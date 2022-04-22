@@ -2,351 +2,598 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29C6150B0F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64CB950B0F4
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444463AbiDVG7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 02:59:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56158 "EHLO
+        id S1444576AbiDVG7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 02:59:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233500AbiDVG7D (ORCPT
+        with ESMTP id S233500AbiDVG7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 02:59:03 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163204F46D;
-        Thu, 21 Apr 2022 23:56:11 -0700 (PDT)
+        Fri, 22 Apr 2022 02:59:41 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A47506CA;
+        Thu, 21 Apr 2022 23:56:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650610571; x=1682146571;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=woXVSuBAGz1p/nvMIX6dnxqIxJiltEEBE48SXFVx2FE=;
-  b=a3kDZY0ncheDhigOR2yVIM9inmZjZceU+Ao93Ct//OmOoH4CKNB7HGbs
-   KJwkHw941KYmQ8rqcJwVnw0RFXwhcgmRw5lNamfkgUr3hQDEDwPF+njRm
-   qfGoAoUItlEXQ9KE5qT7/oGjK0R0f13VuKdmsoXT8KT7jKQOohSbUYQSQ
-   ag56qwIpSlryomcGFnObk/QjeYfRwKoF+kp7I4cVC3Y1d1G0WS+Yv6P5w
-   pbRoBzAXXnezcl9P70aAqlpHiG9+GdyjVfz05YraBUhcrR2TVekJCiImw
-   tY3LWsejVfDsyyt3/mq4J6y39jAIVAkVAcOVdIqoJZh1Z7DcU+pcDHlqo
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264068824"
+  t=1650610607; x=1682146607;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=SBmwOl5g/7Jn16NnPD3VdURUU406FWYz/vJ8u5PWMRc=;
+  b=doowStJxGAOlWpGyLbY+BWGpO7Xh6/0LZbceG7KdjPFV+nvj1jku3PfO
+   7/mZEA/noSBG60Nw9XlltaMSWD8u0hPGtUFB9LK4gzDaJ64YF2nw1WyGq
+   Ntcrat7rheQUkRG0nNe9bkvz9gSh1N8D7vrxRU5nlWntgGMEbQajcGBbp
+   2aPJ++IEnbIHtQInYGksLCr7T4Pd0kmTN6Bu8qPHTnPcqnJRhFKZ3Rhtk
+   2nTkup5upn/UWAvQO1hMuEOLqIjxYquzMFFn9m+lb3RhCs7Lv7isfoEgi
+   n6UleRSpd2RFIUQ5OWD6DzRS9SnkNvuBNft44AHZbR3HpDYNvk9AhZw6U
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="327508040"
 X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
-   d="scan'208";a="264068824"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 23:55:55 -0700
+   d="scan'208";a="327508040"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 23:56:47 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
-   d="scan'208";a="615277913"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 21 Apr 2022 23:55:52 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nhnCp-0009LO-QU;
-        Fri, 22 Apr 2022 06:55:51 +0000
-Date:   Fri, 22 Apr 2022 14:55:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org,
-        akpm@linux-foundation.org
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-arch@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-m68k@lists.linux-m68k.org
-Subject: Re: [PATCH V2 08/30] m68k/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Message-ID: <202202211826.rxBv4dl1-lkp@intel.com>
-References: <1645425519-9034-9-git-send-email-anshuman.khandual@arm.com>
+   d="scan'208";a="703427748"
+Received: from zxingrtx.sh.intel.com ([10.239.159.110])
+  by fmsmga001.fm.intel.com with ESMTP; 21 Apr 2022 23:56:44 -0700
+From:   zhengjun.xing@linux.intel.com
+To:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
+        alexander.shishkin@intel.com, jolsa@redhat.com
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        irogers@google.com, adrian.hunter@intel.com, ak@linux.intel.com,
+        kan.liang@linux.intel.com, zhengjun.xing@linux.intel.com
+Subject: [PATCH 1/3] perf stat: Support metrics with hybrid events
+Date:   Fri, 22 Apr 2022 14:56:33 +0800
+Message-Id: <20220422065635.767648-1-zhengjun.xing@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1645425519-9034-9-git-send-email-anshuman.khandual@arm.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Anshuman,
+From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
 
-Thank you for the patch! Yet something to improve:
+One metric such as 'Kernel_Utilization' may be from different PMUs and
+consists of different events.
 
-[auto build test ERROR on hnaz-mm/master]
+For core,
+Kernel_Utilization = cpu_clk_unhalted.thread:k / cpu_clk_unhalted.thread
 
-url:    https://github.com/0day-ci/linux/commits/Anshuman-Khandual/mm-mmap-Drop-protection_map-and-platform-s-__SXXX-__PXXX-requirements/20220221-144133
-base:   https://github.com/hnaz/linux-mm master
-config: m68k-randconfig-r033-20220221 (https://download.01.org/0day-ci/archive/20220221/202202211826.rxBv4dl1-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/e75c29d8b212cfab904914acdd5a027fb15d2f16
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Anshuman-Khandual/mm-mmap-Drop-protection_map-and-platform-s-__SXXX-__PXXX-requirements/20220221-144133
-        git checkout e75c29d8b212cfab904914acdd5a027fb15d2f16
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash arch/m68k/mm/
+For atom,
+Kernel_Utilization = cpu_clk_unhalted.core:k / cpu_clk_unhalted.core
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The metric group string for core is:
+'{cpu_clk_unhalted.thread/metric-id=cpu_clk_unhalted.thread:k/k,cpu_clk_unhalted.thread/metric-id=cpu_clk_unhalted.thread/}:W'
+It's internally expanded to:
+'{cpu_clk_unhalted.thread_p/metric-id=cpu_clk_unhalted.thread_p:k/k,cpu_clk_unhalted.thread/metric-id=cpu_clk_unhalted.thread/}:W#cpu_core'
 
-All errors (new ones prefixed by >>):
+The metric group string for atom is:
+'{cpu_clk_unhalted.core/metric-id=cpu_clk_unhalted.core:k/k,cpu_clk_unhalted.core/metric-id=cpu_clk_unhalted.core/}:W'
+It's internally expanded to:
+'{cpu_clk_unhalted.core/metric-id=cpu_clk_unhalted.core:k/k,cpu_clk_unhalted.core/metric-id=cpu_clk_unhalted.core/}:W#cpu_atom'
 
->> arch/m68k/mm/init.c:138:10: error: redefinition of 'vm_get_page_prot'
-     138 | pgprot_t vm_get_page_prot(unsigned long vm_flags)
-         |          ^~~~~~~~~~~~~~~~
-   In file included from arch/m68k/mm/init.c:14:
-   include/linux/mm.h:2801:24: note: previous definition of 'vm_get_page_prot' with type 'pgprot_t(long unsigned int)'
-    2801 | static inline pgprot_t vm_get_page_prot(unsigned long vm_flags)
-         |                        ^~~~~~~~~~~~~~~~
-   In file included from arch/m68k/include/asm/thread_info.h:6,
-                    from include/linux/thread_info.h:60,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/m68k/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:78,
-                    from arch/m68k/include/asm/irqflags.h:6,
-                    from include/linux/irqflags.h:16,
-                    from arch/m68k/include/asm/atomic.h:6,
-                    from include/linux/atomic.h:7,
-                    from include/linux/mm_types_task.h:13,
-                    from include/linux/mm_types.h:5,
-                    from include/linux/buildid.h:5,
-                    from include/linux/module.h:14,
-                    from arch/m68k/mm/init.c:11:
-   arch/m68k/mm/init.c: In function 'vm_get_page_prot':
->> arch/m68k/mm/init.c:144:33: error: 'CF_PAGE_VALID' undeclared (first use in this function)
-     144 |                 return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-         |                                 ^~~~~~~~~~~~~
-   arch/m68k/include/asm/page.h:51:40: note: in definition of macro '__pgprot'
-      51 | #define __pgprot(x)     ((pgprot_t) { (x) } )
-         |                                        ^
-   arch/m68k/mm/init.c:144:33: note: each undeclared identifier is reported only once for each function it appears in
-     144 |                 return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-         |                                 ^~~~~~~~~~~~~
-   arch/m68k/include/asm/page.h:51:40: note: in definition of macro '__pgprot'
-      51 | #define __pgprot(x)     ((pgprot_t) { (x) } )
-         |                                        ^
->> arch/m68k/mm/init.c:144:49: error: 'CF_PAGE_ACCESSED' undeclared (first use in this function); did you mean 'FGP_ACCESSED'?
-     144 |                 return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-         |                                                 ^~~~~~~~~~~~~~~~
-   arch/m68k/include/asm/page.h:51:40: note: in definition of macro '__pgprot'
-      51 | #define __pgprot(x)     ((pgprot_t) { (x) } )
-         |                                        ^
->> arch/m68k/mm/init.c:145:33: error: 'CF_PAGE_READABLE' undeclared (first use in this function); did you mean 'PAGE_READONLY'?
-     145 |                                 CF_PAGE_READABLE);
-         |                                 ^~~~~~~~~~~~~~~~
-   arch/m68k/include/asm/page.h:51:40: note: in definition of macro '__pgprot'
-      51 | #define __pgprot(x)     ((pgprot_t) { (x) } )
-         |                                        ^
->> arch/m68k/mm/init.c:148:33: error: 'CF_PAGE_WRITABLE' undeclared (first use in this function); did you mean 'NR_PAGETABLE'?
-     148 |                                 CF_PAGE_WRITABLE);
-         |                                 ^~~~~~~~~~~~~~~~
-   arch/m68k/include/asm/page.h:51:40: note: in definition of macro '__pgprot'
-      51 | #define __pgprot(x)     ((pgprot_t) { (x) } )
-         |                                        ^
->> arch/m68k/mm/init.c:154:33: error: 'CF_PAGE_EXEC' undeclared (first use in this function)
-     154 |                                 CF_PAGE_EXEC);
-         |                                 ^~~~~~~~~~~~
-   arch/m68k/include/asm/page.h:51:40: note: in definition of macro '__pgprot'
-      51 | #define __pgprot(x)     ((pgprot_t) { (x) } )
-         |                                        ^
->> arch/m68k/mm/init.c:174:52: error: 'CF_PAGE_SHARED' undeclared (first use in this function); did you mean 'PAGE_SHARED'?
-     174 |                                 CF_PAGE_READABLE | CF_PAGE_SHARED);
-         |                                                    ^~~~~~~~~~~~~~
-   arch/m68k/include/asm/page.h:51:40: note: in definition of macro '__pgprot'
-      51 | #define __pgprot(x)     ((pgprot_t) { (x) } )
-         |                                        ^
+That means the group "{cpu_clk_unhalted.thread:k,cpu_clk_unhalted.thread}:W"
+is from cpu_core PMU and the group "{cpu_clk_unhalted.core:k,cpu_clk_unhalted.core}"
+is from cpu_atom PMU. And then next, check if the events in the group are
+valid on that PMU. If one event is not valid on that PMU, the associated
+group would be removed internally.
 
+In this example, cpu_clk_unhalted.thread is valid on cpu_core and
+cpu_clk_unhalted.core is valid on cpu_atom. So the checks for these two
+groups are passed.
 
-vim +/vm_get_page_prot +138 arch/m68k/mm/init.c
+Before:
 
-  > 11	#include <linux/module.h>
-    12	#include <linux/signal.h>
-    13	#include <linux/sched.h>
-    14	#include <linux/mm.h>
-    15	#include <linux/swap.h>
-    16	#include <linux/kernel.h>
-    17	#include <linux/string.h>
-    18	#include <linux/types.h>
-    19	#include <linux/init.h>
-    20	#include <linux/memblock.h>
-    21	#include <linux/gfp.h>
-    22	
-    23	#include <asm/setup.h>
-    24	#include <linux/uaccess.h>
-    25	#include <asm/page.h>
-    26	#include <asm/pgalloc.h>
-    27	#include <asm/traps.h>
-    28	#include <asm/machdep.h>
-    29	#include <asm/io.h>
-    30	#ifdef CONFIG_ATARI
-    31	#include <asm/atari_stram.h>
-    32	#endif
-    33	#include <asm/sections.h>
-    34	#include <asm/tlb.h>
-    35	
-    36	/*
-    37	 * ZERO_PAGE is a special page that is used for zero-initialized
-    38	 * data and COW.
-    39	 */
-    40	void *empty_zero_page;
-    41	EXPORT_SYMBOL(empty_zero_page);
-    42	
-    43	#ifdef CONFIG_MMU
-    44	
-    45	int m68k_virt_to_node_shift;
-    46	
-    47	void __init m68k_setup_node(int node)
-    48	{
-    49		node_set_online(node);
-    50	}
-    51	
-    52	#else /* CONFIG_MMU */
-    53	
-    54	/*
-    55	 * paging_init() continues the virtual memory environment setup which
-    56	 * was begun by the code in arch/head.S.
-    57	 * The parameters are pointers to where to stick the starting and ending
-    58	 * addresses of available kernel virtual memory.
-    59	 */
-    60	void __init paging_init(void)
-    61	{
-    62		/*
-    63		 * Make sure start_mem is page aligned, otherwise bootmem and
-    64		 * page_alloc get different views of the world.
-    65		 */
-    66		unsigned long end_mem = memory_end & PAGE_MASK;
-    67		unsigned long max_zone_pfn[MAX_NR_ZONES] = { 0, };
-    68	
-    69		high_memory = (void *) end_mem;
-    70	
-    71		empty_zero_page = memblock_alloc(PAGE_SIZE, PAGE_SIZE);
-    72		if (!empty_zero_page)
-    73			panic("%s: Failed to allocate %lu bytes align=0x%lx\n",
-    74			      __func__, PAGE_SIZE, PAGE_SIZE);
-    75		max_zone_pfn[ZONE_DMA] = end_mem >> PAGE_SHIFT;
-    76		free_area_init(max_zone_pfn);
-    77	}
-    78	
-    79	#endif /* CONFIG_MMU */
-    80	
-    81	void free_initmem(void)
-    82	{
-    83	#ifndef CONFIG_MMU_SUN3
-    84		free_initmem_default(-1);
-    85	#endif /* CONFIG_MMU_SUN3 */
-    86	}
-    87	
-    88	#if defined(CONFIG_MMU) && !defined(CONFIG_COLDFIRE)
-    89	#define VECTORS	&vectors[0]
-    90	#else
-    91	#define VECTORS	_ramvec
-    92	#endif
-    93	
-    94	static inline void init_pointer_tables(void)
-    95	{
-    96	#if defined(CONFIG_MMU) && !defined(CONFIG_SUN3) && !defined(CONFIG_COLDFIRE)
-    97		int i, j;
-    98	
-    99		/* insert pointer tables allocated so far into the tablelist */
-   100		init_pointer_table(kernel_pg_dir, TABLE_PGD);
-   101		for (i = 0; i < PTRS_PER_PGD; i++) {
-   102			pud_t *pud = (pud_t *)&kernel_pg_dir[i];
-   103			pmd_t *pmd_dir;
-   104	
-   105			if (!pud_present(*pud))
-   106				continue;
-   107	
-   108			pmd_dir = (pmd_t *)pgd_page_vaddr(kernel_pg_dir[i]);
-   109			init_pointer_table(pmd_dir, TABLE_PMD);
-   110	
-   111			for (j = 0; j < PTRS_PER_PMD; j++) {
-   112				pmd_t *pmd = &pmd_dir[j];
-   113				pte_t *pte_dir;
-   114	
-   115				if (!pmd_present(*pmd))
-   116					continue;
-   117	
-   118				pte_dir = (pte_t *)pmd_page_vaddr(*pmd);
-   119				init_pointer_table(pte_dir, TABLE_PTE);
-   120			}
-   121		}
-   122	#endif
-   123	}
-   124	
-   125	void __init mem_init(void)
-   126	{
-   127		/* this will put all memory onto the freelists */
-   128		memblock_free_all();
-   129		init_pointer_tables();
-   130	}
-   131	
-   132	#ifdef CONFIG_COLDFIRE
-   133	/*
-   134	 * Page protections for initialising protection_map. See mm/mmap.c
-   135	 * for use. In general, the bit positions are xwr, and P-items are
-   136	 * private, the S-items are shared.
-   137	 */
- > 138	pgprot_t vm_get_page_prot(unsigned long vm_flags)
-   139	{
-   140		switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
-   141		case VM_NONE:
-   142			return PAGE_NONE;
-   143		case VM_READ:
- > 144			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
- > 145					CF_PAGE_READABLE);
-   146		case VM_WRITE:
-   147			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
- > 148					CF_PAGE_WRITABLE);
-   149		case VM_WRITE | VM_READ:
-   150			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-   151					CF_PAGE_READABLE | CF_PAGE_WRITABLE);
-   152		case VM_EXEC:
-   153			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
- > 154					CF_PAGE_EXEC);
-   155		case VM_EXEC | VM_READ:
-   156			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-   157					CF_PAGE_READABLE | CF_PAGE_EXEC);
-   158		case VM_EXEC | VM_WRITE:
-   159			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-   160					CF_PAGE_WRITABLE | CF_PAGE_EXEC);
-   161		case VM_EXEC | VM_WRITE | VM_READ:
-   162			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-   163					CF_PAGE_READABLE | CF_PAGE_WRITABLE |
-   164					CF_PAGE_EXEC);
-   165		case VM_SHARED:
-   166			return PAGE_NONE;
-   167		case VM_SHARED | VM_READ:
-   168			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-   169					CF_PAGE_READABLE);
-   170		case VM_SHARED | VM_WRITE:
-   171			return PAGE_SHARED;
-   172		case VM_SHARED | VM_WRITE | VM_READ:
-   173			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
- > 174					CF_PAGE_READABLE | CF_PAGE_SHARED);
-   175		case VM_SHARED | VM_EXEC:
-   176			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-   177					CF_PAGE_EXEC);
-   178		case VM_SHARED | VM_EXEC | VM_READ:
-   179			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-   180					CF_PAGE_READABLE | CF_PAGE_EXEC);
-   181		case VM_SHARED | VM_EXEC | VM_WRITE:
-   182			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-   183					CF_PAGE_SHARED | CF_PAGE_EXEC);
-   184		case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
-   185			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-   186					CF_PAGE_READABLE | CF_PAGE_SHARED |
-   187					CF_PAGE_EXEC);
-   188		default:
-   189			BUILD_BUG();
-   190		}
-   191	}
-   192	#endif
-   193	
+  # ./perf stat -M Kernel_Utilization -a sleep 1
+WARNING: events in group from different hybrid PMUs!
+WARNING: grouped events cpus do not match, disabling group:
+  anon group { CPU_CLK_UNHALTED.THREAD_P:k, CPU_CLK_UNHALTED.THREAD_P:k, CPU_CLK_UNHALTED.THREAD, CPU_CLK_UNHALTED.THREAD }
 
+ Performance counter stats for 'system wide':
+
+        17,639,501      cpu_atom/CPU_CLK_UNHALTED.CORE/ #     1.00 Kernel_Utilization
+        17,578,757      cpu_atom/CPU_CLK_UNHALTED.CORE:k/
+     1,005,350,226 ns   duration_time
+        43,012,352      cpu_core/CPU_CLK_UNHALTED.THREAD_P:k/ #     0.99 Kernel_Utilization
+        17,608,010      cpu_atom/CPU_CLK_UNHALTED.THREAD_P:k/
+        43,608,755      cpu_core/CPU_CLK_UNHALTED.THREAD/
+        17,630,838      cpu_atom/CPU_CLK_UNHALTED.THREAD/
+     1,005,350,226 ns   duration_time
+
+       1.005350226 seconds time elapsed
+
+After:
+
+  # ./perf stat -M Kernel_Utilization -a sleep 1
+
+ Performance counter stats for 'system wide':
+
+        17,981,895      CPU_CLK_UNHALTED.CORE [cpu_atom] #     1.00 Kernel_Utilization
+        17,925,405      CPU_CLK_UNHALTED.CORE:k [cpu_atom]
+     1,004,811,366 ns   duration_time
+        41,246,425      CPU_CLK_UNHALTED.THREAD_P:k [cpu_core] #     0.99 Kernel_Utilization
+        41,819,129      CPU_CLK_UNHALTED.THREAD [cpu_core]
+     1,004,811,366 ns   duration_time
+
+       1.004811366 seconds time elapsed
+
+Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ tools/perf/util/metricgroup.c  | 263 ++++++++++++++++++++++++++++++---
+ tools/perf/util/stat-display.c |   8 +-
+ 2 files changed, 249 insertions(+), 22 deletions(-)
+
+diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
+index d8492e339521..126a43a8917e 100644
+--- a/tools/perf/util/metricgroup.c
++++ b/tools/perf/util/metricgroup.c
+@@ -141,6 +141,11 @@ struct metric {
+ 	 * output.
+ 	 */
+ 	const char *metric_unit;
++	/**
++	 * The name of the CPU such as "cpu_core" or "cpu_atom" in hybrid systems
++	 * and "NULL" in non-hybrid systems.
++	 */
++	const char *pmu_name;
+ 	/** Optional null terminated array of referenced metrics. */
+ 	struct metric_ref *metric_refs;
+ 	/**
+@@ -215,6 +220,7 @@ static struct metric *metric__new(const struct pmu_event *pe,
+ 	}
+ 	m->metric_expr = pe->metric_expr;
+ 	m->metric_unit = pe->unit;
++	m->pmu_name = pe->pmu;
+ 	m->pctx->runtime = runtime;
+ 	m->has_constraint = metric_no_group || metricgroup__has_constraint(pe);
+ 	m->metric_refs = NULL;
+@@ -250,10 +256,12 @@ static bool contains_metric_id(struct evsel **metric_events, int num_events,
+  * @ids: the metric IDs to match.
+  * @metric_evlist: the list of perf events.
+  * @out_metric_events: holds the created metric events array.
++ * @pmu_name: the name of the CPU.
+  */
+ static int setup_metric_events(struct hashmap *ids,
+ 			       struct evlist *metric_evlist,
+-			       struct evsel ***out_metric_events)
++			       struct evsel ***out_metric_events,
++			       const char *pmu_name)
+ {
+ 	struct evsel **metric_events;
+ 	const char *metric_id;
+@@ -286,6 +294,10 @@ static int setup_metric_events(struct hashmap *ids,
+ 		 * about this event.
+ 		 */
+ 		if (hashmap__find(ids, metric_id, (void **)&val_ptr)) {
++			if (evsel__is_hybrid(ev) && pmu_name &&
++			    strcmp(pmu_name, ev->pmu_name)) {
++				continue;
++			}
+ 			metric_events[matched_events++] = ev;
+ 
+ 			if (matched_events >= ids_size)
+@@ -724,7 +736,8 @@ static int decode_all_metric_ids(struct evlist *perf_evlist, const char *modifie
+ static int metricgroup__build_event_string(struct strbuf *events,
+ 					   const struct expr_parse_ctx *ctx,
+ 					   const char *modifier,
+-					   bool has_constraint)
++					   bool has_constraint,
++					   const char *pmu_name)
+ {
+ 	struct hashmap_entry *cur;
+ 	size_t bkt;
+@@ -806,12 +819,18 @@ static int metricgroup__build_event_string(struct strbuf *events,
+ 		if (no_group) {
+ 			/* Strange case of a metric of just duration_time. */
+ 			ret = strbuf_addf(events, "duration_time");
+-		} else if (!has_constraint)
+-			ret = strbuf_addf(events, "}:W,duration_time");
+-		else
++		} else if (!has_constraint) {
++			ret = strbuf_addf(events, "}:W");
++			if (pmu_name)
++				ret = strbuf_addf(events, "#%s", pmu_name);
+ 			ret = strbuf_addf(events, ",duration_time");
+-	} else if (!no_group && !has_constraint)
++		} else
++			ret = strbuf_addf(events, ",duration_time");
++	} else if (!no_group && !has_constraint) {
+ 		ret = strbuf_addf(events, "}:W");
++		if (pmu_name)
++			ret = strbuf_addf(events, "#%s", pmu_name);
++	}
+ 
+ 	return ret;
+ #undef RETURN_IF_NON_ZERO
+@@ -1150,11 +1169,13 @@ static int metric_list_cmp(void *priv __maybe_unused, const struct list_head *l,
+  * @metric_list: The list that the metric or metric group are added to.
+  * @map: The map that is searched for metrics, most commonly the table for the
+  *       architecture perf is running upon.
++ * @pmu_name: the name of the CPU.
+  */
+-static int metricgroup__add_metric(const char *metric_name, const char *modifier,
+-				   bool metric_no_group,
++static int metricgroup__add_metric(const char *metric_name,
++				   const char *modifier, bool metric_no_group,
+ 				   struct list_head *metric_list,
+-				   const struct pmu_events_map *map)
++				   const struct pmu_events_map *map,
++				   const char *pmu_name)
+ {
+ 	const struct pmu_event *pe;
+ 	LIST_HEAD(list);
+@@ -1167,6 +1188,8 @@ static int metricgroup__add_metric(const char *metric_name, const char *modifier
+ 	 */
+ 	map_for_each_metric(pe, i, map, metric_name) {
+ 		has_match = true;
++		if (pmu_name && pe->pmu && strcmp(pmu_name, pe->pmu))
++			continue;
+ 		ret = add_metric(&list, pe, modifier, metric_no_group,
+ 				 /*root_metric=*/NULL,
+ 				 /*visited_metrics=*/NULL, map);
+@@ -1215,10 +1238,12 @@ static int metricgroup__add_metric(const char *metric_name, const char *modifier
+  * @metric_list: The list that metrics are added to.
+  * @map: The map that is searched for metrics, most commonly the table for the
+  *       architecture perf is running upon.
++ * @pmu_name: the name of the CPU.
+  */
+ static int metricgroup__add_metric_list(const char *list, bool metric_no_group,
+ 					struct list_head *metric_list,
+-					const struct pmu_events_map *map)
++					const struct pmu_events_map *map,
++					const char *pmu_name)
+ {
+ 	char *list_itr, *list_copy, *metric_name, *modifier;
+ 	int ret, count = 0;
+@@ -1235,7 +1260,7 @@ static int metricgroup__add_metric_list(const char *list, bool metric_no_group,
+ 
+ 		ret = metricgroup__add_metric(metric_name, modifier,
+ 					      metric_no_group, metric_list,
+-					      map);
++					      map, pmu_name);
+ 		if (ret == -EINVAL)
+ 			pr_err("Cannot find metric or group `%s'\n", metric_name);
+ 
+@@ -1310,6 +1335,183 @@ static int build_combined_expr_ctx(const struct list_head *metric_list,
+ 	return ret;
+ }
+ 
++static char *get_metric_pmus(char *orig_str, struct strbuf *metric_pmus)
++{
++	char *llist, *nlist, *p1, *p2, *new_str = NULL;
++	int ret;
++	struct strbuf new_events;
++
++	if (!strchr(orig_str, '#')) {
++		/*
++		 * pmu name is added after '#'. If no '#' found,
++		 * don't need to process pmu.
++		 */
++		return strdup(orig_str);
++	}
++
++	nlist = strdup(orig_str);
++	if (!nlist)
++		return new_str;
++
++	ret = strbuf_init(&new_events, 100);
++	if (ret)
++		goto err_out;
++
++	ret = strbuf_grow(metric_pmus, 100);
++	if (ret)
++		goto err_out;
++
++	llist = nlist;
++	while ((p1 = strsep(&llist, ",")) != NULL) {
++		p2 = strchr(p1, '#');
++		if (p2) {
++			*p2 = 0;
++			ret = strbuf_addf(&new_events, "%s,", p1);
++			if (ret)
++				goto err_out;
++
++			ret = strbuf_addf(metric_pmus, "%s,", p2 + 1);
++			if (ret)
++				goto err_out;
++
++		} else {
++			ret = strbuf_addf(&new_events, "%s,", p1);
++			if (ret)
++				goto err_out;
++		}
++	}
++
++	new_str = strdup(new_events.buf);
++	if (new_str) {
++		/* Remove last ',' */
++		new_str[strlen(new_str) - 1] = 0;
++	}
++err_out:
++	free(nlist);
++	strbuf_release(&new_events);
++	return new_str;
++}
++
++static void set_pmu_unmatched_events(struct evlist *evlist, int group_idx,
++				     char *pmu_name,
++				     unsigned long *evlist_removed)
++{
++	struct evsel *evsel, *pos;
++	int i = 0, j = 0;
++
++	/*
++	 * Move to the first evsel of a given group
++	 */
++	evlist__for_each_entry(evlist, evsel) {
++		if (evsel__is_group_leader(evsel) &&
++		    evsel->core.nr_members >= 1) {
++			if (i < group_idx) {
++				j += evsel->core.nr_members;
++				i++;
++				continue;
++			}
++		}
++	}
++
++	i = 0;
++	evlist__for_each_entry(evlist, evsel) {
++		if (i < j) {
++			i++;
++			continue;
++		}
++
++		/*
++		 * Now we are at the first evsel in the group
++		 */
++		for_each_group_evsel(pos, evsel) {
++			if (evsel__is_hybrid(pos) &&
++			    strcmp(pos->pmu_name, pmu_name)) {
++				set_bit(pos->core.idx, evlist_removed);
++			}
++		}
++		break;
++	}
++}
++
++static void remove_pmu_umatched_events(struct evlist *evlist, char *metric_pmus)
++{
++	struct evsel *evsel, *tmp, *new_leader = NULL;
++	unsigned long *evlist_removed;
++	char *llist, *nlist, *p1;
++	bool need_new_leader = false;
++	int i = 0, new_nr_members = 0;
++
++	nlist = strdup(metric_pmus);
++	if (!nlist)
++		return;
++
++	evlist_removed = bitmap_zalloc(evlist->core.nr_entries);
++	if (!evlist_removed) {
++		free(nlist);
++		return;
++	}
++
++	llist = nlist;
++	while ((p1 = strsep(&llist, ",")) != NULL) {
++		if (strlen(p1) > 0) {
++			/*
++			 * p1 points to the string of pmu name, e.g. "cpu_atom".
++			 * The metric group string has pmu suffixes, e.g.
++			 * "{inst_retired.any,cpu_clk_unhalted.thread}:W#cpu_core,
++			 *  {cpu_clk_unhalted.core,inst_retired.any_p}:W#cpu_atom"
++			 * By counting the pmu name, we can know the index of
++			 * group.
++			 */
++			set_pmu_unmatched_events(evlist, i++, p1,
++						 evlist_removed);
++		}
++	}
++
++	evlist__for_each_entry_safe(evlist, tmp, evsel) {
++		if (test_bit(evsel->core.idx, evlist_removed)) {
++			if (!evsel__is_group_leader(evsel)) {
++				if (!need_new_leader) {
++					if (new_leader)
++						new_leader->core.leader->nr_members--;
++					else
++						evsel->core.leader->nr_members--;
++				} else
++					new_nr_members--;
++			} else {
++				/*
++				 * If group leader is to remove, we need to
++				 * prepare a new leader and adjust all group
++				 * members.
++				 */
++				need_new_leader = true;
++				new_nr_members =
++				    evsel->core.leader->nr_members - 1;
++			}
++
++			evlist__remove(evlist, evsel);
++			evsel__delete(evsel);
++		} else {
++			if (!evsel__is_group_leader(evsel)) {
++				if (need_new_leader) {
++					need_new_leader = false;
++					new_leader = evsel;
++					new_leader->core.leader =
++					    &new_leader->core;
++					new_leader->core.nr_members =
++					    new_nr_members;
++				} else if (new_leader)
++					evsel->core.leader = &new_leader->core;
++			} else {
++				need_new_leader = false;
++				new_leader = NULL;
++			}
++		}
++	}
++
++	bitmap_free(evlist_removed);
++	free(nlist);
++}
++
+ /**
+  * parse_ids - Build the event string for the ids and parse them creating an
+  *             evlist. The encoded metric_ids are decoded.
+@@ -1319,14 +1521,18 @@ static int build_combined_expr_ctx(const struct list_head *metric_list,
+  * @modifier: any modifiers added to the events.
+  * @has_constraint: false if events should be placed in a weak group.
+  * @out_evlist: the created list of events.
++ * @pmu_name: the name of the CPU.
+  */
+ static int parse_ids(bool metric_no_merge, struct perf_pmu *fake_pmu,
+ 		     struct expr_parse_ctx *ids, const char *modifier,
+-		     bool has_constraint, struct evlist **out_evlist)
++		     bool has_constraint, struct evlist **out_evlist,
++		     const char *pmu_name)
+ {
+ 	struct parse_events_error parse_error;
+ 	struct evlist *parsed_evlist;
+ 	struct strbuf events = STRBUF_INIT;
++	struct strbuf metric_pmus = STRBUF_INIT;
++	char *nlist = NULL;
+ 	int ret;
+ 
+ 	*out_evlist = NULL;
+@@ -1353,7 +1559,7 @@ static int parse_ids(bool metric_no_merge, struct perf_pmu *fake_pmu,
+ 		ids__insert(ids->ids, tmp);
+ 	}
+ 	ret = metricgroup__build_event_string(&events, ids, modifier,
+-					      has_constraint);
++					      has_constraint, pmu_name);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -1364,11 +1570,20 @@ static int parse_ids(bool metric_no_merge, struct perf_pmu *fake_pmu,
+ 	}
+ 	pr_debug("Parsing metric events '%s'\n", events.buf);
+ 	parse_events_error__init(&parse_error);
+-	ret = __parse_events(parsed_evlist, events.buf, &parse_error, fake_pmu);
++	nlist = get_metric_pmus(events.buf, &metric_pmus);
++	if (!nlist) {
++		ret = -ENOMEM;
++		goto err_out;
++	}
++	ret = __parse_events(parsed_evlist, nlist, &parse_error, fake_pmu);
+ 	if (ret) {
+ 		parse_events_error__print(&parse_error, events.buf);
+ 		goto err_out;
+ 	}
++
++	if (metric_pmus.alloc)
++		remove_pmu_umatched_events(parsed_evlist, metric_pmus.buf);
++
+ 	ret = decode_all_metric_ids(parsed_evlist, modifier);
+ 	if (ret)
+ 		goto err_out;
+@@ -1376,9 +1591,12 @@ static int parse_ids(bool metric_no_merge, struct perf_pmu *fake_pmu,
+ 	*out_evlist = parsed_evlist;
+ 	parsed_evlist = NULL;
+ err_out:
++	if (nlist)
++		free(nlist);
+ 	parse_events_error__exit(&parse_error);
+ 	evlist__delete(parsed_evlist);
+ 	strbuf_release(&events);
++	strbuf_release(&metric_pmus);
+ 	return ret;
+ }
+ 
+@@ -1397,7 +1615,8 @@ static int parse_groups(struct evlist *perf_evlist, const char *str,
+ 	if (metric_events_list->nr_entries == 0)
+ 		metricgroup__rblist_init(metric_events_list);
+ 	ret = metricgroup__add_metric_list(str, metric_no_group,
+-					   &metric_list, map);
++					   &metric_list, map,
++					   perf_evlist->hybrid_pmu_name);
+ 	if (ret)
+ 		goto out;
+ 
+@@ -1413,7 +1632,8 @@ static int parse_groups(struct evlist *perf_evlist, const char *str,
+ 			ret = parse_ids(metric_no_merge, fake_pmu, combined,
+ 					/*modifier=*/NULL,
+ 					/*has_constraint=*/true,
+-					&combined_evlist);
++					&combined_evlist,
++					perf_evlist->hybrid_pmu_name);
+ 		}
+ 		if (combined)
+ 			expr__ctx_free(combined);
+@@ -1450,6 +1670,9 @@ static int parse_groups(struct evlist *perf_evlist, const char *str,
+ 					continue;
+ 
+ 				if (expr__subset_of_ids(n->pctx, m->pctx)) {
++					if (m->pmu_name && n->pmu_name
++					    && strcmp(m->pmu_name, n->pmu_name))
++						continue;
+ 					pr_debug("Events in '%s' fully contained within '%s'\n",
+ 						 m->metric_name, n->metric_name);
+ 					metric_evlist = n->evlist;
+@@ -1459,14 +1682,16 @@ static int parse_groups(struct evlist *perf_evlist, const char *str,
+ 			}
+ 		}
+ 		if (!metric_evlist) {
+-			ret = parse_ids(metric_no_merge, fake_pmu, m->pctx, m->modifier,
+-					m->has_constraint, &m->evlist);
++			ret = parse_ids(metric_no_merge, fake_pmu, m->pctx,
++				      m->modifier, m->has_constraint,
++				      &m->evlist, m->pmu_name);
+ 			if (ret)
+ 				goto out;
+ 
+ 			metric_evlist = m->evlist;
+ 		}
+-		ret = setup_metric_events(m->pctx->ids, metric_evlist, &metric_events);
++		ret = setup_metric_events(m->pctx->ids, metric_evlist,
++					  &metric_events, m->pmu_name);
+ 		if (ret) {
+ 			pr_debug("Cannot resolve IDs for %s: %s\n",
+ 				m->metric_name, m->metric_expr);
+diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
+index 138e3ab9d638..46b3dd134656 100644
+--- a/tools/perf/util/stat-display.c
++++ b/tools/perf/util/stat-display.c
+@@ -539,7 +539,8 @@ static void aggr_update_shadow(struct perf_stat_config *config,
+ 	}
+ }
+ 
+-static void uniquify_event_name(struct evsel *counter)
++static void uniquify_event_name(struct evsel *counter,
++				struct perf_stat_config *stat_config)
+ {
+ 	char *new_name;
+ 	char *config;
+@@ -558,7 +559,8 @@ static void uniquify_event_name(struct evsel *counter)
+ 			counter->name = new_name;
+ 		}
+ 	} else {
+-		if (perf_pmu__has_hybrid()) {
++		if (perf_pmu__has_hybrid() &&
++		    stat_config->metric_events.nr_entries == 0) {
+ 			ret = asprintf(&new_name, "%s/%s/",
+ 				       counter->pmu_name, counter->name);
+ 		} else {
+@@ -619,7 +621,7 @@ static bool collect_data(struct perf_stat_config *config, struct evsel *counter,
+ 		return false;
+ 	cb(config, counter, data, true);
+ 	if (config->no_merge || hybrid_uniquify(counter))
+-		uniquify_event_name(counter);
++		uniquify_event_name(counter, config);
+ 	else if (counter->auto_merge_stats)
+ 		collect_all_aliases(config, counter, cb, data);
+ 	return true;
+-- 
+2.25.1
+

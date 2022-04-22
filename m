@@ -2,216 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E74450B70E
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 14:12:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BBE350B711
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 14:12:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447451AbiDVMNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 08:13:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37176 "EHLO
+        id S1446860AbiDVMPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 08:15:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447460AbiDVMNg (ORCPT
+        with ESMTP id S1389189AbiDVMPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 08:13:36 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4152956C09;
-        Fri, 22 Apr 2022 05:10:36 -0700 (PDT)
-X-UUID: f9f6c9a48ceb4887a88d5199637521dd-20220422
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:b8d344b9-3e8e-41d0-affe-030eca101461,OB:20,L
-        OB:0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,A
-        CTION:release,TS:120
-X-CID-INFO: VERSION:1.1.4,REQID:b8d344b9-3e8e-41d0-affe-030eca101461,OB:20,LOB
-        :0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,A
-        CTION:quarantine,TS:120
-X-CID-META: VersionHash:faefae9,CLOUDID:80479ff0-da02-41b4-b6df-58f4ccd36682,C
-        OID:3b21fae82f57,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,Fi
-        le:nil,QS:0,BEC:nil
-X-UUID: f9f6c9a48ceb4887a88d5199637521dd-20220422
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <allen-kh.cheng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 168344172; Fri, 22 Apr 2022 20:10:30 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 22 Apr 2022 20:10:29 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 22 Apr
- 2022 20:10:21 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 22 Apr 2022 20:10:21 +0800
-From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, <nfraprado@collabora.com>
-CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <devicetree@vger.kernel.org>,
+        Fri, 22 Apr 2022 08:15:03 -0400
+X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 22 Apr 2022 05:12:10 PDT
+Received: from esa17.fujitsucc.c3s2.iphmx.com (esa17.fujitsucc.c3s2.iphmx.com [216.71.158.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5475676C
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 05:12:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
+  t=1650629530; x=1682165530;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=2rSn6DFS0lcscwXjBnZScziBpGyW8J7ErE4/m2PgXMU=;
+  b=pli6MUIukO+3RXdLfbS91eqmS9sORh9XdqwnhEuA9BTAzE7TyuhyDoKl
+   Rkm7Zqqu4q6EF7nI0l6eo2J/pcCGrwjA1aY6GqboApTtj6wXjhflgkKhz
+   36HfvOsdoxzdnP4+lfcIcNXoFm83ArjycWmOTlck0E1paQNl6pidLYKAE
+   ufpYYRi+p6ngZ1SexYaCcLIEz4lCE5MFitIpCGxl1LtwviA7uvaQiFuZR
+   O+H1rrGFKUpa/p1M5grM7ZfR8VezKIccFcRo4yjE1NdV5B1Y3LXMDO0KP
+   VPDK/ZcZNDjzU3kgRTi3t/OcmxUWdQi39/M34YDvPmSbC3D26zWH+3Yku
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="54453535"
+X-IronPort-AV: E=Sophos;i="5.90,281,1643641200"; 
+   d="scan'208";a="54453535"
+Received: from mail-tycjpn01lp2171.outbound.protection.outlook.com (HELO JPN01-TYC-obe.outbound.protection.outlook.com) ([104.47.23.171])
+  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 21:11:01 +0900
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UrYDoB6f92FB78649GC+v1S1fXUrOsALMuMuyfFXafk4ppr+n16Fj7H3T4Y6ElFISeLf3HNZpsvDdE1EnYL1ZLqhGN/NMqDNmCh0BR7DuDJ36omWn2f8cYf+XbK3XHlKxF7mQDg+xzK1mBDuiBBuTPAD3S3B2fyJTKmPQnCM+ExQIXr5FEzKKe5OlLFfVzJCU4fyDnsnm72SSykzQuNyk+Btgejwvdigwz8oDr0JBGw+Xz8/b9E/1yQFiRzRXFgqSsxjuxu7hPsRDzwTR+1c5DRxkxDbQC1/B674vReWXD33Xpps8rsTi54FRagJELyknMMylzmuo6EGfbWrMpaPlw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2rSn6DFS0lcscwXjBnZScziBpGyW8J7ErE4/m2PgXMU=;
+ b=DJ0uLPXCdaRwQLKypHCxOhIXvmXwkDFqrLCOKuyQMvIZ0cTS2sevf1fReAKdAacdY/9xZ9HLmSe+hN/uQLdbq0S3G9mhm0ub0p993nbUXQKypBXWK2Lo62RBukNG85tHbAdVIDvcB926k5kNN+UGRLmX69HwB1MaZA3RVfO7dEPaVLUZoEO2H4amVBurcQ0Kq9a9xV7PxAkeWmGzzVISBRzm/0rKFv7chWHlGCtI0/BSaJ2I1J4D0j9Bq3nhNHq5r+GF5wyYE/hCcDcbGXSRJaF0iynSE1i8D0NgArFWl0JnzANk/oeig2h8BVwAdLzjg+o7AtDFl00mi6Bqe38Kbw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
+ dkim=pass header.d=fujitsu.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=fujitsu.onmicrosoft.com; s=selector2-fujitsu-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2rSn6DFS0lcscwXjBnZScziBpGyW8J7ErE4/m2PgXMU=;
+ b=DV9Dc8ixl1S87VjoAxdRmrcwcYfxBoPXGL7Jrj2Im9uWemfwhBFGF2Sri1w0EGp3LkmTkv3txl0nXyaFFOcYqzABBFFxzAw98riFEaX6M4f132Kta5TtIVUKapw5fJb5l7SieynOuA4mwCT48A8nn87RHXUImH4a7ubtPGknJ8E=
+Received: from OSBPR01MB2037.jpnprd01.prod.outlook.com (2603:1096:603:25::17)
+ by TYCPR01MB9941.jpnprd01.prod.outlook.com (2603:1096:400:1e9::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13; Fri, 22 Apr
+ 2022 12:10:57 +0000
+Received: from OSBPR01MB2037.jpnprd01.prod.outlook.com
+ ([fe80::382e:99b:f0f9:b18c]) by OSBPR01MB2037.jpnprd01.prod.outlook.com
+ ([fe80::382e:99b:f0f9:b18c%6]) with mapi id 15.20.5186.015; Fri, 22 Apr 2022
+ 12:10:57 +0000
+From:   "tarumizu.kohei@fujitsu.com" <tarumizu.kohei@fujitsu.com>
+To:     'Thomas Gleixner' <tglx@linutronix.de>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, Chen-Yu Tsai <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Subject: [PATCH 2/2] dt-bindings: watchdog: mediatek: Convert binding to YAML
-Date:   Fri, 22 Apr 2022 20:10:17 +0800
-Message-ID: <20220422121017.23920-3-allen-kh.cheng@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220422121017.23920-1-allen-kh.cheng@mediatek.com>
-References: <20220422121017.23920-1-allen-kh.cheng@mediatek.com>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "fenghua.yu@intel.com" <fenghua.yu@intel.com>,
+        "reinette.chatre@intel.com" <reinette.chatre@intel.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: RE: [PATCH v3 1/9] drivers: base: Add hardware prefetch control core
+ driver
+Thread-Topic: [PATCH v3 1/9] drivers: base: Add hardware prefetch control core
+ driver
+Thread-Index: AQHYVGMLEHjgMDmteU6Jl0/t5EKiYKz5VdIAgAKC28A=
+Date:   Fri, 22 Apr 2022 12:10:57 +0000
+Message-ID: <OSBPR01MB20378E97DE0CB45ABB5E677680F79@OSBPR01MB2037.jpnprd01.prod.outlook.com>
+References: <20220420030223.689259-1-tarumizu.kohei@fujitsu.com>
+ <20220420030223.689259-2-tarumizu.kohei@fujitsu.com> <87mtgftov3.ffs@tglx>
+In-Reply-To: <87mtgftov3.ffs@tglx>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fujitsu.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 1aac9129-eb96-40b4-68a9-08da24592848
+x-ms-traffictypediagnostic: TYCPR01MB9941:EE_
+x-microsoft-antispam-prvs: <TYCPR01MB9941E5EFDAC8CA03F2D5D89380F79@TYCPR01MB9941.jpnprd01.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: crWO71jwM3+oradoTWOBOertKSPzON+zLq8Kj3VGcb79kjpeL0HbRZfV+BxuMBwY0JMghftdzTM+H+kgR1IZob59g2wJm1KrPW863P+WoocMKaqVDVVcQg1WqRjXE2D5l8sulbH8xVP7aXQcPJ1J3p1VGH2388LJ1PRbYQI0lciwWZlhaRbGY6sC99JCwNpanMlm3vic3BzbTNV+3C7JH4AmI75wfxUHNSlyyAJgqeVS7QrC9Tb2vfoEIerZV2WSkChFEglicsrdK5Vl6zgOMHeyef7f8ClD0kJWTbMyCO7hUWV+1i+8cZrHiLJgYD7D8GKGwrGYudmLKA/HNeWOaUao64WfFtJ2wDkxpsRmdrfUCigEkQl450RtavkiHwC5ya5DawbP0k3V4rmk2JWYUrzDoaoed/AYqspk1sd8RGyoM6qf4WHtFJswEdgDbJtF+ST46GnfRyE3uF7k1AkcYUPxY2v+bGjSj4KGZZ8qzdbyJ5bwNvTGU8mTYNMEWvtld/JnnBWScQ2WUb8DtVy2nm7jDvCJiqigq8TIBZNQySV/1RZsFKOFCHczpYND3BqRoCO1OKGBuET45FxwXsKL+UoLB8LWYwznzCb6NVaVR3SMMzMQkQlvapneVCJqmlyx5m3Zt7Tb9YREyUdYN4Vl18y7P/5NKWv5+cc9tE5qXk1G9ENLiYG6rQfJ/Rv5spvJcfQvt2iRUws978Ibrq2JXGkRekljHSZdVEkmc1N6mUw=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSBPR01MB2037.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(82960400001)(316002)(38070700005)(85182001)(921005)(122000001)(54906003)(4326008)(52536014)(9686003)(38100700002)(83380400001)(55016003)(186003)(66556008)(66476007)(66446008)(64756008)(8936002)(26005)(110136005)(7416002)(33656002)(508600001)(76116006)(66946007)(7696005)(6506007)(86362001)(5660300002)(2906002)(71200400001)(8676002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-2022-jp?B?NTFQYUo1T05mN2J2QUhXRkFoUXc4T3Jqb0lDMmxwNk5xU3ByY2s1cnU0?=
+ =?iso-2022-jp?B?Rk9GazJSelRVNURQN3o3VmwwUW1pVlc3VlNUNlJzdURiMDgrZ1VNMEdH?=
+ =?iso-2022-jp?B?SmtOYnJia1BrWXduMU4wR0ZOeVVDTVZEVnhBM0hOdVpQYTh4ZUlSdDBO?=
+ =?iso-2022-jp?B?SVo1STV2bXhLTlZLWWQ4WWtSUzdnS1pwb0FnNVM1ZzUySGlKenJPcFhH?=
+ =?iso-2022-jp?B?b0pYTlB3cVFYTTZEamxVNGpPRCt3bmFUdHUrWElrOTNqeWhEcDBYa1pU?=
+ =?iso-2022-jp?B?R2sxWGYwSjBnWmVEc0ZlT2JwdVRzN1llN0c4a20vQm9Zak5pOWdLT3BJ?=
+ =?iso-2022-jp?B?ZlNpL3BQQlRKWElDZ1VoVUlBSkdzdG5Ua3FlUjZ0MFlidENuRzc2b0NG?=
+ =?iso-2022-jp?B?RU94UDVoVG5QNUh2bFZRQWJ6K2Z2ZkdXRDJvdE9CcHhyVDhOcUl3WHdV?=
+ =?iso-2022-jp?B?ZjYrWks5bkJqMXEzQ2tWZG5ZaGphOURHbVhCUVhZK05ocmhDU2luV0hP?=
+ =?iso-2022-jp?B?ZTVHemp6Sk9yNmQzVTh5VTJZYUNhY0ZJNlFWV0lYb3hvelcrNlNCeEZZ?=
+ =?iso-2022-jp?B?SjlxZjcrcUJ5dHF2SnFhSzJnZWR3TG5laU5jcUUrbHQwVndBRmFHdldo?=
+ =?iso-2022-jp?B?RlE1UnE5VXIvdnMvaXJqOTU4L1dwcmRPZlExVzRUOGIxMjh2c1MyTWFu?=
+ =?iso-2022-jp?B?dVdnQTlqWUlYcThyU1dkUkYwd3ZLbmY2dlVZR1F6WnJrWWJFb0QyR1d1?=
+ =?iso-2022-jp?B?OVBnZVFrcE5RN1FramVlZEFpdEhadDN4aCtqaHZqNzZyeTFyaFJWdHRI?=
+ =?iso-2022-jp?B?a2lCOWlsT0lpTVhRYlRHVE9pemk5c1FWcUl1UXFQb1htSlVGMWVkKy9F?=
+ =?iso-2022-jp?B?MFlsdGJyYVJobTdQdVVkY1h1cEgyc29YN3V4U1FjVm84NytlMWlYRCtp?=
+ =?iso-2022-jp?B?WDlPY2N1MU1ySFlGVVhvNTdabXdCbG9xcEF2MjZzV1d3UE9lT2NtYmRE?=
+ =?iso-2022-jp?B?V1A0VVBDaXV6Q0hxUmZ4Y3d4eGlJQVVrZ3hMNExBanA0WWxuMXJmYUU1?=
+ =?iso-2022-jp?B?VWpLTW5GRGo3NVo5ZWZIeUZsYTA5UEhSNEdaVUZadThLOVdKOXNXbTZv?=
+ =?iso-2022-jp?B?d3NkRlk4eGJuMml6d2lLTzNxWisvZGJ5NmFleUJCVnk0cW1hd3A1eThj?=
+ =?iso-2022-jp?B?NEFlK3c5WHo2WS9vbVJYbXk1OHdsUlZxRXExelJpMGVTY3habGVPUHc4?=
+ =?iso-2022-jp?B?VFY2Rmc0WFkrTFY1UjcrL05CSFh0WXUvOXhaWkVCWEE3RHNHZXcrQnE1?=
+ =?iso-2022-jp?B?NTZ2OVNmblR1SUF5U2hzNncxY0dIUnNzbGJ4ZitBdHRCcDgyZXkyUGI0?=
+ =?iso-2022-jp?B?VWU2YlRuM0JPR2lCV1JJNUY3VTdoMVVpbENlMHVvS0VkUjhYVHU5VHo2?=
+ =?iso-2022-jp?B?dXZ6RWtoald5ajlBR3p5Q2twVFE1ZTNnbnlrZjlidjYvR0dyVkFFNE1p?=
+ =?iso-2022-jp?B?VnRZTWc2ZktKei9hT1l3SXFuRDhKVUNVSzQyTXJuVzhZKzJEZzlkK08r?=
+ =?iso-2022-jp?B?RUVmUnEzK3JORkdzRnlacnpvMEwwRG9wa2xMSW50TjNDTDFJRk1tdHNz?=
+ =?iso-2022-jp?B?Q1RtWDR6SGNKVWlVKzh2aU5EUmNyQXlmMktnUkIyMXR1T2xMeGJ5NzZw?=
+ =?iso-2022-jp?B?emYyNys4b01iRWFEc2ZxcGx6ODJ0SndteUk2VzhVNW9ZNERxL1Zwem41?=
+ =?iso-2022-jp?B?MkZWQWt4Y0lncG84Q0VZdTJnM2JGRVo5TlhFNmRZWmxDSytscFUwajQz?=
+ =?iso-2022-jp?B?TS9OSUpudVlmR21RRE9OY203UU9rb1Uza2VPbmZUUjJRZkx4bS94TmFp?=
+ =?iso-2022-jp?B?L3VDZDcrNWwybzNLZ2RYaEM4T1o0dmlxcUdzSFN5U2lkdVZ1ZFRYQTdm?=
+ =?iso-2022-jp?B?dlZXdmRsdHNRUVJvcjkxc3VWQkxZaGhHRHN2ZWcwbnhuL1pIYmduVTFQ?=
+ =?iso-2022-jp?B?aWdTMWZPUHh4c3RtOEtXcWFEbDIvNDhvY3BGa09BOXZsUmQ1WWtubjNj?=
+ =?iso-2022-jp?B?ME0rV21MR3BpY1VjNklNalg4S1o3SjYvV1FxY3NIS2tXVks2bENnQ3FF?=
+ =?iso-2022-jp?B?MmhKcW81T2ltbjYrM1greHNncDFhb0IvSVVGcmJTNFozWGVRZnlWbzNa?=
+ =?iso-2022-jp?B?RE1kUU90OHN3Vi9sNDd0cmY5ekRxbWc3ZU5RN0lsZXhKNC9vWFpJNzA4?=
+ =?iso-2022-jp?B?aTNzSGlDNjA5Y2Jvc3JoQWtmaWZIU2p5N1hYVDRZY3ZmRENib3Z0blUv?=
+ =?iso-2022-jp?B?d2FZV2QzUlBmZUlaNVhwc0xVejMyZ0UvMTZqT2RoeFZNVzFMY2pmeHFQ?=
+ =?iso-2022-jp?B?c2dpaE5icHI3VlZoOHRlTW1oR2hHeXRLbTE2bEdyS1ZIaVRsTnlpQW5J?=
+ =?iso-2022-jp?B?Y1pvVVRNZ3NzTDVoVWM2STFKa1IzenlRbVY2dFVpVkhqdVJnTUxmekpa?=
+ =?iso-2022-jp?B?SjB4YnNjSFZkdm8rdVZFUjVFUXZhZUdMSGtJckplTDZhRGNWYjVzc1V3?=
+ =?iso-2022-jp?B?ckdzc2ZKcz0=?=
+Content-Type: text/plain; charset="iso-2022-jp"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: fujitsu.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OSBPR01MB2037.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1aac9129-eb96-40b4-68a9-08da24592848
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Apr 2022 12:10:57.2713
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6vGckv4IfoshjV4wALS6Z/a0ymIQVAZJvShAjJo/UrjpUD+LIQZNnSeytEt4GBNMavi2YOgaQ7noo09a6PPv3JGpk/yrCWxYl2kreDKhgr4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB9941
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert Mediatek watchdog devicetree binding to YAML.
+Thanks for the comment.
 
-Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
----
- .../devicetree/bindings/watchdog/mtk-wdt.txt  | 42 ----------
- .../devicetree/bindings/watchdog/mtk-wdt.yaml | 76 +++++++++++++++++++
- 2 files changed, 76 insertions(+), 42 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
- create mode 100644 Documentation/devicetree/bindings/watchdog/mtk-wdt.yaml
+> This is A64FX specific.
+> This is x86 specific.
+> This is A64FX specific.
+>=20
+> So why is this in generic code and why needs x86 to populate the A64FX bi=
+ts and
+> make them invisible? Same the other way round.
 
-diff --git a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
-deleted file mode 100644
-index 762c62e428ef..000000000000
---- a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
-+++ /dev/null
-@@ -1,42 +0,0 @@
--Mediatek SoCs Watchdog timer
--
--The watchdog supports a pre-timeout interrupt that fires timeout-sec/2
--before the expiry.
--
--Required properties:
--
--- compatible should contain:
--	"mediatek,mt2701-wdt", "mediatek,mt6589-wdt": for MT2701
--	"mediatek,mt2712-wdt": for MT2712
--	"mediatek,mt6582-wdt", "mediatek,mt6589-wdt": for MT6582
--	"mediatek,mt6589-wdt": for MT6589
--	"mediatek,mt6797-wdt", "mediatek,mt6589-wdt": for MT6797
--	"mediatek,mt7622-wdt", "mediatek,mt6589-wdt": for MT7622
--	"mediatek,mt7623-wdt", "mediatek,mt6589-wdt": for MT7623
--	"mediatek,mt7629-wdt", "mediatek,mt6589-wdt": for MT7629
--	"mediatek,mt7986-wdt", "mediatek,mt6589-wdt": for MT7986
--	"mediatek,mt8183-wdt": for MT8183
--	"mediatek,mt8186-wdt", "mediatek,mt6589-wdt": for MT8186
--	"mediatek,mt8516-wdt", "mediatek,mt6589-wdt": for MT8516
--	"mediatek,mt8192-wdt": for MT8192
--	"mediatek,mt8195-wdt", "mediatek,mt6589-wdt": for MT8195
--
--- reg : Specifies base physical address and size of the registers.
--
--Optional properties:
--- mediatek,disable-extrst: disable send output reset signal
--- interrupts: Watchdog pre-timeout (bark) interrupt.
--- timeout-sec: contains the watchdog timeout in seconds.
--- #reset-cells: Should be 1.
--
--Example:
--
--watchdog: watchdog@10007000 {
--	compatible = "mediatek,mt8183-wdt",
--		     "mediatek,mt6589-wdt";
--	mediatek,disable-extrst;
--	reg = <0 0x10007000 0 0x100>;
--	interrupts = <GIC_SPI 139 IRQ_TYPE_NONE>;
--	timeout-sec = <10>;
--	#reset-cells = <1>;
--};
-diff --git a/Documentation/devicetree/bindings/watchdog/mtk-wdt.yaml b/Documentation/devicetree/bindings/watchdog/mtk-wdt.yaml
-new file mode 100644
-index 000000000000..5788617027c8
---- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/mtk-wdt.yaml
-@@ -0,0 +1,76 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/mtk-wdt.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Mediatek SoCs Watchdog timer
-+
-+maintainers:
-+  - Runyang Chen <runyang.chen@mediatek.com>
-+  - Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-+
-+description: |+
-+  The watchdog supports a pre-timeout interrupt that fires timeout-sec/2
-+  before the expiry.
-+
-+allOf:
-+  - $ref: "watchdog.yaml#"
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - const: mediatek,mt2712-wdt
-+      - const: mediatek,mt6589-wdt
-+      - const: mediatek,mt8183-wdt
-+      - const: mediatek,mt8192-wdt
-+
-+      - items:
-+          - enum:
-+              - mediatek,mt2701-wdt
-+              - mediatek,mt6582-wdt
-+              - mediatek,mt6797-wdt
-+              - mediatek,mt7622-wdt
-+              - mediatek,mt7623-wdt
-+              - mediatek,mt7629-wdt
-+              - mediatek,mt7986-wdt
-+              - mediatek,mt8173-wdt
-+              - mediatek,mt8183-wdt
-+              - mediatek,mt8186-wdt
-+              - mediatek,mt8192-wdt
-+              - mediatek,mt8195-wdt
-+              - mediatek,mt8516-wdt
-+          - const: mediatek,mt6589-wdt
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  '#reset-cells':
-+    const: 1
-+
-+  timeout-sec: true
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    watchdog@10007000 {
-+        compatible = "mediatek,mt8183-wdt",
-+                     "mediatek,mt6589-wdt";
-+        mediatek,disable-extrst;
-+        reg = <0x10007000 0x100>;
-+        interrupts = <GIC_SPI 139 IRQ_TYPE_NONE>;
-+        timeout-sec = <10>;
-+        #reset-cells = <1>;
-+    };
-+
-+...
--- 
-2.18.0
+As you commented, current generic code includes things that are not
+needed outside of specific hardware.
+=20
+> Now imagine a few other [sub]architectures come around and add their spec=
+ific
+> prefetcher control knobs, strings and whatever. That's going to be unmain=
+tainable
+> in no time.
+>=20
+> This is not comparable to the cache attributes where the architectures sh=
+are a
+> significant amount of subsets. You just demonstrated that X86 and A64FX s=
+hare
+> not even a single entry.
+>=20
+> The core code should provide infrastructure to manage the [sub]architectu=
+re
+> specific control files at different cache levels.
+>=20
+> Not more not less.
 
+I understand the risks of the current implementation.
+
+I would like to fix the core code to provide infrastructure to manage
+the [sub]architecture specific control files at different cache levels
+by also referring to the comments I received at patch 7/9.

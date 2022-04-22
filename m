@@ -2,178 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EC3E50BDB9
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:57:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 155F350BDBA
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:57:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240805AbiDVRAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 13:00:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34960 "EHLO
+        id S1352109AbiDVRAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 13:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347094AbiDVQ7z (ORCPT
+        with ESMTP id S1345433AbiDVRAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 12:59:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F41235F8DA
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:56:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650646617;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=6ojSZXPxoDV2f3YOyvbbjydnRtJRzwjRtv+89W8ar4I=;
-        b=YylV/Nt1yMR/9gd22wqC4QRCuXMmueaEbx5S59VVwfvHattimUi0jEiLvRzCTWoGyf4wAF
-        lrvtO3w8/FablGpwzMdw4CNte/sU7nnb+iuVzy3KZA+v+EWImf+kbFDm8s7krrvZoXSgON
-        JNpmSTBrdamOIw7lN6kzBuz34meklzU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-671-0TRUTmCUPLGLWrakOyZq_Q-1; Fri, 22 Apr 2022 12:56:56 -0400
-X-MC-Unique: 0TRUTmCUPLGLWrakOyZq_Q-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1733A1E1AE4C;
-        Fri, 22 Apr 2022 16:56:56 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EDC5A2166B5E;
-        Fri, 22 Apr 2022 16:56:55 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: [GIT PULL] KVM fixes for Linux 5.18-rc4
-Date:   Fri, 22 Apr 2022 12:56:55 -0400
-Message-Id: <20220422165655.1665574-1-pbonzini@redhat.com>
+        Fri, 22 Apr 2022 13:00:08 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399EA5FF2B;
+        Fri, 22 Apr 2022 09:57:12 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id t25so15314769lfg.7;
+        Fri, 22 Apr 2022 09:57:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=bPH7VaBfkFbtZZotNuuTdskPihD6+M4P5/MTINbvQUc=;
+        b=Pe+UOZBQErS+Z8nmGZrZH2ly5AmAXR/nub2maR1YBDg2mW5cI8XFN7kRpzR9zJR1g/
+         RCcytxziQK15Y/+UhDwpzPO/z8urhmQ15jD9UMpIVuXdvYk4ZA9FMtQi/zELESwjYQ6k
+         oawpnRmK4g3hu3fT3s6md4XsDn4X61bzFwlVcJy4oKKXIIa+Wf5SbsrYbGooZQtu9T6w
+         mMrQaS3i1Iz83k0/NJ+NcahILWGnEI8wU5g8Ena+3kmorM7mSBcU3mLHYmzUGfSY57bG
+         E+QiOx9uS0cC7R96ZHgDOYCEZyLap5NE8EK+uYgY9glo5SCpnjSPQ7hN8GC1SPl/HsYy
+         6IUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=bPH7VaBfkFbtZZotNuuTdskPihD6+M4P5/MTINbvQUc=;
+        b=XEiKvmg7xsYSXSZYVx/nLyolc7T/6RvikXHAvkNkh+jvOxdHOfpGJ0SkCTpejBuWuu
+         7cVV/dJx9ir3mL7fzph2FOZFcSsmdzYfqq66PcOvZUnSPe4g7zlp/b6WPBB7bwcOizQt
+         zy+RBChim9fHOwMIVFrO63EpsNmwtJL1tSPAGPCOiXaX+vSXKKhsurWYmIJYgOgF6sxd
+         HwZGI1SDFG/FStu42hZnLcapg1U3MgKzqry1M8evemEydgOfEPE1WHQzk738wFjlDRKV
+         j+4Qnd/ZjaM9fYy0bf6KapptCywlA3wTAFVqZXwgFMmJP33Bk9HAp3QjgL3pGCSLBAwv
+         u2wg==
+X-Gm-Message-State: AOAM532c6sb/kFQjdzrACwzo+q7gjzd4MMKryO5RL+6mJjBl1l1yUIdz
+        cNe5zK93yEllcseydASIz8k=
+X-Google-Smtp-Source: ABdhPJzdFQvGzdSLbrSe+adt+pVkjulM8+IbVohfTKqNcWpqfyrWUedIVpFG1a8BPbVbvzAdinxkHQ==
+X-Received: by 2002:a05:6512:2213:b0:471:c296:b659 with SMTP id h19-20020a056512221300b00471c296b659mr3848330lfu.24.1650646630354;
+        Fri, 22 Apr 2022 09:57:10 -0700 (PDT)
+Received: from orome ([62.96.65.119])
+        by smtp.gmail.com with ESMTPSA id r9-20020a2e8e29000000b0024da2131ed9sm269715ljk.100.2022.04.22.09.57.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 09:57:07 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 18:57:04 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, xinlei.lee@mediatek.com,
+        lee.jones@linaro.org, robh+dt@kernel.org, matthias.bgg@gmail.com,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, rex-bc.chen@mediatek.com,
+        jitao.shi@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v6, 5/5] dt-bindings: pwm: Add interrupts property for
+ MediaTek MT8192
+Message-ID: <YmLeYOOCNciqhykt@orome>
+References: <1650284456-16407-1-git-send-email-xinlei.lee@mediatek.com>
+ <1650284456-16407-6-git-send-email-xinlei.lee@mediatek.com>
+ <a92d3b46-ace4-2d19-fef9-c59cd1a596ce@collabora.com>
+ <20220421134808.sqnecvysuzlgdsz5@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Xn43fwg7L9AIf1Ta"
+Content-Disposition: inline
+In-Reply-To: <20220421134808.sqnecvysuzlgdsz5@pengutronix.de>
+User-Agent: Mutt/2.2.1 (c8109e14) (2022-02-19)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
 
-The following changes since commit b2d229d4ddb17db541098b83524d901257e93845:
+--Xn43fwg7L9AIf1Ta
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  Linux 5.18-rc3 (2022-04-17 13:57:31 -0700)
+On Thu, Apr 21, 2022 at 03:48:08PM +0200, Uwe Kleine-K=C3=B6nig wrote:
+> Hello,
+>=20
+> On Thu, Apr 21, 2022 at 12:17:00PM +0200, AngeloGioacchino Del Regno wrot=
+e:
+> > Il 18/04/22 14:20, xinlei.lee@mediatek.com ha scritto:
+> > > From: Xinlei Lee <xinlei.lee@mediatek.com>
+> > >=20
+> > > Add interrupts property of pwm for MediaTek MT8192 SoC.
+> > >=20
+> > > Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> >=20
+> > Hello Xinlei,
+> > the pwm-mtk-disp.c driver does not support interrupts.
+> >=20
+> > Please add interrupts support to the driver first, and only then
+> > add that in the dt-bindings.
+>=20
+> in my understanding the linux driver state and the binding documentation
+> are somewhat independent. Here I'd say adding the irq information to dt
+> without the driver supporting it is fine.
 
-are available in the Git repository at:
+Agreed. I've applied this along with the rest. It doesn't have Rob's or
+Krzysztof's stamp of approval, but it's a trivial change and looks fine
+to me.
 
-  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
+Thierry
 
-for you to fetch changes up to e852be8b148e117e25be1c98cf72ee489b05919e:
+--Xn43fwg7L9AIf1Ta
+Content-Type: application/pgp-signature; name="signature.asc"
 
-  kvm: selftests: introduce and use more page size-related constants (2022-04-21 15:41:01 -0400)
+-----BEGIN PGP SIGNATURE-----
 
-The main and larger change here is a workaround for AMD's lack of cache
-coherency for encrypted-memory guests.
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmJi3mAACgkQ3SOs138+
+s6GaAw//VlLPxZ1xhdfymBfdZxhQ5KeACuZ6k/asJF7IV7j+qF8lPEGixgDeaLZF
+g139oHKqts/KjwLRBEerRUOKC1om/nZNbnF5phGdFXBhNCHPbgPEDXwDh64O6gNN
+VYiOS3e+9/UWgo18fkjE0vAtlf5BOytzKE3dxheacU29YENfK5mfajrP5OqsMmgs
+SXvoMWRuq2ni51pPlj1sNIoeK3FBwvM8D4yFHV8Ns/jpDRmIXqBafYUc0qu3l5yQ
+fX0ojlbaDppJ8YFyRPn7PDY36hA8siLvW9WCJ4GB0sAZeG1ZlA2zvMSFxNLz+OIE
+Xg76o+1+zMuWsHCCvay7Q+ylNlyyVCS4Kp33Ho8BMIHS2WLm1L0wUvaUGAHH4f4h
+I6TcMGxu++kh6g1LXFAZ8HCwUG8J+HdJiYgfKEH8DQuqzYfWl54GA1Gi65+zpCfA
+EoMbL4Ja/pb3QjlgtzoGWoGF9qMUigUy5DlICAJJs+JsI84YGj2UNCFS3uXCHOsC
+/Mh5APkBEz0hI8eF7jWhdpjsD1Fsl04aaHjGn0iIIKw8fHE1XoJXN85aU5jdKS77
+bvuAn7dcSlpasoPaUgIBnje0T7SGp3YKzaJs+PiRE5rxHitjMRLa0umLL/tKMhUE
+vJCoUPamD5R+OoQIeG8sXKQYV/+As6q8kGd21nwJI4AIJ8QhaIM=
+=c+hp
+-----END PGP SIGNATURE-----
 
-I have another patch pending, but it's waiting for review from the
-architecture maintainers.
-
-----------------------------------------------------------------
-RISC-V:
-
-* Remove 's' & 'u' as valid ISA extension
-
-* Do not allow disabling the base extensions 'i'/'m'/'a'/'c'
-
-x86:
-
-* Fix NMI watchdog in guests on AMD
-
-* Fix for SEV cache incoherency issues
-
-* Don't re-acquire SRCU lock in complete_emulated_io()
-
-* Avoid NULL pointer deref if VM creation fails
-
-* Fix race conditions between APICv disabling and vCPU creation
-
-* Bugfixes for disabling of APICv
-
-* Preserve BSP MSR_KVM_POLL_CONTROL across suspend/resume
-
-selftests:
-
-* Do not use bitfields larger than 32-bits, they differ between GCC and clang
-
-----------------------------------------------------------------
-Atish Patra (2):
-      RISC-V: KVM: Remove 's' & 'u' as valid ISA extension
-      RISC-V: KVM: Restrict the extensions that can be disabled
-
-Like Xu (1):
-      KVM: x86/pmu: Update AMD PMC sample period to fix guest NMI-watchdog
-
-Mingwei Zhang (2):
-      KVM: SVM: Flush when freeing encrypted pages even on SME_COHERENT CPUs
-      KVM: SEV: add cache flush to solve SEV cache incoherency issues
-
-Paolo Bonzini (3):
-      Merge tag 'kvm-riscv-fixes-5.18-2' of https://github.com/kvm-riscv/linux into HEAD
-      kvm: selftests: do not use bitfields larger than 32-bits for PTEs
-      kvm: selftests: introduce and use more page size-related constants
-
-Sean Christopherson (9):
-      KVM: x86: Don't re-acquire SRCU lock in complete_emulated_io()
-      KVM: RISC-V: Use kvm_vcpu.srcu_idx, drop RISC-V's unnecessary copy
-      KVM: Add helpers to wrap vcpu->srcu_idx and yell if it's abused
-      KVM: Initialize debugfs_dentry when a VM is created to avoid NULL deref
-      KVM: x86: Tag APICv DISABLE inhibit, not ABSENT, if APICv is disabled
-      KVM: nVMX: Defer APICv updates while L2 is active until L1 is active
-      KVM: x86: Pend KVM_REQ_APICV_UPDATE during vCPU creation to fix a race
-      KVM: x86: Skip KVM_GUESTDBG_BLOCKIRQ APICv update if APICv is disabled
-      KVM: SVM: Simplify and harden helper to flush SEV guest page(s)
-
-Thomas Huth (1):
-      KVM: selftests: Silence compiler warning in the kvm_page_table_test
-
-Tom Rix (1):
-      KVM: SPDX style and spelling fixes
-
-Wanpeng Li (1):
-      x86/kvm: Preserve BSP MSR_KVM_POLL_CONTROL across suspend/resume
-
- arch/powerpc/kvm/book3s_64_mmu_radix.c             |   9 +-
- arch/powerpc/kvm/book3s_hv_nested.c                |  16 +-
- arch/powerpc/kvm/book3s_rtas.c                     |   4 +-
- arch/powerpc/kvm/powerpc.c                         |   4 +-
- arch/riscv/include/asm/kvm_host.h                  |   3 -
- arch/riscv/kvm/vcpu.c                              |  37 ++--
- arch/riscv/kvm/vcpu_exit.c                         |   4 +-
- arch/s390/kvm/interrupt.c                          |   4 +-
- arch/s390/kvm/kvm-s390.c                           |   8 +-
- arch/s390/kvm/vsie.c                               |   4 +-
- arch/x86/include/asm/kvm-x86-ops.h                 |   1 +
- arch/x86/include/asm/kvm_host.h                    |   1 +
- arch/x86/kernel/kvm.c                              |  13 ++
- arch/x86/kvm/pmu.h                                 |   9 +
- arch/x86/kvm/svm/pmu.c                             |   1 +
- arch/x86/kvm/svm/sev.c                             |  67 ++++---
- arch/x86/kvm/svm/svm.c                             |   1 +
- arch/x86/kvm/svm/svm.h                             |   2 +
- arch/x86/kvm/vmx/nested.c                          |   5 +
- arch/x86/kvm/vmx/pmu_intel.c                       |   8 +-
- arch/x86/kvm/vmx/vmx.c                             |   5 +
- arch/x86/kvm/vmx/vmx.h                             |   1 +
- arch/x86/kvm/x86.c                                 |  60 +++---
- include/linux/kvm_host.h                           |  26 ++-
- .../selftests/kvm/include/x86_64/processor.h       |  17 ++
- tools/testing/selftests/kvm/kvm_page_table_test.c  |   2 +-
- tools/testing/selftests/kvm/lib/x86_64/processor.c | 202 +++++++++------------
- tools/testing/selftests/kvm/x86_64/amx_test.c      |   1 -
- .../selftests/kvm/x86_64/emulator_error_test.c     |   1 -
- tools/testing/selftests/kvm/x86_64/smm_test.c      |   2 -
- .../selftests/kvm/x86_64/vmx_tsc_adjust_test.c     |   1 -
- .../testing/selftests/kvm/x86_64/xen_shinfo_test.c |   1 -
- .../testing/selftests/kvm/x86_64/xen_vmcall_test.c |   1 -
- virt/kvm/dirty_ring.c                              |   2 +-
- virt/kvm/kvm_main.c                                |  43 +++--
- virt/kvm/kvm_mm.h                                  |   2 +-
- 36 files changed, 316 insertions(+), 252 deletions(-)
-
+--Xn43fwg7L9AIf1Ta--

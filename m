@@ -2,118 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C79D350C0C1
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 22:45:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA13C50C0EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 23:12:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbiDVUpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 16:45:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36964 "EHLO
+        id S229745AbiDVVPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 17:15:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiDVUpO (ORCPT
+        with ESMTP id S229680AbiDVVPL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 16:45:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5DF202B4C;
-        Fri, 22 Apr 2022 12:42:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 849AC61CE4;
-        Fri, 22 Apr 2022 19:39:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1B01C385A4;
-        Fri, 22 Apr 2022 19:39:18 +0000 (UTC)
-Date:   Fri, 22 Apr 2022 15:39:16 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Kent Overstreet <kent.overstreet@gmail.com>
-Cc:     Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        hannes@cmpxchg.org, akpm@linux-foundation.org,
-        linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-input@vger.kernel.org, roman.gushchin@linux.dev
-Subject: Re: [PATCH v2 1/8] lib/printbuf: New data structure for
- heap-allocated strings
-Message-ID: <20220422153916.7ebf20c3@gandalf.local.home>
-In-Reply-To: <20220422193015.2rs2wvqwdlczreh3@moria.home.lan>
-References: <20220421234837.3629927-1-kent.overstreet@gmail.com>
-        <20220421234837.3629927-7-kent.overstreet@gmail.com>
-        <20220422042017.GA9946@lst.de>
-        <YmI5yA1LrYrTg8pB@moria.home.lan>
-        <20220422052208.GA10745@lst.de>
-        <YmI/v35IvxhOZpXJ@moria.home.lan>
-        <20220422113736.460058cc@gandalf.local.home>
-        <20220422193015.2rs2wvqwdlczreh3@moria.home.lan>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 22 Apr 2022 17:15:11 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68C8F25C667;
+        Fri, 22 Apr 2022 13:10:47 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E7F041063;
+        Fri, 22 Apr 2022 12:41:16 -0700 (PDT)
+Received: from [10.57.80.98] (unknown [10.57.80.98])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 822023F73B;
+        Fri, 22 Apr 2022 12:41:13 -0700 (PDT)
+Message-ID: <a9e09125-c61b-4a2a-f87e-1ba8147f659f@arm.com>
+Date:   Fri, 22 Apr 2022 20:41:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v4] Documentation: x86: rework IOMMU documentation
+Content-Language: en-GB
+To:     Alex Deucher <alexander.deucher@amd.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        corbet@lwn.net, hpa@zytor.com, x86@kernel.org,
+        dave.hansen@linux.intel.com, bp@alien8.de, mingo@redhat.com,
+        tglx@linutronix.de, joro@8bytes.org, Suravee.Suthikulpanit@amd.com,
+        will@kernel.org, iommu@lists.linux-foundation.org,
+        Vasant.Hegde@amd.com
+References: <20220422175423.44491-1-alexander.deucher@amd.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220422175423.44491-1-alexander.deucher@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Apr 2022 15:30:15 -0400
-Kent Overstreet <kent.overstreet@gmail.com> wrote:
+On 2022-04-22 18:54, Alex Deucher wrote:
+[...]
+> +Intel Specific Notes
+> +--------------------
+> +
+> +Graphics Problems?
+> +^^^^^^^^^^^^^^^^^^
+> +
+> +If you encounter issues with graphics devices, you can try adding
+> +option intel_iommu=igfx_off to turn off the integrated graphics engine.
+> +If this fixes anything, please ensure you file a bug reporting the problem.
+> +
+> +Some exceptions to IOVA
+> +^^^^^^^^^^^^^^^^^^^^^^^
+> +
+> +Interrupt ranges are not address translated, (0xfee00000 - 0xfeefffff).
+> +The same is true for peer to peer transactions. Hence we reserve the
+> +address from PCI MMIO ranges so they are not allocated for IOVA addresses.
 
-> > This is how open source programming is suppose to work ;-)  
-> 
-> Is it though? :)
-> 
-> One of the things I've been meaning to talk more about, that
-> came out of a recent Rust discussion, is that we in the kernel community could
-> really do a better job with how we interact with the outside world, particularly
-> with regards to the sharing of code.
-> 
-> The point was made to me when another long standing kernel dev was complaining
-> about Facebook being a large, insular, difficult to work with organization, that
-> likes to pretend it is the center of the universe and not bend to the outside
-> world, while doing the exact same thing with respect to new concerns brought by
-> the Rust community. The irony was illuminating :)
+Note that this should be true for both drivers.
 
-I do not consider Facebook an open source company. One reason I turned them
-down.
+> +
+> +AMD Specific Notes
+> +------------------
+> +
+> +Graphics Problems?
+> +^^^^^^^^^^^^^^^^^^
+> +
+> +If you encounter issues with integrated graphics devices, you can try adding
+> +option iommu=pt to the kernel command line use a 1:1 mapping for the IOMMU.  If
+> +this fixes anything, please ensure you file a bug reporting the problem.
 
-> 
-> The reason I bring that up is that in this case, printbuf is the more evolved,
-> more widely used implementation, and you're asking me to discard it so the
-> kernel can stick with its more primitive, less widely used implementation.
-> 
-> $ git grep -w seq_buf|wc -l
-> 86
-> 
-> $ git grep -w printbuf|wc -l
-> 366
+And indeed this is a generic option. I reckon we could simply merge 
+these two sections together, with the first paragraph being something like:
 
-$ git grep printbuf
-drivers/media/i2c/ccs/ccs-reg-access.c:                 char printbuf[(MAX_WRITE_LEN << 1) +
-drivers/media/i2c/ccs/ccs-reg-access.c:                 bin2hex(printbuf, regdata, msg.len);
-drivers/media/i2c/ccs/ccs-reg-access.c:                         regs->addr + j, printbuf);
+If you encounter issues with integrated graphics devices, you can try 
+adding the option "iommu.passthrough=1", or the equivalent "iommu=pt", 
+to the kernel command line to use a 1:1 mapping for the IOMMU in 
+general.  On Intel you can also try "intel_iommu=igfx_off" to turn off 
+translation specifically for the integrated graphics engine only.  If 
+this fixes anything, please ensure you file a bug reporting the problem.
 
-I don't see it.
+> +
+> +Fault reporting
+> +---------------
+> +When errors are reported, the IOMMU signals via an interrupt. The fault
+> +reason and device that caused it is printed on the console.
+> +
+> +
+> +Kernel Log Samples
+> +------------------
+> +
+> +Intel Boot Messages
+> +^^^^^^^^^^^^^^^^^^^
+> +
+> +Something like this gets printed indicating presence of DMAR tables
+> +in ACPI.
+> +
+> +::
+> +
+> +	ACPI: DMAR (v001 A M I  OEMDMAR  0x00000001 MSFT 0x00000097) @ 0x000000007f5b5ef0
+> +
+> +When DMAR is being processed and initialized by ACPI, prints DMAR locations
+> +and any RMRR's processed
+> +
+> +::
+> +
+> +	ACPI DMAR:Host address width 36
+> +	ACPI DMAR:DRHD (flags: 0x00000000)base: 0x00000000fed90000
+> +	ACPI DMAR:DRHD (flags: 0x00000000)base: 0x00000000fed91000
+> +	ACPI DMAR:DRHD (flags: 0x00000001)base: 0x00000000fed93000
+> +	ACPI DMAR:RMRR base: 0x00000000000ed000 end: 0x00000000000effff
+> +	ACPI DMAR:RMRR base: 0x000000007f600000 end: 0x000000007fffffff
+> +
+> +When DMAR is enabled for use, you will notice
+> +
+> +::
+> +
+> +	PCI-DMA: Using DMAR IOMMU
+> +
+> +Intel Fault reporting
+> +^^^^^^^^^^^^^^^^^^^^^
+> +
+> +::
+> +
+> +	DMAR:[DMA Write] Request device [00:02.0] fault addr 6df084000
+> +	DMAR:[fault reason 05] PTE Write access is not set
+> +	DMAR:[DMA Write] Request device [00:02.0] fault addr 6df084000
+> +	DMAR:[fault reason 05] PTE Write access is not set
+> +
+> +AMD Boot Messages
+> +^^^^^^^^^^^^^^^^^
+> +
+> +Something like this gets printed indicating presence of the IOMMU.
+> +
+> +::
+> +
+> +	iommu: Default domain type: Translated
+> +	iommu: DMA domain TLB invalidation policy: lazy mode
 
-And by your notion:
+Similarly, that's common IOMMU API reporting which will be seen on all 
+architectures (let alone IOMMU drivers). Maybe some of the messages from 
+print_iommu_info() might be better AMD-specific examples?
 
-$ git grep trace_seq | wc -l
-1680
+Cheers,
+Robin.
 
-Thus we all should be using trace_seq!
-
-> 
-> So, going to have to push back on that one :)
-> 
-> Printbufs aren't new code; everything in them is there because I've found it
-> valuable, which is why I decided to try promoting them to the kernel proper (and
-> more importantly, the idea of a standard way to pretty-print anything).
-> 
-> I'm happy to discuss the merits of the code more, and try to convince you why
-> you'll like them :)
-
-I'd like to know more to why seq_buf is not good for you. And just telling
-me that you never seriously tried to make it work because you were afraid
-of causing tracing regressions without ever asking the tracing maintainer
-is not going to cut it.
-
--- Steve
+> +
+> +AMD Fault reporting
+> +^^^^^^^^^^^^^^^^^^^
+> +
+> +::
+> +
+> +	AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0007 address=0xffffc02000 flags=0x0000]
+> +	AMD-Vi: Event logged [IO_PAGE_FAULT device=07:00.0 domain=0x0007 address=0xffffc02000 flags=0x0000]

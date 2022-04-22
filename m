@@ -2,99 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6FDF50BBA1
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:24:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7353C50BBA5
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:25:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449419AbiDVP1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 11:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39032 "EHLO
+        id S1449427AbiDVP2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 11:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449404AbiDVP1E (ORCPT
+        with ESMTP id S1386098AbiDVP2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 11:27:04 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734D256215
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:24:10 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id r17so5245194iln.9
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:24:10 -0700 (PDT)
+        Fri, 22 Apr 2022 11:28:03 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B42C65E3
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:25:07 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id lc2so16997198ejb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:25:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Wxv1VHcdMAWKawTEifnINmazC29umb2i5gHiDAZVeBk=;
-        b=335nWJbBDhabHr89gG5tFiLbFOQLvASDcW1EglELgq0uhxBp97C2KaIqEwRKVbYsmx
-         GpS+ja0gF1YRQsUZmFTz2Nl2pDXP+Xg6v+vWDRNYMU8cLM1cbEfDWjFhC1kiLwXMHCqc
-         eUNTTMg/IucTx/f6rGjggjmKpM7YImY+ja+IfNi+FzeDGPOhrYxJqIu19gGYohfQaFGV
-         0SRajNzdFfpfR5CbaoKsMJp5T0wjU80hAdAdMAGsWbQc6pgeR7DyeISxjBih7RRxtKeA
-         yyb7xs1AH/m8scE0u5RTvPAz4HOf8cex/5nDUlehQfn/pXUbFnP8ggIcugUC7gLXuD4C
-         AWYw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=sa/EoVj7UXoDHkP3+ISFzh+OXFxyPRq9RG0BLiBl6eg=;
+        b=hnD+E7YuymEsEN0uCt13UTly6lbaNaHlNGDgxZoQF6Xfs+pwqxOgf6vvEnBWYGXdM7
+         dKdfK9LhCPQpZGhqdHt4WYTEk5ts7Zb3rhsmo72FeTBK3Sj2+MNsDyAsCKgXcJu+oUgD
+         zsJVl2bniZZemVA2tO4GestXoYnAeXwsST3HEsV9/MscO3kJdbNnKLavvjPZORwpf1UT
+         XjXbgQ7S8b9gb61KpNZnA3D7PVlF/7JwzCup63xsTJszS32zOoGnzSMhqnabE/swfCpH
+         tZo/JMwTtWyBnuNpoq0h2IvAHRsOk7yGYR+NKRJdE88paV7aXSVn0yLzxMbWUj7ooOtL
+         vB1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Wxv1VHcdMAWKawTEifnINmazC29umb2i5gHiDAZVeBk=;
-        b=CjP2FfkUVWOxKlzWLRdydqMf5RNtJf/ICmK04z3iJEk0ivO7ELxcam7Wnimf8BrQ4r
-         Ws8c5C/HuMTEcEiOcswgSf/NiEmxnwN1elZuEIcujl+INQ2MabFUFxkuwZqIqQP5t3ME
-         OZAhPcBn32I8UfDQwWHzZwaBfUzkQnkOgK7EM6CmSfZzcp5eVxbQ3F2ptEXH0kJx7ZYC
-         kyJgQ0KXJaLtjLD8F3RHR+KuiV1nW4xRUIXWG7oONgvHLrTor3DpHcs2ZHFQqO/DENWz
-         KHZxNmEsv46b1bvxr43wjDh3vQy6e3jtzrGw+MyB81hl/TJMpbhhC1M/Sd+fJxnERdc1
-         GUTA==
-X-Gm-Message-State: AOAM532aTjgwhZ4VjDzxPBCpxzNuZZKQKFaRBGARH9gDLZYGJnYiJHve
-        gGPdmpQDo/PdlRvk8tvOCAeADFLjqWbNiEdiw/Otpg==
-X-Google-Smtp-Source: ABdhPJynI2j2o9aSn9G09xaJSPgHCkDd+G+caW0XT60z6/oGe+SAEg8uILSJZITvWsJcMG2BcnPuKkJSdTWGHxW7IyE=
-X-Received: by 2002:a92:d2ca:0:b0:2ca:ca3a:de89 with SMTP id
- w10-20020a92d2ca000000b002caca3ade89mr2225426ilg.127.1650641049737; Fri, 22
- Apr 2022 08:24:09 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=sa/EoVj7UXoDHkP3+ISFzh+OXFxyPRq9RG0BLiBl6eg=;
+        b=x/VPn8DrZZv9oROxoLBiKAnl+b4JRKFQS47clXqDf+Qpcx7fcQC8mwBgXObFJH4ZC9
+         xbQ/96yQdmjjWo/TF3xPykigzZfxGV2fTv21Hqbu1Af5HxTjPIojhYkmRvZ8UR6M1S/m
+         0P2AJb78xXs3QTYGVNGIZDGEXfr0kP+nVGfsEJz+lcofAOgKJcJzX+kDsjXFyoLtGqSV
+         VIMRxLhZkYDOWnYf0tQ8j73wqtPrmDFJNihB0Dd8U81/DAin93llDiLosY2a+B2UTFQC
+         1Wlx2W2Z048zjUCGfwsGkHYAkYgFAPgrr5B/NggVko5jLSNkgsTiyeZVV9wdB4CKdz8G
+         pq0w==
+X-Gm-Message-State: AOAM531nNk0MtPt9Xfr1UOLh3UEkjOxs4qLQOHbQjTjICxVVPAVmiUaC
+        qjEaWApfYmjwu5rnR7f4hkQGjZskLIA/lQ==
+X-Google-Smtp-Source: ABdhPJyvnxn5qAFZghz/3D1h2x9gZV4WrjtyW7sthE7LvdhGsrfG8iMZquBRE7UxfVek29yANr+GVg==
+X-Received: by 2002:a17:907:8a20:b0:6f0:1e57:2dd1 with SMTP id sc32-20020a1709078a2000b006f01e572dd1mr4620592ejc.392.1650641105606;
+        Fri, 22 Apr 2022 08:25:05 -0700 (PDT)
+Received: from [192.168.0.232] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id cr10-20020a056402222a00b0041d918fdf99sm1008263edb.85.2022.04.22.08.25.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Apr 2022 08:25:05 -0700 (PDT)
+Message-ID: <b96fd335-df13-6657-c2ff-38ff677555a4@linaro.org>
+Date:   Fri, 22 Apr 2022 17:25:04 +0200
 MIME-Version: 1.0
-References: <20220422054224.19527-1-matthew.ruffell@canonical.com>
-In-Reply-To: <20220422054224.19527-1-matthew.ruffell@canonical.com>
-From:   Josef Bacik <josef@toxicpanda.com>
-Date:   Fri, 22 Apr 2022 11:23:58 -0400
-Message-ID: <CAEzrpqe=LD3DQcEeLXmmFuq7cX_dAQ6DOCuJYWBoZWKKTmoTzA@mail.gmail.com>
-Subject: Re: [PROBLEM] nbd requests become stuck when devices watched by
- inotify emit udev uevent changes
-To:     Matthew Ruffell <matthew.ruffell@canonical.com>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        linux-block <linux-block@vger.kernel.org>,
-        nbd <nbd@other.debian.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/3] interconnect: qcom: constify qcom_icc_desc
+Content-Language: en-US
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220412102623.227607-1-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220412102623.227607-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 1:42 AM Matthew Ruffell
-<matthew.ruffell@canonical.com> wrote:
->
-> Dear maintainers of the nbd subsystem,
->
-> A user has come across an issue which causes the nbd module to hang after a
-> disconnect where a write has been made to a qemu qcow image file, with qemu-nbd
-> being the server.
->
+On 12/04/2022 12:26, Krzysztof Kozlowski wrote:
+> struct qcom_icc_desc is not modified so it can be made const for safety.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  drivers/interconnect/qcom/msm8916.c |  6 +++---
+>  drivers/interconnect/qcom/msm8939.c |  8 ++++----
+>  drivers/interconnect/qcom/msm8974.c | 12 ++++++------
+>  drivers/interconnect/qcom/qcm2290.c | 12 ++++++------
+>  drivers/interconnect/qcom/qcs404.c  |  6 +++---
+>  drivers/interconnect/qcom/sc7180.c  | 26 +++++++++++++-------------
+>  drivers/interconnect/qcom/sc7280.c  | 24 ++++++++++++------------
+>  drivers/interconnect/qcom/sdm660.c  | 12 ++++++------
+>  drivers/interconnect/qcom/sm8150.c  | 22 +++++++++++-----------
+>  drivers/interconnect/qcom/sm8250.c  | 22 +++++++++++-----------
+>  drivers/interconnect/qcom/sm8350.c  | 20 ++++++++++----------
+>  drivers/interconnect/qcom/sm8450.c  | 22 +++++++++++-----------
 
-Ok there's two problems here, but I want to make sure I have the right
-fix for the hang first.  Can you apply this patch
+Hi folks,
 
-https://paste.centos.org/view/b1a2d01a
+Any comments here?
 
-and make sure the hang goes away?  Once that part is fixed I'll fix
-the IO errors, this is just us racing with systemd while we teardown
-the device and then we're triggering a partition read while the device
-is going down and it's complaining loudly.  Before we would
-set_capacity to 0 whenever we disconnected, but that causes problems
-with file systems that may still have the device open.  However now we
-only do this if the server does the CLEAR_SOCK ioctl, which clearly
-can race with systemd poking the device, so I need to make it
-set_capacity(0) when the last opener closes the device to prevent this
-style of race.
-
-Let me know if that patch fixes the hang, and then I'll work up
-something for the capacity problem.  Thanks,
-
-Josef
+Best regards,
+Krzysztof

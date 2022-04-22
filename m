@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F165150BE5C
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 19:12:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF9350BE18
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 19:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbiDVRNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 13:13:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53794 "EHLO
+        id S1346639AbiDVRNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 13:13:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244744AbiDVRMh (ORCPT
+        with ESMTP id S1343904AbiDVRMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 13:12:37 -0400
+        Fri, 22 Apr 2022 13:12:39 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D2791568;
-        Fri, 22 Apr 2022 10:09:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD5792325;
+        Fri, 22 Apr 2022 10:09:43 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 91E921F46B05
+        with ESMTPSA id 54DEE1F468E2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650647377;
-        bh=EPcCXKeA1LAFjO2ZEEU8z37SDrqevGobpJeJYsDJDSY=;
+        s=mail; t=1650647379;
+        bh=X3NpkUf9tU0MHbsiTnCYAaktL0CWJwW6kSqqsxJNIQE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GMzuubHogBCqI/fcPFkN1Z/E0atBiwC4cjim5/njd57NQb8qXbbF1YnT+9lrN2VcX
-         Uhc00+qaSpL8lsfBuA+iYyB1YTsVyb4swHRJgGe9OE+JbqolwxsSWRE078LmYkzjk0
-         y4+z3dnoLKK55V/z+4oClppHd/PIV/uhpqZ76L4ge5Tp/HstTG0bz7dOAk3Y9TR6rN
-         On8Dln9GFg0usl4f0GnG5JM5atTtSewK+/p++3YVaUrx4L6U60Pm68twTtXP98oq0L
-         BMrrECredc1RRSOw2ZoWY1LtNsDjmzKJYKihFC0iWXUJf4sQJBYzkv8/2lUHxSV3sS
-         TJ8OZFFgKcnmw==
+        b=jloNuzJ4qUyECGKSxkQ9XKUxGO9urUq95lUvWyMcDGjWMrhwa7sJkBX+/A0BwjECo
+         A/i+2dHppavvUXT52xg0BVrXgoqOl2M9eKD2wi+DflpOug8gW8b0Nn1/8T7fJI9eMo
+         CJC5QpyhnLpRVOerHecKeZUv012fdp19iu28kcGPVwOYCoS3YUt6SAgp3vqYey6KRT
+         sZ6LaIgT33HbQKFvHe0ReVil7HsOop/GjDBwqsmy97trKRIa0TSflOnenAqR0YaPeo
+         6mImhy+V6zX8+MDf4LmbDUqRRjceEagdkkNP21zaD43jkVt+ZtFeE3mUsD1USQTEW6
+         8ulC/G76IX/aA==
 Received: by jupiter.universe (Postfix, from userid 1000)
-        id E2BF9480C1E; Fri, 22 Apr 2022 19:09:32 +0200 (CEST)
+        id E4DF0480C26; Fri, 22 Apr 2022 19:09:32 +0200 (CEST)
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Heiko Stuebner <heiko@sntech.de>
 Cc:     Rob Herring <robh+dt@kernel.org>,
@@ -45,11 +45,11 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, kernel@lists.collabora.co.uk,
-        Jianqun Xu <jay.xu@rock-chips.com>, kernel@collabora.com,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: [PATCHv1 14/19] gpio: rockchip: add support for rk3588
-Date:   Fri, 22 Apr 2022 19:09:15 +0200
-Message-Id: <20220422170920.401914-15-sebastian.reichel@collabora.com>
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        kernel@collabora.com
+Subject: [PATCHv1 15/19] dt-bindings: serial: snps-dw-apb-uart: Add Rockchip RK3588
+Date:   Fri, 22 Apr 2022 19:09:16 +0200
+Message-Id: <20220422170920.401914-16-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220422170920.401914-1-sebastian.reichel@collabora.com>
 References: <20220422170920.401914-1-sebastian.reichel@collabora.com>
@@ -64,38 +64,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jianqun Xu <jay.xu@rock-chips.com>
+Add a Rockchip RK3588 compatible.
 
-Add V2.1 rockchip gpio controller type, which is part of the
-RK3588 SoC.
-
-Signed-off-by: Jianqun Xu <jay.xu@rock-chips.com>
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- drivers/gpio/gpio-rockchip.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpio/gpio-rockchip.c b/drivers/gpio/gpio-rockchip.c
-index 099e358d2491..f0e279665525 100644
---- a/drivers/gpio/gpio-rockchip.c
-+++ b/drivers/gpio/gpio-rockchip.c
-@@ -26,6 +26,7 @@
- 
- #define GPIO_TYPE_V1		(0)           /* GPIO Version ID reserved */
- #define GPIO_TYPE_V2		(0x01000C2B)  /* GPIO Version ID 0x01000C2B */
-+#define GPIO_TYPE_V2_1		(0x0101157C)  /* GPIO Version ID 0x0101157C */
- 
- static const struct rockchip_gpio_regs gpio_regs_v1 = {
- 	.port_dr = 0x00,
-@@ -663,7 +664,7 @@ static int rockchip_get_bank_data(struct rockchip_pin_bank *bank)
- 	id = readl(bank->reg_base + gpio_regs_v2.version_id);
- 
- 	/* If not gpio v2, that is default to v1. */
--	if (id == GPIO_TYPE_V2) {
-+	if (id == GPIO_TYPE_V2 || id == GPIO_TYPE_V2_1) {
- 		bank->gpio_regs = &gpio_regs_v2;
- 		bank->gpio_type = GPIO_TYPE_V2;
- 		bank->db_clk = of_clk_get(bank->of_node, 1);
+diff --git a/Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml b/Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml
+index 12137fe80acf..b5c819c5fa2c 100644
+--- a/Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml
++++ b/Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml
+@@ -33,6 +33,7 @@ properties:
+               - rockchip,rk3368-uart
+               - rockchip,rk3399-uart
+               - rockchip,rk3568-uart
++              - rockchip,rk3588-uart
+               - rockchip,rv1108-uart
+           - const: snps,dw-apb-uart
+       - items:
 -- 
 2.35.1
 

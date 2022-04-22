@@ -2,140 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03A8F50BB6F
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:15:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B01B350BB6E
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:15:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449306AbiDVPQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 11:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59374 "EHLO
+        id S1449297AbiDVPQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 11:16:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449292AbiDVPQN (ORCPT
+        with ESMTP id S1355821AbiDVPQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 11:16:13 -0400
+        Fri, 22 Apr 2022 11:16:10 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC915D5F4
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:13:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985AE5D5E5
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:13:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 68F24B830D7
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 15:13:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 087C3C385A8;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5E63EB830D9
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 15:13:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17E4FC385A0;
         Fri, 22 Apr 2022 15:13:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650640397;
-        bh=dlhnkGIAETkf0PM+DA9mEiVM6qZtwnjdx+JDhH9WBps=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=p57lLgFnDbw+D3ySDZ70CYRAge4zheEOlHuaX4q4jENTDFH1xl3w7k888nfcZTAon
-         4/HRucBXiRebcis3ku61yB395F2HmY4Vra91RqTdz2fq9wO2COxonY0+tWtnEwao0Z
-         cesjM7VtwcyGfpqt4QFOE+z+plhD21byUPgYWPqs2wWn5FzoAZZJJZ2YgqkxZTi+Kx
-         n6hJ/dCmb2WXJcfsVNxC4IQp5GOOvaGXq/dBYkQFY/7/3i9HjgWnxV7AwdvLfEmSUm
-         n/RcBaQ26ZAOu+a0cWt3mKpx+ZFW7el2nFc9MG4qmmhrX88MHtfDks5unu7OpoTvWl
-         HYC2HP22HWbYA==
-Date:   Sat, 23 Apr 2022 00:13:11 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>
-Cc:     mhiramat@kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        Tom Zanussi <zanussi@kernel.org>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>
-Subject: Re: [PATCH] tracing: Fix potential double free in create_var_ref()
-Message-Id: <20220423001311.31e2dff59708ddd3043e55af@kernel.org>
-In-Reply-To: <20220422060025.1436075-1-keitasuzuki.park@sslab.ics.keio.ac.jp>
-References: <20220422060025.1436075-1-keitasuzuki.park@sslab.ics.keio.ac.jp>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650640395;
+        bh=GSg4cKn8K7Kb7YLezUWWALENHN/BmeeuDFc8lszaIh4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QaMbMs6JoP5KhJZRh3Ctuhun2xY4R+R2Q5z295CSpRETPtM58rloMPd1zp2Kl3Mm7
+         DtQf1b+4KF/puxCxVEtniCviypLvQyqRCVt6mQcbyWyeZPwqHDrYZxU7Rn1g8z/iat
+         rtpH6X3Hb69cBqLmQ8GL8s4L+cAW+/PKwUYO1I5k=
+Date:   Fri, 22 Apr 2022 17:13:11 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Adrien Thierry <athierry@redhat.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] staging: bcm2835-audio: delete TODO
+Message-ID: <YmLGB8bhHs8cRFVM@kroah.com>
+References: <20220420174401.305964-1-athierry@redhat.com>
+ <YmK+aiaaVLtadGVT@kroah.com>
+ <97917592-6e11-dd82-3f41-893da6b15f6a@i2se.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <97917592-6e11-dd82-3f41-893da6b15f6a@i2se.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Keita,
-
-On Fri, 22 Apr 2022 06:00:25 +0000
-Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp> wrote:
-
-> In create_var_ref(), init_var_ref() is called to initialize the fields
-> of variable ref_field, which is allocated in the previous function call
-> to create_hist_field(). Function init_var_ref() allocates the
-> corresponding fields such as ref_field->system, but frees these fields
-> when the function encounters an error. The caller later calls
-> destroy_hist_field() to conduct error handling, which frees the fields
-> and the variable itself. This results in double free of the fields which
-> are already freed in the previous function.
+On Fri, Apr 22, 2022 at 04:58:22PM +0200, Stefan Wahren wrote:
+> Hi Greg,
 > 
-> Fix this by storing NULL to the corresponding fields when they are freed
-> in init_var_ref().
+> Am 22.04.22 um 16:40 schrieb Greg Kroah-Hartman:
+> > On Wed, Apr 20, 2022 at 01:44:00PM -0400, Adrien Thierry wrote:
+> > > Delete TODO since all tasks were completed:
+> > > 
+> > > 1 - fixed here:
+> > > https://lore.kernel.org/all/20220408150359.26661-1-athierry@redhat.com/
+> > > 
+> > > 2 - there are no remaining checkpatch.pl errors or warnings
+> > > 
+> > > Signed-off-by: Adrien Thierry <athierry@redhat.com>
+> > > ---
+> > >   drivers/staging/vc04_services/bcm2835-audio/TODO | 10 ----------
+> > >   1 file changed, 10 deletions(-)
+> > >   delete mode 100644 drivers/staging/vc04_services/bcm2835-audio/TODO
+> > > 
+> > > diff --git a/drivers/staging/vc04_services/bcm2835-audio/TODO b/drivers/staging/vc04_services/bcm2835-audio/TODO
+> > > deleted file mode 100644
+> > > index b85451255db0..000000000000
+> > > --- a/drivers/staging/vc04_services/bcm2835-audio/TODO
+> > > +++ /dev/null
+> > > @@ -1,10 +0,0 @@
+> > > -*****************************************************************************
+> > > -*                                                                           *
+> > > -*                           TODO: BCM2835-AUDIO                             *
+> > > -*                                                                           *
+> > > -*****************************************************************************
+> > > -
+> > > -1) Revisit multi-cards options and PCM route mixer control (as per comment
+> > > -https://lore.kernel.org/lkml/s5hd0to5598.wl-tiwai@suse.de)
+> > > -
+> > > -2) Fix the remaining checkpatch.pl errors and warnings.
+> > > -- 
+> > > 2.35.1
+> > > 
+> > > 
+> > Great, so now it can be merged to the real part of the kernel?  If not,
+> > what's left for that to happen?
 > 
+> bcm2835-audio depends on interface/vchiq_arm in a parallel directory. Its
+> TODO list is a little bit longer.
 
-Good catch! this looks good to me.
-
-Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
-
-
-BTW, could you Cc the original code authoer and  if you fix a bug and
-add Fixes: tag? That will help the original author can check the bug and
-help stable kernel maintainers to pick the patch. :)
-
-To find the original commit, you can use the 'git blame'.
-
-$ git blame kernel/trace/trace_events_hist.c -L 2093,2100
-067fe038e70f6 (Tom Zanussi 2018-01-15 20:51:56 -0600 2093)      return err;
-067fe038e70f6 (Tom Zanussi 2018-01-15 20:51:56 -0600 2094)  free:
-067fe038e70f6 (Tom Zanussi 2018-01-15 20:51:56 -0600 2095)      kfree(ref_field->system);
-067fe038e70f6 (Tom Zanussi 2018-01-15 20:51:56 -0600 2096)      kfree(ref_field->event_name);
-067fe038e70f6 (Tom Zanussi 2018-01-15 20:51:56 -0600 2097)      kfree(ref_field->name);
-067fe038e70f6 (Tom Zanussi 2018-01-15 20:51:56 -0600 2098) 
-067fe038e70f6 (Tom Zanussi 2018-01-15 20:51:56 -0600 2099)      goto out;
-067fe038e70f6 (Tom Zanussi 2018-01-15 20:51:56 -0600 2100) }
-
-Then, git show will tell you the original author.
-$ git show 067fe038e70f6
-
-And get the format of the commit for Fixes tag.
-
-$ git --no-pager show -s --abbrev-commit --abbrev=12 --pretty=format:"%h (\"%s\")%n" 067fe038e70f6
-067fe038e70f ("tracing: Add variable reference handling to hist triggers")
-
-Then you can add lines like:
-
-Fixes: 067fe038e70f ("tracing: Add variable reference handling to hist triggers")
-Cc: stable@vger.kernel.org
-
-Thank you,
-
-> Signed-off-by: Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>
-> ---
->  kernel/trace/trace_events_hist.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
-> index 44db5ba9cabb..a0e41906d9ce 100644
-> --- a/kernel/trace/trace_events_hist.c
-> +++ b/kernel/trace/trace_events_hist.c
-> @@ -2093,8 +2093,11 @@ static int init_var_ref(struct hist_field *ref_field,
->  	return err;
->   free:
->  	kfree(ref_field->system);
-> +	ref_field->system = NULL;
->  	kfree(ref_field->event_name);
-> +	ref_field->event_name = NULL;
->  	kfree(ref_field->name);
-> +	ref_field->name = NULL;
->  
->  	goto out;
->  }
-> -- 
-> 2.25.1
-> 
-
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+Ah, yeah, still more work to do :(

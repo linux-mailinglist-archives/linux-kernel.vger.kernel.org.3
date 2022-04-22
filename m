@@ -2,121 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3224A50C005
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 20:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA8A850BFDB
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 20:37:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbiDVSxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 14:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52532 "EHLO
+        id S230157AbiDVSiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 14:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230087AbiDVSxc (ORCPT
+        with ESMTP id S229436AbiDVSiK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 14:53:32 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986191FC1E2;
-        Fri, 22 Apr 2022 11:46:28 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id p21so9523789ioj.4;
-        Fri, 22 Apr 2022 11:46:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=VZJZWU/RxygMbphG0Oj9zjd06v34ardwpbG1ITBoIDw=;
-        b=YZrWTzrqWk1rSABVylk7srJID3fDK9uMYJG42OPvae8wfCRKj7ksYtYZn7xN0yrP8i
-         e41Zp35cubbwqYSgd29HYOnVMmbr5qt6fEZ8X/yNW7wvKE6Of2E2X84vq2sbLpm0v1ft
-         7Yc10MU2AuvdmmQhwLN/afW/ybLHkuYWzff9R78t3w/+XyhG60uKEsY2w5UdcUX6Fu2J
-         LMy2HV3lFWnIFWErseiwxIAg5WQVCIyoHpY/usBPF0WEoB6IZcWuDlIdWhOUBNbbC3U9
-         o1RNHfw+J/BuziFmLiNgBRaa2DJDNESPnhnvUgumXYSBsoCUt6ByYC2DxaEy9zCJP3wE
-         T5/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=VZJZWU/RxygMbphG0Oj9zjd06v34ardwpbG1ITBoIDw=;
-        b=kHZH3WGNLzMYnQKcX8w+DjR3WAXSQpLinbGqW5w6I+rEOnh/ZT64SWJeh7jkE1ri7j
-         /iwRNcrdmd97m71ku5XJFNqyrMxi6BVVW0jGxKaXVSnV2t/66ka04Vp2aLIlErHhVgnC
-         +OGvv8fw17i7m7UnCgvFD+rYGoa0L5jQWh1QsUVIZKmhT+BvANvGQQcij+xy6Orper7K
-         Hoaqy2IDoz/f2oXlF2a5CklBXkODa3cwecJP86EFBqxjZBptJ6DFmqGf2c8UORPPtNe0
-         dUeTaKqxyUz+Z5fYw8btueZwrfZzPwxp0xeb5xwicVl13DuW/pb/jgOjet2PpmGBtzu5
-         9sZQ==
-X-Gm-Message-State: AOAM532BUKYCl2ZIoeMNB2cEkA9lRvdRRPihzegTQz15+rknz0Fo4eYD
-        LjU777hxgeqezvjk64N+zI41Sghjp+I=
-X-Google-Smtp-Source: ABdhPJzt8+ULZ4U/JS1QogjvrFZ9RPxY2qsOw5RmC0oJk1pCiWYhJttEH2fg8OhbQGWlcVH7Xy1Pxw==
-X-Received: by 2002:a65:41c3:0:b0:363:5711:e234 with SMTP id b3-20020a6541c3000000b003635711e234mr5039062pgq.386.1650652113575;
-        Fri, 22 Apr 2022 11:28:33 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id b17-20020a056a000a9100b004e1b7cdb8fdsm3593300pfl.70.2022.04.22.11.28.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 11:28:32 -0700 (PDT)
-Message-ID: <68c4710d-013e-85e0-154d-413f4e13b27e@gmail.com>
-Date:   Fri, 22 Apr 2022 11:28:30 -0700
+        Fri, 22 Apr 2022 14:38:10 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6E91A393
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 11:35:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=1+/SezKGzMa2gnYmR8YMQNvrpOnLCVM89OTXqKWDzhs=; b=oEro949fGP54rYhWze+ktQj1CX
+        1wqxWAPrnzs46IEeO3i+tVzFM0JRFFIhE1Fr+L+ed+mIJsv7HIxh1E5cTbQLso4bRrfHGvyBC53ej
+        q+4RdtSq7bCh1amvKXP2z9oOgxevFB6X6pcg9FhXxqtAy4s/WfnA9N5qZzGvurSNuKSHCDzA47Jv4
+        J8Owl4cxZQNk3qXKIqEJiGD1a335I2hIPiEqua0FLPueUATY37Yqf6PFo71ZcmpVcY8Ou8juVAMfR
+        Rrit/51iOsUP0QsW0aXt9wxbPTYIqIpxV+0FRaeghfsx3MyEGpQHytlu7EDCwDyRWgW8vZNM1SYuc
+        rKz4IDSA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nhy2h-006Ja9-Q8; Fri, 22 Apr 2022 18:30:07 +0000
+Date:   Fri, 22 Apr 2022 19:30:07 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     syzbot <syzbot+cf4cf13056f85dec2c40@syzkaller.appspotmail.com>
+Cc:     akpm@linux-foundation.org, dhowells@redhat.com, hughd@google.com,
+        kirill.shutemov@linux.intel.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
+        vbabka@suse.cz, william.kucharski@oracle.com
+Subject: Re: [syzbot] kernel BUG in __filemap_get_folio
+Message-ID: <YmL0L7nhdJTMI9QU@casper.infradead.org>
+References: <000000000000625fa705dd1802e3@google.com>
+ <YmG8zoWKu93EiWb8@casper.infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH net-next 2/5] net: dsa: add out-of-band tagging protocol
-Content-Language: en-US
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        davem@davemloft.net, Rob Herring <robh+dt@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>
-References: <20220422180305.301882-1-maxime.chevallier@bootlin.com>
- <20220422180305.301882-3-maxime.chevallier@bootlin.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220422180305.301882-3-maxime.chevallier@bootlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmG8zoWKu93EiWb8@casper.infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/22/22 11:03, Maxime Chevallier wrote:
-> This tagging protocol is designed for the situation where the link
-> between the MAC and the Switch is designed such that the Destination
-> Port, which is usually embedded in some part of the Ethernet Header, is
-> sent out-of-band, and isn't present at all in the Ethernet frame.
-> 
-> This can happen when the MAC and Switch are tightly integrated on an
-> SoC, as is the case with the Qualcomm IPQ4019 for example, where the DSA
-> tag is inserted directly into the DMA descriptors. In that case,
-> the MAC driver is responsible for sending the tag to the switch using
-> the out-of-band medium. To do so, the MAC driver needs to have the
-> information of the destination port for that skb.
-> 
-> This tagging protocol relies on a new set of fields in skb->shinfo to
-> transmit the dsa tagging information to and from the MAC driver.
-> 
-> Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+On Thu, Apr 21, 2022 at 09:21:34PM +0100, Matthew Wilcox wrote:
+> I wish I knew which 'index' we were looking up.  I'll try reproducing it
+> locally so I can print that out too.
 
-First off, I am not a big fan of expanding skb::shared_info because it 
-is sensitive to cache line sizes and is critical for performance at much 
-higher speeds, I would expect Eric and Jakub to not be terribly happy 
-about it.
+I can't reproduce it locally because the OOM killer says I don't have
+enough RAM.  That's with giving 4GB to the VM.  If I give more than 4GB
+to the VM, my laptop is insufficiently studly, and the host OOM killer
+takes out qemu instead ;-P
 
-The Broadcom systemport (bcmsysport.c) has a mode where it can extract 
-the Broadcom tag and put it in front of the actual packet contents which 
-appears to be very similar here. From there on, you can have two strategies:
+> My suspicion is that there's a race where the folio is split during the
+> lookup, and the bug is really in mapping_get_entry().  The folio->index
+> is weird though; if this was the explanation, I'd expect it to find a
+> page at a multiple of 512 or at least a multiple of 64.
 
-- have the Ethernet controller mangle the packet contents such that the 
-QCA tag is located in front of the actual Ethernet frame and create a 
-new tagging protocol variant for QCA, similar to the TAG_BRCM versus 
-TAG_BRCM_PREPEND
+I think I have an explanation (from thinking really hard, rather than
+testing).  Before we call xas_split(), the tree looks like this:
 
-- provide the necessary information for the tagger to work using an out 
-of band mechanism, which is what you have done, in which case, maybe you 
-can use skb->cb[] instead of using skb::shared_info?
--- 
-Florian
+node (shift=6)
+ -> page (index 0)
+ -> sibling of 0
+ -> sibling of 0
+ -> sibling of 0
+ -> sibling of 0
+ -> sibling of 0
+ -> sibling of 0
+ -> sibling of 0
+ -> page (index 0x200)
+ -> sibling of 8
+ -> sibling of 8
+ -> sibling of 8
+ -> sibling of 8
+ -> sibling of 8
+ -> sibling of 8
+ -> sibling of 8
+ -> sibling of 8
+
+Then we split the page at index 0x200.  Simultaneously, we try to load
+the page at index 0x274 (or 2b4 or 2f4 or ... 3f4).  The load picks
+up the sibling entry at offset 9 (0x274 >> 6), which says to refer to
+the entry at offset 8.  But by the time it gets the entry at offset 8,
+the split has replaced the compound page at index 0x200 with a node that
+points to pages at indices 0x200-0x23f.
+
+Solving it on the split side is possible, but I think it's easier to
+solve on the load side.  I have a patch, it seems to work; let's see
+what syzbot thinks of it:
+
+#syz test: git://git.infradead.org/users/willy/xarray.git main

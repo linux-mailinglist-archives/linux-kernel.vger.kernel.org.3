@@ -2,94 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C815350AF40
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 06:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72D9850AF42
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 06:50:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443986AbiDVEsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 00:48:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39680 "EHLO
+        id S1443997AbiDVEwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 00:52:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231707AbiDVEsb (ORCPT
+        with ESMTP id S241924AbiDVEwR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 00:48:31 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0517183B6
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 21:45:38 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 586821570;
-        Thu, 21 Apr 2022 21:45:38 -0700 (PDT)
-Received: from [10.163.40.48] (unknown [10.163.40.48])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EEC4F3F5A1;
-        Thu, 21 Apr 2022 21:45:30 -0700 (PDT)
-Message-ID: <17625223-cc3d-d62a-57db-f7bb5274369f@arm.com>
-Date:   Fri, 22 Apr 2022 10:16:18 +0530
+        Fri, 22 Apr 2022 00:52:17 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1313346B04
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 21:49:26 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id w187so3033819ybe.2
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 21:49:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=nathanrossi.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3/b3w8P6bSnNfxAO7ag4JKSVtKkG2fkyEmTQEAkbscs=;
+        b=KJINXpYet8aUp8C/KTg+TqfMCepBCAW6P3mLf4r90SkX/8WfMhX5QFos+uaLjsQYLS
+         qJH+ympXXIUTgufBH+Rgsd3Y4ofq9gyh/jacXGMgS4Q3POEQNZ9NGGvHqa7Qy+I6zaXo
+         ibmYZfXo8CY4V9RSHV2ZHxtmbGic9VTvtySonnjZKXd81wHgC4kLJ0HwQcV+TAD8T9EQ
+         ET06H1aJVNGJLcxmC4XqnXyNnWpjVW/zQ6Gp93XzuT1nw/7YZMkYFMiAvz6loCvvLXtP
+         sKb/HhT2z4FJuHRB/fGHS2uWi2uqXnNdPJktwx9dRcwfMJ8Fc9UbWYqMggJ/jGEp0US9
+         OoyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3/b3w8P6bSnNfxAO7ag4JKSVtKkG2fkyEmTQEAkbscs=;
+        b=CtU5LHV1ynJ2LFFGcgoJwaQVNC/ojB0pI1oZ1sSY8pZWYxZw3B2b9cQTmOKyNPKC7Q
+         4HZvEEcbC440FtDmVY2Y7lZx04U79OikOJOiPOFB6DrFkac4tvsNKRTDnrP+KAqG2188
+         V2Rmd0V9U7ga9UVRCmPMnG/syRfBMALRYSgA7676yFveYy4rQczfWrFAXW/sPED6j4X4
+         CCU3sDRbxPhLpeEUBfmTfSGEhsx+q67AANiaO6ojyHjWuWvaIjJZ15EnNopTxGNjMmBs
+         tPiE39GFP5t2z42OUB+O3zEIMJijBQWSRnOcaJ5nijIfH7sanv8FP4ggcSmVHjBa51It
+         pLuA==
+X-Gm-Message-State: AOAM530ORcBqhxy5q7RdifKslw89CDikOvfEXO3DrGaip2PsCrMa1bbD
+        HhB5bnwyIxbbYQvPSQ6empfWV9OzDEKVpMl+oHJ4Bg==
+X-Google-Smtp-Source: ABdhPJwdxTs2hv0KjkLaK1w197ODv/+vWu74yWxNz56GC7PrApk3LFt317uWWvBPyTko3+1W+ejoyU9SS4a3l95qFxM=
+X-Received: by 2002:a5b:50f:0:b0:629:5d05:aebf with SMTP id
+ o15-20020a5b050f000000b006295d05aebfmr2859178ybp.618.1650602965328; Thu, 21
+ Apr 2022 21:49:25 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH -next v5 1/5] mm: page_table_check: using PxD_SIZE instead
- of PxD_PAGE_SIZE
-Content-Language: en-US
-To:     Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Tong Tiangen <tongtiangen@huawei.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Will Deacon <will@kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        linux-riscv@lists.infradead.org, Guohanjun <guohanjun@huawei.com>
-References: <20220421082042.1167967-1-tongtiangen@huawei.com>
- <20220421082042.1167967-2-tongtiangen@huawei.com>
- <CA+CK2bCWRL_vXW1BUhxb-zLiywXTCQdaa+9feEwQytYW=K46-g@mail.gmail.com>
- <bbd67c4e-6adf-dc1f-7104-427e3e598d9a@soleen.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <bbd67c4e-6adf-dc1f-7104-427e3e598d9a@soleen.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220421015728.86912-1-nathan@nathanrossi.com>
+ <87mtgfgx7d.wl-maz@kernel.org> <CA+aJhH026fR5p6-JBaoQikZwC1F-iLBQWrqAvagauKjQoOqykQ@mail.gmail.com>
+ <87fsm6ahnh.wl-maz@kernel.org> <YmFJ4zKn/9MpjhOh@lunn.ch>
+In-Reply-To: <YmFJ4zKn/9MpjhOh@lunn.ch>
+From:   Nathan Rossi <nathan@nathanrossi.com>
+Date:   Fri, 22 Apr 2022 14:49:14 +1000
+Message-ID: <CA+aJhH1uRWrW1+WJiWoH7pge49gc=SvWQ1L+UpLk+Hin5eo4uQ@mail.gmail.com>
+Subject: Re: [PATCH] irqchip/armada-370-xp: Enable MSI affinity configuration
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Nathan Rossi <nathan.rossi@digi.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 21 Apr 2022 at 22:11, Andrew Lunn <andrew@lunn.ch> wrote:
+>
+> > I guess we can get at least some testing from the platform maintainers
+> > to check that this doesn't regress the UP systems.
+>
+> I have a 370rd which is single core. Let me know what you want
+> testing.
 
+If you have a PCIe device that you can use with the 370 rd. Please
+test that the PCIe device probes and generates its interrupts in
+normal operation. I have sent out a v2 of this patch, So if testing
+please use that version
+https://lore.kernel.org/linux-arm-kernel/20220422043532.146946-1-nathan@nathanrossi.com/
 
-On 4/22/22 00:10, Pasha Tatashin wrote:
-> On 4/21/22 11:28, Pasha Tatashin wrote:
->> On Thu, Apr 21, 2022 at 4:02 AM Tong Tiangen <tongtiangen@huawei.com> wrote:
->>> Macro PUD_SIZE/PMD_SIZE is more general in various architectures. Using
->>> PUD_SIZE/PMD_SIZE instead of PUD_PAGE_SIZE/PMD_PAGE_SIZE can better
->>> support page table check in architectures other than x86 and it is no
->>> functional impact on x86.
->>>
->>> Suggested-by: Anshuman Khandual <anshuman.khandual@arm.com>
->>> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
->> Acked-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-> 
-> To avoid similar problems in the future, please also include the following patch after the current series:
-> 
-> ----------------8<-------------[ cut here ]------------------
->>From cccef7ba2433f8e97d1948f85e3bfb2ef5d32a0a Mon Sep 17 00:00:00 2001
-> From: Pasha Tatashin <pasha.tatashin@soleen.com>
-> Date: Thu, 21 Apr 2022 18:04:43 +0000
-> Subject: [PATCH] x86: removed P*D_PAGE_MASK and P*D_PAGE_SIZE
-> 
-> Other architectures and the common mm/ use P*D_MASK, and P*D_SIZE.
-> Remove the duplicated P*D_PAGE_MASK and P*D_PAGE_SIZE which are only
-> used in x86/*.
-> 
-> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+Thanks,
+Nathan
 
-Absolutely, helps in minimizing arch specific stuff wrt to page table mapping.
+>
+>         Andrew

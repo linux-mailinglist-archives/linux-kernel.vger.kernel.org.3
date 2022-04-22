@@ -2,111 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F3E150B550
+	by mail.lfdr.de (Postfix) with ESMTP id CF0F750B552
 	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446714AbiDVKkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 06:40:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35334 "EHLO
+        id S1446662AbiDVKkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 06:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446635AbiDVKiv (ORCPT
+        with ESMTP id S1446631AbiDVKiv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 22 Apr 2022 06:38:51 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6892403ED;
-        Fri, 22 Apr 2022 03:35:47 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 34867580055;
-        Fri, 22 Apr 2022 06:35:44 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Fri, 22 Apr 2022 06:35:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1650623744; x=
-        1650630944; bh=sialgZLQyO92Jzz731mhx4P39e8kWtOeqoXhw0cCtXY=; b=W
-        xTSy59TGhUVrDTR5ZZ9AihUZQI4ztc0COij2niyKHFseYaXY1k1iijFElgMlbzjj
-        IgW79/RwLv6Fp4X6u1RNldYGUTYXAc3mckrXYDpkxLD8Z0+bSam6DaOQn6RH8JJV
-        Qurrb/7pXjRhV6hrBlyosxRCFXsVsKBzWSBUFBCKC76wZdJrkGNy/PnPSeGc6ESL
-        uS9PQ4Df7oGGULaYujEqbEX0gkpBXi38nCiC253MjtXIcEU+DlXgHhcSk5SLyWR8
-        DMCfpqY0+5d3saPZJOXn8wIeAiyRKjBJE3kBwqEP2fTi0gJ5AUl4LXi/x+9R7+KU
-        HwyrBchREXwkM8JuhkQ5w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1650623744; x=1650630944; bh=sialgZLQyO92J
-        zz731mhx4P39e8kWtOeqoXhw0cCtXY=; b=xCGQhbzjwFiulmF6LlwEI2cPB3bBF
-        0ZqiYsKEqcIu5ZJxYH0mF7KEYuIof1NLNHoW4TtCBHWDqwK+z2RZi+HgbfH1FOpb
-        5nEg/us+9DLek/Br6MvB1IWNoskzsjdYAysFTHU1OckKOZaOQbqHZyDf//HLon6T
-        d7mcQhAcY1FFLvkEiygt802ZKh7zDfaBMBxNldjoO4kRqUQb6whLZwd8ZmEBlIhp
-        ctpWULiSYUe0CMhkaloAbV6hB/Gu4jw3+6LjXHWnZntyvDNrP/WiB1ZJOf9x6Xwc
-        3WHrccx3rtfbAlPOI3TziqtZIPUOpSkUOAhqS5u+rspah0ghgnBo8a+Ew==
-X-ME-Sender: <xms:_oRiYlIPkSce9J_iB2dx7YVzLXKxS60W4-Vyw3zmLO4U1aLiaFmmbg>
-    <xme:_oRiYhJOFbCsPLyYHVGGL4uD5HM-gey6IrG0BNy0SHfJOB4Q2dzZGy0EfuD4xixYV
-    3YhQ9CUuNJWy7-W19Q>
-X-ME-Received: <xmr:_oRiYtvBLqnHwVb37WFesVwZ0PMShNb6BvWXvV8Vm7Y4HetLslo-SvwCRTZi3P3Uu5oZYU4g5GlpHVUV0fb323r_rgqp4WPTvpHVZpo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrtdeggddvkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvfevufffkffojghfgggtgfesthekredtredtjeenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeeuieeggffhffffieefheduieeuvdetgeeufeffvefgtedvffehheekffev
-    udefieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:_oRiYma42u8bFsyuaEoHigJkGAD8rHqS6b6IrkpHQB1N2nS1P6TckQ>
-    <xmx:_oRiYsbrF1C3QRv8Y5kK58OXIM5reFvVFe9fVe3wBCRWdmYHf-Yu9g>
-    <xmx:_oRiYqDjcSeHlAIkkqXF6PNc-gW-JT9Geogu1FY8mL5VO4njDgDJWQ>
-    <xmx:AIViYlRpbFTOma7kkn3FGWD0v6WQLAHvvXHX_xxmOtMZ2RMdHubTSg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 22 Apr 2022 06:35:42 -0400 (EDT)
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
-        inki.dae@samsung.com
-Cc:     Maxime Ripard <maxime@cerno.tech>, daniel@ffwll.ch,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        laurent.pinchart@ideasonboard.com,
-        linux-arm-kernel@lists.infradead.org, alain.volmat@foss.st.com,
-        lgirdwood@gmail.com, broonie@kernel.org, samuel@sholland.org,
-        linux-samsung-soc@vger.kernel.org, p.zabel@pengutronix.de,
-        airlied@linux.ie, kyungmin.park@samsung.com, mripard@kernel.org,
-        jernej.skrabec@gmail.com, jy0922.shim@samsung.com,
-        alim.akhtar@samsung.com, krzk@kernel.org, heiko@sntech.de,
-        linux-sunxi@lists.linux.dev, hjc@rock-chips.com, wens@csie.org,
-        dri-devel@lists.freedesktop.org, sw0312.kim@samsung.com
-Subject: Re: (subset) [PATCH 5/5] drm/sun4i: hdmi: Replace drm_detect_hdmi_monitor() with is_hdmi
-Date:   Fri, 22 Apr 2022 12:35:38 +0200
-Message-Id: <165062373584.1462930.6032469942386231983.b4-ty@cerno.tech>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220421170725.903361-6-jose.exposito89@gmail.com>
-References: <20220421170725.903361-1-jose.exposito89@gmail.com> <20220421170725.903361-6-jose.exposito89@gmail.com>
+Received: from mailout2.rbg.tum.de (mailout2.rbg.tum.de [IPv6:2a09:80c0::202])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D9354FAD;
+        Fri, 22 Apr 2022 03:35:54 -0700 (PDT)
+Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [131.159.254.14])
+        by mailout2.rbg.tum.de (Postfix) with ESMTPS id 7C0704C02B0;
+        Fri, 22 Apr 2022 12:35:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
+        s=20220209; t=1650623749;
+        bh=bCNDShSNWamzrapZyCH2+MaOYLPQy3BG0jVzD+WNbD4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=dT+Zo14Mw3Zm1XxiUb4lp1L+yp/xGGuTBLjGLo5o8N/e9+BZaFpaWXuulYOOhz6Ib
+         oKaQ3sSQ9GiWnhU1giBGZwJQyLv9Vw/JKzbWwJ9gEXhuCT9ytBiie1yu2ib53kNJ3y
+         aDsCRtWsWp3Y3882MQVZ5hPSYXSOdLwe+rRZIbEGTC8ckRolOWQEBB1O4l3bmLtjEe
+         a7FHmnSmgjO2veh/5kLbGHVY7kJEs1CPL+daN7HoJ3DfEr0F2otg/uN3wwYHayQudm
+         0UCgCPpAozOgr/clanEiNpP0eUk80HirH/bI5BSGD1xUqeFWuIcD7rXeBtIudnzkfp
+         57ZbauIKayR0Q==
+Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
+        id 763FE6D8; Fri, 22 Apr 2022 12:35:49 +0200 (CEST)
+Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 41EF06D7;
+        Fri, 22 Apr 2022 12:35:49 +0200 (CEST)
+Received: from mail.in.tum.de (vmrbg426.in.tum.de [131.159.0.73])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 3CF2D55F;
+        Fri, 22 Apr 2022 12:35:49 +0200 (CEST)
+Received: by mail.in.tum.de (Postfix, from userid 112)
+        id 1AEA74A037C; Fri, 22 Apr 2022 12:35:49 +0200 (CEST)
+Received: (Authenticated sender: heidekrp)
+        by mail.in.tum.de (Postfix) with ESMTPSA id 496B74A01EC;
+        Fri, 22 Apr 2022 12:35:48 +0200 (CEST)
+        (Extended-Queue-bit xtech_eq@fff.in.tum.de)
+Date:   Fri, 22 Apr 2022 12:35:41 +0200
+From:   Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        llvm@lists.linux.dev
+Cc:     Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
+        Soham Shakraborty <s.s.chakraborty@tudelft.nl>,
+        Martin Fink <martin.fink@in.tum.de>
+Subject: Broken Address Dependency in mm/ksm.c::cmp_and_merge_page()
+Message-ID: <YmKE/XgmRnGKrBbB@Pauls-MacBook-Pro.local>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 21 Apr 2022 19:07:25 +0200, José Expósito wrote:
-> Once EDID is parsed, the monitor HDMI support information is available
-> through drm_display_info.is_hdmi.
-> 
-> This driver calls drm_detect_hdmi_monitor() to receive the same
-> information and stores its own cached value, which is less efficient.
-> 
-> Avoid calling drm_detect_hdmi_monitor() and use drm_display_info.is_hdmi
-> instead and also remove sun4i_hdmi.hdmi_monitor as it is no longer
-> necessary.
-> 
-> [...]
+Hi all, 
 
-Applied to drm/drm-misc (drm-misc-next).
+My dependency checker is flagging yet another broken dependency. For
+context, see [1].
 
-Thanks!
-Maxime
+Thankfully, it is fairly straight-forward to explain this time.
+
+> stable_node = page_stable_node(page);
+
+Line 2032 in mm/ksm.c::cmp_and_merge_page() sees the return value of a
+call to "page_stable_node()", which can depend on a "READ_ONCE()", being
+assigned to "stable_node".
+
+> if (stable_node) {
+>         if (stable_node->head != &migrate_nodes &&
+>             get_kpfn_nid(READ_ONCE(stable_node->kpfn)) != 
+>             NUMA(stable_node->nid)) {
+>                 stable_node_dup_del(stable_node); ‣dup: stable_node
+>                 stable_node->head = &migrate_nodes;
+>                 list_add(&stable_node->list, stable_node->head);
+
+The dependency chain then runs into the two following if's, through an
+assignment of "migrate_nodes" to "stable_node->head" (line 2038) and
+finally reaches a call to "list_add()" (line 2039) where
+"stable_node->head" gets passed as the second function argument. 
+
+>         }
+> }
+> 
+> static inline void list_add(struct list_head *new, struct list_head *head)
+> {
+>         __list_add(new, head, head->next);
+> }
+> 
+> static inline void __list_add(struct list_head *new,
+>                               struct list_head *prev,
+>                               struct list_head *next)
+> {
+>         if (!__list_add_valid(new, prev, next))
+>                 return;
+> 
+>         next->prev = new;
+>         new->next = next;
+>         new->prev = prev;
+>         WRITE_ONCE(prev->next, new);
+> }
+
+By being passed into "list_add()" via "stable_node->head", the
+dependency chain eventually reaches a "WRITE_ONCE()" in "__list_add()"
+whose destination address, "stable_node->head->next", is part of the
+dependency chain and therefore carries an address dependency. 
+
+However, as a result of the assignment in line 2038, Clang knows that
+"stable_node->head" is "migrate_nodes" and replaces it, thereby breaking
+the dependency chain. 
+
+What do you think?
+
+Many thanks,
+Paul
+
+--
+[1]: https://lore.kernel.org/all/Yk7%2FT8BJITwz+Og1@Pauls-MacBook-Pro.local/
+

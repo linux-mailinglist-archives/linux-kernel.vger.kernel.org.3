@@ -2,132 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE0550B357
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 10:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4DC150B35A
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 10:56:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445677AbiDVI6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 04:58:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51346 "EHLO
+        id S1445674AbiDVI7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 04:59:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233715AbiDVI6u (ORCPT
+        with ESMTP id S229975AbiDVI7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 04:58:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB20B1FCE6;
-        Fri, 22 Apr 2022 01:55:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 689D4B82A8A;
-        Fri, 22 Apr 2022 08:55:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B098AC385A0;
-        Fri, 22 Apr 2022 08:55:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650617755;
-        bh=746PkcyfxHkBsvPqzkv4e0eW9xAIIox/PAAolGv1faI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F/C0B3YlHxH2gR71d4gqbj7dxt0CM244OakmddasKEq2Mv9fc65mhL5FIEsiKEsWI
-         F79OOir9atJloZnWCN3lxmQZd15Ul+ovOcbuyW80U8HOk40Kw/Ui09Va+1c8ZfSwxX
-         oKl8xIA5+D4aSVR8AFQEbQxhOedjfth6UopbD2wV9i+5oNfSUcdHRb1Rjh1WH2BE5C
-         RGEdmRJmCq4kKD+PBDEyZEKgJEMERdE9YWiAJHIuThVDRdDTgFpEIn5r9KzvP07AgS
-         riIbF8EJ9AzqCHbgFnYHeeXJHDzrVo8YxqZiK4aTEYhT5w33YatwPrKQN3aXyW8PD4
-         MMVKDf0fHsvPA==
-Date:   Fri, 22 Apr 2022 11:54:39 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        James Morris <jmorris@namei.org>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v7 3/5] certs: Make blacklist_vet_description() more
- strict
-Message-ID: <YmJtT/lOmxEwPMDD@kernel.org>
-References: <20210312171232.2681989-4-mic@digikod.net>
- <20210312171232.2681989-1-mic@digikod.net>
- <648218.1650450548@warthog.procyon.org.uk>
- <YmF0eAh7dYmtLDVx@kernel.org>
- <01ec2ce7-986d-451a-4a36-f627263ef826@digikod.net>
- <YmF+4ZZCZxH9OrS+@kernel.org>
- <329a078d-29e3-e41e-3118-cd8f3e00b003@digikod.net>
+        Fri, 22 Apr 2022 04:59:31 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC2A532CE
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 01:56:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650617799; x=1682153799;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EUKQvAoKoFt5hSbzTVGz9Mveky+GfIeEptM6x0lHNDA=;
+  b=RcdWvQx6DrI8g6ST6ucPnPIlUSqF6AhF7jX41BMGT8uIGDITWZ5dZdw/
+   uB9FQ6NLA03hLAzd4Sa5UR8DS47XlMriFFDeJimNiQ4OGWh1lympMhFnd
+   pznaIqlM8UlUP5vzmdVyUsNM5H7Z1CLHO59asjJ3PT30hGy4bPPBYY2OO
+   1aVlTLfGePtr112pF/NOK9DcCGmKaKj+A2r9B5pqN+bEkSXdhgixAiIA2
+   6fNsR7DdBgNkB9KhC8vvwTgiikJhJs5+RNsba8rq5sF7WBzMJY1jgsyO5
+   aBuNwQgkDuQAPkaEBciAZ52iHRlGxwtSyFzV+HSA2p7zVVzBTCSRDLG/V
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="325075391"
+X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
+   d="scan'208";a="325075391"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 01:56:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
+   d="scan'208";a="511488183"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 22 Apr 2022 01:56:37 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nhp5g-0009ww-SB;
+        Fri, 22 Apr 2022 08:56:36 +0000
+Date:   Fri, 22 Apr 2022 16:56:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alex Deucher <alexander.deucher@amd.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Zhan Liu <zhan.liu@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/../display/dc/dcn201/dcn201_hwseq.c:88:14:
+ warning: variable 'is_in_uma' set but not used
+Message-ID: <202204221604.l3cM1i38-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <329a078d-29e3-e41e-3118-cd8f3e00b003@digikod.net>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 07:29:10PM +0200, Mickaël Salaün wrote:
-> 
-> On 21/04/2022 17:57, Jarkko Sakkinen wrote:
-> > On Thu, Apr 21, 2022 at 05:27:42PM +0200, Mickaël Salaün wrote:
-> > > 
-> > > On 21/04/2022 17:12, Jarkko Sakkinen wrote:
-> > > > On Wed, Apr 20, 2022 at 11:29:08AM +0100, David Howells wrote:
-> > > > > Mickaël Salaün <mic@digikod.net> wrote:
-> > > > > 
-> > > > > > +	/* The following algorithm only works if prefix lengths match. */
-> > > > > > +	BUILD_BUG_ON(sizeof(tbs_prefix) != sizeof(bin_prefix));
-> > > > > > +	prefix_len = sizeof(tbs_prefix) - 1;
-> > > > > > +	for (i = 0; *desc; desc++, i++) {
-> > > > > > +		if (*desc == ':') {
-> > > > > > +			if (tbs_step == prefix_len)
-> > > > > > +				goto found_colon;
-> > > > > > +			if (bin_step == prefix_len)
-> > > > > > +				goto found_colon;
-> > > > > > +			return -EINVAL;
-> > > > > > +		}
-> > > > > > +		if (i >= prefix_len)
-> > > > > > +			return -EINVAL;
-> > > > > > +		if (*desc == tbs_prefix[i])
-> > > > > > +			tbs_step++;
-> > > > > > +		if (*desc == bin_prefix[i])
-> > > > > > +			bin_step++;
-> > > > > > +	}
-> > > > > 
-> > > > > I wonder if:
-> > > > > 
-> > > > > 	static const char tbs_prefix[] = "tbs:";
-> > > > > 	static const char bin_prefix[] = "bin:";
-> > > > > 
-> > > > > 	if (strncmp(desc, tbs_prefix, sizeof(tbs_prefix) - 1) == 0 ||
-> > > > > 	    strncmp(desc, bin_prefix, sizeof(bin_prefix) - 1) == 0)
-> > > > > 		goto found_colon;
-> > > > > 
-> > > > > might be better.
-> > > > > 
-> > > > > David
-> > > > 
-> > > > I think it'd be.
-> > > > 
-> > > > BR, Jarkko
-> > > 
-> > > I'm confused. Didn't you plan to send this patch series before v5.18-rc2?
-> > > It's been a while since I started working on this.
-> > 
-> > That was my original plan but due to some other things, I've sent
-> > a PR for rc4. I CC'd you to the PR.
-> 
-> OK, I missed it. My micro-optimization isn't worth it, strncmp is much
-> simple indeed.
+Hi Alex,
 
-Yeah, anyway, it's fine to submit this as a separate cleanup.
+First bad commit (maybe != root cause):
 
-It's anyway working and tested code.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d569e86915b7f2f9795588591c8d5ea0b66481cb
+commit: 519607a2f7798decb9c891a4f706aaf780f5a677 drm/amdgpu/display: fold DRM_AMD_DC_DCN201 into DRM_AMD_DC_DCN
+date:   7 months ago
+config: powerpc64-randconfig-r033-20220420 (https://download.01.org/0day-ci/archive/20220422/202204221604.l3cM1i38-lkp@intel.com/config)
+compiler: powerpc64le-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=519607a2f7798decb9c891a4f706aaf780f5a677
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 519607a2f7798decb9c891a4f706aaf780f5a677
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/gpu/drm/
 
-BR, Jarkko
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn201/dcn201_hwseq.c: In function 'gpu_addr_to_uma':
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn201/dcn201_hwseq.c:88:14: warning: variable 'is_in_uma' set but not used [-Wunused-but-set-variable]
+      88 |         bool is_in_uma;
+         |              ^~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn201/dcn201_hwseq.c: In function 'dcn201_pipe_control_lock':
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn201/dcn201_hwseq.c:544:22: warning: variable 'hubp' set but not used [-Wunused-but-set-variable]
+     544 |         struct hubp *hubp = NULL;
+         |                      ^~~~
+--
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn201/dcn201_dpp.c: In function 'dpp201_get_optimal_number_of_taps':
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn201/dcn201_dpp.c:185:18: warning: variable 'pixel_width' set but not used [-Wunused-but-set-variable]
+     185 |         uint32_t pixel_width;
+         |                  ^~~~~~~~~~~
+
+
+vim +/is_in_uma +88 drivers/gpu/drm/amd/amdgpu/../display/dc/dcn201/dcn201_hwseq.c
+
+3f68c01be9a222 Zhan Liu 2021-09-25   84  
+3f68c01be9a222 Zhan Liu 2021-09-25   85  static void gpu_addr_to_uma(struct dce_hwseq *hwseq,
+3f68c01be9a222 Zhan Liu 2021-09-25   86  		PHYSICAL_ADDRESS_LOC *addr)
+3f68c01be9a222 Zhan Liu 2021-09-25   87  {
+3f68c01be9a222 Zhan Liu 2021-09-25  @88  	bool is_in_uma;
+3f68c01be9a222 Zhan Liu 2021-09-25   89  
+3f68c01be9a222 Zhan Liu 2021-09-25   90  	if (hwseq->fb_base.quad_part <= addr->quad_part &&
+3f68c01be9a222 Zhan Liu 2021-09-25   91  			addr->quad_part < hwseq->fb_top.quad_part) {
+3f68c01be9a222 Zhan Liu 2021-09-25   92  		addr->quad_part -= hwseq->fb_base.quad_part;
+3f68c01be9a222 Zhan Liu 2021-09-25   93  		addr->quad_part += hwseq->fb_offset.quad_part;
+3f68c01be9a222 Zhan Liu 2021-09-25   94  		is_in_uma = true;
+3f68c01be9a222 Zhan Liu 2021-09-25   95  	} else if (hwseq->fb_offset.quad_part <= addr->quad_part &&
+3f68c01be9a222 Zhan Liu 2021-09-25   96  			addr->quad_part <= hwseq->uma_top.quad_part) {
+3f68c01be9a222 Zhan Liu 2021-09-25   97  		is_in_uma = true;
+3f68c01be9a222 Zhan Liu 2021-09-25   98  	} else if (addr->quad_part == 0) {
+3f68c01be9a222 Zhan Liu 2021-09-25   99  		is_in_uma = false;
+3f68c01be9a222 Zhan Liu 2021-09-25  100  	} else {
+3f68c01be9a222 Zhan Liu 2021-09-25  101  		is_in_uma = false;
+3f68c01be9a222 Zhan Liu 2021-09-25  102  	}
+3f68c01be9a222 Zhan Liu 2021-09-25  103  }
+3f68c01be9a222 Zhan Liu 2021-09-25  104  
+
+:::::: The code at line 88 was first introduced by commit
+:::::: 3f68c01be9a2227de1e190317fe34a6fb835a094 drm/amd/display: add cyan_skillfish display support
+
+:::::: TO: Zhan Liu <zhan.liu@amd.com>
+:::::: CC: Alex Deucher <alexander.deucher@amd.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

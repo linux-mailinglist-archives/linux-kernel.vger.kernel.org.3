@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE85C50B2D2
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 10:24:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A73B250B2D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 10:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389127AbiDVI1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 04:27:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33134 "EHLO
+        id S233619AbiDVI1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 04:27:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352963AbiDVI1P (ORCPT
+        with ESMTP id S1445181AbiDVI1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 04:27:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A3F52E64;
-        Fri, 22 Apr 2022 01:24:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 999D161FDE;
-        Fri, 22 Apr 2022 08:24:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B304BC385A4;
-        Fri, 22 Apr 2022 08:24:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650615862;
-        bh=VZe04wi9Ke1WpooTFqZ15tO/MjgK1FO8qd/uJToj3Wc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jwwEHEHm2Ma97jStCDyTuowW/EJpEo2brMRPLwYkscX+vZ0y40ShSuC0xXJrlMZLa
-         xGdHODv60Vr4GH4JG7nMd9bk3D1pTOlXGyEvTFDf1QYD4qL/WAMD9sIc8FN1r+zneJ
-         mrXlAHE4xs7kzBye6xymR8SqS8XyXO8Wz0ZUUBgdHDNFdd8X2BcJu6DJRA9RuuKCnT
-         Nt94O5Y2oHiNFmXK1Ws+cejfKO9o2Hoii14u/I8Rs5nMU0nivYbc5jXXV0F2NZD6RE
-         xth+GpJBj1+wprn5x/k1gZHn0AzWiPa8vx7UAjg39037MaOd+BogTDYYtPD7hPcr3Z
-         1tPd+eydP2kOQ==
-Date:   Fri, 22 Apr 2022 11:24:14 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, outreachy@lists.linux.dev,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: Re: [PATCH 1/4] mm/highmem: Fix kernel-doc warnings in highmem*.h
-Message-ID: <YmJmLrS3hPR6gOaw@kernel.org>
-References: <20220421180200.16901-1-fmdefrancesco@gmail.com>
- <20220421180200.16901-2-fmdefrancesco@gmail.com>
+        Fri, 22 Apr 2022 04:27:36 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 969DD52E6E
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 01:24:43 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-160-RpMxlxWUPReT48akEvTY5g-1; Fri, 22 Apr 2022 09:24:39 +0100
+X-MC-Unique: RpMxlxWUPReT48akEvTY5g-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Fri, 22 Apr 2022 09:24:37 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Fri, 22 Apr 2022 09:24:37 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Linus Torvalds' <torvalds@linux-foundation.org>,
+        Sven Schnelle <svens@linux.ibm.com>
+CC:     Kees Cook <keescook@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        "krebbel@linux.ibm.com" <krebbel@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>
+Subject: RE: -Warray-bounds fun again
+Thread-Topic: -Warray-bounds fun again
+Thread-Index: AQHYVZxuMWLod4b+f0KSneXrWfgc9qz7l3Bw
+Date:   Fri, 22 Apr 2022 08:24:37 +0000
+Message-ID: <fd6b4de14d944680b5a5674edfe34654@AcuMS.aculab.com>
+References: <yt9dzgkelelc.fsf@linux.ibm.com>
+ <CAHk-=wgv4NLtEowsmX+0jq_nBWXFp8jtruX6U3SDm52N=ftkgg@mail.gmail.com>
+In-Reply-To: <CAHk-=wgv4NLtEowsmX+0jq_nBWXFp8jtruX6U3SDm52N=ftkgg@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220421180200.16901-2-fmdefrancesco@gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,110 +64,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 08:01:57PM +0200, Fabio M. De Francesco wrote:
-> `scripts/kernel-doc -v -none include/linux/highmem*` reports the following
-> warnings:
-> 
-> include/linux/highmem.h:160: warning: expecting prototype for kunmap_atomic(). Prototype was for nr_free_highpages() instead
-> include/linux/highmem.h:204: warning: No description found for return value of 'alloc_zeroed_user_highpage_movable'
-> include/linux/highmem-internal.h:256: warning: Function parameter or member '__addr' not described in 'kunmap_atomic'
-> include/linux/highmem-internal.h:256: warning: Excess function parameter 'addr' description in 'kunmap_atomic'
-> 
-> Fix these warnings by (1) moving the kernel-doc comments from highmem.h to
-> highmem-internal.h (which is the file were the kunmap_atomic() macro is
-> actually defined), (2) extending and merging it with the comment which was
-> already in highmem-internal.h, and (3) using correct parameter names.
-> 
-> Cc: Mike Rapoport <rppt@linux.ibm.com>
-> Cc: Ira Weiny <ira.weiny@intel.com>
-> Suggested-by: Matthew Wilcox <willy@infradead.org>
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> ---
->  include/linux/highmem-internal.h | 14 +++++++++++---
->  include/linux/highmem.h          | 15 +++------------
->  2 files changed, 14 insertions(+), 15 deletions(-)
-> 
-> diff --git a/include/linux/highmem-internal.h b/include/linux/highmem-internal.h
-> index a77be5630209..b099a08e29d3 100644
-> --- a/include/linux/highmem-internal.h
-> +++ b/include/linux/highmem-internal.h
-> @@ -236,9 +236,17 @@ static inline unsigned long totalhigh_pages(void) { return 0UL; }
->  
->  #endif /* CONFIG_HIGHMEM */
->  
-> -/*
-> - * Prevent people trying to call kunmap_atomic() as if it were kunmap()
-> - * kunmap_atomic() should get the return value of kmap_atomic, not the page.
-> +/**
-> + * kunmap_atomic - Unmap the virtual address mapped by kmap_atomic()
-> + * @__addr:       Virtual address to be unmapped
-> + *
-> + * Unmap an address previously mapped by kmap_atomic() and re-enables
+RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMjEgQXByaWwgMjAyMiAxNzoxMQ0KPiANCj4g
+T24gVGh1LCBBcHIgMjEsIDIwMjIgYXQgNzowMiBBTSBTdmVuIFNjaG5lbGxlIDxzdmVuc0BsaW51
+eC5pYm0uY29tPiB3cm90ZToNCj4gPg0KPiA+IFRoZSBvYnZpb3VzICdmaXgnIGlzIHRvIHVzZSBh
+YnNvbHV0ZV9wb2ludGVyKCk6DQo+ID4NCj4gPiAjZGVmaW5lIFMzOTBfbG93Y29yZSAoKigoc3Ry
+dWN0IGxvd2NvcmUgKilhYnNvbHV0ZV9wb2ludGVyKDApKSkNCj4gPg0KPiA+IFRoYXQgbWFrZXMg
+dGhlIHdhcm5pbmcgZ28gYXdheSwgYnV0IHVuZm9ydHVuYXRlbHkgdGhlIGNvbXBpbGVyIG5vIGxv
+bmdlcg0KPiA+IGtub3dzIHRoYXQgdGhlIG1lbW9yeSBhY2Nlc3MgaXMgZml0dGluZyBpbnRvIGEg
+bG9hZC9zdG9yZSB3aXRoIGEgMTIgYml0DQo+ID4gZGlzcGxhY2VtZW50Lg0KPiANCj4gSW4gdGhl
+IGdjYyBidWd6aWxsYSBmb3IgdXMgbmVlZGluZyB0byBkbyB0aGVzZSBnYW1lczoNCj4gDQo+ICAg
+ICBodHRwczovL2djYy5nbnUub3JnL2J1Z3ppbGxhL3Nob3dfYnVnLmNnaT9pZD05OTU3OA0KPiAN
+Cj4gb25lIG9mIHRoZSBzdWdnZXN0aW9ucyB3YXMgIkkgcmVjb21tZW5kIHN1cHByZXNzaW5nIHRo
+ZSB3YXJuaW5nIGVpdGhlcg0KPiBieSAjcHJhZ21hIEdDQyBkaWFnbm9zdGljIG9yIGJ5IG1ha2lu
+ZyB0aGUgcG9pbnRlciB2b2xhdGlsZSIuDQo+IA0KPiBCdXQgUkVBRF9PTkNFKCkgc2hvdWxkIGFs
+cmVhZHkgYmUgZG9pbmcgdGhhdCB2b2xhdGlsZSB0aGluZywgc28gdGhhdA0KPiBzdWdnZXN0aW9u
+IG1heSBub3Qgd29yayB3aXRoIGdjYy0xMiBhbnkgbW9yZS4NCj4gDQo+IEl0IGlzICpwb3NzaWJs
+ZSogdGhhdCBnY2MtMTIgaGFzIG5vdyBzcGVjaWFsLWNhc2VkIHRoZSB2ZXJ5IHNwZWNpYWwNCj4g
+aXNzdWUgb2YgYSBjYXN0IG9mIHRoZSBjb25zdGFudCB6ZXJvLiBUaGF0IGlzIGhvdyBOVUxMIHdh
+cw0KPiB0cmFkaXRpb25hbGx5IGRlZmluZWQuDQo+IA0KPiBTbyBqdXN0IG91dCBvZiBhIHBlcnZl
+cnNlIGN1cmlvc2l0eSwgd2hhdCBoYXBwZW5zIGlmIHlvdSBkbyBzb21ldGhpbmcgbGlrZSB0aGlz
+Og0KPiANCj4gICAgI2RlZmluZSBTMzkwX2xvd2NvcmVfZW5kICgoc3RydWN0IGxvd2NvcmUgKilz
+aXplb2Yoc3RydWN0IGxvd2NvcmUpKQ0KPiAgICAjZGVmaW5lIFMzOTBfbG93Y29yZSAoUzM5MF9s
+b3djb3JlX2VuZFstMV0pDQo+IA0KPiBpbnN0ZWFkPyBJdCBzaG91bGQgZ2V0IHRoZSBzYW1lIHZh
+bHVlIGluIHRoZSBlbmQsIGJ1dCBpdCBkb2Vzbid0IGhhdmUNCj4gdGhhdCBzcGVjaWFsIGNhc2Ug
+b2YgImNhc3QgYW4gaW50ZWdlciBjb25zdGFudCAwIHRvIGEgcG9pbnRlciIuDQo+IA0KPiBJIHN1
+c3BlY3QgaXQgcHJvYmFibHkgZG9lc24ndCBoZWxwLCBiZWNhdXNlIGdjYyB3aWxsIHN0aWxsIHNl
+ZSAib2gsDQo+IHlvdSdyZSBiYXNpbmcgdGhpcyBvZmYgYWRkcmVzcyB6ZXJvIi4NCj4gDQo+IEFu
+b3RoZXIgdGhpbmcgdG8gdHJ5IG1pZ2h0IGJlIHRvIHJlbW92ZSB0aGUgaW5pdGlhbCAxNiBieXRl
+cyBvZg0KPiBwYWRkaW5nIGZyb20gJ3N0cnVjdCBsb3djb3JlJyAoaXQgbG9va3MgbGlrZSB0aGUg
+Zmlyc3QgMjAgYnl0ZXMgYXJlDQo+IG5vdCB1c2VkIC0gc28gbGVhdmUgNCBieXRlcyBvZiBwYWRk
+aW5nIHN0aWxsKSwgYW5kIHVzZQ0KPiANCj4gICAgI2RlZmluZSBTMzkwX2xvd2NvcmUgKCooKHN0
+cnVjdCBsb3djb3JlX25vcGFkICopMTYpKQ0KPiANCj4gaW5zdGVhZC4gVGhlbiBnY2Mgd2lsbCBu
+ZXZlciBzZWUgdGhhdCAwLCBhbmQgaG9wZWZ1bGx5IHRoZSAiaGUncw0KPiBhY2Nlc3NpbmcgYmFz
+ZWQgb2ZmIGEgTlVMTCBwb2ludGVyIiBsb2dpYyB3aWxsIGdvIGF3YXkuDQo+IA0KPiBCZWNhdXNl
+IHJpZ2h0IG5vdywgb3VyIGFic29sdXRlX3BvaW50ZXIoKSBwcm90ZWN0aW9uIGFnYWluc3QgdGhp
+cw0KPiBob3JyaWJsZSBnY2MgbWlzLWZlYXR1cmUgaXMgbGl0ZXJhbGx5IGJhc2VkIG9uIGhpZGlu
+ZyB0aGUgdmFsdWUgZnJvbQ0KPiB0aGUgY29tcGlsZXIgd2l0aCBhbiBpbmxpbmUgYXNtLCBhbmQg
+YnkgdmlydHVlIG9mIGhpZGluZyB0aGUgdmFsdWUNCj4gdGhlbiB5ZXMsIGdjYyB3aWxsIGhhdmUg
+dG8gZ28gdGhyb3VnaCBhIHJlZ2lzdGVyIGJhc2UgcG9pbnRlciBhbmQNCj4gY2Fubm90IHNlZSB0
+aGF0IGl0IGZpdHMgaW4gMTIgYml0cy4NCg0KSSB0aGluayB5b3UgbWlnaHQgYmUgbWl4aW5nIHVw
+IHR3byBwcm9ibGVtcy4NCg0KQWNjZXNzaW5nICgoZm9vICopMCktPm1lbWJlciBpcyBwcm9ibGVt
+YXRpYyBiZWNhdXNlIE5VTEwgbWlnaHQgbm90IGJlIHplcm8uDQpJbiB3aGljaCBjYXNlIGFuIHVu
+ZXhwZWN0ZWQgYWRkcmVzcyBpcyBnZW5lcmF0ZWQuDQpJIHRoaW5rIHRoaXMgaXMgd2h5IGNsYW5n
+IHJlYWxseSBkb2Vzbid0IGxpa2UgeW91IGRvaW5nIHRoYXQuDQpVc2luZyAoKGZvbyAqKShzaXpl
+b2YgKGZvbykpWy0xXS5tZW1iZXIgbWlnaHQgZ2V0IGFyb3VuZCB0aGF0Lg0KDQpJIHN1c3BlY3Qg
+dGhlIGFycmF5IGJvdW5kcyBpc3N1ZSBpcyBjYXVzZWQgYnkgZ2NjIHVzaW5nIGEgc2l6ZSBvZiAw
+DQpmb3IgJ0kgZG9uJ3Qga25vdyB0aGUgc2l6ZScgYW5kIHRoZW4gYXNzdW1pbmcgaXQgaXMgcmVh
+bCBzaXplIGxhdGVyIG9uLg0KVGhhdCBzZWVtcyBsaWtlIGEgcmVhbCBnY2MgYnVnLg0KDQoJRGF2
+aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50
+IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTcz
+ODYgKFdhbGVzKQ0K
 
-Unmap ... and re-enable
-
-or 
-
-Unmaps ... and re-enables
-
-Other than that
-
-Acked-by: Mike Rapoport <rppt@linux.ibm.com>
-
-> + * pagefaults and preemption. Mappings should be unmapped in the reverse
-> + * order that they were mapped. See kmap_local_page() for details.
-> + * @__addr can be any address within the mapped page, so there is no need
-> + * to subtract any offset that has been added. In contrast to kunmap(),
-> + * this function takes the address returned from kmap_atomic(), not the
-> + * page passed to it. The compiler will warn you if you pass the page.
->   */
->  #define kunmap_atomic(__addr)					\
->  do {								\
-> diff --git a/include/linux/highmem.h b/include/linux/highmem.h
-> index 39bb9b47fa9c..c3d562b5f0c1 100644
-> --- a/include/linux/highmem.h
-> +++ b/include/linux/highmem.h
-> @@ -37,7 +37,7 @@ static inline void *kmap(struct page *page);
->  
->  /**
->   * kunmap - Unmap the virtual address mapped by kmap()
-> - * @addr:	Virtual address to be unmapped
-> + * @page:	Virtual address to be unmapped
->   *
->   * Counterpart to kmap(). A NOOP for CONFIG_HIGHMEM=n and for mappings of
->   * pages in the low memory area.
-> @@ -145,17 +145,6 @@ static inline void *kmap_local_folio(struct folio *folio, size_t offset);
->   */
->  static inline void *kmap_atomic(struct page *page);
->  
-> -/**
-> - * kunmap_atomic - Unmap the virtual address mapped by kmap_atomic()
-> - * @addr:	Virtual address to be unmapped
-> - *
-> - * Counterpart to kmap_atomic().
-> - *
-> - * Effectively a wrapper around kunmap_local() which additionally undoes
-> - * the side effects of kmap_atomic(), i.e. reenabling pagefaults and
-> - * preemption.
-> - */
-> -
->  /* Highmem related interfaces for management code */
->  static inline unsigned int nr_free_highpages(void);
->  static inline unsigned long totalhigh_pages(void);
-> @@ -191,6 +180,8 @@ static inline void clear_user_highpage(struct page *page, unsigned long vaddr)
->   * @vma: The VMA the page is to be allocated for
->   * @vaddr: The virtual address the page will be inserted into
->   *
-> + * Returns: The allocated and zeroed HIGHMEM page
-> + *
->   * This function will allocate a page for a VMA that the caller knows will
->   * be able to migrate in the future using move_pages() or reclaimed
->   *
-> -- 
-> 2.34.1
-> 
-> 
-
--- 
-Sincerely yours,
-Mike.

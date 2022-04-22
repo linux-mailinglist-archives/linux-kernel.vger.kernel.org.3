@@ -2,162 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E663950B50E
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71FC750B509
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446629AbiDVKbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 06:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58932 "EHLO
+        id S1446456AbiDVKb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 06:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446606AbiDVKaz (ORCPT
+        with ESMTP id S1350582AbiDVKb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 06:30:55 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7414F54F8D;
-        Fri, 22 Apr 2022 03:28:01 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 10:27:59 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1650623280;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4NPhGkqiIRSiKEgZ/x9p1hdB7pLgPeewg3bgoeGfczc=;
-        b=OhPtiXr7DVBbBWFaLoMvDR76SvEwFFpiMBrb8Z9h1Ad4cKO3beLfD8b6/EQxKo+rKVR0M8
-        DMEg3bAO6f/eg1zBZWuz7RxX+CO4me47+c35am8pAoaWNW9/52K2+FUtLyCJSRfnf4wCPD
-        jNKVO/fy9FtxCclkrDGsgPY7an0bzOI8KKf0jzxoWsktKZffz4GEcMEv4wMVZN9/TEsLST
-        N0LynCXdezZcHx0qbYsJFxr5noIDPQ2z2RP1ROprJ8+tIwoJdarO3QH4HdIJ4Y73llHvYz
-        kRv7sEigh1hUyM7hpDPP1uejNvfAtIrRlRV3BimLNu1tAHzkzY11NtTtji7vYg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1650623280;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4NPhGkqiIRSiKEgZ/x9p1hdB7pLgPeewg3bgoeGfczc=;
-        b=LCl6rgMa+6ZAoGVHGDccIdNLdfkIoOKy0VNtvm9a6HCYSnG6DA6YzP4RT/7Hnc5Q17frG/
-        s79fNB7d6rLBddAw==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: objtool/urgent] objtool: Fix type of reloc::addend
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220419203807.596871927@infradead.org>
-References: <20220419203807.596871927@infradead.org>
+        Fri, 22 Apr 2022 06:31:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD35954F83
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:29:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 542CF61E0B
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 10:29:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4F27C385A0;
+        Fri, 22 Apr 2022 10:28:59 +0000 (UTC)
+Date:   Fri, 22 Apr 2022 11:28:56 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lennart Poettering <lennart@poettering.net>,
+        Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>,
+        Will Deacon <will@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jeremy Linton <Jeremy.Linton@arm.com>,
+        Topi Miettinen <toiwoton@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-abi-devel@lists.sourceforge.net" 
+        <linux-abi-devel@lists.sourceforge.net>
+Subject: Re: [PATCH RFC 2/4] mm, personality: Implement
+ memory-deny-write-execute as a personality flag
+Message-ID: <YmKDaEaOpOaKl7m9@arm.com>
+References: <20220413134946.2732468-1-catalin.marinas@arm.com>
+ <20220413134946.2732468-3-catalin.marinas@arm.com>
+ <443d978a-7092-b5b1-22f3-ae3a997080ad@redhat.com>
 MIME-Version: 1.0
-Message-ID: <165062327903.4207.5493412767018613140.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <443d978a-7092-b5b1-22f3-ae3a997080ad@redhat.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the objtool/urgent branch of tip:
+On Thu, Apr 21, 2022 at 06:37:49PM +0100, David Hildenbrand wrote:
+> On 13.04.22 15:49, Catalin Marinas wrote:
+> > The aim of such policy is to prevent a user task from inadvertently
+> > creating an executable mapping that is or was writeable (and
+> > subsequently made read-only).
+> > 
+> > An example of mmap() returning -EACCESS if the policy is enabled:
+> > 
+> > 	mmap(0, size, PROT_READ | PROT_WRITE | PROT_EXEC, flags, 0, 0);
+> > 
+> > Similarly, mprotect() would return -EACCESS below:
+> > 
+> > 	addr = mmap(0, size, PROT_READ | PROT_EXEC, flags, 0, 0);
+> > 	mprotect(addr, size, PROT_READ | PROT_WRITE | PROT_EXEC);
+> > 
+> > With the past vma writeable permission tracking, mprotect() below would
+> > also fail with -EACCESS:
+> > 
+> > 	addr = mmap(0, size, PROT_READ | PROT_WRITE, flags, 0, 0);
+> > 	mprotect(addr, size, PROT_READ | PROT_EXEC);
+> > 
+> > While the above could be achieved by checking PROT_WRITE & PROT_EXEC on
+> > mmap/mprotect and denying mprotect(PROT_EXEC) altogether (current
+> > systemd MDWE approach via SECCOMP BPF filters), we want the following
+> > scenario to succeed:
+> > 
+> > 	addr = mmap(0, size, PROT_READ | PROT_EXEC, flags, 0, 0);
+> > 	mprotect(addr, size, PROT_READ | PROT_EXEC | PROT_BTI);
+> > 
+> > where PROT_BTI enables branch tracking identification on arm64.
+> > 
+> > The choice for a DENY_WRITE_EXEC personality flag, inherited on fork()
+> > and execve(), was made by analogy to READ_IMPLIES_EXEC.
+> > 
+> > Note that it is sufficient to check for VM_WAS_WRITE in
+> > map_deny_write_exec() as this flag is always set on VM_WRITE mappings.
+> > 
+> > Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+> > Cc: Christoph Hellwig <hch@infradead.org>
+> > Cc: Andrew Morton <akpm@linux-foundation.org>
+> 
+> How does this interact with get_user_pages(FOLL_WRITE|FOLL_FORCE) on a
+> VMA that is VM_MAYWRITE but not VM_WRITE? Is it handled accordingly?
 
-Commit-ID:     c087c6e7b551b7f208c0b852304f044954cf2bb3
-Gitweb:        https://git.kernel.org/tip/c087c6e7b551b7f208c0b852304f044954cf2bb3
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Sun, 17 Apr 2022 17:03:40 +02:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Fri, 22 Apr 2022 12:13:55 +02:00
+For now, that's just about VM_WRITE. Most vmas are VM_MAYWRITE, so we
+can't really have MAYWRITE^EXEC. The basic feature aims to avoid user
+vulnerabilities where a buffer is mapped both writeable and executable.
+Of course, it can be expanded with additional prctl() flags to cover
+other cases.
 
-objtool: Fix type of reloc::addend
+> Note that in the (FOLL_WRITE|FOLL_FORCE) we only require VM_MAYWRITE on
+> the vma and trigger a write fault. As the VMA is not VM_WRITE, we won't
+> actually map the PTE writable, but set it dirty. GUP will retry, find a
+> R/O pte that is dirty and where it knows that it broke COW and will
+> allow the read access, although the PTE is R/O.
+> 
+> That mechanism is required to e.g., set breakpoints in R/O MAP_PRIVATE
+> kernel sections, but it's used elsewhere for page pinning as well.
+> 
+> My gut feeling is that GUP(FOLL_WRITE|FOLL_FORCE) could be used right
+> now to bypass that mechanism, I might be wrong.
 
-Elf{32,64}_Rela::r_addend is of type: Elf{32,64}_Sword, that means
-that our reloc::addend needs to be long or face tuncation issues when
-we do elf_rebuild_reloc_section():
+GUP can be used to bypass this. But if an attacker can trigger such GUP
+paths via a syscall (e.g. ptrace(PTRACE_POKEDATA)), I think we need the
+checks on those paths (and reject the syscall) rather than on
+mmap/mprotect(). This would be covered by something like CAP_SYS_PTRACE.
 
-  - 107:  48 b8 00 00 00 00 00 00 00 00   movabs $0x0,%rax        109: R_X86_64_64        level4_kernel_pgt+0x80000067
-  + 107:  48 b8 00 00 00 00 00 00 00 00   movabs $0x0,%rax        109: R_X86_64_64        level4_kernel_pgt-0x7fffff99
+Not sure what would break if we prevent GUP(FOLL_WRITE|FOLL_FORCE) when
+the vma is !VM_WRITE, basically removing FOLL_FORCE. I guess for
+ptrace() and uprobes that's fine. We could also make this only about
+VM_EXEC rather than VM_WRITE, though  we'd probably need to set
+VM_WAS_WRITE if we ever had a GUP(FOLL_WRITE|FOLL_FORCE) in order to
+prevent a subsequent mprotect(PROT_EXEC).
 
-Fixes: 627fce14809b ("objtool: Add ORC unwind table generation")
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lkml.kernel.org/r/20220419203807.596871927@infradead.org
----
- tools/objtool/check.c               | 8 ++++----
- tools/objtool/elf.c                 | 2 +-
- tools/objtool/include/objtool/elf.h | 4 ++--
- 3 files changed, 7 insertions(+), 7 deletions(-)
+Anyway, this can be a new flag. My first aim is to get the basics
+working similarly to systemd's MDWE.
 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 5f10653..3f67854 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -559,12 +559,12 @@ static int add_dead_ends(struct objtool_file *file)
- 		else if (reloc->addend == reloc->sym->sec->sh.sh_size) {
- 			insn = find_last_insn(file, reloc->sym->sec);
- 			if (!insn) {
--				WARN("can't find unreachable insn at %s+0x%x",
-+				WARN("can't find unreachable insn at %s+0x%lx",
- 				     reloc->sym->sec->name, reloc->addend);
- 				return -1;
- 			}
- 		} else {
--			WARN("can't find unreachable insn at %s+0x%x",
-+			WARN("can't find unreachable insn at %s+0x%lx",
- 			     reloc->sym->sec->name, reloc->addend);
- 			return -1;
- 		}
-@@ -594,12 +594,12 @@ reachable:
- 		else if (reloc->addend == reloc->sym->sec->sh.sh_size) {
- 			insn = find_last_insn(file, reloc->sym->sec);
- 			if (!insn) {
--				WARN("can't find reachable insn at %s+0x%x",
-+				WARN("can't find reachable insn at %s+0x%lx",
- 				     reloc->sym->sec->name, reloc->addend);
- 				return -1;
- 			}
- 		} else {
--			WARN("can't find reachable insn at %s+0x%x",
-+			WARN("can't find reachable insn at %s+0x%lx",
- 			     reloc->sym->sec->name, reloc->addend);
- 			return -1;
- 		}
-diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
-index d7b99a7..0cfe84a 100644
---- a/tools/objtool/elf.c
-+++ b/tools/objtool/elf.c
-@@ -546,7 +546,7 @@ static struct section *elf_create_reloc_section(struct elf *elf,
- 						int reltype);
- 
- int elf_add_reloc(struct elf *elf, struct section *sec, unsigned long offset,
--		  unsigned int type, struct symbol *sym, int addend)
-+		  unsigned int type, struct symbol *sym, long addend)
- {
- 	struct reloc *reloc;
- 
-diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
-index 22ba7e2..9b36802 100644
---- a/tools/objtool/include/objtool/elf.h
-+++ b/tools/objtool/include/objtool/elf.h
-@@ -73,7 +73,7 @@ struct reloc {
- 	struct symbol *sym;
- 	unsigned long offset;
- 	unsigned int type;
--	int addend;
-+	long addend;
- 	int idx;
- 	bool jump_table_start;
- };
-@@ -135,7 +135,7 @@ struct elf *elf_open_read(const char *name, int flags);
- struct section *elf_create_section(struct elf *elf, const char *name, unsigned int sh_flags, size_t entsize, int nr);
- 
- int elf_add_reloc(struct elf *elf, struct section *sec, unsigned long offset,
--		  unsigned int type, struct symbol *sym, int addend);
-+		  unsigned int type, struct symbol *sym, long addend);
- int elf_add_reloc_to_insn(struct elf *elf, struct section *sec,
- 			  unsigned long offset, unsigned int type,
- 			  struct section *insn_sec, unsigned long insn_off);
+-- 
+Catalin

@@ -2,176 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3303C50B576
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:43:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C1D50B57A
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446820AbiDVKqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 06:46:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45242 "EHLO
+        id S1446826AbiDVKqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 06:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349975AbiDVKqG (ORCPT
+        with ESMTP id S1446828AbiDVKqa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 06:46:06 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBF4BF3
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:43:13 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id q1so8801096plx.13
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:43:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PwjyuhBBzo6UT5Lred+US79kmO0Pe9efH/HNboc3Hdw=;
-        b=CueUH3OOot8AF32j5BECrYNIAqKpODeznipw7H4iyOuFOjrDkDhWbj1uEln70UZKI9
-         JKq1xltiLvRCtjXFzqKCx/kCfHIEl29/wm4VSfG1Qw/TjgFsS9tC94wG+JmzQ2Pr8KvI
-         i9mjchpi0kgLAZVbLz2T+XWc2Dg+GS2zhrBKBZb3EhwAs7zA8EoTgZ0wOkeSadwwXKGJ
-         Nc4DQlBOaG6KQRTKWHFUyx4yCmm/IQnND79tsm5HjQ+WPIT1YXpLv284sG6VtI/gMWO5
-         qa6muYXNzKT/qbJ236n4hkK5OVHi3/5L1zEllbw58orJ+E4m7I9KJMzc7Au+hjX550c8
-         DdFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PwjyuhBBzo6UT5Lred+US79kmO0Pe9efH/HNboc3Hdw=;
-        b=g8nkX1O6UD8Dfq99ur87WYwG6locIgDq++aqrFbxSQRlS7iqLxnfNcYQ6eHpVy9vzf
-         yfyBii3HUv8Q8KhOfRQEn5IBSA97Y8jznPGbkB7WCjk58ZUjxhwbGR+kfSEGbV4xuXxq
-         Szwg3ZijkP0VdjQE0JsRKLwJEQtXqVJn7b7aUw9B2NSNMS2r2ijDKYL2JXYY18biI6RX
-         8yiAtzabAZALkYU7iRz3jUjnQEtLP1HDW/lV2aWvuYEH7gSTK29wN0DdZ+6mBE3XrU6z
-         y2c9f6O5fTAc+hjD1LbXE2/E9PrMp9fkDvpEjPpIDZnuTCaJ0qDvxEGqhUBweb24Z44r
-         ke1w==
-X-Gm-Message-State: AOAM531Ht+ikF9ZuSgHz/9QZdYX/4ig+sX9tsjBF3lpDrS9tF2s96CQ/
-        1PwgDvDQuc0VIyX55A4K5A==
-X-Google-Smtp-Source: ABdhPJyLHP+6ZZ57Czt7FGumA5gixAyMavZrloHv3BybrstHXNagscnfm+7CneYBaGgb8wd+tDVJCQ==
-X-Received: by 2002:a17:90b:1b01:b0:1d2:ef4a:98e1 with SMTP id nu1-20020a17090b1b0100b001d2ef4a98e1mr4590141pjb.163.1650624193062;
-        Fri, 22 Apr 2022 03:43:13 -0700 (PDT)
-Received: from piliu.users.ipa.redhat.com ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id f187-20020a6251c4000000b005058e59604csm2148448pfb.217.2022.04.22.03.43.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 03:43:12 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 18:43:07 +0800
-From:   Pingfan Liu <kernelfans@gmail.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH 6/9] pm/irq: make for_each_irq_desc() safe of irq_desc
- release
-Message-ID: <YmKGuwX3o7dETlKl@piliu.users.ipa.redhat.com>
-References: <20220420140521.45361-1-kernelfans@gmail.com>
- <20220420140521.45361-7-kernelfans@gmail.com>
- <CAJZ5v0h2SWN-=-5=OsMGm1amMJrYELqM6BC+J=98EAxSUmxMqg@mail.gmail.com>
- <YmDP93yLJw5gsjtQ@piliu.users.ipa.redhat.com>
- <CAJZ5v0g9DZax-U4WnVcUCc0zAD0uwZZ7E6wsGXmVCB6MeebWxw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0g9DZax-U4WnVcUCc0zAD0uwZZ7E6wsGXmVCB6MeebWxw@mail.gmail.com>
+        Fri, 22 Apr 2022 06:46:30 -0400
+Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6BE27FC0;
+        Fri, 22 Apr 2022 03:43:35 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
+        t=1650624211; bh=4zKNiCJ9mR8YNKg4xV+9DRTe5znRz0G2bXHhsbBhsuc=;
+        h=Subject:From:In-Reply-To:Date:Cc:References:To;
+        b=rbvLx9uVaZ9KLhaZck/JuJlU9H9gFERagLBhE3o2ytCZKQ11iJiiO/8KqezzNuSTn
+         pQCc4HfjB8ZDB11RdeTfmScFbabJXyS6U+rAc6/SCe8v9PGAjQPSd/0lUJEYEhBJb/
+         DAcjFfxZ553jXRIzeWyzghfGmwfRSlnEi3hT8HRc=
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: Re: [RFC PATCH 0/5] Apple Macs machine-level ASoC driver
+From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik@cutebit.org>
+In-Reply-To: <YkXKmxJ0R3qpUoH4@sirena.org.uk>
+Date:   Fri, 22 Apr 2022 12:43:30 +0200
+Cc:     =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Kettenis <kettenis@openbsd.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <DB0255C3-C9EC-4EFA-A377-C4BB1073D9B3@cutebit.org>
+References: <20220331000449.41062-1-povik+lin@cutebit.org>
+ <YkWfziQzprEsWL72@sirena.org.uk>
+ <CCE4A06E-6D6F-457D-B3C5-C36209BF38D3@cutebit.org>
+ <YkW4MPh8VWc8eSGg@sirena.org.uk>
+ <6D199EAB-FE14-4030-96A7-2E0E89D25FAB@cutebit.org>
+ <YkXKmxJ0R3qpUoH4@sirena.org.uk>
+To:     Mark Brown <broonie@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_FAIL,SPF_HELO_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 12:57:28PM +0200, Rafael J. Wysocki wrote:
-> On Thu, Apr 21, 2022 at 5:31 AM Pingfan Liu <kernelfans@gmail.com> wrote:
-> >
-> > On Wed, Apr 20, 2022 at 06:23:48PM +0200, Rafael J. Wysocki wrote:
-> > > On Wed, Apr 20, 2022 at 4:06 PM Pingfan Liu <kernelfans@gmail.com> wrote:
-> > > >
-> > > > The invloved context is no a RCU read section. Furthermore there may be
-> > > > more than one task at this point. Hence it demands a measure to prevent
-> > > > irq_desc from freeing. Use irq_lock_sparse to serve the protection
-> > > > purpose.
-> > >
-> > > Can you please describe an example scenario in which the added locking
-> > > will prevent a failure from occurring?
-> > >
-> >
-> > Sorry to forget mentioning that this is based on the code analysis.
-> >
-> > Suppose the following scenario:
-> > Two threads invloved
-> >   threadA "hibernate" runs suspend_device_irqs()
-> >   threadB "rcu_cpu_kthread" runs rcu_core()->rcu_do_batch(), which releases
-> >   object, let's say irq_desc
-> >
-> > Zoom in:
-> >   threadA                                               threadB
-> >   for_each_irq_desc(irq, desc) {
-> >       get irq_descA which is under freeing
-> >                                                     --->preempted by rcu_core()->rcu_do_batch()  which releases irq_descA
-> >       raw_spin_lock_irqsave(&desc->lock, flags);
-> >       //Oops
-> >
-> > And since in the involved code piece, threadA runs in a preemptible
-> > context, and there may be more than one thread at this stage. So the
-> > preempted can happen.
-> 
-> Well, I'm still not sure that this can ever trigger in practice, but I
 
-Yes, I also think it hardly happen. I had gone through all
-accesses to irq_desc in kernel, and just want to make anything
-completely obey the rule.
-> guess the locking can be added for extra safety.
-> 
-> Anyway, the above information should go into the changelog IMO.
-> 
+> On 31. 3. 2022, at 17:36, Mark Brown <broonie@kernel.org> wrote:
+>=20
+> On Thu, Mar 31, 2022 at 05:04:32PM +0200, Martin Povi=C5=A1er wrote:
+>>> On 31. 3. 2022, at 16:18, Mark Brown <broonie@kernel.org> wrote:
+>=20
+>>> Yes, having two devices driving the bus at the same time wouldn't be
+>>> great.  How is the TDM slot selection for the signals done in the
+>>> hardware, I'm not seeing anything immediately obvious in the driver?
+>>> I'd have thought that things would be implemented such that you =
+could
+>>> implement speaker protection on all speakers simultaneously but =
+perhaps
+>>> not.
+>=20
+>> I don=E2=80=99t know. I would have to go study the details of this. =
+Should I see
+>> if I can find a combination of =E2=80=98ASI1 Sel=E2=80=99 =
+=E2=80=98VSENSE=E2=80=99 =E2=80=98ISENSE=E2=80=99 settings
+>> that would lead to driver conflict on one of the models, or is there
+>> a chance we could hide those controls just on the basis of =E2=80=98it =
+doesn=E2=80=99t
+>> do anything usable and is possibly dangerous=E2=80=99?
+>=20
+> If ISENSE and VSENSE output are controlled by the same mux as routing
+> then we should lock one of the controls out for at least stereo =
+devices
+> (it might be a good idea to check if the output is actually high Z =
+when
+> ISENSE and VSENSE are off rather than just driving zeros, if not it
+> definitely has to be the routing control).  My instinct is that it's
+> better to preserve the ability to implement speaker protection in =
+future
+> since that is something that'd be broadly useful, especially if =
+someone
+> comes up with a generic speaker protection implementation in which =
+case
+> there should be an awful lot of systems out there which could benefit.=20=
 
-OK, I will update it in V2.
-> That said ->
-> 
-> > > > Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
-> > > > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > > > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > > > To: linux-kernel@vger.kernel.org
-> > > > ---
-> > > >  kernel/irq/pm.c | 3 +++
-> > > >  1 file changed, 3 insertions(+)
-> > > >
-> > > > diff --git a/kernel/irq/pm.c b/kernel/irq/pm.c
-> > > > index ca71123a6130..4b67a4c7de3c 100644
-> > > > --- a/kernel/irq/pm.c
-> > > > +++ b/kernel/irq/pm.c
-> > > > @@ -133,6 +133,7 @@ void suspend_device_irqs(void)
-> > > >         struct irq_desc *desc;
-> > > >         int irq;
-> > > >
-> > > > +       irq_lock_sparse();
-> > > >         for_each_irq_desc(irq, desc) {
-> > > >                 unsigned long flags;
-> > > >                 bool sync;
-> > > > @@ -146,6 +147,7 @@ void suspend_device_irqs(void)
-> > > >                 if (sync)
-> > > >                         synchronize_irq(irq);
-> 
-> -> is it entirely safe to call synchronize_irq() under irq_lock_sparse?
 
-synchronize_irq - wait for pending IRQ handlers (on other CPUs). It
-only holds irq_desc->lock and has no connections with irq sparse tree or
-bitmap. I can not see any deadlock issue or miss something?
+Sorry for having put this on hold for a while.
 
-Thanks for your time.
+I looked in the TAS2770 and TAS2764 drivers/datasheets, and to answer
+the questions we had:
 
-Regards,
+ * VSENSE/ISENSE output slots are configured independently of audio =
+samples
+   routing. Kernel drivers configure the slots based on the =
+'ti,imon-slot-no'
+   and 'ti,vmon-slot-no' properties of devicetree.
 
-	Pingfan
-> 
-> > > >         }
-> > > > +       irq_unlock_sparse();
-> > > >  }
-> > > >  EXPORT_SYMBOL_GPL(suspend_device_irqs);
-> > > >
-> > > > @@ -186,6 +188,7 @@ static void resume_irqs(bool want_early)
-> > > >         struct irq_desc *desc;
-> > > >         int irq;
-> > > >
-> > > > +       /* The early resume stage is free of irq_desc release */
-> > > >         for_each_irq_desc(irq, desc) {
-> > > >                 unsigned long flags;
-> > > >                 bool is_early = desc->action &&
-> > > > --
-> > > > 2.31.1
-> > > >
+ * By default codecs transmit Hi-Z for duration of unused slots.
+
+So once we supply the devicetree props it should be electrically sound
+under any configuration of userspace knobs.
+
+One final thought on the playback routing controls: On systems with >2
+speakers, the codecs need to be assigned slots through set_tdm_slot.
+The macaudio driver RFCed here assigns a single slot to each speaker,
+making the effect of each speaker's routing control this:
+
+  'I2C offset' -- uses a random slot
+
+  'Left' 'Right' 'LeftRight' -- uses the single slot we configured
+
+I suppose I better assign two slots to speakers in each left-right pair
+of the same kind (e.g. woofer 1, woofer 2, tweeter). This way the
+routing control will mimic its behavior from simple stereo systems but
+replicated within each left-right pair.  (I would prefer to hide the
+controls altogether, but as I learned that hiding things unless proven
+dangerous is an ASoC non-goal, this way I can make the controls do
+something interesting.)
+
+Martin
+

@@ -2,180 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 928EB50B9E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:17:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B81C50B968
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:02:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448536AbiDVOTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 10:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38212 "EHLO
+        id S1448288AbiDVOFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 10:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448530AbiDVOTe (ORCPT
+        with ESMTP id S1448185AbiDVOFb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 10:19:34 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A274B5AED0;
-        Fri, 22 Apr 2022 07:16:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650637001; x=1682173001;
-  h=from:to:cc:subject:date:message-id;
-  bh=RqQTZ9rQaDwBAdZS5QETujxpLislpihWCdAyP9oPqZc=;
-  b=WXZArPrRv+AMsb4CYy2OlDXa5ukdZMlk2V8f4zY/YFUgwRZtzqMbLIjk
-   S1LxeYrZijwQVPt8YyPG5sYXzkA5NclyOzYAakbFxJhA0KrQ6T9uyguAB
-   v7Fcx3agb32VPAatMy1t5F0GzPtuRo3425eS5fgtE4dZeosgb2XzLwg7B
-   jXsaMaBiRbUjFLqW8pUutqDzhec2F43jpLNVkWskbwD275+VcUkXLsKBs
-   KwNr68drR7nYm9Lme1l3nVTUzt8lpOCeAltDLYKOsFI6zQKjieaPgpyqm
-   LksHg7WXzaz/hebkmfT+L3vkIU8kqGFI2t5s4OW2+e/dsuP2dfKAbdquS
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="245258580"
-X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="245258580"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 07:16:41 -0700
-X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="556396437"
-Received: from arthur-vostro-3668.sh.intel.com ([10.239.13.120])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 07:16:35 -0700
-From:   Zeng Guang <guang.zeng@intel.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        Kai Huang <kai.huang@intel.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Robert Hu <robert.hu@intel.com>, Gao Chao <chao.gao@intel.com>,
-        Zeng Guang <guang.zeng@intel.com>
-Subject: [PATCH] kvm: selftests: Add KVM_CAP_MAX_VCPU_ID cap test
-Date:   Fri, 22 Apr 2022 21:44:56 +0800
-Message-Id: <20220422134456.26655-1-guang.zeng@intel.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 22 Apr 2022 10:05:31 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCCB35A164
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:02:37 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id b19so11174847wrh.11
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:02:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=OiK/+I2vz5bjq7VU2avzLK31jm/Gx9AclMA9jxmVAug=;
+        b=cP1Bt93JTvJ0ym8c2XrolVeLQrg9PeDE7UAjT401HVPMZMx6hIrhs3OtmlPuLQPk/6
+         4pON7EodSw9TXInYKSWTTvj3ODD48aGIMSDzBuGLZt1g5SK9ZrARAVIM/EMSPxviCMFJ
+         a7oDURAoUkMCgihkwepRyC6ipb9gbfuBOYJd3Vjvy1URvkZXYuU1dJkCpKhUdvnkMZxx
+         oeYl7Wlh0oYM37rZDYhT/jhW55nV7EC6RQTe3yGbTcET2UqYxSpJ0gLtMhHzuy7vURqg
+         +Y+eisKwUkhpwfdXKZ2KrCqHVohGaNeFDTx5y379aVJOuBmOJ0cYPvNRTwb8qLEOmbb9
+         NQvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=OiK/+I2vz5bjq7VU2avzLK31jm/Gx9AclMA9jxmVAug=;
+        b=gR2cDo+uRdBdn7FxLWm5u6ZFG86ADRv0adzq9Fz0ijYD1IC2BryfLEcw2kwaPp+3QH
+         ol3zggZJEF6/1INUS1bQwVLLK5KdX1TLeZupaPb2uZmQjm/VkxEUa5g1edpAh4iLaXx7
+         2OKC6aV1cO6HRjL6w1s2Y5NDdV/B9tO5KVde3cMVq24HG2BrGlL1DqNaK/CE33jPCkNn
+         GAlsSn7Wj6XhhGIaEd/1FSlKtegKt0rF6+2X8vX7wG9K+FoUd0JJLyyRP8X3bsm9nhh5
+         ga1rPmkPvCpuY9QK4R9/NBwvVEgZiP2TpRd/Hz9GgpaZME0GZdEviq1ml9Y/yThrP3cv
+         sp0w==
+X-Gm-Message-State: AOAM532eCwrWH5zfmUcLwIh80zG7ywaAdjmvN5e0XU3zqtHXn/MdKJMR
+        M0Syl+RGfmLprhtW9BdLH2LABw==
+X-Google-Smtp-Source: ABdhPJxAw7xcojsmncdMePgMy8X54Zs34nfgJNuHt5yzr/WIJXG0kuAPDAtcSfh+J8Tw7eLdKN9iCQ==
+X-Received: by 2002:a5d:6f0c:0:b0:20a:7db1:3408 with SMTP id ay12-20020a5d6f0c000000b0020a7db13408mr3916991wrb.267.1650636156283;
+        Fri, 22 Apr 2022 07:02:36 -0700 (PDT)
+Received: from [192.168.1.41] (static-176-182-171-101.ncc.abo.bbox.fr. [176.182.171.101])
+        by smtp.googlemail.com with ESMTPSA id bk1-20020a0560001d8100b002061d6bdfd0sm2042767wrb.63.2022.04.22.07.02.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Apr 2022 07:02:35 -0700 (PDT)
+Message-ID: <78790570-f3cd-11f0-c0dc-0d683013946d@linaro.org>
+Date:   Fri, 22 Apr 2022 16:02:34 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] powercap/dtpm: move dtpm_subsys definition to dtpm.c
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>, Tom Rix <trix@redhat.com>,
+        Daniel Lezcano <daniel.lezcano@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220418180814.1811136-1-trix@redhat.com>
+ <CAJZ5v0ivfLtbEL2h1ivATmTTE0+AxWXeZnbCrfF8R=Y-7rfkcA@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0ivfLtbEL2h1ivATmTTE0+AxWXeZnbCrfF8R=Y-7rfkcA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Basic test coverage of KVM_CAP_MAX_VCPU_ID cap.
+On 22/04/2022 15:56, Rafael J. Wysocki wrote:
+> On Mon, Apr 18, 2022 at 8:08 PM Tom Rix <trix@redhat.com> wrote:
+>>
+>> Smatch reports this issue
+>> dtpm_devfreq.c:200:24: warning: symbol 'dtpm_devfreq_ops'
+>>    was not declared. Should it be static?
+>>
+>> dtpm_devfreq_ops is declared in dtpm_subsys.h where it
+>> is also used
+>>
+>> extern struct dtpm_subsys_ops dtpm_devfreq_ops;
+>> struct dtpm_subsys_ops *dtpm_subsys[] = {
+>> ...
+>>          &dtpm_devfreq_ops,
+>>
+>> Global variables should not be defined in header files.
+>> This only works because dtpm.c is the only includer
+>> of dtpm_subsys.h and user of dtpm_susys[].
+>>
+>> Move the definition of dtpm_subsys[] to dtpm.c and change
+>> the storage-class specifier to static.
+>>
+>> Signed-off-by: Tom Rix <trix@redhat.com>
+> 
+> Daniel, any comments?
+> 
+> Or do you want to pick it up yourself?
 
-This capability can be enabled before vCPU creation and only allowed
-to set once. if assigned vcpu id is beyond KVM_CAP_MAX_VCPU_ID
-capability, vCPU creation will fail.
+Yes, I'll pick it
 
-Signed-off-by: Zeng Guang <guang.zeng@intel.com>
----
-This patch appends the test case to verify the KVM_CAP_MAX_VCPU_ID cap
-enabling mechanism introduced in IPI virtualization enabling patch.
-https://lore.kernel.org/lkml/20220419153155.11504-1-guang.zeng@intel.com/
- tools/testing/selftests/kvm/.gitignore        |  1 +
- tools/testing/selftests/kvm/Makefile          |  1 +
- .../kvm/x86_64/max_vcpuid_cap_test.c          | 60 +++++++++++++++++++
- 3 files changed, 62 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86_64/max_vcpuid_cap_test.c
+Thanks
 
-diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index d1e8f5237469..b860dcfee920 100644
---- a/tools/testing/selftests/kvm/.gitignore
-+++ b/tools/testing/selftests/kvm/.gitignore
-@@ -22,6 +22,7 @@
- /x86_64/hyperv_cpuid
- /x86_64/hyperv_features
- /x86_64/hyperv_svm_test
-+/x86_64/max_vcpuid_cap_test
- /x86_64/mmio_warning_test
- /x86_64/mmu_role_test
- /x86_64/platform_info_test
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 21c2dbd21a81..e92dc78de4d0 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -86,6 +86,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/xen_shinfo_test
- TEST_GEN_PROGS_x86_64 += x86_64/xen_vmcall_test
- TEST_GEN_PROGS_x86_64 += x86_64/sev_migrate_tests
- TEST_GEN_PROGS_x86_64 += x86_64/amx_test
-+TEST_GEN_PROGS_x86_64 += x86_64/max_vcpuid_cap_test
- TEST_GEN_PROGS_x86_64 += access_tracking_perf_test
- TEST_GEN_PROGS_x86_64 += demand_paging_test
- TEST_GEN_PROGS_x86_64 += dirty_log_test
-diff --git a/tools/testing/selftests/kvm/x86_64/max_vcpuid_cap_test.c b/tools/testing/selftests/kvm/x86_64/max_vcpuid_cap_test.c
-new file mode 100644
-index 000000000000..3fc84efa7460
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86_64/max_vcpuid_cap_test.c
-@@ -0,0 +1,60 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * maximum APIC ID capability tests
-+ *
-+ * Copyright (C) 2022, Intel, Inc.
-+ *
-+ * Tests for getting/setting maximum APIC ID capability
-+ */
-+
-+#include "kvm_util.h"
-+#include "../lib/kvm_util_internal.h"
-+
-+#define MAX_VCPU_ID	2
-+
-+int main(int argc, char *argv[])
-+{
-+	struct kvm_vm *vm;
-+	struct kvm_enable_cap cap = { 0 };
-+	int ret;
-+
-+	vm = vm_create(VM_MODE_DEFAULT, 0, O_RDWR);
-+
-+	/* Get KVM_CAP_MAX_VCPU_ID cap supported in KVM */
-+	ret = vm_check_cap(vm, KVM_CAP_MAX_VCPU_ID);
-+
-+	/* Try to set KVM_CAP_MAX_VCPU_ID beyond KVM cap */
-+	cap.cap = KVM_CAP_MAX_VCPU_ID;
-+	cap.args[0] = ret + 1;
-+	ret = ioctl(vm->fd, KVM_ENABLE_CAP, &cap);
-+	TEST_ASSERT(ret < 0,
-+		    "Unexpected success to enable KVM_CAP_MAX_VCPU_ID"
-+		    "beyond KVM cap!\n");
-+
-+	/* Set KVM_CAP_MAX_VCPU_ID */
-+	cap.cap = KVM_CAP_MAX_VCPU_ID;
-+	cap.args[0] = MAX_VCPU_ID;
-+	ret = ioctl(vm->fd, KVM_ENABLE_CAP, &cap);
-+	TEST_ASSERT(ret == 0,
-+		    "Unexpected failure to enable KVM_CAP_MAX_VCPU_ID!\n");
-+
-+	/* Check current KVM_CAP_MAX_VCPU_ID value */
-+	ret = vm_check_cap(vm, KVM_CAP_MAX_VCPU_ID);
-+	TEST_ASSERT(ret == MAX_VCPU_ID,
-+		    "Unexpected failure to set KVM_CAP_MAX_VCPU_ID as %d\n",
-+		    MAX_VCPU_ID);
-+
-+	/* Try to set KVM_CAP_MAX_VCPU_ID again */
-+	cap.args[0] = MAX_VCPU_ID + 1;
-+	ret = ioctl(vm->fd, KVM_ENABLE_CAP, &cap);
-+	TEST_ASSERT(ret < 0,
-+		    "Unexpected success to enable KVM_CAP_MAX_VCPU_ID again\n");
-+
-+	/* Create vCPU with id beyond KVM_CAP_MAX_VCPU_ID cap*/
-+	ret = ioctl(vm->fd, KVM_CREATE_VCPU, MAX_VCPU_ID);
-+	TEST_ASSERT(ret < 0,
-+		    "Unexpected success in creating a vCPU with VCPU ID out of range\n");
-+
-+	kvm_vm_free(vm);
-+	return 0;
-+}
+
 -- 
-2.27.0
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

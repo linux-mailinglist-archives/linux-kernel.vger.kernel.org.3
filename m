@@ -2,117 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A0BB50B753
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 14:30:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86AF350B756
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 14:30:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447533AbiDVMdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 08:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49008 "EHLO
+        id S1447523AbiDVMd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 08:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447517AbiDVMdR (ORCPT
+        with ESMTP id S1447548AbiDVMdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 08:33:17 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADE856C3C
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 05:30:23 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 17-20020a05600c021100b00393a19f8f98so2270022wmi.4
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 05:30:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=BoMVUFOEl6nR+FPyhiLBNUhDYjBNRueFaMw3cK0djfg=;
-        b=OS02zn8X0KgjK9iT9Xgk16HCgAt33owcXhXxaYbK3kIjjJj/yoAwIZIl0xhse1yIFe
-         O3ZYcXjEg478fq+/nX9frDJkZVaHZTldmZ+h+ZpmNZ5d0Ea91Qcn5ahbRWFbQ5Nn24B4
-         WEqUCsC4H9QeiL3lT88hNFBmoWykZeBLJUjp1uWtahTnjJzwWNJ6cIVp9G/lBDHsJPyb
-         +VMnIOu+bcMJRbCWjxfeO4Gr0ehqtFEnkdsnXGx4GAk8gxv4sFmsl2kBRZRf1zmoRC7N
-         ayMEUxl0pKrgkEijMCdti/qjBDvgOlQyue9W60uRaCwYDPg/vOwpACJpSjactVpzQhKC
-         TUTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=BoMVUFOEl6nR+FPyhiLBNUhDYjBNRueFaMw3cK0djfg=;
-        b=vOeLnJcVQ3gP2mIEQIwKy3/q3VAlOIH4V3VeP7Ns+P/dVMskiD+l9RClZyKHuIrnYp
-         g9VDsWBQE21Z3nhRgp8NdOMRepb7QsvrYS2jvc49F+smLWcW70G/+0qQZXkaT9ux6d33
-         KJf4K8cZHQRsePa0yf+wvkK2jMH01P8roRSjaUjwywhzTMF1DklipNMa67VxqMepKYJI
-         vGUGDnZzFtB3BL/72iE32KTxX8GT0sHkUXeew2jsOLfinJ3KU7EJgtlGrb1EnGwjSFcu
-         pPvZ/UJ3K8srNzhKB8cLbHjxzz2aq4UjdB5AzIwEutoMMXHOLgb0LW1d6pwFK2iV3a15
-         oUSA==
-X-Gm-Message-State: AOAM531egSgqk3E8UNda1oJfb5SzWEL8Jz/OaHYVlEBO2+BrAXqCZ5tV
-        FFGCHs+nEIdeQgc3j7xCiyLozg==
-X-Google-Smtp-Source: ABdhPJwoZXt4bknR+hx1/TNbRlb+8yw8nHVeheySphVKUd/dY2/71ZZMppN8uXv7A3bTsypj7rUQyA==
-X-Received: by 2002:a05:600c:35c9:b0:392:8e2a:d7aa with SMTP id r9-20020a05600c35c900b003928e2ad7aamr4130493wmq.34.1650630621966;
-        Fri, 22 Apr 2022 05:30:21 -0700 (PDT)
-Received: from ?IPV6:2001:861:44c0:66c0:3ce1:1ed1:5e14:cd49? ([2001:861:44c0:66c0:3ce1:1ed1:5e14:cd49])
-        by smtp.gmail.com with ESMTPSA id t4-20020adfe104000000b00205b50f04f0sm1630593wrz.86.2022.04.22.05.30.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 05:30:21 -0700 (PDT)
-Message-ID: <c4805983-7e07-73cf-39c2-5dc5728029f4@baylibre.com>
-Date:   Fri, 22 Apr 2022 14:30:20 +0200
+        Fri, 22 Apr 2022 08:33:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981A85714A
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 05:30:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9F7262016
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 12:30:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95024C385A4;
+        Fri, 22 Apr 2022 12:30:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650630629;
+        bh=l/UThzJt7EIh5W2gfH2rbyMyEURpsdabio8nxJX2/N8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=q6+ZXnG4VO5fCl1Ebfighwz76rxZODtuBiM9HyI8n5LXwm2fvI9pn9cD3zGtogan8
+         JC2XS1g4Drt9bmofls+4vWo1uygB7PcbG70TGUaK9aO/3LVa2XddVq47dUXmO30BYB
+         NvmPSPoSi1AE59bfThsi+ZtMaCe+ZHe8ZMqNf7S0=
+Date:   Fri, 22 Apr 2022 14:30:26 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Qing Wang <wangqing@vivo.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com
+Subject: Re: [PATCH V2 1/2] arch_topology: support for parsing cache topology
+ from DT
+Message-ID: <YmKf4rv7+NhhS1CY@kroah.com>
+References: <1650628289-67716-1-git-send-email-wangqing@vivo.com>
+ <1650628289-67716-2-git-send-email-wangqing@vivo.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V3 2/2] tty: serial: meson: Added S4 SOC compatibility
-Content-Language: en-US
-To:     Yu Tu <yu.tu@amlogic.com>, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220422111320.19234-1-yu.tu@amlogic.com>
- <20220422111320.19234-3-yu.tu@amlogic.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <20220422111320.19234-3-yu.tu@amlogic.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1650628289-67716-2-git-send-email-wangqing@vivo.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/04/2022 13:13, Yu Tu wrote:
-> Make UART driver compatible with S4 SOC UART. Meanwhile, the S4 SOC
-> UART uses 12MHz as the clock source for baud rate calculations.
+On Fri, Apr 22, 2022 at 04:51:25AM -0700, Qing Wang wrote:
+> From: Wang Qing <wangqing@vivo.com>
 > 
-> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
-> ---
->   drivers/tty/serial/meson_uart.c | 8 ++++++++
->   1 file changed, 8 insertions(+)
+> When ACPI is not enabled, we can get cache topolopy from DT like:
+> *		cpu0: cpu@000 {
+> *			next-level-cache = <&L2_1>;
+> *			L2_1: l2-cache {
+> * 				compatible = "cache";
+> *				next-level-cache = <&L3_1>;
+> * 			};
+> *			L3_1: l3-cache {
+> * 				compatible = "cache";
+> * 			};
+> *		};
+> *
+> *		cpu1: cpu@001 {
+> *			next-level-cache = <&L2_1>;
+> *		};
+> *		...
+> *		};
+> cache_topology[] hold the pointer describing by "next-level-cache", 
+> which can describe the cache topology of every level.
 > 
-> diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
-> index 58bd2723c004..c748e5dd5348 100644
-> --- a/drivers/tty/serial/meson_uart.c
-> +++ b/drivers/tty/serial/meson_uart.c
-> @@ -790,11 +790,19 @@ static int meson_uart_remove(struct platform_device *pdev)
->   	return 0;
->   }
->   
-> +static struct meson_uart_data s4_uart_data = {
-> +	.has_xtal_div2 = true,
-> +};
-> +
->   static const struct of_device_id meson_uart_dt_match[] = {
->   	{ .compatible = "amlogic,meson6-uart" },
->   	{ .compatible = "amlogic,meson8-uart" },
->   	{ .compatible = "amlogic,meson8b-uart" },
->   	{ .compatible = "amlogic,meson-gx-uart" },
-> +	{
-> +		.compatible = "amlogic,meson-s4-uart",
-> +		.data = (void *)&s4_uart_data,
-> +	},
->   	{ /* sentinel */ },
->   };
->   MODULE_DEVICE_TABLE(of, meson_uart_dt_match);
+> MAX_CACHE_LEVEL is strictly corresponding to the cache level from L2.
 
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+I have no idea what this changelog means at all.
+
+What are you trying to do?  What problem are you solving?  Why are you
+doing any of this?
+
+
+> 
+> V2:
+> make function name more sense
+
+As per the documentation this goes below the --- line, right?
+
+
+> 
+> Signed-off-by: Wang Qing <wangqing@vivo.com>
+> ---
+>  drivers/base/arch_topology.c  | 47 ++++++++++++++++++++++++++++++++++-
+>  include/linux/arch_topology.h |  3 +++
+>  2 files changed, 49 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+> index 1d6636ebaac5..46e84ce2ec0c 100644
+> --- a/drivers/base/arch_topology.c
+> +++ b/drivers/base/arch_topology.c
+> @@ -480,8 +480,10 @@ static int __init get_cpu_for_node(struct device_node *node)
+>  		return -1;
+>  
+>  	cpu = of_cpu_node_to_id(cpu_node);
+> -	if (cpu >= 0)
+> +	if (cpu >= 0) {
+>  		topology_parse_cpu_capacity(cpu_node, cpu);
+> +		topology_parse_cpu_caches(cpu_node, cpu);
+> +	}
+>  	else
+>  		pr_info("CPU node for %pOF exist but the possible cpu range is :%*pbl\n",
+>  			cpu_node, cpumask_pr_args(cpu_possible_mask));
+> @@ -647,6 +649,49 @@ static int __init parse_dt_topology(void)
+>  }
+>  #endif
+>  
+> +/*
+> + * cpu cache topology table
+> + */
+> +#define MAX_CACHE_LEVEL 7
+> +static struct device_node *cache_topology[NR_CPUS][MAX_CACHE_LEVEL];
+
+So for a normal big system of 4k cpus * 7 levels, that's a lot of
+memory?  are you sure?
+
+How big of a box did you test this on?
+
+> +
+> +void topology_parse_cpu_caches(struct device_node *cpu_node, int cpu)
+> +{
+> +	struct device_node *node_cache = cpu_node;
+> +	int level = 0;
+> +
+> +	while (level < MAX_CACHE_LEVEL) {
+> +		node_cache = of_parse_phandle(node_cache, "next-level-cache", 0);
+> +		if (!node_cache)
+> +			break;
+> +
+> +		cache_topology[cpu][level++] = node_cache;
+> +	}
+
+No locking anywhere?  What could go wrong :(
+
+> +}
+> +
+> +/*
+> + * find the largest subset of the shared cache in the range of cpu_mask
+> + */
+> +void find_subset_of_share_cache(const struct cpumask *cpu_mask, int cpu,
+> +								 struct cpumask *sc_mask)
+
+Again, horrid global function name.
+
+And no kernel documentation for how this works?
+
+
+
+> +{
+> +	int cache_level, cpu_id;
+> +
+> +	for (cache_level = MAX_CACHE_LEVEL - 1; cache_level >= 0; cache_level--) {
+> +		if (!cache_topology[cpu][cache_level])
+> +			continue;
+
+No locking???
+
+
+> +
+> +		cpumask_clear(sc_mask);
+> +		for (cpu_id = 0; cpu_id < NR_CPUS; cpu_id++) {
+> +			if (cache_topology[cpu][cache_level] == cache_topology[cpu_id][cache_level])
+> +				cpumask_set_cpu(cpu_id, sc_mask);
+> +		}
+> +
+> +		if (cpumask_subset(sc_mask, cpu_mask))
+> +			break;
+> +	}
+> +}
+> +
+>  /*
+>   * cpu topology table
+>   */
+> diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
+> index 58cbe18d825c..c6ed727e453c 100644
+> --- a/include/linux/arch_topology.h
+> +++ b/include/linux/arch_topology.h
+> @@ -93,6 +93,9 @@ void update_siblings_masks(unsigned int cpu);
+>  void remove_cpu_topology(unsigned int cpuid);
+>  void reset_cpu_topology(void);
+>  int parse_acpi_topology(void);
+> +void topology_parse_cpu_caches(struct device_node *cpu_node, int cpu);
+> +void find_subset_of_share_cache(const struct cpumask *cpu_mask, int cpu,
+> +								 struct cpumask *sc_mask);
+
+I still have no idea what this last function is supposed to do.
+
+And very odd indentation, did you run checkpatch on this?
+
+totally confused,
+
+greg k-h

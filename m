@@ -2,97 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A3C50BAC1
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:53:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE4A550BAC0
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449002AbiDVO4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 10:56:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38856 "EHLO
+        id S1448941AbiDVO4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 10:56:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448951AbiDVOz7 (ORCPT
+        with ESMTP id S231418AbiDVO42 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 10:55:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBBBA5C36E;
-        Fri, 22 Apr 2022 07:53:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 811FEB8307B;
-        Fri, 22 Apr 2022 14:53:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92041C385A4;
-        Fri, 22 Apr 2022 14:53:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650639183;
-        bh=T9UBwXuqufvpPkwkvMfLrSuvMpCvswDkzG2OAhXGXms=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gtR6ueBjj90k6uXG+sGb62mjEPhUyWqCc4g/LYsDAGDC86QvoXlQYy95NhT2btdF8
-         P0xl3sQ3qmwmyqmSN38lcytsJbQgKvLmqdrL0dhCwz49yEBz1tKjoPpydxABJtmKdz
-         GxSusnTu+4goI0K1PWwTnb2+/G0VhcVxFy2lzYdc=
-Date:   Fri, 22 Apr 2022 16:53:00 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "T.J. Mercier" <tjmercier@google.com>
-Cc:     daniel@ffwll.ch, tj@kernel.org,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>, jstultz@google.com,
-        cmllamas@google.com, kaleshsingh@google.com, Kenny.Ho@amd.com,
-        mkoutny@suse.com, skhan@linuxfoundation.org,
-        kernel-team@android.com, dri-devel@lists.freedesktop.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC v5 0/6] Proposal for a GPU cgroup controller
-Message-ID: <YmLBTBd+5RHzr9MK@kroah.com>
-References: <20220420235228.2767816-1-tjmercier@google.com>
+        Fri, 22 Apr 2022 10:56:28 -0400
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2B45C36E;
+        Fri, 22 Apr 2022 07:53:34 -0700 (PDT)
+Received: by mail-lf1-f46.google.com with SMTP id y32so14721905lfa.6;
+        Fri, 22 Apr 2022 07:53:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=I0VILpALjxgooNpCUUQ9H0t12+7Y/aJA4JC/W0MMu4Y=;
+        b=hfaIPphNi/HEJkZOFfyCKQ7juFzFwFKQQbNua2SvvUlAc6i3nGmptc7H4gB2trx0UY
+         Gr0jyYnLFBT6/whfk/MtJj5CYM1TWB+7i6L4lkIJwsp4AZ8nMrXW8ohJdYxvhBaZW0Hf
+         rceEKHqmOZkkNonEKZERdfo/h9yXMXpx0cXzOcJqHlX7jYotvyjocrrybTWRUIDWUYkc
+         Gx5s5xxjdSCfa5/GJ41GxBPZS63/Xo4W+jkOhJCn8V/ewFAd17JfnW9CiNIBZwPlhLY+
+         NjooU9LCIxSDybBZkv/ZISfEsdtkf2J27MGrN6AiyBbgudgsxEZ9+Bb+W6kFSr+SbVfx
+         GH5A==
+X-Gm-Message-State: AOAM532N+/oK5Ekvt2FzpZD0XS+aVtZb1koMXIcy/qir2Eu5vU0VbZey
+        icCzVT29QSP691WzoEQIGcVPLMfET7M+c1dcMVVQz9rs
+X-Google-Smtp-Source: ABdhPJwlc7cKv6KK0YFa2nUiR3fW//AKtK/4s6TjqOxcRhCaI2hrDN2p5K4jErdUwTi53d8YZ5x1f3P+jc4Rd35rk10=
+X-Received: by 2002:ac2:4c4f:0:b0:44a:4357:c285 with SMTP id
+ o15-20020ac24c4f000000b0044a4357c285mr3260154lfk.99.1650639212740; Fri, 22
+ Apr 2022 07:53:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220420235228.2767816-1-tjmercier@google.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220422053401.208207-1-namhyung@kernel.org> <YmJ/VAt2yblZC9HN@krava>
+In-Reply-To: <YmJ/VAt2yblZC9HN@krava>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 22 Apr 2022 07:53:22 -0700
+Message-ID: <CAM9d7cjGuTyOmKQsoA9kJPg-_VAuP+jWzwd=g8Z_WpMUZkypUQ@mail.gmail.com>
+Subject: Re: [RFC 0/4] perf record: Implement off-cpu profiling with BPF (v1)
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
+        bpf <bpf@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Blake Jones <blakejones@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 11:52:18PM +0000, T.J. Mercier wrote:
-> This patch series revisits the proposal for a GPU cgroup controller to
-> track and limit memory allocations by various device/allocator
-> subsystems. The patch series also contains a simple prototype to
-> illustrate how Android intends to implement DMA-BUF allocator
-> attribution using the GPU cgroup controller. The prototype does not
-> include resource limit enforcements.
-> 
-> Changelog:
-> v5:
-> Rebase on top of v5.18-rc3
+Hi Jiri,
 
-Why is a "RFC" series on v5?  I treat "RFC" as "not ready to be merged,
-if people are interested, please look at it".  But v5 seems like you
-think this is real.
+On Fri, Apr 22, 2022 at 3:11 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+>
+> On Thu, Apr 21, 2022 at 10:33:57PM -0700, Namhyung Kim wrote:
+>
+> SNIP
+>
+> > The perf bench sched messaging created 400 processes to send/receive
+> > messages through unix sockets.  It spent a large portion of cpu cycles
+> > for audit filter and read/copy the messages while most of the
+> > offcpu-time was in read and write calls.
+> >
+> > You can get the code from 'perf/offcpu-v1' branch in my tree at
+> >
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+> >
+> > Enjoy! :)
+>
+>   CC      builtin-record.o
+> builtin-record.c:52:10: fatal error: util/off_cpu.h: No such file or directory
+>    52 | #include "util/off_cpu.h"
+>
+> forgot to add util/off_cpu.h ?
 
-confused,
+Oops, you're right.  Will resend soon.
 
-greg k-h
+Thanks,
+Namhyung

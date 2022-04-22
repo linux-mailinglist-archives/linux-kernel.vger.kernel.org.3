@@ -2,133 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 099E750AF44
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 06:53:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0293F50AF48
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 06:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444004AbiDVE4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 00:56:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42788 "EHLO
+        id S1444012AbiDVFAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 01:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443528AbiDVE4C (ORCPT
+        with ESMTP id S233418AbiDVFAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 00:56:02 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A561965A4
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 21:53:09 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id u3so9362617wrg.3
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 21:53:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NqW1sJzlV4aSvanIKfDeQQY+sx3syjrs7XXIQkRWQtw=;
-        b=ExaW9k1Vitir2nINZomSBatVKKgAReK/fsbXvrAbn5dB27O90V3mOmiO3YAOwCQbjQ
-         KO5nRkXFQ2jkYtOGrCSAW2kHDHqTx+r4K7qW3xyoxlzKKHpKJj3C2mHxXPBXEjhfW05K
-         VwN3yjyHJ62HDahQZqTeMjLhjF38r9RSs6KFHp2iHHfMF9J4gRozQr6M8wzL6caMHMg1
-         pVfrKha+2YMwqqQn+cSK/cobq6zGK0HCRIgP93d48oGZUZxHzEjmJkKTiOlZ++2PKerr
-         5dnVo7MhjEaLGiwzbJt1TbXG1MT28I3fQJv9yvaAZ+1NF7eZocbk5BHj0OeqG9yV02sb
-         hGDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NqW1sJzlV4aSvanIKfDeQQY+sx3syjrs7XXIQkRWQtw=;
-        b=ZPRnfPVfdWEEcLAOyvdqhufYuLCf0ybOoXbTk1Xvt0Z3dkwPvvDbPUTKwa1c7ecXPO
-         CbjYDW2QqAMh+ZKOa01VrCLjRbfirZQYckZ1vpaau83s1yezkHwJIk/8D2RgqJS71gbN
-         P+Jn7giAueEM+cZT2cApcSyG6TXL8WyyxvXqjsAi1yhJ0a/AV5pgGoe3a2e2ZzwG9ekq
-         Ki5baTCpw0gjgJks436q/c8nWjdrQ8k7DB+HrgqhpadpBMMtd6Kzbw3u2pHu1JFI+vE0
-         hLFipy3nSOizHlWI54XNDHKcqMyVG8+sqgt1JXqRzdeilSVn40EU0xPnXUOKxSFX8Png
-         GawA==
-X-Gm-Message-State: AOAM533+9rUv1gjrSpj4aoYJNI/MqaPBymGTMuG+31Q3REzSX3WHo6bG
-        hZ2DVL1lr8QKm1+DS0lyHSCr46RxZY/vgGI1vtoxXw==
-X-Google-Smtp-Source: ABdhPJwO8Ppu4TLD2X9dPtcPRS8bzrDXPNIiNgP5tsIUWjZSMW2c0vzfNNqDaJges1D52AHkvsKdSGVlgSzajGlMeIc=
-X-Received: by 2002:adf:db86:0:b0:205:bccf:8cbf with SMTP id
- u6-20020adfdb86000000b00205bccf8cbfmr2055381wri.346.1650603188036; Thu, 21
- Apr 2022 21:53:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220421170354.10555-1-palmer@rivosinc.com>
-In-Reply-To: <20220421170354.10555-1-palmer@rivosinc.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Fri, 22 Apr 2022 10:22:56 +0530
-Message-ID: <CAAhSdy0QpShLVXhaT+meSvzkAkDzkG5SqHGbMa4wXdaG22KVWA@mail.gmail.com>
-Subject: Re: [PATCH v1] RISC-V: Only default to spinwait on SBI-0.1 and M-mode
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux@rivosinc.com
+        Fri, 22 Apr 2022 01:00:47 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9074161D;
+        Thu, 21 Apr 2022 21:57:53 -0700 (PDT)
+X-UUID: 328bd78e30b3457ba9ae9926a8bd7a54-20220422
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:746fa042-cc83-4c4a-a458-acf131eb5b2d,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:1,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:1
+X-CID-META: VersionHash:faefae9,CLOUDID:a37390f0-da02-41b4-b6df-58f4ccd36682,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:4,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 328bd78e30b3457ba9ae9926a8bd7a54-20220422
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1202006429; Fri, 22 Apr 2022 12:57:49 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 22 Apr 2022 12:57:47 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 22 Apr 2022 12:57:47 +0800
+Message-ID: <f68239ac05bf119134b3203af9bd74d5af1bc6ba.camel@mediatek.com>
+Subject: Re: [PATCH V2 02/12] clk: mediatek: reset: Use simple reset
+ operations
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>
+CC:     <matthias.bgg@gmail.com>, <p.zabel@pengutronix.de>,
+        <chun-jie.chen@mediatek.com>, <wenst@chromium.org>,
+        <runyang.chen@mediatek.com>, <linux-kernel@vger.kernel.org>,
+        <allen-kh.cheng@mediatek.com>, <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Fri, 22 Apr 2022 12:57:47 +0800
+In-Reply-To: <da6fed21-f661-773d-307f-0c7085e3eb9b@collabora.com>
+References: <20220420130527.23200-1-rex-bc.chen@mediatek.com>
+         <20220420130527.23200-3-rex-bc.chen@mediatek.com>
+         <da6fed21-f661-773d-307f-0c7085e3eb9b@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 10:35 PM Palmer Dabbelt <palmer@rivosinc.com> wrote:
->
-> From: Palmer Dabbelt <palmer@rivosinc.com>
->
-> The spinwait boot method has been superseeded by the SBI HSM extension
-> for some time now, but it still enabled by default.  This causes some
-> issues on large hart count systems, which will hang if a physical hart
-> exists that is larger than NR_CPUS.
->
-> Users on modern SBI implemenation don't need spinwait, and while it's
-> probably possible to deal with some of the spinwait issues let's just
-> restrict the default to systems that are likely to actually use it.
->
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+On Thu, 2022-04-21 at 11:08 +0200, AngeloGioacchino Del Regno wrote:
+> Il 20/04/22 15:05, Rex-BC Chen ha scritto:
+> > There are two version for clock reset register control of MediaTek
+> > SoCs.
+> > The reset operations before MT8183 can use simple reset to cover.
+> > Therefore, we replace mtk_reset_ops with reset_simple_ops.
+> > In addition, we also rename mtk_register_reset_controller to
+> > mtk_register_reset_controller_simple.
+> > 
+> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> 
+> Hello Rex,
+> have you tested this? It won't work.
+> 
+> reset-simple is not using regmap, and it requires you to pass a
+> struct
+> reset_simple_data through drvdata.
+> 
+> Besides, I like that we are using regmap, while reset_simple simply
+> uses
+> readl/writel... so if you want to use that driver, which is good to
+> reduce
+> duplication, you should also implement support for regmap in the form
+> of
+> reset_simple_regmap_ops.
+> 
+> Regards,
+> Angelo
 
-Looks good to me.
+Hello Angelo,
 
-Reviewed-by: Anup Patel <anup@brainfault.org>
+Yes, I also notice the error..
+The data we used is not reset_simple_data.
+I will drop using reset_simple_ops and remain original functions in
+next version.
 
-Regards,
-Anup
+BRs,
+Rex
 
-> ---
-> This seems to be the source of many of my new hangs when trying to test
-> the NR_CPUS=512 support.  It's not really related, just fallout from
-> testing different setups.
-> ---
->  arch/riscv/Kconfig | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 00fd9c548f26..dd5e975abe37 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -359,7 +359,7 @@ config RISCV_SBI_V01
->  config RISCV_BOOT_SPINWAIT
->         bool "Spinwait booting method"
->         depends on SMP
-> -       default y
-> +       default y if RISCV_SBI_V01 || RISCV_M_MODE
->         help
->           This enables support for booting Linux via spinwait method. In the
->           spinwait method, all cores randomly jump to Linux. One of the cores
-> @@ -370,6 +370,12 @@ config RISCV_BOOT_SPINWAIT
->           rely on ordered booting via SBI HSM extension which gets chosen
->           dynamically at runtime if the firmware supports it.
->
-> +         Since spinwait is incompatible with sparse hart IDs, it requires
-> +         NR_CPUS be large enough to contain the physical hart ID of the first
-> +         hart to enter Linux.
-> +
-> +         If unsure what to do here, say N.
-> +
->  config KEXEC
->         bool "Kexec system call"
->         select KEXEC_CORE
-> --
-> 2.34.1
->

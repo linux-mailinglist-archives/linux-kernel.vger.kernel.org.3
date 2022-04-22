@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0293F50AF48
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 06:58:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3815B50AF4A
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 07:01:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444012AbiDVFAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 01:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44174 "EHLO
+        id S1444023AbiDVFDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 01:03:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233418AbiDVFAr (ORCPT
+        with ESMTP id S233418AbiDVFDg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 01:00:47 -0400
+        Fri, 22 Apr 2022 01:03:36 -0400
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9074161D;
-        Thu, 21 Apr 2022 21:57:53 -0700 (PDT)
-X-UUID: 328bd78e30b3457ba9ae9926a8bd7a54-20220422
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207EA48E63;
+        Thu, 21 Apr 2022 22:00:43 -0700 (PDT)
+X-UUID: e63f8a270946463b8bee1185845cbf92-20220422
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:746fa042-cc83-4c4a-a458-acf131eb5b2d,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:1,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:1
-X-CID-META: VersionHash:faefae9,CLOUDID:a37390f0-da02-41b4-b6df-58f4ccd36682,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:4,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 328bd78e30b3457ba9ae9926a8bd7a54-20220422
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+X-CID-O-INFO: VERSION:1.1.4,REQID:f266f48a-3a5f-41b1-97e5-8d5c82e14438,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:2,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:47
+X-CID-INFO: VERSION:1.1.4,REQID:f266f48a-3a5f-41b1-97e5-8d5c82e14438,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:2,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:47
+X-CID-META: VersionHash:faefae9,CLOUDID:e78690f0-da02-41b4-b6df-58f4ccd36682,C
+        OID:IGNORED,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:4,EDM:-3,File:ni
+        l,QS:0,BEC:nil
+X-UUID: e63f8a270946463b8bee1185845cbf92-20220422
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
         (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1202006429; Fri, 22 Apr 2022 12:57:49 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1450099664; Fri, 22 Apr 2022 13:00:39 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 22 Apr 2022 12:57:47 +0800
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 22 Apr 2022 13:00:38 +0800
 Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 22 Apr 2022 12:57:47 +0800
-Message-ID: <f68239ac05bf119134b3203af9bd74d5af1bc6ba.camel@mediatek.com>
-Subject: Re: [PATCH V2 02/12] clk: mediatek: reset: Use simple reset
- operations
+ Transport; Fri, 22 Apr 2022 13:00:38 +0800
+Message-ID: <b185812f94da4cef829c7e2a93c6419568196af4.camel@mediatek.com>
+Subject: Re: [PATCH V2 03/12] clk: mediatek: reset: Refine functions of
+ set_clr
 From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
 To:     AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
@@ -48,11 +51,11 @@ CC:     <matthias.bgg@gmail.com>, <p.zabel@pengutronix.de>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Fri, 22 Apr 2022 12:57:47 +0800
-In-Reply-To: <da6fed21-f661-773d-307f-0c7085e3eb9b@collabora.com>
+Date:   Fri, 22 Apr 2022 13:00:38 +0800
+In-Reply-To: <d833bb7f-ee48-602d-9793-5d717d3b5582@collabora.com>
 References: <20220420130527.23200-1-rex-bc.chen@mediatek.com>
-         <20220420130527.23200-3-rex-bc.chen@mediatek.com>
-         <da6fed21-f661-773d-307f-0c7085e3eb9b@collabora.com>
+         <20220420130527.23200-4-rex-bc.chen@mediatek.com>
+         <d833bb7f-ee48-602d-9793-5d717d3b5582@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
@@ -67,42 +70,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-04-21 at 11:08 +0200, AngeloGioacchino Del Regno wrote:
+On Thu, 2022-04-21 at 11:07 +0200, AngeloGioacchino Del Regno wrote:
 > Il 20/04/22 15:05, Rex-BC Chen ha scritto:
-> > There are two version for clock reset register control of MediaTek
-> > SoCs.
-> > The reset operations before MT8183 can use simple reset to cover.
-> > Therefore, we replace mtk_reset_ops with reset_simple_ops.
-> > In addition, we also rename mtk_register_reset_controller to
-> > mtk_register_reset_controller_simple.
+> > To make driver more readable, revise functions of set_clr.
+> > - Add to_rst_data().
+> > - Extract common code within assert and deassert to
+> >    mtk_reset_update_set_clr().
 > > 
 > > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >   drivers/clk/mediatek/reset.c | 32 +++++++++++++++++++++--------
+> > ---
+> >   1 file changed, 21 insertions(+), 11 deletions(-)
+> > 
+> > diff --git a/drivers/clk/mediatek/reset.c
+> > b/drivers/clk/mediatek/reset.c
+> > index 9110d0b4229f..6574b19daf0f 100644
+> > --- a/drivers/clk/mediatek/reset.c
+> > +++ b/drivers/clk/mediatek/reset.c
+> > @@ -20,26 +20,36 @@ struct mtk_reset {
+> >   	struct reset_controller_dev rcdev;
+> >   };
+> >   
+> > -static int mtk_reset_assert_set_clr(struct reset_controller_dev
+> > *rcdev,
+> > -	unsigned long id)
+> > +static inline struct mtk_reset *to_rst_data(struct
+> > reset_controller_dev *rcdev)
 > 
-> Hello Rex,
-> have you tested this? It won't work.
-> 
-> reset-simple is not using regmap, and it requires you to pass a
-> struct
-> reset_simple_data through drvdata.
-> 
-> Besides, I like that we are using regmap, while reset_simple simply
-> uses
-> readl/writel... so if you want to use that driver, which is good to
-> reduce
-> duplication, you should also implement support for regmap in the form
-> of
-> reset_simple_regmap_ops.
-> 
-> Regards,
-> Angelo
+> to_mtk_reset() looks more consistent, as many developers are using
+> the naming
+> "to_{struct_name}".
 
 Hello Angelo,
 
-Yes, I also notice the error..
-The data we used is not reset_simple_data.
-I will drop using reset_simple_ops and remain original functions in
-next version.
+ok, I will fix this in next version.
+
+> 
+> Also, can you please mention the indentation fixes in the commit
+> description?
+> 
+
+I add another refinement patch in next version.
 
 BRs,
 Rex
+
+> Thanks,
+> Angelo
+> 
 

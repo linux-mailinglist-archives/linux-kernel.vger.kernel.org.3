@@ -2,84 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14DCF50C4FC
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D04950C4F9
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbiDVXej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 19:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37170 "EHLO
+        id S230005AbiDVXfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 19:35:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230280AbiDVXeQ (ORCPT
+        with ESMTP id S229814AbiDVXf0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 19:34:16 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC40CFB8A;
-        Fri, 22 Apr 2022 16:16:55 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id dw17so7170013qvb.9;
-        Fri, 22 Apr 2022 16:16:55 -0700 (PDT)
+        Fri, 22 Apr 2022 19:35:26 -0400
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB6E1D83BA;
+        Fri, 22 Apr 2022 16:18:40 -0700 (PDT)
+Received: by mail-ot1-x32b.google.com with SMTP id i3-20020a056830010300b00605468119c3so6494407otp.11;
+        Fri, 22 Apr 2022 16:18:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=XILRaenKA+ux+cNfTMsUP27EqkAzqma1HpXDmAsliJU=;
-        b=q4ASX2mCJbEKW71AjFTChyikd7lizEo2iA3qJlcg0DC6Vlw1btKxB6yccbdtxkXb4X
-         Db9UG7qM8BZ1rAVqTsLpS6ZM/T/iV8QMGEj0q8QiY+sGOE+dVx1frERw0kVy+AJqorQg
-         s8Iuf3W+ac1VRxMys/drqYh2D+SPm1GH/tyQjWlSIauPL17Uiy/0V/c9wfMTaqUdoGsT
-         WFvHvZPYTHqbWDuQJ+0OKtbUoBmGFoYaWz1ypaDvKhlysdSBSTIo40xKFD2DpzqOR+DF
-         C/X6zTEHrxxGr8AmC5SFceeCfPb3a6gY1wQP3EwHPEaqL4dLbJUrgGSGQRdErjC0VT8S
-         e4Bg==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KoWXKICOXrLwboX1KRSR8wabyc5tj+p6lrbCOGJNsB0=;
+        b=WfyERyMX7R5AXo/rMMIl6y8nSXixykdVRLEdinY/MomqcCB5r5ZQbLs3BCON1JbJid
+         SYBch1vH11Gbyyr7uHnb4uKt0rpEYLwWG6jPVzGB/6YTjnfP6B6nc9E72CRX17Qo8Nv0
+         hqL9sBFF2f0anLzd4y4fWfHceVS7UFZj4OgGcGq3zFsQ1W26Ro4FtkgUsgVmFt6FTodv
+         WJhhQLAQTlQE5ybgDgtXzSu4H0hkfGnY/mdPQk846Y0PZFkSuevMtu2SOCSNLfL6QGeG
+         2/n/ZJOa7dCF4cmxGePvIEuDB/dkYth22mYrBof0ZAwoE1ogpw42s8W4hmZGYwun6WYu
+         NaHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=XILRaenKA+ux+cNfTMsUP27EqkAzqma1HpXDmAsliJU=;
-        b=jiZ7nH6Y9jTZ6zuRMoIqx6KgUw5J8hBR3X9aqIHriI8mZVjcobBAfPrW8Dow2DvGR1
-         lOgojG5Jk3fhVWbrtT/FYX2m7TslwaTyBi/JBDgklZNuYxUayDRG48duBDdKDW/uuqpn
-         Jb4qNQNjUS/oo4n3i+nVHhe4LQL34lvJfRLvFssUNoFoF/7Lnrb1LH0ekbflGkeVxO/y
-         kuw5Hq04VVEMWbwlCaJHIG33/bAajUR9jbIGjrQaL+TpFV0HByhnrB6rv/rOAhe5z3Ho
-         M4HEjzBdpgDqh72H6eMdA3yHm0CBJNhcSwG2TXdG8DfWbQVHgLkI6JJNDl1fbnowFGof
-         7ppA==
-X-Gm-Message-State: AOAM5339iYL0oJahld7CWLHeZNoFMg/PJzmjuVnTRoAdfrvTz+SAsWUj
-        9Cx991TUqd3DaECJpVBq0pA=
-X-Google-Smtp-Source: ABdhPJxFt2jKcJwJdocNdwtDGsiOwWYIQci+16+7XrfNQBgQ3LsJ36wNBfZ94jEqfR5MQKKIegZk4w==
-X-Received: by 2002:ad4:5d69:0:b0:446:3d44:2fbe with SMTP id fn9-20020ad45d69000000b004463d442fbemr5382416qvb.16.1650669414771;
-        Fri, 22 Apr 2022 16:16:54 -0700 (PDT)
-Received: from ?IPV6:2600:1700:2442:6db0:98a4:ff1d:3bb2:5350? ([2600:1700:2442:6db0:98a4:ff1d:3bb2:5350])
-        by smtp.gmail.com with ESMTPSA id o20-20020a05620a0d5400b0069c71a71ed3sm1489737qkl.33.2022.04.22.16.16.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 16:16:54 -0700 (PDT)
-Message-ID: <37465a0f-7deb-bedb-1a84-90324f554ad1@gmail.com>
-Date:   Fri, 22 Apr 2022 18:16:53 -0500
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=KoWXKICOXrLwboX1KRSR8wabyc5tj+p6lrbCOGJNsB0=;
+        b=0udM59OXTkX0qBnWg3+GL73fGaVxcVrRra3MiwovoCuQzxxCnuxt4rnE5fI87cJDSJ
+         5hJ2UtZRWZ9W0jRioEmY5Ehh4Gf3AZBrpWIuFjHTuTFEc2xY0CX13Mf95XBRpjYlbnST
+         GkOFlxxsWcRCHAwWo6NyNK5h4jIiUqU2CR9ac3QPbe8dvA3RAEucqq/PkaiInJx4nD3I
+         ad9eXdjUG6GoAVuUbilyT2ogorPZnCF8S5+wDMt9nB6wZyAULb5gUbsJuhxq6NN5OMjK
+         ZzZq9gBkRqsf1v1hHQwuEVbNrB7VXAl3fIzvpEalEqAbVUoilveIzYT5QHw5TBPKhng0
+         w2Ew==
+X-Gm-Message-State: AOAM5339xlY6pD+0oHKGHNb0Dm+jKfiKy3vE2bynMOUsa/eiVWOva+Il
+        rRsE3wldGCT8V/5DLez8bjg=
+X-Google-Smtp-Source: ABdhPJwKkrwKpAYwt9fhjngX1DM/06254YDKfs9CDiPU2Hx7eNlH3p/K4fmqYt8gQFcOM67kG0jDEA==
+X-Received: by 2002:a05:6830:14cd:b0:605:4e77:6472 with SMTP id t13-20020a05683014cd00b006054e776472mr2672213otq.94.1650669519778;
+        Fri, 22 Apr 2022 16:18:39 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f15-20020a9d5f0f000000b005e6b67945a3sm1256410oti.15.2022.04.22.16.18.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 16:18:38 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 22 Apr 2022 16:18:36 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Tomas Cech <sleep_walker@suse.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
+Message-ID: <20220422231836.GA3202260@roeck-us.net>
+References: <20220419163810.2118169-1-arnd@kernel.org>
+ <20220422170530.GA2338209@roeck-us.net>
+ <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
+ <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net>
+ <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC PATCH 0/2] Documentation: dev-tools: begin KTAP spec v2
- process
-Content-Language: en-US
-To:     David Gow <davidgow@google.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        "Bird, Tim" <Tim.Bird@sony.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Rae Moar <rmr167@gmail.com>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Daniel Latypov <dlatypov@google.com>, kernelci@groups.io,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220316202622.324866-1-frowand.list@gmail.com>
- <CABVgOSmkvxhHSJx0W6BEYz=Ai9vB=nCz625dSKLLUfU0rMLkFA@mail.gmail.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <CABVgOSmkvxhHSJx0W6BEYz=Ai9vB=nCz625dSKLLUfU0rMLkFA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,96 +107,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/17/22 03:42, David Gow wrote:
-> On Thu, Mar 17, 2022 at 4:26 AM <frowand.list@gmail.com> wrote:
->>
->> From: Frank Rowand <frank.rowand@sony.com>
->>
->> An August 2021 RFC patch [1] to create the KTAP Specification resulted in
->> some discussion of possible items to add to the specification.
->> The conversation ended without completing the document.
->>
->> Progress resumed with a December 2021 RFC patch [2] to add a KTAP
->> Specification file (Version 1) to the Linux kernel.  Many of the
->> suggestions from the August 2021 discussion were not included in
->> Version 1.  This patch series is intended to revisit some of the
->> suggestions from the August 2021 discussion.
+On Sat, Apr 23, 2022 at 12:04:31AM +0200, Arnd Bergmann wrote:
+> On Fri, Apr 22, 2022 at 10:55 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> > On 4/22/22 12:16, Arnd Bergmann wrote:
+> > > On Fri, Apr 22, 2022 at 7:05 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> > >
+> > > Which machine did you hit this on? Is this on hardware or in qemu?
+> > >
+> > qemu, as always. borzoi, spitz, terrier, tosa, z2, and sx1 fail.
+> > Also, I just noticed that the failure is not always the same.
+> > z2 fails to boot from initrd, and sx1 fails to boot completely.
 > 
-> Thanks for kicking this off again. There were definitely a lot of good
-> ideas in those threads which we haven't got to yet.
+> That's a lot of machines failing, I hope at least we got the same bugs more
+> than once here.
 > 
-> I think there is an interesting line to walk between keeping KTAP
-> sufficiently "TAP-like" (particularly w/r/t being able to reuse
-> existing TAP parsers), and actually adding features, but I don't
-> recall seeing many such issues in the previous threads.
+> For the I/O space, I found now that PXA was not using the standard
+> virtual I/O address yet, but instead used a NULL-based offset.
 > 
->>
->> Patch 1 changes the Specification version to "2-rc" to indicate
->> that following patches are not yet accepted into a final version 2.
+> I'm not entirely happy with this patch, but this is an outline of what
+> I think we need to fix that: https://pastebin.com/3nVgQsEw
+> This one is probably incomplete, at least it breaks sa1100 for now,
+> and it adds a bogus CONFIG_PCI dependency. I'm also not sure
+> in what way the last patch in the series triggers it, rather than the
+> one that removed mach/io.h.
 > 
-> I'm okay with this, though I'd want us to be a little careful with the
-> timing so we don't end up with, for example, 5.18 having a KTAP spec
-> called 2-rc which is functionally indistinguishable from v1.
+> I had sx1 booting in qemu at least, with the omap1 multiplatform series only.
+> If you have a custom config for this one, make sure you get the right
+> DEBUG_LL address.
+> 
+> > I'll do another round of bisects.
+> 
 
-I finally have some time to return to this.
+So ... z2 bisect points to the same patch, but the error is different.
+As mentioned, it does not recognize the initrd. Oddly enough, booting
+from initrd works for the other platforms.
 
-I could host a branch on my kernel.org "frowand" linux kernel.  When
-agreement is reached on a patch on this mail list, I would add it
-to the branch.  When the discussion determines that it is time to
-release a version 2 of the specification I would add one more commit
-that only updates the version.
+The sx1 boot failure seems to be unrelated to your patch series. It boots
+fine if built from the tip of your branch, but fails to boot in -next.
+That will require a bisect from -next.
 
-Does that sound like a good way to proceed?
-
-> 
->>
->> Patch 2 is an example of a simple change to the Specification.  The
->> change does not change the content of the Specification, but updates
->> a formatting directive as suggested by the Documentation maintainer.
-> 
-> Thanks -- personally, I'd rather this change _does_ go in straight
-> away, even before the 2-rc renaming.
-> 
->> I intend to take some specific suggestions from the August 2021
->> discussion to create stand-alone RFC patches to the Specification
->> instead of adding them as additional patches in this series.  The
->> intent is to focus discussion on a single area of the Specification
->> in each patch email thread.
-> 
-> Seems like a sensible way to structure the discussion. It could get a
-> little bit messy if there end up being merge conflicts, but the whole
-> thing could be collapsed into a single patchset later if that ended up
-> making more sense. (Though that might remove the need for the "rc"
-> version, depending on exactly when and how it happened.)
-
-Yes, if I host a branch then no need for the preliminary rc version.
-
-> 
-> I'd also be curious to see patches to tests and/or test parsers to
-> show off any particularly compatibility-breaking and/or interesting
-> changes, though I don't think that _has_ to be a prerequisite for
-> discussion or the spec.
-
-That is a good suggestion.
-
--Frank
-
-> 
->>
->> [1] https://lore.kernel.org/r/CA+GJov6tdjvY9x12JsJT14qn6c7NViJxqaJk+r-K1YJzPggFDQ@mail.gmail.com
->> [2] https://lore.kernel.org/r/20211207190251.18426-1-davidgow@google.com
->>
->> Frank Rowand (2):
->>   Documentation: dev-tools: KTAP spec change version to 2-rc
->>   Documentation: dev-tools: use literal block instead of code-block
->>
->>  Documentation/dev-tools/ktap.rst | 20 +++++++++-----------
->>  1 file changed, 9 insertions(+), 11 deletions(-)
->>
->> --
->> Frank Rowand <frank.rowand@sony.com>
->>
-> 
-> Cheers,
-> -- David
-
+Guenter

@@ -2,96 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DCF250BC7C
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA61650BC7A
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:02:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358794AbiDVQEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 12:04:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39594 "EHLO
+        id S1377926AbiDVQEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 12:04:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236728AbiDVQEk (ORCPT
+        with ESMTP id S1349941AbiDVQEm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 12:04:40 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFEAB56C0D
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:01:46 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23MEIxDC004439;
-        Fri, 22 Apr 2022 11:01:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=B+fAVScuRJvjR0vYP6PQpK/WVXd6VhFizgRnHYQuDNE=;
- b=LKm5tRjTpKaqMaxvnR3jOFrFaz7XfJW588D+zygNYxbEgQdXq7nlTOe3F5jSuhuLdkwp
- oGapUOgF48xc2n4K8EdCYZ8ZXLuWX+o/dgYHOeGQ0WdGuLib+b9sE2FHzUUT2DDS0V/1
- NrI+wHgZOzwDE4S4fe9K3iLBM+V5Fl9VNOlusIqHa0geJIe7EYaLjCxXCQyep98dddXu
- 2juTR5yoOH5TC16HMc1gIOPa4kaBTW5ddNeWxdrhHUuowc5Kekpj4VYaAYELTxuWifLC
- GFKnKSN2KEpnsUZtqxts7oI7393tVCo8xAs6+pt60vtr8sY6ici+VperSZRQh7EIxFg6 MQ== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3ffu70qb7b-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 22 Apr 2022 11:01:33 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 22 Apr
- 2022 17:01:19 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
- Transport; Fri, 22 Apr 2022 17:01:19 +0100
-Received: from debianA11184.ad.cirrus.com (debianA11184.ad.cirrus.com [198.90.251.83])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id CA23011D1;
-        Fri, 22 Apr 2022 16:01:19 +0000 (UTC)
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-To:     <broonie@kernel.org>
-CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH 2/2] ASoC: soc.h: Add SOC_SINGLE_S_EXT_TLV macro
-Date:   Fri, 22 Apr 2022 17:01:12 +0100
-Message-ID: <20220422160112.3026542-3-rf@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220422160112.3026542-1-rf@opensource.cirrus.com>
-References: <20220422160112.3026542-1-rf@opensource.cirrus.com>
+        Fri, 22 Apr 2022 12:04:42 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59E15B3D7
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:01:48 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id y14so7638330pfe.10
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:01:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=fvtAej5JGuVNellLLY4vrStrSV2CBZuRCp+5/JoyStg=;
+        b=bOdn0jImn1WzfjZlNuqZ0NhMzBD2ETilnRrtGpFJWNkMinZAyvm3Y5DhXSZMK7Gb7Q
+         l8Z+XPs33ywbyztRtDR265zlFXOgQI9pw7HM6nwoKJDbteEH0Vd5EUon5g3ClY9b/vlB
+         HonsGIi18Lr55450daKO0nITBr8Nf9xv5FEqlK5LP3HebVJ6Y64/EhwSlY0DO2lMapkB
+         hhtIj73Uy4tcDLPDhxsY3duBU90/0xmP6g9NaJu1bdFU3+PSykbe5ztWaCSFc8HBeESU
+         rc2FnydIYFD3xCQsXVAnkhCXBJkY/qQp9n/v6fNfST4mQ5foZo8rm7wV1105F8RvnL0k
+         LWOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fvtAej5JGuVNellLLY4vrStrSV2CBZuRCp+5/JoyStg=;
+        b=RJS7kXc42yj43cSTgveQR5dZ6qbRZj2MR/t7RAjsXjoynD4qvCWAWBZFBaX5ekCL8e
+         xO4eGp6GJ8+IEdQuhQGM/jR4/W8Vwe/8jFnyZSpVCJV1ws8MgY3UAon5Y40XjHTyup4i
+         urlvFERndPQnzP7neTUza5XuvHQ5GdEtD52/7A3FxeCDpwR/tIHwXOG783XcsU2KEsIM
+         kvE0Jrd+g4aKeR2pXGMm+X/bVz61BDeEZJCMtHvr1QFoykqGiUSzpWlvZojQWPuXFHNo
+         cf8jIE4jahROqDz4RR5NOK7vKjIS0pL0GL/Y7dUuGdqadU4AsRL9z2SFN0+zVpSEb8ui
+         Yw8g==
+X-Gm-Message-State: AOAM533T4sIECViJ0tQcY8kE2CFxgr9+zJ5+ePToZuHa03h+/p/ycpEL
+        Bj8CcLaJMYPYxX3m2BPSuisEDw==
+X-Google-Smtp-Source: ABdhPJyFRGjHeqwVzOLzk4oMDHyTo0XSFm3q/7QS1+GsVOjKC39tK72dkWebL2ZT8MztbPWRHd/gOA==
+X-Received: by 2002:a05:6a00:1a8f:b0:50a:8c2d:2edf with SMTP id e15-20020a056a001a8f00b0050a8c2d2edfmr5629277pfv.82.1650643307893;
+        Fri, 22 Apr 2022 09:01:47 -0700 (PDT)
+Received: from google.com (201.59.83.34.bc.googleusercontent.com. [34.83.59.201])
+        by smtp.gmail.com with ESMTPSA id l5-20020a63f305000000b0039daaa10a1fsm2525043pgh.65.2022.04.22.09.01.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 09:01:47 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 16:01:43 +0000
+From:   Carlos Llamas <cmllamas@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Li Li <dualli@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] binder: add BINDER_GET_EXTENDED_ERROR ioctl
+Message-ID: <YmLRZ4zFuw34nyOE@google.com>
+References: <20220421042040.759068-1-cmllamas@google.com>
+ <YmLI03OT6st9fcQD@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: ZXsbG9M06rpT03qW-SFxDZZ5mPh0SxKv
-X-Proofpoint-GUID: ZXsbG9M06rpT03qW-SFxDZZ5mPh0SxKv
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmLI03OT6st9fcQD@kroah.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a SOC_SINGLE_S_EXT_TLV macro as a convenience wrapper
-around SOC_DOUBLE_R_S_EXT_TLV for mono volume controls.
+On Fri, Apr 22, 2022 at 05:25:07PM +0200, Greg Kroah-Hartman wrote:
+> On Thu, Apr 21, 2022 at 04:20:36AM +0000, Carlos Llamas wrote:
+> > Provide a userspace mechanism to pull precise error information upon
+> > failed operations. Extending the current error codes returned by the
+> > interfaces allows userspace to better determine the course of action.
+> > This could be for instance, retrying a failed transaction at a later
+> > point and thus offloading the error handling from the driver.
+> > 
+> > Some of the elements for logging failed transactions and similar are
+> > folded into this new logic to avoid duplication. Such is the case for
+> > error line numbers, which become irrelevant after assigning individual
+> > error messages instead.
+> > 
+> > This patch also adds BINDER_GET_EXTENDED_ERROR to the binderfs feature
+> > list, to help userspace determine if the new ioctl is supported by the
+> > driver.
+> 
+> Hint, when you say "also" in a changelog text, that's a hint that this
+> should be more than one patch.  The last thing should be a separate
+> change, right?
 
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
----
- include/sound/soc.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+Yes it should. I now notice I forgot to add the binderfs feature to the
+kselftests too, so I'll include that in v2.
 
-diff --git a/include/sound/soc.h b/include/sound/soc.h
-index 8368b69dfef8..f906e5a70830 100644
---- a/include/sound/soc.h
-+++ b/include/sound/soc.h
-@@ -293,6 +293,12 @@
- 	.get = xhandler_get, .put = xhandler_put, \
- 	.private_value = SOC_DOUBLE_R_S_VALUE(reg_left, reg_right, xshift, \
- 					      xmin, xmax, xsign_bit, xinvert) }
-+#define SOC_SINGLE_S_EXT_TLV(xname, xreg, xshift, xmin, xmax, \
-+			     xsign_bit, xinvert, xhandler_get, xhandler_put, \
-+			     tlv_array) \
-+	SOC_DOUBLE_R_S_EXT_TLV(xname, xreg, xreg, xshift, xmin, xmax, \
-+			       xsign_bit, xinvert, xhandler_get, xhandler_put, \
-+			       tlv_array)
- #define SOC_SINGLE_BOOL_EXT(xname, xdata, xhandler_get, xhandler_put) \
- {	.iface = SNDRV_CTL_ELEM_IFACE_MIXER, .name = xname, \
- 	.info = snd_soc_info_bool_ext, \
--- 
-2.30.2
+> > @@ -2845,22 +2885,20 @@ static void binder_transaction(struct binder_proc *proc,
+> >  			/*
+> >  			 * return_error is set above
+> >  			 */
+> > -			return_error_param = -EINVAL;
+> > -			return_error_line = __LINE__;
+> > +			binder_txn_error(e, &ee, return_error, -EINVAL,
+> > +				"cannot find target node");
+> 
+> You do this a lot, how about making this one commit (first one), and
+> then adding the new "back end" to the error stuff in a second commit.
+> That would make it much easier to review, first commit does nothing new,
+> second one adds the new functionality, and third adds the feature flag.
 
+Yeah, that sounds like the appropiate split. Thanks!
+
+> 
+> thanks,
+> 
+> greg k-h
+
+--
+Carlos Llamas

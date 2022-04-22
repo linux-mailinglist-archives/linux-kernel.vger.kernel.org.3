@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64CB950B0F4
+	by mail.lfdr.de (Postfix) with ESMTP id 1B72F50B0F3
 	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444576AbiDVG7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 02:59:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56544 "EHLO
+        id S1444596AbiDVHAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 03:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233500AbiDVG7l (ORCPT
+        with ESMTP id S1444592AbiDVG76 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 02:59:41 -0400
+        Fri, 22 Apr 2022 02:59:58 -0400
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A47506CA;
-        Thu, 21 Apr 2022 23:56:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222F050B0F;
+        Thu, 21 Apr 2022 23:57:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650610607; x=1682146607;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=SBmwOl5g/7Jn16NnPD3VdURUU406FWYz/vJ8u5PWMRc=;
-  b=doowStJxGAOlWpGyLbY+BWGpO7Xh6/0LZbceG7KdjPFV+nvj1jku3PfO
-   7/mZEA/noSBG60Nw9XlltaMSWD8u0hPGtUFB9LK4gzDaJ64YF2nw1WyGq
-   Ntcrat7rheQUkRG0nNe9bkvz9gSh1N8D7vrxRU5nlWntgGMEbQajcGBbp
-   2aPJ++IEnbIHtQInYGksLCr7T4Pd0kmTN6Bu8qPHTnPcqnJRhFKZ3Rhtk
-   2nTkup5upn/UWAvQO1hMuEOLqIjxYquzMFFn9m+lb3RhCs7Lv7isfoEgi
-   n6UleRSpd2RFIUQ5OWD6DzRS9SnkNvuBNft44AHZbR3HpDYNvk9AhZw6U
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="327508040"
+  t=1650610626; x=1682146626;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=RXFbwxz87qlM883YuYAWF64Fqso0Pit6aDGqdGNhaRU=;
+  b=Cw0PWY6WPHTxTczrIFAH7ElTsTjdVzZSUjEXI6YIIQrvY3jYuMLcIt4X
+   cWt7HtrdW/N9oLsw3bGsIRHz/v2GIzF1UyNqNG7oylqQrzm9e/aBJvd3E
+   /l2LXDqGYybn5A9DkNtMRc1L9q/FSR/Yz1HQ2UQcJ741kP7/0HEVoLlGN
+   YDq9wdXYmuvkq2VCGt8oknG8ZxzAWWQdOe0SOhrPRV1VnkYo23p3j0Cq3
+   yw3PqNpJsJqhgbkxVOu0+IZv535PcTbfjKgsmid+HSUdeD/NdlH3dA+K+
+   lktJCD0hgaWeLDpkCH+9af7cJV0+hcdWbehEIyXX01Wuy96y/hPEB320S
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="327508177"
 X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
-   d="scan'208";a="327508040"
+   d="scan'208";a="327508177"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 23:56:47 -0700
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 23:57:05 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
-   d="scan'208";a="703427748"
+   d="scan'208";a="703427902"
 Received: from zxingrtx.sh.intel.com ([10.239.159.110])
-  by fmsmga001.fm.intel.com with ESMTP; 21 Apr 2022 23:56:44 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 21 Apr 2022 23:57:02 -0700
 From:   zhengjun.xing@linux.intel.com
 To:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
         alexander.shishkin@intel.com, jolsa@redhat.com
 Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
         irogers@google.com, adrian.hunter@intel.com, ak@linux.intel.com,
         kan.liang@linux.intel.com, zhengjun.xing@linux.intel.com
-Subject: [PATCH 1/3] perf stat: Support metrics with hybrid events
-Date:   Fri, 22 Apr 2022 14:56:33 +0800
-Message-Id: <20220422065635.767648-1-zhengjun.xing@linux.intel.com>
+Subject: [PATCH 2/3] perf stat: Merge event counts from all hybrid PMUs
+Date:   Fri, 22 Apr 2022 14:56:34 +0800
+Message-Id: <20220422065635.767648-2-zhengjun.xing@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220422065635.767648-1-zhengjun.xing@linux.intel.com>
+References: <20220422065635.767648-1-zhengjun.xing@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -61,539 +63,121 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
 
-One metric such as 'Kernel_Utilization' may be from different PMUs and
-consists of different events.
+For hybrid events, by default stat aggregates and reports the event counts
+per pmu.
 
-For core,
-Kernel_Utilization = cpu_clk_unhalted.thread:k / cpu_clk_unhalted.thread
+  # ./perf stat -e cycles -a  sleep 1
 
-For atom,
-Kernel_Utilization = cpu_clk_unhalted.core:k / cpu_clk_unhalted.core
+   Performance counter stats for 'system wide':
 
-The metric group string for core is:
-'{cpu_clk_unhalted.thread/metric-id=cpu_clk_unhalted.thread:k/k,cpu_clk_unhalted.thread/metric-id=cpu_clk_unhalted.thread/}:W'
-It's internally expanded to:
-'{cpu_clk_unhalted.thread_p/metric-id=cpu_clk_unhalted.thread_p:k/k,cpu_clk_unhalted.thread/metric-id=cpu_clk_unhalted.thread/}:W#cpu_core'
+      14,066,877,268      cpu_core/cycles/
+       6,814,443,147      cpu_atom/cycles/
 
-The metric group string for atom is:
-'{cpu_clk_unhalted.core/metric-id=cpu_clk_unhalted.core:k/k,cpu_clk_unhalted.core/metric-id=cpu_clk_unhalted.core/}:W'
-It's internally expanded to:
-'{cpu_clk_unhalted.core/metric-id=cpu_clk_unhalted.core:k/k,cpu_clk_unhalted.core/metric-id=cpu_clk_unhalted.core/}:W#cpu_atom'
+         1.002760625 seconds time elapsed
 
-That means the group "{cpu_clk_unhalted.thread:k,cpu_clk_unhalted.thread}:W"
-is from cpu_core PMU and the group "{cpu_clk_unhalted.core:k,cpu_clk_unhalted.core}"
-is from cpu_atom PMU. And then next, check if the events in the group are
-valid on that PMU. If one event is not valid on that PMU, the associated
-group would be removed internally.
+Sometimes, it's also useful to aggregate event counts from all PMUs.
+Create a new option '--hybrid-merge' to enable that behavior and report
+the counts without PMUs.
 
-In this example, cpu_clk_unhalted.thread is valid on cpu_core and
-cpu_clk_unhalted.core is valid on cpu_atom. So the checks for these two
-groups are passed.
+  # ./perf stat -e cycles -a --hybrid-merge  sleep 1
 
-Before:
+   Performance counter stats for 'system wide':
 
-  # ./perf stat -M Kernel_Utilization -a sleep 1
-WARNING: events in group from different hybrid PMUs!
-WARNING: grouped events cpus do not match, disabling group:
-  anon group { CPU_CLK_UNHALTED.THREAD_P:k, CPU_CLK_UNHALTED.THREAD_P:k, CPU_CLK_UNHALTED.THREAD, CPU_CLK_UNHALTED.THREAD }
+      20,732,982,512      cycles
 
- Performance counter stats for 'system wide':
-
-        17,639,501      cpu_atom/CPU_CLK_UNHALTED.CORE/ #     1.00 Kernel_Utilization
-        17,578,757      cpu_atom/CPU_CLK_UNHALTED.CORE:k/
-     1,005,350,226 ns   duration_time
-        43,012,352      cpu_core/CPU_CLK_UNHALTED.THREAD_P:k/ #     0.99 Kernel_Utilization
-        17,608,010      cpu_atom/CPU_CLK_UNHALTED.THREAD_P:k/
-        43,608,755      cpu_core/CPU_CLK_UNHALTED.THREAD/
-        17,630,838      cpu_atom/CPU_CLK_UNHALTED.THREAD/
-     1,005,350,226 ns   duration_time
-
-       1.005350226 seconds time elapsed
-
-After:
-
-  # ./perf stat -M Kernel_Utilization -a sleep 1
-
- Performance counter stats for 'system wide':
-
-        17,981,895      CPU_CLK_UNHALTED.CORE [cpu_atom] #     1.00 Kernel_Utilization
-        17,925,405      CPU_CLK_UNHALTED.CORE:k [cpu_atom]
-     1,004,811,366 ns   duration_time
-        41,246,425      CPU_CLK_UNHALTED.THREAD_P:k [cpu_core] #     0.99 Kernel_Utilization
-        41,819,129      CPU_CLK_UNHALTED.THREAD [cpu_core]
-     1,004,811,366 ns   duration_time
-
-       1.004811366 seconds time elapsed
+         1.002776793 seconds time elapsed
 
 Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
 Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
 ---
- tools/perf/util/metricgroup.c  | 263 ++++++++++++++++++++++++++++++---
- tools/perf/util/stat-display.c |   8 +-
- 2 files changed, 249 insertions(+), 22 deletions(-)
+ tools/perf/Documentation/perf-stat.txt | 10 ++++++++++
+ tools/perf/builtin-stat.c              |  2 ++
+ tools/perf/util/stat-display.c         | 17 +++++++++++++++--
+ tools/perf/util/stat.h                 |  1 +
+ 4 files changed, 28 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
-index d8492e339521..126a43a8917e 100644
---- a/tools/perf/util/metricgroup.c
-+++ b/tools/perf/util/metricgroup.c
-@@ -141,6 +141,11 @@ struct metric {
- 	 * output.
- 	 */
- 	const char *metric_unit;
-+	/**
-+	 * The name of the CPU such as "cpu_core" or "cpu_atom" in hybrid systems
-+	 * and "NULL" in non-hybrid systems.
-+	 */
-+	const char *pmu_name;
- 	/** Optional null terminated array of referenced metrics. */
- 	struct metric_ref *metric_refs;
- 	/**
-@@ -215,6 +220,7 @@ static struct metric *metric__new(const struct pmu_event *pe,
- 	}
- 	m->metric_expr = pe->metric_expr;
- 	m->metric_unit = pe->unit;
-+	m->pmu_name = pe->pmu;
- 	m->pctx->runtime = runtime;
- 	m->has_constraint = metric_no_group || metricgroup__has_constraint(pe);
- 	m->metric_refs = NULL;
-@@ -250,10 +256,12 @@ static bool contains_metric_id(struct evsel **metric_events, int num_events,
-  * @ids: the metric IDs to match.
-  * @metric_evlist: the list of perf events.
-  * @out_metric_events: holds the created metric events array.
-+ * @pmu_name: the name of the CPU.
-  */
- static int setup_metric_events(struct hashmap *ids,
- 			       struct evlist *metric_evlist,
--			       struct evsel ***out_metric_events)
-+			       struct evsel ***out_metric_events,
-+			       const char *pmu_name)
- {
- 	struct evsel **metric_events;
- 	const char *metric_id;
-@@ -286,6 +294,10 @@ static int setup_metric_events(struct hashmap *ids,
- 		 * about this event.
- 		 */
- 		if (hashmap__find(ids, metric_id, (void **)&val_ptr)) {
-+			if (evsel__is_hybrid(ev) && pmu_name &&
-+			    strcmp(pmu_name, ev->pmu_name)) {
-+				continue;
-+			}
- 			metric_events[matched_events++] = ev;
+diff --git a/tools/perf/Documentation/perf-stat.txt b/tools/perf/Documentation/perf-stat.txt
+index c06c341e72b9..8d1cde00b8d6 100644
+--- a/tools/perf/Documentation/perf-stat.txt
++++ b/tools/perf/Documentation/perf-stat.txt
+@@ -454,6 +454,16 @@ Multiple events are created from a single event specification when:
+ 2. Aliases, which are listed immediately after the Kernel PMU events
+    by perf list, are used.
  
- 			if (matched_events >= ids_size)
-@@ -724,7 +736,8 @@ static int decode_all_metric_ids(struct evlist *perf_evlist, const char *modifie
- static int metricgroup__build_event_string(struct strbuf *events,
- 					   const struct expr_parse_ctx *ctx,
- 					   const char *modifier,
--					   bool has_constraint)
-+					   bool has_constraint,
-+					   const char *pmu_name)
- {
- 	struct hashmap_entry *cur;
- 	size_t bkt;
-@@ -806,12 +819,18 @@ static int metricgroup__build_event_string(struct strbuf *events,
- 		if (no_group) {
- 			/* Strange case of a metric of just duration_time. */
- 			ret = strbuf_addf(events, "duration_time");
--		} else if (!has_constraint)
--			ret = strbuf_addf(events, "}:W,duration_time");
--		else
-+		} else if (!has_constraint) {
-+			ret = strbuf_addf(events, "}:W");
-+			if (pmu_name)
-+				ret = strbuf_addf(events, "#%s", pmu_name);
- 			ret = strbuf_addf(events, ",duration_time");
--	} else if (!no_group && !has_constraint)
-+		} else
-+			ret = strbuf_addf(events, ",duration_time");
-+	} else if (!no_group && !has_constraint) {
- 		ret = strbuf_addf(events, "}:W");
-+		if (pmu_name)
-+			ret = strbuf_addf(events, "#%s", pmu_name);
-+	}
++--hybrid-merge::
++Merge the hybrid event counts from all PMUs.
++
++For hybrid events, by default, the stat aggregates and reports the event
++counts per PMU. But sometimes, it's also useful to aggregate event counts
++from all PMUs. This option enables that behavior and reports the counts
++without PMUs.
++
++For non-hybrid events, it should be no effect.
++
+ --smi-cost::
+ Measure SMI cost if msr/aperf/ and msr/smi/ events are supported.
  
- 	return ret;
- #undef RETURN_IF_NON_ZERO
-@@ -1150,11 +1169,13 @@ static int metric_list_cmp(void *priv __maybe_unused, const struct list_head *l,
-  * @metric_list: The list that the metric or metric group are added to.
-  * @map: The map that is searched for metrics, most commonly the table for the
-  *       architecture perf is running upon.
-+ * @pmu_name: the name of the CPU.
-  */
--static int metricgroup__add_metric(const char *metric_name, const char *modifier,
--				   bool metric_no_group,
-+static int metricgroup__add_metric(const char *metric_name,
-+				   const char *modifier, bool metric_no_group,
- 				   struct list_head *metric_list,
--				   const struct pmu_events_map *map)
-+				   const struct pmu_events_map *map,
-+				   const char *pmu_name)
- {
- 	const struct pmu_event *pe;
- 	LIST_HEAD(list);
-@@ -1167,6 +1188,8 @@ static int metricgroup__add_metric(const char *metric_name, const char *modifier
- 	 */
- 	map_for_each_metric(pe, i, map, metric_name) {
- 		has_match = true;
-+		if (pmu_name && pe->pmu && strcmp(pmu_name, pe->pmu))
-+			continue;
- 		ret = add_metric(&list, pe, modifier, metric_no_group,
- 				 /*root_metric=*/NULL,
- 				 /*visited_metrics=*/NULL, map);
-@@ -1215,10 +1238,12 @@ static int metricgroup__add_metric(const char *metric_name, const char *modifier
-  * @metric_list: The list that metrics are added to.
-  * @map: The map that is searched for metrics, most commonly the table for the
-  *       architecture perf is running upon.
-+ * @pmu_name: the name of the CPU.
-  */
- static int metricgroup__add_metric_list(const char *list, bool metric_no_group,
- 					struct list_head *metric_list,
--					const struct pmu_events_map *map)
-+					const struct pmu_events_map *map,
-+					const char *pmu_name)
- {
- 	char *list_itr, *list_copy, *metric_name, *modifier;
- 	int ret, count = 0;
-@@ -1235,7 +1260,7 @@ static int metricgroup__add_metric_list(const char *list, bool metric_no_group,
- 
- 		ret = metricgroup__add_metric(metric_name, modifier,
- 					      metric_no_group, metric_list,
--					      map);
-+					      map, pmu_name);
- 		if (ret == -EINVAL)
- 			pr_err("Cannot find metric or group `%s'\n", metric_name);
- 
-@@ -1310,6 +1335,183 @@ static int build_combined_expr_ctx(const struct list_head *metric_list,
- 	return ret;
- }
- 
-+static char *get_metric_pmus(char *orig_str, struct strbuf *metric_pmus)
-+{
-+	char *llist, *nlist, *p1, *p2, *new_str = NULL;
-+	int ret;
-+	struct strbuf new_events;
-+
-+	if (!strchr(orig_str, '#')) {
-+		/*
-+		 * pmu name is added after '#'. If no '#' found,
-+		 * don't need to process pmu.
-+		 */
-+		return strdup(orig_str);
-+	}
-+
-+	nlist = strdup(orig_str);
-+	if (!nlist)
-+		return new_str;
-+
-+	ret = strbuf_init(&new_events, 100);
-+	if (ret)
-+		goto err_out;
-+
-+	ret = strbuf_grow(metric_pmus, 100);
-+	if (ret)
-+		goto err_out;
-+
-+	llist = nlist;
-+	while ((p1 = strsep(&llist, ",")) != NULL) {
-+		p2 = strchr(p1, '#');
-+		if (p2) {
-+			*p2 = 0;
-+			ret = strbuf_addf(&new_events, "%s,", p1);
-+			if (ret)
-+				goto err_out;
-+
-+			ret = strbuf_addf(metric_pmus, "%s,", p2 + 1);
-+			if (ret)
-+				goto err_out;
-+
-+		} else {
-+			ret = strbuf_addf(&new_events, "%s,", p1);
-+			if (ret)
-+				goto err_out;
-+		}
-+	}
-+
-+	new_str = strdup(new_events.buf);
-+	if (new_str) {
-+		/* Remove last ',' */
-+		new_str[strlen(new_str) - 1] = 0;
-+	}
-+err_out:
-+	free(nlist);
-+	strbuf_release(&new_events);
-+	return new_str;
-+}
-+
-+static void set_pmu_unmatched_events(struct evlist *evlist, int group_idx,
-+				     char *pmu_name,
-+				     unsigned long *evlist_removed)
-+{
-+	struct evsel *evsel, *pos;
-+	int i = 0, j = 0;
-+
-+	/*
-+	 * Move to the first evsel of a given group
-+	 */
-+	evlist__for_each_entry(evlist, evsel) {
-+		if (evsel__is_group_leader(evsel) &&
-+		    evsel->core.nr_members >= 1) {
-+			if (i < group_idx) {
-+				j += evsel->core.nr_members;
-+				i++;
-+				continue;
-+			}
-+		}
-+	}
-+
-+	i = 0;
-+	evlist__for_each_entry(evlist, evsel) {
-+		if (i < j) {
-+			i++;
-+			continue;
-+		}
-+
-+		/*
-+		 * Now we are at the first evsel in the group
-+		 */
-+		for_each_group_evsel(pos, evsel) {
-+			if (evsel__is_hybrid(pos) &&
-+			    strcmp(pos->pmu_name, pmu_name)) {
-+				set_bit(pos->core.idx, evlist_removed);
-+			}
-+		}
-+		break;
-+	}
-+}
-+
-+static void remove_pmu_umatched_events(struct evlist *evlist, char *metric_pmus)
-+{
-+	struct evsel *evsel, *tmp, *new_leader = NULL;
-+	unsigned long *evlist_removed;
-+	char *llist, *nlist, *p1;
-+	bool need_new_leader = false;
-+	int i = 0, new_nr_members = 0;
-+
-+	nlist = strdup(metric_pmus);
-+	if (!nlist)
-+		return;
-+
-+	evlist_removed = bitmap_zalloc(evlist->core.nr_entries);
-+	if (!evlist_removed) {
-+		free(nlist);
-+		return;
-+	}
-+
-+	llist = nlist;
-+	while ((p1 = strsep(&llist, ",")) != NULL) {
-+		if (strlen(p1) > 0) {
-+			/*
-+			 * p1 points to the string of pmu name, e.g. "cpu_atom".
-+			 * The metric group string has pmu suffixes, e.g.
-+			 * "{inst_retired.any,cpu_clk_unhalted.thread}:W#cpu_core,
-+			 *  {cpu_clk_unhalted.core,inst_retired.any_p}:W#cpu_atom"
-+			 * By counting the pmu name, we can know the index of
-+			 * group.
-+			 */
-+			set_pmu_unmatched_events(evlist, i++, p1,
-+						 evlist_removed);
-+		}
-+	}
-+
-+	evlist__for_each_entry_safe(evlist, tmp, evsel) {
-+		if (test_bit(evsel->core.idx, evlist_removed)) {
-+			if (!evsel__is_group_leader(evsel)) {
-+				if (!need_new_leader) {
-+					if (new_leader)
-+						new_leader->core.leader->nr_members--;
-+					else
-+						evsel->core.leader->nr_members--;
-+				} else
-+					new_nr_members--;
-+			} else {
-+				/*
-+				 * If group leader is to remove, we need to
-+				 * prepare a new leader and adjust all group
-+				 * members.
-+				 */
-+				need_new_leader = true;
-+				new_nr_members =
-+				    evsel->core.leader->nr_members - 1;
-+			}
-+
-+			evlist__remove(evlist, evsel);
-+			evsel__delete(evsel);
-+		} else {
-+			if (!evsel__is_group_leader(evsel)) {
-+				if (need_new_leader) {
-+					need_new_leader = false;
-+					new_leader = evsel;
-+					new_leader->core.leader =
-+					    &new_leader->core;
-+					new_leader->core.nr_members =
-+					    new_nr_members;
-+				} else if (new_leader)
-+					evsel->core.leader = &new_leader->core;
-+			} else {
-+				need_new_leader = false;
-+				new_leader = NULL;
-+			}
-+		}
-+	}
-+
-+	bitmap_free(evlist_removed);
-+	free(nlist);
-+}
-+
- /**
-  * parse_ids - Build the event string for the ids and parse them creating an
-  *             evlist. The encoded metric_ids are decoded.
-@@ -1319,14 +1521,18 @@ static int build_combined_expr_ctx(const struct list_head *metric_list,
-  * @modifier: any modifiers added to the events.
-  * @has_constraint: false if events should be placed in a weak group.
-  * @out_evlist: the created list of events.
-+ * @pmu_name: the name of the CPU.
-  */
- static int parse_ids(bool metric_no_merge, struct perf_pmu *fake_pmu,
- 		     struct expr_parse_ctx *ids, const char *modifier,
--		     bool has_constraint, struct evlist **out_evlist)
-+		     bool has_constraint, struct evlist **out_evlist,
-+		     const char *pmu_name)
- {
- 	struct parse_events_error parse_error;
- 	struct evlist *parsed_evlist;
- 	struct strbuf events = STRBUF_INIT;
-+	struct strbuf metric_pmus = STRBUF_INIT;
-+	char *nlist = NULL;
- 	int ret;
- 
- 	*out_evlist = NULL;
-@@ -1353,7 +1559,7 @@ static int parse_ids(bool metric_no_merge, struct perf_pmu *fake_pmu,
- 		ids__insert(ids->ids, tmp);
- 	}
- 	ret = metricgroup__build_event_string(&events, ids, modifier,
--					      has_constraint);
-+					      has_constraint, pmu_name);
- 	if (ret)
- 		return ret;
- 
-@@ -1364,11 +1570,20 @@ static int parse_ids(bool metric_no_merge, struct perf_pmu *fake_pmu,
- 	}
- 	pr_debug("Parsing metric events '%s'\n", events.buf);
- 	parse_events_error__init(&parse_error);
--	ret = __parse_events(parsed_evlist, events.buf, &parse_error, fake_pmu);
-+	nlist = get_metric_pmus(events.buf, &metric_pmus);
-+	if (!nlist) {
-+		ret = -ENOMEM;
-+		goto err_out;
-+	}
-+	ret = __parse_events(parsed_evlist, nlist, &parse_error, fake_pmu);
- 	if (ret) {
- 		parse_events_error__print(&parse_error, events.buf);
- 		goto err_out;
- 	}
-+
-+	if (metric_pmus.alloc)
-+		remove_pmu_umatched_events(parsed_evlist, metric_pmus.buf);
-+
- 	ret = decode_all_metric_ids(parsed_evlist, modifier);
- 	if (ret)
- 		goto err_out;
-@@ -1376,9 +1591,12 @@ static int parse_ids(bool metric_no_merge, struct perf_pmu *fake_pmu,
- 	*out_evlist = parsed_evlist;
- 	parsed_evlist = NULL;
- err_out:
-+	if (nlist)
-+		free(nlist);
- 	parse_events_error__exit(&parse_error);
- 	evlist__delete(parsed_evlist);
- 	strbuf_release(&events);
-+	strbuf_release(&metric_pmus);
- 	return ret;
- }
- 
-@@ -1397,7 +1615,8 @@ static int parse_groups(struct evlist *perf_evlist, const char *str,
- 	if (metric_events_list->nr_entries == 0)
- 		metricgroup__rblist_init(metric_events_list);
- 	ret = metricgroup__add_metric_list(str, metric_no_group,
--					   &metric_list, map);
-+					   &metric_list, map,
-+					   perf_evlist->hybrid_pmu_name);
- 	if (ret)
- 		goto out;
- 
-@@ -1413,7 +1632,8 @@ static int parse_groups(struct evlist *perf_evlist, const char *str,
- 			ret = parse_ids(metric_no_merge, fake_pmu, combined,
- 					/*modifier=*/NULL,
- 					/*has_constraint=*/true,
--					&combined_evlist);
-+					&combined_evlist,
-+					perf_evlist->hybrid_pmu_name);
- 		}
- 		if (combined)
- 			expr__ctx_free(combined);
-@@ -1450,6 +1670,9 @@ static int parse_groups(struct evlist *perf_evlist, const char *str,
- 					continue;
- 
- 				if (expr__subset_of_ids(n->pctx, m->pctx)) {
-+					if (m->pmu_name && n->pmu_name
-+					    && strcmp(m->pmu_name, n->pmu_name))
-+						continue;
- 					pr_debug("Events in '%s' fully contained within '%s'\n",
- 						 m->metric_name, n->metric_name);
- 					metric_evlist = n->evlist;
-@@ -1459,14 +1682,16 @@ static int parse_groups(struct evlist *perf_evlist, const char *str,
- 			}
- 		}
- 		if (!metric_evlist) {
--			ret = parse_ids(metric_no_merge, fake_pmu, m->pctx, m->modifier,
--					m->has_constraint, &m->evlist);
-+			ret = parse_ids(metric_no_merge, fake_pmu, m->pctx,
-+				      m->modifier, m->has_constraint,
-+				      &m->evlist, m->pmu_name);
- 			if (ret)
- 				goto out;
- 
- 			metric_evlist = m->evlist;
- 		}
--		ret = setup_metric_events(m->pctx->ids, metric_evlist, &metric_events);
-+		ret = setup_metric_events(m->pctx->ids, metric_evlist,
-+					  &metric_events, m->pmu_name);
- 		if (ret) {
- 			pr_debug("Cannot resolve IDs for %s: %s\n",
- 				m->metric_name, m->metric_expr);
+diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+index a96f106dc93a..ea88ac5bed2d 100644
+--- a/tools/perf/builtin-stat.c
++++ b/tools/perf/builtin-stat.c
+@@ -1235,6 +1235,8 @@ static struct option stat_options[] = {
+ 	OPT_SET_UINT('A', "no-aggr", &stat_config.aggr_mode,
+ 		    "disable CPU count aggregation", AGGR_NONE),
+ 	OPT_BOOLEAN(0, "no-merge", &stat_config.no_merge, "Do not merge identical named events"),
++	OPT_BOOLEAN(0, "hybrid-merge", &stat_config.hybrid_merge,
++		    "Merge identical named hybrid events"),
+ 	OPT_STRING('x', "field-separator", &stat_config.csv_sep, "separator",
+ 		   "print counts with custom separator"),
+ 	OPT_CALLBACK('G', "cgroup", &evsel_list, "name",
 diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
-index 138e3ab9d638..46b3dd134656 100644
+index 46b3dd134656..d9629a83aa78 100644
 --- a/tools/perf/util/stat-display.c
 +++ b/tools/perf/util/stat-display.c
-@@ -539,7 +539,8 @@ static void aggr_update_shadow(struct perf_stat_config *config,
- 	}
+@@ -612,6 +612,19 @@ static bool hybrid_uniquify(struct evsel *evsel)
+ 	return perf_pmu__has_hybrid() && !is_uncore(evsel);
  }
  
--static void uniquify_event_name(struct evsel *counter)
-+static void uniquify_event_name(struct evsel *counter,
-+				struct perf_stat_config *stat_config)
- {
- 	char *new_name;
- 	char *config;
-@@ -558,7 +559,8 @@ static void uniquify_event_name(struct evsel *counter)
- 			counter->name = new_name;
- 		}
- 	} else {
--		if (perf_pmu__has_hybrid()) {
-+		if (perf_pmu__has_hybrid() &&
-+		    stat_config->metric_events.nr_entries == 0) {
- 			ret = asprintf(&new_name, "%s/%s/",
- 				       counter->pmu_name, counter->name);
- 		} else {
-@@ -619,7 +621,7 @@ static bool collect_data(struct perf_stat_config *config, struct evsel *counter,
++static bool hybrid_merge(struct evsel *counter, struct perf_stat_config *config,
++			 bool check)
++{
++	if (hybrid_uniquify(counter)) {
++		if (check)
++			return config && config->hybrid_merge;
++		else
++			return config && !config->hybrid_merge;
++	}
++
++	return false;
++}
++
+ static bool collect_data(struct perf_stat_config *config, struct evsel *counter,
+ 			    void (*cb)(struct perf_stat_config *config, struct evsel *counter, void *data,
+ 				       bool first),
+@@ -620,9 +633,9 @@ static bool collect_data(struct perf_stat_config *config, struct evsel *counter,
+ 	if (counter->merged_stat)
  		return false;
  	cb(config, counter, data, true);
- 	if (config->no_merge || hybrid_uniquify(counter))
--		uniquify_event_name(counter);
-+		uniquify_event_name(counter, config);
- 	else if (counter->auto_merge_stats)
+-	if (config->no_merge || hybrid_uniquify(counter))
++	if (config->no_merge || hybrid_merge(counter, config, false))
+ 		uniquify_event_name(counter, config);
+-	else if (counter->auto_merge_stats)
++	else if (counter->auto_merge_stats || hybrid_merge(counter, config, true))
  		collect_all_aliases(config, counter, cb, data);
  	return true;
+ }
+diff --git a/tools/perf/util/stat.h b/tools/perf/util/stat.h
+index 335d19cc3063..91d989dfeca4 100644
+--- a/tools/perf/util/stat.h
++++ b/tools/perf/util/stat.h
+@@ -122,6 +122,7 @@ struct perf_stat_config {
+ 	bool			 ru_display;
+ 	bool			 big_num;
+ 	bool			 no_merge;
++	bool			 hybrid_merge;
+ 	bool			 walltime_run_table;
+ 	bool			 all_kernel;
+ 	bool			 all_user;
 -- 
 2.25.1
 

@@ -2,100 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F33F50B165
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 09:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE1B50B160
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 09:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444804AbiDVH3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 03:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44936 "EHLO
+        id S1444789AbiDVH3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 03:29:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444777AbiDVH3A (ORCPT
+        with ESMTP id S1444764AbiDVH2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 03:29:00 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8E75132A
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 00:26:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1650612367; x=1682148367;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=xA3N4B1Oq7NN/T+qdPN5HDE/pIMyStNJQREGSATatw4=;
-  b=Eb9rFkWWZ816G1HdizNtjcdZ65+uzOM3uHK0CgkRSO4mtjoFgr7Yj/Na
-   3AFQSP1P1nv9EAtlwZp8cfCp/zcwVPcXLHaMDUyd78Yu/sthSzrGLYZ0e
-   bQ+Za4rykPaiHpu+1Yt9LEy5WbHEPk19o5Sre+JeqgdCzK7DRHuR7mmMp
-   u2Q9PmzdlKl0lBUXlMboZHtIC2OhMpz0TvNojCL8mc2JFU7SWf5Es5E3w
-   /kM5pjDaXxq5GgTiVE/vlQTaEKAaVM8AsHLxj27lbFALVRJnl3Y7Io8nW
-   79g57Rn9/UCp3fYleiw+A/tvnEgUejFEjMSV6IoyOK7Dyk1+eRD4FrbNc
-   w==;
-X-IronPort-AV: E=Sophos;i="5.90,281,1643698800"; 
-   d="scan'208";a="170537731"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Apr 2022 00:26:07 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 22 Apr 2022 00:26:07 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Fri, 22 Apr 2022 00:26:05 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <daire.mcnamara@microchip.com>, <lewis.hanly@microchip.com>,
-        <cyril.jean@microchip.com>,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v3 4/4] MAINTAINERS: add polarfire rng, pci and clock drivers
-Date:   Fri, 22 Apr 2022 08:25:33 +0100
-Message-ID: <20220422072533.2582084-5-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220422072533.2582084-1-conor.dooley@microchip.com>
-References: <20220422072533.2582084-1-conor.dooley@microchip.com>
+        Fri, 22 Apr 2022 03:28:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F74150E34;
+        Fri, 22 Apr 2022 00:26:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 153B6B82A89;
+        Fri, 22 Apr 2022 07:26:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F228EC385A0;
+        Fri, 22 Apr 2022 07:25:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650612360;
+        bh=mYeiytpIltFGmZW/tp87NqZS9F4Ype3FGfPzGUsDDss=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fnEVtZOfMmKrCviCbqUuAOOEvj/hXBTES+6Pq5FS2j5XJ8qZpOiY0TX6n39bjQoRv
+         p6dIzNiU9Og8hMdrhDh8n/cJsJmcKcCy2Hh2SwT0MY2cfYwue1PY4Htz38hZ+sBvhe
+         cGTGOQFIPDhobjlg4+q2Hn8kcF0ijxWGwWdb7kG6hXXurXVkGda+agXz/QolW6vLwM
+         F2/73gJ/JfRngYmXA09Bd7OIdc7oJPegCvxp6xro1kocnnUsqw8LNIuByZXjKI56JC
+         cy0gkYNimtS4f9rhscKXovdZsq4eJ0xEWOWdqfBlOylJewRjkvg/bX7dNvX9YsgN2O
+         Bu2DT44sYIdtA==
+Date:   Fri, 22 Apr 2022 12:55:56 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Akhil R <akhilrajeev@nvidia.com>
+Cc:     devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        jonathanh@nvidia.com, kyarlagadda@nvidia.com, ldewangan@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        p.zabel@pengutronix.de, rgumasta@nvidia.com, robh+dt@kernel.org,
+        thierry.reding@gmail.com, nathan@kernel.org,
+        dan.carpenter@oracle.com
+Subject: Re: [PATCH] dmaengine: tegra: Fix uninitialized variable usage
+Message-ID: <YmJYhDmGyrwr7ZYT@matsya>
+References: <20220420132239.27775-1-akhilrajeev@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220420132239.27775-1-akhilrajeev@nvidia.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hardware random, PCI and clock drivers for the PolarFire SoC have been
-upstreamed but are not covered by the MAINTAINERS entry, so add them.
-Daire is the author of the clock & PCI drivers, so add him as a
-maintainer in place of Lewis.
+On 20-04-22, 18:52, Akhil R wrote:
+> Initialize slave_bw and remove unused switch case in
+> get_transfer_param()
 
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- MAINTAINERS | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Two patches please, unused patch can go to next while fix goes to fixes
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fd768d43e048..d7602658b0a5 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16939,12 +16939,15 @@ N:	riscv
- K:	riscv
- 
- RISC-V/MICROCHIP POLARFIRE SOC SUPPORT
--M:	Lewis Hanly <lewis.hanly@microchip.com>
- M:	Conor Dooley <conor.dooley@microchip.com>
-+M:	Daire McNamara <daire.mcnamara@microchip.com>
- L:	linux-riscv@lists.infradead.org
- S:	Supported
- F:	arch/riscv/boot/dts/microchip/
-+F:	drivers/char/hw_random/mpfs-rng.c
-+F:	drivers/clk/microchip/clk-mpfs.c
- F:	drivers/mailbox/mailbox-mpfs.c
-+F:	drivers/pci/controller/pcie-microchip-host.c
- F:	drivers/soc/microchip/
- F:	include/soc/microchip/mpfs.h
- 
+> 
+> Fixes: ee17028009d4 ("dmaengine: tegra: Add tegra gpcdma driver")
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> ---
+>  drivers/dma/tegra186-gpc-dma.c | 12 ++++--------
+>  1 file changed, 4 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/dma/tegra186-gpc-dma.c b/drivers/dma/tegra186-gpc-dma.c
+> index f12327732041..6b8d34165176 100644
+> --- a/drivers/dma/tegra186-gpc-dma.c
+> +++ b/drivers/dma/tegra186-gpc-dma.c
+> @@ -830,10 +830,6 @@ static int get_transfer_param(struct tegra_dma_channel *tdc,
+>  		*slave_bw = tdc->dma_sconfig.src_addr_width;
+>  		*csr = TEGRA_GPCDMA_CSR_DMA_IO2MEM_FC;
+>  		return 0;
+> -	case DMA_MEM_TO_MEM:
+> -		*burst_size = tdc->dma_sconfig.src_addr_width;
+> -		*csr = TEGRA_GPCDMA_CSR_DMA_MEM2MEM;
+> -		return 0;
+>  	default:
+>  		dev_err(tdc2dev(tdc), "DMA direction is not supported\n");
+>  	}
+> @@ -985,8 +981,8 @@ tegra_dma_prep_slave_sg(struct dma_chan *dc, struct scatterlist *sgl,
+>  {
+>  	struct tegra_dma_channel *tdc = to_tegra_dma_chan(dc);
+>  	unsigned int max_dma_count = tdc->tdma->chip_data->max_dma_count;
+> +	enum dma_slave_buswidth slave_bw = DMA_SLAVE_BUSWIDTH_UNDEFINED;
+>  	u32 csr, mc_seq, apb_ptr = 0, mmio_seq = 0;
+> -	enum dma_slave_buswidth slave_bw;
+>  	struct tegra_dma_sg_req *sg_req;
+>  	struct tegra_dma_desc *dma_desc;
+>  	struct scatterlist *sg;
+> @@ -1103,12 +1099,12 @@ tegra_dma_prep_dma_cyclic(struct dma_chan *dc, dma_addr_t buf_addr, size_t buf_l
+>  			  size_t period_len, enum dma_transfer_direction direction,
+>  			  unsigned long flags)
+>  {
+> +	enum dma_slave_buswidth slave_bw = DMA_SLAVE_BUSWIDTH_UNDEFINED;
+> +	u32 csr, mc_seq, apb_ptr = 0, mmio_seq = 0, burst_size;
+> +	unsigned int max_dma_count, len, period_count, i;
+>  	struct tegra_dma_channel *tdc = to_tegra_dma_chan(dc);
+>  	struct tegra_dma_desc *dma_desc;
+>  	struct tegra_dma_sg_req *sg_req;
+> -	enum dma_slave_buswidth slave_bw;
+> -	u32 csr, mc_seq, apb_ptr = 0, mmio_seq = 0, burst_size;
+> -	unsigned int max_dma_count, len, period_count, i;
+>  	dma_addr_t mem = buf_addr;
+>  	int ret;
+>  
+> -- 
+> 2.17.1
+
 -- 
-2.35.2
-
+~Vinod

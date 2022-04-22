@@ -2,134 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B761350BC0B
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FEE950BC19
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449512AbiDVPuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 11:50:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54558 "EHLO
+        id S1449568AbiDVPxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 11:53:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234254AbiDVPuC (ORCPT
+        with ESMTP id S1449567AbiDVPwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 11:50:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 220EF5DA06
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:47:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650642428;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OlUy6l6p+0482ZzVUfRyqGdQTewbaSoYgyNY1zTmabI=;
-        b=fKV61xVDn+Dq4cPSjSyhMHx5QdgVos90DbiX7DkOXbvPmbHxSQilCoIjKtgtEzXwmjvn/w
-        WNP1nEhDfSmzqkj+xhGinmxo95t9q6SrLvrvZSS90MPCwIUE5XdC8hQu3bC8MjOiA5mCno
-        5hmob25OS8vYpjFb4/Q0q0aJEr52b74=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-607-Gt8e-HzJPFyMPF4Zwb9FEQ-1; Fri, 22 Apr 2022 11:47:06 -0400
-X-MC-Unique: Gt8e-HzJPFyMPF4Zwb9FEQ-1
-Received: by mail-ed1-f72.google.com with SMTP id dk9-20020a0564021d8900b00425a9c3d40cso2698764edb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:47:06 -0700 (PDT)
+        Fri, 22 Apr 2022 11:52:37 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BCF45DA24
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:49:43 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id g18so17151943ejc.10
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:49:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=EbBrf90Se9JVfBrPUX5vB31Mi0cnNfK03HhVmontGZM=;
+        b=p9urVnCyqPfWbAeTgSbUtdRfSxObUFNtR0D5eF2v15vU3h8ra7egnDpTofsF4zJKh0
+         X22/Y5qYPAJRpQ98ETFprhKBhKvU0zd+geenSx+OqdONFFOEMFm/DETjBqA5zPJYG3E7
+         3Lg8/RE2tyAnTpDpXHoPo6ItX60g3EhXtOeJGHEy+8b5wSLVz4ZbOMbCJAf8tWmtENho
+         mOLA7uM8bUw5tZoJ0nkYku9LZz1GGHuHyA7elECdI/gtOAwKZMNV3hdtYnSTZkre6Q91
+         6JSYJteZeSn4baDRnQZ5J2HyW3VHfsogrGAL8aYAmMtsFSFYn4KCrDxSCBNfcrE5ypDj
+         7j7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=OlUy6l6p+0482ZzVUfRyqGdQTewbaSoYgyNY1zTmabI=;
-        b=fdJHGMrgrpV1l4/4MALuOrUAomBNmFs43y+MzDAWxgnLyuEZcL5JuW3nVcGCvZR/vv
-         cJ8attr19himlKrXIL3UiXWdP4BVQ+pikcUgXA1dxTIbQkxn2qrI+9wXU36k++b/PCvt
-         1J62IKSx5PE9k23UCpKEynWTdD2KPQ/1EXeVlnkrrfKH0pNxL/sq2qL9lg9zq6nJ88OR
-         Bg+8ZWJ2Ye+b/MTOyekxLIrhbEpBOFcyR0Xsdt8VzmDMGzxLbAPyPCl9Z94EQ6VjPKz7
-         p0DqAJH58m3OeAZNdzVqNVCeWJBggnw5rG/Vd2HkaquvppwKHCYWsxFxj0KUjwKQKq8s
-         OzVw==
-X-Gm-Message-State: AOAM532ZH3MdYISvOJ5IodCnjBgnrzAeHZE/i4B+QVIgiridlveFVtwp
-        sv3sMFua6Xrw43gqlsmjH7ARRl2No49R3rDyM42ekQKMvGfcIE+loXUhBFIvG3xxAkmQDghe31s
-        GRP2+5OQ9Rd1rFdesRzS7zAY=
-X-Received: by 2002:aa7:dc49:0:b0:41d:72e2:d34e with SMTP id g9-20020aa7dc49000000b0041d72e2d34emr5507178edu.385.1650642425640;
-        Fri, 22 Apr 2022 08:47:05 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzFAEE1VI+rkI2TiIlFRwMgrd+6Gm1qiHH/aaBKToMrAJsFJRrIiqTZsXd/t0p6TRHUNMoGiw==
-X-Received: by 2002:aa7:dc49:0:b0:41d:72e2:d34e with SMTP id g9-20020aa7dc49000000b0041d72e2d34emr5507163edu.385.1650642425483;
-        Fri, 22 Apr 2022 08:47:05 -0700 (PDT)
-Received: from [192.168.9.10] (net-188-152-140-108.cust.vodafonedsl.it. [188.152.140.108])
-        by smtp.gmail.com with ESMTPSA id j4-20020a170906278400b006e99f136c78sm859368ejc.23.2022.04.22.08.47.03
+        bh=EbBrf90Se9JVfBrPUX5vB31Mi0cnNfK03HhVmontGZM=;
+        b=cL+ImyXTYAMEbh4KopaxV6d+YNKJD4EcFe38olSSK9qoiJDprKMajSS03om1GiVo9r
+         B3xmUlE4fpxNeiTC40PEUmZljq9nWcGIXFXlgtyDkMCvxkzZhhys95iv9cM8XJziPkvm
+         h/HTgi4WMRXsO7t63T4HiEID+MdQmFLd+9y3EeKCOontioyKI8SmKJHbAKbym0HWon8L
+         ZHBFhDK6sDo1GHWDItsPs/LMoWeRrU6Bkntd80LkeZ92pJTv0/tEWa197TEXckdAf1PL
+         K+/WucVBu6PAnu9h1Bn7AlJSX1SSebB/Y/ffCEEO6KhzJTiDSNjxIxl8Gf2GBZ7A+Hel
+         EiAg==
+X-Gm-Message-State: AOAM533PsphJiMhd9xJWuR1rhbW5w1YgXU467xDvIp2vZ49YLVTiGoC1
+        5XCxIyA9BEt3hoGvO0OCHi3Pvw==
+X-Google-Smtp-Source: ABdhPJwOm7OVQF6vFjjh8qNr+uvEPPGlSIw610XQhQ2Tyyu1bh8vgEPXO+cVxey0E8SMmZLsiUzj1g==
+X-Received: by 2002:a17:906:1ec3:b0:6cf:d118:59e2 with SMTP id m3-20020a1709061ec300b006cfd11859e2mr4726662ejj.767.1650642581658;
+        Fri, 22 Apr 2022 08:49:41 -0700 (PDT)
+Received: from [192.168.0.232] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id n10-20020a170906700a00b006efdb748e8dsm864676ejj.88.2022.04.22.08.49.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 08:47:04 -0700 (PDT)
-Message-ID: <736b71d7-1e07-f5c3-d8ad-c3e1b1595d5c@redhat.com>
-Date:   Fri, 22 Apr 2022 17:47:02 +0200
+        Fri, 22 Apr 2022 08:49:40 -0700 (PDT)
+Message-ID: <c0a188e5-8a8c-d4a3-5a3d-9b9dd85d8f44@linaro.org>
+Date:   Fri, 22 Apr 2022 17:49:39 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] fpga: altera-pr-ip: fix unsigned comparison with less
- than zero
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v1] dt-bindings: dsp: mediatek: add mt8186 dsp document
 Content-Language: en-US
-To:     Moritz Fischer <mdf@kernel.org>
-Cc:     Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220405185349.220607-1-marpagan@redhat.com>
- <Yl+K789ZUWd5Si0B@archbook>
-From:   Marco Pagani <marpagan@redhat.com>
-In-Reply-To: <Yl+K789ZUWd5Si0B@archbook>
+To:     Tinghan Shen <tinghan.shen@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220422071534.15653-1-tinghan.shen@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220422071534.15653-1-tinghan.shen@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-04-20 06:24, Moritz Fischer wrote:
-> Marco,
+On 22/04/2022 09:15, Tinghan Shen wrote:
+> This patch adds mt8186 dsp document. The dsp is used for Sound Open
+> Firmware driver node. It includes registers, clocks, memory regions,
+> and mailbox for dsp.
 > 
-> On Tue, Apr 05, 2022 at 08:53:49PM +0200, Marco Pagani wrote:
->> Fix the "comparison with less than zero" warning reported by
->> cppcheck for the unsigned (size_t) parameter "count" of the
->> "alt_pr_fpga_write()" function.
->>
-> Should this have a Reported-by: tag?
-
-I found this problem using the "cppcheck" tool, as reported in the
-commit log. I did not find any previous report of this. Am I missing
-something?
-
->> Signed-off-by: Marco Pagani <marpagan@redhat.com>
->> ---
->>  drivers/fpga/altera-pr-ip-core.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/fpga/altera-pr-ip-core.c b/drivers/fpga/altera-pr-ip-core.c
->> index be0667968d33..2ff3d8e46a0c 100644
->> --- a/drivers/fpga/altera-pr-ip-core.c
->> +++ b/drivers/fpga/altera-pr-ip-core.c
->> @@ -108,7 +108,7 @@ static int alt_pr_fpga_write(struct fpga_manager *mgr, const char *buf,
->>  	u32 *buffer_32 = (u32 *)buf;
->>  	size_t i = 0;
->>  
->> -	if (count <= 0)
->> +	if (count == 0)
->>  		return -EINVAL;
+> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> ---
 > 
-> if (!count)
-> 	return -EINVAL?
-
-Ok, I'll change that in v2.
-
->>  
->>  	/* Write out the complete 32-bit chunks */
->> -- 
->> 2.35.1
+> This patch depends on MT8186 clock bindings.
+> https://lore.kernel.org/all/20220409132251.31725-2-chun-jie.chen@mediatek.com/
 > 
-> Cheers,
-> Moritz
->>
+> ---
+>  .../bindings/dsp/mediatek,mt8186-dsp.yaml     | 93 +++++++++++++++++++
+>  1 file changed, 93 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.yaml
 > 
+> diff --git a/Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.yaml b/Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.yaml
+> new file mode 100644
+> index 000000000000..00a79e880895
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.yaml
+> @@ -0,0 +1,93 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/dsp/mediatek,mt8186-dsp.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Mediatek mt8186 DSP core
+> +
+> +maintainers:
+> +  - Tinghan Shen <tinghan.shen@mediatek.com>
+> +
+> +description: |
+> +  MediaTek mt8186 SoC contains a DSP core used for
+> +  advanced pre- and post- audio processing.
+> +
+> +properties:
+> +  compatible:
+> +    const: mediatek,mt8186-dsp
+> +
+> +  reg:
+> +    items:
+> +      - description: Address and size of the DSP config registers
+> +      - description: Address and size of the DSP SRAM
+> +      - description: Address and size of the DSP secure registers
+> +      - description: Address and size of the DSP bus registers
+> +
+> +  reg-names:
+> +    items:
+> +      - const: cfg
+> +      - const: sram
+> +      - const: sec
+> +      - const: bus
+> +
+> +  clocks:
+> +    items:
+> +      - description: mux for audio dsp clock
+> +      - description: mux for audio dsp local bus
+> +
+> +  clock-names:
+> +    items:
+> +      - const: audiodsp_sel
+> +      - const: adsp_bus_sel
 
-Cheers,
-Marco
+What does the "sel" stands for? Maybe just skip the "_sel" suffixes?
 
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  mboxes:
+> +    items:
+> +      - description: ipc reply between host and audio DSP.
+> +      - description: ipc request between host and audio DSP.
+> +
+> +  mbox-names:
+> +    items:
+> +      - const: mbox0
+> +      - const: mbox1
+
+These should be rather some meaningful names, e.g. "rx" and "tx".
+
+> +
+> +  memory-region:
+> +    items:
+> +      - description: dma buffer between host and DSP.
+> +      - description: DSP system memory.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - clocks
+> +  - clock-names
+> +  - power-domains
+> +  - mbox-names
+> +  - mboxes
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+
+You do not use these headers.
+
+> +    #include <dt-bindings/clock/mt8186-clk.h>
+> +    dsp@10680000 {
+
+
+
+Best regards,
+Krzysztof

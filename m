@@ -2,124 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8766B50AD28
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 03:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6007B50AD2A
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 03:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443031AbiDVBWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 21:22:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58048 "EHLO
+        id S1443036AbiDVBXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 21:23:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239067AbiDVBWG (ORCPT
+        with ESMTP id S239067AbiDVBXx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 21:22:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF14936B7E
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 18:19:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650590353;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=70wGqlUOgWCDvNBVd6ZanDDxLxnP4j+Zj98awDX3AtQ=;
-        b=bM4WfxEv7SPmjcxe9Tah3eN4iNiSJT0IEsDhcniZSWb9tfR0pT4g6ynP/NzapnNMtoDXu8
-        tCN4AP74fEdsoD68TgoWGhhK/EUDQDIxXb8uP1lTqyh/BzqCoCsVEghb9leHSquRwBoKkL
-        tp5tkaRyE4l6w3UeUmjXyIs2yDOmigI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-541-J6j6l2JYOBqHPObQuPBd_Q-1; Thu, 21 Apr 2022 21:19:10 -0400
-X-MC-Unique: J6j6l2JYOBqHPObQuPBd_Q-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 21 Apr 2022 21:23:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB268403D9;
+        Thu, 21 Apr 2022 18:21:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 36E39299E745;
-        Fri, 22 Apr 2022 01:19:10 +0000 (UTC)
-Received: from rh (vpn2-54-103.bne.redhat.com [10.64.54.103])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 98324559209;
-        Fri, 22 Apr 2022 01:19:09 +0000 (UTC)
-Received: from localhost ([::1] helo=rh)
-        by rh with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <dchinner@redhat.com>)
-        id 1nhhww-008TIa-TA; Fri, 22 Apr 2022 11:19:06 +1000
-Date:   Fri, 22 Apr 2022 11:19:05 +1000
-From:   Dave Chinner <dchinner@redhat.com>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Yang Shi <shy828301@gmail.com>
-Subject: Re: [PATCH] mm: do not call add_nr_deferred() with zero deferred
-Message-ID: <YmICiX2DFSveY17Z@rh>
-References: <20220416004104.4089743-1-roman.gushchin@linux.dev>
- <59404249-de0c-c569-d04a-9da38ed14b0a@redhat.com>
- <Yl7mdguNR3CabMAN@carbon>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9A77BB829EB;
+        Fri, 22 Apr 2022 01:21:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52267C385A5;
+        Fri, 22 Apr 2022 01:20:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650590459;
+        bh=ZGP6Dc5HcbyYx3f99nyxqazx+rsBw8MPomaGNK5aG6g=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=FImYl/5UrR4i0m6nCKBrz+z1VN3Zg730BK0ue7KWi4bLydZ/F70wJMb9JLwLTZL8n
+         f1sahHwn759HtZb2fXH9ZQ4ltig1/8Xa6pZsuoGpbaofsbFNgyCtRCcIt199ELfRhk
+         pLBm88zhb+xq12fw1k9DoavfM2G09U9+nuC+g/UB2vS+KqURyHuBryqI4kfX8CkDlq
+         OhUkt6E8cAPFdg7t7Prdl7NVsUupxvDpDlMatUTbaQnXni8fgY+6ORw8m8BjQB3hDx
+         VDkXpQqAQ/Fwq/9blwMnrpVlI/5Ev/GNZ7XPHdWFconE4rTxwSWdKIPmA4qiqYi9xb
+         5GCb3j8kdj1Nw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yl7mdguNR3CabMAN@carbon>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220412065719.17735-1-linmq006@gmail.com>
+References: <20220412065719.17735-1-linmq006@gmail.com>
+Subject: Re: [PATCH] clk: imx: scu: Fix pm_runtime_get_sync() error checking
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linmq006@gmail.com
+To:     Abel Vesa <abel.vesa@nxp.com>, Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 21 Apr 2022 18:20:57 -0700
+User-Agent: alot/0.10
+Message-Id: <20220422012059.52267C385A5@smtp.kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 09:42:30AM -0700, Roman Gushchin wrote:
-> On Tue, Apr 19, 2022 at 02:56:06PM +0200, David Hildenbrand wrote:
-> > On 16.04.22 02:41, Roman Gushchin wrote:
-> > > add_nr_deferred() is often called with next_deferred equal to 0.
-> > > For instance, it's happening under low memory pressure for any
-> > > shrinkers with a low number of cached objects. A corresponding trace
-> > > looks like:
-> > >   <...>-619914 [005] .... 467456.345160: mm_shrink_slab_end: \
-> > >   super_cache_scan+0x0/0x1a0 0000000087027f06: nid: 1	     \
-> > >   unused scan count 0 new scan count 0 total_scan 0	     \
-> > >   last shrinker return val 0
-> > > 
-> > >   <...>-619914 [005] .... 467456.345371: mm_shrink_slab_end: \
-> > >   super_cache_scan+0x0/0x1a0 0000000087027f06: nid: 1	     \
-> > >   unused scan count 0 new scan count 0 total_scan 0	     \
-> > >   last shrinker return val 0
-> > > 
-> > >   <...>-619914 [005] .... 467456.345380: mm_shrink_slab_end: \
-> > >   super_cache_scan+0x0/0x1a0 0000000087027f06: nid: 1 unused \
-> > >   scan count 0 new scan count 0 total_scan 0	             \
-> > >   last shrinker return val 0
-> > > 
-> > > This lead to unnecessary checks and atomic operations, which can be
-> > > avoided by checking next_deferred for not being zero before calling
-> > > add_nr_deferred(). In this case the mm_shrink_slab_end trace point
-> > > will get a potentially slightly outdated "new scan count" value, but
-> > > it's totally fine.
-> > 
-> > Sufficient improvement to justify added complexity for anybody reading
-> > that code?
-> 
-> I don't have any numbers and really doubt the difference is significant,
+Quoting Miaoqian Lin (2022-04-11 23:57:18)
+> If the device is already in a runtime PM enabled state
+> pm_runtime_get_sync() will return 1, so a test for negative
+> value should be used to check for errors.
 
-Never been able to measure it myself.
+Maybe it should use pm_runtime_resume_and_get() instead?
 
-HwoeverI'd much prefer the tracepoint output stays accurate - I've had to
-post-process and/or graph the shrinker progress as reported by the
-start/end tracpoints to find problems in the algorithms in the past.
-That's why there is the additional complexity in the code to make
-sure the coutners are accurate in the first place.
-
-> however the added complexity is also small: one "if" statement.
-
-Yeah, complexity is not the problem here - it's that accuracy of the
-tracepoints has actually mattered to me in the past...
-
-Cheers,
-
-DAve.
--- 
-Dave Chinner
-dchinner@redhat.com
-
+>=20
+> Fixes: 78edeb080330 ("clk: imx: scu: add runtime pm support")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+>  drivers/clk/imx/clk-scu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/clk/imx/clk-scu.c b/drivers/clk/imx/clk-scu.c
+> index 083da31dc3ea..18c6190eeffd 100644
+> --- a/drivers/clk/imx/clk-scu.c
+> +++ b/drivers/clk/imx/clk-scu.c
+> @@ -529,7 +529,7 @@ static int imx_clk_scu_probe(struct platform_device *=
+pdev)
+>                 pm_runtime_enable(dev);
+> =20
+>                 ret =3D pm_runtime_get_sync(dev);
+> -               if (ret) {
+> +               if (ret < 0) {
+>                         pm_genpd_remove_device(dev);
+>                         pm_runtime_disable(dev);
+>                         return ret;
+> --=20
+> 2.17.1
+>

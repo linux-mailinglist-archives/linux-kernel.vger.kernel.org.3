@@ -2,116 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15BB650B3CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A4FE50B3D3
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:16:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445919AbiDVJSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 05:18:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59804 "EHLO
+        id S1445869AbiDVJSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 05:18:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445872AbiDVJMH (ORCPT
+        with ESMTP id S1445877AbiDVJNB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 05:12:07 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A8851E6F
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 02:09:13 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id g13so15154725ejb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 02:09:13 -0700 (PDT)
+        Fri, 22 Apr 2022 05:13:01 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F144E8D
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 02:10:06 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d15so9507298pll.10
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 02:10:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=VlCaDBv0lI+bMbyzSUvp/QCQTyaZL5yq76P9L1bSzBQ=;
-        b=yfbh/IVH9TL8f6D91rmaiLtVr9a+9hMrhh0G0Ce08L9K7Ir1dXIUPQ51SjLXHOpw1o
-         ZKJSnXshJ1ypF5ZGGPvX816do88C79vYfxQMZg6DgJqELawooJjpeW2QK2uv+fdc5FCf
-         yCL0oCldP18VaJcrPVGoZr1F8EDKJNgGYoqLbcKM5iMose5+wIrRercEBRQM39vRLMky
-         aV2+I+HeSbmLhiTWdw/wQYu2BHqE0fA21yDnDw+fbfZJGebOxpOEKjYAFjOvy8ymgxma
-         7aWVrWOcPKUq9z6enLAO6rLWVz3/WVV/am3m8SBNn4wF++RtpxXXap4UdF8SsXF12NPB
-         JhnQ==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RcYU2l3Mf+ndc1CA+8jypEWEXqIahxo9T2ZjrElfFtU=;
+        b=TmQ06wH3tn6ayOI1gsUpAHFoMiXuaJjt3R3T8E3OM1PSntFIvXGcA5AUT1gkoPGXnJ
+         5WugjIFMFRj6O3uywDDvTALgCz5r9Koj1cd2XzI+jgBD6kKaga1gjztCn7Ye7+6sgQaE
+         KJkhdVs+xvn+8S4GgDTADUE+YzZ/2JIx/RQWJvZlYEOMtqC9idRPPP9Skr5iADurwQga
+         u3AvvdVQT1GKvTZiWM3DT1w6e+y5VzGAVHWFq9XjLsVX6S3GaQiOjA/7WTpekN4K6iiT
+         nQAF35GP5dJ03eieMYDeJwVJrABu7Qp3GQEQJ0AK7PViEyyX8rVzBumpLEffsZNFTHZz
+         sSPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=VlCaDBv0lI+bMbyzSUvp/QCQTyaZL5yq76P9L1bSzBQ=;
-        b=S1KlYz/zYOdRPRwnVFpTElHBD1tLYjUKGQAGWOlyvLfqF+5jpEbDyXsBgBwf8RKEOA
-         /O1n0oLvRBWGoegLRYV033d0iPL7xlKhgvgSMMch+p8NDT/bIl6aDEH2qX58lBRCBWEE
-         R8IrIvz4RAlULdU9/eV2CHR4kL3LucA7SF5ITxKhp/PMrkP7VvLG6/UZZoW8YaPNzyXs
-         Qvb2s9m6wdP3eBm+MXPzvAd75/+0mrt0jfNnNtNTokhSH/2s5l2P3ulC0r8RBMrSDQcs
-         IsZy9X0S6pfHitJ52iHms7li10A7b11/Z8r4xMo1HhxB9FA7i9WVKzU1nLgW2s8rcoth
-         8REA==
-X-Gm-Message-State: AOAM531BGwY+5JhlXTsC3Dgv9LhbOqV/OcGjtfx/7UiGYrGLm4tcHqBy
-        Go8oRhsDKPyMKsaHbnTMnBmyhw==
-X-Google-Smtp-Source: ABdhPJyJ1gxk2RK2g2BtIkquk3vuHYv5yKKdtM9KZTp5q96PgxAHQPNrOLJ2bGTM3i+6i+rH4s/W7A==
-X-Received: by 2002:a17:906:9458:b0:6e8:86e5:5b8c with SMTP id z24-20020a170906945800b006e886e55b8cmr3230369ejx.325.1650618552021;
-        Fri, 22 Apr 2022 02:09:12 -0700 (PDT)
-Received: from [192.168.0.232] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id v22-20020a50a456000000b00422a4841c61sm660278edb.58.2022.04.22.02.09.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 02:09:11 -0700 (PDT)
-Message-ID: <601a1b5b-7189-cb9e-a945-6f2d49583633@linaro.org>
-Date:   Fri, 22 Apr 2022 11:09:10 +0200
+        bh=RcYU2l3Mf+ndc1CA+8jypEWEXqIahxo9T2ZjrElfFtU=;
+        b=AjvWywCUaHuqkx7np46qbHVvgezjgSJsMBTMGuhdufEPFt/cQcd+RfnIsiuBS/VZ4W
+         aBc1i4155U9OB43qr6D0WmP2QtzxI9eNezUEMSkDM7HFLMlh+M6O/7mSMflOIZW/Y3un
+         fIixIbp7+p9ZNkgjn4ob7hWc4ylzYaucACD+SokXFkqoXtAKRtRQF8JNJvPUoa4axqm7
+         TlS5o2uam2/lZmrSZhP0/yejcLUcj/27WlvxZazOwDSYW6xeS9AMCu0wy9bRa19zAanl
+         2CsR+0qNABov3xTqmYMw7mO/eh//C9/xYXMRQtFyvLBh3XiiUEE1UjbncyHdnCvuzV17
+         j66g==
+X-Gm-Message-State: AOAM5317XquOXG4Qw8MNwTuyNj3Uh4NF3xPBizsZJM4OeW3wgJGgjEk5
+        eZNt7jdM1d7DxSKY46U83iAXyw==
+X-Google-Smtp-Source: ABdhPJz4fT1I7iNw5RlursGDiN34rX83aj7VnUw2XQvC4YA3uNTDqbWSv54HHCBmtNGXuGOLUVjm+Q==
+X-Received: by 2002:a17:903:11d1:b0:151:9fb2:9858 with SMTP id q17-20020a17090311d100b001519fb29858mr3579539plh.136.1650618606034;
+        Fri, 22 Apr 2022 02:10:06 -0700 (PDT)
+Received: from C02G87K0MD6R.bytedance.net ([139.177.225.244])
+        by smtp.gmail.com with ESMTPSA id oe7-20020a17090b394700b001d8995368a9sm559239pjb.35.2022.04.22.02.10.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 02:10:05 -0700 (PDT)
+From:   Hao Jia <jiahao.os@bytedance.com>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com
+Cc:     linux-kernel@vger.kernel.org, Hao Jia <jiahao.os@bytedance.com>
+Subject: [PATCH v2 0/2] Avoid obvious double update_rq_clock warning
+Date:   Fri, 22 Apr 2022 17:09:42 +0800
+Message-Id: <20220422090944.52618-1-jiahao.os@bytedance.com>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 2/3] dt-bindings: Document ltrf216a light sensor
- bindings
-Content-Language: en-US
-To:     Shreeya Patel <shreeya.patel@collabora.com>, jic23@kernel.org,
-        lars@metafoo.de, robh+dt@kernel.org, Zhigang.Shi@liteon.com,
-        krisman@collabora.com
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        alvaro.soliverez@collabora.com
-References: <20220421140133.354498-1-shreeya.patel@collabora.com>
- <20220421140133.354498-3-shreeya.patel@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220421140133.354498-3-shreeya.patel@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/04/2022 16:01, Shreeya Patel wrote:
+These two patches are about the kernel scheduler:
 
-Thank you for your patch. There is something to discuss/improve.
+patch 1: fixed the issue that kernel may trigger WARN_DOUBLE_CLOCK warning.
+patch 2: removed some no longer needed comments in the deadline scheduler
+and cleaned up the code.
 
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    i2c {
-> +
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        light-sensor@53 {
-> +                compatible = "liteon,ltrf216a";
+v2:
+   - Added double_rq_clock_clear_update inline helper to clear RQCF_UPDATED
+     of rq->clock_update_flags.
+   - split into two separate patches.
 
-You have here unusual indentation - looks like 8 spaces, while the rest
-of example is properly indented with 4 spaces. Please use 4 spaces for
-entire DTS example.
+[1] https://lore.kernel.org/lkml/20220418090929.54005-1-jiahao.os@bytedance.com/
 
-All rest looks good, so with indentation fixes:
+Hao Jia (2):
+  sched/core: Avoid obvious double update_rq_clock warning
+  sched/dl: Remove some comments and adjust code in push_dl_task
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ kernel/sched/core.c     |  6 +++---
+ kernel/sched/deadline.c |  8 +-------
+ kernel/sched/rt.c       |  5 +++--
+ kernel/sched/sched.h    | 31 +++++++++++++++++++++++++++----
+ 4 files changed, 34 insertions(+), 16 deletions(-)
 
-> +                reg = <0x53>;
-> +                vdd-supply = <&vdd_regulator>;
-> +                interrupt-parent = <&gpio0>;
-> +                interrupts = <5 IRQ_TYPE_LEVEL_LOW>;
-> +        };
-> +    };
+-- 
+2.32.0
 
-
-Best regards,
-Krzysztof

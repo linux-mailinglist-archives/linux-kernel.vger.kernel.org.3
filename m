@@ -2,157 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3290850B0AF
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:35:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B7050B0BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444443AbiDVGhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 02:37:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
+        id S1444470AbiDVGl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 02:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444263AbiDVGhN (ORCPT
+        with ESMTP id S1349475AbiDVGlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 02:37:13 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81EE50B2A;
-        Thu, 21 Apr 2022 23:34:19 -0700 (PDT)
-X-UUID: 080a3a59124e4111a49cb3aebd64e83e-20220422
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:826afedb-0e01-4c8c-a794-bbc0fb17599f,OB:0,LO
-        B:0,IP:0,URL:8,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:-12
-X-CID-META: VersionHash:faefae9,CLOUDID:4e8294f0-da02-41b4-b6df-58f4ccd36682,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 080a3a59124e4111a49cb3aebd64e83e-20220422
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <jianjun.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1629514691; Fri, 22 Apr 2022 14:34:15 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 22 Apr 2022 14:33:59 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 22 Apr 2022 14:33:56 +0800
-Message-ID: <32f5308e629cef3692c57c4c55442b0f2f25634f.camel@mediatek.com>
-Subject: Re: [PATCH v2] PCI: mediatek-gen3: Print LTSSM state when PCIe link
- down
-From:   Jianjun Wang <jianjun.wang@mediatek.com>
-To:     Ryder Lee <ryder.lee@mediatek.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-CC:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?UTF-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-pci@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <jieyy.yang@mediatek.com>,
-        <chuanjia.liu@mediatek.com>, <qizhong.cheng@mediatek.com>,
-        <jian.yang@mediatek.com>
-Date:   Fri, 22 Apr 2022 14:33:56 +0800
-In-Reply-To: <20220329030715.7975-1-jianjun.wang@mediatek.com>
-References: <20220329030715.7975-1-jianjun.wang@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 22 Apr 2022 02:41:25 -0400
+Received: from m1541.mail.126.com (m1541.mail.126.com [220.181.15.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 602BE3FD9F;
+        Thu, 21 Apr 2022 23:38:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=yVM+N
+        e5UA83M8xLJzmBVV3Y0VtWxbKAdVuywD6V0vX0=; b=UGDV4TGlRuwu1HMMyiC5C
+        yLfXyf58SamRDI9yHEAyr5erYpGF+2oVl5qouEZLygEyYhO1xLr3v2XeTcYFJnE9
+        0KiLQST7Auxz4uyKYX4GBqBRUfGtTF+6qaPqnXh+AMRZfZXqQGesxyLndUbu7ueA
+        nR3VJ3Op3cOcMlAncuVu7I=
+Received: from zhaojunkui2008$126.com ( [112.80.34.205] ) by
+ ajax-webmail-wmsvr41 (Coremail) ; Fri, 22 Apr 2022 14:37:55 +0800 (CST)
+X-Originating-IP: [112.80.34.205]
+Date:   Fri, 22 Apr 2022 14:37:55 +0800 (CST)
+From:   z <zhaojunkui2008@126.com>
+To:     "Kalle Valo" <kvalo@kernel.org>
+Cc:     "Jakub Kicinski" <kubakici@wp.pl>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bernard@vivo.com
+Subject: Re:Re: [PATCH] net/wireless: add debugfs exit function
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210622(1d4788a8)
+ Copyright (c) 2002-2022 www.mailtech.cn 126com
+In-Reply-To: <877d7hoe2i.fsf@kernel.org>
+References: <20220422012830.342993-1-zhaojunkui2008@126.com>
+ <877d7hoe2i.fsf@kernel.org>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Message-ID: <3c0443f.3b82.1804ffdcdeb.Coremail.zhaojunkui2008@126.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: KcqowADn9t5ETWJizOERAA--.42288W
+X-CM-SenderInfo: p2kd0y5xqn3xasqqmqqrswhudrp/1tbiuRrqqlpD8lA2UwACs-
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maintainers,
-
-Just gentle ping for this patch, if there is anything I can do to get
-this patch merged, please let me know.
-
-Thanks.
-
-On Tue, 2022-03-29 at 11:07 +0800, Jianjun Wang wrote:
-> Print current LTSSM state when PCIe link down instead of the register
-> value, make it easier to get the link status.
-> 
-> Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> ---
-> Changes in v2:
-> Print both of the register value and the LTSSM state.
-> ---
->  drivers/pci/controller/pcie-mediatek-gen3.c | 41
-> ++++++++++++++++++++-
->  1 file changed, 40 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/controller/pcie-mediatek-gen3.c
-> b/drivers/pci/controller/pcie-mediatek-gen3.c
-> index 6745076a02b9..c24e03c198b7 100644
-> --- a/drivers/pci/controller/pcie-mediatek-gen3.c
-> +++ b/drivers/pci/controller/pcie-mediatek-gen3.c
-> @@ -153,6 +153,37 @@ struct mtk_gen3_pcie {
->  	DECLARE_BITMAP(msi_irq_in_use, PCIE_MSI_IRQS_NUM);
->  };
->  
-> +/* LTSSM state in PCIE_LTSSM_STATUS_REG bit[28:24] */
-> +static const char *const ltssm_str[] = {
-> +	"detect.quiet",			/* 0x00 */
-> +	"detect.active",		/* 0x01 */
-> +	"polling.active",		/* 0x02 */
-> +	"polling.compliance",		/* 0x03 */
-> +	"polling.configuration",	/* 0x04 */
-> +	"config.linkwidthstart",	/* 0x05 */
-> +	"config.linkwidthaccept",	/* 0x06 */
-> +	"config.lanenumwait",		/* 0x07 */
-> +	"config.lanenumaccept",		/* 0x08 */
-> +	"config.complete",		/* 0x09 */
-> +	"config.idle",			/* 0x0A */
-> +	"recovery.receiverlock",	/* 0x0B */
-> +	"recovery.equalization",	/* 0x0C */
-> +	"recovery.speed",		/* 0x0D */
-> +	"recovery.receiverconfig",	/* 0x0E */
-> +	"recovery.idle",		/* 0x0F */
-> +	"L0",				/* 0x10 */
-> +	"L0s",				/* 0x11 */
-> +	"L1.entry",			/* 0x12 */
-> +	"L1.idle",			/* 0x13 */
-> +	"L2.idle",			/* 0x14 */
-> +	"L2.transmitwake",		/* 0x15 */
-> +	"disable",			/* 0x16 */
-> +	"loopback.entry",		/* 0x17 */
-> +	"loopback.active",		/* 0x18 */
-> +	"loopback.exit",		/* 0x19 */
-> +	"hotreset",			/* 0x1A */
-> +};
-> +
->  /**
->   * mtk_pcie_config_tlp_header() - Configure a configuration TLP
-> header
->   * @bus: PCI bus to query
-> @@ -327,8 +358,16 @@ static int mtk_pcie_startup_port(struct
-> mtk_gen3_pcie *pcie)
->  				 !!(val & PCIE_PORT_LINKUP), 20,
->  				 PCI_PM_D3COLD_WAIT * USEC_PER_MSEC);
->  	if (err) {
-> +		const char *ltssm_state;
-> +		int ltssm_index;
-> +
->  		val = readl_relaxed(pcie->base +
-> PCIE_LTSSM_STATUS_REG);
-> -		dev_err(pcie->dev, "PCIe link down, ltssm reg val:
-> %#x\n", val);
-> +		ltssm_index = PCIE_LTSSM_STATE(val);
-> +		ltssm_state = ltssm_index >= ARRAY_SIZE(ltssm_str) ?
-> +			      "Unknown state" : ltssm_str[ltssm_index];
-> +		dev_err(pcie->dev,
-> +			"PCIe link down, current ltssm state: %s
-> (%#x)\n",
-> +			ltssm_state, val);
->  		return err;
->  	}
->  
-
+SGkgS2FsbGUgVmFsbzoKCj4tLS0tLdPKvP7Urbz+LS0tLS0KPreivP7IyzogS2FsbGUgVmFsbyA8
+a3ZhbG9Aa2VybmVsLm9yZz4gCj63osvNyrG85DogMjAyMsTqNNTCMjLI1SAxMzo1Nwo+ytW8/sjL
+OiBCZXJuYXJkIFpoYW8gPHpoYW9qdW5rdWkyMDA4QDEyNi5jb20+Cj6zrcvNOiBKYWt1YiBLaWNp
+bnNraSA8a3ViYWtpY2lAd3AucGw+OyBEYXZpZCBTLiBNaWxsZXIgPGRhdmVtQGRhdmVtbG9mdC5u
+ZXQ+OyBQYW9sbyBBYmVuaSA8cGFiZW5pQHJlZGhhdC5jb20+OyBNYXR0aGlhcyBCcnVnZ2VyIDxt
+YXR0aGlhcy5iZ2dAZ21haWwuY29tPjsgbGludXgtd2lyZWxlc3NAdmdlci5rZXJuZWwub3JnOyBu
+ZXRkZXZAdmdlci5rZXJuZWwub3JnOyA+bGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQu
+b3JnOyBsaW51eC1tZWRpYXRla0BsaXN0cy5pbmZyYWRlYWQub3JnOyBsaW51eC1rZXJuZWxAdmdl
+ci5rZXJuZWwub3JnOyDV1L78v/wgPGJlcm5hcmRAdml2by5jb20+Cj7W98ziOiBSZTogW1BBVENI
+XSBuZXQvd2lyZWxlc3M6IGFkZCBkZWJ1Z2ZzIGV4aXQgZnVuY3Rpb24KCj5CZXJuYXJkIFpoYW8g
+PHpoYW9qdW5rdWkyMDA4QDEyNi5jb20+IHdyaXRlczoKCj4+IFRoaXMgcGF0Y2ggYWRkIGV4aXQg
+ZGVidWdmcyBmdW5jdGlvbiB0byBtdDc2MDF1Lgo+PiBEZWJ1Z2ZzIG5lZWQgdG8gYmUgY2xlYW51
+cCB3aGVuIG1vZHVsZSBpcyB1bmxvYWRlZCBvciBsb2FkIGZhaWwuCgo+ImxvYWQgZmFpbCI/IFBs
+ZWFzZSBiZSBtb3JlIHNwZWNpZmljLCBhcmUgeW91IHNheWluZyB0aGF0IHRoZSBzZWNvbmQgbW9k
+dWxlIGxvYWQgZmFpbHMgb3Igd2hhdD8KRm9yIHRoaXMgcGFydCwgdGhlcmUgYXJlIHR3byBjYXNl
+czoKRmlyc3Qgd2hlbiBtdDc2MDF1IGlzIGxvYWRlZCwgaW4gZnVuY3Rpb24gbXQ3NjAxdV9wcm9i
+ZSwgaWYgZnVuY3Rpb24gbXQ3NjAxdV9wcm9iZSBydW4gaW50byBlcnJvciBsYWJsZSBlcnJfaHcs
+IG10NzYwMXVfY2xlYW51cCBkaWRuYHQgY2xlYW51cCB0aGUgZGVidWdmcyBub2RlLgpTZWNvbmQg
+d2hlbiB0aGUgbW9kdWxlIGRpc2Nvbm5lY3QsIGluIGZ1bmN0aW9uIG10NzYwMXVfZGlzY29ubmVj
+dCwgbXQ3NjAxdV9jbGVhbnVwIGRpZG5gdCBjbGVhbnVwIHRoZSBkZWJ1Z2ZzIG5vZGUuCkkgdGhp
+bmsgdGhlc2UgYXJlIHRoZSBtdDc2MDF1IHVubG9hZGVkIG9yIGxvYWQgZmFpbCBjYXNlcywgYnV0
+IGJvdGggd2l0aCBubyBkZWJ1Z2ZzIGNsZWFudXAgd29yay4KCj4+ICBkcml2ZXJzL25ldC93aXJl
+bGVzcy9tZWRpYXRlay9tdDc2MDF1L2RlYnVnZnMuYyB8IDkgKysrKysrKy0tCj4+ICBkcml2ZXJz
+L25ldC93aXJlbGVzcy9tZWRpYXRlay9tdDc2MDF1L2luaXQuYyAgICB8IDEgKwo+PiAgZHJpdmVy
+cy9uZXQvd2lyZWxlc3MvbWVkaWF0ZWsvbXQ3NjAxdS9tdDc2MDF1LmggfCAxICsKCj5UaGUgdGl0
+bGUgc2hvdWxkIGJlOgoKPm10NzYwMXU6IGFkZCBkZWJ1Z2ZzIGV4aXQgZnVuY3Rpb24KR290IGl0
+LCB0aGFua3OjoQoKPj4gLS0tIGEvZHJpdmVycy9uZXQvd2lyZWxlc3MvbWVkaWF0ZWsvbXQ3NjAx
+dS9kZWJ1Z2ZzLmMKPj4gKysrIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvbWVkaWF0ZWsvbXQ3NjAx
+dS9kZWJ1Z2ZzLmMKPj4gQEAgLTksNiArOSw4IEBACj4+ICAjaW5jbHVkZSAibXQ3NjAxdS5oIgo+
+PiAgI2luY2x1ZGUgImVlcHJvbS5oIgo+PiAgCj4+ICtzdGF0aWMgc3RydWN0IGRlbnRyeSAqZGly
+OwoKPkhvdyB3aWxsIHRoaXMgd29yayB3aGVuIHRoZXJlIGFyZSBtdWx0aXBsZSBtdDc2MDF1IGRl
+dmljZXM/IEJlY2F1c2Ugb2YgdGhhdCwgYXZvaWQgdXNpbmcgbm9uLWNvbnN0IHN0YXRpYyB2YXJp
+YWJsZXMuClNvcnJ5IGZvciBtaXNzaW5nIHRoaXMgcGFydCwgSSB1bmRlcnN0YW5kIHRoYXQgdGhl
+IGJldHRlciB3YXkgaXMgdG8gbWFuYWdlIGl0IGluIHRoZSBzdHJ1Y3Qgb2YgdGhlIG1hdGNoZWQg
+ZGV2aWNlLCBJIHdvdWxkIGZpeCB0aGlzIGluIHRoZSBuZXh0IHBhdGNoLgpUaGFuayB5b3UgdmVy
+eSBtdWNoIQoKQlIvL0Jlcm5hcmQKCj4tLQo+aHR0cHM6Ly9wYXRjaHdvcmsua2VybmVsLm9yZy9w
+cm9qZWN0L2xpbnV4LXdpcmVsZXNzL2xpc3QvCgo+aHR0cHM6Ly93aXJlbGVzcy53aWtpLmtlcm5l
+bC5vcmcvZW4vZGV2ZWxvcGVycy9kb2N1bWVudGF0aW9uL3N1Ym1pdHRpbmdwYXRjaGVzCg==

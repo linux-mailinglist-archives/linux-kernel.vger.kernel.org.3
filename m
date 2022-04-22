@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B72F50B0F3
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 542CC50B0F5
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:58:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444596AbiDVHAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 03:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56704 "EHLO
+        id S1444601AbiDVHAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 03:00:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444592AbiDVG76 (ORCPT
+        with ESMTP id S1443796AbiDVHAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 02:59:58 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222F050B0F;
-        Thu, 21 Apr 2022 23:57:06 -0700 (PDT)
+        Fri, 22 Apr 2022 03:00:06 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10821506CA;
+        Thu, 21 Apr 2022 23:57:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650610626; x=1682146626;
+  t=1650610634; x=1682146634;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=RXFbwxz87qlM883YuYAWF64Fqso0Pit6aDGqdGNhaRU=;
-  b=Cw0PWY6WPHTxTczrIFAH7ElTsTjdVzZSUjEXI6YIIQrvY3jYuMLcIt4X
-   cWt7HtrdW/N9oLsw3bGsIRHz/v2GIzF1UyNqNG7oylqQrzm9e/aBJvd3E
-   /l2LXDqGYybn5A9DkNtMRc1L9q/FSR/Yz1HQ2UQcJ741kP7/0HEVoLlGN
-   YDq9wdXYmuvkq2VCGt8oknG8ZxzAWWQdOe0SOhrPRV1VnkYo23p3j0Cq3
-   yw3PqNpJsJqhgbkxVOu0+IZv535PcTbfjKgsmid+HSUdeD/NdlH3dA+K+
-   lktJCD0hgaWeLDpkCH+9af7cJV0+hcdWbehEIyXX01Wuy96y/hPEB320S
+  bh=ioBhvk5SeCW3677/2O3dalL0EN7gGU2noVHqmW4XWY0=;
+  b=iIQnPtahMgCzN7FcWLqnuYJPGSleEmJU0IvywFx+4w3JYaTEb6Vf66n3
+   ygjJkXR+BFnNIPvuZ3J+6ChwB+xhdBZddjoAfGxF8/o61qJ/RxApOOqfY
+   9I7k/IdxcfMVv6h3SAlipdFn+AdCiGMU9EF8asmXodDBsPGkyja20CdkG
+   Qku1g9AxL8ZdEOy4Zkpcxm9uCL5MvOK3g9ALjHUST3DLXV1AF4fuRF63U
+   xnUUjNALtJDlQijKeOThYExbfQsHmq1GrBt9cOoFdn+IHC2QNvZOPlKES
+   PooO1Uhqaz8vr6xrlV5+3O61Z9EfC8BCBEmtoVubEAsBknLDlt7nz2jKs
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="327508177"
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264370137"
 X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
-   d="scan'208";a="327508177"
+   d="scan'208";a="264370137"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 23:57:05 -0700
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 23:57:13 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
-   d="scan'208";a="703427902"
+   d="scan'208";a="703427939"
 Received: from zxingrtx.sh.intel.com ([10.239.159.110])
-  by fmsmga001.fm.intel.com with ESMTP; 21 Apr 2022 23:57:02 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 21 Apr 2022 23:57:09 -0700
 From:   zhengjun.xing@linux.intel.com
 To:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
         alexander.shishkin@intel.com, jolsa@redhat.com
 Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
         irogers@google.com, adrian.hunter@intel.com, ak@linux.intel.com,
         kan.liang@linux.intel.com, zhengjun.xing@linux.intel.com
-Subject: [PATCH 2/3] perf stat: Merge event counts from all hybrid PMUs
-Date:   Fri, 22 Apr 2022 14:56:34 +0800
-Message-Id: <20220422065635.767648-2-zhengjun.xing@linux.intel.com>
+Subject: [PATCH 3/3] perf stat: Support hybrid --topdown option
+Date:   Fri, 22 Apr 2022 14:56:35 +0800
+Message-Id: <20220422065635.767648-3-zhengjun.xing@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220422065635.767648-1-zhengjun.xing@linux.intel.com>
 References: <20220422065635.767648-1-zhengjun.xing@linux.intel.com>
@@ -63,121 +63,179 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
 
-For hybrid events, by default stat aggregates and reports the event counts
-per pmu.
+Since for cpu_core or cpu_atom , they have different topdown
+events groups.
 
-  # ./perf stat -e cycles -a  sleep 1
+For cpu_core, --topdown equals to
+"{slots,cpu_core/topdown-retiring/,cpu_core/topdown-bad-spec/,
+  cpu_core/topdown-fe-bound/,cpu_core/topdown-be-bound/,
+  cpu_core/topdown-heavy-ops/,cpu_core/topdown-br-mispredict/,
+  cpu_core/topdown-fetch-lat/,cpu_core/topdown-mem-bound/}"
+
+For cpu_atom, --topdown equals to
+"{cpu_atom/topdown-retiring/,cpu_atom/topdown-bad-spec/,
+ cpu_atom/topdown-fe-bound/,cpu_atom/topdown-be-bound/}"
+
+To simplify the implementation, on hybrid, --topdown is used
+together with --cputype. If without --cputype, it uses cpu_core
+topdown events by default.
+
+  # ./perf stat --topdown -a  sleep 1
+  WARNING: default to use cpu_core topdown events
 
    Performance counter stats for 'system wide':
 
-      14,066,877,268      cpu_core/cycles/
-       6,814,443,147      cpu_atom/cycles/
+              retiring      bad speculation       frontend bound        backend bound     heavy operations     light operations    branch mispredict       machine clears        fetch latency      fetch bandwidth         memory bound           Core bound
+                  4.1%                 0.0%                 5.1%                90.8%                 2.3%                 1.8%                 0.0%                 0.0%                 4.2%                 0.9%                 9.9%                81.0%
 
-         1.002760625 seconds time elapsed
+         1.002624229 seconds time elapsed
 
-Sometimes, it's also useful to aggregate event counts from all PMUs.
-Create a new option '--hybrid-merge' to enable that behavior and report
-the counts without PMUs.
-
-  # ./perf stat -e cycles -a --hybrid-merge  sleep 1
+  # ./perf stat --topdown -a --cputype atom  sleep 1
 
    Performance counter stats for 'system wide':
 
-      20,732,982,512      cycles
+              retiring      bad speculation       frontend bound        backend bound
+                 13.5%                 0.1%                31.2%                55.2%
 
-         1.002776793 seconds time elapsed
+         1.002366987 seconds time elapsed
 
 Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
 Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
 ---
- tools/perf/Documentation/perf-stat.txt | 10 ++++++++++
- tools/perf/builtin-stat.c              |  2 ++
- tools/perf/util/stat-display.c         | 17 +++++++++++++++--
- tools/perf/util/stat.h                 |  1 +
- 4 files changed, 28 insertions(+), 2 deletions(-)
+ tools/perf/builtin-stat.c | 21 ++++++++++++++++++---
+ tools/perf/util/stat.c    |  4 +++-
+ tools/perf/util/topdown.c | 17 +++++++++++++----
+ tools/perf/util/topdown.h |  3 ++-
+ 4 files changed, 36 insertions(+), 9 deletions(-)
 
-diff --git a/tools/perf/Documentation/perf-stat.txt b/tools/perf/Documentation/perf-stat.txt
-index c06c341e72b9..8d1cde00b8d6 100644
---- a/tools/perf/Documentation/perf-stat.txt
-+++ b/tools/perf/Documentation/perf-stat.txt
-@@ -454,6 +454,16 @@ Multiple events are created from a single event specification when:
- 2. Aliases, which are listed immediately after the Kernel PMU events
-    by perf list, are used.
- 
-+--hybrid-merge::
-+Merge the hybrid event counts from all PMUs.
-+
-+For hybrid events, by default, the stat aggregates and reports the event
-+counts per PMU. But sometimes, it's also useful to aggregate event counts
-+from all PMUs. This option enables that behavior and reports the counts
-+without PMUs.
-+
-+For non-hybrid events, it should be no effect.
-+
- --smi-cost::
- Measure SMI cost if msr/aperf/ and msr/smi/ events are supported.
- 
 diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-index a96f106dc93a..ea88ac5bed2d 100644
+index ea88ac5bed2d..084b0e53fb62 100644
 --- a/tools/perf/builtin-stat.c
 +++ b/tools/perf/builtin-stat.c
-@@ -1235,6 +1235,8 @@ static struct option stat_options[] = {
- 	OPT_SET_UINT('A', "no-aggr", &stat_config.aggr_mode,
- 		    "disable CPU count aggregation", AGGR_NONE),
- 	OPT_BOOLEAN(0, "no-merge", &stat_config.no_merge, "Do not merge identical named events"),
-+	OPT_BOOLEAN(0, "hybrid-merge", &stat_config.hybrid_merge,
-+		    "Merge identical named hybrid events"),
- 	OPT_STRING('x', "field-separator", &stat_config.csv_sep, "separator",
- 		   "print counts with custom separator"),
- 	OPT_CALLBACK('G', "cgroup", &evsel_list, "name",
-diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
-index 46b3dd134656..d9629a83aa78 100644
---- a/tools/perf/util/stat-display.c
-+++ b/tools/perf/util/stat-display.c
-@@ -612,6 +612,19 @@ static bool hybrid_uniquify(struct evsel *evsel)
- 	return perf_pmu__has_hybrid() && !is_uncore(evsel);
- }
+@@ -1844,11 +1844,23 @@ static int add_default_attributes(void)
+ 		unsigned int max_level = 1;
+ 		char *str = NULL;
+ 		bool warn = false;
++		const char *pmu_name = "cpu";
  
-+static bool hybrid_merge(struct evsel *counter, struct perf_stat_config *config,
-+			 bool check)
-+{
-+	if (hybrid_uniquify(counter)) {
-+		if (check)
-+			return config && config->hybrid_merge;
+ 		if (!force_metric_only)
+ 			stat_config.metric_only = true;
+ 
+-		if (pmu_have_event("cpu", topdown_metric_L2_attrs[5])) {
++		if (perf_pmu__has_hybrid()) {
++			if (!evsel_list->hybrid_pmu_name) {
++				pr_warning("WARNING: default to use cpu_core topdown events\n");
++				evsel_list->hybrid_pmu_name = perf_pmu__hybrid_type_to_pmu("core");
++			}
++
++			pmu_name = evsel_list->hybrid_pmu_name;
++			if (!pmu_name)
++				return -1;
++		}
++
++		if (pmu_have_event(pmu_name, topdown_metric_L2_attrs[5])) {
+ 			metric_attrs = topdown_metric_L2_attrs;
+ 			max_level = 2;
+ 		}
+@@ -1859,10 +1871,11 @@ static int add_default_attributes(void)
+ 		} else if (!stat_config.topdown_level)
+ 			stat_config.topdown_level = max_level;
+ 
+-		if (topdown_filter_events(metric_attrs, &str, 1) < 0) {
++		if (topdown_filter_events(metric_attrs, &str, 1, pmu_name) < 0) {
+ 			pr_err("Out of memory\n");
+ 			return -1;
+ 		}
++
+ 		if (metric_attrs[0] && str) {
+ 			if (!stat_config.interval && !stat_config.metric_only) {
+ 				fprintf(stat_config.output,
+@@ -1886,10 +1899,12 @@ static int add_default_attributes(void)
+ 		}
+ 
+ 		if (topdown_filter_events(topdown_attrs, &str,
+-				arch_topdown_check_group(&warn)) < 0) {
++				arch_topdown_check_group(&warn),
++				pmu_name) < 0) {
+ 			pr_err("Out of memory\n");
+ 			return -1;
+ 		}
++
+ 		if (topdown_attrs[0] && str) {
+ 			struct parse_events_error errinfo;
+ 			if (warn)
+diff --git a/tools/perf/util/stat.c b/tools/perf/util/stat.c
+index 817a2de264b4..4a5f3b8ff820 100644
+--- a/tools/perf/util/stat.c
++++ b/tools/perf/util/stat.c
+@@ -117,7 +117,9 @@ static void perf_stat_evsel_id_init(struct evsel *evsel)
+ 	/* ps->id is 0 hence PERF_STAT_EVSEL_ID__NONE by default */
+ 
+ 	for (i = 0; i < PERF_STAT_EVSEL_ID__MAX; i++) {
+-		if (!strcmp(evsel__name(evsel), id_str[i])) {
++		if (!strcmp(evsel__name(evsel), id_str[i]) ||
++		    (strstr(evsel__name(evsel), id_str[i]) && evsel->pmu_name
++		     && strstr(evsel__name(evsel), evsel->pmu_name))) {
+ 			ps->id = i;
+ 			break;
+ 		}
+diff --git a/tools/perf/util/topdown.c b/tools/perf/util/topdown.c
+index 1081b20f9891..a369f84ceb6a 100644
+--- a/tools/perf/util/topdown.c
++++ b/tools/perf/util/topdown.c
+@@ -1,18 +1,24 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <stdio.h>
+ #include "pmu.h"
++#include "pmu-hybrid.h"
+ #include "topdown.h"
+ 
+-int topdown_filter_events(const char **attr, char **str, bool use_group)
++int topdown_filter_events(const char **attr, char **str, bool use_group,
++			  const char *pmu_name)
+ {
+ 	int off = 0;
+ 	int i;
+ 	int len = 0;
+ 	char *s;
++	bool is_hybrid = perf_pmu__is_hybrid(pmu_name);
+ 
+ 	for (i = 0; attr[i]; i++) {
+-		if (pmu_have_event("cpu", attr[i])) {
+-			len += strlen(attr[i]) + 1;
++		if (pmu_have_event(pmu_name, attr[i])) {
++			if (is_hybrid)
++				len += strlen(attr[i]) + strlen(pmu_name) + 3;
++			else
++				len += strlen(attr[i]) + 1;
+ 			attr[i - off] = attr[i];
+ 		} else
+ 			off++;
+@@ -30,7 +36,10 @@ int topdown_filter_events(const char **attr, char **str, bool use_group)
+ 	if (use_group)
+ 		*s++ = '{';
+ 	for (i = 0; attr[i]; i++) {
+-		strcpy(s, attr[i]);
++		if (!is_hybrid)
++			strcpy(s, attr[i]);
 +		else
-+			return config && !config->hybrid_merge;
-+	}
-+
-+	return false;
-+}
-+
- static bool collect_data(struct perf_stat_config *config, struct evsel *counter,
- 			    void (*cb)(struct perf_stat_config *config, struct evsel *counter, void *data,
- 				       bool first),
-@@ -620,9 +633,9 @@ static bool collect_data(struct perf_stat_config *config, struct evsel *counter,
- 	if (counter->merged_stat)
- 		return false;
- 	cb(config, counter, data, true);
--	if (config->no_merge || hybrid_uniquify(counter))
-+	if (config->no_merge || hybrid_merge(counter, config, false))
- 		uniquify_event_name(counter, config);
--	else if (counter->auto_merge_stats)
-+	else if (counter->auto_merge_stats || hybrid_merge(counter, config, true))
- 		collect_all_aliases(config, counter, cb, data);
- 	return true;
- }
-diff --git a/tools/perf/util/stat.h b/tools/perf/util/stat.h
-index 335d19cc3063..91d989dfeca4 100644
---- a/tools/perf/util/stat.h
-+++ b/tools/perf/util/stat.h
-@@ -122,6 +122,7 @@ struct perf_stat_config {
- 	bool			 ru_display;
- 	bool			 big_num;
- 	bool			 no_merge;
-+	bool			 hybrid_merge;
- 	bool			 walltime_run_table;
- 	bool			 all_kernel;
- 	bool			 all_user;
++			sprintf(s, "%s/%s/", pmu_name, attr[i]);
+ 		s += strlen(s);
+ 		*s++ = ',';
+ 	}
+diff --git a/tools/perf/util/topdown.h b/tools/perf/util/topdown.h
+index 2f0d0b887639..118e75281f93 100644
+--- a/tools/perf/util/topdown.h
++++ b/tools/perf/util/topdown.h
+@@ -7,6 +7,7 @@ bool arch_topdown_check_group(bool *warn);
+ void arch_topdown_group_warn(void);
+ bool arch_topdown_sample_read(struct evsel *leader);
+ 
+-int topdown_filter_events(const char **attr, char **str, bool use_group);
++int topdown_filter_events(const char **attr, char **str, bool use_group,
++			  const char *pmu_name);
+ 
+ #endif
 -- 
 2.25.1
 

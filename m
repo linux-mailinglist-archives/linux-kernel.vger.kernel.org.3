@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C64450C4F3
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 675C450C4AE
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:45:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbiDVXlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 19:41:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43178 "EHLO
+        id S230355AbiDVXl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 19:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbiDVXlL (ORCPT
+        with ESMTP id S229897AbiDVXlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 22 Apr 2022 19:41:11 -0400
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D9578FE2
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 16:34:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCF71430E1
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 16:34:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650670464; x=1682206464;
+  t=1650670465; x=1682206465;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=kjuWSd2sy7XgFmiv5deJMfpfD5m8N1nfUS60tlT2HHo=;
-  b=fkbjniia96PShcI0JCqg4JSN9uq+Ndp6bfINNhvZwvVFHPexKw7NR17s
-   EgkfeBD752WOka/koymn/WIIEfihPsVslH+XuT1vApbAiC8AKNs26FuhE
-   99zG1lxl82Q0fYNiARwUfeMkXjc9GFT7Su73cb7mwTRehJKCbYmIXubTA
-   c7WuqU/4yVPuc1Gdn07JNMvE+ZS+kmlCcgGwNzcsEdLdEA1cnZhV03kZ8
-   clQpm5kchQvkXJR6Tfx5xBD/IdRj48GRDzZlkf91kAo4H1QXUw7vFNOVR
-   /IcuF9RE0OjPJwm8MV82e/hwgx0TZ5tnIsUQnQ964ZvJoKV48WqN/L4mW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="246719369"
+  bh=pRdjU3CKhvIuYwAsGdrtepcgI5aiXY7ogPLCrWyIKFI=;
+  b=f4MSJHT9+wJm0PU2plrRF2Y9NHsqb1rNqsqyc6pYf7/gjoC8dl3bDEod
+   IRoiLEi96jB+GXFIZSAjDxAkUSREcr/Pw+lIwoq5mSgv4h3rJlDnkp170
+   kXVwBTlTdS6lt3PVOxJ4AI8SkPmhcyQ75gaO/058p65+1OOdgvoMJQejb
+   WYGwTU6lSNHiNl1ODAvinrHBCenMkEManOSETI7vW5IE5dZkTOloKRmDF
+   d2kC1C4jT0Bg5lB/g8bhQZx86VmsuzlpMb3urhd38U4sUl8zuo195jlrl
+   EFVEDEwp2Ah1BwWj3ORF9XJ8pWBE5xjby8HmV/4fgRurZ/UVpoMgfYNVI
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="246719370"
 X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="246719369"
+   d="scan'208";a="246719370"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 16:34:23 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 16:34:24 -0700
 X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="648838432"
+   d="scan'208";a="648838435"
 Received: from albelfat-mobl.amr.corp.intel.com (HELO skuppusw-desk1.home) ([10.212.246.20])
   by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 16:34:23 -0700
 From:   Kuppuswamy Sathyanarayanan 
@@ -49,14 +49,13 @@ Cc:     "H . Peter Anvin" <hpa@zytor.com>,
         Tony Luck <tony.luck@intel.com>,
         Andi Kleen <ak@linux.intel.com>,
         Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 1/3] x86/tdx: Add TDX Guest attestation interface driver
-Date:   Fri, 22 Apr 2022 16:34:16 -0700
-Message-Id: <20220422233418.1203092-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [PATCH v4 2/3] x86/tdx: Add TDX Guest event notify interrupt support
+Date:   Fri, 22 Apr 2022 16:34:17 -0700
+Message-Id: <20220422233418.1203092-3-sathyanarayanan.kuppuswamy@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220422233418.1203092-1-sathyanarayanan.kuppuswamy@linux.intel.com>
 References: <20220422233418.1203092-1-sathyanarayanan.kuppuswamy@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
@@ -67,391 +66,242 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In TDX guest, attestation is used to verify the trustworthiness of a TD
-to other entities before making any secure communication.
+Host-guest event notification via configured interrupt vector is useful
+in cases where a guest makes an asynchronous request and needs a
+callback from the host to indicate the completion or to let the host
+notify the guest about events like device removal. One usage example is,
+callback requirement of GetQuote asynchronous hypercall.
 
-One usage example is, when a TD guest uses encrypted drive and the
-decryption keys required to access the drive are stored in a secure
-3rd party keyserver, TD guest can use the quote generated via the
-attestation process to prove its trustworthiness with keyserver and
-get access to the storage keys.
+In TDX guest, SetupEventNotifyInterrupt hypercall can be used by the
+guest to specify which interrupt vector to use as an event-notify
+vector to the VMM. Details about the SetupEventNotifyInterrupt
+hypercall can be found in TDX Guest-Host Communication Interface
+(GHCI) Specification, sec 3.5 "VP.VMCALL<SetupEventNotifyInterrupt>".
+Add a tdx_hcall_set_notify_intr() helper function to implement the
+SetupEventNotifyInterrupt hypercall.
 
-General steps involved in attestation process are,
+Reserve 0xec IRQ vector address for TDX guest to receive the event
+completion notification from VMM. Also add related IDT handler to
+process the notification event.
 
-  1. TD guest generates the TDREPORT that contains version information
-     about the Intel TDX module, measurement of the TD, along with a
-     TD-specified nonce.
-  2. TD guest shares the TDREPORT with TD host via GetQuote hypercall
-     which is used by the host to generate a quote via quoting
-     enclave (QE).
-  3. Quote generation completion notification is sent to TD OS via
-     callback interrupt vector configured by TD using
-     SetupEventNotifyInterrupt hypercall.
-  4. After receiving the generated TDQUOTE, a remote verifier can be
-     used to verify the quote and confirm the trustworthiness of the
-     TD.
-     
-More details on above mentioned steps can be found in TDX Guest-Host
-Communication Interface (GHCI) for Intel TDX 1.0, section titled
-"TD attestation".
-
-To allow the attestation agent (user application) to implement this
-feature, add an IOCTL interface to get TDREPORT and TDQUOTE from the
-user space. Since attestation agent can also use methods like vosck or
-TCP/IP to get the TDQUOTE, adding an IOCTL interface for it is an
-optional feature. So to simplify the driver, first add support for
-TDX_CMD_GET_TDREPORT IOCTL. Support for TDQUOTE IOCTL will be added by
-follow-on patches.
-
-TDREPORT can be generated by sending a TDCALL with leaf ID as 0x04.
-More details about the TDREPORT TDCALL can be found in Intel Trust
-Domain Extensions (Intel TDX) Module specification, section titled
-"TDG.MR.REPORT Leaf". Add a wrapper function (tdx_mcall_tdreport())
-to get the TDREPORT from the TDX Module. This API will be used by the
-interface driver to request for TDREPORT.
-
-Also note that explicit access permissions are not enforced in this
-driver because the quote and measurements are not a secret. However
-the access permissions of the device node can be used to set any
-desired access policy. The udev default is usually root access
-only.
+Add support to track the notification event status via
+/proc/interrupts.
 
 Reviewed-by: Tony Luck <tony.luck@intel.com>
 Reviewed-by: Andi Kleen <ak@linux.intel.com>
 Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 ---
- arch/x86/coco/tdx/Makefile      |   2 +-
- arch/x86/coco/tdx/attest.c      | 191 ++++++++++++++++++++++++++++++++
- arch/x86/coco/tdx/tdx.c         |  45 ++++++++
- arch/x86/include/asm/tdx.h      |   2 +
- arch/x86/include/uapi/asm/tdx.h |  23 ++++
- 5 files changed, 262 insertions(+), 1 deletion(-)
- create mode 100644 arch/x86/coco/tdx/attest.c
- create mode 100644 arch/x86/include/uapi/asm/tdx.h
+ arch/x86/coco/tdx/tdx.c            | 77 ++++++++++++++++++++++++++++++
+ arch/x86/include/asm/hardirq.h     |  3 ++
+ arch/x86/include/asm/idtentry.h    |  4 ++
+ arch/x86/include/asm/irq_vectors.h |  7 ++-
+ arch/x86/include/asm/tdx.h         |  4 ++
+ arch/x86/kernel/irq.c              |  7 +++
+ 6 files changed, 101 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/coco/tdx/Makefile b/arch/x86/coco/tdx/Makefile
-index 46c55998557d..d2db3e6770e5 100644
---- a/arch/x86/coco/tdx/Makefile
-+++ b/arch/x86/coco/tdx/Makefile
-@@ -1,3 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0
- 
--obj-y += tdx.o tdcall.o
-+obj-y += tdx.o tdcall.o attest.o
-diff --git a/arch/x86/coco/tdx/attest.c b/arch/x86/coco/tdx/attest.c
-new file mode 100644
-index 000000000000..b776e81f6c20
---- /dev/null
-+++ b/arch/x86/coco/tdx/attest.c
-@@ -0,0 +1,191 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * attest.c - TDX guest attestation interface driver.
-+ *
-+ * Implements user interface to trigger attestation process and
-+ * read the TD Quote result.
-+ *
-+ * Copyright (C) 2022 Intel Corporation
-+ *
-+ */
-+
-+#define pr_fmt(fmt) "x86/tdx: attest: " fmt
-+
-+#include <linux/module.h>
-+#include <linux/miscdevice.h>
-+#include <linux/uaccess.h>
-+#include <linux/fs.h>
-+#include <linux/mm.h>
-+#include <linux/slab.h>
-+#include <linux/set_memory.h>
-+#include <linux/dma-mapping.h>
-+#include <linux/platform_device.h>
-+#include <linux/jiffies.h>
-+#include <linux/io.h>
-+#include <asm/apic.h>
-+#include <asm/tdx.h>
-+#include <asm/irq_vectors.h>
-+#include <uapi/asm/tdx.h>
-+
-+#define DRIVER_NAME "tdx-attest"
-+
-+static struct platform_device *pdev;
-+static struct miscdevice miscdev;
-+
-+static long tdx_get_tdreport(void __user *argp)
-+{
-+	void *report_buf = NULL, *tdreport_buf = NULL;
-+	long ret = 0, err;
-+
-+	/* Allocate space for report data */
-+	report_buf = kmalloc(TDX_REPORT_DATA_LEN, GFP_KERNEL);
-+	if (!report_buf)
-+		return -ENOMEM;
-+
-+	/*
-+	 * Allocate space for TDREPORT buffer (1024-byte aligned).
-+	 * Full page alignment is more than enough.
-+	 */
-+	tdreport_buf = (void *)get_zeroed_page(GFP_KERNEL);
-+	if (!tdreport_buf) {
-+		ret = -ENOMEM;
-+		goto tdreport_failed;
-+	}
-+
-+	/* Copy report data to kernel buffer */
-+	if (copy_from_user(report_buf, argp, TDX_REPORT_DATA_LEN)) {
-+		ret = -EFAULT;
-+		goto tdreport_failed;
-+	}
-+
-+	/* Generate TDREPORT using report data in report_buf */
-+	err = tdx_mcall_tdreport(tdreport_buf, report_buf);
-+	if (err) {
-+		/* If failed, pass TDCALL error code back to user */
-+		ret = put_user(err, (long __user *)argp);
-+		ret = -EIO;
-+		goto tdreport_failed;
-+	}
-+
-+	/* Copy TDREPORT data back to user buffer */
-+	if (copy_to_user(argp, tdreport_buf, TDX_TDREPORT_LEN))
-+		ret = -EFAULT;
-+
-+tdreport_failed:
-+	kfree(report_buf);
-+	if (tdreport_buf)
-+		free_pages((unsigned long)tdreport_buf, 0);
-+
-+	return ret;
-+}
-+
-+static long tdx_attest_ioctl(struct file *file, unsigned int cmd,
-+			     unsigned long arg)
-+{
-+	void __user *argp = (void __user *)arg;
-+	long ret = 0;
-+
-+	switch (cmd) {
-+	case TDX_CMD_GET_TDREPORT:
-+		ret = tdx_get_tdreport(argp);
-+		break;
-+	default:
-+		pr_err("cmd %d not supported\n", cmd);
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+static const struct file_operations tdx_attest_fops = {
-+	.owner		= THIS_MODULE,
-+	.unlocked_ioctl	= tdx_attest_ioctl,
-+	.llseek		= no_llseek,
-+};
-+
-+static int tdx_attest_probe(struct platform_device *attest_pdev)
-+{
-+	struct device *dev = &attest_pdev->dev;
-+	long ret = 0;
-+
-+	/* Only single device is allowed */
-+	if (pdev)
-+		return -EBUSY;
-+
-+	pdev = attest_pdev;
-+
-+	miscdev.name = DRIVER_NAME;
-+	miscdev.minor = MISC_DYNAMIC_MINOR;
-+	miscdev.fops = &tdx_attest_fops;
-+	miscdev.parent = dev;
-+
-+	ret = misc_register(&miscdev);
-+	if (ret) {
-+		pr_err("misc device registration failed\n");
-+		goto failed;
-+	}
-+
-+	pr_debug("module initialization success\n");
-+
-+	return 0;
-+
-+failed:
-+	misc_deregister(&miscdev);
-+
-+	pr_debug("module initialization failed\n");
-+
-+	return ret;
-+}
-+
-+static int tdx_attest_remove(struct platform_device *attest_pdev)
-+{
-+	misc_deregister(&miscdev);
-+	pr_debug("module is successfully removed\n");
-+	return 0;
-+}
-+
-+static struct platform_driver tdx_attest_driver = {
-+	.probe		= tdx_attest_probe,
-+	.remove		= tdx_attest_remove,
-+	.driver		= {
-+		.name	= DRIVER_NAME,
-+	},
-+};
-+
-+static int __init tdx_attest_init(void)
-+{
-+	int ret;
-+
-+	/* Make sure we are in a valid TDX platform */
-+	if (!cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
-+		return -EIO;
-+
-+	ret = platform_driver_register(&tdx_attest_driver);
-+	if (ret) {
-+		pr_err("failed to register driver, err=%d\n", ret);
-+		return ret;
-+	}
-+
-+	pdev = platform_device_register_simple(DRIVER_NAME, -1, NULL, 0);
-+	if (IS_ERR(pdev)) {
-+		ret = PTR_ERR(pdev);
-+		pr_err("failed to allocate device, err=%d\n", ret);
-+		platform_driver_unregister(&tdx_attest_driver);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void __exit tdx_attest_exit(void)
-+{
-+	platform_device_unregister(pdev);
-+	platform_driver_unregister(&tdx_attest_driver);
-+}
-+
-+module_init(tdx_attest_init);
-+module_exit(tdx_attest_exit);
-+
-+MODULE_AUTHOR("Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>");
-+MODULE_DESCRIPTION("TDX attestation driver");
-+MODULE_LICENSE("GPL");
 diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-index 03deb4d6920d..2a79ca92a52d 100644
+index 2a79ca92a52d..d0c62b94a1f6 100644
 --- a/arch/x86/coco/tdx/tdx.c
 +++ b/arch/x86/coco/tdx/tdx.c
-@@ -11,10 +11,12 @@
- #include <asm/insn.h>
+@@ -12,6 +12,10 @@
  #include <asm/insn-eval.h>
  #include <asm/pgtable.h>
-+#include <asm/io.h>
+ #include <asm/io.h>
++#include <asm/apic.h>
++#include <asm/idtentry.h>
++#include <asm/irq_regs.h>
++#include <asm/desc.h>
  
  /* TDX module Call Leaf IDs */
  #define TDX_GET_INFO			1
- #define TDX_GET_VEINFO			3
-+#define TDX_GET_REPORT			4
- #define TDX_ACCEPT_PAGE			6
+@@ -21,6 +25,7 @@
  
  /* TDX hypercall Leaf IDs */
-@@ -34,6 +36,10 @@
- #define VE_GET_PORT_NUM(e)	((e) >> 16)
- #define VE_IS_IO_STRING(e)	((e) & BIT(4))
+ #define TDVMCALL_MAP_GPA		0x10001
++#define TDVMCALL_SETUP_NOTIFY_INTR	0x10004
  
-+/* TDX Module call error codes */
-+#define TDCALL_RETURN_CODE_MASK		0xffffffff00000000
-+#define TDCALL_RETURN_CODE(a)		((a) & TDCALL_RETURN_CODE_MASK)
+ /* MMIO direction */
+ #define EPT_READ	0
+@@ -40,6 +45,28 @@
+ #define TDCALL_RETURN_CODE_MASK		0xffffffff00000000
+ #define TDCALL_RETURN_CODE(a)		((a) & TDCALL_RETURN_CODE_MASK)
+ 
++/*
++ * Handler used to report notifications about
++ * TDX_GUEST_EVENT_NOTIFY_VECTOR IRQ. Currently it will be
++ * used only by the attestation driver. So, race condition
++ * with read/write operation is not considered.
++ */
++static void (*tdx_event_notify_handler)(void);
++
++/* Helper function to register tdx_event_notify_handler */
++void tdx_setup_ev_notify_handler(void (*handler)(void))
++{
++	tdx_event_notify_handler = handler;
++}
++EXPORT_SYMBOL_GPL(tdx_setup_ev_notify_handler);
++
++/* Helper function to unregister tdx_event_notify_handler */
++void tdx_remove_ev_notify_handler(void)
++{
++	tdx_event_notify_handler = NULL;
++}
++EXPORT_SYMBOL_GPL(tdx_remove_ev_notify_handler);
 +
  /*
   * Wrapper for standard use of __tdx_hypercall with no output aside from
   * return code.
-@@ -98,6 +104,45 @@ static inline void tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
+@@ -104,6 +131,21 @@ static inline void tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
  		panic("TDCALL %lld failed (Buggy TDX module!)\n", fn);
  }
  
++/* TDX guest event notification handler */
++DEFINE_IDTENTRY_SYSVEC(sysvec_tdx_event_notify)
++{
++	struct pt_regs *old_regs = set_irq_regs(regs);
++
++	inc_irq_stat(irq_tdx_event_notify_count);
++
++	if (tdx_event_notify_handler)
++		tdx_event_notify_handler();
++
++	ack_APIC_irq();
++
++	set_irq_regs(old_regs);
++}
++
+ /*
+  * tdx_mcall_tdreport() - Generate TDREPORT_STRUCT using TDCALL.
+  *
+@@ -143,6 +185,35 @@ long tdx_mcall_tdreport(void *data, void *reportdata)
+ }
+ EXPORT_SYMBOL_GPL(tdx_mcall_tdreport);
+ 
 +/*
-+ * tdx_mcall_tdreport() - Generate TDREPORT_STRUCT using TDCALL.
++ * tdx_hcall_set_notify_intr() - Setup Event Notify Interrupt Vector.
 + *
-+ * @data        : Address of 1024B aligned data to store
-+ *                TDREPORT_STRUCT.
-+ * @reportdata  : Address of 64B aligned report data
++ * @vector        : Vector address to be used for notification.
 + *
 + * return 0 on success or failure error number.
 + */
-+long tdx_mcall_tdreport(void *data, void *reportdata)
++static long tdx_hcall_set_notify_intr(u8 vector)
 +{
 +	u64 ret;
 +
-+	/*
-+	 * Check for a valid TDX guest to ensure this API is only
-+	 * used by TDX guest platform. Also make sure "data" and
-+	 * "reportdata" pointers are valid.
-+	 */
-+	if (!data || !reportdata || !cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
++	/* Minimum vector value allowed is 32 */
++	if (vector < 32)
 +		return -EINVAL;
 +
 +	/*
-+	 * Pass the physical address of user generated report data
-+	 * and the physical address of output buffer to the TDX module
-+	 * to generate the TD report. Generated data contains
-+	 * measurements/configuration data of the TD guest. More info
-+	 * about ABI can be found in TDX 1.0 Module specification, sec
-+	 * titled "TDG.MR.REPORT".
++	 * Register callback vector address with VMM. More details
++	 * about the ABI can be found in TDX Guest-Host-Communication
++	 * Interface (GHCI), sec titled
++	 * "TDG.VP.VMCALL<SetupEventNotifyInterrupt>".
 +	 */
-+	ret = __tdx_module_call(TDX_GET_REPORT, virt_to_phys(data),
-+				virt_to_phys(reportdata), 0, 0, NULL);
++	ret = _tdx_hypercall(TDVMCALL_SETUP_NOTIFY_INTR, vector, 0, 0, 0);
 +
 +	if (ret)
-+		return TDCALL_RETURN_CODE(ret);
++		return ret;
 +
 +	return 0;
 +}
-+EXPORT_SYMBOL_GPL(tdx_mcall_tdreport);
 +
  static u64 get_cc_mask(void)
  {
  	struct tdx_module_output out;
+@@ -733,5 +804,11 @@ void __init tdx_early_init(void)
+ 	x86_platform.guest.enc_tlb_flush_required   = tdx_tlb_flush_required;
+ 	x86_platform.guest.enc_status_change_finish = tdx_enc_status_changed;
+ 
++	alloc_intr_gate(TDX_GUEST_EVENT_NOTIFY_VECTOR,
++			asm_sysvec_tdx_event_notify);
++
++	if (tdx_hcall_set_notify_intr(TDX_GUEST_EVENT_NOTIFY_VECTOR))
++		pr_warn("Setting event notification interrupt failed\n");
++
+ 	pr_info("Guest detected\n");
+ }
+diff --git a/arch/x86/include/asm/hardirq.h b/arch/x86/include/asm/hardirq.h
+index 275e7fd20310..582deff56210 100644
+--- a/arch/x86/include/asm/hardirq.h
++++ b/arch/x86/include/asm/hardirq.h
+@@ -44,6 +44,9 @@ typedef struct {
+ 	unsigned int irq_hv_reenlightenment_count;
+ 	unsigned int hyperv_stimer0_count;
+ #endif
++#if IS_ENABLED(CONFIG_INTEL_TDX_GUEST)
++	unsigned int irq_tdx_event_notify_count;
++#endif
+ } ____cacheline_aligned irq_cpustat_t;
+ 
+ DECLARE_PER_CPU_SHARED_ALIGNED(irq_cpustat_t, irq_stat);
+diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
+index 72184b0b2219..331d343e1d46 100644
+--- a/arch/x86/include/asm/idtentry.h
++++ b/arch/x86/include/asm/idtentry.h
+@@ -700,6 +700,10 @@ DECLARE_IDTENTRY_SYSVEC(HYPERVISOR_CALLBACK_VECTOR,	sysvec_xen_hvm_callback);
+ DECLARE_IDTENTRY_SYSVEC(HYPERVISOR_CALLBACK_VECTOR,	sysvec_kvm_asyncpf_interrupt);
+ #endif
+ 
++#ifdef CONFIG_INTEL_TDX_GUEST
++DECLARE_IDTENTRY_SYSVEC(TDX_GUEST_EVENT_NOTIFY_VECTOR,	sysvec_tdx_event_notify);
++#endif
++
+ #undef X86_TRAP_OTHER
+ 
+ #endif
+diff --git a/arch/x86/include/asm/irq_vectors.h b/arch/x86/include/asm/irq_vectors.h
+index 43dcb9284208..82ac0c0a34b1 100644
+--- a/arch/x86/include/asm/irq_vectors.h
++++ b/arch/x86/include/asm/irq_vectors.h
+@@ -104,7 +104,12 @@
+ #define HYPERV_STIMER0_VECTOR		0xed
+ #endif
+ 
+-#define LOCAL_TIMER_VECTOR		0xec
++#if IS_ENABLED(CONFIG_INTEL_TDX_GUEST)
++/* Vector on which TDX Guest event notification is delivered */
++#define TDX_GUEST_EVENT_NOTIFY_VECTOR	0xec
++#endif
++
++#define LOCAL_TIMER_VECTOR		0xeb
+ 
+ #define NR_VECTORS			 256
+ 
 diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-index 020c81a7c729..a151f69dd6ef 100644
+index a151f69dd6ef..89ed09809c13 100644
 --- a/arch/x86/include/asm/tdx.h
 +++ b/arch/x86/include/asm/tdx.h
-@@ -67,6 +67,8 @@ void tdx_safe_halt(void);
+@@ -69,6 +69,10 @@ bool tdx_early_handle_ve(struct pt_regs *regs);
  
- bool tdx_early_handle_ve(struct pt_regs *regs);
+ long tdx_mcall_tdreport(void *data, void *reportdata);
  
-+long tdx_mcall_tdreport(void *data, void *reportdata);
++void tdx_setup_ev_notify_handler(void (*handler)(void));
++
++void tdx_remove_ev_notify_handler(void);
 +
  #else
  
  static inline void tdx_early_init(void) { };
-diff --git a/arch/x86/include/uapi/asm/tdx.h b/arch/x86/include/uapi/asm/tdx.h
-new file mode 100644
-index 000000000000..c21f9d6fe88b
---- /dev/null
-+++ b/arch/x86/include/uapi/asm/tdx.h
-@@ -0,0 +1,23 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+#ifndef _UAPI_ASM_X86_TDX_H
-+#define _UAPI_ASM_X86_TDX_H
-+
-+#include <linux/types.h>
-+#include <linux/ioctl.h>
-+
-+/* Input report data length for TDX_CMD_GET_TDREPORT IOCTL request */
-+#define TDX_REPORT_DATA_LEN		64
-+
-+/* Output TD report data length after TDX_CMD_GET_TDREPORT IOCTL execution */
-+#define TDX_TDREPORT_LEN		1024
-+
-+/*
-+ * TDX_CMD_GET_TDREPORT IOCTL is used to get TDREPORT data from the TDX
-+ * Module. Users should pass report data of size TDX_REPORT_DATA_LEN bytes
-+ * via user input buffer of size TDX_TDREPORT_LEN. Once IOCTL is successful
-+ * TDREPORT data is copied to the user buffer. On failure, TDCALL error
-+ * code is copied back to the user buffer.
-+ */
-+#define TDX_CMD_GET_TDREPORT		_IOWR('T', 0x01, __u64)
-+
-+#endif /* _UAPI_ASM_X86_TDX_H */
+diff --git a/arch/x86/kernel/irq.c b/arch/x86/kernel/irq.c
+index 766ffe3ba313..a96ecd866723 100644
+--- a/arch/x86/kernel/irq.c
++++ b/arch/x86/kernel/irq.c
+@@ -181,6 +181,13 @@ int arch_show_interrupts(struct seq_file *p, int prec)
+ 		seq_printf(p, "%10u ",
+ 			   irq_stats(j)->kvm_posted_intr_wakeup_ipis);
+ 	seq_puts(p, "  Posted-interrupt wakeup event\n");
++#endif
++#if IS_ENABLED(CONFIG_INTEL_TDX_GUEST)
++	seq_printf(p, "%*s: ", prec, "TGN");
++	for_each_online_cpu(j)
++		seq_printf(p, "%10u ",
++			   irq_stats(j)->irq_tdx_event_notify_count);
++	seq_puts(p, "  TDX Guest event notification\n");
+ #endif
+ 	return 0;
+ }
 -- 
 2.25.1
 

@@ -2,221 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D5A650BB22
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:06:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7B850BB3B
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:09:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449182AbiDVPI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 11:08:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52118 "EHLO
+        id S1449184AbiDVPLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 11:11:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449095AbiDVPIK (ORCPT
+        with ESMTP id S1350646AbiDVPK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 11:08:10 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658EC13D6A;
-        Fri, 22 Apr 2022 08:05:17 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id q3so11456178plg.3;
-        Fri, 22 Apr 2022 08:05:17 -0700 (PDT)
+        Fri, 22 Apr 2022 11:10:56 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0598D14028
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:08:03 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d15so11439822pll.10
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:08:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=G5bMd3EZKPtSk/LlVpFY7y+BRjO9pioZ19YkfHn+mvI=;
-        b=cWvPAy2H4RrFbwLp3MoR37HUHF0ToOPkpb/ehqduwdm0/MFd4WPOqhOdWiQ4KW9vhh
-         D8vZAiAK1XqoI2LfS1jxxZnyTdSZ50OQ3m476zbGO9U4b1Bza9Xsm1CHJA/fKSJgVBx7
-         oPxLN3BlND+EFE0H4dDbemMmkLw2VIUCVk9/qILGvoml+kzcJQAa5RU3epoSKVPcHs9c
-         vgEuEySvPTnltAgjZ3X4FCZ43W05gXL3B33ZMMb/qpKnpCOY94uM2uUnWY1SL8tnemF9
-         CKxe9BLFKOjl6bdZeqwhqtI4Cs3lKs9047AONq9V0bS0n0eoocbeCWJSb57Jn/gHY6dr
-         ysnA==
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=K4HaIW/vxFAL44m1pOYXWPSNjY/gkA+yaMxMowC6UUM=;
+        b=v0yY2R8anlaP/oXUeyvIuBz1bJ/Ft2t9uPTLDaU7VRCg2UMWEne0FaGoIMuLhAvDvu
+         fyd5DEUOogCYx/7B+KeGRvTwsQktkcgPZEOqzuBFm0jkCW787d/Z5/d9YGdVTHTNfBbb
+         DOhb+PyEJLMkYRR3scNH9EZzd+IXcIugnhI/n0n1a93AFt0O9XTyPCHDak7o1uAIoi5L
+         cY/l85WP47swuKNjv3Xa01tCNRLu8abSXhgYjCu30drNsxyUIezsZkv+vmz6tk4cqXSZ
+         2ECGtvtYty7kcVTrWFNrm4me/iVkiRjpTpXdghrFcCO6oyECxb6x9T4MyDIGVxaBK2r8
+         oSMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=G5bMd3EZKPtSk/LlVpFY7y+BRjO9pioZ19YkfHn+mvI=;
-        b=buTkOkEyBGzk/0sr6E/tQegbEv4Vi5E+NumJ/tDivFw+Wqh70UV0Dfg5iIUJx7kZ/s
-         D+RkmHIW8yEsr6uFxtj4+bbS00rRT9RIvSnuqgAU61uk+g+eMjsNnjI0ZTgw1iH9i7uz
-         +Tv0FZQoz2wZFa9+kwxnoH0Yj9CE3ZHnwhFWhzxMH1iW+jzGsW2X4OY3TSdTWfly58ob
-         KT056XsX42KiCVC73HucGVthcwZIntD7UFxhS1XAYBBvTqUO0rW6q9rzBNGr4Q3HrZRU
-         qhV7yhO8eQkit1HkK6mZ6SKkOvcka3qYPMNKEXkthjwX6EOQI7jeomOEdb5AC4xD6B+9
-         I0ig==
-X-Gm-Message-State: AOAM533mamD/RaKTvlH0bdbtdjyI7bePC1WgCOeXmGAsdb1mzHlZQui2
-        OX+LFKIuK5ByWTJcxK8xj2M=
-X-Google-Smtp-Source: ABdhPJwCH3cE03NTyvR7xld8SoaRA1GwJ5JAmoEibnefVHoufMwsuTVIh7PEaEDEGC5CDPGNwD8fJg==
-X-Received: by 2002:a17:902:e842:b0:158:e15b:1d6e with SMTP id t2-20020a170902e84200b00158e15b1d6emr5168393plg.0.1650639916918;
-        Fri, 22 Apr 2022 08:05:16 -0700 (PDT)
-Received: from balhae.hsd1.ca.comcast.net ([2601:647:4f00:3590:5deb:57fb:7322:f9d4])
-        by smtp.gmail.com with ESMTPSA id s11-20020a6550cb000000b0039daee7ed0fsm2390279pgp.19.2022.04.22.08.05.15
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=K4HaIW/vxFAL44m1pOYXWPSNjY/gkA+yaMxMowC6UUM=;
+        b=HOunr23IMw1HOxymSZhImp4V7aeDCj5WVbdsQmE9ecYp/rKDlkDWjPbZzVnX43LVPg
+         9j62ve1NTKIAMR9tjwkIBJ9m9+T0gjPB7N/zB0/9dKKZifl83JTV4XVF6MqJHzC7hItD
+         Vo9Eai1VhZ4FKxagcm7iQZ+NUigthYQg02qUfRs25hfI3vqccQXwGKa20e3FCHeL37UR
+         fZRL0m/DcaOKpBoM1e/tkdGhptlyLmsCF1zy8OJB/9GnYiXFIZmKRH0r3MnI6Ifh6uI4
+         WzD+HaoKds2J4ZA9LNZ14r+OsuJPxFZk4hFWlseQ4iBsTjkrkECKIGC98tRn7DmafZM3
+         aXKw==
+X-Gm-Message-State: AOAM533A05SthogKiU9nAwhDDycBtylCwlJ6Y4ZCW9tJHMuYtyFGEHqE
+        kMoyNoxz/xqe2Exf18F8U1he7A==
+X-Google-Smtp-Source: ABdhPJx5ATBOzB5TKDH52ypXORAEGKGhYrvejRrJXxN1YQ/2irwp3TANehXl6sHyPzQ8YUMPnMaWWw==
+X-Received: by 2002:a17:90b:19d7:b0:1c7:3413:87e0 with SMTP id nm23-20020a17090b19d700b001c7341387e0mr5966941pjb.132.1650640082435;
+        Fri, 22 Apr 2022 08:08:02 -0700 (PDT)
+Received: from atishp.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id 12-20020a17090a030c00b001d5793b6f71sm6650605pje.13.2022.04.22.08.08.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 08:05:16 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
-        bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Blake Jones <blakejones@google.com>
-Subject: [PATCH 4/4] perf record: Handle argument change in sched_switch
-Date:   Fri, 22 Apr 2022 08:05:07 -0700
-Message-Id: <20220422150507.222488-5-namhyung@kernel.org>
-X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
-In-Reply-To: <20220422150507.222488-1-namhyung@kernel.org>
-References: <20220422150507.222488-1-namhyung@kernel.org>
+        Fri, 22 Apr 2022 08:08:01 -0700 (PDT)
+From:   Atish Patra <atishp@rivosinc.com>
+To:     kvm@vger.kernel.org
+Cc:     Atish Patra <atishp@rivosinc.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>, devicetree@vger.kernel.org,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>, kvm-riscv@lists.infradead.org
+Subject: [v2 PATCH] RISC-V: KVM: Introduce ISA extension register
+Date:   Fri, 22 Apr 2022 08:05:19 -0700
+Message-Id: <20220422150519.3818093-1-atishp@rivosinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Recently sched_switch tracepoint added a new argument for prev_state,
-but it's hard to handle the change in a BPF program.  Instead, we can
-check the function prototype in BTF before loading the program.
+Currently, there is no provision for vmm (qemu-kvm or kvmtool) to
+query about multiple-letter ISA extensions. The config register
+is only used for base single letter ISA extensions.
 
-Thus I make two copies of the tracepoint handler and select one based
-on the BTF info.
+A new ISA extension register is added that will allow the vmm
+to query about any ISA extension one at a time. It is enabled for
+both single letter or multi-letter ISA extensions. The ISA extension
+register is useful to if the vmm requires to retrieve/set single
+extension while the config register should be used if all the base
+ISA extension required to retrieve or set.
 
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+For any multi-letter ISA extensions, the new register interface
+must be used.
+
+Signed-off-by: Atish Patra <atishp@rivosinc.com>
 ---
- tools/perf/util/bpf_off_cpu.c          | 32 +++++++++++++++
- tools/perf/util/bpf_skel/off_cpu.bpf.c | 55 ++++++++++++++++++++------
- 2 files changed, 76 insertions(+), 11 deletions(-)
+Changes from v1->v2:
+1. Sending the patch separate from sstc series as it is unrelated.
+2. Removed few redundant lines.
 
-diff --git a/tools/perf/util/bpf_off_cpu.c b/tools/perf/util/bpf_off_cpu.c
-index 89f36229041d..38aeb13d3d25 100644
---- a/tools/perf/util/bpf_off_cpu.c
-+++ b/tools/perf/util/bpf_off_cpu.c
-@@ -86,6 +86,37 @@ static void off_cpu_finish(void *arg __maybe_unused)
- 	off_cpu_bpf__destroy(skel);
- }
+The kvm tool patches can be found here.
+
+https://github.com/atishp04/kvmtool/tree/sstc_v2
+
+---
+ arch/riscv/include/uapi/asm/kvm.h | 20 +++++++
+ arch/riscv/kvm/vcpu.c             | 98 +++++++++++++++++++++++++++++++
+ 2 files changed, 118 insertions(+)
+
+diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
+index f808ad1ce500..92bd469e2ba6 100644
+--- a/arch/riscv/include/uapi/asm/kvm.h
++++ b/arch/riscv/include/uapi/asm/kvm.h
+@@ -82,6 +82,23 @@ struct kvm_riscv_timer {
+ 	__u64 state;
+ };
  
-+/* recent kernel added prev_state arg, so it needs to call the proper function */
-+static void check_sched_switch_args(void)
-+{
-+	const struct btf *btf = bpf_object__btf(skel->obj);
-+	const struct btf_type *t1, *t2, *t3;
-+	u32 type_id;
++/**
++ * ISA extension IDs specific to KVM. This is not the same as the host ISA
++ * extension IDs as that is internal to the host and should not be exposed
++ * to the guest. This should always be contiguous to keep the mapping simple
++ * in KVM implementation.
++ */
++enum KVM_RISCV_ISA_EXT_ID {
++	KVM_RISCV_ISA_EXT_A = 0,
++	KVM_RISCV_ISA_EXT_C,
++	KVM_RISCV_ISA_EXT_D,
++	KVM_RISCV_ISA_EXT_F,
++	KVM_RISCV_ISA_EXT_H,
++	KVM_RISCV_ISA_EXT_I,
++	KVM_RISCV_ISA_EXT_M,
++	KVM_RISCV_ISA_EXT_MAX,
++};
 +
-+	type_id = btf__find_by_name_kind(btf, "bpf_trace_sched_switch",
-+					 BTF_KIND_TYPEDEF);
-+	if ((s32)type_id < 0)
-+		goto old_format;
-+
-+	t1 = btf__type_by_id(btf, type_id);
-+	if (t1 == NULL)
-+		goto old_format;
-+
-+	t2 = btf__type_by_id(btf, t1->type);
-+	if (t2 == NULL || !btf_is_ptr(t2))
-+		goto old_format;
-+
-+	t3 = btf__type_by_id(btf, t2->type);
-+	if (t3 && btf_is_func_proto(t3) && btf_vlen(t3) == 4) {
-+		/* new format: disable old functions */
-+		bpf_program__set_autoload(skel->progs.on_switch3, false);
-+		return;
-+	}
-+
-+old_format:
-+	bpf_program__set_autoload(skel->progs.on_switch4, false);
-+}
-+
- int off_cpu_prepare(struct evlist *evlist, struct target *target)
- {
- 	int err, fd, i;
-@@ -114,6 +145,7 @@ int off_cpu_prepare(struct evlist *evlist, struct target *target)
- 	}
+ /* Possible states for kvm_riscv_timer */
+ #define KVM_RISCV_TIMER_STATE_OFF	0
+ #define KVM_RISCV_TIMER_STATE_ON	1
+@@ -123,6 +140,9 @@ struct kvm_riscv_timer {
+ #define KVM_REG_RISCV_FP_D_REG(name)	\
+ 		(offsetof(struct __riscv_d_ext_state, name) / sizeof(__u64))
  
- 	set_max_rlimit();
-+	check_sched_switch_args();
++/* ISA Extension registers are mapped as type 7 */
++#define KVM_REG_RISCV_ISA_EXT		(0x07 << KVM_REG_RISCV_TYPE_SHIFT)
++
+ #endif
  
- 	err = off_cpu_bpf__load(skel);
- 	if (err) {
-diff --git a/tools/perf/util/bpf_skel/off_cpu.bpf.c b/tools/perf/util/bpf_skel/off_cpu.bpf.c
-index 27425fe361e2..e11e198af86f 100644
---- a/tools/perf/util/bpf_skel/off_cpu.bpf.c
-+++ b/tools/perf/util/bpf_skel/off_cpu.bpf.c
-@@ -121,22 +121,13 @@ static inline int can_record(struct task_struct *t, int state)
- 	return 1;
- }
- 
--SEC("tp_btf/sched_switch")
--int on_switch(u64 *ctx)
-+static int on_switch(u64 *ctx, struct task_struct *prev,
-+		     struct task_struct *next, int state)
- {
- 	__u64 ts;
--	int state;
- 	__u32 pid, stack_id;
--	struct task_struct *prev, *next;
- 	struct tstamp_data elem, *pelem;
- 
--	if (!enabled)
--		return 0;
--
--	prev = (struct task_struct *)ctx[1];
--	next = (struct task_struct *)ctx[2];
--	state = get_task_state(prev);
--
- 	ts = bpf_ktime_get_ns();
- 
- 	if (!can_record(prev, state))
-@@ -178,4 +169,46 @@ int on_switch(u64 *ctx)
+ #endif /* __LINUX_KVM_RISCV_H */
+diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
+index aad430668bb4..93492eb292fd 100644
+--- a/arch/riscv/kvm/vcpu.c
++++ b/arch/riscv/kvm/vcpu.c
+@@ -365,6 +365,100 @@ static int kvm_riscv_vcpu_set_reg_csr(struct kvm_vcpu *vcpu,
  	return 0;
  }
  
-+SEC("tp_btf/sched_switch")
-+int on_switch3(u64 *ctx)
++/* Mapping between KVM ISA Extension ID & Host ISA extension ID */
++static unsigned long kvm_isa_ext_arr[] = {
++	RISCV_ISA_EXT_a,
++	RISCV_ISA_EXT_c,
++	RISCV_ISA_EXT_d,
++	RISCV_ISA_EXT_f,
++	RISCV_ISA_EXT_h,
++	RISCV_ISA_EXT_i,
++	RISCV_ISA_EXT_m,
++};
++
++static int kvm_riscv_vcpu_get_reg_isa_ext(struct kvm_vcpu *vcpu,
++					  const struct kvm_one_reg *reg)
 +{
-+	struct task_struct *prev, *next;
-+	int state;
++	unsigned long __user *uaddr =
++			(unsigned long __user *)(unsigned long)reg->addr;
++	unsigned long reg_num = reg->id & ~(KVM_REG_ARCH_MASK |
++					    KVM_REG_SIZE_MASK |
++					    KVM_REG_RISCV_ISA_EXT);
++	unsigned long reg_val = 0;
++	unsigned long host_isa_ext;
 +
-+	if (!enabled)
-+		return 0;
++	if (KVM_REG_SIZE(reg->id) != sizeof(unsigned long))
++		return -EINVAL;
 +
-+	/*
-+	 * TP_PROTO(bool preempt, struct task_struct *prev,
-+	 *          struct task_struct *next)
-+	 */
-+	prev = (struct task_struct *)ctx[1];
-+	next = (struct task_struct *)ctx[2];
++	if (reg_num >= KVM_RISCV_ISA_EXT_MAX || reg_num >= ARRAY_SIZE(kvm_isa_ext_arr))
++		return -EINVAL;
 +
-+	state = get_task_state(prev);
++	host_isa_ext = kvm_isa_ext_arr[reg_num];
++	if (__riscv_isa_extension_available(NULL, host_isa_ext))
++		reg_val = 1; /* Mark the given extension as available */
 +
-+	return on_switch(ctx, prev, next, state);
++	if (copy_to_user(uaddr, &reg_val, KVM_REG_SIZE(reg->id)))
++		return -EFAULT;
++
++	return 0;
 +}
 +
-+SEC("tp_btf/sched_switch")
-+int on_switch4(u64 *ctx)
++static int kvm_riscv_vcpu_set_reg_isa_ext(struct kvm_vcpu *vcpu,
++					  const struct kvm_one_reg *reg)
 +{
-+	struct task_struct *prev, *next;
-+	int prev_state;
++	unsigned long __user *uaddr =
++			(unsigned long __user *)(unsigned long)reg->addr;
++	unsigned long reg_num = reg->id & ~(KVM_REG_ARCH_MASK |
++					    KVM_REG_SIZE_MASK |
++					    KVM_REG_RISCV_ISA_EXT);
++	unsigned long reg_val;
++	unsigned long host_isa_ext;
++	unsigned long host_isa_ext_mask;
 +
-+	if (!enabled)
-+		return 0;
++	if (KVM_REG_SIZE(reg->id) != sizeof(unsigned long))
++		return -EINVAL;
 +
-+	/*
-+	 * TP_PROTO(bool preempt, int prev_state,
-+	 *          struct task_struct *prev,
-+	 *          struct task_struct *next)
-+	 */
-+	prev = (struct task_struct *)ctx[2];
-+	next = (struct task_struct *)ctx[3];
-+	prev_state = (int)ctx[1];
++	if (reg_num >= KVM_RISCV_ISA_EXT_MAX || reg_num >= ARRAY_SIZE(kvm_isa_ext_arr))
++		return -EINVAL;
 +
-+	return on_switch(ctx, prev, next, prev_state);
++	if (copy_from_user(&reg_val, uaddr, KVM_REG_SIZE(reg->id)))
++		return -EFAULT;
++
++	host_isa_ext = kvm_isa_ext_arr[reg_num];
++	if (!__riscv_isa_extension_available(NULL, host_isa_ext))
++		return	-EOPNOTSUPP;
++
++	if (host_isa_ext >= RISCV_ISA_EXT_BASE &&
++	    host_isa_ext < RISCV_ISA_EXT_MAX) {
++		/** Multi-letter ISA extension. Currently there is no provision
++		 * to enable/disable the multi-letter ISA extensions for guests.
++		 * Return success if the request is to enable any ISA extension
++		 * that is available in the hardware.
++		 * Return -EOPNOTSUPP otherwise.
++		 */
++		if (!reg_val)
++			return -EOPNOTSUPP;
++		else
++			return 0;
++	}
++
++	/* Single letter base ISA extension */
++	if (!vcpu->arch.ran_atleast_once) {
++		host_isa_ext_mask = BIT_MASK(host_isa_ext);
++		if (!reg_val && (host_isa_ext_mask & KVM_RISCV_ISA_DISABLE_ALLOWED))
++			vcpu->arch.isa &= ~host_isa_ext_mask;
++		else
++			vcpu->arch.isa |= host_isa_ext_mask;
++		vcpu->arch.isa &= riscv_isa_extension_base(NULL);
++		vcpu->arch.isa &= KVM_RISCV_ISA_ALLOWED;
++		kvm_riscv_vcpu_fp_reset(vcpu);
++	} else {
++		return -EOPNOTSUPP;
++	}
++
++	return 0;
 +}
 +
- char LICENSE[] SEC("license") = "Dual BSD/GPL";
+ static int kvm_riscv_vcpu_set_reg(struct kvm_vcpu *vcpu,
+ 				  const struct kvm_one_reg *reg)
+ {
+@@ -382,6 +476,8 @@ static int kvm_riscv_vcpu_set_reg(struct kvm_vcpu *vcpu,
+ 	else if ((reg->id & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_FP_D)
+ 		return kvm_riscv_vcpu_set_reg_fp(vcpu, reg,
+ 						 KVM_REG_RISCV_FP_D);
++	else if ((reg->id & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_ISA_EXT)
++		return kvm_riscv_vcpu_set_reg_isa_ext(vcpu, reg);
+ 
+ 	return -EINVAL;
+ }
+@@ -403,6 +499,8 @@ static int kvm_riscv_vcpu_get_reg(struct kvm_vcpu *vcpu,
+ 	else if ((reg->id & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_FP_D)
+ 		return kvm_riscv_vcpu_get_reg_fp(vcpu, reg,
+ 						 KVM_REG_RISCV_FP_D);
++	else if ((reg->id & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_ISA_EXT)
++		return kvm_riscv_vcpu_get_reg_isa_ext(vcpu, reg);
+ 
+ 	return -EINVAL;
+ }
 -- 
-2.36.0.rc2.479.g8af0fa9b8e-goog
+2.25.1
 

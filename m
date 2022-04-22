@@ -2,110 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFC3350C31C
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:09:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 076DE50C471
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:12:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232490AbiDVWTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 18:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56662 "EHLO
+        id S232925AbiDVWYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 18:24:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233839AbiDVWSt (ORCPT
+        with ESMTP id S232981AbiDVWWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 18:18:49 -0400
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 130B6694B7;
-        Fri, 22 Apr 2022 14:10:49 -0700 (PDT)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-e5ca5c580fso9912442fac.3;
-        Fri, 22 Apr 2022 14:10:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=Tkutjbl6M6F7ROD9a26bDdNrkbSWhhcwmMr6zx2IOcE=;
-        b=ZirOYALXVp6GpUyspYwVQMB5/ICgiyzdUUCALQdL5D0dC4yyfuofhyDQOOf5gCb3L/
-         hNkS3ERBwQIvcphCUsvMlB3EKZej8bPNbgaDjz9XGJDgJ3qoPm8hx0v4/QdMVrEEH7yU
-         iOpNLhHuOCEbNJlWDJuFdV9xtb07K9qM4sJeeRQbH36bIa2xkCktRzWjLpJTTO2OLLVj
-         GMZIjIftJ2VnInLi7VVe1dNc/uPVd0qyIk6WDzUY18sR6EHihbMkUPitBOTcoiCjfK+b
-         kLlBvY2nZRBaQ9HhuxH0HMa7RANK3O7qSz/2lFP06xTGeDqJc5tN0uH5yJ08+zzVGHza
-         vC5Q==
-X-Gm-Message-State: AOAM530w44R8gm1wa/QEw6zZLxTgVfXf/LXDBWVIvBoKlZa0t/MVTuYC
-        DEyeYTpoeSdVLsL+EDAjJQ==
-X-Google-Smtp-Source: ABdhPJxgDVs7xvcysn1Di8tXdOlKYuPI1U7BFRO4ay+lXkeVtgeYsglZ1My+1O/4c4tx67VSav4XdA==
-X-Received: by 2002:a05:6870:9689:b0:e6:bcf:4b6 with SMTP id o9-20020a056870968900b000e60bcf04b6mr6980687oaq.64.1650661848365;
-        Fri, 22 Apr 2022 14:10:48 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id u20-20020a4a9e94000000b003291f6ac4b2sm1238286ook.28.2022.04.22.14.10.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 14:10:47 -0700 (PDT)
-Received: (nullmailer pid 2784281 invoked by uid 1000);
-        Fri, 22 Apr 2022 21:10:47 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Tinghan Shen <tinghan.shen@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-mediatek@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20220422071534.15653-1-tinghan.shen@mediatek.com>
-References: <20220422071534.15653-1-tinghan.shen@mediatek.com>
-Subject: Re: [PATCH v1] dt-bindings: dsp: mediatek: add mt8186 dsp document
-Date:   Fri, 22 Apr 2022 16:10:47 -0500
-Message-Id: <1650661847.232289.2784280.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Fri, 22 Apr 2022 18:22:40 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 239F133B1EB;
+        Fri, 22 Apr 2022 14:13:53 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 23:13:50 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1650662031;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=96/sG4U1PMahw+5F2cvDWRLKP9CkFv2MeGAwdZV08Lo=;
+        b=ANh7OX8dy7UDbQE5tUInn+33OnlAEFzf2qzE0jCgaNtnwimp1tja/4cy43aHj8733bssAs
+        1t6UCwG3hHS2yBSn1x+B8KFA8LuthbsSKj0mwq6uv4UhCpkqwGD3ezC+guhJRCc1BOoiu4
+        4kq6u33r744ppk4w7zTzheEfqaKOVUb/oxmgd60GSOAboABQXmNq4vZ6gKN3eff8c4azGe
+        USicNG7lxkrk6Hq8QPzCjhc8FkUpWc0oGSjNdA6tagIApvuB2tm2glYrNq3lIqJhDucLFF
+        mZt1ywOy5kbVVWHpK04iBZwMd0vSKVy2OIew1szGwt+g3nOT3VL/edqBe0+kRQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1650662031;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=96/sG4U1PMahw+5F2cvDWRLKP9CkFv2MeGAwdZV08Lo=;
+        b=2fqKG24m2+QfMM/URFklauogxCi4xCU6UwTmlOdXwzuDKiG6RVeO8XwDQuGfIwGvRkPwH5
+        XfxCrWoRXUEZGNCA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, rjw@rjwysocki.net,
+        oleg@redhat.com, mingo@kernel.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        tj@kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 0/5] ptrace-vs-PREEMPT_RT and freezer rewrite
+Message-ID: <zzzZz7zJzopLquA6@linutronix.de>
+References: <20220421150248.667412396@infradead.org>
+ <YmLpNhXD8+EzF9/D@linutronix.de>
+ <878rrxnd48.fsf@email.froward.int.ebiederm.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <878rrxnd48.fsf@email.froward.int.ebiederm.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Apr 2022 15:15:34 +0800, Tinghan Shen wrote:
-> This patch adds mt8186 dsp document. The dsp is used for Sound Open
-> Firmware driver node. It includes registers, clocks, memory regions,
-> and mailbox for dsp.
+On 2022-04-22 14:15:35 [-0500], Eric W. Biederman wrote:
+> Sebastian Andrzej Siewior <bigeasy@linutronix.de> writes:
 > 
-> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> ---
+> > On 2022-04-21 17:02:48 [+0200], Peter Zijlstra wrote:
+> >> Find here a new posting of the ptrace and freezer patches :-)
+> >> 
+> >> The majority of the changes are in patch 2, which with much feedback from Oleg
+> >> and Eric has changed lots.
+> >> 
+> >> I'm hoping we're converging on something agreeable.
+> >
+> > I tested this under RT (had to remove the preempt-disable section in
+> > ptrace_stop()) with ssdd [0]. It forks a few tasks and then
+> > PTRACE_SINGLESTEPs them for a few iterations.
 > 
-> This patch depends on MT8186 clock bindings.
-> https://lore.kernel.org/all/20220409132251.31725-2-chun-jie.chen@mediatek.com/
-> 
-> ---
->  .../bindings/dsp/mediatek,mt8186-dsp.yaml     | 93 +++++++++++++++++++
->  1 file changed, 93 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.yaml
-> 
+> Out of curiosity why did you need to remove the preempt_disable section
+> on PREEMPT_RT?  It should have lasted for just a moment until schedule
+> was called.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+within that section spinlock_t locks are acquired. These locks are
+sleeping locks on PREEMPT_RT and must not be acquired within a
+preempt-disable section. (A spinlock_t lock does not disable preemption
+on PREEMPT_RT.)
 
-yamllint warnings/errors:
+> Eric
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.example.dts:22:18: fatal error: dt-bindings/clock/mt8186-clk.h: No such file or directory
-   22 |         #include <dt-bindings/clock/mt8186-clk.h>
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[1]: *** [scripts/Makefile.lib:364: Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1401: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Sebastian

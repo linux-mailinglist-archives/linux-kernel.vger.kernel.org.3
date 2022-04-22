@@ -2,166 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 806A150B54E
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:38:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB70F50B560
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446799AbiDVKkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 06:40:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
+        id S1446588AbiDVKlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 06:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446769AbiDVKjj (ORCPT
+        with ESMTP id S243767AbiDVKlT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 06:39:39 -0400
+        Fri, 22 Apr 2022 06:41:19 -0400
 Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DEE25520A
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:36:39 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id b95so13738972ybi.1
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:36:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA93054F96
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:38:25 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id b95so13745976ybi.1
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:38:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=4zcLXpCy7SBjHdgWPDMiVMAfSv9GgL9PPHTJHm95g50=;
-        b=TlZWQKiYpTuDxECbeXwF6tJvJGze7xTFNWlQD4B2jRWUPyNtSO32rIHpFbOH95KpZM
-         s26ARO9kRKdZUXaE9W+5GAk4Biz6ra37er4NWm9KQgbRawLZiJ4N62G0EB9Mm35+FIPt
-         VE0ppUmp9NOUmWczcYULL7OuU3fw+9RKxiZaP87uqLCwucSFLVBH5/tryhvBmqajwmoC
-         dy7swc3bCfD7Q+nwTUg1K9U7fgliOrmqEuFIfYXlrNb6gziSxffXs9/Ac4SEgpIBkQwS
-         hko+HrFRO72KcUP7tdIswvVyCkaDPDTJTQ4qtmZ3iuoFZRelgls7PmWUdYDm57FAvOFe
-         jd8A==
+        bh=CsjTxEEAvysZcrGQCgnoFVKXKLqNd9huKoE9KzmmMI0=;
+        b=svVpZpsCBwi05D6HGuAV6VNl0TnNbi1By/r9OWleeVotyMkYhrsbqEJDIDSdPkREjz
+         3362oZIRJFtkLcg5aEJpF3n1xd6ipXFEq/j48MVsozpuWi4XWg+JUCI54KpRFm6k9fuH
+         iuiYLtukeDIzvPYOnFvdeD/Dh3cWMScn6ijy/wJ9dMAM+Ai2YRgE3cPtVrKFn8pBOMiS
+         p0gTaif83J768pmvmDZo9cf506rFJd/SfdoLFgYs7uAXbxxuhhAh95UKsS8QPEpG0lM9
+         hAwDNyeI/sHaoL/fQQkj7rT73VhtZtRoFC2YjZupOfhfwmA9IsZitPApsKPfei2M4NAh
+         nktA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=4zcLXpCy7SBjHdgWPDMiVMAfSv9GgL9PPHTJHm95g50=;
-        b=yaJ6hKgWbugfvsMhm3xJCzdP/Q7uaMmGyU+45mCS3RYjmruyrJQylUVr5vXIHg9fJU
-         SR/BS/g8bI7brTAICFoOKfDvuztE1zGPE53MJg9frRhDpztK5vHOoBBSnK0zYBEYFPI3
-         Zzd6VCpB6yqciH50hfnbrS8HSNgGpJqTVNC8v3po/NIqql/8k93T6cNV3DjSAqJpnUFm
-         SOXEHXnuXd5jQWfl0/CWjBeejpN7OHycaVa8GTMYMWpNvhsNbKePjRFJ6ysepWCMN1VD
-         6KAzxJRGazS4O4vl0vlHfQzXctnsAvBZE9hbvTridW+q9sYVRyVhO73zEaOEUKG6H2tg
-         JbOg==
-X-Gm-Message-State: AOAM531SmAvrjqVmnCAqObrhy2P91J4WvhZhpI8OvUx+mJlkUiML0fIJ
-        Mttu1fx4pvEldgCaIXddzmqohH1a6LItVeT6K4n41g==
-X-Google-Smtp-Source: ABdhPJz/ZFLFWoRZflZmG53V5oTsUDnKFJ76SRaHRYdcW5SRnzL6Jxlv23hnpEE1sIZLnoSq3Xe3/OdvM8uV/u46Xk0=
-X-Received: by 2002:a25:84c1:0:b0:63e:7733:f95a with SMTP id
- x1-20020a2584c1000000b0063e7733f95amr3370991ybm.234.1650623798744; Fri, 22
- Apr 2022 03:36:38 -0700 (PDT)
+        bh=CsjTxEEAvysZcrGQCgnoFVKXKLqNd9huKoE9KzmmMI0=;
+        b=oWVVKyTo/o52LgJuaaZWdk+HA3g2fXi3+gizbs8CDgJEFIfgZl3qom8Mm16FNzLohN
+         6wpAbFnMcfZQ0wer012UUSNeoS7wgNuEX46N9JouxYakPJvX4NaZRi4n9UvuZbdW8GNJ
+         0BPzRTRpeqLgkVgXsFVFyIicAAnwIy8wzCjn/uCY9wraCdNOYBHsGaaM3wKlOA82Qind
+         qMP4djFHaBGoDYqno3wgyrj5V5Ph816ZRjlsNJDCyjiHQH72JDq8CU3xoQTBn5Dxu2oG
+         2lagGGWoU7OB+xmzRq0+fIiRzng135CdRCFHVtfHhyi032Y8TVyeMjxfTeZRfUsHNLkB
+         W90Q==
+X-Gm-Message-State: AOAM530Pyd9CQo/2s7IYyg0AOnHqGKM3EnDgqW5bD3dbUTtpcXvtu5Qo
+        yvBRNGgvVT/djDgRo/Cod3GypjP7plYgkjlklrahrA==
+X-Google-Smtp-Source: ABdhPJwoWm73p/RTkzfbVpkviY0RnM3o6+33FT79Cu+M02kBxAUNqMYZoyFQVWm/BUVU98mJ8P1OBCoMWhjNFhY8R9Y=
+X-Received: by 2002:a25:9b85:0:b0:63d:ad6c:aae8 with SMTP id
+ v5-20020a259b85000000b0063dad6caae8mr3527563ybo.609.1650623904827; Fri, 22
+ Apr 2022 03:38:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220421102041.17345-1-johan+linaro@kernel.org>
- <20220421102041.17345-3-johan+linaro@kernel.org> <55d6e32b-9cf4-384c-1036-1adfb867ece8@linaro.org>
- <YmJ+Ti81el2MzsHG@hovoldconsulting.com>
-In-Reply-To: <YmJ+Ti81el2MzsHG@hovoldconsulting.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Fri, 22 Apr 2022 13:36:27 +0300
-Message-ID: <CAA8EJpq25Oi8scffT_u9kGN5CYM7nK4Wxh0Kep+eRFg8xngiHg@mail.gmail.com>
-Subject: Re: [PATCH RFC 2/5] arm64: dts: qcom: sc7280: move pipe mux handling
- to phy
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-phy@lists.infradead.org
+References: <000000000000f46c6305dd264f30@google.com> <YmEf8dpSXJeZ2813@elver.google.com>
+ <YmI4d8xR3tafv2Cq@FVFYT0MHHV2J.usts.net>
+In-Reply-To: <YmI4d8xR3tafv2Cq@FVFYT0MHHV2J.usts.net>
+From:   Marco Elver <elver@google.com>
+Date:   Fri, 22 Apr 2022 12:37:48 +0200
+Message-ID: <CANpmjNPyBV8RCXf_=4oOvkLCavmgeLKw9w3M4zQEFcNMG7RCDg@mail.gmail.com>
+Subject: Re: [syzbot] WARNING in __kfence_free
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     syzbot <syzbot+ffe71f1ff7f8061bcc98@syzkaller.appspotmail.com>,
+        akpm@linux-foundation.org, dvyukov@google.com, glider@google.com,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        cgroups@vger.kernel.org, Andrey Konovalov <andreyknvl@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Apr 2022 at 13:07, Johan Hovold <johan@kernel.org> wrote:
+On Fri, 22 Apr 2022 at 07:09, Muchun Song <songmuchun@bytedance.com> wrote:
 >
-> On Thu, Apr 21, 2022 at 01:59:04PM +0300, Dmitry Baryshkov wrote:
-> > On 21/04/2022 13:20, Johan Hovold wrote:
-> > > The QMP PHY pipe clock remuxing is part of the PHY, which is both the
-> > > producer and the consumer of the pipe clock.
+> On Thu, Apr 21, 2022 at 11:12:17AM +0200, Marco Elver wrote:
+> > On Thu, Apr 21, 2022 at 01:58AM -0700, syzbot wrote:
+> > > Hello,
 > > >
-> > > Update the PCIe controller and PHY node to reflect the new binding.
+> > > syzbot found the following issue on:
 > > >
-> > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > > ---
-> > >   arch/arm64/boot/dts/qcom/sc7280.dtsi | 18 ++++++------------
-> > >   1 file changed, 6 insertions(+), 12 deletions(-)
+> > > HEAD commit:    559089e0a93d vmalloc: replace VM_NO_HUGE_VMAP with VM_ALLO..
+> > > git tree:       upstream
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=10853220f00000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=2e1f9b9947966f42
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=ffe71f1ff7f8061bcc98
+> > > compiler:       aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > > userspace arch: arm64
 > > >
-> > > diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> > > index c07765df9303..b3a9630262dc 100644
-> > > --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> > > +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> > > @@ -1837,11 +1837,7 @@ pcie1: pci@1c08000 {
-> > >                                     <0 0 0 3 &intc 0 0 0 438 IRQ_TYPE_LEVEL_HIGH>,
-> > >                                     <0 0 0 4 &intc 0 0 0 439 IRQ_TYPE_LEVEL_HIGH>;
+> > > Unfortunately, I don't have any reproducer for this issue yet.
 > > >
-> > > -                   clocks = <&gcc GCC_PCIE_1_PIPE_CLK>,
-> > > -                            <&gcc GCC_PCIE_1_PIPE_CLK_SRC>,
-> > > -                            <&pcie1_lane 0>,
-> > > -                            <&rpmhcc RPMH_CXO_CLK>,
-> > > -                            <&gcc GCC_PCIE_1_AUX_CLK>,
-> > > +                   clocks = <&gcc GCC_PCIE_1_AUX_CLK>,
-> > >                              <&gcc GCC_PCIE_1_CFG_AHB_CLK>,
-> > >                              <&gcc GCC_PCIE_1_MSTR_AXI_CLK>,
-> > >                              <&gcc GCC_PCIE_1_SLV_AXI_CLK>,
-> > > @@ -1849,11 +1845,7 @@ pcie1: pci@1c08000 {
-> > >                              <&gcc GCC_AGGRE_NOC_PCIE_TBU_CLK>,
-> > >                              <&gcc GCC_DDRSS_PCIE_SF_CLK>;
+> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > Reported-by: syzbot+ffe71f1ff7f8061bcc98@syzkaller.appspotmail.com
 > > >
-> > > -                   clock-names = "pipe",
-> > > -                                 "pipe_mux",
-> > > -                                 "phy_pipe",
-> > > -                                 "ref",
-> > > -                                 "aux",
-> > > +                   clock-names = "aux",
-> > >                                   "cfg",
-> > >                                   "bus_master",
-> > >                                   "bus_slave",
-> > > @@ -1910,8 +1902,10 @@ pcie1_lane: lanes@1c0e200 {
-> > >                                   <0 0x01c0e600 0 0x170>,
-> > >                                   <0 0x01c0e800 0 0x200>,
-> > >                                   <0 0x01c0ee00 0 0xf4>;
-> > > -                           clocks = <&gcc GCC_PCIE_1_PIPE_CLK>;
-> > > -                           clock-names = "pipe0";
-> > > +                           clocks = <&gcc GCC_PCIE_1_PIPE_CLK>,
-> > > +                                    <&gcc GCC_PCIE_1_PIPE_CLK_SRC>,
-> > > +                                    <&rpmhcc RPMH_CXO_CLK>;
-> > > +                           clock-names = "pipe0", "mux", "ref";
+> > > ------------[ cut here ]------------
+> > > WARNING: CPU: 0 PID: 2216 at mm/kfence/core.c:1022 __kfence_free+0x84/0xc0 mm/kfence/core.c:1022
 > >
-> > This will not be compatible with earlier DTB files, which was a problem
-> > up to now.
+> > That's this warning in __kfence_free:
+> >
+> >       #ifdef CONFIG_MEMCG
+> >               KFENCE_WARN_ON(meta->objcg);
+> >       #endif
+> >
+> > introduced in 8f0b36497303 ("mm: kfence: fix objcgs vector allocation").
+> >
+> > Muchun, are there any circumstances where the assumption may be broken?
+> > Or a new bug elsewhere?
 >
-> That depends. The above wasn't added until 5.16 so we may still be able
-> to fix it.
+> meta->objcg always should be NULL when reaching __kfence_free().
+> In theory, meta->objcg should be cleared via memcg_slab_free_hook().
+>
+> I found the following code snippet in do_slab_free().
+>
+>   /* memcg_slab_free_hook() is already called for bulk free. */
+>   if (!tail)
+>         memcg_slab_free_hook(s, &head, 1);
+>
+> The only posibility is @tail is not NULL, which is the case of
+> kmem_cache_free_bulk(). However, here the call trace is kfree(),
+> it seems to be impossible that missing call memcg_slab_free_hook().
 
-That would depend on Rob/Krzyshtof. But the whole process should be described.
-The driver can nod depend on the clocks being there.
+Fair enough - we can probably wait for the bug to reoccur on another
+instance, and until then assume something else wrong. What is slightly
+suspicious is that it only occurred once on a QEMU TCG arm64 MTE
+instance.
 
->
-> The NAK you got from Rob earlier was when you removed clocks that have
-> been in the devicetree for several years:
->
->         https://lore.kernel.org/all/YgQ+tGhLqwUCsTUo@robh.at.kernel.org/
->
-> and would still be needed by older kernels.
->
-> Worst case, we need to keep both sets for sc7280 (i.e. like we need to
-> do with the pipe clocks that have been around for years).
->
-> Johan
-
-
-
--- 
-With best wishes
-Dmitry
+Thanks,
+-- Marco

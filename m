@@ -2,57 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61A5350C025
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 21:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F07B750C01D
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 21:06:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbiDVTGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 15:06:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53668 "EHLO
+        id S231271AbiDVTGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 15:06:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230419AbiDVTGQ (ORCPT
+        with ESMTP id S231219AbiDVTG3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 15:06:16 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143E013A4F8
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 11:55:18 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id u18-20020a5d8712000000b0064c7a7c497aso5908803iom.18
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 11:55:18 -0700 (PDT)
+        Fri, 22 Apr 2022 15:06:29 -0400
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309BC184F05
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 11:55:37 -0700 (PDT)
+Received: by mail-oo1-xc35.google.com with SMTP id y27-20020a4a9c1b000000b0032129651bb0so1570563ooj.2
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 11:55:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=OzJwbTlQ5CJq/RrC/jGJQpBejYRhRViMdibg0uOTI3E=;
+        b=mTHk9DTfYvsaJW3PRKyUsqoHdHZD4IP6/MrS4TPvAs8Hk/8KxfkDCQW4MVG51y5ZTv
+         9MKmLP+X7+XkN1eBTusqAiLA+vBjALdK9n1uTzxp9aC8stEiZofN7Kyn0TxUCIVHsN4U
+         VmZRZFdWSCrUHgAy+XmlECriJewFQCzWvxZHA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=SW7d9SQV8ry87PsdVWpwkJKv15ZwuogCuWjTqDpXCOs=;
-        b=oQiobKXeQoWtSJfnhdK+k3l7BjzIztKRLmDBiQKLrbxOeBq8SlM0q07eQldnAZhZ7D
-         K6cBWJ8Y1KVBKrCGePeegBF4YqYoTwOlu1qdF2PEZAVfOEv5U8fd2/5GO8I/AUBFzI8Y
-         hbqngKMarJ38pbCEd5Fnr4dYNR3MnIcznKWCz3BlCeWK0RGy1RA6CgxD0/BQOzDnpZvT
-         Ai4qkp5AB9CXxIOzqIyLC2hdvJvIDAagGhpaLGDR8pTtZgrG9lZH/ATu6aRQL18WaJJc
-         278ZHMv8kY8L4bOUN2IkzdAwhuK6dDB+gUckygUzogIWMRdTI7gTFSHqvFa4j/GAukd1
-         j+fg==
-X-Gm-Message-State: AOAM532F5sfUj7fIy4LUA/2ERQjcAR4q+4oR0Bgrva7ZMwley+Xcz169
-        IFD+NyiKiejyoZbQ+9o5nWpsTkdmc7TmAow4VYahZycAZuiR
-X-Google-Smtp-Source: ABdhPJzpcaxVT7ae5c/OrtdmL1gderEJn20oa971shuXRjgHIybvnhbBnELrASUvsLmPnZE7qyOWwVK2wIG0wS0Lt5aGrJzx2a80
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=OzJwbTlQ5CJq/RrC/jGJQpBejYRhRViMdibg0uOTI3E=;
+        b=3vDLoJRUlwhxVgxenR8pcOzoRRIlk7As82U1Zw2k9Zhobsn4baQaEcrMqUq02LRvjF
+         GVJIaTE98VI8oNXO0IqJ0n9ThVTD0XBm0rO7Br+DTW7zStFoqBxoHPj3kHwA6i14sS6q
+         rBtzh8YnHMJl5o0b2Bg1Ktr8rDlIh/OBJ/N6TX/u8He/0dWRqnPNSc4kLIi7WcSfDLVH
+         LXKsQHby5wyDsMbe9hodAL+gzQgYzne+XwwAAwcnHtD1wTL6LZGSneDR4gERjSqxB3rV
+         dqtB73+W1BnapgbR971ZTut7YBFwJc6EKYSYMA/3h8ChkojuCh+fOj8UALkYs2Nvc6Ip
+         1Y7Q==
+X-Gm-Message-State: AOAM533cNo/fQjHbhX2wIvq8wgRs0NZ7dUDAKxn2KqqRX8Tgkdoxl0lz
+        HT+NcKFtEjxBJlU4NazibF/H6BkYDglN7C7oGwqhag==
+X-Google-Smtp-Source: ABdhPJxybbIi1hEyAcfi/V3yEnSJipqITB3vlp/TaI8mUT8lmjCW3COZdZf3uW0sjb9k7ZQrODc2JlVXEK2EZJ8H9gw=
+X-Received: by 2002:a4a:6f49:0:b0:35e:1902:1d3b with SMTP id
+ i9-20020a4a6f49000000b0035e19021d3bmr1514867oof.1.1650653687684; Fri, 22 Apr
+ 2022 11:54:47 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 22 Apr 2022 11:54:47 -0700
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1a62:b0:2cc:5634:763e with SMTP id
- w2-20020a056e021a6200b002cc5634763emr2550900ilv.68.1650653590752; Fri, 22 Apr
- 2022 11:53:10 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 11:53:10 -0700
-In-Reply-To: <00000000000033acbf05d1a969aa@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ec946105dd42bcd6@google.com>
-Subject: Re: [syzbot] WARNING: kmalloc bug in bpf
-From:   syzbot <syzbot+cecf5b7071a0dfb76530@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, hawk@kernel.org,
-        jiri@nvidia.com, john.fastabend@gmail.com, kafai@fb.com,
-        kpsingh@kernel.org, kuba@kernel.org, leonro@nvidia.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        songliubraving@fb.com, syzkaller-bugs@googlegroups.com,
-        torvalds@linux-foundation.org, yhs@fb.com
+In-Reply-To: <1650621734-10297-1-git-send-email-quic_srivasam@quicinc.com>
+References: <1650621734-10297-1-git-send-email-quic_srivasam@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 22 Apr 2022 11:54:47 -0700
+Message-ID: <CAE-0n520B-+QK9vxWQdRV3ChMEN1mD3fBSEY+YG9N4EvGc9wwQ@mail.gmail.com>
+Subject: Re: [PATCH v2] arm64: dts: qcom: sc7280-qcard: Add ldo_l17b regulator node
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        devicetree@vger.kernel.org, dianders@chromium.org,
+        judyhsiao@chromium.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_rjendra@quicinc.com,
+        quic_rohkumar@quicinc.com, robh+dt@kernel.org,
+        srinivas.kandagatla@linaro.org
+Cc:     Venkata Prasad Potturu <quic_potturu@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,24 +71,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+Quoting Srinivasa Rao Mandadapu (2022-04-22 03:02:14)
+> Add pm7325 ldo_l17b regulator, which is required for
+> wcd codec vdd buck supply on sc7280-qcard board.
+>
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> ---
 
-commit 0708a0afe291bdfe1386d74d5ec1f0c27e8b9168
-Author: Daniel Borkmann <daniel@iogearbox.net>
-Date:   Fri Mar 4 14:26:32 2022 +0000
-
-    mm: Consider __GFP_NOWARN flag for oversized kvmalloc() calls
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1499c6fcf00000
-start commit:   1d5a47424040 sfc: The RX page_ring is optional
-git tree:       net
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1a86c22260afac2f
-dashboard link: https://syzkaller.appspot.com/bug?extid=cecf5b7071a0dfb76530
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=176738e7b00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13b4508db00000
-
-If the result looks correct, please mark the issue as fixed by replying with:
-
-#syz fix: mm: Consider __GFP_NOWARN flag for oversized kvmalloc() calls
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>

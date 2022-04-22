@@ -2,161 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FF4950BE01
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 19:08:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD8950BE03
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 19:09:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234530AbiDVRLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 13:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48006 "EHLO
+        id S238449AbiDVRMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 13:12:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236877AbiDVRLP (ORCPT
+        with ESMTP id S234490AbiDVRMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 13:11:15 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66DD8BF12
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 10:08:19 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id q185so1221659ljb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 10:08:19 -0700 (PDT)
+        Fri, 22 Apr 2022 13:12:01 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65F48D6A7
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 10:09:05 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id j6so6245214pfe.13
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 10:09:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5ydRGpptIb5w81SmMvS/nipUS4vYlFd2laIjOx1l84s=;
-        b=Lvd464N6kYN0JkSu1d8HO48IyDf7HODgjimqZsNgT54ppx6uKMwlrVXLSjUGD98RhY
-         Pq0tcSZ4P6rrA2KwURvfmZxdD/Rhh4j7v6eCQuGetT0NswRtG/u1JUAK4PZA48TMiRyP
-         uy1ByLyEeu1hJJmzsmM51y7T/M7OtsP2SKMmg=
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LkPfqDmkY8KImet371CZtiMwqL3xYv7MY5i6YutDB18=;
+        b=ncN4W2vOsDVnoc4oVw2ea+O0cnzBA5VAH5VyP1AwfaAk/0a+naaEIZglGAd6BLAQ1t
+         3qqSPad0w/EsbLBXcE+ECn5NkxfffSq79EKErg+z0BDss3Y06cSBGG2996bjzDmhULGC
+         5PTjFL1z3g5ZEdSIRUkfXH3lM86FZ3+ymoiZQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5ydRGpptIb5w81SmMvS/nipUS4vYlFd2laIjOx1l84s=;
-        b=BmNFrkdy60txAbwED9SCqVxzrIhQLN1/kKbEkDzs5IVemNxLwznVFdKXIVxxwUXviD
-         EgMhpEZlChhPB+Ug5paq6/FXHj8YFANMsTwXLdju5fBZSLumwScYatYriCkhcVGhcqJD
-         dtTNuJHDk9xDjnvBzyn/OzyKQbs7MdqOAuPxnOzYLoGjdfOkLsNDzj66lBRQMQF5Lk6M
-         30pLXBj34cRQzBn3FLARfPvQRO3DNzkLgUytsPtvWw1D52r0kLDn8KlMIrPkEIraSF6e
-         FzJMWPOfDJVDHcQTHEeZvwoPbF/5pgkK8vWUnGzUZR86On01HByIRBuMsc1bZg0/dsYp
-         a2pA==
-X-Gm-Message-State: AOAM5338kZNt6Cyzfe1HckQ1JOtxJhXfvneQeUCZizMY3tKLZA3GiInF
-        2UpqTGrV7et68Hh3YH262bM7IJ+yVjCRDkzhIFg=
-X-Google-Smtp-Source: ABdhPJxQAG0E+R1T44LLsvmWZ4RSwb2HVgy1IFyW72l75+pus+CFslqXaQ09cfsI/KrA4NI3tT/rmQ==
-X-Received: by 2002:a05:651c:179a:b0:247:d37b:6ec5 with SMTP id bn26-20020a05651c179a00b00247d37b6ec5mr3245071ljb.112.1650647297771;
-        Fri, 22 Apr 2022 10:08:17 -0700 (PDT)
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com. [209.85.208.172])
-        by smtp.gmail.com with ESMTPSA id w22-20020a194916000000b0046ba5a6ff16sm288861lfa.11.2022.04.22.10.08.17
-        for <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LkPfqDmkY8KImet371CZtiMwqL3xYv7MY5i6YutDB18=;
+        b=SiNCJmkbuFXSTGry7CTo7wvGpzverT4cwIw+3qY0RvetQem4nMGZIVJNRWn2T7AAD+
+         cdFn40uq+lD/YjIr8bWqOyyilTs0XBal44H77UovkZopI8H3t1oeBVsozYSzQopa8d6R
+         5ApVYdv26oUXsGNLtwqo/7OJm7thdYfkWEt1TpasVtYZprQ13vTzZ3nLhVLG0nCNSIhi
+         M9ugsuE8PZec6G1yWe3pZqcazaIE+S5NNr4NprpVMNMgtCa224SiEPzdJLZcspsH3H7b
+         i6QNmOvfPTlIxO3BRcUsky9ZHBXxG2sWWGepLtfBMoye/oqWM5BKR1aj3RfDvU/NzRHB
+         Eoqg==
+X-Gm-Message-State: AOAM532goBDqceaYKh/SMs2r6yTsJWu5zcPr3V7bLV+ZsKwYC7ZJWrBa
+        dZiwy6TtmaduNb3FeyHU2kQyEA==
+X-Google-Smtp-Source: ABdhPJwxploMckz9Ou9GObHKrr8g2ZfpK6OuIjmriImWrIGfGFFzqCuOY0nLaezjKdWv75Y18HAiWg==
+X-Received: by 2002:a05:6a00:1749:b0:50a:8eed:b824 with SMTP id j9-20020a056a00174900b0050a8eedb824mr6002522pfc.50.1650647345159;
+        Fri, 22 Apr 2022 10:09:05 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:e283:652b:fb2e:829f])
+        by smtp.gmail.com with UTF8SMTPSA id gi21-20020a17090b111500b001d903861194sm496915pjb.30.2022.04.22.10.09.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 10:08:17 -0700 (PDT)
-Received: by mail-lj1-f172.google.com with SMTP id bf11so10402498ljb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 10:08:17 -0700 (PDT)
-X-Received: by 2002:a2e:b818:0:b0:24c:ce86:e6d6 with SMTP id
- u24-20020a2eb818000000b0024cce86e6d6mr3398453ljo.443.1650647296730; Fri, 22
- Apr 2022 10:08:16 -0700 (PDT)
+        Fri, 22 Apr 2022 10:09:04 -0700 (PDT)
+From:   Brian Norris <briannorris@chromium.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        linux-mmc@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Luca Weiss <luca@z3ntu.xyz>,
+        Brian Norris <briannorris@chromium.org>
+Subject: [PATCH v4] mmc: core: Set HS clock speed before sending HS CMD13
+Date:   Fri, 22 Apr 2022 10:08:53 -0700
+Message-Id: <20220422100824.v4.1.I484f4ee35609f78b932bd50feed639c29e64997e@changeid>
+X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
 MIME-Version: 1.0
-References: <20220422060107.781512-1-npiggin@gmail.com> <20220422060107.781512-3-npiggin@gmail.com>
-In-Reply-To: <20220422060107.781512-3-npiggin@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 22 Apr 2022 10:08:00 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgFoWLCV9aPHkHe1Mpu0XqxYWaPkKLpe_hcsTS_Vx3aRA@mail.gmail.com>
-Message-ID: <CAHk-=wgFoWLCV9aPHkHe1Mpu0XqxYWaPkKLpe_hcsTS_Vx3aRA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] Revert "vmalloc: replace VM_NO_HUGE_VMAP with VM_ALLOW_HUGE_VMAP"
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 11:01 PM Nicholas Piggin <npiggin@gmail.com> wrote:
->
-> This reverts commit 559089e0a93d44280ec3ab478830af319c56dbe3
->
-> The previous commit fixes huge vmalloc for drivers that use the
-> vmalloc_to_page() struct pages.
+Way back in commit 4f25580fb84d ("mmc: core: changes frequency to
+hs_max_dtr when selecting hs400es"), Rockchip engineers noticed that
+some eMMC don't respond to SEND_STATUS commands very reliably if they're
+still running at a low initial frequency. As mentioned in that commit,
+JESD84-B51 P49 suggests a sequence in which the host:
+1. sets HS_TIMING
+2. bumps the clock ("<= 52 MHz")
+3. sends further commands
 
-Yeah, no.
+It doesn't exactly require that we don't use a lower-than-52MHz
+frequency, but in practice, these eMMC don't like it.
 
-The very revert shows the problem:
+The aforementioned commit tried to get that right for HS400ES, although
+it's unclear whether this ever truly worked as committed into mainline,
+as other changes/refactoring adjusted the sequence in conflicting ways:
 
-> --- a/arch/powerpc/kernel/module.c
-> +++ b/arch/powerpc/kernel/module.c
-> @@ -101,7 +101,7 @@ __module_alloc(unsigned long size, unsigned long start, unsigned long end, bool
->          * too.
->          */
->         return __vmalloc_node_range(size, 1, start, end, gfp, prot,
-> -                                   VM_FLUSH_RESET_PERMS,
-> +                                   VM_FLUSH_RESET_PERMS | VM_NO_HUGE_VMAP,
->                                     NUMA_NO_NODE, __builtin_return_address(0));
+08573eaf1a70 ("mmc: mmc: do not use CMD13 to get status after speed mode
+switch")
 
-This VM_NO_HUGE_VMAP is a sign of the fact that using hugepages for
-mapping still isn't a transparent operation.
+53e60650f74e ("mmc: core: Allow CMD13 polling when switching to HS mode
+for mmc")
 
-Now, in some cases that would be perfectly fine, ie the s390 case has
-a nice clear comment about how it's a very special case:
+In any case, today we do step 3 before step 2. Let's fix that, and also
+apply the same logic to HS200/400, where this eMMC has problems too.
 
-> +       /*
-> +        * The Create Secure Configuration Ultravisor Call does not support
-> +        * using large pages for the virtual memory area.
-> +        * This is a hardware limitation.
-> +        */
-> +       kvm->arch.pv.stor_var = vmalloc_no_huge(vlen);
+Resolves errors like this seen when booting some RK3399 Gru/Scarlet
+systems:
 
-but as long as it is "anything that plays permission games with the
-mapping is broken" we are not reverting that opt-in thing.
+[    2.058881] mmc1: CQHCI version 5.10
+[    2.097545] mmc1: SDHCI controller on fe330000.mmc [fe330000.mmc] using ADMA
+[    2.209804] mmc1: mmc_select_hs400es failed, error -84
+[    2.215597] mmc1: error -84 whilst initialising MMC card
+[    2.417514] mmc1: mmc_select_hs400es failed, error -110
+[    2.423373] mmc1: error -110 whilst initialising MMC card
+[    2.605052] mmc1: mmc_select_hs400es failed, error -110
+[    2.617944] mmc1: error -110 whilst initialising MMC card
+[    2.835884] mmc1: mmc_select_hs400es failed, error -110
+[    2.841751] mmc1: error -110 whilst initialising MMC card
 
-And no, it's not just that powerpc module code that is somehow magical.
+Ealier versions of this patch bumped to 200MHz/HS200 speeds too early,
+which caused issues on, e.g., qcom-msm8974-fairphone-fp2. (Thanks for
+the report Luca!) After a second look, it appears that aligns with
+JESD84 / page 45 / table 28, so we need to keep to lower (HS / 52 MHz)
+rates first.
 
-This is the exact same issue that the bpf people hit.
+Fixes: 08573eaf1a70 ("mmc: mmc: do not use CMD13 to get status after speed mode switch")
+Fixes: 53e60650f74e ("mmc: core: Allow CMD13 polling when switching to HS mode for mmc")
+Fixes: 4f25580fb84d ("mmc: core: changes frequency to hs_max_dtr when selecting hs400es")
+Cc: Shawn Lin <shawn.lin@rock-chips.com>
+Link: https://lore.kernel.org/linux-mmc/11962455.O9o76ZdvQC@g550jk/
+Reported-by: Luca Weiss <luca@z3ntu.xyz>
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+---
 
-It's also elsewhere, although it might well be hidden by "small
-allocations will never trigger this" (eg the arm64 kprobes case only
-does a single page).
+Changes in v4:
+ * Revert to hs_max_dtr for HS200, due to issues reported by Luca Weiss
+   <luca@z3ntu.xyz>; Luca, feel free to provide a "Tested-by: ..." reply
+   if you'd like that included
+ * Drop the "redundant clock rate" changes, as they aren't needed any
+   more
 
-I also wonder how this affects any use of 'set_memory_xyz()' with
-partial mappings (I can point to "frob_text()" and friends for
-modules, but I can easily imagine drivers doing odd things).
+Changes in v3:
+ * Use mmc_set_bus_speed() to help choose the right clock rate
+ * Avoid redundant clock rate changes
+ * Restore clock rate on failed HS200 switch
 
-In particular, x86 does support pmd splitting for pmd's in
-set_memory_xyz(), but I *really* couldn't tell you that it's ok with a
-largepage that has already had its page counts split.
+Changes in v2:
+ * Use ext_csd.hs200_max_dtr for HS200
+ * Retest on top of 3b6c472822f8 ("mmc: core: Improve fallback to speed
+   modes if eMMC HS200 fails")
 
-It only used to hit the big IO mappings traditionally.
+ drivers/mmc/core/mmc.c | 23 +++++++++++++++++++----
+ 1 file changed, 19 insertions(+), 4 deletions(-)
 
-Now I *think* it JustWorks(tm) - I don't actually see any obvious
-problems there - and I also really hope that nobody actually even does
-that "partial set_memory" on some vmalloc allocation in the first
-place, but no, that kind of "let's hope" is not ok.
+diff --git a/drivers/mmc/core/mmc.c b/drivers/mmc/core/mmc.c
+index 5d8d9f72476f..82ca62c8669c 100644
+--- a/drivers/mmc/core/mmc.c
++++ b/drivers/mmc/core/mmc.c
+@@ -1384,13 +1384,17 @@ static int mmc_select_hs400es(struct mmc_card *card)
+ 		goto out_err;
+ 	}
+ 
++	/*
++	 * Bump to HS timing and frequency. Some cards don't handle
++	 * SEND_STATUS reliably at the initial frequency.
++	 */
+ 	mmc_set_timing(host, MMC_TIMING_MMC_HS);
++	mmc_set_bus_speed(card);
++
+ 	err = mmc_switch_status(card, true);
+ 	if (err)
+ 		goto out_err;
+ 
+-	mmc_set_clock(host, card->ext_csd.hs_max_dtr);
+-
+ 	/* Switch card to DDR with strobe bit */
+ 	val = EXT_CSD_DDR_BUS_WIDTH_8 | EXT_CSD_BUS_WIDTH_STROBE;
+ 	err = mmc_switch(card, EXT_CSD_CMD_SET_NORMAL,
+@@ -1448,7 +1452,7 @@ static int mmc_select_hs400es(struct mmc_card *card)
+ static int mmc_select_hs200(struct mmc_card *card)
+ {
+ 	struct mmc_host *host = card->host;
+-	unsigned int old_timing, old_signal_voltage;
++	unsigned int old_timing, old_signal_voltage, old_clock;
+ 	int err = -EINVAL;
+ 	u8 val;
+ 
+@@ -1479,8 +1483,17 @@ static int mmc_select_hs200(struct mmc_card *card)
+ 				   false, true, MMC_CMD_RETRIES);
+ 		if (err)
+ 			goto err;
++
++		/*
++		 * Bump to HS timing and frequency. Some cards don't handle
++		 * SEND_STATUS reliably at the initial frequency.
++		 * NB: We can't move to full (HS200) speeds until after we've
++		 * successfully switched over.
++		 */
+ 		old_timing = host->ios.timing;
++		old_clock = host->ios.clock;
+ 		mmc_set_timing(host, MMC_TIMING_MMC_HS200);
++		mmc_set_clock(card->host, card->ext_csd.hs_max_dtr);
+ 
+ 		/*
+ 		 * For HS200, CRC errors are not a reliable way to know the
+@@ -1493,8 +1506,10 @@ static int mmc_select_hs200(struct mmc_card *card)
+ 		 * mmc_select_timing() assumes timing has not changed if
+ 		 * it is a switch error.
+ 		 */
+-		if (err == -EBADMSG)
++		if (err == -EBADMSG) {
++			mmc_set_clock(host, old_clock);
+ 			mmc_set_timing(host, old_timing);
++		}
+ 	}
+ err:
+ 	if (err) {
+-- 
+2.36.0.rc2.479.g8af0fa9b8e-goog
 
-And we already know it happens at least for modules.
-
-And no, don't even start about that "it's x86".  It *still* isn't
-about x86 as shown by this very patch. The issue is generic, and x86
-just tends to hit more odd cases and drivers.
-
-In fact, I think x86 probably does *better* than powerpc.
-
-Because it looks like 'set_memory_xyz()' just returns an error for
-vmalloc addresses on powerpc. Sounds strange. Doesn't powerpc do
-STRICT_MODULE_RWX? Does it work only because 'frob_text()' doesn't
-actually check the return value?
-
-Or maybe set_memory_xyz() is ok and it is *only* VM_FLUSH_RESET_PERMS
-that doesn't work? I don't know.
-
-But I do know bpf was affected, and I'm looking at that module thing,
-and so I suspect it's elsewhere too.
-
-Just opt-in with the mappings that matter.
-
-                   Linus

@@ -2,240 +2,413 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E11550C0EB
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 23:12:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F6F150C10A
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 23:21:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbiDVVO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 17:14:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
+        id S229905AbiDVVYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 17:24:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiDVVO0 (ORCPT
+        with ESMTP id S229680AbiDVVYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 17:14:26 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2069.outbound.protection.outlook.com [40.107.244.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0F135C5E5;
-        Fri, 22 Apr 2022 13:10:23 -0700 (PDT)
+        Fri, 22 Apr 2022 17:24:02 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on20609.outbound.protection.outlook.com [IPv6:2a01:111:f400:7ea9::609])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCF7255BC3;
+        Fri, 22 Apr 2022 13:20:04 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Xz31HMuhRHO79iRsa+CIDl5EbuQI6yHrLqUZED6CR5D0RgT3qVEMScvV+UAZQjM8AfqHs1qBOfTQIqv1lLKk//C7HavjE5mleHyzhLEoI3etwvcP869/tmwj+6fb0vqh8LQh453PscoVllTlSu39YEmkXP2K4Cql5vHXi2dtMwc+Wii/58CjYFACUmsZPYILiE+6RM3HGMxtCRYejq3qnAQOZriW0zDRDc9PylQzM/WX75OC9ZkPeolgN48c2XFW8Xc9IOoX00p8HCEH7zwO7bCSNrRNUrThrG2cmqMiDRdDecaIpeBid7v4GIet8d57B321VvioIq5zq7ZjzMZ5Gw==
+ b=gLEDBNFoCaqPBpqmgGjf70pPZ8GYGDpc3CX6uHZ2A0IcW5UovltrlndnNfsGH2e4BUQbvWU5K5Crqu176kPkwIhp7PuVlnlwwvpFv753THvNseoJoONitSh643TmUr7FESdkecHpz1rxgCb48RjRuMg2lhon1/7l0C68g2tlQFuiafwBxztLrm5/vX+CEk/fgO9VWM5wWC9YaWeAPUMA6WCspkg00fHD8Bwp7XQQqf2XH+/Gc92myDHhARQNHwZ9vtRuckACQFx4/dvHO/p44RBC2BQpZeQH34O5UsjEvBmcwtt4KpNGDYPsQ5rpPoU/0N3zCmsLt2Il4aXiQ7W7Rg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=350S4fAC5KifeQLT8wgKi1XDeI/q6eapxAcnFsmjnZk=;
- b=lyNlM0WgQK8S94tvU9A2OhVOkhkfE6d6oXEv87Y0a1zlr2d3V+QLSO70eplmhvmiGnY4D5il1lJmfYV13HMR5mp0Gy2Wzdr70jZlcUT5Miied+lsKoULMeYKb7Z+eTf9UHYv6Uvm4Wm/AhtbmtTAy9ps0hKuxS3OzA3GJ6EyPOeswKBsXvuCL0cKLglA1PpvcylYoaY1K5c/D436TEQkIHyK0XYG1BGRRI6ne7XLRmgxwiV+T1TCmhXp2zNVZan6As986CHB3Op4mRK4EgBV8w/JMj0QsnzS+mNM47r5MmBMA1l2Z/jqXA0JoufxTypnJ12s0PxdMXIgKC2DX+D1dQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
+ bh=yOS2kmC7UY4VQ8qFBPVcFC2QJdlosXUymUzSxPukAfI=;
+ b=dq9ZvhJEaX7hMxAEk3GWNw7Pi0vPU9sYdqll2uapKibMl1IACHWJMpBot8p/SM9C+JkicTg1p5eENY4zVqp8yIY+2s2GKIoPSEvayw1t3CDb3vLHL7+g2Zt/XtaWjIgcqeeCRhKsLpNjSWdsks4VtVS2gRWPWLM2L3/VTS/miQ6xiS5mUUuefdVcrY632ISpsiXnv8EN0GCPmI6cNphc6xigq7fJoKU0CqGnUjfRsPKjhYyNkobW6Cux79TapkAQvAcGJoDQh+vq36NZDxWLxnhAs5tN6bmSO1FFGQ/7O5o8TgNTNgQpYhi4SOi1BGRGWPAmEdYrKlMqV7ISQjBIeQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=350S4fAC5KifeQLT8wgKi1XDeI/q6eapxAcnFsmjnZk=;
- b=x+xradlnM4GwmkGBrSssIkfNU1HGJzslizPqcFtAZtfgV0p6iL6dL4chhdcbLYjc8gPjGFD46XfCcYwiCdCJNlyqfFVDLjLcBbWXbqrdtjGu6cnamByzDBUvhhOamVBS+QIuCnKTv130/xib38ZJ1mcDllGn+oRXju4Ye/sPyY4=
-Received: from BL1PR12MB5144.namprd12.prod.outlook.com (2603:10b6:208:316::6)
- by MN2PR12MB4126.namprd12.prod.outlook.com (2603:10b6:208:199::12) with
+ bh=yOS2kmC7UY4VQ8qFBPVcFC2QJdlosXUymUzSxPukAfI=;
+ b=TDmtTqX8kpz6fgEjEWYxX/TOmMOibYXUhm7RAdjcep25qv7Vi+IBD5dExopyQsjFGDjngqpXPNCow0rqyIDV/J7dzC3pOSGJ+QPLf8XJqxq2Sd8HJ2tLzy32DFF7NaLbPXUUnbVOWLXtWCG9llv3K7Sh/AD/28gpJjjx0N/HqHM=
+Received: from DM6PR08CA0040.namprd08.prod.outlook.com (2603:10b6:5:1e0::14)
+ by BYAPR12MB3237.namprd12.prod.outlook.com (2603:10b6:a03:13a::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Fri, 22 Apr
- 2022 20:05:25 +0000
-Received: from BL1PR12MB5144.namprd12.prod.outlook.com
- ([fe80::98b8:8b06:2069:c838]) by BL1PR12MB5144.namprd12.prod.outlook.com
- ([fe80::98b8:8b06:2069:c838%7]) with mapi id 15.20.5186.015; Fri, 22 Apr 2022
- 20:05:25 +0000
-From:   "Deucher, Alexander" <Alexander.Deucher@amd.com>
-To:     Robin Murphy <robin.murphy@arm.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>, "hpa@zytor.com" <hpa@zytor.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "Suthikulpanit, Suravee" <Suravee.Suthikulpanit@amd.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "Hegde, Vasant" <Vasant.Hegde@amd.com>
-Subject: RE: [PATCH v4] Documentation: x86: rework IOMMU documentation
-Thread-Topic: [PATCH v4] Documentation: x86: rework IOMMU documentation
-Thread-Index: AQHYVnILoAEZrZOhO0iIGelLt1T6q6z8VO2AgAAGhrA=
-Date:   Fri, 22 Apr 2022 20:05:25 +0000
-Message-ID: <BL1PR12MB51447D05D90FC2B25A43F55AF7F79@BL1PR12MB5144.namprd12.prod.outlook.com>
-References: <20220422175423.44491-1-alexander.deucher@amd.com>
- <a9e09125-c61b-4a2a-f87e-1ba8147f659f@arm.com>
-In-Reply-To: <a9e09125-c61b-4a2a-f87e-1ba8147f659f@arm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2022-04-22T20:04:34Z;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=7a90ea29-c470-4af1-b0c1-774300e3b2e2;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_enabled: true
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2022-04-22T20:05:24Z
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_method: Privileged
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_name: Public-AIP 2.0
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: 9f7369ea-37b9-4011-a72c-fea01db05cac
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a1cdf9ce-cdcd-4258-25eb-08da249b70b4
-x-ms-traffictypediagnostic: MN2PR12MB4126:EE_
-x-microsoft-antispam-prvs: <MN2PR12MB412613CD41EBF004FCF1B3BAF7F79@MN2PR12MB4126.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: iNxSFElRQjBMPyCNpFU1dXAVfk7t/fCVAgw3dBInI6a3+dwxlpKthreQCOnWUglZFOmHU2r9Htio/635UCXKrnN3vMjoO3dqs68InnL1eMbp2pTSsEf5lVmZRqECRxMrClhebSupR1IuD6yF/4Gyzdu69NPlwm3POhKptwQfMmt/NMrMFyvUMOF7Ay/ramnbhZBghPlSClnHSJH5nY70x14QAQwMe8jPhHw75pC7FRH0unXZV+iJsyd8l9sDe5VEMwMGbPNVI1GSIbAaeEsZYvaUSoZxzg/lNSjYDg5QsgU1bFS+SuyEPojNGOHtaBiCE0z5lVTTFXrXzLIz7ZVjvlJrWCVk6FM06UqjgQP4oZIuH/syMl+xJAkO6LwDWcg5kuItu93RyUXYtbrLpx2mhibKHyXnfmx/IlvXaywoPYhqoom6CH/1V5sQpulOBRJIBM1PvorOQJD5ZoAtOyX4ZTBOYjy/G7YS+V3CfdK2emIQKyXsV57AG+X/xMlIi2piYM9l6oZDVDVzrxcWxhq+GQ3IN0HWQ5q57zVtk8HKDSDYkWk35hOZXA36+C9NY12Dv/DGjSk5PTLa9fmzKSvCQ8LPYrTnwCMrKp+dKD8GWjMpDPZY4IrzZGEUjeJJnhjzUT90dNi0bjyIJHfNi7dqZaSY3p1simuCpHNRgqHXQlMI6sVw7Gd+e504txffv70gB1Vq8vzeTNTOuPRHCwH8AQOyD0fRlVcOj1TTC9Czp00=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5144.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66946007)(64756008)(66556008)(66446008)(52536014)(83380400001)(71200400001)(122000001)(76116006)(66476007)(7696005)(110136005)(8676002)(921005)(6636002)(86362001)(2906002)(316002)(33656002)(8936002)(6506007)(38100700002)(7416002)(53546011)(38070700005)(5660300002)(55016003)(508600001)(186003)(9686003)(26005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?b1gwYThjQVpiVmlRMklkN3VhaFEwTkdmREozTEdCVURQQjJ3Z2JiWDlneWpP?=
- =?utf-8?B?L29PZmd5ODEvZUQyZU1GamdGamxFSFdJazRES3hqQ3IyVWZ5aU5vb1ByN3ZR?=
- =?utf-8?B?eGxVNmdNVVZueUQzUHVoR1hwQktTMG9JZmt0S1VNUktkeFNvZnVoc0wzMnJx?=
- =?utf-8?B?K05JbnR2OWVaV252UmplczFGWW9Nak8wNFhLM25VOE1KWkpTTVNRS2xScXUz?=
- =?utf-8?B?MTl3Z2tpVWhmUzVxQWtJRTY2ZUg3RnhWbThnZGFTOWhpbGJzcFF1dEpKNEJy?=
- =?utf-8?B?ajdBUEIyWWtaTHhQRGRCd2xtZkd2YXRXNkhGSC9VK1ZyYTZIeGJqNjJ4c0ZM?=
- =?utf-8?B?aFQwMUN1bVJHaVlmMmNvRGFMR2VGYUpvbitHcWFWZ3ZsdmxGdnBZc243TkQx?=
- =?utf-8?B?b2Y5Z1AzSGpqdjRFcENCbW5YV050b3A5TEt0ZWt0NllPWFVFaG1RdTluTjcz?=
- =?utf-8?B?SkFCYzNiZ3lIWXpnVVBjWkFTM1VRcm92SGl5ZzdnYTd1aGwxcWl5dXIzdTE5?=
- =?utf-8?B?UURJL0NGMHo3OHZIeGtTTlFGVTV2ZjNNMnprMkVUWmMwS0FJSm84Tk1CVzNP?=
- =?utf-8?B?QU1qREhVWFRMWVdzYUUyOW96QXJVUWQzUmJ4cU95WW4xK05ZU05kcERPOERi?=
- =?utf-8?B?Wlc4KzhlR0VUUUFYQ0dNeDVnbXpPZnRsYnEvLzdqOFRtY3dCZjJCRTVuZ3ZE?=
- =?utf-8?B?ZUhqRjRlUnhLRDlNckJHQUFuQ2VvMG15WFcrdUUvTGo0YVBuOUlBUDV1bUdX?=
- =?utf-8?B?a3lBWE5pY01DTTJuL1ZtWkhmR3NBQmE2bU1VaFI1TWJuRWJXZEFYK2Yyb3B6?=
- =?utf-8?B?RjMzOEdtM2pHUVFTbzV4cGV6bnhRaTcwM3Z6cGs4OTY2dkUyWktqUWQzbDNM?=
- =?utf-8?B?MndBRHkyWS9kYTdKd3FxZ3orazV4WWRPSGRGWFEvNnFCa09RTTRTMmZxTXdO?=
- =?utf-8?B?dHc3U1Y1R2cxSituVU9xN05ORXEwTy9xSURMZnU2R3lURENVNEdqOUcvc0Vx?=
- =?utf-8?B?REh3dmxnWlR1OWFMVmFoc2JXckF5OXhTQW11MWFBbGw2QmFoTHY5d3JvL3RJ?=
- =?utf-8?B?ekV4ZHczRFltbWRqQitxbS9NQWJXK0MwaWdWK0R5M0x5SnJORlJiVlRZSFBi?=
- =?utf-8?B?RDVCM3Rnb29UL2NYencrNGttNlR0ZFkrMkl6M0dlc21CcXk3TVBtYmxZYm1Z?=
- =?utf-8?B?MEFSQzBSVlJHSFRwWTEwOGNybFRWbm4zV3g5d05wTTYxdFVzZ01wNnlYeFov?=
- =?utf-8?B?VEFCaU1WVXAzZWxLRHV6NXB6K3V5Z21kVlNGYmhma0RhTU9qTCs1MEJUaDNm?=
- =?utf-8?B?V0lIdXZXalo2amRyYUNYaTZJbDZicGVmRTFacEFWa3JCZ1RCWHdIZGtoWU1G?=
- =?utf-8?B?TDNBeDEyTkd3S2ZRYktHZnlob2NodUtMWXhoKytaU0N2V3RvMmNWSTlYcTFK?=
- =?utf-8?B?NDZwK3VXN0NBdjg4RC9hVUtyLzJtVEVpYklKRUdUU1d4ZlJuckQ5bWsyQ0Y2?=
- =?utf-8?B?U2xIdUIvZHlaSmVkZDNhS0MrRHp3QUF0eVVLUVpoS1ZwZlJlWTlVY1NlWmhC?=
- =?utf-8?B?c3pIbXcvTzNVNG5kUlcvMVoxMmtuSW9nVFpyMGU2SkttL2NRSlhEY3F1dnJH?=
- =?utf-8?B?OGw1VTBIS0VKMnY0NUQ4Z01GbFJRQXlxUytUMTJqMmNEODU5YzJESWlDOU02?=
- =?utf-8?B?ZjloNm5nenRWNzhEL2x5NTRaa3V0cHNTM1U0SEZzTHUvVUhvVmZSVkpEYkJO?=
- =?utf-8?B?d05rOVlwRFI5L3Fwb01TWFhTZHptRTlGRm5xS2pUOXJrVmhhQUhYdnpCMGx5?=
- =?utf-8?B?SnNndDFlNU1ZRGVSNGVvWFVUOUo0bno1UWlFU0k1K2huak5iZy94SG44WnlI?=
- =?utf-8?B?S2toZUdKQ3JCREFpUnVPWDRYMHpqd0tFRGxKVU9aNXlzZlEwdnBhOWR4a0k0?=
- =?utf-8?B?dmZmQ1hpd0ZPc3ByYmg3bXVKZTM5VDhRNUpZMGtjYmVLLzFDd1lHaG1DdkNE?=
- =?utf-8?B?dndwYkYvcm15N3pBMXZSWS9qMHZUZzRFWWNsN3FEUVFpM3R1VzhvREhNSWgw?=
- =?utf-8?B?T1RPOEw1TC9GdnVIQnY0WWdUYkdUeDk5UnV5VXlHV01Nb0JWdGlucU94SGdq?=
- =?utf-8?B?Y0NJNTdHSS83Z1BCOVdFRFNmeDNoRjZOcms5aWtxSzRheE1pTldubzJ5a2Nw?=
- =?utf-8?B?TjJwSCt4QlA2ME9RMkdaUVBpNFQwaU5OZ2xuNkNlZVNVNFQ0VUhiejNYVVk1?=
- =?utf-8?B?YnNheW1MQllMdkF0VWtuUFpHYTVEMHlqQ1RwWnhkcHh5V0N4SEdFZ25Wd2dM?=
- =?utf-8?B?WXVzQTk5RG9OcS96amtiQnk1ckkvTmo1aWFRY3BMcDFaSVZCRVdmdz09?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.25; Fri, 22 Apr
+ 2022 20:06:21 +0000
+Received: from DM6NAM11FT054.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:1e0:cafe::d3) by DM6PR08CA0040.outlook.office365.com
+ (2603:10b6:5:1e0::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14 via Frontend
+ Transport; Fri, 22 Apr 2022 20:06:21 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT054.mail.protection.outlook.com (10.13.173.95) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5186.14 via Frontend Transport; Fri, 22 Apr 2022 20:06:21 +0000
+Received: from tr4.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 22 Apr
+ 2022 15:06:19 -0500
+From:   Alex Deucher <alexander.deucher@amd.com>
+To:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <corbet@lwn.net>, <hpa@zytor.com>, <x86@kernel.org>,
+        <dave.hansen@linux.intel.com>, <bp@alien8.de>, <mingo@redhat.com>,
+        <tglx@linutronix.de>, <joro@8bytes.org>,
+        <Suravee.Suthikulpanit@amd.com>, <will@kernel.org>,
+        <iommu@lists.linux-foundation.org>, <robin.murphy@arm.com>,
+        <Vasant.Hegde@amd.com>
+CC:     Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH] Documentation: x86: rework IOMMU documentation
+Date:   Fri, 22 Apr 2022 16:06:07 -0400
+Message-ID: <20220422200607.627754-1-alexander.deucher@amd.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ee0f2f27-21e6-48c2-303e-08da249b91fe
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3237:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR12MB3237DBC680158622A7401668F7F79@BYAPR12MB3237.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZNRHdiUV0GNHoH/8z7bgr9evB1SKnwMWSjXXbbKUVD9ieyl8609xiigdGsKBIQjor8q+Lztqnex9oos4Xo+QTlW0SwXjdoXCZcZwOu6ZddUp4hsMxmss2Shm8yQfbCoCj33yISvGsQLN9P9smEI7rqR//wlmcoeTt5P/+Z1LGoxQ6d37T4qteAU8IGc+O2vgDzj9jl4zDN2n98cOIw820G1TOhmCS1KxbjGa+9eyw3ky9Mb8jRZ+ogfyg89O/hebXsIfHqyKVttV81PvwGwPvOMOGPzMLsLA/JjMexf9HQkrJ79xS9nfyuuPhzPvk6dErmFjO/cCtMfc97bZXjJTOJZoDOSX8RVgJAF+28q3m7uUKp2x1Z9mKNDiFgrvQcr5sGVqxw/5S6MLNb9dX3JQ6uCdHdjDe/yXoQMwT8JZdUqjC+wF/d1RLt3045o+vYM9ZftH6XefnsGHb07Gm9l8MHk9t4QfGz1Wf5kRfcR0Gw/Yv68EtY+yq0iPTFz9adV5H/f/ySF8aH7EmBDmpIzyco7fRBtLtAzXzHBYp3gJvNP3+K2Y1OjTDBH3+q5gOX1ovnK2h4TZObQceh117f5hBjBBQtQIv5/9yRYWy8nZcprqgE9g0Sqg6g8vmXpXyC06JhkBXXFQVyCXOQq6ZHTn3k525WEDtkhaXRkt1nPRXVXXav4l4xUVEqMtyVEcv4ScgoBhmj3Yu25JWOeL69Tob4QZE5hqh+SOoZ9td5YwUIsM4CAfTg/G+Ajez/No1/zJQLBjtYEvVUPnIT9JfpAbM+7z7j+gGN2cZh2cEdMZl7TLLAxDlkJxraH45Ish5AhjusvUJfpeFaxTtdBTrSmQgL/TqnKpVJyJdmAFnbAzJ10=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(70206006)(2616005)(82310400005)(110136005)(47076005)(40460700003)(70586007)(2906002)(6666004)(4326008)(83380400001)(336012)(426003)(8676002)(7696005)(6636002)(81166007)(16526019)(921005)(8936002)(7416002)(966005)(26005)(86362001)(316002)(36860700001)(36756003)(1076003)(508600001)(356005)(5660300002)(30864003)(186003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5144.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a1cdf9ce-cdcd-4258-25eb-08da249b70b4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Apr 2022 20:05:25.5575
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2022 20:06:21.3294
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Z3U7dxhCiTCy+RniTO3mW0/hork5A8XuA61xNjlvQLD3KEbjreCAqcO09OKGWiVPgRV5A1/Bx3rV0BqV93uY+Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4126
+X-MS-Exchange-CrossTenant-Network-Message-Id: ee0f2f27-21e6-48c2-303e-08da249b91fe
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT054.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3237
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-W1B1YmxpY10NCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBSb2JpbiBN
-dXJwaHkgPHJvYmluLm11cnBoeUBhcm0uY29tPg0KPiBTZW50OiBGcmlkYXksIEFwcmlsIDIyLCAy
-MDIyIDM6NDEgUE0NCj4gVG86IERldWNoZXIsIEFsZXhhbmRlciA8QWxleGFuZGVyLkRldWNoZXJA
-YW1kLmNvbT47IGxpbnV4LQ0KPiBkb2NAdmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdl
-ci5rZXJuZWwub3JnOyBjb3JiZXRAbHduLm5ldDsNCj4gaHBhQHp5dG9yLmNvbTsgeDg2QGtlcm5l
-bC5vcmc7IGRhdmUuaGFuc2VuQGxpbnV4LmludGVsLmNvbTsNCj4gYnBAYWxpZW44LmRlOyBtaW5n
-b0ByZWRoYXQuY29tOyB0Z2x4QGxpbnV0cm9uaXguZGU7IGpvcm9AOGJ5dGVzLm9yZzsNCj4gU3V0
-aGlrdWxwYW5pdCwgU3VyYXZlZSA8U3VyYXZlZS5TdXRoaWt1bHBhbml0QGFtZC5jb20+OyB3aWxs
-QGtlcm5lbC5vcmc7DQo+IGlvbW11QGxpc3RzLmxpbnV4LWZvdW5kYXRpb24ub3JnOyBIZWdkZSwg
-VmFzYW50IDxWYXNhbnQuSGVnZGVAYW1kLmNvbT4NCj4gU3ViamVjdDogUmU6IFtQQVRDSCB2NF0g
-RG9jdW1lbnRhdGlvbjogeDg2OiByZXdvcmsgSU9NTVUgZG9jdW1lbnRhdGlvbg0KPiANCj4gT24g
-MjAyMi0wNC0yMiAxODo1NCwgQWxleCBEZXVjaGVyIHdyb3RlOg0KPiBbLi4uXQ0KPiA+ICtJbnRl
-bCBTcGVjaWZpYyBOb3Rlcw0KPiA+ICstLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiA+ICsNCj4gPiAr
-R3JhcGhpY3MgUHJvYmxlbXM/DQo+ID4gK15eXl5eXl5eXl5eXl5eXl5eXg0KPiA+ICsNCj4gPiAr
-SWYgeW91IGVuY291bnRlciBpc3N1ZXMgd2l0aCBncmFwaGljcyBkZXZpY2VzLCB5b3UgY2FuIHRy
-eSBhZGRpbmcNCj4gPiArb3B0aW9uIGludGVsX2lvbW11PWlnZnhfb2ZmIHRvIHR1cm4gb2ZmIHRo
-ZSBpbnRlZ3JhdGVkIGdyYXBoaWNzIGVuZ2luZS4NCj4gPiArSWYgdGhpcyBmaXhlcyBhbnl0aGlu
-ZywgcGxlYXNlIGVuc3VyZSB5b3UgZmlsZSBhIGJ1ZyByZXBvcnRpbmcgdGhlIHByb2JsZW0uDQo+
-ID4gKw0KPiA+ICtTb21lIGV4Y2VwdGlvbnMgdG8gSU9WQQ0KPiA+ICteXl5eXl5eXl5eXl5eXl5e
-Xl5eXl5eXg0KPiA+ICsNCj4gPiArSW50ZXJydXB0IHJhbmdlcyBhcmUgbm90IGFkZHJlc3MgdHJh
-bnNsYXRlZCwgKDB4ZmVlMDAwMDAgLSAweGZlZWZmZmZmKS4NCj4gPiArVGhlIHNhbWUgaXMgdHJ1
-ZSBmb3IgcGVlciB0byBwZWVyIHRyYW5zYWN0aW9ucy4gSGVuY2Ugd2UgcmVzZXJ2ZSB0aGUNCj4g
-PiArYWRkcmVzcyBmcm9tIFBDSSBNTUlPIHJhbmdlcyBzbyB0aGV5IGFyZSBub3QgYWxsb2NhdGVk
-IGZvciBJT1ZBDQo+IGFkZHJlc3Nlcy4NCj4gDQo+IE5vdGUgdGhhdCB0aGlzIHNob3VsZCBiZSB0
-cnVlIGZvciBib3RoIGRyaXZlcnMuDQo+IA0KPiA+ICsNCj4gPiArQU1EIFNwZWNpZmljIE5vdGVz
-DQo+ID4gKy0tLS0tLS0tLS0tLS0tLS0tLQ0KPiA+ICsNCj4gPiArR3JhcGhpY3MgUHJvYmxlbXM/
-DQo+ID4gK15eXl5eXl5eXl5eXl5eXl5eXg0KPiA+ICsNCj4gPiArSWYgeW91IGVuY291bnRlciBp
-c3N1ZXMgd2l0aCBpbnRlZ3JhdGVkIGdyYXBoaWNzIGRldmljZXMsIHlvdSBjYW4gdHJ5DQo+ID4g
-K2FkZGluZyBvcHRpb24gaW9tbXU9cHQgdG8gdGhlIGtlcm5lbCBjb21tYW5kIGxpbmUgdXNlIGEg
-MToxIG1hcHBpbmcNCj4gPiArZm9yIHRoZSBJT01NVS4gIElmIHRoaXMgZml4ZXMgYW55dGhpbmcs
-IHBsZWFzZSBlbnN1cmUgeW91IGZpbGUgYSBidWcNCj4gcmVwb3J0aW5nIHRoZSBwcm9ibGVtLg0K
-PiANCj4gQW5kIGluZGVlZCB0aGlzIGlzIGEgZ2VuZXJpYyBvcHRpb24uIEkgcmVja29uIHdlIGNv
-dWxkIHNpbXBseSBtZXJnZSB0aGVzZSB0d28NCj4gc2VjdGlvbnMgdG9nZXRoZXIsIHdpdGggdGhl
-IGZpcnN0IHBhcmFncmFwaCBiZWluZyBzb21ldGhpbmcgbGlrZToNCj4gDQo+IElmIHlvdSBlbmNv
-dW50ZXIgaXNzdWVzIHdpdGggaW50ZWdyYXRlZCBncmFwaGljcyBkZXZpY2VzLCB5b3UgY2FuIHRy
-eSBhZGRpbmcNCj4gdGhlIG9wdGlvbiAiaW9tbXUucGFzc3Rocm91Z2g9MSIsIG9yIHRoZSBlcXVp
-dmFsZW50ICJpb21tdT1wdCIsIHRvIHRoZQ0KPiBrZXJuZWwgY29tbWFuZCBsaW5lIHRvIHVzZSBh
-IDE6MSBtYXBwaW5nIGZvciB0aGUgSU9NTVUgaW4gZ2VuZXJhbC4gIE9uDQo+IEludGVsIHlvdSBj
-YW4gYWxzbyB0cnkgImludGVsX2lvbW11PWlnZnhfb2ZmIiB0byB0dXJuIG9mZiB0cmFuc2xhdGlv
-biBzcGVjaWZpY2FsbHkNCj4gZm9yIHRoZSBpbnRlZ3JhdGVkIGdyYXBoaWNzIGVuZ2luZSBvbmx5
-LiAgSWYgdGhpcyBmaXhlcyBhbnl0aGluZywgcGxlYXNlIGVuc3VyZQ0KPiB5b3UgZmlsZSBhIGJ1
-ZyByZXBvcnRpbmcgdGhlIHByb2JsZW0uDQo+IA0KPiA+ICsNCj4gPiArRmF1bHQgcmVwb3J0aW5n
-DQo+ID4gKy0tLS0tLS0tLS0tLS0tLQ0KPiA+ICtXaGVuIGVycm9ycyBhcmUgcmVwb3J0ZWQsIHRo
-ZSBJT01NVSBzaWduYWxzIHZpYSBhbiBpbnRlcnJ1cHQuIFRoZQ0KPiA+ICtmYXVsdCByZWFzb24g
-YW5kIGRldmljZSB0aGF0IGNhdXNlZCBpdCBpcyBwcmludGVkIG9uIHRoZSBjb25zb2xlLg0KPiA+
-ICsNCj4gPiArDQo+ID4gK0tlcm5lbCBMb2cgU2FtcGxlcw0KPiA+ICstLS0tLS0tLS0tLS0tLS0t
-LS0NCj4gPiArDQo+ID4gK0ludGVsIEJvb3QgTWVzc2FnZXMNCj4gPiArXl5eXl5eXl5eXl5eXl5e
-Xl5eXg0KPiA+ICsNCj4gPiArU29tZXRoaW5nIGxpa2UgdGhpcyBnZXRzIHByaW50ZWQgaW5kaWNh
-dGluZyBwcmVzZW5jZSBvZiBETUFSIHRhYmxlcw0KPiA+ICtpbiBBQ1BJLg0KPiA+ICsNCj4gPiAr
-OjoNCj4gPiArDQo+ID4gKwlBQ1BJOiBETUFSICh2MDAxIEEgTSBJICBPRU1ETUFSICAweDAwMDAw
-MDAxIE1TRlQNCj4gMHgwMDAwMDA5NykgQA0KPiA+ICsweDAwMDAwMDAwN2Y1YjVlZjANCj4gPiAr
-DQo+ID4gK1doZW4gRE1BUiBpcyBiZWluZyBwcm9jZXNzZWQgYW5kIGluaXRpYWxpemVkIGJ5IEFD
-UEksIHByaW50cyBETUFSDQo+ID4gK2xvY2F0aW9ucyBhbmQgYW55IFJNUlIncyBwcm9jZXNzZWQN
-Cj4gPiArDQo+ID4gKzo6DQo+ID4gKw0KPiA+ICsJQUNQSSBETUFSOkhvc3QgYWRkcmVzcyB3aWR0
-aCAzNg0KPiA+ICsJQUNQSSBETUFSOkRSSEQgKGZsYWdzOiAweDAwMDAwMDAwKWJhc2U6IDB4MDAw
-MDAwMDBmZWQ5MDAwMA0KPiA+ICsJQUNQSSBETUFSOkRSSEQgKGZsYWdzOiAweDAwMDAwMDAwKWJh
-c2U6IDB4MDAwMDAwMDBmZWQ5MTAwMA0KPiA+ICsJQUNQSSBETUFSOkRSSEQgKGZsYWdzOiAweDAw
-MDAwMDAxKWJhc2U6IDB4MDAwMDAwMDBmZWQ5MzAwMA0KPiA+ICsJQUNQSSBETUFSOlJNUlIgYmFz
-ZTogMHgwMDAwMDAwMDAwMGVkMDAwIGVuZDoNCj4gMHgwMDAwMDAwMDAwMGVmZmZmDQo+ID4gKwlB
-Q1BJIERNQVI6Uk1SUiBiYXNlOiAweDAwMDAwMDAwN2Y2MDAwMDAgZW5kOg0KPiAweDAwMDAwMDAw
-N2ZmZmZmZmYNCj4gPiArDQo+ID4gK1doZW4gRE1BUiBpcyBlbmFibGVkIGZvciB1c2UsIHlvdSB3
-aWxsIG5vdGljZQ0KPiA+ICsNCj4gPiArOjoNCj4gPiArDQo+ID4gKwlQQ0ktRE1BOiBVc2luZyBE
-TUFSIElPTU1VDQo+ID4gKw0KPiA+ICtJbnRlbCBGYXVsdCByZXBvcnRpbmcNCj4gPiArXl5eXl5e
-Xl5eXl5eXl5eXl5eXl5eDQo+ID4gKw0KPiA+ICs6Og0KPiA+ICsNCj4gPiArCURNQVI6W0RNQSBX
-cml0ZV0gUmVxdWVzdCBkZXZpY2UgWzAwOjAyLjBdIGZhdWx0IGFkZHIgNmRmMDg0MDAwDQo+ID4g
-KwlETUFSOltmYXVsdCByZWFzb24gMDVdIFBURSBXcml0ZSBhY2Nlc3MgaXMgbm90IHNldA0KPiA+
-ICsJRE1BUjpbRE1BIFdyaXRlXSBSZXF1ZXN0IGRldmljZSBbMDA6MDIuMF0gZmF1bHQgYWRkciA2
-ZGYwODQwMDANCj4gPiArCURNQVI6W2ZhdWx0IHJlYXNvbiAwNV0gUFRFIFdyaXRlIGFjY2VzcyBp
-cyBub3Qgc2V0DQo+ID4gKw0KPiA+ICtBTUQgQm9vdCBNZXNzYWdlcw0KPiA+ICteXl5eXl5eXl5e
-Xl5eXl5eXg0KPiA+ICsNCj4gPiArU29tZXRoaW5nIGxpa2UgdGhpcyBnZXRzIHByaW50ZWQgaW5k
-aWNhdGluZyBwcmVzZW5jZSBvZiB0aGUgSU9NTVUuDQo+ID4gKw0KPiA+ICs6Og0KPiA+ICsNCj4g
-PiArCWlvbW11OiBEZWZhdWx0IGRvbWFpbiB0eXBlOiBUcmFuc2xhdGVkDQo+ID4gKwlpb21tdTog
-RE1BIGRvbWFpbiBUTEIgaW52YWxpZGF0aW9uIHBvbGljeTogbGF6eSBtb2RlDQo+IA0KPiBTaW1p
-bGFybHksIHRoYXQncyBjb21tb24gSU9NTVUgQVBJIHJlcG9ydGluZyB3aGljaCB3aWxsIGJlIHNl
-ZW4gb24gYWxsDQo+IGFyY2hpdGVjdHVyZXMgKGxldCBhbG9uZSBJT01NVSBkcml2ZXJzKS4gTWF5
-YmUgc29tZSBvZiB0aGUgbWVzc2FnZXMgZnJvbQ0KPiBwcmludF9pb21tdV9pbmZvKCkgbWlnaHQg
-YmUgYmV0dGVyIEFNRC1zcGVjaWZpYyBleGFtcGxlcz8NCj4gDQoNCkFsbCBnb29kIHBvaW50cy4g
-IEkndmUgaW50ZWdyYXRlZCB0aGVzZSBzdWdnZXN0aW9ucyBhbmQgd2lsbCBzZW5kIG91dCBhIG5l
-dyB2ZXJzaW9uLg0KDQpUaGFua3MhDQoNCkFsZXgNCg0KPiBDaGVlcnMsDQo+IFJvYmluLg0KPiAN
-Cj4gPiArDQo+ID4gK0FNRCBGYXVsdCByZXBvcnRpbmcNCj4gPiArXl5eXl5eXl5eXl5eXl5eXl5e
-Xg0KPiA+ICsNCj4gPiArOjoNCj4gPiArDQo+ID4gKwlBTUQtVmk6IEV2ZW50IGxvZ2dlZCBbSU9f
-UEFHRV9GQVVMVCBkb21haW49MHgwMDA3DQo+IGFkZHJlc3M9MHhmZmZmYzAyMDAwIGZsYWdzPTB4
-MDAwMF0NCj4gPiArCUFNRC1WaTogRXZlbnQgbG9nZ2VkIFtJT19QQUdFX0ZBVUxUIGRldmljZT0w
-NzowMC4wDQo+IGRvbWFpbj0weDAwMDcNCj4gPiArYWRkcmVzcz0weGZmZmZjMDIwMDAgZmxhZ3M9
-MHgwMDAwXQ0K
+Add preliminary documentation for AMD IOMMU and combine
+with the existing Intel IOMMU documentation and clean
+up and modernize some of the existing documentation to
+align with the current state of the kernel.
+
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+---
+
+V2: Incorporate feedback from Robin to clarify IOMMU vs DMA engine (e.g.,
+    a device) and document proper DMA API.  Also correct the fact that
+    the AMD IOMMU is not limited to managing PCI devices.
+v3: Fix spelling and rework text as suggested by Vasant
+v4: Combine Intel and AMD documents into a single document as suggested
+    by Dave Hansen
+v5: Clarify that keywords are related to ACPI, grammatical fixes
+v6: Make more stuff common based on feedback from Robin
+
+ Documentation/x86/index.rst       |   2 +-
+ Documentation/x86/intel-iommu.rst | 115 ------------------------
+ Documentation/x86/iommu.rst       | 143 ++++++++++++++++++++++++++++++
+ 3 files changed, 144 insertions(+), 116 deletions(-)
+ delete mode 100644 Documentation/x86/intel-iommu.rst
+ create mode 100644 Documentation/x86/iommu.rst
+
+diff --git a/Documentation/x86/index.rst b/Documentation/x86/index.rst
+index f498f1d36cd3..6f8409fe0674 100644
+--- a/Documentation/x86/index.rst
++++ b/Documentation/x86/index.rst
+@@ -21,7 +21,7 @@ x86-specific Documentation
+    tlb
+    mtrr
+    pat
+-   intel-iommu
++   iommu
+    intel_txt
+    amd-memory-encryption
+    pti
+diff --git a/Documentation/x86/intel-iommu.rst b/Documentation/x86/intel-iommu.rst
+deleted file mode 100644
+index 099f13d51d5f..000000000000
+--- a/Documentation/x86/intel-iommu.rst
++++ /dev/null
+@@ -1,115 +0,0 @@
+-===================
+-Linux IOMMU Support
+-===================
+-
+-The architecture spec can be obtained from the below location.
+-
+-http://www.intel.com/content/dam/www/public/us/en/documents/product-specifications/vt-directed-io-spec.pdf
+-
+-This guide gives a quick cheat sheet for some basic understanding.
+-
+-Some Keywords
+-
+-- DMAR - DMA remapping
+-- DRHD - DMA Remapping Hardware Unit Definition
+-- RMRR - Reserved memory Region Reporting Structure
+-- ZLR  - Zero length reads from PCI devices
+-- IOVA - IO Virtual address.
+-
+-Basic stuff
+------------
+-
+-ACPI enumerates and lists the different DMA engines in the platform, and
+-device scope relationships between PCI devices and which DMA engine  controls
+-them.
+-
+-What is RMRR?
+--------------
+-
+-There are some devices the BIOS controls, for e.g USB devices to perform
+-PS2 emulation. The regions of memory used for these devices are marked
+-reserved in the e820 map. When we turn on DMA translation, DMA to those
+-regions will fail. Hence BIOS uses RMRR to specify these regions along with
+-devices that need to access these regions. OS is expected to setup
+-unity mappings for these regions for these devices to access these regions.
+-
+-How is IOVA generated?
+-----------------------
+-
+-Well behaved drivers call pci_map_*() calls before sending command to device
+-that needs to perform DMA. Once DMA is completed and mapping is no longer
+-required, device performs a pci_unmap_*() calls to unmap the region.
+-
+-The Intel IOMMU driver allocates a virtual address per domain. Each PCIE
+-device has its own domain (hence protection). Devices under p2p bridges
+-share the virtual address with all devices under the p2p bridge due to
+-transaction id aliasing for p2p bridges.
+-
+-IOVA generation is pretty generic. We used the same technique as vmalloc()
+-but these are not global address spaces, but separate for each domain.
+-Different DMA engines may support different number of domains.
+-
+-We also allocate guard pages with each mapping, so we can attempt to catch
+-any overflow that might happen.
+-
+-
+-Graphics Problems?
+-------------------
+-If you encounter issues with graphics devices, you can try adding
+-option intel_iommu=igfx_off to turn off the integrated graphics engine.
+-If this fixes anything, please ensure you file a bug reporting the problem.
+-
+-Some exceptions to IOVA
+------------------------
+-Interrupt ranges are not address translated, (0xfee00000 - 0xfeefffff).
+-The same is true for peer to peer transactions. Hence we reserve the
+-address from PCI MMIO ranges so they are not allocated for IOVA addresses.
+-
+-
+-Fault reporting
+----------------
+-When errors are reported, the DMA engine signals via an interrupt. The fault
+-reason and device that caused it with fault reason is printed on console.
+-
+-See below for sample.
+-
+-
+-Boot Message Sample
+--------------------
+-
+-Something like this gets printed indicating presence of DMAR tables
+-in ACPI.
+-
+-ACPI: DMAR (v001 A M I  OEMDMAR  0x00000001 MSFT 0x00000097) @ 0x000000007f5b5ef0
+-
+-When DMAR is being processed and initialized by ACPI, prints DMAR locations
+-and any RMRR's processed::
+-
+-	ACPI DMAR:Host address width 36
+-	ACPI DMAR:DRHD (flags: 0x00000000)base: 0x00000000fed90000
+-	ACPI DMAR:DRHD (flags: 0x00000000)base: 0x00000000fed91000
+-	ACPI DMAR:DRHD (flags: 0x00000001)base: 0x00000000fed93000
+-	ACPI DMAR:RMRR base: 0x00000000000ed000 end: 0x00000000000effff
+-	ACPI DMAR:RMRR base: 0x000000007f600000 end: 0x000000007fffffff
+-
+-When DMAR is enabled for use, you will notice..
+-
+-PCI-DMA: Using DMAR IOMMU
+--------------------------
+-
+-Fault reporting
+-^^^^^^^^^^^^^^^
+-
+-::
+-
+-	DMAR:[DMA Write] Request device [00:02.0] fault addr 6df084000
+-	DMAR:[fault reason 05] PTE Write access is not set
+-	DMAR:[DMA Write] Request device [00:02.0] fault addr 6df084000
+-	DMAR:[fault reason 05] PTE Write access is not set
+-
+-TBD
+-----
+-
+-- For compatibility testing, could use unity map domain for all devices, just
+-  provide a 1-1 for all useful memory under a single domain for all devices.
+-- API for paravirt ops for abstracting functionality for VMM folks.
+diff --git a/Documentation/x86/iommu.rst b/Documentation/x86/iommu.rst
+new file mode 100644
+index 000000000000..ed87d76a38d5
+--- /dev/null
++++ b/Documentation/x86/iommu.rst
+@@ -0,0 +1,143 @@
++=================
++x86 IOMMU Support
++=================
++
++The architecture specs can be obtained from the below locations.
++
++- Intel: http://www.intel.com/content/dam/www/public/us/en/documents/product-specifications/vt-directed-io-spec.pdf
++- AMD: https://www.amd.com/system/files/TechDocs/48882_IOMMU.pdf
++
++This guide gives a quick cheat sheet for some basic understanding.
++
++Basic stuff
++-----------
++
++ACPI enumerates and lists the different IOMMUs on the platform, and
++device scope relationships between devices and which IOMMU controls
++them.
++
++Some ACPI Keywords:
++
++- DMAR - Intel DMA Remapping table
++- DRHD - Intel DMA Remapping Hardware Unit Definition
++- RMRR - Intel Reserved Memory Region Reporting Structure
++- IVRS - AMD I/O Virtualization Reporting Structure
++- IVDB - AMD I/O Virtualization Definition Block
++- IVHD - AMD I/O Virtualization Hardware Definition
++
++What is Intel RMRR?
++^^^^^^^^^^^^^^^^^^^
++
++There are some devices the BIOS controls, for e.g USB devices to perform
++PS2 emulation. The regions of memory used for these devices are marked
++reserved in the e820 map. When we turn on DMA translation, DMA to those
++regions will fail. Hence BIOS uses RMRR to specify these regions along with
++devices that need to access these regions. OS is expected to setup
++unity mappings for these regions for these devices to access these regions.
++
++What is AMD IVRS?
++^^^^^^^^^^^^^^^^^
++
++The architecture defines an ACPI-compatible data structure called an I/O
++Virtualization Reporting Structure (IVRS) that is used to convey information
++related to I/O virtualization to system software.  The IVRS describes the
++configuration and capabilities of the IOMMUs contained in the platform as
++well as information about the devices that each IOMMU virtualizes.
++
++The IVRS provides information about the following:
++
++- IOMMUs present in the platform including their capabilities and proper configuration
++- System I/O topology relevant to each IOMMU
++- Peripheral devices that cannot be otherwise enumerated
++- Memory regions used by SMI/SMM, platform firmware, and platform hardware. These are generally exclusion ranges to be configured by system software.
++
++How is an I/O Virtual Address (IOVA) generated?
++-----------------------------------------------
++
++Well behaved drivers call dma_map_*() calls before sending command to device
++that needs to perform DMA. Once DMA is completed and mapping is no longer
++required, driver performs dma_unmap_*() calls to unmap the region.
++
++Some exceptions to IOVAs
++------------------------
++
++Interrupt ranges are not address translated, (0xfee00000 - 0xfeefffff).
++The same is true for peer to peer transactions. Hence we reserve the
++address from PCI MMIO ranges so they are not allocated for IOVA addresses.
++
++Graphics Problems?
++------------------
++
++If you encounter issues with integrated graphics devices, you can try
++adding the option "iommu.passthrough=1", or the equivalent "iommu=pt",
++to the kernel command line to use a 1:1 mapping for the IOMMU in
++general.  On Intel you can also try "intel_iommu=igfx_off" to turn off
++translation specifically for the integrated graphics engine only.  If
++this fixes anything, please ensure you file a bug reporting the problem.
++
++Fault reporting
++---------------
++When errors are reported, the IOMMU signals via an interrupt. The fault
++reason and device that caused it is printed on the console.
++
++
++Kernel Log Samples
++------------------
++
++Intel Boot Messages
++^^^^^^^^^^^^^^^^^^^
++
++Something like this gets printed indicating presence of DMAR tables
++in ACPI:
++
++::
++
++	ACPI: DMAR (v001 A M I  OEMDMAR  0x00000001 MSFT 0x00000097) @ 0x000000007f5b5ef0
++
++When DMAR is being processed and initialized by ACPI, prints DMAR locations
++and any RMRR's processed:
++
++::
++
++	ACPI DMAR:Host address width 36
++	ACPI DMAR:DRHD (flags: 0x00000000)base: 0x00000000fed90000
++	ACPI DMAR:DRHD (flags: 0x00000000)base: 0x00000000fed91000
++	ACPI DMAR:DRHD (flags: 0x00000001)base: 0x00000000fed93000
++	ACPI DMAR:RMRR base: 0x00000000000ed000 end: 0x00000000000effff
++	ACPI DMAR:RMRR base: 0x000000007f600000 end: 0x000000007fffffff
++
++When DMAR is enabled for use, you will notice:
++
++::
++
++	PCI-DMA: Using DMAR IOMMU
++
++Intel Fault reporting
++^^^^^^^^^^^^^^^^^^^^^
++
++::
++
++	DMAR:[DMA Write] Request device [00:02.0] fault addr 6df084000
++	DMAR:[fault reason 05] PTE Write access is not set
++	DMAR:[DMA Write] Request device [00:02.0] fault addr 6df084000
++	DMAR:[fault reason 05] PTE Write access is not set
++
++AMD Boot Messages
++^^^^^^^^^^^^^^^^^
++
++Something like this gets printed indicating presence of the IOMMU:
++
++::
++
++	AMD-Vi: Found IOMMU cap 0x40
++	AMD-Vi: Extended features (0x4f77ef22294ada): PPR NX GT IA GA PC GA_vAPIC
++	AMD-Vi: Interrupt remapping enabled
++	AMD-Vi: Virtual APIC enabled
++
++AMD Fault reporting
++^^^^^^^^^^^^^^^^^^^
++
++::
++
++	AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0007 address=0xffffc02000 flags=0x0000]
++	AMD-Vi: Event logged [IO_PAGE_FAULT device=07:00.0 domain=0x0007 address=0xffffc02000 flags=0x0000]
+-- 
+2.35.1
+

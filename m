@@ -2,117 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68BF150C06F
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 21:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DED450BFE6
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 20:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbiDVTfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 15:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52514 "EHLO
+        id S229499AbiDVSqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 14:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiDVTew (ORCPT
+        with ESMTP id S229710AbiDVSqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 15:34:52 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8196E26EDE6
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 12:12:51 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-e604f712ecso9573930fac.9
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 12:12:51 -0700 (PDT)
+        Fri, 22 Apr 2022 14:46:14 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FD2F2A1D
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 11:41:26 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-e5ca5c580fso9512395fac.3
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 11:41:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=7NoOp29Q/dMR2v1xp8JyZRZZvoakgizrx1i7zKIJPJA=;
-        b=MvsU0Shq7Wl/izk/EJ6oMnzUpVSyo/bCeBwYPxWdAYO2/9ZUg6IRR1k16Uk4CzEWrL
-         Dx22WIhqhvchO4CtnhICqZcmbvTOQyBGtmNp/E7QHGclmkG9RfeVhmMZFOIqgY28zJbi
-         omzKxdl3vnnS3GlvrP2r4FCgkolfIn6+JQh7f9prIIUo0xYfo8rSs4DkN9dRK4ze3iSM
-         TyeuzwzOBNKEwqy8ugHn0TA1LD1NFbgFndeGaifUZ05vTM/qfZEfNAaZtNs9r18TuSqA
-         tW6u+2Uv84Ucz9Na8WgAb6cr1guTKv08Q0Vn0LTpV0wN7cXO46id9IUmfkkahe/mnrTG
-         gRJw==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=6gjAV10Iy0bb8vJ2mOVMB0SZrY0b5n77L6j1RU8VdXM=;
+        b=UQLEZxu3Gnefj4+OtaImRrfZBjyDsrGOwqT3L4D8+PELfmRybKg6N+U9kwXbBNec8B
+         qKpVkU06TkaCo4dktwV6f4nhGtJIzV103OXK13R6QipAYixnIGfC1U+WJMelXl3+cQ94
+         IIkClZnxp2vThBevLk9Vg09fFu4m+FnV5PonI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition;
-        bh=7NoOp29Q/dMR2v1xp8JyZRZZvoakgizrx1i7zKIJPJA=;
-        b=PwngxHWo9K5wLxN4/A07CXUt0JS6GIDL3kC8C1YSLe3ysCOcBK4mC3afgKE9oel+FS
-         m0UhzA97edWe+ClZ8dgN8rlgp4BUkNBUoKMXEINpg8BFAZr7nauAZrO4Abb9tzY9WVA1
-         KwwfM6XZVqVIbRpP4kqSrW6Ll3HH0ZmQk3tBiF3Vd62OCPWnD01P7WajrU30yUBQGQBg
-         H8WtyM0mV6poq7TzwflUtEgXvekCpGZZNAmGpW5wSSTkXj2+KJKSio4O4Wgl0y+JglHV
-         sOr2MDu7BI+WacpPg3TGjUYwyHuavhihPyy9Qn1ccD0+4EGRdokihwIZGEcwK/eqP1CV
-         c+qg==
-X-Gm-Message-State: AOAM532p2jL82eWHzP5VZiB8TVi3x7wBzhlmTtUCXYJkObxVPGx5Ll4i
-        wZhFD30kSoE8vT8gwo5hR31mmPqMPiM=
-X-Google-Smtp-Source: ABdhPJwjv/+yziYSWHN+C3vFIgOEab+gBtdfs3eHbbzKdOzoUHNJ/g1C7Vgz2La9Z6n6TR8SnVwYrg==
-X-Received: by 2002:a05:6808:138e:b0:322:2dcd:dc7d with SMTP id c14-20020a056808138e00b003222dcddc7dmr3025270oiw.159.1650652673572;
-        Fri, 22 Apr 2022 11:37:53 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b188-20020aca34c5000000b002da579c994dsm1013602oia.31.2022.04.22.11.37.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 11:37:53 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 22 Apr 2022 11:37:51 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Brian Norris <briannorris@chromium.org>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Arnd Bergmann <arnd@arndb.de>,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] soc: rockchip: Fix compile-testing SoC drivers
-Message-ID: <20220422183751.GA2653014@roeck-us.net>
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=6gjAV10Iy0bb8vJ2mOVMB0SZrY0b5n77L6j1RU8VdXM=;
+        b=u1pGpT/q2Y8LedLmd8krTqK0kZqOelQkSEWocveYKJeEniBy3/QLoVIR7ZWPeYD6Z2
+         PuYwu7fgNIhMfpML2FBYVyebPI0Dg1NIEJUjE430aiD/5xQqxOSKuVr2eezHTMBaSCrm
+         VfM8NQx4rDHTwYbPE39NzKlx+AhgVg4yRHiAbGFdvwftzJQI1JZSgfc/+FIVnUF5oLN6
+         RC8xTC344v1fNK2w5s1rp5+r/YUAvn1AZMCtGxO5/5/TGiKe15IXyWpoa3pHXdP9ia7o
+         g6SGLLV9vZ7HXbFGK6ezefBIM68PuRdbs/wWihH9eznTqdRdwoeLrBJqFSuy2GKlx8nN
+         Yr8g==
+X-Gm-Message-State: AOAM533V0wrf6ZVmlmMZcLExd9lLbN4ph++/cjfy/qWnGvm2fvcuagXr
+        A1mmjfY8NbNmUzoImMtrAExC2/GX8QAcXUAz9w+zXw==
+X-Google-Smtp-Source: ABdhPJxjCR1tRv5Vi4Nt0QWTz2GZsD8/5wZBQ5hBZZW11jMP7uvutfanuEQOvf2fWtfAZz7mqXvfI8Y23sNg2MX1b3Q=
+X-Received: by 2002:a05:6870:15ca:b0:e9:551:6d1c with SMTP id
+ k10-20020a05687015ca00b000e905516d1cmr1291139oad.193.1650652758892; Fri, 22
+ Apr 2022 11:39:18 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 22 Apr 2022 11:39:18 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220422084951.2776123-1-lv.ruyi@zte.com.cn>
+References: <20220422084951.2776123-1-lv.ruyi@zte.com.cn>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 22 Apr 2022 11:39:18 -0700
+Message-ID: <CAE-0n52nFSUA-3CWa81mE-WUFW8pjOwYsFp-eGOkzupg2cZ9Yg@mail.gmail.com>
+Subject: Re: [PATCH] drm/msm/dp: fix error check return value of irq_of_parse_and_map()
+To:     cgel.zte@gmail.com, quic_abhinavk@quicinc.com, robdclark@gmail.com,
+        sean@poorly.run
+Cc:     airlied@linux.ie, daniel@ffwll.ch, dmitry.baryshkov@linaro.org,
+        quic_khsieh@quicinc.com, bjorn.andersson@linaro.org,
+        linux@roeck-us.net, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 11:19:19AM -0700, Brian Norris wrote:
-> Similar to commit 7f94b69ece51 ("ARM: ixp4xx: fix compile-testing soc
-> drivers").
-> 
-> drivers/soc/rockchip/Kconfig makes plenty of provision for configuring
-> drivers either for ARCH_ROCKCHIP or for COMPILE_TEST. But
-> drivers/soc/Makefile pulls the rug out from under us, by refusing to
-> build anything if we specified COMPILE_TEST but not ARCH_ROCKCHIP.
-> 
-> Currently, I'm not aware of anything that breaks without this patch, but
-> it certainly makes for confusing builds (CONFIG_ROCKCHIP_PM_DOMAINS=y,
-> but we didn't actually compile the driver?) and leaves room for future
-> error (I have pending patches that break confusingly with COMPILE_TEST=y
-> even though their Kconfig dependencies seem correct [1]).
-> 
-> Defer to drivers/soc/rockchip/{Makefile,Kconfig} to do the right thing.
-> 
-> [1] e.g.,
-> https://lore.kernel.org/linux-rockchip/20220405184816.RFC.2.I2d73b403944f0b8b5871a77585b73f31ccc62999@changeid/
-> [RFC PATCH 2/2] PM / devfreq: rk3399_dmc: Block PMU during transitions
-> 
-> Signed-off-by: Brian Norris <briannorris@chromium.org>
-
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-
+Quoting cgel.zte@gmail.com (2022-04-22 01:49:51)
+> From: Lv Ruyi <lv.ruyi@zte.com.cn>
+>
+> The irq_of_parse_and_map() function returns 0 on failure, and does not
+> return an negative value.
+>
+> Fixes:  8ede2ecc3e5e ("drm/msm/dp: Add DP compliance tests on Snapdragon Chipsets")
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
 > ---
-> 
->  drivers/soc/Makefile | 2 +-
+>  drivers/gpu/drm/msm/dp/dp_display.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
-> index fd7717d597fc..4c91705a8bb3 100644
-> --- a/drivers/soc/Makefile
-> +++ b/drivers/soc/Makefile
-> @@ -23,7 +23,7 @@ obj-y				+= pxa/
->  obj-y				+= amlogic/
->  obj-y				+= qcom/
->  obj-y				+= renesas/
-> -obj-$(CONFIG_ARCH_ROCKCHIP)	+= rockchip/
-> +obj-y				+= rockchip/
->  obj-$(CONFIG_SOC_SAMSUNG)	+= samsung/
->  obj-$(CONFIG_SOC_SIFIVE)	+= sifive/
->  obj-y				+= sunxi/
-> -- 
-> 2.36.0.rc2.479.g8af0fa9b8e-goog
-> 
+>
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index a42732b67349..3926d2ac107d 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -1239,7 +1239,7 @@ int dp_display_request_irq(struct msm_dp *dp_display)
+>         dp = container_of(dp_display, struct dp_display_private, dp_display);
+>
+>         dp->irq = irq_of_parse_and_map(dp->pdev->dev.of_node, 0);
+
+Why can't platform_get_irq() be used?
+
+> -       if (dp->irq < 0) {
+> +       if (!dp->irq) {
+>                 rc = dp->irq;
+
+zero as an error return value is an error?
+
+>                 DRM_ERROR("failed to get irq: %d\n", rc);
+>                 return rc;

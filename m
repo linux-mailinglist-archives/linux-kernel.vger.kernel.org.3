@@ -2,159 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F1F450B10F
+	by mail.lfdr.de (Postfix) with ESMTP id 16CA750B10E
 	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 09:05:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444640AbiDVHGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 03:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60976 "EHLO
+        id S1444650AbiDVHHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 03:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443752AbiDVHGu (ORCPT
+        with ESMTP id S1444645AbiDVHHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 03:06:50 -0400
-Received: from m15114.mail.126.com (m15114.mail.126.com [220.181.15.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5FBE450E3D;
-        Fri, 22 Apr 2022 00:03:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=IugEc
-        7TCS4filMhSENNWMSdUhh7TomdXhWV1WOvsR7c=; b=ghSz560Mmgy+yQGBrvQmX
-        uemRjhsrOTDFsr5kD/Vq21HvCzYfPxJBb72bDtlD+Ap1MPchlann49tqiMo057r7
-        8ROCnB8J9E0IDcWhch1mzLZnGeqbdWcYLcLnHZhgntV+b5DO8/5Wz3EGLOHQKntM
-        HBotY5E1t0Iqwo9ov0Iac4=
-Received: from ubuntu.localdomain (unknown [58.213.83.157])
-        by smtp7 (Coremail) with SMTP id DsmowACndf4+U2JieoI6Aw--.46022S4;
-        Fri, 22 Apr 2022 15:03:28 +0800 (CST)
-From:   Bernard Zhao <zhaojunkui2008@126.com>
-To:     Jakub Kicinski <kubakici@wp.pl>, Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     bernard@vivo.com, Bernard Zhao <zhaojunkui2008@126.com>
-Subject: [PATCH] mediatek/mt7601u: add debugfs exit function
-Date:   Fri, 22 Apr 2022 00:03:25 -0700
-Message-Id: <20220422070325.465918-1-zhaojunkui2008@126.com>
-X-Mailer: git-send-email 2.33.1
+        Fri, 22 Apr 2022 03:07:17 -0400
+Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FB45130D
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 00:04:23 -0700 (PDT)
+Received: from vanadium.ugent.be (vanadium.ugent.be [157.193.99.61])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id BAD6C2CB0E3;
+        Fri, 22 Apr 2022 09:04:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1650611061;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wlADY8n35L2Ou7uvyeVSyLqPISR1e/igSs6VXk/afno=;
+        b=2z/g+n7+dT+FurhJHIQnLUTHRWFUTSrGyIyTGcvtHHQJMYsJvn+SC/gkpvBeRX51lAm/L4
+        yysFkL9Q+w1MRei//reAKfjwiV4SlPL+Tdjb2UleIxA1YdhYBc9MYMVRXWo6jvMIm31hnB
+        unP4QlspRwi+PNwj605uXLIZFX10cJQZteWtGZq6Zh8hrBzSLofW0LgCwD4gct6xts7vjz
+        BWtErvfLBtxcrUxhqZCQ6GxUpWPTil3neRuNDqwARyKH4GTVghSBpLJIp/RLDOq3X97jxf
+        NLGZ8bjU9oouRusSoWjz5XSCGq20aSNYf9HgIeIFJ/Y0vv1apjCpAE8+xYHtrQ==
+Message-ID: <b8b62753ad5235e065b4cb0856a7a7c33438dfbb.camel@svanheule.net>
+Subject: Re: [PATCH v1 3/6] gpio: realtek-otto: Support per-cpu interrupts
+From:   Sander Vanheule <sander@svanheule.net>
+To:     Marc Zyngier <maz@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Bert Vermeulen <bert@biot.com>, linux-kernel@vger.kernel.org
+Date:   Fri, 22 Apr 2022 09:04:20 +0200
+In-Reply-To: <87h76mahsl.wl-maz@kernel.org>
+References: <cover.1649533972.git.sander@svanheule.net>
+         <8d4e0848f233c2c1b98aa141741c61d95cd3843f.1649533972.git.sander@svanheule.net>
+         <CACRpkdbSdDAKiFAsHBosdVDpBhWW-Keoq+t8GJ5LsyWjOZwp_g@mail.gmail.com>
+         <87h76mahsl.wl-maz@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DsmowACndf4+U2JieoI6Aw--.46022S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxCr1xZr43WF4UAFy8Cw48JFb_yoWrAryUpa
-        yDKa4Ykw18Zr1UG3yxAF4UZryrG3s3Wr1xJF95Z345Z3y8Ar1Fq3WjqFy2vasxXFZ8A3WY
-        qF45tF47CryI9FJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zi7DGrUUUUU=
-X-Originating-IP: [58.213.83.157]
-X-CM-SenderInfo: p2kd0y5xqn3xasqqmqqrswhudrp/1tbiqAHqqlpD9hmR1AAAsa
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When mt7601u loaded, there are two cases:
-First when mt7601u is loaded, in function mt7601u_probe, if
-function mt7601u_probe run into error lable err_hw,
-mt7601u_cleanup didn`t cleanup the debugfs node.
-Second when the module disconnect, in function mt7601u_disconnect,
-mt7601u_cleanup didn`t cleanup the debugfs node.
-This patch add debugfs exit function and try to cleanup debugfs
-node when mt7601u loaded fail or unloaded.
+Hi Linus, Marc,
 
-Signed-off-by: Bernard Zhao <zhaojunkui2008@126.com>
----
- .../net/wireless/mediatek/mt7601u/debugfs.c   | 25 +++++++++++--------
- drivers/net/wireless/mediatek/mt7601u/init.c  |  5 ++++
- .../net/wireless/mediatek/mt7601u/mt7601u.h   |  4 +++
- 3 files changed, 24 insertions(+), 10 deletions(-)
+On Thu, 2022-04-21 at 10:48 +0100, Marc Zyngier wrote:
+> On Thu, 21 Apr 2022 00:04:16 +0100,
+> Linus Walleij <linus.walleij@linaro.org> wrote:
+> > 
+> > On Sat, Apr 9, 2022 at 9:56 PM Sander Vanheule <sander@svanheule.net> wrote:
+> > 
+> > > On SoCs with multiple cores, it is possible that the GPIO interrupt
+> > > controller supports assigning specific pins to one or more cores.
+> > > 
+> > > IRQ balancing can be performed on a line-by-line basis if the parent
+> > > interrupt is routed to all available cores, which is the default upon
+> > > initialisation.
+> > > 
+> > > Signed-off-by: Sander Vanheule <sander@svanheule.net>
+> > 
+> > That sounds complicated.
+> > 
+> > Sounds like something the IRQ maintainer (Marc Z) should
+> > have a quick look at.
+> 
+> This is pretty odd indeed. There seem to be a direct mapping between
+> the GPIOs and the CPU it interrupts (or at least that's what the code
+> seem to express). However, I don't see a direct relation between the
+> CPUs and the chained interrupt. It isn't even clear if this interrupt
+> itself is per-CPU.
+> 
+> So this begs a few questions:
+> 
+> - is the affinity actually affecting the target CPU? or is it
+>   affecting the target mux?
+> 
+> - how is the affinity of the mux interrupt actually enforced?
 
-diff --git a/drivers/net/wireless/mediatek/mt7601u/debugfs.c b/drivers/net/wireless/mediatek/mt7601u/debugfs.c
-index 20669eacb66e..1ae3d75d3c9b 100644
---- a/drivers/net/wireless/mediatek/mt7601u/debugfs.c
-+++ b/drivers/net/wireless/mediatek/mt7601u/debugfs.c
-@@ -124,17 +124,22 @@ DEFINE_SHOW_ATTRIBUTE(mt7601u_eeprom_param);
- 
- void mt7601u_init_debugfs(struct mt7601u_dev *dev)
- {
--	struct dentry *dir;
--
--	dir = debugfs_create_dir("mt7601u", dev->hw->wiphy->debugfsdir);
--	if (!dir)
-+	dev->root_dir = debugfs_create_dir("mt7601u", dev->hw->wiphy->debugfsdir);
-+	if (!dev->root_dir)
- 		return;
- 
--	debugfs_create_u8("temperature", 0400, dir, &dev->raw_temp);
--	debugfs_create_u32("temp_mode", 0400, dir, &dev->temp_mode);
-+	debugfs_create_u8("temperature", 0400, dev->root_dir, &dev->raw_temp);
-+	debugfs_create_u32("temp_mode", 0400, dev->root_dir, &dev->temp_mode);
-+
-+	debugfs_create_u32("regidx", 0600, dev->root_dir, &dev->debugfs_reg);
-+	debugfs_create_file("regval", 0600, dev->root_dir, dev, &fops_regval);
-+	debugfs_create_file("ampdu_stat", 0400, dev->root_dir, dev, &mt7601u_ampdu_stat_fops);
-+	debugfs_create_file("eeprom_param", 0400, dev->root_dir, dev, &mt7601u_eeprom_param_fops);
-+}
- 
--	debugfs_create_u32("regidx", 0600, dir, &dev->debugfs_reg);
--	debugfs_create_file("regval", 0600, dir, dev, &fops_regval);
--	debugfs_create_file("ampdu_stat", 0400, dir, dev, &mt7601u_ampdu_stat_fops);
--	debugfs_create_file("eeprom_param", 0400, dir, dev, &mt7601u_eeprom_param_fops);
-+void mt7601u_exit_debugfs(struct mt7601u_dev *dev)
-+{
-+	if (!dev->root_dir)
-+		return;
-+	debugfs_remove(dev->root_dir);
- }
-diff --git a/drivers/net/wireless/mediatek/mt7601u/init.c b/drivers/net/wireless/mediatek/mt7601u/init.c
-index 5d9e952b2966..1e905ef2ed19 100644
---- a/drivers/net/wireless/mediatek/mt7601u/init.c
-+++ b/drivers/net/wireless/mediatek/mt7601u/init.c
-@@ -427,6 +427,9 @@ void mt7601u_cleanup(struct mt7601u_dev *dev)
- 	mt7601u_stop_hardware(dev);
- 	mt7601u_dma_cleanup(dev);
- 	mt7601u_mcu_cmd_deinit(dev);
-+#ifdef CONFIG_DEBUG_FS
-+	mt7601u_exit_debugfs(dev);
-+#endif
- }
- 
- struct mt7601u_dev *mt7601u_alloc_device(struct device *pdev)
-@@ -625,7 +628,9 @@ int mt7601u_register_device(struct mt7601u_dev *dev)
- 	if (ret)
- 		return ret;
- 
-+#ifdef CONFIG_DEBUG_FS
- 	mt7601u_init_debugfs(dev);
-+#endif
- 
- 	return 0;
- }
-diff --git a/drivers/net/wireless/mediatek/mt7601u/mt7601u.h b/drivers/net/wireless/mediatek/mt7601u/mt7601u.h
-index a122f1dd38f6..c5f06818bb35 100644
---- a/drivers/net/wireless/mediatek/mt7601u/mt7601u.h
-+++ b/drivers/net/wireless/mediatek/mt7601u/mt7601u.h
-@@ -242,6 +242,9 @@ struct mt7601u_dev {
- 	u32 rf_pa_mode[2];
- 
- 	struct mac_stats stats;
-+#ifdef CONFIG_DEBUG_FS
-+	struct dentry *root_dir;
-+#endif
- };
- 
- struct mt7601u_tssi_params {
-@@ -279,6 +282,7 @@ struct mt7601u_rxwi;
- extern const struct ieee80211_ops mt7601u_ops;
- 
- void mt7601u_init_debugfs(struct mt7601u_dev *dev);
-+void mt7601u_exit_debugfs(struct mt7601u_dev *dev);
- 
- u32 mt7601u_rr(struct mt7601u_dev *dev, u32 offset);
- void mt7601u_wr(struct mt7601u_dev *dev, u32 offset, u32 val);
--- 
-2.33.1
+There are three interrupt controllers at play here:
+   1. MIPS CPU interrupt controller: drivers/irqchip/irq-mips-cpu.c
+      One interrupt controller per VPE, so in this case there are two. Provides
+      per-CPU interrupts.
+   2. SoC interrupt controller: drivers/irqchip/irq-realtek-rtl.c
+      Also one interrupt controller per VPE. I suppose these will also be per-
+      CPU, although this isn't implemented in the driver yet, and I don't think
+      I yet fully understand how should work in the kernel.
+   3. GPIO interrupt controller: drivers/gpio/gpio-realtek-otto.c
+      One interrupt controller for the entire GPIO bank, with optional
+      configurable affinity (this patch) for the different VPEs.
 
+For the RTL839x series of SoCs, this results in the following:
+
+GPIO LINES SOC IRQ MIPS
++--------+ +-----------+ HW IRQ +--------+
+--->| GPIO | | SOC IRQ | LINES | IRQ |
+--->| BANK |-----o-->| VPE0 CTRL |=========>| VPE0 |
+. | | | +-----------+ +--------+
+. +--------+ | 
+. |
+| +-----------+ +--------+
+\-->| SOC IRQ | | IRQ |
+| VPE1 CTRL |=========>| VPE1 |
++-----------+ +--------+
+
+
+For RTL930x, where GPIO IRQ affinity is configurable:
+
+GPIO LINES SOC IRQ MIPS
++--------+ +-----------+ HW IRQ +--------+
+--->| GPIO |-------->| SOC IRQ | LINES | IRQ |
+--->| BANK | | VPE0 CTRL |=========>| VPE0 |
+. | |-----\ +-----------+ +--------+
+. +--------+ | 
+. |
+| +-----------+ +--------+
+\-->| SOC IRQ | | IRQ |
+| VPE1 CTRL |=========>| VPE1 |
++-----------+ +--------+
+
+The interrupt for the GPIO controller can be muxed to any of the MIPS HW
+interrupts on any (or all) of the VPEs, and these muxes (SoC IRQ controllers)
+can be configured independently per CPU. The SoC IRQ line index is fixed, and
+consistent for both VPEs.
+Only in the second diagram can individual GPIO interrupts be muxed to any of the
+VPEs, but there is still only one IRQ line per VPE for all selected GPIO lines.
+
+I hopes this helps to clarify the situation. We don't have any real
+documentation, so this is basically derived from registers descriptions in SDK
+headers and testing the interrupt behaviour.
+
+Best,
+Sander

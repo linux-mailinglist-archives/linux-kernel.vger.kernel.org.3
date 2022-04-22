@@ -2,178 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFEF650B406
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51D2B50B40B
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:30:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445991AbiDVJaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 05:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46746 "EHLO
+        id S1446012AbiDVJap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 05:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232825AbiDVJaB (ORCPT
+        with ESMTP id S1445997AbiDVJaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 05:30:01 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9275046A;
-        Fri, 22 Apr 2022 02:27:07 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 8E9921F37F;
-        Fri, 22 Apr 2022 09:27:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1650619626; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mtpfE3HniUKfj6fmPxze6Iw4oOnUTvCkmygkgqHEeJE=;
-        b=AvUKHkFcaLWUzkPSZEFfFUSzLy89wwjkyfuckUn+IrfMv3XNM1BmEa7vbcEa2FKmNvXeRo
-        b21zD6zjzGj6vtE80qxr7QtHdukVeUW5f4G9Cs6V+w0OklqeBzLPr0ewHMd4nAWWxW/bbx
-        s3ILLVJTl4XM2+63tqAzJyqVB/fciwI=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 404F82C142;
-        Fri, 22 Apr 2022 09:27:06 +0000 (UTC)
-Date:   Fri, 22 Apr 2022 11:27:05 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Kent Overstreet <kent.overstreet@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, roman.gushchin@linux.dev,
-        hannes@cmpxchg.org
-Subject: Re: [PATCH 3/4] mm: Centralize & improve oom reporting in show_mem.c
-Message-ID: <YmJ06cEyX2u4DGtD@dhcp22.suse.cz>
-References: <20220419203202.2670193-1-kent.overstreet@gmail.com>
- <20220419203202.2670193-4-kent.overstreet@gmail.com>
- <Yl+vHJ3lSLn5ZkWN@dhcp22.suse.cz>
- <20220420165805.lg4k2iipnpyt4nuu@moria.home.lan>
- <YmEhXG8C7msGvhqL@dhcp22.suse.cz>
- <20220421184213.tbglkeze22xrcmlq@moria.home.lan>
- <YmJhWNIcd5GcmKeo@dhcp22.suse.cz>
- <20220422083037.3pjdrusrn54fmfdf@moria.home.lan>
+        Fri, 22 Apr 2022 05:30:35 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC4F36315
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 02:27:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650619663; x=1682155663;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XP/Bq2pc0VZygbMNaDlk5rjG7Tyup7dHcAYPoZ9I3CM=;
+  b=lC4fGPelOhUwQDoSV4vQTwlr1fi6rWxUii1HIcWqD6rFmHcVLZzGSnSm
+   e06zRItbUbqdKovy0MqOUYDaiUaZBV4Cy0h5SPYihuQlh44erAwuFNVZ2
+   wHcLH38xCJEobbn3qHLPl9H4Z5zEwBVPmBb1sxxFt+T6WcVfNCYvCcI5x
+   sAuIqpkIBJilqlaCb7TSSQpCWUOUf3dSL5n/hiwDRL5GTj3Ec2dxnZJpd
+   cKc9Ic995XPrQPvDvVulK/wSlgZ28k4Xf2OpsVXEXasvXYJJPDziCAkGd
+   vc8f8eBLmM7FaVja6LJu/2j/Tr74h39sAXOLci/wz6LNnuYvY8RYoqdu8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264798519"
+X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
+   d="scan'208";a="264798519"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 02:27:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
+   d="scan'208";a="534069027"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 22 Apr 2022 02:27:40 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nhpZj-0009yQ-G1;
+        Fri, 22 Apr 2022 09:27:39 +0000
+Date:   Fri, 22 Apr 2022 17:27:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Qing Wang <wangqing@vivo.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Wang Qing <wangqing@vivo.com>
+Subject: Re: [PATCH 1/2] arch_topology: support for describing cache topology
+ from DT
+Message-ID: <202204221720.cO70SkrD-lkp@intel.com>
+References: <1650552960-60165-2-git-send-email-wangqing@vivo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220422083037.3pjdrusrn54fmfdf@moria.home.lan>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1650552960-60165-2-git-send-email-wangqing@vivo.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 22-04-22 04:30:37, Kent Overstreet wrote:
-> On Fri, Apr 22, 2022 at 10:03:36AM +0200, Michal Hocko wrote:
-> > On Thu 21-04-22 14:42:13, Kent Overstreet wrote:
-> > > On Thu, Apr 21, 2022 at 11:18:20AM +0200, Michal Hocko wrote:
-> > [...]
-> > > > > 00177 16644 pages reserved
-> > > > > 00177 Unreclaimable slab info:
-> > > > > 00177 9p-fcall-cache    total: 8.25 MiB active: 8.25 MiB
-> > > > > 00177 kernfs_node_cache total: 2.15 MiB active: 2.15 MiB
-> > > > > 00177 kmalloc-64        total: 2.08 MiB active: 2.07 MiB
-> > > > > 00177 task_struct       total: 1.95 MiB active: 1.95 MiB
-> > > > > 00177 kmalloc-4k        total: 1.50 MiB active: 1.50 MiB
-> > > > > 00177 signal_cache      total: 1.34 MiB active: 1.34 MiB
-> > > > > 00177 kmalloc-2k        total: 1.16 MiB active: 1.16 MiB
-> > > > > 00177 bch_inode_info    total: 1.02 MiB active: 922 KiB
-> > > > > 00177 perf_event        total: 1.02 MiB active: 1.02 MiB
-> > > > > 00177 biovec-max        total: 992 KiB active: 960 KiB
-> > > > > 00177 Shrinkers:
-> > > > > 00177 super_cache_scan: objects: 127
-> > > > > 00177 super_cache_scan: objects: 106
-> > > > > 00177 jbd2_journal_shrink_scan: objects: 32
-> > > > > 00177 ext4_es_scan: objects: 32
-> > > > > 00177 bch2_btree_cache_scan: objects: 8
-> > > > > 00177   nr nodes:          24
-> > > > > 00177   nr dirty:          0
-> > > > > 00177   cannibalize lock:  0000000000000000
-> > > > > 00177 
-> > > > > 00177 super_cache_scan: objects: 8
-> > > > > 00177 super_cache_scan: objects: 1
-> > > > 
-> > > > How does this help to analyze this allocation failure?
-> > > 
-> > > You asked for an example of the output, which was an entirely reasonable
-> > > request. Shrinkers weren't responsible for this OOM, so it doesn't help here -
-> > 
-> > OK, do you have an example where it clearly helps?
-> 
-> I've debugged quite a few issues with shrinkers over the years where this would
-> have helped a lot (especially if it was also in sysfs), although nothing
-> currently. I was just talking with Dave earlier tonight about more things that
-> could be added for shrinkers, but I'm going to have to go over that conversation
-> again and take notes.
-> 
-> Also, I feel I have to point out that OOM & memory reclaim debugging is an area
-> where many filesystem developers feel that the MM people have been dropping the
-> ball, and your initial response to this patch series...  well, it feels like
-> more of the same.
+Hi Qing,
 
-Not sure where you get that feeling. Debugging memory reclaim is a PITA
-because many problems can be indirect and tools we have available are
-not really great. I do not remember MM people would be blocking useful
-debugging tools addition.
- 
-> Still does to be honest, you're coming across like I haven't been working in
-> this area for a decade+ and don't know what I'm touching. Really, I'm not new to
-> this stuff.
+Thank you for the patch! Yet something to improve:
 
-I am sorry to hear that but there certainly is no intention like that
-and TBH I do not even see where you get that feeling. You have posted a
-changelog which doesn't explain really much. I am aware that you are far
-from a kernel newbie and therefore I would really expect much more in
-that regards.
+[auto build test ERROR on arm64/for-next/core]
+[also build test ERROR on driver-core/driver-core-testing linus/master arm-perf/for-next/perf v5.18-rc3 next-20220421]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> > > are you asking me to explain why shrinkers are relevant to OOMs and memory
-> > > reclaim...?
-> > 
-> > No, not really, I guess that is quite clear. The thing is that the oom
-> > report is quite bloated already and we should be rather picky on what to
-> > dump there. Your above example is a good one here. You have an order-5
-> > allocation failure and that can be caused by almost anything. Compaction
-> > not making progress for many reasons - e.g. internal framentation caused
-> > by pinned pages but also kmalloc allocations. The above output doesn't
-> > help with any of that. Could shrinkers operation be related? Of course
-> > it could but how can I tell?
-> 
-> Yeah sure and internal fragmentation would actually be an _excellent_ thing to
-> add to the show_mem report.
+url:    https://github.com/intel-lab-lkp/linux/commits/Qing-Wang/Add-complex-scheduler-level-for-arm64/20220421-225748
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+config: riscv-randconfig-c006-20220421 (https://download.01.org/0day-ci/archive/20220422/202204221720.cO70SkrD-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/854ee80a8c32ea98203c96ba25cae2e87eeb43b1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Qing-Wang/Add-complex-scheduler-level-for-arm64/20220421-225748
+        git checkout 854ee80a8c32ea98203c96ba25cae2e87eeb43b1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/ drivers/
 
-Completely agreed. The only information we currently have is the
-buddyinfo part which reports movability status but I do not think this
-is remotely sufficient.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-[...]
+All errors (new ones prefixed by >>):
 
-> > If we are lucky enough the oom is reproducible and additional
-> > tracepoints (or whatever your prefer to use) tell us more. Far from
-> > optimal, no question about that but I do not have a good answer on
-> > where the trashhold should really be. Maybe we can come up with some
-> > trigger based mechanism (e.g. some shrinkers are failing so they
-> > register their debugging data which will get dumped on the OOM) which
-> > would enable certain debugging information or something like that.
-> 
-> Why would we need a trigger mechanism?
+>> drivers/base/arch_topology.c:617:1: error: unknown type name 'staic'; did you mean 'static'?
+   staic struct device_node *cache_topology[NR_CPUS][MAX_CACHE_LEVEL];
+   ^~~~~
+   static
+   1 error generated.
 
-Mostly because reasons for reclaim failures can vary a lot and the oom
-report part doesn't have an idea what has happened during the
-reclaim/compaction.
 
-> Could you explain your objection to simply unconditionally dumping the top 10
-> slabs and the top 10 shrinkers?
+vim +617 drivers/base/arch_topology.c
 
-We already do that in some form. We dump unreclaimable slabs if they
-consume more memory than user pages on LRUs. We also dump all slab
-caches with some objects. Why is this approach not good? Should we tweak
-the condition to dump or should we limit the dump? These are reasonable 
-questions to ask. Your patch has dropped those without explaining any
-of the motivation.
+   612	
+   613	/*
+   614	 * cpu cache topology table
+   615	 */
+   616	#define MAX_CACHE_LEVEL 7
+ > 617	staic struct device_node *cache_topology[NR_CPUS][MAX_CACHE_LEVEL];
+   618	
 
-I am perfectly OK to modify should_dump_unreclaim_slab to dump even if
-the slab memory consumption is lower. Also dumping small caches with
-handful of objects can be excessive.
-
-Wrt to shrinkers I really do not know what kind of shrinkers data would
-be useful to dump and when. Therefore I am asking about examples.
 -- 
-Michal Hocko
-SUSE Labs
+0-DAY CI Kernel Test Service
+https://01.org/lkp

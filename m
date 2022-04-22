@@ -2,221 +2,454 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E751D50BE56
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 19:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 511BA50BE7C
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 19:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245101AbiDVROK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 13:14:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58778 "EHLO
+        id S230395AbiDVRYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 13:24:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354116AbiDVROF (ORCPT
+        with ESMTP id S232240AbiDVRYV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 13:14:05 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613FC97284;
-        Fri, 22 Apr 2022 10:10:40 -0700 (PDT)
+        Fri, 22 Apr 2022 13:24:21 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDEAE986F4;
+        Fri, 22 Apr 2022 10:21:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650647440; x=1682183440;
+  t=1650648077; x=1682184077;
   h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=6H07zzq3V6Q/VQ+zNdCUfAQpxUxup5lZvmlW0gvtA7k=;
-  b=NQ5ZbB2frhEIhPXMZ6mm+p2GgTY1uLuf/G/8OeysXmt4PNBdtrP3M2oW
-   Wql+dRWj/M81Mcfw5iI3g+y3n1UuQSJfFXeYnqKWS6B8LZdVMpk4IuACN
-   T4dUkDklamjnaLfOe3eORtEKMDaiamKbVAHXs8jnpmEqn2g/wnpZ39j09
-   qUHZNpMj1Avk9C2roEd7/lyUA6so8wWXIV2uUciUvyHEIyEJqcX9beav7
-   fKGM4E8fsNyxEFkBGUtTcIvstg17BUQBN8Dp3kFTXVLRwtDQlxT6sgWEB
-   t88SL/i6bbsZ05xtDOJ9pqyKBFEa4V3H/W2ftXE+uOmWwLPp3kYoZ40By
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="289853115"
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=/glr8O3Zuuqgkd96EO9dnVVc727rfgUq4glZycMebd4=;
+  b=MY+cYFlOdlYvMsox8za3YqhL5at8lBp4odHdHQJ6gBRX1Hs3aa9nvwtL
+   3H1Du0k+WkCo5hH86lK7KV8ptRUi861qPBAAxay8uXg0E6qOscX095ftc
+   8S8Q0/X12u09Jq30LUSiQAG6kNbm7ZFaty2XpY8jB2oDFd+qpGdbNvtG9
+   y8w0aHqaXEekSr8JKy3VtJo4bAwc0Q5H8IGu8i3Nyg8dd/Zv3pI+4UII1
+   jxRQZuLpfIhVpQ4BEK6lQXo8gcNYBO+yunQY/ftkvLEfOj9/7U5hv0+ra
+   ZNIW8O3krdhNd/ksLN7Y++eRH2mH49r/RtMGA4gTdBm9GCOYodeMfAJCJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="245305197"
 X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="289853115"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 10:10:33 -0700
+   d="scan'208";a="245305197"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 10:12:53 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="659113092"
-Received: from orsmsx604.amr.corp.intel.com ([10.22.229.17])
-  by fmsmga002.fm.intel.com with ESMTP; 22 Apr 2022 10:10:32 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
+   d="scan'208";a="648702661"
+Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
+  by FMSMGA003.fm.intel.com with ESMTP; 22 Apr 2022 10:12:53 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 22 Apr 2022 10:10:32 -0700
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ 15.1.2308.27; Fri, 22 Apr 2022 10:12:52 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 22 Apr 2022 10:10:31 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Fri, 22 Apr 2022 10:10:31 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.174)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ 15.1.2308.27 via Frontend Transport; Fri, 22 Apr 2022 10:12:52 -0700
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.45) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Fri, 22 Apr 2022 10:10:31 -0700
+ 15.1.2308.27; Fri, 22 Apr 2022 10:12:52 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H+nDecI86heb08CKUaohv9Rn9R0Sn177XpyjhhTrd/X78IR33i/g4pBMjh8RLgv/vIAMTS86REiSrXjD+Vv4S0174n7RzKxh+PuyndmJvNhTLLRqYyfkNPj+qeRg8Ne7hi5DM1oQMItIUvah0R03kRC3BfpQAoMlU0rRAuntnH8mhmrOzzyOyoypnJXpERL8RfTe4fi191udNx5uyFnHjlQe7SqUMHE0UMuZd1kZjyvmRmxUE+1X3CXDo5W3Z1t4241tSPJ1jsQOYSmOAksthGnZeF1NFr3lr6bi2E9uEF7Lr0gOafsNhN4kx0yDRE7Yd98twKbul6SLSwaS7vclzg==
+ b=Ie4h5y/4KtLzhp3CBPL9nw6HAbDvNMvfXHDo2HoeQ28aOTM12D1B085IVSJNswsczK2A8miJU2qKIq/a/yFRHFMO1K8cHaZbNPF4hTIzENf7cyxjvSW0FAxXVFOb+5iFZQ+y5dPW/tUJ8Ou1UJT0JejN0RUGMi6SmfKDP6SwNewCfteLgGHdujo/5b33ExOHu2rKM0zZakWCGgWeyPRJKpf5XParJ6TdTevypC8AYIwJRnZmVqFS8C8rkSxvIcSRvB4nLr4Fxbc9oKVol6kQVzAV7fxJ9IoCoch5Iq3n5zCiCXqFHd/HkcGkesVEVyR9dMx9w6kifRTxtZyDJdbcgA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6H07zzq3V6Q/VQ+zNdCUfAQpxUxup5lZvmlW0gvtA7k=;
- b=Uw54FMEqvisay4e6vdGhLbPvkYKhfsyeeo4yhQiIhn6c8E6zLtWoqEqyJKjgDD4dcEVrH4SP+UvRYCOczO2QH+3gj8e2gmi7PVvW+okIaa7F3jrpO5fv9/OlaUTzTP2GkD9t7oYwnsKZGyQfQRsgEax1/+R4PVW95r+peX5Hp0V3nZzpvA3+9tISBj1kYvlmbMKzpNdQc6tSBTQ3jkeAnmi2UgmSVStxiwxuELwP90MQ/00My9E7Akx8vAMNjbIdRKt+GHTzRGuB80qtPVbgvjyZH3maTYXho+j3cJBBTm+Bp1/7SsTqXGziivrkkbeXNqN3K67/3QgK3N2JSwS8Mg==
+ bh=paRO9YEz4kfCGJZo3ClFwwq/OJKZzDlA8Xava8X4dDI=;
+ b=S3qx+irj3YvT3OXiac76VssXI86lHyGuyxGMyV2vgRq1PDLg3acROoNuj/IS8x5T8aMSzuNBaq0NDIbs0ixbr4Qh8CYrYa/iKC+LLgS7qoDIr87b+70yDhRfYKddiLqu61/hbTlbylZJmP+gwM4FVgWm1RwKzZzXybpQfgzPzpqsA5X7AKI9hbSDf82col6/tlJBL5w7T1doJze13OpbxH+sBQwBFO0UTjOyWhazwUk15aPsIyxySzG7dYpRHOeZjIS/alBbVNFuy4gcdaydS9La4/HPAIPCq+SLUvE+ArkdEh3gOw/hO6JZMjBiIsP/PuvtNJ5OGG2itf4oALj6MQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by MN2PR11MB4711.namprd11.prod.outlook.com (2603:10b6:208:24e::13) with
+Received: from MW5PR11MB5811.namprd11.prod.outlook.com (2603:10b6:303:198::18)
+ by CH0PR11MB5217.namprd11.prod.outlook.com (2603:10b6:610:e0::23) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Fri, 22 Apr
- 2022 17:10:27 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::34f6:8e1d:ac6b:6e03]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::34f6:8e1d:ac6b:6e03%12]) with mapi id 15.20.5186.015; Fri, 22 Apr
- 2022 17:10:27 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "Torvalds, Linus" <torvalds@linux-foundation.org>,
-        "npiggin@gmail.com" <npiggin@gmail.com>
-CC:     "songliubraving@fb.com" <songliubraving@fb.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "Kernel-team@fb.com" <Kernel-team@fb.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "song@kernel.org" <song@kernel.org>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>
-Subject: Re: [PATCH v4 bpf 0/4] vmalloc: bpf: introduce VM_ALLOW_HUGE_VMAP
-Thread-Topic: [PATCH v4 bpf 0/4] vmalloc: bpf: introduce VM_ALLOW_HUGE_VMAP
-Thread-Index: AQHYUOjaBVzlZEmkq0yuNBGgG1oCjazxVckAgACoe4CAAPegAIAACf+AgAAgOgCAAlYLAIAA9TuAgAAUCQCAAD2rgIAA23qAgAAKuICAAhm2gIAAJ/4AgAA00QCAAHKLAIAAB8GAgACFUwCAACY8gIAACuGAgAAXVICAANQIAA==
-Date:   Fri, 22 Apr 2022 17:10:27 +0000
-Message-ID: <b88a1097c994a72e9d8abfdcc43a4a0f9003d65a.camel@intel.com>
-References: <20220415164413.2727220-1-song@kernel.org>
-         <YlnCBqNWxSm3M3xB@bombadil.infradead.org> <YlpPW9SdCbZnLVog@infradead.org>
-         <4AD023F9-FBCE-4C7C-A049-9292491408AA@fb.com>
-         <CAHk-=wiMCndbBvGSmRVvsuHFWC6BArv-OEG2Lcasih=B=7bFNQ@mail.gmail.com>
-         <B995F7EB-2019-4290-9C09-AE19C5BA3A70@fb.com> <Yl04LO/PfB3GocvU@kernel.org>
-         <Yl4F4w5NY3v0icfx@bombadil.infradead.org>
-         <88eafc9220d134d72db9eb381114432e71903022.camel@intel.com>
-         <B20F8051-301C-4DE4-A646-8A714AF8450C@fb.com> <Yl8CicJGHpTrOK8m@kernel.org>
-         <CAHk-=wh6um5AFR6TObsYY0v+jUSZxReiZM_5Kh4gAMU8Z8-jVw@mail.gmail.com>
-         <1650511496.iys9nxdueb.astroid@bobo.none>
-         <CAHk-=wiQ5=S3m2+xRbm-1H8fuQwWfQxnO7tHhKg8FjegxzdVaQ@mail.gmail.com>
-         <1650530694.evuxjgtju7.astroid@bobo.none>
-         <25437eade8b2ecf52ff9666a7de9e36928b7d28f.camel@intel.com>
-         <CAHk-=wiQcg=7++Odg08=eZZgdX4NKcPqiqGKXHNXqesTtfkmmA@mail.gmail.com>
-         <1650584815.0dtcbd4qky.astroid@bobo.none>
-         <310d562b80ad328e19a4959356600e4efe49cf4c.camel@intel.com>
-         <1650596505.bxrmjmgjur.astroid@bobo.none>
-         <1650601109.vb3owbt14k.astroid@bobo.none>
-In-Reply-To: <1650601109.vb3owbt14k.astroid@bobo.none>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13; Fri, 22 Apr
+ 2022 17:12:50 +0000
+Received: from MW5PR11MB5811.namprd11.prod.outlook.com
+ ([fe80::6820:41b6:a038:7a3b]) by MW5PR11MB5811.namprd11.prod.outlook.com
+ ([fe80::6820:41b6:a038:7a3b%6]) with mapi id 15.20.5186.013; Fri, 22 Apr 2022
+ 17:12:50 +0000
+From:   "Ertman, David M" <david.m.ertman@intel.com>
+To:     ivecera <ivecera@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+CC:     poros <poros@redhat.com>, mschmidt <mschmidt@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Saleem, Shiraz" <shiraz.saleem@intel.com>,
+        "moderated list:INTEL ETHERNET DRIVERS" 
+        <intel-wired-lan@lists.osuosl.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH net v3] ice: Fix race during aux device (un)plugging
+Thread-Topic: [PATCH net v3] ice: Fix race during aux device (un)plugging
+Thread-Index: AQHYVUZcHI6VX+DIGkiO7KkonUY3tKz8LcQQ
+Date:   Fri, 22 Apr 2022 17:12:50 +0000
+Message-ID: <MW5PR11MB5811B1CA163538BE14F58DA8DDF79@MW5PR11MB5811.namprd11.prod.outlook.com>
+References: <20220421060906.1902576-1-ivecera@redhat.com>
+In-Reply-To: <20220421060906.1902576-1-ivecera@redhat.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.401.20
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 05e9d711-ff8c-45f3-77f4-08da2482ff5d
-x-ms-traffictypediagnostic: MN2PR11MB4711:EE_
+x-ms-office365-filtering-correlation-id: 51477307-bd93-4a86-111c-08da24835482
+x-ms-traffictypediagnostic: CH0PR11MB5217:EE_
 x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <MN2PR11MB47110173470DFB46292DB280C9F79@MN2PR11MB4711.namprd11.prod.outlook.com>
+x-microsoft-antispam-prvs: <CH0PR11MB52170A2ECACF35CD594837CFDDF79@CH0PR11MB5217.namprd11.prod.outlook.com>
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: dPA7H0jWRnX0AA8+c51lNS7dBurUm/B6v/ps69kjZloJdvJYmMshl/12lnwUleOTrcq5unkjHJDIoRMzTjE/597muth7DMckKyfr3L/6E1JCgO/wAEMqnW6oVQSdRTQsODlCGqaOjjHI0M5H6Pz+ygS+SBymu/KyHUvBlKd350mLJ4GO0QANrX5aGx+Q4XGgIGou5lNgXoJGrj7MI5u/SbP89WSB9tmpXVNaQzP47w7EtpIhaKg38mPx951FTxOSpvJ6aK/hDLVK3LLjn6/JrWpJIkkc4uoE1MO5dp8XyRk7mjFp1J5XqzZZua1vAb6fb2stLrg+vkGR/sUVTcwhWTyQDu9+44dI+e//kSh8ejH4Fm0D3qc2ZuNjAVhiUUztRCrjq6qAIfJFsrTcdYrzxqrZMp+Ozz1OKdus6UQ/KeQPBG9HCP9JzHuFuHYxSAOEVhE8X0vfxIdJT6sL06o82nWnkP3CaX80YzdSMS39XAkwPIHvBp7bkvPIEZ3YF6PL0cCgUgm+kQmStVpujBn+k5YhQo4PkG3MRiLyMKhmP0a+STk3nBkdUMnpIlm8ldLY/jy0eEG6rA0gpnHQ09jPakp2LnDQMIwxYSK+hnU7waVofdcxg46GAIgF30gTbKjlMpWMx6ghJ9tBTkbxh9qrmuck8WzcBRMzQ/NQIKE0Nsl9kXLZGElthJOMJVW2OsHoHynEg8XCJhKk9Ghi/RJ920kcByvZ2g+hj1mB03vr4nUOt0Nv9JTiJcKtfJb4u5Jm
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(4744005)(8936002)(6506007)(36756003)(66476007)(66556008)(26005)(508600001)(316002)(7416002)(64756008)(66446008)(54906003)(83380400001)(2616005)(186003)(8676002)(82960400001)(122000001)(2906002)(5660300002)(6512007)(4326008)(6486002)(110136005)(86362001)(38100700002)(38070700005)(66946007)(91956017)(76116006)(71200400001)(99106002)(14583001);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: TDPWmlAK/X0lIjLl4NlZCLp7mixv9TKjfiuZVoQboc34kAdfaYZ8Ba/CuLbFzurwaAYeyu21h/+dFtLesxInxoSFDB7Oo1KRYVskbRd0Ajaetpn1kogaCIem4bgAz8TXPNUaNFNwyKeWBHnYVplRFWncSEU9CJXsqyl1KmdHr2ZUQs4Ztro/Hu1jk8od2jNl5kWtUmF3qhfoSNsDog/MKZu1x+em6pA7cQiEG5HmUiyUCDtAEQ1NeTf0nH+4d1SmUmw7E4E8p//jyDnJr7sjEefiBA5/yvwH14Y4iiTcllKxuFxk45J+riH35f4HnkiyALImyuPbInTpja0INRo4qhlignLxM30KjFjSVxJUnbDoQbuO66ZYMtner6f0Yo0JeO6AhBtlPty+m2YGVuYY2kHIIqBp85VJjgSbAkXsvYRf9nTXIKtb2yLqIVoPsqM0Rs6k2lcCSvmvxvhxV693UT7ZpsE+fd+W439Fm33SW/cQX/dz3wXJnJsJ7ZfwCVV10TPyBd3OISWtb4oBn4qrJ2Cj/NgBOX4SKPNkmDZ46SEiPoBWf75bfOw9meBBwZrkqok42cDEWZ8PtEmfgJO161Nrbk3Zd/iFFC1KGN2YjaDhjaK0S/99YOY44jdocBHhpJFrTPALAtxMXyaStKUxuvNnQOShAEtxTB4YDHG/7uQw3HGKhAFAQzJCT2Lzd0NvGzHCsBsknQMXSFFOgS5oiQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR11MB5811.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(7696005)(33656002)(7416002)(186003)(86362001)(55016003)(71200400001)(9686003)(2906002)(8936002)(5660300002)(53546011)(83380400001)(6506007)(26005)(52536014)(38070700005)(54906003)(110136005)(76116006)(66476007)(8676002)(4326008)(64756008)(66556008)(66446008)(82960400001)(66946007)(316002)(38100700002)(122000001);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MXVPaWo3Q1pxOHZxT1BPTVZBL3JvSVdQalpBeVdhUEplSHZJbjRMSlZKdmsw?=
- =?utf-8?B?QkJQellNM2hzWUVIbncvazcrTmVSZ1R1ckRJUkNVdmNZUkNrTkRyZCs2Uldw?=
- =?utf-8?B?TGdHSUtZaGxVVnp3UVNPYkpydXdSdXc2YVBnTFR1R1NScG90c2VRS0QvWGxZ?=
- =?utf-8?B?NEoxaldHM0FCVThFSmd6N0xDd2V5dnNDT1IySk50VW0vTWtMaERiVzBic096?=
- =?utf-8?B?bGQvelZpZmRzRWJ0c1pRTUN2MFF3R0RUVXd6d3hwZ3VJazRhU3dabjVnMlpU?=
- =?utf-8?B?MzUyNys4cklBTGltcXpNNEFsZFR3eWpkTDV5VTNpSTNEZC9tQmR3K3N6c0Qy?=
- =?utf-8?B?b0QzVTVWVXY5M1ZmZmpoYlU5NThPQ0ZKMCtJbUJBSkJFbStpRk5oYnJ5SVJs?=
- =?utf-8?B?eXhaSUwybmh3R3pYcDVWY0NkdmlxQkMyMlpYUkwxL0p4WktmN2hEUFJPRjZJ?=
- =?utf-8?B?d0p2VmFxaytYZzVmd3MxVXg2d2tUODVPNG5kaDh4SVhQVEZhb0RhL21SY3g2?=
- =?utf-8?B?M2drT09nNEZ5bHYrM0QrTTZES3YwWnJQSm4rRlJmTG5HQWJMVEgzcFE4UFJR?=
- =?utf-8?B?dUJFcEpOOHd5dFJiZS9QamhROUxyTkFHZTY0VnRPV05pWVlwRFpJZ3FndWlp?=
- =?utf-8?B?V2s2WXgrY01XaDIzQkQ3cnA1cjJlVFAzTEhQaDhOaHcyWjUwK3E1RFR4REJt?=
- =?utf-8?B?eGEzNWRhcFhaRXBTaWJFWXJxMHptclBaUXFySmxNZTFsSkM5NlFxOWVaNWNs?=
- =?utf-8?B?ajl6R09hMFl6VVlCTjh1dGdxRUovYyt2aS9VY1RkejVqVW5kaDA5dHJiZVQ2?=
- =?utf-8?B?WDZwT1ZFNU5nYXlnRll2VHlaZkdZODFUK0J3UXZ5S0VGYmhvaWI1ckpLZWJK?=
- =?utf-8?B?Z1ordlJ4WnRJUis2aHppeWoyOXVRV0czRXlGYlVoSW51M0Z5Y0RNVWVQdW5E?=
- =?utf-8?B?ZjBjT2N4TXVaM1dTMjRQc1U2bmNJUWY1a0ovVWdSdjhqalRmU2xPUndSa0FD?=
- =?utf-8?B?NFNGSGNxZEVYdmcwMW50eHhhZG9wR1J2SndkVi8wMngyQUo2OG5vcW9JQ0ZK?=
- =?utf-8?B?UVluZ1BrYzF0c3JOalFqTmNCNTgxbW1rWFRMa0VweWRrWm9KQmtKK1FYeWVu?=
- =?utf-8?B?bnEvaVo2ZUZRZlBWRDg4ZzJqZWxRZUlCckhUMy9mYXJLbk5ESit4WGxDQWtQ?=
- =?utf-8?B?ZU5aVXJ5NmtoU2I0eXdlZDJkazY0aW1SdTRvblNwb2RYR2F0eGJKUlN5eUhY?=
- =?utf-8?B?S3FLVFZaMjdzekhpdGVUU0tTcmhLSUN6ellsQWxCMWtqRE5RTVp4bHlEekxh?=
- =?utf-8?B?VTB4ZDltemlOUjM2TExRVFk3YUE2VC9LMjM0UUcxd2NLRDVkckd3N1FnWUdJ?=
- =?utf-8?B?c3NWbmRCR2hoTXdESGJVd1pUTDE4aXIvcWZXbVZtMmVXTjYxc0xvekZ0WEp3?=
- =?utf-8?B?anB1aC9xM2dRNCtyZGxETlUyY0JJZkkxM2NWWTJveWY4UmZsVitsYnFITG0w?=
- =?utf-8?B?WTRrMTFyOEQwZkNsSE82eFkyZ3JJdWw5SnRPSEw5b0tTL1FpR042aXpDQWtw?=
- =?utf-8?B?QjZPKzBDME9xWnJjQ1FpektRWCtZMm1Pcys4N09NYVh4K1NPTkE2WGIzUGhw?=
- =?utf-8?B?REtEWkExY2tvQ0hJNmZyNEJxNXhVMGc5ZkliaEhyRzlPWk52SFZKOHA0Qjha?=
- =?utf-8?B?UFNteGtKZ3NzL3pMZXVhUWozYncrS0ZoREpZV214dm0yMFJVMXV5Wkp6U2Fl?=
- =?utf-8?B?U0pwWUl5ZGg2YTVxdDdvYmtMY05CcEhha3FSSGFDKzB0K01la0pWUVdrT0to?=
- =?utf-8?B?bDFMSUxkY0dGTngyVHhqSEE2aVVMQlZSS1FmV2hkTEI0OGNxL1NHcDViVTlE?=
- =?utf-8?B?cHZ3Y3hQeUNUOXo1TnJNQ1QxOXNLeUlkTTZWTktDdllnVkN6NVVQSXBxeWFw?=
- =?utf-8?B?QUIva255UWprVkw2aVRsd0ZvL1IrU0R1TWZoWU42T3grWHNESkY4T0drRG1l?=
- =?utf-8?B?anY1UXI4TDFtOW9iTHVGMm9rWG9JTG8rU2lZS240TFozQXYrQ3EyWXdsMEpF?=
- =?utf-8?B?RW9yd3hwVHp5L1JXVHl0clpLQXh4UVFzVmVwaU4zZTdWUjZsVFRsYWJkc0tS?=
- =?utf-8?B?OWtTeGR2dER5K1dEK3Bkd2JPZWZ3VHE2SktkREhFV2ZDNnpZY09sSFh3Uk5M?=
- =?utf-8?B?K095N3MwWngzdUU4Tnh6N2dqaGk4TStWdW1RMmtIK3ZPNElFRktHZ3dwSXE2?=
- =?utf-8?B?dlVUbk1qZS9PbXpLVFBObmVPdU9TWDUrNkRnME9Cd2tjMzhEbTJTT1VrZ0pz?=
- =?utf-8?B?ZHBKZGlUZ2NiV2t2YlZiRlJZai9HYVZKM095N0k5bkdEcHp2VFdlZElmUmRH?=
- =?utf-8?Q?TJe3Ou5Al5wrgTmd5SiM+MdN/Jk2LYUYyEFyl?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <52CCABBBA7C787489285F645B0B94BCB@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?kmsCbamAOrKQAwy/FbpYTiM2Tb2bE+HfgeBGr8ZyqNLLYnyIuEkiDtRRDjOl?=
+ =?us-ascii?Q?kIBbsDmDZxjm0Fi0Zgd9Ia4YK1SkHB9SYBUvMRU0LccBX3Gpix9WDCUXYtLO?=
+ =?us-ascii?Q?NJNcvHhrTNjRYYgbq6eEHminb70LUiH43boE/MN+gXHhgN+6gt0ezyMe32mO?=
+ =?us-ascii?Q?QsaY/RUQm/nLSAUlto9RpRRoQ0vqxtoFZ7fnxdp/FvfXpa+uKmJdoBJOIgl2?=
+ =?us-ascii?Q?buVaHcSOfGtLMj1j539feSvAXKWh4zqY0aBkiWPjzvooFa8Vh3X/OBv1zXpo?=
+ =?us-ascii?Q?g/o7Wn6mBp9IPxvMr0kowA0/fOLSLrdYexVr6dnfvZrIKJXJ1OrnfL3SFqFy?=
+ =?us-ascii?Q?gSHayE8i5rXYPGDbr2G8WhBtrD2819fXe6sj2S4zmW+9Xoh52GhR/waknCTd?=
+ =?us-ascii?Q?dp8RIzgtfYKPeZZdaNyvprTn+WHlGDr9t64xYGaS1i0hBQL26ZywZWKjaq+x?=
+ =?us-ascii?Q?o+H02QAfdsUSi82IaeMEFhdd7m51qDZb4dL0INfU08YyTq6RgPvdSChvM++/?=
+ =?us-ascii?Q?3THoTOXgwHwB46pphse4pr2OyYNRGZliR5fX/4D65z/zwm4ZRlosOWpJgMSw?=
+ =?us-ascii?Q?HEPbuPco1++u2DWY9oZ+2A6UNZjImXRl8wM35E8yOI+AWN5iv9TYT11qCUdL?=
+ =?us-ascii?Q?qszDeyRLUvYNrz4ReZmoTE7FCrhMX5QZmap21kZiduiyb2SWZ720+rA+kwpH?=
+ =?us-ascii?Q?mrDH5s7e8QmL7GJVpJNM6X7q7poPz1DzrUXTrnEFixwe3H9qxnJoSaJAN6mF?=
+ =?us-ascii?Q?1NznviotqxZRq6X/ACINLCU+YmLGikNnQ3hbceC8CHJ10NeQBCu1TYjW6wn0?=
+ =?us-ascii?Q?nHfT+P0cp5Bk3b8FcR8vOZwKuDFuOqVkhDUI9v8DYxRhDFfnCRtm+Nr4/3Nc?=
+ =?us-ascii?Q?ZHb+AdqZ1+iRS+OY79mi5B+TVUuf/fCShC4s12cvaBUvlLTaXcr2a+Ou66dr?=
+ =?us-ascii?Q?c4gpPg6ZdB1/5QZAQwpA+HcYcp4YDBfoVMjgYMCDhuTUvk4lyTIVZ0hmKScF?=
+ =?us-ascii?Q?JW8H8Fp28gdDd/hYWmBHBje4qzkibaLgsYhsJ7/kJ48o1wJ/9bjXrk+DLBEb?=
+ =?us-ascii?Q?zLxm7wrJ0e4fgiVpNoz+VpkZ9dmAowUOg26p9Gfy8of/gyo3b6FstElq/PZ0?=
+ =?us-ascii?Q?3XeLqa5euj4YpyOd8ASi2e5lPcENZV1V8O2bUz8RljehWXxsEB38U3fd5T/T?=
+ =?us-ascii?Q?AGOmYNbA1oGnuv+iHy56gfSVLTSbZG2G3tbraSJtMsbFO6iLJZmwp+hNWo33?=
+ =?us-ascii?Q?OwpCyGI1qpCcFCkjV07JYe1lR9Xpn2DNPRQ6WjX+SIMnBIUTmpcSdCQDFk34?=
+ =?us-ascii?Q?VjeSPImBBYiuYPZ8jju/Q60f5DdkTgvxbXWqKbzPpBMAw3D1o8iBy6DXRo7x?=
+ =?us-ascii?Q?13mDXQ7ycuodVyaMWni5G83lAn9n2ziINnSWTCAlk+Vza2VQOwqbdBpU+i2W?=
+ =?us-ascii?Q?8YckqHf8ebj3qavv7LK7CGUpHjUByzfHp+uDBkgNl5T6UGWGLzOth4WPS2jS?=
+ =?us-ascii?Q?0ZF43o6sWlEWdwgsdlA8tWAZ8ac4P9pEVBlaX23nYQI2+if54YuyKiLovklS?=
+ =?us-ascii?Q?6TBpPAunWiuVfFqFBogC24reC3TrCx6bfIY+vFo84ML/yP8rurzKrRhrfdx1?=
+ =?us-ascii?Q?+hzqAxEbZSOGidTs0GPXe26/7an5ePIyW61BpLaVCcQF+g12+g+qXP8f6V2d?=
+ =?us-ascii?Q?3LW0qx4ugeuoVuO7Ta/fJrO+HOFxgog6vWRY/6sPwmBdSVK5CrWGJO5HZz1Y?=
+ =?us-ascii?Q?7wJewRzC1H+JWh78BkOpfBrR8ak7GNE=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 05e9d711-ff8c-45f3-77f4-08da2482ff5d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Apr 2022 17:10:27.4865
+X-MS-Exchange-CrossTenant-AuthSource: MW5PR11MB5811.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 51477307-bd93-4a86-111c-08da24835482
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Apr 2022 17:12:50.2847
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: /175H0jlRRdMk/Hitj041X0fyhAfwlYfuMNr+cUTQhnbbPldVBqyxoGMI3K0wLS7rPU8FaKM/FthzHOTlWndZY0kQgZd3nhlVGTy2SmGJvg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4711
+X-MS-Exchange-CrossTenant-userprincipalname: 5bYgqjQ24xRg4JrDo1nSZK5BmFmcdWuIj4weoY+8nE+p/cd4IwR3y6L/H+b0+/vczfSgZKdGtb8XdjwJ86VrMh8ZWhBbsYR3hCDIiP8MqWU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5217
 X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCAyMDIyLTA0LTIyIGF0IDE0OjMxICsxMDAwLCBOaWNob2xhcyBQaWdnaW4gd3JvdGU6
-DQo+IEFueSBvdGhlciBjb25jZXJucyB3aXRoIHRoZSBmaXg/DQoNCkkgaGFkIGFub3RoZXIgY29u
-Y2VybiB3aXRoIHRoZSB2bWFsbG9jIGh1Z2UgcGFnZXMuIFBvc3NpYmx5IGdldHRpbmcNCmludG8g
-cGFyYW5vaWQgdGVycml0b3J5IGhlcmUsIGJ1dCBpdCdzIGFyb3VuZCB0aGUgbmV3IGJlaGF2aW9y
-IG9mDQpmcmVlaW5nIHZtYWxsb2MgcGFnZSB0YWJsZXMuIEF0IGxlYXN0IG9uIHg4NiB0aGlzIGRv
-ZXNuJ3QgaGFwcGVuIHZlcnkNCm9mdGVuLiBBRkFJQ1QgaXQgYWxsIGhhcHBlbnMgZHVyaW5nIGJv
-b3Qgb3IgZHVyaW5nIG1lbW9yeSBob3QgdW5wbHVnLg0KDQpUaGUgcmlzayB0aGlzIGVudGFpbHMg
-aXMgcmFjaW5nIGFnYWluc3QgYWxsIHRoZSBzb2Z0d2FyZSBwYWdlIHRhYmxlDQp3YWxrcyBhbmQg
-d2Fsa2luZyBhIGZyZWVkIHRhYmxlLiBBdCBsZWFzdCBvbiB4ODYgdGhlIHdhbGtzIG9mIHRoZQ0K
-a2VybmVsIHRhYmxlcyBhcmUgZG9uZSB3aXRoIG5vIGxvY2tzLCB3aGljaCB3b3JrcyBiZWNhdXNl
-IHRoZSBQVEUNCnVwZGF0ZXMgYXJlIGF0b21pYyBhbmQgcHJldHR5IG11Y2ggbmV2ZXIgZnJlZWQu
-IFNvbWUgb2YgdGhlIGtlcm5lbCBwYWdlDQp0YWJsZSB3YWxrcyBpbiB0aGUgZmF1bHQgaGFuZGxl
-ciBhcmUgYWN0dWFsbHkgdHJpZ2dlcmFibGUgZnJvbQ0KdXNlcnNwYWNlLg0KDQpTbyBpdCdzIGlu
-IHRoZSBjYXRlZ29yeSBvZiAiYWxyZWFkeSB0aGVyZSBpcyBhIGJ1ZyIgb3IgYSBsaXR0bGUgdHJv
-dWJsZQ0Kc29tZW9uZSBjb3VsZCBjYXVzZSB3aXRoIGEgbG90IG9mIGVmZm9ydC4gQXQgbGVhc3Qg
-dW50aWwgUEtTIHZtYWxsb2MNCm1lbW9yeSBzaG93cyB1cC4gQW55d2F5LCBhcyBsb25nIGFzIHdl
-IGFyZSBnb2luZyBvdmVyIHRoaXMgYWxsIGFnYWluIEkNCnRob3VnaHQgaXQgd2FzIHdvcnRoIGJy
-aW5naW5nIHVwLg0K
+> -----Original Message-----
+> From: Ivan Vecera <ivecera@redhat.com>
+> Sent: Wednesday, April 20, 2022 11:09 PM
+> To: netdev@vger.kernel.org
+> Cc: poros <poros@redhat.com>; mschmidt <mschmidt@redhat.com>; Leon
+> Romanovsky <leon@kernel.org>; Brandeburg, Jesse
+> <jesse.brandeburg@intel.com>; Nguyen, Anthony L
+> <anthony.l.nguyen@intel.com>; David S. Miller <davem@davemloft.net>;
+> Jakub Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>;
+> Ertman, David M <david.m.ertman@intel.com>; Saleem, Shiraz
+> <shiraz.saleem@intel.com>; moderated list:INTEL ETHERNET DRIVERS <intel-
+> wired-lan@lists.osuosl.org>; open list <linux-kernel@vger.kernel.org>
+> Subject: [PATCH net v3] ice: Fix race during aux device (un)plugging
+>=20
+> Function ice_plug_aux_dev() assigns pf->adev field too early prior
+> aux device initialization and on other side ice_unplug_aux_dev()
+> starts aux device deinit and at the end assigns NULL to pf->adev.
+> This is wrong because pf->adev should always be non-NULL only when
+> aux device is fully initialized and ready. This wrong order causes
+> a crash when ice_send_event_to_aux() call occurs because that function
+> depends on non-NULL value of pf->adev and does not assume that
+> aux device is half-initialized or half-destroyed.
+> After order correction the race window is tiny but it is still there,
+> as Leon mentioned and manipulation with pf->adev needs to be protected
+> by mutex.
+>=20
+> Fix (un-)plugging functions so pf->adev field is set after aux device
+> init and prior aux device destroy and protect pf->adev assignment by
+> new mutex. This mutex is also held during ice_send_event_to_aux()
+> call to ensure that aux device is valid during that call. Device
+> lock used ice_send_event_to_aux() to avoid its concurrent run can
+> be removed as this is secured by that mutex.
+>=20
+> Reproducer:
+> cycle=3D1
+> while :;do
+>         echo "#### Cycle: $cycle"
+>=20
+>         ip link set ens7f0 mtu 9000
+>         ip link add bond0 type bond mode 1 miimon 100
+>         ip link set bond0 up
+>         ifenslave bond0 ens7f0
+>         ip link set bond0 mtu 9000
+>         ethtool -L ens7f0 combined 1
+>         ip link del bond0
+>         ip link set ens7f0 mtu 1500
+>         sleep 1
+>=20
+>         let cycle++
+> done
+>=20
+> In short when the device is added/removed to/from bond the aux device
+> is unplugged/plugged. When MTU of the device is changed an event is
+> sent to aux device asynchronously. This can race with (un)plugging
+> operation and because pf->adev is set too early (plug) or too late
+> (unplug) the function ice_send_event_to_aux() can touch uninitialized
+> or destroyed fields. In the case of crash below pf->adev->dev.mutex.
+>=20
+> Crash:
+> [   53.372066] bond0: (slave ens7f0): making interface the new active one
+> [   53.378622] bond0: (slave ens7f0): Enslaving as an active interface wi=
+th an u
+> p link
+> [   53.386294] IPv6: ADDRCONF(NETDEV_CHANGE): bond0: link becomes
+> ready
+> [   53.549104] bond0: (slave ens7f1): Enslaving as a backup interface wit=
+h an
+> up
+>  link
+> [   54.118906] ice 0000:ca:00.0 ens7f0: Number of in use tx queues change=
+d
+> inval
+> idating tc mappings. Priority traffic classification disabled!
+> [   54.233374] ice 0000:ca:00.1 ens7f1: Number of in use tx queues change=
+d
+> inval
+> idating tc mappings. Priority traffic classification disabled!
+> [   54.248204] bond0: (slave ens7f0): Releasing backup interface
+> [   54.253955] bond0: (slave ens7f1): making interface the new active one
+> [   54.274875] bond0: (slave ens7f1): Releasing backup interface
+> [   54.289153] bond0 (unregistering): Released all slaves
+> [   55.383179] MII link monitoring set to 100 ms
+> [   55.398696] bond0: (slave ens7f0): making interface the new active one
+> [   55.405241] BUG: kernel NULL pointer dereference, address:
+> 0000000000000080
+> [   55.405289] bond0: (slave ens7f0): Enslaving as an active interface wi=
+th an u
+> p link
+> [   55.412198] #PF: supervisor write access in kernel mode
+> [   55.412200] #PF: error_code(0x0002) - not-present page
+> [   55.412201] PGD 25d2ad067 P4D 0
+> [   55.412204] Oops: 0002 [#1] PREEMPT SMP NOPTI
+> [   55.412207] CPU: 0 PID: 403 Comm: kworker/0:2 Kdump: loaded Tainted: G
+> S
+>            5.17.0-13579-g57f2d6540f03 #1
+> [   55.429094] bond0: (slave ens7f1): Enslaving as a backup interface wit=
+h an
+> up
+>  link
+> [   55.430224] Hardware name: Dell Inc. PowerEdge R750/06V45N, BIOS 1.4.4
+> 10/07/
+> 2021
+> [   55.430226] Workqueue: ice ice_service_task [ice]
+> [   55.468169] RIP: 0010:mutex_unlock+0x10/0x20
+> [   55.472439] Code: 0f b1 13 74 96 eb e0 4c 89 ee eb d8 e8 79 54 ff ff 6=
+6 0f 1f 84
+> 00 00 00 00 00 0f 1f 44 00 00 65 48 8b 04 25 40 ef 01 00 31 d2 <f0> 48 0f=
+ b1 17 75
+> 01 c3 e9 e3 fe ff ff 0f 1f 00 0f 1f 44 00 00 48
+> [   55.491186] RSP: 0018:ff4454230d7d7e28 EFLAGS: 00010246
+> [   55.496413] RAX: ff1a79b208b08000 RBX: ff1a79b2182e8880 RCX:
+> 0000000000000001
+> [   55.503545] RDX: 0000000000000000 RSI: ff4454230d7d7db0 RDI:
+> 0000000000000080
+> [   55.510678] RBP: ff1a79d1c7e48b68 R08: ff4454230d7d7db0 R09:
+> 0000000000000041
+> [   55.517812] R10: 00000000000000a5 R11: 00000000000006e6 R12:
+> ff1a79d1c7e48bc0
+> [   55.524945] R13: 0000000000000000 R14: ff1a79d0ffc305c0 R15:
+> 0000000000000000
+> [   55.532076] FS:  0000000000000000(0000) GS:ff1a79d0ffc00000(0000)
+> knlGS:0000000000000000
+> [   55.540163] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   55.545908] CR2: 0000000000000080 CR3: 00000003487ae003 CR4:
+> 0000000000771ef0
+> [   55.553041] DR0: 0000000000000000 DR1: 0000000000000000 DR2:
+> 0000000000000000
+> [   55.560173] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7:
+> 0000000000000400
+> [   55.567305] PKRU: 55555554
+> [   55.570018] Call Trace:
+> [   55.572474]  <TASK>
+> [   55.574579]  ice_service_task+0xaab/0xef0 [ice]
+> [   55.579130]  process_one_work+0x1c5/0x390
+> [   55.583141]  ? process_one_work+0x390/0x390
+> [   55.587326]  worker_thread+0x30/0x360
+> [   55.590994]  ? process_one_work+0x390/0x390
+> [   55.595180]  kthread+0xe6/0x110
+> [   55.598325]  ? kthread_complete_and_exit+0x20/0x20
+> [   55.603116]  ret_from_fork+0x1f/0x30
+> [   55.606698]  </TASK>
+>=20
+> Fixes: f9f5301e7e2d ("ice: Register auxiliary device to provide RDMA")
+> Cc: Leon Romanovsky <leon@kernel.org>
+> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
+> ---
+>  drivers/net/ethernet/intel/ice/ice.h      |  1 +
+>  drivers/net/ethernet/intel/ice/ice_idc.c  | 33 ++++++++++++++---------
+>  drivers/net/ethernet/intel/ice/ice_main.c |  2 ++
+>  3 files changed, 23 insertions(+), 13 deletions(-)
+>=20
+> diff --git a/drivers/net/ethernet/intel/ice/ice.h
+> b/drivers/net/ethernet/intel/ice/ice.h
+> index 8ed3c9ab7ff7..a895e3a8e988 100644
+> --- a/drivers/net/ethernet/intel/ice/ice.h
+> +++ b/drivers/net/ethernet/intel/ice/ice.h
+> @@ -540,6 +540,7 @@ struct ice_pf {
+>  	struct mutex avail_q_mutex;	/* protects access to avail_[rx|tx]qs
+> */
+>  	struct mutex sw_mutex;		/* lock for protecting VSI alloc
+> flow */
+>  	struct mutex tc_mutex;		/* lock to protect TC changes
+> */
+> +	struct mutex adev_mutex;	/* lock to protect aux device access
+> */
+>  	u32 msg_enable;
+>  	struct ice_ptp ptp;
+>  	struct tty_driver *ice_gnss_tty_driver;
+> diff --git a/drivers/net/ethernet/intel/ice/ice_idc.c
+> b/drivers/net/ethernet/intel/ice/ice_idc.c
+> index 25a436d342c2..b9e471137f6a 100644
+> --- a/drivers/net/ethernet/intel/ice/ice_idc.c
+> +++ b/drivers/net/ethernet/intel/ice/ice_idc.c
+> @@ -10,13 +10,15 @@
+>   * ice_get_auxiliary_drv - retrieve iidc_auxiliary_drv struct
+>   * @pf: pointer to PF struct
+>   *
+> - * This function has to be called with a device_lock on the
+> - * pf->adev.dev to avoid race conditions.
+> + * This function has to be called with pf->adev_mutex held
+> + * to avoid race conditions.
+>   */
+>  static struct iidc_auxiliary_drv *ice_get_auxiliary_drv(struct ice_pf *p=
+f)
+>  {
+>  	struct auxiliary_device *adev;
+>=20
+> +	lockdep_assert_held(&pf->adev_mutex);
+> +
+>  	adev =3D pf->adev;
+>  	if (!adev || !adev->dev.driver)
+>  		return NULL;
+> @@ -37,14 +39,13 @@ void ice_send_event_to_aux(struct ice_pf *pf, struct
+> iidc_event *event)
+>  	if (WARN_ON_ONCE(!in_task()))
+>  		return;
+>=20
+> -	if (!pf->adev)
+> -		return;
+> +	mutex_lock(&pf->adev_mutex);
+>=20
+> -	device_lock(&pf->adev->dev);
+>  	iadrv =3D ice_get_auxiliary_drv(pf);
+>  	if (iadrv && iadrv->event_handler)
+>  		iadrv->event_handler(pf, event);
+> -	device_unlock(&pf->adev->dev);
+> +
+> +	mutex_unlock(&pf->adev_mutex);
+>  }
+>=20
+>  /**
+> @@ -290,7 +291,6 @@ int ice_plug_aux_dev(struct ice_pf *pf)
+>  		return -ENOMEM;
+>=20
+>  	adev =3D &iadev->adev;
+> -	pf->adev =3D adev;
+>  	iadev->pf =3D pf;
+>=20
+>  	adev->id =3D pf->aux_idx;
+> @@ -300,18 +300,20 @@ int ice_plug_aux_dev(struct ice_pf *pf)
+>=20
+>  	ret =3D auxiliary_device_init(adev);
+>  	if (ret) {
+> -		pf->adev =3D NULL;
+>  		kfree(iadev);
+>  		return ret;
+>  	}
+>=20
+>  	ret =3D auxiliary_device_add(adev);
+>  	if (ret) {
+> -		pf->adev =3D NULL;
+>  		auxiliary_device_uninit(adev);
+>  		return ret;
+>  	}
+>=20
+> +	mutex_lock(&pf->adev_mutex);
+> +	pf->adev =3D adev;
+> +	mutex_unlock(&pf->adev_mutex);
+> +
+>  	return 0;
+>  }
+>=20
+> @@ -320,12 +322,17 @@ int ice_plug_aux_dev(struct ice_pf *pf)
+>   */
+>  void ice_unplug_aux_dev(struct ice_pf *pf)
+>  {
+> -	if (!pf->adev)
+> -		return;
+> +	struct auxiliary_device *adev;
+>=20
+> -	auxiliary_device_delete(pf->adev);
+> -	auxiliary_device_uninit(pf->adev);
+> +	mutex_lock(&pf->adev_mutex);
+> +	adev =3D pf->adev;
+>  	pf->adev =3D NULL;
+> +	mutex_unlock(&pf->adev_mutex);
+> +
+> +	if (adev) {
+> +		auxiliary_device_delete(adev);
+> +		auxiliary_device_uninit(adev);
+> +	}
+>  }
+>=20
+>  /**
+> diff --git a/drivers/net/ethernet/intel/ice/ice_main.c
+> b/drivers/net/ethernet/intel/ice/ice_main.c
+> index 5b1198859da7..2cbbf7abefc4 100644
+> --- a/drivers/net/ethernet/intel/ice/ice_main.c
+> +++ b/drivers/net/ethernet/intel/ice/ice_main.c
+> @@ -3769,6 +3769,7 @@ u16 ice_get_avail_rxq_count(struct ice_pf *pf)
+>  static void ice_deinit_pf(struct ice_pf *pf)
+>  {
+>  	ice_service_task_stop(pf);
+> +	mutex_destroy(&pf->adev_mutex);
+>  	mutex_destroy(&pf->sw_mutex);
+>  	mutex_destroy(&pf->tc_mutex);
+>  	mutex_destroy(&pf->avail_q_mutex);
+> @@ -3847,6 +3848,7 @@ static int ice_init_pf(struct ice_pf *pf)
+>=20
+>  	mutex_init(&pf->sw_mutex);
+>  	mutex_init(&pf->tc_mutex);
+> +	mutex_init(&pf->adev_mutex);
+>=20
+>  	INIT_HLIST_HEAD(&pf->aq_wait_list);
+>  	spin_lock_init(&pf->aq_wait_lock);
+> --
+> 2.35.1
+
+
+ack

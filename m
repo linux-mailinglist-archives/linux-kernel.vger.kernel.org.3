@@ -2,141 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAFF050C100
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 23:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F0D250C101
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 23:17:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbiDVVSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 17:18:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42372 "EHLO
+        id S229875AbiDVVS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 17:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiDVVSk (ORCPT
+        with ESMTP id S229747AbiDVVS4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 17:18:40 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD64B38AAF2;
-        Fri, 22 Apr 2022 13:13:55 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id h25so6508550wrc.13;
-        Fri, 22 Apr 2022 13:13:55 -0700 (PDT)
+        Fri, 22 Apr 2022 17:18:56 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12FF27AAA1
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:14:08 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id a15so8944820pfv.11
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:14:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=w+utQDHmts9UPP01phPwUuY21AVZWcPb7bollwyH9Mk=;
-        b=IJNFyE5jk2bGLMjfXZKstoGottY1Ii5MZIiMzWUVd1UhLlu53iiHJ3Ux4NgiXfru1a
-         F7NmldnfmJPUHsQa1MiW0PyQLS8G0ByeNBf1qDkLfO5Din9W5/w5R6sebe9eSPlFNByD
-         2KmzRVWIqsg1ZfpbFCE/aXmmPgLdAPMeBJ/mbUVznC7Bqhu+Zqet0NJhTjqFo5uf5QRM
-         zGgkb7XhSiwkqVLbOscW5t2Rjoiy/ulogBKcZRxQkTGqYug8mZQVi4o5Bh1uyc9+KBj9
-         Xj94IFfEYGLh1R9YjcrgHnEXC5FS+UlGyzVT0Vl4G09OYJsClXBe7oiPUQcPKeYyUy9Y
-         SMTA==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=A1ANqscgWrr+i9qXJ4NjdbCbnC9Em60ZXs/L6LLEDPQ=;
+        b=hee5401YfY3mM159bKwgJ4bIEqeQkj173uXYT7dPpJ5azX964g02koFtEcAuIfLTj+
+         rlpNWNBUKof8UwQvg817MhGdA8by3djJRqMt/pdn1mjkj/FmSb+irGhbmhWU0wc6tnCu
+         0Pf70dD6VTbb/cnJZGxrY7M6wH4w/6WjkeYsqAtKl9xDrlijhoquGWF+F4uhCxQk1Lw3
+         vfLCi8oqj72wZJN0S4ZzitmGgeBa/4r7zsSRYM5D6K5KmYuqJnuGTwFJxGeTQW7YE4rO
+         me/rRwHzVCHcoJppCgl5ncYeL2fKRs4DIST51lgeMzb51bDZKWngVFa9r78l1TrH00PT
+         kKeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=w+utQDHmts9UPP01phPwUuY21AVZWcPb7bollwyH9Mk=;
-        b=6IdEzsrsialgQkJ14dNNBgmx0XuHsIZ6YrVP/JldVNr1ymY2wgE1jxBxJRpH4zo3bn
-         W+R5Lm5BMerxJkaTzNO1GgDqsOGes2s3AOVvErYof3EM5GCm0c+44H2KcpprO9ouXvSa
-         UGzdTAuSywFbNTQBKi2BcO1IUOi1cGqUlXCiFcoInhYOgC1qoCE1pRDlVuUSI6Jw/EHk
-         ygSS3g/+ZuYEmtSbNTaWushPsDL3UyyFaXRjv7MJvgQBPY20drJM0CGVLgFXz0sfyRs3
-         wkaWtS0KRt5DTJug3reFIoZj+52n4tWl1WhovfMhSl9If+DFexmAV7WUF5+LDvbfC2zE
-         wkzA==
-X-Gm-Message-State: AOAM532lrzSxfGMfXWXU5bFzGb/YUz2qYmoaYtHz/7obD/9XUxYpGMbu
-        1wZQa84kkLkGqnrthxV7BO8=
-X-Google-Smtp-Source: ABdhPJyjcqBTW7qhlMx8HaQwl43iu5uwxc77fSl7v1wiuG0PZdzEPLENOOiyb9VCz3c5euNoqhh2LA==
-X-Received: by 2002:a05:6000:1f83:b0:207:a4d8:5173 with SMTP id bw3-20020a0560001f8300b00207a4d85173mr5020266wrb.556.1650658146852;
-        Fri, 22 Apr 2022 13:09:06 -0700 (PDT)
-Received: from leap.localnet (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
-        by smtp.gmail.com with ESMTPSA id c12-20020a05600c0a4c00b00381141f4967sm2901272wmq.35.2022.04.22.13.09.04
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=A1ANqscgWrr+i9qXJ4NjdbCbnC9Em60ZXs/L6LLEDPQ=;
+        b=1C2mzpZu4GHCejhJyUlqp6RaN1bxleaVd1Rj0Hvvo/33AeLVoNFaK32LUYhMlhn68u
+         DKJUMo+e/F3/pGK+jN5oW2u2say5GfLWSixi2LXM9xBULfV7Oy2L+6s/s+0K3sRT6tGk
+         lcoofFX5PXqkv+zctZHf8zo8bao6VppOXJ289f+q/EZTynxpeR261QUg4+GQ8lTZATXy
+         dtQSH2sL3FgftDORu5rAn5STgys8zHdVY/Ir/f5hD6TERHkTuI0F6KfM160J59bPDitO
+         q9dbUrMv2J7cMq34+WdwptBMLAz3mDPcZ7//PpeES04RltO4QAUQR0GTnImxZ8nRUWTI
+         Wohw==
+X-Gm-Message-State: AOAM533gtdHdRIglWKbhceya7mlH3Q9nDQwVD1YNGouZmqvrYWAndoXI
+        UfjLUxECLhYCWb2BFDypRm4LJvNRFsA=
+X-Google-Smtp-Source: ABdhPJx+WS6Nuywl3yCzbvZFN3i8d1cDPEY8/qA+T8UpuC+zaV8L0Hp+W3He9um9IFbfbECC1bs4XQ==
+X-Received: by 2002:a05:6a00:1307:b0:4b0:b1c:6fd9 with SMTP id j7-20020a056a00130700b004b00b1c6fd9mr6559976pfu.27.1650658179194;
+        Fri, 22 Apr 2022 13:09:39 -0700 (PDT)
+Received: from google.com ([2620:15c:211:201:2194:db4:85a8:b0df])
+        by smtp.gmail.com with ESMTPSA id i22-20020a17090a7e1600b001b917d4a1a6sm6789977pjl.2.2022.04.22.13.09.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 13:09:05 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, outreachy@lists.linux.dev,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH 3/4] Documentation/vm: Remove "Using kmap-atomic" from highmem.rst.
-Date:   Fri, 22 Apr 2022 22:09:03 +0200
-Message-ID: <2370538.jE0xQCEvom@leap>
-In-Reply-To: <YmL2EQhfQLMoU1WV@iweiny-desk3>
-References: <20220421180200.16901-1-fmdefrancesco@gmail.com> <20220421180200.16901-4-fmdefrancesco@gmail.com> <YmL2EQhfQLMoU1WV@iweiny-desk3>
+        Fri, 22 Apr 2022 13:09:38 -0700 (PDT)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Fri, 22 Apr 2022 13:09:36 -0700
+From:   Minchan Kim <minchan@kernel.org>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Jirka Hladky <jhladky@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        regressions@lists.linux.dev,
+        Justin Forbes <jforbes@fedoraproject.org>,
+        Tejun Heo <tj@kernel.org>
+Subject: Re: PANIC: "Oops: 0000 [#1] PREEMPT SMP PTI" starting from 5.17 on
+ dual socket Intel Xeon Gold servers
+Message-ID: <YmMLgHnxoTC1idCE@google.com>
+References: <YkTxox8ZQIDtojfU@google.com>
+ <CAFxkdAq6r2WnwML-pPfdZiajaYZCEcUU3GrXW=+wsA7CxGnJdQ@mail.gmail.com>
+ <CAE4VaGBchOMWeHQ8GKiGFv_aCaNGLEvSdLWXZTpE+qC=0bgM3A@mail.gmail.com>
+ <YkY6W1NS+1RTw0VB@google.com>
+ <CAE4VaGDAMZqjwumyvbityzEiK30=5a5vuDMjaS+UHM39R-oPRw@mail.gmail.com>
+ <YkstxbC3OfzYnSRw@google.com>
+ <CAE4VaGAQZcQzN8D+iwcBnP5vY=Ctmbh+oTikvONHir6JjTgpsw@mail.gmail.com>
+ <YmGKrd1BR9HSEy6q@slm.duckdns.org>
+ <YmLznjFdpblHzZiM@google.com>
+ <56ac17fd-5f13-840c-09d8-03363af94520@leemhuis.info>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <56ac17fd-5f13-840c-09d8-03363af94520@leemhuis.info>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On venerd=C3=AC 22 aprile 2022 20:38:09 CEST Ira Weiny wrote:
-> On Thu, Apr 21, 2022 at 08:01:59PM +0200, Fabio M. De Francesco wrote:
-> > The use of kmap_atomic() is deprecated in favor of kmap_local_page().
->=20
-> I'm not sure deprecated is the right word.
+On Fri, Apr 22, 2022 at 08:44:17PM +0200, Thorsten Leemhuis wrote:
+> On 22.04.22 20:27, Minchan Kim wrote:
+> > On Thu, Apr 21, 2022 at 06:47:41AM -1000, Tejun Heo wrote:
+> > [...]
+> 
+> Many thx for looking into this.
+> 
+> > Jirka, Could you test the patch? Once it's confirmed, I need to resend
+> > it with Ccing stable.
+> 
+> When you do so, could you please include a proper "Link:" tag pointing
+> to all reports of the regression, as explained in the Linux kernels
+> documentation (see 'Documentation/process/submitting-patches.rst' and
+> 'Documentation/process/5.Posting.rst'). E.g. in this case:
+> 
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=215696
+> Link:
+> https://lore.kernel.org/lkml/CAE4VaGDZr_4wzRn2___eDYRtmdPaGGJdzu_LCSkJYuY9BEO3cw@mail.gmail.com/
 
-OK, in v2 I won't use "deprecated". Instead I'll say something about a=20
-strong preference to avoid its use. The reason why developers should avoid=
-=20
-kmap_atomic() are explained in 4/4 (I've copy-pasted some lines here for=20
-your convenience):
+Sure. Will do that.
 
-+  Each call of kmap_atomic() in the kernel creates a non-preemptible=20
-section
-+  and disable pagefaults. This could be a source of unwanted latency, so=20
-it
-+  should be only used if it is absolutely required, otherwise=20
-kmap_local_page()
-+  should be used where it is feasible.
-
-> And I think the fact that this
-> documentation is stale is a better reason for the patch as is.
->=20
-> This series should end up indicating the desire to stop growing kmap()=20
-and
-> kmap_atomic() call sites and that their deprecation is on the horizon. =20
-I've
-> not read the text in patch 4/4 yet.
-
-I'll wait for your review of 4/4 before sending v2.
-
->=20
-> > For
-> > this reason the "Using kmap_atomic" section in highmem.rst is obsolete=
-=20
-and
-> > unnecessary.
->=20
-> A lot of the text is obsolete (and redundant) but the example code might=
-=20
-be
-> useful.
->=20
-> Why not move the example and relevant bits into the kdoc for=20
-kmap_atomic()
-> which is then automatically picked up via patch 2/4.
-
-Yes, I agree with you. I'll take into account your suggestion for v2.
-
-However, as I said above, I'll hold v2 until you have time to review 4/4=20
-for the purpose to not miss any changes that you might require for that=20
-patch too.
-
-=46urthermore, while working on v2, I think that I'll extend this series wi=
-th=20
-one or two patch more, in order to address other issues I noticed.=20
-
-Thanks,
-
-=46abio=20
-
-
+> 
+> This concept is not new (Linus and quite a few other developers use them
+> like this for a long time), I just recently improved those documents to
+> clarify things, as my regression tracking efforts rely on this (and
+> there might be other people and software out there that does) -- that's
+> why it's making my work a lot harder if such tags are missing. :-/
+> 
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> 
+> P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+> reports on my table. I can only look briefly into most of them and lack
+> knowledge about most of the areas they concern. I thus unfortunately
+> will sometimes get things wrong or miss something important. I hope
+> that's not the case here; if you think it is, don't hesitate to tell me
+> in a public reply, it's in everyone's interest to set the public record
+> straight.
+> 
+> > [...]

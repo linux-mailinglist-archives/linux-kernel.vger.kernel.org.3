@@ -2,105 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7E0C50B19B
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 09:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7675150B1A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 09:30:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444831AbiDVHcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 03:32:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47046 "EHLO
+        id S1444853AbiDVHdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 03:33:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444829AbiDVHcD (ORCPT
+        with ESMTP id S1444862AbiDVHcc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 03:32:03 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0B05158B
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 00:29:10 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id ay36-20020a05600c1e2400b0038ebc885115so4494459wmb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 00:29:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=lB4iKTGk3M7LJjGdKeHTAN3EN1YcQuPFYEeXUsvm40A=;
-        b=gn/K61fp0L9YQq1130+18t5MUzpqjZ0npz9PW5DzS6kWqgdxc3s/69uYG0Z15pdqL3
-         lVQkTVYzhirxsTRWBu+nScZm3T3xQXOSWLJ6jlYxR8J18K5CJfsgFjrlj4CIl9TUJhmz
-         1R6PDFEb1ZmUcj5D9IFMD+scJuP9sT6cxa1pipj0RY7mgWdHFvdHt9pqGUO2+NyksCeM
-         6Jq6TQLpRdMy5f/bickWV23kIFfMnpSiNodbHqWDVj4Wyo6KkSE4o3WkYnxHiA9Xy2FS
-         yUKVMtGHXToWbSJIxW7Sc8lTXSN3BDGUf3muOhJlMimc6kxrCfzhmeefV5GV3GomhSaI
-         XZHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=lB4iKTGk3M7LJjGdKeHTAN3EN1YcQuPFYEeXUsvm40A=;
-        b=xlvikdT+tORZbnHHlURz6tgIzQRQYjLBawuxRhkcaYybKZQaoYfedpGbZ9L3tjOj3E
-         MeQKP9OhGcOqqjkagxS1zOMPEQmaTzg0YapGraI8nWgekMCNn/T0hw73Z8vQuUz0PtlL
-         +nUQePhrvM9dc+9W3X7WLz5DAdoUxBTiRryt+jd2LxdnAH0dqwIKfkbz08GjUM/NZKIo
-         zDV24dZlQe0d5Nbab32/993MbTCOqFpsuxxktmYhvyuLuTgsMNrGXteHAwZJ2adVmj5e
-         f3ig35NT63hvK4yPBH8fCgXfye+wAIOTiSj/4oX0LKxB72JHgPDQZCTzL0h1+Vkgn2Sr
-         4+uQ==
-X-Gm-Message-State: AOAM533xFpXUQozDtGH8dHYpsp3eSljLneL6ZzcmNd/52zOhJSUAVN6f
-        fW33XAIC3TebpJGJXA9/P8oNpFv++0BBLSuBg4Q=
-X-Google-Smtp-Source: ABdhPJznT4IyyGDZMiSWrk3S2VvjRvuB1ZKZXs32IAWr3vTQ+engqDmsjq2aO4IHPr715oKvNvewnYf5DVpvisHvS+s=
-X-Received: by 2002:a05:600c:1c1f:b0:38e:c425:5b1a with SMTP id
- j31-20020a05600c1c1f00b0038ec4255b1amr2789716wms.69.1650612549374; Fri, 22
- Apr 2022 00:29:09 -0700 (PDT)
+        Fri, 22 Apr 2022 03:32:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD0350456;
+        Fri, 22 Apr 2022 00:29:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2301E61F2F;
+        Fri, 22 Apr 2022 07:29:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C218C385A4;
+        Fri, 22 Apr 2022 07:29:38 +0000 (UTC)
+Message-ID: <101c5840-37c7-1625-9856-2f6b5870b943@xs4all.nl>
+Date:   Fri, 22 Apr 2022 09:29:36 +0200
 MIME-Version: 1.0
-Received: by 2002:a05:6020:8e:b0:1cb:9967:3383 with HTTP; Fri, 22 Apr 2022
- 00:29:08 -0700 (PDT)
-Reply-To: alexnorman438@gmail.com
-From:   Alex Norman <robertedward0065@gmail.com>
-Date:   Fri, 22 Apr 2022 09:29:08 +0200
-Message-ID: <CAHMBMHxYXGAq1Aaq+4AWzTemxH=h4+5RS-Et8niKfwEX7HC0fA@mail.gmail.com>
-Subject: Reply
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:32e listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4595]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [robertedward0065[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [alexnorman438[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [robertedward0065[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 10/24] media: h264: Sort p/b reflist using frame_num
+Content-Language: en-US
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
+        Sebastian Fricke <sebastian.fricke@collabora.com>,
+        linux-media@vger.kernel.org
+References: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
+ <20220405204426.259074-11-nicolas.dufresne@collabora.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20220405204426.259074-11-nicolas.dufresne@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Re:Investment Partnership,
+On 05/04/2022 22:44, Nicolas Dufresne wrote:
+> In the reference list builder, frame_num refers to FrameNumWrap
+> in the spec, which is the same as the pic_num for frame decoding.
+> The same applies for long_term_pic_num and long_term_frame_idx.
+> 
+> Sort all type of references by frame_num so the sort can be reused
+> for fields reflist were the sorting is done using frame_num instead.
+> In short, pic_num is never actually used for building reference
+> lists.
+> 
+> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+> ---
+>  drivers/media/v4l2-core/v4l2-h264.c | 23 +++++++++++++----------
+>  include/media/v4l2-h264.h           |  2 --
+>  2 files changed, 13 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/media/v4l2-core/v4l2-h264.c b/drivers/media/v4l2-core/v4l2-h264.c
+> index bcf9b7774560..7e1eba03099a 100644
+> --- a/drivers/media/v4l2-core/v4l2-h264.c
+> +++ b/drivers/media/v4l2-core/v4l2-h264.c
+> @@ -50,7 +50,6 @@ v4l2_h264_init_reflist_builder(struct v4l2_h264_reflist_builder *b,
+>  		if (!(dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE))
+>  			continue;
+>  
+> -		b->refs[i].pic_num = dpb[i].pic_num;
+>  		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
+>  			b->refs[i].longterm = true;
+>  
+> @@ -139,15 +138,19 @@ static int v4l2_h264_p_ref_list_cmp(const void *ptra, const void *ptrb,
+>  	}
+>  
+>  	/*
+> -	 * Short term pics in descending pic num order, long term ones in
+> -	 * ascending order.
+> +	 * For frames, short term pics are in descending pic num order and long
+> +	 * term ones in ascending order. For fields, the same direction is used
+> +	 * but with frame_num (wrapped). For frames, the value of pic_num and
+> +	 * frame_num are the same (see formula (8-28) and (8-29)). For this
+> +	 * reason we can use frame_num only and share this funciton between
 
-My name is Alex Norman.I came across your contact.I have an investment
-proposal that i want to share with you of my client desire to invest
-in your country.
+funciton -> function
 
-Your response will be appreciated for more details.
+Regards,
 
-Sincerely,
+	Hans
 
-Alex Norman
+> +	 * frames and fields reflist.
+>  	 */
+>  	if (!builder->refs[idxa].longterm)
+>  		return builder->refs[idxb].frame_num <
+>  		       builder->refs[idxa].frame_num ?
+>  		       -1 : 1;
+>  
+> -	return builder->refs[idxa].pic_num < builder->refs[idxb].pic_num ?
+> +	return builder->refs[idxa].frame_num < builder->refs[idxb].frame_num ?
+>  	       -1 : 1;
+>  }
+>  
+> @@ -173,10 +176,10 @@ static int v4l2_h264_b0_ref_list_cmp(const void *ptra, const void *ptrb,
+>  			return 1;
+>  	}
+>  
+> -	/* Long term pics in ascending pic num order. */
+> +	/* Long term pics in ascending frame num order. */
+>  	if (builder->refs[idxa].longterm)
+> -		return builder->refs[idxa].pic_num <
+> -		       builder->refs[idxb].pic_num ?
+> +		return builder->refs[idxa].frame_num <
+> +		       builder->refs[idxb].frame_num ?
+>  		       -1 : 1;
+>  
+>  	poca = v4l2_h264_get_poc(builder, ptra);
+> @@ -218,10 +221,10 @@ static int v4l2_h264_b1_ref_list_cmp(const void *ptra, const void *ptrb,
+>  			return 1;
+>  	}
+>  
+> -	/* Long term pics in ascending pic num order. */
+> +	/* Long term pics in ascending frame num order. */
+>  	if (builder->refs[idxa].longterm)
+> -		return builder->refs[idxa].pic_num <
+> -		       builder->refs[idxb].pic_num ?
+> +		return builder->refs[idxa].frame_num <
+> +		       builder->refs[idxb].frame_num ?
+>  		       -1 : 1;
+>  
+>  	poca = v4l2_h264_get_poc(builder, ptra);
+> diff --git a/include/media/v4l2-h264.h b/include/media/v4l2-h264.h
+> index 4cef717b3f18..0d9eaa956123 100644
+> --- a/include/media/v4l2-h264.h
+> +++ b/include/media/v4l2-h264.h
+> @@ -18,7 +18,6 @@
+>   * @refs.top_field_order_cnt: top field order count
+>   * @refs.bottom_field_order_cnt: bottom field order count
+>   * @refs.frame_num: reference frame number
+> - * @refs.pic_num: reference picture number
+>   * @refs.longterm: set to true for a long term reference
+>   * @refs: array of references
+>   * @cur_pic_order_count: picture order count of the frame being decoded
+> @@ -36,7 +35,6 @@ struct v4l2_h264_reflist_builder {
+>  		s32 top_field_order_cnt;
+>  		s32 bottom_field_order_cnt;
+>  		int frame_num;
+> -		u32 pic_num;
+>  		u16 longterm : 1;
+>  	} refs[V4L2_H264_NUM_DPB_ENTRIES];
+>  
+

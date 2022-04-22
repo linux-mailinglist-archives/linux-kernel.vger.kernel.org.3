@@ -2,63 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC8250B56A
+	by mail.lfdr.de (Postfix) with ESMTP id 887AC50B56B
 	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446803AbiDVKo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 06:44:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42754 "EHLO
+        id S1446798AbiDVKol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 06:44:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446804AbiDVKoW (ORCPT
+        with ESMTP id S1446674AbiDVKod (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 06:44:22 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7AAE2AC1
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:41:26 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id r189so13741047ybr.6
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:41:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BB+z/sNpdoQmOp+aeDFGtzesrgj54ahnX85kbOB7QMg=;
-        b=abNt8UJyo7oWu4YeugczIcw2HKnt573QtuCIX0kpROHHBTfDZ44GLVwSZbHXFcj6ok
-         gtW7g3p/up4ectz36iG/SH6o5V/x/RKjenuuTvxPUt8ZzfiqxUXXgzQDg/tz8MKFNcYz
-         ildOPGsN/S1GC5l6LWtEmSveqZrZkIT5Tyw2N5OL8fxmP/vannelo27VcTV/eTKh/mUW
-         1+Hm9E6rUbWvwUJaqal6SMegDE135493vMaM0OQefuPmkxB0kMPhI3NtgWSfLemUqvna
-         DMIOl1ND9xRdijwsZ/jQP5ysxHcGlkfQdhEQH4TXakrqAiUEA7nymqvQyWfDjWQPSIW6
-         lZ0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BB+z/sNpdoQmOp+aeDFGtzesrgj54ahnX85kbOB7QMg=;
-        b=DiQl/kk4OMZd1Hs9Z8xBkVsTzJt9KEtY3709Yl4h3jdIMaAcStulFpAlYDhis51wqr
-         QgFmiaNSXHyJfwUFVbBqfsgFZMluk8vVlpE6GS19hFZGg/NKUYU2uTZmr/C94QnfYTt2
-         zKdwri+OhMuO1wZJSPZMHcg0RbjDsT6AKRKigqiFAdeWjI4hcUy+0bXYhw72IuqypIXE
-         TbiEHN9GAFxsTNpamskWEAXd+kK9jgwbt7SWDc/J+KOyJ5dnkri7B4v7i7XlfPMhcVuM
-         PyxmbTxTjrQGf1wAg4jRzXgx8qXjDQeKzeD6VyqrQDPoJ4xEFnMoLNds2E4QN6eq5nSG
-         mkgQ==
-X-Gm-Message-State: AOAM530E57U95A5T9drT2zf6SuNNdUzi6AhuJ5PW1i8I16YteCD9Zc7U
-        BSV/NC5b3wwrTmrf1OgXiUocKD14AALOu+wqHCmNl2OPQevefA==
-X-Google-Smtp-Source: ABdhPJywlbGi8Liw+QkSDej3Yl+pGh+CnUP5xw1RQTvw7UzpZloUGNHHQvZWxVNt0MvxBaCcf9gKq0bKcE3NMiK40DY=
-X-Received: by 2002:a05:6902:1547:b0:641:fb0b:4830 with SMTP id
- r7-20020a056902154700b00641fb0b4830mr3946865ybu.175.1650624086191; Fri, 22
- Apr 2022 03:41:26 -0700 (PDT)
+        Fri, 22 Apr 2022 06:44:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1A0F4F;
+        Fri, 22 Apr 2022 03:41:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C11A8B82C14;
+        Fri, 22 Apr 2022 10:41:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 535B0C385A0;
+        Fri, 22 Apr 2022 10:41:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650624090;
+        bh=XgeHDscq4XiMKn3nikqVv26WbVAc1uoCYL9IXMXzt9U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=U7rO0t94WUjIwU5upicuh6PLMNXEsvt+bhoOcdH63t/Tzz6noC7mBAFjt9F4SVCPC
+         zhPYMjy8XQTXW3nUsCL5rB3dO0Fg6kXiv8NHCiVx0ypj1bfN+V8tQ2rtU1f/zIIjfD
+         vMmhwAZFoLdjZ4Y/NzHy7a56lvCVySO8qfe1tEYlwUdHBK84jbKWYuBlFhyv0S/+Mw
+         3nchJRG4qQh3OUWbPpyMB/EQf2PDXJqXgnz2QALSevvdK3MAySn+EDH665betUemdD
+         8xQGZ2ykaOUOY3DPT/OQt2LmksyDnzOHePeNILOiIA4N/OEK+3UTj2DkmazxBDSmx4
+         qCfJo4EmMsRBw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1nhqj6-0002YD-2f; Fri, 22 Apr 2022 12:41:24 +0200
+Date:   Fri, 22 Apr 2022 12:41:24 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Prasad Malisetty <quic_pmaliset@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-phy@lists.infradead.org
+Subject: Re: [PATCH RFC 1/5] phy: qcom-qmp: add support for pipe clock muxing
+Message-ID: <YmKGVP5T/ijPvV+g@hovoldconsulting.com>
+References: <20220421102041.17345-1-johan+linaro@kernel.org>
+ <20220421102041.17345-2-johan+linaro@kernel.org>
+ <f4cfc1b3-2a85-f948-ff2c-27588cbe2210@linaro.org>
 MIME-Version: 1.0
-References: <20220422032227.2991553-1-yangyingliang@huawei.com>
-In-Reply-To: <20220422032227.2991553-1-yangyingliang@huawei.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Fri, 22 Apr 2022 13:41:15 +0300
-Message-ID: <CAA8EJpq2dNaRgEqrKpKTTfAm1p=QRZd2z1ouguiA6wUoxA9QAA@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm/hdmi: check return value after calling platform_get_resource_byname()
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, freedreno@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        robdclark@gmail.com, jilaiw@codeaurora.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f4cfc1b3-2a85-f948-ff2c-27588cbe2210@linaro.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,40 +72,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Apr 2022 at 06:10, Yang Yingliang <yangyingliang@huawei.com> wrote:
->
-> It will cause null-ptr-deref if platform_get_resource_byname() returns NULL,
-> we need check the return value.
->
-> Fixes: c6a57a50ad56 ("drm/msm/hdmi: add hdmi hdcp support (V3)")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+On Thu, Apr 21, 2022 at 02:36:05PM +0300, Dmitry Baryshkov wrote:
+> On 21/04/2022 13:20, Johan Hovold wrote:
+> > Some QMP PHYs need to remux to their pipe clock input to the pipe clock
+> > output generated by the PHY before powering on the PHY and restore the
+> > default source during power down.
+> > 
+> > Add support for an optional pipe clock mux which will be reparented to
+> > the generated pipe clock before powering on the PHY and restored to the
+> > default reference source on power off.
+> > 
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > ---
+ 
+> > +static int qcom_qmp_phy_pipe_clk_enable(struct qmp_phy *qphy)
+> > +{
+> > +	struct qcom_qmp *qmp = qphy->qmp;
+> > +	int ret;
+> > +
+> > +	ret = clk_set_parent(qphy->pipemux_clk, qmp->pipe_clksrc);
+> > +	if (ret)
+> > +		dev_err(qmp->dev, "failed to reparent pipe clock: %d\n", ret);
+> > +
+> > +
+> > +	ret = clk_prepare_enable(qphy->pipe_clk);
+> > +	if (ret) {
+> > +		dev_err(qmp->dev, "failed to enable pipe clock: %d\n", ret);
+> > +		goto err_restore_parent;
+> > +	}
+> 
+> So, what you do here is you manually set the parent of 
+> GCC_PCIE_1_PIPE_CLK_SRC to PHY pipe clock right before enabling 
+> GCC_PCIE_1_PIPE_CLK and set it back to XO after disabling 
+> GCC_PCIE_1_PIPE_CLK.
+> 
+> My proposal is doing exactly the same, but doing that automatically 
+> through the clock infrastructure. After removing pipe_clock handling 
+> from pcie driver itself, we can be sure that nobody is playing dirty 
+> tricks around the pipe_clock.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Yes, the end result is similar, but I believe handling it explicitly in
+the driver is preferred for a number of reasons that I've already
+mentioned. Not least because the mux needs to be updated when the PHY is
+powered on, not when the GCC pipe clock is ungated.
 
-> ---
->  drivers/gpu/drm/msm/hdmi/hdmi.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/gpu/drm/msm/hdmi/hdmi.c b/drivers/gpu/drm/msm/hdmi/hdmi.c
-> index ec324352e862..07e2ad527af9 100644
-> --- a/drivers/gpu/drm/msm/hdmi/hdmi.c
-> +++ b/drivers/gpu/drm/msm/hdmi/hdmi.c
-> @@ -142,6 +142,10 @@ static struct hdmi *msm_hdmi_init(struct platform_device *pdev)
->         /* HDCP needs physical address of hdmi register */
->         res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
->                 config->mmio_name);
-> +       if (!res) {
-> +               ret = -EINVAL;
-> +               goto fail;
-> +       }
->         hdmi->mmio_phy_addr = res->start;
->
->         hdmi->qfprom_mmio = msm_ioremap(pdev, config->qfprom_mmio_name);
-> --
-> 2.25.1
->
+In practise, powering on the PHY and ungating the clock happen to
+coincide in time because only the PHY driver will use the GCC pipe
+clock, but conceptually they are unrelated (and as the GDSC hang shows,
+something in the system appears to be ungating the clock while the PHY
+is powered off).
 
+The QMP PHY driver implementation is much more straight forward and
+easier to reason about than having the mux implementation spread out
+over multiple clock drivers where it's not clear at all what is really
+going on or why (and even debugfs will give you a false view of the
+clock tree state).
 
--- 
-With best wishes
-Dmitry
+> > +
+> > +	return 0;
+> > +
+> > +err_restore_parent:
+> > +	clk_set_parent(qphy->pipemux_clk, qphy->piperef_clk);
+> > +
+> > +	return ret;
+> > +}
+> > +
+> > +static void qcom_qmp_phy_pipe_clk_disable(struct qmp_phy *qphy)
+> > +{
+> > +	struct qcom_qmp *qmp = qphy->qmp;
+> > +	int ret;
+> > +
+> > +	clk_disable_unprepare(qphy->pipe_clk);
+> > +
+> > +	ret = clk_set_parent(qphy->pipemux_clk, qphy->piperef_clk);
+> > +	if (ret)
+> > +		dev_err(qmp->dev, "failed to reparent pipe clock: %d\n", ret);
+> > +}
+> > +
+
+Johan

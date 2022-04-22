@@ -2,177 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3773650BDAD
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E65CB50BDAB
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386738AbiDVQ6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 12:58:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57706 "EHLO
+        id S234508AbiDVQ6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 12:58:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449927AbiDVQ5t (ORCPT
+        with ESMTP id S1449914AbiDVQ5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 12:57:49 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 259CFE7A
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:54:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650646495; x=1682182495;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yZNBnSuynarGRjzVvsGb3f57oeFuePokaCkVYDt1K1s=;
-  b=MnHVpwJ5GvgUqs6pp+hibIPc2bu0zUem/PAK7i448yVeAO5GTpRV3pzt
-   fvYIMR/o0lM+UC8Q+jGZioddlGtyTusSWun9VCBYJ9gZT8Ai1Kv5YsMBV
-   l75aqsi54X62kykaSoo3Ee+ydwabKd01G2vLwwkXENax3niCgEISPKdc6
-   QegkRJgoF5ulDM27rbwnNzDsTabddEcf4KSSezaE02k0e2w3Ng7m++puh
-   QDENBQGnWPwuF1ZDPK1hJdkpX1TkPkaCZsM1QO0UYrBGHEZh6LKicnSRj
-   SX4ZiNvvdSSs9BPLOjxfi5/BKhWCL7Bku1oSQ5auAT9/hMDc8rna1xob2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="263574899"
-X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="263574899"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 09:54:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="534471896"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 22 Apr 2022 09:54:50 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nhwYU-000AMY-1w;
-        Fri, 22 Apr 2022 16:54:50 +0000
-Date:   Sat, 23 Apr 2022 00:54:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chenyang Li <lichenyang@loongson.cn>,
-        Maxime Ripard <mripard@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Dan Carpenter <error27@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, devel@linuxdriverproject.org
-Cc:     kbuild-all@lists.01.org, Yi Li <liyi@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 1/4] drm/loongson: Add DRM Driver for Loongson 7A1000
- bridge chip
-Message-ID: <202204230030.kZgmTGOQ-lkp@intel.com>
-References: <20220422081416.682625-1-lichenyang@loongson.cn>
+        Fri, 22 Apr 2022 12:57:44 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A499A5FF0B
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:54:50 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id p21so9212827ioj.4
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:54:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=I8KiB3k0qd5aGBnHBibLj4k3w/QF0UAZ/tRM/Axt2UE=;
+        b=enp9BRHjyw5GkiP09bboYtyV2m3NiwJ5+1H2BxdsNHb/CN6IJpazQ2Uq4gTIBUN00H
+         HP+bL7VZap6/1+DNCTBdmMWCC9JjrWTIRdn3Q3HT6/GvqvEYpJk7eJSMZnFXLCi4LyR0
+         +2gXMbeJeSMtiiTuOlO1Ghq9qUxCexUXJRxazvFlr0RmzDMPwqML0cfCf1sAYbVxXhxp
+         gtGmSfFMXj6zcMWeAdBPbW4EB3Ir80KXQ9t+WNiOm+D7i6VuEP/4IhVCOpBS0A6KVpiJ
+         RwBqde7saG5FTGnSr07Ov7UedZk+UUVZ7D0q/l/2cE6EI4MkA2ShUJmiGeILPF5XcJUJ
+         T/Ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=I8KiB3k0qd5aGBnHBibLj4k3w/QF0UAZ/tRM/Axt2UE=;
+        b=F8hbWZwPh5Vg52InFlexw74H7VfMi2DQJgvbNgQ+7L8vLlhiXHlVQOemr3h9xBpcCB
+         1dWP3utLZGraaJbBJ5pdLczGTjkKoESwB3XsY8+9r/0zjJgF/ERaoh89kNbyc6i73bGj
+         ZISsjc2WzC8zm9RI8Bf7l6tCgYAGym6d0cc53saU0OkEyhqOt5JZFmRJR4ygp7MQLb5N
+         Ix0N+vzATvDQPNyeXn+dEgdw14kNySYEsAHE/zgWQXd/mfkCV/crOWLAGd6f84zhq4Sp
+         NsaZymH80i7NVNQjuK2NwEp+OqZ52y6YSRxgX5uNG6xL4R3L1i7pYurHVduJi52i7c1H
+         D93g==
+X-Gm-Message-State: AOAM530ygIZTXHenKYQactDfr5ErgUOrWwg39fZ6xYsyfuy3oL7BBtlD
+        2GMn4wLWGG6Ak9C8eWK57+QvvoJ4yHkXZMYd0ffsfVrMJhY=
+X-Google-Smtp-Source: ABdhPJzUAJpHWlGun68BFX5xSwYGsM4XUcVTIrs65mISg1PsnyRYcaz4u9X4l5p02NQn9CemAE6FTGjZlzrxxRp9Go4=
+X-Received: by 2002:a05:6638:3393:b0:32a:93cd:7e48 with SMTP id
+ h19-20020a056638339300b0032a93cd7e48mr2509483jav.93.1650646490086; Fri, 22
+ Apr 2022 09:54:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422081416.682625-1-lichenyang@loongson.cn>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220120162520.570782-1-valentin.schneider@arm.com>
+ <93a20759600c05b6d9e4359a1517c88e06b44834.camel@fb.com> <20220422110903.GW2731@worktop.programming.kicks-ass.net>
+ <20220422115557.0dc5cd86@gandalf.local.home>
+In-Reply-To: <20220422115557.0dc5cd86@gandalf.local.home>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 22 Apr 2022 09:54:39 -0700
+Message-ID: <CAEf4BzbnFBkdpHdwf3Uf_yQDt5Sn8NVkQNUts70EDVu8KmhsHw@mail.gmail.com>
+Subject: Re: [PATCH] sched/tracing: append prev_state to tp args instead
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Delyan Kratunov <delyank@fb.com>,
+        "valentin.schneider@arm.com" <valentin.schneider@arm.com>,
+        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
+        "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "mingo@kernel.org" <mingo@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "Kenta.Tada@sony.com" <Kenta.Tada@sony.com>,
+        "adharmap@quicinc.com" <adharmap@quicinc.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "bristot@redhat.com" <bristot@redhat.com>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "legion@kernel.org" <legion@kernel.org>,
+        "ed.tsai@mediatek.com" <ed.tsai@mediatek.com>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "juri.lelli@redhat.com" <juri.lelli@redhat.com>,
+        "x86@kernel.org" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chenyang,
+On Fri, Apr 22, 2022 at 8:56 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Fri, 22 Apr 2022 13:09:03 +0200
+> Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> > If bpf wants to ride on them, it needs to suffer the pain of doing so.
+>
+> And I constantly hear that BPF is not an ABI, and is not guaranteed to work
+> from one kernel version to the next.
 
-Thank you for the patch! Perhaps something to improve:
+Right, and that's true in terms of expectations of BPF users. But it's
+also true that in pracitce people's tools have to keep working across
+multiple kernel versions and we've developed multiple technologies
+(e.g., BPF CO-RE) and techniques to allow people to adapt to kernel
+changes. See [0] and [1] for some of the tricks people do in real
+production tools to accommodate kernel changes. Some kernel changes
+are easier to accommodate, some are harder. This particular one,
+though, is pretty complicated as no function or symbol got renamed, so
+it's much more involved to detect changes like this. But ultimately
+people will do that anyway.
 
-[auto build test WARNING on drm/drm-next]
-[also build test WARNING on v5.18-rc3 next-20220422]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+But the ask here is, given it's not too late and it's trivial to avoid
+this breakage in the first place by reordering function arguments, we
+(BPF users) kindly ask to consider doing that. Hopefully this trivial
+change isn't hampering kernel development in any way.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chenyang-Li/drm-loongson-Add-DRM-Driver-for-Loongson-7A1000-bridge-chip/20220422-161914
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: arm-randconfig-s031-20220422 (https://download.01.org/0day-ci/archive/20220423/202204230030.kZgmTGOQ-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/e9a9964d58e6cc797a113fa47f54583c10908d63
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Chenyang-Li/drm-loongson-Add-DRM-Driver-for-Loongson-7A1000-bridge-chip/20220422-161914
-        git checkout e9a9964d58e6cc797a113fa47f54583c10908d63
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/loongson/
+  [0] https://github.com/iovisor/bcc/pull/3917
+  [1] https://github.com/iovisor/bcc/pull/3747
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-
-sparse warnings: (new ones prefixed by >>)
->> drivers/gpu/drm/loongson/loongson_drv.c:91:9: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/loongson/loongson_drv.c:99:5: sparse: sparse: symbol 'loongson_modeset_init' was not declared. Should it be static?
-
-vim +/__iomem +91 drivers/gpu/drm/loongson/loongson_drv.c
-
-    36	
-    37	static int loongson_device_init(struct drm_device *dev)
-    38	{
-    39		struct loongson_device *ldev = to_loongson_device(dev);
-    40		struct pci_dev *pdev = to_pci_dev(dev->dev);
-    41		struct pci_dev *gpu_pdev;
-    42		resource_size_t aper_base;
-    43		resource_size_t aper_size;
-    44		resource_size_t mmio_base;
-    45		resource_size_t mmio_size;
-    46		int ret;
-    47	
-    48		/* GPU MEM */
-    49		/* We need get 7A-gpu pci device information for ldev->gpu_pdev */
-    50		/* dev->pdev save 7A-dc pci device information */
-    51		gpu_pdev = pci_get_device(PCI_VENDOR_ID_LOONGSON,
-    52					  PCI_DEVICE_ID_LOONGSON_GPU, NULL);
-    53		ret = pci_enable_device(gpu_pdev);
-    54		if (ret)
-    55			return ret;
-    56		pci_set_drvdata(gpu_pdev, dev);
-    57	
-    58		aper_base = pci_resource_start(gpu_pdev, 2);
-    59		aper_size = pci_resource_len(gpu_pdev, 2);
-    60		ldev->vram_start = aper_base;
-    61		ldev->vram_size = aper_size;
-    62	
-    63		if (!devm_request_mem_region(dev->dev, ldev->vram_start,
-    64					     ldev->vram_size, "loongson_vram")) {
-    65			drm_err(dev, "Can't reserve VRAM\n");
-    66			return -ENXIO;
-    67		}
-    68	
-    69		/* DC MEM */
-    70		mmio_base = pci_resource_start(pdev, 0);
-    71		mmio_size = pci_resource_len(pdev, 0);
-    72		ldev->mmio = devm_ioremap(dev->dev, mmio_base, mmio_size);
-    73		if (!ldev->mmio) {
-    74			drm_err(dev, "Cannot map mmio region\n");
-    75			return -ENOMEM;
-    76		}
-    77	
-    78		if (!devm_request_mem_region(dev->dev, mmio_base,
-    79					     mmio_size, "loongson_mmio")) {
-    80			drm_err(dev, "Can't reserve mmio registers\n");
-    81			return -ENOMEM;
-    82		}
-    83	
-    84		/* DC IO */
-    85		ldev->io = devm_ioremap(dev->dev, LS7A_CHIPCFG_REG_BASE, 0xf);
-    86		if (!ldev->io)
-    87			return -ENOMEM;
-    88	
-    89		ldev->num_crtc = 2;
-    90	
-  > 91		drm_info(dev, "DC mmio base 0x%llx size 0x%llx io 0x%llx\n",
-    92			 mmio_base, mmio_size, *(u64 *)ldev->io);
-    93		drm_info(dev, "GPU vram start = 0x%x size = 0x%x\n",
-    94			 ldev->vram_start, ldev->vram_size);
-    95	
-    96		return 0;
-    97	}
-    98	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+> -- Steve

@@ -2,69 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB70F50B560
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 872ED50B561
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446588AbiDVKlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 06:41:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37858 "EHLO
+        id S1442584AbiDVKnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 06:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243767AbiDVKlT (ORCPT
+        with ESMTP id S1446845AbiDVKmq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 06:41:19 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA93054F96
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:38:25 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id b95so13745976ybi.1
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:38:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CsjTxEEAvysZcrGQCgnoFVKXKLqNd9huKoE9KzmmMI0=;
-        b=svVpZpsCBwi05D6HGuAV6VNl0TnNbi1By/r9OWleeVotyMkYhrsbqEJDIDSdPkREjz
-         3362oZIRJFtkLcg5aEJpF3n1xd6ipXFEq/j48MVsozpuWi4XWg+JUCI54KpRFm6k9fuH
-         iuiYLtukeDIzvPYOnFvdeD/Dh3cWMScn6ijy/wJ9dMAM+Ai2YRgE3cPtVrKFn8pBOMiS
-         p0gTaif83J768pmvmDZo9cf506rFJd/SfdoLFgYs7uAXbxxuhhAh95UKsS8QPEpG0lM9
-         hAwDNyeI/sHaoL/fQQkj7rT73VhtZtRoFC2YjZupOfhfwmA9IsZitPApsKPfei2M4NAh
-         nktA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CsjTxEEAvysZcrGQCgnoFVKXKLqNd9huKoE9KzmmMI0=;
-        b=oWVVKyTo/o52LgJuaaZWdk+HA3g2fXi3+gizbs8CDgJEFIfgZl3qom8Mm16FNzLohN
-         6wpAbFnMcfZQ0wer012UUSNeoS7wgNuEX46N9JouxYakPJvX4NaZRi4n9UvuZbdW8GNJ
-         0BPzRTRpeqLgkVgXsFVFyIicAAnwIy8wzCjn/uCY9wraCdNOYBHsGaaM3wKlOA82Qind
-         qMP4djFHaBGoDYqno3wgyrj5V5Ph816ZRjlsNJDCyjiHQH72JDq8CU3xoQTBn5Dxu2oG
-         2lagGGWoU7OB+xmzRq0+fIiRzng135CdRCFHVtfHhyi032Y8TVyeMjxfTeZRfUsHNLkB
-         W90Q==
-X-Gm-Message-State: AOAM530Pyd9CQo/2s7IYyg0AOnHqGKM3EnDgqW5bD3dbUTtpcXvtu5Qo
-        yvBRNGgvVT/djDgRo/Cod3GypjP7plYgkjlklrahrA==
-X-Google-Smtp-Source: ABdhPJwoWm73p/RTkzfbVpkviY0RnM3o6+33FT79Cu+M02kBxAUNqMYZoyFQVWm/BUVU98mJ8P1OBCoMWhjNFhY8R9Y=
-X-Received: by 2002:a25:9b85:0:b0:63d:ad6c:aae8 with SMTP id
- v5-20020a259b85000000b0063dad6caae8mr3527563ybo.609.1650623904827; Fri, 22
- Apr 2022 03:38:24 -0700 (PDT)
+        Fri, 22 Apr 2022 06:42:46 -0400
+Received: from mailout2.rbg.tum.de (mailout2.rbg.tum.de [IPv6:2a09:80c0::202])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B09554A8;
+        Fri, 22 Apr 2022 03:39:39 -0700 (PDT)
+Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [IPv6:2a09:80c0:254::14])
+        by mailout2.rbg.tum.de (Postfix) with ESMTPS id 293454C046E;
+        Fri, 22 Apr 2022 12:39:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
+        s=20220209; t=1650623977;
+        bh=OziXpZopIYxb3f1gE+uPznYxZhbuOzdu2g8U5ipdPbY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JhS15dFSGztpvzsMkJ6qayNPHMOkYoV7DK/EMamtJDzraoIvQ/98HH1s7aHKTgE+q
+         hOf7aS9sYP2Vy3xhUMhbMp2SOrWpez7VIwkvqDOTwgHFNPLey1EqsGo7cKDz1bM3a0
+         fIy7nyzGK7M8R9ZjDkPLwE7q4bwA44Q0Di5kNt6hEqWrFaYIlOKtquCINJsvT9VtIb
+         Ok5QIXNXAK2GRBE4G3MzvgOBTen8VKRahCJ8KvJ882BqMLSD3TH57JMi1qcKqD+KLL
+         KVuX+GaYr0hW4BACi63hugHoNubFG7Gjcw6zMvNe8of4gEUL4oOY0RcAIOrzEEy4tf
+         LBpWNEvRodfZA==
+Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
+        id 23BA86D8; Fri, 22 Apr 2022 12:39:37 +0200 (CEST)
+Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id F24156D7;
+        Fri, 22 Apr 2022 12:39:36 +0200 (CEST)
+Received: from mail.in.tum.de (vmrbg426.in.tum.de [131.159.0.73])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id ECF6C55F;
+        Fri, 22 Apr 2022 12:39:36 +0200 (CEST)
+Received: by mail.in.tum.de (Postfix, from userid 112)
+        id E7B524A037C; Fri, 22 Apr 2022 12:39:36 +0200 (CEST)
+Received: (Authenticated sender: heidekrp)
+        by mail.in.tum.de (Postfix) with ESMTPSA id 83A464A01EC;
+        Fri, 22 Apr 2022 12:39:35 +0200 (CEST)
+        (Extended-Queue-bit xtech_ad@fff.in.tum.de)
+Date:   Fri, 22 Apr 2022 12:39:34 +0200
+From:   Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
+To:     Nick Desaulniers <ndesaulniers@google.com>,
+        "Jose E. Marchesi" <jemarch@gnu.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        llvm@lists.linux.dev, Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+Subject: Re: Dangerous addr to ctrl dependency transformation in
+ fs/nfs/delegation.c::nfs_server_return_marked_delegations()?
+Message-ID: <YmKF5tiH4W8AVdXe@Pauls-MacBook-Pro.local>
+References: <Yk7/T8BJITwz+Og1@Pauls-MacBook-Pro.local>
+ <CAKwvOdkEULT_OOeaaCneJjbrE=O3kC8SMDs2thFa9gBfpuo2Jg@mail.gmail.com>
 MIME-Version: 1.0
-References: <000000000000f46c6305dd264f30@google.com> <YmEf8dpSXJeZ2813@elver.google.com>
- <YmI4d8xR3tafv2Cq@FVFYT0MHHV2J.usts.net>
-In-Reply-To: <YmI4d8xR3tafv2Cq@FVFYT0MHHV2J.usts.net>
-From:   Marco Elver <elver@google.com>
-Date:   Fri, 22 Apr 2022 12:37:48 +0200
-Message-ID: <CANpmjNPyBV8RCXf_=4oOvkLCavmgeLKw9w3M4zQEFcNMG7RCDg@mail.gmail.com>
-Subject: Re: [syzbot] WARNING in __kfence_free
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     syzbot <syzbot+ffe71f1ff7f8061bcc98@syzkaller.appspotmail.com>,
-        akpm@linux-foundation.org, dvyukov@google.com, glider@google.com,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        cgroups@vger.kernel.org, Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKwvOdkEULT_OOeaaCneJjbrE=O3kC8SMDs2thFa9gBfpuo2Jg@mail.gmail.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,58 +82,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Apr 2022 at 07:09, Muchun Song <songmuchun@bytedance.com> wrote:
->
-> On Thu, Apr 21, 2022 at 11:12:17AM +0200, Marco Elver wrote:
-> > On Thu, Apr 21, 2022 at 01:58AM -0700, syzbot wrote:
-> > > Hello,
-> > >
-> > > syzbot found the following issue on:
-> > >
-> > > HEAD commit:    559089e0a93d vmalloc: replace VM_NO_HUGE_VMAP with VM_ALLO..
-> > > git tree:       upstream
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=10853220f00000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=2e1f9b9947966f42
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=ffe71f1ff7f8061bcc98
-> > > compiler:       aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > userspace arch: arm64
-> > >
-> > > Unfortunately, I don't have any reproducer for this issue yet.
-> > >
-> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > Reported-by: syzbot+ffe71f1ff7f8061bcc98@syzkaller.appspotmail.com
-> > >
-> > > ------------[ cut here ]------------
-> > > WARNING: CPU: 0 PID: 2216 at mm/kfence/core.c:1022 __kfence_free+0x84/0xc0 mm/kfence/core.c:1022
+On Thu, Apr 14, 2022 at 02:21:25PM -0700, Nick Desaulniers wrote:
+> On Thu, Apr 7, 2022 at 8:22 AM Paul Heidekrüger
+> <paul.heidekrueger@in.tum.de> wrote:
 > >
-> > That's this warning in __kfence_free:
+> > Hi all,
 > >
-> >       #ifdef CONFIG_MEMCG
-> >               KFENCE_WARN_ON(meta->objcg);
-> >       #endif
-> >
-> > introduced in 8f0b36497303 ("mm: kfence: fix objcgs vector allocation").
-> >
-> > Muchun, are there any circumstances where the assumption may be broken?
-> > Or a new bug elsewhere?
->
-> meta->objcg always should be NULL when reaching __kfence_free().
-> In theory, meta->objcg should be cleared via memcg_slab_free_hook().
->
-> I found the following code snippet in do_slab_free().
->
->   /* memcg_slab_free_hook() is already called for bulk free. */
->   if (!tail)
->         memcg_slab_free_hook(s, &head, 1);
->
-> The only posibility is @tail is not NULL, which is the case of
-> kmem_cache_free_bulk(). However, here the call trace is kfree(),
-> it seems to be impossible that missing call memcg_slab_free_hook().
+> > work on my dependency checker tool is progressing nicely, and it is
+> > flagging, what I believe is, a harmful addr to ctrl dependency
+> > transformation. For context, see [1] and [2]. I'm using the Clang
+> > compiler.
+> > [1]: https://linuxplumbersconf.org/event/7/contributions/821/attachments/598/1075/LPC_2020_--_Dependency_ordering.pdf
+> > [2]: https://lore.kernel.org/llvm/YXknxGFjvaB46d%2Fp@Pauls-MacBook-Pro/T/#u
+> 
+> Hi Paul,
+> Thanks for the report and your (and your team's) work on this tool.
+> Orthogonal to your report, Jose (cc'ed) and I are currently in the
+> planning process to put together a Kernel+Toolchain microconference
+> track at Linux Plumbers Conference [0] this year (Sept 12-14) in
+> Dublin, Ireland.  Would you or someone from your group be able and
+> interested in presenting more information about your work to an
+> audience of kernel and toolchain developers at such an event?
+> 
+> Would others be interested in such a topic? (What do they say in
+> Starship Troopers...?...Would you like to know more?)
+> 
+> [0] https://lpc.events/event/16/
+> -- 
+> Thanks,
+> ~Nick Desaulniers
 
-Fair enough - we can probably wait for the bug to reoccur on another
-instance, and until then assume something else wrong. What is slightly
-suspicious is that it only occurred once on a QEMU TCG arm64 MTE
-instance.
+Hi Nick and Jose, 
 
-Thanks,
--- Marco
+Many thanks for inviting us! I would love to do a talk at LPC! Hopefully
+in person too.
+
+Given that there have been several talks around this topic at LPC
+already, it seems very fitting, and we'll hopefully have more to share
+by then. Actually we have more to share already :-)
+
+https://lore.kernel.org/all/YmKE%2FXgmRnGKrBbB@Pauls-MacBook-Pro.local/T/#u
+
+I assume we will have to submit an abstract soon? 
+
+Many thanks,
+Paul
+

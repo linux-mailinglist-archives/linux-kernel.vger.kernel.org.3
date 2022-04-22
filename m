@@ -2,82 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2775250BF38
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 20:01:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F8C50BF29
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 20:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233135AbiDVSB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 14:01:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54166 "EHLO
+        id S233740AbiDVSBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 14:01:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233469AbiDVR63 (ORCPT
+        with ESMTP id S236621AbiDVR7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 13:58:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09ADE1CC5;
-        Fri, 22 Apr 2022 10:55:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9CA260C4F;
-        Fri, 22 Apr 2022 17:48:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BE67C385A0;
-        Fri, 22 Apr 2022 17:48:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650649710;
-        bh=5eG88j23VfpqEXG5LElKEOANPUif8PLVVEOgW3NWPM8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=JFxldeSwtEKgk9Lc8kRCQDX6OUJaNJqjczwvWjMV4j3OqtctIRIdLWhgVFbHcrF3q
-         6RV2w/ktTedzqZubriC/58H3Vdm9JiPVMTZntT5U6PsWNK7vp6Lf1pJVILEyJGxmS+
-         qbW6cqz9aSs5BypgxKnfiub0ZMs/SwHrot2cRn1CQZuR4f0sF4Z4oMH0Z+a459fUj/
-         AqyDYdPlcTk4kUXYFN7XRqxWUhAFDdRXCLT5AegHPef/SkanQTZdABcipo326XcIeu
-         cDK0+ZCKSi/1Lz6pPb+mOUQxdS1svIyOTdYSc7OWhpV+sUpJYcDte2V/RzhDmTOY++
-         fOwXTN8nCbK0w==
-Date:   Fri, 22 Apr 2022 10:48:28 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Chas Williams <3chas3@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>, linux-alpha@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-sh@vger.kernel.org, linux-atm-general@lists.sourceforge.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH 0/7] Remove unused SLOW_DOWN_IO
-Message-ID: <20220422104828.75c726d0@kernel.org>
-In-Reply-To: <20220415190817.842864-1-helgaas@kernel.org>
-References: <20220415190817.842864-1-helgaas@kernel.org>
+        Fri, 22 Apr 2022 13:59:34 -0400
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2274107834;
+        Fri, 22 Apr 2022 10:56:40 -0700 (PDT)
+Received: by mail-vs1-xe36.google.com with SMTP id t202so8134591vst.8;
+        Fri, 22 Apr 2022 10:56:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XxZBZ3stUkdhVW/utSJpsv4jrMoNhjVNY7NCi5QPbWU=;
+        b=EeMR2o3WC1it+xKaAE3UcnjfygI28wLy1fn4KUlwq5rUdHXA3ogqmv0vTwBr0/yoz6
+         cDJzg1rfj241iv+2uzC/BYGGmTQnKA/47HSG40F4e3rn8DO/sTGjGLJRZKBNYcdc4SkJ
+         VkxKM+/h5DcmnfD6wJ5B5PusUoozoXv2HxITbZos6wYa396jYdGaTuZm1sAUBzw7DwuF
+         Vdb4koyAer9x2qkiNcMLqPOqC1r2BHVTFWFhhbVE4d70XYAPKDtci9NNSWGC9H/laxad
+         B6pBvpciftuPkCUfsnr9UwtkqOowG6+yMOVvJAiLds17XVWjt2On7Tg7vNK/gpJ5LN5I
+         UWqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=XxZBZ3stUkdhVW/utSJpsv4jrMoNhjVNY7NCi5QPbWU=;
+        b=aVXQ8yM1rBzkIVZ9Ky8Lnso/IHhpxBsMw5VqZsdJrgiIc8HB0CSc1ioYp8RpA8bRW8
+         YCyzf2VElRrwN/ECc1OYr8NmxCjuUlp6TlaZZqjnumf7/OShAJTZkugZpjgr6qhembjC
+         YH0t3GbQl6gSjr6t5a9Wm+PMJkmE1UUTpwt8XHQ1wc9DefL2M/cep1T6oLtkGSj08Pt0
+         6/JzbSgcNT3jIfz36nn7fLFEmdvXtaRfXt5K8CYebOXETNFOxahNMzi4dcouqvgtzLFq
+         Ih7+rYmVv+X5sXQYbdfli8/XBXeTcvHerieVjMXADmiU21B+oeqV2T+rzHewLY+UhQ2L
+         xFeA==
+X-Gm-Message-State: AOAM532PfPjb0rboW2yAG4cpEZgEX6QiqgBGEAQyUO2OfB++ryq7jKtx
+        49QSlG15ygTrqcyqnoMnqvtvtCS/wWA=
+X-Google-Smtp-Source: ABdhPJyo1Iq8/URCKrCCXfDfGEQSCogorOh8Sewv54X7ETtbR5vNrqWaSBhLNZmp149jqYMLD9zdlA==
+X-Received: by 2002:a05:6a00:2405:b0:4e1:5008:adcc with SMTP id z5-20020a056a00240500b004e15008adccmr6135265pfh.35.1650649719093;
+        Fri, 22 Apr 2022 10:48:39 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:b5ae])
+        by smtp.gmail.com with ESMTPSA id x71-20020a62864a000000b0050ad2c24a39sm3358336pfd.205.2022.04.22.10.48.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 10:48:38 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 22 Apr 2022 07:48:36 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     David Vernet <void@manifault.com>
+Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, peterz@infradead.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [PATCH 0/4] cgroup: Introduce cpu controller test suite
+Message-ID: <YmLqdIiXdpQqcPTd@slm.duckdns.org>
+References: <20220422173349.3394844-1-void@manifault.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220422173349.3394844-1-void@manifault.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 15 Apr 2022 14:08:10 -0500 Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> Only alpha, ia64, powerpc, and sh define SLOW_DOWN_IO, and there are no
-> actual uses of it.  The few references to it are in situations that are
-> themselves unused.  Remove them all.
-> 
-> It should be safe to apply these independently and in any order.  The only
-> place SLOW_DOWN_IO is used at all is the lmc_var.h definition of DELAY,
-> which is itself never used.
+Hello, David.
 
-Hi Bojrn! Would you mind reposting just patches 1 and 3 for networking?
-LMC got removed in net-next (commit a5b116a0fa90 ("net: wan: remove the
-lanmedia (lmc) driver")) so the entire series fails to apply and therefore 
-defeats all of our patch handling scripts :S
+On Fri, Apr 22, 2022 at 10:33:47AM -0700, David Vernet wrote:
+> This patchset introduces a new test_cpu.c test suite as part of
+> tools/testing/selftests/cgroup. test_cpu.c will contain testcases that
+> validate the cgroup v2 cpu controller.
+> 
+> This patchset only contains testcases that validate cpu.stat and
+> cpu.weight, but I'm expecting to send further patchsets after this that
+> also include testcases that validate other knobs such as cpu.max.
+> 
+> Note that checkpatch complains about a missing MAINTAINERS file entry for
+> [PATCH 1/4], but Roman Gushchin added that entry in a separate patchset:
+> https://lore.kernel.org/all/20220415000133.3955987-4-roman.gushchin@linux.dev/.
+
+Looks great to me. Thanks for adding the much needed selftests. Peter, if
+you're okay with it, imma route it through the cgroup tree.
+
+Thanks.
+
+-- 
+tejun

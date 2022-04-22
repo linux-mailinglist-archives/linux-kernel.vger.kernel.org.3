@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1086450BBE2
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D09E50BBF0
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:43:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449569AbiDVPp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 11:45:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49764 "EHLO
+        id S1449596AbiDVPqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 11:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449520AbiDVPpZ (ORCPT
+        with ESMTP id S1449540AbiDVPpj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 11:45:25 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11olkn2090.outbound.protection.outlook.com [40.92.20.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD2B5D651;
-        Fri, 22 Apr 2022 08:42:30 -0700 (PDT)
+        Fri, 22 Apr 2022 11:45:39 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11olkn2077.outbound.protection.outlook.com [40.92.20.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574EF5D676;
+        Fri, 22 Apr 2022 08:42:46 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eIoxMcwU5BoDEtvkzOWs9XBB/ewJtlseByBls8pKhpEJextsv7X3I/vKZ/Yj/uAJTuBJrxi8FPGXQYQf1QO4JT/cVvZeeR82Z7/UhDGiB2U9tVPbAKA6gI3mODxZi6dTbV8WeSS+bXQUVlCKN/TaO+RYpfYsx7QsTuoBYIOOZTDjW/9B0OeeOQnVvxyFlHKoXfJyt2D/FRoLz7YSWU2/mFv9FfGgBpYSRnKmwIQXgtoT0onBW5Sa4xzY4f/doo80gjfEZoo/cF/LE7qITD5XEb/cY7pkg5+6cyMel6OZhXVuCZ0U4hm0wUx1Qv6TpWS5OYCweLK6spQQjh6OUbr4eg==
+ b=PPfBEBkSqGoTy+T1Pfbx/OUhFxI8PK3dYuxcKrbdG8dTL5gjUMc2ARPQJ98KRu/lvlbMp9kTEOfaBeLXNFNO0lb/7VZkLz8T655iuGkI06Zt0fGEWMrj3kZzXGrjUYgw/HM6BmOLFcnG6f6FpUx9q422NcGdmnO8EKtbUjKbTa4vNG0xGkl12SHNu/GMWvOHCaeOq27MUukwJxOgeN7zAdDnd9WCPSlv3mBAhHFxjnMYD+pBtq0tW4kERbGFQ94XkoZ1qkJWWlUtNTWGKJVcPVUKhxy422e6L34IWStMgv722MPxP+2Yfa8mFpi9ddeQiK7OnZy9j9X5r5/0G6OwpQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cCJv3sE3XNbnk/UUAdvq92kDPFgE70WnhuKfmeGCiFc=;
- b=encjmf1DFlpaCkRwqpi0GU9jiaXfnNZy6kPEY8en0MzdxM1l9Ppi1swXUz4SGSrJdOulUbpoZZ1NJ/zx+KGwlQq8I07zwCYuQH8CARb61peuE5GWiil69N80J4EtBoP+UVeadH8R0O6VQ3ydw3/q8+Zl3xKMjJAaOJJ9fuDzQtpBQt8COFc/fjLFo6dgMXJP81adgUNbK+M8CrEy4zWwb1z7YKQK4jM0nSam6LdhcrX3XX2XWj/hqViCFUjrONQV2YZg4jWiyIaavsXAjxd4VkyV888k37ERKuC69BJGyI5OJ3CBw/CpztGjXs2WzwMgKDJ2xnnBAaE9/0RHPbWQ/g==
+ bh=QzsnBRl1kO4JKVKbaIC5wMKWdaRVYwYb152iNzGXuOw=;
+ b=kW4Ac8sFVKgo0JTjGh3iICACmsammiqA/+5mXv4OHp8GZlU3NYr6vYk13mCtO/ecpShkzBmSk6y0cdjOt2TQOlfiGtIIxVEwxk3G5o+wBTSyYCsLZoophHHnki65F/4XHz7x/qgirx+ef446vcTgJvX3FF6IQrJpGX1BTZOFWm8HZMpmjMc6sY308NPpCae78/L8Dt3lUYZxTchHrH9BrpTPvlyiEfFnzwN3x8w3kR38M7aUIRn35rEHXHjtOFKf0wQPqvJ2cNBOBuf8+Wk9Oab+3K66yvYvgVxbBFk6pAqetSdEvpmI+55B6YAycM9qPOm0/ncasOcJgXpTLdDvYQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cCJv3sE3XNbnk/UUAdvq92kDPFgE70WnhuKfmeGCiFc=;
- b=rsd7EQ198nVUK/weVORUOHZAy7CAXf2UYvI0YHcE3LQY3uSCQoaKmOv1hd1rK5ZBhT4jg80NDRxTHFopJAYRzk+ZyooGNB+2Utk5wTXF68uJR4oNHySprsOOGMOvOc5ADSy1hQ7TQFNAwWko/4NC11EhfO3rt+QOT+/MXAhA7q2e2veOh+CJ30fXWDsFUTYgdMuSPSqq2ezcE1WrkSg58Z6YsoFGGeEAPgKvLbCOyEJGA6zfOojRZZXKRs6gmPUAAfvmBJ2L5t5HLM+Ktk7RHYDc0DFukfDtn3Xepcrq0bL9RET9n39/tIHCkwpUJmBxfSlUHfdaynnBi4qxhpbEhA==
+ bh=QzsnBRl1kO4JKVKbaIC5wMKWdaRVYwYb152iNzGXuOw=;
+ b=g3RP7ND696buziAhetPGGcp1KP/8eNyS8FvFnGX4xHd6yrtpOdQVC6gVsTf47+MvVgy0IeNdnnTPlt5KMSN3JtbLl/pvmcMfxNA3ZiCbdoYiNFH+1Vqp9PpO0XmRda6h2MiwGTaIXgw7cYMk54sQyjAmZTEKXCeyFZhsLb8TQdANWx0n2nlWFToKhFtBKOduPzo6YMDGIzfgwXfB2NCiCoaqAhsmBwlVgE1FPdV6NFrWCi2yBkqSdn8mHbjAJLcP2GUnnPD8+yF27v/DT1KmB5IMP976wCo6f8IAKP8sFgEWvOLMzMChCOJg5/UvfWPbLF27zP1GWxR3DB+qApf3jQ==
 Received: from BYAPR20MB2472.namprd20.prod.outlook.com (2603:10b6:a03:155::16)
  by SJ0PR20MB3642.namprd20.prod.outlook.com (2603:10b6:a03:2e9::7) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Fri, 22 Apr
- 2022 15:42:28 +0000
+ 2022 15:42:44 +0000
 Received: from BYAPR20MB2472.namprd20.prod.outlook.com
  ([fe80::3480:160a:eb92:d6e3]) by BYAPR20MB2472.namprd20.prod.outlook.com
  ([fe80::3480:160a:eb92:d6e3%6]) with mapi id 15.20.5186.015; Fri, 22 Apr 2022
- 15:42:28 +0000
+ 15:42:44 +0000
 From:   icenowy@outlook.com
 To:     Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
@@ -48,57 +48,57 @@ To:     Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         Icenowy Zheng <icenowy@aosc.io>
-Subject: [PATCH 07/12] dt-bindings: mmc: sunxi-mmc: add R329 MMC compatible string
-Date:   Fri, 22 Apr 2022 23:41:10 +0800
-Message-ID: <BYAPR20MB2472B6F7D9AFD3BA6338A79ABCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+Subject: [PATCH 08/12] mmc: sunxi: add support for R329 MMC controllers
+Date:   Fri, 22 Apr 2022 23:41:11 +0800
+Message-ID: <BYAPR20MB2472BAA6CFEA5BD4B18D7D4EBCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220422140902.1058101-1-icenowy@aosc.io>
 References: <20220422140902.1058101-1-icenowy@aosc.io>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-TMN:  [Htdd/v9LkJkHBCm++s9FvAzzFujUIMV+]
+X-TMN:  [oSw8wRHTSxNMDQeBhamboNRKmzQ7x45A]
 X-ClientProxiedBy: HK0PR03CA0116.apcprd03.prod.outlook.com
  (2603:1096:203:b0::32) To BYAPR20MB2472.namprd20.prod.outlook.com
  (2603:10b6:a03:155::16)
-X-Microsoft-Original-Message-ID: <20220422154115.1068642-5-icenowy@outlook.com>
+X-Microsoft-Original-Message-ID: <20220422154115.1068642-6-icenowy@outlook.com>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b0d51956-5930-472d-a01c-08da2476b4cf
+X-MS-Office365-Filtering-Correlation-Id: 489edf50-d672-41f6-de65-08da2476be39
 X-MS-TrafficTypeDiagnostic: SJ0PR20MB3642:EE_
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8DH+zYkCKj2K8lcUBIe6vL2buGN8Bz6qcubMBd7mhdMnIFXzkjukZ428HKw5bBZs73f5Li6LIO4laoBGvZHZ7DbkZvJt13wNbRBEZ3LL2polrwsnsMWQRkAQoSMqGwXbHKF1e+jMV5kH3mVbodNWD3Zyf9/Y8V9K/8KM73gTeU11RFRbo/l5gM7j2oNC91rFVxwN1jbph93zG/InNxUS8qDfLnQAdVrFdn/KUyaYhYam4xERm7mLmnnqk9FvVJWYPSK4MgaPKk8JPMPV8NhLzjw76Mw9mrIq9TvY7doFY9HiVN2FTdUQ6VH4ZSWJ4kV2+207/ozO1X3lu+piySeYn0RmgiTj12cQTMWO1BDhbKEoT0iGHkIuryDjrM/VXo3IKsui/6iD2hNEwKOkwNeFOKXm8t1U37b2Lxy36Synmr1zsi70+fMskcP0gwslqCsFQmnQFw0DaVeyt32dOa9CaGw0xf+r1c1+mtvMbeuVto/fev5XtRyTruOFdbBYmc0akq0O31NtzAfUYbpuu8EZKJQXzVNJ4HR4M6W1c8V6kT+aNC949/lytez+EMffzMcPKXd0y+UfPtZdvO/LrSpPiQ==
+X-Microsoft-Antispam-Message-Info: sHYB3p1mlqlL7on0bOWXGDR10KBDVDVh3XQQOfzeDTVmpUmHILTOc5J91SmehyKifPP4p2A/dfjNUUIhOu54IhpiFk6n5z6IaK6Ix5o781b4Z7uYik/64+5Mg7vhm3wIYXaJeQlZ/5eAHTmOlDBrEz4CDooarpfaCYKuIYpdn9ukmjorIq6+aRZcXkp4IZFHUM37t/fNKC27Q6rV9kkAk3WAr4IwUq+j92l/oP2ptlLaoeJho1AqsZcH2nAXs7+ibJDST6KkmuWNwwXTdSdxqBz43t2M8AfvcSObKTHUBSKzFdLuLiSU/HLXAqKrqg7AbK3sYCVxlT+G6Ik2XNa+rlAqWOxXUZCnLQBPNQlh35cj5f/i3rDC/TvcIDjcsmIAK+ZzgSozPLGedaoA/5QmoN6BXA0t2D2wv0HVhC1CaBagjCIpu+S0UE3aFMmeyPEAPDExLj/+TSXf/Jz1w+fAEpboNpNAr1KRX7wX0Ma3+jTfCvSnJS90Iu1F/P5DynoU92iKaCYziurVLYybXVd9Mvyzbjei78YOxvZuCc1wPtIJ9bXucIbLWVvZTj+5+hZwMGWwpQmC1FIZCmYIIwL5vw==
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?m18dafE5S0iIYO3wWtM6w/Rc1pl7xcFe3yNEJsr2pbaG2VX0NBopRXfWlOYk?=
- =?us-ascii?Q?dFDDHK30+ovIoRtfR5MYdcIAO45s2Rcb1KQwCf7TS8h0/wHMWS6rPtGlOjPQ?=
- =?us-ascii?Q?RDOUEFp+yrm37StUgqMUu2/oVkDqMhtPkcCAgJfmb9WOFr1tOZuyZ3+2LTlX?=
- =?us-ascii?Q?hU0D7vEha9kP+mcVhxRkY1e4tU3BQxU5osafshkogRk50z4Sk0vUOhdkyRyk?=
- =?us-ascii?Q?X2BHRZlDY4FA/nkrDXH17hlZ3OIDGYQD6MZFG5Vx9IooY97cLkaBV72xaUlu?=
- =?us-ascii?Q?+b1lruNPmFJ9wbGt2I7Xb6ZjIJdgj8T4VtIKguhFXfDVSW0tbxdIEQB24Y2R?=
- =?us-ascii?Q?hLrbrwVl+TczzulE5ZBSg/FcnkG90eisdyV8Zm43pMbjyt4rT+PhRCaQFNJl?=
- =?us-ascii?Q?WolfhmaNsTxUmUhHvnuNTqy6OVQljPwNY2xFpvu23nDwgaIpUmrcB7lCUQl5?=
- =?us-ascii?Q?T8YR8n+RTXziZXnUtIfHIdcDt1OcC7w8kXsqB9dMlRoE2bBgGsto0uCB8+Sy?=
- =?us-ascii?Q?XHORpH55tfkN2/MOIwLaZ+6sqz4g+7bkiDvIAs2OLstaDjQtZw0OAuBn9T+C?=
- =?us-ascii?Q?ACOGcDDoSF1wU1j9xbrptJ1wa59uPcilvjVE5FVlqZ29kCNm+rx8+8WVVXfz?=
- =?us-ascii?Q?dN9tDi+wJa39sBW5RSo0jRJ7FL37E7pDS28F5EMaEXkMMH7Z65rO1QwkDH9x?=
- =?us-ascii?Q?sbYgF85Ih4yPyGE59vWgXn63ccZmBABcFHYhEIhSKv7fwY/m+buSFvxH2W4K?=
- =?us-ascii?Q?329FW+hKB1u7NFAEZuqVPoqF/70SQ2n2BmVrwT6jL4gxwSGU5DWzuK+95Gl6?=
- =?us-ascii?Q?VDF5gaD7hP5MQVHXYS9izCTQH6jGnOOJbry+Rpp5YA4qdIG1qzQzShmJ9cmc?=
- =?us-ascii?Q?c6tf+9C47Bs7pzAm4ORz1vyMr/9FDvBmlVqVLGU2i5swor4uWN3qiqMEMgxJ?=
- =?us-ascii?Q?64kQYmNKp+Dl+J9kQ5sy6NuJ8B7lRgsXg9c/BV0YolKAW02TX1LHhwYfODX4?=
- =?us-ascii?Q?dWvAzj8DAvBtE+ETHAcBykF7cEvx+aAYmkR1nn54bXlFvpPP3gbtrY8UN1zr?=
- =?us-ascii?Q?1QKu9ltn74++8rhxa8sDUzb+N2e2RLrlIAw8rgbmSiVGn/ciFTANu70Gthwg?=
- =?us-ascii?Q?b3RLij9WtnDpnHcYhNuQ/k3kuktKu21TvSEkYWJDf9H0D+W9Gu86MBX+0IR+?=
- =?us-ascii?Q?FlcgaKPA0IryHjtLBzupC+k1qTU62wjs0r5ph3EIjpgeSeh+3zWHLkpG2fPY?=
- =?us-ascii?Q?4NPHBxtccBrWdWmvMcFRRLSzfJROAZxXF2VG40LKu/jjQIaxUK6nnckfAjge?=
- =?us-ascii?Q?s9X7LsU2MjwzJduRC/ySGPdmnstKb/+48H8GqHvcCtokxJyquqzHGC77TC6S?=
- =?us-ascii?Q?MwEar3kEA0zCR2PLUtl/9RB/IIVb8az/Y51pHWoOJS31dwd7xF4A4yYV2NmW?=
- =?us-ascii?Q?WRKKFv9XtCw=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/jI58MgggHf0sZwsDvVHv3gXhG6OtTo3Pwqcnp/5FhGxUrK1y9huocapo6ON?=
+ =?us-ascii?Q?MdIDZnccX0Hb6+OMStIYW3YHN7J1CIpgUZjwM0Wu+n2CDsZm6EmMi+ech6Ni?=
+ =?us-ascii?Q?4YASL9samRFJmxQdAa0hPyZzGnh/1n6n7JKHjZ3XJlyTyEt11TTioNl8TLqd?=
+ =?us-ascii?Q?+jAH0tA/ImJHoRRSPcehMCdSzkqDhfPk8J+vp2vBYSjD8c2SPU+UYhnyeicy?=
+ =?us-ascii?Q?YUnglJSqNwL5qLC6qNWm0zBvXQeeS1gHMpqYdrw0n8eXdWZOIsF092V6L8nM?=
+ =?us-ascii?Q?Gloea50L6MBKpB28TkvsTDwy3eCTBqTY7tch6sA5yv4F1uXR4DSnEq8G6ce9?=
+ =?us-ascii?Q?SL1fPwPPYs8bgoNIO/yTR0H12a+7dACpTHC4qSkXTrA2W7xj9k/FDnE7wGkv?=
+ =?us-ascii?Q?tzq19frU/9pJQjIonNh4pJmAxe8zauvHZAGHoepNIZlO6SYNMYKIM6zwoBuG?=
+ =?us-ascii?Q?tVXzvKMDr2irZA1avVhLomolXCkZuUzg4zCxA9QeTOyl8JVnTAA5ZBnOo/1d?=
+ =?us-ascii?Q?M2A64fnxPoahDBiwMnb1JKAXclnON9Nm0RhJglublHSBfi8fBnGpzUasC7K/?=
+ =?us-ascii?Q?r9c2nm6dvNZyagl5jFyobYi2F85ir5mmC6Qv3NJ2cBxtQEzI+VA72ARXkEBN?=
+ =?us-ascii?Q?G7E95YqHF8AW9ORlmZeTIkRDFAsj6ILWLJxJ8lXRHv5UF4mseWvefu8hP6Y0?=
+ =?us-ascii?Q?7B3lF5ysf68w9ZY3K1R74xm9FRMqbjKLJp9ilSI1O7Djq2UD+dtT5EVRqC5Q?=
+ =?us-ascii?Q?3Wzm0nS99LOL2v1d6RwNwjNx9+HCyFihte/kDby+mm2vJdUWjDgb9wpApmhq?=
+ =?us-ascii?Q?gyL/28MNRuWkdJi51ndbIfDFUUsxujYHXPmvzDMOAxeZzsKbYvaxU388yqN0?=
+ =?us-ascii?Q?7216nw7Mncw1lWwZb64y9RYEzVB3ZaV8fpbG90Xr8ILEO7dSqvx2y/4rxmnx?=
+ =?us-ascii?Q?mshXeaIdgLiwfifLQqmuHgsPyBsWt3Kf0Yt4bx2SNeWGR/QkZWNTJg9A+DUo?=
+ =?us-ascii?Q?6sC2E1ExeapJ9/kD8xyB97Y6rpl5j9nEkYpSBHVU4cV2FIHYpiwzhvE/gCou?=
+ =?us-ascii?Q?E2U/TZhEJ7DHq0YPOCphADq7D3zunMU4RPQLAKAhAfE97s66YfaflZMWtRrJ?=
+ =?us-ascii?Q?C8TGw11D6BIKso79uvKFqltJfHq9CbitQ2mBDpLAS71F/fBOItfVuIzN1qAz?=
+ =?us-ascii?Q?DzLS5d1XxXwG/QH35ciblV/UCRiOS3ws3CgPDS69KBjmK/Xn2RrU9RTZqnj1?=
+ =?us-ascii?Q?ss2qa0BdAzUtAcgLr+fUklTQKWV4h2ROfQhFID3lm0Qr4WQGuBaBtbfROcv4?=
+ =?us-ascii?Q?UZT165f7aZmT4aTWGPLXBkFCuCmrypigG+yJ6LrXC3l5cVyBriKO7KJeXB6K?=
+ =?us-ascii?Q?a7KB/pNoSE/YvGsigqo3IGsZAlqzlwWd4b/jb5mcW5R9QTjETdx+3wuxTzrx?=
+ =?us-ascii?Q?ZlPx+rAF39I=3D?=
 X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b0d51956-5930-472d-a01c-08da2476b4cf
+X-MS-Exchange-CrossTenant-Network-Message-Id: 489edf50-d672-41f6-de65-08da2476be39
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR20MB2472.namprd20.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2022 15:42:28.8811
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2022 15:42:44.5206
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -116,30 +116,44 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Icenowy Zheng <icenowy@aosc.io>
 
-R329 SoC has two MMC controllers similar to ones in the previous
-Allwinner SoCs. However, as R329 has no eMMC controller, the two MMC
-controllers look like a mixture of previous SoCs' ordinary MMC
-controller and eMMC controller.
+The two MMC controllers in Allwinner R329 have a mixed feature set
+comparing to the previous SoCs' ordinary MMC and eMMC controllers.
 
-Add a compatible string for R329 MMC controllers.
+Add support for them.
 
 Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
 ---
- .../devicetree/bindings/mmc/allwinner,sun4i-a10-mmc.yaml         | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/mmc/host/sunxi-mmc.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/mmc/allwinner,sun4i-a10-mmc.yaml b/Documentation/devicetree/bindings/mmc/allwinner,sun4i-a10-mmc.yaml
-index 7803597b6366..afc380dae776 100644
---- a/Documentation/devicetree/bindings/mmc/allwinner,sun4i-a10-mmc.yaml
-+++ b/Documentation/devicetree/bindings/mmc/allwinner,sun4i-a10-mmc.yaml
-@@ -29,6 +29,7 @@ properties:
-       - const: allwinner,sun50i-a64-mmc
-       - const: allwinner,sun50i-a100-emmc
-       - const: allwinner,sun50i-a100-mmc
-+      - const: allwinner,sun50i-r329-mmc
-       - items:
-           - const: allwinner,sun8i-a83t-mmc
-           - const: allwinner,sun7i-a20-mmc
+diff --git a/drivers/mmc/host/sunxi-mmc.c b/drivers/mmc/host/sunxi-mmc.c
+index 0e8fbf4957d8..06934eef8be5 100644
+--- a/drivers/mmc/host/sunxi-mmc.c
++++ b/drivers/mmc/host/sunxi-mmc.c
+@@ -1207,6 +1207,15 @@ static const struct sunxi_mmc_cfg sun50i_a100_emmc_cfg = {
+ 	.needs_new_timings = true,
+ };
+ 
++static const struct sunxi_mmc_cfg sun50i_r329_cfg = {
++	.idma_des_size_bits = 13,
++	.idma_des_shift = 2,
++	.clk_delays = NULL,
++	.can_calibrate = true,
++	.mask_data0 = true,
++	.needs_new_timings = true,
++};
++
+ static const struct of_device_id sunxi_mmc_of_match[] = {
+ 	{ .compatible = "allwinner,sun4i-a10-mmc", .data = &sun4i_a10_cfg },
+ 	{ .compatible = "allwinner,sun5i-a13-mmc", .data = &sun5i_a13_cfg },
+@@ -1218,6 +1227,7 @@ static const struct of_device_id sunxi_mmc_of_match[] = {
+ 	{ .compatible = "allwinner,sun50i-a64-emmc", .data = &sun50i_a64_emmc_cfg },
+ 	{ .compatible = "allwinner,sun50i-a100-mmc", .data = &sun50i_a100_cfg },
+ 	{ .compatible = "allwinner,sun50i-a100-emmc", .data = &sun50i_a100_emmc_cfg },
++	{ .compatible = "allwinner,sun50i-r329-mmc", .data = &sun50i_r329_cfg },
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, sunxi_mmc_of_match);
 -- 
 2.35.1
 

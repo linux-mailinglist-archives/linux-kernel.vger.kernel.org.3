@@ -2,118 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E8E450B625
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 13:28:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B105250B631
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 13:32:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447051AbiDVLbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 07:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42882 "EHLO
+        id S1447092AbiDVLfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 07:35:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232054AbiDVLbR (ORCPT
+        with ESMTP id S232054AbiDVLfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 07:31:17 -0400
-Received: from hutie.ust.cz (hutie.ust.cz [185.8.165.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0703754F9F;
-        Fri, 22 Apr 2022 04:28:22 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1650626900; bh=nnRPoDn9UVOQmCSWBi2f0yPJ71M+pe94PUc3/C0TV6E=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To;
-        b=BAChplZkXMuMU7YQjAHHfzse8aIDAhSV5emQZaIx7Fr664MnS1WotKU9oMqA0G08L
-         oXMJk5Zl8gsP1sytZjTBTyJAUSP9cPK8UoNsouQlgULCRve8jQJ5qZOdAtY4pCgwnh
-         ywCL6HvHVjTcsUbT0ceA4vN62COm59lDp5Bn/fMM=
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [RFC PATCH 0/5] Apple Macs machine-level ASoC driver
-From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik@cutebit.org>
-In-Reply-To: <YmKPQ6kLCPz+2XTJ@sirena.org.uk>
-Date:   Fri, 22 Apr 2022 13:28:20 +0200
-Cc:     =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <B68302F2-3D77-4065-8A16-A9CC690AE10B@cutebit.org>
-References: <20220331000449.41062-1-povik+lin@cutebit.org>
- <YkWfziQzprEsWL72@sirena.org.uk>
- <CCE4A06E-6D6F-457D-B3C5-C36209BF38D3@cutebit.org>
- <YkW4MPh8VWc8eSGg@sirena.org.uk>
- <6D199EAB-FE14-4030-96A7-2E0E89D25FAB@cutebit.org>
- <YkXKmxJ0R3qpUoH4@sirena.org.uk>
- <DB0255C3-C9EC-4EFA-A377-C4BB1073D9B3@cutebit.org>
- <YmKPQ6kLCPz+2XTJ@sirena.org.uk>
-To:     Mark Brown <broonie@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 22 Apr 2022 07:35:03 -0400
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7065522E;
+        Fri, 22 Apr 2022 04:32:09 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-2f7b815ac06so6033637b3.3;
+        Fri, 22 Apr 2022 04:32:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=w+N4ZWpI0+PQOfLRjSNdx0PsiQia2QU6bx7J+BbT/zk=;
+        b=lfsNhW4PDKf6BcH/hEM7rRAbiSVnY6Mn6VcWf8U4R8Iv0Jl1I6JSUFdiu0OKi3rrid
+         ugx/1hCPm4vNLUU7fn7/RYZMDSQ9Xfj8pFrPqi7zNHBU7yTiD23y7z/PmZKC++Xeo+/k
+         Ir7dQds8D4OOrEpF8XtYnqcCocO5STLh5+YQqQ3RQbWO9fZdDbJJJBhNIBxINntOF3T4
+         /Xz+gvOVA+eIeJ5iw+wXbUUrmxc5SLbiYlS+SjXQyXfNeEeYoLY9EEBBwrfNNc7ZDYxn
+         n7oY1rFlNlA8AGgXTDDupBKaAfMAgZU6Okp0es+fghHy/hbJ90qItlkIazPq6CB0AEI7
+         c8pw==
+X-Gm-Message-State: AOAM533U2oTl/yCCa4Ua68gESPkVE/m8inv/j+WiiIkfkcAjwR8DiV0f
+        k0sCjvaGeqXftTWyjoGesQ3xlJekRlkDWNpouKc=
+X-Google-Smtp-Source: ABdhPJzhcfd5/sMJ5Hx7nUCRnhMQ1D+lKwdLXzcaE+X5qIcAiNtBqdVjCkuSjmzCcvuBib7Y7rrJT9Xfqt+pbsGl0fA=
+X-Received: by 2002:a81:8843:0:b0:2f1:502c:def2 with SMTP id
+ y64-20020a818843000000b002f1502cdef2mr4192351ywf.515.1650627128910; Fri, 22
+ Apr 2022 04:32:08 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220422080404.27724-1-yangyicong@hisilicon.com>
+In-Reply-To: <20220422080404.27724-1-yangyicong@hisilicon.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 22 Apr 2022 13:31:56 +0200
+Message-ID: <CAJZ5v0hMxaVPsy9=w1nKhw1PbN0_8FnpJr5wPM24YZKy=--j9Q@mail.gmail.com>
+Subject: Re: [PATCH v4] PCI: Make sure the bus bridge powered on when scanning bus
+To:     Yicong Yang <yangyicong@hisilicon.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linuxarm <linuxarm@huawei.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Apr 22, 2022 at 10:06 AM Yicong Yang <yangyicong@hisilicon.com> wrote:
+>
+> When the bus bridge is runtime suspended, we'll fail to rescan
+> the devices through sysfs as we cannot access the configuration
+> space correctly when the bridge is in D3hot.
+> It can be reproduced like:
+>
+> $ echo 1 > /sys/bus/pci/devices/0000:80:00.0/0000:81:00.1/remove
+> $ echo 1 > /sys/bus/pci/devices/0000:80:00.0/pci_bus/0000:81/rescan
+>
+> 0000:80:00.0 is root port and is runtime suspended and we cannot
+> get 0000:81:00.1 after rescan.
 
+I would rephrase this in the following way:
 
-> On 22. 4. 2022, at 13:19, Mark Brown <broonie@kernel.org> wrote:
->=20
-> On Fri, Apr 22, 2022 at 12:43:30PM +0200, Martin Povi=C5=A1er wrote:
->=20
->> I looked in the TAS2770 and TAS2764 drivers/datasheets, and to answer
->> the questions we had:
->=20
->> * VSENSE/ISENSE output slots are configured independently of audio =
-samples
->>   routing. Kernel drivers configure the slots based on the =
-'ti,imon-slot-no'
->>   and 'ti,vmon-slot-no' properties of devicetree.
->=20
->> * By default codecs transmit Hi-Z for duration of unused slots.
->=20
->> So once we supply the devicetree props it should be electrically =
-sound
->> under any configuration of userspace knobs.
->=20
-> Great, that's a relief.
->=20
->> One final thought on the playback routing controls: On systems with =
->2
->> speakers, the codecs need to be assigned slots through set_tdm_slot.
->> The macaudio driver RFCed here assigns a single slot to each speaker,
->> making the effect of each speaker's routing control this:
->=20
->>  'I2C offset' -- uses a random slot
->=20
->>  'Left' 'Right' 'LeftRight' -- uses the single slot we configured
->=20
->> I suppose I better assign two slots to speakers in each left-right =
-pair
->> of the same kind (e.g. woofer 1, woofer 2, tweeter). This way the
->> routing control will mimic its behavior from simple stereo systems =
-but
->> replicated within each left-right pair.  (I would prefer to hide the
->> controls altogether, but as I learned that hiding things unless =
-proven
->> dangerous is an ASoC non-goal, this way I can make the controls do
->> something interesting.)
->=20
-> I don't quite grasp the difference between the arrangement you're
-> proposing and assigning a single slot to each speaker?  Possibly it's
-> just a reordering of the slots?
+0000:80:00.0 is a Root Port and it is runtime-suspended, so
+0000:81:00.1 is unreachable after a rescan.
 
-Ah, maybe what=E2=80=99s missing is the fact that the way the speaker =
-amp drivers
-are written, if they are assigned two slots with a call to set_tdm_slot,
-the first slot is considered 'left' and the second is 'right'.
+>
+> Make bridge powered on when scanning the child bus, by adding
 
-So in the arrangement I am proposing the 'Left', 'Right' and 'LeftRight'
-values of the routing control have the nominal effect (within the =
-left-right
-speaker pair), while in the other arrangement it is as I described =
-above.
+"Power up the bridge when scanning the child bus and allow it to
+suspend again by adding ..."
 
+> pm_runtime_get_sync()/pm_runtime_put() in pci_scan_child_bus_extend().
+>
+> Cc: Rafael J. Wysocki <rafael@kernel.org>
+> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+
+With the above addressed, please feel free to add
+
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+> ---
+> Change since v3:
+> - retain the pm_runtime_*() calls in pci_scan_bridge_extend() as Rafael points
+>   out that it's necessary when the brigde is in D3cold
+> Link: https://lore.kernel.org/linux-pci/20220414123736.34150-1-yangyicong@hisilicon.com/
+>
+> Change since v2:
+> - just rebase it on v5.18-rc2
+> Link: https://lore.kernel.org/linux-pci/1601029386-4928-1-git-send-email-yangyicong@hisilicon.com/
+>
+> Change since v1:
+> - use an intermediate variable *bridge as suggested
+> - remove the pm_runtime_*() calls in pci_scan_bridge_extend()
+> Link: https://lore.kernel.org/linux-pci/1596022223-4765-1-git-send-email-yangyicong@hisilicon.com/
+>
+>  drivers/pci/probe.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+>
+> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+> index 17a969942d37..b108e72b6586 100644
+> --- a/drivers/pci/probe.c
+> +++ b/drivers/pci/probe.c
+> @@ -2859,11 +2859,20 @@ static unsigned int pci_scan_child_bus_extend(struct pci_bus *bus,
+>         unsigned int used_buses, normal_bridges = 0, hotplug_bridges = 0;
+>         unsigned int start = bus->busn_res.start;
+>         unsigned int devfn, fn, cmax, max = start;
+> +       struct pci_dev *bridge = bus->self;
+>         struct pci_dev *dev;
+>         int nr_devs;
+>
+>         dev_dbg(&bus->dev, "scanning bus\n");
+>
+> +       /*
+> +        * Make sure the bus bridge is powered on, otherwise we may not be
+> +        * able to scan the devices as we may fail to access the configuration
+> +        * space of subordinates.
+> +        */
+> +       if (bridge)
+> +               pm_runtime_get_sync(&bridge->dev);
+> +
+>         /* Go find them, Rover! */
+>         for (devfn = 0; devfn < 256; devfn += 8) {
+>                 nr_devs = pci_scan_slot(bus, devfn);
+> @@ -2976,6 +2985,9 @@ static unsigned int pci_scan_child_bus_extend(struct pci_bus *bus,
+>                 }
+>         }
+>
+> +       if (bridge)
+> +               pm_runtime_put(&bridge->dev);
+> +
+>         /*
+>          * We've scanned the bus and so we know all about what's on
+>          * the other side of any bridges that may be on this bus plus
+> --
+> 2.24.0
+>

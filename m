@@ -2,97 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2455550C553
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 02:06:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD5A350C552
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 02:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbiDVXto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 19:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44880 "EHLO
+        id S230122AbiDVXvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 19:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiDVXtm (ORCPT
+        with ESMTP id S229906AbiDVXvS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 19:49:42 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC10D4CA4;
-        Fri, 22 Apr 2022 16:46:47 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-e67799d278so6411437fac.11;
-        Fri, 22 Apr 2022 16:46:47 -0700 (PDT)
+        Fri, 22 Apr 2022 19:51:18 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155D5C6EE4;
+        Fri, 22 Apr 2022 16:48:24 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id s4so6973603qkh.0;
+        Fri, 22 Apr 2022 16:48:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+        h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=WSqoJagxi812Uz/UbsiFaQztPn6lgwcsPHidF2EdEMc=;
-        b=l3pwTAgBWaPEGR+5Y4Ms2ka1ENpCMRUFU584ArSAe3jbl3rcvvrbM9kesOnaO3DmNg
-         GE8Cr6V+d97pe/CxxOeTQ0VFJQHU2m1eeL7009IJ8hPqC8p6AvVPVPx3frBGxKIOtvoT
-         bTi0q5iqLfM2+HF9WHGZ1sgSQinN4ZzQNHTe6xHdbHlWszgRkye3OsSGX4ECNOYv13eL
-         BZvRbwccaKgH7r9BhTEobkGUmQkgrCHaL8Pkq8wDIzJQhoiNjCZU8LnsMkES/BFuIHzK
-         UP3uOZzngv3BDzJpbtCXQuSPESSnIEY7bA0QTWXbTp/o4Ak1aIAw4Yk/p/RTly6bGsfJ
-         Iatw==
+        bh=9/2xDFh9dl7zEQ1Wno66tlhOklc1X6CUbTpyUD0JYSo=;
+        b=GtSJCfb/kFq8IZZVn9cYuEpNofTiZEMRAjQfrkDfZ4MxVTKJPumEe82wv9zvlt1wdb
+         YPGc+4HLi52g83DegnPV7Cj6RXbdrJo1Y8wo6s7UGnFDsKKta8q8Xx7jhgcCz4eU/a97
+         EuGLMkt0mIDNF29xe2qkJ7myJO7L0xrLSIgSa2r4Vc6xT0g/QfSYOVhK2iwYqw+/etOT
+         /dd1n5RN3+QgA3B4tO1wy/se9l6wzI2XF9hwKP/ROBHn2/XvwNpvLSo0fRujXQimJSOG
+         /oOMxhB+vD8N5gztL5XgScwovH24Y2a0EiUZ0e9mvHM+2ugwjmviB7CVAH6ON/Z9F+CU
+         q0oA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=WSqoJagxi812Uz/UbsiFaQztPn6lgwcsPHidF2EdEMc=;
-        b=s/rEmVQUvPTEjJAHKLcmx/l8Awy5Zl6Epcc/GyI/WgBYHXmDd86lS8rE+FrXqO+vOm
-         sVlZrXps/LYuSArFVf+thOzwQvMHpZLCOQz5l6kobevWvQCoe0EhbOKElhnp6f+W0KjP
-         9iOiMkxXlnpaFwIMB9OJj723GRCgJnkbYpKmDj/grejEpSxKDXqrG7f/qa+C35xsHDua
-         s8KQYBX80A8guffwAasELlszJnIEYXpyXH0bXUoXoP6Pw8YTjO3O3V1lvB3FbhNzXwL0
-         X1ee4qO8joWj91hgiqLrg2nsYBV55ed445zdyruCTYMv2N37ggwOeZevYoyF3bBJl2Fp
-         +n+w==
-X-Gm-Message-State: AOAM531sbIexrBbXbXdVigRnJXAVZuRDFEa5tCsYmTs76mXsaUVizJ+u
-        StzR6FNaq59SYG9zjMHpR2U=
-X-Google-Smtp-Source: ABdhPJzsuurtmrnZ4So2zOMzTz1Yl+C7CeLKiq1mrBLhvhxG9vsoxjvivMhjHyrDEvyQmm/86mXvfQ==
-X-Received: by 2002:a05:6870:b39c:b0:d1:4a9f:35f9 with SMTP id w28-20020a056870b39c00b000d14a9f35f9mr2867661oap.119.1650671206541;
-        Fri, 22 Apr 2022 16:46:46 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q12-20020a4ad54c000000b003245ac0a745sm1347747oos.22.2022.04.22.16.46.45
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9/2xDFh9dl7zEQ1Wno66tlhOklc1X6CUbTpyUD0JYSo=;
+        b=J2XoiKh6bQLMjETvAB7yCMB1W5Lw4r21U4/QlrqkYZ2qtebTYVErge6OvKvi9fZcjx
+         nyu+Bwj6Utut31si1NVw8hZtdGhu6SeD0q9G7dWv6I/yTRNHkPMbTsqEF2UTQU2l/XC9
+         otsaHh8J1cZkDPZrNITXfjE13ilL1EFbQZg2faIMyTuYHpbd896x9PIfPD4juZ44A9KN
+         8t9q0PyjGx1c3GrMFvkHlA0hEggs2J8RirIXn553885fEp57wJjL4Hfvi8ycmNcqgUTj
+         TfYyfWE9jNBhSUnourQi9NWcPuFuC1hyJ7qtrN5aPR/zc6kHJaNfvItq1U4CqAt7Ixte
+         PDaw==
+X-Gm-Message-State: AOAM533ZRt2cXLPwRB6Id10dgYctQAexvEa7LWFEFNm5yarYgyAwb3F4
+        JdEcuTE4/bSnJJoW3DNA4lWqour++Jw6
+X-Google-Smtp-Source: ABdhPJyw5vkKW6b5EOOq344HLslU2RWAyR40NLeFfnTi3FFpV26KMen487nIt7tPNpC9/77RvhcVxg==
+X-Received: by 2002:a37:a247:0:b0:69d:5e7d:42b7 with SMTP id l68-20020a37a247000000b0069d5e7d42b7mr4281597qke.320.1650671303234;
+        Fri, 22 Apr 2022 16:48:23 -0700 (PDT)
+Received: from moria.home.lan (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
+        by smtp.gmail.com with ESMTPSA id b2-20020a37b202000000b0069c7ad47221sm1543720qkf.38.2022.04.22.16.48.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 16:46:46 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 22 Apr 2022 16:46:44 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Nick Hu <nickhu@andestech.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Michal Simek <monstr@monstr.eu>,
-        Borislav Petkov <bp@alien8.de>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Joshua Kinard <kumba@gentoo.org>,
-        David Laight <David.Laight@aculab.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Theodore Ts'o <tytso@mit.edu>
-Subject: Re: [PATCH v1] random: block in /dev/urandom
-Message-ID: <20220422234644.GB3442771@roeck-us.net>
-References: <20220217162848.303601-1-Jason@zx2c4.com>
- <20220322155820.GA1745955@roeck-us.net>
- <YjoC5kQMqyC/3L5Y@zx2c4.com>
- <d5c23f68-30ba-a5eb-6bea-501736e79c88@roeck-us.net>
- <CAHmME9rmeQAD2DwG=APTmDxuVxFDH=6GXoKpgPrU9rc9oXrmxQ@mail.gmail.com>
+        Fri, 22 Apr 2022 16:48:22 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 19:48:20 -0400
+From:   Kent Overstreet <kent.overstreet@gmail.com>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Michal Hocko <mhocko@suse.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, hch@lst.de,
+        hannes@cmpxchg.org, akpm@linux-foundation.org,
+        linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-input@vger.kernel.org, rostedt@goodmis.org
+Subject: Re: [PATCH v2 8/8] mm: Centralize & improve oom reporting in
+ show_mem.c
+Message-ID: <20220422234820.plusgyixgybebfmi@moria.home.lan>
+References: <20220421234837.3629927-1-kent.overstreet@gmail.com>
+ <20220421234837.3629927-14-kent.overstreet@gmail.com>
+ <YmKma/1WUvjjbcO4@dhcp22.suse.cz>
+ <YmLFPJTyoE4GYWp4@carbon>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHmME9rmeQAD2DwG=APTmDxuVxFDH=6GXoKpgPrU9rc9oXrmxQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <YmLFPJTyoE4GYWp4@carbon>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,58 +77,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 03:42:46PM +0200, Jason A. Donenfeld wrote:
-> Hey Guenter,
-> 
-> On Tue, Mar 22, 2022 at 6:56 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> > On 3/22/22 10:09, Jason A. Donenfeld wrote:
-> > > Hey Guenter,
-> > >
-> > > On Tue, Mar 22, 2022 at 08:58:20AM -0700, Guenter Roeck wrote:
-> > >> On Thu, Feb 17, 2022 at 05:28:48PM +0100, Jason A. Donenfeld wrote:
-> > >>> This topic has come up countless times, and usually doesn't go anywhere.
-> > >>> This time I thought I'd bring it up with a slightly narrower focus,
-> > >>> updated for some developments over the last three years: we finally can
-> > >>> make /dev/urandom always secure, in light of the fact that our RNG is
-> > >>> now always seeded.
-> > >>>
-> > >>
-> > >> [ ... ]
-> > >>
-> > >> This patch (or a later version of it) made it into mainline and causes a
-> > >> large number of qemu boot test failures for various architectures (arm,
-> > >> m68k, microblaze, sparc32, xtensa are the ones I observed). Common
-> > >> denominator is that boot hangs at "Saving random seed:". A sample bisect
-> > >> log is attached. Reverting this patch fixes the problem.
-> > >
-> > > As Linus said, it was worth a try, but I guess it just didn't work. For
-> > > my own curiosity, though, do you have a link to those QEMU VMs you could
-> > > share? I'd sort of like to poke around, and if we do ever reattempt this
-> > > sometime down the road, it seems like understanding everything about why
-> > > the previous time failed might be a good idea.
-> > >
-> >
-> > Everything - including the various root file systems - is at
-> > git@github.com:groeck/linux-build-test.git. Look into rootfs/ for the
-> > various boot tests. I'll be happy to provide some qemu command lines
-> > if needed.
-> 
-> I've been playing with a few things, and I'm wondering how close I am
-> to making this problem go away. I just made this branch:
-> https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git/log/?h=jd/for-guenter
-> 
-> Any interest in setting your tests on that and seeing if it still
-> breaks? Or, perhaps better, do you have a single script that runs all
+On Fri, Apr 22, 2022 at 08:09:48AM -0700, Roman Gushchin wrote:
+> To add a concern: largest shrinkers are usually memcg-aware. Scanning
+> over the whole cgroup tree (with potentially hundreds or thousands of cgroups)
+> and over all shrinkers from the oom context sounds like a bad idea to me.
 
-I applied your branch to my 'testing' branch. It will build tonight.
-We should have results by tomorrow morning.
+Why would we be scanning over the whole cgroup tree? We don't do that in the
+vmscan code, nor the new report. If the OOM is for a specific cgroup, we should
+probably only be reporting on memory usage for that cgroup (show_mem() is not
+currently cgroup aware, but perhaps it should be).
 
-> your various tests and does all the toolchain things right, so I can
-> just point it at that tree and iterate?
+> IMO it's more appropriate to do from userspace by oomd or a similar daemon,
+> well before the in-kernel OOM kicks in.
+
+The reason I've been introducing printbufs and the .to_text() method was
+specifically to make this code general enough to be available from
+sysfs/debugfs - so I see no reasons why a userspace oomd couldn't make use of it
+as well.
+
+> > Last but not least let me echo the concern from the other reply. Memory
+> > allocations are not really reasonable to be done from the oom context so
+> > the pr_buf doesn't sound like a good tool here.
 > 
+> +1
 
-Sorry, my system isn't that fancy. I don't mind running tests like this one,
-though.
+In my experience, it's rare to be _so_ out of memory that small kmalloc
+allocations are failing - we'll be triggering the show_mem() report before that
+happens.
 
-Guenter
+However, if this turns out not to be the case in practice, or if there's a
+consensus now that we really want to guard against this, I have some thoughts.
+We could either:
+
+ - mempool-ify printbufs as a whole
+
+ - reserve some memory just for the show_mem() report, which would mean either
+   adding support to printbuf for external buffers (subsuming what seq_buf
+   does), or shrinker .to_text() methods would have to output to seq_buf instead
+   of printbuf (ew, API fragmentation).

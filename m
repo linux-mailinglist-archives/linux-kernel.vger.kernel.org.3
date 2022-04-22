@@ -2,82 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 649C050C1BD
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 00:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8AE550C18F
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 00:06:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231564AbiDVWFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 18:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34838 "EHLO
+        id S231411AbiDVWFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 18:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231559AbiDVWFT (ORCPT
+        with ESMTP id S231302AbiDVWEt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 18:05:19 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2580028882D;
-        Fri, 22 Apr 2022 13:48:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=xXTvDwOshNmT8k01EPNDMJ5Vw4kyttJnV4C5HkjVHmo=; b=lCmZiJ8f6r3JpHX3G3metcapt8
-        xV/Jn2baI6NQYvOMdGiNgfDE6/xKNgCmL8vwrKdToESpCiIN+gsKnLE5j2RGxM/BQFTKT62V3nFNf
-        mPEPSroSRU1lDTsbdNyblCuqxC+3zilX9wO8dUnOJ43e0lJcEm1jDfZ1XCjYWK1YmqK/O2DjeiB1F
-        4Tmn+LR6z0JzsxcQCneFR8nbvo6y6Qs/IuRa3YZUOSm1uETCaqkP4BHbUBiodTiXb+0SBO02zCTvo
-        t4GCrb8YCdrXSpW0/5wr3ATe8ttg7m4XNetMC9fq7qLv+CF+dCAuUVORKWHoiZdD+UqmQcMljJ6dF
-        0c8w/GkA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nhzDj-006MHK-On; Fri, 22 Apr 2022 19:45:35 +0000
-Date:   Fri, 22 Apr 2022 20:45:35 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [GIT PULL] Rare page cache data corruption fix
-Message-ID: <YmMF32RlCn2asAhc@casper.infradead.org>
+        Fri, 22 Apr 2022 18:04:49 -0400
+Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F22BA20BDF2
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:47:15 -0700 (PDT)
+Received: (wp-smtpd smtp.wp.pl 29161 invoked from network); 22 Apr 2022 21:47:12 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
+          t=1650656832; bh=xN2TT2giRziTYzxkSRV3HAksGNGWVBKa+uXJBNXkzg8=;
+          h=From:To:Cc:Subject;
+          b=OaGiXdxuDtJlr6gXKJMqvpfHpw99AKST0JhzfU229DzbMl/J+krQWmDL0JaMn3wZ+
+           nLYzvdrGHvHszYhPrBHs6aXhFXMAhayra5vhItjEqeLtXIx/Awutg9aHIuu0eIUDfd
+           DolY4LgU+nV3ARsdp1tJC43865542AEiY+9HqATk=
+Received: from unknown (HELO kicinski-fedora-PC1C0HJN) (kubakici@wp.pl@[163.114.132.6])
+          (envelope-sender <kubakici@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <zhaojunkui2008@126.com>; 22 Apr 2022 21:47:12 +0200
+Date:   Fri, 22 Apr 2022 12:47:04 -0700
+From:   Jakub Kicinski <kubakici@wp.pl>
+To:     Bernard Zhao <zhaojunkui2008@126.com>
+Cc:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bernard@vivo.com
+Subject: Re: [PATCH v2] mediatek/mt7601u: add debugfs exit function
+Message-ID: <20220422124704.259244e7@kicinski-fedora-PC1C0HJN>
+In-Reply-To: <20220422080854.490379-1-zhaojunkui2008@126.com>
+References: <20220422080854.490379-1-zhaojunkui2008@126.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-WP-MailID: 9321f50bc9e4db09d6c2149ef2c2edd3
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 000000A [UYOE]                               
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzbot found a nasty race between large page splitting and page lookup.
-Details in the commit log, but fortunately it has a reliable reproducer.
-I thought it better to send this one to you straight away.
+On Fri, 22 Apr 2022 01:08:54 -0700 Bernard Zhao wrote:
+> When mt7601u loaded, there are two cases:
+> First when mt7601u is loaded, in function mt7601u_probe, if
+> function mt7601u_probe run into error lable err_hw,
+> mt7601u_cleanup didn`t cleanup the debugfs node.
+> Second when the module disconnect, in function mt7601u_disconnect,
+> mt7601u_cleanup didn`t cleanup the debugfs node.
+> This patch add debugfs exit function and try to cleanup debugfs
+> node when mt7601u loaded fail or unloaded.
+> 
+> Signed-off-by: Bernard Zhao <zhaojunkui2008@126.com>
 
-The other commit fixes the test suite build, again.
+Ah, missed that there was a v2. My point stands, wiphy debugfs dir
+should do the cleanup.
 
-The following changes since commit 281b9d9a4b02229b602a14f7540206b0fbe4134f:
-
-  Merge branch 'akpm' (patches from Andrew) (2022-04-22 10:10:43 -0700)
-
-are available in the Git repository at:
-
-  git://git.infradead.org/users/willy/xarray.git tags/xarray-5.18a
-
-for you to fetch changes up to 63b1898fffcd8bd81905b95104ecc52b45a97e21:
-
-  XArray: Disallow sibling entries of nodes (2022-04-22 15:35:40 -0400)
-
-----------------------------------------------------------------
-XArray: Two fixes for 5.18
-
- - Fix the test suite build for kmem_cache_alloc_lru()
-
- - Fix a rare race between split and load
-
-----------------------------------------------------------------
-Matthew Wilcox (Oracle) (2):
-      tools: Add kmem_cache_alloc_lru()
-      XArray: Disallow sibling entries of nodes
-
- lib/xarray.c                     | 2 ++
- tools/include/linux/slab.h       | 8 +++++++-
- tools/testing/radix-tree/linux.c | 3 ++-
- 3 files changed, 11 insertions(+), 2 deletions(-)
-
+Do you encounter problems in practice or are you sending this patches
+based on reading / static analysis of the code only.

@@ -2,77 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA61650BC7A
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:02:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7859550BC74
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:02:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377926AbiDVQEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 12:04:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39628 "EHLO
+        id S1358677AbiDVQFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 12:05:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349941AbiDVQEm (ORCPT
+        with ESMTP id S1357434AbiDVQEz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 12:04:42 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59E15B3D7
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:01:48 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id y14so7638330pfe.10
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:01:48 -0700 (PDT)
+        Fri, 22 Apr 2022 12:04:55 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4FE25BE68
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:02:01 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id s137so7663408pgs.5
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:02:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fvtAej5JGuVNellLLY4vrStrSV2CBZuRCp+5/JoyStg=;
-        b=bOdn0jImn1WzfjZlNuqZ0NhMzBD2ETilnRrtGpFJWNkMinZAyvm3Y5DhXSZMK7Gb7Q
-         l8Z+XPs33ywbyztRtDR265zlFXOgQI9pw7HM6nwoKJDbteEH0Vd5EUon5g3ClY9b/vlB
-         HonsGIi18Lr55450daKO0nITBr8Nf9xv5FEqlK5LP3HebVJ6Y64/EhwSlY0DO2lMapkB
-         hhtIj73Uy4tcDLPDhxsY3duBU90/0xmP6g9NaJu1bdFU3+PSykbe5ztWaCSFc8HBeESU
-         rc2FnydIYFD3xCQsXVAnkhCXBJkY/qQp9n/v6fNfST4mQ5foZo8rm7wV1105F8RvnL0k
-         LWOw==
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=j/DRPoony39xAyuEQEwrygpJFCr5xS/J71HzZSlHAsc=;
+        b=1y65yY7vuM94Cb2DFLSypSKF3EfFIP9EEDZRMMYc7BNAIb8kyV8SH6oP88tqWE12cT
+         bce6V1dKCmTJjTmD4azRKGLTHybtP3QUiTBhPBKFR+yxwV4ExgYQEJk251glzy/kuPaN
+         lkE9bNd+T3DehLal6fE7fziEnzYMuRh3+ayZRXciw3BXIu2uGLYqzUR7onwoWDHOm5Yl
+         cd4g/julRzttzHSCmCBNZBZVI/ZY2alBNtfN1TfkY2tnhSVZsE6s9iKOktgVsYTG24zW
+         TSvQdnMRVkjx4q5I6E6A8k6PJULytKbVh4wG8f6qdBporN3yw+5oPZNNMRBNY2hkTCkC
+         PaKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fvtAej5JGuVNellLLY4vrStrSV2CBZuRCp+5/JoyStg=;
-        b=RJS7kXc42yj43cSTgveQR5dZ6qbRZj2MR/t7RAjsXjoynD4qvCWAWBZFBaX5ekCL8e
-         xO4eGp6GJ8+IEdQuhQGM/jR4/W8Vwe/8jFnyZSpVCJV1ws8MgY3UAon5Y40XjHTyup4i
-         urlvFERndPQnzP7neTUza5XuvHQ5GdEtD52/7A3FxeCDpwR/tIHwXOG783XcsU2KEsIM
-         kvE0Jrd+g4aKeR2pXGMm+X/bVz61BDeEZJCMtHvr1QFoykqGiUSzpWlvZojQWPuXFHNo
-         cf8jIE4jahROqDz4RR5NOK7vKjIS0pL0GL/Y7dUuGdqadU4AsRL9z2SFN0+zVpSEb8ui
-         Yw8g==
-X-Gm-Message-State: AOAM533T4sIECViJ0tQcY8kE2CFxgr9+zJ5+ePToZuHa03h+/p/ycpEL
-        Bj8CcLaJMYPYxX3m2BPSuisEDw==
-X-Google-Smtp-Source: ABdhPJyFRGjHeqwVzOLzk4oMDHyTo0XSFm3q/7QS1+GsVOjKC39tK72dkWebL2ZT8MztbPWRHd/gOA==
-X-Received: by 2002:a05:6a00:1a8f:b0:50a:8c2d:2edf with SMTP id e15-20020a056a001a8f00b0050a8c2d2edfmr5629277pfv.82.1650643307893;
-        Fri, 22 Apr 2022 09:01:47 -0700 (PDT)
-Received: from google.com (201.59.83.34.bc.googleusercontent.com. [34.83.59.201])
-        by smtp.gmail.com with ESMTPSA id l5-20020a63f305000000b0039daaa10a1fsm2525043pgh.65.2022.04.22.09.01.47
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=j/DRPoony39xAyuEQEwrygpJFCr5xS/J71HzZSlHAsc=;
+        b=yZFX+Hal1WaNyQ8a7Zz8LVc4iduWm31En6QEso8ch7QPF3UQsJ4MNxz78/zbgaxGeR
+         Jr0IcQYbjvrPEQKKI3a7OFeQZgP+FM1kCmmI12hzDnunYSxVp3evqLiACFFCT8lOJCgC
+         kJ9pJ5edhCIr+CXc81PPv4HcHjBGDGM2z+MlxK1tuTIJKmybHYGtpJgSYPMERXnB2n0q
+         K5LbOdoO+vebM+BXJjAVx/S/K1JVlIVB933rWam2IKJVcbAIK8LWELLT7MBLAbcwV3B6
+         VN9JidCejHhSse7nxPDlCqiopWCR5PwAKaB+jvH0ixysdTwaMbg4hOPVBAokU74IlzNw
+         WYeg==
+X-Gm-Message-State: AOAM531+4eLPqtrY75Pn/T0gwy4+KmNJWEiDHE9P2G6QXKYKj4Ra7UWr
+        RUFsCdG4wOdEcHCGpf69Ol2OoA==
+X-Google-Smtp-Source: ABdhPJwmDrwA2ZAu5Q1rVNeT+8sU2e3D7ENPevc7XxVgU67wZEV6rG4NaJpcRjtQFBgIZVoVIxhMEA==
+X-Received: by 2002:a63:5421:0:b0:3aa:5717:fadb with SMTP id i33-20020a635421000000b003aa5717fadbmr4478084pgb.422.1650643320884;
+        Fri, 22 Apr 2022 09:02:00 -0700 (PDT)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id e6-20020a17090a77c600b001cd4989fedcsm6512927pjs.40.2022.04.22.09.01.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 09:01:47 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 16:01:43 +0000
-From:   Carlos Llamas <cmllamas@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Li Li <dualli@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] binder: add BINDER_GET_EXTENDED_ERROR ioctl
-Message-ID: <YmLRZ4zFuw34nyOE@google.com>
-References: <20220421042040.759068-1-cmllamas@google.com>
- <YmLI03OT6st9fcQD@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YmLI03OT6st9fcQD@kroah.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        Fri, 22 Apr 2022 09:02:00 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 09:02:00 -0700 (PDT)
+X-Google-Original-Date: Fri, 22 Apr 2022 08:35:09 PDT (-0700)
+Subject:     Re: [PATCH V3] riscv: patch_text: Fixup last cpu should be master
+In-Reply-To: <mhng-320b7f4f-08bf-4ee8-938e-4bf687760468@palmer-ri-x1c9>
+CC:     guoren@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, guoren@linux.alibaba.com,
+        mhiramat@kernel.org, stable@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     guoren@kernel.org
+Message-ID: <mhng-d2e23c07-fd6f-4ae8-a2c7-fc1825e50503@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,50 +71,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 05:25:07PM +0200, Greg Kroah-Hartman wrote:
-> On Thu, Apr 21, 2022 at 04:20:36AM +0000, Carlos Llamas wrote:
-> > Provide a userspace mechanism to pull precise error information upon
-> > failed operations. Extending the current error codes returned by the
-> > interfaces allows userspace to better determine the course of action.
-> > This could be for instance, retrying a failed transaction at a later
-> > point and thus offloading the error handling from the driver.
-> > 
-> > Some of the elements for logging failed transactions and similar are
-> > folded into this new logic to avoid duplication. Such is the case for
-> > error line numbers, which become irrelevant after assigning individual
-> > error messages instead.
-> > 
-> > This patch also adds BINDER_GET_EXTENDED_ERROR to the binderfs feature
-> > list, to help userspace determine if the new ioctl is supported by the
-> > driver.
-> 
-> Hint, when you say "also" in a changelog text, that's a hint that this
-> should be more than one patch.  The last thing should be a separate
-> change, right?
+On Thu, 21 Apr 2022 15:57:32 PDT (-0700), Palmer Dabbelt wrote:
+> On Wed, 06 Apr 2022 07:16:49 PDT (-0700), guoren@kernel.org wrote:
+>> From: Guo Ren <guoren@linux.alibaba.com>
+>>
+>> These patch_text implementations are using stop_machine_cpuslocked
+>> infrastructure with atomic cpu_count. The original idea: When the
+>> master CPU patch_text, the others should wait for it. But current
+>> implementation is using the first CPU as master, which couldn't
+>> guarantee the remaining CPUs are waiting. This patch changes the
+>> last CPU as the master to solve the potential risk.
+>>
+>> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+>> Signed-off-by: Guo Ren <guoren@kernel.org>
+>> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+>> Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
+>> Cc: <stable@vger.kernel.org>
+>> ---
+>>  arch/riscv/kernel/patch.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/arch/riscv/kernel/patch.c b/arch/riscv/kernel/patch.c
+>> index 0b552873a577..765004b60513 100644
+>> --- a/arch/riscv/kernel/patch.c
+>> +++ b/arch/riscv/kernel/patch.c
+>> @@ -104,7 +104,7 @@ static int patch_text_cb(void *data)
+>>  	struct patch_insn *patch = data;
+>>  	int ret = 0;
+>>
+>> -	if (atomic_inc_return(&patch->cpu_count) == 1) {
+>> +	if (atomic_inc_return(&patch->cpu_count) == num_online_cpus()) {
+>>  		ret =
+>>  		    patch_text_nosync(patch->addr, &patch->insn,
+>>  					    GET_INSN_LENGTH(patch->insn));
+>
+> Thanks, this is on fixes.
 
-Yes it should. I now notice I forgot to add the binderfs feature to the
-kselftests too, so I'll include that in v2.
-
-> > @@ -2845,22 +2885,20 @@ static void binder_transaction(struct binder_proc *proc,
-> >  			/*
-> >  			 * return_error is set above
-> >  			 */
-> > -			return_error_param = -EINVAL;
-> > -			return_error_line = __LINE__;
-> > +			binder_txn_error(e, &ee, return_error, -EINVAL,
-> > +				"cannot find target node");
-> 
-> You do this a lot, how about making this one commit (first one), and
-> then adding the new "back end" to the error stuff in a second commit.
-> That would make it much easier to review, first commit does nothing new,
-> second one adds the new functionality, and third adds the feature flag.
-
-Yeah, that sounds like the appropiate split. Thanks!
-
-> 
-> thanks,
-> 
-> greg k-h
-
---
-Carlos Llamas
+Sorry, I forgot to add the Fixes and stable tags.  I just fixed that up, 
+but I'm going to hold off on this one until next week's PR to make sure 
+it has time to go through linux-next.

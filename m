@@ -2,109 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB3F450B7F7
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E810950B7F5
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447743AbiDVNNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 09:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46064 "EHLO
+        id S1447750AbiDVNNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 09:13:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234055AbiDVNNE (ORCPT
+        with ESMTP id S234118AbiDVNNE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 22 Apr 2022 09:13:04 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111D211C2E;
-        Fri, 22 Apr 2022 06:10:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7A493CE28CB;
-        Fri, 22 Apr 2022 13:10:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B01EDC385A4;
-        Fri, 22 Apr 2022 13:10:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650633007;
-        bh=g3alPqst2KMNlYTZRbC5XyNbsp+KF7ToOB5E/iahWmM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BmSnXLbv3bCIK14FIUrfQg+LE4M2bHWoHYa9H5zEJcvaC8xjRJYEqpFnkS92TYhvt
-         z8z3fM4w26I8XDJWLs18DuEjXHRNf2LKIU79t5JHYj437CsZ+2RCU/YS5bKZ/U8FL5
-         +LY0Pd/WMQNNDFJoqWeR/149jWXk/7tULcD+nZTLJAaYQwtKe+RW7aPPoPg27wx2sy
-         /pBl9AMACJdoiJSrFX6FxjSkqkBJlvH9uq+LMigFee4cDL9XVCPSaIQagqASs6YySH
-         YP3qmqsAkdcA1fAXt49VzNTIAbo4pAj5CPWXEzZEFqZve6y3PliQpM42sHEkEn9xE8
-         0eDbveaIAAmpA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1nht2w-0000XO-5m; Fri, 22 Apr 2022 15:10:02 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>, stable@vger.kernel.org,
-        Vivek Gautam <vivek.gautam@codeaurora.org>
-Subject: [PATCH 2/2] phy: qcom-qmp: fix reset-controller leak on probe errors
-Date:   Fri, 22 Apr 2022 15:09:41 +0200
-Message-Id: <20220422130941.2044-3-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220422130941.2044-1-johan+linaro@kernel.org>
-References: <20220422130941.2044-1-johan+linaro@kernel.org>
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3DE22BF7
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 06:10:11 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id k2-20020a0566022a4200b00654c0f121a9so5380403iov.1
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 06:10:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=RMrxfkxhED/k+onCuiWjc6y9Gxw24l3qWHTwIY1akbI=;
+        b=bA/xTG6YZOFYlOmLJUuposisHWMF8j1SCTCuLWGL/JLTkgZtnuEZvF50ro0WmsgPjr
+         b77OSFVN2MyEWMoi9mMUPEcXtNTw2pkq0m9CfyYpVC5MdNYuzvonALESzAMF60GufVoQ
+         PdLTvasEk5EIwB+8B6HV6rIpxrhFtk0ZqqNySs8/Rn9kNonHIMbW7OWL7wYRb0L+8Pl0
+         WCSjE/k0wziCQ+KQUyVv5aEi6gQSf1ZW/uJN/zc70WOn14m+O6HVAGLfKybYYGJpx1xt
+         kgdxIVlc35o0CH/W6O5B+n+wkkOJEFGgjLlTHdThKDp7KZ2qpYKvTwagG0XEMh1eQoS8
+         7eRg==
+X-Gm-Message-State: AOAM533Ozzy+qYebrETOXVy0Qmml0EXEgzqR1b3o9FP/N80yiVDCjwFP
+        Gc2XSHHaAbVBouV9SP+bYQyj7icb3xqXF2rswVQqozdToqY0
+X-Google-Smtp-Source: ABdhPJyeaqqI7JHo9FAL401hlQu8WtxIW+9yMSfrIfTTsaFHRPrqpc2jS1eX6kxLqpTxIbluC5uTU+HTakE56AivA9mn5OJ4katY
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:e11:b0:2cc:3377:416 with SMTP id
+ a17-20020a056e020e1100b002cc33770416mr1843031ilk.308.1650633010715; Fri, 22
+ Apr 2022 06:10:10 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 06:10:10 -0700
+In-Reply-To: <20220422125227.2853-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004223fc05dd3df2d0@google.com>
+Subject: Re: [syzbot] kernel BUG in __filemap_get_folio
+From:   syzbot <syzbot+cf4cf13056f85dec2c40@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make sure to release the lane reset controller in case of a late probe
-error (e.g. probe deferral).
+Hello,
 
-Note that due to the reset controller being defined in devicetree in
-(questionable) "lane" child nodes, devm_reset_control_get_exclusive()
-cannot be used (and we shouldn't add devres helpers for the legacy reset
-controller API).
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Fixes: e78f3d15e115 ("phy: qcom-qmp: new qmp phy driver for qcom-chipsets")
-Cc: stable@vger.kernel.org      # 4.12
-Cc: Vivek Gautam <vivek.gautam@codeaurora.org>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/phy/qualcomm/phy-qcom-qmp.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Reported-and-tested-by: syzbot+cf4cf13056f85dec2c40@syzkaller.appspotmail.com
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
-index a84f7d1fc9b7..3f77830921f5 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
-@@ -6005,6 +6005,11 @@ static const struct phy_ops qcom_qmp_pcie_ufs_ops = {
- 	.owner		= THIS_MODULE,
- };
- 
-+static void qcom_qmp_reset_control_put(void *data)
-+{
-+	reset_control_put(data);
-+}
-+
- static
- int qcom_qmp_phy_create(struct device *dev, struct device_node *np, int id,
- 			void __iomem *serdes, const struct qmp_phy_cfg *cfg)
-@@ -6099,6 +6104,10 @@ int qcom_qmp_phy_create(struct device *dev, struct device_node *np, int id,
- 			dev_err(dev, "failed to get lane%d reset\n", id);
- 			return PTR_ERR(qphy->lane_rst);
- 		}
-+		ret = devm_add_action_or_reset(dev, qcom_qmp_reset_control_put,
-+					       qphy->lane_rst);
-+		if (ret)
-+			return ret;
- 	}
- 
- 	if (cfg->type == PHY_TYPE_UFS || cfg->type == PHY_TYPE_PCIE)
--- 
-2.35.1
+Tested on:
 
+commit:         559089e0 vmalloc: replace VM_NO_HUGE_VMAP with VM_ALLO..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+kernel config:  https://syzkaller.appspot.com/x/.config?x=dd7c9a79dfcfa205
+dashboard link: https://syzkaller.appspot.com/bug?extid=cf4cf13056f85dec2c40
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1670e278f00000
+
+Note: testing is done by a robot and is best-effort only.

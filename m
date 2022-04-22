@@ -2,97 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5342F50B3E0
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D56E650B3D9
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:18:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379055AbiDVJUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 05:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35390 "EHLO
+        id S1445992AbiDVJTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 05:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244072AbiDVJTx (ORCPT
+        with ESMTP id S1445937AbiDVJTN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 05:19:53 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0977254BFE;
-        Fri, 22 Apr 2022 02:15:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 22 Apr 2022 05:19:13 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F272DD7;
+        Fri, 22 Apr 2022 02:14:57 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 0ADBF1F37B;
+        Fri, 22 Apr 2022 09:14:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1650618896; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m/Us7RSSwCeAHIIfY1ScQOueScZTDL2ahZa2WlmjXkQ=;
+        b=EY7t55bhLh/s6WPstIAtba0p2I4u5qaiE/BtrMeRYsZeogxp/XjuYBt/RLaphMNErAE/0e
+        tVjGhFe/HfAGzrdWH7sRVkJuQ6V0PQvtBh4TLmeFLVx1lSC3CaWMkotppGNpbTzHCG54+1
+        POTxsRQJsXjV4wL4JEfA/rJJrsh013I=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1650618896;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m/Us7RSSwCeAHIIfY1ScQOueScZTDL2ahZa2WlmjXkQ=;
+        b=AEYWSHTOVVsWQHvRtHFdzq1CBpQ5m7pmo2GPoAtrXvwK1B5GaOOgdraTZmXgvZ3PNtd+t9
+        oyy86Q926hzNgmAQ==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 57E5FCE27DC;
-        Fri, 22 Apr 2022 09:15:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 007E2C385A0;
-        Fri, 22 Apr 2022 09:15:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650618935;
-        bh=wphSIBvr7Ma1//woXk0Uh+SjFy5kCgM83/jgyso856g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IadMM0AGGhNeQrUn/BzUo032y3FpRxAXbWOAnYyGSZ4U/UaIalbYvgke7dE/w9SS9
-         8Edg1emCkaYqz1ZxEnnQqH+Ij38F9deMsfJSLZzSveltvIZPY6W0/JlyrL8pfBMxuC
-         cC7aMkIi9MNJby/Y30//y1eP2/ZBWfzlRVDiEKcSUDFbQVpXn1SW9ufiQ/CL4Jml0x
-         AkD5KAbWPUa/l0RSqIf1wYF5HUi3p2rir4fCNREQ4dcmikbru5PhBmsWJra1MvHUIA
-         BjayHV3xMzl46U41OFqHXjpP5Nq1X2f915A/abqMbofunwKpHp3RfBeeSIZ4NDdqZh
-         7QlBwycZpGD8g==
-Date:   Fri, 22 Apr 2022 12:14:20 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     "Dhanraj, Vijay" <vijay.dhanraj@intel.com>
-Cc:     "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Shanahan, Mark" <mark.shanahan@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "Zhang, Cathy" <cathy.zhang@intel.com>,
-        "Xing, Cedric" <cedric.xing@intel.com>,
-        "Huang, Haitao" <haitao.huang@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V4 00/31] x86/sgx and selftests/sgx: Support SGX2
-Message-ID: <YmJx7E/1FFe0UTSP@kernel.org>
-References: <cover.1649878359.git.reinette.chatre@intel.com>
- <2f4338f37943c2b067db16ae65c9af665d3b51d9.camel@kernel.org>
- <9fbf26c8-5808-20c5-8653-d4f36bf398a4@intel.com>
- <42a52a6018e8dadb4c3eebefaae4dab31c0d5721.camel@kernel.org>
- <DM8PR11MB5591BBA189BC4EA5CFE2C7EAF6EF9@DM8PR11MB5591.namprd11.prod.outlook.com>
- <54f053d8bb6b72725b2351fc2016d20b65cebbf1.camel@kernel.org>
- <DM8PR11MB559180D1BA05B0E77D354467F6F49@DM8PR11MB5591.namprd11.prod.outlook.com>
+        by relay2.suse.de (Postfix) with ESMTPS id D4FDD2C14F;
+        Fri, 22 Apr 2022 09:14:55 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 16CDEA0620; Fri, 22 Apr 2022 11:14:55 +0200 (CEST)
+Date:   Fri, 22 Apr 2022 11:14:55 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     cuibixuan <cuibixuan@linux.alibaba.com>
+Cc:     Jan Kara <jack@suse.cz>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        rostedt <rostedt@goodmis.org>, mingo <mingo@redhat.com>,
+        "yi.zhang" <yi.zhang@huawei.com>, linux-ext4@vger.kernel.org,
+        Ted Tso <tytso@mit.edu>
+Subject: Re: =?utf-8?B?5Zue5aSN77yaW1BBVEM=?= =?utf-8?Q?H?= -next] jbd2: use
+ the correct print format
+Message-ID: <20220422091455.rzr265lcht46gub3@quack3.lan>
+References: <1647619000-17758-1-git-send-email-cuibixuan@linux.alibaba.com>
+ <20220321092503.liyi6eqrar52cc5n@quack3.lan>
+ <df9b8f54-274d-404c-a698-c88a18849810.cuibixuan@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DM8PR11MB559180D1BA05B0E77D354467F6F49@DM8PR11MB5591.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <df9b8f54-274d-404c-a698-c88a18849810.cuibixuan@linux.alibaba.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 11:46:57PM +0000, Dhanraj, Vijay wrote:
-> Hi All,
-> 
-> I evaluated V4 patch changes with Gramine and ran into an issue when
-> trying to set EPC page permission to PROT_NONE. It looks like with V3
-> patch series a change was introduced which requires kernel to have at
-> least R permission when calling RESTRICT IOCTL. This change was done
-> under the assumption that EPCM requires at least R permission for
-> EMODPE/EACCEPT to succeed. But when testing with V2 version, EACCEPT
-> worked fine with page permission set to PROT_NONE. 
-> 
-> Thanks to @Shanahan, Mark for confirming that EPCM does not need to have
-> R value to allow EACCEPT or EMODPE. Given this, can we please revert this
-> change?
+Hello,
+
+thanks for noticing. It is probably because this patch was not CCed neither
+to ext4 development mailing list, nor to the ext4 maintainer. Added now.
+Ted, can you please pick up this patch? Lore has it so b4, can pick it up
+just fine. Thanks!
+
+								Honza
+
+On Fri 22-04-22 10:42:51, cuibixuan wrote:
+> Hi, 
+> This patch doesn't seem to be merged into the next branch.  :-)
 > 
 > Thanks,
-> -Vijay
-
-Let's try to avoid top-posting and split the lines appropriately.
-
-BR, Jarkko
+> Bixuan Cui
+> 
+> On Fri 18-03-22 23:56:40, Bixuan Cui wrote:
+> 
+> > The print format error was found when using ftrace event:
+> >     <...>-1406 [000] .... 23599442.895823: jbd2_end_commit: dev 252,8 transaction -1866216965 sync 0 head -1866217368
+> >     <...>-1406 [000] .... 23599442.896299: jbd2_start_commit: dev 252,8 transaction -1866216964 sync 0
+> > 
+> > Print transaction and head with the unsigned format "%u" instead.
+> > 
+> > Fixes: 879c5e6b7cb4 ('jbd2: convert instrumentation from markers to tracepoints')
+> > Signed-off-by: Bixuan Cui <cuibixuan@linux.alibaba.com>
+> 
+> Makes sense. Thanks for the fix. Feel free to add:
+> 
+> Reviewed-by: Jan Kara <jack@suse.cz>
+> 
+>         Honza
+> 
+> > ---
+> >  include/trace/events/jbd2.h | 10 +++++-----
+> >  1 file changed, 5 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/include/trace/events/jbd2.h b/include/trace/events/jbd2.h
+> > index a4dfe005983d..5be1aa1691fb 100644
+> > --- a/include/trace/events/jbd2.h
+> > +++ b/include/trace/events/jbd2.h
+> > @@ -40,7 +40,7 @@ DECLARE_EVENT_CLASS(jbd2_commit,
+> >   TP_STRUCT__entry(
+> >    __field( dev_t, dev   )
+> >    __field( char, sync_commit    )
+> > -  __field( int, transaction    )
+> > +  __field( tid_t, transaction    )
+> >   ),
+> >  
+> >   TP_fast_assign(
+> > @@ -49,7 +49,7 @@ DECLARE_EVENT_CLASS(jbd2_commit,
+> >    __entry->transaction = commit_transaction->t_tid;
+> >   ),
+> >  
+> > - TP_printk("dev %d,%d transaction %d sync %d",
+> > + TP_printk("dev %d,%d transaction %u sync %d",
+> >      MAJOR(__entry->dev), MINOR(__entry->dev),
+> >      __entry->transaction, __entry->sync_commit)
+> >  );
+> > @@ -97,8 +97,8 @@ TRACE_EVENT(jbd2_end_commit,
+> >   TP_STRUCT__entry(
+> >    __field( dev_t, dev   )
+> >    __field( char, sync_commit    )
+> > -  __field( int, transaction    )
+> > -  __field( int, head       )
+> > +  __field( tid_t, transaction    )
+> > +  __field( tid_t, head       )
+> >   ),
+> >  
+> >   TP_fast_assign(
+> > @@ -108,7 +108,7 @@ TRACE_EVENT(jbd2_end_commit,
+> >    __entry->head  = journal->j_tail_sequence;
+> >   ),
+> >  
+> > - TP_printk("dev %d,%d transaction %d sync %d head %d",
+> > + TP_printk("dev %d,%d transaction %u sync %d head %u",
+> >      MAJOR(__entry->dev), MINOR(__entry->dev),
+> >      __entry->transaction, __entry->sync_commit, __entry->head)
+> >  );
+> > -- 
+> > 2.19.1.6.gb485710b
+> > 
+> -- 
+> Jan Kara <jack@suse.com>
+> SUSE Labs, CR
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

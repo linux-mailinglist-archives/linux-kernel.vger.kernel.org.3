@@ -2,105 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE3E150B5D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 13:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98FA350B5D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 13:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446990AbiDVLDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 07:03:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57292 "EHLO
+        id S1446989AbiDVLHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 07:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443207AbiDVLDc (ORCPT
+        with ESMTP id S245078AbiDVLHO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 07:03:32 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730A013DDC
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 04:00:39 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23M9HNbh004871;
-        Fri, 22 Apr 2022 11:00:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=pp1;
- bh=hjKStpOSlGateuiEbVr0jYeOEW3o2bJKOO/TNMgKFgk=;
- b=XWtH7gELt0YYWjCfH2jUGWW8DmCTzV4usNjElJx/pzLGySSzuvl3EQCKRdDCgLMlbDDQ
- 0PRAzBgMDGsGet1vg9zg+aVhWhSWNLIQP1SQdbwEXVv2Vl4x1PvpZoB/yznYWkcZgJ7H
- 6dfzAHlpu1J6cOMRLw3SEj5EDqDWMqAHUTsspWDd6Pvo5ExfmpsrMnO8NwO3ozU8+nyn
- QxpeFdvS5ylUG5xtYm0AeDkTPTrHNeZ8rNWTLqGb8bcy1tk5l3hRsfy+3WEmqux1MEI/
- e6+XVQBq9SlVZf9qNAdUYS567BfmX7Vb9BLB3UEXnfNYGt/1he112l9ZRMRPLZwgBEwR TA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3fjer9dfw3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Apr 2022 11:00:32 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23MAp6or032387;
-        Fri, 22 Apr 2022 11:00:31 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3fjer9dfuq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Apr 2022 11:00:31 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23MAsI5b007837;
-        Fri, 22 Apr 2022 11:00:29 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04ams.nl.ibm.com with ESMTP id 3ffne99853-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Apr 2022 11:00:29 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23MB0QIt56426956
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 22 Apr 2022 11:00:26 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C5E74AE05F;
-        Fri, 22 Apr 2022 11:00:26 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0C45DAE065;
-        Fri, 22 Apr 2022 11:00:24 +0000 (GMT)
-Received: from li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com (unknown [9.43.59.166])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Fri, 22 Apr 2022 11:00:23 +0000 (GMT)
-Date:   Fri, 22 Apr 2022 16:30:17 +0530
-From:   Jagdish Gediya <jvgediya@linux.ibm.com>
-To:     "ying.huang@intel.com" <ying.huang@intel.com>
-Cc:     Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Greg Thelen <gthelen@google.com>
-Subject: Re: [PATCH v2 0/5] mm: demotion: Introduce new node state
- N_DEMOTION_TARGETS
-Message-ID: <YmKKwXa2XI/nwac0@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
-References: <CAAPL-u_pSWD6U0yQ8Ws+_Yfb_3ZEmNXJsYcRJjAFBkyDk=nq8g@mail.gmail.com>
- <ea73f6fda9cafdd0cb6ba8351139e6f4b47354a8.camel@intel.com>
- <CAAPL-u-aeceXFUNdok_GYb2aLhZa0zBBuSqHxFznQob3PbJt7Q@mail.gmail.com>
- <a80647053bba44623094995730e061f0e6129677.camel@intel.com>
- <CAAPL-u89Jxutu1VH0LnO5VGdMbkLvc2M9eapuwP-y9oG9QSsrA@mail.gmail.com>
- <610ccaad03f168440ce765ae5570634f3b77555e.camel@intel.com>
- <CAAPL-u9ktM82zAW_OVwqTmQsr-XC8XOPmAsjoiCLo18cxUWA=A@mail.gmail.com>
- <8e31c744a7712bb05dbf7ceb2accf1a35e60306a.camel@intel.com>
- <CAAPL-u9uP+FUh7Yn0ByOECo+EP32ZABnCvNPKQB9JCA68VHEqQ@mail.gmail.com>
- <78b5f4cfd86efda14c61d515e4db9424e811c5be.camel@intel.com>
+        Fri, 22 Apr 2022 07:07:14 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83F225C5B;
+        Fri, 22 Apr 2022 04:04:21 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id b19so10495079wrh.11;
+        Fri, 22 Apr 2022 04:04:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aX+af2NbLYVavvKgA4KwWpvzLYIlHAkPkYV9LErzorg=;
+        b=RdHAhqBriPScMcrozEZlK7PFf9XAzS66rQDFLnBoBGAjWkJ7ciJZqrY/zzYe3YX17f
+         7AokDza8jYTO67wDtahYdd39QdhtAGMTR1Z+fChGeL5RQ5s3mu+dE5QXdr4g5D0Nn2Lv
+         r1eWsmVYpCq0eTUVG3+pS6mSWehXyAqz21wkoV6oiAyrwameuNpy3EwKEUu3AoZUmOWP
+         vCgIHjGKOo6FkYp2AJFq5XSstiG/kCcQZsSJfps3gVrh/BGFhQDjSsMNlwMU2dIfn2pi
+         ygilEu7iPO8Ej7VI6eX/jVxFCbTziPFMbs8as6KzKxodZMsgb5BvyaK4EmIn7wteA8Ry
+         ZC8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aX+af2NbLYVavvKgA4KwWpvzLYIlHAkPkYV9LErzorg=;
+        b=rE7aaaBPYZl/p13l5XcOyNEIcT344OGdNSGkCJeELkBbuPwLrbJdO9eR/eSi790k6t
+         2znRXNCS0kMYxhZL2nLAQVOh43dr5rQOHYIrSFRB+AHrqnDKh3l7UOVXfpLYGl1NqJOh
+         y3zJJZQh0og6Vf3yxsZ2NU4pnY5o9Gj/BUJfV7egOMEws2Rdk9Nu/dKJsqMZKjvrUygd
+         D/FjAWpE8Ca8p1ocMUDzrIZXe1wZjrzKC24NRTF2NLnkrB6QlVlRS3+Ig9ZnCaiFENC9
+         kbpLhZNJbYWqnvDWroOl3gGi6nHrIhErMLj6pyL8wEW3+uY2Qwgs2WF4+ZS9jqfw2ZtX
+         ahXg==
+X-Gm-Message-State: AOAM533ANesMSzDlSdr/Qgb9r+Om3KvAzaVkyBXTYiZhDLfgficHKXwC
+        7r5SNXnSbEpXsfV7PjfrZ/4HrFfEc6w=
+X-Google-Smtp-Source: ABdhPJyaWqhcVGDLHxDxRf5Wk/P202UvjQHRnNHU8QKJ6oMsRDnKf4mr9mgXnEEACMXB/grE982s0A==
+X-Received: by 2002:adf:fb4d:0:b0:207:a376:7585 with SMTP id c13-20020adffb4d000000b00207a3767585mr3220431wrs.489.1650625460208;
+        Fri, 22 Apr 2022 04:04:20 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id r5-20020adfa145000000b0020acc9de8c4sm705518wrr.38.2022.04.22.04.04.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 04:04:19 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Thomas Gleixner <tglx@linutronix.de>, Tom Rix <trix@redhat.com>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH] kernel/irq/matrix.c: remove redundant assignment to variable 'end'
+Date:   Fri, 22 Apr 2022 12:04:18 +0100
+Message-Id: <20220422110418.1264778-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <78b5f4cfd86efda14c61d515e4db9424e811c5be.camel@intel.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: nCuMr4d0xa6omzspB_W3tLpLwKn1E0R0
-X-Proofpoint-ORIG-GUID: 3d7bMpJLoK_Ng1OsU8W992RXYuhS4fUQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-22_02,2022-04-22_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- mlxscore=0 priorityscore=1501 phishscore=0 malwarescore=0 mlxlogscore=999
- lowpriorityscore=0 spamscore=0 adultscore=0 bulkscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204220046
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -108,264 +69,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 02:21:47PM +0800, ying.huang@intel.com wrote:
-> On Thu, 2022-04-21 at 23:13 -0700, Wei Xu wrote:
-> > On Thu, Apr 21, 2022 at 10:40 PM ying.huang@intel.com
-> > <ying.huang@intel.com> wrote:
-> > > 
-> > > On Thu, 2022-04-21 at 21:46 -0700, Wei Xu wrote:
-> > > > On Thu, Apr 21, 2022 at 5:58 PM ying.huang@intel.com
-> > > > <ying.huang@intel.com> wrote:
-> > > > > 
-> > > > > On Thu, 2022-04-21 at 11:26 -0700, Wei Xu wrote:
-> > > > > > On Thu, Apr 21, 2022 at 12:45 AM ying.huang@intel.com
-> > > > > > <ying.huang@intel.com> wrote:
-> > > > > > > 
-> > > > > > > On Thu, 2022-04-21 at 00:29 -0700, Wei Xu wrote:
-> > > > > > > > On Thu, Apr 21, 2022 at 12:08 AM ying.huang@intel.com
-> > > > > > > > <ying.huang@intel.com> wrote:
-> > > > > > > > > 
-> > > > > > > > > On Wed, 2022-04-20 at 23:49 -0700, Wei Xu wrote:
-> > > > > > > > > > On Wed, Apr 20, 2022 at 11:24 PM ying.huang@intel.com
-> > > > > > > > > > <ying.huang@intel.com> wrote:
-> > > > > > > > > > > 
-> > > > > > > > > > > On Wed, 2022-04-20 at 22:41 -0700, Wei Xu wrote:
-> > > > > > > > > > > > On Wed, Apr 20, 2022 at 8:12 PM Yang Shi <shy828301@gmail.com> wrote:
-> > > > > > > > > > > > > 
-> > > > > > > > > > > > > On Thu, Apr 14, 2022 at 12:00 AM ying.huang@intel.com
-> > > > > > > > > > > > > <ying.huang@intel.com> wrote:
-> > > > > > > > > > > > > > 
-> > > > > > > > > > > > > > On Wed, 2022-04-13 at 14:52 +0530, Jagdish Gediya wrote:
-> > > > > > > > > > > > > > > Current implementation to find the demotion targets works
-> > > > > > > > > > > > > > > based on node state N_MEMORY, however some systems may have
-> > > > > > > > > > > > > > > dram only memory numa node which are N_MEMORY but not the
-> > > > > > > > > > > > > > > right choices as demotion targets.
-> > > > > > > > > > > > > > > 
-> > > > > > > > > > > > > > > This patch series introduces the new node state
-> > > > > > > > > > > > > > > N_DEMOTION_TARGETS, which is used to distinguish the nodes which
-> > > > > > > > > > > > > > > can be used as demotion targets, node_states[N_DEMOTION_TARGETS]
-> > > > > > > > > > > > > > > is used to hold the list of nodes which can be used as demotion
-> > > > > > > > > > > > > > > targets, support is also added to set the demotion target
-> > > > > > > > > > > > > > > list from user space so that default behavior can be overridden.
-> > > > > > > > > > > > > > 
-> > > > > > > > > > > > > > It appears that your proposed user space interface cannot solve all
-> > > > > > > > > > > > > > problems.  For example, for system as follows,
-> > > > > > > > > > > > > > 
-> > > > > > > > > > > > > > Node 0 & 2 are cpu + dram nodes and node 1 are slow memory node near
-> > > > > > > > > > > > > > node 0,
-> > > > > > > > > > > > > > 
-> > > > > > > > > > > > > > available: 3 nodes (0-2)
-> > > > > > > > > > > > > > node 0 cpus: 0 1
-> > > > > > > > > > > > > > node 0 size: n MB
-> > > > > > > > > > > > > > node 0 free: n MB
-> > > > > > > > > > > > > > node 1 cpus:
-> > > > > > > > > > > > > > node 1 size: n MB
-> > > > > > > > > > > > > > node 1 free: n MB
-> > > > > > > > > > > > > > node 2 cpus: 2 3
-> > > > > > > > > > > > > > node 2 size: n MB
-> > > > > > > > > > > > > > node 2 free: n MB
-> > > > > > > > > > > > > > node distances:
-> > > > > > > > > > > > > > node   0   1   2
-> > > > > > > > > > > > > >   0:  10  40  20
-> > > > > > > > > > > > > >   1:  40  10  80
-> > > > > > > > > > > > > >   2:  20  80  10
-> > > > > > > > > > > > > > 
-> > > > > > > > > > > > > > Demotion order 1:
-> > > > > > > > > > > > > > 
-> > > > > > > > > > > > > > node    demotion_target
-> > > > > > > > > > > > > >  0              1
-> > > > > > > > > > > > > >  1              X
-> > > > > > > > > > > > > >  2              X
-> > > > > > > > > > > > > > 
-> > > > > > > > > > > > > > Demotion order 2:
-> > > > > > > > > > > > > > 
-> > > > > > > > > > > > > > node    demotion_target
-> > > > > > > > > > > > > >  0              1
-> > > > > > > > > > > > > >  1              X
-> > > > > > > > > > > > > >  2              1
-> > > > > > > > > > > > > > 
-> > > > > > > > > > > > > > The demotion order 1 is preferred if we want to reduce cross-socket
-> > > > > > > > > > > > > > traffic.  While the demotion order 2 is preferred if we want to take
-> > > > > > > > > > > > > > full advantage of the slow memory node.  We can take any choice as
-> > > > > > > > > > > > > > automatic-generated order, while make the other choice possible via user
-> > > > > > > > > > > > > > space overridden.
-> > > > > > > > > > > > > > 
-> > > > > > > > > > > > > > I don't know how to implement this via your proposed user space
-> > > > > > > > > > > > > > interface.  How about the following user space interface?
-> > > > > > > > > > > > > > 
-> > > > > > > > > > > > > > 1. Add a file "demotion_order_override" in
-> > > > > > > > > > > > > >         /sys/devices/system/node/
-> > > > > > > > > > > > > > 
-> > > > > > > > > > > > > > 2. When read, "1" is output if the demotion order of the system has been
-> > > > > > > > > > > > > > overridden; "0" is output if not.
-> > > > > > > > > > > > > > 
-> > > > > > > > > > > > > > 3. When write "1", the demotion order of the system will become the
-> > > > > > > > > > > > > > overridden mode.  When write "0", the demotion order of the system will
-> > > > > > > > > > > > > > become the automatic mode and the demotion order will be re-generated.
-> > > > > > > > > > > > > > 
-> > > > > > > > > > > > > > 4. Add a file "demotion_targets" for each node in
-> > > > > > > > > > > > > >         /sys/devices/system/node/nodeX/
-> > > > > > > > > > > > > > 
-> > > > > > > > > > > > > > 5. When read, the demotion targets of nodeX will be output.
-> > > > > > > > > > > > > > 
-> > > > > > > > > > > > > > 6. When write a node list to the file, the demotion targets of nodeX
-> > > > > > > > > > > > > > will be set to the written nodes.  And the demotion order of the system
-> > > > > > > > > > > > > > will become the overridden mode.
-> > > > > > > > > > > > > 
-> > > > > > > > > > > > > TBH I don't think having override demotion targets in userspace is
-> > > > > > > > > > > > > quite useful in real life for now (it might become useful in the
-> > > > > > > > > > > > > future, I can't tell). Imagine you manage hundred thousands of
-> > > > > > > > > > > > > machines, which may come from different vendors, have different
-> > > > > > > > > > > > > generations of hardware, have different versions of firmware, it would
-> > > > > > > > > > > > > be a nightmare for the users to configure the demotion targets
-> > > > > > > > > > > > > properly. So it would be great to have the kernel properly configure
-> > > > > > > > > > > > > it *without* intervening from the users.
-> > > > > > > > > > > > > 
-> > > > > > > > > > > > > So we should pick up a proper default policy and stick with that
-> > > > > > > > > > > > > policy unless it doesn't work well for the most workloads. I do
-> > > > > > > > > > > > > understand it is hard to make everyone happy. My proposal is having
-> > > > > > > > > > > > > every node in the fast tier has a demotion target (at least one) if
-> > > > > > > > > > > > > the slow tier exists sounds like a reasonable default policy. I think
-> > > > > > > > > > > > > this is also the current implementation.
-> > > > > > > > > > > > > 
-> > > > > > > > > > > > 
-> > > > > > > > > > > > This is reasonable.  I agree that with a decent default policy,
-> > > > > > > > > > > > 
-> > > > > > > > > > > 
-> > > > > > > > > > > I agree that a decent default policy is important.  As that was enhanced
-> > > > > > > > > > > in [1/5] of this patchset.
-> > > > > > > > > > > 
-> > > > > > > > > > > > the
-> > > > > > > > > > > > overriding of per-node demotion targets can be deferred.  The most
-> > > > > > > > > > > > important problem here is that we should allow the configurations
-> > > > > > > > > > > > where memory-only nodes are not used as demotion targets, which this
-> > > > > > > > > > > > patch set has already addressed.
-> > > > > > > > > > > 
-> > > > > > > > > > > Do you mean the user space interface proposed by [3/5] of this patchset?
-> > > > > > > > > > 
-> > > > > > > > > > Yes.
-> > > > > > > > > > 
-> > > > > > > > > > > IMHO, if we want to add a user space interface, I think that it should
-> > > > > > > > > > > be powerful enough to address all existing issues and some potential
-> > > > > > > > > > > future issues, so that it can be stable.  I don't think it's a good idea
-> > > > > > > > > > > to define a partial user space interface that works only for a specific
-> > > > > > > > > > > use case and cannot be extended for other use cases.
-> > > > > > > > > > 
-> > > > > > > > > > I actually think that they can be viewed as two separate problems: one
-> > > > > > > > > > is to define which nodes can be used as demotion targets (this patch
-> > > > > > > > > > set), and the other is how to initialize the per-node demotion path
-> > > > > > > > > > (node_demotion[]).  We don't have to solve both problems at the same
-> > > > > > > > > > time.
-> > > > > > > > > > 
-> > > > > > > > > > If we decide to go with a per-node demotion path customization
-> > > > > > > > > > interface to indirectly set N_DEMOTION_TARGETS, I'd prefer that there
-> > > > > > > > > > is a single global control to turn off all demotion targets (for the
-> > > > > > > > > > machines that don't use memory-only nodes for demotion).
-> > > > > > > > > > 
-> > > > > > > > > 
-> > > > > > > > > There's one already.  In commit 20b51af15e01 ("mm/migrate: add sysfs
-> > > > > > > > > interface to enable reclaim migration"), a sysfs interface
-> > > > > > > > > 
-> > > > > > > > >         /sys/kernel/mm/numa/demotion_enabled
-> > > > > > > > > 
-> > > > > > > > > is added to turn off all demotion targets.
-> > > > > > > > 
-> > > > > > > > IIUC, this sysfs interface only turns off demotion-in-reclaim.  It
-> > > > > > > > will be even cleaner if we have an easy way to clear node_demotion[]
-> > > > > > > > and N_DEMOTION_TARGETS so that the userspace (post-boot agent, not
-> > > > > > > > init scripts) can know that the machine doesn't even have memory
-> > > > > > > > tiering hardware enabled.
-> > > > > > > > 
-> > > > > > > 
-> > > > > > > What is the difference?  Now we have no interface to show demotion
-> > > > > > > targets of a node.  That is in-kernel only.  What is memory tiering
-> > > > > > > hardware?  The Optane PMEM?  Some information for it is available via
-> > > > > > > ACPI HMAT table.
-> > > > > > > 
-> > > > > > > Except demotion-in-reclaim, what else do you care about?
-> > > > > > 
-> > > > > > There is a difference: one is to indicate the availability of the
-> > > > > > memory tiering hardware and the other is to indicate whether
-> > > > > > transparent kernel-driven demotion from the reclaim path is activated.
-> > > > > > With /sys/devices/system/node/demote_targets or the per-node demotion
-> > > > > > target interface, the userspace can figure out the memory tiering
-> > > > > > topology abstracted by the kernel.  It is possible to use
-> > > > > > application-guided demotion without having to enable reclaim-based
-> > > > > > demotion in the kernel.  Logically it is also cleaner to me to
-> > > > > > decouple the tiering node representation from the actual demotion
-> > > > > > mechanism enablement.
-> > > > > 
-> > > > > I am confused here.  It appears that you need a way to expose the
-> > > > > automatic generated demotion order from kernel to user space interface.
-> > > > > We can talk about that if you really need it.
-> > > > > 
-> > > > > But [2-5/5] of this patchset is to override the automatic generated
-> > > > > demotion order from user space to kernel interface.
-> > > > 
-> > > > As a side effect of allowing user space to override the default set of
-> > > > demotion target nodes, it also provides a sysfs interface to allow
-> > > > userspace to read which nodes are currently being designated as
-> > > > demotion targets.
-> > > > 
-> > > > The initialization of demotion targets is expected to complete during
-> > > > boot (either by kernel or via an init script).  After that, the
-> > > > userspace processes (e.g. proactive tiering daemon or tiering-aware
-> > > > applications) can query this sysfs interface to know if there are any
-> > > > tiering nodes present and act accordingly.
-> > > > 
-> > > > It would be even better to expose the per-node demotion order
-> > > > (node_demotion[]) via the sysfs interface (e.g.
-> > > > /sys/devices/system/node/nodeX/demotion_targets as you have
-> > > > suggested). It can be read-only until there are good use cases to
-> > > > require overriding the per-node demotion order.
-> > > 
-> > > I am OK to expose the system demotion order to user space.  For example,
-> > > via /sys/devices/system/node/nodeX/demotion_targets, but read-only.
-> > 
-> > Sounds good. We can send out a patch for such a read-only interface.
-> > 
-> > > But if we want to add functionality to override system demotion order,
-> > > we need to consider the user space interface carefully, at least after
-> > > collecting all requirement so far.  I don't think the interface proposed
-> > > in [2-5/5] of this patchset is sufficient or extensible enough.
-> > 
-> > The current proposed interface should be sufficient to override which
-> > nodes can serve as demotion targets.  I agree that it is not
-> > sufficient if userspace wants to redefine the per-node demotion
-> > targets and a suitable user space interface for that purpose needs to
-> > be designed carefully.
-> > 
-> 
-> IMHO, it's better to define both together.  That is, collect all
-> requirement, and design it carefully, keeping extensible in mind.  If
-> it's not the good timing yet, we can defer it to collect more
-> requirement.  That's not urgent even for authors' system, because they
-> can just don't enable demotion-in-reclaim.
-> 
-> Best Regards,
-> Huang, Ying
+Variable end is being initialized with a value that is never read, it
+is being re-assigned later with the same value. The initialization is
+redundant and can be removed.
 
-I think it is necessary to either have per node demotion targets
-configuration or the user space interface supported by this patch
-series. As we don't have clear consensus on how the user interface
-should look like, we can defer the per node demotion target set
-interface to future until the real need arises.
+Cleans up clang scan build warning:
+kernel/irq/matrix.c:289:25: warning: Value stored to 'end' during its
+initialization is never read [deadcode.DeadStores]
 
-Current patch series sets N_DEMOTION_TARGET from dax device kmem
-driver, it may be possible that some memory node desired as demotion
-target is not detected in the system from dax-device kmem probe path.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ kernel/irq/matrix.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-It is also possible that some of the dax-devices are not preferred as
-demotion target e.g. HBM, for such devices, node shouldn't be set to
-N_DEMOTION_TARGETS. In future, Support should be added to distinguish
-such dax-devices and not mark them as N_DEMOTION_TARGETS from the
-kernel, but for now this user space interface will be useful to avoid
-such devices as demotion targets.
+diff --git a/kernel/irq/matrix.c b/kernel/irq/matrix.c
+index bbfb26489aa1..1698e77645ac 100644
+--- a/kernel/irq/matrix.c
++++ b/kernel/irq/matrix.c
+@@ -286,7 +286,7 @@ void irq_matrix_remove_managed(struct irq_matrix *m, const struct cpumask *msk)
+ int irq_matrix_alloc_managed(struct irq_matrix *m, const struct cpumask *msk,
+ 			     unsigned int *mapped_cpu)
+ {
+-	unsigned int bit, cpu, end = m->alloc_end;
++	unsigned int bit, cpu, end;
+ 	struct cpumap *cm;
+ 
+ 	if (cpumask_empty(msk))
+-- 
+2.35.1
 
-We can add read only interface to view per node demotion targets
-from /sys/devices/system/node/nodeX/demotion_targets, remove
-duplicated /sys/kernel/mm/numa/demotion_target interface and instead
-make /sys/devices/system/node/demotion_targets writable.
-
-Huang, Wei, Yang,
-What do you suggest?

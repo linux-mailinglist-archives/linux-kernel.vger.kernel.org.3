@@ -2,65 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D56E650B3D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CD9A50B3F8
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:24:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445992AbiDVJTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 05:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33892 "EHLO
+        id S1445931AbiDVJ0u convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 22 Apr 2022 05:26:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445937AbiDVJTN (ORCPT
+        with ESMTP id S1377251AbiDVJ0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 05:19:13 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F272DD7;
-        Fri, 22 Apr 2022 02:14:57 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 0ADBF1F37B;
-        Fri, 22 Apr 2022 09:14:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1650618896; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=m/Us7RSSwCeAHIIfY1ScQOueScZTDL2ahZa2WlmjXkQ=;
-        b=EY7t55bhLh/s6WPstIAtba0p2I4u5qaiE/BtrMeRYsZeogxp/XjuYBt/RLaphMNErAE/0e
-        tVjGhFe/HfAGzrdWH7sRVkJuQ6V0PQvtBh4TLmeFLVx1lSC3CaWMkotppGNpbTzHCG54+1
-        POTxsRQJsXjV4wL4JEfA/rJJrsh013I=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1650618896;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=m/Us7RSSwCeAHIIfY1ScQOueScZTDL2ahZa2WlmjXkQ=;
-        b=AEYWSHTOVVsWQHvRtHFdzq1CBpQ5m7pmo2GPoAtrXvwK1B5GaOOgdraTZmXgvZ3PNtd+t9
-        oyy86Q926hzNgmAQ==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D4FDD2C14F;
-        Fri, 22 Apr 2022 09:14:55 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 16CDEA0620; Fri, 22 Apr 2022 11:14:55 +0200 (CEST)
-Date:   Fri, 22 Apr 2022 11:14:55 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     cuibixuan <cuibixuan@linux.alibaba.com>
-Cc:     Jan Kara <jack@suse.cz>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        rostedt <rostedt@goodmis.org>, mingo <mingo@redhat.com>,
-        "yi.zhang" <yi.zhang@huawei.com>, linux-ext4@vger.kernel.org,
-        Ted Tso <tytso@mit.edu>
-Subject: Re: =?utf-8?B?5Zue5aSN77yaW1BBVEM=?= =?utf-8?Q?H?= -next] jbd2: use
- the correct print format
-Message-ID: <20220422091455.rzr265lcht46gub3@quack3.lan>
-References: <1647619000-17758-1-git-send-email-cuibixuan@linux.alibaba.com>
- <20220321092503.liyi6eqrar52cc5n@quack3.lan>
- <df9b8f54-274d-404c-a698-c88a18849810.cuibixuan@linux.alibaba.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <df9b8f54-274d-404c-a698-c88a18849810.cuibixuan@linux.alibaba.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        Fri, 22 Apr 2022 05:26:46 -0400
+Received: from mail.holtmann.org (coyote.holtmann.net [212.227.132.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A7B4F27CE0;
+        Fri, 22 Apr 2022 02:23:53 -0700 (PDT)
+Received: from smtpclient.apple (p4fefc32f.dip0.t-ipconnect.de [79.239.195.47])
+        by mail.holtmann.org (Postfix) with ESMTPSA id C11D8CECD2;
+        Fri, 22 Apr 2022 11:16:04 +0200 (CEST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: Re: [PATCH v2] Bluetooth: btusb: add support for Qualcomm WCN785x
+From:   Marcel Holtmann <marcel@holtmann.org>
+In-Reply-To: <1650017516-28912-1-git-send-email-quic_zijuhu@quicinc.com>
+Date:   Fri, 22 Apr 2022 11:16:04 +0200
+Cc:     Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Content-Transfer-Encoding: 8BIT
+Message-Id: <7EF2E4E4-2DC5-450C-8840-314B9D210521@holtmann.org>
+References: <1650017516-28912-1-git-send-email-quic_zijuhu@quicinc.com>
+To:     Zijun Hu <quic_zijuhu@quicinc.com>
+X-Mailer: Apple Mail (2.3696.80.82.1.1)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,91 +42,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Zijun,
 
-thanks for noticing. It is probably because this patch was not CCed neither
-to ext4 development mailing list, nor to the ext4 maintainer. Added now.
-Ted, can you please pick up this patch? Lore has it so b4, can pick it up
-just fine. Thanks!
+> Qualcomm WCN785x has PID/VID 0cf3/e700 as shown by
+> /sys/kernel/debug/usb/devices:
+> 
+> T:  Bus=02 Lev=02 Prnt=02 Port=01 Cnt=02 Dev#=  8 Spd=12   MxCh= 0
+> D:  Ver= 1.10 Cls=e0(wlcon) Sub=01 Prot=01 MxPS=64 #Cfgs=  1
+> P:  Vendor=0cf3 ProdID=e700 Rev= 0.01
+> C:* #Ifs= 2 Cfg#= 1 Atr=e0 MxPwr=100mA
+> I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=1ms
+> E:  Ad=82(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+> E:  Ad=02(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+> I:* If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+> I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+> I:  If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+> I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+> I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+> I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+> I:  If#= 1 Alt= 6 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  63 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  63 Ivl=1ms
+> I:  If#= 1 Alt= 7 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  65 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  65 Ivl=1ms
+> 
+> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
+> ---
+> drivers/bluetooth/btusb.c | 10 ++++++++--
+> 1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+> index 06a854a2507e..67a6a84a6f61 100644
+> --- a/drivers/bluetooth/btusb.c
+> +++ b/drivers/bluetooth/btusb.c
+> @@ -317,6 +317,11 @@ static const struct usb_device_id blacklist_table[] = {
+> 						     BTUSB_WIDEBAND_SPEECH |
+> 						     BTUSB_VALID_LE_STATES },
+> 
+> +	/* QCA WCN785x chipset */
+> +	{ USB_DEVICE(0x0cf3, 0xe700), .driver_info = BTUSB_QCA_WCN6855 |
+> +						     BTUSB_WIDEBAND_SPEECH |
+> +						     BTUSB_VALID_LE_STATES },
+> +
+> 	/* Broadcom BCM2035 */
+> 	{ USB_DEVICE(0x0a5c, 0x2009), .driver_info = BTUSB_BCM92035 },
+> 	{ USB_DEVICE(0x0a5c, 0x200a), .driver_info = BTUSB_WRONG_SCO_MTU },
+> @@ -3037,6 +3042,7 @@ static const struct qca_device_info qca_devices_table[] = {
+> 	{ 0x00130100, 40, 4, 16 }, /* WCN6855 1.0 */
+> 	{ 0x00130200, 40, 4, 16 }, /* WCN6855 2.0 */
+> 	{ 0x00130201, 40, 4, 16 }, /* WCN6855 2.1 */
+> +	{ 0x00190200, 40, 4, 16 }, /* WCN785x 2.0 */
+> };
+> 
+> static int btusb_qca_send_vendor_req(struct usb_device *udev, u8 request,
+> @@ -3327,11 +3333,11 @@ static int btusb_setup_qca(struct hci_dev *hdev)
+> 		if (err < 0)
+> 			return err;
+> 
+> -		/* WCN6855 2.1 will reset to apply firmware downloaded here, so
+> +		/* WCN6855 2.1 and later will reset to apply firmware downloaded here, so
+> 		 * wait ~100ms for reset Done then go ahead, otherwise, it maybe
+> 		 * cause potential enable failure.
+> 		 */
+> -		if (info->rom_version == 0x00130201)
+> +		if ((info->rom_version == 0x00130201) || (info->rom_version == 0x00190200))
+> 			msleep(QCA_BT_RESET_WAIT_MS);
 
-								Honza
+I think it is better to start using a switch statement here.
 
-On Fri 22-04-22 10:42:51, cuibixuan wrote:
-> Hi, 
-> This patch doesn't seem to be merged into the next branch.  :-)
-> 
-> Thanks,
-> Bixuan Cui
-> 
-> On Fri 18-03-22 23:56:40, Bixuan Cui wrote:
-> 
-> > The print format error was found when using ftrace event:
-> >     <...>-1406 [000] .... 23599442.895823: jbd2_end_commit: dev 252,8 transaction -1866216965 sync 0 head -1866217368
-> >     <...>-1406 [000] .... 23599442.896299: jbd2_start_commit: dev 252,8 transaction -1866216964 sync 0
-> > 
-> > Print transaction and head with the unsigned format "%u" instead.
-> > 
-> > Fixes: 879c5e6b7cb4 ('jbd2: convert instrumentation from markers to tracepoints')
-> > Signed-off-by: Bixuan Cui <cuibixuan@linux.alibaba.com>
-> 
-> Makes sense. Thanks for the fix. Feel free to add:
-> 
-> Reviewed-by: Jan Kara <jack@suse.cz>
-> 
->         Honza
-> 
-> > ---
-> >  include/trace/events/jbd2.h | 10 +++++-----
-> >  1 file changed, 5 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/include/trace/events/jbd2.h b/include/trace/events/jbd2.h
-> > index a4dfe005983d..5be1aa1691fb 100644
-> > --- a/include/trace/events/jbd2.h
-> > +++ b/include/trace/events/jbd2.h
-> > @@ -40,7 +40,7 @@ DECLARE_EVENT_CLASS(jbd2_commit,
-> >   TP_STRUCT__entry(
-> >    __field( dev_t, dev   )
-> >    __field( char, sync_commit    )
-> > -  __field( int, transaction    )
-> > +  __field( tid_t, transaction    )
-> >   ),
-> >  
-> >   TP_fast_assign(
-> > @@ -49,7 +49,7 @@ DECLARE_EVENT_CLASS(jbd2_commit,
-> >    __entry->transaction = commit_transaction->t_tid;
-> >   ),
-> >  
-> > - TP_printk("dev %d,%d transaction %d sync %d",
-> > + TP_printk("dev %d,%d transaction %u sync %d",
-> >      MAJOR(__entry->dev), MINOR(__entry->dev),
-> >      __entry->transaction, __entry->sync_commit)
-> >  );
-> > @@ -97,8 +97,8 @@ TRACE_EVENT(jbd2_end_commit,
-> >   TP_STRUCT__entry(
-> >    __field( dev_t, dev   )
-> >    __field( char, sync_commit    )
-> > -  __field( int, transaction    )
-> > -  __field( int, head       )
-> > +  __field( tid_t, transaction    )
-> > +  __field( tid_t, head       )
-> >   ),
-> >  
-> >   TP_fast_assign(
-> > @@ -108,7 +108,7 @@ TRACE_EVENT(jbd2_end_commit,
-> >    __entry->head  = journal->j_tail_sequence;
-> >   ),
-> >  
-> > - TP_printk("dev %d,%d transaction %d sync %d head %d",
-> > + TP_printk("dev %d,%d transaction %u sync %d head %u",
-> >      MAJOR(__entry->dev), MINOR(__entry->dev),
-> >      __entry->transaction, __entry->sync_commit, __entry->head)
-> >  );
-> > -- 
-> > 2.19.1.6.gb485710b
-> > 
-> -- 
-> Jan Kara <jack@suse.com>
-> SUSE Labs, CR
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Regards
+
+Marcel
+

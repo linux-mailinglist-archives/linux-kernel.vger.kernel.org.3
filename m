@@ -2,104 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B2350B430
+	by mail.lfdr.de (Postfix) with ESMTP id 356C150B42E
 	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446086AbiDVJiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 05:38:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53576 "EHLO
+        id S1446090AbiDVJig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 05:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352701AbiDVJiM (ORCPT
+        with ESMTP id S1445907AbiDVJie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 05:38:12 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DD813D18
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 02:35:19 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id o9-20020a0566022e0900b00654b599b1eeso4981234iow.21
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 02:35:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=eJqj+y46Jg4jvSeLYvr2PbyuHx5gaVrCSckNNPhxPV4=;
-        b=2+8XvzwjmrxDpdF3sBR7D+/y5dIKEBSllfpflnSJ9jzAKQ639tqIqrIazxnBNGXQHS
-         VrYAaTcfy7QVIMQ1VwnO1jiGXzZ/G66h0UbpEWtAuFAnRCxTTLgqZ9le6kzibkb28dSt
-         YgFPHw0keq7sbvCO2/VoNEBfpQvijycp+rziOksDNvsqQQWhwLIBj/NxAEu6q9U2oZSW
-         lGBrhPzntFVEbGik/9ntgpnJ9sdNaT2A12nSqGIgyPn6SYxLfVyyh8NjDLytzzWseCQ1
-         lo1oT7LaPgGlXXrVrBHhkz7KhsyiPvyyOGJx3iorWFTvzb7AiRJdY4VsZdsRakvg+1pJ
-         SxvA==
-X-Gm-Message-State: AOAM531K2Yn4PanmChHS9AtgOShGide6XCQseuRYspvd8vfJqVMuumOn
-        teSljx5HOUCp5pzQoklZP40w1rT9vRJMTg9TTAgNIj25fE2X
-X-Google-Smtp-Source: ABdhPJy6ZdJcyIQX7MReO97SecWiSPzDDNnmJYWIpl1AxZBVwUYcFkGe+49W+dV9Akk0Z3SQ396IlGtj1Bzrpn+pWfcB0gU1owFf
+        Fri, 22 Apr 2022 05:38:34 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C94527EE;
+        Fri, 22 Apr 2022 02:35:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1650620141; x=1682156141;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=a1NKqMAQrpDA9DNNjLiY6Z6HBalYNQgIEUbfmgCyV1o=;
+  b=xsOWsvTUtrzwe1elaGXehg3zl6inUXZ9x3m5R5jLtbVcjdW44AOSfxjo
+   Z+LCG8oXB8gKRc/haGgmYLVByMddgvm+QTDxgAwHk9tyqlIPeMkyoIjTa
+   5BfmXAJnIiD3cE0vNjT0/1+V0FGL8UV4unM/bfzNP4l2wXKAv8nD9+EQO
+   U=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 22 Apr 2022 02:35:41 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 02:35:42 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 22 Apr 2022 02:35:40 -0700
+Received: from [10.216.36.2] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 22 Apr
+ 2022 02:35:36 -0700
+Message-ID: <c1dc4ce8-9dd5-d511-f022-5e71dd7c23ba@quicinc.com>
+Date:   Fri, 22 Apr 2022 15:05:31 +0530
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:2405:b0:327:d930:bc9c with SMTP id
- z5-20020a056638240500b00327d930bc9cmr1678727jat.70.1650620119126; Fri, 22 Apr
- 2022 02:35:19 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 02:35:19 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000dc142205dd3af12e@google.com>
-Subject: [syzbot] KMSAN: uninit-value in io_fallback_req_func
-From:   syzbot <syzbot+5ca552d10251920ab7e2@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk, glider@google.com,
-        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] arm64: dts: qcom: sc7280: Add ldo_l17b regulator node
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        <quic_rohkumar@quicinc.com>,
+        "Srinivas Kandagatla" <srinivas.kandagatla@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Judy Hsiao <judyhsiao@chromium.org>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+References: <1650550779-8133-1-git-send-email-quic_srivasam@quicinc.com>
+ <CAD=FV=VODaTxu+c8cXWyy8Mw1Qm145vwt-UspirE6k-XL-MZdg@mail.gmail.com>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <CAD=FV=VODaTxu+c8cXWyy8Mw1Qm145vwt-UspirE6k-XL-MZdg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Thanks for your time Doug!!!
 
-syzbot found the following issue on:
-
-HEAD commit:    33d9269ef6e0 Revert "kernel: kmsan: don't instrument stack..
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=12a4e62cf00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f8f2668b971cd508
-dashboard link: https://syzkaller.appspot.com/bug?extid=5ca552d10251920ab7e2
-compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11a2e148f00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1332bce8f00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5ca552d10251920ab7e2@syzkaller.appspotmail.com
-
-=====================================================
-BUG: KMSAN: uninit-value in io_fallback_req_func+0x218/0x5f7 fs/io_uring.c:1399
- io_fallback_req_func+0x218/0x5f7 fs/io_uring.c:1399
- process_one_work+0xdb6/0x1820 kernel/workqueue.c:2307
- worker_thread+0x10b3/0x21e0 kernel/workqueue.c:2454
- kthread+0x3c7/0x500 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30
-
-Uninit was created at:
- slab_post_alloc_hook mm/slab.h:737 [inline]
- kmem_cache_alloc_bulk+0xe98/0x1530 mm/slub.c:3744
- __io_alloc_req_refill+0x482/0x867 fs/io_uring.c:2072
- io_alloc_req_refill fs/io_uring.c:2098 [inline]
- io_submit_sqes+0x7d4/0x1a00 fs/io_uring.c:7441
- __do_sys_io_uring_enter fs/io_uring.c:10162 [inline]
- __se_sys_io_uring_enter+0x62f/0x23a0 fs/io_uring.c:10104
- __x64_sys_io_uring_enter+0x19d/0x200 fs/io_uring.c:10104
- do_syscall_x64 arch/x86/entry/common.c:51 [inline]
- do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:81
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-CPU: 0 PID: 3552 Comm: kworker/0:4 Not tainted 5.17.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Comput
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+On 4/21/2022 9:50 PM, Doug Anderson wrote:
+> Hi,
+>
+> On Thu, Apr 21, 2022 at 7:20 AM Srinivasa Rao Mandadapu
+> <quic_srivasam@quicinc.com> wrote:
+>> Add ldo_l17b in pm7325 regulator, which is required for
+>> wcd codec vdd buck supply.
+>>
+>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+>> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+>> ---
+>>   arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi | 5 +++++
+>>   1 file changed, 5 insertions(+)
+> The ${SUBJECT} should probably mention qcard somehow? Right now your
+> patch subject makes it sound like this applies to all sc7280 boards,
+> but this only affects those including the qcard dtsi file.
+Okay. Will update the subject accordingly.
+>
+>
+>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
+>> index b833ba1..17d0c05 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
+>> @@ -113,6 +113,11 @@
+>>                          regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+>>                  };
+>>
+>> +               vreg_l17b_1p8: ldo17 {
+>> +                       regulator-min-microvolt = <1700000>;
+>> +                       regulator-max-microvolt = <1900000>;
+> All the other regulators in this file specify:
+>
+> regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+>
+> Why doesn't yours?
+Okay. Will add initial mode.

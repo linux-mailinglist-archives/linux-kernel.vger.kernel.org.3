@@ -2,170 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 076CD50C1AF
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 00:07:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BCCE50C358
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231146AbiDVV6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 17:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33206 "EHLO
+        id S233318AbiDVWnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 18:43:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbiDVV5D (ORCPT
+        with ESMTP id S234084AbiDVWm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 17:57:03 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2251AFF5D;
-        Fri, 22 Apr 2022 13:39:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650659994; x=1682195994;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UMRs4BhTByG3T0yDZhW94axoO98VgNSgjnfEZMM3/as=;
-  b=lTZxpBoeWfaai/QN924GKvdQdblQhJN+yIquj7iG17bZU9wVF+ZtEATd
-   g4EzUzX2PBNfZxxxhXbdar/MlVdXpCo7G2W5cqIBafWFYEBnbkkBwjHDd
-   gQn3aOhXe9muB8XyTHcjnEDOTZVbiyQrZ32OYozuZwk6mUTB0DJn9wmGY
-   A0UdrnFc1/hLtAi3JLLwIKvnCAMIAGNwUrMmUfvDNDeozsJnFrLgynl7U
-   kAnzMs6BtMA58hC2CEiXWwQB5HFlXFRiGNsmQuEBacqMnfvRc4qRiTfW8
-   arGJCAwsyRRkCJ7ojUxgSXFNpzSj6YKQPFGAS5ajFE/wXTLWzd7hTc+zV
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="325202821"
-X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="325202821"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 11:17:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="594251782"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 22 Apr 2022 11:16:57 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nhxpx-000ARo-9g;
-        Fri, 22 Apr 2022 18:16:57 +0000
-Date:   Sat, 23 Apr 2022 02:16:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Cixi Geng <gengcixi@gmail.com>, sre@kernel.org,
-        orsonzhai@gmail.com, baolin.wang7@gmail.com, zhang.lyra@gmail.com,
-        chenyongzhi811@gmail.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power: supply: Add enable the primary charger interface
-Message-ID: <202204230206.9TgyhSb1-lkp@intel.com>
-References: <20220422074109.1709106-1-gengcixi@gmail.com>
+        Fri, 22 Apr 2022 18:42:56 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C35214124;
+        Fri, 22 Apr 2022 14:42:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1650663739;
+        bh=FASJJR2Tx4uF4/s/WY7/LWoW20ycDshiMItQZbSs9bU=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=MrF6gSUstM2zHBTkft9N0k3blkosRvqMDcnr9VfSgB9oE0Tk7dlp6H/3X/WJoySuP
+         jjWEmtDakDxs0kIm/6IuW+ednbCRxCMKR6wxsa/M97RWFFNtorI/+SlFDXCCmTUPux
+         jd/Xl67fKHd4mFmM315ulL76Men47npBl1g4TnZE=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([87.78.190.74]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mlw3N-1o7vEZ2TLf-00izyL; Fri, 22
+ Apr 2022 20:31:44 +0200
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-clk@vger.kernel.org, openbmc@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 0/7] Nuvoton WPCM450 clock and reset driver
+Date:   Fri, 22 Apr 2022 20:30:05 +0200
+Message-Id: <20220422183012.444674-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422074109.1709106-1-gengcixi@gmail.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:lUBjNycijZc1q4is3LS9ZHsMWEXwBBLNpAxLeKbzlS/j8Due5p2
+ ljr6755Dqs0uo5UTwhnk2Ib3iRRxTbS5Smc24rInSA9LcKoMsBxfM3ZWZ/dVZ/wSUBKXWr6
+ Xf+kT3a3SsjJBWESluVcRlWa6VD3IcYWQm9jGqM/0ZPIcNQa3SScSfnxtrXoqY6l8IdVyb3
+ x7/RLynriNGKabyGwlBCA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:IHcu07vI+r0=:ftzINHBaRsiwNBb4Ii7qFZ
+ e6loVkQcZ1CYeY9+XTmcU1I3B3ksH6S0td2DzoUrYlGnRoVu+DUhaLaM+j4Li0zxoIcTpplDl
+ R+XqCEUZ53w0Ee0HpuOgzq4bhxKj7P/osSSH/TKnOL/mEgSIJjvEC0QhamiZXgpPZ3mWvqMKR
+ C3n8S5esU/xYPPxfuLE9ccIBeJeVgZcJzGwAIZSlx0Z5fz89ijugK065K4wP90Fi84XmhI6Fo
+ DwNd2NylDyoSMufFth+1JBzjfG6kpVVOPZCdU4Il9bTMOFMIQ9ESoYQ95GJyBOLbh6DZ0Vjvi
+ GcGFR7hqbMk7kq5PThv1r44UlQ6P1DqGlU6VTsgZ9QuAqeYk/DVQa1NUNGE7oI+9UR2Wpo9w1
+ Ixs/Y7M/vXhG00vMcAvH5opd+kw07thxRhA2I6hX0XSX7MI6Ikjxf5zpTaA7G/xRHUtfT959V
+ f3dMH+iMCEXQVHo8wsWHUV3vHmQkuo4GHEyjNAy9uCLko2V0ZCvMFOrzeMSRcQuq9pmkLTCyh
+ mCJmyCsO0Q3TyVxSdxev9RLlNiV9UE77NhcfrGtFXlwv1Wk6daYIhTAzYYxz6x6jhtPoIaaq8
+ NWl/6MdZOIiDumAmDMEDvk796WCMr/j+K3YSueC+pz8k3sXtgBUNlcbMVU+EaSHT8uCiomZ0T
+ JKqL9qM2eTQA2sV/ze0IYAblIYcw1p4ZLtqs7Jm2wGq8SP2D1ok6qzJrKPVCaUmASLz7niRtW
+ hYfHAjLZGd0rSEur92CG79sm0v0EqOlT+bG7uimDaX7nfF5IOI8EQ/TFLvpA02OusfKVvU6qW
+ B+fMHHpWsNQXr9+9yYFnbNsCS8VDeDMyxwwBvwBuLNlZCcDcPRbWW2xI68cwq0Yjr5tNN6kWr
+ nRQxNO7bfijbecvStWMHXz9JhnimyTIH2IoZbLhxAk7SDk8X5huW8a12eT88J9ybgvvzzT29L
+ A2MzGdyvkCP8WKSPEZLjlnxTSsjt1wGZ12qx+FnXx4S+lZ9KJ03gZ42TNb6VwL6+qndS28Tyo
+ Qkc1o9rt6op8eurWjqszM8dZvxNEE5IgVesnczDGjWU3YAZxHJpMuWj70z8iI5kuep6aR9uHa
+ oB3Xi3d5P4WNmU=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Cixi,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on sre-power-supply/for-next]
-[also build test WARNING on v5.18-rc3 next-20220422]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Cixi-Geng/power-supply-Add-enable-the-primary-charger-interface/20220422-154432
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
-config: riscv-randconfig-r042-20220422 (https://download.01.org/0day-ci/archive/20220423/202204230206.9TgyhSb1-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/a566cf23ffad8453d1e1f611086b6eda3f14515d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Cixi-Geng/power-supply-Add-enable-the-primary-charger-interface/20220422-154432
-        git checkout a566cf23ffad8453d1e1f611086b6eda3f14515d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/power/supply/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/power/supply/sc2731_charger.c:156:13: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           } else if (val && !info->charging) {
-                      ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/power/supply/sc2731_charger.c:164:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/power/supply/sc2731_charger.c:156:9: note: remove the 'if' if its condition is always true
-           } else if (val && !info->charging) {
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/power/supply/sc2731_charger.c:156:13: warning: variable 'ret' is used uninitialized whenever '&&' condition is false [-Wsometimes-uninitialized]
-           } else if (val && !info->charging) {
-                      ^~~
-   drivers/power/supply/sc2731_charger.c:164:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/power/supply/sc2731_charger.c:156:13: note: remove the '&&' if its condition is always true
-           } else if (val && !info->charging) {
-                      ^~~~~~
->> drivers/power/supply/sc2731_charger.c:153:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!val && info->charging) {
-               ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/power/supply/sc2731_charger.c:164:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/power/supply/sc2731_charger.c:153:2: note: remove the 'if' if its condition is always false
-           if (!val && info->charging) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/power/supply/sc2731_charger.c:151:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   drivers/power/supply/sc2731_charger.c:255:7: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-                   if (val->intval == true) {
-                       ^~~~~~~~~~~~~~~~~~~
-   drivers/power/supply/sc2731_charger.c:268:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/power/supply/sc2731_charger.c:255:3: note: remove the 'if' if its condition is always true
-                   if (val->intval == true) {
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/power/supply/sc2731_charger.c:225:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   4 warnings generated.
+This series adds support for the clock and reset controller in the Nuvoton
+WPCM450 SoC. This means that the clock rates for peripherals will be calcu=
+lated
+automatically based on the clock tree as it was preconfigured by the bootl=
+oader.
+The 24 MHz dummy clock, that is currently in the devicetree, is no longer =
+needed.
+Somewhat unfortunately, this also means that there is a breaking change on=
+ce
+the devicetree starts relying on the clock driver, but I find it acceptabl=
+e in
+this case, because WPCM450 is still at a somewhat early stage.
 
 
-vim +156 drivers/power/supply/sc2731_charger.c
+Upstreaming plan (although other suggestions are welcome):
 
-   148	
-   149	static int sc2731_charger_set_status(struct sc2731_charger_info *info, int val)
-   150	{
-   151		int ret;
-   152	
- > 153		if (!val && info->charging) {
-   154			sc2731_charger_stop_charge(info);
-   155			info->charging = false;
- > 156		} else if (val && !info->charging) {
-   157			ret = sc2731_charger_start_charge(info);
-   158			if (ret)
-   159				dev_err(info->dev, "start charge failed\n");
-   160			else
-   161				info->charging = true;
-   162		}
-   163	
-   164		return ret;
-   165	}
-   166	
+Once reviewed,
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+- The ARM/dts changes should go through Joel Stanley's bmc tree
+- The clocksource/timer changes should probably go via Daniel Lezcano and =
+TIP
+- The watchdog patch should go via the watchdog tree
+- The clock controller bindings and driver should go through the clk tree
+- It might make sense to delay the final ARM/dts patch ("ARM: dts: wpcm450=
+:
+  Switch clocks to clock controller") until next cycle to make sure it is
+  merged after the clock driver.
+
+Jonathan Neusch=C3=A4fer (7):
+  dt-bindings: timer: nuvoton,npcm7xx-timer: Allow specifying all clocks
+  clocksource: timer-npcm7xx: Enable timer 1 clock before use
+  watchdog: npcm: Enable clock if provided
+  dt-bindings: clock: Add Nuvoton WPCM450 clock/reset controller
+  ARM: dts: wpcm450: Add clock controller node
+  clk: wpcm450: Add Nuvoton WPCM450 clock/reset controller driver
+  ARM: dts: wpcm450: Switch clocks to clock controller
+
+ .../bindings/clock/nuvoton,wpcm450-clk.yaml   |  74 ++++
+ .../bindings/timer/nuvoton,npcm7xx-timer.yaml |   8 +-
+ arch/arm/boot/dts/nuvoton-wpcm450.dtsi        |  29 +-
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/clk-wpcm450.c                     | 378 ++++++++++++++++++
+ drivers/clocksource/timer-npcm7xx.c           |  14 +-
+ drivers/reset/Kconfig                         |   2 +-
+ drivers/watchdog/npcm_wdt.c                   |   9 +
+ .../dt-bindings/clock/nuvoton,wpcm450-clk.h   |  67 ++++
+ 9 files changed, 572 insertions(+), 10 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,wpcm45=
+0-clk.yaml
+ create mode 100644 drivers/clk/clk-wpcm450.c
+ create mode 100644 include/dt-bindings/clock/nuvoton,wpcm450-clk.h
+
+=2D-
+2.35.1
+

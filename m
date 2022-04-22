@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08DC950B1B1
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 09:33:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FECD50B1AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 09:33:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444874AbiDVHe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 03:34:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49998 "EHLO
+        id S1444889AbiDVHfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 03:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386165AbiDVHe4 (ORCPT
+        with ESMTP id S1444876AbiDVHfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 03:34:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03D2515B0;
-        Fri, 22 Apr 2022 00:32:03 -0700 (PDT)
+        Fri, 22 Apr 2022 03:35:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95775515BE;
+        Fri, 22 Apr 2022 00:32:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 50547B82A89;
-        Fri, 22 Apr 2022 07:32:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4AD7C385A4;
-        Fri, 22 Apr 2022 07:31:59 +0000 (UTC)
-Message-ID: <43bba7a4-4eae-9e36-a1ae-60e3ffe30491@xs4all.nl>
-Date:   Fri, 22 Apr 2022 09:31:57 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AE5461F5A;
+        Fri, 22 Apr 2022 07:32:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63C86C385A0;
+        Fri, 22 Apr 2022 07:32:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650612747;
+        bh=UB28YGlhAkWEAuV9AeyG9g+eUkzmMf90dg+QB+rqWlA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jqttIBEWlQitOymB/4TM6jgFBEJ1Getb1PJx6UNuGLHWijmeWJs0pYENdEVOINA7X
+         hbjQr61D9B3qKkpsnO9+KufPzlPvAYyoeDGt2zjlMDnNRR/0ZWQnScvef9PglVKka7
+         aioFwBSe3MQLKNypbPiK4Z6wbn3bcFzNXU4Zn5lj8pGEOM5ZhpIyio2C9gGCuzauyd
+         S10H5IXc0K7yWJjwWEOKlzzJTZwncl+IFLUIqnZP63GS6eanxWtUZ2l0sqUFrkBWQ5
+         fl2gNnLhoOfHk4PdQbgCcTxtKY26O+FVKzcoqPq3gKYGmySEWoOFJccGqb/1GUQUz1
+         kMViTExNDBIkw==
+From:   Georgi Djakov <djakov@kernel.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        djakov@kernel.org
+Subject: [GIT PULL] interconnect fixes for 5.18-rc
+Date:   Fri, 22 Apr 2022 10:32:21 +0300
+Message-Id: <20220422073221.30745-1-djakov@kernel.org>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 11/24] media: v4l2: Reorder field reflist
-Content-Language: en-US
-To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
-        Sebastian Fricke <sebastian.fricke@collabora.com>,
-        linux-media@vger.kernel.org
-References: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
- <20220405204426.259074-12-nicolas.dufresne@collabora.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20220405204426.259074-12-nicolas.dufresne@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,92 +51,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/04/2022 22:44, Nicolas Dufresne wrote:
-> As per spec, the field reflist requires interleaving top and bottom
-> field in a specific way that does not fit inside the sort operation.
-> The process consist of alternating references parity, starting with
-> a reference of the same parity as the current picture. This
-> processs is done twice, once for short term references and a second
-> time for the long term references.
-> 
-> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
-> ---
->  drivers/media/v4l2-core/v4l2-h264.c | 42 +++++++++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
-> 
-> diff --git a/drivers/media/v4l2-core/v4l2-h264.c b/drivers/media/v4l2-core/v4l2-h264.c
-> index 7e1eba03099a..d2d1f3bed7e8 100644
-> --- a/drivers/media/v4l2-core/v4l2-h264.c
-> +++ b/drivers/media/v4l2-core/v4l2-h264.c
-> @@ -244,6 +244,40 @@ static int v4l2_h264_b1_ref_list_cmp(const void *ptra, const void *ptrb,
->  	return poca < pocb ? -1 : 1;
->  }
->  
-> +/*
-> + * The references need to be reordered so that references are alternating
-> + * between top and bottom field references starting with the current picture
-> + * parity. This has to be * done for short term and long term references
-                             ^
-Spurious *.
+Hello Greg,
 
-Regards,
+This pull request contains interconnect driver fixes for an issue that
+has been reported. Please pull into char-misc-linus when possible. The
+patches have been in linux-next for a week.
 
-	Hans
+Thanks,
+Georgi
 
-> + * separately.
-> + */
-> +static void reorder_field_reflist(const struct v4l2_h264_reflist_builder *b,
-> +				  struct v4l2_h264_reference *reflist)
-> +{
-> +	struct v4l2_h264_reference tmplist[V4L2_H264_REF_LIST_LEN];
-> +	u8 lt, i = 0, j = 0, k = 0;
-> +
-> +	memcpy(tmplist, reflist, sizeof(tmplist[0]) * b->num_valid);
-> +
-> +	for (lt = 0; lt <= 1; lt++) {
-> +		do {
-> +			for (; i < b->num_valid && b->refs[tmplist[i].index].longterm == lt; i++) {
-> +				if (tmplist[i].fields == b->cur_pic_fields) {
-> +					reflist[k++] = tmplist[i++];
-> +					break;
-> +				}
-> +			}
-> +
-> +			for (; j < b->num_valid && b->refs[tmplist[j].index].longterm == lt; j++) {
-> +				if (tmplist[j].fields != b->cur_pic_fields) {
-> +					reflist[k++] = tmplist[j++];
-> +					break;
-> +				}
-> +			}
-> +		} while ((i < b->num_valid && b->refs[tmplist[i].index].longterm == lt) ||
-> +			 (j < b->num_valid && b->refs[tmplist[j].index].longterm == lt));
-> +	}
-> +}
-> +
->  static char ref_type_to_char (u8 ref_type)
->  {
->  	switch (ref_type) {
-> @@ -346,6 +380,9 @@ v4l2_h264_build_p_ref_list(const struct v4l2_h264_reflist_builder *builder,
->  	sort_r(reflist, builder->num_valid, sizeof(*reflist),
->  	       v4l2_h264_p_ref_list_cmp, NULL, builder);
->  
-> +	if (builder->cur_pic_fields != V4L2_H264_FRAME_REF)
-> +		reorder_field_reflist(builder, reflist);
-> +
->  	print_ref_list_p(builder, reflist);
->  }
->  EXPORT_SYMBOL_GPL(v4l2_h264_build_p_ref_list);
-> @@ -379,6 +416,11 @@ v4l2_h264_build_b_ref_lists(const struct v4l2_h264_reflist_builder *builder,
->  	sort_r(b1_reflist, builder->num_valid, sizeof(*b1_reflist),
->  	       v4l2_h264_b1_ref_list_cmp, NULL, builder);
->  
-> +	if (builder->cur_pic_fields != V4L2_H264_FRAME_REF) {
-> +		reorder_field_reflist(builder, b0_reflist);
-> +		reorder_field_reflist(builder, b1_reflist);
-> +	}
-> +
->  	if (builder->num_valid > 1 &&
->  	    !memcmp(b1_reflist, b0_reflist, builder->num_valid))
->  		swap(b1_reflist[0], b1_reflist[1]);
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-5.18-rc4
+
+for you to fetch changes up to 2fb251c265608636fc961b7d38e1a03937e57371:
+
+  interconnect: qcom: sdx55: Drop IP0 interconnects (2022-04-14 09:47:16 +0300)
+
+----------------------------------------------------------------
+interconnect fixes for v5.18
+
+This contains a fix for a reported issue on sc7180 platforms, where
+one of the resources has been incorrectly modelled as both clock and
+interconnect, which is causing a crash when both frameworks try to
+manage it. Fix the same issue also on another platform that appears
+to be affected by the same.
+
+- interconnect: qcom: sc7180: Drop IP0 interconnects
+- interconnect: qcom: sdx55: Drop IP0 interconnects
+
+Signed-off-by: Georgi Djakov <djakov@kernel.org>
+
+----------------------------------------------------------------
+Stephen Boyd (2):
+      interconnect: qcom: sc7180: Drop IP0 interconnects
+      interconnect: qcom: sdx55: Drop IP0 interconnects
+
+ drivers/interconnect/qcom/sc7180.c | 21 --------
+ drivers/interconnect/qcom/sdx55.c  | 21 --------
+ 2 files changed, 42 deletions(-)

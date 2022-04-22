@@ -2,179 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C40A950BEB7
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 19:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 628AC50BEBA
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 19:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233232AbiDVRdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 13:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41382 "EHLO
+        id S232245AbiDVRdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 13:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233008AbiDVRc5 (ORCPT
+        with ESMTP id S229753AbiDVRds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 13:32:57 -0400
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C7789CF8;
-        Fri, 22 Apr 2022 10:30:00 -0700 (PDT)
-Received: by mail-pl1-f182.google.com with SMTP id b7so12288409plh.2;
-        Fri, 22 Apr 2022 10:29:59 -0700 (PDT)
+        Fri, 22 Apr 2022 13:33:48 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9DAE2B2F
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 10:30:48 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 21so11251657edv.1
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 10:30:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=HNZdGuTlB4ZyqdNx0zZ57VA5IMyL05uRbRN7pIK/unU=;
+        b=Cpl1dt70H22hHb3a2k1F/gZybtWw8PyK4eyMjsQQl0/ADKOTqNg2NeU3zNTfbl72Mi
+         RFz6P9DN+6K2ISa+Al6MARv2R6WgSTO+ScXPKeDRNEzeGHrSIVYBdykS//l8W8Jmld75
+         xX20GzzptN1Wq7caPyUSIX2LosdIWn3JaaXt/SzsrV23qvimMx90F6gaQiY6wd6Y4789
+         TFkVxrJEEublyn1TvmLSC/WmlH2eVPq9Ynp4dQ36X6QRA7AbFbh8GhiwkqrTCif1WXAO
+         QFBkGmWaozknYFoz1garLCKHmerRkgk5+voQnFGvZlkziiZpjMhHZ04gYNP+JVt21KNT
+         t7wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=L0VZiWPUDvoGtAJV+rMrpuEj6dHv4nQx4wlGW/anjZk=;
-        b=q6rjtvC/ygrQrRn60iTrMkEa3xg0GQ5kmlNIL94JfDUibNGFoCdpEx6Qq0uWVBQUCe
-         Z5ByGSd3/1L4G2su+Vy98xXE7U4lmSwXl0KixZXXR6HRNjCE9WtuoNY/xmx1uEoaO496
-         gcSO2JkhVWs5pY78faYI42+FWrMaxoJ1v9g2m1MW9y+BYKMOt4Qsl9f3NDY4PYXlFy5N
-         cBbBfGfLcdiT/Isn1Q0Pv5NpdqNfkEMgvO/NMP8fKeIErQ0ULzoVwDRqlba0OEbqec05
-         hpTMOjpwq5ijWP4Ty7GlFgowNGpcvmTC2C2Snj/bRUncIEqBcu5nSlxHnAqSkD4+0mPw
-         SZrg==
-X-Gm-Message-State: AOAM5313qs32PvA3bul0xqcQzwS/STUJniEXoqt8VqNbOh6fzB64V8PI
-        0yCxC9z7AbDNoGxIxTi2mFQ=
-X-Google-Smtp-Source: ABdhPJxvwTkOkkyNA7wXQqprYp05cNssYZ3YEvlZbX43EXOI/ndmleuxVMLsu7YF8GHfJfNL8RA+NA==
-X-Received: by 2002:a17:90b:1a89:b0:1d2:f7ae:4928 with SMTP id ng9-20020a17090b1a8900b001d2f7ae4928mr17434702pjb.46.1650648310473;
-        Fri, 22 Apr 2022 10:25:10 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:e473:77c4:b4f8:27d3? ([2620:15c:211:201:e473:77c4:b4f8:27d3])
-        by smtp.gmail.com with ESMTPSA id h126-20020a628384000000b0050cfdceabbasm188350pfe.155.2022.04.22.10.25.08
+        bh=HNZdGuTlB4ZyqdNx0zZ57VA5IMyL05uRbRN7pIK/unU=;
+        b=hgfNCWOQaYpB7k/jpFtZb7ixN9Ad7nbJerA6l43VB3PjjZk/twTxGyHYlcsZox7/oD
+         19LD0hL5tAFoukhSd+eUC2fpJVYAOXQWaW9vODs6AZe7ZjNeUXhZsM94+WiEi5sIHx8P
+         zVbOgOCCEHvCMgWn2EtHGG+TRYjDHkcbgokuPgbLvRdGaqWIW0cRU6V6eOh57GAqJAlA
+         mrj+zxuavtJmfuT9PKmxRcXCY9DyVFycJj79lYKLqFJ5oa7gZE8PWUrzs2t8RXJQ+zoz
+         7QcYPYcdItEQha0MiBfIca56YDW33+nSDnP6ACi3aBsZMxX56pE6yWM9DjwXDctT03ll
+         Ftsw==
+X-Gm-Message-State: AOAM533I1Z8pXASB3KllQrVJuDlLRNBM5ceWE5jU4pldDXihwMEBEiiD
+        LuwTElCctvBL2xC3L3fPZG2Paw==
+X-Google-Smtp-Source: ABdhPJwuFz3R4GDMR+B6w7XF06kzjDOus8Sj9fbqhs9sCpzbm0EvLdbLOHqYo8h0m41JFU4Qqn4CYg==
+X-Received: by 2002:a05:6402:90c:b0:415:d340:4ae2 with SMTP id g12-20020a056402090c00b00415d3404ae2mr6053079edz.331.1650648402270;
+        Fri, 22 Apr 2022 10:26:42 -0700 (PDT)
+Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id h7-20020a1709066d8700b006d4b4d137fbsm944012ejt.50.2022.04.22.10.26.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 10:25:09 -0700 (PDT)
-Message-ID: <f426fa45-7d72-52ad-8557-0027bca84194@acm.org>
-Date:   Fri, 22 Apr 2022 10:25:07 -0700
+        Fri, 22 Apr 2022 10:26:41 -0700 (PDT)
+Message-ID: <f2e5a34b-ed02-91a1-bc7b-fecaa95e227e@linaro.org>
+Date:   Fri, 22 Apr 2022 19:26:40 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH] scsi: ufs: wb: Add Manual Flush sysfs and cleanup toggle
- functions
+Subject: Re: [PATCH V4 01/14] dt-bindings: cpufreq: mediatek: Add MediaTek CCI
+ property
 Content-Language: en-US
-To:     j-young.choi@samsung.com, ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        Daejun Park <daejun7.park@samsung.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <CGME20220422120240epcms2p24bdcb416becf76b417f7c39006aa40f2@epcms2p1>
- <1891546521.01650629881201.JavaMail.epsvc@epcpadp4>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <1891546521.01650629881201.JavaMail.epsvc@epcpadp4>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, rafael@kernel.org,
+        viresh.kumar@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        matthias.bgg@gmail.com
+Cc:     jia-wei.chang@mediatek.com, roger.lu@mediatek.com,
+        hsinyi@google.com, khilman@baylibre.com,
+        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220422075239.16437-1-rex-bc.chen@mediatek.com>
+ <20220422075239.16437-2-rex-bc.chen@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220422075239.16437-2-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/22/22 05:14, Jinyoung CHOI wrote:
-> There is the following quirk to bypass "WB Manual Flush" in Write
-> Booster.
+On 22/04/2022 09:52, Rex-BC Chen wrote:
+> MediaTek Cache Coherent Interconnect (CCI) uses software devfreq module
+> for scaling clock frequency and adjust voltage.
+> The phandle could be linked between CPU and MediaTek CCI for some
+> MediaTek SoCs, like MT8183 and MT8186.
+> Therefore, we add this property in cpufreq-mediatek.txt.
 > 
->    - UFSHCD_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL
+> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> ---
+>  .../devicetree/bindings/cpufreq/cpufreq-mediatek.txt         | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> If this quirk is not set, there is no knob that can controll "WB Manual Flush".
-> 
-> 	There are three flags that control Write Booster Feature.
-> 		1. WB ON/OFF
-> 		2. WB Hibern Flush ON/OFF
-> 		3. WB Flush ON/OFF
-> 
-> 	The sysfs that controls the WB was implemented. (1)
-> 
-> 	In the case of "Hibern Flush", it is always good to turn on.
-> 	Control may not be required. (2)
-> 
-> 	Finally, "Manual flush" may be determined that it can affect
-> 	performance or power consumption.
-> 	So the sysfs that controls this may be necessary. (3)
-> 
-> In addition, toggle functions for controlling the above flags are cleaned.
+> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek.txt b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek.txt
+> index b8233ec91d3d..3387e1e2a2df 100644
+> --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek.txt
+> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek.txt
+> @@ -20,6 +20,11 @@ Optional properties:
+>  	       Vsram to fit SoC specific needs. When absent, the voltage scaling
+>  	       flow is handled by hardware, hence no software "voltage tracking" is
+>  	       needed.
+> +- mediatek,cci:
+> +	MediaTek Cache Coherent Interconnect (CCI) uses the software devfreq module to
+> +	scale the clock frequency and adjust the voltage.
 
-Please make all sentences in the patch description start at the left margin.
+Devfreq is a SW mechanism, it should not be part of bindings description.
 
-> diff --git a/drivers/scsi/ufs/ufs-sysfs.c b/drivers/scsi/ufs/ufs-sysfs.c
-> index 5c405ff7b6ea..6bbb56152708 100644
-> --- a/drivers/scsi/ufs/ufs-sysfs.c
-> +++ b/drivers/scsi/ufs/ufs-sysfs.c
-> @@ -229,7 +229,7 @@ static ssize_t wb_on_store(struct device *dev, struct device_attribute *attr,
->   		 * If the platform supports UFSHCD_CAP_CLK_SCALING, turn WB
->   		 * on/off will be done while clock scaling up/down.
->   		 */
-> -		dev_warn(dev, "To control WB through wb_on is not allowed!\n");
-> +		dev_warn(dev, "To control Write Booster is not allowed!\n");
->   		return -EOPNOTSUPP;
->   	}
+> +	For details, please refer to
+> +	Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
 
-The new error message is grammatically incorrect. Please fix.
+Since the file does not exist, I have troubles reviewing it. First of
+all, you already have "mediatek,cci-control" property in DT, so why
+using different name?
 
-> +	if (!ufshcd_is_wb_flush_allowed(hba)) {
-> +		dev_warn(dev, "To control WB Flush is not allowed!\n");
+Second, it looks like you want to put devfreq into bindings instead of
+using proper interconnect bindings.
 
-Same issue for the above error message.
-
-> +static DEVICE_ATTR_RW(wb_flush_on);
-
-"wb_flush_enabled" is probably a better name than "wb_flush_on".
-Additionally, the "wb_flush_en" is closer to the terminology used in the
-UFS specification (fWriteBoosterBufferFlushEn).
-
- > diff --git a/drivers/scsi/ufs/ufs.h b/drivers/scsi/ufs/ufs.h
- > index 4a00c24a3209..6c85f512f82f 100644
- > --- a/drivers/scsi/ufs/ufs.h
- > +++ b/drivers/scsi/ufs/ufs.h
- > @@ -611,7 +611,7 @@ struct ufs_dev_info {
- >
- >   	/* UFS WB related flags */
- >   	bool    wb_enabled;
- > -	bool    wb_buf_flush_enabled;
- > +	bool    wb_flush_enabled;
- >   	u8	wb_dedicated_lu;
- >   	u8      wb_buffer_type;
-
-Adding a variable with the name "wb_flush_enabled" next to a variable with
-the name "wb_buf_flush_enabled" is confusing. Please chose better names and
-add comments.
-
-> -static int __ufshcd_wb_toggle(struct ufs_hba *hba, bool set, enum flag_idn idn)
-> +static int __ufshcd_wb_toggle(struct ufs_hba *hba, const char *knob,
-> +			      bool set, enum flag_idn idn)
->   {
-> +	int ret;
->   	u8 index;
->   	enum query_opcode opcode = set ? UPIU_QUERY_OPCODE_SET_FLAG :
-> -				   UPIU_QUERY_OPCODE_CLEAR_FLAG;
-> +		UPIU_QUERY_OPCODE_CLEAR_FLAG;
-> +
-> +	if (!ufshcd_is_wb_allowed(hba))
-> +		return -EPERM;
->   
->   	index = ufshcd_wb_get_query_index(hba);
-> -	return ufshcd_query_flag_retry(hba, opcode, idn, index, NULL);
-> +
-> +	ret = ufshcd_query_flag_retry(hba, opcode, idn, index, NULL);
-> +	if (ret) {
-> +		dev_err(hba->dev, "%s: %s %s failed %d\n",
-> +			__func__, knob, set ? "enable" : "disable", ret);
-> +		return ret;
-> +	}
-> +
-> +	dev_dbg(hba->dev, "%s: %s %s\n",
-> +		 __func__, knob, set ? "enabled" : "disabled");
-> +
-> +	return ret;
->   }
-
-Please leave out the dev_dbg() message and move the dev_err() message to
-the callers of __ufshcd_wb_toggle() such that the 'knob' argument does not
-have to be added to __ufshcd_wb_toggle().
-
-Thanks,
-
-Bart.
+Best regards,
+Krzysztof

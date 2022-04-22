@@ -2,85 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 502EC50BCF4
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5119C50BCF6
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:27:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449653AbiDVQ3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 12:29:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58450 "EHLO
+        id S1449683AbiDVQaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 12:30:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384500AbiDVQ3b (ORCPT
+        with ESMTP id S1449654AbiDVQ3z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 12:29:31 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355E15EBEF;
-        Fri, 22 Apr 2022 09:26:35 -0700 (PDT)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 0279383D4B;
-        Fri, 22 Apr 2022 18:26:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1650644793;
-        bh=DEvATQUcmAUvQtZt+xl0HhiXkCZH3A3i2rSRnjRahGM=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=jKUSyRNQXt+3uKyhT+4qpG0zhfDqsIKb0MBe+7dwBIJclr3+0t+w6Ln8rjXZrzxCD
-         xsSvW7US62e0SpaA9TMWJPC/safVtElF5FYHE31gz3JgklEPwIW9KFUtR2QQQ0ozQN
-         agRKE947CU4MdHKxst1LEtQIiMauosoyl//jME5tgChBF4S59bKxydkKbWQ1hCTNQI
-         JTdmBiIdnsHz97Xy8ptppSto0l0m1qwnBrJGkJR11U8+PG0tFYrjduXU8kNVhEy1nD
-         XwbQTh5F+jyvWjb+fXvvK5mPi9WgegzMnHLZthTR+AxdlgVquuEcHBvVzeomwheuCb
-         ASx+DqSWM6ORw==
-Message-ID: <c48500cd-50be-1d70-2f2c-02c2dcede1eb@denx.de>
-Date:   Fri, 22 Apr 2022 18:26:32 +0200
+        Fri, 22 Apr 2022 12:29:55 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129775EBD5
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:26:48 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id l62-20020a1c2541000000b0038e4570af2fso5656158wml.5
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:26:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UQKwgkK7XcnD0Rg5dyzM5z8p1A79/VfuJ1pqbXYKM5g=;
+        b=DB7OJJQM6ToLBwkgF1N6fJGkNaBv8n3ClPRlWkq03mVVL/VMuo988a/CRj/JU2y/J3
+         LxIs6u2dVbU/dDDZQkfSypxNKRbl/F8k4++kuvNm1WnLAugDdOpzuNve1T0LTcewF0bY
+         zmEP3SO2qgXPWgxHFH4ICYAlPt3RzE06HMA2A3AiJv7egQz6/emF65NCjuOgSU9ESYU4
+         BDFntr1axQYaCcfEpgCW/juiNKBN5tRTlUoplhRG6UdiHRv6so2i2RIQqbOdUI5f8AnA
+         6I5JDeixp+QaRbIk+MeGB/B/IoWYPnesEjbNFuitEtMfGJ/Nrz9uobpFuEWDZMT7afgN
+         kKsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UQKwgkK7XcnD0Rg5dyzM5z8p1A79/VfuJ1pqbXYKM5g=;
+        b=IHmV2LD74L33KsRl2lPIf6FXSLn7PU9FpqufcKrWxNfDEbeE7fctQUK+WK/hLwKP84
+         5SemPVcNeMpkrRYwOCQu9W5Nqq0avG66DVmxQjY4Qk6rapXzuUVo2QMl56J4KfEJX78I
+         QDvQitoHpuHr3Q1bvJpxFvDXMILefSbC7T2MdOdAWMMfGC9cfuEiyQcFwfMaLUYE0GFF
+         wYzk/q4j/S/EmCU7AzkypumfIe36fNR1ZzU/Rh8/s3be8VIaJtWGLRgaXALqK8RhxFhF
+         3CYTrXMFqAz3TCs1gn05GhJNR+DXk4JWKr4mxLp+wEIWjTuL9JsS0UDl1QEbDsD0ybPu
+         pwPw==
+X-Gm-Message-State: AOAM5324TA3TsMXK99jnE4rwvPX22tGoSY7anHFwulUT3/OUIfQghZPD
+        5KD/sWjly8J37UMU1DYZY39syiuB/5a0Em2VYqzz
+X-Google-Smtp-Source: ABdhPJz0usETe5tYcvsLPEcLUMTwIkTc1Rk3Ud2Ys3tDsyivrygwosiMcwEzjUWboIzGHFJlhESi2sq4OIiN1z5J2UY=
+X-Received: by 2002:a1c:3b89:0:b0:38e:b37f:52d with SMTP id
+ i131-20020a1c3b89000000b0038eb37f052dmr4774530wma.197.1650644806553; Fri, 22
+ Apr 2022 09:26:46 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] pinctrl: stm32: improve bank clocks management
-Content-Language: en-US
-To:     Fabien Dessenne <fabien.dessenne@foss.st.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-gpio@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220422143608.226580-1-fabien.dessenne@foss.st.com>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <20220422143608.226580-1-fabien.dessenne@foss.st.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.5 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220418145945.38797-1-casey@schaufler-ca.com> <20220418145945.38797-25-casey@schaufler-ca.com>
+In-Reply-To: <20220418145945.38797-25-casey@schaufler-ca.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 22 Apr 2022 12:26:35 -0400
+Message-ID: <CAHC9VhS04Q5BdOgJAo0QB-HZNSgCVRbp1-YZn7vitGfVrqyDuw@mail.gmail.com>
+Subject: Re: [PATCH v35 24/29] LSM: Add a function to report multiple LSMs
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     casey.schaufler@intel.com, jmorris@namei.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-audit@redhat.com, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/22/22 16:36, Fabien Dessenne wrote:
-> Instead of enabling/disabling the clock at each IO configuration update,
-> just keep the clock enabled from the probe.
-> This makes things simpler and more efficient (e.g. the time required to
-> toggle an output IO is drastically decreased) without significantly
-> increasing the power consumption.
+On Mon, Apr 18, 2022 at 11:12 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
+>
+> Add a new boolean function lsm_multiple_contexts() to
+> identify when multiple security modules provide security
+> context strings.
+>
+> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> ---
+>  include/linux/security.h | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 
-[...]
+Acked-by: Paul Moore <paul@paul-moore.com>
 
->   static struct irq_domain *stm32_pctrl_get_irq_domain(struct device_node *np)
-> @@ -1575,6 +1537,10 @@ int stm32_pctl_probe(struct platform_device *pdev)
->   			ret = stm32_gpiolib_register_bank(pctl, child);
->   			if (ret) {
->   				of_node_put(child);
-> +
-> +				for (i = 0; i < pctl->nbanks; i++)
-> +					clk_disable_unprepare(pctl->banks[i].clk);
-> +
-
-There are clk_bulk_*() functions, maybe you can use those to get rid of 
-these loops ?
-
-The rest looks good to me.
+-- 
+paul-moore.com

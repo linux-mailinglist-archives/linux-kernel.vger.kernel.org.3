@@ -2,164 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE14850C004
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 20:57:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68BF150C06F
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 21:37:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229507AbiDVTAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 15:00:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55094 "EHLO
+        id S230090AbiDVTfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 15:35:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbiDVS7x (ORCPT
+        with ESMTP id S229446AbiDVTew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 14:59:53 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on20622.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eae::622])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989D020D634
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 11:49:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ndPu5zBvla/iKb1S4gOSMWTxJRl3psCTcfqOvPIAw2QCEwxDq1tK7d5Beobsd7gSESlGsod6+jUIam+DDk4JdQPWP8t55qN3+cH6A7263+Q/PhJfag4qQKiDsXzSzzzumd58lF+WPeER2N80Jr3XFufTn/u0PdkPRiYJKYIC2GGMFcq1q+gDAIacru2MkiY/ezH/RqoqcYs9ulOksvV+zQcpiCzSdeOqyf2sYUExMu9YSBL3EqWntjGMZJPRjz0NyfhUH5M4DUvlR42wgRdWgMchn7/6EYBPA5WHji4I1HJeeuXNDOoKY0gd7YhYtzyNZlB8YkK9uPiH75Wc/+YJmg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=L7iUKiYSSocyDQG6RQ8Xt0P3DLrTr8+W1szEZ7X4v8E=;
- b=ev3ekHETRb7i4FIm6ZIUjh6fJNw+fNzRnfZHvXOu69i4AJqMrjscv1KIcm8JUFdHnoeKofeI7lm6i3Rp92A7sbYZ3rct73boC387k1N1VV0dZk5S1H2xBASJWFl3AEvE35gMrNRlJ25mrDDlvklJSREhlPXiYBlBmY4QxDY3W0yqIZuPXh8tbNogF7+vRBunO9D6e4WJ7wbEGysiT3wnYIgt9q/dvynNNLeQIzR8vhv7dlbMNGOxhgtgyr99gw4zyAMGbCzeoRQpH+nxjh4ALWty36DT7eTAajb8es8Kdi/QJSmE+LuQErIXZAqxWQcEZuETxEQwOoAQmxKp0fkG0w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=L7iUKiYSSocyDQG6RQ8Xt0P3DLrTr8+W1szEZ7X4v8E=;
- b=COohQnwsaAXvdiD8o1mkJ/NQ0uDII0CTPGISfpUl2k43DsQkUmz20kTDnUm3X8/M5teLiNTS8JCKKubFJrbNraifDM3Ao+pQGexvgnNskPvmlUZF4l+ILRksBqcw8rfKc1ttwNxZuaaghfU5c3yWULktI8jFGT1uKwWoWUjSNBTjpvPaa75sFAAAL0VWz7PDQwlEZ5sijaT4N6/WSVsVdGDCLyaro0Ki0WyNwYYftqcEk2+Kf1txQIPCeKZPzlMPzwlJB07+xf5aBHpXuoNlIN61LoJzRuD3tNoV7KAWE1lU1i/EApwJz6sE8zai/nu4t9SeqoFweKcWHFTXYLfZjw==
-Received: from PH0PR12MB5647.namprd12.prod.outlook.com (2603:10b6:510:144::5)
- by BN6PR12MB1731.namprd12.prod.outlook.com (2603:10b6:404:106::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13; Fri, 22 Apr
- 2022 18:37:09 +0000
-Received: from PH0PR12MB5647.namprd12.prod.outlook.com
- ([fe80::5820:b6ff:15c:2acc]) by PH0PR12MB5647.namprd12.prod.outlook.com
- ([fe80::5820:b6ff:15c:2acc%9]) with mapi id 15.20.5186.015; Fri, 22 Apr 2022
- 18:37:09 +0000
-From:   Krishna Reddy <vdumpa@nvidia.com>
-To:     Robin Murphy <robin.murphy@arm.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>
-CC:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "sven@svenpeter.dev" <sven@svenpeter.dev>,
-        "robdclark@gmail.com" <robdclark@gmail.com>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "yong.wu@mediatek.com" <yong.wu@mediatek.com>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>,
-        "zhang.lyra@gmail.com" <zhang.lyra@gmail.com>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "jean-philippe@linaro.org" <jean-philippe@linaro.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 02/13] iommu: Move bus setup to IOMMU device registration
-Thread-Topic: [PATCH 02/13] iommu: Move bus setup to IOMMU device registration
-Thread-Index: AQHYT/0ok9lNELUg+Eml6ifIWi+wbqz8Rbag
-Date:   Fri, 22 Apr 2022 18:37:08 +0000
-Message-ID: <PH0PR12MB56475FAF4A2E7DB0AE1C1217B3F79@PH0PR12MB5647.namprd12.prod.outlook.com>
-References: <cover.1649935679.git.robin.murphy@arm.com>
- <e607a32be8e84c56d65160902f4bd3fb434ee9d3.1649935679.git.robin.murphy@arm.com>
-In-Reply-To: <e607a32be8e84c56d65160902f4bd3fb434ee9d3.1649935679.git.robin.murphy@arm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f1903079-3bae-4b41-3d25-08da248f1bb5
-x-ms-traffictypediagnostic: BN6PR12MB1731:EE_
-x-microsoft-antispam-prvs: <BN6PR12MB173190FEEBC2F4AAEF586059B3F79@BN6PR12MB1731.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: yFkF/hScrKN6Hb4y42smHJoYs7zrO30HEQW3QMEfCOx977zmrukaytO+L88DXUSvGL6s/f3OGq50cOTKlsqyOWRkLUko2AHABc28zMKq3WMvteu+9Qtf+o9cidbjiARZXnOduxjU/FCC0lrGS0daeP7Mibq390H6qiLThQadBuuWznaHnAacY3MfsAonI1ZQOZSoyvh8kjmoOe15g5CfL940ljzxuzAYl8cWbYdNRfjfqPsg3+jBXIgPGpd91HL+KarbeOzw5ZtiYV6cwfNBn62u6Jj35bIRG8VXfl87D+KvdtDCX+yEdOrz7TWXkuDsNbGkF0L5RcH30mq8C5pnMhRPx5EWj3T1gAzPblyKycAsQNBodZoxmjgwLrQGKlWs9XzSxxcasaguW4NNRewCV5wzeakiufjkHgYZ0x5xrC9UsGb9BmEqcJNyPRa+C4qm+YBkJ8TbZyk+FnKmFx45i2GfeP7SbxYewQKvuZqyA8GwjJdFU+/WhWGpApOyosaHJY+JAXfKt//aA20VDrl2csm3uLPmb4Z3VosxUi56qUqP5/bB0xy6IEF/xONljJ74Qw55oe5TioSLWvyqGTt32VuF+884tEOo9PRF68Jhe0BJchdR7GVciwXBxe3zCHuhH/sEfELFHCC62M/MOQ4LJFawg4ct7tQ2r32IhIdgsZ+VrHg7sEwGQ7Jx8HOlAaJ8YkCiKinJWfUXrXqjottF6w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR12MB5647.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(7696005)(7416002)(110136005)(122000001)(38100700002)(52536014)(8936002)(5660300002)(38070700005)(33656002)(6506007)(54906003)(55016003)(26005)(71200400001)(186003)(9686003)(4326008)(8676002)(66476007)(66556008)(4744005)(2906002)(66946007)(76116006)(508600001)(86362001)(64756008)(66446008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?PV8OFeTxiWpBKk9mg1al581uRc7DdrwdZDloCIM8OTNYrPbfynXsWOHVEv6O?=
- =?us-ascii?Q?wyb6n1rFEX2cpYSOj/Xrm/KGmv15CUd4qptPSdkktYM8jKB527/OQCzpG/iV?=
- =?us-ascii?Q?kxatzIId2ha2mlHiBLGYP09E4hY8sPY9bB0RDt7fdYlZZ0Gw7d5MSRX8PFkQ?=
- =?us-ascii?Q?BLuQ3YhWYkRcmuosvZfwtaDNsGj0a+5CBIw4ZLXoI1wvBEcAFm2UwK5PMy0R?=
- =?us-ascii?Q?r2QF2r2glLZvw/1/vax02HDnlFihMiCJNu8JGjRVrYZzVMIOCFGJRc5KNkM+?=
- =?us-ascii?Q?5CQAb3+dZDThNtj6ypi/zlTRl1JCY3TOb+9oNurGdfX7DNqr7AgfjzMANmL1?=
- =?us-ascii?Q?rQ/lkC42I6nEOI6dsOe+PweOolaUunAzOo8vkN+zWSPP2iwYhgFGqEybIZ+y?=
- =?us-ascii?Q?W7XSXM2rUtCkX/+/nfIwrSXwFwmpJhVB4hkajbb9SILIjdDsKKwbMToPOH52?=
- =?us-ascii?Q?J/LK9BCKTdsp+6zG2zDHqvNy5bYXUyMgEPRuxU8jVzGCFN7ZUTSYO6UQdQCf?=
- =?us-ascii?Q?1Gca8r7m7619sBlyf3mxhiE3VOHQuTPy5wMCzhcMTYzR77hK9iUuq6+1wq1n?=
- =?us-ascii?Q?nIELVW+8km3S6/6SfLgQ0NC8A6VeG6MMA2aQ6n0p+22pRGuplr9hglmUOfcM?=
- =?us-ascii?Q?NvraGdxxA0TsyuNTiJGRI3W3C2p9qOruF9lQeiS6Jc6xgO1zcZkn3v3lw+iL?=
- =?us-ascii?Q?SeuPeALXmGle4y7Tj48AfxxBHFPbTLgu6jgGvBpLKd3sEecvpgynyKjdOo3l?=
- =?us-ascii?Q?EVdo6xhAEHZ53AunH8AFIVivbc7XWyE7BzN9tA6tet+sYp/zA7dMZFR3Ku9B?=
- =?us-ascii?Q?qIXsyjXn2vQeuFp8+jPYq1LjZBuso4bcX3wUlWTmiFARqplDEFG4znsCzl2H?=
- =?us-ascii?Q?PFFAY7cxamad9mWPLkCj4WYgwt4WYL8A+qAm/msAVIyKzqurBaaf8z3dtG31?=
- =?us-ascii?Q?bl6c198tKW0j/rTWtvzngsvw3lSRSz66dMUEeC5ExgZcPd2UpS8Qce2HXqg4?=
- =?us-ascii?Q?jxBz4yV2FZFArm99sSA1vSV+ItbrZKfuwDucOBYVDRk0xAcqHz+BFnmFU8qT?=
- =?us-ascii?Q?g8yj5Xb0C3BYAFI3lmcn/Cpq6M1kwoCyGn3veI/SL8+5WYqWrx0LolLRiUcn?=
- =?us-ascii?Q?fyvtsIsfxd4ZwusZXONRmb0kiKY425kk+9W143KR+hWo2CpPH+EhrzDOxFMt?=
- =?us-ascii?Q?ejE9MzsNIo5sPjp9kGa7cbinZPKaK9VfhqftPHhAm+wrw4LNV5u3lXvhigaw?=
- =?us-ascii?Q?uVeOqxCZw8ukicEP82CfjcWzA5otMVIQbLOHEOZFIAh1KnCkcj5AFpHsSxog?=
- =?us-ascii?Q?8FbE0di4awdFnDc9tnqcrBYxos8kwMpfPbJGwYM5Gb5rIqWBxbVLzXqFpjgz?=
- =?us-ascii?Q?AvuHz/ZgbktdBo1Bu5CfK6w+Wbl7uxFguvBmoigy3BPggvA9Mvjz7DpN+sIO?=
- =?us-ascii?Q?x04BbTXymhK9esbA9ejwe9J0KL8WW8371u/mokpgPQ4V1G1/dYZwraUbHXLF?=
- =?us-ascii?Q?go5WIbFlKwfcgmXugaY8S0iGH2IxYWakxTniNh06SJr+Bp/C6SvOLwlFRJyv?=
- =?us-ascii?Q?P5lSsjXO2WYDlNOvtbH/Vc+OXZXpf66e1H3ffuLP0LWA+ZD1AxzKltifuC/h?=
- =?us-ascii?Q?FFueZ56DwswQSWPQa9yP/eVpERYBb9A+TMN7i4QYyYalAov0awfJtuzAntXF?=
- =?us-ascii?Q?Ic6dpqs1InB3NrWP8OD7PFDqwVX2ByVuVgKqDdGhPtLEYGhfXBUqRCIl/cej?=
- =?us-ascii?Q?vqu8eJYqdA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 22 Apr 2022 15:34:52 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8196E26EDE6
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 12:12:51 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-e604f712ecso9573930fac.9
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 12:12:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=7NoOp29Q/dMR2v1xp8JyZRZZvoakgizrx1i7zKIJPJA=;
+        b=MvsU0Shq7Wl/izk/EJ6oMnzUpVSyo/bCeBwYPxWdAYO2/9ZUg6IRR1k16Uk4CzEWrL
+         Dx22WIhqhvchO4CtnhICqZcmbvTOQyBGtmNp/E7QHGclmkG9RfeVhmMZFOIqgY28zJbi
+         omzKxdl3vnnS3GlvrP2r4FCgkolfIn6+JQh7f9prIIUo0xYfo8rSs4DkN9dRK4ze3iSM
+         TyeuzwzOBNKEwqy8ugHn0TA1LD1NFbgFndeGaifUZ05vTM/qfZEfNAaZtNs9r18TuSqA
+         tW6u+2Uv84Ucz9Na8WgAb6cr1guTKv08Q0Vn0LTpV0wN7cXO46id9IUmfkkahe/mnrTG
+         gRJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mime-version:content-disposition;
+        bh=7NoOp29Q/dMR2v1xp8JyZRZZvoakgizrx1i7zKIJPJA=;
+        b=PwngxHWo9K5wLxN4/A07CXUt0JS6GIDL3kC8C1YSLe3ysCOcBK4mC3afgKE9oel+FS
+         m0UhzA97edWe+ClZ8dgN8rlgp4BUkNBUoKMXEINpg8BFAZr7nauAZrO4Abb9tzY9WVA1
+         KwwfM6XZVqVIbRpP4kqSrW6Ll3HH0ZmQk3tBiF3Vd62OCPWnD01P7WajrU30yUBQGQBg
+         H8WtyM0mV6poq7TzwflUtEgXvekCpGZZNAmGpW5wSSTkXj2+KJKSio4O4Wgl0y+JglHV
+         sOr2MDu7BI+WacpPg3TGjUYwyHuavhihPyy9Qn1ccD0+4EGRdokihwIZGEcwK/eqP1CV
+         c+qg==
+X-Gm-Message-State: AOAM532p2jL82eWHzP5VZiB8TVi3x7wBzhlmTtUCXYJkObxVPGx5Ll4i
+        wZhFD30kSoE8vT8gwo5hR31mmPqMPiM=
+X-Google-Smtp-Source: ABdhPJwjv/+yziYSWHN+C3vFIgOEab+gBtdfs3eHbbzKdOzoUHNJ/g1C7Vgz2La9Z6n6TR8SnVwYrg==
+X-Received: by 2002:a05:6808:138e:b0:322:2dcd:dc7d with SMTP id c14-20020a056808138e00b003222dcddc7dmr3025270oiw.159.1650652673572;
+        Fri, 22 Apr 2022 11:37:53 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b188-20020aca34c5000000b002da579c994dsm1013602oia.31.2022.04.22.11.37.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 11:37:53 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 22 Apr 2022 11:37:51 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Arnd Bergmann <arnd@arndb.de>,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] soc: rockchip: Fix compile-testing SoC drivers
+Message-ID: <20220422183751.GA2653014@roeck-us.net>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR12MB5647.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f1903079-3bae-4b41-3d25-08da248f1bb5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Apr 2022 18:37:08.9507
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: DH3mxVTDq4FeiLbsE/2eb+FJM/Wl/UtcNg0YaZZzkEB/ev7GXwxTJLVwFwbGGMVowQUfwVYWZdHLL9ryF2jOvQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1731
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        SPF_HELO_PASS,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good effort to isolate bus config from smmu drivers.
-Reviewed-By: Krishna Reddy <vdumpa@nvidia.com>
+On Fri, Apr 22, 2022 at 11:19:19AM -0700, Brian Norris wrote:
+> Similar to commit 7f94b69ece51 ("ARM: ixp4xx: fix compile-testing soc
+> drivers").
+> 
+> drivers/soc/rockchip/Kconfig makes plenty of provision for configuring
+> drivers either for ARCH_ROCKCHIP or for COMPILE_TEST. But
+> drivers/soc/Makefile pulls the rug out from under us, by refusing to
+> build anything if we specified COMPILE_TEST but not ARCH_ROCKCHIP.
+> 
+> Currently, I'm not aware of anything that breaks without this patch, but
+> it certainly makes for confusing builds (CONFIG_ROCKCHIP_PM_DOMAINS=y,
+> but we didn't actually compile the driver?) and leaves room for future
+> error (I have pending patches that break confusingly with COMPILE_TEST=y
+> even though their Kconfig dependencies seem correct [1]).
+> 
+> Defer to drivers/soc/rockchip/{Makefile,Kconfig} to do the right thing.
+> 
+> [1] e.g.,
+> https://lore.kernel.org/linux-rockchip/20220405184816.RFC.2.I2d73b403944f0b8b5871a77585b73f31ccc62999@changeid/
+> [RFC PATCH 2/2] PM / devfreq: rk3399_dmc: Block PMU during transitions
+> 
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
 
-I have an orthogonal question here.
-Can the following code handle the case, where different buses have differen=
-t type of SMMU instances(like one bus has SMMUv2 and another bus has SMMUv3=
-)?
-If it need to handle the above case, can the smmu device bus be matched wit=
-h specific bus here and ops set only for that bus?=20
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-
-> +       for (int i =3D 0; i < ARRAY_SIZE(iommu_buses); i++) {
-> +               struct bus_type *bus =3D iommu_buses[i];
-> +               const struct iommu_ops *bus_ops =3D bus->iommu_ops;
-> +               int err;
-> +
-> +               WARN_ON(bus_ops && bus_ops !=3D ops);
-> +               bus->iommu_ops =3D ops;
-> +               err =3D bus_iommu_probe(bus);
-> +               if (err) {
-> +                       bus_for_each_dev(bus, NULL, iommu,
-> remove_iommu_group);
-> +                       bus->iommu_ops =3D bus_ops;
-> +                       return err;
-> +               }
-> +       }
-
-
--KR
+> ---
+> 
+>  drivers/soc/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+> index fd7717d597fc..4c91705a8bb3 100644
+> --- a/drivers/soc/Makefile
+> +++ b/drivers/soc/Makefile
+> @@ -23,7 +23,7 @@ obj-y				+= pxa/
+>  obj-y				+= amlogic/
+>  obj-y				+= qcom/
+>  obj-y				+= renesas/
+> -obj-$(CONFIG_ARCH_ROCKCHIP)	+= rockchip/
+> +obj-y				+= rockchip/
+>  obj-$(CONFIG_SOC_SAMSUNG)	+= samsung/
+>  obj-$(CONFIG_SOC_SIFIVE)	+= sifive/
+>  obj-y				+= sunxi/
+> -- 
+> 2.36.0.rc2.479.g8af0fa9b8e-goog
+> 

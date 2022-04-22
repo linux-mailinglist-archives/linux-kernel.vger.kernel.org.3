@@ -2,160 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 376A450C4F0
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:46:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0084F50C52E
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230354AbiDVXi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 19:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60922 "EHLO
+        id S229972AbiDVXjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 19:39:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230253AbiDVXij (ORCPT
+        with ESMTP id S229897AbiDVXjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 19:38:39 -0400
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71902E6459;
-        Fri, 22 Apr 2022 16:25:51 -0700 (PDT)
-Received: by mail-qv1-xf35.google.com with SMTP id kd22so2312191qvb.4;
-        Fri, 22 Apr 2022 16:25:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=rcdaBhhud9SyNHNY0AAhVKpiP7gID+EH0S68KRDmsGo=;
-        b=cl1daFNRCD3e5ffgQ725R7amEwpyE1xVdZ5NGUozsQbs4DgYzyYZwr9MPIuNqNkZ+t
-         kFS9d5mX2ptu1vW0KM/xExO22N1uvYB6ISW5Gf2O4FPY4qOYhIjr87geUoaxd0nUifM/
-         +8/XYg6gGAlhph7wlWJSXFZX+vE0dTTXAz63XW0UYkRpwPRABlWD43ZafITFmKHyLrva
-         k0SBpjCDVuZG5HlTU6E9NgbNG6KVOSys0P1PX8oVhPi5L5dbWztVKRB47JM0/4+gJsmG
-         ZrkJLacRQTPvHvLxW6HXLeQVqn7FuSUofP0ZCFDV7yXGf6oWiCmuKc4N1yMKKOdxKxcv
-         4voQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rcdaBhhud9SyNHNY0AAhVKpiP7gID+EH0S68KRDmsGo=;
-        b=1x3KVJwOHUG5ZjyLNvfYOSnp27Toko553FBS3zEOsxGVB0DK5HrHSHp4klVdjfbSea
-         GO4MHvS54xRoX7yu1D3D7h5wi1Crb1XYQXb08rRzC5TZ+DF4L0NYUZqk5PQ232fUtO94
-         99FupADYQ14NC4wrRt6odffbArd81GPVdrkunSRSjUBF+BU14W0jOf0OQrHyQz2l2pSl
-         qE+Igbce2qNXpgL0itfJEyYZpL0hXs+od5KRhNkVTbnpDYhiFJuPj2ix/qfYnmeG9GzA
-         bLq06K9tRIeRW57HgK2t2s3r3amd2YwSd8v9lH3nwu/e1DDKOuMovzsxuJMn0s4JHK7X
-         9/Lw==
-X-Gm-Message-State: AOAM5335thhUSXFNjgZLofYUDj8t5oiLyPe9oQ6MNYXvlZXmQG/iKq++
-        SANAYB+ptJaQCPSkFPAF3Jc=
-X-Google-Smtp-Source: ABdhPJyEDybsNUkFpLBFTngPCki9AUC4GVSw/pvF00/UmfGceNLNQSnWZzheejDGBi+Vp98KSZtzPw==
-X-Received: by 2002:a05:6214:518d:b0:454:6ea7:a179 with SMTP id kl13-20020a056214518d00b004546ea7a179mr2838176qvb.121.1650669950640;
-        Fri, 22 Apr 2022 16:25:50 -0700 (PDT)
-Received: from ?IPV6:2600:1700:2442:6db0:98a4:ff1d:3bb2:5350? ([2600:1700:2442:6db0:98a4:ff1d:3bb2:5350])
-        by smtp.gmail.com with ESMTPSA id m9-20020a05622a118900b002f1fc51135dsm2104515qtk.57.2022.04.22.16.25.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 16:25:50 -0700 (PDT)
-Message-ID: <ee73ec15-db6c-e0bb-ddb1-012499d08b11@gmail.com>
-Date:   Fri, 22 Apr 2022 18:25:49 -0500
+        Fri, 22 Apr 2022 19:39:31 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C82EC110;
+        Fri, 22 Apr 2022 16:28:47 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 9ABDC3201F33;
+        Fri, 22 Apr 2022 19:28:45 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Fri, 22 Apr 2022 19:28:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1650670125; x=
+        1650756525; bh=sVFvJn0waws0huqXtaOE4/eUsYmyydlP/Izjgm4OF6M=; b=W
+        5XZ+obawGydKuH0oHzBtc1dAFeoxo1MCpIqwqHehtoQIj48YxhpNKmwhgdyZceQt
+        ZOkw6S81EwZIfgj/UunDlCIRQFB4m8R8BN2pcyOUgqv6ezQBFc/QD9RX/08TyVK7
+        +uyG4XMF/oNjoD3S+51pr1EKbL65W69Abq7bTQV4GxQ5bdZ5SwkAOXXb4LnSaEuQ
+        4I2bsGE4RYtL79CRX34taP9iWziTTjhxiegpAGd+QrTqs5H3Q/r8QGf0UCd5VjsL
+        M8diNyijzmghjrVnHDS9s/Zy+RBtVhWKhA99tu02hylsRrX7xusBJPs6y7HYZu+s
+        CTC2xbJ+aNUqNlcKUeW3g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1650670125; x=1650756525; bh=sVFvJn0waws0h
+        uqXtaOE4/eUsYmyydlP/Izjgm4OF6M=; b=Jbn/oL+i+KTVsMVOikDmAgBU8ss6w
+        FwFgomqno2UoS+C6GfjzjASPff79cUauu3grf94e6j2mfWII+U0qm917wruQv2nA
+        jMkN+lIi3kqUmvEY2uLVALnXo84fhgc1G8JGiHGF4Teb+N+I/92/8Ns6ztXiTBvy
+        wOOUNNC7GUDiznOaFvAsdmVkU/IgXjO4f73oFXZ5wE0NhaNdmOYqBlStWy9RtLQ1
+        cTXCWsFDzwb3t3dBd25hC19XolTi11dwfOBHl4IE09/XpVIMKOe2BEioguJm+IaT
+        4HKBlNVhjdEOCpKLkazcfiUlxy9HYWaxQ6h6uaWwMdJkdRVdzOVJfpJOw==
+X-ME-Sender: <xms:LDpjYg71Io2H-Z-EPR3w9_oA3M7zQ2TBqkeTpx2971jCCg5BqLMOmg>
+    <xme:LDpjYh4H69RhzYXu8ruuNLTZAezCbFFJExY0rSzUIYnLoEtu7eNHXCe17e0PjmcMi
+    lhyJKjFa-TIOa-qog>
+X-ME-Received: <xmr:LDpjYvdTf1u95CfSTFRMcWaXdxXOpibrkEmBbdBw6IBFbiVFqUv25GkPzOmNUMiPzuG0uKA9mOgCy-O_deAuWGIsn0eSYZqE0bP64VxBwm0vnT2BQKIyLeDFyg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrtdehgddvfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefuvfevfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepleetjeffvdegheektdekveeuueetffetffehudefueejvddufedu
+    teeiieejveelnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghruf
+    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhhohhllhgr
+    nhgurdhorhhg
+X-ME-Proxy: <xmx:LDpjYlIWPjmpMWg9F_1pCq3mPYjGwUPTQzba_yKZLSZXuN2nHFtQCw>
+    <xmx:LDpjYkLxWBM7VKkmktTvlmJ8PiEzWRgl5KK44kEshuYKPO3uZtVavg>
+    <xmx:LDpjYmyhXktio00qmHo6EzAJ-QgyBROk2ze5cGnSc61flOET_sGTrQ>
+    <xmx:LTpjYiznz8PFVA2Y_-68t0NX5lK8KotoXHic2wmFD_xZlJcz3IVl8g>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 22 Apr 2022 19:28:43 -0400 (EDT)
+Subject: Re: [PATCH 1/2] dt-bindings: input: sun4i-lradc-keys: add R329 LRADC
+ binding
+To:     Icenowy Zheng <icenowy@aosc.io>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Icenowy Zheng <icenowy@sipeed.com>
+References: <BYAPR20MB2472D625C876D97E95CB6078BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <db2c4d90-0097-442a-68df-3dd77f7a4d0b@sholland.org>
+Date:   Fri, 22 Apr 2022 18:28:42 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC PATCH 1/2] Documentation: dev-tools: KTAP spec change
- version to 2-rc
+In-Reply-To: <BYAPR20MB2472D625C876D97E95CB6078BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     David Gow <davidgow@google.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        "Bird, Tim" <Tim.Bird@sony.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Rae Moar <rmr167@gmail.com>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Daniel Latypov <dlatypov@google.com>, kernelci@groups.io,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220316202622.324866-1-frowand.list@gmail.com>
- <20220316202622.324866-2-frowand.list@gmail.com>
- <CABVgOSm_rQcBhbC5C7Z7_+zEheCjkjHCmzKHyx7b5bYLESvA0A@mail.gmail.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <CABVgOSm_rQcBhbC5C7Z7_+zEheCjkjHCmzKHyx7b5bYLESvA0A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/17/22 03:43, David Gow wrote:
-> On Thu, Mar 17, 2022 at 4:26 AM <frowand.list@gmail.com> wrote:
->>
->> From: Frank Rowand <frank.rowand@sony.com>
->>
->> Prepare KTAP Specification for the process of creating Version 2.
->> The version will remain 2-rc until the final commit to complete
->> Version 2.
->>
->> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
->> ---
-> 
-> This seems okay to me, though I'd generally rather this stay in a
-> branch rather than hitting torvalds/master while there aren't any
-> substantive changes to the actual spec. (Basically, let's not rush
-> naming this "2-rc" for 5.18 if there aren't any other changes: a 2-rc
-> which is practically the same as 1 is probably going to be more
-> confusing than helpful if it sticks around for a whole kernel release.
+Hi Icenowy,
 
-Sounds good.  In my reply (a few minutes ago) to your other email, I offer
-to host a branch.  The branch approach sounds good to me.
+On 4/22/22 11:07 AM, icenowy@outlook.com wrote:
+> From: Icenowy Zheng <icenowy@sipeed.com>
+> 
+> R329 has similar LRADC with previous Allwinner SoCs, but with bus clock
+> and reset.
+> 
+> Add binding for it.
+> 
+> Signed-off-by: Icenowy Zheng <icenowy@sipeed.com>
 
-> 
-> (Also, when would we want to update the various mentions of "KTAP
-> version 1" in the document to "KTAP version 2" or "KTAP version 2-rc"?
-> Now, when 2 is released, at the first breaking change to that example,
-> etc?)
+I sent this binding/driver update (also with D1 support) last week:
 
-There are only a few references to version 1.  I can create a patch to change
-them to version 2 (other than the version of the document itself).
+https://lore.kernel.org/lkml/20220414002349.24332-1-samuel@sholland.org/T/
 
-If we are working on a branch, it should not make a big difference when the
-internal uses of "version 1" are changed to "version 2".  If I do it right
-away then it won't get overlooked.
+Please see if it works for you.
 
--Frank
-
-> 
-> Cheers,
-> -- David
-> 
->>  Documentation/dev-tools/ktap.rst | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
->> index 5ee735c6687f..37b5dc61bfb8 100644
->> --- a/Documentation/dev-tools/ktap.rst
->> +++ b/Documentation/dev-tools/ktap.rst
->> @@ -1,7 +1,7 @@
->>  .. SPDX-License-Identifier: GPL-2.0
->>
->>  ===================================================
->> -The Kernel Test Anything Protocol (KTAP), version 1
->> +The Kernel Test Anything Protocol (KTAP), version 2-rc
->>  ===================================================
-> 
-> Nit: Sphinx complains that we now need more '=' signs:
-> 
-> Documentation/dev-tools/ktap.rst:3: WARNING: Title overline too short.
-> ===================================================
-> 
-> 
-> The Kernel Test Anything Protocol (KTAP), version 2-rc
-> ===================================================
-> 
->>
->>  TAP, or the Test Anything Protocol is a format for specifying test results used
->> --
->> Frank Rowand <frank.rowand@sony.com>
->>
-
+Regards,
+Samuel

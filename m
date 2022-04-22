@@ -2,132 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70C1D50B57A
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1622050B57B
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:44:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446826AbiDVKqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 06:46:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45650 "EHLO
+        id S1446827AbiDVKq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 06:46:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446828AbiDVKqa (ORCPT
+        with ESMTP id S1446824AbiDVKqx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 06:46:30 -0400
-Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6BE27FC0;
-        Fri, 22 Apr 2022 03:43:35 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1650624211; bh=4zKNiCJ9mR8YNKg4xV+9DRTe5znRz0G2bXHhsbBhsuc=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To;
-        b=rbvLx9uVaZ9KLhaZck/JuJlU9H9gFERagLBhE3o2ytCZKQ11iJiiO/8KqezzNuSTn
-         pQCc4HfjB8ZDB11RdeTfmScFbabJXyS6U+rAc6/SCe8v9PGAjQPSd/0lUJEYEhBJb/
-         DAcjFfxZ553jXRIzeWyzghfGmwfRSlnEi3hT8HRc=
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [RFC PATCH 0/5] Apple Macs machine-level ASoC driver
-From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik@cutebit.org>
-In-Reply-To: <YkXKmxJ0R3qpUoH4@sirena.org.uk>
-Date:   Fri, 22 Apr 2022 12:43:30 +0200
-Cc:     =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>
+        Fri, 22 Apr 2022 06:46:53 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFE0BCA2;
+        Fri, 22 Apr 2022 03:44:00 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id r12so8169473iod.6;
+        Fri, 22 Apr 2022 03:44:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=9mOgppXNPhWimJqU72s6fXNPCFcDPkPEDHvzrtAfbic=;
+        b=ENmreVhV8u52bMxntoqrAwWBbM5PCO0r/Nol68a0fAE7eZaW+4ofl96ZmogULhu1zV
+         DNxIaQcf0wmQVDjly5xrv2Mt48m/jTwNjIuwuAckSntilFAysopuuumDYulXX3FHv6mj
+         VhADvhep9wK2tGVynosU+YD5wneIpN8/+Mj+X7se+8JKa2Wv1K7gi3PF2jxFwehZS9F9
+         +yBpmbiBtzkq0V+4qa3KMlScOSfd51XY77gdCMM2ZKppK0x+4ED9imCXzD4J8w3+vpha
+         worW7C6dcCsEiC+eNZQLZ0cTbB2bKQ6tHKO9YLH8QJiD/+/EA1bz0fhh5ie1NtkhqReG
+         DBnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=9mOgppXNPhWimJqU72s6fXNPCFcDPkPEDHvzrtAfbic=;
+        b=vDLLG/GxOkQG/1z1mBCzVzDbQAhSVX8WkboS0ZoWDMSCXdG3pEg0OdZ1c+0PRR7+tq
+         T9J0w+S5ESJslJ94n2M1OlSZ/awlwHbWReQEGabNP1oLVP3i2H6XtZ4dtjyY8XYsAbw9
+         oPl0oGz4unihexwLjdnWV5x5iUUCYT926A2e/WpNy+RO5NLI61dOsHI/dTp2NZGj8oOe
+         bJpwWsQ6YmK+QVmlZg9I7JJZNXSIQMCHtA7aHdky0IgKuv/Erv1fNImkCo3YvJnQlr2m
+         j90XQzCzpys8chwHHArAUuCmCxv5VmidIoKXJuG3jJgLfOz2HolzYaVPqQgUBIRpg3vY
+         vUJQ==
+X-Gm-Message-State: AOAM530Q6PI1z2XA5nRPt0HgA0h4we+eL+AxsT1xWobB3ZsaYsDwm8gS
+        KsPPN1E7SjK6UkzpCNASFHMtu5YMc8BxKJHUdXOgU/U84ERcUWQC
+X-Google-Smtp-Source: ABdhPJxuHA+ovPFyGpEEbXeiptBOygU6YMacm73aSaQQzN5jKfKaI7hqdDVB2vUOkzAAfaoiFekAI7Pm86w4RHS54ng=
+X-Received: by 2002:a05:6638:213:b0:326:5c30:494b with SMTP id
+ e19-20020a056638021300b003265c30494bmr1874609jaq.42.1650624240131; Fri, 22
+ Apr 2022 03:44:00 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220412122524.26966-1-surong.pang@gmail.com> <610871b2-1707-dfba-868f-4ddecc4d554d@linux.intel.com>
+ <CAEDbmAT=fZ-kpn13sW4KjB9RuFb_6T4j_eripR54NZ3UciZfqA@mail.gmail.com> <d6df23a0-6539-f955-5241-5cdfcaa4eca4@linux.intel.com>
+In-Reply-To: <d6df23a0-6539-f955-5241-5cdfcaa4eca4@linux.intel.com>
+From:   surong pang <surong.pang@gmail.com>
+Date:   Fri, 22 Apr 2022 18:43:48 +0800
+Message-ID: <CAEDbmAT3SoSsEmTkELSYoykGN+AuPgi2N11V2YwKuaC3nKMEmQ@mail.gmail.com>
+Subject: Re: [PATCH V1 1/1] usb/host: Let usb phy shutdown later
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     mathias.nyman@intel.com, Greg KH <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Orson.Zhai@unisoc.com, yunguo.wu@unisoc.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <DB0255C3-C9EC-4EFA-A377-C4BB1073D9B3@cutebit.org>
-References: <20220331000449.41062-1-povik+lin@cutebit.org>
- <YkWfziQzprEsWL72@sirena.org.uk>
- <CCE4A06E-6D6F-457D-B3C5-C36209BF38D3@cutebit.org>
- <YkW4MPh8VWc8eSGg@sirena.org.uk>
- <6D199EAB-FE14-4030-96A7-2E0E89D25FAB@cutebit.org>
- <YkXKmxJ0R3qpUoH4@sirena.org.uk>
-To:     Mark Brown <broonie@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_FAIL,SPF_HELO_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+>>> @@ -398,6 +397,7 @@ static int xhci_plat_remove(struct platform_device =
+*dev)
+>>>       clk_disable_unprepare(clk);
+>>>       clk_disable_unprepare(reg_clk);
+>>> +    usb_phy_shutdown(hcd->usb_phy);
+>>>       usb_put_hcd(hcd);
 
-> On 31. 3. 2022, at 17:36, Mark Brown <broonie@kernel.org> wrote:
->=20
-> On Thu, Mar 31, 2022 at 05:04:32PM +0200, Martin Povi=C5=A1er wrote:
->>> On 31. 3. 2022, at 16:18, Mark Brown <broonie@kernel.org> wrote:
->=20
->>> Yes, having two devices driving the bus at the same time wouldn't be
->>> great.  How is the TDM slot selection for the signals done in the
->>> hardware, I'm not seeing anything immediately obvious in the driver?
->>> I'd have thought that things would be implemented such that you =
-could
->>> implement speaker protection on all speakers simultaneously but =
-perhaps
->>> not.
->=20
->> I don=E2=80=99t know. I would have to go study the details of this. =
-Should I see
->> if I can find a combination of =E2=80=98ASI1 Sel=E2=80=99 =
-=E2=80=98VSENSE=E2=80=99 =E2=80=98ISENSE=E2=80=99 settings
->> that would lead to driver conflict on one of the models, or is there
->> a chance we could hide those controls just on the basis of =E2=80=98it =
-doesn=E2=80=99t
->> do anything usable and is possibly dangerous=E2=80=99?
->=20
-> If ISENSE and VSENSE output are controlled by the same mux as routing
-> then we should lock one of the controls out for at least stereo =
-devices
-> (it might be a good idea to check if the output is actually high Z =
-when
-> ISENSE and VSENSE are off rather than just driving zeros, if not it
-> definitely has to be the routing control).  My instinct is that it's
-> better to preserve the ability to implement speaker protection in =
-future
-> since that is something that'd be broadly useful, especially if =
-someone
-> comes up with a generic speaker protection implementation in which =
-case
-> there should be an awful lot of systems out there which could benefit.=20=
+Is it ok to put usb_phy_shutdown before usb_put_hcd(hcd)? hcd is
+released at usb_put_hcd.
 
+UNISOC DWC3 phy is not divided  USB 2.0/3.0 phy clearly.  Yes, it's
+UNISOC's issue.
+It UNISOC's dtsi: phys =3D <&ssphy>, <&ssphy>;
+If to shutdown phy too earlier,  it will cost 10s timeout to do xhci_reset.
+usb_remmove_hcd  --> usb_stop_hcd --> xhci_stop --> xhci_reset  -->
+xhci_handshake(&xhci->op_regs->command, CMD_RESET, 0, 10 * 1000 *1000)
 
-Sorry for having put this on hold for a while.
+I want to know this change is acceptable or not?
 
-I looked in the TAS2770 and TAS2764 drivers/datasheets, and to answer
-the questions we had:
+hcd->usb_phy =3D devm_usb_get_phy_by_phandle(sysdev, "usb-phy", 0);
+Why in xhci_plat_remove, just to shutdown "usb-phy"[0], not to
+shutdown "usb-phy"[1] ?
 
- * VSENSE/ISENSE output slots are configured independently of audio =
-samples
-   routing. Kernel drivers configure the slots based on the =
-'ti,imon-slot-no'
-   and 'ti,vmon-slot-no' properties of devicetree.
-
- * By default codecs transmit Hi-Z for duration of unused slots.
-
-So once we supply the devicetree props it should be electrically sound
-under any configuration of userspace knobs.
-
-One final thought on the playback routing controls: On systems with >2
-speakers, the codecs need to be assigned slots through set_tdm_slot.
-The macaudio driver RFCed here assigns a single slot to each speaker,
-making the effect of each speaker's routing control this:
-
-  'I2C offset' -- uses a random slot
-
-  'Left' 'Right' 'LeftRight' -- uses the single slot we configured
-
-I suppose I better assign two slots to speakers in each left-right pair
-of the same kind (e.g. woofer 1, woofer 2, tweeter). This way the
-routing control will mimic its behavior from simple stereo systems but
-replicated within each left-right pair.  (I would prefer to hide the
-controls altogether, but as I learned that hiding things unless proven
-dangerous is an ASoC non-goal, this way I can make the controls do
-something interesting.)
-
-Martin
-
+Mathias Nyman <mathias.nyman@linux.intel.com> =E4=BA=8E2022=E5=B9=B44=E6=9C=
+=8822=E6=97=A5=E5=91=A8=E4=BA=94 15:51=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On 22.4.2022 5.10, surong pang wrote:
+> > shared_hcd might be freed already here, but hcd should not be freed
+> > here, because "usb_put_hcd(hcd)" is called later.
+>
+> To me it still looks like this patch calls usb_phy_shutdown(hcd->usb_phy)=
+ _after_
+> usb_put_hcd(hcd):
+>
+> >>> @@ -398,6 +397,7 @@ static int xhci_plat_remove(struct platform_devic=
+e *dev)
+> >>>       clk_disable_unprepare(clk);
+> >>>       clk_disable_unprepare(reg_clk);
+> >>>       usb_put_hcd(hcd);
+> >>> +     usb_phy_shutdown(hcd->usb_phy);
+>
+>
+> shared hcd was freed even earlier, before disabling the clocks.
+>
+> Thanks
+> Mathias

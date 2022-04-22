@@ -2,72 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A5450C57C
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 02:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4145150C55A
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 02:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbiDWAAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 20:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54260 "EHLO
+        id S231201AbiDWABb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 20:01:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiDWAAb (ORCPT
+        with ESMTP id S229662AbiDWABY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 20:00:31 -0400
-X-Greylist: delayed 35292 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 22 Apr 2022 16:57:35 PDT
-Received: from relay5.mymailcheap.com (relay5.mymailcheap.com [159.100.248.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D445A1CFF86;
-        Fri, 22 Apr 2022 16:57:35 -0700 (PDT)
-Received: from relay1.mymailcheap.com (relay1.mymailcheap.com [144.217.248.102])
-        by relay5.mymailcheap.com (Postfix) with ESMTPS id D25C3267CE;
-        Fri, 22 Apr 2022 23:57:33 +0000 (UTC)
-Received: from filter1.mymailcheap.com (filter1.mymailcheap.com [149.56.130.247])
-        by relay1.mymailcheap.com (Postfix) with ESMTPS id 9D1EE3F1C5;
-        Fri, 22 Apr 2022 23:57:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
-        by filter1.mymailcheap.com (Postfix) with ESMTP id 931D12A374;
-        Fri, 22 Apr 2022 23:57:31 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at filter1.mymailcheap.com
-Received: from filter1.mymailcheap.com ([127.0.0.1])
-        by localhost (filter1.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id EKhdRskM061T; Fri, 22 Apr 2022 23:57:30 +0000 (UTC)
-Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by filter1.mymailcheap.com (Postfix) with ESMTPS;
-        Fri, 22 Apr 2022 23:57:30 +0000 (UTC)
-Received: from [172.16.34.145] (unknown [121.33.114.136])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 5C0094006D;
-        Fri, 22 Apr 2022 23:57:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=aosc.io; s=default;
-        t=1650671849; bh=DD5aCHKicT3d4y+emq1GaFjzfF9oVaAmnNBTesrDm4E=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=AAdZy/P1OZJE0KnFzKZXRyz4HGgP3iW4LOq47Oo9dE4RItltGMTETGfkTtY3cXV3U
-         GSSmovmGonmtmxzwWmhXREIdJa35VGKks5wnN5uJ5+98BMZQnhHaAS1/R+mnlFrAlk
-         DMBd+QtgX2TLVenoRav27X36NtFs4RXDYf+zxDn8=
-Message-ID: <2fb5b3f35d8b971839694e94d4965f1d8968f708.camel@aosc.io>
-Subject: Re: [PATCH 3/4] spi: sun6i: add quirk for in-controller clock
- divider
-From:   Icenowy Zheng <icenowy@aosc.io>
-To:     Samuel Holland <samuel@sholland.org>,
-        Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Date:   Sat, 23 Apr 2022 07:57:20 +0800
-In-Reply-To: <d1c09ca7-dc25-843c-2f64-fbf5111a9118@sholland.org>
-References: <20220422155639.1071645-1-icenowy@outlook.com>
-         <BYAPR20MB24728A99C2F7505873A091B5BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
-         <d1c09ca7-dc25-843c-2f64-fbf5111a9118@sholland.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 
+        Fri, 22 Apr 2022 20:01:24 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7FC71E3DFB;
+        Fri, 22 Apr 2022 16:58:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650671909; x=1682207909;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=e3FLOi/+v6B4A3waN/i8lUdjtDM+G0jjnajfyZctWxo=;
+  b=SDp6R0Jq6rA76nJhR1qd9Krc7/kuPoIlPu8AjtGHYzEzBm5dyZlnpVd3
+   M5EZx+mIZASwD4AOe+UneOSJ8JAOBaST/lsxK9qAApO8Lci8zaLAzsYyX
+   ELSN3rsYBU+I9vYYQoCkfizxbxeh3oFWhCHJIWh631avjW7SecqkC4jbz
+   eIUE5vKHqtfFPnoDd7gIAFDLip8uiRTkDs5Aqt8IQqz2c2RDQ2aLPd9PF
+   Rm1ExLPCq4FNiJck2gLEq0IhfTY1DZo2SJoQMArZePDpF4xRVbG3GlGRJ
+   bSu7NY+tWLKy8Ed29vyuouhuZK9JOy5FJD7hSSWPtONMheDI/tLKS/+Sr
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264306798"
+X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
+   d="scan'208";a="264306798"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 16:58:29 -0700
+X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
+   d="scan'208";a="659264395"
+Received: from hltravis-mobl1.amr.corp.intel.com (HELO localhost) ([10.213.166.215])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 16:58:28 -0700
+Date:   Fri, 22 Apr 2022 16:58:28 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     linux-cxl@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/8] cxl/acpi: Add root device lockdep validation
+Message-ID: <YmNBJBTxUCvDHMbw@iweiny-desk3>
+References: <165055518776.3745911.9346998911322224736.stgit@dwillia2-desk3.amr.corp.intel.com>
+ <165055519869.3745911.10162603933337340370.stgit@dwillia2-desk3.amr.corp.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,T_SPF_PERMERROR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <165055519869.3745911.10162603933337340370.stgit@dwillia2-desk3.amr.corp.intel.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,165 +69,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022-04-22星期五的 18:54 -0500，Samuel Holland写道：
-> On 4/22/22 10:56 AM, icenowy@outlook.com wrote:
-> > From: Icenowy Zheng <icenowy@aosc.io>
-> > 
-> > Previously SPI controllers in Allwinner SoCs has a clock divider
-> > inside.
-> > However now the clock divider is removed and to set the transfer
-> > clock
-> > rate it's only needed to set the SPI module clock to the target
-> > value.
-> > 
-> > Add a quirk for this kind of SPI controllers.
-> > 
-> > Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
-> > ---
-> >  drivers/spi/spi-sun6i.c | 68 +++++++++++++++++++++++--------------
-> > ----
-> >  1 file changed, 38 insertions(+), 30 deletions(-)
-> > 
-> > diff --git a/drivers/spi/spi-sun6i.c b/drivers/spi/spi-sun6i.c
-> > index 84c525b08ad0..fc81afc3a963 100644
-> > --- a/drivers/spi/spi-sun6i.c
-> > +++ b/drivers/spi/spi-sun6i.c
-> > @@ -87,6 +87,7 @@
-> >  
-> >  struct sun6i_spi_cfg {
-> >         unsigned long           fifo_depth;
-> > +       bool                    has_clk_ctl;
-> >  };
-> >  
-> >  struct sun6i_spi {
-> > @@ -260,7 +261,7 @@ static int sun6i_spi_transfer_one(struct
-> > spi_master *master,
-> >                                   struct spi_transfer *tfr)
-> >  {
-> >         struct sun6i_spi *sspi = spi_master_get_devdata(master);
-> > -       unsigned int mclk_rate, div, div_cdr1, div_cdr2, timeout;
-> > +       unsigned int div, div_cdr1, div_cdr2, timeout;
-> >         unsigned int start, end, tx_time;
-> >         unsigned int trig_level;
-> >         unsigned int tx_len = 0, rx_len = 0;
-> > @@ -350,39 +351,44 @@ static int sun6i_spi_transfer_one(struct
-> > spi_master *master,
-> >  
-> >         sun6i_spi_write(sspi, SUN6I_TFR_CTL_REG, reg);
-> >  
-> > -       /* Ensure that we have a parent clock fast enough */
-> > -       mclk_rate = clk_get_rate(sspi->mclk);
-> > -       if (mclk_rate < (2 * tfr->speed_hz)) {
-> > -               clk_set_rate(sspi->mclk, 2 * tfr->speed_hz);
-> > -               mclk_rate = clk_get_rate(sspi->mclk);
-> > -       }
-> > +       if (sspi->cfg->has_clk_ctl) {
-> > +               unsigned int mclk_rate = clk_get_rate(sspi->mclk);
-> > +               /* Ensure that we have a parent clock fast enough
-> > */
-> > +               if (mclk_rate < (2 * tfr->speed_hz)) {
-> > +                       clk_set_rate(sspi->mclk, 2 * tfr-
-> > >speed_hz);
-> > +                       mclk_rate = clk_get_rate(sspi->mclk);
-> > +               }
-> >  
-> > -       /*
-> > -        * Setup clock divider.
-> > -        *
-> > -        * We have two choices there. Either we can use the clock
-> > -        * divide rate 1, which is calculated thanks to this
-> > formula:
-> > -        * SPI_CLK = MOD_CLK / (2 ^ cdr)
-> > -        * Or we can use CDR2, which is calculated with the
-> > formula:
-> > -        * SPI_CLK = MOD_CLK / (2 * (cdr + 1))
-> > -        * Wether we use the former or the latter is set through
-> > the
-> > -        * DRS bit.
-> > -        *
-> > -        * First try CDR2, and if we can't reach the expected
-> > -        * frequency, fall back to CDR1.
-> > -        */
-> > -       div_cdr1 = DIV_ROUND_UP(mclk_rate, tfr->speed_hz);
-> > -       div_cdr2 = DIV_ROUND_UP(div_cdr1, 2);
-> > -       if (div_cdr2 <= (SUN6I_CLK_CTL_CDR2_MASK + 1)) {
-> > -               reg = SUN6I_CLK_CTL_CDR2(div_cdr2 - 1) |
-> > SUN6I_CLK_CTL_DRS;
-> > -               tfr->effective_speed_hz = mclk_rate / (2 *
-> > div_cdr2);
-> > +               /*
-> > +                * Setup clock divider.
-> > +                *
-> > +                * We have two choices there. Either we can use the
-> > clock
-> > +                * divide rate 1, which is calculated thanks to
-> > this formula:
-> > +                * SPI_CLK = MOD_CLK / (2 ^ cdr)
-> > +                * Or we can use CDR2, which is calculated with the
-> > formula:
-> > +                * SPI_CLK = MOD_CLK / (2 * (cdr + 1))
-> > +                * Wether we use the former or the latter is set
-> > through the
-> > +                * DRS bit.
-> > +                *
-> > +                * First try CDR2, and if we can't reach the
-> > expected
-> > +                * frequency, fall back to CDR1.
-> > +                */
-> > +               div_cdr1 = DIV_ROUND_UP(mclk_rate, tfr->speed_hz);
-> > +               div_cdr2 = DIV_ROUND_UP(div_cdr1, 2);
-> > +               if (div_cdr2 <= (SUN6I_CLK_CTL_CDR2_MASK + 1)) {
-> > +                       reg = SUN6I_CLK_CTL_CDR2(div_cdr2 - 1) |
-> > SUN6I_CLK_CTL_DRS;
-> > +                       tfr->effective_speed_hz = mclk_rate / (2 *
-> > div_cdr2);
-> > +               } else {
-> > +                       div = min(SUN6I_CLK_CTL_CDR1_MASK,
-> > order_base_2(div_cdr1));
-> > +                       reg = SUN6I_CLK_CTL_CDR1(div);
-> > +                       tfr->effective_speed_hz = mclk_rate / (1 <<
-> > div);
-> > +               }
-> > +
-> > +               sun6i_spi_write(sspi, SUN6I_CLK_CTL_REG, reg);
-> >         } else {
-> > -               div = min(SUN6I_CLK_CTL_CDR1_MASK,
-> > order_base_2(div_cdr1));
-> > -               reg = SUN6I_CLK_CTL_CDR1(div);
-> > -               tfr->effective_speed_hz = mclk_rate / (1 << div);
-> > +               clk_set_rate(sspi->mclk, tfr->speed_hz);
-> 
-> clk_set_rate() may not set the exact requested rate. Should we set
-> tfr->effective_speed_hz based on clk_get_rate() afterward?
+On Thu, Apr 21, 2022 at 08:33:18AM -0700, Dan Williams wrote:
+> The CXL "root" device, ACPI0017, is an attach point for coordinating
+> platform level CXL resources and is the parent device for a CXL port
+> topology tree. As such it has distinct locking rules relative to other
+> CXL subsystem objects, but because it is an ACPI device the lock class
+> is established well before it is given to the cxl_acpi driver.
+ 
+This final sentence gave me pause because it implied that the device lock class
+was set to something other than no validate.  But I don't see that anywhere in
+the acpi code.  So given that it looks to me like ACPI is just using the
+default no validate class...
 
-Sounds right. I should add this in the next revision.
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
 
+> However, the lockdep API does support changing the lock class "live" for
+> situations like this. Add a device_lock_set_class() helper that a driver
+> can use in ->probe() to set a custom lock class, and
+> device_lock_reset_class() to return to the default "no validate" class
+> before the custom lock class key goes out of scope after ->remove().
 > 
-> Regards,
-> Samuel
+> Note the helpers are all macros to support dead code elimination in the
+> CONFIG_PROVE_LOCKING=n case.
 > 
-> >         }
-> >  
-> > -       sun6i_spi_write(sspi, SUN6I_CLK_CTL_REG, reg);
-> >         /* Finally enable the bus - doing so before might raise SCK
-> > to HIGH */
-> >         reg = sun6i_spi_read(sspi, SUN6I_GBL_CTL_REG);
-> >         reg |= SUN6I_GBL_CTL_BUS_ENABLE;
-> > @@ -702,10 +708,12 @@ static int sun6i_spi_remove(struct
-> > platform_device *pdev)
-> >  
-> >  static const struct sun6i_spi_cfg sun6i_a31_spi_cfg = {
-> >         .fifo_depth     = SUN6I_FIFO_DEPTH,
-> > +       .has_clk_ctl    = true,
-> >  };
-> >  
-> >  static const struct sun6i_spi_cfg sun8i_h3_spi_cfg = {
-> >         .fifo_depth     = SUN8I_FIFO_DEPTH,
-> > +       .has_clk_ctl    = true,
-> >  };
-> >  
-> >  static const struct of_device_id sun6i_spi_match[] = {
-> > 
+> Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Waiman Long <longman@redhat.com>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Alison Schofield <alison.schofield@intel.com>
+> Cc: Vishal Verma <vishal.l.verma@intel.com>
+> Cc: Ira Weiny <ira.weiny@intel.com>
+> Cc: Ben Widawsky <ben.widawsky@intel.com>
+> Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Dan Williams <dan.j.williams@intel.com>
+> ---
+>  drivers/cxl/acpi.c     |   15 +++++++++++++++
+>  include/linux/device.h |   25 +++++++++++++++++++++++++
+>  2 files changed, 40 insertions(+)
 > 
-
-
+> diff --git a/drivers/cxl/acpi.c b/drivers/cxl/acpi.c
+> index d15a6aec0331..e19cea27387e 100644
+> --- a/drivers/cxl/acpi.c
+> +++ b/drivers/cxl/acpi.c
+> @@ -275,6 +275,15 @@ static int add_root_nvdimm_bridge(struct device *match, void *data)
+>  	return 1;
+>  }
+>  
+> +static struct lock_class_key cxl_root_key;
+> +
+> +static void cxl_acpi_lock_reset_class(void *_dev)
+> +{
+> +	struct device *dev = _dev;
+> +
+> +	device_lock_reset_class(dev);
+> +}
+> +
+>  static int cxl_acpi_probe(struct platform_device *pdev)
+>  {
+>  	int rc;
+> @@ -283,6 +292,12 @@ static int cxl_acpi_probe(struct platform_device *pdev)
+>  	struct acpi_device *adev = ACPI_COMPANION(host);
+>  	struct cxl_cfmws_context ctx;
+>  
+> +	device_lock_set_class(&pdev->dev, &cxl_root_key);
+> +	rc = devm_add_action_or_reset(&pdev->dev, cxl_acpi_lock_reset_class,
+> +				      &pdev->dev);
+> +	if (rc)
+> +		return rc;
+> +
+>  	root_port = devm_cxl_add_port(host, host, CXL_RESOURCE_NONE, NULL);
+>  	if (IS_ERR(root_port))
+>  		return PTR_ERR(root_port);
+> diff --git a/include/linux/device.h b/include/linux/device.h
+> index 93459724dcde..82c9d307e7bd 100644
+> --- a/include/linux/device.h
+> +++ b/include/linux/device.h
+> @@ -850,6 +850,31 @@ static inline bool device_supports_offline(struct device *dev)
+>  	return dev->bus && dev->bus->offline && dev->bus->online;
+>  }
+>  
+> +#define __device_lock_set_class(dev, name, key) \
+> +	lock_set_class(&(dev)->mutex.dep_map, name, key, 0, _THIS_IP_)
+> +
+> +/**
+> + * device_lock_set_class - Specify a temporary lock class while a device
+> + *			   is attached to a driver
+> + * @dev: device to modify
+> + * @key: lock class key data
+> + *
+> + * This must be called with the device_lock() already held, for example
+> + * from driver ->probe().
+> + */
+> +#define device_lock_set_class(dev, key)				\
+> +	__device_lock_set_class(dev, #key, key)
+> +
+> +/**
+> + * device_lock_reset_class - Return a device to the default lockdep novalidate state
+> + * @dev: device to modify
+> + *
+> + * This must be called with the device_lock() already held, for example
+> + * from driver ->remove().
+> + */
+> +#define device_lock_reset_class(dev) \
+> +	device_lock_set_class(dev, &__lockdep_no_validate__)
+> +
+>  void lock_device_hotplug(void);
+>  void unlock_device_hotplug(void);
+>  int lock_device_hotplug_sysfs(void);
+> 

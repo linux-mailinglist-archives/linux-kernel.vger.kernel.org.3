@@ -2,140 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4129B50B3C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2CBE50B394
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:06:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233614AbiDVJQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 05:16:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60776 "EHLO
+        id S1445901AbiDVJES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 05:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445900AbiDVJO7 (ORCPT
+        with ESMTP id S1445726AbiDVJDL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 05:14:59 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B0951E76
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 02:12:07 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id y19-20020a056e02119300b002c2d3ef05bfso4058155ili.18
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 02:12:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=vO2Cuxa4EB7u/Dij9OoFRHsqcLWpfFLkWXJuU8L5L9A=;
-        b=yqO8118SvfhmozOVyEmnVp5X2RyMK35kjNj1Mwd1lcmmr4ORSfKh1MhOOJqh56GR9u
-         oENZ1RvDavF8uFrZvwc77zlNS5dI7NTfRBteqgQ7G/sE3syeFVO5OKGh8x2wv1wcDLQZ
-         BpJjpqxpGiakeXaNufpFzm1aND/dK7boxxTXbxbrUxuO3hKwf6jawpZU8Hfu4fQJWsxm
-         bqIiyeRxnvrYyjm63Bq8gV2pacIfRJfnZ/JyYW5U2Q4N/IoYvQd5szE8fssmzp5DsI/z
-         N0B1YO4ZDnUFgVHr8QPkxE99ElgU5qpg8mT/tsJi4oCYky+fO3FJpNC6ozCXuhVpfHNH
-         qK7Q==
-X-Gm-Message-State: AOAM530aCe/aLi3Q8FrRMja/bpyj7Lx9e39QmTtLQ5W6v+7XpnL6n1MN
-        /SjS69Mw2kn+Ig+DNgJmCnM1Y5qaxKrNZs5Q/2khefUWbwB+
-X-Google-Smtp-Source: ABdhPJxxAfyF8/7WKDZQDWVL18t1Brcwf2NmDcgVC0u4SDyeW4RN0qI7twNUkMJ5dyhj4HZnVEJFKMz5mXoxDI2duJqVloj7G6NR
+        Fri, 22 Apr 2022 05:03:11 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9AA753708;
+        Fri, 22 Apr 2022 02:00:12 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Kl7d760Hmz1J9mD;
+        Fri, 22 Apr 2022 16:59:23 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 22 Apr 2022 17:00:11 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 22 Apr
+ 2022 17:00:10 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-hwmon@vger.kernel.org>
+CC:     <linux@roeck-us.net>, <jdelvare@suse.com>
+Subject: [PATCH 20/20] hwmon: (w83781d) check return value after calling platform_get_resource()
+Date:   Fri, 22 Apr 2022 17:12:07 +0800
+Message-ID: <20220422091207.4034406-21-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220422091207.4034406-1-yangyingliang@huawei.com>
+References: <20220422091207.4034406-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:da8e:0:b0:2cb:e08b:2b7b with SMTP id
- u14-20020a92da8e000000b002cbe08b2b7bmr1467036iln.165.1650618726451; Fri, 22
- Apr 2022 02:12:06 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 02:12:06 -0700
-In-Reply-To: <20220422070412.2714-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d995b605dd3a9e93@google.com>
-Subject: Re: [syzbot] kernel BUG in __filemap_get_folio
-From:   syzbot <syzbot+cf4cf13056f85dec2c40@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+It will cause null-ptr-deref if platform_get_resource() returns NULL,
+we need check the return value.
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-kernel BUG in __filemap_get_folio
+Fixes: 7666c13c627f ("hwmon/w83781d: No longer use i2c-isa")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/hwmon/w83781d.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
- free_contig_range+0xb1/0x180 mm/page_alloc.c:9418
- destroy_args+0xa8/0x646 mm/debug_vm_pgtable.c:1018
- debug_vm_pgtable+0x2a51/0x2ae3 mm/debug_vm_pgtable.c:1332
- do_one_initcall+0x103/0x650 init/main.c:1298
- do_initcall_level init/main.c:1371 [inline]
- do_initcalls init/main.c:1387 [inline]
- do_basic_setup init/main.c:1406 [inline]
- kernel_init_freeable+0x6b1/0x73a init/main.c:1613
- kernel_init+0x1a/0x1d0 init/main.c:1502
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
-------------[ cut here ]------------
-kernel BUG at mm/filemap.c:1972!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 4282 Comm: syz-executor.1 Not tainted 5.18.0-rc3-syzkaller-00007-g559089e0a93d-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:__filemap_get_folio+0xc65/0xf00 mm/filemap.c:1972
-Code: db 45 31 f6 e9 fd f5 ff ff 44 8b 6c 24 10 48 89 eb e9 f0 f5 ff ff e8 2a f2 d8 ff 48 c7 c6 80 d9 d5 89 48 89 df e8 6b 8d 0e 00 <0f> 0b e8 14 f2 d8 ff 48 89 df 31 db e8 4a af 03 00 e9 78 f7 ff ff
-RSP: 0018:ffffc900037b78b0 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffffea00017c8800 RCX: 0000000000000000
-RDX: ffff8880763fc140 RSI: ffffffff819f5bf5 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000018 R09: 00000000ffffffff
-R10: ffffffff891d5eec R11: 00000000ffffffff R12: 00000000000001c0
-R13: 0000000000000182 R14: 0000000000000000 R15: dffffc0000000000
-FS:  00007f807ec16700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fd7f356c058 CR3: 0000000078894000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- pagecache_get_page+0x2e/0x290 mm/folio-compat.c:126
- shmem_getpage_gfp+0x471/0x2370 mm/shmem.c:1812
- shmem_getpage mm/shmem.c:149 [inline]
- shmem_write_begin+0xff/0x1e0 mm/shmem.c:2446
- generic_perform_write+0x249/0x560 mm/filemap.c:3788
- __generic_file_write_iter+0x2aa/0x4d0 mm/filemap.c:3916
- generic_file_write_iter+0xd7/0x220 mm/filemap.c:3948
- call_write_iter include/linux/fs.h:2050 [inline]
- new_sync_write+0x38a/0x560 fs/read_write.c:504
- vfs_write+0x7c0/0xac0 fs/read_write.c:591
- ksys_write+0x127/0x250 fs/read_write.c:644
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f807da890e9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f807ec16168 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 00007f807db9bf60 RCX: 00007f807da890e9
-RDX: 000000000208e24b RSI: 0000000020000080 RDI: 0000000000000004
-RBP: 00007f807dae308d R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffcdf2c068f R14: 00007f807ec16300 R15: 0000000000022000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__filemap_get_folio+0xc65/0xf00 mm/filemap.c:1972
-Code: db 45 31 f6 e9 fd f5 ff ff 44 8b 6c 24 10 48 89 eb e9 f0 f5 ff ff e8 2a f2 d8 ff 48 c7 c6 80 d9 d5 89 48 89 df e8 6b 8d 0e 00 <0f> 0b e8 14 f2 d8 ff 48 89 df 31 db e8 4a af 03 00 e9 78 f7 ff ff
-RSP: 0018:ffffc900037b78b0 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffffea00017c8800 RCX: 0000000000000000
-RDX: ffff8880763fc140 RSI: ffffffff819f5bf5 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000018 R09: 00000000ffffffff
-R10: ffffffff891d5eec R11: 00000000ffffffff R12: 00000000000001c0
-R13: 0000000000000182 R14: 0000000000000000 R15: dffffc0000000000
-FS:  00007f807ec16700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f1a16b6c058 CR3: 0000000078894000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
-Tested on:
-
-commit:         559089e0 vmalloc: replace VM_NO_HUGE_VMAP with VM_ALLO..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-console output: https://syzkaller.appspot.com/x/log.txt?x=17b87e0cf00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=dd7c9a79dfcfa205
-dashboard link: https://syzkaller.appspot.com/bug?extid=cf4cf13056f85dec2c40
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=14add062f00000
+diff --git a/drivers/hwmon/w83781d.c b/drivers/hwmon/w83781d.c
+index b3579721265f..4fe6eec02570 100644
+--- a/drivers/hwmon/w83781d.c
++++ b/drivers/hwmon/w83781d.c
+@@ -1767,6 +1767,8 @@ w83781d_isa_probe(struct platform_device *pdev)
+ 
+ 	/* Reserve the ISA region */
+ 	res = platform_get_resource(pdev, IORESOURCE_IO, 0);
++	if (!res)
++		return -EINVAL;
+ 	if (!devm_request_region(&pdev->dev,
+ 				 res->start + W83781D_ADDR_REG_OFFSET, 2,
+ 				 "w83781d"))
+-- 
+2.25.1
 

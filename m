@@ -2,396 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7400650B71D
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 14:18:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 763E150B718
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 14:16:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447341AbiDVMVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 08:21:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42188 "EHLO
+        id S1447265AbiDVMTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 08:19:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447285AbiDVMVB (ORCPT
+        with ESMTP id S237402AbiDVMTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 08:21:01 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9798455222
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 05:18:06 -0700 (PDT)
-Received: from epcas3p4.samsung.com (unknown [182.195.41.22])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220422121802epoutp02408d5bc9707ddec6a40789b8b6f11607~oNyH677an3046530465epoutp02c
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 12:18:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220422121802epoutp02408d5bc9707ddec6a40789b8b6f11607~oNyH677an3046530465epoutp02c
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1650629882;
-        bh=rsCa61hE44w6ByVM4dSvf0XuZA9wqQ14iNuB+xJ97hw=;
-        h=Subject:Reply-To:From:To:Date:References:From;
-        b=MLVyh0YmvTolpReXn1xBKd6LB1yKOCypS9fRZhKgUBaXoIRxIWGLHjt71D1azCODo
-         NwNaWP3xFxA5zpi1n/hhOGWZW0qFfaEEEJVURyRoMeZTIHVmGQic0z+fcWtIX27Rih
-         FwvF5niS2KVnAaHNDyHD6daaTGzkqp4Xxcxrjv6w=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas3p4.samsung.com (KnoxPortal) with ESMTP id
-        20220422121801epcas3p47414609a6d991cb91e0e4cfd8c4bcf65~oNyGvpFbN1864618646epcas3p4M;
-        Fri, 22 Apr 2022 12:18:01 +0000 (GMT)
-Received: from epcpadp4 (unknown [182.195.40.18]) by epsnrtp4.localdomain
-        (Postfix) with ESMTP id 4KlD2K1X5tz4x9Q5; Fri, 22 Apr 2022 12:18:01 +0000
-        (GMT)
-Mime-Version: 1.0
-Subject: [PATCH] scsi: ufs: wb: Add Manual Flush sysfs and cleanup toggle
- functions
-Reply-To: j-young.choi@samsung.com
-Sender: Jinyoung CHOI <j-young.choi@samsung.com>
-From:   Jinyoung CHOI <j-young.choi@samsung.com>
-To:     ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        Daejun Park <daejun7.park@samsung.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <1891546521.01650629881201.JavaMail.epsvc@epcpadp4>
-Date:   Fri, 22 Apr 2022 21:14:52 +0900
-X-CMS-MailID: 20220422121452epcms2p19528693c66f4c2afaf685e30b2d27e10
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Hop-Count: 3
-X-CMS-RootMailID: 20220422120240epcms2p24bdcb416becf76b417f7c39006aa40f2
-References: <CGME20220422120240epcms2p24bdcb416becf76b417f7c39006aa40f2@epcms2p1>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 22 Apr 2022 08:19:19 -0400
+Received: from esa17.fujitsucc.c3s2.iphmx.com (esa17.fujitsucc.c3s2.iphmx.com [216.71.158.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4945521B
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 05:16:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
+  t=1650629787; x=1682165787;
+  h=from:to:subject:date:message-id:references:in-reply-to:
+   content-transfer-encoding:mime-version;
+  bh=zcyNsiYzrzPwOWVr7GnMwQu5U7CP82toT+6DDjYVma8=;
+  b=QDgPzln5Chfg1PhCW5A9JP6nvfcQWT+GcuVmQiPqZjoQtTeuAQLPNt0O
+   lIuG0C6bPJz1fMJLuqzI3F6/yrjtwhBzm5z4rI0v8Ebuo0YOtsQsRqyDI
+   T70sjkynqY922O7U8eT5S3zMZW1CPQ8Ydx7/eVFTsQp+KPTuoW7IkmiY9
+   8PFo2pV3wh1csya3FKv2nA267FOLQkB9JUbFS0fdIe+LRaGOX/5sZQBvc
+   5YYoRl3/HkA4Doojo2SkCmm8tecLBWwCY+7Yx+qszzLpb8oGsYYCS5PZM
+   9uasb/V2LjMIjrwbMVQs9TiukLaTrOkmas5747KpnLFZ17+kRcZICyP2u
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="54453808"
+X-IronPort-AV: E=Sophos;i="5.90,281,1643641200"; 
+   d="scan'208";a="54453808"
+Received: from mail-os0jpn01lp2105.outbound.protection.outlook.com (HELO JPN01-OS0-obe.outbound.protection.outlook.com) ([104.47.23.105])
+  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 21:16:22 +0900
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DDhuTqY2/XMdr93gEQUH0lCzOEtG1ggWerArt0lMSmRTYMSrwPDt2nxy8cPklitHeh+gyl6wHsa1p7a3CxzX25oSlJS6pFdjFc73n3jIOs04WHYS6Id8csScfd73kdjNjbEk5pgFrtYYrotJhbHglzRoo+lBHiBX8rieWXJf6QOwhnenBUjMWIjysjl8LJVUpULqrsQX6WOkFiwhgKAYI7X1ShbWe8MCaUQgxmDAUoanBvNDCeprEhPon8GeoYlYk4y38mHIgu8xK6nxIfA4+ZphETVfRdSH35TuBnOnV9z5MoaJfNb6Ih87oIQDB53lRRfkcpmTjAlc1Zbf2FOzLQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zcyNsiYzrzPwOWVr7GnMwQu5U7CP82toT+6DDjYVma8=;
+ b=fndCsdeq1BOKwEdZ8zSw4/IYWdM5hzIjRIdv5e73L5kH8lmaNIsD3qQth/iXmWyRZG4MmVc01I2aqFjPn4a86zQe9ZPalnC7sc94wUMqjVfCdP1qLwOslWdHfkpRIV6IAmYPZOUMB9aqQmFXjud6vfzsgqfk2oc4yWrt1P7ep/mxC8y6PCEjJ6lgb97Ar5YbOcVeo9glnrcEnOE5iMpjxSH5M9BMa3zs7tFFmZj80wuo5hn01ZZ53O1hdfShYg1H4ymQgr3K1q7LKOt0MgaaKtpucfE03a7sLh7IEPQXo5AY6QU/E3y/9NmoluRXP+vQH+587+WvpBAaJGQYppLEoA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
+ dkim=pass header.d=fujitsu.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=fujitsu.onmicrosoft.com; s=selector2-fujitsu-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zcyNsiYzrzPwOWVr7GnMwQu5U7CP82toT+6DDjYVma8=;
+ b=H3oAftZFhc5KLadiIZnykooa/ekNBAFHBJn/4f8uwYITP6stgyoYYzVDKekeThRzMki3dtt051VSmhqB+YJR4zkctj9DJm22X/4ZdVGUKNc16UalQEIayGRht7zamaG4PCR5gHAIaaW/WyaFv2T/ifN+qrPewnqw5/grpcX2fak=
+Received: from OSBPR01MB2037.jpnprd01.prod.outlook.com (2603:1096:603:25::17)
+ by OS0PR01MB5907.jpnprd01.prod.outlook.com (2603:1096:604:bd::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13; Fri, 22 Apr
+ 2022 12:16:18 +0000
+Received: from OSBPR01MB2037.jpnprd01.prod.outlook.com
+ ([fe80::382e:99b:f0f9:b18c]) by OSBPR01MB2037.jpnprd01.prod.outlook.com
+ ([fe80::382e:99b:f0f9:b18c%6]) with mapi id 15.20.5186.015; Fri, 22 Apr 2022
+ 12:16:18 +0000
+From:   "tarumizu.kohei@fujitsu.com" <tarumizu.kohei@fujitsu.com>
+To:     'Thomas Gleixner' <tglx@linutronix.de>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "fenghua.yu@intel.com" <fenghua.yu@intel.com>,
+        "reinette.chatre@intel.com" <reinette.chatre@intel.com>
+Subject: RE: [PATCH v3 7/9] x86: Add hardware prefetch control support for x86
+Thread-Topic: [PATCH v3 7/9] x86: Add hardware prefetch control support for
+ x86
+Thread-Index: AQHYVGMS5ZVzEyeIOE2a6l/c0xocPaz5YsWAgAJ4j6A=
+Date:   Fri, 22 Apr 2022 12:16:18 +0000
+Message-ID: <OSBPR01MB2037FFD9250ED3E075E2778080F79@OSBPR01MB2037.jpnprd01.prod.outlook.com>
+References: <20220420030223.689259-1-tarumizu.kohei@fujitsu.com>
+ <20220420030223.689259-8-tarumizu.kohei@fujitsu.com> <87czhbtmpu.ffs@tglx>
+In-Reply-To: <87czhbtmpu.ffs@tglx>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fujitsu.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 787dcd37-f4ee-41c1-7135-08da2459e7a1
+x-ms-traffictypediagnostic: OS0PR01MB5907:EE_
+x-microsoft-antispam-prvs: <OS0PR01MB5907C2A897033D2EFE7DA39580F79@OS0PR01MB5907.jpnprd01.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: cpnapM9dzKWB6IlIbYkOnnnEepEEjFB2s2gK5LOvK+qlM/RJSH4NjBOfJHdZwOIyWXCEdu4vZVuEls0b899cRy9lDgnVNK3jLM8DzMyNTxUKS8qa+9AkzOGG5QEaKh2QkecO8kroXr8aXxkxCRp38B4ehccLumuDKsYhZX+4FbxyvbSV1e2+WxECleUdTxFL/ArtbCzibhfEBatOApRHGC49cz4Yug1Hay15TNq+BPI73OAyJzktQOvHK3iFm8UuG9KSbZ6M8BGn+gcZF+4+U6WaCpQCXK7V3ufbJoLBq/XA6ROG48UCxNtf1YNgJFGNfx/pnG0t6SfAnoZvMUJ33V9U/gQ54dPYig2dNc8Evw5uHSWdqkWgOUIS2vTY9PQoTJplw2yckG6rUhSwBgACCYbc5ZRpqqqcGmlMrX0psUfQumoh+UR9lHwd0F/LXSXW8HUi2q+/wT+U098/qckleC8mS9kzUR3vDS1jSuhSG6UAJ5F1tbcn5UuJRKnl/G8rBYR2VsFM37yy3yaXawIbfHgVTfi2Pru7ez3203fHYX6FuwfgBPHWfhQw1oz6mX2n26WGNfOV6JGq/74MIX2QbV7bYBpk6O+bUT8xX0O5AjReaaP2/y63jJWW57lwEgYLYIP0jabCFjn4oXAHTeyfqS919bBWykLhI1mZmyQAE/bDN06xOrnfO0nFmQecr0g0OVz7EmkGZqbDv4aWLvxlFdymIyTJgPUEBc3MWjIr3Zg=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSBPR01MB2037.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(85182001)(186003)(316002)(82960400001)(110136005)(38070700005)(921005)(122000001)(33656002)(8936002)(7416002)(7696005)(55016003)(38100700002)(6506007)(2906002)(52536014)(5660300002)(26005)(76116006)(66556008)(66476007)(66446008)(8676002)(64756008)(66946007)(9686003)(71200400001)(508600001)(86362001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-2022-jp?B?WlA2cHhONHJiRFAwanUvME42cjk3dllReDcwN1E0ZnhkMGtsSld1MWJO?=
+ =?iso-2022-jp?B?eE9yZkY2bUxJcWJIeHhNbzM5blpZWnhmZUtWZkJiNXpjNVZmcnFRek9j?=
+ =?iso-2022-jp?B?ajc1QkNPYy93eUZ2MXlGa0dGNGwreXJKb0dNTU41QXgxcHp1dW9mSnVX?=
+ =?iso-2022-jp?B?d0M4amZkRkRtYVBFVXBMQ090YW1JdlNuZ2ZKdFhjY2xjNm5BamszWCtU?=
+ =?iso-2022-jp?B?d0tBV0FIYVJRVG9rWGl4MWlmMExuYSs0aUdOdVBuQXRFQmR4SWtkUmxJ?=
+ =?iso-2022-jp?B?dFVZYUNsek0zRjZoZXVpa2x1aW1YajhDVU15UjBidyt6VlFRNFp2RkVt?=
+ =?iso-2022-jp?B?OCthQW5tNDFXRXJKR3lDd1owU0VLNkdUQ005ZzNiY05xUm0xakZMaEM3?=
+ =?iso-2022-jp?B?N0d6ekdKZjJIaDFyc1FLTFZrcHBaSzZPbzNDTnZISUtkcmNOT1Y2RllP?=
+ =?iso-2022-jp?B?MTdvZDlxRVU4dnVtUlNYbUhFU2t1OGsxUWdMZXJsNzhLbW16T2dOWlFP?=
+ =?iso-2022-jp?B?US80dDlwV0VVM0xCSzFKTE1McFJZaWg0NUI0YXdCWm1uZjZ3OGtIcVpz?=
+ =?iso-2022-jp?B?OVRubGFlYjFQOHkrN2hLb0FCT00xcXFrVzZKa0dPTGwvWkthSUgxRzR1?=
+ =?iso-2022-jp?B?SmVJYXBvNkxyRk9YZExHd2wvblYzM01KdkVpdEZ0K25sTXp5YmRCcmQy?=
+ =?iso-2022-jp?B?UVQ5MFBaUlBLSlR6bm9ydnNOTk8yTnhvSDRSUm1xTHJQWXMzeTdrcW0x?=
+ =?iso-2022-jp?B?WDZDWWFOTGFaTXpPNUo3RG8rWHVJYkx5WlRIaHROWXJ1aGRZd0lPTVdn?=
+ =?iso-2022-jp?B?RE9XRXNvUkhPbGFUWmZlbHdmZEE5NnJ4OExvRFByeDlEZzhnQUxTcGJh?=
+ =?iso-2022-jp?B?bDJlK1VBOGdRaVJ5amJTVEw5SnVrZXNDdk1yU014QU9VSmZ6NTY0SDVB?=
+ =?iso-2022-jp?B?MG1DLy9oS0MxZUYxME43eE55ODJVWDFWcDVkaTNFM2V1dENkSGZJVDdT?=
+ =?iso-2022-jp?B?dkgzWmsxRFkwSm5DcThPSTlxeHd5NHJrS0FmL09vZUtkbSt4bVdXVndj?=
+ =?iso-2022-jp?B?WHNBM0hYSEJ1dkVrVjd1aURWbndXQlpkcSsrMFZDQk1FWHQ1bUNEYzN4?=
+ =?iso-2022-jp?B?OXNhd3E4U1hYNTZuQUxyRmE4T0xKS2V0VjdBbTM0azU3anM3VnI2YXdK?=
+ =?iso-2022-jp?B?cDBLenViZlRyclZITTJXZHNwOTNiMGlRdVVQWGRLTExmd3RJYUtZeHJY?=
+ =?iso-2022-jp?B?UEYyaU9wRzNyekoyUEVEc01objRzYXNkTHI1ek9PYm9vK0RpVDc5U0FR?=
+ =?iso-2022-jp?B?YVBTRXhRYzNvWHRyVEVESTNUTHZCcExNcEw2NVVGb2pFdERWU1pmZlhV?=
+ =?iso-2022-jp?B?ZXU3VGE5bG85cFc5NEduQVJBQm5BWi9KZGQzYVBLZ1U1YzM3Z0N3MWJa?=
+ =?iso-2022-jp?B?Z0dZcjhRWVdhUFlVOUlUZGZqWWVBbDg3MEs3cTZpem02bDU1UlRLRlc3?=
+ =?iso-2022-jp?B?RXZSWDMzbUJOclI3NkM1RnFuU2VmUFpwMmtvOE04bzN5Rko3V0FyNlVD?=
+ =?iso-2022-jp?B?b0xiT1YxYkJEM3NKaGt1NkhPVkJ2VnRnUHpZQm5mbUtYS0hmYTdBU1RO?=
+ =?iso-2022-jp?B?YmxKY1ArRUpXR04yVVcxNHZlOG1CS0RGcGZnbnB6ODV0WG4xcUNPRzRh?=
+ =?iso-2022-jp?B?SXN2dWdCdkxXRWhyS1ZPeVRtZmpzbUYvMjBxVjRNa1RyNSttWmRKUWJy?=
+ =?iso-2022-jp?B?OXdlMUhXTWZXcHRTdldMemorREFib1oyeHlKaTZ4Mndmek02WncycVEx?=
+ =?iso-2022-jp?B?TlZqWWtDSWM1RHhMK0dSc1JzbHNObGF1Vnk1RXVWWGtIY1ZpazFWaVB3?=
+ =?iso-2022-jp?B?bXNvRnlwYVhSOG80TFc1OU5wR2x6VmNXc1lQMSt1NDJ0RWxHelluTTFm?=
+ =?iso-2022-jp?B?cVQ3QzV2bytQYWRybDUrVFZ1WkdaZEVTcUtITTVkR2pFMjdJODZFS3NG?=
+ =?iso-2022-jp?B?ZlRKYkl3NEk5TXZXUUdwakxrTGJ2bFRvMmg3QTV5U0FjRzMvaTBhWW1X?=
+ =?iso-2022-jp?B?RlV4RjlmOWJnclVzU0xkV1JudGx4c1VDaEl5d1JaM3NYTm53Z05jQ1pB?=
+ =?iso-2022-jp?B?bTlCODZsUGY0bnF2aThjQ2NNcjVFUEhTZnNDN0NGY0Z5blpkOWlXTzEv?=
+ =?iso-2022-jp?B?UTVBenFDNDd2bXd6cTRJMlRBTDU0TG5RY2JXSDB0akJ5U3VoVVBqR21P?=
+ =?iso-2022-jp?B?OURCM2JWQVVmQ29rNTA1OHEvVDYzRVlEZ216eFQwbzI3aUwzZHVjd3NT?=
+ =?iso-2022-jp?B?SDRPUEduTS84NEhscm5yemVzZTQxRkE0eTJIZzcrY1NzNklucGJkRitv?=
+ =?iso-2022-jp?B?d1dXbGUraE1YOWVIUFhrYXA0UTdMaE1tblJYTEJ6dlVHQTBkeGN4OHYw?=
+ =?iso-2022-jp?B?Yk56NC8zQnBLZnVOYU1hbG5sMzVobUU3SzYvL2N6UnczVkdxU3Myb1lh?=
+ =?iso-2022-jp?B?TXlZWjZ5WDVnelAvYkJqcVVLdU91V3VLRUFBZHNGaFRncU9xdXJ0ZEpJ?=
+ =?iso-2022-jp?B?VDJ2UEdTdz0=?=
+Content-Type: text/plain; charset="iso-2022-jp"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: fujitsu.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OSBPR01MB2037.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 787dcd37-f4ee-41c1-7135-08da2459e7a1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Apr 2022 12:16:18.2996
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: KRp8PGww4tsAT3YMqoYNM9j1zawJr5m07cZu1WusLx69bnyaho54Z5RyUBwgy1EGV6LCKoEPRn7HT55rScnS//rkaLGsNa87VuWiWeH65mc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS0PR01MB5907
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is the following quirk to bypass "WB Manual Flush" in Write
-Booster.
+> Prefetch control is supported on a lot of CPU models and all except Xeon =
+PHI have
+> the same MSR layout. ATOMs do not support L2_ACL and DCU_IP, but that's i=
+t. So
+> there is absolutely nothing broadwell specific here.
+>=20
+> Why do we need six explicit functions, which are pretty much copy and pas=
+te?
 
-  - UFSHCD_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL
+There is no special reason for them. My design was not good.
 
-If this quirk is not set, there is no knob that can controll "WB Manual Flush".
+> The only difference is the bit they operate on. It's just a matter of pro=
+per wrapper
+> structs.
+>=20
+> See? One show() and one store() function which operates directly at the a=
+ttribute
+> level and supports all known variants of bits in the control MSR. No magi=
+c global
+> constants, no visible management, no hardcoded type/level relations... Si=
+mple
+> and straight forward.
+>=20
+> All what the core code needs to do is to populate the attributes in the
+> sys/.../cache/index$N/ directories when level and type matches.
+>=20
+> I'm pretty sure you can simplify the A64FX code in a very similar way.
 
-	There are three flags that control Write Booster Feature.
-		1. WB ON/OFF
-		2. WB Hibern Flush ON/OFF
-		3. WB Flush ON/OFF
-
-	The sysfs that controls the WB was implemented. (1)
-
-	In the case of "Hibern Flush", it is always good to turn on.
-	Control may not be required. (2)
-
-	Finally, "Manual flush" may be determined that it can affect
-	performance or power consumption.
-	So the sysfs that controls this may be necessary. (3)
-
-In addition, toggle functions for controlling the above flags are cleaned.
-
-Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
----
- drivers/scsi/ufs/ufs-sysfs.c | 46 ++++++++++++++++++-
- drivers/scsi/ufs/ufs.h       |  2 +-
- drivers/scsi/ufs/ufshcd.c    | 86 +++++++++++++++++-------------------
- drivers/scsi/ufs/ufshcd.h    |  7 +++
- 4 files changed, 94 insertions(+), 47 deletions(-)
-
-diff --git a/drivers/scsi/ufs/ufs-sysfs.c b/drivers/scsi/ufs/ufs-sysfs.c
-index 5c405ff7b6ea..6bbb56152708 100644
---- a/drivers/scsi/ufs/ufs-sysfs.c
-+++ b/drivers/scsi/ufs/ufs-sysfs.c
-@@ -229,7 +229,7 @@ static ssize_t wb_on_store(struct device *dev, struct device_attribute *attr,
- 		 * If the platform supports UFSHCD_CAP_CLK_SCALING, turn WB
- 		 * on/off will be done while clock scaling up/down.
- 		 */
--		dev_warn(dev, "To control WB through wb_on is not allowed!\n");
-+		dev_warn(dev, "To control Write Booster is not allowed!\n");
- 		return -EOPNOTSUPP;
- 	}
- 
-@@ -253,6 +253,48 @@ static ssize_t wb_on_store(struct device *dev, struct device_attribute *attr,
- 	return res < 0 ? res : count;
- }
- 
-+static ssize_t wb_flush_on_show(struct device *dev,
-+				struct device_attribute *attr,
-+				char *buf)
-+{
-+	struct ufs_hba *hba = dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "%d\n", hba->dev_info.wb_flush_enabled);
-+}
-+
-+static ssize_t wb_flush_on_store(struct device *dev,
-+				 struct device_attribute *attr,
-+				 const char *buf, size_t count)
-+{
-+	struct ufs_hba *hba = dev_get_drvdata(dev);
-+	unsigned int wb_flush_enable;
-+	ssize_t res;
-+
-+	if (!ufshcd_is_wb_flush_allowed(hba)) {
-+		dev_warn(dev, "To control WB Flush is not allowed!\n");
-+		return -EOPNOTSUPP;
-+	}
-+
-+	if (kstrtouint(buf, 0, &wb_flush_enable))
-+		return -EINVAL;
-+
-+	if (wb_flush_enable != 0 && wb_flush_enable != 1)
-+		return -EINVAL;
-+
-+	down(&hba->host_sem);
-+	if (!ufshcd_is_user_access_allowed(hba)) {
-+		res = -EBUSY;
-+		goto out;
-+	}
-+
-+	ufshcd_rpm_get_sync(hba);
-+	res = ufshcd_wb_toggle_flush(hba, wb_flush_enable);
-+	ufshcd_rpm_put_sync(hba);
-+out:
-+	up(&hba->host_sem);
-+	return res < 0 ? res : count;
-+}
-+
- static DEVICE_ATTR_RW(rpm_lvl);
- static DEVICE_ATTR_RO(rpm_target_dev_state);
- static DEVICE_ATTR_RO(rpm_target_link_state);
-@@ -261,6 +303,7 @@ static DEVICE_ATTR_RO(spm_target_dev_state);
- static DEVICE_ATTR_RO(spm_target_link_state);
- static DEVICE_ATTR_RW(auto_hibern8);
- static DEVICE_ATTR_RW(wb_on);
-+static DEVICE_ATTR_RW(wb_flush_on);
- 
- static struct attribute *ufs_sysfs_ufshcd_attrs[] = {
- 	&dev_attr_rpm_lvl.attr,
-@@ -271,6 +314,7 @@ static struct attribute *ufs_sysfs_ufshcd_attrs[] = {
- 	&dev_attr_spm_target_link_state.attr,
- 	&dev_attr_auto_hibern8.attr,
- 	&dev_attr_wb_on.attr,
-+	&dev_attr_wb_flush_on.attr,
- 	NULL
- };
- 
-diff --git a/drivers/scsi/ufs/ufs.h b/drivers/scsi/ufs/ufs.h
-index 4a00c24a3209..6c85f512f82f 100644
---- a/drivers/scsi/ufs/ufs.h
-+++ b/drivers/scsi/ufs/ufs.h
-@@ -611,7 +611,7 @@ struct ufs_dev_info {
- 
- 	/* UFS WB related flags */
- 	bool    wb_enabled;
--	bool    wb_buf_flush_enabled;
-+	bool    wb_flush_enabled;
- 	u8	wb_dedicated_lu;
- 	u8      wb_buffer_type;
- 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 3f9caafa91bf..7bd510582471 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -249,7 +249,6 @@ static inline int ufshcd_config_vreg_hpm(struct ufs_hba *hba,
- 					 struct ufs_vreg *vreg);
- static int ufshcd_try_to_abort_task(struct ufs_hba *hba, int tag);
- static void ufshcd_wb_toggle_flush_during_h8(struct ufs_hba *hba, bool set);
--static inline void ufshcd_wb_toggle_flush(struct ufs_hba *hba, bool enable);
- static void ufshcd_hba_vreg_set_lpm(struct ufs_hba *hba);
- static void ufshcd_hba_vreg_set_hpm(struct ufs_hba *hba);
- 
-@@ -269,7 +268,7 @@ static inline void ufshcd_disable_irq(struct ufs_hba *hba)
- 	}
- }
- 
--static inline void ufshcd_wb_config(struct ufs_hba *hba)
-+static void ufshcd_wb_set_default_flags(struct ufs_hba *hba)
- {
- 	if (!ufshcd_is_wb_allowed(hba))
- 		return;
-@@ -277,7 +276,7 @@ static inline void ufshcd_wb_config(struct ufs_hba *hba)
- 	ufshcd_wb_toggle(hba, true);
- 
- 	ufshcd_wb_toggle_flush_during_h8(hba, true);
--	if (!(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL))
-+	if (ufshcd_is_wb_flush_allowed(hba))
- 		ufshcd_wb_toggle_flush(hba, true);
- }
- 
-@@ -608,7 +607,7 @@ static void ufshcd_device_reset(struct ufs_hba *hba)
- 		ufshcd_set_ufs_dev_active(hba);
- 		if (ufshcd_is_wb_allowed(hba)) {
- 			hba->dev_info.wb_enabled = false;
--			hba->dev_info.wb_buf_flush_enabled = false;
-+			hba->dev_info.wb_flush_enabled = false;
- 		}
- 	}
- 	if (err != -EOPNOTSUPP)
-@@ -5689,74 +5688,70 @@ static void ufshcd_temp_exception_event_handler(struct ufs_hba *hba, u16 status)
- 	 */
- }
- 
--static int __ufshcd_wb_toggle(struct ufs_hba *hba, bool set, enum flag_idn idn)
-+static int __ufshcd_wb_toggle(struct ufs_hba *hba, const char *knob,
-+			      bool set, enum flag_idn idn)
- {
-+	int ret;
- 	u8 index;
- 	enum query_opcode opcode = set ? UPIU_QUERY_OPCODE_SET_FLAG :
--				   UPIU_QUERY_OPCODE_CLEAR_FLAG;
-+		UPIU_QUERY_OPCODE_CLEAR_FLAG;
-+
-+	if (!ufshcd_is_wb_allowed(hba))
-+		return -EPERM;
- 
- 	index = ufshcd_wb_get_query_index(hba);
--	return ufshcd_query_flag_retry(hba, opcode, idn, index, NULL);
-+
-+	ret = ufshcd_query_flag_retry(hba, opcode, idn, index, NULL);
-+	if (ret) {
-+		dev_err(hba->dev, "%s: %s %s failed %d\n",
-+			__func__, knob, set ? "enable" : "disable", ret);
-+		return ret;
-+	}
-+
-+	dev_dbg(hba->dev, "%s: %s %s\n",
-+		 __func__, knob, set ? "enabled" : "disabled");
-+
-+	return ret;
- }
- 
- int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable)
- {
- 	int ret;
- 
--	if (!ufshcd_is_wb_allowed(hba))
-+	if (hba->dev_info.wb_enabled == enable)
- 		return 0;
- 
--	if (!(enable ^ hba->dev_info.wb_enabled))
--		return 0;
--
--	ret = __ufshcd_wb_toggle(hba, enable, QUERY_FLAG_IDN_WB_EN);
--	if (ret) {
--		dev_err(hba->dev, "%s Write Booster %s failed %d\n",
--			__func__, enable ? "enable" : "disable", ret);
-+	ret = __ufshcd_wb_toggle(hba, "Write Booster", enable,
-+				 QUERY_FLAG_IDN_WB_EN);
-+	if (ret)
- 		return ret;
--	}
- 
- 	hba->dev_info.wb_enabled = enable;
--	dev_info(hba->dev, "%s Write Booster %s\n",
--			__func__, enable ? "enabled" : "disabled");
- 
- 	return ret;
- }
- 
--static void ufshcd_wb_toggle_flush_during_h8(struct ufs_hba *hba, bool set)
-+static void ufshcd_wb_toggle_flush_during_h8(struct ufs_hba *hba, bool enable)
- {
--	int ret;
--
--	ret = __ufshcd_wb_toggle(hba, set,
--			QUERY_FLAG_IDN_WB_BUFF_FLUSH_DURING_HIBERN8);
--	if (ret) {
--		dev_err(hba->dev, "%s: WB-Buf Flush during H8 %s failed: %d\n",
--			__func__, set ? "enable" : "disable", ret);
--		return;
--	}
--	dev_dbg(hba->dev, "%s WB-Buf Flush during H8 %s\n",
--			__func__, set ? "enabled" : "disabled");
-+	__ufshcd_wb_toggle(hba, "WB-Buf Flush during H8", enable,
-+			   QUERY_FLAG_IDN_WB_BUFF_FLUSH_DURING_HIBERN8);
- }
- 
--static inline void ufshcd_wb_toggle_flush(struct ufs_hba *hba, bool enable)
-+int ufshcd_wb_toggle_flush(struct ufs_hba *hba, bool enable)
- {
- 	int ret;
- 
--	if (!ufshcd_is_wb_allowed(hba) ||
--	    hba->dev_info.wb_buf_flush_enabled == enable)
--		return;
-+	if (hba->dev_info.wb_flush_enabled == enable)
-+		return 0;
- 
--	ret = __ufshcd_wb_toggle(hba, enable, QUERY_FLAG_IDN_WB_BUFF_FLUSH_EN);
--	if (ret) {
--		dev_err(hba->dev, "%s WB-Buf Flush %s failed %d\n", __func__,
--			enable ? "enable" : "disable", ret);
--		return;
--	}
-+	ret = __ufshcd_wb_toggle(hba, "WB-Buf Flush", enable,
-+				 QUERY_FLAG_IDN_WB_BUFF_FLUSH_EN);
-+	if (ret)
-+		return ret;
- 
--	hba->dev_info.wb_buf_flush_enabled = enable;
-+	hba->dev_info.wb_flush_enabled = enable;
- 
--	dev_dbg(hba->dev, "%s WB-Buf Flush %s\n",
--			__func__, enable ? "enabled" : "disabled");
-+	return ret;
- }
- 
- static bool ufshcd_wb_presrv_usrspc_keep_vcc_on(struct ufs_hba *hba,
-@@ -5790,7 +5785,7 @@ static bool ufshcd_wb_presrv_usrspc_keep_vcc_on(struct ufs_hba *hba,
- 
- static void ufshcd_wb_force_disable(struct ufs_hba *hba)
- {
--	if (!(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL))
-+	if (ufshcd_is_wb_flush_allowed(hba))
- 		ufshcd_wb_toggle_flush(hba, false);
- 
- 	ufshcd_wb_toggle_flush_during_h8(hba, false);
-@@ -8178,7 +8173,8 @@ static int ufshcd_probe_hba(struct ufs_hba *hba, bool init_dev_params)
- 	 */
- 	ufshcd_set_active_icc_lvl(hba);
- 
--	ufshcd_wb_config(hba);
-+	ufshcd_wb_set_default_flags(hba);
-+
- 	if (hba->ee_usr_mask)
- 		ufshcd_write_ee_control(hba);
- 	/* Enable Auto-Hibernate if configured */
-diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-index 94f545be183a..abd2be248dc5 100644
---- a/drivers/scsi/ufs/ufshcd.h
-+++ b/drivers/scsi/ufs/ufshcd.h
-@@ -991,6 +991,12 @@ static inline bool ufshcd_is_wb_allowed(struct ufs_hba *hba)
- 	return hba->caps & UFSHCD_CAP_WB_EN;
- }
- 
-+static inline bool ufshcd_is_wb_flush_allowed(struct ufs_hba *hba)
-+{
-+	return ufshcd_is_wb_allowed(hba) &&
-+		!(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL);
-+}
-+
- static inline bool ufshcd_is_user_access_allowed(struct ufs_hba *hba)
- {
- 	return !hba->shutting_down;
-@@ -1209,6 +1215,7 @@ int ufshcd_exec_raw_upiu_cmd(struct ufs_hba *hba,
- 			     enum query_opcode desc_op);
- 
- int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable);
-+int ufshcd_wb_toggle_flush(struct ufs_hba *hba, bool enable);
- int ufshcd_suspend_prepare(struct device *dev);
- int __ufshcd_suspend_prepare(struct device *dev, bool rpm_ok_for_spm);
- void ufshcd_resume_complete(struct device *dev);
--- 
-2.25.1
+Thank you for showing me a concrete example. The implementation image
+is now clear. With this in mind, I would like to simplify the core,
+x86 and A64FX codes.

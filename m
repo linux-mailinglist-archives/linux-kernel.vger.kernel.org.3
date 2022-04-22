@@ -2,130 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 877AE50B386
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:06:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99FFE50B3C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445859AbiDVJI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 05:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58292 "EHLO
+        id S1445772AbiDVJJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 05:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445932AbiDVJIQ (ORCPT
+        with ESMTP id S1356741AbiDVJJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 05:08:16 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2053.outbound.protection.outlook.com [40.107.220.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA79F1BE8A;
-        Fri, 22 Apr 2022 02:05:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=idXacIBnsTVktAYEn9rZ3bu3efxkRv5ISt53jxay4VgDOpCGYum7Zwza+5F0LuarZg8aHFHYF7nYiXAWHrA5gWeDpQSlm79jJnQlNtjKG0o+vF9XZ8cClPe3mnD7JUMujrH6S5wFZ8VvFeOeQieXHlndbU2fJgI/H0b+djGSHZuvbfVvHVamg4S9fxWgxOMqdSZ7h/Cq5hnGcTmVMRA8Nos2XXIcvGOjaJ6yO/XFM+85kGiNAJSgTnhbkVliceQXAGt7zhSm5i4bX5ot8amzPhkW0jR/eIKXnKxMFmK6NaOkUwebL078Gxne4Lq3VQ8qJcKl3tbqvMsrVKlyHpDiqg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ChbCZlz1zXLGw8gJ2ngpGKLZFlZdvmW4UDQzdNcXv4c=;
- b=WawozKwDZD0fqJ/NVmmikq+TtOfSmAf1knkGKp2xcqKEWoOw4ciejoXsX+SYkd7h+rH8IvK1RJJ9/HAopl5wAlhwmfHsUG9GceykkkYKXWRoup/0EvrAJZs9/yN8Z44UwfwEJ1cqMNjbbivGvMSj0XsGERyc4DIWch7qDmT4QY/NRd9nBxPL7NgF0C8TjAZzjeKxO/d/eGJRUDHFGkVk297u2ijAmH7ApSDN4PoZZeUcm2cjiKOI3y/hJcDl8nw/CerN5eN+RTvOyikfCObXeja6JKgujJ6HTjLP3LtMuaFT0fgDjtIEvdP8K9d4aQJj9q94L5gvaQyfUWPS4zSXcA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.234) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ChbCZlz1zXLGw8gJ2ngpGKLZFlZdvmW4UDQzdNcXv4c=;
- b=H50ixjmvKC+V0WyBjxE9l2fbkMbWoYvVAd+KXjTwYr+gg7X0gs6kk1fvTxDlVlv/KgqJXpwFOU2kTTy6In6H5lq7qsx649zPGY3jRhygtjlIHKpZg6cTPacbfs6lWC75sEq+BJqRbMesDKiMVgTxMaRECYN5uoYEm7bwOEmXDfnHWBTHM1VUynbqkmr7c2iWr8ggXsKTOUMXpxZ9576EEbVC3eCkA9BEHyE2tpoDnLrPKbu65ikFbeZySe3M6/yquYN5STjq41y4lCM+KDe5u343j7CXgZu7JZZD2raJdF1QSs8W0A2rwDG4YVDlaVuyHghCK9gOl8or+4fJtPLjZg==
-Received: from MW4PR04CA0277.namprd04.prod.outlook.com (2603:10b6:303:89::12)
- by BN8PR12MB3204.namprd12.prod.outlook.com (2603:10b6:408:9d::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Fri, 22 Apr
- 2022 09:05:18 +0000
-Received: from CO1NAM11FT036.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:89:cafe::47) by MW4PR04CA0277.outlook.office365.com
- (2603:10b6:303:89::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15 via Frontend
- Transport; Fri, 22 Apr 2022 09:05:18 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.234; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.234) by
- CO1NAM11FT036.mail.protection.outlook.com (10.13.174.124) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5186.14 via Frontend Transport; Fri, 22 Apr 2022 09:05:18 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- DRHQMAIL101.nvidia.com (10.27.9.10) with Microsoft SMTP Server (TLS) id
- 15.0.1497.32; Fri, 22 Apr 2022 09:05:17 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 22 Apr 2022 02:05:17 -0700
-Received: from ldewangan-ubuntu.nvidia.com (10.127.8.13) by mail.nvidia.com
- (10.126.190.180) with Microsoft SMTP Server id 15.2.986.22 via Frontend
- Transport; Fri, 22 Apr 2022 02:05:15 -0700
-From:   Laxman Dewangan <ldewangan@nvidia.com>
-To:     <masahiroy@kernel.org>, <michal.lkml@markovi.net>,
-        <ndesaulniers@google.com>
-CC:     <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Laxman Dewangan" <ldewangan@nvidia.com>
-Subject: [PATCH V1 1/1] scripts/Kbuild: Add path of fixeddep script
-Date:   Fri, 22 Apr 2022 14:35:05 +0530
-Message-ID: <20220422090505.551472-1-ldewangan@nvidia.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 22 Apr 2022 05:09:01 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41CD451E6F
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 02:06:04 -0700 (PDT)
+Received: from mail-wm1-f49.google.com ([209.85.128.49]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N1gac-1nsqjS1Ud6-0122Ki for <linux-kernel@vger.kernel.org>; Fri, 22 Apr
+ 2022 11:06:02 +0200
+Received: by mail-wm1-f49.google.com with SMTP id v64-20020a1cac43000000b0038cfd1b3a6dso7508456wme.5
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 02:06:02 -0700 (PDT)
+X-Gm-Message-State: AOAM532LFtIDIdVx+YIwRvHce/9bdOE1JicttUh8UOdob6HWiy0sWPK9
+        8xC4/XMebIbitilN0+gaJtXlbfpM+TICk5fVchY=
+X-Google-Smtp-Source: ABdhPJyBJy68LeWxoCtkZpxUNMy01/6v++E4fqe+8tuCDM/CbPdYU7ohbVixofosAP/W+Pe5EImxDo7fKgPauiW5gWg=
+X-Received: by 2002:a7b:ce15:0:b0:38e:b7b0:79be with SMTP id
+ m21-20020a7bce15000000b0038eb7b079bemr3153470wmc.71.1650618361979; Fri, 22
+ Apr 2022 02:06:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ccbd15f4-8acc-4ae8-b7cf-08da243f38f6
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3204:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR12MB3204327E6EC4E6839305882AD5F79@BN8PR12MB3204.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nvioYB/Z1E+4YDtBFDG+G2S9e0fmGEYEDtxzaBqmN+SCPsewHJOlKtQB4g2x1P7raEZUQwkvlJJcsfa6SQ0prETYdTXevjXPoycHhIONA0RPh9fD+MTBaSo0lRxbFpfA33HEhvAGrabnHIVqi+9AncA9JDbLF2rFUiStgXhKD6jxVruq2grm/+JHQRujNknQ8caoKfEsvIVZFxHbxYzjAM/jRqpPIwrpMGCAzvObQduOJUBa2cLLtpw/8v3hV0p9pIDOdWbZhq0gYlU3WJ5u+dvZDGDMlqoRdF1NFiXaMhjHRJS5xkiUV0hxEz995irbz3uoH5UpTVyeSaqWNgiqv9BCgs7O4O19YHZk9qrpR/DNg6vFw5v5UTLhJ8RN3/7Yi7kfiNR/YH3ygb18jMndCNO1NS/AIEyXRxKJltvluQtTU7t/GNwDKbk4RT1GaSGeZwiA3a51Yn6z7bELiGuMzpe/XQDj3i1mK0CI+3FNIChOANUiqzWgY0qQsBz/ngC8qegssuJWMQfMEfRkdOXAskPQ51qTidMW1bUgWXswKgEBOB+zEltug88YG4LMn0rTdC++j7nXAiBWzpX9/TzTgDn4LKVi5PIg/m9fhSw3wE00vy/aYlY0S56qK4TC148ZGAOcS/iqIZzJLehSLw5h4Ny4E1PuEusDf8yjemNXfYY4oYCfG4Kz+dh0FQpAB3y4LgcIs58+jW47sxDJCjudp4z1mEfVafLA/hP87AiOMi4=
-X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(8936002)(70206006)(110136005)(4326008)(6666004)(1076003)(70586007)(316002)(2616005)(107886003)(54906003)(356005)(4744005)(508600001)(81166007)(426003)(8676002)(36860700001)(40460700003)(2906002)(36756003)(186003)(82310400005)(86362001)(7696005)(47076005)(26005)(336012)(83380400001)(5660300002)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2022 09:05:18.2329
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ccbd15f4-8acc-4ae8-b7cf-08da243f38f6
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT036.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3204
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220204072234.304543-1-joel@jms.id.au> <20220204072234.304543-2-joel@jms.id.au>
+ <YmJPRPhfA4Cki85S@kroah.com>
+In-Reply-To: <YmJPRPhfA4Cki85S@kroah.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 22 Apr 2022 11:05:46 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0G_xNQ6b2e71VXPVi+-j5L--SU37gFErwGYuh1QPrr1A@mail.gmail.com>
+Message-ID: <CAK8P3a0G_xNQ6b2e71VXPVi+-j5L--SU37gFErwGYuh1QPrr1A@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] firmware: Add boot information to sysfs
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Joel Stanley <joel@jms.id.au>, Arnd Bergmann <arnd@arndb.de>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:0NVKVjl/TQk0UtjI91jMgAun+WwfT1DDqE/TxRS4h2d4QQ1MpmQ
+ GmWm5FrJXZ0wK43Pz2mfjim4nPccoAMv64WmBasQO60DUuk+1aM6wu+Mxz9lmBlOiDmOTAv
+ W7/nkhmryjwBvnDJspjiemL/KTooyGeFcwcPPkN5cfnqsWdPoQF1K6FvSEpw/LjWiG/Hr9l
+ qi01RKfbxJhJpOTiaBYjw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:AfU11mqt1Jo=:Z+5KKHD1eVOKYgWMLTlHq6
+ pc3TIhIDl8pgFn6UFRad0zQ+kWFRZK8tMGCBh9eB0K/7amQBjPpeqi565U6jg68PYQ6qRDGpG
+ LMaPrdTAS8EvwNvMt5c6F3tuMv2uAhFOBDvyhu19cpIjIj9cN7P8v1UqNAGCwSkL8kHpfm2gc
+ +g08sQMl70GRVvWHDDFTnRRIUHfaqcZzyc2gWYI9zvE8elyJIxjtmd8xW4ApoJHFVf4vLyBo/
+ AS4N93Uf/4TTWlzalAuZRScKNLiZqQGNBK8/v7ifLsmseT3mxLPqc9cs7JqHQH9qr9GyBAqf0
+ rBcH0TKQuFuKMIxa1QSXRkMuhqFTedrDFjhqDWSleqUku9G1ZxjefZzL5oI0I2a6PTd4zvp6R
+ GaLjZ9dNSqNF++YEE/OKEITUK4nOhmH62eM7KGmIKqDBBP7nVwZIo50rMR/MvHJlV0ePxTLnD
+ geU8aWD4LGlmCBzULL1SQw2jZYXeDusshE3ddDoGmTmGLBb/kL35RDd3ycG5F8dkDVkFZcHXi
+ edozaRPm3xTOBGHP7U9d/lL3PZhbE7LRuLIjzQ1ujujvPdTdKP4B7XYtTZQQzjDPlvtvDm3MP
+ mIF2jhrD5bTQBCbabK2SUDkavbl1Qiwx481Htywqt+N3dJFmLAyQjlPrsfUudce3XNkf555v3
+ g4u5yuxL/VNaUx/COQwXHqHDyLsT3N9S0m9PNztjgP92ht9oSUubba4cVAI5ZKxqXw/ERIgQV
+ +4ERbufVgj2WtskkIAltE4c85+q/nCv3NQL4YSfvrJaH3XjU9J6Iab3yg6yh2/5byHclEPoDs
+ 0yZPltDDap9mTKzwcxhzBPGqDM/ICQG79Pxp/7E+O6qyge4CNY=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add path of the fixdep script from the object tree.
-This will make the path of script absolute rather than
-relative and execute the command from makefile from any
-location.
+On Fri, Apr 22, 2022 at 8:46 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+> On Fri, Feb 04, 2022 at 05:52:32PM +1030, Joel Stanley wrote:
+> > +What:                /sys/firmware/bootinfo/*
+> > +Date:                Jan 2022
+>
+> It isn't January anymore :)
 
-Signed-off-by: Laxman Dewangan <ldewangan@nvidia.com>
----
- scripts/Kbuild.include | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The patch was sent on Feb 4, I would expect that to be close enough. Does this
+need to be the month of the kernel release it is merged into instead?
 
-diff --git a/scripts/Kbuild.include b/scripts/Kbuild.include
-index cdec22088423e..e07e9265829f8 100644
---- a/scripts/Kbuild.include
-+++ b/scripts/Kbuild.include
-@@ -147,7 +147,7 @@ if_changed_dep = $(if $(if-changed-cond),$(cmd_and_fixdep),@:)
- 
- cmd_and_fixdep =                                                             \
- 	$(cmd);                                                              \
--	scripts/basic/fixdep $(depfile) $@ '$(make-cmd)' > $(dot-target).cmd;\
-+	$(objtree)/scripts/basic/fixdep $(depfile) $@ '$(make-cmd)' > $(dot-target).cmd;\
- 	rm -f $(depfile)
- 
- # Usage: $(call if_changed_rule,foo)
--- 
-2.17.1
+> > +Description:
+> > +             A system can expose information about how it was started in
+> > +             this directory.
+>
+> I do not understand what you mean by "how it was started".
+>
+> > +             This information is agnostic as to the firmware implementation.
+>
+> How?  This should be very firmware specific.
 
+The original patch was specific to a particular SoC vendor. Since the
+information provided here is fairly generic in the end, I asked for
+the interface
+to be generalized to the point that it can be reused across multiple
+vendors and architectures.
+
+      Arnd

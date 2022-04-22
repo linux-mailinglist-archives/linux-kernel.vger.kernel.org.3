@@ -2,100 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6529E50BE91
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 19:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45D4250BECE
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 19:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231607AbiDVR2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 13:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48668 "EHLO
+        id S233008AbiDVRim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 13:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231392AbiDVR2Z (ORCPT
+        with ESMTP id S231931AbiDVRi0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 13:28:25 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68EFBD3728
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 10:25:25 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id ks6so17735942ejb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 10:25:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=xyTu4b7ZMRhX6whN7X8zUFA8mpZ14UJCNVpEn8M9ARg=;
-        b=NIa/76KBpbPcghoDEkTYGEHbQsh/DvJWClpr17LX22LfUCDZlA8v44kBeEFyZHxhX9
-         dGj9bcrXhnLJcjpa+sp0fCzGeiIsd1LcqXrgUryZ4GH9Ti06OoWYQRoFgPVXYpfL3ooe
-         s66wJHVJ52frfDlYQLnrn63t4ijca1CnnUSagHs4Knl1WTBwye44ShV5svAu8Su/v5I+
-         ODg58bbXoXdN12+yLukNzr33J+hvPWkrjqj1G9EpS0U0VRl6WdxsnagiIZzXQkZ2egSm
-         RfJaPMmssnoS3R0VoGZqg3SJ/YWBy6ttx9uicI2bDwGRr7zZWCwWIcMJk3H78ck72pMZ
-         qXaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xyTu4b7ZMRhX6whN7X8zUFA8mpZ14UJCNVpEn8M9ARg=;
-        b=Pwx/xoVMmt55gaxc07EbJbViqhR4W9KRD+Fc8zDwAUUcMbdb56KOOnaEaPmUtu7S7t
-         /UkZkqJcHp3DtnX1LpURlUOM4zNMUk4HShMR+WIIPDo1ivAuKPCJYI6bCGyPBUcfGbAc
-         kvTJ8ZuKFvOUE/E/tHYETyhVNqdwsj/9qaywVutJ6Kad88l53ArvDDeJYMyDWY6QPDK2
-         WyAiRs19LPm7HBUdZWAocbs8IoQjvobVh22Ms3q1RqueopO3GiPEtNT9rI77ix9z/N/1
-         qAoVHJVEjGhABTmmVI9NUo0LFBvVM7PG4e7YcN4SQ5jgjj9LPg1jlCPNoX+z1eE4Zaok
-         dS4Q==
-X-Gm-Message-State: AOAM533ML6Lb6kbPgD+WQdqRF06ycaNwp193+qhO2Bybf+stcr5gVEft
-        2JAuyWcfdIZJoCwhSKUctOXLvw==
-X-Google-Smtp-Source: ABdhPJzS3sVONP52JJ41oUXMaywZWInX/T1GsMDEpa4Oo7VNHKVjxy8VUX1OKglrnM+JWmBSNQhpLg==
-X-Received: by 2002:a17:907:62a6:b0:6ef:8118:d3e2 with SMTP id nd38-20020a17090762a600b006ef8118d3e2mr5004725ejc.605.1650648230694;
-        Fri, 22 Apr 2022 10:23:50 -0700 (PDT)
-Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id fq6-20020a1709069d8600b006e891c0b7e0sm933630ejc.129.2022.04.22.10.23.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 10:23:50 -0700 (PDT)
-Message-ID: <af95f353-c91d-844e-3bc1-e052f7d16e54@linaro.org>
-Date:   Fri, 22 Apr 2022 19:23:48 +0200
+        Fri, 22 Apr 2022 13:38:26 -0400
+Received: from honk.sigxcpu.org (honk.sigxcpu.org [24.134.29.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE27915821;
+        Fri, 22 Apr 2022 10:35:25 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by honk.sigxcpu.org (Postfix) with ESMTP id 653F8FB04;
+        Fri, 22 Apr 2022 19:24:24 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at honk.sigxcpu.org
+Received: from honk.sigxcpu.org ([127.0.0.1])
+        by localhost (honk.sigxcpu.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id FUzJat0K8MxW; Fri, 22 Apr 2022 19:24:21 +0200 (CEST)
+Date:   Fri, 22 Apr 2022 19:24:15 +0200
+From:   Guido =?iso-8859-1?Q?G=FCnther?= <guido.gunther@puri.sm>
+To:     Liu Ying <victor.liu@nxp.com>
+Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, kishon@ti.com,
+        vkoul@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        andrzej.hajda@intel.com, narmstrong@baylibre.com,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        robert.chiras@nxp.com, martin.kepplinger@puri.sm
+Subject: Re: [PATCH resend v8 1/5] drm/bridge: nwl-dsi: Set PHY mode in
+ nwl_dsi_mode_set()
+Message-ID: <YmLkv4PYsi+XiFr5@qwark.sigxcpu.org>
+References: <20220419010852.452169-1-victor.liu@nxp.com>
+ <20220419010852.452169-2-victor.liu@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V4 00/14] cpufreq: mediatek: Cleanup and support MT8183
- and MT8186
-Content-Language: en-US
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        matthias.bgg@gmail.com
-Cc:     jia-wei.chang@mediatek.com, roger.lu@mediatek.com,
-        hsinyi@google.com, khilman@baylibre.com,
-        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220422075239.16437-1-rex-bc.chen@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220422075239.16437-1-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220419010852.452169-2-victor.liu@nxp.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_FAIL,
+        SPF_HELO_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/04/2022 09:52, Rex-BC Chen wrote:
+Hi,
+On Tue, Apr 19, 2022 at 09:08:48AM +0800, Liu Ying wrote:
+> The Northwest Logic MIPI DSI host controller embedded in i.MX8qxp
+> works with a Mixel MIPI DPHY + LVDS PHY combo to support either
+> a MIPI DSI display or a LVDS display.  So, this patch calls
+> phy_set_mode() from nwl_dsi_mode_set() to set PHY mode to MIPI DPHY
+> explicitly.
 > 
-> Reference series:
-> [1]: V1 of this series is present by Jia-Wei Chang.
->      message-id:20220307122151.11666-1-jia-wei.chang@mediatek.com
+> Cc: Guido Günther <agx@sigxcpu.org>
+> Cc: Robert Chiras <robert.chiras@nxp.com>
+> Cc: Martin Kepplinger <martin.kepplinger@puri.sm>
+> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+> Cc: Neil Armstrong <narmstrong@baylibre.com>
+> Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+> Cc: Jonas Karlman <jonas@kwiboo.se>
+> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
+> Cc: David Airlie <airlied@linux.ie>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: NXP Linux Team <linux-imx@nxp.com>
+> Signed-off-by: Liu Ying <victor.liu@nxp.com>
+> ---
+> v7->v8:
+> * Resend with Andrzej's and Jernej's mail addressed updated.
 > 
-> [2]: The MediaTek CCI devfreq driver is introduced in another series.
->      message-id:20220408052150.22536-1-johnson.wang@mediatek.com
+> v6->v7:
+> * No change.
 > 
-> [3]: The MediaTek SVS driver is introduced in another series.
->      message-id:20220221063939.14969-1-roger.lu@mediatek.com
+> v5->v6:
+> * Rebase the series upon v5.17-rc1.
+> * Set PHY mode in ->mode_set() instead of ->pre_enable() in the nwl-dsi
+>   bridge driver due to the rebase.
+> * Drop Guido's R-b tag due to the rebase.
+> 
+> v4->v5:
+> * No change.
+> 
+> v3->v4:
+> * No change.
+> 
+> v2->v3:
+> * No change.
+> 
+> v1->v2:
+> * Add Guido's R-b tag.
+> 
+>  drivers/gpu/drm/bridge/nwl-dsi.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/bridge/nwl-dsi.c b/drivers/gpu/drm/bridge/nwl-dsi.c
+> index d5945501a5ee..85bab7372af1 100644
+> --- a/drivers/gpu/drm/bridge/nwl-dsi.c
+> +++ b/drivers/gpu/drm/bridge/nwl-dsi.c
+> @@ -666,6 +666,12 @@ static int nwl_dsi_mode_set(struct nwl_dsi *dsi)
+>  		return ret;
+>  	}
+>  
+> +	ret = phy_set_mode(dsi->phy, PHY_MODE_MIPI_DPHY);
+> +	if (ret < 0) {
+> +		DRM_DEV_ERROR(dev, "Failed to set DSI phy mode: %d\n", ret);
+> +		goto uninit_phy;
+> +	}
+> +
+>  	ret = phy_configure(dsi->phy, phy_cfg);
+>  	if (ret < 0) {
+>  		DRM_DEV_ERROR(dev, "Failed to configure DSI phy: %d\n",
+> ret);
 
-These are not proper links. Please use lore references.
+I can't currently test this but it still looks good so
 
+Reviewed-by: Guido Günther <agx@sigxcpu.org>
 
-Best regards,
-Krzysztof
+Cheers,
+ -- Guido
+
+> -- 
+> 2.25.1
+> 

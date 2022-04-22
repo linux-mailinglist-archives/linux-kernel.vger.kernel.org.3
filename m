@@ -2,102 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D62E850BCCE
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:22:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24FDB50BCD2
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381501AbiDVQZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 12:25:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54606 "EHLO
+        id S1382805AbiDVQ0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 12:26:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381149AbiDVQZU (ORCPT
+        with ESMTP id S1381784AbiDVQ0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 12:25:20 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264885AA48
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:22:27 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id p189so5384456wmp.3
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:22:27 -0700 (PDT)
+        Fri, 22 Apr 2022 12:26:36 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15F05DE70
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:23:38 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 17so10287475lji.1
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:23:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:organization:in-reply-to:content-transfer-encoding;
-        bh=zY4C5B+QxiaTEzxxexC/40j3SP92tDxpSvstBBqkr8I=;
-        b=2KC6S/IX6j6j/hdZgAG7Wy8zhssVYkMM2W/r28JdDOxrZe9kjqLKPvOKBbwEeBuGvZ
-         94NicFy5IACmfK/dmOP3VJESQJCYQUkwW8sSzBVmJbUKOTfLpl0agepRGrJWK7bG0hGU
-         zuVDM0shNBruv50LMO1GRNg534Rk+TCBYfXW9m/O4b+bxaeOsP9Xga+ZcnNNYEfRxZkA
-         Vjvsae3frQrSGgwDuIeERO1opJtgk4I682nSte3jDJbtnySeKOCYaQY3XR5RC5UXSJzK
-         8BsH9Fdhnb8k1/lx5cazSisFmCBYOo+HjnW8jTAH3hmics07gFpAGcQJF1qVdletwGcS
-         esaw==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MuBFrhJUOONLWXDwFhqBNuCDF96+pp+7LO7m7j6HVnc=;
+        b=aPyjHIH15/ZlqkdljmCtysFMz1fao4RAeRNcVpZ8TybN4Ud2MluMCY5f73fNrXfypM
+         HkZsnBpkUt3gU6bCETZbnfknjtQGlO14szjXMcnQb+BxiWvenyMTWGNt+pidsZwW+hGi
+         QplsAf9EP/tHXtgg4EFNDpnvzNPcKezjH53i4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=zY4C5B+QxiaTEzxxexC/40j3SP92tDxpSvstBBqkr8I=;
-        b=yP6whrAR3PKpx4+BRCgOsVhU7VqWM0LqcOQNwUm+JNSUj9g4iA5mApopQn0pRQqLUe
-         I/vV2T4pzzF0B6RLdo4CFi7ebPlkXunZ3OpqQe/RYVGkT7vx8OLImAfZGheO98+iroPE
-         Qi6llBT7Ie3fyrMCYB+ipNG077Ov4x6qQOWZqQQXwp+w+KzyWOEsFSJsrOWaXJSUzoDK
-         G7o2D/P66YtZ/WXEpNCQrY51l0NvLEsBlnTKvlBEsdeE2xV3hJZ6Q1zvNU2uO1Welybu
-         B2d+EIkLrrgwerGdsAjMyx6arQqWpCBClR7SrWiYkCo2zbuRvwfymZKgQ1XEeBywoOQd
-         oNZA==
-X-Gm-Message-State: AOAM531N9t/hmPsamc3RUKqEHGFWHGqMRhdHXzhODCB/YCNUom6SdpQV
-        0WElI7z1xTfdNKDk1yYaAMaxBA==
-X-Google-Smtp-Source: ABdhPJyhHijmfDn7mBZ8Yi8hIQc2YxGRbhYKiIfgqQ7kbu5nme0yI0od4RgU9nXwoHv4mwvoZwDpMQ==
-X-Received: by 2002:a1c:f018:0:b0:37b:c13c:3128 with SMTP id a24-20020a1cf018000000b0037bc13c3128mr13874624wmb.157.1650644545585;
-        Fri, 22 Apr 2022 09:22:25 -0700 (PDT)
-Received: from ?IPV6:2001:861:44c0:66c0:3ce1:1ed1:5e14:cd49? ([2001:861:44c0:66c0:3ce1:1ed1:5e14:cd49])
-        by smtp.gmail.com with ESMTPSA id u16-20020a05600c441000b0038ebcbadcedsm5651369wmn.2.2022.04.22.09.22.24
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MuBFrhJUOONLWXDwFhqBNuCDF96+pp+7LO7m7j6HVnc=;
+        b=xxpi4KXTHkZsFqllYiWRgO+VgmKmmswwxu7BG5XS4eSf2RYBzho+ujTyI7RYGXrCcJ
+         c0Id+fL8EzodhFNjywo+kwUIFu8tgiO2ecighcpMRz7feK382+8UOgwxtHKh3vjYtcTL
+         OK7ezV3viSpqT5vz521hO45aph2XcAHKb2xgfxajOGaA71k0ug/3OYAPc+JUAzNdZbYn
+         icSJlmPVxXRaR27HknbW+//0Ya0Ntz02khWk0Dtqh3f99tyAhJcNZjOv4CJiK0RZ6EjN
+         iBcVICOg7HCTVIAuMo/qQ5IyC2bFcutz8ogQnekdGApKsp0/NiaoZF6whdYuUZhtKTcG
+         Xw8w==
+X-Gm-Message-State: AOAM533K9T3kVHyifRzWbbXBnHrYC/SHtc4+kKq01HDymAk8zCbYraaX
+        rLVDTbQBRMN42GJlPaHi1rk6S0x2LyJ6KgxUl4A=
+X-Google-Smtp-Source: ABdhPJwO/kgFGe1NvEkuvX7o9qvFegxEoMDb9oztz3CRuvIBd8s2cNX6bcBmsmDrE9DT+4+Lc4CVtw==
+X-Received: by 2002:a05:651c:1050:b0:24d:cc3c:dd26 with SMTP id x16-20020a05651c105000b0024dcc3cdd26mr3264761ljm.449.1650644617018;
+        Fri, 22 Apr 2022 09:23:37 -0700 (PDT)
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com. [209.85.208.178])
+        by smtp.gmail.com with ESMTPSA id q17-20020a2e8751000000b00244beaacef1sm266628ljj.18.2022.04.22.09.23.35
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 09:22:24 -0700 (PDT)
-Message-ID: <23ce10e4-bdb6-9b3a-465b-8ff86d679296@baylibre.com>
-Date:   Fri, 22 Apr 2022 18:22:24 +0200
+        Fri, 22 Apr 2022 09:23:35 -0700 (PDT)
+Received: by mail-lj1-f178.google.com with SMTP id bj36so10228191ljb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:23:35 -0700 (PDT)
+X-Received: by 2002:a2e:b8d2:0:b0:24e:e19c:5375 with SMTP id
+ s18-20020a2eb8d2000000b0024ee19c5375mr3277685ljp.176.1650644614617; Fri, 22
+ Apr 2022 09:23:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] clocksource/drivers/oxnas-rps: Fix irq_of_parse_and_map()
- return value
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-oxnas@groups.io
-References: <20220422104101.55754-1-krzysztof.kozlowski@linaro.org>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <20220422104101.55754-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220422060107.781512-1-npiggin@gmail.com> <20220422060107.781512-2-npiggin@gmail.com>
+In-Reply-To: <20220422060107.781512-2-npiggin@gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 22 Apr 2022 09:23:18 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wg09h4_-g6Fc1K5UqA==Zfe1gXQhJcZ6J9Mnopp15gptg@mail.gmail.com>
+Message-ID: <CAHk-=wg09h4_-g6Fc1K5UqA==Zfe1gXQhJcZ6J9Mnopp15gptg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] mm/vmalloc: huge vmalloc backing pages should be
+ split rather than compound
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/04/2022 12:41, Krzysztof Kozlowski wrote:
-> The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
-> 
-> Fixes: 89355274e1f7 ("clocksource/drivers/oxnas-rps: Add Oxford Semiconductor RPS Dual Timer")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->   drivers/clocksource/timer-oxnas-rps.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/clocksource/timer-oxnas-rps.c b/drivers/clocksource/timer-oxnas-rps.c
-> index 56c0cc32d0ac..d514b44e67dd 100644
-> --- a/drivers/clocksource/timer-oxnas-rps.c
-> +++ b/drivers/clocksource/timer-oxnas-rps.c
-> @@ -236,7 +236,7 @@ static int __init oxnas_rps_timer_init(struct device_node *np)
->   	}
->   
->   	rps->irq = irq_of_parse_and_map(np, 0);
-> -	if (rps->irq < 0) {
-> +	if (!rps->irq) {
->   		ret = -EINVAL;
->   		goto err_iomap;
->   	}
+On Thu, Apr 21, 2022 at 11:01 PM Nicholas Piggin <npiggin@gmail.com> wrote:
+>
+> Huge vmalloc higher-order backing pages were allocated with __GFP_COMP
+> in order to allow the sub-pages to be refcounted by callers such as
+> "remap_vmalloc_page [sic]" (remap_vmalloc_range).
+>
+> However a similar problem exists for other struct page fields callers
+> use, for example fb_deferred_io_fault() takes a vmalloc'ed page and
+> not only refcounts it but uses ->lru, ->mapping, ->index. This is not
+> compatible with compound sub-pages.
+>
+> The correct approach is to use split high-order pages for the huge
+> vmalloc backing. These allow callers to treat them in exactly the same
+> way as individually-allocated order-0 pages.
 
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+This patch looks ObviouslyCorrect(tm), and you even reproduced the
+fbdev  problem.
+
+Applied.
+
+              Linus

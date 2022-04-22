@@ -2,116 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A73B250B2D4
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 10:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCFEE50B2E1
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 10:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233619AbiDVI1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 04:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33346 "EHLO
+        id S1445181AbiDVI35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 04:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445181AbiDVI1g (ORCPT
+        with ESMTP id S1352644AbiDVI34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 04:27:36 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 969DD52E6E
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 01:24:43 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-160-RpMxlxWUPReT48akEvTY5g-1; Fri, 22 Apr 2022 09:24:39 +0100
-X-MC-Unique: RpMxlxWUPReT48akEvTY5g-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Fri, 22 Apr 2022 09:24:37 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Fri, 22 Apr 2022 09:24:37 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Linus Torvalds' <torvalds@linux-foundation.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-CC:     Kees Cook <keescook@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        "krebbel@linux.ibm.com" <krebbel@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>
-Subject: RE: -Warray-bounds fun again
-Thread-Topic: -Warray-bounds fun again
-Thread-Index: AQHYVZxuMWLod4b+f0KSneXrWfgc9qz7l3Bw
-Date:   Fri, 22 Apr 2022 08:24:37 +0000
-Message-ID: <fd6b4de14d944680b5a5674edfe34654@AcuMS.aculab.com>
-References: <yt9dzgkelelc.fsf@linux.ibm.com>
- <CAHk-=wgv4NLtEowsmX+0jq_nBWXFp8jtruX6U3SDm52N=ftkgg@mail.gmail.com>
-In-Reply-To: <CAHk-=wgv4NLtEowsmX+0jq_nBWXFp8jtruX6U3SDm52N=ftkgg@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 22 Apr 2022 04:29:56 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97DB352E5D
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 01:27:03 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id bv16so9920346wrb.9
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 01:27:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=u7TUP/Txry1UFuyT1GMH6MxIlNWsEqUWlVQuJ3Ycgo4=;
+        b=2/I5sgtu6yek/DqrCw3fNAG0CyFOv3PlhCCCJ+GXocYogXRpOANpLUGCSLIL6TXXJL
+         ncM/kLDoJ/bNF7oVzLDmvTM1U3qDOvltDLOY94qFOFrVnXCkZfDsjDwyWE2jcRPo5B1P
+         ttxqJ8yX7vcodL42mKjo/d0lRMIGPiXtLb17dpL2lYUuxkj6MobpP5XnR8PmKbChBY0Z
+         7zmq27Ase+2MLiNJ+AreILAY0VwbdAMekeGiuF36tHqnyXwpBeV6cqPt/OeTETRnDqrU
+         +QHBEU1kHUMiZEs4+Xe8l3uwd3L6Dy+ht+n9MPLNoA7z1gb/z+BsoiCI7GOSeiqizJDX
+         7PeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=u7TUP/Txry1UFuyT1GMH6MxIlNWsEqUWlVQuJ3Ycgo4=;
+        b=Fot+HlZpIRLrXgoDr+uH4x7J6iVVsvhRGXWPEv4v/Oz49ac2DN7QO9VU8EIRUanKxZ
+         5+FUfYLxPEQ051oSXjQqp3brpL1dPDJvEFxdsxq2mqwyWYvVLGlWd4kOeJ66JjeBG4rP
+         NAfq3Gandn/SzWOn60F3bY4RgmMErpgVmGwXwafeEPdQhT/6D9HXUKMLOr2+JKVktHLl
+         H2GsevC1MCGBzyUxFLgY/k9Kj0deg/rk7+v4Mtigd7tt+f2Xk8HcXOqY/3pGQctDfVbB
+         Ci9llsmiRMBauDSVkhMmjEkZKn2mjEDjcC8rDZkMpsDE4JudjEPGeS0OCH4WPRd4xLOP
+         Y1TA==
+X-Gm-Message-State: AOAM530dGXR2h5xFIGR55TpUu90saAzACkpzoaPVbcuzBczrMxFBaT75
+        IVJGe2vmO0jnTGc2kgqCXbCq7A==
+X-Google-Smtp-Source: ABdhPJwc7lC7iXT26SYx3VMbx1Xy9+zwh+M/Yt5wvRZ3xffC5nUuF/FW32z69itymsszmlEUC9PuCA==
+X-Received: by 2002:adf:f2cb:0:b0:20a:77c2:3958 with SMTP id d11-20020adff2cb000000b0020a77c23958mr2637147wrp.589.1650616021757;
+        Fri, 22 Apr 2022 01:27:01 -0700 (PDT)
+Received: from ?IPV6:2001:861:44c0:66c0:3ce1:1ed1:5e14:cd49? ([2001:861:44c0:66c0:3ce1:1ed1:5e14:cd49])
+        by smtp.gmail.com with ESMTPSA id e4-20020a5d6d04000000b0020a8bbbb72bsm1335208wrq.97.2022.04.22.01.27.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Apr 2022 01:27:00 -0700 (PDT)
+Message-ID: <b6029a92-04f0-9ae7-291c-621f9871280b@baylibre.com>
+Date:   Fri, 22 Apr 2022 10:26:59 +0200
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/2] Revert "ASoC: meson: axg-tdm-interface: manage
+ formatters in trigger"
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Mark Brown <broonie@kernel.org>
+Cc:     jbrunet@baylibre.com, alsa-devel@alsa-project.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Dmitry Shmidt <dimitrysh@google.com>
+References: <20220421155725.2589089-1-narmstrong@baylibre.com>
+ <YmGSeVbwWtyHP/Tz@sirena.org.uk>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <YmGSeVbwWtyHP/Tz@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMjEgQXByaWwgMjAyMiAxNzoxMQ0KPiANCj4g
-T24gVGh1LCBBcHIgMjEsIDIwMjIgYXQgNzowMiBBTSBTdmVuIFNjaG5lbGxlIDxzdmVuc0BsaW51
-eC5pYm0uY29tPiB3cm90ZToNCj4gPg0KPiA+IFRoZSBvYnZpb3VzICdmaXgnIGlzIHRvIHVzZSBh
-YnNvbHV0ZV9wb2ludGVyKCk6DQo+ID4NCj4gPiAjZGVmaW5lIFMzOTBfbG93Y29yZSAoKigoc3Ry
-dWN0IGxvd2NvcmUgKilhYnNvbHV0ZV9wb2ludGVyKDApKSkNCj4gPg0KPiA+IFRoYXQgbWFrZXMg
-dGhlIHdhcm5pbmcgZ28gYXdheSwgYnV0IHVuZm9ydHVuYXRlbHkgdGhlIGNvbXBpbGVyIG5vIGxv
-bmdlcg0KPiA+IGtub3dzIHRoYXQgdGhlIG1lbW9yeSBhY2Nlc3MgaXMgZml0dGluZyBpbnRvIGEg
-bG9hZC9zdG9yZSB3aXRoIGEgMTIgYml0DQo+ID4gZGlzcGxhY2VtZW50Lg0KPiANCj4gSW4gdGhl
-IGdjYyBidWd6aWxsYSBmb3IgdXMgbmVlZGluZyB0byBkbyB0aGVzZSBnYW1lczoNCj4gDQo+ICAg
-ICBodHRwczovL2djYy5nbnUub3JnL2J1Z3ppbGxhL3Nob3dfYnVnLmNnaT9pZD05OTU3OA0KPiAN
-Cj4gb25lIG9mIHRoZSBzdWdnZXN0aW9ucyB3YXMgIkkgcmVjb21tZW5kIHN1cHByZXNzaW5nIHRo
-ZSB3YXJuaW5nIGVpdGhlcg0KPiBieSAjcHJhZ21hIEdDQyBkaWFnbm9zdGljIG9yIGJ5IG1ha2lu
-ZyB0aGUgcG9pbnRlciB2b2xhdGlsZSIuDQo+IA0KPiBCdXQgUkVBRF9PTkNFKCkgc2hvdWxkIGFs
-cmVhZHkgYmUgZG9pbmcgdGhhdCB2b2xhdGlsZSB0aGluZywgc28gdGhhdA0KPiBzdWdnZXN0aW9u
-IG1heSBub3Qgd29yayB3aXRoIGdjYy0xMiBhbnkgbW9yZS4NCj4gDQo+IEl0IGlzICpwb3NzaWJs
-ZSogdGhhdCBnY2MtMTIgaGFzIG5vdyBzcGVjaWFsLWNhc2VkIHRoZSB2ZXJ5IHNwZWNpYWwNCj4g
-aXNzdWUgb2YgYSBjYXN0IG9mIHRoZSBjb25zdGFudCB6ZXJvLiBUaGF0IGlzIGhvdyBOVUxMIHdh
-cw0KPiB0cmFkaXRpb25hbGx5IGRlZmluZWQuDQo+IA0KPiBTbyBqdXN0IG91dCBvZiBhIHBlcnZl
-cnNlIGN1cmlvc2l0eSwgd2hhdCBoYXBwZW5zIGlmIHlvdSBkbyBzb21ldGhpbmcgbGlrZSB0aGlz
-Og0KPiANCj4gICAgI2RlZmluZSBTMzkwX2xvd2NvcmVfZW5kICgoc3RydWN0IGxvd2NvcmUgKilz
-aXplb2Yoc3RydWN0IGxvd2NvcmUpKQ0KPiAgICAjZGVmaW5lIFMzOTBfbG93Y29yZSAoUzM5MF9s
-b3djb3JlX2VuZFstMV0pDQo+IA0KPiBpbnN0ZWFkPyBJdCBzaG91bGQgZ2V0IHRoZSBzYW1lIHZh
-bHVlIGluIHRoZSBlbmQsIGJ1dCBpdCBkb2Vzbid0IGhhdmUNCj4gdGhhdCBzcGVjaWFsIGNhc2Ug
-b2YgImNhc3QgYW4gaW50ZWdlciBjb25zdGFudCAwIHRvIGEgcG9pbnRlciIuDQo+IA0KPiBJIHN1
-c3BlY3QgaXQgcHJvYmFibHkgZG9lc24ndCBoZWxwLCBiZWNhdXNlIGdjYyB3aWxsIHN0aWxsIHNl
-ZSAib2gsDQo+IHlvdSdyZSBiYXNpbmcgdGhpcyBvZmYgYWRkcmVzcyB6ZXJvIi4NCj4gDQo+IEFu
-b3RoZXIgdGhpbmcgdG8gdHJ5IG1pZ2h0IGJlIHRvIHJlbW92ZSB0aGUgaW5pdGlhbCAxNiBieXRl
-cyBvZg0KPiBwYWRkaW5nIGZyb20gJ3N0cnVjdCBsb3djb3JlJyAoaXQgbG9va3MgbGlrZSB0aGUg
-Zmlyc3QgMjAgYnl0ZXMgYXJlDQo+IG5vdCB1c2VkIC0gc28gbGVhdmUgNCBieXRlcyBvZiBwYWRk
-aW5nIHN0aWxsKSwgYW5kIHVzZQ0KPiANCj4gICAgI2RlZmluZSBTMzkwX2xvd2NvcmUgKCooKHN0
-cnVjdCBsb3djb3JlX25vcGFkICopMTYpKQ0KPiANCj4gaW5zdGVhZC4gVGhlbiBnY2Mgd2lsbCBu
-ZXZlciBzZWUgdGhhdCAwLCBhbmQgaG9wZWZ1bGx5IHRoZSAiaGUncw0KPiBhY2Nlc3NpbmcgYmFz
-ZWQgb2ZmIGEgTlVMTCBwb2ludGVyIiBsb2dpYyB3aWxsIGdvIGF3YXkuDQo+IA0KPiBCZWNhdXNl
-IHJpZ2h0IG5vdywgb3VyIGFic29sdXRlX3BvaW50ZXIoKSBwcm90ZWN0aW9uIGFnYWluc3QgdGhp
-cw0KPiBob3JyaWJsZSBnY2MgbWlzLWZlYXR1cmUgaXMgbGl0ZXJhbGx5IGJhc2VkIG9uIGhpZGlu
-ZyB0aGUgdmFsdWUgZnJvbQ0KPiB0aGUgY29tcGlsZXIgd2l0aCBhbiBpbmxpbmUgYXNtLCBhbmQg
-YnkgdmlydHVlIG9mIGhpZGluZyB0aGUgdmFsdWUNCj4gdGhlbiB5ZXMsIGdjYyB3aWxsIGhhdmUg
-dG8gZ28gdGhyb3VnaCBhIHJlZ2lzdGVyIGJhc2UgcG9pbnRlciBhbmQNCj4gY2Fubm90IHNlZSB0
-aGF0IGl0IGZpdHMgaW4gMTIgYml0cy4NCg0KSSB0aGluayB5b3UgbWlnaHQgYmUgbWl4aW5nIHVw
-IHR3byBwcm9ibGVtcy4NCg0KQWNjZXNzaW5nICgoZm9vICopMCktPm1lbWJlciBpcyBwcm9ibGVt
-YXRpYyBiZWNhdXNlIE5VTEwgbWlnaHQgbm90IGJlIHplcm8uDQpJbiB3aGljaCBjYXNlIGFuIHVu
-ZXhwZWN0ZWQgYWRkcmVzcyBpcyBnZW5lcmF0ZWQuDQpJIHRoaW5rIHRoaXMgaXMgd2h5IGNsYW5n
-IHJlYWxseSBkb2Vzbid0IGxpa2UgeW91IGRvaW5nIHRoYXQuDQpVc2luZyAoKGZvbyAqKShzaXpl
-b2YgKGZvbykpWy0xXS5tZW1iZXIgbWlnaHQgZ2V0IGFyb3VuZCB0aGF0Lg0KDQpJIHN1c3BlY3Qg
-dGhlIGFycmF5IGJvdW5kcyBpc3N1ZSBpcyBjYXVzZWQgYnkgZ2NjIHVzaW5nIGEgc2l6ZSBvZiAw
-DQpmb3IgJ0kgZG9uJ3Qga25vdyB0aGUgc2l6ZScgYW5kIHRoZW4gYXNzdW1pbmcgaXQgaXMgcmVh
-bCBzaXplIGxhdGVyIG9uLg0KVGhhdCBzZWVtcyBsaWtlIGEgcmVhbCBnY2MgYnVnLg0KDQoJRGF2
-aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50
-IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTcz
-ODYgKFdhbGVzKQ0K
+Hi Mark,
 
+On 21/04/2022 19:20, Mark Brown wrote:
+> On Thu, Apr 21, 2022 at 05:57:24PM +0200, Neil Armstrong wrote:
+>> This reverts commit bf5e4887eeddb48480568466536aa08ec7f179a5 because
+>> the following and required commit e138233e56e9829e65b6293887063a1a3ccb2d68
+> 
+> One other thing - these should be Fixes: tags, that helps tooling figure
+> out things like backports.
+> 
+> Also:
+> 
+> Please include human readable descriptions of things like commits and
+> issues being discussed in e-mail in your mails, this makes them much
+> easier for humans to read especially when they have no internet access.
+> I do frequently catch up on my mail on flights or while otherwise
+> travelling so this is even more pressing for me than just being about
+> making things a bit easier to read.
+
+Thanks, I'll think of this for the next time.
+
+Neil

@@ -2,109 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6108F50C1E2
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 00:07:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 070B950C47F
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230469AbiDVV5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 17:57:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60740 "EHLO
+        id S232239AbiDVWPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 18:15:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbiDVV4w (ORCPT
+        with ESMTP id S232204AbiDVWPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 17:56:52 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5BDF407ED4
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:42:03 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23MIeMoG033941;
-        Fri, 22 Apr 2022 13:40:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1650652822;
-        bh=jL5+JwCMsTSzM2LVGeKWU46/zHtkF+EJ8LNwJy/lJNM=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=cTkH6TMEhd/jT7YSK904kjPRxu962l78xyt8Dhv0/OvVn4MNtq/9sVLnVXfg3bmux
-         ZlMAVyn3QwcyX3x4EpL9+HQPUuwV/4cG6jOjKSb4llGQIA0iJLT9Q0EjMO0R3dMVIq
-         j+/8wotR7NnktIST0hxWIh5h62OXE5zdZXr3kwjY=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23MIeMAp011441
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 22 Apr 2022 13:40:22 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 22
- Apr 2022 13:40:21 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 22 Apr 2022 13:40:21 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23MIeL4o078154;
-        Fri, 22 Apr 2022 13:40:21 -0500
-Date:   Fri, 22 Apr 2022 13:40:21 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     <cgel.zte@gmail.com>, <tony@atomide.com>
-CC:     <ssantosh@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] soc: ti: pm33xx: using pm_runtime_resume_and_get instead
- of pm_runtime_get_sync
-Message-ID: <20220422184021.v2w55kbvllu3flar@daughter>
-References: <20220418063059.2558074-1-chi.minghao@zte.com.cn>
+        Fri, 22 Apr 2022 18:15:16 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD3323668D;
+        Fri, 22 Apr 2022 14:05:18 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id b17so6961114qvp.6;
+        Fri, 22 Apr 2022 14:05:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DpzKp6GQylN2DVn3Q8F44AaoMz54tuxDB2xUboNmmNk=;
+        b=pzvr3/UvSftncfosMfmgiWOYhMYbYHuIZTCgY5hDDTvmyy0dEedr9JVfuEeVSTpSm5
+         Wod5E9A0cF7e6X5SdVy8UQacTpGtFKdz/js8K/09qJ95ej2UAw2PGlDkrsu+YG2dXUGA
+         p/jEJQdqi+LBuQNomKnUI+S9NQyVkZ2ZnEbNnNiPIsX8T4w6VzABtzJx/TXysyHMCVQ+
+         ScUWgjAh3cPwFtBgN8jKf/CoS7zoCpT0JVr0YNB0YwEC8YxElSpInoxiPR7dP6Gy9x+x
+         Z2XHiikQMiTNKC8bErgRGi2i/cEQhRjtXly2a1DC44EwlTnp4zUihn+XzrUyE57MfFZT
+         LYeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DpzKp6GQylN2DVn3Q8F44AaoMz54tuxDB2xUboNmmNk=;
+        b=N+dern6iTZrA/2UvQsr6Y52jn8zymardWbbx95HxpdlyZEHU0GjMAhiSiuBcWU6ygK
+         JvfCgYSLuYmROy/fJwQDjacL8Z26faSRt/7q+beB70rfc12J3+jrUYoa3of+uVgVOn8r
+         E0I3Cha8DP6onWwoH6uDGhYrXN0tjv0lYjfsOL/h4s6rAHmkmMnRct/kEU5pURDnwn+u
+         jLIR9LJuEdROgHTQH9jEsbxMhgu77xSQKO3yBuhhcTCkBSyEq0t6vd7LJxhqOmp1tFVj
+         /fsF/Urs+Z1Da7L6xRV5AHESN3hbjFZCoDcZ475N18TUP89AJOhbCYU+21J3cifOSl/X
+         tnWQ==
+X-Gm-Message-State: AOAM533V03zKTB0KHH5xciSahmWiExG0lVdxqoqtnCrR4CoYYoVLgztQ
+        L0rfaX+MxMSzwBqpHdHMyvbxV359xb7uLrvxjhSuX17I
+X-Google-Smtp-Source: ABdhPJyDTdfYVPmGi9JCDZSwQ3dGVcvDeC8/OPyjPu7IjhwDECkrHzuq3quIB48TTMhTBLoEclHmpE49GOqp3rGJBbM=
+X-Received: by 2002:ad4:5943:0:b0:446:5c3e:2c2a with SMTP id
+ eo3-20020ad45943000000b004465c3e2c2amr4554955qvb.75.1650653101635; Fri, 22
+ Apr 2022 11:45:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220418063059.2558074-1-chi.minghao@zte.com.cn>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <BYAPR20MB24721F9954252BECBEF486ACBCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+In-Reply-To: <BYAPR20MB24721F9954252BECBEF486ACBCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+From:   Vasily Khoruzhick <anarsoul@gmail.com>
+Date:   Fri, 22 Apr 2022 11:44:35 -0700
+Message-ID: <CA+E=qVfMm=8aQOM_HW_3EeqqLi-Fgn1Ex3h6kor89FQ0KfTvRw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: thermal: sun8i-thermal: add binding for
+ R329 THS
+To:     icenowy@outlook.com
+Cc:     Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-linux <linux-arm-kernel@lists.infradead.org>,
+        linux-sunxi@lists.linux.dev,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Icenowy Zheng <icenowy@aosc.io>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06:30-20220418, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
-> 
-> Using pm_runtime_resume_and_get is more appropriate
-> for simplifing code
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-
-Tony: Could you check?
-
+On Fri, Apr 22, 2022 at 9:12 AM <icenowy@outlook.com> wrote:
+>
+> From: Icenowy Zheng <icenowy@aosc.io>
+>
+> R329 has a thermal sensor controller that has only one sensor, and the
+> structure of it is like the H6 one.
+>
+> Add device tree binding for it.
+>
+> Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
 > ---
->  drivers/soc/ti/pm33xx.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/soc/ti/pm33xx.c b/drivers/soc/ti/pm33xx.c
-> index 7bab4bbaf02d..ce09c42eaed2 100644
-> --- a/drivers/soc/ti/pm33xx.c
-> +++ b/drivers/soc/ti/pm33xx.c
-> @@ -555,11 +555,9 @@ static int am33xx_pm_probe(struct platform_device *pdev)
->  #endif /* CONFIG_SUSPEND */
->  
->  	pm_runtime_enable(dev);
-> -	ret = pm_runtime_get_sync(dev);
-> -	if (ret < 0) {
-> -		pm_runtime_put_noidle(dev);
-> +	ret = pm_runtime_resume_and_get(dev);
-> +	if (ret < 0)
->  		goto err_pm_runtime_disable;
-> -	}
->  
->  	ret = pm_ops->init(am33xx_do_sram_idle);
->  	if (ret) {
-> -- 
-> 2.25.1
-> 
-> 
+>  .../devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml  | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
+> index 6e0b110153b0..87b4103e0a5f 100644
+> --- a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
+> @@ -20,6 +20,7 @@ properties:
+>        - allwinner,sun50i-a100-ths
+>        - allwinner,sun50i-h5-ths
+>        - allwinner,sun50i-h6-ths
+> +      - allwinner,sun50i-r329-ths
+>
+>    clocks:
+>      minItems: 1
+> @@ -63,6 +64,7 @@ allOf:
+>              enum:
+>                - allwinner,sun50i-a100-ths
+>                - allwinner,sun50i-h6-ths
+> +              - allwinner,sun50i-r329-ths
+>
+>      then:
+>        properties:
+> @@ -85,6 +87,7 @@ allOf:
+>          compatible:
+>            contains:
+>              const: allwinner,sun8i-h3-ths
+> +            const: allwinner,sun8i-r329-ths
+>
+>      then:
+>        properties:
 
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+There's also a check at line #99 that requires clock, clock-names and
+resets properties for thermal sensors in other Allwinner SoCs. Are
+these not required for r329?
+
+Also are you planning to add a node for thermal sensor to r329 dtsi?
+
+
+> --
+> 2.35.1
+>

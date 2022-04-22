@@ -2,70 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7810850BC08
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B761350BC0B
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234300AbiDVPuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 11:50:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54550 "EHLO
+        id S1449512AbiDVPuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 11:50:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233213AbiDVPuC (ORCPT
+        with ESMTP id S234254AbiDVPuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 22 Apr 2022 11:50:02 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D2A95D666;
-        Fri, 22 Apr 2022 08:47:08 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id w19so14973355lfu.11;
-        Fri, 22 Apr 2022 08:47:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=qZ1iKOWejQmCTdi0PJCvl5WKNY0DydrHfyTlkB3tubg=;
-        b=BB1ySnH7FPuAdxwD3/Q2LbcCF/8aoJEQz6O6CL3KXyPaZVqqmTRNg7FM6fqLNBU/6E
-         ZgZT1+axzJrlIJ2c56atI4S0K3VyHupvxg3zoHMcOW3X312vDvlxSgWHdRAWsgogKNxH
-         k3TRTY75AwaNBjpmRd0EEm/2qQg71cd6wuxexDYhb2jZ56VLV71IRGWijBcqxWvvznib
-         MiKkKkIQZfUGAUd20Sz65dYCWJ6ITTwL+daMZyugJ2x3TXE17b89xHCyVOLqUnRDFq3I
-         tgxvJfnAEOaxqjaCE4i+bqOdXinB03XG/+6NDsGt5xHJYm3i5TzlCQ2RgtJty1xixUAw
-         vRuQ==
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 220EF5DA06
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:47:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650642428;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OlUy6l6p+0482ZzVUfRyqGdQTewbaSoYgyNY1zTmabI=;
+        b=fKV61xVDn+Dq4cPSjSyhMHx5QdgVos90DbiX7DkOXbvPmbHxSQilCoIjKtgtEzXwmjvn/w
+        WNP1nEhDfSmzqkj+xhGinmxo95t9q6SrLvrvZSS90MPCwIUE5XdC8hQu3bC8MjOiA5mCno
+        5hmob25OS8vYpjFb4/Q0q0aJEr52b74=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-607-Gt8e-HzJPFyMPF4Zwb9FEQ-1; Fri, 22 Apr 2022 11:47:06 -0400
+X-MC-Unique: Gt8e-HzJPFyMPF4Zwb9FEQ-1
+Received: by mail-ed1-f72.google.com with SMTP id dk9-20020a0564021d8900b00425a9c3d40cso2698764edb.7
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:47:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=qZ1iKOWejQmCTdi0PJCvl5WKNY0DydrHfyTlkB3tubg=;
-        b=4wCZ9ZEHDhUh/nMWZBze31YGJHGw3bIt11TLfYfndsRCVlJPMtLgMAerVdJKua5EGJ
-         SSKVguN6p130upaUsa8JmxPPUomdXnxB+rIxag70PTql5AJVo361qXHuyhkFnBRzujG8
-         0btTPJn9wSGCV6LrH97fWC6r9hyk3Ly4Ejb/bxi/ffJ43tvbqlDreeD+m0bjOekX0naW
-         cVqE1YwRqclH35HubQCxozi1e0RUcBABzzLjoExVQv2K31Miw6gyWXmxct9WJvNJ+uoU
-         mPH30tU9qAmagqI+AX570wQNKS7l/ANUYEfcMk7MJ+rDhuiWrHWoYnPaZ6q2RA/r7NWd
-         /Ytw==
-X-Gm-Message-State: AOAM531ff+ZvU3sFGKW91YRlWavMdsLM8fopmgZixqKbfyuZ9QppUhy3
-        6zAAOCPeRiPEwPz6cCJkolw=
-X-Google-Smtp-Source: ABdhPJyVXYQcSohXYjuO/DCvdMk0mu20HEY/56MN7dJ7k5Hu9huyBeItnSsHrZHYhEKDWw4/Lz0UQw==
-X-Received: by 2002:a05:6512:1398:b0:448:bda0:99f2 with SMTP id p24-20020a056512139800b00448bda099f2mr3564545lfa.681.1650642426140;
-        Fri, 22 Apr 2022 08:47:06 -0700 (PDT)
-Received: from orome ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id n2-20020a19d602000000b0046d150c112dsm262551lfg.234.2022.04.22.08.47.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=OlUy6l6p+0482ZzVUfRyqGdQTewbaSoYgyNY1zTmabI=;
+        b=fdJHGMrgrpV1l4/4MALuOrUAomBNmFs43y+MzDAWxgnLyuEZcL5JuW3nVcGCvZR/vv
+         cJ8attr19himlKrXIL3UiXWdP4BVQ+pikcUgXA1dxTIbQkxn2qrI+9wXU36k++b/PCvt
+         1J62IKSx5PE9k23UCpKEynWTdD2KPQ/1EXeVlnkrrfKH0pNxL/sq2qL9lg9zq6nJ88OR
+         Bg+8ZWJ2Ye+b/MTOyekxLIrhbEpBOFcyR0Xsdt8VzmDMGzxLbAPyPCl9Z94EQ6VjPKz7
+         p0DqAJH58m3OeAZNdzVqNVCeWJBggnw5rG/Vd2HkaquvppwKHCYWsxFxj0KUjwKQKq8s
+         OzVw==
+X-Gm-Message-State: AOAM532ZH3MdYISvOJ5IodCnjBgnrzAeHZE/i4B+QVIgiridlveFVtwp
+        sv3sMFua6Xrw43gqlsmjH7ARRl2No49R3rDyM42ekQKMvGfcIE+loXUhBFIvG3xxAkmQDghe31s
+        GRP2+5OQ9Rd1rFdesRzS7zAY=
+X-Received: by 2002:aa7:dc49:0:b0:41d:72e2:d34e with SMTP id g9-20020aa7dc49000000b0041d72e2d34emr5507178edu.385.1650642425640;
+        Fri, 22 Apr 2022 08:47:05 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzFAEE1VI+rkI2TiIlFRwMgrd+6Gm1qiHH/aaBKToMrAJsFJRrIiqTZsXd/t0p6TRHUNMoGiw==
+X-Received: by 2002:aa7:dc49:0:b0:41d:72e2:d34e with SMTP id g9-20020aa7dc49000000b0041d72e2d34emr5507163edu.385.1650642425483;
+        Fri, 22 Apr 2022 08:47:05 -0700 (PDT)
+Received: from [192.168.9.10] (net-188-152-140-108.cust.vodafonedsl.it. [188.152.140.108])
+        by smtp.gmail.com with ESMTPSA id j4-20020a170906278400b006e99f136c78sm859368ejc.23.2022.04.22.08.47.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Fri, 22 Apr 2022 08:47:04 -0700 (PDT)
+Message-ID: <736b71d7-1e07-f5c3-d8ad-c3e1b1595d5c@redhat.com>
 Date:   Fri, 22 Apr 2022 17:47:02 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Max Kellermann <max.kellermann@gmail.com>
-Cc:     linux-pwm@vger.kernel.org, u.kleine-koenig@pengutronix.de,
-        lee.jones@linaro.org, linux-kernel@vger.kernel.org,
-        andrey@lebedev.lt, stable@vger.kernel.org
-Subject: Re: [PATCH 1/3] pwm-sun4i: convert "next_period" to local variable
-Message-ID: <YmLN9mZ9O58F/e1q@orome>
-References: <20220125123429.3490883-1-max.kellermann@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="HISICXV0FqZNY31B"
-Content-Disposition: inline
-In-Reply-To: <20220125123429.3490883-1-max.kellermann@gmail.com>
-User-Agent: Mutt/2.2.1 (c8109e14) (2022-02-19)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] fpga: altera-pr-ip: fix unsigned comparison with less
+ than zero
+Content-Language: en-US
+To:     Moritz Fischer <mdf@kernel.org>
+Cc:     Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
+        Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220405185349.220607-1-marpagan@redhat.com>
+ <Yl+K789ZUWd5Si0B@archbook>
+From:   Marco Pagani <marpagan@redhat.com>
+In-Reply-To: <Yl+K789ZUWd5Si0B@archbook>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,44 +84,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022-04-20 06:24, Moritz Fischer wrote:
+> Marco,
+> 
+> On Tue, Apr 05, 2022 at 08:53:49PM +0200, Marco Pagani wrote:
+>> Fix the "comparison with less than zero" warning reported by
+>> cppcheck for the unsigned (size_t) parameter "count" of the
+>> "alt_pr_fpga_write()" function.
+>>
+> Should this have a Reported-by: tag?
 
---HISICXV0FqZNY31B
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I found this problem using the "cppcheck" tool, as reported in the
+commit log. I did not find any previous report of this. Am I missing
+something?
 
-On Tue, Jan 25, 2022 at 01:34:27PM +0100, Max Kellermann wrote:
-> Its value is calculated in sun4i_pwm_apply() and is used only there.
->=20
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Max Kellermann <max.kellermann@gmail.com>
-> ---
->  drivers/pwm/pwm-sun4i.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
+>> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+>> ---
+>>  drivers/fpga/altera-pr-ip-core.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/fpga/altera-pr-ip-core.c b/drivers/fpga/altera-pr-ip-core.c
+>> index be0667968d33..2ff3d8e46a0c 100644
+>> --- a/drivers/fpga/altera-pr-ip-core.c
+>> +++ b/drivers/fpga/altera-pr-ip-core.c
+>> @@ -108,7 +108,7 @@ static int alt_pr_fpga_write(struct fpga_manager *mgr, const char *buf,
+>>  	u32 *buffer_32 = (u32 *)buf;
+>>  	size_t i = 0;
+>>  
+>> -	if (count <= 0)
+>> +	if (count == 0)
+>>  		return -EINVAL;
+> 
+> if (!count)
+> 	return -EINVAL?
 
-Patches applied, though I dropped the Cc: stable on patches 1 and 2.
+Ok, I'll change that in v2.
 
-Thanks,
-Thierry
+>>  
+>>  	/* Write out the complete 32-bit chunks */
+>> -- 
+>> 2.35.1
+> 
+> Cheers,
+> Moritz
+>>
+> 
 
---HISICXV0FqZNY31B
-Content-Type: application/pgp-signature; name="signature.asc"
+Cheers,
+Marco
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmJizfYACgkQ3SOs138+
-s6EFThAAhoicE6orGW9RTkMBtQor7rH90WjIVP9VZBgJv+VNLaWneoRnfMjihVtw
-hmF2ZNnQVvQnMOHKMGziE89tSPNM0juNl68v3E6IzkSNJDj4lI1pE3AxWGVb8ZgY
-/0DpY+2tQ68o18Fl+yU2qidINiGRaYuvBehqeLyfIKQf7g7208IanyA63hs+OGny
-KPkJwztcbBbdSqDDlvHS2XQgI+6GoaJtokz1c7WIjEDqRaong027x/3sFJ76K/N1
-Eb0HgQGfI7N7We7Xw59aD7pYAOuL7YYAp6bZTz69S1zwJeLJpU/vscvJHT24fVjy
-BlngF1KoMhd67nziTenSKIBp5sU3vwtltnTmBkNmLWhrNDJ27lsFnr5GgsgLKJ0k
-DBuco4Cnwnqb0e1hY1HUMTnyiyxXGcRGZXSjSmCYzwVFp0NJ7UsaEooxSRynw9PO
-pdzZNJ4UGzbvf0zBZNmXE4BVNop3JpQpK1QEcO0R3t5a0RiZSwbCVQQtgRbe4uSz
-+44YBsE00gA9/n15GjacMK5Bwgmev+RbWRCOSodL6b18aQyWDxdrbx422dDNLDxd
-ci52ANa3s15aEih6DCZLiet5WzI390gatD3j4VrrwxD5+WjVzvG2oWT+vVRs5YxC
-eHTFSqFxQekr/MT/CNIXeAP3Io2a4h2okh1kqHVrhX2miHeHzxs=
-=EMSF
------END PGP SIGNATURE-----
-
---HISICXV0FqZNY31B--

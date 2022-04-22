@@ -2,99 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3225850BA5D
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:41:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C24450BA78
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:43:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448774AbiDVOnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 10:43:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57718 "EHLO
+        id S1448824AbiDVOpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 10:45:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233505AbiDVOnj (ORCPT
+        with ESMTP id S1448834AbiDVOp1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 10:43:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD135BE58
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:40:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E5147604EF
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 14:40:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A66EDC385A4;
-        Fri, 22 Apr 2022 14:40:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650638445;
-        bh=MYOgwWbfG5bkafDdMryKHBx4bZzP6zWaU7pqVa4fSeU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2cqtaxk446CcosqemMNM2QZCQrAWhOe4SetSJj8PSVEekW2A6l/qwYlHo0Og+hrcR
-         GjzpEwIs6WT4jzG2l/owuBWRsgqvxIvwC0e/TFmdhDocTI8pyMeDt5Vz3NetqOcxdl
-         FGgyCm/rddtlLUpAlPoBhRcHU1NZAgk693ADHsbk=
-Date:   Fri, 22 Apr 2022 16:40:42 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Adrien Thierry <athierry@redhat.com>
-Cc:     Maxime Ripard <mripard@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] staging: bcm2835-audio: delete TODO
-Message-ID: <YmK+aiaaVLtadGVT@kroah.com>
-References: <20220420174401.305964-1-athierry@redhat.com>
+        Fri, 22 Apr 2022 10:45:27 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73E15BE6E;
+        Fri, 22 Apr 2022 07:42:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=JfaFBap5XOtEB+YkkJ9E9pvw6jjkwyxBWuZ63OV8jOo=; b=2iW4xAij7Xo+8jKTLoxPTikuIu
+        Fi62Db6A46bHFst2qLDayoFWOb6RX6ajDK/tjDgbw4Pp5AR+9Y7Nc+WmtKOA5T3+cA6Hd1Ba/7NMl
+        /H7JeZ4vNiMnbDct96DTc0XhWrFzeGMii1/9riBIc9DQAeXnDvco+HHPcdDJSXDvg/XPKZtB/77na
+        zmba1NEbnS/W29AXrGd4wjDpw0S6Hh31RRpAHGtnkzgO4KYM3/9N1iN6BLGyxf86UL3iTp9S9EfJ2
+        GynSoMhj1cmlB3tfGWVWw9qnFEUdF2Z0z7EwCyuhCfiJia20VFlM4CvE0TVx8EZ7CI0Rqw+PLuWMl
+        BrrXqijA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nhuUS-000s6V-32; Fri, 22 Apr 2022 14:42:32 +0000
+Date:   Fri, 22 Apr 2022 07:42:32 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Song Liu <song@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     bpf@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        kernel-team@fb.com, akpm@linux-foundation.org,
+        rick.p.edgecombe@intel.com, hch@infradead.org,
+        imbrenda@linux.ibm.com
+Subject: Re: [PATCH bpf 0/4] bpf_prog_pack and vmalloc-on-huge-page fixes
+Message-ID: <YmK+2AyIuqaySkHQ@bombadil.infradead.org>
+References: <20220422051813.1989257-1-song@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220420174401.305964-1-athierry@redhat.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220422051813.1989257-1-song@kernel.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 01:44:00PM -0400, Adrien Thierry wrote:
-> Delete TODO since all tasks were completed:
+On Thu, Apr 21, 2022 at 10:18:09PM -0700, Song Liu wrote:
+> NOTE: This set is based on Linus' master branch (d569e86915b7), not
+> bpf/master.
 > 
-> 1 - fixed here:
-> https://lore.kernel.org/all/20220408150359.26661-1-athierry@redhat.com/
-> 
-> 2 - there are no remaining checkpatch.pl errors or warnings
-> 
-> Signed-off-by: Adrien Thierry <athierry@redhat.com>
-> ---
->  drivers/staging/vc04_services/bcm2835-audio/TODO | 10 ----------
->  1 file changed, 10 deletions(-)
->  delete mode 100644 drivers/staging/vc04_services/bcm2835-audio/TODO
-> 
-> diff --git a/drivers/staging/vc04_services/bcm2835-audio/TODO b/drivers/staging/vc04_services/bcm2835-audio/TODO
-> deleted file mode 100644
-> index b85451255db0..000000000000
-> --- a/drivers/staging/vc04_services/bcm2835-audio/TODO
-> +++ /dev/null
-> @@ -1,10 +0,0 @@
-> -*****************************************************************************
-> -*                                                                           *
-> -*                           TODO: BCM2835-AUDIO                             *
-> -*                                                                           *
-> -*****************************************************************************
-> -
-> -1) Revisit multi-cards options and PCM route mixer control (as per comment
-> -https://lore.kernel.org/lkml/s5hd0to5598.wl-tiwai@suse.de)
-> -
-> -2) Fix the remaining checkpatch.pl errors and warnings.
-> -- 
-> 2.35.1
-> 
-> 
+> There are various discussion about these changes, check out [1] [2].
+> I guess we can use this thread to discuss which patches should go in 5.18.
+> AFAICT, 1/4 need to with 5.18;
 
-Great, so now it can be merged to the real part of the kernel?  If not,
-what's left for that to happen?
+Since huge pages are effectively disabled on v5.18 I can't see why.
 
-thanks,
+> 2/4 seems safe to go as well;
 
-greg k-h
+My impression on the discussion was that huge pages design was broken
+and evidence for this came up after x86 finally enabled *a small*
+portion use case of it. This revealed how broken huge pages were not
+just for x86 but for other architectures. And so I can't see why we'd
+enable for v5.18 huge pages for the large system hash.
+
+> 3/4 and 4/4
+> may still need more work/discussion.
+
+Happy to review these but if huge pages are disabled I don't see the
+point in a module_alloc_huge() yet.
+
+  Luis
+
+> 
+> Thanks!
+> 
+> [1] https://lore.kernel.org/linux-mm/20220415164413.2727220-1-song@kernel.org/
+> [2] https://lore.kernel.org/linux-mm/20220421072212.608884-1-song@kernel.org/
+> 
+> Song Liu (4):
+>   bpf: invalidate unused part of bpf_prog_pack
+>   page_alloc: use vmalloc_huge for large system hash
+>   module: introduce module_alloc_huge
+>   bpf: use module_alloc_huge for bpf_prog_pack
+> 
+>  arch/x86/kernel/module.c     | 21 +++++++++++++++++++++
+>  arch/x86/net/bpf_jit_comp.c  | 22 ++++++++++++++++++++++
+>  include/linux/bpf.h          |  2 ++
+>  include/linux/moduleloader.h |  5 +++++
+>  kernel/bpf/core.c            | 28 +++++++++++++++++++++-------
+>  kernel/module.c              |  8 ++++++++
+>  mm/page_alloc.c              |  2 +-
+>  7 files changed, 80 insertions(+), 8 deletions(-)
+> 
+> --
+> 2.30.2

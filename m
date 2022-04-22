@@ -2,194 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFABB50AC95
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 01:57:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 904FC50AC9F
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 02:01:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387054AbiDVAA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 20:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56480 "EHLO
+        id S1442785AbiDVADy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 20:03:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233119AbiDVAAZ (ORCPT
+        with ESMTP id S1381767AbiDVADu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 20:00:25 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF082018E
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 16:57:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650585453; x=1682121453;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=qNbkrPfEWjwymGAI+jxZp21smcon3y5Vd3dXkyOa+vE=;
-  b=hvcdjGkmD101zjU+Sgq/CPP9Bg0oNr3KXFRCEv+3SxAOHj4Ta7CizQCv
-   QTVBNTxRGYynN944IZVjWUHaHE2BjTiBJte0qhpAIIb37iZ0uImUKY6ty
-   o2aKV7KBSmB/AY9gNVx2R1ERin+kIlKtvMqic+p/c0JMKajqibw9w6Efx
-   gA4WfI/JKmOmBF+SAymrWmaYD4mDe1dpsS6fTvFDRRRtiTHzM0wlgqAuu
-   8OPJluQ61sh9FxIIScYoBitVrepgrdwdpAuQ9F0azJo0a9ktb5XMJgNUd
-   GxnxkQdtZM8U7w2trTI4lXAwjClfnEVklDbjp7xQKYtdqBfO14Cbv/ufa
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="262115796"
-X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
-   d="scan'208";a="262115796"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 16:57:33 -0700
-X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
-   d="scan'208";a="556055518"
-Received: from zhouju8x-mobl.ccr.corp.intel.com ([10.254.212.221])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 16:57:31 -0700
-Message-ID: <ce9a0dcf91e731db032d67b8b6fcbc9c30b9c829.camel@intel.com>
-Subject: Re: [PATCH] mm: swap: determine swap device by using page nid
-From:   "ying.huang@intel.com" <ying.huang@intel.com>
-To:     Aaron Lu <aaron.lu@intel.com>
-Cc:     Yang Shi <shy828301@gmail.com>, Michal Hocko <mhocko@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Date:   Fri, 22 Apr 2022 07:57:29 +0800
-In-Reply-To: <YmFmL42W+OrORElV@ziqianlu-nuc9qn>
-References: <20220407020953.475626-1-shy828301@gmail.com>
-         <Yk6cutNf5sOuYbDl@ziqianlu-nuc9qn>
-         <CAHbLzkq+eKcKCsxXDTiOcBxk8FjMdWBqOxwi4N_NG7PZWbAAkA@mail.gmail.com>
-         <Yl/FS9enAD4V8jG3@ziqianlu-nuc9qn>
-         <f27ec36beb3cf1dbbfc3b8835e586d5d6fe7f561.camel@intel.com>
-         <YmFmL42W+OrORElV@ziqianlu-nuc9qn>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Thu, 21 Apr 2022 20:03:50 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3673EF17;
+        Thu, 21 Apr 2022 17:00:57 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kkvgq6myvz4x7V;
+        Fri, 22 Apr 2022 10:00:55 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1650585656;
+        bh=jyMua1JM5/19m6/LHbydkO3JFid9AKYADiYEgJ3fXMk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=QGftkvzG4k0wI+vlqiiV8GmECKnBzelEU3jdZuLwPAGeMmN+9JKb3kLGZpmOfhHam
+         r0k5NVYYcDOajlhzPDZOW8L8kAPqdQujQRz7LK3oTPELw+RWaLgsVkrYbK8g0s0mxn
+         +JBw8mKASnf5ENpw/2dVrLAEhVMnUVSHiJzbaPiNEIi4oVy7cFuwAHoWz+JbeW16Hq
+         tDLBTXkYYNydMB7Q/3djkmsTaGilAqf344XtIrponhpMXr05ORYpf0rP0ElxzSsl1P
+         LPp4BZA3cyyEss8iVzq7i7Kb5/2hW1Rwm5ufC8V4aJOEM3x8QiG5DcIwg50DwANbCq
+         xL6q6+OdmXO/g==
+Date:   Fri, 22 Apr 2022 10:00:54 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: [PATCH v2] topology/sysfs: Fix allnoconfig build breakage.
+Message-ID: <20220422100054.74cadded@canb.auug.org.au>
+In-Reply-To: <90d0e2c9b4a74c92bcdd5fc4313a7629@intel.com>
+References: <20220421152645.3a849198@canb.auug.org.au>
+        <YmD+geU9CmjoVnN9@kroah.com>
+        <YmF8Hrq5kgDdfvtS@agluck-desk3.sc.intel.com>
+        <YmF+FTxgu2U4/oPA@kroah.com>
+        <YmGEL2klp4S97UiH@agluck-desk3.sc.intel.com>
+        <20220422092247.5c638079@canb.auug.org.au>
+        <90d0e2c9b4a74c92bcdd5fc4313a7629@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/QDaG+i/BcEViymA_OO6Rbib";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-04-21 at 22:11 +0800, Aaron Lu wrote:
-> On Thu, Apr 21, 2022 at 03:49:21PM +0800, ying.huang@intel.com wrote:
-> > On Wed, 2022-04-20 at 16:33 +0800, Aaron Lu wrote:
-> > > On Thu, Apr 07, 2022 at 10:36:54AM -0700, Yang Shi wrote:
-> > > > On Thu, Apr 7, 2022 at 1:12 AM Aaron Lu <aaron.lu@intel.com> wrote:
-> > > > > 
-> > > > > On Wed, Apr 06, 2022 at 07:09:53PM -0700, Yang Shi wrote:
-> > > > > > The swap devices are linked to per node priority lists, the swap device
-> > > > > > closer to the node has higher priority on that node's priority list.
-> > > > > > This is supposed to improve I/O latency, particularly for some fast
-> > > > > > devices.  But the current code gets nid by calling numa_node_id() which
-> > > > > > actually returns the nid that the reclaimer is running on instead of the
-> > > > > > nid that the page belongs to.
-> > > > > > 
-> > > > > 
-> > > > > Right.
-> > > > > 
-> > > > > > Pass the page's nid dow to get_swap_pages() in order to pick up the
-> > > > > > right swap device.  But it doesn't work for the swap slots cache which
-> > > > > > is per cpu.  We could skip swap slots cache if the current node is not
-> > > > > > the page's node, but it may be overkilling. So keep using the current
-> > > > > > node's swap slots cache.  The issue was found by visual code inspection
-> > > > > > so it is not sure how much improvement could be achieved due to lack of
-> > > > > > suitable testing device.  But anyway the current code does violate the
-> > > > > > design.
-> > > > > > 
-> > > > > 
-> > > > > I intentionally used the reclaimer's nid because I think when swapping
-> > > > > out to a device, it is faster when the device is on the same node as
-> > > > > the cpu.
-> > > > 
-> > > > OK, the offline discussion with Huang Ying showed the design was to
-> > > > have page's nid in order to achieve better I/O performance (more
-> > > > noticeable on faster devices) since the reclaimer may be running on a
-> > > > different node from the reclaimed page.
-> > > > 
-> > > > > 
-> > > > > Anyway, I think I can make a test case where the workload allocates all
-> > > > > its memory on the remote node and its workingset memory is larger then
-> > > > > the available memory so swap is triggered, then we can see which way
-> > > > > achieves better performance. Sounds reasonable to you?
-> > > > 
-> > > > Yeah, definitely, thank you so much. I don't have a fast enough device
-> > > > by hand to show the difference right now. If you could get some data
-> > > > it would be perfect.
-> > > > 
-> > > 
-> > > Failed to find a test box that has two NVMe disks attached to different
-> > > nodes and since Shanghai is locked down right now, we couldn't install
-> > > another NVMe on the box so I figured it might be OK to test on a box that
-> > > has a single NVMe attached to node 0 like this:
-> > > 
-> > > 1) restrict the test processes to run on node 0 and allocate on node 1;
-> > > 2) restrict the test processes to run on node 1 and allocate on node 0.
-> > > 
-> > > In case 1), the reclaimer's node id is the same as the swap device's so
-> > > it's the same as current behaviour and in case 2), the page's node id is
-> > > the same as the swap device's so it's what your patch proposed.
-> > > 
-> > > The test I used is vm-scalability/case-swap-w-rand:
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/wfg/vm-scalability.git/tree/case-swap-w-seq
-> > > which spawns $nr_task processes and each will mmap $size and then
-> > > randomly write to that area. I set nr_task=32 and $size=4G, so a total
-> > > of 128G memory will be needed and I used memory.limit_in_bytes to
-> > > restrict the available memory to 64G, to make sure swap is triggered.
-> > > 
-> > > The reason why cgroup is used is to avoid waking up the per-node kswapd
-> > > which can trigger swapping with reclaimer/page/swap device all having the
-> > > same node id.
-> > > 
-> > > And I don't see a measuable difference from the result:
-> > > case1(using reclaimer's node id) vm-scalability.throughput: 10574 KB/s
-> > > case2(using page's node id)      vm-scalability.throughput: 10567 KB/s
-> > > 
-> > > My interpretation of the result is, when reclaiming a remote page, it
-> > > doesn't matter much which swap device to use if the swap device is a IO
-> > > device.
-> > > 
-> > > Later Ying reminded me we have test box that has optane installed on
-> > > different nodes so I also tested there: Icelake 2 sockets server with 2
-> > > optane installed on each node. I did the test there like this:
-> > > 1) restrict the test processes to run on node 0 and allocate on node 1
-> > >    and only swapon pmem0, which is the optane backed swap device on node 0;
-> > > 2) restrict the test processes to run on node 0 and allocate on node 1
-> > >    and only swapon pmem1, which is the optane backed swap device on node 1.
-> > > 
-> > > So case 1) is current behaviour and case 2) is what your patch proposed.
-> > > 
-> > > With the same test and the same nr_task/size, the result is:
-> > > case1(using reclaimer's node id) vm-scalability.throughput: 71033 KB/s
-> > > case2(using page's node id)      vm-scalability.throughput: 58753 KB/s
-> > > 
-> > 
-> > The per-node swap device support is more about swap-in latency than
-> > swap-out throughput.  I suspect the test case is more about swap-out
-> > throughput.  perf profiling can show this.
-> > 
-> 
-> On another thought, swap out can very well affect swap in latency:
-> since swap is involved, the available memory is in short supply and swap
-> in may very likely need to reclaim a page and that reclaim can involve a
-> swap out, so swap out performance can also affect swap in latency.
-> 
+--Sig_/QDaG+i/BcEViymA_OO6Rbib
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I think you are talking about thrashing.  Thrashing will kill
-performance.  With proactive reclaiming, or something similar (e.g. kill
-low priority workloads), we can introduce swapping almost without
-thrashing.
+Hi Tony,
 
-I don't want to say the performance of swapout isn't important.  But
-swap out and swap in are different.  swap out performance is more about
-throughput, while swap in performance is more about latency.
+On Thu, 21 Apr 2022 23:38:28 +0000 "Luck, Tony" <tony.luck@intel.com> wrote:
+>
+> >> Fixes: c3702a746ff5 ("topology/sysfs: Hide PPIN on systems that do not=
+ support it.") =20
+> >
+> > This is actually commit aa63a74d4535. =20
+>=20
+> Doh! I looked in my tree, not in Greg's.
+>=20
+> Doesn't matter much, Greg is going to revert as I haven't come up with a =
+good[1]
+> way to fix this.
+>=20
+> -Tony
+>=20
+> [1] I found two bad ways. First one made Greg barf. This one breaks the b=
+uild for over
+> 50% of supported architectures :-(
 
-Best Regards,
-Huang, Ying
+I assume that there is some good reason that topology_ppin() is not
+implemented as a static inline function?
 
-> > For swap-in latency, we can use pmbench, which can output latency
-> > information.
-> > 
-> > Best Regards,
-> > Huang, Ying
-> > 
-> > 
-> > [snip]
-> > 
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/QDaG+i/BcEViymA_OO6Rbib
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJh8DYACgkQAVBC80lX
+0GwzbAf+LuLlFTK6JAMSbPf8A8gnPo4xr+iVf9lG8eHDQnrVFhKVSyo+B9fEUB0h
+oPv3yRZG1KktlrfmbfFjBQSEq+AX/p/pJhtlk4Oc97hO0JUr0mgwW8okdeYL7tEM
+SMw3/UkVaBMphYklW2Y6kb7Vx1VSS+GVDaV9f7t05vS7Fmcr79/776MPaj2lyCKu
+lT570KoHabGrGUQs23lJwo316w+USWsGMs3WQa6VobFfiscyr7+ytG1KugXAMkSw
+A+xf/Ymip2f+vfxz26KtoUzUAbAvFd6J72eEaHZ+LTwY/3I3UAn4XQiBbWlD9pRg
+RNAsdlIk8+m6+Pmne6iCTSbMx1ocaA==
+=tSPX
+-----END PGP SIGNATURE-----
+
+--Sig_/QDaG+i/BcEViymA_OO6Rbib--

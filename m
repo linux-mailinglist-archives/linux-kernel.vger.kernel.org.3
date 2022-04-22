@@ -2,81 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68E6550BA8D
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C05E50BA90
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:48:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448898AbiDVOvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 10:51:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35082 "EHLO
+        id S1448912AbiDVOv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 10:51:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448896AbiDVOu7 (ORCPT
+        with ESMTP id S1448897AbiDVOvX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 10:50:59 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C465C361;
-        Fri, 22 Apr 2022 07:48:05 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id bv16so11368059wrb.9;
-        Fri, 22 Apr 2022 07:48:05 -0700 (PDT)
+        Fri, 22 Apr 2022 10:51:23 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352E75C359
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:48:29 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id t25so10704423edt.9
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:48:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=kszdO6wU0Mqq85Z4KS0Qv5qQ/jWZuPbQJLH0mbPBngY=;
-        b=ckimHfSHANKWUZV3VNpsoUCavtkIeyvi842IphJyJDXHazb6pz6QO69HxtEqvgVPGi
-         zumAINHBO2LlvtZM5M/MSFotIgPRrjYEWorlg7qKlvb2lguNYF8A0ktY8sU3TD0MQkV5
-         6J1q6l1l2ALaOrpIx0xccDzU+Jti7wY6R6NHPX/xyDl6Nj+kJ6mnqe/4Wppxn4Pub5n4
-         mGW7zNZEUp7hFZL2MUIeKS4RmOJvmzlmdud5eGqr4RpxswqyIJKWEyrx2pNiyTD+zmrQ
-         YbOwF6caCllB37Wq1zfBi3uSBB1fk56owycsj0buZuZru3OVC9zG3ZkMs+SLRP0OAB+I
-         ocTg==
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7zsIRzNIRn8xv0TLvT1DjIsq/RVivIHdkhDcQAho+Zs=;
+        b=Nr0Z18y8ph+MXQmfpZLNfzIbpNdfJoEKXbDAt/UnP/BTrVycDDpH13iPs4rguEOzQ/
+         otnKQwTY56EQgfUVXjybo05UyV3pChE/kkiOzcRklDeEiXQPap60evUUw/J1TX05u+iF
+         UwqjtvWsFFR4dhn46H3L5tvi2uxVlS5TnRnjQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=kszdO6wU0Mqq85Z4KS0Qv5qQ/jWZuPbQJLH0mbPBngY=;
-        b=VYeS74LFehmN8X3DMTIzKjYAH5EL2LbZTGstoGmKeeVW/Tqko77g7lOL5TJF6lZYZt
-         WNTc2xgHk7UmWaYW2Fx6O0nE3BLlrnlhriUIjt9EmzLmnBcnoIDgtVKppXr3xyz4FyCD
-         gbV4jbwgfvLFEGGr7gBFIyjxdllRgx0TNA004tkWgeZb0lVje6oKq/395q/w9FkRar+S
-         T3f39eR2Qo2uBCyEmyh+iaL8/z5ePAQaSyWZxacfNJXyP5Zdha9nCcXoR+EjHjFjK4Z+
-         RFC1NJ80+AdRk9g5x3EhmP6WJBe1EGqywKzyfyj9NGBYM9NgheeEEbH+kFh95xGM4CSu
-         KnFw==
-X-Gm-Message-State: AOAM5303tKFWh5JteRt9RGbrPdxdbNz/2p2u/X7VjY76ByU94X4lRTtw
-        hUhWc5YX8+gMxa7VWaaPC31sQApLvT1WrA==
-X-Google-Smtp-Source: ABdhPJyCKTiS68ltMDOjoqogI8DPaUY5lhMrd/Ldxc9wQ1klvoy7rTcUWwqKZZR1Opu84lCAH6Zg6A==
-X-Received: by 2002:a05:6000:2cd:b0:20a:9403:1681 with SMTP id o13-20020a05600002cd00b0020a94031681mr4019160wry.474.1650638883804;
-        Fri, 22 Apr 2022 07:48:03 -0700 (PDT)
-Received: from [192.168.1.145] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id w4-20020a7bc104000000b0038eba17a797sm4603969wmi.31.2022.04.22.07.48.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 07:48:03 -0700 (PDT)
-Message-ID: <db89b86f-4b53-db99-8ec5-e4e469b02694@gmail.com>
-Date:   Fri, 22 Apr 2022 16:48:01 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7zsIRzNIRn8xv0TLvT1DjIsq/RVivIHdkhDcQAho+Zs=;
+        b=dUgkD3x7rC3ND8mnCSww6OLGVhcaV5pK99WUeWGNRw2QiMf1uyzg72i1Mnj3eqsdlb
+         5zcrBXdv+ydReocMeRrEaJbeDk0c9lPJv7HMGLJrwSBhAt74Ek27+3nkqJUhme51vbEk
+         ykVse9ZtpiWWsDTcFxftGOt9qGO3r1dDTN2nZhyXkWMxEteanz6lVlE4lfNaSmvOrVyZ
+         eSj+HbGFtIADrPaYOxxQBA36GCiBZmslln6mwdndvu+3b3GA/WmXfc/OLfKy9NKpCiKE
+         L0ks82oOBrhg9RKijr//1uUUuhJR2URgcKkUH5MMxsnPFSPpy6tVnqfr+sKgzCc2+n9o
+         Wr5g==
+X-Gm-Message-State: AOAM532DHckjf2uSZHNWOanv7xCCHxj6wBHwOrS7EcsnV/O7Ag37HF7z
+        x7d0sNGAxMIMWMP6v7FUx+gvJoDIfUX5qlsk+yawyA==
+X-Google-Smtp-Source: ABdhPJyLkyfn7hrzDCgBNR4IbPa/+dcKZx+aqeRvjZL/LtCvp3ryeyf9mXsqjnEUsQmn7dMJTi0QQQwhGBWdqs7sn3Q=
+X-Received: by 2002:a05:6402:270e:b0:424:55a:d8a3 with SMTP id
+ y14-20020a056402270e00b00424055ad8a3mr5174379edd.221.1650638907755; Fri, 22
+ Apr 2022 07:48:27 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v14 0/2] Add basic SoC support for mediatek mt8195
-Content-Language: en-US
-To:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Johnson Wang <johnson.wang@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Henry Chen <henryc.chen@mediatek.com>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        ryder.lee@kernel.org, wenst@chromium.org, chunfeng.yun@mediatek.com
-References: <20220411022724.11005-1-tinghan.shen@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220411022724.11005-1-tinghan.shen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220408061809.12324-1-dharamhans87@gmail.com>
+ <20220408061809.12324-2-dharamhans87@gmail.com> <CAJfpegvU+y+WRhWrgWfc_7O5BdVi=N+3RUuVdBFFoyYVr9MDeg@mail.gmail.com>
+ <CACUYsyGiNgbyoxWWdXm0z73B7QfnPGU2gYanDNSQqmq5_rnrhw@mail.gmail.com>
+In-Reply-To: <CACUYsyGiNgbyoxWWdXm0z73B7QfnPGU2gYanDNSQqmq5_rnrhw@mail.gmail.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Fri, 22 Apr 2022 16:48:16 +0200
+Message-ID: <CAJfpegsZF4D-sshMK0C=jSECskyQRAgA_1hKD9ytsHKvmXoBeA@mail.gmail.com>
+Subject: Re: [PATCH 1/1] FUSE: Allow parallel direct writes on the same file
+To:     Dharmendra Hans <dharamhans87@gmail.com>
+Cc:     linux-fsdevel@vger.kernel.org,
+        fuse-devel <fuse-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org, Bernd Schubert <bschubert@ddn.com>,
+        Dharmendra Singh <dsingh@ddn.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,99 +66,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 22 Apr 2022 at 16:30, Dharmendra Hans <dharamhans87@gmail.com> wrote:
+>
+> On Thu, Apr 21, 2022 at 8:52 PM Miklos Szeredi <miklos@szeredi.hu> wrote:
+> >
+> > On Fri, 8 Apr 2022 at 08:18, Dharmendra Singh <dharamhans87@gmail.com> wrote:
+> > >
+> > > As of now, in Fuse, direct writes on the same file are serialized
+> > > over inode lock i.e we hold inode lock for the whole duration of
+> > > the write request. This serialization works pretty well for the FUSE
+> > > user space implementations which rely on this inode lock for their
+> > > cache/data integrity etc. But it hurts badly such FUSE implementations
+> > > which has their own ways of mainting data/cache integrity and does not
+> > > use this serialization at all.
+> > >
+> > > This patch allows parallel direct writes on the same file with the
+> > > help of a flag called FOPEN_PARALLEL_WRITES. If this flag is set on
+> > > the file (flag is passed from libfuse to fuse kernel as part of file
+> > > open/create), we do not hold inode lock for the whole duration of the
+> > > request, instead acquire it only to protect updates on certain fields
+> > > of the inode. FUSE implementations which rely on this inode lock can
+> > > continue to do so and this is default behaviour.
+> > >
+> > > Signed-off-by: Dharmendra Singh <dsingh@ddn.com>
+> > > ---
+> > >  fs/fuse/file.c            | 38 ++++++++++++++++++++++++++++++++++----
+> > >  include/uapi/linux/fuse.h |  2 ++
+> > >  2 files changed, 36 insertions(+), 4 deletions(-)
+> > >
+> > > diff --git a/fs/fuse/file.c b/fs/fuse/file.c
+> > > index 37eebfb90500..d3e8f44c1228 100644
+> > > --- a/fs/fuse/file.c
+> > > +++ b/fs/fuse/file.c
+> > > @@ -1465,6 +1465,8 @@ ssize_t fuse_direct_io(struct fuse_io_priv *io, struct iov_iter *iter,
+> > >         int err = 0;
+> > >         struct fuse_io_args *ia;
+> > >         unsigned int max_pages;
+> > > +       bool p_write = write &&
+> > > +               (ff->open_flags & FOPEN_PARALLEL_WRITES) ? true : false;
+> > >
+> > >         max_pages = iov_iter_npages(iter, fc->max_pages);
+> > >         ia = fuse_io_alloc(io, max_pages);
+> > > @@ -1472,10 +1474,11 @@ ssize_t fuse_direct_io(struct fuse_io_priv *io, struct iov_iter *iter,
+> > >                 return -ENOMEM;
+> > >
+> > >         if (!cuse && fuse_range_is_writeback(inode, idx_from, idx_to)) {
+> > > -               if (!write)
+> > > +               /* Parallel write does not come with inode lock held */
+> > > +               if (!write || p_write)
+> >
+> > Probably would be good to add an inode_is_locked() assert in
+> > fuse_sync_writes() to make sure we don't miss cases silently.
+>
+> I think fuse_set_nowrite() called from fuse_sync_writes() already has
+> this assertion.
 
+Ah, okay.
 
-On 11/04/2022 04:27, Tinghan Shen wrote:
-> This series adds basic SoC support for Mediatek's SoC MT8195.
+>
+> >
+> > >                         inode_lock(inode);
+> > >                 fuse_sync_writes(inode);
+> > > -               if (!write)
+> > > +               if (!write || p_write)
+> > >                         inode_unlock(inode);
+> > >         }
+> > >
+> > > @@ -1568,22 +1571,36 @@ static ssize_t fuse_direct_read_iter(struct kiocb *iocb, struct iov_iter *to)
+> > >  static ssize_t fuse_direct_write_iter(struct kiocb *iocb, struct iov_iter *from)
+> > >  {
+> > >         struct inode *inode = file_inode(iocb->ki_filp);
+> > > +       struct file *file = iocb->ki_filp;
+> > > +       struct fuse_file *ff = file->private_data;
+> > >         struct fuse_io_priv io = FUSE_IO_PRIV_SYNC(iocb);
+> > >         ssize_t res;
+> > > +       bool p_write = ff->open_flags & FOPEN_PARALLEL_WRITES ? true : false;
+> > > +       bool unlock_inode = true;
+> > >
+> > >         /* Don't allow parallel writes to the same file */
+> > >         inode_lock(inode);
+> > >         res = generic_write_checks(iocb, from);
+> >
+> > I don't think this needs inode lock.  At least nfs_file_direct_write()
+> > doesn't have it.
+> >
+> > What it does have, however is taking the inode lock for shared for the
+> > actual write operation, which is probably something that fuse needs as
+> > well.
+> >
+> > Also I worry about size extending writes not holding the inode lock
+> > exclusive.  Would that be a problem in your use case?
+>
+> Thanks for pointing out this issue. Actually there is an issue in
+> appending writes.
+> Until unless current appeding write is finished and does not update
+> i_size, next appending
+> write can't be allowed as it would be otherwise one request
+> overwriting data written
+> by another request.
+> For other kind of writes, I do not see the issue as i_size update can
+> be handled as it is
+> done currently as these writes are based upon fixed offset instead of
+> generating offset
+> from i_size.
 
-Both patches applied to their respective branches.
+That's true, but I still worry...  Does your workload include
+non-append extending writes?  Seems to me making those run in parallel
+is asking for trouble.
 
-Thanks!
+> If we agreed, I  would be sending the updated patch shortly.
+> (Also please take a look on other patches raised by me for atomic-open,  these
+>  patches are pending since couple of weeks)
 
-> 
-> ---
-> Changes in v14:
->    - update pwrap dt-bindings
->      this patch is picked from 20220411014121.15015-2-zhiyong.tao@mediatek.com
->    - enable u3phy2 and u3phy3 in evb dts
-> Changes in v13:
->    - add more description of reg items in mtk-sd.yaml
-> Changes in v12:
->    - update mtk-sd.yaml to extend reg property and fix yamllint error
->    - add xhci nodes and move xhci3 property (usb2-lpm-disable) to evb.dts
-> Changes in v11:
->    - rebase on 5.17-rc4
-> Changes in v10:
->    - clean CC list
-> Changes in v9:
->    - remove duplicated cpus dt-bindings patch in v8
-> Changes in v8:
->    - v7 mediatek,spi-mtk-nor.yaml patch is applied in branch for-5.17 at
->      kernel/git/broonie/spi.git
->    - v7 pinctrl-mt8195.yaml patch is applied in branch for-next at
->      kernel/git/linusw/linux-pinctrl.git
->    - add cortex-a78 compatible to cpus dt-bindings
->    - add mediatek,drive-strength-adv property to pinctrl dt-bindings
->    - fix evb dts
->      - remove i2c nodes with disabled status from dts
->      - fix pin properties not match pinctrl dt-bindings
->      - remove unnecessary u3port*
->    - fix dtsi
->      - fix node format
->      - reorder oscillator* nodes
->      - fix node name of cpu idle nodes
->      - remove clock-frequency property in the timer node
->      - reorder clock and clock names in usb nodes
-> Changes in v7:
->    - refine title of spi-nor dt-bindings patch
->    - refine commit message of pinctrl dt-bindings patch
->    - update pinctrl-mt8195.yaml
->      - change property pattern from 'pins' to '^pins'
->      - update examples with new property in descriptions
->      - add new example
->    - drop '_' from node names of pinctrl subnodes in mt8195-evb.dts
-> Changes in v6:
->    - rebase on 5.16-rc1
->    - add new clock name to spi-nor dt-bindings
->    - add "pins" property in pinctrl dt-bindings
->    - fix fails of dtbs_checks
->      - remove "arm,armv8" not matched in yaml from cpu compatile
->      - fix node name of xhci
->      - remvoe xhci upstreaming wakeup properties
->      - remove xhci unused properties address-cells and size-cells
->      - fix node name of ufs-phy
->      - fix node name of spi-nor
->      - fix node name and sub-nodes of pinctrl
->      - fix mmc compatible
-> Changes in v5:
->    - enable basic nodes in mt8195-evb.dts
->    - remove dedicated clock nodes
->    - add mmc2 node
->    - fix interrupt number of pinctrl node
->    - update clock nodes to apply internal fixes
->    - add dt-bindings for perficfg node
-> 
-> v4 thread:
-> https://lore.kernel.org/all/20210922093303.23720-2-seiya.wang@mediatek.com/
-> v3 thread:
-> https://lore.kernel.org/all/20210601075350.31515-2-seiya.wang@mediatek.com/
-> v2 thread:
-> https://lore.kernel.org/all/20210319023427.16711-10-seiya.wang@mediatek.com/
-> v1 thread:
-> https://lore.kernel.org/all/20210316111443.3332-11-seiya.wang@mediatek.com/
-> ---
-> 
-> Tinghan Shen (1):
->    arm64: dts: Add mediatek SoC mt8195 and evaluation board
-> 
-> Zhiyong.Tao (1):
->    dt-bindings: pwrap: mediatek: fix pwrap document for mt8195
-> 
->   .../bindings/soc/mediatek/pwrap.txt           |   10 +-
->   arch/arm64/boot/dts/mediatek/Makefile         |    1 +
->   arch/arm64/boot/dts/mediatek/mt8195-evb.dts   |  181 +++
->   arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 1045 +++++++++++++++++
->   4 files changed, 1232 insertions(+), 5 deletions(-)
->   create mode 100644 arch/arm64/boot/dts/mediatek/mt8195-evb.dts
->   create mode 100644 arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> 
+I'm looking at that currently.
+
+Thanks,
+Miklos

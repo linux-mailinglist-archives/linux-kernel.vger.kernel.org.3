@@ -2,108 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73E2E50C40D
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:12:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA2DA50C33E
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233874AbiDVWox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 18:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43542 "EHLO
+        id S232531AbiDVWZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 18:25:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233556AbiDVWon (ORCPT
+        with ESMTP id S232155AbiDVWZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 18:44:43 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96AE30D85A
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 14:39:40 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23MI1eGT108778;
-        Fri, 22 Apr 2022 13:01:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1650650501;
-        bh=Kl1JWrgUFz6ayHAKznd+Y3h+PX7n0DydW4VC03n7x2c=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=ku76huh2hYibqAGm5CepUCDs/h2s/RpwGQJL5gCcP8AYURREUG4CGEo/Vttt489aK
-         5uVlU9T5aBPNrn+Q1w4uUDhjOkwj6GqDyirtmEpRvDu03w77akpzvWyTILlGVS1mCU
-         saoZ4R/JZcSMGP1zYqNMVshzHBKgA+uaqiM3Ki6g=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23MI1eww117540
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 22 Apr 2022 13:01:40 -0500
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 22
- Apr 2022 13:01:40 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 22 Apr 2022 13:01:40 -0500
-Received: from ula0226330.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23MI1dso125884;
-        Fri, 22 Apr 2022 13:01:40 -0500
-From:   Andrew Davis <afd@ti.com>
-To:     Jens Wiklander <jens.wiklander@linaro.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        <op-tee@lists.trustedfirmware.org>, <linux-kernel@vger.kernel.org>
-CC:     Andrew Davis <afd@ti.com>
-Subject: [PATCH 2/2] tee: remove flags TEE_IOCTL_SHM_MAPPED and TEE_IOCTL_SHM_DMA_BUF
-Date:   Fri, 22 Apr 2022 13:01:39 -0500
-Message-ID: <20220422180139.13447-2-afd@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220422180139.13447-1-afd@ti.com>
-References: <20220422180139.13447-1-afd@ti.com>
+        Fri, 22 Apr 2022 18:25:27 -0400
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA791B8282
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 14:17:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:Message-ID:Date:Subject:Cc:To:From:References:In-Reply-To:
+        Content-ID:Content-Description;
+        bh=XRgs5dgoBGBDr9oS5MRbFhujpNneuzIzg2K4+SgByuA=; b=LTDQ4JRHSj7PS7jOvG31dv/Q7W
+        ZB5cT+8p9nbf0eUz5yz+8PNMcOu8i0/sHYrLMr3C/t55uXOeknvcQDdlGTXTeMpLgihR40eBAQrJl
+        P8l8Yv+c2+K3v1qKaaDgvgjT/zsxA/Gt8AP0vETbSgpH+/Oypsirx7HCyP9w9S5r9Ny+XmwPHYsPh
+        OD0V3dy2DL0UwsPda7DPkigL/etquLdpVrlB4a09h5JMZbQruEXzTWncpVrqar8Pu+2lSR9If/7vj
+        6Sfamqo8kSVgsRbeLyTkBYnX6ubInNVSO4lRPybZO0yubOK1HC2gLVQOlrVaDga2fNKMRVP8a1TwZ
+        a5O+Mt7SbmZCZ5whMbAq6J/sbt3uRetJNum0op4p4Znw31xcjBGhLnzh6SjDFFt3BbvYihp6cKqn7
+        dkTGuC1GoUabk3W6/3J1KoJHonNV04yf5QB93sTVhwRrcZxIdWrKbEz6Z4ct2yZuBSshH8WGtUbiz
+        nHkhgpU2Sp4VB5Nd4X/4W4aZjSWomDcCPXUPtxBntMzd5yZ2VuUorQlLZkeLD+smipJlYjfUoGSJz
+        jOZzjLoKQXDyvGhRGNtsJdM0GXy9JXuSlLg+kwYpj7/s3+tMQV1MB6hBmAYF+UHfpIB3b4kVxThdl
+        Ha2e37FPpqkbh9tzHmQsXrvnrM6fckHGNMhBwlTnM=;
+From:   Christian Schoenebeck <qemu_oss@crudebyte.com>
+To:     qemu-devel@nongnu.org
+Cc:     Will Cohen <wwcohen@gmail.com>, Greg Kurz <groug@kaod.org>,
+        Michael Roitzsch <reactorcontrol@icloud.com>,
+        Keno Fischer <keno@juliacomputing.com>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        Latchesar Ionkov <lucho@ionkov.net>
+Subject: [RFC PATCH] 9p: case-insensitive host filesystems
+Date:   Fri, 22 Apr 2022 20:02:46 +0200
+Message-ID: <1757498.AyhHxzoH2B@silver>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These look to be leftover from an early edition of this driver. Userspace
-does not need this information. Checking all users of this that I have
-access to I have verified no one is using them.
+Now that 9p support for macOS hosts just landed in QEMU 7.0 and with support 
+for Windows hosts on the horizon [1], the question is how to deal with case-
+insensitive host filesystems, which are very common on those two systems?
 
-They leak internal use flags out to userspace. Even more they are not
-correct anymore after a45ea4efa358. Lets drop these flags before
-someone does try to use them for something and they become ABI.
+I made some tests, e.g. trying to setup a 9p root fs Linux installation on a 
+macOS host as described in the QEMU HOWTO [2], which at a certain point causes 
+the debootstrap script to fail when trying to unpack the 'libpam-runtime' 
+package. That's because it would try to create this symlink:
 
-Signed-off-by: Andrew Davis <afd@ti.com>
+  /usr/share/man/man7/PAM.7.gz -> /usr/share/man/man7/pam.7.gz
+
+which fails with EEXIST on a case-insensitive APFS. Unfortunately you can't 
+easily switch an existing APFS partition to case-sensitivity. It requires to 
+reformat the entire partition, loosing all your data, etc.
+
+So I did a quick test with QEMU as outlined below, trying to simply let 9p 
+server "eat" EEXIST errors in such cases, but then I realized that most of the 
+time it would not even come that far, as Linux client would first send a 
+'Twalk' request to check whether target symlink entry already exists, and as 
+it gets a positive response from 9p server (again, due to case-insensitivity) 
+client would stop right there without even trying to send a 'Tsymlink' 
+request.
+
+So maybe it's better to handle case-insensitivity entirely on client side? 
+I've read that some generic "case fold" code has landed in the Linux kernel 
+recently that might do the trick?
+
+Should 9p server give a hint to 9p client that it's a case-insensitive fs? And 
+if yes, once per entire exported fs or rather for each directory (as there 
+might be submounts on host)?
+
+[1] https://lore.kernel.org/all/20220408171013.912436-1-bmeng.cn@gmail.com/
+[2] https://wiki.qemu.org/Documentation/9p_root_fs
+
 ---
- drivers/tee/tee_core.c   | 1 -
- include/uapi/linux/tee.h | 4 ----
- 2 files changed, 5 deletions(-)
+ hw/9pfs/9p-local.c | 54 ++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
 
-diff --git a/drivers/tee/tee_core.c b/drivers/tee/tee_core.c
-index 8aa1a4836b92f..650dd87a38e77 100644
---- a/drivers/tee/tee_core.c
-+++ b/drivers/tee/tee_core.c
-@@ -339,7 +339,6 @@ tee_ioctl_shm_register(struct tee_context *ctx,
- 		return PTR_ERR(shm);
+diff --git a/hw/9pfs/9p-local.c b/hw/9pfs/9p-local.c
+index d42ce6d8b8..d6cb45c758 100644
+--- a/hw/9pfs/9p-local.c
++++ b/hw/9pfs/9p-local.c
+@@ -39,6 +39,10 @@
+ #endif
+ #endif
+ #include <sys/ioctl.h>
++#ifdef CONFIG_DARWIN
++#include <glib.h>
++#include <glib/gprintf.h>
++#endif
  
- 	data.id = shm->id;
--	data.flags = shm->flags;
- 	data.length = shm->size;
+ #ifndef XFS_SUPER_MAGIC
+ #define XFS_SUPER_MAGIC  0x58465342
+@@ -57,6 +61,18 @@ typedef struct {
+     int mountfd;
+ } LocalData;
  
- 	if (copy_to_user(udata, &data, sizeof(data)))
-diff --git a/include/uapi/linux/tee.h b/include/uapi/linux/tee.h
-index 25a6c534beb1b..23e57164693c4 100644
---- a/include/uapi/linux/tee.h
-+++ b/include/uapi/linux/tee.h
-@@ -42,10 +42,6 @@
- #define TEE_IOC_MAGIC	0xa4
- #define TEE_IOC_BASE	0
++#ifdef CONFIG_DARWIN
++
++/* Compare strings case-insensitive (assuming UTF-8 encoding). */
++static int p9_stricmp(const char *a, const char *b)
++{
++    g_autofree gchar *cia = g_utf8_casefold(a, -1);
++    g_autofree gchar *cib = g_utf8_casefold(b, -1);
++    return g_utf8_collate(cia, cib);
++}
++
++#endif
++
+ int local_open_nofollow(FsContext *fs_ctx, const char *path, int flags,
+                         mode_t mode)
+ {
+@@ -931,6 +947,25 @@ static int local_symlink(FsContext *fs_ctx, const char 
+*oldpath,
+                fs_ctx->export_flags & V9FS_SM_NONE) {
+         err = symlinkat(oldpath, dirfd, name);
+         if (err) {
++#if CONFIG_DARWIN
++            if (errno == EEXIST) {
++                printf("  -> symlinkat(oldpath='%s', dirfd=%d, name='%s') = 
+EEXIST\n", oldpath, dirfd, name);
++            }
++            if (errno == EEXIST &&
++                strcmp(oldpath, name) && !p9_stricmp(oldpath, name))
++            {
++                struct stat st1, st2;
++                const int cur_errno = errno;
++                if (!fstatat(dirfd, oldpath, &st1, AT_SYMLINK_NOFOLLOW) &&
++                    !fstatat(dirfd, name, &st2, AT_SYMLINK_NOFOLLOW) &&
++                    st1.st_dev == st2.st_dev && st1.st_ino == st2.st_ino)
++                {
++                    printf("  -> iCASE SAME\n");
++                    err = 0;
++                }
++                errno = cur_errno;
++            }
++#endif
+             goto out;
+         }
+         err = fchownat(dirfd, name, credp->fc_uid, credp->fc_gid,
+@@ -983,6 +1018,25 @@ static int local_link(FsContext *ctx, V9fsPath *oldpath,
  
--/* Flags relating to shared memory */
--#define TEE_IOCTL_SHM_MAPPED	0x1	/* memory mapped in normal world */
--#define TEE_IOCTL_SHM_DMA_BUF	0x2	/* dma-buf handle on shared memory */
--
- #define TEE_MAX_ARG_SIZE	1024
+     ret = linkat(odirfd, oname, ndirfd, name, 0);
+     if (ret < 0) {
++#if CONFIG_DARWIN
++        if (errno == EEXIST) {
++            printf("  -> linkat(odirfd=%d, oname='%s', ndirfd=%d, name='%s') 
+= EEXIST\n", odirfd, oname, ndirfd, name);
++        }
++        if (errno == EEXIST &&
++            strcmp(oname, name) && !p9_stricmp(oname, name))
++        {
++            struct stat st1, st2;
++            const int cur_errno = errno;
++            if (!fstatat(odirfd, oname, &st1, AT_SYMLINK_NOFOLLOW) &&
++                !fstatat(ndirfd, name, &st2, AT_SYMLINK_NOFOLLOW) &&
++                st1.st_dev == st2.st_dev && st1.st_ino == st2.st_ino)
++            {
++                printf("  -> iCASE SAME\n");
++                ret = 0;
++            }
++            errno = cur_errno;
++        }
++#endif
+         goto out_close;
+     }
  
- #define TEE_GEN_CAP_GP		(1 << 0)/* GlobalPlatform compliant TEE */
 -- 
-2.17.1
+2.32.0 (Apple Git-132)
+
+
+
 

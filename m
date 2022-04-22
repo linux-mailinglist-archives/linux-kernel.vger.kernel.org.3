@@ -2,46 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2311150AE5F
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 05:10:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A778850AE7B
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 05:24:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443706AbiDVDNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 23:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58364 "EHLO
+        id S1443756AbiDVD0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 23:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443700AbiDVDNL (ORCPT
+        with ESMTP id S1443730AbiDVD0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 23:13:11 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C34E4C789;
-        Thu, 21 Apr 2022 20:10:19 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KkzsQ1F06zfYkP;
-        Fri, 22 Apr 2022 11:09:30 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 22 Apr 2022 11:10:17 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 22 Apr
- 2022 11:10:17 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>
-CC:     <robdclark@gmail.com>, <jilaiw@codeaurora.org>
-Subject: [PATCH] drm/msm/hdmi: check return value after calling platform_get_resource_byname()
-Date:   Fri, 22 Apr 2022 11:22:27 +0800
-Message-ID: <20220422032227.2991553-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        Thu, 21 Apr 2022 23:26:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9914D63E
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 20:23:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E7865B82A2A
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:23:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 854FBC385A7;
+        Fri, 22 Apr 2022 03:23:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650597811;
+        bh=O/viPJYPHRZIpmTuoEaBkacx7MMguY7hWUbhqksXnkw=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=qpXXyjfJ14mvXbLvLyq0qTyy6Lpg5nd5+Uklkec6LhqNaQQFoK6uRFWUoXPi3hmEx
+         yIDfY1lDEpd+5boLProrbBQgWfphGoPfQ6qTkjMc+rszrxuVysTE/5/Wrkv0ofsL89
+         GMhUv7UY5V804heZb/3dA3w4nz8Sx/6EvjQTLfg2NZDY9CgH5scmmTpJlhndIpcPjI
+         OUUNnrrzzCA5/mP0Q3m7+P+T7q30TXv5ch7OQBVd/8VuhlT3GgKAXIBadDkDWmAhYB
+         t1tK6NXvSQ+vNN5h6ofj2a12PROKt11zvbRzycFY4aRVkqfMAUTLqqvE4R+gmLlomz
+         lVHraWmV3hkhg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 70CDAE8DBDA;
+        Fri, 22 Apr 2022 03:23:31 +0000 (UTC)
+Subject: Re: [git pull] drm fixes for 5.18-rc4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAPM=9tzQpOnBBNNYWDaJRBztOCVM-PmprHHWZnr2yLh2rb2Y8g@mail.gmail.com>
+References: <CAPM=9tzQpOnBBNNYWDaJRBztOCVM-PmprHHWZnr2yLh2rb2Y8g@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAPM=9tzQpOnBBNNYWDaJRBztOCVM-PmprHHWZnr2yLh2rb2Y8g@mail.gmail.com>
+X-PR-Tracked-Remote: git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-04-22
+X-PR-Tracked-Commit-Id: 70da382e1c5b9b2049c10abfd4489a40c1b60df0
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: d569e86915b7f2f9795588591c8d5ea0b66481cb
+Message-Id: <165059781145.714.9614384696896372863.pr-tracker-bot@kernel.org>
+Date:   Fri, 22 Apr 2022 03:23:31 +0000
+To:     Dave Airlie <airlied@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,30 +65,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It will cause null-ptr-deref if platform_get_resource_byname() returns NULL,
-we need check the return value.
+The pull request you sent on Fri, 22 Apr 2022 12:56:18 +1000:
 
-Fixes: c6a57a50ad56 ("drm/msm/hdmi: add hdmi hdcp support (V3)")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/gpu/drm/msm/hdmi/hdmi.c | 4 ++++
- 1 file changed, 4 insertions(+)
+> git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-04-22
 
-diff --git a/drivers/gpu/drm/msm/hdmi/hdmi.c b/drivers/gpu/drm/msm/hdmi/hdmi.c
-index ec324352e862..07e2ad527af9 100644
---- a/drivers/gpu/drm/msm/hdmi/hdmi.c
-+++ b/drivers/gpu/drm/msm/hdmi/hdmi.c
-@@ -142,6 +142,10 @@ static struct hdmi *msm_hdmi_init(struct platform_device *pdev)
- 	/* HDCP needs physical address of hdmi register */
- 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
- 		config->mmio_name);
-+	if (!res) {
-+		ret = -EINVAL;
-+		goto fail;
-+	}
- 	hdmi->mmio_phy_addr = res->start;
- 
- 	hdmi->qfprom_mmio = msm_ioremap(pdev, config->qfprom_mmio_name);
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/d569e86915b7f2f9795588591c8d5ea0b66481cb
+
+Thank you!
+
 -- 
-2.25.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

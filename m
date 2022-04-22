@@ -2,110 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1030B50C525
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:46:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B463F50C4D5
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:46:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbiDVXdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 19:33:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37538 "EHLO
+        id S230213AbiDVXdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 19:33:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231755AbiDVXdA (ORCPT
+        with ESMTP id S231778AbiDVXdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 22 Apr 2022 19:33:00 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F120CBF73;
-        Fri, 22 Apr 2022 16:14:47 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23MNEWcV059722;
-        Fri, 22 Apr 2022 18:14:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1650669272;
-        bh=7XjQZD4KtPOGu7ug5uoIpXVCaFJ8ucmoZCCk+9odcS0=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=eR42Jk6mYCJX8efcm2FAc8Rd1LxSUvnKS6FXuyVAAwEoVwHKe14FbdJiZNCPVbLSe
-         kYW1jKUsA2+1PSzIHTePU5vmQstP9e9jEpW/yp0LPgNRnc5+LIg7DXYoJlxc0dXQWo
-         d3ZYaGFu9WQcTD2QdbSo9ZI6eVOIyDZF4qHdNlNc=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23MNEWw1030768
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 22 Apr 2022 18:14:32 -0500
-Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 22
- Apr 2022 18:14:32 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 22 Apr 2022 18:14:32 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23MNEWTN031542;
-        Fri, 22 Apr 2022 18:14:32 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Drew Fustini <dfustini@baylibre.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Dave Gerlach <d-gerlach@ti.com>,
-        Tony Lindgren <tony@atomide.com>
-CC:     Nishanth Menon <nm@ti.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>
-Subject: Re: (subset) [PATCH v2 0/2] soc: ti: wkup_m3_ipc: support vtt toggle
-Date:   Fri, 22 Apr 2022 18:14:31 -0500
-Message-ID: <165066925452.1802.14006320713243100128.b4-ty@ti.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220409211215.2529387-1-dfustini@baylibre.com>
-References: <20220409211215.2529387-1-dfustini@baylibre.com>
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA500210C3A;
+        Fri, 22 Apr 2022 16:14:56 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 16:14:49 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1650669295;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qj54Vyot11RQURjSDei20EVpyRPh4pQqH20/VoPb/oY=;
+        b=WWhuDxynQAO8T0s74G33tChZVeFVDym7JxNZ5avEQ2CPZNMh9wqOtfLPt/wrG1+5WwfSTu
+        7yjlJ2fQ+56QPdJsoOiM/ZahjDyqpieegEXLu4PcOhG+OOBZx8RlLBwzKpDN9ekV7CSFx2
+        fXn8qs8BVdRh/bFx1bRkHLItH8xTB6w=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     David Vernet <void@manifault.com>
+Cc:     akpm@linux-foundation.org, tj@kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, hannes@cmpxchg.org, mhocko@kernel.org,
+        shakeelb@google.com, kernel-team@fb.com
+Subject: Re: [PATCH 3/5] cgroup: Account for memory_localevents in
+ test_memcg_oom_group_leaf_events()
+Message-ID: <YmM26XBZxWy4Widc@carbon>
+References: <20220422155728.3055914-1-void@manifault.com>
+ <20220422155728.3055914-4-void@manifault.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220422155728.3055914-4-void@manifault.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Drew Fustini,
-
-On Sat, 9 Apr 2022 14:12:13 -0700, Drew Fustini wrote:
-> This series enables the Cortex M3 processor found in AM33xx and AM43xx
-> SoCs to toggle the VTT regulator during low power mode transitions.
+On Fri, Apr 22, 2022 at 08:57:27AM -0700, David Vernet wrote:
+> The test_memcg_oom_group_leaf_events() testcase in the cgroup memcg tests
+> validates that processes in a group that perform allocations exceeding
+> memory.oom.group are killed. It also validates that the
+> memory.events.oom_kill events are properly propagated in this case.  Commit
+> 06e11c907ea4 ("kselftests: memcg: update the oom group leaf events test")
+> fixed test_memcg_oom_group_leaf_events() to account for the fact that the
+> memory.events.oom_kill events in a child cgroup is propagated up to its
+> parent. This behavior can actually be configured by the memory_localevents
+> mount option, so this patch updates the testcase to properly account for
+> the possible presence of this mount option.
 > 
-> I recently converted the Wakeup M3 IPC bindings to YAML. Rob has applied
-> that patch [1]. It is a prerequisite for the wkup-m3-ipc.yaml patch in
-> this series.
+> Signed-off-by: David Vernet <void@manifault.com>
+> ---
+>  .../testing/selftests/cgroup/test_memcontrol.c  | 17 ++++++++++++++++-
+>  1 file changed, 16 insertions(+), 1 deletion(-)
 > 
-> [...]
+> diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+> index ea2fd27e52df..d88e0ca3f3d1 100644
+> --- a/tools/testing/selftests/cgroup/test_memcontrol.c
+> +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+> @@ -21,6 +21,7 @@
+>  #include "../kselftest.h"
+>  #include "cgroup_util.h"
+>  
+> +static bool has_localevents;
+>  static bool has_recursiveprot;
+>  
+>  /*
+> @@ -1091,6 +1092,7 @@ static int test_memcg_oom_group_leaf_events(const char *root)
+>  {
+>  	int ret = KSFT_FAIL;
+>  	char *parent, *child;
+> +	long parent_oom_events;
+>  
+>  	parent = cg_name(root, "memcg_test_0");
+>  	child = cg_name(root, "memcg_test_0/memcg_test_1");
+> @@ -1128,7 +1130,15 @@ static int test_memcg_oom_group_leaf_events(const char *root)
+>  	if (cg_read_key_long(child, "memory.events", "oom_kill ") <= 0)
+>  		goto cleanup;
+>  
+> -	if (cg_read_key_long(parent, "memory.events", "oom_kill ") <= 0)
+> +	parent_oom_events = cg_read_key_long(
+> +			parent, "memory.events", "oom_kill ");
+> +	// If memory_localevents is not enabled (the default), the parent should
+> +	// count OOM events in its children groups. Otherwise, it should not
+> +	// have observed any events.
 
-I have applied the following to branch ti-drivers-soc-next on [1].
-Thank you!
+Please, use /* */ style comments, it's a generic kernel style.
 
-[2/2] soc: ti: wkup_m3_ipc: Add support for toggling VTT regulator
-      commit: f226041424cf87245d39a1b2dfae304308b36b6b
+> +	if (has_localevents) {
+> +		if (parent_oom_events != 0)
+> +			goto cleanup;
+> +	} else if (parent_oom_events <= 0)
+>  		goto cleanup;
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent up the chain during
-the next merge window (or sooner if it is a relevant bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+How about something like this? IMO a bit more clear what's going on.
+	if ((has_local_events && parent_oom_events == 0) ||
+	    parent_oom_events > 0)
+		ret = KSFT_PASS;
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Anyway, looks good to me.
+Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-[1] git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
-
+>  
+>  	ret = KSFT_PASS;
+> @@ -1298,6 +1308,11 @@ int main(int argc, char **argv)
+>  		ksft_exit_skip("Failed to query cgroup mount option\n");
+>  	has_recursiveprot = proc_status;
+>  
+> +	proc_status = proc_mount_contains("memory_localevents");
+> +	if (proc_status < 0)
+> +		ksft_exit_skip("Failed to query cgroup mount option\n");
+> +	has_localevents = proc_status;
+> +
+>  	for (i = 0; i < ARRAY_SIZE(tests); i++) {
+>  		switch (tests[i].fn(root)) {
+>  		case KSFT_PASS:
+> -- 
+> 2.30.2
+> 

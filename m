@@ -2,196 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 329F550C08D
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 21:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2540750C12C
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 23:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbiDVUBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 16:01:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37050 "EHLO
+        id S230074AbiDVViY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 17:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiDVUBg (ORCPT
+        with ESMTP id S229983AbiDVViO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 16:01:36 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A655730FDC3
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 12:47:10 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id c1so2367378pfo.0
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 12:47:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=y+doHSiz3zcutbur9voJocSmaAz48vDvOlIUUyf7FWM=;
-        b=a89x4nKawOtJHTWqZbbFoLA02HiA2GzJbSC41mQ0wwzZCECYB6TfQJyr2/Df//ex6j
-         XmT7P5B7iv2ke14uKxII/CpVdU/jGI3+z1MIfk01HgLY9e7jNF9Ef2GADrch0NvHa2Y3
-         e0KdE6OauULyRg0pbergxbJPNWhKph4DwTXjsVF841dpy6vNTRdBbFB4kG6CDGiBe/En
-         Qb0hJIxgcUjt+X3s6hrUD5N9ZqrYgaixHHLzZl+0DDb3SAg7tffEOtAZ3BhMwk+Jk8Q8
-         uA7WNM97/AFXWvlT4MeMpnEo8UMFQt1R3aNEVDwn5c6WaCgsPEVAFR101CSOBwwYA7K6
-         c4kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=y+doHSiz3zcutbur9voJocSmaAz48vDvOlIUUyf7FWM=;
-        b=xKGR+wbhJcystiwDLF8Rk3/XSDsdr8jiu1tXel9+Re4YpVmnMaYHN/qLPao4VQf4nh
-         ZugRyFVGQxwJIvjrkg2Mf+joD3iWAzJvMJBovF9LC2l6aADO97uE7fDYP69VxdpxiRx2
-         8SOFflEbLFK/YQ9A0H3jRymQr2ajaN/3lLClFxHhhqEmt2UI2649i987AFx6d7KZ4rDK
-         Y3i+3cBFdcnZTmNdBSB20/gWt6CCijNIwIy4bahfr5fle5i6BhUDROeRGswlbkD8BrXf
-         ohS/sgB1POa5TuUbJ6Yow9kkMktsRJ9zKbWGFluZcd5FenF/U+a3aI62yLlJPuabiasx
-         wDXw==
-X-Gm-Message-State: AOAM531GYmqRkKsOKWQIW70ZwTPfJTdLnKfF3qKT8UBc8Gpr733VdFhK
-        3LTE5COrNtD6n7B9I9a7PIQr+QFy1FBU4A==
-X-Google-Smtp-Source: ABdhPJxEUUev7ihPovjIZboLjGNyvTtHcPOY4eAutzFYv8bD3wyzHsFImEWTBe+Xfe0zGML0moa32Q==
-X-Received: by 2002:a62:a504:0:b0:50a:ceee:5f4 with SMTP id v4-20020a62a504000000b0050aceee05f4mr6608640pfm.13.1650655974887;
-        Fri, 22 Apr 2022 12:32:54 -0700 (PDT)
-Received: from makvihas.localhost.com ([2405:201:202b:15:bfe0:e8c0:bea6:ee63])
-        by smtp.gmail.com with ESMTPSA id z5-20020a056a00240500b004e15d39f15fsm3518932pfh.83.2022.04.22.12.32.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 12:32:54 -0700 (PDT)
-From:   Vihas Makwana <makvihas@gmail.com>
-To:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Straube <straube.linux@gmail.com>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Vihas Makwana <makvihas@gmail.com>
-Subject: [PATCH v3 6/7] staging: r8188eu: drop unnecessary wrapper _rtw_alloc_network
-Date:   Sat, 23 Apr 2022 01:02:22 +0530
-Message-Id: <20220422193223.11948-7-makvihas@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220422193223.11948-1-makvihas@gmail.com>
-References: <20220422193223.11948-1-makvihas@gmail.com>
+        Fri, 22 Apr 2022 17:38:14 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829A91E3DF3
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:39:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650659989; x=1682195989;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CPrMsqPBc4d+/2ELT/59dZdNya95D7ohcRstQplIP1w=;
+  b=OmjFPCf3qyFFDC0Xb8AwCAHuogKUc2gXFX9OAsxP7fPDApkLy1BSxbBx
+   q1oQmYcUlgCAtsi7YMnG5WUqBcuwFatfnwESr+xomSWbxvbQr3STYAKCW
+   2BLUDcOniIxzNq1Cr4gMOgTOBz1EBB+qf4u1FSRu6ftcsqhV6ASzxC/oo
+   HZNWSDKM+HLoyIhahfOSQ8cX07eG6uTrHZ33xCr4MpgrTEcKOL4ZNO/dd
+   exrWncZUcdfZ6cHseAOVwXEQivE3F4SDVyQWenke9hUX22LgOeTYRpZ6l
+   KxyA3mtYnrMVFDYiUsjVAS1l5sqC3h2smqfP0GcDhi7WWnkEqWo5eXhQU
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="325188982"
+X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
+   d="scan'208";a="325188982"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 10:25:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
+   d="scan'208";a="806077611"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 22 Apr 2022 10:25:52 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nhx2W-000AOU-7j;
+        Fri, 22 Apr 2022 17:25:52 +0000
+Date:   Sat, 23 Apr 2022 01:25:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Matteo Croce <mcroce@microsoft.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Emil Renner Berthing <kernel@esmil.dk>
+Subject: [esmil:visionfive 2/54] mm/kasan/shadow.c:63:7: warning: no previous
+ prototype for 'memcpy'
+Message-ID: <202204230129.dHHHV3FB-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        NO_RDNS_DOTCOM_HELO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop unnecessary wrapper _rtw_alloc_network and move its logic to
-rtw_alloc_network.
+tree:   https://github.com/esmil/linux visionfive
+head:   68fe13e37af4c8331cdd40841353c9725cb65925
+commit: 359a031f0505e46e0274570b6e015984f45da29b [2/54] riscv: optimized memcpy
+config: riscv-randconfig-c003-20220422 (https://download.01.org/0day-ci/archive/20220423/202204230129.dHHHV3FB-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/esmil/linux/commit/359a031f0505e46e0274570b6e015984f45da29b
+        git remote add esmil https://github.com/esmil/linux
+        git fetch --no-tags esmil visionfive
+        git checkout 359a031f0505e46e0274570b6e015984f45da29b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash mm/kasan/
 
-Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Vihas Makwana <makvihas@gmail.com>
----
- drivers/staging/r8188eu/core/rtw_cmd.c     |  2 +-
- drivers/staging/r8188eu/core/rtw_mlme.c    | 59 +++++++++-------------
- drivers/staging/r8188eu/include/rtw_mlme.h |  2 +-
- 3 files changed, 27 insertions(+), 36 deletions(-)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
-index 512896b86..ab462eb40 100644
---- a/drivers/staging/r8188eu/core/rtw_cmd.c
-+++ b/drivers/staging/r8188eu/core/rtw_cmd.c
-@@ -1457,7 +1457,7 @@ void rtw_createbss_cmd_callback(struct adapter *padapter, struct cmd_obj *pcmd)
- 		rtw_indicate_connect(padapter);
- 	} else {
- 
--		pwlan = _rtw_alloc_network(pmlmepriv);
-+		pwlan = rtw_alloc_network(pmlmepriv);
- 		spin_lock_bh(&pmlmepriv->scanned_queue.lock);
- 		if (!pwlan) {
- 			pwlan = rtw_get_oldest_wlan_network(&pmlmepriv->scanned_queue);
-diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
-index fb64954a0..080e07385 100644
---- a/drivers/staging/r8188eu/core/rtw_mlme.c
-+++ b/drivers/staging/r8188eu/core/rtw_mlme.c
-@@ -53,38 +53,6 @@ void rtw_free_mlme_priv_ie_data(struct mlme_priv *pmlmepriv)
- 	rtw_free_mlme_ie_data(&pmlmepriv->p2p_assoc_req_ie, &pmlmepriv->p2p_assoc_req_ie_len);
- }
- 
--struct	wlan_network *_rtw_alloc_network(struct	mlme_priv *pmlmepriv)/* _queue *free_queue) */
--{
--	struct	wlan_network	*pnetwork;
--	struct __queue *free_queue = &pmlmepriv->free_bss_pool;
--	struct list_head *plist = NULL;
--
--	spin_lock_bh(&free_queue->lock);
--
--	if (list_empty(&free_queue->queue)) {
--		pnetwork = NULL;
--		goto exit;
--	}
--	plist = (&free_queue->queue)->next;
--
--	pnetwork = container_of(plist, struct wlan_network, list);
--
--	list_del_init(&pnetwork->list);
--
--	pnetwork->network_type = 0;
--	pnetwork->fixed = false;
--	pnetwork->last_scanned = jiffies;
--	pnetwork->aid = 0;
--	pnetwork->join_res = 0;
--
--	pmlmepriv->num_of_scanned++;
--
--exit:
--	spin_unlock_bh(&free_queue->lock);
--
--	return pnetwork;
--}
--
- void _rtw_free_network(struct mlme_priv *pmlmepriv, struct wlan_network *pnetwork, u8 isfreeall)
- {
- 	u32 curr_time, delta_time;
-@@ -285,11 +253,34 @@ void rtw_free_mlme_priv(struct mlme_priv *pmlmepriv)
- 		vfree(pmlmepriv->free_bss_buf);
- }
- 
--static struct wlan_network *rtw_alloc_network(struct mlme_priv *pmlmepriv)
-+struct wlan_network *rtw_alloc_network(struct mlme_priv *pmlmepriv)
- {
- 	struct	wlan_network	*pnetwork;
-+	struct __queue *free_queue = &pmlmepriv->free_bss_pool;
-+	struct list_head *plist = NULL;
-+
-+	spin_lock_bh(&free_queue->lock);
- 
--	pnetwork = _rtw_alloc_network(pmlmepriv);
-+	if (list_empty(&free_queue->queue)) {
-+		pnetwork = NULL;
-+		goto exit;
-+	}
-+	plist = (&free_queue->queue)->next;
-+
-+	pnetwork = container_of(plist, struct wlan_network, list);
-+
-+	list_del_init(&pnetwork->list);
-+
-+	pnetwork->network_type = 0;
-+	pnetwork->fixed = false;
-+	pnetwork->last_scanned = jiffies;
-+	pnetwork->aid = 0;
-+	pnetwork->join_res = 0;
-+
-+	pmlmepriv->num_of_scanned++;
-+
-+exit:
-+	spin_unlock_bh(&free_queue->lock);
- 
- 	return pnetwork;
- }
-diff --git a/drivers/staging/r8188eu/include/rtw_mlme.h b/drivers/staging/r8188eu/include/rtw_mlme.h
-index fc30793f4..e982f0615 100644
---- a/drivers/staging/r8188eu/include/rtw_mlme.h
-+++ b/drivers/staging/r8188eu/include/rtw_mlme.h
-@@ -560,7 +560,7 @@ void rtw_scan_timeout_handler(struct adapter *adapter);
- 
- void rtw_free_mlme_priv_ie_data(struct mlme_priv *pmlmepriv);
- 
-- struct wlan_network *_rtw_alloc_network(struct mlme_priv *pmlmepriv);
-+struct wlan_network *rtw_alloc_network(struct mlme_priv *pmlmepriv);
- 
- void _rtw_free_network(struct mlme_priv *pmlmepriv,
- 		       struct wlan_network *pnetwork, u8 isfreeall);
+All warnings (new ones prefixed by >>):
+
+>> mm/kasan/shadow.c:63:7: warning: no previous prototype for 'memcpy' [-Wmissing-prototypes]
+      63 | void *memcpy(void *dest, const void *src, size_t len)
+         |       ^~~~~~
+
+
+vim +/memcpy +63 mm/kasan/shadow.c
+
+bb359dbcb70085 Andrey Konovalov 2020-12-22  61  
+bb359dbcb70085 Andrey Konovalov 2020-12-22  62  #undef memcpy
+bb359dbcb70085 Andrey Konovalov 2020-12-22 @63  void *memcpy(void *dest, const void *src, size_t len)
+bb359dbcb70085 Andrey Konovalov 2020-12-22  64  {
+f00748bfa0246c Andrey Konovalov 2021-02-24  65  	if (!kasan_check_range((unsigned long)src, len, false, _RET_IP_) ||
+f00748bfa0246c Andrey Konovalov 2021-02-24  66  	    !kasan_check_range((unsigned long)dest, len, true, _RET_IP_))
+bb359dbcb70085 Andrey Konovalov 2020-12-22  67  		return NULL;
+bb359dbcb70085 Andrey Konovalov 2020-12-22  68  
+bb359dbcb70085 Andrey Konovalov 2020-12-22  69  	return __memcpy(dest, src, len);
+bb359dbcb70085 Andrey Konovalov 2020-12-22  70  }
+bb359dbcb70085 Andrey Konovalov 2020-12-22  71  
+
+:::::: The code at line 63 was first introduced by commit
+:::::: bb359dbcb70085a63e8bdbf14837a900750f0cf7 kasan: split out shadow.c from common.c
+
+:::::: TO: Andrey Konovalov <andreyknvl@google.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+
 -- 
-2.30.2
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

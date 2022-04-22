@@ -2,47 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C1550B598
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F5350B5A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:54:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446890AbiDVKzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 06:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51028 "EHLO
+        id S1446900AbiDVK42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 06:56:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348748AbiDVKzf (ORCPT
+        with ESMTP id S1446889AbiDVK4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 06:55:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4D15548C;
-        Fri, 22 Apr 2022 03:52:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3D3D61EFC;
-        Fri, 22 Apr 2022 10:52:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EABDC385A0;
-        Fri, 22 Apr 2022 10:52:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650624761;
-        bh=5VwyYniTmCuQGdWotOwqSqZfCYpUDVP0/iwsTYfqbVQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=qgO14iWVtksDIiVwfqIB09zIwGVrKZWHCeJrfjJcsOTOkAIO0FfTcervnhUsWXnIi
-         5K8RPQenrDqA8r8z2oUbykCcngz4THZiT4LNdUGq8YNe9hodk7GeMmqOVvLuBUHCGK
-         Befb+s7cz9x+oxZBv/uyb/crKJn6r+lnbbVIlwUxXHYG8UbyJ/2hy6ULKfLMhSTr3Z
-         vRIyPmMb/0E1+vdzt7wtjDuHwVv4lYuGAR9IowSlxt1SPsJhy0b734T+kFIrLih308
-         Zq+NybQXNDfxUqzpvmpWLtNZvT4W6fuPnmxoyqgdhVredf+w8dyLgFhkogee7NRSx5
-         I5VJKgiQNQm4g==
-From:   Christian Brauner <brauner@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] fs: MNT_WRITE_HOLD fix
-Date:   Fri, 22 Apr 2022 12:52:31 +0200
-Message-Id: <20220422105231.197721-1-brauner@kernel.org>
+        Fri, 22 Apr 2022 06:56:25 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D525549F
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:53:32 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id b24so9929408edu.10
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:53:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5FUsF3Bm4YCkmboKOMo1H4UXrqyMZV42HmPdb6t+zEg=;
+        b=iTwMIkUlm5QdnVZDvAMZ8lv3kIjxsQ9C28n0K6MiwbpwtvFce7ujI+BCC8Rv2gER9h
+         a6684oc2VQwqV0D9gVE3quTVc776ypTodMrTG7mF+MNmMzk6nC3837htwDjcK3yrqYu1
+         9q1MwMpYT7T1YdAgi5q0/zzUWiT8eLkRI0a2K1W8Ejv5wlKP7UXZSA251z5qHmbCdIUw
+         e+JScoyT03JamWyFX0UEHVaaoAaMI6ZZbck336N1e0YwfeUiFB5OSh0WdNoX73I4DbcH
+         X45e5by65ELA6hXHR/qnfdriQvrl9tiFN41UWzC+94T5Pj8RgJqQ91XKCGUlBQ0b8gOl
+         0XSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5FUsF3Bm4YCkmboKOMo1H4UXrqyMZV42HmPdb6t+zEg=;
+        b=E5jNEt8i4REHEpfknmH4RtnHcgLie5n8LyuWGi8TCd5rv/hLQGA0y3+hMh/F2RhXoG
+         cwQeyGY3otm3jb0tuc6KhBU/zSVoSr1oKPrk8U/blx99CM3wUzS5/ABp1UJnm3OJrPz6
+         RMc8tRE9wHo3CjzFllujOIxHPj/tKyXuNuyCuiDkOwIMakJucQ31+mSnYw526UTsnXag
+         df7HyTByCwj8lauznAY6OsyJh5HdE6oc2qbU2t5rE97YPp90JWJIaF2Y5pYa/bVNG/Fs
+         kluloQ5K28k6Ycpsfs5G6FYmIGRUWJSt0mVa4IT+wfxes8Rf3QYDG+e0l8lnm+hELMHt
+         qOqw==
+X-Gm-Message-State: AOAM530JP7OZ0+i/KP01VwiIMm3CY6/xqFB3QMcU91Q4FEfh+m8nomHH
+        ll8i6SvAfgo9XMU5y0OtqZzkFw==
+X-Google-Smtp-Source: ABdhPJxxWJp8w+RW/AI0tJ84JwzVl6Kbq3YxN/Efj32iTP/ULw3xGNDAXNvf59LrAf6J6fDYljZPOQ==
+X-Received: by 2002:a05:6402:50d0:b0:423:f4a1:597d with SMTP id h16-20020a05640250d000b00423f4a1597dmr4136984edb.228.1650624811158;
+        Fri, 22 Apr 2022 03:53:31 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id lb26-20020a170907785a00b006ea4d2928e5sm625573ejc.218.2022.04.22.03.53.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 03:53:30 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] rpmsg: qcom_smd: Fix irq_of_parse_and_map() return value
+Date:   Fri, 22 Apr 2022 12:53:26 +0200
+Message-Id: <20220422105326.78713-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,75 +70,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Linus,
+The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
 
-/* Summary */
-The recent cleanup in e257039f0fc7 ("mount_setattr(): clean the control flow
-and calling conventions") switched the mount attribute codepaths from do-while
-to for loops as they are more idiomatic when walking mounts.
+Fixes: 53e2822e56c7 ("rpmsg: Introduce Qualcomm SMD backend")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/rpmsg/qcom_smd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-However, we did originally choose do-while constructs because if we request a
-mount or mount tree to be made read-only we need to hold writers in the
-following way: The mount attribute code will grab lock_mount_hash() and then
-call mnt_hold_writers() which will _unconditionally_ set MNT_WRITE_HOLD on the
-mount.
+diff --git a/drivers/rpmsg/qcom_smd.c b/drivers/rpmsg/qcom_smd.c
+index 764c980507be..6ccfa12abd10 100644
+--- a/drivers/rpmsg/qcom_smd.c
++++ b/drivers/rpmsg/qcom_smd.c
+@@ -1407,7 +1407,7 @@ static int qcom_smd_parse_edge(struct device *dev,
+ 		edge->name = node->name;
+ 
+ 	irq = irq_of_parse_and_map(node, 0);
+-	if (irq < 0) {
++	if (!irq) {
+ 		dev_err(dev, "required smd interrupt missing\n");
+ 		ret = irq;
+ 		goto put_node;
+-- 
+2.32.0
 
-Any callers that need write access have to call mnt_want_write(). They will
-immediately see that MNT_WRITE_HOLD is set on the mount and the caller will
-then either spin (on non-preempt-rt) or wait on lock_mount_hash() (on
-preempt-rt).
-
-The fact that MNT_WRITE_HOLD is set unconditionally means that once
-mnt_hold_writers() returns we need to _always_ pair it with
-mnt_unhold_writers() in both the failure and success paths.
-
-The do-while constructs did take care of this. But Al's change to a for loop in
-the failure path stops on the first mount we failed to change mount attributes
-_without_ going into the loop to call mnt_unhold_writers().
-
-This in turn means that once we failed to make a mount read-only via
-mount_setattr() - i.e. there are already writers on that mount - we will block
-any writers indefinitely. Fix this by ensuring that the for loop always unsets
-MNT_WRITE_HOLD including the first mount we failed to change to read-only. Also
-sprinkle a few comments into the cleanup code to remind people about what is
-happening including myself. After all, I didn't catch it during review.
-
-This is only relevant on mainline and was reported by syzbot. Details about the
-syzbot reports are all in the commit message.
-
-/* Testing */
-All patches are based on v5.18-rc3 and have been sitting in linux-next. No
-build failures or warnings were observed. Syzbot was unable to reproduce the
-issue with this patch applied.
-
-/* Conflicts */
-At the time of creating this PR no merge conflicts were reported from
-linux-next and no merge conflicts showed up doing a test-merge with current
-mainline.
-
-The following changes since commit b2d229d4ddb17db541098b83524d901257e93845:
-
-  Linux 5.18-rc3 (2022-04-17 13:57:31 -0700)
-
-are available in the Git repository at:
-
-  git@gitolite.kernel.org:pub/scm/linux/kernel/git/brauner/linux tags/fs.fixes.v5.18-rc4
-
-for you to fetch changes up to 0014edaedfd804dbf35b009808789325ca615716:
-
-  fs: unset MNT_WRITE_HOLD on failure (2022-04-21 17:57:37 +0200)
-
-Please consider pulling these changes from the signed fs.fixes.v5.18-rc4 tag.
-
-Thanks!
-Christian
-
-----------------------------------------------------------------
-fs.fixes.v5.18-rc4
-
-----------------------------------------------------------------
-Christian Brauner (1):
-      fs: unset MNT_WRITE_HOLD on failure
-
- fs/namespace.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)

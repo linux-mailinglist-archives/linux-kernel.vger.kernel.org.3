@@ -2,138 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 155F350BDBA
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96C3050BDBF
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352109AbiDVRAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 13:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35354 "EHLO
+        id S1352712AbiDVRBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 13:01:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345433AbiDVRAI (ORCPT
+        with ESMTP id S229699AbiDVRBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 13:00:08 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399EA5FF2B;
-        Fri, 22 Apr 2022 09:57:12 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id t25so15314769lfg.7;
-        Fri, 22 Apr 2022 09:57:12 -0700 (PDT)
+        Fri, 22 Apr 2022 13:01:01 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D7260D89
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:58:07 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id s14so12111302plk.8
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:58:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=bPH7VaBfkFbtZZotNuuTdskPihD6+M4P5/MTINbvQUc=;
-        b=Pe+UOZBQErS+Z8nmGZrZH2ly5AmAXR/nub2maR1YBDg2mW5cI8XFN7kRpzR9zJR1g/
-         RCcytxziQK15Y/+UhDwpzPO/z8urhmQ15jD9UMpIVuXdvYk4ZA9FMtQi/zELESwjYQ6k
-         oawpnRmK4g3hu3fT3s6md4XsDn4X61bzFwlVcJy4oKKXIIa+Wf5SbsrYbGooZQtu9T6w
-         mMrQaS3i1Iz83k0/NJ+NcahILWGnEI8wU5g8Ena+3kmorM7mSBcU3mLHYmzUGfSY57bG
-         E+QiOx9uS0cC7R96ZHgDOYCEZyLap5NE8EK+uYgY9glo5SCpnjSPQ7hN8GC1SPl/HsYy
-         6IUA==
+         :content-disposition:in-reply-to;
+        bh=nsFsSZ9xU/v0PMYpVq83wyniIq3VfJOQeOaPDdSEOLU=;
+        b=gmu6AGMNw0UpOEQCmqAYanxSJtRw0aGzPIAgdVQsj6Hzg6iRJ6IIHr9suloBpbhg/H
+         eI8fvM3Xm2W8Fva8iE5Z1M8en9AuTJdEIwmfCTlqInVJpfLkmwcko0sQMT0cyiRjtkUv
+         Cx5Zc4UKsgxi/7D1AktfN/Ykm33o7Qt/Y9eG0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=bPH7VaBfkFbtZZotNuuTdskPihD6+M4P5/MTINbvQUc=;
-        b=XEiKvmg7xsYSXSZYVx/nLyolc7T/6RvikXHAvkNkh+jvOxdHOfpGJ0SkCTpejBuWuu
-         7cVV/dJx9ir3mL7fzph2FOZFcSsmdzYfqq66PcOvZUnSPe4g7zlp/b6WPBB7bwcOizQt
-         zy+RBChim9fHOwMIVFrO63EpsNmwtJL1tSPAGPCOiXaX+vSXKKhsurWYmIJYgOgF6sxd
-         HwZGI1SDFG/FStu42hZnLcapg1U3MgKzqry1M8evemEydgOfEPE1WHQzk738wFjlDRKV
-         j+4Qnd/ZjaM9fYy0bf6KapptCywlA3wTAFVqZXwgFMmJP33Bk9HAp3QjgL3pGCSLBAwv
-         u2wg==
-X-Gm-Message-State: AOAM532c6sb/kFQjdzrACwzo+q7gjzd4MMKryO5RL+6mJjBl1l1yUIdz
-        cNe5zK93yEllcseydASIz8k=
-X-Google-Smtp-Source: ABdhPJzdFQvGzdSLbrSe+adt+pVkjulM8+IbVohfTKqNcWpqfyrWUedIVpFG1a8BPbVbvzAdinxkHQ==
-X-Received: by 2002:a05:6512:2213:b0:471:c296:b659 with SMTP id h19-20020a056512221300b00471c296b659mr3848330lfu.24.1650646630354;
-        Fri, 22 Apr 2022 09:57:10 -0700 (PDT)
-Received: from orome ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id r9-20020a2e8e29000000b0024da2131ed9sm269715ljk.100.2022.04.22.09.57.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 09:57:07 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 18:57:04 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, xinlei.lee@mediatek.com,
-        lee.jones@linaro.org, robh+dt@kernel.org, matthias.bgg@gmail.com,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, rex-bc.chen@mediatek.com,
-        jitao.shi@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v6, 5/5] dt-bindings: pwm: Add interrupts property for
- MediaTek MT8192
-Message-ID: <YmLeYOOCNciqhykt@orome>
-References: <1650284456-16407-1-git-send-email-xinlei.lee@mediatek.com>
- <1650284456-16407-6-git-send-email-xinlei.lee@mediatek.com>
- <a92d3b46-ace4-2d19-fef9-c59cd1a596ce@collabora.com>
- <20220421134808.sqnecvysuzlgdsz5@pengutronix.de>
+         :mime-version:content-disposition:in-reply-to;
+        bh=nsFsSZ9xU/v0PMYpVq83wyniIq3VfJOQeOaPDdSEOLU=;
+        b=JADuN0PHtDZUg9SFMdPKdbTOjErXM/8sMtRyAr6DczzHnC3zIa19knhjctwvj4EY73
+         /6CR+TNVS1w9/ifqydRAFxPzdu9dpqTCvJcGyU5wmnBbOSz6Im8OIvQoyn8KGgrnOLXd
+         YhF3rDriw5P990FZMp2ytDR7gbi/knS4NpmZ0eA6AtY/+CHJvTmWiieaJzYY2vJa+ca9
+         9vNzeTMwwWd4EBKK4cnUfStEFtdc7PVu2ZJ4OjyksQ4rieRixqoOmsarWWLAGW/kyOXq
+         /GQf6hiWL08YB35LArIQswbnXaK9z9gM0gy2Jr0AuE/kUmas8zIO0cO1xdPoiQcR78d9
+         6qSA==
+X-Gm-Message-State: AOAM533laT3v48dv2kZchb2M2Bk/aFguB6QoEKRNUC6kHmdN4QCifwGD
+        uNXGbpxIZSiMexMqoPtmNwLX+g==
+X-Google-Smtp-Source: ABdhPJx8Ai6tZ7rW1kUYJ3DGMJkmpGNHbBnH3oDMcjTtP7yTqj8ZF4SQmjQ9j8/CvfFqmenW9pt5ow==
+X-Received: by 2002:a17:90a:193:b0:1d5:a5dd:852 with SMTP id 19-20020a17090a019300b001d5a5dd0852mr6368897pjc.176.1650646686813;
+        Fri, 22 Apr 2022 09:58:06 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:404c:8721:29:87a4])
+        by smtp.gmail.com with UTF8SMTPSA id c18-20020a056a000ad200b004cdccd3da08sm3338421pfl.44.2022.04.22.09.58.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Apr 2022 09:58:06 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 09:58:04 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com,
+        srinivas.kandagatla@linaro.org, dianders@chromium.org,
+        swboyd@chromium.org, judyhsiao@chromium.org,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Subject: Re: [PATCH v10 07/12] arm64: dts: qcom: sc7280: herobrine: Add
+ max98360a codec node
+Message-ID: <YmLenJYD2dSlvmd+@google.com>
+References: <1650636521-18442-1-git-send-email-quic_srivasam@quicinc.com>
+ <1650636521-18442-8-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Xn43fwg7L9AIf1Ta"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220421134808.sqnecvysuzlgdsz5@pengutronix.de>
-User-Agent: Mutt/2.2.1 (c8109e14) (2022-02-19)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1650636521-18442-8-git-send-email-quic_srivasam@quicinc.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Apr 22, 2022 at 07:38:36PM +0530, Srinivasa Rao Mandadapu wrote:
+> Add max98360a codec node for audio use case on all herobrine boards.
+> 
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
 
---Xn43fwg7L9AIf1Ta
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Apr 21, 2022 at 03:48:08PM +0200, Uwe Kleine-K=C3=B6nig wrote:
-> Hello,
->=20
-> On Thu, Apr 21, 2022 at 12:17:00PM +0200, AngeloGioacchino Del Regno wrot=
-e:
-> > Il 18/04/22 14:20, xinlei.lee@mediatek.com ha scritto:
-> > > From: Xinlei Lee <xinlei.lee@mediatek.com>
-> > >=20
-> > > Add interrupts property of pwm for MediaTek MT8192 SoC.
-> > >=20
-> > > Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-> >=20
-> > Hello Xinlei,
-> > the pwm-mtk-disp.c driver does not support interrupts.
-> >=20
-> > Please add interrupts support to the driver first, and only then
-> > add that in the dt-bindings.
->=20
-> in my understanding the linux driver state and the binding documentation
-> are somewhat independent. Here I'd say adding the irq information to dt
-> without the driver supporting it is fine.
-
-Agreed. I've applied this along with the rest. It doesn't have Rob's or
-Krzysztof's stamp of approval, but it's a trivial change and looks fine
-to me.
-
-Thierry
-
---Xn43fwg7L9AIf1Ta
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmJi3mAACgkQ3SOs138+
-s6GaAw//VlLPxZ1xhdfymBfdZxhQ5KeACuZ6k/asJF7IV7j+qF8lPEGixgDeaLZF
-g139oHKqts/KjwLRBEerRUOKC1om/nZNbnF5phGdFXBhNCHPbgPEDXwDh64O6gNN
-VYiOS3e+9/UWgo18fkjE0vAtlf5BOytzKE3dxheacU29YENfK5mfajrP5OqsMmgs
-SXvoMWRuq2ni51pPlj1sNIoeK3FBwvM8D4yFHV8Ns/jpDRmIXqBafYUc0qu3l5yQ
-fX0ojlbaDppJ8YFyRPn7PDY36hA8siLvW9WCJ4GB0sAZeG1ZlA2zvMSFxNLz+OIE
-Xg76o+1+zMuWsHCCvay7Q+ylNlyyVCS4Kp33Ho8BMIHS2WLm1L0wUvaUGAHH4f4h
-I6TcMGxu++kh6g1LXFAZ8HCwUG8J+HdJiYgfKEH8DQuqzYfWl54GA1Gi65+zpCfA
-EoMbL4Ja/pb3QjlgtzoGWoGF9qMUigUy5DlICAJJs+JsI84YGj2UNCFS3uXCHOsC
-/Mh5APkBEz0hI8eF7jWhdpjsD1Fsl04aaHjGn0iIIKw8fHE1XoJXN85aU5jdKS77
-bvuAn7dcSlpasoPaUgIBnje0T7SGp3YKzaJs+PiRE5rxHitjMRLa0umLL/tKMhUE
-vJCoUPamD5R+OoQIeG8sXKQYV/+As6q8kGd21nwJI4AIJ8QhaIM=
-=c+hp
------END PGP SIGNATURE-----
-
---Xn43fwg7L9AIf1Ta--
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>

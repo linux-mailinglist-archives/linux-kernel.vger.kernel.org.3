@@ -2,76 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 070B950C47F
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:12:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D44A850C2C6
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232239AbiDVWPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 18:15:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57976 "EHLO
+        id S232171AbiDVWNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 18:13:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232204AbiDVWPQ (ORCPT
+        with ESMTP id S232902AbiDVWNF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 18:15:16 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD3323668D;
-        Fri, 22 Apr 2022 14:05:18 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id b17so6961114qvp.6;
-        Fri, 22 Apr 2022 14:05:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DpzKp6GQylN2DVn3Q8F44AaoMz54tuxDB2xUboNmmNk=;
-        b=pzvr3/UvSftncfosMfmgiWOYhMYbYHuIZTCgY5hDDTvmyy0dEedr9JVfuEeVSTpSm5
-         Wod5E9A0cF7e6X5SdVy8UQacTpGtFKdz/js8K/09qJ95ej2UAw2PGlDkrsu+YG2dXUGA
-         p/jEJQdqi+LBuQNomKnUI+S9NQyVkZ2ZnEbNnNiPIsX8T4w6VzABtzJx/TXysyHMCVQ+
-         ScUWgjAh3cPwFtBgN8jKf/CoS7zoCpT0JVr0YNB0YwEC8YxElSpInoxiPR7dP6Gy9x+x
-         Z2XHiikQMiTNKC8bErgRGi2i/cEQhRjtXly2a1DC44EwlTnp4zUihn+XzrUyE57MfFZT
-         LYeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DpzKp6GQylN2DVn3Q8F44AaoMz54tuxDB2xUboNmmNk=;
-        b=N+dern6iTZrA/2UvQsr6Y52jn8zymardWbbx95HxpdlyZEHU0GjMAhiSiuBcWU6ygK
-         JvfCgYSLuYmROy/fJwQDjacL8Z26faSRt/7q+beB70rfc12J3+jrUYoa3of+uVgVOn8r
-         E0I3Cha8DP6onWwoH6uDGhYrXN0tjv0lYjfsOL/h4s6rAHmkmMnRct/kEU5pURDnwn+u
-         jLIR9LJuEdROgHTQH9jEsbxMhgu77xSQKO3yBuhhcTCkBSyEq0t6vd7LJxhqOmp1tFVj
-         /fsF/Urs+Z1Da7L6xRV5AHESN3hbjFZCoDcZ475N18TUP89AJOhbCYU+21J3cifOSl/X
-         tnWQ==
-X-Gm-Message-State: AOAM533V03zKTB0KHH5xciSahmWiExG0lVdxqoqtnCrR4CoYYoVLgztQ
-        L0rfaX+MxMSzwBqpHdHMyvbxV359xb7uLrvxjhSuX17I
-X-Google-Smtp-Source: ABdhPJyDTdfYVPmGi9JCDZSwQ3dGVcvDeC8/OPyjPu7IjhwDECkrHzuq3quIB48TTMhTBLoEclHmpE49GOqp3rGJBbM=
-X-Received: by 2002:ad4:5943:0:b0:446:5c3e:2c2a with SMTP id
- eo3-20020ad45943000000b004465c3e2c2amr4554955qvb.75.1650653101635; Fri, 22
- Apr 2022 11:45:01 -0700 (PDT)
+        Fri, 22 Apr 2022 18:13:05 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AAEEB30A430
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 14:00:45 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3D2B21FB;
+        Fri, 22 Apr 2022 12:02:21 -0700 (PDT)
+Received: from [10.57.80.98] (unknown [10.57.80.98])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6CDF43F73B;
+        Fri, 22 Apr 2022 12:02:18 -0700 (PDT)
+Message-ID: <9da468bc-e6fd-1d7c-a6ce-69be87a7472a@arm.com>
+Date:   Fri, 22 Apr 2022 20:02:12 +0100
 MIME-Version: 1.0
-References: <BYAPR20MB24721F9954252BECBEF486ACBCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
-In-Reply-To: <BYAPR20MB24721F9954252BECBEF486ACBCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
-From:   Vasily Khoruzhick <anarsoul@gmail.com>
-Date:   Fri, 22 Apr 2022 11:44:35 -0700
-Message-ID: <CA+E=qVfMm=8aQOM_HW_3EeqqLi-Fgn1Ex3h6kor89FQ0KfTvRw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: thermal: sun8i-thermal: add binding for
- R329 THS
-To:     icenowy@outlook.com
-Cc:     Yangtao Li <tiny.windzz@gmail.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-linux <linux-arm-kernel@lists.infradead.org>,
-        linux-sunxi@lists.linux.dev,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Icenowy Zheng <icenowy@aosc.io>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 02/13] iommu: Move bus setup to IOMMU device registration
+Content-Language: en-GB
+To:     Krishna Reddy <vdumpa@nvidia.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "will@kernel.org" <will@kernel.org>
+Cc:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "sven@svenpeter.dev" <sven@svenpeter.dev>,
+        "robdclark@gmail.com" <robdclark@gmail.com>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "yong.wu@mediatek.com" <yong.wu@mediatek.com>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>,
+        "zhang.lyra@gmail.com" <zhang.lyra@gmail.com>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "jean-philippe@linaro.org" <jean-philippe@linaro.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <cover.1649935679.git.robin.murphy@arm.com>
+ <e607a32be8e84c56d65160902f4bd3fb434ee9d3.1649935679.git.robin.murphy@arm.com>
+ <PH0PR12MB56475FAF4A2E7DB0AE1C1217B3F79@PH0PR12MB5647.namprd12.prod.outlook.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <PH0PR12MB56475FAF4A2E7DB0AE1C1217B3F79@PH0PR12MB5647.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,56 +61,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 9:12 AM <icenowy@outlook.com> wrote:
->
-> From: Icenowy Zheng <icenowy@aosc.io>
->
-> R329 has a thermal sensor controller that has only one sensor, and the
-> structure of it is like the H6 one.
->
-> Add device tree binding for it.
->
-> Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
-> ---
->  .../devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml  | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
-> index 6e0b110153b0..87b4103e0a5f 100644
-> --- a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
-> @@ -20,6 +20,7 @@ properties:
->        - allwinner,sun50i-a100-ths
->        - allwinner,sun50i-h5-ths
->        - allwinner,sun50i-h6-ths
-> +      - allwinner,sun50i-r329-ths
->
->    clocks:
->      minItems: 1
-> @@ -63,6 +64,7 @@ allOf:
->              enum:
->                - allwinner,sun50i-a100-ths
->                - allwinner,sun50i-h6-ths
-> +              - allwinner,sun50i-r329-ths
->
->      then:
->        properties:
-> @@ -85,6 +87,7 @@ allOf:
->          compatible:
->            contains:
->              const: allwinner,sun8i-h3-ths
-> +            const: allwinner,sun8i-r329-ths
->
->      then:
->        properties:
+On 2022-04-22 19:37, Krishna Reddy wrote:
+> Good effort to isolate bus config from smmu drivers.
+> Reviewed-By: Krishna Reddy <vdumpa@nvidia.com>
 
-There's also a check at line #99 that requires clock, clock-names and
-resets properties for thermal sensors in other Allwinner SoCs. Are
-these not required for r329?
+Thanks!
 
-Also are you planning to add a node for thermal sensor to r329 dtsi?
+> I have an orthogonal question here.
+> Can the following code handle the case, where different buses have different type of SMMU instances(like one bus has SMMUv2 and another bus has SMMUv3)?
+> If it need to handle the above case, can the smmu device bus be matched with specific bus here and ops set only for that bus?
 
+Not yet, but that is one of the end goals that this is all working 
+towards. I think the stuff that I've added to the dev branch[1] today 
+should have reached the point where that becomes viable, but I'll need 
+to rig up a system to test it next week.
 
-> --
-> 2.35.1
->
+Intermediate solutions aren't worth it because in practice you 
+inevitably end up needing both IOMMU drivers to share the platform "bus" 
+anyway.
+
+Cheers,
+Robin.
+
+[1] https://gitlab.arm.com/linux-arm/linux-rm/-/commits/iommu/bus
+
+> 
+> 
+>> +       for (int i = 0; i < ARRAY_SIZE(iommu_buses); i++) {
+>> +               struct bus_type *bus = iommu_buses[i];
+>> +               const struct iommu_ops *bus_ops = bus->iommu_ops;
+>> +               int err;
+>> +
+>> +               WARN_ON(bus_ops && bus_ops != ops);
+>> +               bus->iommu_ops = ops;
+>> +               err = bus_iommu_probe(bus);
+>> +               if (err) {
+>> +                       bus_for_each_dev(bus, NULL, iommu,
+>> remove_iommu_group);
+>> +                       bus->iommu_ops = bus_ops;
+>> +                       return err;
+>> +               }
+>> +       }
+> 
+> 
+> -KR

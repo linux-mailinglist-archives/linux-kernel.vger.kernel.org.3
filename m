@@ -2,193 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A731550B869
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:25:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80F8550B86E
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:27:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447823AbiDVN2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 09:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58744 "EHLO
+        id S1447964AbiDVN3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 09:29:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447994AbiDVN1g (ORCPT
+        with ESMTP id S234679AbiDVN3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 09:27:36 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472C3583AC
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 06:24:43 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id bq30so14298922lfb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 06:24:43 -0700 (PDT)
+        Fri, 22 Apr 2022 09:29:44 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5855520C;
+        Fri, 22 Apr 2022 06:26:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Uh/i7pONWs9zNhFkmIOXxH8K9rX2pqq3+dxTkHV4IDc=;
-        b=jaaEpWQcqbaEyYdutWZeZdjw+QQcJSdbCS9SFtmkIjJKr2AaQYFmeKaXsRSZNqL/du
-         5uA3obMPxfFyjez258m1b1o3+55hDt6FJiMIMDWDq4Wcce1C2cvATWGciaROy62EMuEf
-         F6qX6s4f12Eef6QMWAdbw2PzdFVAkvZ/6g9u6GJeE7ms2M0vZyA6a7eXbsB8WedPWvuF
-         +FcQspQ/1qjQqM/t+unssU2WbArmsbheEoBeA+Gq2TWwJR2DCcRugpRMkubOnFbxiUbD
-         vPq3O5uD/3VmxTCRiieDxY5FMecKZkf+z9RQ8DqinlJg182Sn3YFbeJs3VVUD1Hne/cw
-         /oMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Uh/i7pONWs9zNhFkmIOXxH8K9rX2pqq3+dxTkHV4IDc=;
-        b=OK1zzadt67h+sjjIUTP1AGcDf2eS52M73RyFSZD2V/uzm1U6bg6iwFdy9hpohnREU9
-         tZ5CW/8kWEk+QA4vqmImvdnj1mOTVkgFk61xe7gxg9QtPXlB1/ouxpqWk7gAw70dHfp2
-         EMtgEujZq33lX2pps9vL/rURzH0JROGE1R9LIwIkfQTbbAHkvBRB5H2UzFWewk+nnxBk
-         YyHa2iH9FwOaozz8TuznnGduXnu3mbqqrxsu0v+37nIx2dMYL6nPj1J16Rvl7ewrUrK5
-         Vw7SbfW1CljvnI41UIbUav1J+BN3DvCumcstUGpFZiWjPXUSANOSQ/DQbWIea4Al4uim
-         s9Tw==
-X-Gm-Message-State: AOAM530AORiHAS9bSNMJ6LJytkYtO8gwfg61eEFTdjZml08HdWw+ffu2
-        bJPbfO6gwG5WlAfVlW2XkYlLLg==
-X-Google-Smtp-Source: ABdhPJzZtxkAjlCvb/TUt3cLoRv5l+ol9ToRYGDDMNmm0Vv66uA83/NBrnntGKbTm/BO4hUpHvgFow==
-X-Received: by 2002:a05:6512:228d:b0:471:c287:9715 with SMTP id f13-20020a056512228d00b00471c2879715mr3171748lfu.660.1650633881512;
-        Fri, 22 Apr 2022 06:24:41 -0700 (PDT)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id w23-20020a197b17000000b0046d1729e7d9sm224621lfc.294.2022.04.22.06.24.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 06:24:40 -0700 (PDT)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 1CD12104429; Fri, 22 Apr 2022 16:26:19 +0300 (+03)
-Date:   Fri, 22 Apr 2022 16:26:19 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv4 3/8] efi/x86: Implement support for unaccepted memory
-Message-ID: <20220422132619.54e754fyzeaaoqog@box.shutemov.name>
-References: <20220405234343.74045-4-kirill.shutemov@linux.intel.com>
- <Ylnwmvygp796+qcA@zn.tnic>
- <20220418155545.a567xnxa6elglapl@box.shutemov.name>
- <Yl2UHOQ4iZJ29k0q@zn.tnic>
- <20220418202431.whvql4w57c7l5vpw@box.shutemov.name>
- <Yl3RmPhdZieSr8W2@zn.tnic>
- <20220418235015.mnujtlmmlyin7y6m@box.shutemov.name>
- <Yl5nSSC4HpSWqfY7@zn.tnic>
- <20220422002124.lwd7b56zko24gbll@box.shutemov.name>
- <YmJ1o9UmPIW12Nu7@zn.tnic>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1650634012; x=1682170012;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ibCD8n+74D25bQ/6Jrl39b9qR5VPuTVM9OJHM9wXnOk=;
+  b=ydASwxOyfDaiPRJLLS+1ewfPPyzdDWOg2KxbNRObZccS7Z/cqpjfix6M
+   USRLRWmiBPW/Ccf0m4pPaxNlbe5AW5WdiWGu7Mt70CV3TMq60dWuQol3p
+   qTv+Zh40tQL3uFPMMHgVrKLi90prSzldCRCCcrkuxOJq5T2izHrmv2otW
+   k=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 22 Apr 2022 06:26:51 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 06:26:50 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 22 Apr 2022 06:26:50 -0700
+Received: from [10.216.36.2] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 22 Apr
+ 2022 06:26:44 -0700
+Message-ID: <fb53452a-0898-407e-5e86-897aeab446bc@quicinc.com>
+Date:   Fri, 22 Apr 2022 18:56:41 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YmJ1o9UmPIW12Nu7@zn.tnic>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v8 2/4] arm64: dts: qcom: sc7280: Add nodes for wcd9385
+ and max98360a codec
+Content-Language: en-US
+To:     Matthias Kaehlcke <mka@chromium.org>
+CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_rohkumar@quicinc.com>, <srinivas.kandagatla@linaro.org>,
+        <dianders@chromium.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+References: <1650291252-30398-1-git-send-email-quic_srivasam@quicinc.com>
+ <1650291252-30398-3-git-send-email-quic_srivasam@quicinc.com>
+ <Yl2VmW18QAJl9v+m@google.com>
+ <5ac149ac-4862-e8c9-185c-524c4b111961@quicinc.com>
+ <5d4b7c44-62e1-aaa6-3116-f58e1a1b437b@quicinc.com>
+ <YmF7TRlxUWWQ394e@google.com>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <YmF7TRlxUWWQ394e@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 11:30:11AM +0200, Borislav Petkov wrote:
-> On Fri, Apr 22, 2022 at 03:21:24AM +0300, Kirill A. Shutemov wrote:
-> > There's still #include <linux/efi.h> in misc.h. You removed one, but
-> > there's a second one for some reason.
-> 
-> I don't know which tree you're looking at but latest tip/master has:
-> 
-> $ git grep -E "efi\.h" arch/x86/boot/
-> arch/x86/boot/compressed/acpi.c:6:#include "efi.h"
-> arch/x86/boot/compressed/kaslr.c:25:#include "efi.h"
-> arch/x86/boot/compressed/misc.h:40:#include "efi.h"
-> arch/x86/boot/compressed/pgtable_64.c:7:#include "efi.h"
 
-Sorry for the noise. I read 'elf.h' as 'efi.h' :/
-
-But it also includes <linux/bitmap.h> indirectly:
-
-In file included from include/linux/elf.h:6:
-In file included from arch/x86/include/asm/elf.h:8:
-In file included from include/linux/thread_info.h:60:
-In file included from arch/x86/include/asm/thread_info.h:53:
-In file included from arch/x86/include/asm/cpufeature.h:5:
-In file included from arch/x86/include/asm/processor.h:22:
-In file included from arch/x86/include/asm/msr.h:11:
-In file included from arch/x86/include/asm/cpumask.h:5:
-In file included from include/linux/cpumask.h:12:
-
-> > Any plans for <linux/acpi.h>? It includes <linux/bitmap.h>:
-> 
-> So if misc.h is including linux/bitmap.h indirectly, you can simply
-> include misc.h right?
-
-Yes.
-
-> And then you'll slide under the closing door, as you say below. :)
-
-Is it sarcasm or clearance to go?
-
-> > I also underesitmated what is required to be copied because of the
-> > indirect include. The list was only to compile bitmap.c. mem.c (former
-> > unaccepted_memory.c) would require more.
-> 
-> More like?
-
-for_each_clear_bitrange() is pain to unwind.
-
-> Maybe I can help out converting some of the stuff. You could push your
-> current state somewhere - even if it doesn't build - so that I can take
-> a look...
-
-I will push what I have a bit later today.
-
-> > BTW, do we have a white list of linux/ includes that allowed? minmax.h?
-> > math.h? What is the line.
-> 
-> Well, that's the thing. Even if those look innocuous now, if they get
-> new includes added to them, that has an influence on the decompressor.
-> 
-> So I'm thinking copying the required bits would be the proper way
-> forward.
-
-I understand where you comes from. But on my side I face suddenly higher
-entry bar. Yes, it is bad excuse, I know.
-
-> > Maybe allow what is included directly or indirectly now? (Yes, it is my
-> > poor attempt to slide under closing door.)
-> 
-> That's basically saying, can I get this done so that I can mark my
-> checkbox that my task is done - you can deal with the crap later
-> yourself.
-> 
-> How about we take our time and solve this properly instead of hurrying
-> constantly?
-
-I'm okay with this. But I lack coherent understating on how you want it
-to look like.
-
-Like, looking on your new "efi.h", I see it still implicitly depends on
-<linux/types.h> and <linux/uuid.h>. Why is it okay? Is it temporary? What
-is criteria of what is okay to keep for now?
-
-You mentioned having <asm/shared/bitops.h> as we do <asm/shared/io.h>. But
-<asm/bitops.h> has non-trivial dependencies on its own.
-
-Okay, we can move them into asm/shared as well, but how to deal with
-asm-generic/ things? And linux/ dependencies? Do we create a copy in
-x86/include?
-
--- 
- Kirill A. Shutemov
+On 4/21/2022 9:12 PM, Matthias Kaehlcke wrote:
+Thanks for your time Matthias!!
+> On Thu, Apr 21, 2022 at 12:31:52PM +0530, Srinivasa Rao Mandadapu wrote:
+>> On 4/19/2022 4:54 PM, Srinivasa Rao Mandadapu wrote:
+>>> On 4/18/2022 10:15 PM, Matthias Kaehlcke wrote:
+>>> Thanks for your time and valuable inputs Matthias!!!
+>>>> On Mon, Apr 18, 2022 at 07:44:10PM +0530, Srinivasa Rao Mandadapu wrote:
+>>>>> Add wcd938x and  max98360a codecs for audio use case on
+>>>>> sc7280 based platforms.
+>>>>> Add tlmm gpio property in wcd938x node for switching CTIA/OMTP Headset.
+>>>>> Add amp_en node for  max98360a codec.
+>>>> General note: I don't think it's a good practice to add stuff like
+>>>> this to
+>>>> multiple boards in a single patch. Why?
+>>>>
+>>>> First the subject of such a patch tends to be vague ("arm64: dts: qcom:
+>>>> sc7280: Add nodes for wcd9385 and max98360a codec"), in this case it
+>>>> gives
+>>>> no hint about the boards. If someone was interested in picking changes
+>>>> for a given board they can't easily identify from the subject that the
+>>>> change is relevant for them.
+>>>>
+>>>> Changes touching multiple boards are more likely to cause conflicts when
+>>>> being picked (or reverted), both upstream and in downstream trees (which
+>>>> unfortunately have to exist for product development). Downstream trees
+>>>> might only pick changes for the board(s) they target, patches that touch
+>>>> mutiple boards often cause conflicts due to context deltas in the
+>>>> 'irrelevant' boards.
+>>>>
+>>>> Lastly it's usually easier to get a patch reviewed (in the sense of
+>>>> getting a 'Reviewed-by' tag) and landed that does a single thing.
+>>> Yes, agree to your opinion. In a nutshell, we will include board
+>>> name(ex: herobrine)
+>>>
+>>> in commit message and split the patches per external codec.
+>>>
+>>> Actually, in Initial herobrine boards, EVT and IDP, has both maxim
+>>> speaker and WCD codec,
+>>>
+>>> hence we included in same patch.
+>>>
+>>>>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>>>>> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+>>>>> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+>>>>> ---
+>>>>>    arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts     |  6 ++
+>>>>>    arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi |  8 +++
+>>>>>    arch/arm64/boot/dts/qcom/sc7280-idp.dtsi       | 97
+>>>>> ++++++++++++++++++++++++++
+>>>>>    3 files changed, 111 insertions(+)
+>>>>>
+>>>>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
+>>>>> b/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
+>>>>> index 344338a..aa0bf6e2 100644
+>>>>> --- a/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
+>>>>> +++ b/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
+>>>>> @@ -87,6 +87,12 @@ ap_ts_pen_1v8: &i2c13 {
+>>>>>        pins = "gpio51";
+>>>>>    };
+>>>>>    +&wcd938x {
+>>>>> +    pinctrl-names = "default";
+>>>>> +    pinctrl-0 = <&us_euro_hs_sel>;
+>>>>> +    us-euro-gpios = <&tlmm 81 GPIO_ACTIVE_HIGH>;
+>>>>> +};
+>>>> Since this is added for the CRD rev3 it probably should also be added to
+>>>> sc7280-herobrine-crd.dts
+>>> Okay. Will add in corresponding latest herobrine CRD dts file also.
+>>>>> +
+>>>>>    &tlmm {
+>>>>>        tp_int_odl: tp-int-odl {
+>>>>>            pins = "gpio7";
+>>>>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+>>>>> b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+>>>>> index d58045d..f247403 100644
+>>>>> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+>>>>> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+>>>>> @@ -20,6 +20,14 @@
+>>>>>    #include "sc7280-chrome-common.dtsi"
+>>>>>      / {
+>>>>> +    max98360a: audio-codec-0 {
+>>>>> +        compatible = "maxim,max98360a";
+>>>>> +        pinctrl-names = "default";
+>>>>> +        pinctrl-0 = <&amp_en>;
+>>>>> +        sdmode-gpios = <&tlmm 63 GPIO_ACTIVE_HIGH>;
+>>>>> +        #sound-dai-cells = <0>;
+>>>>> +    };
+>>>>> +
+>>>>>        chosen {
+>>>>>            stdout-path = "serial0:115200n8";
+>>>>>        };
+>>>>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+>>>>> b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+>>>>> index 2f863c0..8dad599 100644
+>>>>> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+>>>>> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+>>>>> @@ -20,6 +20,42 @@
+>>>>>            serial1 = &uart7;
+>>>>>        };
+>>>>>    +    max98360a: audio-codec-0 {
+>>>>> +        compatible = "maxim,max98360a";
+>>>>> +        pinctrl-names = "default";
+>>>>> +        pinctrl-0 = <&amp_en>;
+>>>>> +        sdmode-gpios = <&tlmm 63 GPIO_ACTIVE_HIGH>;
+>>>>> +        #sound-dai-cells = <0>;
+>>>>> +    };
+>>>>> +
+>>>>> +    wcd938x: audio-codec-1 {
+>>>> Why 'wcd938x' and not 'wcd9385'?
+>>> Actually same driver is used for both wcd9380 and wcd9385. Here we can
+>>> use specific name as per board.
+>>>
+>>> Will change accordingly.
+>> At present, dt-bindgs also has wcd938x. So will update the name in bindings
+>> and here post this series.
+>>
+>> is it okay?
+> I don't think it's strictly necessary to update the binding, as
+> 'wcd938x' is only used in the example, and also it's not really
+> wrong. Then again, if the example in the binding uses a
+> specific wcd version it might make it less likely that the
+> wildcard name is used in future board DTs. Up to you :)
+Okay. Will update accordingly.

@@ -2,136 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9360250B27D
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 10:00:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ABA650B225
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 09:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445383AbiDVICU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 04:02:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42056 "EHLO
+        id S1445365AbiDVIBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 04:01:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349087AbiDVICK (ORCPT
+        with ESMTP id S1349087AbiDVIBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 04:02:10 -0400
-Received: from m1541.mail.126.com (m1541.mail.126.com [220.181.15.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 84C62522DB;
-        Fri, 22 Apr 2022 00:59:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=KOOwj
-        Ngxtpj+BOV9RiocwkEJ5gaHVgyNXKB2q9i864s=; b=I2bcLGGMBZdE8yJCQe73E
-        ublKXrfowHicATx4CEeGLTb6eCcoRMxL5WoQOTv2+7QZxwlqAzF4e/JPdbJi3Hv0
-        A8AVgXuuhLURpEiqwFDsWBb4y1DE5YvfB6w7f1mKr1sC1ZbZ4TWP3y/hEY3dxCYf
-        tslRTLpgh+V2PhvjmdSg5c=
-Received: from zhaojunkui2008$126.com ( [58.213.83.157] ) by
- ajax-webmail-wmsvr41 (Coremail) ; Fri, 22 Apr 2022 15:58:26 +0800 (CST)
-X-Originating-IP: [58.213.83.157]
-Date:   Fri, 22 Apr 2022 15:58:26 +0800 (CST)
-From:   z <zhaojunkui2008@126.com>
-To:     "Kalle Valo" <kvalo@kernel.org>
-Cc:     "Jakub Kicinski" <kubakici@wp.pl>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bernard@vivo.com
-Subject: Re:Re: [PATCH] mediatek/mt7601u: add debugfs exit function
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210622(1d4788a8)
- Copyright (c) 2002-2022 www.mailtech.cn 126com
-In-Reply-To: <87k0bhmuh6.fsf@kernel.org>
-References: <20220422070325.465918-1-zhaojunkui2008@126.com>
- <87k0bhmuh6.fsf@kernel.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        Fri, 22 Apr 2022 04:01:34 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8695134678
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 00:58:38 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23M5Gt97028198;
+        Fri, 22 Apr 2022 09:58:32 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=9LZRINyuViKBArdIM1/SKVkSFPRxo1+nGcdlcVRuGJQ=;
+ b=ln+4BaE+or9vSss1YylIHnncN5YbpgyEGnypbJn/NhdkaawMPkgOqymiGv0t+euVTna3
+ CUcXmGevDipR3fTOZ9JHgSp4Lj18iRDgTLO6FgsktQB+zkA+7h/BB77vmcLdH9lD+JeD
+ 9/uyReRuG0cxvwpDZemRH952OIwaaIgBnOlaoG0uAObvKlOX2bU9dIOP8sPPM/pu4APQ
+ 3+gBc5j+3oNwUHm3acZt4x7dEd9S7M/CegXywBaWCjA9uikQ1ROhvJStBQFxji8mYyfy
+ GtZXd27xiCy2FMh1TAZPcZHBDSzNq12zNUDMevABaJtJY54eTy7giKFzbHxkKuHsdUiI Bw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ffpqh7c7c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 22 Apr 2022 09:58:32 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 626A9100039;
+        Fri, 22 Apr 2022 09:58:29 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 537E8216ECA;
+        Fri, 22 Apr 2022 09:58:29 +0200 (CEST)
+Received: from [10.201.21.216] (10.75.127.49) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Fri, 22 Apr
+ 2022 09:58:28 +0200
+Message-ID: <133fb3f2-16b9-aff8-c4c8-67beaa19703d@foss.st.com>
+Date:   Fri, 22 Apr 2022 09:58:27 +0200
 MIME-Version: 1.0
-Message-ID: <6fd91edd.4c2b.1805047850c.Coremail.zhaojunkui2008@126.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: KcqowADn9t4jYGJiD_oRAA--.42888W
-X-CM-SenderInfo: p2kd0y5xqn3xasqqmqqrswhudrp/1tbiuQPqqlpD8lH33AAAsr
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/2] Revert "drm: of: Properly try all possible cases for
+ bridge/panel detection"
+Content-Language: en-US
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     <dri-devel@lists.freedesktop.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        <linux-kernel@vger.kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jagan Teki <jagan@amarulasolutions.com>
+References: <20220420231230.58499-1-bjorn.andersson@linaro.org>
+ <YmCU7YLx/+ILPptK@ripper> <YmED/vYsrjoc4OjC@aptenodytes>
+From:   Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+In-Reply-To: <YmED/vYsrjoc4OjC@aptenodytes>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-22_02,2022-04-21_01,2022-02-23_01
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SEkgS2FsbGUgVmFsbzoKCkF0IDIwMjItMDQtMjIgMTU6NDU6NTcsICJLYWxsZSBWYWxvIiA8a3Zh
-bG9Aa2VybmVsLm9yZz4gd3JvdGU6Cj5CZXJuYXJkIFpoYW8gPHpoYW9qdW5rdWkyMDA4QDEyNi5j
-b20+IHdyaXRlczoKPgo+PiBXaGVuIG10NzYwMXUgbG9hZGVkLCB0aGVyZSBhcmUgdHdvIGNhc2Vz
-Ogo+PiBGaXJzdCB3aGVuIG10NzYwMXUgaXMgbG9hZGVkLCBpbiBmdW5jdGlvbiBtdDc2MDF1X3By
-b2JlLCBpZgo+PiBmdW5jdGlvbiBtdDc2MDF1X3Byb2JlIHJ1biBpbnRvIGVycm9yIGxhYmxlIGVy
-cl9odywKPj4gbXQ3NjAxdV9jbGVhbnVwIGRpZG5gdCBjbGVhbnVwIHRoZSBkZWJ1Z2ZzIG5vZGUu
-Cj4+IFNlY29uZCB3aGVuIHRoZSBtb2R1bGUgZGlzY29ubmVjdCwgaW4gZnVuY3Rpb24gbXQ3NjAx
-dV9kaXNjb25uZWN0LAo+PiBtdDc2MDF1X2NsZWFudXAgZGlkbmB0IGNsZWFudXAgdGhlIGRlYnVn
-ZnMgbm9kZS4KPj4gVGhpcyBwYXRjaCBhZGQgZGVidWdmcyBleGl0IGZ1bmN0aW9uIGFuZCB0cnkg
-dG8gY2xlYW51cCBkZWJ1Z2ZzCj4+IG5vZGUgd2hlbiBtdDc2MDF1IGxvYWRlZCBmYWlsIG9yIHVu
-bG9hZGVkLgo+Pgo+PiBTaWduZWQtb2ZmLWJ5OiBCZXJuYXJkIFpoYW8gPHpoYW9qdW5rdWkyMDA4
-QDEyNi5jb20+Cj4+IC0tLQo+PiAgLi4uL25ldC93aXJlbGVzcy9tZWRpYXRlay9tdDc2MDF1L2Rl
-YnVnZnMuYyAgIHwgMjUgKysrKysrKysrKystLS0tLS0tLQo+PiAgZHJpdmVycy9uZXQvd2lyZWxl
-c3MvbWVkaWF0ZWsvbXQ3NjAxdS9pbml0LmMgIHwgIDUgKysrKwo+PiAgLi4uL25ldC93aXJlbGVz
-cy9tZWRpYXRlay9tdDc2MDF1L210NzYwMXUuaCAgIHwgIDQgKysrCj4+ICAzIGZpbGVzIGNoYW5n
-ZWQsIDI0IGluc2VydGlvbnMoKyksIDEwIGRlbGV0aW9ucygtKQo+Pgo+PiBkaWZmIC0tZ2l0IGEv
-ZHJpdmVycy9uZXQvd2lyZWxlc3MvbWVkaWF0ZWsvbXQ3NjAxdS9kZWJ1Z2ZzLmMgYi9kcml2ZXJz
-L25ldC93aXJlbGVzcy9tZWRpYXRlay9tdDc2MDF1L2RlYnVnZnMuYwo+PiBpbmRleCAyMDY2OWVh
-Y2I2NmUuLjFhZTNkNzVkM2M5YiAxMDA2NDQKPj4gLS0tIGEvZHJpdmVycy9uZXQvd2lyZWxlc3Mv
-bWVkaWF0ZWsvbXQ3NjAxdS9kZWJ1Z2ZzLmMKPj4gKysrIGIvZHJpdmVycy9uZXQvd2lyZWxlc3Mv
-bWVkaWF0ZWsvbXQ3NjAxdS9kZWJ1Z2ZzLmMKPj4gQEAgLTEyNCwxNyArMTI0LDIyIEBAIERFRklO
-RV9TSE9XX0FUVFJJQlVURShtdDc2MDF1X2VlcHJvbV9wYXJhbSk7Cj4+ICAKPj4gIHZvaWQgbXQ3
-NjAxdV9pbml0X2RlYnVnZnMoc3RydWN0IG10NzYwMXVfZGV2ICpkZXYpCj4+ICB7Cj4+IC0Jc3Ry
-dWN0IGRlbnRyeSAqZGlyOwo+PiAtCj4+IC0JZGlyID0gZGVidWdmc19jcmVhdGVfZGlyKCJtdDc2
-MDF1IiwgZGV2LT5ody0+d2lwaHktPmRlYnVnZnNkaXIpOwo+PiAtCWlmICghZGlyKQo+PiArCWRl
-di0+cm9vdF9kaXIgPSBkZWJ1Z2ZzX2NyZWF0ZV9kaXIoIm10NzYwMXUiLCBkZXYtPmh3LT53aXBo
-eS0+ZGVidWdmc2Rpcik7Cj4+ICsJaWYgKCFkZXYtPnJvb3RfZGlyKQo+PiAgCQlyZXR1cm47Cj4+
-ICAKPj4gLQlkZWJ1Z2ZzX2NyZWF0ZV91OCgidGVtcGVyYXR1cmUiLCAwNDAwLCBkaXIsICZkZXYt
-PnJhd190ZW1wKTsKPj4gLQlkZWJ1Z2ZzX2NyZWF0ZV91MzIoInRlbXBfbW9kZSIsIDA0MDAsIGRp
-ciwgJmRldi0+dGVtcF9tb2RlKTsKPj4gKwlkZWJ1Z2ZzX2NyZWF0ZV91OCgidGVtcGVyYXR1cmUi
-LCAwNDAwLCBkZXYtPnJvb3RfZGlyLCAmZGV2LT5yYXdfdGVtcCk7Cj4+ICsJZGVidWdmc19jcmVh
-dGVfdTMyKCJ0ZW1wX21vZGUiLCAwNDAwLCBkZXYtPnJvb3RfZGlyLCAmZGV2LT50ZW1wX21vZGUp
-Owo+PiArCj4+ICsJZGVidWdmc19jcmVhdGVfdTMyKCJyZWdpZHgiLCAwNjAwLCBkZXYtPnJvb3Rf
-ZGlyLCAmZGV2LT5kZWJ1Z2ZzX3JlZyk7Cj4+ICsJZGVidWdmc19jcmVhdGVfZmlsZSgicmVndmFs
-IiwgMDYwMCwgZGV2LT5yb290X2RpciwgZGV2LCAmZm9wc19yZWd2YWwpOwo+PiArCWRlYnVnZnNf
-Y3JlYXRlX2ZpbGUoImFtcGR1X3N0YXQiLCAwNDAwLCBkZXYtPnJvb3RfZGlyLCBkZXYsICZtdDc2
-MDF1X2FtcGR1X3N0YXRfZm9wcyk7Cj4+ICsJZGVidWdmc19jcmVhdGVfZmlsZSgiZWVwcm9tX3Bh
-cmFtIiwgMDQwMCwgZGV2LT5yb290X2RpciwgZGV2LCAmbXQ3NjAxdV9lZXByb21fcGFyYW1fZm9w
-cyk7Cj4+ICt9Cj4+ICAKPj4gLQlkZWJ1Z2ZzX2NyZWF0ZV91MzIoInJlZ2lkeCIsIDA2MDAsIGRp
-ciwgJmRldi0+ZGVidWdmc19yZWcpOwo+PiAtCWRlYnVnZnNfY3JlYXRlX2ZpbGUoInJlZ3ZhbCIs
-IDA2MDAsIGRpciwgZGV2LCAmZm9wc19yZWd2YWwpOwo+PiAtCWRlYnVnZnNfY3JlYXRlX2ZpbGUo
-ImFtcGR1X3N0YXQiLCAwNDAwLCBkaXIsIGRldiwgJm10NzYwMXVfYW1wZHVfc3RhdF9mb3BzKTsK
-Pj4gLQlkZWJ1Z2ZzX2NyZWF0ZV9maWxlKCJlZXByb21fcGFyYW0iLCAwNDAwLCBkaXIsIGRldiwg
-Jm10NzYwMXVfZWVwcm9tX3BhcmFtX2ZvcHMpOwo+PiArdm9pZCBtdDc2MDF1X2V4aXRfZGVidWdm
-cyhzdHJ1Y3QgbXQ3NjAxdV9kZXYgKmRldikKPj4gK3sKPj4gKwlpZiAoIWRldi0+cm9vdF9kaXIp
-Cj4+ICsJCXJldHVybjsKPj4gKwlkZWJ1Z2ZzX3JlbW92ZShkZXYtPnJvb3RfZGlyKTsKPgo+ZGVi
-dWdmc19yZW1vdmUoKSBoYXMgSVNfRVJSX09SX05VTEwoKSBjaGVjaywgc28gbm8gbmVlZCB0byBj
-aGVjayBmb3IKPm51bGwgaGVyZS4KR290IGl0LCB0aGFua3MhCgo+PiAgfQo+PiBkaWZmIC0tZ2l0
-IGEvZHJpdmVycy9uZXQvd2lyZWxlc3MvbWVkaWF0ZWsvbXQ3NjAxdS9pbml0LmMgYi9kcml2ZXJz
-L25ldC93aXJlbGVzcy9tZWRpYXRlay9tdDc2MDF1L2luaXQuYwo+PiBpbmRleCA1ZDllOTUyYjI5
-NjYuLjFlOTA1ZWYyZWQxOSAxMDA2NDQKPj4gLS0tIGEvZHJpdmVycy9uZXQvd2lyZWxlc3MvbWVk
-aWF0ZWsvbXQ3NjAxdS9pbml0LmMKPj4gKysrIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvbWVkaWF0
-ZWsvbXQ3NjAxdS9pbml0LmMKPj4gQEAgLTQyNyw2ICs0MjcsOSBAQCB2b2lkIG10NzYwMXVfY2xl
-YW51cChzdHJ1Y3QgbXQ3NjAxdV9kZXYgKmRldikKPj4gIAltdDc2MDF1X3N0b3BfaGFyZHdhcmUo
-ZGV2KTsKPj4gIAltdDc2MDF1X2RtYV9jbGVhbnVwKGRldik7Cj4+ICAJbXQ3NjAxdV9tY3VfY21k
-X2RlaW5pdChkZXYpOwo+PiArI2lmZGVmIENPTkZJR19ERUJVR19GUwo+PiArCW10NzYwMXVfZXhp
-dF9kZWJ1Z2ZzKGRldik7Cj4+ICsjZW5kaWYKPj4gIH0KPj4gIAo+PiAgc3RydWN0IG10NzYwMXVf
-ZGV2ICptdDc2MDF1X2FsbG9jX2RldmljZShzdHJ1Y3QgZGV2aWNlICpwZGV2KQo+PiBAQCAtNjI1
-LDcgKzYyOCw5IEBAIGludCBtdDc2MDF1X3JlZ2lzdGVyX2RldmljZShzdHJ1Y3QgbXQ3NjAxdV9k
-ZXYgKmRldikKPj4gIAlpZiAocmV0KQo+PiAgCQlyZXR1cm4gcmV0Owo+PiAgCj4+ICsjaWZkZWYg
-Q09ORklHX0RFQlVHX0ZTCj4+ICAJbXQ3NjAxdV9pbml0X2RlYnVnZnMoZGV2KTsKPj4gKyNlbmRp
-Zgo+Cj5BcmUgdGhlc2UgdHdvIGlmZGVmcyByZWFsbHkgbmVlZGVkPyBkZWJ1Z2ZzIGZ1bmN0aW9u
-cyBhcmUgZW1wdHkKPmZ1bmN0aW9ucyB3aGVuIENPTkZJR19ERUJVR19GUyBpcyBkaXNhYmxlZC4K
-SWZkZWYgZG9lc24ndCBzZWVtIHRvIG1ha2UgbXVjaCBzZW5zZSwgdGhhbmtzIGZvciB5b3VyIGFk
-dmljZSEKCj4+IC0tLSBhL2RyaXZlcnMvbmV0L3dpcmVsZXNzL21lZGlhdGVrL210NzYwMXUvbXQ3
-NjAxdS5oCj4+ICsrKyBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL21lZGlhdGVrL210NzYwMXUvbXQ3
-NjAxdS5oCj4+IEBAIC0yNDIsNiArMjQyLDkgQEAgc3RydWN0IG10NzYwMXVfZGV2IHsKPj4gIAl1
-MzIgcmZfcGFfbW9kZVsyXTsKPj4gIAo+PiAgCXN0cnVjdCBtYWNfc3RhdHMgc3RhdHM7Cj4+ICsj
-aWZkZWYgQ09ORklHX0RFQlVHX0ZTCj4+ICsJc3RydWN0IGRlbnRyeSAqcm9vdF9kaXI7Cj4+ICsj
-ZW5kaWYKPgo+SSB3b3VsZCByZW1vdmUgdGhpcyBpZmRlZiwgaXQncyBqdXN0IHNhdmluZyBvbmUg
-cG9pbnRlciBzaXplLiBMZXNzCj5pZmRlZnMgd2UgaGF2ZSB0aGUgYmV0dGVyLgpJIHdvdWxkIG1v
-ZGlmeSB0aGUgY29kZSBhbmQgcmVzdWJtaXQgYSBwYXRjaCwgdGhhbmsgeW91IHZlcnkgbXVjaCEK
-CkJSLy9CZXJuYXJkCj4tLSAKPmh0dHBzOi8vcGF0Y2h3b3JrLmtlcm5lbC5vcmcvcHJvamVjdC9s
-aW51eC13aXJlbGVzcy9saXN0Lwo+Cj5odHRwczovL3dpcmVsZXNzLndpa2kua2VybmVsLm9yZy9l
-bi9kZXZlbG9wZXJzL2RvY3VtZW50YXRpb24vc3VibWl0dGluZ3BhdGNoZXMK
+Hi
+
+On 4/21/22 09:13, Paul Kocialkowski wrote:
+> Hi,
+>
+> On Wed 20 Apr 22, 16:19, Bjorn Andersson wrote:
+>> On Wed 20 Apr 16:12 PDT 2022, Bjorn Andersson wrote:
+>>
+>> Sorry, I missed Jagan and Linus, author and reviewer of the reverted
+>> patch 2, among the recipients.
+> I'd be curious to have Jagan's feedback on why the change was needed in the
+> first place and whether an accepted dt binding relies on it.
+>
+> We might be able to just keep the whole thing reverted (forever).
+
+
+This patch was merged within the last mainline kernel and was breaking our STM32MP15 platforms.
+
+Switching back to drm-based kernel (drm-next-fixes branch) made me realize this patch was faulty.
+I'm glad it was reverted.
+
+
+Thanks,
+
+Raphaël
+
+>
+> Paul
+>
+>> Regards,
+>> Bjorn
+>>
+>>> Commit '80253168dbfd ("drm: of: Lookup if child node has panel or
+>>> bridge")' introduced the ability to describe a panel under a display
+>>> controller without having to use a graph to connect the controller to
+>>> its single child panel (or bridge).
+>>>
+>>> The implementation of this would find the first non-graph node and
+>>> attempt to acquire the related panel or bridge. This prevents cases
+>>> where any other child node, such as a aux bus for a DisplayPort
+>>> controller, or an opp-table to find the referenced panel.
+>>>
+>>> Commit '67bae5f28c89 ("drm: of: Properly try all possible cases for
+>>> bridge/panel detection")' attempted to solve this problem by not
+>>> bypassing the graph reference lookup before attempting to find the panel
+>>> or bridge.
+>>>
+>>> While this does solve the case where a proper graph reference is
+>>> present, it does not allow the caller to distinguish between a
+>>> yet-to-be-probed panel or bridge and the absence of a reference to a
+>>> panel.
+>>>
+>>> One such case is a DisplayPort controller that on some boards have an
+>>> explicitly described reference to a panel, but on others have a
+>>> discoverable DisplayPort display attached (which doesn't need to be
+>>> expressed in DeviceTree).
+>>>
+>>> This reverts commit '67bae5f28c89 ("drm: of: Properly try all possible
+>>> cases for bridge/panel detection")', as a step towards reverting commit
+>>> '80253168dbfd ("drm: of: Lookup if child node has panel or bridge")'.
+>>>
+>>> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>>> ---
+>>>  drivers/gpu/drm/drm_of.c | 99 ++++++++++++++++++++--------------------
+>>>  1 file changed, 49 insertions(+), 50 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/drm_of.c b/drivers/gpu/drm/drm_of.c
+>>> index f4df344509a8..026e4e29a0f3 100644
+>>> --- a/drivers/gpu/drm/drm_of.c
+>>> +++ b/drivers/gpu/drm/drm_of.c
+>>> @@ -214,29 +214,6 @@ int drm_of_encoder_active_endpoint(struct device_node *node,
+>>>  }
+>>>  EXPORT_SYMBOL_GPL(drm_of_encoder_active_endpoint);
+>>>  
+>>> -static int find_panel_or_bridge(struct device_node *node,
+>>> -				struct drm_panel **panel,
+>>> -				struct drm_bridge **bridge)
+>>> -{
+>>> -	if (panel) {
+>>> -		*panel = of_drm_find_panel(node);
+>>> -		if (!IS_ERR(*panel))
+>>> -			return 0;
+>>> -
+>>> -		/* Clear the panel pointer in case of error. */
+>>> -		*panel = NULL;
+>>> -	}
+>>> -
+>>> -	/* No panel found yet, check for a bridge next. */
+>>> -	if (bridge) {
+>>> -		*bridge = of_drm_find_bridge(node);
+>>> -		if (*bridge)
+>>> -			return 0;
+>>> -	}
+>>> -
+>>> -	return -EPROBE_DEFER;
+>>> -}
+>>> -
+>>>  /**
+>>>   * drm_of_find_panel_or_bridge - return connected panel or bridge device
+>>>   * @np: device tree node containing encoder output ports
+>>> @@ -259,44 +236,66 @@ int drm_of_find_panel_or_bridge(const struct device_node *np,
+>>>  				struct drm_panel **panel,
+>>>  				struct drm_bridge **bridge)
+>>>  {
+>>> -	struct device_node *node;
+>>> -	int ret;
+>>> +	int ret = -EPROBE_DEFER;
+>>> +	struct device_node *remote;
+>>>  
+>>>  	if (!panel && !bridge)
+>>>  		return -EINVAL;
+>>> -
+>>>  	if (panel)
+>>>  		*panel = NULL;
+>>> -	if (bridge)
+>>> -		*bridge = NULL;
+>>> -
+>>> -	/* Check for a graph on the device node first. */
+>>> -	if (of_graph_is_present(np)) {
+>>> -		node = of_graph_get_remote_node(np, port, endpoint);
+>>> -		if (node) {
+>>> -			ret = find_panel_or_bridge(node, panel, bridge);
+>>> -			of_node_put(node);
+>>> -
+>>> -			if (!ret)
+>>> -				return 0;
+>>> -		}
+>>> -	}
+>>>  
+>>> -	/* Otherwise check for any child node other than port/ports. */
+>>> -	for_each_available_child_of_node(np, node) {
+>>> -		if (of_node_name_eq(node, "port") ||
+>>> -		    of_node_name_eq(node, "ports"))
+>>> +	/**
+>>> +	 * Devices can also be child nodes when we also control that device
+>>> +	 * through the upstream device (ie, MIPI-DCS for a MIPI-DSI device).
+>>> +	 *
+>>> +	 * Lookup for a child node of the given parent that isn't either port
+>>> +	 * or ports.
+>>> +	 */
+>>> +	for_each_available_child_of_node(np, remote) {
+>>> +		if (of_node_name_eq(remote, "port") ||
+>>> +		    of_node_name_eq(remote, "ports"))
+>>>  			continue;
+>>>  
+>>> -		ret = find_panel_or_bridge(node, panel, bridge);
+>>> -		of_node_put(node);
+>>> +		goto of_find_panel_or_bridge;
+>>> +	}
+>>> +
+>>> +	/*
+>>> +	 * of_graph_get_remote_node() produces a noisy error message if port
+>>> +	 * node isn't found and the absence of the port is a legit case here,
+>>> +	 * so at first we silently check whether graph presents in the
+>>> +	 * device-tree node.
+>>> +	 */
+>>> +	if (!of_graph_is_present(np))
+>>> +		return -ENODEV;
+>>> +
+>>> +	remote = of_graph_get_remote_node(np, port, endpoint);
+>>> +
+>>> +of_find_panel_or_bridge:
+>>> +	if (!remote)
+>>> +		return -ENODEV;
+>>> +
+>>> +	if (panel) {
+>>> +		*panel = of_drm_find_panel(remote);
+>>> +		if (!IS_ERR(*panel))
+>>> +			ret = 0;
+>>> +		else
+>>> +			*panel = NULL;
+>>> +	}
+>>> +
+>>> +	/* No panel found yet, check for a bridge next. */
+>>> +	if (bridge) {
+>>> +		if (ret) {
+>>> +			*bridge = of_drm_find_bridge(remote);
+>>> +			if (*bridge)
+>>> +				ret = 0;
+>>> +		} else {
+>>> +			*bridge = NULL;
+>>> +		}
+>>>  
+>>> -		/* Stop at the first found occurrence. */
+>>> -		if (!ret)
+>>> -			return 0;
+>>>  	}
+>>>  
+>>> -	return -EPROBE_DEFER;
+>>> +	of_node_put(remote);
+>>> +	return ret;
+>>>  }
+>>>  EXPORT_SYMBOL_GPL(drm_of_find_panel_or_bridge);
+>>>  
+>>> -- 
+>>> 2.35.1
+>>>

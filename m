@@ -2,83 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0CC50B9FE
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:23:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AEE050BA06
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448589AbiDVOZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 10:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
+        id S1448593AbiDVO0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 10:26:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448333AbiDVOZ1 (ORCPT
+        with ESMTP id S1358070AbiDVO0i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 10:25:27 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF481CFCE;
-        Fri, 22 Apr 2022 07:22:33 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C0A332F7;
-        Fri, 22 Apr 2022 16:22:31 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1650637351;
-        bh=wZifj+fUEBhv1yJJc/JjqYEk/AIauY1nIeQNs8Vfq5M=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=AVrFqNQBMQ08PG/1j2E2IaWmP4UHB6LrGSoilBvdiiHNDF4f3oq+QDV69K4C/Shdp
-         mCMNZ6fua8sS684gPmro1TpZwBFhXKn/Khh3NszaDScNpybYCGgtO//roB6WZJ+9U7
-         CpFuJH56kH90x+3COBtf7kNi4VWYR/PqpQjx5hNA=
-Content-Type: text/plain; charset="utf-8"
+        Fri, 22 Apr 2022 10:26:38 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A231D57B13;
+        Fri, 22 Apr 2022 07:23:40 -0700 (PDT)
+X-UUID: b4f22b128d5b48559cad4c259a8fd1b4-20220422
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:287b2567-2a8d-4441-84a7-6d974afe7739,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:-20
+X-CID-META: VersionHash:faefae9,CLOUDID:50e3a1f0-da02-41b4-b6df-58f4ccd36682,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: b4f22b128d5b48559cad4c259a8fd1b4-20220422
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <jianjun.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2036729730; Fri, 22 Apr 2022 22:23:35 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 22 Apr 2022 22:23:34 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 22 Apr 2022 22:23:33 +0800
+From:   Jianjun Wang <jianjun.wang@mediatek.com>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+CC:     Wei-Shun Chang <weishunc@google.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <rex-bc.chen@mediatek.com>,
+        <randy.wu@mediatek.com>, <jieyy.yang@mediatek.com>,
+        <chuanjia.liu@mediatek.com>, <qizhong.cheng@mediatek.com>,
+        <jian.yang@mediatek.com>
+Subject: [PATCH v7 0/2] phy: mediatek: Add PCIe PHY driver
+Date:   Fri, 22 Apr 2022 22:23:29 +0800
+Message-ID: <20220422142331.17173-1-jianjun.wang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1650607607-22893-1-git-send-email-baihaowen@meizu.com>
-References: <1650607607-22893-1-git-send-email-baihaowen@meizu.com>
-Subject: Re: [PATCH] media: m920x: Remove useless kfree
-From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc:     Haowen Bai <baihaowen@meizu.com>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-To:     Haowen Bai <baihaowen@meizu.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Date:   Fri, 22 Apr 2022 15:22:28 +0100
-Message-ID: <165063734898.3204481.2637889109438003078@Monstersaurus>
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Haowen Bai (2022-04-22 07:06:47)
-> After alloc fail, we do not need to kfree.
->=20
+These series patches add support for PCIe PHY driver on MediaTek chipsets.
 
-Agreed, this shouldn't hurt as kfree will be a noop here but it is
-always null so redundant.
+Changes in v7:
+1. Add bitfield.h header to fix the build error on non-arm64 platforms.
 
-May still warrant a fixes tag though, but it's not a critical fix.
+Changes in v6:
+1. Remove unnecessary header files;
+2. Use FILELD_PREP in bitfield.h to set value.
 
+Changes in v5:
+1. Fix typo in kerneldoc: "eFues" => "eFuse".
 
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Changes in v4:
+1. Fix no return when calling dev_err_probe.
 
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
-> ---
->  drivers/media/usb/dvb-usb/m920x.c | 1 -
->  1 file changed, 1 deletion(-)
->=20
-> diff --git a/drivers/media/usb/dvb-usb/m920x.c b/drivers/media/usb/dvb-us=
-b/m920x.c
-> index 548199cd86f6..9df0ccfb654b 100644
-> --- a/drivers/media/usb/dvb-usb/m920x.c
-> +++ b/drivers/media/usb/dvb-usb/m920x.c
-> @@ -277,7 +277,6 @@ static int m920x_i2c_xfer(struct i2c_adapter *adap, s=
-truct i2c_msg msg[], int nu
->                         char *read =3D kmalloc(1, GFP_KERNEL);
->                         if (!read) {
->                                 ret =3D -ENOMEM;
-> -                               kfree(read);
->                                 goto unlock;
->                         }
-> =20
-> --=20
-> 2.7.4
->
+Changes in v3:
+1. Add introductions for structure members;
+2. Add SoC dependent data;
+3. Dynamically allocate efuse data;
+4. Check return value if it's an -EPROBE_DEFER.
+
+Changes in v2:
+1. Add specific compatible name;
+2. Read NVMEM data at probe time;
+3. Fix typos.
+
+Jianjun Wang (2):
+  dt-bindings: phy: mediatek: Add YAML schema for PCIe PHY
+  phy: mediatek: Add PCIe PHY driver
+
+ .../bindings/phy/mediatek,pcie-phy.yaml       |  75 +++++
+ drivers/phy/mediatek/Kconfig                  |  11 +
+ drivers/phy/mediatek/Makefile                 |   1 +
+ drivers/phy/mediatek/phy-mtk-pcie.c           | 267 ++++++++++++++++++
+ 4 files changed, 354 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/phy/mediatek,pcie-phy.yaml
+ create mode 100644 drivers/phy/mediatek/phy-mtk-pcie.c
+
+-- 
+2.18.0
+

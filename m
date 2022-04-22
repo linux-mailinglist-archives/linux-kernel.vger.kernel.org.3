@@ -2,151 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B3FD50AFA1
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 07:41:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8B150AF9D
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 07:41:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232540AbiDVFlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 01:41:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55148 "EHLO
+        id S229873AbiDVFk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 01:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232259AbiDVF0I (ORCPT
+        with ESMTP id S231308AbiDVFdl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 01:26:08 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E194F442
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 22:23:14 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id x191so6490910pgd.4
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 22:23:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qs8TzJaMMRdlcgPCr158FHr4muxROdIwIKSMdWLHkHo=;
-        b=G/BsrDbXacV0SZ9Ne77oXKsQiEopiKSGAiAaqGYk4H47zX958UCh8d3h3fFf0mau//
-         MbXqvOB66RzNwCOaZyNP4nEsHtnwdkNJyeQgbU5sculwgSThov+D1pKikSKCetXMO262
-         ly67chsgg+6zDuX8kxXbJXJsM8vcXDnYmnl9QxhveSX5SgDKMtjFnsuQn0iuvI5xsc9j
-         yZHAOh1JlYWxiC8XEu5CIy1vrTrauwUA/V/xI8L4EFalIBpwfuRCuMVn6XSLY6sPj80a
-         iRHpIbGzVp89absSi+vJ3vna/H+s3JJdcIcKsKzqb+1fbLbZD42wIsiHagNaDg9+Jm37
-         KPhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qs8TzJaMMRdlcgPCr158FHr4muxROdIwIKSMdWLHkHo=;
-        b=aFYeUxAONmAvCSueRIwkt5EXhdzzZbcII1LQ3O93naU9T/MDoWJ4EXxL/nf30ODduk
-         oLc8i20Kjnh1iFH9zGlTAbWcjhmqZYm2ZpeXrX+ZmFiY+5bECyHg0cJMiXAXmDtgnV5G
-         NUSF2c1uwqnMnBjFzOX24bogtUhuO78vNEfcDiAdDZZRRCD91BXoFylWREBijUPh0g/J
-         uXAB57iMOOx7H4FdGsh5cgTzu7slJajH8rBV85ifaVPj25Vf4emXokr0Gmqd6GYvjB3G
-         arRZK2kBG8t5D9lBDVC3xZvvfCaWRbWDafyKH+6iyFpBvTrFkcjnLt6sShAUuDxFJNRV
-         5gig==
-X-Gm-Message-State: AOAM5335MGVTuNucmEA9pVTwkJD4aavCRfgHUvmPON7eqs274Zn3yYYy
-        dWRBhcHsYLdtRpxc0wNdNjgB4+k+QgrWWSxASpc=
-X-Google-Smtp-Source: ABdhPJxGskIJDKnYp4O7Zl7AraYPDKiRG6aG0jNJsiX2fxEPmngjRzXg5dlvN+nBrUVDoTsMOaf4Dqsi7enIghU44k4=
-X-Received: by 2002:a65:5b4b:0:b0:3a3:d8fb:6926 with SMTP id
- y11-20020a655b4b000000b003a3d8fb6926mr2507143pgr.76.1650604994231; Thu, 21
- Apr 2022 22:23:14 -0700 (PDT)
+        Fri, 22 Apr 2022 01:33:41 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26BC64F445
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 22:30:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650605449; x=1682141449;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4ELds+ozdE9ev44uE/QSC+UYaWavPh95sp7UGSKykTU=;
+  b=JVwkjvdl0j/CbbfN/LOVGGqJ6h5yxrr5+L5qmhy4vRNwg/F/2YjVlFzQ
+   +Rx30LtxCFvm+A1tZr4lu7Ez2wZrt6+O2S+3O4PFb15hzhQJ2I+spxSlJ
+   JKym/At3bUQCtm8/2MA91fp1AyL3muuGmMIrnyfovomIkLiFSz8eLW0AI
+   raCcsiB9zh20sm+dgKqAyBkVlckYZv0A7iTNVnZa0mBtFmO5skwwSXuCB
+   rwK9K9apUFXnG5+qds3ktq3ZKXmy1oYmnQW7NlrAUWJCderP/MS9mrxyZ
+   Hu9NeM5iG9UD++useve690+bjrqdC0ZuF2l/lkplyQHkacX06qWuujzOB
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="351018044"
+X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
+   d="scan'208";a="351018044"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 22:30:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
+   d="scan'208";a="533972955"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 21 Apr 2022 22:30:47 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nhlsU-0009Gj-J6;
+        Fri, 22 Apr 2022 05:30:46 +0000
+Date:   Fri, 22 Apr 2022 13:30:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Fangzhi Zuo <Jerry.Zuo@amd.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hpo_dp_stream_encoder.c:439:14:
+ warning: variable 'sdp_stream_enable' set but not used
+Message-ID: <202204221332.ZuRIqlbM-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220420073717.GD16310@xsang-OptiPlex-9020> <CAHk-=wi6pJhsWLd7t9wEtq5tWh_2O61cSLk-wCgLwFrjW6+jbw@mail.gmail.com>
- <CANaxB-yVLCSHAi3QKMYzsSDRYC5Wz05iWx8yrb57cbiJ__5ThA@mail.gmail.com>
- <CAHk-=wgSW3gB1=rf3atv=3Xvn0pNBtKUKJ2VF81ue-xagS7F4w@mail.gmail.com> <CAHk-=wjdCtgtQPZPTigMMniZaoMA_tHDu3EMBVM3w1GH5X+cOw@mail.gmail.com>
-In-Reply-To: <CAHk-=wjdCtgtQPZPTigMMniZaoMA_tHDu3EMBVM3w1GH5X+cOw@mail.gmail.com>
-From:   Andrei Vagin <avagin@gmail.com>
-Date:   Thu, 21 Apr 2022 22:23:02 -0700
-Message-ID: <CANaxB-zDKVtGTRrqh4SpPKS96Ux6s01BL3BdAe-ZY_9HWSX9dw@mail.gmail.com>
-Subject: Re: [fs/pipe] 5a519c8fe4: WARNING:at_mm/page_alloc.c:#__alloc_pages
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     kernel test robot <oliver.sang@intel.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        kernel test robot <lkp@intel.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Pavel Emelyanov <ovzxemul@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 12:28 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Thu, Apr 21, 2022 at 9:30 AM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > The pipe part sounds like a horrible hacky thing.
-> >
-> > I also assume you already tried that, and hit some performance issues.
-> > But it does sound like the better interface, more directly what you
-> > want.
-> >
-> > So what are the problems with using process_vm_readv?
+Hi Fangzhi,
 
-The big advantage of vmsplice is that it can attach real user pages into
-a pipe and then any following changes of these pages by the process
-don't trigger any allocations and extra copies of data. vmsplice in this
-case is fast. After splicing pages to pipes, we resume a process and
-splice pages from pipes to a socket or a file.  The whole process of
-dumping process pages is zero-copy.
+FYI, the error/warning still remains.
 
->
-> Actually, I take that back.
->
-> Don't use pipes.
->
-> Don't use process_vm_readv().
->
-> Use the system call we already have for "snapshot the current VM".
->
-> It's called "fork()". It's cheap, it's efficient, and it snapshots the
-> whole VM in one go. No stupid extra buffers in pipes, no crazy things
-> like that.
->
-> So just make your pre-dump code do a simple fork(), let the parent
-> continue, and then do the dumping in the child at whatever pace you
-> want.
->
-> In fact, you might just leave the child process alone, and let it _be_
-> that pre-dump.
->
-> You can create a new snapshot every once in a while, and kill the
-> previous snapshot, if you want to keep the snapshot close to the
-> target, and then use the memory tracking to track what has changed
-> since.
->
-> And you might not want to use plain "fork()", but instead some kind of
-> "clone()" variant. You might want to use CLONE_PARENT and some
-> non-SIGCHLD exit signal to basically hide the snapshot image from the
-> thing you are snapshotting.
->
-> Anyway, the "use vmsplice to a pipe to create a snapshot" sounds just
-> insane when you have a very traditional system call that is all about
-> snapshotting the process.
->
-> Maybe a new CLONE_xyz flag could be added to make that memory tracking
-> integrate better or whatever.
->
-> Any showstoppers?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d569e86915b7f2f9795588591c8d5ea0b66481cb
+commit: 83228ebb82e4fe2e5513f35d9b0b0eded3c44cbc drm/amd/display: Add DP 2.0 HPO Stream Encoder
+date:   8 months ago
+config: powerpc64-randconfig-r033-20220420 (https://download.01.org/0day-ci/archive/20220422/202204221332.ZuRIqlbM-lkp@intel.com/config)
+compiler: powerpc64le-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=83228ebb82e4fe2e5513f35d9b0b0eded3c44cbc
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 83228ebb82e4fe2e5513f35d9b0b0eded3c44cbc
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/gpu/drm/
 
-We considered this approach. CRIU dumps a tree of processes. In many
-cases, it's a container with its pid namespace. In such cases, it isn't
-possible to fork helper processes without affecting the behavior of
-dumped processes. First, helper processes will be visible for dumped
-processes. Second, waitid with __WALL will wait for our helpers and a
-dumped process can be very surprised to find a child that it hasn't
-created. For the pre-dump, we don't need a true memory snapshot, we
-don't care about changed pages. But if we fork a process in the wrong
-moment, we can double its memory consumption and as this is happening in
-a dumped process context, we can hit its resource limits or trigger OOM
-in a dumped container.
-Forking a helper itself can hit resource limits such as rlimits or
-cgroup limits.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks,
-Andrei
+All warnings (new ones prefixed by >>):
+
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hpo_dp_stream_encoder.c: In function 'dcn31_hpo_dp_stream_enc_update_dp_info_packets':
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hpo_dp_stream_encoder.c:439:14: warning: variable 'sdp_stream_enable' set but not used [-Wunused-but-set-variable]
+     439 |         bool sdp_stream_enable = false;
+         |              ^~~~~~~~~~~~~~~~~
+
+
+vim +/sdp_stream_enable +439 drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hpo_dp_stream_encoder.c
+
+   432	
+   433	static void dcn31_hpo_dp_stream_enc_update_dp_info_packets(
+   434			struct hpo_dp_stream_encoder *enc,
+   435			const struct encoder_info_frame *info_frame)
+   436	{
+   437		struct dcn31_hpo_dp_stream_encoder *enc3 = DCN3_1_HPO_DP_STREAM_ENC_FROM_HPO_STREAM_ENC(enc);
+   438		uint32_t dmdata_packet_enabled = 0;
+ > 439		bool sdp_stream_enable = false;
+   440	
+   441		if (info_frame->vsc.valid) {
+   442			enc->vpg->funcs->update_generic_info_packet(
+   443					enc->vpg,
+   444					0,  /* packetIndex */
+   445					&info_frame->vsc);
+   446			sdp_stream_enable = true;
+   447		}
+   448		if (info_frame->spd.valid) {
+   449			enc->vpg->funcs->update_generic_info_packet(
+   450					enc->vpg,
+   451					2,  /* packetIndex */
+   452					&info_frame->spd);
+   453			sdp_stream_enable = true;
+   454		}
+   455		if (info_frame->hdrsmd.valid) {
+   456			enc->vpg->funcs->update_generic_info_packet(
+   457					enc->vpg,
+   458					3,  /* packetIndex */
+   459					&info_frame->hdrsmd);
+   460			sdp_stream_enable = true;
+   461		}
+   462		/* enable/disable transmission of packet(s).
+   463		 * If enabled, packet transmission begins on the next frame
+   464		 */
+   465		REG_UPDATE(DP_SYM32_ENC_SDP_GSP_CONTROL0, GSP_VIDEO_CONTINUOUS_TRANSMISSION_ENABLE, info_frame->vsc.valid);
+   466		REG_UPDATE(DP_SYM32_ENC_SDP_GSP_CONTROL2, GSP_VIDEO_CONTINUOUS_TRANSMISSION_ENABLE, info_frame->spd.valid);
+   467		REG_UPDATE(DP_SYM32_ENC_SDP_GSP_CONTROL3, GSP_VIDEO_CONTINUOUS_TRANSMISSION_ENABLE, info_frame->hdrsmd.valid);
+   468	
+   469		/* check if dynamic metadata packet transmission is enabled */
+   470		REG_GET(DP_SYM32_ENC_SDP_METADATA_PACKET_CONTROL,
+   471				METADATA_PACKET_ENABLE, &dmdata_packet_enabled);
+   472	
+   473		/* Enable secondary data path */
+   474		REG_UPDATE(DP_SYM32_ENC_SDP_CONTROL,
+   475				SDP_STREAM_ENABLE, 1);
+   476	}
+   477	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

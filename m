@@ -2,179 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A55350BB86
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:17:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C05750BB88
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:17:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449349AbiDVPT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 11:19:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34148 "EHLO
+        id S1449375AbiDVPUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 11:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357069AbiDVPTz (ORCPT
+        with ESMTP id S1449369AbiDVPUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 11:19:55 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174CEE093;
-        Fri, 22 Apr 2022 08:17:01 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23MAS3Xk031297;
-        Fri, 22 Apr 2022 17:16:59 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=s5sxuCtgNccCRANRgxe8iGyIasbOV71Jgg+UGoiZRFo=;
- b=PWlLRuCIcbWInfLoWY2OZ+Uj36byBj6N2jBr8SyeUkvuaiIZWKwSAZf6rJd9rSRiZW/8
- 2jBYnWqCBS4BBNpB75w47fF5OGynNnfDw9XwSWN/27pR8YUALx9mOwP1RhSi38TzOwSf
- oR3T2U0Sk8nuyUJFVB/C1mdku3r/6yb2IT+qB7Zu/kDdR0DD2ipRQ0Bs6/Bm88aYeSp4
- CKPn4zs0cSj6Ydjr1TTIQNLexMkD99ujy9Bmn92GtH+TJ1j5g18KA1lDbSwn9ejSY82j
- 3KFU+hJw3l9R6JUWENrC6AO7Y4u6mtQ90D3KoaKOjrqLK+kEW2708z13wcSVgQXmwd8P Dg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ffpqe9w71-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Apr 2022 17:16:59 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DC3B610002A;
-        Fri, 22 Apr 2022 17:16:58 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D3E2B22FA4F;
-        Fri, 22 Apr 2022 17:16:58 +0200 (CEST)
-Received: from [10.201.20.246] (10.75.127.44) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Fri, 22 Apr
- 2022 17:16:58 +0200
-Message-ID: <64aed5f4-bc6b-b8ea-f599-b2c43e35d9bd@foss.st.com>
-Date:   Fri, 22 Apr 2022 17:16:57 +0200
+        Fri, 22 Apr 2022 11:20:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1B29E5DA1C
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:17:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650640636;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ljPEk7R5J71TOPgAVvKcjJgou60F7BhP3VQzvXf9g5M=;
+        b=Fm51J934HbsC2zV5OhetooUZNS0e8AsQ6LQyY2QTy+jTqt0APQZJAA2fYThDGNuqTWeJVo
+        n+CK3/S7uJexu5LwqQANbflP88o6gFPfN9ddGIEW+eyvmI9iRnJMq6g6u2AQSgGgAftxwY
+        zVh+eaixPGF8lYqzoaJ0pvssb6u7G1o=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-651-oBvGebEzOTiR45sw89DSlg-1; Fri, 22 Apr 2022 11:17:14 -0400
+X-MC-Unique: oBvGebEzOTiR45sw89DSlg-1
+Received: by mail-qv1-f69.google.com with SMTP id u7-20020a0cb407000000b00446687f0b1bso6852471qve.5
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:17:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ljPEk7R5J71TOPgAVvKcjJgou60F7BhP3VQzvXf9g5M=;
+        b=fx9MH0Cn+YREBzMIwTNPgLOC+g/8XpPUjpMgsla7iLcuMTUJJXNzKaImlKr+u7r9Z2
+         iQxpIkTDBErYiqR353Kr/PISZ/eSFAtKichwRBqnK4vIE1zvg4XVu/XsNI3s+b65AIqc
+         udJf2520Ehrypw8d/pkXuqr+hOP45OAdAY6bhGHPduRuEzN/Lt/JX3gGEkeoyH/GjY3s
+         5ndhUY4CAKgeNPo95sB9I/gWqG7N/WMm3zv/RHHN83/JWmdfQfqJM2mJFj2TVfXJfOsA
+         JsgLxPDTYr691q6u0qOdro50YdLz+bV2F/Ym2zgEuMz513I8cIKoGcIvavc1yV6SSp14
+         ACAw==
+X-Gm-Message-State: AOAM533s6LrXGo5oRPdByGJKXj376FrDCS+gKjdls7vF2v4d4S7lcP2H
+        7azQG1fNRyAO5tdqZUIiooL4Z3548uc4Vqy7dDvHuLcRJJKDXa2hwjvjLWe6kroDqhxHNROcetB
+        WqmPIkDhjtbJstTC7p0nyaZVu
+X-Received: by 2002:a05:6214:2389:b0:435:ba04:8f18 with SMTP id fw9-20020a056214238900b00435ba048f18mr4107310qvb.4.1650640634101;
+        Fri, 22 Apr 2022 08:17:14 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyjMrEgs4qWwrfRJ+/YrbFr8Z4BJtENFj05qIosgsYOz+0gq0PHGNWoZHjHiTvQUr8E5s3g/w==
+X-Received: by 2002:a05:6214:2389:b0:435:ba04:8f18 with SMTP id fw9-20020a056214238900b00435ba048f18mr4107289qvb.4.1650640633896;
+        Fri, 22 Apr 2022 08:17:13 -0700 (PDT)
+Received: from treble ([2600:1700:6e32:6c00::35])
+        by smtp.gmail.com with ESMTPSA id k189-20020a3788c6000000b0069c10860b10sm1020921qkd.107.2022.04.22.08.17.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 08:17:13 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 08:17:10 -0700
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Miroslav Benes <mbenes@suse.cz>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 15/25] objtool: Rework ibt and extricate from stack
+ validation
+Message-ID: <20220422151710.kxf2iywniedb4trk@treble>
+References: <cover.1650300597.git.jpoimboe@redhat.com>
+ <fd1435e46bb95f81031b8fb1fa360f5f787e4316.1650300597.git.jpoimboe@redhat.com>
+ <alpine.LSU.2.21.2204201755580.1205@pobox.suse.cz>
+ <20220422105037.GV2731@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] rpmsg: virtio: fix possible double free in
- rpmsg_virtio_add_ctrl_dev()
-Content-Language: en-US
-To:     Hangyu Hua <hbh25y@gmail.com>, <bjorn.andersson@linaro.org>,
-        <mathieu.poirier@linaro.org>
-CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220418101724.42174-1-hbh25y@gmail.com>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-In-Reply-To: <20220418101724.42174-1-hbh25y@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-22_04,2022-04-22_01,2022-02-23_01
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220422105037.GV2731@worktop.programming.kicks-ass.net>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hangyu,
-
-On 4/18/22 12:17, Hangyu Hua wrote:
-> vch will be free in virtio_rpmsg_release_device() when
-> rpmsg_ctrldev_register_device() fails. There is no need to call
-> kfree() again.
+On Fri, Apr 22, 2022 at 12:50:37PM +0200, Peter Zijlstra wrote:
+> On Wed, Apr 20, 2022 at 07:25:16PM +0200, Miroslav Benes wrote:
+> > A nit and it was there even before this patch...
+> > 
+> > > -static struct instruction *
+> > > -validate_ibt_reloc(struct objtool_file *file, struct reloc *reloc)
+> > > -{
+> > > -	struct instruction *dest;
+> > > -	struct section *sec;
+> > > -	unsigned long off;
+> > > -
+> > > -	sec = reloc->sym->sec;
+> > > -	off = reloc->sym->offset;
+> > > -
+> > > -	if ((reloc->sec->base->sh.sh_flags & SHF_EXECINSTR) &&
+> > > -	    (reloc->type == R_X86_64_PC32 || reloc->type == R_X86_64_PLT32))
+> > > -		off += arch_dest_reloc_offset(reloc->addend);
+> > 
+> > here...
+> > 
+> > > +static int validate_ibt_insn(struct objtool_file *file, struct instruction *insn)
+> > > +{
+> > 
+> > ...
+> > > +		off = reloc->sym->offset;
+> > > +		if (reloc->type == R_X86_64_PC32 || reloc->type == R_X86_64_PLT32)
+> > > +			off += arch_dest_reloc_offset(reloc->addend);
+> > > +		else
+> > > +			off += reloc->addend;
+> > 
+> > it looks kind of strange to have arch_dest_reloc_offset() and still 
+> > reference arch-specific relocation types here. On the other hand it seems 
+> > difficult to achieve complete arch-agnostic code, so take it just as a 
+> > note and maybe someone porting objtool to a different architecture will 
+> > split the code, make it all arch-independent and all will be nice and 
+> > shiny.
 > 
-> Fixes: c486682ae1e2 ("rpmsg: virtio: Register the rpmsg_char device")
-> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-> ---
->  drivers/rpmsg/virtio_rpmsg_bus.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
-> index 603233f0686e..3b7b47f785cf 100644
-> --- a/drivers/rpmsg/virtio_rpmsg_bus.c
-> +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
-> @@ -851,7 +851,6 @@ static struct rpmsg_device *rpmsg_virtio_add_ctrl_dev(struct virtio_device *vdev
->  
->  	err = rpmsg_ctrldev_register_device(rpdev_ctrl);
->  	if (err) {
-> -		kfree(vch);
->  		return ERR_PTR(err);
->  	}
->  
+> Something like so perhaps? Seems to build and boot x86_64-defconfig.
 
-Good catch! I confirmed by testing the error case. There is a double free.
+Looks good...
 
-That said this highlight a quite more complex issue as
-rpmsg_virtio_del_ctrl_dev[1] and rpmsg_ns_register_device(rpdev_ns)error
-case[2] need also some improvements.
-
-[1]
-https://elixir.bootlin.com/linux/v5.18-rc3/source/drivers/rpmsg/virtio_rpmsg_bus.c#L861
-[2]https://elixir.bootlin.com/linux/v5.18-rc3/source/drivers/rpmsg/virtio_rpmsg_bus.c#L974
-
-Please find at the end of my mail a V2 patch that should fix more error
-cases.
-As you initiate the fix, do you want to send the V2 or do you prefer
-that I send the fix?
-
-Thanks,
-Arnaud
-
-Subject: [PATCH V2] rpmsg: virtio: fix possible double free in rpmsg_probe()
-
-the virtio_rpmsg_channel structure will be free in
-virtio_rpmsg_release_device() when the device_register() fails or
-when device_unregister is called.
-There is no need to call kfree() again.
-
-Fixes: c486682ae1e2 ("rpmsg: virtio: Register the rpmsg_char device")
-
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
----
- drivers/rpmsg/virtio_rpmsg_bus.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c
-b/drivers/rpmsg/virtio_rpmsg_bus.c
-index 3ede25b1f2e4..a65c8be9b11f 100644
---- a/drivers/rpmsg/virtio_rpmsg_bus.c
-+++ b/drivers/rpmsg/virtio_rpmsg_bus.c
-@@ -850,10 +850,8 @@ static struct rpmsg_device
-*rpmsg_virtio_add_ctrl_dev(struct virtio_device *vdev
- 	rpdev_ctrl->little_endian = virtio_is_little_endian(vrp->vdev);
-
- 	err = rpmsg_ctrldev_register_device(rpdev_ctrl);
--	if (err) {
--		kfree(vch);
-+	if (err)
- 		return ERR_PTR(err);
--	}
-
- 	return rpdev_ctrl;
- }
-@@ -862,7 +860,7 @@ static void rpmsg_virtio_del_ctrl_dev(struct
-rpmsg_device *rpdev_ctrl)
- {
- 	if (!rpdev_ctrl)
- 		return;
--	kfree(to_virtio_rpmsg_channel(rpdev_ctrl));
-+	device_unregister(&rpdev_ctrl->dev);
- }
-
- static int rpmsg_probe(struct virtio_device *vdev)
-@@ -973,7 +971,7 @@ static int rpmsg_probe(struct virtio_device *vdev)
-
- 		err = rpmsg_ns_register_device(rpdev_ns);
- 		if (err)
--			goto free_vch;
-+			goto free_ctrldev;
- 	}
-
- 	/*
-@@ -997,8 +995,6 @@ static int rpmsg_probe(struct virtio_device *vdev)
-
- 	return 0;
-
--free_vch:
--	kfree(vch);
- free_ctrldev:
- 	rpmsg_virtio_del_ctrl_dev(rpdev_ctrl);
- free_coherent:
 -- 
-2.24.3
+Josh
+

@@ -2,97 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 233A950BC84
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:03:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D73150BC88
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:04:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357819AbiDVQFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 12:05:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40672 "EHLO
+        id S1354133AbiDVQGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 12:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbiDVQFj (ORCPT
+        with ESMTP id S232289AbiDVQFz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 12:05:39 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12olkn2087.outbound.protection.outlook.com [40.92.21.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71275DE76;
-        Fri, 22 Apr 2022 09:02:45 -0700 (PDT)
+        Fri, 22 Apr 2022 12:05:55 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12olkn2092.outbound.protection.outlook.com [40.92.21.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45255E149;
+        Fri, 22 Apr 2022 09:02:59 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c0+Yp8Ny9YVpxVnasjO3MgUG/f/ZJMhmQPNYp9o9YLbbK46qQ3wna6xhoH+A3QHbLSuxEIkcyfpTUeVkIaC3W9iwaEZbQ4D15M4yRTMn/9NgDJf4+E7fwA5rma4LH0yPkunXbxoos1dq3WzrV3tWEDYuR+NAuaUa0w3aGigYjSzYOk+0+FBS3BiGbnupIbKB9eaIRx0mcA3kLGksA5LR+K+91djy/ygOl24gdO2h2L6ytQ8eZMrc962YVTW0GOkG4QJgdq3QNt+y0msP2Pl/NZNOJBgcClXBSkbi9RvhvkYDJaM4QYjBuS3aMWkjwtjaLj8kxl6A3xCev56HzeFA6A==
+ b=JAopLuNi5ko5M29QRawPZImyb9K1aDn7CugSvUcvlDNDwysHZEuWV5JfqLs6xkKNkUHWZ32Qt6WXwC2yoF39MlbMARGbHvwZz18QsYYKhZdEIHNRVad6fPoArvSwDf29Ze2xFSSBIjfxrrWYhEk66cXOCETT51qs2OW4RELGmDY/WkMJLXIGqchKEOfrehkxANTBdeo8arm00SDiC86Aztj/Ej3tkWWGzlK/3gaNZfPvlqILj3TNKadT1xeNpHVWlqJbY82v/XbRQAIkpbz+VZ7704gstjxXbZP3QOMm+XU97PV20gLbVGT9uySsLxwAFq2Ea/hFd0o3wP5+IP14ag==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+lHADMAL0NkfusQGDXcw7p3Nxi7opqnAU8qpxK++s+M=;
- b=JrxvymA52Q/y/y9juqDLKgzqYRVdn/KRCDoTqaXr/toIvrRFu3iLQf5GsdwOqlfdFlSDzjAMkVymo8YDsxTYbgZaU3EnhV1kzLZcjr+Nc27PwWrH7R7jM8NuSaRgiFt4/+RccBjRbKhQE9qpo31e86WTUpuXHjO6d9eLpFY28BIzf307nWpGx21k8seNN3ab+YZu0YWOf2y0gf8U+CwpaglKEsuEqLRognlPF/pnthgsSGrUAfnmrxyP5k4QVzPU/uRzOOtqa97G2VkeWxPoM9OzJ7SNWvGmsRsDfVM7pwBflZsi0hz6OJ10jsWpdtr1nRj7a82bxFdhZdWUrZ6+8w==
+ bh=b3bO13YmCabNvWf6OwNKP2sas0CpiP6jg/J18b8Pz0U=;
+ b=IZAc3wOOIOgXwjr5oXuZ+RVOiEi51AcvQKJCBoL6dTDSEbHd27kbJ9o9mCy6X0Kx2lc/vNPegfUUoA98VqhTFJlDC5CcFJaciz2BX0JbQsizLrzoDrRDAwNRGwQowGhsIGInVsM1p4d1cOx+gKFMhghfLuiSJcmwcvG7bcZIpj9NMHmuRmL1uAuH5nDUA4kTbBhjk3XW31Rn9ZRkYfvMVUvi13nrrb9CzTnKdpTyZFXXKUJCcd8d+ctPhm39dZsMyEeb0lsHQqN30amwwFVtcGjHT3kO/nEkN+IKdDsup3YgZ7AxMftlBJ/SkOnDdq3kzJMlCVd2vM4jXAagc55hag==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+lHADMAL0NkfusQGDXcw7p3Nxi7opqnAU8qpxK++s+M=;
- b=j+NdJsEk4JcPP+Ftc+mlSx1gyQ4Jmv6PCvqiN1nKNpkk+GhfwJinGRHRlAarI7X853UPfSyXYBQBWZ/kOARGDw7LdNjezbZa3Ph9H6R7O5WagjMLcD16gOwhEIA8q6HTV1zlc7bZFuZ1tHiMrdCGXAN6wW9o3lOax4YedqEMQGRZfpjsFnJMSGCD2rNWOdVaJFZlKBbGN/TN0Ls5/N0+AkNTaYmw4AODDOkzteW7WEaTFWbKkiUiDMb1fcNi9i5kuQeLG+Zmhu8k8PbBSxLi1gx4iVHoihor8TAlFUd9VqPNO6vHmeQmSgSmA3O5AeafXxel8XC5E0/J9+Efwhf5TA==
+ bh=b3bO13YmCabNvWf6OwNKP2sas0CpiP6jg/J18b8Pz0U=;
+ b=mxm9Dk3Iy+mMp12lLYYfeKSYjAL/lhFRIllvOWMUrrFB5JUfLN3M4nDsAMshRxRkmR6FAF45U7nD1UmTiYhAfghiNP8X6b+iHoPpNFEHk7lFLtD+dDjBknuGB9raOVK9h5c7rV92nEfGtBWWYRHcktWiyn9AfGorliOQwc//ECiBHRt+V9m27eCC7HNBTY3f5fY61KInkqKxtgPouVDi5Cnbyd2MiEtI6q2AnT4LcqWBn3Q0FvrreKNH/3qC/IPdLT7FKRRbvvq7dHfMNfX2vMHYrCTvGvFBDu5YC75mH2ZGEVj7eAQDoIBIGrI/nLx8S9JI40n2n8eiqTdnSFKBbQ==
 Received: from BYAPR20MB2472.namprd20.prod.outlook.com (2603:10b6:a03:155::16)
  by CY4PR2001MB1685.namprd20.prod.outlook.com (2603:10b6:910:68::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Fri, 22 Apr
- 2022 16:02:44 +0000
+ 2022 16:02:58 +0000
 Received: from BYAPR20MB2472.namprd20.prod.outlook.com
  ([fe80::3480:160a:eb92:d6e3]) by BYAPR20MB2472.namprd20.prod.outlook.com
  ([fe80::3480:160a:eb92:d6e3%6]) with mapi id 15.20.5186.015; Fri, 22 Apr 2022
- 16:02:44 +0000
+ 16:02:58 +0000
 From:   icenowy@outlook.com
 To:     Marcel Holtmann <marcel@holtmann.org>,
         Johan Hedberg <johan.hedberg@gmail.com>,
         Luiz Augusto von Dentz <luiz.dentz@gmail.com>
 Cc:     linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, Icenowy Zheng <icenowy@aosc.io>
-Subject: [PATCH 0/3] btrtl: try to use OF machine compatible as config postfix
-Date:   Sat, 23 Apr 2022 00:02:28 +0800
-Message-ID: <BYAPR20MB2472590CD7F6385C0E002763BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+        linux-sunxi@lists.linux.dev, Icenowy Zheng <icenowy@sipeed.com>
+Subject: [PATCH 1/3] Bluetooth: btrtl: try config w/o postfix if postfixed one failed to load
+Date:   Sat, 23 Apr 2022 00:02:29 +0800
+Message-ID: <BYAPR20MB24723A54E913F0218DF87F83BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220422160231.1072810-1-icenowy@outlook.com>
+References: <20220422160231.1072810-1-icenowy@outlook.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-TMN:  [S9Mp5eyF3vDnUHmlK9ml8yArgbO9NKlj]
+X-TMN:  [GLyOAnXyVB6IjTCN6k0tBy6bpZ0TJQdv]
 X-ClientProxiedBy: HK2PR04CA0070.apcprd04.prod.outlook.com
  (2603:1096:202:15::14) To BYAPR20MB2472.namprd20.prod.outlook.com
  (2603:10b6:a03:155::16)
-X-Microsoft-Original-Message-ID: <20220422160231.1072810-1-icenowy@outlook.com>
+X-Microsoft-Original-Message-ID: <20220422160231.1072810-2-icenowy@outlook.com>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b947124e-01ef-45ba-3a7d-08da2479890f
+X-MS-Office365-Filtering-Correlation-Id: 933fa029-322c-49fc-5382-08da24799129
 X-MS-TrafficTypeDiagnostic: CY4PR2001MB1685:EE_
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: D+pswPgHCa2AdIhOON7T4/mpAuMbJmtmIvsbh70hurqiCmTKXyvxiHz07VhWSoM6ctIiYY+2JCQczsnryxe3YeqCaLrlHRL06iySXJjsf+JaMsL98QP/sHUF31bkO8dH4ZAwFTz0uw64GcuNMsJ8a+idgiCYomPvgZ9Tv5Jqo/j3mi6tVQ0DByIOxXdS9q6rg7yRUxLAFzaVMn1/YIvWf3n0OMj6GjmWxu553G//Xrf5KSjuCll9zu9MA1w5vj/lE4yntDG+x4AxdKEksrleDW/M66uLhbahD/5yzB7rxgzmLGxOPRf7bnq15TdzA1NXJB+CoFdpU1hXrKgtJUdSElv9Q7DCs6iw0Fe0/wXGRcc0VMPB4ebjc8Hk4WCmR87DI37c8kAPFX+MpXxodyhWHDfzA6Fw2KiDihTbVfpC7iWz9oZyYGkbxHY9jPNwgxHL6xkhvd87ZR6ZocmGkLZ2Ji1ybPXeSiaeswHXq8CPvIoeYaWrMuKu4Pu+X2dG+P4m8jJpuaPKWTs6QfM9y3jwmNzf+Q60pSkG5+zJQ2c+egSyaphwMFHK1MG5WmmNMzOlb8gGj1LbG1VfOf3LdsCDHw==
+X-Microsoft-Antispam-Message-Info: XPvqHwjKGA4AVqI353HHT/lq84Zlm4/36LVYg7cpEwE4I18G2RyDIhQt0+DBAfBtLa2nidbu6Qmi6JZEZpSuMRCQkKTe3whOwV9DQd0DAelCWcB5UFYEwJvs0zwJOfZGDf30LkZ8WkAGlj89HGQFgjGtEJTvclBLrTfUV6vU+lxJGjV/GhNrpI+7J9P/mJ55mYyEC7QntSgw4lmFZ42ISSEbXLdQfugVZ9iwbrKyHhssQJN0rlwf3jY1L83DZkWkjXUTs5uzVPAoOUpZqnUd3OriEExcL2AikW6wBPAOlu2KdT9k4l8KXx2ak+ylGHld0u5nxe5PK8OkcnOUicp+Ya/C0Qu9lsemV6pn53nwvEBpd8oD6O/WQnjqgEe6HedRrj5k+AVbageaGIq8MjCcHnKFH8KaZgexmlzuyld2YkV4rKMVyYrfH7T+InSr2KuX54OJMl2UMUtjU61ZSsXEEbGfS1rmLgJIF2J1MXnT1nO9P8gE+xn85WUQ6963lHF49v5H6NA8pK/YxNrjyIY5pYVoyXvy9TtZbRz115Ris+yOOuMtzlbufSJCcff8o6mxlmQxgbkoCjmBNSh9TVw69Q==
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FrsArwEygSz8sIYG2HCz4QOEbqvB/Hq9xYG09z6nuUNWMSD31E095oZDTgKt?=
- =?us-ascii?Q?WaKmBRKbn5EcHbsoV/emZHoj+44/tgQ0Q7HjYkENGP/8t0/Zo30DTVw/PtDq?=
- =?us-ascii?Q?kzYNyq/QcRt209SsK4ebnXo027D3tMQKupub6mzgn4eea7ONKgLzw0q4yLay?=
- =?us-ascii?Q?6rZuXqHTcG1WdeEfTwjNf/ndn05vZz74v5LEduLqEScKDNgP9cbtKKlUyTNT?=
- =?us-ascii?Q?DzhSQ/B/Akv7w7Ny5h+sMFTlEz1e5iubUYE9oJGL7qCg04bBC1sdcC0+hS5U?=
- =?us-ascii?Q?2Sy+DVGSBaBOHYXg48Q0ODrTvQnlni5XZp02JMC8BYEctWIASOQf1H1tmVrb?=
- =?us-ascii?Q?eB6ugKxJjZ+/UnxYvbLcM+wwSGziCGSJMc4iRIbMFzNSH2h6cHZ8TpPqNitf?=
- =?us-ascii?Q?Kgj5AhDz0IvqPmGD1gFI4v9MlGxKcDPXNd8CyTDmFE+kw5wXqAhTeabNaSfa?=
- =?us-ascii?Q?8Vcgiptr4XSmdcf7AfUcL5qyHnAz0yP2uyFbuj5EKqVwrrpY0L8hmMaoij2h?=
- =?us-ascii?Q?ycgyUjnDpgUiN8C6zOptAXeZMNFmSY2u9faKHxyyBVtJntg5BP2mT2yRWzu1?=
- =?us-ascii?Q?9Up5SmrlPk3hFdhBDbRHKf6AQJemxiLuzkseAQn3LSijXwaYQr7NBsLXHC08?=
- =?us-ascii?Q?djXLYnU9mbCPL1iK8Orrj7/dOST+/uk5o1Lb2PqzJAYLU5pLh+lNAO6zK6jk?=
- =?us-ascii?Q?WhjdhYqesPUzHP1nboxfRgvuLwXk8YSeGwocPKS+O1dQrvYurT9awTvjyKPl?=
- =?us-ascii?Q?HKJc/Dz7bFvLaRIHCT/HwU8bRqLyqTLUxT25hy92D4cAYmaiExBPcQdASCtE?=
- =?us-ascii?Q?C23JRfOLtNSEo12B+o19o5Oq4fIEdt3IU+/+twPKnKkvX3TzoD7wu0fdINIo?=
- =?us-ascii?Q?5mGe4HTLG3d9IdUFa+pFzLPkNTDEXG5ZiuX1uCAVRMB6qd9uaXOBrTwxRVFt?=
- =?us-ascii?Q?/h2YoyIdLlXyvKtZ4hX6GQZDgRTb7/2WTClujl7obgtnraCm267wlcdnjJdL?=
- =?us-ascii?Q?YZSDf1u07w+N2cEWBYuA0KTsTLAbtx5fv7i7S1J38291Zm1iqvVD6er6LIqW?=
- =?us-ascii?Q?aStqeV7SMdm8iEE4je524qqUlPioOo/RjAmTK7rFm7ODIVSshL9qHONqDHL9?=
- =?us-ascii?Q?w6j/7/2D0eZE1tBmNdAYOLgtxtXZ4l79mWe4aoROtb7XMLcBtGicUkwWuzQY?=
- =?us-ascii?Q?FNEY0qDD9okAOatbe+O6Ty9wOnVqohJkVjpdAyS0bw4vurcgtO4PaaqnSoR6?=
- =?us-ascii?Q?YCL/YUkFG5n2JDdib7ZW67EkmhIhRyI/gVZ+m7V1ymCuBsMGdgncmQeRtMxr?=
- =?us-ascii?Q?t/DiOF4SPcDCZjom+4e1/cwnq/7KXNGaQFxerEhDoTLl+B70Mj9PyJBQkVH0?=
- =?us-ascii?Q?OjWx3WgBPUTRq6LM4+eEFDtyGYViepQktzWFKgzdbg8yown3UZ9JQnHAZO+X?=
- =?us-ascii?Q?Jbaf7s1hvJ4=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ItorM44UEDUGHTx4Uu74GSwxYyqsrDwNeChU/zm4sJ7cFF3U/RhUZEnZLpx9?=
+ =?us-ascii?Q?d7Vj30eHjjDrGah3DZTrFj/gLXkRrODCAvzGt4AmtfUmIyqK6Q1evlCNf43L?=
+ =?us-ascii?Q?pQFlTZAAlnCmSFc7k+Om6ZBCaSmKKMH/+cs4d19GN3QlfO/OjJ+MMz8xeqkz?=
+ =?us-ascii?Q?uawqbM2azJJPQx2g25qB3cauglAh5YZt/lUH4mU7nt4sCuL1TeNKE2g+q82d?=
+ =?us-ascii?Q?49mjhQ7BDkP0kAuMLnksnpBh1zjlWt4V1rrJYP8Wj1IhYX88NNsxMijw0nMi?=
+ =?us-ascii?Q?27Ry92e8jfqJfKJKTtD6sfolPoyvS5r6lLQ57QQrgfcM3k456xWQufImvD4I?=
+ =?us-ascii?Q?k3oqkI/2Lj50te9Vd8K3JQonI1zrFdLihNSwHdw6UNmfWEMA81pL/EtuAbqT?=
+ =?us-ascii?Q?vnVRH6OSD4DwsxyMOtQIfSbfeOj3c2cf3PiVRaRm980t4vVSjaZN3h+Kasdv?=
+ =?us-ascii?Q?/FcHl0Cd0C1TXsAoOWd0+V8XqEtW+pXojKoRhon0trkiRhWxuxdg96qNrVDn?=
+ =?us-ascii?Q?jtZFOgr576+hwttoC9cvGsJUDJRToPzcgtFnNQqnjbttO2i0kL7tQeQDUK4n?=
+ =?us-ascii?Q?O5X1v3v9uIBHc1QDcWz+wGZ9zq15ONJo6J/i1gJz8PQ2D9E8h1ApvhZzNX5m?=
+ =?us-ascii?Q?gGqUIjEPlp+QmzlDLAqzwJrgCE4VWLHFaMOMMslizouGh8WaPbrd5eWPcRuC?=
+ =?us-ascii?Q?1ZnEYxV6I1U/Nvq7iMgRNww30fmqACxGqdGuk3X5E3+fn2HixIEiUcFs3mmq?=
+ =?us-ascii?Q?Go41dhD5dMyhU0I3dheDoNh03qXp25bgAZjFh3Xv3ulKhQ1ZpPmPr34Bnfbb?=
+ =?us-ascii?Q?jKquxPzZE6MKhr4mSosUPV7zsiCQAvO36Su9uammSFYJGwAlOU6lDkUoIc9S?=
+ =?us-ascii?Q?T538USo0IowSRLo73ct/fuMiE8KZTYyNL+1Uarzhs/q2nq2bvfAWQG6KsTvQ?=
+ =?us-ascii?Q?UH6pon4BywLE+JCwQqA5yjeReEwaXFclarU2J7pNmaCkDZqgb3Bb/PMAMPEF?=
+ =?us-ascii?Q?fSTTWHayChdmduBAoGCX/ql8RBs/vum12gz5BqbPTtpUi7fbQBKoQ33A1nTk?=
+ =?us-ascii?Q?lHWU7R7jb52gHe21u9AtCc7iA9yeUAEvq0epHhrifUSemmIdd+zjONN2EH7F?=
+ =?us-ascii?Q?oKMOdUyn3ICY6EvG8m+LMopQAA5AKmmJ514dspi8oEt/ySVtSjhndnZoDhsx?=
+ =?us-ascii?Q?EQOQFd3Qq8VcvKZr0qZZuFc4maj7MUgsn4TMBbZ6L1aR9kneYlEUU8Fv67iD?=
+ =?us-ascii?Q?KeH+rdnG/MAjURPspnEqfdx2lsBOFxHtYGmpMEg5PJ49Ryk/QMt5mU3GOFH7?=
+ =?us-ascii?Q?DVpD18N6AkEpPWSYZqL52mFMU56s+MO773iujPnf5GhIMIdcqniu0+TK0UaB?=
+ =?us-ascii?Q?7Cw6witVyRypFQg2T51u4UGIJuXUbrobq5ibJgai/CS7GDwofixeTJ4hskn8?=
+ =?us-ascii?Q?E7dGJnmjy34=3D?=
 X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b947124e-01ef-45ba-3a7d-08da2479890f
+X-MS-Exchange-CrossTenant-Network-Message-Id: 933fa029-322c-49fc-5382-08da24799129
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR20MB2472.namprd20.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2022 16:02:44.2184
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2022 16:02:57.9830
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -108,25 +110,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Icenowy Zheng <icenowy@aosc.io>
+From: Icenowy Zheng <icenowy@sipeed.com>
 
-Currently for OF machines there's no way to specify a machine-specific
-btrtl config file.
+We should try the non-prefixed config file name if the prefixed one
+failed to load (possibly because of it does not exist).
 
-Try to use OF machine compatible string as config postfix, in a similar
-manner with brcmfmac driver (which needs machine-specific config files
-too).
+Add this behavior to firmware-loading routine.
 
-Icenowy Zheng (3):
-  Bluetooth: btrtl: try config w/o postfix if postfixed one failed to
-    load
-  Bluetooth: btrtl: use board DT compatible string as config postfix
-  Bluetooth: btrtl: allow longer config file name
+Signed-off-by: Icenowy Zheng <icenowy@sipeed.com>
+---
+ drivers/bluetooth/btrtl.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
- drivers/bluetooth/btrtl.c  |  8 +++++++-
- drivers/bluetooth/hci_h5.c | 27 +++++++++++++++++++++++++++
- 2 files changed, 34 insertions(+), 1 deletion(-)
-
+diff --git a/drivers/bluetooth/btrtl.c b/drivers/bluetooth/btrtl.c
+index 481d488bca0f..1f834513762b 100644
+--- a/drivers/bluetooth/btrtl.c
++++ b/drivers/bluetooth/btrtl.c
+@@ -699,6 +699,12 @@ struct btrtl_device_info *btrtl_initialize(struct hci_dev *hdev,
+ 		}
+ 		btrtl_dev->cfg_len = rtl_load_file(hdev, cfg_name,
+ 						   &btrtl_dev->cfg_data);
++		if (postfix && btrtl_dev->cfg_len <= 0) {
++			snprintf(cfg_name, sizeof(cfg_name), "%s.bin",
++				 btrtl_dev->ic_info->cfg_name);
++			btrtl_dev->cfg_len = rtl_load_file(hdev, cfg_name,
++							&btrtl_dev->cfg_data);
++		}
+ 		if (btrtl_dev->ic_info->config_needed &&
+ 		    btrtl_dev->cfg_len <= 0) {
+ 			rtl_dev_err(hdev, "mandatory config file %s not found",
 -- 
 2.35.1
 

@@ -2,181 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3BE450AEAF
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 06:02:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A019150AEB7
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 06:08:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443849AbiDVEDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 00:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50212 "EHLO
+        id S1443772AbiDVEL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 00:11:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443764AbiDVEDQ (ORCPT
+        with ESMTP id S236246AbiDVELX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 00:03:16 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C845A6359;
-        Thu, 21 Apr 2022 21:00:22 -0700 (PDT)
-X-UUID: 59637d826a8e456097885ce81c9e3856-20220422
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:3ae5548f-302a-4774-863a-7492d695ffd8,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:6,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:6
-X-CID-META: VersionHash:faefae9,CLOUDID:b1bdb8ef-06b0-4305-bfbf-554bfc9d151a,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:4,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 59637d826a8e456097885ce81c9e3856-20220422
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 38023904; Fri, 22 Apr 2022 12:00:18 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 22 Apr 2022 12:00:15 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 22 Apr 2022 12:00:15 +0800
-Message-ID: <6238e4bb6854fea0b075a99662a961a2d2d88cde.camel@mediatek.com>
-Subject: Re: [PATCH V2 11/12] clk: mediatek: reset: Add infra_ao reset
- support for MT8192
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Chen-Yu Tsai <wenst@chromium.org>
-CC:     "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        Chun-Jie Chen =?UTF-8?Q?=28=E9=99=B3=E6=B5=9A=E6=A1=80=29?= 
-        <Chun-Jie.Chen@mediatek.com>,
-        Runyang Chen =?UTF-8?Q?=28=E9=99=88=E6=B6=A6=E6=B4=8B=29?= 
-        <Runyang.Chen@mediatek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Allen-KH Cheng =?UTF-8?Q?=28=E7=A8=8B=E5=86=A0=E5=8B=B3=29?= 
-        <Allen-KH.Cheng@mediatek.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Fri, 22 Apr 2022 12:00:15 +0800
-In-Reply-To: <CAGXv+5HMe7LaXiMJofW4ZT0Ku70mNAt2A=98YzZbx-frF7kQGQ@mail.gmail.com>
-References: <20220420130527.23200-1-rex-bc.chen@mediatek.com>
-         <20220420130527.23200-12-rex-bc.chen@mediatek.com>
-         <CAGXv+5HMe7LaXiMJofW4ZT0Ku70mNAt2A=98YzZbx-frF7kQGQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 22 Apr 2022 00:11:23 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2092.outbound.protection.outlook.com [40.107.93.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28C14E3B1;
+        Thu, 21 Apr 2022 21:08:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gz0CYriW93Ue3N015i06ThebS+dOha+wpgdkB4h+BIv1n8p1WGV+u6vhixbUIoCjQuyB2kR0kc4HElVIyn5/xIVLtu1kR3AUNqWk6KVGA+kh9dDiugjDI1IHA0om1zNLV3DkJ2IwJeEp/U2A36TMiCfbs4x96vPi/WmXFDQ1IQRwvjFl2Mzdtrj+PTZkmeUADp0srsr1RJGi087/QK3SX3vVlCwkuIaniOmjcrx6K3kF/Fxe5NSsyHZA6s/G8mxFc8zX8Rauw7bkJYNuNe0AnKw0SAZcDIxsBASY2fSutg1uAEj7iRS9yLVc9nTFCFBK1Uv492kJt+wYPrhWybduMQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=57XlQW3r5Ws5SYh1U+nJdq86xcDgkdo9lwML0jQEA98=;
+ b=aPgD1Q8IuKXnBgV0HJnYCaVdbHqkrCBB3Ch8hTd3nM3ck8rIpqnGcTb7FBWwwayXZXUHpU1pRQvA/G2hNazb1PnmGw+wpmAEZgBIS90/jAAtyozBKe+PuMtLvE7d/ssHqWytnv6/Dov/9mMT2R7+aFx/OaFTl2Lw8Y9VEpnzoRgDIRpwIez06xom3GifsgvmGLqlqMY8mYf9qQKnyTS3lDWwo2dQBbbx0uf38fCZXGy8otOndkk92WV92YkabWp1azwWlyDZbF5xB8aFWXKXdFE+ORl4/bZSaqEZXOsYOg0e8P+efNsAiK22Lk70vjUVHGuRXDISyPLQwBxy6YrkUg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=57XlQW3r5Ws5SYh1U+nJdq86xcDgkdo9lwML0jQEA98=;
+ b=DXSi+Bi7vjtCVxVOysaaikLQCHXtADfFhwl2eWNbB6pOcDeMATZUvCJm2lUr4niJbd1YYx6hkOOO8FbkvUGXIWXz05RfluqYqtNEWKoPPzEatmKbFzDEoJw6k4Pp3jWhID5UD357CJxf4WIcQQshBIodB68J5E231IW5sb0wwOM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
+ BL0PR0102MB3587.prod.exchangelabs.com (2603:10b6:207:38::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5164.25; Fri, 22 Apr 2022 04:08:25 +0000
+Received: from SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::319b:4612:e6f4:f22c]) by SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::319b:4612:e6f4:f22c%3]) with mapi id 15.20.5186.015; Fri, 22 Apr 2022
+ 04:08:25 +0000
+From:   Quan Nguyen <quan@os.amperecomputing.com>
+To:     Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        openipmi-developer@lists.sourceforge.net,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org
+Cc:     Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+Subject: [PATCH v7 0/3] Add SSIF BMC driver
+Date:   Fri, 22 Apr 2022 11:08:00 +0700
+Message-Id: <20220422040803.2524940-1-quan@os.amperecomputing.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR04CA0005.apcprd04.prod.outlook.com
+ (2603:1096:4:197::16) To SJ0PR01MB7282.prod.exchangelabs.com
+ (2603:10b6:a03:3f2::24)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9ee23ee7-1b09-4240-0e50-08da2415bfa3
+X-MS-TrafficTypeDiagnostic: BL0PR0102MB3587:EE_
+X-Microsoft-Antispam-PRVS: <BL0PR0102MB35876EF8ACE87185C5FDA092F2F79@BL0PR0102MB3587.prod.exchangelabs.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: lrHlCjn75tlLonMQyhawkssGUqfd/4RB4R7QO1dxjxkPh6ZBrKTrsfBpVSovjqPogOvcmmARlBNASoO9jP0CHu5FVVkIX8WADbWS3RNo81GWKEtVf6Qix9gsMdJD6JqOpGZAEgGxPRBmNllVpm/MiWSrG5J7xB0dLpVy38zdvIe2TigbPlB1T+oPa+qjlztgwcjOYrNotQ/bco4QEzTGP6k7hQDALG5gZXk2XuOpK9ce2qa8uU04bJ53VfYWq8FlXfKC7dCjCrfLlcj7dFZC3SMJPbwj/nCCt/BRKhcs/gsNACw2qhkLQCvFEntQjjnX0aTYGb9QRKOt/7pc5IbP8t8hVJ5Qt5btqWxwHxXe0Odh4qn0Eds61o43z8tWqXlmrtJPfAvETb2RP6AXJgTOjfcNS3IMGnt0B1oqSfuN5KHrpehkXPHLVWl+lBNVqoZRuDn9yMtJy4bo3Lp8g6q4XEJxLl40F5mYk1zbYX8FopK4iVUgbdyBrJVqYfPMCaT+Np83eueEDfEyZ81GBQga6FPMlavhdy2i6X5wSTmTuiNQel/ASuZwXGGzQOHFNNIJrc+4G0I0OD01qqTR+B3HdoczpQbDIphLyzDEHEoKT3P3dAl978RnX5HP3i+h+avbWhr1+sCWJMR5cxB8Uy8ghJ38Dq5oZJlcs2qBI7uWnOHaaI1lGk7EVEOQA31EnzKw0kHYbwWhOaUYo737b9x2StM9IpVAKYlGrwNvG1k1twTKnGyYFltcg3JcUcUPExXBAe0ssmZk0/AjwFWy9um/kDPcKgh6XTMqqszuWC2nDAYhNAmN4b/aut3h70CqDa/+
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(186003)(4326008)(921005)(38100700002)(54906003)(66946007)(7416002)(86362001)(110136005)(8676002)(6486002)(38350700002)(8936002)(966005)(83380400001)(52116002)(2906002)(66476007)(66556008)(5660300002)(508600001)(1076003)(6512007)(6506007)(2616005)(26005)(6666004)(107886003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jVsDEcxFy89PSbahCmJSW0FE/k8fJFOQV8CHgt7JsScKZV1Rj91eSbJZfwwE?=
+ =?us-ascii?Q?5cgrU0S8t25Bmyg6v4awzjvxrx8gef4TNvsghbqtJm9jaltc8NXPYNWSN+ra?=
+ =?us-ascii?Q?GUpXZdINSkhqV7J5Fwu8UigFpHfABTVClUAzC8VavZfh4RNt2jboKh5L91eW?=
+ =?us-ascii?Q?tBMUl6NnsDToTZtf3OpOc0lc5GqzAs09sRzxstf0cQ6lQED9lFxFiWGMoBB2?=
+ =?us-ascii?Q?oBJi/syu4Uevluzm776PBdlKvs8eI+EcvH+qbWoqbL9yvSo6KFdH4+zCDoBW?=
+ =?us-ascii?Q?r09w3h6OWEG1aUlzOkOqM6zim9g3tIGxwKCPJVB3dO75qLxFHsvOYIGXBZ8q?=
+ =?us-ascii?Q?0vzPitkqKD+lZ1fabgeL6FlzvYwHN6mb8/Nalw5drlhrUUwWTH9Y6mD/fONz?=
+ =?us-ascii?Q?RZQJi2GCTrtJ0KiL/6G7ZBjGUbx6hixYX3ucW3VHc1+xUzghWb0Jk175prcP?=
+ =?us-ascii?Q?+RQyE2unBqz3cF+bnaHz1bKBtaItOihBmt/yKsJU/y8+pT/awxTk7FEtKxlm?=
+ =?us-ascii?Q?dIqS4ovDRxrS5R4AzdhL2t3dPOo3IRlUsLgKlDgH3z9U4pcfytMQutVmUd70?=
+ =?us-ascii?Q?kCuXgEGJEt0yBWymQbgjdBhgggQ2O/jGU4HgMFtPyir2PUEJ6DsgaYs44Ceu?=
+ =?us-ascii?Q?SdSNUbkKHFBPc4B6FASPiRw005POH0uKPVm5wPaUsY3uv2ACRA/dTL6y4uOl?=
+ =?us-ascii?Q?DAxcranu5B0g1vWMfFRK6x6O4B4Pa8IG17e0fstsvTQAcuyFk3r2u6JIEoRO?=
+ =?us-ascii?Q?t+3p5/BHCUVVxYxXWSPNfq0Dhs4TYbxFkvMyyEKNjxGdR4m2diXtnV/R5fpb?=
+ =?us-ascii?Q?rZGjrUh/ICHNDmIK9XWYdLrm33t+Ws0UuTHokDurX4w3M/GWCBle2Vqq8c15?=
+ =?us-ascii?Q?cVjok1SEslKtU3/HKctzfjWaatlYAs48V2lmNLTDfU7Tkw11O01xFytTOlmu?=
+ =?us-ascii?Q?l6QN4EOz3gLxPYCRZ3IDCKT4vfgyQPZFN+iBXsw4j1ZDv+A4fzDAM2ONF874?=
+ =?us-ascii?Q?bcpu8oS09qbsTWxp3DaixeBZUfyEuMYO9vNlw+fFbCKo5vXsr0ZJOczfSZuk?=
+ =?us-ascii?Q?InL+tUJk4xmHcBpHmH+BVZ15m9Zc3Lm5JbpIrbhM6KA9DN9FpFxN/0/N+FdM?=
+ =?us-ascii?Q?k5Q+/xTr7G1O+kyZKqxzRXAPIlsdTv5KMHhRNjXft8AVUYHm8cdRRU02JGaL?=
+ =?us-ascii?Q?AMQCk1I2lcsxofFgu+bWpdToYF22BxrmSQhUNcFHKR6nV52j1Zdd18bYAr8Z?=
+ =?us-ascii?Q?K83UVwYcJBoV/20wwb4g4ci+hGlRLExUSQjlG7X1NSdmxB+u2FjMEc7z+rGe?=
+ =?us-ascii?Q?GOxc+rJPQtnNLzQSoOXzf/VaeLbAh0tzhba7xGr3RVVpGBR9OcXW7tMdix64?=
+ =?us-ascii?Q?ia9HnJ4VVbFv4SQXZWoICH+2ec4nyxh+YGfYpkcor/58JZ1L2iJvyWUU2xJI?=
+ =?us-ascii?Q?YdQSqm4BJlF0M2uB7jbe+2kS9kDj/3vepJ9WzcxvF497PSc+LBfKP7PbAUco?=
+ =?us-ascii?Q?NlGX+QP8xnAuflamkfoodznbG/WHkEfRfClX42d6CCnBJfUnjZpvdH1SFt5a?=
+ =?us-ascii?Q?FdLILJV9bloON/FGiq7AnCucAMWKOn4UbtiyoqDFF1t8YWZw3IKhDbQtEZ9E?=
+ =?us-ascii?Q?/5QLw6W41WroSiTFra1eltzxNwPEuXMP0jIKGz43U/wXuBidT/+TYj9pKBIv?=
+ =?us-ascii?Q?On8rJXbvxUb+e8tEAoUMKs0ECS1JHDKp/V+MSxM8nmLq1nzWOxpnd7aONRYa?=
+ =?us-ascii?Q?sLAFSnwMSSXtYX+pbuxB3bv7ToZPKI0S2k4EQUm6+QVQokvHaohG?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9ee23ee7-1b09-4240-0e50-08da2415bfa3
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2022 04:08:25.6893
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9LsjpFsLA/GQTD9yiDl3Q6p5oFHgXzFJf4OQnzJ7ytzHJnc0NhaNw1IS7D5+SaZD7Hfih1VCIdWhPiXS1/N3ZzNxYjX3oN8mXfmdUamPBdI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR0102MB3587
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Chen-Yu,
+This series add support the SSIF BMC driver which is to perform in-band
+IPMI communication with their host in management (BMC) side.
 
-On Thu, 2022-04-21 at 14:53 +0800, Chen-Yu Tsai wrote:
-> On Wed, Apr 20, 2022 at 9:05 PM Rex-BC Chen <rex-bc.chen@mediatek.com
-> > wrote:
-> > 
-> > The infra_ao reset is needed for MT8192. Therefore, we add this
-> > patch
-> > to support it.
-> > 
-> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> > ---
-> >  drivers/clk/mediatek/clk-mt8192.c         | 11 +++++++++++
-> >  include/dt-bindings/reset/mt8192-resets.h | 11 +++++++++++
-> >  2 files changed, 22 insertions(+)
-> > 
-> > diff --git a/drivers/clk/mediatek/clk-mt8192.c
-> > b/drivers/clk/mediatek/clk-mt8192.c
-> > index ab27cd66b866..7926b83b9035 100644
-> > --- a/drivers/clk/mediatek/clk-mt8192.c
-> > +++ b/drivers/clk/mediatek/clk-mt8192.c
-> > @@ -1114,6 +1114,13 @@ static const struct mtk_gate top_clks[] = {
-> >         GATE_TOP(CLK_TOP_SSUSB_PHY_REF, "ssusb_phy_ref", "clk26m",
-> > 25),
-> >  };
-> > 
-> > +static const struct mtk_clk_rst_desc clk_rst_desc = {
-> > +       .version = MTK_RST_SET_CLR,
-> > +       .reg_num = 4,
-> > +       .reg_ofs = 0x0,
-> > +       .reset_n_cells = 2,
-> 
-> If you want to do this, you need to update the bindings first.
+SSIF BMC driver in this series is tested with Aspeed AST2500.
 
-OK, I will add another patch for this.
+Discussion for v6: https://lkml.org/lkml/2022/3/10/340
 
-> 
-> > +};
-> > +
-> >  #define MT8192_PLL_FMAX                (3800UL * MHZ)
-> >  #define MT8192_PLL_FMIN                (1500UL * MHZ)
-> >  #define MT8192_INTEGER_BITS    8
-> > @@ -1239,6 +1246,10 @@ static int clk_mt8192_infra_probe(struct
-> > platform_device *pdev)
-> >         if (r)
-> >                 goto free_clk_data;
-> > 
-> > +       r = mtk_clk_register_rst_ctrl_with_dev(&pdev->dev,
-> > &clk_rst_desc);
-> > +       if (r)
-> > +               goto free_clk_data;
-> > +
-> >         r = of_clk_add_provider(node, of_clk_src_onecell_get,
-> > clk_data);
-> >         if (r)
-> >                 goto free_clk_data;
-> > diff --git a/include/dt-bindings/reset/mt8192-resets.h
-> > b/include/dt-bindings/reset/mt8192-resets.h
-> > index be9a7ca245b9..feac1ac85906 100644
-> > --- a/include/dt-bindings/reset/mt8192-resets.h
-> > +++ b/include/dt-bindings/reset/mt8192-resets.h
-> > @@ -7,6 +7,7 @@
-> >  #ifndef _DT_BINDINGS_RESET_CONTROLLER_MT8192
-> >  #define _DT_BINDINGS_RESET_CONTROLLER_MT8192
-> > 
-> > +/* TOPRGU */
-> >  #define
-> > MT8192_TOPRGU_MM_SW_RST                                        1
-> >  #define MT8192_TOPRGU_MFG_SW_RST                               2
-> >  #define MT8192_TOPRGU_VENC_SW_RST                              3
-> > @@ -27,4 +28,14 @@
-> > 
-> >  #define MT8192_TOPRGU_SW_RST_NUM                               23
-> > 
-> > +/* INFRA RST0 */
-> > +#define MT8192_INFRA_RST0_LVTS_AP_RST                          0
-> > +/* INFRA RST2 */
-> > +#define MT8192_INFRA_RST2_PCIE_PHY_RST                         15
-> > +/* INFRA RST3 */
-> > +#define MT8192_INFRA_RST3_PTP_RST                              5
-> > +/* INFRA RST4 */
-> > +#define MT8192_INFRA_RST4_LVTS_MCU                             12
-> > +#define MT8192_INFRA_RST4_PCIE_TOP                             1
-> > +
-> 
-> This change should be part of the binding change.
-> 
-> For these, please also add a patch for the actual device tree
-> changes.
-> 
+v7:
+  + Remove unnecessary del_timer() in response_timeout()        [Corey]
+  + Change compatible string from "ampere,ssif-bmc" to "ssif-bmc"  [Jae]
+  + Dropped the use of ssif_msg_len() macro, use the len directly [Quan]
+  + Solve possible issue if both response timer and ssif_bmc_write()
+  occurred at the same time                                      [Corey]
+  + Fix wrong return type of ssif_bmc_poll()         [kernel robot test]
+  + Refactor and introduce ssif_part_buffer struct to replace the
+  response_buf to manage each send/receive part of ssif           [Quan]
+  + Change SSIF_BAD_SMBUS state to SSIF_ABORTING state           [Corey]
+  + Support abort feature to skip the current bad request/response and
+  wait until next new request                                    [Corey]
+  + Refactor the PEC calculation to avoid the re-calculate the PEC on
+  each I2C_SLAVE_WRITE_RECEIVED event                             [Quan]
+  + Fix the use of error-proned idx                              [Corey]
+  + Defer the test for valid SMBus command until the read/write part
+  is determined                                                   [Quan]
+  + Change/split unsupported_smbus_cmd() to
+  supported_[write|read]_cmd()                                   [Corey]
+  + Abort the request if somehow its size exceeded 255 bytes      [Quan]
 
-OK, I will do this.
+v6:
+  + Drop the use of slave_enable()                             [Wolfram]
+  + Make i2c-aspeed to issue RxCmdLast command on all
+  I2C_SLAVE_WRITE_REQUESTED event to assert NAK when slave busy   [Quan]
+  + Make i2c slave to return -EBUSY when it's busy                [Quan]
+  + Drop the aborting feature as return Completion Code 0xFF may stop
+  host to retry and make ipmi_ssif.so fails to load               [Quan]
+  + Add timer to recover slave from busy state when no response   [Quan]
+  + Clean request/response buffer appropriately                   [Quan]
+  + Add some minor change on error and warning messages           [Quan]
 
-BRs,
-Rex
-> 
-> ChenYu
-> 
-> >  #endif  /* _DT_BINDINGS_RESET_CONTROLLER_MT8192 */
-> > --
-> > 2.18.0
-> > 
+v5:
+  + Correct the patches order to fix the bisect issue found by
+  kernel build robot
+
+v4:
+  + Fix recursive spinlock                                      [Graeme]
+  + Send response with Completion code 0xFF when aborting         [Quan]
+  + Fix warning with dt_binding_check                              [Rob]
+  + Change aspeed-ssif-bmc.yaml to ssif-bmc.yaml                  [Quan]
+  + Added bounding check on SMBus writes and the whole request     [Dan]
+  + Moved buffer to end of struct ssif_bmc_ctx to avoid context
+    corruption if somehow buffer is written past the end           [Dan]
+  + Return -EINVAL if userspace buffer too small, don't
+    silence truncate                                       [Corey, Joel]
+  + Not necessary to check NONBLOCK in lock                      [Corey]
+  + Enforce one user at a time                                    [Joel]
+  + Reject write with invalid response length from userspace     [Corey]
+  + Add state machines for better ssif bmc state handling         [Quan]
+  + Drop ssif_bmc_aspeed.c and make ssif_bmc.c is generic
+    SSIF BMC driver                                               [Quan]
+  + Change compatible string "aspeed,ast2500-ssif-bmc" to
+    "ampere,ssif-bmc"                                             [Quan]
+  + Toggle Slave enable in i2c-aspeed to turn on/off slave mode   [Ryan]
+  + Added slave_enable() to struct i2c_algorithm to control
+    slave mode and to address the recursive spinlock      [Graeme, Ryan]
+  + Abort current request with invalid SMBus write or
+    invalid command                                               [Quan]
+  + Abort all request if there is pending response                [Quan]
+  + Changed validate_pec() to validate_request()                  [Quan]
+  + Add unsupported_smbus_cmd() to handle unknown SMBus command   [Quan]
+  + Print internal state string for ease investigating issue      [Quan]
+  + Move to READY state on SLAVE_STOP event                       [Quan]
+  + Change initilize_transfer() to process_smbus_cmd()            [Quan]
+  + Introduce functions for each slave event                      [Quan]
+
+v3:
+  + Switched binding doc to use DT schema format                   [Rob]
+  + Splited into generic ssif_bmc and aspeed-specific      [Corey, Joel]
+  + Removed redundant license info                                [Joel]
+  + Switched to use traditional if-else                           [Joel]
+  + Removed unused ssif_bmc_ioctl()                               [Joel]
+  + Made handle_request()/complete_response() to return void      [Joel]
+  + Refactored send_ssif_bmc_response() and
+  receive_ssif_bmc_request()                                     [Corey]
+  + Remove mutex                                                 [Corey]
+  + Use spin_lock/unlock_irqsave/restore in callback             [Corey]
+  + Removed the unnecessary memset                               [Corey]
+  + Switch to use dev_err()                                      [Corey]
+  + Combine mask/unmask two interrupts together                  [Corey]
+  + Fixed unhandled Tx done with NAK                              [Quan]
+  + Late ack'ed Tx done w/wo Ack irq                              [Quan]
+  + Use aspeed-specific exported aspeed_set_slave_busy() when
+  slave busy to fix the deadlock                 [Graeme, Philipp, Quan]
+  + Clean buffer for last multipart read                          [Quan]
+  + Handle unknown incoming command                               [Quan]
+
+v2:
+  + Fixed compiling error with COMPILE_TEST for arc
+
+Quan Nguyen (3):
+  ipmi: ssif_bmc: Add SSIF BMC driver
+  bindings: ipmi: Add binding for SSIF BMC driver
+  i2c: aspeed: Assert NAK when slave is busy
+
+ .../devicetree/bindings/ipmi/ssif-bmc.yaml    |  38 +
+ drivers/char/ipmi/Kconfig                     |  11 +
+ drivers/char/ipmi/Makefile                    |   1 +
+ drivers/char/ipmi/ssif_bmc.c                  | 780 ++++++++++++++++++
+ drivers/char/ipmi/ssif_bmc.h                  | 107 +++
+ drivers/i2c/busses/i2c-aspeed.c               |   5 +-
+ 6 files changed, 941 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/ipmi/ssif-bmc.yaml
+ create mode 100644 drivers/char/ipmi/ssif_bmc.c
+ create mode 100644 drivers/char/ipmi/ssif_bmc.h
+
+-- 
+2.35.1
 

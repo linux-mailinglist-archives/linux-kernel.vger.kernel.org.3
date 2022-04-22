@@ -2,118 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 972BB50ADF8
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 04:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7184D50AE06
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 04:47:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443498AbiDVCsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 22:48:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42644 "EHLO
+        id S1443502AbiDVCuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 22:50:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235671AbiDVCsO (ORCPT
+        with ESMTP id S1359495AbiDVCuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 22:48:14 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674642ED41;
-        Thu, 21 Apr 2022 19:45:21 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KkzDM5wpvzCrdw;
-        Fri, 22 Apr 2022 10:40:51 +0800 (CST)
-Received: from [10.67.110.176] (10.67.110.176) by
- kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 22 Apr 2022 10:45:18 +0800
-Subject: Re: [PATCH -next] libbpf: Add additional null-pointer checking in
- make_parent_dir
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        <gongruiqi1@huawei.com>, <wangweiyang2@huawei.com>
-References: <20220421130056.2510372-1-cuigaosheng1@huawei.com>
- <CAEf4Bza3inoAHsS0w=nKXNgxyFqzPXJVyDHq03Foody6Vgp7=Q@mail.gmail.com>
-From:   cuigaosheng <cuigaosheng1@huawei.com>
-Message-ID: <45fdf83c-7492-1c31-af8d-7b2c9bdaf5a7@huawei.com>
-Date:   Fri, 22 Apr 2022 10:45:08 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
-MIME-Version: 1.0
-In-Reply-To: <CAEf4Bza3inoAHsS0w=nKXNgxyFqzPXJVyDHq03Foody6Vgp7=Q@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+        Thu, 21 Apr 2022 22:50:09 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2115.outbound.protection.outlook.com [40.107.243.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413E14C7B7;
+        Thu, 21 Apr 2022 19:47:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ap/VEWHUE6+85bIifep7VDNftLWRosucg3nGPUj+EXBELIRj0fsPbyKD0WSYkECamcpNpLuVBCAGYKtN1ptaVIhp4I7xOtAy1DTYTWjbJd0qkrfD3EtvgL6b6oTx6bJNg+p7jMDy/5ZiTv5kj7VEpbNK74CCKfyolMq2xE4WptLvHBET56zQ9UdXpa2DJFljP2p+8IqL9B7WSxSUOg9WJDzvY/U1k6ge59fi+jCtwRnFLaZVjhw/2Jn1lkb83v/3LxCUOy/bV+PCqLEyKIBpwS6QLMLns8oYxXcSzTfSPDuWDl10++hJofVKQztRsdRUPN8mAmHxYPwt4AvM/Vgunw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Di4c3G+nkTz60rGdAqg0n9+ZMfkpd4f8R5UlLlKdOTs=;
+ b=mMLkUQ9fEolPch/QyzR1isJbXv07yhzWhkdnC3WuR2zPW0X/WZFPPx/K9e6+j2+/brhbUDXbLFO0/4esUMgAp33cBk5qhWjvV//EYyWdu2XYSYhL0c9xXcCfu0aNId7toSFZm96hxwYZCMA4AkrIgNqu6FKohoCnI5zttTuOT3h4XwyhrLYQxMDjtG7tua2zzMr9LYIrR4yutHStY3WDWe7hYrQzRW7+dHAfdQqgtgDpjQnudghKjHJuYbkIpDhs+5ZO7lnUEqhTwVjrejg1kcW/pOoyaW2vMbN97RR6L/sGwvkoDYR2XqmQuwyL8oTPmycNmFn33v+3AdmVEwdNqw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Di4c3G+nkTz60rGdAqg0n9+ZMfkpd4f8R5UlLlKdOTs=;
+ b=WE3v305u7vFsLuFO8FgfHsEYXEb7OVtGrsKagr/oTcQJmLhO/Tpa2WX05tULZge3qV+kuuC9vJ0jXyxblxSPkNGU3QzRKGKQVniMsQoiDCvFZuSHopobu/pqhnUTaKCG+b4RgR8TbrppyeojAxKtNh5Cj5h12NjmEZnZ7tbvCGU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
+ BN0PR01MB6845.prod.exchangelabs.com (2603:10b6:408:14a::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5186.13; Fri, 22 Apr 2022 02:47:13 +0000
+Received: from SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::319b:4612:e6f4:f22c]) by SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::319b:4612:e6f4:f22c%3]) with mapi id 15.20.5186.015; Fri, 22 Apr 2022
+ 02:47:13 +0000
+From:   Quan Nguyen <quan@os.amperecomputing.com>
+To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Quan Nguyen <quan@os.amperecomputing.com>,
+        Thu Nguyen <thu@os.amperecomputing.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>
+Cc:     Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+Subject: [PATCH v8 0/9] Add Ampere's Altra SMPro MFD and its child drivers
+Date:   Fri, 22 Apr 2022 09:46:44 +0700
+Message-Id: <20220422024653.2199489-1-quan@os.amperecomputing.com>
+X-Mailer: git-send-email 2.35.1
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.176]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: SG2P153CA0023.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c7::10)
+ To SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9885009d-d035-45ca-4d06-08da240a679a
+X-MS-TrafficTypeDiagnostic: BN0PR01MB6845:EE_
+X-Microsoft-Antispam-PRVS: <BN0PR01MB6845F9B465DC13B05DA202A6F2F79@BN0PR01MB6845.prod.exchangelabs.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1mdc9b/0rV3Ay3rXRU6E6YzFlp6OLlaV5N+JZ036zcvCUea5bWt3Fe17IFLu2vq3/uj8gpomr79ddJ+5HxmYqxeXaMtZwYrY4PjNY+8vl7kukGXAoVhu+E0NBg3r0oqHREamEl3ReC+vQc9l1isF/fD55hdf5llYXQSvEUOf07hNrSYONjsqrEbEXj8GyNXd5C6HdLqQw7bP9sDaeEWgtsAgDlR1avRBH0Mmo4K/CZVDR1bqxJtH+FnuDS4Yoj0pnQWIcdAiPOyyDlExpQj/3r7VxWajFNu59PAhE6SET/vc1RduIRKmCdimzuu39H2Fcnpvqt2qruZpIukdkBsWHxgBldkp7s19xaaElOVMGKSMl4N4A0MZy+whxj1RuieTvHSH5qDvS9V3OJC/4qCniiQSeTtk7/O124L5gRz0gSRWaNVcfWcx1hMbEln+Y70ILstYnFoFdAZo5uNi2GQiQXLpGcQwLKHPvY1wKZQ25pwSLqyEzRLCjMJpTTTMOHO6XYuvb/kdyzFnT/+7bhf4JTSOv4OSEW6oGMc32i24v2v0D4z1pD+EXsxzpJDjlC7h0UbZGb4hrX/KvtDa6yrr/gpcX0Q8cWehNNAd8LRz1avimi3rDeIcyGvDG6xleUxBpTKH2WIvOpEGEFr7u59ylY12lwESGYZ/R6y0d0EjQilCi85Yf4TU+QMgcifXqKX2Uge/Y8fD09D98J0bZScwGXSQof3yUeb4904/EHbycxc9i7AnDSz/0zl1sGE6yB7afyv2O2zTLke8bdA/nnf/HeSXX1lkB8mda52aYHMM6M6E6UZSyPPUB9wNFf8PzPSD
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4326008)(316002)(8676002)(6486002)(966005)(86362001)(38100700002)(38350700002)(8936002)(508600001)(5660300002)(54906003)(110136005)(66476007)(66556008)(921005)(7416002)(107886003)(66946007)(1076003)(83380400001)(186003)(52116002)(6512007)(2616005)(26005)(6506007)(2906002)(6666004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gL6nKr6jNUs5HEXa3lG7kp1pXRdwLnDUWKthJO3Ae7vjqeuyC8f3SOL4XdqY?=
+ =?us-ascii?Q?CDnm53hF5MJWOFc/gNsoqvNhxCRqeOzmKOwOr8S756FQsvUga/4zI9v8A1FN?=
+ =?us-ascii?Q?vrQTFV7HtWMRKeKpqNHbvbfK0yh3OUcGFvWm3g5zHsLxAHSgDqsOtUASRSDv?=
+ =?us-ascii?Q?S59ZqhjbE3sW96ugVlydNONBBiztRYtufC6ooJS32O9c1pHLpypCcUZhtEs0?=
+ =?us-ascii?Q?0NMzA1XKDgyk8qPkQe8tTcasudhzzSfUEzutkuyxABniK8rpzBJZJ6j9M8L3?=
+ =?us-ascii?Q?Tv6gd3ckxky/NI97lVE7iHhwYM6Xa+oAT88NghYUAA7eHLB5Z+91U6kx5KFF?=
+ =?us-ascii?Q?uWJgGdiF1aX2j1Fwodbx9dEKWEki2vm6gTOJfRfeOzQ0kBfHP8x2B4jLs1QA?=
+ =?us-ascii?Q?1ZvAdumotTkTerQtTwnHtGCGl/eWp4tKO/0ZsaRUWyBmsBJRQQ1BtjCZBWnW?=
+ =?us-ascii?Q?H2QBXHr5VLyl9RTGfUExbPOdsvKJ/CzsxYBp8lspastPcDTn3GdP/oOIrTBS?=
+ =?us-ascii?Q?X8qmh0ECSfp7fzGybtuyLIuikf6ukznjHhthk+QnAQ9toGDXO6c5YpF0jfdt?=
+ =?us-ascii?Q?Xwn9q1U04gqngkM3hCpvRQKwFjRfn8NXiuCh3kqWOIRU0HYbxP4e480CyVr1?=
+ =?us-ascii?Q?0w2D0ooDhloPXziisoYHOYA28mcEypDR4F0LCSqZZm/ovYUIIrk6FO8D+71X?=
+ =?us-ascii?Q?zwqJYXs38ppWL6lT48q1V+SCWnLTRK2+j97iYo06QMu3Uq4lkDlpj6tq2+Nh?=
+ =?us-ascii?Q?t/9vwf7DRSPwcWT+LxzYpeFNFz1b/wKfwkx9LJpe0bqvC1o7qe9ahVBexAec?=
+ =?us-ascii?Q?LTAW8zN8t0O+6rXkpzpnwgO0cDs81vJJF66AxMK8zSO0XrG8PjGzz7bfQFt1?=
+ =?us-ascii?Q?10k+n/HAwOp8o1hhFXMcuvg1K3i0dU7DVphH9hOrQrmFVp/jD+LVLq1wT4j/?=
+ =?us-ascii?Q?obZTMEmpoKlIzDne/QOfOxz+9TuHG7bhAvZfOoMQSu0dQVWOeDV23Wl9CrzS?=
+ =?us-ascii?Q?t+iEAnfn6E2CNxut3u8GF6hXFWQm6WYgG/tSVhoGld9BCkBJe9Pxo1wSoqea?=
+ =?us-ascii?Q?z2FeCgRYsM4Y6mQZIzKWdfseafowbe9Vzp6OiF4k26gc64v8JXGCM/i/iLyQ?=
+ =?us-ascii?Q?DQj7+KlCNCdRFOHoBpS43zkUcAdEV8osGLRrF/ozJhm4alVy2774E1Ty/J5A?=
+ =?us-ascii?Q?6eg2sqJ6H4GKMc9V+I/G2R4+5sJH4v7lCHzsDLHWkNp6wY+iPq5xpXrargGq?=
+ =?us-ascii?Q?H2mgFEcGRf0RQfpCmhiYX2i+gUzWTO3CQr1s8s7vVxpwKqcis+l+ozaoWVLM?=
+ =?us-ascii?Q?Yoz9GDDP2Wjqb/J0XYLsbSuem5Gix3VnhvVM/8gk2VkQMyA6yI4u9KWhGZop?=
+ =?us-ascii?Q?uGP8wrfa6ZrvNxA+atSI6pBpI7B5tQn3mGmnfdNQziQnX7XQXyPGei9z6Lbo?=
+ =?us-ascii?Q?6Fg77zN8NL8BxbRa9yw1BvUED2+fDSDs7rPtUR5Jx0y8uK4fGgtuNDVsC2Tc?=
+ =?us-ascii?Q?k4zB3CTAle/4M3jFPvp/fOAUxjw1d1AnZVhCJGxViPo2/KEcAKLSgKTris2+?=
+ =?us-ascii?Q?vVRO0096++IHMSgWCWp0G8WZTldqZ4cPOTqQylQejI8EID/xxN9ykhjB1DSj?=
+ =?us-ascii?Q?6+HaAQfbmIKQ54w+sYeTxdevFOc6qMZ+thVj6kin4HKaXSjePB4ctZpWveEE?=
+ =?us-ascii?Q?YCu3VuWZZjxk3TjzywFFSn2lgF+hQyK28sS8cN/pp4eeaaEV4WRMoq7Iddb9?=
+ =?us-ascii?Q?fBv4CLgckS0RMBfH/vOeaMrIPW5qPAFDHdIirE+r0rz1fVy6Qpd9?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9885009d-d035-45ca-4d06-08da240a679a
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2022 02:47:13.6846
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tJ50s8u+VH6WOHE9ep233ICV2EHxSfwyNFpumK+D05cKtUkbvKTWX/z3fhdWoD4PteQEpQ/m+DcjSCV2RlH+4qhID+kTo1Zr6k2zGI9XpnY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR01MB6845
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I don't understand why we don't check path for NULL, bpf_link__pin is an external
-interface, It will be called by external functions and provide input parameters,
-for example in samples/bpf/hbm.c:
-> 201 link = bpf_program__attach_cgroup(bpf_prog, cg1); 202 if 
-> (libbpf_get_error(link)) { 203 fprintf(stderr, "ERROR: 
-> bpf_program__attach_cgroup failed\n"); 204 goto err; 205 } 206 207 
-> sprintf(cg_pin_path, "/sys/fs/bpf/hbm%d", cg_id); 208 rc = 
-> bpf_link__pin(link, cg_pin_path); 209 if (rc < 0) { 210 printf("ERROR: 
-> bpf_link__pin failed: %d\n", rc); 211 goto err; 212 }
-if cg_pin_path is NULL, strdup(NULL) will trigger a segmentation fault in
-make_parent_dir, I think we should avoid this and add null-pointer checking
-for path, just like check_path:
-> 7673 static int check_path(const char *path) 7674 { 7675 char *cp, 
-> errmsg[STRERR_BUFSIZE]; 7676 struct statfs st_fs; 7677 char *dname, 
-> *dir; 7678 int err = 0; 7679 7680 if (path == NULL) 7681 return 
-> -EINVAL; 7682 7683 dname = strdup(path); 7684 if (dname == NULL) 7685 
-> return -ENOMEM; 7686 7687 dir = dirname(dname); 7688 if (statfs(dir, 
-> &st_fs)) { 7689 cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg)); 
-> 7690 pr_warn("failed to statfs %s: %s\n", dir, cp); 7691 err = -errno; 
-> 7692 } 7693 free(dname); 7694 7695 if (!err && st_fs.f_type != 
-> BPF_FS_MAGIC) { 7696 pr_warn("specified path %s is not on BPF FS\n", 
-> path); 7697 err = -EINVAL; 7698 } 7699 7700 return err; 7701 }
+The SMpro co-processor on Ampere Altra processor family is to monitor
+and report various data included hwmon-related info, RAS errors, and
+other miscellaneous information. The SMPro MFD driver initializes the
+register map and instantiates all sub-devices. All the specifics will
+be handled in the child drivers.
 
-Thanks.
+This patch set includes support for Ampere SMpro hwmon, errmon, and
+misc as the child drivers. The hwmon driver supports accessing various
+CPU sensors provided by the SMpro co-processor including temperature,
+power, voltages, and current found on Ampere Altra processor family.
+The errmon driver supports monitoring and reporting RAS-related errors.
+The misc driver is to support reporting boot progress and other
+miscellaneous information.
 
-在 2022/4/22 0:55, Andrii Nakryiko 写道:
-> On Thu, Apr 21, 2022 at 6:01 AM Gaosheng Cui <cuigaosheng1@huawei.com> wrote:
->> The make_parent_dir is called without null-pointer checking for path,
->> such as bpf_link__pin. To ensure there is no null-pointer dereference
->> in make_parent_dir, so make_parent_dir requires additional null-pointer
->> checking for path.
->>
->> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
->> ---
->>   tools/lib/bpf/libbpf.c | 3 +++
->>   1 file changed, 3 insertions(+)
->>
->> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
->> index b53e51884f9e..5786e6184bf5 100644
->> --- a/tools/lib/bpf/libbpf.c
->> +++ b/tools/lib/bpf/libbpf.c
->> @@ -7634,6 +7634,9 @@ static int make_parent_dir(const char *path)
->>          char *dname, *dir;
->>          int err = 0;
->>
->> +       if (path == NULL)
->> +               return -EINVAL;
->> +
-> API contract is that path shouldn't be NULL. Just like we don't check
-> link, obj, prog for NULL in every single API, I don't think we need to
-> do it here, unless I'm missing something?
->
->>          dname = strdup(path);
->>          if (dname == NULL)
->>                  return -ENOMEM;
->> --
->> 2.25.1
->>
-> .
+Discussion for v7: https://lkml.org/lkml/2022/3/21/125
+
+v8:
+  + Insert 'break;' to avoid fall-through          [kernel test robot]
+  + Avoid uninitialized variable use               [kernel test robot]
+  + Remove unused #*_cells                                 [Krzysztof]
+  + Switch to use sysfs_emit()                                  [Greg]
+  + Sysfs to return single value only                           [Greg]
+  + Fix KernelVerion field in Documentation/ABI/testing doc     [Greg]
+  + Change errors_* sysfs to error_*                            [Quan]
+  + Add overflow_[core|mem|pcie|other]_[ce|ue] sysfs to report
+  overflow status of each type of HW errors                     [Quan]
+  + Update wording in Kconfig for smpro-errmon and smpro-misc   [Quan]
+  + Masks reserved bit when read 10-bit power value             [Quan]
+  + Add some minor refactor                                     [Quan]
+
+v7:
+  + Add docs to Documentation/ABI/testing                       [Greg]
+  + Re-order patches to avoid compile dependency           [Lee Jones]
+  + Remove regmap_acquire/release_lock()                        [Quan]
+  + Install regmap bus->read/write() to handle multiple types of bus
+    access                                                      [Quan]
+  + Replace i2c block read by regmap_noinc_read()               [Quan]
+  + Fix wrong return type of *show/store()         [kernel test robot]
+  + Update GPL version                                          [Quan]
+  + Add some others minor code refactor                         [Quan]
+
+v6:
+  + Introduced smpro-errmon, smpro-misc as smpro-mfd sub-device [Quan]
+
+v5:
+  + Introduced the smpro-mfd driver and drop the use of
+  simple-mfd-i2c driver to avoid DT node with no resource in child
+  device DT nodes [Rob]
+  + Removed the use of reg DT property in child driver [Quan]
+  + Validated ManufactureID when probing smpro-mfd drivers [Quan]
+  + As child devices are instantiated by SMPro MFD driver, drop the
+  ManufacturerID checking in child driver, ie: smpro-hwmon [Quan]
+  + Revised commit messages [Quan]
+
+v4:
+  + Revised commit message [Quan]
+  + Fixed build issue found by kernel test robot [Guenter]
+  + Returned regmap_read() error code [Guenter]
+
+v3:
+  + Supported list of compatible string [Rob]
+  + Introduced reg property in DT to specify reg offset [Rob]
+  + Updated description and other minor changes in yaml file [Rob]
+  + Handled negative temperature value [Guenter]
+  + Returned -ENODEV if Manufacturer ID is wrong [Guenter]
+  + Refactored smpro_read_string() and smpro_temp_read() [Guenter]
+  + Removed smpro_write() function [Guenter]
+  + Added minor refactor changes [Quan]
+
+v2:
+  + Used 'struct of_device_id's .data attribute [Lee Jones]
+  + Removed "virtual" sensors [Guenter]
+  + Fixed typo "mili" to "milli", "nanoWatt" to "microWatt" [Guenter]
+  + Reported SOC_TDP as "Socket TDP" using max attributes [Guenter]
+  + Clarified "highest" meaning in documentation [Guenter]
+  + Corrected return error code when host is turn off [Guenter]
+  + Reported MEM HOT Threshold for all DIMMs as temp*_crit [Guenter]
+  + Removed license info as SPDX-License-Identifier existed [Guenter]
+  + Added is_visible() support [Guenter]
+  + Used HWMON_CHANNEL_INFO() macro and LABEL attributes [Guenter]
+  + Made is_valid_id() return boolean [Guenter]
+  + Returned -EPROBE_DEFER when smpro reg inaccessible [Guenter]
+  + Removed unnecessary error message when dev register fail [Guenter]
+  + Removed Socket TDP sensor [Quan]
+  + Changed "ampere,ac01-smpro" to "ampere,smpro" [Quan]
+  + Included sensor type and channel in labels [Quan]
+  + Refactorized code to fix checkpatch.pl --strict complaint [Quan]
+
+Quan Nguyen (9):
+  hwmon: smpro: Add Ampere's Altra smpro-hwmon driver
+  docs: hwmon: (smpro-hwmon) Add documentation
+  misc: smpro-errmon: Add Ampere's SMpro error monitor driver
+  docs: misc-devices: (smpro-errmon) Add documentation
+  misc: smpro-misc: Add Ampere's Altra SMpro misc driver
+  docs: misc-devices: (smpro-misc) Add documentation
+  dt-bindings: mfd: Add bindings for Ampere Altra SMPro MFD driver
+  mfd: smpro-mfd: Adds Ampere's Altra SMpro MFD driver
+  docs: ABI: testing: Document the Ampere Altra Family's SMpro sysfs
+    interfaces
+
+ .../sysfs-bus-platform-devices-ampere-smpro   | 157 ++++++
+ .../devicetree/bindings/mfd/ampere,smpro.yaml |  42 ++
+ Documentation/hwmon/index.rst                 |   1 +
+ Documentation/hwmon/smpro-hwmon.rst           | 101 ++++
+ Documentation/misc-devices/index.rst          |   2 +
+ Documentation/misc-devices/smpro-errmon.rst   | 198 ++++++++
+ Documentation/misc-devices/smpro-misc.rst     |  82 +++
+ drivers/hwmon/Kconfig                         |   8 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/smpro-hwmon.c                   | 465 +++++++++++++++++
+ drivers/mfd/Kconfig                           |  12 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/smpro-mfd.c                       | 134 +++++
+ drivers/misc/Kconfig                          |  22 +
+ drivers/misc/Makefile                         |   2 +
+ drivers/misc/smpro-errmon.c                   | 477 ++++++++++++++++++
+ drivers/misc/smpro-misc.c                     | 161 ++++++
+ 17 files changed, 1866 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-platform-devices-ampere-smpro
+ create mode 100644 Documentation/devicetree/bindings/mfd/ampere,smpro.yaml
+ create mode 100644 Documentation/hwmon/smpro-hwmon.rst
+ create mode 100644 Documentation/misc-devices/smpro-errmon.rst
+ create mode 100644 Documentation/misc-devices/smpro-misc.rst
+ create mode 100644 drivers/hwmon/smpro-hwmon.c
+ create mode 100644 drivers/mfd/smpro-mfd.c
+ create mode 100644 drivers/misc/smpro-errmon.c
+ create mode 100644 drivers/misc/smpro-misc.c
+
+-- 
+2.35.1
+

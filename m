@@ -2,105 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD86F50B6A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 13:57:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FFFF50B6B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 14:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447226AbiDVMAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 08:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57462 "EHLO
+        id S1447258AbiDVMDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 08:03:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447214AbiDVL77 (ORCPT
+        with ESMTP id S1447214AbiDVMDI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 07:59:59 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753863ED01;
-        Fri, 22 Apr 2022 04:57:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650628626; x=1682164626;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=una0KHCh52R2HL+UriGbWNcELDP4ksfAOACMj6FtIPs=;
-  b=kRseLUuWngxFvBJCbWGiM35dNTXkOKhkUrVXVTgVBZ/QQPoGv0jqgqp6
-   hmi9dZ2KS83qD8uwC1Y6Z91ZbgqICtj9dfcxFh5pfj/oBzm6CmmhJCbbM
-   Kr+RLADYQeDAeC9cftg3pwWNEmfPb9MiP9uTiiEhr6O6TAKfvMrfk9PCs
-   H986E/mkaD/YlpHoHUAIkleJE7rj3UmF0hunziFAW3hEUPvRJyxZpYaK4
-   vsBMQIyCvDwwLbn2VvuKsDUyCtWvpdUNp1f7B3bsAbEPzZWNMYfAp4TvQ
-   qwkkJg6o32XmUwBkACT6AYfvYs0mNKKvrAO2dSNLXJuB50ypJk46aDzD2
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264132747"
-X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
-   d="scan'208";a="264132747"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 04:57:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
-   d="scan'208";a="867560850"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga005.fm.intel.com with ESMTP; 22 Apr 2022 04:57:04 -0700
-To:     surong pang <surong.pang@gmail.com>
-Cc:     mathias.nyman@intel.com, Greg KH <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Orson.Zhai@unisoc.com, yunguo.wu@unisoc.com
-References: <20220412122524.26966-1-surong.pang@gmail.com>
- <610871b2-1707-dfba-868f-4ddecc4d554d@linux.intel.com>
- <CAEDbmAT=fZ-kpn13sW4KjB9RuFb_6T4j_eripR54NZ3UciZfqA@mail.gmail.com>
- <d6df23a0-6539-f955-5241-5cdfcaa4eca4@linux.intel.com>
- <CAEDbmAT3SoSsEmTkELSYoykGN+AuPgi2N11V2YwKuaC3nKMEmQ@mail.gmail.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH V1 1/1] usb/host: Let usb phy shutdown later
-Message-ID: <e05ec742-c3dc-df7c-c5d7-29358d0a7081@linux.intel.com>
-Date:   Fri, 22 Apr 2022 14:59:01 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        Fri, 22 Apr 2022 08:03:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7F763F7;
+        Fri, 22 Apr 2022 05:00:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F1A4AB82CBD;
+        Fri, 22 Apr 2022 12:00:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AFE4AC385AC;
+        Fri, 22 Apr 2022 12:00:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650628812;
+        bh=zQrMIPHuCAwcsFxTQf+xe50+KfMsAf58w2aK7PIWyxA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=jRcyA83SgmjoxxcHSAymG7T0TD1JTJILZlhRnJF2er0gTxRBVzfdroFSwzLLbqrHR
+         aImLb+UotcueB50SVhHlW25qipXa5PTScXHtLP4TwgMhpjGQQX1WxOuZORF5WjSwvK
+         /ERY6qWXJHZHNdLwCsuHGaw9ldlpXbZ1lZOhSUVpzgSJF5Eidlp/oxR+noj7toGVLs
+         vZ6+VDr5SlwC/G2uyzEqrJauoli5+18+QTg99Z2xso6OVw+sGK/PyJ/Xoxj3YzYxUm
+         Mnt8Z6FrByS9PQWdrCUMxneKaRHAMSMvR3npr6JmNX9fP0RO6a7g44Plz9tn9Fmg9/
+         UH/ot/smjjdSA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9664AE85D90;
+        Fri, 22 Apr 2022 12:00:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <CAEDbmAT3SoSsEmTkELSYoykGN+AuPgi2N11V2YwKuaC3nKMEmQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 0/2] net: macb: Make ZynqMP SGMII phy configuration optional
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165062881261.32249.18140200057485548714.git-patchwork-notify@kernel.org>
+Date:   Fri, 22 Apr 2022 12:00:12 +0000
+References: <1650452590-32948-1-git-send-email-radhey.shyam.pandey@xilinx.com>
+In-Reply-To: <1650452590-32948-1-git-send-email-radhey.shyam.pandey@xilinx.com>
+To:     Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        robh+dt@kernel.org, krzk+dt@kernel.org,
+        nicolas.ferre@microchip.com, claudiu.beznea@microchip.com,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, michals@xilinx.com,
+        harinik@xilinx.com, git@xilinx.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.4.2022 13.43, surong pang wrote:
->>>> @@ -398,6 +397,7 @@ static int xhci_plat_remove(struct platform_device *dev)
->>>>       clk_disable_unprepare(clk);
->>>>       clk_disable_unprepare(reg_clk);
->>>> +    usb_phy_shutdown(hcd->usb_phy);
->>>>       usb_put_hcd(hcd);
+Hello:
+
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Wed, 20 Apr 2022 16:33:08 +0530 you wrote:
+> This patchset drop phy-names property from MACB node and also make
+> SGMII Phy configuration optional. The motivation for this change
+> is to support traditional usescase in which first stage bootloader
+> does PS-GT configuration, and should still be supported in macb
+> driver.
 > 
-> Is it ok to put usb_phy_shutdown before usb_put_hcd(hcd)? hcd is
-> released at usb_put_hcd.
-
-yes, above looks good.
-
 > 
-> UNISOC DWC3 phy is not divided  USB 2.0/3.0 phy clearly.  Yes, it's
-> UNISOC's issue.
-> It UNISOC's dtsi: phys = <&ssphy>, <&ssphy>;
-> If to shutdown phy too earlier,  it will cost 10s timeout to do xhci_reset.
-> usb_remmove_hcd  --> usb_stop_hcd --> xhci_stop --> xhci_reset  -->
-> xhci_handshake(&xhci->op_regs->command, CMD_RESET, 0, 10 * 1000 *1000)
-> 
-> I want to know this change is acceptable or not?
-> 
-> hcd->usb_phy = devm_usb_get_phy_by_phandle(sysdev, "usb-phy", 0);
-> Why in xhci_plat_remove, just to shutdown "usb-phy"[0], not to
-> shutdown "usb-phy"[1] ?
+> [...]
 
-xhci-plat.c only takes one phy at index 0, so we only shutdowns that one.
+Here is the summary with links:
+  - [1/2] dt-bindings: net: cdns,macb: Drop phy-names property for ZynqMP SGMII PHY
+    https://git.kernel.org/netdev/net-next/c/3ac8316e09b0
+  - [2/2] net: macb: In ZynqMP initialization make SGMII phy configuration optional
+    https://git.kernel.org/netdev/net-next/c/29e96fe9e0ec
 
-Looks like usb core hcd code has better phy handling when adding and
-removing hcds. It supports multiple phys.
-If possible use that instead.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-See drivers/usb/core/hcd.c usb_add_hcd()
 
-Thanks
--Mathias

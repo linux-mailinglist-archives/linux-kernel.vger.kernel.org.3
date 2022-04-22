@@ -2,54 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8192F50B047
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A80F250B03B
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444257AbiDVGN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 02:13:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49676 "EHLO
+        id S1444220AbiDVGNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 02:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444317AbiDVGNK (ORCPT
+        with ESMTP id S1444341AbiDVGNV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 02:13:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99B2289BE;
-        Thu, 21 Apr 2022 23:10:17 -0700 (PDT)
+        Fri, 22 Apr 2022 02:13:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D844434A5
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 23:10:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 84834B82A81;
-        Fri, 22 Apr 2022 06:10:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0649C385A4;
-        Fri, 22 Apr 2022 06:10:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650607815;
-        bh=MJyZJeaFrRIgBTeVkPLy57xZQnMw1BKj1OB3B3uCgf4=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id E7931B82A81
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 06:10:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23C70C385A4;
+        Fri, 22 Apr 2022 06:10:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650607826;
+        bh=9TNW3wYfSuM9PlmQpT0Zdgu2dFVulayRiQeg+hNcdms=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IY4Fg2MiVAFQ098Mu1llqTZ4El90rKHVtoud/3uo5fa+pG5bP87H73olcGwr3WFtF
-         1FU2wR5WKdvEN9R73qU3Ij08EmCCrmXWnjEwgsJrjQG5bMLCPaChY6xJr21X9+Byb/
-         Tv1RxitzFRmAEXjnHwoduy8rzzvgFusWrCFW23pnDVTAu7lKt6lhSTAE2CDAerbonA
-         0QrzmAO/1j7Eb6HK22cXP01WfVo3Du9QiG1hIPexRUU0PTPHLwMOaaEJbRQONsXuoh
-         eydAWkbLCPxwN+ONB8ue9y0GQQBk7nU+ydcWpWJnJwxuRfWnI4nUz7vNosfVu3t0m2
-         xCyjRGxgT75+w==
-Date:   Fri, 22 Apr 2022 11:40:11 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Haowen Bai <baihaowen@meizu.com>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dmaengine: imx-sdma: Remove useless null check before
- call of_node_put()
-Message-ID: <YmJGw84by8eczx/u@matsya>
-References: <1650509390-26877-1-git-send-email-baihaowen@meizu.com>
+        b=P/M/Zm/veiGwzAWnsYAbWZ3EsXL+XD8/eHzt08OYdJD29uDbKhsYtw+nFcn1MEwcI
+         b1gB7rkoz2VswVmnSSnxucsw/DrmoZXjxDvFdTmjNOejpfsCMyULCaPwAAhsE9vUuk
+         lCeX8xp9FxfYDOxIDW902QAVIHTwnPo+ucxrHk3o=
+Date:   Fri, 22 Apr 2022 08:10:23 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Vihas Makwana <makvihas@gmail.com>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Pavel Skripkin <paskripkin@gmail.com>
+Subject: Re: [PATCH v2 0/7] drop some unnecessary wrappers
+Message-ID: <YmJGzwA0kD+lFtfN@kroah.com>
+References: <20220411102136.14937-1-makvihas@gmail.com>
+ <3484215.R56niFO833@leap>
+ <20220412151529.GF3293@kadam>
+ <3134226.AJdgDx1Vlc@leap>
+ <20220413054252.GR12805@kadam>
+ <CAH1kMwT0gyQNB1-j62-2ntJD9Lobsmr8-5h6n6-SJ44wykMyHQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1650509390-26877-1-git-send-email-baihaowen@meizu.com>
+In-Reply-To: <CAH1kMwT0gyQNB1-j62-2ntJD9Lobsmr8-5h6n6-SJ44wykMyHQ@mail.gmail.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,29 +60,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21-04-22, 10:49, Haowen Bai wrote:
-> No need to add null check before call of_node_put(), since the
-> implementation of of_node_put() has done it.
-> 
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
-> ---
->  drivers/dma/imx-sdma.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
-> index 6196a7b3956b..b8a1299b93f0 100644
-> --- a/drivers/dma/imx-sdma.c
-> +++ b/drivers/dma/imx-sdma.c
-> @@ -1933,8 +1933,7 @@ static int sdma_event_remap(struct sdma_engine *sdma)
->  	}
->  
->  out:
-> -	if (gpr_np)
-> -		of_node_put(gpr_np);
-> +	of_node_put(gpr_np);
+On Fri, Apr 22, 2022 at 12:26:21AM +0530, Vihas Makwana wrote:
+> Did this patch series get lost?
 
-this is incorrect as it is called on error case
+What series?  (hint, do not top post).
 
+My queue of staging patches was empty as of a few days ago (it's filled
+up since then), so if they were not applied, please resend.
 
--- 
-~Vinod
+thanks,
+
+greg k-h

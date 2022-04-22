@@ -2,53 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24A3F50B486
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:01:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1D0650B493
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:01:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446335AbiDVKDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 06:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42452 "EHLO
+        id S1446363AbiDVKEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 06:04:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356188AbiDVKDF (ORCPT
+        with ESMTP id S1446353AbiDVKEK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 06:03:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B55B633A;
-        Fri, 22 Apr 2022 03:00:13 -0700 (PDT)
+        Fri, 22 Apr 2022 06:04:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9E353E32;
+        Fri, 22 Apr 2022 03:01:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C98AA61E22;
-        Fri, 22 Apr 2022 10:00:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 222EFC385A4;
-        Fri, 22 Apr 2022 10:00:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF39861BCE;
+        Fri, 22 Apr 2022 10:01:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E068C385A0;
+        Fri, 22 Apr 2022 10:01:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650621612;
-        bh=cVZ2hdGXyNfp3bPgzaWVpNPl0RnZDzkmgcgmnhrdSPM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=JoCVVRmcu2oNpA+njb6RpJJkr3khphXI5Nrx9WRRZHSbgJvc3hCdoqLKGdiFhS3bM
-         Nb7YkzkAxAh1kNA7qKoEEuhi/OqIFROLsVXYhe6aW2jq3TaUQAeauQAb4aLabVBYGe
-         BwcFfwOxdprI67bdb/5WLOA4hVodcHw5VZawQ6y1AViL8UWFasGAhgRTK5Tasp+Amv
-         rqsWvYwvKmQCgZQRpbqrKLdAbBCkWarUKFOKH/Y1j4wux7vn5JcL22WLxkBFvRlN+u
-         KoUJNtywbeakIcvCc9wBouKCAm1kj+r5HHVGChlfxliv6WQkgHvJ9lOjKAZpJqlyWI
-         ZIc/wwY+rLFPg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 06777E8DD85;
-        Fri, 22 Apr 2022 10:00:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: ethernet: ti: am65-cpsw-ethtool: use
- pm_runtime_resume_and_get
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165062161202.6174.6961390379696554091.git-patchwork-notify@kernel.org>
-Date:   Fri, 22 Apr 2022 10:00:12 +0000
-References: <20220419110352.2574359-1-chi.minghao@zte.com.cn>
-In-Reply-To: <20220419110352.2574359-1-chi.minghao@zte.com.cn>
-To:     Lv Ruyi <cgel.zte@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, chi.minghao@zte.com.cn,
-        zealci@zte.com.cn
+        s=k20201202; t=1650621677;
+        bh=Wd+lczt9RgngB+KHzFwDqzcWWJ5RsUNianvpFDvjBR4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XURCIgmbHSzRc2sunmW23qD95gOcgPejG/ca+zhwIpRmOV+BJ3DR1b3kYWq/tc/Bc
+         QMMFwTRfAeo3wgBdl8GE5xUVH7Pn49mbE53wJXJcwcjqpJKKjzvGungj8y6Lx6217p
+         83H/9vyNPwcPr/MeK8M2Mxb2Mdp5iRFoEuTUOCX2eYHwV7/Jp9aysd2mcaoyGsnJsp
+         5hCASXGz9VpzREL4zA3KJuiVEtgZkt3qCFDpzfHlNWyVvaotBXgcMbfuDNkVrI44/v
+         ww4oTyAe0SgxaAZytIHUXauYVntyBhZwK8+jTK3lpu1cD8pUOm8U/tsP4LBLA52pjD
+         DbSRvHfaeLhrQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nhq6E-0067tx-DP; Fri, 22 Apr 2022 11:01:14 +0100
+Date:   Fri, 22 Apr 2022 11:01:14 +0100
+Message-ID: <87a6cda13p.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Oliver Upton <oupton@google.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, will@kernel.org, apatel@ventanamicro.com,
+        atishp@rivosinc.com, seanjc@google.com, pgonda@google.com
+Subject: Re: [PATCH 0/4] KVM: fix KVM_EXIT_SYSTEM_EVENT mess
+In-Reply-To: <ef5c6c5b-2ed1-7d4c-e757-ed8bcead5d18@redhat.com>
+References: <20220421180443.1465634-1-pbonzini@redhat.com>
+        <YmJgIQe+5zGbrxoF@google.com>
+        <ef5c6c5b-2ed1-7d4c-e757-ed8bcead5d18@redhat.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: pbonzini@redhat.com, oupton@google.com, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, will@kernel.org, apatel@ventanamicro.com, atishp@rivosinc.com, seanjc@google.com, pgonda@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,30 +67,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Tue, 19 Apr 2022 11:03:52 +0000 you wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
+On Fri, 22 Apr 2022 10:41:34 +0100,
+Paolo Bonzini <pbonzini@redhat.com> wrote:
 > 
-> Using pm_runtime_resume_and_get() to replace pm_runtime_get_sync and
-> pm_runtime_put_noidle. This change is just to simplify the code, no
-> actual functional changes.
+> On 4/22/22 09:58, Oliver Upton wrote:
+> > Is there any way we could clean this up in 5.18 and leave the whole
+> > ndata/data pattern for 5.19?
+> > 
+> > IOW, for 5.18 go back and fix the padding:
+> > 
+> > 	struct {
+> > 		__u32 type;
+> > 		__u32 pad;
+> > 		__u64 flags;
+> > 	} system_event;
+> > 
+> > Then for 5.19 circle back on the data business, except use a flag bit
+> > for it:
+> > 
+> > 	struct {
+> > 		__u32 type;
+> > 		__u32 pad;
+> > 	#define KVM_SYSTEM_EVENT_NDATA_VALID	(1u << 63)
+> > 		__u64 flags;
+> > 		__u64 ndata;
+> > 		__u64 data[16];
+> > 	} system_event;
+> > 
+> > Where we apply that bit to system_event::flags this time instead of
+> > ::type. Could also go the CAP route.
 > 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> 
-> [...]
+> These patches are against kvm/next, so that is already what I did. :)
 
-Here is the summary with links:
-  - net: ethernet: ti: am65-cpsw-ethtool: use pm_runtime_resume_and_get
-    https://git.kernel.org/netdev/net-next/c/e350dbac3c09
+Can you please post a complete series? It is becoming really hard to
+track what you are doing.
 
-You are awesome, thank you!
+> On the other hand right now the ARM and RISC-V flags are unusable with
+> 32-bit userspace, so we need to fix _something_ in 5.18 as well.
+
+What 32bit userspace? arm64 doesn't have any that can interact with KVM,
+so I don't see anything to fix on that front.
+
+> For
+> your proposal, all that's missing is a 5.18 patch to add the
+> padding. But since the flags UAPI was completely unused before 5.18
+> and there's no reason to inflict the different naming of fields to
+> userspace.  So I think we want to apply this UAPI change in 5.18 too.
+
+As it was pointed out already, CrosVM has already started looking at
+the flags. The fact that it was always 0 until now doesn't make it
+less of a UAPI.
+
+I'd like to see a full series that implements the transition before we
+make a decision on this.
+
+Thanks,
+
+	M.
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Without deviation from the norm, progress is not possible.

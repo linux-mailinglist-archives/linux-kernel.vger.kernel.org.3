@@ -2,123 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 168E050C008
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 20:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE9E50C002
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 20:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbiDVSxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 14:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53386 "EHLO
+        id S230312AbiDVSyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 14:54:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbiDVSxV (ORCPT
+        with ESMTP id S230297AbiDVSyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 14:53:21 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A595D1FA51
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 11:46:20 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id bq30so15794357lfb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 11:46:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gs1lyGDE7+A7xavqOFG1B5XF/uB9DkKS+4Zz/DRp/RQ=;
-        b=f9blmSpiCrZ4zmBvGGeHGSBZF8lDA69+NXIVkqHeg2EPAQqUP5e2SrYel1SNJ6vkKy
-         vLazn76N9iNNnAv9WWOSz8+OHiQptaq8UdnhYq170F2u6zqQg2U5ElQxjd85O7Nb9gE2
-         SFLmyIFXXkFiNRNJEED8FrI0b5Cn2ToNPw9UU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gs1lyGDE7+A7xavqOFG1B5XF/uB9DkKS+4Zz/DRp/RQ=;
-        b=TbrGRcyXIBfUxJETEwLWYkRe92Q1/11T+psxP5q9JRF8qVxPYytRAWOFWgQdEelWf2
-         p1XI9NfkFkWpvSKYkBRdeIYxFHI0LZGMLSB9mft5OrtBHZ9IZzM7mje3wzuAz96PKGTt
-         ajmsYDtUefTJ2vNxlWuNBV4gualC9ym/d75QMjFoE5cl9WrxUVuw1/vcEZT2TPM+9HHj
-         P1HH7XtgYlDG9iKy/vG45Sx56huPBbv86apSmsmxzLN1cr6QzRB4ve8lZE8DhgoHeW0t
-         DreWhqnHuSA1sa71Sz2pxF+34VHb+xapA4q+S+pn82QUY/D227k34G30sfCIbYgwWBCs
-         6Ncw==
-X-Gm-Message-State: AOAM5300Th8QKKFXYmRUmWc5nn4G/Tz0ycFH2Yzf7DiCSL71SEfUC457
-        G0Wr+8TZhfBuEylcAvkWhETxXI71oi45wXqrUPA=
-X-Google-Smtp-Source: ABdhPJyucUXXq3XL6Sdx0YACaZcoL+jwg63Y/8ITyKpl9U+1U/ocZ41yJheVF7kaBsEKZ+6KAtIXNA==
-X-Received: by 2002:ac2:52b4:0:b0:445:ba75:7513 with SMTP id r20-20020ac252b4000000b00445ba757513mr4029213lfm.248.1650652917186;
-        Fri, 22 Apr 2022 11:41:57 -0700 (PDT)
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com. [209.85.208.169])
-        by smtp.gmail.com with ESMTPSA id 22-20020a05651c009600b0024db88fff1asm301409ljq.83.2022.04.22.11.41.54
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 11:41:55 -0700 (PDT)
-Received: by mail-lj1-f169.google.com with SMTP id bn33so10684110ljb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 11:41:54 -0700 (PDT)
-X-Received: by 2002:a2e:9d46:0:b0:24c:7f1d:73cc with SMTP id
- y6-20020a2e9d46000000b0024c7f1d73ccmr3579356ljj.358.1650652914703; Fri, 22
- Apr 2022 11:41:54 -0700 (PDT)
+        Fri, 22 Apr 2022 14:54:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE08616D987;
+        Fri, 22 Apr 2022 11:47:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EB32DB8321E;
+        Fri, 22 Apr 2022 18:42:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 937C6C385A0;
+        Fri, 22 Apr 2022 18:42:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650652932;
+        bh=U10hpA2FN+1veBlILEFUKuB1ORcAow417p82jNSKGes=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ChtK86B1kZFaIlBSPd8+2tmh2neTUtBuotxyGuN3GvEmlo6fTTkQ/6O1uQwW6M6Sx
+         p8uRBELGKdZZfG5KG1QbVaA38AuI5ftrUOp/8HhuriwDR8ZghI8fjyOLtwZLhy/BUa
+         Ugq5/xN2H8I7fhS3qrFdmNn3tm1k5zoMISHLPecd3xVKi0DMG4FA+lTxexdgJGo3Dh
+         eCCHZv0mrdW44y0gRYgFmL2ce1Lkn/9Jc/tJ3hSaNgu0h2ufwcaq0jBMz7Nq7Jqbnj
+         zQLSVSnss8P5UzMuIA2D3nQd5nWqVwr316dLDSZhb8NzxXwBrpXHtjxOZCRbPjZ6gG
+         DuhfYFilCgJfw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 385DC5C0641; Fri, 22 Apr 2022 11:42:12 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 11:42:12 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        kernel test robot <lkp@intel.com>, rcu@vger.kernel.org,
+        rushikesh.s.kadam@intel.com
+Subject: Re: [PATCH v4.1] rcu/nocb: Add an option to offload all CPUs on boot
+Message-ID: <20220422184212.GH4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220422175247.2197949-1-joel@joelfernandes.org>
 MIME-Version: 1.0
-References: <20220422060107.781512-1-npiggin@gmail.com> <20220422060107.781512-3-npiggin@gmail.com>
- <CAHk-=wgFoWLCV9aPHkHe1Mpu0XqxYWaPkKLpe_hcsTS_Vx3aRA@mail.gmail.com>
-In-Reply-To: <CAHk-=wgFoWLCV9aPHkHe1Mpu0XqxYWaPkKLpe_hcsTS_Vx3aRA@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 22 Apr 2022 11:41:38 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whao=iosX1s5Z4SF-ZGa-ebAukJoAdUJFk5SPwnofV+Vg@mail.gmail.com>
-Message-ID: <CAHk-=whao=iosX1s5Z4SF-ZGa-ebAukJoAdUJFk5SPwnofV+Vg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] Revert "vmalloc: replace VM_NO_HUGE_VMAP with VM_ALLOW_HUGE_VMAP"
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Content-Type: multipart/mixed; boundary="000000000000a114e105dd429420"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220422175247.2197949-1-joel@joelfernandes.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000a114e105dd429420
-Content-Type: text/plain; charset="UTF-8"
+On Fri, Apr 22, 2022 at 05:52:47PM +0000, Joel Fernandes (Google) wrote:
+> From: Joel Fernandes <joel@joelfernandes.org>
+> 
+> On systems with CONFIG_RCU_NOCB_CPU=y, there is no default mask provided
+> which ends up not offloading any CPU. This patch removes a dependency
+> from the bootloader having to know about RCU and about how to provide
+> the mask.
+> 
+> With the new option enabled, all CPUs will be offloaded on boot unless
+> rcu_nocbs= or rcu_nohz_full= kernel parameters provide a CPU list.
+> 
+> Reviewed-by: Kalesh Singh <kaleshsingh@google.com>
+> Reviewed-by: Uladzislau Rezki <urezki@gmail.com>
+> (In v4.1, fixed issues with CONFIG maze reported by kernel test robot).
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Joel Fernandes <joel@joelfernandes.org>
+> ---
+> 
+> Rebased and tested on rcu/dev branch.
+> 
+>  Documentation/admin-guide/kernel-parameters.txt |  6 ++++++
+>  kernel/rcu/Kconfig                              | 13 +++++++++++++
+>  kernel/rcu/tree_nocb.h                          | 15 ++++++++++++++-
+>  3 files changed, 33 insertions(+), 1 deletion(-)
 
-On Fri, Apr 22, 2022 at 10:08 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> Just opt-in with the mappings that matter.
+Thank you, Joel!  I have queued this for v5.20 and for testing and
+further review.  As before, please see below to check my wordsmithing.
 
-Actually, we could automatically opt-in a few common cases that we
-know are fundamentally ok, because they already can't play protection
-games.
+							Thanx, Paul
 
-In particular, kvmalloc().
+------------------------------------------------------------------------
 
-So I think something like this patch - along with Song's patch to
-enable it for alloc_large_system_hash() - would be fairly safe, and
-avoid any nasty cases.
+commit 42942fb3cad5d96e0b2b97deec05504d57908e1c
+Author: Joel Fernandes <joel@joelfernandes.org>
+Date:   Fri Apr 22 17:52:47 2022 +0000
 
-And probably catch quite a lot of the cases that matter that can grow large.
+    rcu/nocb: Add an option to offload all CPUs on boot
+    
+    Systems built with CONFIG_RCU_NOCB_CPU=y but booted without either
+    the rcu_nocbs= or rcu_nohz_full= kernel-boot parameters will not have
+    callback offloading on any of the CPUs, nor can any of the CPUs be
+    switched to enable callback offloading at runtime.  Although this is
+    intentional, it would be nice to have a way to offload all the CPUs
+    without having to make random bootloaders specify either the rcu_nocbs=
+    or the rcu_nohz_full= kernel-boot parameters.
+    
+    This commit therefore provides a new CONFIG_RCU_NOCB_CPU_DEFAULT_ALL
+    Kconfig option that switches the default so as to offload callback
+    processing on all of the CPUs.  This default can still be overridden
+    using the rcu_nocbs= and rcu_nohz_full= kernel-boot parameters.
+    
+    Reviewed-by: Kalesh Singh <kaleshsingh@google.com>
+    Reviewed-by: Uladzislau Rezki <urezki@gmail.com>
+    (In v4.1, fixed issues with CONFIG maze reported by kernel test robot).
+    Reported-by: kernel test robot <lkp@intel.com>
+    Signed-off-by: Joel Fernandes <joel@joelfernandes.org>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 
-               Linus
-
---000000000000a114e105dd429420
-Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
-Content-Disposition: attachment; filename="patch.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l2ary56k0>
-X-Attachment-Id: f_l2ary56k0
-
-IG1tL3V0aWwuYyB8IDExICsrKysrKysrKy0tCiAxIGZpbGUgY2hhbmdlZCwgOSBpbnNlcnRpb25z
-KCspLCAyIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL21tL3V0aWwuYyBiL21tL3V0aWwuYwpp
-bmRleCA1NGU1ZTc2MWE5YTkuLjM0OTJhOWU4MWFhMyAxMDA2NDQKLS0tIGEvbW0vdXRpbC5jCisr
-KyBiL21tL3V0aWwuYwpAQCAtNTkyLDggKzU5MiwxNSBAQCB2b2lkICprdm1hbGxvY19ub2RlKHNp
-emVfdCBzaXplLCBnZnBfdCBmbGFncywgaW50IG5vZGUpCiAJCXJldHVybiBOVUxMOwogCX0KIAot
-CXJldHVybiBfX3ZtYWxsb2Nfbm9kZShzaXplLCAxLCBmbGFncywgbm9kZSwKLQkJCV9fYnVpbHRp
-bl9yZXR1cm5fYWRkcmVzcygwKSk7CisJLyoKKwkgKiBrdm1hbGxvYygpIGNhbiBhbHdheXMgdXNl
-IFZNX0FMTE9XX0hVR0VfVk1BUCwKKwkgKiBzaW5jZSB0aGUgY2FsbGVycyBhbHJlYWR5IGNhbm5v
-dCBhc3N1bWUgYW55dGhpbmcKKwkgKiBhYm91dCB0aGUgcmVzdWx0aW5nIHBvaW50ZXIsIGFuZCBj
-YW5ub3QgcGxheQorCSAqIHByb3RlY3Rpb24gZ2FtZXMuCisJICovCisJcmV0dXJuIF9fdm1hbGxv
-Y19ub2RlX3JhbmdlKHNpemUsIDEsIFZNQUxMT0NfU1RBUlQsIFZNQUxMT0NfRU5ELAorCQkJZmxh
-Z3MsIFBBR0VfS0VSTkVMLCBWTV9BTExPV19IVUdFX1ZNQVAsCisJCQlub2RlLCBfX2J1aWx0aW5f
-cmV0dXJuX2FkZHJlc3MoMCkpOwogfQogRVhQT1JUX1NZTUJPTChrdm1hbGxvY19ub2RlKTsKIAo=
---000000000000a114e105dd429420--
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index b80c458d12ec4..9a690d49547e8 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -3572,6 +3572,9 @@
+ 			just as if they had also been called out in the
+ 			rcu_nocbs= boot parameter.
+ 
++			Note that this argument takes precedence over
++			the CONFIG_RCU_NOCB_CPU_DEFAULT_ALL option.
++
+ 	noiotrap	[SH] Disables trapped I/O port accesses.
+ 
+ 	noirqdebug	[X86-32] Disables the code which attempts to detect and
+@@ -4475,6 +4478,9 @@
+ 			no-callback mode from boot but the mode may be
+ 			toggled at runtime via cpusets.
+ 
++			Note that this argument takes precedence over
++			the CONFIG_RCU_NOCB_CPU_DEFAULT_ALL option.
++
+ 	rcu_nocb_poll	[KNL]
+ 			Rather than requiring that offloaded CPUs
+ 			(specified by rcu_nocbs= above) explicitly
+diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
+index 1c630e573548d..27aab870ae4cf 100644
+--- a/kernel/rcu/Kconfig
++++ b/kernel/rcu/Kconfig
+@@ -262,6 +262,19 @@ config RCU_NOCB_CPU
+ 	  Say Y here if you need reduced OS jitter, despite added overhead.
+ 	  Say N here if you are unsure.
+ 
++config RCU_NOCB_CPU_DEFAULT_ALL
++	bool "Offload RCU callback processing from all CPUs by default"
++	depends on RCU_NOCB_CPU
++	default n
++	help
++	  Use this option to offload callback processing from all CPUs
++	  by default, in the absence of the rcu_nocbs or nohz_full boot
++	  parameter. This also avoids the need to use any boot parameters
++	  to achieve the effect of offloading all CPUs on boot.
++
++	  Say Y here if you want offload all CPUs by default on boot.
++	  Say N here if you are unsure.
++
+ config TASKS_TRACE_RCU_READ_MB
+ 	bool "Tasks Trace RCU readers use memory barriers in user and idle"
+ 	depends on RCU_EXPERT && TASKS_TRACE_RCU
+diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+index 4cf9a29bba79d..60cc92cc66552 100644
+--- a/kernel/rcu/tree_nocb.h
++++ b/kernel/rcu/tree_nocb.h
+@@ -1197,11 +1197,21 @@ void __init rcu_init_nohz(void)
+ {
+ 	int cpu;
+ 	bool need_rcu_nocb_mask = false;
++	bool offload_all = false;
+ 	struct rcu_data *rdp;
+ 
++#if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL)
++	if (!rcu_state.nocb_is_setup) {
++		need_rcu_nocb_mask = true;
++		offload_all = true;
++	}
++#endif /* #if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL) */
++
+ #if defined(CONFIG_NO_HZ_FULL)
+-	if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask))
++	if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask)) {
+ 		need_rcu_nocb_mask = true;
++		offload_all = false; /* NO_HZ_FULL has its own mask. */
++	}
+ #endif /* #if defined(CONFIG_NO_HZ_FULL) */
+ 
+ 	if (need_rcu_nocb_mask) {
+@@ -1222,6 +1232,9 @@ void __init rcu_init_nohz(void)
+ 		cpumask_or(rcu_nocb_mask, rcu_nocb_mask, tick_nohz_full_mask);
+ #endif /* #if defined(CONFIG_NO_HZ_FULL) */
+ 
++	if (offload_all)
++		cpumask_setall(rcu_nocb_mask);
++
+ 	if (!cpumask_subset(rcu_nocb_mask, cpu_possible_mask)) {
+ 		pr_info("\tNote: kernel parameter 'rcu_nocbs=', 'nohz_full', or 'isolcpus=' contains nonexistent CPUs.\n");
+ 		cpumask_and(rcu_nocb_mask, cpu_possible_mask,

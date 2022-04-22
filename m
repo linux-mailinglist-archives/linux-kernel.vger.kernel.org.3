@@ -2,104 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66FE750BA20
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4252650BA21
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:30:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448689AbiDVOdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 10:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49952 "EHLO
+        id S1448722AbiDVOdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 10:33:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378396AbiDVOdO (ORCPT
+        with ESMTP id S1448673AbiDVOdQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 10:33:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1383533897;
-        Fri, 22 Apr 2022 07:30:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A519CB82ED8;
-        Fri, 22 Apr 2022 14:30:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8DFFC385A4;
-        Fri, 22 Apr 2022 14:30:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650637818;
-        bh=yahbdoWlqHWHArEz9FYsLhjfCwUS5AlwO6ecbof4pGo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nQ9j6JoSQvx155lNlUs0nMAeUFOVIYq6XBgVzRouD4jQjZA3TeODJbPyzuDZpsvgk
-         2lQn8cw89dVEtwNdDduKc7DFxBQ8iq5blKn59UB2fvltrwRvoiuaqz0woKWDD1J64c
-         Ux2q0bga4dOuCCqlHEo1Lkm6sINFWyo8ERVqzrjk=
-Date:   Fri, 22 Apr 2022 16:30:15 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        Gilles Buloz <gilles.buloz@kontron.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: Re: [PATCH v3 2/5] tty: Simplify receive flow control char logic
-Message-ID: <YmK796AkXmoSb5fZ@kroah.com>
-References: <20220411094859.10894-1-ilpo.jarvinen@linux.intel.com>
- <20220411094859.10894-3-ilpo.jarvinen@linux.intel.com>
+        Fri, 22 Apr 2022 10:33:16 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B6C275C0
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:30:22 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id c10so11344358wrb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:30:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=3ItMjhvb1/hM2jNtzAM/HCEyjHx2yTDf8giphic99II=;
+        b=Q+bqKn2kphZ6dkI4mNlHNqszn4boae0E/d/xBKmldgHQrzrmLOUjZyXGzBd9PX2ECn
+         IYK84mP/abeHXWDoCOYulcBZO1pgSCfNJkYOr2le+FGi/Z57Q2Y5ZGItIiyJtWrL8eDG
+         KuLA6BXfrRFs7ktJ+bLAvO2a2NstJNdVQz5kYdos/hpyNlBoC0ThHhpJR536oxMUJ3Df
+         XExXODKubzBTrzjTQkJU2H3APAUCK1JS5B6B8J2fVdQyzRxQcpMXN2Q9h9VmKLrTVdhz
+         zy4FcewLm5Q1jsyHbtrO74mdXdjqTF235POz/loiWtUrHaZpO45aE/uLY16JxqvHMDxU
+         ciFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=3ItMjhvb1/hM2jNtzAM/HCEyjHx2yTDf8giphic99II=;
+        b=QnAezKvvnXOrWfDumAyyZFX2KetYNy8tsrR9hRoKviP908qqOljWbrEmoZmshkw1ee
+         rmGMjoKp4l+iGusghJeOymB2FzXWT+4k2H0BbZlhVyQJzKvvspZvOxHe8WDaam9EY5ZF
+         yUKNgiTnsYIc/o2B1/puhTgzOrxF83K952Qfoj8b7IbNWoTIzizpdOft2+unnCmXumbG
+         k2kfO1uGg4xj+BrRtoPZ4JnnesVEm7PNEmukAV715WJ1ajBU/ar6ic6oRPN2htmefOAZ
+         pGqH7iMB1hCs+cE9yvDu6j+CIPMoBVtzG7EeDG+AhmaeJYl3xrS/g+LktX45Xn1pxEgU
+         R5PQ==
+X-Gm-Message-State: AOAM532gJ6eKj3WZir5PXUJeoTNyndMyESHCrZThNrujWvU2F2T+k934
+        YYv2rT7SkuMAlOJ4dW3m8t3vZ8hrdXLAvg==
+X-Google-Smtp-Source: ABdhPJzO4XZzgz0MgPEnN50RQJl3TakwYabgyyn0sJV65Y1f1DF3kHXL1X/rRZ3t7Oi9mzkALEpM+A==
+X-Received: by 2002:a05:6000:249:b0:207:ab35:67eb with SMTP id m9-20020a056000024900b00207ab3567ebmr3951299wrz.222.1650637820657;
+        Fri, 22 Apr 2022 07:30:20 -0700 (PDT)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id u20-20020a05600c19d400b003929c4bf23asm1730656wmq.44.2022.04.22.07.30.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 07:30:20 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 16:30:18 +0200
+From:   LABBE Corentin <clabbe@baylibre.com>
+To:     Aliya Rahmani <aliyarahmani786@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        outreachy@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/3] staging: media: zoran: fix warnings reported by
+ checkpatch
+Message-ID: <YmK7+rQFwxcmMCfQ@Red>
+References: <20220418171453.16971-1-aliyarahmani786@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220411094859.10894-3-ilpo.jarvinen@linux.intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220418171453.16971-1-aliyarahmani786@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 12:48:56PM +0300, Ilpo Järvinen wrote:
-> Add a helper to check if the character is a flow control one.
-> Reorder return places, add else for the case where START_CHAR
-> and STOP_CHAR are the same, w/o else both would match.
+Le Mon, Apr 18, 2022 at 10:44:50PM +0530, Aliya Rahmani a écrit :
+> These patches address style issues found by checkpatch in the
+> zoran/videocodec.c file.
 > 
-> This seems cleanest approach once skipping due to lookahead
-> is added by the next patch. Its downside is the duplicated
-> START_CHAR and STOP_CHAR checks.
+> changes since v2:
+> PATCH[2/3] : Rework commit description and subject
+> PATCH[3/3] : Rework commit description and subject
 > 
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> ---
->  drivers/tty/n_tty.c | 15 ++++++++++-----
->  1 file changed, 10 insertions(+), 5 deletions(-)
+> Aliya Rahmani (3):
+>  staging: media: zoran: use seq_puts() instead of seq_printf()
+>  staging: media: zoran: else is not generally useful after a break or return
+>  staging: media: zoran: avoid macro argument precedence issues
 > 
-> diff --git a/drivers/tty/n_tty.c b/drivers/tty/n_tty.c
-> index c7edfc001fd0..90b3e06cbeb1 100644
-> --- a/drivers/tty/n_tty.c
-> +++ b/drivers/tty/n_tty.c
-> @@ -1220,20 +1220,25 @@ n_tty_receive_signal_char(struct tty_struct *tty, int signal, unsigned char c)
->  		process_echoes(tty);
->  }
->  
-> +static bool n_tty_is_char_flow_ctrl(struct tty_struct *tty, unsigned char c)
-> +{
-> +	return c == START_CHAR(tty) || c == STOP_CHAR(tty);
-> +}
-> +
->  /* Returns true if c is consumed as flow-control character */
->  static bool n_tty_receive_char_flow_ctrl(struct tty_struct *tty, unsigned char c)
->  {
-> +	if (!n_tty_is_char_flow_ctrl(tty, c))
-> +		return false;
-> +
->  	if (c == START_CHAR(tty)) {
->  		start_tty(tty);
->  		process_echoes(tty);
-> -		return true;
-> -	}
-> -	if (c == STOP_CHAR(tty)) {
-> +	} else if (c == STOP_CHAR(tty)) {
+> drivers/staging/media/zoran/videocodec.c | 9++++-----
+> 1 file changed, 4 insertions(+), 5 deletions(-)
+> 
 
-The else is always true here now so why check it again?
+Thanks for your patchs
 
-Just return in the above if statement and then call stop_tty().
+Only problem is that your patch 1 did not apply, but this was easily fixed for applying.
 
-thanks,
+The whole serie is:
+Tested-by: Corentin Labbe <clabbe@baylibre.com>
+Acked-by: Corentin Labbe <clabbe@baylibre.com>
 
-greg k-h
+Regards

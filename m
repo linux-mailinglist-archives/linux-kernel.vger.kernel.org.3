@@ -2,181 +2,357 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA9BD50B4FE
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D82150B501
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:27:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446532AbiDVKaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 06:30:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58556 "EHLO
+        id S1446542AbiDVKaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 06:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351711AbiDVKaV (ORCPT
+        with ESMTP id S1446533AbiDVKab (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 06:30:21 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C467D54BDA
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:27:27 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id k29so6979728pgm.12
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:27:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QiB2o+WdMsJeAeDDSCARTXP2m3be3V0si7VrlcKUU9o=;
-        b=EpVOrHjPnfUPosjTlIQ1i2uTS3VaVjSTEsn9fvxTlMiqlmD5AwJQeVwCDiQcArIIKN
-         G0U4XrIyJIN3CfVCUIrKzrqmbxecuVOE+Ns+XyT6sLIQq3Sz+vUfV3qF4jkcNVStV+HD
-         ohqFPfNeLvtVze2xs3540Uag578+Sa0Tio3U23Oj9fuHVhxC10HtbglTic+F4nkj+rnJ
-         uNZ4AmDYyFqaAMKue+LnbfyyCvEFjw3OFO08wu8B27tOJZSsok3aK5Esq1bRVszqWR8L
-         yJ2z08rjpeL6YiYDefHLoElqOMY1TQYX5c4B0SjdTEwSs9+LPZm8GPtYD9zlA2w7ZbTc
-         jLKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QiB2o+WdMsJeAeDDSCARTXP2m3be3V0si7VrlcKUU9o=;
-        b=Fq5H5mZfldbO2aMezKQp3DJnMPx+d41uA0bO2E8Aldw25P8qhJd245bmhr/DuSijJ3
-         l5sAc7sE7FBjSU7nrvi5WVEfi1QHWWQ/rgyFVip6pRWM5X0sM7X7a1ZmGR4KkbSsjH9L
-         fhSznu2Wu3MB5L4O1uMMsVij02yeme1PXHR5b8o2QXm8Xiq7jW8CDavMBxzke6Key5y3
-         IOfKzdRFEDkAYoUDapw5ZoPAN2M5HowwdXqSQAWiELxKFNl6TpgRV+MRGzv4WmB1AE2c
-         QekJauvdLQ+1DM4/v70a721YJzFWezXoyu8ec2Q5wgGtCmjmWtr5yTaijBlcUzwuDSF4
-         deOQ==
-X-Gm-Message-State: AOAM530SzbizoZJFnukf9uXPv3UexWjD7AqdIA5DSnr09T63Ei+bNe6n
-        TiQ36tMYr3+ot7dpTblFejxzAQ==
-X-Google-Smtp-Source: ABdhPJyRBTQkRNOtq7recuzplNVvWzLVDPh5nxa7aDJJb65yhisHdXfThgq+7iw7chP2H9Ska312SA==
-X-Received: by 2002:a05:6a02:206:b0:399:3c9:f465 with SMTP id bh6-20020a056a02020600b0039903c9f465mr3409854pgb.388.1650623247325;
-        Fri, 22 Apr 2022 03:27:27 -0700 (PDT)
-Received: from localhost ([139.177.225.255])
-        by smtp.gmail.com with ESMTPSA id t38-20020a634626000000b0039cc30b7c93sm1779592pga.82.2022.04.22.03.27.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 03:27:27 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 18:27:22 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Waiman Long <longman@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH] mm/memcg: Free percpu stats memory of dying memcg's
-Message-ID: <YmKDCjJFYMmfa8sG@FVFYT0MHHV2J.usts.net>
-References: <20220421145845.1044652-1-longman@redhat.com>
- <YmGHYNuAp8957ouq@carbon>
- <112a4d7f-bc53-6e59-7bb8-6fecb65d045d@redhat.com>
- <YmGbmrH/Hg1VJlUc@carbon>
- <58c41f14-356e-88dd-54aa-dc6873bf80ff@redhat.com>
- <YmIZ9Lpvx5pY3oTV@carbon>
+        Fri, 22 Apr 2022 06:30:31 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6890654BED;
+        Fri, 22 Apr 2022 03:27:36 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 10:27:32 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1650623254;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BSv6tskMto6sfNS9ZKQytGNWEgqOUWwp68HL4mFtntI=;
+        b=OvdUnWQIT2qf75hV2wdF7o8dhvLKqaF9WVP3PyVy3sw4gbaas/aMdcFcRjJ6saTortTI1V
+        MRgyB+rxAnPq5O6m8YaP133epchSBUkUhz9q+N66icU3EV6YDxhYYvNIubjBLr188JfzXp
+        yk5ObEZrEVoWRed6nt91NTYFfi09zd+zJ+I2ED6B7OD+4hAL0QTqbuG1Om+qM4PbZ4wTJO
+        ig+qqlyB6dT/RpVcG1oR7ndWu+9juaYfBadFFQIMiJM8bGQiAIEXF2bIjSlUhbfpFA4Gq+
+        zFrMdwluMMTbbHeYclMqF9ZWHY6yI0zfU5gw/+2Z6zb9FnZ9SEtBv5t1bRASvw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1650623254;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BSv6tskMto6sfNS9ZKQytGNWEgqOUWwp68HL4mFtntI=;
+        b=PMegcjfG01Pdjf7NiizyAF+sxqYmYna2K37+xzhE+CekTC6Z5YdDWEOBP3gCyj3w23P712
+        Jwt0Z1RvrTLCjeCw==
+From:   "tip-bot2 for Marco Elver" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: perf/core] signal: Deliver SIGTRAP on perf event asynchronously
+ if blocked
+Cc:     Dmitry Vyukov <dvyukov@google.com>, Marco Elver <elver@google.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220404111204.935357-1-elver@google.com>
+References: <20220404111204.935357-1-elver@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YmIZ9Lpvx5pY3oTV@carbon>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <165062325293.4207.1642060359321395455.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 07:59:00PM -0700, Roman Gushchin wrote:
-> On Thu, Apr 21, 2022 at 02:46:00PM -0400, Waiman Long wrote:
-> > On 4/21/22 13:59, Roman Gushchin wrote:
-> > > On Thu, Apr 21, 2022 at 01:28:20PM -0400, Waiman Long wrote:
-> > > > On 4/21/22 12:33, Roman Gushchin wrote:
-> > > > > On Thu, Apr 21, 2022 at 10:58:45AM -0400, Waiman Long wrote:
-> > > > > > For systems with large number of CPUs, the majority of the memory
-> > > > > > consumed by the mem_cgroup structure is actually the percpu stats
-> > > > > > memory. When a large number of memory cgroups are continuously created
-> > > > > > and destroyed (like in a container host), it is possible that more
-> > > > > > and more mem_cgroup structures remained in the dying state holding up
-> > > > > > increasing amount of percpu memory.
-> > > > > > 
-> > > > > > We can't free up the memory of the dying mem_cgroup structure due to
-> > > > > > active references in some other places. However, the percpu stats memory
-> > > > > > allocated to that mem_cgroup is a different story.
-> > > > > > 
-> > > > > > This patch adds a new percpu_stats_disabled variable to keep track of
-> > > > > > the state of the percpu stats memory. If the variable is set, percpu
-> > > > > > stats update will be disabled for that particular memcg. All the stats
-> > > > > > update will be forward to its parent instead. Reading of the its percpu
-> > > > > > stats will return 0.
-> > > > > > 
-> > > > > > The flushing and freeing of the percpu stats memory is a multi-step
-> > > > > > process. The percpu_stats_disabled variable is set when the memcg is
-> > > > > > being set to offline state. After a grace period with the help of RCU,
-> > > > > > the percpu stats data are flushed and then freed.
-> > > > > > 
-> > > > > > This will greatly reduce the amount of memory held up by dying memory
-> > > > > > cgroups.
-> > > > > > 
-> > > > > > By running a simple management tool for container 2000 times per test
-> > > > > > run, below are the results of increases of percpu memory (as reported
-> > > > > > in /proc/meminfo) and nr_dying_descendants in root's cgroup.stat.
-> > > > > Hi Waiman!
-> > > > > 
-> > > > > I've been proposing the same idea some time ago:
-> > > > > https://lore.kernel.org/all/20190312223404.28665-7-guro@fb.com/T/ .
-> > > > > 
-> > > > > However I dropped it with the thinking that with many other fixes
-> > > > > preventing the accumulation of the dying cgroups it's not worth the added
-> > > > > complexity and a potential cpu overhead.
-> > > > > 
-> > > > > I think it ultimately comes to the number of dying cgroups. If it's low,
-> > > > > memory savings are not worth the cpu overhead. If it's high, they are.
-> > > > > I hope long-term to drive it down significantly (with lru-pages reparenting
-> > > > > being the first major milestone), but it might take a while.
-> > > > > 
-> > > > > I don't have a strong opinion either way, just want to dump my thoughts
-> > > > > on this.
-> > > > I have quite a number of customer cases complaining about increasing percpu
-> > > > memory usages. The number of dying memcg's can go to tens of thousands. From
-> > > > my own investigation, I believe that those dying memcg's are not freed
-> > > > because they are pinned down by references in the page structure. I am aware
-> > > > that we support the use of objcg in the page structure which will allow easy
-> > > > reparenting, but most pages don't do that and it is not easy to do this
-> > > > conversion and it may take quite a while to do that.
-> > > The big question is whether there is a memory pressure on those systems.
-> > > If yes, and the number of dying cgroups is growing, it's worth investigating.
-> > > It might be due to the sharing of pagecache pages and this will be ultimately
-> > > fixed with implementing of the pagecache reparenting. But it also might be due
-> > > to other bugs, which are fixable, so it would be great to understand.
-> > 
-> > 
-> > Pagecache reparenting will probably fix the problem that I have seen. Is
-> > someone working on this?
-> 
-> Some time ago Muchun posted patches based on the reusing of the obj_cgroup API.
->
+The following commit has been merged into the perf/core branch of tip:
 
-Yep. It is here:
+Commit-ID:     78ed93d72ded679e3caf0758357209887bda885f
+Gitweb:        https://git.kernel.org/tip/78ed93d72ded679e3caf0758357209887bda885f
+Author:        Marco Elver <elver@google.com>
+AuthorDate:    Mon, 04 Apr 2022 13:12:04 +02:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Fri, 22 Apr 2022 12:14:05 +02:00
 
-https://lore.kernel.org/all/20220216115132.52602-1-songmuchun@bytedance.com/.
+signal: Deliver SIGTRAP on perf event asynchronously if blocked
+
+With SIGTRAP on perf events, we have encountered termination of
+processes due to user space attempting to block delivery of SIGTRAP.
+Consider this case:
+
+    <set up SIGTRAP on a perf event>
+    ...
+    sigset_t s;
+    sigemptyset(&s);
+    sigaddset(&s, SIGTRAP | <and others>);
+    sigprocmask(SIG_BLOCK, &s, ...);
+    ...
+    <perf event triggers>
+
+When the perf event triggers, while SIGTRAP is blocked, force_sig_perf()
+will force the signal, but revert back to the default handler, thus
+terminating the task.
+
+This makes sense for error conditions, but not so much for explicitly
+requested monitoring. However, the expectation is still that signals
+generated by perf events are synchronous, which will no longer be the
+case if the signal is blocked and delivered later.
+
+To give user space the ability to clearly distinguish synchronous from
+asynchronous signals, introduce siginfo_t::si_perf_flags and
+TRAP_PERF_FLAG_ASYNC (opted for flags in case more binary information is
+required in future).
+
+The resolution to the problem is then to (a) no longer force the signal
+(avoiding the terminations), but (b) tell user space via si_perf_flags
+if the signal was synchronous or not, so that such signals can be
+handled differently (e.g. let user space decide to ignore or consider
+the data imprecise).
+
+The alternative of making the kernel ignore SIGTRAP on perf events if
+the signal is blocked may work for some usecases, but likely causes
+issues in others that then have to revert back to interception of
+sigprocmask() (which we want to avoid). [ A concrete example: when using
+breakpoint perf events to track data-flow, in a region of code where
+signals are blocked, data-flow can no longer be tracked accurately.
+When a relevant asynchronous signal is received after unblocking the
+signal, the data-flow tracking logic needs to know its state is
+imprecise. ]
+
+Fixes: 97ba62b27867 ("perf: Add support for SIGTRAP on perf events")
+Reported-by: Dmitry Vyukov <dvyukov@google.com>
+Signed-off-by: Marco Elver <elver@google.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Tested-by: Dmitry Vyukov <dvyukov@google.com>
+Link: https://lore.kernel.org/r/20220404111204.935357-1-elver@google.com
+---
+ arch/arm/kernel/signal.c           |  1 +
+ arch/arm64/kernel/signal.c         |  1 +
+ arch/arm64/kernel/signal32.c       |  1 +
+ arch/m68k/kernel/signal.c          |  1 +
+ arch/sparc/kernel/signal32.c       |  1 +
+ arch/sparc/kernel/signal_64.c      |  1 +
+ arch/x86/kernel/signal_compat.c    |  2 ++
+ include/linux/compat.h             |  1 +
+ include/linux/sched/signal.h       |  2 +-
+ include/uapi/asm-generic/siginfo.h |  7 +++++++
+ kernel/events/core.c               |  4 ++--
+ kernel/signal.c                    | 18 ++++++++++++++++--
+ 12 files changed, 35 insertions(+), 5 deletions(-)
+
+diff --git a/arch/arm/kernel/signal.c b/arch/arm/kernel/signal.c
+index 459abc5..ea128e3 100644
+--- a/arch/arm/kernel/signal.c
++++ b/arch/arm/kernel/signal.c
+@@ -708,6 +708,7 @@ static_assert(offsetof(siginfo_t, si_upper)	== 0x18);
+ static_assert(offsetof(siginfo_t, si_pkey)	== 0x14);
+ static_assert(offsetof(siginfo_t, si_perf_data)	== 0x10);
+ static_assert(offsetof(siginfo_t, si_perf_type)	== 0x14);
++static_assert(offsetof(siginfo_t, si_perf_flags) == 0x18);
+ static_assert(offsetof(siginfo_t, si_band)	== 0x0c);
+ static_assert(offsetof(siginfo_t, si_fd)	== 0x10);
+ static_assert(offsetof(siginfo_t, si_call_addr)	== 0x0c);
+diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
+index 4a4122e..41b5d9d 100644
+--- a/arch/arm64/kernel/signal.c
++++ b/arch/arm64/kernel/signal.c
+@@ -1011,6 +1011,7 @@ static_assert(offsetof(siginfo_t, si_upper)	== 0x28);
+ static_assert(offsetof(siginfo_t, si_pkey)	== 0x20);
+ static_assert(offsetof(siginfo_t, si_perf_data)	== 0x18);
+ static_assert(offsetof(siginfo_t, si_perf_type)	== 0x20);
++static_assert(offsetof(siginfo_t, si_perf_flags) == 0x24);
+ static_assert(offsetof(siginfo_t, si_band)	== 0x10);
+ static_assert(offsetof(siginfo_t, si_fd)	== 0x18);
+ static_assert(offsetof(siginfo_t, si_call_addr)	== 0x10);
+diff --git a/arch/arm64/kernel/signal32.c b/arch/arm64/kernel/signal32.c
+index d984282..4700f85 100644
+--- a/arch/arm64/kernel/signal32.c
++++ b/arch/arm64/kernel/signal32.c
+@@ -487,6 +487,7 @@ static_assert(offsetof(compat_siginfo_t, si_upper)	== 0x18);
+ static_assert(offsetof(compat_siginfo_t, si_pkey)	== 0x14);
+ static_assert(offsetof(compat_siginfo_t, si_perf_data)	== 0x10);
+ static_assert(offsetof(compat_siginfo_t, si_perf_type)	== 0x14);
++static_assert(offsetof(compat_siginfo_t, si_perf_flags)	== 0x18);
+ static_assert(offsetof(compat_siginfo_t, si_band)	== 0x0c);
+ static_assert(offsetof(compat_siginfo_t, si_fd)		== 0x10);
+ static_assert(offsetof(compat_siginfo_t, si_call_addr)	== 0x0c);
+diff --git a/arch/m68k/kernel/signal.c b/arch/m68k/kernel/signal.c
+index 49533f6..b9f6908 100644
+--- a/arch/m68k/kernel/signal.c
++++ b/arch/m68k/kernel/signal.c
+@@ -625,6 +625,7 @@ static inline void siginfo_build_tests(void)
+ 	/* _sigfault._perf */
+ 	BUILD_BUG_ON(offsetof(siginfo_t, si_perf_data) != 0x10);
+ 	BUILD_BUG_ON(offsetof(siginfo_t, si_perf_type) != 0x14);
++	BUILD_BUG_ON(offsetof(siginfo_t, si_perf_flags) != 0x18);
  
-> I'm not strictly against this approach, but in my opinion it's not the best.
-> I suggested to use lru vectors as an intermediate objects. In theory, it might
-
-I remember this.
-
-> allow to avoid bumping reference counters for all charged pages at all: live
-> cgroups will be protected by being live, dying cgroups will only need
-> a temporarily protection while lru vectors and associated pages are reparenting.
-> 
-> There are pros and cons:
-> + cgroup reference counting becomes simpler and more debuggable
-> + potential perf wins from fewer operations with live cgroups css refcounters
-> = I hope to see code simplifications (but not guaranteed)
-> - deleting cgroups becomes more expensive, but the cost can be spread to
->   asynchronous workers
-> 
-> Idk if Muchun tried to implement it. If not, I might try myself.
->
-
-Yep. I have implemented a initial version recently. I'll do some stability tests
-and send it out ASAP.
-
-Thanks Roman.
-
+ 	/* _sigpoll */
+ 	BUILD_BUG_ON(offsetof(siginfo_t, si_band)   != 0x0c);
+diff --git a/arch/sparc/kernel/signal32.c b/arch/sparc/kernel/signal32.c
+index f9fe502..dad3896 100644
+--- a/arch/sparc/kernel/signal32.c
++++ b/arch/sparc/kernel/signal32.c
+@@ -779,5 +779,6 @@ static_assert(offsetof(compat_siginfo_t, si_upper)	== 0x18);
+ static_assert(offsetof(compat_siginfo_t, si_pkey)	== 0x14);
+ static_assert(offsetof(compat_siginfo_t, si_perf_data)	== 0x10);
+ static_assert(offsetof(compat_siginfo_t, si_perf_type)	== 0x14);
++static_assert(offsetof(compat_siginfo_t, si_perf_flags)	== 0x18);
+ static_assert(offsetof(compat_siginfo_t, si_band)	== 0x0c);
+ static_assert(offsetof(compat_siginfo_t, si_fd)		== 0x10);
+diff --git a/arch/sparc/kernel/signal_64.c b/arch/sparc/kernel/signal_64.c
+index 8b9fc76..570e43e 100644
+--- a/arch/sparc/kernel/signal_64.c
++++ b/arch/sparc/kernel/signal_64.c
+@@ -590,5 +590,6 @@ static_assert(offsetof(siginfo_t, si_upper)	== 0x28);
+ static_assert(offsetof(siginfo_t, si_pkey)	== 0x20);
+ static_assert(offsetof(siginfo_t, si_perf_data)	== 0x18);
+ static_assert(offsetof(siginfo_t, si_perf_type)	== 0x20);
++static_assert(offsetof(siginfo_t, si_perf_flags) == 0x24);
+ static_assert(offsetof(siginfo_t, si_band)	== 0x10);
+ static_assert(offsetof(siginfo_t, si_fd)	== 0x14);
+diff --git a/arch/x86/kernel/signal_compat.c b/arch/x86/kernel/signal_compat.c
+index b52407c..879ef8c 100644
+--- a/arch/x86/kernel/signal_compat.c
++++ b/arch/x86/kernel/signal_compat.c
+@@ -149,8 +149,10 @@ static inline void signal_compat_build_tests(void)
+ 
+ 	BUILD_BUG_ON(offsetof(siginfo_t, si_perf_data) != 0x18);
+ 	BUILD_BUG_ON(offsetof(siginfo_t, si_perf_type) != 0x20);
++	BUILD_BUG_ON(offsetof(siginfo_t, si_perf_flags) != 0x24);
+ 	BUILD_BUG_ON(offsetof(compat_siginfo_t, si_perf_data) != 0x10);
+ 	BUILD_BUG_ON(offsetof(compat_siginfo_t, si_perf_type) != 0x14);
++	BUILD_BUG_ON(offsetof(compat_siginfo_t, si_perf_flags) != 0x18);
+ 
+ 	CHECK_CSI_OFFSET(_sigpoll);
+ 	CHECK_CSI_SIZE  (_sigpoll, 2*sizeof(int));
+diff --git a/include/linux/compat.h b/include/linux/compat.h
+index 1c758b0..01fddf7 100644
+--- a/include/linux/compat.h
++++ b/include/linux/compat.h
+@@ -235,6 +235,7 @@ typedef struct compat_siginfo {
+ 				struct {
+ 					compat_ulong_t _data;
+ 					u32 _type;
++					u32 _flags;
+ 				} _perf;
+ 			};
+ 		} _sigfault;
+diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
+index 3c8b348..bab7cc5 100644
+--- a/include/linux/sched/signal.h
++++ b/include/linux/sched/signal.h
+@@ -320,7 +320,7 @@ int send_sig_mceerr(int code, void __user *, short, struct task_struct *);
+ 
+ int force_sig_bnderr(void __user *addr, void __user *lower, void __user *upper);
+ int force_sig_pkuerr(void __user *addr, u32 pkey);
+-int force_sig_perf(void __user *addr, u32 type, u64 sig_data);
++int send_sig_perf(void __user *addr, u32 type, u64 sig_data);
+ 
+ int force_sig_ptrace_errno_trap(int errno, void __user *addr);
+ int force_sig_fault_trapno(int sig, int code, void __user *addr, int trapno);
+diff --git a/include/uapi/asm-generic/siginfo.h b/include/uapi/asm-generic/siginfo.h
+index 3ba180f..ffbe4ce 100644
+--- a/include/uapi/asm-generic/siginfo.h
++++ b/include/uapi/asm-generic/siginfo.h
+@@ -99,6 +99,7 @@ union __sifields {
+ 			struct {
+ 				unsigned long _data;
+ 				__u32 _type;
++				__u32 _flags;
+ 			} _perf;
+ 		};
+ 	} _sigfault;
+@@ -164,6 +165,7 @@ typedef struct siginfo {
+ #define si_pkey		_sifields._sigfault._addr_pkey._pkey
+ #define si_perf_data	_sifields._sigfault._perf._data
+ #define si_perf_type	_sifields._sigfault._perf._type
++#define si_perf_flags	_sifields._sigfault._perf._flags
+ #define si_band		_sifields._sigpoll._band
+ #define si_fd		_sifields._sigpoll._fd
+ #define si_call_addr	_sifields._sigsys._call_addr
+@@ -271,6 +273,11 @@ typedef struct siginfo {
+  */
+ 
+ /*
++ * Flags for si_perf_flags if SIGTRAP si_code is TRAP_PERF.
++ */
++#define TRAP_PERF_FLAG_ASYNC (1u << 0)
++
++/*
+  * SIGCHLD si_codes
+  */
+ #define CLD_EXITED	1	/* child has exited */
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index cfde994..6eafb1b 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -6533,8 +6533,8 @@ static void perf_sigtrap(struct perf_event *event)
+ 	if (current->flags & PF_EXITING)
+ 		return;
+ 
+-	force_sig_perf((void __user *)event->pending_addr,
+-		       event->attr.type, event->attr.sig_data);
++	send_sig_perf((void __user *)event->pending_addr,
++		      event->attr.type, event->attr.sig_data);
+ }
+ 
+ static void perf_pending_event_disable(struct perf_event *event)
+diff --git a/kernel/signal.c b/kernel/signal.c
+index 30cd1ca..e43bc2a 100644
+--- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -1805,7 +1805,7 @@ int force_sig_pkuerr(void __user *addr, u32 pkey)
+ }
+ #endif
+ 
+-int force_sig_perf(void __user *addr, u32 type, u64 sig_data)
++int send_sig_perf(void __user *addr, u32 type, u64 sig_data)
+ {
+ 	struct kernel_siginfo info;
+ 
+@@ -1817,7 +1817,18 @@ int force_sig_perf(void __user *addr, u32 type, u64 sig_data)
+ 	info.si_perf_data = sig_data;
+ 	info.si_perf_type = type;
+ 
+-	return force_sig_info(&info);
++	/*
++	 * Signals generated by perf events should not terminate the whole
++	 * process if SIGTRAP is blocked, however, delivering the signal
++	 * asynchronously is better than not delivering at all. But tell user
++	 * space if the signal was asynchronous, so it can clearly be
++	 * distinguished from normal synchronous ones.
++	 */
++	info.si_perf_flags = sigismember(&current->blocked, info.si_signo) ?
++				     TRAP_PERF_FLAG_ASYNC :
++				     0;
++
++	return send_sig_info(info.si_signo, &info, current);
+ }
+ 
+ /**
+@@ -3432,6 +3443,7 @@ void copy_siginfo_to_external32(struct compat_siginfo *to,
+ 		to->si_addr = ptr_to_compat(from->si_addr);
+ 		to->si_perf_data = from->si_perf_data;
+ 		to->si_perf_type = from->si_perf_type;
++		to->si_perf_flags = from->si_perf_flags;
+ 		break;
+ 	case SIL_CHLD:
+ 		to->si_pid = from->si_pid;
+@@ -3509,6 +3521,7 @@ static int post_copy_siginfo_from_user32(kernel_siginfo_t *to,
+ 		to->si_addr = compat_ptr(from->si_addr);
+ 		to->si_perf_data = from->si_perf_data;
+ 		to->si_perf_type = from->si_perf_type;
++		to->si_perf_flags = from->si_perf_flags;
+ 		break;
+ 	case SIL_CHLD:
+ 		to->si_pid    = from->si_pid;
+@@ -4722,6 +4735,7 @@ static inline void siginfo_buildtime_checks(void)
+ 	CHECK_OFFSET(si_pkey);
+ 	CHECK_OFFSET(si_perf_data);
+ 	CHECK_OFFSET(si_perf_type);
++	CHECK_OFFSET(si_perf_flags);
+ 
+ 	/* sigpoll */
+ 	CHECK_OFFSET(si_band);

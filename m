@@ -2,127 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB44C50AF63
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 07:10:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA33750AF66
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 07:10:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444099AbiDVFKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 01:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47818 "EHLO
+        id S1444095AbiDVFMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 01:12:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444081AbiDVFKq (ORCPT
+        with ESMTP id S1354690AbiDVFMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 01:10:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB534EF7D;
-        Thu, 21 Apr 2022 22:07:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 92E5F61D5C;
-        Fri, 22 Apr 2022 05:07:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C4E4C385A0;
-        Fri, 22 Apr 2022 05:07:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650604073;
-        bh=vzfRtV+6HmzAXkT9LkEyK6PRF7OjBvpXGEf/vM7UJSY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GAHDADhNIu3VnJP6g4TTNtQ0FfdlnND7LMl7VptMN7R2INA3nx+7WA3NECywDHWfz
-         9xRCC1kbenIolxN8xv5PXbDuDllk5jVcic/bI0v57FQ2gD1ke30Pv26tm4A1632yzY
-         EotT7UrnlRuw81WHUt0RlJ3vSyFl4RvWfdpXq/+g=
-Date:   Fri, 22 Apr 2022 07:07:47 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Hongyu Xie <xy521521@gmail.com>
-Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hongyu Xie <xiehongyu1@kylinos.cn>,
-        stable@vger.kernel.org, "sheng . huang" <sheng.huang@ecastech.com>,
-        wangqi@kylinos.cn, xiongxin@kylinos.cn
-Subject: Re: [RESEND PATCH -next] USB: serial: pl2303: implement reset_resume
- member
-Message-ID: <YmI4I9MCLBheMyvr@kroah.com>
-References: <20220419065408.2461091-1-xy521521@gmail.com>
- <YmGKL05dnA+q/HAM@kroah.com>
- <f3f6ea7d-2051-7a7f-61e0-8a5bba8ca8f2@gmail.com>
+        Fri, 22 Apr 2022 01:12:08 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A334F441
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 22:09:16 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id j8so8385661pll.11
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 22:09:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=rpqDRBjWTFgnwu8hYqPDued7W5tN/z70+zi0V+kqfDQ=;
+        b=Q0hcI1wq6TOk2nT188DONJl8NB23KNtCjhfItg9EEg/p3Wrhq0eawgIr8JTlnSl9gT
+         RzIQDZfLJK+Un/ClfO2FXBkYSxX0RjMPs7MbYdAjubXsDgh9wwa+RtV9E5XVFLCszDIQ
+         MK3KtHeydNAlOsqh4MLUdnTetvCSN8IWoMM0n9FKeVZF9sJISp/ncUeqhoYYHl/xuukl
+         H3LmXrFpqgD8zzpVJaBj1kwZwxVDascj4aIViTToD8Q9SDtUes4R+Nq1PatVvkeb4RvG
+         o8vKY2uDUfGaecPS6vWVIbDWWAjIFfHW9FnfCtkA+QERRjBrDY6cgpFwj0dMT3zWcrN9
+         UHWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rpqDRBjWTFgnwu8hYqPDued7W5tN/z70+zi0V+kqfDQ=;
+        b=8STEL5zaugOvCYMdgzpBUQVFs+7gg+nJ1GXuDk127kObxnHieQZgYQd4QVh+5rAQCm
+         EHxrGtrZ5t4pnl8M9cDwEhGYs+yV0/Zm2zZHAZVrAklI+oaqXRZzNviL2jbJ5FIG6tH8
+         z0yRYy388UN4nIn8LfhFjKIST+veeXj9YSqdW20t7k0LWz7NFwgwP/5Xrcu8P4dYUF1r
+         TS325V26/PohEganQMNoQ1gb6gbYRqlWaYK8ytNksUBUeTvOzqVjTfIWL/RU5VjZspty
+         iFft5pvYemqxtPzBRj5BfdBGta9TS+g/aGqmreIIsFoJoNjSS5J9wpMyAflBIUa9pT9A
+         XoTQ==
+X-Gm-Message-State: AOAM53350sTTvrhICwH19qFa7wiw5kiVPzZpTHHD0MgR3rp17PNcMA8Z
+        kfd4ODawZVgVTda18x4ZhYwGng==
+X-Google-Smtp-Source: ABdhPJwEWcy2D4mg4wIjBcgA4vTprLUh+mK4jKEEc3+Pu6A1K8wQq7O31Sm6PJfJsxTdGi+dnPQypg==
+X-Received: by 2002:a17:902:bc8b:b0:158:ac00:cca0 with SMTP id bb11-20020a170902bc8b00b00158ac00cca0mr2893469plb.102.1650604155898;
+        Thu, 21 Apr 2022 22:09:15 -0700 (PDT)
+Received: from localhost ([139.177.225.255])
+        by smtp.gmail.com with ESMTPSA id g15-20020aa7818f000000b00505ce2e4640sm844208pfi.100.2022.04.21.22.09.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 22:09:15 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 13:09:11 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     Marco Elver <elver@google.com>
+Cc:     syzbot <syzbot+ffe71f1ff7f8061bcc98@syzkaller.appspotmail.com>,
+        akpm@linux-foundation.org, dvyukov@google.com, glider@google.com,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        cgroups@vger.kernel.org
+Subject: Re: [syzbot] WARNING in __kfence_free
+Message-ID: <YmI4d8xR3tafv2Cq@FVFYT0MHHV2J.usts.net>
+References: <000000000000f46c6305dd264f30@google.com>
+ <YmEf8dpSXJeZ2813@elver.google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f3f6ea7d-2051-7a7f-61e0-8a5bba8ca8f2@gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YmEf8dpSXJeZ2813@elver.google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 10:35:59AM +0800, Hongyu Xie wrote:
+On Thu, Apr 21, 2022 at 11:12:17AM +0200, Marco Elver wrote:
+> On Thu, Apr 21, 2022 at 01:58AM -0700, syzbot wrote:
+> > Hello,
+> > 
+> > syzbot found the following issue on:
+> > 
+> > HEAD commit:    559089e0a93d vmalloc: replace VM_NO_HUGE_VMAP with VM_ALLO..
+> > git tree:       upstream
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=10853220f00000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=2e1f9b9947966f42
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=ffe71f1ff7f8061bcc98
+> > compiler:       aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > userspace arch: arm64
+> > 
+> > Unfortunately, I don't have any reproducer for this issue yet.
+> > 
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+ffe71f1ff7f8061bcc98@syzkaller.appspotmail.com
+> > 
+> > ------------[ cut here ]------------
+> > WARNING: CPU: 0 PID: 2216 at mm/kfence/core.c:1022 __kfence_free+0x84/0xc0 mm/kfence/core.c:1022
 > 
-> Hi greg,
-> On 2022/4/22 00:45, Greg KH wrote:
-> > On Tue, Apr 19, 2022 at 02:54:08PM +0800, Hongyu Xie wrote:
-> > > From: Hongyu Xie <xiehongyu1@kylinos.cn>
-> > > 
-> > > pl2303.c doesn't have reset_resume for hibernation.
-> > > So needs_binding will be set to 1 duiring hibernation.
-> > > usb_forced_unbind_intf will be called, and the port minor
-> > > will be released (x in ttyUSBx).
-> > 
-> > Please use the full 72 columns that you are allowed in a changelog text.
-> > 
-> > 
-> > > It works fine if you have only one USB-to-serial device.
-> > > Assume you have 2 USB-to-serial device, nameing A and B.
-> > > A gets a smaller minor(ttyUSB0), B gets a bigger one.
-> > > And start to hibernate. When your PC is in hibernation,
-> > > unplug device A. Then wake up your PC by pressing the
-> > > power button. After waking up the whole system, device
-> > > B gets ttyUSB0. This will casuse a problem if you were
-> > > using those to ports(like opened two minicom process)
-> > > before hibernation.
-> > > So member reset_resume is needed in usb_serial_driver
-> > > pl2303_device.
-> > 
-> > If you want persistent device naming, use the symlinks that udev creates
-> > for your for all your serial devices.  Never rely on the number of a USB
-> > to serial device.
-> Let me put it this way. Assume you need to record messages output from two
-> machines using 2 USB-to-serial devices(naming A and B, and A is on
-> USB1-port3, B is on USB1-port4) opened by two minicom process.
-> The setting for A in minicom would be like:
-> 	"A -    Serial Device      : /dev/ttyUSB0"
-> The setting for B in minicom would be like:
-> 	"A -    Serial Device      : /dev/ttyUSB1"
-> Then start to hibernate on your computer. When your PC is in
-> hibernation, unplug A. After waking up your computer, "/dev/ttyUSB0"
-> would be released first, then allocated to B. The minicom process used
-> to record outputs from A is now recording B's outputs. The minicom
-> process used to record outputs from B is now recording nothing, because
-> "/dev/ttyUSB1" is not exist anymore. That's the problem I've been
-> talking about. And I don't think using symlinks will solve this problem.
+> That's this warning in __kfence_free:
+> 
+> 	#ifdef CONFIG_MEMCG
+> 		KFENCE_WARN_ON(meta->objcg);
+> 	#endif
+> 
+> introduced in 8f0b36497303 ("mm: kfence: fix objcgs vector allocation").
+> 
+> Muchun, are there any circumstances where the assumption may be broken?
+> Or a new bug elsewhere?
 
-Yes, symlinks will solve the issue, that is what they are there for.
-Look in /dev/serial/ for a persistent name for them that allows you to
-uniquely open the correct device if they can be described.  Using
-/dev/ttyUSBX is almost never the correct thing to do.
+meta->objcg always should be NULL when reaching __kfence_free().
+In theory, meta->objcg should be cleared via memcg_slab_free_hook().
 
-> > > Codes in pl2303_reset_resume are borrowed from pl2303_open.
-> > > 
-> > > As a matter of fact, all driver under drivers/usb/serial
-> > > has the same problem except ch341.c.
-> > > 
-> > > Cc: stable@vger.kernel.org
-> > 
-> > How does this meet the stable kernel rule requirements?  It would be a
-> > new feature if it were accepted, right?
-> It's not a new feature at all. struct usb_serial_driver already has a
-> member name reset_resume, there is no implementation in pl2303.c yet.
-> And ch341.c has one(ch341_reset_resume()), that why I said "all driver
-> under drivers/usb/serial has the same problem except ch341.c"
+I found the following code snippet in do_slab_free().
 
-Please read:
-    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-for what is valid stable kernel changes.
+  /* memcg_slab_free_hook() is already called for bulk free. */
+  if (!tail)
+  	memcg_slab_free_hook(s, &head, 1); 
 
-thanks,
+The only posibility is @tail is not NULL, which is the case of
+kmem_cache_free_bulk(). However, here the call trace is kfree(),
+it seems to be impossible that missing call memcg_slab_free_hook().
 
-greg k-h
+Thanks. 

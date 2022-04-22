@@ -2,401 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A50150BC3A
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 960B350BC3E
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353869AbiDVP7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 11:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
+        id S1352711AbiDVP7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 11:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231858AbiDVP7J (ORCPT
+        with ESMTP id S231617AbiDVP7w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 11:59:09 -0400
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7630F5DA56
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:56:15 -0700 (PDT)
-Received: by mail-ed1-x543.google.com with SMTP id e30so7418184eda.0
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:56:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xMb/6E6D8vYaEVYmHUTHLUaT7ebly6aMUjlVw/vTE1Y=;
-        b=RUdk4w5ba2vvCZ1ir0NxVhJ20tgfJWllbtsYAHcEzg6cfNM/r406bNrmVq+tbx64zp
-         9PwFMUdqyfuWRJTc5fk40en/QMQo40yt3s6fuU1usl47DV5vVrGmdmO09uscHUKUKJGB
-         j25z/R7QxhtQyxjY9KJwtOwPaZi9XZu1Qj5ZQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xMb/6E6D8vYaEVYmHUTHLUaT7ebly6aMUjlVw/vTE1Y=;
-        b=d9oGuRw7HGNX7syoTR116o8kiqZxT5O7OM2xkcqZvXGVXkz2cdeotgj1PtUWPj9O7k
-         Js1Z0KDWkbZMmlt9x69TIhSPYygBn0z9+JW31MDBgY2+6BiCEDz/LBkk0PTZy6qo43BC
-         OmKemlUtQ2mnEAKrm24FFX6AfAwkKZfLLI5fspKCekH+1s/pMmf/7DFL1+cSxy1WqU58
-         pQlV/0uwSIl8KVzJXs9wjeptYlY+9AIV3jThwuTHXXyCFfUGmmY/T/2qztt71b/DtlLw
-         bkv3czEZDLnho/xJknR14YC820KL4B6+cIF4TF/kNFgu/5qFUSDLe0Io/zg3fzok/1A8
-         coOQ==
-X-Gm-Message-State: AOAM532J1KFQvOkkfYi7Jm+IZg4tZe3f++JYeP512BcG4JSyNOJMm1gt
-        mymtn5QlH78qr9oOdIBduxsfMe23pJwUSgApBQA=
-X-Google-Smtp-Source: ABdhPJzwUIBYs+h2pNVUbzc1Gx6/5myGokGN/+y/WubK/17Hv3HOqNzeBUxE6P0DwGDX52l3P2MJ6g==
-X-Received: by 2002:aa7:c793:0:b0:408:4a69:90b4 with SMTP id n19-20020aa7c793000000b004084a6990b4mr5625474eds.58.1650642974109;
-        Fri, 22 Apr 2022 08:56:14 -0700 (PDT)
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
-        by smtp.gmail.com with ESMTPSA id q14-20020a17090622ce00b006e898c912e5sm851074eja.217.2022.04.22.08.56.13
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 08:56:13 -0700 (PDT)
-Received: by mail-wr1-f41.google.com with SMTP id k22so11697579wrd.2
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:56:13 -0700 (PDT)
-X-Received: by 2002:a05:6000:1105:b0:20a:80b4:bcaf with SMTP id
- z5-20020a056000110500b0020a80b4bcafmr4285103wrw.679.1650642972904; Fri, 22
- Apr 2022 08:56:12 -0700 (PDT)
+        Fri, 22 Apr 2022 11:59:52 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11olkn2022.outbound.protection.outlook.com [40.92.18.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B255BE4C;
+        Fri, 22 Apr 2022 08:56:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VwaQDXjdfW/TXCVREHMJleNslYRWkXBCc93jqHvobgHRlQ2EcTDxOV7minzOYZU42vt51tTCZtDfcfYw/UUD2IeP1zJpqS+Dm0K7X5zxU4aNwAuq0nmkZ3QoIQ4+5cD+P3PLP0PtbzIU/z/XlRvH50Ar1b0IJ9+PXqE+/QcwnNyJNCVHelGLi8iPUGwAbj00VZwsyiZaHUEpvKzVXzBnQ775/kG2Wph2sCVoG5p4ye24QIX4liUeRqN/GjeakyJLUG90XZCBBeHVAjlkAO3rcg7ddXd1CI1jExkGzym17WrV8japOVmAuJ5RPhLqSrnpuyDyC/MwZbjzQ3G3KldH/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aSOvOVo4owsPTCe7z/6UpT+MQ9CHNqBsLlT+gV0Zy5s=;
+ b=dQNk8K0mjGfDHXC+UTGwukHsQ5S6FduzVRUe4sTfuEBRh5M900m40NE5Ev3Z+LhigvyhKp4dITx/EvrV10oJ4jIaZ7ga2tjBWvDfJfVP0T86kugjqcZmhNvAxIVhZxnTn1w564nx0t9Ffg9tZXBAfH9WYRBeaOo3ePJBC5D9HcBLVuyLmk9lxg/J4gRmP/XOnnH7BpUl8rHZpoBx34HFeh6XMYM7mQzSTOeoJBsgiVo/rJXj3OBwg7cKBlpg6y12b0fr3eq9GyljZMFf66VSD8ueJaU7OTsZGYoS8DYJTlPSWatvay120uMHgWsc95VJmcu1I5+rYONtBiC9yOmrKA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aSOvOVo4owsPTCe7z/6UpT+MQ9CHNqBsLlT+gV0Zy5s=;
+ b=lFdDhvazA5DZ9Uny99tyIYmA5ywI3Fux/YZQ7TLr76SsMGWbU27hKr30OdkZ0kJHzydj9wro5CF3SLYyS+Y29tirZXbRXYPF7/F6iZ3GXyo+XOa77js34alj5yk7E3lV952Sr4GOMwLoBr8r2l1DI4b8N3GMUZNgdoGi5uCgp4iTY851pWAmtM0ux0Yj3e+UTxd9UmfcTNlvyLoErcHWDXmMlO48lnZ6x3v9KN52XGTgKlYayWZFhZYzzLwQYKZKq5aW2PG9QTeokNgXrUo1brW1KqD+xdJqOdSgoqbzySwMhQVA+NgfR6c8MBbalq4lFxNu67Aookhq90IapqknEg==
+Received: from BYAPR20MB2472.namprd20.prod.outlook.com (2603:10b6:a03:155::16)
+ by CY4PR2001MB0917.namprd20.prod.outlook.com (2603:10b6:903:d6::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Fri, 22 Apr
+ 2022 15:56:56 +0000
+Received: from BYAPR20MB2472.namprd20.prod.outlook.com
+ ([fe80::3480:160a:eb92:d6e3]) by BYAPR20MB2472.namprd20.prod.outlook.com
+ ([fe80::3480:160a:eb92:d6e3%6]) with mapi id 15.20.5186.015; Fri, 22 Apr 2022
+ 15:56:56 +0000
+From:   icenowy@outlook.com
+To:     Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Icenowy Zheng <icenowy@aosc.io>
+Subject: [PATCH 0/4] Allwinner R329 SPI support
+Date:   Fri, 22 Apr 2022 23:56:35 +0800
+Message-ID: <BYAPR20MB2472A0C29FAA2782487BD1E8BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN:  [gAaQJSZX2fxmAp1fh/5i678WGTo0aEVE]
+X-ClientProxiedBy: HK0PR01CA0059.apcprd01.prod.exchangelabs.com
+ (2603:1096:203:a6::23) To BYAPR20MB2472.namprd20.prod.outlook.com
+ (2603:10b6:a03:155::16)
+X-Microsoft-Original-Message-ID: <20220422155639.1071645-1-icenowy@outlook.com>
 MIME-Version: 1.0
-References: <1650618666-15342-1-git-send-email-quic_sbillaka@quicinc.com> <1650618666-15342-3-git-send-email-quic_sbillaka@quicinc.com>
-In-Reply-To: <1650618666-15342-3-git-send-email-quic_sbillaka@quicinc.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 22 Apr 2022 08:55:59 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=WWa8n0MJB8ks7bgrSj1Qop1Z5hvfEAOWtFcmsz38eR_w@mail.gmail.com>
-Message-ID: <CAD=FV=WWa8n0MJB8ks7bgrSj1Qop1Z5hvfEAOWtFcmsz38eR_w@mail.gmail.com>
-Subject: Re: [PATCH v9 2/4] drm/msm/dp: Support only IRQ_HPD and REPLUG
- interrupts for eDP
-To:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <seanpaul@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        quic_kalyant <quic_kalyant@quicinc.com>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        quic_vproddut <quic_vproddut@quicinc.com>,
-        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
-        Steev Klimaszewski <steev@kali.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5de612f3-2986-462a-b397-08da2478ba24
+X-MS-TrafficTypeDiagnostic: CY4PR2001MB0917:EE_
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Gz0y/445Jq+EcEgoHtthQLiJLnhJ9i6JRQ3CHuxMOKtP7FTzyLRdfmRDF7K7cRo/n/UtejHHzSIdemVIRaXFmAlOlJDbkVHBz/v5U9X030Q9pOsDraVeeu95CEfRis3p4T7WwVEWdrRpecR8qloP8SUQk+FezI6OmRtx/1ucPnxOCMkGe01mTKLJZdgNuSsMK7iRg6LFoslkKS1L0F/v7QZFawwmuXdoS1B4SFtRKSwmrxLgKoVP6BUWrgDL+BjfBuN2S90ogslTlUx8DGN9DQ1Y1wker8XDUqs+kFVkakT6e2XjnWZ1G1bGGTk7/4KM4ZdcQYK8Iwv1023famdLr6zW6l0npcl9dWniUqvUFMSh3OBvWQyivPyZhhHNu8Ce/Zjy2M2Ix0UCPzCtLfnn1d8ezRXHf3AFEUprj1cElyGWagvWIiuhuXvdye4tjDOf3cFTaalwApliVALAZ7yKyZjXWQNFA2L+Tf0yU9vao6RhoYrW63iFd/VCQ27tYnHapPUhVvYpVF53bJHnvqkFmBxkWFOPQc0Zn9zsbMUyxpO9gF/o1Qs82vEPYowJiGhCLblXRhjz5mRWsKv3RmgCCQ==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0CIyfk3nTGAGkPeWzFdlecINvrc6863Goa5ngK4kbL7gvtL7k2eIEOia0UF8?=
+ =?us-ascii?Q?LFIeHkIXhsfC5eQO1AOg6RLpBuH0BL3rr/u7juyvoF2JVowkBEvOiPQ68C/a?=
+ =?us-ascii?Q?S2BrseFuhIwYMrX83WZlXaNHfcaT62rp+RcZUUaLtEFBtKJh+t+ZpnLbnGGr?=
+ =?us-ascii?Q?BqhECXASEC/5+y+WHhj+uqdAuGknoXWBhhSpZ53eDZQSaR8pLR952xEkcuRY?=
+ =?us-ascii?Q?fRM46g5ZZzjHaOoqgPzIA67b6ya88xeGFeiOPclLr5854LHKYgChAaZ/LDd5?=
+ =?us-ascii?Q?ppKr8+nJXP60gn/AC7uKtzCTtXAjJUmBzppA4fcwqQyh0ukwFtMYDCBvoivn?=
+ =?us-ascii?Q?9XK1hWEIofhbNu1xoXmLlrJV0f/C76Kars4rtuHRV+yHhjM9iohQTCv+TUlM?=
+ =?us-ascii?Q?vgkz2bP05914Q/s7pCmmxKxrO5ZH4j1nYtaLkBrK8CADPDG7qpXM/S6MQrGZ?=
+ =?us-ascii?Q?LaR6DfDWjPBY85vClgAFfdq+t45xxvOpn5zH369qNyg8uxyqJO0RlMZkoxX2?=
+ =?us-ascii?Q?1pqqIwZucXdflK3WD/ylCSwSejNaDZLdlsIfxo0UY+OEmAetA5chdQzKLOLU?=
+ =?us-ascii?Q?gEmF+DKVRTg+4skwcnufgJlm1pZeDRTszEukfdVlB+196izm06AFSkNXjU7L?=
+ =?us-ascii?Q?fJJl1DyVac46vplvVKXYCUquHqsNsHPsLORJgFZ3l1rjnTa1yczNojkqoSaY?=
+ =?us-ascii?Q?mgBLhY6mjaFaNEVoRVIcEFCCo3yAx28JZiqstzINkMlSDjZqxPIJKnyBtM3L?=
+ =?us-ascii?Q?UodS3j7SR8ZTZlDHiA6TqbcSNgx0SojyoMQ4UT5sugCbQh37waJzeq2i0JN8?=
+ =?us-ascii?Q?ltFR0lcziJAxsZBchAiK1Y72fZg7n+Guul7iWzroUfkZQv4g7FDJt4NCHQar?=
+ =?us-ascii?Q?4A0ujUZaJY//nWas6OTE0nZXzeZJBWRXP01FxXvuGPvVIBysUXh/HLH3LJtx?=
+ =?us-ascii?Q?tJLErvGnGB2p111mbq5G/RdOyoZLl3QL1Tmeged0nvIVqYDR1MPBRhuPqxOZ?=
+ =?us-ascii?Q?xLBw3og5WfGiSPbmgoPbjlAwbvE5UgEvXECvjPqd7j3dbMtR0pwOMDG4+Q67?=
+ =?us-ascii?Q?LO0eK3kEDjDuVfNgnuxQPlcyy1uhQmE5/5NXf59mJktN3XXoJNk2tJeoXp5u?=
+ =?us-ascii?Q?bAhQ44fwKB/Xn6+tT8XZ4yWaBwkd90Sga+2We8eyZ4k8/FqwTMUF9W3yGzyh?=
+ =?us-ascii?Q?GGD10S1+70dTHLSu7hou/Ls8njKP7usYHv7YdNMMEoRE82mxhbMHu3aMAAJO?=
+ =?us-ascii?Q?o0EiDw/lrDcEiKO+3nRdHFZJgtcAAxn9mUnKVzcog1jTCuMrReIb2CC/xaBu?=
+ =?us-ascii?Q?Y+uQsc7JJuMTSkRSoVzDkckGb9psm/2kKdU8pO0mFaNyRq2JTxgm1T/Iv5kc?=
+ =?us-ascii?Q?kVR2Z6pcvOr2sFQMbHSH153NTnOpQWTW7iFTh1e+bHm+w0HskrgRrOLlZ9XI?=
+ =?us-ascii?Q?WB4yt5qG4t0=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5de612f3-2986-462a-b397-08da2478ba24
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR20MB2472.namprd20.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2022 15:56:56.9145
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR2001MB0917
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Icenowy Zheng <icenowy@aosc.io>
 
-On Fri, Apr 22, 2022 at 2:11 AM Sankeerth Billakanti
-<quic_sbillaka@quicinc.com> wrote:
->
-> The panel-edp enables the eDP panel power during probe, get_modes
-> and pre-enable. The eDP connect and disconnect interrupts for the eDP/DP
-> controller are directly dependent on panel power. As eDP display can be
-> assumed as always connected, the controller driver can skip the eDP
-> connect and disconnect interrupts. Any disruption in the link status
-> will be indicated via the IRQ_HPD interrupts.
->
-> So, the eDP controller driver can just enable the IRQ_HPD and replug
-> interrupts. The DP controller driver still needs to enable all the
-> interrupts.
->
-> Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-> ---
-> Changes in v9:
->   - add comment explaining the interrupt status register
->
-> Changes in v8:
->   - add comment explaining the interrupt status return
->
-> Changes in v7:
->   - reordered the patch in the series
->   - modified the return statement for isr
->   - connector check modified to just check for eDP
->
->  drivers/gpu/drm/msm/dp/dp_catalog.c | 16 ++++++++++------
->  drivers/gpu/drm/msm/dp/dp_display.c | 22 +++++++++++++++++++++-
->  2 files changed, 31 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.c b/drivers/gpu/drm/msm/dp/dp_catalog.c
-> index fac815f..df9670d 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_catalog.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_catalog.c
-> @@ -569,10 +569,6 @@ void dp_catalog_ctrl_hpd_config(struct dp_catalog *dp_catalog)
->
->         u32 reftimer = dp_read_aux(catalog, REG_DP_DP_HPD_REFTIMER);
->
-> -       /* enable HPD plug and unplug interrupts */
-> -       dp_catalog_hpd_config_intr(dp_catalog,
-> -               DP_DP_HPD_PLUG_INT_MASK | DP_DP_HPD_UNPLUG_INT_MASK, true);
-> -
->         /* Configure REFTIMER and enable it */
->         reftimer |= DP_DP_HPD_REFTIMER_ENABLE;
->         dp_write_aux(catalog, REG_DP_DP_HPD_REFTIMER, reftimer);
-> @@ -599,13 +595,21 @@ u32 dp_catalog_hpd_get_intr_status(struct dp_catalog *dp_catalog)
->  {
->         struct dp_catalog_private *catalog = container_of(dp_catalog,
->                                 struct dp_catalog_private, dp_catalog);
-> -       int isr = 0;
-> +       int isr, mask;
->
->         isr = dp_read_aux(catalog, REG_DP_DP_HPD_INT_STATUS);
->         dp_write_aux(catalog, REG_DP_DP_HPD_INT_ACK,
->                                  (isr & DP_DP_HPD_INT_MASK));
-> +       mask = dp_read_aux(catalog, REG_DP_DP_HPD_INT_MASK);
->
-> -       return isr;
-> +       /*
-> +        * We only want to return interrupts that are unmasked to the caller.
-> +        * However, the interrupt status field also contains other
-> +        * informational bits about the HPD state status, so we only mask
-> +        * out the part of the register that tells us about which interrupts
-> +        * are pending.
-> +        */
-> +       return isr & (mask | ~DP_DP_HPD_INT_MASK);
->  }
->
->  int dp_catalog_ctrl_get_interrupt(struct dp_catalog *dp_catalog)
-> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> index 055681a..dea4de9 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> @@ -683,7 +683,8 @@ static int dp_hpd_unplug_handle(struct dp_display_private *dp, u32 data)
->         dp_display_handle_plugged_change(&dp->dp_display, false);
->
->         /* enable HDP plug interrupt to prepare for next plugin */
-> -       dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_PLUG_INT_MASK, true);
-> +       if (!dp->dp_display.is_edp)
-> +               dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_PLUG_INT_MASK, true);
->
->         DRM_DEBUG_DP("After, type=%d hpd_state=%d\n",
->                         dp->dp_display.connector_type, state);
-> @@ -1096,6 +1097,13 @@ static void dp_display_config_hpd(struct dp_display_private *dp)
->         dp_display_host_init(dp);
->         dp_catalog_ctrl_hpd_config(dp->catalog);
->
-> +       /* Enable plug and unplug interrupts only for external DisplayPort */
-> +       if (!dp->dp_display.is_edp)
-> +               dp_catalog_hpd_config_intr(dp->catalog,
-> +                               DP_DP_HPD_PLUG_INT_MASK |
-> +                               DP_DP_HPD_UNPLUG_INT_MASK,
-> +                               true);
-> +
->         /* Enable interrupt first time
->          * we are leaving dp clocks on during disconnect
->          * and never disable interrupt
-> @@ -1381,6 +1389,12 @@ static int dp_pm_resume(struct device *dev)
->         dp_catalog_ctrl_hpd_config(dp->catalog);
->
->
-> +       if (!dp->dp_display.is_edp)
-> +               dp_catalog_hpd_config_intr(dp->catalog,
-> +                               DP_DP_HPD_PLUG_INT_MASK |
-> +                               DP_DP_HPD_UNPLUG_INT_MASK,
-> +                               true);
-> +
->         if (dp_catalog_link_is_connected(dp->catalog)) {
->                 /*
->                  * set sink to normal operation mode -- D0
-> @@ -1659,6 +1673,9 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
->                 return;
->         }
->
-> +       if (dp->is_edp)
-> +               dp_hpd_plug_handle(dp_display, 0);
+This patchset introduces support for Allwinner R329 SPI controllers,
+which removed in-controller clock divider.
 
-So I finally got a chance to test and unfortunately this is getting a
-lockdep error. :( Here's the crawl with my current set of patches
-(which, admittedly is on the chromeos-5.15 tree) instead of pure
-upstream. I avoid the errors with this (sorry for the whitespace
-damage, but it's really just a one-line change):
+Icenowy Zheng (4):
+  dt-bindings: spi: sun6i: add DT bindings for Allwinner R329 SPI
+  spi: sun6i: change OF match data to a struct
+  spi: sun6i: add quirk for in-controller clock divider
+  spi: sun6i: add support for R329 SPI controllers
 
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -582,7 +582,8 @@ static int dp_hpd_plug_handle(struct
-dp_display_private *dp, u32 data)
-         * add fail safe mode outside event_mutex scope
-         * to avoid potiential circular lock with drm thread
-         */
--       dp_panel_add_fail_safe_mode(dp->dp_display.connector);
-+       if (!dp->dp_display.is_edp)
-+               dp_panel_add_fail_safe_mode(dp->dp_display.connector);
+ .../bindings/spi/allwinner,sun6i-a31-spi.yaml |   2 +
+ drivers/spi/spi-sun6i.c                       | 112 +++++++++++-------
+ 2 files changed, 74 insertions(+), 40 deletions(-)
 
-        /* uevent will complete connection part */
-        return 0;
+-- 
+2.35.1
 
-That's a bit gross, but at least shows the problem. It's not a
-_terrible_ fix because the failsafe modes don't make sense for eDP,
-right? That being said, why are we hacking this in here? Shouldn't
-this be in the core? ...or at least we should just be providing them
-in get_modes()?
-
-FWIW: the error was:
-
-======================================================
- WARNING: possible circular locking dependency detected
- 5.15.35-lockdep #6 Tainted: G        W
- ------------------------------------------------------
- frecon/429 is trying to acquire lock:
- ffffff808dc3c4e8 (&dev->mode_config.mutex){+.+.}-{3:3}, at:
-dp_panel_add_fail_safe_mode+0x4c/0xa0
-
- but task is already holding lock:
- ffffff808dc441e0 (&kms->commit_lock[i]){+.+.}-{3:3}, at: lock_crtcs+0xb4/0x124
-
- which lock already depends on the new lock.
-
-
- the existing dependency chain (in reverse order) is:
-
- -> #3 (&kms->commit_lock[i]){+.+.}-{3:3}:
-        __mutex_lock_common+0x174/0x1a64
-        mutex_lock_nested+0x98/0xac
-        lock_crtcs+0xb4/0x124
-        msm_atomic_commit_tail+0x330/0x748
-        commit_tail+0x19c/0x278
-        drm_atomic_helper_commit+0x1dc/0x1f0
-        drm_atomic_commit+0xc0/0xd8
-        drm_atomic_helper_set_config+0xb4/0x134
-        drm_mode_setcrtc+0x688/0x1248
-        drm_ioctl_kernel+0x1e4/0x338
-        drm_ioctl+0x3a4/0x684
-        __arm64_sys_ioctl+0x118/0x154
-        invoke_syscall+0x78/0x224
-        el0_svc_common+0x178/0x200
-        do_el0_svc+0x94/0x13c
-        el0_svc+0x5c/0xec
-        el0t_64_sync_handler+0x78/0x108
-        el0t_64_sync+0x1a4/0x1a8
-
- -> #2 (crtc_ww_class_mutex){+.+.}-{3:3}:
-        __mutex_lock_common+0x174/0x1a64
-        ww_mutex_lock+0xb8/0x278
-        modeset_lock+0x304/0x4ac
-        drm_modeset_lock+0x4c/0x7c
-        drmm_mode_config_init+0x4a8/0xc50
-        msm_drm_init+0x274/0xac0
-        msm_drm_bind+0x20/0x2c
-        try_to_bring_up_master+0x3dc/0x470
-        __component_add+0x18c/0x3c0
-        component_add+0x1c/0x28
-        dp_display_probe+0x954/0xa98
-        platform_probe+0x124/0x15c
-        really_probe+0x1b0/0x5f8
-        __driver_probe_device+0x174/0x20c
-        driver_probe_device+0x70/0x134
-        __device_attach_driver+0x130/0x1d0
-        bus_for_each_drv+0xfc/0x14c
-        __device_attach+0x1bc/0x2bc
-        device_initial_probe+0x1c/0x28
-        bus_probe_device+0x94/0x178
-        deferred_probe_work_func+0x1a4/0x1f0
-        process_one_work+0x5d4/0x9dc
-        worker_thread+0x898/0xccc
-        kthread+0x2d4/0x3d4
-        ret_from_fork+0x10/0x20
-
- -> #1 (crtc_ww_class_acquire){+.+.}-{0:0}:
-        ww_acquire_init+0x1c4/0x2c8
-        drm_modeset_acquire_init+0x44/0xc8
-        drm_helper_probe_single_connector_modes+0xb0/0x12dc
-        drm_mode_getconnector+0x5dc/0xfe8
-        drm_ioctl_kernel+0x1e4/0x338
-        drm_ioctl+0x3a4/0x684
-        __arm64_sys_ioctl+0x118/0x154
-        invoke_syscall+0x78/0x224
-        el0_svc_common+0x178/0x200
-        do_el0_svc+0x94/0x13c
-        el0_svc+0x5c/0xec
-        el0t_64_sync_handler+0x78/0x108
-        el0t_64_sync+0x1a4/0x1a8
-
- -> #0 (&dev->mode_config.mutex){+.+.}-{3:3}:
-        __lock_acquire+0x2650/0x672c
-        lock_acquire+0x1b4/0x4ac
-        __mutex_lock_common+0x174/0x1a64
-        mutex_lock_nested+0x98/0xac
-        dp_panel_add_fail_safe_mode+0x4c/0xa0
-        dp_hpd_plug_handle+0x1f0/0x280
-        dp_bridge_enable+0x94/0x2b8
-        drm_atomic_bridge_chain_enable+0x11c/0x168
-        drm_atomic_helper_commit_modeset_enables+0x500/0x740
-        msm_atomic_commit_tail+0x3e4/0x748
-        commit_tail+0x19c/0x278
-        drm_atomic_helper_commit+0x1dc/0x1f0
-        drm_atomic_commit+0xc0/0xd8
-        drm_atomic_helper_set_config+0xb4/0x134
-        drm_mode_setcrtc+0x688/0x1248
-        drm_ioctl_kernel+0x1e4/0x338
-        drm_ioctl+0x3a4/0x684
-        __arm64_sys_ioctl+0x118/0x154
-        invoke_syscall+0x78/0x224
-        el0_svc_common+0x178/0x200
-        do_el0_svc+0x94/0x13c
-        el0_svc+0x5c/0xec
-        el0t_64_sync_handler+0x78/0x108
-        el0t_64_sync+0x1a4/0x1a8
-
- other info that might help us debug this:
-
- Chain exists of:
-   &dev->mode_config.mutex --> crtc_ww_class_mutex --> &kms->commit_lock[i]
-
-  Possible unsafe locking scenario:
-
-        CPU0                    CPU1
-        ----                    ----
-   lock(&kms->commit_lock[i]);
-                                lock(crtc_ww_class_mutex);
-                                lock(&kms->commit_lock[i]);
-   lock(&dev->mode_config.mutex);
-
-  *** DEADLOCK ***
-
- 3 locks held by frecon/429:
-  #0: ffffffc00e197ab0 (crtc_ww_class_acquire){+.+.}-{0:0}, at:
-drm_modeset_acquire_init+0x44/0xc8
-  #1: ffffff808dc3c588 (crtc_ww_class_mutex){+.+.}-{3:3}, at:
-modeset_lock+0x18c/0x4ac
-  #2: ffffff808dc441e0 (&kms->commit_lock[i]){+.+.}-{3:3}, at:
-lock_crtcs+0xb4/0x124
-
- stack backtrace:
- CPU: 5 PID: 429 Comm: frecon Tainted: G        W
-5.15.35-lockdep #6 9ba2ecd8f15354021fe165873da3aaa99f5b6798
- Hardware name: Google Herobrine (rev1+) (DT)
- Call trace:
-  dump_backtrace+0x0/0x3c4
-  show_stack+0x20/0x2c
-  dump_stack_lvl+0x78/0x9c
-  dump_stack+0x18/0x44
-  print_circular_bug+0x17c/0x1a8
-  check_noncircular+0x260/0x30c
-  __lock_acquire+0x2650/0x672c
-  lock_acquire+0x1b4/0x4ac
-  __mutex_lock_common+0x174/0x1a64
-  mutex_lock_nested+0x98/0xac
-  dp_panel_add_fail_safe_mode+0x4c/0xa0
-  dp_hpd_plug_handle+0x1f0/0x280
-  dp_bridge_enable+0x94/0x2b8
-  drm_atomic_bridge_chain_enable+0x11c/0x168
-  drm_atomic_helper_commit_modeset_enables+0x500/0x740
-  msm_atomic_commit_tail+0x3e4/0x748
-  commit_tail+0x19c/0x278
-  drm_atomic_helper_commit+0x1dc/0x1f0
-  drm_atomic_commit+0xc0/0xd8
-  drm_atomic_helper_set_config+0xb4/0x134
-  drm_mode_setcrtc+0x688/0x1248
-  drm_ioctl_kernel+0x1e4/0x338
-  drm_ioctl+0x3a4/0x684
-  __arm64_sys_ioctl+0x118/0x154
-  invoke_syscall+0x78/0x224
-  el0_svc_common+0x178/0x200
-  do_el0_svc+0x94/0x13c
-  el0_svc+0x5c/0xec
-  el0t_64_sync_handler+0x78/0x108
-  el0t_64_sync+0x1a4/0x1a8

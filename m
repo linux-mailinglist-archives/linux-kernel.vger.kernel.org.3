@@ -2,170 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F343A50B4E5
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D81050B4F5
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:26:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446510AbiDVKXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 06:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55746 "EHLO
+        id S1380820AbiDVK2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 06:28:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235156AbiDVKXt (ORCPT
+        with ESMTP id S233923AbiDVK2l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 06:23:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E4C387BB;
-        Fri, 22 Apr 2022 03:20:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 26ED061E6E;
-        Fri, 22 Apr 2022 10:20:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78215C385A4;
-        Fri, 22 Apr 2022 10:20:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650622855;
-        bh=l8DMuJMxhFg3oWj3P06LfAZsH8ZofBIGfJ+Zsxq3M3c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tXz8dnNMqZa1305TV+OZTAXZYU1mQErY7qQwDOrLEGInkAMbEIzqrG3b+N/MezYx+
-         nltOcc4WCszV0jlGsgS1jSmOpfo+zKsVzo3QSZyQ+n4wkjVgoZgzp6Ak5D7/TmmJ2X
-         OqlL4P+FUNqoeKRzqD69pPyT0SP9R1wxn9ZML6uohJbjy12uHgUFabDfUL5BAu+U+I
-         3zZf2YNJh6naLmWslpXXKwp13wozl37QHGEhPsNnvVmppbSUoKH9TTGIzMJMBK5JKR
-         ToquwwGVQQmCB9ufrgASyzefmiULPiVKvutwkGXcCs2etHqxKwQ7ihzemQ8w0C2IDF
-         FgVInoYZe6cag==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nhqPA-0002Om-Fm; Fri, 22 Apr 2022 12:20:49 +0200
-Date:   Fri, 22 Apr 2022 12:20:48 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-phy@lists.infradead.org
-Subject: Re: [PATCH RFC 1/5] phy: qcom-qmp: add support for pipe clock muxing
-Message-ID: <YmKBgGHtfDcO1Mkg@hovoldconsulting.com>
-References: <20220421102041.17345-1-johan+linaro@kernel.org>
- <20220421102041.17345-2-johan+linaro@kernel.org>
- <de4f9514-5132-f208-d43f-4c50afcda203@linaro.org>
+        Fri, 22 Apr 2022 06:28:41 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B32F954BC1
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:25:48 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id u15so15424626ejf.11
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:25:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SN4drg2JTpqJsP0CH9F58BTXLr90dl8MWfA2yC+Ydps=;
+        b=kgLJJCQCxmhs8OK0PP2StISQ2j+AUvWuCOxalEUF2BWpNNsp3Onq1OEZ09UaNwJ4TF
+         x5/cnscx9KdiDW2rndrrcuZ1AlqT/gJRpfeY00llTvFF3f9AG24QDshxR2wM8qa5Es6Y
+         yf5xnKucmyQws2060UmG3ElrTy+yDc0nAKVpFMrG46waAVyzZv3NyiSIlJfPB5WohVY8
+         arT8+jC/MnUK976rXrqJtu/zES5LNkf22zViak0c6E1qWqo1gVA1hE++9rUYbIz4PpfT
+         YxFa1Qkd15dP9axMKlDoFpQ40SEUvjcQg29wigNea8OI6x7JfW+EGTcFV/Clu37ytb8s
+         Zcbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SN4drg2JTpqJsP0CH9F58BTXLr90dl8MWfA2yC+Ydps=;
+        b=wdyQHECMo/1huqR07Htms4X+jVH3r2JTG/G6zoLRCf1qqcxy3x/emS+JVmB6eR7PO2
+         aN+DxcxiTUjPYuALGS2nVRGQZsr5HNA7nuvzL7NfiKxyS7vCDWgBC9bus4THkLddraHy
+         Wk4JeT5VPziMekjUTytOV81XTsIReP7TWe0Tl5QmowfRSoa+XK8/w3kBO5WLBBnanBxr
+         NNLucgxxbPbWoH6vHCuQsk5K6CRRSCGWuAoL9QCD7qvMgTFT8wEW9CRI0Bo/F6wllHfC
+         zC+kBJUIbdpiA5o5uM0uRyPk7w8g34EsOLy2MYdFhUFHvGIFXAt8lNSK6QY6WKhYexBk
+         1ryw==
+X-Gm-Message-State: AOAM532NzENiZoESDiujfZGJqaoFF/554L/SYIQBi3ut4xbxkiHw1KPs
+        ZrIwQQkF1ym7hGOrAJAgN5WNjA==
+X-Google-Smtp-Source: ABdhPJwl+qZNM8ipTsT25L3081dhFGNSIua496QmlPCsVtwo3iseCpZh1OCXY5DAVnclK7C784PSXw==
+X-Received: by 2002:a17:906:9746:b0:6e0:5c9a:1a20 with SMTP id o6-20020a170906974600b006e05c9a1a20mr3582778ejy.714.1650623147318;
+        Fri, 22 Apr 2022 03:25:47 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id z8-20020a170906714800b006eff5936d60sm609754ejj.158.2022.04.22.03.25.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 03:25:46 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <snawrocki@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL fixes] pinctrl: samsung: Fixes for v5.18 (current cycle)
+Date:   Fri, 22 Apr 2022 12:25:41 +0200
+Message-Id: <20220422102541.33372-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <de4f9514-5132-f208-d43f-4c50afcda203@linaro.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 02:08:27PM +0300, Dmitry Baryshkov wrote:
-> On 21/04/2022 13:20, Johan Hovold wrote:
-> > Some QMP PHYs need to remux to their pipe clock input to the pipe clock
-> > output generated by the PHY before powering on the PHY and restore the
-> > default source during power down.
-> > 
-> > Add support for an optional pipe clock mux which will be reparented to
-> > the generated pipe clock before powering on the PHY and restored to the
-> > default reference source on power off.
-> > 
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> >   drivers/phy/qualcomm/phy-qcom-qmp.c | 71 ++++++++++++++++++++++++++---
-> >   1 file changed, 65 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
-> > index 7d2d1ab061f7..bc6db9670291 100644
-> > --- a/drivers/phy/qualcomm/phy-qcom-qmp.c
-> > +++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
-> > @@ -3292,6 +3292,8 @@ struct qmp_phy_combo_cfg {
-> >    * @rx2: iomapped memory space for second lane's rx (in dual lane PHYs)
-> >    * @pcs_misc: iomapped memory space for lane's pcs_misc
-> >    * @pipe_clk: pipe clock
-> > + * @pipemux_clk: pipe clock source mux
-> > + * @piperef_clk: pipe clock default reference source
-> >    * @index: lane index
-> >    * @qmp: QMP phy to which this lane belongs
-> >    * @lane_rst: lane's reset controller
-> > @@ -3311,6 +3313,8 @@ struct qmp_phy {
-> >   	void __iomem *rx2;
-> >   	void __iomem *pcs_misc;
-> >   	struct clk *pipe_clk;
-> > +	struct clk *pipemux_clk;
-> > +	struct clk *piperef_clk;
-> >   	unsigned int index;
-> >   	struct qcom_qmp *qmp;
-> >   	struct reset_control *lane_rst;
-> > @@ -3346,6 +3350,7 @@ struct qcom_qmp {
-> >   	void __iomem *dp_com;
-> >   
-> >   	struct clk_bulk_data *clks;
-> > +	struct clk *pipe_clksrc;
-> 
-> Please move this to qmp_phy too.
+Hi Linus,
 
-Ok.
- 
-> > +	/* Get optional pipe clock mux and default reference source clock. */
-> > +	qphy->pipemux_clk = of_clk_get_by_name(np, "mux");
-> > +	if (IS_ERR(qphy->pipemux_clk)) {
-> > +		ret = PTR_ERR(qphy->pipemux_clk);
-> > +		if (ret == -EPROBE_DEFER)
-> > +			return ret;
-> > +
-> > +		qphy->pipemux_clk = NULL;
-> 
-> This makes the driver ignore every possible erorr except -EPROBE_DEFER. 
-> However the driver should behave in quite the oppposite way. Please use 
-> devm_clk_get_optional() instead. It would do that in better way.
+Two fixes for the current cycle.
 
-We'd need to add an optional version of devm_get_clk_from_child() for
-that due to the questionable "lane" child nodes this driver uses.
+Best regards,
+Krzysztof
 
-The above works for an RFC, but testing for -EINVAL and -ENOENT handles
-a few more theoretical errnos until an optional helper is in place.
 
-> Not to mention that this code leaks a refcount on the clock.
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
-True, just like the driver has been doing with the pipe clock and lane
-reset since it was merged. I'll fix that up.
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
 
-> > +	} else {
-> > +		qphy->piperef_clk = of_clk_get_by_name(np, "ref");
-> > +		if (IS_ERR(qphy->piperef_clk)) {
-> > +			ret = PTR_ERR(qphy->piperef_clk);
-> > +			return dev_err_probe(dev, ret,
-> > +					     "failed to get lane%d piperef_clk\n",
-> > +					     id);
-> > +		}
-> > +	}
-> > +
-> 
-> As a second thought.
-> This needs to be more explicit. If the chipset requires the pipe clock 
-> remuxing, we must fail if the clocks were not provided. So depending on 
-> the qmp instance/property the driver should either use devm_clk_get() 
-> (instead of _optional) or skip this block completely.
+are available in the Git repository at:
 
-No, the kernel is not a DT validator (and we have the YAML bindings for
-that now).
+  https://git.kernel.org/pub/scm/linux/kernel/git/pinctrl/samsung.git tags/samsung-pinctrl-fixes-5.18
 
-> But this will not work with earlier DTS files.
+for you to fetch changes up to ac875df4d854ab13d9c4af682a1837a1214fecec:
 
-So this is not a problem (but if we really wanted to have the driver
-validate the DT it can be done by updating the compatible strings).
+  pinctrl: samsung: fix missing GPIOLIB on ARM64 Exynos config (2022-04-21 08:58:54 +0200)
 
-Johan
+----------------------------------------------------------------
+Samsung pinctrl drivers fixes for v5.18
+
+1. Fix sparse warning introduced in v5.18-rc1.
+2. Fix possible unmet Kconfig dependency with COMPILE_TEST, present
+   since v4.3 or earlier.
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (2):
+      pinctrl: samsung: staticize fsd_pin_ctrl
+      pinctrl: samsung: fix missing GPIOLIB on ARM64 Exynos config
+
+ arch/arm/mach-exynos/Kconfig                   |  1 -
+ drivers/pinctrl/samsung/Kconfig                | 11 ++++-------
+ drivers/pinctrl/samsung/pinctrl-exynos-arm64.c |  2 +-
+ 3 files changed, 5 insertions(+), 9 deletions(-)

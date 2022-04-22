@@ -2,71 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4102950B0D8
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81ABF50B0DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444529AbiDVGv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 02:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
+        id S1444547AbiDVGxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 02:53:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444516AbiDVGvP (ORCPT
+        with ESMTP id S1444534AbiDVGxK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 02:51:15 -0400
-Received: from smtp.smtpout.orange.fr (smtp04.smtpout.orange.fr [80.12.242.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4EE50E05
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 23:48:21 -0700 (PDT)
-Received: from pop-os.home ([86.243.180.246])
-        by smtp.orange.fr with ESMTPA
-        id hn5Xn05RsYnCyhn5Xn2aYb; Fri, 22 Apr 2022 08:48:20 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Fri, 22 Apr 2022 08:48:20 +0200
-X-ME-IP: 86.243.180.246
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Sven Van Asbroeck <TheSven73@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        linux-staging@lists.linux.dev
-Subject: [PATCH] staging: fieldbus: Fix the error handling path in anybuss_host_common_probe()
-Date:   Fri, 22 Apr 2022 08:48:18 +0200
-Message-Id: <5401a519608d6e1a4e7435c20f4f20b0c5c36c23.1650610082.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
+        Fri, 22 Apr 2022 02:53:10 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2CCDF00;
+        Thu, 21 Apr 2022 23:50:18 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23M6oChM099907;
+        Fri, 22 Apr 2022 01:50:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1650610212;
+        bh=8FCGL9ynSvblZzCZRtlK6aXMZQP3HoOBugc9soJ2zRg=;
+        h=From:To:CC:Subject:Date;
+        b=qwV8sqsX2ihy5Ggi9y+D3F4/SIqxrYgeEdf6DIBBO4/WgEVBV0ovFF1AsdxCWDBdy
+         s7zI1jIVyp22xzpeJ4WxNvneEzvBm08Au5DkT6IBWRSGPn0VTPlH7EO13vY1YiooYR
+         fIOoA+0qMAe9HlzuRJV31RZX4qMyfMECiuCEZdKk=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23M6oBtY118474
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 22 Apr 2022 01:50:12 -0500
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 22
+ Apr 2022 01:50:10 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 22 Apr 2022 01:50:10 -0500
+Received: from ula0132425.ent.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23M6o6O6127651;
+        Fri, 22 Apr 2022 01:50:07 -0500
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>
+Subject: [PATCH v2 0/2] arm64: ti: k3-am62: Introduce DT nodes for basic peripherals
+Date:   Fri, 22 Apr 2022 12:20:00 +0530
+Message-ID: <20220422065002.387753-1-vigneshr@ti.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If device_register() fails, device_unregister() should not be called
-because it will free some resources that are not allocated.
-put_device() should be used instead.
+Add nodes for McSPI, OSPI, MMC, DMA and CPSW ethernet switch
 
-Fixes: 308ee87a2f1e ("staging: fieldbus: anybus-s: support HMS Anybus-S bus")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/staging/fieldbus/anybuss/host.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v2:
 
-diff --git a/drivers/staging/fieldbus/anybuss/host.c b/drivers/staging/fieldbus/anybuss/host.c
-index a344410e48fe..cd86b9c9e345 100644
---- a/drivers/staging/fieldbus/anybuss/host.c
-+++ b/drivers/staging/fieldbus/anybuss/host.c
-@@ -1384,7 +1384,7 @@ anybuss_host_common_probe(struct device *dev,
- 		goto err_device;
- 	return cd;
- err_device:
--	device_unregister(&cd->client->dev);
-+	put_device(&cd->client->dev);
- err_kthread:
- 	kthread_stop(cd->qthread);
- err_reset:
+Add aliases for ethernet
+Collect Reviewed-by
+
+v1: lore.kernel.org/r/20220415131917.431137-1-vigneshr@ti.com
+
+Vignesh Raghavendra (2):
+  arm64: dts: ti: k3-am62: Add more peripheral nodes
+  arm64: dts: ti: k3-am625-sk: Enable on board peripherals
+
+ arch/arm64/boot/dts/ti/k3-am62-main.dtsi | 266 ++++++++++++++++++++++
+ arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi  |  20 ++
+ arch/arm64/boot/dts/ti/k3-am625-sk.dts   | 273 +++++++++++++++++++++++
+ 3 files changed, 559 insertions(+)
+
 -- 
-2.32.0
+2.36.0
 

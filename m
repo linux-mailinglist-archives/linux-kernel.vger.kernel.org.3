@@ -2,137 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E240B50C120
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 23:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B635650C12E
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 23:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbiDVVi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 17:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37086 "EHLO
+        id S229993AbiDVVhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 17:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbiDVViO (ORCPT
+        with ESMTP id S229728AbiDVVhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 17:38:14 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C53FC2A60A1;
-        Fri, 22 Apr 2022 13:39:32 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 3F260215FF;
-        Fri, 22 Apr 2022 20:29:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1650659358; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DQC9EwCc1d1zwv7C55oUEIwJvP8u2qczlBIORadICHM=;
-        b=uYZv5hZrfXo2ih3eM61buBuIvSz6QOFFhD/teRRlFeYlIRGxdGRHYkRzeigC3ZoAYLJZy4
-        /xmA7IHpb9B0Z1fe2WOV2rI+8UjeTH2Ln4ZmlEcqiGNj5T7KgozDqEWusyu+VZwunc6EEX
-        6bVDIOlkieaPn/YgYHdJh5iL0s+JxrE=
-Received: from suse.cz (unknown [10.163.16.6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D85F42C145;
-        Fri, 22 Apr 2022 20:29:16 +0000 (UTC)
-Date:   Fri, 22 Apr 2022 22:29:16 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Marco Elver <elver@google.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Alexander Potapenko <glider@google.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Kees Cook <keescook@chromium.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Xiaoming Ni <nixiaoming@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Corey Minyard <cminyard@mvista.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Wang Qing <wangqing@vivo.com>, rcu@vger.kernel.org
-Subject: Re: [PATCH printk v4 00/15] implement threaded console printing
-Message-ID: <YmMQHMaS0KwyN5hX@alley>
-References: <20220421212250.565456-1-john.ogness@linutronix.de>
- <YmJ1fnc4trEOooZD@alley>
+        Fri, 22 Apr 2022 17:37:36 -0400
+Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com [209.85.222.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA02EC138
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:38:36 -0700 (PDT)
+Received: by mail-ua1-f51.google.com with SMTP id g22so3410657uam.12
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:38:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Z7l1siJ5Z2fXTsLPc04ivVbBuS3c9PMnxxuVpF86Xzs=;
+        b=IIo57g2PIuT0TvD4bSVMcYrJl+6VE3sP8KhJktIn+xmBDyQuNInfkEWId6ES9YYH/2
+         wUd/ofdCTjanaKSZW7IxdjZcO03qfDhbio9LnGBAKEd3/kt4cVXZ8y+l9qx89zQHAkA+
+         Z7D7NSyj0670eg9sdw8/y638r/O+DRZSVNCsVTEK2n0iAcJ9RaOs8SkxU29Lj+DgTIUt
+         h55VNvhWwv/iXNB06BL8q3GnU5rgWacC1pamJA6tOPHyGog9wh+y66fANtiSw/p3i548
+         0GX3wn3gBgdUAIY/0HgbGHzvIISAtuYePXflkG8S7dkrvVX/4HAJyiq/nzCOoVMcc9qj
+         4fzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Z7l1siJ5Z2fXTsLPc04ivVbBuS3c9PMnxxuVpF86Xzs=;
+        b=EpTKVIzq+5dbwXz2g8tNtBmRIQ9KBw4890pt5+rhIHojVbnwSu0OIc42VQxovffe3g
+         CoJGvDO10yQduZmWO0b2F5+S7P85+rU9kAigJu8KctYXKFgzMvXqsYPrY/S6hcKgxGmy
+         +d/nZRUrToOAJ9QIHm6JbGpm3sy8RqJZraDlNCqpp/alFRuOTduBxXmWakqwZqiYiLQm
+         S2skP0nJzJUchF4Ecs6r67XAqzoBUSQTGbqI/smfKZHJNfgfG1rWk6J7BNdoZKwoStyY
+         n5rk/M8Z5d4mSyVTHx6cQrWJq4wJyt1rBinFgmdVKC066SYnj2s+ZzhPZqeEtC/zBn27
+         3y6w==
+X-Gm-Message-State: AOAM530zvZ2gwCIMH8oUfD5ctZopZGgiX6pY7e4I7a1EuxpNK1Ur46mM
+        sVHVXeH4BF2XAMRsaqqtSaOOJdUvcl1OLjY/yOoRyQ==
+X-Google-Smtp-Source: ABdhPJxVykdcIn3WVbtHm5IZKYZ2b7ht5iGQlarXHMqHwHtAYcGofKLyCRwTcQILqNllL8yPFcHqRJ/ct594Gx94lpU=
+X-Received: by 2002:a9f:356c:0:b0:359:5bee:d1f8 with SMTP id
+ o99-20020a9f356c000000b003595beed1f8mr2372276uao.60.1650659560491; Fri, 22
+ Apr 2022 13:32:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YmJ1fnc4trEOooZD@alley>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220422195516.10769-1-jvgediya@linux.ibm.com> <20220422195516.10769-4-jvgediya@linux.ibm.com>
+In-Reply-To: <20220422195516.10769-4-jvgediya@linux.ibm.com>
+From:   Wei Xu <weixugc@google.com>
+Date:   Fri, 22 Apr 2022 13:32:29 -0700
+Message-ID: <CAAPL-u8+LUrw-k_WKs2VESvFMzhNOFrG8X=E58Gvfw4FKvny9w@mail.gmail.com>
+Subject: Re: [PATCH v3 3/7] drivers/base/node: Add support to write
+ node_states[] via sysfs
+To:     Jagdish Gediya <jvgediya@linux.ibm.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, baolin.wang@linux.alibaba.com,
+        dave.hansen@linux.intel.com, ying.huang@intel.com,
+        aneesh.kumar@linux.ibm.com, shy828301@gmail.com,
+        gthelen@google.com, dan.j.williams@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2022-04-22 11:39:59, Petr Mladek wrote:
-> On Thu 2022-04-21 23:28:35, John Ogness wrote:
-> > This is v4 of a series to implement a kthread for each registered
-> > console. v3 is here [0]. The kthreads locklessly retrieve the
-> > records from the printk ringbuffer and also do not cause any lock
-> > contention between each other. This allows consoles to run at full
-> > speed. For example, a netconsole is able to dump records much
-> > faster than a serial or vt console. Also, during normal operation,
-> > printk() callers are completely decoupled from console printing.
-> > 
-> > There are situations where kthread printing is not sufficient. For
-> > example, during panic situations, where the kthreads may not get a
-> > chance to schedule. In such cases, the current method of attempting
-> > to print directly within the printk() caller context is used. New
-> > functions printk_prefer_direct_enter() and
-> > printk_prefer_direct_exit() are made available to mark areas of the
-> > kernel where direct printing is preferred. (These should only be
-> > areas that do not occur during normal operation.)
-> > 
-> > This series also introduces pr_flush(): a might_sleep() function
-> > that will block until all active printing threads have caught up
-> > to the latest record at the time of the pr_flush() call. This
-> > function is useful, for example, to wait until pending records
-> > are flushed to consoles before suspending.
-> > 
-> > Note that this series does *not* increase the reliability of console
-> > printing. Rather it focuses on the non-interference aspect of
-> > printk() by decoupling printk() callers from printing (during normal
-> > operation). Nonetheless, the reliability aspect should not worsen
-> > due to this series.
-> 
-> This version looks good enough for linux-next. I do not see any
-> functional problem and it should work as designed. It is time to
-> see how it works in various "real life" work loads.
-> 
-> I am going to push it later today unless anyone (John) complains ;-)
+On Fri, Apr 22, 2022 at 12:55 PM Jagdish Gediya <jvgediya@linux.ibm.com> wrote:
+>
+> Current /sys/devices/system/node/* interface doesn't support
+> to write node_states[], however write support is needed in case
+> users want to set them manually e.g. when user want to override
+> default N_DEMOTION_TARGETS found by the kernel.
+>
+> Rename existing _NODE_ATTR to _NODE_ATTR_RO and introduce new
+> _NODE_ATTR_RW which can be used for node_states[] which can
+> be written from sysfs.
+>
+> It may be necessary to validate written values and take action
+> based on them in a state specific way so a callback 'write' is
+> introduced in 'struct node_attr'.
+>
+> A new function demotion_targets_write() is added to validate
+> the input nodes for N_DEMOTION_TARGETS which should be subset
+> of N_MEMORY and to build new demotion list based on new nodes.
+>
+> Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
 
-I have pushed the patchset into printk/linux.git, branch
-rework/kthreads. Also I merged it into for-next branch.
+Acked-by: Wei Xu <weixugc@google.com>
 
-We are still discussing better solution of the complicated locking
-scheme[0]. The main purpose is to make it easier and more safe to use.
-Anyway, the current code looks safe. Any potential improvements
-should not affect the behavior.
-
-So, it is time to test it in linux-next. Let's see how survives
-hammering of various robots and people testing on linux-next.
-I keep my fingers crossed.
-
-Best Regards,
-Petr
+> ---
+>  drivers/base/node.c | 62 +++++++++++++++++++++++++++++++++++----------
+>  1 file changed, 49 insertions(+), 13 deletions(-)
+>
+> diff --git a/drivers/base/node.c b/drivers/base/node.c
+> index 6eef22e6413e..e03eedbc421b 100644
+> --- a/drivers/base/node.c
+> +++ b/drivers/base/node.c
+> @@ -20,6 +20,7 @@
+>  #include <linux/pm_runtime.h>
+>  #include <linux/swap.h>
+>  #include <linux/slab.h>
+> +#include <linux/migrate.h>
+>
+>  static struct bus_type node_subsys = {
+>         .name = "node",
+> @@ -1013,6 +1014,7 @@ void unregister_one_node(int nid)
+>  struct node_attr {
+>         struct device_attribute attr;
+>         enum node_states state;
+> +       int (*write)(nodemask_t nodes);
+>  };
+>
+>  static ssize_t show_node_state(struct device *dev,
+> @@ -1024,23 +1026,57 @@ static ssize_t show_node_state(struct device *dev,
+>                           nodemask_pr_args(&node_states[na->state]));
+>  }
+>
+> -#define _NODE_ATTR(name, state) \
+> -       { __ATTR(name, 0444, show_node_state, NULL), state }
+> +static ssize_t store_node_state(struct device *s,
+> +                               struct device_attribute *attr,
+> +                               const char *buf, size_t count)
+> +{
+> +       nodemask_t nodes;
+> +       struct node_attr *na = container_of(attr, struct node_attr, attr);
+> +
+> +       if (nodelist_parse(buf, nodes))
+> +               return -EINVAL;
+> +
+> +       if (na->write) {
+> +               if (na->write(nodes))
+> +                       return -EINVAL;
+> +       } else {
+> +               node_states[na->state] = nodes;
+> +       }
+> +
+> +       return count;
+> +}
+> +
+> +static int demotion_targets_write(nodemask_t nodes)
+> +{
+> +       if (nodes_subset(nodes, node_states[N_MEMORY])) {
+> +               node_states[N_DEMOTION_TARGETS] = nodes;
+> +               set_migration_target_nodes();
+> +               return 0;
+> +       }
+> +
+> +       return -EINVAL;
+> +}
+> +
+> +#define _NODE_ATTR_RO(name, state) \
+> +       { __ATTR(name, 0444, show_node_state, NULL), state, NULL }
+> +
+> +#define _NODE_ATTR_RW(name, state, write_fn) \
+> +       { __ATTR(name, 0644, show_node_state, store_node_state), state, write_fn }
+>
+>  static struct node_attr node_state_attr[] = {
+> -       [N_POSSIBLE] = _NODE_ATTR(possible, N_POSSIBLE),
+> -       [N_ONLINE] = _NODE_ATTR(online, N_ONLINE),
+> -       [N_NORMAL_MEMORY] = _NODE_ATTR(has_normal_memory, N_NORMAL_MEMORY),
+> +       [N_POSSIBLE] = _NODE_ATTR_RO(possible, N_POSSIBLE),
+> +       [N_ONLINE] = _NODE_ATTR_RO(online, N_ONLINE),
+> +       [N_NORMAL_MEMORY] = _NODE_ATTR_RO(has_normal_memory, N_NORMAL_MEMORY),
+>  #ifdef CONFIG_HIGHMEM
+> -       [N_HIGH_MEMORY] = _NODE_ATTR(has_high_memory, N_HIGH_MEMORY),
+> +       [N_HIGH_MEMORY] = _NODE_ATTR_RO(has_high_memory, N_HIGH_MEMORY),
+>  #endif
+> -       [N_MEMORY] = _NODE_ATTR(has_memory, N_MEMORY),
+> -       [N_CPU] = _NODE_ATTR(has_cpu, N_CPU),
+> -       [N_GENERIC_INITIATOR] = _NODE_ATTR(has_generic_initiator,
+> -                                          N_GENERIC_INITIATOR),
+> -       [N_DEMOTION_TARGETS] = _NODE_ATTR(demotion_targets,
+> -                                         N_DEMOTION_TARGETS),
+> -
+> +       [N_MEMORY] = _NODE_ATTR_RO(has_memory, N_MEMORY),
+> +       [N_CPU] = _NODE_ATTR_RO(has_cpu, N_CPU),
+> +       [N_GENERIC_INITIATOR] = _NODE_ATTR_RO(has_generic_initiator,
+> +                                             N_GENERIC_INITIATOR),
+> +       [N_DEMOTION_TARGETS] = _NODE_ATTR_RW(demotion_targets,
+> +                                            N_DEMOTION_TARGETS,
+> +                                            demotion_targets_write),
+>  };
+>
+>  static struct attribute *node_state_attrs[] = {
+> --
+> 2.35.1
+>

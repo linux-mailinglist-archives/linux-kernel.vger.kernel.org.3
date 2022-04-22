@@ -2,81 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D2050B153
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 09:25:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B95850B16B
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 09:28:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444753AbiDVH0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 03:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43622 "EHLO
+        id S1444765AbiDVH2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 03:28:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiDVH02 (ORCPT
+        with ESMTP id S1353497AbiDVH2x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 03:26:28 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C16B5006B;
-        Fri, 22 Apr 2022 00:23:35 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id ks6so14671411ejb.1;
-        Fri, 22 Apr 2022 00:23:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2ckmga5iewVe4NEqSvC8/k1bVhDBRyp3WcuyEXAk3hU=;
-        b=PpNKAdIhwwej/a+iKEhoQa1qXge7ez608u/l5uwtwNfnysvKWBQ0cdjbPq5yEZUZ35
-         X2JEdNLn1IR2N4ZiG/C5xbs4tXPiDiuvOr+ve3zLQTb2wEY2xFIPB7LtYLR9axlcE/qG
-         fVfTxYYy9TIvQhyJ9a6bdJfv8oeATIYEI1hM/IJ8as/VUnLJyLXkPzbyFcSYg4GVDoO0
-         vGVY+5hGF5cheJlLxZmIxzGE8NOfkvnEBTUURcHtHji/MkKKzzBlBDl1eulobKi4/WyY
-         uwo2z+eoZbHKJj7GT1jcUF5Vfs99V2rN6bGFrtctRr+B3uwwOlJWVlnn/m5zAqdL3enB
-         zw+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2ckmga5iewVe4NEqSvC8/k1bVhDBRyp3WcuyEXAk3hU=;
-        b=TrF0x3+xualYfObJT1rkkBjGacZoi0VjPZ/p2E9uXxFU7ZLzOpljd/UgbTaPcNmNWd
-         zatuhcPYYmbnkDhu3S19KVI+SR6xOv+ljsKrAMz5h9ifZEaEQk68MLJEyLCk8WQZ40YN
-         ixurK/CBnAvHtdkErPqXlyqaTbLw6ITahY6ptIpAJjKRFzXEeEpB8+T2idI645aF2m5n
-         LvgmbCyApXJHsKdHGuhrmiHHNyy041aTXLyF910epjkxwwdT6we2WttNJdZmr02sHxEC
-         ET5ONUd6mOtmR5Q+JV39l9QTOw5UjEwE2te2fST/M9rgPGqJD/6ZE898EBxWuAJgSlDK
-         pzUg==
-X-Gm-Message-State: AOAM532gBC2qAH4ffjVRGfKv91PNmTIFGonnzq6bJmOhH2UACgM48QVM
-        fm9m7NZK2Zry5ma8p/u9o4izzbHGsuWo1Q==
-X-Google-Smtp-Source: ABdhPJxCLeGVVvH9tOb+su2mvPLIvuhRdpdzqU+hDcPh49P2pGyZuANbhEWfISlSKuhxVTeSeruyVQ==
-X-Received: by 2002:a17:906:d14e:b0:6ef:b5ab:48e1 with SMTP id br14-20020a170906d14e00b006efb5ab48e1mr2988104ejb.11.1650612213358;
-        Fri, 22 Apr 2022 00:23:33 -0700 (PDT)
-Received: from fedora ([95.180.24.23])
-        by smtp.gmail.com with ESMTPSA id jw12-20020a17090776ac00b006e87137194esm463569ejc.150.2022.04.22.00.23.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 00:23:32 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 09:23:30 +0200
-From:   Aleksa Savic <savicaleksa83@gmail.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add support for
- Aquacomputer Farbwerk
-Message-ID: <YmJX8vNlpd6wQDkg@fedora>
-References: <20220421072743.5058-1-savicaleksa83@gmail.com>
+        Fri, 22 Apr 2022 03:28:53 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1705A50454
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 00:25:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1650612360; x=1682148360;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/YpfyL2u+t1gtrxzfg5VIROIwt7BOm7moe9tHDT1Pfo=;
+  b=dlgeP7ebRifM76GOmUCDxIX9ZNz9udgBZfSc1rkT3/d02Jm0E5dSr0ex
+   ytWKbQdX9XUl8bqr1sESVir0hghNu3enrj8ItKYKcIbCU/VoLXf4XSw0Q
+   sHwLquPraJSY/cG2qOuduZsXtYfWeMQHvPKj9vw/TsFfXOZsUFcbkTLev
+   3gJwSywSI3bbjwLrrupip5qPv6PukQqxWDVCsVN+FN2s2la+rYTyI85Ay
+   j0A6BLUnYvQE6oPqr7f5eOP1QRHEiKPy4PSWvTwg8Zb4hkWA+Q0V2voSV
+   YBfZt5QACpXR5DSa94IMe2gK87ZGu8dxiJRwlGwRcnpxOdGlFCkmWs40z
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,281,1643698800"; 
+   d="scan'208";a="153462789"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Apr 2022 00:25:59 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 22 Apr 2022 00:25:57 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Fri, 22 Apr 2022 00:25:55 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <daire.mcnamara@microchip.com>, <lewis.hanly@microchip.com>,
+        <cyril.jean@microchip.com>,
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v3 0/4] polarfire soc kconfig/maintainers updates
+Date:   Fri, 22 Apr 2022 08:25:29 +0100
+Message-ID: <20220422072533.2582084-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.35.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220421072743.5058-1-savicaleksa83@gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hey Palmer,
 
-Just noticed that this patch is missing the "select CRC16" addition
-present in hwmon-next. I apologize for that, will fix in v2.
+As discussed, Kconfig.socs updated with the recently upstreamed drivers.
+I took the liberty of also adding them to the maintainers entry.
+The hwrng isnt in your tree, but was accepted today.
+As you suggested, I added the vitesse phy driver in the kconfig.socs
+entry - lmk if you don't like what I did with the comment.
+
+In v2 I have replaced Lewis as a maintainer with Daire, since he is the
+original author of the clock and pci drivers & a co-author on a bunch of
+other (upcoming) drivers.
+
+v3 makes the vitesse depend on phylib to avoid the lkp reported build
+errors
 
 Thanks,
-Aleksa
+
+Conor Dooley (4):
+  riscv: select peripheral drivers for polarfire soc
+  riscv: config: enable the mailbox framework
+  riscv: select vitesse phy driver for polarfire soc
+  MAINTAINERS: add polarfire rng, pci and clock drivers
+
+ MAINTAINERS                  | 5 ++++-
+ arch/riscv/Kconfig.socs      | 5 +++++
+ arch/riscv/configs/defconfig | 1 +
+ 3 files changed, 10 insertions(+), 1 deletion(-)
+
+-- 
+2.35.2
+

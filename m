@@ -2,108 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 897F450B452
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:46:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7469250B466
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:49:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446296AbiDVJsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 05:48:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60654 "EHLO
+        id S1446027AbiDVJvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 05:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446231AbiDVJs2 (ORCPT
+        with ESMTP id S1387288AbiDVJvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 05:48:28 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B5BADFF0
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 02:45:35 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kl8fN2BN9z4xXS;
-        Fri, 22 Apr 2022 19:45:32 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1650620734;
-        bh=Al83ymN/ho4hwVOypF35AMxE9htb4+ARNDtj3dzBOic=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=n1kiepiJd8a8t0vH2NyNoWar0AsBDtzB1cl/Fh45VwFPT5MK8tw1UTcLX17q8WY8x
-         /7xNsb+93FcFBaFP2NiF6MDx8CcmozeREaY6MkKhoGHeZ6WSWzPS6pQLEicFyeOsx9
-         zPDp4YE8G3p/q9e27K8R6pmEr5wXLas6eOraWwbg3X4rxYwsOE+1tm9/OZf5rixtcj
-         3uGlTfzdlC3h1U3DKijnn+wq7uPxly76L8ow24pMuA4Fo1F2wRwKCg5b01JuxaptnE
-         mh318QXvG2BkqiDkZ7wQbm/SqWlTmabZNHKvcn/GTzHYoN9JSHonn/T3uphH5DhXvq
-         Ed1+/nokNrBog==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Tong Tiangen <tongtiangen@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>
-Cc:     linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Xie XiuQi <xiexiuqi@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>,
-        Tong Tiangen <tongtiangen@huawei.com>
-Subject: Re: [PATCH -next v4 1/7] x86, powerpc: fix function define in
- copy_mc_to_user
-In-Reply-To: <20220420030418.3189040-2-tongtiangen@huawei.com>
-References: <20220420030418.3189040-1-tongtiangen@huawei.com>
- <20220420030418.3189040-2-tongtiangen@huawei.com>
-Date:   Fri, 22 Apr 2022 19:45:31 +1000
-Message-ID: <87r15p8n9g.fsf@mpe.ellerman.id.au>
-MIME-Version: 1.0
-Content-Type: text/plain
+        Fri, 22 Apr 2022 05:51:11 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6B6101DC;
+        Fri, 22 Apr 2022 02:48:18 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id c12so9710694plr.6;
+        Fri, 22 Apr 2022 02:48:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=UgfEhZ8+0guBOJEB+LTVzDck5+orSXs7YLCmPKl/+a8=;
+        b=MR2tzT3jkl8yDrm9X9xI11YMz7iWT4zt50glV/lxhyzah3WfjSHGC5ke9zLIxJ+qFh
+         0IrbrndYo+hMgjE9wLqnkA19AjUavzncOZrLZ1MDYUFYr/u8f5k0TltsihjLQy5/FvOH
+         USatLJhB+v1VPeTyG8FA8yI/YkhzGcwQ/eeZ9w3K4VSs0GUU/j11IV4+N3aK68ghCqih
+         Cbrki7S95gAJcTDGY77CXw80U/wwiZXjQHSOCDij4ESZNyVYVrELaeAOuNr5qO1wWrO9
+         53cPHcwwiL+aBu0pqWnO+US9pjJSmBdszFFH2gCeHvSba6u3QJKZ/UAs0ZPinayBMnfn
+         DArw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=UgfEhZ8+0guBOJEB+LTVzDck5+orSXs7YLCmPKl/+a8=;
+        b=NHSldvw94UlK9auvjMX/duYrwy2USx1LSLBHbNR0tiNihRI2WDG6vNRaQ7z1BleL2L
+         gx6yFiHGBB1nM9W8kbBNH5xrQL4UMMLY4WsBkXaV5zUsdzHAbx8LPqQPprb/RMWyq2aM
+         6QgIIrEsJZQVOxg3n3m3ADGBGn9mBb2+Ynx6VRiNhouXtinbI0wFJ+wqdCYDIDrkzZM2
+         +eCQMBMIW5IMdUWzwwyamZPOCrDRokS5coYU+HIqK1kNBaFP4zuyVxr3Z9HtMvK4wuM7
+         mlcpSOBaELPpiJT5t0EvopmFWje0cRZbY/wmQzszDW/0KGPxLHv1EK+G9783+zAuNsqE
+         UiKQ==
+X-Gm-Message-State: AOAM533NApGYjlJh2kKWR2EKaADYpAsaNY6T0ZS/k5sfn9uwqTXnMDtJ
+        wfeTVZ2FT9jZDpBCl/f8eRwFCPns7fc=
+X-Google-Smtp-Source: ABdhPJwCDbYkZRgiIKnvoI0V+j2m8JLvkWAhPEkF5WV6KqGvx6NqAcj6S5MMCqEuDyoA3sQ+Yf2OUg==
+X-Received: by 2002:a17:90b:1d0e:b0:1c9:b74e:494 with SMTP id on14-20020a17090b1d0e00b001c9b74e0494mr4362366pjb.238.1650620898216;
+        Fri, 22 Apr 2022 02:48:18 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.119])
+        by smtp.googlemail.com with ESMTPSA id 80-20020a630453000000b003aa6779ff5asm1702172pge.16.2022.04.22.02.48.15
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 22 Apr 2022 02:48:17 -0700 (PDT)
+From:   Wanpeng Li <kernellwp@gmail.com>
+X-Google-Original-From: Wanpeng Li <wanpengli@tencent.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>
+Subject: [PATCH] x86/kvm: handle the failure of __pv_cpu_mask allocation
+Date:   Fri, 22 Apr 2022 02:47:26 -0700
+Message-Id: <1650620846-12092-1-git-send-email-wanpengli@tencent.com>
+X-Mailer: git-send-email 2.7.4
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tong Tiangen <tongtiangen@huawei.com> writes:
-> x86/powerpc has it's implementation of copy_mc_to_user but not use #define
-> to declare.
->
-> This may cause problems, for example, if other architectures open
-> CONFIG_ARCH_HAS_COPY_MC, but want to use copy_mc_to_user() outside the
-> architecture, the code add to include/linux/uaddess.h is as follows:
->
->     #ifndef copy_mc_to_user
->     static inline unsigned long __must_check
->     copy_mc_to_user(void *dst, const void *src, size_t cnt)
->     {
-> 	    ...
->     }
->     #endif
-     
-The above doesn't exist yet, you add it in patch 3, which is a little
-confusing for a reader of this commit in isolation.
+From: Wanpeng Li <wanpengli@tencent.com>
 
-I think you could safely move that into this patch, and then this patch
-would be ~= "Add generic fallback version of copy_mc_to_user()".
+Fallback to native ipis/tlb flush if fails to allocate __pv_cpu_mask.
 
-It's probably not worth doing a whole new version of the series just for
-that, but if you need to do a new version for some other reason I think
-it would be cleaner to introduce the fallback in this commit.
+Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
+---
+ arch/x86/kernel/kvm.c | 26 ++++++++++++++++++++++++--
+ 1 file changed, 24 insertions(+), 2 deletions(-)
 
-> Then this definition will conflict with the implementation of x86/powerpc
-> and cause compilation errors as follow:
->
-> Fixes: ec6347bb4339 ("x86, powerpc: Rename memcpy_mcsafe() to copy_mc_to_{user, kernel}()")
-> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
-> ---
->  arch/powerpc/include/asm/uaccess.h | 1 +
+diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
+index a22deb58f86d..29d79d760996 100644
+--- a/arch/x86/kernel/kvm.c
++++ b/arch/x86/kernel/kvm.c
+@@ -46,6 +46,7 @@
+ 
+ DEFINE_STATIC_KEY_FALSE(kvm_async_pf_enabled);
+ 
++static struct apic orig_apic;
+ static int kvmapf = 1;
+ 
+ static int __init parse_no_kvmapf(char *arg)
+@@ -542,6 +543,11 @@ static void __send_ipi_mask(const struct cpumask *mask, int vector)
+ 
+ static void kvm_send_ipi_mask(const struct cpumask *mask, int vector)
+ {
++	if (unlikely(!this_cpu_cpumask_var_ptr(__pv_cpu_mask))) {
++		orig_apic.send_IPI_mask(mask, vector);
++		return;
++	}
++
+ 	__send_ipi_mask(mask, vector);
+ }
+ 
+@@ -551,6 +557,11 @@ static void kvm_send_ipi_mask_allbutself(const struct cpumask *mask, int vector)
+ 	struct cpumask *new_mask = this_cpu_cpumask_var_ptr(__pv_cpu_mask);
+ 	const struct cpumask *local_mask;
+ 
++	if (unlikely(!new_mask)) {
++		orig_apic.send_IPI_mask_allbutself(mask, vector);
++		return;
++	}
++
+ 	cpumask_copy(new_mask, mask);
+ 	cpumask_clear_cpu(this_cpu, new_mask);
+ 	local_mask = new_mask;
+@@ -611,6 +622,7 @@ late_initcall(setup_efi_kvm_sev_migration);
+  */
+ static void kvm_setup_pv_ipi(void)
+ {
++	orig_apic = *apic;
+ 	apic->send_IPI_mask = kvm_send_ipi_mask;
+ 	apic->send_IPI_mask_allbutself = kvm_send_ipi_mask_allbutself;
+ 	pr_info("setup PV IPIs\n");
+@@ -639,6 +651,11 @@ static void kvm_flush_tlb_multi(const struct cpumask *cpumask,
+ 	struct kvm_steal_time *src;
+ 	struct cpumask *flushmask = this_cpu_cpumask_var_ptr(__pv_cpu_mask);
+ 
++	if (unlikely(!flushmask)) {
++		native_flush_tlb_multi(cpumask, info);
++		return;
++	}
++
+ 	cpumask_copy(flushmask, cpumask);
+ 	/*
+ 	 * We have to call flush only on online vCPUs. And
+@@ -671,11 +688,16 @@ static __init int kvm_alloc_cpumask(void)
+ 
+ 	if (pv_tlb_flush_supported() || pv_ipi_supported())
+ 		for_each_possible_cpu(cpu) {
+-			zalloc_cpumask_var_node(per_cpu_ptr(&__pv_cpu_mask, cpu),
+-				GFP_KERNEL, cpu_to_node(cpu));
++			if (!zalloc_cpumask_var_node(&per_cpu(__pv_cpu_mask, cpu),
++				GFP_KERNEL, cpu_to_node(cpu)))
++				goto err_out;
+ 		}
+ 
+ 	return 0;
++err_out:
++	for_each_possible_cpu(cpu)
++		free_cpumask_var(per_cpu(__pv_cpu_mask, cpu));
++	return -ENOMEM;
+ }
+ arch_initcall(kvm_alloc_cpumask);
+ 
+-- 
+2.25.1
 
-Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
-
-cheers

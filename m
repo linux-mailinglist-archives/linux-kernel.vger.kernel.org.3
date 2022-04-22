@@ -2,115 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF26650C11A
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 23:36:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E240B50C120
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 23:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbiDVVhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 17:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36318 "EHLO
+        id S230027AbiDVVi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 17:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbiDVVhk (ORCPT
+        with ESMTP id S230118AbiDVViO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 17:37:40 -0400
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FDF6400EDA
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:38:40 -0700 (PDT)
-Received: by mail-oi1-f169.google.com with SMTP id r85so10313081oie.7
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:38:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2FeuhW6y4os5v9CoDi1x5cL69WTrNP7orQRjD5u2f2Q=;
-        b=SWA5JCifyGGgXC8kg9oqcVEfzGpcJyubvgXISY/tkiQ4LkAnBvdJQ4x+SDJdCcN5r5
-         l/D5Xwmleml/wGOTyuQey0sip6/0Tgoq+rQ7CHZro/fqIgNVa0LsvarIkgGhhvY5j1sF
-         LMm1oOI3X0eDdolQ9LpFcFBcvkgDAo4IEFQp7an7GZ4F5A6E9vw8lZlu+PJZ8/F/XeaE
-         2XrN/+haQevXPxaL9uHcm3fCWmwsIiDq4XpsMffkJ/1dAHzee/+nBWc5FxrRuv2Yv75v
-         ot9Gi+ioqe4rUavjZ2Ml02hMsz+UFQFITKvVGI/dulXXz+ZeW0uqaldMetwuQxNGpPe6
-         t/zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2FeuhW6y4os5v9CoDi1x5cL69WTrNP7orQRjD5u2f2Q=;
-        b=4MlbXWArR+Cz5opcS7HSSeCoGSQj45gUh9z4EzJW5/GXYFRuDmhtJfbZ402RTEc05t
-         i0b6351yxsOWMwyxD5wkySPv9CfaRgMXOOoctl7RUdLnQmUgYw/xhT3jDpJKSsrghD/H
-         5w+UBBT8UyvuCMFUelxWKA4W92W8yH1nFYsGR/Rxu4g5TeUA679jqJGNEjARqOd5iycp
-         5uHBn7KcQU+XBQ8GvZc8qdE1sYMRcVXd2gDIk+2Ws42GXzF4ZNGYH4LuUWSyUBr80gyu
-         lzV2Ovm+ORFWNdw6VozdZrX+TXy9uBH+rl+CzpZBYv//BsdzlZaAwheHwzGLiO1ekxJ5
-         RyyQ==
-X-Gm-Message-State: AOAM531LqcwCdunnjzn1vPzpPhBhFfIFupUIL0mBd0l8F8glU6+Ih2x0
-        2kONGQVbLKO9hZMCVS4y/ZTsRWRApapG5NaDL7cgve41SRg=
-X-Google-Smtp-Source: ABdhPJxCip4JkFs0bch4l1aLRcJlX/rZIBmOxuo46xJlHa8tYFRtgabnDRNRUlP/nwaE4268Bz4NxqEBLVaSJWXdjEQ=
-X-Received: by 2002:a17:90b:1d84:b0:1d0:6472:e0a3 with SMTP id
- pf4-20020a17090b1d8400b001d06472e0a3mr18058060pjb.207.1650658963307; Fri, 22
- Apr 2022 13:22:43 -0700 (PDT)
+        Fri, 22 Apr 2022 17:38:14 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C53FC2A60A1;
+        Fri, 22 Apr 2022 13:39:32 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 3F260215FF;
+        Fri, 22 Apr 2022 20:29:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1650659358; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DQC9EwCc1d1zwv7C55oUEIwJvP8u2qczlBIORadICHM=;
+        b=uYZv5hZrfXo2ih3eM61buBuIvSz6QOFFhD/teRRlFeYlIRGxdGRHYkRzeigC3ZoAYLJZy4
+        /xmA7IHpb9B0Z1fe2WOV2rI+8UjeTH2Ln4ZmlEcqiGNj5T7KgozDqEWusyu+VZwunc6EEX
+        6bVDIOlkieaPn/YgYHdJh5iL0s+JxrE=
+Received: from suse.cz (unknown [10.163.16.6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id D85F42C145;
+        Fri, 22 Apr 2022 20:29:16 +0000 (UTC)
+Date:   Fri, 22 Apr 2022 22:29:16 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Marco Elver <elver@google.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Alexander Potapenko <glider@google.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Kees Cook <keescook@chromium.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Xiaoming Ni <nixiaoming@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Corey Minyard <cminyard@mvista.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Wang Qing <wangqing@vivo.com>, rcu@vger.kernel.org
+Subject: Re: [PATCH printk v4 00/15] implement threaded console printing
+Message-ID: <YmMQHMaS0KwyN5hX@alley>
+References: <20220421212250.565456-1-john.ogness@linutronix.de>
+ <YmJ1fnc4trEOooZD@alley>
 MIME-Version: 1.0
-References: <46c1c59e-1368-620d-e57a-f35c2c82084d@linux.dev>
- <55605876-d05a-8be3-a6ae-ec26de9ee178@openvz.org> <CALvZod47PARcupR4P41p5XJRfCaTqSuy-cfXs7Ky9=-aJQuoFA@mail.gmail.com>
- <964ae72a-0484-67de-8143-a9a2d492a520@openvz.org> <e9cd84f2-d2e9-33a8-d74e-edcf60d35236@openvz.org>
-In-Reply-To: <e9cd84f2-d2e9-33a8-d74e-edcf60d35236@openvz.org>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Fri, 22 Apr 2022 13:22:32 -0700
-Message-ID: <CALvZod7ys1SNrQhbweCoCKVyfN1itE16jhC97TqjWtHDFh1RpQ@mail.gmail.com>
-Subject: Re: [PATCH memcg RFC] net: set proper memcg for net_init hooks allocations
-To:     Vasily Averin <vvs@openvz.org>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>, kernel@openvz.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmJ1fnc4trEOooZD@alley>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 1:09 PM Vasily Averin <vvs@openvz.org> wrote:
->
-> On 4/22/22 23:01, Vasily Averin wrote:
-> > On 4/21/22 18:56, Shakeel Butt wrote:
-> >> On Sat, Apr 16, 2022 at 11:39 PM Vasily Averin <vvs@openvz.org> wrote:
-> >>> @@ -1147,7 +1148,13 @@ static int __register_pernet_operations(struct list_head *list,
-> >>>                  * setup_net() and cleanup_net() are not possible.
-> >>>                  */
-> >>>                 for_each_net(net) {
-> >>> +                       struct mem_cgroup *old, *memcg = NULL;
-> >>> +#ifdef CONFIG_MEMCG
-> >>> +                       memcg = (net == &init_net) ? root_mem_cgroup : mem_cgroup_from_obj(net);
-> >>
-> >> memcg from obj is unstable, so you need a reference on memcg. You can
-> >> introduce get_mem_cgroup_from_kmem() which works for both
-> >> MEMCG_DATA_OBJCGS and MEMCG_DATA_KMEM. For uncharged objects (like
-> >> init_net) it should return NULL.
-> >
-> > Could you please elaborate with more details?
-> > It seems to me mem_cgroup_from_obj() does everything exactly as you say:
-> > - for slab objects it returns memcg taken from according slab->memcg_data
-> > - for ex-slab objects (i.e. page->memcg_data & MEMCG_DATA_OBJCGS)
-> >     page_memcg_check() returns NULL
-> > - for kmem objects (i.e. page->memcg_data & MEMCG_DATA_KMEM)
-> >     page_memcg_check() returns objcg->memcg
-> > - in another cases
-> >     page_memcg_check() returns page->memcg_data,
-> >     so for uncharged objects like init_net NULL should be returned.
-> >
-> > I can introduce exported get_mem_cgroup_from_kmem(), however it should only
-> > call mem_cgroup_from_obj(), perhaps under read_rcu_lock/unlock.
->
-> I think I finally got your point:
-> Do you mean I should use css_tryget(&memcg->css) for found memcg,
-> like get_mem_cgroup_from_mm() does?
+On Fri 2022-04-22 11:39:59, Petr Mladek wrote:
+> On Thu 2022-04-21 23:28:35, John Ogness wrote:
+> > This is v4 of a series to implement a kthread for each registered
+> > console. v3 is here [0]. The kthreads locklessly retrieve the
+> > records from the printk ringbuffer and also do not cause any lock
+> > contention between each other. This allows consoles to run at full
+> > speed. For example, a netconsole is able to dump records much
+> > faster than a serial or vt console. Also, during normal operation,
+> > printk() callers are completely decoupled from console printing.
+> > 
+> > There are situations where kthread printing is not sufficient. For
+> > example, during panic situations, where the kthreads may not get a
+> > chance to schedule. In such cases, the current method of attempting
+> > to print directly within the printk() caller context is used. New
+> > functions printk_prefer_direct_enter() and
+> > printk_prefer_direct_exit() are made available to mark areas of the
+> > kernel where direct printing is preferred. (These should only be
+> > areas that do not occur during normal operation.)
+> > 
+> > This series also introduces pr_flush(): a might_sleep() function
+> > that will block until all active printing threads have caught up
+> > to the latest record at the time of the pr_flush() call. This
+> > function is useful, for example, to wait until pending records
+> > are flushed to consoles before suspending.
+> > 
+> > Note that this series does *not* increase the reliability of console
+> > printing. Rather it focuses on the non-interference aspect of
+> > printk() by decoupling printk() callers from printing (during normal
+> > operation). Nonetheless, the reliability aspect should not worsen
+> > due to this series.
+> 
+> This version looks good enough for linux-next. I do not see any
+> functional problem and it should work as designed. It is time to
+> see how it works in various "real life" work loads.
+> 
+> I am going to push it later today unless anyone (John) complains ;-)
 
-Yes.
+I have pushed the patchset into printk/linux.git, branch
+rework/kthreads. Also I merged it into for-next branch.
+
+We are still discussing better solution of the complicated locking
+scheme[0]. The main purpose is to make it easier and more safe to use.
+Anyway, the current code looks safe. Any potential improvements
+should not affect the behavior.
+
+So, it is time to test it in linux-next. Let's see how survives
+hammering of various robots and people testing on linux-next.
+I keep my fingers crossed.
+
+Best Regards,
+Petr

@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F44650B7B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 14:56:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A25750B7AB
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 14:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233805AbiDVM54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 08:57:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33404 "EHLO
+        id S233837AbiDVM5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 08:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233826AbiDVM4z (ORCPT
+        with ESMTP id S234030AbiDVM5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 08:56:55 -0400
-Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [207.211.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1386527F5
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 05:54:02 -0700 (PDT)
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        Fri, 22 Apr 2022 08:57:02 -0400
+Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C41B2527F5
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 05:54:07 -0700 (PDT)
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-369-Yr3lvMn-Mpec8zFWnc3kCg-1; Fri, 22 Apr 2022 08:53:58 -0400
-X-MC-Unique: Yr3lvMn-Mpec8zFWnc3kCg-1
+ us-mta-654-2bZdEIVWPhG6siyfIglrFQ-1; Fri, 22 Apr 2022 08:54:00 -0400
+X-MC-Unique: 2bZdEIVWPhG6siyfIglrFQ-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 12A603C1E8FA;
-        Fri, 22 Apr 2022 12:53:57 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DE24F185A7B2;
+        Fri, 22 Apr 2022 12:53:59 +0000 (UTC)
 Received: from comp-core-i7-2640m-0182e6.redhat.com (unknown [10.36.110.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 57964C44CCF;
-        Fri, 22 Apr 2022 12:53:54 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 571E0C44AE4;
+        Fri, 22 Apr 2022 12:53:57 +0000 (UTC)
 From:   Alexey Gladkov <legion@kernel.org>
 To:     LKML <linux-kernel@vger.kernel.org>,
         "Eric W . Biederman" <ebiederm@xmission.com>,
@@ -43,9 +43,9 @@ Cc:     Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
         Serge Hallyn <serge@hallyn.com>,
         Varad Gautam <varad.gautam@suse.com>,
         Vasily Averin <vvs@virtuozzo.com>
-Subject: [PATCH v1 3/4] ipc: Check permissions for checkpoint_restart sysctls at open time
-Date:   Fri, 22 Apr 2022 14:53:39 +0200
-Message-Id: <8b415b6b297d1143106bbcf57a269eb744bfdf81.1650631347.git.legion@kernel.org>
+Subject: [PATCH v1 4/4] ipc: Remove extra braces
+Date:   Fri, 22 Apr 2022 14:53:40 +0200
+Message-Id: <8f645e997ff805dcb410cfdd09df9e475c6c845e.1650631347.git.legion@kernel.org>
 In-Reply-To: <cover.1650631347.git.legion@kernel.org>
 References: <CAHk-=wgBB8iPd0W=MQWnQJukMAPAqgsC0QX2wwiSvcct9zu_RA@mail.gmail.com> <cover.1650631347.git.legion@kernel.org>
 MIME-Version: 1.0
@@ -60,110 +60,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As Eric Biederman pointed out, it is possible not to use a custom
-proc_handler and check permissions for every write, but to use a
-.permission handler. That will allow the checkpoint_restart sysctls to
-perform all of their permission checks at open time, and not need any
-other special code.
+Fix coding style. In the previous commit, I added braces because,
+in addition to changing .data, .extra1 also changed. Now this is not
+needed.
 
-Link: https://lore.kernel.org/lkml/87czib9g38.fsf@email.froward.int.ebiederm.org/
-Signed-off-by: Eric W. Biederman <ebiederm@xmission.com>
 Signed-off-by: Alexey Gladkov <legion@kernel.org>
 ---
- ipc/ipc_sysctl.c | 54 ++++++++++++++++++++++++++----------------------
- 1 file changed, 29 insertions(+), 25 deletions(-)
+ ipc/ipc_sysctl.c | 25 ++++++++++++-------------
+ 1 file changed, 12 insertions(+), 13 deletions(-)
 
 diff --git a/ipc/ipc_sysctl.c b/ipc/ipc_sysctl.c
-index ff99d0305a5b..5a58598d48c8 100644
+index 5a58598d48c8..ef313ecfb53a 100644
 --- a/ipc/ipc_sysctl.c
 +++ b/ipc/ipc_sysctl.c
-@@ -68,25 +68,6 @@ static int proc_ipc_sem_dointvec(struct ctl_table *table, int write,
- 	return ret;
- }
+@@ -222,42 +222,41 @@ bool setup_ipc_sysctls(struct ipc_namespace *ns)
+ 		int i;
  
--#ifdef CONFIG_CHECKPOINT_RESTORE
--static int proc_ipc_dointvec_minmax_checkpoint_restore(struct ctl_table *table,
--		int write, void *buffer, size_t *lenp, loff_t *ppos)
--{
--	struct ipc_namespace *ns = current->nsproxy->ipc_ns;
--	struct ctl_table ipc_table;
--
--	if (write && !checkpoint_restore_ns_capable(ns->user_ns))
--		return -EPERM;
--
--	memcpy(&ipc_table, table, sizeof(ipc_table));
--
--	ipc_table.extra1 = SYSCTL_ZERO;
--	ipc_table.extra2 = SYSCTL_INT_MAX;
--
--	return proc_dointvec_minmax(&ipc_table, write, buffer, lenp, ppos);
--}
--#endif
--
- int ipc_mni = IPCMNI;
- int ipc_mni_shift = IPCMNI_SHIFT;
- int ipc_min_cycle = RADIX_TREE_MAP_SIZE;
-@@ -172,22 +153,28 @@ static struct ctl_table ipc_sysctls[] = {
- 		.procname	= "sem_next_id",
- 		.data		= &init_ipc_ns.ids[IPC_SEM_IDS].next_id,
- 		.maxlen		= sizeof(init_ipc_ns.ids[IPC_SEM_IDS].next_id),
--		.mode		= 0666,
--		.proc_handler	= proc_ipc_dointvec_minmax_checkpoint_restore,
-+		.mode		= 0444,
-+		.proc_handler	= proc_dointvec_minmax,
-+		.extra1		= SYSCTL_ZERO,
-+		.extra2		= SYSCTL_INT_MAX,
- 	},
- 	{
- 		.procname	= "msg_next_id",
- 		.data		= &init_ipc_ns.ids[IPC_MSG_IDS].next_id,
- 		.maxlen		= sizeof(init_ipc_ns.ids[IPC_MSG_IDS].next_id),
--		.mode		= 0666,
--		.proc_handler	= proc_ipc_dointvec_minmax_checkpoint_restore,
-+		.mode		= 0444,
-+		.proc_handler	= proc_dointvec_minmax,
-+		.extra1		= SYSCTL_ZERO,
-+		.extra2		= SYSCTL_INT_MAX,
- 	},
- 	{
- 		.procname	= "shm_next_id",
- 		.data		= &init_ipc_ns.ids[IPC_SHM_IDS].next_id,
- 		.maxlen		= sizeof(init_ipc_ns.ids[IPC_SHM_IDS].next_id),
--		.mode		= 0666,
--		.proc_handler	= proc_ipc_dointvec_minmax_checkpoint_restore,
-+		.mode		= 0444,
-+		.proc_handler	= proc_dointvec_minmax,
-+		.extra1		= SYSCTL_ZERO,
-+		.extra2		= SYSCTL_INT_MAX,
- 	},
+ 		for (i = 0; i < ARRAY_SIZE(ipc_sysctls); i++) {
+-			if (tbl[i].data == &init_ipc_ns.shm_ctlmax) {
++			if (tbl[i].data == &init_ipc_ns.shm_ctlmax)
+ 				tbl[i].data = &ns->shm_ctlmax;
+ 
+-			} else if (tbl[i].data == &init_ipc_ns.shm_ctlall) {
++			else if (tbl[i].data == &init_ipc_ns.shm_ctlall)
+ 				tbl[i].data = &ns->shm_ctlall;
+ 
+-			} else if (tbl[i].data == &init_ipc_ns.shm_ctlmni) {
++			else if (tbl[i].data == &init_ipc_ns.shm_ctlmni)
+ 				tbl[i].data = &ns->shm_ctlmni;
+ 
+-			} else if (tbl[i].data == &init_ipc_ns.shm_rmid_forced) {
++			else if (tbl[i].data == &init_ipc_ns.shm_rmid_forced)
+ 				tbl[i].data = &ns->shm_rmid_forced;
+ 
+-			} else if (tbl[i].data == &init_ipc_ns.msg_ctlmax) {
++			else if (tbl[i].data == &init_ipc_ns.msg_ctlmax)
+ 				tbl[i].data = &ns->msg_ctlmax;
+ 
+-			} else if (tbl[i].data == &init_ipc_ns.msg_ctlmni) {
++			else if (tbl[i].data == &init_ipc_ns.msg_ctlmni)
+ 				tbl[i].data = &ns->msg_ctlmni;
+ 
+-			} else if (tbl[i].data == &init_ipc_ns.msg_ctlmnb) {
++			else if (tbl[i].data == &init_ipc_ns.msg_ctlmnb)
+ 				tbl[i].data = &ns->msg_ctlmnb;
+ 
+-			} else if (tbl[i].data == &init_ipc_ns.sem_ctls) {
++			else if (tbl[i].data == &init_ipc_ns.sem_ctls)
+ 				tbl[i].data = &ns->sem_ctls;
+ #ifdef CONFIG_CHECKPOINT_RESTORE
+-			} else if (tbl[i].data == &init_ipc_ns.ids[IPC_SEM_IDS].next_id) {
++			else if (tbl[i].data == &init_ipc_ns.ids[IPC_SEM_IDS].next_id)
+ 				tbl[i].data = &ns->ids[IPC_SEM_IDS].next_id;
+ 
+-			} else if (tbl[i].data == &init_ipc_ns.ids[IPC_MSG_IDS].next_id) {
++			else if (tbl[i].data == &init_ipc_ns.ids[IPC_MSG_IDS].next_id)
+ 				tbl[i].data = &ns->ids[IPC_MSG_IDS].next_id;
+ 
+-			} else if (tbl[i].data == &init_ipc_ns.ids[IPC_SHM_IDS].next_id) {
++			else if (tbl[i].data == &init_ipc_ns.ids[IPC_SHM_IDS].next_id)
+ 				tbl[i].data = &ns->ids[IPC_SHM_IDS].next_id;
  #endif
- 	{}
-@@ -203,8 +190,25 @@ static int set_is_seen(struct ctl_table_set *set)
- 	return &current->nsproxy->ipc_ns->ipc_set == set;
- }
+-			} else {
++			else
+ 				tbl[i].data = NULL;
+-			}
+ 		}
  
-+static int ipc_permissions(struct ctl_table_header *head, struct ctl_table *table)
-+{
-+	int mode = table->mode;
-+
-+#ifdef CONFIG_CHECKPOINT_RESTORE
-+	struct ipc_namespace *ns = current->nsproxy->ipc_ns;
-+
-+	if (((table->data == &ns->ids[IPC_SEM_IDS].next_id) ||
-+	     (table->data == &ns->ids[IPC_MSG_IDS].next_id) ||
-+	     (table->data == &ns->ids[IPC_SHM_IDS].next_id)) &&
-+	    checkpoint_restore_ns_capable(ns->user_ns))
-+		mode = 0666;
-+#endif
-+	return mode;
-+}
-+
- static struct ctl_table_root set_root = {
- 	.lookup = set_lookup,
-+	.permissions = ipc_permissions,
- };
- 
- bool setup_ipc_sysctls(struct ipc_namespace *ns)
+ 		ns->ipc_sysctls = __register_sysctl_table(&ns->ipc_set, "kernel", tbl);
 -- 
 2.33.2
 

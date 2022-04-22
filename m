@@ -2,92 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94C3350BDCF
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 19:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5DD50BDD4
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 19:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354991AbiDVREf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 13:04:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52416 "EHLO
+        id S245718AbiDVRGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 13:06:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230289AbiDVREd (ORCPT
+        with ESMTP id S241661AbiDVRF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 13:04:33 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E50C56A41E;
-        Fri, 22 Apr 2022 10:01:38 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id bv19so17559919ejb.6;
-        Fri, 22 Apr 2022 10:01:38 -0700 (PDT)
+        Fri, 22 Apr 2022 13:05:58 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040636E4FD
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 10:03:03 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id h12so8481187plf.12
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 10:03:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=dRt/jR85kRicxEUhK1JqoJCyTsq8d1Ddz7419Ukqr3g=;
-        b=MwjYZ7qV/qk74QwHLrDpFyYe7qW1bVrrhttKMwYATQVrLQa0vp7MNTURL/BJxQf+H1
-         a+ZQ8epUaHzJ7LMDbVecNqQGtdb83QTweuKSDqVY3vfKjEyhvOiMSUTK4EPtW5xdxExQ
-         ZsuzWEx5CaPEsTcllmRkeaXG/4YdOOG3OkJ7YkfZ/fjgQxZEzKXSQYNIM6M4yltvbLZj
-         1AhKlQzVK0OdqLJbo5TKrklv2PHosgJogPFbHTrgx96W6i10iG0xyRZTe6kO0noEUDvr
-         qd9NyMQJARBWVSLFBD9T716TV9UktYneYRZl5XwW2hGVdwxJYxv1nPdQ2blahsbbCgfO
-         8hrg==
+        bh=BoHm2K3ZMTehK9sE+U91LQiGPglplAVwfUXYnba9qeA=;
+        b=L3IJIn/qXd/KXkwirNMP8HaT8Q9z9d8+YMaDAWecKR8U0MfGRKZ+zTMpM9HaF2OLtP
+         0kgfllgtQ48Rwhq2CLzSo78zG14g5LwHAtXRBJuJcG7qO2PEdrpIzhrkwYiGBQvnTxIc
+         HTlUkG/wT85cyKKuZksAgMJgOUdg3iqTJOogYvYreDOHha34fy5ScWJfbCfsgXuIb/rY
+         sXgcf1F8PFuIEuvJtWbcm+dPZyv7zC1jhAbK6KROnEqjFQJDIDXa/uE8W08qHG+YO1EY
+         JfgC8Ik5tagHuw0QOhQ/uigxF2KxSYmPUdVe15roXc/CiATcX3xWtXT9FBo5YPwN/jrf
+         Iw9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dRt/jR85kRicxEUhK1JqoJCyTsq8d1Ddz7419Ukqr3g=;
-        b=wkQt8tfSVbYnYpY2RUMLiLyVF/kwB8RlEhnCD8pBoGpLca6r0H/uOew9gq7Fe86kkt
-         kifGqxks6FrUZ1Y/R8TglntMxuk2kWxoRKHi/omHlOvP8r9H+MeiiWjF7+p7xOIG9FNn
-         sDTpGZbGW8s83jjui2Dgv8j8xirGmBRqSC7oJStfZmoM+hJi8j2jerQ7IGnMHKMaZqCC
-         seOCrdJ0wTgpnYx2SbQKcJRZdCeQ2Ei78j+aNhHoCJXYqr6ZndzGrA00mYBLxcLkquiC
-         dDbRnS4lStrKYQ12afC23ihAznWqH2w/PYIzXSr2sQkn8l5WQXx5X6ScXvgpqa46R2/W
-         hmEg==
-X-Gm-Message-State: AOAM531vObH15k0HRnlPTIlwYBoWj5w3uJVMNBXGfQXbUUmw/enMufJ+
-        3Ro7bj+nYX1NVCbp+8V0pEs=
-X-Google-Smtp-Source: ABdhPJwkloO6wFKF3wsvvFuA3uUm2MnZyAvWSKFcHvW2sdIQ6A9XHVZ2jL0sDhN1Ak6T/k6dbdLaAg==
-X-Received: by 2002:a17:906:c2c9:b0:6e8:5ee7:e621 with SMTP id ch9-20020a170906c2c900b006e85ee7e621mr5169389ejb.760.1650646897142;
-        Fri, 22 Apr 2022 10:01:37 -0700 (PDT)
-Received: from skbuf ([188.25.160.86])
-        by smtp.gmail.com with ESMTPSA id kb9-20020a1709070f8900b006e889aad94esm917423ejc.128.2022.04.22.10.01.35
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=BoHm2K3ZMTehK9sE+U91LQiGPglplAVwfUXYnba9qeA=;
+        b=t387I6L/jlMs6MVc/NmI87ycZrGLMjcEVj+lHnC7N3LjzcKsKKe/7lHex8rC9pJY4R
+         /pzXvHz6CBoz80CzaRYUF0KN1zsfEDtypZUvAbhgNnIoCm/JwnBDqpdmxC/OOsNhCJUq
+         5JEa6HPKDPtGY0urhCA0vuMIZVPzKBZAYwTsvzOZeMJKKgHqkgOIgDRjnZrLNQy+9Udq
+         GgafaZ4MiLhZC77D+MhiIZV3k9UZASvsLf7yxKxpx6c4+Doc+E70HJyI8G6BjAgfHqhN
+         I700a5HtqtzZuy1ZbFqmqCUMLG3Q6OdjCw+S9660BAwPzPcZvtRK/ZAT8LLWM0UgfJIA
+         OSTQ==
+X-Gm-Message-State: AOAM533fA3cix8Ndgxte0XMHsubWhEtbKuhAKSVlcf30EgPfsKkEzyXx
+        1wf1tACtqwulhF0x6iKPbN8=
+X-Google-Smtp-Source: ABdhPJxzTUjtn5abJlDmPMtyx6gxMLoD7MkBm0R4JyPyWsVfwTKfSQwma61sk0HCUTlLxxhOoue4EQ==
+X-Received: by 2002:a17:90a:fc8a:b0:1d8:ace3:70bc with SMTP id ci10-20020a17090afc8a00b001d8ace370bcmr2526988pjb.37.1650646982338;
+        Fri, 22 Apr 2022 10:03:02 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:b5ae])
+        by smtp.gmail.com with ESMTPSA id h14-20020a63384e000000b00366ba5335e7sm2603673pgn.72.2022.04.22.10.03.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 10:01:36 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 20:01:35 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
-        Woojung Huh <woojung.huh@microchip.com>
-Subject: Re: [RFC Patch net-next] net: dsa: ksz: added the generic
- port_stp_state_set function
-Message-ID: <20220422170135.ctkibqs3lunbeo44@skbuf>
-References: <20220420072647.22192-1-arun.ramadoss@microchip.com>
+        Fri, 22 Apr 2022 10:03:01 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 22 Apr 2022 07:03:00 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Imran Khan <imran.f.khan@oracle.com>
+Cc:     viro@zeniv.linux.org.uk, gregkh@linuxfoundation.org,
+        ebiederm@xmission.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 00/10] kernfs: Remove reference counting for
+ kernfs_open_node.
+Message-ID: <YmLfxHcekrr89IFl@slm.duckdns.org>
+References: <20220410023719.1752460-1-imran.f.khan@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220420072647.22192-1-arun.ramadoss@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220410023719.1752460-1-imran.f.khan@oracle.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 12:56:47PM +0530, Arun Ramadoss wrote:
-> The ksz8795 and ksz9477 uses the same algorithm for the
-> port_stp_state_set function except the register address is different. So
-> moved the algorithm to the ksz_common.c and used the dev_ops for
-> register read and write. This function can also used for the lan937x
-> part. Hence making it generic for all the parts.
-> 
-> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
-> ---
+Hello, Imran.
 
-If the entire port STP state change procedure is the same, just a
-register offset is different, can you not create a common STP state
-procedure that takes the register offset as argument, and gets called
-with different offset arguments from ksz8795.c and from ksz9477.c?
+I took a look to patch 5 and it looks like there's still some work left to
+do. Maybe it'd be easier to concentrate on the first two parts - the notify
+list conversion and open_file_mutex conversion first and then get to the
+rest later?
+
+Thanks.
+
+-- 
+tejun

@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 117A650B515
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D1C650B512
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:29:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446554AbiDVKam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 06:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58682 "EHLO
+        id S1446567AbiDVKap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 06:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446540AbiDVKag (ORCPT
+        with ESMTP id S1446541AbiDVKag (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 22 Apr 2022 06:30:36 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2910D54BF5;
-        Fri, 22 Apr 2022 03:27:42 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 10:27:40 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DF954BDA;
+        Fri, 22 Apr 2022 03:27:43 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 10:27:41 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1650623261;
+        s=2020; t=1650623262;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=teOH439CL13s2Fik94mdeuFW3qMai2ULGSkcDlXTTO0=;
-        b=jhxORQd73g5jY3hX9HNBFt8Ve3WdXFS5uc2PYmxPKkqYTupJIQBvX1KGorx2B/Tw+s4F/F
-        7+dGVzfI/gV0McAcm0B3JIerzNYQ8lCqpq9Bh5caQBW5fdoH1ukTsWwRNMv94uQTiICzLt
-        03XD+JotRRwH2c6dbABqycdrCJF4RC9sbGamFUBPFLSR7VUvw5c0/du7vu4SPWZ1gdHkeA
-        7XMgFiiX2V7XWMAEYrCXbCAAOxekCV0+ELo7Gh1INSt4qhlQrvRZ/jhlJ9Y0zXqXSKZllU
-        X+7TYu/HTdOU0SBeAH40WbQq8R6x8zzI2YqGSSsWpesRCRzc3P1xsHgkMWo++A==
+        bh=ghxrLJ2tOeaJNHyvxM17SdM8t/7rVcm0oYkLm7OfjPU=;
+        b=edk8UiQdooYuINh7DvcMBRzvzqIOh6BlqFfSZ1JctdMhkrnkcVBS2W/JRmsSAsS/U+K9tF
+        4BTzS4jNb/LAXfj0Br3PXBSP16gNbITCEt1LOCsfqCq848vZB7+DeCvpYFZheuHRfheXxC
+        VQU+9mtYoATCtb845zGz0PebJaKCayXtXVF4DrHdjwy1wQngbG73600/c3FW2drTbuQjpe
+        l6K2BlMPrCM8F5iQ5Y/qWYEuwfRhfb2aJbZ6JqCAceVb0/qNA/ecyk10GldrvNWRCfcJua
+        zMS2Dud4xp4xuUUyAJGclsRfbw7j0l8LF7jMgctPACenRtDGg3hwW6GPpIczWw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1650623261;
+        s=2020e; t=1650623262;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=teOH439CL13s2Fik94mdeuFW3qMai2ULGSkcDlXTTO0=;
-        b=c8NqAdYfu7i97oIFkpVvThhfBnqncQpy2L4yW049ji8kqWmjNF/YhIoVa2Plp5cgXZpWt5
-        y3o5pRczKMI2QFBw==
-From:   "tip-bot2 for Tao Zhou" <tip-bot2@linutronix.de>
+        bh=ghxrLJ2tOeaJNHyvxM17SdM8t/7rVcm0oYkLm7OfjPU=;
+        b=WuYepgY5s8ttQUiSRgyuT3Xn0eAf7UYVVxAeg0J/waP6qCPWLlfxn/IB86WNCLIe7MjuR+
+        zMxse4C3lOHO4zBw==
+From:   "tip-bot2 for Chengming Zhou" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/fair: Revise comment about lb decision matrix
-Cc:     Tao Zhou <tao.zhou@linux.dev>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>, x86@kernel.org,
+Subject: [tip: sched/core] sched/psi: report zeroes for CPU full at the system level
+Cc:     Martin Steigerwald <Martin.Steigerwald@proact.de>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Chengming Zhou <zhouchengming@bytedance.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220415095505.7765-1-tao.zhou@linux.dev>
-References: <20220415095505.7765-1-tao.zhou@linux.dev>
+In-Reply-To: <20220408121914.82855-1-zhouchengming@bytedance.com>
+References: <20220408121914.82855-1-zhouchengming@bytedance.com>
 MIME-Version: 1.0
-Message-ID: <165062326028.4207.17060214721845047142.tip-bot2@tip-bot2>
+Message-ID: <165062326115.4207.12801633890427061202.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,56 +68,103 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     a658353167bf2ea6052cee071dbcc13e0f229dc9
-Gitweb:        https://git.kernel.org/tip/a658353167bf2ea6052cee071dbcc13e0f229dc9
-Author:        Tao Zhou <tao.zhou@linux.dev>
-AuthorDate:    Fri, 15 Apr 2022 17:55:04 +08:00
+Commit-ID:     890d550d7dbac7a31ecaa78732aa22be282bb6b8
+Gitweb:        https://git.kernel.org/tip/890d550d7dbac7a31ecaa78732aa22be282bb6b8
+Author:        Chengming Zhou <zhouchengming@bytedance.com>
+AuthorDate:    Fri, 08 Apr 2022 20:19:14 +08:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Fri, 22 Apr 2022 12:14:08 +02:00
 
-sched/fair: Revise comment about lb decision matrix
+sched/psi: report zeroes for CPU full at the system level
 
-If busiest group type is group_misfit_task, the local
-group type must be group_has_spare according to below
-code in update_sd_pick_busiest():
+Martin find it confusing when look at the /proc/pressure/cpu output,
+and found no hint about that CPU "full" line in psi Documentation.
 
-  if (sgs->group_type == group_misfit_task &&
-      (!capacity_greater(capacity_of(env->dst_cpu), sg->sgc->max_capacity) ||
-       sds->local_stat.group_type != group_has_spare))
-	   return false;
+% cat /proc/pressure/cpu
+some avg10=0.92 avg60=0.91 avg300=0.73 total=933490489
+full avg10=0.22 avg60=0.23 avg300=0.16 total=358783277
 
-group type imbalanced and overloaded and fully_busy are filtered in here.
-misfit and asym are filtered before in update_sg_lb_stats().
-So, change the decision matrix to:
+The PSI_CPU_FULL state is introduced by commit e7fcd7622823
+("psi: Add PSI_CPU_FULL state"), which mainly for cgroup level,
+but also counted at the system level as a side effect.
 
-  busiest \ local has_spare fully_busy misfit asym imbalanced overloaded
-  has_spare        nr_idle   balanced   N/A    N/A  balanced   balanced
-  fully_busy       nr_idle   nr_idle    N/A    N/A  balanced   balanced
-  misfit_task      force     N/A        N/A    N/A  *N/A*      *N/A*
-  asym_packing     force     force      N/A    N/A  force      force
-  imbalanced       force     force      N/A    N/A  force      force
-  overloaded       force     force      N/A    N/A  force      avg_load
+Naturally, the FULL state doesn't exist for the CPU resource at
+the system level. These "full" numbers can come from CPU idle
+schedule latency. For example, t1 is the time when task wakeup
+on an idle CPU, t2 is the time when CPU pick and switch to it.
+The delta of (t2 - t1) will be in CPU_FULL state.
 
-Fixes: 0b0695f2b34a ("sched/fair: Rework load_balance()")
-Signed-off-by: Tao Zhou <tao.zhou@linux.dev>
+Another case all processes can be stalled is when all cgroups
+have been throttled at the same time, which unlikely to happen.
+
+Anyway, CPU_FULL metric is meaningless and confusing at the
+system level. So this patch will report zeroes for CPU full
+at the system level, and update psi Documentation accordingly.
+
+Fixes: e7fcd7622823 ("psi: Add PSI_CPU_FULL state")
+Reported-by: Martin Steigerwald <Martin.Steigerwald@proact.de>
+Suggested-by: Johannes Weiner <hannes@cmpxchg.org>
+Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
-Link: https://lkml.kernel.org/r/20220415095505.7765-1-tao.zhou@linux.dev
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+Link: https://lore.kernel.org/r/20220408121914.82855-1-zhouchengming@bytedance.com
 ---
- kernel/sched/fair.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/accounting/psi.rst |  9 ++++-----
+ kernel/sched/psi.c               | 15 +++++++++------
+ 2 files changed, 13 insertions(+), 11 deletions(-)
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 3eba0dc..4c42012 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -9496,7 +9496,7 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
-  * busiest \ local has_spare fully_busy misfit asym imbalanced overloaded
-  * has_spare        nr_idle   balanced   N/A    N/A  balanced   balanced
-  * fully_busy       nr_idle   nr_idle    N/A    N/A  balanced   balanced
-- * misfit_task      force     N/A        N/A    N/A  force      force
-+ * misfit_task      force     N/A        N/A    N/A  N/A        N/A
-  * asym_packing     force     force      N/A    N/A  force      force
-  * imbalanced       force     force      N/A    N/A  force      force
-  * overloaded       force     force      N/A    N/A  force      avg_load
+diff --git a/Documentation/accounting/psi.rst b/Documentation/accounting/psi.rst
+index 860fe65..5e40b3f 100644
+--- a/Documentation/accounting/psi.rst
++++ b/Documentation/accounting/psi.rst
+@@ -37,11 +37,7 @@ Pressure interface
+ Pressure information for each resource is exported through the
+ respective file in /proc/pressure/ -- cpu, memory, and io.
+ 
+-The format for CPU is as such::
+-
+-	some avg10=0.00 avg60=0.00 avg300=0.00 total=0
+-
+-and for memory and IO::
++The format is as such::
+ 
+ 	some avg10=0.00 avg60=0.00 avg300=0.00 total=0
+ 	full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+@@ -58,6 +54,9 @@ situation from a state where some tasks are stalled but the CPU is
+ still doing productive work. As such, time spent in this subset of the
+ stall state is tracked separately and exported in the "full" averages.
+ 
++CPU full is undefined at the system level, but has been reported
++since 5.13, so it is set to zero for backward compatibility.
++
+ The ratios (in %) are tracked as recent trends over ten, sixty, and
+ three hundred second windows, which gives insight into short term events
+ as well as medium and long term trends. The total absolute stall time
+diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+index 5a49a8c..a337f3e 100644
+--- a/kernel/sched/psi.c
++++ b/kernel/sched/psi.c
+@@ -1060,14 +1060,17 @@ int psi_show(struct seq_file *m, struct psi_group *group, enum psi_res res)
+ 	mutex_unlock(&group->avgs_lock);
+ 
+ 	for (full = 0; full < 2; full++) {
+-		unsigned long avg[3];
+-		u64 total;
++		unsigned long avg[3] = { 0, };
++		u64 total = 0;
+ 		int w;
+ 
+-		for (w = 0; w < 3; w++)
+-			avg[w] = group->avg[res * 2 + full][w];
+-		total = div_u64(group->total[PSI_AVGS][res * 2 + full],
+-				NSEC_PER_USEC);
++		/* CPU FULL is undefined at the system level */
++		if (!(group == &psi_system && res == PSI_CPU && full)) {
++			for (w = 0; w < 3; w++)
++				avg[w] = group->avg[res * 2 + full][w];
++			total = div_u64(group->total[PSI_AVGS][res * 2 + full],
++					NSEC_PER_USEC);
++		}
+ 
+ 		seq_printf(m, "%s avg10=%lu.%02lu avg60=%lu.%02lu avg300=%lu.%02lu total=%llu\n",
+ 			   full ? "full" : "some",

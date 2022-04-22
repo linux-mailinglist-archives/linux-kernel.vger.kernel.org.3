@@ -2,105 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B4F250BE92
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 19:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6529E50BE91
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 19:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231734AbiDVR3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 13:29:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52020 "EHLO
+        id S231607AbiDVR2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 13:28:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231266AbiDVR3J (ORCPT
+        with ESMTP id S231392AbiDVR2Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 13:29:09 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7535ED5EA2
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 10:26:08 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id h11so10477308ljb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 10:26:08 -0700 (PDT)
+        Fri, 22 Apr 2022 13:28:25 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68EFBD3728
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 10:25:25 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id ks6so17735942ejb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 10:25:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HJYid1oDIz8BlusNfEFWMXGaZqmdNR6muh9voapRylw=;
-        b=AtB9Znor7qBu+dy6JyI664aV539rkJ0X3gjGNPpVOeHFyCEP/I/Hsv4NfoT9i7Hzxn
-         Nl6P6cq/S2hxwrDu/aRQUrnmu+cNn5TBofpy24Mmqb+Z2ByL1r6A/ZSvapmDfqQRkP1L
-         ANb2GP8Mu3sRwgI8T4O7seKqxD0Du4+OIqpag=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=xyTu4b7ZMRhX6whN7X8zUFA8mpZ14UJCNVpEn8M9ARg=;
+        b=NIa/76KBpbPcghoDEkTYGEHbQsh/DvJWClpr17LX22LfUCDZlA8v44kBeEFyZHxhX9
+         dGj9bcrXhnLJcjpa+sp0fCzGeiIsd1LcqXrgUryZ4GH9Ti06OoWYQRoFgPVXYpfL3ooe
+         s66wJHVJ52frfDlYQLnrn63t4ijca1CnnUSagHs4Knl1WTBwye44ShV5svAu8Su/v5I+
+         ODg58bbXoXdN12+yLukNzr33J+hvPWkrjqj1G9EpS0U0VRl6WdxsnagiIZzXQkZ2egSm
+         RfJaPMmssnoS3R0VoGZqg3SJ/YWBy6ttx9uicI2bDwGRr7zZWCwWIcMJk3H78ck72pMZ
+         qXaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HJYid1oDIz8BlusNfEFWMXGaZqmdNR6muh9voapRylw=;
-        b=OmVIzJapFzMd+0o5gKZgtqEOAJEQoK3Gh8ioR/pn9Ic+BeU2qZFDqPTmOZxePenqkH
-         XR97UcT0QjFIJnYnLWwcl3NuskG09aO4iPnyzCSJSSHwNcRvkqb+8RsT8IS0vpz2FmBu
-         pMp7RNu42neNgPoCZ+SqkLH4C3t+TAXfY2CpPRkDS7Z61O8ePmxMP4CisD8hf3NJ/xM6
-         k8maR+U/YDYY5hhtysryr9n97erw0pz/ZKBReVh8huV8tvQBU0p1/F35WaCWcEqT7UXf
-         FP/C+YbHJ5jIDuUpGDaq8vDMoL2aXVGgjK7DikCQOJhoL6MBp998YU+443BeGZDPvrtw
-         kwFA==
-X-Gm-Message-State: AOAM533w8oEsDtZCuDLz5JK9BVlYbK+0TcqnVlwz5rMG3ycUuapKBiGv
-        ldDqDjunqfXcDZyYuc57ivUDDXLXilujp+spkl4=
-X-Google-Smtp-Source: ABdhPJxiW1DbSEQmnUPWKQTa8bR1T5IkOcmxe/nUv99KWYYFEqEED1sm0zC3eEvOBA739uTinAfCMg==
-X-Received: by 2002:a2e:bd13:0:b0:244:da2f:ff4d with SMTP id n19-20020a2ebd13000000b00244da2fff4dmr3563694ljq.213.1650648235626;
-        Fri, 22 Apr 2022 10:23:55 -0700 (PDT)
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com. [209.85.208.174])
-        by smtp.gmail.com with ESMTPSA id bj37-20020a2eaaa5000000b0024dd3537e93sm283376ljb.114.2022.04.22.10.23.53
-        for <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xyTu4b7ZMRhX6whN7X8zUFA8mpZ14UJCNVpEn8M9ARg=;
+        b=Pwx/xoVMmt55gaxc07EbJbViqhR4W9KRD+Fc8zDwAUUcMbdb56KOOnaEaPmUtu7S7t
+         /UkZkqJcHp3DtnX1LpURlUOM4zNMUk4HShMR+WIIPDo1ivAuKPCJYI6bCGyPBUcfGbAc
+         kvTJ8ZuKFvOUE/E/tHYETyhVNqdwsj/9qaywVutJ6Kad88l53ArvDDeJYMyDWY6QPDK2
+         WyAiRs19LPm7HBUdZWAocbs8IoQjvobVh22Ms3q1RqueopO3GiPEtNT9rI77ix9z/N/1
+         qAoVHJVEjGhABTmmVI9NUo0LFBvVM7PG4e7YcN4SQ5jgjj9LPg1jlCPNoX+z1eE4Zaok
+         dS4Q==
+X-Gm-Message-State: AOAM533ML6Lb6kbPgD+WQdqRF06ycaNwp193+qhO2Bybf+stcr5gVEft
+        2JAuyWcfdIZJoCwhSKUctOXLvw==
+X-Google-Smtp-Source: ABdhPJzS3sVONP52JJ41oUXMaywZWInX/T1GsMDEpa4Oo7VNHKVjxy8VUX1OKglrnM+JWmBSNQhpLg==
+X-Received: by 2002:a17:907:62a6:b0:6ef:8118:d3e2 with SMTP id nd38-20020a17090762a600b006ef8118d3e2mr5004725ejc.605.1650648230694;
+        Fri, 22 Apr 2022 10:23:50 -0700 (PDT)
+Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id fq6-20020a1709069d8600b006e891c0b7e0sm933630ejc.129.2022.04.22.10.23.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 10:23:53 -0700 (PDT)
-Received: by mail-lj1-f174.google.com with SMTP id bn33so10449978ljb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 10:23:53 -0700 (PDT)
-X-Received: by 2002:a2e:8245:0:b0:24b:48b1:a1ab with SMTP id
- j5-20020a2e8245000000b0024b48b1a1abmr3347370ljh.152.1650648232816; Fri, 22
- Apr 2022 10:23:52 -0700 (PDT)
+        Fri, 22 Apr 2022 10:23:50 -0700 (PDT)
+Message-ID: <af95f353-c91d-844e-3bc1-e052f7d16e54@linaro.org>
+Date:   Fri, 22 Apr 2022 19:23:48 +0200
 MIME-Version: 1.0
-References: <20220420073717.GD16310@xsang-OptiPlex-9020> <CAHk-=wi6pJhsWLd7t9wEtq5tWh_2O61cSLk-wCgLwFrjW6+jbw@mail.gmail.com>
- <CANaxB-yVLCSHAi3QKMYzsSDRYC5Wz05iWx8yrb57cbiJ__5ThA@mail.gmail.com>
- <CAHk-=wgSW3gB1=rf3atv=3Xvn0pNBtKUKJ2VF81ue-xagS7F4w@mail.gmail.com>
- <CAHk-=wjdCtgtQPZPTigMMniZaoMA_tHDu3EMBVM3w1GH5X+cOw@mail.gmail.com> <CANaxB-zDKVtGTRrqh4SpPKS96Ux6s01BL3BdAe-ZY_9HWSX9dw@mail.gmail.com>
-In-Reply-To: <CANaxB-zDKVtGTRrqh4SpPKS96Ux6s01BL3BdAe-ZY_9HWSX9dw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 22 Apr 2022 10:23:36 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wj8OCHqYkB2hVQ2FG6n5g4R0H3eetzbo9NrHooY1-4pwg@mail.gmail.com>
-Message-ID: <CAHk-=wj8OCHqYkB2hVQ2FG6n5g4R0H3eetzbo9NrHooY1-4pwg@mail.gmail.com>
-Subject: Re: [fs/pipe] 5a519c8fe4: WARNING:at_mm/page_alloc.c:#__alloc_pages
-To:     Andrei Vagin <avagin@gmail.com>
-Cc:     kernel test robot <oliver.sang@intel.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        kernel test robot <lkp@intel.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Pavel Emelyanov <ovzxemul@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH V4 00/14] cpufreq: mediatek: Cleanup and support MT8183
+ and MT8186
+Content-Language: en-US
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, rafael@kernel.org,
+        viresh.kumar@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        matthias.bgg@gmail.com
+Cc:     jia-wei.chang@mediatek.com, roger.lu@mediatek.com,
+        hsinyi@google.com, khilman@baylibre.com,
+        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220422075239.16437-1-rex-bc.chen@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220422075239.16437-1-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 10:23 PM Andrei Vagin <avagin@gmail.com> wrote:
->
-> The big advantage of vmsplice is that it can attach real user pages into
-> a pipe and then any following changes of these pages by the process
-> don't trigger any allocations and extra copies of data. vmsplice in this
-> case is fast. After splicing pages to pipes, we resume a process and
-> splice pages from pipes to a socket or a file.  The whole process of
-> dumping process pages is zero-copy.
+On 22/04/2022 09:52, Rex-BC Chen wrote:
+> 
+> Reference series:
+> [1]: V1 of this series is present by Jia-Wei Chang.
+>      message-id:20220307122151.11666-1-jia-wei.chang@mediatek.com
+> 
+> [2]: The MediaTek CCI devfreq driver is introduced in another series.
+>      message-id:20220408052150.22536-1-johnson.wang@mediatek.com
+> 
+> [3]: The MediaTek SVS driver is introduced in another series.
+>      message-id:20220221063939.14969-1-roger.lu@mediatek.com
 
-Hmm. What happens if you just use /proc/<pid>/mem?
+These are not proper links. Please use lore references.
 
-That just takes a reference to the tsk->mm. No page copies at all.
-After that you can do anything you want to that mm.
 
-Well, anything a /proc/<pid>/mm fd allows, which is mainly read and
-write. But it stays around for as long as you keep it open, and
-fundamentally stays coherent with that mm, because it *is* that mm.
-
-And it doesn't affect anything else, because all it literally has is
-that mm_struct pointer.
-
-            Linus
+Best regards,
+Krzysztof

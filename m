@@ -2,156 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00F7350BD2C
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:32:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BAA850BD2F
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449734AbiDVQff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 12:35:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37034 "EHLO
+        id S1449742AbiDVQf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 12:35:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389617AbiDVQfe (ORCPT
+        with ESMTP id S1354009AbiDVQfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 12:35:34 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25DE95F24A;
-        Fri, 22 Apr 2022 09:32:41 -0700 (PDT)
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nhwCv-0001kP-Ev; Fri, 22 Apr 2022 18:32:33 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nhwCv-000C8l-5l; Fri, 22 Apr 2022 18:32:33 +0200
-Subject: Re: [PATCH bpf-next] libbpf: also check /sys/kernel/tracing for
- tracefs files
-To:     Connor O'Brien <connoro@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220421201125.13907-1-connoro@google.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <407ab3dd-cee1-a043-585b-1b2886c6f7fd@iogearbox.net>
-Date:   Fri, 22 Apr 2022 18:32:32 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Fri, 22 Apr 2022 12:35:55 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 034E85DA79;
+        Fri, 22 Apr 2022 09:33:02 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id EFEFF8393B;
+        Fri, 22 Apr 2022 18:32:59 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1650645180;
+        bh=H6Ng9dU4SgWEq5Ejz5YMWUlWTgL9RMB8+WAFzJPrCxI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=wUbVqSkmAaXvc7xWxOapahlsTdkDRDpelDR7H+PXo3O5FiNGmx2hWE/rkBi47POK4
+         dYthtV04SJcZwaJ+TncknDAUP2CdcL7Aaej2VaPuzUwy0Y8e9u+ikVG92hXT7lZUl9
+         xa33paX4YmxlkY5HgiuGHlK8vp/cv+Nf/VkMrCc5pX76x8GWYITkf+2H5n/ysuqqSK
+         4YQGIQlIkYF/VHtnBVHBC7LhcYslwfv5DkoqVnKb1lmq71oK0/TWDLp1Ig/oHVYu8r
+         j2VY7861GFMg5zvKxn4KNwe6b1MMOwa8srhjVVHTK/XZbwAjOjY+jeJi65FdpBTJ6j
+         WBJW0NZ2TPa0Q==
+Message-ID: <174bea56-3e99-e01c-4133-f1350d34448d@denx.de>
+Date:   Fri, 22 Apr 2022 18:32:59 +0200
 MIME-Version: 1.0
-In-Reply-To: <20220421201125.13907-1-connoro@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 6/8] ARM: dts: stm32: enable optee firmware and SCMI
+ support on STM32MP15
 Content-Language: en-US
+To:     Alexandre Torgue <alexandre.torgue@foss.st.com>, arnd@arndb.de,
+        robh+dt@kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        soc@kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-kernel@vger.kernel.org,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>, etienne.carriere@st.com
+References: <20220422150952.20587-1-alexandre.torgue@foss.st.com>
+ <20220422150952.20587-7-alexandre.torgue@foss.st.com>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <20220422150952.20587-7-alexandre.torgue@foss.st.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.5/26520/Fri Apr 22 10:30:17 2022)
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Virus-Scanned: clamav-milter 0.103.5 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/21/22 10:11 PM, Connor O'Brien wrote:
-> libbpf looks for tracefs files only under debugfs, but tracefs may be
-> mounted even if debugfs is not. When /sys/kernel/debug/tracing is
-> absent, try looking under /sys/kernel/tracing instead.
+On 4/22/22 17:09, Alexandre Torgue wrote:
+> Enable optee and SCMI clocks/reset protocols support.
 > 
-> Signed-off-by: Connor O'Brien <connoro@google.com>
-> ---
->   tools/lib/bpf/libbpf.c | 26 +++++++++++++++++++-------
->   1 file changed, 19 insertions(+), 7 deletions(-)
+> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
 > 
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 68cc134d070d..6ef587329eb2 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -10140,10 +10140,16 @@ static void gen_kprobe_legacy_event_name(char *buf, size_t buf_sz,
->   		 __sync_fetch_and_add(&index, 1));
->   }
+> diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
+> index 7fdc324b3cf9..1b2fd3426a81 100644
+> --- a/arch/arm/boot/dts/stm32mp151.dtsi
+> +++ b/arch/arm/boot/dts/stm32mp151.dtsi
+> @@ -115,6 +115,33 @@
+>   		status = "disabled";
+>   	};
 >   
-> +static bool debugfs_available(void)
-> +{
-> +	return !access("/sys/kernel/debug/tracing", F_OK);
+> +	firmware {
+> +		optee: optee {
+> +			compatible = "linaro,optee-tz";
+> +			method = "smc";
+> +			status = "disabled";
+> +		};
 
-Should this be a one-time probe, so on subsequent debugfs_available() calls
-we return the initially cached result?
-
-> +}
-> +
->   static int add_kprobe_event_legacy(const char *probe_name, bool retprobe,
->   				   const char *kfunc_name, size_t offset)
->   {
-> -	const char *file = "/sys/kernel/debug/tracing/kprobe_events";
-> +	const char *file = debugfs_available() ? "/sys/kernel/debug/tracing/kprobe_events" :
-> +		"/sys/kernel/tracing/kprobe_events";
->   
->   	return append_to_file(file, "%c:%s/%s %s+0x%zx",
->   			      retprobe ? 'r' : 'p',
-> @@ -10153,7 +10159,8 @@ static int add_kprobe_event_legacy(const char *probe_name, bool retprobe,
->   
->   static int remove_kprobe_event_legacy(const char *probe_name, bool retprobe)
->   {
-> -	const char *file = "/sys/kernel/debug/tracing/kprobe_events";
-> +	const char *file = debugfs_available() ? "/sys/kernel/debug/tracing/kprobe_events" :
-> +		"/sys/kernel/tracing/kprobe_events";
->   
->   	return append_to_file(file, "-:%s/%s", retprobe ? "kretprobes" : "kprobes", probe_name);
->   }
-> @@ -10163,7 +10170,8 @@ static int determine_kprobe_perf_type_legacy(const char *probe_name, bool retpro
->   	char file[256];
->   
->   	snprintf(file, sizeof(file),
-> -		 "/sys/kernel/debug/tracing/events/%s/%s/id",
-> +		 debugfs_available() ? "/sys/kernel/debug/tracing/events/%s/%s/id" :
-> +		 "/sys/kernel/tracing/events/%s/%s/id",
->   		 retprobe ? "kretprobes" : "kprobes", probe_name);
->   
->   	return parse_uint_from_file(file, "%d\n");
-> @@ -10493,7 +10501,8 @@ static void gen_uprobe_legacy_event_name(char *buf, size_t buf_sz,
->   static inline int add_uprobe_event_legacy(const char *probe_name, bool retprobe,
->   					  const char *binary_path, size_t offset)
->   {
-> -	const char *file = "/sys/kernel/debug/tracing/uprobe_events";
-> +	const char *file = debugfs_available() ? "/sys/kernel/debug/tracing/uprobe_events" :
-> +		"/sys/kernel/tracing/uprobe_events";
->   
->   	return append_to_file(file, "%c:%s/%s %s:0x%zx",
->   			      retprobe ? 'r' : 'p',
-> @@ -10503,7 +10512,8 @@ static inline int add_uprobe_event_legacy(const char *probe_name, bool retprobe,
->   
->   static inline int remove_uprobe_event_legacy(const char *probe_name, bool retprobe)
->   {
-> -	const char *file = "/sys/kernel/debug/tracing/uprobe_events";
-> +	const char *file = debugfs_available() ? "/sys/kernel/debug/tracing/uprobe_events" :
-> +		"/sys/kernel/tracing/uprobe_events";
->   
->   	return append_to_file(file, "-:%s/%s", retprobe ? "uretprobes" : "uprobes", probe_name);
->   }
-> @@ -10513,7 +10523,8 @@ static int determine_uprobe_perf_type_legacy(const char *probe_name, bool retpro
->   	char file[512];
->   
->   	snprintf(file, sizeof(file),
-> -		 "/sys/kernel/debug/tracing/events/%s/%s/id",
-> +		 debugfs_available() ? "/sys/kernel/debug/tracing/events/%s/%s/id" :
-> +		 "/sys/kernel/tracing/events/%s/%s/id",
->   		 retprobe ? "uretprobes" : "uprobes", probe_name);
->   
->   	return parse_uint_from_file(file, "%d\n");
-> @@ -11071,7 +11082,8 @@ static int determine_tracepoint_id(const char *tp_category,
->   	int ret;
->   
->   	ret = snprintf(file, sizeof(file),
-> -		       "/sys/kernel/debug/tracing/events/%s/%s/id",
-> +		       debugfs_available() ? "/sys/kernel/debug/tracing/events/%s/%s/id" :
-> +		       "/sys/kernel/tracing/events/%s/%s/id",
->   		       tp_category, tp_name);
->   	if (ret < 0)
->   		return -errno;
-> 
-
+Doesn't this TEE node get automatically generated and patched into DT by 
+the TEE ? I think OpTee-OS does that.

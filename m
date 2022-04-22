@@ -2,206 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFA6C50C4DC
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:46:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B18750C50F
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:46:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbiDVXcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 19:32:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35296 "EHLO
+        id S229960AbiDVXed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 19:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbiDVXbw (ORCPT
+        with ESMTP id S230038AbiDVXch (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 19:31:52 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71D41D92D4;
-        Fri, 22 Apr 2022 16:10:41 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id x20so7157097qvl.10;
-        Fri, 22 Apr 2022 16:10:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=aoICAI9/Bl4AX+BWm7cH1yLO17nxdNcynLM1mxiKj24=;
-        b=FDMCQ91VyoUpXjChH8PCm1ByG5YeMcRbD3Nq3XS/A7yJu3gI6Pjb/925KdVtmuV+uT
-         ryXDUcNHBrqOE1RmhgvJ1CjVa3kg/yNTHPC518BX1ez4zbiNT484v9Q5AkrDGgXGOG6i
-         hnenZW0yGZnydsTrRtr1ilzpdhsvfFNjMTDDROs75BxuSLuFwbxtujIUa0bjIibgOo3Z
-         p+xZZhduHmsoGqZIrggSpRhUXE/GeQJhMMFJD0X7E69siGiG2a3UqD3kQ4T3EdQxakFe
-         Y7eVcJnrRpNvz8n3epO3/WgE+ftfVGLrdtqijBWF7mEkls8AJSBf4J8Tvp7su26XGYuR
-         EGVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=aoICAI9/Bl4AX+BWm7cH1yLO17nxdNcynLM1mxiKj24=;
-        b=JPFHSG8g/jKrIHlRUKsBjpm2+fF2SSl2yf8RwwlaBABD7YUHF+Op5Pcim5arvn9kAA
-         BsLw05dEijpgJp0xSCpAAG4vaxj460m78ueP1iUkmr/shG/p8rMq3r8XAd1ruUxBRIwf
-         cSB2aSLNancy9V1u0h2BVHdqaXo3R5KNN54vSqCg74NTSgy/mQDrRj4TOEYamde75b7g
-         +BAawtJEZpuxIUrrydhL9PHRE6cms5j/ViZlW2dr7r8L7WmQwYwY1Icb9fjC99KRSPDK
-         UerQHq+Nbz9vv0zyZD3eQlKvDgLxxH4zVpHRInujYbDMpKBQRpq8WkACoKW+DLriI6/J
-         OeDg==
-X-Gm-Message-State: AOAM531WfIvjz8c8mJ64qwa4DPINiJg9OIbqqU1Kh3vEi4T0K2dBxcCw
-        DC1nnnxhgZumJH2VNpavxok=
-X-Google-Smtp-Source: ABdhPJzav8sT9TWnhNXns8IrZa1IG5AZwcniTTDuvasNMCEKJoV1Mgl8DxW8at2ghxApi6HIy3n1YQ==
-X-Received: by 2002:a05:6214:248c:b0:441:2a61:659d with SMTP id gi12-20020a056214248c00b004412a61659dmr5548580qvb.59.1650669041020;
-        Fri, 22 Apr 2022 16:10:41 -0700 (PDT)
-Received: from ?IPV6:2600:1700:2442:6db0:98a4:ff1d:3bb2:5350? ([2600:1700:2442:6db0:98a4:ff1d:3bb2:5350])
-        by smtp.gmail.com with ESMTPSA id x4-20020a05620a258400b0067d47fb5aa4sm1495672qko.63.2022.04.22.16.10.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 16:10:40 -0700 (PDT)
-Message-ID: <95dcdcd3-fb48-6e5c-3262-7aacaac71e78@gmail.com>
-Date:   Fri, 22 Apr 2022 18:10:39 -0500
+        Fri, 22 Apr 2022 19:32:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF172FBEAB;
+        Fri, 22 Apr 2022 16:13:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88C14B832E2;
+        Fri, 22 Apr 2022 23:13:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6C92C385A4;
+        Fri, 22 Apr 2022 23:13:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650669187;
+        bh=+bWM4jQypuRyr9hdKzZtZVpK4pbUaBz3lqN1cR1DhB8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=P5i/KXST6+gJT5ZfDGVugr7Int5LslybQ+LA5Y423xAob3GEEbTrpjG4Scy5apKiU
+         VzlApQfZTOxLn3Eh1I+2e0ju6n+FjR0TdtINFA5G1TgnolFVadUn+A+/vAtPUOZJdv
+         gCndAdbB6IS+Nsi1QQBcwUtplGWCTIz7g+NOWVs8ovnti/ZKLDa2SKM18705TseOJ+
+         bTUXK6IkOH2+y6LtcezSVPHIHS296RIEt4Xkaz5pR+guagb8EsrmBYFiNu1MPKGxwp
+         k/39+oLydarfoUvS2gBtDOCADixi7qdslTe0JScnUA0fB55U5avKMquosjzzNarhs+
+         he5UlgArKbjSg==
+Date:   Fri, 22 Apr 2022 16:13:05 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Vincent Cuissard <cuissard@marvell.com>,
+        Samuel Ortiz <sameo@linux.intel.com>, linux-nfc@lists.01.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] nfc: nfcmrvl: spi: Fix irq_of_parse_and_map() return
+ value
+Message-ID: <20220422161305.59e0be38@kernel.org>
+In-Reply-To: <20220422104758.64039-1-krzysztof.kozlowski@linaro.org>
+References: <20220422104758.64039-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC PATCH 2/2] Documentation: dev-tools: use literal block
- instead of code-block
-Content-Language: en-US
-To:     David Gow <davidgow@google.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        "Bird, Tim" <Tim.Bird@sony.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Rae Moar <rmr167@gmail.com>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Daniel Latypov <dlatypov@google.com>, kernelci@groups.io,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220316202622.324866-1-frowand.list@gmail.com>
- <20220316202622.324866-3-frowand.list@gmail.com>
- <CABVgOSngfB41BVoEvQ1JX+2oFvS7Mik58VfPm9pydmiC_GSD6Q@mail.gmail.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <CABVgOSngfB41BVoEvQ1JX+2oFvS7Mik58VfPm9pydmiC_GSD6Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jon,
-
-On 3/17/22 03:43, David Gow wrote:
-> On Thu, Mar 17, 2022 at 4:26 AM <frowand.list@gmail.com> wrote:
->>
->> From: Frank Rowand <frank.rowand@sony.com>
->>
->> KTAP Specification: Change code-block directives to straightforward
->> literal blocks since the blocks do not contain code.
->>
->> Suggested-by: Jonathan Corbet <corbet@lwn.net>
->> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
->> ---
+On Fri, 22 Apr 2022 12:47:58 +0200 Krzysztof Kozlowski wrote:
+> The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
 > 
-> This looks good to me.
-> 
-> I'd personally rather push this through independently of the KTAP 2.0
-> spec updates, as it's really just a minor formatting change to the
-> spec, and it has no impact on the actual KTAP format.
-> 
-> So, if we can accept this independently, that'd be swell.
-> 
-> Reviewed-by: David Gow <davidgow@google.com>
+> Fixes: caf6e49bf6d0 ("NFC: nfcmrvl: add spi driver")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+> This is another issue to https://lore.kernel.org/all/20220422084605.2775542-1-lv.ruyi@zte.com.cn/
 
-I got distracted with other tasks, just now returning to this.
+Maybe send one patch that fixes both and also fixes the usage of ret?
 
-There has been no other comment in the last month, so I think it
-is fair to go ahead and ask you to pull this patch.
-
-Can you pull just this patch (patch 2/2) or would you prefer that
-I do a version 2 which does not contain patch 1/2?
-
--Frank
-
-> 
-> Cheers,
-> -- David
-> 
-> 
->>  Documentation/dev-tools/ktap.rst | 18 ++++++++----------
->>  1 file changed, 8 insertions(+), 10 deletions(-)
->>
->> diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
->> index 37b5dc61bfb8..b9a57ceddd4f 100644
->> --- a/Documentation/dev-tools/ktap.rst
->> +++ b/Documentation/dev-tools/ktap.rst
->> @@ -115,34 +115,32 @@ The diagnostic data field is optional, and results which have neither a
->>  directive nor any diagnostic data do not need to include the "#" field
->>  separator.
->>
->> -Example result lines include:
->> -
->> -.. code-block:: none
->> +Example result lines include::
->>
->>         ok 1 test_case_name
->>
->>  The test "test_case_name" passed.
->>
->> -.. code-block:: none
->> +::
->>
->>         not ok 1 test_case_name
->>
->>  The test "test_case_name" failed.
->>
->> -.. code-block:: none
->> +::
->>
->>         ok 1 test # SKIP necessary dependency unavailable
->>
->>  The test "test" was SKIPPED with the diagnostic message "necessary dependency
->>  unavailable".
->>
->> -.. code-block:: none
->> +::
->>
->>         not ok 1 test # TIMEOUT 30 seconds
->>
->>  The test "test" timed out, with diagnostic data "30 seconds".
->>
->> -.. code-block:: none
->> +::
->>
->>         ok 5 check return code # rcode=0
->>
->> @@ -202,7 +200,7 @@ allowed to be either indented or not indented.
->>
->>  An example of a test with two nested subtests:
->>
->> -.. code-block:: none
->> +::
->>
->>         KTAP version 1
->>         1..1
->> @@ -215,7 +213,7 @@ An example of a test with two nested subtests:
->>
->>  An example format with multiple levels of nested testing:
->>
->> -.. code-block:: none
->> +::
->>
->>         KTAP version 1
->>         1..2
->> @@ -250,7 +248,7 @@ nested version line, uses a line of the form
->>
->>  Example KTAP output
->>  --------------------
->> -.. code-block:: none
->> +::
->>
->>         KTAP version 1
->>         1..1
->> --
->> Frank Rowand <frank.rowand@sony.com>
->>
-
+> diff --git a/drivers/nfc/nfcmrvl/spi.c b/drivers/nfc/nfcmrvl/spi.c
+> index a38e2fcdfd39..01f0a08a381c 100644
+> --- a/drivers/nfc/nfcmrvl/spi.c
+> +++ b/drivers/nfc/nfcmrvl/spi.c
+> @@ -115,7 +115,7 @@ static int nfcmrvl_spi_parse_dt(struct device_node *node,
+>  	}
+>  
+>  	ret = irq_of_parse_and_map(node, 0);
+> -	if (ret < 0) {
+> +	if (!ret) {
+>  		pr_err("Unable to get irq, error: %d\n", ret);
+>  		return ret;
+>  	}

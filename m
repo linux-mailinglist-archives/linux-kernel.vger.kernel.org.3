@@ -2,120 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E144F50B1AA
+	by mail.lfdr.de (Postfix) with ESMTP id 9905C50B1A9
 	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 09:31:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444858AbiDVHeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 03:34:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48960 "EHLO
+        id S1444866AbiDVHek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 03:34:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386165AbiDVHd7 (ORCPT
+        with ESMTP id S1386165AbiDVHeh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 03:33:59 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA2350456;
-        Fri, 22 Apr 2022 00:31:06 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d15so9024431pll.10;
-        Fri, 22 Apr 2022 00:31:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RKXep+OukE4SdMu+cRqxBY4lHOeFUaKFcve1sEKphTA=;
-        b=NApdQprPkR9X5KsKrlEItbVibHuWQMkdC6R6dIz1a0f8v08lro3Bt24bmFnX9gcIUx
-         c/CvMMP1C6TE4xFIq4EpE5DIOaTjyjH6xH5joQX9P6/5DJZ+IbV+IvM0ol6mB2xYZlhG
-         ZTyVvc5ig+But+NxDHgUFqIMABOyzzpBRgumMgBNEQCyAcFoDVvB5Y3PX8Ksc90G1FVm
-         Pt8yRgXMrkTN4XFq3qouYGABgtD26N572duYyZbbeU6OL3GSkiuET0oTQYqIl9l3ZWEt
-         FBd2MdLEjvpOMkA7XjU06fb3qigQP1aSyhn1W/PkkQe0fsN1gQRQkuCWl/iTdyYTVmxE
-         x1Aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RKXep+OukE4SdMu+cRqxBY4lHOeFUaKFcve1sEKphTA=;
-        b=KU7llvZbey2rou858586wRlm8nYbG8c3azN1u6BTNoWTydRKK1UPWPi+PufUpXURYj
-         itk9jvHYpPvBbHYKEtcGZHtggZPPQakoGMPjAZBHfASbpuEddXtQX6WyX+GUd89aHtZE
-         WhNdnogjdQVS3yp6ytJk60pxQv/eDpZGakpKUdUqnhxOZtJOgt/NDiHKSKyN1H9JjqtI
-         Ql5gUKDGuciHmqoGtPwK/+bwPVw71gwGYgZXwvEiGgK61e8OJzLM3zI+83ZC52KVo7rR
-         SAWumqdPlCVusUbQ53OkrgVUxwRch3BJgeWrKxL7K/+p6DO23VcXoMOUz0KQpXRTrlE/
-         QuUA==
-X-Gm-Message-State: AOAM5305GOs+YkzJnw+TNPTmF3JTw4uBw77lTTyIvp0syscMhpWBAfUJ
-        1sMIivioDoIIHyiC2I2f4b0=
-X-Google-Smtp-Source: ABdhPJwiJ6sRVKvla0sQE/4lcm4QNy8KLY5artA5wt36MqIypf9P32Jf5A47gdWp+q1ok87ey6bU9w==
-X-Received: by 2002:a17:902:d50c:b0:159:3fa:266 with SMTP id b12-20020a170902d50c00b0015903fa0266mr3311422plg.132.1650612666216;
-        Fri, 22 Apr 2022 00:31:06 -0700 (PDT)
-Received: from localhost ([58.251.76.82])
-        by smtp.gmail.com with ESMTPSA id l25-20020a635719000000b0039da6cdf82dsm1287484pgb.83.2022.04.22.00.31.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 00:31:05 -0700 (PDT)
-From:   Yunbo Yu <yuyunbo519@gmail.com>
-To:     nbd@nbd.name, lorenzo@kernel.org, ryder.lee@mediatek.com,
-        shayne.chen@mediatek.com, sean.wang@mediatek.com, kvalo@kernel.org,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        matthias.bgg@gmail.com, yuyunbo519@gmail.com
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] mt76:mt7603: move spin_lock_bh() to spin_lock()
-Date:   Fri, 22 Apr 2022 15:31:02 +0800
-Message-Id: <20220422073102.426739-1-yuyunbo519@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 22 Apr 2022 03:34:37 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C739B515B4;
+        Fri, 22 Apr 2022 00:31:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=BiFwTkcFOMTtKqRq3uhC/TlKTqlAY7nnCuq174HKk0M=; b=AyKZDrqtPLqsXggbYiNB4s0jKC
+        YuBihnegzx6MUh0QMeUCIUyxS0f8f2fHUB0dpThVn0kxXgH0ji+gVYvcBDXPVbqWZBj1H0bHQy6HK
+        rNHe9jnf9i/eJ6t+KzyR7oxKiLEvuZVv4p7TySSggte7OR1iygeQw2aUvicwuJ+FbLEXH5T9RW31q
+        IoRQPXYf6lKNUEFw8989N3pP2QZ3Om5Fj0KPUjQngthaabNwb3SsL9Te6XdrDGTAaKoV+cLlcsXhd
+        elh8AV6Q6wtQkZ48zABYj5dlG8a7qkVNvEDyGFpyaK6gdfaEXz6tVXyNi6cht7qnie+3kKrkNBvcB
+        7NUjcvXg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nhnlA-007dGP-HF; Fri, 22 Apr 2022 07:31:20 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3733D9861C1; Fri, 22 Apr 2022 09:31:18 +0200 (CEST)
+Date:   Fri, 22 Apr 2022 09:31:18 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Song Liu <song@kernel.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        bpf <bpf@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <Kernel-team@fb.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Subject: Re: [PATCH bpf] bpf: invalidate unused part of bpf_prog_pack
+Message-ID: <20220422073118.GR2731@worktop.programming.kicks-ass.net>
+References: <20220421072212.608884-1-song@kernel.org>
+ <CAHk-=wi3eu8mdKmXOCSPeTxABVbstbDg1q5Fkak+A9kVwF+fVw@mail.gmail.com>
+ <CAADnVQKyDwXUMCfmdabbVE0vSGxdpqmWAwHRBqbPLW=LdCnHBQ@mail.gmail.com>
+ <CAHk-=whFeBezdSrPy31iYv-UZNnNavymrhqrwCptE4uW8aeaHw@mail.gmail.com>
+ <CAPhsuW7M6exGD3C1cPBGjhU0Y5efxtJ3=0BWNnbuH87TgQMzdg@mail.gmail.com>
+ <CAHk-=wh1mO5HdrOMTq68WHM51-=jdmQS=KipVYxS+5u3uRc5rg@mail.gmail.com>
+ <1A4FF473-0988-48BE-9993-0F5E9F0AAC95@fb.com>
+ <CAHk-=wi62LDc5B3DOr5pyVtOUOuLkLzHvmZQApH9q=raqaGkUg@mail.gmail.com>
+ <8F788446-899C-4BA3-8236-612A94D98582@fb.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8F788446-899C-4BA3-8236-612A94D98582@fb.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is unnecessary to call spin_lock_bh(), for you are already in a tasklet.
+> > On Apr 21, 2022, at 3:30 PM, Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-Signed-off-by: Yunbo Yu <yuyunbo519@gmail.com>
+> > I actually think bpf_arch_text_copy() is another horribly badly done thing.
+> > 
+> > It seems only implemented on x86 (I'm not sure how anything else is
+> > supposed to work, I didn't go look), and there it is horribly badly
+> > done, using __text_poke() that does all these magical things just to
+> > make it atomic wrt concurrent code execution.
+> > 
+> > None of which is *AT*ALL* relevant for this case, since concurrent
+> > code execution simply isn't a thing (and if it were, you would already
+> > have lost).
+> > 
+> > And if that wasn't pointless enough, it does all that magic "map the
+> > page writably at a different virtual address using poking_addr in
+> > poking_mm" and a different address space entirely.
+> > 
+> > All of that is required for REAL KERNEL CODE.
+> > 
+> > But the thing is, for bpf_prog_pack, all of that is just completely
+> > pointless and stupid complexity.
+
+I think the point is that this hole will likely share a page with active
+code, and as such there should not be a writable mapping mapping to it,
+necessitating the whole __text_poke() mess.
+
+That said; it does seem somewhat silly have a whole page worth of int3
+around just for this.
+
+Perhaps we can do something like the completely untested below?
+
 ---
- drivers/net/wireless/mediatek/mt76/mt7603/beacon.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/x86/kernel/alternative.c | 48 +++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 42 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7603/beacon.c b/drivers/net/wireless/mediatek/mt76/mt7603/beacon.c
-index 5d4522f440b7..b5e8308e0cc7 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7603/beacon.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7603/beacon.c
-@@ -82,12 +82,12 @@ void mt7603_pre_tbtt_tasklet(struct tasklet_struct *t)
- 	__skb_queue_head_init(&data.q);
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index d374cb3cf024..60afa9105307 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -994,7 +994,20 @@ static inline void unuse_temporary_mm(temp_mm_state_t prev_state)
+ __ro_after_init struct mm_struct *poking_mm;
+ __ro_after_init unsigned long poking_addr;
  
- 	q = dev->mphy.q_tx[MT_TXQ_BEACON];
--	spin_lock_bh(&q->lock);
-+	spin_lock(&q->lock);
- 	ieee80211_iterate_active_interfaces_atomic(mt76_hw(dev),
- 		IEEE80211_IFACE_ITER_RESUME_ALL,
- 		mt7603_update_beacon_iter, dev);
- 	mt76_queue_kick(dev, q);
--	spin_unlock_bh(&q->lock);
-+	spin_unlock(&q->lock);
+-static void *__text_poke(void *addr, const void *opcode, size_t len)
++static void text_poke_memcpy(void *dst, const void *src, size_t len)
++{
++	memcpy(dst, src, len);
++}
++
++static void text_poke_memset(void *dst, const void *src, size_t len)
++{
++	int c = *(int *)src;
++	memset(dst, c, len);
++}
++
++typedef void text_poke_f(void *dst, const void *src, size_t len);
++
++static void *__text_poke(text_poke_f func, void *addr, const void *src, size_t len)
+ {
+ 	bool cross_page_boundary = offset_in_page(addr) + len > PAGE_SIZE;
+ 	struct page *pages[2] = {NULL};
+@@ -1059,7 +1072,7 @@ static void *__text_poke(void *addr, const void *opcode, size_t len)
+ 	prev = use_temporary_mm(poking_mm);
  
- 	/* Flush all previous CAB queue packets */
- 	mt76_wr(dev, MT_WF_ARB_CAB_FLUSH, GENMASK(30, 16) | BIT(0));
-@@ -117,7 +117,7 @@ void mt7603_pre_tbtt_tasklet(struct tasklet_struct *t)
- 		mt76_skb_set_moredata(data.tail[i], false);
+ 	kasan_disable_current();
+-	memcpy((u8 *)poking_addr + offset_in_page(addr), opcode, len);
++	func((void *)poking_addr + offset_in_page(addr), src, len);
+ 	kasan_enable_current();
+ 
+ 	/*
+@@ -1091,7 +1104,8 @@ static void *__text_poke(void *addr, const void *opcode, size_t len)
+ 	 * If the text does not match what we just wrote then something is
+ 	 * fundamentally screwy; there's nothing we can really do about that.
+ 	 */
+-	BUG_ON(memcmp(addr, opcode, len));
++	if (func == text_poke_memcpy)
++		BUG_ON(memcmp(addr, src, len));
+ 
+ 	local_irq_restore(flags);
+ 	pte_unmap_unlock(ptep, ptl);
+@@ -1118,7 +1132,7 @@ void *text_poke(void *addr, const void *opcode, size_t len)
+ {
+ 	lockdep_assert_held(&text_mutex);
+ 
+-	return __text_poke(addr, opcode, len);
++	return __text_poke(text_poke_memcpy, addr, opcode, len);
+ }
+ 
+ /**
+@@ -1137,7 +1151,7 @@ void *text_poke(void *addr, const void *opcode, size_t len)
+  */
+ void *text_poke_kgdb(void *addr, const void *opcode, size_t len)
+ {
+-	return __text_poke(addr, opcode, len);
++	return __text_poke(text_poke_memcpy, addr, opcode, len);
+ }
+ 
+ /**
+@@ -1167,7 +1181,29 @@ void *text_poke_copy(void *addr, const void *opcode, size_t len)
+ 
+ 		s = min_t(size_t, PAGE_SIZE * 2 - offset_in_page(ptr), len - patched);
+ 
+-		__text_poke((void *)ptr, opcode + patched, s);
++		__text_poke(text_poke_memcpy, (void *)ptr, opcode + patched, s);
++		patched += s;
++	}
++	mutex_unlock(&text_mutex);
++	return addr;
++}
++
++void *text_poke_set(void *addr, int c, size_t len)
++{
++	unsigned long start = (unsigned long)addr;
++	size_t patched = 0;
++
++	if (WARN_ON_ONCE(core_kernel_text(start)))
++		return NULL;
++
++	mutex_lock(&text_mutex);
++	while (patched < len) {
++		unsigned long ptr = start + patched;
++		size_t s;
++
++		s = min_t(size_t, PAGE_SIZE * 2 - offset_in_page(ptr), len - patched);
++
++		__text_poke(text_poke_memset, (void *)ptr, (void *)&c, s);
+ 		patched += s;
  	}
- 
--	spin_lock_bh(&q->lock);
-+	spin_lock(&q->lock);
- 	while ((skb = __skb_dequeue(&data.q)) != NULL) {
- 		struct ieee80211_tx_info *info = IEEE80211_SKB_CB(skb);
- 		struct ieee80211_vif *vif = info->control.vif;
-@@ -126,7 +126,7 @@ void mt7603_pre_tbtt_tasklet(struct tasklet_struct *t)
- 		mt76_tx_queue_skb(dev, q, skb, &mvif->sta.wcid, NULL);
- 	}
- 	mt76_queue_kick(dev, q);
--	spin_unlock_bh(&q->lock);
-+	spin_unlock(&q->lock);
- 
- 	for (i = 0; i < ARRAY_SIZE(data.count); i++)
- 		mt76_wr(dev, MT_WF_ARB_CAB_COUNT_B0_REG(i),
--- 
-2.25.1
-
+ 	mutex_unlock(&text_mutex);

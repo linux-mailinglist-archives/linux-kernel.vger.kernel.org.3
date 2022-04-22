@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A553450B44F
+	by mail.lfdr.de (Postfix) with ESMTP id EDA3450B450
 	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:46:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446195AbiDVJsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 05:48:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60092 "EHLO
+        id S1446189AbiDVJrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 05:47:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381631AbiDVJsL (ORCPT
+        with ESMTP id S1446167AbiDVJrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 05:48:11 -0400
-X-Greylist: delayed 66 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 22 Apr 2022 02:45:14 PDT
-Received: from esa8.hc1455-7.c3s2.iphmx.com (esa8.hc1455-7.c3s2.iphmx.com [139.138.61.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D42153731
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 02:45:13 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="58751382"
+        Fri, 22 Apr 2022 05:47:02 -0400
+Received: from esa10.hc1455-7.c3s2.iphmx.com (esa10.hc1455-7.c3s2.iphmx.com [139.138.36.225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5976453B5F;
+        Fri, 22 Apr 2022 02:44:09 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="58614522"
 X-IronPort-AV: E=Sophos;i="5.90,281,1643641200"; 
-   d="scan'208";a="58751382"
-Received: from unknown (HELO yto-r1.gw.nic.fujitsu.com) ([218.44.52.217])
-  by esa8.hc1455-7.c3s2.iphmx.com with ESMTP; 22 Apr 2022 18:44:06 +0900
-Received: from yto-m2.gw.nic.fujitsu.com (yto-nat-yto-m2.gw.nic.fujitsu.com [192.168.83.65])
-        by yto-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 7A44CCA260;
+   d="scan'208";a="58614522"
+Received: from unknown (HELO oym-r3.gw.nic.fujitsu.com) ([210.162.30.91])
+  by esa10.hc1455-7.c3s2.iphmx.com with ESMTP; 22 Apr 2022 18:44:06 +0900
+Received: from oym-m3.gw.nic.fujitsu.com (oym-nat-oym-m3.gw.nic.fujitsu.com [192.168.87.60])
+        by oym-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id BF644D6478;
         Fri, 22 Apr 2022 18:44:05 +0900 (JST)
 Received: from oym-om1.fujitsu.com (oym-om1.o.css.fujitsu.com [10.85.58.161])
-        by yto-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 95504E6771;
+        by oym-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id CBC60D9462;
         Fri, 22 Apr 2022 18:44:04 +0900 (JST)
 Received: from localhost.localdomain (bakeccha.fct.css.fujitsu.com [10.126.195.136])
-        by oym-om1.fujitsu.com (Postfix) with ESMTP id 502B840487FBC;
+        by oym-om1.fujitsu.com (Postfix) with ESMTP id 8B9E040483741;
         Fri, 22 Apr 2022 18:44:04 +0900 (JST)
 From:   Shunsuke Nakamura <nakamura.shun@fujitsu.com>
 To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
         mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
         jolsa@redhat.com, namhyung@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: [PATCH 6/7] libperf test: Add test_stat_overflow()
-Date:   Fri, 22 Apr 2022 18:38:32 +0900
-Message-Id: <20220422093833.340873-7-nakamura.shun@fujitsu.com>
+Subject: [PATCH 7/7] libperf test: Add test_stat_overflow_event()
+Date:   Fri, 22 Apr 2022 18:38:33 +0900
+Message-Id: <20220422093833.340873-8-nakamura.shun@fujitsu.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220422093833.340873-1-nakamura.shun@fujitsu.com>
 References: <20220422093833.340873-1-nakamura.shun@fujitsu.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,12 +51,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added overflow test using refresh and period.
-
-Confirmation
- - That the overflow occurs the number of times specified by
-   perf_evse__refresh()
- - That the period can be updated by perf_evsel__period()
+Add a test to check overflowed events.
 
 Committer testing:
 
@@ -76,19 +70,15 @@ Committer testing:
 
   <SNIP>
 
+  Event  0 -- overflow flag = 0x1, POLL_UP = 1, other signal event = 0
+  Event  1 -- overflow flag = 0x2, POLL_UP = 1, other signal event = 0
+  Event  2 -- overflow flag = 0x4, POLL_UP = 1, other signal event = 0
+  Event  3 -- overflow flag = 0x8, POLL_UP = 1, other signal event = 0
   OK
   - running tests/test-evsel.c...
 
   <SNIP>
 
-          period = 1000000
-          overflow limit = 3, overflow count = 3, POLL_IN = 2, POLL_UP = 1, other signal event = 0
-          period = 2000000
-          overflow limit = 3, overflow count = 3, POLL_IN = 2, POLL_UP = 1, other signal event = 0
-          period = 1000000
-          overflow limit = 3, overflow count = 3, POLL_IN = 2, POLL_UP = 1, other signal event = 0
-          period = 2000000
-          overflow limit = 3, overflow count = 3, POLL_IN = 2, POLL_UP = 1, other signal event = 0
   OK
   running dynamic:
   - running tests/test-cpumap.c...OK
@@ -97,101 +87,95 @@ Committer testing:
 
   <SNIP>
 
+  Event  0 -- overflow flag = 0x1, POLL_UP = 1, other signal event = 0
+  Event  1 -- overflow flag = 0x2, POLL_UP = 1, other signal event = 0
+  Event  2 -- overflow flag = 0x4, POLL_UP = 1, other signal event = 0
+  Event  3 -- overflow flag = 0x8, POLL_UP = 1, other signal event = 0
   OK
   - running tests/test-evsel.c...
 
   <SNIP>
 
-          period = 1000000
-          overflow limit = 3, overflow count = 3, POLL_IN = 2, POLL_UP = 1, other signal event = 0
-          period = 2000000
-          overflow limit = 3, overflow count = 3, POLL_IN = 2, POLL_UP = 1, other signal event = 0
-          period = 1000000
-          overflow limit = 3, overflow count = 3, POLL_IN = 2, POLL_UP = 1, other signal event = 0
-          period = 2000000
-          overflow limit = 3, overflow count = 3, POLL_IN = 2, POLL_UP = 1, other signal event = 0
   OK
   make: Leaving directory '/home/nakamura/build_work/build_kernel/linux-kernel/linux/tools/lib/perf'
 
 Signed-off-by: Shunsuke Nakamura <nakamura.shun@fujitsu.com>
 ---
- tools/lib/perf/tests/test-evsel.c | 108 ++++++++++++++++++++++++++++++
- 1 file changed, 108 insertions(+)
+ tools/lib/perf/tests/test-evlist.c | 111 +++++++++++++++++++++++++++++
+ 1 file changed, 111 insertions(+)
 
-diff --git a/tools/lib/perf/tests/test-evsel.c b/tools/lib/perf/tests/test-evsel.c
-index 89be89afb24d..4de5d5554836 100644
---- a/tools/lib/perf/tests/test-evsel.c
-+++ b/tools/lib/perf/tests/test-evsel.c
-@@ -1,6 +1,11 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include <inttypes.h>
+diff --git a/tools/lib/perf/tests/test-evlist.c b/tools/lib/perf/tests/test-evlist.c
+index d8f9493cd4d1..587364851432 100644
+--- a/tools/lib/perf/tests/test-evlist.c
++++ b/tools/lib/perf/tests/test-evlist.c
+@@ -5,6 +5,8 @@
  #include <stdarg.h>
- #include <stdio.h>
+ #include <unistd.h>
+ #include <stdlib.h>
 +#include <string.h>
-+#include <signal.h>
-+#include <unistd.h>
 +#include <fcntl.h>
  #include <linux/perf_event.h>
- #include <perf/cpumap.h>
- #include <perf/threadmap.h>
-@@ -8,6 +13,15 @@
- #include <internal/tests.h>
- #include "tests.h"
+ #include <linux/limits.h>
+ #include <sys/types.h>
+@@ -24,6 +26,13 @@
+ #define EVENT_NUM 15
+ #define WAIT_COUNT 100000000UL
  
-+#define WAIT_COUNT 10000000UL
++static unsigned int overflow_flag;
 +static struct signal_counts {
-+	int in;
 +	int hup;
 +	int others;
-+	int overflow;
 +} sig_count;
-+static struct perf_evsel *s_evsel;
++static struct perf_evlist *s_evlist;
 +
  static int libperf_print(enum libperf_print_level level,
  			 const char *fmt, va_list ap)
  {
-@@ -189,6 +203,98 @@ static int test_stat_user_read(int event)
+@@ -570,6 +579,107 @@ static int test_stat_multiplexing(void)
  	return 0;
  }
  
 +static void sig_handler(int signo, siginfo_t *info, void *uc)
 +{
-+	switch (info->si_code) {
-+	case POLL_IN:
-+		sig_count.in++;
-+		break;
-+	case POLL_HUP:
-+		sig_count.hup++;
-+		break;
-+	default:
-+		sig_count.others++;
++	struct perf_evsel *evsel;
++	int i = 0;
++
++	perf_evlist__for_each_evsel(s_evlist, evsel) {
++		if (perf_evsel__has_fd(evsel, info->si_fd)) {
++			if (info->si_code == POLL_HUP)
++				sig_count.hup++;
++			else
++				sig_count.others++;
++
++			overflow_flag = (1U << i);
++			return;
++		}
++		i++;
 +	}
 +
-+	sig_count.overflow++;
++	__T_VERBOSE("Failed to get fd of overflowed event");
 +}
 +
-+static int test_stat_overflow(int owner)
++static int test_stat_overflow_event(void)
 +{
 +	static struct sigaction sig;
-+	u64 period = 1000000;
-+	int overflow_limit = 3;
 +
 +	struct perf_thread_map *threads;
++	struct perf_evsel *evsel;
 +	struct perf_event_attr attr = {
-+		.type           = PERF_TYPE_SOFTWARE,
-+		.config         = PERF_COUNT_SW_TASK_CLOCK,
-+		.sample_type    = PERF_SAMPLE_PERIOD,
-+		.sample_period  = period,
-+		.disabled       = 1,
++		.type		= PERF_TYPE_SOFTWARE,
++		.config		= PERF_COUNT_SW_CPU_CLOCK,
++		.sample_type	= PERF_SAMPLE_PERIOD,
++		.sample_period	= 100000,
++		.disabled	= 1,
 +	};
-+	struct perf_event_attr *tmp_attr;
-+	int err = 0, i;
++	int err, i, event_num = 4;
 +
 +	LIBPERF_OPTS(perf_evsel_open_opts, opts,
 +		     .open_flags = PERF_FLAG_FD_CLOEXEC,
 +		     .flags	 = (O_RDWR | O_NONBLOCK | O_ASYNC),
 +		     .signal	 = SIGRTMIN + 1,
-+		     .owner_type = owner,
++		     .owner_type = F_OWNER_PID,
 +		     .sig	 = &sig);
 +
 +	/* setup signal handler */
@@ -204,57 +188,62 @@ index 89be89afb24d..4de5d5554836 100644
 +
 +	perf_thread_map__set_pid(threads, 0, 0);
 +
-+	s_evsel = perf_evsel__new(&attr);
-+	__T("failed to create evsel", s_evsel);
++	s_evlist = perf_evlist__new();
++	__T("failed to create evlist", s_evlist);
 +
-+	err = perf_evsel__open_opts(s_evsel, NULL, threads, &opts);
-+	__T("failed to open evsel", err == 0);
++	for (i = 0; i < event_num; i++) {
++		evsel = perf_evsel__new(&attr);
++		__T("failed to create evsel", evsel);
 +
-+	for (i = 0; i < 2; i++) {
++		perf_evlist__add(s_evlist, evsel);
++	}
++
++	perf_evlist__set_maps(s_evlist, NULL, threads);
++
++	err = perf_evlist__open_opts(s_evlist, &opts);
++	__T("failed to open evlist", err == 0);
++
++	i = 0;
++	perf_evlist__for_each_evsel(s_evlist, evsel) {
 +		volatile unsigned int wait_count = WAIT_COUNT;
 +
-+		sig_count.in = 0;
++		overflow_flag = 0;
 +		sig_count.hup = 0;
 +		sig_count.others = 0;
-+		sig_count.overflow = 0;
 +
-+		period = period << i;
-+		err = perf_evsel__period(s_evsel, period);
-+		__T("failed to period evsel", err == 0);
-+
-+		tmp_attr = perf_evsel__attr(s_evsel);
-+		__T_VERBOSE("\tperiod = %llu\n", tmp_attr->sample_period);
-+
-+		err = perf_evsel__refresh(s_evsel, overflow_limit);
++		err = perf_evsel__refresh(evsel, 1);
 +		__T("failed to refresh evsel", err == 0);
 +
 +		while (wait_count--)
 +			;
 +
-+		__T_VERBOSE("\toverflow limit = %d, overflow count = %d, ",
-+			    overflow_limit, sig_count.overflow);
-+		__T_VERBOSE("POLL_IN = %d, POLL_HUP = %d, other signal event = %d\n",
-+			    sig_count.in, sig_count.hup, sig_count.others);
++		__T_VERBOSE("Event %2d -- overflow flag = %#x, ",
++			    i, overflow_flag);
++		__T_VERBOSE("POLL_HUP = %d, other signal event = %d\n",
++			    sig_count.hup, sig_count.others);
 +
-+		__T("failed to overflow count", overflow_limit == sig_count.overflow);
++		__T("unexpected event overflow detected", overflow_flag && (1U << i));
++		__T("unexpected signal event detected",
++		    sig_count.hup == 1 && sig_count.others == 0);
++
++		i++;
 +	}
 +
-+	perf_evsel__close(s_evsel);
-+	perf_evsel__delete(s_evsel);
++	perf_evlist__close(s_evlist);
++	perf_evlist__delete(s_evlist);
 +	perf_thread_map__put(threads);
 +
 +	return 0;
 +}
 +
- int test_evsel(int argc, char **argv)
+ int test_evlist(int argc, char **argv)
  {
  	__T_START;
-@@ -200,6 +306,8 @@ int test_evsel(int argc, char **argv)
- 	test_stat_thread_enable();
- 	test_stat_user_read(PERF_COUNT_HW_INSTRUCTIONS);
- 	test_stat_user_read(PERF_COUNT_HW_CPU_CYCLES);
-+	test_stat_overflow(F_OWNER_PID);
-+	test_stat_overflow(F_OWNER_TID);
+@@ -582,6 +692,7 @@ int test_evlist(int argc, char **argv)
+ 	test_mmap_thread();
+ 	test_mmap_cpus();
+ 	test_stat_multiplexing();
++	test_stat_overflow_event();
  
  	__T_END;
  	return tests_failed == 0 ? 0 : -1;

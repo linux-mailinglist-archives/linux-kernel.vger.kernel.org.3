@@ -2,144 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF0F750B552
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:38:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 806A150B54E
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446662AbiDVKkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 06:40:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
+        id S1446799AbiDVKkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 06:40:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446631AbiDVKiv (ORCPT
+        with ESMTP id S1446769AbiDVKjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 06:38:51 -0400
-Received: from mailout2.rbg.tum.de (mailout2.rbg.tum.de [IPv6:2a09:80c0::202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D9354FAD;
-        Fri, 22 Apr 2022 03:35:54 -0700 (PDT)
-Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [131.159.254.14])
-        by mailout2.rbg.tum.de (Postfix) with ESMTPS id 7C0704C02B0;
-        Fri, 22 Apr 2022 12:35:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
-        s=20220209; t=1650623749;
-        bh=bCNDShSNWamzrapZyCH2+MaOYLPQy3BG0jVzD+WNbD4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=dT+Zo14Mw3Zm1XxiUb4lp1L+yp/xGGuTBLjGLo5o8N/e9+BZaFpaWXuulYOOhz6Ib
-         oKaQ3sSQ9GiWnhU1giBGZwJQyLv9Vw/JKzbWwJ9gEXhuCT9ytBiie1yu2ib53kNJ3y
-         aDsCRtWsWp3Y3882MQVZ5hPSYXSOdLwe+rRZIbEGTC8ckRolOWQEBB1O4l3bmLtjEe
-         a7FHmnSmgjO2veh/5kLbGHVY7kJEs1CPL+daN7HoJ3DfEr0F2otg/uN3wwYHayQudm
-         0UCgCPpAozOgr/clanEiNpP0eUk80HirH/bI5BSGD1xUqeFWuIcD7rXeBtIudnzkfp
-         57ZbauIKayR0Q==
-Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
-        id 763FE6D8; Fri, 22 Apr 2022 12:35:49 +0200 (CEST)
-Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 41EF06D7;
-        Fri, 22 Apr 2022 12:35:49 +0200 (CEST)
-Received: from mail.in.tum.de (vmrbg426.in.tum.de [131.159.0.73])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 3CF2D55F;
-        Fri, 22 Apr 2022 12:35:49 +0200 (CEST)
-Received: by mail.in.tum.de (Postfix, from userid 112)
-        id 1AEA74A037C; Fri, 22 Apr 2022 12:35:49 +0200 (CEST)
-Received: (Authenticated sender: heidekrp)
-        by mail.in.tum.de (Postfix) with ESMTPSA id 496B74A01EC;
-        Fri, 22 Apr 2022 12:35:48 +0200 (CEST)
-        (Extended-Queue-bit xtech_eq@fff.in.tum.de)
-Date:   Fri, 22 Apr 2022 12:35:41 +0200
-From:   Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        llvm@lists.linux.dev
-Cc:     Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-        Soham Shakraborty <s.s.chakraborty@tudelft.nl>,
-        Martin Fink <martin.fink@in.tum.de>
-Subject: Broken Address Dependency in mm/ksm.c::cmp_and_merge_page()
-Message-ID: <YmKE/XgmRnGKrBbB@Pauls-MacBook-Pro.local>
+        Fri, 22 Apr 2022 06:39:39 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DEE25520A
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:36:39 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id b95so13738972ybi.1
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:36:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4zcLXpCy7SBjHdgWPDMiVMAfSv9GgL9PPHTJHm95g50=;
+        b=TlZWQKiYpTuDxECbeXwF6tJvJGze7xTFNWlQD4B2jRWUPyNtSO32rIHpFbOH95KpZM
+         s26ARO9kRKdZUXaE9W+5GAk4Biz6ra37er4NWm9KQgbRawLZiJ4N62G0EB9Mm35+FIPt
+         VE0ppUmp9NOUmWczcYULL7OuU3fw+9RKxiZaP87uqLCwucSFLVBH5/tryhvBmqajwmoC
+         dy7swc3bCfD7Q+nwTUg1K9U7fgliOrmqEuFIfYXlrNb6gziSxffXs9/Ac4SEgpIBkQwS
+         hko+HrFRO72KcUP7tdIswvVyCkaDPDTJTQ4qtmZ3iuoFZRelgls7PmWUdYDm57FAvOFe
+         jd8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4zcLXpCy7SBjHdgWPDMiVMAfSv9GgL9PPHTJHm95g50=;
+        b=yaJ6hKgWbugfvsMhm3xJCzdP/Q7uaMmGyU+45mCS3RYjmruyrJQylUVr5vXIHg9fJU
+         SR/BS/g8bI7brTAICFoOKfDvuztE1zGPE53MJg9frRhDpztK5vHOoBBSnK0zYBEYFPI3
+         Zzd6VCpB6yqciH50hfnbrS8HSNgGpJqTVNC8v3po/NIqql/8k93T6cNV3DjSAqJpnUFm
+         SOXEHXnuXd5jQWfl0/CWjBeejpN7OHycaVa8GTMYMWpNvhsNbKePjRFJ6ysepWCMN1VD
+         6KAzxJRGazS4O4vl0vlHfQzXctnsAvBZE9hbvTridW+q9sYVRyVhO73zEaOEUKG6H2tg
+         JbOg==
+X-Gm-Message-State: AOAM531SmAvrjqVmnCAqObrhy2P91J4WvhZhpI8OvUx+mJlkUiML0fIJ
+        Mttu1fx4pvEldgCaIXddzmqohH1a6LItVeT6K4n41g==
+X-Google-Smtp-Source: ABdhPJz/ZFLFWoRZflZmG53V5oTsUDnKFJ76SRaHRYdcW5SRnzL6Jxlv23hnpEE1sIZLnoSq3Xe3/OdvM8uV/u46Xk0=
+X-Received: by 2002:a25:84c1:0:b0:63e:7733:f95a with SMTP id
+ x1-20020a2584c1000000b0063e7733f95amr3370991ybm.234.1650623798744; Fri, 22
+ Apr 2022 03:36:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220421102041.17345-1-johan+linaro@kernel.org>
+ <20220421102041.17345-3-johan+linaro@kernel.org> <55d6e32b-9cf4-384c-1036-1adfb867ece8@linaro.org>
+ <YmJ+Ti81el2MzsHG@hovoldconsulting.com>
+In-Reply-To: <YmJ+Ti81el2MzsHG@hovoldconsulting.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Fri, 22 Apr 2022 13:36:27 +0300
+Message-ID: <CAA8EJpq25Oi8scffT_u9kGN5CYM7nK4Wxh0Kep+eRFg8xngiHg@mail.gmail.com>
+Subject: Re: [PATCH RFC 2/5] arm64: dts: qcom: sc7280: move pipe mux handling
+ to phy
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Prasad Malisetty <quic_pmaliset@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-phy@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all, 
+On Fri, 22 Apr 2022 at 13:07, Johan Hovold <johan@kernel.org> wrote:
+>
+> On Thu, Apr 21, 2022 at 01:59:04PM +0300, Dmitry Baryshkov wrote:
+> > On 21/04/2022 13:20, Johan Hovold wrote:
+> > > The QMP PHY pipe clock remuxing is part of the PHY, which is both the
+> > > producer and the consumer of the pipe clock.
+> > >
+> > > Update the PCIe controller and PHY node to reflect the new binding.
+> > >
+> > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > > ---
+> > >   arch/arm64/boot/dts/qcom/sc7280.dtsi | 18 ++++++------------
+> > >   1 file changed, 6 insertions(+), 12 deletions(-)
+> > >
+> > > diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> > > index c07765df9303..b3a9630262dc 100644
+> > > --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> > > +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> > > @@ -1837,11 +1837,7 @@ pcie1: pci@1c08000 {
+> > >                                     <0 0 0 3 &intc 0 0 0 438 IRQ_TYPE_LEVEL_HIGH>,
+> > >                                     <0 0 0 4 &intc 0 0 0 439 IRQ_TYPE_LEVEL_HIGH>;
+> > >
+> > > -                   clocks = <&gcc GCC_PCIE_1_PIPE_CLK>,
+> > > -                            <&gcc GCC_PCIE_1_PIPE_CLK_SRC>,
+> > > -                            <&pcie1_lane 0>,
+> > > -                            <&rpmhcc RPMH_CXO_CLK>,
+> > > -                            <&gcc GCC_PCIE_1_AUX_CLK>,
+> > > +                   clocks = <&gcc GCC_PCIE_1_AUX_CLK>,
+> > >                              <&gcc GCC_PCIE_1_CFG_AHB_CLK>,
+> > >                              <&gcc GCC_PCIE_1_MSTR_AXI_CLK>,
+> > >                              <&gcc GCC_PCIE_1_SLV_AXI_CLK>,
+> > > @@ -1849,11 +1845,7 @@ pcie1: pci@1c08000 {
+> > >                              <&gcc GCC_AGGRE_NOC_PCIE_TBU_CLK>,
+> > >                              <&gcc GCC_DDRSS_PCIE_SF_CLK>;
+> > >
+> > > -                   clock-names = "pipe",
+> > > -                                 "pipe_mux",
+> > > -                                 "phy_pipe",
+> > > -                                 "ref",
+> > > -                                 "aux",
+> > > +                   clock-names = "aux",
+> > >                                   "cfg",
+> > >                                   "bus_master",
+> > >                                   "bus_slave",
+> > > @@ -1910,8 +1902,10 @@ pcie1_lane: lanes@1c0e200 {
+> > >                                   <0 0x01c0e600 0 0x170>,
+> > >                                   <0 0x01c0e800 0 0x200>,
+> > >                                   <0 0x01c0ee00 0 0xf4>;
+> > > -                           clocks = <&gcc GCC_PCIE_1_PIPE_CLK>;
+> > > -                           clock-names = "pipe0";
+> > > +                           clocks = <&gcc GCC_PCIE_1_PIPE_CLK>,
+> > > +                                    <&gcc GCC_PCIE_1_PIPE_CLK_SRC>,
+> > > +                                    <&rpmhcc RPMH_CXO_CLK>;
+> > > +                           clock-names = "pipe0", "mux", "ref";
+> >
+> > This will not be compatible with earlier DTB files, which was a problem
+> > up to now.
+>
+> That depends. The above wasn't added until 5.16 so we may still be able
+> to fix it.
 
-My dependency checker is flagging yet another broken dependency. For
-context, see [1].
+That would depend on Rob/Krzyshtof. But the whole process should be described.
+The driver can nod depend on the clocks being there.
 
-Thankfully, it is fairly straight-forward to explain this time.
+>
+> The NAK you got from Rob earlier was when you removed clocks that have
+> been in the devicetree for several years:
+>
+>         https://lore.kernel.org/all/YgQ+tGhLqwUCsTUo@robh.at.kernel.org/
+>
+> and would still be needed by older kernels.
+>
+> Worst case, we need to keep both sets for sc7280 (i.e. like we need to
+> do with the pipe clocks that have been around for years).
+>
+> Johan
 
-> stable_node = page_stable_node(page);
 
-Line 2032 in mm/ksm.c::cmp_and_merge_page() sees the return value of a
-call to "page_stable_node()", which can depend on a "READ_ONCE()", being
-assigned to "stable_node".
 
-> if (stable_node) {
->         if (stable_node->head != &migrate_nodes &&
->             get_kpfn_nid(READ_ONCE(stable_node->kpfn)) != 
->             NUMA(stable_node->nid)) {
->                 stable_node_dup_del(stable_node); ‣dup: stable_node
->                 stable_node->head = &migrate_nodes;
->                 list_add(&stable_node->list, stable_node->head);
-
-The dependency chain then runs into the two following if's, through an
-assignment of "migrate_nodes" to "stable_node->head" (line 2038) and
-finally reaches a call to "list_add()" (line 2039) where
-"stable_node->head" gets passed as the second function argument. 
-
->         }
-> }
-> 
-> static inline void list_add(struct list_head *new, struct list_head *head)
-> {
->         __list_add(new, head, head->next);
-> }
-> 
-> static inline void __list_add(struct list_head *new,
->                               struct list_head *prev,
->                               struct list_head *next)
-> {
->         if (!__list_add_valid(new, prev, next))
->                 return;
-> 
->         next->prev = new;
->         new->next = next;
->         new->prev = prev;
->         WRITE_ONCE(prev->next, new);
-> }
-
-By being passed into "list_add()" via "stable_node->head", the
-dependency chain eventually reaches a "WRITE_ONCE()" in "__list_add()"
-whose destination address, "stable_node->head->next", is part of the
-dependency chain and therefore carries an address dependency. 
-
-However, as a result of the assignment in line 2038, Clang knows that
-"stable_node->head" is "migrate_nodes" and replaces it, thereby breaking
-the dependency chain. 
-
-What do you think?
-
-Many thanks,
-Paul
-
---
-[1]: https://lore.kernel.org/all/Yk7%2FT8BJITwz+Og1@Pauls-MacBook-Pro.local/
-
+-- 
+With best wishes
+Dmitry

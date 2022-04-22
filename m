@@ -2,102 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1393750B581
+	by mail.lfdr.de (Postfix) with ESMTP id 79DFD50B582
 	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446848AbiDVKsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 06:48:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47612 "EHLO
+        id S1446857AbiDVKsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 06:48:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446602AbiDVKsf (ORCPT
+        with ESMTP id S1446851AbiDVKsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 06:48:35 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD05E3FBFA
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:45:42 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id y21so3037070edo.2
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:45:42 -0700 (PDT)
+        Fri, 22 Apr 2022 06:48:53 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD0E3FBFA;
+        Fri, 22 Apr 2022 03:45:59 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id w1so13575928lfa.4;
+        Fri, 22 Apr 2022 03:45:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=E0mPDFRf2yGCYjXvBv/hrY8X7EKal2dOh8Gqauv0y1o=;
-        b=hMffFfUZGHLuMf4xjuCqC0todGSD5kRTFeTjJ/Kiq1GvDKE7GYPQ3BHfEWcc0+BLRo
-         zfNfU1rBTvTUXATzcYtX/G3CPWoziz3HoJYMc7cipZ/SWumhn3QqeoYtqqyMZlGr3WbV
-         56kHys/Ez8+9AqYfP78EOQGF8z5jZuNnJCl9IOPLFu2v/38oq2PZOFA9hlupunvO1zDY
-         lTAjSXpPU5bqtAkqFbdpdHl3OJngGxgPeFSWr/RBrI33GnVBszAQEjEXLmiT8G1azlst
-         xEuBRQlqa0Npblv/r4aiHrALyWxVk9RR5TE/8Addh8txKNshI89Vnr+oT6BqIuKRi4lA
-         Kxzg==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wGWQsodsPCEvTet53bPj88p4jYhZ/d++dMltkcbaEYI=;
+        b=mAgORrZD4oGwxnomgnH+TjiwLaKb2n8RwwlVy9gojA6VXZvgpCuQHQFkyqo+L5hSg7
+         P/CfljKHsQEkc4wyZRStj3cokDs5YI3oqJNK1uGWh3hbb2s22dB6WydHn15mu8u7mMO1
+         8xBbXHxbRZmFXP5y3CV4pHpt0MPycn8SbcxahMoLHnhpFRQkLqGn5XzYyhFRC8N8m2Wk
+         KItYYPtNrYMxiSoEyFk/4cxmCOQ0eQoqfllAQBynyv5OpDO4/x98HAzYmVKwcgvFIjPS
+         lV6xZfyH+TW+wVOrnPE+U18irxyThdJTg1usk374FlxJQ/bcWJ3is8Gcp91qT4ffBaXY
+         0Iuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=E0mPDFRf2yGCYjXvBv/hrY8X7EKal2dOh8Gqauv0y1o=;
-        b=TXDID6iD5msdJ6ZN7A3TP0BRoKpzYrhKnYhV92dNcanaiaM7p2jL1BDI83H42AjQmr
-         v4+lcp5l4azGY1Cg9W9fchWowyml/PDvVMlfmfwb/NDhq9zjKor7HMANhDcAL9lZGiMo
-         nMuWgx2Zdhy0Bim6IyK2wSrE9luu4m9EUllT0jev5B3jLvgdMthrjzakPu234o30r8Tv
-         FXsQhZkjGQSS7QFLqLZ1Z3DnHYi3QsF8Cd4v/fljf+3+scqF5j+MvCLdJgCK5rYlkuUi
-         eKxdGQC9Nva7HlJz9KOLW26gJBKK7r/xK6jy165zTSQGP3ULBEQWsO0/KNKKizwUIolY
-         4HRw==
-X-Gm-Message-State: AOAM533UmAb20eNN9KRCtykarASv+4VJiVFrS/Oq3GMwH2Uba9sZ3VIq
-        tuHEVy5CCX52mxRkdZL9usQC/Q==
-X-Google-Smtp-Source: ABdhPJzJD/7be1sR2YX5lXMsY8HObXb/T1c5dQYSajPOBst6CqwP9QEnjh5GfF1c3sLUGXKVJ3qfyw==
-X-Received: by 2002:a05:6402:1107:b0:416:439a:6a9e with SMTP id u7-20020a056402110700b00416439a6a9emr4059032edv.382.1650624341298;
-        Fri, 22 Apr 2022 03:45:41 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id cn27-20020a0564020cbb00b00418b0c7fbbfsm744502edb.32.2022.04.22.03.45.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 03:45:40 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Eddie James <eajames@linux.ibm.com>, linux-i2c@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] irqchip/aspeed-scu-ic: Fix irq_of_parse_and_map() return value
-Date:   Fri, 22 Apr 2022 12:45:36 +0200
-Message-Id: <20220422104536.61451-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220422104536.61451-1-krzysztof.kozlowski@linaro.org>
-References: <20220422104536.61451-1-krzysztof.kozlowski@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wGWQsodsPCEvTet53bPj88p4jYhZ/d++dMltkcbaEYI=;
+        b=Vnhzk3WCyxhFGKTD2kkKcTd1joc6W3il2yVzQaF+pEF2SjHk+wTKGhEIQkGRMMoMnD
+         bQ57VxswqHvqUgk4I3LnMy9QFhxe0tfsYgTPnaQntknMf4Pxy0UEHaLnKLvHOqQoDXAD
+         7vebOzh2FYtYPxNyWTEVeqm+RThvUTaVK2Uo/riFEHkt9PNN0XNMaN75lB53MUFyeauh
+         CBFb4mN77eozMBCg3jOrGJ+bBTbrzXx/GnMurjNzm+rsrmkyhgaJ3b5x4RqLALy8YBCK
+         0BM8accF8OYGUPzy/KdrT8mGPB6tPrAM/q7aXeg29ES/qekxn8jiNql83cWSo8ObhxeI
+         KWFQ==
+X-Gm-Message-State: AOAM5316VYovy/GI6hcjgVIAxIPY0BNaQlmtN1rvJqtiI65PaUQXQpAE
+        ZL44m9m7IxLYFLcZK/Gtuxng1gLW+6Iudf5GMq8=
+X-Google-Smtp-Source: ABdhPJwDhLfB/RddN8AJO1OXvAzh43JVwTYgu7pKH9N74RGPzr1t5+yHvvDMmvwJ0C1Lq06TJ+kPl88b4hRASryM51Q=
+X-Received: by 2002:a05:6512:31cc:b0:471:d125:162c with SMTP id
+ j12-20020a05651231cc00b00471d125162cmr2737873lfe.96.1650624357838; Fri, 22
+ Apr 2022 03:45:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220418043735.11441-1-patrick.wang.shcn@gmail.com>
+ <20220418143404.55c8fcab@gandalf.local.home> <CAGcnep8bH4Nncbt3t+VRLff35ZyD8JyzHcEgkq-u6TEq47jqzQ@mail.gmail.com>
+ <CAGcnep_Gx+3KiUvDVronYKn_divU3OM-RQEOPZakv7MRYh4EJw@mail.gmail.com>
+ <20220420114454.69ab108c@gandalf.local.home> <20220420122633.55d4ff6b@gandalf.local.home>
+ <CAGcnep86pd2trfTovU8_z1msOstx7gKCdndm=pHLDGTy+_K7=g@mail.gmail.com> <20220421085047.2cb8edf9@gandalf.local.home>
+In-Reply-To: <20220421085047.2cb8edf9@gandalf.local.home>
+From:   patrick wang <patrick.wang.shcn@gmail.com>
+Date:   Fri, 22 Apr 2022 18:45:46 +0800
+Message-ID: <CAGcnep9Ez-S962vukR_a=otzcSxDRo5HUW2vG_YCBanCfURGXw@mail.gmail.com>
+Subject: Re: [PATCH] rcu: ftrace: avoid tracing a few functions executed in multi_cpu_stop()
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
+        jiangshanlai@gmail.com, joel@joelfernandes.org,
+        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
+On Thu, Apr 21, 2022 at 8:50 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Thu, 21 Apr 2022 19:36:06 +0800
+> patrick wang <patrick.wang.shcn@gmail.com> wrote:
+>
+> > On Thu, Apr 21, 2022 at 12:26 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+> > >
+> > > On Wed, 20 Apr 2022 11:44:54 -0400
+> > > Steven Rostedt <rostedt@goodmis.org> wrote:
+> > >
+> > >
+> > > Interesting. On x86 when we used stop machine[*] it was not an issue to
+> > > modify the code that is being executed in stop machine. I'm curious to
+> > > exactly what the issue is if something does get traced in the stop machine
+> > > processing. Why does it crash?
+> >
+> > I looked up the commit history. When x86 turned to breakpoints, stop
+> > machine's state machine loop had no calls during waiting. So there
+> > was no function being called during modifying code. Which means
+> > there were no other cpus would load those instructions to be updated
+> > in this period. While the stop machine currently will call other functions
+> > and the call chain is fairly deep. So it may not quite be suitable for ftrace
+> > now because it can not make sure the instructions within its own call
+> > chain are updated atomically.
+>
+> Are you saying that the RISC-V stop machine implementation has code being
+> called on the other CPUs while they wait?
+>
 
-Fixes: 04f605906ff0 ("irqchip: Add Aspeed SCU interrupt controller")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/irqchip/irq-aspeed-scu-ic.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Yes, and not just RISC-V. It's arch-independent. It's the internal change of
+stop machine implementation.
 
-diff --git a/drivers/irqchip/irq-aspeed-scu-ic.c b/drivers/irqchip/irq-aspeed-scu-ic.c
-index 18b77c3e6db4..9cf67541828f 100644
---- a/drivers/irqchip/irq-aspeed-scu-ic.c
-+++ b/drivers/irqchip/irq-aspeed-scu-ic.c
-@@ -157,7 +157,7 @@ static int aspeed_scu_ic_of_init_common(struct aspeed_scu_ic *scu_ic,
- 	}
- 
- 	irq = irq_of_parse_and_map(node, 0);
--	if (irq < 0) {
-+	if (!irq) {
- 		rc = irq;
- 		goto err;
- 	}
--- 
-2.32.0
+----------------------------------------------------------------
+Former stop machine wait loop:
+do {
+    cpu_relax(); => macro
+    ...
+} while (curstate != STOPMACHINE_EXIT);
+-----------------------------------------------------------------
+Current stop machine wait loop:
+do {
+    stop_machine_yield(cpumask); => function (notraced)
+    ...
+    touch_nmi_watchdog(); => function (notraced, inside calls also notraced)
+    ...
+    rcu_momentary_dyntick_idle(); => function (notraced, inside calls traced)
+} while (curstate != MULTI_STOP_EXIT);
+------------------------------------------------------------------
 
+Thanks,
+Patrick

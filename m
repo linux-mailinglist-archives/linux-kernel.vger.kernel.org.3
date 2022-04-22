@@ -2,75 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6091650BBB7
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20B9F50BBB9
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:30:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449463AbiDVPc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 11:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42038 "EHLO
+        id S1449493AbiDVPcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 11:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377794AbiDVPcW (ORCPT
+        with ESMTP id S1449512AbiDVPcu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 11:32:22 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3387F5D648;
-        Fri, 22 Apr 2022 08:29:28 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id e2so5298925wrh.7;
-        Fri, 22 Apr 2022 08:29:28 -0700 (PDT)
+        Fri, 22 Apr 2022 11:32:50 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F8EDC5
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:29:53 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id t11so17026930eju.13
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 08:29:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=7CJFggtV+qbVm+vx1mWXtLgoNJlaTKSAglgOgNLxrFw=;
-        b=nNk2fwG8qYWFD/V8Qs3GK9eyHJuu7PFXywZgc5i6Vrm9h5unYx2W2kULcaI+h+5o5n
-         MkOChHCJCOrN93vLOCk5UvewvWRmG8fX+cp6R9hjXIT0R1lr/J71yPc5YzTHNuumzhC3
-         1lEnKEosS/Hb4YOEfUHPMJk3vxKZRgIQLW3ZvFxblcfc4heA4r2HVH+rgQ/3aCykJ07U
-         zcl+lZGxd4OYsJ8+g6biyuuZ73lrjEqvFSCMsFXay3dd//UHFhjbQcLwoFMVjdYb1nJw
-         nxE+DYY9Yxn56JYjjMX/54ewDuwKwkjZ47igmoPbrBh+Iy29/1wNnICNLhRFVGWJzN9j
-         qMIg==
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=U3ndCcoKSfgDdwTgox1SYrm0TgUghFUDkVmxzCUPpWI=;
+        b=CI/7eNrAZWppSmvGj7Ei/huCBNooS5x/94tgY7F08MECG0LFS9LDb8Ez8Z9MObCngr
+         IT9Ew4iQRcE3HdHzTMkh8bot08REiR6caysRhsnXnVB6hMfzLskH3UJG/UPKUlzDLoEd
+         SFybgBnrJgrBZ0D/Nwiw80CyvlET//V1rBuIw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7CJFggtV+qbVm+vx1mWXtLgoNJlaTKSAglgOgNLxrFw=;
-        b=Wf4eb6j7UaAZB8h4757nBihTDdH4CXkFiGm+epXqIJ+mwodC5C7kopdWb872dMAM1Y
-         VuaEz6m8qaD2PCT/sWavZPHokou+J6VFDzppTZnv3kgg/JNKYsbFT8qfybOkhJTlFP8Z
-         RsKPM6aga9LE0n0cEPs8qxINbh/0iwIkd4IEHqMbNiHevQ3zyd6SNMz2AyaIymE5Lc3b
-         GeZYmj0+z29hzIkIYKPmcVGP74p6jC2Kzv4h9kwDgu4EjY4MpCkZS4tpbqHH1CwSBaQB
-         C4MTHkuxR6uYVs6XGLl81vgMcDL/SsSxDUba3+QkrBoBJqaouMTMlSiCC5PCK8GEn00j
-         4kpA==
-X-Gm-Message-State: AOAM530QaazBpxKk7++shhMdvaEO0Iv8Xp60wgFZyodXyBCTFTc6DJVv
-        A9iBAjjMMHQvjoSkUYtwFZ8=
-X-Google-Smtp-Source: ABdhPJzB6yGh8Mk4HIz4bYLXtwzWGwyWB6T2XW8pPrpVOQ+A9SRHhiBmTfRmJN7ThoZMIQcqGqyIDQ==
-X-Received: by 2002:a5d:4ec6:0:b0:207:a120:b2c5 with SMTP id s6-20020a5d4ec6000000b00207a120b2c5mr4275161wrv.481.1650641366716;
-        Fri, 22 Apr 2022 08:29:26 -0700 (PDT)
-Received: from [192.168.1.145] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id l8-20020a5d6d88000000b0020a98986534sm2093115wrs.43.2022.04.22.08.29.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 08:29:26 -0700 (PDT)
-Message-ID: <9499ded6-22c3-17b3-e1f7-e982d063f1f1@gmail.com>
-Date:   Fri, 22 Apr 2022 17:29:25 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=U3ndCcoKSfgDdwTgox1SYrm0TgUghFUDkVmxzCUPpWI=;
+        b=t0M0Gikl5iW0EmV88MD3H9kngIpau69BdF5ICvOaRRiHqHCrdXakWnrkODaTMbNKx/
+         apnLJq5tsSjOr7PgBa6xjSXpo9Qh3oTSK7SmHPQT8viDNduOsxb8S8dr1VpGYm/eB+1f
+         MQGv92fdQ5OLQ1VhTVsaHEQodcojkzAwlWLialWmbpesGFWsomOy4Bl1yQHC92tvq16y
+         91m9b/xlNoll7+XVc3XgeILRXvDxKUxgiRmosKfYs35AN8+xADD0kuE89dDQ5evAOwnH
+         YN/0tDm1klOUaYRtk7Ohiz+rj20xTpaFQKJ7FI0csTA529jDnZ7UNbtHf1mxF+D/V0KY
+         B6sw==
+X-Gm-Message-State: AOAM530t6c8cBWg18dTwPr75P4/Op1KXJsuH/NIwKG2ttG4wmK/cYQnS
+        EVtuEH9X+Fi0mQXQH+55FVs3tN1Em0UMniB+BgGj3A==
+X-Google-Smtp-Source: ABdhPJy1at9+LCOaoCzkJdFtaQNyYQdt70weIoAhFlcg+F9RTA+dfPK4ONhY88KREMaYRWFFa0Ko6wL4MnVM1pZ5ZYQ=
+X-Received: by 2002:a17:906:7948:b0:6da:64ed:178e with SMTP id
+ l8-20020a170906794800b006da64ed178emr4797983ejo.523.1650641392357; Fri, 22
+ Apr 2022 08:29:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] arm64: dts: mediatek: mt8173: Add gce-client-reg handle
- to disp-mutex
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, robh+dt@kernel.org
-Cc:     krzysztof.kozlowski@canonical.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20220228110329.245366-1-angelogioacchino.delregno@collabora.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220228110329.245366-1-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220322115148.3870-1-dharamhans87@gmail.com> <20220322115148.3870-2-dharamhans87@gmail.com>
+In-Reply-To: <20220322115148.3870-2-dharamhans87@gmail.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Fri, 22 Apr 2022 17:29:40 +0200
+Message-ID: <CAJfpegtunCe5hV1b9cKJgPk44B2SQgtK3RG5r2is8V5VrMYeNg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] FUSE: Implement atomic lookup + open
+To:     Dharmendra Singh <dharamhans87@gmail.com>
+Cc:     linux-fsdevel@vger.kernel.org,
+        fuse-devel <fuse-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org, Dharmendra Singh <dsingh@ddn.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,29 +63,326 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 28/02/2022 12:03, AngeloGioacchino Del Regno wrote:
-> Add a gce client reg handle to the disp mutex to enable MT8173
-> platforms to use MediaTek's CMDQ for extra performance.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-Applied, thanks
-
+On Tue, 22 Mar 2022 at 12:52, Dharmendra Singh <dharamhans87@gmail.com> wrote:
+>
+> From: Dharmendra Singh <dsingh@ddn.com>
+>
+> There are couple of places in FUSE where we do agressive
+> lookup.
+> 1) When we go for creating a file (O_CREAT), we do lookup
+> for non-existent file. It is very much likely that file
+> does not exists yet as O_CREAT is passed to open(). This
+> lookup can be avoided and can be performed  as part of
+> open call into libfuse.
+>
+> 2) When there is normal open for file/dir (dentry is
+> new/negative). In this case since we are anyway going to open
+> the file/dir with USER space, avoid this separate lookup call
+> into libfuse and combine it with open.
+>
+> This lookup + open in single call to libfuse and finally to
+> USER space has been named as atomic open. It is expected
+> that USER space open the file and fills in the attributes
+> which are then used to make inode stand/revalidate in the
+> kernel cache.
+>
+> Signed-off-by: Dharmendra Singh <dsingh@ddn.com>
 > ---
->   arch/arm64/boot/dts/mediatek/mt8173.dtsi | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8173.dtsi b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-> index 291db4fcbb25..9eaea1156e25 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-> @@ -1278,6 +1278,7 @@ mutex: mutex@14020000 {
->   			interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_LOW>;
->   			power-domains = <&spm MT8173_POWER_DOMAIN_MM>;
->   			clocks = <&mmsys CLK_MM_MUTEX_32K>;
-> +			mediatek,gce-client-reg = <&gce SUBSYS_1402XXXX 0 0x1000>;
->   			mediatek,gce-events = <CMDQ_EVENT_MUTEX0_STREAM_EOF>,
->                                                 <CMDQ_EVENT_MUTEX1_STREAM_EOF>;
->   		};
+> v2 patch includes:
+> - disabled o-create atomicity when the user space file system
+>   does not have an atomic_open implemented. In principle lookups
+>   for O_CREATE also could be optimized out, but there is a risk
+>   to break existing fuse file systems. Those file system might
+>   not expect open O_CREATE calls for exiting files, as these calls
+>   had been so far avoided as lookup was done first.
+
+So we enabling atomic lookup+create only if FUSE_DO_ATOMIC_OPEN is
+set.  This logic is a bit confusing as CREATE is unrelated to
+ATOMIC_OPEN.   It would be cleaner to have a separate flag for atomic
+lookup+create.  And in fact FUSE_DO_ATOMIC_OPEN could be dropped and
+the usual logic of setting fc->no_atomic_open if ENOSYS is returned
+could be used instead.
+
+>
+>  fs/fuse/dir.c             | 113 +++++++++++++++++++++++++++++++-------
+>  fs/fuse/fuse_i.h          |   3 +
+>  fs/fuse/inode.c           |   4 +-
+>  include/uapi/linux/fuse.h |   2 +
+>  4 files changed, 101 insertions(+), 21 deletions(-)
+>
+> diff --git a/fs/fuse/dir.c b/fs/fuse/dir.c
+> index 656e921f3506..b2613eb87a4e 100644
+> --- a/fs/fuse/dir.c
+> +++ b/fs/fuse/dir.c
+> @@ -516,16 +516,14 @@ static int get_security_context(struct dentry *entry, umode_t mode,
+>  }
+>
+>  /*
+> - * Atomic create+open operation
+> - *
+> - * If the filesystem doesn't support this, then fall back to separate
+> - * 'mknod' + 'open' requests.
+> + * Perform create + open or lookup + open in single call to libfuse
+>   */
+> -static int fuse_create_open(struct inode *dir, struct dentry *entry,
+> -                           struct file *file, unsigned int flags,
+> -                           umode_t mode)
+> +static int fuse_atomic_open_common(struct inode *dir, struct dentry *entry,
+> +                                  struct dentry **alias, struct file *file,
+> +                                  unsigned int flags, umode_t mode,
+> +                                  uint32_t opcode)
+>  {
+> -       int err;
+> +       bool create = (opcode == FUSE_CREATE ? true : false);
+>         struct inode *inode;
+>         struct fuse_mount *fm = get_fuse_mount(dir);
+>         FUSE_ARGS(args);
+> @@ -535,11 +533,16 @@ static int fuse_create_open(struct inode *dir, struct dentry *entry,
+>         struct fuse_entry_out outentry;
+>         struct fuse_inode *fi;
+>         struct fuse_file *ff;
+> +       struct dentry *res = NULL;
+>         void *security_ctx = NULL;
+>         u32 security_ctxlen;
+> +       int err;
+> +
+> +       if (alias)
+> +               *alias = NULL;
+>
+>         /* Userspace expects S_IFREG in create mode */
+> -       BUG_ON((mode & S_IFMT) != S_IFREG);
+> +       BUG_ON(create && (mode & S_IFMT) != S_IFREG);
+>
+>         forget = fuse_alloc_forget();
+>         err = -ENOMEM;
+> @@ -554,7 +557,13 @@ static int fuse_create_open(struct inode *dir, struct dentry *entry,
+>         if (!fm->fc->dont_mask)
+>                 mode &= ~current_umask();
+>
+> -       flags &= ~O_NOCTTY;
+> +       if (!create) {
+> +               flags = flags & ~(O_CREAT | O_EXCL | O_NOCTTY);
+
+We know O_CREAT and O_EXCL are not set in this case.
+
+> +               if (!fm->fc->atomic_o_trunc)
+> +                       flags &= ~O_TRUNC;
+
+I think atomic_open should imply atomic_o_trunc.  Not worth
+complicating this further with a separate case.
+
+> +       } else {
+> +               flags &= ~O_NOCTTY;
+> +       }
+>         memset(&inarg, 0, sizeof(inarg));
+>         memset(&outentry, 0, sizeof(outentry));
+>         inarg.flags = flags;
+> @@ -566,7 +575,7 @@ static int fuse_create_open(struct inode *dir, struct dentry *entry,
+>                 inarg.open_flags |= FUSE_OPEN_KILL_SUIDGID;
+>         }
+>
+> -       args.opcode = FUSE_CREATE;
+> +       args.opcode = opcode;
+>         args.nodeid = get_node_id(dir);
+>         args.in_numargs = 2;
+>         args.in_args[0].size = sizeof(inarg);
+> @@ -595,8 +604,12 @@ static int fuse_create_open(struct inode *dir, struct dentry *entry,
+>         if (err)
+>                 goto out_free_ff;
+>
+> +       err = -ENOENT;
+> +       if (!S_ISDIR(outentry.attr.mode) && !outentry.nodeid)
+> +               goto out_free_ff;
+> +
+>         err = -EIO;
+> -       if (!S_ISREG(outentry.attr.mode) || invalid_nodeid(outentry.nodeid) ||
+> +       if (invalid_nodeid(outentry.nodeid) ||
+>             fuse_invalid_attr(&outentry.attr))
+>                 goto out_free_ff;
+>
+> @@ -612,10 +625,32 @@ static int fuse_create_open(struct inode *dir, struct dentry *entry,
+>                 err = -ENOMEM;
+>                 goto out_err;
+>         }
+> +       if (!fm->fc->do_atomic_open)
+> +               d_instantiate(entry, inode);
+> +       else {
+> +               res = d_splice_alias(inode, entry);
+> +               if (res) {
+> +                       /* Close the file in user space, but do not unlink it,
+> +                        * if it was created - with network file systems other
+> +                        * clients might have already accessed it.
+> +                        */
+> +                       if (IS_ERR(res)) {
+> +                               fi = get_fuse_inode(inode);
+> +                               fuse_sync_release(fi, ff, flags);
+> +                               fuse_queue_forget(fm->fc, forget, outentry.nodeid, 1);
+> +                               err = PTR_ERR(res);
+> +                               goto out_err;
+> +                       } else {
+> +                               entry = res;
+> +                               if (alias)
+> +                                       *alias = res;
+> +                       }
+> +               }
+> +       }
+>         kfree(forget);
+> -       d_instantiate(entry, inode);
+>         fuse_change_entry_timeout(entry, &outentry);
+> -       fuse_dir_changed(dir);
+> +       if (create)
+> +               fuse_dir_changed(dir);
+
+This will invalidate the parent even if the file was not created.
+Userspace will have to indicate whether the file was created or not as
+the kernel won't be able to determine this otherwise.  This affects
+permission checking as well.
+
+>         err = finish_open(file, entry, generic_file_open);
+>         if (err) {
+>                 fi = get_fuse_inode(inode);
+> @@ -634,20 +669,54 @@ static int fuse_create_open(struct inode *dir, struct dentry *entry,
+>         return err;
+>  }
+>
+> +/*
+> + * Atomic lookup + open
+> + */
+> +
+> +static int fuse_do_atomic_open(struct inode *dir, struct dentry *entry,
+> +                              struct dentry **alias, struct file *file,
+> +                              unsigned int flags, umode_t mode)
+> +{
+> +       int err;
+> +       struct fuse_conn *fc = get_fuse_conn(dir);
+> +
+> +       if (!fc->do_atomic_open)
+> +               return -ENOSYS;
+> +       err = fuse_atomic_open_common(dir, entry, alias, file,
+> +                                     flags, mode, FUSE_ATOMIC_OPEN);
+> +       return err;
+> +}
+> +
+>  static int fuse_mknod(struct user_namespace *, struct inode *, struct dentry *,
+>                       umode_t, dev_t);
+>  static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
+>                             struct file *file, unsigned flags,
+>                             umode_t mode)
+>  {
+> -       int err;
+> +       bool create = (flags & O_CREAT) ? true : false;
+>         struct fuse_conn *fc = get_fuse_conn(dir);
+> -       struct dentry *res = NULL;
+> +       struct dentry *res = NULL, *alias = NULL;
+> +       int err;
+>
+>         if (fuse_is_bad(dir))
+>                 return -EIO;
+>
+> -       if (d_in_lookup(entry)) {
+> +       /* Atomic lookup + open - dentry might be File or Directory */
+> +       if (!create) {
+> +               err = fuse_do_atomic_open(dir, entry, &alias, file, flags, mode);
+> +               res = alias;
+> +               if (!err)
+> +                       goto out_dput;
+> +               else if (err != -ENOSYS)
+> +                       goto no_open;
+
+The above looks bogus.  On error we just want to return that error,
+not finish the open.
+
+> +       }
+> +       /* ENOSYS fall back - user space does not have full atomic open.*/
+> +
+> +       /* O_CREAT could be optimized already, but we fear to break some
+> +        * userspace implementations therefore optimize in case of atomic
+> +        * open only.
+> +        */
+> +       if (!fc->do_atomic_open && d_in_lookup(entry))  {
+>                 res = fuse_lookup(dir, entry, 0);
+>                 if (IS_ERR(res))
+>                         return PTR_ERR(res);
+> @@ -656,7 +725,7 @@ static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
+>                         entry = res;
+>         }
+>
+> -       if (!(flags & O_CREAT) || d_really_is_positive(entry))
+> +       if (!create || d_really_is_positive(entry))
+>                 goto no_open;
+>
+>         /* Only creates */
+> @@ -664,8 +733,12 @@ static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
+>
+>         if (fc->no_create)
+>                 goto mknod;
+> -
+> -       err = fuse_create_open(dir, entry, file, flags, mode);
+> +       /*
+> +        * If the filesystem doesn't support atomic create + open, then fall
+> +        * back to separate 'mknod' + 'open' requests.
+> +        */
+> +       err = fuse_atomic_open_common(dir, entry, NULL, file, flags, mode,
+> +                                     FUSE_CREATE);
+>         if (err == -ENOSYS) {
+>                 fc->no_create = 1;
+>                 goto mknod;
+> diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
+> index e8e59fbdefeb..e4dc68a90b28 100644
+> --- a/fs/fuse/fuse_i.h
+> +++ b/fs/fuse/fuse_i.h
+> @@ -669,6 +669,9 @@ struct fuse_conn {
+>         /** Is open/release not implemented by fs? */
+>         unsigned no_open:1;
+>
+> +       /** Does the filesystem support atomic open? */
+> +       unsigned do_atomic_open:1;
+> +
+>         /** Is opendir/releasedir not implemented by fs? */
+>         unsigned no_opendir:1;
+>
+> diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
+> index ee846ce371d8..5f667de69115 100644
+> --- a/fs/fuse/inode.c
+> +++ b/fs/fuse/inode.c
+> @@ -1190,6 +1190,8 @@ static void process_init_reply(struct fuse_mount *fm, struct fuse_args *args,
+>                                 fc->setxattr_ext = 1;
+>                         if (flags & FUSE_SECURITY_CTX)
+>                                 fc->init_security = 1;
+> +                       if (flags & FUSE_DO_ATOMIC_OPEN)
+> +                               fc->do_atomic_open = 1;
+>                 } else {
+>                         ra_pages = fc->max_read / PAGE_SIZE;
+>                         fc->no_lock = 1;
+> @@ -1235,7 +1237,7 @@ void fuse_send_init(struct fuse_mount *fm)
+>                 FUSE_ABORT_ERROR | FUSE_MAX_PAGES | FUSE_CACHE_SYMLINKS |
+>                 FUSE_NO_OPENDIR_SUPPORT | FUSE_EXPLICIT_INVAL_DATA |
+>                 FUSE_HANDLE_KILLPRIV_V2 | FUSE_SETXATTR_EXT | FUSE_INIT_EXT |
+> -               FUSE_SECURITY_CTX;
+> +               FUSE_SECURITY_CTX | FUSE_DO_ATOMIC_OPEN;
+>  #ifdef CONFIG_FUSE_DAX
+>         if (fm->fc->dax)
+>                 flags |= FUSE_MAP_ALIGNMENT;
+> diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
+> index d6ccee961891..a28dd60078ff 100644
+> --- a/include/uapi/linux/fuse.h
+> +++ b/include/uapi/linux/fuse.h
+> @@ -389,6 +389,7 @@ struct fuse_file_lock {
+>  /* bits 32..63 get shifted down 32 bits into the flags2 field */
+>  #define FUSE_SECURITY_CTX      (1ULL << 32)
+>  #define FUSE_HAS_INODE_DAX     (1ULL << 33)
+> +#define FUSE_DO_ATOMIC_OPEN    (1ULL << 34)
+>
+>  /**
+>   * CUSE INIT request/reply flags
+> @@ -537,6 +538,7 @@ enum fuse_opcode {
+>         FUSE_SETUPMAPPING       = 48,
+>         FUSE_REMOVEMAPPING      = 49,
+>         FUSE_SYNCFS             = 50,
+> +       FUSE_ATOMIC_OPEN        = 51,
+>
+>         /* CUSE specific operations */
+>         CUSE_INIT               = 4096,
+> --
+> 2.17.1
+>

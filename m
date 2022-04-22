@@ -2,257 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A40550C4D8
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:46:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2455550C553
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 02:06:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbiDVXsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 19:48:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40368 "EHLO
+        id S229803AbiDVXto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 19:49:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiDVXsa (ORCPT
+        with ESMTP id S229498AbiDVXtm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 19:48:30 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B169F57B38;
-        Fri, 22 Apr 2022 16:45:34 -0700 (PDT)
+        Fri, 22 Apr 2022 19:49:42 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC10D4CA4;
+        Fri, 22 Apr 2022 16:46:47 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-e67799d278so6411437fac.11;
+        Fri, 22 Apr 2022 16:46:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1650671135; x=1682207135;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=4lI5QQVTvYeP8wkKNBfN+3WtQcv3wu/e6yW5dEZ3qWQ=;
-  b=e1tgnpCOdd8bDpKJ8wPl5sRRrXOOkgmnrIR70CxQUl0rgJ2CeCiF4RAD
-   vO3YluGEUOACPx+KqaJFSW/wAKJ8W5AUBl+Fs8TdLac8TyOtA++9Gf8RB
-   eCfS+za2tGLXcqCD1x1nVtfMv6DnRPVEdTIKxG0RnITHcOHpjXKxdmGQJ
-   0=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 22 Apr 2022 16:45:34 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 16:45:33 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 22 Apr 2022 16:45:33 -0700
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 22 Apr 2022 16:45:32 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
-        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <bjorn.andersson@linaro.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
-        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] drm/msm/dp: move add fail safe mode to dp_connector_get_mode()
-Date:   Fri, 22 Apr 2022 16:45:23 -0700
-Message-ID: <1650671124-14030-1-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WSqoJagxi812Uz/UbsiFaQztPn6lgwcsPHidF2EdEMc=;
+        b=l3pwTAgBWaPEGR+5Y4Ms2ka1ENpCMRUFU584ArSAe3jbl3rcvvrbM9kesOnaO3DmNg
+         GE8Cr6V+d97pe/CxxOeTQ0VFJQHU2m1eeL7009IJ8hPqC8p6AvVPVPx3frBGxKIOtvoT
+         bTi0q5iqLfM2+HF9WHGZ1sgSQinN4ZzQNHTe6xHdbHlWszgRkye3OsSGX4ECNOYv13eL
+         BZvRbwccaKgH7r9BhTEobkGUmQkgrCHaL8Pkq8wDIzJQhoiNjCZU8LnsMkES/BFuIHzK
+         UP3uOZzngv3BDzJpbtCXQuSPESSnIEY7bA0QTWXbTp/o4Ak1aIAw4Yk/p/RTly6bGsfJ
+         Iatw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=WSqoJagxi812Uz/UbsiFaQztPn6lgwcsPHidF2EdEMc=;
+        b=s/rEmVQUvPTEjJAHKLcmx/l8Awy5Zl6Epcc/GyI/WgBYHXmDd86lS8rE+FrXqO+vOm
+         sVlZrXps/LYuSArFVf+thOzwQvMHpZLCOQz5l6kobevWvQCoe0EhbOKElhnp6f+W0KjP
+         9iOiMkxXlnpaFwIMB9OJj723GRCgJnkbYpKmDj/grejEpSxKDXqrG7f/qa+C35xsHDua
+         s8KQYBX80A8guffwAasELlszJnIEYXpyXH0bXUoXoP6Pw8YTjO3O3V1lvB3FbhNzXwL0
+         X1ee4qO8joWj91hgiqLrg2nsYBV55ed445zdyruCTYMv2N37ggwOeZevYoyF3bBJl2Fp
+         +n+w==
+X-Gm-Message-State: AOAM531sbIexrBbXbXdVigRnJXAVZuRDFEa5tCsYmTs76mXsaUVizJ+u
+        StzR6FNaq59SYG9zjMHpR2U=
+X-Google-Smtp-Source: ABdhPJzsuurtmrnZ4So2zOMzTz1Yl+C7CeLKiq1mrBLhvhxG9vsoxjvivMhjHyrDEvyQmm/86mXvfQ==
+X-Received: by 2002:a05:6870:b39c:b0:d1:4a9f:35f9 with SMTP id w28-20020a056870b39c00b000d14a9f35f9mr2867661oap.119.1650671206541;
+        Fri, 22 Apr 2022 16:46:46 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q12-20020a4ad54c000000b003245ac0a745sm1347747oos.22.2022.04.22.16.46.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 16:46:46 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 22 Apr 2022 16:46:44 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Nick Hu <nickhu@andestech.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Michal Simek <monstr@monstr.eu>,
+        Borislav Petkov <bp@alien8.de>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Joshua Kinard <kumba@gentoo.org>,
+        David Laight <David.Laight@aculab.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: Re: [PATCH v1] random: block in /dev/urandom
+Message-ID: <20220422234644.GB3442771@roeck-us.net>
+References: <20220217162848.303601-1-Jason@zx2c4.com>
+ <20220322155820.GA1745955@roeck-us.net>
+ <YjoC5kQMqyC/3L5Y@zx2c4.com>
+ <d5c23f68-30ba-a5eb-6bea-501736e79c88@roeck-us.net>
+ <CAHmME9rmeQAD2DwG=APTmDxuVxFDH=6GXoKpgPrU9rc9oXrmxQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHmME9rmeQAD2DwG=APTmDxuVxFDH=6GXoKpgPrU9rc9oXrmxQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current DP driver implementation has adding safe mode done at
-dp_hpd_plug_handle() which is expected to be executed under event
-thread context.
+On Fri, Apr 22, 2022 at 03:42:46PM +0200, Jason A. Donenfeld wrote:
+> Hey Guenter,
+> 
+> On Tue, Mar 22, 2022 at 6:56 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> >
+> > On 3/22/22 10:09, Jason A. Donenfeld wrote:
+> > > Hey Guenter,
+> > >
+> > > On Tue, Mar 22, 2022 at 08:58:20AM -0700, Guenter Roeck wrote:
+> > >> On Thu, Feb 17, 2022 at 05:28:48PM +0100, Jason A. Donenfeld wrote:
+> > >>> This topic has come up countless times, and usually doesn't go anywhere.
+> > >>> This time I thought I'd bring it up with a slightly narrower focus,
+> > >>> updated for some developments over the last three years: we finally can
+> > >>> make /dev/urandom always secure, in light of the fact that our RNG is
+> > >>> now always seeded.
+> > >>>
+> > >>
+> > >> [ ... ]
+> > >>
+> > >> This patch (or a later version of it) made it into mainline and causes a
+> > >> large number of qemu boot test failures for various architectures (arm,
+> > >> m68k, microblaze, sparc32, xtensa are the ones I observed). Common
+> > >> denominator is that boot hangs at "Saving random seed:". A sample bisect
+> > >> log is attached. Reverting this patch fixes the problem.
+> > >
+> > > As Linus said, it was worth a try, but I guess it just didn't work. For
+> > > my own curiosity, though, do you have a link to those QEMU VMs you could
+> > > share? I'd sort of like to poke around, and if we do ever reattempt this
+> > > sometime down the road, it seems like understanding everything about why
+> > > the previous time failed might be a good idea.
+> > >
+> >
+> > Everything - including the various root file systems - is at
+> > git@github.com:groeck/linux-build-test.git. Look into rootfs/ for the
+> > various boot tests. I'll be happy to provide some qemu command lines
+> > if needed.
+> 
+> I've been playing with a few things, and I'm wondering how close I am
+> to making this problem go away. I just made this branch:
+> https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git/log/?h=jd/for-guenter
+> 
+> Any interest in setting your tests on that and seeing if it still
+> breaks? Or, perhaps better, do you have a single script that runs all
 
-However there is possible circular locking happen (see blow stack trace)
-after edp driver call dp_hpd_plug_handle() from dp_bridge_enable() which
-is executed under drm_thread context.
+I applied your branch to my 'testing' branch. It will build tonight.
+We should have results by tomorrow morning.
 
-To break this circular locking, this patch have safe mode added at
-dp_connector_get_mode() which is executed under drm thread context.
-Therefore no lock acquired required for &dev->mode_config.mutex while
-adding fail safe mode since it has been hold by drm thread already.
+> your various tests and does all the toolchain things right, so I can
+> just point it at that tree and iterate?
+> 
 
-======================================================
- WARNING: possible circular locking dependency detected
- 5.15.35-lockdep #6 Tainted: G        W
- ------------------------------------------------------
- frecon/429 is trying to acquire lock:
- ffffff808dc3c4e8 (&dev->mode_config.mutex){+.+.}-{3:3}, at:
-dp_panel_add_fail_safe_mode+0x4c/0xa0
+Sorry, my system isn't that fancy. I don't mind running tests like this one,
+though.
 
- but task is already holding lock:
- ffffff808dc441e0 (&kms->commit_lock[i]){+.+.}-{3:3}, at: lock_crtcs+0xb4/0x124
-
- which lock already depends on the new lock.
-
- the existing dependency chain (in reverse order) is:
-
- -> #3 (&kms->commit_lock[i]){+.+.}-{3:3}:
-        __mutex_lock_common+0x174/0x1a64
-        mutex_lock_nested+0x98/0xac
-        lock_crtcs+0xb4/0x124
-        msm_atomic_commit_tail+0x330/0x748
-        commit_tail+0x19c/0x278
-        drm_atomic_helper_commit+0x1dc/0x1f0
-        drm_atomic_commit+0xc0/0xd8
-        drm_atomic_helper_set_config+0xb4/0x134
-        drm_mode_setcrtc+0x688/0x1248
-        drm_ioctl_kernel+0x1e4/0x338
-        drm_ioctl+0x3a4/0x684
-        __arm64_sys_ioctl+0x118/0x154
-        invoke_syscall+0x78/0x224
-        el0_svc_common+0x178/0x200
-        do_el0_svc+0x94/0x13c
-        el0_svc+0x5c/0xec
-        el0t_64_sync_handler+0x78/0x108
-        el0t_64_sync+0x1a4/0x1a8
-
- -> #2 (crtc_ww_class_mutex){+.+.}-{3:3}:
-        __mutex_lock_common+0x174/0x1a64
-        ww_mutex_lock+0xb8/0x278
-        modeset_lock+0x304/0x4ac
-        drm_modeset_lock+0x4c/0x7c
-        drmm_mode_config_init+0x4a8/0xc50
-        msm_drm_init+0x274/0xac0
-        msm_drm_bind+0x20/0x2c
-        try_to_bring_up_master+0x3dc/0x470
-        __component_add+0x18c/0x3c0
-        component_add+0x1c/0x28
-        dp_display_probe+0x954/0xa98
-        platform_probe+0x124/0x15c
-        really_probe+0x1b0/0x5f8
-        __driver_probe_device+0x174/0x20c
-        driver_probe_device+0x70/0x134
-        __device_attach_driver+0x130/0x1d0
-        bus_for_each_drv+0xfc/0x14c
-        __device_attach+0x1bc/0x2bc
-        device_initial_probe+0x1c/0x28
-        bus_probe_device+0x94/0x178
-        deferred_probe_work_func+0x1a4/0x1f0
-        process_one_work+0x5d4/0x9dc
-        worker_thread+0x898/0xccc
-        kthread+0x2d4/0x3d4
-        ret_from_fork+0x10/0x20
-
- -> #1 (crtc_ww_class_acquire){+.+.}-{0:0}:
-        ww_acquire_init+0x1c4/0x2c8
-        drm_modeset_acquire_init+0x44/0xc8
-        drm_helper_probe_single_connector_modes+0xb0/0x12dc
-        drm_mode_getconnector+0x5dc/0xfe8
-        drm_ioctl_kernel+0x1e4/0x338
-        drm_ioctl+0x3a4/0x684
-        __arm64_sys_ioctl+0x118/0x154
-        invoke_syscall+0x78/0x224
-        el0_svc_common+0x178/0x200
-        do_el0_svc+0x94/0x13c
-        el0_svc+0x5c/0xec
-        el0t_64_sync_handler+0x78/0x108
-        el0t_64_sync+0x1a4/0x1a8
-
- -> #0 (&dev->mode_config.mutex){+.+.}-{3:3}:
-        __lock_acquire+0x2650/0x672c
-        lock_acquire+0x1b4/0x4ac
-        __mutex_lock_common+0x174/0x1a64
-        mutex_lock_nested+0x98/0xac
-        dp_panel_add_fail_safe_mode+0x4c/0xa0
-        dp_hpd_plug_handle+0x1f0/0x280
-        dp_bridge_enable+0x94/0x2b8
-        drm_atomic_bridge_chain_enable+0x11c/0x168
-        drm_atomic_helper_commit_modeset_enables+0x500/0x740
-        msm_atomic_commit_tail+0x3e4/0x748
-        commit_tail+0x19c/0x278
-        drm_atomic_helper_commit+0x1dc/0x1f0
-        drm_atomic_commit+0xc0/0xd8
-        drm_atomic_helper_set_config+0xb4/0x134
-        drm_mode_setcrtc+0x688/0x1248
-        drm_ioctl_kernel+0x1e4/0x338
-        drm_ioctl+0x3a4/0x684
-        __arm64_sys_ioctl+0x118/0x154
-        invoke_syscall+0x78/0x224
-        el0_svc_common+0x178/0x200
-        do_el0_svc+0x94/0x13c
-        el0_svc+0x5c/0xec
-        el0t_64_sync_handler+0x78/0x108
-        el0t_64_sync+0x1a4/0x1a8
-
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
----
- drivers/gpu/drm/msm/dp/dp_display.c |  6 ------
- drivers/gpu/drm/msm/dp/dp_panel.c   | 23 +++++++++++++----------
- 2 files changed, 13 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index 92cd50f..01453db 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -555,12 +555,6 @@ static int dp_hpd_plug_handle(struct dp_display_private *dp, u32 data)
- 
- 	mutex_unlock(&dp->event_mutex);
- 
--	/*
--	 * add fail safe mode outside event_mutex scope
--	 * to avoid potiential circular lock with drm thread
--	 */
--	dp_panel_add_fail_safe_mode(dp->dp_display.connector);
--
- 	/* uevent will complete connection part */
- 	return 0;
- };
-diff --git a/drivers/gpu/drm/msm/dp/dp_panel.c b/drivers/gpu/drm/msm/dp/dp_panel.c
-index 1aa9aa8c..23fee42 100644
---- a/drivers/gpu/drm/msm/dp/dp_panel.c
-+++ b/drivers/gpu/drm/msm/dp/dp_panel.c
-@@ -151,15 +151,6 @@ static int dp_panel_update_modes(struct drm_connector *connector,
- 	return rc;
- }
- 
--void dp_panel_add_fail_safe_mode(struct drm_connector *connector)
--{
--	/* fail safe edid */
--	mutex_lock(&connector->dev->mode_config.mutex);
--	if (drm_add_modes_noedid(connector, 640, 480))
--		drm_set_preferred_mode(connector, 640, 480);
--	mutex_unlock(&connector->dev->mode_config.mutex);
--}
--
- int dp_panel_read_sink_caps(struct dp_panel *dp_panel,
- 	struct drm_connector *connector)
- {
-@@ -216,7 +207,11 @@ int dp_panel_read_sink_caps(struct dp_panel *dp_panel,
- 			goto end;
- 		}
- 
--		dp_panel_add_fail_safe_mode(connector);
-+		/* fail safe edid */
-+		mutex_lock(&connector->dev->mode_config.mutex);
-+		if (drm_add_modes_noedid(connector, 640, 480))
-+			drm_set_preferred_mode(connector, 640, 480);
-+		mutex_unlock(&connector->dev->mode_config.mutex);
- 	}
- 
- 	if (panel->aux_cfg_update_done) {
-@@ -266,6 +261,14 @@ int dp_panel_get_modes(struct dp_panel *dp_panel,
- 		return -EINVAL;
- 	}
- 
-+	/*
-+	 * add fail safe mode (640x480) here
-+	 * since we are executed in drm_thread context,
-+	 * no mode_config.mutex acquired required
-+	 */
-+	if (drm_add_modes_noedid(connector, 640, 480))
-+		drm_set_preferred_mode(connector, 640, 480);
-+
- 	if (dp_panel->edid)
- 		return dp_panel_update_modes(connector, dp_panel->edid);
- 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+Guenter

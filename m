@@ -2,119 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C4C750C399
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 596A250C34E
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233017AbiDVWff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 18:35:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57800 "EHLO
+        id S233439AbiDVWfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 18:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233321AbiDVWfN (ORCPT
+        with ESMTP id S233202AbiDVWf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 18:35:13 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667E12CC18F
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 14:27:44 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id j8so13523063pll.11
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 14:27:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=w9AKK/wGlnxig+lE3h4LHV/aZa9ukqQjCgIygmyWAnI=;
-        b=68ZELSGoErna6Kx0I1rr70ZevaMAPMnUYlggojQeGdeNtet7Hum0m7txFWvhbVCPoh
-         Lpfn1c1GUzjoDoqF3atTMDyB/W54WSq09ZqEMstjj/nD57yi3McP45zUESmlBRcMSayd
-         RCzz4ipAytYtGQe71XITH8QJ3AOzILuXAM8yhmiGgJ7WF+oGlf5airqmyAOM2HGknwiH
-         NL8jDL6gpoJPBQW7EeAY6wZ4C88AXehvjWq8bqkos1IivsjngJ9pqrOMVpnTljE1x58T
-         I93xuOolWlJ6WC9weiHMQEfCyYC7FH5wSxSWXUOcug8i2eaQtc0PgYHeEI3sT7IioZIr
-         TevA==
+        Fri, 22 Apr 2022 18:35:28 -0400
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE49B2CCB95;
+        Fri, 22 Apr 2022 14:28:00 -0700 (PDT)
+Received: by mail-ot1-f51.google.com with SMTP id e15-20020a9d63cf000000b006054e65aaecso6382645otl.0;
+        Fri, 22 Apr 2022 14:28:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=w9AKK/wGlnxig+lE3h4LHV/aZa9ukqQjCgIygmyWAnI=;
-        b=l6QYBoIF0gzw5B45+6A/gJui8P3nM6v3QofKlKsM9mUtBDlBnUnKNAFEskTyciP6ac
-         2e6Amh7wjKKs/4BRvkh2N1Z75UFkLqvJJOcNhHIHtOA7ziEnmL6NOyBhaBq0qyKjGAjU
-         1hsE2Qfiaeg0PI3RFTdedwdXNu7cb3gWSnwa5m9xRujaj7El+GNvANgkwd/y2jjVMQBc
-         DDFr3VlyVfmr3j5AXgGm9HajLDjheb6kXGuhkIJCRf/RjuzNtGorlyowvvivTl9k9JZl
-         xcRQrGUWI64L6/4YflK838Ukl1jsfc2EeFjtno7xv+TxXsg0pJfwFczFPecJhjuNm0SG
-         +J4w==
-X-Gm-Message-State: AOAM530qg4pFBDtTxesp1Rp2d6bjXDoh63zUG+Fo3vXiacVOxmO2cL0B
-        e6Auoh+O9YutipnwL+gz9oYwma5hHBJ37E+2CEDEzg==
-X-Google-Smtp-Source: ABdhPJwBmyn23Epq/35EZiri4tm6JvqSiIIERB77yO45Op+oQcI+/5ahmZRwLntOQrNzhYN0N3NhjEndaBvuqb3gpmc=
-X-Received: by 2002:a17:902:7296:b0:14b:4bc6:e81 with SMTP id
- d22-20020a170902729600b0014b4bc60e81mr6342011pll.132.1650662863976; Fri, 22
- Apr 2022 14:27:43 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jaxMqNYGtR9/GKTe6XSZEtOnCayZXLADx5gspn1sMaU=;
+        b=F133HIy+xcswRSWGJVv71yrJ4Ga0GCxl6j4ha/9jpfxXfYx6RINEws9fkwoGq24qe/
+         MvpkqzAK1vg9GlGg6galfdz1X974TXTQHGbftX6kZ6sR9+X6g2n0DWGBvabPMmTWnwVl
+         IuPyugS5EiLBwgWIi/5avrjNsxLxhd5M2gASi1reu0DVMrkYYrhSLvLVHGPlL8Zmwlxw
+         JGk950IiSEMSQA3wcPNvLirJBaeWfKDT4D6FSUi3wxH6gGw1ODJMiX8OnrukGqFfYc8y
+         jOA98z59vIqMrNemM2OWKuzG90KkDTcpbxWYsNLTH4siD0R0BnDGor74wpxLm1W+P+Xl
+         iP8A==
+X-Gm-Message-State: AOAM531eGOmorAQMwx6fINeLe38YQkGNGo5CwKQa/X0fpCHpdYdz6heB
+        hrKQAhpsiQFNlWZbL/zujg==
+X-Google-Smtp-Source: ABdhPJyVlTpz8f4H1tIkdFIcTZaYs0+eqvGbNHOIUHnieRI58LSaZYbm5RhBLf4fkz2E5vAMRo2VXQ==
+X-Received: by 2002:a9d:5381:0:b0:605:777f:b65b with SMTP id w1-20020a9d5381000000b00605777fb65bmr2562755otg.189.1650662880236;
+        Fri, 22 Apr 2022 14:28:00 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id v20-20020a056830141400b00604d7cb9bb1sm1196168otp.43.2022.04.22.14.27.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 14:27:59 -0700 (PDT)
+Received: (nullmailer pid 2836931 invoked by uid 1000);
+        Fri, 22 Apr 2022 21:27:58 -0000
+Date:   Fri, 22 Apr 2022 16:27:58 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Sean Anderson <sean.anderson@seco.com>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Shawn Guo <shawnguo@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Li Yang <leoyang.li@nxp.com>, linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: Re: [PATCH 2/8] dt-bindings: nvmem: sfp: Add clock properties
+Message-ID: <YmMd3liryJlZRMuA@robh.at.kernel.org>
+References: <20220421175657.1259024-1-sean.anderson@seco.com>
+ <20220421175657.1259024-3-sean.anderson@seco.com>
+ <4a45db184fbadc278624571dfbeb5004@walle.cc>
 MIME-Version: 1.0
-References: <20220419045045.1664996-1-ruansy.fnst@fujitsu.com>
- <20220421012045.GR1544202@dread.disaster.area> <86cb0ada-208c-02de-dbc9-53c6014892c3@fujitsu.com>
- <CAPcyv4i0Noum8hqHtCpdM5HMVdmNHm3Aj2JCnZ+KZLgceiXYaA@mail.gmail.com>
- <20220421043502.GS1544202@dread.disaster.area> <YmDxs1Hj4H/cu2sd@infradead.org>
- <20220421074653.GT1544202@dread.disaster.area>
-In-Reply-To: <20220421074653.GT1544202@dread.disaster.area>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Fri, 22 Apr 2022 14:27:32 -0700
-Message-ID: <CAPcyv4jj_Z+P4BuC6EXXrzbVr1uHomQVu1A+cq55EFnSGmP7cQ@mail.gmail.com>
-Subject: Re: [PATCH v13 0/7] fsdax: introduce fs query to support reflink
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Shiyang Ruan <ruansy.fnst@fujitsu.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux MM <linux-mm@kvack.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Jane Chu <jane.chu@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4a45db184fbadc278624571dfbeb5004@walle.cc>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 12:47 AM Dave Chinner <david@fromorbit.com> wrote:
->
-> On Wed, Apr 20, 2022 at 10:54:59PM -0700, Christoph Hellwig wrote:
-> > On Thu, Apr 21, 2022 at 02:35:02PM +1000, Dave Chinner wrote:
-> > > Sure, I'm not a maintainer and just the stand-in patch shepherd for
-> > > a single release. However, being unable to cleanly merge code we
-> > > need integrated into our local subsystem tree for integration
-> > > testing because a patch dependency with another subsystem won't gain
-> > > a stable commit ID until the next merge window is .... distinctly
-> > > suboptimal.
-> >
-> > Yes.  Which is why we've taken a lot of mm patchs through other trees,
-> > sometimes specilly crafted for that.  So I guess in this case we'll
-> > just need to take non-trivial dependencies into the XFS tree, and just
-> > deal with small merge conflicts for the trivial ones.
->
-> OK. As Naoyo has pointed out, the first dependency/conflict Ruan has
-> listed looks trivial to resolve.
->
-> The second dependency, OTOH, is on a new function added in the patch
-> pointed to. That said, at first glance it looks to be independent of
-> the first two patches in that series so I might just be able to pull
-> that one patch in and have that leave us with a working
-> fsdax+reflink tree.
->
-> Regardless, I'll wait to see how much work the updated XFS/DAX
-> reflink enablement patchset still requires when Ruan posts it before
-> deciding what to do here.  If it isn't going to be a merge
-> candidate, what to do with this patchset is moot because there's
-> little to test without reflink enabled...
+On Thu, Apr 21, 2022 at 08:12:34PM +0200, Michael Walle wrote:
+> Am 2022-04-21 19:56, schrieb Sean Anderson:
+> > To program fuses, it is necessary to set the fuse programming time. This
+> > is determined based on the value of the platform clock. Add a clock
+> > property.
+> 
+> For some context: Sean was adding the SFP support in u-boot and
+> I referred him to this binding. I didn't need the clock to just
+> read the data. But Sean is right, we need the clock for the
+> programming. I was unaware of that. The binding is still yet to
+> be released with v5.18, thus I think it is still possible to make
+> the clock mandatory.
 
-I do have a use case for this work absent the reflink work. Recall we
-had a conversation about how to communicate "dax-device has been
-ripped away from the fs" events and we ended up on the idea of reusing
-->notify_failure(), but with the device's entire logical address range
-as the notification span. That will let me unwind and delete the
-PTE_DEVMAP infrastructure for taking extra device references to hold
-off device-removal. Instead ->notify_failure() arranges for all active
-DAX mappings to be invalidated and allow the removal to proceed
-especially since physical removal does not care about software pins.
+Please add this detail to the commit message. Otherwise, it looks like 
+an ABI break to make a new property required.
+
+> 
+> > Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+> 
+> Fixes: 6f9817cdcc82 ("dt-bindings: nvmem: add fsl,layerscape-sfp binding")
+> 
+> -michael
+> 
+> > ---
+> > 
+> >  .../bindings/nvmem/fsl,layerscape-sfp.yaml         | 14 ++++++++++++++
+> >  1 file changed, 14 insertions(+)
+> > 
+> > diff --git
+> > a/Documentation/devicetree/bindings/nvmem/fsl,layerscape-sfp.yaml
+> > b/Documentation/devicetree/bindings/nvmem/fsl,layerscape-sfp.yaml
+> > index b7798e903191..54086f50157d 100644
+> > --- a/Documentation/devicetree/bindings/nvmem/fsl,layerscape-sfp.yaml
+> > +++ b/Documentation/devicetree/bindings/nvmem/fsl,layerscape-sfp.yaml
+> > @@ -24,15 +24,29 @@ properties:
+> >    reg:
+> >      maxItems: 1
+> > 
+> > +  clocks:
+> > +    maxItems: 1
+> > +    description:
+> > +      The SFP clock. Typically, this is the platform clock divided by
+> > 4.
+> > +
+> > +  clock-names:
+> > +    const: sfp
+> > +
+> >  required:
+> >    - compatible
+> >    - reg
+> > +  - clock-names
+> > +  - clocks
+> > 
+> >  unevaluatedProperties: false
+> > 
+> >  examples:
+> >    - |
+> > +    #include <dt-bindings/clock/fsl,qoriq-clockgen.h>
+> >      efuse@1e80000 {
+> >          compatible = "fsl,ls1028a-sfp";
+> >          reg = <0x1e80000 0x8000>;
+> > +        clocks = <&clockgen QORIQ_CLK_PLATFORM_PLL
+> > +                            QORIQ_CLK_PLL_DIV(4)>;
+> > +        clock-names = "sfp";
+> >      };

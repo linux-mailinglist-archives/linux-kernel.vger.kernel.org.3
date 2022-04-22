@@ -2,59 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C1C50B866
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A731550B869
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447947AbiDVN1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 09:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58106 "EHLO
+        id S1447823AbiDVN2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 09:28:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447800AbiDVN1D (ORCPT
+        with ESMTP id S1447994AbiDVN1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 09:27:03 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA84A5839F;
-        Fri, 22 Apr 2022 06:24:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 28575CE2973;
-        Fri, 22 Apr 2022 13:24:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8A6FC385A4;
-        Fri, 22 Apr 2022 13:24:05 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="VwOJbv3A"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1650633844;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Pch+L8M9KtX83OSfyZJfXJ4rgzqApwvB6ecz+tZfEsE=;
-        b=VwOJbv3APm154VuGShXhAVWTQ4k6zVhf6cuZUqYmDO1SqUvgZhFj0HhMU1Zk6y3BU6x7eG
-        1R7bixIrQxHKDxbQ3v6QVhjfD6I+4gCzXzjR2s8+xXN+H28FJbV1eEB/DYXaxnR/fjinJe
-        h7PVSLU5BcpqmANRnmalD79sILM68QI=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 80c97672 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 22 Apr 2022 13:24:03 +0000 (UTC)
-Date:   Fri, 22 Apr 2022 15:24:00 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Theodore Ts'o <tytso@mit.edu>, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org,
-        Linus Torvalds <torvalds@linuxfoundation.org>
-Subject: Re: [PATCH v2] random: avoid mis-detecting a slow counter as a cycle
- counter
-Message-ID: <YmKscCcGxeqikv7t@zx2c4.com>
-References: <20220421233152.58522-1-ebiggers@kernel.org>
- <YmHraZcGnY3stnp9@zx2c4.com>
- <YmH4Mgbo9gs4tOp7@sol.localdomain>
- <YmJ4bJjet/QhkXZS@zx2c4.com>
+        Fri, 22 Apr 2022 09:27:36 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472C3583AC
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 06:24:43 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id bq30so14298922lfb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 06:24:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Uh/i7pONWs9zNhFkmIOXxH8K9rX2pqq3+dxTkHV4IDc=;
+        b=jaaEpWQcqbaEyYdutWZeZdjw+QQcJSdbCS9SFtmkIjJKr2AaQYFmeKaXsRSZNqL/du
+         5uA3obMPxfFyjez258m1b1o3+55hDt6FJiMIMDWDq4Wcce1C2cvATWGciaROy62EMuEf
+         F6qX6s4f12Eef6QMWAdbw2PzdFVAkvZ/6g9u6GJeE7ms2M0vZyA6a7eXbsB8WedPWvuF
+         +FcQspQ/1qjQqM/t+unssU2WbArmsbheEoBeA+Gq2TWwJR2DCcRugpRMkubOnFbxiUbD
+         vPq3O5uD/3VmxTCRiieDxY5FMecKZkf+z9RQ8DqinlJg182Sn3YFbeJs3VVUD1Hne/cw
+         /oMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Uh/i7pONWs9zNhFkmIOXxH8K9rX2pqq3+dxTkHV4IDc=;
+        b=OK1zzadt67h+sjjIUTP1AGcDf2eS52M73RyFSZD2V/uzm1U6bg6iwFdy9hpohnREU9
+         tZ5CW/8kWEk+QA4vqmImvdnj1mOTVkgFk61xe7gxg9QtPXlB1/ouxpqWk7gAw70dHfp2
+         EMtgEujZq33lX2pps9vL/rURzH0JROGE1R9LIwIkfQTbbAHkvBRB5H2UzFWewk+nnxBk
+         YyHa2iH9FwOaozz8TuznnGduXnu3mbqqrxsu0v+37nIx2dMYL6nPj1J16Rvl7ewrUrK5
+         Vw7SbfW1CljvnI41UIbUav1J+BN3DvCumcstUGpFZiWjPXUSANOSQ/DQbWIea4Al4uim
+         s9Tw==
+X-Gm-Message-State: AOAM530AORiHAS9bSNMJ6LJytkYtO8gwfg61eEFTdjZml08HdWw+ffu2
+        bJPbfO6gwG5WlAfVlW2XkYlLLg==
+X-Google-Smtp-Source: ABdhPJzZtxkAjlCvb/TUt3cLoRv5l+ol9ToRYGDDMNmm0Vv66uA83/NBrnntGKbTm/BO4hUpHvgFow==
+X-Received: by 2002:a05:6512:228d:b0:471:c287:9715 with SMTP id f13-20020a056512228d00b00471c2879715mr3171748lfu.660.1650633881512;
+        Fri, 22 Apr 2022 06:24:41 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id w23-20020a197b17000000b0046d1729e7d9sm224621lfc.294.2022.04.22.06.24.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 06:24:40 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 1CD12104429; Fri, 22 Apr 2022 16:26:19 +0300 (+03)
+Date:   Fri, 22 Apr 2022 16:26:19 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv4 3/8] efi/x86: Implement support for unaccepted memory
+Message-ID: <20220422132619.54e754fyzeaaoqog@box.shutemov.name>
+References: <20220405234343.74045-4-kirill.shutemov@linux.intel.com>
+ <Ylnwmvygp796+qcA@zn.tnic>
+ <20220418155545.a567xnxa6elglapl@box.shutemov.name>
+ <Yl2UHOQ4iZJ29k0q@zn.tnic>
+ <20220418202431.whvql4w57c7l5vpw@box.shutemov.name>
+ <Yl3RmPhdZieSr8W2@zn.tnic>
+ <20220418235015.mnujtlmmlyin7y6m@box.shutemov.name>
+ <Yl5nSSC4HpSWqfY7@zn.tnic>
+ <20220422002124.lwd7b56zko24gbll@box.shutemov.name>
+ <YmJ1o9UmPIW12Nu7@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YmJ4bJjet/QhkXZS@zx2c4.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <YmJ1o9UmPIW12Nu7@zn.tnic>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,44 +102,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 11:42:04AM +0200, Jason A. Donenfeld wrote:
-> Hi Eric,
+On Fri, Apr 22, 2022 at 11:30:11AM +0200, Borislav Petkov wrote:
+> On Fri, Apr 22, 2022 at 03:21:24AM +0300, Kirill A. Shutemov wrote:
+> > There's still #include <linux/efi.h> in misc.h. You removed one, but
+> > there's a second one for some reason.
 > 
-> On Thu, Apr 21, 2022 at 05:34:58PM -0700, Eric Biggers wrote:
-> > On Fri, Apr 22, 2022 at 01:40:25AM +0200, Jason A. Donenfeld wrote:
-> > > Hi Eric,
-> > > 
-> > > Thanks. This looks better.
-> > > 
-> > > On Thu, Apr 21, 2022 at 04:31:52PM -0700, Eric Biggers wrote:
-> > > > Therefore, increase the number of counter comparisons from 1 to 3, to
-> > > > greatly reduce the rate of false positive cycle counter detections.
-> > > > +	for (i = 0; i < 3; i++) {
-> > > > +		unsigned long entropy = random_get_entropy();
-> > >  
-> > > Wondering: why do you do 3 comparisons rather than 2? What does 3 get
-> > > you that 2 doesn't already? I thought the only real requirement was that
-> > > in the event where (a)!=(b), (b) is read as meaningfully close as
-> > > possible to when the counter changes.
-> > > 
-> > 
-> > On CONFIG_PREEMPT kernels this code usually runs with preemption enabled, so I
-> > don't think it's guaranteed that any particular number of comparisons will be
-> > sufficient, since the task could get preempted for a long time between each call
-> > to random_get_entropy().  However, the chance of a false positive should
-> > decrease exponentially, and should be pretty small in the first place, so 3
-> > comparisons seems like a good number.
+> I don't know which tree you're looking at but latest tip/master has:
 > 
-> Ahh, I see. So you check three times instead of disabling
-> preemption/irqs, which would be awfully heavy weight. Seems like a
-> reasonable compromise.
-> 
-> By the way, I was thinking about the assumptions we're making with this
-> comparison ("two adjacent counters shouldn't be the same") in the
-> context of this idea from my first reply to you:
+> $ git grep -E "efi\.h" arch/x86/boot/
+> arch/x86/boot/compressed/acpi.c:6:#include "efi.h"
+> arch/x86/boot/compressed/kaslr.c:25:#include "efi.h"
+> arch/x86/boot/compressed/misc.h:40:#include "efi.h"
+> arch/x86/boot/compressed/pgtable_64.c:7:#include "efi.h"
 
-Rather than buggy inline email code, I made a real patch out of it for
-your consideration:
-https://lore.kernel.org/linux-crypto/20220422132027.1267060-1-Jason@zx2c4.com/
+Sorry for the noise. I read 'elf.h' as 'efi.h' :/
 
-Jason
+But it also includes <linux/bitmap.h> indirectly:
+
+In file included from include/linux/elf.h:6:
+In file included from arch/x86/include/asm/elf.h:8:
+In file included from include/linux/thread_info.h:60:
+In file included from arch/x86/include/asm/thread_info.h:53:
+In file included from arch/x86/include/asm/cpufeature.h:5:
+In file included from arch/x86/include/asm/processor.h:22:
+In file included from arch/x86/include/asm/msr.h:11:
+In file included from arch/x86/include/asm/cpumask.h:5:
+In file included from include/linux/cpumask.h:12:
+
+> > Any plans for <linux/acpi.h>? It includes <linux/bitmap.h>:
+> 
+> So if misc.h is including linux/bitmap.h indirectly, you can simply
+> include misc.h right?
+
+Yes.
+
+> And then you'll slide under the closing door, as you say below. :)
+
+Is it sarcasm or clearance to go?
+
+> > I also underesitmated what is required to be copied because of the
+> > indirect include. The list was only to compile bitmap.c. mem.c (former
+> > unaccepted_memory.c) would require more.
+> 
+> More like?
+
+for_each_clear_bitrange() is pain to unwind.
+
+> Maybe I can help out converting some of the stuff. You could push your
+> current state somewhere - even if it doesn't build - so that I can take
+> a look...
+
+I will push what I have a bit later today.
+
+> > BTW, do we have a white list of linux/ includes that allowed? minmax.h?
+> > math.h? What is the line.
+> 
+> Well, that's the thing. Even if those look innocuous now, if they get
+> new includes added to them, that has an influence on the decompressor.
+> 
+> So I'm thinking copying the required bits would be the proper way
+> forward.
+
+I understand where you comes from. But on my side I face suddenly higher
+entry bar. Yes, it is bad excuse, I know.
+
+> > Maybe allow what is included directly or indirectly now? (Yes, it is my
+> > poor attempt to slide under closing door.)
+> 
+> That's basically saying, can I get this done so that I can mark my
+> checkbox that my task is done - you can deal with the crap later
+> yourself.
+> 
+> How about we take our time and solve this properly instead of hurrying
+> constantly?
+
+I'm okay with this. But I lack coherent understating on how you want it
+to look like.
+
+Like, looking on your new "efi.h", I see it still implicitly depends on
+<linux/types.h> and <linux/uuid.h>. Why is it okay? Is it temporary? What
+is criteria of what is okay to keep for now?
+
+You mentioned having <asm/shared/bitops.h> as we do <asm/shared/io.h>. But
+<asm/bitops.h> has non-trivial dependencies on its own.
+
+Okay, we can move them into asm/shared as well, but how to deal with
+asm-generic/ things? And linux/ dependencies? Do we create a copy in
+x86/include?
+
+-- 
+ Kirill A. Shutemov

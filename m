@@ -2,105 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C2A50B01D
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 303A050B016
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:05:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380551AbiDVGHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 02:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46344 "EHLO
+        id S1442695AbiDVGHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 02:07:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444219AbiDVGH2 (ORCPT
+        with ESMTP id S1444223AbiDVGH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 02:07:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A203850063;
+        Fri, 22 Apr 2022 02:07:29 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3BE5B5005C
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 23:04:37 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C4B1D1576;
         Thu, 21 Apr 2022 23:04:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E12461DC5;
-        Fri, 22 Apr 2022 06:04:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C216DC385A4;
-        Fri, 22 Apr 2022 06:04:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650607475;
-        bh=QVgdPhLPhkloXklN2o5gxk7tqYHTsj68+O0sLTDu7XU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CSizFBlFR69OnS+wshQn86Kwi7lObQGqB6M5j1bJRVTJssXo29VaMCsMIef1Kgryo
-         zxpmZNTxbHBbqmhR6q0xOBFFpurXCdFs7xMCjq+kgVjfJADrqMrv4/jPuZuzeF6Eug
-         7X+YLFUmIiWUMAZpIkFbO8oLsNt8Q9Zplg1qWl56aifrL/JKhluSVlanij1F+LRI6e
-         tBF21OInNey2jcaDu5dDFgXHfMSU9M+oLbmG1F9gUr6b3xIKVbhuXikwd5/bjFlrvo
-         aNSDZ0IoT0wZ0nQEEOhTJMT74SWG2JN8L6+F6S2xU9PrCfZXyK2yPvLeOgiuJ58hLQ
-         IVH+5TT61itNQ==
-Date:   Fri, 22 Apr 2022 11:34:31 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     cgel.zte@gmail.com
-Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, dmaengine@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] dma: Make use of the helper function
- devm_platform_ioremap_resource()
-Message-ID: <YmJFbxi2T9wvP1Ox@matsya>
-References: <20220421084509.2615252-1-lv.ruyi@zte.com.cn>
+Received: from [10.163.40.48] (unknown [10.163.40.48])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 595F83F5A1;
+        Thu, 21 Apr 2022 23:04:27 -0700 (PDT)
+Message-ID: <7fc56f41-a3c2-76be-7a20-dda392f3c4fc@arm.com>
+Date:   Fri, 22 Apr 2022 11:35:13 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220421084509.2615252-1-lv.ruyi@zte.com.cn>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH -next v5 3/5] mm: page_table_check: add hooks to public
+ helpers
+Content-Language: en-US
+To:     Tong Tiangen <tongtiangen@huawei.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Guohanjun <guohanjun@huawei.com>
+References: <20220421082042.1167967-1-tongtiangen@huawei.com>
+ <20220421082042.1167967-4-tongtiangen@huawei.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20220421082042.1167967-4-tongtiangen@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21-04-22, 08:45, cgel.zte@gmail.com wrote:
-> From: Lv Ruyi <lv.ruyi@zte.com.cn>
+
+
+On 4/21/22 13:50, Tong Tiangen wrote:
+> Move ptep_clear() to the include/linux/pgtable.h and add page table check
+> relate hooks to some helpers, it's prepare for support page table check
+> feature on new architecture.
+
+Could instrumenting generic page table helpers (fallback instances when its
+corresponding __HAVE_ARCH_XXX is not defined on the platform), might add all
+the page table check hooks into paths on platforms which have not subscribed
+ARCH_SUPPORTS_PAGE_TABLE_CHECK in the first place ? Although these looks have
+!CONFIG_PAGE_TABLE_CHECK fallback stubs in the header, hence a build problem
+gets avoided.
+
 > 
-
-It is dmaengine: not dma:
-
-Also add driver tag to subject line. git log would help you choosing
-right tags
-
-> Use the devm_platform_ioremap_resource() helper instead of calling
-> platform_get_resource() and devm_ioremap_resource() separately.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-
-Where is the report?
-
-> Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
+> Acked-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 > ---
->  drivers/dma/imx-sdma.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+>  arch/x86/include/asm/pgtable.h | 10 ----------
+>  include/linux/pgtable.h        | 26 ++++++++++++++++++--------
+>  2 files changed, 18 insertions(+), 18 deletions(-)
 > 
-> diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
-> index 6196a7b3956b..cf4667d10f6a 100644
-> --- a/drivers/dma/imx-sdma.c
-> +++ b/drivers/dma/imx-sdma.c
-> @@ -2073,7 +2073,6 @@ static int sdma_probe(struct platform_device *pdev)
->  	const char *fw_name;
->  	int ret;
->  	int irq;
-> -	struct resource *iores;
->  	struct resource spba_res;
->  	int i;
->  	struct sdma_engine *sdma;
-> @@ -2096,8 +2095,7 @@ static int sdma_probe(struct platform_device *pdev)
->  	if (irq < 0)
->  		return irq;
+> diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+> index 564abe42b0f7..51cd39858f81 100644
+> --- a/arch/x86/include/asm/pgtable.h
+> +++ b/arch/x86/include/asm/pgtable.h
+> @@ -1073,16 +1073,6 @@ static inline pte_t ptep_get_and_clear_full(struct mm_struct *mm,
+>  	return pte;
+>  }
 >  
-> -	iores = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	sdma->regs = devm_ioremap_resource(&pdev->dev, iores);
-> +	sdma->regs = devm_platform_ioremap_resource(pdev, 0);
->  	if (IS_ERR(sdma->regs))
->  		return PTR_ERR(sdma->regs);
->  
-> -- 
-> 2.25.1
+> -#define __HAVE_ARCH_PTEP_CLEAR
 
--- 
-~Vinod
+AFICS X86 is the only platform subscribing __HAVE_ARCH_PTEP_CLEAR. Hence if
+this is getting dropped for generic ptep_clear(), then no need to add back
+#ifnded __HAVE_ARCH_PTEP_CLEAR construct. Generic ptep_clear() is the only
+definition for all platforms ?
+
+Also if this patch is trying to drop off __HAVE_ARCH_PTEP_CLEAR along with
+other page table check related changes, it needs to be done via a separate
+patch instead.
+
+> -static inline void ptep_clear(struct mm_struct *mm, unsigned long addr,
+> -			      pte_t *ptep)
+> -{
+> -	if (IS_ENABLED(CONFIG_PAGE_TABLE_CHECK))
+> -		ptep_get_and_clear(mm, addr, ptep);
+> -	else
+> -		pte_clear(mm, addr, ptep);
+> -}
+> -
+>  #define __HAVE_ARCH_PTEP_SET_WRPROTECT
+>  static inline void ptep_set_wrprotect(struct mm_struct *mm,
+>  				      unsigned long addr, pte_t *ptep)
+> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+> index 49ab8ee2d6d7..10d2d91edf20 100644
+> --- a/include/linux/pgtable.h
+> +++ b/include/linux/pgtable.h
+> @@ -12,6 +12,7 @@
+>  #include <linux/bug.h>
+>  #include <linux/errno.h>
+>  #include <asm-generic/pgtable_uffd.h>
+> +#include <linux/page_table_check.h>
+>  
+>  #if 5 - defined(__PAGETABLE_P4D_FOLDED) - defined(__PAGETABLE_PUD_FOLDED) - \
+>  	defined(__PAGETABLE_PMD_FOLDED) != CONFIG_PGTABLE_LEVELS
+> @@ -272,14 +273,6 @@ static inline bool arch_has_hw_pte_young(void)
+>  }
+>  #endif
+>  
+> -#ifndef __HAVE_ARCH_PTEP_CLEAR
+> -static inline void ptep_clear(struct mm_struct *mm, unsigned long addr,
+> -			      pte_t *ptep)
+> -{
+> -	pte_clear(mm, addr, ptep);
+> -}
+> -#endif
+> -
+>  #ifndef __HAVE_ARCH_PTEP_GET_AND_CLEAR
+>  static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
+>  				       unsigned long address,
+> @@ -287,10 +280,22 @@ static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
+>  {
+>  	pte_t pte = *ptep;
+>  	pte_clear(mm, address, ptep);
+> +	page_table_check_pte_clear(mm, address, pte);
+>  	return pte;
+>  }
+>  #endif
+>  
+> +#ifndef __HAVE_ARCH_PTEP_CLEAR
+> +static inline void ptep_clear(struct mm_struct *mm, unsigned long addr,
+> +			      pte_t *ptep)
+> +{
+> +	if (IS_ENABLED(CONFIG_PAGE_TABLE_CHECK))
+> +		ptep_get_and_clear(mm, addr, ptep);
+> +	else
+> +		pte_clear(mm, addr, ptep);
+
+Could not this be reworked to avoid IS_ENABLED() ? This is confusing. If the page
+table hooks can be added to all potential page table paths via generic helpers,
+irrespective of CONFIG_PAGE_TABLE_CHECK option, there is no rationale for doing
+a IS_ENABLED() check here.
+
+> +}
+> +#endif
+> +
+>  #ifndef __HAVE_ARCH_PTEP_GET
+>  static inline pte_t ptep_get(pte_t *ptep)
+>  {
+> @@ -360,7 +365,10 @@ static inline pmd_t pmdp_huge_get_and_clear(struct mm_struct *mm,
+>  					    pmd_t *pmdp)
+>  {
+>  	pmd_t pmd = *pmdp;
+> +
+>  	pmd_clear(pmdp);
+> +	page_table_check_pmd_clear(mm, address, pmd);
+> +
+>  	return pmd;
+>  }
+>  #endif /* __HAVE_ARCH_PMDP_HUGE_GET_AND_CLEAR */
+> @@ -372,6 +380,8 @@ static inline pud_t pudp_huge_get_and_clear(struct mm_struct *mm,
+>  	pud_t pud = *pudp;
+>  
+>  	pud_clear(pudp);
+> +	page_table_check_pud_clear(mm, address, pud);
+> +
+>  	return pud;
+>  }
+>  #endif /* __HAVE_ARCH_PUDP_HUGE_GET_AND_CLEAR */

@@ -2,207 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86AF350B756
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 14:30:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99C2D50B75C
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 14:31:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447523AbiDVMd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 08:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48912 "EHLO
+        id S1447556AbiDVMei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 08:34:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447548AbiDVMdZ (ORCPT
+        with ESMTP id S1447543AbiDVMeg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 08:33:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981A85714A
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 05:30:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9F7262016
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 12:30:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95024C385A4;
-        Fri, 22 Apr 2022 12:30:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650630629;
-        bh=l/UThzJt7EIh5W2gfH2rbyMyEURpsdabio8nxJX2/N8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=q6+ZXnG4VO5fCl1Ebfighwz76rxZODtuBiM9HyI8n5LXwm2fvI9pn9cD3zGtogan8
-         JC2XS1g4Drt9bmofls+4vWo1uygB7PcbG70TGUaK9aO/3LVa2XddVq47dUXmO30BYB
-         NvmPSPoSi1AE59bfThsi+ZtMaCe+ZHe8ZMqNf7S0=
-Date:   Fri, 22 Apr 2022 14:30:26 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Qing Wang <wangqing@vivo.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com
-Subject: Re: [PATCH V2 1/2] arch_topology: support for parsing cache topology
- from DT
-Message-ID: <YmKf4rv7+NhhS1CY@kroah.com>
-References: <1650628289-67716-1-git-send-email-wangqing@vivo.com>
- <1650628289-67716-2-git-send-email-wangqing@vivo.com>
+        Fri, 22 Apr 2022 08:34:36 -0400
+X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 22 Apr 2022 05:31:43 PDT
+Received: from esa4.fujitsucc.c3s2.iphmx.com (esa4.fujitsucc.c3s2.iphmx.com [68.232.151.214])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883FA517EA
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 05:31:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
+  t=1650630704; x=1682166704;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=0R/RnTiXEPlu15Zcrq0fL+oBkbHt/08mhMj1KSaPRTg=;
+  b=F9/piRnesV4+1lYWqpmHj8N9hRAw1tLOmgXu0IKOlj00kE3mWCC9eOQz
+   Gig3406kpdFEmKDiqqeXguYTrezfO7NRiJD7t7p80WuQFj4sq9zy+2UgT
+   IPDJ8yHeUd/AEdwoyDs1SyAXLug0tPwzPB9V0dTYEIK3zGWwdX226cO9G
+   5m/ftlh/ySgN8NqZbj6wysLHQuPQWZvhMk66/JBFK5bPIvrJOtU5/oMrL
+   Cy6xpK/n6FfUpB0uJ+2xgJRkiW7jkAfqYgSMz3gXr3Pb0oCgK/wg+eVap
+   WBSjTZr9miPPJj2SNDZZaU/DN1QGPDNde2elt4abVqWUCjAi3BC+cmsxK
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="62347800"
+X-IronPort-AV: E=Sophos;i="5.90,281,1643641200"; 
+   d="scan'208";a="62347800"
+Received: from mail-os0jpn01lp2105.outbound.protection.outlook.com (HELO JPN01-OS0-obe.outbound.protection.outlook.com) ([104.47.23.105])
+  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 21:30:35 +0900
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PHpxEFNCcKwZfkssR1hflQASGnZTI56tv+jjQD1P0xUjyYqg/aAIOKGZf3IQHHeYFpwrdJ5An1qPDbkanhKeMWVR6T+Bt0C2sJmwmXOrrp73B2hIHHaoV559Eobza26nUL9d36bo1zrfFwWEt8vj90/2e56ye3e1qxDMSwFJufwuag6/jVxXKpiufCJ/Bp0AmuKMkktQh4H9hmIM3ERH5p42yPebRNjkBuSQAn8rZQs3ur93Ih3fzHre9iRNlrclSb418PkOrqpK+kZY4YGfVedOZ86ohsHfx3A2Q0Y8JnTlLXdwZJNGLDDqn/0MO0QWtcrlk//le/t8oRtnjqRPuw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FaLFoZAY5LCmAsBAxQcOlIUpokEbkLNrMk+O9WE8ItY=;
+ b=oO9mqre5K6kkAztMVkVAfgsTlDoIZjZaYuH2BTumjpRho8RiIDlkWM3rs+RV8JmQE8tuEAlfGSAEKDVNB4luLjfc39jiYpz4TvNv2m9h9t5Lvi0MC7yM00bvvg+z3DFh9KwmUYtt9LwAxCHsWUDy1UpXZDHrpgZV47LjqVkWJhuXET83xHYCejUwiuBv5OkFkTJCi3XoHB5apem2l8MFD1hzsla6ieFaBHTTzFVCRt4m0KW59wfip/r0l4Vl0bCrLe1Ym4vG2fafECsQAS7wPQS+GaSVGnTt6SzjWsuVuIWe/g7fSOheVGcFT2gJbSunBGHmkBrLKuod5Rl/Td9GPg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
+ dkim=pass header.d=fujitsu.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=fujitsu.onmicrosoft.com; s=selector2-fujitsu-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FaLFoZAY5LCmAsBAxQcOlIUpokEbkLNrMk+O9WE8ItY=;
+ b=jeLm7/wmJEvflmKJHx5XzOlLZRQ1rAbYGN7KEdkZDpI1nlfFGgSgAculFrlYfyTBIEIz9g66VVsp8GswEOhRXNR6MdNvJ0UruNP3qgz+HknIsLwggzVoV49tgb9/MAKR8vC1PXfpbmmsjdJlnaz+lMQeFRFO0cIk7lmWmA4IuUM=
+Received: from OSBPR01MB2037.jpnprd01.prod.outlook.com (2603:1096:603:25::17)
+ by OS3PR01MB7064.jpnprd01.prod.outlook.com (2603:1096:604:129::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13; Fri, 22 Apr
+ 2022 12:30:31 +0000
+Received: from OSBPR01MB2037.jpnprd01.prod.outlook.com
+ ([fe80::382e:99b:f0f9:b18c]) by OSBPR01MB2037.jpnprd01.prod.outlook.com
+ ([fe80::382e:99b:f0f9:b18c%6]) with mapi id 15.20.5186.015; Fri, 22 Apr 2022
+ 12:30:31 +0000
+From:   "tarumizu.kohei@fujitsu.com" <tarumizu.kohei@fujitsu.com>
+To:     'Greg KH' <gregkh@linuxfoundation.org>
+CC:     "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "fenghua.yu@intel.com" <fenghua.yu@intel.com>,
+        "reinette.chatre@intel.com" <reinette.chatre@intel.com>
+Subject: RE: [PATCH v3 1/9] drivers: base: Add hardware prefetch control core
+ driver
+Thread-Topic: [PATCH v3 1/9] drivers: base: Add hardware prefetch control core
+ driver
+Thread-Index: AQHYVGMLEHjgMDmteU6Jl0/t5EKiYKz55peAgAH2WaA=
+Date:   Fri, 22 Apr 2022 12:30:30 +0000
+Message-ID: <OSBPR01MB20374588A6B57209D707CA2F80F79@OSBPR01MB2037.jpnprd01.prod.outlook.com>
+References: <20220420030223.689259-1-tarumizu.kohei@fujitsu.com>
+ <20220420030223.689259-2-tarumizu.kohei@fujitsu.com>
+ <YmD3UX6aTvUXlYF5@kroah.com>
+In-Reply-To: <YmD3UX6aTvUXlYF5@kroah.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fujitsu.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3553f975-342e-4c60-03ac-08da245be3d1
+x-ms-traffictypediagnostic: OS3PR01MB7064:EE_
+x-microsoft-antispam-prvs: <OS3PR01MB70645FEDD7BB7D0063A2C9F680F79@OS3PR01MB7064.jpnprd01.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: sJOiVQRegcQiUAn1v0+AtylOlh63azx1GiKdFuLhJhi7HnL1XEbIdPdd6R5j7fj6VjnTk/bSp5oAtR1shtQrm+hSm6omVCLKb9fzejiXU7VjQtxTn9E3DxIQcTFrTgd09d2sjC+v35d38NDf9ZpS7LvxtmclPF9vDNrTN+Xxkqcv5lpAkzjqhy9/lJDy8n7LRcquuBKOER4EZsTyifomNH5n6jPAzRgz4pEcSzcj/mQik8miPgZJDuLYvbXOYjnFqKfdr2tbt5uSndNHJzrGJE5zUkEA1u6R0wygqjDk6F/9dcqx73wY1RiLU7wwsknRJdVo2vAbqwRJmhDJePYDVirG0QTXNhq5LWV/VLIZBxOnGUWVE1CC5O+G4sL5EMY/L0XHgBdsSYZ2+7ffNjMRa1j09lqiQ5xmQEjL6lGT03nYNUVLh4buxhpwEM88hD04krjrB+JrOL/ESkEeDozrt2AKM9Mto9j6GWNJodiZRILlkbhvKb9BXVjelO4SchuB9/q/19oOWHZT/0wSlZ0h1r5ArH/4bIyaTlEdiJhcAkhuVvW1QqXhb/qr3EXfOo9J5SJYIdKhcqev5qJLI7LehUDcuUEaN+L9MeJ9dYAalF+Ol196frKEbAbLbJv9fM6hnVL1D+BNhUE3SHSsI9BTzTRVf30t0bEq4FowXh3V8r6k9hF3LbqF++qs2Cf4On1p3XIYdH0zvDp5afZS/QAtUw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSBPR01MB2037.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(8676002)(66476007)(85182001)(6916009)(66556008)(66446008)(508600001)(82960400001)(7416002)(316002)(86362001)(122000001)(54906003)(52536014)(9686003)(64756008)(33656002)(76116006)(71200400001)(66946007)(4326008)(2906002)(186003)(38100700002)(5660300002)(38070700005)(6506007)(55016003)(4744005)(7696005)(26005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-2022-jp?B?cHNvdnhHbTA5NUN2V1ltaE9sQjd0ck8yYXl0R1JaVWI0L2RscXBscnBa?=
+ =?iso-2022-jp?B?Mzh0T1Y0bnNnN3UrcUVxSGRzY25Rc3prWmplanZxUy9zUDhMRkhoUnRU?=
+ =?iso-2022-jp?B?c2s1c0F3VGtUeDdhNkw2QksxTG8yTTRia3pUL2ZjbjRGOGV5T2FvVnhO?=
+ =?iso-2022-jp?B?Y2REbVRRRmhQV2wzUGVMMkR4WnYwMTVTdjc3VmNtSk1MNnExckVTUG52?=
+ =?iso-2022-jp?B?L0hxdzhKaFBIdmRtcjZVeVRRWHJ1dTBlSHB6cUZDTUk2NUppaVZVa3RS?=
+ =?iso-2022-jp?B?c1ArMU1CTTJNQk5DRW42M0dmdC84NUdlQ2doSlR5QzZhMERmZ2o5RlVN?=
+ =?iso-2022-jp?B?NTJVOWJQZVg4Y1dzZXZtYVM2YzJMdkdGMVNvaWp1R3RZVkZRcUhXQnls?=
+ =?iso-2022-jp?B?bUJpS0NDTDVUZnlUVnlGY0h0RFRzSTB6NkpuOVozTkY5TGE1dERHNC93?=
+ =?iso-2022-jp?B?WHhSUHlua09RaVJWbktDNnc3UkRzWW8xUFRISTdFbkg1Q1ZrTWJCcXZp?=
+ =?iso-2022-jp?B?UFlINWZlTTB4QmMvR3NMajdoY01UTm1kS2drRC9pSFNvUHVyazhlOUZ2?=
+ =?iso-2022-jp?B?QkVzeEJub3BDOFVDOWRxaWR1QlBiNmU3dmRiTThqMmFTY0VCUld5NGdj?=
+ =?iso-2022-jp?B?WFR1TEJrL0hRbmtNQlA2RndiR21jZkh2eHVTTERhQW1NbTBHUDNadFRq?=
+ =?iso-2022-jp?B?bkJwTm1PT0RSMWg0Zi80eDdvVnV0Rkt1ZGZ5V3pGTTc0WGE4ZHBYQUlN?=
+ =?iso-2022-jp?B?T2NCRnZ6MThCRjJydUJKaW9GcE5ERzRIWjE3NUpWYzQzRzdmeWFFNkdV?=
+ =?iso-2022-jp?B?QzAzNy8yWG1iZTYvWjh6OEFXOVB5ZlZaVkdvVU9LZmxxc1VXTmYzUXJQ?=
+ =?iso-2022-jp?B?M0h3SHZWanJVYWdhVkNaaGNpWEpzVjBnM1BCdURvR2dIUnBtNzFVb3Vw?=
+ =?iso-2022-jp?B?THRNN2NtOFdrNEk5dHBHRmVidElQUG5nMDBUcU00YjZSY2ptRndXTWpx?=
+ =?iso-2022-jp?B?dzlMOTFnSzBMSmVoNUdEQjhxNXdURWNSRlROSTBOWlRPSWFNMFB3YzRD?=
+ =?iso-2022-jp?B?eU85bGVIeVdmdnZrelJlTSs5R0k3dHNjM1RPSXdHZDA2Tytxemx6UEo2?=
+ =?iso-2022-jp?B?d1QxOGszRHNEdUdxbWVZQ1RCVlczZ083MEFoZGhZTDNkUnJ2L2JEUmZr?=
+ =?iso-2022-jp?B?U1pkcXBBRjdURVpDY1JVKzJBRWhsRWkvRlgrajBUZHgwSjRrekZvTHR3?=
+ =?iso-2022-jp?B?VlJIZlduSEFIL3czWDZoVEV0RW0xNTNDOTBVQ0hNUUkzZklzOGxNbEhs?=
+ =?iso-2022-jp?B?QlMrVGdIaWZlc01VSU1OUkdWeE1vbnRMRW9OQVBqMk5WU2FWWkVJQk41?=
+ =?iso-2022-jp?B?MGRzWFRTUXFSYVpSRVBwZ1dCNVMxY0ZpRXFKUUM0aTV0YXFCQ0ErT3BC?=
+ =?iso-2022-jp?B?cks3VlE1K00xQ3U4VXV5RDFMVHJ4RkdlY0hyajNRVDVNQU5zT1RUMXd3?=
+ =?iso-2022-jp?B?Zm9UU0s0Qmt0aXZWWUl1RkdNQ2grTlFZcnhNL0M2SkFmUDRjYXFMZmV3?=
+ =?iso-2022-jp?B?enJYcTdXakRYOGJHd3ZlQ0R4aE5jN1VMUkFwd1NWQ2ZZQ2FpYUFiQTN2?=
+ =?iso-2022-jp?B?bkI1WDgxdGEyQnk4R1Y4NGtNb052TDlSbzdLRHRNc0JEc1o1Z2JhOU14?=
+ =?iso-2022-jp?B?UGQvN3d0UktCVTNRZG5rcTZ1VkRQR0RlalY3QTZpMktURndreVdwYUNL?=
+ =?iso-2022-jp?B?bEtDb3JsdzY0SWk3OHZ1QTUrUTkvNVRXZUdtcmh3cXhhcDFTOXdiRUkr?=
+ =?iso-2022-jp?B?bjFjd2tiVGFDaE82eVpBNlUzSXdoSGU0SjhXbndJaEF5TW95YUZNWnJD?=
+ =?iso-2022-jp?B?M1paQmI4b2dXNzhCRnhSd01PMmYyMnIzYkU4MlB4enc2cmFvVDNQTVMz?=
+ =?iso-2022-jp?B?V01mS05YVnd4Ty9YbVcvYUNrd1huUTZkb3ViZTZPYTVCd1Z6VEtHM3JC?=
+ =?iso-2022-jp?B?QWFGOGdpcXFtTlFpTW5wRVVhbWhERTZnVFZOVE9QZGxvSjh5ck9tVE43?=
+ =?iso-2022-jp?B?Z29lWU5rM1FBejFCT1pjcWZBUWdkZmNPT25PQU1JTDZPRGRMMXFyRjd4?=
+ =?iso-2022-jp?B?dExQWHlTeGYzOHVsZmtxNjhJeGVaSmNING55bkQyNXhhRFZzTlU0RzVV?=
+ =?iso-2022-jp?B?TUVBUmdMUVBVNlN3R1dvUHFaR1BZelpCMFdVc2N2T1RSdzM4Y2RxVkx3?=
+ =?iso-2022-jp?B?T3gvcnMwS2VXQUtGWkhFZldVZUVqYTBUNXFRUmduclVTdXpCbUg5ZGlM?=
+ =?iso-2022-jp?B?QkExbXVtaFp1dlZBbEJCa2JnajVMNHNHVHhLMStVTEc1VFhtMmNSK0lL?=
+ =?iso-2022-jp?B?aDNvRFg3MEpJbUNFNGI4M0Q4eDF4Q0VCQnNrY0xEVHhQaTV1NWwyZFRh?=
+ =?iso-2022-jp?B?b0QzT2dlR1dKajRkc0U2Z1JIWi9rMHRGcG5zN2tYb1NydjlaYVI4WHdw?=
+ =?iso-2022-jp?B?bThlbnNXTWdxWDkwV3U2djFSaSs4RnAzNWNHSkpCcDByTUlCQzNQcjcx?=
+ =?iso-2022-jp?B?bmdldXVCMD0=?=
+Content-Type: text/plain; charset="iso-2022-jp"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1650628289-67716-2-git-send-email-wangqing@vivo.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: fujitsu.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OSBPR01MB2037.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3553f975-342e-4c60-03ac-08da245be3d1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Apr 2022 12:30:30.8627
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Yhbc26IjJPToRNW81Pnv1ps+K9dOZAGqPysObEnAfRiSaONT+CTtbzN3Y6LvXk36K2IiR/o/PujmHhp1dfXMyxQOWooICaNlUdADfcp1kOY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3PR01MB7064
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 04:51:25AM -0700, Qing Wang wrote:
-> From: Wang Qing <wangqing@vivo.com>
-> 
-> When ACPI is not enabled, we can get cache topolopy from DT like:
-> *		cpu0: cpu@000 {
-> *			next-level-cache = <&L2_1>;
-> *			L2_1: l2-cache {
-> * 				compatible = "cache";
-> *				next-level-cache = <&L3_1>;
-> * 			};
-> *			L3_1: l3-cache {
-> * 				compatible = "cache";
-> * 			};
-> *		};
-> *
-> *		cpu1: cpu@001 {
-> *			next-level-cache = <&L2_1>;
-> *		};
-> *		...
-> *		};
-> cache_topology[] hold the pointer describing by "next-level-cache", 
-> which can describe the cache topology of every level.
-> 
-> MAX_CACHE_LEVEL is strictly corresponding to the cache level from L2.
+Thanks for the comment.
 
-I have no idea what this changelog means at all.
+> Thanks to Thomas for pointing this change out to me.
+>=20
+> Why did you not use get_maintainer.pl on your patch?  You are adding file=
+s here
+> that you want _me_ to maintain for the next 25+ years, yet not asking for=
+ my
+> review?  That's not nice, and for that reason alone I would not accept th=
+is change.
 
-What are you trying to do?  What problem are you solving?  Why are you
-doing any of this?
+I apologize for my mistake. I did not specify some patch files when I
+executed get_maintainer.pl. I would like to use it correctly when I
+send the next version patch.
 
+> Also, this is very hardware-specific, which is not a good thing for code =
+in
+> drivers/base/  See the mess we have in the topology driver core code for
+> examples of that mess :(
 
-> 
-> V2:
-> make function name more sense
-
-As per the documentation this goes below the --- line, right?
-
-
-> 
-> Signed-off-by: Wang Qing <wangqing@vivo.com>
-> ---
->  drivers/base/arch_topology.c  | 47 ++++++++++++++++++++++++++++++++++-
->  include/linux/arch_topology.h |  3 +++
->  2 files changed, 49 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> index 1d6636ebaac5..46e84ce2ec0c 100644
-> --- a/drivers/base/arch_topology.c
-> +++ b/drivers/base/arch_topology.c
-> @@ -480,8 +480,10 @@ static int __init get_cpu_for_node(struct device_node *node)
->  		return -1;
->  
->  	cpu = of_cpu_node_to_id(cpu_node);
-> -	if (cpu >= 0)
-> +	if (cpu >= 0) {
->  		topology_parse_cpu_capacity(cpu_node, cpu);
-> +		topology_parse_cpu_caches(cpu_node, cpu);
-> +	}
->  	else
->  		pr_info("CPU node for %pOF exist but the possible cpu range is :%*pbl\n",
->  			cpu_node, cpumask_pr_args(cpu_possible_mask));
-> @@ -647,6 +649,49 @@ static int __init parse_dt_topology(void)
->  }
->  #endif
->  
-> +/*
-> + * cpu cache topology table
-> + */
-> +#define MAX_CACHE_LEVEL 7
-> +static struct device_node *cache_topology[NR_CPUS][MAX_CACHE_LEVEL];
-
-So for a normal big system of 4k cpus * 7 levels, that's a lot of
-memory?  are you sure?
-
-How big of a box did you test this on?
-
-> +
-> +void topology_parse_cpu_caches(struct device_node *cpu_node, int cpu)
-> +{
-> +	struct device_node *node_cache = cpu_node;
-> +	int level = 0;
-> +
-> +	while (level < MAX_CACHE_LEVEL) {
-> +		node_cache = of_parse_phandle(node_cache, "next-level-cache", 0);
-> +		if (!node_cache)
-> +			break;
-> +
-> +		cache_topology[cpu][level++] = node_cache;
-> +	}
-
-No locking anywhere?  What could go wrong :(
-
-> +}
-> +
-> +/*
-> + * find the largest subset of the shared cache in the range of cpu_mask
-> + */
-> +void find_subset_of_share_cache(const struct cpumask *cpu_mask, int cpu,
-> +								 struct cpumask *sc_mask)
-
-Again, horrid global function name.
-
-And no kernel documentation for how this works?
-
-
-
-> +{
-> +	int cache_level, cpu_id;
-> +
-> +	for (cache_level = MAX_CACHE_LEVEL - 1; cache_level >= 0; cache_level--) {
-> +		if (!cache_topology[cpu][cache_level])
-> +			continue;
-
-No locking???
-
-
-> +
-> +		cpumask_clear(sc_mask);
-> +		for (cpu_id = 0; cpu_id < NR_CPUS; cpu_id++) {
-> +			if (cache_topology[cpu][cache_level] == cache_topology[cpu_id][cache_level])
-> +				cpumask_set_cpu(cpu_id, sc_mask);
-> +		}
-> +
-> +		if (cpumask_subset(sc_mask, cpu_mask))
-> +			break;
-> +	}
-> +}
-> +
->  /*
->   * cpu topology table
->   */
-> diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
-> index 58cbe18d825c..c6ed727e453c 100644
-> --- a/include/linux/arch_topology.h
-> +++ b/include/linux/arch_topology.h
-> @@ -93,6 +93,9 @@ void update_siblings_masks(unsigned int cpu);
->  void remove_cpu_topology(unsigned int cpuid);
->  void reset_cpu_topology(void);
->  int parse_acpi_topology(void);
-> +void topology_parse_cpu_caches(struct device_node *cpu_node, int cpu);
-> +void find_subset_of_share_cache(const struct cpumask *cpu_mask, int cpu,
-> +								 struct cpumask *sc_mask);
-
-I still have no idea what this last function is supposed to do.
-
-And very odd indentation, did you run checkpatch on this?
-
-totally confused,
-
-greg k-h
+I would like to try to remove hardware-specific code from core code,
+or move to other place.

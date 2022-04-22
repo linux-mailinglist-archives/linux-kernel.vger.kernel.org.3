@@ -2,124 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74A3150BCBF
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:17:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CCF050BCBC
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:17:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379718AbiDVQUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 12:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
+        id S1378978AbiDVQU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 12:20:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378994AbiDVQUc (ORCPT
+        with ESMTP id S1378335AbiDVQUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 12:20:32 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D1F5C861;
-        Fri, 22 Apr 2022 09:17:38 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id k22so11784838wrd.2;
-        Fri, 22 Apr 2022 09:17:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=aqaDmVSTH8kRIVx2Jc7UCmC/D+1NcV2YaY4UF+KoQrE=;
-        b=LBRrPEsh5v4Ua+CSf7zr4C62y//TkfzRqpV3PBZJRBv4CRQdOGCoTEQaKNDTp+sLlk
-         lKwrtnBRF8oP6xhAtavb18l0DVnUYCPeACgbWDZx7ivGRtLyfMq63htBTs8V6XJX9zo7
-         AUwTPdl5h8ZwGIys2HQAsC4um9xLK67DhwofOQGd6/G5h9srgZZ9vF+iSSU0fRt058wc
-         uI9jgBIs8BGFZbWPFwO+C8b/ibDYwKOa4px0WctiWv4BaDqzrhLP1fi8c/FPArFrGC2N
-         PO5BlTdOTweSO33q/9Ajn3Uubn8oS3UaG4Ob1fTdtOp+s9lw6TySzSzis7YMqnpt/YIb
-         PRLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=aqaDmVSTH8kRIVx2Jc7UCmC/D+1NcV2YaY4UF+KoQrE=;
-        b=3XJX8DdtSsshOqyqjf5Y0C0Zyj/AzUtjDYY2Bew0d8iCn7FEBvICEDxKvDFPxwgbf6
-         UaysJ0E6ltDCKfxkvpXZMOtcAkkKmIlG+xkc8iWHDp+wkj8Jb/x4xdYKF3J+ZIg7KhKD
-         X2nVv/fdP/jKV2lAg0sCJ7u1ksCWbnVmKXFG0hWiow265UfpGHKnrvhLSd7KVzwBunZy
-         mFBtE2EHNw50dMG/tqiKBQBbj581rRd6j8V++ySbIN/rnNnfzcrTdaO0/ps7uMDZg4TE
-         pkbM8L3vUgJkOuu7YrZrNIVf4DjO8A0NG6x72hlJptN5HGmShR/bKTdyYnEdaTFfdg3w
-         zhTQ==
-X-Gm-Message-State: AOAM532F8ACcty0bemC1atgMP3gZiTs9m5moyPYfgyI+o9cFwDxCfDAr
-        Z2PtFOF110FbnuD/gd8cTQE=
-X-Google-Smtp-Source: ABdhPJy8A+5MLmvgrVf6CaFzLQbY516nLLbku9rWWNatXqiOrdjiHJhHtgZ0ZGYa/KZ/OmNHmanEBg==
-X-Received: by 2002:adf:da49:0:b0:204:1548:2a58 with SMTP id r9-20020adfda49000000b0020415482a58mr4400090wrl.664.1650644257315;
-        Fri, 22 Apr 2022 09:17:37 -0700 (PDT)
-Received: from localhost.localdomain ([94.73.37.128])
-        by smtp.gmail.com with ESMTPSA id 20-20020a05600c22d400b0038c8dbdc1a3sm1927029wmg.38.2022.04.22.09.17.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 09:17:37 -0700 (PDT)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     hadess@hadess.net
-Cc:     hdegoede@redhat.com, dmitry.torokhov@gmail.com,
-        rydberg@bitmath.org, lains@riseup.net, jikos@kernel.org,
-        benjamin.tissoires@redhat.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH 3/3] HID: wacom: Fix double free on managed resource
-Date:   Fri, 22 Apr 2022 18:17:09 +0200
-Message-Id: <20220422161709.30198-3-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220422161709.30198-1-jose.exposito89@gmail.com>
-References: <20220422161709.30198-1-jose.exposito89@gmail.com>
+        Fri, 22 Apr 2022 12:20:23 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0705DA53;
+        Fri, 22 Apr 2022 09:17:28 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23MGHCcm121089;
+        Fri, 22 Apr 2022 11:17:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1650644232;
+        bh=iYC92yO0nVNTBrV4ZcAROnLEimDhVCylf0MCz4FDpg8=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=XxG5mI0ikG5jZo4MowM6zesP/gy4T+x3jrUd68nqr/HcbxXAG7jpFJnwWTpjidPJ+
+         C3NI1cG10RFpY1ZaY+aujncHqwwFUL9xKCHsWPbWhdQIzKLVfsYnm/nbHhbZkHxFLU
+         f571unjgjXI5Qz+xdaA/G4TGYXrLum1bgX3hm8FA=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23MGHCXr059334
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 22 Apr 2022 11:17:12 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 22
+ Apr 2022 11:17:11 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 22 Apr 2022 11:17:11 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23MGHBxn019241;
+        Fri, 22 Apr 2022 11:17:11 -0500
+Date:   Fri, 22 Apr 2022 11:17:11 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Rahul T R <r-ravikumar@ti.com>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski@canonical.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <tomi.valkeinen@ideasonboard.com>,
+        <laurent.pinchart@ideasonboard.com>, <kishon@ti.com>
+Subject: Re: [PATCH v3 0/2] DSS: Add support for DisplayPort
+Message-ID: <20220422161711.jkderbw5r4wxwgjf@crudeness>
+References: <20220406165852.13026-1-r-ravikumar@ti.com>
+ <ed64bf63-95c6-94ae-4c4f-a206250f44a9@ti.com>
+ <20220422141637.4hz5nrlpjapmqezw@uda0490373>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220422141637.4hz5nrlpjapmqezw@uda0490373>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As described in the documentation for devm_input_allocate_device():
+On 19:46-20220422, Rahul T R wrote:
+> On 12:51-20220415, Vignesh Raghavendra wrote:
+> > 
+> > 
+> > On 06/04/22 10:28 pm, Rahul T R wrote:
+> > > The following series of patches enables DisplayPort on
+> > > j721e-evm
+> > > 
+> > > Tomi Valkeinen (2):
+> > >   arm64: dts: ti: k3-j721e-main: add DP & DP PHY
+> > >   arm64: dts: ti: k3-j721e-common-proc-board: add DP to j7 evm
+> > > 
+> > > v2:
+> > >    - use phandle with a parameter to refer clocks insted of
+> > >      sub nodes in serdes_wiz node
+> > >    - move phy link node to board DTS file
+> > > 
+> > > v3:
+> > >    - Fix the regulator node name as per the DT spec
+> > >    - Use Macro for GPIO type
+> > > 
+> > > boot logs:
+> > >    https://gist.githubusercontent.com/ravi-rahul/1bdbc3f77ab381e486c8394650c2e85d/raw/f04584c30181821c4ee83aee7781a9ba143cd3f3/j7_DP_upstream.log
+> > > 
+> > > kernel patch verify report:
+> > >    https://gist.githubusercontent.com/ravi-rahul/a982fef3fae03ec0dbdd5cb475a4cb25/raw/c8230370746e9878daf9527c3aa9d82eed7aa33c/report-kernel-patch-verify.txt
+> > 
+> > Hmm, With dtbs_check I see (on v5.18-rc1 tag)
+> > 
+> > +/workdir/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dtb: dp-bridge@a000000: ports: 'port@0' is a required property
+> > +/workdir/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dtb: dp-bridge@a000000: ports: 'port@4' is a required property
+> > +/workdir/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dtb: dp-bridge@a000000: 'phys' is a required property
+> > +/workdir/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dtb: dp-bridge@a000000: 'phy-names' is a required property
+> > 
+> > This goes away with 2/2 although adds:
+> > +<stdout>: Warning (graph_child_address): /bus@100000/dss@4a00000/ports: graph node has single child node 'port@0', #address-cells/#size-cells are not necessary
+> > 
+> > 
+> > Do we need to have empty ports node in j721e-main.dtsi for dp-bridge?   And something similar wrt phys as well?
+> > 
+> > Regards
+> > Vignesh
+> 
+> Hi Vignesh,
+> 
+> Thanks for the review!
+> Not sure why kernel patch verify did not catch this
 
-  Managed input devices do not need to be explicitly unregistered or
-  freed as it will be done automatically when owner device unbinds from
-  its driver (or binding fails).
-
-However this driver was explicitly freeing the input device, allocated
-using devm_input_allocate_device() through wacom_allocate_input().
-
-Remove the calls to input_free_device() to avoid a possible double free
-error.
-
-Fixes: d2d13f18aaa51 ("Input: wacom - create a separate input device for pads")
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
----
- drivers/hid/wacom_sys.c | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/drivers/hid/wacom_sys.c b/drivers/hid/wacom_sys.c
-index 066c567dbaa2..164c0f7cb796 100644
---- a/drivers/hid/wacom_sys.c
-+++ b/drivers/hid/wacom_sys.c
-@@ -2098,7 +2098,6 @@ static int wacom_register_inputs(struct wacom *wacom)
- 	error = wacom_setup_pen_input_capabilities(pen_input_dev, wacom_wac);
- 	if (error) {
- 		/* no pen in use on this interface */
--		input_free_device(pen_input_dev);
- 		wacom_wac->pen_input = NULL;
- 		pen_input_dev = NULL;
- 	} else {
-@@ -2110,7 +2109,6 @@ static int wacom_register_inputs(struct wacom *wacom)
- 	error = wacom_setup_touch_input_capabilities(touch_input_dev, wacom_wac);
- 	if (error) {
- 		/* no touch in use on this interface */
--		input_free_device(touch_input_dev);
- 		wacom_wac->touch_input = NULL;
- 		touch_input_dev = NULL;
- 	} else {
-@@ -2122,7 +2120,6 @@ static int wacom_register_inputs(struct wacom *wacom)
- 	error = wacom_setup_pad_input_capabilities(pad_input_dev, wacom_wac);
- 	if (error) {
- 		/* no pad in use on this interface */
--		input_free_device(pad_input_dev);
- 		wacom_wac->pad_input = NULL;
- 		pad_input_dev = NULL;
- 	} else {
+if you are'nt able to install all the required packages and version of
+packages, then use the kpv wrapper script for docker container that
+already packages things.
 -- 
-2.25.1
-
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D

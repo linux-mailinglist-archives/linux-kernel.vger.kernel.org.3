@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B557E50BC47
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3638050BC4C
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:57:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382774AbiDVQAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 12:00:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34092 "EHLO
+        id S1442228AbiDVQAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 12:00:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359635AbiDVQAM (ORCPT
+        with ESMTP id S1381209AbiDVQAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 12:00:12 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11olkn2018.outbound.protection.outlook.com [40.92.18.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1365DA63;
-        Fri, 22 Apr 2022 08:57:18 -0700 (PDT)
+        Fri, 22 Apr 2022 12:00:20 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11olkn2051.outbound.protection.outlook.com [40.92.18.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3295DA5E;
+        Fri, 22 Apr 2022 08:57:26 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H1FNmpN9DOyQo0575y/T2TyykMB4Z156FzWVeWwEcex+QpEmrgjduVmPL1obXuWrQF8P3RDC2Ep0X87TU6FgTI5uKWp2WCQJ65MdmKLc7nDjsUfDt9iGSLfFwPZyEmMTv39296y0+IyN1NYkYb9J/7gNGtRU1lFm8aHS1+JVY5ffznCd3PNkE8FkH0GEVVoDrPNA+PVzxJKAIk1FVagNiyeOLLCMKYMX13sm3zAPTF5aBjdwuXYSOtxk9ioSwCHOLU7ZsDzNFLkOTMIqQEnlW55gneNPB/zmddYsYlc85/BBTrglOazlmrfEXpvEluSBY6/cItTzcYBYyYNsr4B03g==
+ b=U3mPCAcYAUBDc2YKR+tQ21mixuCGB3sBySkLcCAdQBRjmooamvqLZO0YvZ9r7yFO4IHL6+aD5rF+dBE3C5IzLRaw5sD8Z4W6QKiFCPdko/l4QVGWmV4VSKGp9zeBCBOe3Tkk0o6/avyA+8RqMhgOFFO0kJ7MEqX8lgg6sVNeuAci20/+uShNzfl27tD1d9Arzdgg7Jl7Lf2Y+MK5aete/cfJmZo6PQ1AB5e0U9m6i3BQ1ZqUOKm90PFc5xcrb6bMqN/odoZf0N4MBvh5kaLhUtGJyl2zdnq1LzM/Rz0RN75JBJA/+UGvLGdY02jHmKg7YpTXVorbuKCMUC0eBfvGAA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=w214JjkWxts/kZdYSYyJbA2zAoSYiPb6tUrTOsI486A=;
- b=CF1PiUzUNMeQ9+ZqLMBf7/RVzk4t1jibhLnMqVhB2WMpEHsE+tjOcr6kP4vamGc0Hak4dESHnwoGq3pn0pEHnUP89Fo8Td2blgGOs+uFJ07kWCgIZSfCIQl5g9FAEZkwKz8QwgTrxqy3CHGUkEQcYgS4w+3r3nv/7rMudGRW1rVaVvnGVYAcSQsqkbCEu8mUJvaaeM016ugh8QNb8TMWV7Dw07A3uQapOtNEXzZ/HtpBydESlTBSQ5SpWKeVJ+Igqi0Zbk4VyOanNevruc4bfwTkbiXXwXQWDuF82jjBbMNKsNAc2HwrlBszNrnhGDXYPWwHiZor1GyHV9uCSa+Nyw==
+ bh=g/nkuKY6fOKGmnQLLGSq3ReQr9gJ5aTylkHMaLhGwyY=;
+ b=ECysYfKRHMUOG0HuOgg7S2gaAJt9w2pbG736dToFnVyTBvGLo7vm35ZJO60j+CBKDwF6JFfZWYY6kr1LnCQbwxbENLUSrWKeQ+8ETHVeqJBmED3Gi+raLpji6wAvpM/UHWkFEeipyc/16F+o35GCK1o9uElMk/faIp4x3vOvyAxNH3C0tHYUEwt3yDlvZ5xKFc+10AZk6CCt+/fgsQ5vVxog53Itn5dmTCD1rWrdzkwTrjBD3xouL3IRCpxJ6xUkHCA6i18JTpyCY4fU61mGV+BrpRr6Wve5Dzru/JjZyVEEMvSnI+mY/ruc4eV8VnMxKylYyWD3d7xoKcJhAU4urg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=w214JjkWxts/kZdYSYyJbA2zAoSYiPb6tUrTOsI486A=;
- b=avIl6xb9ivtcLGSSB2c593ZJpAGneeVYLnxiVtHTcDy2915NSfu6Q6+9hsDVTetrt/0MemLtcSm6sJywl+6Khhz7Dt4TVkNJKN3k/HH4KMCZaNRx/PK55vcrXIUlyahFjobrA3ToDL1MuBVHdX+JHSWa986WYZ5z/ThjC1wxIgIJlTW4nZixhAyKYfKmZTQQuz9NKgnNXUtdaJiHMqqgWKJKxgYK8MdhXDkgg+31tLO2leBRBGUC0A0pNd8fkHxXDAAzBzdW9ZgH/boZPl2JjJep5Pjn9Dq25ngxNaMSTBZcfVOzvSLydO5sxstzRfdW4cJhJEsVEfBYNFn3kHEAZw==
+ bh=g/nkuKY6fOKGmnQLLGSq3ReQr9gJ5aTylkHMaLhGwyY=;
+ b=sY7TDSZ9aJ7ZkjsN0b0AT/3qwO2BUIiAfH7mUrD+rssH52m2DgowFZVTI5wk9pkeOUaxjpc6TFNB1NzZs+MGHiUgAyhuhdS7Z8HaPbjPaq5LWekysAGjs2rs5obWwNB4v3gYdZsXmv7lq6Ji+rXp1kHQqv78vDVs27waz5Ln0+o+dV127z+WQhuAgFR7tQKO3nbcKJFvOL/KfiGGTAcovc7qA1h24Gzq0y7hAyVmPOpeSUG6QwFDxkbxB1OR5BICRf0+s8N00/H2uEMO437rCHWVldVomSmmYYoaPA1nOtZ6YEqPPNZivxhskxLpEjGRHmELKaN9fvOSwrjB/cjl1Q==
 Received: from BYAPR20MB2472.namprd20.prod.outlook.com (2603:10b6:a03:155::16)
  by CY4PR2001MB0917.namprd20.prod.outlook.com (2603:10b6:903:d6::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Fri, 22 Apr
- 2022 15:57:16 +0000
+ 2022 15:57:25 +0000
 Received: from BYAPR20MB2472.namprd20.prod.outlook.com
  ([fe80::3480:160a:eb92:d6e3]) by BYAPR20MB2472.namprd20.prod.outlook.com
  ([fe80::3480:160a:eb92:d6e3%6]) with mapi id 15.20.5186.015; Fri, 22 Apr 2022
- 15:57:16 +0000
+ 15:57:25 +0000
 From:   icenowy@outlook.com
 To:     Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
@@ -46,57 +46,57 @@ To:     Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
 Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-kernel@vger.kernel.org, Icenowy Zheng <icenowy@aosc.io>
-Subject: [PATCH 3/4] spi: sun6i: add quirk for in-controller clock divider
-Date:   Fri, 22 Apr 2022 23:56:38 +0800
-Message-ID: <BYAPR20MB24728A99C2F7505873A091B5BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+Subject: [PATCH 4/4] spi: sun6i: add support for R329 SPI controllers
+Date:   Fri, 22 Apr 2022 23:56:39 +0800
+Message-ID: <BYAPR20MB2472717D5AC20E7702329996BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220422155639.1071645-1-icenowy@outlook.com>
 References: <20220422155639.1071645-1-icenowy@outlook.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-TMN:  [6on+UoLO1ATpsFxi0pyPJsItMb+i9p/A]
+X-TMN:  [MGFqH9QJANVe0BzP0KPvht+S9gJKbyRg]
 X-ClientProxiedBy: HK0PR01CA0059.apcprd01.prod.exchangelabs.com
  (2603:1096:203:a6::23) To BYAPR20MB2472.namprd20.prod.outlook.com
  (2603:10b6:a03:155::16)
-X-Microsoft-Original-Message-ID: <20220422155639.1071645-4-icenowy@outlook.com>
+X-Microsoft-Original-Message-ID: <20220422155639.1071645-5-icenowy@outlook.com>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 27e00b0f-5279-4cf3-da4c-08da2478c62c
+X-MS-Office365-Filtering-Correlation-Id: bfea3a30-45df-4fad-b1bf-08da2478cb0b
 X-MS-TrafficTypeDiagnostic: CY4PR2001MB0917:EE_
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dPKginjMP6LZfTjk1VtW8Pv4RLWarsXenZrYwgtH0SNDfyjwQptrmY2qopUzZ4W0i0drObBPzNaiSm9BdHYwDMhaArHpxPYSyXnO9qSpPYfYgMgjvzBBGtGWqKunBgGX42/2MyeFXdjYPQ26XWbWKJ3uXan7PXVGEChTr2PVezOJgUZFsG+KXiFt45IhIF1nSAsSp+CnO/ehpRHLm0528FccF+Hj2VAGkriXnChKbrbxoalRERv96Al7rR0fM1+FHK2rFqlH6kf3GWhEziFJwrIa6URe/DTgFRAU/V5b7R97+Boe8bZpq2GUfCaMMQde1r+PZO5cMrDD8mSr2c7U0sOmDAYvB574ZKzgNMXaexO4+6lF5nrLtB+XdHX8QGOjgwpvBXrrw8HGmCAefESrHY8cfN/0Dats/wwA48swne4ijiCQE5apZnsP6ckiqX/nqOo2YfzBCcnGeowhD3+rQiP8ON/bpLyOExM1Y0wVlnqghVzgv0bY0kAuJVmFeDu/rJomqoflMppijHIqA++IJxEmHg4gQGPffiVhhNNfcWxFI23/qkw5N7UTeNtP8YtWDIvpPokrtqDQa29COy5nqw==
+X-Microsoft-Antispam-Message-Info: 3Md5mcrh3B8WOSwFTddObXMg27FbduhwK8YlquuBIhVoJCOwRFegAwd6fSkOZv9j8rLHdq5DAMcL5ILerLMeyQmAntm1S3XvJp/rbZytNs8552Zx9OjpH97iQ5cwiApuno7t6Iztv9TgKqzUT04e/vG95ySXu+3L8KXzST6G+qgGfipAd0isnZ2uDXFwg4Ecw9Vu0GV9D19GOLY3ClGAYF6G1RX/B8d8vmFvIc6NgIzbqrEhAC8x+5S7rTdQ4lC3Oq7NtVaT9DjBFMtYQKIVNjCg9isF24cy5DFm8zTxp0j7eySE+3yXzgI7PisFtdTvkA+SeIoTvB5AGcmZTlz/xg6u8guNENHfw23E49RwNrOPBNmhgZm2N2fIi/U3QiMWAFLHegtGha3bdCCnG4PNagcUetOtThiJ6uC1dSSkQa3J0fRsYUh3hdQ/AwwQCY+8zxT0A039XpvNezIgc0ckSH9c0YvwVXAOFrlyKlERN5sxv5oGlXxQaRis0TI55IkRuYEupLpSZv4igUt3PSL1R1Qf4dtXvN7VC3AbPZ072zZ1YiXG8/QuJ17N3gUIR++FVahG4BZLC2cECtXQ2MB6xQ==
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?P+vnShno19Ic9CduPeN6aaWaPDycWAQUGaRx9kLEovgbIyi57Iy91yGVizZC?=
- =?us-ascii?Q?ShxPzqNr2kS2ZLjkeH2BsA+dYzp3PEjsJcZdiuB0ihul5oKu75Mo2dOJe4Q7?=
- =?us-ascii?Q?JwIQDTwbEOtFwDuCEbYiR8PSrHa+oZP5XTFWHMy0xRQ8Y7C+DxCWK+yxXxeC?=
- =?us-ascii?Q?jUqKQxweytzLkzin+EdfxOpZKnrAvJrfR+QiUL2HHyv1pGOfjjHgPg/DVwW9?=
- =?us-ascii?Q?Lp/xrU4bieQI2LwGwRGVOTR9xDgTON+14Ys/QWf1KzNz2JbipE0WvyjLVois?=
- =?us-ascii?Q?y27ToqGNfo/cNDQKtZ6DeKk3nYyDi3rC0gp4omhK6UmyPRpEbjN2s2SsGYWu?=
- =?us-ascii?Q?x3hbHk8Sk7WnLogZzMxgkZES13Q6I3rEMtmVW/nOa+K0Exg7oHJR20jPyigy?=
- =?us-ascii?Q?fc4uuY4LMtDrRratGBA3cDgdAW976rvGfl5D9/H5PaR5x+9/UT+cqZdJ3ZN9?=
- =?us-ascii?Q?7aBqPCUVF8eBuQLFhX3Sy3/DjzQVdZx3nsg9Q705StiVbLUJ4psPkOTJMD9q?=
- =?us-ascii?Q?tPqv30l2zc71oOrJTBW0sd4vu6ltbyKaLThqWW7wo5mqphOZMz8GPSXk/tRE?=
- =?us-ascii?Q?ZjK3lT8Gv5z75+uldf60ZmHMfsqy6fJpB/Zq65ja7Xos1CshJNL2qs8SdYkb?=
- =?us-ascii?Q?SMYhVMqXl4/zGIEGHSl8brWXHLUOEbyGd1Dugv+KxhX/929xYZFn6/OBBM2y?=
- =?us-ascii?Q?6r2U+Xiqzl0QUMtfD0hU9/Eh7418vlEtGfMq6qIasKQAUsqDfLdKVSxV3TnK?=
- =?us-ascii?Q?S3yrz71wPKEksMTQvPbWrIHhv8jBMuUN+9eYZVoFR0pMG0s4x4n9LLgjTXsY?=
- =?us-ascii?Q?dKRdp0hyCV+ErKB06plL5LetQMuNuLMV14auzH6P3XTV+NjKJfV8OV460uAB?=
- =?us-ascii?Q?uagzsr0a1AM3GH1HW2VLRzoW6uAj7WVe+aH1f/qrWyfoKS+G+XhWmE9gyMhx?=
- =?us-ascii?Q?30VnK4nDHKJxS3yoTHunFsEiZKwXLvxWb1qRyf0RKbZcuyHsSlRawb2YoaVa?=
- =?us-ascii?Q?QQUsQmpuKjcvuuoElHw6H3BVOt5+dTSfcgvV8DFNrcWeaszpDrdrmXJKHhYI?=
- =?us-ascii?Q?SK1Hawb28eLA40Ry9eo/IhYzxumbHmV0ZvV44e8Y4Ib2KJfCM4ECQoe0ekYm?=
- =?us-ascii?Q?olz+tUg6BhWhkAMebLV8vPC50ScNbd/N3gNKpyejFgjRwCsnu7uwj1yO1IvQ?=
- =?us-ascii?Q?oKZ5LrMGdo9If7YhAETkXuaDoybhA1ACU6RmprzsicvZ18LBPg7ED8XzHTkk?=
- =?us-ascii?Q?UNBdfoB/hl/8UgPvwvZFOi4d35xbY43JycFRJL6T0aDYe5w8nFsi9cGaM0AU?=
- =?us-ascii?Q?xQlnUSvEaWCcSWADsn0DIL4xTToEFcTrmnB1o3RQXvVTXfJPjtqV5aIIrWy9?=
- =?us-ascii?Q?yFFcVfo5kIAiXGpCt9EhYK0Yv8Zkq/MUb+9/aOLFFJnhYwlbPrhF1KR+qY7B?=
- =?us-ascii?Q?C8cwL3QgqmA=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XVN7wxGmEM+/QD/C6r1JWjXvcLHF9LPH+j4Eax4bZC2FHpsoJ4/WMdkVeton?=
+ =?us-ascii?Q?mGsdYlf0D8DjYm/XUH2v9VpBY18oybi4f5JVGtPB6YPCrcY/p4EYEOi0Ctjg?=
+ =?us-ascii?Q?SiTleVCAaPXgnTMLC8Ti1GicPrLmhqdDgK2gELl+XBOgT7WjyuQuoLIuN1Mu?=
+ =?us-ascii?Q?fuj8M5l6uU9IXQyD92SO/10NJXA00jBmN6/fJuT/4NSX61mfNBKfrnl8UXXE?=
+ =?us-ascii?Q?M8+Ssu7vgK6wZPn8BYFbtGpLScJAe65+b9yyXVABW6S/DOoQk5SxKIoNbs3H?=
+ =?us-ascii?Q?FV2mqV55eFt8gUyhdLZgIXWi5OZQtVkkp2AvHMlCEc/S9gCF00h3LiaYBH4F?=
+ =?us-ascii?Q?aQz1c691f6/cFF4xKpDNjqFjd7VE6rKAsmu1nnyjGEy8V8IJM9H4fYlCFGUd?=
+ =?us-ascii?Q?8yEXRx22WnzRUne9CDY8pAevCPKuRYXWoVnMGbbD4H9NUAkR/KA2HBer/kH/?=
+ =?us-ascii?Q?RlmZJZd+rGNUsZbYYQmRDcXypuCsZ8+DZvNJxEgbJwODU5UdfyhE710v8f5b?=
+ =?us-ascii?Q?3HM4jYRsis+KNm4r8fUMxMNISVoMY1MqD2PrySBlKyGv+Aa7jA2RDdDoCgvE?=
+ =?us-ascii?Q?anplB/Rz3NVkmAzqmLYq+TaSLX+2fvlOQ7dJnH0YLukgKsC/qyS/9pcGh9A0?=
+ =?us-ascii?Q?rseZ46+eyzh6fNRoP5hORSrTYoZFEI6wcfkFcQ/6yvvEH/8KjEQo5mFJ6DB5?=
+ =?us-ascii?Q?PIkvNqY8ncuPUcVJpmZZc9LaHOAnRPBfjKUKNcDAjox7BOudRUtevjnPfntG?=
+ =?us-ascii?Q?v+WpkcePwuBJ6T44tgLEQiR68CsxdJiUD6iSeBVAmcUYgNTZs4z64QY3nxxk?=
+ =?us-ascii?Q?SIX68rNRZz5KbYRN8ezfwSks+6dOc9pOhoGy4cVrZ6rcpQA1pZfg0NrUxj9s?=
+ =?us-ascii?Q?Xv/FBTpZ1W559W064rASk5iLcUZqM3pohJYYgBYism8j+YtkxppcCQNY9bFX?=
+ =?us-ascii?Q?E5TOtcu8dW4BT1u4Lmfhgl4m5Yr9JiRmKD85lOhGnzxc+hlN66w0J7WIKWyI?=
+ =?us-ascii?Q?VFiAcitQBtLY4DOdPBEDUkS7Sw1vcec1S6mISuvmXBidzNd9qyUbHOIxRR+c?=
+ =?us-ascii?Q?cEWi/SFLGWjt+juIlYPKd9P9ieK59r+p7akRV4ZiR5YCIUwXbqHQpDkO+TK5?=
+ =?us-ascii?Q?eL/5bmGLfCtlYcL1jhQ2RnFTY5Ji7C2jAi1yqMuxDXNlg++O0BiB7dgmyDHz?=
+ =?us-ascii?Q?KGzo2RyIXQWODuvZ1xzXR1f/aCydO1UmpZ/YswsSKdA/B4NzXRni+xYOL+af?=
+ =?us-ascii?Q?5B5oK1A8VQsjjyYbJ0mz5oA9clG9O3Ys1rRODLxXrvUjTYC1pjpoKkMuEN2X?=
+ =?us-ascii?Q?FM+7xYkgoAiATewS5PjQG7EdMvTWSPsUsKdSwunO+Nuu62ZWDl9nMeRa/pCc?=
+ =?us-ascii?Q?21znSVxT6TT7BOhTwymgfiSBcQyzYx6vkJOF8UHbTb9MosmtnI/hE0wbb7A/?=
+ =?us-ascii?Q?MKjlLxhwQDg=3D?=
 X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 27e00b0f-5279-4cf3-da4c-08da2478c62c
+X-MS-Exchange-CrossTenant-Network-Message-Id: bfea3a30-45df-4fad-b1bf-08da2478cb0b
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR20MB2472.namprd20.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2022 15:57:16.8506
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2022 15:57:25.1625
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -114,125 +114,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Icenowy Zheng <icenowy@aosc.io>
 
-Previously SPI controllers in Allwinner SoCs has a clock divider inside.
-However now the clock divider is removed and to set the transfer clock
-rate it's only needed to set the SPI module clock to the target value.
+R329 has two SPI controllers. One of it is quite similar to previous
+ones, but with internal clock divider removed; the other added MIPI DBI
+Type-C offload based on the first one.
 
-Add a quirk for this kind of SPI controllers.
+Add basical support for these controllers. As we're not going to
+support the DBI functionality now, just implement the two kinds of
+controllers as the same.
 
 Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
 ---
- drivers/spi/spi-sun6i.c | 68 +++++++++++++++++++++++------------------
- 1 file changed, 38 insertions(+), 30 deletions(-)
+ drivers/spi/spi-sun6i.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/drivers/spi/spi-sun6i.c b/drivers/spi/spi-sun6i.c
-index 84c525b08ad0..fc81afc3a963 100644
+index fc81afc3a963..c4bd8ea31b43 100644
 --- a/drivers/spi/spi-sun6i.c
 +++ b/drivers/spi/spi-sun6i.c
-@@ -87,6 +87,7 @@
- 
- struct sun6i_spi_cfg {
- 	unsigned long		fifo_depth;
-+	bool			has_clk_ctl;
+@@ -716,9 +716,21 @@ static const struct sun6i_spi_cfg sun8i_h3_spi_cfg = {
+ 	.has_clk_ctl	= true,
  };
  
- struct sun6i_spi {
-@@ -260,7 +261,7 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
- 				  struct spi_transfer *tfr)
- {
- 	struct sun6i_spi *sspi = spi_master_get_devdata(master);
--	unsigned int mclk_rate, div, div_cdr1, div_cdr2, timeout;
-+	unsigned int div, div_cdr1, div_cdr2, timeout;
- 	unsigned int start, end, tx_time;
- 	unsigned int trig_level;
- 	unsigned int tx_len = 0, rx_len = 0;
-@@ -350,39 +351,44 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
- 
- 	sun6i_spi_write(sspi, SUN6I_TFR_CTL_REG, reg);
- 
--	/* Ensure that we have a parent clock fast enough */
--	mclk_rate = clk_get_rate(sspi->mclk);
--	if (mclk_rate < (2 * tfr->speed_hz)) {
--		clk_set_rate(sspi->mclk, 2 * tfr->speed_hz);
--		mclk_rate = clk_get_rate(sspi->mclk);
--	}
-+	if (sspi->cfg->has_clk_ctl) {
-+		unsigned int mclk_rate = clk_get_rate(sspi->mclk);
-+		/* Ensure that we have a parent clock fast enough */
-+		if (mclk_rate < (2 * tfr->speed_hz)) {
-+			clk_set_rate(sspi->mclk, 2 * tfr->speed_hz);
-+			mclk_rate = clk_get_rate(sspi->mclk);
-+		}
- 
--	/*
--	 * Setup clock divider.
--	 *
--	 * We have two choices there. Either we can use the clock
--	 * divide rate 1, which is calculated thanks to this formula:
--	 * SPI_CLK = MOD_CLK / (2 ^ cdr)
--	 * Or we can use CDR2, which is calculated with the formula:
--	 * SPI_CLK = MOD_CLK / (2 * (cdr + 1))
--	 * Wether we use the former or the latter is set through the
--	 * DRS bit.
--	 *
--	 * First try CDR2, and if we can't reach the expected
--	 * frequency, fall back to CDR1.
--	 */
--	div_cdr1 = DIV_ROUND_UP(mclk_rate, tfr->speed_hz);
--	div_cdr2 = DIV_ROUND_UP(div_cdr1, 2);
--	if (div_cdr2 <= (SUN6I_CLK_CTL_CDR2_MASK + 1)) {
--		reg = SUN6I_CLK_CTL_CDR2(div_cdr2 - 1) | SUN6I_CLK_CTL_DRS;
--		tfr->effective_speed_hz = mclk_rate / (2 * div_cdr2);
-+		/*
-+		 * Setup clock divider.
-+		 *
-+		 * We have two choices there. Either we can use the clock
-+		 * divide rate 1, which is calculated thanks to this formula:
-+		 * SPI_CLK = MOD_CLK / (2 ^ cdr)
-+		 * Or we can use CDR2, which is calculated with the formula:
-+		 * SPI_CLK = MOD_CLK / (2 * (cdr + 1))
-+		 * Wether we use the former or the latter is set through the
-+		 * DRS bit.
-+		 *
-+		 * First try CDR2, and if we can't reach the expected
-+		 * frequency, fall back to CDR1.
-+		 */
-+		div_cdr1 = DIV_ROUND_UP(mclk_rate, tfr->speed_hz);
-+		div_cdr2 = DIV_ROUND_UP(div_cdr1, 2);
-+		if (div_cdr2 <= (SUN6I_CLK_CTL_CDR2_MASK + 1)) {
-+			reg = SUN6I_CLK_CTL_CDR2(div_cdr2 - 1) | SUN6I_CLK_CTL_DRS;
-+			tfr->effective_speed_hz = mclk_rate / (2 * div_cdr2);
-+		} else {
-+			div = min(SUN6I_CLK_CTL_CDR1_MASK, order_base_2(div_cdr1));
-+			reg = SUN6I_CLK_CTL_CDR1(div);
-+			tfr->effective_speed_hz = mclk_rate / (1 << div);
-+		}
++static const struct sun6i_spi_cfg sun50i_r329_spi_cfg = {
++	.fifo_depth	= SUN8I_FIFO_DEPTH,
++};
 +
-+		sun6i_spi_write(sspi, SUN6I_CLK_CTL_REG, reg);
- 	} else {
--		div = min(SUN6I_CLK_CTL_CDR1_MASK, order_base_2(div_cdr1));
--		reg = SUN6I_CLK_CTL_CDR1(div);
--		tfr->effective_speed_hz = mclk_rate / (1 << div);
-+		clk_set_rate(sspi->mclk, tfr->speed_hz);
- 	}
- 
--	sun6i_spi_write(sspi, SUN6I_CLK_CTL_REG, reg);
- 	/* Finally enable the bus - doing so before might raise SCK to HIGH */
- 	reg = sun6i_spi_read(sspi, SUN6I_GBL_CTL_REG);
- 	reg |= SUN6I_GBL_CTL_BUS_ENABLE;
-@@ -702,10 +708,12 @@ static int sun6i_spi_remove(struct platform_device *pdev)
- 
- static const struct sun6i_spi_cfg sun6i_a31_spi_cfg = {
- 	.fifo_depth	= SUN6I_FIFO_DEPTH,
-+	.has_clk_ctl	= true,
- };
- 
- static const struct sun6i_spi_cfg sun8i_h3_spi_cfg = {
- 	.fifo_depth	= SUN8I_FIFO_DEPTH,
-+	.has_clk_ctl	= true,
- };
- 
  static const struct of_device_id sun6i_spi_match[] = {
+ 	{ .compatible = "allwinner,sun6i-a31-spi", .data = &sun6i_a31_spi_cfg },
+ 	{ .compatible = "allwinner,sun8i-h3-spi",  .data = &sun8i_h3_spi_cfg },
++	{
++		.compatible = "allwinner,sun50i-r329-spi",
++		.data = &sun50i_r329_spi_cfg
++	},
++	{
++		.compatible = "allwinner,sun50i-r329-spi-dbi",
++		.data = &sun50i_r329_spi_cfg
++	},
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, sun6i_spi_match);
 -- 
 2.35.1
 

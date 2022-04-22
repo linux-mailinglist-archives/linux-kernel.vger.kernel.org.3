@@ -2,88 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33BD750C376
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C4C750C399
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233295AbiDVWfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 18:35:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54862 "EHLO
+        id S233017AbiDVWff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 18:35:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233214AbiDVWfI (ORCPT
+        with ESMTP id S233321AbiDVWfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 18:35:08 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8A62CB479
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 14:27:31 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id x9so9635194ybe.11
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 14:27:31 -0700 (PDT)
+        Fri, 22 Apr 2022 18:35:13 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667E12CC18F
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 14:27:44 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id j8so13523063pll.11
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 14:27:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=v4i3AmNv4FLK6btws/jh0kCSYBAa4f3ciHtxOpc3dZs=;
-        b=JRDatOGFzKK/uf+U50BmSx+6g4Pa7D170MDb5ReJoxJCi2YJ+O1LWcsk3ZR+cCBvOv
-         GbI3hNcEt8op7qRcvRwQ1rF5AX0KZrXSyqZ64VdMU5KrD7qR1RorXlZ7BdfS/vwlCh/u
-         mu0Nbnoz3MxCqG5idEmXqe7YNX3p+7DVU7y0VRUEwRAjMCgtMxMuM8yFYoIs7OpITDVV
-         NFr9xZzrgfbvZDJjyHfftICMW18Gae8pnfjA0n5Tq4hFDIEo2naboitBPARNTgAuA9wV
-         NLIyepcfEUNoedq5wC333803/JJ4N5AOBz2KgH3OzXG8wBAGvmI5B9QYV9q2Is2Q60Rq
-         2Edw==
+        bh=w9AKK/wGlnxig+lE3h4LHV/aZa9ukqQjCgIygmyWAnI=;
+        b=68ZELSGoErna6Kx0I1rr70ZevaMAPMnUYlggojQeGdeNtet7Hum0m7txFWvhbVCPoh
+         Lpfn1c1GUzjoDoqF3atTMDyB/W54WSq09ZqEMstjj/nD57yi3McP45zUESmlBRcMSayd
+         RCzz4ipAytYtGQe71XITH8QJ3AOzILuXAM8yhmiGgJ7WF+oGlf5airqmyAOM2HGknwiH
+         NL8jDL6gpoJPBQW7EeAY6wZ4C88AXehvjWq8bqkos1IivsjngJ9pqrOMVpnTljE1x58T
+         I93xuOolWlJ6WC9weiHMQEfCyYC7FH5wSxSWXUOcug8i2eaQtc0PgYHeEI3sT7IioZIr
+         TevA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=v4i3AmNv4FLK6btws/jh0kCSYBAa4f3ciHtxOpc3dZs=;
-        b=HqORQPoMae0K6tRgUz2GHEPxsfIZrBneyGLuMwXGY87ZNpF7IkXx7eHbVDoMDoDiHL
-         7Bw22CHpCfEctJDtXsij0iV+/ZUpTw9fo4Ee3QcS85OKcZ3Utyxcb3skFz4QHJk8iQkJ
-         HTk8JIEgfsUa7XJ/9nSJCIFLRrXzNprMJPMraPyPlzcpCQ3AwJBkkOnH3C8LZmeomzgF
-         5RuHFY8oiLjLYGtFDjnqoKkKXk2B7P6c8GzDhO5NUANHfLVGpndKhQMXKORvHhVExTPw
-         Caofpley/E7XtpjJWpkeJni8u5uMUYnJqXiNXEsEkQA8ZrQvarfMFEZ4WyNmwtchwy3W
-         pMqg==
-X-Gm-Message-State: AOAM531MEnHFtGKd7xYxXTDraFtLu8C3X8nDcsDhz+ymyMn94XCRQ4QK
-        1WJPasnSvDSoZq6sRjwXZd/g6uWXJQfmsytLStjCnA==
-X-Google-Smtp-Source: ABdhPJy5uOpR6QqOApr8JTXnRyyqvChXNpcmelnBXNb6YY6fm53l19ExMBperiDNdyr16+uDrBTu9QvaUkCjxxjaNPc=
-X-Received: by 2002:a5b:8c8:0:b0:641:e8de:a6f4 with SMTP id
- w8-20020a5b08c8000000b00641e8dea6f4mr6385815ybq.533.1650662851086; Fri, 22
- Apr 2022 14:27:31 -0700 (PDT)
+        bh=w9AKK/wGlnxig+lE3h4LHV/aZa9ukqQjCgIygmyWAnI=;
+        b=l6QYBoIF0gzw5B45+6A/gJui8P3nM6v3QofKlKsM9mUtBDlBnUnKNAFEskTyciP6ac
+         2e6Amh7wjKKs/4BRvkh2N1Z75UFkLqvJJOcNhHIHtOA7ziEnmL6NOyBhaBq0qyKjGAjU
+         1hsE2Qfiaeg0PI3RFTdedwdXNu7cb3gWSnwa5m9xRujaj7El+GNvANgkwd/y2jjVMQBc
+         DDFr3VlyVfmr3j5AXgGm9HajLDjheb6kXGuhkIJCRf/RjuzNtGorlyowvvivTl9k9JZl
+         xcRQrGUWI64L6/4YflK838Ukl1jsfc2EeFjtno7xv+TxXsg0pJfwFczFPecJhjuNm0SG
+         +J4w==
+X-Gm-Message-State: AOAM530qg4pFBDtTxesp1Rp2d6bjXDoh63zUG+Fo3vXiacVOxmO2cL0B
+        e6Auoh+O9YutipnwL+gz9oYwma5hHBJ37E+2CEDEzg==
+X-Google-Smtp-Source: ABdhPJwBmyn23Epq/35EZiri4tm6JvqSiIIERB77yO45Op+oQcI+/5ahmZRwLntOQrNzhYN0N3NhjEndaBvuqb3gpmc=
+X-Received: by 2002:a17:902:7296:b0:14b:4bc6:e81 with SMTP id
+ d22-20020a170902729600b0014b4bc60e81mr6342011pll.132.1650662863976; Fri, 22
+ Apr 2022 14:27:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <1650285427-19752-1-git-send-email-quic_srivasam@quicinc.com>
-In-Reply-To: <1650285427-19752-1-git-send-email-quic_srivasam@quicinc.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 22 Apr 2022 23:27:20 +0200
-Message-ID: <CACRpkdYuojrAdz1G_ePeuaEX1Q4hQah=nQuOuW=v0Ty_FOk0Ag@mail.gmail.com>
-Subject: Re: [PATCH v13 0/7] Add pin control support for lpass sc7280
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     agross@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
-        robh+dt@kernel.org, quic_plai@quicinc.com, bgoswami@quicinc.com,
-        perex@perex.cz, tiwai@suse.com, srinivas.kandagatla@linaro.org,
-        quic_rohkumar@quicinc.com, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, swboyd@chromium.org,
-        judyhsiao@chromium.org, linux-gpio@vger.kernel.org
+References: <20220419045045.1664996-1-ruansy.fnst@fujitsu.com>
+ <20220421012045.GR1544202@dread.disaster.area> <86cb0ada-208c-02de-dbc9-53c6014892c3@fujitsu.com>
+ <CAPcyv4i0Noum8hqHtCpdM5HMVdmNHm3Aj2JCnZ+KZLgceiXYaA@mail.gmail.com>
+ <20220421043502.GS1544202@dread.disaster.area> <YmDxs1Hj4H/cu2sd@infradead.org>
+ <20220421074653.GT1544202@dread.disaster.area>
+In-Reply-To: <20220421074653.GT1544202@dread.disaster.area>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Fri, 22 Apr 2022 14:27:32 -0700
+Message-ID: <CAPcyv4jj_Z+P4BuC6EXXrzbVr1uHomQVu1A+cq55EFnSGmP7cQ@mail.gmail.com>
+Subject: Re: [PATCH v13 0/7] fsdax: introduce fs query to support reflink
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Shiyang Ruan <ruansy.fnst@fujitsu.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Jane Chu <jane.chu@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 2:37 PM Srinivasa Rao Mandadapu
-<quic_srivasam@quicinc.com> wrote:
+On Thu, Apr 21, 2022 at 12:47 AM Dave Chinner <david@fromorbit.com> wrote:
 >
-> This patch series is to split lpass variant common pin control
-> functions and SoC specific functions and to add lpass sc7280 pincontrol support.
-> It also Adds dt-bindings for lpass sc7280 lpass lpi pincontrol.
+> On Wed, Apr 20, 2022 at 10:54:59PM -0700, Christoph Hellwig wrote:
+> > On Thu, Apr 21, 2022 at 02:35:02PM +1000, Dave Chinner wrote:
+> > > Sure, I'm not a maintainer and just the stand-in patch shepherd for
+> > > a single release. However, being unable to cleanly merge code we
+> > > need integrated into our local subsystem tree for integration
+> > > testing because a patch dependency with another subsystem won't gain
+> > > a stable commit ID until the next merge window is .... distinctly
+> > > suboptimal.
+> >
+> > Yes.  Which is why we've taken a lot of mm patchs through other trees,
+> > sometimes specilly crafted for that.  So I guess in this case we'll
+> > just need to take non-trivial dependencies into the XFS tree, and just
+> > deal with small merge conflicts for the trivial ones.
 >
-> Changes Since V12:
+> OK. As Naoyo has pointed out, the first dependency/conflict Ruan has
+> listed looks trivial to resolve.
+>
+> The second dependency, OTOH, is on a new function added in the patch
+> pointed to. That said, at first glance it looks to be independent of
+> the first two patches in that series so I might just be able to pull
+> that one patch in and have that leave us with a working
+> fsdax+reflink tree.
+>
+> Regardless, I'll wait to see how much work the updated XFS/DAX
+> reflink enablement patchset still requires when Ruan posts it before
+> deciding what to do here.  If it isn't going to be a merge
+> candidate, what to do with this patchset is moot because there's
+> little to test without reflink enabled...
 
-Bjorn says he's happy so I applied this v13 version for v5.19.
-Any remaining nits can certainly be fixed in-tree.
-
-Thanks for you tireless work on making this work the right way!
-
-Yours,
-Linus Walleij
+I do have a use case for this work absent the reflink work. Recall we
+had a conversation about how to communicate "dax-device has been
+ripped away from the fs" events and we ended up on the idea of reusing
+->notify_failure(), but with the device's entire logical address range
+as the notification span. That will let me unwind and delete the
+PTE_DEVMAP infrastructure for taking extra device references to hold
+off device-removal. Instead ->notify_failure() arranges for all active
+DAX mappings to be invalidated and allow the removal to proceed
+especially since physical removal does not care about software pins.

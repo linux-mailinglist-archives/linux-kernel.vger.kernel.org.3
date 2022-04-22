@@ -2,143 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A9B50ACBD
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 02:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 192F850ACC1
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 02:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442920AbiDVAWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 20:22:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37696 "EHLO
+        id S1442936AbiDVA0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 20:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387931AbiDVAWl (ORCPT
+        with ESMTP id S237771AbiDVA0a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 20:22:41 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F274144A23
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 17:19:48 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id y11so7681472ljh.5
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 17:19:48 -0700 (PDT)
+        Thu, 21 Apr 2022 20:26:30 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C8B4968F
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 17:23:39 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id p8so6448346pfh.8
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 17:23:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cN9ZhLUrf8Ngv6pdmP79a/DexlpcMLtixNmmzcyV9hA=;
-        b=LArRVF1L5S+exersvD6njieFFNEV7araYOj8gZPObmLO8klh3ABsCS7aDto0KIkFkA
-         gryZTmKRKKRbeKGinEDIvMghJVBVWVhHFoTru2RteUmqEI9N4Qz86WJJ+xBMxpWYi2hj
-         X6UQcrAo0+Nsqn+uEsdJ3rb1t2r6SS1RjuGdi3XRhqWYu0EBuWptIuWdI3dqWciJWBw7
-         /601VPw5EC1WGlFgW7XG5/aOrD1ePUtb0cDN+nHXaQZnZS0QWmDy96aKVGUQRrDsCZSI
-         a523+6DyR7nRYI63ugyMN4sQCCgdAbFrdJqwQxTm4KL/NiPBAzv7T6N5wmNRJcQvXVK1
-         18QA==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+6isM9rPgnmUdLXF2PlckUisnk3OJXyXTwV1qms8h1g=;
+        b=JkjgNHqRJy5KbgBIvYEyVrAQfuO80ZGbKWjGP0AAoCINZl3bLn8bhvXCOJDpJlBEg8
+         NxDF/tX5kFkyv2So8OCMnsp6byZmGV0iLZyjfq2lySItBZdUFok0gz4ls+HHzO9x4G+V
+         HbJ1JqlETnEvoxCJLE4CudRot06gz5NBzz6Zo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cN9ZhLUrf8Ngv6pdmP79a/DexlpcMLtixNmmzcyV9hA=;
-        b=KzBlMEBef87kb6FX9ifsvaZQGIyLhCSugU0jAfvDeFg+6KMY2KI6JD3G+s4G9UZ2nQ
-         hqdu0bV0UMTS0tLZ4pDmHfUK9tevS8BOV883/W1VULEwRvcaMRtBNjuyZKLuhei7a4Og
-         hcUiKNEdqzqIJy+nDTm687iA+ulew0ek24t3P2qSreiYQXrXMhUnOl4lXkmio8C6Oayg
-         +TcBz7roPPQkC44dZQXQ0ssmM6b1VoLeJ5bU5q4tg3A7X/NJ+PRoE0LuCl4UDSj8YoQX
-         qZA4GgjxJ2rSZMHBaf9J1nKXL9+uq9nAQ64BWuI2vcWWMDb5TksN9egUyOdzgAp5yv+m
-         zYew==
-X-Gm-Message-State: AOAM5336+aWLuCdYqAfBAiz0K8j4fLTlZJhNJkrI3DkmnD43yR0jaiRH
-        5LV35XHxKeWJeTchWcM/Kb7tkw==
-X-Google-Smtp-Source: ABdhPJzMTYxtDeWJy9+XjUrtkBWIIe2HSlGBUf31nW/YAGzyb6TtF4NhfgICChBTw+MWha7yN0hDJQ==
-X-Received: by 2002:a05:651c:12c1:b0:249:7e8c:d5fc with SMTP id 1-20020a05651c12c100b002497e8cd5fcmr1203744lje.33.1650586786839;
-        Thu, 21 Apr 2022 17:19:46 -0700 (PDT)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id u25-20020a197919000000b0046b4f7553dcsm50363lfc.295.2022.04.21.17.19.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 17:19:46 -0700 (PDT)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 67241104429; Fri, 22 Apr 2022 03:21:24 +0300 (+03)
-Date:   Fri, 22 Apr 2022 03:21:24 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv4 3/8] efi/x86: Implement support for unaccepted memory
-Message-ID: <20220422002124.lwd7b56zko24gbll@box.shutemov.name>
-References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
- <20220405234343.74045-4-kirill.shutemov@linux.intel.com>
- <Ylnwmvygp796+qcA@zn.tnic>
- <20220418155545.a567xnxa6elglapl@box.shutemov.name>
- <Yl2UHOQ4iZJ29k0q@zn.tnic>
- <20220418202431.whvql4w57c7l5vpw@box.shutemov.name>
- <Yl3RmPhdZieSr8W2@zn.tnic>
- <20220418235015.mnujtlmmlyin7y6m@box.shutemov.name>
- <Yl5nSSC4HpSWqfY7@zn.tnic>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+6isM9rPgnmUdLXF2PlckUisnk3OJXyXTwV1qms8h1g=;
+        b=cjkDcMArFjwY3zKBRUHjB/DHtoovOrtFPkdrevcZmHyE583K77w2IXTNiiV91Sxsna
+         7TKeIadRHnRFJWU29NMHy/qnwWiUAL88DoBLxfsWif7YDOsFXqiUEZjhuuuusM7HGBCK
+         DrkITR+2K6kKBHKrBe/zlf2TIIZ9PSgf7OtGH15rwQOOjbNBahDTJyUNyv0JTUuEdcL/
+         NJ3l7Ne4osWJQi+E8p6Zu23bWfVMvpcECTfWVD/n3qwkzxRDJ7tHsIFzEvza5rUvQryf
+         zyBwTOEycEs72/RMuFUDwu6H/tPfLeZ7lo1UUZ9Y/70tobIC3iydsBLyWZJB+Ncwp2hZ
+         FA5Q==
+X-Gm-Message-State: AOAM53053DkXfAY2zrDMVsHKdsXh3MIaCuohenSrEy6yzhJUWVwW/wmt
+        7nVBdOAak6iU96s0ELnQ0ef13A==
+X-Google-Smtp-Source: ABdhPJw9YS3CeCmSKEpGAhl/Z0uvcagcMQFn4lDU0jx2RRatzbW24NDaC/4y5Ff9r979x7OD/4s6Zw==
+X-Received: by 2002:a05:6a02:116:b0:39c:c779:b480 with SMTP id bg22-20020a056a02011600b0039cc779b480mr1655951pgb.311.1650587018436;
+        Thu, 21 Apr 2022 17:23:38 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:e283:652b:fb2e:829f])
+        by smtp.gmail.com with UTF8SMTPSA id k198-20020a633dcf000000b003aa9116ba17sm294393pga.35.2022.04.21.17.23.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Apr 2022 17:23:37 -0700 (PDT)
+From:   Brian Norris <briannorris@chromium.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Shawn Lin <shawn.lin@rock-chips.com>, linux-mmc@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Luca Weiss <luca@z3ntu.xyz>, linux-kernel@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Brian Norris <briannorris@chromium.org>
+Subject: [PATCH v2] mmc: core: Don't set HS200 clock rate prematurely
+Date:   Thu, 21 Apr 2022 17:23:18 -0700
+Message-Id: <20220422002318.3587413-1-briannorris@chromium.org>
+X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yl5nSSC4HpSWqfY7@zn.tnic>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 09:39:53AM +0200, Borislav Petkov wrote:
-> On Tue, Apr 19, 2022 at 02:50:15AM +0300, Kirill A. Shutemov wrote:
-> > I find it strange that you go after <linux/bitmap.h> which has limited
-> > exposure while <linux/acpi.h> and <linux/efi.h> are there already.
-> 
-> Funny you should mention that:
-> 
-> https://lore.kernel.org/r/YlCKWhMJEMUgJmjF@zn.tnic
+Commit 1c7ec586fe55 ("mmc: core: Set HS clock speed before sending HS
+CMD13") fixes problems with certain eMMC, but introduced new ones with
+others:
 
-There's still #include <linux/efi.h> in misc.h. You removed one, but
-there's a second one for some reason.
+  qcom-msm8974-fairphone-fp2:
 
-Any plans for <linux/acpi.h>? It includes <linux/bitmap.h>:
+  [    1.868608] mmc0: SDHCI controller on f9824900.sdhci [f9824900.sdhci] using ADMA 64-bit
+  [    1.925220] mmc0: mmc_select_hs200 failed, error -110
+  [    1.925285] mmc0: error -110 whilst initialising MMC card
 
-In file included from ./include/linux/cpumask.h:12,
-                 from ./include/linux/smp.h:13,
-                 from ./include/linux/lockdep.h:14,
-                 from ./include/linux/mutex.h:17,
-                 from ./include/linux/kernfs.h:11,
-                 from ./include/linux/sysfs.h:16,
-                 from ./include/linux/kobject.h:20,
-                 from ./include/linux/of.h:17,
-                 from ./include/linux/irqdomain.h:35,
-                 from ./include/linux/acpi.h:13,
-                 from arch/x86/boot/compressed/misc.h:3
+It appears we've overshot the acceptable clock rate here; while JESD84
+suggests that we can bump to 52 MHz before switching (CMD6) to HS400, it
+does *not* say we can switch to 200 MHz before switching to HS200 (see
+page 45 / table 28). Use the HS bounds (typically 52 MHz) instead of the
+HS200 bounds (which are only applicable after we successfully switch).
 
-We will get name conflicts if we try to copy <linux/bitmap.h> stuff.
-Hm.
+Link: https://lore.kernel.org/lkml/11962455.O9o76ZdvQC@g550jk/
+Fixes: 1c7ec586fe55 ("mmc: core: Set HS clock speed before sending HS CMD13")
+Reported-by: Luca Weiss <luca@z3ntu.xyz>
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+---
+Apologies for the quick resend; I fumbled the commit/send, even though I
+had already updated the comments...
 
-I also underesitmated what is required to be copied because of the
-indirect include. The list was only to compile bitmap.c. mem.c (former
-unaccepted_memory.c) would require more.
+Changes in v2:
+ * Updated comments
 
-BTW, do we have a white list of linux/ includes that allowed? minmax.h?
-math.h? What is the line.
+ drivers/mmc/core/mmc.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-Maybe allow what is included directly or indirectly now? (Yes, it is my
-poor attempt to slide under closing door.)
-
+diff --git a/drivers/mmc/core/mmc.c b/drivers/mmc/core/mmc.c
+index 9ab915b5737a..82ca62c8669c 100644
+--- a/drivers/mmc/core/mmc.c
++++ b/drivers/mmc/core/mmc.c
+@@ -1485,13 +1485,15 @@ static int mmc_select_hs200(struct mmc_card *card)
+ 			goto err;
+ 
+ 		/*
+-		 * Bump to HS200 timing and frequency. Some cards don't
+-		 * handle SEND_STATUS reliably at the initial frequency.
++		 * Bump to HS timing and frequency. Some cards don't handle
++		 * SEND_STATUS reliably at the initial frequency.
++		 * NB: We can't move to full (HS200) speeds until after we've
++		 * successfully switched over.
+ 		 */
+ 		old_timing = host->ios.timing;
+ 		old_clock = host->ios.clock;
+ 		mmc_set_timing(host, MMC_TIMING_MMC_HS200);
+-		mmc_set_bus_speed(card);
++		mmc_set_clock(card->host, card->ext_csd.hs_max_dtr);
+ 
+ 		/*
+ 		 * For HS200, CRC errors are not a reliable way to know the
 -- 
- Kirill A. Shutemov
+2.36.0.rc2.479.g8af0fa9b8e-goog
+

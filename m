@@ -2,105 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 757FF50B09F
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:29:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15EA750B097
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444373AbiDVGab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 02:30:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38302 "EHLO
+        id S1444391AbiDVGaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 02:30:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232313AbiDVGaW (ORCPT
+        with ESMTP id S239131AbiDVGan (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 02:30:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9073150B0E;
-        Thu, 21 Apr 2022 23:27:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 29F4B61E84;
-        Fri, 22 Apr 2022 06:27:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FFCBC385A0;
-        Fri, 22 Apr 2022 06:27:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650608849;
-        bh=0LmX9onb0fLejpzUdnIanuBPF8QPvttRJ09VDidwsGM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=h8KDDC86T6Z7XLFA3NVQa8DjEIQgAfefqBfq3z0ME+UlRMfKtJxGmU3pEw3MAGCpL
-         XeX/WZR08AI1H7uhePs2voBbuDiijrEKOIKGrCTTR9nSPRYvC41vTy2U3t1GT9LBj3
-         N6tpcarPtLJjWbbqTLFqcseWZm2lKocH8QOU542s=
-Date:   Fri, 22 Apr 2022 08:27:26 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: [PATCH v2] topology/sysfs: Fix allnoconfig build breakage.
-Message-ID: <YmJKzgG9tNY5c6RP@kroah.com>
-References: <20220421152645.3a849198@canb.auug.org.au>
- <YmD+geU9CmjoVnN9@kroah.com>
- <YmF8Hrq5kgDdfvtS@agluck-desk3.sc.intel.com>
- <YmF+FTxgu2U4/oPA@kroah.com>
- <YmGEL2klp4S97UiH@agluck-desk3.sc.intel.com>
- <20220422092247.5c638079@canb.auug.org.au>
- <90d0e2c9b4a74c92bcdd5fc4313a7629@intel.com>
- <20220422100054.74cadded@canb.auug.org.au>
- <YmIYFjI/B+33PQn+@agluck-desk3.sc.intel.com>
- <YmJEkoVGCnCXb5Ff@kroah.com>
+        Fri, 22 Apr 2022 02:30:43 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 600E850B17
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 23:27:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650608871; x=1682144871;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=7FKlaBGgHn2LiVjGfAUlft1h9xE8gkk5PntmcCX/1as=;
+  b=fryKipwJMtAt66EEM6DT8sLSBNIuNWcgIvfrjMg6VYC3gGx2gsgJdsPs
+   baHLQyXG7nPQdunqwE8oW/OzL74DAcr61+/GgkL29iH/ddx2cM9ObFndJ
+   1Z2Khpdf9xJzUsWysKpd/z+PtrUO5K7hsgDVnDp1qYsCiRDasSEueCFd1
+   xM5t5H++G+cqCU64ojggYHTrxFk5Ks15oPiepWXWT7jWlGjAMhISC9U33
+   rAOzab40cFMC9/nPV8MQBvZGM5S0UjcHpayOuQTuHsP4NRM86NPPAykU1
+   d/yVNIiw5nUjoNdFKOgV4zZJ2zW2yVlYYG6UAQuX/1GzBuFueKRKAcouo
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264757411"
+X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
+   d="scan'208";a="264757411"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 23:27:51 -0700
+X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
+   d="scan'208";a="530688715"
+Received: from jiejingx-mobl1.ccr.corp.intel.com ([10.254.215.31])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 23:27:48 -0700
+Message-ID: <4f1bc4dc65117a185833555ff8df30a944453499.camel@intel.com>
+Subject: Re: [PATCH] mm: swap: determine swap device by using page nid
+From:   "ying.huang@intel.com" <ying.huang@intel.com>
+To:     Aaron Lu <aaron.lu@intel.com>
+Cc:     Yang Shi <shy828301@gmail.com>, Michal Hocko <mhocko@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Fri, 22 Apr 2022 14:27:45 +0800
+In-Reply-To: <YmJKBaq1yj6/iBJ3@ziqianlu-desk1>
+References: <20220407020953.475626-1-shy828301@gmail.com>
+         <Yk6cutNf5sOuYbDl@ziqianlu-nuc9qn>
+         <CAHbLzkq+eKcKCsxXDTiOcBxk8FjMdWBqOxwi4N_NG7PZWbAAkA@mail.gmail.com>
+         <Yl/FS9enAD4V8jG3@ziqianlu-nuc9qn>
+         <f27ec36beb3cf1dbbfc3b8835e586d5d6fe7f561.camel@intel.com>
+         <YmETEHnK/FiNbLO7@ziqianlu-desk1>
+         <6f7210be7353d1c01dc9f872b2692b83f87f5452.camel@intel.com>
+         <YmJKBaq1yj6/iBJ3@ziqianlu-desk1>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YmJEkoVGCnCXb5Ff@kroah.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 08:00:50AM +0200, Greg KH wrote:
-> On Thu, Apr 21, 2022 at 07:51:02PM -0700, Luck, Tony wrote:
-> > On Fri, Apr 22, 2022 at 10:00:54AM +1000, Stephen Rothwell wrote:
-> > > I assume that there is some good reason that topology_ppin() is not
-> > > implemented as a static inline function?
-> > 
-> > I don't think so. I just cut & pasted how all the other topology_*()
-> > things were implemented.
-> > 
-> > Making it a static inline appears to fix this problem. But before
-> > embarrassing myself with a third broken version I'll let zero day
-> > crunch on:
-> > 
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/aegl/linux.git hide_ppin
-> > 
-> > to see if there is some subtle config or arch where the inline trick
-> > doesn't work.
-> > 
-> > Thanks for the idea! :-)
+On Fri, 2022-04-22 at 14:24 +0800, Aaron Lu wrote:
+> On Thu, Apr 21, 2022 at 04:34:09PM +0800, ying.huang@intel.com wrote:
+> > On Thu, 2022-04-21 at 16:17 +0800, Aaron Lu wrote:
+> > > On Thu, Apr 21, 2022 at 03:49:21PM +0800, ying.huang@intel.com wrote:
 > 
-> Why not just do the following, which passes my build tests here:
+> ... ...
 > 
+> > > > For swap-in latency, we can use pmbench, which can output latency
+> > > > information.
+> > > > 
+> > > 
+> > > OK, I'll give pmbench a run, thanks for the suggestion.
+> > 
+> > Better to construct a senario with more swapin than swapout.  For
+> > example, start a memory eater, then kill it later.
 > 
-> diff --git a/drivers/base/topology.c b/drivers/base/topology.c
-> index 706dbf8bf249..ac6ad9ab67f9 100644
-> --- a/drivers/base/topology.c
-> +++ b/drivers/base/topology.c
-> @@ -155,9 +155,7 @@ static struct attribute *default_attrs[] = {
->  static umode_t topology_is_visible(struct kobject *kobj,
->  				   struct attribute *attr, int unused)
->  {
-> -	struct device *dev = kobj_to_dev(kobj);
-> -
-> -	if (attr == &dev_attr_ppin.attr && !topology_ppin(dev->id))
-> +	if (attr == &dev_attr_ppin.attr && !topology_ppin(kobj_to_dev(kobj)->id))
->  		return 0;
->  
->  	return attr->mode;
+> What about vm-scalability/case-swapin?
+> https://git.kernel.org/pub/scm/linux/kernel/git/wfg/vm-scalability.git/tree/case-swapin
+> 
+> I think you are pretty familiar with it but still:
+> 1) it starts $nr_task processes and each mmaps $size/$nr_task area and
+>    then consumes the memory, after this, it waits for a signal;
+> 2) start another process to consume $size memory to push the memory in
+>    step 1) to swap device;
+> 3) kick processes in step 1) to start accessing their memory, thus
+>    trigger swapins. The metric of this testcase is the swapin throughput.
+> 
+> I plan to restrict the cgroup's limit to $size.
+> 
+> Considering there is only one NVMe drive attached to node 0, I will run
+> the test as described before:
+> 1) bind processes to run on node 0, allocate on node 1 to test the
+>    performance when reclaimer's node id is the same as swap device's.
+> 2) bind processes to run on node 1, allocate on node 0 to test the
+>    performance when page's node id is the same as swap device's.
+> 
+> Ying and Yang,
+> 
+> Let me know what you think about the case used and the way the test is
+> conducted.
 
-I've sent this as real patch now.
+The test case looks good to me.  And, do you have a way to measure swap
+in latency?  Better to compare between enabling and disabling per-node
+swap device support too to make sure per-node support has performance
+impact on this system.
 
-thanks,
+Best Regards,
+Huang, Ying
 
-greg k-h
+

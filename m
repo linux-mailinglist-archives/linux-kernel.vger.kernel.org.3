@@ -2,156 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41BDC50B564
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FC8250B56A
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446619AbiDVKoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 06:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42186 "EHLO
+        id S1446803AbiDVKo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 06:44:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446793AbiDVKoE (ORCPT
+        with ESMTP id S1446804AbiDVKoW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 06:44:04 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989CBC2F
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:41:07 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1650624066;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8OWHCGhf98mxnHF3GBVLKPpbLrNg/Ir3H4vcDTXq2PA=;
-        b=Mv4G/SimB+4TF/4Q6arbVpuwFI0wyHtTAazn0TW3VPujwkKU8Ii82JeDkqxrShtfF/ucfz
-        MlRhVcUTkKdg73xj7qimSUyRwX8cPYuU8H+RD48A9QqUK4LvKYP15C6CvVjyosChNWCsz9
-        zFXiP/3qeAlO6RBQYQ7TfdOkk0QYhHM7y5gmPDgF4v1yQqd9mtxs3bZY32SdIAo+zK6VOz
-        FyFK/fJBla1If4EPe6+3mlVY8OvSNlpTTmQjESIXAQCVsWXska8ZmDQOL8ouXKjUwYyXNe
-        OgqNLQJ0Rhl2I1rmqqPSObdGRUGNmS542WVXdwJPC/KRu98rg8ktRBZ5PeHqyA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1650624066;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8OWHCGhf98mxnHF3GBVLKPpbLrNg/Ir3H4vcDTXq2PA=;
-        b=qLKAU9C/77+9XxFOXmQJP2TfWYDZU98/SxFybKjmzkT0gtxcpasChAoj+Mylpg0iH3fmPY
-        lvg0AZN87vMUnQBA==
-To:     Waiman Long <longman@redhat.com>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Feng Tang <feng.tang@intel.com>,
-        Bill Gray <bgray@redhat.com>, Jirka Hladky <jhladky@redhat.com>
-Subject: Re: [PATCH 2/2] x86/tsc_sync: Add synchronization overhead to tsc
- adjustment
-In-Reply-To: <d1a04785-4822-3a3f-5c37-81329a562364@redhat.com>
-References: <20220314194630.1726542-1-longman@redhat.com>
- <20220314194630.1726542-3-longman@redhat.com> <87czhymql2.ffs@tglx>
- <d1a04785-4822-3a3f-5c37-81329a562364@redhat.com>
-Date:   Fri, 22 Apr 2022 12:41:05 +0200
-Message-ID: <87levx8kou.ffs@tglx>
+        Fri, 22 Apr 2022 06:44:22 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7AAE2AC1
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:41:26 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id r189so13741047ybr.6
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:41:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BB+z/sNpdoQmOp+aeDFGtzesrgj54ahnX85kbOB7QMg=;
+        b=abNt8UJyo7oWu4YeugczIcw2HKnt573QtuCIX0kpROHHBTfDZ44GLVwSZbHXFcj6ok
+         gtW7g3p/up4ectz36iG/SH6o5V/x/RKjenuuTvxPUt8ZzfiqxUXXgzQDg/tz8MKFNcYz
+         ildOPGsN/S1GC5l6LWtEmSveqZrZkIT5Tyw2N5OL8fxmP/vannelo27VcTV/eTKh/mUW
+         1+Hm9E6rUbWvwUJaqal6SMegDE135493vMaM0OQefuPmkxB0kMPhI3NtgWSfLemUqvna
+         DMIOl1ND9xRdijwsZ/jQP5ysxHcGlkfQdhEQH4TXakrqAiUEA7nymqvQyWfDjWQPSIW6
+         lZ0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BB+z/sNpdoQmOp+aeDFGtzesrgj54ahnX85kbOB7QMg=;
+        b=DiQl/kk4OMZd1Hs9Z8xBkVsTzJt9KEtY3709Yl4h3jdIMaAcStulFpAlYDhis51wqr
+         QgFmiaNSXHyJfwUFVbBqfsgFZMluk8vVlpE6GS19hFZGg/NKUYU2uTZmr/C94QnfYTt2
+         zKdwri+OhMuO1wZJSPZMHcg0RbjDsT6AKRKigqiFAdeWjI4hcUy+0bXYhw72IuqypIXE
+         TbiEHN9GAFxsTNpamskWEAXd+kK9jgwbt7SWDc/J+KOyJ5dnkri7B4v7i7XlfPMhcVuM
+         PyxmbTxTjrQGf1wAg4jRzXgx8qXjDQeKzeD6VyqrQDPoJ4xEFnMoLNds2E4QN6eq5nSG
+         mkgQ==
+X-Gm-Message-State: AOAM530E57U95A5T9drT2zf6SuNNdUzi6AhuJ5PW1i8I16YteCD9Zc7U
+        BSV/NC5b3wwrTmrf1OgXiUocKD14AALOu+wqHCmNl2OPQevefA==
+X-Google-Smtp-Source: ABdhPJywlbGi8Liw+QkSDej3Yl+pGh+CnUP5xw1RQTvw7UzpZloUGNHHQvZWxVNt0MvxBaCcf9gKq0bKcE3NMiK40DY=
+X-Received: by 2002:a05:6902:1547:b0:641:fb0b:4830 with SMTP id
+ r7-20020a056902154700b00641fb0b4830mr3946865ybu.175.1650624086191; Fri, 22
+ Apr 2022 03:41:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220422032227.2991553-1-yangyingliang@huawei.com>
+In-Reply-To: <20220422032227.2991553-1-yangyingliang@huawei.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Fri, 22 Apr 2022 13:41:15 +0300
+Message-ID: <CAA8EJpq2dNaRgEqrKpKTTfAm1p=QRZd2z1ouguiA6wUoxA9QAA@mail.gmail.com>
+Subject: Re: [PATCH] drm/msm/hdmi: check return value after calling platform_get_resource_byname()
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, freedreno@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        robdclark@gmail.com, jilaiw@codeaurora.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18 2022 at 11:41, Waiman Long wrote:
-> On 4/3/22 06:03, Thomas Gleixner wrote:
-> [ =C2=A0 =C2=A00.008815] TSC ADJUST compensate: CPU36 observed 86056 warp=
-=20
-> (overhead 150). Adjust: 86206
-> [ =C2=A0 =C2=A00.008815] TSC ADJUST compensate: CPU54 observed 86148 warp=
-=20
-> (overhead 158). Adjust: 86306
+On Fri, 22 Apr 2022 at 06:10, Yang Yingliang <yangyingliang@huawei.com> wrote:
 >
->> Also if the compensation value is at the upper end and the real overhead
->> is way lower then the validation run might end up with the opposite
->> result. I'm a bit worried about this variation.
+> It will cause null-ptr-deref if platform_get_resource_byname() returns NULL,
+> we need check the return value.
 >
-> I also have a little concern about that. That is why I add patch 1 to=20
-> minimize as much external interference as possible. For the TSC=20
-> adjustment samples that I got so far, I have never seen one that need a=20
-> 2nd adjustment to go backward.
+> Fixes: c6a57a50ad56 ("drm/msm/hdmi: add hdmi hdcp support (V3)")
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 
-I did some experiments and noticed that the boot time overhead is
-different from the overhead when doing the sync check after boot
-(offline a socket and on/offline the first CPU of it several times).
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-During boot the overhead is lower on this machine (SKL-X), during
-runtime it's way higher and more noisy.
+> ---
+>  drivers/gpu/drm/msm/hdmi/hdmi.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/msm/hdmi/hdmi.c b/drivers/gpu/drm/msm/hdmi/hdmi.c
+> index ec324352e862..07e2ad527af9 100644
+> --- a/drivers/gpu/drm/msm/hdmi/hdmi.c
+> +++ b/drivers/gpu/drm/msm/hdmi/hdmi.c
+> @@ -142,6 +142,10 @@ static struct hdmi *msm_hdmi_init(struct platform_device *pdev)
+>         /* HDCP needs physical address of hdmi register */
+>         res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+>                 config->mmio_name);
+> +       if (!res) {
+> +               ret = -EINVAL;
+> +               goto fail;
+> +       }
+>         hdmi->mmio_phy_addr = res->start;
+>
+>         hdmi->qfprom_mmio = msm_ioremap(pdev, config->qfprom_mmio_name);
+> --
+> 2.25.1
+>
 
-The noise can be pretty much eliminated by running the sync_overhead
-measurement multiple times and building the average.
 
-The reason why it is higher is that after offlining the socket the CPU
-comes back up with a frequency of 700Mhz while during boot it runs with
-2100Mhz.
-
-Sync overhead: 118
-Sync overhead:  51 A: 22466 M: 22448 F: 2101683
-
-Sync overhead: 178
-Sync overhead: 152 A: 22477 M: 67380 F:  700529
-
-Sync overhead: 212
-Sync overhead: 152 A: 22475 M: 67380 F:  700467
-
-Sync overhead: 153
-Sync overhead: 152 A: 22497 M: 67452 F:  700404
-
-Can you try the patch below and check whether the overhead stabilizes
-accross several attempts on that copperlake machine and whether the
-frequency is always the same or varies?
-
-Independent of the outcome on that, I think have to take the actual CPU
-frequency into account for calculating the overhead.
-
-Thanks,
-
-        tglx
----
---- a/arch/x86/kernel/tsc_sync.c
-+++ b/arch/x86/kernel/tsc_sync.c
-@@ -446,7 +446,8 @@ void check_tsc_sync_target(void)
- 	unsigned int cpu =3D smp_processor_id();
- 	cycles_t cur_max_warp, gbl_max_warp;
- 	cycles_t start, sync_overhead;
--	int cpus =3D 2;
-+	u64 ap1, ap2, mp1, mp2;
-+	int i, cpus =3D 2;
-=20
- 	/* Also aborts if there is no TSC. */
- 	if (unsynchronized_tsc())
-@@ -514,6 +515,23 @@ void check_tsc_sync_target(void)
- 	arch_spin_lock(&sync.lock);
- 	arch_spin_unlock(&sync.lock);
- 	sync_overhead =3D rdtsc_ordered() - start;
-+	pr_info("Sync overhead: %lld\n", sync_overhead);
-+
-+	sync_overhead =3D 0;
-+	rdmsrl(MSR_IA32_APERF, ap1);
-+	rdmsrl(MSR_IA32_MPERF, mp1);
-+	for (i =3D 0; i < 256; i++) {
-+		start =3D rdtsc_ordered();
-+		arch_spin_lock(&sync.lock);
-+		arch_spin_unlock(&sync.lock);
-+		sync_overhead +=3D rdtsc_ordered() - start;
-+	};
-+	rdmsrl(MSR_IA32_APERF, ap2);
-+	rdmsrl(MSR_IA32_MPERF, mp2);
-+	ap2 -=3D ap1;
-+	mp2 -=3D mp1;
-+	pr_info("Sync overhead: %lld A: %llu M: %llu F: %llu\n", sync_overhead >>=
- 8,
-+		ap2, mp2, mp2 ? div64_u64((cpu_khz * ap2), mp2) : 0);
-=20
- 	/*
- 	 * If the warp value of this CPU is 0, then the other CPU
+-- 
+With best wishes
+Dmitry

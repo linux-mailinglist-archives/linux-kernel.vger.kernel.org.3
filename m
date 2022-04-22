@@ -2,160 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C8050C0F4
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 23:12:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4C5A50C0AD
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 22:18:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbiDVVKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 17:10:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47776 "EHLO
+        id S229953AbiDVUQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 16:16:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiDVVJ5 (ORCPT
+        with ESMTP id S229578AbiDVUQT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 17:09:57 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E9512465FB
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:06:02 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id y32so16110495lfa.6
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 13:06:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=uID8iZcNLBme4rZdpwP2elgnitNvjR/PYrEFPkEMrt4=;
-        b=K87wFhFCqh3RUSfcjyHWaJ/5OlWIaCtbKiOBy/+lg00oDsHo00dI9Rz913ownD+DBL
-         47j/1FQaoHEzvRGxNbrxGsgl7+D50V85YT1FdoRMTvK7qMkmsNqF9izOyRDx+dPlVcrN
-         PuU5VqnxQaMP1XvJIEFREriWuLui4ThOlm6RCIy09TlUR3zrwFtmnqN//0XUrW33aZyh
-         HKhKRwmvqOV03Ak4cj8WgBUbW7mMsZ2Dg0uMMOqoASX+5BJ0q9R/08Zvy/VmFiAMWiAq
-         NlhqszFUOsK5gPC6/k2K5W00Ot+1S6YmXD7AVIwsTs2LI83qY3/jotSduWfGx+K0rKII
-         rUQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uID8iZcNLBme4rZdpwP2elgnitNvjR/PYrEFPkEMrt4=;
-        b=igwoHmaJ8zrp+2xO1NFGdQKVk5IyskCUB732bXa5HZKo+oevyoYtNojRIjw4/wfR0N
-         GrgWLQjU46mzrjwtYpqLm56i3lBnp4kSp7mvs3PLRHUm1NmFloKPufdRF/Pxy28idDVP
-         iBcIeClNJYD54elYAElEg/5Uf5Z2vW9FlCzPt3Ki9ID1/6MiifZtV8a1twbQ+lfuuJls
-         voCuuS4ailzrRW7ltYBOslyMI6Zg/1Yb7gjKlHeBVAHSHWTbdechThrObCP9QD8Jxiqu
-         WI1bkWWgOwFGq8L0OtL8pYtT7Qt+oowMkn1vwO4eGP+jW3FQieT4BPWKGUDx77n122di
-         xJJg==
-X-Gm-Message-State: AOAM531zGkk3ZelgXBAw4jMAnDKPrpgkztOMcD4rwO6+63BpLZh/D3nX
-        aqgDMEaJWFT6TyNogvhMd16tCQ==
-X-Google-Smtp-Source: ABdhPJxKLv+z6Br2tuUL+prEzz5FUlfWTCd6C3ag34B5uJ22tX+4eTJVuOo3jnoNg0E6Y/cSpI48ww==
-X-Received: by 2002:a05:6512:228d:b0:471:a5b8:d51a with SMTP id f13-20020a056512228d00b00471a5b8d51amr4118108lfu.411.1650657674555;
-        Fri, 22 Apr 2022 13:01:14 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.177])
-        by smtp.gmail.com with ESMTPSA id e5-20020ac25ca5000000b004705dbcc329sm332547lfq.222.2022.04.22.13.01.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 13:01:14 -0700 (PDT)
-Message-ID: <964ae72a-0484-67de-8143-a9a2d492a520@openvz.org>
-Date:   Fri, 22 Apr 2022 23:01:12 +0300
+        Fri, 22 Apr 2022 16:16:19 -0400
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E95373043;
+        Fri, 22 Apr 2022 13:08:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1650657795;
+        bh=YAXMPs+cpGG9Fbfwn2u2th0nZlCAFyC0num0OzVX/2s=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=BQUhN0L2unkvkiMumNC3p8/41OGywwmf3wbclyvKvJ6Y33cK1/pWOEAusgQ+uCtCI
+         3QKRpTI4qXp/5t9r5Aq0VGGFz34+LZexh7hdY7NhITKBYb0bgybEIBVNqX3bjIw9y8
+         L09zOY7/y+7aazqSIYl+8KWpBKj7hgYT9V2DbC7I=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 31FED1289863;
+        Fri, 22 Apr 2022 16:03:15 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id GHNGq47j4p7D; Fri, 22 Apr 2022 16:03:15 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1650657795;
+        bh=YAXMPs+cpGG9Fbfwn2u2th0nZlCAFyC0num0OzVX/2s=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=BQUhN0L2unkvkiMumNC3p8/41OGywwmf3wbclyvKvJ6Y33cK1/pWOEAusgQ+uCtCI
+         3QKRpTI4qXp/5t9r5Aq0VGGFz34+LZexh7hdY7NhITKBYb0bgybEIBVNqX3bjIw9y8
+         L09zOY7/y+7aazqSIYl+8KWpBKj7hgYT9V2DbC7I=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::c14])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 1060912891DA;
+        Fri, 22 Apr 2022 16:03:13 -0400 (EDT)
+Message-ID: <1f3ce897240bf0f125ca3e5f6ded7c290118a8dc.camel@HansenPartnership.com>
+Subject: Re: [PATCH v2 1/8] lib/printbuf: New data structure for
+ heap-allocated strings
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Kent Overstreet <kent.overstreet@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        hannes@cmpxchg.org, akpm@linux-foundation.org,
+        linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-input@vger.kernel.org, roman.gushchin@linux.dev
+Date:   Fri, 22 Apr 2022 16:03:12 -0400
+In-Reply-To: <20220422193015.2rs2wvqwdlczreh3@moria.home.lan>
+References: <20220421234837.3629927-1-kent.overstreet@gmail.com>
+         <20220421234837.3629927-7-kent.overstreet@gmail.com>
+         <20220422042017.GA9946@lst.de> <YmI5yA1LrYrTg8pB@moria.home.lan>
+         <20220422052208.GA10745@lst.de> <YmI/v35IvxhOZpXJ@moria.home.lan>
+         <20220422113736.460058cc@gandalf.local.home>
+         <20220422193015.2rs2wvqwdlczreh3@moria.home.lan>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH memcg RFC] net: set proper memcg for net_init hooks
- allocations
-Content-Language: en-US
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>, kernel@openvz.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-References: <46c1c59e-1368-620d-e57a-f35c2c82084d@linux.dev>
- <55605876-d05a-8be3-a6ae-ec26de9ee178@openvz.org>
- <CALvZod47PARcupR4P41p5XJRfCaTqSuy-cfXs7Ky9=-aJQuoFA@mail.gmail.com>
-From:   Vasily Averin <vvs@openvz.org>
-In-Reply-To: <CALvZod47PARcupR4P41p5XJRfCaTqSuy-cfXs7Ky9=-aJQuoFA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/21/22 18:56, Shakeel Butt wrote:
-> On Sat, Apr 16, 2022 at 11:39 PM Vasily Averin <vvs@openvz.org> wrote:
->> @@ -1147,7 +1148,13 @@ static int __register_pernet_operations(struct list_head *list,
->>                  * setup_net() and cleanup_net() are not possible.
->>                  */
->>                 for_each_net(net) {
->> +                       struct mem_cgroup *old, *memcg = NULL;
->> +#ifdef CONFIG_MEMCG
->> +                       memcg = (net == &init_net) ? root_mem_cgroup : mem_cgroup_from_obj(net);
+On Fri, 2022-04-22 at 15:30 -0400, Kent Overstreet wrote:
+> Hi Steve!
 > 
-> memcg from obj is unstable, so you need a reference on memcg. You can
-> introduce get_mem_cgroup_from_kmem() which works for both
-> MEMCG_DATA_OBJCGS and MEMCG_DATA_KMEM. For uncharged objects (like
-> init_net) it should return NULL.
+> On Fri, Apr 22, 2022 at 11:37:36AM -0400, Steven Rostedt wrote:
+> > On Fri, 22 Apr 2022 01:40:15 -0400
+> > Kent Overstreet <kent.overstreet@gmail.com> wrote:
+[...]
+> > > Now yes, I _could_ do a wholesale conversion of seq_buf to
+> > > printbuf and delete that code, but doing that job right, to be
+> > > confident that I'm not introducing bugs, is going to take more
+> > > time than I really want to invest right now. I really don't like
+> > > to play fast and loose with that stuff.
+> > 
+> > I would be happy to work with you to convert to seq_buf. If there's
+> > something missing from it, I can help you change it so that it
+> > doesn't cause any regressions with the tracing subsystem.
+> > 
+> > This is how open source programming is suppose to work ;-)
+> 
+> Is it though? :)
+> 
+> One of the things I've been meaning to talk more about, that
+> came out of a recent Rust discussion, is that we in the kernel
+> community could really do a better job with how we interact with the
+> outside world, particularly with regards to the sharing of code.
+> 
+> The point was made to me when another long standing kernel dev was
+> complaining about Facebook being a large, insular, difficult to work
+> with organization, that likes to pretend it is the center of the
+> universe and not bend to the outside world, while doing the exact
+> same thing with respect to new concerns brought by the Rust
+> community. The irony was illuminating :)
 
-Could you please elaborate with more details?
-It seems to me mem_cgroup_from_obj() does everything exactly as you say:
-- for slab objects it returns memcg taken from according slab->memcg_data
-- for ex-slab objects (i.e. page->memcg_data & MEMCG_DATA_OBJCGS)
-    page_memcg_check() returns NULL
-- for kmem objects (i.e. page->memcg_data & MEMCG_DATA_KMEM) 
-    page_memcg_check() returns objcg->memcg
-- in another cases
-    page_memcg_check() returns page->memcg_data,
-    so for uncharged objects like init_net NULL should be returned.
+Hey, I didn't say that at all.  I said vendoring the facebook reference
+implementation wouldn't work (it being 74k lines and us using 300) but
+that facebook was doing the right thing for us with zstd because they
+were maintaining the core code we needed, even if we couldn't vendor it
+from their code base:
 
-I can introduce exported get_mem_cgroup_from_kmem(), however it should only
-call mem_cgroup_from_obj(), perhaps under read_rcu_lock/unlock.
+https://lore.kernel.org/rust-for-linux/ea85b3bce5f172dc73e2be8eb4dbd21fae826fa1.camel@HansenPartnership.com/
 
-Do you mean something like this?
+You were the one who said all that about facebook, while incorrectly
+implying I said it first (which is an interesting variation on the
+strawman fallacy):
 
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -1768,4 +1768,14 @@ static inline struct mem_cgroup *mem_cgroup_from_obj(void *p)
- 
- #endif /* CONFIG_MEMCG_KMEM */
- 
-+static inline struct mem_cgroup *get_mem_cgroup_from_kmem(void *p)
-+{
-+	struct mem_cgroup *memcg;
-+
-+	rcu_read_lock();
-+	memcg = mem_cgroup_from_obj(p);
-+	rcu_read_unlock();
-+
-+	return memcg;
-+}
- #endif /* _LINUX_MEMCONTROL_H */
-diff --git a/net/core/net_namespace.c b/net/core/net_namespace.c
-index a5b5bb99c644..4003c47965c9 100644
---- a/net/core/net_namespace.c
-+++ b/net/core/net_namespace.c
-@@ -26,6 +26,7 @@
- #include <net/net_namespace.h>
- #include <net/netns/generic.h>
- 
-+#include <linux/sched/mm.h>
- /*
-  *	Our network namespace constructor/destructor lists
-  */
-@@ -1147,7 +1148,14 @@ static int __register_pernet_operations(struct list_head *list,
- 		 * setup_net() and cleanup_net() are not possible.
- 		 */
- 		for_each_net(net) {
-+			struct mem_cgroup *old, *memcg;
-+
-+			memcg = get_mem_cgroup_from_kmem(net);
-+			if (memcg == NULL)
-+				memcg = root_mem_cgroup;
-+			old = set_active_memcg(memcg);
- 			error = ops_init(ops, net);
-+			set_active_memcg(old);
- 			if (error)
- 				goto out_undo;
- 			list_add_tail(&net->exit_list, &net_exit_list);
+https://lore.kernel.org/rust-for-linux/20220415203926.pvahugtzrg4dbhcc@moria.home.lan/
+
+James
+
+
+

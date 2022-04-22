@@ -2,69 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B38B250B614
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 13:22:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0149950B61B
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 13:23:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447080AbiDVLZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 07:25:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40144 "EHLO
+        id S1447094AbiDVLZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 07:25:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446980AbiDVLZI (ORCPT
+        with ESMTP id S1447083AbiDVLZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 07:25:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB17541AC;
-        Fri, 22 Apr 2022 04:22:16 -0700 (PDT)
+        Fri, 22 Apr 2022 07:25:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DB156206
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 04:22:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C5E2361F72;
-        Fri, 22 Apr 2022 11:22:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25151C385A0;
-        Fri, 22 Apr 2022 11:22:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45D4EB82C2B
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 11:22:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A31B1C385AA;
+        Fri, 22 Apr 2022 11:22:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650626535;
-        bh=SVW4zVvibn9z+IjAwyBEd5JkQQkXUtOD1zca6C1BokE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qqInEFY2cO4FTnCH8Gno5qENJk/44n3MG8a3wISfMNbDgBokbaZ7vvr+qaZVsI27K
-         i/VwnIIIbXQceDYv0RAf7WYyxiTpWag2UFtrdfL2mC/attGJ1kr9GGgJxyTL35FDt0
-         SVEs8jdWWJveITVcdjC1Z+BBasxW4ilFyxeyNQGEWMhhl2oarOsIo5ZRE/s7n8WK29
-         E8FRNSTUeDUZ+HPQ7tnDqqlvzH/oG0ZspRVjbDvuzfsktZUAxzVXzMIUzFWa9ks5+Q
-         QkvKB3D94/j5v/Xc8a3s47FqgRn5wUTZWUkSJzw+PhcuThk+V5rwoy4G28IWV7jeTt
-         9sm4LcyOh1m0Q==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nhrMW-0002mB-2D; Fri, 22 Apr 2022 13:22:08 +0200
-Date:   Fri, 22 Apr 2022 13:22:08 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-phy@lists.infradead.org
-Subject: Re: [PATCH RFC 1/5] phy: qcom-qmp: add support for pipe clock muxing
-Message-ID: <YmKP4FXXm6NhQFYK@hovoldconsulting.com>
-References: <20220421102041.17345-1-johan+linaro@kernel.org>
- <20220421102041.17345-2-johan+linaro@kernel.org>
- <de4f9514-5132-f208-d43f-4c50afcda203@linaro.org>
- <YmKBgGHtfDcO1Mkg@hovoldconsulting.com>
- <CAA8EJpqTzcwAtxk+XtAWdZaKEx2=VduPiVBp+CWj=_C-921YJg@mail.gmail.com>
+        s=k20201202; t=1650626558;
+        bh=tNf+5h5T3qHAOYjpS84V/nz/K0uUb9xr3AXDzXd1SVI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=XTO1jMQX7j4vfTBeb9FIw1ko71H9TOx62On1ZoFva/AXm+eOBvgynQS7HoqhxBhMI
+         t6snACFLEJ4J68S0O+R4TzdZyFKCowXAosmIxojZV8QOaS7BQrKH6C1kljEqJDJjzu
+         VzUDR+IiSRNIzE/I210JtwcxH/yQtJIpKDiSABL1Ab1Nh0T+RLv6xP94kUPZHZ3sOS
+         JGC0fjfVP3iDGZdug+hJv2Le69fo0yRqU6BAvyI0Q5YHCzueevqoabyLAnFycpxXr0
+         4z64Z2/pKy674216U6ONMwWB+UJJa3PZKgQ537KLqqnRmRsTssfBdq2mfWDhXEGdw0
+         KTyrRFRxS0vlQ==
+Date:   Fri, 22 Apr 2022 12:22:34 +0100
+From:   Will Deacon <will@kernel.org>
+To:     joro@8bytes.org
+Cc:     iommu@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        robin.murphy@arm.com, kernel-team@android.com
+Subject: [GIT PULL] iommu/arm-smmu: Fixes for 5.18
+Message-ID: <20220422112233.GB9901@willie-the-truck>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAA8EJpqTzcwAtxk+XtAWdZaKEx2=VduPiVBp+CWj=_C-921YJg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -74,77 +53,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ Again, please trim unnecessary context from your replies. ]
+Hi Joerg,
 
-On Fri, Apr 22, 2022 at 01:35:01PM +0300, Dmitry Baryshkov wrote:
-> On Fri, 22 Apr 2022 at 13:20, Johan Hovold <johan@kernel.org> wrote:
-> >
-> > On Thu, Apr 21, 2022 at 02:08:27PM +0300, Dmitry Baryshkov wrote:
-> > > On 21/04/2022 13:20, Johan Hovold wrote:
+Unusually, we've got some SMMU driver fixes this time around. Summary in
+the tag -- please can you pull these for 5.18?
 
-> > > > +   /* Get optional pipe clock mux and default reference source clock. */
-> > > > +   qphy->pipemux_clk = of_clk_get_by_name(np, "mux");
-> > > > +   if (IS_ERR(qphy->pipemux_clk)) {
-> > > > +           ret = PTR_ERR(qphy->pipemux_clk);
-> > > > +           if (ret == -EPROBE_DEFER)
-> > > > +                   return ret;
-> > > > +
-> > > > +           qphy->pipemux_clk = NULL;
+Cheers,
 
-> > > > +   } else {
-> > > > +           qphy->piperef_clk = of_clk_get_by_name(np, "ref");
-> > > > +           if (IS_ERR(qphy->piperef_clk)) {
-> > > > +                   ret = PTR_ERR(qphy->piperef_clk);
-> > > > +                   return dev_err_probe(dev, ret,
-> > > > +                                        "failed to get lane%d piperef_clk\n",
-> > > > +                                        id);
-> > > > +           }
-> > > > +   }
-> > > > +
-> > >
-> > > As a second thought.
-> > > This needs to be more explicit. If the chipset requires the pipe clock
-> > > remuxing, we must fail if the clocks were not provided. So depending on
-> > > the qmp instance/property the driver should either use devm_clk_get()
-> > > (instead of _optional) or skip this block completely.
-> >
-> > No, the kernel is not a DT validator (and we have the YAML bindings for
-> > that now).
-> 
-> It is not about DT validation. It is about passing a correct DT.
+Will
 
-Heh. That's the same thing.
+--->8
 
-> The file can come up from the kernel. It can come from the older
-> kernel.  OR it can come from the vendor. Or it even might be being a
-> part of firmware flashed into the device.  So we can not assume that
-> the DT is correct just because the in-kernel DT passes YAML
-> validation.
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
-Again, no. The kernel does not need to implement DT validation and can
-assume that the DT describes the hardware accurately. If the DT says
-there's a mux, the driver can use it. If there's no mux in DT, the
-driver can assume it isn't there.
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
 
-The only thing that complicates things here is the sc7280 dts which has
-been released in 5.16. We don't care about Qualcomm's kernels and dts.
+are available in the Git repository at:
 
-> So, as I wrote, the whole patchset needs much more care about compatibility.
-> 
-> > > But this will not work with earlier DTS files.
-> >
-> > So this is not a problem (but if we really wanted to have the driver
-> > validate the DT it can be done by updating the compatible strings).
-> 
-> We should not update compatible strings just because the driver
-> changes. Compat strings describe the hardware, not the Linux point of
-> view on it.
+  git://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git tags/arm-smmu-fixes
 
-We can, it's a documented practise in case a binding needs to be
-updated in an incompatible way:
+for you to fetch changes up to 4a25f2ea0e030b2fc852c4059a50181bfc5b2f57:
 
-	https://www.kernel.org/doc/html/latest/devicetree/bindings/ABI.html
+  iommu: arm-smmu: disable large page mappings for Nvidia arm-smmu (2022-04-22 11:21:30 +0100)
 
-But I don't think it'll be needed here.
+----------------------------------------------------------------
+Arm SMMU fixes for 5.18
 
-Johan
+- Fix off-by-one in SMMUv3 SVA TLB invalidation
+
+- Disable large mappings to workaround nvidia erratum
+
+----------------------------------------------------------------
+Ashish Mhetre (1):
+      iommu: arm-smmu: disable large page mappings for Nvidia arm-smmu
+
+Nicolin Chen (1):
+      iommu/arm-smmu-v3: Fix size calculation in arm_smmu_mm_invalidate_range()
+
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c |  9 +++++++-
+ drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c    | 30 +++++++++++++++++++++++++
+ 2 files changed, 38 insertions(+), 1 deletion(-)

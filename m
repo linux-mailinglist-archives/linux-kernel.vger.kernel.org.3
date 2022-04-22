@@ -2,182 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E659A50B82F
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 020E250B81E
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:15:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447855AbiDVNSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 09:18:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50812 "EHLO
+        id S1447814AbiDVNSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 09:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447826AbiDVNSK (ORCPT
+        with ESMTP id S1447824AbiDVNSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 09:18:10 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam08on2071.outbound.protection.outlook.com [40.107.101.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469E3267F;
-        Fri, 22 Apr 2022 06:15:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KGf2JL/TfMBVGq9h27JZ0b7fblUMtJzqj29/VD5rpwSnDRfGZxHrZThxdBQgY3A9wA2ejviBmegfaIicS45LcS57nEGXgCjwXrtQM6q+27Lku1EHcixqi5LeLL5KESs2AXnlLE2VP3ZvIJrwtEWTnllAQ/JbVBnikE54NDGWKognDNALYMi6r2PO/gvOpjHA7CmEXfp58fACEEjo/L/4hUGJn58zTVZdcEBwI5h/dXRNQHsb4aoDeNvPjkxs4tIGJzSXnrf2O7QG617BPMnB1BcsYwNi8G4AWTbeMLid89HAVMDX/d0eYz/o1afAWMbR7iqEHIfY/dmMFLSI9NKl2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=896jnF0U7pXuz4FVFHsHXyYPANBVKaszqjSRz1PN7qQ=;
- b=Poa3SdY+AGRXBqZcUaDKQwXkpExmfs9oiMsDqDa7gYKjlcCwWinK0vBRwVs1CP3iQdxaVjP+8Px3QxuUknwliC4yjTQY6YR9GP6KxY7e3i578M/rnPeZF7LRyRfB6Uq0em7M+TqVsBEijxozDhb/x0tg/fkp0fR+gktT2/NkWInOC0kyf8idNF+Gm6AjtnbuoZU3JLzfGxjj3F7sAtgzyR/vkVnNtr7rjHqLmdPo/zW0AwXOUZNrhXvd0TyDyCeMRP6s8+vaX+G9YGbbP7MaJLePPwtEY19Z2GIVtDZYNP2tdhw/x2g8OP4/OS7jY3iKZ40zy0qsEN3fouGL2Nheow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linux-foundation.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=896jnF0U7pXuz4FVFHsHXyYPANBVKaszqjSRz1PN7qQ=;
- b=acBbSxrhGUnC3J+KJ6booGZXtpq4A98cJLB0NejW5m2q/B+6I8pQvKOP70o4C9saF3ubVsbejk1+x9ztMHYZU3s8Dr9t9FdUPzHgFuZ3TfWA/0TjcdzJo/f59tPZCaCNtrb9dEAK2VdIQBJUzDL93MECTBtIBGuv+IaUHmptiMU=
-Received: from BN8PR07CA0034.namprd07.prod.outlook.com (2603:10b6:408:ac::47)
- by CY4PR12MB1367.namprd12.prod.outlook.com (2603:10b6:903:3c::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13; Fri, 22 Apr
- 2022 13:15:09 +0000
-Received: from BN8NAM11FT020.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:ac:cafe::a9) by BN8PR07CA0034.outlook.office365.com
- (2603:10b6:408:ac::47) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14 via Frontend
- Transport; Fri, 22 Apr 2022 13:15:09 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT020.mail.protection.outlook.com (10.13.176.223) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5186.14 via Frontend Transport; Fri, 22 Apr 2022 13:15:08 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 22 Apr
- 2022 08:15:07 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     <torvalds@linux-foundation.org>
-CC:     Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
-        Gong Richard <Richard.Gong@amd.com>,
-        <regressions@lists.linux.dev>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Greg KH <gregkh@linuxfoundation.org>, <stable@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Bartosz Golaszewski" <brgl@bgdev.pl>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "Mario Limonciello" <mario.limonciello@amd.com>,
-        =?UTF-8?q?Samuel=20=C4=8Cavoj?= <samuel@cavoj.net>,
-        <lukeluk498@gmail.com>
-Subject: [PATCH v2 1/1] gpio: Request interrupts after IRQ is initialized
-Date:   Fri, 22 Apr 2022 08:14:52 -0500
-Message-ID: <20220422131452.20757-2-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220422131452.20757-1-mario.limonciello@amd.com>
-References: <20220422131452.20757-1-mario.limonciello@amd.com>
+        Fri, 22 Apr 2022 09:18:03 -0400
+Received: from out203-205-251-60.mail.qq.com (out203-205-251-60.mail.qq.com [203.205.251.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36E69218C
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 06:15:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1650633306;
+        bh=zHuVbfzAKZiFcRUPtMifpg9OMMsnImpLTfyM0BnWlmA=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=LPGCW3ZysyZ1cR8rR3B6gvZTSgEZY/HRf+l5waXAo6AoOxh9JvtcgGjJRGgsZYBm6
+         xDlkWtB4TRbIbOipItsdj8BtnrpEF+4noV3oDC6KbyB97chozsjWILPQzgjtoh4my5
+         XqnVWinEYZGQY31yvmP+zms0MaPoYdneq4wNjgD4=
+Received: from [IPv6:240e:362:431:df00:2955:4366:920b:947f] ([240e:362:431:df00:2955:4366:920b:947f])
+        by newxmesmtplogicsvrszb7.qq.com (NewEsmtp) with SMTP
+        id 3C1AA630; Fri, 22 Apr 2022 21:15:01 +0800
+X-QQ-mid: xmsmtpt1650633301tpw3lamyh
+Message-ID: <tencent_A4E83BA6071B2204B6F5D4E69A50D21C1A09@qq.com>
+X-QQ-XMAILINFO: M3Q/Kj4zjy60MwLBIzDEpzcu0q0dCeG+7LBaVLJxTyHvdg7eFxtj2IAvTPibBG
+         cutfshSKICOuznttU/zQYoszxm2DpOEH0jfNGHe/AR7LqxPhcJIEONMIqxGEANtgve0cb6bUrdwH
+         9juZK34jmyNDBOSQc2AQ9F33I1Cq6YiZch4GLyhQ1zmiEuAoQp1+TQ3dnjvl3yRJ3cDPq87rJuKk
+         odize4VF1jy6KbupsTB6BTmYZ24Mx7uRy+yLsQsfOC9u9nmGWpA9p95Y4F6bJYMOzbHNNImYRXt+
+         iHj5jdKhiE6EYHCKg+V/gByOnTMjuhciwiz9nY5LiHHXHu8yvamnb9JTAAjJPdMx/cqVwjC2VXyf
+         yibw6hEqdNAbnRmQbkmZtjjL3on+gBqwOWJpVyyqGsVT4Du3T97mZSA7vuLvggR3sEjOcrIsINuV
+         SJFBcSmPmMchqJTl+CDW3TCoaafT3C6MBAzIcHylo0SCqnY40yIAUhr6A3lPIJlvNhCfsU9wfIoc
+         uShyp3yon/pCl91B1dCNzCYOTq1bjhPcRDtw/UghGgps1qYnRdJGeRj1fj+lqkw0ZC/A7hB4tM7b
+         iISypXFAsa+QlEJ3REPpjVdkcH8orRmB5/ZlMy8uwhqWY+p/32vYhE4WFVczSO6h3h8rAmH3+xpU
+         7DtIxspmKj/iR70sIj9fzPUG9f1a1qvJqZr4R7NqKRTmTcy1eih+L4jlzJUozhr/3zw9UQOhb3DQ
+         cz3w87JxUO58PKo9lHi6xIsBS/pV8qy8XovoSIBSQkDIBuTCc6AKOi4NLSC2kgYa9ZpLo6s9o+jm
+         JKi1xwp+8lzxByg0mjH3lvkOGCU2Mz+3f90hCw+RQUYvm1OwNkSAgqj3oFmQdGFRExvcM5uW7OSJ
+         rqnJ3xoigFekgX3FHdGUTpnsm9qzy5OqwQGoThjfigCXWNqfF67x5zDCmTw15Pr2YIyTSdecJN6I
+         AN3VetOxneOt/RbEYpF4mKbHR4RuTn
+Subject: Re: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
+ allocation and free it on mm exit
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     Fenghua Yu <fenghua.yu@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86 <x86@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        iommu <iommu@lists.linux-foundation.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>, will@kernel.org,
+        robin.murphy@arm.com, zhangfei.gao@linaro.org
+References: <tencent_F73C11A7DBAC6AF24D3369DF0DCA1D7E8308@qq.com>
+ <a139dbad-2f42-913b-677c-ef35f1eebfed@intel.com>
+ <tencent_B683AC1146DB6A6ABB4D73697C0D6A1D7608@qq.com>
+ <YlWBkyGeb2ZOGLKl@fyu1.sc.intel.com>
+ <tencent_A9458C6CEBAADD361DA765356477B00E920A@qq.com>
+ <tencent_8B6D7835F62688B4CD069C0EFC41B308B407@qq.com>
+ <YllADL6uMoLllzQo@fyu1.sc.intel.com> <YmA4pbgevqln/jSO@myrica>
+ <tencent_76E043C4D1B6A21A5253579A61034107EB06@qq.com>
+ <tencent_7477100F8A445C6CAFA8F13601A55134480A@qq.com>
+ <YmJ/WA6KAQU/xJjA@myrica>
+From:   "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>
+X-OQ-MSGID: <dda655fc-7776-6d4d-0506-1443bb6c8b21@foxmail.com>
+Date:   Fri, 22 Apr 2022 21:15:01 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <YmJ/WA6KAQU/xJjA@myrica>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e6c4c16a-cfe0-47dc-d100-08da24622017
-X-MS-TrafficTypeDiagnostic: CY4PR12MB1367:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR12MB13677F563D70F265C63213ADE2F79@CY4PR12MB1367.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: M5GOev1MLJPHAN7rGCYWbECdIUC24J2tjSai6Tt3BdohYZIDSMU1vChmhRAt8mcNquM4Qw2AhjNdDa6b7uyd6WtP9X5nNXEEOXo0PPjyy7Kl10Y/uA6bK+b67LGFrN745g2hgygNtN9mNfdXoiF7lWHXF88G2No9qIP4cqJhkkENjV4Y09qRDUDcmhBILgFFVhvQvig2RrMYJ933w2ByrSrN+GZZh55izkcLKKRVKSBnPYrQhmuAkODvKENqta3FEQ4AYkzAayWB4qzCCjD8BX1OvXZcZH9+o01I+Bn+FLbEDP6QhGTmKVdQ6E+xFxg9zMwsYVopfEhMryHchVLD0KOgKDucDq37hWgNnJaDLFU9aoMcIhCj9NcT6KTeDvEG/8yIpd/kdmZyjKuwUIB2SrIUDUIQn5x5xMGOe5mMtTS4ceyU+ronT48WTQih2SHIhclx/h4HmdntRuQAWMzqw89g5EQqHL71v2xIIr1fG0qlyfVlG2w1XglQKHZ1XOMYd0xoMmQaDk3Aw2e6q77vvGhohKjGE0foIm+kV4FeqYjtQ88F1V95TmEudcAXtNkvwfX/HI4WLhLibkef2o00N05JAK8VsFS0ghCa92RNUi9tYblEE+u4OQilPqEKh39zE8XB120T4s8hNtn4Ev8uOVUsok6ivVVC8IOYDO/FysHLoD/HXObY4UnLn9dh0itTaIjL5+0unFEstizR6CppRX+ZNxauYk4r+9g9iuD8rdmTKDMvHsnKec51bNBm3LGrUJ63fZyraMVW+pqJB79aNTVjK0srvToGx69Ltachu1RSxSMDn+7PuqINW8PL8udXI7MeyK7/ljzOPTC84gaRGQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(7416002)(5660300002)(508600001)(82310400005)(2616005)(81166007)(356005)(83380400001)(45080400002)(44832011)(70206006)(4326008)(966005)(7696005)(8676002)(2906002)(6666004)(8936002)(86362001)(36860700001)(70586007)(6916009)(54906003)(36756003)(16526019)(186003)(26005)(1076003)(40460700003)(336012)(426003)(47076005)(66574015)(316002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2022 13:15:08.9391
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e6c4c16a-cfe0-47dc-d100-08da24622017
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT020.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1367
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-Spam-Status: No, score=2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
+        FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 5467801f1fcb ("gpio: Restrict usage of GPIO chip irq members before
-initialization") attempted to fix a race condition that lead to a NULL
-pointer, but in the process caused a regression for _AEI/_EVT declared
-GPIOs. This manifests in messages showing deferred probing while trying
-to allocate IRQs like so:
 
-[    0.688318] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x0000 to IRQ, err -517
-[    0.688337] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x002C to IRQ, err -517
-[    0.688348] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x003D to IRQ, err -517
-[    0.688359] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x003E to IRQ, err -517
-[    0.688369] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x003A to IRQ, err -517
-[    0.688379] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x003B to IRQ, err -517
-[    0.688389] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x0002 to IRQ, err -517
-[    0.688399] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x0011 to IRQ, err -517
-[    0.688410] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x0012 to IRQ, err -517
-[    0.688420] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x0007 to IRQ, err -517
+Hi, Jean
 
-The code for walking _AEI doesn't handle deferred probing and so this leads
-to non-functional GPIO interrupts.
+On 2022/4/22 下午6:11, Jean-Philippe Brucker wrote:
+> On Fri, Apr 22, 2022 at 05:03:10PM +0800, zhangfei.gao@foxmail.com wrote:
+> [...]
+>>> Have tested, still got some issue with our openssl-engine.
+>>>
+>>> 1. If openssl-engine does not register rsa, nginx works well.
+>>>
+>>> 2. If openssl-engine register rsa, nginx also works, but ioasid is not
+>>> freed when nginx stop.
+>>>
+>>> IMPLEMENT_DYNAMIC_BIND_FN(bind_fn)
+>>> bind_fn
+>>> ENGINE_set_RSA(e, rsa_methods())
+>>>
+>>> destroy_fn
+>>>
+>>> If ENGINE_set_RSA is set, nginx start and stop will NOT call destroy_fn.
+>>> Even rsa_methods is almost new via RSA_meth_new.
+>>>
+>>> In 5.18-rcx, this caused ioasid  not freed in nginx start and stop.
+>>> In 5.17, though destroy_fn is not called, but ioasid is freed when nginx
+>>> stop, so not noticed this issue before.
+>> 1. uacce_fops_release
+>> In 5.16 or 5.17
+>> In fact, we aslo has the issue: openssl engine does not call destroy_fn ->
+>> close(uacce_fd)
+>> But system will automatically close all opened fd,
+>> so uacce_fops_release is also called and free ioasid.
+>>
+>> Have one experiment, not call close fd
+>>
+>> log: open uacce fd but no close
+>> [ 2583.471225]  dump_backtrace+0x0/0x1a0
+>> [ 2583.474876]  show_stack+0x20/0x30
+>> [ 2583.478178]  dump_stack_lvl+0x8c/0xb8
+>> [ 2583.481825]  dump_stack+0x18/0x34
+>> [ 2583.485126]  uacce_fops_release+0x44/0xdc
+>> [ 2583.489117]  __fput+0x78/0x240
+>> [ 2583.492159]  ____fput+0x18/0x28
+>> [ 2583.495288]  task_work_run+0x88/0x160
+>> [ 2583.498936]  do_notify_resume+0x214/0x490
+>> [ 2583.502927]  el0_svc+0x58/0x70
+>> [ 2583.505968]  el0t_64_sync_handler+0xb0/0xb8
+>> [ 2583.510132]  el0t_64_sync+0x1a0/0x1a4
+>> [ 2583.582292]  uacce_fops_release q=00000000d6674128
+>>
+>> In 5.18, since refcount was add.
+>> The opened uacce fd was not closed automatically by system
+>> So we see the issue.
+>>
+>> log: open uacce fd but no close
+>>   [  106.360140]  uacce_fops_open q=00000000ccc38d74
+>> [  106.364929]  ioasid_alloc ioasid=1
+>> [  106.368585]  iommu_sva_alloc_pasid pasid=1
+>> [  106.372943]  iommu_sva_bind_device handle=000000006cca298a
+>> // ioasid is not free
+> I'm trying to piece together what happens from the kernel point of view.
+>
+> * master process with mm A opens a queue fd through uacce, which calls
+>    iommu_sva_bind_device(dev, A) -> PASID 1
+>
+> * master forks and exits. Child (daemon) gets mm B, inherits the queue fd.
+>    The device is still bound to mm A with PASID 1, since the queue fd is
+>    still open.
 
-Fix this issue by moving the call to `acpi_gpiochip_request_interrupts` to
-occur after gc->irc.initialized is set.
+> We discussed this before, but I don't remember where we left off. The
+> child can't use the queue because its mappings are not copied on fork(),
+> and the queue is still bound to the parent mm A. The child either needs to
+> open a new queue or take ownership of the old one with a new uacce ioctl.
+Yes, currently nginx aligned with the case.
+Child process (worker process) reopen uacce,
 
-Cc: Shreeya Patel <shreeya.patel@collabora.com>
-Cc: stable@vger.kernel.org
-Fixes: 5467801f1fcb ("gpio: Restrict usage of GPIO chip irq members before initialization")
-Reported-by: Mario Limonciello <mario.limonciello@amd.com>
-Link: https://lore.kernel.org/linux-gpio/BL1PR12MB51577A77F000A008AA694675E2EF9@BL1PR12MB5157.namprd12.prod.outlook.com/T/#u
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Reviewed-by: Shreeya Patel <shreeya.patel@collabora.com>
-Tested-By: Samuel Čavoj <samuel@cavoj.net>
-Tested-By: lukeluk498@gmail.com Link:
-Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1979
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215850
-Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1976
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
----
-v1->v2:
- * Pick up acked-by/reviewed-by/link/tested-by
+Master process (do init) open uacce, iommu_sva_bind_device(dev, A) -> 
+PASID 1
+Master process fork Child (daemon) and exit.
 
- drivers/gpio/gpiolib.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Child (daemon)  does not use PASID 1 any more, only fork and manage 
+worker process.
+Worker process reopen uacce, iommu_sva_bind_device(dev, B) PASID 2
 
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index 085348e08986..b7694171655c 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -1601,8 +1601,6 @@ static int gpiochip_add_irqchip(struct gpio_chip *gc,
- 
- 	gpiochip_set_irq_hooks(gc);
- 
--	acpi_gpiochip_request_interrupts(gc);
--
- 	/*
- 	 * Using barrier() here to prevent compiler from reordering
- 	 * gc->irq.initialized before initialization of above
-@@ -1612,6 +1610,8 @@ static int gpiochip_add_irqchip(struct gpio_chip *gc,
- 
- 	gc->irq.initialized = true;
- 
-+	acpi_gpiochip_request_interrupts(gc);
-+
- 	return 0;
- }
- 
--- 
-2.34.1
+So it is expected.
+> Is that the "IMPLEMENT_DYNAMIC_BIND_FN()" you mention, something out of
+> tree?  This operation should unbind from A before binding to B, no?
+> Otherwise we leak PASID 1.
+In 5.16 PASID 1 from master is hold until nginx service stop.
+nginx start
+master:
+iommu_sva_alloc_pasid mm->pasid=1      // master process
+
+lynx https start:
+iommu_sva_alloc_pasid mm->pasid=2    //worker process
+
+nginx stop:  from fops_release
+iommu_sva_free_pasid mm->pasid=2   // worker process
+iommu_sva_free_pasid mm->pasid=1  // master process
+
+
+Have one silly question.
+
+kerne driver
+fops_open
+iommu_sva_bind_device
+
+fops_release
+iommu_sva_unbind_device
+
+application
+main()
+fd = open
+return;
+
+Application exit but not close(fd), is it expected fops_release will be 
+called automatically by system?
+
+On 5.17
+fops_release is called automatically, as well as iommu_sva_unbind_device.
+On 5.18-rc1.
+fops_release is not called, have to manually call close(fd)
+
+Since nginx may have a issue, it does not call close(fd) when nginx -s quit.
+
+Thanks
+
+
 

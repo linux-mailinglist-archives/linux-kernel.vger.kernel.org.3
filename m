@@ -2,268 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B03EF50C4F5
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 376A450C4F0
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:46:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbiDVXjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 19:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53544 "EHLO
+        id S230354AbiDVXi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 19:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230400AbiDVXim (ORCPT
+        with ESMTP id S230253AbiDVXij (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 19:38:42 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C3FB1ABC
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 16:25:58 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id i24so9330709pfa.7
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 16:25:58 -0700 (PDT)
+        Fri, 22 Apr 2022 19:38:39 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71902E6459;
+        Fri, 22 Apr 2022 16:25:51 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id kd22so2312191qvb.4;
+        Fri, 22 Apr 2022 16:25:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Kg+J0lutmClKCI/mbVYUeiYnCMom4Vl06UJmqL3ZJtk=;
-        b=2sK4ko6n7BlY3r3TG8OzRAVyPe1h7zc8rAEdVLjHdq2PKfDVL/FT7Pslh7H83JFdMr
-         GuFH8wALKvjAcFX6asFEAZLfn/vTT8SYv72LHIfjr+mNBLu7QongXYEtc9osgfeNORzE
-         atQtxcU/uvR/evvZNnsl3Bfk5YIMFJtj0qoI0hBXD7eCJo/+yEOod8AbK19Fjwe53/ev
-         WrHwAu83WduuhAHlLFr5lcG6AfYXdDCrN1ayu5hzfVWFafyqTkJhFqJkC7/XRZX5J9Op
-         oVFFww3nI/Ud4cKURLuZ2XJm8Qd74eY+OoTb5zD5sfOxZm4F54ba3WbFrlzWKC6eD27i
-         rcmw==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=rcdaBhhud9SyNHNY0AAhVKpiP7gID+EH0S68KRDmsGo=;
+        b=cl1daFNRCD3e5ffgQ725R7amEwpyE1xVdZ5NGUozsQbs4DgYzyYZwr9MPIuNqNkZ+t
+         kFS9d5mX2ptu1vW0KM/xExO22N1uvYB6ISW5Gf2O4FPY4qOYhIjr87geUoaxd0nUifM/
+         +8/XYg6gGAlhph7wlWJSXFZX+vE0dTTXAz63XW0UYkRpwPRABlWD43ZafITFmKHyLrva
+         k0SBpjCDVuZG5HlTU6E9NgbNG6KVOSys0P1PX8oVhPi5L5dbWztVKRB47JM0/4+gJsmG
+         ZrkJLacRQTPvHvLxW6HXLeQVqn7FuSUofP0ZCFDV7yXGf6oWiCmuKc4N1yMKKOdxKxcv
+         4voQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Kg+J0lutmClKCI/mbVYUeiYnCMom4Vl06UJmqL3ZJtk=;
-        b=7yMzBImdhmTiLtb1mQ40Spdfmk2XdJh7S2aNWToFelGmOJO+yodQwOs2V1kM6zGVil
-         6GPtdzxYmIUBHRGoE6ECRHBz62EpSGRoHMkc1UqSrqk2PuWt2aSrHwIVcAWQt3V5nZE7
-         2V1xwjPFwVIW87uKEQbHgYX/39BTd3OR9SjD0FmPnF38V4L0B5BfpXQ4CcRD7AaNqrJh
-         96bXHUXcYrIhTwa2vWW1Nu7biyAQBRVw8y0C1odrZZ0GX+E+fmc5tNZ5ywX+0Dr2Lo/S
-         a/pimlS/Dh5epcVsrab5Aq0QNQJhWWDfxLy12I2R/SN8K+GvDDYtHTI2Olc17CPxJzA0
-         84Qw==
-X-Gm-Message-State: AOAM531QcpKa9MEL7q+jBXIT/2TQqTFiwHiSfgBdU/fOEFKzZGzg7EbL
-        uUoyYGdMg5+QZzMAPST6TR8uB9Y1clWfGw8WYYxLcQ==
-X-Google-Smtp-Source: ABdhPJyk+9NByLvMF4dmHW+MT93xxhaesMYL7U/407zUDtQsybQYu4P3kbbZJirb7qj0n9DVt2vmaTTwis8/njJa1Y8=
-X-Received: by 2002:a05:6a00:8c5:b0:4fe:134d:30d3 with SMTP id
- s5-20020a056a0008c500b004fe134d30d3mr7387132pfu.3.1650669958018; Fri, 22 Apr
- 2022 16:25:58 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=rcdaBhhud9SyNHNY0AAhVKpiP7gID+EH0S68KRDmsGo=;
+        b=1x3KVJwOHUG5ZjyLNvfYOSnp27Toko553FBS3zEOsxGVB0DK5HrHSHp4klVdjfbSea
+         GO4MHvS54xRoX7yu1D3D7h5wi1Crb1XYQXb08rRzC5TZ+DF4L0NYUZqk5PQ232fUtO94
+         99FupADYQ14NC4wrRt6odffbArd81GPVdrkunSRSjUBF+BU14W0jOf0OQrHyQz2l2pSl
+         qE+Igbce2qNXpgL0itfJEyYZpL0hXs+od5KRhNkVTbnpDYhiFJuPj2ix/qfYnmeG9GzA
+         bLq06K9tRIeRW57HgK2t2s3r3amd2YwSd8v9lH3nwu/e1DDKOuMovzsxuJMn0s4JHK7X
+         9/Lw==
+X-Gm-Message-State: AOAM5335thhUSXFNjgZLofYUDj8t5oiLyPe9oQ6MNYXvlZXmQG/iKq++
+        SANAYB+ptJaQCPSkFPAF3Jc=
+X-Google-Smtp-Source: ABdhPJyEDybsNUkFpLBFTngPCki9AUC4GVSw/pvF00/UmfGceNLNQSnWZzheejDGBi+Vp98KSZtzPw==
+X-Received: by 2002:a05:6214:518d:b0:454:6ea7:a179 with SMTP id kl13-20020a056214518d00b004546ea7a179mr2838176qvb.121.1650669950640;
+        Fri, 22 Apr 2022 16:25:50 -0700 (PDT)
+Received: from ?IPV6:2600:1700:2442:6db0:98a4:ff1d:3bb2:5350? ([2600:1700:2442:6db0:98a4:ff1d:3bb2:5350])
+        by smtp.gmail.com with ESMTPSA id m9-20020a05622a118900b002f1fc51135dsm2104515qtk.57.2022.04.22.16.25.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Apr 2022 16:25:50 -0700 (PDT)
+Message-ID: <ee73ec15-db6c-e0bb-ddb1-012499d08b11@gmail.com>
+Date:   Fri, 22 Apr 2022 18:25:49 -0500
 MIME-Version: 1.0
-References: <20220422224508.440670-1-jane.chu@oracle.com> <20220422224508.440670-4-jane.chu@oracle.com>
-In-Reply-To: <20220422224508.440670-4-jane.chu@oracle.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Fri, 22 Apr 2022 16:25:47 -0700
-Message-ID: <CAPcyv4i7xi=5O=HSeBEzvoLvsmBB_GdEncbasMmYKf3vATNy0A@mail.gmail.com>
-Subject: Re: [PATCH v9 3/7] mce: fix set_mce_nospec to always unmap the whole page
-To:     Jane Chu <jane.chu@oracle.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>, david <david@fromorbit.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        X86 ML <x86@kernel.org>,
-        Vishal L Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>,
-        device-mapper development <dm-devel@redhat.com>,
-        "Weiny, Ira" <ira.weiny@intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        "Luck, Tony" <tony.luck@intel.com>, Jue Wang <juew@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC PATCH 1/2] Documentation: dev-tools: KTAP spec change
+ version to 2-rc
+Content-Language: en-US
+To:     David Gow <davidgow@google.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        "Bird, Tim" <Tim.Bird@sony.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Rae Moar <rmr167@gmail.com>,
+        Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Daniel Latypov <dlatypov@google.com>, kernelci@groups.io,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220316202622.324866-1-frowand.list@gmail.com>
+ <20220316202622.324866-2-frowand.list@gmail.com>
+ <CABVgOSm_rQcBhbC5C7Z7_+zEheCjkjHCmzKHyx7b5bYLESvA0A@mail.gmail.com>
+From:   Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <CABVgOSm_rQcBhbC5C7Z7_+zEheCjkjHCmzKHyx7b5bYLESvA0A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ Add Tony as the originator of the whole_page() logic and Jue who
-reported the issue that lead to 17fae1294ad9 x86/{mce,mm}: Unmap the
-entire page if the whole page is affected and poisoned ]
+On 3/17/22 03:43, David Gow wrote:
+> On Thu, Mar 17, 2022 at 4:26 AM <frowand.list@gmail.com> wrote:
+>>
+>> From: Frank Rowand <frank.rowand@sony.com>
+>>
+>> Prepare KTAP Specification for the process of creating Version 2.
+>> The version will remain 2-rc until the final commit to complete
+>> Version 2.
+>>
+>> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
+>> ---
+> 
+> This seems okay to me, though I'd generally rather this stay in a
+> branch rather than hitting torvalds/master while there aren't any
+> substantive changes to the actual spec. (Basically, let's not rush
+> naming this "2-rc" for 5.18 if there aren't any other changes: a 2-rc
+> which is practically the same as 1 is probably going to be more
+> confusing than helpful if it sticks around for a whole kernel release.
 
+Sounds good.  In my reply (a few minutes ago) to your other email, I offer
+to host a branch.  The branch approach sounds good to me.
 
-On Fri, Apr 22, 2022 at 3:46 PM Jane Chu <jane.chu@oracle.com> wrote:
->
-> The set_memory_uc() approach doesn't work well in all cases.
-> As Dan pointed out when "The VMM unmapped the bad page from
-> guest physical space and passed the machine check to the guest."
-> "The guest gets virtual #MC on an access to that page. When
-> the guest tries to do set_memory_uc() and instructs cpa_flush()
-> to do clean caches that results in taking another fault / exception
-> perhaps because the VMM unmapped the page from the guest."
->
-> Since the driver has special knowledge to handle NP or UC,
-> mark the poisoned page with NP and let driver handle it when
-> it comes down to repair.
->
-> Please refer to discussions here for more details.
-> https://lore.kernel.org/all/CAPcyv4hrXPb1tASBZUg-GgdVs0OOFKXMXLiHmktg_kFi7YBMyQ@mail.gmail.com/
->
-> Now since poisoned page is marked as not-present, in order to
-> avoid writing to a not-present page and trigger kernel Oops,
-> also fix pmem_do_write().
->
-> Fixes: 284ce4011ba6 ("x86/memory_failure: Introduce {set, clear}_mce_nospec()")
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-> Signed-off-by: Jane Chu <jane.chu@oracle.com>
-> ---
->  arch/x86/kernel/cpu/mce/core.c |  6 +++---
->  arch/x86/mm/pat/set_memory.c   | 23 +++++++++++------------
->  drivers/nvdimm/pmem.c          | 30 +++++++-----------------------
->  include/linux/set_memory.h     |  4 ++--
->  4 files changed, 23 insertions(+), 40 deletions(-)
->
-> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-> index 981496e6bc0e..fa67bb9d1afe 100644
-> --- a/arch/x86/kernel/cpu/mce/core.c
-> +++ b/arch/x86/kernel/cpu/mce/core.c
-> @@ -579,7 +579,7 @@ static int uc_decode_notifier(struct notifier_block *nb, unsigned long val,
->
->         pfn = mce->addr >> PAGE_SHIFT;
->         if (!memory_failure(pfn, 0)) {
-> -               set_mce_nospec(pfn, whole_page(mce));
-> +               set_mce_nospec(pfn);
->                 mce->kflags |= MCE_HANDLED_UC;
->         }
->
-> @@ -1316,7 +1316,7 @@ static void kill_me_maybe(struct callback_head *cb)
->
->         ret = memory_failure(p->mce_addr >> PAGE_SHIFT, flags);
->         if (!ret) {
-> -               set_mce_nospec(p->mce_addr >> PAGE_SHIFT, p->mce_whole_page);
-> +               set_mce_nospec(p->mce_addr >> PAGE_SHIFT);
->                 sync_core();
->                 return;
->         }
-> @@ -1342,7 +1342,7 @@ static void kill_me_never(struct callback_head *cb)
->         p->mce_count = 0;
->         pr_err("Kernel accessed poison in user space at %llx\n", p->mce_addr);
->         if (!memory_failure(p->mce_addr >> PAGE_SHIFT, 0))
-> -               set_mce_nospec(p->mce_addr >> PAGE_SHIFT, p->mce_whole_page);
-> +               set_mce_nospec(p->mce_addr >> PAGE_SHIFT);
->  }
->
->  static void queue_task_work(struct mce *m, char *msg, void (*func)(struct callback_head *))
-> diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-> index 978cf5bd2ab6..e3a5e55f3e08 100644
-> --- a/arch/x86/mm/pat/set_memory.c
-> +++ b/arch/x86/mm/pat/set_memory.c
-> @@ -1925,13 +1925,8 @@ int set_memory_wb(unsigned long addr, int numpages)
->  }
->  EXPORT_SYMBOL(set_memory_wb);
->
-> -/*
-> - * Prevent speculative access to the page by either unmapping
-> - * it (if we do not require access to any part of the page) or
-> - * marking it uncacheable (if we want to try to retrieve data
-> - * from non-poisoned lines in the page).
-> - */
-> -int set_mce_nospec(unsigned long pfn, bool unmap)
-> +/* Prevent speculative access to a page by marking it not-present */
-> +int set_mce_nospec(unsigned long pfn)
->  {
->         unsigned long decoy_addr;
->         int rc;
-> @@ -1956,19 +1951,23 @@ int set_mce_nospec(unsigned long pfn, bool unmap)
->          */
->         decoy_addr = (pfn << PAGE_SHIFT) + (PAGE_OFFSET ^ BIT(63));
->
-> -       if (unmap)
-> -               rc = set_memory_np(decoy_addr, 1);
-> -       else
-> -               rc = set_memory_uc(decoy_addr, 1);
-> +       rc = set_memory_np(decoy_addr, 1);
->         if (rc)
->                 pr_warn("Could not invalidate pfn=0x%lx from 1:1 map\n", pfn);
->         return rc;
->  }
->
-> +static int set_memory_present(unsigned long *addr, int numpages)
-> +{
-> +       return change_page_attr_set(addr, numpages, __pgprot(_PAGE_PRESENT), 0);
-> +}
-> +
->  /* Restore full speculative operation to the pfn. */
->  int clear_mce_nospec(unsigned long pfn)
->  {
-> -       return set_memory_wb((unsigned long) pfn_to_kaddr(pfn), 1);
-> +       unsigned long addr = (unsigned long) pfn_to_kaddr(pfn);
-> +
-> +       return set_memory_present(&addr, 1);
->  }
->  EXPORT_SYMBOL_GPL(clear_mce_nospec);
->
-> diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
-> index 58d95242a836..4aa17132a557 100644
-> --- a/drivers/nvdimm/pmem.c
-> +++ b/drivers/nvdimm/pmem.c
-> @@ -158,36 +158,20 @@ static blk_status_t pmem_do_write(struct pmem_device *pmem,
->                         struct page *page, unsigned int page_off,
->                         sector_t sector, unsigned int len)
->  {
-> -       blk_status_t rc = BLK_STS_OK;
-> -       bool bad_pmem = false;
->         phys_addr_t pmem_off = sector * 512 + pmem->data_offset;
->         void *pmem_addr = pmem->virt_addr + pmem_off;
->
-> -       if (unlikely(is_bad_pmem(&pmem->bb, sector, len)))
-> -               bad_pmem = true;
-> +       if (unlikely(is_bad_pmem(&pmem->bb, sector, len))) {
-> +               blk_status_t rc = pmem_clear_poison(pmem, pmem_off, len);
-> +
-> +               if (rc != BLK_STS_OK)
-> +                       return rc;
-> +       }
->
-> -       /*
-> -        * Note that we write the data both before and after
-> -        * clearing poison.  The write before clear poison
-> -        * handles situations where the latest written data is
-> -        * preserved and the clear poison operation simply marks
-> -        * the address range as valid without changing the data.
-> -        * In this case application software can assume that an
-> -        * interrupted write will either return the new good
-> -        * data or an error.
-> -        *
-> -        * However, if pmem_clear_poison() leaves the data in an
-> -        * indeterminate state we need to perform the write
-> -        * after clear poison.
-> -        */
->         flush_dcache_page(page);
->         write_pmem(pmem_addr, page, page_off, len);
-> -       if (unlikely(bad_pmem)) {
-> -               rc = pmem_clear_poison(pmem, pmem_off, len);
-> -               write_pmem(pmem_addr, page, page_off, len);
-> -       }
->
-> -       return rc;
-> +       return BLK_STS_OK;
->  }
->
->  static void pmem_submit_bio(struct bio *bio)
-> diff --git a/include/linux/set_memory.h b/include/linux/set_memory.h
-> index 683a6c3f7179..369769ce7399 100644
-> --- a/include/linux/set_memory.h
-> +++ b/include/linux/set_memory.h
-> @@ -43,10 +43,10 @@ static inline bool can_set_direct_map(void)
->  #endif /* CONFIG_ARCH_HAS_SET_DIRECT_MAP */
->
->  #ifdef CONFIG_X86_64
-> -int set_mce_nospec(unsigned long pfn, bool unmap);
-> +int set_mce_nospec(unsigned long pfn);
->  int clear_mce_nospec(unsigned long pfn);
->  #else
-> -static inline int set_mce_nospec(unsigned long pfn, bool unmap)
-> +static inline int set_mce_nospec(unsigned long pfn)
->  {
->         return 0;
->  }
-> --
-> 2.18.4
->
+> 
+> (Also, when would we want to update the various mentions of "KTAP
+> version 1" in the document to "KTAP version 2" or "KTAP version 2-rc"?
+> Now, when 2 is released, at the first breaking change to that example,
+> etc?)
+
+There are only a few references to version 1.  I can create a patch to change
+them to version 2 (other than the version of the document itself).
+
+If we are working on a branch, it should not make a big difference when the
+internal uses of "version 1" are changed to "version 2".  If I do it right
+away then it won't get overlooked.
+
+-Frank
+
+> 
+> Cheers,
+> -- David
+> 
+>>  Documentation/dev-tools/ktap.rst | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
+>> index 5ee735c6687f..37b5dc61bfb8 100644
+>> --- a/Documentation/dev-tools/ktap.rst
+>> +++ b/Documentation/dev-tools/ktap.rst
+>> @@ -1,7 +1,7 @@
+>>  .. SPDX-License-Identifier: GPL-2.0
+>>
+>>  ===================================================
+>> -The Kernel Test Anything Protocol (KTAP), version 1
+>> +The Kernel Test Anything Protocol (KTAP), version 2-rc
+>>  ===================================================
+> 
+> Nit: Sphinx complains that we now need more '=' signs:
+> 
+> Documentation/dev-tools/ktap.rst:3: WARNING: Title overline too short.
+> ===================================================
+> 
+> 
+> The Kernel Test Anything Protocol (KTAP), version 2-rc
+> ===================================================
+> 
+>>
+>>  TAP, or the Test Anything Protocol is a format for specifying test results used
+>> --
+>> Frank Rowand <frank.rowand@sony.com>
+>>
+

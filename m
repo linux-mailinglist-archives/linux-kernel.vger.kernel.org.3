@@ -2,58 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75DC450AFDE
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAE8350B025
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 08:05:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232972AbiDVGDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 02:03:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42528 "EHLO
+        id S233180AbiDVGDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 02:03:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233188AbiDVGCl (ORCPT
+        with ESMTP id S233129AbiDVGDN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 02:02:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796CA4F9E8;
-        Thu, 21 Apr 2022 22:59:49 -0700 (PDT)
+        Fri, 22 Apr 2022 02:03:13 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99AEC4F9E6;
+        Thu, 21 Apr 2022 23:00:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 14E0D61DCB;
-        Fri, 22 Apr 2022 05:59:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A62DC385A0;
-        Fri, 22 Apr 2022 05:59:45 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id ADB47CE2734;
+        Fri, 22 Apr 2022 06:00:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4547BC385A9;
+        Fri, 22 Apr 2022 06:00:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650607188;
-        bh=Z6tYJdQ52dK4e0TCyEc9tLY3AwqFGgq40orqV6fBm6I=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=r84SSopwf/s426Y3Tqm8PhD7fx4YvbRG9di2doiNhFgYM+pLczZUTEomOCqe8/n7i
-         QwGm6NDr/N6xfl8Vz0vxV4TIvWnvavgsATCFf4wYOo7OuRCIjXseHk300sUFZHYWZ+
-         8Xi4gOKnnH4If6c4M9JE7MxoR/tfQJWFPoK3WxO/gG89eb6fAAVwO8pnMxhcq3QMzu
-         OefWm0STllhbrVFwX/caHXJzOjWhG3CqpJhuofyMIww6R4LvXLD7fLuZnmkCee/ZwS
-         8Cd3aG68oWXgXwrIQJqeA4Z9dyxFNxOk8+FPUBpMBxLCecW9rHVO8Z/dRtqztCCx6b
-         s3RANwmlupXdg==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Hermes Zhang <chenhui.zhang@axis.com>
-Cc:     Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, <kernel@axis.com>,
-        Hermes Zhang <chenhuiz@axis.com>,
-        <linux-wireless@vger.kernel.org>,
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        <SHA-cyfmac-dev-list@infineon.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] brcmfmac: of: introduce new property to allow disable PNO
-References: <20220422044419.3415842-1-chenhui.zhang@axis.com>
-Date:   Fri, 22 Apr 2022 08:59:43 +0300
-In-Reply-To: <20220422044419.3415842-1-chenhui.zhang@axis.com> (Hermes Zhang's
-        message of "Fri, 22 Apr 2022 12:44:18 +0800")
-Message-ID: <8735i5odyo.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        s=k20201202; t=1650607215;
+        bh=np9k1HF17G/foQYsLsraNIRu3iRUQ1M7X1InLfXJuQk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PkR4he/6UBUNRftk8d8Y87Wt3vDwtiOj7zEDz7HWFoOW8uBFx9llbDR5pg30bUVBu
+         S1gJ1GbZyGzH0PG20DDLem56Geq0S2/LxxHL0WcHCH937FXgN+a7GL+U30V+tFCMTQ
+         PcKR7A1FhbhbnmjtxPhFLDAqP9uRqqYoG2OdyIH18qBa8nKK//ZHRbDcJrnn5U8v44
+         ndM5gtQ1GoeC87V0FmiEMPJoNbPUeSuOWDxlEtDN/AoHUNJLrjEgnw/0/SA+6hqdCc
+         HeU1Vr2L0F1TY2MDkTMxo2WXcNUcv7HivQ+i03wGZdafqgL/XK5BDMKzzXhOrfWY+o
+         ZidfbTW6EupQw==
+Date:   Fri, 22 Apr 2022 11:30:11 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     i.m.novikov@yadro.com
+Cc:     sanju.mehta@amd.com, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux@yadro.com,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] dmaengine: PTDMA: statify pt_tx_status
+Message-ID: <YmJEa8YH4vI1G38s@matsya>
+References: <20220421092143.18281-1-i.m.novikov@yadro.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220421092143.18281-1-i.m.novikov@yadro.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,49 +54,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hermes Zhang <chenhui.zhang@axis.com> writes:
+On 21-04-22, 12:21, i.m.novikov@yadro.com wrote:
+> From: Ilya Novikov <i.m.novikov@yadro.com>
+> 
+> LKP bot reports a new warning:
+> Warning:
+> drivers/dma/ptdma/ptdma-dmaengine.c:262:1: warning: no previous
+> prototype for 'pt_tx_status' [-Wmissing-prototypes]
 
-> From: Hermes Zhang <chenhuiz@axis.com>
->
-> The PNO feature need to be disable for some scenario in different
-> product. This commit introduce a new property to allow the
-> product-specific toggling of this feature.
-
-"some scenario"? That's not really helpful.
-
-> Signed-off-by: Hermes Zhang <chenhuiz@axis.com>
-> ---
->
-> Notes:
->     Change property name to brcm,pno-disable
->
->  drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c
-> index 8623bde5eb70..121a195e4054 100644
-> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c
-> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c
-> @@ -11,6 +11,7 @@
->  #include "core.h"
->  #include "common.h"
->  #include "of.h"
-> +#include "feature.h"
->  
->  static int brcmf_of_get_country_codes(struct device *dev,
->  				      struct brcmf_mp_device *settings)
-> @@ -102,6 +103,9 @@ void brcmf_of_probe(struct device *dev, enum brcmf_bus_type bus_type,
->  	if (bus_type != BRCMF_BUSTYPE_SDIO)
->  		return;
->  
-> +	if (of_find_property(np, "brcm,pno-disable", NULL))
-> +		settings->feature_disable |= BIT(BRCMF_FEAT_PNO);
-
-Is this DT property documented and acked by the Device Tree maintainers?
-AFAIK DT is not supposed to be used as a software configuration
-database.
+I have applied 20220421052407.745637-1-vkoul@kernel.org which was sent
+before this
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+~Vinod

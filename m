@@ -2,93 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A42150C006
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 20:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A882750C03D
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 21:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbiDVSzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 14:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33904 "EHLO
+        id S229602AbiDVTSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 15:18:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiDVSzM (ORCPT
+        with ESMTP id S229574AbiDVTSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 14:55:12 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 994A9202B50
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 11:47:51 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:6624:6d8d:f790:d5c]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nhyGQ-0006dR-Ga; Fri, 22 Apr 2022 20:44:18 +0200
-Message-ID: <56ac17fd-5f13-840c-09d8-03363af94520@leemhuis.info>
-Date:   Fri, 22 Apr 2022 20:44:17 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: PANIC: "Oops: 0000 [#1] PREEMPT SMP PTI" starting from 5.17 on
- dual socket Intel Xeon Gold servers
-Content-Language: en-US
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Jirka Hladky <jhladky@redhat.com>,
+        Fri, 22 Apr 2022 15:18:09 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 398E612ACC0
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 12:04:55 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-deb9295679so9558259fac.6
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 12:04:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=U5kbOYIbw9W5idi/w7UWPQThlgNI5YFtm66gzqTVHwI=;
+        b=EosFqLT95BxHAVUXgvmDMUV5Lz2xaMtfJWrbZhJGacLzWlPy34JcgfMzn6ruT8Jsx1
+         /k/R+WO/a7/sW8WbwMoxUHuURYkIbCwrSeHhuFoEIigjXEhwSnf7lnkTrpCrS9B9b3oE
+         tysYeR6jkN+E5fSBIA12eW/xrV9n6zaAKHLeQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=U5kbOYIbw9W5idi/w7UWPQThlgNI5YFtm66gzqTVHwI=;
+        b=U5BUiq2yNWy7CisR017/eKVySGfzG2O+Zrp8A5j/7alSQwmUab1Nb5oEjA/PoZCPuG
+         KW+G4e4F35civ9DX9JMXnnBrfMq/Ag0Gjp+Q7sMg6jdG1lYsvIw1gTfMlTwvPCYyhIg2
+         DgGA7gXvzyUJ6uB1AfSmahlqAPdeyTaySutdqNv5o+fXAGBkgVP5sEk8WUfKWe9bQfGI
+         BCi2eeIFs0VEtqJ2ZXfReXz4ktKUnq7UsfNBxsNxEZRHOZwrw1KjWYTxQfkVBfZ/KA4H
+         VMhdhA/N52BigP9s8XBSJuvw+ReV/EotA3cMJtf9u9Jf1BZIu8yeJkh34GyctSANpVG4
+         5AgA==
+X-Gm-Message-State: AOAM532hfhraF3RrJ1m0BGxM4PqRJjUygFELqrQGGmCtpB7RqeH1MU41
+        lP6Gr9uIXSyuz12sWWNk3bUxLuamn1ILYQ==
+X-Google-Smtp-Source: ABdhPJzJ07qszw6srRpsPHUiNVf7zbKYzJ5hu40DkMqn2j3wMFLmW5tnu/Ucr3LTdOXuZO2YX+YXlg==
+X-Received: by 2002:a17:90a:d0c5:b0:1c9:ec78:18e5 with SMTP id y5-20020a17090ad0c500b001c9ec7818e5mr17636056pjw.53.1650653079678;
+        Fri, 22 Apr 2022 11:44:39 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:404c:8721:29:87a4])
+        by smtp.gmail.com with UTF8SMTPSA id ch10-20020a056a00288a00b0050a51a95e91sm3041025pfb.201.2022.04.22.11.44.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Apr 2022 11:44:38 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 11:44:36 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        regressions@lists.linux.dev,
-        Justin Forbes <jforbes@fedoraproject.org>,
-        Tejun Heo <tj@kernel.org>
-References: <CAE4VaGBZk2NL6Tn2fGxmGMR-n8KFNqgPOktY_sQ1vjViLDNhhg@mail.gmail.com>
- <CAE4VaGB4=aCd8iDb4EduR+-5QTSgVWd5sxrnBA4e3g9dPrnuBg@mail.gmail.com>
- <YkTxox8ZQIDtojfU@google.com>
- <CAFxkdAq6r2WnwML-pPfdZiajaYZCEcUU3GrXW=+wsA7CxGnJdQ@mail.gmail.com>
- <CAE4VaGBchOMWeHQ8GKiGFv_aCaNGLEvSdLWXZTpE+qC=0bgM3A@mail.gmail.com>
- <YkY6W1NS+1RTw0VB@google.com>
- <CAE4VaGDAMZqjwumyvbityzEiK30=5a5vuDMjaS+UHM39R-oPRw@mail.gmail.com>
- <YkstxbC3OfzYnSRw@google.com>
- <CAE4VaGAQZcQzN8D+iwcBnP5vY=Ctmbh+oTikvONHir6JjTgpsw@mail.gmail.com>
- <YmGKrd1BR9HSEy6q@slm.duckdns.org> <YmLznjFdpblHzZiM@google.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <YmLznjFdpblHzZiM@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1650653271;d77986d0;
-X-HE-SMSGID: 1nhyGQ-0006dR-Ga
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
+        quic_kriskura@quicinc.com, quic_vpulyala@quicinc.com
+Subject: Re: [PATCH v14 2/7] PM / wakeup: Add device_children_wakeup_capable()
+Message-ID: <YmL3lMaR79wPMEfY@google.com>
+References: <1650395470-31333-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1650395470-31333-3-git-send-email-quic_c_sanm@quicinc.com>
+ <CAJZ5v0h2ZKPN6SERPnASPywZfeOWXWncJgNZ1WZa80+=M4DCiQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0h2ZKPN6SERPnASPywZfeOWXWncJgNZ1WZa80+=M4DCiQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.04.22 20:27, Minchan Kim wrote:
-> On Thu, Apr 21, 2022 at 06:47:41AM -1000, Tejun Heo wrote:
-> [...]
+On Fri, Apr 22, 2022 at 01:57:17PM +0200, Rafael J. Wysocki wrote:
+> On Tue, Apr 19, 2022 at 9:11 PM Sandeep Maheswaram
+> <quic_c_sanm@quicinc.com> wrote:
+> >
+> > From: Matthias Kaehlcke <mka@chromium.org>
+> >
+> > Add device_children_wakeup_capable() which checks whether the device itself
+> > or one if its descendants is wakeup capable.
+> 
+> device_wakeup_path() exists for a very similar purpose.
+> 
+> Is it not usable for whatever you need the new function introduced here?
 
-Many thx for looking into this.
+I wasn't aware of it's function, there are no doc comments and the
+name isn't really self explanatory.
 
-> Jirka, Could you test the patch? Once it's confirmed, I need to resend
-> it with Ccing stable.
-
-When you do so, could you please include a proper "Link:" tag pointing
-to all reports of the regression, as explained in the Linux kernels
-documentation (see 'Documentation/process/submitting-patches.rst' and
-'Documentation/process/5.Posting.rst'). E.g. in this case:
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215696
-Link:
-https://lore.kernel.org/lkml/CAE4VaGDZr_4wzRn2___eDYRtmdPaGGJdzu_LCSkJYuY9BEO3cw@mail.gmail.com/
-
-This concept is not new (Linus and quite a few other developers use them
-like this for a long time), I just recently improved those documents to
-clarify things, as my regression tracking efforts rely on this (and
-there might be other people and software out there that does) -- that's
-why it's making my work a lot harder if such tags are missing. :-/
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I'm getting a lot of
-reports on my table. I can only look briefly into most of them and lack
-knowledge about most of the areas they concern. I thus unfortunately
-will sometimes get things wrong or miss something important. I hope
-that's not the case here; if you think it is, don't hesitate to tell me
-in a public reply, it's in everyone's interest to set the public record
-straight.
-
-> [...]
+In a quick test device_wakeup_path() returned inconsistent values for the
+root hub, sometimes true, others false when a wakeup capable USB device was
+connected.

@@ -2,144 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24EC450B83A
+	by mail.lfdr.de (Postfix) with ESMTP id 3DA9250B83B
 	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 15:20:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447889AbiDVNV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 09:21:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54008 "EHLO
+        id S1447882AbiDVNUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 09:20:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447683AbiDVNVY (ORCPT
+        with ESMTP id S236078AbiDVNUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 09:21:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92410580DD;
-        Fri, 22 Apr 2022 06:18:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4FFC1B82D47;
-        Fri, 22 Apr 2022 13:18:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6977CC385A0;
-        Fri, 22 Apr 2022 13:18:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650633507;
-        bh=b3cLy4CKtqux3jqGHuSXvrfXhwmJTx37EbQCGlvn+AM=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=oceIaNcjR2SdZ2Hwo0Ldz7l80qzNDIytljZHUBXyBxeBXYYVk/AtcfANR5yStwnzN
-         7udFzKNqeqOcVb8oDyTe3ax53OIKEP01Tc9poDXMDzS2AO0SBFuJsAHqeViLI7cJp7
-         ZAXeMNS5PTTH7LbXvOFmeIRxoNZqTKLI7DHqQkjdcYf2uxBEOHYKkrlIpG5V8XSOPs
-         Lt8uHINNI+fuNOsPqKJDh11p1MxgqDEf3JHY395iZhuwDdMmiLMTd9BiIn7RWcsvLH
-         X7p5FyBiPZcfOU5+F7E2QjXn9qzE6ylVsQwclh+tPQuRLrnc0IbYfeHBgIqOpoVcXp
-         wj/yF9vyItHoA==
-Message-ID: <9e8fffb8344323ce9a80adc733e9250a63cb68ee.camel@kernel.org>
-Subject: Re: [PATCH V4 00/31] x86/sgx and selftests/sgx: Support SGX2
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>, jethro@fortanix.com
-Cc:     "Dhanraj, Vijay" <vijay.dhanraj@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Shanahan, Mark" <mark.shanahan@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "Zhang, Cathy" <cathy.zhang@intel.com>,
-        "Xing, Cedric" <cedric.xing@intel.com>,
-        "Huang, Haitao" <haitao.huang@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Fri, 22 Apr 2022 16:17:11 +0300
-In-Reply-To: <YmJyYwp9UHRLWaTw@kernel.org>
-References: <cover.1649878359.git.reinette.chatre@intel.com>
-         <2f4338f37943c2b067db16ae65c9af665d3b51d9.camel@kernel.org>
-         <9fbf26c8-5808-20c5-8653-d4f36bf398a4@intel.com>
-         <42a52a6018e8dadb4c3eebefaae4dab31c0d5721.camel@kernel.org>
-         <DM8PR11MB5591BBA189BC4EA5CFE2C7EAF6EF9@DM8PR11MB5591.namprd11.prod.outlook.com>
-         <54f053d8bb6b72725b2351fc2016d20b65cebbf1.camel@kernel.org>
-         <DM8PR11MB559180D1BA05B0E77D354467F6F49@DM8PR11MB5591.namprd11.prod.outlook.com>
-         <a94e4098-f5c1-f9ff-fab0-c2e5210cf188@intel.com>
-         <YmJyYwp9UHRLWaTw@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.0 
+        Fri, 22 Apr 2022 09:20:48 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A46D7625B;
+        Fri, 22 Apr 2022 06:17:55 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id b19so10996553wrh.11;
+        Fri, 22 Apr 2022 06:17:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=k8r+yfkaeQZMDq9HKQ53kc2pMzWynvXz7/9ViLHoyIg=;
+        b=MjiXU0m3KVdIl4giHmSj2IO9ORa+VB0l+jEmNLgyFJ5s6WGpUN19kYaEjy+7QUv86V
+         ctm/1TSApZueL9zCTWzeq03iuKHpBwmJkNmaGXIP1q1qzOj5aTd+S99uUtWvJzZbpxFJ
+         FzkZEcmQsv4DLnuryI1gocHLfnCZZHkXv+MTCFOrjuH/huZCkmRd1tRftlLARuPfGiUa
+         m3JObwCfSh+7VNJVtaSG0W3kRltYLpQRK8A4vZBb2baMb6VbwRWs0LLTHpVJXmy2wdy/
+         OmeT+wTBcy0frRSKe3irtf4jG559wb7/Yk94EVje9yJOVN1HkR+abw7n8KXiHGvmwZuM
+         fuBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=k8r+yfkaeQZMDq9HKQ53kc2pMzWynvXz7/9ViLHoyIg=;
+        b=i/gJY1ctdW+I6PQ71ZZ8VyZGMdLc02Tx5o4aJqALb2tVEoW+dhpAm8ev8Hd5MtIlUN
+         TD0s/HAAvdBbquxrgN+X1XbZI+TwqjMcqps4SYLPQVxUs/1EK5U5Trcnq+Qqmg9QSAUi
+         FOGHMs17hyvIGyjcy/CFsYlriHIieppG/yuCJ5d35i/LtPjsH6QhhkvW4ZRMsipjbVll
+         zgh4fxKhR+gipbq4URTKv1qQWpcQumkUvvKiWfFcTS2oScR1DWqKXF9PNAb8oAPmIdjZ
+         8V3QVCmX3f28lgjNshL8D0vgHUy3xK9wYpPjs03xA0F1ixA83vHTMb+N6pD1jspMobeP
+         YGUA==
+X-Gm-Message-State: AOAM532xtNljDBKpij4bnS7n2KGymf3NJcOb+y0pvpJaC5zhbojJcJyc
+        U+HVVHvJ8aK7fgtyHSeV8vxkkr08O6Q1qQ==
+X-Google-Smtp-Source: ABdhPJyq0tB3OynhCktMQm8k9iio8P+tjNQKjHOjKu/G2Orjw95W8o7cYREafb4kJkQ9T55R9gCyvg==
+X-Received: by 2002:a5d:6d08:0:b0:20a:88bf:6d6e with SMTP id e8-20020a5d6d08000000b0020a88bf6d6emr3773883wrq.152.1650633474164;
+        Fri, 22 Apr 2022 06:17:54 -0700 (PDT)
+Received: from [192.168.1.145] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id a2-20020a056000188200b0020aa2581c7fsm1979130wri.104.2022.04.22.06.17.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Apr 2022 06:17:53 -0700 (PDT)
+Message-ID: <e2fa86e4-5949-81db-5ecc-1aa5dc0a4e79@gmail.com>
+Date:   Fri, 22 Apr 2022 15:17:52 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/1] dt-bindings: timer: mediatek: Convert binding to YAML
+Content-Language: en-US
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Ryder Lee <ryder.lee@kernel.org>
+References: <20220422131317.25410-1-allen-kh.cheng@mediatek.com>
+ <20220422131317.25410-2-allen-kh.cheng@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220422131317.25410-2-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-22 at 12:16 +0300, Jarkko Sakkinen wrote:
-> On Thu, Apr 21, 2022 at 08:29:31PM -0700, Reinette Chatre wrote:
-> > Hi Vijay and Mark,
-> >=20
-> > On 4/21/2022 4:46 PM, Dhanraj, Vijay wrote:
-> > > Hi All,
-> > >=20
-> > > I evaluated V4 patch changes with Gramine and ran into an issue when =
-trying to set EPC page permission to PROT_NONE. It looks like with V3 patch=
- series a change was introduced which requires
-> > > kernel to have at least R permission when calling RESTRICT IOCTL. Thi=
-s change was done under the assumption that EPCM requires at least R permis=
-sion for EMODPE/EACCEPT to succeed. But when
-> > > testing with V2 version, EACCEPT worked fine with page permission set=
- to PROT_NONE.=20
-> > >=20
-> > > Thanks to @Shanahan, Mark for confirming that EPCM does not need to h=
-ave R value to allow EACCEPT or EMODPE. Given this, can we please revert th=
-is change?
-> > >=20
-> >=20
-> > Thank you very much for pointing this out. I can revert the change
-> > to what was done in V2 where the only check is to ensure that W require=
-s R.
-> > This is a requirement of EMODPR. Could you please check if this snippet
-> > results in things working for you again?
-> >=20
-> > ---8<---
-> > diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/=
-ioctl.c
-> > index 83674d054c13..7c7c8a61196e 100644
-> > --- a/arch/x86/kernel/cpu/sgx/ioctl.c
-> > +++ b/arch/x86/kernel/cpu/sgx/ioctl.c
-> > @@ -855,12 +855,8 @@ static long sgx_ioc_enclave_restrict_permissions(s=
-truct sgx_encl *encl,
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (params.permissions =
-& ~SGX_SECINFO_PERMISSION_MASK)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0return -EINVAL;
-> > =C2=A0
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Read access is required f=
-or the enclave to be able to use the page.
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * SGX instructions like ENC=
-LU[EMODPE] and ENCLU[EACCEPT] require
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * read access.
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!(params.permissions & S=
-GX_SECINFO_R))
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if ((params.permissions & SG=
-X_SECINFO_W) &&
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 !(params.=
-permissions & SGX_SECINFO_R))
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0return -EINVAL;
-> > =C2=A0
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (params.result || pa=
-rams.count)
->=20
-> Just adding that it's fine for me to revert this.
 
-Jethro, I thought it would be also good to get yor view on the current
-series. Is this something that your platform can live with?
 
-BR, Jarkko
+On 22/04/2022 15:13, Allen-KH Cheng wrote:
+> Convert Mediatek timer devicetree binding to YAML.
+> 
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> ---
+>   .../bindings/timer/mediatek,mtk-timer.txt     | 42 ----------
+>   .../bindings/timer/mediatek,mtk-timer.yaml    | 79 +++++++++++++++++++
+>   2 files changed, 79 insertions(+), 42 deletions(-)
+>   delete mode 100644 Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt
+>   create mode 100644 Documentation/devicetree/bindings/timer/mediatek,mtk-timer.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt b/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt
+> deleted file mode 100644
+> index 6f1f9dba6e88..000000000000
+> --- a/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt
+> +++ /dev/null
+> @@ -1,42 +0,0 @@
+> -MediaTek Timers
+> ----------------
+> -
+> -MediaTek SoCs have two different timers on different platforms,
+> -- GPT (General Purpose Timer)
+> -- SYST (System Timer)
+> -
+> -The proper timer will be selected automatically by driver.
+> -
+> -Required properties:
+> -- compatible should contain:
+> -	For those SoCs that use GPT
+> -	* "mediatek,mt2701-timer" for MT2701 compatible timers (GPT)
+> -	* "mediatek,mt6580-timer" for MT6580 compatible timers (GPT)
+> -	* "mediatek,mt6582-timer" for MT6582 compatible timers (GPT)
+> -	* "mediatek,mt6589-timer" for MT6589 compatible timers (GPT)
+> -	* "mediatek,mt7623-timer" for MT7623 compatible timers (GPT)
+> -	* "mediatek,mt8127-timer" for MT8127 compatible timers (GPT)
+> -	* "mediatek,mt8135-timer" for MT8135 compatible timers (GPT)
+> -	* "mediatek,mt8173-timer" for MT8173 compatible timers (GPT)
+> -	* "mediatek,mt8516-timer" for MT8516 compatible timers (GPT)
+> -	* "mediatek,mt6577-timer" for MT6577 and all above compatible timers (GPT)
+> -
+> -	For those SoCs that use SYST
+> -	* "mediatek,mt8183-timer" for MT8183 compatible timers (SYST)
+> -	* "mediatek,mt8186-timer" for MT8186 compatible timers (SYST)
+> -	* "mediatek,mt8192-timer" for MT8192 compatible timers (SYST)
+> -	* "mediatek,mt8195-timer" for MT8195 compatible timers (SYST)
+> -	* "mediatek,mt7629-timer" for MT7629 compatible timers (SYST)
+> -	* "mediatek,mt6765-timer" for MT6765 and all above compatible timers (SYST)
+> -
+> -- reg: Should contain location and length for timer register.
+> -- clocks: Should contain system clock.
+> -
+> -Examples:
+> -
+> -	timer@10008000 {
+> -		compatible = "mediatek,mt6577-timer";
+> -		reg = <0x10008000 0x80>;
+> -		interrupts = <GIC_SPI 113 IRQ_TYPE_LEVEL_LOW>;
+> -		clocks = <&system_clk>;
+> -	};
+> diff --git a/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.yaml b/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.yaml
+> new file mode 100644
+> index 000000000000..be7eb09275f9
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.yaml
+> @@ -0,0 +1,79 @@
+> +# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/timer/mediatek,mtk-timer.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek SoCs timers bindings
+> +
+> +description:
+> +  MediaTek SoCs have two different timers on different platforms,
+> +  - GPT (General Purpose Timer)
+> +  - SYST (System Timer)
+> +
+> +maintainers:
+> +  - Fengquan Chen <fengquan.chen@mediatek.com>
+> +  - Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: '^timer@[a-f0-9]+$'
+> +
+> +  compatible:
+> +    oneOf:
+> +      - const: mediatek,mt6577-timer
+> +      - const: mediatek,mt6765-timer
+> +      - items:
+> +          - enum:
+> +              - mediatek,mt2701-timer
+> +              - mediatek,mt6580-timer
+> +              - mediatek,mt6582-timer
+> +              - mediatek,mt6589-timer
+> +              - mediatek,mt7623-timer
+> +              - mediatek,mt8127-timer
+> +              - mediatek,mt8135-timer
+> +              - mediatek,mt8173-timer
+> +              - mediatek,mt8516-timer
+> +          - const: mediatek,mt6577-timer
+> +      - items:
+> +          - enum:
+> +              - mediatek,mt7629-timer
+> +              - mediatek,mt8183-timer
+> +              - mediatek,mt8186-timer
+> +              - mediatek,mt8192-timer
+> +              - mediatek,mt8195-timer
+> +          - const: mediatek,mt6765-timer
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  clock-names:
+> +    minItems: 1
+> +    items:
+> +      - const: clk13m
+> +      - const: bus
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+
+Are we missing clocks here?
+
+Regards,
+Matthias
+
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    timer@10008000 {
+> +        compatible = "mediatek,mt6577-timer";
+> +        reg = <0xd4014000 0x100>;
+> +        interrupts = <13>;
+> +        clocks = <&coreclk 2>;
+> +    };
+> +
+> +...

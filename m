@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04DAF50B391
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9517150B389
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 11:06:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445797AbiDVJDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 05:03:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53786 "EHLO
+        id S1445851AbiDVJEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 05:04:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445705AbiDVJDD (ORCPT
+        with ESMTP id S1445685AbiDVJDM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 05:03:03 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040EB767F;
-        Fri, 22 Apr 2022 02:00:11 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Kl7d60W2Xz1J9sd;
-        Fri, 22 Apr 2022 16:59:22 +0800 (CST)
+        Fri, 22 Apr 2022 05:03:12 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A23A5370B;
+        Fri, 22 Apr 2022 02:00:13 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Kl7dv2WSXzhY1v;
+        Fri, 22 Apr 2022 17:00:03 +0800 (CST)
 Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.24; Fri, 22 Apr 2022 17:00:09 +0800
 Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
  (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 22 Apr
- 2022 17:00:08 +0800
+ 2022 17:00:09 +0800
 From:   Yang Yingliang <yangyingliang@huawei.com>
 To:     <linux-kernel@vger.kernel.org>, <linux-hwmon@vger.kernel.org>
 CC:     <linux@roeck-us.net>, <jdelvare@suse.com>
-Subject: [PATCH 15/20] hwmon: (via686a) check return value after calling platform_get_resource()
-Date:   Fri, 22 Apr 2022 17:12:02 +0800
-Message-ID: <20220422091207.4034406-16-yangyingliang@huawei.com>
+Subject: [PATCH 16/20] hwmon: (vt1211) check return value after calling platform_get_resource()
+Date:   Fri, 22 Apr 2022 17:12:03 +0800
+Message-ID: <20220422091207.4034406-17-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220422091207.4034406-1-yangyingliang@huawei.com>
 References: <20220422091207.4034406-1-yangyingliang@huawei.com>
@@ -53,25 +53,25 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 It will cause null-ptr-deref if platform_get_resource() returns NULL,
 we need check the return value.
 
-Fixes: 2ec342e68453 ("hwmon/via686a: Convert to a platform driver")
+Fixes: ab41319eab3b ("hwmon: New driver for the VIA VT1211")
 Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/hwmon/via686a.c | 2 ++
+ drivers/hwmon/vt1211.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/drivers/hwmon/via686a.c b/drivers/hwmon/via686a.c
-index 55634110c2f9..f4e0a56498f8 100644
---- a/drivers/hwmon/via686a.c
-+++ b/drivers/hwmon/via686a.c
-@@ -671,6 +671,8 @@ static int via686a_probe(struct platform_device *pdev)
+diff --git a/drivers/hwmon/vt1211.c b/drivers/hwmon/vt1211.c
+index 4a5e911d26eb..4b1448e7f1c0 100644
+--- a/drivers/hwmon/vt1211.c
++++ b/drivers/hwmon/vt1211.c
+@@ -1152,6 +1152,8 @@ static int vt1211_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
  
- 	/* Reserve the ISA region */
  	res = platform_get_resource(pdev, IORESOURCE_IO, 0);
 +	if (!res)
 +		return -EINVAL;
- 	if (!devm_request_region(&pdev->dev, res->start, VIA686A_EXTENT,
- 				 via686a_driver.driver.name)) {
- 		dev_err(&pdev->dev, "Region 0x%lx-0x%lx already in use!\n",
+ 	if (!devm_request_region(dev, res->start, resource_size(res),
+ 				 DRVNAME)) {
+ 		dev_err(dev, "Failed to request region 0x%lx-0x%lx\n",
 -- 
 2.25.1
 

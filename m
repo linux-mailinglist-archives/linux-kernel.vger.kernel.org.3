@@ -2,128 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1CE50B96F
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 330FD50B974
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 16:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448302AbiDVOG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 10:06:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56520 "EHLO
+        id S1448311AbiDVOG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 10:06:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351486AbiDVOG0 (ORCPT
+        with ESMTP id S235751AbiDVOG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 10:06:26 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67AA65A162
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:03:33 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id q12so7389338pgj.13
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:03:33 -0700 (PDT)
+        Fri, 22 Apr 2022 10:06:56 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7AB5A165
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:04:02 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id i27so16570308ejd.9
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:04:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=yIxJ0wDa8EMSjPBeJ0MH0ee5bXLTHtfgfaqE1L8G+40=;
-        b=lJxrPZlkatu783HAwlcGCkHOGo7DXQhGtEQqtJXdK1/LRl+CFmh8ejREqMzuQsb/EO
-         mSWo3xSE3IyrXmkejiW/vWdGNWXHJq3XuWPVwHfOrNTHe22aLtJOSFoF9VbWxGShMkLI
-         9Q+PuNjFAIycQZ3Wxp1Hlw+8+12yQNRH0GG+fNhLoV/3xJ4+LhbnZOUxx6MZEP9nSodA
-         yqgCHWgXniNWxjtrX3H3On6nZ4yPcA3da8QSX9nhLRZ5IjY5tb6uARk2tJLXfFalCk4P
-         xGPGUKbc8fkI0Vi0kDpxm6o08sdvcBkKHkthDdk164bksR8xqFiWBvr+aIqy948MIjR+
-         97aw==
+        bh=R+w/lFm+gTC9eW9lBYMMnUgARDTN948ashX6/88jSSk=;
+        b=ghMiyWVM5DKXsssoViKphQIWceZP/fjd3ty8ZXt7WVjJwP3cN3O9IT7qFAE/Jj/Qdw
+         cR9jYLzNJMz5r3gE7L5BLvMguTvA0g7jVmzMc9rN0pTwKYDEQo4/M8O2xgTv2G8CrHaT
+         U2LEsQ4bPR/y/gfgsnT9qyWh/kRicE14xKEec=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=yIxJ0wDa8EMSjPBeJ0MH0ee5bXLTHtfgfaqE1L8G+40=;
-        b=SZkBCsjCDuEITFbDQdBlaHBoWRvQ23IJYNfP+2sG3YcMolmGsegOQHTZduJcJGcO8D
-         6DDUmBfiZiTw32y6fZSCprU3y95AFik4xvU+/g4nzmqHF3pnppDwr1xDdvHFxaHt6wRq
-         b5CzBwh6g8DpoPGw8keUJb1UMg/XBB0GYrADMsgXw04oqTB8y47w0p3ykTxRWrJqy7fS
-         fAtERF1+3eBD+IcYM9FQBLM0LrxcGecFx1C4ezocZlZ3bCJGlwj12PBXTIXKwnXddmrI
-         11jW3lrh8PI0/8aVE0/365bX8EPrRNqlwblzxuQKQDDs7L/wBfpn5rOy9xZKcMs9Ke/N
-         S4cQ==
-X-Gm-Message-State: AOAM5303J+oSNPzyUO6MA0jDSSc1QZrxI+1dEh0tk5wRUjDYcCtpf0v3
-        ohnclf+9GGWzVssZh5TXB65pu5caqprzt97BLJ4ZCQ==
-X-Google-Smtp-Source: ABdhPJxRtgE3RbFTfbHXqawhd/4ATwWIhmdUbK2D/ER+hiax8GwWWsOHlmE4gELgS/jXpG50IMB4XeGk31Iq3HBZuEs=
-X-Received: by 2002:a05:6a00:1747:b0:505:d75c:e0b2 with SMTP id
- j7-20020a056a00174700b00505d75ce0b2mr5271101pfc.0.1650636212574; Fri, 22 Apr
- 2022 07:03:32 -0700 (PDT)
+        bh=R+w/lFm+gTC9eW9lBYMMnUgARDTN948ashX6/88jSSk=;
+        b=GgFxeG0Q5NKUluG5zr13KWH6KSPKNZy5nX5uZUfnym+9/vjSjgKwsLdBK/siyG0GRW
+         rB1zISYVT3/TopD3Mac3I/WbxEVfCoUZV9VmFJkGoAPa90FH4MWSqWiUM6nZYdFg6V55
+         tGOwDtHnKtJDp8c/o6APBkl9oLZVadljM4DgZw8Fq5bBmlRU2zLrBKIIPXsAMQq1sLh7
+         +XRuncwW2G9m2cH8e9XKO9rMES59It/4+s2HumhDmg22aRjV5VAofauG3ZLPnjZ9ludn
+         Y+MX25Zo7rPjrHOFu7S/1JrZXtFPGWCyfhR8dLMTAUmfftcKDj0QtLqU/MuBvS0sbnDX
+         gN8Q==
+X-Gm-Message-State: AOAM532cCv+ckCgBaRzk7AGbo06Yr2ArQPLCmKeIxmvS58MzDSKyV9c8
+        bVxVwF3EpDUNrlP6krkqdqERY8UhWnwnJnlJbKQ=
+X-Google-Smtp-Source: ABdhPJxyviR3lD0VhENfDB/mM7Xw3acDJkKzvaFUOOzHZEt8sqxXd3jJ2oDTKCZnTNss5eQiKnXJmA==
+X-Received: by 2002:a17:906:730c:b0:6f0:f69:b2e with SMTP id di12-20020a170906730c00b006f00f690b2emr4285276ejc.276.1650636232627;
+        Fri, 22 Apr 2022 07:03:52 -0700 (PDT)
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com. [209.85.128.43])
+        by smtp.gmail.com with ESMTPSA id bn19-20020a170906c0d300b006efe245d03csm779478ejb.151.2022.04.22.07.03.49
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Apr 2022 07:03:49 -0700 (PDT)
+Received: by mail-wm1-f43.google.com with SMTP id r4-20020a05600c35c400b0039295dc1fc3so5431806wmq.3
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 07:03:49 -0700 (PDT)
+X-Received: by 2002:a05:600c:502b:b0:38f:f7c6:3609 with SMTP id
+ n43-20020a05600c502b00b0038ff7c63609mr4367415wmr.15.1650636228521; Fri, 22
+ Apr 2022 07:03:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220422084720.959271-1-xji@analogixsemi.com> <20220422084720.959271-3-xji@analogixsemi.com>
-In-Reply-To: <20220422084720.959271-3-xji@analogixsemi.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Fri, 22 Apr 2022 16:03:21 +0200
-Message-ID: <CAG3jFysyj7sO0qh3FAAeuOQYUSz6nkZ8svX7f4xdfSY980OkCg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] dt-bindings:drm/bridge:anx7625: add port@0 property
-To:     Xin Ji <xji@analogixsemi.com>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
+References: <1650618666-15342-1-git-send-email-quic_sbillaka@quicinc.com> <1650618666-15342-3-git-send-email-quic_sbillaka@quicinc.com>
+In-Reply-To: <1650618666-15342-3-git-send-email-quic_sbillaka@quicinc.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 22 Apr 2022 07:03:35 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XhznD3Nuiku9mS5YKFVX0GB8qxQZe8m8AgGCQz=a2chQ@mail.gmail.com>
+Message-ID: <CAD=FV=XhznD3Nuiku9mS5YKFVX0GB8qxQZe8m8AgGCQz=a2chQ@mail.gmail.com>
+Subject: Re: [PATCH v9 2/4] drm/msm/dp: Support only IRQ_HPD and REPLUG
+ interrupts for eDP
+To:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <seanpaul@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        quic_kalyant <quic_kalyant@quicinc.com>,
+        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
+        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        bliang@analogixsemi.com, qwen@analogixsemi.com,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        quic_vproddut <quic_vproddut@quicinc.com>,
+        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
+        Steev Klimaszewski <steev@kali.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Apr 2022 at 10:48, Xin Ji <xji@analogixsemi.com> wrote:
->
-> Add 'bus-type' and 'data-lanes' define, bus-type 7 for MIPI DPI
-> input, others for DSI input.
->
-> Signed-off-by: Xin Ji <xji@analogixsemi.com>
->
-> ---
-> V1 -> V2: rebase on the latest code.
-> ---
->  .../display/bridge/analogix,anx7625.yaml      | 19 ++++++++++++++++++-
->  1 file changed, 18 insertions(+), 1 deletion(-)
->
-> diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> index 35a48515836e..4590186c4a0b 100644
-> --- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> +++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> @@ -94,7 +94,22 @@ properties:
->          $ref: /schemas/graph.yaml#/$defs/port-base
->          unevaluatedProperties: false
->          description:
-> -          Video port for MIPI DSI input.
-> +          MIPI DSI/DPI input.
-> +
-> +        properties:
-> +          endpoint:
-> +            $ref: /schemas/media/video-interfaces.yaml#
-> +            type: object
-> +            additionalProperties: false
-> +
-> +            properties:
-> +              remote-endpoint: true
-> +
-> +              bus-type:
-> +                enum: [7]
-> +                default: 1
-> +
-> +              data-lanes: true
->
->        port@1:
->          $ref: /schemas/graph.yaml#/properties/port
-> @@ -143,6 +158,8 @@ examples:
->                      reg = <0>;
->                      anx7625_in: endpoint {
->                          remote-endpoint = <&mipi_dsi>;
-> +                        bus-type = <7>;
-> +                        data-lanes = <0 1 2 3>;
->                      };
->                  };
->
+Hi,
 
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+On Fri, Apr 22, 2022 at 2:11 AM Sankeerth Billakanti
+<quic_sbillaka@quicinc.com> wrote:
+>
+> The panel-edp enables the eDP panel power during probe, get_modes
+> and pre-enable. The eDP connect and disconnect interrupts for the eDP/DP
+> controller are directly dependent on panel power. As eDP display can be
+> assumed as always connected, the controller driver can skip the eDP
+> connect and disconnect interrupts. Any disruption in the link status
+> will be indicated via the IRQ_HPD interrupts.
+>
+> So, the eDP controller driver can just enable the IRQ_HPD and replug
+> interrupts. The DP controller driver still needs to enable all the
+> interrupts.
+>
+> Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+> ---
+> Changes in v9:
+>   - add comment explaining the interrupt status register
+>
+> Changes in v8:
+>   - add comment explaining the interrupt status return
+>
+> Changes in v7:
+>   - reordered the patch in the series
+>   - modified the return statement for isr
+>   - connector check modified to just check for eDP
+>
+>  drivers/gpu/drm/msm/dp/dp_catalog.c | 16 ++++++++++------
+>  drivers/gpu/drm/msm/dp/dp_display.c | 22 +++++++++++++++++++++-
+>  2 files changed, 31 insertions(+), 7 deletions(-)
+
+Reviewed-by: Douglas Anderson <dianders@chromium.org>

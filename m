@@ -2,307 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AB5750BED4
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 19:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE00A50BEDF
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 19:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233588AbiDVRjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 13:39:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42034 "EHLO
+        id S233858AbiDVRlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 13:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbiDVRjT (ORCPT
+        with ESMTP id S229919AbiDVRlK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 13:39:19 -0400
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4058EBB918;
-        Fri, 22 Apr 2022 10:36:16 -0700 (PDT)
-Received: by mail-qk1-f175.google.com with SMTP id s4so6347874qkh.0;
-        Fri, 22 Apr 2022 10:36:16 -0700 (PDT)
+        Fri, 22 Apr 2022 13:41:10 -0400
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDFE4E07E1
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 10:38:03 -0700 (PDT)
+Received: by mail-pl1-f179.google.com with SMTP id n18so12347783plg.5
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 10:38:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QiXv4gRA4sTObvIQ+FoZbquWQgdoIl4ETDd06lrJqYI=;
+        b=j1kJ+/P6c1H11XFyMz2fXLe7XysDwsCdF9a79eOUYcvtLdxf9Tx3Eny+Pb3enhMss6
+         04ovK/+SnfhDeRevELEOpWSR1VcwaJTfHWKYkiWg4FRlhxiRSBEDrmYgzdfB8eFbAEtb
+         76X8pK+PaE7/0ubmPPOmWhWqa7QT+SdZlAi5HewV0Gj+lB2YMQLhfQZ/QkPTfKgA3D9F
+         aPBfaMe2M3q4C9A2dw8u1uuX7nhKaoxy4lymOUm3zPAYbZVxEVEOXlwE3rsJUHVZkBJs
+         xSV0Z0mQ/rMafG39d34kIxoKIoBsEBA0qm8Nke2p60oFKdYkQptdQ1rwyx/i6zHsir2N
+         F+mQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jd8Of3UQ/tKXQyCAU+TY/4BZIiO1B8v+E8NTO3SRV0g=;
-        b=67bewfq4JSiGMNkH3BxEaaEXNeRZuT29zbFLi9nBMlL2JaBNpVuy9Jbvda99CJAftg
-         ImEs19az89q9OJ3Dt1/kDy7/8Zp/Ehz/ntv+WDZAh+aLqAK3XIj92MaEhKdK8Zhl+R01
-         XKhgvsYqWL16Iz+5+n/at02WDnMAxurhKUeHpwD64c2an6zYcW6a+1UXQ7nhnqNhSg1A
-         tTWA7Sa2u0jX89UkC4izO5QsZLlOsNjFeyn78k1mSj34JK+W8lr0v528rwy6WXrXr2/4
-         5xro1gMm8tdO1ud3H3VIUIYF/+R/Ei2DRAbmAtnnxXxpToUzr9+YlFv6SKre85unQbNW
-         cdng==
-X-Gm-Message-State: AOAM532NU0K5E64U3q2TDPbijDRtiq4+4/HC/VeNqqclQ3YTfRk+q+fU
-        l5t29EcgqtvssKwKi1+plX06mDa1hOgGSQ==
-X-Google-Smtp-Source: ABdhPJyTT4O6pc8bwgHjfFEarWkws8V3+iMpizSW91UzeSI3fpGVsB8It4W5bxvliPVaK4ljqNmCDw==
-X-Received: by 2002:a05:620a:d4e:b0:69b:f2e5:b8cd with SMTP id o14-20020a05620a0d4e00b0069bf2e5b8cdmr3390200qkl.535.1650648870591;
-        Fri, 22 Apr 2022 10:34:30 -0700 (PDT)
-Received: from localhost (fwdproxy-ash-009.fbsv.net. [2a03:2880:20ff:9::face:b00c])
-        by smtp.gmail.com with ESMTPSA id h5-20020a05622a170500b002f33ec7a932sm1632660qtk.79.2022.04.22.10.34.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 10:34:30 -0700 (PDT)
-From:   David Vernet <void@manifault.com>
-To:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org
-Cc:     cgroups@vger.kernel.org, peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: [PATCH v2 3/4] cgroup: Add test_cpucg_weight_overprovisioned() testcase
-Date:   Fri, 22 Apr 2022 10:33:52 -0700
-Message-Id: <20220422173349.3394844-4-void@manifault.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220422173349.3394844-1-void@manifault.com>
-References: <20220422173349.3394844-1-void@manifault.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QiXv4gRA4sTObvIQ+FoZbquWQgdoIl4ETDd06lrJqYI=;
+        b=8SEPABFidJXWttxD+AMRs/Q7bp2aQ/HQ24zzt/fgLmHGarAI3FZ6AfDyNTpJuTuQmL
+         Zbbmp6d8L1DowaqnPCyn3+AqaZSHDsvxCjZmt7JJlk2ABGHGAC6V9nPcRHEipksV3mAO
+         SGx2bI5Mn0ZFXZCTTkqtuNvKoxO1zlLtbNpOGsFf9jey1SL6/YnOK2PfWH84Gv1hcO6R
+         jX0DoTvG7Ud+SGHonGmo+zxotGA+Yp7IIR4roZ+G6NjCc1/gOtxKjkG0lp6Dl68qQDZp
+         hZA/37mjQ8f94mOlIUJm6vRKaxIrbLjh+gtCTE68hL/RPbOT0bw6VklBDjxDgrmQ21rs
+         eYrw==
+X-Gm-Message-State: AOAM531yRhpEbyWyrxrBPzGqYym/JIw4XDlURknaTIsxFrh+Ts0LTbFj
+        M+zzn3E9H8zwqxupYbu2U6fLC/HoruGUtded2qo=
+X-Google-Smtp-Source: ABdhPJwDtXXK2rudfcxu6wHXZuUanIAPzm53VgsV1cCq2vwpLT/lRskHReTO45q5f74JiCAzll30576kEc3oqOCCZ34=
+X-Received: by 2002:a17:902:d5c3:b0:154:c472:de80 with SMTP id
+ g3-20020a170902d5c300b00154c472de80mr5593008plh.87.1650648845908; Fri, 22 Apr
+ 2022 10:34:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220416053902.68517-1-dave@stgolabs.net> <20220416053902.68517-6-dave@stgolabs.net>
+ <CAHbLzkruFaKF_92w2qsZz4sH24C-TARXaL-byT6doVVe6VQ4Zg@mail.gmail.com>
+In-Reply-To: <CAHbLzkruFaKF_92w2qsZz4sH24C-TARXaL-byT6doVVe6VQ4Zg@mail.gmail.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Fri, 22 Apr 2022 10:33:53 -0700
+Message-ID: <CAHbLzkr4w-20H11uNrf-9ZJd=oHGTXTatd5OJ0JAO1KwojySdA@mail.gmail.com>
+Subject: Re: [PATCH 5/6] mm/migration: export demotion_path of a node via sysfs
+To:     Davidlohr Bueso <dave@stgolabs.net>, jvgediya@linux.ibm.com,
+        ying.huang@intel.com, weixugc@google.com
+Cc:     linux-mm@kvack.org, mhocko@kernel.org, akpm@linux-foundation.org,
+        rientjes@google.com, yosryahmed@google.com, hannes@cmpxchg.org,
+        shakeelb@google.com, dave.hansen@linux.intel.com,
+        tim.c.chen@linux.intel.com, roman.gushchin@linux.dev,
+        gthelen@google.com, a.manzanares@samsung.com,
+        heekwon.p@samsung.com, gim.jongmin@samsung.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-test_cpu.c includes testcases that validate the cgroup cpu controller.
-This patch adds a new testcase called test_cpucg_weight_overprovisioned()
-that verifies the expected behavior of creating multiple processes with
-different cpu.weight, on a system that is overprovisioned.
+On Fri, Apr 22, 2022 at 10:31 AM Yang Shi <shy828301@gmail.com> wrote:
+>
+> On Fri, Apr 15, 2022 at 10:39 PM Davidlohr Bueso <dave@stgolabs.net> wrote:
+> >
+> > Add a /sys/devices/system/node/nodeX/demotion_path file
+> > to export the possible target(s) in node_demotion[node].
+>
+> I'm not sure if you noticed that Jagdish Gediya is working on the
+> similar patch, please see
+> https://lore.kernel.org/linux-mm/20220413092206.73974-1-jvgediya@linux.ibm.com/
 
-So as to avoid code duplication, this patch also updates cpu_hog_func_param
-to take a new hog_clock_type enum which informs how time is counted in
-hog_cpus_timed() (either process time or wall clock time).
+Loop in Jagdish Gediya, Ying Huang and Wei Xu.
 
-Signed-off-by: David Vernet <void@manifault.com>
----
- tools/testing/selftests/cgroup/cgroup_util.c |  12 ++
- tools/testing/selftests/cgroup/cgroup_util.h |   1 +
- tools/testing/selftests/cgroup/test_cpu.c    | 135 ++++++++++++++++++-
- 3 files changed, 145 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
-index 0cf7e90c0052..b690fdc8b4cd 100644
---- a/tools/testing/selftests/cgroup/cgroup_util.c
-+++ b/tools/testing/selftests/cgroup/cgroup_util.c
-@@ -190,6 +190,18 @@ int cg_write(const char *cgroup, const char *control, char *buf)
- 	return -1;
- }
- 
-+int cg_write_numeric(const char *cgroup, const char *control, long value)
-+{
-+	char buf[64];
-+	int ret;
-+
-+	ret = sprintf(buf, "%lu", value);
-+	if (ret < 0)
-+		return ret;
-+
-+	return cg_write(cgroup, control, buf);
-+}
-+
- int cg_find_unified_root(char *root, size_t len)
- {
- 	char buf[10 * PAGE_SIZE];
-diff --git a/tools/testing/selftests/cgroup/cgroup_util.h b/tools/testing/selftests/cgroup/cgroup_util.h
-index 1df13dc8b8aa..0f79156697cf 100644
---- a/tools/testing/selftests/cgroup/cgroup_util.h
-+++ b/tools/testing/selftests/cgroup/cgroup_util.h
-@@ -35,6 +35,7 @@ extern long cg_read_long(const char *cgroup, const char *control);
- long cg_read_key_long(const char *cgroup, const char *control, const char *key);
- extern long cg_read_lc(const char *cgroup, const char *control);
- extern int cg_write(const char *cgroup, const char *control, char *buf);
-+int cg_write_numeric(const char *cgroup, const char *control, long value);
- extern int cg_run(const char *cgroup,
- 		  int (*fn)(const char *cgroup, void *arg),
- 		  void *arg);
-diff --git a/tools/testing/selftests/cgroup/test_cpu.c b/tools/testing/selftests/cgroup/test_cpu.c
-index 3bd61964a262..8d901c06c79d 100644
---- a/tools/testing/selftests/cgroup/test_cpu.c
-+++ b/tools/testing/selftests/cgroup/test_cpu.c
-@@ -2,6 +2,8 @@
- 
- #define _GNU_SOURCE
- #include <linux/limits.h>
-+#include <sys/sysinfo.h>
-+#include <sys/wait.h>
- #include <errno.h>
- #include <pthread.h>
- #include <stdio.h>
-@@ -10,9 +12,17 @@
- #include "../kselftest.h"
- #include "cgroup_util.h"
- 
-+enum hog_clock_type {
-+	// Count elapsed time using the CLOCK_PROCESS_CPUTIME_ID clock.
-+	CPU_HOG_CLOCK_PROCESS,
-+	// Count elapsed time using system wallclock time.
-+	CPU_HOG_CLOCK_WALL,
-+};
-+
- struct cpu_hog_func_param {
- 	int nprocs;
- 	struct timespec ts;
-+	enum hog_clock_type clock_type;
- };
- 
- /*
-@@ -118,8 +128,13 @@ static int hog_cpus_timed(const char *cgroup, void *arg)
- 		(struct cpu_hog_func_param *)arg;
- 	struct timespec ts_run = param->ts;
- 	struct timespec ts_remaining = ts_run;
-+	struct timespec ts_start;
- 	int i, ret;
- 
-+	ret = clock_gettime(CLOCK_MONOTONIC, &ts_start);
-+	if (ret != 0)
-+		return ret;
-+
- 	for (i = 0; i < param->nprocs; i++) {
- 		pthread_t tid;
- 
-@@ -135,9 +150,19 @@ static int hog_cpus_timed(const char *cgroup, void *arg)
- 		if (ret && errno != EINTR)
- 			return ret;
- 
--		ret = clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &ts_total);
--		if (ret != 0)
--			return ret;
-+		if (param->clock_type == CPU_HOG_CLOCK_PROCESS) {
-+			ret = clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &ts_total);
-+			if (ret != 0)
-+				return ret;
-+		} else {
-+			struct timespec ts_current;
-+
-+			ret = clock_gettime(CLOCK_MONOTONIC, &ts_current);
-+			if (ret != 0)
-+				return ret;
-+
-+			ts_total = timespec_sub(&ts_current, &ts_start);
-+		}
- 
- 		ts_remaining = timespec_sub(&ts_run, &ts_total);
- 	}
-@@ -176,6 +201,7 @@ static int test_cpucg_stats(const char *root)
- 			.tv_sec = usage_seconds,
- 			.tv_nsec = 0,
- 		},
-+		.clock_type = CPU_HOG_CLOCK_PROCESS,
- 	};
- 	if (cg_run(cpucg, hog_cpus_timed, (void *)&param))
- 		goto cleanup;
-@@ -197,6 +223,108 @@ static int test_cpucg_stats(const char *root)
- 	return ret;
- }
- 
-+/*
-+ * First, this test creates the following hierarchy:
-+ * A
-+ * A/B     cpu.weight = 50
-+ * A/C     cpu.weight = 100
-+ * A/D     cpu.weight = 150
-+ *
-+ * A separate process is then created for each child cgroup which spawns as
-+ * many threads as there are cores, and hogs each CPU as much as possible
-+ * for some time interval.
-+ *
-+ * Once all of the children have exited, we verify that each child cgroup
-+ * was given proportional runtime as informed by their cpu.weight.
-+ */
-+static int test_cpucg_weight_overprovisioned(const char *root)
-+{
-+	struct child {
-+		char *cgroup;
-+		pid_t pid;
-+		long usage;
-+	};
-+	int ret = KSFT_FAIL, i;
-+	char *parent = NULL;
-+	struct child children[3] = {NULL};
-+	long usage_seconds = 10;
-+
-+	parent = cg_name(root, "cpucg_test_0");
-+	if (!parent)
-+		goto cleanup;
-+
-+	if (cg_create(parent))
-+		goto cleanup;
-+
-+	if (cg_write(parent, "cgroup.subtree_control", "+cpu"))
-+		goto cleanup;
-+
-+	for (i = 0; i < ARRAY_SIZE(children); i++) {
-+		children[i].cgroup = cg_name_indexed(parent, "cpucg_child", i);
-+		if (!children[i].cgroup)
-+			goto cleanup;
-+
-+		if (cg_create(children[i].cgroup))
-+			goto cleanup;
-+
-+		if (cg_write_numeric(children[i].cgroup, "cpu.weight",
-+					50 * (i + 1)))
-+			goto cleanup;
-+	}
-+
-+	for (i = 0; i < ARRAY_SIZE(children); i++) {
-+		struct cpu_hog_func_param param = {
-+			.nprocs = get_nprocs(),
-+			.ts = {
-+				.tv_sec = usage_seconds,
-+				.tv_nsec = 0,
-+			},
-+			.clock_type = CPU_HOG_CLOCK_WALL,
-+		};
-+		pid_t pid = cg_run_nowait(children[i].cgroup, hog_cpus_timed,
-+				(void *)&param);
-+		if (pid <= 0)
-+			goto cleanup;
-+		children[i].pid = pid;
-+	}
-+
-+	for (i = 0; i < ARRAY_SIZE(children); i++) {
-+		int retcode;
-+
-+		waitpid(children[i].pid, &retcode, 0);
-+		if (!WIFEXITED(retcode))
-+			goto cleanup;
-+		if (WEXITSTATUS(retcode))
-+			goto cleanup;
-+	}
-+
-+	for (i = 0; i < ARRAY_SIZE(children); i++)
-+		children[i].usage = cg_read_key_long(children[i].cgroup,
-+				"cpu.stat", "usage_usec");
-+
-+	for (i = 0; i < ARRAY_SIZE(children) - 1; i++) {
-+		long delta;
-+
-+		if (children[i + 1].usage <= children[i].usage)
-+			goto cleanup;
-+
-+		delta = children[i + 1].usage - children[i].usage;
-+		if (!values_close(delta, children[0].usage, 35))
-+			goto cleanup;
-+	}
-+
-+	ret = KSFT_PASS;
-+cleanup:
-+	for (i = 0; i < ARRAY_SIZE(children); i++) {
-+		cg_destroy(children[i].cgroup);
-+		free(children[i].cgroup);
-+	}
-+	cg_destroy(parent);
-+	free(parent);
-+
-+	return ret;
-+}
-+
- #define T(x) { x, #x }
- struct cpucg_test {
- 	int (*fn)(const char *root);
-@@ -204,6 +332,7 @@ struct cpucg_test {
- } tests[] = {
- 	T(test_cpucg_subtree_control),
- 	T(test_cpucg_stats),
-+	T(test_cpucg_weight_overprovisioned),
- };
- #undef T
- 
--- 
-2.30.2
-
+>
+> It would be better to combine the two to avoid duplicate effort.
+>
+> >
+> > Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
+> > ---
+> >  Documentation/ABI/stable/sysfs-devices-node |  6 ++++
+> >  drivers/base/node.c                         | 39 +++++++++++++++++++++
+> >  include/linux/migrate.h                     | 15 ++++++++
+> >  mm/migrate.c                                | 15 +-------
+> >  4 files changed, 61 insertions(+), 14 deletions(-)
+> >
+> > diff --git a/Documentation/ABI/stable/sysfs-devices-node b/Documentation/ABI/stable/sysfs-devices-node
+> > index 3c935e1334f7..f620c6ae013c 100644
+> > --- a/Documentation/ABI/stable/sysfs-devices-node
+> > +++ b/Documentation/ABI/stable/sysfs-devices-node
+> > @@ -192,3 +192,9 @@ Description:
+> >                 When it completes successfully, the specified amount or more memory
+> >                 will have been reclaimed, and -EAGAIN if less bytes are reclaimed
+> >                 than the specified amount.
+> > +
+> > +What:          /sys/devices/system/node/nodeX/demotion_path
+> > +Date:          April 2022
+> > +Contact:       Davidlohr Bueso <dave@stgolabs.net>
+> > +Description:
+> > +               Shows nodes within the next tier of slower memory below this node.
+> > diff --git a/drivers/base/node.c b/drivers/base/node.c
+> > index d80c478e2a6e..ab4bae777535 100644
+> > --- a/drivers/base/node.c
+> > +++ b/drivers/base/node.c
+> > @@ -17,6 +17,7 @@
+> >  #include <linux/nodemask.h>
+> >  #include <linux/cpu.h>
+> >  #include <linux/device.h>
+> > +#include <linux/migrate.h>
+> >  #include <linux/pm_runtime.h>
+> >  #include <linux/swap.h>
+> >  #include <linux/slab.h>
+> > @@ -560,11 +561,49 @@ static ssize_t node_read_distance(struct device *dev,
+> >  }
+> >  static DEVICE_ATTR(distance, 0444, node_read_distance, NULL);
+> >
+> > +static ssize_t node_read_demotion_path(struct device *dev,
+> > +                                      struct device_attribute *attr, char *buf)
+> > +{
+> > +       int nid = dev->id;
+> > +       int len = 0;
+> > +       int i;
+> > +       struct demotion_nodes *nd;
+> > +
+> > +       /*
+> > +        * buf is currently PAGE_SIZE in length and each node needs 4 chars
+> > +        * at the most (target + space or newline).
+> > +        */
+> > +       BUILD_BUG_ON(MAX_NUMNODES * 4 > PAGE_SIZE);
+> > +
+> > +       if (!node_demotion) {
+> > +               len += sysfs_emit_at(buf, len, "%d", NUMA_NO_NODE);
+> > +               goto done;
+> > +       }
+> > +
+> > +       nd = &node_demotion[nid];
+> > +
+> > +       rcu_read_lock();
+> > +       if (nd->nr == 0)
+> > +               len += sysfs_emit_at(buf, len, "%d", NUMA_NO_NODE);
+> > +       else {
+> > +               for (i = 0; i < nd->nr; i++) {
+> > +                       len += sysfs_emit_at(buf, len, "%s%d",
+> > +                                            i ? " " : "", nd->nodes[i]);
+> > +               }
+> > +       }
+> > +       rcu_read_unlock();
+> > +done:
+> > +       len += sysfs_emit_at(buf, len, "\n");
+> > +       return len;
+> > +}
+> > +static DEVICE_ATTR(demotion_path, 0444, node_read_demotion_path, NULL);
+> > +
+> >  static struct attribute *node_dev_attrs[] = {
+> >         &dev_attr_meminfo.attr,
+> >         &dev_attr_numastat.attr,
+> >         &dev_attr_distance.attr,
+> >         &dev_attr_vmstat.attr,
+> > +       &dev_attr_demotion_path.attr,
+> >         NULL
+> >  };
+> >
+> > diff --git a/include/linux/migrate.h b/include/linux/migrate.h
+> > index 90e75d5a54d6..b0ac6a717e44 100644
+> > --- a/include/linux/migrate.h
+> > +++ b/include/linux/migrate.h
+> > @@ -111,6 +111,21 @@ static inline int migrate_misplaced_page(struct page *page,
+> >  }
+> >  #endif /* CONFIG_NUMA_BALANCING */
+> >
+> > +#define DEFAULT_DEMOTION_TARGET_NODES 15
+> > +
+> > +#if MAX_NUMNODES < DEFAULT_DEMOTION_TARGET_NODES
+> > +#define DEMOTION_TARGET_NODES  (MAX_NUMNODES - 1)
+> > +#else
+> > +#define DEMOTION_TARGET_NODES  DEFAULT_DEMOTION_TARGET_NODES
+> > +#endif
+> > +
+> > +struct demotion_nodes {
+> > +       unsigned short nr;
+> > +       short nodes[DEMOTION_TARGET_NODES];
+> > +};
+> > +
+> > +extern struct demotion_nodes *node_demotion __read_mostly;
+> > +
+> >  #ifdef CONFIG_MIGRATION
+> >
+> >  /*
+> > diff --git a/mm/migrate.c b/mm/migrate.c
+> > index 6c31ee1e1c9b..e47ea25fcfe8 100644
+> > --- a/mm/migrate.c
+> > +++ b/mm/migrate.c
+> > @@ -2172,20 +2172,7 @@ int migrate_misplaced_page(struct page *page, struct vm_area_struct *vma,
+> >   * must be held over all reads to ensure that no cycles are
+> >   * observed.
+> >   */
+> > -#define DEFAULT_DEMOTION_TARGET_NODES 15
+> > -
+> > -#if MAX_NUMNODES < DEFAULT_DEMOTION_TARGET_NODES
+> > -#define DEMOTION_TARGET_NODES  (MAX_NUMNODES - 1)
+> > -#else
+> > -#define DEMOTION_TARGET_NODES  DEFAULT_DEMOTION_TARGET_NODES
+> > -#endif
+> > -
+> > -struct demotion_nodes {
+> > -       unsigned short nr;
+> > -       short nodes[DEMOTION_TARGET_NODES];
+> > -};
+> > -
+> > -static struct demotion_nodes *node_demotion __read_mostly;
+> > +struct demotion_nodes *node_demotion __read_mostly;
+> >
+> >  /**
+> >   * next_demotion_node() - Get the next node in the demotion path
+> > --
+> > 2.26.2
+> >
+> >

@@ -2,381 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B3B250ADED
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 04:43:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05CBE50ADF2
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 04:44:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443483AbiDVCq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Apr 2022 22:46:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41668 "EHLO
+        id S1443511AbiDVCrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Apr 2022 22:47:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241380AbiDVCqY (ORCPT
+        with ESMTP id S1443516AbiDVCr3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Apr 2022 22:46:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B56A4C787;
-        Thu, 21 Apr 2022 19:43:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 60CD861924;
-        Fri, 22 Apr 2022 02:43:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4681C385A5;
-        Fri, 22 Apr 2022 02:43:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650595411;
-        bh=M7eCpy1YM/FZZkPtnY1nuvZ9kmH7octKYQQT4/LloXQ=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=YEj9tQRoB951sXaa6rYu1shr5AHRFpRcdYMwsRj110RQ9b8QuWPC2i4/ADpxxZKZb
-         tMR3XQlBFgSUHsbsUQQrrjL8VduQ+eW6XA8q1CE1yaZ0Pbr9GPm3JaD0wyeBifwSA8
-         wd6kbJZ8P9aj5V/fyZ9WukapYsdRiUPD1D38oEByxSVr6j54vWqDFm/xzCaH+y2XXb
-         UB1GocLy3rdMvexOZrO8kJJHR5BqabBBDMLv6S9zwziccb6ptC1oQ7stkU14OjTQLP
-         JGKOpUDJyU3jo2526XVWirQpvAYx7KS3EaditjiK1HQBr3CuzxSfjxVAgci5myhutK
-         Yp0QYhjWNxk/g==
-Content-Type: text/plain; charset="utf-8"
+        Thu, 21 Apr 2022 22:47:29 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0BE4CD46
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Apr 2022 19:44:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650595477; x=1682131477;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=GJiwExnw2IafD02a1HNsPSHGWBmXbRwNr9H/jzVEfLY=;
+  b=RebRQsbdl2crTuA/k6xiTMu/G0gGrukUbV8r9wHHqslS+1J0W02Vecwv
+   p5hpQqxPKTNmuFifXemfGXkqRRc3DglgnC4xioBj9XOuHt9rCHkRANa5A
+   9VylaaPno3jsFK34l2uCaOviU8GIJ8h6hYQ6W2pIz9wpZ4zZgbUrSWULl
+   cSKP27rDbnI4C1k/vT23lURghqtPWOeJx/VHVts7c/P/zO0J6Q/qfmoIf
+   C9gETEzpRK44I5m/JEcfuhDQK5HPArMQxJgbgKjjXI4mwcNh9mqZ6tHcM
+   47zQnUisIasYPbGSq7YHPiFSTyGnAcbHKYQRx1KcDSKUxLTjq3td16J96
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="262147704"
+X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
+   d="scan'208";a="262147704"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 19:44:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
+   d="scan'208";a="805790258"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 21 Apr 2022 19:44:36 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nhjHf-00098U-EN;
+        Fri, 22 Apr 2022 02:44:35 +0000
+Date:   Fri, 22 Apr 2022 10:43:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/sev] BUILD SUCCESS
+ 9617f2f48310f2f341a9a0ebbc2dcfe1e88031a2
+Message-ID: <62621657.PWCXywsBgvhd8blt%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220421031849.454626-1-bjorn.andersson@linaro.org>
-References: <20220421031849.454626-1-bjorn.andersson@linaro.org>
-Subject: Re: [PATCH v3] clk: qcom: rcg2: Cache CFG register updates for parked RCGs
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-To:     Amit Nischal <anischal@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Taniya Das <quic_tdas@quicinc.com>
-Date:   Thu, 21 Apr 2022 19:43:29 -0700
-User-Agent: alot/0.10
-Message-Id: <20220422024331.B4681C385A5@smtp.kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Bjorn Andersson (2022-04-20 20:18:49)
-> As GDSCs are turned on and off some associated clocks are momentarily
-> enabled for house keeping purposes. For this, and similar, purposes the
-> "shared RCGs" will park the RCG on a source clock which is known to be
-> available.
-> When the RCG is parked, a safe clock source will be selected and
-> committed, then the original source would be written back and upon enable
-> the change back to the unparked source would be committed.
->=20
-> But starting with SM8350 this fails, as the value in CFG is committed by
-> the GDSC handshake and without a ticking parent the GDSC enablement will
-> time out.
->=20
-> This becomes a concrete problem if the runtime supended state of a
-> device includes disabling such rcg's parent clock. As the device
-> attempts to power up the domain again the rcg will fail to enable and
-> hence the GDSC enablement will fail, preventing the device from
-> returning from the suspended state.
->=20
-> This can be seen in e.g. the display stack during probe on SM8350.
->=20
-> To avoid this problem, the software needs to ensure that the RCG is
-> configured to a active parent clock while it is disabled. This is done
-> by caching the CFG register content while the shared RCG is parked on
-> this safe source.
->=20
-> Writes to M, N and D registers are committed as they are requested. New
-> helpers for get_parent() and recalc_rate() are extracted from their
-> previous implementations and __clk_rcg2_configure() is modified to allow
-> it to operate on the cached value.
->=20
-> Fixes: 7ef6f11887bd ("clk: qcom: Configure the RCGs to a safe source as n=
-eeded")
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/sev
+branch HEAD: 9617f2f48310f2f341a9a0ebbc2dcfe1e88031a2  virt: sevguest: Rename the sevguest dir and files to sev-guest
 
-Taniya, can you please review?
+elapsed time: 887m
 
->=20
-> Changes since v2:
-> - Explained the symptoms in commit message
-> - Reduced error in clk_rcg2_get_parent() to pr_debug()
-> - Reduced the size of the change in __clk_rcg2_configure()
-> - Polished comment in clk_rcg2_shared_set_rate()
-> - Use clk_hw_is_enabled() in clk_rcg2_shared_set_parent()
->=20
->  drivers/clk/qcom/clk-rcg.h  |   2 +
->  drivers/clk/qcom/clk-rcg2.c | 124 ++++++++++++++++++++++++++++--------
->  2 files changed, 100 insertions(+), 26 deletions(-)
->=20
-> diff --git a/drivers/clk/qcom/clk-rcg.h b/drivers/clk/qcom/clk-rcg.h
-> index 00cea508d49e..012e745794fd 100644
-> --- a/drivers/clk/qcom/clk-rcg.h
-> +++ b/drivers/clk/qcom/clk-rcg.h
-> @@ -140,6 +140,7 @@ extern const struct clk_ops clk_dyn_rcg_ops;
->   * @freq_tbl: frequency table
->   * @clkr: regmap clock handle
->   * @cfg_off: defines the cfg register offset from the CMD_RCGR + CFG_REG
-> + * @parked_cfg: cached value of the CFG register for parked RCGs
->   */
->  struct clk_rcg2 {
->         u32                     cmd_rcgr;
-> @@ -150,6 +151,7 @@ struct clk_rcg2 {
->         const struct freq_tbl   *freq_tbl;
->         struct clk_regmap       clkr;
->         u8                      cfg_off;
-> +       u32                     parked_cfg;
->  };
-> =20
->  #define to_clk_rcg2(_hw) container_of(to_clk_regmap(_hw), struct clk_rcg=
-2, clkr)
-> diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
-> index f675fd969c4d..9d218b04aa49 100644
-> --- a/drivers/clk/qcom/clk-rcg2.c
-> +++ b/drivers/clk/qcom/clk-rcg2.c
-> @@ -73,16 +73,11 @@ static int clk_rcg2_is_enabled(struct clk_hw *hw)
->         return (cmd & CMD_ROOT_OFF) =3D=3D 0;
->  }
-> =20
-> -static u8 clk_rcg2_get_parent(struct clk_hw *hw)
-> +static u8 __clk_rcg2_get_parent(struct clk_hw *hw, u32 cfg)
->  {
->         struct clk_rcg2 *rcg =3D to_clk_rcg2(hw);
->         int num_parents =3D clk_hw_get_num_parents(hw);
-> -       u32 cfg;
-> -       int i, ret;
-> -
-> -       ret =3D regmap_read(rcg->clkr.regmap, RCG_CFG_OFFSET(rcg), &cfg);
-> -       if (ret)
-> -               goto err;
-> +       int i;
-> =20
->         cfg &=3D CFG_SRC_SEL_MASK;
->         cfg >>=3D CFG_SRC_SEL_SHIFT;
-> @@ -91,12 +86,27 @@ static u8 clk_rcg2_get_parent(struct clk_hw *hw)
->                 if (cfg =3D=3D rcg->parent_map[i].cfg)
->                         return i;
-> =20
-> -err:
->         pr_debug("%s: Clock %s has invalid parent, using default.\n",
->                  __func__, clk_hw_get_name(hw));
->         return 0;
->  }
-> =20
-> +static u8 clk_rcg2_get_parent(struct clk_hw *hw)
-> +{
-> +       struct clk_rcg2 *rcg =3D to_clk_rcg2(hw);
-> +       u32 cfg;
-> +       int ret;
-> +
-> +       ret =3D regmap_read(rcg->clkr.regmap, RCG_CFG_OFFSET(rcg), &cfg);
-> +       if (ret) {
-> +               pr_debug("%s: Unable to read CFG register for %s\n",
-> +                        __func__, clk_hw_get_name(hw));
-> +               return 0;
-> +       }
-> +
-> +       return __clk_rcg2_get_parent(hw, cfg);
-> +}
-> +
->  static int update_config(struct clk_rcg2 *rcg)
->  {
->         int count, ret;
-> @@ -163,12 +173,10 @@ calc_rate(unsigned long rate, u32 m, u32 n, u32 mod=
-e, u32 hid_div)
->  }
-> =20
->  static unsigned long
-> -clk_rcg2_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
-> +__clk_rcg2_recalc_rate(struct clk_hw *hw, unsigned long parent_rate, u32=
- cfg)
->  {
->         struct clk_rcg2 *rcg =3D to_clk_rcg2(hw);
-> -       u32 cfg, hid_div, m =3D 0, n =3D 0, mode =3D 0, mask;
-> -
-> -       regmap_read(rcg->clkr.regmap, RCG_CFG_OFFSET(rcg), &cfg);
-> +       u32 hid_div, m =3D 0, n =3D 0, mode =3D 0, mask;
-> =20
->         if (rcg->mnd_width) {
->                 mask =3D BIT(rcg->mnd_width) - 1;
-> @@ -189,6 +197,17 @@ clk_rcg2_recalc_rate(struct clk_hw *hw, unsigned lon=
-g parent_rate)
->         return calc_rate(parent_rate, m, n, mode, hid_div);
->  }
-> =20
-> +static unsigned long
-> +clk_rcg2_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
-> +{
-> +       struct clk_rcg2 *rcg =3D to_clk_rcg2(hw);
-> +       u32 cfg;
-> +
-> +       regmap_read(rcg->clkr.regmap, RCG_CFG_OFFSET(rcg), &cfg);
-> +
-> +       return __clk_rcg2_recalc_rate(hw, parent_rate, cfg);
-> +}
-> +
->  static int _freq_tbl_determine_rate(struct clk_hw *hw, const struct freq=
-_tbl *f,
->                                     struct clk_rate_request *req,
->                                     enum freq_policy policy)
-> @@ -262,7 +281,8 @@ static int clk_rcg2_determine_floor_rate(struct clk_h=
-w *hw,
->         return _freq_tbl_determine_rate(hw, rcg->freq_tbl, req, FLOOR);
->  }
-> =20
-> -static int __clk_rcg2_configure(struct clk_rcg2 *rcg, const struct freq_=
-tbl *f)
-> +static int __clk_rcg2_configure(struct clk_rcg2 *rcg, const struct freq_=
-tbl *f,
-> +                               u32 *_cfg)
->  {
->         u32 cfg, mask, d_val, not2d_val, n_minus_m;
->         struct clk_hw *hw =3D &rcg->clkr.hw;
-> @@ -304,15 +324,27 @@ static int __clk_rcg2_configure(struct clk_rcg2 *rc=
-g, const struct freq_tbl *f)
->         cfg |=3D rcg->parent_map[index].cfg << CFG_SRC_SEL_SHIFT;
->         if (rcg->mnd_width && f->n && (f->m !=3D f->n))
->                 cfg |=3D CFG_MODE_DUAL_EDGE;
-> -       return regmap_update_bits(rcg->clkr.regmap, RCG_CFG_OFFSET(rcg),
-> -                                       mask, cfg);
-> +
-> +       *_cfg &=3D ~mask;
-> +       *_cfg |=3D cfg;
-> +
-> +       return 0;
->  }
-> =20
->  static int clk_rcg2_configure(struct clk_rcg2 *rcg, const struct freq_tb=
-l *f)
->  {
-> +       u32 cfg;
->         int ret;
-> =20
-> -       ret =3D __clk_rcg2_configure(rcg, f);
-> +       ret =3D regmap_read(rcg->clkr.regmap, RCG_CFG_OFFSET(rcg), &cfg);
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret =3D __clk_rcg2_configure(rcg, f, &cfg);
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret =3D regmap_write(rcg->clkr.regmap, RCG_CFG_OFFSET(rcg), cfg);
->         if (ret)
->                 return ret;
-> =20
-> @@ -979,11 +1011,12 @@ static int clk_rcg2_shared_set_rate(struct clk_hw =
-*hw, unsigned long rate,
->                 return -EINVAL;
-> =20
->         /*
-> -        * In case clock is disabled, update the CFG, M, N and D registers
-> -        * and don't hit the update bit of CMD register.
-> +        * In case clock is disabled, update the M, N and D registers, ca=
-che
-> +        * the CFG value in parked_cfg and don't hit the update bit of CMD
-> +        * register.
->          */
->         if (!__clk_is_enabled(hw->clk))
-> -               return __clk_rcg2_configure(rcg, f);
-> +               return __clk_rcg2_configure(rcg, f, &rcg->parked_cfg);
-> =20
->         return clk_rcg2_shared_force_enable_clear(hw, f);
->  }
-> @@ -1007,6 +1040,11 @@ static int clk_rcg2_shared_enable(struct clk_hw *h=
-w)
->         if (ret)
->                 return ret;
-> =20
-> +       /* Write back the stored configuration corresponding to current r=
-ate */
-> +       ret =3D regmap_write(rcg->clkr.regmap, rcg->cmd_rcgr + CFG_REG, r=
-cg->parked_cfg);
-> +       if (ret)
-> +               return ret;
-> +
->         ret =3D update_config(rcg);
->         if (ret)
->                 return ret;
-> @@ -1017,13 +1055,12 @@ static int clk_rcg2_shared_enable(struct clk_hw *=
-hw)
->  static void clk_rcg2_shared_disable(struct clk_hw *hw)
->  {
->         struct clk_rcg2 *rcg =3D to_clk_rcg2(hw);
-> -       u32 cfg;
-> =20
->         /*
->          * Store current configuration as switching to safe source would =
-clear
->          * the SRC and DIV of CFG register
->          */
-> -       regmap_read(rcg->clkr.regmap, rcg->cmd_rcgr + CFG_REG, &cfg);
-> +       regmap_read(rcg->clkr.regmap, rcg->cmd_rcgr + CFG_REG, &rcg->park=
-ed_cfg);
-> =20
->         /*
->          * Park the RCG at a safe configuration - sourced off of safe sou=
-rce.
-> @@ -1041,17 +1078,52 @@ static void clk_rcg2_shared_disable(struct clk_hw=
- *hw)
->         update_config(rcg);
-> =20
->         clk_rcg2_clear_force_enable(hw);
-> +}
-> =20
-> -       /* Write back the stored configuration corresponding to current r=
-ate */
-> -       regmap_write(rcg->clkr.regmap, rcg->cmd_rcgr + CFG_REG, cfg);
-> +static u8 clk_rcg2_shared_get_parent(struct clk_hw *hw)
-> +{
-> +       struct clk_rcg2 *rcg =3D to_clk_rcg2(hw);
-> +
-> +       /* If the shared rcg is parked used the cached cfg instead */
-> +       if (!__clk_is_enabled(hw->clk))
-> +               return __clk_rcg2_get_parent(hw, rcg->parked_cfg);
-> +
-> +       return clk_rcg2_get_parent(hw);
-> +}
-> +
-> +static int clk_rcg2_shared_set_parent(struct clk_hw *hw, u8 index)
-> +{
-> +       struct clk_rcg2 *rcg =3D to_clk_rcg2(hw);
-> +
-> +       /* If the shared rcg is parked only update the cached cfg */
-> +       if (!clk_hw_is_enabled(hw)) {
-> +               rcg->parked_cfg &=3D ~CFG_SRC_SEL_MASK;
-> +               rcg->parked_cfg |=3D rcg->parent_map[index].cfg << CFG_SR=
-C_SEL_SHIFT;
-> +
-> +               return 0;
-> +       }
-> +
-> +       return clk_rcg2_set_parent(hw, index);
-> +}
-> +
-> +static unsigned long
-> +clk_rcg2_shared_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
-> +{
-> +       struct clk_rcg2 *rcg =3D to_clk_rcg2(hw);
-> +
-> +       /* If the shared rcg is parked used the cached cfg instead */
-> +       if (!__clk_is_enabled(hw->clk))
-> +               return __clk_rcg2_recalc_rate(hw, parent_rate, rcg->parke=
-d_cfg);
-> +
-> +       return clk_rcg2_recalc_rate(hw, parent_rate);
->  }
-> =20
->  const struct clk_ops clk_rcg2_shared_ops =3D {
->         .enable =3D clk_rcg2_shared_enable,
->         .disable =3D clk_rcg2_shared_disable,
-> -       .get_parent =3D clk_rcg2_get_parent,
-> -       .set_parent =3D clk_rcg2_set_parent,
-> -       .recalc_rate =3D clk_rcg2_recalc_rate,
-> +       .get_parent =3D clk_rcg2_shared_get_parent,
-> +       .set_parent =3D clk_rcg2_shared_set_parent,
-> +       .recalc_rate =3D clk_rcg2_shared_recalc_rate,
->         .determine_rate =3D clk_rcg2_determine_rate,
->         .set_rate =3D clk_rcg2_shared_set_rate,
->         .set_rate_and_parent =3D clk_rcg2_shared_set_rate_and_parent,
-> --=20
-> 2.35.1
->
+configs tested: 115
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+powerpc                     asp8347_defconfig
+sh                           se7712_defconfig
+powerpc                     ep8248e_defconfig
+sh                   sh7724_generic_defconfig
+powerpc                       ppc64_defconfig
+sh                          rsk7269_defconfig
+mips                     loongson1b_defconfig
+arm                        mini2440_defconfig
+sparc                       sparc32_defconfig
+arm                        keystone_defconfig
+powerpc                  storcenter_defconfig
+mips                        bcm47xx_defconfig
+sh                          polaris_defconfig
+arm                        spear6xx_defconfig
+mips                            ar7_defconfig
+powerpc                     pq2fads_defconfig
+arm                           stm32_defconfig
+xtensa                    smp_lx200_defconfig
+mips                           xway_defconfig
+xtensa                          iss_defconfig
+microblaze                          defconfig
+powerpc                      arches_defconfig
+xtensa                  cadence_csp_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220421
+ia64                             allmodconfig
+ia64                             allyesconfig
+ia64                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20220421
+s390                 randconfig-r044-20220421
+riscv                randconfig-r042-20220421
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
+
+clang tested configs:
+riscv                randconfig-c006-20220421
+mips                 randconfig-c004-20220421
+x86_64                        randconfig-c007
+i386                          randconfig-c001
+arm                  randconfig-c002-20220421
+powerpc              randconfig-c003-20220421
+powerpc                      ppc64e_defconfig
+mips                           rs90_defconfig
+powerpc                        fsp2_defconfig
+powerpc                     tqm8560_defconfig
+arm                              alldefconfig
+hexagon                          alldefconfig
+arm                     davinci_all_defconfig
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

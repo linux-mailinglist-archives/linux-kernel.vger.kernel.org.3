@@ -2,130 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4521950B238
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 09:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A16950B231
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 09:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445090AbiDVH6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 03:58:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38002 "EHLO
+        id S1445363AbiDVIAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 04:00:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241901AbiDVH6S (ORCPT
+        with ESMTP id S1445370AbiDVIAB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 03:58:18 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A98C34647
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 00:55:24 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id j16-20020a056e02125000b002cc39632ab9so3976727ilq.9
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 00:55:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=/vtUWpnugYZvI17/PxIskjzNw1gYIuijhJ19Q0tFHHE=;
-        b=KpfepWGv6mQKgxM6AD8SG0Z2Zt50nYsWiGDljc9I4pp5l/n3jW97+QzjsO9Uqjj6Cc
-         vInEQjGz+xVZurvawbZZ9DMBoHNd34i8LamV0yUqCcHW9PxjwErOfjXaBAWTkhJztJgc
-         7FTvKS3E39i1Eb/JKCuBKZ6meCqsy/kR1CMPPuXeuuwCYuaX9yvH4Bc/hOS7TDwtpHIu
-         fLju3RyVrknKo/uDYSZL6doTDpWMEWzMUlZ2amdjudBPkdHd5Q0ur4CX/2FM31in0K6+
-         Dh5IahI0bVsvg1A65KepN7ZowzMUhXbcNwKQqqu3z5tCxrJUbIl3qqZCIktbzRYISk71
-         VaYQ==
-X-Gm-Message-State: AOAM532GZmiuj2Uqh0kffanOplJCw5y3paFtcSJQ04M/zsIdn3iKi5wZ
-        0SUMfkqOysa2rerejv5wSKhEgwfnmqlYlpxqz80Njk6bND/P
-X-Google-Smtp-Source: ABdhPJweuOucVY7qIlWIZ0LJXuyQZzQ1OM0E9pWKoqV1SaityRuZjD/S4y68Or9hUabKFNRg/Iq8vpFpikOvh5qXsHWBPHn+N/r5
-MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1647:b0:328:81e9:1975 with SMTP id
- a7-20020a056638164700b0032881e91975mr1518400jat.143.1650614124001; Fri, 22
- Apr 2022 00:55:24 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 00:55:23 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000085bef105dd398c3d@google.com>
-Subject: [syzbot] WARNING in __floppy_read_block_0
-From:   syzbot <syzbot+bac6723617710898abd3@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, efremov@linux.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Fri, 22 Apr 2022 04:00:01 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0EA527F5;
+        Fri, 22 Apr 2022 00:56:29 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R661e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=guwen@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VAlrUan_1650614179;
+Received: from e02h04404.eu6sqa(mailfrom:guwen@linux.alibaba.com fp:SMTPD_---0VAlrUan_1650614179)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 22 Apr 2022 15:56:27 +0800
+From:   Wen Gu <guwen@linux.alibaba.com>
+To:     kgraul@linux.ibm.com, davem@davemloft.net, kuba@kernel.org
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net 0/2] net/smc: Two fixes for smc fallback
+Date:   Fri, 22 Apr 2022 15:56:17 +0800
+Message-Id: <1650614179-11529-1-git-send-email-guwen@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+This patch set includes two fixes for smc fallback:
 
-syzbot found the following issue on:
+Patch 1/2 introduces some simple helpers to wrap the replacement
+and restore of clcsock's callback functions. Make sure that only
+the original callbacks will be saved and not overwritten.
 
-HEAD commit:    b2d229d4ddb1 Linux 5.18-rc3
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=10b813f0f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=dd7c9a79dfcfa205
-dashboard link: https://syzkaller.appspot.com/bug?extid=bac6723617710898abd3
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Patch 2/2 fixes a syzbot reporting slab-out-of-bound issue where
+smc_fback_error_report() accesses the already freed smc sock (see
+https://lore.kernel.org/r/00000000000013ca8105d7ae3ada@google.com/).
+The patch fixes it by resetting sk_user_data and restoring clcsock
+callback functions timely in fallback situation.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+But it should be noted that although patch 2/2 can fix the issue
+of 'slab-out-of-bounds/use-after-free in smc_fback_error_report',
+it can't pass the syzbot reproducer test. Because after applying
+these two patches in upstream, syzbot reproducer triggered another
+known issue like this:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+bac6723617710898abd3@syzkaller.appspotmail.com
+==================================================================
+BUG: KASAN: use-after-free in tcp_retransmit_timer+0x2ef3/0x3360 net/ipv4/tcp_timer.c:511
+Read of size 8 at addr ffff888020328380 by task udevd/4158
 
-------------[ cut here ]------------
-WARNING: CPU: 2 PID: 22697 at drivers/block/floppy.c:1000 schedule_bh drivers/block/floppy.c:1000 [inline]
-WARNING: CPU: 2 PID: 22697 at drivers/block/floppy.c:1000 process_fd_request drivers/block/floppy.c:2849 [inline]
-WARNING: CPU: 2 PID: 22697 at drivers/block/floppy.c:1000 __floppy_read_block_0.isra.0+0x292/0x330 drivers/block/floppy.c:4141
-Modules linked in:
-CPU: 2 PID: 22697 Comm: syz-executor.3 Not tainted 5.18.0-rc3-syzkaller #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-RIP: 0010:schedule_bh drivers/block/floppy.c:1000 [inline]
-RIP: 0010:process_fd_request drivers/block/floppy.c:2849 [inline]
-RIP: 0010:__floppy_read_block_0.isra.0+0x292/0x330 drivers/block/floppy.c:4141
-Code: 84 24 b8 01 00 00 65 48 2b 04 25 28 00 00 00 0f 85 a0 00 00 00 48 81 c4 c0 01 00 00 5b 5d 41 5c 41 5d 41 5e c3 e8 1e 1e f0 fc <0f> 0b e9 5a ff ff ff e8 e2 12 3b fd e9 7c fe ff ff e8 08 1e f0 fc
-RSP: 0018:ffffc90021f2f6c0 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 1ffff920043e5ed8 RCX: 0000000000000000
-RDX: ffff888019a48080 RSI: ffffffff84882ff2 RDI: 0000000000000003
-RBP: ffffea0001593300 R08: 0000000000000000 R09: ffffffff8c8b3f27
-R10: ffffffff84882f4a R11: 0000000000000000 R12: 0000000000000001
-R13: 0000000000000001 R14: dffffc0000000000 R15: 0000000000000001
-FS:  00007fce8416d700(0000) GS:ffff88802cc00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f5e5a11efc0 CR3: 000000006ad68000 CR4: 0000000000150ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+CPU: 1 PID: 4158 Comm: udevd Not tainted 5.18.0-rc3-syzkaller-00074-gb05a5683eba6-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
 Call Trace:
- <TASK>
- floppy_revalidate.isra.0+0x801/0xae0 drivers/block/floppy.c:4187
- floppy_open+0xac5/0xd70 drivers/block/floppy.c:4039
- blkdev_get_whole+0x99/0x2d0 block/bdev.c:666
- blkdev_get_by_dev.part.0+0x5d2/0xc80 block/bdev.c:816
- blkdev_get_by_dev+0x6b/0x80 block/bdev.c:850
- blkdev_open+0x13c/0x2c0 block/fops.c:498
- do_dentry_open+0x4a1/0x11e0 fs/open.c:824
- do_open fs/namei.c:3476 [inline]
- path_openat+0x1c71/0x2910 fs/namei.c:3609
- do_filp_open+0x1aa/0x400 fs/namei.c:3636
- do_sys_openat2+0x16d/0x4c0 fs/open.c:1213
- do_sys_open fs/open.c:1229 [inline]
- __do_sys_openat fs/open.c:1245 [inline]
- __se_sys_openat fs/open.c:1240 [inline]
- __x64_sys_openat+0x13f/0x1f0 fs/open.c:1240
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fce8303c004
-Code: 84 00 00 00 00 00 44 89 54 24 0c e8 96 f9 ff ff 44 8b 54 24 0c 44 89 e2 48 89 ee 41 89 c0 bf 9c ff ff ff b8 01 01 00 00 0f 05 <48> 3d 00 f0 ff ff 77 34 44 89 c7 89 44 24 0c e8 c8 f9 ff ff 8b 44
-RSP: 002b:00007fce8416cca0 EFLAGS: 00000293 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 6666666666666667 RCX: 00007fce8303c004
-RDX: 0000000000000000 RSI: 00007fce8416cd40 RDI: 00000000ffffff9c
-RBP: 00007fce8416cd40 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000293 R12: 0000000000000000
-R13: 00007ffe79dbf38f R14: 00007fce8416d300 R15: 0000000000022000
- </TASK>
+ <IRQ>
+  __dump_stack lib/dump_stack.c:88 [inline]
+  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+  print_address_description.constprop.0.cold+0xeb/0x467 mm/kasan/report.c:313
+  print_report mm/kasan/report.c:429 [inline]
+  kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
+  tcp_retransmit_timer+0x2ef3/0x3360 net/ipv4/tcp_timer.c:511
+  tcp_write_timer_handler+0x5e6/0xbc0 net/ipv4/tcp_timer.c:622
+  tcp_write_timer+0xa2/0x2b0 net/ipv4/tcp_timer.c:642
+  call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1421
+  expire_timers kernel/time/timer.c:1466 [inline]
+  __run_timers.part.0+0x679/0xa80 kernel/time/timer.c:1737
+  __run_timers kernel/time/timer.c:1715 [inline]
+  run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1750
+  __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
+  invoke_softirq kernel/softirq.c:432 [inline]
+  __irq_exit_rcu+0x123/0x180 kernel/softirq.c:637
+  irq_exit_rcu+0x5/0x20 kernel/softirq.c:649
+  sysvec_apic_timer_interrupt+0x93/0xc0 arch/x86/kernel/apic/apic.c:1097
+ </IRQ>
+ ...
+(detail report can be found in https://syzkaller.appspot.com/text?tag=CrashReport&x=15406b44f00000)
 
+IMHO, the above issue is the same as this known one: https://syzkaller.appspot.com/bug?extid=694120e1002c117747ed,
+and it doesn't seem to be related with SMC. The discussion about this known issue is ongoing and can be found in
+https://lore.kernel.org/bpf/000000000000f75af905d3ba0716@google.com/T/.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+And I added the temporary solution mentioned in the above discussion on
+top of my two patches, the syzbot reproducer of 'slab-out-of-bounds/
+use-after-free in smc_fback_error_report' no longer triggers any issue.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Wen Gu (2):
+  net/smc: Only save the original clcsock callback functions
+  net/smc: Fix slab-out-of-bounds issue in fallback
+
+ net/smc/af_smc.c    | 135 ++++++++++++++++++++++++++++++++++++----------------
+ net/smc/smc.h       |  29 +++++++++++
+ net/smc/smc_close.c |   5 +-
+ 3 files changed, 126 insertions(+), 43 deletions(-)
+
+-- 
+1.8.3.1
+

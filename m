@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 706CD50BC29
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C32FC50BC30
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449585AbiDVP4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 11:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59374 "EHLO
+        id S1449648AbiDVP5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 11:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355262AbiDVP4P (ORCPT
+        with ESMTP id S234345AbiDVP5m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 11:56:15 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B411CFEC;
-        Fri, 22 Apr 2022 08:53:22 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id k22so11686289wrd.2;
-        Fri, 22 Apr 2022 08:53:22 -0700 (PDT)
+        Fri, 22 Apr 2022 11:57:42 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532DF237CE;
+        Fri, 22 Apr 2022 08:54:48 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id x17so15014465lfa.10;
+        Fri, 22 Apr 2022 08:54:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=r7VFn3nngH4hNjFd5Mmo4mWEZGaDYjUWd1EsyxAItoo=;
-        b=DTP9DHNq5jUm2XHGh/m/MlF5ZHRM+6H84xoxglPZV5KB0b8Dxe02cU/kU8iMZVhGEA
-         XMl8T6DYI+31yC7qfkqTb2p8nihDO0fQQMWRDzwy86DOwMwHT8tbT9g0HU6cnla9n5ec
-         lYhSg0YT2G96BPHcq+hHnlsWtcFQIeNeNczMBVOluy0HSXBc+PydxuyN3nPcXmLSKuqC
-         puKlMJEIXxR+4KLNlT8z36Z7qIqzHlaISjgpskp+5iafoz74oqj14Vz4HVBFK1AhSs5z
-         qhrVhm6B5iWwh7gwktS2j1U7Y/7l8Yvl5l5Vv5mvvjWlvXqq3qMLaWN1wyhzanAmWWuO
-         4CFg==
+         :content-disposition:in-reply-to:user-agent;
+        bh=lks2EMkJckKXXGPYQAgtI2m89X51SNXNx9xbd5ZHWuQ=;
+        b=RCNN9kyQCGrAsGwyCpavddgEtmbY9NeuE4Ot7kXpayx0n+zJI3lsI2t2ZO2EJFl5c2
+         sHK53YgOIlt6ckp0cZbPr6vfAmIMg7odXi4ueWZepSa/bSJPEUEYU2tmbuOMgYTh8QWN
+         dD8qYrjW5nH4I9/XgVeFtd9GutaSlGxrewRSxVwS4EaJJfilF6Qsl+4kPxuxsyOQ3DT7
+         XEZlBoNHQ5u86W+Wq0TO2e3QXnGrzD75ca8cb7JE78OFFhDiWzVvQtCO+BmHhyrRZ0qu
+         qHeedafEFUp4Qw/bXtmYn0jCL4Hx8yEJmkQj2kSqKiQbNqKjRtJHB+v8OZcXnp20B01T
+         0/QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=r7VFn3nngH4hNjFd5Mmo4mWEZGaDYjUWd1EsyxAItoo=;
-        b=s0VF2+J48Rl7FwG+K9XT8fPY+P2S/yuE86cd2i7mS63KqNx4MQjAFcN1Qw+U8rm5tN
-         chsTnfIREVn+8rn4Yll2/ZmeAKC0EpSgbO8tmZztASahq4wAbmsrmePLivm+GjWTxs8R
-         kKd8P9D1parVq8y3+Tr6ulMxcxX0TqvTblGVLFOEk0vd20zfPy/apBSZy9PV6ZjU44/A
-         fht+p2IXUAhiNNWMxB+JcgDc8+JP7lzo6Z3iO3tX0J+0bxJNQFrEDrwuLTOlM3gBnf0P
-         sGdlYINSchq/XysduoIlDk5JhNg7KfOfFI+n69hh2l2ak2sSf7+26T4L22+T2tjburWS
-         bsww==
-X-Gm-Message-State: AOAM532UVIHX4kp4dsRrMHlws3XxTcnZNXHqcv1N+oBTIyji+m/92Rbf
-        98MF87/Ag9hmrFpGz6Y0bBI=
-X-Google-Smtp-Source: ABdhPJxoFu1IAbWDj7jx4O7GbR2IpYAyiPT7hQ5/DScUoGyOeD3rzzw5Cta6ExLlJ3lVrTakmnoufw==
-X-Received: by 2002:a5d:4e07:0:b0:207:9a41:842f with SMTP id p7-20020a5d4e07000000b002079a41842fmr4269077wrt.232.1650642800770;
-        Fri, 22 Apr 2022 08:53:20 -0700 (PDT)
-Received: from localhost (92.40.203.64.threembb.co.uk. [92.40.203.64])
-        by smtp.gmail.com with ESMTPSA id p3-20020adfaa03000000b00207a1db96cfsm2185493wrd.71.2022.04.22.08.53.18
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=lks2EMkJckKXXGPYQAgtI2m89X51SNXNx9xbd5ZHWuQ=;
+        b=3HsOo9PPWykQoAxyA8zmsUyjrlHFECvLud50tzg4mOPb2RvZ2Sx9pUbu7RnGFnFUwe
+         lXkpz6CjuR4vrgfqCBJdXV+he1C4jWQ7PSLelM2JN4vVEcyrIOKcANg0okipqyuGWi1i
+         3rR/XSxKvmRVLHdPkxVJQWJoK3Zvdd9oCy7FOxyKvj2Q5NHPv9uGUjGOZ3y9ogIbKumf
+         77AyiFM1fvQC5uKe7vA67VIeZUBSOBxjSgJQhzl9RPQ6kDgtHumJHCETKLJH59hTMipy
+         XinbljZCUvcReKWdduOyCEWOUJ538Kb3tErxJw0O9z+5NEx2zl/9qxPofQA3A1gWFG5s
+         GamA==
+X-Gm-Message-State: AOAM531yPW+l4Bhrdf10y/7kXnKqKwve9Rx/k4kPm9TUe30dyHoByYuC
+        9ELHRNI/j0lgajFZxA1TakuziVMJsK8=
+X-Google-Smtp-Source: ABdhPJzr+3Gb2AIG7O7wrQYBlHeGFDGlNWyVADyEhW/hlpfcokuiZn9eYXUjmLhKsBDzcqhS2x/4CQ==
+X-Received: by 2002:a05:6512:3d14:b0:46b:81d9:b9ee with SMTP id d20-20020a0565123d1400b0046b81d9b9eemr3542774lfv.109.1650642886407;
+        Fri, 22 Apr 2022 08:54:46 -0700 (PDT)
+Received: from orome ([62.96.65.119])
+        by smtp.gmail.com with ESMTPSA id f4-20020a193804000000b00471a32f8f72sm264901lfa.229.2022.04.22.08.54.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 08:53:20 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 16:54:10 +0100
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, mturquette@baylibre.com,
-        paul@crapouillou.net, paulburton@kernel.org,
-        tsbogend@alpha.franken.de
-Subject: Re: [RESEND PATCH 2/3] clk: ingenic: Mark critical clocks in Ingenic
- SoCs
-Message-ID: <YmLPotnIBStYpapa@localhost>
-References: <20220411101441.17020-1-aidanmacdonald.0x0@gmail.com>
- <20220411101441.17020-3-aidanmacdonald.0x0@gmail.com>
- <20220422023359.87E8FC385A8@smtp.kernel.org>
+        Fri, 22 Apr 2022 08:54:45 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 17:54:42 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     paul@crapouillou.net, robh+dt@kernel.org,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: timer: Add PWM compatible for X1000
+ SoC
+Message-ID: <YmLPwtJYRE+qI2oJ@orome>
+References: <20220224234133.15708-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="wslXXE2EBCJbUgwQ"
 Content-Disposition: inline
-In-Reply-To: <20220422023359.87E8FC385A8@smtp.kernel.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20220224234133.15708-1-aidanmacdonald.0x0@gmail.com>
+User-Agent: Mutt/2.2.1 (c8109e14) (2022-02-19)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,28 +74,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 07:33:57PM -0700, Stephen Boyd wrote:
-> Quoting Aidan MacDonald (2022-04-11 03:14:40)
-> > Consider the CPU, L2 cache, and memory as critical to ensure they
-> > are not disabled.
-> > 
-> > Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-> > Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-> > ---
-> 
-> General comment, please add a comment around CLK_IS_CRITICAL usage if it
-> isn't very clear why such a clk shouldn't be turned off. Second, is
-> there any point in describing these clks in the kernel and using memory
-> to do that if they're just going to always be on? Wouldn't a dummy clk
-> returned from clk_get() work just as well if anything is grabbing a
-> reference with clk_get()?
 
-I'd guess they're there to keep track of which PLLs are in use, at least
-for SoCs that have more than one PLL. Using a dummy clock sounds like a
-bad idea since it won't represent that, and besides the clock configuration
-is something that can change at runtime so hardcoding it would be foolish.
+--wslXXE2EBCJbUgwQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I'll send a v2 with explanatory comments around CLK_IS_CRITICAL.
+On Thu, Feb 24, 2022 at 11:41:33PM +0000, Aidan MacDonald wrote:
+> The PWM hardware on the X1000 SoC is almost identical to other
+> Ingenic SoCs, so it can be used with only minor driver changes.
+>=20
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> ---
+> It seems Thierry picked up the driver patch separately (thanks for
+> that) so here's the DTS changes on their own. Would've uploaded a
+> v2 sooner but I was busy the past couple weeks and couldn't spend
+> any time on kernel stuff. I guess this isn't a v2 per se, but for
+> completeness:
+>=20
+> v1: https://lore.kernel.org/linux-mips/20220209231141.20184-1-aidanmacdon=
+ald.0x0@gmail.com/
+>=20
+>  Documentation/devicetree/bindings/timer/ingenic,tcu.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 
-Regards,
-Aidan
+Looks like I also somehow ended up applying this snippet, though
+possibly from the earlier patch.
+
+Thierry
+
+--wslXXE2EBCJbUgwQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmJiz8IACgkQ3SOs138+
+s6G8TA//aNfTdXlORXO6PccUeVulC2D1QRHujiQBe2dGOgoilLVkRc49K8fHizPf
+sOQ3ALFaibR6O1A9WjO0DuIQ//l/gt9NlTsuhFzklL8wkn6wy+lPEeUWpEyks+f2
+aly8o9m7zYBNhIDcB3M+t9DQ5YhrU5MlQRwDutupWSs7ayW2PrWJEsl7OoL2pjLM
+Y2M4JkcGD43WoYQsAuJxn+ZKYWC7pT7PeaO3sQpt9+/UzzFP9NWbSubVpfESNSE+
+38vmuytaEZtlLsnwPUJcf5xR99DmyEfIFcrlnxHGY1l9AnpVbAKGygtTE4l++Xrp
+LrIPob/y6eBC6J0BnOQ2hNBMNxxs6kL5smFgGPw+YlB1kBsYNLpG6RUBxsF6dv1k
+t0kVKYuiSojMF682A5ga1KUHPqL/FXAFpqT4HrciqHN8AHymaR50K6kMIybSNn6P
+gUxHr4hPDsaqmDDfyrnUyle+UbmCnP9TuHsikNj1LMgFXT7K58BYpM3uisLDlPap
+IMxQS5JizTulZ1Db+u4B0hgRk2vA0u320XGbP8Wf2wlvqxRaGSfFgDNo6WSzA3mz
+C4Ip+2eUjXpmAv5Ly91KYRvcOLWQ42glDhlNbAS6u/bEus8jN2isum9fXv6ctNeB
+caeel3DG+SZIAAs04/lEtTK2L65SyjLOXkw4QyBfegt/qMF6Tfs=
+=SaPD
+-----END PGP SIGNATURE-----
+
+--wslXXE2EBCJbUgwQ--

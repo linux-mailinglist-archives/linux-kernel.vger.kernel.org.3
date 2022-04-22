@@ -2,92 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DC7550BB4A
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:12:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7063B50BB66
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 17:12:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449225AbiDVPNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 11:13:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55674 "EHLO
+        id S1449257AbiDVPNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 11:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449230AbiDVPMy (ORCPT
+        with ESMTP id S1449277AbiDVPNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 11:12:54 -0400
-Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB1F1083;
-        Fri, 22 Apr 2022 08:09:58 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 08:09:48 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1650640196;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FuSilkQrD0XHypF9NHM/iQufTOifJtoJtKA0QjM80gQ=;
-        b=ogvZvMz0qmRqn6QDbBgi2ylHy0TQA3uWaXlbE2Qr5PhovLBd6Wn+NU6jdRIreeLszV8F0T
-        6vKrZZb2n1v73UODttDRnOV+VFz4bTzSb5v8lROD6lWxhYq1rSkVWs2ELGwxEOI0lkMR0a
-        /6VVGN0zpZMKdJS97D22pC8bfMik1wM=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Kent Overstreet <kent.overstreet@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, hch@lst.de, hannes@cmpxchg.org,
-        akpm@linux-foundation.org, linux-clk@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-input@vger.kernel.org
-Subject: Re: [PATCH v2 8/8] mm: Centralize & improve oom reporting in
- show_mem.c
-Message-ID: <YmLFPJTyoE4GYWp4@carbon>
-References: <20220421234837.3629927-1-kent.overstreet@gmail.com>
- <20220421234837.3629927-14-kent.overstreet@gmail.com>
- <YmKma/1WUvjjbcO4@dhcp22.suse.cz>
+        Fri, 22 Apr 2022 11:13:14 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E37495C376;
+        Fri, 22 Apr 2022 08:10:20 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23MEYpBg004664;
+        Fri, 22 Apr 2022 17:09:57 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=selector1;
+ bh=9QxTQMUq/Xo8vdY6aSgRWMlI+mjf+2qkd9WP7GUpTsg=;
+ b=Ln1OT3cHY7fMCotXOcF1xtV1w1/MCnpw+WVkG4tNhhJ1LT3BXhPKxK62Lc59rcjqhFor
+ ZP6AD9hOkedjAD+CsJ0UCmgNPK+ux54d0ho39Qz/y1Z2AGMv5ERelxM2O8tZotp85UxJ
+ Q+hwbXhapEObuiuEDJFEkDh3Qp2p9/nEAQl53QF8wQS0NeE4rdom9pvte7qZejNMrcxD
+ S/U7OgyukjJmEyPQBsRQCQzXGT0K5prJxp02FUInkyHoPRAI6wEmvexZe1lvJAQ9dFAJ
+ XYnSaovAiuu3Xnn9H20npmcC1S1GU+8T74C6vPkrA7y/xErV0MITVOP5dXU5/fP5Ks+i iA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ffpqe9v5h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 22 Apr 2022 17:09:57 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id EB02E10002A;
+        Fri, 22 Apr 2022 17:09:56 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E21A8233C65;
+        Fri, 22 Apr 2022 17:09:56 +0200 (CEST)
+Received: from localhost (10.75.127.51) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Fri, 22 Apr
+ 2022 17:09:56 +0200
+From:   Alexandre Torgue <alexandre.torgue@foss.st.com>
+To:     <arnd@arndb.de>, <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>, <soc@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-kernel@vger.kernel.org>, Marek Vasut <marex@denx.de>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        <etienne.carriere@st.com>
+Subject: [PATCH 4/8] dt-bindings: reset: stm32mp15: rename RST_SCMI define
+Date:   Fri, 22 Apr 2022 17:09:48 +0200
+Message-ID: <20220422150952.20587-5-alexandre.torgue@foss.st.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220422150952.20587-1-alexandre.torgue@foss.st.com>
+References: <20220422150952.20587-1-alexandre.torgue@foss.st.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YmKma/1WUvjjbcO4@dhcp22.suse.cz>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.51]
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-22_04,2022-04-22_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 02:58:19PM +0200, Michal Hocko wrote:
-> On Thu 21-04-22 19:48:37, Kent Overstreet wrote:
-> > This patch:
-> >  - Changes show_mem() to always report on slab usage
-> >  - Instead of reporting on all slabs, we only report on top 10 slabs,
-> >    and in sorted order
-> 
-> As I've already pointed out in the email thread for the previous
-> version, this would be better in its own patch explaining why we want to
-> make this unconditional and why to limit the number caches to print.
-> Why the trashold shouldn't be absolute size based?
-> 
-> >  - Also reports on shrinkers, with the new shrinkers_to_text().
-> >    Shrinkers need to be included in OOM/allocation failure reporting
-> >    because they're responsible for memory reclaim - if a shrinker isn't
-> >    giving up its memory, we need to know which one and why.
->
-> Again, I do agree that information about shrinkers can be useful but
-> there are two main things to consider. Do we want to dump that
-> information unconditionaly? E.g. does it make sense to print for all
-> allocation requests (even high order, GFP_NOWAIT...)? Should there be
-> any explicit trigger when to dump this data (like too many shrinkers
-> failing etc)?
+As we only have one SCMI instance, it's not necessary to add an index to
+the name.
 
-To add a concern: largest shrinkers are usually memcg-aware. Scanning
-over the whole cgroup tree (with potentially hundreds or thousands of cgroups)
-and over all shrinkers from the oom context sounds like a bad idea to me.
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
 
-IMO it's more appropriate to do from userspace by oomd or a similar daemon,
-well before the in-kernel OOM kicks in.
+diff --git a/include/dt-bindings/reset/stm32mp1-resets.h b/include/dt-bindings/reset/stm32mp1-resets.h
+index f3a0ed317835..4ffa7c3612e6 100644
+--- a/include/dt-bindings/reset/stm32mp1-resets.h
++++ b/include/dt-bindings/reset/stm32mp1-resets.h
+@@ -107,17 +107,17 @@
+ #define GPIOK_R		19786
+ 
+ /* SCMI reset domain identifiers */
+-#define RST_SCMI0_SPI6		0
+-#define RST_SCMI0_I2C4		1
+-#define RST_SCMI0_I2C6		2
+-#define RST_SCMI0_USART1	3
+-#define RST_SCMI0_STGEN		4
+-#define RST_SCMI0_GPIOZ		5
+-#define RST_SCMI0_CRYP1		6
+-#define RST_SCMI0_HASH1		7
+-#define RST_SCMI0_RNG1		8
+-#define RST_SCMI0_MDMA		9
+-#define RST_SCMI0_MCU		10
+-#define RST_SCMI0_MCU_HOLD_BOOT	11
++#define RST_SCMI_SPI6		0
++#define RST_SCMI_I2C4		1
++#define RST_SCMI_I2C6		2
++#define RST_SCMI_USART1	3
++#define RST_SCMI_STGEN		4
++#define RST_SCMI_GPIOZ		5
++#define RST_SCMI_CRYP1		6
++#define RST_SCMI_HASH1		7
++#define RST_SCMI_RNG1		8
++#define RST_SCMI_MDMA		9
++#define RST_SCMI_MCU		10
++#define RST_SCMI_MCU_HOLD_BOOT	11
+ 
+ #endif /* _DT_BINDINGS_STM32MP1_RESET_H_ */
+-- 
+2.17.1
 
-> 
-> Last but not least let me echo the concern from the other reply. Memory
-> allocations are not really reasonable to be done from the oom context so
-> the pr_buf doesn't sound like a good tool here.
-
-+1

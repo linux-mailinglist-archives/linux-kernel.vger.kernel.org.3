@@ -2,177 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1132450C055
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 21:25:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 250D550C093
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 21:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbiDVT0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 15:26:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39338 "EHLO
+        id S229612AbiDVTy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 15:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiDVT0Q (ORCPT
+        with ESMTP id S229445AbiDVTyY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 15:26:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E5B291D43;
-        Fri, 22 Apr 2022 12:20:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 96CF961CEB;
-        Fri, 22 Apr 2022 19:16:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2A8DC385BC;
-        Fri, 22 Apr 2022 19:16:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650654997;
-        bh=usqLrTa+RhNIXODsvc1TquBT71WxqcNK2RxgDri8djo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=BcbAj7n7cyrdsYQDBhKMzC/YUP1oi3n0WJLV/Vawg0ETGgRxV3laogMOtLoZsS2S6
-         deAr85yKEmeImhiHAgSHPYRkW4keZh105LIDrm0LR/EY+7ylYYi5+Ag9M9tf4obaqu
-         6qys2kdldoqnru7mzQfJXQU9V+CnbiPr9Tktzh6HF1FiaQ3cdZifzPK+IzTLrZupY3
-         nj76lUfw/prvPD39owSDZAYYqmaY/o4jd1l0MOSMfMfXqhh6ksSgKZQso7EdYWgT82
-         sS83lues1q+E9qW5a3gPFPNwTUorxb9c9MGc25aNl98SvSiYw+tUUBKBn/94bqxJ36
-         XhAvozQCefNHg==
-Received: by mail-wr1-f47.google.com with SMTP id q7so4751997wrm.5;
-        Fri, 22 Apr 2022 12:16:36 -0700 (PDT)
-X-Gm-Message-State: AOAM531y3Mhhr0MFAokHPZ9evsmIFRZ5vjPGpIPLwUldh7tqQdpP0bLv
-        T2dgMunT5PXj2CquFVe+0ENKqNdJTU5JzhwERSI=
-X-Google-Smtp-Source: ABdhPJw6+Yao9x3BaLiJGzKRj3K3UIg0JnN9aGyxH7bzbX5jCygm3ZIZ1bsSqfcHE9peInK43hwx2CakFvcKMsS3Rps=
-X-Received: by 2002:a5d:6983:0:b0:207:a226:df4b with SMTP id
- g3-20020a5d6983000000b00207a226df4bmr5002354wru.192.1650654994816; Fri, 22
- Apr 2022 12:16:34 -0700 (PDT)
+        Fri, 22 Apr 2022 15:54:24 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EBA2D8846;
+        Fri, 22 Apr 2022 12:35:10 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id y129so6531867qkb.2;
+        Fri, 22 Apr 2022 12:35:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=uaw3jQI0O7lfuasFDAU1iMGalKK6DqU9oePbaLb6Lpo=;
+        b=jSBuMPPxD+TRF+uvoRePfqLx62akhHX4yKi60akXL8zvbnY79lrrPOv9UdoTTN6G03
+         Z3Z6xJWsC44e2+sH601gYFYQRahbzOlLTXCLTR7DpvXVU7hdwors1gULh5GCqc6Ai1Xp
+         xH2iybM481G86VuD9jW/RRoA7ua81x00JPulz+mRHkD1xdubsNPwLiT4kmVqxX7Rwm0+
+         bWXe1pdPRZ/WrNqxSXBKagepCTNXYFpKudiprDzf06IGDaereV2WJ1I+PhmjNJcvMCER
+         qqEMvrIVug0YQphPqXtbOOyBwQi0iB/t+Dyq8nT6ygBsRs4PscXLhPGC/9Je3uLiCX0R
+         juyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uaw3jQI0O7lfuasFDAU1iMGalKK6DqU9oePbaLb6Lpo=;
+        b=2X8WOImVhKdMo0TGPNY3KZo0A+tqRfF2CF80XBSU+QaGtTd50MKKin3wJ5bb0R1pmg
+         sX21ewhszMCtim9Pa/ZGO0sJNAr2YbxUmT+WWaAszsScwZv9mrgninPMmSUskjo8FMAH
+         eJrtXv8Oy9mQz73k1AMPDOl0We0By9k7hLuBL1KyzwZ1/CHc9QlyPsXe/Z1x3ZWPLUFb
+         dg+6Ft7YDJEQcixLjTsAWi3VfnxtDadzHlLsgIEt4CGE4o+3SkBmqKxL6+wXhnITGRks
+         1ne9NNDZFOXTBeLq8y6rovBpCNJQBqiFwxvCufOLDebLSBWgCQV0Yeq0QGJ9xgIg1ufs
+         8W2A==
+X-Gm-Message-State: AOAM530cs6eX1vqWvq+Z+CD7jARDTcbQsidB6tcDvT49L3e+yGXSkVg5
+        bdenq8RSTO9zn1dUBJyiqzABVP0BKdEi
+X-Google-Smtp-Source: ABdhPJwRNFuGFN5zUpqH2tATD7eZCTHBc5A5LvoxXTRq8ugddn1nAMCTX2JWMw8ITL691waO11UeTQ==
+X-Received: by 2002:a37:6902:0:b0:606:853:fe50 with SMTP id e2-20020a376902000000b006060853fe50mr3597093qkc.751.1650655818042;
+        Fri, 22 Apr 2022 12:30:18 -0700 (PDT)
+Received: from moria.home.lan (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
+        by smtp.gmail.com with ESMTPSA id bl14-20020a05620a1a8e00b0069e622e593esm1219789qkb.95.2022.04.22.12.30.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 12:30:17 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 15:30:15 -0400
+From:   Kent Overstreet <kent.overstreet@gmail.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        hannes@cmpxchg.org, akpm@linux-foundation.org,
+        linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-input@vger.kernel.org, roman.gushchin@linux.dev
+Subject: Re: [PATCH v2 1/8] lib/printbuf: New data structure for
+ heap-allocated strings
+Message-ID: <20220422193015.2rs2wvqwdlczreh3@moria.home.lan>
+References: <20220421234837.3629927-1-kent.overstreet@gmail.com>
+ <20220421234837.3629927-7-kent.overstreet@gmail.com>
+ <20220422042017.GA9946@lst.de>
+ <YmI5yA1LrYrTg8pB@moria.home.lan>
+ <20220422052208.GA10745@lst.de>
+ <YmI/v35IvxhOZpXJ@moria.home.lan>
+ <20220422113736.460058cc@gandalf.local.home>
 MIME-Version: 1.0
-References: <20220419163810.2118169-1-arnd@kernel.org> <20220422170530.GA2338209@roeck-us.net>
-In-Reply-To: <20220422170530.GA2338209@roeck-us.net>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Fri, 22 Apr 2022 21:16:18 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
-Message-ID: <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
-Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Tomas Cech <sleep_walker@suse.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220422113736.460058cc@gandalf.local.home>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 7:05 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Tue, Apr 19, 2022 at 06:37:22PM +0200, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > This revisits a series I sent a few years ago:
-> >
-> > https://lore.kernel.org/lkml/20191018154052.1276506-1-arnd@arndb.de/
-> >
-> > All the other ARMv5 conversions are under way now, with
-> > OMAP1 being the only one still not in linux-next yet,
-> > and PXA completing the set.
-> >
-> > Most of the patches are unchanged from before, furtunately
-> > the PXA code is fairly stable. I addressed Robert's comments,
-> > pulled in two patches from Dmitry, and added the last a the
-> > final four patches to finish off the multiplatform conversion.
-> >
-> > I hope someone is left to test these on PXA: if this works,
-> > I'd like to merge it for 5.19. A git tree with these is avaialable
-> > for testing at
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/log/?h=pxa-multiplatform-5.18
-> >
->
-> Unfortunately that crashes for me when trying to boot from ide.
-> Bisect points to the last patch of the series.
+Hi Steve!
 
-Thanks a lot for testing and the perfect bug report!
+On Fri, Apr 22, 2022 at 11:37:36AM -0400, Steven Rostedt wrote:
+> On Fri, 22 Apr 2022 01:40:15 -0400
+> Kent Overstreet <kent.overstreet@gmail.com> wrote:
+> 
+> > So I'm honestly not super eager to start modifying tricky arch code that I can't
+> > test, and digging into what looked like non trivial interactions between the way
+> > the traceing code using seq_buf (naturally, given that's where it originates).
+> 
+> Yes, seq_buf came from the tracing system but was to be used in a more
+> broader way. I had originally pushed trace_seq into the lib directory, but
+> Andrew Morton said it was too specific to tracing. Thus, I gutted the
+> generic parts out of it and created seq_buf, which looks to be something
+> that you could use. I had patches to convert seq_file to it, but ran out of
+> time. I probably can pull them out of the closet and start that again.
+> 
+> > 
+> > Now yes, I _could_ do a wholesale conversion of seq_buf to printbuf and delete
+> > that code, but doing that job right, to be confident that I'm not introducing
+> > bugs, is going to take more time than I really want to invest right now. I
+> > really don't like to play fast and loose with that stuff.
+> 
+> I would be happy to work with you to convert to seq_buf. If there's
+> something missing from it, I can help you change it so that it doesn't
+> cause any regressions with the tracing subsystem.
+> 
+> This is how open source programming is suppose to work ;-)
 
-> [    1.403715] 8<--- cut here ---
-> [    1.403848] Unable to handle kernel paging request at virtual address feeb000e
-> [    1.404097] [feeb000e] *pgd=00000000
+Is it though? :)
 
-Ok, this is the PCI I/O space area, which starts at 0xfee00000,
-clearly the way I/O space
-gets mapped changed here. I don't yet see what happened, but it should
-be straightforward
-to find from here.
+One of the things I've been meaning to talk more about, that
+came out of a recent Rust discussion, is that we in the kernel community could
+really do a better job with how we interact with the outside world, particularly
+with regards to the sharing of code.
 
-> [    1.416643]  pcmcia_init_one from pcmcia_device_probe+0xe4/0x2a0
-> [    1.416882]  pcmcia_device_probe from really_probe+0xc8/0x3b4
-> [    1.417070]  really_probe from __driver_probe_device+0x9c/0x214
-> [    1.417255]  __driver_probe_device from driver_probe_device+0x38/0xe0
-> [    1.417454]  driver_probe_device from __device_attach_driver+0xa4/0x11c
-> [    1.417657]  __device_attach_driver from bus_for_each_drv+0x88/0xd8
-> [    1.417864]  bus_for_each_drv from __device_attach+0xf4/0x194
-> [    1.418047]  __device_attach from bus_probe_device+0x8c/0x94
-> [    1.418224]  bus_probe_device from device_add+0x3d0/0x894
-> [    1.418395]  device_add from pcmcia_device_add+0x2ec/0x3e0
-> [    1.418568]  pcmcia_device_add from pcmcia_card_add+0xd4/0x1a0
-> [    1.418756]  pcmcia_card_add from pcmcia_bus_add+0x44/0x4c
-> [    1.418930]  pcmcia_bus_add from socket_insert+0x12c/0x150
-> [    1.419103]  socket_insert from pccardd+0x398/0x44c
-> [    1.419257]  pccardd from kthread+0xdc/0x114
-> [    1.419400]  kthread from ret_from_fork+0x14/0x2c
-> [    1.419569] Exception stack(0xc48a5fb0 to 0xc48a5ff8)
-> [    1.419735] 5fa0:                                     00000000 00000000 00000000 00000000
-> [    1.419979] 5fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-> [    1.420222] 5fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-> [    1.420501] Code: 13570000 e1a06000 0a000043 e3a03002 (e5c03000)
-> [    1.420874] ---[ end trace 0000000000000000 ]---
->
-> ---
-> # bad: [7643a9ca9f8e08f71e15f89dd74863635e981e03] ARM: pxa: convert to multiplatform
-> # good: [3123109284176b1532874591f7c81f3837bbdc17] Linux 5.18-rc1
-> git bisect start 'HEAD' 'v5.18-rc1'
-> # good: [9b03d7f95bd4d97101ecb8ea1e822103b81fdb2d] ARM: pxa: mainstone-wm97xx: use gpio lookup table
-> git bisect good 9b03d7f95bd4d97101ecb8ea1e822103b81fdb2d
-> # good: [764063eee7620ea9abb940068a7ad0e7f9efa1b6] cpufreq: pxa3: move clk register access to clk driver
-> git bisect good 764063eee7620ea9abb940068a7ad0e7f9efa1b6
-> # good: [5153474f0a4388b7ddb59add4be73bfb42b2007f] ARM: mmp: remove tavorevb board support
-> git bisect good 5153474f0a4388b7ddb59add4be73bfb42b2007f
-> # good: [2746f7c78b428c8b01b691a29a972c08101ae343] ARM: PXA: fix multi-cpu build of xsc3
-> git bisect good 2746f7c78b428c8b01b691a29a972c08101ae343
-> # good: [73d5106e9489464eac84362705e93bcf3b376123] ARM: pxa: remove support for MTD_XIP
-> git bisect good 73d5106e9489464eac84362705e93bcf3b376123
-> # first bad commit: [7643a9ca9f8e08f71e15f89dd74863635e981e03] ARM: pxa: convert to multiplatform
+The point was made to me when another long standing kernel dev was complaining
+about Facebook being a large, insular, difficult to work with organization, that
+likes to pretend it is the center of the universe and not bend to the outside
+world, while doing the exact same thing with respect to new concerns brought by
+the Rust community. The irony was illuminating :)
 
-I'll back out this patch for now while investigating further.
+The reason I bring that up is that in this case, printbuf is the more evolved,
+more widely used implementation, and you're asking me to discard it so the
+kernel can stick with its more primitive, less widely used implementation.
 
-Which machine did you hit this on? Is this on hardware or in qemu?
+$ git grep -w seq_buf|wc -l
+86
 
-       Arnd
+$ git grep -w printbuf|wc -l
+366
+
+So, going to have to push back on that one :)
+
+Printbufs aren't new code; everything in them is there because I've found it
+valuable, which is why I decided to try promoting them to the kernel proper (and
+more importantly, the idea of a standard way to pretty-print anything).
+
+I'm happy to discuss the merits of the code more, and try to convince you why
+you'll like them :)

@@ -2,169 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4FFC50B75D
+	by mail.lfdr.de (Postfix) with ESMTP id 3CC0550B75B
 	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 14:31:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447541AbiDVMeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 08:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49980 "EHLO
+        id S1447549AbiDVMeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 08:34:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447540AbiDVMeO (ORCPT
+        with ESMTP id S1447543AbiDVMeT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 08:34:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A03254BC3
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 05:31:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7EB8B82CD3
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 12:31:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F9C5C385A0;
-        Fri, 22 Apr 2022 12:31:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650630678;
-        bh=B0FfGg08Iiv7pykm+jqHRmeXsu0/oIWa+m7eEXoWwkw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L2nERJK9AIVns/WkGlmLNC2c0DHBsR2l7dmulew/h50tXqj/il0W9O8w3l6g4D8eu
-         rw3FJgrMlX1iTWHTgTi2Rq6ZenQTltxBlddZ1j8kakP4r2acTqS5MzsX4n1sVDiQi0
-         /8bu0EvNgrs1wWyh1Q18lCgHHMWUsEEHiZ0PR40Y=
-Date:   Fri, 22 Apr 2022 14:31:14 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Qing Wang <wangqing@vivo.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com
-Subject: Re: [PATCH V2 2/2] arm64: Add complex scheduler level for arm64
-Message-ID: <YmKgEmna8PNF9xlG@kroah.com>
-References: <1650628289-67716-1-git-send-email-wangqing@vivo.com>
- <1650628289-67716-3-git-send-email-wangqing@vivo.com>
+        Fri, 22 Apr 2022 08:34:19 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62ADE517EA;
+        Fri, 22 Apr 2022 05:31:26 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id r19so5016580wmq.0;
+        Fri, 22 Apr 2022 05:31:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=CBcYiF6362uk33z6W6pwWYiGiENSgVP0CPFI16Cm26o=;
+        b=GxGdiWg1HKUPuzArMV6q7mYMHSw5fVQXbIsdKBZEmY18qLoQ/3od67tJgJavDorpuh
+         x3QJ6ZiBT9hn3e+ycWnWXxTP/kzAchfYGmDC2xiXsNoJC7vZ9d7jONp4FlmPsoJgEV19
+         1o7JeRo5p2q9xwzmxzTNXU1/RdbHeh9Cpxikpcc8o//YNZJeefFjbx5EKIQhBdHe85se
+         MBS5Lo62p93P41R9OSuhcsGmWxq1Xd/+L+p4TD6Iizs8qUvSO5TX7LEiw0V//4Zf9XkV
+         +QcE5kkh6m2dTwgVTKdPpJ+L2C3jTZefzjRzV0qPTTv0F9BZ7bL+mxO6V5zXNaxYjlVN
+         aKRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=CBcYiF6362uk33z6W6pwWYiGiENSgVP0CPFI16Cm26o=;
+        b=YXHrPyC3MFIoCcGKPYdMOYLZJATM8HgIGWJ0KEjF4Exi2C+KCCD5CifCtpJWvWUbaX
+         ZyP+sVi0FgiMWBGKgeaNB7eZspCNYtRLEVaykxvNa6yMCuXdwBkfuVEK/frWob+w8VWc
+         o2KSkyG7+6C6b/bHC4Y3C3oJ5Se2yfEycJ8liKvb67aC19P9EkLBFc2YJpExLAn9OE4y
+         8AtyZs2y2j/LObLh8yex+FEgId0+n0nxshOPfdVebQZxzlbREFUlXzJkZh8nwPYGS0lX
+         zSYZSNW5PwBfwTyLlHu2atIOfTCNbtau3flKgtjMCY6BpgWCYP7lJEEIiIGTzSvb0UGf
+         MpiQ==
+X-Gm-Message-State: AOAM532N340rvuayW25K4/lxwHyVt1iucOsSS6rDpyHfCtB4muMw+DCK
+        moMNJa/t4th2ziYI3dQf7bE=
+X-Google-Smtp-Source: ABdhPJxAXSLZr0cbOfuaLrq9lwbUFGLwRJ/KMqDo3dR+G9jBSah8w2G7ldUeCdqYhnSSMDrXLwu2pg==
+X-Received: by 2002:a1c:6a02:0:b0:38b:3661:47f1 with SMTP id f2-20020a1c6a02000000b0038b366147f1mr3933534wmc.5.1650630684935;
+        Fri, 22 Apr 2022 05:31:24 -0700 (PDT)
+Received: from [192.168.1.145] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id n12-20020a5d588c000000b0020a9e80d2b1sm2041357wrf.107.2022.04.22.05.31.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Apr 2022 05:31:24 -0700 (PDT)
+Message-ID: <074d8c26-3fb7-bee1-d559-7ce96f583fee@gmail.com>
+Date:   Fri, 22 Apr 2022 14:31:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1650628289-67716-3-git-send-email-wangqing@vivo.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v20 2/8] soc: mediatek: add mtk-mutex support for mt8195
+ vdosys0
+Content-Language: en-US
+To:     Jason-JH Lin <jason-jh.lin@mediatek.com>,
+        CK Hu <ck.hu@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Nancy Lin <nancy.lin@mediatek.com>,
+        Singo Chang <singo.chang@mediatek.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220419094143.9561-1-jason-jh.lin@mediatek.com>
+ <20220419094143.9561-3-jason-jh.lin@mediatek.com>
+ <82cc5e6900138e13ed9d75c6d2a42c6d7afc1959.camel@mediatek.com>
+ <c3de9ccb314316b5296b115dd3e9f8171577489f.camel@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <c3de9ccb314316b5296b115dd3e9f8171577489f.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 04:51:26AM -0700, Qing Wang wrote:
-> From: Wang Qing <wangqing@vivo.com>
+
+
+On 22/04/2022 04:32, Jason-JH Lin wrote:
+> Hi CK,
 > 
-> The DSU-110 DynamIQ™ cluster supports blocks that are called complexes
-> which contain up to two cores of the same type and some shared logic.
-> Sharing some logic between the cores can make a complex area efficient.
+> Thanks for the reviews.
 > 
-> This patch adds complex level for complexs and automatically enables
-> the load balance among complexs. It will directly benefit a lot of
-> workload which loves more resources such as memory bandwidth, caches.
+> On Thu, 2022-04-21 at 14:50 +0800, CK Hu wrote:
+>> Hi, Jason:
+>>
+>> On Tue, 2022-04-19 at 17:41 +0800, jason-jh.lin wrote:
+>>> Add mtk-mutex support for mt8195 vdosys0.
+>>>
+>>> Signed-off-by: jason-jh.lin <jason-jh.lin@mediatek.com>
+>>> Acked-by: AngeloGioacchino Del Regno <
+>>> angelogioacchino.delregno@collabora.com>
+>>> Tested-by: Fei Shao <fshao@chromium.org>
+>>> ---
+>>>   drivers/soc/mediatek/mtk-mutex.c | 87
+>>> ++++++++++++++++++++++++++++++--
+>>>   1 file changed, 84 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/drivers/soc/mediatek/mtk-mutex.c
+>>> b/drivers/soc/mediatek/mtk-mutex.c
+>>> index aaf8fc1abb43..729ee88035ed 100644
+>>> --- a/drivers/soc/mediatek/mtk-mutex.c
+>>> +++ b/drivers/soc/mediatek/mtk-mutex.c
+>>> @@ -17,6 +17,9 @@
+>>>   #define MT8183_MUTEX0_MOD0			0x30
+>>>   #define MT8183_MUTEX0_SOF0			0x2c
+>>>   
+>>> +#define MT8195_DISP_MUTEX0_MOD0			0x30
+>>> +#define MT8195_DISP_MUTEX0_SOF			0x2c
+>>
+>> This is identical to mt8183, so use mt8183 one instead of creating
+>> new
+>> one.
+>>
+>> Regards,
+>> CK
+>>
+> I'll fix this in the next version.
+
+Please send this as a follow-up fix on top of:
+https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/log/?h=v5.18-next/soc
+
+Regards,
+Matthias
+
 > 
-> Testing has been done with Stream benchmark:
-> 8threads stream (2 little cores * 2(complex) + 3 medium cores + 1 big core)
->                 stream                 stream
->                 w/o patch              w/ patch
-> MB/sec copy     37579.2 (   0.00%)    39127.3 (   4.12%)
-> MB/sec scale    38261.1 (   0.00%)    39195.4 (   2.44%)
-> MB/sec add      39497.0 (   0.00%)    41101.5 (   4.06%)
-> MB/sec triad    39885.6 (   0.00%)    40772.7 (   2.22%)
-> 
-> And in order to support this features, we defined arm64_topology.
-> 
-> V2:
-> fix commit log and loop more
-> 
-> Signed-off-by: Wang Qing <wangqing@vivo.com>
-> ---
->  arch/arm64/Kconfig      | 13 +++++++++++
->  arch/arm64/kernel/smp.c | 48 ++++++++++++++++++++++++++++++++++++++++-
->  2 files changed, 60 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index edbe035cb0e3..4063de8c6153 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -1207,6 +1207,19 @@ config SCHED_CLUSTER
->  	  by sharing mid-level caches, last-level cache tags or internal
->  	  busses.
->  
-> +config SCHED_COMPLEX
-> +	bool "Complex scheduler support"
-> +	help
-> +	  DSU supports blocks that are called complexes which contain up to
-> +	  two cores of the same type and some shared logic. Sharing some logic
-> +	  between the cores can make a complex area efficient.
-> +
-> +	  Complex also can be considered as a shared cache group smaller
-> +	  than cluster.
-> +
-> +	  Complex scheduler support improves the CPU scheduler's decision
-> +	  making when dealing with machines that have complexs of CPUs.
-> +
->  config SCHED_SMT
->  	bool "SMT scheduler support"
->  	help
-> diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
-> index 3b46041f2b97..526765112146 100644
-> --- a/arch/arm64/kernel/smp.c
-> +++ b/arch/arm64/kernel/smp.c
-> @@ -14,6 +14,7 @@
->  #include <linux/sched/mm.h>
->  #include <linux/sched/hotplug.h>
->  #include <linux/sched/task_stack.h>
-> +#include <linux/sched/topology.h>
->  #include <linux/interrupt.h>
->  #include <linux/cache.h>
->  #include <linux/profile.h>
-> @@ -57,6 +58,10 @@
->  DEFINE_PER_CPU_READ_MOSTLY(int, cpu_number);
->  EXPORT_PER_CPU_SYMBOL(cpu_number);
->  
-> +#ifdef SCHED_COMPLEX
-> +DEFINE_PER_CPU_READ_MOSTLY(cpumask_t, cpu_complex_map);
-> +#endif
-
-ifdefs should not be in .c files.
-
-
-> +
->  /*
->   * as from 2.5, kernels no longer have an init_tasks structure
->   * so we need some other way of telling a new secondary core
-> @@ -715,6 +720,47 @@ void __init smp_init_cpus(void)
->  	}
->  }
->  
-> +#ifdef SCHED_COMPLEX
-
-same here.
-
-> +static int arm64_complex_flags(void)
-> +{
-> +	return SD_SHARE_PKG_RESOURCES;
-> +}
-> +
-> +const struct cpumask *arm64_complex_mask(int cpu)
-> +{
-> +	const struct cpumask *core_mask = cpu_cpu_mask(cpu);
-> +
-> +	/* Find the smaller shared cache level than clustergroup and coregroup*/
-> +#ifdef CONFIG_SCHED_MC
-> +	core_mask = cpu_coregroup_mask(cpu);
-> +#endif
-> +#ifdef CONFIG_SCHED_CLUSTER
-> +	core_mask = cpu_clustergroup_mask(cpu);
-> +#endif
-
-See, same here.  This is a mess and unmaintainable.
-
-thanks,
-
-greg k-h
+> Regards,
+> Jason-JH.Lin.
+>>>
+>>>   
+>>> +static const struct mtk_mutex_data mt8195_mutex_driver_data = {
+>>> +	.mutex_mod = mt8195_mutex_mod,
+>>> +	.mutex_sof = mt8195_mutex_sof,
+>>> +	.mutex_mod_reg = MT8195_DISP_MUTEX0_MOD0,
+>>> +	.mutex_sof_reg = MT8195_DISP_MUTEX0_SOF,
+>>> +};
+>>> +
+>>>   
+>>
+>>

@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D82150B501
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 117A650B515
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:29:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446542AbiDVKaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 06:30:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58616 "EHLO
+        id S1446554AbiDVKam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 06:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446533AbiDVKab (ORCPT
+        with ESMTP id S1446540AbiDVKag (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 06:30:31 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6890654BED;
-        Fri, 22 Apr 2022 03:27:36 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 10:27:32 -0000
+        Fri, 22 Apr 2022 06:30:36 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2910D54BF5;
+        Fri, 22 Apr 2022 03:27:42 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 10:27:40 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1650623254;
+        s=2020; t=1650623261;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BSv6tskMto6sfNS9ZKQytGNWEgqOUWwp68HL4mFtntI=;
-        b=OvdUnWQIT2qf75hV2wdF7o8dhvLKqaF9WVP3PyVy3sw4gbaas/aMdcFcRjJ6saTortTI1V
-        MRgyB+rxAnPq5O6m8YaP133epchSBUkUhz9q+N66icU3EV6YDxhYYvNIubjBLr188JfzXp
-        yk5ObEZrEVoWRed6nt91NTYFfi09zd+zJ+I2ED6B7OD+4hAL0QTqbuG1Om+qM4PbZ4wTJO
-        ig+qqlyB6dT/RpVcG1oR7ndWu+9juaYfBadFFQIMiJM8bGQiAIEXF2bIjSlUhbfpFA4Gq+
-        zFrMdwluMMTbbHeYclMqF9ZWHY6yI0zfU5gw/+2Z6zb9FnZ9SEtBv5t1bRASvw==
+        bh=teOH439CL13s2Fik94mdeuFW3qMai2ULGSkcDlXTTO0=;
+        b=jhxORQd73g5jY3hX9HNBFt8Ve3WdXFS5uc2PYmxPKkqYTupJIQBvX1KGorx2B/Tw+s4F/F
+        7+dGVzfI/gV0McAcm0B3JIerzNYQ8lCqpq9Bh5caQBW5fdoH1ukTsWwRNMv94uQTiICzLt
+        03XD+JotRRwH2c6dbABqycdrCJF4RC9sbGamFUBPFLSR7VUvw5c0/du7vu4SPWZ1gdHkeA
+        7XMgFiiX2V7XWMAEYrCXbCAAOxekCV0+ELo7Gh1INSt4qhlQrvRZ/jhlJ9Y0zXqXSKZllU
+        X+7TYu/HTdOU0SBeAH40WbQq8R6x8zzI2YqGSSsWpesRCRzc3P1xsHgkMWo++A==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1650623254;
+        s=2020e; t=1650623261;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BSv6tskMto6sfNS9ZKQytGNWEgqOUWwp68HL4mFtntI=;
-        b=PMegcjfG01Pdjf7NiizyAF+sxqYmYna2K37+xzhE+CekTC6Z5YdDWEOBP3gCyj3w23P712
-        Jwt0Z1RvrTLCjeCw==
-From:   "tip-bot2 for Marco Elver" <tip-bot2@linutronix.de>
+        bh=teOH439CL13s2Fik94mdeuFW3qMai2ULGSkcDlXTTO0=;
+        b=c8NqAdYfu7i97oIFkpVvThhfBnqncQpy2L4yW049ji8kqWmjNF/YhIoVa2Plp5cgXZpWt5
+        y3o5pRczKMI2QFBw==
+From:   "tip-bot2 for Tao Zhou" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] signal: Deliver SIGTRAP on perf event asynchronously
- if blocked
-Cc:     Dmitry Vyukov <dvyukov@google.com>, Marco Elver <elver@google.com>,
+Subject: [tip: sched/core] sched/fair: Revise comment about lb decision matrix
+Cc:     Tao Zhou <tao.zhou@linux.dev>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>, x86@kernel.org,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220404111204.935357-1-elver@google.com>
-References: <20220404111204.935357-1-elver@google.com>
+In-Reply-To: <20220415095505.7765-1-tao.zhou@linux.dev>
+References: <20220415095505.7765-1-tao.zhou@linux.dev>
 MIME-Version: 1.0
-Message-ID: <165062325293.4207.1642060359321395455.tip-bot2@tip-bot2>
+Message-ID: <165062326028.4207.17060214721845047142.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,293 +66,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the perf/core branch of tip:
+The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     78ed93d72ded679e3caf0758357209887bda885f
-Gitweb:        https://git.kernel.org/tip/78ed93d72ded679e3caf0758357209887bda885f
-Author:        Marco Elver <elver@google.com>
-AuthorDate:    Mon, 04 Apr 2022 13:12:04 +02:00
+Commit-ID:     a658353167bf2ea6052cee071dbcc13e0f229dc9
+Gitweb:        https://git.kernel.org/tip/a658353167bf2ea6052cee071dbcc13e0f229dc9
+Author:        Tao Zhou <tao.zhou@linux.dev>
+AuthorDate:    Fri, 15 Apr 2022 17:55:04 +08:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Fri, 22 Apr 2022 12:14:05 +02:00
+CommitterDate: Fri, 22 Apr 2022 12:14:08 +02:00
 
-signal: Deliver SIGTRAP on perf event asynchronously if blocked
+sched/fair: Revise comment about lb decision matrix
 
-With SIGTRAP on perf events, we have encountered termination of
-processes due to user space attempting to block delivery of SIGTRAP.
-Consider this case:
+If busiest group type is group_misfit_task, the local
+group type must be group_has_spare according to below
+code in update_sd_pick_busiest():
 
-    <set up SIGTRAP on a perf event>
-    ...
-    sigset_t s;
-    sigemptyset(&s);
-    sigaddset(&s, SIGTRAP | <and others>);
-    sigprocmask(SIG_BLOCK, &s, ...);
-    ...
-    <perf event triggers>
+  if (sgs->group_type == group_misfit_task &&
+      (!capacity_greater(capacity_of(env->dst_cpu), sg->sgc->max_capacity) ||
+       sds->local_stat.group_type != group_has_spare))
+	   return false;
 
-When the perf event triggers, while SIGTRAP is blocked, force_sig_perf()
-will force the signal, but revert back to the default handler, thus
-terminating the task.
+group type imbalanced and overloaded and fully_busy are filtered in here.
+misfit and asym are filtered before in update_sg_lb_stats().
+So, change the decision matrix to:
 
-This makes sense for error conditions, but not so much for explicitly
-requested monitoring. However, the expectation is still that signals
-generated by perf events are synchronous, which will no longer be the
-case if the signal is blocked and delivered later.
+  busiest \ local has_spare fully_busy misfit asym imbalanced overloaded
+  has_spare        nr_idle   balanced   N/A    N/A  balanced   balanced
+  fully_busy       nr_idle   nr_idle    N/A    N/A  balanced   balanced
+  misfit_task      force     N/A        N/A    N/A  *N/A*      *N/A*
+  asym_packing     force     force      N/A    N/A  force      force
+  imbalanced       force     force      N/A    N/A  force      force
+  overloaded       force     force      N/A    N/A  force      avg_load
 
-To give user space the ability to clearly distinguish synchronous from
-asynchronous signals, introduce siginfo_t::si_perf_flags and
-TRAP_PERF_FLAG_ASYNC (opted for flags in case more binary information is
-required in future).
-
-The resolution to the problem is then to (a) no longer force the signal
-(avoiding the terminations), but (b) tell user space via si_perf_flags
-if the signal was synchronous or not, so that such signals can be
-handled differently (e.g. let user space decide to ignore or consider
-the data imprecise).
-
-The alternative of making the kernel ignore SIGTRAP on perf events if
-the signal is blocked may work for some usecases, but likely causes
-issues in others that then have to revert back to interception of
-sigprocmask() (which we want to avoid). [ A concrete example: when using
-breakpoint perf events to track data-flow, in a region of code where
-signals are blocked, data-flow can no longer be tracked accurately.
-When a relevant asynchronous signal is received after unblocking the
-signal, the data-flow tracking logic needs to know its state is
-imprecise. ]
-
-Fixes: 97ba62b27867 ("perf: Add support for SIGTRAP on perf events")
-Reported-by: Dmitry Vyukov <dvyukov@google.com>
-Signed-off-by: Marco Elver <elver@google.com>
+Fixes: 0b0695f2b34a ("sched/fair: Rework load_balance()")
+Signed-off-by: Tao Zhou <tao.zhou@linux.dev>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Tested-by: Dmitry Vyukov <dvyukov@google.com>
-Link: https://lore.kernel.org/r/20220404111204.935357-1-elver@google.com
+Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+Link: https://lkml.kernel.org/r/20220415095505.7765-1-tao.zhou@linux.dev
 ---
- arch/arm/kernel/signal.c           |  1 +
- arch/arm64/kernel/signal.c         |  1 +
- arch/arm64/kernel/signal32.c       |  1 +
- arch/m68k/kernel/signal.c          |  1 +
- arch/sparc/kernel/signal32.c       |  1 +
- arch/sparc/kernel/signal_64.c      |  1 +
- arch/x86/kernel/signal_compat.c    |  2 ++
- include/linux/compat.h             |  1 +
- include/linux/sched/signal.h       |  2 +-
- include/uapi/asm-generic/siginfo.h |  7 +++++++
- kernel/events/core.c               |  4 ++--
- kernel/signal.c                    | 18 ++++++++++++++++--
- 12 files changed, 35 insertions(+), 5 deletions(-)
+ kernel/sched/fair.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/kernel/signal.c b/arch/arm/kernel/signal.c
-index 459abc5..ea128e3 100644
---- a/arch/arm/kernel/signal.c
-+++ b/arch/arm/kernel/signal.c
-@@ -708,6 +708,7 @@ static_assert(offsetof(siginfo_t, si_upper)	== 0x18);
- static_assert(offsetof(siginfo_t, si_pkey)	== 0x14);
- static_assert(offsetof(siginfo_t, si_perf_data)	== 0x10);
- static_assert(offsetof(siginfo_t, si_perf_type)	== 0x14);
-+static_assert(offsetof(siginfo_t, si_perf_flags) == 0x18);
- static_assert(offsetof(siginfo_t, si_band)	== 0x0c);
- static_assert(offsetof(siginfo_t, si_fd)	== 0x10);
- static_assert(offsetof(siginfo_t, si_call_addr)	== 0x0c);
-diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
-index 4a4122e..41b5d9d 100644
---- a/arch/arm64/kernel/signal.c
-+++ b/arch/arm64/kernel/signal.c
-@@ -1011,6 +1011,7 @@ static_assert(offsetof(siginfo_t, si_upper)	== 0x28);
- static_assert(offsetof(siginfo_t, si_pkey)	== 0x20);
- static_assert(offsetof(siginfo_t, si_perf_data)	== 0x18);
- static_assert(offsetof(siginfo_t, si_perf_type)	== 0x20);
-+static_assert(offsetof(siginfo_t, si_perf_flags) == 0x24);
- static_assert(offsetof(siginfo_t, si_band)	== 0x10);
- static_assert(offsetof(siginfo_t, si_fd)	== 0x18);
- static_assert(offsetof(siginfo_t, si_call_addr)	== 0x10);
-diff --git a/arch/arm64/kernel/signal32.c b/arch/arm64/kernel/signal32.c
-index d984282..4700f85 100644
---- a/arch/arm64/kernel/signal32.c
-+++ b/arch/arm64/kernel/signal32.c
-@@ -487,6 +487,7 @@ static_assert(offsetof(compat_siginfo_t, si_upper)	== 0x18);
- static_assert(offsetof(compat_siginfo_t, si_pkey)	== 0x14);
- static_assert(offsetof(compat_siginfo_t, si_perf_data)	== 0x10);
- static_assert(offsetof(compat_siginfo_t, si_perf_type)	== 0x14);
-+static_assert(offsetof(compat_siginfo_t, si_perf_flags)	== 0x18);
- static_assert(offsetof(compat_siginfo_t, si_band)	== 0x0c);
- static_assert(offsetof(compat_siginfo_t, si_fd)		== 0x10);
- static_assert(offsetof(compat_siginfo_t, si_call_addr)	== 0x0c);
-diff --git a/arch/m68k/kernel/signal.c b/arch/m68k/kernel/signal.c
-index 49533f6..b9f6908 100644
---- a/arch/m68k/kernel/signal.c
-+++ b/arch/m68k/kernel/signal.c
-@@ -625,6 +625,7 @@ static inline void siginfo_build_tests(void)
- 	/* _sigfault._perf */
- 	BUILD_BUG_ON(offsetof(siginfo_t, si_perf_data) != 0x10);
- 	BUILD_BUG_ON(offsetof(siginfo_t, si_perf_type) != 0x14);
-+	BUILD_BUG_ON(offsetof(siginfo_t, si_perf_flags) != 0x18);
- 
- 	/* _sigpoll */
- 	BUILD_BUG_ON(offsetof(siginfo_t, si_band)   != 0x0c);
-diff --git a/arch/sparc/kernel/signal32.c b/arch/sparc/kernel/signal32.c
-index f9fe502..dad3896 100644
---- a/arch/sparc/kernel/signal32.c
-+++ b/arch/sparc/kernel/signal32.c
-@@ -779,5 +779,6 @@ static_assert(offsetof(compat_siginfo_t, si_upper)	== 0x18);
- static_assert(offsetof(compat_siginfo_t, si_pkey)	== 0x14);
- static_assert(offsetof(compat_siginfo_t, si_perf_data)	== 0x10);
- static_assert(offsetof(compat_siginfo_t, si_perf_type)	== 0x14);
-+static_assert(offsetof(compat_siginfo_t, si_perf_flags)	== 0x18);
- static_assert(offsetof(compat_siginfo_t, si_band)	== 0x0c);
- static_assert(offsetof(compat_siginfo_t, si_fd)		== 0x10);
-diff --git a/arch/sparc/kernel/signal_64.c b/arch/sparc/kernel/signal_64.c
-index 8b9fc76..570e43e 100644
---- a/arch/sparc/kernel/signal_64.c
-+++ b/arch/sparc/kernel/signal_64.c
-@@ -590,5 +590,6 @@ static_assert(offsetof(siginfo_t, si_upper)	== 0x28);
- static_assert(offsetof(siginfo_t, si_pkey)	== 0x20);
- static_assert(offsetof(siginfo_t, si_perf_data)	== 0x18);
- static_assert(offsetof(siginfo_t, si_perf_type)	== 0x20);
-+static_assert(offsetof(siginfo_t, si_perf_flags) == 0x24);
- static_assert(offsetof(siginfo_t, si_band)	== 0x10);
- static_assert(offsetof(siginfo_t, si_fd)	== 0x14);
-diff --git a/arch/x86/kernel/signal_compat.c b/arch/x86/kernel/signal_compat.c
-index b52407c..879ef8c 100644
---- a/arch/x86/kernel/signal_compat.c
-+++ b/arch/x86/kernel/signal_compat.c
-@@ -149,8 +149,10 @@ static inline void signal_compat_build_tests(void)
- 
- 	BUILD_BUG_ON(offsetof(siginfo_t, si_perf_data) != 0x18);
- 	BUILD_BUG_ON(offsetof(siginfo_t, si_perf_type) != 0x20);
-+	BUILD_BUG_ON(offsetof(siginfo_t, si_perf_flags) != 0x24);
- 	BUILD_BUG_ON(offsetof(compat_siginfo_t, si_perf_data) != 0x10);
- 	BUILD_BUG_ON(offsetof(compat_siginfo_t, si_perf_type) != 0x14);
-+	BUILD_BUG_ON(offsetof(compat_siginfo_t, si_perf_flags) != 0x18);
- 
- 	CHECK_CSI_OFFSET(_sigpoll);
- 	CHECK_CSI_SIZE  (_sigpoll, 2*sizeof(int));
-diff --git a/include/linux/compat.h b/include/linux/compat.h
-index 1c758b0..01fddf7 100644
---- a/include/linux/compat.h
-+++ b/include/linux/compat.h
-@@ -235,6 +235,7 @@ typedef struct compat_siginfo {
- 				struct {
- 					compat_ulong_t _data;
- 					u32 _type;
-+					u32 _flags;
- 				} _perf;
- 			};
- 		} _sigfault;
-diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
-index 3c8b348..bab7cc5 100644
---- a/include/linux/sched/signal.h
-+++ b/include/linux/sched/signal.h
-@@ -320,7 +320,7 @@ int send_sig_mceerr(int code, void __user *, short, struct task_struct *);
- 
- int force_sig_bnderr(void __user *addr, void __user *lower, void __user *upper);
- int force_sig_pkuerr(void __user *addr, u32 pkey);
--int force_sig_perf(void __user *addr, u32 type, u64 sig_data);
-+int send_sig_perf(void __user *addr, u32 type, u64 sig_data);
- 
- int force_sig_ptrace_errno_trap(int errno, void __user *addr);
- int force_sig_fault_trapno(int sig, int code, void __user *addr, int trapno);
-diff --git a/include/uapi/asm-generic/siginfo.h b/include/uapi/asm-generic/siginfo.h
-index 3ba180f..ffbe4ce 100644
---- a/include/uapi/asm-generic/siginfo.h
-+++ b/include/uapi/asm-generic/siginfo.h
-@@ -99,6 +99,7 @@ union __sifields {
- 			struct {
- 				unsigned long _data;
- 				__u32 _type;
-+				__u32 _flags;
- 			} _perf;
- 		};
- 	} _sigfault;
-@@ -164,6 +165,7 @@ typedef struct siginfo {
- #define si_pkey		_sifields._sigfault._addr_pkey._pkey
- #define si_perf_data	_sifields._sigfault._perf._data
- #define si_perf_type	_sifields._sigfault._perf._type
-+#define si_perf_flags	_sifields._sigfault._perf._flags
- #define si_band		_sifields._sigpoll._band
- #define si_fd		_sifields._sigpoll._fd
- #define si_call_addr	_sifields._sigsys._call_addr
-@@ -271,6 +273,11 @@ typedef struct siginfo {
-  */
- 
- /*
-+ * Flags for si_perf_flags if SIGTRAP si_code is TRAP_PERF.
-+ */
-+#define TRAP_PERF_FLAG_ASYNC (1u << 0)
-+
-+/*
-  * SIGCHLD si_codes
-  */
- #define CLD_EXITED	1	/* child has exited */
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index cfde994..6eafb1b 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -6533,8 +6533,8 @@ static void perf_sigtrap(struct perf_event *event)
- 	if (current->flags & PF_EXITING)
- 		return;
- 
--	force_sig_perf((void __user *)event->pending_addr,
--		       event->attr.type, event->attr.sig_data);
-+	send_sig_perf((void __user *)event->pending_addr,
-+		      event->attr.type, event->attr.sig_data);
- }
- 
- static void perf_pending_event_disable(struct perf_event *event)
-diff --git a/kernel/signal.c b/kernel/signal.c
-index 30cd1ca..e43bc2a 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -1805,7 +1805,7 @@ int force_sig_pkuerr(void __user *addr, u32 pkey)
- }
- #endif
- 
--int force_sig_perf(void __user *addr, u32 type, u64 sig_data)
-+int send_sig_perf(void __user *addr, u32 type, u64 sig_data)
- {
- 	struct kernel_siginfo info;
- 
-@@ -1817,7 +1817,18 @@ int force_sig_perf(void __user *addr, u32 type, u64 sig_data)
- 	info.si_perf_data = sig_data;
- 	info.si_perf_type = type;
- 
--	return force_sig_info(&info);
-+	/*
-+	 * Signals generated by perf events should not terminate the whole
-+	 * process if SIGTRAP is blocked, however, delivering the signal
-+	 * asynchronously is better than not delivering at all. But tell user
-+	 * space if the signal was asynchronous, so it can clearly be
-+	 * distinguished from normal synchronous ones.
-+	 */
-+	info.si_perf_flags = sigismember(&current->blocked, info.si_signo) ?
-+				     TRAP_PERF_FLAG_ASYNC :
-+				     0;
-+
-+	return send_sig_info(info.si_signo, &info, current);
- }
- 
- /**
-@@ -3432,6 +3443,7 @@ void copy_siginfo_to_external32(struct compat_siginfo *to,
- 		to->si_addr = ptr_to_compat(from->si_addr);
- 		to->si_perf_data = from->si_perf_data;
- 		to->si_perf_type = from->si_perf_type;
-+		to->si_perf_flags = from->si_perf_flags;
- 		break;
- 	case SIL_CHLD:
- 		to->si_pid = from->si_pid;
-@@ -3509,6 +3521,7 @@ static int post_copy_siginfo_from_user32(kernel_siginfo_t *to,
- 		to->si_addr = compat_ptr(from->si_addr);
- 		to->si_perf_data = from->si_perf_data;
- 		to->si_perf_type = from->si_perf_type;
-+		to->si_perf_flags = from->si_perf_flags;
- 		break;
- 	case SIL_CHLD:
- 		to->si_pid    = from->si_pid;
-@@ -4722,6 +4735,7 @@ static inline void siginfo_buildtime_checks(void)
- 	CHECK_OFFSET(si_pkey);
- 	CHECK_OFFSET(si_perf_data);
- 	CHECK_OFFSET(si_perf_type);
-+	CHECK_OFFSET(si_perf_flags);
- 
- 	/* sigpoll */
- 	CHECK_OFFSET(si_band);
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 3eba0dc..4c42012 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -9496,7 +9496,7 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
+  * busiest \ local has_spare fully_busy misfit asym imbalanced overloaded
+  * has_spare        nr_idle   balanced   N/A    N/A  balanced   balanced
+  * fully_busy       nr_idle   nr_idle    N/A    N/A  balanced   balanced
+- * misfit_task      force     N/A        N/A    N/A  force      force
++ * misfit_task      force     N/A        N/A    N/A  N/A        N/A
+  * asym_packing     force     force      N/A    N/A  force      force
+  * imbalanced       force     force      N/A    N/A  force      force
+  * overloaded       force     force      N/A    N/A  force      avg_load

@@ -2,85 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB50950BD59
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51C5950BD5E
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 18:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449798AbiDVQqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 12:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45720 "EHLO
+        id S1449822AbiDVQrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 12:47:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449791AbiDVQq2 (ORCPT
+        with ESMTP id S1449800AbiDVQqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 12:46:28 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A775B5F266
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:43:32 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id k23so17511844ejd.3
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:43:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=RiEO4zZamQGG5SMMgDVcQPYTfMS+OHWwLyxPSkJbTUg=;
-        b=eRzeKgLnPmzo//vWRiR9PbqQdWIzIrsMA9yo5FP5RwZV3ZvSqz9ySo08Kk6KQrb+Dz
-         LxTGHQy8ajCw7toJJ8APhixFbekcV88bU0PzWlfhYb6WcyES2E/5dCWLuvEBYaEDuVhn
-         Z6j9P2LAEV1khpHdkiYtvon52q9RK82F1dOzA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=RiEO4zZamQGG5SMMgDVcQPYTfMS+OHWwLyxPSkJbTUg=;
-        b=gwCBbBQUDvDXqmPLz7KKMh7ieWZ7BW4gLFpSW/l52eFsiTC3LjYXkES71EsUSfiywJ
-         qk9INPI3MBi8CxW1w1eaKUGQcNI/hxdZ2s1UD0o4632wy6ZO60CWyV+Wl3wPXnwq3c/6
-         Ul7XtuDrvHz9MR2T3H5nY/RhNJyEzCyU/x1D4QrSOatE01o7Vb7hQVJHz52D4b66J2cd
-         T5O0uSu+Uq4gMxG+P/RsJQHIRmF5qwKsseR7PWsZZdRUD84ojn4446eU4tDOWTV9vein
-         nTfqtd6SActlhBn+GpRgywnx3HtIzY2XBxry16K5Rv7TMTJc9B5ZkaLCabh3rf3F0qtG
-         OPPw==
-X-Gm-Message-State: AOAM533Lr2+BjPYcaMiA1WayF91DmTLeeE79lkpcTZl/dw+NPEPFCOsj
-        sNcM3oJYIEfIdyO+qO7GPBNvUg==
-X-Google-Smtp-Source: ABdhPJxqTZotCRjXIS4vrC1dXDIZmDp8YaKiZEC6pmSPJlCwJUPWdQpSpFlx+ZHm9ZqQ4gM5cyjCog==
-X-Received: by 2002:a17:907:6e90:b0:6ef:ef41:ac10 with SMTP id sh16-20020a1709076e9000b006efef41ac10mr5184554ejc.187.1650645811291;
-        Fri, 22 Apr 2022 09:43:31 -0700 (PDT)
-Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-56-163.cust.vodafonedsl.it. [188.217.56.163])
-        by smtp.gmail.com with ESMTPSA id m3-20020a17090679c300b006cf9ce53354sm900935ejo.190.2022.04.22.09.43.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 09:43:31 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 18:43:28 +0200
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Subject: dt-bindings: usb: usb251xb: add documentation for boost-up property
-Message-ID: <20220422164328.GA2263442@tom-ThinkPad-T14s-Gen-2i>
+        Fri, 22 Apr 2022 12:46:45 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE53D5F8C1
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 09:43:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650645831; x=1682181831;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iL7+aGwgJSlc39d1Ilbvm2KZhPW+6VwhKd3gr84pzSA=;
+  b=ehTVYULEQBodQu4HBDmIwzcfR2L2k+ejl1hIbQ3yzg1O6gFR263/5S66
+   h/M+XSkHbViIZYfNksd1gwtvJSHjyUXYqnHePbgil+3IbiG2c2mlL2u7w
+   IpThUb5TxMDmEY0N3BBCCIJXJ1NAXQfeXvDM3IfYiyE7hK/Ot7xPaxKmm
+   cScZydhtGQj7BAkANAqR4aJ3prNSl+DwtfRlzzssHLfxBgk/pxsIpSWKn
+   7bVAQiqQkbXTg7KBgLPGt4NJmfUEWcmlUVX9a5aajDMloeSEOiSb6nSml
+   Fsy7mhtiFqi49iTTnp1pfO3bW/+ulgcTlGY3EHhSUgM/zI33JCnf9K16h
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="289845481"
+X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
+   d="scan'208";a="289845481"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 09:43:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
+   d="scan'208";a="530926235"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 22 Apr 2022 09:43:49 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nhwNp-000ALg-8j;
+        Fri, 22 Apr 2022 16:43:49 +0000
+Date:   Sat, 23 Apr 2022 00:43:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 2431/2579]
+ include/asm-generic/percpu.h:147:9: error: implicit declaration of function
+ 'raw_local_irq_save'
+Message-ID: <202204230044.O7aOPfOO-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
-Sorry for the really really late reply but I forgot it.
-Is about https://lore.kernel.org/all/20220306184720.5350-1-tomm.merciai@gmail.com/T/
-I check that others property don't have the vendor prefix on the property name.
-Maybe I'm missing somenthing?
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   49e1ec6c70a6eb4b7de9250a455b8b63eb42afbe
+commit: 518a4e5de1cbdbd028929db6ad968d6245b7e89a [2431/2579] headers/deps: rcu: Optimize <linux/rcupdate.h> dependencies
+config: i386-debian-10.3 (https://download.01.org/0day-ci/archive/20220423/202204230044.O7aOPfOO-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=518a4e5de1cbdbd028929db6ad968d6245b7e89a
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 518a4e5de1cbdbd028929db6ad968d6245b7e89a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/
 
-Regards,
-Tommaso
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/x86/include/asm/percpu.h:393,
+                    from arch/x86/include/asm/current.h:6,
+                    from include/linux/preempt.h:10,
+                    from include/linux/bottom_half.h:7,
+                    from include/linux/rcupdate.h:26,
+                    from include/linux/bpf.h:9,
+                    from include/linux/bpf_verifier.h:7,
+                    from net/ipv4/bpf_tcp_ca.c:6:
+   include/linux/bpf.h: In function 'bpf_disable_instrumentation':
+>> include/asm-generic/percpu.h:147:9: error: implicit declaration of function 'raw_local_irq_save' [-Werror=implicit-function-declaration]
+     147 |         raw_local_irq_save(__flags);                                    \
+         |         ^~~~~~~~~~~~~~~~~~
+   include/asm-generic/percpu.h:355:41: note: in expansion of macro 'this_cpu_generic_to_op'
+     355 | #define this_cpu_add_8(pcp, val)        this_cpu_generic_to_op(pcp, val, +=)
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:380:25: note: in expansion of macro 'this_cpu_add_8'
+     380 |                 case 8: stem##8(variable, __VA_ARGS__);break;           \
+         |                         ^~~~
+   include/linux/percpu-defs.h:509:41: note: in expansion of macro '__pcpu_size_call'
+     509 | #define this_cpu_add(pcp, val)          __pcpu_size_call(this_cpu_add_, pcp, val)
+         |                                         ^~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:520:41: note: in expansion of macro 'this_cpu_add'
+     520 | #define this_cpu_inc(pcp)               this_cpu_add(pcp, 1)
+         |                                         ^~~~~~~~~~~~
+   include/linux/bpf.h:1446:9: note: in expansion of macro 'this_cpu_inc'
+    1446 |         this_cpu_inc(bpf_prog_active);
+         |         ^~~~~~~~~~~~
+>> include/asm-generic/percpu.h:149:9: error: implicit declaration of function 'raw_local_irq_restore' [-Werror=implicit-function-declaration]
+     149 |         raw_local_irq_restore(__flags);                                 \
+         |         ^~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/percpu.h:355:41: note: in expansion of macro 'this_cpu_generic_to_op'
+     355 | #define this_cpu_add_8(pcp, val)        this_cpu_generic_to_op(pcp, val, +=)
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:380:25: note: in expansion of macro 'this_cpu_add_8'
+     380 |                 case 8: stem##8(variable, __VA_ARGS__);break;           \
+         |                         ^~~~
+   include/linux/percpu-defs.h:509:41: note: in expansion of macro '__pcpu_size_call'
+     509 | #define this_cpu_add(pcp, val)          __pcpu_size_call(this_cpu_add_, pcp, val)
+         |                                         ^~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:520:41: note: in expansion of macro 'this_cpu_add'
+     520 | #define this_cpu_inc(pcp)               this_cpu_add(pcp, 1)
+         |                                         ^~~~~~~~~~~~
+   include/linux/bpf.h:1446:9: note: in expansion of macro 'this_cpu_inc'
+    1446 |         this_cpu_inc(bpf_prog_active);
+         |         ^~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/raw_local_irq_save +147 include/asm-generic/percpu.h
+
+e88d62cd4b2f0b Mark Rutland    2017-09-26  143  
+eba117889ac444 Tejun Heo       2014-06-17  144  #define this_cpu_generic_to_op(pcp, val, op)				\
+9c28278a24c01c Tejun Heo       2014-06-17  145  do {									\
+eba117889ac444 Tejun Heo       2014-06-17  146  	unsigned long __flags;						\
+eba117889ac444 Tejun Heo       2014-06-17 @147  	raw_local_irq_save(__flags);					\
+1b5ca12127427c Nicholas Piggin 2016-09-22  148  	raw_cpu_generic_to_op(pcp, val, op);				\
+eba117889ac444 Tejun Heo       2014-06-17 @149  	raw_local_irq_restore(__flags);					\
+9c28278a24c01c Tejun Heo       2014-06-17  150  } while (0)
+9c28278a24c01c Tejun Heo       2014-06-17  151  
+1b5ca12127427c Nicholas Piggin 2016-09-22  152  
+
+:::::: The code at line 147 was first introduced by commit
+:::::: eba117889ac444bea6e8270049cbaeed48169889 percpu: preffity percpu header files
+
+:::::: TO: Tejun Heo <tj@kernel.org>
+:::::: CC: Tejun Heo <tj@kernel.org>
 
 -- 
-Tommaso Merciai
-Embedded Linux Engineer
-tommaso.merciai@amarulasolutions.com
-__________________________________
-
-Amarula Solutions SRL
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-T. +39 042 243 5310
-info@amarulasolutions.com
-www.amarulasolutions.com
+0-DAY CI Kernel Test Service
+https://01.org/lkp

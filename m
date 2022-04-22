@@ -2,98 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B06C650B7A7
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 14:54:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB41650B7B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 14:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbiDVM5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 08:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33384 "EHLO
+        id S233849AbiDVM6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 08:58:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233872AbiDVM4w (ORCPT
+        with ESMTP id S233785AbiDVM6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 08:56:52 -0400
-Received: from hutie.ust.cz (hutie.ust.cz [185.8.165.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D72B52B00;
-        Fri, 22 Apr 2022 05:53:58 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1650632035; bh=Rr2b05NP3wGMyQRhBvV1IUry/zX4H2Dk7P7NRyvj4Tc=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To;
-        b=S2seNKR6yDu5lByMYBXtbttAJdb1b0jPUip8DgWFAkRfkxD3ictQ41YsHmflWx7Jt
-         ZD8Gqu1wZkLj4wbBUECqLWYLgwPXkly6M/+vFY+k4B81Erg0Fdt7CREtFGbIoACJlI
-         LHvoYzn8dmLlHQFq0Wf1Gr97+ZrFIpCXzoHBcxCs=
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [RFC PATCH 0/5] Apple Macs machine-level ASoC driver
-From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik@cutebit.org>
-In-Reply-To: <YmKjL9bOtOmsFWTs@sirena.org.uk>
-Date:   Fri, 22 Apr 2022 14:53:54 +0200
-Cc:     =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <3CD969AD-7316-4D83-AD92-CC85ED817125@cutebit.org>
-References: <YkW4MPh8VWc8eSGg@sirena.org.uk>
- <6D199EAB-FE14-4030-96A7-2E0E89D25FAB@cutebit.org>
- <YkXKmxJ0R3qpUoH4@sirena.org.uk>
- <DB0255C3-C9EC-4EFA-A377-C4BB1073D9B3@cutebit.org>
- <YmKPQ6kLCPz+2XTJ@sirena.org.uk>
- <B68302F2-3D77-4065-8A16-A9CC690AE10B@cutebit.org>
- <YmKSgHrbb/7koM36@sirena.org.uk>
- <A1574F30-62D2-467D-A40B-8FD7C6B8BCFA@cutebit.org>
- <YmKeEKa0w2xLM9cL@sirena.org.uk>
- <6F6130F3-381C-4AB7-B618-CDC4C4A37C9B@cutebit.org>
- <YmKjL9bOtOmsFWTs@sirena.org.uk>
-To:     Mark Brown <broonie@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 22 Apr 2022 08:58:36 -0400
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A011EB3
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 05:55:44 -0700 (PDT)
+Received: by mail-ot1-x343.google.com with SMTP id k29-20020a056830243d00b006040caa0988so5408166ots.6
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 05:55:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zm9GfdANLktexLnSc2t2HLTF4hneluEodUT1P1kDEsM=;
+        b=hqpExlYNzkwIX37Hy7SHOLnExYYUGG8vNf/6n9iAKjl5YQzWvYMgOOIuE2PmHkVlId
+         8p2hIYnz2HLmhSYdOwsAzjY/APN2BXnUw/+SINDligXdzFGG3E1vx0GomViz5E701Hu5
+         +YXaVWJpR0D9lTq8jjEGNXIAYwlJNJ0x0VaJxyrxdsa7mWwQTsd1yMHq/havwPdPp8lH
+         gE6GLCQsPBCZFgC0GGJHYFfoFUfQ8JMLuORrLRTgNl2GvXnwkUPpoTK9WNCU9xaO6yCF
+         AN4YMsRpo4Ng/fPi9zygy3b0diFDQQtg3fmBU5p3mJJNKSkssyLATjOAy6FeI8xFj4wc
+         ctLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zm9GfdANLktexLnSc2t2HLTF4hneluEodUT1P1kDEsM=;
+        b=suJNGb3ceiPBsyUviCwriUd36J9i7u50YypbXhJsZYqIT3hfovF6W0n+sFCw+0urbB
+         vhQv1p+Ax46ZtFJqJwYshGefJa5zw7yCKNPru9p+hecaQSn+DU66SsP62f5a0t/kTFjn
+         Z7LccLraU/7aUCmGnMBXKqYXy6fDrYSu1bUpAkg0MFurBPxmwXkMAc5kiEtv0q6CvyMM
+         mZQO1uNW3c7UnMjQ0fA5wwSdv1Qyx+EiktNTWQJOatsVSAbD9ilwOD1L7XlTCHrxcw+Q
+         kDjzc8uI9v/s9xbnwz6fnQ2oXmTD6zUhr1LwEwHORKqR4uWYf+RayORAth9n+7rKeRmx
+         w9JQ==
+X-Gm-Message-State: AOAM532rB6eRcbPWc1MiYe1+R/7t8oZFDtsnxPewprRhPWVR62b5754u
+        IyZ18Q7VN7Vc5pqckRkgHv+QHPsQcs3EwQ==
+X-Google-Smtp-Source: ABdhPJyNyko5expXH8i0LaM0d82/FWE6LtI1dFtVxCQad4UDosaAE16fqf3aYknTT7loeHX6IM4g8Q==
+X-Received: by 2002:a9d:7608:0:b0:5e9:5b29:bef8 with SMTP id k8-20020a9d7608000000b005e95b29bef8mr1628062otl.368.1650632143462;
+        Fri, 22 Apr 2022 05:55:43 -0700 (PDT)
+Received: from bertie (072-190-140-117.res.spectrum.com. [72.190.140.117])
+        by smtp.gmail.com with ESMTPSA id b5-20020a9d7545000000b006054e5f6703sm691686otl.31.2022.04.22.05.55.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 05:55:42 -0700 (PDT)
+From:   Rebecca Mckeever <remckee0@gmail.com>
+To:     outreachy@lists.linux.dev
+Cc:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, David Hildenbrand <david@redhat.com>,
+        Rebecca Mckeever <remckee0@gmail.com>
+Subject: [PATCH v2 0/4] memblock tests: update style of comments
+Date:   Fri, 22 Apr 2022 07:55:34 -0500
+Message-Id: <cover.1650631746.git.remckee0@gmail.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+These patches update the style of comments for memblock_add_*(),
+memblock_reserve_*(), memblock_remove_*(), and memblock_free_*() 
+functions to match the style of comments in tests/alloc_*.c and 
+remove extra spaces in those comments to conform to Linux kernel
+coding style.
 
+Rebecca Mckeever (4):
+  memblock tests: update style of comments for memblock_add_*()
+    functions
+  memblock tests: update style of comments for memblock_reserve_*()
+    functions
+  memblock tests: update style of comments for memblock_remove_*()
+    functions
+  memblock tests: update style of comments for memblock_free_*()
+    functions
 
-> On 22. 4. 2022, at 14:44, Mark Brown <broonie@kernel.org> wrote:
->=20
-> On Fri, Apr 22, 2022 at 02:36:03PM +0200, Martin Povi=C5=A1er wrote:
->=20
->>> Ah, I think the confusion here is that I'm using slot and channel
->>> interchangably whereas you're saying that previously the driver =
-would
->>> allocate two channels to each speaker with duplicate data?
->=20
->> I guess you could say that. Not that there=E2=80=99s duplicate data =
-on the I2S
->> bus, but the speaker amp would previously be configured to look for =
-the
->> left and right channel in the same TDM slot (see e.g. set_tdm_slot of
->> tas2770 [0]).  (Each speaker amp drives a single speaker, but it =
-still
->> has a notion of left and right channel.)
->=20
-> Oh, I see - the speaker actually allows configuration of the slots
-> independently.  Usually the left/right thing on mono devices only does
-> something for I2S where the bus clocking enforces that there be both
-> left and right channels.  Either configuration is fine by me TBH, if =
-you
-> can do that then you could just keep them mapped to the same channel
-> then mark the control as disabled since it should have no effect.
+ tools/testing/memblock/tests/basic_api.c | 350 +++++++++++++++++------
+ 1 file changed, 256 insertions(+), 94 deletions(-)
 
-Well but is there some established way to mark a control as disabled?
-
-Another issue here is that if I disable it I can=E2=80=99t leave the =
-routing
-control in it=E2=80=99s default value, which is =E2=80=98I2C Offset=E2=80=99=
- and makes the speaker
-amp ignore the slot mapping.
+-- 
+2.32.0
 

@@ -2,142 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71FC750B509
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:29:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A912250B519
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Apr 2022 12:30:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446456AbiDVKb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 06:31:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59860 "EHLO
+        id S1446587AbiDVKdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 06:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350582AbiDVKb4 (ORCPT
+        with ESMTP id S1344416AbiDVKdK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 06:31:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD35954F83
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 03:29:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 542CF61E0B
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 10:29:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4F27C385A0;
-        Fri, 22 Apr 2022 10:28:59 +0000 (UTC)
-Date:   Fri, 22 Apr 2022 11:28:56 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Lennart Poettering <lennart@poettering.net>,
-        Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>,
-        Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jeremy Linton <Jeremy.Linton@arm.com>,
-        Topi Miettinen <toiwoton@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-abi-devel@lists.sourceforge.net" 
-        <linux-abi-devel@lists.sourceforge.net>
-Subject: Re: [PATCH RFC 2/4] mm, personality: Implement
- memory-deny-write-execute as a personality flag
-Message-ID: <YmKDaEaOpOaKl7m9@arm.com>
-References: <20220413134946.2732468-1-catalin.marinas@arm.com>
- <20220413134946.2732468-3-catalin.marinas@arm.com>
- <443d978a-7092-b5b1-22f3-ae3a997080ad@redhat.com>
+        Fri, 22 Apr 2022 06:33:10 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CB3F193E6;
+        Fri, 22 Apr 2022 03:30:16 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id b24so9863139edu.10;
+        Fri, 22 Apr 2022 03:30:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UIGF2yrhpVMa0xy286pYYiwJ1gwxTNrWbaIYNQ9PLHg=;
+        b=MwH4StWDqbUX02jrMZlu3Oz68cIJ7X1GSNvAHCSv/eTgtvrHJtiNT1Ki6vBmpvbPzd
+         ksCsSNt1s2Z7ILLAk2gU3GR3zzAMfoNq6yyqbzG8KMQIjO2pG4ACo+b2U7Kt36Pez2fb
+         +/AKGVIfPiDitsetCT50qQiOi0H2NsZtxerygpPgqT/e9kcqR2saOa7ZWPDEF2BaYzIo
+         0ONEnrcbRXui2s4MH0XB4vkAB0d67NsClatsm9hlp8A4CO+zSZymw/OUD5nOC9q1FgHk
+         8k70W3Yzmm8FDtxXV5RHKGyjBDpT8lTlIWelCVs1USJenkF1Vi0q1s4aHxXrvVRJYe4f
+         HO8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=UIGF2yrhpVMa0xy286pYYiwJ1gwxTNrWbaIYNQ9PLHg=;
+        b=Oifxug5yZ8r3IwS5ND5hOeuoPmmjyGFjy82jrgpfA/iVf3Ak4HjuoHaTrUZ+Eyx4eP
+         yyEJwT0/czsY7UFdoc7ASWSE7qhTKng3ur+VWbZ8cU6L1qba8EmOMMDuS48mVRvj2XCs
+         alIgF86OoP2YY4udTkEHz/HDxmCQxvw1f5cRBog+0GGZOzloc9T69wfiVlypzGRIv9Vx
+         YhloJKE6esWMbf6/Smf+lqJdTvvB23FXRBgXSppJOd/aaVMoyx9+CeFW+tHR8tKpR6D8
+         MujAUUtvIVuIVwexJ7JBRueMJYyA72gx1qn26ZI157Wf5LzQXREAOa4bX1opNc4n2SHh
+         +qrg==
+X-Gm-Message-State: AOAM533J7ARMqM+w5ir6uskN6QgjPh1h3O2uj1imaIzKpjRTl6QZhP9E
+        53wEopYaMiMqsdYsSU6jq7KNUce6I6Ko9w==
+X-Google-Smtp-Source: ABdhPJwhfYz3XwJfMIDystAbDuo5/DdRKTWOmogmRnohfErMWfPOPJt8VSLoEOcKYsJ8aeOWIjM32w==
+X-Received: by 2002:a05:6402:84c:b0:423:e5a2:3655 with SMTP id b12-20020a056402084c00b00423e5a23655mr4159159edz.28.1650623415155;
+        Fri, 22 Apr 2022 03:30:15 -0700 (PDT)
+Received: from avogadro.lan ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.gmail.com with ESMTPSA id d6-20020a170906304600b006ef5da1b1besm608225ejd.221.2022.04.22.03.30.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 03:30:14 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Peter Gonda <pgonda@google.com>,
+        Sean Christopherson <seanjc@google.com>
+Subject: [PATCH for-5.18] KVM: fix bad user ABI for KVM_EXIT_SYSTEM_EVENT
+Date:   Fri, 22 Apr 2022 12:30:13 +0200
+Message-Id: <20220422103013.34832-1-pbonzini@redhat.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <443d978a-7092-b5b1-22f3-ae3a997080ad@redhat.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 06:37:49PM +0100, David Hildenbrand wrote:
-> On 13.04.22 15:49, Catalin Marinas wrote:
-> > The aim of such policy is to prevent a user task from inadvertently
-> > creating an executable mapping that is or was writeable (and
-> > subsequently made read-only).
-> > 
-> > An example of mmap() returning -EACCESS if the policy is enabled:
-> > 
-> > 	mmap(0, size, PROT_READ | PROT_WRITE | PROT_EXEC, flags, 0, 0);
-> > 
-> > Similarly, mprotect() would return -EACCESS below:
-> > 
-> > 	addr = mmap(0, size, PROT_READ | PROT_EXEC, flags, 0, 0);
-> > 	mprotect(addr, size, PROT_READ | PROT_WRITE | PROT_EXEC);
-> > 
-> > With the past vma writeable permission tracking, mprotect() below would
-> > also fail with -EACCESS:
-> > 
-> > 	addr = mmap(0, size, PROT_READ | PROT_WRITE, flags, 0, 0);
-> > 	mprotect(addr, size, PROT_READ | PROT_EXEC);
-> > 
-> > While the above could be achieved by checking PROT_WRITE & PROT_EXEC on
-> > mmap/mprotect and denying mprotect(PROT_EXEC) altogether (current
-> > systemd MDWE approach via SECCOMP BPF filters), we want the following
-> > scenario to succeed:
-> > 
-> > 	addr = mmap(0, size, PROT_READ | PROT_EXEC, flags, 0, 0);
-> > 	mprotect(addr, size, PROT_READ | PROT_EXEC | PROT_BTI);
-> > 
-> > where PROT_BTI enables branch tracking identification on arm64.
-> > 
-> > The choice for a DENY_WRITE_EXEC personality flag, inherited on fork()
-> > and execve(), was made by analogy to READ_IMPLIES_EXEC.
-> > 
-> > Note that it is sufficient to check for VM_WAS_WRITE in
-> > map_deny_write_exec() as this flag is always set on VM_WRITE mappings.
-> > 
-> > Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-> > Cc: Christoph Hellwig <hch@infradead.org>
-> > Cc: Andrew Morton <akpm@linux-foundation.org>
-> 
-> How does this interact with get_user_pages(FOLL_WRITE|FOLL_FORCE) on a
-> VMA that is VM_MAYWRITE but not VM_WRITE? Is it handled accordingly?
+When KVM_EXIT_SYSTEM_EVENT was introduced, it included a flags
+member that at the time was unused.  Unfortunately this extensibility
+mechanism has several issues:
 
-For now, that's just about VM_WRITE. Most vmas are VM_MAYWRITE, so we
-can't really have MAYWRITE^EXEC. The basic feature aims to avoid user
-vulnerabilities where a buffer is mapped both writeable and executable.
-Of course, it can be expanded with additional prctl() flags to cover
-other cases.
+- x86 is not writing the member, so it is not possible to use it
+  on x86 except for new events
 
-> Note that in the (FOLL_WRITE|FOLL_FORCE) we only require VM_MAYWRITE on
-> the vma and trigger a write fault. As the VMA is not VM_WRITE, we won't
-> actually map the PTE writable, but set it dirty. GUP will retry, find a
-> R/O pte that is dirty and where it knows that it broke COW and will
-> allow the read access, although the PTE is R/O.
-> 
-> That mechanism is required to e.g., set breakpoints in R/O MAP_PRIVATE
-> kernel sections, but it's used elsewhere for page pinning as well.
-> 
-> My gut feeling is that GUP(FOLL_WRITE|FOLL_FORCE) could be used right
-> now to bypass that mechanism, I might be wrong.
+- the member is not aligned to 64 bits, so the definition of the
+  uAPI struct is incorrect for 32-bit userspace.  This is a problem
+  for RISC-V, which supports CONFIG_KVM_COMPAT.
 
-GUP can be used to bypass this. But if an attacker can trigger such GUP
-paths via a syscall (e.g. ptrace(PTRACE_POKEDATA)), I think we need the
-checks on those paths (and reject the syscall) rather than on
-mmap/mprotect(). This would be covered by something like CAP_SYS_PTRACE.
+Since padding has to be introduced, place a new field in there
+that tells if the flags field is valid.  To allow further extensibility,
+in fact, change flags to an array of 16 values, and store how many
+of the values are valid.  The availability of the new ndata field
+is tied to a system capability; all architectures are changed to
+fill in the field.
 
-Not sure what would break if we prevent GUP(FOLL_WRITE|FOLL_FORCE) when
-the vma is !VM_WRITE, basically removing FOLL_FORCE. I guess for
-ptrace() and uprobes that's fine. We could also make this only about
-VM_EXEC rather than VM_WRITE, though  we'd probably need to set
-VM_WAS_WRITE if we ever had a GUP(FOLL_WRITE|FOLL_FORCE) in order to
-prevent a subsequent mprotect(PROT_EXEC).
+For compatibility with userspace that was using the flags field,
+a union overlaps flags with data[0].
 
-Anyway, this can be a new flag. My first aim is to get the basics
-working similarly to systemd's MDWE.
+Supersedes: <20220421180443.1465634-1-pbonzini@redhat.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Peter Gonda <pgonda@google.com>
+Cc: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+---
+ Documentation/virt/kvm/api.rst | 24 +++++++++++++++++-------
+ arch/arm64/kvm/psci.c          |  3 ++-
+ arch/riscv/kvm/vcpu_sbi.c      |  3 ++-
+ arch/x86/kvm/x86.c             |  2 ++
+ include/uapi/linux/kvm.h       |  8 +++++++-
+ virt/kvm/kvm_main.c            |  1 +
+ 6 files changed, 31 insertions(+), 10 deletions(-)
 
+diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+index 85c7abc51af5..4a900cdbc62e 100644
+--- a/Documentation/virt/kvm/api.rst
++++ b/Documentation/virt/kvm/api.rst
+@@ -5986,16 +5986,16 @@ should put the acknowledged interrupt vector into the 'epr' field.
+   #define KVM_SYSTEM_EVENT_RESET          2
+   #define KVM_SYSTEM_EVENT_CRASH          3
+ 			__u32 type;
+-			__u64 flags;
++                        __u32 ndata;
++                        __u64 data[16];
+ 		} system_event;
+ 
+ If exit_reason is KVM_EXIT_SYSTEM_EVENT then the vcpu has triggered
+ a system-level event using some architecture specific mechanism (hypercall
+ or some special instruction). In case of ARM64, this is triggered using
+-HVC instruction based PSCI call from the vcpu. The 'type' field describes
+-the system-level event type. The 'flags' field describes architecture
+-specific flags for the system-level event.
++HVC instruction based PSCI call from the vcpu.
+ 
++The 'type' field describes the system-level event type.
+ Valid values for 'type' are:
+ 
+  - KVM_SYSTEM_EVENT_SHUTDOWN -- the guest has requested a shutdown of the
+@@ -6010,10 +6010,20 @@ Valid values for 'type' are:
+    to ignore the request, or to gather VM memory core dump and/or
+    reset/shutdown of the VM.
+ 
+-Valid flags are:
++If KVM_CAP_SYSTEM_EVENT_DATA is present, the 'data' field can contain
++architecture specific information for the system-level event.  Only
++the first `ndata` items (possibly zero) of the data array are valid.
+ 
+- - KVM_SYSTEM_EVENT_RESET_FLAG_PSCI_RESET2 (arm64 only) -- the guest issued
+-   a SYSTEM_RESET2 call according to v1.1 of the PSCI specification.
++ - for arm64, data[0] is set to KVM_SYSTEM_EVENT_RESET_FLAG_PSCI_RESET2 if
++   the guest issued a SYSTEM_RESET2 call according to v1.1 of the PSCI
++   specification.
++
++ - for RISC-V, data[0] is set to the value of the second argument of the
++   ``sbi_system_reset`` call.
++
++Previous versions of Linux defined a `flags` member in this struct.  The
++field is now aliased to `data[0]`.  Userspace can assume that it is only
++written if ndata is greater than 0.
+ 
+ ::
+ 
+diff --git a/arch/arm64/kvm/psci.c b/arch/arm64/kvm/psci.c
+index baac2b405f23..708d80e8e60d 100644
+--- a/arch/arm64/kvm/psci.c
++++ b/arch/arm64/kvm/psci.c
+@@ -181,7 +181,8 @@ static void kvm_prepare_system_event(struct kvm_vcpu *vcpu, u32 type, u64 flags)
+ 
+ 	memset(&vcpu->run->system_event, 0, sizeof(vcpu->run->system_event));
+ 	vcpu->run->system_event.type = type;
+-	vcpu->run->system_event.flags = flags;
++	vcpu->run->system_event.ndata = 1;
++	vcpu->run->system_event.data[0] = flags;
+ 	vcpu->run->exit_reason = KVM_EXIT_SYSTEM_EVENT;
+ }
+ 
+diff --git a/arch/riscv/kvm/vcpu_sbi.c b/arch/riscv/kvm/vcpu_sbi.c
+index a09ecb97b890..a145f4356453 100644
+--- a/arch/riscv/kvm/vcpu_sbi.c
++++ b/arch/riscv/kvm/vcpu_sbi.c
+@@ -94,7 +94,8 @@ void kvm_riscv_vcpu_sbi_system_reset(struct kvm_vcpu *vcpu,
+ 
+ 	memset(&run->system_event, 0, sizeof(run->system_event));
+ 	run->system_event.type = type;
+-	run->system_event.flags = flags;
++	run->system_event.ndata = 1;
++	run->system_event.data[0] = reason;
+ 	run->exit_reason = KVM_EXIT_SYSTEM_EVENT;
+ }
+ 
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index a6ab19afc638..7f21d9fe816f 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -10020,12 +10020,14 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+ 		if (kvm_check_request(KVM_REQ_HV_CRASH, vcpu)) {
+ 			vcpu->run->exit_reason = KVM_EXIT_SYSTEM_EVENT;
+ 			vcpu->run->system_event.type = KVM_SYSTEM_EVENT_CRASH;
++			vcpu->run->system_event.ndata = 0;
+ 			r = 0;
+ 			goto out;
+ 		}
+ 		if (kvm_check_request(KVM_REQ_HV_RESET, vcpu)) {
+ 			vcpu->run->exit_reason = KVM_EXIT_SYSTEM_EVENT;
+ 			vcpu->run->system_event.type = KVM_SYSTEM_EVENT_RESET;
++			vcpu->run->system_event.ndata = 0;
+ 			r = 0;
+ 			goto out;
+ 		}
+diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+index 91a6fe4e02c0..f903ab0c8d7a 100644
+--- a/include/uapi/linux/kvm.h
++++ b/include/uapi/linux/kvm.h
+@@ -445,7 +445,11 @@ struct kvm_run {
+ #define KVM_SYSTEM_EVENT_RESET          2
+ #define KVM_SYSTEM_EVENT_CRASH          3
+ 			__u32 type;
+-			__u64 flags;
++			__u32 ndata;
++			union {
++				__u64 flags;
++				__u64 data[16];
++			};
+ 		} system_event;
+ 		/* KVM_EXIT_S390_STSI */
+ 		struct {
+@@ -1144,6 +1148,8 @@ struct kvm_ppc_resize_hpt {
+ #define KVM_CAP_S390_MEM_OP_EXTENSION 211
+ #define KVM_CAP_PMU_CAPABILITY 212
+ #define KVM_CAP_DISABLE_QUIRKS2 213
++/* #define KVM_CAP_VM_TSC_CONTROL 214 */
++#define KVM_CAP_SYSTEM_EVENT_DATA 215
+ 
+ #ifdef KVM_CAP_IRQ_ROUTING
+ 
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index f30bb8c16f26..6d971fb1b08d 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -4354,6 +4354,7 @@ static long kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
+ 		return 0;
+ #endif
+ 	case KVM_CAP_BINARY_STATS_FD:
++	case KVM_CAP_SYSTEM_EVENT_DATA:
+ 		return 1;
+ 	default:
+ 		break;
 -- 
-Catalin
+2.35.1

@@ -2,124 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2F0850C488
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 808C650C509
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 01:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231252AbiDVXMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 19:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47644 "EHLO
+        id S230196AbiDVXS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 19:18:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234197AbiDVXK1 (ORCPT
+        with ESMTP id S233656AbiDVXRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 19:10:27 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9B2CA0FC;
-        Fri, 22 Apr 2022 15:50:09 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id 0C79E1F46BDC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650667808;
-        bh=L6RAxxyxxLpHhLGcPBmYtZ/tE9DimItHz6GaN0DngLg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=fcXzbLCDoHgYhKXjc2pQmObm+ibrAt4vIRZBwfC71DKGxl0MsT0TTUeS7ytCjCT73
-         v57tjh2mrfrASYalN8TBzU1mBrm1gT5xVNy/veTRLGDEnftCtHbT3kPaU0Bj8LYEIX
-         NTXMDtLjyeAZach/OXp/JQNGwrrKJ4MyBJHhCkCxiad/EvOWCponlEN1tUrekQjtFT
-         gtZmHOWJa122J4CIpsHt98Y5dxH073wKEDQoNDx6x5lSYfW1Qq4jR7Nyda9b9FSyQy
-         +gV10uRIrRx+06blynB23rpRTm/2dsjHEyxymMXxxBk2UQ22ToPXI0t73M13uZklGf
-         hoZfBJSHUvNcw==
-Message-ID: <ad030c70-19eb-ce15-5a78-4c04450b7ad3@collabora.com>
-Date:   Sat, 23 Apr 2022 01:50:03 +0300
+        Fri, 22 Apr 2022 19:17:38 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272B3133E60
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 15:52:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650667943; x=1682203943;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3ZvQFbp4k30eVgkzTG7NKho9OkhYNJu6NRiznVhTZe4=;
+  b=GAb2pIBuhaD9jcMairry+sfJ3yN899lUdO/oiTi0p0RK4AEceYzGnfra
+   zctlX6kEmEgK+fm6a6HBMynxpJuvfvvaWeZjZwdpb/HK0lms2DNaqn38P
+   w8iWWidV3faCxDpfKZ/9R9vaM6ZWm7IJa3R+/gv/oA9ilx3xwt2DKukZJ
+   9TzjiH2RM67GE07Y/Ubsc0rWbgLfyuvGYX+UuSG5oC0L53TyqIo9KnhYh
+   9sIY6/VEv7ZKKVj4AeU5AeHuyI1TRrIZPOP2xi0j9UGZwy2Uy7MLyKer0
+   R0vuDt9oSPR8yTZ9i93ym55qS9jfaDdFx3a5mTx8tO07L0cHwzF9Pq81B
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264583197"
+X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
+   d="scan'208";a="264583197"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 15:52:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
+   d="scan'208";a="594345364"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 22 Apr 2022 15:52:21 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ni28S-000Adi-Oy;
+        Fri, 22 Apr 2022 22:52:20 +0000
+Date:   Sat, 23 Apr 2022 06:51:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Isaku Yamahata <isaku.yamahata@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [intel-tdx:kvm-upstream-workaround 190/293]
+ arch/x86/virt/vmx/tdx/tdx_debug.c:38:6: warning: variable 'ret' is used
+ uninitialized whenever 'if' condition is false
+Message-ID: <202204230602.MCSINBa4-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v1] media: videobuf2: Allow applications customize data
- offsets of capture buffers
-Content-Language: en-US
-To:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Boris Brezillon <bbrezillon@collabora.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Sebastian Fricke <sebastian.fricke@collabora.com>,
-        Laura Nao <laura.nao@collabora.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>
-References: <20220322132329.6527-1-dmitry.osipenko@collabora.com>
- <a7c858461b99de2d4afad22d888acc3a74850240.camel@ndufresne.ca>
- <9ec970d6-ea09-802c-419b-b2ef26800990@collabora.com>
- <5be83f0b343c04d877a2c2d805fb5f71ca9973b1.camel@ndufresne.ca>
- <fe24d151-6097-aa8e-7691-5e4d81fa42c6@collabora.com>
- <f80128c50d3dacff0af70bd88521abae42476f85.camel@ndufresne.ca>
- <CAPY8ntBQBrWytYRbv50F-4TZJdCaSQs86r3vY6kJdp+oc6SxEQ@mail.gmail.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <CAPY8ntBQBrWytYRbv50F-4TZJdCaSQs86r3vY6kJdp+oc6SxEQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/25/22 16:11, Dave Stevenson wrote:
-> Hi Nicolas & Dmitry
-> 
-> On Fri, 25 Mar 2022 at 12:32, Nicolas Dufresne <nicolas@ndufresne.ca> wrote:
->>
->> Le jeudi 24 mars 2022 à 21:20 +0300, Dmitry Osipenko a écrit :
->>> The root of the problem is that DRM UAPI is more flexible and allows to
->>> customize offsets for both S/MPLANEs, while V4L doesn't allow to do it
->>> at all. I'm exploring all the potential options, so far neither of the
->>> proposed variants is ideal.
->>
->> In GStreamer kmssink, the way DRM is used, is that if you have 2 planes in your
->> pixel format, but only received 1 DMABuf, we will pass this DMABuf twice (well
->> GEM handles, but twice), with appropriate offset.
->>
->> With this in mind, the idea for V4L2 could be to always resort to MPLANE for
->> this purpose. The tricky part for userland is that it needs to know the dual
->> pixel format and map that accordingly. That is a bit difficult and this is
->> something Helen was trying to address with the v4l2_buffer_ext (that and
->> allowing space to store DRM Modifiers in the future).
->>
->> The second challenge is the overhead. In DRM, as we "prime" the DMABuf into
->> handles, this gives a kernel object to store any relevant information about the
->> buffer. So having it duplicate can be done at no cost. In V4L2, the driver would
->> need to handle that more often. Specially that despite the recommendation
->> (except for primary buffer decoder, were this is mandatory), we don't force a
->> strict DMABuf / Buffer IDX  mapping.
-> 
-> To throw another use case of data offsets into the mix, I'm keeping a
-> watching eye on implementing stereoscopic capture into libcamera where
-> we want to present the same buffer to the ISP twice (once for each
-> eye) with either a vertical or horizontal offset between the two
-> passes.
-> Adding a data_offset of either a half line or half the frame is the
-> easiest way around that one, although it could potentially be
-> accommodated through the selection API setting a compose region
-> instead.
+tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
+head:   d32e9a403c5c4f16dc577cbe92148e5b80f79d59
+commit: eed43994431837da508aed7b50717777818c1837 [190/293] [REVERTME] debugfs to operation on TDX debug op
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20220423/202204230602.MCSINBa4-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/eed43994431837da508aed7b50717777818c1837
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream-workaround
+        git checkout eed43994431837da508aed7b50717777818c1837
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Hi Dave,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thank you for the suggestion about the stereoscopic capture! If you'll
-manage to test this patch and it will work for you, then please feel
-free to give yours tested-by.
+All warnings (new ones prefixed by >>):
 
-I'll need to do couple extra checks to ensure that we really need this
-new feature for the Chromebooks, this will take time. But if you'll be
-able to confirm that this variant of the patch works for yours case with
-the stereo cams, then we may try to proceed using the current variant
-right away.
+>> arch/x86/virt/vmx/tdx/tdx_debug.c:38:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (debugconfig_supported) {
+               ^~~~~~~~~~~~~~~~~~~~~
+   arch/x86/virt/vmx/tdx/tdx_debug.c:46:10: note: uninitialized use occurs here
+           return  ret;
+                   ^~~
+   arch/x86/virt/vmx/tdx/tdx_debug.c:38:2: note: remove the 'if' if its condition is always true
+           if (debugconfig_supported) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/virt/vmx/tdx/tdx_debug.c:36:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   1 warning generated.
 
+
+vim +38 arch/x86/virt/vmx/tdx/tdx_debug.c
+
+    32	
+    33	static inline u64 tddebugconfig(u64 subleaf, u64 param1, u64 param2)
+    34	{
+    35		static bool debugconfig_supported = true;
+    36		int ret;
+    37	
+  > 38		if (debugconfig_supported) {
+    39			ret = __seamcall(SEAMCALL_TDDEBUGCONFIG, subleaf, param1, param2, 0, NULL);
+    40			if (ret) {
+    41				pr_info("DEBUGCONFIG SEAMCALL isn't supported.\n");
+    42				debugconfig_supported = false;
+    43			}
+    44		}
+    45	
+    46		return  ret;
+    47	}
+    48	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

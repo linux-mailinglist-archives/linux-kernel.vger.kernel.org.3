@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF04850CBEA
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 17:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 911B450CBED
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 17:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236071AbiDWPrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 11:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45918 "EHLO
+        id S236090AbiDWPrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 11:47:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236058AbiDWPrP (ORCPT
+        with ESMTP id S236077AbiDWPrp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 11:47:15 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15172BB0B
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 08:44:16 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id t25so19151794lfg.7
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 08:44:16 -0700 (PDT)
+        Sat, 23 Apr 2022 11:47:45 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5A782DA96
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 08:44:47 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-deb9295679so11724211fac.6
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 08:44:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hfKZvtI/V1RB7ImohZ4GyUEx6ziFwIp7DfRzHaG4QmM=;
-        b=DiHDhYVtJ6mN9p21nI9d2hTsPdoU6rSCAw8cBNBF+4qy/YtbI335KdJcJCZqFlSXvO
-         jpOu2UQb1C+gtw8xsQT4X5HjpUTV0daTppKW8tMnTT+bniLkpDWxZl91QZPp9JuzkiTI
-         srMqOLLZ1kjp3tS8BKacxt7dETeCBH4scRBOomvH2IFAoVTKsVc8lgxop+Z7Vykru/jv
-         uMFR2t2zoJ8/f6k3KE/welgT/qrgmpkRU80XPg92Qvr0D4shOZ3mOkq+D0pgDDb8A9XS
-         HnwuUewjbsmG6Lqfo7uugsorPE1q8nSrQ45YkSwxs45giZvXsEJH2lGvl2ddUwzbqpg0
-         NbLg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WI4v9jTbsIcKFzbTFV4CkXCBay54N1Oo0tLcKG2okuk=;
+        b=GuCc7g12xSirTqULiexO/HNajNdmFb2nq0eVlcaz0hWMdnxOMIk5AeBAMqPyL0rYVl
+         MyvXwBc0tDxT1g1wi/Na74VHs+MMpCLVOCNuBRnNQYccRZvr/MHAzIyK7mu7VWVpRxnS
+         2zWuzRZCM9bVznfcRL1kSJRE+M+CxxTBdcY92OfyTcIYJBFBWe4C0NRAKHjdSUIVENHC
+         Xy4MWQrTivSTA6Ul6V8DvmPaHa+OhENFObjP1VJjSASeTRgGypP/0vY2zI0L8UwjUDoG
+         GUiSkSQlPu2plfvN4ZygVwuRULWkCX/AT5k4dMY1vakwjk16RPIUsOeK/9prQjRUtz9q
+         LvfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hfKZvtI/V1RB7ImohZ4GyUEx6ziFwIp7DfRzHaG4QmM=;
-        b=I11rXExvDf/a4mR4iw4tiseIiZGRss0OdZXrI2OSd0PAWK16RefVGFeGNoeDDFiVb7
-         ydsMBmc8mxMDM7cdrloLxQV98uGly0BK3KEeAWjbQfeDN2rEmcanN7d/yVAxzsq7HTca
-         oNtiVVf9y3EKPdJphMMKT7wJCr61wgZTgbcjl5unKfA7ibm6WzMq5/VjiueXXmwnb6+/
-         fU1KGZ7Hs4i5E+StKMYJnDcxRaAKV4NwKaWIKyuhS5Ki2RGg/rqEQEBXFmGnufo3z+3z
-         sqUK4UTaW23M2Xfjt8/3i6hDKrD6v1D1z8nXCXwaodkcpldL2UNGcI5HrUVs1WeymAOS
-         zHSw==
-X-Gm-Message-State: AOAM532ltUUuH6tyzktM+oX1x+n7Njswi4LRohJ0HNrXQPulWZtZSn1N
-        Oj8C/YQAOiOGO8GylypDqUhFfuhUgE4EaRhSBricfg==
-X-Google-Smtp-Source: ABdhPJy/6uEu30VxnahyAvRcr5w0UpMdLC3qntcN+PT5EYI7AtF/tDd20hIccAr0Dirl9Z90Nq17jOv10nNc7qxtU6M=
-X-Received: by 2002:a05:6512:1293:b0:471:fca1:e60 with SMTP id
- u19-20020a056512129300b00471fca10e60mr759404lfs.668.1650728654765; Sat, 23
- Apr 2022 08:44:14 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WI4v9jTbsIcKFzbTFV4CkXCBay54N1Oo0tLcKG2okuk=;
+        b=LRp0XY7AnmsqD3QabU+7n1hWUjb8rMmdBLRIG45XG3Bft9SARJlf5lCNBsk2QOtGxg
+         u9QcPR1EwCOXlFslMDXxzGI9zOuAV+R9/n+Bx6CxOjAIRAlEWAbIgZRF78r6sgDz8QKh
+         eeduDNqA41KHirVAqjLZzBYRGYz5tzhI5KwKENWUI8pS9JTclIdWtfoQOpsHyXlO3jJj
+         7EKesU2sCTIjLcV+gFPM4xFXYuLRdbg5ktqZ9HzSSUcvyy50RCqXyKJ9uDeM/8AXwgoC
+         TshTZtI3EXPlg/jKaGSOOG0OLbt+xScMApVCyvcCoWmDNRqD7CFgPEnyHFZXDb7x3jgE
+         RAEw==
+X-Gm-Message-State: AOAM5323f5ZaoolfgDHS37d9FKSk+grE4eWg3XaXNJKmSbyJPGU9JMYi
+        w4WHPNGfMvECAyzF6yeUii4JUw==
+X-Google-Smtp-Source: ABdhPJwhzqzGCODM05j5yChA14I3TniITfBb/T0zYrHKD6GGVSxGnliKR/rMO0K34IDB5CGKJF3asg==
+X-Received: by 2002:a05:6870:4414:b0:e6:244f:78ba with SMTP id u20-20020a056870441400b000e6244f78bamr7984019oah.201.1650728687284;
+        Sat, 23 Apr 2022 08:44:47 -0700 (PDT)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id g25-20020a544f99000000b002da70c710b8sm1933901oiy.54.2022.04.23.08.44.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Apr 2022 08:44:46 -0700 (PDT)
+Date:   Sat, 23 Apr 2022 08:46:47 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        bhupesh.linux@gmail.com, agross@kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, vkoul@kernel.org
+Subject: Re: [PATCH v3 1/4] dt-bindings: phy: qcom,qmp: Mark '#clock-cells'
+ as a 'optional' property
+Message-ID: <YmQfZ+h5tD6KbMID@ripper>
+References: <20220418205509.1102109-1-bhupesh.sharma@linaro.org>
+ <20220418205509.1102109-2-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
-References: <20220423102421.16869-1-fmdefrancesco@gmail.com> <20220423102421.16869-4-fmdefrancesco@gmail.com>
-In-Reply-To: <20220423102421.16869-4-fmdefrancesco@gmail.com>
-From:   Todd Kjos <tkjos@google.com>
-Date:   Sat, 23 Apr 2022 08:44:03 -0700
-Message-ID: <CAHRSSExiZMX-q_miUBOMOKrxPrvdXO2J3Wtchsn=0Etp7mvuLw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] binder: Use kmap_local_page() in binder_alloc_get_page()
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220418205509.1102109-2-bhupesh.sharma@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,55 +74,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 23, 2022 at 3:24 AM Fabio M. De Francesco
-<fmdefrancesco@gmail.com> wrote:
->
-> The use of kmap_atomic() is being deprecated in favor of kmap_local_page()
-> where it is feasible. Each call of kmap_atomic() in the kernel creates
-> a non-preemptible section and disable pagefaults. This could be a source
-> of unwanted latency, so it should be only used if it is absolutely
-> required, otherwise kmap_local_page() should be preferred.
->
-> With kmap_local_page(), the mapping is per thread, CPU local and not
-> globally visible. Furthermore, the mapping can be acquired from any context
-> (including interrupts).
->
-> Therefore, use kmap_local_page() / kunmap_local() in place of
-> kmap_atomic() / kunmap_atomic().
->
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+On Mon 18 Apr 13:55 PDT 2022, Bhupesh Sharma wrote:
 
-Acked-by: Todd Kjos <tkjos@google.com>
+> '#clock-cells' is not a required property for qmp-phy(s) in the
+> '/' node, but it should be is used in 'phy@' subnode (where it is
+> actually a 'required' property). Fix the same.
+> 
 
+It's not that #clock-cells is "not a required property", it's that the
+clock comes out of the phy (the child node), so there is no clocks
+provided by the parent device.
+
+
+Please rewrite the commit message.
+
+> This also fixes the following 'make dtbs_check' warning(s):
+> 
+> sm8350-microsoft-surface-duo2.dt.yaml: phy@1d87000:
+>   '#clock-cells' is a required property
+> 
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 > ---
->  drivers/android/binder_alloc.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
-> index 0875c463c002..058595cc7ff0 100644
-> --- a/drivers/android/binder_alloc.c
-> +++ b/drivers/android/binder_alloc.c
-> @@ -1250,17 +1250,17 @@ static int binder_alloc_do_buffer_copy(struct binder_alloc *alloc,
->                 page = binder_alloc_get_page(alloc, buffer,
->                                              buffer_offset, &pgoff);
->                 size = min_t(size_t, bytes, PAGE_SIZE - pgoff);
-> -               base_ptr = kmap_atomic(page);
-> +               base_ptr = kmap_local_page(page);
->                 tmpptr = base_ptr + pgoff;
->                 if (to_buffer)
->                         memcpy(tmpptr, ptr, size);
->                 else
->                         memcpy(ptr, tmpptr, size);
->                 /*
-> -                * kunmap_atomic() takes care of flushing the cache
-> +                * kunmap_local() takes care of flushing the cache
->                  * if this device has VIVT cache arch
->                  */
-> -               kunmap_atomic(base_ptr);
-> +               kunmap_local(base_ptr);
->                 bytes -= size;
->                 pgoff = 0;
->                 ptr = ptr + size;
-> --
-> 2.34.1
->
+>  Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
+> index 8b850c5ab116..c39ead81ecd7 100644
+> --- a/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
+> @@ -66,9 +66,6 @@ properties:
+>        - description: Address and length of PHY's common serdes block.
+>        - description: Address and length of PHY's DP_COM control block.
+>  
+> -  "#clock-cells":
+> -    enum: [ 1, 2 ]
+> -
+>    "#address-cells":
+>      enum: [ 1, 2 ]
+>  
+> @@ -112,11 +109,13 @@ patternProperties:
+>      description:
+>        Each device node of QMP phy is required to have as many child nodes as
+>        the number of lanes the PHY has.
+> +    properties:
+> +      "#clock-cells":
+> +        enum: [ 0, 1, 2 ]
+
+The commit message doesn't mention the fact that 0 is also a valid
+value. Perhaps just keep it [1, 2] in this patch?
+
+Regards,
+Bjorn
+
+>  
+>  required:
+>    - compatible
+>    - reg
+> -  - "#clock-cells"
+>    - "#address-cells"
+>    - "#size-cells"
+>    - ranges
+> @@ -468,7 +467,6 @@ examples:
+>      usb_2_qmpphy: phy-wrapper@88eb000 {
+>          compatible = "qcom,sdm845-qmp-usb3-uni-phy";
+>          reg = <0x088eb000 0x18c>;
+> -        #clock-cells = <1>;
+>          #address-cells = <1>;
+>          #size-cells = <1>;
+>          ranges = <0x0 0x088eb000 0x2000>;
+> -- 
+> 2.35.1
+> 

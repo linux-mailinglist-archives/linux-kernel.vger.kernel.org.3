@@ -2,85 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4947750CC64
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 18:43:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5ADE50CC60
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 18:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235295AbiDWQnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 12:43:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52680 "EHLO
+        id S236459AbiDWQoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 12:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236452AbiDWQmf (ORCPT
+        with ESMTP id S236451AbiDWQn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 12:42:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806113CA5B;
-        Sat, 23 Apr 2022 09:39:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 195B1B80CEE;
-        Sat, 23 Apr 2022 16:39:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C8885C385A5;
-        Sat, 23 Apr 2022 16:39:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650731974;
-        bh=UPG7CofSXFfKWK0ddl4zCS+NnflrUTaJGnwJWu5sThM=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=b01RdLach0P3csMy4cfwzbA7JIr4kCDQDm2BuhBsIegGI9YUhelPrNi1KTuQEmE9M
-         MoemXGTl0m0o+UdAWuQIofhFh2aEk12GLU1+1h0jN8j3MfZ4o7P9ePHVN9slXKTxU8
-         fcl2VWu8rrXstuWeqMr+PHm0SGk2F0CvNyAA0VFactcNtbPyl1ETp+sxAsiUPNTj8Z
-         aYgUCRs0y5jDX9fWSsEaUdNX1Z6AjLrJxECT+jML5sB7EUJ8XPRC8EFokBkOvI4zEi
-         9hz8DgctOI+LMOH32IC+7ln+K5e2ENkLDUm0gmUCyFI7D75xMeG/BlnhpPsvkqyMEz
-         tvKMIohaeB15A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B3706E8DBD4;
-        Sat, 23 Apr 2022 16:39:34 +0000 (UTC)
-Subject: Re: [GIT PULL] perf tools fixes for v5.18: 3rd batch
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220423010046.453630-1-acme@kernel.org>
-References: <20220423010046.453630-1-acme@kernel.org>
-X-PR-Tracked-List-Id: <linux-perf-users.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220423010046.453630-1-acme@kernel.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-fixes-for-v5.18-2022-04-22
-X-PR-Tracked-Commit-Id: 5bb017d4b97a0f135f43ef77091b7edcce4dcee6
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 45ab9400e73f34103e73c18a73280c9aa1650e98
-Message-Id: <165073197472.16562.6185530869806202112.pr-tracker-bot@kernel.org>
-Date:   Sat, 23 Apr 2022 16:39:34 +0000
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
+        Sat, 23 Apr 2022 12:43:56 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8180F42A38
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 09:40:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=2MvqW49dlfPXlTFO4cVz6jW0fsGriUccE1VFxe7rooQ=; b=4CpgKtZWpr1YvrwrgR0PVODSfR
+        eFHq3GErIpjs8WXAaxmLwUJKW2Z//2hg9eashRdzhcM19R6oVxxqIxAe6YlPuPVuItoTu4azCvfr2
+        pGg65CQ/FdUzZKmE6ubYHxzYTixg9YZgL+KZeg+2Hf6FBRSvPF83kFxQ+JjE8EUs6qRpgGpXw+r1e
+        ukp3Ji2ELJKv1OizDiizyYel4rZFkUXo+rKGnGWuuAZi6cPGZi7Gj7OSWaq4fKE93lQDwpAxnqKSd
+        7sMpv5r84yTKbhECYHDRHM16S9tNaakXyhMW2GipLr8jLem2OCOeIy90YqNtk/EF11ryDiHiAuK4s
+        nqKdocew==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1niIoX-004edG-Bn; Sat, 23 Apr 2022 16:40:53 +0000
+Date:   Sat, 23 Apr 2022 09:40:53 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Oleksandr Tyshchenko <olekstysh@gmail.com>
+Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Juergen Gross <jgross@suse.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Clark Williams <williams@redhat.com>,
-        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        German Gomez <german.gomez@arm.com>,
-        Guilherme Amadio <amadio@gentoo.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Julien Grall <julien@xen.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: Re: [PATCH V1 3/6] xen/virtio: Add option to restrict memory access
+ under Xen
+Message-ID: <YmQsFb36UEH9BUnN@infradead.org>
+References: <1650646263-22047-1-git-send-email-olekstysh@gmail.com>
+ <1650646263-22047-4-git-send-email-olekstysh@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1650646263-22047-4-git-send-email-olekstysh@gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 22 Apr 2022 22:00:46 -0300:
+Please split this into one patch that creates grant-dma-ops, and another
+that sets up the virtio restricted access helpers.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-fixes-for-v5.18-2022-04-22
+> +
+> +#ifdef CONFIG_ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
+> +int arch_has_restricted_virtio_memory_access(void)
+> +{
+> +	return (xen_has_restricted_virtio_memory_access() ||
+> +			cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT));
+> +}
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/45ab9400e73f34103e73c18a73280c9aa1650e98
+So instead of hardcoding Xen here, this seems like a candidate for
+another cc_platform_has flag.
 
-Thank you!
+> +config XEN_VIRTIO
+> +	bool "Xen virtio support"
+> +	default n
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+n is the default default, so no need to specify it.
+
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/******************************************************************************
+
+The all * line is not the usual kernel style, I'd suggest to drop it.
+
+> +static struct page *xen_grant_dma_alloc_pages(struct device *dev, size_t size,
+> +					      dma_addr_t *dma_handle,
+> +					      enum dma_data_direction dir,
+> +					      gfp_t gfp)
+> +{
+> +	WARN_ONCE(1, "xen_grant_dma_alloc_pages size %zu\n", size);
+> +	return NULL;
+> +}
+> +
+> +static void xen_grant_dma_free_pages(struct device *dev, size_t size,
+> +				     struct page *vaddr, dma_addr_t dma_handle,
+> +				     enum dma_data_direction dir)
+> +{
+> +	WARN_ONCE(1, "xen_grant_dma_free_pages size %zu\n", size);
+> +}
+
+Please just wire this up to the same implementation as .alloc and .free.
+
+> +	spin_lock(&xen_grant_dma_lock);
+> +	list_add(&data->list, &xen_grant_dma_devices);
+> +	spin_unlock(&xen_grant_dma_lock);
+
+Hmm, having to do this device lookup for every DMA operation is going
+to suck. It might make sense to add a private field (e.g. as a union
+with the iommu field) in struct device instead.
+
+But if not you probably want to switch to a more efficient data
+structure like the xarray at least.
+
+> +EXPORT_SYMBOL_GPL(xen_grant_setup_dma_ops);
+
+I don't think this has any modular users, or did I miss something?

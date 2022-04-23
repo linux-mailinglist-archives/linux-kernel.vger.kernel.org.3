@@ -2,114 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1016250CC1E
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 18:03:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87D1F50CC22
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 18:03:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236269AbiDWQFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 12:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33104 "EHLO
+        id S236296AbiDWQGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 12:06:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236251AbiDWQFv (ORCPT
+        with ESMTP id S236130AbiDWQGp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 12:05:51 -0400
-Received: from smtp.smtpout.orange.fr (smtp02.smtpout.orange.fr [80.12.242.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0313D2496E
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 09:02:52 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.180.246])
-        by smtp.orange.fr with ESMTPA
-        id iIDhnoslywn8GiIDhns99I; Sat, 23 Apr 2022 18:02:50 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sat, 23 Apr 2022 18:02:50 +0200
-X-ME-IP: 86.243.180.246
-Message-ID: <fad918d3-6923-5bec-7830-5cddf7a725d6@wanadoo.fr>
-Date:   Sat, 23 Apr 2022 18:02:48 +0200
+        Sat, 23 Apr 2022 12:06:45 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09655522EB
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 09:03:48 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so11749536fac.7
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 09:03:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=h8PXDVWhKSWBJ0C2lTa3ybMUBrdTmN9u1QzT/Ihk3Pk=;
+        b=nP0ktGxiJzcu0Clehe5GCxRzS2iKxF48fxVgutSfIYOUswhkoQQVHsJy/YrznvUhIs
+         BMzo/fVq7L1AlUpI4B4rUb1BqRTBpfcVnrIM30czanR61YO671Q0hPAI+s6dgLLJ/sw7
+         L/kyYpB+5dTfqfw/J7JdZsx1OwHC3eWkcUqOODNj23DDTWc7DILTpjvKpxv1aH9NK8+l
+         5hJXkEHPJZKBw71PPLwvTlXE0LGLihgzpcx2HgtZLy28Fl1qHns9F6OtpKz7/hrNIjJ1
+         fbWIpcHfk+fTchwO6egooikNX5YUoqvjpeVmynlgz7FFJ6ygG9NXkYXjERfl9KZ4max7
+         8WLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=h8PXDVWhKSWBJ0C2lTa3ybMUBrdTmN9u1QzT/Ihk3Pk=;
+        b=65NLOoV2WR5ZLeBQxN0JwccSfS1nQ0d2ZR8YzPCqCne3OfebhDgREKORcUnHdXBFVR
+         qTP9U2KJYIp4G+CDUk+yLFNpUh6DbNCeC9gBoss4ukyB/d9F+hTNVQw+M8ld1r7FsU4C
+         2gsv+JQUoUFZI2r1emeAVljstjknTmRsZOZhYWprCJ2US8jCjhRjvnd871elPnfN2R+X
+         W8zVl44eGZCzC5VjQmKZilw5wy4gHbkkeuG19SRlmlgAejMr3JsKsuDbJUUyYCDtDtY7
+         BUYqMNpENiIouqDpqEO/8j9+2FEyOiGv2vzaPNHF6XS0AsETrFA13WLDvGBKw31e34RZ
+         sJMw==
+X-Gm-Message-State: AOAM5302w2sBZ6FYFm6pMOp4GrL0Wfg2QdN4lJwZ5CMQ4K0xISL/hwHa
+        lx8vGfpi6gXLpUUEwVGyH289Ig==
+X-Google-Smtp-Source: ABdhPJyfoXu/6v5iR7R2/jWDr/7XAZoB+zpsxrUBkKAVnoaBYOT0r3a7pCIcYsGHGuHEn8JXNwum5A==
+X-Received: by 2002:a05:6870:33a5:b0:dd:f6e6:7837 with SMTP id w37-20020a05687033a500b000ddf6e67837mr3879028oae.154.1650729827416;
+        Sat, 23 Apr 2022 09:03:47 -0700 (PDT)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id c9-20020a4a8ec9000000b0032438ba79b0sm2123856ool.0.2022.04.23.09.03.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Apr 2022 09:03:46 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-phy@lists.infradead.org, linux-arm-msm@vger.kernel.org
+Cc:     robh+dt@kernel.org, agross@kernel.org,
+        Rob Herring <robh@kernel.org>, bhupesh.linux@gmail.com,
+        vkoul@kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: (subset) [PATCH v3 4/4] arm64: dts: qcom: sm8450: Fix qmp phy node (use phy@ instead of lanes@)
+Date:   Sat, 23 Apr 2022 11:03:43 -0500
+Message-Id: <165072980563.2810336.17249658876538804302.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220418205509.1102109-5-bhupesh.sharma@linaro.org>
+References: <20220418205509.1102109-1-bhupesh.sharma@linaro.org> <20220418205509.1102109-5-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 3/3] binder: Use kmap_local_page() in
- binder_alloc_get_page()
-Content-Language: fr
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Arve_Hj=c3=b8nnev=c3=a5g?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org
-Newsgroups: gmane.linux.kernel
-References: <20220423102421.16869-1-fmdefrancesco@gmail.com>
- <20220423102421.16869-4-fmdefrancesco@gmail.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220423102421.16869-4-fmdefrancesco@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Le 23/04/2022 à 12:24, Fabio M. De Francesco a écrit :
-> The use of kmap_atomic() is being deprecated in favor of kmap_local_page()
-> where it is feasible. Each call of kmap_atomic() in the kernel creates
-> a non-preemptible section and disable pagefaults. This could be a source
-> of unwanted latency, so it should be only used if it is absolutely
-> required, otherwise kmap_local_page() should be preferred.
+On Tue, 19 Apr 2022 02:25:09 +0530, Bhupesh Sharma wrote:
+> Fix the following 'make dtbs_check' warning(s) by
+> using phy@ instead of lanes@:
+> arch/arm64/boot/dts/qcom/sm8450-hdk.dtb: phy@1c0f000: 'lanes@1c0e000'
+>   does not match any of the regexes: '^phy@[0-9a-f]+$', 'pinctrl-[0-9]+'
 > 
-> With kmap_local_page(), the mapping is per thread, CPU local and not
-> globally visible. Furthermore, the mapping can be acquired from any context
-> (including interrupts).
 > 
-> Therefore, use kmap_local_page() / kunmap_local() in place of
-> kmap_atomic() / kunmap_atomic().
-> 
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> ---
->   drivers/android/binder_alloc.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
-> index 0875c463c002..058595cc7ff0 100644
-> --- a/drivers/android/binder_alloc.c
-> +++ b/drivers/android/binder_alloc.c
-> @@ -1250,17 +1250,17 @@ static int binder_alloc_do_buffer_copy(struct binder_alloc *alloc,
->   		page = binder_alloc_get_page(alloc, buffer,
->   					     buffer_offset, &pgoff);
->   		size = min_t(size_t, bytes, PAGE_SIZE - pgoff);
-> -		base_ptr = kmap_atomic(page);
-> +		base_ptr = kmap_local_page(page);
->   		tmpptr = base_ptr + pgoff;
->   		if (to_buffer)
->   			memcpy(tmpptr, ptr, size);
->   		else
->   			memcpy(ptr, tmpptr, size);
 
-in the same spirit as patch 1/3, memcpy_to_page() and memcpy_from_page() 
-looks good candidate to avoid code duplication.
+Applied, thanks!
 
-Not checked in details, but looks mostly the same.
+[4/4] arm64: dts: qcom: sm8450: Fix qmp phy node (use phy@ instead of lanes@)
+      commit: 2a31f958f8326c263f2af2511cd6d8256d81e810
 
-Just my 2c.
-
-CJ
-
->   		/*
-> -		 * kunmap_atomic() takes care of flushing the cache
-> +		 * kunmap_local() takes care of flushing the cache
->   		 * if this device has VIVT cache arch
->   		 */
-> -		kunmap_atomic(base_ptr);
-> +		kunmap_local(base_ptr);
->   		bytes -= size;
->   		pgoff = 0;
->   		ptr = ptr + size;
-
+Best regards,
+-- 
+Bjorn Andersson <bjorn.andersson@linaro.org>

@@ -2,215 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAFB550C8EB
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 12:06:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2682250C900
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 12:06:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234744AbiDWKEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 06:04:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45818 "EHLO
+        id S234750AbiDWKEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 06:04:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234283AbiDWKES (ORCPT
+        with ESMTP id S234283AbiDWKEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 06:04:18 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47E1165EDD
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 03:01:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650708077; x=1682244077;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JoPlsE2ABpO9h5Sw7SvTCPwR/5jbxfCoNRpstzd3JpY=;
-  b=VOVIvXiOBli6n1d3jhAQx3dza8BOFItAcIsuLYr4Kp7G8f+gsPmOdhMa
-   82M2D89nbCkgBOtlywfSj8QEGbzrEmMAPuiSBFHLrOrfxO5Sor+NZTYsb
-   6yYSK1RO1zbN2aUutHQV3FhyP09Nb6gVjEj+VpgFI1ZcaOynaQ3wW6qQ+
-   n1jtS2pn66nas/IMHPQ6cFps47Hs07S1Ywdp45ohnWHt7Vzxo+C0Ajuna
-   jmZG2aUeM6XWHkTvE7rT2wAGRepNPin68FSRjHGaEUpgdell0zVLB8mZc
-   36wCmUBzEo8Zqbc8txDBo1kd237hGZeJea962twoA2D0Ko1NQ0s0pOnlh
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="351324982"
-X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
-   d="scan'208";a="351324982"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 03:01:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
-   d="scan'208";a="728890233"
-Received: from lkp-server01.sh.intel.com (HELO dd58949a6e39) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 23 Apr 2022 03:01:15 -0700
-Received: from kbuild by dd58949a6e39 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1niCZn-00008x-0b;
-        Sat, 23 Apr 2022 10:01:15 +0000
-Date:   Sat, 23 Apr 2022 18:01:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 42/44]
- fs/afs/write.c:271:24: sparse: sparse: incorrect type in assignment
- (different base types)
-Message-ID: <202204231701.vIC3BFdf-lkp@intel.com>
+        Sat, 23 Apr 2022 06:04:23 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CDD616664B
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 03:01:18 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id y20so20693147eju.7
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 03:01:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=yMGG+zyUqngKlUh1IoJ7uZEj7Hkk7vR8Bqm6uTHC9YY=;
+        b=VdkCVDZAvN4RNtsDNBvJD/u8yxTwvhngmT9LXS+yNnFusdRs16u4cjFr5irHyvFgHq
+         L87iry65Vj5kDYAKmCA4+vXu2x/ay6/vVainiECGOlcKz9yxcgB5wOt1kjp6RJxVQzSS
+         SSJL0/pP6MefV2saz6nmmICtwBRiuiUm/ekZvTOZdMVVFv7R/0FbSM7pK1VHGZu4nVYr
+         x6Xajdhm478/6h5MzyjfAsM2wPjrZ3iDjqortIKw39EUo2EK/CUZvcb0jqUXfB4Lyh/4
+         N6gelxgv+CoNoOfcH8ILrAgc4408xOOgrL6sE/44IPl6qa1/NxdBsxUhS75l8PrHYF67
+         po7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=yMGG+zyUqngKlUh1IoJ7uZEj7Hkk7vR8Bqm6uTHC9YY=;
+        b=UmaDkMYn1ZpzI+mSwVX+RahQMaKgSKdChNoZ4lXLU5drDhRNMwMnG02Q0r5+oBFyIO
+         JL27exu6gYfjxCq9buZHdHMQozFALIQ8ch9fQ6Vjp/u7yqANo2iE1XszHwkLvSD+H6Xj
+         l24AhtCjXT7fcCkESmzRBiecJpE9IaHfZUDtJYxZBIcU17IBtFY3C5aSwQHBs6Rl1JwC
+         x0LYnGQHYtjbFHuKWt9SJUyuwJ4VU6fbA0964gWeSdp+NmpH9o9T7dIFeyrmz1PraAnZ
+         1lgns55GP0VqUbXa2E7ja43+xCT8/IS+y6mytHdrfxPii+F7TcAuz9t3sjF4wnSeSZjP
+         GfDQ==
+X-Gm-Message-State: AOAM532VO6NGC8Rt6y+kz2959bvaI6wI/0cywCz7PYXkTv4B+vi5R4le
+        56mJIC017j5IvDDkGrHQc8cjzw==
+X-Google-Smtp-Source: ABdhPJzHcV7ul2x/Jmn2zCbAwdMzU3MG3+f/janVAUgWm+zXoVg8O3JiRyXSQtQT+AfHfvQ05S+tOA==
+X-Received: by 2002:a17:907:7ea6:b0:6ef:f384:15b4 with SMTP id qb38-20020a1709077ea600b006eff38415b4mr8091838ejc.91.1650708076601;
+        Sat, 23 Apr 2022 03:01:16 -0700 (PDT)
+Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id n16-20020a05640204d000b0042062f9f0e1sm1963756edw.15.2022.04.23.03.01.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 23 Apr 2022 03:01:16 -0700 (PDT)
+Message-ID: <67a03d14-7d83-2aec-ee60-82b142450512@linaro.org>
+Date:   Sat, 23 Apr 2022 12:01:14 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCHv1 01/19] dt-binding: clock: Document rockchip,rk3588-cru
+ bindings
+Content-Language: en-US
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@lists.collabora.co.uk,
+        Elaine Zhang <zhangqing@rock-chips.com>, kernel@collabora.com
+References: <20220422170920.401914-1-sebastian.reichel@collabora.com>
+ <20220422170920.401914-2-sebastian.reichel@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220422170920.401914-2-sebastian.reichel@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
-head:   931e50676c6598d0eda1954ead465519ff91874d
-commit: 0565641524458774e47a4d1fd06f80d0bd62965f [42/44] afs: [DON'T MERGE] Implement trivial content crypto for testing purposes
-config: alpha-randconfig-s031-20220422 (https://download.01.org/0day-ci/archive/20220423/202204231701.vIC3BFdf-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/ammarfaizi2/linux-block/commit/0565641524458774e47a4d1fd06f80d0bd62965f
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout 0565641524458774e47a4d1fd06f80d0bd62965f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=alpha SHELL=/bin/bash fs/afs/
+On 22/04/2022 19:09, Sebastian Reichel wrote:
+> From: Elaine Zhang <zhangqing@rock-chips.com>
+> 
+> Document the device tree bindings of the rockchip Rk3588 SoC
+> clock driver.
+> 
+> Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>  .../bindings/clock/rockchip,rk3588-cru.yaml   | 63 +++++++++++++++++++
+>  1 file changed, 63 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3588-cru.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/rockchip,rk3588-cru.yaml b/Documentation/devicetree/bindings/clock/rockchip,rk3588-cru.yaml
+> new file mode 100644
+> index 000000000000..dec2ae8c7970
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/rockchip,rk3588-cru.yaml
+> @@ -0,0 +1,63 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/rockchip,rk3588-cru.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: ROCKCHIP rk3588 Family Clock Control Module Binding
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+s/ROCKCHIP/Rockchip/
+(that's the most common name used here and also on company website)
+
+s/Binding//
+
+> +
+> +maintainers:
+> +  - Elaine Zhang <zhangqing@rock-chips.com>
+> +  - Heiko Stuebner <heiko@sntech.de>
+> +
+> +description: |
+> +  The RK3588 clock controller generates the clock and also implements a
+> +  reset controller for SoC peripherals.
+> +  (examples: provide SCLK_UART2\PCLK_UART2 and SRST_P_UART2\SRST_S_UART2 for UART module)
+> +  Each clock is assigned an identifier and client nodes can use this identifier
+> +  to specify the clock which they consume. All available clocks are defined as
+> +  preprocessor macros in the dt-bindings/clock/rk3588-cru.h headers and can be
+> +  used in device tree sources.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - rockchip,rk3588-cru
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#clock-cells":
+> +    const: 1
+> +
+> +  "#reset-cells":
+> +    const: 1
+> +
+> +  clocks: true
+
+Need to define how many and what clocks are coming here.
+
+> +
+> +  assigned-clocks:
+> +    minItems: 1
+> +
+> +  assigned-clock-parents:
+> +    minItems: 1
+> +
+> +  assigned-clock-rates:
+> +    minItems: 1
+
+You normally don't need these in the bindings, they come from the schema.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - "#clock-cells"
+> +  - "#reset-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  # Clock Control Module node:
+> +  - |
+> +    cru: clock-controller@fd7c0000 {
+> +      compatible = "rockchip,rk3588-cru";
+> +      reg = <0xfd7c0000 0x5c000>;
+> +      #clock-cells = <1>;
+> +      #reset-cells = <1>;
+> +    };
 
 
-sparse warnings: (new ones prefixed by >>)
->> fs/afs/write.c:271:24: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be64 [usertype] @@     got restricted __le64 [usertype] @@
-   fs/afs/write.c:271:24: sparse:     expected restricted __be64 [usertype]
-   fs/afs/write.c:271:24: sparse:     got restricted __le64 [usertype]
->> fs/afs/write.c:274:23: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be64 [usertype] @@     got long long [usertype] pos @@
-   fs/afs/write.c:274:23: sparse:     expected restricted __be64 [usertype]
-   fs/afs/write.c:274:23: sparse:     got long long [usertype] pos
-   fs/afs/write.c:378:24: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be64 [usertype] @@     got restricted __le64 [usertype] @@
-   fs/afs/write.c:378:24: sparse:     expected restricted __be64 [usertype]
-   fs/afs/write.c:378:24: sparse:     got restricted __le64 [usertype]
-   fs/afs/write.c:381:23: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be64 [usertype] @@     got long long [usertype] pos @@
-   fs/afs/write.c:381:23: sparse:     expected restricted __be64 [usertype]
-   fs/afs/write.c:381:23: sparse:     got long long [usertype] pos
-
-vim +271 fs/afs/write.c
-
-   230	
-   231	/*
-   232	 * Encrypt part of a write for fscrypt.  The caller reserved an extra
-   233	 * scatterlist element before each of source_sg and dest_sg for our purposes,
-   234	 * should we need them.
-   235	 */
-   236	int afs_encrypt_block(struct netfs_io_request *wreq, loff_t pos, size_t len,
-   237			      struct scatterlist *source_sg, unsigned int n_source,
-   238			      struct scatterlist *dest_sg, unsigned int n_dest)
-   239	{
-   240		struct crypto_sync_skcipher *ci;
-   241		struct skcipher_request *req;
-   242		struct crypto_skcipher *tfm;
-   243		struct sha256_state *sha;
-   244		void *buf = NULL;
-   245		__be64 *session_key;
-   246		u8 *iv, *b0;
-   247		int ret;
-   248	
-   249		ci = crypto_alloc_sync_skcipher("cts(cbc(aes))", 0, 0);
-   250		if (IS_ERR(ci)) {
-   251			ret = PTR_ERR(ci);
-   252			pr_err("Can't allocate cipher: %d\n", ret);
-   253			goto error;
-   254		}
-   255		tfm = &ci->base;
-   256	
-   257		if (crypto_sync_skcipher_ivsize(ci) > 16 &&
-   258		    crypto_sync_skcipher_blocksize(ci) > 16) {
-   259			pr_err("iv wrong size: %u\n", crypto_sync_skcipher_ivsize(ci));
-   260			ret = -EINVAL;
-   261			goto error_ci;
-   262		}
-   263	
-   264		buf = kzalloc(4 * 16 + sizeof(*sha), GFP_KERNEL);
-   265		if (!buf)
-   266			goto error_ci;
-   267		b0 = buf;
-   268		iv = buf + 32;
-   269		session_key = buf + 48;
-   270		session_key[0] = cpu_to_be64(pos);
- > 271		session_key[1] = cpu_to_le64(pos);
-   272		sha = buf + 64;
-   273	
- > 274		*(__be64 *)iv = pos;
-   275	
-   276		ret = crypto_sync_skcipher_setkey(ci, (u8 *)session_key, 16);
-   277		if (ret < 0) {
-   278			pr_err("Setkey failed: %d\n", ret);
-   279			goto error_ci;
-   280		}
-   281	
-   282		ret = -ENOMEM;
-   283		req = skcipher_request_alloc(tfm, GFP_NOFS);
-   284		if (!req)
-   285			goto error_ci;
-   286	
-   287		skcipher_request_set_sync_tfm(req, ci);
-   288		skcipher_request_set_callback(req, 0, NULL, NULL);
-   289	
-   290		/* If the length is so short that the CTS algorithm will refuse to
-   291		 * handle it, prepend a predictable block on the front and discard the
-   292		 * output.  Since CTS does draw data backwards, we can regenerate the
-   293		 * encryption on just that block at decryption time.
-   294		 */
-   295		if (len < 16) {
-   296			unsigned int i;
-   297			u8 *p = buf + 16;
-   298	
-   299			kdebug("preblock %16phN", iv);
-   300			sha256_init(sha);
-   301			sha256_update(sha, iv, 32); /* iv and session key */
-   302			sha256_final(sha, b0);
-   303			kdebug("preblock %16phN", b0);
-   304	
-   305			netfs_dump_sg("SRC", source_sg, n_source);
-   306			if (sg_copy_to_buffer(source_sg, n_source, p, len) != len) {
-   307				ret = -EIO;
-   308				goto error_req;
-   309			}
-   310	
-   311			for (i = 0; i < len; i++)
-   312				p[i] += b0[i];
-   313	
-   314			if (sg_copy_from_buffer(dest_sg, n_dest, p, len) != len) {
-   315				ret = -EIO;
-   316				goto error_req;
-   317			}
-   318			netfs_dump_sg("DST", dest_sg, n_dest);
-   319			ret = 0;
-   320		} else {
-   321			netfs_dump_sg("SRC", source_sg, n_source);
-   322			skcipher_request_set_crypt(req, source_sg, dest_sg, len, iv);
-   323			ret = crypto_skcipher_encrypt(req);
-   324			if (ret < 0)
-   325				pr_err("Encrypt failed: %d\n", ret);
-   326			netfs_dump_sg("DST", dest_sg, n_dest);
-   327		}
-   328	
-   329	error_req:
-   330		skcipher_request_free(req);
-   331	error_ci:
-   332		kfree(buf);
-   333		crypto_free_sync_skcipher(ci);
-   334	error:
-   335		return ret;
-   336	}
-   337	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+Krzysztof

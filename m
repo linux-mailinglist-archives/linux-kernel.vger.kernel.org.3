@@ -2,97 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52F3B50C926
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 12:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1484450C92D
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 12:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234888AbiDWKXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 06:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54732 "EHLO
+        id S229540AbiDWK2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 06:28:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233592AbiDWKX1 (ORCPT
+        with ESMTP id S234891AbiDWK13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 06:23:27 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C291B89D9
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 03:20:29 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id bv19so20741863ejb.6
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 03:20:28 -0700 (PDT)
+        Sat, 23 Apr 2022 06:27:29 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C022564E6
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 03:24:31 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id u17-20020a05600c211100b0038eaf4cdaaeso9512953wml.1
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 03:24:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=wFau58/3dbFFXW5s/rSRyjR0Vv6vq15uvojLlFyaWYw=;
-        b=VdBeLuXQeTfZ0WLS8qcex/zqFzDuiG8Txkpzd9okBbMJ4TgfIsIFJmbW7Tf99SDUoQ
-         jDozl0XWC7OEZ6qTd1JLMPr6dl6mvilBQdyKEKzH8OW9agDsvPmBN5W6j283532gx1nQ
-         MKdbMzmYHmf9+1S/2AXVdz8polAsDE+i7Og35b7TDRH84FLh0oABC4bn10uokB4GMmXr
-         RJ9baprrI9l2mL35Yor4CqdnWDHYtm78mZu5PaX7vEJexhH80EuAKtL1Vrnb0VpEpI1d
-         C61sPiiOwt1ZnMr75JCXwE6BBhUAsRrwaaW2u+lfmaMFzb7HvaMkm468iZIi0KV+yeZW
-         ryyw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hmwzzU+oUsjeOQ4831eC65EcSxjUz8YhjuhTAsVP8U8=;
+        b=CTywPRVtNSBTMd0idOhtNLInS25aX2di8NMiKJ27MTuKI1wC3wAHYqqtMgBrz8Uk38
+         h2aEDAHeC30IBkOpwZ/KQ1AZ8P1nGF09QL9Wcaz6pUWT8JZe4PCbvW3AuES/GZ/hqdwh
+         sMlhO9k9rvzQIs5689LR03VsW1J2lMBR3y7QcQQsmFNkOybMA4OucGR6KhLNEDo5GbF8
+         JnWhJAaO114p3KBNsbT5zEMilZ9I///u+DrVidCADR5QS0CwEtJktemFPTBWIcjgm8qD
+         HLRvSofPBigx71DWgavXtPg2FtQi+l9kNCWFTDyG7mEZABSWaYGj+it8R9DmjZxeaHTz
+         zIsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=wFau58/3dbFFXW5s/rSRyjR0Vv6vq15uvojLlFyaWYw=;
-        b=2obR/UTfNMmGTU0T3nIAkfBYmo0x8HPT78UzSehMY45AXaY7bnoVwwwqtfzi1ayMm2
-         HlU2ftazQyzSjTTOUz/ymDeaX1msnj2grBr/SMuYGy0+2oBAip4BrOJOsImJz+uxINmO
-         ZTZWFR26bGuk0JlxULMO4cXuLUuo5idTjD4YV3uYjvp4neBcRks1Dk9/ALoAOHXPNbGP
-         fVak55AksdGa6QPMIL0S/Tcq9m4ySi9uwqzeoN4gIf57NU5kJPdIkz+Qwj+DQZXDaMTP
-         e7lrGckkstVriE3NHITXdWI4iLO5G2N+jGYpnwGKgFVCfNnbu+s+QgYJU/oGSGqcYre3
-         LcUw==
-X-Gm-Message-State: AOAM5307MbLFI5DR7ZIdrNk8UBzT1+gtGQupGx0cND/qMxgiwvNh4igE
-        4c+JSCxsSUNsF217/UTpFKO+YQ==
-X-Google-Smtp-Source: ABdhPJyHlCCVCTAtns0efc4iZ7S75fDASI52u/P1Kc0Vy4D6sBJpiZ7iYAysEriC5MzcgajCOpK+XA==
-X-Received: by 2002:a17:907:9721:b0:6f3:806c:b9f4 with SMTP id jg33-20020a170907972100b006f3806cb9f4mr119631ejc.462.1650709227598;
-        Sat, 23 Apr 2022 03:20:27 -0700 (PDT)
-Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id g9-20020aa7c849000000b00412fc6bf26dsm2063437edt.80.2022.04.23.03.20.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Apr 2022 03:20:27 -0700 (PDT)
-Message-ID: <ad62836d-b66f-8423-8c9a-c3b9f90e0add@linaro.org>
-Date:   Sat, 23 Apr 2022 12:20:26 +0200
+        bh=hmwzzU+oUsjeOQ4831eC65EcSxjUz8YhjuhTAsVP8U8=;
+        b=ja4+w45Jqdd02UVgSJ6dl8oA0LTprs2orcykkSQcYbi9/KzCCSaMGn+IV7jkOjZBZx
+         etATruSf0IcLMhHNh3HJr6Cj6KS58OIeUqhfG8SnFFF6Wpu6t+9Jg4XauQ5yx63OR4h+
+         2Ob+pKMbSmNKULBBVFVSG8g9X9gmUv2jRoCvLaCXNsoiy/fQYzOLk1oqB2CVM6NGQCoq
+         lFno6HyiG6R3V5SvDFbrqTxHcuIcVHxAXGR6AAoSDYJEW2cLTY4lkPhwCkMg9K+GoYKa
+         gDJfiUiQ/laVRaM6o2pr+gibqgc11ATtaEcqKkKppMAhy+sU7N15h1Y/BTcYOttueEvG
+         LQ8Q==
+X-Gm-Message-State: AOAM530oB78XtYzRQRoboPoGLH+/Xe/a5eYNCunm1Pab/d64A8dLpct/
+        kBbK3zrH/Csh87G3ti18008=
+X-Google-Smtp-Source: ABdhPJwbDV6RBBsBs4YLiSHH1R3BI3vAH6+s7n1iUCc/tczi8HEpXIcuEVEJVmm3XPrlOPfEROozog==
+X-Received: by 2002:a7b:cf05:0:b0:38e:b707:1c3d with SMTP id l5-20020a7bcf05000000b0038eb7071c3dmr7890731wmg.164.1650709470282;
+        Sat, 23 Apr 2022 03:24:30 -0700 (PDT)
+Received: from localhost.localdomain (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
+        by smtp.gmail.com with ESMTPSA id t15-20020adfeb8f000000b002060d26c211sm4089057wrn.114.2022.04.23.03.24.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Apr 2022 03:24:28 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Subject: [PATCH 0/3] binder: Use kmap_local_page() in binder_alloc.c
+Date:   Sat, 23 Apr 2022 12:24:18 +0200
+Message-Id: <20220423102421.16869-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] dt-bindings: fsl: convert fsl,layerscape-dcfg to YAML
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Li Yang <leoyang.li@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220421153044.3496643-1-michael@walle.cc>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220421153044.3496643-1-michael@walle.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/04/2022 17:30, Michael Walle wrote:
-> Convert the fsl,layerscape-dcfg binding to the new YAML format.
-> 
-> One thing added here, compared to the original binding, is the clock
-> controller subnode of the LS1028A SoC and its "simple-mfd" compatible as
-> used in arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi as well as the
-> little-endian and big-endian properties.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
->  .../arm/freescale/fsl,layerscape-dcfg.txt     | 19 ------
->  .../arm/freescale/fsl,layerscape-dcfg.yaml    | 68 +++++++++++++++++++
->  2 files changed, 68 insertions(+), 19 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/arm/freescale/fsl,layerscape-dcfg.txt
->  create mode 100644 Documentation/devicetree/bindings/arm/freescale/fsl,layerscape-dcfg.yaml
+Use kmap_local_page() in binder_alloc.c because kmap() and kmap_atomic()
+are being deprecated and kmap_local_page is preferred where it is feasible.
 
-Same comments as for scfg (move to soc, generic node name, reference
-clock controller schema, mention adding syscon in commit msg).
+With kmap_local_page(), the mapping is per thread, CPU local and not
+globally visible. Furthermore, the mapping can be acquired from any
+context, including interrupts.
 
-Best regards,
-Krzysztof
+Fabio M. De Francesco (3):
+  binder: Use memset_page() in binder_alloc_clear_buf()
+  binder: Use kmap_local_page() in binder_alloc_copy_user_to_buffer()
+  binder: Use kmap_local_page() in binder_alloc_get_page()
+
+ drivers/android/binder_alloc.c | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
+
+-- 
+2.34.1
+

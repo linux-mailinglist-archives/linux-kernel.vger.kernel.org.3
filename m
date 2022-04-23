@@ -2,87 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03C3850CD2A
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 21:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2272250CD2C
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 21:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236861AbiDWTUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 15:20:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44210 "EHLO
+        id S236873AbiDWTWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 15:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiDWTUF (ORCPT
+        with ESMTP id S229491AbiDWTWV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 15:20:05 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94611D92F7;
-        Sat, 23 Apr 2022 12:17:06 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-e5c42b6e31so12049557fac.12;
-        Sat, 23 Apr 2022 12:17:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4KKD44aDbTYnErXQIAdZB1trxRmXyTSu+nMBzwIudCY=;
-        b=IV/5iQpQe05/ci0Bh0/qYL+Qkay9ECCjZ3gZzF1PcUEpHWhRytD63iz2WyGVN7GLW2
-         4kjxM+YEyRr48dj4gmzrRLcUqiyV97S2i0chw3TDPcvn3NMny1mKaa0nSP1/eQSGnByP
-         U4JlqpextZX2hxgnXPhwkpiAPNwWYXpbmVyyukrvjeftftDnRzuNnV6XFAIbTnWii9aq
-         c+qBiP+InFkem1YJxtOGzERE+o9HQ1a7DyVBKh/1qSYKmVpaWtgko01uOShWFNQZ8A5h
-         rMM4YkJ1WCHmhWybEmVZbfZiWD5a78VTmMIeuGLmcXILKLUp9IvxtDIz8PzyEZ4aWWFH
-         KEIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=4KKD44aDbTYnErXQIAdZB1trxRmXyTSu+nMBzwIudCY=;
-        b=YzDBPZOQBsWYRftJCscOyJGkFuJH16hFwAzkxWWAwTV9CfwlVzKw3gVVu1dmwFf4ep
-         ACoVggk8QESCPcDNNa3ZYgvSk9y9zaD5mn9WPvetvfGeCkuOkLRlS8huptrrmTfEMw1G
-         PMNp4vwgSNUn2Sm2yxo5d21+11F9z0LlPuxQHNrENYLnPsHYyjGOMHSwiPwzvUJKBLJh
-         9ETNEJGsRtqk11JA95xLOlOycE/x2eThGXBfN2QUZ99P4eta219NmvK95z1Vvw5I2dj1
-         AipiUAr2+LgYFXhtybp4mKGBtoWa9u6MGd4yI+S/74csShPdbYn1DQY1HpWEcHRP5JER
-         cXVg==
-X-Gm-Message-State: AOAM530zeRs35vC6oj5TlgmQX98yt5B6HC991QGptJvLRgvmr1pZf+KS
-        XvUhe3+nycsJgsBGBz47xlY=
-X-Google-Smtp-Source: ABdhPJwtqAxGRodl4NNQOlWfRGaxk6b4ezEVaz399ot2DLg3L1Qu21f9VHFMP62jDgO4Fx+OTrWgBA==
-X-Received: by 2002:a05:6870:41c9:b0:db:f23:f5e with SMTP id z9-20020a05687041c900b000db0f230f5emr8701653oac.118.1650741425294;
-        Sat, 23 Apr 2022 12:17:05 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j25-20020a9d1919000000b0060549a9ca91sm2023212ota.79.2022.04.23.12.17.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 12:17:03 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 23 Apr 2022 12:17:01 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add ProArt X570 Creator WIFI
- board
-Message-ID: <20220423191701.GA3971291@roeck-us.net>
-References: <20220422111737.1352610-1-eugene.shalygin@gmail.com>
+        Sat, 23 Apr 2022 15:22:21 -0400
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3BDA1DA401
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 12:19:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1650741561;
+        bh=/RKB2jRgAU16VoNM+zrBlmdZGZchtI/lZWSgcosPGv0=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=Gyk8pm46wmYR0N4nk0lEnMA6k4Tsqvc81v+4gQa+unWZJHCakGfWRWMvFyr6C4728
+         s3vXls3mHR2Sng4A0lzishLQM1SM3lJlnkJUbqEaC85DqmuGrGmMUM4146S3bki37J
+         5qREEHzgWAEpBRi223LSjd65DCdyl8pLhn87xo5Y=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 113D71280E1D;
+        Sat, 23 Apr 2022 15:19:21 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id CzsH_sy5tZhX; Sat, 23 Apr 2022 15:19:21 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1650741560;
+        bh=/RKB2jRgAU16VoNM+zrBlmdZGZchtI/lZWSgcosPGv0=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=eYSp0gDLABNLMzlkpOrFPLsYZ/YorM+/msyNLC1xCbh2TycDRsdzI8WSTN9kjC0br
+         M6jvSa/zSs6rITkQmP/OAAdtOxLQXCIueyfFDTX+5kHZhA+O4HgG49VU1zk2gYZ599
+         gqv8sK5y8UDjza+85vlpbQpT6e/5nlrhvH0JS2Ns=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::c14])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 750051280DC6;
+        Sat, 23 Apr 2022 15:19:20 -0400 (EDT)
+Message-ID: <a661ff2bab4959b2b9759c537e3c1e5c1b7ce3a9.camel@HansenPartnership.com>
+Subject: [GIT PULL] SCSI fixes for 5.18-rc3
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Sat, 23 Apr 2022 15:19:19 -0400
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422111737.1352610-1-eugene.shalygin@gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 01:17:37PM +0200, Eugene Shalygin wrote:
-> Basing on information and testing provided by users [1] add support for
-> another board, ASUS ProArt X570 Creator WiFi.
-> 
-> [1] https://github.com/zeule/asus-ec-sensors/issues/17
-> 
-> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+One fix for an information leak caused by copying a buffer to userspace
+without checking for error first in the sr driver.
 
-Applied.
+The patch is available here:
 
-Thanks,
-Guenter
+git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+
+The short changelog is:
+
+Tom Rix (1):
+      scsi: sr: Do not leak information in ioctl
+
+And the diffstat:
+
+ drivers/scsi/sr_ioctl.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
+
+With full diff below.
+
+James
+
+---
+
+diff --git a/drivers/scsi/sr_ioctl.c b/drivers/scsi/sr_ioctl.c
+index ddd00efc4882..fbdb5124d7f7 100644
+--- a/drivers/scsi/sr_ioctl.c
++++ b/drivers/scsi/sr_ioctl.c
+@@ -41,7 +41,7 @@ static int sr_read_tochdr(struct cdrom_device_info *cdi,
+ 	int result;
+ 	unsigned char *buffer;
+ 
+-	buffer = kmalloc(32, GFP_KERNEL);
++	buffer = kzalloc(32, GFP_KERNEL);
+ 	if (!buffer)
+ 		return -ENOMEM;
+ 
+@@ -55,10 +55,13 @@ static int sr_read_tochdr(struct cdrom_device_info *cdi,
+ 	cgc.data_direction = DMA_FROM_DEVICE;
+ 
+ 	result = sr_do_ioctl(cd, &cgc);
++	if (result)
++		goto err;
+ 
+ 	tochdr->cdth_trk0 = buffer[2];
+ 	tochdr->cdth_trk1 = buffer[3];
+ 
++err:
+ 	kfree(buffer);
+ 	return result;
+ }
+@@ -71,7 +74,7 @@ static int sr_read_tocentry(struct cdrom_device_info *cdi,
+ 	int result;
+ 	unsigned char *buffer;
+ 
+-	buffer = kmalloc(32, GFP_KERNEL);
++	buffer = kzalloc(32, GFP_KERNEL);
+ 	if (!buffer)
+ 		return -ENOMEM;
+ 
+@@ -86,6 +89,8 @@ static int sr_read_tocentry(struct cdrom_device_info *cdi,
+ 	cgc.data_direction = DMA_FROM_DEVICE;
+ 
+ 	result = sr_do_ioctl(cd, &cgc);
++	if (result)
++		goto err;
+ 
+ 	tocentry->cdte_ctrl = buffer[5] & 0xf;
+ 	tocentry->cdte_adr = buffer[5] >> 4;
+@@ -98,6 +103,7 @@ static int sr_read_tocentry(struct cdrom_device_info *cdi,
+ 		tocentry->cdte_addr.lba = (((((buffer[8] << 8) + buffer[9]) << 8)
+ 			+ buffer[10]) << 8) + buffer[11];
+ 
++err:
+ 	kfree(buffer);
+ 	return result;
+ }
+@@ -384,7 +390,7 @@ int sr_get_mcn(struct cdrom_device_info *cdi, struct cdrom_mcn *mcn)
+ {
+ 	Scsi_CD *cd = cdi->handle;
+ 	struct packet_command cgc;
+-	char *buffer = kmalloc(32, GFP_KERNEL);
++	char *buffer = kzalloc(32, GFP_KERNEL);
+ 	int result;
+ 
+ 	if (!buffer)
+@@ -400,10 +406,13 @@ int sr_get_mcn(struct cdrom_device_info *cdi, struct cdrom_mcn *mcn)
+ 	cgc.data_direction = DMA_FROM_DEVICE;
+ 	cgc.timeout = IOCTL_TIMEOUT;
+ 	result = sr_do_ioctl(cd, &cgc);
++	if (result)
++		goto err;
+ 
+ 	memcpy(mcn->medium_catalog_number, buffer + 9, 13);
+ 	mcn->medium_catalog_number[13] = 0;
+ 
++err:
+ 	kfree(buffer);
+ 	return result;
+ }
+

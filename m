@@ -2,91 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5270350CC62
+	by mail.lfdr.de (Postfix) with ESMTP id C827250CC63
 	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 18:43:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231442AbiDWQol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 12:44:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58652 "EHLO
+        id S236471AbiDWQpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 12:45:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236465AbiDWQoR (ORCPT
+        with ESMTP id S236443AbiDWQpR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 12:44:17 -0400
-Received: from mxout02.lancloud.ru (mxout02.lancloud.ru [45.84.86.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3660347AD3;
-        Sat, 23 Apr 2022 09:41:14 -0700 (PDT)
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru ADB9123081DB
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH v3 7/8] ARM: dts: r9a06g032: Add USB PHY DT support
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        "Geert Uytterhoeven" <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>
-CC:     Rob Herring <robh@kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-renesas-soc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-References: <20220422120850.769480-1-herve.codina@bootlin.com>
- <20220422120850.769480-8-herve.codina@bootlin.com>
- <ed432ba2-6081-4d82-bdc9-cd88cb52ca1f@omp.ru>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <f7e76000-11ec-42d1-5767-7f270a3b025d@omp.ru>
-Date:   Sat, 23 Apr 2022 19:41:09 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Sat, 23 Apr 2022 12:45:17 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF1B3D1D4
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 09:42:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=BbU4qU1u+ib3z06jcjxtpWxewOhWeGRACT3SUClYfQU=; b=AhrDqdLN83fA5xLD4BM2GP2cPe
+        ZPFamzRoBUWgZ6TueAJd/LnTpCkqpIraOwxxnFdhh10vSqfwomorASN5nrlTp8V9Dry0dnGRxjjEw
+        v7JuhY6ox9FidKp5Hlp3HLTXDr3Vz4TBvr3dE48LvKPTfesNhxqNIb3L+LJJZDQI1E1E05OFk7nZJ
+        fdgfnxdUNoQrEcTt1wwc5Cy5Dh82uK7C4oGDIf7aO2Wy+2OHkl7W87Jqi1aFlc6+I3039Se/GEDo3
+        evKCQOC1ENaEsIIIjNzCQtGidYDx7645wDthEjcAzr29ZEXmNny8nn/OVrakWVtN9qIAf8TKvLahV
+        rbi2qx6g==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1niIpu-004etX-T8; Sat, 23 Apr 2022 16:42:18 +0000
+Date:   Sat, 23 Apr 2022 09:42:18 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Oleksandr Tyshchenko <olekstysh@gmail.com>
+Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Julien Grall <julien@xen.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: Re: [PATCH V1 6/6] arm/xen: Assign xen-grant DMA ops for xen-grant
+ DMA devices
+Message-ID: <YmQsagqMn56jidFZ@infradead.org>
+References: <1650646263-22047-1-git-send-email-olekstysh@gmail.com>
+ <1650646263-22047-7-git-send-email-olekstysh@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <ed432ba2-6081-4d82-bdc9-cd88cb52ca1f@omp.ru>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1650646263-22047-7-git-send-email-olekstysh@gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/23/22 12:09 PM, Sergey Shtylyov wrote:
+On Fri, Apr 22, 2022 at 07:51:03PM +0300, Oleksandr Tyshchenko wrote:
+>  static inline void xen_setup_dma_ops(struct device *dev)
+>  {
+>  #ifdef CONFIG_XEN
+> -	if (xen_swiotlb_detect())
+> +	if (arch_has_restricted_virtio_memory_access() &&
+> +			xen_is_grant_dma_device(dev))
+> +		xen_grant_setup_dma_ops(dev);
+> +	else if (xen_swiotlb_detect())
 
-[...]
->> Define the r9a06g032 generic part of the USB PHY device node.
->>
->> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
->> ---
->>  arch/arm/boot/dts/r9a06g032.dtsi | 6 ++++++
->>  1 file changed, 6 insertions(+)
->>
->> diff --git a/arch/arm/boot/dts/r9a06g032.dtsi b/arch/arm/boot/dts/r9a06g032.dtsi
->> index 33581f0c55c4..58af07eb75c9 100644
->> --- a/arch/arm/boot/dts/r9a06g032.dtsi
->> +++ b/arch/arm/boot/dts/r9a06g032.dtsi
->> @@ -59,6 +59,12 @@ ext_rtc_clk: extrtcclk {
->>  		clock-frequency = <0>;
->>  	};
->>  
->> +	usbphy: usbphy {
-> 
->    I think the node name should be "usb-phy"...
+I don't think that arch_has_restricted_virtio_memory_access
+check should be there as it still is a bit of a layering violation.
 
-   It's not my thinking alone, the DT spec documents "usb-phy" in section 2.2.2. :-)
-
-> [...]
-
-MBR, Sergey

@@ -2,92 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F10A50CAEA
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 16:01:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2ADD50CAF6
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 16:02:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235910AbiDWOEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 10:04:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59476 "EHLO
+        id S232845AbiDWOF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 10:05:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235928AbiDWOEm (ORCPT
+        with ESMTP id S235958AbiDWOFO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 10:04:42 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497BC6AA58
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 07:01:44 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2f4e17a5809so51946257b3.2
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 07:01:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=T8hqvwXzMDJqZ8Axnxfnhvq+3Bu/rfhoYjsi7PA4tsE=;
-        b=SaaEKps4SdcXrfWLEhDKbRKvWuHqxD/qC9DthlbxTefT8zFbnCkKN6Twt0N/zWPsAU
-         kJOzbP+3wq3L1DT7U8hKowgIHXNJSlfhEhCCYfjXkLsVcCgEaWIy3Ga1kCs9Pj1BgVou
-         eETAD1Kace93r7bld1JcOoykJwmdEeNQd6b567WNlWqOJMytyl4gEqOx+RfI7++STaz7
-         d8WiXLQeQEuCe01HMtqFsrTJopkuQYUY7UetF/X16zSVu9Ac6gXTXRhIO2i3L3SaVbou
-         Cju3TdsCK+gMN7LKClrPxs1deGxBu6NTofsZp4LnlYrUunaHT7GuB+5CDuJ5wRWl69ZZ
-         nxaA==
+        Sat, 23 Apr 2022 10:05:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3DDD66949A
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 07:02:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650722535;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=6PrprjwNGAWhYgrjZkK+UokhMmTgkjR3u0Og/Iue6j8=;
+        b=YnGXhbREUtGygw7GrFVc/vCbmnQZxN6W7DgpVMy6G+nx04PsGvZuU+ULsmW6C5hjLxl5YH
+        HUx35EyfdLZhlR/BLqf/wkNdZvhaol0ECmyLixEsZbferWUBJ3krMpWcCGXSrC11Q29oy/
+        OSo2LVGJAABF0TIVtxlaSqwJfSSNHkc=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-529-fmV3_S8sNkOKt1zKuvur0g-1; Sat, 23 Apr 2022 10:02:13 -0400
+X-MC-Unique: fmV3_S8sNkOKt1zKuvur0g-1
+Received: by mail-qk1-f197.google.com with SMTP id p207-20020a3742d8000000b0069e80ba4a17so7383311qka.4
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 07:02:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=T8hqvwXzMDJqZ8Axnxfnhvq+3Bu/rfhoYjsi7PA4tsE=;
-        b=SyE+Y6avvM9JnsZvLzl7sA7ZaBRmC6ZTJzMsisYDbqtIBpfqojKl1T37cTr72RsGN4
-         HXB4FcvE0ZaMa30dXUO4jThTHHTcdv/Z8W1OtXNgMOmI9I6OYq4obmPatI2Plx4kDDmu
-         KrcFnJk01wEAmQlJoKxM9hRLLRil0BrF/O4k7axm7hXaYH38urkT58A7IZzExEYXN6F0
-         /bvIwl/fYDKh6eV369t91g0rdc17VSAAU6wsDaCrPt3xd6Vthn/X7FrdecI+0NO1YeCD
-         dWCe1n9c7WShXYsbQvPkgroE44gnCEG/L8lY2qBmqXMIE2wOhh/ESrCXnahawwco5l7q
-         KiyA==
-X-Gm-Message-State: AOAM533bnmP87DZikQpEahqOwrdhXZdE/Q0dEebiphTogf64ZV6tv1TC
-        FGJOxQp42TizW1A7Uuxr5w8pTBLrV56C2A==
-X-Google-Smtp-Source: ABdhPJxsNaEps6ilaktgoEwtOSIY7NxJHT+V6V6MOj80bSa9QlpCvxee4wdQ5uX7FllpuzeE/S8bxPIyfYgnpw==
-X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:28b])
- (user=shakeelb job=sendgmr) by 2002:a25:8e90:0:b0:637:3d1f:cc39 with SMTP id
- q16-20020a258e90000000b006373d1fcc39mr8923198ybl.321.1650722503481; Sat, 23
- Apr 2022 07:01:43 -0700 (PDT)
-Date:   Sat, 23 Apr 2022 14:01:41 +0000
-In-Reply-To: <20220421234426.3494842-3-yosryahmed@google.com>
-Message-Id: <20220423140141.si5uke4wwzkbvssv@google.com>
-Mime-Version: 1.0
-References: <20220421234426.3494842-1-yosryahmed@google.com> <20220421234426.3494842-3-yosryahmed@google.com>
-Subject: Re: [PATCH v4 2/4] selftests: cgroup: return -errno from
- cg_read()/cg_write() on failure
-From:   Shakeel Butt <shakeelb@google.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Chen Wandun <chenwandun@huawei.com>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>,
-        "Michal =?utf-8?Q?Koutn=C3=BD?=" <mkoutny@suse.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Dan Schatzberg <schatzberg.dan@gmail.com>,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6PrprjwNGAWhYgrjZkK+UokhMmTgkjR3u0Og/Iue6j8=;
+        b=TEY0pxiPPu38PhRHkdw0/oFYqYaHgDWUVH8PQOnKFL3OWBpmN1FWALKkgRn5PWnjU6
+         WvWqVEIMB2f4IbpfklrWKN/SWEk9y/gP2tmOsvbtO097rq/oTteimlfHQmWHCkItSNDg
+         a7Jq6kF0QM9xGAURXKhvByGwLMD1vgVHjRJ8hIJNfrCzDXtUTJ7OJtL1xl1rIBhER5xE
+         ZxwUZ8hiDrOF50HLTLXL4xhbcgCKQ/AnU6OqN+v5Dny/GS5VJzhCFefMWRQukG/+gEnp
+         YCXVO9zgTd1xWm0g3nVGHR7S0FnXsLR9g04CBGp6RZQToZ1MFXemCGB6Nx2uD+rVfApP
+         zfcQ==
+X-Gm-Message-State: AOAM531yBBfdQGFhDY/7WYjvJmMmraQFqogjHzswLgLtaytAOaT8SD8z
+        0cyZ2i57oWsFpW0P6vJ2jYttZ3ia/FndyMC+ENdAXdpcm63jY6Fgd/nNYE7s0lBYPwUp3oEiQPo
+        6/HGz3x3s9WvNvn6ltAnmueTG
+X-Received: by 2002:a05:622a:5c7:b0:2e1:d599:9e0d with SMTP id d7-20020a05622a05c700b002e1d5999e0dmr6545938qtb.491.1650722533271;
+        Sat, 23 Apr 2022 07:02:13 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzcg5oz2LjpPWSLb0omDfjmbtM63wn8mXV481F9hAK+F7Pn2tt2BhYD5iGuvkhmnzKkvKeS6A==
+X-Received: by 2002:a05:622a:5c7:b0:2e1:d599:9e0d with SMTP id d7-20020a05622a05c700b002e1d5999e0dmr6545919qtb.491.1650722533084;
+        Sat, 23 Apr 2022 07:02:13 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id i18-20020a05620a27d200b0069ecf023d1asm2300543qkp.129.2022.04.23.07.02.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Apr 2022 07:02:12 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     anitha.chrisanthus@intel.com, edmund.j.dea@intel.com,
+        airlied@linux.ie, daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/kmb: remove layer_irqs variable
+Date:   Sat, 23 Apr 2022 10:02:05 -0400
+Message-Id: <20220423140205.3371025-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 11:44:24PM +0000, Yosry Ahmed wrote:
-> Currently, cg_read()/cg_write() returns 0 on success and -1 on failure.
-> Modify them to return the -errno on failure.
-> 
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+Sparse reports these issues
+kmb_plane.c:21:11: warning: symbol 'layer_irqs' was not declared. Should it be static?
 
-Acked-by: Shakeel Butt <shakeelb@google.com>
+layer_irq in not used, so remove it.
+
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/gpu/drm/kmb/kmb_plane.c | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/drivers/gpu/drm/kmb/kmb_plane.c b/drivers/gpu/drm/kmb/kmb_plane.c
+index 2735b8eb3537..8fe93d149491 100644
+--- a/drivers/gpu/drm/kmb/kmb_plane.c
++++ b/drivers/gpu/drm/kmb/kmb_plane.c
+@@ -18,13 +18,6 @@
+ #include "kmb_plane.h"
+ #include "kmb_regs.h"
+ 
+-const u32 layer_irqs[] = {
+-	LCD_INT_VL0,
+-	LCD_INT_VL1,
+-	LCD_INT_GL0,
+-	LCD_INT_GL1
+-};
+-
+ /* Conversion (yuv->rgb) matrix from myriadx */
+ static const u32 csc_coef_lcd[] = {
+ 	1024, 0, 1436,
+-- 
+2.27.0
+

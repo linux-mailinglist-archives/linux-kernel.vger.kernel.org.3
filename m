@@ -2,122 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 760A950C5B1
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 02:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E69450C5B9
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 02:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbiDWA2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 20:28:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59192 "EHLO
+        id S230233AbiDWAau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 20:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbiDWA2H (ORCPT
+        with ESMTP id S230143AbiDWAao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 20:28:07 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A5FDB9;
-        Fri, 22 Apr 2022 17:25:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650673512; x=1682209512;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=u2Z9Otj6c1AajGxO+LEqR2cmO3Esb9Gfsf32sjGWGjw=;
-  b=b6WySz1SSNM/CkEU62hHKB4FanoiY10kaTZb194W7K8AYLdjn2S6ousf
-   XlmXy1SyjdVIa+sapZeQsCPY6wumf0Stpm3Hj06LKo9h9nBT4qGaN3CGn
-   GF4HaCRINVgEYNf+xnefFmJNbhrIRjaZZDHEdHbB+lV3R+ja4F2hVKr1l
-   Ax1MI7kS6TDNLIlSbmYjcNFBfslJHH0yT7U5+UlAid0Uk84kI+nGGr69H
-   In2FXMPvVMkxO1oFDmPshpftd8xvQMj6D14OIT9k7Fhuy/fVjhsIWHsGu
-   /JuyjJIIdGdHDKAgQ1D9r2jVN1HJ/IZfORmFePExXgERuQaCO0O/KMcen
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="252151467"
-X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="252151467"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 17:25:11 -0700
-X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="534715134"
-Received: from hltravis-mobl1.amr.corp.intel.com (HELO localhost) ([10.213.166.215])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 17:25:11 -0700
-Date:   Fri, 22 Apr 2022 17:25:10 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     linux-cxl@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        vishal.l.verma@intel.com, alison.schofield@intel.com,
-        nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 7/8] device-core: Kill the lockdep_mutex
-Message-ID: <YmNHZlRczSH6hRJ5@iweiny-desk3>
-References: <165055518776.3745911.9346998911322224736.stgit@dwillia2-desk3.amr.corp.intel.com>
- <165055522548.3745911.14298368286915484086.stgit@dwillia2-desk3.amr.corp.intel.com>
+        Fri, 22 Apr 2022 20:30:44 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3CD6D4E6;
+        Fri, 22 Apr 2022 17:27:48 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 17:27:41 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1650673667;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XwFF1A7SiuFl1/Uh2mJXT54VhE2HR1r71xU373I5YNM=;
+        b=l/XGEbFO7gqD24thsCKUb4MeMMbv4zsqVLfsR7ioqtnTCt61bZnF+V3lhM7Z0vGcL1qtkD
+        osLaWYi8C2cz/4ONfCe8lr6w5zrLod/m6h6wE4MzYngrQezmGMjmNfr2U8LxNJ5Y4qUwlJ
+        JgoRLDStU2Evm83C+zKg1Ck8FeOGO9w=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Kent Overstreet <kent.overstreet@gmail.com>
+Cc:     Michal Hocko <mhocko@suse.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, hch@lst.de,
+        hannes@cmpxchg.org, akpm@linux-foundation.org,
+        linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-input@vger.kernel.org, rostedt@goodmis.org
+Subject: Re: [PATCH v2 8/8] mm: Centralize & improve oom reporting in
+ show_mem.c
+Message-ID: <YmNH/fh8OwTJ6ASC@carbon>
+References: <20220421234837.3629927-1-kent.overstreet@gmail.com>
+ <20220421234837.3629927-14-kent.overstreet@gmail.com>
+ <YmKma/1WUvjjbcO4@dhcp22.suse.cz>
+ <YmLFPJTyoE4GYWp4@carbon>
+ <20220422234820.plusgyixgybebfmi@moria.home.lan>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <165055522548.3745911.14298368286915484086.stgit@dwillia2-desk3.amr.corp.intel.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220422234820.plusgyixgybebfmi@moria.home.lan>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 08:33:45AM -0700, Dan Williams wrote:
-> Per Peter [1], the lockdep API has native support for all the use cases
-> lockdep_mutex was attempting to enable. Now that all lockdep_mutex users
-> have been converted to those APIs, drop this lock.
+On Fri, Apr 22, 2022 at 07:48:20PM -0400, Kent Overstreet wrote:
+> On Fri, Apr 22, 2022 at 08:09:48AM -0700, Roman Gushchin wrote:
+> > To add a concern: largest shrinkers are usually memcg-aware. Scanning
+> > over the whole cgroup tree (with potentially hundreds or thousands of cgroups)
+> > and over all shrinkers from the oom context sounds like a bad idea to me.
 > 
-> Link: https://lore.kernel.org/r/Ylf0dewci8myLvoW@hirez.programming.kicks-ass.net [1]
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Dan Williams <dan.j.williams@intel.com>
+> Why would we be scanning over the whole cgroup tree? We don't do that in the
+> vmscan code, nor the new report. If the OOM is for a specific cgroup, we should
+> probably only be reporting on memory usage for that cgroup (show_mem() is not
+> currently cgroup aware, but perhaps it should be).
 
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+You're scanning over a small portion of all shrinker lists (on a machine with
+cgroups), so the top-10 list has little value.
+Global ->count_objects() return the number of objects on the system/root_mem_cgroup
+level, not the shrinker's total.
 
-> ---
->  drivers/base/core.c    |    3 ---
->  include/linux/device.h |    5 -----
->  2 files changed, 8 deletions(-)
 > 
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index 3d6430eb0c6a..2eede2ec3d64 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -2864,9 +2864,6 @@ void device_initialize(struct device *dev)
->  	kobject_init(&dev->kobj, &device_ktype);
->  	INIT_LIST_HEAD(&dev->dma_pools);
->  	mutex_init(&dev->mutex);
-> -#ifdef CONFIG_PROVE_LOCKING
-> -	mutex_init(&dev->lockdep_mutex);
-> -#endif
->  	lockdep_set_novalidate_class(&dev->mutex);
->  	spin_lock_init(&dev->devres_lock);
->  	INIT_LIST_HEAD(&dev->devres_head);
-> diff --git a/include/linux/device.h b/include/linux/device.h
-> index 82c9d307e7bd..c00ab223da50 100644
-> --- a/include/linux/device.h
-> +++ b/include/linux/device.h
-> @@ -400,8 +400,6 @@ struct dev_msi_info {
->   * 		This identifies the device type and carries type-specific
->   * 		information.
->   * @mutex:	Mutex to synchronize calls to its driver.
-> - * @lockdep_mutex: An optional debug lock that a subsystem can use as a
-> - * 		peer lock to gain localized lockdep coverage of the device_lock.
->   * @bus:	Type of bus device is on.
->   * @driver:	Which driver has allocated this
->   * @platform_data: Platform data specific to the device.
-> @@ -499,9 +497,6 @@ struct device {
->  					   core doesn't touch it */
->  	void		*driver_data;	/* Driver data, set and get with
->  					   dev_set_drvdata/dev_get_drvdata */
-> -#ifdef CONFIG_PROVE_LOCKING
-> -	struct mutex		lockdep_mutex;
-> -#endif
->  	struct mutex		mutex;	/* mutex to synchronize calls to
->  					 * its driver.
->  					 */
+> > IMO it's more appropriate to do from userspace by oomd or a similar daemon,
+> > well before the in-kernel OOM kicks in.
 > 
+> The reason I've been introducing printbufs and the .to_text() method was
+> specifically to make this code general enough to be available from
+> sysfs/debugfs - so I see no reasons why a userspace oomd couldn't make use of it
+> as well.
+
+Of course, I've nothing against adding .to_text().
+
 > 
+> > > Last but not least let me echo the concern from the other reply. Memory
+> > > allocations are not really reasonable to be done from the oom context so
+> > > the pr_buf doesn't sound like a good tool here.
+> > 
+> > +1
+> 
+> In my experience, it's rare to be _so_ out of memory that small kmalloc
+> allocations are failing - we'll be triggering the show_mem() report before that
+> happens.
+
+I agree. However the OOM killer _has_ to make the progress even in such rare
+circumstances.

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A473350C9A1
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 13:38:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50AF550C9A7
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 13:39:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235271AbiDWLli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 07:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58324 "EHLO
+        id S235128AbiDWLls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 07:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232036AbiDWLle (ORCPT
+        with ESMTP id S235267AbiDWLlj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 07:41:34 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BB41A04F;
-        Sat, 23 Apr 2022 04:38:36 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id w1so18481434lfa.4;
-        Sat, 23 Apr 2022 04:38:36 -0700 (PDT)
+        Sat, 23 Apr 2022 07:41:39 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B84271BA821;
+        Sat, 23 Apr 2022 04:38:38 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id x33so18504479lfu.1;
+        Sat, 23 Apr 2022 04:38:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=xCiolmgN3BM/9hqURVQm8Fqd8GzWBSSZv9txkhzdRc4=;
-        b=kx8deysmbzOe6OBlcsMIejoPkxCsCvoTcg6r8W64zbqEoHAe/Mvx1oRuO/la7HWA3M
-         qOMXRMVv6coinGmI+AkdjC2z0ezlI4FZcWDGoEg1kiLbfxTnGgRtya9CMYa5fOvaFsoT
-         uCcWYO4eoNLt9T2/HiOOUa2Xx97NzuiSV65kru4NkhxYtO8k47kbeK66X86y2kBVO/9I
-         bkrAlEIMeTgHjFkpYiMRU6AL4WqSH064226SwlK3jRURfar1n3hX7uMpX2NnDCO/xedh
-         qT/O1rMHt82mAh4AjacfQlGZAodiTHUPcK/i4LTkCFoMusJv3ZOucTGaCU+LTnywWzQZ
-         KFxw==
+        bh=9EtoakrJrjTj5jLsYUp/T56xfz/HVSV91AzJtSvGSbU=;
+        b=ev8cW5F027Wz1YcEXnGq0ELeFmb4UCHkXCgEsAYVEiBrxkAB7jwgmt/g4Aha+6T7zI
+         ZJ4owIZ4ucBXZE13ovO2DNUkzVDEe2rP0ZoSrAeS+4JPEAVkRS5JeeAI+vmfHHxnX2Ua
+         0yZJdPn+xkjl8Ivzf3FQbjyXant/1MMvtFR+WSyd+T0Tb3UUdbd7uqxqm6K86hm64xmw
+         64iPp+joBvF2pkVC7pUvYLies6/2RgzfRk3qJcK7MYBcEMM9wMSdqEKp/e4sv54Ab9oP
+         yUf1xeKcm0IiGzbHADRlV3wwpmQo7MLpAd1BshvibnV1vHAphE2w5cYBYnYahDm5Na2i
+         7w0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=xCiolmgN3BM/9hqURVQm8Fqd8GzWBSSZv9txkhzdRc4=;
-        b=rnRrxt7d2QAikD8wJ+3u6MZ7teXHfD3dy6hnksxY4lgMLIw8uYrnBc1yHP4TS12BSI
-         8qcw1d5c2bX5txfBiiChYRrhGVr2RzeGZldAzM1QLcPpD6rU2O/oeid+PJF5QXSaVPAd
-         8WSkqp1HdBrHVP6jPTbWceQIrYVLnS78hOIY2L+KLvla8yfSzUAsJ9JLiWbcsR3BVYZA
-         /WyT4ONKw8SpPANyLRA23M7YZTZU1H5//Eye/YOuPqly7BFaTOk6KIjAKd5dLn6Qmu0J
-         3z/NdUNArnuVPs6N9QSibxD3JDIuT2mxS9eEQmj6YCYT2l3geoSKDL1T+XT+7b2LkLQ9
-         bv0Q==
-X-Gm-Message-State: AOAM532CU/1FkkhQ5zOgs885A+F1ydPn6KUtiuV1fEqFq3EMCcFXI+cM
-        wC0uI8CxVYHVD5YnHMeJiVg=
-X-Google-Smtp-Source: ABdhPJyRKbtRxftsMtdsT/P9kh3negEMeQhkrHNU5CWAZELcGfNHS8JQO7Edg7UKKSf+M9FvASw0lw==
-X-Received: by 2002:a05:6512:4017:b0:471:b3c3:481d with SMTP id br23-20020a056512401700b00471b3c3481dmr6234569lfb.541.1650713914723;
-        Sat, 23 Apr 2022 04:38:34 -0700 (PDT)
+        bh=9EtoakrJrjTj5jLsYUp/T56xfz/HVSV91AzJtSvGSbU=;
+        b=qY+Wg77z0lsJtwujT+z4e0Omb2x0Pmqh3iZAWsCl2LYpTL+peO2MfZ9CeIXs6JJEuB
+         tVJHF0Rzmrnze7It4/cX8KxNwvoqWH2BKueNJynAlasD1ZnQRphC+9xnq5Zv9cPojuST
+         MSEeIHlNCHon/M3bDh/oztKbiOn/xBheMffc3ly/mtL+udCC41Z5slYqKn6+nRWMtINe
+         sA0JRgkRhzAcYeGQG4m0pCRryNL0+lzv+GxJTAFFdk1yozyKrnoDGfst8qCy7nDDHNgU
+         0LtJTGK3mpa+m3mGJExwIdAUil6D7WLHOuFSvdLXxMOKJt87qfzsiCGjGSAiF5qYIWCd
+         O/Xg==
+X-Gm-Message-State: AOAM5303FQfg0lq0oOHcv3eyOVT0p4LbnsDwyLH35DaxrRfvqRWoMI3g
+        XR66LK0O3vJW97cVQV/Lqwk=
+X-Google-Smtp-Source: ABdhPJyGdsEWmvXaacxzf676KaE3MCBTRwd20XKcfWXUk4tDCchpQPddCr3RuNB1+je4VIOlUO1tAg==
+X-Received: by 2002:a05:6512:6d4:b0:470:f48d:44e2 with SMTP id u20-20020a05651206d400b00470f48d44e2mr6428203lff.542.1650713917064;
+        Sat, 23 Apr 2022 04:38:37 -0700 (PDT)
 Received: from morzel-asus.lan (static-91-225-135-18.devs.futuro.pl. [91.225.135.18])
-        by smtp.gmail.com with ESMTPSA id g17-20020a2e9cd1000000b0024db538c2absm526411ljj.7.2022.04.23.04.38.33
+        by smtp.gmail.com with ESMTPSA id g17-20020a2e9cd1000000b0024db538c2absm526411ljj.7.2022.04.23.04.38.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 04:38:34 -0700 (PDT)
+        Sat, 23 Apr 2022 04:38:36 -0700 (PDT)
 From:   Michal Orzel <michalorzel.eng@gmail.com>
 To:     Jens Axboe <axboe@kernel.dk>,
         Nathan Chancellor <nathan@kernel.org>,
@@ -56,9 +56,9 @@ To:     Jens Axboe <axboe@kernel.dk>,
 Cc:     Michal Orzel <michalorzel.eng@gmail.com>,
         linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: [PATCH RESEND v2 2/5] block/blk-map: Remove redundant assignment
-Date:   Sat, 23 Apr 2022 13:38:08 +0200
-Message-Id: <20220423113811.13335-2-michalorzel.eng@gmail.com>
+Subject: [PATCH RESEND v2 3/5] block/partitions/acorn: Remove redundant assignments
+Date:   Sat, 23 Apr 2022 13:38:09 +0200
+Message-Id: <20220423113811.13335-3-michalorzel.eng@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220423113811.13335-1-michalorzel.eng@gmail.com>
 References: <20220423113811.13335-1-michalorzel.eng@gmail.com>
@@ -74,34 +74,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Get rid of redundant assignment to a variable ret from function
-bio_map_user_iov as it is being assigned a value that is never read.
-It is being re-assigned in the first instruction after the while loop
+Get rid of redundant assignments to a variable slot from function
+adfspart_check_ADFS. It is being assigned a value that is never read
+as we are breaking out from the switch case and the function ends.
 
 Reported by clang-tidy [deadcode.DeadStores]
 
 Signed-off-by: Michal Orzel <michalorzel.eng@gmail.com>
 ---
- block/blk-map.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ block/partitions/acorn.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/block/blk-map.c b/block/blk-map.c
-index c7f71d83eff1..fa72e63e18c2 100644
---- a/block/blk-map.c
-+++ b/block/blk-map.c
-@@ -260,10 +260,9 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
+diff --git a/block/partitions/acorn.c b/block/partitions/acorn.c
+index 2c381c694c57..d2fc122d7426 100644
+--- a/block/partitions/acorn.c
++++ b/block/partitions/acorn.c
+@@ -282,13 +282,13 @@ int adfspart_check_ADFS(struct parsed_partitions *state)
+ #ifdef CONFIG_ACORN_PARTITION_RISCIX
+ 		case PARTITION_RISCIX_SCSI:
+ 		case PARTITION_RISCIX_MFM:
+-			slot = riscix_partition(state, start_sect, slot,
++			riscix_partition(state, start_sect, slot,
+ 						nr_sects);
+ 			break;
+ #endif
  
- 		npages = DIV_ROUND_UP(offs + bytes, PAGE_SIZE);
- 
--		if (unlikely(offs & queue_dma_alignment(rq->q))) {
--			ret = -EINVAL;
-+		if (unlikely(offs & queue_dma_alignment(rq->q)))
- 			j = 0;
--		} else {
-+		else {
- 			for (j = 0; j < npages; j++) {
- 				struct page *page = pages[j];
- 				unsigned int n = PAGE_SIZE - offs;
+ 		case PARTITION_LINUX:
+-			slot = linux_partition(state, start_sect, slot,
++			linux_partition(state, start_sect, slot,
+ 					       nr_sects);
+ 			break;
+ 		}
 -- 
 2.25.1
 

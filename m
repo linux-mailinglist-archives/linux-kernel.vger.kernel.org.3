@@ -2,133 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9708150CDC3
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 23:37:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26F6050CDC5
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 23:39:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236352AbiDWVk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 17:40:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58058 "EHLO
+        id S237165AbiDWVlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 17:41:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbiDWVkZ (ORCPT
+        with ESMTP id S229742AbiDWVls (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 17:40:25 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF111D5660
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 14:37:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650749846; x=1682285846;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SPXyh5poUdOcTW+Wor5MxtqohioAs576NOvB1FmQ/CY=;
-  b=Q2atSYL4ygv4EiuA8theqXkGuHFQtxSdhusplIXDzdFNRL3O4IlJl38C
-   Rh2/GLmcgWotJWCXTZ0mgGA/vmc1VcTU3e521OU/rl98RpDjpAS1qghql
-   fykKFZ6aVqqLPYwXQEpRH5o9DDHk+c2kZyUL62qQyx1065miVzWmOnobG
-   XCZia5ln5NqRG/p8HoPQfOQ/OwJWoXO8mjhueGS4upOLmb5ZGXMIc9Z31
-   qjxEgA1hgfrc8ZyiZc0xVU6Av2RvzEP/g/fYU6u94XT91D03qbsbFVAnh
-   nthIY6g+UgLpWwtPU8bV9h3gooI39uEICwqfEA6/S99S1uETm93cY5ubw
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="263805485"
-X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
-   d="scan'208";a="263805485"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 14:37:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
-   d="scan'208";a="729063334"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 23 Apr 2022 14:37:25 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1niNRU-0000V7-CP;
-        Sat, 23 Apr 2022 21:37:24 +0000
-Date:   Sun, 24 Apr 2022 05:36:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sebastian Ott <sebott@linux.ibm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>
-Subject: fmvj18x_cs.c:undefined reference to `ioremap'
-Message-ID: <202204240543.dAVwn7O6-lkp@intel.com>
+        Sat, 23 Apr 2022 17:41:48 -0400
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F751D5660;
+        Sat, 23 Apr 2022 14:38:49 -0700 (PDT)
+Received: by mail-pf1-f176.google.com with SMTP id i24so11287294pfa.7;
+        Sat, 23 Apr 2022 14:38:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=BzqWH2IzgALcoDHHVu1SSmrK7vebYFiu676jJ6lQ4us=;
+        b=ITRrI434LwGfXkPKj4SrA3C1JXDUVQeqGeGXN7X1mJjQm0TwxQt5G+FtrQyzssjNw3
+         4GYs3i9/z5FsnuMaEmREwBJVh17StIzib/hi9MfCHlTOdfQQJjhaJpJw4WzinjMuNFwQ
+         HNStg1ySrrL2DjHp/33yRqJnrRWaxEMjlCQYCylZjSwql1htDGodae3mFqCdu0eufz8N
+         1he9wyIQI0w5FmlOTQTQWAebq0hUQf3X+9JJMk7QcetbBzRQv7XyPVyfP35XUMfIfya8
+         9FtnYoxZ52gvm8wB0V2LUVtJ8oKS9oO6ejOm2U9qLelBCbXQCp6NbC3M8HtFq/Bpaawp
+         /zkA==
+X-Gm-Message-State: AOAM533s//zTreG5mB+XFAylPU8PXQmAFNnpBD3iBex8zAhdC3ShBaYg
+        9+jELdetdLDkZSHMtBAzatI=
+X-Google-Smtp-Source: ABdhPJx337gZtgIghf3LEwQbDgP5EWy3UJhIGYn5MfEWZP19IscHesE3rIdmF91xklhaW6eTy0IXdQ==
+X-Received: by 2002:a63:8a41:0:b0:3aa:a7c9:23b8 with SMTP id y62-20020a638a41000000b003aaa7c923b8mr9059061pgd.137.1650749928940;
+        Sat, 23 Apr 2022 14:38:48 -0700 (PDT)
+Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
+        by smtp.gmail.com with ESMTPSA id 128-20020a630686000000b003ab01991fe5sm2091610pgg.77.2022.04.23.14.38.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 23 Apr 2022 14:38:48 -0700 (PDT)
+Message-ID: <0f061fc0-d7ee-aa48-278b-4ca7dc3ce53f@acm.org>
+Date:   Sat, 23 Apr 2022 14:38:46 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] scsi: ufs: wb: Add Manual Flush sysfs and cleanup toggle
+ functions
+Content-Language: en-US
+To:     jin young choi <ychoijy@gmail.com>,
+        Avri Altman <Avri.Altman@wdc.com>
+Cc:     "j-young.choi@samsung.com" <j-young.choi@samsung.com>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "cang@codeaurora.org" <cang@codeaurora.org>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <CGME20220422120240epcms2p24bdcb416becf76b417f7c39006aa40f2@epcms2p1>
+ <1891546521.01650629881201.JavaMail.epsvc@epcpadp4>
+ <DM6PR04MB6575EB87D425CE431CC4A8F8FCF79@DM6PR04MB6575.namprd04.prod.outlook.com>
+ <CAM36TBtsU0k1e+8-_Ew4ve3SJ0yExUFwPAYnmQy_-AXUHGoeZw@mail.gmail.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <CAM36TBtsU0k1e+8-_Ew4ve3SJ0yExUFwPAYnmQy_-AXUHGoeZw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   13bc32bad7059d6c5671e9d037e6e3ed001cc0f4
-commit: 71ba41c9b1d91042960e9d92a5c8f52dc8531eda s390/pci: provide support for MIO instructions
-date:   3 years ago
-config: s390-buildonly-randconfig-r005-20220424 (https://download.01.org/0day-ci/archive/20220424/202204240543.dAVwn7O6-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=71ba41c9b1d91042960e9d92a5c8f52dc8531eda
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 71ba41c9b1d91042960e9d92a5c8f52dc8531eda
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+On 4/23/22 07:24, jin young choi wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+>>> +static DEVICE_ATTR_RW(wb_flush_on);
+>> Maybe wb_flush_enable ?
+>>
+> 'wb_on' sysfs already existed. So I named it in the same format (_on)
+> I'll change both. (_on -> _enable)
 
-All errors (new ones prefixed by >>):
+sysfs attributes constitute an ABI. Breaking the user space ABI is not 
+allowed. Hence, renaming existing sysfs attributes is not an option.
 
-   s390-linux-ld: drivers/phy/marvell/phy-mvebu-a3700-utmi.o: in function `mvebu_a3700_utmi_phy_probe':
-   phy-mvebu-a3700-utmi.c:(.text+0x41e): undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: drivers/tty/ipwireless/main.o: in function `ipwireless_detach':
-   main.c:(.text+0x90): undefined reference to `iounmap'
-   s390-linux-ld: main.c:(.text+0xd4): undefined reference to `iounmap'
-   s390-linux-ld: drivers/tty/ipwireless/main.o: in function `config_ipwireless':
-   main.c:(.text+0x262): undefined reference to `iounmap'
-   s390-linux-ld: main.c:(.text+0x2a0): undefined reference to `iounmap'
-   s390-linux-ld: drivers/tty/ipwireless/main.o: in function `ipwireless_probe.part.0':
-   main.c:(.text+0x53a): undefined reference to `ioremap'
-   s390-linux-ld: main.c:(.text+0x5f6): undefined reference to `iounmap'
-   s390-linux-ld: main.c:(.text+0x62c): undefined reference to `ioremap'
-   s390-linux-ld: main.c:(.text+0x676): undefined reference to `iounmap'
-   s390-linux-ld: drivers/char/hw_random/exynos-trng.o: in function `exynos_trng_probe':
-   exynos-trng.c:(.text+0x240): undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: drivers/char/hw_random/meson-rng.o: in function `meson_rng_probe':
-   meson-rng.c:(.text+0x82): undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: drivers/char/hw_random/mtk-rng.o: in function `mtk_rng_probe':
-   mtk-rng.c:(.text+0x274): undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: drivers/net/ethernet/fujitsu/fmvj18x_cs.o: in function `fmvj18x_get_hwinfo':
->> fmvj18x_cs.c:(.text+0xd0c): undefined reference to `ioremap'
->> s390-linux-ld: fmvj18x_cs.c:(.text+0xd56): undefined reference to `iounmap'
-   s390-linux-ld: fmvj18x_cs.c:(.text+0xde0): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/ethernet/fujitsu/fmvj18x_cs.o: in function `fmvj18x_config':
-   fmvj18x_cs.c:(.text+0xf7e): undefined reference to `ioremap'
-   s390-linux-ld: fmvj18x_cs.c:(.text+0x10ae): undefined reference to `iounmap'
-   s390-linux-ld: fmvj18x_cs.c:(.text+0x145e): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/ethernet/fujitsu/fmvj18x_cs.o: in function `fmvj18x_detach':
->> fmvj18x_cs.c:(.text+0x15d8): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/ethernet/xircom/xirc2ps_cs.o: in function `xirc2ps_detach':
-   xirc2ps_cs.c:(.text+0xe48): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/ethernet/xircom/xirc2ps_cs.o: in function `xirc2ps_config':
-   xirc2ps_cs.c:(.text+0x19a8): undefined reference to `ioremap'
->> s390-linux-ld: xirc2ps_cs.c:(.text+0x1b20): undefined reference to `iounmap'
-   s390-linux-ld: drivers/pcmcia/cistpl.o: in function `set_cis_map':
-   cistpl.c:(.text+0x222): undefined reference to `iounmap'
-   s390-linux-ld: cistpl.c:(.text+0x234): undefined reference to `ioremap'
-   s390-linux-ld: cistpl.c:(.text+0x286): undefined reference to `ioremap'
-   s390-linux-ld: cistpl.c:(.text+0x29c): undefined reference to `iounmap'
-   s390-linux-ld: drivers/pcmcia/cistpl.o: in function `release_cis_mem':
-   cistpl.c:(.text+0xd06): undefined reference to `iounmap'
-   s390-linux-ld: drivers/crypto/ccree/cc_driver.o: in function `init_cc_resources':
-   cc_driver.c:(.text+0x326): undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: drivers/crypto/ccree/cc_debugfs.o: in function `cc_debugfs_init':
-   cc_debugfs.c:(.text+0xcc): undefined reference to `debugfs_create_regset32'
+Thanks,
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Bart.

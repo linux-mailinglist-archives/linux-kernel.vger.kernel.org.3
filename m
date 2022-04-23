@@ -2,105 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ACB650C9EA
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 14:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 664EF50C9EF
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 14:33:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235424AbiDWMeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 08:34:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58756 "EHLO
+        id S235456AbiDWMfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 08:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231231AbiDWMd6 (ORCPT
+        with ESMTP id S231231AbiDWMfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 08:33:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D7321696EE
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 05:31:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650717060;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=BeOJYjv9Uq2XAYhQoQ5l1QOio0YQGcQSqiAKchKFN5I=;
-        b=E9/ioy77zwY21eX+UcpvtdiQp7kIrGOwyLaIlUDUqof3GRr+g1vSHYf9fBDJPYeFm13/Lh
-        5DmhvvO23lmQ5ScMglaT++D0RUrZ/7edi2+FCFwXFVbtucpeGMbdCJ79kW9UAFY2PZCmL4
-        x6mVT9yNHg9nqeT7uKIGtJEuTVcSZJ8=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-286-YZgoz7wRPfaJGnnhAoYjew-1; Sat, 23 Apr 2022 08:30:58 -0400
-X-MC-Unique: YZgoz7wRPfaJGnnhAoYjew-1
-Received: by mail-qv1-f69.google.com with SMTP id u7-20020a0cb407000000b00446687f0b1bso8767117qve.5
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 05:30:58 -0700 (PDT)
+        Sat, 23 Apr 2022 08:35:13 -0400
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170E919F401;
+        Sat, 23 Apr 2022 05:32:16 -0700 (PDT)
+Received: by mail-qt1-f180.google.com with SMTP id d9so7269124qty.12;
+        Sat, 23 Apr 2022 05:32:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=BeOJYjv9Uq2XAYhQoQ5l1QOio0YQGcQSqiAKchKFN5I=;
-        b=A5zZIkOmVVKuO5vTzu1qrpOOMj3zp/8Cg3+T7ur3rw8iSPWy2pZFhr0un40Vxgb4Yk
-         w0ARybTBnOO9D/fdMj3n45YKisn23LsqT5U5kIy3XvlNegPZ47M20YkVO731Dkwu4IZY
-         7OZc/j88GZ/ce68lvHI2rA+vars0SY2a5gtJRJdmtw9k2IjbBQhxLRaKfnXJdb6lm3KP
-         JONBjdeqXesbhPZ66XQIDgfXqweG+faK7KMfKyL8/Wj6pMeI5bR0PUMX7XwE6Ot/bWPs
-         uLaGCcl8DscwDqiRlTbAEwYDrxc/gzeXXQ9WDWZLtFSnWakl4eo/nCfh2JaXhe9t+Znb
-         ACsQ==
-X-Gm-Message-State: AOAM530HoYSEB5zDUJ0F/GLZL5LHPHbFbKwxqbeOC+t7E57ODVAnhZmj
-        OjC9PUjulRnWjjCuvfFdtNBsrvUvuX1FXfwEenPHKluiZ7b1EK0jzD2nQVLsEii1hZ9Xu6l50f7
-        JxVV+Q4hMjt+5XHBl3+saZXKb
-X-Received: by 2002:ad4:5be1:0:b0:440:a2ec:ea99 with SMTP id k1-20020ad45be1000000b00440a2ecea99mr6617958qvc.20.1650717058476;
-        Sat, 23 Apr 2022 05:30:58 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzhVcaF6hVaQMxy2Bx+WEj0Dv5VCNN+pTO04EbmEvOcA4BOxWj6bxa7W6hRQnXKI8Wa64U7Yg==
-X-Received: by 2002:ad4:5be1:0:b0:440:a2ec:ea99 with SMTP id k1-20020ad45be1000000b00440a2ecea99mr6617945qvc.20.1650717058312;
-        Sat, 23 Apr 2022 05:30:58 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id y15-20020a05620a09cf00b0069c80404de6sm2105323qky.31.2022.04.23.05.30.57
+        bh=yvNakASAT0LQEom1pxuFRLCVN5J4xhsFoT1WWqDLdJ0=;
+        b=K5IYAKQDeY5RyU0hyjF0+mojv39hz0nqCbupmhNJM0KRRM0CRm0XXOJv1RSWbV/PV5
+         k3xCP8lxs30/FwgzotBbAewwBwDwJduVobc60Fym4pZotiH/AZU3aPgCU6w/5nAZnodB
+         Ep9xOunxArkVcEgrB0n9a1G9EunTvcY3yst5lm5CUxmG/hJxyX7/X7QlY2Bwgf41KjPY
+         jfx/HPVQTQbjCxjOFRT1c+sWtsFW/2VIU5Y1Xx9NfH+lKxXs1L6kFX722iR7LJjDkeJP
+         UpO9asrki5EGRag2NmwfOnZZ/d4sxczck5WNiZOA0t5Ncy5p43MK1CftyLdGJfuDlJw2
+         Xkmg==
+X-Gm-Message-State: AOAM532vvnCTl99+tYs6mSbqoOZihBHT0yvGCvJ5v4xpGpQwuJJnocuI
+        78LaY5S85MnRS3etxpKBzuU=
+X-Google-Smtp-Source: ABdhPJyUQeEqywTEkrEGvntcVlCDW12Rj90hPx4Pp/Ph7Obok0XhKQPR9Lkn9zVWU7VekCQVhPgG3g==
+X-Received: by 2002:ac8:7f0b:0:b0:2f3:643e:23da with SMTP id f11-20020ac87f0b000000b002f3643e23damr27787qtk.569.1650717135146;
+        Sat, 23 Apr 2022 05:32:15 -0700 (PDT)
+Received: from localhost (fwdproxy-ash-014.fbsv.net. [2a03:2880:20ff:e::face:b00c])
+        by smtp.gmail.com with ESMTPSA id t80-20020a37aa53000000b0069ec218b786sm2270325qke.126.2022.04.23.05.32.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 05:30:57 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     irenic.rajneesh@gmail.com, david.e.box@intel.com,
-        hdegoede@redhat.com, markgross@kernel.org
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] platform/x86/intel: pmc/core: change pmc_lpm_modes to static
-Date:   Sat, 23 Apr 2022 08:30:48 -0400
-Message-Id: <20220423123048.591405-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Sat, 23 Apr 2022 05:32:14 -0700 (PDT)
+From:   David Vernet <void@manifault.com>
+To:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org
+Cc:     cgroups@vger.kernel.org, peterz@infradead.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: [PATCH 1/5] cgroup: Adding test_cpucg_nested_weight_overprovisioned() testcase
+Date:   Sat, 23 Apr 2022 05:30:50 -0700
+Message-Id: <20220423123053.2982931-1-void@manifault.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sparse reports this issue
-core.c: note: in included file:
-core.h:239:12: warning: symbol 'pmc_lpm_modes' was not declared. Should it be static?
+The cgroup cpu controller tests in
+tools/testing/selftests/cgroup/test_cpu.c have some testcases that validate
+the expected behavior of setting cpu.weight on cgroups, and then hogging
+CPUs. What is still missing from the suite is a testcase that validates
+nested cgroups. This patch adds test_cpucg_nested_weight_overprovisioned(),
+which validates that a parent's cpu.weight will override its children if
+they overcommit a host, and properly protect any sibling groups of that
+parent.
 
-Global variables should not be defined in headers.  This only works
-because core.h is only included by core.c. Single file use
-variables should be static, so change its storage-class specifier
-to static.
-
-Signed-off-by: Tom Rix <trix@redhat.com>
+Signed-off-by: David Vernet <void@manifault.com>
 ---
- drivers/platform/x86/intel/pmc/core.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/cgroup/test_cpu.c | 122 ++++++++++++++++++++++
+ 1 file changed, 122 insertions(+)
 
-diff --git a/drivers/platform/x86/intel/pmc/core.h b/drivers/platform/x86/intel/pmc/core.h
-index a46d3b53bf61..7a059e02c265 100644
---- a/drivers/platform/x86/intel/pmc/core.h
-+++ b/drivers/platform/x86/intel/pmc/core.h
-@@ -236,7 +236,7 @@ enum ppfear_regs {
- #define ADL_LPM_STATUS_LATCH_EN_OFFSET		0x1704
- #define ADL_LPM_LIVE_STATUS_OFFSET		0x1764
+diff --git a/tools/testing/selftests/cgroup/test_cpu.c b/tools/testing/selftests/cgroup/test_cpu.c
+index 64f9ce91c992..fc90b4d0feb9 100644
+--- a/tools/testing/selftests/cgroup/test_cpu.c
++++ b/tools/testing/selftests/cgroup/test_cpu.c
+@@ -403,6 +403,127 @@ static int test_cpucg_weight_underprovisioned(const char *root)
+ 			underprovision_validate);
+ }
  
--const char *pmc_lpm_modes[] = {
-+static const char *pmc_lpm_modes[] = {
- 	"S0i2.0",
- 	"S0i2.1",
- 	"S0i2.2",
++/*
++ * First, this test creates the following hierarchy:
++ * A
++ * A/B     cpu.weight = 1000
++ * A/C     cpu.weight = 1000
++ * A/C/D   cpu.weight = 5000
++ * A/C/E   cpu.weight = 5000
++ *
++ * A separate process is then created for each leaf, which spawn nproc threads
++ * that burn a CPU for a few seconds.
++ *
++ * Once all of those processes have exited, we verify that each of the leaf
++ * cgroups have roughly the same usage from cpu.stat.
++ */
++static int
++test_cpucg_nested_weight_overprovisioned(const char *root)
++{
++	int ret = KSFT_FAIL, i;
++	char *parent = NULL, *child = NULL;
++	struct cpu_hogger leaf[3] = {NULL};
++	long nested_leaf_usage, child_usage;
++	int nprocs = get_nprocs();
++
++	parent = cg_name(root, "cpucg_test");
++	child = cg_name(parent, "cpucg_child");
++	if (!parent || !child)
++		goto cleanup;
++
++	if (cg_create(parent))
++		goto cleanup;
++	if (cg_write(parent, "cgroup.subtree_control", "+cpu"))
++		goto cleanup;
++
++	if (cg_create(child))
++		goto cleanup;
++	if (cg_write(child, "cgroup.subtree_control", "+cpu"))
++		goto cleanup;
++	if (cg_write(child, "cpu.weight", "1000"))
++		goto cleanup;
++
++	for (i = 0; i < ARRAY_SIZE(leaf); i++) {
++		const char *ancestor;
++		long weight;
++
++		if (i == 0) {
++			ancestor = parent;
++			weight = 1000;
++		} else {
++			ancestor = child;
++			weight = 5000;
++		}
++		leaf[i].cgroup = cg_name_indexed(ancestor, "cpucg_leaf", i);
++		if (!leaf[i].cgroup)
++			goto cleanup;
++
++		if (cg_create(leaf[i].cgroup))
++			goto cleanup;
++
++		if (cg_write_numeric(leaf[i].cgroup, "cpu.weight", weight))
++			goto cleanup;
++	}
++
++	for (i = 0; i < ARRAY_SIZE(leaf); i++) {
++		pid_t pid;
++		struct cpu_hog_func_param param = {
++			.nprocs = nprocs,
++			.ts = {
++				.tv_sec = 10,
++				.tv_nsec = 0,
++			},
++			.clock_type = CPU_HOG_CLOCK_WALL,
++		};
++
++		pid = cg_run_nowait(leaf[i].cgroup, hog_cpus_timed,
++				(void *)&param);
++		if (pid <= 0)
++			goto cleanup;
++		leaf[i].pid = pid;
++	}
++
++	for (i = 0; i < ARRAY_SIZE(leaf); i++) {
++		int retcode;
++
++		waitpid(leaf[i].pid, &retcode, 0);
++		if (!WIFEXITED(retcode))
++			goto cleanup;
++		if (WEXITSTATUS(retcode))
++			goto cleanup;
++	}
++
++	for (i = 0; i < ARRAY_SIZE(leaf); i++) {
++		leaf[i].usage = cg_read_key_long(leaf[i].cgroup,
++				"cpu.stat", "usage_usec");
++		if (leaf[i].usage <= 0)
++			goto cleanup;
++	}
++
++	nested_leaf_usage = leaf[1].usage + leaf[2].usage;
++	if (!values_close(leaf[0].usage, nested_leaf_usage, 15))
++		goto cleanup;
++
++	child_usage = cg_read_key_long(child, "cpu.stat", "usage_usec");
++	if (child_usage <= 0)
++		goto cleanup;
++	if (!values_close(child_usage, nested_leaf_usage, 1))
++		goto cleanup;
++
++	ret = KSFT_PASS;
++cleanup:
++	for (i = 0; i < ARRAY_SIZE(leaf); i++) {
++		cg_destroy(leaf[i].cgroup);
++		free(leaf[i].cgroup);
++	}
++	cg_destroy(child);
++	free(child);
++	cg_destroy(parent);
++	free(parent);
++
++	return ret;
++}
++
+ #define T(x) { x, #x }
+ struct cpucg_test {
+ 	int (*fn)(const char *root);
+@@ -412,6 +533,7 @@ struct cpucg_test {
+ 	T(test_cpucg_stats),
+ 	T(test_cpucg_weight_overprovisioned),
+ 	T(test_cpucg_weight_underprovisioned),
++	T(test_cpucg_nested_weight_overprovisioned),
+ };
+ #undef T
+ 
 -- 
-2.27.0
+2.30.2
 

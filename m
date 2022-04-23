@@ -2,132 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6686750CC8C
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 19:23:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E23CA50CC90
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 19:28:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236381AbiDWR0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 13:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47408 "EHLO
+        id S236578AbiDWRbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 13:31:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbiDWR0r (ORCPT
+        with ESMTP id S235097AbiDWRbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 13:26:47 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE0114B66C;
-        Sat, 23 Apr 2022 10:23:47 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id q7so7581645wrm.5;
-        Sat, 23 Apr 2022 10:23:47 -0700 (PDT)
+        Sat, 23 Apr 2022 13:31:00 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921B115B467
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 10:28:03 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id q12so9880965pgj.13
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 10:28:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=gOeGhsw9YsWvUbFAKiv+8FpM8AEgNtP62ndxy+K37CY=;
-        b=qvfITE+MFT2kmzc1QZflvKs7xyI+JHBxwfhmsYhbqnFtXIrxq+vdD/5pVg5L7O4iuT
-         2PpOj4dbtJ5KdzAeFWly5C1f5vuvWb9gL3iDQbHGyHS4b/4jkyJQerZe0uhpTmuBhfYb
-         YlraWV38Q5wndwu86jqLUR2ErlYyBXyFvVRDDqhxZYnJei62+n/Y+0c+ThhTziLS7Us4
-         ZCyH9vue794zMHxYraHc2vK4bbUvKikgPVGIBJAkUzT12h7flm17XRALDXAyIb0wGF87
-         7twlFdXD8K6q1ho95ONbZ8OFRuNiUhwCYdEAHxvu4ReptMNnSSnD07pnIVu5/Fut+kmx
-         F+VQ==
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OjNNj2h0H9BdL9f5m+RhS3iK90tZuCfxF3PYDW2jHLo=;
+        b=Y4suICBQDJxf0jQtkeyC3zyUM3bJCKEEvMlhWiNcQGzmHv6AX00nag852PsZfn/2WY
+         QX3PVo+C07/bFjX7RsJyx8FIa8FTgD/N2sYKBiWOpN2jEIWRzzbv5Cd0J8GEUpLILWe1
+         kYOvssQac95PDPJANkwqEueJuzNVkyZfGUdeSyiSdjU3+KTpuB7qjofvFpgq9PTG962L
+         iY5fl8f1dAKPE5sSN/uu+Ln8TWXq9VgcVzyZH71ov5mgjuJl8PBt0nZSjXlPmLC7OVUu
+         Lx53yMbickS/RVM/xs9BR4dNxqU3PNoknFTU3wQfaMkFAgIKpRIeULxaBE48sPeUDaIW
+         D2Wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gOeGhsw9YsWvUbFAKiv+8FpM8AEgNtP62ndxy+K37CY=;
-        b=qE+F5E9+9a8lNw8beZ1SJcbY797VBLzK5JrnUm9Zoxo11OqXNP5H2Xuhk0KW0WcsJP
-         UUI01DlCNJmzOERMQgCc05fv6lnWBYBvWQJiYqeRDfvb7Tqhhy3iKUgdc7F1Vf22OES5
-         riguf4XK8Rsp//YHdc5mgxYRGgXyb77nZubGgcVkzzYJx/Z9lnZIMtNJfURDoTGPNOPO
-         UsslGi/H5TUHVWZcgEuJc7hzpym4+4p24PSDUVtOGfNc8OzQsBnL+Q9+hZf++YG3X3Oj
-         q5+BtX3RJ0W9eLgmfdByuXrjpiZp963Jp8V5JuZvuWLBrDgGaBde6Dl1JFdWOKDu5wpe
-         u8mA==
-X-Gm-Message-State: AOAM530bIs4x9xcRFdQhsesXoTA4vjA13pAwBvp7guWeGUJ3GkVW7A7M
-        5cPh35T4qsmhn0EQHsT2Sn8=
-X-Google-Smtp-Source: ABdhPJzMdu0dmGmnJmBRCaJq8Ag1Saf8ZKij8MnHGKkGEcMOdNAVjRmivzu9ab4WXNBm6xXRzVm3OQ==
-X-Received: by 2002:a05:6000:111:b0:207:ac77:3d07 with SMTP id o17-20020a056000011100b00207ac773d07mr8113500wrx.136.1650734626185;
-        Sat, 23 Apr 2022 10:23:46 -0700 (PDT)
-Received: from localhost.localdomain ([94.73.37.128])
-        by smtp.gmail.com with ESMTPSA id w8-20020a1cf608000000b0038c8fdc93d6sm6880364wmc.28.2022.04.23.10.23.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 10:23:45 -0700 (PDT)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     stefanberzl@gmail.com
-Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com, spbnick@gmail.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: Re: Status on hid xppen patch
-Date:   Sat, 23 Apr 2022 19:23:29 +0200
-Message-Id: <20220423172330.32585-1-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <941a793a-d2f7-9c2c-59be-b3930e1acfec@gmail.com>
-References: <941a793a-d2f7-9c2c-59be-b3930e1acfec@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OjNNj2h0H9BdL9f5m+RhS3iK90tZuCfxF3PYDW2jHLo=;
+        b=2svYSmml/RQdtco6R8z+fT8Qs11LiN9uIrNEbXpwU4ObY57JyA5IkncjCLzyRg0uyo
+         PQvkU6fqkr2nGyimJYbRv9nxLM9lMbCEzk2GrnFkOCS9vpGTyBBwvvprkoz01bsTEoXb
+         l535i/L9ZQ3Ay+JAXBMJ7Rs2UUlc0TxHxNR6rP9pRDFrx0UCtVjPG9iQ/iBnNOw9raOk
+         GHUtVYYilDSobIZCjbULjWbMiZoUeXOrCGs1uXsEIHKVjknHPgFK6LackAvflp/RuCHY
+         1KNbtuRxOEtH0YTlXNNqhQGEkS2U/qoyA3+LKW/nVLlwK4qMKFWiPLG175NxuC9NFnrW
+         cesg==
+X-Gm-Message-State: AOAM532iMMvkclhLRA77iYQOlS0lXDI3n7u5Sm8uooNGzTNn9G1N2KDK
+        JLQizFT/m3TcnN3z9w4YCctBmJ6rYX5jqHkjBtF1rN5rpt7I0w==
+X-Google-Smtp-Source: ABdhPJwT11ZC6iXsaztYnSq4YzfDM6EFxQy96NZsDhLdWGx609R+suZlfO9ayXNZmrfnqdz2ibDw7UZSkJUIhziL3i8=
+X-Received: by 2002:a63:1117:0:b0:399:2df0:7fb9 with SMTP id
+ g23-20020a631117000000b003992df07fb9mr8862901pgl.40.1650734883122; Sat, 23
+ Apr 2022 10:28:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <165055518776.3745911.9346998911322224736.stgit@dwillia2-desk3.amr.corp.intel.com>
+ <165055519869.3745911.10162603933337340370.stgit@dwillia2-desk3.amr.corp.intel.com>
+ <YmNBJBTxUCvDHMbw@iweiny-desk3> <CAPcyv4jtNgfjWLyu6MtBAjwUiqe2qEBW802AzZZeg2gZ_wU9AQ@mail.gmail.com>
+In-Reply-To: <CAPcyv4jtNgfjWLyu6MtBAjwUiqe2qEBW802AzZZeg2gZ_wU9AQ@mail.gmail.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Sat, 23 Apr 2022 10:27:52 -0700
+Message-ID: <CAPcyv4hhD5t-qm_c_=bRjbJZFg9Mjkzbvu_2MEJB87fKy3hh-g@mail.gmail.com>
+Subject: Re: [PATCH v3 2/8] cxl/acpi: Add root device lockdep validation
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     linux-cxl@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Hello everynyan!
+On Fri, Apr 22, 2022 at 5:08 PM Dan Williams <dan.j.williams@intel.com> wrote:
 >
-> A while ago I sent in a patch to add support for newer Xp-pen tablets 
-> that even made it into patchwork:
+> On Fri, Apr 22, 2022 at 4:58 PM Ira Weiny <ira.weiny@intel.com> wrote:
+> >
+> > On Thu, Apr 21, 2022 at 08:33:18AM -0700, Dan Williams wrote:
+> > > The CXL "root" device, ACPI0017, is an attach point for coordinating
+> > > platform level CXL resources and is the parent device for a CXL port
+> > > topology tree. As such it has distinct locking rules relative to other
+> > > CXL subsystem objects, but because it is an ACPI device the lock class
+> > > is established well before it is given to the cxl_acpi driver.
+> >
+> > This final sentence gave me pause because it implied that the device lock class
+> > was set to something other than no validate.  But I don't see that anywhere in
+> > the acpi code.  So given that it looks to me like ACPI is just using the
+> > default no validate class...
 >
-> https://patchwork.kernel.org/project/linux-input/patch/b401e453-9c66-15e3-1a1d-21f33b7a64e8@gmail.com/
+> Oh, good observation. *If* ACPI had set a custom lock class then
+> cxl_acpi would need to be careful to restore that ACPI-specific class
+> and not reset it to "no validate" on exit, or skip setting its own
+> custom class. However, I think for generic buses like ACPI that feed
+> devices into other subsystems it likely has little reason to set its
+> own class. For safety, since device_lock_set_class() is general
+> purpose, I'll have it emit a debug message and fail if the class is
+> not "no validate" on entry.
 >
-> I have never actually gotten any feedback on it though and am wondering 
-> if everything is to your liking. Anyway it doesn't build against the 
-> current tree anymore. Assuming there is any value it, should I rewrite 
-> it against hid master or hid uclogic?
->
-> Many thanks
->
-> Stefan Berzl
 
-Hi Stefan,
+So this turned out way uglier than I expected:
 
-I just saw your email in the mailing list.
+ drivers/cxl/acpi.c     |    4 +++-
+ include/linux/device.h |   33 +++++++++++++++++++++++++--------
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-Your patch doesn't apply against the current tree because of the changes
-from Nikolai/the DIGImend project I'm sending upstream. For reference,
-here is the latest batch of patches, with links to the previous ones:
-
-https://lore.kernel.org/linux-input/20220421175052.911446-1-jose.exposito89@gmail.com/T/
-
-Please note that I'm not the maintainer of the driver, I'm just a web
-developer who does free software as a hobby, i.e., this is not my area
-of expertise, so take my words as suggestions, not as the path to
-follow ;)
-
-The development of the uclogic driver takes place on the DIGImend
-project (inactive right now):
-https://github.com/DIGImend/digimend-kernel-drivers
-
-Like you, I wanted to add support for my tablet/improve my kernel
-dev skills, but I noticed that I needed some patches from DIGImend, so,
-instead of taking what I needed, I decided to upstream all the patches.
-
-At the moment of writing this email, 24 patches from DIGImend have been
-merged, 5 are under review and 7 more need to be sent. We are close to
-the end.
-
-My tablet (Parblo A610 PLUS V2) also needs some magic data to be enabled.
-Actually, the data is pretty similar to the one in your patch.
-You can see my implementation here:
-https://github.com/JoseExposito/linux/commit/f1f24e57fab45a2bcf4e0af5ba9d8f5a2245670b
-
-I just refactored my patch and extracted the code to send the magic data
-to its own function (uclogic_probe_interface), so we can share it.
-
-I'd suggest rebasing your code on top of DIGImend's code + my patch
-so we can share some code and once all patches are upstream, you can
-send it with minor or without conflicts.
-
-What do you think?
-
-José Expósito
-
+...so I'm going to drop it and just add a comment about the
+expectations. As Peter said there's already a multitude of ways to
+cause false positive / negative results with lockdep so this is just
+one more area where one needs to be careful and understand the lock
+context they might be overriding.

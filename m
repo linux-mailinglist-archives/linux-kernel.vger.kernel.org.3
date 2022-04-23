@@ -2,128 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF02350C5D6
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 02:53:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F86350C5D8
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 02:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231312AbiDWA4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 20:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46492 "EHLO
+        id S231319AbiDWA7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 20:59:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbiDWA4G (ORCPT
+        with ESMTP id S229894AbiDWA7H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 20:56:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6C51738CA;
-        Fri, 22 Apr 2022 17:53:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8ECB860FBB;
-        Sat, 23 Apr 2022 00:53:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80106C385A8;
-        Sat, 23 Apr 2022 00:53:09 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="apuirUnw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1650675185;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BtroWoypB74RmLGCXy/EXj5t2W95zgqhXYB+W+c3LYE=;
-        b=apuirUnwiClPZkngdFTOM+QfyFKtnvlwA/luZqphpx2jlS66JX3i7wtN4EjErQfzF+Wktq
-        ULcCQOdPLrsKonuld9pW6IPmx9nMIzMW7PE9KuqHSJGOFnvd19RTov2l7N8+riDdxwSkTx
-        A6j27PAa97zJfQyvB5+w6Yd/uXjGpFg=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d8f036cc (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Sat, 23 Apr 2022 00:53:05 +0000 (UTC)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-2f7bb893309so21450917b3.12;
-        Fri, 22 Apr 2022 17:53:03 -0700 (PDT)
-X-Gm-Message-State: AOAM530iWDSISiRD3YBdkGykYJ/YnCGEUfI1ouUWPhL11sHhAKJKSFan
-        JTgq/eVTPulaHhhsazS8WWseWBJtiltryO6zkFg=
-X-Google-Smtp-Source: ABdhPJyfQC4xfW2/BqRv5HoqgN8AV6BTcIbuJH0uSB8n2Edr3sir/FlqIFAQgMkIMlNc41QBK/E+q+G0PIuXFxD7crQ=
-X-Received: by 2002:a81:1d4:0:b0:2eb:1b10:f43e with SMTP id
- 203-20020a8101d4000000b002eb1b10f43emr7705887ywb.100.1650675181900; Fri, 22
- Apr 2022 17:53:01 -0700 (PDT)
+        Fri, 22 Apr 2022 20:59:07 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64FD225289
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 17:56:11 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id kd22so2432856qvb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 17:56:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=VoXvIeqAbmOIw8MPtifiiSU52O9NLhujq72iuIkL/pQ=;
+        b=VN1VG1wmBwvFxp4RPfHBPhTPXmDyYQiCmA9iJfE+mgzPibnuv2zEF4b+525pX/HiLm
+         XaG9K7A5NYqZxVwtuXpatasdGzcfJ5WauI2qRb1ReDzjwkUkmgNQ6irzVS4mUHOx03ZR
+         R6/vP7a2Sw3QfrgwEciuB1p1bud5hqKVRmhxJiEnhsN5prJG5f52aouHCduUULhsT/rv
+         EoqSEQcee+zLWi/qfA9XHjdVkhSJrVilbaldOCp/BNtmvfJoJcEQeU6YsMq0KlI3u3CR
+         tuIFAQGL33Q6/vUcKpnUmTeHnBOgAfJTZItBJHqQTLgI8mWB+JTHTnG6loiXb2FEzVw5
+         ye+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VoXvIeqAbmOIw8MPtifiiSU52O9NLhujq72iuIkL/pQ=;
+        b=vvyfPSUmaD02u6oqVlXEny/UweHytMtL1PxtH/84bsoBY8ALPkIRjPjvJVJI0ZMf2J
+         AHfetX1tknZb1+wTRkzZzZF+91TJHTBcI4arR/FaeIJ7Y88ZXU8F1wV74yCJQaR9ktQN
+         4Fbh2+fyCaR3Rv46cbZs3zhtllXqhVdbkI1uJm/3g8+IuwLO8MlQn532xU1aM2B0fnf2
+         a1PwjeJ2I1S6+3ghbVwvwEYSQCuFdArbIv+mX/gM5yDKC9FLkdBMxHq+BF4K3NU39gOy
+         ffRusQExcc0eMOe+21o9WtqBIS8Mul3Yfs8FLnfIQXUQ0c9GYKePnSgwHp0KkeL4N8S/
+         D9gQ==
+X-Gm-Message-State: AOAM532B6KQ5hJSWlbFE4foMvedeIl6EhetYXR++3YoPN19vy7mN2/Rw
+        gNc1zPqZ3tfAfZ601lznc1N24g==
+X-Google-Smtp-Source: ABdhPJy3Gor+up+vdFVQl37njOan+NvWWBlSTjU5FXP+S77AJ12gOqugu5s/TSwOs1rr6XqF48aRGQ==
+X-Received: by 2002:a0c:c404:0:b0:431:31c3:3d15 with SMTP id r4-20020a0cc404000000b0043131c33d15mr5523691qvi.116.1650675371094;
+        Fri, 22 Apr 2022 17:56:11 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id f186-20020a379cc3000000b0069e82c4d8a1sm1650037qke.80.2022.04.22.17.56.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 17:56:10 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1ni44H-008OZg-Oh; Fri, 22 Apr 2022 21:56:09 -0300
+Date:   Fri, 22 Apr 2022 21:56:09 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>
+Cc:     "zyjzyj2000@gmail.com" <zyjzyj2000@gmail.com>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/3] RDMA/rxe: Remove useless parameters for
+ update_state()
+Message-ID: <20220423005609.GW64706@ziepe.ca>
+References: <20220412022903.574238-1-lizhijian@fujitsu.com>
+ <b3c747ed-1a87-896b-d95e-35fd2a80ccf7@fujitsu.com>
 MIME-Version: 1.0
-References: <20220217162848.303601-1-Jason@zx2c4.com> <20220322155820.GA1745955@roeck-us.net>
- <YjoUU+8zrzB02pW7@sirena.org.uk> <0d20fb04-81b8-eeee-49ab-5b0a9e78c9f8@roeck-us.net>
- <YjsOHmvDgAxwLFMg@sirena.org.uk> <ebafdf77-5d96-556b-0197-a172b656bb01@roeck-us.net>
- <CAK8P3a1hzmXTTMsGcCA2ekEHnff+M7GrYSQDN4bVfVk6Ui=Apw@mail.gmail.com>
-In-Reply-To: <CAK8P3a1hzmXTTMsGcCA2ekEHnff+M7GrYSQDN4bVfVk6Ui=Apw@mail.gmail.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Sat, 23 Apr 2022 02:52:51 +0200
-X-Gmail-Original-Message-ID: <CAHmME9pMFMk6Uu1p4z9SzdAwg2q52FnH3fcsGXCK0OZod=YwLw@mail.gmail.com>
-Message-ID: <CAHmME9pMFMk6Uu1p4z9SzdAwg2q52FnH3fcsGXCK0OZod=YwLw@mail.gmail.com>
-Subject: Re: [PATCH v1] random: block in /dev/urandom
-To:     Arnd Bergmann <arnd@arndb.de>, Guenter Roeck <linux@roeck-us.net>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Nick Hu <nickhu@andestech.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Michal Simek <monstr@monstr.eu>,
-        Borislav Petkov <bp@alien8.de>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Joshua Kinard <kumba@gentoo.org>,
-        David Laight <David.Laight@aculab.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Theodore Ts'o" <tytso@mit.edu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b3c747ed-1a87-896b-d95e-35fd2a80ccf7@fujitsu.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Arnd/Guenter,
+On Fri, Apr 22, 2022 at 01:07:46AM +0000, lizhijian@fujitsu.com wrote:
+> ping
 
-On Wed, Mar 23, 2022 at 4:53 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Wed, Mar 23, 2022 at 3:23 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> > On 3/23/22 05:10, Mark Brown wrote:
-> > > On Tue, Mar 22, 2022 at 02:54:20PM -0700, Guenter Roeck wrote:
-> > > Kind of academic given that Jason seems to have a handle on what the
-> > > issues are but for KernelCI it's variations on mach-virt, plus
-> > > versatile-pb.  There's a physical cubietruck as well, and BeagleBone
-> > > Blacks among others.  My best guess would be systems with low RAM are
-> > > somehow more prone to issues.
-> >
-> > I don't think it is entirely academic. versatile-pb fails for me;
-> > if it doesn't fail at KernelCI, I'd like to understand why - not to
-> > fix it in my test environment, but to make sure that I _don't_ fix it.
-> > After all, it _is_ a regression. Even if that regression is triggered
-> > by bad (for a given definition of "bad") userspace code, it is still
-> > a regression.
->
-> Maybe kernelci has a virtio-rng device assigned to the machine
-> and you don't? That would clearly avoid the issue here.
-
-Indeed it's probably something like that. Or maybe they're networked
-with something that has a steady stream of interrupts. I say this
-because I was able to reproduce Guenter's findings using the
-versatilepb machine with the versatile_defconfig config and the
-versatile-pb.dtb file. Indeed this board doesn't have a cycle counter.
-However, I did have success using the fallback timer and the other
-patches in the jd/for-guenter branch, so at least for versatile's
-nuances, I think (hope?) there's a reasonable success story here.
+I'd like to see some of the people testing rxe look over these, at
+least until we get rxe back to being stable
 
 Jason

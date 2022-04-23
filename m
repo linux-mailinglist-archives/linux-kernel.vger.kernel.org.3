@@ -2,70 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5DF850CC51
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 18:34:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B95350CC56
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 18:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236386AbiDWQh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 12:37:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34776 "EHLO
+        id S236403AbiDWQii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 12:38:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiDWQhZ (ORCPT
+        with ESMTP id S236383AbiDWQie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 12:37:25 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F7B2F025;
-        Sat, 23 Apr 2022 09:34:27 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-e5ca5c580fso11819032fac.3;
-        Sat, 23 Apr 2022 09:34:27 -0700 (PDT)
+        Sat, 23 Apr 2022 12:38:34 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03D1B76;
+        Sat, 23 Apr 2022 09:35:36 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id q129so12443271oif.4;
+        Sat, 23 Apr 2022 09:35:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=kdKMMnUA+xK7+qfwHy7L8VJH4pn19kuakHSYhLYJsME=;
-        b=d8wFV5HD+2y58md+ggyQwpanQEqyF7bSzJVMjUI0q4LrIA+4CyDu3HAzuyWNH/J3Ot
-         ZxuMuecmx397wyMwBkkVh47jl1PRtzRTvkuQaYa6aw87M4hUXnEhjSSbVnsR4KFg5NOz
-         DV7hME+ajQekX8fP5O5+hoKL+CimiRdFqJTrOPOXE/laJ8BNUqI8tFOLIhoKSc6Ny/WH
-         0reRrM6cagdlMrJ0ROvCq4Wqb5WHnPXD9Vwg6YSsvp6y3eZ6zIDeTAS4waGyWZAblsWa
-         WXtz4nass82V50EW3JZNItl4zE9pyOX4gg58TclpsZ/Jvw64jRAdRaNmJHS2XZCwTWnw
-         AEqw==
+        bh=+ovHkGKEvlIZwtQ9aFgXnHkHqXOrvd8sanG2BE5UeV4=;
+        b=CE/MNPBnre0f1a6TKBwmofViVrKgJ05IptkoHG1SdPEtiyLXvKTXsLuufocRXtSDng
+         d5JDRBbSvHcatQBIXa+ToEZ/CMq9zT1djryIQ5zcdnOnSe+yXhXEZlvTs5rpDKoElDv3
+         9TzUJIsoXr8AtXlK7UwMYZ/CbkWlOlVcvSxY75jobolML9RVUS8/jaz4/AMyaeT76p2I
+         DZ1b+YsCWiiLUTXfF+xMgDWSoNsdbRrSiLveQScgNblUdZ+1HoyVR55+vS5Fe33LKauy
+         1vrB6j57yhXhHlPLGOwAfRabCTuiY6DgbIZZejJ200pt5FAVUxCzHxW56KLFn4GIwD+7
+         PkFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=kdKMMnUA+xK7+qfwHy7L8VJH4pn19kuakHSYhLYJsME=;
-        b=nuc8YS+begyc3TDF6bv8zK0nubCTLOjs1cwBPRvKZk2AZzDC7xmHGBf/xI4XpOH1Fn
-         s8+Cq3PKSYMyiCtx43W7uiX73xPrkWZK5LUxdSzxrIZMQiU18DZa/pTU6rTiLglPzAJ2
-         95nhR9wESjVtjYBh35gOk66/3zuf97tXTKfEtLAc/plDJ+ewP874/lmr0kdIWDZPTi2f
-         Rd+O5fenA98hotom2vXLrBfJfYMTXiHXsUPyCgC6OYk5eOJfFvAPDYyJuLwK/4gAuf8n
-         c/ppPleeyo5up9MCCspcC8KzCS8Re7gOAshbJs3Pe1b8zZMXyzUZYuCjZ5Ti1FGp8bJ6
-         tHww==
-X-Gm-Message-State: AOAM533sepOEXzxu1CZWWQ2QC8Hm99wGYswKiEp01XDAQ/nEBttzXrbS
-        FIA9Jp5lRlZVHBpSRw3vXV0=
-X-Google-Smtp-Source: ABdhPJwGTu/C/RVu0+EetN+MLvLoyqxJzkF96/JACYVXvhk8RVWxScGB3efjBVf6t28JOrghHbzX7Q==
-X-Received: by 2002:a05:6870:580e:b0:e2:7e06:e785 with SMTP id r14-20020a056870580e00b000e27e06e785mr4372716oap.38.1650731666707;
-        Sat, 23 Apr 2022 09:34:26 -0700 (PDT)
+        bh=+ovHkGKEvlIZwtQ9aFgXnHkHqXOrvd8sanG2BE5UeV4=;
+        b=56nRSa57T9xvAY6Mgfqj7CyC0dYxV2JXPuDwDmFzuGDzwemBL6VYBRXgp32bWSxpjl
+         5SXfIU+SRO910nF+tI+mCX5O2qeuRB5uOJpNm+wPPHHRRtoOVJl/+R6QBC+Ht3nvW3Q3
+         6NNr3E0OLxsKNSxT+HFd9q8ZfC74oXK7dSA2XaUpDyrzdqLHSdiMSlo0CNk9ZN60y/AL
+         1/AO6/zu9vX0F1s0Bi4onuCSgBnfJ4baCt9dU2tgImad4TnnfDVSgZ4gQVqBDpuZbE+M
+         ZmXJTLHsdUsUAKxSjMdyCedWJLuozUAIS9ZbaJib5hxe+uAivYGD1ADhWT3iHEg7w8mt
+         6WCQ==
+X-Gm-Message-State: AOAM530SJuQrmiZrkX6F+nXUI6DVH7zZ5BiWHI+dbJhjI9bNzqrsdeoB
+        xPXkHoy9xSYiBy99/N4r9rQ=
+X-Google-Smtp-Source: ABdhPJzUhgOA/L7vBlij2I/59HEEJY7wUxIWCqzShnoqp2lck8+Dlp3S/SGRjv16vWtHRMXQnI72kA==
+X-Received: by 2002:aca:de84:0:b0:2f9:c97c:421c with SMTP id v126-20020acade84000000b002f9c97c421cmr4636599oig.46.1650731736174;
+        Sat, 23 Apr 2022 09:35:36 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v27-20020a056870311b00b000e28bdb81e5sm1716857oaa.44.2022.04.23.09.34.23
+        by smtp.gmail.com with ESMTPSA id x12-20020a4aea0c000000b0035195c4662fsm2163837ood.9.2022.04.23.09.35.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 09:34:24 -0700 (PDT)
+        Sat, 23 Apr 2022 09:35:34 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 23 Apr 2022 09:34:22 -0700
+Date:   Sat, 23 Apr 2022 09:35:33 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Aleksa Savic <savicaleksa83@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org, Jack Doan <me@jackdoan.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add support for
- Aquacomputer Farbwerk
-Message-ID: <20220423163422.GA3964519@roeck-us.net>
-References: <20220421072743.5058-1-savicaleksa83@gmail.com>
- <20220422183144.GA2637654@roeck-us.net>
- <YmQoEoU1UJ+KPhQ9@fedora>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Nick Hu <nickhu@andestech.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Michal Simek <monstr@monstr.eu>,
+        Borislav Petkov <bp@alien8.de>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Joshua Kinard <kumba@gentoo.org>,
+        David Laight <David.Laight@aculab.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: Re: [PATCH v1] random: block in /dev/urandom
+Message-ID: <20220423163533.GB3964519@roeck-us.net>
+References: <20220217162848.303601-1-Jason@zx2c4.com>
+ <20220322155820.GA1745955@roeck-us.net>
+ <YjoC5kQMqyC/3L5Y@zx2c4.com>
+ <d5c23f68-30ba-a5eb-6bea-501736e79c88@roeck-us.net>
+ <CAHmME9rmeQAD2DwG=APTmDxuVxFDH=6GXoKpgPrU9rc9oXrmxQ@mail.gmail.com>
+ <20220423135631.GB3958174@roeck-us.net>
+ <YmQNK2uicWbklo7U@zx2c4.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YmQoEoU1UJ+KPhQ9@fedora>
+In-Reply-To: <YmQNK2uicWbklo7U@zx2c4.com>
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -77,23 +102,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 23, 2022 at 06:23:46PM +0200, Aleksa Savic wrote:
-[ ... ]
-> > > +	case USB_PRODUCT_ID_FARBWERK:
-> > > +		priv->kind = farbwerk;
-> > > +
-> > 
-> > 
-> > Any special reason for this empty line ? It seems kind of random.
-> > 
-> > Guenter
-> > 
+On Sat, Apr 23, 2022 at 04:28:59PM +0200, Jason A. Donenfeld wrote:
+> Hi Guenter,
 > 
-> That's how code in other cases of that switch is formatted (not visible
-> from this patch directly), setting priv->kind and then the appropriate
-> labels.
+> On Sat, Apr 23, 2022 at 06:56:31AM -0700, Guenter Roeck wrote:
+> > Looks like your code is already in -next; I see the same failures in
+> > your tree and there.
 > 
-Ah, ok. Looks odd here, but makes sense.
+> It's not in next, actually. The branch I made for you has that
+> additional testing commit.
+> 
 
-Thanks,
+Hmm, then I can't really test it because the other 16 patches
+in your branch (which are in -next) already cause a number
+of failures.
+
 Guenter

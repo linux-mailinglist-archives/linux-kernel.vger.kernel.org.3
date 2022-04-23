@@ -2,100 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D779950C981
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 13:10:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95C7B50C983
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 13:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235174AbiDWLNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 07:13:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34648 "EHLO
+        id S235175AbiDWLPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 07:15:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235160AbiDWLNl (ORCPT
+        with ESMTP id S231814AbiDWLPN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 07:13:41 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 715EF174F7F
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 04:10:44 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id ks6so20935275ejb.1
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 04:10:44 -0700 (PDT)
+        Sat, 23 Apr 2022 07:15:13 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B825DCD
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 04:12:17 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id d22so588783wrc.13
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 04:12:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=YOA1DyguzoVjmBi7XCeE8zovNraVkKZ3s4vArozjUoE=;
-        b=uIzGnS/huGv+QjwaGUzL9SbzKv72wyULmUBtKBPSqYGoTICDxBZKYEInQtMAIIM8n9
-         FqjNjbc3uR2AJWOqscy8acx38wPlm5bMvVAJlPW0KtwlmAGJH02y4nmXdXPRCaqlJDGC
-         J2DatpZ36PNJR8h7KRRIPCuaGbsjF0OIxZ5QFx8BcUbmVDugQRg9Duo9HSP+UEgJznC5
-         M94tGjOPF4+zX6NNNbNfkrK1xbwOPSzJhYEAx2Cl84qhu48rf27fQlbFTxvChiLB97KM
-         Ubc1raX5zuWd+7O/0hFBNZ/ylifHwVqDLfo6i0cPT655WpQDkns1be3PI7e46DnLazPb
-         hk2Q==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TgZGUu18sUqEflQul3HE3gNa2RZslmJlgEQ5Ca0qxHY=;
+        b=KcB+MOY49fDh/5nux1j5g8rrEM50z9MvbAN+3IC3EgSfKjxURcU/mGCXUlgCOhabfX
+         /O9fqhn/IU/PJqkXEilmpVL/pXkgQlenCURj7omI8a3Q5ObjQIXd2eWpN9+auRhECuSd
+         U6R/yZt42MCvVQ/bpACSVKUA/Oh06wCBOZNB8N0DnOsdfrLPbO10HT97mE76WklF+sBu
+         z5XVVLLgQatbZ8Z6ZV6GPeAhUHzUSp/E2TH7T6UonfmB9+Bne5tVVfcJccN6yJTqUsnZ
+         Z+v77TB0Cac+/7v0jLt3NcIechtHuIIXeKY8ojUc9ccQnxNUj+WZ670XedY9SCRSfSne
+         crdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=YOA1DyguzoVjmBi7XCeE8zovNraVkKZ3s4vArozjUoE=;
-        b=B2HGPL1d/TrM1eWTAmoiVrNBFMBp0NJ817VfQqfB/kyAE4ucuUzG6ec5ZxVUlfJI79
-         Y4RZupp43ugsuE4lbWUOwcKLD5eo7erqqhTjOkyNrZb6duYgTlEoJMS3b/48CXD3Klrh
-         5v4BE5iqvFss9YUCuX2RUkg9ksmHvyaJ9amvKlwDSwJsgW/cwmN+KcHOnXAY5ju+xN4c
-         g3PBe0Bnwux5Lg/CPjUGb/RZoSE81PHYd4LqUuCSHg/R5xclt9JxL3aV/0bI61YFbuRU
-         vuGuGfdQ0TTCpAzirGGVz6v+HeoHxsXlgWW4iNho7ylWAfsiqqsSfR2qwpWIAyXoBThR
-         7urw==
-X-Gm-Message-State: AOAM532mmcpdnGkCpUk0E7qr20wc57BHatzeLCch9ZHCzhvQSQrukuE8
-        MoJ2+BickwNF/Jiq+6NcGsHGZLypjQOqzQ==
-X-Google-Smtp-Source: ABdhPJxhtL97HOhbKuFx3GU4SYR07afL0RgN1lqtAdGzxLeDjbXG68ptL7Ip57i9TdZTa4ssiU3SVg==
-X-Received: by 2002:a17:906:7f02:b0:6cf:86d8:c31c with SMTP id d2-20020a1709067f0200b006cf86d8c31cmr8235764ejr.518.1650712243005;
-        Sat, 23 Apr 2022 04:10:43 -0700 (PDT)
-Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id c2-20020a170906170200b006efe7be5f10sm1586405eje.185.2022.04.23.04.10.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Apr 2022 04:10:42 -0700 (PDT)
-Message-ID: <ff87d5cb-b0d4-95a2-90b0-7827a2a34d05@linaro.org>
-Date:   Sat, 23 Apr 2022 13:10:41 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TgZGUu18sUqEflQul3HE3gNa2RZslmJlgEQ5Ca0qxHY=;
+        b=68uTUctuCdzjc7f73f3yg5xqGkjeLxp1xHtnk/pNnq+Vhz8HvxwO1zmcnjsY/6wy1u
+         Avq05B8tRY+Y4H2QSOUMblsfrUBHpP8lqZC7uvsBhDFluJgLJIDYzW1FkgGdAvHPQAA+
+         ifcSVY5xHArrjjaFe7TXNMaa/deSBcbShOBqo1XH+7iCLG4cPYZW2Pmo7kI8LkkwufXn
+         wsZSMYD6W+upRv8B8J3moQ69PPwTPj4XGLSu/4soVOYg/yPYzsx2rJuyJqdncIZUcYgp
+         bkXlsg0KWVoXnI4mYbsAnbfeCwDBDxgU32SvcSjSBqUfUO3+olc1mGkMJidKdurmFHJX
+         JXrQ==
+X-Gm-Message-State: AOAM533cnxwzWY0jk+53P4RK53a8zFx2QMCLipQnto41WgIcfc6bUinQ
+        naWC8V4vW2DEBl5gNfUHiE58G94COswHNeb9EFQ=
+X-Google-Smtp-Source: ABdhPJzahX171NJVwwA+X6fyv0ItQfTGJyitYu26N1FlvSpyKbYMNwxffenQSkD8cQ+cwZpvNvx50g==
+X-Received: by 2002:adf:c547:0:b0:207:9abc:cfa1 with SMTP id s7-20020adfc547000000b002079abccfa1mr6980350wrf.390.1650712335468;
+        Sat, 23 Apr 2022 04:12:15 -0700 (PDT)
+Received: from google.com (203.75.199.104.bc.googleusercontent.com. [104.199.75.203])
+        by smtp.gmail.com with ESMTPSA id f6-20020a05600c4e8600b00393e31ac628sm1673486wmq.7.2022.04.23.04.12.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Apr 2022 04:12:14 -0700 (PDT)
+Date:   Sat, 23 Apr 2022 11:12:13 +0000
+From:   Sebastian Ene <sebastianene@google.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        qperret@google.com, will@kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH  v2 0/2] Detect stalls on guest vCPUS
+Message-ID: <YmPfDabN6i+yRxgR@google.com>
+References: <20220422141949.3456505-1-sebastianene@google.com>
+ <YmOh5I7ZK08LlM6D@kroah.com>
+ <YmPAoFjfGoBHbPjC@google.com>
+ <877d7gcf9j.wl-maz@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/3] media: dt-bindings: media: rockchip-vdec: Add RK3328
- compatible
-Content-Language: en-US
-To:     Christopher Obbard <chris.obbard@collabora.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Alex Bee <knaerzche@gmail.com>,
-        Elaine Zhang <zhangqing@rock-chips.com>
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-References: <20220422133803.989256-1-chris.obbard@collabora.com>
- <20220422133803.989256-2-chris.obbard@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220422133803.989256-2-chris.obbard@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <877d7gcf9j.wl-maz@kernel.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/04/2022 15:38, Christopher Obbard wrote:
-> Document the RK3328 compatible for rockchip-vdec.
+On Sat, Apr 23, 2022 at 10:36:56AM +0100, Marc Zyngier wrote:
+> On Sat, 23 Apr 2022 10:02:24 +0100,
+> Sebastian Ene <sebastianene@google.com> wrote:
+> > 
+> > On Sat, Apr 23, 2022 at 08:51:16AM +0200, Greg Kroah-Hartman wrote:
+> > > On Fri, Apr 22, 2022 at 02:19:48PM +0000, Sebastian Ene wrote:
+> > > > This adds a mechanism to detect stalls on the guest vCPUS by creating a
+> > > > per CPU hrtimer which periodically 'pets' the host backend driver.
+> > > > 
+> > > > This device driver acts as a soft lockup detector by relying on the host
+> > > > backend driver to measure the elapesed time between subsequent 'pet' events.
+> > > > If the elapsed time doesn't match an expected value, the backend driver
+> > > > decides that the guest vCPU is locked and resets the guest. The host
+> > > > backend driver takes into account the time that the guest is not
+> > > > running. The communication with the backend driver is done through MMIO
+> > > > and the register layout of the virtual watchdog is described as part of
+> > > > the backend driver changes.
+> > > > 
+> > > > The host backend driver is implemented as part of:
+> > > > https://chromium-review.googlesource.com/c/chromiumos/platform/crosvm/+/3548817
+> > > > 
+> > > > Changelog v2:
+> > > >  - move the driver to misc as this does not cope with watchdog core
+> > > >    subsystem
+> > 
+> > Hello Greg,
+> > 
+> > > 
+> > > Wait, why does it not cope with it?  That's not documented anywhere in
+> > > your patch that adds the driver.  In fact, most of the text here needs
+> > > to be in the changelog for the driver submission, not thrown away in the
+> > > 00/XX email that will never end up in the kernel tree.
+> > > 
+> > > thanks,
+> > > 
+> > > greg k-h
+> > 
+> > From the previous feedback that I received on this patch it seems that
+> > watchdog core is not intended to be used for this type of driver. This
+> > watchdog device tracks the elapsed time on a per-cpu basis,
+> > since KVM schedules vCPUs independently. Watchdog core is not intended
+> > to detect CPU stalls and the drivers don't have a notion of CPU.
+
+Hello Marc,
+
 > 
-> Signed-off-by: Christopher Obbard <chris.obbard@collabora.com>
-> ---
->  Documentation/devicetree/bindings/media/rockchip,vdec.yaml | 1 +
->  1 file changed, 1 insertion(+)
+> I must say that I don't really get the objection against the watchdog
+> approach. OK, there is no userspace aspect to this.  But we already
+> use watchdogs for more than just userspace (reboot is one of the major
+> use cases).
+> 
+> There already are per-CPU watchdog in the tree: see how the
+> fsl-ls208xa platform has one SP805 per CPU (8 of them in total). As
+> far as I can tell, there was no objection to this. So what is special
+> about this one?
 
+I think the difference is in the fact that this driver expects hrtimers
+which are CPU binded to execute the periodic watchdog 'pet'. We would
+require a strong thread affinity setting if we rely on userspace to
+do this 'pet' operation.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Thanks,
+Sebastian
 
-
-Best regards,
-Krzysztof
+> 
+> Thanks,
+> 
+> 	M.
+> 
+> -- 
+> Without deviation from the norm, progress is not possible.

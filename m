@@ -2,105 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E46550CDDF
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 00:06:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D1F950CDE2
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 00:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234586AbiDWWIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 18:08:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50180 "EHLO
+        id S237191AbiDWWKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 18:10:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiDWWIs (ORCPT
+        with ESMTP id S235965AbiDWWKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 18:08:48 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC671656D
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 15:05:49 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id bv19so22735066ejb.6
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 15:05:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=WiFwTh79e/vDiEl2X1EIBN4kgkhCfNrDRpDpgRmEVDk=;
-        b=GpuB+1ubhT2BD3XCTrdY/EqBZmMRTF4U5R6sqoE2ix7rWg07Yv9Mp1Z61AVrv6zGa+
-         pKUozdrZj+VQtsADxvXQsWyM1hLUCn0+kRfmDfGkOsncvBAaSfd5VCVG6P8SbbznP8tS
-         QhYJp7xyoYhYFbULOcho7W5wwzuBZAXP1MWa/Q16ZR0pvf7rqgxobG+m3lrA5RPQi6SE
-         7E3IqW/C9y7ta7/CNuDbdMkBezqImjCj9JA2Fi4sXlBIxM0IUvdQcOPlQNz5n03sfq/b
-         TMv0Md2vqhka2Tj6aN5a7bW+hFJ/3QFh+v/Y+O6oXBtZQZYEOjf+VoUn6eE2bCx767l/
-         Fp5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=WiFwTh79e/vDiEl2X1EIBN4kgkhCfNrDRpDpgRmEVDk=;
-        b=bgkNac4GykFOQCTkbUhqwjTr0zGCvoKuV7eEFM2KpT+ggAG9ylDxMmd6HHpIx/Kaqa
-         xR7hG+BzJ9MiVizqHJ+uzv3WX0rm78ItcHB/QtiRHxfcOCuer0KyfXAeM4hXtVnJPRSD
-         1JTY5zCUj5DSPkjdReT6Bt5i7BcEfvTumyHibQV3zQ9+PRmYj0fuPY95QLvDIj0NmUhX
-         4lw2mQ8ExOLvqDTPPYa9NcqMRTDb90mSM3uG1BL4Yam+Ukd50MIfRs0MwkIbEr77kNG9
-         0y+y6+Yp68F+6yAgveLFJob/XjOMmuoS+NfWOTI4VCvQ1j1RlyQDc4g2ZXWbsrSv15DY
-         vLIQ==
-X-Gm-Message-State: AOAM530ItzWVYQ+/ZGQCILYupn35Uf4fA1SJYTX4uTJ7Ulpot2nQcURb
-        YGuF/+xphn46F8C26nmaycKOLwpSuoSraryfM2U=
-X-Google-Smtp-Source: ABdhPJzWuO26zWYAGqo1A1d8yoxs/IYnTcT34lSOkxx8xs5sazLfklLgF5fElBPmpSpErpmgqvj/3AsxvbR5wosmNxE=
-X-Received: by 2002:a17:906:c0e:b0:6f0:2b1e:9077 with SMTP id
- s14-20020a1709060c0e00b006f02b1e9077mr9759059ejf.411.1650751548262; Sat, 23
- Apr 2022 15:05:48 -0700 (PDT)
+        Sat, 23 Apr 2022 18:10:34 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4453139759
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 15:07:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650751656; x=1682287656;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rkRGR22eEuv1oM9xxa6jnEemsvuLfCXgIIj+ORWpj+M=;
+  b=Q+XqYxjMIaqoZSSMXQV5xgn+bWl8B59YfI2HdZogy0pa7kClZVIS/AbT
+   rR5sCiFyHEZG0ggJ0IevJ8qVbGY1s8lhNkQikczhOegMx8Kn3ZVclkayx
+   RjPAuPzjrmduw3eBhEi/HHW0r7S5aRqDEZRAH8GAot2ZDLtO+jUHeDiDs
+   ThtKwft7dzcWM6zv+zTUFTisDJeY3txij0bjCKtWkjATmm5XcE1MTzbpY
+   ECsEXlcOkjTjY8pMe6UPzm8fqsfa73VOHECxrXkQJZRlrKT5GEdWoO4Cu
+   GjBE8vBaBpLpltM3Y6rqZmUn99ufWo8S3erZRnWkQqbCu2bmOHFkNlQ+w
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="246868574"
+X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
+   d="scan'208";a="246868574"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 15:07:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
+   d="scan'208";a="649132721"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Apr 2022 15:07:34 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1niNuf-0000XN-Rx;
+        Sat, 23 Apr 2022 22:07:33 +0000
+Date:   Sun, 24 Apr 2022 06:07:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
+Subject: drivers/dma/dw-edma/dw-edma-v0-core.c:192:19: warning: unused
+ function 'readq_ch'
+Message-ID: <202204240640.NsKCxxv9-lkp@intel.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6f02:39b:b0:1a:6c4e:3ca7 with HTTP; Sat, 23 Apr 2022
- 15:05:47 -0700 (PDT)
-Reply-To: wijh555@gmail.com
-From:   "Mr. Yakubu Abubakar," <yakubuabubakar1884@gmail.com>
-Date:   Sat, 23 Apr 2022 15:05:47 -0700
-Message-ID: <CANt38eu7083QKs-K6se4Mk2auKWth9igO_cs==LKBt0HOnyG=Q@mail.gmail.com>
-Subject: Good Day,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:633 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4906]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [yakubuabubakar1884[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [wijh555[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [yakubuabubakar1884[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Greetings,
-I'm Mr. Yakubu Abubakar, how are you doing hope you are in good
-health, the Board irector
-try to reach you on phone several times Meanwhile, your number was not
-connecting. before he ask me to send you an email to hear from you if
-you are fine. hope to hear you are in good Health.
+Hi Gustavo,
 
-Thanks,
-Mr. Yakubu Abubakar.
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   13bc32bad7059d6c5671e9d037e6e3ed001cc0f4
+commit: e0c1d53891c43a70c9fa85ddb3174ab5afd7e2ec dmaengine: dw-edma: Add support for the HDMA feature
+date:   1 year, 1 month ago
+config: mips-randconfig-r032-20220424 (https://download.01.org/0day-ci/archive/20220424/202204240640.NsKCxxv9-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e0c1d53891c43a70c9fa85ddb3174ab5afd7e2ec
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e0c1d53891c43a70c9fa85ddb3174ab5afd7e2ec
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/dma/dw-edma/ drivers/usb/gadget/ fs/overlayfs/ kernel/bpf/ sound/core/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/dma/dw-edma/dw-edma-v0-core.c:192:19: warning: unused function 'readq_ch'
+   static inline u64 readq_ch(struct dw_edma enum dw_edma_dir dir, u16 ch,
+   ^
+   fatal error: error in backend: Nested variants found in inline asm string: '.if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/barrier.h", .line = 16, $); 0x00 ) != -1)) : $))) ) && ( (1 << 0) ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif'
+   clang-15: error: clang frontend command failed with exit code 70 (use -v to see invocation)
+   clang version 15.0.0 (git://gitmirror/llvm_project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
+   Target: mips64el-unknown-linux
+   Thread model: posix
+   InstalledDir: /opt/cross/clang-1cddcfdc3c/bin
+   clang-15: note: diagnostic msg:
+   Makefile arch block drivers fs include kernel mm nr_bisected scripts sound source usr virt
+
+
+vim +/readq_ch +192 drivers/dma/dw-edma/dw-edma-v0-core.c
+
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  191  
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18 @192  static inline u64 readq_ch(struct dw_edma *dw, enum dw_edma_dir dir, u16 ch,
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  193  			   const void __iomem *addr)
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  194  {
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  195  	u32 value;
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  196  
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  197  	if (dw->mf == EDMA_MF_EDMA_LEGACY) {
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  198  		u32 viewport_sel;
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  199  		unsigned long flags;
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  200  
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  201  		raw_spin_lock_irqsave(&dw->lock, flags);
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  202  
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  203  		viewport_sel = FIELD_PREP(EDMA_V0_VIEWPORT_MASK, ch);
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  204  		if (dir == EDMA_DIR_READ)
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  205  			viewport_sel |= BIT(31);
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  206  
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  207  		writel(viewport_sel,
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  208  		       &(__dw_regs(dw)->type.legacy.viewport_sel));
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  209  		value = readq(addr);
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  210  
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  211  		raw_spin_unlock_irqrestore(&dw->lock, flags);
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  212  	} else {
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  213  		value = readq(addr);
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  214  	}
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  215  
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  216  	return value;
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  217  }
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  218  
+
+:::::: The code at line 192 was first introduced by commit
+:::::: 04e0a39fc10f82a71b84af73351333b184cee578 dmaengine: dw-edma: Add writeq() and readq() for 64 bits architectures
+
+:::::: TO: Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>
+:::::: CC: Vinod Koul <vkoul@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

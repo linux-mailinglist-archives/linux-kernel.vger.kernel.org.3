@@ -2,117 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E998850C9B4
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 13:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8770F50C9B5
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 13:48:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235334AbiDWLtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 07:49:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35410 "EHLO
+        id S235335AbiDWLvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 07:51:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235326AbiDWLtl (ORCPT
+        with ESMTP id S235120AbiDWLv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 07:49:41 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A42FAD22
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 04:46:44 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id n18so16492199plg.5
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 04:46:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=J0S0S5fuFEbU9yXYTubsjxw2YWpXKUGELZ8mwol2duc=;
-        b=bq8q2kzQEI0IEZeJno5JXEsEmtsP2XDtX8a7APwWbw8Bu6I9elN+nstWWF+B3Y0s2m
-         pi7xJXoGCbXsysoZ2VmqVW3jxkDWwKZDOc7rRaa4Valv2baAqWC4Qf8xeRWvnXcCu/84
-         TdHKR5MScLcIgRyRos+4if64pht/FJhObjCGh4DP/0cNKgCoTDsaHm5LqylisPBGuRS0
-         LZURRVR8iERZkDcb8SayTQXPA6j1JcOYw0rYgOxYGrmvTAhnZIPRbNepLh8yT2WKpfL5
-         ZMJ/ChqeuIsrJDYyfRidus+ONKG+hdvNCQxSfTZxxrXmgTvnTHAtWRu1mYaoF2U9b/v/
-         AYEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=J0S0S5fuFEbU9yXYTubsjxw2YWpXKUGELZ8mwol2duc=;
-        b=a+8yiMkVR4XZr71Z7xAr8mq0pl7UNGXm7JBlPtSVgp9L8reoISl1S/XDo/1maS9don
-         FWeq6RBORayZdhLW4CMiXRUyz/DFt5RFHEhE0IPnH9+W/8MWtDgtPzCWnhgWInxtBJ5o
-         aBcyjc1OqgmGgVIrTIDkJ6JXxVfHnXg1XU+Yzj7YUB06RcAQUTAMFPw95N89WTJw+vrx
-         026FgJq8gdDCNqDk8vOsI5S/XFeoicy+d8XAroWrStWnuZFRn6trJ20xmzzKnI5CVmxR
-         /J2uTkCauirP0IfLZE3PhXpXHclGGGJfy/LRQGFx4PfrkkMPc6GD3Jx330wxnpvv40XS
-         8EFQ==
-X-Gm-Message-State: AOAM530wHupS9CVd/PkmVuHaY/8PlyW4szGFY/z2ZbnEtPM5A9cSsseP
-        SY6/j906jEwVN13JucE64/LL
-X-Google-Smtp-Source: ABdhPJygyj7U3ci2JCo8JtRud845IZLWNNfXjTuuKJYcvw6sZFDL45L1g8kw+xMiMNLDVNOCZ8ysxA==
-X-Received: by 2002:a17:90a:5991:b0:1d9:27f3:74cc with SMTP id l17-20020a17090a599100b001d927f374ccmr3694119pji.90.1650714403387;
-        Sat, 23 Apr 2022 04:46:43 -0700 (PDT)
-Received: from thinkpad ([117.207.28.196])
-        by smtp.gmail.com with ESMTPSA id g6-20020a17090a714600b001d7f3bb11d7sm5446077pjs.53.2022.04.23.04.46.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 04:46:42 -0700 (PDT)
-Date:   Sat, 23 Apr 2022 17:16:35 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     martin.petersen@oracle.com, jejb@linux.ibm.com,
-        avri.altman@wdc.com, alim.akhtar@samsung.com,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/5] scsi: ufs: core: Remove redundant wmb() in
- ufshcd_send_command()
-Message-ID: <20220423114635.GC374560@thinkpad>
-References: <20220422132140.313390-1-manivannan.sadhasivam@linaro.org>
- <20220422132140.313390-5-manivannan.sadhasivam@linaro.org>
- <10d7e4a7-4364-b579-fecf-53c953d22b7d@acm.org>
+        Sat, 23 Apr 2022 07:51:29 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 571A81F3130
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 04:48:32 -0700 (PDT)
+Received: from fsav112.sakura.ne.jp (fsav112.sakura.ne.jp [27.133.134.239])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 23NBmTfj015009;
+        Sat, 23 Apr 2022 20:48:29 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav112.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav112.sakura.ne.jp);
+ Sat, 23 Apr 2022 20:48:29 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav112.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 23NBmSiS015000
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Sat, 23 Apr 2022 20:48:28 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <8a6659ba-13ba-b9be-08c8-f02f106d55fb@I-love.SAKURA.ne.jp>
+Date:   Sat, 23 Apr 2022 20:48:28 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <10d7e4a7-4364-b579-fecf-53c953d22b7d@acm.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 8/8] mm: Centralize & improve oom reporting in
+ show_mem.c
+Content-Language: en-US
+To:     Kent Overstreet <kent.overstreet@gmail.com>
+Cc:     Michal Hocko <mhocko@suse.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, hch@lst.de,
+        hannes@cmpxchg.org, akpm@linux-foundation.org,
+        linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-input@vger.kernel.org, rostedt@goodmis.org,
+        Roman Gushchin <roman.gushchin@linux.dev>
+References: <20220421234837.3629927-1-kent.overstreet@gmail.com>
+ <20220421234837.3629927-14-kent.overstreet@gmail.com>
+ <YmKma/1WUvjjbcO4@dhcp22.suse.cz> <YmLFPJTyoE4GYWp4@carbon>
+ <20220422234820.plusgyixgybebfmi@moria.home.lan> <YmNH/fh8OwTJ6ASC@carbon>
+ <20220423004607.q4lbz2mplkhlbyhm@moria.home.lan> <YmNVjiVv0fKXYjIF@carbon>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <YmNVjiVv0fKXYjIF@carbon>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 10:19:14PM -0700, Bart Van Assche wrote:
-> On 4/22/22 06:21, Manivannan Sadhasivam wrote:
-> > The wmb() inside ufshcd_send_command() is added to make sure that the
-> > doorbell is committed immediately.
+On 2022/04/23 10:25, Roman Gushchin wrote:
+>>> I agree. However the OOM killer _has_ to make the progress even in such rare
+>>> circumstances.
+>>
+>> Oh, and the concern is allocator recursion? Yeah, that's a good point.
 > 
-> That's not the purpose of the wmb() call so I think the comment is wrong.
+> Yes, but not the only problem.
 > 
-> > This leads to couple of expectations:
-> > 
-> > 1. The doorbell write should complete before the function return.
-> > 2. The doorbell write should not cross the function boundary.
-> > 
-> > 2nd expectation is fullfilled by the Linux memory model as there is a
-> > guarantee that the critical section won't cross the unlock (release)
-> > operation.
+>>
+>> Do you know if using memalloc_noreclaim_(save|restore) is sufficient for that,
+>> or do we want GFP_ATOMIC? I'm already using GFP_ATOMIC for allocations when we
+>> generate the report on slabs, since we're taking the slab mutex there.
 > 
-> I think you meant that the writel() won't cross the unlock operation?
+> And this is another problem: grabbing _any_ locks from the oom context is asking
+> for trouble: you can potentially enter the oom path doing any allocation, so
+> now you have to check that no allocations are ever made holding this lock.
+> And I'm not aware of any reasonable way to test it, so most likely it ends up
+> introducing some very subtle bags, which will be triggered once a year.
 > 
 
-yes!
-
-Thanks,
-Mani
-
-> > diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-> > index 9349557b8a01..ec514a6c5393 100644
-> > --- a/drivers/scsi/ufs/ufshcd.c
-> > +++ b/drivers/scsi/ufs/ufshcd.c
-> > @@ -2116,9 +2116,6 @@ void ufshcd_send_command(struct ufs_hba *hba, unsigned int task_tag)
-> >   	__set_bit(task_tag, &hba->outstanding_reqs);
-> >   	ufshcd_writel(hba, 1 << task_tag, REG_UTP_TRANSFER_REQ_DOOR_BELL);
-> >   	spin_unlock_irqrestore(&hba->outstanding_lock, flags);
-> > -
-> > -	/* Make sure that doorbell is committed immediately */
-> > -	wmb();
-> >   }
-> 
-> Anyway:
-> 
-> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+You can't allocate memory nor hold locks from OOM context. Since oom_lock mutex
+serializes OOM reporting, you could use statically pre-allocated buffer for holding
+one line of output. Correlating whole report will be done by the userspace program
+with the aid of CONFIG_PRINTK_CALLER=y.

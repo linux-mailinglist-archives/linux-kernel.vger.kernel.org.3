@@ -2,82 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA2FA50C803
+	by mail.lfdr.de (Postfix) with ESMTP id 65AD350C802
 	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 09:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233711AbiDWHdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 03:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51230 "EHLO
+        id S233958AbiDWHeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 03:34:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231879AbiDWHdq (ORCPT
+        with ESMTP id S233651AbiDWHdt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 03:33:46 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017A0C2C
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 00:30:49 -0700 (PDT)
+        Sat, 23 Apr 2022 03:33:49 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6540CC2C
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 00:30:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650699050; x=1682235050;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Lqfh2dy8yhcMsDgpHBa9eJKT10BfW8n3g7pvy4zAr5o=;
-  b=DW2dMb6cmqB192kcuYWjz+O/KM4pUS5aPIOkfx6XzOi728zwAd5OD4ur
-   lCb/aPv9B06/6w4mwQEGwm9lYrvG6SBDsHFAYQKa6aRrvsBbmkgsxchMV
-   lb1t9LQYZxbyg9U3ETnBHOpsB3gOo14+SaTwIvK2yZAcPIaAGl5DY/Nr0
-   UWnyXySdPMgwIRKq0vpho8jrdlYfbeHVGIPw8Xw+oe8WRabgue/H48NAT
-   RjGBelEWKPMXaPXIdQC85x6Fpti/oPewN8PA9gqq9gK2fpeACmxHoJ2xE
-   ldWhXD3bmRGDn4PutPdde4xyjy3hVa8WZYfmp3RKRUbOFewb/GiNSqUum
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264356405"
+  t=1650699052; x=1682235052;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=C541v7PuNvIqabzwOaiOUIw9BmTNKpxThOwoOZGimcI=;
+  b=UBTW4dreahXsftWQzq5jN+i705E5crviz9dIQ45gTWnceSzIQfcVVQ/q
+   G/A2xCBLUT+rMmtvVyKLSLvl6ouQ+y4J7qyq/RP7MsNT1hoHTZMXfn2w6
+   fKKOwUGCARef1cuJ/Uj3Lr7NHx0XcU2MRUelXZt8yCANEtEdmT/ZpXcbY
+   mjZFzPu2a+3GsoxFsRzOmgXSivgSMhiTXRrfBUIil55Lg1aDlRz2V/cjZ
+   qs/UDYBuYKnx2j3tR4pG8UlfWgltFYNH82GbFfdFsgahpGOCiXSqTDRPm
+   MHyGODwnxgeLvF+TpA86/Sj//oQlov60TwlCApwK6OJlxpmSy+TWTti7u
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="351311817"
 X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
-   d="scan'208";a="264356405"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 00:30:49 -0700
+   d="scan'208";a="351311817"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 00:30:52 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
-   d="scan'208";a="703856539"
+   d="scan'208";a="673433864"
 Received: from lkp-server01.sh.intel.com (HELO dd58949a6e39) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 23 Apr 2022 00:30:47 -0700
+  by orsmga004.jf.intel.com with ESMTP; 23 Apr 2022 00:30:48 -0700
 Received: from kbuild by dd58949a6e39 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1niAEB-00001N-8X;
+        id 1niAEB-00001P-Db;
         Sat, 23 Apr 2022 07:30:47 +0000
-Date:   Sat, 23 Apr 2022 15:30:14 +0800
+Date:   Sat, 23 Apr 2022 15:30:17 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Dan Carpenter <error27@gmail.com>
+To:     Jagdish Gediya <jvgediya@linux.ibm.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org
 Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Chuck Lever <chuck.lever@oracle.com>
-Subject: [linux-stable-rc:linux-5.15.y 4665/5978]
- include/linux/sunrpc/xdr.h:734:10: warning: result of comparison of constant
- 4611686018427387903 with expression of type '__u32' (aka 'unsigned int') is
- always false
-Message-ID: <202204231526.ijyYsWuP-lkp@intel.com>
+        baolin.wang@linux.alibaba.com, dave.hansen@linux.intel.com,
+        ying.huang@intel.com, aneesh.kumar@linux.ibm.com,
+        shy828301@gmail.com, weixugc@google.com, gthelen@google.com,
+        dan.j.williams@intel.com, Jagdish Gediya <jvgediya@linux.ibm.com>
+Subject: Re: [PATCH v3 6/7] mm: demotion: expose per-node demotion targets
+ via sysfs
+Message-ID: <202204231557.Jmw6QI8T-lkp@intel.com>
+References: <20220422195516.10769-7-jvgediya@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220422195516.10769-7-jvgediya@linux.ibm.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-head:   81d8d30c35edf29c5c70186ccb14dac4a5ca38a8
-commit: 303cd6173dce0a28d26526c77814eb90a41bd898 [4665/5978] NFSD: prevent integer overflow on 32 bit systems
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220423/202204231526.ijyYsWuP-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
+Hi Jagdish,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on driver-core/driver-core-testing]
+[also build test ERROR on linus/master linux/master v5.18-rc3]
+[cannot apply to hnaz-mm/master next-20220422]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jagdish-Gediya/mm-demotion-Introduce-new-node-state-N_DEMOTION_TARGETS/20220423-035714
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git 4e224719f5d9b92abf1e0edfb2a83053208f3026
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220423/202204231557.Jmw6QI8T-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=303cd6173dce0a28d26526c77814eb90a41bd898
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.15.y
-        git checkout 303cd6173dce0a28d26526c77814eb90a41bd898
+        # https://github.com/intel-lab-lkp/linux/commit/0717e30f61ac83bd6ec65395bf46fdb5131cb83f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jagdish-Gediya/mm-demotion-Introduce-new-node-state-N_DEMOTION_TARGETS/20220423-035714
+        git checkout 0717e30f61ac83bd6ec65395bf46fdb5131cb83f
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
@@ -85,61 +98,29 @@ reproduce (this is a W=1 build):
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from net/ipv4/ipconfig.c:59:
-   In file included from include/linux/nfs_fs.h:31:
-   In file included from include/linux/sunrpc/auth.h:13:
-   In file included from include/linux/sunrpc/sched.h:19:
->> include/linux/sunrpc/xdr.h:734:10: warning: result of comparison of constant 4611686018427387903 with expression of type '__u32' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-           if (len > SIZE_MAX / sizeof(*p))
-               ~~~ ^ ~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+>> drivers/base/node.c:567:32: error: call to undeclared function 'node_get_demotion_targets'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           nodemask_t demotion_targets = node_get_demotion_targets(dev->id);
+                                         ^
+>> drivers/base/node.c:567:13: error: initializing 'nodemask_t' with an expression of incompatible type 'int'
+           nodemask_t demotion_targets = node_get_demotion_targets(dev->id);
+                      ^                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
 
-vim +734 include/linux/sunrpc/xdr.h
+vim +/node_get_demotion_targets +567 drivers/base/node.c
 
-   712	
-   713	/**
-   714	 * xdr_stream_decode_uint32_array - Decode variable length array of integers
-   715	 * @xdr: pointer to xdr_stream
-   716	 * @array: location to store the integer array or NULL
-   717	 * @array_size: number of elements to store
-   718	 *
-   719	 * Return values:
-   720	 *   On success, returns number of elements stored in @array
-   721	 *   %-EBADMSG on XDR buffer overflow
-   722	 *   %-EMSGSIZE if the size of the array exceeds @array_size
-   723	 */
-   724	static inline ssize_t
-   725	xdr_stream_decode_uint32_array(struct xdr_stream *xdr,
-   726			__u32 *array, size_t array_size)
-   727	{
-   728		__be32 *p;
-   729		__u32 len;
-   730		ssize_t retval;
-   731	
-   732		if (unlikely(xdr_stream_decode_u32(xdr, &len) < 0))
-   733			return -EBADMSG;
- > 734		if (len > SIZE_MAX / sizeof(*p))
-   735			return -EBADMSG;
-   736		p = xdr_inline_decode(xdr, len * sizeof(*p));
-   737		if (unlikely(!p))
-   738			return -EBADMSG;
-   739		if (array == NULL)
-   740			return len;
-   741		if (len <= array_size) {
-   742			if (len < array_size)
-   743				memset(array+len, 0, (array_size-len)*sizeof(*array));
-   744			array_size = len;
-   745			retval = len;
-   746		} else
-   747			retval = -EMSGSIZE;
-   748		for (; array_size > 0; p++, array++, array_size--)
-   749			*array = be32_to_cpup(p);
-   750		return retval;
-   751	}
-   752	
+   563	
+   564	static ssize_t demotion_targets_show(struct device *dev,
+   565					     struct device_attribute *attr, char *buf)
+   566	{
+ > 567		nodemask_t demotion_targets = node_get_demotion_targets(dev->id);
+   568	
+   569		return sysfs_emit(buf, "%*pbl\n", nodemask_pr_args(&demotion_targets));
+   570	}
+   571	static DEVICE_ATTR_RO(demotion_targets);
+   572	
 
 -- 
 0-DAY CI Kernel Test Service

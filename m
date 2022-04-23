@@ -2,78 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D01B50CB61
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 16:41:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE94150CB64
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 16:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229518AbiDWOoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 10:44:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34978 "EHLO
+        id S230374AbiDWOoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 10:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbiDWOoE (ORCPT
+        with ESMTP id S230108AbiDWOob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 10:44:04 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D3DBE9D1
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 07:41:03 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d15so17106554pll.10
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 07:41:03 -0700 (PDT)
+        Sat, 23 Apr 2022 10:44:31 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F90ED3718
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 07:41:34 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id g28so70171ybj.10
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 07:41:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rNEcxmUy5rq0ORs4OjE0BCxrosGd+zcmrow3MiOXGPk=;
-        b=t9ae2uQZWpX9EIiz03UlyM8TdDe7WFdAvlPzUb26dPGry9XYpgdW0wxMSxZjW5rMBW
-         eQtIQxR9blqLBlupP8LIWZpXRXhwKzkksRt1MWlV12zTBIDXCm0a4Xjsfn7jeU3bjpbw
-         7zdnSIam82bXZHvDtP6WJLdQjaW9/QsPv+p+9pFc1WHbZ9bYQEqrW+nSvJ2i37r5ELQk
-         XpstZ0UvnNO5mdWHBIaACktGOyNHiy7XvIZirHdIBCAK/xio/lzlh+0F5TIdWjtC3ILj
-         ecpkODVfDP5w55YE/PCFpDqkILBLFJtwpGmbdfcutlrwpKotm0eBfZqsfv4FJeN5yQYZ
-         MlTg==
+        d=nathanrossi.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Xea/ooL0oXQr48b59SjzLL2di9oPZrvbBXHt0wat3jc=;
+        b=VpMPIOjOPRfPsA5kT+RVI6LIkgrPRSEhBxxCycmmriboalFnHZKg9ebRbAeSZ0AylJ
+         53JinkuYkyfLJnUoDEdgy6nuNtVb1iIn68aGCQanDvreWw/BaIhREYxzEN34vN9Le6R6
+         CaJUvkavT/umtxEhhvs4E46Zz+2oHy1bpzTBaTBcFv9TwpXn0ek5ldst3nLNl3gEtBxb
+         ITzc8AJ/ShTSyTr5KnRObrbq/a1+EAqWznf95hx+fqxqychkdFqUaMQc3okP6tuT+GZr
+         TAhmQb/C5f2ulGMEU4wvDSgLK3EgBwRO0a0mJ5lldjr5TQeZ+WZXgcfVF2oHY7isz9WZ
+         3/hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rNEcxmUy5rq0ORs4OjE0BCxrosGd+zcmrow3MiOXGPk=;
-        b=E/SDRj68RAH4jFeehUcRFQqaUhoqJcPWnykvuedpoz+SoIZLwXdl1ioVGmEKUzO+9T
-         OgkPxjmQAw4OzlBibxHP2JgvVRnADcuWKpHPf4BH24oDxnTG5zs73X9r4EbxEHv9zHCZ
-         QSDISmKynlYSic4DM12YCHQDYp18PdHdO7/QAGKa+/ot/4QBYY+Y0mRAtMqx8szztd6z
-         7Id//PMhVufA2n/MfdICWxC/JoPWaOpdoeXPtq0N/IIVEHJUFpMxZqI2Pg97T3OCCsb4
-         mLrU1j8BQBOpjuMSVzPyO2YPtW1NLeagpQR6bS5AmGJNIKo63tOlRhOf+TIfBj58/NGE
-         ksYQ==
-X-Gm-Message-State: AOAM530NEf1wWhRgHxR9YY+yCOL2TDY68nDw8QMzqRrI5twKcTY7KhKm
-        iX1JEkhxKms/I7+VPsqmEzF3
-X-Google-Smtp-Source: ABdhPJwBCxb2/arKtHGeprjJBihRYx+XXniYwuwmIFKhV7rtT2vC40Wq+UGluxk4wJU9RgqPIe/W4g==
-X-Received: by 2002:a17:902:bd92:b0:15c:e5ba:fb49 with SMTP id q18-20020a170902bd9200b0015ce5bafb49mr3170662pls.35.1650724862860;
-        Sat, 23 Apr 2022 07:41:02 -0700 (PDT)
-Received: from thinkpad ([117.207.28.196])
-        by smtp.gmail.com with ESMTPSA id j6-20020aa79286000000b004fdf02851eesm5775277pfa.4.2022.04.23.07.40.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 07:41:02 -0700 (PDT)
-Date:   Sat, 23 Apr 2022 20:10:55 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 25/25] PCI: dwc: Add DW eDMA engine support
-Message-ID: <20220423144055.GR374560@thinkpad>
-References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
- <20220324014836.19149-26-Sergey.Semin@baikalelectronics.ru>
- <20220328141521.GA17663@thinkpad>
- <20220419205403.hdtp67mwoyrl6b6q@mobilestation>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Xea/ooL0oXQr48b59SjzLL2di9oPZrvbBXHt0wat3jc=;
+        b=m2J1RIwMVx3DBVk8hdIWLN5IGCI/Y6g7OAuNolgQXYXUVPNWiT91TZk9WHC9qstWlm
+         fwhhxs0aUwPZepQdHaM4ID0HZQEIssrLZmtYs0S5DqWHYsfUnjPtx9Que+Vq9FQduo5K
+         fJFz3wqdGVjIQVyTKNnIBHwLxLKKNvP+9v9EqTe6PicINfyU/7wdcRxRDnPhozZTlSb4
+         yhFMM3johxfRTRpdlv2mQOUTMXMSOYrgkWtuv0DbYBabnzut1gk7tF1YZ977KA/ZVAvs
+         ER3fylRX4eLcJBeEKlJafP7xQyHU5eZ+ykGhd9xCNyjOfpDebelGbgj2ic6eKZetux64
+         gcDQ==
+X-Gm-Message-State: AOAM531HiU5nA33RUdy6sAVrd6tWK2B21G1s9N/RDI1U4gU31hJ5naVV
+        9ujPEOSadMxdqjrRN1pGu5l3pmphEYqvGEnDaYfieA==
+X-Google-Smtp-Source: ABdhPJx7MQMqxc6szpt3wAHoBUFuvlBgosdX8utQ5F+DTI9tcw27agSFUd5ZmgiQru4z6NkEKr4c1mEK3vvCwkafq78=
+X-Received: by 2002:a5b:a43:0:b0:63d:c248:13a5 with SMTP id
+ z3-20020a5b0a43000000b0063dc24813a5mr9196772ybq.614.1650724893453; Sat, 23
+ Apr 2022 07:41:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220419205403.hdtp67mwoyrl6b6q@mobilestation>
+References: <20220423131427.237160-1-nathan@nathanrossi.com>
+ <20220423131427.237160-2-nathan@nathanrossi.com> <YmQIHWL4iTS5qVIz@lunn.ch>
+In-Reply-To: <YmQIHWL4iTS5qVIz@lunn.ch>
+From:   Nathan Rossi <nathan@nathanrossi.com>
+Date:   Sun, 24 Apr 2022 00:41:22 +1000
+Message-ID: <CA+aJhH3EtAxAKy8orC-SU8UnagBCibF3dHXrp78zfjuAzj4vUg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] net: dsa: mv88e6xxx: Handle single-chip-address OF property
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -84,235 +72,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 11:54:03PM +0300, Serge Semin wrote:
-> On Mon, Mar 28, 2022 at 07:45:21PM +0530, Manivannan Sadhasivam wrote:
-> > On Thu, Mar 24, 2022 at 04:48:36AM +0300, Serge Semin wrote:
-> > > Since the DW eDMA driver now supports eDMA controllers embedded into the
-> > > locally accessible DW PCIe Root Ports and End-points, we can use the
-> > > updated interface to register DW eDMA as DMA engine device if it's
-> > > available. In order to successfully do that the DW PCIe core driver need
-> > > to perform some preparations first. First of all it needs to find out the
-> > > eDMA controller CSRs base address, whether they are accessible over the
-> > > Port Logic or iATU unrolled space. Afterwards it can try to auto-detect
-> > > the eDMA controller availability and number of it's read/write channels.
-> > > If none was found the procedure will just silently halt with no error
-> > > returned. Secondly the platform is supposed to provide either combined or
-> > > per-channel IRQ signals. If no valid IRQs set is found the procedure will
-> > > also halt with no error returned so to be backward compatible with
-> > > platforms where DW PCIe controllers have eDMA embedded but lack of the
-> > > IRQs defined for them. Finally before actually probing the eDMA device we
-> > > need to allocate LLP items buffers. After that the DW eDMA can be
-> > > registered. If registration is successful the info-message regarding the
-> > > number of detected Read/Write eDMA channels will be printed to the system
-> > > log in the same way as it's done for iATU settings.
-> > > 
-> > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > > ---
-> > >  .../pci/controller/dwc/pcie-designware-ep.c   |   4 +
-> > >  .../pci/controller/dwc/pcie-designware-host.c |  13 +-
-> > >  drivers/pci/controller/dwc/pcie-designware.c  | 188 ++++++++++++++++++
-> > >  drivers/pci/controller/dwc/pcie-designware.h  |  23 ++-
-> > >  4 files changed, 225 insertions(+), 3 deletions(-)
-> > > 
-> > > diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
-> > > index 23401f17e8f0..b2840d1a5b9a 100644
-> > > --- a/drivers/pci/controller/dwc/pcie-designware-ep.c
-> > > +++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
-> > > @@ -712,6 +712,10 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
-> > >  
-> > >  	dw_pcie_iatu_detect(pci);
-> > >  
-> > > +	ret = dw_pcie_edma_detect(pci);
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > >  	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "addr_space");
-> > >  	if (!res)
-> > >  		return -EINVAL;
-> > 
-> 
-> > eDMA needs to be removed on error path
-> 
-> So does the EPC memory... The dw_pcie_ep_init() and the code using it
-> are broken in the cleanup part. Neither the platform drivers nor the
-> method itself de-allocate the epc memory on any further error. See,
+On Sun, 24 Apr 2022 at 00:07, Andrew Lunn <andrew@lunn.ch> wrote:
+>
+> On Sat, Apr 23, 2022 at 01:14:27PM +0000, Nathan Rossi wrote:
+> > Handle the parsing and use of single chip addressing when the switch has
+> > the single-chip-address property defined. This allows for specifying the
+> > switch as using single chip addressing even when mdio address 0 is used
+> > by another device on the bus. This is a feature of some switches (e.g.
+> > the MV88E6341/MV88E6141) where the switch shares the bus only responding
+> > to the higher 16 addresses.
+>
+> Hi Nathan
+>
+> I think i'm missing something in this explanation:
+>
+> smi.c says:
+>
+> /* The switch ADDR[4:1] configuration pins define the chip SMI device address
+>  * (ADDR[0] is always zero, thus only even SMI addresses can be strapped).
+>  *
+>  * When ADDR is all zero, the chip uses Single-chip Addressing Mode, assuming it
+>  * is the only device connected to the SMI master. In this mode it responds to
+>  * all 32 possible SMI addresses, and thus maps directly the internal devices.
+>  *
+>  * When ADDR is non-zero, the chip uses Multi-chip Addressing Mode, allowing
+>  * multiple devices to share the SMI interface. In this mode it responds to only
+>  * 2 registers, used to indirectly access the internal SMI devices.
+>  *
+>  * Some chips use a different scheme: Only the ADDR4 pin is used for
+>  * configuration, and the device responds to 16 of the 32 SMI
+>  * addresses, allowing two to coexist on the same SMI interface.
+>  */
+>
+> So if ADDR = 0, it takes up the whole bus. And in this case reg = 0.
+> If ADDR != 0, it is in multi chip mode, and DT reg = ADDR.
+>
+> int mv88e6xxx_smi_init(struct mv88e6xxx_chip *chip,
+>                        struct mii_bus *bus, int sw_addr)
+> {
+>         if (chip->info->dual_chip)
+>                 chip->smi_ops = &mv88e6xxx_smi_dual_direct_ops;
+>         else if (sw_addr == 0)
+>                 chip->smi_ops = &mv88e6xxx_smi_direct_ops;
+>         else if (chip->info->multi_chip)
+>                 chip->smi_ops = &mv88e6xxx_smi_indirect_ops;
+>         else
+>                 return -EINVAL;
+>
+> This seems to implement what is above. smi_direct_ops == whole bus,
+> smi_indirect_ops == multi-chip mode.
+>
+> In what situation do you see this not working? What device are you
+> using, what does you DT look like, and what at the ADDR value?
 
-Right.
+The device I am using is the MV88E6141, it follows the second scheme
+such that it only responds to the upper 16 of the 32 SMI addresses in
+single chip addressing mode. I am able to define the switch at address
+0, and everything works. However in the device I am using (Netgate
+SG-3100) the ethernet phys for the non switch ethernet interfaces are
+also on the same mdio bus as the switch. One of those phys is
+configured with address 0. Defining both the ethernet-phy and switch
+as address 0 does not work.
 
-> the dw_pcie_ep_exit() function isn't called by any glue driver, while
-> some of them do have the device remove method implemented. I
-> am not going to fix the platform drivers (though the devm_add_action()
-> method could be used for that in a least painful fix) due to lacking
-> of an EP device to test it out. But since you are asking to revert
-> the eDMA initialization in case of the EP init failure I'll add the
-> cleanup-on-error path to the dw_pcie_ep_init() method. But it will be
-> done in v2 of the "PCI: dwc: Various fixes and cleanups" series.
-> 
+The device tree I have looks like:
 
-That's fine, thanks.
+&mdio {
+    status = "okay";
+    pinctrl-0 = <&mdio_pins>;
+    pinctrl-names = "default";
 
-> > 
-> > > diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-> > > index 715a13b90e43..048b452ee4f3 100644
-> > > --- a/drivers/pci/controller/dwc/pcie-designware-host.c
-> > > +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-> > > @@ -405,14 +405,18 @@ int dw_pcie_host_init(struct pcie_port *pp)
-> > >  
-> > >  	dw_pcie_iatu_detect(pci);
-> > >  
-> > > -	ret = dw_pcie_setup_rc(pp);
-> > > +	ret = dw_pcie_edma_detect(pci);
-> > >  	if (ret)
-> > >  		goto err_free_msi;
-> > >  
-> > > +	ret = dw_pcie_setup_rc(pp);
-> > > +	if (ret)
-> > > +		goto err_edma_remove;
-> > > +
-> > >  	if (!dw_pcie_link_up(pci) && pci->ops && pci->ops->start_link) {
-> > >  		ret = pci->ops->start_link(pci);
-> > >  		if (ret)
-> > > -			goto err_free_msi;
-> > > +			goto err_edma_remove;
-> > >  	}
-> > >  
-> > >  	/* Ignore errors, the link may come up later */
-> > > @@ -430,6 +434,9 @@ int dw_pcie_host_init(struct pcie_port *pp)
-> > >  	if (pci->ops && pci->ops->stop_link)
-> > >  		pci->ops->stop_link(pci);
-> > >  
-> > > +err_edma_remove:
-> > > +	dw_pcie_edma_remove(pci);
-> > > +
-> > >  err_free_msi:
-> > >  	if (pp->has_msi_ctrl)
-> > >  		dw_pcie_free_msi(pp);
-> > > @@ -452,6 +459,8 @@ void dw_pcie_host_deinit(struct pcie_port *pp)
-> > >  	if (pci->ops && pci->ops->stop_link)
-> > >  		pci->ops->stop_link(pci);
-> > >  
-> > > +	dw_pcie_edma_remove(pci);
-> > > +
-> > >  	if (pp->has_msi_ctrl)
-> > >  		dw_pcie_free_msi(pp);
-> > >  
-> > > diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-> > > index 4a95a7b112e9..dbe39a7ecb71 100644
-> > > --- a/drivers/pci/controller/dwc/pcie-designware.c
-> > > +++ b/drivers/pci/controller/dwc/pcie-designware.c
-> > 
-> > [...]
-> > 
-> > > +int dw_pcie_edma_detect(struct dw_pcie *pci)
-> > > +{
-> > > +	int ret;
-> > > +
-> > > +	pci->edma.dev = pci->dev;
-> > > +	if (!pci->edma.ops)
-> > > +		pci->edma.ops = &dw_pcie_edma_ops;
-> > > +	pci->edma.flags |= DW_EDMA_CHIP_LOCAL;
-> > > +
-> 
-> > > +	pci->edma_unroll_enabled = dw_pcie_edma_unroll_enabled(pci);
-> > 
-> > Is is possible to continue the unroll path for eDMA if iATU unroll is enabled?
-> 
-> Don't get it. Could you elaborate your question in more details?
-> Are you talking about using the same flag for both eDMA and iATU
-> unrolled space? If so then most likely yes. But in that case the
-> iatu_unroll_enabled flag name and semantics need to be changed.
-> 
+    phy0: ethernet-phy@0 {
+        status = "okay";
+        reg = <0>;
+    };
 
-If iATU has unroll enabled then I think we can assume that edma will also be
-the same. So I was wondering if we could just depend on iatu_unroll_enabled
-here.
+    phy1: ethernet-phy@1 {
+        status = "okay";
+        reg = <1>;
+    };
 
-> > 
-> > > +	if (pci->edma_unroll_enabled && pci->iatu_unroll_enabled) {
-> > > +		pci->edma.mf = EDMA_MF_EDMA_UNROLL;
-> > > +		if (pci->atu_base != pci->dbi_base + DEFAULT_DBI_ATU_OFFSET)
-> > > +			pci->edma.reg_base = pci->atu_base + PCIE_DMA_UNROLL_BASE;
-> > > +		else
-> > > +			pci->edma.reg_base = pci->dbi_base + DEFAULT_DBI_DMA_OFFSET;
-> > 
-> 
-> > This assumption won't work on all platforms. Atleast on our platform, the
-> > offsets vary. So I'd suggest to try getting the reg_base from DT first and use
-> > these offsets as a fallback as we do for iATU.
-> 
-> I don't know how the eDMA offset can vary at least concerning the
-> normal DW PCIe setup. In any case the DW eDMA controller CSRs are
-> mapped in the same way as the iATU space: CS2=1 CDM=1. They are either
-> created as an unrolled region mapped into the particular MMIO space
-> (as a separate MMIO space or as a part of the DBI space), or
-> accessible over the PL viewports (as a part of the Port Logic CSRs).
-> Nothing else is described in the hardware manuals. Based on that I
-> don't see a reason to add one more reg space binding.
-> 
+    switch0: switch0@16 {
+        compatible = "marvell,mv88e6141", "marvell,mv88e6085";
+        single-chip-address;
+        reg = <16>; /* first port in single address mode */
+        dsa,member = <0 0>;
+        status = "okay";
 
-This is not true. Vendors can customize the iATU location inside DBI region
-for unroll too. That's one of the reason why dw_pcie_iatu_detect() works on
-qcom platforms as it tries to get iatu address from DT first and then falls
-back to the default offset if not found.
-
-So please define an additional DT region for edma.
-
-> > 
-> > > +	} else {
-> > > +		pci->edma.mf = EDMA_MF_EDMA_LEGACY;
-> > > +		pci->edma.reg_base = pci->dbi_base + PCIE_DMA_VIEWPORT_BASE;
-> > > +	}
-> > > +
-> > > +	ret = dw_pcie_edma_detect_channels(pci);
-> > > +	if (ret) {
-> > > +		dev_err(pci->dev, "Unexpected NoF eDMA channels found\n");
-> > > +		return ret;
-> > > +	}
-> > > +
-> > > +	/* Skip any further initialization if no eDMA found */
-> > 
-> 
-> > Should we introduce a new Kconfig option for enabling eDMA? My concern here is,
-> > if eDMA is really needed for an usecase and if the platform support is broken
-> > somehow (DT issues?), then we'll just simply go ahead without probe failure and
-> > it may break somewhere else.
-> > 
-> > And we are returning errors if something wrong happens during eDMA probe. This
-> > might annoy the existing users who don't care about eDMA but turning those
-> > errors to debug will affect the real users of eDMA.
-> > 
-> > For these reasons, I think it'd be better to probe eDMA only if the Kconfig
-> > option is enabled (which would be disabled by default). And properly return the
-> > failure.
-> 
-> I don't see a need in introducing of a new parametrization. Neither
-> there is a point in dropping the eDMA support on all the platforms for
-> the sake of some hypothetically malfunction hardware.
-
-I'm not talking about "hypothetically malfunction hardware" but real customized
-ones like all Qcom platforms supporting PCIe. As I said in my previous comment,
-the default eDMA offset won't work on Qcom platforms. So if this driver tries
-to access the registers based on the default offset, it may result in SMMU
-errors. The edma region needs to be defined in DT for probing edma correctly.
-
-But even if we add dt support for edma and probe edma unconditionally, we'd be
-breaking the dts compatibility with older ones that don't define it.
-
-> Regarding the
-> config, the DW eDMA driver already has one. It's CONFIG_DW_EDMA which
-> can be used for what you say. Though I need to fix this patch a bit so
-> the -ENODEV errno returned from the dw_edma_probe() method would be
-> ignored in the dw_pcie_edma_detect() procedure to support the case of
-> the disabled DW eDMA driver.
-> 
-
-Please do so.
+... ports/mdio nodes ...
+    };
+};
 
 Thanks,
-Mani
+Nathan
 
-> -Sergey
-> 
-> > 
-> > Thanks,
-> > Mani
+>
+> Thanks
+>         Andrew

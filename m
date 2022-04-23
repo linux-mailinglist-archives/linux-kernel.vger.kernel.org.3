@@ -2,149 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13BEA50C72D
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 06:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3859950C764
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 06:27:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232726AbiDWENX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 00:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47028 "EHLO
+        id S232874AbiDWE3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 00:29:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232452AbiDWENN (ORCPT
+        with ESMTP id S232761AbiDWE3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 00:13:13 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D38F1F8EE5
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 21:10:16 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id l203so349608oif.0
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 21:10:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=YNhoTijYDK5hg3tJxjQgdgbL/kgrcPDOQkgZNKFoLe0=;
-        b=hdtSyu9V8DkuUoFOA2YMj1NAwALLRl8/nme92ADOd6vw4uiyPQw2nLnwlWE4hZOTYh
-         hMVnDHLTvfUc3WViSmGZpg2u+pUEdcvsCyRqN73T6IzHEHGfA1vTEDiRHBJPN+6XlSrv
-         msMrpfZZZUF+GyEAV6/iGHUUspOxCkoTxxTgLKGlzea3b8Ke23TheCXbCJsLEcyEmSAx
-         ScCt27p+r7SoHmhvmiiLbK5GcRXCci038RWnzP44TuuwC/pgLF4fgvBbUOcFzAdBcVtl
-         NfA6FDVc5YQAbEHs68IP4imFUJETFAHSxXGTUp5cLGJo2EgIWtcozlUiXlg7hCcXLvqZ
-         T+QQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YNhoTijYDK5hg3tJxjQgdgbL/kgrcPDOQkgZNKFoLe0=;
-        b=F63mzzCbj3XvxPeMj/kRoZ9jkniudZym+rPwgl4hZNOnqhpbiLjqGH+vt2fG2i6Pki
-         PaM7+Rm5bIoZJKxjc0BJAQDNnOpulfp8dVv1r+s1/EqZMYlWEOK8Zr14qGcaSGpoOCPc
-         8UNPXeYNp2RAsOsg8mU8pIzOoCATXmEAc7loB8otwqqSQzLcrQNxadMUoyeAmWDyGZ5s
-         4UFbVs8rUvxDO/E26DMAnG7i4svqZ+nw+KCga6a3S/hVsc19eDK7MRkKwigWJdmfiRsV
-         Lp5FJCEFK0hGUtpLTfOIe9wRFxP3iap/G4CyagYTCTFRNrluddBAu0yoB6YANS0jsf8M
-         vhoQ==
-X-Gm-Message-State: AOAM532qn/1ycilgslXdxLENI2jVl88cFlOPxj4P3Dt/Nm3pUT0drtBk
-        TFu8weyIwp9/MkvV/RzVFq8VzA==
-X-Google-Smtp-Source: ABdhPJzEuQC08m6xCkVKR6XsHeSL5p0/ZkR7uRyRVVh9KvlNaDYNcO6f0NhDLqPj0GWi2P4EkbGFgQ==
-X-Received: by 2002:a05:6808:1a04:b0:322:7b89:1973 with SMTP id bk4-20020a0568081a0400b003227b891973mr8311352oib.227.1650687016176;
-        Fri, 22 Apr 2022 21:10:16 -0700 (PDT)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id l10-20020aca3e0a000000b0032258369a5fsm1410185oia.44.2022.04.22.21.10.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 21:10:15 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 21:12:16 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] drm/msm/dp: Implement oob_hotplug_event()
-Message-ID: <YmN8oMl7EulvBbEG@ripper>
-References: <20220422223225.1297434-1-bjorn.andersson@linaro.org>
- <20220422223225.1297434-2-bjorn.andersson@linaro.org>
- <11a77fd7-d30b-edf6-3570-64d0c2e1764c@linaro.org>
+        Sat, 23 Apr 2022 00:29:44 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B704E6441;
+        Fri, 22 Apr 2022 21:26:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650688007; x=1682224007;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2ml0TS+9I0iNoLYUgBGKFcxsSut//WkkULNAjxgIoNc=;
+  b=NRzrpDqJYIzLgQcX8yKOKl0uRU2m2DmZaJMOgPxlbIlz2+x+P8BWCaHm
+   oP4ZYa444DUAMdSLItTYHyK0EVBeeKdMOOTQAFzYNZ/JUMoIrDrwsRyNl
+   gKF0sc46aew04DRLmC+CLftbTlsKttT+r32D8ZBa27+PPp6zqo+xbnIf8
+   Eh9p/wmG7RmdhPKDtkVmxU4giB75yrLcEvpZhiso0wgMfDsmjrjPelW85
+   Zp1LYkuiNI0d9SYqjfjqur8INEEXjpJWNHMLEJCPQ38zMsG5+JN5OeDaw
+   c4IYab1KHvWElyq1C7TOH0sI41TQBUK+FD+aqQg1NGUT1TT9W0dxCvfNW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="325299705"
+X-IronPort-AV: E=Sophos;i="5.90,283,1643702400"; 
+   d="scan'208";a="325299705"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 21:26:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,283,1643702400"; 
+   d="scan'208";a="703818105"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 22 Apr 2022 21:26:43 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ni7M3-000Azh-6w;
+        Sat, 23 Apr 2022 04:26:43 +0000
+Date:   Sat, 23 Apr 2022 12:26:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Junwen Wu <wudaemon@163.com>, akpm@linux-foundation.org,
+        keescook@chromium.org, adobriyan@gmail.com, fweimer@redhat.com,
+        ddiss@suse.de
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Junwen Wu <wudaemon@163.com>
+Subject: Re: [PATCH v1] proc: limit schedstate node write operation
+Message-ID: <202204231250.LYIILAXn-lkp@intel.com>
+References: <20220423023104.153004-1-wudaemon@163.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <11a77fd7-d30b-edf6-3570-64d0c2e1764c@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220423023104.153004-1-wudaemon@163.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 22 Apr 16:07 PDT 2022, Dmitry Baryshkov wrote:
-> On 23/04/2022 01:32, Bjorn Andersson wrote:
-[..]
-> > diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
-> > index 80f59cf99089..76904b1601b1 100644
-> > --- a/drivers/gpu/drm/msm/dp/dp_drm.c
-> > +++ b/drivers/gpu/drm/msm/dp/dp_drm.c
-> > @@ -123,6 +123,14 @@ static enum drm_mode_status dp_connector_mode_valid(
-> >   	return dp_display_validate_mode(dp_disp, mode->clock);
-> >   }
-> > +static void dp_oob_hotplug_event(struct drm_connector *connector,
-> > +				 enum drm_connector_hpd_state hpd_state)
-> > +{
-> > +	struct msm_dp *dp_disp = to_dp_connector(connector)->dp_display;
-> > +
-> > +	dp_display_oob_hotplug_event(dp_disp, hpd_state);
-> > +}
-> > +
-> >   static const struct drm_connector_funcs dp_connector_funcs = {
-> >   	.detect = dp_connector_detect,
-> >   	.fill_modes = drm_helper_probe_single_connector_modes,
-> > @@ -130,6 +138,7 @@ static const struct drm_connector_funcs dp_connector_funcs = {
-> >   	.reset = drm_atomic_helper_connector_reset,
-> >   	.atomic_duplicate_state = drm_atomic_helper_connector_duplicate_state,
-> >   	.atomic_destroy_state = drm_atomic_helper_connector_destroy_state,
-> > +	.oob_hotplug_event = dp_oob_hotplug_event,
-> 
-> We were (are) going to switch dp driver to use drm_bridge_connector (to fix
-> support for bridge chains, eDP panels, etc.
-> 
-> So these changes must be ported to drm_bridge_connector (or we must
-> abandon/defer the idea of using the bridge_connector).
-> 
-> For the oob_hotplug_event() callback proper support might be as simple as
-> calling drm_bridge_connector_hpd_cb().
-> 
+Hi Junwen,
 
-Are you saying that you have code ready and being merged into linux-next
-that I should redesign this on top of, or that you're planning to write
-some code in the future and DisplayPort support have to wait until then?
+Thank you for the patch! Perhaps something to improve:
 
-> >   };
-> >   static const struct drm_connector_helper_funcs dp_connector_helper_funcs = {
-> > @@ -160,6 +169,8 @@ struct drm_connector *dp_drm_connector_init(struct msm_dp *dp_display)
-> >   	if (ret)
-> >   		return ERR_PTR(ret);
-> > +	connector->fwnode = fwnode_handle_get(dev_fwnode(dp_display->dev));
-> > +
-> 
-> This would be much more interesting. Supporting this in a generic way might
-> be tricky. But we can still set the fwnode manually from the dp code.
-> 
+[auto build test WARNING on hnaz-mm/master]
+[also build test WARNING on kees/for-next/pstore linus/master linux/master v5.18-rc3 next-20220422]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-There's a slight mishmash here, because the device used to initialize
-the connector is the drm_dev, but we need the actual fwnode of the DP
-device associated with the connector.
+url:    https://github.com/intel-lab-lkp/linux/commits/Junwen-Wu/proc-limit-schedstate-node-write-operation/20220423-103457
+base:   https://github.com/hnaz/linux-mm master
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20220423/202204231250.LYIILAXn-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/e7bc039b7c0aa4e9a5bb3ae2340769a451f795db
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Junwen-Wu/proc-limit-schedstate-node-write-operation/20220423-103457
+        git checkout e7bc039b7c0aa4e9a5bb3ae2340769a451f795db
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash fs/
 
-So I think this is how it needs to be done.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Regards,
-Bjorn
+All warnings (new ones prefixed by >>):
+
+   fs/proc/base.c: In function 'sched_write':
+>> fs/proc/base.c:1468:13: warning: 'strcmp' of a string of length 5 and an array of size 5 evaluates to nonzero [-Wstring-compare]
+    1468 |         if (strcmp(ubuf, "reset") == 0) {
+         |             ^~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/strcmp +1468 fs/proc/base.c
+
+  1454	
+  1455	static ssize_t
+  1456	sched_write(struct file *file, const char __user *buf,
+  1457		    size_t count, loff_t *offset)
+  1458	{
+  1459		struct inode *inode = file_inode(file);
+  1460		struct task_struct *p;
+  1461		char ubuf[5];
+  1462	
+  1463		memset(ubuf, 0, sizeof(ubuf));
+  1464		if (count > 5)
+  1465			count = 0;
+  1466		if (copy_from_user(ubuf, buf, count))
+  1467			return -EFAULT;
+> 1468		if (strcmp(ubuf, "reset") == 0) {
+  1469			p = get_proc_task(inode);
+  1470			if (!p)
+  1471				return -ESRCH;
+  1472			proc_sched_set_task(p);
+  1473	
+  1474			put_task_struct(p);
+  1475		}
+  1476	
+  1477		return count;
+  1478	}
+  1479	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

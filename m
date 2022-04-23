@@ -2,147 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6FFC50C6EF
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 05:45:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F0D50C6EC
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 05:41:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232469AbiDWDq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 23:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41932 "EHLO
+        id S232462AbiDWDoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 23:44:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231960AbiDWDqx (ORCPT
+        with ESMTP id S232315AbiDWDoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 23:46:53 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam08olkn2027.outbound.protection.outlook.com [40.92.45.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3191B19D491;
-        Fri, 22 Apr 2022 20:43:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gUAbvjqUnrx+LMChm7FsCOnhPTG0tLrxbM9sUywIcH5F6XwtusuLNF8zMMJ0TWybuBuO5RLnT46eFo8TPJIu/MMajAuUukNqClVb9krzkCylEKci77XRT2ZBQhe2MX2GWSc7d89T2OUV5cX1O+6RxSKKwkYVZsN8DzDa6/dGTyp7L6sH68WjFjqKP42rMe5gypcwfTr4YII7r08yXuquDik1OqyXiqTzIYuESA6Cqgm1gBkzyf4N/I6CGNRp0lGdt5Q5Y2k1fn/7fwX6R8zXZd2H06MdA/LozUzKu6NZSCVjwm0BQFJQ+Ad3r4FkL6BriaKAHBoq8FT7nlIboxYOyA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jL4dcz39su7NoOZeM1ZwxE69Y9kWjJ7OI8DGwkRHJBM=;
- b=K+HM1JZtOFNiJDiKDpJ0mg+uVCudPy0azI6IsjZs2bJXp//UJRIxzHdkJi4sbJjCyxZTzrlLrbcwEgP/+feBJiIlDP9R8DoI1M3FsfovAfMWNGS2zQw/SrkryKktR5UEsCTVM9IrFxFvRubDlEyypf0kjFfRVdycBqSxgnhKlOCzkGMc2cL4/uexVxBF1JFBbEPLrpMcw9bW/cD0LbNO/+nt2kAiC90SQJYWuXIBivPYa4u7AxOVEGS3GzZWS9ZrLX5SS0FddT8XHmXPe/4TNCheZnf6fkzXRFNYgwPbJh2Rs9MvK17P4tF6/WzwVdxpisLyjGqVtmZeQLTyOqYv5w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from CY4PR04MB0567.namprd04.prod.outlook.com (2603:10b6:903:b1::20)
- by SN6PR04MB4205.namprd04.prod.outlook.com (2603:10b6:805:30::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Sat, 23 Apr
- 2022 03:43:55 +0000
-Received: from CY4PR04MB0567.namprd04.prod.outlook.com
- ([fe80::8e:6e22:f98c:29d5]) by CY4PR04MB0567.namprd04.prod.outlook.com
- ([fe80::8e:6e22:f98c:29d5%5]) with mapi id 15.20.5186.015; Sat, 23 Apr 2022
- 03:43:53 +0000
-From:   Jonathan Bakker <xc-racer2@live.ca>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Kyungmin Park <kyungmin.park@samsung.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        Jonathan Bakker <xc-racer2@live.ca>
-Subject: [PATCH 0/5] mtd: onenand: samsung: Add support for device tree
-Date:   Fri, 22 Apr 2022 20:43:11 -0700
-Message-ID: <CY4PR04MB0567451F82EEBED23A7559EFCBF69@CY4PR04MB0567.namprd04.prod.outlook.com>
-X-Mailer: git-send-email 2.30.2
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TMN:  [oHP3j3Exn+1rF6bz4+niH2QFQiO9/w71I0JahMnzCuDIaBjtLpfeaHABtma9lTat]
-X-ClientProxiedBy: MW4PR03CA0329.namprd03.prod.outlook.com
- (2603:10b6:303:dd::34) To CY4PR04MB0567.namprd04.prod.outlook.com
- (2603:10b6:903:b1::20)
-X-Microsoft-Original-Message-ID: <20220423034316.366488-1-xc-racer2@live.ca>
+        Fri, 22 Apr 2022 23:44:14 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75413B2442
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 20:41:18 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-e5e433d66dso10626582fac.5
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 20:41:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wKqHPdyYwATO8dlCGP1CENdzgdMNK7Lqp4jLDjIdG38=;
+        b=zBj2quoyrYPsi/ivJ79t+l51E0g7NGKdD8xqRKuSeTwmBSD168WXqmEmoAWNO+Fv4o
+         ewmbL+9KzW3yu9ge+gL7UrTQcliLwKp8fEK9o9J/AAixfG/4Hoi7ny1o/Pmf7pmlZkeM
+         ymeIkD95M38hntoNgV4nAe2x/Eau5LdMWwCQjuCL5zlIo25q2E02zCPFDlkE+S3CVxsW
+         dFJ4OI4m1lLIennX0FDgam7LMXApsVeiDKOrWX8qPyu/m3HsfdjjY1XmGZAXHcvgG1Xb
+         J3DlOPIWPvgVuRt9JgqniHwlk7qS4HkuZJLFKEWd+yjZkM6FdiC1W0hqiA9ZCVmlO2fo
+         8ksg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wKqHPdyYwATO8dlCGP1CENdzgdMNK7Lqp4jLDjIdG38=;
+        b=pMlg+eFSWDY/ozJ5ifZXW7UCg0uPnzs2m9BeD5h9bwufpOhumLmKuDRFjkAt7cyIq3
+         mWoND5OJhSmSuDNxl4zG+oFC0V1fhWu7KUsph/l14PgxtSVL6Y1lg+y3u/yGhjv+Ze7j
+         rAYFJtIEDqj42hUBF55BXXZ7nYOFVSRJGlnGFjrwBgGu3heDK1R6e6K3LTplngBOVLsx
+         VeiGU5saIiH7xk/OIM9JMpfnRtsh9zfLrz12CYqT3Me6kAWw7cD1STnhS5db64BuK6QG
+         G+3TRT0G1BlA/fXh9PCl5S1XSNhkZ+zWI/OiYPgLxze1a3A6Pz+T4yqZCMBcagxq1lP4
+         KsWQ==
+X-Gm-Message-State: AOAM532AzDUTs9tksDw3EBHQndsPtK0AGiZj/f+MEAE+CtxcbeIt8nHp
+        95GV7oBY6Y1IWO3DmjHeMOoLog==
+X-Google-Smtp-Source: ABdhPJzZCLhf7t3Ypz5v3KJ+nSV3UDL7oocvo4A+/+Cfx5GPnsc8JSYXgIXN+P7L1aauM/K4buLGdA==
+X-Received: by 2002:a05:6870:d192:b0:de:691:81ad with SMTP id a18-20020a056870d19200b000de069181admr7566588oac.165.1650685277800;
+        Fri, 22 Apr 2022 20:41:17 -0700 (PDT)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id n21-20020a9d4d15000000b00603fb46ddcbsm1391698otf.65.2022.04.22.20.41.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 20:41:17 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 20:43:18 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_tdas@quicinc.com
+Subject: Re: [PATCH v2 1/2] dt-bindings: clock: Add Qualcomm SC8280XP GCC
+ bindings
+Message-ID: <YmN11qt/PqogYruQ@ripper>
+References: <20220422230013.1332993-1-bjorn.andersson@linaro.org>
+ <20220423014824.912ACC385A0@smtp.kernel.org>
+ <YmNsYSxLtwLpw98t@ripper>
+ <20220423031350.01299C385A0@smtp.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e32a0330-3a2a-488d-2126-08da24db7c99
-X-MS-TrafficTypeDiagnostic: SN6PR04MB4205:EE_
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NhN4ZC1ILRhdUhV8/YAQ0rNJP+6H304QgzCH77K4HvJlkn1I/76VQt0g9R2NjsMkZJkpaxM01NloHXz0SPxpcSbqXwuIKE9jBZzZKbsBs4gqLyyRj9IYqLo6bXEJguVvczSqUPrj10SdCjDXlyBAQsdLtudGVyS2XQIV284V4XtAexaAlaPAVP7tB9Jxp34/31kaEuXsQHVwC31pcVc552U77+qAOeDZrg9K9kxm4brpQOsM7A4MYBN3kDg0pMoB2te6A7Dd48a15GqML9FaJFsmf/oQ8U+o7KBDDdN2EUlkAxb6MueWCxpVpjj+ZHEMxQDMCD3nWWIyN8j06rOxApt3tF3v2gJN1fsiYxKkG+egSI6lbAQQFALVu7WQopHUQ1zW2uCorHUWqDcaTQCoWC3E0HYe9rhD2oAZzcdKJfRTZ/NmywENRRCgGHJ6TjiYhF/GV5feD2z06ypZynD0hk71u4LhQc2VMJHc1yVxgzmKOdu+KqI5N3s/g/MixrK5uFB7Qi96s25T4D9IFsAJ9Uqegszp9o/eZCIypiAhKBkmFSqTSbNaDdMmdAY99XMj6KHzF4MACWxMimG3A0Ol7KkqgwrKcqZXCA/SLf5HDZjPmRmsyMSZbJYg00WFtjux
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eTRhUlVOMmV2dGRQOC9odUNTMGVSS1A1d0JlT2hRWEJCOXM1d0hjaFRlS1Fj?=
- =?utf-8?B?OG9EeGY2bGM1V05FYWZKeUdKUVdndVpuTW1vUlB0bS96QmF3Y3g4c2ZEaXVN?=
- =?utf-8?B?TTVvMzk4Wm5ZbEtxaWZUbEl6NFFXbkVuS24vMUFnZkxJTUR6KzVwM09xOFQ0?=
- =?utf-8?B?eXVFUWVGMnc2aWxyMjNOMWM1dHFPRUNGQnBlWVFRU2ErY3laeGxoV0V0R0t1?=
- =?utf-8?B?c0lIMlArMUNReUk3bXVRdFVuMTVmNVI1WDMwRTlXSzdwTTc4TTVNenZBNjBY?=
- =?utf-8?B?QlU3b0FET096bzlKQ25Zd0R3SVBrMVREZlZ4TDRxNk9URFRJbUpra2tkU2Vp?=
- =?utf-8?B?eFcxRVBTdEdWTmxEcDk1ZE1GOFVwVytVVW85dW5kWmhFNWUrVFVpZUpIRGRM?=
- =?utf-8?B?d09Pd0U4MXdrWHZ1MlJoZ2lmaHhmckN1NGVTQldtUkIxeDVML3MxWlpmL2pm?=
- =?utf-8?B?N0JTN0pTRERnQmI4aFp3a2FHTTM4RXdhdGFYZTJDUXBZd2YybGhqTHRBcXhl?=
- =?utf-8?B?UmhJK0xEcG4rcWV1RFY3dFloLzZwV2t0aXRlWm1mUHBsRWpHVnNwWjgra0JC?=
- =?utf-8?B?L3dUbngya1FNRmhNT0tVTXpMeS9VTHpJRUtaWFZtSGdNYUEweHZzZ1lHakJ3?=
- =?utf-8?B?M2E4TGFUU1ZkY1RIUHJVaEZvUlJlSHhvYWNtbFdYcW5ISEpRc3RvMDBWZjF3?=
- =?utf-8?B?RDdpWk8rZlpZSEFiazBFS3FRdGxXME9xdFVOUDlHaXUvUHp2dlQ5cUFXWkQ2?=
- =?utf-8?B?UDZJTDVwVC9kYUYvLzF1dUFmT25RL1N5OFFOK1F2SE44eitaNnhEb3pjb0xJ?=
- =?utf-8?B?K29OOTJ0N05adU5IRHk5eWNlWGNtYWkyQnNtdEhEUTFOd0JvUzJrU0wrbEdV?=
- =?utf-8?B?Q3R0R2ZnZ3o5bDVLQ0JBWWtmSTBuc3dWWDJFaEo0YUVwblh2VlpJazl2Wngy?=
- =?utf-8?B?VVcyRnpMQU5ZYWhxNVMwUE5UcWViazBzdFFMOXVaZnJTL1ZZVnFlc05FVVJj?=
- =?utf-8?B?ZFl4UURid0lyd0NmaGpndExlVEJBQVdJSk13MmdoZi9GVVM3cXJvRUJsUHI5?=
- =?utf-8?B?aktUdG95OW52QUUxSkFqQ2dZejcxMWRZOXhXU1g0cEsxVlVLZjFyc25hU3Fi?=
- =?utf-8?B?UmJjU2dLNHpQQll6UFhQbU9zdzUvRFFzRHJmT1I0YTAzcXY3ZWtFaTM4cHI1?=
- =?utf-8?B?T2RhNVA2TE9sZ3Q5ejZaNUpnbEE1K0tCbFp0RWhRbFhmeFFiNWUwK1dCQmxS?=
- =?utf-8?B?TVRxN3Bybk4yb2xWVndwSEN1NVpmYWsyNkJLRHFualBFSllqZEJIUWNzYndV?=
- =?utf-8?B?b25hQkREeXM1ajZHekdGd2lRNXZuZ3BxVGExbTk1bWlYeDdXRFJCV3R5WklK?=
- =?utf-8?B?MG93U2ZncFozREZkYURmcVVCYmkvMkFnQmNEb2RnTk13NWJzdTM0eVRPMjdv?=
- =?utf-8?B?UERtQVZpTU5Rc0NlTS9CZjUvcWZ3MUJsT1BRN013elR2VnFaeDFsRW1ZRm5s?=
- =?utf-8?B?c3VDUkZ1WENWQzNtU3pLTzZYeHFFd1dETkNHUVZNNzBxcFhQa2FiMWFmcU1V?=
- =?utf-8?B?M0hTTHM5QzlGZzZDRUNaZE9TNmk5cWJ3YlcwVTBmUXg4RWFDd3BiRlRyS1I3?=
- =?utf-8?B?WHE2aXNTN3RvMStnY1FhOFdHeldFa2dPcG1LTWFQOWFubnRCT1lSWm5jMnpn?=
- =?utf-8?B?UjRSditwTkJkZUlVSUVNRkdXajdLM1RhcjQxMDFSYlcvdi9wVzlrVkhQVHky?=
- =?utf-8?B?R3pXM2lNelpaS0hOWTJnNzg4YzNQeVd6VXF1a0lVeDN5V0NUaVlNZUJBcXl6?=
- =?utf-8?B?WEZyRjNmeUtpR1dDTXBqWHlHd1VmYmRWMy8xbERsZ2tIZjFES1FKY25hUGZL?=
- =?utf-8?B?ZmxwUzBML2ptR1NpOFdmTk5SR09kQ2pkN0JrOStMVm5DenhQSjlWdlNFQ2g0?=
- =?utf-8?B?NXBwbFUvb3k2eWdjdmYxOWJWc0kzTHV2bzZQdzF6UGh0Y3Z2c3VVYnJ0ajBV?=
- =?utf-8?Q?CDMjH/CprrPPhqpjrRkl2b2aQKNzrs=3D?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-edb50.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: e32a0330-3a2a-488d-2126-08da24db7c99
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR04MB0567.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Apr 2022 03:43:53.8662
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR04MB4205
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220423031350.01299C385A0@smtp.kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This builds off a patchset submitted in 2019 [1] and adds support for DT
-initialization to the Samsung OneNAND driver.
+On Fri 22 Apr 20:13 PDT 2022, Stephen Boyd wrote:
 
-Compared with the revision posted there, the binding document has been
-re-written in yaml and changed to have a separate nand node below the
-controller.  The patch unifying the resource order has remained unchanged
-despite feedback - I don't seem the point in splitting it into a rename
-and a unifying as the renaming would cause the variable name not to be
-representative of what it was.
+> Quoting Bjorn Andersson (2022-04-22 20:02:57)
+> > On Fri 22 Apr 18:48 PDT 2022, Stephen Boyd wrote:
+> > 
+> > > Quoting Bjorn Andersson (2022-04-22 16:00:12)
+> > > > Add binding for the Qualcomm SC8280XP Global Clock controller.
+> > > > 
+> > > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > > 
+> > > Why no cover letter?
+> > > 
+> > 
+> > I didn't have anything useful to write in it. Will provide you one in
+> > the future...
+> 
+> Thanks!
+> 
+> > > > +  clocks:
+> > > > +    items:
+> > > > +      - description: XO reference clock
+> > > 
+> > > "clock" is redundant in all these descriptions. Please remove.
+> > > 
+> > 
+> > You don't think it's a little bit odd to have description such as
+> > "Sleep", "PCIe 2a pipe" or First EMAC controller reference"?
+> > 
+> > I mean I agree that it's obviously clocks we're talking about, but to me
+> > that makes it seems like the descriptions are cut short, just for the
+> > sake of avoiding "clock".
+> 
+> Alright, keeping clock is OK as long as
+> 
+> > 
+> > > > +      - description: Sleep clock
+> > > > +      - description: UFS memory first RX symbol clock
+> > > > +      - description: UFS memory second RX symbol clock
+> > > > +      - description: UFS memory first TX symbol clock
+> > > > +      - description: UFS card first RX symbol clock
+> > > > +      - description: UFS card second RX symbol clock
+> > > > +      - description: UFS card first TX symbol clock
+> > > > +      - description: Primary USB SuperSpeed pipe clock
+> > > > +      - description: gcc_usb4_phy_pipegmux_clk_src
+> 
+> there is a better name for this and the other non-word descriptions.
+> 
+> USB4 phy pipe gmux clock source?
+> 
 
-I've collected the R-b tags from that patchset, but dropped the one from
-the commit adding DT support as it has changed due to the different DT
-layout.
+Sounds good, I'll make sure to fill these out.
 
-[1] https://lkml.kernel.org/lkml/20190426164224.11327-1-pawel.mikolaj.chmiel@gmail.com/
+> > > > +      - description: gcc_usb4_phy_dp_gmux_clk_src
+> > > > +      - description: gcc_usb4_phy_sys_pipegmux_clk_src
+> > > > +      - description: usb4_phy_gcc_usb4_pcie_pipe_clk
+> > > > +      - description: usb4_phy_gcc_usb4rtr_max_pipe_clk
+> > > > +      - description: Primary USB4 RX0 clock
+> > > > +      - description: Primary USB4 RX1 clock
+> > > > +      - description: Secondary USB SuperSpeed pipe clock
+> > > > +      - description: gcc_usb4_1_phy_pipegmux_clk_src
+> > > > +      - description: gcc_usb4_1_phy_dp_gmux_clk_src
+> > > > +      - description: gcc_usb4_1_phy_sys_pipegmux_clk_src
+> > > > +      - description: usb4_1_phy_gcc_usb4_pcie_pipe_clk
+> > > > +      - description: usb4_1_phy_gcc_usb4rtr_max_pipe_clk
+> > > > +      - description: Secondary USB4 RX0 clock
+> > > > +      - description: Secondary USB4 RX0 clock
+> > > > +      - description: Multiport USB first SupserSpeed pipe clock
+> > > > +      - description: Multiport USB second SuperSpeed pipe clock
+> > > > +      - description: PCIe 2a pipe clock
+> > > > +      - description: PCIe 2b pipe clock
+> > > > +      - description: PCIe 3a pipe clock
+> > > > +      - description: PCIe 3b pipe clock
+> > > > +      - description: PCIe 4 pipe clock
+> > > > +      - description: First EMAC controller reference clock
+> > > > +      - description: Second EMAC controller reference clock
+> > > > +
+> > > > +  clock-names:
+> > > > +    items:
+> > > > +      - const: bi_tcxo
+> > > > +      - const: sleep_clk
+> > > 
+> > > And "_clk" postfix is redundant in all these strings. Remove?
+> > > 
+> > 
+> > In this case I think they should include _clk, as they actually matches
+> > the clock names in the documentation.
+> > 
+> 
+> I'd really rather not have clock-names at all because we spend a bunch
+> of time comparing strings with them when we could just as easily use
+> a number.
 
-Jonathan Bakker (1):
-  dt-bindings: mtd: samsung-onenand: Add new binding
+I know that you would like to get rid of the clock-names for the clock
+controllers. I've looked at it since and while it will be faster to
+execute I still feel that it's going to be harder to write and maintain.
 
-Tomasz Figa (4):
-  mtd: onenand: samsung: Set name field of mtd_info struct
-  mtd: onenand: samsung: Unify resource order for controller variants
-  mtd: onenand: samsung: Make sure that bus clock is enabled
-  mtd: onenand: samsung: Add device tree support
+E.g. look at gcc_pcie_4_pipe_clk_src, its parents today are
+pcie_4_pipe_clk and bi_tcxo. Something I can reason about being correct
+or not.
 
- .../bindings/mtd/samsung,onenand.yaml         |  89 +++++++++++++
- drivers/mtd/nand/onenand/onenand_samsung.c    | 120 ++++++++++++++----
- 2 files changed, 183 insertions(+), 26 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/mtd/samsung,onenand.yaml
+If we ditch the clock-names I will have:
 
--- 
-2.30.2
+static const struct clk_parent_data gcc_parent_data_14[] = {
+        { .index = 30 },
+        { .index = 0 },
+};
 
+Generally we would perhaps use some compile time constant, but that
+won't work here because we're talking about the index in the clocks
+array in the yaml.
+
+
+But perhaps I'm missing something that would make this manageable?
+
+Regards,
+Bjorn

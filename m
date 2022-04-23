@@ -2,115 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50BF350CC4B
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 18:30:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B3C50CC5D
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 18:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236210AbiDWQdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 12:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46900 "EHLO
+        id S236452AbiDWQno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 12:43:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232381AbiDWQdH (ORCPT
+        with ESMTP id S236441AbiDWQnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 12:33:07 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B405A1AF31
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 09:30:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650731410; x=1682267410;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=erq/J6IugNqFBPl/JfID0tI97ob10byjp/0rK7jZ9Qw=;
-  b=DTUiHbB9ALjsRZrf9GA4B9C+lAt/gg8LlpZ3bfRVOz3PyY6pMB8lSZWc
-   Kkstx2HfbZqYeFOHnlDIxUa+5HqZowkzNO6qVb40QHjqnvjtw3P5rkZJK
-   VgM7v6/bm7g6wVU3jfB5wJlspZX4Qivgz0Vx5XKGkGr7ao+gLy5SRO4Uc
-   10Pou64RRqmLb5EQAk+UTGbtQR02U0tY9eylBdywuNYCuB2DaT41WULG8
-   awHqZETnT3ZPfkIOSDH6Ln3XOnyUN71eDmesPeTyY9KHRmv/QNg12XLbt
-   zPDMaffGUbfRNTAPxT++e68qhnrsnFYvQ1JfLpPY6MibcO7AMBghcR5C8
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="252251517"
-X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
-   d="scan'208";a="252251517"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 09:30:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
-   d="scan'208";a="531346832"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 23 Apr 2022 09:30:09 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1niIe8-0000Dz-DQ;
-        Sat, 23 Apr 2022 16:30:08 +0000
-Date:   Sun, 24 Apr 2022 00:29:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 1760/2579] fs/ceph/cache.h:130:9: error:
- call to undeclared function 'filemap_dirty_folio'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202204240008.JDntM9cU-lkp@intel.com>
+        Sat, 23 Apr 2022 12:43:41 -0400
+X-Greylist: delayed 532 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 23 Apr 2022 09:40:42 PDT
+Received: from mailout-l3b-97.contactoffice.com (mailout-l3b-97.contactoffice.com [212.3.242.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F913CA5B
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 09:40:42 -0700 (PDT)
+Received: from smtpauth2.co-bxl (smtpauth2.co-bxl [10.2.0.24])
+        by mailout-l3b-97.contactoffice.com (Postfix) with ESMTP id 6A530771
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 18:31:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1650731509;
+        s=20210208-e7xh; d=mailfence.com; i=flaskhalsaren@mailfence.com;
+        h=Message-ID:Date:MIME-Version:From:Content-Type:Content-Transfer-Encoding;
+        l=5571; bh=0R8nPHhTzHrR7qwjgjmoB8zkJbRXGE/jXo1Sg2ABPyk=;
+        b=BvIIgwiDKclVZmrrxLP4c4ds5UsOqdKoWV9LkZosXZ2LTj8kL9d2SCpOgjkfMX5c
+        RBsuHLwGdqlxjiyeWe5nrvIOQE0xGJOtxNvw+0dhDKawiuE14EKe1M83D/xvSYBz8CI
+        CL3IR2WKv9aUE+pHoff2aHtx1t1NncfYxysTwIf7yugaaG1TxHjVEE6rbRUG68657Yj
+        pMyRmYJsxainH2Jyj3k+WoFJYx+ZyzfBnIXSZyTYGPG79RffNQz/43KNpPRc4XZPHGj
+        tLk3BhHTTEgkKvnq7FGmEKK+PtUA0uxVkWhdb0XOigBwkoW1PAUG8a5F2EV+oG1aggk
+        lUE2L+ZwNQ==
+Received: by smtp.mailfence.com with ESMTPSA
+          for <linux-kernel@vger.kernel.org> ; Sat, 23 Apr 2022 18:31:46 +0200 (CEST)
+Message-ID: <a444299d-377b-a175-2d69-5dc068a840e7@mailfence.com>
+Date:   Sat, 23 Apr 2022 18:31:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org
+From:   flaskhalsaren it <flaskhalsaren@mailfence.com>
+Subject: Slowing down task using a modified FIFO scheduler
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-ContactOffice-Account: com:351898251
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   49e1ec6c70a6eb4b7de9250a455b8b63eb42afbe
-commit: 5906052f724ace8783a32193d743f4db58a3bfee [1760/2579] headers/deps: writeback: Remove the <linux/writeback_api.h> header from <linux/writeback.h>
-config: x86_64-randconfig-c007 (https://download.01.org/0day-ci/archive/20220424/202204240008.JDntM9cU-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=5906052f724ace8783a32193d743f4db58a3bfee
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 5906052f724ace8783a32193d743f4db58a3bfee
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/
+Hi, I have been experimenting with the FIFO scheduler and tick rate in order
+to reduce execution speed for tasks; I need to run legacy code that runs 
+on old
+slow hardware at approximately the same speed on new faster hardware while
+preserving "realtime-like" properties of the code. The general idea
+was to add a delay
+during each task, tick to mimic the execution speed of the slower system.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+At the end of this mail are my modifications in the kernel, where I for the
+FIFO scheduler introduces a delay of 500 microseconds for each scheduling
+tick, that is
+my intention is to use up about 500 microseconds of the scheduling tick 
+for the
+task. Assuming a tick length of 1000 microseconds we effectively reduce the
+execution speed to about 1 - 500/1000 or about 50%.
 
-All errors (new ones prefixed by >>):
+I am using kernel version 5.15.7 and Ubuntu 20.04.4
 
-   In file included from fs/ceph/caps.c:33:
->> fs/ceph/cache.h:130:9: error: call to undeclared function 'filemap_dirty_folio'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           return filemap_dirty_folio(mapping, folio);
-                  ^
-   fs/ceph/cache.h:130:9: note: did you mean 'filemap_get_folio'?
-   include/linux/pagemap.h:525:29: note: 'filemap_get_folio' declared here
-   static inline struct folio *filemap_get_folio(struct address_space *mapping,
-                               ^
-   1 error generated.
+I have made a small test program to verify that my approach works as 
+expected
+which I run in userspace (delay_test.c):
+
+#include <stdio.h>
+#include <unistd.h>
+#include <time.h>
+#include <sched.h>
+#include <stdint.h>
+#include <sys/time.h>
+
+static inline void timespec_diff(struct timespec *a, struct timespec *b,
+     struct timespec *result) {
+     result->tv_sec  = a->tv_sec  - b->tv_sec;
+     result->tv_nsec = a->tv_nsec - b->tv_nsec;
+     if (result->tv_nsec < 0) {
+         --result->tv_sec;
+         result->tv_nsec += 1000000000L;
+     }
+}
+
+void main(int argc, char *args[])
+{
+   struct sched_param param;
+   param.sched_priority = 99;
+   sched_setscheduler(0,SCHED_FIFO,&param);
+   struct timespec start,now,diff;
+   uint64_t  sleep_delay = 100L;
+   clock_gettime(CLOCK_MONOTONIC, &start);
+
+   printf("Start is %lu.%lu\n",start.tv_sec,start.tv_nsec);
+   for(;;)
+   {
+     usleep(sleep_delay);
+     clock_gettime(CLOCK_MONOTONIC, &now);
+     timespec_diff(&now,&start,&diff);
+     printf("Time is %lus 
+%luns\n",(uint64_t)diff.tv_sec,(uint64_t)diff.tv_nsec);
+
+   }
+}
 
 
-vim +/filemap_dirty_folio +130 fs/ceph/cache.h
+I compile the above program like this (assuming a 2GHz CPU core that is
+evacuated and assigned a dedicated Cgroup) $ gcc ....
+and create it like this with Cgroup v1
+sudo cgcreate -t $USER:$GRP -a $USER:$GRP -g cpuset,memory,freezer:tes
+echo "1" | sudo tee /sys/fs/cgroup/cpuset/test/cpuset.cpus > /dev/null
+echo "0" | sudo tee /sys/fs/cgroup/cpuset/test/cpuset.mems > /dev/null
+echo "1" | sudo tee /sys/fs/cgroup/cpuset/test/cpuset.cpu_exclusive > 
+/dev/null
 
-400e1286c0ec3f Jeff Layton             2021-12-07  126  
-8fb72b4a76933a Matthew Wilcox (Oracle  2022-02-09  127) static inline int ceph_fscache_dirty_folio(struct address_space *mapping,
-8fb72b4a76933a Matthew Wilcox (Oracle  2022-02-09  128) 		struct folio *folio)
-400e1286c0ec3f Jeff Layton             2021-12-07  129  {
-8fb72b4a76933a Matthew Wilcox (Oracle  2022-02-09 @130) 	return filemap_dirty_folio(mapping, folio);
-400e1286c0ec3f Jeff Layton             2021-12-07  131  }
-400e1286c0ec3f Jeff Layton             2021-12-07  132  
+and run it with
+sudo cgexec -g memory,freezer,cpuset:test ./a.out
 
-:::::: The code at line 130 was first introduced by commit
-:::::: 8fb72b4a76933ae6f86725cc8e4a8190ba84d755 fscache: Convert fscache_set_page_dirty() to fscache_dirty_folio()
+The expected output is something like
+Start is 1835.474539419
+Time is 0s 200000ns
+Time is 0s 300000ns
+Time is 0s 500000ns
+Time is 0s 1000000ns <-- Here scheduler delay kicks i.
+Time is 0s 1100000ns
+Time is 0s 1200000ns
+...
 
-:::::: TO: Matthew Wilcox (Oracle) <willy@infradead.org>
-:::::: CC: Matthew Wilcox (Oracle) <willy@infradead.org>
+and so on. Instead, I get this
+Start is 1835.474539419
+Time is 0s 175382ns
+Time is 0s 283956ns
+Time is 0s 391289ns
+Time is 0s 501217ns <-- Around here scheduler delay should have kicked in.
+Time is 0s 610443ns <- Instead roughly the same delay is added.
+Time is 0s 721963ns
+Time is 0s 835387ns
+Time is 0s 948290ns
+Time is 0s 1061414ns
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Things I have tried so far: Turning off SMT, making sure that I am using
+CONFIG_HZ_PERIODIC , Isolating tasks using cgroups and isolcpus, making sure
+that the system is running at the correct tick rate and changing the 
+frequency
+in combination with the Governor. Is it something I am missing in regards to
+doing this slowdown? Any answers or hints would be appreciated.
+
+My own delay method I have added to the kernel (register_time.c):
+
+static uint64_t rdtsc2(void){
+     uint32_t hi, lo;
+     __asm__ __volatile__ ("xorl %%eax,%%eax\ncpuid" ::: "%rax",
+"%rbx", "%rcx", "%rdx");
+     __asm__ __volatile__ ("rdtsc" : "=a"(lo), "=d"(hi));
+     return  (((uint64_t)hi)<<32) | ((uint64_t)lo) ; }
+
+uint64_t get_khz(void){
+     uint64_t aperf,mperf,khz;
+     unsigned long flags;
+
+     local_irq_save(flags);
+     rdmsrl(MSR_IA32_APERF,aperf);
+     rdmsrl(MSR_IA32_MPERF,mperf);
+     local_irq_restore(flags);
+
+     khz = div64_u64((cpu_khz * aperf),mperf);
+
+     return khz;
+}
+
+uint64_t nanos_to_ticks(uint64_t nanos){
+      return (get_khz() * 1000L * nanos)/NSEC_PER_SEC;
+}
+  /*
+  *Sleeps for the specified amount of ticks.
+  * Ticks to sleep can be calculated with nanos_to_tick().
+  * Going from ticks to nanoseconds is done using ticks_to_nanos().
+  */
+uint64_t tick_sleep(uint64_t ticks_to_sleep) {
+     uint64_t now;
+     uint64_t sleep_until;
+     uint64_t delta_ticks;
+
+     preempt_disable();
+     now = rdtsc2();
+     sleep_until = now + ticks_to_sleep;
+     while (now < sleep_until)
+     {
+         now = rdtsc2();
+     }
+     delta_ticks = now - sleep_until;
+     preempt_enable();
+     return delta_ticks;
+}
+
+The part where I try to add the delay (rt.c):
+
+static void task_tick_rt(struct rq *rq, struct task_struct *p, int queued) {
+   struct sched_rt_entity *rt_se = &p->rt;
+
+   update_curr_rt(rq);
+   update_rt_rq_load_avg(rq_clock_pelt(rq), rq, 1);
+
+   watchdog(rq, p);
+
+   /*
+    * RR tasks need a special form of timeslice management.
+    * FIFO tasks have no timeslices.
+    * CONFIG_PWM_FRAMEWORK is used to activate the special FIFO
+    */
+   #ifdef CONFIG_PWM_FRAMEWORK
+   if (p->policy == SCHED_FIFO)
+   {
+       tick_sleep(nanos_to_ticks(500000));
+       return;
+   }
+   #else
+   if (p->policy != SCHED_RR)
+   {
+       return;
+   }
+   #endif
+
+   if (--p->rt.time_slice)
+       return;
+
+   p->rt.time_slice = sched_rr_timeslice;
+
+   /*
+    * Requeue to the end of the queue if we (and all of our ancestors) 
+are not
+    * the only element on the queue
+    */
+   for_each_sched_rt_entity(rt_se)
+   {
+       if (rt_se->run_list.prev != rt_se->run_list.next)
+       {
+           requeue_task_rt(rq, p, 0);
+           resched_curr(rq);
+           return;
+       }
+   }
+}
+
+
+Best Regards
+Jacob M

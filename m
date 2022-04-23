@@ -2,181 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B669D50C91D
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 12:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DB8850C920
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 12:16:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234831AbiDWKOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 06:14:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47332 "EHLO
+        id S234848AbiDWKSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 06:18:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234881AbiDWKMb (ORCPT
+        with ESMTP id S231953AbiDWKSd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 06:12:31 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15111CF700
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 03:09:24 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id r13so20727925ejd.5
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 03:09:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=DCeonWjVpVvFaDIUwzVDrsiqJjzTalP0OPLls+NZnWc=;
-        b=Ti6mIMHpl+KN1/VH2J/2Cm2mTkZux/aaoLWdUgSJvMYK24cdjcpn/xrC3BuGDo4kU5
-         zVPpBVbSqxfJsJOqUtG0AvsE5eno6MEaDIdYS5A5JMJ6H7ahribCTyyba0KYpA2nqLPJ
-         BI8saKICCz7P89BZceexn4b0+G5zn3YM2hhIsdizMzQ0GYAcp2NhaS7unERZLNvZRkhV
-         jyPbeGU5IJWhC21moe7MTkHHFwGGiJ9PXB0TzaGiZCsw3s83TzXTJOobl7nE8d5lHyzz
-         nYMOCOeD9ctRMRRf9Rw8MYeHrcD2stIQr6yYnMX9fqRJQO1Oh7KtVK5a4d3dwe0wQOB1
-         BhQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=DCeonWjVpVvFaDIUwzVDrsiqJjzTalP0OPLls+NZnWc=;
-        b=kHLejgfL5IIvrDeCo7rw8HN+/SYyuG8fH1nFTomMgk/8AhJEMS7VN+6BXFa6f+c3Il
-         tT9YmDEtUGrbMUVmxbA8DiL+JOSYd/DhIVOsfj+EH8zTYdnJShh7i22frgeE0EY43xyR
-         mW6ReDaAR7OaRR0Ni6Tw6eIRKK5Mg6vyWAQUjSKwMmkEorMNnPVZ2rgP2Y7f/x4+abn8
-         dSPXQTap1lS2YZenKTHTYtgilr0RCV1oIo+eLSmtftMbEL++yj+MXmp4659QAsgaBJVP
-         1GconnZ/hD2xTcF4gatWaOH0z/H8+ZShPYu9U0ucyMruxqK9AR+tYjsO7jdAJLWfTsWz
-         +H3A==
-X-Gm-Message-State: AOAM531KvnzTitYgE99u4wEceLfc3l8DXYkNREMHlmYYqudE9YV1lTo1
-        9ogupSif1ZlmqU2stPY7aJKzJA==
-X-Google-Smtp-Source: ABdhPJxH7lyOrG5mIRwnK45I7YIT1NaYQjc31HVx1K3KqPyODzSMcETNAdiuJaWQhGMZt5D/Z2kNzQ==
-X-Received: by 2002:a17:906:8301:b0:6e4:896d:59b1 with SMTP id j1-20020a170906830100b006e4896d59b1mr7624358ejx.396.1650708563296;
-        Sat, 23 Apr 2022 03:09:23 -0700 (PDT)
-Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id p12-20020a50c94c000000b00425c48132bfsm1362892edh.55.2022.04.23.03.09.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Apr 2022 03:09:22 -0700 (PDT)
-Message-ID: <46e72600-b96a-03a9-134d-28a0cb4bc078@linaro.org>
-Date:   Sat, 23 Apr 2022 12:09:21 +0200
+        Sat, 23 Apr 2022 06:18:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 243FD69495
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 03:15:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650708934;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Nnu/RwyQm3ejKaQwoN4NCJcZ0nanUujxwSLD2x1jY2o=;
+        b=cEZrOpeFuVg/h+VIT9wLleOEyKVAF4e/7D9vyU15k6apuD+W/UJg3luLStLGp3GO/oxkYz
+        OOxHoioYe6V5uu3DDPX1CAFK06JJj3ALG0OgfP60aQd4S39JNxRq/H/Vx65U4r+oXG75H6
+        KnLIZrdnNMPRt94dw/eWjMn8k112eLc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-674-pshl6yfwO1e5w0rDgnjiQA-1; Sat, 23 Apr 2022 06:15:31 -0400
+X-MC-Unique: pshl6yfwO1e5w0rDgnjiQA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6AFAF380670C;
+        Sat, 23 Apr 2022 10:15:30 +0000 (UTC)
+Received: from ceranb (unknown [10.39.192.68])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 27402C28102;
+        Sat, 23 Apr 2022 10:15:28 +0000 (UTC)
+Date:   Sat, 23 Apr 2022 12:15:27 +0200
+From:   Ivan Vecera <ivecera@redhat.com>
+To:     "Ertman, David M" <david.m.ertman@intel.com>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        poros <poros@redhat.com>, mschmidt <mschmidt@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Saleem, Shiraz" <shiraz.saleem@intel.com>,
+        "moderated list:INTEL ETHERNET DRIVERS" 
+        <intel-wired-lan@lists.osuosl.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net v3] ice: Fix race during aux device (un)plugging
+Message-ID: <20220423121527.79fa5efb@ceranb>
+In-Reply-To: <MW5PR11MB58110D02BF761C889B29CBC7DDF79@MW5PR11MB5811.namprd11.prod.outlook.com>
+References: <20220421060906.1902576-1-ivecera@redhat.com>
+        <MW5PR11MB581100DBD307763A92012BEADDF79@MW5PR11MB5811.namprd11.prod.outlook.com>
+        <MW5PR11MB58110D02BF761C889B29CBC7DDF79@MW5PR11MB5811.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCHv1 19/19] arm64: dts: rockchip: Add rk3588-evb1 board
-Content-Language: en-US
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@lists.collabora.co.uk,
-        Kever Yang <kever.yang@rock-chips.com>, kernel@collabora.com
-References: <20220422170920.401914-1-sebastian.reichel@collabora.com>
- <20220422170920.401914-20-sebastian.reichel@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220422170920.401914-20-sebastian.reichel@collabora.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/04/2022 19:09, Sebastian Reichel wrote:
-> From: Kever Yang <kever.yang@rock-chips.com>
+On Fri, 22 Apr 2022 20:55:10 +0000
+"Ertman, David M" <david.m.ertman@intel.com> wrote:
+
+> > -----Original Message-----
+> > From: Ertman, David M
+> > Sent: Friday, April 22, 2022 10:42 AM
+> > To: Ivan Vecera <ivecera@redhat.com>; netdev@vger.kernel.org
+> > Cc: poros <poros@redhat.com>; mschmidt <mschmidt@redhat.com>; Leon
+> > Romanovsky <leon@kernel.org>; Brandeburg, Jesse
+> > <jesse.brandeburg@intel.com>; Nguyen, Anthony L
+> > <anthony.l.nguyen@intel.com>; David S. Miller <davem@davemloft.net>;
+> > Jakub Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>;
+> > Saleem, Shiraz <shiraz.saleem@intel.com>; moderated list:INTEL ETHERNET
+> > DRIVERS <intel-wired-lan@lists.osuosl.org>; open list <linux-  
+> > kernel@vger.kernel.org>  
+> > Subject: RE: [PATCH net v3] ice: Fix race during aux device (un)plugging
+> >   
+> > > -----Original Message-----
+> > > From: Ivan Vecera <ivecera@redhat.com>
+> > > Sent: Wednesday, April 20, 2022 11:09 PM
+> > > To: netdev@vger.kernel.org
+> > > Cc: poros <poros@redhat.com>; mschmidt <mschmidt@redhat.com>;  
+> > Leon  
+> > > Romanovsky <leon@kernel.org>; Brandeburg, Jesse
+> > > <jesse.brandeburg@intel.com>; Nguyen, Anthony L
+> > > <anthony.l.nguyen@intel.com>; David S. Miller <davem@davemloft.net>;
+> > > Jakub Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>;
+> > > Ertman, David M <david.m.ertman@intel.com>; Saleem, Shiraz
+> > > <shiraz.saleem@intel.com>; moderated list:INTEL ETHERNET DRIVERS  
+> > <intel-  
+> > > wired-lan@lists.osuosl.org>; open list <linux-kernel@vger.kernel.org>
+> > > Subject: [PATCH net v3] ice: Fix race during aux device (un)plugging
+> > >
+> > > Function ice_plug_aux_dev() assigns pf->adev field too early prior
+> > > aux device initialization and on other side ice_unplug_aux_dev()
+> > > starts aux device deinit and at the end assigns NULL to pf->adev.
+> > > This is wrong because pf->adev should always be non-NULL only when
+> > > aux device is fully initialized and ready. This wrong order causes
+> > > a crash when ice_send_event_to_aux() call occurs because that function
+> > > depends on non-NULL value of pf->adev and does not assume that
+> > > aux device is half-initialized or half-destroyed.
+> > > After order correction the race window is tiny but it is still there,
+> > > as Leon mentioned and manipulation with pf->adev needs to be protected
+> > > by mutex.
+> > >
+> > > Fix (un-)plugging functions so pf->adev field is set after aux device
+> > > init and prior aux device destroy and protect pf->adev assignment by
+> > > new mutex. This mutex is also held during ice_send_event_to_aux()
+> > > call to ensure that aux device is valid during that call. Device
+> > > lock used ice_send_event_to_aux() to avoid its concurrent run can
+> > > be removed as this is secured by that mutex.
+> > >
+> > > Reproducer:
+> > > cycle=1
+> > > while :;do
+> > >         echo "#### Cycle: $cycle"
+> > >
+> > >         ip link set ens7f0 mtu 9000
+> > >         ip link add bond0 type bond mode 1 miimon 100
+> > >         ip link set bond0 up
+> > >         ifenslave bond0 ens7f0
+> > >         ip link set bond0 mtu 9000
+> > >         ethtool -L ens7f0 combined 1
+> > >         ip link del bond0
+> > >         ip link set ens7f0 mtu 1500
+> > >         sleep 1
+> > >
+> > >         let cycle++
+> > > done
+> > >
+> > > In short when the device is added/removed to/from bond the aux device
+> > > is unplugged/plugged. When MTU of the device is changed an event is
+> > > sent to aux device asynchronously. This can race with (un)plugging
+> > > operation and because pf->adev is set too early (plug) or too late
+> > > (unplug) the function ice_send_event_to_aux() can touch uninitialized
+> > > or destroyed fields. In the case of crash below pf->adev->dev.mutex.
+> > >
+> > > Crash:
+> > > [   53.372066] bond0: (slave ens7f0): making interface the new active one
+> > > [   53.378622] bond0: (slave ens7f0): Enslaving as an active interface with an  
+> > u  
+> > > p link
+> > > [   53.386294] IPv6: ADDRCONF(NETDEV_CHANGE): bond0: link becomes
+> > > ready
+> > > [   53.549104] bond0: (slave ens7f1): Enslaving as a backup interface with an
+> > > up
+> > >  link
+> > > [   54.118906] ice 0000:ca:00.0 ens7f0: Number of in use tx queues changed
+> > > inval
+> > > idating tc mappings. Priority traffic classification disabled!
+> > > [   54.233374] ice 0000:ca:00.1 ens7f1: Number of in use tx queues changed
+> > > inval
+> > > idating tc mappings. Priority traffic classification disabled!
+> > > [   54.248204] bond0: (slave ens7f0): Releasing backup interface
+> > > [   54.253955] bond0: (slave ens7f1): making interface the new active one
+> > > [   54.274875] bond0: (slave ens7f1): Releasing backup interface
+> > > [   54.289153] bond0 (unregistering): Released all slaves
+> > > [   55.383179] MII link monitoring set to 100 ms
+> > > [   55.398696] bond0: (slave ens7f0): making interface the new active one
+> > > [   55.405241] BUG: kernel NULL pointer dereference, address:
+> > > 0000000000000080
+> > > [   55.405289] bond0: (slave ens7f0): Enslaving as an active interface with an  
+> > u  
+> > > p link
+> > > [   55.412198] #PF: supervisor write access in kernel mode
+> > > [   55.412200] #PF: error_code(0x0002) - not-present page
+> > > [   55.412201] PGD 25d2ad067 P4D 0
+> > > [   55.412204] Oops: 0002 [#1] PREEMPT SMP NOPTI
+> > > [   55.412207] CPU: 0 PID: 403 Comm: kworker/0:2 Kdump: loaded Tainted:  
+> > G  
+> > > S
+> > >            5.17.0-13579-g57f2d6540f03 #1
+> > > [   55.429094] bond0: (slave ens7f1): Enslaving as a backup interface with an
+> > > up
+> > >  link
+> > > [   55.430224] Hardware name: Dell Inc. PowerEdge R750/06V45N, BIOS  
+> > 1.4.4  
+> > > 10/07/
+> > > 2021
+> > > [   55.430226] Workqueue: ice ice_service_task [ice]
+> > > [   55.468169] RIP: 0010:mutex_unlock+0x10/0x20
+> > > [   55.472439] Code: 0f b1 13 74 96 eb e0 4c 89 ee eb d8 e8 79 54 ff ff 66 0f 1f  
+> > 84  
+> > > 00 00 00 00 00 0f 1f 44 00 00 65 48 8b 04 25 40 ef 01 00 31 d2 <f0> 48 0f b1 17  
+> > 75  
+> > > 01 c3 e9 e3 fe ff ff 0f 1f 00 0f 1f 44 00 00 48
+> > > [   55.491186] RSP: 0018:ff4454230d7d7e28 EFLAGS: 00010246
+> > > [   55.496413] RAX: ff1a79b208b08000 RBX: ff1a79b2182e8880 RCX:
+> > > 0000000000000001
+> > > [   55.503545] RDX: 0000000000000000 RSI: ff4454230d7d7db0 RDI:
+> > > 0000000000000080
+> > > [   55.510678] RBP: ff1a79d1c7e48b68 R08: ff4454230d7d7db0 R09:
+> > > 0000000000000041
+> > > [   55.517812] R10: 00000000000000a5 R11: 00000000000006e6 R12:
+> > > ff1a79d1c7e48bc0
+> > > [   55.524945] R13: 0000000000000000 R14: ff1a79d0ffc305c0 R15:
+> > > 0000000000000000
+> > > [   55.532076] FS:  0000000000000000(0000) GS:ff1a79d0ffc00000(0000)
+> > > knlGS:0000000000000000
+> > > [   55.540163] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > [   55.545908] CR2: 0000000000000080 CR3: 00000003487ae003 CR4:
+> > > 0000000000771ef0
+> > > [   55.553041] DR0: 0000000000000000 DR1: 0000000000000000 DR2:
+> > > 0000000000000000
+> > > [   55.560173] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7:
+> > > 0000000000000400
+> > > [   55.567305] PKRU: 55555554
+> > > [   55.570018] Call Trace:
+> > > [   55.572474]  <TASK>
+> > > [   55.574579]  ice_service_task+0xaab/0xef0 [ice]
+> > > [   55.579130]  process_one_work+0x1c5/0x390
+> > > [   55.583141]  ? process_one_work+0x390/0x390
+> > > [   55.587326]  worker_thread+0x30/0x360
+> > > [   55.590994]  ? process_one_work+0x390/0x390
+> > > [   55.595180]  kthread+0xe6/0x110
+> > > [   55.598325]  ? kthread_complete_and_exit+0x20/0x20
+> > > [   55.603116]  ret_from_fork+0x1f/0x30
+> > > [   55.606698]  </TASK>
+> > >
+> > > Fixes: f9f5301e7e2d ("ice: Register auxiliary device to provide RDMA")
+> > > Cc: Leon Romanovsky <leon@kernel.org>
+> > > Signed-off-by: Ivan Vecera <ivecera@redhat.com>  
+> > 
+> > Sorry for previous mis-reply - hit the wrong button.
+> > 
+> > LGTM
+> > Acked-by: Dave Ertman <david.m.ertman@intel.com>  
 > 
-> Add board file for the RK3588 evaluation board. While the hardware
-> offers plenty of peripherals and connectivity this basic implementation
-> just handles things required to successfully boot Linux from eMMC
-> and connect via UART.
+> After thinking about this for a bit longer, I did think of one issue.
 > 
-> Signed-off-by: Kever Yang <kever.yang@rock-chips.com>
-> [rebase, update commit message, use EVB1 for SoC bringup]
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> ---
->  .../devicetree/bindings/arm/rockchip.yaml     |  5 +++
->  arch/arm64/boot/dts/rockchip/Makefile         |  1 +
->  .../boot/dts/rockchip/rk3588-evb1-v10.dts     | 34 +++++++++++++++++++
->  3 files changed, 40 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts
+> With the removal of the device_lock in ice_send_event_to_aux(), there is no guarantee that the
+> function pointer will not become NULL by the auxiliary_driver unloading.  It is a very small window,
+> but it could happen.
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
-> index eece92f83a2d..b14d0c84c69b 100644
-> --- a/Documentation/devicetree/bindings/arm/rockchip.yaml
-> +++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
-> @@ -664,6 +664,11 @@ properties:
->            - const: rockchip,rk3568-bpi-r2pro
->            - const: rockchip,rk3568
->  
-> +      - description: Rockchip RK3588 Evaluation board
-> +        items:
-> +          - const: rockchip,rk3588-evb1-v10
-> +          - const: rockchip,rk3588
-> +
->  additionalProperties: true
->  
->  ...
-> diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-> index 4ae9f35434b8..8a53ab6d37a1 100644
-> --- a/arch/arm64/boot/dts/rockchip/Makefile
-> +++ b/arch/arm64/boot/dts/rockchip/Makefile
-> @@ -61,3 +61,4 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-pinenote-v1.2.dtb
->  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-quartz64-a.dtb
->  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb1-v10.dtb
->  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-bpi-r2-pro.dtb
-> +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588-evb1-v10.dtb
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts b/arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts
-> new file mode 100644
-> index 000000000000..68b19acb1550
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts
-> @@ -0,0 +1,34 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
-> + *
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "rk3588.dtsi"
-> +
-> +/ {
-> +	model = "Rockchip RK3588 EVB1 V10 Board";
-> +	compatible = "rockchip,rk3588-evb1-v10", "rockchip,rk3588";
-> +
-> +	chosen {
-> +		stdout-path = "serial2:1500000n8";
-> +	};
-> +};
-> +
-> +&sdhci {
-> +	bus-width = <8>;
-> +	no-sdio;
-> +	no-sd;
-> +	non-removable;
-> +	max-frequency = <200000000>;
-> +	mmc-hs400-1_8v;
-> +	mmc-hs400-enhanced-strobe;
-> +	status = "ok";
-> +};
-> +
-> +&uart2 {
-> +	status = "ok";
+> I think the device_lock should probably stay also.
+> 
+> DaveE
+> 
 
-Usually status goes at the end of properties and rockchip sources use
-"okay" instead of "ok".
+The function pointer can't become NULL but adev->dev.driver can. So yeah, you are right the device lock
+needs to be held as well.
+Will submit v4.
 
-It's a nit, so in any case:
+Thx,
+Ivan
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof

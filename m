@@ -2,153 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FCB150C9E0
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 14:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E78C050C9E2
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 14:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235268AbiDWM2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 08:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33892 "EHLO
+        id S234460AbiDWM3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 08:29:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235451AbiDWM1z (ORCPT
+        with ESMTP id S231231AbiDWM3u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 08:27:55 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85605BEE
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 05:24:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650716698; x=1682252698;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=o1f+T3LaJqFnpKfN5ykKQ1cYz0Qln59Ix3NT/uTK1vQ=;
-  b=ZqvlYeREWGiuO1jJbkfQWrSz252BtBE2dOIajTvZg10AAsds3vmpA1b+
-   gQQRPQdqWEzPDO4dl6SutOv9IAns+VjwDlqc1W94YOfP5hfTDRFX/KjAN
-   31FoSVLRsJEi/7mc/osHRqOucNfa7wfifUuXajchy61KNhbGXnKE9scfC
-   b79vXv0nX2UPtfkUngVVi9Dqrc9OOtKZsqn0Ib46M90VI0jZYofYs+hep
-   cpVr20amuaUYZL20i2TVfFfCkoHgd/PM4+g5818BBHMXIr6fQ27IDyzgx
-   qnDKa/o1fH5urgxt6ugjKmuE7ETSKoCQ23VuVU4Pda2SBuu+F2CpmWrU6
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264383513"
-X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
-   d="scan'208";a="264383513"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 05:24:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
-   d="scan'208";a="511932564"
-Received: from lkp-server01.sh.intel.com (HELO dd58949a6e39) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 23 Apr 2022 05:24:56 -0700
-Received: from kbuild by dd58949a6e39 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1niEoq-0000HN-15;
-        Sat, 23 Apr 2022 12:24:56 +0000
-Date:   Sat, 23 Apr 2022 20:24:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 28/44]
- fs/netfs/crypto.c:76:31: sparse: sparse: incompatible types in comparison
- expression (different type sizes):
-Message-ID: <202204232031.0Hw9DMix-lkp@intel.com>
+        Sat, 23 Apr 2022 08:29:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B34574871;
+        Sat, 23 Apr 2022 05:26:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26C5B610A3;
+        Sat, 23 Apr 2022 12:26:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8868C385A5;
+        Sat, 23 Apr 2022 12:26:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650716811;
+        bh=p40jvo6iLy+D16SXcDbbHtObi3NFXFDafaBZX/wN0d0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XRNcDgr3Q/vz2yWopQQ+WeK3MtLGmTl4mnqBcA72/G42Ghc2RuiThu0trImXKH3ko
+         +7xz1PVhYakC8qXivSgD7CuKpuQ9Szwbgc4VBQOPo8G70PWic2JxKVOY0Qp14MPiS5
+         tCYconMTnfHFMZoeNx1R0Xwo7On6mPI3gcOOxVRyqaoMhatgkiaUey5t+Uzga95Wl7
+         j6XMDeoHerEAISp6FxLvVluXL6fAj22b9z2E9yp8uvAd7ZjKAlJEvmbnLnRF2W38Iy
+         5W+qVG+UbSDKe5ot/0IzQ89PzmRvGEo/ll82pGLxD4QGI6h7M7jsgoN3wYqrSI4n0Y
+         63bRoWVxKBTnw==
+Date:   Sat, 23 Apr 2022 17:56:44 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
+Cc:     quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
+        mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bhaumik Bhatt <bbhatt@codeaurora.org>
+Subject: Re: [PATCH v4 1/2] bus: mhi: host: Bail on writing register fields
+ if read fails
+Message-ID: <20220423122644.GL374560@thinkpad>
+References: <1650304226-11080-1-git-send-email-quic_jhugo@quicinc.com>
+ <1650304226-11080-2-git-send-email-quic_jhugo@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1650304226-11080-2-git-send-email-quic_jhugo@quicinc.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
-head:   931e50676c6598d0eda1954ead465519ff91874d
-commit: 777536e6af57becf14b8f4f34007ed3e3a95c911 [28/44] netfs: Perform content encryption
-config: arc-randconfig-s032-20220422 (https://download.01.org/0day-ci/archive/20220423/202204232031.0Hw9DMix-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/ammarfaizi2/linux-block/commit/777536e6af57becf14b8f4f34007ed3e3a95c911
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout 777536e6af57becf14b8f4f34007ed3e3a95c911
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc SHELL=/bin/bash fs/netfs/
+On Mon, Apr 18, 2022 at 11:50:25AM -0600, Jeffrey Hugo wrote:
+> From: Bhaumik Bhatt <bbhatt@codeaurora.org>
+> 
+> Helper API to write register fields relies on successful reads
+> of the register/address prior to the write. Bail out if a failure
+> is seen when reading the register before the actual write is
+> performed.
+> 
+> Signed-off-by: Bhaumik Bhatt <bbhatt@codeaurora.org>
+> Reviewed-by: Hemant Kumar <hemantk@codeaurora.org>
+> Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
+Thanks,
+Mani
 
-sparse warnings: (new ones prefixed by >>)
->> fs/netfs/crypto.c:76:31: sparse: sparse: incompatible types in comparison expression (different type sizes):
->> fs/netfs/crypto.c:76:31: sparse:    unsigned int *
->> fs/netfs/crypto.c:76:31: sparse:    unsigned long *
-
-vim +76 fs/netfs/crypto.c
-
-    45	
-    46	/*
-    47	 * Populate a scatterlist from folios in an xarray.
-    48	 */
-    49	static int netfs_xarray_to_sglist(struct xarray *xa, loff_t pos, size_t len,
-    50					  struct scatterlist *sg, unsigned int n_sg)
-    51	{
-    52		struct scatterlist *p = sg;
-    53		struct folio *folio = NULL;
-    54		size_t seg, offset, skip = 0;
-    55		loff_t start = pos;
-    56		pgoff_t index = start >> PAGE_SHIFT;
-    57		int j;
-    58	
-    59		XA_STATE(xas, xa, index);
-    60	
-    61		sg_init_table(sg, n_sg);
-    62	
-    63		rcu_read_lock();
-    64	
-    65		xas_for_each(&xas, folio, ULONG_MAX) {
-    66			if (xas_retry(&xas, folio))
-    67				continue;
-    68			if (WARN_ON(xa_is_value(folio)) || WARN_ON(folio_test_hugetlb(folio)))
-    69				break;
-    70			for (j = (folio_index(folio) < index) ? index - folio_index(folio) : 0;
-    71			     j < folio_nr_pages(folio); j++
-    72			     ) {
-    73				struct page *subpage = folio_file_page(folio, j);
-    74	
-    75				offset = (pos + skip) & ~PAGE_MASK;
-  > 76				seg = min(len, PAGE_SIZE - offset);
-    77	
-    78				sg_set_page(p++, subpage, seg, offset);
-    79	
-    80				len -= seg;
-    81				skip += seg;
-    82				if (len == 0)
-    83					break;
-    84			}
-    85			if (len == 0)
-    86				break;
-    87		}
-    88	
-    89		rcu_read_unlock();
-    90		if (len > 0) {
-    91			kdebug("*** Insufficient source (%zx)", len);
-    92			//WARN_ON(len > 0);
-    93			return -EIO;
-    94		}
-    95	
-    96		sg_mark_end(p - 1);
-    97		return p - sg;
-    98	}
-    99	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> ---
+>  drivers/bus/mhi/host/boot.c     | 22 ++++++++++++++++------
+>  drivers/bus/mhi/host/init.c     | 22 +++++++++++++++++-----
+>  drivers/bus/mhi/host/internal.h |  7 ++++---
+>  drivers/bus/mhi/host/main.c     |  9 ++++++---
+>  drivers/bus/mhi/host/pm.c       | 15 +++++++++++----
+>  5 files changed, 54 insertions(+), 21 deletions(-)
+> 
+> diff --git a/drivers/bus/mhi/host/boot.c b/drivers/bus/mhi/host/boot.c
+> index b0da7ca..26d0edd 100644
+> --- a/drivers/bus/mhi/host/boot.c
+> +++ b/drivers/bus/mhi/host/boot.c
+> @@ -19,8 +19,8 @@
+>  #include "internal.h"
+>  
+>  /* Setup RDDM vector table for RDDM transfer and program RXVEC */
+> -void mhi_rddm_prepare(struct mhi_controller *mhi_cntrl,
+> -		      struct image_info *img_info)
+> +int mhi_rddm_prepare(struct mhi_controller *mhi_cntrl,
+> +		     struct image_info *img_info)
+>  {
+>  	struct mhi_buf *mhi_buf = img_info->mhi_buf;
+>  	struct bhi_vec_entry *bhi_vec = img_info->bhi_vec;
+> @@ -28,6 +28,7 @@ void mhi_rddm_prepare(struct mhi_controller *mhi_cntrl,
+>  	struct device *dev = &mhi_cntrl->mhi_dev->dev;
+>  	u32 sequence_id;
+>  	unsigned int i;
+> +	int ret;
+>  
+>  	for (i = 0; i < img_info->entries - 1; i++, mhi_buf++, bhi_vec++) {
+>  		bhi_vec->dma_addr = mhi_buf->dma_addr;
+> @@ -45,11 +46,17 @@ void mhi_rddm_prepare(struct mhi_controller *mhi_cntrl,
+>  	mhi_write_reg(mhi_cntrl, base, BHIE_RXVECSIZE_OFFS, mhi_buf->len);
+>  	sequence_id = MHI_RANDOM_U32_NONZERO(BHIE_RXVECSTATUS_SEQNUM_BMSK);
+>  
+> -	mhi_write_reg_field(mhi_cntrl, base, BHIE_RXVECDB_OFFS,
+> -			    BHIE_RXVECDB_SEQNUM_BMSK, sequence_id);
+> +	ret = mhi_write_reg_field(mhi_cntrl, base, BHIE_RXVECDB_OFFS,
+> +				  BHIE_RXVECDB_SEQNUM_BMSK, sequence_id);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to write sequence ID for BHIE_RXVECDB\n");
+> +		return ret;
+> +	}
+>  
+>  	dev_dbg(dev, "Address: %p and len: 0x%zx sequence: %u\n",
+>  		&mhi_buf->dma_addr, mhi_buf->len, sequence_id);
+> +
+> +	return 0;
+>  }
+>  
+>  /* Collect RDDM buffer during kernel panic */
+> @@ -198,10 +205,13 @@ static int mhi_fw_load_bhie(struct mhi_controller *mhi_cntrl,
+>  
+>  	mhi_write_reg(mhi_cntrl, base, BHIE_TXVECSIZE_OFFS, mhi_buf->len);
+>  
+> -	mhi_write_reg_field(mhi_cntrl, base, BHIE_TXVECDB_OFFS,
+> -			    BHIE_TXVECDB_SEQNUM_BMSK, sequence_id);
+> +	ret = mhi_write_reg_field(mhi_cntrl, base, BHIE_TXVECDB_OFFS,
+> +				  BHIE_TXVECDB_SEQNUM_BMSK, sequence_id);
+>  	read_unlock_bh(pm_lock);
+>  
+> +	if (ret)
+> +		return ret;
+> +
+>  	/* Wait for the image download to complete */
+>  	ret = wait_event_timeout(mhi_cntrl->state_event,
+>  				 MHI_PM_IN_ERROR_STATE(mhi_cntrl->pm_state) ||
+> diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
+> index a8c18c5f..3842611 100644
+> --- a/drivers/bus/mhi/host/init.c
+> +++ b/drivers/bus/mhi/host/init.c
+> @@ -547,9 +547,14 @@ int mhi_init_mmio(struct mhi_controller *mhi_cntrl)
+>  	mhi_cntrl->mhi_cmd[PRIMARY_CMD_RING].ring.db_addr = base + CRDB_LOWER;
+>  
+>  	/* Write to MMIO registers */
+> -	for (i = 0; reg_info[i].offset; i++)
+> -		mhi_write_reg_field(mhi_cntrl, base, reg_info[i].offset,
+> -				    reg_info[i].mask, reg_info[i].val);
+> +	for (i = 0; reg_info[i].offset; i++) {
+> +		ret = mhi_write_reg_field(mhi_cntrl, base, reg_info[i].offset,
+> +					  reg_info[i].mask, reg_info[i].val);
+> +		if (ret) {
+> +			dev_err(dev, "Unable to write to MMIO registers\n");
+> +			return ret;
+> +		}
+> +	}
+>  
+>  	return 0;
+>  }
+> @@ -1117,8 +1122,15 @@ int mhi_prepare_for_power_up(struct mhi_controller *mhi_cntrl)
+>  		 */
+>  		mhi_alloc_bhie_table(mhi_cntrl, &mhi_cntrl->rddm_image,
+>  				     mhi_cntrl->rddm_size);
+> -		if (mhi_cntrl->rddm_image)
+> -			mhi_rddm_prepare(mhi_cntrl, mhi_cntrl->rddm_image);
+> +		if (mhi_cntrl->rddm_image) {
+> +			ret = mhi_rddm_prepare(mhi_cntrl,
+> +					       mhi_cntrl->rddm_image);
+> +			if (ret) {
+> +				mhi_free_bhie_table(mhi_cntrl,
+> +						    mhi_cntrl->rddm_image);
+> +				goto error_reg_offset;
+> +			}
+> +		}
+>  	}
+>  
+>  	mutex_unlock(&mhi_cntrl->pm_mutex);
+> diff --git a/drivers/bus/mhi/host/internal.h b/drivers/bus/mhi/host/internal.h
+> index b47d8ef..01fd10a 100644
+> --- a/drivers/bus/mhi/host/internal.h
+> +++ b/drivers/bus/mhi/host/internal.h
+> @@ -324,8 +324,9 @@ int __must_check mhi_poll_reg_field(struct mhi_controller *mhi_cntrl,
+>  				    u32 val, u32 delayus);
+>  void mhi_write_reg(struct mhi_controller *mhi_cntrl, void __iomem *base,
+>  		   u32 offset, u32 val);
+> -void mhi_write_reg_field(struct mhi_controller *mhi_cntrl, void __iomem *base,
+> -			 u32 offset, u32 mask, u32 val);
+> +int __must_check mhi_write_reg_field(struct mhi_controller *mhi_cntrl,
+> +				     void __iomem *base, u32 offset, u32 mask,
+> +				     u32 val);
+>  void mhi_ring_er_db(struct mhi_event *mhi_event);
+>  void mhi_write_db(struct mhi_controller *mhi_cntrl, void __iomem *db_addr,
+>  		  dma_addr_t db_val);
+> @@ -339,7 +340,7 @@ int mhi_init_dev_ctxt(struct mhi_controller *mhi_cntrl);
+>  void mhi_deinit_dev_ctxt(struct mhi_controller *mhi_cntrl);
+>  int mhi_init_irq_setup(struct mhi_controller *mhi_cntrl);
+>  void mhi_deinit_free_irq(struct mhi_controller *mhi_cntrl);
+> -void mhi_rddm_prepare(struct mhi_controller *mhi_cntrl,
+> +int mhi_rddm_prepare(struct mhi_controller *mhi_cntrl,
+>  		      struct image_info *img_info);
+>  void mhi_fw_load_handler(struct mhi_controller *mhi_cntrl);
+>  
+> diff --git a/drivers/bus/mhi/host/main.c b/drivers/bus/mhi/host/main.c
+> index 9021be7..142eea1 100644
+> --- a/drivers/bus/mhi/host/main.c
+> +++ b/drivers/bus/mhi/host/main.c
+> @@ -65,19 +65,22 @@ void mhi_write_reg(struct mhi_controller *mhi_cntrl, void __iomem *base,
+>  	mhi_cntrl->write_reg(mhi_cntrl, base + offset, val);
+>  }
+>  
+> -void mhi_write_reg_field(struct mhi_controller *mhi_cntrl, void __iomem *base,
+> -			 u32 offset, u32 mask, u32 val)
+> +int __must_check mhi_write_reg_field(struct mhi_controller *mhi_cntrl,
+> +				     void __iomem *base, u32 offset, u32 mask,
+> +				     u32 val)
+>  {
+>  	int ret;
+>  	u32 tmp;
+>  
+>  	ret = mhi_read_reg(mhi_cntrl, base, offset, &tmp);
+>  	if (ret)
+> -		return;
+> +		return ret;
+>  
+>  	tmp &= ~mask;
+>  	tmp |= (val << __ffs(mask));
+>  	mhi_write_reg(mhi_cntrl, base, offset, tmp);
+> +
+> +	return 0;
+>  }
+>  
+>  void mhi_write_db(struct mhi_controller *mhi_cntrl, void __iomem *db_addr,
+> diff --git a/drivers/bus/mhi/host/pm.c b/drivers/bus/mhi/host/pm.c
+> index c000a92..dc2e8ff 100644
+> --- a/drivers/bus/mhi/host/pm.c
+> +++ b/drivers/bus/mhi/host/pm.c
+> @@ -129,13 +129,20 @@ enum mhi_pm_state __must_check mhi_tryset_pm_state(struct mhi_controller *mhi_cn
+>  
+>  void mhi_set_mhi_state(struct mhi_controller *mhi_cntrl, enum mhi_state state)
+>  {
+> +	struct device *dev = &mhi_cntrl->mhi_dev->dev;
+> +	int ret;
+> +
+>  	if (state == MHI_STATE_RESET) {
+> -		mhi_write_reg_field(mhi_cntrl, mhi_cntrl->regs, MHICTRL,
+> -				    MHICTRL_RESET_MASK, 1);
+> +		ret = mhi_write_reg_field(mhi_cntrl, mhi_cntrl->regs, MHICTRL,
+> +					  MHICTRL_RESET_MASK, 1);
+>  	} else {
+> -		mhi_write_reg_field(mhi_cntrl, mhi_cntrl->regs, MHICTRL,
+> -				    MHICTRL_MHISTATE_MASK, state);
+> +		ret = mhi_write_reg_field(mhi_cntrl, mhi_cntrl->regs, MHICTRL,
+> +					  MHICTRL_MHISTATE_MASK, state);
+>  	}
+> +
+> +	if (ret)
+> +		dev_err(dev, "Failed to set MHI state to: %s\n",
+> +			mhi_state_str(state));
+>  }
+>  
+>  /* NOP for backward compatibility, host allowed to ring DB in M2 state */
+> -- 
+> 2.7.4
+> 
+> 

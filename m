@@ -2,245 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10EC050CB39
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 16:31:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C933C50CB3A
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 16:33:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236038AbiDWOdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 10:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53430 "EHLO
+        id S236049AbiDWOgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 10:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234415AbiDWOds (ORCPT
+        with ESMTP id S232877AbiDWOgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 10:33:48 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FBE9289B4;
-        Sat, 23 Apr 2022 07:30:50 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 15so1307100pgf.4;
-        Sat, 23 Apr 2022 07:30:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IbYzjBMPd51boeHwhH3wuc9Vn0/S8H3iRbP4T06Ug/A=;
-        b=e9kxM39mRig/k57Ub+oGcFMcpzV47OT4eNveol/LKX9UORSpHXh/KjtegfnWHITvlm
-         jJp1c7Aa+U91Dy7KWeYRbNW5QH9l21dc9SkmTW2kR9kBVpP02GiiShVXYuvFGzpYALZj
-         vBFGEmX7C80dxIYPi8X39MEmSiD95SJApig2bubiz3EiInmdAc6wJsm3Wk2eIhkH1K0D
-         pLo1KbIf7XARqxRc/DLTwJuZb2jb6tR07DAiD5AKQbeodRyfTSD8e2ZG66HmJxG5Khy6
-         5d5dEASAAbsHJKu4SCE6hf8c9dcBEF3g6n34w0o7xZIZXAbsxWPHssUjUQHb2Q8+qUnk
-         /oHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IbYzjBMPd51boeHwhH3wuc9Vn0/S8H3iRbP4T06Ug/A=;
-        b=lYEOY3KFolTAVX7rJhkt2hzbEaidFW02DJpjnqTDgp5lBNlh+C4yu1IcV1Necq68zr
-         t0p+Frk4XNArr2EOuH1/+EQXUCZUz5AFaZPsLpn8PorkiG4YGnR0rtDvcJtk0QZMS68w
-         mEe79qT7ackOjEQGr06p5W+vgoIdGy0PlKIuvi4kouIEwTrS5vRjS9fwHtMOO/++dTxZ
-         6ih2inF3lj6DcG3tQX6nKOUVojZjwslCYHXO4Sc6tH1Hjxb/nYNwOXAvA58dUGYQljsO
-         tJ7Sh2bwPaYaxC2HdgA3AzB3KZCcGiCjSh/hMK3OAkTlq2PP/ijdMoeN4/4bfg9jqAhy
-         zuuQ==
-X-Gm-Message-State: AOAM533HLmsKTismb9ljfSh0fbg9Ptp1DfF+G2Ym7oPJPV0zOzrh14jV
-        EXumTgVIXbdUOsK8efbovAk=
-X-Google-Smtp-Source: ABdhPJxhAIxDc9NmJoC5o4P8rTL4BbAzX+TMNG/y7XV9K86jlKj5vfeK3KWWsG1w0N86098N8ariGQ==
-X-Received: by 2002:a63:fd04:0:b0:3aa:6473:1859 with SMTP id d4-20020a63fd04000000b003aa64731859mr8226012pgh.151.1650724249799;
-        Sat, 23 Apr 2022 07:30:49 -0700 (PDT)
-Received: from localhost.localdomain ([223.212.58.71])
-        by smtp.gmail.com with ESMTPSA id d8-20020aa78688000000b00505793566f7sm5778399pfo.211.2022.04.23.07.30.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 07:30:49 -0700 (PDT)
-From:   Yuntao Wang <ytcoode@gmail.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Yuntao Wang <ytcoode@gmail.com>
-Subject: [PATCH bpf-next] selftests/bpf: Fix incorrect TRUNNER_BINARY name output
-Date:   Sat, 23 Apr 2022 22:30:07 +0800
-Message-Id: <20220423143007.423526-1-ytcoode@gmail.com>
-X-Mailer: git-send-email 2.35.3
+        Sat, 23 Apr 2022 10:36:01 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60DBC111CAC
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 07:33:03 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kltzc14TSz4xLb;
+        Sun, 24 Apr 2022 00:33:00 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1650724381;
+        bh=WoVkgo+1c7VtsmcEJ4bIoptWeHFiV0K5oskKMxsYsV0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=lrXnP+fpdJguWUAQWN2X0b9+V8jQE/+m2rqG1BLz3rDML3ZSMi7xW+qv0wJWDSXCq
+         Xhj6CLepoh2fU8F3p1VITdGldCUyOGWiBEBeNheRZW0W9QjOxwcWq4mV9h/yV1SVZz
+         c+/YHpTiXpRZJaJVp4FdGBpALyrEopPLt/J7w84o5QJo70nWyfSErzCldxBL4DU/cg
+         Ysg3aCv7AQe5GSGXpXeS1D3CfNjPzG6b6y6k7x385n0URcFGtZBxB4hqsyEVAm8QBB
+         nexrFGD9EmNJ0R4hQoYb2z1zQeghYrrFviCWnTbYgZose6Tbequ2yQWHEPpnPRKNHc
+         i4zq7Oddw7rgA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Tyrel Datwyler <tyreld@linux.ibm.com>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] powerpc/pci: Remove useless null check before call
+ of_node_put()
+In-Reply-To: <c4613523-de98-b824-175a-89fd66931bd6@linux.ibm.com>
+References: <1650509529-27525-1-git-send-email-baihaowen@meizu.com>
+ <c4613523-de98-b824-175a-89fd66931bd6@linux.ibm.com>
+Date:   Sun, 24 Apr 2022 00:32:57 +1000
+Message-ID: <87levv98fa.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, when we run 'make test_progs', the output is:
+Tyrel Datwyler <tyreld@linux.ibm.com> writes:
+> On 4/20/22 19:52, Haowen Bai wrote:
+>> No need to add null check before call of_node_put(), since the
+>> implementation of of_node_put() has done it.
+>> 
+>> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+>> ---
+>>  arch/powerpc/kernel/pci_dn.c | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>> 
+>> diff --git a/arch/powerpc/kernel/pci_dn.c b/arch/powerpc/kernel/pci_dn.c
+>> index 61571ae23953..ba3bbc9bec2d 100644
+>> --- a/arch/powerpc/kernel/pci_dn.c
+>> +++ b/arch/powerpc/kernel/pci_dn.c
+>> @@ -357,8 +357,8 @@ void pci_remove_device_node_info(struct device_node *dn)
+>> 
+>>  	/* Drop the parent pci_dn's ref to our backing dt node */
+>>  	parent = of_get_parent(dn);
+>> -	if (parent)
+>> -		of_node_put(parent);
+>> +
+>> +	of_node_put(parent);
+>
+> This whole block of code looks useless, or suspect. Examining the rest of the
+> code for this function this is the only place that parent is referenced. The
+> of_get_parent() call returns the parent with its refcount incremented, and then
+> we turn around and call of_node_put() which drops that reference we just took.
+> The comment doesn't do what it says it does. If we really need to drop a
+> previous reference to the parent device node this code block would need to call
+> of_node_put() twice on parent to accomplish that.
 
-  CLNG-BPF [test_maps] atomic_bounds.o
-  ...
-  GEN-SKEL [test_progs] atomic_bounds.skel.h
-  ...
-  TEST-OBJ [test_progs] align.test.o
-  ...
-  TEST-HDR [test_progs] tests.h
-  EXT-OBJ  [test_progs] test_progs.o
-  ...
-  BINARY   test_progs
+Yeah good analysis.
 
-As you can see, the TRUNNER_BINARY name in the CLNG-BPF part is test_maps,
-which is incorrect.
+It used to use pdn->parent, which didn't grab  an extra reference, see
+commit 14db3d52d3a2 ("powerpc/eeh: Reduce use of pci_dn::node").
 
-Similarly, when we run 'make test_maps', the output is:
+The old code was:
 
-  CLNG-BPF [test_maps] atomic_bounds.o
-  ...
-  GEN-SKEL [test_progs] atomic_bounds.skel.h
-  ...
-  TEST-OBJ [test_maps] array_map_batch_ops.test.o
-  ...
-  TEST-HDR [test_maps] tests.h
-  EXT-OBJ  [test_maps] test_maps.o
-  ...
-  BINARY   test_maps
+        if (pdn->parent)
+                of_node_put(pdn->parent->node);
 
-At this time, the TRUNNER_BINARY name in the GEN-SKEL part is wrong.
+> A closer examination is required to determine if what the comment says we need
+> to do is required. If it is then the code as it exists today is leaking that
+> reference AFAICS.
 
-Again, if we run 'make /full/path/to/selftests/bpf/test_vmlinux.skel.h',
-the output is:
+Yeah. This function is only called from pnv_php.c, ie. powernv PCI
+hotplug, which I think gets less testing than pseries hotplug. So
+possibly we are leaking references and haven't noticed, or maybe the
+comment is out of date.
 
-  CLNG-BPF [test_maps] test_vmlinux.o
-  GEN-SKEL [test_progs] test_vmlinux.skel.h
-
-Here, the TRUNNER_BINARY names are inappropriate and meaningless, they
-should be removed.
-
-This patch fixes these and all other similar issues.
-
-With the patch applied, the output becomes:
-
-  $ make test_progs
-
-  CLNG-BPF [test_progs] atomic_bounds.o
-  ...
-  GEN-SKEL [test_progs] atomic_bounds.skel.h
-  ...
-  TEST-OBJ [test_progs] align.test.o
-  ...
-  TEST-HDR [test_progs] tests.h
-  EXT-OBJ  [test_progs] test_progs.o
-  ...
-  BINARY   test_progs
-
-  $ make test_maps
-
-  CLNG-BPF [test_maps] atomic_bounds.o
-  ...
-  GEN-SKEL [test_maps] atomic_bounds.skel.h
-  ...
-  TEST-OBJ [test_maps] array_map_batch_ops.test.o
-  ...
-  TEST-HDR [test_maps] tests.h
-  EXT-OBJ  [test_maps] test_maps.o
-  ...
-  BINARY   test_maps
-
-  $ make /full/path/to/selftests/bpf/test_vmlinux.skel.h
-
-  CLNG-BPF test_vmlinux.o
-  GEN-SKEL test_vmlinux.skel.h
-
-Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
----
- tools/testing/selftests/bpf/Makefile | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index bafdc5373a13..3cf444cb20af 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -413,7 +413,7 @@ $(TRUNNER_BPF_OBJS): $(TRUNNER_OUTPUT)/%.o:				\
- 					  $(TRUNNER_BPF_CFLAGS))
- 
- $(TRUNNER_BPF_SKELS): %.skel.h: %.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
--	$$(call msg,GEN-SKEL,$(TRUNNER_BINARY),$$@)
-+	$$(call msg,GEN-SKEL,$$(TRUNNER_BINARY),$$@)
- 	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked1.o) $$<
- 	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked2.o) $$(<:.o=.linked1.o)
- 	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked3.o) $$(<:.o=.linked2.o)
-@@ -422,7 +422,7 @@ $(TRUNNER_BPF_SKELS): %.skel.h: %.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
- 	$(Q)$$(BPFTOOL) gen subskeleton $$(<:.o=.linked3.o) name $$(notdir $$(<:.o=)) > $$(@:.skel.h=.subskel.h)
- 
- $(TRUNNER_BPF_LSKELS): %.lskel.h: %.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
--	$$(call msg,GEN-SKEL,$(TRUNNER_BINARY),$$@)
-+	$$(call msg,GEN-SKEL,$$(TRUNNER_BINARY),$$@)
- 	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked1.o) $$<
- 	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked2.o) $$(<:.o=.linked1.o)
- 	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked3.o) $$(<:.o=.linked2.o)
-@@ -430,12 +430,12 @@ $(TRUNNER_BPF_LSKELS): %.lskel.h: %.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
- 	$(Q)$$(BPFTOOL) gen skeleton -L $$(<:.o=.linked3.o) name $$(notdir $$(<:.o=_lskel)) > $$@
- 
- $(TRUNNER_BPF_SKELS_LINKED): $(TRUNNER_BPF_OBJS) $(BPFTOOL) | $(TRUNNER_OUTPUT)
--	$$(call msg,LINK-BPF,$(TRUNNER_BINARY),$$(@:.skel.h=.o))
-+	$$(call msg,LINK-BPF,$$(TRUNNER_BINARY),$$(@:.skel.h=.o))
- 	$(Q)$$(BPFTOOL) gen object $$(@:.skel.h=.linked1.o) $$(addprefix $(TRUNNER_OUTPUT)/,$$($$(@F)-deps))
- 	$(Q)$$(BPFTOOL) gen object $$(@:.skel.h=.linked2.o) $$(@:.skel.h=.linked1.o)
- 	$(Q)$$(BPFTOOL) gen object $$(@:.skel.h=.linked3.o) $$(@:.skel.h=.linked2.o)
- 	$(Q)diff $$(@:.skel.h=.linked2.o) $$(@:.skel.h=.linked3.o)
--	$$(call msg,GEN-SKEL,$(TRUNNER_BINARY),$$@)
-+	$$(call msg,GEN-SKEL,$$(TRUNNER_BINARY),$$@)
- 	$(Q)$$(BPFTOOL) gen skeleton $$(@:.skel.h=.linked3.o) name $$(notdir $$(@:.skel.h=)) > $$@
- 	$(Q)$$(BPFTOOL) gen subskeleton $$(@:.skel.h=.linked3.o) name $$(notdir $$(@:.skel.h=)) > $$(@:.skel.h=.subskel.h)
- endif
-@@ -444,7 +444,7 @@ endif
- ifeq ($($(TRUNNER_TESTS_DIR)-tests-hdr),)
- $(TRUNNER_TESTS_DIR)-tests-hdr := y
- $(TRUNNER_TESTS_HDR): $(TRUNNER_TESTS_DIR)/*.c
--	$$(call msg,TEST-HDR,$(TRUNNER_BINARY),$$@)
-+	$$(call msg,TEST-HDR,$$(TRUNNER_BINARY),$$@)
- 	$$(shell (echo '/* Generated header, do not edit */';					\
- 		  sed -n -E 's/^void (serial_)?test_([a-zA-Z0-9_]+)\((void)?\).*/DEFINE_TEST(\2)/p'	\
- 			$(TRUNNER_TESTS_DIR)/*.c | sort ;	\
-@@ -461,7 +461,7 @@ $(TRUNNER_TEST_OBJS): $(TRUNNER_OUTPUT)/%.test.o:			\
- 		      $(TRUNNER_BPF_LSKELS)				\
- 		      $(TRUNNER_BPF_SKELS_LINKED)			\
- 		      $$(BPFOBJ) | $(TRUNNER_OUTPUT)
--	$$(call msg,TEST-OBJ,$(TRUNNER_BINARY),$$@)
-+	$$(call msg,TEST-OBJ,$$(TRUNNER_BINARY),$$@)
- 	$(Q)cd $$(@D) && $$(CC) -I. $$(CFLAGS) -c $(CURDIR)/$$< $$(LDLIBS) -o $$(@F)
- 
- $(TRUNNER_EXTRA_OBJS): $(TRUNNER_OUTPUT)/%.o:				\
-@@ -469,17 +469,19 @@ $(TRUNNER_EXTRA_OBJS): $(TRUNNER_OUTPUT)/%.o:				\
- 		       $(TRUNNER_EXTRA_HDRS)				\
- 		       $(TRUNNER_TESTS_HDR)				\
- 		       $$(BPFOBJ) | $(TRUNNER_OUTPUT)
--	$$(call msg,EXT-OBJ,$(TRUNNER_BINARY),$$@)
-+	$$(call msg,EXT-OBJ,$$(TRUNNER_BINARY),$$@)
- 	$(Q)$$(CC) $$(CFLAGS) -c $$< $$(LDLIBS) -o $$@
- 
- # non-flavored in-srctree builds receive special treatment, in particular, we
- # do not need to copy extra resources (see e.g. test_btf_dump_case())
- $(TRUNNER_BINARY)-extras: $(TRUNNER_EXTRA_FILES) | $(TRUNNER_OUTPUT)
- ifneq ($2:$(OUTPUT),:$(shell pwd))
--	$$(call msg,EXT-COPY,$(TRUNNER_BINARY),$(TRUNNER_EXTRA_FILES))
-+	$$(call msg,EXT-COPY,$$(TRUNNER_BINARY),$(TRUNNER_EXTRA_FILES))
- 	$(Q)rsync -aq $$^ $(TRUNNER_OUTPUT)/
- endif
- 
-+$(OUTPUT)/$(TRUNNER_BINARY): TRUNNER_BINARY = $(TRUNNER_BINARY)
-+
- $(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_TEST_OBJS)			\
- 			     $(TRUNNER_EXTRA_OBJS) $$(BPFOBJ)		\
- 			     $(RESOLVE_BTFIDS)				\
-@@ -489,6 +491,8 @@ $(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_TEST_OBJS)			\
- 	$(Q)$(RESOLVE_BTFIDS) --btf $(TRUNNER_OUTPUT)/btf_data.o $$@
- 	$(Q)ln -sf $(if $2,..,.)/tools/build/bpftool/bootstrap/bpftool $(if $2,$2/)bpftool
- 
-+TRUNNER_BINARY =
-+
- endef
- 
- # Define test_progs test runner.
--- 
-2.35.3
-
+cheers

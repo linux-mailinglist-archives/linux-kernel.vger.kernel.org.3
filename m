@@ -2,112 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB4C250C9DE
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 14:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FCB150C9E0
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 14:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235414AbiDWM0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 08:26:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57898 "EHLO
+        id S235268AbiDWM2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 08:28:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235342AbiDWM0e (ORCPT
+        with ESMTP id S235451AbiDWM1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 08:26:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD177183F84;
-        Sat, 23 Apr 2022 05:23:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 483C560FC8;
-        Sat, 23 Apr 2022 12:23:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96F49C385A5;
-        Sat, 23 Apr 2022 12:23:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650716616;
-        bh=1ZDjuPtLpq1fxqlJBuXcS1neob/RlAg1nHXUoBOA43g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RjpyDUwtlQrv7/c1lLzBfXgeagx3tB/M9NIXbNSBZAykTurh15C8vVIyOdNv6uvYV
-         eOdhCz+zsQJ1nFw6vafKtQzuD5FHLNram2173vjiK5+k63EaqfGCNvuL8jgjcoX6Rt
-         dpUKR8mN/T5+vXvlO+WtMhUGiIlKdGGg232QZxGRydyrOvP5rnw4Aq+3U4MhcpWVvu
-         QXQF+IpwCxn4jeHGiYMgk8lhBMYzt0gYXhrgR4eet1ibG8TnCUQnycsLPO8dRUC2fI
-         NaLUmU0qBf5dDJPFfbH/zxncTvbE80CpkG+w7VMPDdADqkPzmaKLQYC5+UUNhHFCWX
-         C6ciwV7uNcJ5g==
-Date:   Sat, 23 Apr 2022 17:53:29 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     mhi@lists.linux.dev, quic_hemantk@quicinc.com,
-        quic_bbhatt@quicinc.com, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loic.poulain@linaro.org,
-        dnlplm@gmail.com
-Subject: Re: [PATCH v2] bus: mhi: host: pci_generic: Sort mhi_pci_id_table
- based on the PID
-Message-ID: <20220423122329.GK374560@thinkpad>
-References: <20220411133428.42165-1-manivannan.sadhasivam@linaro.org>
+        Sat, 23 Apr 2022 08:27:55 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85605BEE
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 05:24:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650716698; x=1682252698;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=o1f+T3LaJqFnpKfN5ykKQ1cYz0Qln59Ix3NT/uTK1vQ=;
+  b=ZqvlYeREWGiuO1jJbkfQWrSz252BtBE2dOIajTvZg10AAsds3vmpA1b+
+   gQQRPQdqWEzPDO4dl6SutOv9IAns+VjwDlqc1W94YOfP5hfTDRFX/KjAN
+   31FoSVLRsJEi/7mc/osHRqOucNfa7wfifUuXajchy61KNhbGXnKE9scfC
+   b79vXv0nX2UPtfkUngVVi9Dqrc9OOtKZsqn0Ib46M90VI0jZYofYs+hep
+   cpVr20amuaUYZL20i2TVfFfCkoHgd/PM4+g5818BBHMXIr6fQ27IDyzgx
+   qnDKa/o1fH5urgxt6ugjKmuE7ETSKoCQ23VuVU4Pda2SBuu+F2CpmWrU6
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264383513"
+X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
+   d="scan'208";a="264383513"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 05:24:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
+   d="scan'208";a="511932564"
+Received: from lkp-server01.sh.intel.com (HELO dd58949a6e39) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 23 Apr 2022 05:24:56 -0700
+Received: from kbuild by dd58949a6e39 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1niEoq-0000HN-15;
+        Sat, 23 Apr 2022 12:24:56 +0000
+Date:   Sat, 23 Apr 2022 20:24:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 28/44]
+ fs/netfs/crypto.c:76:31: sparse: sparse: incompatible types in comparison
+ expression (different type sizes):
+Message-ID: <202204232031.0Hw9DMix-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220411133428.42165-1-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 07:04:28PM +0530, Manivannan Sadhasivam wrote:
-> Sorting this way helps in identifying the products of vendors. There is no
-> sorting required for VID and the new VID should be added as the last entry.
-> 
-> Let's also add a note clarifying this.
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
+head:   931e50676c6598d0eda1954ead465519ff91874d
+commit: 777536e6af57becf14b8f4f34007ed3e3a95c911 [28/44] netfs: Perform content encryption
+config: arc-randconfig-s032-20220422 (https://download.01.org/0day-ci/archive/20220423/202204232031.0Hw9DMix-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/ammarfaizi2/linux-block/commit/777536e6af57becf14b8f4f34007ed3e3a95c911
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
+        git checkout 777536e6af57becf14b8f4f34007ed3e3a95c911
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc SHELL=/bin/bash fs/netfs/
 
-Applied to mhi-next!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks,
-Mani
 
-> ---
-> 
-> Changes in v2:
-> 
-> * Fixup the 0x0306 entry by moving it after subid
-> 
->  drivers/bus/mhi/host/pci_generic.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
-> index 541ced27d941..8858f3bf4f04 100644
-> --- a/drivers/bus/mhi/host/pci_generic.c
-> +++ b/drivers/bus/mhi/host/pci_generic.c
-> @@ -446,20 +446,21 @@ static const struct mhi_pci_dev_info mhi_sierra_em919x_info = {
->  	.sideband_wake = false,
->  };
->  
-> +/* Keep the list sorted based on the PID. New VID should be added as the last entry */
->  static const struct pci_device_id mhi_pci_id_table[] = {
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0304),
-> +		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx24_info },
->  	/* EM919x (sdx55), use the same vid:pid as qcom-sdx55m */
->  	{ PCI_DEVICE_SUB(PCI_VENDOR_ID_QCOM, 0x0306, 0x18d7, 0x0200),
->  		.driver_data = (kernel_ulong_t) &mhi_sierra_em919x_info },
->  	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0306),
->  		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx55_info },
-> -	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0304),
-> -		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx24_info },
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0308),
-> +		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx65_info },
->  	{ PCI_DEVICE(0x1eac, 0x1001), /* EM120R-GL (sdx24) */
->  		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
->  	{ PCI_DEVICE(0x1eac, 0x1002), /* EM160R-GL (sdx24) */
->  		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
-> -	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0308),
-> -		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx65_info },
->  	/* T99W175 (sdx55), Both for eSIM and Non-eSIM */
->  	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0ab),
->  		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx55_info },
-> -- 
-> 2.25.1
-> 
+sparse warnings: (new ones prefixed by >>)
+>> fs/netfs/crypto.c:76:31: sparse: sparse: incompatible types in comparison expression (different type sizes):
+>> fs/netfs/crypto.c:76:31: sparse:    unsigned int *
+>> fs/netfs/crypto.c:76:31: sparse:    unsigned long *
+
+vim +76 fs/netfs/crypto.c
+
+    45	
+    46	/*
+    47	 * Populate a scatterlist from folios in an xarray.
+    48	 */
+    49	static int netfs_xarray_to_sglist(struct xarray *xa, loff_t pos, size_t len,
+    50					  struct scatterlist *sg, unsigned int n_sg)
+    51	{
+    52		struct scatterlist *p = sg;
+    53		struct folio *folio = NULL;
+    54		size_t seg, offset, skip = 0;
+    55		loff_t start = pos;
+    56		pgoff_t index = start >> PAGE_SHIFT;
+    57		int j;
+    58	
+    59		XA_STATE(xas, xa, index);
+    60	
+    61		sg_init_table(sg, n_sg);
+    62	
+    63		rcu_read_lock();
+    64	
+    65		xas_for_each(&xas, folio, ULONG_MAX) {
+    66			if (xas_retry(&xas, folio))
+    67				continue;
+    68			if (WARN_ON(xa_is_value(folio)) || WARN_ON(folio_test_hugetlb(folio)))
+    69				break;
+    70			for (j = (folio_index(folio) < index) ? index - folio_index(folio) : 0;
+    71			     j < folio_nr_pages(folio); j++
+    72			     ) {
+    73				struct page *subpage = folio_file_page(folio, j);
+    74	
+    75				offset = (pos + skip) & ~PAGE_MASK;
+  > 76				seg = min(len, PAGE_SIZE - offset);
+    77	
+    78				sg_set_page(p++, subpage, seg, offset);
+    79	
+    80				len -= seg;
+    81				skip += seg;
+    82				if (len == 0)
+    83					break;
+    84			}
+    85			if (len == 0)
+    86				break;
+    87		}
+    88	
+    89		rcu_read_unlock();
+    90		if (len > 0) {
+    91			kdebug("*** Insufficient source (%zx)", len);
+    92			//WARN_ON(len > 0);
+    93			return -EIO;
+    94		}
+    95	
+    96		sg_mark_end(p - 1);
+    97		return p - sg;
+    98	}
+    99	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

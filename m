@@ -2,99 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C577750CB41
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 16:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8226050CB2F
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 16:28:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbiDWOjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 10:39:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47156 "EHLO
+        id S230517AbiDWObJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 10:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiDWOjn (ORCPT
+        with ESMTP id S232666AbiDWObG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 10:39:43 -0400
-X-Greylist: delayed 557 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 23 Apr 2022 07:36:45 PDT
-Received: from mail.tambre.ee (mail.tambre.ee [IPv6:2a01:7e01:e001:cc::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B783A203F65;
-        Sat, 23 Apr 2022 07:36:45 -0700 (PDT)
-Received: from [IPV6:2001:7d0:8a11:4700:d8bd:7f1f:5e8b:fc58] (fc58-5e8b-7f1f-d8bd-4700-8a11-07d0-2001.dyn.estpak.ee [IPv6:2001:7d0:8a11:4700:d8bd:7f1f:5e8b:fc58])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: raul)
-        by mail.tambre.ee (Postfix) with ESMTPSA id 8855980062;
-        Sat, 23 Apr 2022 17:27:24 +0300 (EEST)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.tambre.ee 8855980062
-Authentication-Results: mail.tambre.ee; dmarc=fail (p=reject dis=none) header.from=tambre.ee
-Authentication-Results: mail.tambre.ee; spf=fail smtp.mailfrom=tambre.ee
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.tambre.ee 8855980062
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tambre.ee; s=201812;
-        t=1650724045; bh=9gYBnH9KPURUghbXDsxTxayhdYgcj3IoMHz0DPDiA00=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=YFgvVKD7HJJ9Dxt3j4BzH1t+gogs0lTsdo/enGYiXmC3VXwnRvQ3t57zMMt0iZ+9u
-         Jq8Tz1pauz57NTsXO5SiXynbah+A6+ha5nqC4k3sxntLvGPG2geobXEyLphQ+AuEVQ
-         iYiQV19jWpvftSMs3dpA1XLNdylbAPuz7lv1tjUks0SW91D1PlFhJEePXndrLmM+rD
-         ikX5KpU9FGz3Rx+vUhn+9sQ3swxSMHZHaYzK1pi93hOFGrD7CbbqSH1P+dV0WtViIl
-         wKd75cZX/ZjdDfdzDOf0+l2ccErKsDzSqYtZDX96R7FvnavUjmMR5kBTQidW+GsD0V
-         CqQNvyZsmn+0w==
-Message-ID: <50b80804-e95c-2137-5d74-2451e5bb826f@tambre.ee>
-Date:   Sat, 23 Apr 2022 17:27:21 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH V2 2/8] dt-bindings: PCI: tegra: Add device tree support
- for Tegra234
-Content-Language: en-GB
-To:     Vidya Sagar <vidyas@nvidia.com>, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com, robh+dt@kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com
-Cc:     kishon@ti.com, vkoul@kernel.org, kw@linux.com, krzk@kernel.org,
-        p.zabel@pengutronix.de, mperttunen@nvidia.com,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, kthota@nvidia.com,
-        mmaddireddy@nvidia.com, sagar.tv@gmail.com
-References: <20220423124858.25946-1-vidyas@nvidia.com>
- <20220423124858.25946-3-vidyas@nvidia.com>
-From:   Raul Tambre <raul@tambre.ee>
-In-Reply-To: <20220423124858.25946-3-vidyas@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 23 Apr 2022 10:31:06 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2DB27FC4
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 07:28:05 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2f7d4addafdso1748857b3.6
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 07:28:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=DXAXkVZYPHcetFXE1oISHIeSMz1Xot5LLxB15W3LMjk=;
+        b=tQibwGA8uz8Ue+E3pvs+c8ZLtax4gGb4dFOV3dy8bzYAyRQotxBRYtX3oExAAr/e5W
+         lcJykMgKZDqXuCRcUTWrpgdKqNqa7SDK7R5LQ1iWkeMFOMj4/GvkIliYrru0Fcz3ot5h
+         cvD+hIJBFRnHqnE3eBGsznogk3ef/KiPrus6ZbeRLGrGf+/GlLHeLPEohW773ai5NpM2
+         pXrvOgHb8VQuBDo7BbJ8vcpHd3CLD6msHLW5xjWZJUln3dl7h6R0dYjUMivzqyXucYGI
+         E+67TMHQeiyQW5PXgSo8AKsLGTtBzdyQAAlPZ+C99mPyDJfjZvDTgswF9XlojwtZrxoc
+         qXMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=DXAXkVZYPHcetFXE1oISHIeSMz1Xot5LLxB15W3LMjk=;
+        b=hGWOuiK2Efr9VbRW4h4232ncrDlerfDegl5hoCnJWuoJpyUxHJe11Vy9ZCVS3T0qHG
+         X+ntpt7fKhkJyL+8695ihCQz0rplEGlg5PT3G1qPArSlreqOWmjwjSY2u8Rspdk6XTiL
+         kATRefC8qHP9coNDD8Pkqms97gOBkLFuSUQPXZmDJYZtm4PFk3NUTIiMUQMYBn+NvJtj
+         2eRnrhtvn5G0lhJzfNA6SfpxKfMBJRphXybNhvHCm3pNCZvrId4UNGDXf1HbMCZXbXyI
+         BpuiH/jpryQtXxPu2wvcLxMKZON3F9jiWYKFfgt1K42IFEiap84aROsKCOQvyhOAh3O2
+         BZjw==
+X-Gm-Message-State: AOAM531CJ1LmYsyw8qsbqWfOSteYvsjVfY0Q3jGGB1zEp66h38jqGo80
+        1pjDPoloFTSwDt9ngA86ZpBNhaSPBaRg8g==
+X-Google-Smtp-Source: ABdhPJymwLMUEIWwXLSUSEFl1hrUHDozuSw0iJLPBiMCTcvECf3BdD1JzQSLUMCkewcVDkKmZFBQ5OvW5vc+iw==
+X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:28b])
+ (user=shakeelb job=sendgmr) by 2002:a05:6902:124b:b0:644:c3bf:fa2d with SMTP
+ id t11-20020a056902124b00b00644c3bffa2dmr9159316ybu.462.1650724084357; Sat,
+ 23 Apr 2022 07:28:04 -0700 (PDT)
+Date:   Sat, 23 Apr 2022 14:28:01 +0000
+In-Reply-To: <20220421234426.3494842-5-yosryahmed@google.com>
+Message-Id: <20220423142801.gnvd42cdcsz4hpon@google.com>
+Mime-Version: 1.0
+References: <20220421234426.3494842-1-yosryahmed@google.com> <20220421234426.3494842-5-yosryahmed@google.com>
+Subject: Re: [PATCH v4 4/4] selftests: cgroup: add a selftest for memory.reclaim
+From:   Shakeel Butt <shakeelb@google.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Chen Wandun <chenwandun@huawei.com>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>,
+        "Michal =?utf-8?Q?Koutn=C3=BD?=" <mkoutny@suse.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Dan Schatzberg <schatzberg.dan@gmail.com>,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-04-23 15:48, Vidya Sagar wrote:
-> @@ -47,16 +64,33 @@ Required properties:
->     "p2u-N": where N ranges from 0 to one less than the total number of lanes
->   - nvidia,bpmp: Must contain a pair of phandle to BPMP controller node followed
->     by controller-id. Following are the controller ids for each controller.
-> +  Tegra194:
-> +  ---------
->       0: C0
->       1: C1
->       2: C2
->       3: C3
->       4: C4
->       5: C5
-> +  Tegra194:
+On Thu, Apr 21, 2022 at 11:44:26PM +0000, Yosry Ahmed wrote:
+> Add a new test for memory.reclaim that verifies that the interface
+> correctly reclaims memory as intended, from both anon and file pages.
+> 
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+> ---
+>  .../selftests/cgroup/test_memcontrol.c        | 86 +++++++++++++++++++
+>  1 file changed, 86 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+> index f2ffb3a30194..5f7c20de2426 100644
+> --- a/tools/testing/selftests/cgroup/test_memcontrol.c
+> +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+> @@ -760,6 +760,91 @@ static int test_memcg_max(const char *root)
+>  	return ret;
+>  }
+>  
+> +/*
+> + * This test checks that memory.reclaim reclaims the given
+> + * amount of memory (from both anon and file).
+> + */
+> +static int test_memcg_reclaim(const char *root)
+> +{
+> +	int ret = KSFT_FAIL, fd, retries;
+> +	char *memcg;
+> +	long current, to_reclaim;
+> +	char buf[64];
+> +
+> +	memcg = cg_name(root, "memcg_test");
+> +	if (!memcg)
+> +		goto cleanup;
+> +
+> +	if (cg_create(memcg))
+> +		goto cleanup;
+> +
+> +	current = cg_read_long(memcg, "memory.current");
+> +	if (current != 0)
+> +		goto cleanup;
+> +
+> +	cg_run_nowait(memcg, alloc_anon_noexit, (void *) MB(50));
 
-Should this be Tegra234?
+Don't you need is_swap_enabled() check before deciding to do the anon
+allocations?
 
-> +  ---------
-> +    0 : C0
-> +    1 : C1
-> +    2 : C2
-> +    3 : C3
-> +    4 : C4
-> +    5 : C5
-> +    6 : C6
-> +    7 : C7
-> +    8 : C8
-> +    9 : C9
-> +    10: C10
+> +	sleep(1);
+> +
+> +	fd = get_temp_fd();
+> +	if (fd < 0)
+> +		goto cleanup;
+> +
+> +	cg_run_nowait(memcg, alloc_pagecache_50M_noexit, (void *)(long)fd);
+> +	sleep(1);
 
+These sleep(1)s do not seem robust. Since kernel keeps the page cache
+around, you can convert anon to use tmpfs and use simple cg_run to
+trigger the allocations of anon (tmpfs) and file which will remain in
+memory even after return from cg_run.

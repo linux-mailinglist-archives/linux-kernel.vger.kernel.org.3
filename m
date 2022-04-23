@@ -2,42 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4761150CC1F
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 18:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1016250CC1E
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 18:03:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236279AbiDWQF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 12:05:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33360 "EHLO
+        id S236269AbiDWQFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 12:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236251AbiDWQFx (ORCPT
+        with ESMTP id S236251AbiDWQFv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 12:05:53 -0400
-Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884F22496E
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 09:02:56 -0700 (PDT)
-Received: from list by ciao.gmane.io with local (Exim 4.92)
-        (envelope-from <glk-linux-kernel-4@m.gmane-mx.org>)
-        id 1niIDl-0004Qj-VQ
-        for linux-kernel@vger.kernel.org; Sat, 23 Apr 2022 18:02:53 +0200
-X-Injected-Via-Gmane: http://gmane.org/
-To:     linux-kernel@vger.kernel.org
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH 3/3] binder: Use kmap_local_page() in
- binder_alloc_get_page()
-Date:   Sat, 23 Apr 2022 18:02:48 +0200
+        Sat, 23 Apr 2022 12:05:51 -0400
+Received: from smtp.smtpout.orange.fr (smtp02.smtpout.orange.fr [80.12.242.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0313D2496E
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 09:02:52 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.180.246])
+        by smtp.orange.fr with ESMTPA
+        id iIDhnoslywn8GiIDhns99I; Sat, 23 Apr 2022 18:02:50 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sat, 23 Apr 2022 18:02:50 +0200
+X-ME-IP: 86.243.180.246
 Message-ID: <fad918d3-6923-5bec-7830-5cddf7a725d6@wanadoo.fr>
-References: <20220423102421.16869-1-fmdefrancesco@gmail.com>
- <20220423102421.16869-4-fmdefrancesco@gmail.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Date:   Sat, 23 Apr 2022 18:02:48 +0200
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
+Subject: Re: [PATCH 3/3] binder: Use kmap_local_page() in
+ binder_alloc_get_page()
 Content-Language: fr
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Arve_Hj=c3=b8nnev=c3=a5g?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org
+Newsgroups: gmane.linux.kernel
+References: <20220423102421.16869-1-fmdefrancesco@gmail.com>
+ <20220423102421.16869-4-fmdefrancesco@gmail.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 In-Reply-To: <20220423102421.16869-4-fmdefrancesco@gmail.com>
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -100,5 +112,4 @@ CJ
 >   		bytes -= size;
 >   		pgoff = 0;
 >   		ptr = ptr + size;
-
 

@@ -2,62 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B874050C5A4
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 02:13:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E55C650C59E
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 02:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbiDWAKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 20:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59182 "EHLO
+        id S230394AbiDWALG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 20:11:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiDWAKr (ORCPT
+        with ESMTP id S229943AbiDWAKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 20:10:47 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE3318B2E;
+        Fri, 22 Apr 2022 20:10:54 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2100C55AF
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 17:07:55 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id bq30so16915038lfb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 17:07:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Y8t5diYG349ZuV7Fu5rF2fzW6twUu4D6A/dKUO2v1uQ=;
+        b=hB4rxYPasm8ifPX5Tvhu5XaZR4ryfUFF4a234UiL3xhop2GGlgAcH++cxHp1r/1hA9
+         1Qi+a7X/lPkIStSPVbQ325IS8YVxtsjDg1EsL/a3XdCGNyCgxqNWaFEbqzWVvJ1w/bwl
+         KYV65VmRWO4jRAXtJfZYyB/9yf4Ks1fYo8hd0LmTfY+ytQxnbOBa2Xt4NGMAsL/VyIbl
+         NpvsiLzP+ceNYh/rXYwPyvPCeKuDH1w4UbRtjd4eWxnlj1miR9a8c7Rl/16NZ6JgJ/f2
+         E0b7eLiZ5Y47iC/mmwy6PdahtFf1pXweTSK5n9wsP/d16zCFNBcSJZW0UEpFwx4y+HOq
+         Is8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Y8t5diYG349ZuV7Fu5rF2fzW6twUu4D6A/dKUO2v1uQ=;
+        b=jHcKyxYZuDiuk334MgR6hVWTur8d4ND8p+guxshFc4yBnnxsuWEVDxuX+W4FGQbaPs
+         Ce5TAc9GnFMHKWUy3CPlQ2iIrKOFB+qpBqc3i1g/dWMf2IVK8nB4OjgyubeukyJyvvAI
+         xwdb/o0LWGL5ZHoOLbL33tCdpy92pg3EWEyRtD9OTs0uB71uDWQe9I1GMd8T4OC0fOim
+         baQvH3BTRJTa8HEs57lsLGpnQ25z09guydt5zpnp1QyMxH8efP9EBfdS0aHghB8dIyk+
+         wRJ4gipUFtXVIJ1/fSai9AVgRpehb7OZjZB4OUf8vxARg215LUxmVVubZNLKzIo0sPnM
+         scRA==
+X-Gm-Message-State: AOAM532P3b9VbnC8DD3mYdsN35kYkrQHulum8oY/TY+VqX5Mo141ln3T
+        Cz3I6ozHs6nwALkYXKjAXAVfyQ==
+X-Google-Smtp-Source: ABdhPJysrBV3gbDdlaHLJUF6Z+RHtatxhPW8rEBCAeMBJSDEHgPSDxi4vJYGqZFziHiZ8gxBg0lS0w==
+X-Received: by 2002:ac2:4e03:0:b0:44a:c82:35e7 with SMTP id e3-20020ac24e03000000b0044a0c8235e7mr4968341lfr.10.1650672473293;
+        Fri, 22 Apr 2022 17:07:53 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id v5-20020a196105000000b004718f60c025sm396522lfb.105.2022.04.22.17.07.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Fri, 22 Apr 2022 17:07:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650672472; x=1682208472;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IArjNjJZz4Vc7BVwLKn3GsXeS47qYp1VbwvEuzMXHZA=;
-  b=WUWSe0sh49fRrYPq0bc8+TRMYQch0xk7j5L8m1f2LYTtfZRv5EYYzjKK
-   rskHQaw5Bl4ZMnnGf2S6WbcL56UxOfkB8dbtS0+JJU76WTJ2dJFBJEfel
-   ohC6VTuMD+7+rIOB0bD96OFcZapAs3BbI1kW4JKJIydN7gTMXHqcWqjAa
-   b76AktnSceE2naeAj/3FlaeW2Eyk16W5UkGYv0fMpeDCMuug1qpdmWHyd
-   S48Z4jUngVX3uYjmFATGObEznLywl7M+dzS6SPLUPIySUUi66yUIQMPeD
-   wCbgknQJtK+jEbmYDM6db/rQ9fBlIzVk4R7EheloEjV15FBlMUN3OEizw
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="325269478"
-X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="325269478"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 17:07:52 -0700
-X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="531090618"
-Received: from hltravis-mobl1.amr.corp.intel.com (HELO localhost) ([10.213.166.215])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 17:07:51 -0700
-Date:   Fri, 22 Apr 2022 17:07:51 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     linux-cxl@vger.kernel.org,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        peterz@infradead.org, nvdimm@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/8] cxl: Drop cxl_device_lock()
-Message-ID: <YmNDVxnaWK8pBuN0@iweiny-desk3>
-References: <165055518776.3745911.9346998911322224736.stgit@dwillia2-desk3.amr.corp.intel.com>
- <165055520383.3745911.53447786039115271.stgit@dwillia2-desk3.amr.corp.intel.com>
+Message-ID: <3b9588d2-d9f6-c96f-b316-953b56b59bfe@linaro.org>
+Date:   Sat, 23 Apr 2022 03:07:51 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <165055520383.3745911.53447786039115271.stgit@dwillia2-desk3.amr.corp.intel.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] drm/msm/dp: move add fail safe mode to
+ dp_connector_get_mode()
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, vkoul@kernel.org,
+        daniel@ffwll.ch, airlied@linux.ie, agross@kernel.org,
+        bjorn.andersson@linaro.org
+Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1650671124-14030-1-git-send-email-quic_khsieh@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1650671124-14030-1-git-send-email-quic_khsieh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,422 +80,198 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 08:33:23AM -0700, Dan Williams wrote:
-> Now that all CXL subsystem locking is validated with custom lock
-> classes, there is no need for the custom usage of the lockdep_mutex.
+On 23/04/2022 02:45, Kuogee Hsieh wrote:
+> Current DP driver implementation has adding safe mode done at
+> dp_hpd_plug_handle() which is expected to be executed under event
+> thread context.
 > 
-> Cc: Alison Schofield <alison.schofield@intel.com>
-> Cc: Vishal Verma <vishal.l.verma@intel.com>
-> Cc: Ira Weiny <ira.weiny@intel.com>
-> Cc: Ben Widawsky <ben.widawsky@intel.com>
-> Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Signed-off-by: Dan Williams <dan.j.williams@intel.com>
-
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-
+> However there is possible circular locking happen (see blow stack trace)
+> after edp driver call dp_hpd_plug_handle() from dp_bridge_enable() which
+> is executed under drm_thread context.
+> 
+> To break this circular locking, this patch have safe mode added at
+> dp_connector_get_mode() which is executed under drm thread context.
+> Therefore no lock acquired required for &dev->mode_config.mutex while
+> adding fail safe mode since it has been hold by drm thread already.
+> 
+> ======================================================
+>   WARNING: possible circular locking dependency detected
+>   5.15.35-lockdep #6 Tainted: G        W
+>   ------------------------------------------------------
+>   frecon/429 is trying to acquire lock:
+>   ffffff808dc3c4e8 (&dev->mode_config.mutex){+.+.}-{3:3}, at:
+> dp_panel_add_fail_safe_mode+0x4c/0xa0
+> 
+>   but task is already holding lock:
+>   ffffff808dc441e0 (&kms->commit_lock[i]){+.+.}-{3:3}, at: lock_crtcs+0xb4/0x124
+> 
+>   which lock already depends on the new lock.
+> 
+>   the existing dependency chain (in reverse order) is:
+> 
+>   -> #3 (&kms->commit_lock[i]){+.+.}-{3:3}:
+>          __mutex_lock_common+0x174/0x1a64
+>          mutex_lock_nested+0x98/0xac
+>          lock_crtcs+0xb4/0x124
+>          msm_atomic_commit_tail+0x330/0x748
+>          commit_tail+0x19c/0x278
+>          drm_atomic_helper_commit+0x1dc/0x1f0
+>          drm_atomic_commit+0xc0/0xd8
+>          drm_atomic_helper_set_config+0xb4/0x134
+>          drm_mode_setcrtc+0x688/0x1248
+>          drm_ioctl_kernel+0x1e4/0x338
+>          drm_ioctl+0x3a4/0x684
+>          __arm64_sys_ioctl+0x118/0x154
+>          invoke_syscall+0x78/0x224
+>          el0_svc_common+0x178/0x200
+>          do_el0_svc+0x94/0x13c
+>          el0_svc+0x5c/0xec
+>          el0t_64_sync_handler+0x78/0x108
+>          el0t_64_sync+0x1a4/0x1a8
+> 
+>   -> #2 (crtc_ww_class_mutex){+.+.}-{3:3}:
+>          __mutex_lock_common+0x174/0x1a64
+>          ww_mutex_lock+0xb8/0x278
+>          modeset_lock+0x304/0x4ac
+>          drm_modeset_lock+0x4c/0x7c
+>          drmm_mode_config_init+0x4a8/0xc50
+>          msm_drm_init+0x274/0xac0
+>          msm_drm_bind+0x20/0x2c
+>          try_to_bring_up_master+0x3dc/0x470
+>          __component_add+0x18c/0x3c0
+>          component_add+0x1c/0x28
+>          dp_display_probe+0x954/0xa98
+>          platform_probe+0x124/0x15c
+>          really_probe+0x1b0/0x5f8
+>          __driver_probe_device+0x174/0x20c
+>          driver_probe_device+0x70/0x134
+>          __device_attach_driver+0x130/0x1d0
+>          bus_for_each_drv+0xfc/0x14c
+>          __device_attach+0x1bc/0x2bc
+>          device_initial_probe+0x1c/0x28
+>          bus_probe_device+0x94/0x178
+>          deferred_probe_work_func+0x1a4/0x1f0
+>          process_one_work+0x5d4/0x9dc
+>          worker_thread+0x898/0xccc
+>          kthread+0x2d4/0x3d4
+>          ret_from_fork+0x10/0x20
+> 
+>   -> #1 (crtc_ww_class_acquire){+.+.}-{0:0}:
+>          ww_acquire_init+0x1c4/0x2c8
+>          drm_modeset_acquire_init+0x44/0xc8
+>          drm_helper_probe_single_connector_modes+0xb0/0x12dc
+>          drm_mode_getconnector+0x5dc/0xfe8
+>          drm_ioctl_kernel+0x1e4/0x338
+>          drm_ioctl+0x3a4/0x684
+>          __arm64_sys_ioctl+0x118/0x154
+>          invoke_syscall+0x78/0x224
+>          el0_svc_common+0x178/0x200
+>          do_el0_svc+0x94/0x13c
+>          el0_svc+0x5c/0xec
+>          el0t_64_sync_handler+0x78/0x108
+>          el0t_64_sync+0x1a4/0x1a8
+> 
+>   -> #0 (&dev->mode_config.mutex){+.+.}-{3:3}:
+>          __lock_acquire+0x2650/0x672c
+>          lock_acquire+0x1b4/0x4ac
+>          __mutex_lock_common+0x174/0x1a64
+>          mutex_lock_nested+0x98/0xac
+>          dp_panel_add_fail_safe_mode+0x4c/0xa0
+>          dp_hpd_plug_handle+0x1f0/0x280
+>          dp_bridge_enable+0x94/0x2b8
+>          drm_atomic_bridge_chain_enable+0x11c/0x168
+>          drm_atomic_helper_commit_modeset_enables+0x500/0x740
+>          msm_atomic_commit_tail+0x3e4/0x748
+>          commit_tail+0x19c/0x278
+>          drm_atomic_helper_commit+0x1dc/0x1f0
+>          drm_atomic_commit+0xc0/0xd8
+>          drm_atomic_helper_set_config+0xb4/0x134
+>          drm_mode_setcrtc+0x688/0x1248
+>          drm_ioctl_kernel+0x1e4/0x338
+>          drm_ioctl+0x3a4/0x684
+>          __arm64_sys_ioctl+0x118/0x154
+>          invoke_syscall+0x78/0x224
+>          el0_svc_common+0x178/0x200
+>          do_el0_svc+0x94/0x13c
+>          el0_svc+0x5c/0xec
+>          el0t_64_sync_handler+0x78/0x108
+>          el0t_64_sync+0x1a4/0x1a8
+> 
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
 > ---
->  drivers/cxl/core/pmem.c |    4 +-
->  drivers/cxl/core/port.c |   55 ++++++++++++++-------------------
->  drivers/cxl/cxl.h       |   78 -----------------------------------------------
->  drivers/cxl/mem.c       |    4 +-
->  drivers/cxl/pmem.c      |   12 ++++---
->  lib/Kconfig.debug       |    6 ----
->  6 files changed, 33 insertions(+), 126 deletions(-)
+>   drivers/gpu/drm/msm/dp/dp_display.c |  6 ------
+>   drivers/gpu/drm/msm/dp/dp_panel.c   | 23 +++++++++++++----------
+>   2 files changed, 13 insertions(+), 16 deletions(-)
 > 
-> diff --git a/drivers/cxl/core/pmem.c b/drivers/cxl/core/pmem.c
-> index e825e261278d..bec7cfb54ebf 100644
-> --- a/drivers/cxl/core/pmem.c
-> +++ b/drivers/cxl/core/pmem.c
-> @@ -124,10 +124,10 @@ static void unregister_nvb(void *_cxl_nvb)
->  	 * work to flush. Once the state has been changed to 'dead' then no new
->  	 * work can be queued by user-triggered bind.
->  	 */
-> -	cxl_device_lock(&cxl_nvb->dev);
-> +	device_lock(&cxl_nvb->dev);
->  	flush = cxl_nvb->state != CXL_NVB_NEW;
->  	cxl_nvb->state = CXL_NVB_DEAD;
-> -	cxl_device_unlock(&cxl_nvb->dev);
-> +	device_unlock(&cxl_nvb->dev);
->  
->  	/*
->  	 * Even though the device core will trigger device_release_driver()
-> diff --git a/drivers/cxl/core/port.c b/drivers/cxl/core/port.c
-> index 750aac95ed5f..ea60abda6500 100644
-> --- a/drivers/cxl/core/port.c
-> +++ b/drivers/cxl/core/port.c
-> @@ -312,10 +312,10 @@ static void cxl_port_release(struct device *dev)
->  	struct cxl_port *port = to_cxl_port(dev);
->  	struct cxl_ep *ep, *_e;
->  
-> -	cxl_device_lock(dev);
-> +	device_lock(dev);
->  	list_for_each_entry_safe(ep, _e, &port->endpoints, list)
->  		cxl_ep_release(ep);
-> -	cxl_device_unlock(dev);
-> +	device_unlock(dev);
->  	ida_free(&cxl_port_ida, port->id);
->  	kfree(port);
->  }
-> @@ -556,7 +556,7 @@ static int match_root_child(struct device *dev, const void *match)
->  		return 0;
->  
->  	port = to_cxl_port(dev);
-> -	cxl_device_lock(dev);
-> +	device_lock(dev);
->  	list_for_each_entry(dport, &port->dports, list) {
->  		iter = match;
->  		while (iter) {
-> @@ -566,7 +566,7 @@ static int match_root_child(struct device *dev, const void *match)
->  		}
->  	}
->  out:
-> -	cxl_device_unlock(dev);
-> +	device_unlock(dev);
->  
->  	return !!iter;
->  }
-> @@ -625,13 +625,13 @@ static int add_dport(struct cxl_port *port, struct cxl_dport *new)
->  static void cond_cxl_root_lock(struct cxl_port *port)
->  {
->  	if (is_cxl_root(port))
-> -		cxl_device_lock(&port->dev);
-> +		device_lock(&port->dev);
->  }
->  
->  static void cond_cxl_root_unlock(struct cxl_port *port)
->  {
->  	if (is_cxl_root(port))
-> -		cxl_device_unlock(&port->dev);
-> +		device_unlock(&port->dev);
->  }
->  
->  static void cxl_dport_remove(void *data)
-> @@ -738,15 +738,15 @@ static int add_ep(struct cxl_port *port, struct cxl_ep *new)
->  {
->  	struct cxl_ep *dup;
->  
-> -	cxl_device_lock(&port->dev);
-> +	device_lock(&port->dev);
->  	if (port->dead) {
-> -		cxl_device_unlock(&port->dev);
-> +		device_unlock(&port->dev);
->  		return -ENXIO;
->  	}
->  	dup = find_ep(port, new->ep);
->  	if (!dup)
->  		list_add_tail(&new->list, &port->endpoints);
-> -	cxl_device_unlock(&port->dev);
-> +	device_unlock(&port->dev);
->  
->  	return dup ? -EEXIST : 0;
->  }
-> @@ -856,12 +856,12 @@ static void delete_endpoint(void *data)
->  		goto out;
->  	parent = &parent_port->dev;
->  
-> -	cxl_device_lock(parent);
-> +	device_lock(parent);
->  	if (parent->driver && endpoint->uport) {
->  		devm_release_action(parent, cxl_unlink_uport, endpoint);
->  		devm_release_action(parent, unregister_port, endpoint);
->  	}
-> -	cxl_device_unlock(parent);
-> +	device_unlock(parent);
->  	put_device(parent);
->  out:
->  	put_device(&endpoint->dev);
-> @@ -922,7 +922,7 @@ static void cxl_detach_ep(void *data)
->  		}
->  
->  		parent_port = to_cxl_port(port->dev.parent);
-> -		cxl_device_lock(&parent_port->dev);
-> +		device_lock(&parent_port->dev);
->  		if (!parent_port->dev.driver) {
->  			/*
->  			 * The bottom-up race to delete the port lost to a
-> @@ -930,12 +930,12 @@ static void cxl_detach_ep(void *data)
->  			 * parent_port ->remove() will have cleaned up all
->  			 * descendants.
->  			 */
-> -			cxl_device_unlock(&parent_port->dev);
-> +			device_unlock(&parent_port->dev);
->  			put_device(&port->dev);
->  			continue;
->  		}
->  
-> -		cxl_device_lock(&port->dev);
-> +		device_lock(&port->dev);
->  		ep = find_ep(port, &cxlmd->dev);
->  		dev_dbg(&cxlmd->dev, "disconnect %s from %s\n",
->  			ep ? dev_name(ep->ep) : "", dev_name(&port->dev));
-> @@ -950,7 +950,7 @@ static void cxl_detach_ep(void *data)
->  			port->dead = true;
->  			list_splice_init(&port->dports, &reap_dports);
->  		}
-> -		cxl_device_unlock(&port->dev);
-> +		device_unlock(&port->dev);
->  
->  		if (!list_empty(&reap_dports)) {
->  			dev_dbg(&cxlmd->dev, "delete %s\n",
-> @@ -958,7 +958,7 @@ static void cxl_detach_ep(void *data)
->  			delete_switch_port(port, &reap_dports);
->  		}
->  		put_device(&port->dev);
-> -		cxl_device_unlock(&parent_port->dev);
-> +		device_unlock(&parent_port->dev);
->  	}
->  }
->  
-> @@ -1006,7 +1006,7 @@ static int add_port_attach_ep(struct cxl_memdev *cxlmd,
->  		return -EAGAIN;
->  	}
->  
-> -	cxl_device_lock(&parent_port->dev);
-> +	device_lock(&parent_port->dev);
->  	if (!parent_port->dev.driver) {
->  		dev_warn(&cxlmd->dev,
->  			 "port %s:%s disabled, failed to enumerate CXL.mem\n",
-> @@ -1024,7 +1024,7 @@ static int add_port_attach_ep(struct cxl_memdev *cxlmd,
->  			get_device(&port->dev);
->  	}
->  out:
-> -	cxl_device_unlock(&parent_port->dev);
-> +	device_unlock(&parent_port->dev);
->  
->  	if (IS_ERR(port))
->  		rc = PTR_ERR(port);
-> @@ -1135,14 +1135,14 @@ struct cxl_dport *cxl_find_dport_by_dev(struct cxl_port *port,
->  {
->  	struct cxl_dport *dport;
->  
-> -	cxl_device_lock(&port->dev);
-> +	device_lock(&port->dev);
->  	list_for_each_entry(dport, &port->dports, list)
->  		if (dport->dport == dev) {
-> -			cxl_device_unlock(&port->dev);
-> +			device_unlock(&port->dev);
->  			return dport;
->  		}
->  
-> -	cxl_device_unlock(&port->dev);
-> +	device_unlock(&port->dev);
->  	return NULL;
->  }
->  EXPORT_SYMBOL_NS_GPL(cxl_find_dport_by_dev, CXL);
-> @@ -1384,9 +1384,9 @@ int cxl_decoder_add(struct cxl_decoder *cxld, int *target_map)
->  
->  	port = to_cxl_port(cxld->dev.parent);
->  
-> -	cxl_device_lock(&port->dev);
-> +	device_lock(&port->dev);
->  	rc = cxl_decoder_add_locked(cxld, target_map);
-> -	cxl_device_unlock(&port->dev);
-> +	device_unlock(&port->dev);
->  
->  	return rc;
->  }
-> @@ -1457,14 +1457,7 @@ static int cxl_bus_probe(struct device *dev)
->  {
->  	int rc;
->  
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index 92cd50f..01453db 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -555,12 +555,6 @@ static int dp_hpd_plug_handle(struct dp_display_private *dp, u32 data)
+>   
+>   	mutex_unlock(&dp->event_mutex);
+>   
 > -	/*
-> -	 * Take the CXL nested lock since the driver core only holds
-> -	 * @dev->mutex and not @dev->lockdep_mutex.
+> -	 * add fail safe mode outside event_mutex scope
+> -	 * to avoid potiential circular lock with drm thread
 > -	 */
-> -	cxl_nested_lock(dev);
->  	rc = to_cxl_drv(dev->driver)->probe(dev);
-> -	cxl_nested_unlock(dev);
+> -	dp_panel_add_fail_safe_mode(dp->dp_display.connector);
 > -
->  	dev_dbg(dev, "probe: %d\n", rc);
->  	return rc;
->  }
-> @@ -1473,10 +1466,8 @@ static void cxl_bus_remove(struct device *dev)
->  {
->  	struct cxl_driver *cxl_drv = to_cxl_drv(dev->driver);
->  
-> -	cxl_nested_lock(dev);
->  	if (cxl_drv->remove)
->  		cxl_drv->remove(dev);
-> -	cxl_nested_unlock(dev);
->  }
->  
->  static struct workqueue_struct *cxl_bus_wq;
-> diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
-> index 990b6670222e..140dc3278cde 100644
-> --- a/drivers/cxl/cxl.h
-> +++ b/drivers/cxl/cxl.h
-> @@ -405,82 +405,4 @@ struct cxl_nvdimm_bridge *cxl_find_nvdimm_bridge(struct cxl_nvdimm *cxl_nvd);
->  #define __mock static
->  #endif
->  
-> -#ifdef CONFIG_PROVE_CXL_LOCKING
-> -enum cxl_lock_class {
-> -	CXL_ANON_LOCK,
-> -	CXL_NVDIMM_LOCK,
-> -	CXL_NVDIMM_BRIDGE_LOCK,
-> -	CXL_PORT_LOCK,
-> -	/*
-> -	 * Be careful to add new lock classes here, CXL_PORT_LOCK is
-> -	 * extended by the port depth, so a maximum CXL port topology
-> -	 * depth would need to be defined first.
-> -	 */
-> -};
-> -
-> -static inline void cxl_nested_lock(struct device *dev)
+>   	/* uevent will complete connection part */
+>   	return 0;
+>   };
+> diff --git a/drivers/gpu/drm/msm/dp/dp_panel.c b/drivers/gpu/drm/msm/dp/dp_panel.c
+> index 1aa9aa8c..23fee42 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_panel.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_panel.c
+> @@ -151,15 +151,6 @@ static int dp_panel_update_modes(struct drm_connector *connector,
+>   	return rc;
+>   }
+>   
+> -void dp_panel_add_fail_safe_mode(struct drm_connector *connector)
 > -{
-> -	if (is_cxl_port(dev)) {
-> -		struct cxl_port *port = to_cxl_port(dev);
-> -
-> -		mutex_lock_nested(&dev->lockdep_mutex,
-> -				  CXL_PORT_LOCK + port->depth);
-> -	} else if (is_cxl_decoder(dev)) {
-> -		struct cxl_port *port = to_cxl_port(dev->parent);
-> -
-> -		/*
-> -		 * A decoder is the immediate child of a port, so set
-> -		 * its lock class equal to other child device siblings.
-> -		 */
-> -		mutex_lock_nested(&dev->lockdep_mutex,
-> -				  CXL_PORT_LOCK + port->depth + 1);
-> -	} else if (is_cxl_nvdimm_bridge(dev))
-> -		mutex_lock_nested(&dev->lockdep_mutex, CXL_NVDIMM_BRIDGE_LOCK);
-> -	else if (is_cxl_nvdimm(dev))
-> -		mutex_lock_nested(&dev->lockdep_mutex, CXL_NVDIMM_LOCK);
-> -	else
-> -		mutex_lock_nested(&dev->lockdep_mutex, CXL_ANON_LOCK);
+> -	/* fail safe edid */
+> -	mutex_lock(&connector->dev->mode_config.mutex);
+> -	if (drm_add_modes_noedid(connector, 640, 480))
+> -		drm_set_preferred_mode(connector, 640, 480);
+> -	mutex_unlock(&connector->dev->mode_config.mutex);
 > -}
 > -
-> -static inline void cxl_nested_unlock(struct device *dev)
-> -{
-> -	mutex_unlock(&dev->lockdep_mutex);
-> -}
-> -
-> -static inline void cxl_device_lock(struct device *dev)
-> -{
-> -	/*
-> -	 * For double lock errors the lockup will happen before lockdep
-> -	 * warns at cxl_nested_lock(), so assert explicitly.
-> -	 */
-> -	lockdep_assert_not_held(&dev->lockdep_mutex);
-> -
-> -	device_lock(dev);
-> -	cxl_nested_lock(dev);
-> -}
-> -
-> -static inline void cxl_device_unlock(struct device *dev)
-> -{
-> -	cxl_nested_unlock(dev);
-> -	device_unlock(dev);
-> -}
-> -#else
-> -static inline void cxl_nested_lock(struct device *dev)
-> -{
-> -}
-> -
-> -static inline void cxl_nested_unlock(struct device *dev)
-> -{
-> -}
-> -
-> -static inline void cxl_device_lock(struct device *dev)
-> -{
-> -	device_lock(dev);
-> -}
-> -
-> -static inline void cxl_device_unlock(struct device *dev)
-> -{
-> -	device_unlock(dev);
-> -}
-> -#endif
->  #endif /* __CXL_H__ */
-> diff --git a/drivers/cxl/mem.c b/drivers/cxl/mem.c
-> index 49a4b1c47299..91fb8d5b21a7 100644
-> --- a/drivers/cxl/mem.c
-> +++ b/drivers/cxl/mem.c
-> @@ -195,7 +195,7 @@ static int cxl_mem_probe(struct device *dev)
->  		return -ENXIO;
->  	}
->  
-> -	cxl_device_lock(&parent_port->dev);
-> +	device_lock(&parent_port->dev);
->  	if (!parent_port->dev.driver) {
->  		dev_err(dev, "CXL port topology %s not enabled\n",
->  			dev_name(&parent_port->dev));
-> @@ -205,7 +205,7 @@ static int cxl_mem_probe(struct device *dev)
->  
->  	rc = create_endpoint(cxlmd, parent_port);
->  out:
-> -	cxl_device_unlock(&parent_port->dev);
-> +	device_unlock(&parent_port->dev);
->  	put_device(&parent_port->dev);
->  	return rc;
->  }
-> diff --git a/drivers/cxl/pmem.c b/drivers/cxl/pmem.c
-> index 15ad666ab03e..b65a272a2d6d 100644
-> --- a/drivers/cxl/pmem.c
-> +++ b/drivers/cxl/pmem.c
-> @@ -43,7 +43,7 @@ static int cxl_nvdimm_probe(struct device *dev)
->  	if (!cxl_nvb)
->  		return -ENXIO;
->  
-> -	cxl_device_lock(&cxl_nvb->dev);
-> +	device_lock(&cxl_nvb->dev);
->  	if (!cxl_nvb->nvdimm_bus) {
->  		rc = -ENXIO;
->  		goto out;
-> @@ -68,7 +68,7 @@ static int cxl_nvdimm_probe(struct device *dev)
->  	dev_set_drvdata(dev, nvdimm);
->  	rc = devm_add_action_or_reset(dev, unregister_nvdimm, nvdimm);
->  out:
-> -	cxl_device_unlock(&cxl_nvb->dev);
-> +	device_unlock(&cxl_nvb->dev);
->  	put_device(&cxl_nvb->dev);
->  
->  	return rc;
-> @@ -233,7 +233,7 @@ static void cxl_nvb_update_state(struct work_struct *work)
->  	struct nvdimm_bus *victim_bus = NULL;
->  	bool release = false, rescan = false;
->  
-> -	cxl_device_lock(&cxl_nvb->dev);
-> +	device_lock(&cxl_nvb->dev);
->  	switch (cxl_nvb->state) {
->  	case CXL_NVB_ONLINE:
->  		if (!online_nvdimm_bus(cxl_nvb)) {
-> @@ -251,7 +251,7 @@ static void cxl_nvb_update_state(struct work_struct *work)
->  	default:
->  		break;
->  	}
-> -	cxl_device_unlock(&cxl_nvb->dev);
-> +	device_unlock(&cxl_nvb->dev);
->  
->  	if (release)
->  		device_release_driver(&cxl_nvb->dev);
-> @@ -327,9 +327,9 @@ static int cxl_nvdimm_bridge_reset(struct device *dev, void *data)
->  		return 0;
->  
->  	cxl_nvb = to_cxl_nvdimm_bridge(dev);
-> -	cxl_device_lock(dev);
-> +	device_lock(dev);
->  	cxl_nvb->state = CXL_NVB_NEW;
-> -	cxl_device_unlock(dev);
-> +	device_unlock(dev);
->  
->  	return 0;
->  }
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 075cd25363ac..4a2c853c948b 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -1559,12 +1559,6 @@ config PROVE_NVDIMM_LOCKING
->  	help
->  	  Enable lockdep to validate nd_device_lock() usage.
->  
-> -config PROVE_CXL_LOCKING
-> -	bool "CXL"
-> -	depends on CXL_BUS
-> -	help
-> -	  Enable lockdep to validate cxl_device_lock() usage.
-> -
->  endchoice
->  
->  endmenu # lock debugging
-> 
+>   int dp_panel_read_sink_caps(struct dp_panel *dp_panel,
+>   	struct drm_connector *connector)
+>   {
+> @@ -216,7 +207,11 @@ int dp_panel_read_sink_caps(struct dp_panel *dp_panel,
+>   			goto end;
+>   		}
+>   
+> -		dp_panel_add_fail_safe_mode(connector);
+> +		/* fail safe edid */
+> +		mutex_lock(&connector->dev->mode_config.mutex);
+> +		if (drm_add_modes_noedid(connector, 640, 480))
+> +			drm_set_preferred_mode(connector, 640, 480);
+> +		mutex_unlock(&connector->dev->mode_config.mutex);
+>   	}
+>   
+>   	if (panel->aux_cfg_update_done) {
+> @@ -266,6 +261,14 @@ int dp_panel_get_modes(struct dp_panel *dp_panel,
+>   		return -EINVAL;
+>   	}
+>   
+> +	/*
+> +	 * add fail safe mode (640x480) here
+> +	 * since we are executed in drm_thread context,
+> +	 * no mode_config.mutex acquired required
+> +	 */
+> +	if (drm_add_modes_noedid(connector, 640, 480))
+> +		drm_set_preferred_mode(connector, 640, 480);
+> +
+>   	if (dp_panel->edid)
+>   		return dp_panel_update_modes(connector, dp_panel->edid);
+>   
+Also, wouldn't calling get_modes() several times make cause adding more 
+and more 640x480 modes to the modes list?
+
+
+-- 
+With best wishes
+Dmitry

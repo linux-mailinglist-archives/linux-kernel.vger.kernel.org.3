@@ -2,111 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E152D50C942
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 12:31:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3535350C943
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 12:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235022AbiDWKcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 06:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55320 "EHLO
+        id S235043AbiDWKd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 06:33:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235010AbiDWKcM (ORCPT
+        with ESMTP id S232670AbiDWKdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 06:32:12 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B941C048C
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 03:29:15 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id a21so1011656edb.1
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 03:29:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=T1doDOEgacffxYLHRh8rB/qzYEgOkZW9WRd7tL8Bnmg=;
-        b=Uq2QkeMj4YDx/HQMSBiMYbQ6hB5oDmdQNO5vrv6RZsV0W4hbLOlfcQfE9Fx+SorbgG
-         MeBfPLDNjGQBN9jXgG5BBgWMk4ku+EZIK5tA7n91BL7LiJUig2PZR20nB4vhxhCfJcMG
-         t6d2xzbi1EuNuz47K+u9ehbXvvjZ8kcpDisSvAJK4yj0jNqNnr/FlmotFTQIdwngVGZi
-         87mIRQutpRMvI7Y76Ke2obhz8pH7azA2gURjmJ0JSv954JHBmzuGdv1BKUsPx5/slIgm
-         vwbdwjM6Bl9W5ADyXkYlNsUd38w3K77+S6uxSZ6nNh9W2/Sj+Q0SNxkXfiIZlZvSWi/e
-         IXsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=T1doDOEgacffxYLHRh8rB/qzYEgOkZW9WRd7tL8Bnmg=;
-        b=e6k3weNE79UivKbd3GAV0XHjlSCIJSkh4TiJQH+EuzOduhQedOOfQ6g2gOukw0txSx
-         Jm8I93MEN5NufN13e37U73dsLfBAzHO3GGRg+Npgt8ZFo4O9wktW9lp63bVJU4/1Gpcr
-         yaa55oB1e18rz/e7Tow4Fr7jD82dSG1h1f0A4Qfe7/tA3oVWNmhhkaOa4W/UIWxrLcOP
-         8bQujbct/jWPkzoLSSmnz/VgBhB5SgaWIll5+EUH+kltEpOpp9qNVrlUHqnKG0ombD5f
-         e6kKcgX2YOq9C+a2WI4xveAPFPTrNVAYObqq4m7lnSqtDyfD4iBIY4R2Y7l9S9oDRqxi
-         QN/g==
-X-Gm-Message-State: AOAM530uLxTOgxoghISQu/VSpqIswcCBkb7KYuDejliEAcXdH/cq7+pB
-        Tz4s/cBlwmyysErRDdHNY+ToaA==
-X-Google-Smtp-Source: ABdhPJzzZENHEHVJTTVj4i/LY2EyfuP6i5J51hweFIRBo2TrNePYugK61Ib5JXoKcujbhrjpbonMsg==
-X-Received: by 2002:a05:6402:1941:b0:413:2555:53e3 with SMTP id f1-20020a056402194100b00413255553e3mr9457841edz.164.1650709754411;
-        Sat, 23 Apr 2022 03:29:14 -0700 (PDT)
-Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id oz20-20020a170906cd1400b006e872188edbsm1557661ejb.104.2022.04.23.03.29.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Apr 2022 03:29:14 -0700 (PDT)
-Message-ID: <16311e64-6a7f-e20e-de12-5a9eab10af83@linaro.org>
-Date:   Sat, 23 Apr 2022 12:29:12 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V3 14/17] dt-binding: mt8195: Add infra_ao reset bit
-Content-Language: en-US
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, mturquette@baylibre.com,
-        sboyd@kernel.org, matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     p.zabel@pengutronix.de, angelogioacchino.delregno@collabora.com,
-        chun-jie.chen@mediatek.com, wenst@chromium.org,
-        runyang.chen@mediatek.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        Sat, 23 Apr 2022 06:33:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C5211EACF;
+        Sat, 23 Apr 2022 03:30:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0117E60F72;
+        Sat, 23 Apr 2022 10:30:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51ABFC385A5;
+        Sat, 23 Apr 2022 10:30:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650709828;
+        bh=ff4v014/iePNUz+icT/yCsh2zIx6F6nb3gqJB1eZ8UE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IXbxE35IvogCm4AZ8zf3jDibpQvSyM0C/W7X9aOUpsRCzXOI07cfGdkWgEbDXWuCr
+         kHSslvl42YFufuJLUjxH+6Rlemh4k5ehoJ0U76XnWwo/D64jT3So83tqkAFjCS9+H6
+         9XGZjuNh5XDyj1VT2QzlODsbPR56lIo8wzJ2/IPR+6qUMek4L2BCV/t5x64hN25Q8y
+         Xr9LLlVN3fF+XBKV03hhLSY0wx9o5lEU7yd8whJ6OEG30xUTbuEa5djU8KMh+2QwPC
+         oAsEmKmW3z1C/HA7pmQSaW9nJigb1Pte7SU3itFZmqvPUSBZDBhkZgGwGurE72xs+j
+         1h8z5Y+LbCwCQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=billy-the-mountain.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1niD21-006Mq2-Qb; Sat, 23 Apr 2022 11:30:25 +0100
+Date:   Sat, 23 Apr 2022 11:30:25 +0100
+Message-ID: <874k2kccse.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220422060152.13534-1-rex-bc.chen@mediatek.com>
- <20220422060152.13534-15-rex-bc.chen@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220422060152.13534-15-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        linux-arm-msm@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v3 00/10] gpiolib: Handle immutable irq_chip structures
+In-Reply-To: <CACRpkda3L_itpqcnPq6xDoJtNHt8NuvE1MZk1bCNR+u2KKUpBA@mail.gmail.com>
+References: <20220419141846.598305-1-maz@kernel.org>
+        <CACRpkda3L_itpqcnPq6xDoJtNHt8NuvE1MZk1bCNR+u2KKUpBA@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: linus.walleij@linaro.org, linux-kernel@vger.kernel.org, brgl@bgdev.pl, thierry.reding@gmail.com, joey.gouly@arm.com, jonathanh@nvidia.com, marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io, bjorn.andersson@linaro.org, agross@kernel.org, jeffrey.l.hugo@gmail.com, tglx@linutronix.de, Basavaraj.Natikar@amd.com, Shyam-sundar.S-k@amd.com, andy.shevchenko@gmail.com, linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/04/2022 08:01, Rex-BC Chen wrote:
-> To support reset of infra_ao, add the bit definition for thermal/SVS.
+On Fri, 22 Apr 2022 22:24:22 +0100,
+Linus Walleij <linus.walleij@linaro.org> wrote:
 > 
-> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> ---
->  include/dt-bindings/reset/mt8195-resets.h | 7 +++++++
->  1 file changed, 7 insertions(+)
+> On Tue, Apr 19, 2022 at 4:19 PM Marc Zyngier <maz@kernel.org> wrote:
 > 
-> diff --git a/include/dt-bindings/reset/mt8195-resets.h b/include/dt-bindings/reset/mt8195-resets.h
-> index a26bccc8b957..2479680616fb 100644
-> --- a/include/dt-bindings/reset/mt8195-resets.h
-> +++ b/include/dt-bindings/reset/mt8195-resets.h
-> @@ -26,4 +26,11 @@
->  
->  #define MT8195_TOPRGU_SW_RST_NUM               16
->  
-> +/* INFRA RST0 */
-> +#define MT8195_INFRA_RST0_THERMAL_AP_RST       0
-> +/* INFRA RST3 */
-> +#define MT8195_INFRA_RST3_PTP_RST              5
-> +/* INFRA RST4 */
-> +#define MT8195_INFRA_RST4_THERMAL_MCU_RST      10
+> > This is a followup from [2].
+> >
+> > I recently realised that the gpiolib play ugly tricks on the
+> > unsuspecting irq_chip structures by patching the callbacks.
+> >
+> > Not only this breaks when an irq_chip structure is made const (which
+> > really should be the default case), but it also forces this structure
+> > to be copied at nauseam for each instance of the GPIO block, which is
+> > a waste of memory.
+> >
+> > My current approach is to add a new irq_chip flag (IRQCHIP_IMMUTABLE)
+> > which does what it says on the tin: don't you dare writing to them.
+> > Gpiolib is further updated not to install its own callbacks, and it
+> > becomes the responsibility of the driver to call into the gpiolib when
+> > required. This is similar to what we do for other subsystems such as
+> > PCI-MSI.
+> >
+> > 5 drivers are updated to this new model: M1, QC, Tegra, pl061 and AMD
+> > (as I actively use them) keeping a single irq_chip structure, marking
+> > it const, and exposing the new flag.
+> >
+> > Nothing breaks, the volume of change is small, the memory usage goes
+> > down and we have fewer callbacks that can be used as attack vectors.
+> > What's not to love?
+> >
+> > Since there wasn't any objection in the previous round of review, I'm
+> > going to take this series into -next to see if anything breaks at
+> > scale.
+> 
+> The series:
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> 
+> Bartosz: if you're happy with this can you apply it to an immutable branch
+> from v5.18-rc1 and merge that into the GPIO for-next and then I can also
+> pull that into pinctrl?
 
-Same comments as for other reset.
+For what it is worth, I've pushed this branch into irqchip-next.
 
+You can pick it up from:
 
-Best regards,
-Krzysztof
+https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=irq/gpio-immutable
+
+but I can also drop it from the irqchip tree.
+
+Just let me know.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

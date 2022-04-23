@@ -2,124 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F3450C84B
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 10:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8EB50C82A
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 10:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234152AbiDWIrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 04:47:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38404 "EHLO
+        id S234151AbiDWIFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 04:05:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231579AbiDWIrL (ORCPT
+        with ESMTP id S231787AbiDWIFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 04:47:11 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05741B9FB5;
-        Sat, 23 Apr 2022 01:44:15 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23MJAqRd055009;
-        Fri, 22 Apr 2022 14:10:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1650654652;
-        bh=aWLd/2RyGAql92fiaxn8ur5cJ8eJ5/TK8S5NNMNK8v8=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=vF3iH3vWvOMk66fGAYxvIsaufssvDnx7ldzzamWegfnAGc2WQlyMnc41NyF1Mjldl
-         0zFys75wGMqX6U3Ov/tYVhFX/Fsgc0JzoVF2P/YoWo13hUe5Z6IShgf3mLkzJ1zpnv
-         dTCkbyOtbroMwufITSOfWO1scJ1M33LdWm+LcEuY=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23MJAqQV012376
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 22 Apr 2022 14:10:52 -0500
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 22
- Apr 2022 14:10:52 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 22 Apr 2022 14:10:52 -0500
-Received: from [128.247.81.242] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23MJAqWX104615;
-        Fri, 22 Apr 2022 14:10:52 -0500
-Message-ID: <2528be71-ca3f-566b-4769-36063c98ee0e@ti.com>
-Date:   Fri, 22 Apr 2022 14:10:52 -0500
+        Sat, 23 Apr 2022 04:05:00 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE28A1035
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 01:02:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650700924; x=1682236924;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=oYSa9eG/ZLGjKfhpFORv9gMTTxmsCZoyxnq7RTpNwu0=;
+  b=IRLMsWjBX6XtasNzPJMjx70D8b63WzmkSIRcZvWhbWuOl8azMD3sceU2
+   rsUJF9qYXgJVk8f1E+psAdmu7crzjG0YO2gFqkMoY7R3Ix1rLXJMcTvxm
+   DBQ4fcfC0oDCW9bLquw+8AajFwJcOTx1XvJkJlBCw2hAzeljkBsF+36oa
+   c2LVy2BinSAZ3R2CKqAkx4l9N6HV5R1G//Hh2s+OedgHH3BKQtUtYYBUP
+   aYGFhfalfVHhmyRMw24BrinVDql/m3npO0lMcfHRpc0BtVejFh6FffSto
+   +hPT3ImaqzhBVpRvqb5mqlF0E7EMLVBplhR3SABMFYQuskJaqButSLTO6
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="265034545"
+X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
+   d="scan'208";a="265034545"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 01:02:04 -0700
+X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
+   d="scan'208";a="578312714"
+Received: from yjsun1-mobl.ccr.corp.intel.com (HELO [10.255.31.217]) ([10.255.31.217])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 01:02:00 -0700
+Message-ID: <36764562-ad54-b192-4084-842fee8fca78@linux.intel.com>
+Date:   Sat, 23 Apr 2022 16:01:59 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 1/6] dt-bindings: ti,sci: Add ti,ctx-memory-region
- property
+Subject: Re: [PATCH 02/13] iommu: Move bus setup to IOMMU device registration
 Content-Language: en-US
-To:     Andrew Davis <afd@ti.com>, Rob Herring <robh+dt@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Tero Kristo <kristo@kernel.org>, Nishanth Menon <nm@ti.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-References: <20220421203659.27853-1-d-gerlach@ti.com>
- <20220421203659.27853-2-d-gerlach@ti.com>
- <ad47db06-7f5c-399f-0ad0-81f720e6f035@ti.com>
-From:   Dave Gerlach <d-gerlach@ti.com>
-In-Reply-To: <ad47db06-7f5c-399f-0ad0-81f720e6f035@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Robin Murphy <robin.murphy@arm.com>, joro@8bytes.org,
+        will@kernel.org
+Cc:     iommu@lists.linux-foundation.org, sven@svenpeter.dev,
+        robdclark@gmail.com, m.szyprowski@samsung.com,
+        yong.wu@mediatek.com, mjrosato@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, zhang.lyra@gmail.com,
+        thierry.reding@gmail.com, vdumpa@nvidia.com,
+        jean-philippe@linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1649935679.git.robin.murphy@arm.com>
+ <e607a32be8e84c56d65160902f4bd3fb434ee9d3.1649935679.git.robin.murphy@arm.com>
+ <d838c7f8-2d31-2327-9b4d-c05b06a516bb@linux.intel.com>
+ <1d9a2146-9e48-ba97-d049-5d2332ebbd3a@arm.com>
+ <d928d256-b1bc-2d45-a9c3-382edfe67b80@linux.intel.com>
+ <7f693a3a-bbab-237a-af9a-4395e501a5b2@arm.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+In-Reply-To: <7f693a3a-bbab-237a-af9a-4395e501a5b2@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Robin,
 
-On 4/22/22 14:02, Andrew Davis wrote:
-> On 4/21/22 3:36 PM, Dave Gerlach wrote:
->> Add documentation for the ti,ctx-memory-region property which is a
->> phandle to a reserved-memory carveout to be used by the ti_sci driver
->> storage of low power mode memory context. This is optional for normal
->> system operation but required to enabled suspend-to-mem usage of Deep
->> Sleep state.
+On 2022/4/19 15:20, Robin Murphy wrote:
+> On 2022-04-19 00:37, Lu Baolu wrote:
+>> On 2022/4/19 6:09, Robin Murphy wrote:
+>>> On 2022-04-16 01:04, Lu Baolu wrote:
+>>>> On 2022/4/14 20:42, Robin Murphy wrote:
+>>>>> @@ -1883,27 +1900,12 @@ static int iommu_bus_init(struct bus_type 
+>>>>> *bus)
+>>>>>    */
+>>>>>   int bus_set_iommu(struct bus_type *bus, const struct iommu_ops *ops)
+>>>>>   {
+>>>>> -    int err;
+>>>>> -
+>>>>> -    if (ops == NULL) {
+>>>>> -        bus->iommu_ops = NULL;
+>>>>> -        return 0;
+>>>>> -    }
+>>>>> -
+>>>>> -    if (bus->iommu_ops != NULL)
+>>>>> +    if (bus->iommu_ops && ops && bus->iommu_ops != ops)
+>>>>>           return -EBUSY;
+>>>>>       bus->iommu_ops = ops;
+>>>>
+>>>> Do we still need to keep above lines in bus_set_iommu()?
+>>>
+>>> It preserves the existing behaviour until each callsite and its 
+>>> associated error handling are removed later on, which seems like as 
+>>> good a thing to do as any. Since I'm already relaxing 
+>>> iommu_device_register() to a warn-but-continue behaviour while it 
+>>> keeps the bus ops on life-support internally, I figured not changing 
+>>> too much at once would make it easier to bisect any potential issues 
+>>> arising from this first step.
 >>
->> Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
->> ---
->>   .../devicetree/bindings/arm/keystone/ti,sci.yaml         | 9 +++++++++
->>   1 file changed, 9 insertions(+)
+>> Fair enough. Thank you for the explanation.
 >>
->> diff --git a/Documentation/devicetree/bindings/arm/keystone/ti,sci.yaml b/Documentation/devicetree/bindings/arm/keystone/ti,sci.yaml
->> index 34f5f877d444..ec88aa88a2a0 100644
->> --- a/Documentation/devicetree/bindings/arm/keystone/ti,sci.yaml
->> +++ b/Documentation/devicetree/bindings/arm/keystone/ti,sci.yaml
->> @@ -61,6 +61,15 @@ properties:
->>     mboxes:
->>       minItems: 2
->>   
->> +  ti,ctx-memory-region:
->> +    description:
->> +      Phandle to the reserved memory node to be associated with the
->> +      ti-sci device, to be used for saving low power context. The
->> +      reserved memory node should be a carveout node, and should
->> +      be defined as per the bindings in
->> +      Documentation/devicetree/bindings/reserved-memory/reserved-memory.yaml
->> +    $ref: /schemas/types.yaml#/definitions/string
->> +
+>> Do you have a public tree that I could pull these patches and try them
+>> on an Intel hardware? Or perhaps you have done this? I like the whole
+>> idea of this series, but it's better to try it with a real hardware.
 > 
+> I haven't bothered with separate branches since there's so many 
+> different pieces in-flight, but my complete (unstable) development 
+> branch can be found here:
 > 
-> Why does this have to be yet another reserved carveout region,
-> should be dynamically allocated.
+> https://gitlab.arm.com/linux-arm/linux-rm/-/commits/iommu/bus
 > 
+> For now I'd recommend winding the head back to "iommu: Clean up 
+> bus_set_iommu()" for testing - some of the patches above that have 
+> already been posted and picked up by their respective subsystems, but 
+> others are incomplete and barely compile-tested. I'll probably rearrange 
+> it later this week to better reflect what's happened so far.
 
-This must be a fixed address in order to support other low power modes
-which have not yet been introduced.
+I wound the head back to "iommu: Clean up bus_set_iommu" and tested it
+on an Intel machine. It got stuck during boot. This test was on a remote
+machine and I have no means to access it physically. So I can't get any
+kernel debugging messages. (I have to work from home these days. :-()
 
-Regards,
-Dave
+I guess it's due to the fact that intel_iommu_probe_device() callback
+only works for the pci devices. The issue occurs when probing a device
+other than a PCI one.
 
-> Andrew
-> 
-> 
->>     ti,system-reboot-controller:
->>       description: Determines If system reboot can be triggered by SoC reboot
->>       type: boolean
+Best regards,
+baolu

@@ -2,134 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 722BE50C965
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 12:52:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C8B50C966
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 12:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235078AbiDWKzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 06:55:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49418 "EHLO
+        id S235086AbiDWKzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 06:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235070AbiDWKzD (ORCPT
+        with ESMTP id S235081AbiDWKzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 06:55:03 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CBF1FB0D4
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 03:52:06 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id k23so20868079ejd.3
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 03:52:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=yGPt/mNpWWrOQ8JYPp5zOeJM1AwLjJHd/VxeaRoxS/g=;
-        b=FeMJBzVYJCu5iuakegHQoq7T1UjOgKxYLZFFM04aOBON6ouKF4bnGG7ZQo/H5hjAEJ
-         f8r98k6BVN2PIt+uquahOGQaXsYqyZhCAvUM8nArvBjRO6VEABfiW+0iZVXcjvsduIQV
-         o97CWrVW5DwXYw2IX+TDQDaIrTUZBycoBGs1ZT1PHI+q2pceXJMTexV1DwQO7QmQG1vL
-         gaWFUCcQRRTkmaOholvifwz3lgga/JAZ+Y6ZooVWDTrVdHONgeQndyrVZVwsl+qwjoRd
-         uR3jrtePUwKYuBm97v/jBzsjd5IbuO3zngfykL8+j3lTs38cEKZWQlWS+uLFhdy9hT1b
-         U2vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=yGPt/mNpWWrOQ8JYPp5zOeJM1AwLjJHd/VxeaRoxS/g=;
-        b=OSyBYh2B7hJ1m+g6x9Mgrm2x01XlNSqBwDSutv28od4JBhjmd/f6IkdNGo9yL9qrcp
-         0/DeDbNOeyTjVx6JqUABwxWgpSMf2kHGT/0y9cwplDI7M8kYp2T7RvfNkC5KrUxNnJJG
-         XXrYNT3V467VJ7mMGlNwQJxCcQbqpkLNgI06HXE24CESP6DYT65fI1ghD99vzxFwU0jV
-         ERQDT6iMocawg0HYOOYEDq7zDZ7FhhUCOT60RKBKJ1ngeuyM4JwqtEwrOzJVuXWNPw3/
-         rBoZdqWDzlQR20l247SZCB8jXzX3VT0dx+UndVI/1zdjy8tVyyef8d1mzhTLVy73lUs9
-         3ObA==
-X-Gm-Message-State: AOAM532iAdU2XW9PMmrP4Yzd2hPUkPHCv3S34zuLrFxdYii+rRtXtpv+
-        hUwqaTDn0EnuzLB1451CnOJXbg==
-X-Google-Smtp-Source: ABdhPJzD3HJ7Q5n2ETTVurxNh/apy7DsoaCyPYbmEli1g0u6/qoBGi40V+p82qf13/UcXbuET4Qd/A==
-X-Received: by 2002:a17:907:3e03:b0:6da:8c5a:6d4a with SMTP id hp3-20020a1709073e0300b006da8c5a6d4amr8141145ejc.585.1650711124878;
-        Sat, 23 Apr 2022 03:52:04 -0700 (PDT)
-Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id b26-20020a1709062b5a00b006e8daae2359sm1565521ejg.95.2022.04.23.03.52.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Apr 2022 03:52:04 -0700 (PDT)
-Message-ID: <8c565aa7-3b3b-3034-3301-c87c7265384b@linaro.org>
-Date:   Sat, 23 Apr 2022 12:52:03 +0200
+        Sat, 23 Apr 2022 06:55:17 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2481FF544
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 03:52:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650711139; x=1682247139;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0UOZgvJ2bmcDdjHLpIX4c2tMkDUj3A2FMChhiL2LOL8=;
+  b=bDw/QB+fOHXLj5rxcTXYSpeh+LRtnWUN2KzbRFzwK7PLuyZRL+IB67U7
+   qRzL4MAIrE1y8dI2BzsU7zLIe8Wg4Rt4WKBZmRbnRPc91KZsDGer3p0Wy
+   YDA4QYuPpbZoypB/3CzIGY05R9puWQqU/7R1thm3JpDXsceW/0lESbb0O
+   zxydPr1gptBVEZOj9Hyhxo6BOrgqipX8oV7MuxIGy2ZLMqfyromG/JluJ
+   Lw0xIujIN+oTQ4QfKWywnGsL1pe3aenEUY59gscMrHlJV4lzv65wfVRcW
+   EMB/LfQg1OtyYnNIsQkSZZ1vJGcE8dpfld9SrE8yLCOBf5h8bufSZ25BD
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264659424"
+X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
+   d="scan'208";a="264659424"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 03:52:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
+   d="scan'208";a="869238371"
+Received: from lkp-server01.sh.intel.com (HELO dd58949a6e39) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 23 Apr 2022 03:52:17 -0700
+Received: from kbuild by dd58949a6e39 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1niDNA-0000BH-Rf;
+        Sat, 23 Apr 2022 10:52:16 +0000
+Date:   Sat, 23 Apr 2022 18:52:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ben Walker <benjamin.walker@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>
+Subject: [vkoul-dmaengine:next 38/42] WARNING: modpost:
+ vmlinux.o(.text+0xc2ea84): Section mismatch in reference from the function
+ gpiochip_relres_irq() to the function .exit.text:gxt4500_exit()
+Message-ID: <202204231815.vlFfJefM-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v5 06/11] dt-bindings: watchdog: Add HPE GXP Watchdog
- timer binding
-Content-Language: en-US
-To:     nick.hawkins@hpe.com, verdun@hpe.com, joel@jms.id.au,
-        arnd@arndb.de, openbmc@lists.ozlabs.org
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220421192132.109954-1-nick.hawkins@hpe.com>
- <20220421192132.109954-7-nick.hawkins@hpe.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220421192132.109954-7-nick.hawkins@hpe.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/04/2022 21:21, nick.hawkins@hpe.com wrote:
-> ---
->  .../bindings/watchdog/hpe,gxp-wdt.yaml        | 30 +++++++++++++++++++
->  1 file changed, 30 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.yaml b/Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.yaml
-> new file mode 100644
-> index 000000000000..c20da146352f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.yaml
-> @@ -0,0 +1,30 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/hpe,gxp-wdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: HPE GXP Controlled Watchdog
-> +
-> +allOf:
-> +  - $ref: "watchdog.yaml#"
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
+head:   99faef48e7a3f878848a2d711af710e36fadbd6e
+commit: 643a4a85b0bc7efeb5732fb4563c43c77ba0c6ac [38/42] dmaengine: hidma: In hidma_prep_dma_memset treat value as a single byte
+config: riscv-buildonly-randconfig-r002-20220421 (https://download.01.org/0day-ci/archive/20220423/202204231815.vlFfJefM-lkp@intel.com/config)
+compiler: riscv32-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git/commit/?id=643a4a85b0bc7efeb5732fb4563c43c77ba0c6ac
+        git remote add vkoul-dmaengine https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git
+        git fetch --no-tags vkoul-dmaengine next
+        git checkout 643a4a85b0bc7efeb5732fb4563c43c77ba0c6ac
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-allOf goes after maintainers, before properties.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> +
-> +maintainers:
-> +  - Nick Hawkins <nick.hawkins@hpe.com>
-> +  - Jean-Marie Verdun <verdun@hpe.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: hpe,gxp-wdt
-> +
-> +required:
-> +  - compatible
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    watchdog0:  watchdog {
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
-Doubled space.
+>> WARNING: modpost: vmlinux.o(.text+0xc2ea84): Section mismatch in reference from the function gpiochip_relres_irq() to the function .exit.text:gxt4500_exit()
+The function gpiochip_relres_irq() references a function in an exit section.
+Often the function gxt4500_exit() has valid usage outside the exit section
+and the fix is to remove the __exit annotation of gxt4500_exit.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x188e5b0): Section mismatch in reference from the function vme_free_consistent() to the variable .exit.text:.LFE5732
+The function vme_free_consistent() references a variable in an exit section.
+Often the variable .LFE5732 has valid usage outside the exit section
+and the fix is to remove the __exit annotation of .LFE5732.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x1be08ac): Section mismatch in reference from the function sctp_sched_get_sched() to the variable .init.text:.L0
+The function sctp_sched_get_sched() references
+the variable __init .L0 .
+This is often because sctp_sched_get_sched lacks a __init
+annotation or the annotation of .L0 is wrong.
+--
+>> WARNING: modpost: vmlinux.o(__ex_table+0x1260): Section mismatch in reference from the variable .L0 to the variable .debug_str:.LASF296
+FATAL: modpost: extable_entry size hasn't been discovered!
+--
+>> WARNING: modpost: vmlinux.o(.text+0x1a89c3c): Section mismatch in reference from the function fib_free_table() to the variable .init.text:.LBE3680
+The function fib_free_table() references
+the variable __init .LBE3680.
+This is often because fib_free_table lacks a __init
+annotation or the annotation of .LBE3680 is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x1bdf950): Section mismatch in reference from the function sctp_auth_asoc_set_default_hmac() to the variable .exit.text:.LVL24
+The function sctp_auth_asoc_set_default_hmac() references a variable in an exit section.
+Often the variable .LVL24 has valid usage outside the exit section
+and the fix is to remove the __exit annotation of .LVL24.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x1bdf9cc): Section mismatch in reference from the function sctp_auth_send_cid() to the variable .init.text:.LVL0
+The function sctp_auth_send_cid() references
+the variable __init .LVL0.
+This is often because sctp_auth_send_cid lacks a __init
+annotation or the annotation of .LVL0 is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x1be06d0): Section mismatch in reference from the function sctp_sched_ops_register() to the variable .init.text:.L0
+The function sctp_sched_ops_register() references
+the variable __init .L0 .
+This is often because sctp_sched_ops_register lacks a __init
+annotation or the annotation of .L0 is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x1be0718): Section mismatch in reference from the function sctp_sched_set_sched() to the variable .init.text:.L0
+The function sctp_sched_set_sched() references
+the variable __init .L0 .
+This is often because sctp_sched_set_sched lacks a __init
+annotation or the annotation of .L0 is wrong.
 
-> +      compatible = "hpe,gxp-wdt";
-> +    };
-> +
+Note: the below error/warnings can be found in parent commit:
+<< WARNING: modpost: vmlinux.o(.text+0xa570d0): Section mismatch in reference from the function blkdev_get_no_open() to the variable .exit.text:.LFE4493
+<< WARNING: modpost: vmlinux.o(.text+0xa57164): Section mismatch in reference from the function blkdev_get_by_dev() to the variable .exit.text:.LFE4493
+<< WARNING: modpost: vmlinux.o(.text+0xdc547c): Section mismatch in reference from the function dss_dispc_uninitialize_irq() to the variable .init.text:.L20
+<< WARNING: modpost: vmlinux.o(.text+0x10c05ec): Section mismatch in reference from the function nvmet_exit_discovery() to the variable .exit.text:.LVL53
+<< WARNING: modpost: vmlinux.o(.text+0x1a89c24): Section mismatch in reference from the function fib_free_table() to the variable .init.text:.LBE3661
+<< WARNING: modpost: vmlinux.o(.text+0x1ad8528): Section mismatch in reference from the function x25_limit_facilities() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1c35db0): Section mismatch in reference from the function tipc_topsrv_init_net() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(__ex_table+0x1260): Section mismatch in reference from the variable .L0 to the variable .debug_str:.LASF284
+<< WARNING: modpost: vmlinux.o(.text+0xa570d0): Section mismatch in reference from the function blkdev_get_no_open() to the variable .exit.text:.LFE4493
+<< WARNING: modpost: vmlinux.o(.text+0xa57164): Section mismatch in reference from the function blkdev_get_by_dev() to the variable .exit.text:.LFE4493
+<< WARNING: modpost: vmlinux.o(.text+0xdc547c): Section mismatch in reference from the function dss_dispc_uninitialize_irq() to the variable .init.text:.L20
+<< WARNING: modpost: vmlinux.o(.text+0x10c05ec): Section mismatch in reference from the function nvmet_exit_discovery() to the variable .exit.text:.LVL53
+<< WARNING: modpost: vmlinux.o(.text+0x1a89c24): Section mismatch in reference from the function fib_free_table() to the variable .init.text:.LBE3661
+<< WARNING: modpost: vmlinux.o(.text+0x1ad8528): Section mismatch in reference from the function x25_limit_facilities() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1c35db0): Section mismatch in reference from the function tipc_topsrv_init_net() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(__ex_table+0x1260): Section mismatch in reference from the variable .L0 to the variable .debug_str:.LASF284
+<< WARNING: modpost: vmlinux.o(.text+0xa570d0): Section mismatch in reference from the function blkdev_get_no_open() to the variable .exit.text:.LFE4493
+<< WARNING: modpost: vmlinux.o(.text+0xa57164): Section mismatch in reference from the function blkdev_get_by_dev() to the variable .exit.text:.LFE4493
+<< WARNING: modpost: vmlinux.o(.text+0xdc547c): Section mismatch in reference from the function dss_dispc_uninitialize_irq() to the variable .init.text:.L20
+<< WARNING: modpost: vmlinux.o(.text+0x10c05ec): Section mismatch in reference from the function nvmet_exit_discovery() to the variable .exit.text:.LVL53
+<< WARNING: modpost: vmlinux.o(.text+0x1a89c24): Section mismatch in reference from the function fib_free_table() to the variable .init.text:.LBE3661
+<< WARNING: modpost: vmlinux.o(.text+0x1ad8528): Section mismatch in reference from the function x25_limit_facilities() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1c35db0): Section mismatch in reference from the function tipc_topsrv_init_net() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(__ex_table+0x1260): Section mismatch in reference from the variable .L0 to the variable .debug_str:.LASF284
+<< WARNING: modpost: vmlinux.o(.text+0xa570d0): Section mismatch in reference from the function blkdev_get_no_open() to the variable .exit.text:.LFE4493
+<< WARNING: modpost: vmlinux.o(.text+0xa57164): Section mismatch in reference from the function blkdev_get_by_dev() to the variable .exit.text:.LFE4493
+<< WARNING: modpost: vmlinux.o(.text+0xdc547c): Section mismatch in reference from the function dss_dispc_uninitialize_irq() to the variable .init.text:.L20
+<< WARNING: modpost: vmlinux.o(.text+0x10c05ec): Section mismatch in reference from the function nvmet_exit_discovery() to the variable .exit.text:.LVL53
+<< WARNING: modpost: vmlinux.o(.text+0x1a89c24): Section mismatch in reference from the function fib_free_table() to the variable .init.text:.LBE3661
+<< WARNING: modpost: vmlinux.o(.text+0x1ad8528): Section mismatch in reference from the function x25_limit_facilities() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1c35db0): Section mismatch in reference from the function tipc_topsrv_init_net() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(__ex_table+0x1260): Section mismatch in reference from the variable .L0 to the variable .debug_str:.LASF284
+<< WARNING: modpost: vmlinux.o(.text+0xa570d0): Section mismatch in reference from the function blkdev_get_no_open() to the variable .exit.text:.LFE4493
+<< WARNING: modpost: vmlinux.o(.text+0xa57164): Section mismatch in reference from the function blkdev_get_by_dev() to the variable .exit.text:.LFE4493
+<< WARNING: modpost: vmlinux.o(.text+0xdc547c): Section mismatch in reference from the function dss_dispc_uninitialize_irq() to the variable .init.text:.L20
+<< WARNING: modpost: vmlinux.o(.text+0x10c05ec): Section mismatch in reference from the function nvmet_exit_discovery() to the variable .exit.text:.LVL53
+<< WARNING: modpost: vmlinux.o(.text+0x1a89c24): Section mismatch in reference from the function fib_free_table() to the variable .init.text:.LBE3661
+<< WARNING: modpost: vmlinux.o(.text+0x1ad8528): Section mismatch in reference from the function x25_limit_facilities() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1c35db0): Section mismatch in reference from the function tipc_topsrv_init_net() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(__ex_table+0x1260): Section mismatch in reference from the variable .L0 to the variable .debug_str:.LASF284
+<< WARNING: modpost: vmlinux.o(.text+0xa570d0): Section mismatch in reference from the function blkdev_get_no_open() to the variable .exit.text:.LFE4493
+<< WARNING: modpost: vmlinux.o(.text+0xa57164): Section mismatch in reference from the function blkdev_get_by_dev() to the variable .exit.text:.LFE4493
+<< WARNING: modpost: vmlinux.o(.text+0xdc547c): Section mismatch in reference from the function dss_dispc_uninitialize_irq() to the variable .init.text:.L20
+<< WARNING: modpost: vmlinux.o(.text+0x10c05ec): Section mismatch in reference from the function nvmet_exit_discovery() to the variable .exit.text:.LVL53
+<< WARNING: modpost: vmlinux.o(.text+0x1a89c24): Section mismatch in reference from the function fib_free_table() to the variable .init.text:.LBE3661
+<< WARNING: modpost: vmlinux.o(.text+0x1ad8528): Section mismatch in reference from the function x25_limit_facilities() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1c35db0): Section mismatch in reference from the function tipc_topsrv_init_net() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(__ex_table+0x1260): Section mismatch in reference from the variable .L0 to the variable .debug_str:.LASF284
+<< WARNING: modpost: vmlinux.o(.text+0xa570d0): Section mismatch in reference from the function blkdev_get_no_open() to the variable .exit.text:.LFE4493
+<< WARNING: modpost: vmlinux.o(.text+0xa57164): Section mismatch in reference from the function blkdev_get_by_dev() to the variable .exit.text:.LFE4493
+<< WARNING: modpost: vmlinux.o(.text+0xdc547c): Section mismatch in reference from the function dss_dispc_uninitialize_irq() to the variable .init.text:.L20
+<< WARNING: modpost: vmlinux.o(.text+0x10c05ec): Section mismatch in reference from the function nvmet_exit_discovery() to the variable .exit.text:.LVL53
+<< WARNING: modpost: vmlinux.o(.text+0x1a89c24): Section mismatch in reference from the function fib_free_table() to the variable .init.text:.LBE3661
+<< WARNING: modpost: vmlinux.o(.text+0x1ad8528): Section mismatch in reference from the function x25_limit_facilities() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1c35db0): Section mismatch in reference from the function tipc_topsrv_init_net() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(__ex_table+0x1260): Section mismatch in reference from the variable .L0 to the variable .debug_str:.LASF284
+<< WARNING: modpost: vmlinux.o(.text+0xa570d0): Section mismatch in reference from the function blkdev_get_no_open() to the variable .exit.text:.LFE4493
+<< WARNING: modpost: vmlinux.o(.text+0xa57164): Section mismatch in reference from the function blkdev_get_by_dev() to the variable .exit.text:.LFE4493
+<< WARNING: modpost: vmlinux.o(.text+0xdc547c): Section mismatch in reference from the function dss_dispc_uninitialize_irq() to the variable .init.text:.L20
+<< WARNING: modpost: vmlinux.o(.text+0x10c05ec): Section mismatch in reference from the function nvmet_exit_discovery() to the variable .exit.text:.LVL53
+<< WARNING: modpost: vmlinux.o(.text+0x1a89c24): Section mismatch in reference from the function fib_free_table() to the variable .init.text:.LBE3661
+<< WARNING: modpost: vmlinux.o(.text+0x1ad8528): Section mismatch in reference from the function x25_limit_facilities() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1c35db0): Section mismatch in reference from the function tipc_topsrv_init_net() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(__ex_table+0x1260): Section mismatch in reference from the variable .L0 to the variable .debug_str:.LASF284
+<< WARNING: modpost: vmlinux.o(.text+0xa570d0): Section mismatch in reference from the function blkdev_get_no_open() to the variable .exit.text:.LFE4493
+<< WARNING: modpost: vmlinux.o(.text+0xa57164): Section mismatch in reference from the function blkdev_get_by_dev() to the variable .exit.text:.LFE4493
+<< WARNING: modpost: vmlinux.o(.text+0xdc547c): Section mismatch in reference from the function dss_dispc_uninitialize_irq() to the variable .init.text:.L20
+<< WARNING: modpost: vmlinux.o(.text+0x10c05ec): Section mismatch in reference from the function nvmet_exit_discovery() to the variable .exit.text:.LVL53
+<< WARNING: modpost: vmlinux.o(.text+0x1a89c24): Section mismatch in reference from the function fib_free_table() to the variable .init.text:.LBE3661
+<< WARNING: modpost: vmlinux.o(.text+0x1ad8528): Section mismatch in reference from the function x25_limit_facilities() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1c35db0): Section mismatch in reference from the function tipc_topsrv_init_net() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(__ex_table+0x1260): Section mismatch in reference from the variable .L0 to the variable .debug_str:.LASF284
 
-
-Best regards,
-Krzysztof
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

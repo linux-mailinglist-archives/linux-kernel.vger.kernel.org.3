@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1F1F50C7DB
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 08:50:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EA7950C7DD
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 08:51:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233647AbiDWGxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 02:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43312 "EHLO
+        id S233674AbiDWGyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 02:54:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233589AbiDWGxG (ORCPT
+        with ESMTP id S233589AbiDWGyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 02:53:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DED87F20C;
-        Fri, 22 Apr 2022 23:50:09 -0700 (PDT)
+        Sat, 23 Apr 2022 02:54:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8DE55F8CA;
+        Fri, 22 Apr 2022 23:51:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0478F60B4D;
-        Sat, 23 Apr 2022 06:50:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCCF8C385A5;
-        Sat, 23 Apr 2022 06:50:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6C6F6B80022;
+        Sat, 23 Apr 2022 06:51:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FAACC385A5;
+        Sat, 23 Apr 2022 06:51:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650696608;
-        bh=N74KVf0Xg1tp9U6s88Q84deTqBztJDb0FzAXhMjhEW4=;
+        s=korg; t=1650696680;
+        bh=K/et5AaKBRLTBYtnLXvvukZr52M2pfPjJy2F2k300V8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AXwHADvT9bmFHX0p2wyDgl0QCoHo4RZi3t+kVmn6d1P6Ky6rW4PALGL+H++PrHako
-         j2WeC/kzVQ2RX2z4KJJ925UrIusHekMufSMTKJOAJecBywBcsJE+tWglxJHXWqk09Q
-         PrKTaQJngGHIqMcsw90Gm7OiZyfq4nuObagEbcmA=
-Date:   Sat, 23 Apr 2022 08:50:03 +0200
+        b=coRHeWIRmnAV7xb3syQDjEUvW8vLdNM4I37T4uJOt7KEdtkyq1AFj1lQiS/OuH9vg
+         yzNIpqqmJklkc1i/xvekGW7Bcff9m9lSqzayeV+RjrA6idcxYQ9OlhPCq1Frr5uron
+         oBXFiZrspQR8fSjShC1uMylq4Zm7xCEAhgKilsT8=
+Date:   Sat, 23 Apr 2022 08:51:16 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Sebastian Ene <sebastianene@google.com>
 Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
         Dragan Cvetic <dragan.cvetic@xilinx.com>,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         maz@kernel.org, will@kernel.org, qperret@google.com
-Subject: Re: [PATCH  v2 2/2] misc: Add a mechanism to detect stalls on guest
- vCPUs
-Message-ID: <YmOhmzmBL36rBO30@kroah.com>
+Subject: Re: [PATCH  v2 0/2] Detect stalls on guest vCPUS
+Message-ID: <YmOh5I7ZK08LlM6D@kroah.com>
 References: <20220422141949.3456505-1-sebastianene@google.com>
- <20220422141949.3456505-3-sebastianene@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220422141949.3456505-3-sebastianene@google.com>
+In-Reply-To: <20220422141949.3456505-1-sebastianene@google.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -55,152 +53,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 02:19:50PM +0000, Sebastian Ene wrote:
-> This patch adds support for a virtual watchdog which relies on the
-> per-cpu hrtimers to pet at regular intervals.
+On Fri, Apr 22, 2022 at 02:19:48PM +0000, Sebastian Ene wrote:
+> This adds a mechanism to detect stalls on the guest vCPUS by creating a
+> per CPU hrtimer which periodically 'pets' the host backend driver.
 > 
-> Signed-off-by: Sebastian Ene <sebastianene@google.com>
-> ---
->  drivers/misc/Kconfig  |   8 ++
->  drivers/misc/Makefile |   1 +
->  drivers/misc/vm-wdt.c | 215 ++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 224 insertions(+)
->  create mode 100644 drivers/misc/vm-wdt.c
+> This device driver acts as a soft lockup detector by relying on the host
+> backend driver to measure the elapesed time between subsequent 'pet' events.
+> If the elapsed time doesn't match an expected value, the backend driver
+> decides that the guest vCPU is locked and resets the guest. The host
+> backend driver takes into account the time that the guest is not
+> running. The communication with the backend driver is done through MMIO
+> and the register layout of the virtual watchdog is described as part of
+> the backend driver changes.
 > 
-> diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-> index 2b9572a6d114..0e710149ff95 100644
-> --- a/drivers/misc/Kconfig
-> +++ b/drivers/misc/Kconfig
-> @@ -493,6 +493,14 @@ config OPEN_DICE
->  
->  	  If unsure, say N.
->  
-> +config VM_WATCHDOG
-> +	tristate "Virtual Machine Watchdog"
-> +	select LOCKUP_DETECTOR
-> +	help
-> +	  Detect CPU locks on the virtual machine.
-> +	  To compile this driver as a module, choose M here: the
-> +	  module will be called vm-wdt.
-> +
->  source "drivers/misc/c2port/Kconfig"
->  source "drivers/misc/eeprom/Kconfig"
->  source "drivers/misc/cb710/Kconfig"
-> diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-> index 2ec634354cf5..868e28d01b75 100644
-> --- a/drivers/misc/Makefile
-> +++ b/drivers/misc/Makefile
-> @@ -59,3 +59,4 @@ obj-$(CONFIG_XILINX_SDFEC)	+= xilinx_sdfec.o
->  obj-$(CONFIG_HISI_HIKEY_USB)	+= hisi_hikey_usb.o
->  obj-$(CONFIG_UID_SYS_STATS)	+= uid_sys_stats.o
->  obj-$(CONFIG_OPEN_DICE)		+= open-dice.o
-> +obj-$(CONFIG_VM_WATCHDOG) += vm-wdt.o
+> The host backend driver is implemented as part of:
+> https://chromium-review.googlesource.com/c/chromiumos/platform/crosvm/+/3548817
+> 
+> Changelog v2:
+>  - move the driver to misc as this does not cope with watchdog core
+>    subsystem
 
-No tab?
-
-> \ No newline at end of file
-> diff --git a/drivers/misc/vm-wdt.c b/drivers/misc/vm-wdt.c
-> new file mode 100644
-> index 000000000000..ea4351754645
-> --- /dev/null
-> +++ b/drivers/misc/vm-wdt.c
-> @@ -0,0 +1,215 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-
-I have to ask, do you really mean "+" here as this is not the overall
-license of the kernel.  It's not a normal license for your employer to
-pick, so as long as you have legal approval, it's fine, but if not, you
-need to get that.
-
-> +//
-> +// Virtual watchdog driver.
-> +//  Copyright (C) Google, 2022
-> +
-> +#define pr_fmt(fmt) "vm-watchdog: " fmt
-
-It's a driver, you shouldn't need any pr_* calls.
-
-> +
-> +#include <linux/cpu.h>
-> +#include <linux/init.h>
-> +#include <linux/io.h>
-> +#include <linux/kernel.h>
-> +
-> +#include <linux/device.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/module.h>
-> +#include <linux/nmi.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-> +#include <linux/param.h>
-> +#include <linux/percpu.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/slab.h>
-> +
-> +#define DRV_NAME			"vm_wdt"
-
-KBUILD_MODNAME?
-
-> +#define DRV_VERSION			"1.0"
-
-"versions" mean nothing once the code is in the kernel, please drop
-this.
-
-But why isn't this in the normal watchdog subdirectory?  Why is this a
-special driver?
-
-> +
-> +#define VMWDT_REG_STATUS		(0x00)
-> +#define VMWDT_REG_LOAD_CNT		(0x04)
-> +#define VMWDT_REG_CURRENT_CNT		(0x08)
-> +#define VMWDT_REG_CLOCK_FREQ_HZ		(0x0C)
-> +#define VMWDT_REG_LEN			(0x10)
-> +
-> +#define VMWDT_DEFAULT_CLOCK_HZ		(10)
-> +#define VMWDT_DEFAULT_TIMEOT_SEC	(8)
-> +
-> +struct vm_wdt_s {
-> +	void __iomem *membase;
-> +	u32 clock_freq;
-> +	u32 expiration_sec;
-> +	u32 ping_timeout_ms;
-> +	struct hrtimer per_cpu_hrtimer;
-> +	struct platform_device *dev;
-> +};
-> +
-> +#define vmwdt_reg_write(wdt, reg, value)	\
-> +	iowrite32((value), (wdt)->membase + (reg))
-> +#define vmwdt_reg_read(wdt, reg)		\
-> +	io32read((wdt)->membase + (reg))
-> +
-> +static struct platform_device *virt_dev;
-> +
-> +static enum hrtimer_restart vmwdt_timer_fn(struct hrtimer *hrtimer)
-> +{
-> +	struct vm_wdt_s *cpu_wdt;
-> +	u32 ticks;
-> +
-> +	cpu_wdt = container_of(hrtimer, struct vm_wdt_s, per_cpu_hrtimer);
-> +	ticks = cpu_wdt->clock_freq * cpu_wdt->expiration_sec;
-> +	vmwdt_reg_write(cpu_wdt, VMWDT_REG_LOAD_CNT, ticks);
-> +	hrtimer_forward_now(hrtimer, ms_to_ktime(cpu_wdt->ping_timeout_ms));
-> +
-> +	return HRTIMER_RESTART;
-> +}
-> +
-> +static void vmwdt_start(void *arg)
-> +{
-> +	u32 ticks;
-> +	int cpu = smp_processor_id();
-> +	struct vm_wdt_s *cpu_wdt = arg;
-> +	struct hrtimer *hrtimer = &cpu_wdt->per_cpu_hrtimer;
-> +
-> +	pr_info("cpu %u vmwdt start\n", cpu);
-
-When drivers work properly, they are quiet.
-
-Again, why not have this in drivers/watchdog/ and use the apis there
-instead of creating a custom one for no reason?
+Wait, why does it not cope with it?  That's not documented anywhere in
+your patch that adds the driver.  In fact, most of the text here needs
+to be in the changelog for the driver submission, not thrown away in the
+00/XX email that will never end up in the kernel tree.
 
 thanks,
 

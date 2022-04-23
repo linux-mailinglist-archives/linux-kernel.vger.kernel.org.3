@@ -2,226 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 135D950C884
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 11:13:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D89AF50C888
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 11:15:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234405AbiDWJNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 05:13:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51110 "EHLO
+        id S234348AbiDWJR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 05:17:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234396AbiDWJNK (ORCPT
+        with ESMTP id S229833AbiDWJRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 05:13:10 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C92E22F013
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 02:10:10 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 9677D21107;
-        Sat, 23 Apr 2022 09:10:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1650705008; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LZcBEsRf4H4TUD/LeIhDCJzVbvZV1c9YPF146laEEeM=;
-        b=EEpJluR3Y0YyLokU3njES4XnOYjNIqnoThKrkYg7sXIUUJNopUdSaqmOAirKNKsFmvV4+Q
-        uzN+EI5avd9cRQv3jAaLYlAInBKvtSDY2C3BSoGC5ZhSk7QgTsvR1OB8Gke6oGp69PhFQe
-        EYeaQct9YW9eufYb76CXu7ccyzP6zLM=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1CAFE13A1B;
-        Sat, 23 Apr 2022 09:10:08 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id TlqKBXDCY2JqPQAAMHmgww
-        (envelope-from <jgross@suse.com>); Sat, 23 Apr 2022 09:10:08 +0000
-Message-ID: <8acfaa93-50ce-8dd9-49c6-cc328bb37569@suse.com>
-Date:   Sat, 23 Apr 2022 11:10:07 +0200
+        Sat, 23 Apr 2022 05:17:55 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7746C644FF
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 02:14:57 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id x18so14173392wrc.0
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 02:14:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=l9GiO+JTBstyipJTtca0kHHsb17FGQMqHQg4tzHOg9Y=;
+        b=I6x1fhOQq1UOP7bEu54Th8XDxGR1vBQJDOvvHuuwxERrZjFYO0PwH5eIEtW1R4tvGe
+         jbJCQ/ypJHxEnBIvcz4uvYD5Q3t64g6wEapHnkTFq0Dgk2EWKDSEuJHhenRSXWsT4xM6
+         uCin1qtu4zjQ8/WV9w3JOTANdTYEmDAYxYEu0fEkcY/00IkaEYxJpP61vYL41+OYtIrG
+         ilQD0tNxY1oB7vvrrU6fIqsf7gLM/4MR8ufOnqGjzIIqKQl6g6uvhckGYzWyD54zhXSJ
+         wq0oPZ7EDOIW/GVW1j95hBiEvWSS96jYQdPOdYfvw8jk0QGVvMVIbbxBN3T5+2YmAGcL
+         jJsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=l9GiO+JTBstyipJTtca0kHHsb17FGQMqHQg4tzHOg9Y=;
+        b=3WccSzQP860GV0dmTLwg8W0kl7JYzpfTkCKCN+mFIlFklwGsWK4qnluQ6eH1GEVjRf
+         /86UUy0/vFysx5vdwZd5WhRAGiXGbNf/MfcPJTuSn8fjFivhPUpH9JVgnE+Y4iwfGuct
+         IqB9X4kYl+d2GmgK4MteoNGWQLTWKLo0/W+JbIeAr0vR1/MFGCk+RGRjd85e7m2aHVxc
+         opo2mo+uJHXWC1K8e9UTdIgQVDlyw30wAngC+dRm695pts2teHdTXagcZasKf8nPD16o
+         HtARa0yyhb5yhGgfEjWXYGsbL+r2k94A+8LxIG1RRE/EvZplHj9FPzObL8/Rm2HoJSPR
+         msxg==
+X-Gm-Message-State: AOAM533yPhqDDJi00Ekg6JYcr1pm55ZL2/vgDiwP5BGf13tSA4NWvKrH
+        yJi+EueAej/x2bs9Je56dAZC7w==
+X-Google-Smtp-Source: ABdhPJwMLoo6duhvirnDSrZ+rc9W2RxbhhwNNlNhQzNPP7zNSpOEPQnD+bX1JeZ0h5fkFmrnZ0MV1A==
+X-Received: by 2002:adf:fe47:0:b0:20a:c899:829f with SMTP id m7-20020adffe47000000b0020ac899829fmr6102700wrs.165.1650705295840;
+        Sat, 23 Apr 2022 02:14:55 -0700 (PDT)
+Received: from google.com (203.75.199.104.bc.googleusercontent.com. [104.199.75.203])
+        by smtp.gmail.com with ESMTPSA id p7-20020a5d4e07000000b002079a418430sm3597982wrt.85.2022.04.23.02.14.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Apr 2022 02:14:55 -0700 (PDT)
+Date:   Sat, 23 Apr 2022 09:14:53 +0000
+From:   Sebastian Ene <sebastianene@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        qperret@google.com, will@kernel.org, maz@kernel.org
+Subject: Re: [PATCH  v2 2/2] misc: Add a mechanism to detect stalls on guest
+ vCPUs
+Message-ID: <YmPDjWK5X1O3HQvk@google.com>
+References: <20220422141949.3456505-1-sebastianene@google.com>
+ <20220422141949.3456505-3-sebastianene@google.com>
+ <YmOhmzmBL36rBO30@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH V1 3/6] xen/virtio: Add option to restrict memory access
- under Xen
-Content-Language: en-US
-To:     Oleksandr <olekstysh@gmail.com>,
-        Stefano Stabellini <sstabellini@kernel.org>
-Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Julien Grall <julien@xen.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>
-References: <1650646263-22047-1-git-send-email-olekstysh@gmail.com>
- <1650646263-22047-4-git-send-email-olekstysh@gmail.com>
- <alpine.DEB.2.22.394.2204221526221.915916@ubuntu-linux-20-04-desktop>
- <3de2852b-0a94-fd1d-2eb6-fd818f33fc88@gmail.com>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <3de2852b-0a94-fd1d-2eb6-fd818f33fc88@gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------o0kwwZd5WhI0vqwOQJ85oWOv"
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmOhmzmBL36rBO30@kroah.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------o0kwwZd5WhI0vqwOQJ85oWOv
-Content-Type: multipart/mixed; boundary="------------DtRNb3Oo0VGbLsVI53cPNLg0";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Oleksandr <olekstysh@gmail.com>,
- Stefano Stabellini <sstabellini@kernel.org>
-Cc: xen-devel@lists.xenproject.org, x86@kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski
- <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, "H. Peter Anvin" <hpa@zytor.com>,
- Boris Ostrovsky <boris.ostrovsky@oracle.com>, Julien Grall <julien@xen.org>,
- Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
- "Michael S. Tsirkin" <mst@redhat.com>, Christoph Hellwig <hch@infradead.org>
-Message-ID: <8acfaa93-50ce-8dd9-49c6-cc328bb37569@suse.com>
-Subject: Re: [PATCH V1 3/6] xen/virtio: Add option to restrict memory access
- under Xen
-References: <1650646263-22047-1-git-send-email-olekstysh@gmail.com>
- <1650646263-22047-4-git-send-email-olekstysh@gmail.com>
- <alpine.DEB.2.22.394.2204221526221.915916@ubuntu-linux-20-04-desktop>
- <3de2852b-0a94-fd1d-2eb6-fd818f33fc88@gmail.com>
-In-Reply-To: <3de2852b-0a94-fd1d-2eb6-fd818f33fc88@gmail.com>
+On Sat, Apr 23, 2022 at 08:50:03AM +0200, Greg Kroah-Hartman wrote:
+> On Fri, Apr 22, 2022 at 02:19:50PM +0000, Sebastian Ene wrote:
 
---------------DtRNb3Oo0VGbLsVI53cPNLg0
-Content-Type: multipart/mixed; boundary="------------GUEFUP6KMNbzPrgiWpDseGco"
+Hello Greg,
 
---------------GUEFUP6KMNbzPrgiWpDseGco
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+> > This patch adds support for a virtual watchdog which relies on the
+> > per-cpu hrtimers to pet at regular intervals.
+> > 
+> > Signed-off-by: Sebastian Ene <sebastianene@google.com>
+> > ---
+> >  drivers/misc/Kconfig  |   8 ++
+> >  drivers/misc/Makefile |   1 +
+> >  drivers/misc/vm-wdt.c | 215 ++++++++++++++++++++++++++++++++++++++++++
+> >  3 files changed, 224 insertions(+)
+> >  create mode 100644 drivers/misc/vm-wdt.c
+> > 
+> > diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+> > index 2b9572a6d114..0e710149ff95 100644
+> > --- a/drivers/misc/Kconfig
+> > +++ b/drivers/misc/Kconfig
+> > @@ -493,6 +493,14 @@ config OPEN_DICE
+> >  
+> >  	  If unsure, say N.
+> >  
+> > +config VM_WATCHDOG
+> > +	tristate "Virtual Machine Watchdog"
+> > +	select LOCKUP_DETECTOR
+> > +	help
+> > +	  Detect CPU locks on the virtual machine.
+> > +	  To compile this driver as a module, choose M here: the
+> > +	  module will be called vm-wdt.
+> > +
+> >  source "drivers/misc/c2port/Kconfig"
+> >  source "drivers/misc/eeprom/Kconfig"
+> >  source "drivers/misc/cb710/Kconfig"
+> > diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
+> > index 2ec634354cf5..868e28d01b75 100644
+> > --- a/drivers/misc/Makefile
+> > +++ b/drivers/misc/Makefile
+> > @@ -59,3 +59,4 @@ obj-$(CONFIG_XILINX_SDFEC)	+= xilinx_sdfec.o
+> >  obj-$(CONFIG_HISI_HIKEY_USB)	+= hisi_hikey_usb.o
+> >  obj-$(CONFIG_UID_SYS_STATS)	+= uid_sys_stats.o
+> >  obj-$(CONFIG_OPEN_DICE)		+= open-dice.o
+> > +obj-$(CONFIG_VM_WATCHDOG) += vm-wdt.o
+> 
+> No tab?
+> 
 
-T24gMjMuMDQuMjIgMDk6MDUsIE9sZWtzYW5kciB3cm90ZToNCj4gDQo+IE9uIDIzLjA0LjIy
-IDAyOjAwLCBTdGVmYW5vIFN0YWJlbGxpbmkgd3JvdGU6DQo+IA0KPiBIZWxsbyBTdGVmYW5v
-DQo+IA0KPiANCj4+IE9uIEZyaSwgMjIgQXByIDIwMjIsIE9sZWtzYW5kciBUeXNoY2hlbmtv
-IHdyb3RlOg0KPj4+IEZyb206IEp1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT4NCj4+
-Pg0KPj4+IEludHJvZHVjZSBYZW4gZ3JhbnQgRE1BLW1hcHBpbmcgbGF5ZXIgd2hpY2ggY29u
-dGFpbnMgc3BlY2lhbCBETUEtbWFwcGluZw0KPj4+IHJvdXRpbmVzIGZvciBwcm92aWRpbmcg
-Z3JhbnQgcmVmZXJlbmNlcyBhcyBETUEgYWRkcmVzc2VzIHRvIGJlIHVzZWQgYnkNCj4+PiBm
-cm9udGVuZHMgKGUuZy4gdmlydGlvKSBpbiBYZW4gZ3Vlc3RzLg0KPj4+DQo+Pj4gSW4gb3Jk
-ZXIgdG8gc3VwcG9ydCB2aXJ0aW8gaW4gWGVuIGd1ZXN0cyBhZGQgYSBjb25maWcgb3B0aW9u
-IFhFTl9WSVJUSU8NCj4+PiBlbmFibGluZyB0aGUgdXNlciB0byBzcGVjaWZ5IHdoZXRoZXIg
-aW4gYWxsIFhlbiBndWVzdHMgdmlydGlvIHNob3VsZA0KPj4+IGJlIGFibGUgdG8gYWNjZXNz
-IG1lbW9yeSB2aWEgWGVuIGdyYW50IG1hcHBpbmdzIG9ubHkgb24gdGhlIGhvc3Qgc2lkZS4N
-Cj4+Pg0KPj4+IEFzIHRoaXMgYWxzbyByZXF1aXJlcyBwcm92aWRpbmcgYXJjaF9oYXNfcmVz
-dHJpY3RlZF92aXJ0aW9fbWVtb3J5X2FjY2Vzcw0KPj4+IGltcGxlbWVudGF0aW9uLCBzd2l0
-Y2ggZnJvbSBhIHB1cmUgc3R1YiB0byBhIHJlYWwgZnVuY3Rpb24gb24gQXJtDQo+Pj4gYW5k
-IGNvbWJpbmUgd2l0aCBleGlzdGluZyBpbXBsZW1lbnRhdGlvbiBmb3IgdGhlIFNFViBndWVz
-dHMgb24geDg2Lg0KPj4+DQo+Pj4gQWRkIHRoZSBuZWVkZWQgZnVuY3Rpb25hbGl0eSBieSBw
-cm92aWRpbmcgYSBzcGVjaWFsIHNldCBvZiBETUEgb3BzDQo+Pj4gaGFuZGxpbmcgdGhlIG5l
-ZWRlZCBncmFudCBvcGVyYXRpb25zIGZvciB0aGUgSS9PIHBhZ2VzLg0KPj4+DQo+Pj4gU2ln
-bmVkLW9mZi1ieTogSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1c2UuY29tPg0KPj4+IFNpZ25l
-ZC1vZmYtYnk6IE9sZWtzYW5kciBUeXNoY2hlbmtvIDxvbGVrc2FuZHJfdHlzaGNoZW5rb0Bl
-cGFtLmNvbT4NCj4+IFRoZXJlIGFyZSBhIGNvdXBsZSBvZiBtaW5vciB0aGluZ3MgdGhhdCBj
-aGVja3BhdGNoLnBsIHJlcG9ydHMsDQo+IA0KPiBUaGFuayB5b3UgZm9yIHBvaW50aW5nIHRo
-aXMgb3V0LCBteSBmYXVsdC4NCj4gDQo+IA0KPj4gwqAgYnV0IGFzaWRlDQo+PiBmcm9tIHRo
-b3NlIHRoZSBwYXRjaCBsb29rcyBmaW5lIHRvIG1lLg0KPiANCj4gZ29vZA0KPiANCj4gDQo+
-IFRoZSBhdHRhY2hlZCBkaWZmIHRvIGJlIHNxdWFzaGVkIGZvciB0aGUgbmV3IHZlcnNpb24u
-IE9uZSB0aGluZyByZW1haW5zOg0KPiANCj4gY2hlY2twYXRjaC5wbCBzYXlzIHJlZ2FyZGlu
-ZyBkcml2ZXJzL3hlbi9ncmFudC1kbWEtb3BzLmM6DQo+IA0KPiBXQVJOSU5HOiBhZGRlZCwg
-bW92ZWQgb3IgZGVsZXRlZCBmaWxlKHMpLCBkb2VzIE1BSU5UQUlORVJTIG5lZWQgdXBkYXRp
-bmc/DQo+ICMxNTE6DQo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0DQo+IA0KPiANCj4gV2hpY2gs
-IEkgYXNzdW1lLCB0aGlzIGlzIG5vdCBhbiBpc3N1ZSBhcyBuZXcgZmlsZSBmYWxscyB1bmRl
-ciBYRU4gSFlQRVJWSVNPUiANCj4gSU5URVJGQUNFIG1haW50YWluZXJzaGlwPw0KDQpZZXMu
-DQoNCg0KSnVlcmdlbg0K
---------------GUEFUP6KMNbzPrgiWpDseGco
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+I will add one.
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+> > \ No newline at end of file
+> > diff --git a/drivers/misc/vm-wdt.c b/drivers/misc/vm-wdt.c
+> > new file mode 100644
+> > index 000000000000..ea4351754645
+> > --- /dev/null
+> > +++ b/drivers/misc/vm-wdt.c
+> > @@ -0,0 +1,215 @@
+> > +// SPDX-License-Identifier: GPL-2.0+
+> 
+> I have to ask, do you really mean "+" here as this is not the overall
+> license of the kernel.  It's not a normal license for your employer to
+> pick, so as long as you have legal approval, it's fine, but if not, you
+> need to get that.
+> 
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+Thanks for letting me know, I think this should be :
+SPDX-License-Identifier: GPL-2.0 without "+".
 
---------------GUEFUP6KMNbzPrgiWpDseGco--
+> > +//
+> > +// Virtual watchdog driver.
+> > +//  Copyright (C) Google, 2022
+> > +
+> > +#define pr_fmt(fmt) "vm-watchdog: " fmt
+> 
+> It's a driver, you shouldn't need any pr_* calls.
+>
 
---------------DtRNb3Oo0VGbLsVI53cPNLg0--
+I will remove those.
 
---------------o0kwwZd5WhI0vqwOQJ85oWOv
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+> > +
+> > +#include <linux/cpu.h>
+> > +#include <linux/init.h>
+> > +#include <linux/io.h>
+> > +#include <linux/kernel.h>
+> > +
+> > +#include <linux/device.h>
+> > +#include <linux/interrupt.h>
+> > +#include <linux/module.h>
+> > +#include <linux/nmi.h>
+> > +#include <linux/of.h>
+> > +#include <linux/of_device.h>
+> > +#include <linux/param.h>
+> > +#include <linux/percpu.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/slab.h>
+> > +
+> > +#define DRV_NAME			"vm_wdt"
+> 
+> KBUILD_MODNAME?
+> 
+> > +#define DRV_VERSION			"1.0"
+> 
+> "versions" mean nothing once the code is in the kernel, please drop
+> this.
+> 
 
------BEGIN PGP SIGNATURE-----
+I will drop this.
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmJjwm8FAwAAAAAACgkQsN6d1ii/Ey+H
-1wf/RIPBtwhsuLI224stYcbzkJ08tRoayokmGlxy4V+7w0pS3B8Hn8UfcC1c91lB9xMQc3SSA8CB
-G3FFo9EekVBD/eHx0OkGyBzDYr6zR0xCjiUWXgyzse0uFO0kNKlUT0tC9uCO8PqR83Nejpo9mN09
-UbZS4fUctvMyUgdrDXzqqitob/tRVjd6qjWXUthBgHhmGyuX5ET3kXMeAwx+UsvjQAlAS3ZVu8q0
-PmEI3ZbtnWcdkiKI5r4tn7Io8wuQs1xz7gG3RD9STIgu+AiL7nK4WLWRgFcKzGsj9AWaOC/PCeiN
-ZsBan4mYBQczyADAMHkjnQByzi22RN/27cKp1uROUw==
-=RYNS
------END PGP SIGNATURE-----
+> But why isn't this in the normal watchdog subdirectory?  Why is this a
+> special driver?
+> 
+> > +
+> > +#define VMWDT_REG_STATUS		(0x00)
+> > +#define VMWDT_REG_LOAD_CNT		(0x04)
+> > +#define VMWDT_REG_CURRENT_CNT		(0x08)
+> > +#define VMWDT_REG_CLOCK_FREQ_HZ		(0x0C)
+> > +#define VMWDT_REG_LEN			(0x10)
+> > +
+> > +#define VMWDT_DEFAULT_CLOCK_HZ		(10)
+> > +#define VMWDT_DEFAULT_TIMEOT_SEC	(8)
+> > +
+> > +struct vm_wdt_s {
+> > +	void __iomem *membase;
+> > +	u32 clock_freq;
+> > +	u32 expiration_sec;
+> > +	u32 ping_timeout_ms;
+> > +	struct hrtimer per_cpu_hrtimer;
+> > +	struct platform_device *dev;
+> > +};
+> > +
+> > +#define vmwdt_reg_write(wdt, reg, value)	\
+> > +	iowrite32((value), (wdt)->membase + (reg))
+> > +#define vmwdt_reg_read(wdt, reg)		\
+> > +	io32read((wdt)->membase + (reg))
+> > +
+> > +static struct platform_device *virt_dev;
+> > +
+> > +static enum hrtimer_restart vmwdt_timer_fn(struct hrtimer *hrtimer)
+> > +{
+> > +	struct vm_wdt_s *cpu_wdt;
+> > +	u32 ticks;
+> > +
+> > +	cpu_wdt = container_of(hrtimer, struct vm_wdt_s, per_cpu_hrtimer);
+> > +	ticks = cpu_wdt->clock_freq * cpu_wdt->expiration_sec;
+> > +	vmwdt_reg_write(cpu_wdt, VMWDT_REG_LOAD_CNT, ticks);
+> > +	hrtimer_forward_now(hrtimer, ms_to_ktime(cpu_wdt->ping_timeout_ms));
+> > +
+> > +	return HRTIMER_RESTART;
+> > +}
+> > +
+> > +static void vmwdt_start(void *arg)
+> > +{
+> > +	u32 ticks;
+> > +	int cpu = smp_processor_id();
+> > +	struct vm_wdt_s *cpu_wdt = arg;
+> > +	struct hrtimer *hrtimer = &cpu_wdt->per_cpu_hrtimer;
+> > +
+> > +	pr_info("cpu %u vmwdt start\n", cpu);
+> 
+> When drivers work properly, they are quiet.
+> 
 
---------------o0kwwZd5WhI0vqwOQJ85oWOv--
+I will drop this.
+
+> Again, why not have this in drivers/watchdog/ and use the apis there
+> instead of creating a custom one for no reason?
+> 
+
+I submitted this patch to the drivers/watchdog and I received some
+feedback on it stating that this type of driver is not intended to be
+used with watchdog core, because the drivers don't have a notion of
+CPU. Moreover, we need to keep track of the elapsed time on a per-cpu
+basis and the core watchdog framework doesn't provide this
+functionality.
+
+> thanks,
+> 
+> greg k-h
+
+Thanks,
+Sebastian

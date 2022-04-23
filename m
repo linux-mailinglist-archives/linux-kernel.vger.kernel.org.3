@@ -2,163 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0B2050CB85
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 17:02:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2DE50CB8B
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 17:10:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231387AbiDWPFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 11:05:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55476 "EHLO
+        id S231640AbiDWPNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 11:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbiDWPFS (ORCPT
+        with ESMTP id S231442AbiDWPNB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 11:05:18 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E8F1759F8;
-        Sat, 23 Apr 2022 08:02:20 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id p189so6715701wmp.3;
-        Sat, 23 Apr 2022 08:02:20 -0700 (PDT)
+        Sat, 23 Apr 2022 11:13:01 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41FE81BBF91
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 08:10:04 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id d12so315258ybc.4
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 08:10:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=AOe0YWTIxO20z66gzbsK5tfpgnik6/90iVqeOl0gU2Q=;
-        b=WxD1riBOilQjVngzpg58exa20G16bL/OmpWTeWKaZhrqqc8nZgIXu57O0M5wBhb/g5
-         VInT1OZtuDadKJIsq3H+DlUbxeceqHOkvfbJIzAbip9UQG5XzNDauAVR5Z3aF6rnhFfy
-         acsYW35wzXA9d7ErCVw+T+yB3eYoJ0ZpY/oDFWyFMIDj5iGx/AmpFp/AJz+Ry8HBPpEh
-         JqfzT62s4DBdX6MMmDGzSfHsmJTShurRUvSfSfyOPq5vFr9OOwc3gYGPkTaM7GXMuGWI
-         0S3EVGP2OOnFXBksrGFrs/fyfP8uDqATgGlX49YI1AuP1F2xPBSd9C5LTWR/6JhCohGJ
-         VMUQ==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HcEOj4EmRV2bT/d0f7+I1phF7xYEnU+HoITpUoil1Mw=;
+        b=u/kUitkfNhZi0kJxhasNAWpadIX8okuT+xHKh/AncBUmqZhr5dcUqMZGoO8lFrxth6
+         3edvzEpOuHdb6/JRsEZbN+oJeG6wBT52Kex7kih9ogV9o+RTFwO5+lyElLepmmpW49II
+         RKi32p7JayVvs/AaCwophRvemsGk24kke3CwEWWq2YzjNlyTwfsWzxaC2Hw3L/RYLNxn
+         SG1RTUdFWjhZcpV6c0XgeMg0vvv1w0pcUBgW2fixeB8AXBYhaC6I/UJh8XQIv8uxTWPz
+         zvDFY+Tm8k+LpUbZDYpOn7D3W84FNURm4Am3ItNYQRsL9T67Yp2BVldKdfO2gDXtwj5e
+         eLVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=AOe0YWTIxO20z66gzbsK5tfpgnik6/90iVqeOl0gU2Q=;
-        b=pJzlVsj8iKwc1J1MCt8Jhmnch65gKLwjxpt2DXHBfQi4pricvdAQj3x57b8tszVmtt
-         WOGUP5CgLy9eGv4uO4NRbvF92DtVuBog9gr7il+NuO0LoYJIV1VQDppuiyDROuQR7W6V
-         C6wom6V8jSUykuMnaToC3YUJpnDZcTaqWzI/LnqphANHAptOL07xksmSPFpTasr2TRGR
-         wZKdrY6yq74g3qrVaicqqLJMoSF3ajTgvabNJ57w6W0jdhipp6ByvRhQRyZ4fo/L2m20
-         JmC9Xy2yLfPYQWaI6NRAbs2NxWjYGYoNQjRUC9nB/hh5O4YqFOFhhuSkNuUoGE46GPOu
-         x5cQ==
-X-Gm-Message-State: AOAM532HjaqTZ6256gxQjRQ+P+jZVQq7m22dHJhnj5jYJa4C+SW6hlvr
-        kuCOfxm5uYygOWWqFkks+8A=
-X-Google-Smtp-Source: ABdhPJzNuXFZIXG5ipXuEP2C/qhRymV/7TFGNq1TDlgw6SwbNK3ZVwdsWiutIp4TRHeJSM5AFCxADA==
-X-Received: by 2002:a1c:6a02:0:b0:38b:3661:47f1 with SMTP id f2-20020a1c6a02000000b0038b366147f1mr8794342wmc.5.1650726138642;
-        Sat, 23 Apr 2022 08:02:18 -0700 (PDT)
-Received: from elementary ([94.73.37.128])
-        by smtp.gmail.com with ESMTPSA id m20-20020a05600c3b1400b0038ebbbb2ad2sm6969222wms.44.2022.04.23.08.02.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 08:02:18 -0700 (PDT)
-Date:   Sat, 23 Apr 2022 17:02:12 +0200
-From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     hadess@hadess.net, dmitry.torokhov@gmail.com, rydberg@bitmath.org,
-        lains@riseup.net, jikos@kernel.org, benjamin.tissoires@redhat.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] HID: logitech-hidpp: Fix double free on managed
- resource
-Message-ID: <20220423150212.GA6661@elementary>
-References: <20220422161709.30198-1-jose.exposito89@gmail.com>
- <20220422161709.30198-2-jose.exposito89@gmail.com>
- <876f7c92-4e50-401e-f0b0-c2942bd8b63d@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HcEOj4EmRV2bT/d0f7+I1phF7xYEnU+HoITpUoil1Mw=;
+        b=f44FE5ywBaXVgJdWACz1zOAlW/kNSwpNyBHTpn25fcXNyr197OT1gEBCWY+6n5cCgr
+         z/6po5pdQX3ysa2Zw0yzFFCE/BRL1FIWzI3nMLghnqFmzilANy0JEbmrFtSMHFzifacr
+         j+SUKmlS6pfcKAnHSCYGSMXbj6H8lnS23mn4DAN8ShJ9cWGvshyJ/TrC/fSjKIGLMf3e
+         5Ow0UUUb7EanhhIrpqwu4zaqjTFSPur9etheW/orGlJ2dBgAvSkqx1B/ps1mSvjHZXx5
+         PEv34NJpdT0L4ww8sbzI9LoZ4Ejfk2e6QFUxISgqp43p3W0/mTF6Jokmhn1AKFg2cC9O
+         BlEw==
+X-Gm-Message-State: AOAM53105r4ClA2BleGrjeHk170tqHNI3Dm83DuiHF+wMDOXvkRDe80g
+        xtwLdgAkJS8MKRfzC9+63/t40QPW9LvYaCuKophCog==
+X-Google-Smtp-Source: ABdhPJyza1njnKyLN1yEv5H9aRd4Bo/zhtPtUsD4WN9dTedBBqyfjW7aGLR6pq3lbFrcY23bIvF1/otEzmacQP08lR4=
+X-Received: by 2002:a5b:451:0:b0:648:2a28:973f with SMTP id
+ s17-20020a5b0451000000b006482a28973fmr2538584ybp.291.1650726603099; Sat, 23
+ Apr 2022 08:10:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <876f7c92-4e50-401e-f0b0-c2942bd8b63d@redhat.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220414214337.311880-1-linus.walleij@linaro.org>
+ <f4deb182-ec18-6744-2c4c-adaed4ef7a33@collabora.com> <CACRpkdbZnWJgkS2a0xXs_WG40jz6+aTSPt743Zigd0KZ8R=yww@mail.gmail.com>
+ <cdb243d7-af84-b647-ee29-e4d4ab04834b@collabora.com>
+In-Reply-To: <cdb243d7-af84-b647-ee29-e4d4ab04834b@collabora.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 23 Apr 2022 17:09:49 +0200
+Message-ID: <CACRpkda8pT-mzZXDAoGLnK2xZ9TtrvMqY49oHY6E1C4LSsQhcA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: gnss: Add Broacom BCM4751 family bindings
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Johan Hovold <johan@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        David Heidelberg <david.heidelberg@collabora.com>,
+        Svyatoslav Ryhel <clamor95@gmail.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 23, 2022 at 01:41:30PM +0200, Hans de Goede wrote:
-> Hi,
-> 
-> On 4/22/22 18:17, José Expósito wrote:
-> > As described in the documentation for devm_input_allocate_device():
-> > 
-> >   Managed input devices do not need to be explicitly unregistered or
-> >   freed as it will be done automatically when owner device unbinds from
-> >   its driver (or binding fails).
-> > 
-> > However this driver was explicitly freeing the input device, allocated
-> > using devm_input_allocate_device() through hidpp_allocate_input().
-> > 
-> > Remove the call to input_free_device() to avoid a possible double free
-> > error.
-> 
-> Actually calling input_free_device() on a devm allocated input device
-> is fine. The input subsystem has chosen to not have a
-> separate devm_input_free_device(), instead input_free_device() knows
-> if a device is allocated through devm and then also frees the devres
-> tied to it:
-> 
-> void input_free_device(struct input_dev *dev)
-> {
->         if (dev) {
->                 if (dev->devres_managed)
->                         WARN_ON(devres_destroy(dev->dev.parent,
->                                                 devm_input_device_release,
->                                                 devm_input_device_match,
->                                                 dev));
->                 input_put_device(dev);
->         }
-> }
+On Sat, Apr 23, 2022 at 4:12 PM Dmitry Osipenko
+<dmitry.osipenko@collabora.com> wrote:
+> On 4/23/22 00:50, Linus Walleij wrote:
+> > On Mon, Apr 18, 2022 at 1:19 PM Dmitry Osipenko
+> > <dmitry.osipenko@collabora.com> wrote:
+> >
+> >> What are the chances of seeing the kernel driver for BCM4751+?
+> >
+> > The kernel does not normally drive the GPS. The kernel has a small driver
+> > dealing with hardware power on/off of the GPS and exposing
+> > /dev/gnss0 to userspace.
+> >
+> > See Johans lecture at:
+> > https://events19.linuxfoundation.org/wp-content/uploads/2017/12/The-GNSS-Subsystem-Johan-Hovold-Hovold-Consulting-AB.pdf
+>
+> IIUC, driver also should be needed for the firmware uploading, similarly
+> to the BCM WiFi/BT chips, isn't it?
 
-Hi Hans, 
+As far as I can tell from the filesystem on this phone there is no firmware
+so it is flashed into the GPS chip.
 
-Thanks for the code review.
+> > gpsd is the most common userspace daemon for GPS.
+> > gpsd will then talk to /dev/gnss0 as any other TTY IIUC.
+> >
+> > Replicant has a free implementation of the "MEIF" API for this GPS,
+> > I think what is needed is really for someone to pick up, polish and
+> > contribute that to gpsd
+> > https://git.replicant.us/contrib/PaulK/bcm4751/
+>
+> My main curiosity is about whether you already have a working driver
+> prototype, something you could share with us all, so we could start
+> playing with it too :)
 
-Obviously, I completely misunderstood these functions, my bad.
-Thanks for the explanation.
+It's on my TODO whenever there is time, but I have small kids so not
+so much time... I was hoping for the jolly people in postmarketOS to
+chime in because they seem to have a bunch of people with lots of
+time on their hands available :D
 
-Please ignore the patchset.
-
-Jose
-
-> > 
-> > Fixes: c39e3d5fc9dd3 ("HID: logitech-hidpp: late bind the input device on wireless connection")
-> > Signed-off-by: José Expósito <jose.exposito89@gmail.com>
-> > ---
-> >  drivers/hid/hid-logitech-hidpp.c | 6 +-----
-> >  1 file changed, 1 insertion(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
-> > index 81de88ab2ecc..9c00a781ab57 100644
-> > --- a/drivers/hid/hid-logitech-hidpp.c
-> > +++ b/drivers/hid/hid-logitech-hidpp.c
-> > @@ -3957,11 +3957,7 @@ static void hidpp_connect_event(struct hidpp_device *hidpp)
-> >  	}
-> >  
-> >  	hidpp_populate_input(hidpp, input);
-> > -
-> > -	ret = input_register_device(input);
-> > -	if (ret)
-> > -		input_free_device(input);
-> > -
-> 
-> The original code does look wrong there though, since the input device
-> is free-ed it should not be stored in hidpp->delayed_input, so this should be comes:
-> 
-> 	ret = input_register_device(input);
-> 	if (ret) {
-> 		input_free_device(input);
-> 		return;
-> 	}
-> 
-> 
-> Regards,
-> 
-> Hans
-> 
-> 
-> >  	hidpp->delayed_input = input;
-> >  }
-> >  
-> 
-> 
+Yours,
+Linus Walleij

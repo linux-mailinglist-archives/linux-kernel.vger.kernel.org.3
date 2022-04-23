@@ -2,356 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5B550C7AC
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 07:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73DCB50C7AE
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 07:45:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233321AbiDWFrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 01:47:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56848 "EHLO
+        id S233369AbiDWFrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 01:47:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233278AbiDWFq7 (ORCPT
+        with ESMTP id S232541AbiDWFrg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 01:46:59 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F6064BFE
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 22:44:01 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id q1so14109914plx.13
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 22:44:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZFsn76Wy7S6v0Yqx+I64DSGzjdIzFdQ9mwgQEn4qZdI=;
-        b=OHli3WxxjTNOtwXzzUteux30e7lUnsvZe0VRujYtUDHGwF7DeCIr0LXKfAdXygEqPL
-         jUVEy5CqxatjGEfrEhkcGYVCbn04il2mvqrFC+qSMBWU6UqUzGkuBSSfOOqC2udQsReS
-         29aFR4RuBGZpab2g/+roF2YHgsvahIzxZKAtzL7eWdu05biLD5jt8zW8OVMAMJI54HEy
-         kuj8auXO0vv/CU2VKzIKuhg+HijorcVemLraYYwjfnrpXXOB//KjbZRLFjSKzZfgZhwi
-         v5KznMcSPYlVbKh3tW9hURb3yOlhL1Yz1runuW6hFsP7ndeT6RkJlWvDsHc2NVpByLwS
-         TErw==
+        Sat, 23 Apr 2022 01:47:36 -0400
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9EDDA88A6;
+        Fri, 22 Apr 2022 22:44:40 -0700 (PDT)
+Received: by mail-pf1-f175.google.com with SMTP id j6so7574633pfe.13;
+        Fri, 22 Apr 2022 22:44:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZFsn76Wy7S6v0Yqx+I64DSGzjdIzFdQ9mwgQEn4qZdI=;
-        b=HaepH7nHLpU2dOgHQUZj38CSv4vK7qXi0472eFhgLVWxLS7TCkYHzkrxoJnNAnYXQ0
-         5bYg0z3ON+2eoFV+EqErasH/yn4nPe+kKFr4SbGbNoXqFbtXGmuqJHdwMtUxvh2Vz2Gn
-         /jcNuM3dnB6kZp3gcg5nQbdHo4aWD9D1r7bAUVIpLPfr9QZ9gHb7w1WgDb2Q/Bd4R6v7
-         ak07H8tLW7BgVabwZRk68ysFvNqBf+C9VQizuayYdb8QdagL/Cp+dsGy97EeHZw/HDo3
-         TmeH7AZ5QUXrzD37W6nHiO0QpxyCBYBmS0f6HwxlfdFUdhMiCgYki9zS5UA0vbSpgEjF
-         yVXA==
-X-Gm-Message-State: AOAM532mURzs2G2mYEmi1K/Y6ib/IYuVkIESXD2a3C4TuvnoRFJWWT8C
-        koLyYu2ihZIPc5uxtoJs8wW+gtFtiBaqp9Dy/tVIpjbKdbU=
-X-Google-Smtp-Source: ABdhPJzqdIY3siotXW6eE2KEll2J6YC3j9KiWON6VCesRQeVObAGPD6alQrr4OD/+znajuSVjVEYLGvlfokOtuBttAM=
-X-Received: by 2002:a17:90b:4f89:b0:1d4:961f:ad9d with SMTP id
- qe9-20020a17090b4f8900b001d4961fad9dmr18172000pjb.114.1650692640956; Fri, 22
- Apr 2022 22:44:00 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=P0diT9iDcYe1TifSZHN2PRcMMU/gU9bovyJTLCWyR74=;
+        b=RXtShu8PuwriYVvaiNb9S0f6DcuyqCZz2jyrD+rfVgi44v9AT5AyHvdjAMaQ3q/pEg
+         DNmhyDWVojm1KbfX7iecHeSlY5d7BqUZFGmm1ra4l/uSPzPrWfYtv/g7hdw8VBh0MtoV
+         +KJXkBlZ/fy0SUnhMVrO9aNhEDsDgYd9Bm+2hASDwIra6Yc3xbhIws1yoHYYeTbupYE7
+         g6QfLP2cFS/RoymD4FVKEvY6c7qMJN83sK5eSXOdoTNfTA5y+D1wNNsHy1x3gM/CspgP
+         XsS13tIN8tBXtgM5AClJAfAcOy5ipWCAFyIZA2M7wbWaphlhsClS/jNbiVcldsnhHM6R
+         fW8g==
+X-Gm-Message-State: AOAM532dZnFXqCSC+Zy+M+6A3dZMMOZf8f8pdtokB4MPz12oJd/VnA44
+        v57kqwsZh6SxFeb/3DjJIOhod+D+MtbPXA==
+X-Google-Smtp-Source: ABdhPJw2ccwvag5NjSS5+MUAgUQEDEpmqr8eppkw74Vf5Pq3mfzCLLgKvn7hrVXUU3VlbyZAPbdxVg==
+X-Received: by 2002:a63:5b43:0:b0:39d:1a2b:5904 with SMTP id l3-20020a635b43000000b0039d1a2b5904mr6663505pgm.533.1650692680213;
+        Fri, 22 Apr 2022 22:44:40 -0700 (PDT)
+Received: from karthik-strix-linux.karthek.com ([117.208.180.32])
+        by smtp.gmail.com with ESMTPSA id m22-20020a17090aab1600b001cd4989fecbsm7653996pjq.23.2022.04.22.22.44.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 22:44:39 -0700 (PDT)
+Date:   Sat, 23 Apr 2022 11:14:34 +0530
+From:   Karthik Alapati <mail@karthek.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Carlos Llamas <cmllamas@google.com>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/binderfs: Improve message to provide more info
+Message-ID: <YmOSQv2U8+Hs5WjP@karthik-strix-linux.karthek.com>
 MIME-Version: 1.0
-References: <20220310140911.50924-1-chao.p.peng@linux.intel.com> <20220310140911.50924-2-chao.p.peng@linux.intel.com>
-In-Reply-To: <20220310140911.50924-2-chao.p.peng@linux.intel.com>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Fri, 22 Apr 2022 22:43:50 -0700
-Message-ID: <CAGtprH9sncAeS7-=ewr07B=Q+htVDdwRJhbqF+GhehHMYmvw5w@mail.gmail.com>
-Subject: Re: [PATCH v5 01/13] mm/memfd: Introduce MFD_INACCESSIBLE flag
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jun Nakajima <jun.nakajima@intel.com>, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 6:09 AM Chao Peng <chao.p.peng@linux.intel.com> wrote:
->
-> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
->
-> Introduce a new memfd_create() flag indicating the content of the
-> created memfd is inaccessible from userspace through ordinary MMU
-> access (e.g., read/write/mmap). However, the file content can be
-> accessed via a different mechanism (e.g. KVM MMU) indirectly.
->
-> It provides semantics required for KVM guest private memory support
-> that a file descriptor with this flag set is going to be used as the
-> source of guest memory in confidential computing environments such
-> as Intel TDX/AMD SEV but may not be accessible from host userspace.
->
-> Since page migration/swapping is not yet supported for such usages
-> so these pages are currently marked as UNMOVABLE and UNEVICTABLE
-> which makes them behave like long-term pinned pages.
->
-> The flag can not coexist with MFD_ALLOW_SEALING, future sealing is
-> also impossible for a memfd created with this flag.
->
-> At this time only shmem implements this flag.
->
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> ---
->  include/linux/shmem_fs.h   |  7 +++++
->  include/uapi/linux/memfd.h |  1 +
->  mm/memfd.c                 | 26 +++++++++++++++--
->  mm/shmem.c                 | 57 ++++++++++++++++++++++++++++++++++++++
->  4 files changed, 88 insertions(+), 3 deletions(-)
->
-> diff --git a/include/linux/shmem_fs.h b/include/linux/shmem_fs.h
-> index e65b80ed09e7..2dde843f28ef 100644
-> --- a/include/linux/shmem_fs.h
-> +++ b/include/linux/shmem_fs.h
-> @@ -12,6 +12,9 @@
->
->  /* inode in-kernel data */
->
-> +/* shmem extended flags */
-> +#define SHM_F_INACCESSIBLE     0x0001  /* prevent ordinary MMU access (e.g. read/write/mmap) to file content */
-> +
->  struct shmem_inode_info {
->         spinlock_t              lock;
->         unsigned int            seals;          /* shmem seals */
-> @@ -24,6 +27,7 @@ struct shmem_inode_info {
->         struct shared_policy    policy;         /* NUMA memory alloc policy */
->         struct simple_xattrs    xattrs;         /* list of xattrs */
->         atomic_t                stop_eviction;  /* hold when working on inode */
-> +       unsigned int            xflags;         /* shmem extended flags */
->         struct inode            vfs_inode;
->  };
->
-> @@ -61,6 +65,9 @@ extern struct file *shmem_file_setup(const char *name,
->                                         loff_t size, unsigned long flags);
->  extern struct file *shmem_kernel_file_setup(const char *name, loff_t size,
->                                             unsigned long flags);
-> +extern struct file *shmem_file_setup_xflags(const char *name, loff_t size,
-> +                                           unsigned long flags,
-> +                                           unsigned int xflags);
->  extern struct file *shmem_file_setup_with_mnt(struct vfsmount *mnt,
->                 const char *name, loff_t size, unsigned long flags);
->  extern int shmem_zero_setup(struct vm_area_struct *);
-> diff --git a/include/uapi/linux/memfd.h b/include/uapi/linux/memfd.h
-> index 7a8a26751c23..48750474b904 100644
-> --- a/include/uapi/linux/memfd.h
-> +++ b/include/uapi/linux/memfd.h
-> @@ -8,6 +8,7 @@
->  #define MFD_CLOEXEC            0x0001U
->  #define MFD_ALLOW_SEALING      0x0002U
->  #define MFD_HUGETLB            0x0004U
-> +#define MFD_INACCESSIBLE       0x0008U
->
->  /*
->   * Huge page size encoding when MFD_HUGETLB is specified, and a huge page
-> diff --git a/mm/memfd.c b/mm/memfd.c
-> index 9f80f162791a..74d45a26cf5d 100644
-> --- a/mm/memfd.c
-> +++ b/mm/memfd.c
-> @@ -245,16 +245,20 @@ long memfd_fcntl(struct file *file, unsigned int cmd, unsigned long arg)
->  #define MFD_NAME_PREFIX_LEN (sizeof(MFD_NAME_PREFIX) - 1)
->  #define MFD_NAME_MAX_LEN (NAME_MAX - MFD_NAME_PREFIX_LEN)
->
-> -#define MFD_ALL_FLAGS (MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_HUGETLB)
-> +#define MFD_ALL_FLAGS (MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_HUGETLB | \
-> +                      MFD_INACCESSIBLE)
->
->  SYSCALL_DEFINE2(memfd_create,
->                 const char __user *, uname,
->                 unsigned int, flags)
->  {
-> +       struct address_space *mapping;
->         unsigned int *file_seals;
-> +       unsigned int xflags;
->         struct file *file;
->         int fd, error;
->         char *name;
-> +       gfp_t gfp;
->         long len;
->
->         if (!(flags & MFD_HUGETLB)) {
-> @@ -267,6 +271,10 @@ SYSCALL_DEFINE2(memfd_create,
->                         return -EINVAL;
->         }
->
-> +       /* Disallow sealing when MFD_INACCESSIBLE is set. */
-> +       if (flags & MFD_INACCESSIBLE && flags & MFD_ALLOW_SEALING)
-> +               return -EINVAL;
-> +
->         /* length includes terminating zero */
->         len = strnlen_user(uname, MFD_NAME_MAX_LEN + 1);
->         if (len <= 0)
-> @@ -301,8 +309,11 @@ SYSCALL_DEFINE2(memfd_create,
->                                         HUGETLB_ANONHUGE_INODE,
->                                         (flags >> MFD_HUGE_SHIFT) &
->                                         MFD_HUGE_MASK);
+Currently the binderfs test says what failure it encountered
+without saying why it may occurred when it fails to mount
+binderfs. So, Warn about enabling CONFIG_ANDROID_BINDERFS in the
+running kernel.
 
-Should hugetlbfs also be modified to be a backing store for private
-memory like shmem when hugepages are to be used?
-As of now, this series doesn't seem to support using private memfds
-with backing hugepages.
+Signed-off-by: Karthik Alapati <mail@karthek.com>
+---
+ tools/testing/selftests/filesystems/binderfs/binderfs_test.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/tools/testing/selftests/filesystems/binderfs/binderfs_test.c b/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
+index 0315955ff0f4..bc1c407651fc 100644
+--- a/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
++++ b/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
+@@ -412,7 +412,8 @@ TEST(binderfs_stress)
+ 
+ 		ret = mount(NULL, binderfs_mntpt, "binder", 0, 0);
+ 		ASSERT_EQ(ret, 0) {
+-			TH_LOG("%s - Failed to mount binderfs", strerror(errno));
++			TH_LOG("%s - Failed to mount binderfs, check if CONFIG_ANDROID_BINDERFS is enabled in the running kernel",
++				strerror(errno));
+ 		}
+ 
+ 		for (int i = 0; i < ARRAY_SIZE(fds); i++) {
+-- 
+2.35.2
 
-
-> -       } else
-> -               file = shmem_file_setup(name, 0, VM_NORESERVE);
-> +       } else {
-> +               xflags = flags & MFD_INACCESSIBLE ? SHM_F_INACCESSIBLE : 0;
-> +               file = shmem_file_setup_xflags(name, 0, VM_NORESERVE, xflags);
-> +       }
-> +
->         if (IS_ERR(file)) {
->                 error = PTR_ERR(file);
->                 goto err_fd;
-> @@ -313,6 +324,15 @@ SYSCALL_DEFINE2(memfd_create,
->         if (flags & MFD_ALLOW_SEALING) {
->                 file_seals = memfd_file_seals_ptr(file);
->                 *file_seals &= ~F_SEAL_SEAL;
-> +       } else if (flags & MFD_INACCESSIBLE) {
-> +               mapping = file_inode(file)->i_mapping;
-> +               gfp = mapping_gfp_mask(mapping);
-> +               gfp &= ~__GFP_MOVABLE;
-> +               mapping_set_gfp_mask(mapping, gfp);
-> +               mapping_set_unevictable(mapping);
-> +
-> +               file_seals = memfd_file_seals_ptr(file);
-> +               *file_seals = F_SEAL_SEAL;
->         }
->
->         fd_install(fd, file);
-> diff --git a/mm/shmem.c b/mm/shmem.c
-> index a09b29ec2b45..9b31a7056009 100644
-> --- a/mm/shmem.c
-> +++ b/mm/shmem.c
-> @@ -1084,6 +1084,13 @@ static int shmem_setattr(struct user_namespace *mnt_userns,
->                     (newsize > oldsize && (info->seals & F_SEAL_GROW)))
->                         return -EPERM;
->
-> +               if (info->xflags & SHM_F_INACCESSIBLE) {
-> +                       if(oldsize)
-> +                               return -EPERM;
-> +                       if (!PAGE_ALIGNED(newsize))
-> +                               return -EINVAL;
-> +               }
-> +
->                 if (newsize != oldsize) {
->                         error = shmem_reacct_size(SHMEM_I(inode)->flags,
->                                         oldsize, newsize);
-> @@ -1331,6 +1338,8 @@ static int shmem_writepage(struct page *page, struct writeback_control *wbc)
->                 goto redirty;
->         if (!total_swap_pages)
->                 goto redirty;
-> +       if (info->xflags & SHM_F_INACCESSIBLE)
-> +               goto redirty;
->
->         /*
->          * Our capabilities prevent regular writeback or sync from ever calling
-> @@ -2228,6 +2237,9 @@ static int shmem_mmap(struct file *file, struct vm_area_struct *vma)
->         if (ret)
->                 return ret;
->
-> +       if (info->xflags & SHM_F_INACCESSIBLE)
-> +               return -EPERM;
-> +
->         /* arm64 - allow memory tagging on RAM-based files */
->         vma->vm_flags |= VM_MTE_ALLOWED;
->
-> @@ -2433,6 +2445,8 @@ shmem_write_begin(struct file *file, struct address_space *mapping,
->                 if ((info->seals & F_SEAL_GROW) && pos + len > inode->i_size)
->                         return -EPERM;
->         }
-> +       if (unlikely(info->xflags & SHM_F_INACCESSIBLE))
-> +               return -EPERM;
->
->         ret = shmem_getpage(inode, index, pagep, SGP_WRITE);
->
-> @@ -2517,6 +2531,21 @@ static ssize_t shmem_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
->                 end_index = i_size >> PAGE_SHIFT;
->                 if (index > end_index)
->                         break;
-> +
-> +               /*
-> +                * inode_lock protects setting up seals as well as write to
-> +                * i_size. Setting SHM_F_INACCESSIBLE only allowed with
-> +                * i_size == 0.
-> +                *
-> +                * Check SHM_F_INACCESSIBLE after i_size. It effectively
-> +                * serialize read vs. setting SHM_F_INACCESSIBLE without
-> +                * taking inode_lock in read path.
-> +                */
-> +               if (SHMEM_I(inode)->xflags & SHM_F_INACCESSIBLE) {
-> +                       error = -EPERM;
-> +                       break;
-> +               }
-> +
->                 if (index == end_index) {
->                         nr = i_size & ~PAGE_MASK;
->                         if (nr <= offset)
-> @@ -2648,6 +2677,12 @@ static long shmem_fallocate(struct file *file, int mode, loff_t offset,
->                         goto out;
->                 }
->
-> +               if ((info->xflags & SHM_F_INACCESSIBLE) &&
-> +                   (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len))) {
-> +                       error = -EINVAL;
-> +                       goto out;
-> +               }
-> +
->                 shmem_falloc.waitq = &shmem_falloc_waitq;
->                 shmem_falloc.start = (u64)unmap_start >> PAGE_SHIFT;
->                 shmem_falloc.next = (unmap_end + 1) >> PAGE_SHIFT;
-> @@ -4082,6 +4117,28 @@ struct file *shmem_kernel_file_setup(const char *name, loff_t size, unsigned lon
->         return __shmem_file_setup(shm_mnt, name, size, flags, S_PRIVATE);
->  }
->
-> +/**
-> + * shmem_file_setup_xflags - get an unlinked file living in tmpfs with
-> + *      additional xflags.
-> + * @name: name for dentry (to be seen in /proc/<pid>/maps
-> + * @size: size to be set for the file
-> + * @flags: VM_NORESERVE suppresses pre-accounting of the entire object size
-> + * @xflags: SHM_F_INACCESSIBLE prevents ordinary MMU access to the file content
-> + */
-> +
-> +struct file *shmem_file_setup_xflags(const char *name, loff_t size,
-> +                                    unsigned long flags, unsigned int xflags)
-> +{
-> +       struct shmem_inode_info *info;
-> +       struct file *res = __shmem_file_setup(shm_mnt, name, size, flags, 0);
-> +
-> +       if(!IS_ERR(res)) {
-> +               info = SHMEM_I(file_inode(res));
-> +               info->xflags = xflags & SHM_F_INACCESSIBLE;
-> +       }
-> +       return res;
-> +}
-> +
->  /**
->   * shmem_file_setup - get an unlinked file living in tmpfs
->   * @name: name for dentry (to be seen in /proc/<pid>/maps
-> --
-> 2.17.1
->

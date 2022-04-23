@@ -2,111 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2DE50CB8B
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 17:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BD8450CB92
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 17:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231640AbiDWPNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 11:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
+        id S231688AbiDWPPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 11:15:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231442AbiDWPNB (ORCPT
+        with ESMTP id S230380AbiDWPO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 11:13:01 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41FE81BBF91
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 08:10:04 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id d12so315258ybc.4
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 08:10:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HcEOj4EmRV2bT/d0f7+I1phF7xYEnU+HoITpUoil1Mw=;
-        b=u/kUitkfNhZi0kJxhasNAWpadIX8okuT+xHKh/AncBUmqZhr5dcUqMZGoO8lFrxth6
-         3edvzEpOuHdb6/JRsEZbN+oJeG6wBT52Kex7kih9ogV9o+RTFwO5+lyElLepmmpW49II
-         RKi32p7JayVvs/AaCwophRvemsGk24kke3CwEWWq2YzjNlyTwfsWzxaC2Hw3L/RYLNxn
-         SG1RTUdFWjhZcpV6c0XgeMg0vvv1w0pcUBgW2fixeB8AXBYhaC6I/UJh8XQIv8uxTWPz
-         zvDFY+Tm8k+LpUbZDYpOn7D3W84FNURm4Am3ItNYQRsL9T67Yp2BVldKdfO2gDXtwj5e
-         eLVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HcEOj4EmRV2bT/d0f7+I1phF7xYEnU+HoITpUoil1Mw=;
-        b=f44FE5ywBaXVgJdWACz1zOAlW/kNSwpNyBHTpn25fcXNyr197OT1gEBCWY+6n5cCgr
-         z/6po5pdQX3ysa2Zw0yzFFCE/BRL1FIWzI3nMLghnqFmzilANy0JEbmrFtSMHFzifacr
-         j+SUKmlS6pfcKAnHSCYGSMXbj6H8lnS23mn4DAN8ShJ9cWGvshyJ/TrC/fSjKIGLMf3e
-         5Ow0UUUb7EanhhIrpqwu4zaqjTFSPur9etheW/orGlJ2dBgAvSkqx1B/ps1mSvjHZXx5
-         PEv34NJpdT0L4ww8sbzI9LoZ4Ejfk2e6QFUxISgqp43p3W0/mTF6Jokmhn1AKFg2cC9O
-         BlEw==
-X-Gm-Message-State: AOAM53105r4ClA2BleGrjeHk170tqHNI3Dm83DuiHF+wMDOXvkRDe80g
-        xtwLdgAkJS8MKRfzC9+63/t40QPW9LvYaCuKophCog==
-X-Google-Smtp-Source: ABdhPJyza1njnKyLN1yEv5H9aRd4Bo/zhtPtUsD4WN9dTedBBqyfjW7aGLR6pq3lbFrcY23bIvF1/otEzmacQP08lR4=
-X-Received: by 2002:a5b:451:0:b0:648:2a28:973f with SMTP id
- s17-20020a5b0451000000b006482a28973fmr2538584ybp.291.1650726603099; Sat, 23
- Apr 2022 08:10:03 -0700 (PDT)
+        Sat, 23 Apr 2022 11:14:56 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2089.outbound.protection.outlook.com [40.107.220.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29E91D48E7;
+        Sat, 23 Apr 2022 08:11:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BiRJ3WPYFkToh2aqbqYWxhiUjJHS5ncO3OWZpLdswLg7QojD6J9soUP/KIeEEIakBdfyaFCKILm3h9ICXCvGLX9aVOk/o7l7Vk0KE3oGZnIHttsn2PJbs5wBZEF4oCzxrP+6JoElB2kEtxkRrsCERbmWt+S7iI4TiY8eSRXBxEnYNVVLBtgMet4thy99U2RzvipVJ4WMFVIKgbvhG/g8JGTuastPg4fnzdSo0PM2OlqKyAhq+jnyqVSXnc9020ulwj2T3AApkvspn3fo2xB4rZY9Vg6uKPo+sHgFfS2DVA7e+8UA+IGfR7tYivLoTvK2EAV+2CAovKht7pA2s3n9hg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Hjm2kv8OjSC3rIvc4Xzxt3MjjwYEjDPfroBJ6aJY1Tc=;
+ b=LnNQay3qSWBwizz/nvWOSBKg7bUxeh9yyO+UkR4QIVAzJLYcAHfT/iOousSr26hwd1Y5F6vkv6dRkCs1MxqO8iohT+RNpl1CcYe1Hz/iV+hnbbWhkLioVy0OcmozjmTOeKqrLluhFU6OqYqPmgztZVXdi+BzeBz94NEus0PlRsRCO/oHSNUh9PywQYpjk2336lxDOOmH8F45936JOvVnWztz+s9jnDddK6HDVjdBJB0VgU7Oz7KZskrt+VWggLryoyAKi+cYZUlwdNyNTjAralWWFpw5UdJAzfBOrc1ySFc66nkUfMIm3USKINZU3Cz+M4VbkX5WTQZzjXS+EwWHQg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Hjm2kv8OjSC3rIvc4Xzxt3MjjwYEjDPfroBJ6aJY1Tc=;
+ b=QMrA0Fc466wXbmSkDFGbwyFp4sMq6PNBsWI1f1XNw0vO9CX/Vl3gfL/NL7MFFrJ5k+seWcB+1qJVVEiyXWo6PJQASjc1h1CEwL0hoDXCgMHnuYQtTPFpfkZ40AIG6j6V+YBAmV0W/tWtDb0CGi9rAvuOYLZtmnjJ8DSXK/MgMaSOmrAFsCieKRxWPil87ary0VWYdAewzcHkShZ3V5VaJ23qZgKN75dRGqI+qf6FxP/NlOpPgQntFz1Tkk+COFvkgg/RTqg2vCxsZXTCmzSH5NvIRVTBJhcKjWGj7JrsFHRqc48Rw1m7xAUeSSRLpXUlObl2AovUQHAriXQ2ftoG7Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BN8PR12MB2900.namprd12.prod.outlook.com (2603:10b6:408:69::18)
+ by BN9PR12MB5305.namprd12.prod.outlook.com (2603:10b6:408:102::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13; Sat, 23 Apr
+ 2022 15:11:56 +0000
+Received: from BN8PR12MB2900.namprd12.prod.outlook.com
+ ([fe80::f917:a955:6b35:6425]) by BN8PR12MB2900.namprd12.prod.outlook.com
+ ([fe80::f917:a955:6b35:6425%6]) with mapi id 15.20.5186.015; Sat, 23 Apr 2022
+ 15:11:56 +0000
+Message-ID: <26c0caf1-4cfc-9c7d-ac51-180ba4501bf5@nvidia.com>
+Date:   Sat, 23 Apr 2022 20:41:39 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH V2 2/8] dt-bindings: PCI: tegra: Add device tree support
+ for Tegra234
+Content-Language: en-US
+To:     Raul Tambre <raul@tambre.ee>, bhelgaas@google.com,
+        lorenzo.pieralisi@arm.com, robh+dt@kernel.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com
+Cc:     kishon@ti.com, vkoul@kernel.org, kw@linux.com, krzk@kernel.org,
+        p.zabel@pengutronix.de, mperttunen@nvidia.com,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, kthota@nvidia.com,
+        mmaddireddy@nvidia.com, sagar.tv@gmail.com
+References: <20220423124858.25946-1-vidyas@nvidia.com>
+ <20220423124858.25946-3-vidyas@nvidia.com>
+ <50b80804-e95c-2137-5d74-2451e5bb826f@tambre.ee>
+From:   Vidya Sagar <vidyas@nvidia.com>
+In-Reply-To: <50b80804-e95c-2137-5d74-2451e5bb826f@tambre.ee>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MA1PR0101CA0072.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a00:20::34) To BN8PR12MB2900.namprd12.prod.outlook.com
+ (2603:10b6:408:69::18)
 MIME-Version: 1.0
-References: <20220414214337.311880-1-linus.walleij@linaro.org>
- <f4deb182-ec18-6744-2c4c-adaed4ef7a33@collabora.com> <CACRpkdbZnWJgkS2a0xXs_WG40jz6+aTSPt743Zigd0KZ8R=yww@mail.gmail.com>
- <cdb243d7-af84-b647-ee29-e4d4ab04834b@collabora.com>
-In-Reply-To: <cdb243d7-af84-b647-ee29-e4d4ab04834b@collabora.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sat, 23 Apr 2022 17:09:49 +0200
-Message-ID: <CACRpkda8pT-mzZXDAoGLnK2xZ9TtrvMqY49oHY6E1C4LSsQhcA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: gnss: Add Broacom BCM4751 family bindings
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Johan Hovold <johan@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        David Heidelberg <david.heidelberg@collabora.com>,
-        Svyatoslav Ryhel <clamor95@gmail.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b04b1e0b-906d-449f-1bb2-08da253b9b30
+X-MS-TrafficTypeDiagnostic: BN9PR12MB5305:EE_
+X-Microsoft-Antispam-PRVS: <BN9PR12MB530504941B536CAB95BE9894B8F69@BN9PR12MB5305.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: K2AMMXZX1AJFoE9/XkozZm/IdKjw2SrSrVLuSDZVwHBc4KkeB1EtaP/fcimG06hGHSLqkLRQ7CBSt/i4ihw8Z+CwgoFTUAHKETSMqflmXsAsMbY+blIHc+aseduwheA9HhX63W2F09hm15ARuzVZybU0McL+yq/RVw46/KEmswwWWbXhTmWW/wjyDZmZEa33/zheAad3L6WbHTML+8X/1Y5EwLyj5K1nbtiOs86HdcoYF6mQKMAHxWO3qIeH/iAYig/q5dAhq4S1S3tI6nrMzrY8y/IGZ9aROUiAzTKgfDlbIe2Y3T7EzvWKHsamAfb4k4jCqzvxnbs0yVTlrx6JnnUI4aptBs3km8Eeve10cpnbvSKmv5wB5Uxli/5tmMcJxeIaSp0m+jL5ImR8dCKyCsm2rpOOSZCSJGRSjBbGuXieIILS9Bv9MlDYhSURyMJ3l7XUledW1T2p0G2A4nNRvg4DwIkRj/QU7bvz80LtRTmYI2L+LP0zlzyDSWBe9gjCuuF/0oVGMDkBdf5BWjLdyWxiJBpSuGT7rgZIqKm3x8iHMcf0BNyMt7MH9MXFoq8Rqhldu1vwxeg2rPEnB7YHgGPn7IZsMn1I3tptxv8w70Lu3PJXK5Xfq2UDEjdlrD+8mWrKj//1Btx+1NCLSDVitxEdCVT9JQ5MvmFJCY8KkwrTRgOEvQm5a7YjHqYHvqdO5eH3rvGKrQT5ag+ntnP10dg49lgTMsiYwOGE0w6lIMk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB2900.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(53546011)(2616005)(6506007)(6512007)(26005)(6666004)(6486002)(508600001)(38100700002)(31696002)(186003)(86362001)(6636002)(4744005)(2906002)(8936002)(5660300002)(7416002)(36756003)(66476007)(8676002)(4326008)(66556008)(66946007)(31686004)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eVkvRjFjQWRVV0NNdjVPZm9ReXBNVGtaNFBPQk42R0Y0WnVzTG4vLzhDWWEy?=
+ =?utf-8?B?MUNFaEtvL0x2cEtIellRdE9zc1VON1E1MVRJUHhxcWpOUmhzbWpWdlZEaXBn?=
+ =?utf-8?B?MUh0VGUwSlFhOEhoSmZuejR6Q2ZQa1MzK2xwL092Y0tMemU5bk11Y3U3K0E4?=
+ =?utf-8?B?TmhHT3F0UitLcVoyS1MzNVJJTzZsUlg0Q01QSWIzeWw5bDFWWTQ0UDI2OUJq?=
+ =?utf-8?B?K1BYbFVESXVqL0V5dkY5aTNacGxsb1hlNE43NWdiRGVUYzd3b0Y4WUhlYzBZ?=
+ =?utf-8?B?OTdnblczZTlWakR3SXVmWHZhM21qMjFjL2ZIeHpKWmtmSi9POENNU3BKR0VD?=
+ =?utf-8?B?OFR3WkdIVnArTlM4dkx5TWN6aHdrSEk4bExWTHo2cU1rMHNjbGVwQWljNTg1?=
+ =?utf-8?B?dlhjY3BhQklyTmpQRjJRUFRuV2pReTdDUTRDODhCOTZyUlhQKy9rblZGcnVR?=
+ =?utf-8?B?MnY1R0ZYOElRcWhqamY2elduOVg0emZDVlVPS3MvRjh6Znd1SUpxRjVGRENK?=
+ =?utf-8?B?d0QrK1lLbjdIY0RKYTUyTDRmRVlnR0RGQU5PZGQrbmI3MGp0YlZETmxuU0h4?=
+ =?utf-8?B?UE1oUmdVeC9UM1ZaT0JWZkdjRkRMaFdTb2c2eFJzbGowQ2JhZytSZGUzMW1j?=
+ =?utf-8?B?RnBuMWF3YnVlUGdWdk1XOWtOMlp4Z1VQTFpkUzZ5OUhmc0R0NnJDTFVoZGZU?=
+ =?utf-8?B?Q2tVYzlROUxnQktZSW50OUNRWHJCTlUwYUNoanlEeEM5VGR0SWFraTNncFZQ?=
+ =?utf-8?B?VmFtMVNRUHhObklkanlXNUx5WmZJc3BWL3h1Vk40RTlsS0l5aVVzNXNtU21N?=
+ =?utf-8?B?di84Ui9iWmVKeDdDK005VEZXV21rcTBRNmwvNnVqcUVRYytxYytuSStlcWJy?=
+ =?utf-8?B?L2VGZUZja1pteUhwTXNjajZYYUxJa09aSjNlWU1VV2pnTUVnamNJaFk2VWsw?=
+ =?utf-8?B?R3hEODJ6MWxzakhXS2sybzNaTDdGR3F6QTNLUXBpVDdqZzR3M3ZEeDE1dlk1?=
+ =?utf-8?B?Qkh1bTlnb3hNOW1mYlZBSTl1WkhuckpGRExNbFdsRjI2eURMUERpc293THR5?=
+ =?utf-8?B?emRHRkRUOGF5aUVKY1VGU1ZqYkpWd000dzhtQ0NJbjczVlFWcEJuZTlmYWxq?=
+ =?utf-8?B?cUhrNGlZK09ZaXJXQnlrK0NnZ1lnajgrbU5jYTEyVUdzbHEzTzJmWWdEUEJn?=
+ =?utf-8?B?dEZnM3d4Zk9GRHh4ZmN0TWduNy94OVpmN2o2UWs3T3FYT01ZM1hneHpqMHY3?=
+ =?utf-8?B?T3ZEdUYvL29kZU50aFltT0VnWURCT0p5LzJqRjVJcTBkSE5JTnl6ZmdUL09F?=
+ =?utf-8?B?YTg2YjNPOEdjMW5FaEFpcEVUMEZ0bFVSMkM5VXgyVHM5NDNpSkpRN2Ntdkp1?=
+ =?utf-8?B?UlQyZzdFUlRpSDQ1cXVnK2d4TWJkalpKSHRTcWcwMjBwQXlGaytoTlBwdVJI?=
+ =?utf-8?B?Z1V0RDloOTNBMFcvZGFDSjRKN0hmeXI1NjRHb3ltd25lNmVhRENDYVpRNmUz?=
+ =?utf-8?B?VlhaOHdseVFzT2lWZUphZVgxcUtFQTJqd3VlVDRGOXE1QWg5aENRWWowRHZj?=
+ =?utf-8?B?V2s5ZUFvamNsckJ6YkVkMldXbGN5ZE81SGRvNE0va3lDeUhYNTdaNmxOS0xE?=
+ =?utf-8?B?MExjd3Rnc3NvSmlHQ2JoVXhYcHkySC9yTUdrZmFSWmh6R1AwdjBxcGsyZEN1?=
+ =?utf-8?B?TytSK0YxbHZXRW4yTEhQMldHb1ZNS2hBbkE5THpra3BYSmxWZmhTK2NHdkN0?=
+ =?utf-8?B?bVR1eWxOUmRnWjBjUENZckhHZFVzMCtuYVNMKzVkV2VsdFc0eGdQd3IxZjh1?=
+ =?utf-8?B?bUVzNzFQeHNQTkoyTi95YXo4bGZDdXU2ejBBY3hQVWh5OGVDUnB2MHdqN0kz?=
+ =?utf-8?B?Y3pTb3h0RGVObVVoWWJpM1kwbGFDa2VSdlVjYTlHOSsvWWFFMElJQkkvVjBm?=
+ =?utf-8?B?ZmgxUFEwdSs3S3Bvak5VZFlkOGM3Tkhqdkt1SDdlL2NYamJKTVhwUS9GNkpC?=
+ =?utf-8?B?d21nUXBESzZacCt1OHRSeFRxaUVGVzJQOW03UEZ4eHdVdUtTQi8valUrWm1w?=
+ =?utf-8?B?SmVWUHZpMGkvVmFIeStNZGxueWVyZUs4ZUp3TGk4MGx5cXFNeU5OMXkrUytP?=
+ =?utf-8?B?OWVxa3Y1Z0FNR0toWVJ5bklHTERnWkd3bnZmQlZ5Y2lQQzVhVGphM1FuMjN3?=
+ =?utf-8?B?ckg4SjREUU00R0hkTjFPRENHQXBqV3NuNk9RYUxkeE5MNVF5alNPRDZoNTY4?=
+ =?utf-8?B?TjFGRTZnd0FRN3BmSkZvNDJNb2k0T2xUUGdzNk1nZEtkQmducTc3Wmp0Vm5U?=
+ =?utf-8?B?SGR0VVZMSEx1MXhvS0NOdUZmWmlPRzd2ckVPN002WmZhS2IzazFmZz09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b04b1e0b-906d-449f-1bb2-08da253b9b30
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB2900.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Apr 2022 15:11:56.7328
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4ZI3ZloztobfNGPyvxG4y3k886hYfNB7hULIyjlG3Zmefw13JBrpcpK+SfP8Fgsd6YhqdTRxBsc5zvZHVE0lpg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5305
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 23, 2022 at 4:12 PM Dmitry Osipenko
-<dmitry.osipenko@collabora.com> wrote:
-> On 4/23/22 00:50, Linus Walleij wrote:
-> > On Mon, Apr 18, 2022 at 1:19 PM Dmitry Osipenko
-> > <dmitry.osipenko@collabora.com> wrote:
-> >
-> >> What are the chances of seeing the kernel driver for BCM4751+?
-> >
-> > The kernel does not normally drive the GPS. The kernel has a small driver
-> > dealing with hardware power on/off of the GPS and exposing
-> > /dev/gnss0 to userspace.
-> >
-> > See Johans lecture at:
-> > https://events19.linuxfoundation.org/wp-content/uploads/2017/12/The-GNSS-Subsystem-Johan-Hovold-Hovold-Consulting-AB.pdf
->
-> IIUC, driver also should be needed for the firmware uploading, similarly
-> to the BCM WiFi/BT chips, isn't it?
 
-As far as I can tell from the filesystem on this phone there is no firmware
-so it is flashed into the GPS chip.
 
-> > gpsd is the most common userspace daemon for GPS.
-> > gpsd will then talk to /dev/gnss0 as any other TTY IIUC.
-> >
-> > Replicant has a free implementation of the "MEIF" API for this GPS,
-> > I think what is needed is really for someone to pick up, polish and
-> > contribute that to gpsd
-> > https://git.replicant.us/contrib/PaulK/bcm4751/
->
-> My main curiosity is about whether you already have a working driver
-> prototype, something you could share with us all, so we could start
-> playing with it too :)
+On 4/23/2022 7:57 PM, Raul Tambre wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> On 2022-04-23 15:48, Vidya Sagar wrote:
+>> @@ -47,16 +64,33 @@ Required properties:
+>>     "p2u-N": where N ranges from 0 to one less than the total number 
+>> of lanes
+>>   - nvidia,bpmp: Must contain a pair of phandle to BPMP controller 
+>> node followed
+>>     by controller-id. Following are the controller ids for each 
+>> controller.
+>> +  Tegra194:
+>> +  ---------
+>>       0: C0
+>>       1: C1
+>>       2: C2
+>>       3: C3
+>>       4: C4
+>>       5: C5
+>> +  Tegra194:
+> 
+> Should this be Tegra234?
 
-It's on my TODO whenever there is time, but I have small kids so not
-so much time... I was hoping for the jolly people in postmarketOS to
-chime in because they seem to have a bunch of people with lots of
-time on their hands available :D
+Yes.
+Oops... How did I miss this? My bad.
 
-Yours,
-Linus Walleij
+> 
+>> +  ---------
+>> +    0 : C0
+>> +    1 : C1
+>> +    2 : C2
+>> +    3 : C3
+>> +    4 : C4
+>> +    5 : C5
+>> +    6 : C6
+>> +    7 : C7
+>> +    8 : C8
+>> +    9 : C9
+>> +    10: C10
+> 

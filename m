@@ -2,54 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26A3D50C974
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 12:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD9B450C976
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 12:58:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234346AbiDWK7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 06:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38062 "EHLO
+        id S235100AbiDWLBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 07:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232883AbiDWK7T (ORCPT
+        with ESMTP id S232883AbiDWLBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 06:59:19 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C5F19C21
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 03:56:21 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id y19-20020a056e02119300b002c2d3ef05bfso5224951ili.18
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 03:56:21 -0700 (PDT)
+        Sat, 23 Apr 2022 07:01:16 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249C8D8F
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 03:58:20 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id a1so7605747edt.3
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 03:58:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=s8radedpzyLI4HDoWW69lEYh91W1j56nCvc9cs+YJf4=;
+        b=f+1QC0z11D0dcebGt2VWGRFrDZdkfukZznanhVnVqzbFa8wIWHbcPbkvDEWNVtyhst
+         8s2NczQTtq2QC+JpYxd/TASkMCIUmnVz5fJyne5/v8H504vCyh8oYcH3qxJO27Rat6gU
+         konsyNv6wwihHH0rZcIzJWveUrA72x0Rm1OAIAnPQuMPxRBoqNx+GJ6O47KZOlbAYAMh
+         12IGSRwMDLvPqAUtxiPTBORSQWvIPrRXhcQx99owgsLLGgT32rkVgHL0MtTBZnKHpqge
+         WcRI5qXwNNLYRCJklloUjYKGAmhdFZyRq454WIBtUFwO/6+c4jVneBIi0Sb8DCosTAz2
+         C1Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=4ZC6JurtOjiWgIN9rlfDIfJmEZpcHUsletaGslS+hg8=;
-        b=wZQaGeMPquPV9Lg1h//OtMTfFJIyCTZFYCg9+smWZLyjhAzDNDjFkh8fJPU3zQX4dt
-         kiH/+wsTiDU2W14QcSDbevYbmm2XL7RSCHu9O2rtGxv135Exfc2eICvsjRG3zqXy2xs2
-         ZpBs5TGreivlcB+WSqVWFkCV5I4Y18IGlKs6wb5H4LwdCJ7roLHDLC69EvIYsInalJwX
-         S0azM6FE09/VHJQaV9l+4bdJe3qp4xxi8x7EVbhryRtQiLujR1gyzSVVMxMvtFWODFYR
-         wYYAlb/DoSdDGV9LbyfbXrLmBnpEN/fCphDbfklMPQJh9nwWpyIHMo/F17+OQACY/2+5
-         gniA==
-X-Gm-Message-State: AOAM531wSdrw3+RZpu8kaKgDml5gPv9B36dqQf4cFdmY/vCK2M+iTUa2
-        E0LePxDoypKIeZ3+SNTmM85QDWgDItvjg5egrH/sD6m63O+b
-X-Google-Smtp-Source: ABdhPJwH+Ju16HpN/76ava733ey+RNkvdy90QfhZclJDv5RWeWtPVxXi71kYagFRzFnBojUZIXuH67I/DOsb1rUDFbqKJm9WbqEx
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=s8radedpzyLI4HDoWW69lEYh91W1j56nCvc9cs+YJf4=;
+        b=CP8k8epK+zEneuC2S5CP7RotBzuJAgwWcMyh7ymQkkwDj3HqXqsfz/BESJ9R7/u9WQ
+         STcBXY/tObxbzmbfHuOI5ctkKtq4tpDdtyyD2NKbtR8j87im53kpRWYMYliWdd7VZ1/n
+         Rw8zjKL7qBIW5Q2xSrYXKJs7Iwd3xBraR12AjvJF2/+IbRYlQ6s5XRUpn4VC5zxauDdN
+         IWz/7vGCfX31cYUC3hiR9K3Dir2a7WrvFLG+KZWKO1P9aGG/0BcCmV2dRhSiLA0quzzn
+         ZtjgGbMk0NIsEBcAzvvFXjnec556YGSFAWV1Lb2C/agFHo9S+f0r6rnWuej6ZE/ODtTY
+         CFTQ==
+X-Gm-Message-State: AOAM530GWuyV1pc55sbkdcFlGmb2ViFYY4rKhOHpo/IEdJZIGHLQHMpK
+        yZzx3NCBHGgyobzfmaMawmltJNuzJjp2Kg==
+X-Google-Smtp-Source: ABdhPJyBynvCg3KqONUzxY9h9+AK16bU/MfXMIpRGXRtMy8+m8Xuy7Z4CzO34NAen2NKE/SMnmQ40A==
+X-Received: by 2002:a05:6402:5254:b0:424:78b:dfa4 with SMTP id t20-20020a056402525400b00424078bdfa4mr9604754edd.398.1650711498720;
+        Sat, 23 Apr 2022 03:58:18 -0700 (PDT)
+Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id y19-20020a056402359300b00423e51be1cesm2076104edc.64.2022.04.23.03.58.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 23 Apr 2022 03:58:18 -0700 (PDT)
+Message-ID: <2fdc71ed-b99c-22d9-c921-6eba134ee1f8@linaro.org>
+Date:   Sat, 23 Apr 2022 12:58:17 +0200
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:481a:b0:326:6a2c:2396 with SMTP id
- cp26-20020a056638481a00b003266a2c2396mr3785189jab.122.1650711381294; Sat, 23
- Apr 2022 03:56:21 -0700 (PDT)
-Date:   Sat, 23 Apr 2022 03:56:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000082452505dd503126@google.com>
-Subject: [syzbot] WARNING in kvm_mmu_uninit_tdp_mmu (2)
-From:   syzbot <syzbot+a8ad3ee1525a0c4b40ec@syzkaller.appspotmail.com>
-To:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        pbonzini@redhat.com, seanjc@google.com,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
-        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v5 07/11] dt-bindings: arm: Add HPE GXP Binding
+Content-Language: en-US
+To:     nick.hawkins@hpe.com, verdun@hpe.com, joel@jms.id.au,
+        arnd@arndb.de, openbmc@lists.ozlabs.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220421192132.109954-1-nick.hawkins@hpe.com>
+ <20220421192132.109954-8-nick.hawkins@hpe.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220421192132.109954-8-nick.hawkins@hpe.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,74 +77,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 21/04/2022 21:21, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
+> 
+> This adds support for the hpe,gxp binding.
 
-syzbot found the following issue on:
+Just "Add support for HPE GXP".
+https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
 
-HEAD commit:    59f0c2447e25 Merge tag 'net-5.18-rc4' of git://git.kernel...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=15a61430f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6bc13fa21dd76a9b
-dashboard link: https://syzkaller.appspot.com/bug?extid=a8ad3ee1525a0c4b40ec
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=134363d0f00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11ed3e34f00000
+>  The GXP is based on
+> the cortex a9 processor and supports arm7.
+> 
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+> 
+> ---
+> v5:
+> * Fix version log
+> v4:
+> * Removed gxp.yaml
+> * Created hpe,gxp.yaml based on reviewer input
+> v3:
+> * Created gxp.yaml
+> v2:
+> * No change
+> ---
+>  .../devicetree/bindings/arm/hpe,gxp.yaml      | 22 +++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/hpe,gxp.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/hpe,gxp.yaml b/Documentation/devicetree/bindings/arm/hpe,gxp.yaml
+> new file mode 100644
+> index 000000000000..cd86b67ea207
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/hpe,gxp.yaml
+> @@ -0,0 +1,22 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/hpe,gxp.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: HPE BMC GXP SoC driver
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a8ad3ee1525a0c4b40ec@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 3597 at arch/x86/kvm/mmu/tdp_mmu.c:57 kvm_mmu_uninit_tdp_mmu+0xf8/0x130 arch/x86/kvm/mmu/tdp_mmu.c:57
-Modules linked in:
-CPU: 1 PID: 3597 Comm: syz-executor294 Not tainted 5.18.0-rc3-syzkaller-00060-g59f0c2447e25 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-RIP: 0010:kvm_mmu_uninit_tdp_mmu+0xf8/0x130 arch/x86/kvm/mmu/tdp_mmu.c:57
-Code: 83 d8 a0 00 00 48 39 c5 75 24 e8 e3 4d 5a 00 e8 9e e0 45 00 5b 5d e9 d7 4d 5a 00 e8 b2 42 a5 00 e9 3d ff ff ff e8 c8 4d 5a 00 <0f> 0b eb ad e8 bf 4d 5a 00 0f 0b eb d3 e8 c6 42 a5 00 e9 64 ff ff
-RSP: 0018:ffffc90002e37c08 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffffc90002cda000 RCX: 0000000000000000
-RDX: ffff888023f1e180 RSI: ffffffff811e1688 RDI: 0000000000000001
-RBP: ffffc90002ce40e8 R08: 0000000000000001 R09: 0000000000000001
-R10: ffffffff817ead48 R11: 0000000000000000 R12: ffffc90002cda000
-R13: ffffc90002e37c50 R14: 0000000000000003 R15: ffffc90002cdb240
-FS:  0000000000000000(0000) GS:ffff88802cb00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000560ac4d0cd68 CR3: 000000000ba8e000 CR4: 0000000000152ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- kvm_arch_destroy_vm+0x350/0x470 arch/x86/kvm/x86.c:11860
- kvm_destroy_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:1230 [inline]
- kvm_put_kvm+0x4fa/0xb70 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1264
- kvm_vm_release+0x3f/0x50 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1287
- __fput+0x277/0x9d0 fs/file_table.c:317
- task_work_run+0xdd/0x1a0 kernel/task_work.c:164
- exit_task_work include/linux/task_work.h:37 [inline]
- do_exit+0xaff/0x2a00 kernel/exit.c:795
- do_group_exit+0xd2/0x2f0 kernel/exit.c:925
- __do_sys_exit_group kernel/exit.c:936 [inline]
- __se_sys_exit_group kernel/exit.c:934 [inline]
- __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:934
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f0327505409
-Code: Unable to access opcode bytes at RIP 0x7f03275053df.
-RSP: 002b:00007ffc4a0be998 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 00007f0327578350 RCX: 00007f0327505409
-RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
-RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 68742f636f72702f
-R10: 00000000ffffffff R11: 0000000000000246 R12: 00007f0327578350
-R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
- </TASK>
+This is not a SoC driver anymore, so instead maybe:
+"HPE BMC GXP SoC platforms"
+or
+"HPE BMC GXP platforms"
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> +
+> +maintainers:
+> +  - Nick Hawkins <nick.hawkins@hpe.com>
+> +  - Jean-Marie Verdun <verdun@hpe.com>
+> +
+> +properties:
+> +  compatible:
+You do not allow any extension of this (no oneOf), which is fine if you
+do not plan any other SoCs or SoMs. This is okay, but if there is a
+chance list will grow, then you should have here oneOf, like other bindings.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+> +    items:
+> +      - enum:
+> +          - hpe,gxp-dl360gen10
+> +      - const: hpe,gxp
+> +
+> +additionalProperties: true
+> +
+> +...
+
+
+Best regards,
+Krzysztof

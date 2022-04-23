@@ -2,157 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F311450CD50
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 21:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 197D150CD49
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 21:55:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236978AbiDWT6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 15:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44584 "EHLO
+        id S236956AbiDWT6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 15:58:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236914AbiDWT60 (ORCPT
+        with ESMTP id S234890AbiDWT60 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 23 Apr 2022 15:58:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2115F183FBD;
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65262F3BA
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 12:55:25 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id u15so22344229ejf.11
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 12:55:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=812ATgqJqVuXrzSX7vqc6tXClwcvzSLGkWrw1b5I++8=;
+        b=hvkwQ6TKOCtfYkBltK1BhkfyjhB4cxmA4bGFAS909ho+2AGRQVxSYKV4RY7432BtpV
+         zhOesIbNq3AdPKPRCxnWF99pASa1rd5Wiy3VCdaGtYWJzkcYW/oG+kCd1g8IjqY/Knxl
+         VZEeIe6bhUtH91ZLUpJ/yNhfsTEcTUG1sro7/rAOuwpN1zrCp07BEnNtZfruYXejR6GP
+         YdPeF9eycUOrdusmErs21cNki1EZ5g1VQGadAODaLYa7z1QYM8/sWCezyjt1WvtAPn/k
+         W5PbeHlJHU8YkY5k2zWc/ISxRwoM5+sKZBEf7YNBmoiGkmxqbssxlfovHhJKVHRUqafF
+         ha9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=812ATgqJqVuXrzSX7vqc6tXClwcvzSLGkWrw1b5I++8=;
+        b=x3FurOZHHm6G0SbUh/XjuxMJ/rcqbuIXV5dJL8WrSCGWI78xHUi0kCRgF+eyyV/MB2
+         FthsrnMy5XdUcheeGJycjyf3qkNM3GST/SZzBgTy9TRWw9g8LO89i720nxi/5U9alYt8
+         4yu2TpYD/HjTelXoEGhjuvJuXAbwTLwhxouxJkBlCCckVdL+cWa7H4tnaT0EzjA4v1T9
+         qchxwfBM/HiLh6JvIhRCUK/o5+32y85TCMtJvgBGY9oTJZKKOvOUNBH2n+0b645IgEjr
+         yf55qTQ/O7iyPAUVPl4EKn7EX/dFQ6GaIlt7e+eAMTgugbo5oDkD7rDha7Wy7vU+crjj
+         7SkA==
+X-Gm-Message-State: AOAM530jBH1ZkXXxfTz5TaleJoyGhzJb4vlTgbtY/2uW0Mu/17lMcZWe
+        shZ5K077y2SagEhZnb3YY2GlMCBHfxmeGw==
+X-Google-Smtp-Source: ABdhPJxHNVQT5odGBiwpouPQw1RWXyaubyvA4orHuRY0Lnu1VdOEQRtBSgC3uOZ2TIIvLwqJtxQG9w==
+X-Received: by 2002:a17:906:c152:b0:6f0:1fb3:4e0b with SMTP id dp18-20020a170906c15200b006f01fb34e0bmr9626504ejc.547.1650743724201;
         Sat, 23 Apr 2022 12:55:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C5E94B80D1C;
-        Sat, 23 Apr 2022 19:55:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CA3CC385B5;
-        Sat, 23 Apr 2022 19:55:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650743721;
-        bh=f+gN5VFSk9TvNUY6oLSGkqRdwS9xhEyKvVqBzBXLs0k=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=PzAHzR20lzvPfCTqt/UUzx12IPhOfz+TRjqNJ8NxEoRI/bWqgErqlZjk7cfTM259a
-         ES9ZLzK7AQ5x5SMPoX4fGuEBvk10IF/bYoYOZNrIybBirPtSW18FdAPqWZza8MudXV
-         vG23F9GYtnFHpHrf84m9ZBvRrLCT6HR3YBoZ5rIdgNbcdWJ4WulW+Ag5txr/fArK/K
-         8hzENh6M4DW/B6aRii4K02sQiyHAgWdV6wTeninHDFb9FTGsk1kC60BC8Ty7Z9oRiu
-         uezNy/Q8OZSv9U2rlimKsK6lo1l+EW6dZRWZhxxZjuCiGNgZmaJtyoN+hSdEOEgF8G
-         ZbIfS2Abjyb2Q==
-Received: by mail-wm1-f48.google.com with SMTP id v64-20020a1cac43000000b0038cfd1b3a6dso10070118wme.5;
-        Sat, 23 Apr 2022 12:55:21 -0700 (PDT)
-X-Gm-Message-State: AOAM533lGh9EPqhUPg/nNViJ/yIL6iwq+/2Z9XUGtlSB1o1YIthHmVZa
-        ZwNhKnBa6uPnYoSswxFiRZFxxDjgek5kduGVgxM=
-X-Google-Smtp-Source: ABdhPJwI9oPHj0hjS6Y5T/XpNunPLjXzfhDb/y4TSIxWhFvis5ICGMzIa2Kp6ZajGKm/dLFayXeKiCmoNnJ4Fu7pVP8=
-X-Received: by 2002:a1c:f219:0:b0:38c:782c:3bb with SMTP id
- s25-20020a1cf219000000b0038c782c03bbmr18417513wmc.94.1650743719480; Sat, 23
- Apr 2022 12:55:19 -0700 (PDT)
+Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id k14-20020a170906128e00b006e4b67514a1sm1980657ejb.179.2022.04.23.12.55.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 23 Apr 2022 12:55:23 -0700 (PDT)
+Message-ID: <6e91cf76-bb2d-5f4c-6648-59e666a71e9d@linaro.org>
+Date:   Sat, 23 Apr 2022 21:55:22 +0200
 MIME-Version: 1.0
-References: <20220419163810.2118169-1-arnd@kernel.org> <20220422170530.GA2338209@roeck-us.net>
- <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
- <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net> <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
- <20220422234150.GA3442771@roeck-us.net>
-In-Reply-To: <20220422234150.GA3442771@roeck-us.net>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Sat, 23 Apr 2022 21:55:03 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3qZdEqnJ2nTOKwDMossngOgCpEvZq4cQMPQjSsUoU=6g@mail.gmail.com>
-Message-ID: <CAK8P3a3qZdEqnJ2nTOKwDMossngOgCpEvZq4cQMPQjSsUoU=6g@mail.gmail.com>
-Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Tomas Cech <sleep_walker@suse.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 2/4] dt-bindings: interconnect: Add Qualcomm SM6350 NoC
+ support
+Content-Language: en-US
+To:     Luca Weiss <luca.weiss@fairphone.com>,
+        linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Odelu Kukatla <okukatla@codeaurora.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220422144021.232993-1-luca.weiss@fairphone.com>
+ <20220422144021.232993-3-luca.weiss@fairphone.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220422144021.232993-3-luca.weiss@fairphone.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 23, 2022 at 1:41 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Sat, Apr 23, 2022 at 12:04:31AM +0200, Arnd Bergmann wrote:
-> > On Fri, Apr 22, 2022 at 10:55 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> > > On 4/22/22 12:16, Arnd Bergmann wrote:
-> > > > On Fri, Apr 22, 2022 at 7:05 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> > > >
-> > > > Which machine did you hit this on? Is this on hardware or in qemu?
-> > > >
-> > > qemu, as always. borzoi, spitz, terrier, tosa, z2, and sx1 fail.
-> > > Also, I just noticed that the failure is not always the same.
-> > > z2 fails to boot from initrd, and sx1 fails to boot completely.
-> >
-> > That's a lot of machines failing, I hope at least we got the same bugs more
-> > than once here.
-> >
-> > For the I/O space, I found now that PXA was not using the standard
-> > virtual I/O address yet, but instead used a NULL-based offset.
-> >
-> > I'm not entirely happy with this patch, but this is an outline of what
-> > I think we need to fix that: https://pastebin.com/3nVgQsEw
-> > This one is probably incomplete, at least it breaks sa1100 for now,
-> > and it adds a bogus CONFIG_PCI dependency. I'm also not sure
-> > in what way the last patch in the series triggers it, rather than the
-> > one that removed mach/io.h.
-> >
-> > I had sx1 booting in qemu at least, with the omap1 multiplatform series only.
-> > If you have a custom config for this one, make sure you get the right
-> > DEBUG_LL address.
-> >
-> > > I'll do another round of bisects.
-> >
->
-> Here is the bisect for the sx1 boot failure.
+On 22/04/2022 16:40, Luca Weiss wrote:
+> Add bindings for Qualcomm SM6350 Network-On-Chip interconnect devices.
+> 
+> As SM6350 has two pairs of NoCs sharing the same reg, allow this in the
+> binding documentation, as was done for qcm2290.
+> 
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> ---
+>  .../bindings/interconnect/qcom,rpmh.yaml      |  44 ++++++
+>  .../dt-bindings/interconnect/qcom,sm6350.h    | 148 ++++++++++++++++++
+>  2 files changed, 192 insertions(+)
+>  create mode 100644 include/dt-bindings/interconnect/qcom,sm6350.h
+> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> index 5a911be0c2ea..797107212a42 100644
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> @@ -72,6 +72,14 @@ properties:
+>        - qcom,sdx55-mc-virt
+>        - qcom,sdx55-mem-noc
+>        - qcom,sdx55-system-noc
+> +      - qcom,sm6350-aggre1-noc
+> +      - qcom,sm6350-aggre2-noc
+> +      - qcom,sm6350-config-noc
+> +      - qcom,sm6350-dc-noc
+> +      - qcom,sm6350-gem-noc
+> +      - qcom,sm6350-mmss-noc
+> +      - qcom,sm6350-npu-noc
+> +      - qcom,sm6350-system-noc
+>        - qcom,sm8150-aggre1-noc
+>        - qcom,sm8150-aggre2-noc
+>        - qcom,sm8150-camnoc-noc
+> @@ -131,6 +139,42 @@ properties:
+>      description: |
+>        Names for each of the qcom,bcm-voters specified.
+>  
+> +# Child node's properties
+> +patternProperties:
+> +  '^interconnect-[a-z0-9\-]+$':
+> +    type: object
+> +    description:
+> +      The interconnect providers do not have a separate QoS register space,
+> +      but share parent's space.
+> +
+> +    properties:
+> +      compatible:
+> +        enum:
+> +          - qcom,sm6350-clk-virt
+> +          - qcom,sm6350-compute-noc
+> +
+> +      '#interconnect-cells':
+> +        const: 1
+> +
+> +      qcom,bcm-voters:
+> +        $ref: /schemas/types.yaml#/definitions/phandle-array
 
-Odd, I can't reproduce this at all. Do you get any console output at
-all for this?
+You need maxItems for the entire list, so how many phandles could be
+here. You only defined how the each phandle looks like.
 
-Is this the plain omap1_defconfig, or something else?
+> +        items:
+> +          maxItems: 1
+> +        description: |
+> +          List of phandles to qcom,bcm-voter nodes that are required by
+> +          this interconnect to send RPMh commands.
+> +
+> +      qcom,bcm-voter-names:
+> +        description: |
+> +          Names for each of the qcom,bcm-voters specified.
+> +
+> +    required:
+> +      - compatible
+> +      - '#interconnect-cells'
+> +      - qcom,bcm-voters
+> +
+> +    additionalProperties: false
 
-One thing I keep having to apply myself is this snippet:
+You need to add allOf:if:then constraints where these children can
+appear. If we want to be strict with bindings, this could be a new
+binding, only for SM6350, using common qcom-interconnect binding.
 
-diff --git a/arch/arm/mm/proc-arm925.S b/arch/arm/mm/proc-arm925.S
-index 0bfad62ea858..87c695703580 100644
---- a/arch/arm/mm/proc-arm925.S
-+++ b/arch/arm/mm/proc-arm925.S
-@@ -441,7 +441,6 @@ __arm925_setup:
+The problem is that you allow now any other variant to have
+qcom,sm6350-clk-virt|qcom,sm6350-compute-noc children which obviously is
+wrong, but someone might want to re-use your compatibles.
 
- #ifdef CONFIG_CPU_DCACHE_WRITETHROUGH
-        mov     r0, #4                          @ disable write-back
-on caches explicitly
--       mcr     p15, 7, r0, c15, c0, 0
- #endif
+Probably we hit the limitation of this Qcom bindings here - they are
+just too big, too many compatibles.
 
-        adr     r5, arm925_crval
+Instead maybe let's define:
+1. Common Qcom interconnect rpmh part.
+2. Reference it from qcom,rpmh.yaml.
+3. Reference it from SM6350 rpmh and customize the children.
 
-I don't remember what the story is behind this, but I can't actually manage
-to boot omap1_defconfig on qemu with the instruction intact.
+> +
+>  required:
+>    - compatible
+>    - reg
+> diff --git a/include/dt-bindings/interconnect/qcom,sm6350.h b/include/dt-bindings/interconnect/qcom,sm6350.h
+> new file mode 100644
+> index 000000000000..c6eab5b42858
+> --- /dev/null
+> +++ b/include/dt-bindings/interconnect/qcom,sm6350.h
+> @@ -0,0 +1,148 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
 
-       Arnd
+Same license as bindings, so GPL-2.0 or BSD-2-clause
+
+
+Best regards,
+Krzysztof

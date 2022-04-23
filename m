@@ -2,95 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DBEB50C96C
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 12:53:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F5C50C96D
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 12:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235099AbiDWKzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 06:55:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52816 "EHLO
+        id S235116AbiDWK4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 06:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235096AbiDWKzv (ORCPT
+        with ESMTP id S235127AbiDWK4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 06:55:51 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57461209061
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 03:52:54 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id d6so8144939ede.8
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 03:52:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=SnLxGyDlH+f6meURmeh/oYKzc3TusTflpKC2msJGp18=;
-        b=VItS62qaFGAceiXdlqbdB9+ruWRpST1ulKyCNtDd1RdC50ct8mS2pXtpi3WWrh+rSP
-         tNzAXjrrpBeQRm2edCURtRh9B01TYKDeSvFO0j1KgfsXpGrSSIyZ2e3MMG3HOY9DL8hc
-         ZU54vrXPFwTwSRqyfF2HVTFct3Po2bvHhvK07vau0AlZfIpmB7dX0dr0VmwLGY/3CObe
-         H2Skf57Xxs1NdFzKHBjz5vbrMTqV9vpv+g/xAmMQHrKLVFBBuPiqgxCsUV7fWaEclL6Y
-         fW2OHrOUyjmGb4pffxxM/PpjN/qdifJtgj3R00F7XzKhLhr65t742qojYxRPGRawS4CE
-         JBOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=SnLxGyDlH+f6meURmeh/oYKzc3TusTflpKC2msJGp18=;
-        b=vNPYITpcK1e14k5Iyhsrm5Q0ayPH8GH8ry5/RGr0KFT003YxVz0BK0XtL2Vp5z+Y5j
-         h0W5fl7CkoIZU3Uf/nfhDCQvcC/mVsmJ0MYSZ908jFaFH+fKBqfmCF4Ufw+4AK3fkaF3
-         9yh+eacJzg/qVnWsph2XUs6mTra/nGHTKa+dYWHVlgDYlrfOpQREMcSbFNz3WRaluwy7
-         QfNgpfvSOEzF5dkgaEP2iCcwiuBXCDWw6n7Jj0RvtOFvIeFwqvTCEO6D+2OAhYGCRBfF
-         eiwBmkSgqlkycnJaqpcIgNVltPbdvcPJ/2yrf/0NHqTBeqqrwmaQwR/KucYZa3/q7b5X
-         p74Q==
-X-Gm-Message-State: AOAM531RGGbCc8WD1cmhJN5h71Ywxwzoy7+S+XjMhXINisHDDa3q1zFn
-        XpImY5rmRKz4e6WikD35c1N0tw==
-X-Google-Smtp-Source: ABdhPJzFYbwY1hBBb4KD1bsYKaKWZiWZFmm0TdsTCJuQO1GfWSsldiXIzka7E/qihjcWIP8Cyf4sCg==
-X-Received: by 2002:a05:6402:2985:b0:425:d51f:ae4 with SMTP id eq5-20020a056402298500b00425d51f0ae4mr1518847edb.379.1650711172990;
-        Sat, 23 Apr 2022 03:52:52 -0700 (PDT)
-Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id d2-20020a170906040200b006e84213fdffsm1591852eja.201.2022.04.23.03.52.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Apr 2022 03:52:52 -0700 (PDT)
-Message-ID: <8a423201-09fc-feec-ac5b-9a8c2bea6c71@linaro.org>
-Date:   Sat, 23 Apr 2022 12:52:51 +0200
+        Sat, 23 Apr 2022 06:56:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE7320D62D
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 03:53:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0A965B80A7C
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 10:53:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E0E3C385A0;
+        Sat, 23 Apr 2022 10:53:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650711185;
+        bh=0u/mceG99EHgoghWwdSWZQ50NwptBEddcg6cYThSrw8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GkClU9x5qYy7RWJ0SoiQHYw0jFOX7qkYqb1YJsHLz+O6Jq8dJS4K/ffMrgzwK9cho
+         /x6N2fH3+fmdULkusx0UybVAcXBuNnsebB8G107d6zwTq1NYU05cay9b4SJfsRoVy/
+         KkchlyM0HcBAJox88K18IiteiMOr7NkG6tK5Wbr4=
+Date:   Sat, 23 Apr 2022 12:53:02 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Tony Luck <tony.luck@intel.com>
+Subject: Re: [PATCH] topology: Fix up build warning in topology_is_visible()
+Message-ID: <YmPajtfsCL8Idw4h@kroah.com>
+References: <20220422062653.3899972-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v5 08/11] dt-bindings: usb: generic-ehci: Add HPE GXP ehci
- binding
-Content-Language: en-US
-To:     nick.hawkins@hpe.com, verdun@hpe.com, joel@jms.id.au,
-        arnd@arndb.de, openbmc@lists.ozlabs.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220421192132.109954-1-nick.hawkins@hpe.com>
- <20220421192132.109954-9-nick.hawkins@hpe.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220421192132.109954-9-nick.hawkins@hpe.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220422062653.3899972-1-gregkh@linuxfoundation.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/04/2022 21:21, nick.hawkins@hpe.com wrote:
-> From: Nick Hawkins <nick.hawkins@hpe.com>
+On Fri, Apr 22, 2022 at 08:26:53AM +0200, Greg Kroah-Hartman wrote:
+> Commit aa63a74d4535 ("topology/sysfs: Hide PPIN on systems that do not
+> support it.") caused a build warning on some configurations:
 > 
-> Add hpe,gxp-ehci to the generic-ehci list. This is to
-> enable the device tree.
+> drivers/base/topology.c: In function 'topology_is_visible':
+> drivers/base/topology.c:158:24: warning: unused variable 'dev' [-Wunused-variable]
+>   158 |         struct device *dev = kobj_to_dev(kobj);
 > 
-> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+> Fix this up by getting rid of the variable entirely.
+> 
+> Fixes: aa63a74d4535 ("topology/sysfs: Hide PPIN on systems that do not support it.")
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Cc: Tony Luck <tony.luck@intel.com>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  drivers/base/topology.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/base/topology.c b/drivers/base/topology.c
+> index 706dbf8bf249..ac6ad9ab67f9 100644
+> --- a/drivers/base/topology.c
+> +++ b/drivers/base/topology.c
+> @@ -155,9 +155,7 @@ static struct attribute *default_attrs[] = {
+>  static umode_t topology_is_visible(struct kobject *kobj,
+>  				   struct attribute *attr, int unused)
+>  {
+> -	struct device *dev = kobj_to_dev(kobj);
+> -
+> -	if (attr == &dev_attr_ppin.attr && !topology_ppin(dev->id))
+> +	if (attr == &dev_attr_ppin.attr && !topology_ppin(kobj_to_dev(kobj)->id))
+>  		return 0;
+>  
+>  	return attr->mode;
+> -- 
+> 2.36.0
+> 
 
+Given no comments that this is a bad idea, I'll go apply this now.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+thanks,
 
-
-Best regards,
-Krzysztof
+greg k-h

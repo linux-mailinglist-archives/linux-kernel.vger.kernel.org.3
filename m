@@ -2,144 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CECE50C7D2
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 08:38:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F3750C7D6
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 08:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233613AbiDWGiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 02:38:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45674 "EHLO
+        id S233641AbiDWGlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 02:41:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233528AbiDWGiU (ORCPT
+        with ESMTP id S233385AbiDWGlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 02:38:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E691738EB;
-        Fri, 22 Apr 2022 23:35:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3D784B801BB;
-        Sat, 23 Apr 2022 06:35:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCD79C385A0;
-        Sat, 23 Apr 2022 06:35:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650695720;
-        bh=uj117Fj0AoiisjMt1kk2aSrqooXMqVlr2Vxsn5y3Q+g=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=eH/LKVoNGyp2Ix5Znj3F6z74ZX9Ey3qSMlPdX4tw0zeFqJ2zTXbzACJNdnxKfI3+M
-         B20pItwMgjzz0uKaMQm8k6WD+F6X3cbG6aR5vlbhmGSVT02mT5svKwDKWMxWUpHmpI
-         xOz2r3dn+M+b/6YHmAynf+otgkUluHD+IOZt+7syYAd1wBLBhxsFOlKP1M5JqIadny
-         +2qbySaFlEt5m2UZhgNALM1x0EPbgEEqW2kL49bMWt8Mqcssbhtz+LLzzoNbQxbDlq
-         iE+rYwAQNsCgSLVc0Ig2KbJ8q3QPPDsJ+QIV6n6glgX6wbCt6ZlthMru/ljizcPDtx
-         DUMTvZL7/YmpQ==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Sedat Dilek <sedat.dilek@gmail.com>
-Cc:     "Greenman\, Gregory" <gregory.greenman@intel.com>,
-        "linux\@roeck-us.net" <linux@roeck-us.net>,
-        "linux-wireless\@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "rostedt\@goodmis.org" <rostedt@goodmis.org>,
-        "Berg\, Johannes" <johannes.berg@intel.com>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev\@vger.kernel.org" <netdev@vger.kernel.org>,
-        "Coelho\, Luciano" <luciano.coelho@intel.com>
-Subject: Re: [PATCH] iwlwifi: iwl-dbg: Use del_timer_sync() before freeing
-References: <20220411154210.1870008-1-linux@roeck-us.net>
-        <afd746404a74657a288a9272bf0c419c027dbd06.camel@intel.com>
-        <CA+icZUVEfKcGi7ME3hoyinz2VQxLKhCXgwDA2K3AB7MEK-bveQ@mail.gmail.com>
-Date:   Sat, 23 Apr 2022 09:35:16 +0300
-In-Reply-To: <CA+icZUVEfKcGi7ME3hoyinz2VQxLKhCXgwDA2K3AB7MEK-bveQ@mail.gmail.com>
-        (Sedat Dilek's message of "Wed, 13 Apr 2022 17:06:26 +0200")
-Message-ID: <87fsm4mhnf.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Sat, 23 Apr 2022 02:41:12 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F02DEB
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 23:38:16 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id s18so20283076ejr.0
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 23:38:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=JfYNk7PKym38MlGAXyXafcCNWPn+2drPWLNtsAJTZac=;
+        b=wYRkumz1HH5a5k41YA/3eyDDbvnMB1QTrSknt8c1j99bwzKt02sO/yGBsz4l9qzhVx
+         JdgMXmnVnqe5kV8Html2wprELfIEpNmTRD3bGakgJS/qHVWcPU+sLDjpFY+jOl9b8+T5
+         LKtUZ6In5Mvp/0CB6hxnHt12qThKxTApkJxaOik1N8AUYqMwHSGe4WZB8Y7lXZ58hRma
+         D81PrYOUXEPCCSE4QAkX2/wFJngtAzRzub/zH38Bf1ZeFUv6eAyW9KHYipZpX+NZSUo9
+         +LXdpkcwiBohl6gk/mtgxvVf6x2fv+6i+6lKMMNVHEktGiUyRGwDJ4YYBudkReeqX6EA
+         2WNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JfYNk7PKym38MlGAXyXafcCNWPn+2drPWLNtsAJTZac=;
+        b=kmTlQy9RUAtaLPu7+r2QGvQt9wMNlub67LzSAy5baGPqnxVnnUBncitxdX5+RRyBH9
+         znIXyWZJtIBi0irkifyV/1r7XNbg64jdrPvpOqsyJthJ4fKIjAIxRDstZKzfnjZRCqF1
+         oeborYRJUDUVuPTASMpTqdGvL4Ty8eVEluJYXshdv1bl3y2dDwCd4bGxMDp9m5LmmdBm
+         TIHwiCCtIxSGzNG8SBHCFOtkkInjYrcOG1vLKxgrWZar0P56lAOeIARwIahGtVOWFIlN
+         Cd/mj068GL3PMy1GAGQiUzTuMpT8QiS3r/E2M5/uSqit2RUQkqZ770fEYxd+YSD8NiGw
+         rxCA==
+X-Gm-Message-State: AOAM533+6SWH4tnuZUfxyTZ2/8U3wZMFFA/axXeQ9FnJIFr+8JSYeyhj
+        WVll+YDwZM+0Fn4sf9G8fb/x2A==
+X-Google-Smtp-Source: ABdhPJwzivo8NzW2VqVoaWDBZYgI3SnzZw9bPgroasDWLZL3hitJGtp3e92gxF/3V81cOzkCePJQXg==
+X-Received: by 2002:a17:906:5d12:b0:6f0:17a5:6053 with SMTP id g18-20020a1709065d1200b006f017a56053mr7275588ejt.635.1650695894463;
+        Fri, 22 Apr 2022 23:38:14 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s ([104.245.96.34])
+        by smtp.gmail.com with ESMTPSA id x12-20020a170906134c00b006ef8be0e8e9sm1398092ejb.168.2022.04.22.23.38.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 23:38:13 -0700 (PDT)
+Date:   Sat, 23 Apr 2022 14:38:05 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Ali Saidi <alisaidi@amazon.com>
+Cc:     kan.liang@linux.intel.com, Nick.Forrington@arm.com,
+        acme@kernel.org, ak@linux.intel.com,
+        alexander.shishkin@linux.intel.com, andrew.kilroy@arm.com,
+        benh@kernel.crashing.org, german.gomez@arm.com,
+        james.clark@arm.com, john.garry@huawei.com, jolsa@kernel.org,
+        kjain@linux.ibm.com, lihuafei1@huawei.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
+        mathieu.poirier@linaro.org, mingo@redhat.com, namhyung@kernel.org,
+        peterz@infradead.org, will@kernel.org
+Subject: Re: [PATCH v5 2/5] perf: Add SNOOP_PEER flag to perf mem data struct
+Message-ID: <20220423063805.GA559531@leoy-ThinkPad-X240s>
+References: <c17dedde-6ba8-db9b-4827-32477f039764@linux.intel.com>
+ <20220422212249.22463-1-alisaidi@amazon.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220422212249.22463-1-alisaidi@amazon.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sedat Dilek <sedat.dilek@gmail.com> writes:
+On Fri, Apr 22, 2022 at 09:22:49PM +0000, Ali Saidi wrote:
+> 
+> On Fri, 22 Apr 2022 21:43:28, Kan Liang wrote:
+> > On 4/22/2022 2:49 PM, Ali Saidi wrote:
+> > > On Wed, 20 Apr 2022 18:43:28, Kan Liang wrote:
+> > >> On 4/8/2022 3:53 PM, Ali Saidi wrote:
+> > >>> Add a flag to the perf mem data struct to signal that a request caused a
+> > >>> cache-to-cache transfer of a line from a peer of the requestor and
+> > >>> wasn't sourced from a lower cache level.
+> > >>
+> > >> It sounds similar to the Forward state. Why can't the
+> > >> PERF_MEM_SNOOPX_FWD be reused?
+> > > 
+> > > Is there a definition of SNOOPX_FWD i can refer to? Happy to use this instead if
+> > > the semantics align between architectures.
+> > > 
+> > 
+> > + Andi
+> > 
+> > As my understanding, the SNOOPX_FWD means the Forward state, which is a 
+> > non-modified (clean) cache-to-cache copy.
+> > https://en.wikipedia.org/wiki/MESIF_protocol
+>   
+> In this case the semantics are different. We know the line was transferred from
+> another peer cache, but don't know if it was clean, dirty, or if the receiving core
+> now has exclusive ownership of it.
 
-> On Wed, Apr 13, 2022 at 11:56 AM Greenman, Gregory
-> <gregory.greenman@intel.com> wrote:
->>
->>
->> On Mon, 2022-04-11 at 08:42 -0700, Guenter Roeck wrote:
->> > In Chrome OS, a large number of crashes is observed due to corrupted
->> > timer
->> > lists. Steven Rostedt pointed out that this usually happens when a
->> > timer
->> > is freed while still active, and that the problem is often triggered
->> > by code calling del_timer() instead of del_timer_sync() just before
->> > freeing.
->> >
->> > Steven also identified the iwlwifi driver as one of the possible
->> > culprits
->> > since it does exactly that.
->> >
->> > Reported-by: Steven Rostedt <rostedt@goodmis.org>
->> > Cc: Steven Rostedt <rostedt@goodmis.org>
->> > Cc: Johannes Berg <johannes.berg@intel.com>
->> > Cc: Gregory Greenman <gregory.greenman@intel.com>
->> > Fixes: 60e8abd9d3e91 ("iwlwifi: dbg_ini: add periodic trigger new API
->> > support")
->> > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->> > ---
->> > v1 (from RFC):
->> >     Removed Shahar S Matityahu from Cc: and added Gregory Greenman.
->> >     No functional change.
->> >
->> > I thought about the need to add a mutex to protect the timer list,
->> > but
->> > I convinced myself that it is not necessary because the code adding
->> > the timer list and the code removing it should never be never
->> > executed
->> > in parallel.
->> >
->> >  drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c | 2 +-
->> >  1 file changed, 1 insertion(+), 1 deletion(-)
->> >
->> > diff --git a/drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c
->> > b/drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c
->> > index 866a33f49915..3237d4b528b5 100644
->> > --- a/drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c
->> > +++ b/drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c
->> > @@ -371,7 +371,7 @@ void iwl_dbg_tlv_del_timers(struct iwl_trans
->> > *trans)
->> >         struct iwl_dbg_tlv_timer_node *node, *tmp;
->> >
->> >         list_for_each_entry_safe(node, tmp, timer_list, list) {
->> > -               del_timer(&node->timer);
->> > +               del_timer_sync(&node->timer);
->> >                 list_del(&node->list);
->> >                 kfree(node);
->> >         }
->>
->> Hi Kalle,
->>
->> Can you please pick it up to wireless-drivers for the next rc?
->> It is an important fix.
->> Luca has already assigned it to you in patchwork.
->>
->> Thanks!
->>
->> Acked-by: Gregory Greenman <gregory.greenman@intel.com>
->
-> I have tested this on top of Linux v5.17.3-rc1.
->
-> Feel free to add my...
->
-> Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # Linux v5.17.3-rc1 and
-> Debian LLVM-14
+In the spec "Intel 64 and IA-32 Architectures Software Developer's Manual,
+Volume 3B: System Programming Guide, Part 2", section "18.8.1.3 Off-core
+Response Performance Monitoring in the Processor Core", it defines the
+REMOTE_CACHE_FWD as:
 
-Please keep the Tested-by in one line, otherwise patchwork cannot parse
-it correctly. I fixed this manually during commit.
+"L3 Miss: local homed requests that missed the L3 cache and was serviced
+by forwarded data following a cross package snoop where no modified copies
+found. (Remote home requests are not counted)".
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+Except SNOOPX_FWD means a no modified cache snooping, it also means it's
+a cache conherency from *remote* socket.  This is quite different from we
+define SNOOPX_PEER, which only snoop from peer CPU or clusters.
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+If no objection, I prefer we could keep the new snoop type SNOOPX_PEER,
+this would be easier for us to distinguish the semantics and support the
+statistics for SNOOPX_FWD and SNOOPX_PEER separately.
+
+I overlooked the flag SNOOPX_FWD, thanks a lot for Kan's reminding.
+
+Thanks,
+Leo

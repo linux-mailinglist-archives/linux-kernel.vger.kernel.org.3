@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2123050CA4A
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 15:02:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6487050CA4D
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 15:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235621AbiDWNFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 09:05:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41064 "EHLO
+        id S235631AbiDWNFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 09:05:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235610AbiDWNFK (ORCPT
+        with ESMTP id S235626AbiDWNFP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 09:05:10 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB7C1F040A
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 06:02:14 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id y14so9746077pfe.10
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 06:02:14 -0700 (PDT)
+        Sat, 23 Apr 2022 09:05:15 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF2C1F0420
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 06:02:18 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id h1so10495234pfv.12
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 06:02:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=vM5RVFO6hnZxHJlh729g+B7vJJ65wYvCqP8gO/Xp2ro=;
-        b=lgd9AJ3xV83rtBnLBU8P2J9R36SCBOyCEbLQ2iuuJcKcMYPcMWeG9oEhUpBiDld0QJ
-         LD9vFOnSdr4UWN1ePf6i0irQilLHHJMkr0AENGUZREk5/bQcoAbYZUPRe6Hdcbt3uAcc
-         gBRiH7tPPurHgunU8I5j1SKxPTPh0hu9rhhqAygLH6l/WeLloKQir3eAmYq1z8l3Dj4E
-         QBR3390YsMPjuvu2zaXZ1hFwY1+6ss2zE1CXEMuD2386I9YhjZdzzO4bCyFxBM0yu8qu
-         TiWkf9Hzqae26ugfIKq4V2qHHSrJxmNHBjb2wjlckqJI9YsCqBBlLJBDY0ixvAllIYle
-         ddDw==
+        bh=+3gUIKqgjIoqwfyRdl1gl0gu9sfmeEdgyuQbdCNe5BA=;
+        b=LN46w5S3b44hmyqlW8bleygWumr9HpM35L/IWvTsW2aVpra7CrkWWp7so/GivC7wS4
+         K9iUcT4o8T+bZXihS+zOeHAmcmoTBKE0otsLwcElfTrewYuDDKDbNBRwLoutCrt/de0W
+         8We+i7z52FruY7VU3uCd5NXYM5sa2Qx4H+VCEDgkyMOfHOGoL4Ym1IbuNDbt0CuXOB2X
+         DtlVR+fgZWKYWiNjmYrIECen7dFpfqG8zAEGwlktMSZP3W3WEVVKwMTOd1zlxK76TUzf
+         S/xfImg2o2KaLtfuNhtAw8GjMahPILScWywueuVqyvYpbWABvLcZpNTYrnD1Cxt6NSVB
+         L8OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vM5RVFO6hnZxHJlh729g+B7vJJ65wYvCqP8gO/Xp2ro=;
-        b=YvqqAEyplAWwvM+dh0n1oAUkRzjJaSQBSJvYiIxTr7jArehRBGO+DB3ASo7JsF6511
-         h4Zuhp56K9VB+l277RxAjPLPXtaM8UhmEE2vJDCtMwK0dh7wkelo1N549VsoFK2aIuyU
-         Sv7i7Qp+tUywQS3sxcNklOfvRhdkzTNvE7atGWHFSpjIrPtNWFLqwSEEilSKpki8Upba
-         icfmH92PzgsTPn49Z/ta+YpbSbX8/tA/ct/UEuBYSf3P3E/FehjviJbQo34vSaK7nRTE
-         lftKCdTbwe3svvzdV/FR/eRZF7y1HZr2VEfgILFVonYvps0fpY2A5kD6zyXNjitFXo1b
-         gDFQ==
-X-Gm-Message-State: AOAM53322FF75DMj5jtOhzg/irPDXNbWaUDXwjympLk0anQQ4cbKjT/G
-        TPb7WRRRiKiIr21ePwadV18=
-X-Google-Smtp-Source: ABdhPJxrZpTSfajfKptQieeEDLFf4C5YXMwUJmLcw1HcMC8Y6cJLiI9R2mqPpyptpKj1iuvCYwoLhw==
-X-Received: by 2002:a05:6a00:4399:b0:50a:db62:e4fa with SMTP id bt25-20020a056a00439900b0050adb62e4famr10000551pfb.31.1650718933675;
-        Sat, 23 Apr 2022 06:02:13 -0700 (PDT)
+        bh=+3gUIKqgjIoqwfyRdl1gl0gu9sfmeEdgyuQbdCNe5BA=;
+        b=Im1IXjf4yO014QUig/eI5L1YQXgLpw2DjQub0b2/HO8CEspK2QBswqQ5D362ON1aCc
+         6YNgxTRyQ2vxHI2dfjV2+4yyUHQAkg2bmiAKNHZy8iMcU0cX5v2hp73k99Hvpg6539qa
+         qA7cBqQCWka83nPkeg3CBveUOhLFBE6P2nigkGmrC3GK35KOZG0gH6A7snND4Q/07v2+
+         que2RXX+D3ytB4z4pXA+bBlBCI3MJ4xldpwB7xPJvv7dsekp/5glvsqjjXWONYDJHxvu
+         Z+o8uUktXUqLzV7iB0nka3x6hGbCM3ZfzUAdbZcl0vHhyahf0ssvAWIyDmnurgg49Jub
+         SVqg==
+X-Gm-Message-State: AOAM533n9WYSRnFgrtkWc/AoDMgiCvtX9tJikO2Cib5n2ZbsXjwWYnn9
+        MCjYN+gmdWyG4HMFe8NtW4xshDrG4Ew22Q==
+X-Google-Smtp-Source: ABdhPJzLZyrXSGRaOPPlqezEIm/raJzvDqC2gZAi8gNTlVurCBybd2ZOdD+ntz/RHhOcwoeeuMs3Tw==
+X-Received: by 2002:a05:6a00:2186:b0:4f7:5544:1cc9 with SMTP id h6-20020a056a00218600b004f755441cc9mr9719631pfi.62.1650718937763;
+        Sat, 23 Apr 2022 06:02:17 -0700 (PDT)
 Received: from localhost.localdomain ([14.100.36.163])
-        by smtp.gmail.com with ESMTPSA id c139-20020a624e91000000b005060cdff4ffsm5808994pfb.129.2022.04.23.06.02.12
+        by smtp.gmail.com with ESMTPSA id c139-20020a624e91000000b005060cdff4ffsm5808994pfb.129.2022.04.23.06.02.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 06:02:13 -0700 (PDT)
+        Sat, 23 Apr 2022 06:02:17 -0700 (PDT)
 From:   Solomon Tan <wjsota@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         dan.carpenter@oracle.com
-Subject: [PATCH 2/7] staging: rtl8192e: Remove unnecessary u8 argument cast
-Date:   Sat, 23 Apr 2022 21:01:45 +0800
-Message-Id: <20220423130150.161903-3-wjsota@gmail.com>
+Subject: [PATCH 3/7] staging: rtl8192e: Remove unnecessary u8 cast in comparison
+Date:   Sat, 23 Apr 2022 21:01:46 +0800
+Message-Id: <20220423130150.161903-4-wjsota@gmail.com>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220423130150.161903-1-wjsota@gmail.com>
 References: <20220423130150.161903-1-wjsota@gmail.com>
@@ -70,98 +70,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the unnecessary explicit u8 casts for u8 arguments in function
-calls. These functions have declared their parameters to be of type u8,
-so the arguments given to those parameters will be automatically coerced
-to u8. Therefore, an explicit cast is unnecessary.
+Since the macro VERSION_8190_BD is defined to be 0x3, and the structure
+members card_8192_version and IC_Cut are both u8, an explicit u8 cast is
+unnecessary.
 
 Signed-off-by: Solomon Tan <wjsota@gmail.com>
 ---
- drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c      | 9 ++++-----
- drivers/staging/rtl8192e/rtl8192e/r8192E_firmware.c | 3 +--
- drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c      | 2 +-
- drivers/staging/rtl8192e/rtl8192e/rtl_dm.c          | 2 +-
- 4 files changed, 7 insertions(+), 9 deletions(-)
+ drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c | 2 +-
+ drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-index 4b31fecde4e6..4fe806eae5b7 100644
+index 4fe806eae5b7..b608540c036c 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
 +++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-@@ -1175,7 +1175,7 @@ void  rtl92e_fill_tx_desc(struct net_device *dev, struct tx_desc *pdesc,
- 	pTxFwInfo = (struct tx_fwinfo_8190pci *)skb->data;
- 	memset(pTxFwInfo, 0, sizeof(struct tx_fwinfo_8190pci));
- 	pTxFwInfo->TxHT = (cb_desc->data_rate & 0x80) ? 1 : 0;
--	pTxFwInfo->TxRate = _rtl92e_rate_mgn_to_hw((u8)cb_desc->data_rate);
-+	pTxFwInfo->TxRate = _rtl92e_rate_mgn_to_hw(cb_desc->data_rate);
- 	pTxFwInfo->EnableCPUDur = cb_desc->bTxEnableFwCalcDur;
- 	pTxFwInfo->Short = _rtl92e_query_is_short(pTxFwInfo->TxHT,
- 						  pTxFwInfo->TxRate, cb_desc);
-@@ -1194,7 +1194,7 @@ void  rtl92e_fill_tx_desc(struct net_device *dev, struct tx_desc *pdesc,
- 	pTxFwInfo->CtsEnable = (cb_desc->bCTSEnable) ? 1 : 0;
- 	pTxFwInfo->RtsSTBC = (cb_desc->bRTSSTBC) ? 1 : 0;
- 	pTxFwInfo->RtsHT = (cb_desc->rts_rate&0x80) ? 1 : 0;
--	pTxFwInfo->RtsRate = _rtl92e_rate_mgn_to_hw((u8)cb_desc->rts_rate);
-+	pTxFwInfo->RtsRate = _rtl92e_rate_mgn_to_hw(cb_desc->rts_rate);
- 	pTxFwInfo->RtsBandwidth = 0;
- 	pTxFwInfo->RtsSubcarrier = cb_desc->RTSSC;
- 	pTxFwInfo->RtsShort = (pTxFwInfo->RtsHT == 0) ?
-@@ -1707,8 +1707,7 @@ static void _rtl92e_process_phyinfo(struct r8192_priv *priv, u8 *buffer,
- 		slide_rssi_index = 0;
+@@ -811,7 +811,7 @@ bool rtl92e_start_adapter(struct net_device *dev)
  
- 	tmp_val = priv->stats.slide_rssi_total/slide_rssi_statistics;
--	priv->stats.signal_strength = rtl92e_translate_to_dbm(priv,
--							      (u8)tmp_val);
-+	priv->stats.signal_strength = rtl92e_translate_to_dbm(priv, tmp_val);
- 	curr_st->rssi = priv->stats.signal_strength;
- 	if (!prev_st->bPacketMatchBSSID) {
- 		if (!prev_st->bToSelfBA)
-@@ -2034,7 +2033,7 @@ bool rtl92e_get_rx_stats(struct net_device *dev, struct rtllib_rx_stats *stats,
- 	pDrvInfo = (struct rx_fwinfo *)(skb->data + stats->RxBufShift);
+ 	rtl92e_config_mac(dev);
  
- 	stats->rate = _rtl92e_rate_hw_to_mgn((bool)pDrvInfo->RxHT,
--					     (u8)pDrvInfo->RxRate);
-+					     pDrvInfo->RxRate);
- 	stats->bShortPreamble = pDrvInfo->SPLCP;
- 
- 	_rtl92e_update_received_rate_histogram_stats(dev, stats);
-diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_firmware.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_firmware.c
-index 9b025b9fa7ab..38110fa4f36d 100644
---- a/drivers/staging/rtl8192e/rtl8192e/r8192E_firmware.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_firmware.c
-@@ -34,8 +34,7 @@ static bool _rtl92e_fw_boot_cpu(struct net_device *dev)
- 	netdev_dbg(dev, "Download Firmware: Put code ok!\n");
- 
- 	CPU_status = rtl92e_readl(dev, CPU_GEN);
--	rtl92e_writeb(dev, CPU_GEN,
--		      (u8)((CPU_status|CPU_GEN_PWR_STB_CPU)&0xff));
-+	rtl92e_writeb(dev, CPU_GEN, (CPU_status | CPU_GEN_PWR_STB_CPU) & 0xff);
- 	mdelay(1);
- 
- 	if (!_rtl92e_wait_for_fw(dev, CPU_GEN_BOOT_RDY, 200)) {
+-	if (priv->card_8192_version > (u8)VERSION_8190_BD) {
++	if (priv->card_8192_version > VERSION_8190_BD) {
+ 		rtl92e_get_tx_power(dev);
+ 		rtl92e_set_tx_power(dev, priv->chan);
+ 	}
 diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-index c7071e0997bc..1b70c12be365 100644
+index 1b70c12be365..b7bdbd895e7b 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
 +++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-@@ -933,7 +933,7 @@ static u8 _rtl92e_phy_switch_channel_step(struct net_device *dev, u8 channel,
+@@ -919,7 +919,7 @@ static u8 _rtl92e_phy_switch_channel_step(struct net_device *dev, u8 channel,
+ 				continue;
+ 			switch (CurrentCmd->CmdID) {
+ 			case CmdID_SetTxPowerLevel:
+-				if (priv->IC_Cut > (u8)VERSION_8190_BD)
++				if (priv->IC_Cut > VERSION_8190_BD)
+ 					_rtl92e_set_tx_power_level(dev,
+ 								   channel);
  				break;
- 			case CmdID_WritePortUchar:
- 				rtl92e_writeb(dev, CurrentCmd->Para1,
--					      (u8)CurrentCmd->Para2);
-+					      CurrentCmd->Para2);
- 				break;
- 			case CmdID_RF_WriteReg:
- 				for (eRFPath = 0; eRFPath <
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-index c85b23415772..d58800d06e8f 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-@@ -2513,5 +2513,5 @@ static void _rtl92e_dm_send_rssi_to_fw(struct net_device *dev)
- {
- 	struct r8192_priv *priv = rtllib_priv(dev);
- 
--	rtl92e_writeb(dev, DRIVER_RSSI, (u8)priv->undecorated_smoothed_pwdb);
-+	rtl92e_writeb(dev, DRIVER_RSSI, priv->undecorated_smoothed_pwdb);
- }
 -- 
 2.36.0
 

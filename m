@@ -2,138 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92F5550CE16
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 02:11:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0E150CE18
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 02:11:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235518AbiDWXuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 19:50:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55916 "EHLO
+        id S236928AbiDWXwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 19:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235017AbiDWXui (ORCPT
+        with ESMTP id S229732AbiDWXwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 19:50:38 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED29622BF1
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 16:47:39 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id u15so22925706ejf.11
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 16:47:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=S4As9YzHRBrrZ1C0yo3XEDo6BKzSgfNCpKjF9OwCZh0=;
-        b=iM2mIyLEiD1wFXjGNEI3QW7B+C7ZMY0mpFrDiymtfImyzMtP79nNX/vbweJ1UVr/Jz
-         YQUAlLR5mb6a1nMgQFDtqYobanGVN0A6hZbGpt2veilypsnkC9fkK5DWpPyFmlgNMWAa
-         6jQfOJuFahUv4yDJXkmOPprBJ8R305LthfKe9d0HbKWsrh7O6iV/iqx+EZxo/8Jj0mPc
-         Cy2ZrW73Z9pz6Rx63l/N7MbLYVaMOEyI/Pvp+xL2Eyb2TDPr0Ez7My6LioUbw9ElgMpe
-         B7rGdflQo7QOVVIYOscJmd6y6KblJq9aetAige64PcFCuonjL5iQyRY7pdWh2LhEEkRR
-         /rXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=S4As9YzHRBrrZ1C0yo3XEDo6BKzSgfNCpKjF9OwCZh0=;
-        b=XPfbjJRQozYpP0rtzm+NEOaRkiFoLALIyIN62daaBFWjf2aQX6pv5U0m4Dq2uZ3PhX
-         fQNNK7zqBlQdg6oJg34xTuStydA09bhENAHwt9cOfV6rZMmTtD3++FFCNgTJQjajmLaD
-         ulzV0ja0ZDAKV7kH5KucpT6zyXh65yH8fYjP9D/kxA/8vcd/XjGy+ARAIsM+XAEizfPt
-         rjRFA9h1bZ9xaD1EglhzxLOv2J9UVGDJIUlYAx9c6pOQBOW6GU78tQ1XqwuubjnIOCAN
-         sTbJxGcuj/qmvDZir4B7XAaitvJyzcBKHCeKncousEiSZq1UCKNui+crebS6jMdzY0KF
-         G6kA==
-X-Gm-Message-State: AOAM532yNJAXTuL/xqVGWi1tPmNORckYZBGWw/fLrxeEp3pBv584KKIp
-        IR2d98B5r8uGNs1xtLAayCQ=
-X-Google-Smtp-Source: ABdhPJxa7ryau6Xp1HxNg5EMWfbttV2me1SLWRyisMp8p6lvvVhTU2suzZzNksPN5Az+hAU0X9y2lg==
-X-Received: by 2002:a17:907:86a8:b0:6f0:1f97:d7da with SMTP id qa40-20020a17090786a800b006f01f97d7damr10174693ejc.663.1650757658401;
-        Sat, 23 Apr 2022 16:47:38 -0700 (PDT)
-Received: from leap.localnet (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
-        by smtp.gmail.com with ESMTPSA id e22-20020a170906505600b006da7d71f25csm2104425ejk.41.2022.04.23.16.47.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 16:47:37 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Straube <straube.linux@gmail.com>,
-        Vihas Makwana <makvihas@gmail.com>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Vihas Makwana <makvihas@gmail.com>
-Subject: Re: [PATCH] staging: r8188eu: fix a potential NULL pointer dereference
-Date:   Sun, 24 Apr 2022 01:47:35 +0200
-Message-ID: <3607997.MHq7AAxBmi@leap>
-In-Reply-To: <20220423184745.21134-1-makvihas@gmail.com>
-References: <20220423184745.21134-1-makvihas@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 23 Apr 2022 19:52:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F14E26113;
+        Sat, 23 Apr 2022 16:49:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3B4C3B80CFD;
+        Sat, 23 Apr 2022 23:49:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98098C385A0;
+        Sat, 23 Apr 2022 23:49:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1650757755;
+        bh=Ph02Z8NmFW9Xa0ZFqyBY0dnHe4IOaDafx/zUg80yRtQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=TBBj3bG5S4VvgKxTlmXV4+9CZ/ALUdKJ2u2xj63Cg4+MxNFtYT+//RNFEyjpfXer5
+         rUVntarp+N8WQB8Ou/BXv1jECuyiVry1h9+zA/i3gjYAiKdNq5S0v8xpWGy/+VYN7W
+         gLflr7woNIoTmfGwtfzCowFogIhRN466ItRYoOkw=
+Date:   Sat, 23 Apr 2022 16:49:13 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Al Viro <viro@zeniv.linux.org.uk>, Chris Mason <clm@fb.com>,
+        David Sterba <dsterba@suse.com>, Will Deacon <will@kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] mm: Add fault_in_subpage_writeable() to probe at
+ sub-page granularity
+Message-Id: <20220423164913.3f0c92f7ad6ec718ea7c0360@linux-foundation.org>
+In-Reply-To: <20220423100751.1870771-2-catalin.marinas@arm.com>
+References: <20220423100751.1870771-1-catalin.marinas@arm.com>
+        <20220423100751.1870771-2-catalin.marinas@arm.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On sabato 23 aprile 2022 20:47:48 CEST Vihas Makwana wrote:
-> recvframe_chk_defrag() performs a NULL check on psta, but if that check
-> fails then it dereferences it, which it shouldn't do as psta is NULL.
+On Sat, 23 Apr 2022 11:07:49 +0100 Catalin Marinas <catalin.marinas@arm.com> wrote:
+
+> On hardware with features like arm64 MTE or SPARC ADI, an access fault
+> can be triggered at sub-page granularity. Depending on how the
+> fault_in_writeable() function is used, the caller can get into a
+> live-lock by continuously retrying the fault-in on an address different
+> from the one where the uaccess failed.
 > 
-> Set pdefrag_q to NULL if above check fails and let the code after it 
-handle
-> that case.
+> In the majority of cases progress is ensured by the following
+> conditions:
 > 
-> Fixes: 1cc18a22b96b ("staging: r8188eu: Add files for new driver - part 
-5")
-> Signed-off-by: Vihas Makwana <makvihas@gmail.com>
-> ---
->  drivers/staging/r8188eu/core/rtw_recv.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> 1. copy_to_user_nofault() guarantees at least one byte access if the
+>    user address is not faulting.
 > 
-> diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/
-r8188eu/core/rtw_recv.c
-> index c1005ddaa..db54bceff 100644
-> --- a/drivers/staging/r8188eu/core/rtw_recv.c
-> +++ b/drivers/staging/r8188eu/core/rtw_recv.c
-> @@ -1244,7 +1244,7 @@ struct recv_frame *recvframe_chk_defrag(struct 
-adapter *padapter, struct recv_fr
->  			pdefrag_q = NULL;
->  		}
->  	} else {
-> -		pdefrag_q = &psta->sta_recvpriv.defrag_q;
-> +		pdefrag_q = NULL;
-
-Hi Vihas,
-
-To me the code looks like this...
-
-	struct sta_info *psta;
-	...
-	psta = rtw_get_stainfo(pstapriv, psta_addr);
-	/* The code is about to test if "psta" is a valid pointer */
-	if (!psta) {
-		/* "psta" is NULL */		
-		...
-	} else {
-		/* "psta" is not NULL */
-		...
-
->  	}
+> 2. The fault_in_writeable() loop is resumed from the first address that
+>    could not be accessed by copy_to_user_nofault().
+> 
+> If the loop iteration is restarted from an earlier (initial) point, the
+> loop is repeated with the same conditions and it would live-lock.
+> 
+> Introduce an arch-specific probe_subpage_writeable() and call it from
+> the newly added fault_in_subpage_writeable() function. The arch code
+> with sub-page faults will have to implement the specific probing
+> functionality.
+> 
+> Note that no other fault_in_subpage_*() functions are added since they
+> have no callers currently susceptible to a live-lock.
+> 
+> ...
+>
+> --- a/include/linux/uaccess.h
+> +++ b/include/linux/uaccess.h
+> @@ -231,6 +231,28 @@ static inline bool pagefault_disabled(void)
+>   */
+>  #define faulthandler_disabled() (pagefault_disabled() || in_atomic())
 >  
+> +#ifndef CONFIG_ARCH_HAS_SUBPAGE_FAULTS
+> +
+> +/**
+> + * probe_subpage_writeable: probe the user range for write faults at sub-page
+> + *			    granularity (e.g. arm64 MTE)
+> + * @uaddr: start of address range
+> + * @size: size of address range
+> + *
+> + * Returns 0 on success, the number of bytes not probed on fault.
+> + *
+> + * It is expected that the caller checked for the write permission of each
+> + * page in the range either by put_user() or GUP. The architecture port can
+> + * implement a more efficient get_user() probing if the same sub-page faults
+> + * are triggered by either a read or a write.
+> + */
+> +static inline size_t probe_subpage_writeable(void __user *uaddr, size_t size)
 
-Also, even if "psta" were NULL (but it isn't), your change would still be 
-no good.
+It's `char __user *' at the other definition.
 
-Please be very careful with these types of changes next time :)
-
-Thanks,
-
-Fabio M. De Francesco
-
->  	if ((ismfrag == 0) && (fragnum == 0))
-> -- 
-> 2.30.2
+> +{
+> +	return 0;
+> +}
+> +
+> +#endif /* CONFIG_ARCH_HAS_SUBPAGE_FAULTS */
+> +
+>  #ifndef ARCH_HAS_NOCACHE_UACCESS
 >  
-
-
-
+> ...
+>

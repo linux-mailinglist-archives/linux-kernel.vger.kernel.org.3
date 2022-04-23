@@ -2,97 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C05D50CD54
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 21:58:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1CD350CD57
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 22:02:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236120AbiDWT77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 15:59:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50306 "EHLO
+        id S236986AbiDWUFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 16:05:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234532AbiDWT7r (ORCPT
+        with ESMTP id S233954AbiDWUFD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 15:59:47 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BBD819A48F
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 12:56:46 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id el3so9379441edb.11
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 12:56:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=yNSMjzR/UC7gAKQriiodIhNkqmmIvXbfjZZmbtmDsBI=;
-        b=yzdnRPgskGVSMi8zv4oBko9lVeYwVJkxDSR6MCkGUoXeTAK/4NDODNNgZ26KgG/mOU
-         CoB2QmI5FRJiOq51uIk68eCareFVrvmvpKA6fadl6vN+B9T5RdthGC51nk1UKkl+rI8V
-         bjJ2huIzejbSjE72D4g4LFxCCdRX9/IA+qfbvCDwAyYtGJd+1W1YKHpSRD6XJtD/NGTi
-         CpaqFGoxA5vUA+GgVLLCa5jP0gs2G4OvNlibifucQX9N1C8ExbobxZ9RxTWEg1kPm5Q4
-         cw1AHrC+4rdOM3XxOEVWQzz9UEH9NMK1rgPaPN7MQiMNTT4/+pOMEGnmTuWdtFC0C1b1
-         hT4w==
+        Sat, 23 Apr 2022 16:05:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36DF6191C46
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 13:02:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650744124;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=TmI4HuYyRoxvHL+vw/EIwCgtYuWPzs344Ybx3U2pVv8=;
+        b=PMthp5y5Ecn522rZbzbXfwDy5F6wQnXvfd7EqQzGbVFiwqG8k9Oyil8cpQHiygACDAW/tW
+        A7zUTKgRkt8yX9YyVK8JSDw7zlQGZ60BKh5pJDqltj8U9pLr9euAjD2vxlJpQ9yo5wUVoq
+        M1rIgoHP4gibIEzvhzWK5kpls+rkRaI=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-562-CK_WC18VPxOPC_anD1-Wxg-1; Sat, 23 Apr 2022 16:02:02 -0400
+X-MC-Unique: CK_WC18VPxOPC_anD1-Wxg-1
+Received: by mail-qv1-f70.google.com with SMTP id fw9-20020a056214238900b0043522aa5b81so9321454qvb.21
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 13:02:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=yNSMjzR/UC7gAKQriiodIhNkqmmIvXbfjZZmbtmDsBI=;
-        b=XXKDGwibc7fqiBCze+YFn4MezbcCVPHo68g4ly7AT/DtzP8dDInXCg/AcESizLV7HN
-         aE+CnQ5aspaCzqkIf+WtxDt5oE3Z4EN74xqrJfpRd5nTGkzszvaDIGosw2feEgn1OFOs
-         TY08MCRGTEkbBrUpiOJbWoitoZBV/S+vgzrziY7tL6qxyqVJ0hDbScRUxqNFdA+0wb4P
-         pYVMEZ8JbSgQP/DfoIRuDaE2Vk3NuLPjXnGCVyF7u34aoc9Bir03NC5WqyT90I4FwL4y
-         i3DGqrRHXxNgUhwOqPuRbFVjvcw8iBhZwYcQby3BW12qzYGRHisj/KSy1GWSQBUlN3+w
-         EDRg==
-X-Gm-Message-State: AOAM533i+mV7vHbf9/xNTgutXVfnqmi+MEyLGR8diNvvW9IsdrwAcjYA
-        +Xa8k3LAE1M9lpkwzoW6a1s8DA==
-X-Google-Smtp-Source: ABdhPJzP7TI1ViD5VGn0KNvewzYBqWM6Mjpp1qDDQ0uaLL/LxQa1J8/5UFBb/Hc1PCg1kUb/MRd8iw==
-X-Received: by 2002:a05:6402:331c:b0:41d:9354:97c2 with SMTP id e28-20020a056402331c00b0041d935497c2mr11442391eda.300.1650743805113;
-        Sat, 23 Apr 2022 12:56:45 -0700 (PDT)
-Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id p24-20020a056402045800b0041614c8f79asm2518327edw.88.2022.04.23.12.56.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Apr 2022 12:56:44 -0700 (PDT)
-Message-ID: <af3d5b2f-b245-6c10-1e2c-0f8f5a979fc0@linaro.org>
-Date:   Sat, 23 Apr 2022 21:56:43 +0200
+        bh=TmI4HuYyRoxvHL+vw/EIwCgtYuWPzs344Ybx3U2pVv8=;
+        b=ctFCMaxZXqxY0bMa/n+S7P6Uy3KuE4s5MebGXyKX5PJ5M3Gu/XLlQud6RWX2p2cIE5
+         8qHreuV61IYt0H+4IUkE9V98vlOKXcXmM0dc4adrToFLM7f65nmHY0BTjgCBs80F08/x
+         O1gb/DgIH8vsHCgSu/JcvWh57t5QF0yEGNOOfSxiYYUO+3LB6wgXymkNbZ05dtA8CEUz
+         PT6RWVCkbuFCahCund72zGJKyWcHp76xFIqLJGWApAQ8uBoa9dEdZTwl69RV5eXfWsX9
+         sjw7j2jzH9fYXU5fdZMaiuUPTS6XCjItDlPv1MYtmUObhS6cpNZGkGNBroJdzg1G2Q6g
+         YZxg==
+X-Gm-Message-State: AOAM532JW+wJSq6LnMnXY1KCOObisbpTNuw9aYsKiQOF3OhZFoPzQy1n
+        TqPa+acFr1U2Up/3VM2h3+oUUoANh1pMfVFgOvgHCvva6B9HHVYpAp6Rn/LO5zYRWSLzrdjWAOv
+        weku21PDHROWvzhseppEhZKgi
+X-Received: by 2002:a05:622a:1b91:b0:2f3:45f0:d9fb with SMTP id bp17-20020a05622a1b9100b002f345f0d9fbmr7608093qtb.147.1650744122263;
+        Sat, 23 Apr 2022 13:02:02 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwmfh+uSxEWKmvVX8l/LATjWvc9VwFZNJueNhicXlKtCgy74l29do1f86Ksx39bNBVQ+S9p3w==
+X-Received: by 2002:a05:622a:1b91:b0:2f3:45f0:d9fb with SMTP id bp17-20020a05622a1b9100b002f345f0d9fbmr7608083qtb.147.1650744122071;
+        Sat, 23 Apr 2022 13:02:02 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id e26-20020ac84b5a000000b002f35d11c5dfsm2348748qts.65.2022.04.23.13.02.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Apr 2022 13:02:01 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/radeon: change cac_weights_* to static
+Date:   Sat, 23 Apr 2022 16:01:55 -0400
+Message-Id: <20220423200155.1735336-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/5] dt-bindings: remoteproc: qcom: pas: Add MSM8226 adsp
-Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220423155059.660387-1-luca@z3ntu.xyz>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220423155059.660387-1-luca@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/04/2022 17:50, Luca Weiss wrote:
-> Add the compatible for the adsp found in MSM8226.
-> 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> ---
->  Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
+Sparse reports these issues
+si_dpm.c:332:26: warning: symbol 'cac_weights_pitcairn' was not declared. Should it be static?
+si_dpm.c:1088:26: warning: symbol 'cac_weights_oland' was not declared. Should it be static?
 
+Both of these variables are only used in si_dpm.c.  Single file variables
+should be static, so change their storage-class specifiers to static.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/gpu/drm/radeon/si_dpm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/gpu/drm/radeon/si_dpm.c b/drivers/gpu/drm/radeon/si_dpm.c
+index 3add39c1a689..fbf968e3f6d7 100644
+--- a/drivers/gpu/drm/radeon/si_dpm.c
++++ b/drivers/gpu/drm/radeon/si_dpm.c
+@@ -329,7 +329,7 @@ static const struct si_dte_data dte_data_malta =
+ 	true
+ };
+ 
+-struct si_cac_config_reg cac_weights_pitcairn[] =
++static struct si_cac_config_reg cac_weights_pitcairn[] =
+ {
+ 	{ 0x0, 0x0000ffff, 0, 0x8a, SISLANDS_CACCONFIG_CGIND },
+ 	{ 0x0, 0xffff0000, 16, 0x0, SISLANDS_CACCONFIG_CGIND },
+@@ -1085,7 +1085,7 @@ static const struct si_dte_data dte_data_venus_pro =
+ 	true
+ };
+ 
+-struct si_cac_config_reg cac_weights_oland[] =
++static struct si_cac_config_reg cac_weights_oland[] =
+ {
+ 	{ 0x0, 0x0000ffff, 0, 0x82, SISLANDS_CACCONFIG_CGIND },
+ 	{ 0x0, 0xffff0000, 16, 0x4F, SISLANDS_CACCONFIG_CGIND },
+-- 
+2.27.0
 
-Best regards,
-Krzysztof

@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C46650C671
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 04:19:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 699FD50C682
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 04:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232038AbiDWCRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 22:17:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49882 "EHLO
+        id S231991AbiDWCRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 22:17:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231888AbiDWCRS (ORCPT
+        with ESMTP id S231903AbiDWCRU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 22:17:18 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57C421BACC
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 19:14:23 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id j8-20020aa78d08000000b0050ade744b37so4407884pfe.16
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 19:14:23 -0700 (PDT)
+        Fri, 22 Apr 2022 22:17:20 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A6B21BAC2
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 19:14:25 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id l14-20020a63f30e000000b0039cc65bdc47so5966831pgh.17
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 19:14:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=2vvWQ9/N6TBUtPpS273fWXc6JvToYd+8tR496nicoP4=;
-        b=n3TDy7z9cxCWkbe0b3hZSx68GdKDEavEBHm2F/2UnaSWCFQX67C/O/sxgWC3RRbaFY
-         6++xptZLz9/3RWcuEGF9mur1xrOgcyh6i+HrlS/1MXF/E3mJIOmOzpPU1weA5QigFL4z
-         797WU5CVvsd35eTHEti0NijTeAZG31ROQv/Rz/xW3Ge5a8g9aFGrW5xzrFEZ3ZK5Za50
-         P1Vp+q3Cs6DPuwfsppq3GslpW6SszRWquVa1A/CSiv7ztDCU8bO4mlyn6hkCcFGPkyJF
-         D8qMb/vxCLkULOfG4AJRNSzj1wsjFsGRZAK7plrVyD9jMKoBpjyQFS4PZX+s8wigC+wu
-         JuEA==
+        bh=2fpXsZJhGbr4MoYNSTdShihZ64Vsg8Cw64xWWeEmfo8=;
+        b=h1b6lSgWxe8TBdg42eLDaS/rCLqPvrgXgz9XuK1/dcZ+XRF2KuTO0fLelihQFovgIL
+         oupmS6D6UcCvaYPnwp0D6Il6duyzcSQ7343q2f1nWaVesl9OlCtq9mkRkyiAiRSMbytF
+         7d+E4qjU04hxfbI0NmBx/31x628HGxgmf2C3qd2Hlj0/M9AkZqShmJ+YkXEa/mDirnlB
+         wXhWU51c1t1c+ug4fiOdzmkPDVxnJx0Yn05SZfZwGucGVVdkBqxMqS+6d9B9mV5gw/01
+         sWDqDgcnlY7rMobVY8+3Oc2rC+cbJDFfrD3CVrU8Vot8zsc52p84b0WJHnl0o9CZUgcg
+         EdfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=2vvWQ9/N6TBUtPpS273fWXc6JvToYd+8tR496nicoP4=;
-        b=wuGqC2FFTr5SncG/MAE5trdhO4OPB8/kyY+rYgJByrg09+NIwZEpuX3sm8bdAbaiah
-         CrOMGqThzepVVTpv3HPdoi0C1B2fw3DrjggMrmgOFhou0JeK0GAVA+zpPylVFx1JgBSu
-         6QT3+97+K7xP5Ue0PR8QwVv50L5PiYaNZnZBBkX/RAapMsdI9LUTI6ruT6tmd1NNVtdk
-         McW4CJAUaMAOnOPMmqwrnsEo2RVOWWTFCkE6z9K2l1rEC1eY/223BZbbfVwSNCcymvk+
-         F7j4WgSKShRJuVe2MXSB+tSFn2ShK4k0mFMEcXI0aVJo8hFP+edyHfB/BX2Qy3a8rMXs
-         cU4w==
-X-Gm-Message-State: AOAM530EwdnHtJiJgIkDMUv83SOcT4Qf+cS4VfoSU59igLOVGlthkCS6
-        hVEdOUqRKhfa/K99OFNED+7FyG4pNts=
-X-Google-Smtp-Source: ABdhPJwkgmq74doJUUfzWDwKUzbCOAwHJhdGFtSbxKNWqKLyDARCy1+spnoY/OA2++CPk27FgQGYWdk2+uU=
+        bh=2fpXsZJhGbr4MoYNSTdShihZ64Vsg8Cw64xWWeEmfo8=;
+        b=DilqJXrRINzzIPkyutaWd75XKBrch88osgZaurE95dsdLH9pIT05J7IuzWfx//Dir8
+         SO+2ooRmI8gF8PCTSlGHWRA7Eo2a/wc4dWxIFkhh4GgOp/U/LKvoq5tMEhZK5FgT4LAZ
+         IgagPVcdV6uMEwgsJeJ38vlc2JghAiDAU21cWvXu1kiLaNuMlhWuNAlhyhZpitllQk3q
+         nlCpUksCK9NyWxx0R5Qy8r8nwXdsq1zkvr/ak56SAEwEmhTcD/4ZjIoBLaFM8U7ZQgPm
+         fGyy1siTsxfDkH8tBdwvn1+qVlttBaxjuWXpTpauSY5tiSDW0D+Tz0p5hsw6nkyTYFFb
+         ByKw==
+X-Gm-Message-State: AOAM531O5lRsgXQOF+XSMwmwvKRwLPckmM1Q7E+t8/3s5bAyDy0cR+kk
+        VkXkI4A0baM9d2SvILq7XpIDBpOx6aQ=
+X-Google-Smtp-Source: ABdhPJzkeFWXkid1f7CdUq2JgPMwKM+U8A2gs99SEHa1ULCf6QpWZgib2qh+1qu3CjwxCcXqx5APei0SkhI=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:90a:9105:b0:1d2:9e98:7e1e with SMTP id
- k5-20020a17090a910500b001d29e987e1emr692797pjo.0.1650680062764; Fri, 22 Apr
- 2022 19:14:22 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:22d4:b0:50a:8540:431f with SMTP id
+ f20-20020a056a0022d400b0050a8540431fmr8059369pfj.54.1650680064933; Fri, 22
+ Apr 2022 19:14:24 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Sat, 23 Apr 2022 02:14:06 +0000
+Date:   Sat, 23 Apr 2022 02:14:07 +0000
 In-Reply-To: <20220423021411.784383-1-seanjc@google.com>
-Message-Id: <20220423021411.784383-7-seanjc@google.com>
+Message-Id: <20220423021411.784383-8-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220423021411.784383-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
-Subject: [PATCH v2 06/11] KVM: SVM: Re-inject INTn instead of retrying the
- insn on "failure"
+Subject: [PATCH v2 07/11] KVM: x86: Trace re-injected exceptions
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -67,7 +66,7 @@ Cc:     Sean Christopherson <seanjc@google.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,111 +74,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Re-inject INTn software interrupts instead of retrying the instruction if
-the CPU encountered an intercepted exception while vectoring the INTn,
-e.g. if KVM intercepted a #PF when utilizing shadow paging.  Retrying the
-instruction is architecturally wrong e.g. will result in a spurious #DB
-if there's a code breakpoint on the INT3/O, and lack of re-injection also
-breaks nested virtualization, e.g. if L1 injects a software interrupt and
-vectoring the injected interrupt encounters an exception that is
-intercepted by L0 but not L1.
+Trace exceptions that are re-injected, not just those that KVM is
+injecting for the first time.  Debugging re-injection bugs is painful
+enough as is, not having visibility into what KVM is doing only makes
+things worse.
+
+Delay propagating pending=>injected in the non-reinjection path so that
+the tracing can properly identify reinjected exceptions.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/svm/nested.c |  7 +++----
- arch/x86/kvm/svm/svm.c    | 24 +++++++++++++++++++-----
- 2 files changed, 22 insertions(+), 9 deletions(-)
+ arch/x86/kvm/trace.h | 12 ++++++++----
+ arch/x86/kvm/x86.c   | 16 +++++++++-------
+ 2 files changed, 17 insertions(+), 11 deletions(-)
 
-diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-index 0163238aa198..a83e367ade54 100644
---- a/arch/x86/kvm/svm/nested.c
-+++ b/arch/x86/kvm/svm/nested.c
-@@ -617,10 +617,9 @@ static inline bool is_evtinj_soft(u32 evtinj)
- 	if (!(evtinj & SVM_EVTINJ_VALID))
- 		return false;
+diff --git a/arch/x86/kvm/trace.h b/arch/x86/kvm/trace.h
+index de4762517569..d07428e660e3 100644
+--- a/arch/x86/kvm/trace.h
++++ b/arch/x86/kvm/trace.h
+@@ -358,25 +358,29 @@ TRACE_EVENT(kvm_inj_virq,
+  * Tracepoint for kvm interrupt injection:
+  */
+ TRACE_EVENT(kvm_inj_exception,
+-	TP_PROTO(unsigned exception, bool has_error, unsigned error_code),
+-	TP_ARGS(exception, has_error, error_code),
++	TP_PROTO(unsigned exception, bool has_error, unsigned error_code,
++		 bool reinjected),
++	TP_ARGS(exception, has_error, error_code, reinjected),
  
--	/*
--	 * Intentionally return false for SOFT events, SVM doesn't yet support
--	 * re-injecting soft interrupts.
--	 */
-+	if (type == SVM_EVTINJ_TYPE_SOFT)
-+		return true;
-+
- 	return type == SVM_EVTINJ_TYPE_EXEPT && kvm_exception_is_soft(vector);
- }
+ 	TP_STRUCT__entry(
+ 		__field(	u8,	exception	)
+ 		__field(	u8,	has_error	)
+ 		__field(	u32,	error_code	)
++		__field(	bool,	reinjected	)
+ 	),
  
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 8321f9ce5e35..b8fb07eeeca5 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -3430,14 +3430,23 @@ static void svm_inject_nmi(struct kvm_vcpu *vcpu)
- static void svm_inject_irq(struct kvm_vcpu *vcpu)
+ 	TP_fast_assign(
+ 		__entry->exception	= exception;
+ 		__entry->has_error	= has_error;
+ 		__entry->error_code	= error_code;
++		__entry->reinjected	= reinjected;
+ 	),
+ 
+-	TP_printk("%s (0x%x)",
++	TP_printk("%s (0x%x)%s",
+ 		  __print_symbolic(__entry->exception, kvm_trace_sym_exc),
+ 		  /* FIXME: don't print error_code if not present */
+-		  __entry->has_error ? __entry->error_code : 0)
++		  __entry->has_error ? __entry->error_code : 0,
++		  __entry->reinjected ? " [reinjected]" : "")
+ );
+ 
+ /*
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 951d0a78ccda..c3ee8dc00d3a 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -9393,6 +9393,11 @@ int kvm_check_nested_events(struct kvm_vcpu *vcpu)
+ 
+ static void kvm_inject_exception(struct kvm_vcpu *vcpu)
  {
- 	struct vcpu_svm *svm = to_svm(vcpu);
-+	u32 type;
- 
--	WARN_ON(!vcpu->arch.interrupt.soft && !gif_set(svm));
-+	if (vcpu->arch.interrupt.soft) {
-+		if (svm_update_soft_interrupt_rip(vcpu))
-+			return;
++	trace_kvm_inj_exception(vcpu->arch.exception.nr,
++				vcpu->arch.exception.has_error_code,
++				vcpu->arch.exception.error_code,
++				vcpu->arch.exception.injected);
 +
-+		type = SVM_EVTINJ_TYPE_SOFT;
-+	} else {
-+		WARN_ON(!gif_set(svm));
-+		type = SVM_EVTINJ_TYPE_INTR;
-+	}
+ 	if (vcpu->arch.exception.error_code && !is_protmode(vcpu))
+ 		vcpu->arch.exception.error_code = false;
+ 	static_call(kvm_x86_queue_exception)(vcpu);
+@@ -9450,13 +9455,6 @@ static int inject_pending_event(struct kvm_vcpu *vcpu, bool *req_immediate_exit)
  
- 	trace_kvm_inj_virq(vcpu->arch.interrupt.nr);
- 	++vcpu->stat.irq_injections;
+ 	/* try to inject new event if pending */
+ 	if (vcpu->arch.exception.pending) {
+-		trace_kvm_inj_exception(vcpu->arch.exception.nr,
+-					vcpu->arch.exception.has_error_code,
+-					vcpu->arch.exception.error_code);
+-
+-		vcpu->arch.exception.pending = false;
+-		vcpu->arch.exception.injected = true;
+-
+ 		if (exception_type(vcpu->arch.exception.nr) == EXCPT_FAULT)
+ 			__kvm_set_rflags(vcpu, kvm_get_rflags(vcpu) |
+ 					     X86_EFLAGS_RF);
+@@ -9470,6 +9468,10 @@ static int inject_pending_event(struct kvm_vcpu *vcpu, bool *req_immediate_exit)
+ 		}
  
- 	svm->vmcb->control.event_inj = vcpu->arch.interrupt.nr |
--		SVM_EVTINJ_VALID | SVM_EVTINJ_TYPE_INTR;
-+				       SVM_EVTINJ_VALID | type;
- }
- 
- void svm_complete_interrupt_delivery(struct kvm_vcpu *vcpu, int delivery_mode,
-@@ -3717,6 +3726,8 @@ static inline void sync_lapic_to_cr8(struct kvm_vcpu *vcpu)
- static void svm_complete_soft_interrupt(struct kvm_vcpu *vcpu, u8 vector,
- 					int type)
- {
-+	bool is_exception = (type == SVM_EXITINTINFO_TYPE_EXEPT);
-+	bool is_soft = (type == SVM_EXITINTINFO_TYPE_SOFT);
- 	struct vcpu_svm *svm = to_svm(vcpu);
- 
- 	/*
-@@ -3728,8 +3739,7 @@ static void svm_complete_soft_interrupt(struct kvm_vcpu *vcpu, u8 vector,
- 	 * the same event, i.e. if the event is a soft exception/interrupt,
- 	 * otherwise next_rip is unused on VMRUN.
- 	 */
--	if (nrips && type == SVM_EXITINTINFO_TYPE_EXEPT &&
--	    kvm_exception_is_soft(vector) &&
-+	if (nrips && (is_soft || (is_exception && kvm_exception_is_soft(vector))) &&
- 	    kvm_is_linear_rip(vcpu, svm->soft_int_old_rip + svm->soft_int_csbase))
- 		svm->vmcb->control.next_rip = svm->soft_int_next_rip;
- 	/*
-@@ -3740,7 +3750,7 @@ static void svm_complete_soft_interrupt(struct kvm_vcpu *vcpu, u8 vector,
- 	 * hit a #NP in the guest, and the #NP encountered a #PF, the #NP will
- 	 * be the reported vectored event, but RIP still needs to be unwound.
- 	 */
--	else if (!nrips && type == SVM_EXITINTINFO_TYPE_EXEPT &&
-+	else if (!nrips && (is_soft || is_exception) &&
- 		 kvm_is_linear_rip(vcpu, svm->soft_int_next_rip + svm->soft_int_csbase))
- 		kvm_rip_write(vcpu, svm->soft_int_old_rip);
- }
-@@ -3802,9 +3812,13 @@ static void svm_complete_interrupts(struct kvm_vcpu *vcpu)
- 	case SVM_EXITINTINFO_TYPE_INTR:
- 		kvm_queue_interrupt(vcpu, vector, false);
- 		break;
-+	case SVM_EXITINTINFO_TYPE_SOFT:
-+		kvm_queue_interrupt(vcpu, vector, true);
-+		break;
- 	default:
- 		break;
+ 		kvm_inject_exception(vcpu);
++
++		vcpu->arch.exception.pending = false;
++		vcpu->arch.exception.injected = true;
++
+ 		can_inject = false;
  	}
-+
- }
  
- static void svm_cancel_injection(struct kvm_vcpu *vcpu)
 -- 
 2.36.0.rc2.479.g8af0fa9b8e-goog
 

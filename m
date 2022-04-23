@@ -2,95 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C47950CA99
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 15:27:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F73F50CA9B
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 15:28:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235767AbiDWNaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 09:30:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44908 "EHLO
+        id S235773AbiDWNbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 09:31:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235823AbiDWN32 (ORCPT
+        with ESMTP id S235766AbiDWNa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 09:29:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF36360060;
-        Sat, 23 Apr 2022 06:26:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3A7E0B80AD4;
-        Sat, 23 Apr 2022 13:26:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09F43C385A5;
-        Sat, 23 Apr 2022 13:26:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650720388;
-        bh=vZepI/YrdkIUFcAgba62MT7KAC51SG3flI+XjUdGxRw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ivQiMhs4BxbWKlILamBe7PSi0gj0SsBCKwlJfC7AxyfULzM+tEQOn431tYSHfKYmf
-         YwqUOnXQqjfjlteva+DXzkeG8sEKGQCfq3qYKKarMFxOV0uP5wiGlQtcmbVxcHTU/x
-         PBfW/Xt86yNFS5SnVyu0nwKu9xj2onlbqGOwUwY1FpE1CEXdrnCqYfevlIIB1g3gLS
-         /NRs0wWQr+KPTeWXCJlXVJKsHHnPH2ATA39IsOcEQw/bbvb3QkbS1dV0OmY1Z/6ytI
-         0diu1QfUJ9c8+yCn2aD+B/HGk+g0y3EWOHPGtVVsg7cwOSikSSqy0YL56TPDzov0yA
-         ZDVGBIKEZ7asg==
-Date:   Sat, 23 Apr 2022 18:56:20 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
-Cc:     quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
-        mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/2] MHI MMIO register write updates
-Message-ID: <20220423132620.GO374560@thinkpad>
-References: <1650304226-11080-1-git-send-email-quic_jhugo@quicinc.com>
+        Sat, 23 Apr 2022 09:30:58 -0400
+Received: from smtp.smtpout.orange.fr (smtp07.smtpout.orange.fr [80.12.242.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1497C782
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 06:28:01 -0700 (PDT)
+Received: from pop-os.home ([86.243.180.246])
+        by smtp.orange.fr with ESMTPA
+        id iFnrnuctdAKwFiFnrnIybL; Sat, 23 Apr 2022 15:27:59 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sat, 23 Apr 2022 15:27:59 +0200
+X-ME-IP: 86.243.180.246
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-mips@vger.kernel.org
+Subject: [PATCH] MIPS: SGI-IP30: Free some unused memory
+Date:   Sat, 23 Apr 2022 15:27:58 +0200
+Message-Id: <f9475119cf8d7dc51f9f993ab6a4de40a2735ca1.1650720466.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1650304226-11080-1-git-send-email-quic_jhugo@quicinc.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 11:50:24AM -0600, Jeffrey Hugo wrote:
-> In case of MHI MMIO writes, the register field write function needs to do reads
-> before writes are performed. Propagate read failures such that callers are made
-> aware of those and can take appropriate action instead of running blind.
-> 
-> Optimizing the MMIO initialization function to use mhi_write_reg() in most cases
-> should also be done to improve design.
-> 
-> These patches were tested on X86_64 architecture with Ubuntu 18.04 and SDX65
-> attach.
-> 
-> v4:
-> Address review comments about log messages, and a missing blank line
-> 
-> v3:
-> Noticed this was reviewed but never picked up.  Rebased to -next
-> 
-> v2:
-> -Fix testbot reported missing set of changes from pm.c
-> 
-> Bhaumik Bhatt (2):
->   bus: mhi: host: Bail on writing register fields if read fails
->   bus: mhi: host: Optimize and update MMIO register write method
+platform_device_add_data() duplicates the memory it is passed. So we can
+free some memory to save a few bytes that would remain unused otherwise.
 
-Series applied to mhi-next!
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ arch/mips/sgi-ip30/ip30-xtalk.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thanks,
-Mani
+diff --git a/arch/mips/sgi-ip30/ip30-xtalk.c b/arch/mips/sgi-ip30/ip30-xtalk.c
+index 8a2894645529..8129524421cb 100644
+--- a/arch/mips/sgi-ip30/ip30-xtalk.c
++++ b/arch/mips/sgi-ip30/ip30-xtalk.c
+@@ -63,6 +63,8 @@ static void bridge_platform_create(int widget, int masterwid)
+ 	}
+ 	platform_device_add_resources(pdev, &w1_res, 1);
+ 	platform_device_add_data(pdev, wd, sizeof(*wd));
++	/* platform_device_add_data() duplicates the data */
++	kfree(wd);
+ 	platform_device_add(pdev);
+ 
+ 	bd = kzalloc(sizeof(*bd), GFP_KERNEL);
+@@ -92,6 +94,8 @@ static void bridge_platform_create(int widget, int masterwid)
+ 	bd->io_offset	= IP30_SWIN_BASE(widget);
+ 
+ 	platform_device_add_data(pdev, bd, sizeof(*bd));
++	/* platform_device_add_data() duplicates the data */
++	kfree(bd);
+ 	platform_device_add(pdev);
+ 	pr_info("xtalk:%x bridge widget\n", widget);
+ 	return;
+-- 
+2.32.0
 
-> 
->  drivers/bus/mhi/host/boot.c     | 22 +++++++++----
->  drivers/bus/mhi/host/init.c     | 68 ++++++++++++++++++++++++-----------------
->  drivers/bus/mhi/host/internal.h |  7 +++--
->  drivers/bus/mhi/host/main.c     |  9 ++++--
->  drivers/bus/mhi/host/pm.c       | 15 ++++++---
->  5 files changed, 77 insertions(+), 44 deletions(-)
-> 
-> -- 
-> 2.7.4
-> 

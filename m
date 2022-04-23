@@ -2,199 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB36550C813
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 09:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E5050C816
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 09:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234008AbiDWHnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 03:43:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60872 "EHLO
+        id S234057AbiDWHuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 03:50:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230242AbiDWHnr (ORCPT
+        with ESMTP id S232732AbiDWHte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 03:43:47 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC1F1ED407
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 00:40:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650699651; x=1682235651;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ucuoSk12DQfsHOdwbBkyhJAs3pTgRSOksYR0POnApX8=;
-  b=KR+3og/0XOcqI4YXLR5DyXjxCWUNpyhtIvI799atMgqiD05MDdBHayWG
-   UnlcAfhdHl+04VWNfA2BmF5mVQHaLIJ4x/8wRm2JUEBZ5dWHNyQyfkdlg
-   bF6dBFeto3KY62gpGoF92G2b06l/q11sQpc1aNv5Y2FN1bLKu5wcrmZm6
-   7jtCmAoX9NaMDdbcQyZ5QEqzlMPZe+Waw8EHetrwxlzI+PQHntGu/NAc7
-   n3LwnkigdpAvQUcX9kb+a/runYOCw4tqxsEFwNzYq/gs2GtsL/LyA/GuV
-   RhNO5uoQr8qBvcBUMYWgSBkhNqTpGk5aqIX0KFDbazT2vAsq940PyAedJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264641886"
-X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
-   d="scan'208";a="264641886"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 00:40:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
-   d="scan'208";a="728861838"
-Received: from lkp-server01.sh.intel.com (HELO dd58949a6e39) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 23 Apr 2022 00:40:48 -0700
-Received: from kbuild by dd58949a6e39 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1niANs-000024-1z;
-        Sat, 23 Apr 2022 07:40:48 +0000
-Date:   Sat, 23 Apr 2022 15:40:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: drivers/nvdimm/namespace_devs.c:915:20: warning: Local variable
- 'res' shadows outer variable [shadowVariable]
-Message-ID: <202204231545.HgpB1iQL-lkp@intel.com>
+        Sat, 23 Apr 2022 03:49:34 -0400
+Received: from smtp.smtpout.orange.fr (smtp09.smtpout.orange.fr [80.12.242.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238C9257
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 00:46:32 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.180.246])
+        by smtp.orange.fr with ESMTPA
+        id iATJnxcm4KpuHiATKn1U8C; Sat, 23 Apr 2022 09:46:29 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sat, 23 Apr 2022 09:46:29 +0200
+X-ME-IP: 86.243.180.246
+Message-ID: <5272f8f0-7624-141b-076c-e8de08e595f5@wanadoo.fr>
+Date:   Sat, 23 Apr 2022 09:46:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 5/7] mm: provide shrinkers with names
+Content-Language: fr
+To:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
+Cc:     Dave Chinner <dchinner@redhat.com>, linux-kernel@vger.kernel.org,
+        Yang Shi <shy828301@gmail.com>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Hillf Danton <hdanton@sina.com>
+Newsgroups: gmane.linux.kernel,gmane.linux.kernel.mm
+References: <20220422202644.799732-1-roman.gushchin@linux.dev>
+ <20220422202644.799732-6-roman.gushchin@linux.dev>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220422202644.799732-6-roman.gushchin@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   c00c5e1d157bec0ef0b0b59aa5482eb8dc7e8e49
-commit: b4366a827f6cf6e58c93e076e335d9ee9ee0480f libnvdimm/labels: Introduce getters for namespace label fields
-date:   8 months ago
-compiler: arc-elf-gcc (GCC) 11.2.0
-reproduce (cppcheck warning):
-        # apt-get install cppcheck
-        git checkout b4366a827f6cf6e58c93e076e335d9ee9ee0480f
-        cppcheck --quiet --enable=style,performance,portability --template=gcc FILE
+Hi,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Le 22/04/2022 à 22:26, Roman Gushchin a écrit :
+> Currently shrinkers are anonymous objects. For debugging purposes they
+> can be identified by count/scan function names, but it's not always
+> useful: e.g. for superblock's shrinkers it's nice to have at least
+> an idea of to which superblock the shrinker belongs.
+> 
+> This commit adds names to shrinkers. register_shrinker() and
+> prealloc_shrinker() functions are extended to take a format and
+> arguments to master a name. If CONFIG_SHRINKER_DEBUG is on,
+> the name is saved until the corresponding debugfs object is created,
+> otherwise it's simple ignored.
+> 
+> After this change the shrinker debugfs directory looks like:
+>    $ cd /sys/kernel/debug/shrinker/
+>    $ ls
+>      dqcache-16          sb-cgroup2-30    sb-hugetlbfs-33  sb-proc-41       sb-selinuxfs-22  sb-tmpfs-40    sb-zsmalloc-19
+>      kfree_rcu-0         sb-configfs-23   sb-iomem-12      sb-proc-44       sb-sockfs-8      sb-tmpfs-42    shadow-18
+>      sb-aio-20           sb-dax-11        sb-mqueue-21     sb-proc-45       sb-sysfs-26      sb-tmpfs-43    thp_deferred_split-10
+>      sb-anon_inodefs-15  sb-debugfs-7     sb-nsfs-4        sb-proc-47       sb-tmpfs-1       sb-tmpfs-46    thp_zero-9
+>      sb-bdev-3           sb-devpts-28     sb-pipefs-14     sb-pstore-31     sb-tmpfs-27      sb-tmpfs-49    xfs_buf-37
+>      sb-bpf-32           sb-devtmpfs-5    sb-proc-25       sb-rootfs-2      sb-tmpfs-29      sb-tracefs-13  xfs_inodegc-38
+>      sb-btrfs-24         sb-hugetlbfs-17  sb-proc-39       sb-securityfs-6  sb-tmpfs-35      sb-xfs-36      zspool-34
+> 
+> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> ---
 
+[...]
 
-cppcheck warnings: (new ones prefixed by >>)
->> drivers/nvdimm/namespace_devs.c:915:20: warning: Local variable 'res' shadows outer variable [shadowVariable]
-     struct resource *res;
-                      ^
-   drivers/nvdimm/namespace_devs.c:903:19: note: Shadowed declaration
-    struct resource *res = &nspm->nsio.res;
-                     ^
-   drivers/nvdimm/namespace_devs.c:915:20: note: Shadow variable
-     struct resource *res;
-                      ^
->> drivers/nvdimm/namespace_devs.c:2030:26: warning: Local variable 'ndd' shadows outer variable [shadowVariable]
-     struct nvdimm_drvdata *ndd;
-                            ^
-   drivers/nvdimm/namespace_devs.c:1953:25: note: Shadowed declaration
-    struct nvdimm_drvdata *ndd = to_ndd(nd_mapping);
-                           ^
-   drivers/nvdimm/namespace_devs.c:2030:26: note: Shadow variable
-     struct nvdimm_drvdata *ndd;
-                            ^
-   drivers/nvdimm/namespace_devs.c:2440:26: warning: Local variable 'e' shadows outer variable [shadowVariable]
-      struct list_head *l, *e;
-                            ^
-   drivers/nvdimm/namespace_devs.c:2347:35: note: Shadowed declaration
-    struct nd_label_ent *label_ent, *e;
-                                     ^
-   drivers/nvdimm/namespace_devs.c:2440:26: note: Shadow variable
-      struct list_head *l, *e;
-                            ^
+> diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
+> index 59f91e392a2a..1b326b93155c 100644
+> --- a/drivers/md/raid5.c
+> +++ b/drivers/md/raid5.c
+> @@ -7383,7 +7383,7 @@ static struct r5conf *setup_conf(struct mddev *mddev)
+>   	conf->shrinker.count_objects = raid5_cache_count;
+>   	conf->shrinker.batch = 128;
+>   	conf->shrinker.flags = 0;
+> -	if (register_shrinker(&conf->shrinker)) {
+> +	if (register_shrinker(&conf->shrinker, "md")) {
 
-cppcheck possible warnings: (new ones prefixed by >>, may not real problems)
+Based on pr_warn below, does it make sense to have something like:
+   register_shrinker(&conf->shrinker, "md-%s", mdname(mddev))
 
->> drivers/nvdimm/namespace_devs.c:1235:9: warning: Uninitialized variable: nd_label [uninitvar]
-      if (!nd_label)
-           ^
-   drivers/nvdimm/namespace_devs.c:1232:51: note: Assignment 'nd_label=label_ent->label', assigned value is <Uninit>
-      struct nd_namespace_label *nd_label = label_ent->label;
-                                                     ^
-   drivers/nvdimm/namespace_devs.c:1235:9: note: Uninitialized variable: nd_label
-      if (!nd_label)
-           ^
-   drivers/nvdimm/namespace_devs.c:1852:9: warning: Uninitialized variable: nd_label [uninitvar]
-      if (!nd_label)
-           ^
-   drivers/nvdimm/namespace_devs.c:1848:51: note: Assignment 'nd_label=label_ent->label', assigned value is <Uninit>
-      struct nd_namespace_label *nd_label = label_ent->label;
-                                                     ^
-   drivers/nvdimm/namespace_devs.c:1852:9: note: Uninitialized variable: nd_label
-      if (!nd_label)
-           ^
-   drivers/nvdimm/namespace_devs.c:1908:9: warning: Uninitialized variable: nd_label [uninitvar]
-      if (!nd_label)
-           ^
-   drivers/nvdimm/namespace_devs.c:1907:24: note: Assignment 'nd_label=label_ent->label', assigned value is <Uninit>
-      nd_label = label_ent->label;
-                          ^
-   drivers/nvdimm/namespace_devs.c:1908:9: note: Uninitialized variable: nd_label
-      if (!nd_label)
-           ^
-   drivers/nvdimm/namespace_devs.c:2358:8: warning: Uninitialized variable: nd_label [uninitvar]
-     if (!nd_label)
-          ^
-   drivers/nvdimm/namespace_devs.c:2354:50: note: Assignment 'nd_label=label_ent->label', assigned value is <Uninit>
-     struct nd_namespace_label *nd_label = label_ent->label;
-                                                    ^
-   drivers/nvdimm/namespace_devs.c:2358:8: note: Uninitialized variable: nd_label
-     if (!nd_label)
-          ^
+>   		pr_warn("md/raid:%s: couldn't register shrinker.\n",
+>   			mdname(mddev));
+>   		goto abort;
 
-vim +/res +915 drivers/nvdimm/namespace_devs.c
+[...]
 
-bf9bccc14c05dae Dan Williams 2015-06-17  899  
-0e3b0d123c8fd5c Dan Williams 2016-10-06  900  static void nd_namespace_pmem_set_resource(struct nd_region *nd_region,
-bf9bccc14c05dae Dan Williams 2015-06-17  901  		struct nd_namespace_pmem *nspm, resource_size_t size)
-bf9bccc14c05dae Dan Williams 2015-06-17  902  {
-bf9bccc14c05dae Dan Williams 2015-06-17  903  	struct resource *res = &nspm->nsio.res;
-0e3b0d123c8fd5c Dan Williams 2016-10-06  904  	resource_size_t offset = 0;
-bf9bccc14c05dae Dan Williams 2015-06-17  905  
-0e3b0d123c8fd5c Dan Williams 2016-10-06  906  	if (size && !nspm->uuid) {
-0e3b0d123c8fd5c Dan Williams 2016-10-06  907  		WARN_ON_ONCE(1);
-0e3b0d123c8fd5c Dan Williams 2016-10-06  908  		size = 0;
-0e3b0d123c8fd5c Dan Williams 2016-10-06  909  	}
-0e3b0d123c8fd5c Dan Williams 2016-10-06  910  
-0e3b0d123c8fd5c Dan Williams 2016-10-06  911  	if (size && nspm->uuid) {
-0e3b0d123c8fd5c Dan Williams 2016-10-06  912  		struct nd_mapping *nd_mapping = &nd_region->mapping[0];
-0e3b0d123c8fd5c Dan Williams 2016-10-06  913  		struct nvdimm_drvdata *ndd = to_ndd(nd_mapping);
-0e3b0d123c8fd5c Dan Williams 2016-10-06  914  		struct nd_label_id label_id;
-0e3b0d123c8fd5c Dan Williams 2016-10-06 @915  		struct resource *res;
-0e3b0d123c8fd5c Dan Williams 2016-10-06  916  
-0e3b0d123c8fd5c Dan Williams 2016-10-06  917  		if (!ndd) {
-0e3b0d123c8fd5c Dan Williams 2016-10-06  918  			size = 0;
-0e3b0d123c8fd5c Dan Williams 2016-10-06  919  			goto out;
-0e3b0d123c8fd5c Dan Williams 2016-10-06  920  		}
-0e3b0d123c8fd5c Dan Williams 2016-10-06  921  
-0e3b0d123c8fd5c Dan Williams 2016-10-06  922  		nd_label_gen_id(&label_id, nspm->uuid, 0);
-0e3b0d123c8fd5c Dan Williams 2016-10-06  923  
-0e3b0d123c8fd5c Dan Williams 2016-10-06  924  		/* calculate a spa offset from the dpa allocation offset */
-0e3b0d123c8fd5c Dan Williams 2016-10-06  925  		for_each_dpa_resource(ndd, res)
-0e3b0d123c8fd5c Dan Williams 2016-10-06  926  			if (strcmp(res->name, label_id.id) == 0) {
-0e3b0d123c8fd5c Dan Williams 2016-10-06  927  				offset = (res->start - nd_mapping->start)
-0e3b0d123c8fd5c Dan Williams 2016-10-06  928  					* nd_region->ndr_mappings;
-0e3b0d123c8fd5c Dan Williams 2016-10-06  929  				goto out;
-0e3b0d123c8fd5c Dan Williams 2016-10-06  930  			}
-0e3b0d123c8fd5c Dan Williams 2016-10-06  931  
-0e3b0d123c8fd5c Dan Williams 2016-10-06  932  		WARN_ON_ONCE(1);
-0e3b0d123c8fd5c Dan Williams 2016-10-06  933  		size = 0;
-0e3b0d123c8fd5c Dan Williams 2016-10-06  934  	}
-0e3b0d123c8fd5c Dan Williams 2016-10-06  935  
-0e3b0d123c8fd5c Dan Williams 2016-10-06  936   out:
-0e3b0d123c8fd5c Dan Williams 2016-10-06  937  	res->start = nd_region->ndr_start + offset;
-0e3b0d123c8fd5c Dan Williams 2016-10-06  938  	res->end = res->start + size - 1;
-bf9bccc14c05dae Dan Williams 2015-06-17  939  }
-bf9bccc14c05dae Dan Williams 2015-06-17  940  
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 121a54a1602b..6025cfda4932 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -613,7 +613,7 @@ static unsigned long lruvec_lru_size(struct lruvec *lruvec, enum lru_list lru,
+>   /*
+>    * Add a shrinker callback to be called from the vm.
+>    */
+> -int prealloc_shrinker(struct shrinker *shrinker)
+> +static int __prealloc_shrinker(struct shrinker *shrinker)
+>   {
+>   	unsigned int size;
+>   	int err;
+> @@ -637,6 +637,34 @@ int prealloc_shrinker(struct shrinker *shrinker)
+>   	return 0;
+>   }
+>   
+> +#ifdef CONFIG_SHRINKER_DEBUG
+> +int prealloc_shrinker(struct shrinker *shrinker, const char *fmt, ...)
+> +{
+> +	int err;
+> +	char buf[64];
+> +	va_list ap;
+> +
+> +	va_start(ap, fmt);
+> +	vscnprintf(buf, sizeof(buf), fmt, ap);
+> +	va_end(ap);
+> +
+> +	shrinker->name = kstrdup(buf, GFP_KERNEL);
+> +	if (!shrinker->name)
+> +		return -ENOMEM;
 
-:::::: The code at line 915 was first introduced by commit
-:::::: 0e3b0d123c8fd5c42f364aea3ab663b1f18dad39 libnvdimm, namespace: allow multiple pmem-namespaces per region at scan time
+use kvasprintf_const() (and kfree_const() elsewhere) to simplify code 
+and take advantage of kstrdup_const() in most cases?
 
-:::::: TO: Dan Williams <dan.j.williams@intel.com>
-:::::: CC: Dan Williams <dan.j.williams@intel.com>
+> +
+> +	err = __prealloc_shrinker(shrinker);
+> +	if (err)
+> +		kfree(shrinker->name);
+> +
+> +	return err;
+> +}
+> +#else
+> +int prealloc_shrinker(struct shrinker *shrinker, const char *fmt, ...)
+> +{
+> +	return __prealloc_shrinker(shrinker);
+> +}
+> +#endif
+> +
+>   void free_prealloced_shrinker(struct shrinker *shrinker)
+>   {
+>   	if (shrinker->flags & SHRINKER_MEMCG_AWARE) {
+> @@ -648,6 +676,9 @@ void free_prealloced_shrinker(struct shrinker *shrinker)
+>   
+>   	kfree(shrinker->nr_deferred);
+>   	shrinker->nr_deferred = NULL;
+> +#ifdef CONFIG_SHRINKER_DEBUG
+> +	kfree(shrinker->name);
+> +#endif
+>   }
+>   
+>   void register_shrinker_prepared(struct shrinker *shrinker)
+> @@ -659,15 +690,38 @@ void register_shrinker_prepared(struct shrinker *shrinker)
+>   	up_write(&shrinker_rwsem);
+>   }
+>   
+> -int register_shrinker(struct shrinker *shrinker)
+> +static int __register_shrinker(struct shrinker *shrinker)
+>   {
+> -	int err = prealloc_shrinker(shrinker);
+> +	int err = __prealloc_shrinker(shrinker);
+>   
+>   	if (err)
+>   		return err;
+>   	register_shrinker_prepared(shrinker);
+>   	return 0;
+>   }
+> +
+> +#ifdef CONFIG_SHRINKER_DEBUG
+> +int register_shrinker(struct shrinker *shrinker, const char *fmt, ...)
+> +{
+> +	char buf[64];
+> +	va_list ap;
+> +
+> +	va_start(ap, fmt);
+> +	vscnprintf(buf, sizeof(buf), fmt, ap);
+> +	va_end(ap);
+> +
+> +	shrinker->name = kstrdup(buf, GFP_KERNEL);
+> +	if (!shrinker->name)
+> +		return -ENOMEM;
+> +
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+same as above.
+
+> +	return __register_shrinker(shrinker);
+
+Missing error handling and freeing of shrinker->name as done in 
+prealloc_shrinker()?
+
+CJ
+
+> +}
+> +#else
+> +int register_shrinker(struct shrinker *shrinker, const char *fmt, ...)
+> +{
+> +	return __register_shrinker(shrinker);
+> +}
+> +#endif
+>   EXPORT_SYMBOL(register_shrinker);
+>   
+>   /*
+
+[...]

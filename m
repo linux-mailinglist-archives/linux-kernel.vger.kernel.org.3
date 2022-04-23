@@ -2,79 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7847850CA84
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 15:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 553B250CA88
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 15:20:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235712AbiDWNVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 09:21:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
+        id S235724AbiDWNXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 09:23:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233341AbiDWNVA (ORCPT
+        with ESMTP id S233341AbiDWNXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 09:21:00 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F72B2117E5
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 06:18:03 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2eb2bc9018aso93140367b3.18
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 06:18:03 -0700 (PDT)
+        Sat, 23 Apr 2022 09:23:39 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9039021ED2C
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 06:20:42 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id j8so16792280pll.11
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 06:20:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=Jmlk3DqwaEBaVBLzTd1kbUUz4icf8kJ9wDD4tXETqTs=;
-        b=tcW1c6qW82jBz5nCN0RwRIROmBDXBjYQaBTvl6CyaY4jryJ3rsU/VWZVvv/lgdk8Oq
-         F9Ozp10PiNVyjEystyc6dusqsDvapLv1MpcKsLK/XtqZHAZ9jl75ugUrBIiH5m7d4ah6
-         WiMGHgI09mOdrk1FPHaZOFnWcnisHKbgrUP6x/UhwdNs7R5wuqds4PoZi/LZj+tCdjJp
-         uTuj3/6WoxFYMMaCG2i6V8aCN+0nLElxw3mDuLxkyumtJpwy7W0Xneuf5YMswqhGju+U
-         Af+Id7zSqX8aWeY0EFFTMfOOLbwaR6qbKAO4lnAApOIEoI0tGboj149z5WPnzVXdPJ5z
-         TB/g==
+        d=nathanrossi.com; s=google;
+        h=date:message-id:from:to:cc:subject:content-transfer-encoding
+         :mime-version;
+        bh=VDVJNwQC9G2do4EJBoyXwI4wMV7uzIa5s7Tu2i6+M9E=;
+        b=Bs7f1pBUxrJOx1Rb0toQohquDrucGeqqkWPzhxTr0mv7EinNNsw0MMLSNPa43FrUFM
+         +9yozL9+zmGAsy9gJyXXz7JT2iiCwXz6u/lDiCdSKwZLAOQ5HkjG6jQ+74XMKwL8zONf
+         huUa6t0LQkVgxjk88rh+Tz5Xg/LF7OqsLkjGR/W1qvyDQ2uahuRAV28vCgxe4F0b+mCL
+         +Tk/vFbZ5JLjtrBae/XeNDRiUo2aNZs67iorzLeCRG37QbxtaOBMTnE6Ov8BE+eipYe8
+         SpmhZdkBBMkmSrAEG2MzlPNbnYesRhFAap9dBoOAI1uY0hcsBBO6wiQrV9A9V4tUhz6r
+         8K5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=Jmlk3DqwaEBaVBLzTd1kbUUz4icf8kJ9wDD4tXETqTs=;
-        b=nArYQRqkJ3tSe+ZSRYwiXiOIdL0VPcGx6pv/ZFXWbXE5EmkK9V4m8b74K+/YdAbXVy
-         MEQTjTpKo2P6vEJDulAmrR6o0c6Ak4H3f00+ejxrHAiM3y3gj81qDwqEWAECcPoBcKGN
-         IpEXFfBsHmJMQH6S6SX90TzgAPnlot+6Xv/OXyT75gVk48QxJZyF8QHkx53GONUijLji
-         ZvmGmVTBJbxLWHg7fEFlXnEWeFimTWSXYye9cviRt7wvMmPgAaTEWoag3xR70kRGk/yq
-         s/WjBI9PiPvhWpoMWxTvGV3a9o/NY6uvrp/GqpwfqJx8I9NwH4R56MEXw1w5uLlHpP9Q
-         e9PA==
-X-Gm-Message-State: AOAM532Nu8/cx+WbHQfWRpTFHBqh+1dMbujVIUbwCOUeiIqaiWIvatPm
-        xDvFnGSvUfGI+Kng5Kxis7//fh7RnEFMtA==
-X-Google-Smtp-Source: ABdhPJwqNQuWBP+rr8jYh//2Me7hXgMWRhcR2bSBcY24fHQjz0IW8s8sTvGb/a3zNb8YnbOsn/JtZFHE1VwkAg==
-X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:28b])
- (user=shakeelb job=sendgmr) by 2002:a25:bb43:0:b0:645:43cf:736c with SMTP id
- b3-20020a25bb43000000b0064543cf736cmr8648089ybk.493.1650719882767; Sat, 23
- Apr 2022 06:18:02 -0700 (PDT)
-Date:   Sat, 23 Apr 2022 13:17:59 +0000
-In-Reply-To: <c60767c9-03fe-2c9b-9844-752ef0df5b03@openvz.org>
-Message-Id: <20220423131759.dv5eqdpdfoa2drh4@google.com>
-Mime-Version: 1.0
-References: <c60767c9-03fe-2c9b-9844-752ef0df5b03@openvz.org>
-Subject: Re: [PATCH] mm/memcg: minor cleanup in non-memcg_kmem version of mem_cgroup_from_obj()
-From:   Shakeel Butt <shakeelb@google.com>
-To:     Vasily Averin <vvs@openvz.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:message-id:from:to:cc:subject
+         :content-transfer-encoding:mime-version;
+        bh=VDVJNwQC9G2do4EJBoyXwI4wMV7uzIa5s7Tu2i6+M9E=;
+        b=m2X369wkRecYxlWqgPEER/Fnn/uZmsqrxp7OpZ0UlVqCqRf4/dQ/j9vOrytbqP+0eS
+         wvtx+gF5BsnrWtKArPO4xLXUPfEkUjWDKwhRCwGkXYIIv2TJV1nWrWRk1Y+fK40hCpqL
+         7o8rIWyLeRxjE6mGoTA6vp1H6gmpHMXjFyoe7K3+gQmOlhutc1nf2UTBUiChfyIoFMh+
+         aOX36vxTM3Io+9eiA3bNNL+JDyCPaYIFT+lwtZJGyx/B56FodA28gjqfnFa/yUrko+Uh
+         uTQ5itY6VtMR5EiNYyoUw03++/J3Yyfx0FBBMnADK1bAduPdbK9sFcI0ICSR/9QNH1W7
+         8Sxg==
+X-Gm-Message-State: AOAM532k/7+kw5UO+AZJx1kmH4FlrpgT5X+0EvzK9pupTV71fmvxL4rv
+        Vvt62pv6NHkdgpl8+GJDFS9UPw==
+X-Google-Smtp-Source: ABdhPJxfKVSxWejtjcVFh8TGSWjzQeoSzwsegywog51PDLCITMfQLii4o/sbsCv9kPQUs+gGoqT1Ng==
+X-Received: by 2002:a17:902:ea53:b0:15b:1bb8:ac9e with SMTP id r19-20020a170902ea5300b0015b1bb8ac9emr9132837plg.45.1650720042137;
+        Sat, 23 Apr 2022 06:20:42 -0700 (PDT)
+Received: from [127.0.1.1] (117-20-68-98.751444.bne.nbn.aussiebb.net. [117.20.68.98])
+        by smtp.gmail.com with UTF8SMTPSA id f19-20020a17090a639300b001d81a30c437sm2024788pjj.50.2022.04.23.06.20.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Apr 2022 06:20:41 -0700 (PDT)
+Date:   Sat, 23 Apr 2022 13:20:35 +0000
+Message-Id: <20220423132035.238704-1-nathan@nathanrossi.com>
+From:   Nathan Rossi <nathan@nathanrossi.com>
+To:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Nathan Rossi <nathan@nathanrossi.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH] net: dsa: mv88e6xxx: Skip cmode writable for mv88e6*41 if unchanged
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 23, 2022 at 05:23:03AM +0300, Vasily Averin wrote:
-> Replace leading spaces by tab:
->  WARNING: please, no spaces at the start of a line
->  #X: FILE: include/linux/memcontrol.h:1480:
->  +       return NULL;$
-> 
-> Fixes: commit 8380ce479010 ("mm: fork: fix kernel_stack memcg stats for various stack implementations")
-> Signed-off-by: Vasily Averin <vvs@openvz.org>
+The mv88e6341_port_set_cmode function always calls the set writable
+regardless of whether the current cmode is different from the desired
+cmode. This is problematic for specific configurations of the mv88e6341
+and mv88e6141 (in single chip adddressing mode?) where the hidden
+registers are not accessible. This causes the set_cmode_writable to
+fail, and causes teardown of the switch despite the cmode already being
+configured in the correct mode (via external configuration).
 
-Acked-by: Shakeel Butt <shakeelb@google.com>
+This change adds checking of the current cmode compared to the desired
+mode and returns if already in the desired mode. This skips the
+set_cmode_writable setup if the port is already configured in the
+desired mode, avoiding any issues with access of hidden registers.
+
+Signed-off-by: Nathan Rossi <nathan@nathanrossi.com>
+---
+ drivers/net/dsa/mv88e6xxx/port.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/drivers/net/dsa/mv88e6xxx/port.c b/drivers/net/dsa/mv88e6xxx/port.c
+index 795b312876..f2e9c8cae3 100644
+--- a/drivers/net/dsa/mv88e6xxx/port.c
++++ b/drivers/net/dsa/mv88e6xxx/port.c
+@@ -713,6 +713,7 @@ int mv88e6341_port_set_cmode(struct mv88e6xxx_chip *chip, int port,
+ 			     phy_interface_t mode)
+ {
+ 	int err;
++	u8 cmode = chip->ports[port].cmode;
+ 
+ 	if (port != 5)
+ 		return -EOPNOTSUPP;
+@@ -724,6 +725,23 @@ int mv88e6341_port_set_cmode(struct mv88e6xxx_chip *chip, int port,
+ 	case PHY_INTERFACE_MODE_XAUI:
+ 	case PHY_INTERFACE_MODE_RXAUI:
+ 		return -EINVAL;
++
++	/* Check before setting writable. Such that on devices that are already
++	 * correctly configured, no attempt is made to make the cmode writable
++	 * as it may fail.
++	 */
++	case PHY_INTERFACE_MODE_1000BASEX:
++		if (cmode == MV88E6XXX_PORT_STS_CMODE_1000BASEX)
++			return 0;
++		break;
++	case PHY_INTERFACE_MODE_SGMII:
++		if (cmode == MV88E6XXX_PORT_STS_CMODE_SGMII)
++			return 0;
++		break;
++	case PHY_INTERFACE_MODE_2500BASEX:
++		if (cmode == MV88E6XXX_PORT_STS_CMODE_2500BASEX)
++			return 0;
++		break;
+ 	default:
+ 		break;
+ 	}
+---
+2.35.2

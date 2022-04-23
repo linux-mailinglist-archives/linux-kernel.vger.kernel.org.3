@@ -2,144 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A100550C955
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 12:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5819150C95E
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 12:49:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235073AbiDWKgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 06:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39860 "EHLO
+        id S234952AbiDWKwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 06:52:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235037AbiDWKgC (ORCPT
+        with ESMTP id S229732AbiDWKwU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 06:36:02 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D071D8C07
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 03:32:56 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id g13so20811649ejb.4
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 03:32:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=tsJdL6DJfWiEvwfRIfk97/Nhp/cHKIkCfmyLbxjfN3I=;
-        b=xJC6UTkhkoYanFTTSfhaxHSdEiV/oIP0wsbTBrhXOkIPgQUTqPug4iUH8CQCnWj/GL
-         uKmUB0boeeHlHc+lFTRqU52DV02++d/2gRXjqylTkMywN2d3C8+xKyqk9QE9d7KdeDu1
-         g7/xfcqCKtwZTaYv3F7Pzi+dyWjRSEAkdVByRPdhYH6G9o5rtBbZup13qb3DkaiOVe4K
-         lx8/aU/2EP9t5w0zUB3i+/cmqxdJmn83RABo0rRjrptdhJPTjGe0jOW0D0nDd18kzr7d
-         2UpC2O6MxvPRphoF2cwzrXGMXmHPgVNy7VB/O3tU7WPTGUr8CEXJ2xC/mo3Kik2uNtW/
-         08+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tsJdL6DJfWiEvwfRIfk97/Nhp/cHKIkCfmyLbxjfN3I=;
-        b=i/ObwS4sgJoi6X1ffhqRcB2LjzD9Jy3rjF7w2ebxFNsgUtMYujBwf/bGtfirPOwHmg
-         FeOcadHFFtp6pNq3fbcgXMp2AWSvwS2nnFWExoyB8RjlgDp8OhVa5NrY0eZgdCZ7T31L
-         vFdc/JaRZ9ftfIBb75lOar7NcPiVrPfor99JG7sXXZ5gupiEMegRonM1nLuTCKhskfnm
-         SgXzcI6AekGCbtbybX0kfzXSYU+F9djT3pQimqrgFse4yJlij6cfOCQ9hjdZKS21Tjm0
-         FrBI8Iohj7W9MRsem/J6UZg3QgumI4T/4+OhjKc4C2wbZBOxxiPCQjjLZ13c8hId02cK
-         haZA==
-X-Gm-Message-State: AOAM533z7KLciUx2efe/i/tsfMap5SULDTbRTDhvXynpme6x3Ug4JWd4
-        1JGT4efgZxmbKEVYvJS4BNd4Gaf7ZjgUnQ==
-X-Google-Smtp-Source: ABdhPJzw23sr0PxRmACppdsVqcsGW5Xzf11v1G2nenM22VT4mr4skYMBrOi1mXs7vfxYFZbvZTdo1A==
-X-Received: by 2002:a17:907:1b26:b0:6ef:eaca:d2d8 with SMTP id mp38-20020a1709071b2600b006efeacad2d8mr7970655ejc.604.1650709975211;
-        Sat, 23 Apr 2022 03:32:55 -0700 (PDT)
-Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id au9-20020a170907092900b006e8985cc68asm1547842ejc.1.2022.04.23.03.32.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Apr 2022 03:32:54 -0700 (PDT)
-Message-ID: <c40a2dad-c7aa-f778-f1ac-971185691950@linaro.org>
-Date:   Sat, 23 Apr 2022 12:32:53 +0200
+        Sat, 23 Apr 2022 06:52:20 -0400
+Received: from out28-52.mail.aliyun.com (out28-52.mail.aliyun.com [115.124.28.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE21C8A9B;
+        Sat, 23 Apr 2022 03:49:19 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436342|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_social|0.164624-0.00134867-0.834027;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047201;MF=kant@allwinnertech.com;NM=1;PH=DS;RN=11;RT=11;SR=0;TI=SMTPD_---.NWHc4yz_1650710954;
+Received: from 192.168.110.175(mailfrom:kant@allwinnertech.com fp:SMTPD_---.NWHc4yz_1650710954)
+          by smtp.aliyun-inc.com(33.32.92.215);
+          Sat, 23 Apr 2022 18:49:16 +0800
+Message-ID: <e45f684a-7953-69bf-900a-f30dca209778@allwinnertech.com>
+Date:   Sat, 23 Apr 2022 18:49:23 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 2/2] arm64: dts: ti: k3-am625-sk: Enable on board
- peripherals
-Content-Language: en-US
-To:     Vignesh Raghavendra <vigneshr@ti.com>, Nishanth Menon <nm@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] thermal: devfreq_cooling: use local ops instead of global
+ ops
+Content-Language: en-GB
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     amitk@kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>
-References: <20220422065002.387753-1-vigneshr@ti.com>
- <20220422065002.387753-3-vigneshr@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220422065002.387753-3-vigneshr@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        allwinner-opensource-support@allwinnertech.com,
+        stable@vger.kernel.org, orjan.eide@arm.com, edubezval@gmail.com,
+        javi.merino@kernel.org, daniel.lezcano@linaro.org,
+        rui.zhang@intel.com
+References: <20220325094436.101419-1-kant@allwinnertech.com>
+ <4db6b25c-dd78-a6ba-02a5-ac2e49996be1@arm.com>
+ <6b89fa96-07f0-19bb-2e18-22afa27554a1@allwinnertech.com>
+ <281fd0f0-d2fc-95cf-d183-31ca8c25830e@arm.com>
+From:   Kant Fan <kant@allwinnertech.com>
+In-Reply-To: <281fd0f0-d2fc-95cf-d183-31ca8c25830e@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/04/2022 08:50, Vignesh Raghavendra wrote:
-> Add nodes for I2C IO expander, OSPI Flash, Eth PHYs, SD and eMMC that
-> are present on AM625 SK board.
+On 20/04/2022 18:32, Lukasz Luba wrote:
+> Hi Kant,
 > 
-> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
-> Reviewed-by: Bryan Brattlof <bb@ti.com>
-> ---
->  arch/arm64/boot/dts/ti/k3-am625-sk.dts | 273 +++++++++++++++++++++++++
->  1 file changed, 273 insertions(+)
+> On 4/19/22 16:49, Kant Fan wrote:
+>> On 29/03/2022 14:59, Lukasz Luba wrote:
+>>>
+>>>
+>>> On 3/25/22 09:44, Kant Fan wrote:
+>>>> commit 7b62935828266658714f81d4e9176edad808dc70 upstream.
+>>>>
+>>>> Fix access illegal address problem in following condition:
+>>>> There are muti devfreq cooling devices in system, some of them register
+>>>> with dfc_power but other does not, power model ops such as 
+>>>> state2power will
+>>>> append to global devfreq_cooling_ops when the cooling device with
+>>>> dfc_power register. It makes the cooling device without dfc_power
+>>>> also use devfreq_cooling_ops after appending when register later by
+>>>> of_devfreq_cooling_register_power() or of_devfreq_cooling_register().
+>>>>
+>>>> IPA governor regards the cooling devices without dfc_power as a 
+>>>> power actor
+>>>> because they also have power model ops, and will access illegal 
+>>>> address at
+>>>> dfc->power_ops when execute cdev->ops->get_requested_power or
+>>>> cdev->ops->power2state. As the calltrace below shows:
+>>>>
+>>>> Unable to handle kernel NULL pointer dereference at virtual address
+>>>> 00000008
+>>>> ...
+>>>> calltrace:
+>>>> [<c06e5488>] devfreq_cooling_power2state+0x24/0x184
+>>>> [<c06df420>] power_actor_set_power+0x54/0xa8
+>>>> [<c06e3774>] power_allocator_throttle+0x770/0x97c
+>>>> [<c06dd120>] handle_thermal_trip+0x1b4/0x26c
+>>>> [<c06ddb48>] thermal_zone_device_update+0x154/0x208
+>>>> [<c014159c>] process_one_work+0x1ec/0x36c
+>>>> [<c0141c58>] worker_thread+0x204/0x2ec
+>>>> [<c0146788>] kthread+0x140/0x154
+>>>> [<c01010e8>] ret_from_fork+0x14/0x2c
+>>>>
+>>>> Fixes: a76caf55e5b35 ("thermal: Add devfreq cooling")
+>>>> Cc: stable@vger.kernel.org # 4.4+
+>>>> Signed-off-by: Kant Fan <kant@allwinnertech.com>
+>>>> ---
+>>>>   drivers/thermal/devfreq_cooling.c | 25 ++++++++++++++++++-------
+>>>>   1 file changed, 18 insertions(+), 7 deletions(-)
+>>>>
+>>>
+>>> Looks good. So this patch should be applied for all stable
+>>> kernels starting from v4.4 to v5.12 (the v5.13 and later need
+>>> other patch).
+>>>
+>>> Next time you might use in the subject something like:
+>>> [PATCH 4.4] thermal: devfreq_cooling: use local ops instead of global 
+>>> ops
+>>> It would be better distinguished from your other patch with the
+>>> same subject, which was for mainline and v5.13+
+>>
+>> Hi Lukasz,
+>> Thank you for the guidance. I want to know if I'm understanding you in 
+>> a right way. Could you confirm the following information?
+>>
+>> 1. The stable patches
+>> After the patch is merged into mainline later, I'll submit the 
+>> following patches individually for v4.4 ~ v5.12:
 > 
-> diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk.dts b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-> index 0de4113ccd5de..5fc35898a1e2e 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-> +++ b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-> @@ -9,6 +9,7 @@
->  
->  #include <dt-bindings/leds/common.h>
->  #include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/net/ti-dp83867.h>
->  #include "k3-am625.dtsi"
->  
->  / {
-> @@ -17,6 +18,12 @@ / {
->  
->  	aliases {
->  		serial2 = &main_uart0;
-> +		mmc0 = &sdhci0;
-> +		mmc1 = &sdhci1;
-> +		mmc2 = &sdhci2;
-> +		spi0 = &ospi0;
-> +		ethernet0 = &cpsw_port1;
-> +		ethernet1 = &cpsw_port2;
->  	};
->  
->  	chosen {
-> @@ -87,6 +94,33 @@ vcc_3v3_sys: regulator-2 {
->  		regulator-boot-on;
->  	};
->  
-> +	vdd_mmc1: fixed-regulator-sd {
+> Correct, after it gets mainline you can point to that commit hash and
+> process with those patches. I don't now which of those older stable
+> kernels are still maintained, since some of them have longer support
+> and the rest had shorter and might already ended. You can check the
+> end of life for those 'Longterm' here [1]. AFAICS the 4.4 is not in that
+> table, so you can start from 4.9, should be OK.
+> So the list of needed patches would be for those stable kernels:
+> 4.9, 4.14, 4.19, 5.4, 5.10
+> I can see that last release for 5.11.x was in May 2021, so it's probably
+> ended, similar for 5.12.x (Jul 2021). That's why I suggested that list
+> for the long support kernels.
+> 
 
-Don't encode the type of binding into node name. Node name should be
-generic, so either regulator-0 or regulator-sd.
+Hi Lukasz,
+Thanks for figuring it out. I'll check the stable versions carefully.
 
-> +		/* TPS22918DBVR */
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vdd_mmc1";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		regulator-boot-on;
-> +		enable-active-high;
-> +		vin-supply = <&vcc_3v3_sys>;
-> +		gpio = <&exp1 3 GPIO_ACTIVE_HIGH>;
-> +	};
-> +
-> +	vdd_sd_dv: gpio-regulator-TLV71033 {
+>>
+>> [PATCH 4.4] thermal: devfreq_cooling: use local ops instead of global ops
+>> [PATCH 4.5] thermal: devfreq_cooling: use local ops instead of global ops
+>> ...
+>> [PATCH 5.12] thermal: devfreq_cooling: use local ops instead of global 
+>> ops
+>>
+>> And also the following patches individually for v5.13+ :
+> 
+> For this, you probably don't have to. You have added 'v5.13+' in the
+> original patch v2, so it will be picked correctly. It should apply
+> on those stable kernels w/o issues. If there will be, stable kernel
+> engineers will ping us.
+> 
+>> [PATCH 5.13] thermal: devfreq_cooling: use local ops instead of global 
+>> ops
+>> [PATCH 5.14] thermal: devfreq_cooling: use local ops instead of global 
+>> ops
+>> ...
+>> [PATCH 5.17] thermal: devfreq_cooling: use local ops instead of global 
+>> ops
+>>
+>> 2. The mainline patch
+>> I saw your mail with Rafael, seems there are conflicts... I wonder if 
+>> there's anything wrong with my patch, or anything I can help?
+>>
+> 
+> Thank you for offering help. Rafael solved that correctly, so it doesn't
+> need any more work.
+> 
+> Thank you for doing that work!
+> 
+> Regards,
+> Lukasz
+> 
+> [1] https://www.kernel.org/category/releases.html
 
-The same + do not mix cases, so regulator-1 or regulator-tlv71033
+No problem. I'll submit the stable patches after the mainline patch is 
+merged.
 
-
-Best regards,
-Krzysztof
+-- 
+Best Regards,
+Kant Fan

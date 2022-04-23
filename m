@@ -2,74 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23DF650C8A8
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 11:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB9F50C894
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 11:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234452AbiDWJbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 05:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53504 "EHLO
+        id S234519AbiDWJd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 05:33:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234440AbiDWJbg (ORCPT
+        with ESMTP id S234494AbiDWJdS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 05:31:36 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CEB41FF57E
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 02:28:38 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id r13so20622036ejd.5
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 02:28:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=XwRX3dQQKVCbO7y3tkBOfJG0TaUkfPDXzwv86ykznLY=;
-        b=boWjgTSfPOJYrFX2B0Ktpyn5wSiTeF8DJCpuoxmuJ5hXlU9dNVdJCtMl5uvEoKYFgG
-         anir+PwRSZmLlILbfYNShfNFRvRW4MIT6EemUwjMm2EYb2vWis8kzsJXy+6r/bK2u0jr
-         tmMgZeXQ0YsI7F8esO+qzObvcgW2D42acLxKF+m4Z00P5y5B/fnHMZWEGJSGi7s7KVX4
-         qQObLL9gWTC2MQU3uwcCjqo9hRBE1rpGgEklbKcVtfcz+ujYY5W4ErnoBqfZgQtTHOLO
-         vwfV9E+OvRZ3284K9e5NU+r16af/bGCVTKJvbJ141gzri749z6Z2ib2N7pFJ8gR/Pbed
-         2TEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=XwRX3dQQKVCbO7y3tkBOfJG0TaUkfPDXzwv86ykznLY=;
-        b=UlEFIlP7w7tl3zdCiPK82adMhmltjcco+DrV54qGzcWDjnr89B6bYg2spB4/flYlHA
-         rpu8WvsUSKlLq1cH1F/Kuoa2DJdbzTaSQo77C0fbW9ZojVwiCVYaj46FYmp2Ea6CG0Ax
-         O78DVeCElaQzsEKJ19QPQWqosAFhLvvG6nTiYC8iPansfPI5bVJRzmh81N4uyWRBts+f
-         LWWeqJzoVzIYj3lZaRoxVF0XuA9bh3Z26dxDx2aDjg+H7mpibn+HNQXCe/Fa1dglCUJQ
-         IUDmi/rSLrn5hHSieDj+fTIHfbUpElk/c2wapxOIiiSP+hUVg/SXSV6/dpMGX8o/pQXg
-         MQlQ==
-X-Gm-Message-State: AOAM533PwrW6wRCIb8NPqsMg50QvcORrBd/YHTc31ywZz3B470FhQScj
-        TeNjx3DOYHFDM2o/TwGXBUMUbw==
-X-Google-Smtp-Source: ABdhPJwQyTIIz1uqkkA/2Gzfz8WyLrZPTzJtXQA4DG3JJPeEuT8o/0o90kidYqWbdlzjNwJ9n9n+3w==
-X-Received: by 2002:a17:907:2da3:b0:6f3:6e74:67b0 with SMTP id gt35-20020a1709072da300b006f36e7467b0mr2726572ejc.766.1650706116579;
-        Sat, 23 Apr 2022 02:28:36 -0700 (PDT)
-Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id tk22-20020a170907c29600b006de43e9605asm1450030ejc.181.2022.04.23.02.28.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Apr 2022 02:28:36 -0700 (PDT)
-Message-ID: <e7eb0c05-7056-7aeb-ebca-399f11d22122@linaro.org>
-Date:   Sat, 23 Apr 2022 11:28:35 +0200
+        Sat, 23 Apr 2022 05:33:18 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D69A6C8BE5
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 02:30:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650706215; x=1682242215;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PBCdMFUfBx3arTmg/F40pbY08SWeH4eP+o9eyt9mTZI=;
+  b=SypYRQVroPQGSbh9RU7qXQu2gEQag6VGPWsVM7iehjKDiYZ4JG6teq9w
+   phkcn+/fWLyG5/Borpv7rAGOX2mM/c4l/ZmsRmRxuQyYZons0qS32aRU8
+   8rO/lStDx5ceaFjrp/bmC7kMLUkZQPeofePuLZ+RhiQlcHLPwItGJ1lGp
+   PFLPyIQuKqKKo7YbZWcURomgFA2FOuU0E08eS6rKABSydQq6R3XgM6o0g
+   MZVOrO2FP4EskQNax3M3R51osQecf+50m8TvaBtLXNLxhHnTQ1dQCyZH4
+   XAjr3HHPDTBY3UZhm+WrODU0U8WRX1ukB3WtDPt7KeeDBXAOfi12eoHf9
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="263723032"
+X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
+   d="scan'208";a="263723032"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 02:30:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
+   d="scan'208";a="703875136"
+Received: from lkp-server01.sh.intel.com (HELO dd58949a6e39) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 23 Apr 2022 02:30:14 -0700
+Received: from kbuild by dd58949a6e39 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1niC5l-00007T-Lk;
+        Sat, 23 Apr 2022 09:30:13 +0000
+Date:   Sat, 23 Apr 2022 17:29:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>
+Subject: [intel-tdx:guest-rebased 4/129] arch/x86/kernel/tdcall.o: warning:
+ objtool: __tdx_module_call()+0x3f: missing int3 after ret
+Message-ID: <202204231753.86pSanI4-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] nfc: nfcmrvl: spi: Fix irq_of_parse_and_map() return
- value
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Vincent Cuissard <cuissard@marvell.com>,
-        Samuel Ortiz <sameo@linux.intel.com>, linux-nfc@lists.01.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220422104758.64039-1-krzysztof.kozlowski@linaro.org>
- <20220422161305.59e0be38@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220422161305.59e0be38@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,20 +64,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/04/2022 01:13, Jakub Kicinski wrote:
-> On Fri, 22 Apr 2022 12:47:58 +0200 Krzysztof Kozlowski wrote:
->> The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
->>
->> Fixes: caf6e49bf6d0 ("NFC: nfcmrvl: add spi driver")
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->> This is another issue to https://lore.kernel.org/all/20220422084605.2775542-1-lv.ruyi@zte.com.cn/
-> 
-> Maybe send one patch that fixes both and also fixes the usage of ret?
+Hi Kuppuswamy,
 
-Bah, I just blindly copied one part of his patch without deeper check.
-Thanks for noticing it.
+First bad commit (maybe != root cause):
 
+tree:   https://github.com/intel/tdx.git guest-rebased
+head:   4c095660b91dbdd18042456e395af0deeef93485
+commit: 78ee914ccc3ec6aba40ea3ffd044ea17b1aba9ce [4/129] x86/tdx: Add __tdx_module_call() and __tdx_hypercall() helper functions
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220423/202204231753.86pSanI4-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel/tdx/commit/78ee914ccc3ec6aba40ea3ffd044ea17b1aba9ce
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest-rebased
+        git checkout 78ee914ccc3ec6aba40ea3ffd044ea17b1aba9ce
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
 
-Best regards,
-Krzysztof
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/kernel/tdcall.o: warning: objtool: __tdx_module_call()+0x3f: missing int3 after ret
+>> arch/x86/kernel/tdcall.o: warning: objtool: __tdx_hypercall()+0x60: missing int3 after ret
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

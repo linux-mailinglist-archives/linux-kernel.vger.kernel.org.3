@@ -2,121 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED1A250C559
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 02:06:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E12B50C5DD
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 03:00:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231417AbiDWAIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 20:08:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45686 "EHLO
+        id S231331AbiDWBDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 21:03:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231478AbiDWAHB (ORCPT
+        with ESMTP id S229785AbiDWBD2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 20:07:01 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B722D210187
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 17:03:51 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id n4-20020a170902f60400b00158d1f2d442so5579755plg.18
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 17:03:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=s8j9kj4vlgoBbVsMqTWGwW74KTbhvSIyPcu9kjmk3mg=;
-        b=Kf/obMymV4dKTLaHQ9vU4iXvPrE4oPgT1V7IU2nfscX8IQV7XePv3hocOPRD9WGWS5
-         qbqdVHGKg+NzqNIxosRgBK0ZoTUP+V1zuEf6JCVhnsdtSIorKYV1lMswst4f7/aOwsXN
-         TeEL29nm1GDndxDwEEU3sPxLD9aehBKPDUQZpO0M6iqu8+C67ydwXnTP6ypLb2nzUYNl
-         3bAkmcX7/05uXq7IYcs+GDKCo15Jr0qbLoY55JX2cug1q4nIlf+sfHk3sMv2J68Dro9K
-         XIimltu0kNIfB1I9N9SHiI9/77weHhz3n+dpmKV1HpVytDTq+/WIiA8uWayp2iVwGfBz
-         D/lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=s8j9kj4vlgoBbVsMqTWGwW74KTbhvSIyPcu9kjmk3mg=;
-        b=eUAYzK4k4XqypiG6dopom/TeEJmYTOv79MNDaPUje/D5kKclQ4S0ZDEpP4p2hLAHDp
-         Kq3DQjARglgiRDAG9vzQ1Mh8WwbVpPMOQHSMk1FfCrH6XitvhHiJpuhuhJgR2UQ4ejgz
-         +zCvkVPtrzcZEQkKmybG14jrNsxL+hCtZve/mCc1jpZ0cWnF39Kh9hQqGAizZs9fbhyo
-         J3bHf5PxnG1Ng3cOHfZJMHdWtbTiXdf+/3kNQ+GlrohY4z4IajLsWx2MG1y6HFPVTUpi
-         Epw8qzlOnMwDCxRpx+oL+iWUhjQ9xPKkNmZn6C6SnRsf8wVtM6AscDQ0EFrZa/CwY5yK
-         /zdw==
-X-Gm-Message-State: AOAM533JjmrI6h01gII08RMv1EQaEqhcNLh4BPcVRBd+Z1OuzuWeWAl/
-        4P2FCioZykeZPA3Wm5YgefdB7P+ezAoP
-X-Google-Smtp-Source: ABdhPJxLdnqeaExMLlAnDRAdqhlgHYhal0Uv3YiRM0Qpe3ApegAEaDu5LxZo18Qe+X+tJK/Krg4ftUZZ1Hoe
-X-Received: from rananta-virt.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1bcc])
- (user=rananta job=sendgmr) by 2002:aa7:9522:0:b0:4e1:d277:ce8 with SMTP id
- c2-20020aa79522000000b004e1d2770ce8mr7486812pfp.16.1650672230928; Fri, 22 Apr
- 2022 17:03:50 -0700 (PDT)
-Date:   Sat, 23 Apr 2022 00:03:28 +0000
-In-Reply-To: <20220423000328.2103733-1-rananta@google.com>
-Message-Id: <20220423000328.2103733-10-rananta@google.com>
-Mime-Version: 1.0
-References: <20220423000328.2103733-1-rananta@google.com>
-X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
-Subject: [PATCH v6 9/9] selftests: KVM: aarch64: Add the bitmap firmware
- registers to get-reg-list
-From:   Raghavendra Rao Ananta <rananta@google.com>
-To:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Raghavendra Rao Anata <rananta@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+        Fri, 22 Apr 2022 21:03:28 -0400
+X-Greylist: delayed 39070 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 22 Apr 2022 18:00:31 PDT
+Received: from relay3.mymailcheap.com (relay3.mymailcheap.com [217.182.66.161])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C3D5C671;
+        Fri, 22 Apr 2022 18:00:30 -0700 (PDT)
+Received: from filter1.mymailcheap.com (filter1.mymailcheap.com [149.56.130.247])
+        by relay3.mymailcheap.com (Postfix) with ESMTPS id 553EF3ECDF;
+        Sat, 23 Apr 2022 03:00:26 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by filter1.mymailcheap.com (Postfix) with ESMTP id A2F5E2A374;
+        Sat, 23 Apr 2022 01:00:25 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at filter1.mymailcheap.com
+Received: from filter1.mymailcheap.com ([127.0.0.1])
+        by localhost (filter1.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Zdi33cixN-Om; Sat, 23 Apr 2022 01:00:24 +0000 (UTC)
+Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by filter1.mymailcheap.com (Postfix) with ESMTPS;
+        Sat, 23 Apr 2022 01:00:24 +0000 (UTC)
+Received: from [172.16.34.145] (unknown [113.67.11.122])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 6B041401C4;
+        Sat, 23 Apr 2022 01:00:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=aosc.io; s=default;
+        t=1650675623; bh=N4i/1Sl8XBZEoIx04G8sQIpXEjM3YdS6eNFHmG+4P2c=;
+        h=Subject:From:To:Cc:In-Reply-To:References:Date:From;
+        b=j8JylXwwyvys35BdMKnA21asyRFKv5QAT5RyRJye1BcC4s4ZxAYq3xb4ALCDLsVxJ
+         yXrpji/F3661RFq/bT/yfPsdoJc8gwd28N2Fa41NhKFWxvDqTk7uxBtZo/NedaZcSt
+         fcg4g4Jn7K+v+hH5i+xOX1dSZtSlmfsOP3DQD4JM=
+Message-ID: <41a8e5353f95ec1031f5700588313d379b63ec78.camel@aosc.io>
+Subject: Re: [PATCH 4/4] spi: sun6i: add support for R329 SPI controllers
+From:   Icenowy Zheng <icenowy@aosc.io>
+To:     Samuel Holland <samuel@sholland.org>,
+        Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <0b5b586a-3bc7-384e-103c-e40d0b2fac23@sholland.org>
+References: <20220422155639.1071645-1-icenowy@outlook.com>
+         <BYAPR20MB2472717D5AC20E7702329996BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+         <0b5b586a-3bc7-384e-103c-e40d0b2fac23@sholland.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Date:   Sat, 23 Apr 2022 08:07:10 +0800
+User-Agent: Evolution 3.40.4 
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,T_SPF_PERMERROR,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the psuedo-firmware registers KVM_REG_ARM_STD_BMAP,
-KVM_REG_ARM_STD_HYP_BMAP, and KVM_REG_ARM_VENDOR_HYP_BMAP to
-the base_regs[] list.
+在 2022-04-22星期五的 18:59 -0500，Samuel Holland写道：
+> On 4/22/22 10:56 AM, icenowy@outlook.com wrote:
+> > From: Icenowy Zheng <icenowy@aosc.io>
+> > 
+> > R329 has two SPI controllers. One of it is quite similar to
+> > previous
+> > ones, but with internal clock divider removed; the other added MIPI
+> > DBI
+> > Type-C offload based on the first one.
+> > 
+> > Add basical support for these controllers. As we're not going to
+> > support the DBI functionality now, just implement the two kinds of
+> > controllers as the same.
+> 
+> I'm curious what speeds you were able to use SPI at. On D1, with
+> effectively
+> these same changes, I would always get corrupted data when reading
+> from the
+> onboard SPI NAND on the Nezha board. However, if I enabled the "new
+> mode of
+> sample timing" (bit 2 in GBL_CTL_REG), I got the correct data.
 
-Also, add the COPROC support for KVM_REG_ARM_FW_FEAT_BMAP.
+See 7.3.3.10 of R329_User_Manual_v1.0.pdf ? (named SPI sample mode and
+Run Clock configuration)
 
-Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
----
- tools/testing/selftests/kvm/aarch64/get-reg-list.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+> 
+> Regards,
+> Samuel
 
-diff --git a/tools/testing/selftests/kvm/aarch64/get-reg-list.c b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-index 0b571f3fe64c..d3a7dbfcbb3d 100644
---- a/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-+++ b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-@@ -294,6 +294,11 @@ static void print_reg(struct vcpu_config *c, __u64 id)
- 			    "%s: Unexpected bits set in FW reg id: 0x%llx", config_name(c), id);
- 		printf("\tKVM_REG_ARM_FW_REG(%lld),\n", id & 0xffff);
- 		break;
-+	case KVM_REG_ARM_FW_FEAT_BMAP:
-+		TEST_ASSERT(id == KVM_REG_ARM_FW_FEAT_BMAP_REG(id & 0xffff),
-+			    "%s: Unexpected bits set in the bitmap feature FW reg id: 0x%llx", config_name(c), id);
-+		printf("\tKVM_REG_ARM_FW_FEAT_BMAP_REG(%lld),\n", id & 0xffff);
-+		break;
- 	case KVM_REG_ARM64_SVE:
- 		if (has_cap(c, KVM_CAP_ARM_SVE))
- 			printf("\t%s,\n", sve_id_to_str(c, id));
-@@ -692,6 +697,9 @@ static __u64 base_regs[] = {
- 	KVM_REG_ARM_FW_REG(1),		/* KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1 */
- 	KVM_REG_ARM_FW_REG(2),		/* KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2 */
- 	KVM_REG_ARM_FW_REG(3),		/* KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3 */
-+	KVM_REG_ARM_FW_FEAT_BMAP_REG(0),	/* KVM_REG_ARM_STD_BMAP */
-+	KVM_REG_ARM_FW_FEAT_BMAP_REG(1),	/* KVM_REG_ARM_STD_HYP_BMAP */
-+	KVM_REG_ARM_FW_FEAT_BMAP_REG(2),	/* KVM_REG_ARM_VENDOR_HYP_BMAP */
- 	ARM64_SYS_REG(3, 3, 14, 3, 1),	/* CNTV_CTL_EL0 */
- 	ARM64_SYS_REG(3, 3, 14, 3, 2),	/* CNTV_CVAL_EL0 */
- 	ARM64_SYS_REG(3, 3, 14, 0, 2),
--- 
-2.36.0.rc2.479.g8af0fa9b8e-goog
 

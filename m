@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A5A550C6F7
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 05:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A35E50C6FE
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 05:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232622AbiDWDuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 23:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50494 "EHLO
+        id S232657AbiDWDuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 23:50:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232526AbiDWDtk (ORCPT
+        with ESMTP id S232563AbiDWDtp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 23:49:40 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08olkn2104.outbound.protection.outlook.com [40.92.47.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B270313976D;
-        Fri, 22 Apr 2022 20:46:44 -0700 (PDT)
+        Fri, 22 Apr 2022 23:49:45 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08olkn2043.outbound.protection.outlook.com [40.92.47.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383BB17E18;
+        Fri, 22 Apr 2022 20:46:48 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Zgt1yu64UtGJWUVVCxflQrWyG+jBbc5r72p1x/Qrk2Atib9ivFOXwP4DLErH5NAaK95uPY1jbzLhlUNiMygfkPHPcy4w1RX4qjS4aHtyXCnpW4HQAfe/XceOQhmNACrhEYV1pxRp6oQUG8oqJDN14I0SnEtRFqW1HeyViaeUY2Xi76ybguwuUlqefM2/dZltdbODjYNkt5M+2y1XGdHVzABAMw5j1iLwRFRSUdFf+kcTkvaN1v+mI7QnAy4okvPSTemiBdHI6lFTNxR1//08zvGsV/TibB8WY6IZsXhse3G0ewtJHodSOpKGLSiS1N1K4XDE2EBQ+HPmQ1yLA/hK8g==
+ b=Lx/dffzEIK3vWKwOJxHF67D9F23Mdp2U2niDm4+VFEsUBPFI23d7/Vxf6WqClLWkBRiU/ETTntRQA87i1n9+wBKkGK2A6TeMPffMWcMB/aXqNa7PVRQwRCfgUx3S3vmYud2inPGUX28sif8pHuDjMwYGEjLu4W4NoifnRiYXZxemqq1rjojTbcl1jY0U/ztTxTBbXSiprBRImUm8bW8mqxzwzaHdwaGgL+0dyVlX4lFrcY4ff1Md59GHE0r+ZTuqgYi6vnpHSqbLfrd3wNdjmJ3mjlRAti8kU+CZKNXxovzqAkuoQV2Gg8X+2PPucCU6F8DtjA1Tb35Bv4WZCVQtAQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2TEFyQpoFygt63asuQVsE0XVF+UYmrJJETWTjkVoqdo=;
- b=kpnBrei7/Rkj3BNuyHsyJmmoCyUd+az7NGLm+saUx99MKjf1a1Znj+KzcrJFtttcUQbYWt6cUKr7HxfXnWIiE0b8wnCMw7H1oSrMxTL4QEbxpsG2+Gfn4x75FPoN4OX4lMNv43D9kistpQBAm1hAdiJ76C3Gf71yrMudZyKAmYAf0ndvH7yX1BlwEwHx9jO3zFRttfU8DFQwJygUcY94mDBQsWkE0pkZnsO+Ctg72skfRS2hu8nUb7AjxtGjzz2w8x0rRVTqztG0Ffwed71khPAqafF5JU1RPFfIWW5Iom00VoOSUp6ThSEjM1Gt2RTRyPSAEwVp1JDZcSx5SbyXXA==
+ bh=TOCNBNpg8pj5X3kpg0xrEiadcxZZFicj1B2uUAE+IjM=;
+ b=ezLPLWAlYDmpn3y5RwCdCOrn91OIMLr7Uaa/fJ5mQAESHD2SjXMdtgI4ivH05P7meIBo5/T+H43jBoJTEr4CB3ih4SUZ07nW+Rb984Va/k8/ihB3xVOEEEZoV449o4i2BllvZL87rL6oI1j5f5b4zWly1sNj6jD/4XhkgmrlSYbQN/U7CKxhq/ZaLQHhzAJNPYJGge8xiEpRX+dRS15QBWoxoc8RXr/npcYIiefozHztP9Bb1sz+dFvgSRO5CwkHXwwiSKZJ43BwzoYmKHiIJcIb9wOPqLgvGt++Gh/UgWlpiNbC31PTZnnSA2kyzfm06eagt5MykgtGa/9X5F+yNA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 Received: from CY4PR04MB0567.namprd04.prod.outlook.com (2603:10b6:903:b1::20)
  by SN6PR04MB4205.namprd04.prod.outlook.com (2603:10b6:805:30::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Sat, 23 Apr
- 2022 03:46:43 +0000
+ 2022 03:46:46 +0000
 Received: from CY4PR04MB0567.namprd04.prod.outlook.com
  ([fe80::8e:6e22:f98c:29d5]) by CY4PR04MB0567.namprd04.prod.outlook.com
  ([fe80::8e:6e22:f98c:29d5%5]) with mapi id 15.20.5186.015; Sat, 23 Apr 2022
- 03:46:42 +0000
+ 03:46:46 +0000
 From:   Jonathan Bakker <xc-racer2@live.ca>
 To:     Miquel Raynal <miquel.raynal@bootlin.com>
 Cc:     Kyungmin Park <kyungmin.park@samsung.com>,
@@ -43,66 +43,67 @@ Cc:     Kyungmin Park <kyungmin.park@samsung.com>,
         Tomasz Figa <tomasz.figa@gmail.com>,
         =?UTF-8?q?Pawe=C5=82=20Chmiel?= <pawel.mikolaj.chmiel@gmail.com>,
         Jonathan Bakker <xc-racer2@live.ca>
-Subject: [PATCH 2/5] mtd: onenand: samsung: Set name field of mtd_info struct
-Date:   Fri, 22 Apr 2022 20:46:19 -0700
-Message-ID: <CY4PR04MB0567121FF1C304D782B07E58CBF69@CY4PR04MB0567.namprd04.prod.outlook.com>
+Subject: [PATCH 3/5] mtd: onenand: samsung: Unify resource order for controller variants
+Date:   Fri, 22 Apr 2022 20:46:20 -0700
+Message-ID: <CY4PR04MB05679F5FFE8317D557933CB3CBF69@CY4PR04MB0567.namprd04.prod.outlook.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220423034524.366612-1-xc-racer2@live.ca>
+In-Reply-To: <20220423034622.366696-1-xc-racer2@live.ca>
 References: <20220423034524.366612-1-xc-racer2@live.ca>
+ <20220423034622.366696-1-xc-racer2@live.ca>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-TMN:  [31aCKBWYxvekUmHCZrlZnJNvfi/1AJUPOl6OL4jNZaWYvHMCzP04AHwLqwS9nyHz]
+X-TMN:  [l2FdWO9S3Of0bxkli5/76lPwUFTdTVMeFfFO/wdP6TZtn5RBC1007aa2VLoXy9Gg]
 X-ClientProxiedBy: MW4PR04CA0210.namprd04.prod.outlook.com
  (2603:10b6:303:86::35) To CY4PR04MB0567.namprd04.prod.outlook.com
  (2603:10b6:903:b1::20)
-X-Microsoft-Original-Message-ID: <20220423034622.366696-1-xc-racer2@live.ca>
+X-Microsoft-Original-Message-ID: <20220423034622.366696-2-xc-racer2@live.ca>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9508204a-d12f-42aa-6e7a-08da24dbe16a
+X-MS-Office365-Filtering-Correlation-Id: ea943821-93a8-4df7-d37f-08da24dbe3a1
 X-MS-TrafficTypeDiagnostic: SN6PR04MB4205:EE_
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /8IaNIf5He4Ia/OtVPUH4CG+StIaos5VoAgfgQrPdUjmZwZA0bMQF93YnmwFOBdhJV231g4TDjyitW51/9LdEnmhkaQTa+InDEmwmxBG9KiBUZVarsqIHW9pQGvcTxhAoerALrpZ/OriiJI4i7LINIg1xDBnv5n2SgNYjuCrWKlthtJ40HBa31Yn1tb9uIk10fWc68XN6CVLkUcmJEDaVWLATfjvT86e6t0pczdP/W70pGdEPATpFMBeq4tI56UH2WFe3biZiu2a+u6QIzQeorQ291gAkeviP+c3QMY2je8u//LrP/e55r5FS5A19SGi8fYCEafZn5aX8MYZ+1FlxAaalAYMehFe5eMhF15UAfqHOxWh6Q22Ifo2QCh3hzx545MO4zkmBKbfLnJMNSJyllwso4Cv3oslqOSKwgiwf/SzuJGuKIhsX6dN45dAu0LAb2lh58oG3WUsJFw9wM3al6xIM2RHrKT9IY6VYfOKdZbPEdas407a4maJQ7MLJZMcQzX4X20aODmKFvwTquVXrCU/5HVOXhE4skBbbHv5cBL6QmhjewRiFdVb5pw86IVfgDXs7IRHuSuChc2Qx84OHg==
+X-Microsoft-Antispam-Message-Info: d+bJautiTjtFkFFL6Cr5Iaf+oQLj9D718x20bWKhdGH94wuA6A1gz82f7ltmiCS0/6RXb2/wO9n1l6hWZ0fOz9aWZwvk4twIKdFTzkjsiEPZz2DPyoIPvj5QZz/mhTGgPXzvZQz2uNSDWQeWlNQzgK16P6sZc+sf5oDerHbaTLzubO03rEF+H2Alb0BvsYI6inroaPio1uPV1vFHPtgMgucZ6TQg2ShCc15YwHJ9Mbg3Bo7f3u0z7+sD0xYX0MsUwRMjnJONumthtXnNSS3eG4KppIWyrNkq5HSl84sHMWBoO+a/h7AaqZpxuPq39C2rA9bjCzfPMEHrqOxR5xsphtRSWbPP97Kp480GuXus5lO/5wEP2QnCk5DlNN+kEosC8u2zlWZwSdamz8KJp1uONwG9ESC8+Hw14IVZrg11mAUSoEKmdNIGHLZU3YgFzdtCvl5ZeiAx+tyvfvy7lELl85QwQy9V3va/qBmRDFu1wS0QgM8bkczTva+OnE4IX2dDX5JewYCcZLGLU5+jlyqKIuWSsAyfRduJan6JohgCgSDmrrTbyLW2SkqH4J+tAQJhu/O5kH+6BmjohFFc0GOl8Q==
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QWNoNVZvTzQ4Mkc3a1ZxZlhIaTVuMVRGaTQ1VHFVbU9KTWUyN29tSXFxODlo?=
- =?utf-8?B?VDlOZlBFem1iL083eGJveWlUU0toRGJ2aURVYUNPRGFici9BS2dZZEQ0QUhy?=
- =?utf-8?B?OTVPZThTNXEvcU50VmVuc1FBZWt6UzhlUjc5NXIwSURZRlNCRzl5VWxnSHps?=
- =?utf-8?B?RkN3TEhIM09BalhiSjdtd3JFOEtlbTNJV3JlcWFiVGlCN3AxN1JpdEZyTVRN?=
- =?utf-8?B?Y3ZCSzZhbFZ5ZjVPWS96dkR3U3d3TEg4dU5ZeUVZMXNobERSY0JVc3piS1kz?=
- =?utf-8?B?dElLQWFzNC84ZXczZEtQczk5NXcrbEF1ODVvQkliajNlc0d4VzlpWThMb0hZ?=
- =?utf-8?B?SWt0ZVBSTjVQN3FabTNOelc2QlZENGJrRE5tK3Bubm4rNWVKeVM5YnVpa0F0?=
- =?utf-8?B?UWxTVjVxWS9EOVZCL1pIeDluakhqbS9JZmNxS2cxV0tnbWJXU1M5bEtCYjEr?=
- =?utf-8?B?SzE1cFZER1VRMnhra1ppVzNJeExQbXlHZkZBQS9ZWGpKUVBCVk5JZWhUMTNk?=
- =?utf-8?B?d3RRM0VGNVpLY25QeUNRbHBvSC8yZXJwamVQQ3hUeWVwUDE0YkpYTEtOd0hU?=
- =?utf-8?B?QWhxYVlEUmp2YVpudDRLRnJUaTUrNW5kTG9UOXFObUlWNHhqMFA2TFpaWUlY?=
- =?utf-8?B?d1lBVVU1dEpIV0NtQSt6dUZoQ1l1RnplQThNb3ZtTnhTSzlHVEhmUFoxMTNn?=
- =?utf-8?B?SS9HM1hhMlo0djV6TUJMMnF1N0M3U0k3eTRmenZaRWwzcUc0ZHJ6bWEwNzgw?=
- =?utf-8?B?VEttU3Zlck5EY1JBVTJRd25QaXhKK2QwUjRLU3hMQm9BU0x3VXdpRW1qdFdM?=
- =?utf-8?B?MjQrb0wxR3Z1N2YvTXdZdExKRXoxR3IzWkZJRlpsSjJsdW9ZT0Jid2xqZ3Qw?=
- =?utf-8?B?SUdKZlJaM1hNRnJXYmJvU1BJYXVhZ0o5TTcwL1pReG43ZUZzWVR6NWZGRXRw?=
- =?utf-8?B?WHlPZ0hGV0I3aEVqSXVWS25YZ25UaHdITVRmT3JtZXpud085NkU5NVQ4SHhL?=
- =?utf-8?B?OEUzazd1anRPaDVXMkhsWUx0RlkxS0VYc1VNUG9zTExxMjcwak1RZzZXVWdM?=
- =?utf-8?B?QVd1UndVblRKZDI5eFUzdFpvOFZHdGRLUFhTVnhycldkMzdRU2FKSEF4WFd5?=
- =?utf-8?B?ZCtKckZIWFp5bytHZ3JjbUtZQUh4SHJNL0RnK0NxYmJEdTdtdnQ0UCswVWxB?=
- =?utf-8?B?by9SUEhYNWtvc3RmZW1aSnY2aTdOMzR0aG5FRithN3pLS1hDdUdnM0NqQmIz?=
- =?utf-8?B?MklEWExKVFdLZGxZKzNKQlA2dVpGckhjdWFOM2JuYVB6VWFzNXBXK00yMGlM?=
- =?utf-8?B?S1ZPQXc5TVNyTlNQN1R6Tk1tOVpselYxaWx3NU1wSVZIZXhoSlViNWMxcm5p?=
- =?utf-8?B?ZXBOeWRZeXpOaFF4dFd6b09udWljaXVrWnBtSVdLMnhRaHdkSFRXd1FONVlr?=
- =?utf-8?B?R0VHbWNWUTZOVGQ1dGptc3pqU1JPcU9wVVRnQlZGMWhFLzIvL01qbU9zcXFV?=
- =?utf-8?B?SEY0d0hVNkE5Zit0TDFWeDNqeEhtQzZUbW1US1hEV1ZUelo3S240WXNDSVN2?=
- =?utf-8?B?TkEzZ0tZbURqTXBnelg5ZFdMWWczaTA4MmxYRmF1R2RzaHM0N3ozOTdYOS9V?=
- =?utf-8?B?WFNFM3dOT1lCenBCRmdnV1JtWE45TFY5VlE0c0RvVUVGMGNkM3EwUXZERGpI?=
- =?utf-8?B?bUdBOWtJeGRodndTV1lGTW5laU5rcGFESVJmRS9MNk14MXA1WVVXOTBBSkdM?=
- =?utf-8?B?Z0lXUnk1aVpnNVh3bDRzd2xxb3dEaGVSUlFMaXAwRm1VbWdGWUczcUFMZTBE?=
- =?utf-8?B?OFRpT0g3SFZnVFM5OFgyTHh1QjBxVmFsanZETkNlWjU4SkY4L0VLVjJEQUtt?=
- =?utf-8?B?UVUrQUNqcDFQaTBHR0d4dklDVml6U0JmZWpYN0dISUYwdTc5azZQV2dCUk5m?=
- =?utf-8?B?NnRKNERiQSsyUFBTS3RqNStRTUxMUFYvYVVoNGlGOUpUWHNsck43b09PRnNG?=
- =?utf-8?Q?SjSwQUejowjCIo3KN4+P89BtCcl+4o=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SXNrdS9lKzhFdlFqQ0dmY0FUYURkY0pnUWcxNm5ZMlZ1aHNHcHJZVVhyc3hV?=
+ =?utf-8?B?cjYvdzhvWmJaQ2hUaDlXWUpIZkgzZnJyNUxsc1hrVGFSWFVoTjJFQzJ6Wndj?=
+ =?utf-8?B?M3JIY0JldjdUQjZSUUNvbm1kSVh6aWlEcDFlYXh0U2N2Q2tNMUo3RDNobFpN?=
+ =?utf-8?B?YnM5UVBrZXlYLzZyV2E2c0lGODRJYmRodEtuRjFhanQ2R1Izc1NTSVRsdjlm?=
+ =?utf-8?B?ZjJRRm1hQ2ljWENETmNWYkt0RjlUYUhNWDQwNmF2aU1EUG14eEhSa0ZUN1F3?=
+ =?utf-8?B?aldKM3psd3g0bGdJSlIxRTd2dVp3cXdEWTdrdG9BdlpFRE9zUjBXUnRHS3VN?=
+ =?utf-8?B?VWpROXl6OXlTVjIyRmdVZUt4ZVFzS1dxcnJNTkdtTEJLMEkyYnNZZDZwUU5y?=
+ =?utf-8?B?RTltZTZMRTNyNmcrQWY3T3k0RCtFekJocyt1ZzFuaU1TZ0tWNWtaRWxDMnBr?=
+ =?utf-8?B?dlFqMFNOYVl4cmZoaXIzMWprOEdzcktRTDN0UDMvRVlXWkV3cnl4N00zVXhF?=
+ =?utf-8?B?ejR5cHJSVWdxMjFROW50N05leFZEb1VGNjVydHh2RjlYdThqL1IwU0Ezd0F1?=
+ =?utf-8?B?Uk1TQXF2bjhONWhDY2JGZVJNcEhYcUwvMXh0VUo5Y1FVTTVrZThPaHJsY3lp?=
+ =?utf-8?B?YzE0R3NJK1pIL0hwTmhEcHAyaUozR2MvaFpLZjI2ZGNXOGJmNEo3T1J4NWh1?=
+ =?utf-8?B?RVlYOFl6NG90SmhTTVB2eER2bnVZak9odXI4dTU3TFczblFQNzlvMmlzOUZF?=
+ =?utf-8?B?eHRZSVBBK0hLOXJVUTBGZWllcDlSakEvdVN5SjIxYWczWkJFSzV4UUJOSmRX?=
+ =?utf-8?B?OEZTRjBES0MwMlE2WDlVUFgrTHFqL0RndGdRb3VkYTJQeDYwb0ZxeFQxWWIz?=
+ =?utf-8?B?YnMvTzFRQ0JPQUdERFVpV1JTU3F0ekJpOTA5SzVLaWpIUDliUTN5S3FlR1J2?=
+ =?utf-8?B?Z2lZWjRKZ1QwcS81cmRCU3BCNUtIdW0vRWhrZ2hZTEdSL3VjYVBHeUV5THBo?=
+ =?utf-8?B?OU5nVjJYUzQ2VHBJcWJ3RWRQbUplMTV0dG0rd0VvM1p1bTJ1REh2ZEZ1N2NH?=
+ =?utf-8?B?OGVXbno3U0RwQ3lNb0x1SlVYQVhRYkZtTm5YUFhDZnh5MjRTdWtxQ2dZeW52?=
+ =?utf-8?B?eVlndWJHa0ZHU1kwaVNKUkNzZldOVlhjZU5zOVlmVE1ZYnpyU3VDZThUbHdJ?=
+ =?utf-8?B?L3hUVFdJSmlwV3k2UGFBZkxwK21aZmw5NC9HNjJWYStKOUk2QWltck8xU3FM?=
+ =?utf-8?B?ZURoTlhZZWpma2hLR1BYUDhvNFVPcGlyeGdMU05walpqMEdLZDFlc2g5Q0Uw?=
+ =?utf-8?B?Rk1YQi9DVUR1bUxuN2M1VnNzMlp1S2dZUkVzSGRJQWRDK3ZpNzVNdjJHL2lY?=
+ =?utf-8?B?Z01KMjAwbHpvU3I3TlQwNDMzNVFmQXBnYVduSHhQNVd3RFZXendLYmI1UUR3?=
+ =?utf-8?B?U3JLNmp1bFJUYUQxbXVkeHhaakIvUS9pS3ZrOWNpTlpBM01YUDBlU0hQYm5H?=
+ =?utf-8?B?aGhUU1lQaWhaV0lyUzRuWVZETm0vK2Z0MEFncm0yL2ZtU3NRV2VpWGVHNDZH?=
+ =?utf-8?B?UmNCcFNUSG55Y1RQNTJVUkFaM0w1S2VGOHlGRFBXQ0ovam55MmZDZFJIUjBH?=
+ =?utf-8?B?aEFhc3c2UDNLdWtiTHduRGNNRWNFaThGR2Q5aHhWUWtQaE5TanYvZit5VTE4?=
+ =?utf-8?B?aTJlY08xVGg0T0ZvTDFtcEZBVnNZWHU1WERYNGkyTDAxdVBoKzcrVDg0UGRI?=
+ =?utf-8?B?VVVUZEtJUkdrakZPWUhCcG10bytsemd3RWI1czRvQjRSd3F0bk1lc1hKZDdq?=
+ =?utf-8?B?UnJNT2ZBMktGVHNXcWs5d1kxOGRsZ1VZMWRlclhwTnhRRFM4UFkwRnV4alZz?=
+ =?utf-8?B?QUxoVWhtOVliQkNveVZNNjdvckx1VmV3MzdhUG9JRTF1Y1NQWkQwd0JScGxs?=
+ =?utf-8?B?QkJZTFg2SFl3SXFHcDVVbzU0YlhsZGE0RWI2QW4ycExWWUpyeEhrRSt6NCtY?=
+ =?utf-8?Q?dibYfoy7oDnWN8rXPGcJ85vcDaN0kw=3D?=
 X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-edb50.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9508204a-d12f-42aa-6e7a-08da24dbe16a
+X-MS-Exchange-CrossTenant-Network-Message-Id: ea943821-93a8-4df7-d37f-08da24dbe3a1
 X-MS-Exchange-CrossTenant-AuthSource: CY4PR04MB0567.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Apr 2022 03:46:42.8851
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Apr 2022 03:46:46.5723
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -119,32 +120,154 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Tomasz Figa <tomasz.figa@gmail.com>
 
-This patch adds initialization of .name field of mtd_info struct to
-avoid printing "(null)" in kernel log messages, such as:
+Before this patch, the order of memory resources requested by the driver
+was controller base as first and OneNAND chip base as second for
+S3C64xx/S5PC100 variant and the opposite for S5PC110/S5PV210 variant.
 
-[    1.942519] 1 ofpart partitions found on MTD device (null)
-[    1.949708] Creating 1 MTD partitions on "(null)":
+To make this more consistent, this patch swaps the order of resources
+for the latter and updates platform code accordingly. As a nice side
+effect there is a slight reduction in line count of probe function.
+
+This will make the transition to DT-based probing much easier.
 
 Signed-off-by: Tomasz Figa <tomasz.figa@gmail.com>
 Signed-off-by: Paweł Chmiel <pawel.mikolaj.chmiel@gmail.com>
-Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
 Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
 ---
- drivers/mtd/nand/onenand/onenand_samsung.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/mtd/nand/onenand/onenand_samsung.c | 48 ++++++++++------------
+ 1 file changed, 22 insertions(+), 26 deletions(-)
 
 diff --git a/drivers/mtd/nand/onenand/onenand_samsung.c b/drivers/mtd/nand/onenand/onenand_samsung.c
-index b64895573515..924f5ddc9505 100644
+index 924f5ddc9505..a3ef4add865a 100644
 --- a/drivers/mtd/nand/onenand/onenand_samsung.c
 +++ b/drivers/mtd/nand/onenand/onenand_samsung.c
-@@ -853,6 +853,7 @@ static int s3c_onenand_probe(struct platform_device *pdev)
- 		return -ENOMEM;
+@@ -123,14 +123,13 @@ struct s3c_onenand {
+ 	struct mtd_info	*mtd;
+ 	struct platform_device	*pdev;
+ 	enum soc_type	type;
+-	void __iomem	*base;
+-	void __iomem	*ahb_addr;
++	void __iomem	*ctrl_base;
++	void __iomem	*chip_base;
+ 	int		bootram_command;
+ 	void		*page_buf;
+ 	void		*oob_buf;
+ 	unsigned int	(*mem_addr)(int fba, int fpa, int fsa);
+ 	unsigned int	(*cmd_map)(unsigned int type, unsigned int val);
+-	void __iomem	*dma_addr;
+ 	unsigned long	phys_base;
+ 	struct completion	complete;
+ };
+@@ -144,22 +143,22 @@ static struct s3c_onenand *onenand;
  
- 	this = (struct onenand_chip *) &mtd[1];
-+	mtd->name = dev_name(&pdev->dev);
- 	mtd->priv = this;
- 	mtd->dev.parent = &pdev->dev;
- 	onenand->pdev = pdev;
+ static inline int s3c_read_reg(int offset)
+ {
+-	return readl(onenand->base + offset);
++	return readl(onenand->ctrl_base + offset);
+ }
+ 
+ static inline void s3c_write_reg(int value, int offset)
+ {
+-	writel(value, onenand->base + offset);
++	writel(value, onenand->ctrl_base + offset);
+ }
+ 
+ static inline int s3c_read_cmd(unsigned int cmd)
+ {
+-	return readl(onenand->ahb_addr + cmd);
++	return readl(onenand->chip_base + cmd);
+ }
+ 
+ static inline void s3c_write_cmd(int value, unsigned int cmd)
+ {
+-	writel(value, onenand->ahb_addr + cmd);
++	writel(value, onenand->chip_base + cmd);
+ }
+ 
+ #ifdef SAMSUNG_DEBUG
+@@ -517,7 +516,7 @@ static int (*s5pc110_dma_ops)(dma_addr_t dst, dma_addr_t src, size_t count, int
+ 
+ static int s5pc110_dma_poll(dma_addr_t dst, dma_addr_t src, size_t count, int direction)
+ {
+-	void __iomem *base = onenand->dma_addr;
++	void __iomem *base = onenand->ctrl_base;
+ 	int status;
+ 	unsigned long timeout;
+ 
+@@ -561,7 +560,7 @@ static int s5pc110_dma_poll(dma_addr_t dst, dma_addr_t src, size_t count, int di
+ 
+ static irqreturn_t s5pc110_onenand_irq(int irq, void *data)
+ {
+-	void __iomem *base = onenand->dma_addr;
++	void __iomem *base = onenand->ctrl_base;
+ 	int status, cmd = 0;
+ 
+ 	status = readl(base + S5PC110_INTC_DMA_STATUS);
+@@ -583,7 +582,7 @@ static irqreturn_t s5pc110_onenand_irq(int irq, void *data)
+ 
+ static int s5pc110_dma_irq(dma_addr_t dst, dma_addr_t src, size_t count, int direction)
+ {
+-	void __iomem *base = onenand->dma_addr;
++	void __iomem *base = onenand->ctrl_base;
+ 	int status;
+ 
+ 	status = readl(base + S5PC110_INTC_DMA_MASK);
+@@ -632,7 +631,7 @@ static int s5pc110_read_bufferram(struct mtd_info *mtd, int area,
+ 	}
+ 
+ 	if (offset & 3 || (size_t) buf & 3 ||
+-		!onenand->dma_addr || count != mtd->writesize)
++		!onenand->ctrl_base || count != mtd->writesize)
+ 		goto normal;
+ 
+ 	/* Handle vmalloc address */
+@@ -862,23 +861,22 @@ static int s3c_onenand_probe(struct platform_device *pdev)
+ 	s3c_onenand_setup(mtd);
+ 
+ 	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	onenand->base = devm_ioremap_resource(&pdev->dev, r);
+-	if (IS_ERR(onenand->base))
+-		return PTR_ERR(onenand->base);
+-
++	onenand->ctrl_base = devm_ioremap_resource(&pdev->dev, r);
++	if (IS_ERR(onenand->ctrl_base))
++		return PTR_ERR(onenand->ctrl_base);
++
++	r = platform_get_resource(pdev, IORESOURCE_MEM, 1);
++	onenand->chip_base = devm_ioremap_resource(&pdev->dev, r);
++	if (IS_ERR(onenand->chip_base))
++		return PTR_ERR(onenand->chip_base);
+ 	onenand->phys_base = r->start;
+ 
+-	/* Set onenand_chip also */
+-	this->base = onenand->base;
+-
+ 	/* Use runtime badblock check */
+ 	this->options |= ONENAND_SKIP_UNLOCK_CHECK;
+ 
+ 	if (onenand->type != TYPE_S5PC110) {
+-		r = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+-		onenand->ahb_addr = devm_ioremap_resource(&pdev->dev, r);
+-		if (IS_ERR(onenand->ahb_addr))
+-			return PTR_ERR(onenand->ahb_addr);
++		/* Set onenand_chip also */
++		this->base = onenand->ctrl_base;
+ 
+ 		/* Allocate 4KiB BufferRAM */
+ 		onenand->page_buf = devm_kzalloc(&pdev->dev, SZ_4K,
+@@ -896,10 +894,8 @@ static int s3c_onenand_probe(struct platform_device *pdev)
+ 		this->subpagesize = mtd->writesize;
+ 
+ 	} else { /* S5PC110 */
+-		r = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+-		onenand->dma_addr = devm_ioremap_resource(&pdev->dev, r);
+-		if (IS_ERR(onenand->dma_addr))
+-			return PTR_ERR(onenand->dma_addr);
++		/* Set onenand_chip also */
++		this->base = onenand->chip_base;
+ 
+ 		s5pc110_dma_ops = s5pc110_dma_poll;
+ 		/* Interrupt support */
 -- 
 2.30.2
 

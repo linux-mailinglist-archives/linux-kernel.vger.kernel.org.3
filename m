@@ -2,96 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23C0450CA52
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 15:03:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FB3150CA58
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 15:06:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235700AbiDWNFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 09:05:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42576 "EHLO
+        id S234938AbiDWNIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 09:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235636AbiDWNF3 (ORCPT
+        with ESMTP id S230154AbiDWNIw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 09:05:29 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A00A1F0B88
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 06:02:30 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id c23so16766693plo.0
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 06:02:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=p8rAqTMQ2XWjal/ekmPzbpXL4sv2yzkmbXk/WYInG0Q=;
-        b=J6Aeym90Qy7VvagYHJbWEoIg+d2WadfzFnKyUGz0cxZRSxhvpDAkZjUZ7Tz0RdjTe+
-         V2gHk2sQmmEJJc6KSe7SXmlQ5yjByo+Ts95qXsXhYzFwvBt4L/vPOdjb5LVKnLmcfK5x
-         HcfNqM+4BTydL8FplyHJQfRopqpOr8xicBNxYtC/V3YBnrBA9zBDKPw3EDY8ePH2CJlP
-         JFyZ3SNEJH338tHvdh21LKXbLDAim5DyDlcO8upRXgOiJa9wwhXLx8yy/5T9IbQFfoC7
-         nyE+L/9mAm8uodApvvqHxti+ZLS3wXdXJEWp8sSCJlqVINKpYgI8fTvMFRNZCU2ftZVc
-         m2cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=p8rAqTMQ2XWjal/ekmPzbpXL4sv2yzkmbXk/WYInG0Q=;
-        b=CZgM/nLPYFmHeYuzjw27f7B5PFxUZNO8Iq6fXTuhpRn3Rwe4517PX4oC+tkJVeiCc9
-         HKPYLDITTfwZ3VbsdBz18ZogvfyR3DqBn8bT3hE75795i5lCpNDZiFQNIN2wBxYgc4Se
-         Ui0x1dslFtMIXQRpqFUpHCNjxKDKduPXryfa4WInWsTT7nlQrG/92zSlkjGbfPZCvIbA
-         Uv2oX289LPa8MqwoZ8L6Tsj6dR6LJr7iLM6N78Vwu3Bc55oN32GF7LFTvM08JKEcS6Qo
-         Xfc4bHKTjjpyfwjNTNn0M0cmS2nUahgJKp7g7SOzwMbU3PhI5xTHupppjaMgAg6SHfHC
-         z+Lg==
-X-Gm-Message-State: AOAM533tXZEgeFoM7VFGLHV4YGhGiKOUfAngfaol0l2rcE5x09Bk6sse
-        QGfye0VsnFIXqWVhMrn4ZueCTWY6L1c+Ww==
-X-Google-Smtp-Source: ABdhPJwAIIyfCLGQZTmPZl143X0zqHT/wc9wmMavCCX3LYvhAQteaMrULWE7fGph3+AgK9ezAIRCdA==
-X-Received: by 2002:a17:90b:3c51:b0:1d6:aabd:6a3b with SMTP id pm17-20020a17090b3c5100b001d6aabd6a3bmr10729005pjb.241.1650718950431;
-        Sat, 23 Apr 2022 06:02:30 -0700 (PDT)
-Received: from localhost.localdomain ([14.100.36.163])
-        by smtp.gmail.com with ESMTPSA id c139-20020a624e91000000b005060cdff4ffsm5808994pfb.129.2022.04.23.06.02.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 06:02:30 -0700 (PDT)
-From:   Solomon Tan <wjsota@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dan.carpenter@oracle.com
-Subject: [PATCH 7/7] staging: rtl8192e: Remove u16 cast for u16 return value
-Date:   Sat, 23 Apr 2022 21:01:50 +0800
-Message-Id: <20220423130150.161903-8-wjsota@gmail.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220423130150.161903-1-wjsota@gmail.com>
-References: <20220423130150.161903-1-wjsota@gmail.com>
+        Sat, 23 Apr 2022 09:08:52 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB7F1BE83
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 06:05:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650719155; x=1682255155;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+na3yLK7i1dr4u7EY7pE0nZJ2rWx9pUL5s0RqRpdp6c=;
+  b=hyqJIzvXB01JSeayiLLs3l2mbbXkreYHUFMGD7waSV2vvV9OkDy8XS1c
+   ak3UFthSAHIhLg5SVsNgdOMX9hJnS3X4ByWunufgY+Zi+sjTYWl/itxwu
+   Y9/VsbuDZcslzES/eQ+XgZLw2vOvatQATRwnMUDbQEUGqxqH08Q5XTyA1
+   O+9A0RsdfO04pUFQq0zSXOyyk/Ryop+M9fB54ffbbywyv53pUvg3AvTcF
+   vBQfsZTv8q3LVW4zSj47olS1O2fFhrDAW4Q8rhWsuuxp4FYxav9f8CiJf
+   5cY/7HyfMJYmKq/Pa9SBawqdd8JvVbh/5xwguGh+0p5aDuiy3cDzSehLd
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="244820511"
+X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
+   d="scan'208";a="244820511"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 06:05:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
+   d="scan'208";a="556861846"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 23 Apr 2022 06:05:53 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1niFSS-00002i-St;
+        Sat, 23 Apr 2022 13:05:52 +0000
+Date:   Sat, 23 Apr 2022 21:05:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        David Sterba <dsterba@suse.com>,
+        Nikolay Borisov <nborisov@suse.com>
+Subject: [kdave-btrfs-devel:misc-next 67/136] fs/btrfs/extent_io.c:5952:7:
+ warning: Local variable 'ret' shadows outer variable [shadowVariable]
+Message-ID: <202204232126.HLpn2Rg5-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove explicit u16 cast of the function Mk16 return value.
-The variable hi does not need to be casted explicitly to u16 as it will
-already be casted implicitly.
+tree:   https://github.com/kdave/btrfs-devel.git misc-next
+head:   446e59dd6c55d120dc09444a1f086e5a81898665
+commit: 55093e751296ec57c65374e1e0378f6d32946389 [67/136] btrfs: factor out allocating an array of pages
+compiler: microblaze-linux-gcc (GCC) 11.2.0
+reproduce (cppcheck warning):
+        # apt-get install cppcheck
+        git checkout 55093e751296ec57c65374e1e0378f6d32946389
+        cppcheck --quiet --enable=style,performance,portability --template=gcc FILE
 
-Signed-off-by: Solomon Tan <wjsota@gmail.com>
----
- drivers/staging/rtl8192e/rtllib_crypt_tkip.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/drivers/staging/rtl8192e/rtllib_crypt_tkip.c b/drivers/staging/rtl8192e/rtllib_crypt_tkip.c
-index a305b79c53e7..8bc95651e384 100644
---- a/drivers/staging/rtl8192e/rtllib_crypt_tkip.c
-+++ b/drivers/staging/rtl8192e/rtllib_crypt_tkip.c
-@@ -136,7 +136,7 @@ static inline u16 Hi16(u32 val)
- 
- static inline u16 Mk16(u8 hi, u8 lo)
- {
--	return lo | (((u16)hi) << 8);
-+	return lo | (hi << 8);
- }
- 
- 
+
+cppcheck warnings: (new ones prefixed by >>)
+        ^
+>> fs/btrfs/extent_io.c:5952:7: warning: Local variable 'ret' shadows outer variable [shadowVariable]
+     int ret;
+         ^
+   fs/btrfs/extent_io.c:5931:6: note: Shadowed declaration
+    int ret;
+        ^
+   fs/btrfs/extent_io.c:5952:7: note: Shadow variable
+     int ret;
+         ^
+
+cppcheck possible warnings: (new ones prefixed by >>, may not real problems)
+
+        ^
+   fs/btrfs/extent_io.c:369:26: warning: Parameter 'p_in' can be declared with const [constParameter]
+          struct rb_node ***p_in,
+                            ^
+   fs/btrfs/extent_io.c:370:25: warning: Parameter 'parent_in' can be declared with const [constParameter]
+          struct rb_node **parent_in)
+                           ^
+   fs/btrfs/extent_io.c:1823:30: warning: Parameter 'mapping' can be declared with const [constParameter]
+          struct address_space *mapping,
+                                ^
+   fs/btrfs/extent_io.c:1824:40: warning: Parameter 'locked_page' can be declared with const [constParameter]
+          struct page *page, struct page *locked_page,
+                                          ^
+   fs/btrfs/extent_io.c:6052:16: warning: Parameter 'accessed' can be declared with const [constParameter]
+     struct page *accessed)
+                  ^
+
+vim +/ret +5952 fs/btrfs/extent_io.c
+
+  5925	
+  5926	struct extent_buffer *btrfs_clone_extent_buffer(const struct extent_buffer *src)
+  5927	{
+  5928		int i;
+  5929		struct extent_buffer *new;
+  5930		int num_pages = num_extent_pages(src);
+  5931		int ret;
+  5932	
+  5933		new = __alloc_extent_buffer(src->fs_info, src->start, src->len);
+  5934		if (new == NULL)
+  5935			return NULL;
+  5936	
+  5937		/*
+  5938		 * Set UNMAPPED before calling btrfs_release_extent_buffer(), as
+  5939		 * btrfs_release_extent_buffer() have different behavior for
+  5940		 * UNMAPPED subpage extent buffer.
+  5941		 */
+  5942		set_bit(EXTENT_BUFFER_UNMAPPED, &new->bflags);
+  5943	
+  5944		memset(new->pages, 0, sizeof(*new->pages) * num_pages);
+  5945		ret = btrfs_alloc_page_array(num_pages, new->pages);
+  5946		if (ret) {
+  5947			btrfs_release_extent_buffer(new);
+  5948			return NULL;
+  5949		}
+  5950	
+  5951		for (i = 0; i < num_pages; i++) {
+> 5952			int ret;
+  5953			struct page *p = new->pages[i];
+  5954	
+  5955			ret = attach_extent_buffer_page(new, p, NULL);
+  5956			if (ret < 0) {
+  5957				btrfs_release_extent_buffer(new);
+  5958				return NULL;
+  5959			}
+  5960			WARN_ON(PageDirty(p));
+  5961			copy_page(page_address(p), page_address(src->pages[i]));
+  5962		}
+  5963		set_extent_buffer_uptodate(new);
+  5964	
+  5965		return new;
+  5966	}
+  5967	
+
 -- 
-2.36.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

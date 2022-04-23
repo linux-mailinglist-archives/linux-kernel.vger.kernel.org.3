@@ -2,175 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DA4C50CD7E
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 23:06:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD1A50CD89
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 23:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237091AbiDWVI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 17:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51538 "EHLO
+        id S236563AbiDWVNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 17:13:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232418AbiDWVI4 (ORCPT
+        with ESMTP id S232418AbiDWVNv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 17:08:56 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C8716E6AF;
-        Sat, 23 Apr 2022 14:05:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650747958; x=1682283958;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=L794azoPtxLpLtQ4yl9xWCR1tuXoZvf24hSkQ2o3Nnc=;
-  b=QcdTBDjBpeQY1b9mGxOFlHaHECLG98n/4OZ93sRZZWm97FyekQF1artT
-   /PsuywqlKw5F0kllvfZ2XJsfuFihHRlq/AQAKQ9dWeJ9NiCde+74TWB3z
-   siZ+sk6Foi9jSZFPduXdO4+ZiNQp+DiEEfgx+ABCwLbeNgzzqBMapkqz6
-   oi0jMLsb/utsT9A6AK0mKk+/flRF1E0a8dKWPdk0NyM1HkCi1LmUaXdjE
-   UY5TzBnxfErNHvKCcKwdJTXsB+ziICetl9iQoVrttiYumUVE8XJzSXpJx
-   CHls18nUxkAcgMkwf0N7qiFG80z0yDhv3nmyOo5k8n6Blf3QKAuBa5FIt
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="245525521"
-X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
-   d="scan'208";a="245525521"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 14:05:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
-   d="scan'208";a="627468824"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 23 Apr 2022 14:05:56 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1niMx1-0000Tk-U7;
-        Sat, 23 Apr 2022 21:05:55 +0000
-Date:   Sun, 24 Apr 2022 05:05:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Eugen Hristev <eugen.hristev@microchip.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
-Subject: drivers/media/platform/atmel/atmel-sama7g5-isc.c:610:34: warning:
- unused variable 'microchip_xisc_of_match'
-Message-ID: <202204240539.2fONWAZh-lkp@intel.com>
+        Sat, 23 Apr 2022 17:13:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2277318CE5D;
+        Sat, 23 Apr 2022 14:10:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A3401B80D98;
+        Sat, 23 Apr 2022 21:10:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FC03C385A5;
+        Sat, 23 Apr 2022 21:10:47 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="YCua9rEN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1650748245;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EhMHwAtxBeyAlPcmtZM1jKqEy31s4ZBgTOPhjm9fTZQ=;
+        b=YCua9rENZsFWL50uQB+osscI/9XaYS6un4Pz4cokIHHtQLDTaqwbLPzFQk9zh+Cm1T4qRP
+        XiJpjU8EjL+J9d8WOjRMAs3D/P14MeTzChLFa5x0mkNGoUca4l7yCPo4Kvhfr9Yry3zBI2
+        Km/ybmnwIzwzhyr5j46vRWCLMs6kGbA=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 78fab421 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Sat, 23 Apr 2022 21:10:45 +0000 (UTC)
+Date:   Sat, 23 Apr 2022 23:10:41 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Nick Hu <nickhu@andestech.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Michal Simek <monstr@monstr.eu>,
+        Borislav Petkov <bp@alien8.de>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Joshua Kinard <kumba@gentoo.org>,
+        David Laight <David.Laight@aculab.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: Re: [PATCH v1] random: block in /dev/urandom
+Message-ID: <YmRrUYfsXkF3XZ5S@zx2c4.com>
+References: <20220217162848.303601-1-Jason@zx2c4.com>
+ <20220322155820.GA1745955@roeck-us.net>
+ <YjoC5kQMqyC/3L5Y@zx2c4.com>
+ <d5c23f68-30ba-a5eb-6bea-501736e79c88@roeck-us.net>
+ <CAHmME9rmeQAD2DwG=APTmDxuVxFDH=6GXoKpgPrU9rc9oXrmxQ@mail.gmail.com>
+ <20220423135631.GB3958174@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220423135631.GB3958174@roeck-us.net>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eugen,
+Hey Guenter,
 
-FYI, the error/warning still remains.
+On Sat, Apr 23, 2022 at 06:56:31AM -0700, Guenter Roeck wrote:
+> Looks like your code is already in -next; I see the same failures in
+> your tree and there.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   13bc32bad7059d6c5671e9d037e6e3ed001cc0f4
-commit: c9aa973884a163ecb6d5d4d3be9137058adcaf8c media: atmel: atmel-isc: add microchip-xisc driver
-date:   11 months ago
-config: s390-randconfig-c005-20220424 (https://download.01.org/0day-ci/archive/20220424/202204240539.2fONWAZh-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c9aa973884a163ecb6d5d4d3be9137058adcaf8c
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout c9aa973884a163ecb6d5d4d3be9137058adcaf8c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/media/platform/atmel/
+So interestingly, none of the old issues are now present (the hangs on
+versatilepb and such), so that's very positive. As for the crashes you
+found:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> openrisc generates a warning backtrace.
+> parisc crashes.
+> s390 crashes silently, no crash log.
 
-All warnings (new ones prefixed by >>):
+I've now fixed these too, and tested the fixes as well. Hopefully the
+new jd/for-guenther branch has no regressions at all now... Knock on
+wood.
 
-   In file included from drivers/media/platform/atmel/atmel-sama7g5-isc.c:40:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:36:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/media/platform/atmel/atmel-sama7g5-isc.c:40:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/media/platform/atmel/atmel-sama7g5-isc.c:40:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/media/platform/atmel/atmel-sama7g5-isc.c:610:34: warning: unused variable 'microchip_xisc_of_match' [-Wunused-const-variable]
-   static const struct of_device_id microchip_xisc_of_match[] = {
-                                    ^
-   13 warnings generated.
+Thanks a bunch for looking at this. Very much appreciated.
 
-
-vim +/microchip_xisc_of_match +610 drivers/media/platform/atmel/atmel-sama7g5-isc.c
-
-   609	
- > 610	static const struct of_device_id microchip_xisc_of_match[] = {
-   611		{ .compatible = "microchip,sama7g5-isc" },
-   612		{ }
-   613	};
-   614	MODULE_DEVICE_TABLE(of, microchip_xisc_of_match);
-   615	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Jason

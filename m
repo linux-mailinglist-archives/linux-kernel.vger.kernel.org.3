@@ -2,78 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 595BB50C809
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 09:39:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB36550C813
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 09:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233986AbiDWHij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 03:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42452 "EHLO
+        id S234008AbiDWHnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 03:43:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231812AbiDWHih (ORCPT
+        with ESMTP id S230242AbiDWHnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 03:38:37 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03E522B03;
-        Sat, 23 Apr 2022 00:35:39 -0700 (PDT)
-X-UUID: 8f8558b0a7f447bc94022bc495a65a81-20220423
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:094cc651-b347-4fd9-a817-86e1f31b0551,OB:10,L
-        OB:0,IP:0,URL:8,TC:0,Content:-20,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,
-        ACTION:release,TS:83
-X-CID-INFO: VERSION:1.1.4,REQID:094cc651-b347-4fd9-a817-86e1f31b0551,OB:10,LOB
-        :0,IP:0,URL:8,TC:0,Content:-20,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,
-        ACTION:quarantine,TS:83
-X-CID-META: VersionHash:faefae9,CLOUDID:5297aef0-da02-41b4-b6df-58f4ccd36682,C
-        OID:df1a717272b0,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,Fi
-        le:nil,QS:0,BEC:nil
-X-UUID: 8f8558b0a7f447bc94022bc495a65a81-20220423
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1993905657; Sat, 23 Apr 2022 15:35:35 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Sat, 23 Apr 2022 15:35:33 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 23 Apr 2022 15:35:32 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-CC:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        Steve Cho <stevecho@chromium.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH ,v4] media: mediatek: vcodec: Fix v4l2 compliance decoder cmd test fail
-Date:   Sat, 23 Apr 2022 15:35:31 +0800
-Message-ID: <20220423073531.24749-1-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 23 Apr 2022 03:43:47 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC1F1ED407
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 00:40:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650699651; x=1682235651;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ucuoSk12DQfsHOdwbBkyhJAs3pTgRSOksYR0POnApX8=;
+  b=KR+3og/0XOcqI4YXLR5DyXjxCWUNpyhtIvI799atMgqiD05MDdBHayWG
+   UnlcAfhdHl+04VWNfA2BmF5mVQHaLIJ4x/8wRm2JUEBZ5dWHNyQyfkdlg
+   bF6dBFeto3KY62gpGoF92G2b06l/q11sQpc1aNv5Y2FN1bLKu5wcrmZm6
+   7jtCmAoX9NaMDdbcQyZ5QEqzlMPZe+Waw8EHetrwxlzI+PQHntGu/NAc7
+   n3LwnkigdpAvQUcX9kb+a/runYOCw4tqxsEFwNzYq/gs2GtsL/LyA/GuV
+   RhNO5uoQr8qBvcBUMYWgSBkhNqTpGk5aqIX0KFDbazT2vAsq940PyAedJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264641886"
+X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
+   d="scan'208";a="264641886"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 00:40:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
+   d="scan'208";a="728861838"
+Received: from lkp-server01.sh.intel.com (HELO dd58949a6e39) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 23 Apr 2022 00:40:48 -0700
+Received: from kbuild by dd58949a6e39 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1niANs-000024-1z;
+        Sat, 23 Apr 2022 07:40:48 +0000
+Date:   Sat, 23 Apr 2022 15:40:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: drivers/nvdimm/namespace_devs.c:915:20: warning: Local variable
+ 'res' shadows outer variable [shadowVariable]
+Message-ID: <202204231545.HgpB1iQL-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,69 +62,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Will return -EINVAL using standard framework api when test stateless
-decoder with cmd VIDIOC_(TRY)DECODER_CMD. Disable them to adjust v4l2
-compliance test for user driver(GStreamer/Chrome) won't use decoder cmd.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c00c5e1d157bec0ef0b0b59aa5482eb8dc7e8e49
+commit: b4366a827f6cf6e58c93e076e335d9ee9ee0480f libnvdimm/labels: Introduce getters for namespace label fields
+date:   8 months ago
+compiler: arc-elf-gcc (GCC) 11.2.0
+reproduce (cppcheck warning):
+        # apt-get install cppcheck
+        git checkout b4366a827f6cf6e58c93e076e335d9ee9ee0480f
+        cppcheck --quiet --enable=style,performance,portability --template=gcc FILE
 
-Fixes: 8cdc3794b2e3 ("media: mtk-vcodec: vdec: support stateless API")
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
----
-changes compared with v3:
-- using v4l2_disable_ioctl to replace return -ENOTTY
-changes compared with v2:
-- add reviewed-by tag
-changes compared with v1:
-- add Fixes: tag
----
- .../media/platform/mediatek/vcodec/mtk_vcodec_dec.c | 13 +------------
- .../platform/mediatek/vcodec/mtk_vcodec_dec_drv.c   |  3 +++
- 2 files changed, 4 insertions(+), 12 deletions(-)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-index 130ecef2e766..c8ee5e2b4f69 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-@@ -47,14 +47,7 @@ static struct mtk_q_data *mtk_vdec_get_q_data(struct mtk_vcodec_ctx *ctx,
- static int vidioc_try_decoder_cmd(struct file *file, void *priv,
- 				struct v4l2_decoder_cmd *cmd)
- {
--	struct mtk_vcodec_ctx *ctx = fh_to_ctx(priv);
--
--	/* Use M2M stateless helper if relevant */
--	if (ctx->dev->vdec_pdata->uses_stateless_api)
--		return v4l2_m2m_ioctl_stateless_try_decoder_cmd(file, priv,
--								cmd);
--	else
--		return v4l2_m2m_ioctl_try_decoder_cmd(file, priv, cmd);
-+	return v4l2_m2m_ioctl_try_decoder_cmd(file, priv, cmd);
- }
- 
- 
-@@ -69,10 +62,6 @@ static int vidioc_decoder_cmd(struct file *file, void *priv,
- 	if (ret)
- 		return ret;
- 
--	/* Use M2M stateless helper if relevant */
--	if (ctx->dev->vdec_pdata->uses_stateless_api)
--		return v4l2_m2m_ioctl_stateless_decoder_cmd(file, priv, cmd);
--
- 	mtk_v4l2_debug(1, "decoder cmd=%u", cmd->cmd);
- 	dst_vq = v4l2_m2m_get_vq(ctx->m2m_ctx,
- 				V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-index df7b25e9cbc8..7e93e1c55158 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-@@ -400,6 +400,9 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 	}
- 
- 	if (dev->vdec_pdata->uses_stateless_api) {
-+		v4l2_disable_ioctl(vfd_dec, VIDIOC_DECODER_CMD);
-+		v4l2_disable_ioctl(vfd_dec, VIDIOC_TRY_DECODER_CMD);
-+
- 		dev->mdev_dec.dev = &pdev->dev;
- 		strscpy(dev->mdev_dec.model, MTK_VCODEC_DEC_NAME,
- 			sizeof(dev->mdev_dec.model));
+
+cppcheck warnings: (new ones prefixed by >>)
+>> drivers/nvdimm/namespace_devs.c:915:20: warning: Local variable 'res' shadows outer variable [shadowVariable]
+     struct resource *res;
+                      ^
+   drivers/nvdimm/namespace_devs.c:903:19: note: Shadowed declaration
+    struct resource *res = &nspm->nsio.res;
+                     ^
+   drivers/nvdimm/namespace_devs.c:915:20: note: Shadow variable
+     struct resource *res;
+                      ^
+>> drivers/nvdimm/namespace_devs.c:2030:26: warning: Local variable 'ndd' shadows outer variable [shadowVariable]
+     struct nvdimm_drvdata *ndd;
+                            ^
+   drivers/nvdimm/namespace_devs.c:1953:25: note: Shadowed declaration
+    struct nvdimm_drvdata *ndd = to_ndd(nd_mapping);
+                           ^
+   drivers/nvdimm/namespace_devs.c:2030:26: note: Shadow variable
+     struct nvdimm_drvdata *ndd;
+                            ^
+   drivers/nvdimm/namespace_devs.c:2440:26: warning: Local variable 'e' shadows outer variable [shadowVariable]
+      struct list_head *l, *e;
+                            ^
+   drivers/nvdimm/namespace_devs.c:2347:35: note: Shadowed declaration
+    struct nd_label_ent *label_ent, *e;
+                                     ^
+   drivers/nvdimm/namespace_devs.c:2440:26: note: Shadow variable
+      struct list_head *l, *e;
+                            ^
+
+cppcheck possible warnings: (new ones prefixed by >>, may not real problems)
+
+>> drivers/nvdimm/namespace_devs.c:1235:9: warning: Uninitialized variable: nd_label [uninitvar]
+      if (!nd_label)
+           ^
+   drivers/nvdimm/namespace_devs.c:1232:51: note: Assignment 'nd_label=label_ent->label', assigned value is <Uninit>
+      struct nd_namespace_label *nd_label = label_ent->label;
+                                                     ^
+   drivers/nvdimm/namespace_devs.c:1235:9: note: Uninitialized variable: nd_label
+      if (!nd_label)
+           ^
+   drivers/nvdimm/namespace_devs.c:1852:9: warning: Uninitialized variable: nd_label [uninitvar]
+      if (!nd_label)
+           ^
+   drivers/nvdimm/namespace_devs.c:1848:51: note: Assignment 'nd_label=label_ent->label', assigned value is <Uninit>
+      struct nd_namespace_label *nd_label = label_ent->label;
+                                                     ^
+   drivers/nvdimm/namespace_devs.c:1852:9: note: Uninitialized variable: nd_label
+      if (!nd_label)
+           ^
+   drivers/nvdimm/namespace_devs.c:1908:9: warning: Uninitialized variable: nd_label [uninitvar]
+      if (!nd_label)
+           ^
+   drivers/nvdimm/namespace_devs.c:1907:24: note: Assignment 'nd_label=label_ent->label', assigned value is <Uninit>
+      nd_label = label_ent->label;
+                          ^
+   drivers/nvdimm/namespace_devs.c:1908:9: note: Uninitialized variable: nd_label
+      if (!nd_label)
+           ^
+   drivers/nvdimm/namespace_devs.c:2358:8: warning: Uninitialized variable: nd_label [uninitvar]
+     if (!nd_label)
+          ^
+   drivers/nvdimm/namespace_devs.c:2354:50: note: Assignment 'nd_label=label_ent->label', assigned value is <Uninit>
+     struct nd_namespace_label *nd_label = label_ent->label;
+                                                    ^
+   drivers/nvdimm/namespace_devs.c:2358:8: note: Uninitialized variable: nd_label
+     if (!nd_label)
+          ^
+
+vim +/res +915 drivers/nvdimm/namespace_devs.c
+
+bf9bccc14c05dae Dan Williams 2015-06-17  899  
+0e3b0d123c8fd5c Dan Williams 2016-10-06  900  static void nd_namespace_pmem_set_resource(struct nd_region *nd_region,
+bf9bccc14c05dae Dan Williams 2015-06-17  901  		struct nd_namespace_pmem *nspm, resource_size_t size)
+bf9bccc14c05dae Dan Williams 2015-06-17  902  {
+bf9bccc14c05dae Dan Williams 2015-06-17  903  	struct resource *res = &nspm->nsio.res;
+0e3b0d123c8fd5c Dan Williams 2016-10-06  904  	resource_size_t offset = 0;
+bf9bccc14c05dae Dan Williams 2015-06-17  905  
+0e3b0d123c8fd5c Dan Williams 2016-10-06  906  	if (size && !nspm->uuid) {
+0e3b0d123c8fd5c Dan Williams 2016-10-06  907  		WARN_ON_ONCE(1);
+0e3b0d123c8fd5c Dan Williams 2016-10-06  908  		size = 0;
+0e3b0d123c8fd5c Dan Williams 2016-10-06  909  	}
+0e3b0d123c8fd5c Dan Williams 2016-10-06  910  
+0e3b0d123c8fd5c Dan Williams 2016-10-06  911  	if (size && nspm->uuid) {
+0e3b0d123c8fd5c Dan Williams 2016-10-06  912  		struct nd_mapping *nd_mapping = &nd_region->mapping[0];
+0e3b0d123c8fd5c Dan Williams 2016-10-06  913  		struct nvdimm_drvdata *ndd = to_ndd(nd_mapping);
+0e3b0d123c8fd5c Dan Williams 2016-10-06  914  		struct nd_label_id label_id;
+0e3b0d123c8fd5c Dan Williams 2016-10-06 @915  		struct resource *res;
+0e3b0d123c8fd5c Dan Williams 2016-10-06  916  
+0e3b0d123c8fd5c Dan Williams 2016-10-06  917  		if (!ndd) {
+0e3b0d123c8fd5c Dan Williams 2016-10-06  918  			size = 0;
+0e3b0d123c8fd5c Dan Williams 2016-10-06  919  			goto out;
+0e3b0d123c8fd5c Dan Williams 2016-10-06  920  		}
+0e3b0d123c8fd5c Dan Williams 2016-10-06  921  
+0e3b0d123c8fd5c Dan Williams 2016-10-06  922  		nd_label_gen_id(&label_id, nspm->uuid, 0);
+0e3b0d123c8fd5c Dan Williams 2016-10-06  923  
+0e3b0d123c8fd5c Dan Williams 2016-10-06  924  		/* calculate a spa offset from the dpa allocation offset */
+0e3b0d123c8fd5c Dan Williams 2016-10-06  925  		for_each_dpa_resource(ndd, res)
+0e3b0d123c8fd5c Dan Williams 2016-10-06  926  			if (strcmp(res->name, label_id.id) == 0) {
+0e3b0d123c8fd5c Dan Williams 2016-10-06  927  				offset = (res->start - nd_mapping->start)
+0e3b0d123c8fd5c Dan Williams 2016-10-06  928  					* nd_region->ndr_mappings;
+0e3b0d123c8fd5c Dan Williams 2016-10-06  929  				goto out;
+0e3b0d123c8fd5c Dan Williams 2016-10-06  930  			}
+0e3b0d123c8fd5c Dan Williams 2016-10-06  931  
+0e3b0d123c8fd5c Dan Williams 2016-10-06  932  		WARN_ON_ONCE(1);
+0e3b0d123c8fd5c Dan Williams 2016-10-06  933  		size = 0;
+0e3b0d123c8fd5c Dan Williams 2016-10-06  934  	}
+0e3b0d123c8fd5c Dan Williams 2016-10-06  935  
+0e3b0d123c8fd5c Dan Williams 2016-10-06  936   out:
+0e3b0d123c8fd5c Dan Williams 2016-10-06  937  	res->start = nd_region->ndr_start + offset;
+0e3b0d123c8fd5c Dan Williams 2016-10-06  938  	res->end = res->start + size - 1;
+bf9bccc14c05dae Dan Williams 2015-06-17  939  }
+bf9bccc14c05dae Dan Williams 2015-06-17  940  
+
+:::::: The code at line 915 was first introduced by commit
+:::::: 0e3b0d123c8fd5c42f364aea3ab663b1f18dad39 libnvdimm, namespace: allow multiple pmem-namespaces per region at scan time
+
+:::::: TO: Dan Williams <dan.j.williams@intel.com>
+:::::: CC: Dan Williams <dan.j.williams@intel.com>
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

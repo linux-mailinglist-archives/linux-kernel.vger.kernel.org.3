@@ -2,218 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5BBF50CDC8
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 23:42:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC39550CDCD
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 23:44:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236890AbiDWVpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 17:45:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49584 "EHLO
+        id S237239AbiDWVqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 17:46:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiDWVp3 (ORCPT
+        with ESMTP id S229464AbiDWVqt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 17:45:29 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8E125EB1
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 14:42:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650750151; x=1682286151;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=/SiKj9lxba+tH5b99WjcnpQ2d+082ttSeW+BcGmtMFY=;
-  b=CPqUfH1fj4POfgDvvi2EAufrUgzwF3SoOcyF8Vi/PaH14EQAfRDB/u4E
-   nulwjq/+bOMbU0gpFOXo6m77zP7T5A1Y/WVFSwI381gfqkcxoFxEZgtfI
-   S0xETJ0SeedaZ8phMqDtJmp/61lrMTx5yjoOJeLpzcHd0mS6LALBj/BC0
-   eAh2yIqwYAmLGphRyrfy1JMuozAbExI/VTHEY4CeThuaMWbUDtCTJhWMl
-   C0RB9jmtQvTEg+udTmXH23p6QUp1M3rvq6n/d4sdBAAK46RrQaW9QbwYL
-   5THWmkkEk+9jVS+6k4IrjLD0ypE7BfIN3UPk+Y8RVnlWzUQHcPGJ/JB5J
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="252299324"
-X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
-   d="scan'208";a="252299324"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 14:42:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
-   d="scan'208";a="869857889"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 23 Apr 2022 14:42:29 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1niNWP-0000Vd-53;
-        Sat, 23 Apr 2022 21:42:29 +0000
-Date:   Sun, 24 Apr 2022 05:41:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:objtool/core] BUILD SUCCESS
- a8e35fece49b16b20de000aab687ca075e4463af
-Message-ID: <62647297.tU5ka8VySHNrFi8k%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 23 Apr 2022 17:46:49 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43206289B3
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 14:43:50 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id j17so11298705pfi.9
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 14:43:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NjdKMlafojykRWM3mLmTI0beW/EaYpJclIaGul4FrUE=;
+        b=DPReL9r/tgtBxHjkNlFUr3vLePZV3WBKBCdqSzMfebUFeNdYbJ/ENvRK/DMKBq2S8Q
+         gLdxMYTD/r0rB1oM71uJkyNGfmhAkNRJP9KfLeZV3hYSi73cL81ApuqK0mqT6jU8IAYf
+         0N56sADpN3Xkq48jtOg+tuJsm6VA3nAl921pZ+CQQfh6DaY3UIMoGmlqcaEkFaBuGsUF
+         BmDd0YcJAuwAjyIfL3UniTtX7SPXUThVYlELl3Y5perm06zDnXZ+rV3AKMixc7Q8pZKz
+         YvoRorV6wbnVw4L1iQwmzoC7meonzJsnBHwcBNixrZaEBPik4w4UydYvWeCWdLPI2kXz
+         vTug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NjdKMlafojykRWM3mLmTI0beW/EaYpJclIaGul4FrUE=;
+        b=sQ8nyoOP09ZqgaPU5ZZf8IArz+7JyAz4OTbFBzbAxNkgrEzuc5uLjv7R9TV139kPzG
+         y4Rhukr0EcqdvI2iS8EPoH1ilPCmLjSpgiAqZi2TJvK65lxYQI10R591IEVdhOVzdhfl
+         xYxUr2boo6Td/Qtvic+YQ65huErco2HUskA8WSIN9m6HR1y7zA8zy3jddWcLMyYpB1bm
+         SfjcQ+GG2EStHo0PKw5IWoglnPaAFaSxXa1TjGlprbe+Dtde0iVDyjNDATq7/W4RsXNF
+         t6lG6ElZBNRJ2ySIIdS8is7aN9roWUDGg2TCxQX7s+sW9jNUb7v6Eog4jXUGf3vyC16+
+         HmMQ==
+X-Gm-Message-State: AOAM532V/dlvPphA6Li7lh3YqILYcLvWxGGArfN27enbzUgclvg6IO9U
+        RvaY7ZxSntZI4tImNsXKj16hvSRYUe9bS6Jja6A6cQ==
+X-Google-Smtp-Source: ABdhPJw4oCtdWDvodWpsyA5xVH+DH+MnprCEJol9U/OWK04/udNMPZ6L4XEE7Ab6fQOB4kMsx/PUTEbHKYrLAOv6N3o=
+X-Received: by 2002:a63:88c8:0:b0:3ab:1871:13ac with SMTP id
+ l191-20020a6388c8000000b003ab187113acmr1557536pgd.561.1650750229438; Sat, 23
+ Apr 2022 14:43:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20220421234426.3494842-1-yosryahmed@google.com>
+ <20220421234426.3494842-5-yosryahmed@google.com> <20220423142801.gnvd42cdcsz4hpon@google.com>
+In-Reply-To: <20220423142801.gnvd42cdcsz4hpon@google.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Sat, 23 Apr 2022 14:43:13 -0700
+Message-ID: <CAJD7tkbhjJDNXcAmiAkGT8RCvBSz=SAfh7JR3AJysSz29hcEgw@mail.gmail.com>
+Subject: Re: [PATCH v4 4/4] selftests: cgroup: add a selftest for memory.reclaim
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Chen Wandun <chenwandun@huawei.com>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Dan Schatzberg <schatzberg.dan@gmail.com>,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git objtool/core
-branch HEAD: a8e35fece49b16b20de000aab687ca075e4463af  objtool: Update documentation
+On Sat, Apr 23, 2022 at 7:28 AM Shakeel Butt <shakeelb@google.com> wrote:
+>
+> On Thu, Apr 21, 2022 at 11:44:26PM +0000, Yosry Ahmed wrote:
+> > Add a new test for memory.reclaim that verifies that the interface
+> > correctly reclaims memory as intended, from both anon and file pages.
+> >
+> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> > Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+> > ---
+> >  .../selftests/cgroup/test_memcontrol.c        | 86 +++++++++++++++++++
+> >  1 file changed, 86 insertions(+)
+> >
+> > diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+> > index f2ffb3a30194..5f7c20de2426 100644
+> > --- a/tools/testing/selftests/cgroup/test_memcontrol.c
+> > +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+> > @@ -760,6 +760,91 @@ static int test_memcg_max(const char *root)
+> >       return ret;
+> >  }
+> >
+> > +/*
+> > + * This test checks that memory.reclaim reclaims the given
+> > + * amount of memory (from both anon and file).
+> > + */
+> > +static int test_memcg_reclaim(const char *root)
+> > +{
+> > +     int ret = KSFT_FAIL, fd, retries;
+> > +     char *memcg;
+> > +     long current, to_reclaim;
+> > +     char buf[64];
+> > +
+> > +     memcg = cg_name(root, "memcg_test");
+> > +     if (!memcg)
+> > +             goto cleanup;
+> > +
+> > +     if (cg_create(memcg))
+> > +             goto cleanup;
+> > +
+> > +     current = cg_read_long(memcg, "memory.current");
+> > +     if (current != 0)
+> > +             goto cleanup;
+> > +
+> > +     cg_run_nowait(memcg, alloc_anon_noexit, (void *) MB(50));
+>
+> Don't you need is_swap_enabled() check before deciding to do the anon
+> allocations?
 
-elapsed time: 2038m
+Yes you are right. In the next version will check whether or not swap
+is enabled and modify the test accordingly.
 
-configs tested: 133
-configs skipped: 5
+> > +     sleep(1);
+> > +
+> > +     fd = get_temp_fd();
+> > +     if (fd < 0)
+> > +             goto cleanup;
+> > +
+> > +     cg_run_nowait(memcg, alloc_pagecache_50M_noexit, (void *)(long)fd);
+> > +     sleep(1);
+>
+> These sleep(1)s do not seem robust. Since kernel keeps the page cache
+> around, you can convert anon to use tmpfs and use simple cg_run to
+> trigger the allocations of anon (tmpfs) and file which will remain in
+> memory even after return from cg_run.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Other tests in the file are also using sleep approach (see
+test_memcg_min, although it retries for multiple times until
+memory.current reaches an expected amount). In my experience it hasn't
+been flaky running for multiple times on different machines, but I
+agree it can be flaky (false negative).
 
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-sparc                               defconfig
-arm                       aspeed_g5_defconfig
-sh                          rsk7201_defconfig
-m68k                         apollo_defconfig
-ia64                             allyesconfig
-nios2                         10m50_defconfig
-openrisc                  or1klitex_defconfig
-m68k                        m5407c3_defconfig
-um                                  defconfig
-arm                          simpad_defconfig
-powerpc                      pcm030_defconfig
-powerpc                   currituck_defconfig
-arm                        shmobile_defconfig
-powerpc                       holly_defconfig
-mips                        bcm47xx_defconfig
-sparc64                             defconfig
-um                               alldefconfig
-ia64                        generic_defconfig
-arm                           viper_defconfig
-m68k                             allyesconfig
-ia64                         bigsur_defconfig
-sh                        apsh4ad0a_defconfig
-arm                           sama5_defconfig
-sh                           se7705_defconfig
-m68k                       m5475evb_defconfig
-powerpc                 canyonlands_defconfig
-arm                           u8500_defconfig
-mips                 decstation_r4k_defconfig
-arc                     nsimosci_hs_defconfig
-arm                           imxrt_defconfig
-arc                              alldefconfig
-sh                        dreamcast_defconfig
-arm                        trizeps4_defconfig
-sh                           se7751_defconfig
-arc                          axs103_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220422
-ia64                             allmodconfig
-ia64                                defconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a015
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-arc                  randconfig-r043-20220422
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
+I am not sure about the allocating file pages with cg_run, is it
+guaranteed that the page cache will remain in memory until the test
+ends? If it doesn't, it can also flake, but it would produce false
+positives (the test could pass because the kernel drained page cache
+for some other reason although the interface is not working
+correctly).
 
-clang tested configs:
-riscv                randconfig-c006-20220422
-mips                 randconfig-c004-20220422
-x86_64                        randconfig-c007
-i386                          randconfig-c001
-arm                  randconfig-c002-20220422
-powerpc              randconfig-c003-20220422
-powerpc                      acadia_defconfig
-mips                           ip27_defconfig
-riscv                            alldefconfig
-arm                    vt8500_v6_v7_defconfig
-powerpc                     ksi8560_defconfig
-mips                          ath25_defconfig
-powerpc                     tqm8540_defconfig
-arm                         orion5x_defconfig
-mips                     cu1830-neo_defconfig
-riscv                    nommu_virt_defconfig
-powerpc                      walnut_defconfig
-mips                         tb0219_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-hexagon              randconfig-r041-20220422
-s390                 randconfig-r044-20220422
-riscv                randconfig-r042-20220422
-hexagon              randconfig-r045-20220422
+In my personal opinion, false negative flakes are better than false
+positives. At least currently the test explicitly and clearly fails if
+the allocations are not successful. If we rely on the page cache
+remaining until the test finishes then it could silently pass if the
+interface is not working correctly.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+There are a few ways we can go forward with this:
+1) Keep everything as-is, but print a message if the test fails due to
+memory.current not reaching 100MB to make it clear that it didn't fail
+due to a problem with the interface.
+2) Add a sleep/retry loop similar to test_memcg_min instead of sleeping once.
+3) Send a signal from forked children when they are done with the
+allocation, and wait to receive this signal in the test to make sure
+the allocation is completed.
+
+In my opinion we should do (1) (and maybe (2)) for now as (3) could be
+an overkill if the test is normal passing. Maybe add a comment about
+(3) being an option in the future if the test flakes. Let me know what
+you think?

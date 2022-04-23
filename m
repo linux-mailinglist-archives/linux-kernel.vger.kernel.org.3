@@ -2,175 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 862F350C958
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 12:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA92C50C952
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 12:40:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234978AbiDWKfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 06:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37154 "EHLO
+        id S235057AbiDWKfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 06:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232591AbiDWKfQ (ORCPT
+        with ESMTP id S234903AbiDWKfg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 06:35:16 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05761167E3;
-        Sat, 23 Apr 2022 03:32:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650709939; x=1682245939;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=99EiatxEAzm7mLpblkfbmxHzYEHnM6shM4C4UTNQKG4=;
-  b=NHy0IDNchryk1SJA9SO8XDITMfgqgsxuFgbOvrLE1iEn0yaMK7At/ZJt
-   STnhAjO+Ri/hjVblyAboZP2ZM/yQIOHPYtU/QzD86gYulj4T9UJPxpmaJ
-   IiguQqKLE3U1V7E+Xb/TVngpTnZtp6XwUEuK6qov1inQ+KlbKyWpgUW2z
-   wqH075QS/1sciDLkBMsRn9b8IwZklC/CmS9wiLaia2yZTw++VopmAqTjs
-   XC7Dne9N2Zpc0NhcZqwDSI+6qfkgturJpnU6Vgo9FvTnOMyBDVuiEUGZe
-   xl+3YdHyP5k0uwcZER0STOzjB9Y+tfQb6Wf9/vxaI+gvzYhvDbS7tNk8K
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="290008027"
-X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
-   d="scan'208";a="290008027"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 03:32:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
-   d="scan'208";a="627338427"
-Received: from lkp-server01.sh.intel.com (HELO dd58949a6e39) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 23 Apr 2022 03:32:16 -0700
-Received: from kbuild by dd58949a6e39 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1niD3o-0000AT-7v;
-        Sat, 23 Apr 2022 10:32:16 +0000
-Date:   Sat, 23 Apr 2022 18:31:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vasily Averin <vvs@openvz.org>, Vlastimil Babka <vbabka@suse.cz>,
-        Shakeel Butt <shakeelb@google.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, kernel@openvz.org,
-        Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
-        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH] net: set proper memcg for net_init hooks allocations
-Message-ID: <202204231806.8O86U791-lkp@intel.com>
-References: <6f38e02b-9af3-4dcf-9000-1118a04b13c7@openvz.org>
+        Sat, 23 Apr 2022 06:35:36 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5793F22BF6;
+        Sat, 23 Apr 2022 03:32:39 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id bf11so12378996ljb.7;
+        Sat, 23 Apr 2022 03:32:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=FjHVIpwQVF2j9Z1J3pzN5aGfezd4ZG1gp/yXo52Doyk=;
+        b=XFmDGucF/OcegOVH0xx/d8n/IGwkExBInzgnH2Lm7dLvoea6vEpiarJprM8axfZYn6
+         xdqdozexD2dH6IbHU5LMU7IS9U+oioxj5yy6DIUWl2cXiOWkfXf0jBRUlbUac9HTVnqB
+         RiOklvCNDaZGnqGSqOn6qqrJh+pq6gQJAqGVe8G1NMAPMjHTihC998Aaq06Jmcc+fcT+
+         iz/U5Gi7FQk1R1FbfVjnYWzi8EXNYk8F+GlASybLnp/xB8AV28jXILYawb2+8Cn5XGAL
+         kLLkAgfNwnWBTuxawnfafuToG52yusZv5V839takuTzRzaFeEZiTEDGv/G0oXano+ONU
+         j+Lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=FjHVIpwQVF2j9Z1J3pzN5aGfezd4ZG1gp/yXo52Doyk=;
+        b=KCTlJkNynU29CGY0k2iS81iCNCEOGuOpqK1owtrkqjYtW9EO5paYyQlyV3HRpxptj3
+         ZVyoXEIQommDlftZ+YPgYDLeFY0CpLlTvzcYcGPWOXHOK75L2YOsC83huyF0KS/JNBwZ
+         S+0Nxbtj+ALrihwndKCtJtqjkuhI8ldU6JPeQNUeKoBGNmKLizoGzs7fd0tRVzVkLMms
+         vprBWwpDFtuWjHRdVNBdjb7vkB1Fo1GczA8POVV0ejg3DxnTBXI4h4t61A2YsJFmQFnN
+         XIvV+sTjewtA9H3Gw87gS8B4WHyVdw7Tr3ZeuAMcjMM2Ddt685/0G4L2+/5oJd664yOu
+         Djpg==
+X-Gm-Message-State: AOAM531xjJ8tckkekqujWsIJ+QxIpoaJncC2WDbCNDQRoPNiV75YtuHu
+        xvnF+LzMYql2RVymtFwA/rQ=
+X-Google-Smtp-Source: ABdhPJypw+C0OHw2I6BBqFjoROXfn7uqBt7/o3BKuV0y5z0fzD6WCOzfmSwCSW856LNxwR99k8GuRg==
+X-Received: by 2002:a05:651c:1781:b0:247:daa7:4358 with SMTP id bn1-20020a05651c178100b00247daa74358mr5186355ljb.477.1650709957430;
+        Sat, 23 Apr 2022 03:32:37 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-138-167.dynamic.spd-mgts.ru. [109.252.138.167])
+        by smtp.googlemail.com with ESMTPSA id m1-20020a2e7101000000b0024f081cb0absm73107ljc.83.2022.04.23.03.32.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 23 Apr 2022 03:32:36 -0700 (PDT)
+Message-ID: <0ac35b47-720e-ae99-45d2-3f8d63868a1e@gmail.com>
+Date:   Sat, 23 Apr 2022 13:32:35 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6f38e02b-9af3-4dcf-9000-1118a04b13c7@openvz.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCHv1 08/19] mmc: sdhci-of-dwcmshc: add reset call back for
+ rockchip Socs
+Content-Language: en-US
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@lists.collabora.co.uk,
+        Yifeng Zhao <yifeng.zhao@rock-chips.com>, kernel@collabora.com
+References: <20220422170920.401914-1-sebastian.reichel@collabora.com>
+ <20220422170920.401914-9-sebastian.reichel@collabora.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <20220422170920.401914-9-sebastian.reichel@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vasily,
+22.04.2022 20:09, Sebastian Reichel пишет:
+> From: Yifeng Zhao <yifeng.zhao@rock-chips.com>
+> 
+> The reset function build in the SDHCI will not reset the logic
+> circuit related to the tuning function, which may cause data
+> reading errors. Resetting the complete SDHCI controller through
+> the reset controller fixes the issue.
+> 
+> Signed-off-by: Yifeng Zhao <yifeng.zhao@rock-chips.com>
+> [rebase]
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>  drivers/mmc/host/sdhci-of-dwcmshc.c | 28 +++++++++++++++++++++++++++-
+>  1 file changed, 27 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/mmc/host/sdhci-of-dwcmshc.c b/drivers/mmc/host/sdhci-of-dwcmshc.c
+> index bac874ab0b33..d95ae6ca1256 100644
+> --- a/drivers/mmc/host/sdhci-of-dwcmshc.c
+> +++ b/drivers/mmc/host/sdhci-of-dwcmshc.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/of_device.h>
+> +#include <linux/reset.h>
+>  #include <linux/sizes.h>
+>  
+>  #include "sdhci-pltfm.h"
+> @@ -63,6 +64,7 @@
+>  struct rk3568_priv {
+>  	/* Rockchip specified optional clocks */
+>  	struct clk_bulk_data rockchip_clks[RK3568_MAX_CLKS];
+> +	struct reset_control *reset;
+>  	u8 txclk_tapnum;
+>  };
+>  
+> @@ -255,6 +257,23 @@ static void dwcmshc_rk3568_set_clock(struct sdhci_host *host, unsigned int clock
+>  	sdhci_writel(host, extra, DWCMSHC_EMMC_DLL_STRBIN);
+>  }
+>  
+> +static void rk35xx_sdhci_reset(struct sdhci_host *host, u8 mask)
+> +{
+> +	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+> +	struct dwcmshc_priv *dwc_priv = sdhci_pltfm_priv(pltfm_host);
+> +	struct rk35xx_priv *priv = dwc_priv->priv;
+> +
+> +	if (mask & SDHCI_RESET_ALL) {
+> +		if (!IS_ERR_OR_NULL(priv->reset)) {
 
-Thank you for the patch! Perhaps something to improve:
+priv->reset can't be a error ptr since probe fails on error.
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.18-rc3 next-20220422]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> +			reset_control_assert(priv->reset);
+> +			udelay(1);
+> +			reset_control_deassert(priv->reset);
+> +		}
+> +	}
+> +
+> +	sdhci_reset(host, mask);
+> +}
+> +
+>  static const struct sdhci_ops sdhci_dwcmshc_ops = {
+>  	.set_clock		= sdhci_set_clock,
+>  	.set_bus_width		= sdhci_set_bus_width,
+> @@ -269,7 +288,7 @@ static const struct sdhci_ops sdhci_dwcmshc_rk3568_ops = {
+>  	.set_bus_width		= sdhci_set_bus_width,
+>  	.set_uhs_signaling	= dwcmshc_set_uhs_signaling,
+>  	.get_max_clock		= sdhci_pltfm_clk_get_max_clock,
+> -	.reset			= sdhci_reset,
+> +	.reset			= rk35xx_sdhci_reset,
+>  	.adma_write_desc	= dwcmshc_adma_write_desc,
+>  };
+>  
+> @@ -292,6 +311,13 @@ static int dwcmshc_rk3568_init(struct sdhci_host *host, struct dwcmshc_priv *dwc
+>  	int err;
+>  	struct rk3568_priv *priv = dwc_priv->priv;
+>  
+> +	priv->reset = devm_reset_control_array_get_exclusive(mmc_dev(host->mmc));
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vasily-Averin/net-set-proper-memcg-for-net_init-hooks-allocations/20220423-160759
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git c00c5e1d157bec0ef0b0b59aa5482eb8dc7e8e49
-config: riscv-randconfig-r042-20220422 (https://download.01.org/0day-ci/archive/20220423/202204231806.8O86U791-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/3b379e5391e36e13b9f36305aa6d233fb03d4e58
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Vasily-Averin/net-set-proper-memcg-for-net_init-hooks-allocations/20220423-160759
-        git checkout 3b379e5391e36e13b9f36305aa6d233fb03d4e58
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/exynos/
+The devm_reset_control_array_get_exclusive() never returns NULL.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The devm_reset_control_array_get_optional_exclusive(() may return NULL
+if reset is missing in DT, perhaps that's what you actually want?
 
-All warnings (new ones prefixed by >>):
+> +	if (IS_ERR_OR_NULL(priv->reset)) {
+> +		err = PTR_ERR(priv->reset);
 
-   In file included from drivers/gpu/drm/exynos/exynos_drm_dma.c:15:
-   In file included from drivers/gpu/drm/exynos/exynos_drm_drv.h:16:
-   In file included from include/drm/drm_crtc.h:28:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   include/linux/memcontrol.h:1773:21: error: call to undeclared function 'css_tryget'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           } while (memcg && !css_tryget(&memcg->css));
-                              ^
-   include/linux/memcontrol.h:1773:38: error: incomplete definition of type 'struct mem_cgroup'
-           } while (memcg && !css_tryget(&memcg->css));
-                                          ~~~~~^
-   include/linux/mm_types.h:31:8: note: forward declaration of 'struct mem_cgroup'
-   struct mem_cgroup;
-          ^
->> drivers/gpu/drm/exynos/exynos_drm_dma.c:55:35: warning: implicit conversion from 'unsigned long long' to 'unsigned int' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
-           dma_set_max_seg_size(subdrv_dev, DMA_BIT_MASK(32));
-           ~~~~~~~~~~~~~~~~~~~~             ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:76:40: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                          ^~~~~
-   1 warning and 2 errors generated.
+NULL isn't a error
 
+> +		dev_err(mmc_dev(host->mmc), "failed to get reset control %d\n", err);
 
-vim +55 drivers/gpu/drm/exynos/exynos_drm_dma.c
+dev_err_probe()?
 
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  33  
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  34  /*
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  35   * drm_iommu_attach_device- attach device to iommu mapping
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  36   *
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  37   * @drm_dev: DRM device
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  38   * @subdrv_dev: device to be attach
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  39   *
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  40   * This function should be called by sub drivers to attach it to iommu
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  41   * mapping.
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  42   */
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  43  static int drm_iommu_attach_device(struct drm_device *drm_dev,
-07dc3678bacc2a Marek Szyprowski 2020-03-09  44  				struct device *subdrv_dev, void **dma_priv)
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  45  {
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  46  	struct exynos_drm_private *priv = drm_dev->dev_private;
-b9c633882de460 Marek Szyprowski 2020-06-01  47  	int ret = 0;
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  48  
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  49  	if (get_dma_ops(priv->dma_dev) != get_dma_ops(subdrv_dev)) {
-6f83d20838c099 Inki Dae         2019-04-15  50  		DRM_DEV_ERROR(subdrv_dev, "Device %s lacks support for IOMMU\n",
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  51  			  dev_name(subdrv_dev));
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  52  		return -EINVAL;
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  53  	}
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  54  
-ddfd4ab6bb0883 Marek Szyprowski 2020-07-07 @55  	dma_set_max_seg_size(subdrv_dev, DMA_BIT_MASK(32));
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  56  	if (IS_ENABLED(CONFIG_ARM_DMA_USE_IOMMU)) {
-07dc3678bacc2a Marek Szyprowski 2020-03-09  57  		/*
-07dc3678bacc2a Marek Szyprowski 2020-03-09  58  		 * Keep the original DMA mapping of the sub-device and
-07dc3678bacc2a Marek Szyprowski 2020-03-09  59  		 * restore it on Exynos DRM detach, otherwise the DMA
-07dc3678bacc2a Marek Szyprowski 2020-03-09  60  		 * framework considers it as IOMMU-less during the next
-07dc3678bacc2a Marek Szyprowski 2020-03-09  61  		 * probe (in case of deferred probe or modular build)
-07dc3678bacc2a Marek Szyprowski 2020-03-09  62  		 */
-07dc3678bacc2a Marek Szyprowski 2020-03-09  63  		*dma_priv = to_dma_iommu_mapping(subdrv_dev);
-07dc3678bacc2a Marek Szyprowski 2020-03-09  64  		if (*dma_priv)
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  65  			arm_iommu_detach_device(subdrv_dev);
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  66  
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  67  		ret = arm_iommu_attach_device(subdrv_dev, priv->mapping);
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  68  	} else if (IS_ENABLED(CONFIG_IOMMU_DMA)) {
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  69  		ret = iommu_attach_device(priv->mapping, subdrv_dev);
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  70  	}
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  71  
-b9c633882de460 Marek Szyprowski 2020-06-01  72  	return ret;
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  73  }
-67fbf3a3ef8443 Andrzej Hajda    2018-10-12  74  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

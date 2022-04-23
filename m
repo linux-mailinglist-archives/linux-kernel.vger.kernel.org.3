@@ -2,506 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C94FD50CDFC
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 00:54:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 426D450CDFE
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 00:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232236AbiDWWza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 18:55:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52642 "EHLO
+        id S232846AbiDWXCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 19:02:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231796AbiDWWzY (ORCPT
+        with ESMTP id S231355AbiDWXCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 18:55:24 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850E525C65
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 15:52:25 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id g16-20020a05660203d000b005f7b3b0642eso8395506iov.16
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 15:52:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=Scm1NT1ZZOHkSEjNtN7ZIrzWc0JzDs3OJ36TIDsU4KA=;
-        b=xcTpYbudgyCpMlluQKXmiNJe1sH0NA2SzcgtBdvk4otOohLAg78WSZ5xqLLc5S4S74
-         XuiZYSEukQOc/zCI4ZFn2BIjPAjKV9FU5exJrkweYklRs2wGnGq+B2ToN+Ql6Fr04s/H
-         dcVnuo73GFTsApGAX4FTUXjm0qgSjGK/l+I3atW6uKb57bfKOA0GwcAv4Xz7PoVAZ6wi
-         gRPTtIYgwa1+xAsrv1w8d8uLWEUXibxVXJrtrGjkxS3e1l51Ay0kH0pqeKtYJeX8MR3T
-         /nUqYwLSYN+GX2g9gqEwClDTQ94jWGCpjsI6bq4PhCnj1iKP8jFSbqJQj3u1dHyQKh8S
-         tYZQ==
-X-Gm-Message-State: AOAM532dEwPBxQ/aeG7Rgd0r9qd51TE+qDgwOYE9JC9/ZJDL4QMOUtXP
-        aFFZTfafxg0dTAoKC2/wpgxoNrktciR6zsvpEW3MyZHQoqe1
-X-Google-Smtp-Source: ABdhPJyxJARbuHYRmSI2qzcAzqkW0ZNgKjepFO9qoFNEL0eP7hCEkiDM71VFsB3GN/jcu24H005jOfsPE+ux2Nxz+CQx0YBo+IFO
+        Sat, 23 Apr 2022 19:02:16 -0400
+X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 23 Apr 2022 15:59:16 PDT
+Received: from de-smtp-delivery-213.mimecast.com (de-smtp-delivery-213.mimecast.com [194.104.109.213])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E74ED47552
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 15:59:16 -0700 (PDT)
+Received: from CHE01-GV0-obe.outbound.protection.outlook.com
+ (mail-gv0che01lp2046.outbound.protection.outlook.com [104.47.22.46]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-37-y2nhIAIUOFepsUb6n-Cwkg-1; Sun, 24 Apr 2022 00:58:09 +0200
+X-MC-Unique: y2nhIAIUOFepsUb6n-Cwkg-1
+Received: from ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:3b::9) by
+ GV0P278MB0356.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:33::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5186.13; Sat, 23 Apr 2022 22:58:08 +0000
+Received: from ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::dd15:e6d7:a4d0:7207]) by ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::dd15:e6d7:a4d0:7207%7]) with mapi id 15.20.5186.020; Sat, 23 Apr 2022
+ 22:58:07 +0000
+From:   Marcel Ziswiler <marcel.ziswiler@toradex.com>
+To:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+CC:     "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-imx@nxp.com" <linux-imx@nxp.com>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "peppe.cavallaro@st.com" <peppe.cavallaro@st.com>,
+        "joabreu@synopsys.com" <joabreu@synopsys.com>,
+        "kuba@kernel.org" <kuba@kernel.org>
+Subject: net: stmmac: dwmac-imx: half duplex crash
+Thread-Topic: net: stmmac: dwmac-imx: half duplex crash
+Thread-Index: AQHYV2WZ5uT4Cdlm/Umu1AAuySf2Og==
+Date:   Sat, 23 Apr 2022 22:58:07 +0000
+Message-ID: <36ba455aad3e57c0c1f75cce4ee0f3da69e139a1.camel@toradex.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 55bd4fb6-4484-4867-cc3a-08da257cbb8e
+x-ms-traffictypediagnostic: GV0P278MB0356:EE_
+x-microsoft-antispam-prvs: <GV0P278MB0356190F8E63D9F8DFEE35FCFBF69@GV0P278MB0356.CHEP278.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0
+x-microsoft-antispam-message-info: SvS17ZIvBCQzFScfQs8WpGapaa/+rvlUTjLzgeWJWtSSCqndCThTVUj+9DnpCZUPpzgkn+OvgUi/OeQvYyn8sr8P3GWv2y+RvncvwMA8flDRV9Wv1NagL83jRLqVluvIDjbFQuTuDtpLaZ2aAtAqO6G847YFEUOWGebbR1HNIlI4WM6EOfrYgYnH9sITsakxScqPdONAi3IiXw7wWzTQmqn+Mnyn43nk1S6JDLJUNhYe9+CSjALyiS230gXp/aqAEGOEf12pxZj2GiUhxEWgoBqEHfIrziMpZKOwZg+8LyqPm5lk0pjscUAVZf9uPhMUnOQZRjs3GuZSKsYQsHrraIHAOySCL6frhFEhse0FZvNiJ+krYRnZq9eaCq4wtTwleKHmUQxZu5zDNDGKnK2CPCYjKuSjSF2bbdFwa2aSY2orjd/wbgLsgpR0Kbpo1FUbyRGOHZvF3Pz3idgEjInZhUifs6KLksxNpKkhyV7uhc3HCnW7NyLtT4eVU2+/U8IMSUz+ozS2FFXtIYQU2hBve3sqqE8Vp33ldqxYWr3PHQ/f69QlmY6fCulLdIva3KSeKBqa0YTMusBFOkXHMToEQBdPJORngoSVhp0ieQw3WWwC+XRPgv6ofnHeaN6zeAKrO2NDFxGcYxXRn0fDVlGq9Ru8hu3FxrCvtp4LLG3l/Ajd0ML5Jp9La6vEFxfNMzFhyz5FO/bOGIk+J0EalZWGVLuWuQXuBjDimgLFbwAgIvYIi7ZMuA3go7eqNvC/7CfUvg2X0W1ECZDNN/Gq9AbXoR1lPCDrGLsDryhYDk1LmWk=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(376002)(39840400004)(396003)(346002)(136003)(366004)(76116006)(66556008)(66946007)(4326008)(8676002)(6506007)(38070700005)(38100700002)(2906002)(316002)(36756003)(71200400001)(54906003)(64756008)(122000001)(6916009)(83380400001)(5660300002)(8936002)(66476007)(66446008)(86362001)(6486002)(966005)(7416002)(508600001)(45080400002)(26005)(6512007)(44832011)(186003)(2616005);DIR:OUT;SFP:1102
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cWtGZmJ6cHBmc2JwZWp1Ums0S01yb1RTNmpBcmlpM2E3SHM0eFBRRlpMMGY2?=
+ =?utf-8?B?R1U4cjRVcmVwUGt2YzZJOUxRbG13d1lwVSs3aW5YM005K0hLaEVBcXFvNHg5?=
+ =?utf-8?B?aHVqcWpZUEhwKzRlMlE1MU5zUTZrbkFOeHROVXVpUkJHT0dhcnI1SnhybXZB?=
+ =?utf-8?B?YStER0FKbHBNcFJHeGpLRW9naWxXQzMyZ0FLL2lzWEJYdmwrSWVUUUpZMS9S?=
+ =?utf-8?B?MFZycnREZ2wrL2FsK2NhU0xCa3lhYmdTUm5WeTBkbUxSa2drL1hTelFESWtB?=
+ =?utf-8?B?RDlmL2R3Z0VvUjBtSDd5SVo5NlV2M2xSNnphLzBodUNOMGRONkZwZ01tRFB1?=
+ =?utf-8?B?QUtQMENqN1QzZEVkaXVsZlorWnhMSG1tUDhBazBxbEhaajhSckFKVlErTUp3?=
+ =?utf-8?B?SFRLSXRlZHQ5MHBtUUN6SXZETjhDWmp1TGNJUWFCK1AvYWZWcGUwZDYrVWhq?=
+ =?utf-8?B?R2h5aEN6OHF4L0oyVVdWbDlYT0xENE5mY241K2gwZExsejVZOUhYNkNTQnVC?=
+ =?utf-8?B?SnFKWEJISVNBMHdabDdJYmliTU0zL3FQNStnR3BWMU5xMEdpRzEzVDBUU2lU?=
+ =?utf-8?B?T2VqTGhXQWU4QklJVUZ6dXRYWkFKeE8xZGJLNHI1M2taTEpCWXJlYkoxbCt2?=
+ =?utf-8?B?a3JjNVJHenkrcG5naUlnN2swWUZ1bVlob0UrSHZOeDlJK0VZaUpCbmhSdFNz?=
+ =?utf-8?B?SHBYdXVjOTNJQnBQWlV4MU5EV1dlTnZBazZDMWFKY2VBeHpxOUlIMkNWeTZq?=
+ =?utf-8?B?UkRxcExsSTR3WVFld3JhZmFSdGdRQW5Gb1FreHFnRFd4Y3ZyMXlVQVFtVUQ2?=
+ =?utf-8?B?Q2pSNlZxdWpGc1lQbmR2OXR6WU1NdU9IUW9ka2E1TXh2SnFrRWdUaHBnMVFx?=
+ =?utf-8?B?eGdQWGt5Vy92ZjFJNEFWRUJVYnI2Z0VyZ1pPS295MnVVN0JlV2VjdEFKK3Q3?=
+ =?utf-8?B?QnVBTmJ3dm10NFkzcEdvdnFmWUx4NVBEQjd6dXlVUUs5OFoxendPenptcG9w?=
+ =?utf-8?B?S1hlYTN5SmhSTXplM2VXejJJdmIxaTBtLzUzZUlKL1ZOL21RczY0cXdVUGFj?=
+ =?utf-8?B?QWxHSWZkcHI3SUFDVkdDamVFdFEzbkVVaHRKcE1Ed0dxZGhTMWdVdFA1ODZs?=
+ =?utf-8?B?TXJDWnlkUEZudU9iZmR4dDA0SGU3NFllb01WV2x1L2xkbnJzaWo1a2t5cE0y?=
+ =?utf-8?B?SDRiQnpMR21ZcGF5YkRLc2hnOWhrUmtDUXBwdzltMTV6b1ZUS096NFVoNnYw?=
+ =?utf-8?B?bDdRWFViNGtWTTVuOFBzbEh6RThxSC82VnhFQXRsdjRJVTU2UUxBckF4aGdW?=
+ =?utf-8?B?dXU0b3ZUeC9kd3c5blZWQkl2YmtKMXRKNm5KQWdYbk5tRG1pSlNsZ2VDaEF5?=
+ =?utf-8?B?alBOdVg2Z1ovU2c0QkhTMVQwL1FjaE5SWVMxcy9ORkx4d3FyRGMvZHJJdmVY?=
+ =?utf-8?B?UDFLdXBvdHpmaHVpMlZHd1pBcVJOQTlBTEUrNW9RQUVoRUJ3V05aUlVndWNB?=
+ =?utf-8?B?Um1OcC9pWmJ1SEZTTVdsVWVjRnlTL1NkZUxLK0JRenFOTllWYUNXZkdaWFc2?=
+ =?utf-8?B?TU15ZEZvMS9JV2FiTVRDaWY5emV5OVFPVEloeGtTU2pLbktWSDBiVWJGVjZY?=
+ =?utf-8?B?dnVYL3d2YUxsYkhqN0NJU000NHFYcXZ1aWtRenJrUXlDOThoVjhWRy9nczBt?=
+ =?utf-8?B?dXgzUjIzSFhTSENjWmN1TEd6TUxkM0ZIRDFKbUZ5QWgwOTcvU3BsUG5PcFRD?=
+ =?utf-8?B?dGhNcGFYRzdaZzIyUEpkMXdPTDZpWWZNY09EVUcwbjhXVzNieDdpNmNNY2Mv?=
+ =?utf-8?B?TWtpRzdCemplNmh5bW9qRlJTWnhwZ2Fud0RFUzlWVzlxc0Q4ZDZYcWFLK1Jp?=
+ =?utf-8?B?NjlBU1Y0Rjg2N1dDN2dTNC9LbkppZWYwV1ZlOW12RnJUK3pKUHFoQ24zRmli?=
+ =?utf-8?B?K05BaHU1V2hQSVhycGpNbzh2TGtucmo0Y0Z6RDlFOFNuZU9SR0RkdG9vNjZu?=
+ =?utf-8?B?OFJPM1VEY3U5R3p4eVpFaG1NUWhVS2RBalk3VkE2bVk4TGhOQlRibWFCaGRN?=
+ =?utf-8?B?U2dSUmJuUGpVQnVxSDNDdTVsSzRGQmRvSFVpOHdzL2hZMnRIT3NTbkRHSUpF?=
+ =?utf-8?B?RHdUQjlzeTU4Y3ZEUlUzOWhmcWovUjY4bmF1ZU5ubmZQcHg1NlhFdStpRGhh?=
+ =?utf-8?B?S1d5dmRibjZlNmtydEQ2YlBjYnNWTHdTWFdsSXZESTVLdXBIaU45Uk4zZ2NP?=
+ =?utf-8?B?bjY4b3F1OUxwdDdSbjQrajFMczZuUVppT2VLZ3gyNG05WTk2TlVkaFg0L1RW?=
+ =?utf-8?B?ZkhqTXEzdEZReVZvNXUzVjdPVXB5SnVhMXJlaFo1YmIyaTViVExyMVZyR2xj?=
+ =?utf-8?Q?VZF393wKYaqekqXNfLjj7FTwhvI1qVnQ/dCgX?=
 MIME-Version: 1.0
-X-Received: by 2002:a92:4402:0:b0:2ca:b29a:9974 with SMTP id
- r2-20020a924402000000b002cab29a9974mr4135284ila.155.1650754344864; Sat, 23
- Apr 2022 15:52:24 -0700 (PDT)
-Date:   Sat, 23 Apr 2022 15:52:24 -0700
-In-Reply-To: <0000000000008d88a205d0722901@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000056576d05dd5a326e@google.com>
-Subject: Re: [syzbot] possible deadlock in _snd_pcm_stream_lock_irqsave (3)
-From:   syzbot <syzbot+58740f570d9b0dacf2a3@syzkaller.appspotmail.com>
-To:     alsa-devel-owner@alsa-project.org, alsa-devel@alsa-project.org,
-        bfields@fieldses.org, jlayton@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        perex@perex.cz, syzkaller-bugs@googlegroups.com, tiwai@suse.com,
-        viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: toradex.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 55bd4fb6-4484-4867-cc3a-08da257cbb8e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Apr 2022 22:58:07.8591
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: b0VtaWwPb9BMImrVktmK965WCo804eaPukh6plM2QSzyvX70rhAYTVgrUkiPN2NCMRRgZhLveIotJXQY+q15LfoIrFbpJm2G6cOtDs7TWTk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV0P278MB0356
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CDE13A77 smtp.mailfrom=marcel.ziswiler@toradex.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: toradex.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-ID: <1372816D226B4F40816FEE49CE0F6814@CHEP278.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
-
-HEAD commit:    13bc32bad705 Merge tag 'drm-fixes-2022-04-23' of git://ano..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11371798f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=71bf5c8488a4e33a
-dashboard link: https://syzkaller.appspot.com/bug?extid=58740f570d9b0dacf2a3
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=129b3992f00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17a6b6fcf00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+58740f570d9b0dacf2a3@syzkaller.appspotmail.com
-
-========================================================
-WARNING: possible irq lock inversion dependency detected
-5.18.0-rc3-syzkaller-00218-g13bc32bad705 #0 Not tainted
---------------------------------------------------------
-swapper/0/0 just changed the state of lock:
-ffff888022e8b110 (&group->lock){..-.}-{2:2}, at: _snd_pcm_stream_lock_irqsave+0x9f/0xd0 sound/core/pcm_native.c:170
-but this lock took another, SOFTIRQ-READ-unsafe lock in the past:
- (tasklist_lock){.+.+}-{2:2}
-
-
-and interrupts could create inverse lock ordering between them.
-
-
-other info that might help us debug this:
-Chain exists of:
-  &group->lock --> &timer->lock --> tasklist_lock
-
- Possible interrupt unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(tasklist_lock);
-                               local_irq_disable();
-                               lock(&group->lock);
-                               lock(&timer->lock);
-  <Interrupt>
-    lock(&group->lock);
-
- *** DEADLOCK ***
-
-no locks held by swapper/0/0.
-
-the shortest dependencies between 2nd lock and 1st lock:
-    -> (tasklist_lock){.+.+}-{2:2} {
-       HARDIRQ-ON-R at:
-                            lock_acquire kernel/locking/lockdep.c:5641 [inline]
-                            lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5606
-                            __raw_read_lock include/linux/rwlock_api_smp.h:150 [inline]
-                            _raw_read_lock+0x5b/0x70 kernel/locking/spinlock.c:228
-                            do_wait+0x284/0xce0 kernel/exit.c:1508
-                            kernel_wait+0x9c/0x150 kernel/exit.c:1698
-                            call_usermodehelper_exec_sync kernel/umh.c:139 [inline]
-                            call_usermodehelper_exec_work+0xf5/0x180 kernel/umh.c:166
-                            process_one_work+0x996/0x1610 kernel/workqueue.c:2289
-                            worker_thread+0x665/0x1080 kernel/workqueue.c:2436
-                            kthread+0x2e9/0x3a0 kernel/kthread.c:376
-                            ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
-       SOFTIRQ-ON-R at:
-                            lock_acquire kernel/locking/lockdep.c:5641 [inline]
-                            lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5606
-                            __raw_read_lock include/linux/rwlock_api_smp.h:150 [inline]
-                            _raw_read_lock+0x5b/0x70 kernel/locking/spinlock.c:228
-                            do_wait+0x284/0xce0 kernel/exit.c:1508
-                            kernel_wait+0x9c/0x150 kernel/exit.c:1698
-                            call_usermodehelper_exec_sync kernel/umh.c:139 [inline]
-                            call_usermodehelper_exec_work+0xf5/0x180 kernel/umh.c:166
-                            process_one_work+0x996/0x1610 kernel/workqueue.c:2289
-                            worker_thread+0x665/0x1080 kernel/workqueue.c:2436
-                            kthread+0x2e9/0x3a0 kernel/kthread.c:376
-                            ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
-       INITIAL USE at:
-                           lock_acquire kernel/locking/lockdep.c:5641 [inline]
-                           lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5606
-                           __raw_write_lock_irq include/linux/rwlock_api_smp.h:195 [inline]
-                           _raw_write_lock_irq+0x32/0x50 kernel/locking/spinlock.c:326
-                           copy_process+0x4364/0x6fe0 kernel/fork.c:2368
-                           kernel_clone+0xe7/0xab0 kernel/fork.c:2639
-                           kernel_thread+0xb5/0xf0 kernel/fork.c:2691
-                           rest_init+0x23/0x3e0 init/main.c:691
-                           start_kernel+0x47f/0x4a0 init/main.c:1140
-                           secondary_startup_64_no_verify+0xc3/0xcb
-       INITIAL READ USE at:
-                                lock_acquire kernel/locking/lockdep.c:5641 [inline]
-                                lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5606
-                                __raw_read_lock include/linux/rwlock_api_smp.h:150 [inline]
-                                _raw_read_lock+0x5b/0x70 kernel/locking/spinlock.c:228
-                                do_wait+0x284/0xce0 kernel/exit.c:1508
-                                kernel_wait+0x9c/0x150 kernel/exit.c:1698
-                                call_usermodehelper_exec_sync kernel/umh.c:139 [inline]
-                                call_usermodehelper_exec_work+0xf5/0x180 kernel/umh.c:166
-                                process_one_work+0x996/0x1610 kernel/workqueue.c:2289
-                                worker_thread+0x665/0x1080 kernel/workqueue.c:2436
-                                kthread+0x2e9/0x3a0 kernel/kthread.c:376
-                                ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
-     }
-     ... key      at: [<ffffffff8ba0a098>] tasklist_lock+0x18/0x40
-     ... acquired at:
-   __raw_read_lock include/linux/rwlock_api_smp.h:150 [inline]
-   _raw_read_lock+0x5b/0x70 kernel/locking/spinlock.c:228
-   send_sigio+0xab/0x380 fs/fcntl.c:792
-   dnotify_handle_event+0x148/0x280 fs/notify/dnotify/dnotify.c:115
-   fsnotify_handle_inode_event.isra.0+0x209/0x350 fs/notify/fsnotify.c:264
-   fsnotify_handle_event fs/notify/fsnotify.c:323 [inline]
-   send_to_group fs/notify/fsnotify.c:377 [inline]
-   fsnotify+0xeaf/0x13d0 fs/notify/fsnotify.c:564
-   fsnotify_name include/linux/fsnotify.h:36 [inline]
-   fsnotify_name include/linux/fsnotify.h:29 [inline]
-   fsnotify_dirent include/linux/fsnotify.h:42 [inline]
-   fsnotify_create include/linux/fsnotify.h:207 [inline]
-   open_last_lookups fs/namei.c:3402 [inline]
-   path_openat+0x1232/0x2910 fs/namei.c:3606
-   do_filp_open+0x1aa/0x400 fs/namei.c:3636
-   do_sys_openat2+0x16d/0x4c0 fs/open.c:1213
-   do_sys_open fs/open.c:1229 [inline]
-   __do_sys_creat fs/open.c:1305 [inline]
-   __se_sys_creat fs/open.c:1299 [inline]
-   __x64_sys_creat+0xc9/0x120 fs/open.c:1299
-   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-   do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-   entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-   -> (&f->f_owner.lock){....}-{2:2} {
-      INITIAL USE at:
-                         lock_acquire kernel/locking/lockdep.c:5641 [inline]
-                         lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5606
-                         __raw_write_lock_irq include/linux/rwlock_api_smp.h:195 [inline]
-                         _raw_write_lock_irq+0x32/0x50 kernel/locking/spinlock.c:326
-                         f_modown+0x2a/0x390 fs/fcntl.c:91
-                         __f_setown fs/fcntl.c:110 [inline]
-                         f_setown+0xd7/0x230 fs/fcntl.c:138
-                         do_fcntl+0x748/0x10b0 fs/fcntl.c:377
-                         __do_sys_fcntl fs/fcntl.c:454 [inline]
-                         __se_sys_fcntl fs/fcntl.c:439 [inline]
-                         __x64_sys_fcntl+0x15f/0x1d0 fs/fcntl.c:439
-                         do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-                         do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-                         entry_SYSCALL_64_after_hwframe+0x44/0xae
-      INITIAL READ USE at:
-                              lock_acquire kernel/locking/lockdep.c:5641 [inline]
-                              lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5606
-                              __raw_read_lock_irqsave include/linux/rwlock_api_smp.h:160 [inline]
-                              _raw_read_lock_irqsave+0x70/0x90 kernel/locking/spinlock.c:236
-                              send_sigio+0x24/0x380 fs/fcntl.c:778
-                              kill_fasync_rcu fs/fcntl.c:1003 [inline]
-                              kill_fasync fs/fcntl.c:1017 [inline]
-                              kill_fasync+0x1f8/0x470 fs/fcntl.c:1010
-                              snd_timer_user_ccallback+0x298/0x330 sound/core/timer.c:1386
-                              snd_timer_notify1+0x11c/0x3b0 sound/core/timer.c:516
-                              snd_timer_start1+0x4d4/0x800 sound/core/timer.c:578
-                              snd_timer_start sound/core/timer.c:696 [inline]
-                              snd_timer_start sound/core/timer.c:689 [inline]
-                              snd_timer_user_start.isra.0+0x1e3/0x260 sound/core/timer.c:1984
-                              __snd_timer_user_ioctl.isra.0+0xda4/0x2490 sound/core/timer.c:2107
-                              snd_timer_user_ioctl+0x77/0xb0 sound/core/timer.c:2128
-                              vfs_ioctl fs/ioctl.c:51 [inline]
-                              __do_sys_ioctl fs/ioctl.c:870 [inline]
-                              __se_sys_ioctl fs/ioctl.c:856 [inline]
-                              __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
-                              do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-                              do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-                              entry_SYSCALL_64_after_hwframe+0x44/0xae
-    }
-    ... key      at: [<ffffffff9061aa40>] __key.5+0x0/0x40
-    ... acquired at:
-   __raw_read_lock_irqsave include/linux/rwlock_api_smp.h:160 [inline]
-   _raw_read_lock_irqsave+0x70/0x90 kernel/locking/spinlock.c:236
-   send_sigio+0x24/0x380 fs/fcntl.c:778
-   kill_fasync_rcu fs/fcntl.c:1003 [inline]
-   kill_fasync fs/fcntl.c:1017 [inline]
-   kill_fasync+0x1f8/0x470 fs/fcntl.c:1010
-   snd_timer_user_ccallback+0x298/0x330 sound/core/timer.c:1386
-   snd_timer_notify1+0x11c/0x3b0 sound/core/timer.c:516
-   snd_timer_start1+0x4d4/0x800 sound/core/timer.c:578
-   snd_timer_start sound/core/timer.c:696 [inline]
-   snd_timer_start sound/core/timer.c:689 [inline]
-   snd_timer_user_start.isra.0+0x1e3/0x260 sound/core/timer.c:1984
-   __snd_timer_user_ioctl.isra.0+0xda4/0x2490 sound/core/timer.c:2107
-   snd_timer_user_ioctl+0x77/0xb0 sound/core/timer.c:2128
-   vfs_ioctl fs/ioctl.c:51 [inline]
-   __do_sys_ioctl fs/ioctl.c:870 [inline]
-   __se_sys_ioctl fs/ioctl.c:856 [inline]
-   __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
-   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-   do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-   entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-  -> (&new->fa_lock){....}-{2:2} {
-     INITIAL READ USE at:
-                            lock_acquire kernel/locking/lockdep.c:5641 [inline]
-                            lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5606
-                            __raw_read_lock_irqsave include/linux/rwlock_api_smp.h:160 [inline]
-                            _raw_read_lock_irqsave+0x70/0x90 kernel/locking/spinlock.c:236
-                            kill_fasync_rcu fs/fcntl.c:996 [inline]
-                            kill_fasync fs/fcntl.c:1017 [inline]
-                            kill_fasync+0x136/0x470 fs/fcntl.c:1010
-                            snd_timer_user_ccallback+0x298/0x330 sound/core/timer.c:1386
-                            snd_timer_notify1+0x11c/0x3b0 sound/core/timer.c:516
-                            snd_timer_start1+0x4d4/0x800 sound/core/timer.c:578
-                            snd_timer_start sound/core/timer.c:696 [inline]
-                            snd_timer_start sound/core/timer.c:689 [inline]
-                            snd_timer_user_start.isra.0+0x1e3/0x260 sound/core/timer.c:1984
-                            __snd_timer_user_ioctl.isra.0+0xda4/0x2490 sound/core/timer.c:2107
-                            snd_timer_user_ioctl+0x77/0xb0 sound/core/timer.c:2128
-                            vfs_ioctl fs/ioctl.c:51 [inline]
-                            __do_sys_ioctl fs/ioctl.c:870 [inline]
-                            __se_sys_ioctl fs/ioctl.c:856 [inline]
-                            __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
-                            do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-                            do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-                            entry_SYSCALL_64_after_hwframe+0x44/0xae
-   }
-   ... key      at: [<ffffffff9061b820>] __key.0+0x0/0x40
-   ... acquired at:
-   __raw_read_lock_irqsave include/linux/rwlock_api_smp.h:160 [inline]
-   _raw_read_lock_irqsave+0x70/0x90 kernel/locking/spinlock.c:236
-   kill_fasync_rcu fs/fcntl.c:996 [inline]
-   kill_fasync fs/fcntl.c:1017 [inline]
-   kill_fasync+0x136/0x470 fs/fcntl.c:1010
-   snd_timer_user_ccallback+0x298/0x330 sound/core/timer.c:1386
-   snd_timer_notify1+0x11c/0x3b0 sound/core/timer.c:516
-   snd_timer_start1+0x4d4/0x800 sound/core/timer.c:578
-   snd_timer_start sound/core/timer.c:696 [inline]
-   snd_timer_start sound/core/timer.c:689 [inline]
-   snd_timer_user_start.isra.0+0x1e3/0x260 sound/core/timer.c:1984
-   __snd_timer_user_ioctl.isra.0+0xda4/0x2490 sound/core/timer.c:2107
-   snd_timer_user_ioctl+0x77/0xb0 sound/core/timer.c:2128
-   vfs_ioctl fs/ioctl.c:51 [inline]
-   __do_sys_ioctl fs/ioctl.c:870 [inline]
-   __se_sys_ioctl fs/ioctl.c:856 [inline]
-   __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
-   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-   do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-   entry_SYSCALL_64_after_hwframe+0x44/0xae
-
- -> (&timer->lock){....}-{2:2} {
-    INITIAL USE at:
-                     lock_acquire kernel/locking/lockdep.c:5641 [inline]
-                     lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5606
-                     __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
-                     _raw_spin_lock_irqsave+0x39/0x50 kernel/locking/spinlock.c:162
-                     snd_timer_resolution+0x55/0x100 sound/core/timer.c:489
-                     snd_timer_user_params.isra.0+0x18e/0x8c0 sound/core/timer.c:1851
-                     __snd_timer_user_ioctl.isra.0+0x101c/0x2490 sound/core/timer.c:2100
-                     snd_timer_user_ioctl+0x77/0xb0 sound/core/timer.c:2128
-                     vfs_ioctl fs/ioctl.c:51 [inline]
-                     __do_sys_ioctl fs/ioctl.c:870 [inline]
-                     __se_sys_ioctl fs/ioctl.c:856 [inline]
-                     __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
-                     do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-                     do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-                     entry_SYSCALL_64_after_hwframe+0x44/0xae
-  }
-  ... key      at: [<ffffffff909196a0>] __key.10+0x0/0x40
-  ... acquired at:
-   __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
-   _raw_spin_lock_irqsave+0x39/0x50 kernel/locking/spinlock.c:162
-   snd_timer_notify sound/core/timer.c:1086 [inline]
-   snd_timer_notify+0x10c/0x3d0 sound/core/timer.c:1073
-   snd_pcm_timer_notify sound/core/pcm_native.c:608 [inline]
-   snd_pcm_post_start+0x24a/0x310 sound/core/pcm_native.c:1451
-   snd_pcm_action_single+0xf4/0x130 sound/core/pcm_native.c:1283
-   snd_pcm_action+0x6e/0x90 sound/core/pcm_native.c:1364
-   __snd_pcm_lib_xfer+0x14d0/0x1e10 sound/core/pcm_lib.c:2308
-   snd_pcm_oss_write3+0x103/0x250 sound/core/oss/pcm_oss.c:1253
-   snd_pcm_oss_write2+0x30e/0x3f0 sound/core/oss/pcm_oss.c:1393
-   snd_pcm_oss_sync1+0x187/0x440 sound/core/oss/pcm_oss.c:1627
-   snd_pcm_oss_sync+0x638/0x800 sound/core/oss/pcm_oss.c:1704
-   snd_pcm_oss_release+0x276/0x300 sound/core/oss/pcm_oss.c:2590
-   __fput+0x277/0x9d0 fs/file_table.c:317
-   task_work_run+0xdd/0x1a0 kernel/task_work.c:164
-   exit_task_work include/linux/task_work.h:37 [inline]
-   do_exit+0xaff/0x2a00 kernel/exit.c:795
-   do_group_exit+0xd2/0x2f0 kernel/exit.c:925
-   __do_sys_exit_group kernel/exit.c:936 [inline]
-   __se_sys_exit_group kernel/exit.c:934 [inline]
-   __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:934
-   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-   do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-   entry_SYSCALL_64_after_hwframe+0x44/0xae
-
--> (&group->lock){..-.}-{2:2} {
-   IN-SOFTIRQ-W at:
-                    lock_acquire kernel/locking/lockdep.c:5641 [inline]
-                    lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5606
-                    __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
-                    _raw_spin_lock_irqsave+0x39/0x50 kernel/locking/spinlock.c:162
-                    _snd_pcm_stream_lock_irqsave+0x9f/0xd0 sound/core/pcm_native.c:170
-                    snd_pcm_period_elapsed+0x1d/0x50 sound/core/pcm_lib.c:1848
-                    dummy_hrtimer_callback+0x94/0x1b0 sound/drivers/dummy.c:377
-                    __run_hrtimer kernel/time/hrtimer.c:1685 [inline]
-                    __hrtimer_run_queues+0x609/0xe50 kernel/time/hrtimer.c:1749
-                    hrtimer_run_softirq+0x17b/0x360 kernel/time/hrtimer.c:1766
-                    __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
-                    invoke_softirq kernel/softirq.c:432 [inline]
-                    __irq_exit_rcu+0x123/0x180 kernel/softirq.c:637
-                    irq_exit_rcu+0x5/0x20 kernel/softirq.c:649
-                    sysvec_apic_timer_interrupt+0x93/0xc0 arch/x86/kernel/apic/apic.c:1097
-                    asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:645
-                    native_safe_halt arch/x86/include/asm/irqflags.h:51 [inline]
-                    arch_safe_halt arch/x86/include/asm/irqflags.h:89 [inline]
-                    acpi_safe_halt drivers/acpi/processor_idle.c:115 [inline]
-                    acpi_idle_do_entry+0x1c6/0x250 drivers/acpi/processor_idle.c:556
-                    acpi_idle_enter+0x361/0x500 drivers/acpi/processor_idle.c:691
-                    cpuidle_enter_state+0x1b1/0xc80 drivers/cpuidle/cpuidle.c:237
-                    cpuidle_enter+0x4a/0xa0 drivers/cpuidle/cpuidle.c:351
-                    call_cpuidle kernel/sched/idle.c:155 [inline]
-                    cpuidle_idle_call kernel/sched/idle.c:236 [inline]
-                    do_idle+0x3e8/0x590 kernel/sched/idle.c:303
-                    cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:400
-                    start_kernel+0x47f/0x4a0 init/main.c:1140
-                    secondary_startup_64_no_verify+0xc3/0xcb
-   INITIAL USE at:
-                   lock_acquire kernel/locking/lockdep.c:5641 [inline]
-                   lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5606
-                   __raw_spin_lock_irq include/linux/spinlock_api_smp.h:119 [inline]
-                   _raw_spin_lock_irq+0x32/0x50 kernel/locking/spinlock.c:170
-                   spin_lock_irq include/linux/spinlock.h:374 [inline]
-                   snd_pcm_group_lock_irq sound/core/pcm_native.c:97 [inline]
-                   snd_pcm_stream_lock_irq sound/core/pcm_native.c:136 [inline]
-                   snd_pcm_hw_params+0x14b/0x19f0 sound/core/pcm_native.c:726
-                   snd_pcm_kernel_ioctl+0x164/0x310 sound/core/pcm_native.c:3435
-                   snd_pcm_oss_change_params_locked+0x14e2/0x3a70 sound/core/oss/pcm_oss.c:976
-                   snd_pcm_oss_make_ready_locked+0xb3/0x130 sound/core/oss/pcm_oss.c:1198
-                   snd_pcm_oss_write1 sound/core/oss/pcm_oss.c:1416 [inline]
-                   snd_pcm_oss_write+0x4ac/0x9c0 sound/core/oss/pcm_oss.c:2811
-                   vfs_write+0x269/0xac0 fs/read_write.c:589
-                   ksys_write+0x127/0x250 fs/read_write.c:644
-                   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-                   do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-                   entry_SYSCALL_64_after_hwframe+0x44/0xae
- }
- ... key      at: [<ffffffff90919f00>] __key.8+0x0/0x40
- ... acquired at:
-   mark_lock kernel/locking/lockdep.c:4571 [inline]
-   mark_usage kernel/locking/lockdep.c:4502 [inline]
-   __lock_acquire+0x11e7/0x56c0 kernel/locking/lockdep.c:4983
-   lock_acquire kernel/locking/lockdep.c:5641 [inline]
-   lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5606
-   __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
-   _raw_spin_lock_irqsave+0x39/0x50 kernel/locking/spinlock.c:162
-   _snd_pcm_stream_lock_irqsave+0x9f/0xd0 sound/core/pcm_native.c:170
-   snd_pcm_period_elapsed+0x1d/0x50 sound/core/pcm_lib.c:1848
-   dummy_hrtimer_callback+0x94/0x1b0 sound/drivers/dummy.c:377
-   __run_hrtimer kernel/time/hrtimer.c:1685 [inline]
-   __hrtimer_run_queues+0x609/0xe50 kernel/time/hrtimer.c:1749
-   hrtimer_run_softirq+0x17b/0x360 kernel/time/hrtimer.c:1766
-   __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
-   invoke_softirq kernel/softirq.c:432 [inline]
-   __irq_exit_rcu+0x123/0x180 kernel/softirq.c:637
-   irq_exit_rcu+0x5/0x20 kernel/softirq.c:649
-   sysvec_apic_timer_interrupt+0x93/0xc0 arch/x86/kernel/apic/apic.c:1097
-   asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:645
-   native_safe_halt arch/x86/include/asm/irqflags.h:51 [inline]
-   arch_safe_halt arch/x86/include/asm/irqflags.h:89 [inline]
-   acpi_safe_halt drivers/acpi/processor_idle.c:115 [inline]
-   acpi_idle_do_entry+0x1c6/0x250 drivers/acpi/processor_idle.c:556
-   acpi_idle_enter+0x361/0x500 drivers/acpi/processor_idle.c:691
-   cpuidle_enter_state+0x1b1/0xc80 drivers/cpuidle/cpuidle.c:237
-   cpuidle_enter+0x4a/0xa0 drivers/cpuidle/cpuidle.c:351
-   call_cpuidle kernel/sched/idle.c:155 [inline]
-   cpuidle_idle_call kernel/sched/idle.c:236 [inline]
-   do_idle+0x3e8/0x590 kernel/sched/idle.c:303
-   cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:400
-   start_kernel+0x47f/0x4a0 init/main.c:1140
-   secondary_startup_64_no_verify+0xc3/0xcb
-
-
-stack backtrace:
-CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.18.0-rc3-syzkaller-00218-g13bc32bad705 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_irq_inversion_bug kernel/locking/lockdep.c:192 [inline]
- check_usage_forwards kernel/locking/lockdep.c:4045 [inline]
- mark_lock_irq kernel/locking/lockdep.c:4177 [inline]
- mark_lock.part.0.cold+0x86/0xd8 kernel/locking/lockdep.c:4607
- mark_lock kernel/locking/lockdep.c:4571 [inline]
- mark_usage kernel/locking/lockdep.c:4502 [inline]
- __lock_acquire+0x11e7/0x56c0 kernel/locking/lockdep.c:4983
- lock_acquire kernel/locking/lockdep.c:5641 [inline]
- lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5606
- __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
- _raw_spin_lock_irqsave+0x39/0x50 kernel/locking/spinlock.c:162
- _snd_pcm_stream_lock_irqsave+0x9f/0xd0 sound/core/pcm_native.c:170
- snd_pcm_period_elapsed+0x1d/0x50 sound/core/pcm_lib.c:1848
- dummy_hrtimer_callback+0x94/0x1b0 sound/drivers/dummy.c:377
- __run_hrtimer kernel/time/hrtimer.c:1685 [inline]
- __hrtimer_run_queues+0x609/0xe50 kernel/time/hrtimer.c:1749
- hrtimer_run_softirq+0x17b/0x360 kernel/time/hrtimer.c:1766
- __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
- invoke_softirq kernel/softirq.c:432 [inline]
- __irq_exit_rcu+0x123/0x180 kernel/softirq.c:637
- irq_exit_rcu+0x5/0x20 kernel/softirq.c:649
- sysvec_apic_timer_interrupt+0x93/0xc0 arch/x86/kernel/apic/apic.c:1097
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:645
-RIP: 0010:native_save_fl arch/x86/include/asm/irqflags.h:29 [inline]
-RIP: 0010:arch_local_save_flags arch/x86/include/asm/irqflags.h:70 [inline]
-RIP: 0010:arch_irqs_disabled arch/x86/include/asm/irqflags.h:130 [inline]
-RIP: 0010:acpi_safe_halt drivers/acpi/processor_idle.c:116 [inline]
-RIP: 0010:acpi_idle_do_entry+0x1c6/0x250 drivers/acpi/processor_idle.c:556
-Code: 89 de e8 7d 6e 0c f8 84 db 75 ac e8 94 6a 0c f8 e8 ff b2 12 f8 eb 0c e8 88 6a 0c f8 0f 00 2d 51 07 c6 00 e8 7c 6a 0c f8 fb f4 <9c> 5b 81 e3 00 02 00 00 fa 31 ff 48 89 de e8 f7 6c 0c f8 48 85 db
-RSP: 0018:ffffffff8ba07d60 EFLAGS: 00000293
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffffffff8babc700 RSI: ffffffff896cc614 RDI: 0000000000000000
-RBP: ffff8880165b4864 R08: 0000000000000001 R09: 0000000000000001
-R10: ffffffff817f7938 R11: 0000000000000000 R12: 0000000000000001
-R13: ffff8880165b4800 R14: ffff8880165b4864 R15: ffff8881407ed004
- acpi_idle_enter+0x361/0x500 drivers/acpi/processor_idle.c:691
- cpuidle_enter_state+0x1b1/0xc80 drivers/cpuidle/cpuidle.c:237
- cpuidle_enter+0x4a/0xa0 drivers/cpuidle/cpuidle.c:351
- call_cpuidle kernel/sched/idle.c:155 [inline]
- cpuidle_idle_call kernel/sched/idle.c:236 [inline]
- do_idle+0x3e8/0x590 kernel/sched/idle.c:303
- cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:400
- start_kernel+0x47f/0x4a0 init/main.c:1140
- second
-----------------
-Code disassembly (best guess):
-   0:	89 de                	mov    %ebx,%esi
-   2:	e8 7d 6e 0c f8       	callq  0xf80c6e84
-   7:	84 db                	test   %bl,%bl
-   9:	75 ac                	jne    0xffffffb7
-   b:	e8 94 6a 0c f8       	callq  0xf80c6aa4
-  10:	e8 ff b2 12 f8       	callq  0xf812b314
-  15:	eb 0c                	jmp    0x23
-  17:	e8 88 6a 0c f8       	callq  0xf80c6aa4
-  1c:	0f 00 2d 51 07 c6 00 	verw   0xc60751(%rip)        # 0xc60774
-  23:	e8 7c 6a 0c f8       	callq  0xf80c6aa4
-  28:	fb                   	sti
-  29:	f4                   	hlt
-* 2a:	9c                   	pushfq <-- trapping instruction
-  2b:	5b                   	pop    %rbx
-  2c:	81 e3 00 02 00 00    	and    $0x200,%ebx
-  32:	fa                   	cli
-  33:	31 ff                	xor    %edi,%edi
-  35:	48 89 de             	mov    %rbx,%rsi
-  38:	e8 f7 6c 0c f8       	callq  0xf80c6d34
-  3d:	48 85 db             	test   %rbx,%rbx
+SGkgdGhlcmUNCg0KV2UgbGF0ZWx5IHRyaWVkIG9wZXJhdGluZyB0aGUgSU1YOE1QRVZLIEVORVRf
+UU9TIGlteC1kd21hYyBkcml2ZXIgaW4gaGFsZi1kdXBsZXggbW9kZXMgd2hpY2ggY3Jhc2hlcyBh
+cw0KZm9sbG93czoNCg0Kcm9vdEBpbXg4bXBldms6fiMgdW5hbWUgLWENCkxpbnV4IGlteDhtcGV2
+ayA1LjE4LjAtcmMyLW5leHQtMjAyMjA0MTMtMDAwMDYtZ2M3NDEzMDZmZjJlZCAjNCBTTVAgUFJF
+RU1QVCBXZWQgQXByIDEzIDE1OjA4OjM2IENFU1QgMjAyMg0KYWFyY2g2NCBhYXJjaDY0IGFhcmNo
+NjQgR05VL0xpbnV4DQpyb290QGlteDhtcGV2azp+IyBldGh0b29sIC1zIGV0aDEgYWR2ZXJ0aXNl
+IDB4MDA0DQpbICA0NjkuNjg1MzA0XSBpbXgtZHdtYWMgMzBiZjAwMDAuZXRoZXJuZXQgZXRoMTog
+TGluayBpcyBEb3duDQpbICA0NjkuNzAzNTI4XSBrYXVkaXRkX3ByaW50a19za2I6IDEgY2FsbGJh
+Y2tzIHN1cHByZXNzZWQNClsgIDQ2OS43MDM1MzldIGF1ZGl0OiB0eXBlPTEzMzQgYXVkaXQoMTY1
+MDc1NDIzOC4zMTk6MjMpOiBwcm9nLWlkPTE3IG9wPUxPQUQNClsgIDQ2OS43MTU2MDJdIGF1ZGl0
+OiB0eXBlPTEzMzQgYXVkaXQoMTY1MDc1NDIzOC4zMjc6MjQpOiBwcm9nLWlkPTE4IG9wPUxPQUQN
+ClsgIDQ3Mi43Mzc4ODRdIGlteC1kd21hYyAzMGJmMDAwMC5ldGhlcm5ldCBldGgxOiBMaW5rIGlz
+IFVwIC0gMTAwTWJwcy9IYWxmIC0gZmxvdyBjb250cm9sIG9mZg0KWyAgNDcyLjc0NjIwNV0gSVB2
+NjogQUREUkNPTkYoTkVUREVWX0NIQU5HRSk6IGV0aDE6IGxpbmsgYmVjb21lcyByZWFkeQ0KWyAg
+NDc4LjA4MDQ4MV0gLS0tLS0tLS0tLS0tWyBjdXQgaGVyZSBdLS0tLS0tLS0tLS0tDQpbICA0Nzgu
+MDg1MTM0XSBORVRERVYgV0FUQ0hET0c6IGV0aDEgKGlteC1kd21hYyk6IHRyYW5zbWl0IHF1ZXVl
+IDEgdGltZWQgb3V0DQpbICA0NzguMDkxOTg1XSBXQVJOSU5HOiBDUFU6IDMgUElEOiAwIGF0IG5l
+dC9zY2hlZC9zY2hfZ2VuZXJpYy5jOjUyOSBkZXZfd2F0Y2hkb2crMHgyMDAvMHgyMTANClsgIDQ3
+OC4xMDAyNjldIE1vZHVsZXMgbGlua2VkIGluOiA4MDIxcSBnYXJwIG1ycCBzdHAgbGxjIG92ZXJs
+YXkgYmx1ZXRvb3RoIGVjZGhfZ2VuZXJpYyBlY2MgcmZraWxsIGNhYW1fanINCmNhYW1oYXNoX2Rl
+c2MgY2FhbWFsZ19kZXNjIGNyeXB0b19lbmdpbmUgcm5nX2NvcmUgYXV0aGVuYyBsaWJkZXMgZHdt
+YWNfaW14IHN0bW1hY19wbGF0Zm9ybSBpbXhfc2RtYQ0KY3JjdDEwZGlmX2NlIGZzbF9pbXg4X2Rk
+cl9wZXJmIHN0bW1hYyBwY3NfeHBjcyBldG5hdml2IGdwdV9zY2hlZCBmbGV4Y2FuIGNhYW0gc252
+c19wd3JrZXkgZXJyb3IgY2FuX2Rldg0KcnRjX3NudnMgaW14X2NwdWZyZXFfZHQgaW14OG1tX3Ro
+ZXJtYWwgZnVzZSBkcm0gaXB2Ng0KWyAgNDc4LjEzMjE0Ml0gQ1BVOiAzIFBJRDogMCBDb21tOiBz
+d2FwcGVyLzMgTm90IHRhaW50ZWQgNS4xOC4wLXJjMi1uZXh0LTIwMjIwNDEzLTAwMDA2LWdjNzQx
+MzA2ZmYyZWQgIzQNClsgIDQ3OC4xNDEzNjRdIEhhcmR3YXJlIG5hbWU6IE5YUCBpLk1YOE1QbHVz
+IEVWSyBib2FyZCAoRFQpDQpbICA0NzguMTQ2Njc2XSBwc3RhdGU6IDYwMDAwMDA1IChuWkN2IGRh
+aWYgLVBBTiAtVUFPIC1UQ08gLURJVCAtU1NCUyBCVFlQRT0tLSkNClsgIDQ3OC4xNTM2NDRdIHBj
+IDogZGV2X3dhdGNoZG9nKzB4MjAwLzB4MjEwDQpbICA0NzguMTU3NjYyXSBsciA6IGRldl93YXRj
+aGRvZysweDIwMC8weDIxMA0KWyAgNDc4LjE2MTY4MF0gc3AgOiBmZmZmODAwMDBhM2IzYTcwDQpb
+ICA0NzguMTY0OTkyXSB4Mjk6IGZmZmY4MDAwMGEzYjNhNzAgeDI4OiAwMDAwMDAwMDAwMDAwMDA1
+IHgyNzogZmZmZjgwMDAwOGU1NzYwMA0KWyAgNDc4LjE3MjE0MF0geDI2OiBmZmZmODAwMDA5ZWY3
+OWMwIHgyNTogZmZmZjAwMDE3ZjNjN2ZlOCB4MjQ6IGZmZmY4MDAwMGEzYjNiNDANClsgIDQ3OC4x
+NzkyODNdIHgyMzogZmZmZjgwMDAwOWVmNzAwMCB4MjI6IDAwMDAwMDAwMDAwMDAwMDEgeDIxOiBm
+ZmZmMDAwMGM0Y2MwMzljDQpbICA0NzguMTg2NDI4XSB4MjA6IGZmZmYwMDAwYzRjYzAwMDAgeDE5
+OiBmZmZmMDAwMGM0Y2MwNDQ4IHgxODogMDAwMDAwMDAwMDAwMDAzMA0KWyAgNDc4LjE5MzU3MV0g
+eDE3OiBmZmZmODAwMTc1YTEzMDAwIHgxNjogZmZmZjgwMDAwYTJlNDAwMCB4MTU6IGZmZmZmZmZm
+ZmZmZmZmZmYNClsgIDQ3OC4yMDA3MTNdIHgxNDogZmZmZjgwMDAwOWYxMjM4OCB4MTM6IDAwMDAw
+MDAwMDAwMDA0ZWMgeDEyOiAwMDAwMDAwMDAwMDAwMWE0DQpbICA0NzguMjA3ODYwXSB4MTE6IDcx
+MjA3NDY5NmQ3MzZlNjEgeDEwOiBmZmZmODAwMDA5ZjZhMzg4IHg5IDogMDAwMDAwMDBmZmZmZjAw
+MA0KWyAgNDc4LjIxNTAwM10geDggOiBmZmZmODAwMDA5ZjEyMzg4IHg3IDogMDAwMDAwMDAwMDAw
+MDAwMyB4NiA6IDAwMDAwMDAwMDAwMDAwMDANClsgIDQ3OC4yMjIxNDZdIHg1IDogMDAwMDAwMDAw
+MDAwMDAwMCB4NCA6IDAwMDAwMDAwMDAwMDAwMDAgeDMgOiAwMDAwMDAwMDAwMDAwMDAwDQpbICA0
+NzguMjI5Mjk0XSB4MiA6IDAwMDAwMDAwMDAwMDAwMDAgeDEgOiAwMDAwMDAwMDAwMDAwMDAwIHgw
+IDogZmZmZjAwMDBjMDFhMDAwMA0KWyAgNDc4LjIzNjQzOV0gQ2FsbCB0cmFjZToNClsgIDQ3OC4y
+Mzg4ODZdICBkZXZfd2F0Y2hkb2crMHgyMDAvMHgyMTANClsgIDQ3OC4yNDI1NTZdICBjYWxsX3Rp
+bWVyX2ZuLmNvbnN0cHJvcC4wKzB4MjQvMHg4MA0KWyAgNDc4LjI0NzE4Ml0gIF9fcnVuX3RpbWVy
+cy5wYXJ0LjArMHgxZjQvMHgyM2MNClsgIDQ3OC4yNTE0NTRdICBydW5fdGltZXJfc29mdGlycSsw
+eDNjLzB4N2MNClsgIDQ3OC4yNTUzODRdICBfX2RvX3NvZnRpcnErMHgxMjQvMHgyYTANClsgIDQ3
+OC4yNTkwNDddICBfX2lycV9leGl0X3JjdSsweGU0LzB4MTAwDQpbICA0NzguMjYyODA0XSAgaXJx
+X2V4aXRfcmN1KzB4MTAvMHgxYw0KWyAgNDc4LjI2NjMwMF0gIGVsMV9pbnRlcnJ1cHQrMHgzOC8w
+eDcwDQpbICA0NzguMjY5ODgxXSAgZWwxaF82NF9pcnFfaGFuZGxlcisweDE4LzB4MjQNClsgIDQ3
+OC4yNzM5ODhdICBlbDFoXzY0X2lycSsweDY0LzB4NjgNClsgIDQ3OC4yNzczOTNdICBhcmNoX2Nw
+dV9pZGxlKzB4MTgvMHgyYw0KWyAgNDc4LjI4MDk2OV0gIGRlZmF1bHRfaWRsZV9jYWxsKzB4MjQv
+MHg2Yw0KWyAgNDc4LjI4NDkwMF0gIGRvX2lkbGUrMHgyMmMvMHgyOWMNClsgIDQ3OC4yODgxMzNd
+ICBjcHVfc3RhcnR1cF9lbnRyeSsweDI4LzB4MzANClsgIDQ3OC4yOTIwNjVdICBzZWNvbmRhcnlf
+c3RhcnRfa2VybmVsKzB4MTQwLzB4MTY0DQpbICA0NzguMjk2NjAwXSAgX19zZWNvbmRhcnlfc3dp
+dGNoZWQrMHhhMC8weGE0DQpbICA0NzguMzAwNzg5XSAtLS1bIGVuZCB0cmFjZSAwMDAwMDAwMDAw
+MDAwMDAwIF0tLS0NClsgIDQ3OC4zMDU0NTFdIGlteC1kd21hYyAzMGJmMDAwMC5ldGhlcm5ldCBl
+dGgxOiBSZXNldCBhZGFwdGVyLg0KWyAgNDc4LjMzMjkwMV0gaW14LWR3bWFjIDMwYmYwMDAwLmV0
+aGVybmV0IGV0aDE6IEZQRSB3b3JrcXVldWUgc3RvcA0KWyAgNDc4LjMzOTIzM10gaW14LWR3bWFj
+IDMwYmYwMDAwLmV0aGVybmV0IGV0aDE6IFRpbWVvdXQgYWNjZXNzaW5nIE1BQ19WTEFOX1RhZ19G
+aWx0ZXINClsgIDQ3OC4zNDY5NjJdIGlteC1kd21hYyAzMGJmMDAwMC5ldGhlcm5ldCBldGgxOiBm
+YWlsZWQgdG8ga2lsbCB2aWQgMDA4MS8wDQpbICA0NzguNTU2NDk0XSBpbXgtZHdtYWMgMzBiZjAw
+MDAuZXRoZXJuZXQgZXRoMTogUEhZIFtzdG1tYWMtMTowMV0gZHJpdmVyIFtSVEw4MjExRiBHaWdh
+Yml0IEV0aGVybmV0XQ0KKGlycT1QT0xMKQ0KWyAgNDc4LjczNjU2MF0gaW14LWR3bWFjIDMwYmYw
+MDAwLmV0aGVybmV0IGV0aDE6IFJlZ2lzdGVyIE1FTV9UWVBFX1BBR0VfUE9PTCBSeFEtMA0KWyAg
+NDc4Ljc0NDM4OF0gaW14LWR3bWFjIDMwYmYwMDAwLmV0aGVybmV0IGV0aDE6IFJlZ2lzdGVyIE1F
+TV9UWVBFX1BBR0VfUE9PTCBSeFEtMQ0KWyAgNDc4Ljc1MjIyMl0gaW14LWR3bWFjIDMwYmYwMDAw
+LmV0aGVybmV0IGV0aDE6IFJlZ2lzdGVyIE1FTV9UWVBFX1BBR0VfUE9PTCBSeFEtMg0KWyAgNDc4
+Ljc2MDEyNl0gaW14LWR3bWFjIDMwYmYwMDAwLmV0aGVybmV0IGV0aDE6IFJlZ2lzdGVyIE1FTV9U
+WVBFX1BBR0VfUE9PTCBSeFEtMw0KWyAgNDc4Ljc2Nzk1MV0gaW14LWR3bWFjIDMwYmYwMDAwLmV0
+aGVybmV0IGV0aDE6IFJlZ2lzdGVyIE1FTV9UWVBFX1BBR0VfUE9PTCBSeFEtNA0KWyAgNDc4Ljc4
+NDUyMF0gaW14LWR3bWFjIDMwYmYwMDAwLmV0aGVybmV0IGV0aDE6IE5vIFNhZmV0eSBGZWF0dXJl
+cyBzdXBwb3J0IGZvdW5kDQpbICA0NzguNzkxNzg3XSBpbXgtZHdtYWMgMzBiZjAwMDAuZXRoZXJu
+ZXQgZXRoMTogSUVFRSAxNTg4LTIwMDggQWR2YW5jZWQgVGltZXN0YW1wIHN1cHBvcnRlZA0KWyAg
+NDc4LjgwMDIyN10gaW14LWR3bWFjIDMwYmYwMDAwLmV0aGVybmV0IGV0aDE6IHJlZ2lzdGVyZWQg
+UFRQIGNsb2NrDQpbICA0NzguODA2NjEwXSBpbXgtZHdtYWMgMzBiZjAwMDAuZXRoZXJuZXQgZXRo
+MTogRlBFIHdvcmtxdWV1ZSBzdGFydA0KWyAgNDc4LjgxMjc3NF0gaW14LWR3bWFjIDMwYmYwMDAw
+LmV0aGVybmV0IGV0aDE6IGNvbmZpZ3VyaW5nIGZvciBwaHkvcmdtaWktaWQgbGluayBtb2RlDQpb
+ICA0NzguODQ4NzM5XSA4MDIxcTogYWRkaW5nIFZMQU4gMCB0byBIVyBmaWx0ZXIgb24gZGV2aWNl
+IGV0aDENCg0KRG9lcyBhbnlib2R5IGhhdmUgYW55IGV4cGVyaWVuY2UgaW4gcnVubmluZyBkd21h
+YyBpbiBoYWxmLWR1cGxleCBtb2RlPyBBbnkgc3VnZ2VzdGlvbnM/DQoNCkJUVzogSXQgYWxzbyBj
+cmFzaGVzIHRoZSBzYW1lIHdheSBydW5uaW5nIE5YUCdzIGxhdGVzdCBkb3duc3RyZWFtIExGNS4x
+NS41XzEuMC4wIHdoaWNoIEkgcmVwb3J0ZWQgaGVyZSBbMV0uDQoNClsxXQ0KaHR0cHM6Ly9jb21t
+dW5pdHkubnhwLmNvbS90NS9pLU1YLVByb2Nlc3NvcnMvSU1YOE1QRVZLLUVORVQtUU9TLWlteC1k
+d21hYy1IYWxmLUR1cGxleC1DcmFzaGVzL20tcC8xNDQ4MDg1I00xODk1OTcNCg0KQ2hlZXJzDQoN
+Ck1hcmNlbA0K
 

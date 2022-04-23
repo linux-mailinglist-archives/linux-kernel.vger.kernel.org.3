@@ -2,110 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3447F50CA77
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 15:15:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E08E250CA76
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 15:15:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235715AbiDWNSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 09:18:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58638 "EHLO
+        id S232643AbiDWNR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 09:17:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235685AbiDWNRj (ORCPT
+        with ESMTP id S235666AbiDWNRg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 09:17:39 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A0D1EE8EC
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 06:14:41 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id n8so16832968plh.1
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 06:14:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nathanrossi.com; s=google;
-        h=date:message-id:from:to:cc:subject:content-transfer-encoding
-         :mime-version;
-        bh=tZUrl8zLKA5D27ChnNocJe50cIVDD1SSEejUzU+DrrI=;
-        b=i8TV0Ww6bdfK6ykIROfAsZnjEnJS3ZqNeUmA+qBRONVVVWSA6HP7wmhLSMJ/1ajzS2
-         1o/dWYH5BLqrzbKnSTDQqcrQCb5aeZybM4qBk3u2gZY8g1LlaHKf0YZiWtSH+lfjbLuU
-         dE6kSOCKlwFPt7rMjY1dKGKkMnqPq4cy3zBkWrQXJQNiQ1cJ3fASGNc87w97yg7wN2hJ
-         VFdh4FsAiuXCwepwqOzSv3BwVpgTL33i5n1qahZpnvEcrfiS9QWYPGuI/hPFHJlVljJc
-         QjGgo4FUYb8oRQQvhcY+OtCjLsH3iRfmoUz258vD/GURt1qy3KVAv5K2lxgwc4YoBdwr
-         JVEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:from:to:cc:subject
-         :content-transfer-encoding:mime-version;
-        bh=tZUrl8zLKA5D27ChnNocJe50cIVDD1SSEejUzU+DrrI=;
-        b=E1auQVMpJapqxc3nsrbLyGqoLGNewyK1ZGslVw97z79jAC736iDBZTgF28bp7CgUWa
-         r3aTPWP8ubcFqYmlYB7Ij7pPZa6wqXfGCm+drqEL5d2kjPUcSGgLuY3yHZq8qA+jBuGU
-         AaqnK1DqRagD1sG97hBI7o96ECTTFZKvg35DlTzGspZQ7enib9M98FY88nQUp9ZMFWkE
-         2qP3NcKNlcOUfvFpA9eeIBDgvzHT4R9/8XfELY57tHaqTSeNmG5xYOcB4Qz8WvQGhcWN
-         XlKHXkypF3GOcSrlWLPBdlvHVQc2NKdxWUa7G260bCwDSrLUrA3QrDBGLQXPyWkpMD1G
-         5mDw==
-X-Gm-Message-State: AOAM530gvU2/YnXOL5LUdZDvYm1kbJ0PfzXQ2mnpYit1mj6KVePIGokY
-        WqmC6pIGxP05GW6HiWlSsdOzug==
-X-Google-Smtp-Source: ABdhPJzvdhfEGUXSzxlB9k8D2vR5vqIHv5iTi//MSitWGnSl/f7S28O/LHFKUDRMmL7GEWmFRCicZw==
-X-Received: by 2002:a17:902:e94f:b0:14f:1636:c8a8 with SMTP id b15-20020a170902e94f00b0014f1636c8a8mr9338301pll.130.1650719680802;
-        Sat, 23 Apr 2022 06:14:40 -0700 (PDT)
-Received: from [127.0.1.1] (117-20-68-98.751444.bne.nbn.aussiebb.net. [117.20.68.98])
-        by smtp.gmail.com with UTF8SMTPSA id w7-20020a63a747000000b003991d7d3728sm5103337pgo.74.2022.04.23.06.14.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 06:14:40 -0700 (PDT)
-Date:   Sat, 23 Apr 2022 13:14:27 +0000
-Message-Id: <20220423131427.237160-1-nathan@nathanrossi.com>
-From:   Nathan Rossi <nathan@nathanrossi.com>
-To:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        Sat, 23 Apr 2022 09:17:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955E81DD225;
+        Sat, 23 Apr 2022 06:14:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 15A4CB801BD;
+        Sat, 23 Apr 2022 13:14:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87D7CC385A5;
+        Sat, 23 Apr 2022 13:14:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650719676;
+        bh=EhGNChbTex4daXC/4M0L+MFTZGt5iVXyh5mOH6CzWeM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WEmbry3swwcKTDm+Y+ygHIERtUNF07Xpg8tZ0fNPrw3SURPGXJCuDUSlWatSz4NzS
+         J7WRYJHTHP1LG048fDCbUzh0D8pR1so2Tb81e1ggWtWQW5vKmUM8ts5CYeTJmRmcue
+         nEQQZR189UIYCpuyXDhZjJ03PaRJJg1kUJEMY/QDNjpxl3ij7XOCjeJ71k+HsgWREE
+         rFVNuLh8oQ8v9npLTz7zopnpRp/wOnZL+8kp6tZcF6/g5ut7lNG7dASJC0YpwHVE7X
+         R4FX+Izd/8WE7NmavgLgGwHE0LDpZO0bIbmbQN2OkA4PnLPWQS04z2sAF1Vq0IIe6d
+         /RnyZwKr6/Z+w==
+Date:   Sat, 23 Apr 2022 18:44:29 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
+Cc:     quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
+        mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Nathan Rossi <nathan@nathanrossi.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: [PATCH 1/2] dt-bindings: net: dsa: marvell: Add single-chip-address property
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v4] bus: mhi: host: Wait for ready state after reset
+Message-ID: <20220423131429.GN374560@thinkpad>
+References: <1650302562-30964-1-git-send-email-quic_jhugo@quicinc.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1650302562-30964-1-git-send-email-quic_jhugo@quicinc.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some Marvell DSA devices can be accessed in a single chip addressing
-mode. This is currently configured by setting the address of the switch
-to 0. However switches in this configuration do not respond to address
-0, only responding to higher addresses (fixed addressed based on the
-switch model) for the individual ports/etc. This is a feature to allow
-for other phys to exist on the same mdio bus.
+On Mon, Apr 18, 2022 at 11:22:42AM -0600, Jeffrey Hugo wrote:
+> After the device has signaled the end of reset by clearing the reset bit,
+> it will automatically reinit MHI and the internal device structures.  Once
+> That is done, the device will signal it has entered the ready state.
+> 
+> Signaling the ready state involves sending an interrupt (MSI) to the host
+> which might cause IOMMU faults if it occurs at the wrong time.
+> 
+> If the controller is being powered down, and possibly removed, then the
+> reset flow would only wait for the end of reset.  At which point, the host
+> and device would start a race.  The host may complete its reset work, and
+> remove the interrupt handler, which would cause the interrupt to be
+> disabled in the IOMMU.  If that occurs before the device signals the ready
+> state, then the IOMMU will fault since it blocked an interrupt.  While
+> harmless, the fault would appear like a serious issue has occurred so let's
+> silence it by making sure the device hits the ready state before the host
+> completes its reset processing.
+> 
+> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+> Reviewed-by: Hemant Kumar <quic_hemantk@quicinc.com>
+> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-This change defines a 'single-chip-address' property in order to
-explicitly define that the chip is accessed in this mode. This allows
-for a switch to have an address defined other than 0, so that address
-0 can be used for another mdio device.
+Applied to mhi-next!
 
-Signed-off-by: Nathan Rossi <nathan@nathanrossi.com>
----
- Documentation/devicetree/bindings/net/dsa/marvell.txt | 2 ++
- 1 file changed, 2 insertions(+)
+Thanks,
+Mani
 
-diff --git a/Documentation/devicetree/bindings/net/dsa/marvell.txt b/Documentation/devicetree/bindings/net/dsa/marvell.txt
-index 2363b41241..5c7304274c 100644
---- a/Documentation/devicetree/bindings/net/dsa/marvell.txt
-+++ b/Documentation/devicetree/bindings/net/dsa/marvell.txt
-@@ -46,6 +46,8 @@ Optional properties:
- - mdio?		: Container of PHYs and devices on the external MDIO
- 			  bus. The node must contains a compatible string of
- 			  "marvell,mv88e6xxx-mdio-external"
-+- single-chip-address	: Device is configured to use single chip addressing
-+			  mode.
- 
- Example:
- 
----
-2.35.2
+> ---
+> 
+> v4:
+> Cleanup email domain change
+> 
+> v3:
+> Rebase and use dev_err over dev_warn
+> 
+> v2: 
+> Fix subject and remove use of cur_state
+> 
+>  drivers/bus/mhi/host/pm.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/drivers/bus/mhi/host/pm.c b/drivers/bus/mhi/host/pm.c
+> index 3d90b8e..c000a92 100644
+> --- a/drivers/bus/mhi/host/pm.c
+> +++ b/drivers/bus/mhi/host/pm.c
+> @@ -476,6 +476,15 @@ static void mhi_pm_disable_transition(struct mhi_controller *mhi_cntrl)
+>  		 * hence re-program it
+>  		 */
+>  		mhi_write_reg(mhi_cntrl, mhi_cntrl->bhi, BHI_INTVEC, 0);
+> +
+> +		if (!MHI_IN_PBL(mhi_get_exec_env(mhi_cntrl))) {
+> +			/* wait for ready to be set */
+> +			ret = mhi_poll_reg_field(mhi_cntrl, mhi_cntrl->regs,
+> +						 MHISTATUS,
+> +						 MHISTATUS_READY_MASK, 1, 25000);
+> +			if (ret)
+> +				dev_err(dev, "Device failed to enter READY state\n");
+> +		}
+>  	}
+>  
+>  	dev_dbg(dev,
+> -- 
+> 2.7.4
+> 

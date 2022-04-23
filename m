@@ -2,109 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A09EF50CDEA
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 00:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 412FB50CDEC
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 00:22:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237315AbiDWWTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 18:19:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33464 "EHLO
+        id S236003AbiDWWZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 18:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230337AbiDWWTe (ORCPT
+        with ESMTP id S229552AbiDWWZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 18:19:34 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3C614DEA4;
-        Sat, 23 Apr 2022 15:16:35 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id ks6so22816992ejb.1;
-        Sat, 23 Apr 2022 15:16:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=SeT9VKBABGE3+M59+/LdCRTy+y0q+UOFIghRmJw7JEU=;
-        b=ghEvrTo/Mw/dGr730gI9vebowZJO7rKTe/+ShB6UWGyegdMld1T8uMV4Je5P9dfyw2
-         FF0/6gg7Pq8QIUkYjBJaAQToDMVr6y4Lk1yxvod3bAS+Z+yeSYR0mkj1Ai1qNYJLf23P
-         0Cl7H1phs9RQtEd6La3Pjydygqw1rO1bvXGsopDhNMx1mBVK1s7ZPA/ebq/SQNddFPzN
-         YjDBj+/wdKcy/GbiazuxWlDGrXea9t7I+Runba6n1mF7NYeuABbsjkM0x6tOFQ8/0D03
-         UbciJXa8UhsSA5BC/dFwoJQmOpQ7+/wtz/zu7SDUka5/NlXyHhQMQVPIdW2Zg4BDBBPI
-         OSpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=SeT9VKBABGE3+M59+/LdCRTy+y0q+UOFIghRmJw7JEU=;
-        b=bmGBOJH/lc/gwK4IRA/YMT63SDG3Xo24+OzlPIAT7O2UQpqKyYlv/hQceUTvYA1uHU
-         zxOhRsVOVgXZLlXuwlFk64NxyiBoQw91Q2On7CUwKa4Um4oHA8xvobAton4fbIh+7KDn
-         /AAIYjttwqHprdduPSoeagS/A+9OKRLhMCtGQg1F3lvk9yDgGRUEiTuxs9AH6PqSm+vz
-         oOy8NW9mslWfm+vDamBgYviH0v07ZdmRjjqX2/OrkZI06Z14PeCf3/mszF6gpe1Bdgez
-         O4HhMocc+u2VdlfvBbYvbM6nb7FJlHMn5wbBz2cvwTR2QYha2rd75dSHO64gys9K1Cp4
-         55hA==
-X-Gm-Message-State: AOAM5327vzHFSRnN4QsAISBeWtJ9+j6BOTuaFtCdDRFLavwTM42JdEeR
-        XCYQ0xRg53w5QaQTxON1Bt8=
-X-Google-Smtp-Source: ABdhPJwhbEa7xhj18dQkE7o4UxIXO6J5D9LIESZfSOfibr5uduO1+Zize1piovEhzJALerxZ5LhLoA==
-X-Received: by 2002:a17:906:c0d6:b0:6ca:457e:f1b7 with SMTP id bn22-20020a170906c0d600b006ca457ef1b7mr9540974ejb.399.1650752194502;
-        Sat, 23 Apr 2022 15:16:34 -0700 (PDT)
-Received: from linux.. (p5dd1ed70.dip0.t-ipconnect.de. [93.209.237.112])
-        by smtp.gmail.com with ESMTPSA id s1-20020a056402036100b004240a3fc6b4sm2669484edw.82.2022.04.23.15.16.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 15:16:34 -0700 (PDT)
-From:   Bean Huo <huobean@gmail.com>
-To:     ulf.hansson@linaro.org, adrian.hunter@intel.com,
-        linus.walleij@linaro.org, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     beanhuo@micron.com, stable <stable@vger.kernel.org>
-Subject: [PATCH v1 2/2] mmc: core: Allows to override the timeout value for ioctl() path
-Date:   Sun, 24 Apr 2022 00:16:23 +0200
-Message-Id: <20220423221623.1074556-3-huobean@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220423221623.1074556-1-huobean@gmail.com>
-References: <20220423221623.1074556-1-huobean@gmail.com>
+        Sat, 23 Apr 2022 18:25:41 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB3D178595
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 15:22:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650752562; x=1682288562;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=zMdk6iWzkyTLRUXdH9dO6D6JnfUoMkjdmflzUIYl5jc=;
+  b=mDRwvUljR8gc2IgCAon2vTWZ8AJUKjqwxxx8tHcXTPMU5orWSZVhuB9H
+   9BBaTAi4E0iBsZPiI4DLaKsaBeYZNWOd0UvDlHG9+0KCymtOiSMahwCsf
+   Hib786EP+fyAvNFkxLOd2qd3CFP3QqOljFe5JFekbZxk+dMoUTAASaSK4
+   MdZKAdYWCT76DOpsdQ2ThTJrj/FdjebBu09QZgO1iLlURwWOPtYYx2RY6
+   vBEeqxqazQOjDKIq0XwtzlIKbpr3C78BsqXgBLQMYzZHiG99FJSR+vSPd
+   zRinNATYFjoRkWE/ZkWJqTe5aFYVJDFa/CmOA2Z6y4B9ksIztoBLhpDg8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="252302937"
+X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
+   d="scan'208";a="252302937"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 15:22:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
+   d="scan'208";a="627484592"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 23 Apr 2022 15:22:40 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1niO9I-0000aJ-0Y;
+        Sat, 23 Apr 2022 22:22:40 +0000
+Date:   Sun, 24 Apr 2022 06:21:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:objtool/urgent] BUILD SUCCESS
+ 4abff6d48dbcea8200c7ea35ba70c242d128ebf3
+Message-ID: <62647bf8.EakSbgl+YDP5DGcj%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bean Huo <beanhuo@micron.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git objtool/urgent
+branch HEAD: 4abff6d48dbcea8200c7ea35ba70c242d128ebf3  objtool: Fix code relocs vs weak symbols
 
-Occasionally, user-land applications initiate longer timeout values for certain commands
-through ioctl() system call. But so far we are still using a fixed timeout of 10 seconds
-in mmc_poll_for_busy() on the ioctl() path, even if a custom timeout is specified in the
-userspace application. This patch allows custom timeout values to override this default
-timeout values on the ioctl path.
+elapsed time: 2134m
 
-Cc: stable <stable@vger.kernel.org>
-Signed-off-by: Bean Huo <beanhuo@micron.com>
----
- drivers/mmc/core/block.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+configs tested: 130
+configs skipped: 5
 
-diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-index b35e7a95798b..6cb701aa1abc 100644
---- a/drivers/mmc/core/block.c
-+++ b/drivers/mmc/core/block.c
-@@ -609,11 +609,11 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
- 
- 	if (idata->rpmb || (cmd.flags & MMC_RSP_R1B) == MMC_RSP_R1B) {
- 		/*
--		 * Ensure RPMB/R1B command has completed by polling CMD13
--		 * "Send Status".
-+		 * Ensure RPMB/R1B command has completed by polling CMD13 "Send Status". Here we
-+		 * allow to override the default timeout value if a custom timeout is specified.
- 		 */
--		err = mmc_poll_for_busy(card, MMC_BLK_TIMEOUT_MS, false,
--					MMC_BUSY_IO);
-+		err = mmc_poll_for_busy(card, idata->ic.cmd_timeout_ms ? : MMC_BLK_TIMEOUT_MS,
-+					false, MMC_BUSY_IO);
- 	}
- 
- 	return err;
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+sparc                               defconfig
+arm                       aspeed_g5_defconfig
+sh                          rsk7201_defconfig
+m68k                         apollo_defconfig
+ia64                             allyesconfig
+nios2                         10m50_defconfig
+openrisc                  or1klitex_defconfig
+m68k                        m5407c3_defconfig
+um                                  defconfig
+arm                          simpad_defconfig
+powerpc                      pcm030_defconfig
+powerpc                   currituck_defconfig
+arm                        shmobile_defconfig
+powerpc                       holly_defconfig
+mips                        bcm47xx_defconfig
+sparc64                             defconfig
+um                               alldefconfig
+ia64                        generic_defconfig
+arm                           viper_defconfig
+m68k                             allyesconfig
+ia64                         bigsur_defconfig
+sh                        apsh4ad0a_defconfig
+arm                           sama5_defconfig
+mips                 decstation_r4k_defconfig
+powerpc                     redwood_defconfig
+arm                         cm_x300_defconfig
+sh                           se7705_defconfig
+arm                          iop32x_defconfig
+arm                         assabet_defconfig
+m68k                       m5475evb_defconfig
+powerpc                 canyonlands_defconfig
+arm                        trizeps4_defconfig
+sh                           se7751_defconfig
+arc                          axs103_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220422
+ia64                             allmodconfig
+ia64                                defconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20220422
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
+
+clang tested configs:
+riscv                randconfig-c006-20220422
+mips                 randconfig-c004-20220422
+x86_64                        randconfig-c007
+i386                          randconfig-c001
+arm                  randconfig-c002-20220422
+powerpc              randconfig-c003-20220422
+powerpc                      acadia_defconfig
+mips                           ip27_defconfig
+riscv                            alldefconfig
+arm                    vt8500_v6_v7_defconfig
+powerpc                     ksi8560_defconfig
+mips                malta_qemu_32r6_defconfig
+powerpc                 mpc836x_mds_defconfig
+mips                          ath25_defconfig
+powerpc                     tqm8540_defconfig
+arm                         orion5x_defconfig
+mips                     cu1830-neo_defconfig
+riscv                    nommu_virt_defconfig
+mips                       rbtx49xx_defconfig
+powerpc                      walnut_defconfig
+mips                         tb0219_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+hexagon              randconfig-r041-20220422
+s390                 randconfig-r044-20220422
+riscv                randconfig-r042-20220422
+hexagon              randconfig-r045-20220422
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

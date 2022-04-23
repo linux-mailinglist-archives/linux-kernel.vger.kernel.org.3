@@ -2,210 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1357E50C639
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 03:51:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81A2B50C63D
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 03:51:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231696AbiDWBwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 21:52:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45864 "EHLO
+        id S229889AbiDWBxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 21:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbiDWBwI (ORCPT
+        with ESMTP id S231473AbiDWBxp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 21:52:08 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73C456C0D
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 18:49:12 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id w20so11287343ybi.8
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 18:49:12 -0700 (PDT)
+        Fri, 22 Apr 2022 21:53:45 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9D925D3
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 18:50:49 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id t13so8670050pgn.8
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 18:50:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=EXzY+UzgBA4CY//ySgkNNk++mmPT2Q7lGPNdGhvpS3k=;
-        b=KQjOWOuGdM2d8vnXhq62QM4DYVCKd+WiOQ5XcRXxeDej1fuhlOfKyLkXXmvh5v6qd0
-         k22F7HjbfBdDj2nGswhBmz6ipOnP7fcHVUpSI1MUusXUjdPAjntnr9bpwiIh/avOImuz
-         Tv7jzaxvtnvenIYxTpUroNFypfhzA0hHYntzM=
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iuHt4Iz4FeZBvfTekgoBxhqf7wWZiBSKlKE/b+2tuYo=;
+        b=goIqv8VMZbjl/c21Jd/hdMFrKYsyG7ZmdvPyMP0a/LfpPFogQ2pz0rqGGlL/AbTqAs
+         9pSaiVPXATwgYFD5N5J3yDUb/pSsg0GPEKelq16yimQnW972dgloHJe65mdFFqD9Do1K
+         rfbVg7wta3owfIXNgtPf9exTJ5PLWsXRn7YHotwHXiR3Lkj659kCquaRDrj310oN7KKB
+         jMZM6HpvA98IESGZVPUiQud4tbPccE2u3eNVzqTqrXy3s0yTKF6yVKnJ7iGeA60/fd96
+         +GWnu5/SHFOm3yjfGlSdAu7G7dd4BdX/igL9srOjG3lvbYLAaHSMkweQg27Zn7pzyHq/
+         VUDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=EXzY+UzgBA4CY//ySgkNNk++mmPT2Q7lGPNdGhvpS3k=;
-        b=qV9mbzWpm1j5yxOZ1+3mhwvQQIoMNNU4WxsNEIWiaBbRi7kZkLsx1gTr1IRCnfb3+o
-         4q4Uv1SI/xxAhMUbTwY6OJzbZBgrkYb0VrKZhwCfry65+TbrDw44Y4ikC3zSedYKC22I
-         x4wzuPXFOH5s+ipbRwuGc3vg6q+HOh4D5Vfl/WQiBRqQTekyzNjPx+IvuDQ6YptTcSEJ
-         h1GsPrTvvnYpUY7LVq2nu8D00PtwfeL9slurJlp80e6k8aIyQf74m1AoJllommE1ycce
-         aasIF9ggcG+PrjJyOW8hd+aE5DVH8dqcDOpwT+5GR2jWLuD9wCCfyomk0rC82SMFxjRr
-         9wnw==
-X-Gm-Message-State: AOAM530z6HOkcrtb6fXyAJz+Cq/+L/SWrb/CEk+EJhd955IQ56atChTE
-        K0fv+grcgHQL8gjJ1+mpBmjx+YDw32nCzQqbAYf6
-X-Google-Smtp-Source: ABdhPJxiVqXIABuDkaacxe8g2z9oY63ATrv3RWNbgC6ZqrWg3gx+2hRc+pki0UDz6nLSiqkK5aJvkH+pVIR8k+KsbCM=
-X-Received: by 2002:a25:a0c9:0:b0:647:36b4:d149 with SMTP id
- i9-20020a25a0c9000000b0064736b4d149mr1617034ybm.405.1650678551920; Fri, 22
- Apr 2022 18:49:11 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220420112408.155561-1-apatel@ventanamicro.com>
- <3fa5215b-84c3-5e4c-cb53-6c05d05e4350@canonical.com> <CAOnJCUJrN4frY_OdQzO-yr5CrDLvj=ge9KY2d=XnGvAF-uQNvQ@mail.gmail.com>
-In-Reply-To: <CAOnJCUJrN4frY_OdQzO-yr5CrDLvj=ge9KY2d=XnGvAF-uQNvQ@mail.gmail.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Fri, 22 Apr 2022 18:49:01 -0700
-Message-ID: <CAOnJCUK5q0k1qKD0fM4NtbP6KAGcaBBknkCKLBXxcC=EPGVu1Q@mail.gmail.com>
-Subject: Re: [PATCH v3] RISC-V: Increase range and default value of NR_CPUS
-To:     Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-Cc:     Anup Patel <apatel@ventanamicro.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=iuHt4Iz4FeZBvfTekgoBxhqf7wWZiBSKlKE/b+2tuYo=;
+        b=WuWRd/KcwSHogSj6kThh/WZb9cUlrTfBv8sxS8iO+LHTfEFw2sXM1C27elmfYyvnCg
+         2yvI9dqZrR1Qs85Nx04vkiuZcYHokJ6MpY10wAr/C6xKST9bJCB6m+OfTSirNCly/Qcg
+         ND0dRqOGfRmklEuvEgJ+uQliZkc7SXRXKT1NjedhTOmLZ/9MEuqgK7Oga+TlWWs/6RAT
+         lT6fo3O+g+Wu31jU2QoXunfwPIjSpgTlPoTVBSNlo260/3RD0IJqxhlIjeeRoqiBv977
+         Dpk4jBdtunB/eNOwNxnB1Pcel+adIVIMES94qpLxinwbnZPdgrSdMls80AjwkTRrz9xq
+         f60g==
+X-Gm-Message-State: AOAM5313rpRLkdTh1psMZslxr86DCK2Ms1D2D6s8vChuP+viExi1N5J8
+        pB+27VSC8hXd2u0GThcgEvhC2A==
+X-Google-Smtp-Source: ABdhPJxJGqglrviMvw8Swe1RM63k2IYS5w00YAqVduQcH5u9WbhL2yia4TEU96zrIIxxdu1APdK0XA==
+X-Received: by 2002:a63:c5:0:b0:3aa:9882:9f91 with SMTP id 188-20020a6300c5000000b003aa98829f91mr6164187pga.574.1650678648423;
+        Fri, 22 Apr 2022 18:50:48 -0700 (PDT)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id 123-20020a620681000000b004fa7c20d732sm3684931pfg.133.2022.04.22.18.50.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 18:50:47 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 18:50:47 -0700 (PDT)
+X-Google-Original-Date: Fri, 22 Apr 2022 18:50:27 PDT (-0700)
+Subject:     Re: [PATCH v3 00/13] Introduce sv48 support without relocatable kernel
+In-Reply-To: <CA+zEjCuyEsB0cHoL=zepejcRbn9Rwg9nRXLMZCOXe_daSWbvig@mail.gmail.com>
+CC:     corbet@lwn.net, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, zong.li@sifive.com, anup@brainfault.org,
+        Atish.Patra@rivosinc.com, Christoph Hellwig <hch@lst.de>,
+        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
+        dvyukov@google.com, ardb@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        keescook@chromium.org, guoren@linux.alibaba.com,
+        heinrich.schuchardt@canonical.com, mchitale@ventanamicro.com,
+        panqinglin2020@iscas.ac.cn, linux-doc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org,
+        linux-arch@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     alexandre.ghiti@canonical.com
+Message-ID: <mhng-f386a42e-77d9-4644-914f-552a8e721f5c@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 5:16 PM Atish Patra <atishp@atishpatra.org> wrote:
+On Fri, 01 Apr 2022 05:56:30 PDT (-0700), alexandre.ghiti@canonical.com wrote:
+> On Fri, Feb 18, 2022 at 11:45 AM Alexandre Ghiti
+> <alexandre.ghiti@canonical.com> wrote:
+>>
+>> Hi Palmer,
+>>
+>> On Thu, Jan 20, 2022 at 11:05 AM Alexandre Ghiti
+>> <alexandre.ghiti@canonical.com> wrote:
+>> >
+>> > On Thu, Jan 20, 2022 at 8:30 AM Alexandre Ghiti
+>> > <alexandre.ghiti@canonical.com> wrote:
+>> > >
+>> > > On Thu, Jan 20, 2022 at 5:18 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>> > > >
+>> > > > On Mon, 06 Dec 2021 02:46:44 PST (-0800), alexandre.ghiti@canonical.com wrote:
+>> > > > > * Please note notable changes in memory layouts and kasan population *
+>> > > > >
+>> > > > > This patchset allows to have a single kernel for sv39 and sv48 without
+>> > > > > being relocatable.
+>> > > > >
+>> > > > > The idea comes from Arnd Bergmann who suggested to do the same as x86,
+>> > > > > that is mapping the kernel to the end of the address space, which allows
+>> > > > > the kernel to be linked at the same address for both sv39 and sv48 and
+>> > > > > then does not require to be relocated at runtime.
+>> > > > >
+>> > > > > This implements sv48 support at runtime. The kernel will try to
+>> > > > > boot with 4-level page table and will fallback to 3-level if the HW does not
+>> > > > > support it. Folding the 4th level into a 3-level page table has almost no
+>> > > > > cost at runtime.
+>> > > > >
+>> > > > > Note that kasan region had to be moved to the end of the address space
+>> > > > > since its location must be known at compile-time and then be valid for
+>> > > > > both sv39 and sv48 (and sv57 that is coming).
+>> > > > >
+>> > > > > Tested on:
+>> > > > >   - qemu rv64 sv39: OK
+>> > > > >   - qemu rv64 sv48: OK
+>> > > > >   - qemu rv64 sv39 + kasan: OK
+>> > > > >   - qemu rv64 sv48 + kasan: OK
+>> > > > >   - qemu rv32: OK
+>> > > > >
+>> > > > > Changes in v3:
+>> > > > >   - Fix SZ_1T, thanks to Atish
+>> > > > >   - Fix warning create_pud_mapping, thanks to Atish
+>> > > > >   - Fix k210 nommu build, thanks to Atish
+>> > > > >   - Fix wrong rebase as noted by Samuel
+>> > > > >   - * Downgrade to sv39 is only possible if !KASAN (see commit changelog) *
+>> > > > >   - * Move KASAN next to the kernel: virtual layouts changed and kasan population *
+>> > > > >
+>> > > > > Changes in v2:
+>> > > > >   - Rebase onto for-next
+>> > > > >   - Fix KASAN
+>> > > > >   - Fix stack canary
+>> > > > >   - Get completely rid of MAXPHYSMEM configs
+>> > > > >   - Add documentation
+>> > > > >
+>> > > > > Alexandre Ghiti (13):
+>> > > > >   riscv: Move KASAN mapping next to the kernel mapping
+>> > > > >   riscv: Split early kasan mapping to prepare sv48 introduction
+>> > > > >   riscv: Introduce functions to switch pt_ops
+>> > > > >   riscv: Allow to dynamically define VA_BITS
+>> > > > >   riscv: Get rid of MAXPHYSMEM configs
+>> > > > >   asm-generic: Prepare for riscv use of pud_alloc_one and pud_free
+>> > > > >   riscv: Implement sv48 support
+>> > > > >   riscv: Use pgtable_l4_enabled to output mmu_type in cpuinfo
+>> > > > >   riscv: Explicit comment about user virtual address space size
+>> > > > >   riscv: Improve virtual kernel memory layout dump
+>> > > > >   Documentation: riscv: Add sv48 description to VM layout
+>> > > > >   riscv: Initialize thread pointer before calling C functions
+>> > > > >   riscv: Allow user to downgrade to sv39 when hw supports sv48 if !KASAN
+>> > > > >
+>> > > > >  Documentation/riscv/vm-layout.rst             |  48 ++-
+>> > > > >  arch/riscv/Kconfig                            |  37 +-
+>> > > > >  arch/riscv/configs/nommu_k210_defconfig       |   1 -
+>> > > > >  .../riscv/configs/nommu_k210_sdcard_defconfig |   1 -
+>> > > > >  arch/riscv/configs/nommu_virt_defconfig       |   1 -
+>> > > > >  arch/riscv/include/asm/csr.h                  |   3 +-
+>> > > > >  arch/riscv/include/asm/fixmap.h               |   1
+>> > > > >  arch/riscv/include/asm/kasan.h                |  11 +-
+>> > > > >  arch/riscv/include/asm/page.h                 |  20 +-
+>> > > > >  arch/riscv/include/asm/pgalloc.h              |  40 ++
+>> > > > >  arch/riscv/include/asm/pgtable-64.h           | 108 ++++-
+>> > > > >  arch/riscv/include/asm/pgtable.h              |  47 +-
+>> > > > >  arch/riscv/include/asm/sparsemem.h            |   6 +-
+>> > > > >  arch/riscv/kernel/cpu.c                       |  23 +-
+>> > > > >  arch/riscv/kernel/head.S                      |   4 +-
+>> > > > >  arch/riscv/mm/context.c                       |   4 +-
+>> > > > >  arch/riscv/mm/init.c                          | 408 ++++++++++++++----
+>> > > > >  arch/riscv/mm/kasan_init.c                    | 250 ++++++++---
+>> > > > >  drivers/firmware/efi/libstub/efi-stub.c       |   2
+>> > > > >  drivers/pci/controller/pci-xgene.c            |   2 +-
+>> > > > >  include/asm-generic/pgalloc.h                 |  24 +-
+>> > > > >  include/linux/sizes.h                         |   1
+>> > > > >  22 files changed, 833 insertions(+), 209 deletions(-)
+>> > > >
+>> > > > Sorry this took a while.  This is on for-next, with a bit of juggling: a
+>> > > > handful of trivial fixes for configs that were failing to build/boot and
+>> > > > some merge issues.  I also pulled out that MAXPHYSMEM fix to the top, so
+>> > > > it'd be easier to backport.  This is bigger than something I'd normally like to
+>> > > > take late in the cycle, but given there's a lot of cleanups, likely some fixes,
+>> > > > and it looks like folks have been testing this I'm just going to go with it.
+>> > > >
+>> > >
+>> > > Yes yes yes! That's fantastic news :)
+>> > >
+>> > > > Let me know if there's any issues with the merge, it was a bit hairy.
+>> > > > Probably best to just send along a fixup patch at this point.
+>> > >
+>> > > I'm going to take a look at that now, and I'll fix anything that comes
+>> > > up quickly :)
+>> >
+>> > I see in for-next that you did not take the following patches:
+>> >
+>> >   riscv: Improve virtual kernel memory layout dump
+>> >   Documentation: riscv: Add sv48 description to VM layout
+>> >   riscv: Initialize thread pointer before calling C functions
+>> >   riscv: Allow user to downgrade to sv39 when hw supports sv48 if !KASAN
+>> >
+>> > I'm not sure this was your intention. If it was, I believe that at
+>> > least the first 2 patches are needed in this series, the 3rd one is a
+>> > useful fix and we can discuss the 4th if that's an issue for you.
+>>
+>> Can you confirm that this was intentional and maybe explain the
+>> motivation behind it? Because I see value in those patches.
 >
-> On Thu, Apr 21, 2022 at 12:05 AM Heinrich Schuchardt
-> <heinrich.schuchardt@canonical.com> wrote:
-> >
-> >
-> >
-> > On 4/20/22 13:24, Anup Patel wrote:
-> > > Currently, the range and default value of NR_CPUS is too restrictive
-> > > for high-end RISC-V systems with large number of HARTs. The latest
-> > > QEMU virt machine supports upto 512 CPUs so the current NR_CPUS is
-> > > restrictive for QEMU as well. Other major architectures (such as
-> > > ARM64, x86_64, MIPS, etc) have a much higher range and default
-> > > value of NR_CPUS.
-> > >
-> > > This patch increases NR_CPUS range to 2-512 and default value to
-> > > XLEN (i.e. 32 for RV32 and 64 for RV64).
-> > >
-> > > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> >
+> Palmer,
 >
-> This works upto 207 harts in upstream Qemu + OpenSBI. Beyond that,
-> firmware size becomes > 2MB and PMP protection
-> kicks in for the kernel boot address (0x80200000)
->
+> I read that you were still taking patches for 5.18, so I confirm again
+> that the patches above are needed IMO.
 
-Just wanted to clarify that this is as per the current configuration
-in OpenSBI. The boot address
-is configured to be 0x80000000 for the generic platform. Thus, it can
-support a maximum of 207 harts.
+It was too late for this when it was sent (I saw it then, but just got 
+around to actually doing the work to sort it out).
 
-If anybody wishes to boot more than that, the boot address should be
-changed to a valid DRAM address such that
-it doesn't step on kernel/DT or other resident boot loaders (e.g. U-Boot).
+It took me a while to figure out exactly what was going on here, but I 
+think I remember now: that downgrade patch (and the follow-on I just 
+sent) is broken for medlow, because mm/init.c must be built medany 
+(which we're using for the mostly-PIC qualities).  I remember being in 
+the middle of rebasing/debugging this a while ago, I must have forgotten 
+I was in the middle of that and accidentally merged the branch as-is.  
+Certainly wasn't trying to silently take half the patch set and leave 
+the rest in limbo, that's the wrong way to do things. 
 
-It should be changed per platform (if supporting more than 128 harts)
-rather than changing
-to a common address for all platforms.
+I'm not sure what the right answer is here, but I just sent a patch to 
+drop support for medlow.  We'll have to talk about that, for now I 
+cleaned up some other minor issues, rearranged that docs and fix to come 
+first, and put this at palmer/riscv-sv48.  I think that fix is 
+reasonable to take the doc and fix into fixes, then the dump improvement 
+on for-next.  We'll have to see what folks think about the medany-only 
+kernels, the other option would be to build FDT as medany which seems a 
+bit awkward.  
 
-> Here is the OpenSBI boot prints for 256 harts with some hacks around
-> sanitize_domain to disable sbi_domain_check_addr
->
-> Platform Name             : riscv-virtio,qemu
-> Platform Features         : medeleg
-> Platform HART Count       : 208
-> Platform IPI Device       : aclint-mswi
-> Platform Timer Device     : aclint-mtimer @ 10000000Hz
-> Platform Console Device   : uart8250
-> Platform HSM Device       : ---
-> Platform Reboot Device    : sifive_test
-> Platform Shutdown Device  : sifive_test
-> Firmware Base             : 0x80000000
-> Firmware Size             : 2052 KB ---------->>> Firmware size is
-> greater than 2MB where
-> Runtime SBI Version       : 0.3
->
-> Domain0 Name              : root
-> Domain0 Boot HART         : 122
-> Domain0 HARTs             :
-> 0*,1*,2*,3*,4*,5*,6*,7*,8*,9*,10*,11*,12*,13*,14*,15*,16*,17*,18*,19*,20*=
-,21*,22*,23*,24*,25*,26*,27*,28*,29*,30*,31*,32*,33*,34*,35*,36*,37*,38*,39=
-*,40*,41*,42*,43*,44*,45*,46*,47*,48*,49*,50*,51*,52*,53*,54*,55*,56*,57*,5=
-8*,59*,60*,61*,62*,63*,64*,65*,66*,67*,68*,69*,70*,71*,72*,73*,74*,75*,76*,=
-77*,78*,79*,80*,81*,82*,83*,84*,85*,86*,87*,88*,89*,90*,91*,92*,93*,94*,95*=
-,96*,97*,98*,99*,100*,101*,102*,103*,104*,105*,106*,107*,108*,109*,110*,111=
-*,112*,113*,114*,115*,116*,117*,118*,119*,120*,121*,122*,123*,124*,125*,126=
-*,127*,128*,129*,130*,131*,132*,133*,134*,135*,136*,137*,138*,139*,140*,141=
-*,142*,143*,144*,145*,146*,147*,148*,149*,150*,151*,152*,153*,154*,155*,156=
-*,157*,158*,159*,160*,161*,162*,163*,164*,165*,166*,167*,168*,169*,170*,171=
-*,172*,173*,174*,175*,176*,177*,178*,179*,180*,181*,182*,183*,184*,185*,186=
-*,187*,188*,189*,190*,191*,192*,193*,194*,195*,196*,197*,198*,199*,200*,201=
-*,202*,203*,204*,205*,206*,207*
-> Domain0 Region00          : 0x0000000002000000-0x000000000200ffff (I)
-> Domain0 Region01          : 0x0000000080000000-0x00000000803fffff ()
-> Domain0 Region02          : 0x0000000000000000-0xffffffffffffffff (R,W,X)
-> Domain0 Next Address      : 0x0000000080200000
-> Domain0 Next Arg1         : 0x00000000bf000000
-> Domain0 Next Mode         : S-mode
-> Domain0 SysReset          : yes
->
-> Boot HART ID              : 122
-> Boot HART Domain          : root
-> Boot HART ISA             : rv64imafdcsuh
-> Boot HART Features        : scounteren,mcounteren,time
-> Boot HART PMP Count       : 16
-> Boot HART PMP Granularity : 4
-> Boot HART PMP Address Bits: 54
-> Boot HART MHPM Count      : 0
-> Boot HART MIDELEG         : 0x0000000000001666
-> Boot HART MEDELEG         : 0x0000000000f0b509
->
->
-> > Reviewed-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-> >
-> > > ---
-> > > Changes since v2:
-> > >   - Rebased on Linux-5.18-rc3
-> > >   - Use a different range when SBI v0.1 is enabled
-> > > Changes since v1:
-> > >   - Updated NR_CPUS range to 2-512 which reflects maximum number of
-> > >     CPUs supported by QEMU virt machine.
-> > > ---
-> > >   arch/riscv/Kconfig | 9 ++++++---
-> > >   1 file changed, 6 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > > index 00fd9c548f26..1823f281069f 100644
-> > > --- a/arch/riscv/Kconfig
-> > > +++ b/arch/riscv/Kconfig
-> > > @@ -275,10 +275,13 @@ config SMP
-> > >         If you don't know what to do here, say N.
-> > >
-> > >   config NR_CPUS
-> > > -     int "Maximum number of CPUs (2-32)"
-> > > -     range 2 32
-> > > +     int "Maximum number of CPUs (2-512)"
-> > >       depends on SMP
-> > > -     default "8"
-> > > +     range 2 512 if !SBI_V01
-> > > +     range 2 32 if SBI_V01 && 32BIT
-> > > +     range 2 64 if SBI_V01 && 64BIT
-> > > +     default "32" if 32BIT
-> > > +     default "64" if 64BIT
-> > >
-> > >   config HOTPLUG_CPU
-> > >       bool "Support for hot-pluggable CPUs"
->
->
->
-> --
-> Regards,
-> Atish
+> Maybe even the relocatable series?
 
+Do you mind giving me a pointer?  I'm not sure why I'm so drop-prone 
+with your patches, I promise I'm not doing it on purpose.
 
-
---=20
-Regards,
-Atish
+>
+> Thanks,
+>
+> Alex
+>
+>>
+>> Thanks,
+>>
+>> Alex
+>>
+>> >
+>> > I tested for-next on both sv39 and sv48 successfully, I took a glance
+>> > at the code and noticed you fixed the PTRS_PER_PGD error, thanks for
+>> > that. Otherwise nothing obvious has popped.
+>> >
+>> > Thanks again,
+>> >
+>> > Alex
+>> >
+>> > >
+>> > > Thanks!
+>> > >
+>> > > Alex
+>> > >
+>> > > >
+>> > > > Thanks!

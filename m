@@ -2,86 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA92C50C952
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 12:40:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A100550C955
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 12:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235057AbiDWKfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 06:35:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38598 "EHLO
+        id S235073AbiDWKgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 06:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234903AbiDWKfg (ORCPT
+        with ESMTP id S235037AbiDWKgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 06:35:36 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5793F22BF6;
-        Sat, 23 Apr 2022 03:32:39 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id bf11so12378996ljb.7;
-        Sat, 23 Apr 2022 03:32:39 -0700 (PDT)
+        Sat, 23 Apr 2022 06:36:02 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D071D8C07
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 03:32:56 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id g13so20811649ejb.4
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 03:32:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=FjHVIpwQVF2j9Z1J3pzN5aGfezd4ZG1gp/yXo52Doyk=;
-        b=XFmDGucF/OcegOVH0xx/d8n/IGwkExBInzgnH2Lm7dLvoea6vEpiarJprM8axfZYn6
-         xdqdozexD2dH6IbHU5LMU7IS9U+oioxj5yy6DIUWl2cXiOWkfXf0jBRUlbUac9HTVnqB
-         RiOklvCNDaZGnqGSqOn6qqrJh+pq6gQJAqGVe8G1NMAPMjHTihC998Aaq06Jmcc+fcT+
-         iz/U5Gi7FQk1R1FbfVjnYWzi8EXNYk8F+GlASybLnp/xB8AV28jXILYawb2+8Cn5XGAL
-         kLLkAgfNwnWBTuxawnfafuToG52yusZv5V839takuTzRzaFeEZiTEDGv/G0oXano+ONU
-         j+Lg==
+        bh=tsJdL6DJfWiEvwfRIfk97/Nhp/cHKIkCfmyLbxjfN3I=;
+        b=xJC6UTkhkoYanFTTSfhaxHSdEiV/oIP0wsbTBrhXOkIPgQUTqPug4iUH8CQCnWj/GL
+         uKmUB0boeeHlHc+lFTRqU52DV02++d/2gRXjqylTkMywN2d3C8+xKyqk9QE9d7KdeDu1
+         g7/xfcqCKtwZTaYv3F7Pzi+dyWjRSEAkdVByRPdhYH6G9o5rtBbZup13qb3DkaiOVe4K
+         lx8/aU/2EP9t5w0zUB3i+/cmqxdJmn83RABo0rRjrptdhJPTjGe0jOW0D0nDd18kzr7d
+         2UpC2O6MxvPRphoF2cwzrXGMXmHPgVNy7VB/O3tU7WPTGUr8CEXJ2xC/mo3Kik2uNtW/
+         08+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=FjHVIpwQVF2j9Z1J3pzN5aGfezd4ZG1gp/yXo52Doyk=;
-        b=KCTlJkNynU29CGY0k2iS81iCNCEOGuOpqK1owtrkqjYtW9EO5paYyQlyV3HRpxptj3
-         ZVyoXEIQommDlftZ+YPgYDLeFY0CpLlTvzcYcGPWOXHOK75L2YOsC83huyF0KS/JNBwZ
-         S+0Nxbtj+ALrihwndKCtJtqjkuhI8ldU6JPeQNUeKoBGNmKLizoGzs7fd0tRVzVkLMms
-         vprBWwpDFtuWjHRdVNBdjb7vkB1Fo1GczA8POVV0ejg3DxnTBXI4h4t61A2YsJFmQFnN
-         XIvV+sTjewtA9H3Gw87gS8B4WHyVdw7Tr3ZeuAMcjMM2Ddt685/0G4L2+/5oJd664yOu
-         Djpg==
-X-Gm-Message-State: AOAM531xjJ8tckkekqujWsIJ+QxIpoaJncC2WDbCNDQRoPNiV75YtuHu
-        xvnF+LzMYql2RVymtFwA/rQ=
-X-Google-Smtp-Source: ABdhPJypw+C0OHw2I6BBqFjoROXfn7uqBt7/o3BKuV0y5z0fzD6WCOzfmSwCSW856LNxwR99k8GuRg==
-X-Received: by 2002:a05:651c:1781:b0:247:daa7:4358 with SMTP id bn1-20020a05651c178100b00247daa74358mr5186355ljb.477.1650709957430;
-        Sat, 23 Apr 2022 03:32:37 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-138-167.dynamic.spd-mgts.ru. [109.252.138.167])
-        by smtp.googlemail.com with ESMTPSA id m1-20020a2e7101000000b0024f081cb0absm73107ljc.83.2022.04.23.03.32.36
+        bh=tsJdL6DJfWiEvwfRIfk97/Nhp/cHKIkCfmyLbxjfN3I=;
+        b=i/ObwS4sgJoi6X1ffhqRcB2LjzD9Jy3rjF7w2ebxFNsgUtMYujBwf/bGtfirPOwHmg
+         FeOcadHFFtp6pNq3fbcgXMp2AWSvwS2nnFWExoyB8RjlgDp8OhVa5NrY0eZgdCZ7T31L
+         vFdc/JaRZ9ftfIBb75lOar7NcPiVrPfor99JG7sXXZ5gupiEMegRonM1nLuTCKhskfnm
+         SgXzcI6AekGCbtbybX0kfzXSYU+F9djT3pQimqrgFse4yJlij6cfOCQ9hjdZKS21Tjm0
+         FrBI8Iohj7W9MRsem/J6UZg3QgumI4T/4+OhjKc4C2wbZBOxxiPCQjjLZ13c8hId02cK
+         haZA==
+X-Gm-Message-State: AOAM533z7KLciUx2efe/i/tsfMap5SULDTbRTDhvXynpme6x3Ug4JWd4
+        1JGT4efgZxmbKEVYvJS4BNd4Gaf7ZjgUnQ==
+X-Google-Smtp-Source: ABdhPJzw23sr0PxRmACppdsVqcsGW5Xzf11v1G2nenM22VT4mr4skYMBrOi1mXs7vfxYFZbvZTdo1A==
+X-Received: by 2002:a17:907:1b26:b0:6ef:eaca:d2d8 with SMTP id mp38-20020a1709071b2600b006efeacad2d8mr7970655ejc.604.1650709975211;
+        Sat, 23 Apr 2022 03:32:55 -0700 (PDT)
+Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id au9-20020a170907092900b006e8985cc68asm1547842ejc.1.2022.04.23.03.32.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Apr 2022 03:32:36 -0700 (PDT)
-Message-ID: <0ac35b47-720e-ae99-45d2-3f8d63868a1e@gmail.com>
-Date:   Sat, 23 Apr 2022 13:32:35 +0300
+        Sat, 23 Apr 2022 03:32:54 -0700 (PDT)
+Message-ID: <c40a2dad-c7aa-f778-f1ac-971185691950@linaro.org>
+Date:   Sat, 23 Apr 2022 12:32:53 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCHv1 08/19] mmc: sdhci-of-dwcmshc: add reset call back for
- rockchip Socs
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 2/2] arm64: dts: ti: k3-am625-sk: Enable on board
+ peripherals
 Content-Language: en-US
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@lists.collabora.co.uk,
-        Yifeng Zhao <yifeng.zhao@rock-chips.com>, kernel@collabora.com
-References: <20220422170920.401914-1-sebastian.reichel@collabora.com>
- <20220422170920.401914-9-sebastian.reichel@collabora.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <20220422170920.401914-9-sebastian.reichel@collabora.com>
+To:     Vignesh Raghavendra <vigneshr@ti.com>, Nishanth Menon <nm@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>
+References: <20220422065002.387753-1-vigneshr@ti.com>
+ <20220422065002.387753-3-vigneshr@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220422065002.387753-3-vigneshr@ti.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,94 +81,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-22.04.2022 20:09, Sebastian Reichel пишет:
-> From: Yifeng Zhao <yifeng.zhao@rock-chips.com>
+On 22/04/2022 08:50, Vignesh Raghavendra wrote:
+> Add nodes for I2C IO expander, OSPI Flash, Eth PHYs, SD and eMMC that
+> are present on AM625 SK board.
 > 
-> The reset function build in the SDHCI will not reset the logic
-> circuit related to the tuning function, which may cause data
-> reading errors. Resetting the complete SDHCI controller through
-> the reset controller fixes the issue.
-> 
-> Signed-off-by: Yifeng Zhao <yifeng.zhao@rock-chips.com>
-> [rebase]
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+> Reviewed-by: Bryan Brattlof <bb@ti.com>
 > ---
->  drivers/mmc/host/sdhci-of-dwcmshc.c | 28 +++++++++++++++++++++++++++-
->  1 file changed, 27 insertions(+), 1 deletion(-)
+>  arch/arm64/boot/dts/ti/k3-am625-sk.dts | 273 +++++++++++++++++++++++++
+>  1 file changed, 273 insertions(+)
 > 
-> diff --git a/drivers/mmc/host/sdhci-of-dwcmshc.c b/drivers/mmc/host/sdhci-of-dwcmshc.c
-> index bac874ab0b33..d95ae6ca1256 100644
-> --- a/drivers/mmc/host/sdhci-of-dwcmshc.c
-> +++ b/drivers/mmc/host/sdhci-of-dwcmshc.c
-> @@ -15,6 +15,7 @@
->  #include <linux/module.h>
->  #include <linux/of.h>
->  #include <linux/of_device.h>
-> +#include <linux/reset.h>
->  #include <linux/sizes.h>
+> diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk.dts b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
+> index 0de4113ccd5de..5fc35898a1e2e 100644
+> --- a/arch/arm64/boot/dts/ti/k3-am625-sk.dts
+> +++ b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
+> @@ -9,6 +9,7 @@
 >  
->  #include "sdhci-pltfm.h"
-> @@ -63,6 +64,7 @@
->  struct rk3568_priv {
->  	/* Rockchip specified optional clocks */
->  	struct clk_bulk_data rockchip_clks[RK3568_MAX_CLKS];
-> +	struct reset_control *reset;
->  	u8 txclk_tapnum;
->  };
+>  #include <dt-bindings/leds/common.h>
+>  #include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/net/ti-dp83867.h>
+>  #include "k3-am625.dtsi"
 >  
-> @@ -255,6 +257,23 @@ static void dwcmshc_rk3568_set_clock(struct sdhci_host *host, unsigned int clock
->  	sdhci_writel(host, extra, DWCMSHC_EMMC_DLL_STRBIN);
->  }
+>  / {
+> @@ -17,6 +18,12 @@ / {
 >  
-> +static void rk35xx_sdhci_reset(struct sdhci_host *host, u8 mask)
-> +{
-> +	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-> +	struct dwcmshc_priv *dwc_priv = sdhci_pltfm_priv(pltfm_host);
-> +	struct rk35xx_priv *priv = dwc_priv->priv;
+>  	aliases {
+>  		serial2 = &main_uart0;
+> +		mmc0 = &sdhci0;
+> +		mmc1 = &sdhci1;
+> +		mmc2 = &sdhci2;
+> +		spi0 = &ospi0;
+> +		ethernet0 = &cpsw_port1;
+> +		ethernet1 = &cpsw_port2;
+>  	};
+>  
+>  	chosen {
+> @@ -87,6 +94,33 @@ vcc_3v3_sys: regulator-2 {
+>  		regulator-boot-on;
+>  	};
+>  
+> +	vdd_mmc1: fixed-regulator-sd {
+
+Don't encode the type of binding into node name. Node name should be
+generic, so either regulator-0 or regulator-sd.
+
+> +		/* TPS22918DBVR */
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vdd_mmc1";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		regulator-boot-on;
+> +		enable-active-high;
+> +		vin-supply = <&vcc_3v3_sys>;
+> +		gpio = <&exp1 3 GPIO_ACTIVE_HIGH>;
+> +	};
 > +
-> +	if (mask & SDHCI_RESET_ALL) {
-> +		if (!IS_ERR_OR_NULL(priv->reset)) {
+> +	vdd_sd_dv: gpio-regulator-TLV71033 {
 
-priv->reset can't be a error ptr since probe fails on error.
+The same + do not mix cases, so regulator-1 or regulator-tlv71033
 
-> +			reset_control_assert(priv->reset);
-> +			udelay(1);
-> +			reset_control_deassert(priv->reset);
-> +		}
-> +	}
-> +
-> +	sdhci_reset(host, mask);
-> +}
-> +
->  static const struct sdhci_ops sdhci_dwcmshc_ops = {
->  	.set_clock		= sdhci_set_clock,
->  	.set_bus_width		= sdhci_set_bus_width,
-> @@ -269,7 +288,7 @@ static const struct sdhci_ops sdhci_dwcmshc_rk3568_ops = {
->  	.set_bus_width		= sdhci_set_bus_width,
->  	.set_uhs_signaling	= dwcmshc_set_uhs_signaling,
->  	.get_max_clock		= sdhci_pltfm_clk_get_max_clock,
-> -	.reset			= sdhci_reset,
-> +	.reset			= rk35xx_sdhci_reset,
->  	.adma_write_desc	= dwcmshc_adma_write_desc,
->  };
->  
-> @@ -292,6 +311,13 @@ static int dwcmshc_rk3568_init(struct sdhci_host *host, struct dwcmshc_priv *dwc
->  	int err;
->  	struct rk3568_priv *priv = dwc_priv->priv;
->  
-> +	priv->reset = devm_reset_control_array_get_exclusive(mmc_dev(host->mmc));
 
-The devm_reset_control_array_get_exclusive() never returns NULL.
-
-The devm_reset_control_array_get_optional_exclusive(() may return NULL
-if reset is missing in DT, perhaps that's what you actually want?
-
-> +	if (IS_ERR_OR_NULL(priv->reset)) {
-> +		err = PTR_ERR(priv->reset);
-
-NULL isn't a error
-
-> +		dev_err(mmc_dev(host->mmc), "failed to get reset control %d\n", err);
-
-dev_err_probe()?
-
+Best regards,
+Krzysztof

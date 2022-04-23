@@ -2,147 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACD9850C78D
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 07:20:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01E2650C78E
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 07:20:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233210AbiDWFV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 01:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55334 "EHLO
+        id S233273AbiDWFWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 01:22:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiDWFVr (ORCPT
+        with ESMTP id S233214AbiDWFVv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 01:21:47 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1DD8D6B1
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 22:18:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650691131; x=1682227131;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GofBlrhL+rqrvpcKXz6vxE+/FzKcz+kTY1qvk15MVuY=;
-  b=adFLrWuAhRqo9GiFZYuB4Hc7bA40v5twSyCwcRLrMdr/kYrV27rFrIq1
-   tWh/j7Hv0Gn0GMFnEl3vN1znl3I4yW2zNm4EJniSnQxtoXwAWld54cAjB
-   7RZOWhaQjY8OzjhdbPXm88azHT2xqwOrJcBwwUjKQYhjfCf7Qt6hKpuwO
-   9XinpQ19/mL7HYP+LJo5Qhb4DBo19HmCs5/DB6KZ3GjuuBKZY2TJAPk2w
-   x03AFhEuCLTQVcK+gwKKp+z/a/u0YgOa2LV5pTBkY75iJ5fXuIJbjwJfm
-   cv0SfOHEPQCwMcIZwa3uW0eypyB3QF/gaFXK6C23FJSKqWmaPg6j82a/3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="265021529"
-X-IronPort-AV: E=Sophos;i="5.90,283,1643702400"; 
-   d="scan'208";a="265021529"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 22:18:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,283,1643702400"; 
-   d="scan'208";a="563329939"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 22 Apr 2022 22:18:46 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ni8AP-000B2v-Jo;
-        Sat, 23 Apr 2022 05:18:45 +0000
-Date:   Sat, 23 Apr 2022 13:17:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Donghai Qiao <dqiao@redhat.com>, akpm@linux-foundation.org,
-        sfr@canb.auug.org.au, arnd@arndb.de, peterz@infradead.org,
-        heying24@huawei.com, andriy.shevchenko@linux.intel.com,
-        axboe@kernel.dk, rdunlap@infradead.org, tglx@linutronix.de,
-        gor@linux.ibm.com
-Cc:     kbuild-all@lists.01.org, donghai.w.qiao@gmail.com,
-        linux-kernel@vger.kernel.org, Donghai Qiao <dqiao@redhat.com>
-Subject: Re: [PATCH v2 11/11] smp: modify up.c to adopt the same format of
- cross CPU call.
-Message-ID: <202204231333.D1x82f1d-lkp@intel.com>
-References: <20220422200040.93813-12-dqiao@redhat.com>
+        Sat, 23 Apr 2022 01:21:51 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8BFB90CCB
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 22:18:55 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id ks6so20030567ejb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 22:18:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=FSLBd1Ysis1ZqaWu6Zoyxjq+Ki98jPbY3SmhIZw4EwE=;
+        b=IV4z1ZP/uQ3FlyiVUNFu/3mdSaYgUs3AVLD2EJxXOf10Lg0S7d+77yfrxIgXsvuUwI
+         lLWLdJzEjCZh/wIRJKdnkQzZ6/zf1P5NTRXokPdvMGcqN3Sl1SU5UFqgoHw473PAU6+I
+         3ydQyK3XcT4yu5SnyaLktw9DBCLcVQh/hjCR5KhVEDIylFrmKHSWM70YeGPCPywt9bwc
+         6GwJJR2halIn7NhwGBihFo7CmLlA6QUJ26SOeK4liFx3K9He1jRWt84r6LAX4CNm8MuS
+         gH515uA9JvcPUHb26ubw4w0NAxlQ+xd87GQ+9fYch8bUGM/R+b4Lt638OI4/0SMXzuTJ
+         9edA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=FSLBd1Ysis1ZqaWu6Zoyxjq+Ki98jPbY3SmhIZw4EwE=;
+        b=NbeBZ9xybHz1PWDAJwwBlo9ZOiXW4a78RDYBMYR+hClgVei1YQfN+IGgjzn74Zasc1
+         WwLFGw5TzMsJTcoe8uUy9uNbNgJOlJl3KoWNl7quJrunQw/c5La9MX5/9HIqfAyfsCcF
+         8sBvP6JT0MkcL3lWdgkVTnETKeB38vIORG/t9XAcsvfiJe4zbzyMKOGitd4f5uLE+Wsi
+         4+gkqNnw3ZZUOrCo8QM/d5TUc+yIfpdMzLLKZjTq3fz1LQAXl1G0DG8pbuXDXVs6AcXd
+         gXEstl7uAhy0wI6G6zygdxO8VVgQQ9Vh43TbZhGVU6OR8TbRKgYrAy95e4ab20o53EDY
+         ZEjg==
+X-Gm-Message-State: AOAM531DaXYr7BkQaaHOsXohNjvEll+KmGqh4QZDsg7Uw2zfc9Vm+dQu
+        G8UlUk3tzNGlO7wezpcR5dIf/zZBG7Ahg5Rxxwe8AyrYpjqhKg==
+X-Google-Smtp-Source: ABdhPJyvc8cz+2ghAyYyfb1+6ZWEzgPG15m+aRsXu6N6K2pkN+1K5j3DYFhxq1eACxb4Nvjpu0UN2IlcK4p4T8n9gHU=
+X-Received: by 2002:a17:906:4794:b0:6f3:7569:77fd with SMTP id
+ cw20-20020a170906479400b006f3756977fdmr829165ejc.266.1650691134325; Fri, 22
+ Apr 2022 22:18:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422200040.93813-12-dqiao@redhat.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Sat, 23 Apr 2022 15:18:43 +1000
+Message-ID: <CAPM=9tx4wRuT7J7ZxVeqQNWYdti8=_x3aPURRFPX1qrjWAw09A@mail.gmail.com>
+Subject: [git pull] drm fixes for 5.18-rc4 (part 2)
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Donghai,
+Hi Linus,
 
-Thank you for the patch! Yet something to improve:
+Maarten was away, so Maxine stepped up and sent me the drm-fixes
+merge, so no point leaving it for another week. The big change is an
+OF revert around bridge/panels, it may have some driver fallout, but
+hopefully this revert gets them shook out in the next week easier.
+Otherwise it's a bunch of locking/refcounts across drivers, a radeon
+dma_resv logic fix and some raspberry pi panel fixes.
 
-[auto build test ERROR on powerpc/next]
-[also build test ERROR on rafael-pm/linux-next linus/master v5.18-rc3]
-[cannot apply to tip/x86/core next-20220422]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Regards,
+Dave.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Donghai-Qiao/smp-cross-CPU-call-interface/20220423-060436
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220423/202204231333.D1x82f1d-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/655b898028ef1555f6bec036db8d4681b551aaa8
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Donghai-Qiao/smp-cross-CPU-call-interface/20220423-060436
-        git checkout 655b898028ef1555f6bec036db8d4681b551aaa8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+drm-fixes-2022-04-23:
+drm fixes for 5.18-rc4 - 2nd part
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+panel:
+- revert of patch that broke panel/bridge issues
 
-All errors (new ones prefixed by >>):
+dma-buf:
+- remove unused header file.
 
-   kernel/up.c: In function 'smp_call_mask':
->> kernel/up.c:50:18: error: 'cpu' undeclared (first use in this function); did you mean 'fpu'?
-      50 |         smp_call(cpu, func, info, type);
-         |                  ^~~
-         |                  fpu
-   kernel/up.c:50:18: note: each undeclared identifier is reported only once for each function it appears in
-   kernel/up.c:44:23: warning: unused variable 'flags' [-Wunused-variable]
-      44 |         unsigned long flags;
-         |                       ^~~~~
-   kernel/up.c: In function 'smp_call_mask_cond':
-   kernel/up.c:80:26: error: 'cpu' undeclared (first use in this function); did you mean 'fpu'?
-      80 |                 smp_call(cpu, func, info, type);
-         |                          ^~~
-         |                          fpu
-   kernel/up.c:76:23: warning: unused variable 'flags' [-Wunused-variable]
-      76 |         unsigned long flags;
-         |                       ^~~~~
-   In file included from include/linux/percpu.h:7,
-                    from include/linux/context_tracking_state.h:5,
-                    from include/linux/hardirq.h:5,
-                    from include/linux/interrupt.h:11,
-                    from kernel/up.c:6:
-   At top level:
-   include/linux/smp.h:131:14: warning: 'seq_type' defined but not used [-Wunused-variable]
-     131 | static char *seq_type[] = {
-         |              ^~~~~~~~
+amdgpu:
+- partial revert of locking change
 
+radeon:
+- fix dma_resv logic inversion
 
-vim +50 kernel/up.c
+panel:
+- pi touchscreen panel init fixes
 
-    41	
-    42	void smp_call_mask(const struct cpumask *mask, smp_call_func_t func, void *info, unsigned int type)
-    43	{
-    44		unsigned long flags;
-    45	
-    46		if (!cpumask_test_cpu(0, mask))
-    47			return;
-    48	
-    49		preempt_disable();
-  > 50		smp_call(cpu, func, info, type);
-    51		preempt_enable();
-    52	}
-    53	EXPORT_SYMBOL(smp_call_mask);
-    54	
+vc4:
+- build fix
+- runtime pm refcount fix
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+vmwgfx:
+- refcounting fix
+The following changes since commit 70da382e1c5b9b2049c10abfd4489a40c1b60df0=
+:
+
+  Merge tag 'drm-msm-fixes-2022-04-20' of
+https://gitlab.freedesktop.org/drm/msm into drm-fixes (2022-04-22
+09:25:47 +1000)
+
+are available in the Git repository at:
+
+  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-04-23
+
+for you to fetch changes up to c18a2a280c073f70569a91ef0d7434d12e66e200:
+
+  Merge tag 'drm-misc-fixes-2022-04-22' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-fixes (2022-04-23
+15:00:44 +1000)
+
+----------------------------------------------------------------
+drm fixes for 5.18-rc4 - 2nd part
+
+panel:
+- revert of patch that broke panel/bridge issues
+
+dma-buf:
+- remove unused header file.
+
+amdgpu:
+- partial revert of locking change
+
+radeon:
+- fix dma_resv logic inversion
+
+panel:
+- pi touchscreen panel init fixes
+
+vc4:
+- build fix
+- runtime pm refcount fix
+
+vmwgfx:
+- refcounting fix
+
+----------------------------------------------------------------
+Bjorn Andersson (2):
+      Revert "drm: of: Properly try all possible cases for
+bridge/panel detection"
+      Revert "drm: of: Lookup if child node has panel or bridge"
+
+Christian K=C3=B6nig (2):
+      drm/radeon: fix logic inversion in radeon_sync_resv
+      drm/amdgpu: partial revert "remove ctx->lock" v2
+
+Dave Airlie (1):
+      Merge tag 'drm-misc-fixes-2022-04-22' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
+
+Dave Stevenson (2):
+      drm/panel/raspberrypi-touchscreen: Avoid NULL deref if not initialise=
+d
+      drm/panel/raspberrypi-touchscreen: Initialise the bridge in prepare
+
+Karol Herbst (1):
+      dma-buf-map: remove renamed header file
+
+Miaoqian Lin (1):
+      drm/vc4: Use pm_runtime_resume_and_get to fix pm_runtime_get_sync() u=
+sage
+
+Zack Rusin (1):
+      drm/vmwgfx: Fix gem refcounting and memory evictions
+
+Zheng Bin (1):
+      drm/vc4: Fix build error when CONFIG_DRM_VC4=3Dy &&
+CONFIG_RASPBERRYPI_FIRMWARE=3Dm
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c             |  21 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c            |   2 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.h            |   1 +
+ drivers/gpu/drm/drm_of.c                           |  84 +++----
+ .../gpu/drm/panel/panel-raspberrypi-touchscreen.c  |  13 +-
+ drivers/gpu/drm/radeon/radeon_sync.c               |   2 +-
+ drivers/gpu/drm/vc4/Kconfig                        |   3 +
+ drivers/gpu/drm/vc4/vc4_dsi.c                      |   2 +-
+ drivers/gpu/drm/vmwgfx/vmwgfx_bo.c                 |  43 ++--
+ drivers/gpu/drm/vmwgfx/vmwgfx_drv.c                |   8 +-
+ drivers/gpu/drm/vmwgfx/vmwgfx_surface.c            |   7 +-
+ include/linux/dma-buf-map.h                        | 266 -----------------=
+----
+ 12 files changed, 94 insertions(+), 358 deletions(-)
+ delete mode 100644 include/linux/dma-buf-map.h

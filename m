@@ -2,108 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E46150CDC0
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 23:31:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9708150CDC3
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 23:37:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233137AbiDWVer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 17:34:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36030 "EHLO
+        id S236352AbiDWVk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 17:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbiDWVeo (ORCPT
+        with ESMTP id S229742AbiDWVkZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 17:34:44 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF98B42DD;
-        Sat, 23 Apr 2022 14:31:47 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 807475C00C3;
-        Sat, 23 Apr 2022 17:31:46 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Sat, 23 Apr 2022 17:31:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1650749506; x=
-        1650835906; bh=Dl4Gnii1lgQ3CuqDwJm6Ada66ZIg7WGp0sT4NijET4g=; b=a
-        /iCwS1IcycZQFMyCZJPXqJBoDi8knnuTpxOkS0QNqrVgcZazrMU6me+qzJsNLN0g
-        6ymzf63HBnh7sRHkkTMA88xBNlbJp2eINv+C1qdAzTJmyAIdjEp1vAKnmchLPkil
-        7st52ELLVULgHo5NZu0PHf1D2m5D9pbJ7e/OBbri412iMIjDydqzPDhnCeBy3Fye
-        kCvbHQFW69gIuWFYSw66bdUHIBG4o6aYlWQFY1U2H15/8J7uwBVLU1m1T8NCuJKi
-        G9Dynumf2p4uBH151PT1+I377f5IJWocFXWCaCQakir9hZF8wd9p5addhVzPeokj
-        gGoXKrbgPzq1+X+ZCdTJg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1650749506; x=1650835906; bh=Dl4Gnii1lgQ3C
-        uqDwJm6Ada66ZIg7WGp0sT4NijET4g=; b=ZuZ36IQxtV8ZTl/R4Zxd9maMIyvZ7
-        EXZAaoMxtOVMr9V5aHrxcgRuwmlJQbcCcwx3K4a1sr2EkeR+W1XZ9GpdfP/iXJDq
-        e8CuChhJWYNmZs/1NJ74bk/gixMYVqePKDZJmTXKqhhLdLpN5YNGPklgAs7CFgx3
-        jecvL+ZdgsOSgYcSClc+z8q87fCGYEuDXL7vrPVdQ2X1TJ+/+cppa66LiWketeJi
-        k3oCUKbNyLr/KL82ie+ADOJA0phfY8ubidGMllxE4V2+ocruJN7Pij+fIX7ShnPR
-        zYroca46yzjTtzkEhaaEsvEOLTDU68LmIcO+fKJqNpgHCISQSrcE8ws+g==
-X-ME-Sender: <xms:QnBkYoicMMF3JgAgfrdn_RWGLmH7gR1nKZRGdGDeycKhfLTvZjtiwA>
-    <xme:QnBkYhDyqnPzxNlHo11Xx2JA3aLf5e0iyTycF0-em6GlpRm8MHKYOr_lkMq7Ly5Q-
-    HMCBoRwf3MTLegI4Q>
-X-ME-Received: <xmr:QnBkYgHJY9NjHB6VYlM_I7nJ0O2SKqlUYMRooXl7oOFfgLDL_DeFGTBhIst_aFnZtOPLTJhnIu-B9Vd9tUetI_jS1OHyJ2XvDCPryJqyX0xhfNl_rSCU-fvKIg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrtdeigdduiedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
-    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpeelteejffdvgeehkedtkeevueeuteffteffhedufeeujedvudef
-    udetieeijeevleenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrh
-    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhl
-    rghnugdrohhrgh
-X-ME-Proxy: <xmx:QnBkYpTn4hefkply-JJGXOGQ47ounA_l8RhQ2Ti16tsud_3Lj_9_RA>
-    <xmx:QnBkYlxWXxhTnheZtbYTuljqn7ym4FAAmMzXMKlFNf5Mi8zKexIk6g>
-    <xmx:QnBkYn4J5e2rIiMkDK4zCY_c3ewmqKyBCWTXVFkkce3MW6QvM6tMPg>
-    <xmx:QnBkYqo3-CBV_-lIBsd-zKdGypplFiTuy9tbwss2TlXeXstM_NKMNw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 23 Apr 2022 17:31:45 -0400 (EDT)
-Subject: Re: [PATCH 03/12] pinctrl: sunxi: add support for R329 R-PIO pin
- controller
-To:     Icenowy Zheng <icenowy@aosc.io>
-Cc:     Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Icenowy Zheng <icenowy@aosc.io>
-References: <20220422140902.1058101-1-icenowy@aosc.io>
- <BYAPR20MB247251E54E05FE4EB315B4C7BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <5365b3af-a8c2-6f20-3ac1-6a4483ae2a52@sholland.org>
-Date:   Sat, 23 Apr 2022 16:31:45 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Sat, 23 Apr 2022 17:40:25 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF111D5660
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 14:37:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650749846; x=1682285846;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=SPXyh5poUdOcTW+Wor5MxtqohioAs576NOvB1FmQ/CY=;
+  b=Q2atSYL4ygv4EiuA8theqXkGuHFQtxSdhusplIXDzdFNRL3O4IlJl38C
+   Rh2/GLmcgWotJWCXTZ0mgGA/vmc1VcTU3e521OU/rl98RpDjpAS1qghql
+   fykKFZ6aVqqLPYwXQEpRH5o9DDHk+c2kZyUL62qQyx1065miVzWmOnobG
+   XCZia5ln5NqRG/p8HoPQfOQ/OwJWoXO8mjhueGS4upOLmb5ZGXMIc9Z31
+   qjxEgA1hgfrc8ZyiZc0xVU6Av2RvzEP/g/fYU6u94XT91D03qbsbFVAnh
+   nthIY6g+UgLpWwtPU8bV9h3gooI39uEICwqfEA6/S99S1uETm93cY5ubw
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="263805485"
+X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
+   d="scan'208";a="263805485"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 14:37:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
+   d="scan'208";a="729063334"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 23 Apr 2022 14:37:25 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1niNRU-0000V7-CP;
+        Sat, 23 Apr 2022 21:37:24 +0000
+Date:   Sun, 24 Apr 2022 05:36:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sebastian Ott <sebott@linux.ibm.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>
+Subject: fmvj18x_cs.c:undefined reference to `ioremap'
+Message-ID: <202204240543.dAVwn7O6-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <BYAPR20MB247251E54E05FE4EB315B4C7BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/22/22 10:41 AM, icenowy@outlook.com wrote:
-> From: Icenowy Zheng <icenowy@aosc.io>
-> 
-> Allwinner R320 SoC has a pin controller in the CPUS power domain.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   13bc32bad7059d6c5671e9d037e6e3ed001cc0f4
+commit: 71ba41c9b1d91042960e9d92a5c8f52dc8531eda s390/pci: provide support for MIO instructions
+date:   3 years ago
+config: s390-buildonly-randconfig-r005-20220424 (https://download.01.org/0day-ci/archive/20220424/202204240543.dAVwn7O6-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=71ba41c9b1d91042960e9d92a5c8f52dc8531eda
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 71ba41c9b1d91042960e9d92a5c8f52dc8531eda
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
-This should be "R329". Also see my comments on the previous version, which still
-apply:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-https://lore.kernel.org/linux-sunxi/e9937a23-8a8a-ebec-0a44-0d15a06b7e89@sholland.org/
+All errors (new ones prefixed by >>):
 
-Regards,
-Samuel
+   s390-linux-ld: drivers/phy/marvell/phy-mvebu-a3700-utmi.o: in function `mvebu_a3700_utmi_phy_probe':
+   phy-mvebu-a3700-utmi.c:(.text+0x41e): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: drivers/tty/ipwireless/main.o: in function `ipwireless_detach':
+   main.c:(.text+0x90): undefined reference to `iounmap'
+   s390-linux-ld: main.c:(.text+0xd4): undefined reference to `iounmap'
+   s390-linux-ld: drivers/tty/ipwireless/main.o: in function `config_ipwireless':
+   main.c:(.text+0x262): undefined reference to `iounmap'
+   s390-linux-ld: main.c:(.text+0x2a0): undefined reference to `iounmap'
+   s390-linux-ld: drivers/tty/ipwireless/main.o: in function `ipwireless_probe.part.0':
+   main.c:(.text+0x53a): undefined reference to `ioremap'
+   s390-linux-ld: main.c:(.text+0x5f6): undefined reference to `iounmap'
+   s390-linux-ld: main.c:(.text+0x62c): undefined reference to `ioremap'
+   s390-linux-ld: main.c:(.text+0x676): undefined reference to `iounmap'
+   s390-linux-ld: drivers/char/hw_random/exynos-trng.o: in function `exynos_trng_probe':
+   exynos-trng.c:(.text+0x240): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: drivers/char/hw_random/meson-rng.o: in function `meson_rng_probe':
+   meson-rng.c:(.text+0x82): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: drivers/char/hw_random/mtk-rng.o: in function `mtk_rng_probe':
+   mtk-rng.c:(.text+0x274): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: drivers/net/ethernet/fujitsu/fmvj18x_cs.o: in function `fmvj18x_get_hwinfo':
+>> fmvj18x_cs.c:(.text+0xd0c): undefined reference to `ioremap'
+>> s390-linux-ld: fmvj18x_cs.c:(.text+0xd56): undefined reference to `iounmap'
+   s390-linux-ld: fmvj18x_cs.c:(.text+0xde0): undefined reference to `iounmap'
+   s390-linux-ld: drivers/net/ethernet/fujitsu/fmvj18x_cs.o: in function `fmvj18x_config':
+   fmvj18x_cs.c:(.text+0xf7e): undefined reference to `ioremap'
+   s390-linux-ld: fmvj18x_cs.c:(.text+0x10ae): undefined reference to `iounmap'
+   s390-linux-ld: fmvj18x_cs.c:(.text+0x145e): undefined reference to `iounmap'
+   s390-linux-ld: drivers/net/ethernet/fujitsu/fmvj18x_cs.o: in function `fmvj18x_detach':
+>> fmvj18x_cs.c:(.text+0x15d8): undefined reference to `iounmap'
+   s390-linux-ld: drivers/net/ethernet/xircom/xirc2ps_cs.o: in function `xirc2ps_detach':
+   xirc2ps_cs.c:(.text+0xe48): undefined reference to `iounmap'
+   s390-linux-ld: drivers/net/ethernet/xircom/xirc2ps_cs.o: in function `xirc2ps_config':
+   xirc2ps_cs.c:(.text+0x19a8): undefined reference to `ioremap'
+>> s390-linux-ld: xirc2ps_cs.c:(.text+0x1b20): undefined reference to `iounmap'
+   s390-linux-ld: drivers/pcmcia/cistpl.o: in function `set_cis_map':
+   cistpl.c:(.text+0x222): undefined reference to `iounmap'
+   s390-linux-ld: cistpl.c:(.text+0x234): undefined reference to `ioremap'
+   s390-linux-ld: cistpl.c:(.text+0x286): undefined reference to `ioremap'
+   s390-linux-ld: cistpl.c:(.text+0x29c): undefined reference to `iounmap'
+   s390-linux-ld: drivers/pcmcia/cistpl.o: in function `release_cis_mem':
+   cistpl.c:(.text+0xd06): undefined reference to `iounmap'
+   s390-linux-ld: drivers/crypto/ccree/cc_driver.o: in function `init_cc_resources':
+   cc_driver.c:(.text+0x326): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: drivers/crypto/ccree/cc_debugfs.o: in function `cc_debugfs_init':
+   cc_debugfs.c:(.text+0xcc): undefined reference to `debugfs_create_regset32'
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

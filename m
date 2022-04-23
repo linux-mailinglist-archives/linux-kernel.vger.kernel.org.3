@@ -2,102 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A17350CD06
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 20:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF45550CD08
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 20:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236775AbiDWSvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 14:51:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52558 "EHLO
+        id S236810AbiDWSv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 14:51:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiDWSvn (ORCPT
+        with ESMTP id S236806AbiDWSvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 14:51:43 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29801C5E29
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 11:48:44 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id g9so9994289pgc.10
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 11:48:44 -0700 (PDT)
+        Sat, 23 Apr 2022 14:51:53 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B371C5E34
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 11:48:54 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id z99so14066035ede.5
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 11:48:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UUb+ppLFoogYwaTmCBdznH5CdpGbI76fYVRaRMz3mZY=;
-        b=LqTp+ahzDUi8OG8Tezrr0Q3SfgqNt7jmuPYJhWCTvWArypx7loPGZE8E77ri8gcwMc
-         6NSMN/Wr8C4LWJOqzcS0vbQHe6TXARhDo3QN1zMNiapcl62aFdeF7Wwuo19uoeSqJjoD
-         kQD0z6BIEyitPcu+mgCh0704ol93oXQB1f0XUqhAYaC6LO+SeW4Eg3hWeq3lUaWd9j61
-         2g3U4fh5XHV3fWgQaEUdWIRDf4fNxEuYOzJQi9TQydTX4QqjMIWe83wNP4LJQrtrL5C3
-         1humejQSw7/42jtOc+uUgQ1P9/G59M320ElSp0cdeJWQlXRxXLxElMMHNUAU6e1usr+b
-         pwfg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=cn6XbdSV75AzJUqDkArX7N9Qwi67g268+E4pm2dewqo=;
+        b=nll2PAJt9YMO/U59Hz37tDWVllasTrAyD3eCrwHBbN7g69GupF5QvhZK7r47s73zmv
+         lKM4M1IM0d6ouCQjoWcZ1EoMFOjNhw1IeQBYzMihZv+a/tL2BUhoZsokr1KtK4ydPrAX
+         fl2txqmjV93IWaFB0D2Ed3IwG/ZIaoM7ekdzjWGlK1X35Cm2dWCJtH1EWaIVquFWTMfy
+         BetrPYvG9XNYTs6dKEG8M0Msy8Um5erafxbhRp0dtjazpFdSBXfTpMU7SxeCfPVWexVI
+         oFN9xoJ3h+FV4xTYC5tur8a0iPICcTpTC+qpQbCoWsHI61wxqTDriiRf9iZ7n1bbk6hY
+         BGFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=UUb+ppLFoogYwaTmCBdznH5CdpGbI76fYVRaRMz3mZY=;
-        b=dvnlTZZ669qkrLO1pQfbW/QJ3jMzcA3qin6f8B63Y93x3PTRHHYOGlAVq94M6h32P0
-         34rXDZLtGr4mSsidhQ7d98D8BPVlFtxSpiuN6+LZf8La3RZJCikgqmkDhDHKAZmEPvvX
-         7S9X0mJqcKhDFvmdYoRwr5PW6UgcG290hKSvwkWWe7Jml7u0ze7NZbM1l4vegZDkNTV8
-         Quizo7fwSvPKejtTImqAHmYQwyBJ2D/Kooi/v+i8BwCbJ+4xBxwYymKmcAtlpv25wxMq
-         Vp7NCjR7PqgJ+RHSTR4rAizh0vlrqhmvfj9Dn3GkXgwF/g6JLniUCU1sV+KkktSK06yW
-         ERHg==
-X-Gm-Message-State: AOAM533rPlECGCD7tKEouUegT5hcoCzUu0vrwMtZjKxyXkDh4ql2lelm
-        ryLGGDvAIFYrA+fSRAIG790=
-X-Google-Smtp-Source: ABdhPJwqDzYgIhXoXKNro0nwo9XbCmjvIts0kZXsSLVI6Kcteoyp0FInfGeAHPBDV1Fi5EG4u0z5xw==
-X-Received: by 2002:a63:4a09:0:b0:382:597:3d0d with SMTP id x9-20020a634a09000000b0038205973d0dmr8783928pga.18.1650739724308;
-        Sat, 23 Apr 2022 11:48:44 -0700 (PDT)
-Received: from makvihas.localhost.com ([2405:201:202b:15:bc6e:cece:6009:3520])
-        by smtp.gmail.com with ESMTPSA id 124-20020a621982000000b0050a73577a37sm6529113pfz.45.2022.04.23.11.48.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 11:48:44 -0700 (PDT)
-From:   Vihas Makwana <makvihas@gmail.com>
-To:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Straube <straube.linux@gmail.com>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Vihas Makwana <makvihas@gmail.com>
-Subject: [PATCH] staging: r8188eu: fix a potential NULL pointer dereference
-Date:   Sun, 24 Apr 2022 00:17:48 +0530
-Message-Id: <20220423184745.21134-1-makvihas@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        bh=cn6XbdSV75AzJUqDkArX7N9Qwi67g268+E4pm2dewqo=;
+        b=QQeJZkkNMEpyAdscd/zoxOhaRQnISD5WPUIm75eEEIJBvvBfv/O3rIYfMJkroIflaI
+         InAHY3cjNYk9xvOY+fA8YnL8Qy2ur/2oMQENiOX981q6t8mhsSyAJ+GtX79NOtfqKaMa
+         hRCS/cJP9xnPFgKJQnRQpZgmBBohUDgf5cQIXBEhvMrRbn6Cs9RXbTdfATu6qgymGDEx
+         IfrOBn4W+NHEi6LxWgib0x2l5dH+DRK7OEubTh8D9BcEgpAaUxNmbprHWcCdEKoCJbPv
+         5LGYPY8nxtkpgSHzN4uZwTy6bvgZP7BGKpCMTnDttHFQcS3GKiEEMBo5imaJsAz6mTpb
+         aDeg==
+X-Gm-Message-State: AOAM532mPLaLCCmVIzPj4ztXquopsjwwmgBHqPUmmiGxoHZe3xoW44Dm
+        7OqneKiVBRZHT0Za0tYPJ8cSKPVD1HU+1Q==
+X-Google-Smtp-Source: ABdhPJxqvrPTE82vaER+vS4BSUdN4v+0Gf2elep3T/QIBc2ZZd1aa8/RuntBcjoHt4V0LrYFGGNoZA==
+X-Received: by 2002:a50:e70f:0:b0:425:da3c:4731 with SMTP id a15-20020a50e70f000000b00425da3c4731mr683754edn.223.1650739733391;
+        Sat, 23 Apr 2022 11:48:53 -0700 (PDT)
+Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id l2-20020a50c102000000b0042423e1328fsm2445889edf.26.2022.04.23.11.48.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 23 Apr 2022 11:48:53 -0700 (PDT)
+Message-ID: <24d1c786-17e5-bd70-df7f-55cff045df7f@linaro.org>
+Date:   Sat, 23 Apr 2022 20:48:52 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        NO_RDNS_DOTCOM_HELO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] dt-bindings: i3c: Convert cdns,i3c-master to DT schema
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Przemys=c5=82aw_Gaj?= <pgaj@cadence.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Boris Brezillon <bbrezillon@kernel.org>
+Cc:     linux-i3c@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220422192224.2594098-1-robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220422192224.2594098-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-recvframe_chk_defrag() performs a NULL check on psta, but if that check
-fails then it dereferences it, which it shouldn't do as psta is NULL.
+On 22/04/2022 21:22, Rob Herring wrote:
 
-Set pdefrag_q to NULL if above check fails and let the code after it handle
-that case.
+(...)
 
-Fixes: 1cc18a22b96b ("staging: r8188eu: Add files for new driver - part 5")
-Signed-off-by: Vihas Makwana <makvihas@gmail.com>
----
- drivers/staging/r8188eu/core/rtw_recv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> diff --git a/Documentation/devicetree/bindings/i3c/cdns,i3c-master.yaml b/Documentation/devicetree/bindings/i3c/cdns,i3c-master.yaml
+> new file mode 100644
+> index 000000000000..cc40d25358ec
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/i3c/cdns,i3c-master.yaml
+> @@ -0,0 +1,60 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/i3c/cdns,i3c-master.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Cadence I3C master block
+> +
+> +maintainers:
+> +  - Boris Brezillon <bbrezillon@kernel.org>
+> +
+> +allOf:
+> +  - $ref: i3c.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: cdns,i3c-master
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 2
+> +
+> +  clock-names:
+> +    items:
+> +      - const: pclk
+> +      - const: sysclk
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - interrupts
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    i3c-master@d040000 {
+> +        compatible = "cdns,i3c-master";
+> +        clocks = <&coreclock>, <&i3csysclock>;
+> +        clock-names = "pclk", "sysclk";
+> +        interrupts = <3 0>;
 
-diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
-index c1005ddaa..db54bceff 100644
---- a/drivers/staging/r8188eu/core/rtw_recv.c
-+++ b/drivers/staging/r8188eu/core/rtw_recv.c
-@@ -1244,7 +1244,7 @@ struct recv_frame *recvframe_chk_defrag(struct adapter *padapter, struct recv_fr
- 			pdefrag_q = NULL;
- 		}
- 	} else {
--		pdefrag_q = &psta->sta_recvpriv.defrag_q;
-+		pdefrag_q = NULL;
- 	}
- 
- 	if ((ismfrag == 0) && (fragnum == 0))
--- 
-2.30.2
+There is a chance this is IRQ_TYPE_NONE and should be something more
+reasonable, but without DTS example we might not know.
 
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof

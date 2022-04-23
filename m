@@ -2,162 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AC3250C9D4
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 14:15:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED7E250C9D7
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 14:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235354AbiDWMR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 08:17:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52952 "EHLO
+        id S235394AbiDWMTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 08:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231537AbiDWMRz (ORCPT
+        with ESMTP id S234127AbiDWMTI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 08:17:55 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF031117B
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 05:14:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650716097; x=1682252097;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=x2JhaNUGEE1bYv058u4DhdJPR8UuSZ3lRm2m5MV7ljE=;
-  b=ZKb1LNSTYtV104uk76oIBBQM95K1QUOg52ykcQj6u7WMwgxy7DXC2PWe
-   ehcMw2NNECG6MpYbGrDcvgMXyduEwNj064c+68aEQyeAXq93U41QmFJxb
-   zF2+T2CodqNLFPtiRXr+sQIsL+QPswXNnolL1MirOYLHe9cvqqD0CMGCE
-   rjvny8E5iAcg/XjSaeU5x5F3YCmUvNhEY9tuW3w4sZVJ7A0vWiZPKKB5J
-   TV4pUKSsWYLGDWFzGbsh2nRjPTMxzyJYVnvZ8VDBWli+nKqiTmt8/8TSe
-   jZ6y5f1aMQ4Uq1kFUcskaGr41wuR9uDWhQ511m6r/+jry6u9dUC3D5boi
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="290017170"
-X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
-   d="scan'208";a="290017170"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 05:14:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
-   d="scan'208";a="627356011"
-Received: from lkp-server01.sh.intel.com (HELO dd58949a6e39) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 23 Apr 2022 05:14:56 -0700
-Received: from kbuild by dd58949a6e39 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1niEf9-0000GV-BC;
-        Sat, 23 Apr 2022 12:14:55 +0000
-Date:   Sat, 23 Apr 2022 20:14:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 1926/2579]
- drivers/mfd/intel_soc_pmic_core.c:70:9: error: implicit declaration of
- function 'irq_domain_update_bus_token'
-Message-ID: <202204232025.hMR56x14-lkp@intel.com>
+        Sat, 23 Apr 2022 08:19:08 -0400
+Received: from euporie.uberspace.de (euporie.uberspace.de [185.26.156.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A257C16A
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 05:16:09 -0700 (PDT)
+Received: (qmail 10142 invoked by uid 989); 23 Apr 2022 12:16:07 -0000
+Authentication-Results: euporie.uberspace.de;
+        auth=pass (plain)
+Date:   Sat, 23 Apr 2022 14:15:57 +0200
+From:   Florian Fischer <florian.fischer@muhq.space>
+To:     Namhyung Kim <namhyung@gmail.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>
+Subject: Re: [PATCHSET v4 next 0/3] perf stat: add user_time and system_time
+ tool events
+Message-ID: <20220423121557.z5gzbqadonmrg6ef@pasture>
+References: <20220420102354.468173-1-florian.fischer@muhq.space>
+ <YmA48V09iBbqy6su@kernel.org>
+ <CAM9d7cjcA0aYC1otY4WvCJ_h71P9wiHu42GK7iyv3=i01rQ26Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAM9d7cjcA0aYC1otY4WvCJ_h71P9wiHu42GK7iyv3=i01rQ26Q@mail.gmail.com>
+X-Rspamd-Bar: /
+X-Rspamd-Report: MIME_GOOD(-0.1) MID_RHS_NOT_FQDN(0.5) BAYES_HAM(-0.639367)
+X-Rspamd-Score: -0.239367
+Received: from unknown (HELO unkown) (::1)
+        by euporie.uberspace.de (Haraka/2.8.28) with ESMTPSA; Sat, 23 Apr 2022 14:16:07 +0200
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
+        MSGID_FROM_MTA_HEADER,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   49e1ec6c70a6eb4b7de9250a455b8b63eb42afbe
-commit: 762e2c31017f8004327c678d499aa24693a9d465 [1926/2579] headers/deps: ACPI: Optimize <linux/acpi.h> dependencies, remove <linux/irqdomain.h> inclusion
-config: x86_64-randconfig-a015 (https://download.01.org/0day-ci/archive/20220423/202204232025.hMR56x14-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=762e2c31017f8004327c678d499aa24693a9d465
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 762e2c31017f8004327c678d499aa24693a9d465
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On 22.04.2022 16:52, Namhyung Kim wrote:
+> Hello,
+> 
+> On Fri, Apr 22, 2022 at 3:05 PM Arnaldo Carvalho de Melo
+> <acme@kernel.org> wrote:
+> >
+> > Em Wed, Apr 20, 2022 at 12:23:51PM +0200, Florian Fischer escreveu:
+> > > This patch series adds new internal events to perf stat exposing the times spend
+> > > in user and kernel mode in nanoseconds reported by rusage.
+> > >
+> > > During some benchmarking using perf it bothered me that I could not easily
+> > > retrieve those times from perf stat when using the machine readable output.
+> > >
+> > > But perf definitely knows about those values because in the human readable output
+> > > they are present.
+> > >
+> > > Therefore I exposed the times reported by rusage via the new tool events:
+> > > user_time and system_time.
+> > >
+> > > This allows to retrieved them in machine-readable output:
+> > >
+> > > $ ./perf stat -x, -e duration_time,user_time,system_time,cache-misses -- grep -q -r duration_time tools/perf
+> > > 72134524,ns,duration_time:u,72134524,100.00,,
+> > > 65225000,ns,user_time:u,65225000,100.00,,
+> > > 6865000,ns,ssystem_time:u,6865000,100.00,,
+> 
+> ssystem?  Looks like a typo.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Yes thanks. Fortunately I fixed it in the commit that got applied [1].
 
-All errors (new ones prefixed by >>):
+> 
+> Anyway it looks a little bit strange to me if we can get
+> system time in user mode only (the 'u' modifier).
 
-   drivers/mfd/intel_soc_pmic_core.c: In function 'intel_soc_pmic_i2c_probe':
->> drivers/mfd/intel_soc_pmic_core.c:70:9: error: implicit declaration of function 'irq_domain_update_bus_token' [-Werror=implicit-function-declaration]
-      70 |         irq_domain_update_bus_token(regmap_irq_get_domain(pmic->irq_chip_data),
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/mfd/intel_soc_pmic_core.c:71:37: error: 'DOMAIN_BUS_NEXUS' undeclared (first use in this function)
-      71 |                                     DOMAIN_BUS_NEXUS);
-         |                                     ^~~~~~~~~~~~~~~~
-   drivers/mfd/intel_soc_pmic_core.c:71:37: note: each undeclared identifier is reported only once for each function it appears in
-   cc1: some warnings being treated as errors
+Sorry but I don't really understand what you mean.
+The system_time is reported to userspace via rusage filled by wait4(2).
+It will always report the value reported to the user space regardless of what
+counters perf has access to.
 
+If you run perf as user you get the same system_time (but with the ':u' suffix)
+as when you run perf as root or lower kernel.perf_event_paranoid to allow access
+to more counters.
 
-vim +/irq_domain_update_bus_token +70 drivers/mfd/intel_soc_pmic_core.c
+$ perf stat -x, -e system_time sync
+31246000,ns,system_time:u,31246000,100.00,,
 
-a3aa9a93df9fc8 Shobhit Kumar   2015-06-26  29  
-5165238460068e Zhu, Lejun      2014-06-03  30  static int intel_soc_pmic_i2c_probe(struct i2c_client *i2c,
-5165238460068e Zhu, Lejun      2014-06-03  31  				    const struct i2c_device_id *i2c_id)
-5165238460068e Zhu, Lejun      2014-06-03  32  {
-5165238460068e Zhu, Lejun      2014-06-03  33  	struct device *dev = &i2c->dev;
-5165238460068e Zhu, Lejun      2014-06-03  34  	struct intel_soc_pmic_config *config;
-5165238460068e Zhu, Lejun      2014-06-03  35  	struct intel_soc_pmic *pmic;
-5165238460068e Zhu, Lejun      2014-06-03  36  	int ret;
-5165238460068e Zhu, Lejun      2014-06-03  37  
-5b78223f55a0f5 Hans de Goede   2021-12-06  38  	if (soc_intel_is_byt())
-b01e9348e10654 Hans de Goede   2017-09-04  39  		config = &intel_soc_pmic_config_byt_crc;
-5b78223f55a0f5 Hans de Goede   2021-12-06  40  	else
-b01e9348e10654 Hans de Goede   2017-09-04  41  		config = &intel_soc_pmic_config_cht_crc;
-5165238460068e Zhu, Lejun      2014-06-03  42  
-5165238460068e Zhu, Lejun      2014-06-03  43  	pmic = devm_kzalloc(dev, sizeof(*pmic), GFP_KERNEL);
-0a65fbf64dad89 Kiran Padwal    2015-02-11  44  	if (!pmic)
-0a65fbf64dad89 Kiran Padwal    2015-02-11  45  		return -ENOMEM;
-0a65fbf64dad89 Kiran Padwal    2015-02-11  46  
-5165238460068e Zhu, Lejun      2014-06-03  47  	dev_set_drvdata(dev, pmic);
-5165238460068e Zhu, Lejun      2014-06-03  48  
-5165238460068e Zhu, Lejun      2014-06-03  49  	pmic->regmap = devm_regmap_init_i2c(i2c, config->regmap_config);
-db43b8d04d7a9f Pan Bian        2017-04-23  50  	if (IS_ERR(pmic->regmap))
-db43b8d04d7a9f Pan Bian        2017-04-23  51  		return PTR_ERR(pmic->regmap);
-db43b8d04d7a9f Pan Bian        2017-04-23  52  
-159ee7578a7453 Andy Shevchenko 2017-02-21  53  	pmic->irq = i2c->irq;
-5165238460068e Zhu, Lejun      2014-06-03  54  
-5165238460068e Zhu, Lejun      2014-06-03  55  	ret = regmap_add_irq_chip(pmic->regmap, pmic->irq,
-5165238460068e Zhu, Lejun      2014-06-03  56  				  config->irq_flags | IRQF_ONESHOT,
-5165238460068e Zhu, Lejun      2014-06-03  57  				  0, config->irq_chip,
-5165238460068e Zhu, Lejun      2014-06-03  58  				  &pmic->irq_chip_data);
-5165238460068e Zhu, Lejun      2014-06-03  59  	if (ret)
-5165238460068e Zhu, Lejun      2014-06-03  60  		return ret;
-5165238460068e Zhu, Lejun      2014-06-03  61  
-5165238460068e Zhu, Lejun      2014-06-03  62  	ret = enable_irq_wake(pmic->irq);
-5165238460068e Zhu, Lejun      2014-06-03  63  	if (ret)
-5165238460068e Zhu, Lejun      2014-06-03  64  		dev_warn(dev, "Can't enable IRQ as wake source: %d\n", ret);
-5165238460068e Zhu, Lejun      2014-06-03  65  
-a3aa9a93df9fc8 Shobhit Kumar   2015-06-26  66  	/* Add lookup table for crc-pwm */
-a3aa9a93df9fc8 Shobhit Kumar   2015-06-26  67  	pwm_add_table(crc_pwm_lookup, ARRAY_SIZE(crc_pwm_lookup));
-a3aa9a93df9fc8 Shobhit Kumar   2015-06-26  68  
-f49f43371b8a68 Hans de Goede   2021-12-25  69  	/* To distuingish this domain from the GPIO/charger's irqchip domains */
-f49f43371b8a68 Hans de Goede   2021-12-25 @70  	irq_domain_update_bus_token(regmap_irq_get_domain(pmic->irq_chip_data),
-f49f43371b8a68 Hans de Goede   2021-12-25 @71  				    DOMAIN_BUS_NEXUS);
-f49f43371b8a68 Hans de Goede   2021-12-25  72  
-5165238460068e Zhu, Lejun      2014-06-03  73  	ret = mfd_add_devices(dev, -1, config->cell_dev,
-5165238460068e Zhu, Lejun      2014-06-03  74  			      config->n_cell_devs, NULL, 0,
-5165238460068e Zhu, Lejun      2014-06-03  75  			      regmap_irq_get_domain(pmic->irq_chip_data));
-5165238460068e Zhu, Lejun      2014-06-03  76  	if (ret)
-5165238460068e Zhu, Lejun      2014-06-03  77  		goto err_del_irq_chip;
-5165238460068e Zhu, Lejun      2014-06-03  78  
-5165238460068e Zhu, Lejun      2014-06-03  79  	return 0;
-5165238460068e Zhu, Lejun      2014-06-03  80  
-5165238460068e Zhu, Lejun      2014-06-03  81  err_del_irq_chip:
-5165238460068e Zhu, Lejun      2014-06-03  82  	regmap_del_irq_chip(pmic->irq, pmic->irq_chip_data);
-5165238460068e Zhu, Lejun      2014-06-03  83  	return ret;
-5165238460068e Zhu, Lejun      2014-06-03  84  }
-5165238460068e Zhu, Lejun      2014-06-03  85  
+# perf stat -x, -e system_time sync
+33794000,ns,system_time,33794000,100.00,,
 
-:::::: The code at line 70 was first introduced by commit
-:::::: f49f43371b8a680c5972d052598d7c120f1a05d3 mfd: intel_soc_pmic_crc: Set main IRQ domain bus token to DOMAIN_BUS_NEXUS
+> 
+> Thanks,
+> Namhyung
+> 
 
-:::::: TO: Hans de Goede <hdegoede@redhat.com>
-:::::: CC: Lee Jones <lee.jones@linaro.org>
+Flo Fischer
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/commit/?h=tmp.perf/core&id=b03b89b350034f220cc24fc77c56990a97a796b2

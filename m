@@ -2,141 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3365E50CC9D
+	by mail.lfdr.de (Postfix) with ESMTP id 7B4D450CC9E
 	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 19:34:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236621AbiDWRf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 13:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53708 "EHLO
+        id S236634AbiDWRgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 13:36:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236609AbiDWRf6 (ORCPT
+        with ESMTP id S231447AbiDWRgu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 13:35:58 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3399E1A61EF
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 10:33:00 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id t13so9902855pgn.8
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 10:33:00 -0700 (PDT)
+        Sat, 23 Apr 2022 13:36:50 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F6C1B58DB
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 10:33:53 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id u15so21957747ejf.11
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 10:33:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xxYgAVRvbeskBRCc62b6dd1b3P0m/iQAjdEflJjZwEw=;
-        b=cIGzVuvaHPW/VLTUuGNP05j8jEVx31lmj/3qbzCRsPPrbTPeSt32R9NgmplRr+LV2v
-         TPG/LcGufNFw0M7teCiF+6fVAYn4/IZUkzhvU151c+DtN5zNP6ijWWFEX0r7a0X7hpZ6
-         xO3b46N9BlD5HOH/6KjSBgqpCWBJDeBsMQZmm79J4gye6fRcxGTlCl4dKaFf6y1mAURp
-         E5R7bt7AOI4nxW4Mui2PMh/dI9vZ6rNafeuVBGnANyufcFvtdgr6zL9cseyBu2DWlLef
-         OiFipnPqxqKTZqc5cVuZn5+/7HX/WRUNoR6ULhHbqgV/g2kNVB4EiarR81JxPDgXZFsx
-         xVNQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=FPklBFUlmlWqLuVXy6B+3oKrHAPe2W9KYrCbAlopSxY=;
+        b=Zuuez3XAG2sU2i49PzW0etiCIynSqpbW3ktuqETkfLxBpXyIiXUrXiySHh6pUPgGyM
+         GmBuLANXqoDcyR3ohe5bGooD+QYC79g1wUODctvs8FwQNzdWYVLNXgvJ11xC0bGOE5/S
+         AUIaoaIceXAoEhdJx7ZkD2+lYtQs9jhGgN1WjSXCtgP9Y1+6RyaSt+7/+GTs2WXYyKmN
+         x3Yyky6bF2Iux6CzpZyL/LYOmbDoIQco1JR80MEo8v8XR6+JcZy7kbQVDHf4rB77BLde
+         Tque5KqfFReQpNf01t39lCrERDCKR6xSgMqpssRHbJsT/wMURpiJhiSL/3BBh/yj0TRF
+         p5BA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xxYgAVRvbeskBRCc62b6dd1b3P0m/iQAjdEflJjZwEw=;
-        b=Mn1m45HYHnTr6FssVjGEshMujpphGXyGgTmuZNxpxe8yY6wZ4rE6vFIsR8l9J+EXZN
-         wlVo4fTY/xkC0rw7hv/daOXnd9cH1kwoKI2gdNkXRxQUJ9yCz5aTB+RvMoIuGISOTe4Q
-         DA8eBl2PMxwdJMq4/akd4WZjLY5Pe932X/yzdQUGmeKYYJyZgX3lkJnwk2pqKDKYIdE8
-         7Ehm8OQGtZzWsdgVNOR8ux1naTl6YIpOAbAvhzCg0deuBUp1h2xmFdDfghLOPeIicB+k
-         cCcbaSnC2UPqTvEpCiPWOae0wFqQKCasuAiEti1wZA4ruYeX2XGgC2XXEU/NWPd24NIf
-         WFhQ==
-X-Gm-Message-State: AOAM531q/EBwBcwQg4fWWWEUm7I+XTG7hr3vfYJ1+P1NCDKYaCZqbquY
-        dgStzHFKGkLCPEEQaZJr4ORA0iuI/ppEXWdca5YclA==
-X-Google-Smtp-Source: ABdhPJy0mhTUMjh9InWAjD5l2gEPa+UaJvVCIFLNzGQ3RNZPm0s50yYnG9o8IIvsa9ZqP9/kYJI8dbG4WyP4ubzay9s=
-X-Received: by 2002:a05:6a02:283:b0:342:703e:1434 with SMTP id
- bk3-20020a056a02028300b00342703e1434mr8647836pgb.74.1650735179515; Sat, 23
- Apr 2022 10:32:59 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=FPklBFUlmlWqLuVXy6B+3oKrHAPe2W9KYrCbAlopSxY=;
+        b=GXj6HA6ySdQyzxzQJ6MBUXJfPY6qZxZ6pdLGk/7cg6+W9qI1yxgk9j+Xk7c9cv+JdV
+         +4xUk5vVaiG48AXulEGpr6VFGzG8k3FE+yH4dqH4LX3tU9Onx256sa/2FcA58abYI1F6
+         L5N+DCUJZstxXXi3tnrYwFwjgE1w6Vu2XvCWV4RwUq9LAw9IK4SmOFKhCXyfcV6Ox2tI
+         k8vxGqxfdMs3NsbnQI7FvVYdwmRL2RaWSolK8BisdPXMpwBfDWQOyTKREg/kMYxA443C
+         lwFkA0TxbqLksvgxCnKjVROrb2CKLqgNWnGs2JtEItWwPtGARa+jsumtVkmh/UDk8JMK
+         JYUw==
+X-Gm-Message-State: AOAM5305aBasjRd4j75cEfV8DAmvIaHogicLbwzMyD/pQXOHak/0E5ya
+        /HnoJE4bJISBzAklAWa/JDY4Vg==
+X-Google-Smtp-Source: ABdhPJzX1ijLSyZOHOK2ZNoevNPGU8n24ZXLdosWH8eUXrGskF80qQ+kEgwgsJzoxOJwjbMFW0Sh4A==
+X-Received: by 2002:a17:906:99c5:b0:6df:8215:4ccd with SMTP id s5-20020a17090699c500b006df82154ccdmr9278893ejn.684.1650735231609;
+        Sat, 23 Apr 2022 10:33:51 -0700 (PDT)
+Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id a1-20020a1709063e8100b006ce06ed8aa7sm1882903ejj.142.2022.04.23.10.33.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 23 Apr 2022 10:33:51 -0700 (PDT)
+Message-ID: <10d5f3c7-28a0-4337-76d5-b99795b9de9e@linaro.org>
+Date:   Sat, 23 Apr 2022 19:33:49 +0200
 MIME-Version: 1.0
-References: <20220419045045.1664996-1-ruansy.fnst@fujitsu.com>
- <20220421012045.GR1544202@dread.disaster.area> <86cb0ada-208c-02de-dbc9-53c6014892c3@fujitsu.com>
- <CAPcyv4i0Noum8hqHtCpdM5HMVdmNHm3Aj2JCnZ+KZLgceiXYaA@mail.gmail.com>
- <20220421043502.GS1544202@dread.disaster.area> <YmDxs1Hj4H/cu2sd@infradead.org>
- <20220421074653.GT1544202@dread.disaster.area> <CAPcyv4jj_Z+P4BuC6EXXrzbVr1uHomQVu1A+cq55EFnSGmP7cQ@mail.gmail.com>
- <20220423000121.GH1544202@dread.disaster.area>
-In-Reply-To: <20220423000121.GH1544202@dread.disaster.area>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Sat, 23 Apr 2022 10:32:48 -0700
-Message-ID: <CAPcyv4h0wv3ecXP3q2QM2gnpxMggb7XJoJZcFdJD-xJ==mRGFg@mail.gmail.com>
-Subject: Re: [PATCH v13 0/7] fsdax: introduce fs query to support reflink
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Shiyang Ruan <ruansy.fnst@fujitsu.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux MM <linux-mm@kvack.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Jane Chu <jane.chu@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 3/3] arm64: dts: rockchip: Add vdec support for RK3328
+Content-Language: en-US
+To:     Christopher Obbard <chris.obbard@collabora.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Alex Bee <knaerzche@gmail.com>,
+        Elaine Zhang <zhangqing@rock-chips.com>
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+References: <20220422133803.989256-1-chris.obbard@collabora.com>
+ <20220422133803.989256-4-chris.obbard@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220422133803.989256-4-chris.obbard@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 5:02 PM Dave Chinner <david@fromorbit.com> wrote:
->
-> On Fri, Apr 22, 2022 at 02:27:32PM -0700, Dan Williams wrote:
-> > On Thu, Apr 21, 2022 at 12:47 AM Dave Chinner <david@fromorbit.com> wrote:
-> > >
-> > > On Wed, Apr 20, 2022 at 10:54:59PM -0700, Christoph Hellwig wrote:
-> > > > On Thu, Apr 21, 2022 at 02:35:02PM +1000, Dave Chinner wrote:
-> > > > > Sure, I'm not a maintainer and just the stand-in patch shepherd for
-> > > > > a single release. However, being unable to cleanly merge code we
-> > > > > need integrated into our local subsystem tree for integration
-> > > > > testing because a patch dependency with another subsystem won't gain
-> > > > > a stable commit ID until the next merge window is .... distinctly
-> > > > > suboptimal.
-> > > >
-> > > > Yes.  Which is why we've taken a lot of mm patchs through other trees,
-> > > > sometimes specilly crafted for that.  So I guess in this case we'll
-> > > > just need to take non-trivial dependencies into the XFS tree, and just
-> > > > deal with small merge conflicts for the trivial ones.
-> > >
-> > > OK. As Naoyo has pointed out, the first dependency/conflict Ruan has
-> > > listed looks trivial to resolve.
-> > >
-> > > The second dependency, OTOH, is on a new function added in the patch
-> > > pointed to. That said, at first glance it looks to be independent of
-> > > the first two patches in that series so I might just be able to pull
-> > > that one patch in and have that leave us with a working
-> > > fsdax+reflink tree.
-> > >
-> > > Regardless, I'll wait to see how much work the updated XFS/DAX
-> > > reflink enablement patchset still requires when Ruan posts it before
-> > > deciding what to do here.  If it isn't going to be a merge
-> > > candidate, what to do with this patchset is moot because there's
-> > > little to test without reflink enabled...
-> >
-> > I do have a use case for this work absent the reflink work.  Recall we
-> > had a conversation about how to communicate "dax-device has been
-> > ripped away from the fs" events and we ended up on the idea of reusing
-> > ->notify_failure(), but with the device's entire logical address range
-> > as the notification span. That will let me unwind and delete the
-> > PTE_DEVMAP infrastructure for taking extra device references to hold
-> > off device-removal. Instead ->notify_failure() arranges for all active
-> > DAX mappings to be invalidated and allow the removal to proceed
-> > especially since physical removal does not care about software pins.
->
-> Sure. My point is that if the reflink enablement isn't ready to go,
-> then from an XFS POV none of this matters in this cycle and we can
-> just leave the dependencies to commit via Andrew's tree. Hence by
-> the time we get to the reflink enablement all the prior dependencies
-> will have been merged and have stable commit IDs, and we can just
-> stage this series and the reflink enablement as we normally would in
-> the next cycle.
->
-> However, if we don't get the XFS reflink dax enablement sorted out
-> in the next week or two, then we don't need this patchset in this
-> cycle. Hence if you still need this patchset for other code you need
-> to merge in this cycle, then you're the poor schmuck that has to run
-> the mm-tree conflict guantlet to get a stable commit ID for the
-> dependent patches in this cycle, not me....
+On 22/04/2022 15:38, Christopher Obbard wrote:
+> The RK3328 has an vdec device with dedicated iommu.
+> Describe the device and required power-domains in the
+> devicetree.
 
-Yup. Let's give it another week or so to see if the reflink rebase
-materializes and go from there.
+(...)
+
+> @@ -660,6 +664,25 @@ vpu_mmu: iommu@ff350800 {
+>  		power-domains = <&power RK3328_PD_VPU>;
+>  	};
+>  
+> +	vdec: video-codec@ff360000 {
+> +		compatible = "rockchip,rk3328-vdec", "rockchip,rk3399-vdec";
+
+This does not match your bindings (according to bindings is incorrect)
+Did you test them with dtbs_check?
+
+Best regards,
+Krzysztof

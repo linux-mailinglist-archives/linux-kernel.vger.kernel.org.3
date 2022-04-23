@@ -2,70 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B7C450C5A6
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 02:13:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2EE150C5A8
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 02:17:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbiDWAQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 20:16:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52062 "EHLO
+        id S229616AbiDWAUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 20:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiDWAQl (ORCPT
+        with ESMTP id S229548AbiDWAT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 20:16:41 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CB46F491
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 17:13:46 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-deb9295679so10278703fac.6
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 17:13:46 -0700 (PDT)
+        Fri, 22 Apr 2022 20:19:59 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D51B5A143
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 17:17:03 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2f16645872fso100966837b3.4
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 17:17:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=zfFaHSOoCxM9k7WKIO+SokAw11U0tu3SQrHG+UYnnlM=;
-        b=SMTCDHnxPQC5SWcOnrjWlUXYfTnq2kSb7H1LnbYRP0ofrUmzM0854ZNXMkmhrSDnWT
-         3RZUnfA5zAxRFraIm7Qjx9cilV+2Ss7wB7JctfUBW0X5wdAlynDjUAwvHAr+dMNJ44BZ
-         s/fxmjw3HKSl+k+EjZ4bHrJ/VUc44pDQvSTwI=
+        d=atishpatra.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=MoSOk7aiSsrTsFED04ppyU9PqkK13gebDi+J9ftgEjs=;
+        b=ZOQ5EjKoIj6frB25e/g+fvJ1PDdhmnKNWUV6ChlD92WFm3A3X/bhOBJx6Y0lGxzAxX
+         bC55qm14OQ6BI71mEOhg/9I481wslmOus55fjNPH+2cN9lvEOg7rwSW30zZvpXhoB3sS
+         8kB6MY6EjYEDHMbp+1MaRQMa2z1AfztCpS99k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=zfFaHSOoCxM9k7WKIO+SokAw11U0tu3SQrHG+UYnnlM=;
-        b=fJkDpSJZPbA6wqr2sEr5vX4JIKsRFKlNU9sxNJcLZfgw5jx2hsvjInkRdkACoRz4TT
-         GZ8gEObw6wlhgRlqdhQf8OmkQEMIOdER/p9edvNVpzCSmTXNax/isKoBtNoeVDZQjm8k
-         QWf5U9CWSoJwsn8ZU8ZjvXd1ygU6W9TqTGm9KF/Nv9VbyflZ0w2PthBRhbuPAvJ9ILkw
-         wb3/tDmaAuxYfmiuwkpL4rvTs2tIjYLSQkdqad6xv2p1bojmA7ODqd234kYjrsKd7lvf
-         1rdCi7Y87yhJIrWvtDlscY2NJMoxEA+8l4fu7PlkBRnIUJr4H00FGx/OHW9pMGuPc522
-         Cltg==
-X-Gm-Message-State: AOAM531ft9/313Vp4h9Y5sskBttW7R9rpuVxAr0GPuEkiosImUQTillf
-        HNBsmH5ObvL+ZJflXzGVULgCJhhXo9YBwn7npEyyig==
-X-Google-Smtp-Source: ABdhPJyDBwXV+rdQrcRoHA6+8NjnidEoQADmYUSSgyUssOflCC+zmPxyfEsir5j8jsvIFyT+93lwtCnrCsLX4JuITZg=
-X-Received: by 2002:a05:6870:15ca:b0:e9:551:6d1c with SMTP id
- k10-20020a05687015ca00b000e905516d1cmr1773145oad.193.1650672826133; Fri, 22
- Apr 2022 17:13:46 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 22 Apr 2022 17:13:45 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=MoSOk7aiSsrTsFED04ppyU9PqkK13gebDi+J9ftgEjs=;
+        b=COAHU6eXzoSyXt6uF2JxJZumpy4T+f45MnE/yKrRXBhnUWuZYqUsy7X929CIMNnTgA
+         mixNvtW/7o+Rey23qGyKTSb5/2PORUKHWMpmesnR9ssM1AeRPFVoDbWATJgsijgowA9K
+         YAYj+oiFdmKad/cxNaEsqLAIRZqncwNqLd3fnmn9pGWxQ6rLzNC0X8l/3NO8IAuDWE97
+         afHPhsN5MYP6hdt628wv+ZpGTbdU/vs/IHRNNqxyDmo4yDPXm4Bx0/iHr01/AocfH3Nc
+         4wfrKuTlUwM+gmeE6rAsXudEk9ft49e75ecHNejelA108wUL6r+IhijpgRGxhpOCVKbv
+         WXLQ==
+X-Gm-Message-State: AOAM5329/dYob+CezqMjrpAaGhexk7lB0uWjmFLQHslC0NM1SZnIN246
+        Pd3d6dT/yaK7qVs59OqmexOpYi+yCWlWWJstjFu0
+X-Google-Smtp-Source: ABdhPJw9bzlBvX7MnRZTUkY+yabryAq+Aj4BLIPm1GIu7cklg4UTowuZEcE85B6lKf5JpX4IRCuMrhLOUP2TYJYMQ2A=
+X-Received: by 2002:a81:1f84:0:b0:2f4:d37b:a25f with SMTP id
+ f126-20020a811f84000000b002f4d37ba25fmr7567853ywf.443.1650673022196; Fri, 22
+ Apr 2022 17:17:02 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1650618666-15342-2-git-send-email-quic_sbillaka@quicinc.com>
-References: <1650618666-15342-1-git-send-email-quic_sbillaka@quicinc.com> <1650618666-15342-2-git-send-email-quic_sbillaka@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 22 Apr 2022 17:13:45 -0700
-Message-ID: <CAE-0n51VBDmOOworjpuB1nqVD-7055yqvn2Er5H13qgFC5R2AQ@mail.gmail.com>
-Subject: Re: [PATCH v9 1/4] drm/msm/dp: Add eDP support via aux_bus
-To:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     robdclark@gmail.com, seanpaul@chromium.org,
-        quic_kalyant@quicinc.com, quic_abhinavk@quicinc.com,
-        dianders@chromium.org, quic_khsieh@quicinc.com,
-        bjorn.andersson@linaro.org, sean@poorly.run, airlied@linux.ie,
-        daniel@ffwll.ch, dmitry.baryshkov@linaro.org,
-        quic_vproddut@quicinc.com, quic_aravindh@quicinc.com,
-        steev@kali.org
+References: <20220420112408.155561-1-apatel@ventanamicro.com> <3fa5215b-84c3-5e4c-cb53-6c05d05e4350@canonical.com>
+In-Reply-To: <3fa5215b-84c3-5e4c-cb53-6c05d05e4350@canonical.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Fri, 22 Apr 2022 17:16:51 -0700
+Message-ID: <CAOnJCUJrN4frY_OdQzO-yr5CrDLvj=ge9KY2d=XnGvAF-uQNvQ@mail.gmail.com>
+Subject: Re: [PATCH v3] RISC-V: Increase range and default value of NR_CPUS
+To:     Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,146 +70,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Sankeerth Billakanti (2022-04-22 02:11:03)
-> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> index d7a19d6..055681a 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-
-Some nitpicks
-
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-
-> @@ -1508,7 +1509,8 @@ void msm_dp_irq_postinstall(struct msm_dp *dp_display)
+On Thu, Apr 21, 2022 at 12:05 AM Heinrich Schuchardt
+<heinrich.schuchardt@canonical.com> wrote:
 >
->         dp_hpd_event_setup(dp);
 >
-> -       dp_add_event(dp, EV_HPD_INIT_SETUP, 0, 100);
-> +       if (!dp_display->is_edp)
-> +               dp_add_event(dp, EV_HPD_INIT_SETUP, 0, 100);
-
-Did it turn out that in fact DP isn't ready still to setup even after
-delaying the irq?
-
->  }
 >
->  void msm_dp_debugfs_init(struct msm_dp *dp_display, struct drm_minor *minor)
-> @@ -1530,6 +1532,65 @@ void msm_dp_debugfs_init(struct msm_dp *dp_display, struct drm_minor *minor)
->         }
->  }
+> On 4/20/22 13:24, Anup Patel wrote:
+> > Currently, the range and default value of NR_CPUS is too restrictive
+> > for high-end RISC-V systems with large number of HARTs. The latest
+> > QEMU virt machine supports upto 512 CPUs so the current NR_CPUS is
+> > restrictive for QEMU as well. Other major architectures (such as
+> > ARM64, x86_64, MIPS, etc) have a much higher range and default
+> > value of NR_CPUS.
+> >
+> > This patch increases NR_CPUS range to 2-512 and default value to
+> > XLEN (i.e. 32 for RV32 and 64 for RV64).
+> >
+> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 >
-> +static int dp_display_get_next_bridge(struct msm_dp *dp)
-> +{
-> +       int rc;
-> +       struct dp_display_private *dp_priv;
-> +       struct device_node *aux_bus;
-> +       struct device *dev;
-> +
-> +       dp_priv = container_of(dp, struct dp_display_private, dp_display);
-> +       dev = &dp_priv->pdev->dev;
-> +       aux_bus = of_get_child_by_name(dev->of_node, "aux-bus");
-> +
-> +       if (aux_bus && dp->is_edp) {
-> +               dp_display_host_init(dp_priv);
-> +               dp_catalog_ctrl_hpd_config(dp_priv->catalog);
-> +               dp_display_host_phy_init(dp_priv);
-> +               enable_irq(dp_priv->irq);
-> +
-> +               /*
-> +                * The code below assumes that the panel will finish probing
-> +                * by the time devm_of_dp_aux_populate_ep_devices() returns.
-> +                * This isn't a great assumption since it will fail if the
-> +                * panel driver is probed asynchronously but is the best we
-> +                * can do without a bigger driver reorganization.
-> +                */
-> +               rc = devm_of_dp_aux_populate_ep_devices(dp_priv->aux);
-> +               of_node_put(aux_bus);
-> +               if (rc)
-> +                       goto error;
-> +       } else if (dp->is_edp) {
-> +               DRM_ERROR("eDP aux_bus not found\n");
-> +               return -ENODEV;
-> +       }
-> +
-> +       /*
-> +        * External bridges are mandatory for eDP interfaces: one has to
-> +        * provide at least an eDP panel (which gets wrapped into panel-bridge).
-> +        *
-> +        * For DisplayPort interfaces external bridges are optional, so
-> +        * silently ignore an error if one is not present (-ENODEV).
-> +        */
-> +       rc = dp_parser_find_next_bridge(dp_priv->parser);
-> +       if (!dp->is_edp && rc == -ENODEV)
-> +               return 0;
-> +       else if (rc)
 
-Just an if because there's a return above.
+This works upto 207 harts in upstream Qemu + OpenSBI. Beyond that,
+firmware size becomes > 2MB and PMP protection
+kicks in for the kernel boot address (0x80200000)
 
-> +               goto error;
-> +
-> +       dp->next_bridge = dp_priv->parser->next_bridge;
+Here is the OpenSBI boot prints for 256 harts with some hacks around
+sanitize_domain to disable sbi_domain_check_addr
 
-In which case it almost feels like it could be written
+Platform Name             : riscv-virtio,qemu
+Platform Features         : medeleg
+Platform HART Count       : 208
+Platform IPI Device       : aclint-mswi
+Platform Timer Device     : aclint-mtimer @ 10000000Hz
+Platform Console Device   : uart8250
+Platform HSM Device       : ---
+Platform Reboot Device    : sifive_test
+Platform Shutdown Device  : sifive_test
+Firmware Base             : 0x80000000
+Firmware Size             : 2052 KB ---------->>> Firmware size is
+greater than 2MB where
+Runtime SBI Version       : 0.3
 
-	if (!dp->is_edp && rc == -ENODEV)
-		return 0;
-	if (!rc) {
-		dp->next_bridge = dp_priv->parser->next_bridge;
-		return 0;
-	}
-error:
-	if (dp->is_edp) {
+Domain0 Name              : root
+Domain0 Boot HART         : 122
+Domain0 HARTs             :
+0*,1*,2*,3*,4*,5*,6*,7*,8*,9*,10*,11*,12*,13*,14*,15*,16*,17*,18*,19*,20*,2=
+1*,22*,23*,24*,25*,26*,27*,28*,29*,30*,31*,32*,33*,34*,35*,36*,37*,38*,39*,=
+40*,41*,42*,43*,44*,45*,46*,47*,48*,49*,50*,51*,52*,53*,54*,55*,56*,57*,58*=
+,59*,60*,61*,62*,63*,64*,65*,66*,67*,68*,69*,70*,71*,72*,73*,74*,75*,76*,77=
+*,78*,79*,80*,81*,82*,83*,84*,85*,86*,87*,88*,89*,90*,91*,92*,93*,94*,95*,9=
+6*,97*,98*,99*,100*,101*,102*,103*,104*,105*,106*,107*,108*,109*,110*,111*,=
+112*,113*,114*,115*,116*,117*,118*,119*,120*,121*,122*,123*,124*,125*,126*,=
+127*,128*,129*,130*,131*,132*,133*,134*,135*,136*,137*,138*,139*,140*,141*,=
+142*,143*,144*,145*,146*,147*,148*,149*,150*,151*,152*,153*,154*,155*,156*,=
+157*,158*,159*,160*,161*,162*,163*,164*,165*,166*,167*,168*,169*,170*,171*,=
+172*,173*,174*,175*,176*,177*,178*,179*,180*,181*,182*,183*,184*,185*,186*,=
+187*,188*,189*,190*,191*,192*,193*,194*,195*,196*,197*,198*,199*,200*,201*,=
+202*,203*,204*,205*,206*,207*
+Domain0 Region00          : 0x0000000002000000-0x000000000200ffff (I)
+Domain0 Region01          : 0x0000000080000000-0x00000000803fffff ()
+Domain0 Region02          : 0x0000000000000000-0xffffffffffffffff (R,W,X)
+Domain0 Next Address      : 0x0000000080200000
+Domain0 Next Arg1         : 0x00000000bf000000
+Domain0 Next Mode         : S-mode
+Domain0 SysReset          : yes
 
-but I'm not worried either way, besides removing the else from the else-if.
+Boot HART ID              : 122
+Boot HART Domain          : root
+Boot HART ISA             : rv64imafdcsuh
+Boot HART Features        : scounteren,mcounteren,time
+Boot HART PMP Count       : 16
+Boot HART PMP Granularity : 4
+Boot HART PMP Address Bits: 54
+Boot HART MHPM Count      : 0
+Boot HART MIDELEG         : 0x0000000000001666
+Boot HART MEDELEG         : 0x0000000000f0b509
 
-> +
-> +       return 0;
-> +
-> +error:
-> +       if (dp->is_edp) {
-> +               disable_irq(dp_priv->irq);
-> +               dp_display_host_phy_exit(dp_priv);
-> +               dp_display_host_deinit(dp_priv);
-> +       }
-> +       return rc;
-> +}
-> +
->  int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
->                         struct drm_encoder *encoder)
->  {
-> diff --git a/drivers/gpu/drm/msm/dp/dp_parser.h b/drivers/gpu/drm/msm/dp/dp_parser.h
-> index d371bae..950416c 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_parser.h
-> +++ b/drivers/gpu/drm/msm/dp/dp_parser.h
-> @@ -125,7 +125,7 @@ struct dp_parser {
->         u32 max_dp_lanes;
->         struct drm_bridge *next_bridge;
+
+> Reviewed-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
 >
-> -       int (*parse)(struct dp_parser *parser, int connector_type);
-> +       int (*parse)(struct dp_parser *parser);
->  };
->
->  /**
-> @@ -141,4 +141,15 @@ struct dp_parser {
->   */
->  struct dp_parser *dp_parser_get(struct platform_device *pdev);
->
-> +/**
-> + * dp_parser_find_next_bridge() - find an additional bridge to DP
-> + *
-> + * @parser: dp_parser data from client
-> + * return: 0 if able to get the bridge else return an error code
+> > ---
+> > Changes since v2:
+> >   - Rebased on Linux-5.18-rc3
+> >   - Use a different range when SBI v0.1 is enabled
+> > Changes since v1:
+> >   - Updated NR_CPUS range to 2-512 which reflects maximum number of
+> >     CPUs supported by QEMU virt machine.
+> > ---
+> >   arch/riscv/Kconfig | 9 ++++++---
+> >   1 file changed, 6 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > index 00fd9c548f26..1823f281069f 100644
+> > --- a/arch/riscv/Kconfig
+> > +++ b/arch/riscv/Kconfig
+> > @@ -275,10 +275,13 @@ config SMP
+> >         If you don't know what to do here, say N.
+> >
+> >   config NR_CPUS
+> > -     int "Maximum number of CPUs (2-32)"
+> > -     range 2 32
+> > +     int "Maximum number of CPUs (2-512)"
+> >       depends on SMP
+> > -     default "8"
+> > +     range 2 512 if !SBI_V01
+> > +     range 2 32 if SBI_V01 && 32BIT
+> > +     range 2 64 if SBI_V01 && 64BIT
+> > +     default "32" if 32BIT
+> > +     default "64" if 64BIT
+> >
+> >   config HOTPLUG_CPU
+> >       bool "Support for hot-pluggable CPUs"
 
-return comes after the description below. Also should be capitalized.
-You can check this by compiling with W=1 I believe, or run the
-kernel doc format script on the file..
 
-> + *
-> + * This function is used to find any additional bridge attached to
-> + * the DP controller. The eDP interface requires a panel bridge.
 
-Return: 0 if able to get the bridge, otherwise negative errno for failure
-
-> + */
-> +int dp_parser_find_next_bridge(struct dp_parser *parser);
-> +
+--=20
+Regards,
+Atish

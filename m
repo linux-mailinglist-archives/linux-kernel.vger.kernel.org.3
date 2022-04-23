@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF8E150CD95
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 23:27:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E943E50CDBC
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 23:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237111AbiDWVaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 17:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43266 "EHLO
+        id S236678AbiDWVcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 17:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235494AbiDWVaB (ORCPT
+        with ESMTP id S237271AbiDWVck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 17:30:01 -0400
+        Sat, 23 Apr 2022 17:32:40 -0400
 Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F181C931;
-        Sat, 23 Apr 2022 14:27:00 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id AD7A05C00D1;
-        Sat, 23 Apr 2022 17:26:57 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2AA1F604;
+        Sat, 23 Apr 2022 14:29:32 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id D3E0A5C00D1;
+        Sat, 23 Apr 2022 17:29:31 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Sat, 23 Apr 2022 17:26:57 -0400
+  by compute1.internal (MEProxy); Sat, 23 Apr 2022 17:29:31 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1650749217; x=
-        1650835617; bh=Sf6A7BtVO5tnu6AjnGZwOxwe4Z3yS1w+ePVhHWXxjAs=; b=C
-        VgOTVOKZnosC8QK2OaWQFndmWT60BJKELD1+W/lAjw9PxcotTsjT6vYFt2oh9hIb
-        oyATm01xQ9fSs2WXRjNFL+63KVzNDwBadq6s2Gnd9LwJ/sSC2t91H05Zj6h73crC
-        4Oup89HzGaz3kyqElcY8yEYKFySq+3II4SFvBfaFjGhqKws34DZ4zauUshvuSULL
-        vn9mIKI2/dCfQ8hsZhqZZOQcGsF8e8hMx/S4KmltbY6kqw7lXRIaUx028kfQw+NT
-        fQs0Km+h6MxPNtzhKUi94GLs/BumDurpoOe1hRRD3OwaYBlDVZJwt9iD27SASZbp
-        OPgP/3lcyP2bDnBlKxM1Q==
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1650749371; x=
+        1650835771; bh=Pj0wzKf6dex5toiA0Kiw7U4VWCF5jYwgc7tf+MRocTc=; b=W
+        hdQMsMqi+xCWMjbGqY+t5oRH6pqQ34asy6z49IHhxNi7yc829+nDlcQfz8/i1Hh6
+        b3ICSgvcN6/c4Jlt0X95wy1pZ/7vXIl8P01QIK5SH9NN39zvD5oq9e+st/LFWuIl
+        AiSMCDXoAqEiIYpDvrk1sA4sUwn90n3ZrtBpMI50jHyCHXaT9plDkbMAfVlWB/HB
+        cX8yGiNEIPyr2ogEAqG9JD2rCQJ7o3SsasSWvNBFRDydokiK4BhmorEy3EkCxG3o
+        zGMMyHyV/TB5rCN9L5pKkRhNw8hAMNYW3aGPlQBGM5d4smczpNr43SdCgf1V27+F
+        5l5PUCICVXYqM5WZfpF/Q==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1650749217; x=1650835617; bh=Sf6A7BtVO5tnu
-        6AjnGZwOxwe4Z3yS1w+ePVhHWXxjAs=; b=dKo38QnHRHz81dQ64IcvSTY76+sS5
-        RGj6Ed4oNodtJsCzggjEG543VxRSCsMC4TpCN2TMoXkGsMIYJw8zDVPnxX7AsjTb
-        xONFo9RVQZw8hkx32u0hOAfThuRVEompI5SN1kQplCe/2Q3BTBFBNc+/TfGjy+wl
-        zA4v+qY00OeTF2LWORANv/uQjLWK+W2aLikroof4MFPiuNjcjy5LbnfYOfDdLg6Y
-        LNN5ITwkpWdmGIacrI3tmUnIdBssy02iqdMIAArs1F8ghyFW3pGD2u7f/ldx9RJt
-        53NalyQ4yFPy2WNJ9f96dckcJP4zHnhm7iNNDaUyho5qTK0cmjzmz97uA==
-X-ME-Sender: <xms:IW9kYnHkTqOyc1RGwF-31XWBymVW8SYDaiHwfY0PfDUCza0f1M4TFA>
-    <xme:IW9kYkXm9kfrlSAtrIImWtblnu6DcABkajCP0chCUY-TxUJFbwEgOnlSjU3SIcgqF
-    m8G3OftYed7KDq0pA>
-X-ME-Received: <xmr:IW9kYpJh_ouiyBU4yqRAt9DbZf_TRsCVTaKnRHIRZkxOSsYfbdIXNmRRLfbwJWrBijMZstmMoIrmkvsiq8WmsN4hEzZ78KwrLsTta7itO_iytj4dC09CNcR2zA>
+        :x-sasl-enc; s=fm1; t=1650749371; x=1650835771; bh=Pj0wzKf6dex5t
+        oiA0Kiw7U4VWCF5jYwgc7tf+MRocTc=; b=aawUbErFS6LqyNtEnu+g7ebqgQBUY
+        8ltMy1fzWyw3OVl/IS5vOTSwEaJoDTiyPsDSextiHOZDAxzU/KO9hTuvepVpCAc+
+        Ph5tDE62olgcpHfWr2JK9LNs9H6MPpYx7tf+rP4MfsZTc/dksML6eQKDwssARs/u
+        cj5Vo9c+yuq/2+Xlo9koQRhtoLLjTMz+n78Aar21TJyCT5hSEwjLU33eyBESUzkv
+        rMiUvNEhekB18sRa6TU0/9QDEWd/x6TtNl8WKZIyQpVTWxXWVuXAyf/fQpQrgcKc
+        989QI01FOFP1OtAHlG+kZQwaoxo8p+kfk40pnAeB+FWExeMV4KBN//Gzg==
+X-ME-Sender: <xms:u29kYiXsnQfGLWnHZMduinOBBMS3-yxQ-0PmgAUCvWmbjyCExjnKEg>
+    <xme:u29kYunleDDiYBkDAbsnLMO7FkoJR4C64kHFIsQ3xThU92yir5oS2RdU5aSJzF1U8
+    G3V1sBlJr7WI-1qNg>
+X-ME-Received: <xmr:u29kYmaSNTpZmwyHuFKdHQwc-AccgRATbJBQSRnQYm2IbdHUW0ZBY-V9pkzBLzz5AYUH4FToyE5k9WoytJLqT9638EKsDpJ-c9Unnr_iCFUEGSIWgwwtmpDFbg>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrtdeigdduiedvucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -56,31 +56,32 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrtdeigdduiedvucetufdoteggod
     udetieeijeevleenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrh
     fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhl
     rghnugdrohhrgh
-X-ME-Proxy: <xmx:IW9kYlEjdPqj-MuBz1GpOBPg-6iV-fcJrs1bcLgT9rEIDnzBsOhdbA>
-    <xmx:IW9kYtWTHQQEOob2nbjIVPN0aj9py2oyRxfkQcENfhAcLtXS9tRV9A>
-    <xmx:IW9kYgPsq9JEpS-H4IdBkVKmqGtDZ46u2u9TgXTINQzgwq_84kF-Ew>
-    <xmx:IW9kYlS6jP31wfR1--vdWz101JRAylX1Sl4MrzUZxPQYU65NpLCTZg>
+X-ME-Proxy: <xmx:u29kYpVlQpm8em9p5f8vrWn6XKOgbu6dOvUdawBinBTHHWZCH0mqsQ>
+    <xmx:u29kYsniKACYKNioTk0gWytNv0JU-vfXSIWvGWM3hBfj9VYEXKiNWA>
+    <xmx:u29kYufBW60TawUWpqRJ6uYBn1apqYH05N3icgqADiFAg6FMMhClIQ>
+    <xmx:u29kYle5oQ9uOaZIgFNEyLHX0JUy5eIG_aoexcMdT4rMHDpLbr6Aag>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 23 Apr 2022 17:26:56 -0400 (EDT)
-Subject: Re: [PATCH 01/12] dt-bindings: pinctrl: document Allwinner R329 PIO
- and R-PIO
-To:     Icenowy Zheng <icenowy@aosc.io>, Rob Herring <robh+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
+ 23 Apr 2022 17:29:30 -0400 (EDT)
+Subject: Re: [PATCH 02/12] pinctrl: sunxi: add support for R329 CPUX pin
+ controller
+To:     Icenowy Zheng <icenowy@aosc.io>
+Cc:     Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Andre Przywara <andre.przywara@arm.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+        Andre Przywara <andre.przywara@arm.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Icenowy Zheng <icenowy@aosc.io>
 References: <20220422140902.1058101-1-icenowy@aosc.io>
- <20220422140902.1058101-2-icenowy@aosc.io>
+ <BYAPR20MB2472B703E377AA813EE55B26BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
 From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <f41a509d-cf8f-47c6-0a8a-2aa4cee44637@sholland.org>
-Date:   Sat, 23 Apr 2022 16:26:56 -0500
+Message-ID: <d82f6c90-1926-f3b1-02a0-b82e5ee179b0@sholland.org>
+Date:   Sat, 23 Apr 2022 16:29:30 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.6.0
 MIME-Version: 1.0
-In-Reply-To: <20220422140902.1058101-2-icenowy@aosc.io>
+In-Reply-To: <BYAPR20MB2472B703E377AA813EE55B26BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -94,20 +95,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/22/22 9:08 AM, Icenowy Zheng wrote:
-> Allwinner R329 have two pin controllers similar to previous Allwinner
-> SoCs, PIO and R-PIO.
+On 4/22/22 10:40 AM, icenowy@outlook.com wrote:
+> From: Icenowy Zheng <icenowy@aosc.io>
 > 
-> Add compatible strings for them.
+> Allwinner R329 SoC has two pin controllers similar to ones on previous
+> SoCs, one in CPUX power domain and another in CPUS.
+> 
+> This patch adds support for the CPUX domain pin controller.
 > 
 > Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
 
-Acked-by: Samuel Holland <samuel@sholland.org>
+This is identical to the previous version. Please see my comments on that, as
+they still apply:
 
-This is identical to the previous submission[1], which was already acked by Rob
-and Maxime. Please add those tags.
-
-Regards,
-Samuel
-
-[1]: https://lore.kernel.org/linux-sunxi/20210802062212.73220-7-icenowy@sipeed.com/
+https://lore.kernel.org/linux-sunxi/2f6de069-7983-efc2-3c4a-7c1355c4cbc5@sholland.org/

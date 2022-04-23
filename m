@@ -2,123 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBDC350CC92
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 19:30:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AB6350CC97
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 19:32:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236589AbiDWRcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 13:32:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39728 "EHLO
+        id S236602AbiDWRep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 13:34:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbiDWRcK (ORCPT
+        with ESMTP id S236584AbiDWRen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 13:32:10 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6556B174422
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 10:29:13 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id g9so9892757pgc.10
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 10:29:13 -0700 (PDT)
+        Sat, 23 Apr 2022 13:34:43 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9861718C46B
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 10:31:44 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id m20so1286118ejj.10
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 10:31:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AhQD7vPYfAiEn+1RfQt67d4Dixq2S1YB+w4qj2jR+Q0=;
-        b=xWKXKc58HUkxMRuDr/Zf6Aje7ybvTzC671zQtfNEALotesIZAxNUc2OGEA4z3Ra7Of
-         lkStFa3Uxdix3cOJZDYBHyrFCMutNH68Gfit3R7u95+uMerV4inCdkX5tYTlb8bQppfP
-         GVMOpuVsU+PKBwwRm8845rgsfzOkwkig89/gchUiiMe/tlrxvF59A4OkCGpnAU51r+CT
-         SOqoDAkKyGT2546Nu4M586YH6iQFI0TriSPXJ4zKHuLS6E7GYPU0KRqyP+1sSitkfvyE
-         /jlefNOpENa3XDJsSmPdNtL9DWk2ne95gAtVj79KvvOsDK8Xv5GoLzI4lnGOadxL3lh/
-         XALg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=bKsmqXRYpqUwhmofQJ981p6h75uLhrlYANKDZeRH3Yw=;
+        b=AsyhZT5G7Rn1USmiBSUJqjC54KlsVFEdM+LUYDHVCYDWT2uMibekpBmYtuUoUApjvC
+         li+cxCy+MjPt4k5Ly6BP1nKgLPiYO92qskFvBmO/yu01Q9G6ftIaVnxSI1NJZITAr5SZ
+         RVmU6IQltV8QyJEf99e1IAw3H725Z4goBXgzN6F//2aTelMEMiC4hlyJ9b5+PRpt+rhq
+         hzHeDco0ztmw+YZQO/dST6kcgF+EMNWwq/5zp1DsdcD9h5zdr6ETU1d4hnygyqKBNVuU
+         wI1XEl9420F6q7aTcQLGUsmajZha053Y5YikkHxdDHh97bARDumge1nYnfW/hWHkBefk
+         4bqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AhQD7vPYfAiEn+1RfQt67d4Dixq2S1YB+w4qj2jR+Q0=;
-        b=dSCe+mAf51Lalw6o50Rzdk2o4OaeU5zZZrSysuqEmcZvIhIY0MFP/r8s8lq8coT6qz
-         27Yg6TfZvdobElMr1yES/ZiIjR/GHepHJMXDgq3zypCYj7UDjZb9AFqV0H0dbXbtcUn/
-         3AqTO48WwVl7zYxwRob7r6mMTrcrQRMo8vC7YkxEyaetewoncgnJNuN2p5g8r0KbA1Fn
-         AkC0vp56A6nRo7GZ5fEz2s3rcj72Fsq03CQkfJHtXHOoQDy/GT3J3BdagIJE6jzwz/Ds
-         vlUQi9q7CsRbRj42mMtsi8wKFKzV3uuFs9IKf5bjzB98ZHuNDNw8AUEb+nBwNEYAVjAo
-         jqKw==
-X-Gm-Message-State: AOAM530mJvGlcvZNKfGR5sXr20m6VIWGMJYrNatZvR3Aruc05t89bjEh
-        /dM7l2W+M0jT/HfjhB01jLP+aMWI7e6zBoMpXddiHw==
-X-Google-Smtp-Source: ABdhPJxHuHMaqsEKztBmTLaKInseY99XjI/+A47OoxmxiEuZUwC9WyROijbh+f6qYfCWMeRmXPrwJ1l3eN2+M0oAWek=
-X-Received: by 2002:a65:6e0e:0:b0:399:26d7:a224 with SMTP id
- bd14-20020a656e0e000000b0039926d7a224mr8657810pgb.437.1650734952939; Sat, 23
- Apr 2022 10:29:12 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=bKsmqXRYpqUwhmofQJ981p6h75uLhrlYANKDZeRH3Yw=;
+        b=MRwCOEw5E+5Qtvnx6A1pEklZZ2q5BDKPsTPqvzazOawQYVd+qwWKa4gftbrvJQ40h/
+         rocNuOOj4Y+osEiKwgFbjADpJecq8XM0xaMCuFyd45hF9eRt76iODSaY01pAaEW3ZLcg
+         aqrsOfAOGLhHxcH7sNlFCe8JxEqCBDIZGS5pSyJDrX/5WIiVe/yGaQJtYSIPUjtS6HFb
+         RFWicdmYjwFwa6OLF4bMNGO1qTxw4dqNIOOy5be1F9UYwDCfJajRQwy12YXkA7H0SKPL
+         q6033Q9vIp/HjKsfJjgw8trCeZagQ1tQz1tVBN0d9J9UOq8wGA6Y1ufkQHdw/w9w1EZ1
+         S3Yw==
+X-Gm-Message-State: AOAM5334W6HKYbxF9geE0Ctwc889wyPf+Je9tXPr4VC2VvqUhfKhxb0r
+        A7DoI8e0eaHhGfkO4Z7xiIr3tyPktFasyg==
+X-Google-Smtp-Source: ABdhPJxUIwgdy6uOQIKxuP9OG0OknA6P6MQwfXJgUv6/3CSZgK3CreXhlN5R95v7e9nLbVweqm/4xA==
+X-Received: by 2002:a17:906:6a0f:b0:6f0:1d08:3640 with SMTP id qw15-20020a1709066a0f00b006f01d083640mr9294977ejc.264.1650735103121;
+        Sat, 23 Apr 2022 10:31:43 -0700 (PDT)
+Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id r16-20020a056402019000b00418ed60c332sm2422395edv.65.2022.04.23.10.31.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 23 Apr 2022 10:31:42 -0700 (PDT)
+Message-ID: <34819690-5cb7-bbce-a2f5-3f6e66661049@linaro.org>
+Date:   Sat, 23 Apr 2022 19:31:40 +0200
 MIME-Version: 1.0
-References: <165055518776.3745911.9346998911322224736.stgit@dwillia2-desk3.amr.corp.intel.com>
- <165055523099.3745911.9091010720291846249.stgit@dwillia2-desk3.amr.corp.intel.com>
- <YmOAXqOIW7DE0nMR@iweiny-desk3>
-In-Reply-To: <YmOAXqOIW7DE0nMR@iweiny-desk3>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Sat, 23 Apr 2022 10:29:02 -0700
-Message-ID: <CAPcyv4gOBypbVV8dCrR6xWGSv0EA0sAVyNNwah1=d-hkuV3A_Q@mail.gmail.com>
-Subject: Re: [PATCH v3 8/8] nvdimm: Fix firmware activation deadlock scenarios
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     linux-cxl@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Vishal L Verma <vishal.l.verma@intel.com>,
-        "Schofield, Alison" <alison.schofield@intel.com>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/3] media: dt-bindings: media: rockchip-vdec: Add RK3328
+ compatible
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Christopher Obbard <chris.obbard@collabora.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Alex Bee <knaerzche@gmail.com>,
+        Elaine Zhang <zhangqing@rock-chips.com>
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+References: <20220422133803.989256-1-chris.obbard@collabora.com>
+ <20220422133803.989256-2-chris.obbard@collabora.com>
+ <ff87d5cb-b0d4-95a2-90b0-7827a2a34d05@linaro.org>
+In-Reply-To: <ff87d5cb-b0d4-95a2-90b0-7827a2a34d05@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 9:28 PM Ira Weiny <ira.weiny@intel.com> wrote:
->
-> On Thu, Apr 21, 2022 at 08:33:51AM -0700, Dan Williams wrote:
-> > Lockdep reports the following deadlock scenarios for CXL root device
-> > power-management, device_prepare(), operations, and device_shutdown()
-> > operations for 'nd_region' devices:
-> >
-> > ---
-> >  Chain exists of:
-> >    &nvdimm_region_key --> &nvdimm_bus->reconfig_mutex --> system_transition_mutex
-> >
-> >   Possible unsafe locking scenario:
-> >
-> >         CPU0                    CPU1
-> >         ----                    ----
-> >    lock(system_transition_mutex);
-> >                                 lock(&nvdimm_bus->reconfig_mutex);
-> >                                 lock(system_transition_mutex);
-> >    lock(&nvdimm_region_key);
-> >
-> > --
-> >
-> >  Chain exists of:
-> >    &cxl_nvdimm_bridge_key --> acpi_scan_lock --> &cxl_root_key
-> >
-> >   Possible unsafe locking scenario:
-> >
-> >         CPU0                    CPU1
-> >         ----                    ----
-> >    lock(&cxl_root_key);
-> >                                 lock(acpi_scan_lock);
-> >                                 lock(&cxl_root_key);
-> >    lock(&cxl_nvdimm_bridge_key);
-> >
-> > ---
-> >
-> > These stem from holding nvdimm_bus_lock() over hibernate_quiet_exec()
-> > which walks the entire system device topology taking device_lock() along
-> > the way. The nvdimm_bus_lock() is protecting against unregistration,
-> > multiple simultaneous ops callers, and preventing activate_show() from
-> > racing activate_store(). For the first 2, the lock is redundant.
-> > Unregistration already flushes all ops users, and sysfs already prevents
-> > multiple threads to be active in an ops handler at the same time. For
-> > the last userspace should already be waiting for its last
-> > activate_store() to complete, and does not need activate_show() to flush
-> > the write side, so this lock usage can be deleted in these attributes.
-> >
->
-> I'm sorry if this is obvious but why can't the locking be removed from
-> capability_show() and nvdimm_bus_firmware_visible() as well?
+On 23/04/2022 13:10, Krzysztof Kozlowski wrote:
+> On 22/04/2022 15:38, Christopher Obbard wrote:
+>> Document the RK3328 compatible for rockchip-vdec.
+>>
+>> Signed-off-by: Christopher Obbard <chris.obbard@collabora.com>
+>> ---
+>>  Documentation/devicetree/bindings/media/rockchip,vdec.yaml | 1 +
+>>  1 file changed, 1 insertion(+)
+> 
+> 
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-It can, that's a good catch, thanks.
+I acked this but Johan pointed out that your intention was different and
+missing patch context is quite important here. Please explain what
+exactly you wanted in the patch? Now it looks actually wrong, so my ack
+is not correct.
+
+Best regards,
+Krzysztof

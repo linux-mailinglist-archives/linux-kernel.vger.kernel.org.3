@@ -2,76 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F3750C7D6
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 08:40:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 431AC50C7DA
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 08:50:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233641AbiDWGlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 02:41:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56348 "EHLO
+        id S233580AbiDWGwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 02:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233385AbiDWGlM (ORCPT
+        with ESMTP id S229565AbiDWGwt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 02:41:12 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F02DEB
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 23:38:16 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id s18so20283076ejr.0
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 23:38:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JfYNk7PKym38MlGAXyXafcCNWPn+2drPWLNtsAJTZac=;
-        b=wYRkumz1HH5a5k41YA/3eyDDbvnMB1QTrSknt8c1j99bwzKt02sO/yGBsz4l9qzhVx
-         JdgMXmnVnqe5kV8Html2wprELfIEpNmTRD3bGakgJS/qHVWcPU+sLDjpFY+jOl9b8+T5
-         LKtUZ6In5Mvp/0CB6hxnHt12qThKxTApkJxaOik1N8AUYqMwHSGe4WZB8Y7lXZ58hRma
-         D81PrYOUXEPCCSE4QAkX2/wFJngtAzRzub/zH38Bf1ZeFUv6eAyW9KHYipZpX+NZSUo9
-         +LXdpkcwiBohl6gk/mtgxvVf6x2fv+6i+6lKMMNVHEktGiUyRGwDJ4YYBudkReeqX6EA
-         2WNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JfYNk7PKym38MlGAXyXafcCNWPn+2drPWLNtsAJTZac=;
-        b=kmTlQy9RUAtaLPu7+r2QGvQt9wMNlub67LzSAy5baGPqnxVnnUBncitxdX5+RRyBH9
-         znIXyWZJtIBi0irkifyV/1r7XNbg64jdrPvpOqsyJthJ4fKIjAIxRDstZKzfnjZRCqF1
-         oeborYRJUDUVuPTASMpTqdGvL4Ty8eVEluJYXshdv1bl3y2dDwCd4bGxMDp9m5LmmdBm
-         TIHwiCCtIxSGzNG8SBHCFOtkkInjYrcOG1vLKxgrWZar0P56lAOeIARwIahGtVOWFIlN
-         Cd/mj068GL3PMy1GAGQiUzTuMpT8QiS3r/E2M5/uSqit2RUQkqZ770fEYxd+YSD8NiGw
-         rxCA==
-X-Gm-Message-State: AOAM533+6SWH4tnuZUfxyTZ2/8U3wZMFFA/axXeQ9FnJIFr+8JSYeyhj
-        WVll+YDwZM+0Fn4sf9G8fb/x2A==
-X-Google-Smtp-Source: ABdhPJwzivo8NzW2VqVoaWDBZYgI3SnzZw9bPgroasDWLZL3hitJGtp3e92gxF/3V81cOzkCePJQXg==
-X-Received: by 2002:a17:906:5d12:b0:6f0:17a5:6053 with SMTP id g18-20020a1709065d1200b006f017a56053mr7275588ejt.635.1650695894463;
-        Fri, 22 Apr 2022 23:38:14 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s ([104.245.96.34])
-        by smtp.gmail.com with ESMTPSA id x12-20020a170906134c00b006ef8be0e8e9sm1398092ejb.168.2022.04.22.23.38.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 23:38:13 -0700 (PDT)
-Date:   Sat, 23 Apr 2022 14:38:05 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Ali Saidi <alisaidi@amazon.com>
-Cc:     kan.liang@linux.intel.com, Nick.Forrington@arm.com,
-        acme@kernel.org, ak@linux.intel.com,
-        alexander.shishkin@linux.intel.com, andrew.kilroy@arm.com,
-        benh@kernel.crashing.org, german.gomez@arm.com,
-        james.clark@arm.com, john.garry@huawei.com, jolsa@kernel.org,
-        kjain@linux.ibm.com, lihuafei1@huawei.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
-        mathieu.poirier@linaro.org, mingo@redhat.com, namhyung@kernel.org,
-        peterz@infradead.org, will@kernel.org
-Subject: Re: [PATCH v5 2/5] perf: Add SNOOP_PEER flag to perf mem data struct
-Message-ID: <20220423063805.GA559531@leoy-ThinkPad-X240s>
-References: <c17dedde-6ba8-db9b-4827-32477f039764@linux.intel.com>
- <20220422212249.22463-1-alisaidi@amazon.com>
+        Sat, 23 Apr 2022 02:52:49 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DC97F202;
+        Fri, 22 Apr 2022 23:49:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650696592; x=1682232592;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/TgZTP8Sb4P0FH9slFXu/lphspGv+TGMH48WzenOT9M=;
+  b=CgLv0cNokeVuUc3sPD/1E8DHwcNLhxdF2M9XMrt7IVRTWO2dfb+Nmmjz
+   jv/wumVJ8SHweS0qUGLrlzCcGONGTySvXdvDCr+4pH4ynzSsJg1sX1tNy
+   hURvwnyHX+hWdV+kSr3hBpixlKTLx4x6trrvW6X8fGImBI0RpXoCkclHf
+   O/UyiiRBtVzEPhyq5eO2jAaergFn3ylNyLITwvwsqDe5p95V4AWScoLuz
+   xS1HAcxD0X2BRt6ufjIfONpMeLLW1WyXwYLC191hiRcxQMR3aIOgsXJY4
+   nRdeOJu90R44M0s8Zmqd4wrIF0m5mMik3oD/Klqy69EBMztsRv249KDyv
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="327776409"
+X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
+   d="scan'208";a="327776409"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 23:49:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,283,1643702400"; 
+   d="scan'208";a="627297258"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 22 Apr 2022 23:49:48 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ni9aW-000B6g-75;
+        Sat, 23 Apr 2022 06:49:48 +0000
+Date:   Sat, 23 Apr 2022 14:49:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Miles Chen <miles.chen@mediatek.com>,
+        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-media@vger.kernel.org, Miles Chen <miles.chen@mediatek.com>,
+        iommu@lists.linux-foundation.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iommu/mediatek: fix NULL pointer dereference when
+ printing dev_name
+Message-ID: <202204231446.IYKdZ674-lkp@intel.com>
+References: <20220422223549.4173-1-miles.chen@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220422212249.22463-1-alisaidi@amazon.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+In-Reply-To: <20220422223549.4173-1-miles.chen@mediatek.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,51 +75,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 09:22:49PM +0000, Ali Saidi wrote:
-> 
-> On Fri, 22 Apr 2022 21:43:28, Kan Liang wrote:
-> > On 4/22/2022 2:49 PM, Ali Saidi wrote:
-> > > On Wed, 20 Apr 2022 18:43:28, Kan Liang wrote:
-> > >> On 4/8/2022 3:53 PM, Ali Saidi wrote:
-> > >>> Add a flag to the perf mem data struct to signal that a request caused a
-> > >>> cache-to-cache transfer of a line from a peer of the requestor and
-> > >>> wasn't sourced from a lower cache level.
-> > >>
-> > >> It sounds similar to the Forward state. Why can't the
-> > >> PERF_MEM_SNOOPX_FWD be reused?
-> > > 
-> > > Is there a definition of SNOOPX_FWD i can refer to? Happy to use this instead if
-> > > the semantics align between architectures.
-> > > 
-> > 
-> > + Andi
-> > 
-> > As my understanding, the SNOOPX_FWD means the Forward state, which is a 
-> > non-modified (clean) cache-to-cache copy.
-> > https://en.wikipedia.org/wiki/MESIF_protocol
->   
-> In this case the semantics are different. We know the line was transferred from
-> another peer cache, but don't know if it was clean, dirty, or if the receiving core
-> now has exclusive ownership of it.
+Hi Miles,
 
-In the spec "Intel 64 and IA-32 Architectures Software Developer's Manual,
-Volume 3B: System Programming Guide, Part 2", section "18.8.1.3 Off-core
-Response Performance Monitoring in the Processor Core", it defines the
-REMOTE_CACHE_FWD as:
+Thank you for the patch! Perhaps something to improve:
 
-"L3 Miss: local homed requests that missed the L3 cache and was serviced
-by forwarded data following a cross package snoop where no modified copies
-found. (Remote home requests are not counted)".
+[auto build test WARNING on joro-iommu/next]
+[also build test WARNING on v5.18-rc3 next-20220422]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Except SNOOPX_FWD means a no modified cache snooping, it also means it's
-a cache conherency from *remote* socket.  This is quite different from we
-define SNOOPX_PEER, which only snoop from peer CPU or clusters.
+url:    https://github.com/intel-lab-lkp/linux/commits/Miles-Chen/iommu-mediatek-fix-NULL-pointer-dereference-when-printing-dev_name/20220423-070605
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git next
+config: hexagon-randconfig-r041-20220422 (https://download.01.org/0day-ci/archive/20220423/202204231446.IYKdZ674-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/85771767e503ca60069fe4e6ec2ddb80c7f9bafa
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Miles-Chen/iommu-mediatek-fix-NULL-pointer-dereference-when-printing-dev_name/20220423-070605
+        git checkout 85771767e503ca60069fe4e6ec2ddb80c7f9bafa
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/iommu/
 
-If no objection, I prefer we could keep the new snoop type SNOOPX_PEER,
-this would be easier for us to distinguish the semantics and support the
-statistics for SNOOPX_FWD and SNOOPX_PEER separately.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I overlooked the flag SNOOPX_FWD, thanks a lot for Kan's reminding.
+All warnings (new ones prefixed by >>):
 
-Thanks,
-Leo
+>> drivers/iommu/mtk_iommu.c:605:6: warning: variable 'larbdev' is uninitialized when used here [-Wuninitialized]
+           if (larbdev) {
+               ^~~~~~~
+   drivers/iommu/mtk_iommu.c:597:24: note: initialize the variable 'larbdev' to silence this warning
+           struct device *larbdev;
+                                 ^
+                                  = NULL
+   1 warning generated.
+
+
+vim +/larbdev +605 drivers/iommu/mtk_iommu.c
+
+   592	
+   593	static void mtk_iommu_release_device(struct device *dev)
+   594	{
+   595		struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
+   596		struct mtk_iommu_data *data;
+   597		struct device *larbdev;
+   598		unsigned int larbid;
+   599	
+   600		if (!fwspec || fwspec->ops != &mtk_iommu_ops)
+   601			return;
+   602	
+   603		data = dev_iommu_priv_get(dev);
+   604		larbid = MTK_M4U_TO_LARB(fwspec->ids[0]);
+ > 605		if (larbdev) {
+   606			larbdev = data->larb_imu[larbid].dev;
+   607			device_link_remove(dev, larbdev);
+   608		}
+   609	
+   610		iommu_fwspec_free(dev);
+   611	}
+   612	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

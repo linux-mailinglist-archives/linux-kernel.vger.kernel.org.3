@@ -2,91 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B536150CBEF
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 17:47:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F2350CC01
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 17:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236058AbiDWPuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 11:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58814 "EHLO
+        id S236159AbiDWPyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 11:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234162AbiDWPum (ORCPT
+        with ESMTP id S233748AbiDWPye (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 11:50:42 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCD1D3981;
-        Sat, 23 Apr 2022 08:47:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1650728864; x=1682264864;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=WUlcHf/t/2eZN/wNFhQO0XPNYnopzEAdT4u3MWAmykg=;
-  b=JoUz3Gjw749ZAnD0F5JAUPoEt1TlM5Kx2PJuEMbeNyuAPyO7xDfeBJ1s
-   umPk91jV16+NWc6rJkjE+tIdeCmLSFtRhEyVGfMPHFJizSBmuIpV1kvAe
-   17lDki1uWoVVtIm82t6lY6fAzFphvcPfVq1UYQs9KcVxC2EYFH9Hz+Ax2
-   SuZx0ruf624MUDu6BEQV17hnszKeNcxeCcEhXug7CYD/pJDgVu+w8h66N
-   FtcEjKSe19ADL8k/QXIHm59olKBttQQpHU5Tj3o4f7ULll/BkBILlicIr
-   jeTzruxSoL6McY8SulR1/TaxUnQGyKSVe7jeJkJQ6BfB8zBtsZ4C9taTL
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.90,284,1643698800"; 
-   d="scan'208";a="161490770"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Apr 2022 08:47:44 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Sat, 23 Apr 2022 08:47:43 -0700
-Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Sat, 23 Apr 2022 08:47:35 -0700
-From:   Arun Ramadoss <arun.ramadoss@microchip.com>
-To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, <UNGLinuxDriver@microchip.com>,
-        Arun Ramadoss <arun.ramadoss@microchip.com>
-Subject: [Patch net-next] net: phy: LAN937x: add interrupt support for link detection
-Date:   Sat, 23 Apr 2022 21:17:27 +0530
-Message-ID: <20220423154727.29052-1-arun.ramadoss@microchip.com>
-X-Mailer: git-send-email 2.33.0
+        Sat, 23 Apr 2022 11:54:34 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C51D64C3;
+        Sat, 23 Apr 2022 08:51:36 -0700 (PDT)
+Received: from g550jk.arnhem.chello.nl (a246182.upc-a.chello.nl [62.163.246.182])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 3E165CAE5B;
+        Sat, 23 Apr 2022 15:51:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1650729095; bh=Pv8SOge4wX45Hpi29ExyVTuAkh3jcltOvD+t2ezoUEQ=;
+        h=From:To:Cc:Subject:Date;
+        b=djoiGXYM+jQLxx3Tu89EH4wzvKevDNK/X+X84GBLjY8YiOP/EjoyHYlVgR4Kx1SR+
+         8XvzpPveYIIPeqjsRBXmsn/JlCowliOsBBzfG+daUdgaF6R6iebsqbkC04vi95aCEx
+         l16kezGumToX0L+sDK99D0BOhGQSi3J8m/onfAWc=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/5] dt-bindings: remoteproc: qcom: pas: Add MSM8226 adsp
+Date:   Sat, 23 Apr 2022 17:50:55 +0200
+Message-Id: <20220423155059.660387-1-luca@z3ntu.xyz>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added the config_intr and handle_interrupt for the LAN937x phy which is
-same as the LAN87xx phy.
+Add the compatible for the adsp found in MSM8226.
 
-Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 ---
- drivers/net/phy/microchip_t1.c | 2 ++
- 1 file changed, 2 insertions(+)
+ Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/net/phy/microchip_t1.c b/drivers/net/phy/microchip_t1.c
-index 796fbcb7dafe..d4c93d59bc53 100644
---- a/drivers/net/phy/microchip_t1.c
-+++ b/drivers/net/phy/microchip_t1.c
-@@ -792,6 +792,8 @@ static struct phy_driver microchip_t1_phy_driver[] = {
- 		.flags          = PHY_POLL_CABLE_TEST,
- 		.features	= PHY_BASIC_T1_FEATURES,
- 		.config_init	= lan87xx_config_init,
-+		.config_intr    = lan87xx_phy_config_intr,
-+		.handle_interrupt = lan87xx_handle_interrupt,
- 		.suspend	= genphy_suspend,
- 		.resume		= genphy_resume,
- 		.config_aneg    = lan87xx_config_aneg,
-
-base-commit: cfc1d91a7d78cf9de25b043d81efcc16966d55b3
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+index a4409c398193..925e4015d59b 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+@@ -16,6 +16,7 @@ description:
+ properties:
+   compatible:
+     enum:
++      - qcom,msm8226-adsp-pil
+       - qcom,msm8974-adsp-pil
+       - qcom,msm8996-adsp-pil
+       - qcom,msm8996-slpi-pil
+@@ -159,6 +160,7 @@ allOf:
+         compatible:
+           contains:
+             enum:
++              - qcom,msm8226-adsp-pil
+               - qcom,msm8974-adsp-pil
+               - qcom,msm8996-adsp-pil
+               - qcom,msm8996-slpi-pil
+@@ -274,6 +276,7 @@ allOf:
+         compatible:
+           contains:
+             enum:
++              - qcom,msm8226-adsp-pil
+               - qcom,msm8974-adsp-pil
+               - qcom,msm8996-adsp-pil
+               - qcom,msm8996-slpi-pil
+@@ -364,6 +367,7 @@ allOf:
+         compatible:
+           contains:
+             enum:
++              - qcom,msm8226-adsp-pil
+               - qcom,msm8996-adsp-pil
+               - qcom,msm8998-adsp-pas
+     then:
+@@ -546,6 +550,7 @@ allOf:
+         compatible:
+           contains:
+             enum:
++              - qcom,msm8226-adsp-pil
+               - qcom,msm8974-adsp-pil
+               - qcom,msm8996-adsp-pil
+               - qcom,msm8996-slpi-pil
 -- 
-2.33.0
+2.36.0
 

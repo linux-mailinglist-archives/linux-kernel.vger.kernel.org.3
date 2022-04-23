@@ -2,114 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 933A950CC13
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 17:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D441550CC16
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 17:58:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236225AbiDWQAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 12:00:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38820 "EHLO
+        id S236238AbiDWQB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 12:01:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236193AbiDWQAM (ORCPT
+        with ESMTP id S235824AbiDWQBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 12:00:12 -0400
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A4D2626;
-        Sat, 23 Apr 2022 08:57:14 -0700 (PDT)
-Received: by mail-qk1-f171.google.com with SMTP id b68so7960491qkc.4;
-        Sat, 23 Apr 2022 08:57:14 -0700 (PDT)
+        Sat, 23 Apr 2022 12:01:24 -0400
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E6BFD27
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 08:58:27 -0700 (PDT)
+Received: by mail-oo1-xc35.google.com with SMTP id g30-20020a4a251e000000b0033a39d8340aso1968619ooa.5
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 08:58:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=27WRb8TAj1xwCmRX5jLJOJcOnmbBFcgubgVjuAUaE4o=;
+        b=y6xW2G1XsSHeyH5DXQeveuW/+O0IFPUrGFlQdrEGfcYGVPfpVes+ogoxf7DdHI/rMa
+         S8CrJLRFP05dPLdga+w21Qd116oGA0vO+lAzTSoTXebiKhah9Ph1yHMOHQgKMiaXlGiY
+         5xmiiuhimxwugnQGhKahuJCYouLaT7oKHwdPdVgdnCoH2QOVmA6tPHoJqkbsvusRTQcm
+         0ll1BLKmpkslmQZMJJz4FLOKBMGF0M2ilrmO+BAxwZf224P5MYKanmGke0HCiAFh1gzT
+         2YStkcU3++Wqa9VF6mP3hDJz/aE5Xo7uJ4vBngiH1obS1VEWtTAwNxXBwhfuOToxYiMG
+         YA/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gmXNl4tIfL5wRbTrjuvKfaCU9MK0lOXp83omTUSrSMo=;
-        b=RqYcKbwdqymvvBUcZsqs2449ogL1+J5xlvDJt3JhwCZln//N/ASrDT/R/AsaDi4r5W
-         cIyOVCbsVpPi/SMbtnKam77lZMmMXxm9wLpnJBdJi/HllZEC2KQiJYrGcW17reB32E54
-         ku+/2abwX9sE/cQp5p7y95LwjCInYWf/PuEm1+9jJa8GmEgcnvTCIx7C246S0wt0brbM
-         IJgdz59Ydq00nA13w6Mblr78h/uNX+FOOUhhm3rqqL+/dIC/t5+7RfKdrIdBRQy6/lWA
-         8jl+qDzgEVcBy2wNfZ9eccDkleiFjXgCCdLv9JKEJntYEOhy5LTMNg+nvHMOpmhSXgD5
-         x2tw==
-X-Gm-Message-State: AOAM530fcqYnQojJzgxWl3pQ39U0MPI9ieIcXsNi8GwxbBLydcYne6SW
-        W7onRlfVvmLEvZOoX0OFoic=
-X-Google-Smtp-Source: ABdhPJxrka55ASWkCj+31Zq8g/DCOT2vSRE9a3/Q38M+L6ijF+65YD0/feALRFzYTD/HSx0KMyH5Rg==
-X-Received: by 2002:a05:620a:2588:b0:680:f657:fbd6 with SMTP id x8-20020a05620a258800b00680f657fbd6mr5649398qko.287.1650729433397;
-        Sat, 23 Apr 2022 08:57:13 -0700 (PDT)
-Received: from localhost (fwdproxy-ash-119.fbsv.net. [2a03:2880:20ff:77::face:b00c])
-        by smtp.gmail.com with ESMTPSA id w4-20020a05620a0e8400b0067b1bcd081csm2321762qkm.66.2022.04.23.08.57.12
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=27WRb8TAj1xwCmRX5jLJOJcOnmbBFcgubgVjuAUaE4o=;
+        b=UVZJ5qMPC/AZILIlrCu+z8Dphf6uLxbAWITMT2rAy2FGTE77AfOT9U5a0YRjzQQJCL
+         PfZHl+AZqfRHMb8tbWPuamPqXBhr4BX5FOMJg+Hngk20U3nNG3rA+gS5XwYMcSbhL43x
+         Cm5MV8Edv3mqqI3apVlGo+G40GimH/j4jEQSfMfrqdFs5bo7Qm77tpoyjwV9S/mEy46f
+         crpZzEWULXwzC7naDhoGX0m5utJFswHrLYD3rK2xm1W6Oxcf4sjvyC0uZPvza4vqM17W
+         Wfjh0cltp0JVgeRiMFkWORYbccMMVB+oZzBnu8W7pZUTQraO5mU+xH7w53udhgOUyPJA
+         ug6g==
+X-Gm-Message-State: AOAM533xBxKwHYUZiIf8Ypqci6GxIBGFNm5u7SMyvGY97N73GpOozm/N
+        vTdENylaoE+yv7kkm0JQFOCkaQ==
+X-Google-Smtp-Source: ABdhPJxirqopZgxakMSnC5mL6OQFJH4GIYYrYUpo7jcz3xc42mq/IIeVQ0PA9j/DS5UivlF8dtmF+Q==
+X-Received: by 2002:a4a:c294:0:b0:329:2fed:ad3f with SMTP id b20-20020a4ac294000000b003292fedad3fmr3543974ooq.4.1650729506813;
+        Sat, 23 Apr 2022 08:58:26 -0700 (PDT)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id a37-20020a9d2628000000b0060563c52952sm1915719otb.8.2022.04.23.08.58.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 08:57:13 -0700 (PDT)
-From:   David Vernet <void@manifault.com>
-To:     akpm@linux-foundation.org
-Cc:     tj@kernel.org, roman.gushchin@linux.dev,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, hannes@cmpxchg.org, mhocko@kernel.org,
-        shakeelb@google.com, kernel-team@fb.com, void@manifault.com
-Subject: [PATCH v2 5/5] cgroup: Fix racy check in alloc_pagecache_max_30M() helper function
-Date:   Sat, 23 Apr 2022 08:56:22 -0700
-Message-Id: <20220423155619.3669555-6-void@manifault.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220423155619.3669555-1-void@manifault.com>
-References: <20220423155619.3669555-1-void@manifault.com>
+        Sat, 23 Apr 2022 08:58:26 -0700 (PDT)
+Date:   Sat, 23 Apr 2022 10:58:24 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     agross@kernel.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com,
+        srinivas.kandagatla@linaro.org, dianders@chromium.org,
+        swboyd@chromium.org, judyhsiao@chromium.org,
+        quic_rjendra@quicinc.com,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Subject: Re: [PATCH] arm64: dts: qcom: sc7280: Add ldo_l17b regulator node
+Message-ID: <YmQiIJatomyUVahR@builder.lan>
+References: <1650550779-8133-1-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1650550779-8133-1-git-send-email-quic_srivasam@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-alloc_pagecache_max_30M() in the cgroup memcg tests performs a 50MB
-pagecache allocation, which it expects to be capped at 30MB due to the
-calling process having a memory.high setting of 30MB. After the allocation,
-the function contains a check that verifies that MB(29) < memory.current <=
-MB(30). This check can actually fail non-deterministically.
+On Thu 21 Apr 09:19 CDT 2022, Srinivasa Rao Mandadapu wrote:
 
-The testcases that use this function are test_memcg_high() and
-test_memcg_max(), which set memory.min and memory.max to 30MB respectively
-for the cgroup under test. The allocation can slightly exceed this number
-in both cases, and for memory.max, the process performing the allocation
-will not have the OOM killer invoked as it's performing a pagecache
-allocation.  This patchset therefore updates the above check to instead use
-the verify_close() helper function.
+> Add ldo_l17b in pm7325 regulator, which is required for
+> wcd codec vdd buck supply.
+> 
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
+> index b833ba1..17d0c05 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
+> @@ -113,6 +113,11 @@
+>  			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+>  		};
+>  
+> +		vreg_l17b_1p8: ldo17 {
+> +			regulator-min-microvolt = <1700000>;
+> +			regulator-max-microvolt = <1900000>;
 
-Signed-off-by: David Vernet <void@manifault.com>
-Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
----
- tools/testing/selftests/cgroup/test_memcontrol.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+Can you confirm that this doesn't need to be in HPM mode?
 
-diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-index 38d2054eefe6..3bac06999354 100644
---- a/tools/testing/selftests/cgroup/test_memcontrol.c
-+++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-@@ -564,9 +564,14 @@ static int alloc_pagecache_max_30M(const char *cgroup, void *arg)
- {
- 	size_t size = MB(50);
- 	int ret = -1;
--	long current;
-+	long current, high, max;
- 	int fd;
- 
-+	high = cg_read_long(cgroup, "memory.high");
-+	max = cg_read_long(cgroup, "memory.max");
-+	if (high != MB(30) && max != MB(30))
-+		goto cleanup;
-+
- 	fd = get_temp_fd();
- 	if (fd < 0)
- 		return -1;
-@@ -575,7 +580,7 @@ static int alloc_pagecache_max_30M(const char *cgroup, void *arg)
- 		goto cleanup;
- 
- 	current = cg_read_long(cgroup, "memory.current");
--	if (current <= MB(29) || current > MB(30))
-+	if (!values_close(current, MB(30), 5))
- 		goto cleanup;
- 
- 	ret = 0;
--- 
-2.30.2
+Thanks,
+Bjorn
 
+> +		};
+> +
+>  		vdd_px_wcd9385:
+>  		vdd_txrx:
+>  		vddpx_0:
+> -- 
+> 2.7.4
+> 

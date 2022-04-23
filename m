@@ -2,227 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6093550CA0E
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 14:48:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 933D750CA12
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 14:49:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235501AbiDWMvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 08:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41578 "EHLO
+        id S235511AbiDWMwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 08:52:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235460AbiDWMvS (ORCPT
+        with ESMTP id S234974AbiDWMwF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 08:51:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 382361A07B
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 05:48:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650718099;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pRhbv36CFIo8Yp1QE2JYd5jVp+PVRgKRLXPKJ8jb5rI=;
-        b=AmQjmw3RkPJeNHe/VxOZnDuPj8IAwbUoSwroKknlC5TSeTy9ABjopWOO+6mB1zyWfM1Lqj
-        L8McJuJRsI/+HMieugrvzj5krvXwPS3fzL311sg93qJ4XuyS2Een9dHMyKFYP1eJjPx+my
-        G9xK/vDlx7gqJ1uryE6PA3QDpJ6pBFY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-204-wKYpcH_IP8K7sDJQ2Qz6VA-1; Sat, 23 Apr 2022 08:48:16 -0400
-X-MC-Unique: wKYpcH_IP8K7sDJQ2Qz6VA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ED4F1101AA45;
-        Sat, 23 Apr 2022 12:48:15 +0000 (UTC)
-Received: from [10.72.13.230] (ovpn-13-230.pek2.redhat.com [10.72.13.230])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 67BB940F4940;
-        Sat, 23 Apr 2022 12:48:09 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v6 02/18] KVM: arm64: Route hypercalls based on their
- owner
-To:     Oliver Upton <oupton@google.com>
-Cc:     kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
-        eauger@redhat.com, Jonathan.Cameron@huawei.com,
-        vkuznets@redhat.com, will@kernel.org, shannon.zhaosl@gmail.com,
-        james.morse@arm.com, mark.rutland@arm.com, maz@kernel.org,
-        pbonzini@redhat.com, shan.gavin@gmail.com
-References: <20220403153911.12332-1-gshan@redhat.com>
- <20220403153911.12332-3-gshan@redhat.com> <YmETmWvPPQvHpQwP@google.com>
- <2519e2fa-4d6a-a5f8-1057-6b1820853036@redhat.com>
- <YmLs6t8iUn+BH6mo@google.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <6d66823e-a6b0-f52a-efe3-0fbf1538597a@redhat.com>
-Date:   Sat, 23 Apr 2022 20:48:06 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Sat, 23 Apr 2022 08:52:05 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2081.outbound.protection.outlook.com [40.107.244.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D384F1A82D;
+        Sat, 23 Apr 2022 05:49:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=R330jNaAtkZ6WpvIVfXh/8qvdexOEp9PkaqYxliVvpEzLMEwzmzSdYsPWQMhSlxbv/lpoAhwDUWOvRNgaOjl8Pl3FXcHCSxn8wha93InlYDcmL2yKwGTUfGI4NsfkNIRDBLi4o1d+wfEE6Ns/W3QH2vWvttcXQCWYBh10EuY0PMjJUCb+wgpaMRJFgvBybRtBBHyv1M9MqGLzwcQk+rKFsd3HMxnwOSYv0GRUkVtEmxfj8FnFBGNuDZKILWOwF0i2RC1hjRrkMgeD42pO7wAeseU6PRfIInnZBd9r/E2SV7TmGPYViR/IrkkFyDLDUl0LGRi4xQ89IXALLK9QEVZfQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZTSc/AQ+PQCUuR104LNTU5MGKut8AGJpqoDYM65l76A=;
+ b=f8mQclWBznbDXBlMRMTbO1Rc0+cHauO7CeyjiUALLiLwq70ILAbRPPcZW0vRkaOq1vzJihB3SFsklwh3GbJDm0rkXB8E9xiKH9Xg43dTuGr+zoOZX6j4vSKcfHf72kwd6PoVR10P2czCOH/pdCQdqlL0SPeQifgrOG7Tcgw9Ymobbt8mP3eQey+T27CKmF80QdYFS3t/2mKf4yFv89JE/MRP2h6wjsjbzpTMZ/Z69WmutYHW3ufoX7cFrO1mkT0JA6YLNISyuwIz7URlFG5XiKiWa/RahB+hwKNvAp/U4P3NjtPKNeL2Wc7yCqYoXOfNxIZYnlWdnP+oILWm4Jf4vw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.236) smtp.rcpttodomain=ti.com smtp.mailfrom=nvidia.com; dmarc=pass
+ (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
+ (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZTSc/AQ+PQCUuR104LNTU5MGKut8AGJpqoDYM65l76A=;
+ b=OJNu1e3kgWe0JbVCZz9ERHJRsZ9phSys0IjXpug6Iio0irHcSN7yJ9g3Qq1XZkT0rMCZL53FdQRDta5GwOIm65hplyI/JXOi+hcIu+z4KJRUyVjkWydban5vt1MQiVdNR22QhfAxKxURgkbg+tyy5/+bG88qYR4+6Vn/fG+fP7cUfb8rfiZkuwF5z7KTFIN5WW4QhDuigTfYCS6vjQDeOXeycQwiwjEBigdMSFh4BOfPfVv6mPMt6mXAI1qmGASrdQreSE9+Q44OQ7RTesgOZ8YDxLGoxIEibCf6v4GeV7GppPm+fsm8kqWbVpxeap7RlZs4y77KdDN3A9f+THzIgg==
+Received: from BN9P221CA0004.NAMP221.PROD.OUTLOOK.COM (2603:10b6:408:10a::12)
+ by DM8PR12MB5493.namprd12.prod.outlook.com (2603:10b6:8:3d::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Sat, 23 Apr
+ 2022 12:49:07 +0000
+Received: from BN8NAM11FT050.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:10a:cafe::1a) by BN9P221CA0004.outlook.office365.com
+ (2603:10b6:408:10a::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13 via Frontend
+ Transport; Sat, 23 Apr 2022 12:49:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.236; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.236) by
+ BN8NAM11FT050.mail.protection.outlook.com (10.13.177.5) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5186.14 via Frontend Transport; Sat, 23 Apr 2022 12:49:06 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ DRHQMAIL109.nvidia.com (10.27.9.19) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.32; Sat, 23 Apr 2022 12:49:06 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Sat, 23 Apr 2022 05:49:05 -0700
+Received: from vidyas-desktop.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server id 15.2.986.22 via Frontend
+ Transport; Sat, 23 Apr 2022 05:49:00 -0700
+From:   Vidya Sagar <vidyas@nvidia.com>
+To:     <bhelgaas@google.com>, <lorenzo.pieralisi@arm.com>,
+        <robh+dt@kernel.org>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>
+CC:     <kishon@ti.com>, <vkoul@kernel.org>, <kw@linux.com>,
+        <krzk@kernel.org>, <p.zabel@pengutronix.de>,
+        <mperttunen@nvidia.com>, <linux-pci@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <kthota@nvidia.com>, <mmaddireddy@nvidia.com>, <vidyas@nvidia.com>,
+        <sagar.tv@gmail.com>
+Subject: [PATCH V2 0/8] PCI: tegra: Add Tegra234 PCIe support
+Date:   Sat, 23 Apr 2022 18:18:50 +0530
+Message-ID: <20220423124858.25946-1-vidyas@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-In-Reply-To: <YmLs6t8iUn+BH6mo@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 477b2588-ff8d-4561-6e45-08da2527a783
+X-MS-TrafficTypeDiagnostic: DM8PR12MB5493:EE_
+X-Microsoft-Antispam-PRVS: <DM8PR12MB549396645C1AA0DA5E1DC2A8B8F69@DM8PR12MB5493.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: W4gmupU7LbknwZEcHYdDCkrX2Sf8F71j2c+3uuOi6c9U3Nbf8gcnLA9lFdV2pjQJNyih7XMVarjTOg/p6/+idQW+t6cvUVtcqfWLuELuL4zZTWZqfkeAYdO6rBiZtoIDR9lWVfh2yPii3AUhG56kCCOJR6ms64K091UubVBn38bvhDYQx661EXtyqXJirnanlJizag5tuFydubIKoQiFWPXJUbUUTl+4S066NLP+UguFRBpGp+VNUnfuIgsLj/pQpA7wIOBSRGMD0ud8qhUishfV/SpwNz5pZXps38Dsoi3Oqbs4Iw7TTHJOHjbRIsgepoVg4PxF5XCWnRKcumlxv9fdMpmDvZObStxEIKwgJ7JyCePS5/mhxrFCGVf1aLO3SdXpFlt5Dp1ARg5pebxo/C6qoUcGoNO+duWeeMOiydjmmDqP32I+Pix4dF47UgD2i45+yla6EwhdTQsNz1hj+Vp0vSYA0BKABk6jBs4qjYXnwVX/RHKFu/lCWzw2PTs9z8nIjlN9rAYjudyRfB5pG/M5RxLOe/zYkDhKDhqC9lqd8UdtUBrk3wAQEeiPA9bIhjQpM1F3v42EqTnATfpOjau7M/1ACDbVmX14DU0vR/PkSBLYCxw8vC7V6mXM/RsaFz5TrjsZmmpVuh9Ug2KuVPqpv1DRsDI1m7NkT8NXOKK9oTEBMNG420PFlU0YbM+lijRWUD4rOOTdEjV+lnZYbg==
+X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(36860700001)(356005)(81166007)(5660300002)(40460700003)(6636002)(54906003)(110136005)(8936002)(508600001)(7416002)(4326008)(336012)(8676002)(70206006)(70586007)(316002)(26005)(186003)(2906002)(1076003)(2616005)(83380400001)(426003)(47076005)(6666004)(7696005)(82310400005)(86362001)(36756003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Apr 2022 12:49:06.8988
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 477b2588-ff8d-4561-6e45-08da2527a783
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT050.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR12MB5493
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Oliver,
+Tegra234 has a total of 11 PCIe controllers based on Synopsys DesignWare core.
+There are three Universal PHY (UPHY) blocks (viz. HSIO, NVHS and GBE) with
+each block supporting 8 lanes respectively. Controllers:0~4 use UPHY lanes
+from HSIO block, Controllers:5,6 use UPHY lanes from NVHS block and
+Controllers:7~10 use UPHY lanes from GBE block. Lane mapping in each block
+is controlled in XBAR module by BPMP-FW. Since PCIe core has PIPE interface,
+a glue module called PIPE-to-UPHY (P2U) is used to connect each UPHY lane
+(applicable to all three UPHY bricks i.e. HSIO/NVHS/GBE) to PCIe controller.
+This patch series
+- Adds support for Tegra234 in the existing P2U PHY driver
+- Adds support for Tegra234 in the existing PCIe platform controller driver
+- Adds device tree nodes for all PCIe controllers
+- Enables nodes applicable to P3737-0000 platform
 
-On 4/23/22 1:59 AM, Oliver Upton wrote:
-> On Fri, Apr 22, 2022 at 08:20:50PM +0800, Gavin Shan wrote:
->> On 4/21/22 4:19 PM, Oliver Upton wrote:
->>> On Sun, Apr 03, 2022 at 11:38:55PM +0800, Gavin Shan wrote:
->>>> kvm_hvc_call_handler() directly handles the incoming hypercall, or
->>>> and routes it based on its (function) ID. kvm_psci_call() becomes
->>>> the gate keeper to handle the hypercall that can't be handled by
->>>> any one else. It makes kvm_hvc_call_handler() a bit messy.
->>>>
->>>> This reorgnizes the code to route the hypercall to the corresponding
->>>> handler based on its owner.
->>>
->>> nit: write changelogs in the imperative:
->>>
->>> Reorganize the code to ...
->>>
->>
->> Thanks again for your review. It will be corrected in next respin.
->> By the way, could you help to review the rest when you have free
->> cycles? :)
-> 
-> Yup, I've been thinking on the rest of the series just to make sure the
-> feedback I give is sane.
-> 
+Testing done on P3737-0000 platform
+- PCIe link is up with on-board Broadcom WiFi controller
 
-Sure.
+- PCIe link is up with an NVMe drive connected to M.2 Key-M slot and its
+  functionality is verified
 
->>>> The hypercall may be handled directly
->>>> in the handler or routed further to the corresponding functionality.
->>>> The (function) ID is always verified before it's routed to the
->>>> corresponding functionality. By the way, @func_id is repalced by
->>>> @func, to be consistent with by smccc_get_function().
->>>>
->>>> PSCI is the only exception, those hypercalls defined by 0.2 or
->>>> beyond are routed to the handler for Standard Secure Service, but
->>>> those defined in 0.1 are routed to the handler for Standard
->>>> Hypervisor Service.
->>>>
->>>> Suggested-by: Oliver Upton <oupton@google.com>
->>>> Signed-off-by: Gavin Shan <gshan@redhat.com>
->>>> ---
->>>>    arch/arm64/kvm/hypercalls.c | 199 +++++++++++++++++++++++-------------
->>>>    1 file changed, 127 insertions(+), 72 deletions(-)
->>>>
->>>> diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
->>>> index 8438fd79e3f0..b659387d8919 100644
->>>> --- a/arch/arm64/kvm/hypercalls.c
->>>> +++ b/arch/arm64/kvm/hypercalls.c
->>>
->>> [...]
->>>
->>>> +static int kvm_hvc_standard(struct kvm_vcpu *vcpu, u32 func)
->>>> +{
->>>> +	u64 val = SMCCC_RET_NOT_SUPPORTED;
->>>> +
->>>> +	switch (func) {
->>>> +	case ARM_SMCCC_TRNG_VERSION ... ARM_SMCCC_TRNG_RND32:
->>>> +	case ARM_SMCCC_TRNG_RND64:
->>>> +		return kvm_trng_call(vcpu);
->>>> +	case PSCI_0_2_FN_PSCI_VERSION ... PSCI_0_2_FN_SYSTEM_RESET:
->>>> +	case PSCI_0_2_FN64_CPU_SUSPEND ... PSCI_0_2_FN64_MIGRATE_INFO_UP_CPU:
->>>> +	case PSCI_1_0_FN_PSCI_FEATURES ... PSCI_1_0_FN_SET_SUSPEND_MODE:
->>>> +	case PSCI_1_0_FN64_SYSTEM_SUSPEND:
->>>> +	case PSCI_1_1_FN_SYSTEM_RESET2:
->>>> +	case PSCI_1_1_FN64_SYSTEM_RESET2:
->>>
->>> Isn't it known from the SMCCC what range of hypercall numbers PSCI and
->>> TRNG fall under, respectively?
->>>
->>> https://developer.arm.com/documentation/den0028/e/
->>>
->>> See sections 6.3 and 6.4.
->>>
->>
->> Bit#30 of the function ID is the call convention indication, which is
->> either 32 or 64-bits. For TRNG's function IDs, its 32-bits and 64-bits
->> variants are discrete. Besides, the spec reserves more functions IDs
->> than what range we're using. It means we don't have symbols to match
->> the reserved ranges. So it looks good to me for TRNG cases.
->>
->> For PSCI, it can be simplified as below, according to the defination
->> in include/uapi/linux/psci.h:
->>
->>      case PSCI_0_2_FN_PSCI_VERSION ...
->>           PSCI_1_1_FN_SYSTEM_RESET2:     /* 32-bits */
->>      case PSCI_0_2_FN64_CPU_SUSPEND ...
->>           PSCI_1_1_FN64_SYSTEM_RESET2:   /* 64-bits */
-> 
-> Right, but this still requires that we go back and update this switch
-> statement every time we add a new PSCI call, which is exactly what I was
-> hoping we could avoid. Doing this based exactly on the spec reduces the
-> burden for future changes, and keeps all relevant context in a single
-> spot.
-> 
->    #define SMCCC_STD_PSCI_RANGE_START	0x0000
->    #define SMCCC_STD_PSCI_RANGE_END	0x001f
->    #define SMCCC_STD_TRNG_RANGE_START	0x0050
->    #define SMCCC_STD_TRNG_RANGE_END	0x005f
-> 
->    switch (ARM_SMCCC_FUNC_NUM(function_id)) {
->            case SMCCC_STD_PSCI_RANGE_START ... SMCCC_STD_PSCI_RANGE_END:
-> 	          return kvm_psci_call(vcpu);
->            case SMCCC_STD_TRNG_RANGE_START ... SMCCC_STD_TRNG_RANGE_END:
-> 	  	  return kvm_trng_call(vcpu);
-> 
-> 	 ...
->    }
-> 
+- PCIe link is up with a variety of cards (NICs and USB3.0 add-on cards)
+  connected to CEM slot and their functionality is verified
 
-Yep, we should avoid to visit and modify this function when a new PSCI call
-is added. I intended not to introduce new macros, especially in the header
-file (include/linux/arm-smccc.h), which is out of kvm/arm64 scope to some
-degree. However, these newly added macros will have life much easier. I will
-include the changes in next respin.
+V2:
+* Dropped 3 patches that add clocks & resets IDs, power-domain IDs and
+  memory IDs for PCIe controllers as the patches are already available
+  in linux-next
+* Based on Bjorn's review comment, reverted the commit b57256918399 ("PCI:
+  tegra194: Rename tegra_pcie_dw to tegra194_pcie") and pushed it as a
+  separate patch before adding support for T234 in the existing driver
+* Addressed review comments from Rob for the other changes
 
->>>> +	case KVM_PSCI_FN_CPU_SUSPEND ... KVM_PSCI_FN_MIGRATE:
->>>> +		return kvm_psci_call(vcpu);
->>>
->>> You might want to handle these from the main call handler with a giant
->>> disclaimer that these values predate SMCCC and therefore collide with
->>> the standard hypervisor service range.
->>>
->>> [...]
->>>
->>
->> I probably just keep it as it is to follow the rule: to route
->> based on the owner strictly. Besides, there are 3 levels to
->> handle SMCCCs after this patch is applied, which corresponds
->> to 3 handlers as main/owner/function. It sounds more natural
->> for reader to follow the implementation in this way.
-> 
-> I think this makes it much more confusing for the reader, as you'd be
-> hard pressed to find these function IDs in the SMCCC spec. Since their
-> values are outside of the specification, it is confusing to only address
-> them after these switch statements have decided that they belong to a
-> particular service owner as they do not.
-> 
+Vidya Sagar (8):
+  dt-bindings: PHY: P2U: Add support for Tegra234 P2U block
+  dt-bindings: PCI: tegra: Add device tree support for Tegra234
+  arm64: tegra: Add P2U and PCIe controller nodes to Tegra234 DT
+  arm64: tegra: Enable PCIe slots in P3737-0000 board
+  phy: tegra: Add PCIe PIPE2UPHY support for Tegra234
+  PCI: Disable MSI for Tegra234 root ports
+  Revert "PCI: tegra194: Rename tegra_pcie_dw to tegra194_pcie"
+  PCI: tegra: Add Tegra234 PCIe support
 
-Ok. Lets filter these SMCCC PSCI numbers in kvm_hvc_call_handler():
+ .../bindings/pci/nvidia,tegra194-pcie.txt     | 104 ++-
+ .../bindings/phy/phy-tegra194-p2u.yaml        |  17 +-
+ .../nvidia/tegra234-p3737-0000+p3701-0000.dts |  25 +
+ arch/arm64/boot/dts/nvidia/tegra234.dtsi      | 775 ++++++++++++++++++
+ drivers/pci/controller/dwc/pcie-tegra194.c    | 622 +++++++++-----
+ drivers/pci/quirks.c                          |  13 +-
+ drivers/phy/tegra/phy-tegra194-p2u.c          |  48 +-
+ 7 files changed, 1396 insertions(+), 208 deletions(-)
 
-     /* Filter these calls that aren't documented in the specification */
-     if (func >= KVM_PSCI_FN_CPU_SUSPEND && func <= KVM_PSCI_FN_MIGRATE)
-         return kvm_psci_call(vcpu);
-
-     switch (ARM_SMCCC_OWNER_NUM(func)) {
-         :
-     }
-
-Thanks,
-Gavin
+-- 
+2.17.1
 

@@ -2,128 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA0F50CA3E
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 14:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1562850CA44
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 14:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235586AbiDWM5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 08:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
+        id S235602AbiDWM73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 08:59:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234914AbiDWM51 (ORCPT
+        with ESMTP id S232089AbiDWM7Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 08:57:27 -0400
-Received: from out28-196.mail.aliyun.com (out28-196.mail.aliyun.com [115.124.28.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70860BD6;
-        Sat, 23 Apr 2022 05:54:28 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.0743748|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0141704-0.000306015-0.985524;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047205;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.NWKZXFE_1650718463;
-Received: from 192.168.30.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NWKZXFE_1650718463)
-          by smtp.aliyun-inc.com(33.32.24.3);
-          Sat, 23 Apr 2022 20:54:24 +0800
-Subject: Re: [PATCH v2 1/3] SPI: Ingenic: Add support for use GPIO as chip
- select line.
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     broonie@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, contact@artur-rojek.eu,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com, reimu@sudomaker.com
-References: <1650654583-89933-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1650654583-89933-2-git-send-email-zhouyanjie@wanyeetech.com>
- <PQ9RAR.93DKCD4H5Q7G1@crapouillou.net>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <4645dd7a-08b4-e80e-2033-a55212c6f051@wanyeetech.com>
-Date:   Sat, 23 Apr 2022 20:54:23 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        Sat, 23 Apr 2022 08:59:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D00891139
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 05:56:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650718588;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=fXS1wYFISLzf4YrpSc6l5RCrDLoiak/N6nEId/I9Cks=;
+        b=SSaKlAEfnq3EqEd581Ktn/Kiac9PjV3iXRgIEtfh73uhT2YJg5I4WNgSlGI7FVfmVZELAs
+        CE3TKsa2hefIM7s1JZNAiUKKiRybMFYRiOh61xC7PdIyBfOIP0d7HElsz6XdQNeYOBZ1NC
+        wXfFzsKdmfxqboM8deW2lWhVELwUGFY=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-7-zevMUinqMbO2mlp2DZ42xw-1; Sat, 23 Apr 2022 08:56:26 -0400
+X-MC-Unique: zevMUinqMbO2mlp2DZ42xw-1
+Received: by mail-qv1-f70.google.com with SMTP id k10-20020ad45bea000000b0044c3ec9f75cso6567493qvc.4
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 05:56:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fXS1wYFISLzf4YrpSc6l5RCrDLoiak/N6nEId/I9Cks=;
+        b=1fZzxemhdjjhzEiOm1gEEO1iPajBt2sAo8v0fYJ+Bd8rrIFozVTqWHDvvdqSM1ejLU
+         5+TO95Kx7DbDSZsZiQjZgl5MWZRA3iaG+3g5YksZpKxfp7XBp/qIiExFSoX3y+TJY66/
+         dGPA1dh2YKK25sEz/pw+ZTtV9h+cTQkAj1bfhBEp70iAXerHllqsaVU1e7NasBbEk8I1
+         FaKfRulL3TK/21KLZycxVyzqEQMmOMO017Ff8BeBP0ljH9wwMxdoGzZtjckrCFC4Q9Js
+         M6d6N0cTwM3gbS9c2BQy/FgVaAdYXe/u7swhw79IHjHczSQH88gtFdLaK7L1vk1yXe5I
+         uRYw==
+X-Gm-Message-State: AOAM532yveZtCOo15+IUxQgyIoDlKeEdn+PO3PM41P5GqLtQ5VwQZvB0
+        SU7RP0aksEqrMZWZWMIpKwpTDFYIvtDwwZ/GDJ8EvFjv8gaJS7mK61NTN5yhlIYMPKDUbd0fC2Y
+        87QAz8DvO1GvlT4MGCk6So5N6
+X-Received: by 2002:a05:620a:44c6:b0:69e:9bef:53e3 with SMTP id y6-20020a05620a44c600b0069e9bef53e3mr5447562qkp.481.1650718586186;
+        Sat, 23 Apr 2022 05:56:26 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxhlweP7vkujEfw3nfYFCm7iGeT3wgX5eOb2GZoLM/GocC/XMB64gi5W1GtgsEOcxr1gb7hWw==
+X-Received: by 2002:a05:620a:44c6:b0:69e:9bef:53e3 with SMTP id y6-20020a05620a44c600b0069e9bef53e3mr5447553qkp.481.1650718585973;
+        Sat, 23 Apr 2022 05:56:25 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id f11-20020a05620a12eb00b0069c88d15b6asm2240097qkl.68.2022.04.23.05.56.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Apr 2022 05:56:25 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     daniel@ffwll.ch, deller@gmx.de, sam@ravnborg.org,
+        tzimmermann@suse.de, javierm@redhat.com, cssk@net-c.es
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] fbcon: change fbcon_*registered_fb variables to static
+Date:   Sat, 23 Apr 2022 08:56:18 -0400
+Message-Id: <20220423125618.1916005-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <PQ9RAR.93DKCD4H5Q7G1@crapouillou.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+Sparse reports these issues
+fbcon.c:106:16: warning: symbol 'fbcon_registered_fb' was not declared. Should it be static?
+fbcon.c:107:5: warning: symbol 'fbcon_num_registered_fb' was not declared. Should it be static?
 
-On 2022/4/23 上午3:20, Paul Cercueil wrote:
-> Hi Zhou,
->
-> Le sam., avril 23 2022 at 03:09:41 +0800, 周琰杰 (Zhou Yanjie) 
-> <zhouyanjie@wanyeetech.com> a écrit :
->> Add support for using GPIOs as chip select lines on Ingenic SoCs.
->>
->> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
->> ---
->>
->> Notes:
->>     v1->v2:
->>     Use "device_property_read_u32()" instead
->>     "of_property_read_u32()" as Paul Cercueil's suggestion.
->>
->>  drivers/spi/spi-ingenic.c | 11 +++++++++--
->>  1 file changed, 9 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/spi/spi-ingenic.c b/drivers/spi/spi-ingenic.c
->> index 03077a7..bb512ca 100644
->> --- a/drivers/spi/spi-ingenic.c
->> +++ b/drivers/spi/spi-ingenic.c
->> @@ -380,7 +380,7 @@ static int spi_ingenic_probe(struct 
->> platform_device *pdev)
->>      struct spi_controller *ctlr;
->>      struct ingenic_spi *priv;
->>      void __iomem *base;
->> -    int ret;
->> +    int num_cs, ret;
->>
->>      pdata = of_device_get_match_data(dev);
->>      if (!pdata) {
->> @@ -416,6 +416,11 @@ static int spi_ingenic_probe(struct 
->> platform_device *pdev)
->>      if (IS_ERR(priv->flen_field))
->>          return PTR_ERR(priv->flen_field);
->>
->> +    if (device_property_read_u32(dev, "num-cs", &num_cs)) {
->> +        dev_warn(dev, "Number of chip select lines not specified.\n");
->> +        num_cs = 2;
->
-> The "num-cs" property is not required in the binding, so I don't think 
-> the dev_warn() is warranted. Just silently set num_cs = 2.
->
+These variables are only used in fbcon.c. Single file use variables should
+be static, so change their storage-class specifiers to static.
 
-Sure.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/video/fbdev/core/fbcon.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/fbcon.c
+index c4e91715ef00..225ac0fe0143 100644
+--- a/drivers/video/fbdev/core/fbcon.c
++++ b/drivers/video/fbdev/core/fbcon.c
+@@ -103,8 +103,8 @@ enum {
+ 
+ static struct fbcon_display fb_display[MAX_NR_CONSOLES];
+ 
+-struct fb_info *fbcon_registered_fb[FB_MAX];
+-int fbcon_num_registered_fb;
++static struct fb_info *fbcon_registered_fb[FB_MAX];
++static int fbcon_num_registered_fb;
+ 
+ #define fbcon_for_each_registered_fb(i)		\
+ 	for (i = 0; WARN_CONSOLE_UNLOCKED(), i < FB_MAX; i++)		\
+-- 
+2.27.0
 
-> With this addressed:
-> Reviewed-by: Paul Cercueil <paul@crapouillou.net>
->
-> Cheers,
-> -Paul
->
->> +    }
->> +
->>      platform_set_drvdata(pdev, ctlr);
->>
->>      ctlr->prepare_transfer_hardware = spi_ingenic_prepare_hardware;
->> @@ -429,7 +434,9 @@ static int spi_ingenic_probe(struct 
->> platform_device *pdev)
->>      ctlr->bits_per_word_mask = pdata->bits_per_word_mask;
->>      ctlr->min_speed_hz = 7200;
->>      ctlr->max_speed_hz = 54000000;
->> -    ctlr->num_chipselect = 2;
->> +    ctlr->use_gpio_descriptors = true;
->> +    ctlr->max_native_cs = 2;
->> +    ctlr->num_chipselect = num_cs;
->>      ctlr->dev.of_node = pdev->dev.of_node;
->>
->>      if (spi_ingenic_request_dma(ctlr, dev))
->> -- 
->> 2.7.4
->>
->

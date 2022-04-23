@@ -2,94 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87CF950C991
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 13:25:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6D550C996
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 13:30:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235213AbiDWL2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 07:28:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35656 "EHLO
+        id S235209AbiDWLdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 07:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234999AbiDWL2J (ORCPT
+        with ESMTP id S232564AbiDWLdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 07:28:09 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF28C1094
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 04:25:12 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id t11so20869605eju.13
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 04:25:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=b0QHbEfjhdFjBQohwIb3mVsJsYj7ByjobrCCQyighNY=;
-        b=OWWWrhwA+sfgjaEEgSVqN+h+Zolso0GHgxGLbXaAmv/G+zvfsKo1V2V7wlW70jg1q6
-         nG0T1MuhNxoirWsGTIdJieUZlPpgafXSDj0Z2tgroyjzhE03kXfYmTsuPr37vzAzt83Y
-         hYCfppSyrak8z5DjQ3oDCWonqpdXuoLo5v0/o1Fwp0JKTgXHn1X6eR/Uc9uX48C8pBJd
-         K5uyXXj71TnWF4CpnknbDshZy03N3q2nqoHRjmB5nxY15r6F8oLMwn3e5REiWTZqx6fz
-         UH7ePgOFvqCcQ9ZdYReEXiSDiiE5eCsjWFEiul2g1Lre4bD63Xh6zFWeUIOujSu8QGIO
-         xJBw==
+        Sat, 23 Apr 2022 07:33:37 -0400
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D244219C2F;
+        Sat, 23 Apr 2022 04:30:40 -0700 (PDT)
+Received: by mail-qk1-f169.google.com with SMTP id d19so7596880qko.3;
+        Sat, 23 Apr 2022 04:30:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=b0QHbEfjhdFjBQohwIb3mVsJsYj7ByjobrCCQyighNY=;
-        b=bf9fjc88CwQTIkQOmruqRXtxCwnNSCmIE0r6670J1RCy2e/GCF8zNjmRlCb5Qu/RJi
-         hA5E9FEJsknXdgsmbvE8hf97g59bH3jyD4BsTdTr+f7peXwepx6Ih12b4EfaLBwe4F3f
-         +81ru/A1fDJ5u1y6pL6nzgZcCKG/6qt6yu649LiU5b9XFNLbbqsFOuBkww7I6mk5VLEK
-         K9FJMIBXB1fUFC+f0s/R/cX1G0IPvxqJvPW2w+BDiIiz6IJ5jnPYawzmtX0X3Orej3Vw
-         Q1ARkDeJn+I6p4W5q1Btsmp9ANs6LT4QMeci9HnwFwaTGjbmCq3D0898DmJnfpm2BQZU
-         bwUg==
-X-Gm-Message-State: AOAM533LB/5h2Ia6Dhyn7Xeb7uh0qtq0xJAH+sYM9HPvi/tu+7qvWSUh
-        b4hWZNdULIuaVyJ+JIw4gxt6Lw==
-X-Google-Smtp-Source: ABdhPJykneMY5JCtqucAvuVw5uFTMjnYXBQJbrUzg8v0zp5Q2N9doiRsAbkBlDcBP0r3mcI0+hg3sA==
-X-Received: by 2002:a17:907:6d9f:b0:6f0:1077:eaf4 with SMTP id sb31-20020a1709076d9f00b006f01077eaf4mr8081863ejc.708.1650713111613;
-        Sat, 23 Apr 2022 04:25:11 -0700 (PDT)
-Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id ay17-20020a170906d29100b006e88f246fdbsm1589880ejb.152.2022.04.23.04.25.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Apr 2022 04:25:11 -0700 (PDT)
-Message-ID: <0c4c5e9d-7222-69d3-1dea-1a499acf0f6c@linaro.org>
-Date:   Sat, 23 Apr 2022 13:25:10 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=v+hm7gQVZ3AvhLOPtEZQpwUGWPY5yjYTJl2KFpAuyRI=;
+        b=CmVP1UEeOajeakz/bqm6hWkTeRu/K/B2XMFZL2i+OoBmJ+KJe/HXPYI40QNwBf6Jd9
+         omMkoNod4T8krrRtfnzcK+JiBCBDn/QU+rgeFgSt9so0nclwGjzwF9P7itAIhwF/U1lD
+         x6Ip34psnCYsfad0CSaU0k8fx8N9JkpJwvsXxTJc9+DoVn4WvC9M0cRcNvJbIKzJjv9c
+         YrVzjmZv80iU3abtXQTFm7OorhBb4dp0M3QYTkGjmUpbHyt0s/BZPBDy/F0kJupBDHz3
+         MgBRXU5noElJ1C+5L1MGqufv1y2j359PP1oZRCCfypIvRAIqIiOqm2ECZwEAYz3CM3pc
+         O43w==
+X-Gm-Message-State: AOAM532zZKUelYj6o7bqwMeQ+RLsCQIS3pQEALIGdeMM+tUg439VJg1B
+        Q1GmW5yw64mkUjDY6eE7PGA=
+X-Google-Smtp-Source: ABdhPJyL5qHhE+Rq8ng4FXgO46xS2udtOcYBgNIw2VO/z6o0ZNxbHjowlCxBnPGa+DV/Djz80tXa1A==
+X-Received: by 2002:a37:b141:0:b0:69b:ea55:b20e with SMTP id a62-20020a37b141000000b0069bea55b20emr5354820qkf.316.1650713439772;
+        Sat, 23 Apr 2022 04:30:39 -0700 (PDT)
+Received: from dev0025.ash9.facebook.com (fwdproxy-ash-010.fbsv.net. [2a03:2880:20ff:a::face:b00c])
+        by smtp.gmail.com with ESMTPSA id 2-20020a05620a06c200b0069ea498aec7sm2199801qky.16.2022.04.23.04.30.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Apr 2022 04:30:39 -0700 (PDT)
+Date:   Sat, 23 Apr 2022 04:30:37 -0700
+From:   David Vernet <void@manifault.com>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     akpm@linux-foundation.org, tj@kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, hannes@cmpxchg.org, mhocko@kernel.org,
+        shakeelb@google.com, kernel-team@fb.com
+Subject: Re: [PATCH 1/5] cgroups: Refactor children cgroups in memcg tests
+Message-ID: <20220423113037.gnfysktiuzmfnpmp@dev0025.ash9.facebook.com>
+References: <20220422155728.3055914-1-void@manifault.com>
+ <20220422155728.3055914-2-void@manifault.com>
+ <YmM0b+3thMZaXVDb@carbon>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] dt-bindings: phy: marvell,armada-3700-utmi-host-phy: Fix
- incorrect compatible in example
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220422192054.2591093-1-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220422192054.2591093-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmM0b+3thMZaXVDb@carbon>
+User-Agent: NeoMutt/20211029
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/04/2022 21:20, Rob Herring wrote:
-> Fix the example using the incorrect compatible string.
+On Fri, Apr 22, 2022 at 04:04:15PM -0700, Roman Gushchin wrote:
+>
+
+Thanks for the reviews on this patchset, Roman. FYI I think Andrew already
+merged these patches to the -mm tree. I'll send out a follow-on patch that
+fixes everything you pointed out, both here and on the other patches in the
+set.
+
+> On Fri, Apr 22, 2022 at 08:57:25AM -0700, David Vernet wrote:
+> > In test_memcg_min() and test_memcg_low(), there is an array of four sibling
+> > cgroups. All but one of these sibling groups does a 50MB allocation, and
+> > the group that does no allocation is the third of four in the array.  This
+> > is not a problem per se, but makes it a bit tricky to do some assertions in
+> > test_memcg_low(), as we want to make assertions on the siblings based on
+> > whether or not they performed allocations. Having a static index before
+> > which all groups have performed an allocation makes this cleaner.
+> > 
+> > This patch therefore reorders the sibling groups so that the group that
+> > performs no allocations is the last in the array.
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/phy/marvell,armada-3700-utmi-phy.yaml   | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+> It makes the comment explaining the test just above the test_memcg_min()
+> function obsolete. Please, fix it too.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
+Thanks for catching that. I'll fix the comment both in test_memcg_min() and
+test_memcg_low() when I send out that follow-on patch.

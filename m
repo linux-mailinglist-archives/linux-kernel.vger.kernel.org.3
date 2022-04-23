@@ -2,138 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F85050CBF2
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 17:49:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35CBF50CC0A
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 17:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236080AbiDWPwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 11:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37294 "EHLO
+        id S236164AbiDWP7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 11:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236154AbiDWPwh (ORCPT
+        with ESMTP id S229584AbiDWP7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 11:52:37 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E1B1F8D88
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 08:49:40 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id a10so12330922oif.9
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 08:49:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=v0ylInl64i1hrDqBe9LG4snd53LOWIsND9Zo4cq727k=;
-        b=oVqzYjyQU1wu4npBfpRZe+pc8DzrfKOPAh/ztdLQcN1LoLZrTAsC227FUJ6cNEMI/Y
-         Z9THlv266Q+z+3IQD3gM0EDhas6CZU5FUX0nXKMXL9PAbDlYM95lx3IHQkPUEQ7bB3u1
-         eQLoXJU8PCBd7HMIFftoCoIXzPjUlcvTDS+EuMBbflgaEH+b98SR7Zc+nFl38QrYt5lI
-         t2CH0LEBdP7BRRSIetG5gmWLOqZe1fThnDoFQz+ky5jBtEuF4cRKmL//lFBYfligWAei
-         CUaU43SWG7A0kWoD/koKwNjoKUZCtOdtPQCHKL6Rd8wDPG1/yfMk0AfKVfClUOtHPoRr
-         +t6w==
+        Sat, 23 Apr 2022 11:59:48 -0400
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08C75E9B;
+        Sat, 23 Apr 2022 08:56:50 -0700 (PDT)
+Received: by mail-qt1-f169.google.com with SMTP id o18so7600383qtk.7;
+        Sat, 23 Apr 2022 08:56:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=v0ylInl64i1hrDqBe9LG4snd53LOWIsND9Zo4cq727k=;
-        b=58jg35y7bcfkuMfE+iW+oo34Yfq1G31obBAM2c4IOw7eIV/hgGVjQULTAj3++JXA20
-         bETanLgqWwdI6nlLNhU3e5MqKYDl/S57EtWrhjF2+No3ZyHt2AfYMgkZuOXby99Ihjf1
-         7GsTniyZujPoTFEb/3wpfSdK/ZWGNetXEC4zKiDqeJx1n5eD/uJ981g6y9WkudrUtDYA
-         n0/Frw5RgIQOJZMxYBpYdOfAsMmwI/4UdOrWltomlYcTAUlRAvgFCKXj3kZ71710sUGs
-         D7DCvcX79xXNIzL0o7lhMbvToICcKzLYLNDx2xLhu5Dd5q2x6a7JV74TdaFGekKCsaBv
-         jfmA==
-X-Gm-Message-State: AOAM5325L3Lhjp7stNKE7+fic/U1dRjUG9Pht2uM2fHcJBG5H6D2RVPq
-        6EnhtrOTjnHBnpl36XW6Nkt8cA==
-X-Google-Smtp-Source: ABdhPJx8fCal4anqgjvarWztx1n3sowp/1yUkWS9TO0WIVk/1YCyKPGDiPvo6UGPkRylM+OeJ69yzQ==
-X-Received: by 2002:aca:919:0:b0:324:eab4:748d with SMTP id 25-20020aca0919000000b00324eab4748dmr3471818oij.123.1650728979741;
-        Sat, 23 Apr 2022 08:49:39 -0700 (PDT)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id 88-20020a9d0361000000b006056fd81aacsm1980494otv.40.2022.04.23.08.49.38
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KYSyRCk38u4G2hktKJeu3gAfTkZxhlPFYSytt9pTpIw=;
+        b=OrAsGGvI7KVsuFC7+m+H5y48lbisyzgehwBNVCgYJMw4teiiGO5nYN2dzcuLDISM9C
+         rMZYJYOSSIjKACCcP3SFwlo0EQ4YQxQMOtHLBJkeg20NM4KUkc6eWrI1tFcit6KPRBjH
+         ptWxTsC04zq7qh6UC9SnB+Cy7zZWcQf+JiBuv/UVQzgx47GyeV1vMqZ8N9FHMts74Qwv
+         p4m36gammhz1if0uu5HicciF586qjGGNUu/rFZzYoUm/SgevG6fwXqR5t1rcTwg2OaB7
+         VPC7lAcPhZP0QzOdHfsa4Pl6mYjrb1rgfw+ghAla0h5WICVS67GbyhbD5zgHun72fu4y
+         RhAw==
+X-Gm-Message-State: AOAM533gLFfUFp7NbUaCPBgpFnfUg6RNsTADhU4+VkRwtzs55twpdURe
+        h7yQbuqt8SfsdkBSe0HI9jY=
+X-Google-Smtp-Source: ABdhPJwMzqu+MSfBXkoJcYYp/xxZpV8JWGg4fm1DIKo3/DT++ZvLT7JwV9+hqT59/UZrCpyeL1m+zw==
+X-Received: by 2002:ac8:5f06:0:b0:2f1:f657:eb3a with SMTP id x6-20020ac85f06000000b002f1f657eb3amr6846295qta.151.1650729409102;
+        Sat, 23 Apr 2022 08:56:49 -0700 (PDT)
+Received: from localhost (fwdproxy-ash-022.fbsv.net. [2a03:2880:20ff:16::face:b00c])
+        by smtp.gmail.com with ESMTPSA id n11-20020a05622a11cb00b002f344f11849sm2967490qtk.71.2022.04.23.08.56.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 08:49:39 -0700 (PDT)
-Date:   Sat, 23 Apr 2022 08:51:39 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        bhupesh.linux@gmail.com, agross@kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, vkoul@kernel.org, Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v3 3/4] dt-bindings: phy: qcom,qmp: Describe phy@ subnode
- properly
-Message-ID: <YmQgi0i9PDCVqrGz@ripper>
-References: <20220418205509.1102109-1-bhupesh.sharma@linaro.org>
- <20220418205509.1102109-4-bhupesh.sharma@linaro.org>
+        Sat, 23 Apr 2022 08:56:48 -0700 (PDT)
+From:   David Vernet <void@manifault.com>
+To:     akpm@linux-foundation.org
+Cc:     tj@kernel.org, roman.gushchin@linux.dev,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, hannes@cmpxchg.org, mhocko@kernel.org,
+        shakeelb@google.com, kernel-team@fb.com, void@manifault.com
+Subject: [PATCH v2 0/5] Fix bugs in memcontroller cgroup tests
+Date:   Sat, 23 Apr 2022 08:56:15 -0700
+Message-Id: <20220423155619.3669555-1-void@manifault.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220418205509.1102109-4-bhupesh.sharma@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 18 Apr 13:55 PDT 2022, Bhupesh Sharma wrote:
+tools/testing/selftests/cgroup/test_memcontrol.c contains a set of
+testcases which validate expected behavior of the cgroup memory controller.
+Roman Gushchin recently sent out a patchset that fixed a few issues in the
+test. This patchset continues that effort by fixing a few more issues that
+were causing non-deterministic failures in the suite. With this patchset,
+I'm unable to reproduce any more errors after running the tests in a
+continuous loop for many iterations. Before, I was able to reproduce at
+least one of the errors fixed in this patchset with just one or two runs.
 
-> Currently the qcom,qmp-phy dt-binding doesn't describe
-> the 'reg' and '#phy-cells' properties for the phy@ subnode.
-> 
-> Fix the same.
-> 
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Rob Herring <robh@kernel.org>
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->  .../devicetree/bindings/phy/qcom,qmp-phy.yaml       | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
-> index 411c79dbfa15..c553c8ad0d1a 100644
-> --- a/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
-> +++ b/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
-> @@ -118,6 +118,19 @@ patternProperties:
->        Each device node of QMP phy is required to have as many child nodes as
->        the number of lanes the PHY has.
->      properties:
-> +      reg:
-> +        minItems: 1
-> +        maxItems: 6
-> +        items:
-> +          description: |
-> +            List of offset and length pairs of register sets for PHY blocks.
-> +            common block control registers, such as - SW_RESET, START_CTRL.
-> +            pcs registers, such as - PCS_STATUS, POWER_DOWN_CONTROL,
-> +            pcs misc registers, such as - PCS_MISC_TYPEC_CTRL.
+Changelog:
+v2:
+  - Fixed the comment headers in test_memcg_min() and test_memcg_low() to
+    reflect the new ordering of child cgroups in those tests.
+  - Fixed the comment I added in test_memcg_oom_group_leaf_events() to use /* */
+    for multiline comments, as is the norm according to the kernel style guide.
+  - Changed some of the conditional logic in test_memcg_oom_group_leaf_events()
+    that checks for OOM event counts based on memory_localevents to be more
+    intuitive.
 
-The two cases we have is:
+David Vernet (5):
+  cgroups: Refactor children cgroups in memcg tests
+  cgroup: Account for memory_recursiveprot in test_memcg_low()
+  cgroup: Account for memory_localevents in
+    test_memcg_oom_group_leaf_events()
+  cgroup: Removing racy check in test_memcg_sock()
+  cgroup: Fix racy check in alloc_pagecache_max_30M() helper function
 
-  tx
-  rx
-  pcs
-  pcs_misc
+ tools/testing/selftests/cgroup/cgroup_util.c  | 12 +++
+ tools/testing/selftests/cgroup/cgroup_util.h  |  1 +
+ .../selftests/cgroup/test_memcontrol.c        | 77 ++++++++++++-------
+ 3 files changed, 64 insertions(+), 26 deletions(-)
 
-and:
+-- 
+2.30.2
 
-  tx
-  rx
-  pcs
-  tx2
-  rx2
-  pcs_misc
-
-So I think we should express that explicitly here.
-
-Regards,
-Bjorn
-
-> +
-> +      "#phy-cells":
-> +        const: 0
-> +
->        "#clock-cells":
->          enum: [ 0, 1, 2 ]
->  
-> -- 
-> 2.35.1
-> 

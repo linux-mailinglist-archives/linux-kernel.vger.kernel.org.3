@@ -2,126 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 876CB50C587
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 02:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 508C950C54D
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 02:06:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231195AbiDWAEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 20:04:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37800 "EHLO
+        id S230026AbiDWAFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 20:05:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiDWAEW (ORCPT
+        with ESMTP id S229486AbiDWAF3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 20:04:22 -0400
-Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2551CDF83;
-        Fri, 22 Apr 2022 17:01:27 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-115-138.pa.nsw.optusnet.com.au [49.181.115.138])
-        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id 060F35345C6;
-        Sat, 23 Apr 2022 10:01:22 +1000 (AEST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1ni3DF-003Ms4-8J; Sat, 23 Apr 2022 10:01:21 +1000
-Date:   Sat, 23 Apr 2022 10:01:21 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Shiyang Ruan <ruansy.fnst@fujitsu.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux MM <linux-mm@kvack.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Jane Chu <jane.chu@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>
-Subject: Re: [PATCH v13 0/7] fsdax: introduce fs query to support reflink
-Message-ID: <20220423000121.GH1544202@dread.disaster.area>
-References: <20220419045045.1664996-1-ruansy.fnst@fujitsu.com>
- <20220421012045.GR1544202@dread.disaster.area>
- <86cb0ada-208c-02de-dbc9-53c6014892c3@fujitsu.com>
- <CAPcyv4i0Noum8hqHtCpdM5HMVdmNHm3Aj2JCnZ+KZLgceiXYaA@mail.gmail.com>
- <20220421043502.GS1544202@dread.disaster.area>
- <YmDxs1Hj4H/cu2sd@infradead.org>
- <20220421074653.GT1544202@dread.disaster.area>
- <CAPcyv4jj_Z+P4BuC6EXXrzbVr1uHomQVu1A+cq55EFnSGmP7cQ@mail.gmail.com>
+        Fri, 22 Apr 2022 20:05:29 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 422822C6
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 17:02:34 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id r14-20020a9d750e000000b00605446d683eso6554335otk.10
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 17:02:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=qPSkwD/MU+Iqo4BRfa/Ls4gx2geTEC9xNtBW72fotns=;
+        b=SGhKHlx9rgmGuT6KRjWdwmxQ6DjMyJuzfLXLaIeYVZ5TcfYbaSKVqoxVTgfk6REXcQ
+         TlgPEGIZWLwT8DG8S96iFRwCNg7xVZDKb+MzzlNcrntMSloJCzacD5SpwspomRzFRT3g
+         wgr86qCSKfNxzHpd40okIrwxExUC0sZieWPdQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=qPSkwD/MU+Iqo4BRfa/Ls4gx2geTEC9xNtBW72fotns=;
+        b=6v5TEXiVvdJM84PpUv8317bvo27FT9gvqr3yxGnKAh+q1d7ZgCS5Xm9whaveKSKRCC
+         L/8OB/bkUok+wo4ScNGOHWLS/OcZ1a5fVYnQp3b/EikNRhmG6Siqv5vFZ9wuNfIHr3SQ
+         Eakh3OVj2vJgkWRDLN+a+9LBr1zSypbEcHYwXHsBKW/zDTVRB2i8+N64YPM7+J4sHTiK
+         vSxL8uz8ebuQjiRlbxxvtevDeyOm/vXjmPu2/FSrpuJGyCX3aqmQ+uKhyeozTYydh34t
+         AD7rSLwZLeFpUhSl7QS+KoXHsSqjpHUJHmZEfnPGPdQPCZe6tS5nbm6ab3nwNfRD9pY3
+         OyqA==
+X-Gm-Message-State: AOAM533WkkjmEeC5vHr2CmW2KlVGVJb9BEEKUegZTt0SHmyElMrbP6EP
+        e7eIUaLO/aFJK/dRbapwaTlGgcfu9nKBBLAiTw2q4A==
+X-Google-Smtp-Source: ABdhPJyCu1JPsTB5cEHaf/m5kBgPEh7iMzqGhHYkxVcYy1y6WXjtp50N6Ta3Ouu7RPsVdOORKVJbQT5IgWz1UxpYpbM=
+X-Received: by 2002:a9d:20a1:0:b0:5e8:d2b6:f63f with SMTP id
+ x30-20020a9d20a1000000b005e8d2b6f63fmr2689805ota.159.1650672153625; Fri, 22
+ Apr 2022 17:02:33 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 22 Apr 2022 17:02:33 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPcyv4jj_Z+P4BuC6EXXrzbVr1uHomQVu1A+cq55EFnSGmP7cQ@mail.gmail.com>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=deDjYVbe c=1 sm=1 tr=0 ts=626341d5
-        a=/kVtbFzwtM2bJgxRVb+eeA==:117 a=/kVtbFzwtM2bJgxRVb+eeA==:17
-        a=kj9zAlcOel0A:10 a=z0gMJWrwH1QA:10 a=7-415B0cAAAA:8
-        a=N97b58O49P40uwd1XQkA:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1650671124-14030-1-git-send-email-quic_khsieh@quicinc.com>
+References: <1650671124-14030-1-git-send-email-quic_khsieh@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 22 Apr 2022 17:02:33 -0700
+Message-ID: <CAE-0n502Jc57jKDL5d3QbZBZrtAiuU+vj33BXxB3sb7EScTgHA@mail.gmail.com>
+Subject: Re: [PATCH] drm/msm/dp: move add fail safe mode to dp_connector_get_mode()
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
+        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
+        dmitry.baryshkov@linaro.org, robdclark@gmail.com, sean@poorly.run,
+        vkoul@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 02:27:32PM -0700, Dan Williams wrote:
-> On Thu, Apr 21, 2022 at 12:47 AM Dave Chinner <david@fromorbit.com> wrote:
-> >
-> > On Wed, Apr 20, 2022 at 10:54:59PM -0700, Christoph Hellwig wrote:
-> > > On Thu, Apr 21, 2022 at 02:35:02PM +1000, Dave Chinner wrote:
-> > > > Sure, I'm not a maintainer and just the stand-in patch shepherd for
-> > > > a single release. However, being unable to cleanly merge code we
-> > > > need integrated into our local subsystem tree for integration
-> > > > testing because a patch dependency with another subsystem won't gain
-> > > > a stable commit ID until the next merge window is .... distinctly
-> > > > suboptimal.
-> > >
-> > > Yes.  Which is why we've taken a lot of mm patchs through other trees,
-> > > sometimes specilly crafted for that.  So I guess in this case we'll
-> > > just need to take non-trivial dependencies into the XFS tree, and just
-> > > deal with small merge conflicts for the trivial ones.
-> >
-> > OK. As Naoyo has pointed out, the first dependency/conflict Ruan has
-> > listed looks trivial to resolve.
-> >
-> > The second dependency, OTOH, is on a new function added in the patch
-> > pointed to. That said, at first glance it looks to be independent of
-> > the first two patches in that series so I might just be able to pull
-> > that one patch in and have that leave us with a working
-> > fsdax+reflink tree.
-> >
-> > Regardless, I'll wait to see how much work the updated XFS/DAX
-> > reflink enablement patchset still requires when Ruan posts it before
-> > deciding what to do here.  If it isn't going to be a merge
-> > candidate, what to do with this patchset is moot because there's
-> > little to test without reflink enabled...
-> 
-> I do have a use case for this work absent the reflink work.  Recall we
-> had a conversation about how to communicate "dax-device has been
-> ripped away from the fs" events and we ended up on the idea of reusing
-> ->notify_failure(), but with the device's entire logical address range
-> as the notification span. That will let me unwind and delete the
-> PTE_DEVMAP infrastructure for taking extra device references to hold
-> off device-removal. Instead ->notify_failure() arranges for all active
-> DAX mappings to be invalidated and allow the removal to proceed
-> especially since physical removal does not care about software pins.
+Quoting Kuogee Hsieh (2022-04-22 16:45:23)
+> Current DP driver implementation has adding safe mode done at
+> dp_hpd_plug_handle() which is expected to be executed under event
+> thread context.
+>
+> However there is possible circular locking happen (see blow stack trace)
+> after edp driver call dp_hpd_plug_handle() from dp_bridge_enable() which
+> is executed under drm_thread context.
+>
+> To break this circular locking, this patch have safe mode added at
+> dp_connector_get_mode() which is executed under drm thread context.
+> Therefore no lock acquired required for &dev->mode_config.mutex while
+> adding fail safe mode since it has been hold by drm thread already.
 
-Sure. My point is that if the reflink enablement isn't ready to go,
-then from an XFS POV none of this matters in this cycle and we can
-just leave the dependencies to commit via Andrew's tree. Hence by
-the time we get to the reflink enablement all the prior dependencies
-will have been merged and have stable commit IDs, and we can just
-stage this series and the reflink enablement as we normally would in
-the next cycle.
-
-However, if we don't get the XFS reflink dax enablement sorted out
-in the next week or two, then we don't need this patchset in this
-cycle. Hence if you still need this patchset for other code you need
-to merge in this cycle, then you're the poor schmuck that has to run
-the mm-tree conflict guantlet to get a stable commit ID for the
-dependent patches in this cycle, not me....
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+Reported-by: Douglas Anderson <dianders@chromium.org>
+Fixes: 8b2c181e3dcf ("drm/msm/dp: add fail safe mode outside of
+event_mutex context")
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>

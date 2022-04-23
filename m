@@ -2,179 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B8F250CD0D
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 20:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE58850CD21
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 21:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236786AbiDWS7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 14:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51450 "EHLO
+        id S236835AbiDWTDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 15:03:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230130AbiDWS7P (ORCPT
+        with ESMTP id S235009AbiDWTDB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 14:59:15 -0400
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B55929835
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 11:56:17 -0700 (PDT)
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id CF5412C1C74;
-        Sat, 23 Apr 2022 18:56:16 +0000 (UTC)
-Received: from pdx1-sub0-mail-a217.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 635702C17CA;
-        Sat, 23 Apr 2022 18:56:16 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1650740176; a=rsa-sha256;
-        cv=none;
-        b=N/wfyJy/Zgxo4I/fH7nkiTcu9s7Mme0bCJmgBszR1zfGqEn3m1pDZ7Uk+FsU4rb/EdD3rZ
-        VyRBBl0HE2aAZ2G9dunlSFmGhilX9LrD/oyvTBwAE2Ezlaq3Psg43nJ+1U09n8cHYtuIbT
-        gE+0U37CByqBBadoKEC+Qk0gcK72F3Rr0Cjz84ynvp2hihLfJJ6uVzPNqM/ItFESeR5TtI
-        WgwLWTxNZ6SVXtVo7tgmgdC57cDUZr1DEcnA4IyjBva4EqM6BdNe7oJPxH0jthGb+joOzM
-        RQ1aIzcIA7pKP7ATBfCRw8t6TleIgrfzWGXLK00LMikLwBfrh0vFnYWQD4j4Jw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1650740176;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:dkim-signature;
-        bh=W65KaRAPn4X0/N0KkhSECgSQXT6ViyLCcIqNeKUjBzo=;
-        b=xsPlqZxY7pSNPLiL7CZ9NZRyzpuU71a0xWpnoBjqEwTPOG+MMFb5dNayI8r0Uqi6WEgt1d
-        NRiFkBqtAOnJzoy1gDGMUhpL9E6OCmmWzquJU6omou5+mXB8rVuo04E6iFtAWcm2oFF+yn
-        j1n0vmPC4eGC0nAaapXTCrlDxJTJeOnmp7B+STtYWlAaK5NQiS+KPPd8eJhbXtaSBv6gSM
-        wbRBxv8U5cSNHnj+zb16x+nO9fE4BghoR5iBl0jxN9EK6hsNcsOoRI907y2MjFaLoZS7hu
-        brI/3Vb5CBazpClQBFh7HLGuvwuYhMoyNf11b5Pj/D0QsQuljb/U6S2h746osg==
-ARC-Authentication-Results: i=1;
-        rspamd-67b64f579b-tg62q;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=ian@linux.cowan.aero
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|ian@linux.cowan.aero
-X-MailChannels-Auth-Id: dreamhost
-X-Soft-White: 76c6196c6caa5c60_1650740176668_1261024006
-X-MC-Loop-Signature: 1650740176668:1773818257
-X-MC-Ingress-Time: 1650740176668
-Received: from pdx1-sub0-mail-a217.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.112.55.255 (trex/6.7.1);
-        Sat, 23 Apr 2022 18:56:16 +0000
-Received: from localhost.localdomain (unknown [69.12.38.97])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: ian@linux.cowan.aero)
-        by pdx1-sub0-mail-a217.dreamhost.com (Postfix) with ESMTPSA id 4Km0qM6DHVz1NC;
-        Sat, 23 Apr 2022 11:56:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.cowan.aero;
-        s=dreamhost; t=1650740176;
-        bh=W65KaRAPn4X0/N0KkhSECgSQXT6ViyLCcIqNeKUjBzo=;
-        h=From:To:Cc:Subject:Date:Content-Transfer-Encoding;
-        b=nfhM1Ae4CYb9FvgTxZz1SRGGIgAi3CQkrHUez1kUCTop0GM++L4ziOojZM57klOxr
-         sC7cF1OwWPM9xBkBLrA0mwM5y2yylOvpJkH2ng/YjiP83ivO/D3mwZ/n7TTw+mUe3B
-         yVkD4Fpko9YCKQlzaoP/bNCrL8zzp+CUQib+EER2eOnhJM/yoAT0sxcoQaK0iqrkGy
-         Ag54gHeMIWH7bSnZK1XivyL7CCJhdJfnbKGks1RF5XB3vrDfUWLyhPSW/LnKf1ENTC
-         j4izUqIEN/EBqpmIUDqpmRK/w8n79Ru8UFU2pCP7T+jtFG4apigxg7JdaWnooAyZoO
-         47tc1hb3CxowQ==
-From:   Ian Cowan <ian@linux.cowan.aero>
-To:     Joe Perches <joe@perches.com>
-Cc:     linux-kernel@vger.kernel.org, ian@linux.cowan.aero
-Subject: [PATCH] scripts: get_maintainer: add an option to format for command line
-Date:   Sat, 23 Apr 2022 14:55:52 -0400
-Message-Id: <20220423185552.126453-1-ian@linux.cowan.aero>
-X-Mailer: git-send-email 2.35.1
+        Sat, 23 Apr 2022 15:03:01 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721411C6C83
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 12:00:03 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id i27so22229499ejd.9
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 12:00:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=+uwEn9PtiETP9hgJxDCM35viHAdrK5gZduRTsOTAbfA=;
+        b=t3ztxLhsW2gnmub5Y4m4fXss2kLlqV08GB4ts6ipTgAnlJNPgGHmDA4kzeoP+j/YdL
+         0l8gQlmc3o2ZQRIb12Yaq1jFUF9TPYv3O9Tnn6xaK/elxbjflNJIrMIjohy/9p1zz05o
+         pqaShbNZEnRtF3OjJUGmS8usqgpjyqBXwS3y/60ZwqH4lD0dhe63Nk/jjJT8eqTDZA28
+         4K4/1tlT6OCpBRGPg3iUVKb9TPN2/QSn7R5gnkZba4IHo8L7PiAJdWOCVRseWOwuP5Sg
+         MIpZ5YAdvu96ZoeDPzYHptBdkd5OgP1beY0xoZlqJIM0myu4ZKalJx7CDnKNKJ0hR3YB
+         O1yA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+uwEn9PtiETP9hgJxDCM35viHAdrK5gZduRTsOTAbfA=;
+        b=IKt8Jewet6tZlxbiaRm9dvC+tuLtO1LZFabq9RixpddroQ251/5yX/1aHIiS3pUr08
+         n9nj8MR/ww8EDufqUYSS7xJIxf3jve9JyxcM5XnTRlZ1T+93/+Zid76NbUkrFJQgtAI9
+         ZmVb6i0KTeMU1os/fgdpYqfxSx1P+f8zYqSq/yyNPmO/QNEmuevaRe7J3YrPH0P7rNv9
+         TUeDnWb3AsU36S2TwAOFLKr72Ut9vTGQpBmp+V8z/rjYbKhviCjPcSYi/J3xe62fNqHl
+         VDLebphtRU0AHHO0vCRhCGUAu5dbkKwOY4WsN/Mx5kWb0t1N/9IVjgYvlxp3hgI4kfOE
+         jP6g==
+X-Gm-Message-State: AOAM5309GKUfEF1bBOYKymSj9tkV7QXzZhDIwKC0FYlLOjmSJv9P2w6r
+        atEu8k1cS+UuY92s4rgPWyfpdA==
+X-Google-Smtp-Source: ABdhPJzgajugMKK45hYI0FNGUcmQU06VbSYanQu9uAbA9fu3U6zoOBMMbv9JDVvo58GRODX9a0Uqag==
+X-Received: by 2002:a17:907:970b:b0:6f0:103c:f7fa with SMTP id jg11-20020a170907970b00b006f0103cf7famr9283163ejc.171.1650740402064;
+        Sat, 23 Apr 2022 12:00:02 -0700 (PDT)
+Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id bf11-20020a0564021a4b00b00423e997a3ccsm2472862edb.19.2022.04.23.12.00.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 23 Apr 2022 12:00:01 -0700 (PDT)
+Message-ID: <1d2c5505-f412-5993-ca60-51e65242aa1e@linaro.org>
+Date:   Sat, 23 Apr 2022 21:00:00 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] dt-bindings: fsl: convert fsl,layerscape-scfg to YAML
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Li Yang <leoyang.li@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220421153115.3496834-1-michael@walle.cc>
+ <fb8c2c57-38bf-065f-a781-beb2fb89353e@linaro.org>
+ <9c8c910e62b6b8a674ee0f2c752b6479@walle.cc>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <9c8c910e62b6b8a674ee0f2c752b6479@walle.cc>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds the option to return the list of maintainers in the format for
-sending via command line, specifically targeted for `git send-email`.
-This will add a `--to` tag before the first email and a `--cc` tag for
-each following email. The option can be toggled by using the
-`--cl-format` flag when calling the get_maintainer script.
+On 23/04/2022 16:05, Michael Walle wrote:
+> Am 2022-04-23 12:17, schrieb Krzysztof Kozlowski:
+> 
+>>> +patternProperties:
+>>> +  "^interrupt-controller@[a-z0-9]+$":
+>>> +    $ref: /schemas/interrupt-controller.yaml#
+>>
+>> Do you have a specific FSL schema (bindings) for the child?
+> 
+> Mh, indeed there is the following binding which I didn't notice
+> earlier
+> Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.txt
+> 
+> So I guess it has to be converted before this schema?
 
-The new addition is disabled by default and will only print (even if
-enabled) if there are maintainers to return. This will prevent the
-script from trying to generate a formatted line without any maintainers
-and also allow the user to visually verify that the outputted line contains
-the correct maintainers and lists (by verifying the roles).
+That would be awesome! :) Skipping the conversion is not a blocker, but
+it is easy later to forget to update the reference.
 
-Signed-off-by: Ian Cowan <ian@linux.cowan.aero>
----
- scripts/get_maintainer.pl | 29 +++++++++++++++++++++++++++--
- 1 file changed, 27 insertions(+), 2 deletions(-)
 
-diff --git a/scripts/get_maintainer.pl b/scripts/get_maintainer.pl
-index 6bd5221d37b8..fc6844a56c87 100755
---- a/scripts/get_maintainer.pl
-+++ b/scripts/get_maintainer.pl
-@@ -53,6 +53,7 @@ my $output_section_maxlen = 50;
- my $scm = 0;
- my $tree = 1;
- my $web = 0;
-+my $format_for_cl = 0;
- my $subsystem = 0;
- my $status = 0;
- my $letters = "";
-@@ -269,6 +270,7 @@ if (!GetOptions(
- 		'scm!' => \$scm,
- 		'tree!' => \$tree,
- 		'web!' => \$web,
-+		'cl-format!' => \$format_for_cl,
- 		'letters=s' => \$letters,
- 		'pattern-depth=i' => \$pattern_depth,
- 		'k|keywords!' => \$keywords,
-@@ -636,8 +638,13 @@ my %deduplicate_address_hash = ();
- 
- my @maintainers = get_maintainers();
- if (@maintainers) {
--    @maintainers = merge_email(@maintainers);
--    output(@maintainers);
-+	my @maintainers_merged = merge_email(@maintainers);
-+	output(@maintainers_merged);
-+
-+	if ($format_for_cl) {
-+		my @format_for_cl = format_cl(@maintainers);
-+		output(@format_for_cl);
-+	}
- }
- 
- if ($scm) {
-@@ -1071,6 +1078,7 @@ Output type options:
-   --separator [, ] => separator for multiple entries on 1 line
-     using --separator also sets --nomultiline if --separator is not [, ]
-   --multiline => print 1 entry per line
-+  --cl-format => Include a formatted string for emailing via the command line
- 
- Other options:
-   --pattern-depth => Number of pattern directory traversals (default: 0 (all))
-@@ -2512,6 +2520,23 @@ sub merge_email {
-     return @lines;
- }
- 
-+sub format_cl {
-+	my @out;
-+	my $first = 1;
-+
-+	for (@_) {
-+		my ($address, $role) = @$_;
-+		if ($first) {
-+			$first = 0;
-+			@out = "--to '$address'";
-+		} else {
-+			@out = "@out --cc '$address'";
-+		}
-+	}
-+
-+	return ('', @out);
-+}
-+
- sub output {
-     my (@parms) = @_;
- 
--- 
-2.35.1
-
+Best regards,
+Krzysztof

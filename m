@@ -2,122 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5ADE50CC60
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 18:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5270350CC62
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 18:43:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236459AbiDWQoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 12:44:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56486 "EHLO
+        id S231442AbiDWQol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 12:44:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236451AbiDWQn4 (ORCPT
+        with ESMTP id S236465AbiDWQoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 12:43:56 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8180F42A38
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 09:40:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=2MvqW49dlfPXlTFO4cVz6jW0fsGriUccE1VFxe7rooQ=; b=4CpgKtZWpr1YvrwrgR0PVODSfR
-        eFHq3GErIpjs8WXAaxmLwUJKW2Z//2hg9eashRdzhcM19R6oVxxqIxAe6YlPuPVuItoTu4azCvfr2
-        pGg65CQ/FdUzZKmE6ubYHxzYTixg9YZgL+KZeg+2Hf6FBRSvPF83kFxQ+JjE8EUs6qRpgGpXw+r1e
-        ukp3Ji2ELJKv1OizDiizyYel4rZFkUXo+rKGnGWuuAZi6cPGZi7Gj7OSWaq4fKE93lQDwpAxnqKSd
-        7sMpv5r84yTKbhECYHDRHM16S9tNaakXyhMW2GipLr8jLem2OCOeIy90YqNtk/EF11ryDiHiAuK4s
-        nqKdocew==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1niIoX-004edG-Bn; Sat, 23 Apr 2022 16:40:53 +0000
-Date:   Sat, 23 Apr 2022 09:40:53 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Oleksandr Tyshchenko <olekstysh@gmail.com>
-Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Juergen Gross <jgross@suse.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Julien Grall <julien@xen.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: Re: [PATCH V1 3/6] xen/virtio: Add option to restrict memory access
- under Xen
-Message-ID: <YmQsFb36UEH9BUnN@infradead.org>
-References: <1650646263-22047-1-git-send-email-olekstysh@gmail.com>
- <1650646263-22047-4-git-send-email-olekstysh@gmail.com>
+        Sat, 23 Apr 2022 12:44:17 -0400
+Received: from mxout02.lancloud.ru (mxout02.lancloud.ru [45.84.86.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3660347AD3;
+        Sat, 23 Apr 2022 09:41:14 -0700 (PDT)
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru ADB9123081DB
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH v3 7/8] ARM: dts: r9a06g032: Add USB PHY DT support
+To:     Herve Codina <herve.codina@bootlin.com>,
+        Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>
+CC:     Rob Herring <robh@kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-renesas-soc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+References: <20220422120850.769480-1-herve.codina@bootlin.com>
+ <20220422120850.769480-8-herve.codina@bootlin.com>
+ <ed432ba2-6081-4d82-bdc9-cd88cb52ca1f@omp.ru>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <f7e76000-11ec-42d1-5767-7f270a3b025d@omp.ru>
+Date:   Sat, 23 Apr 2022 19:41:09 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1650646263-22047-4-git-send-email-olekstysh@gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ed432ba2-6081-4d82-bdc9-cd88cb52ca1f@omp.ru>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please split this into one patch that creates grant-dma-ops, and another
-that sets up the virtio restricted access helpers.
+On 4/23/22 12:09 PM, Sergey Shtylyov wrote:
 
-> +
-> +#ifdef CONFIG_ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
-> +int arch_has_restricted_virtio_memory_access(void)
-> +{
-> +	return (xen_has_restricted_virtio_memory_access() ||
-> +			cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT));
-> +}
+[...]
+>> Define the r9a06g032 generic part of the USB PHY device node.
+>>
+>> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+>> ---
+>>  arch/arm/boot/dts/r9a06g032.dtsi | 6 ++++++
+>>  1 file changed, 6 insertions(+)
+>>
+>> diff --git a/arch/arm/boot/dts/r9a06g032.dtsi b/arch/arm/boot/dts/r9a06g032.dtsi
+>> index 33581f0c55c4..58af07eb75c9 100644
+>> --- a/arch/arm/boot/dts/r9a06g032.dtsi
+>> +++ b/arch/arm/boot/dts/r9a06g032.dtsi
+>> @@ -59,6 +59,12 @@ ext_rtc_clk: extrtcclk {
+>>  		clock-frequency = <0>;
+>>  	};
+>>  
+>> +	usbphy: usbphy {
+> 
+>    I think the node name should be "usb-phy"...
 
-So instead of hardcoding Xen here, this seems like a candidate for
-another cc_platform_has flag.
+   It's not my thinking alone, the DT spec documents "usb-phy" in section 2.2.2. :-)
 
-> +config XEN_VIRTIO
-> +	bool "Xen virtio support"
-> +	default n
+> [...]
 
-n is the default default, so no need to specify it.
-
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/******************************************************************************
-
-The all * line is not the usual kernel style, I'd suggest to drop it.
-
-> +static struct page *xen_grant_dma_alloc_pages(struct device *dev, size_t size,
-> +					      dma_addr_t *dma_handle,
-> +					      enum dma_data_direction dir,
-> +					      gfp_t gfp)
-> +{
-> +	WARN_ONCE(1, "xen_grant_dma_alloc_pages size %zu\n", size);
-> +	return NULL;
-> +}
-> +
-> +static void xen_grant_dma_free_pages(struct device *dev, size_t size,
-> +				     struct page *vaddr, dma_addr_t dma_handle,
-> +				     enum dma_data_direction dir)
-> +{
-> +	WARN_ONCE(1, "xen_grant_dma_free_pages size %zu\n", size);
-> +}
-
-Please just wire this up to the same implementation as .alloc and .free.
-
-> +	spin_lock(&xen_grant_dma_lock);
-> +	list_add(&data->list, &xen_grant_dma_devices);
-> +	spin_unlock(&xen_grant_dma_lock);
-
-Hmm, having to do this device lookup for every DMA operation is going
-to suck. It might make sense to add a private field (e.g. as a union
-with the iommu field) in struct device instead.
-
-But if not you probably want to switch to a more efficient data
-structure like the xarray at least.
-
-> +EXPORT_SYMBOL_GPL(xen_grant_setup_dma_ops);
-
-I don't think this has any modular users, or did I miss something?
+MBR, Sergey

@@ -2,48 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A155750CCC0
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 19:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E0550CCC1
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 19:49:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236683AbiDWRty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 13:49:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50476 "EHLO
+        id S236718AbiDWRws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 13:52:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236673AbiDWRtw (ORCPT
+        with ESMTP id S236681AbiDWRwb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 13:49:52 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642703336F;
-        Sat, 23 Apr 2022 10:46:55 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 0A68C68B05; Sat, 23 Apr 2022 19:46:50 +0200 (CEST)
-Date:   Sat, 23 Apr 2022 19:46:50 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Cc:     bjorn.andersson@linaro.org, mathieu.poirier@linaro.org,
-        robin.murphy@arm.com, hch@lst.de, m.szyprowski@samsung.com,
-        matthias.bgg@gmail.com, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, yj.chiang@mediatek.com
-Subject: Re: [PATCH 0/2] dma-mapping, remoteproc: Fix dma_mem leak after
- rproc_shutdown
-Message-ID: <20220423174650.GA29219@lst.de>
-References: <20220422062436.14384-1-mark-pk.tsai@mediatek.com>
+        Sat, 23 Apr 2022 13:52:31 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7FB338B9
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 10:49:33 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id a1so8336748edt.3
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 10:49:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zzTlr5i1vBH3eZkwgYdNgfi9JX5fLc8qr1ql93tJV/Y=;
+        b=K+1SaZwztaHUvVqD4eNlYpZBN76mjtx6X5TywZ3y38vEWUlCs3d3C8MG++H7IoHYDC
+         obAlZ/MFE+RmLzK9BST6KuGjJgj2nvuxyf+EArxIFmALpq7dutV6VEVcrWnef1iZqfqu
+         gsvljKL8WC0w2kuY/LP5FZJr0Cljwtb0q6RJYd5mHPwTHiHZQMBsMsbMIkawn+YRaPV5
+         xR6zfWn6NS16/H+5Phh3JIRq6JLCN3166AGSz5ZSR/j3UDt27gwBrNEW3Jjy3UFAYwl/
+         O5ehOaVT1XdJYZaveHMdsVPQP/+X762VrAFvmtHYQHPLhYENkSK48IKmGKBAYGwuZ0vC
+         ol5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zzTlr5i1vBH3eZkwgYdNgfi9JX5fLc8qr1ql93tJV/Y=;
+        b=5N/P6MNisfEdtIN0TU6LlmIfzgTOfrxOgE72Eene8wmuiEztnlXz5wKBeQEG6Gd2Iz
+         hXkw3zm+vWvhy6oK3Tx6u75S704Vxvm3VBspR4xNPOgDsvDSun/uZHbEey9jHjv6m46A
+         d4mWFuc99zXUSXMv30xXRjSQVQLsoMK23ol56fpobfA63oEuXkKYw9gYPK6C0do17ZiH
+         zx3wvpaoKkFRGgqbDASSkiCiBhdrITc/qnAUBZEQjpCRUWbAVD98YUujVf8RbMflwqZS
+         5hiUCLzPfC3uT388TVbfRpncVAVSLImKLXaIS06z7KgALrZYz8fX4qpqVo3zOF4sFgsz
+         KE2A==
+X-Gm-Message-State: AOAM531sX2x0cHykPIiBkl92HF4XVEh7miTDfNFNrs4lEWuAako5Hkys
+        fU55C2cyR+6afgi9RH1jFRZLkg==
+X-Google-Smtp-Source: ABdhPJw/vOnH+HBxj1ggcvptoHPHf/x94iLfOJcPMwCd4J+FV95mNVywr9SyxLVrLvWEXCzt9EK7aA==
+X-Received: by 2002:a05:6402:4493:b0:41d:83ca:35d6 with SMTP id er19-20020a056402449300b0041d83ca35d6mr10731655edb.89.1650736172007;
+        Sat, 23 Apr 2022 10:49:32 -0700 (PDT)
+Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id r22-20020a17090638d600b006d584aaa9c9sm1871730ejd.133.2022.04.23.10.49.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 23 Apr 2022 10:49:31 -0700 (PDT)
+Message-ID: <34d3bfdc-cf8c-bf63-4f67-57c8d6c9b780@linaro.org>
+Date:   Sat, 23 Apr 2022 19:49:30 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422062436.14384-1-mark-pk.tsai@mediatek.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH net-next 4/5] net: dt-bindings: Introduce the Qualcomm
+ IPQESS Ethernet controller
+Content-Language: en-US
+To:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        davem@davemloft.net, Rob Herring <robh+dt@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>
+References: <20220422180305.301882-1-maxime.chevallier@bootlin.com>
+ <20220422180305.301882-5-maxime.chevallier@bootlin.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220422180305.301882-5-maxime.chevallier@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sigh.  In theory drivers should never declare coherent memory like
-this, and there has been some work to fix remoteproc in that regard.
+On 22/04/2022 20:03, Maxime Chevallier wrote:
+> Add the DT binding for the IPQESS Ethernet Controller. This is a simple
+> controller, only requiring the phy-mode, interrupts, clocks, and
+> possibly a MAC address setting.
+> 
+> Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+> ---
+>  .../devicetree/bindings/net/qcom,ipqess.yaml  | 94 +++++++++++++++++++
+>  1 file changed, 94 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/qcom,ipqess.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/net/qcom,ipqess.yaml b/Documentation/devicetree/bindings/net/qcom,ipqess.yaml
+> new file mode 100644
+> index 000000000000..8fec5633692f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/qcom,ipqess.yaml
+> @@ -0,0 +1,94 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/qcom,ipqess.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm IPQ ESS EDMA Ethernet Controller Device Tree Bindings
 
-But I guess until that is merged we'll need somthing like this fix.
+s/Device Tree Bindings//
+
+> +
+> +allOf:
+> +  - $ref: "ethernet-controller.yaml#"
+
+allOf goes after maintainers.
+
+> +
+> +maintainers:
+> +  - Maxime Chevallier <maxime.chevallier@bootlin.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: qcom,ipq4019e-ess-edma
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    minItems: 2
+> +    maxItems: 32
+> +    description: One interrupt per tx and rx queue, with up to 16 queues.
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  phy-mode: true
+> +
+> +  fixed-link: true
+> +
+> +  mac-address: true
+
+You don't need all these three. They come from ethernet-controller and
+you use unevaluatedProperties.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - phy-mode
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    gmac: ethernet@c080000 {
+> +        compatible = "qcom,ipq4019-ess-edma";
+> +        reg = <0xc080000 0x8000>;
+> +        interrupts = <GIC_SPI  65 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI  66 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI  67 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI  68 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI  69 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI  70 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI  71 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI  72 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI  73 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI  74 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI  75 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI  76 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI  77 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI  78 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI  79 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI  80 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI 240 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI 241 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI 242 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI 243 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI 244 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI 245 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI 246 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI 247 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI 248 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI 249 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI 250 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI 251 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI 252 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI 253 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI 254 IRQ_TYPE_EDGE_RISING>,
+> +                     <GIC_SPI 255 IRQ_TYPE_EDGE_RISING>;
+> +
+> +        status = "okay";
+
+No status in the example.
+
+> +
+> +        phy-mode = "internal";
+> +        fixed-link {
+> +            speed = <1000>;
+> +            full-duplex;
+> +            pause;
+> +            asym-pause;
+> +        };
+> +    };
+> +
+> +...
+
+
+Best regards,
+Krzysztof

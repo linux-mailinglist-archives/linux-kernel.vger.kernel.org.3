@@ -2,130 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FAC550C5F7
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 03:15:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3173A50C5FD
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 03:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231500AbiDWBSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 21:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38180 "EHLO
+        id S231627AbiDWBXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 21:23:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229941AbiDWBSa (ORCPT
+        with ESMTP id S231574AbiDWBXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 21:18:30 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEE9257B0D
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 18:15:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650676535; x=1682212535;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kAE4EkRynMmHZuZVooQDcnPKLK4VaZhgzbo6HL5JbxM=;
-  b=hr/lIP54sf5OY8WINf67Jn06wC6IARwUWojEtUxUES4gi9iALk/g9Try
-   kE3fZBblVIfC3QhaJqJIn6dcceO/eup3pBp80UqgzV0X+9f4knJ7HN6WP
-   WDeF4fQL27mkG4TLHnvntKiKqG/shwjxnDvcWpyi2zhd9+RhQtFAwD8Sb
-   ctO51h45VK8WUl0NsjWDuUqnzko36YEDLkrRk0nt4sf2eSihdO/c6BOLc
-   T3KN0Dklh7edG7l31GKb4a8JNFRHSZPwvAZqnCfcJj/d2glVnakbDJPn1
-   MGp20AQnHQ3DZPx6z+NxyR6RrpBJTKZTdHHOnxZbNEB0WQNKDRM8a7fg2
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="327740393"
-X-IronPort-AV: E=Sophos;i="5.90,283,1643702400"; 
-   d="scan'208";a="327740393"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 18:15:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,283,1643702400"; 
-   d="scan'208";a="806229938"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 22 Apr 2022 18:15:34 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ni4N3-000AlG-Ej;
-        Sat, 23 Apr 2022 01:15:33 +0000
-Date:   Sat, 23 Apr 2022 09:14:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 26/44]
- include/linux/fscache.h:540: undefined reference to
- `__fscache_begin_write_operation'
-Message-ID: <202204230943.UBa5uRYJ-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 22 Apr 2022 21:23:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4F25D18E;
+        Fri, 22 Apr 2022 18:20:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB9376122F;
+        Sat, 23 Apr 2022 01:20:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4727FC385A4;
+        Sat, 23 Apr 2022 01:20:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650676843;
+        bh=R8xeU+lU3Opd9ECa9+JWLH3W7hAIJsjrO5mbJXYy5vQ=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Th07eE0IUisMd27lYutTyYSyCpXIugzMudf1Oytj8OqLCOO0B4kKJOG2G20OhDlPC
+         7nTag39gLDAJiE3gqvcuG+YBc2FXogP4Ak7rgbO6rpZCVgQdb4sjua+5Wi4Z7Plmrj
+         EmtXmRi5yacyk/Vg70Wdrb3lfzURcvC3wRMnL2aBCbevZFl3LgBzdlOKxP1urwGRgC
+         c9rt1NL5yJp0ZDjxTszvUZjO26i63TZOzPl1MvG9EpBvBpRJgbxlCcUh3tnAGXKsAR
+         KmIqF6k/Gqrrhpru5LporQWCLS+dp3i09sILvR5cXtmFX9I0w+5nblgvqcIYcjZh2i
+         rksUV8Wk58p5Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 349B5E6D402;
+        Sat, 23 Apr 2022 01:20:43 +0000 (UTC)
+Subject: Re: [GIT PULL] ext4 fixes for 5.18-rc4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YmMsywgKkOpa6dlR@mit.edu>
+References: <YmMsywgKkOpa6dlR@mit.edu>
+X-PR-Tracked-List-Id: <linux-ext4.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YmMsywgKkOpa6dlR@mit.edu>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git tags/ext4_for_linus_stable
+X-PR-Tracked-Commit-Id: 23e3d7f7061f8682c751c46512718f47580ad8f0
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: c00c5e1d157bec0ef0b0b59aa5482eb8dc7e8e49
+Message-Id: <165067684321.21969.3748476205738254809.pr-tracker-bot@kernel.org>
+Date:   Sat, 23 Apr 2022 01:20:43 +0000
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-ext4@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
-head:   931e50676c6598d0eda1954ead465519ff91874d
-commit: 1cdfbd29bdd34acf57d11846369b44dbab7b4d3a [26/44] netfs: Dispatch write requests to process a writeback slice
-config: microblaze-randconfig-r006-20220422 (https://download.01.org/0day-ci/archive/20220423/202204230943.UBa5uRYJ-lkp@intel.com/config)
-compiler: microblaze-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/1cdfbd29bdd34acf57d11846369b44dbab7b4d3a
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout 1cdfbd29bdd34acf57d11846369b44dbab7b4d3a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=microblaze SHELL=/bin/bash
+The pull request you sent on Fri, 22 Apr 2022 18:31:39 -0400:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git tags/ext4_for_linus_stable
 
-All errors (new ones prefixed by >>):
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/c00c5e1d157bec0ef0b0b59aa5482eb8dc7e8e49
 
-   microblaze-linux-ld: fs/netfs/output.o: in function `fscache_begin_write_operation':
->> include/linux/fscache.h:540: undefined reference to `__fscache_begin_write_operation'
-
-
-vim +540 include/linux/fscache.h
-
-9af1c6c3089b29 David Howells 2021-10-20  516  
-16f2f4e679cfda David Howells 2021-08-27  517  /**
-16f2f4e679cfda David Howells 2021-08-27  518   * fscache_begin_write_operation - Begin a write operation for the netfs lib
-16f2f4e679cfda David Howells 2021-08-27  519   * @cres: The cache resources for the write being performed
-16f2f4e679cfda David Howells 2021-08-27  520   * @cookie: The cookie representing the cache object
-16f2f4e679cfda David Howells 2021-08-27  521   *
-16f2f4e679cfda David Howells 2021-08-27  522   * Begin a write operation on behalf of the netfs helper library.  @cres
-16f2f4e679cfda David Howells 2021-08-27  523   * indicates the cache resources to which the operation state should be
-16f2f4e679cfda David Howells 2021-08-27  524   * attached; @cookie indicates the cache object that will be accessed.
-16f2f4e679cfda David Howells 2021-08-27  525   *
-16f2f4e679cfda David Howells 2021-08-27  526   * @cres->inval_counter is set from @cookie->inval_counter for comparison at
-16f2f4e679cfda David Howells 2021-08-27  527   * the end of the operation.  This allows invalidation during the operation to
-16f2f4e679cfda David Howells 2021-08-27  528   * be detected by the caller.
-16f2f4e679cfda David Howells 2021-08-27  529   *
-16f2f4e679cfda David Howells 2021-08-27  530   * Returns:
-16f2f4e679cfda David Howells 2021-08-27  531   * * 0		- Success
-16f2f4e679cfda David Howells 2021-08-27  532   * * -ENOBUFS	- No caching available
-16f2f4e679cfda David Howells 2021-08-27  533   * * Other error code from the cache, such as -ENOMEM.
-16f2f4e679cfda David Howells 2021-08-27  534   */
-16f2f4e679cfda David Howells 2021-08-27  535  static inline
-16f2f4e679cfda David Howells 2021-08-27  536  int fscache_begin_write_operation(struct netfs_cache_resources *cres,
-16f2f4e679cfda David Howells 2021-08-27  537  				  struct fscache_cookie *cookie)
-16f2f4e679cfda David Howells 2021-08-27  538  {
-16f2f4e679cfda David Howells 2021-08-27  539  	if (fscache_cookie_enabled(cookie))
-16f2f4e679cfda David Howells 2021-08-27 @540  		return __fscache_begin_write_operation(cres, cookie);
-16f2f4e679cfda David Howells 2021-08-27  541  	return -ENOBUFS;
-16f2f4e679cfda David Howells 2021-08-27  542  }
-16f2f4e679cfda David Howells 2021-08-27  543  
-
-:::::: The code at line 540 was first introduced by commit
-:::::: 16f2f4e679cfdaa9552574484f104014908a76c6 nfs: Implement cache I/O by accessing the cache directly
-
-:::::: TO: David Howells <dhowells@redhat.com>
-:::::: CC: David Howells <dhowells@redhat.com>
+Thank you!
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

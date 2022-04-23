@@ -2,74 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 873F250CBDB
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 17:35:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D46CE50CBDE
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 17:39:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235300AbiDWPic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 11:38:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36894 "EHLO
+        id S235399AbiDWPmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 11:42:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234532AbiDWPiZ (ORCPT
+        with ESMTP id S231204AbiDWPmA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 11:38:25 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EAD1101
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 08:35:27 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id e4so12334328oif.2
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 08:35:27 -0700 (PDT)
+        Sat, 23 Apr 2022 11:42:00 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E153D1FA
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 08:39:03 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id c15so12915927ljr.9
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 08:39:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yZmrXMgw1MBRyJ3VvvD/S/NJK9gJ19shfJZhz6rDBD8=;
-        b=mGSQvuV4hkqafUS7ZKoo2FiRZjhxNffY3wsAOyi1ma31ijRXbJn7+RGsvTN6SXsFGX
-         wKkFcFDQHKqocEa661h2Jjyd41tSBDAQR9fFp0fTa7nU065FkmcLu6e1fcP1s9rhoqZj
-         d32vvCyFvTHHFxt4RpSRFdovtI6OsL6Lebx9Hg7Stu0I7Sby4ZxAiSgi4Kx8RgifAM/+
-         /oO28YDzcfR8AgzXwbBxfaJBjz1qK42jCwypNOXerWO+v6k4fnV1v/dGEt2y2M7DudbP
-         qTatpmrm4WRPsciOM8dowgfI1mcbKTcUeOto2H6tIeHIqPuZWFa3Rr/GfSni5GmgOtHH
-         7Eaw==
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=a+z70vimB+5HjACd5bJnkNciNJmYhICT7m82HtTW0ak=;
+        b=DGOxBYWGDBUZ85wK2PSmDgFBf3glfu6gBp9RcuZpjhtgF6HOjUY5Q2ABqF6SbbucDY
+         ALM7X7aHf99HafMPHM99WC7enJTKMJTEBI283/ereOCVLfHFuQ8XI1lmfyBXO4h9RU39
+         n7ABaPpwvD4EdliIxzOrw9UewqCBHWH67THLRGJkCkFdWcimUmA0Utg7st7+XwHgRZEN
+         Tu0dkwEzwiUufuFq4DrEvruNVCpmplVfy26ZaeqNDdT2ToVxmbZ4I9RCx2oG79NVen3C
+         Wb/krsbyfcOO9f8SOZQBZytlQePpf4MEK1030tBTm6Gbcd4qrT0i/toFpmtC8xaMzfOw
+         2oNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yZmrXMgw1MBRyJ3VvvD/S/NJK9gJ19shfJZhz6rDBD8=;
-        b=Ls7DMSX54041dl36Nvu9XFoZ8npofVbrYmdiIt0y2uCIbD/GXKsgJdcgpeFmZJVbGe
-         xYGxSS+UBpgdBrOA3eoa8EBcjVTdFV0/50a3IeNRFdXYLMEMzj5Bvux2vyYKR9EovJKc
-         a0QXl69anj6lGxGQm5KiOMJmGkGC/a3cupapZGXqAsrJQXfma7kZlX1jKjiRieZi0lXL
-         Isluvt8VqAKQthqRGan67esE/rivh30N5kCai6BTAW3EWqeFEo9sXDe21YK7K+4iAOQW
-         9Z7NNpE6Q48NT5KCsv+Bq4COOddK+u59Pj5nBeWtg9/1ylEbk5FW094n665ymQg1yedT
-         W5YA==
-X-Gm-Message-State: AOAM532eugeDSa2ILXO2UxJHd6GpzDOklYLJYOvWG8/3OHyvIz9Cyz5B
-        7YKnUrY8KQnNKvA8gcPErjGnNg==
-X-Google-Smtp-Source: ABdhPJwEkJcEyjTPFjAvW1fVnvHs6ADGz6qPasmzNXMt4XfJZ82bYxcgsxvOViNCsBPsSyFJ5kSPgQ==
-X-Received: by 2002:a05:6808:144a:b0:325:642:f58f with SMTP id x10-20020a056808144a00b003250642f58fmr1307346oiv.221.1650728126028;
-        Sat, 23 Apr 2022 08:35:26 -0700 (PDT)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id j9-20020a056808056900b0032252797ea4sm1948720oig.6.2022.04.23.08.35.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 08:35:25 -0700 (PDT)
-Date:   Sat, 23 Apr 2022 10:35:23 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Sai Teja Aluvala <quic_saluvala@quicinc.com>
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, agross@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        mka@chromium.org, quic_hemantg@quicinc.com,
-        quic_bgodavar@quicinc.com, quic_rjliao@quicinc.com,
-        quic_hbandi@quicinc.com, abhishekpandit@chromium.org,
-        mcchou@chromium.org
-Subject: Re: [PATCH v4] Bluetooth: arm64: dts: qcom: sc7280: Add IO regulator
- handler in SC7280 CRD platforms
-Message-ID: <YmQcu2GVES4FuwFU@builder.lan>
-References: <1650458740-16957-1-git-send-email-quic_saluvala@quicinc.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=a+z70vimB+5HjACd5bJnkNciNJmYhICT7m82HtTW0ak=;
+        b=KoRiZueqwm5Tk0mWWJau6adEyU1Z7L7sCBt08HAFNEO2ZFH/6/D4cUDNNl0B6fYLT8
+         et6S/6+Akeg0FPRGlhhxydSfk0Wapx5kLKOOSUnawFIwqTW5/AU5nrIqYVCf3w1eBIVS
+         M2yBhBiZRqK5iqpAUmBSOTWpyzIb+/JwRPH5egeD2rhRGduereTzatCxHxIhj9S2HTdk
+         Ho+JLw67+ylRhykY4GGG01RI2f7ZEnkUS/jM3aaVNM8hby6Qxt6PtZvruY/9J4xoZsKO
+         DNC+DH3OaAvmW70W+1mnY1W6BfKzMRZlZ/HgeTOGdcnudYoPOOqcC2gBsaq2QnINubuJ
+         u9SQ==
+X-Gm-Message-State: AOAM532CA1L//ACRObslUEDR3Cs8FDbm48aWaBdxSeuwoYkKBEScSBc1
+        jQheKytT77mGeuiOIbImajMySg==
+X-Google-Smtp-Source: ABdhPJyYd1HfSKlhZZ2xbgUsaXPbfPteYDgF4mpaisyCzRwuDfskdLVMadU5g6ZMLIwnSMH0GOHZmg==
+X-Received: by 2002:a05:651c:1617:b0:247:fd84:2195 with SMTP id f23-20020a05651c161700b00247fd842195mr5903693ljq.356.1650728341337;
+        Sat, 23 Apr 2022 08:39:01 -0700 (PDT)
+Received: from [192.168.1.65] ([46.188.121.177])
+        by smtp.gmail.com with ESMTPSA id q3-20020a196e43000000b00470e15b24casm658735lfk.89.2022.04.23.08.39.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 23 Apr 2022 08:39:00 -0700 (PDT)
+Message-ID: <3e457e4e-a908-0de7-ba3e-6d5ab434107e@openvz.org>
+Date:   Sat, 23 Apr 2022 18:38:59 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1650458740-16957-1-git-send-email-quic_saluvala@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+From:   Vasily Averin <vvs@openvz.org>
+Subject: [PATCH memcg v2] net: set proper memcg for net_init hooks allocations
+To:     Vlastimil Babka <vbabka@suse.cz>,
+        Shakeel Butt <shakeelb@google.com>
+Cc:     kernel@openvz.org, Florian Westphal <fw@strlen.de>,
+        linux-kernel@vger.kernel.org,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
+        netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+References: <202204231806.8O86U791-lkp@intel.com>
+Content-Language: en-US
+In-Reply-To: <202204231806.8O86U791-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,63 +79,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 20 Apr 07:45 CDT 2022, Sai Teja Aluvala wrote:
+__register_pernet_operations() executes init hook of registered
+pernet_operation structure in all existing net namespaces.
 
-Look here:
+Typically, these hooks are called by a process associated with
+the specified net namespace, and all __GFP_ACCOUNTING marked
+allocation are accounted for corresponding container/memcg.
 
-$ git log --oneline -- sc7280-crd.dts
-737f9ea6cee7 arm64: dts: qcom: sc7280: Rename crd to crd-r3
-073a39a2a63a arm64: dts: qcom: sc7280: Add pmg1110 regulators for sc7280-crd
-3ebf11fa4a35 arm64: dts: qcom: sc7280-crd: Add Touchscreen and touchpad support
-248da168fbae arm64: dts: qcom: sc7280: Define EC and H1 nodes for IDP/CRD
-427b249504ea arm64: dts: qcom: sc7280-crd: Add device tree files for CRD
+However __register_pernet_operations() calls the hooks in the same
+context, and as a result all marked allocations are accounted
+to one memcg for all processed net namespaces.
 
-You have 2 commits specifically touching this file and you have 3
-touching the platform. Your change touches only the single board, so it
-should match the two.
+This patch adjusts active memcg for each net namespace and helps
+to account memory allocated inside ops_init() into the proper memcg.
 
-As said before, your subject is too noisy, you can express this change
-with less words. Something like "...: Override Bluetooth vddio" completely
-covers the "what" of this patch, in 54 characters.
+Signed-off-by: Vasily Averin <vvs@openvz.org>
+---
+v2: introduced get/put_net_memcg(),
+    new functions are moved under CONFIG_MEMCG_KMEM
+    to fix compilation issues reported by Intel's kernel test robot
 
-> As IO regulator varies in different SC7280 platforms
-> updating this handler in individual platform bluetooth node.
-> 
+v1: introduced get_mem_cgroup_from_kmem(), which takes the refcount
+    for the found memcg, suggested by Shakeel
+---
+ include/linux/memcontrol.h | 35 +++++++++++++++++++++++++++++++++++
+ net/core/net_namespace.c   |  7 +++++++
+ 2 files changed, 42 insertions(+)
 
-"Bluetooth vddio in the CRD differs from that in the IDP, override it."
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index 0abbd685703b..5230d3c5585a 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -1714,6 +1714,33 @@ static inline int memcg_cache_id(struct mem_cgroup *memcg)
+ 
+ struct mem_cgroup *mem_cgroup_from_obj(void *p);
+ 
++static inline struct mem_cgroup *get_mem_cgroup_from_kmem(void *p)
++{
++	struct mem_cgroup *memcg;
++
++	rcu_read_lock();
++	do {
++		memcg = mem_cgroup_from_obj(p);
++	} while (memcg && !css_tryget(&memcg->css));
++	rcu_read_unlock();
++	return memcg;
++}
++
++static inline struct mem_cgroup *get_net_memcg(void *p)
++{
++	struct mem_cgroup *memcg;
++
++	memcg = get_mem_cgroup_from_kmem(p);
++
++	if (!memcg)
++		memcg = root_mem_cgroup;
++
++	return memcg;
++}
++static inline void put_net_memcg(struct mem_cgroup *memcg)
++{
++	css_put(&memcg->css);
++}
+ #else
+ static inline bool mem_cgroup_kmem_disabled(void)
+ {
+@@ -1766,6 +1793,14 @@ static inline struct mem_cgroup *mem_cgroup_from_obj(void *p)
+        return NULL;
+ }
+ 
++static inline struct mem_cgroup *get_net_memcg(void *p)
++{
++	return NULL;
++}
++
++static inline void put_net_memcg(struct mem_cgroup *memcg)
++{
++}
+ #endif /* CONFIG_MEMCG_KMEM */
+ 
+ #endif /* _LINUX_MEMCONTROL_H */
+diff --git a/net/core/net_namespace.c b/net/core/net_namespace.c
+index a5b5bb99c644..bf88360b8377 100644
+--- a/net/core/net_namespace.c
++++ b/net/core/net_namespace.c
+@@ -26,6 +26,7 @@
+ #include <net/net_namespace.h>
+ #include <net/netns/generic.h>
+ 
++#include <linux/sched/mm.h>
+ /*
+  *	Our network namespace constructor/destructor lists
+  */
+@@ -1147,7 +1148,13 @@ static int __register_pernet_operations(struct list_head *list,
+ 		 * setup_net() and cleanup_net() are not possible.
+ 		 */
+ 		for_each_net(net) {
++			struct mem_cgroup *old, *memcg;
++
++			memcg = get_net_memcg(net);
++			old = set_active_memcg(memcg);
+ 			error = ops_init(ops, net);
++			set_active_memcg(old);
++			put_net_memcg(memcg);
+ 			if (error)
+ 				goto out_undo;
+ 			list_add_tail(&net->exit_list, &net_exit_list);
+-- 
+2.31.1
 
-Makes it clear what area is touched, what value is overriden and why
-it's overriden.
-
-Regards,
-Bjorn
-
-> Signed-off-by: Sai Teja Aluvala <quic_saluvala@quicinc.com>
-> ---
-> v4: updated commit text
-> v3: Updated commit text to reflect the change
-> v2: updated reviewer comments.
-> v1: intial patch
-> ---
-> ---
->  arch/arm64/boot/dts/qcom/sc7280-crd.dts | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-> index e2efbdd..6cbbddc 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-> @@ -35,6 +35,10 @@
->  	};
->  };
->  
-> +&bluetooth {
-> +	vddio-supply = <&vreg_l18b_1p8>;
-> +};
-> +
->  ap_tp_i2c: &i2c0 {
->  	status = "okay";
->  	clock-frequency = <400000>;
-> -- 
-> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc.
-> 

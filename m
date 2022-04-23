@@ -2,72 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A10850CBCE
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 17:27:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F2E50CBC9
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 17:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234535AbiDWP1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 11:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53034 "EHLO
+        id S236074AbiDWP2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 11:28:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233462AbiDWP1L (ORCPT
+        with ESMTP id S236067AbiDWP2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 11:27:11 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C630A35DDF;
-        Sat, 23 Apr 2022 08:24:12 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id o18so7562261qtk.7;
-        Sat, 23 Apr 2022 08:24:12 -0700 (PDT)
+        Sat, 23 Apr 2022 11:28:33 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C650C40E57
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 08:25:35 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id p10so19092935lfa.12
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 08:25:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=DB27knfDqQc7OD0leI6JmLLgT8Ml329OWNhxU2Af7WI=;
-        b=V8Ya5SEin/5zgbYymNln3A+hUT/anyCJ1fnyD17zBLO17TQ74WliCoBmaeGiCG4OXO
-         8F3JWIHBR5EvaNlpP62NmBJqNTvnC8ke21pI39iJRqZMdNqaoFVGLfsJXBGt0q1galOl
-         0FpPTXf4fCwgWjgx0vpmMBSREtgn4o4OFLwHKklq/eq43A1eF9MU8Ssh52jRbp3tPMbs
-         KL0nLbjUuM/AzfqyVRtdAjGbeiTyQZKm6z6AUeZeV82wuw40IOGY0YM73AFQHJKamgua
-         b45Z3yNhEtB7ObbJ+T1HpaT0UxBszaHaNhx+/iQC8/7EWVi7eFj/V7phkzF1j8ZfUkMA
-         0iJQ==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=uPFaFyXz+EDuxvlVGUNcApp1IgYD33kJxyk7ho7JgsI=;
+        b=qAX7YMz/JVxRQSD3fqnQXDX9zVCZWMtAGJZf1JQG6BC5yFq+jBJs0Bmw87DF2eoCmq
+         eB2jJ/jLcplC0r+dgKvQHASQCXlpPx9qQUvjOIRwmext+2BEI0HSQFsH+wCaKaT+dSrx
+         pM78v3UdfvFh6ZqEaYYirFC4NVvxB3UYNKeyJAuxTPBGueHYmNO1YXcqFHfXfqC5kFeK
+         XCKNDjDTj1YGjwgrnHyOM3osVRjWrQAzoW4HO1CVCAsEzUy/NId/1IIJ6vn2OTwihsxL
+         HbGqWv2cHnxee5QlZ8keGC34Wlv1JJF3pXORff0x5PdSPBVpKxUSGjq/0Pa0qxEffFfF
+         oZZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=DB27knfDqQc7OD0leI6JmLLgT8Ml329OWNhxU2Af7WI=;
-        b=LkvWUBVO3Ly9CccC6b4VAVOcarVHx1EjHHdFvwD2qPXeSezTnpEaemiyq8kOAObwsa
-         JnUYxWKAWl+JdLG94OadiSUZQNPF7+7DeZQr95LEASGWfLyRweuvWEdBfnNwY4hZXYbl
-         vvlyqFVvlk5V9K2FgB6G3IKEgWU0WT/ZXUHdMVilloEdlSFg6skN4LN6G8KjBvvGBUK5
-         4BZnKicxV3LfHYG6sJeESWC/baA5CLNGULvD9IB7F9ylSAwi5UhbBmmwAvbcQl1YEwXx
-         QU8out5/3Hlk6i8PB5mCi7z03eyftih54cqlIPqB/n4nWg2cGRjJ2bxVRsamqYi7qSkb
-         xw/w==
-X-Gm-Message-State: AOAM531wiLCGFE8g4uLh9a/JUB75nxT57iUcCoucJC/tflxSeWZ+WKe3
-        m+3iMRXITYF+jH6JzduLCJE=
-X-Google-Smtp-Source: ABdhPJybRjaMCkQ7fMxW5I3iMYatbJOQ+l0qY41y/qN0g1LtLCGvGnPRdyP5lvab9ohjC4EXH6prwA==
-X-Received: by 2002:ac8:4d51:0:b0:2f1:ec64:cf90 with SMTP id x17-20020ac84d51000000b002f1ec64cf90mr6789779qtv.53.1650727451831;
-        Sat, 23 Apr 2022 08:24:11 -0700 (PDT)
-Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
-        by smtp.gmail.com with ESMTPSA id y6-20020a05622a004600b002f33ba280cbsm3184165qtw.8.2022.04.23.08.24.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 08:24:11 -0700 (PDT)
-From:   Peter Geis <pgwipeout@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     linux-rockchip@lists.infradead.org,
-        Peter Geis <pgwipeout@gmail.com>,
-        Marc Zyngier <maz@kernel.org>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v8 5/5] arm64: dts: rockchip: enable pcie controller on quartz64-a
-Date:   Sat, 23 Apr 2022 11:24:03 -0400
-Message-Id: <20220423152403.1681222-6-pgwipeout@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220423152403.1681222-1-pgwipeout@gmail.com>
-References: <20220423152403.1681222-1-pgwipeout@gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=uPFaFyXz+EDuxvlVGUNcApp1IgYD33kJxyk7ho7JgsI=;
+        b=XyI2QWpq0jX+fokHZBGsFLuVlxhvvEAhBObdSOBKHnarVNpeRO8LgoVoddjf1QUdzJ
+         pwc8E/UF0IxZAzRXq/mbjD/kBi7s1qUXmWfIkaPNaqQ9vimThv0WlVA+GeYST/8XkX/V
+         mYAZDV5Jk6l2/nnIGMJ7wD7b8UJ1dDGwXXbasGWR0qd8crytdouclsQwRvENSbaF8PBL
+         kjym2Y4aQJaMXkgWCk/unCa6DjbmFEKW4Xywm7iZhrIaruSMjb2JuyVRmD1eB2DiON9W
+         jJioT8QhDqB2B8C6ZuFAxTI6JRF22vOrJ1e8n2hf/IhsDyhX/5Es6+RZTg5Bl+CQPukN
+         AkaA==
+X-Gm-Message-State: AOAM530CssUzsZ1dumUHoW+nVD6l1rVU97TEwvaRKUcuW3iXBgVWVOgD
+        v9oHEjPxh8FtGWQNBuEs+/4=
+X-Google-Smtp-Source: ABdhPJwZNl8ZX/SsU1gM9f+mVYW4LB3X8j+kRC6d+voW45tPtkkQcLAFY9FBtTyQGpxCpCgIZRyrOQ==
+X-Received: by 2002:a19:dc0f:0:b0:439:702c:d83b with SMTP id t15-20020a19dc0f000000b00439702cd83bmr6906996lfg.192.1650727534046;
+        Sat, 23 Apr 2022 08:25:34 -0700 (PDT)
+Received: from [192.168.1.7] ([212.22.223.21])
+        by smtp.gmail.com with ESMTPSA id w23-20020a197b17000000b0046d1729e7d9sm651824lfc.294.2022.04.23.08.25.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 23 Apr 2022 08:25:33 -0700 (PDT)
+Subject: Re: [PATCH V1 3/6] xen/virtio: Add option to restrict memory access
+ under Xen
+To:     Juergen Gross <jgross@suse.com>
+Cc:     Stefano Stabellini <sstabellini@kernel.org>,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Julien Grall <julien@xen.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>
+References: <1650646263-22047-1-git-send-email-olekstysh@gmail.com>
+ <1650646263-22047-4-git-send-email-olekstysh@gmail.com>
+ <alpine.DEB.2.22.394.2204221526221.915916@ubuntu-linux-20-04-desktop>
+ <3de2852b-0a94-fd1d-2eb6-fd818f33fc88@gmail.com>
+ <8acfaa93-50ce-8dd9-49c6-cc328bb37569@suse.com>
+From:   Oleksandr <olekstysh@gmail.com>
+Message-ID: <cfeec3e9-8a04-b2ae-56bf-153e4ff2d9c7@gmail.com>
+Date:   Sat, 23 Apr 2022 18:25:30 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <8acfaa93-50ce-8dd9-49c6-cc328bb37569@suse.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Language: en-US
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,80 +91,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the nodes to enable the pcie controller on the quartz64 model a
-board.
 
-Signed-off-by: Peter Geis <pgwipeout@gmail.com>
----
- .../boot/dts/rockchip/rk3566-quartz64-a.dts   | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
+On 23.04.22 12:10, Juergen Gross wrote:
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-index dd7f4b9b686b..8b0537744a60 100644
---- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-@@ -125,6 +125,18 @@ vbus: vbus {
- 		vin-supply = <&vcc12v_dcin>;
- 	};
- 
-+	vcc3v3_pcie_p: vcc3v3_pcie_p {
-+		compatible = "regulator-fixed";
-+		enable-active-high;
-+		gpio = <&gpio0 RK_PC6 GPIO_ACTIVE_HIGH>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pcie_enable_h>;
-+		regulator-name = "vcc3v3_pcie_p";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&vcc_3v3>;
-+	};
-+
- 	vcc5v0_usb: vcc5v0_usb {
- 		compatible = "regulator-fixed";
- 		regulator-name = "vcc5v0_usb";
-@@ -187,6 +199,10 @@ vcc_wl: vcc_wl {
- 	};
- };
- 
-+&combphy2 {
-+	status = "okay";
-+};
-+
- &cpu0 {
- 	cpu-supply = <&vdd_cpu>;
- };
-@@ -495,6 +511,14 @@ rgmii_phy1: ethernet-phy@0 {
- 	};
- };
- 
-+&pcie2x1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pcie_reset_h>;
-+	reset-gpios = <&gpio1 RK_PB2 GPIO_ACTIVE_HIGH>;
-+	vpcie3v3-supply = <&vcc3v3_pcie_p>;
-+	status = "okay";
-+};
-+
- &pinctrl {
- 	bt {
- 		bt_enable_h: bt-enable-h {
-@@ -520,6 +544,16 @@ diy_led_enable_h: diy-led-enable-h {
- 		};
- 	};
- 
-+	pcie {
-+		pcie_enable_h: pcie-enable-h {
-+			rockchip,pins = <0 RK_PC6 RK_FUNC_GPIO &pcfg_pull_none>;
-+		};
-+
-+		pcie_reset_h: pcie-reset-h {
-+			rockchip,pins = <1 RK_PB2 RK_FUNC_GPIO &pcfg_pull_none>;
-+		};
-+	};
-+
- 	pmic {
- 		pmic_int_l: pmic-int-l {
- 			rockchip,pins = <0 RK_PA3 RK_FUNC_GPIO &pcfg_pull_up>;
+Hello Juergen
+
+> On 23.04.22 09:05, Oleksandr wrote:
+>>
+>> On 23.04.22 02:00, Stefano Stabellini wrote:
+>>
+>> Hello Stefano
+>>
+>>
+>>> On Fri, 22 Apr 2022, Oleksandr Tyshchenko wrote:
+>>>> From: Juergen Gross <jgross@suse.com>
+>>>>
+>>>> Introduce Xen grant DMA-mapping layer which contains special 
+>>>> DMA-mapping
+>>>> routines for providing grant references as DMA addresses to be used by
+>>>> frontends (e.g. virtio) in Xen guests.
+>>>>
+>>>> In order to support virtio in Xen guests add a config option 
+>>>> XEN_VIRTIO
+>>>> enabling the user to specify whether in all Xen guests virtio should
+>>>> be able to access memory via Xen grant mappings only on the host side.
+>>>>
+>>>> As this also requires providing 
+>>>> arch_has_restricted_virtio_memory_access
+>>>> implementation, switch from a pure stub to a real function on Arm
+>>>> and combine with existing implementation for the SEV guests on x86.
+>>>>
+>>>> Add the needed functionality by providing a special set of DMA ops
+>>>> handling the needed grant operations for the I/O pages.
+>>>>
+>>>> Signed-off-by: Juergen Gross <jgross@suse.com>
+>>>> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+>>> There are a couple of minor things that checkpatch.pl reports,
+>>
+>> Thank you for pointing this out, my fault.
+>>
+>>
+>>>   but aside
+>>> from those the patch looks fine to me.
+>>
+>> good
+>>
+>>
+>> The attached diff to be squashed for the new version. One thing remains:
+>>
+>> checkpatch.pl says regarding drivers/xen/grant-dma-ops.c:
+>>
+>> WARNING: added, moved or deleted file(s), does MAINTAINERS need 
+>> updating?
+>> #151:
+>> new file mode 100644
+>>
+>>
+>> Which, I assume, this is not an issue as new file falls under XEN 
+>> HYPERVISOR INTERFACE maintainership?
+>
+> Yes.
+
+
+ok, thank you for the confirmation.
+
+
+>
+>
+> Juergen
+
 -- 
-2.25.1
+Regards,
+
+Oleksandr Tyshchenko
 

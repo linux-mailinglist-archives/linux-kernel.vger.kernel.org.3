@@ -2,80 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8226050CB2F
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 16:28:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56F8E50CB32
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 16:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230517AbiDWObJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 10:31:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42602 "EHLO
+        id S235795AbiDWOcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 10:32:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232666AbiDWObG (ORCPT
+        with ESMTP id S236077AbiDWOcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 10:31:06 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2DB27FC4
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 07:28:05 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2f7d4addafdso1748857b3.6
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 07:28:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=DXAXkVZYPHcetFXE1oISHIeSMz1Xot5LLxB15W3LMjk=;
-        b=tQibwGA8uz8Ue+E3pvs+c8ZLtax4gGb4dFOV3dy8bzYAyRQotxBRYtX3oExAAr/e5W
-         lcJykMgKZDqXuCRcUTWrpgdKqNqa7SDK7R5LQ1iWkeMFOMj4/GvkIliYrru0Fcz3ot5h
-         cvD+hIJBFRnHqnE3eBGsznogk3ef/KiPrus6ZbeRLGrGf+/GlLHeLPEohW773ai5NpM2
-         pXrvOgHb8VQuBDo7BbJ8vcpHd3CLD6msHLW5xjWZJUln3dl7h6R0dYjUMivzqyXucYGI
-         E+67TMHQeiyQW5PXgSo8AKsLGTtBzdyQAAlPZ+C99mPyDJfjZvDTgswF9XlojwtZrxoc
-         qXMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=DXAXkVZYPHcetFXE1oISHIeSMz1Xot5LLxB15W3LMjk=;
-        b=hGWOuiK2Efr9VbRW4h4232ncrDlerfDegl5hoCnJWuoJpyUxHJe11Vy9ZCVS3T0qHG
-         X+ntpt7fKhkJyL+8695ihCQz0rplEGlg5PT3G1qPArSlreqOWmjwjSY2u8Rspdk6XTiL
-         kATRefC8qHP9coNDD8Pkqms97gOBkLFuSUQPXZmDJYZtm4PFk3NUTIiMUQMYBn+NvJtj
-         2eRnrhtvn5G0lhJzfNA6SfpxKfMBJRphXybNhvHCm3pNCZvrId4UNGDXf1HbMCZXbXyI
-         BpuiH/jpryQtXxPu2wvcLxMKZON3F9jiWYKFfgt1K42IFEiap84aROsKCOQvyhOAh3O2
-         BZjw==
-X-Gm-Message-State: AOAM531CJ1LmYsyw8qsbqWfOSteYvsjVfY0Q3jGGB1zEp66h38jqGo80
-        1pjDPoloFTSwDt9ngA86ZpBNhaSPBaRg8g==
-X-Google-Smtp-Source: ABdhPJymwLMUEIWwXLSUSEFl1hrUHDozuSw0iJLPBiMCTcvECf3BdD1JzQSLUMCkewcVDkKmZFBQ5OvW5vc+iw==
-X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:28b])
- (user=shakeelb job=sendgmr) by 2002:a05:6902:124b:b0:644:c3bf:fa2d with SMTP
- id t11-20020a056902124b00b00644c3bffa2dmr9159316ybu.462.1650724084357; Sat,
- 23 Apr 2022 07:28:04 -0700 (PDT)
-Date:   Sat, 23 Apr 2022 14:28:01 +0000
-In-Reply-To: <20220421234426.3494842-5-yosryahmed@google.com>
-Message-Id: <20220423142801.gnvd42cdcsz4hpon@google.com>
-Mime-Version: 1.0
-References: <20220421234426.3494842-1-yosryahmed@google.com> <20220421234426.3494842-5-yosryahmed@google.com>
-Subject: Re: [PATCH v4 4/4] selftests: cgroup: add a selftest for memory.reclaim
-From:   Shakeel Butt <shakeelb@google.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Chen Wandun <chenwandun@huawei.com>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>,
-        "Michal =?utf-8?Q?Koutn=C3=BD?=" <mkoutny@suse.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Dan Schatzberg <schatzberg.dan@gmail.com>,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        Sat, 23 Apr 2022 10:32:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DD3289B4;
+        Sat, 23 Apr 2022 07:29:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4B8DB80688;
+        Sat, 23 Apr 2022 14:29:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE4A0C385A5;
+        Sat, 23 Apr 2022 14:29:06 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Q7s5qcAl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1650724145;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VGCSqF1/roTZOFlPi0CAeOLjCByjkUs4ceONVf8EcjA=;
+        b=Q7s5qcAlnaV2fXpBY0hm9KYIo+Hg3/6ZvLqT+99ji+Hw01JNZx+N4iQrs5Y0OfnyutZiLR
+        5TfEn1Dua7iWhpV9RFf2rn0UnqflYZuOjkqtA1nRCwovp1F0M70CjFwls9SctZ5VpNUtoL
+        n7oR4/5UP1MyXic5d1en9mp8GRuc26c=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 27a510e4 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Sat, 23 Apr 2022 14:29:04 +0000 (UTC)
+Date:   Sat, 23 Apr 2022 16:28:59 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Nick Hu <nickhu@andestech.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Michal Simek <monstr@monstr.eu>,
+        Borislav Petkov <bp@alien8.de>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Joshua Kinard <kumba@gentoo.org>,
+        David Laight <David.Laight@aculab.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: Re: [PATCH v1] random: block in /dev/urandom
+Message-ID: <YmQNK2uicWbklo7U@zx2c4.com>
+References: <20220217162848.303601-1-Jason@zx2c4.com>
+ <20220322155820.GA1745955@roeck-us.net>
+ <YjoC5kQMqyC/3L5Y@zx2c4.com>
+ <d5c23f68-30ba-a5eb-6bea-501736e79c88@roeck-us.net>
+ <CAHmME9rmeQAD2DwG=APTmDxuVxFDH=6GXoKpgPrU9rc9oXrmxQ@mail.gmail.com>
+ <20220423135631.GB3958174@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220423135631.GB3958174@roeck-us.net>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,61 +86,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 11:44:26PM +0000, Yosry Ahmed wrote:
-> Add a new test for memory.reclaim that verifies that the interface
-> correctly reclaims memory as intended, from both anon and file pages.
-> 
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
-> ---
->  .../selftests/cgroup/test_memcontrol.c        | 86 +++++++++++++++++++
->  1 file changed, 86 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-> index f2ffb3a30194..5f7c20de2426 100644
-> --- a/tools/testing/selftests/cgroup/test_memcontrol.c
-> +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-> @@ -760,6 +760,91 @@ static int test_memcg_max(const char *root)
->  	return ret;
->  }
->  
-> +/*
-> + * This test checks that memory.reclaim reclaims the given
-> + * amount of memory (from both anon and file).
-> + */
-> +static int test_memcg_reclaim(const char *root)
-> +{
-> +	int ret = KSFT_FAIL, fd, retries;
-> +	char *memcg;
-> +	long current, to_reclaim;
-> +	char buf[64];
-> +
-> +	memcg = cg_name(root, "memcg_test");
-> +	if (!memcg)
-> +		goto cleanup;
-> +
-> +	if (cg_create(memcg))
-> +		goto cleanup;
-> +
-> +	current = cg_read_long(memcg, "memory.current");
-> +	if (current != 0)
-> +		goto cleanup;
-> +
-> +	cg_run_nowait(memcg, alloc_anon_noexit, (void *) MB(50));
+Hi Guenter,
 
-Don't you need is_swap_enabled() check before deciding to do the anon
-allocations?
+On Sat, Apr 23, 2022 at 06:56:31AM -0700, Guenter Roeck wrote:
+> Looks like your code is already in -next; I see the same failures in
+> your tree and there.
 
-> +	sleep(1);
-> +
-> +	fd = get_temp_fd();
-> +	if (fd < 0)
-> +		goto cleanup;
-> +
-> +	cg_run_nowait(memcg, alloc_pagecache_50M_noexit, (void *)(long)fd);
-> +	sleep(1);
+It's not in next, actually. The branch I made for you has that
+additional testing commit.
 
-These sleep(1)s do not seem robust. Since kernel keeps the page cache
-around, you can convert anon to use tmpfs and use simple cg_run to
-trigger the allocations of anon (tmpfs) and file which will remain in
-memory even after return from cg_run.
+Jason

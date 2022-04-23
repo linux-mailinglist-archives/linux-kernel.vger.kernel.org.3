@@ -2,114 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A9C450C93F
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 12:31:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B739650C93E
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 12:31:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234936AbiDWKaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 06:30:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45654 "EHLO
+        id S234950AbiDWKaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 06:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234287AbiDWK3x (ORCPT
+        with ESMTP id S234971AbiDWKaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 06:29:53 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 686A563BCC;
-        Sat, 23 Apr 2022 03:26:57 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23N5iGYR022826;
-        Sat, 23 Apr 2022 10:26:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=YU6DuhMWdcCqR/esisKnTr9adDxkr5LITBnMOC56St0=;
- b=HvszEA+1PbErzd7LQ4sjqKedhogooYyUWasDXm97cypyjJ6hJhUfpVHh02Sk7H0xtfpR
- shAZDQt/dlOlqTPc9girsE83tA+bbeNucKXoHuufp49bnffPMdb72RusoaHdXCCVW/M6
- 0vVnM7vzILMhEbwgorjElEF0PaI7wnhcIus8gDGOb8jsjvIFu3gdFzlu94XegVCM0FKO
- O0dZPfP4HjQSZUSw0Vry7Q/hGmmByHo9onoDnXGiokc1fjAA3A99twrBt6jZxi7TUFrN
- 2QHh4EmYYe5Im/cg/yfoAFgePVqXCq7UY3inqGt+UcOdec8BOQK2cnHrT0kgQjiNboKa pg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fmbjtjm55-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 23 Apr 2022 10:26:49 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23NANtUo018886;
-        Sat, 23 Apr 2022 10:26:48 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fmbjtjm4w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 23 Apr 2022 10:26:48 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23NAJBCn026117;
-        Sat, 23 Apr 2022 10:26:46 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma03ams.nl.ibm.com with ESMTP id 3fm938r9jv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 23 Apr 2022 10:26:46 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23NAQh4717301768
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 23 Apr 2022 10:26:43 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B840611C04A;
-        Sat, 23 Apr 2022 10:26:43 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 61E1111C04C;
-        Sat, 23 Apr 2022 10:26:43 +0000 (GMT)
-Received: from [9.171.84.240] (unknown [9.171.84.240])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Sat, 23 Apr 2022 10:26:43 +0000 (GMT)
-Message-ID: <67d3e987-47ba-160f-ed73-0dfe1e92c513@linux.ibm.com>
-Date:   Sat, 23 Apr 2022 12:26:43 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH net 0/2] net/smc: Two fixes for smc fallback
-Content-Language: en-US
-To:     Wen Gu <guwen@linux.alibaba.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1650614179-11529-1-git-send-email-guwen@linux.alibaba.com>
-From:   Karsten Graul <kgraul@linux.ibm.com>
-Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <1650614179-11529-1-git-send-email-guwen@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 2CUIawL_-KQQfU_dJDQmS3Xqj4MoEqJX
-X-Proofpoint-GUID: kOD7krKXrfscmW1WgjmafpbaIVQaF47V
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Sat, 23 Apr 2022 06:30:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C47E1BD59A;
+        Sat, 23 Apr 2022 03:27:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 408D060F4E;
+        Sat, 23 Apr 2022 10:27:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 958D3C385A0;
+        Sat, 23 Apr 2022 10:27:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650709635;
+        bh=ddKHEuTRbRut1OsQhp+YMuMz23onGUBMShLMqKxTwJU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YJC/mBali+ZaOBUhChsdgZnicBb+bq6N7bb64+3OnZP+TROX50HxrR4xfieYO162x
+         dhsCX3KlNWOAYKpEryeAQZvHfVEGdx6ZeVq+PfeOiiEeEKiKAb0SNrPkx3ucGF18R+
+         0dtX4SEJb4GPT3zzGZZ2V0bhQtnNEtKkrhaMOzjCZQXPFaQOr8QtJjuw2JL++U03u0
+         EaZ7eaANf8LaDkVOp68CUxX+JmnrMVZFSsUw4MDHdzjdey5M4Q4M3gFyoqTry8S8Vs
+         FUSZAee2FGjz0SblW0KTs0Y1GuzYa6L095a67cWfXJUwp08vEMlcYCZC6t2W9HQ+Y1
+         8AIu+DMm+RV8A==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1niCyv-006Mln-7Y; Sat, 23 Apr 2022 11:27:13 +0100
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-23_01,2022-04-22_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 bulkscore=0 phishscore=0 adultscore=0 lowpriorityscore=0
- spamscore=0 suspectscore=0 clxscore=1015 priorityscore=1501
- mlxlogscore=908 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204230046
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Sat, 23 Apr 2022 11:27:13 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        iommu@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: fully convert arm to use dma-direct
+In-Reply-To: <CACRpkdbdKBfmXGdyTm3T-MFAK30N-z4KH0k8eD8F7xaYUbDDhA@mail.gmail.com>
+References: <20220421074204.1284072-1-hch@lst.de>
+ <CACRpkdbdKBfmXGdyTm3T-MFAK30N-z4KH0k8eD8F7xaYUbDDhA@mail.gmail.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <e3ff279d8f00fb38ee4e9ecda0e56038@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: linus.walleij@linaro.org, hch@lst.de, linux@armlinux.org.uk, arnd@kernel.org, andre.przywara@arm.com, andrew@lunn.ch, gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com, gregkh@linuxfoundation.org, stern@rowland.harvard.edu, laurentiu.tudor@nxp.com, m.szyprowski@samsung.com, robin.murphy@arm.com, iommu@lists.linux-foundation.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/04/2022 09:56, Wen Gu wrote:
-> This patch set includes two fixes for smc fallback:
+On 2022-04-22 22:17, Linus Walleij wrote:
+> On Thu, Apr 21, 2022 at 9:42 AM Christoph Hellwig <hch@lst.de> wrote:
 > 
-> Patch 1/2 introduces some simple helpers to wrap the replacement
-> and restore of clcsock's callback functions. Make sure that only
-> the original callbacks will be saved and not overwritten.
+>> arm is the last platform not using the dma-direct code for directly
+>> mapped DMA.  With the dmaboune removal from Arnd we can easily switch
+>> arm to always use dma-direct now (it already does for LPAE configs
+>> and nommu).  I'd love to merge this series through the dma-mapping 
+>> tree
+>> as it gives us the opportunity for additional core dma-mapping
+>> improvements.
+> (...)
 > 
-> Patch 2/2 fixes a syzbot reporting slab-out-of-bound issue where
-> smc_fback_error_report() accesses the already freed smc sock (see
-> https://lore.kernel.org/r/00000000000013ca8105d7ae3ada@google.com/).
-> The patch fixes it by resetting sk_user_data and restoring clcsock
-> callback functions timely in fallback situation.
+>>  b/arch/arm/mach-footbridge/Kconfig                   |    1
+>>  b/arch/arm/mach-footbridge/common.c                  |   19
+>>  b/arch/arm/mach-footbridge/include/mach/dma-direct.h |    8
+>>  b/arch/arm/mach-footbridge/include/mach/memory.h     |    4
+> 
+> I think Marc Z has a Netwinder that he can test this on. Marc?
+> I have one too, just not much in my office because of parental leave.
 
-Thank you for the analysis and the fix!
+I'm about to travel for a week. Can this wait until I'm back?
+This is one of the few boxes that isn't hooked up to the PDU,
+so I can't operate it remotely.
 
-For the series:
-Acked-by: Karsten Graul <kgraul@linux.ibm.com>
+         M.
+-- 
+Jazz is not dead. It just smells funny...

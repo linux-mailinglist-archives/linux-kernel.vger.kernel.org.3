@@ -2,68 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B646650C8AC
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 11:40:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B62150C8B6
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 11:45:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234625AbiDWJnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 05:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60270 "EHLO
+        id S234647AbiDWJnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 05:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234557AbiDWJmd (ORCPT
+        with ESMTP id S234557AbiDWJnP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 05:42:33 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE3EF7DE33
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 02:39:36 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id a21so924059edb.1
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 02:39:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yi/KWMdEjAECEQqVSPs3J5XHwdnZDBuBrnOuI1PVsGc=;
-        b=DGc8Sn7k6aJZQWpk8RYgPbSw6k2zTB/vM0gD6NDsZKI9E0VGOCNlfyzhzyJnHcTzGl
-         DlFtvB2K3XdYjv92YuEZd/ijas4Qob8oAgxavap8hi3A+EAxCb1SK630S4V6LJBTBY6B
-         tEzGyc53fRgwZxbR92ITXhltgT8QYWyILRjZsfkwqslQF1ze/ZqAUjLjkdjlQroN/PaO
-         8O/MBwdH8MIRH4adf6hFDii2cPJqFqpWYrFp2JGBjO0lC3jwfmttt+rEBOHf94I3nkwL
-         W82hZnY9o5g3rvSyK/V4/3pz3mAl8/RlnJ73R22cVELImFV5AbFbmFGLeWmevA8BtEAl
-         8+FQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yi/KWMdEjAECEQqVSPs3J5XHwdnZDBuBrnOuI1PVsGc=;
-        b=7ifQVJtZ82zrjL9dL5o+NJQEvSMCuJ01zWSGy6zqBbiOXvJO1fBg5TklhtKy/MnGOK
-         CXgRwlMobSxip0ElolXtcIb2jtcEEF0mPssKBrvKV88V9IbWBtAv304bor6qn8ht/nBI
-         KuhVP6Ju+soRsKsMvYytn7PHb6DxRL+/sj0VdSHR1lqtB8ha1xTzVf1ccOBGNhxOo4kC
-         4VwG7DbytujQTVSNE04C/n/nQW2WXxvdo82PHNYyMh+cn/NAfGau3s9M0531lLhTvgKb
-         J7JKxKU1RjXxPvHgb6AK9N0bC8e3lhR6yC9i+bqhs11K4oUmSKU2JBZEnj0gg+kmafss
-         2aFA==
-X-Gm-Message-State: AOAM532fTTD+t6pzCauwYaOu85V+w6KVs/+0TLZaNoWFrJgqQ4VayLHr
-        BN+7hs9bI6luwH9GfjvIV2iLXYMyU2Mdyg==
-X-Google-Smtp-Source: ABdhPJx/vBPd2DZ/ue/LXDVxPGJkHdiS434Zk9hz/YnuVTXUIhs/whv0tWbG+s+70kXa+sdql69TFA==
-X-Received: by 2002:a05:6402:294e:b0:41c:c191:64bc with SMTP id ed14-20020a056402294e00b0041cc19164bcmr9550151edb.166.1650706775500;
-        Sat, 23 Apr 2022 02:39:35 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id k19-20020a1709061c1300b006e8843b0729sm1518201ejg.76.2022.04.23.02.39.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 02:39:34 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] rpmsg: qcom_smd: Fix returning 0 if irq_of_parse_and_map() fails
-Date:   Sat, 23 Apr 2022 11:39:32 +0200
-Message-Id: <20220423093932.32136-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
+        Sat, 23 Apr 2022 05:43:15 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603817EA26;
+        Sat, 23 Apr 2022 02:40:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650706817; x=1682242817;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SECSW/KfTCFzvgQa0o1UPp5w19OimdSmXQzt+n2rFnA=;
+  b=SXtVpqtftNvP88PAXX4RLHfSZc+i1VfmrI7FA2ouWALZhVgZpYmdWiFF
+   tDdDFDZuHhVAYFfMuTnpL8PUByafvXrUNCAeBPk11rvN/DdLQ6PXkREKw
+   JYR6BGxzCv5gmY1PANT3dJrnBCBiQgf53t+xUn0frFIbVU2agQOdKYW3p
+   pi7220XK4FbAI0HQEq7RL8Fx4AYEDcLHuF/jbJVWoMT3cQlgktG+XA9L+
+   3iYu61c645aCSdHIJ2zXIYfPbTr9CIfNzQ1fDDbyOkDUzq0eusM/AMeit
+   UC+ItCoBNLE3pWsP0x/tR1DPb4UD7voPCx5HGwX5utkCPGyK8kpDoJSaF
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="351323762"
+X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
+   d="scan'208";a="351323762"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 02:40:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
+   d="scan'208";a="627330466"
+Received: from lkp-server01.sh.intel.com (HELO dd58949a6e39) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 23 Apr 2022 02:40:14 -0700
+Received: from kbuild by dd58949a6e39 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1niCFR-00007m-V3;
+        Sat, 23 Apr 2022 09:40:13 +0000
+Date:   Sat, 23 Apr 2022 17:39:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vasily Averin <vvs@openvz.org>, Vlastimil Babka <vbabka@suse.cz>,
+        Shakeel Butt <shakeelb@google.com>
+Cc:     kbuild-all@lists.01.org, kernel@openvz.org,
+        Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
+        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH] net: set proper memcg for net_init hooks allocations
+Message-ID: <202204231724.0eEAtmxV-lkp@intel.com>
+References: <6f38e02b-9af3-4dcf-9000-1118a04b13c7@openvz.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6f38e02b-9af3-4dcf-9000-1118a04b13c7@openvz.org>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,35 +69,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-irq_of_parse_and_map() returns 0 on failure, so this should not be
-passed further as error return code.
+Hi Vasily,
 
-Fixes: 1a358d350664 ("rpmsg: qcom_smd: Fix irq_of_parse_and_map() return value")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Thank you for the patch! Yet something to improve:
 
----
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.18-rc3 next-20220422]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-A fix for: https://lore.kernel.org/all/20220422105326.78713-1-krzysztof.kozlowski@linaro.org/
-Commit sha from Bjorn's email, so might not be stable/correct.
+url:    https://github.com/intel-lab-lkp/linux/commits/Vasily-Averin/net-set-proper-memcg-for-net_init-hooks-allocations/20220423-160759
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git c00c5e1d157bec0ef0b0b59aa5482eb8dc7e8e49
+config: mips-buildonly-randconfig-r006-20220423 (https://download.01.org/0day-ci/archive/20220423/202204231724.0eEAtmxV-lkp@intel.com/config)
+compiler: mips64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/3b379e5391e36e13b9f36305aa6d233fb03d4e58
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Vasily-Averin/net-set-proper-memcg-for-net_init-hooks-allocations/20220423-160759
+        git checkout 3b379e5391e36e13b9f36305aa6d233fb03d4e58
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=mips prepare
 
-Consider squashing it.
----
- drivers/rpmsg/qcom_smd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/drivers/rpmsg/qcom_smd.c b/drivers/rpmsg/qcom_smd.c
-index 6ccfa12abd10..1957b27c4cf3 100644
---- a/drivers/rpmsg/qcom_smd.c
-+++ b/drivers/rpmsg/qcom_smd.c
-@@ -1409,7 +1409,7 @@ static int qcom_smd_parse_edge(struct device *dev,
- 	irq = irq_of_parse_and_map(node, 0);
- 	if (!irq) {
- 		dev_err(dev, "required smd interrupt missing\n");
--		ret = irq;
-+		ret = -EINVAL;
- 		goto put_node;
- 	}
- 
+All errors (new ones prefixed by >>):
+
+   In file included from include/linux/swap.h:9,
+                    from include/linux/suspend.h:5,
+                    from arch/mips/kernel/asm-offsets.c:17:
+   include/linux/memcontrol.h: In function 'get_mem_cgroup_from_kmem':
+>> include/linux/memcontrol.h:1773:28: error: implicit declaration of function 'css_tryget'; did you mean 'wb_tryget'? [-Werror=implicit-function-declaration]
+    1773 |         } while (memcg && !css_tryget(&memcg->css));
+         |                            ^~~~~~~~~~
+         |                            wb_tryget
+>> include/linux/memcontrol.h:1773:45: error: invalid use of undefined type 'struct mem_cgroup'
+    1773 |         } while (memcg && !css_tryget(&memcg->css));
+         |                                             ^~
+   arch/mips/kernel/asm-offsets.c: At top level:
+   arch/mips/kernel/asm-offsets.c:26:6: warning: no previous prototype for 'output_ptreg_defines' [-Wmissing-prototypes]
+      26 | void output_ptreg_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:78:6: warning: no previous prototype for 'output_task_defines' [-Wmissing-prototypes]
+      78 | void output_task_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:92:6: warning: no previous prototype for 'output_thread_info_defines' [-Wmissing-prototypes]
+      92 | void output_thread_info_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:108:6: warning: no previous prototype for 'output_thread_defines' [-Wmissing-prototypes]
+     108 | void output_thread_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:179:6: warning: no previous prototype for 'output_mm_defines' [-Wmissing-prototypes]
+     179 | void output_mm_defines(void)
+         |      ^~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:240:6: warning: no previous prototype for 'output_sc_defines' [-Wmissing-prototypes]
+     240 | void output_sc_defines(void)
+         |      ^~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:253:6: warning: no previous prototype for 'output_signal_defined' [-Wmissing-prototypes]
+     253 | void output_signal_defined(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:332:6: warning: no previous prototype for 'output_pm_defines' [-Wmissing-prototypes]
+     332 | void output_pm_defines(void)
+         |      ^~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+   make[2]: *** [scripts/Makefile.build:120: arch/mips/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1194: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +1773 include/linux/memcontrol.h
+
+  1765	
+  1766	static inline struct mem_cgroup *get_mem_cgroup_from_kmem(void *p)
+  1767	{
+  1768		struct mem_cgroup *memcg;
+  1769	
+  1770		rcu_read_lock();
+  1771		do {
+  1772			memcg = mem_cgroup_from_obj(p);
+> 1773		} while (memcg && !css_tryget(&memcg->css));
+
 -- 
-2.32.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

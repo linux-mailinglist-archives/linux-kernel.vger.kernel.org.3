@@ -2,94 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADB9F50C894
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 11:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9906A50C89B
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 11:32:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234519AbiDWJd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 05:33:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58894 "EHLO
+        id S234469AbiDWJdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 05:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234494AbiDWJdS (ORCPT
+        with ESMTP id S233576AbiDWJdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 05:33:18 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D69A6C8BE5
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 02:30:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650706215; x=1682242215;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PBCdMFUfBx3arTmg/F40pbY08SWeH4eP+o9eyt9mTZI=;
-  b=SypYRQVroPQGSbh9RU7qXQu2gEQag6VGPWsVM7iehjKDiYZ4JG6teq9w
-   phkcn+/fWLyG5/Borpv7rAGOX2mM/c4l/ZmsRmRxuQyYZons0qS32aRU8
-   8rO/lStDx5ceaFjrp/bmC7kMLUkZQPeofePuLZ+RhiQlcHLPwItGJ1lGp
-   PFLPyIQuKqKKo7YbZWcURomgFA2FOuU0E08eS6rKABSydQq6R3XgM6o0g
-   MZVOrO2FP4EskQNax3M3R51osQecf+50m8TvaBtLXNLxhHnTQ1dQCyZH4
-   XAjr3HHPDTBY3UZhm+WrODU0U8WRX1ukB3WtDPt7KeeDBXAOfi12eoHf9
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="263723032"
-X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
-   d="scan'208";a="263723032"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 02:30:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
-   d="scan'208";a="703875136"
-Received: from lkp-server01.sh.intel.com (HELO dd58949a6e39) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 23 Apr 2022 02:30:14 -0700
-Received: from kbuild by dd58949a6e39 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1niC5l-00007T-Lk;
-        Sat, 23 Apr 2022 09:30:13 +0000
-Date:   Sat, 23 Apr 2022 17:29:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>
-Subject: [intel-tdx:guest-rebased 4/129] arch/x86/kernel/tdcall.o: warning:
- objtool: __tdx_module_call()+0x3f: missing int3 after ret
-Message-ID: <202204231753.86pSanI4-lkp@intel.com>
+        Sat, 23 Apr 2022 05:33:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6AD23529B;
+        Sat, 23 Apr 2022 02:30:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D114960E15;
+        Sat, 23 Apr 2022 09:30:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF40FC385A5;
+        Sat, 23 Apr 2022 09:29:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650706202;
+        bh=uYpUk5+sN0P3nqhmmuGUesP6y8QLTNMXcU77kia2qFE=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=SmRdB1dO1YCHMLFOBv7Wbz1+hejcLVpMTNWXxgBx0kM5ie60V5M1PnPMhH/K0+66Y
+         ttTyc4BEPTKQHH7a/ePsZVnFQ+r5qfd0mgaNIN+7qbBNO+90m3noM5RipkTWUvMebJ
+         VQupcuq8YLaRUQxMA9JO0MePDbm5iE012mH+SVUsUwbzgOBA5Lk4jHNVnhbEw8IKUm
+         /SXiuQLpoK2O9jEZx8/9U4xd2mk6JQKuEhnSUUjPr/KYkxbmX6QJ2bqcnw0Mxb+Hrw
+         qrs3zy/VOZcqjkYpUcx4z+7T5QUbVBf9U+o4NhBiJbQ9yaccXe8IuRJejAb4qgsttL
+         bit2ldzNFvpHQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] ath11k: Fix build warning without CONFIG_IPV6
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20220411020843.10284-1-yuehaibing@huawei.com>
+References: <20220411020843.10284-1-yuehaibing@huawei.com>
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <quic_cjhuang@quicinc.com>, <quic_bqiang@quicinc.com>,
+        <ath11k@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>
+User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <165070619766.959.11490520883578406450.kvalo@kernel.org>
+Date:   Sat, 23 Apr 2022 09:29:59 +0000 (UTC)
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kuppuswamy,
+YueHaibing <yuehaibing@huawei.com> wrote:
 
-First bad commit (maybe != root cause):
+> drivers/net/wireless/ath/ath11k/mac.c:8175:13: error: ‘ath11k_mac_op_ipv6_changed’ defined but not used [-Werror=unused-function]
+>  static void ath11k_mac_op_ipv6_changed(struct ieee80211_hw *hw,
+>              ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Wrap it with #ifdef block to fix this.
+> 
+> Fixes: c3c36bfe998b ("ath11k: support ARP and NS offload")
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
 
-tree:   https://github.com/intel/tdx.git guest-rebased
-head:   4c095660b91dbdd18042456e395af0deeef93485
-commit: 78ee914ccc3ec6aba40ea3ffd044ea17b1aba9ce [4/129] x86/tdx: Add __tdx_module_call() and __tdx_hypercall() helper functions
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220423/202204231753.86pSanI4-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel/tdx/commit/78ee914ccc3ec6aba40ea3ffd044ea17b1aba9ce
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx guest-rebased
-        git checkout 78ee914ccc3ec6aba40ea3ffd044ea17b1aba9ce
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
+Patch applied to ath-next branch of ath.git, thanks.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/x86/kernel/tdcall.o: warning: objtool: __tdx_module_call()+0x3f: missing int3 after ret
->> arch/x86/kernel/tdcall.o: warning: objtool: __tdx_hypercall()+0x60: missing int3 after ret
+67888630adde ath11k: Fix build warning without CONFIG_IPV6
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+https://patchwork.kernel.org/project/linux-wireless/patch/20220411020843.10284-1-yuehaibing@huawei.com/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+

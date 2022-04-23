@@ -2,191 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF06050C6E0
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 05:23:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A192050C6E2
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Apr 2022 05:23:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232437AbiDWDQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Apr 2022 23:16:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33686 "EHLO
+        id S232489AbiDWDRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Apr 2022 23:17:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232359AbiDWDQh (ORCPT
+        with ESMTP id S232414AbiDWDQs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Apr 2022 23:16:37 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7364CC60
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Apr 2022 20:13:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650683622; x=1682219622;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+M/y3ZiwrUHCKNrEkV5MGO0xbR9T3K7uVqIPPNRdSK8=;
-  b=EEhS2lgGj5A8+1q77tzjLmOIKfNlOp368/Ez9IP6J2TPb0pMrJb6hYH1
-   UoLOV5doQaDD21cizESLtwhK+/Zu8JDp0B8n8665xJPaNvy+ekyhyO7t4
-   FG6OoVlUPw/TNn9FCW1KGdoM0+7upS24OgFG7xTVHew1rDVyKrtQtwYK7
-   MvI9h9M8/M70U8xBaJnQtiGn9XEuZchYbccTUGo13DnJt/esMkvkf7NDO
-   eV5DfUJ2PdaP9opAu8gxZX9Wy5XoHZuZmVEFsLxwqyYjkmuR/92BUX9TJ
-   jz4C/4+4uXtDfnlMUj9VajKOFRlLEzk2PPqq//vlnqK0iDc36mixKf6Ex
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="325291559"
-X-IronPort-AV: E=Sophos;i="5.90,283,1643702400"; 
-   d="scan'208";a="325291559"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 20:13:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,283,1643702400"; 
-   d="scan'208";a="703804137"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 22 Apr 2022 20:13:40 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ni6DL-000AwX-U1;
-        Sat, 23 Apr 2022 03:13:39 +0000
-Date:   Sat, 23 Apr 2022 11:13:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 30/44]
- fs/netfs/direct_read.c:198:3: error: expected expression
-Message-ID: <202204231010.5DHxVC96-lkp@intel.com>
+        Fri, 22 Apr 2022 23:16:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AEC0C60;
+        Fri, 22 Apr 2022 20:13:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4CDECB8335D;
+        Sat, 23 Apr 2022 03:13:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01299C385A0;
+        Sat, 23 Apr 2022 03:13:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650683630;
+        bh=cAjB3SwesxGlhRGXCKftp+OPMZZqvtJP/UCppIG/HvA=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=OP0hdxPZNSvivrDZoK0G6hQtq+j61ny5knTMEfFwL0Con60lrQ1oaYhaVVB7LJ79V
+         4baTC7tvXP6FwN2rTlcdvLumGdhHfS5Qp7ChLxmqiIWwFSto95M54Hr22HFEufPOH9
+         wcvdrNcMMsrwnBUx9GgqLbmL4vCFpwta7TugRPl/HoeVcjHIbDoovqdeEPo1Giy4xz
+         BI+QlrKhBYdyynnPalzlwH7TZpHZYtEgXMlN0xYKK2g+gP05Im1V8alSHjBifY9ZvG
+         dWicF5RDot33bfL5HKhXthcURnzQj2IVoal3mZGePG8EB32p2jltoqMle4zwgRtlb8
+         pNAlaYY498otg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <YmNsYSxLtwLpw98t@ripper>
+References: <20220422230013.1332993-1-bjorn.andersson@linaro.org> <20220423014824.912ACC385A0@smtp.kernel.org> <YmNsYSxLtwLpw98t@ripper>
+Subject: Re: [PATCH v2 1/2] dt-bindings: clock: Add Qualcomm SC8280XP GCC bindings
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_tdas@quicinc.com
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Date:   Fri, 22 Apr 2022 20:13:48 -0700
+User-Agent: alot/0.10
+Message-Id: <20220423031350.01299C385A0@smtp.kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
-head:   931e50676c6598d0eda1954ead465519ff91874d
-commit: d1c47ebbbed8921181b4573ba5736595bc3b787c [30/44] netfs: Support decryption on DIO read
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220423/202204231010.5DHxVC96-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/d1c47ebbbed8921181b4573ba5736595bc3b787c
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout d1c47ebbbed8921181b4573ba5736595bc3b787c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/
+Quoting Bjorn Andersson (2022-04-22 20:02:57)
+> On Fri 22 Apr 18:48 PDT 2022, Stephen Boyd wrote:
+>=20
+> > Quoting Bjorn Andersson (2022-04-22 16:00:12)
+> > > Add binding for the Qualcomm SC8280XP Global Clock controller.
+> > >=20
+> > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> >=20
+> > Why no cover letter?
+> >=20
+>=20
+> I didn't have anything useful to write in it. Will provide you one in
+> the future...
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks!
 
-All errors (new ones prefixed by >>):
+> > > +  clocks:
+> > > +    items:
+> > > +      - description: XO reference clock
+> >=20
+> > "clock" is redundant in all these descriptions. Please remove.
+> >=20
+>=20
+> You don't think it's a little bit odd to have description such as
+> "Sleep", "PCIe 2a pipe" or First EMAC controller reference"?
+>=20
+> I mean I agree that it's obviously clocks we're talking about, but to me
+> that makes it seems like the descriptions are cut short, just for the
+> sake of avoiding "clock".
 
->> fs/netfs/direct_read.c:198:3: error: expected expression
-                   unsigned int min_bsize = 1ULL << ctx->min_bshift;
-                   ^
->> fs/netfs/direct_read.c:199:54: error: use of undeclared identifier 'min_bsize'
-                   unsigned long long start = round_down(rreq->start, min_bsize);
-                                                                      ^
-   fs/netfs/direct_read.c:201:47: error: use of undeclared identifier 'min_bsize'
-                                                  round_up(rreq->start + rreq->len, min_bsize),
-                                                                                    ^
-   fs/netfs/direct_read.c:201:47: error: use of undeclared identifier 'min_bsize'
-   fs/netfs/direct_read.c:199:22: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
-                   unsigned long long start = round_down(rreq->start, min_bsize);
-                                      ^
-   1 warning and 4 errors generated.
+Alright, keeping clock is OK as long as
 
+>=20
+> > > +      - description: Sleep clock
+> > > +      - description: UFS memory first RX symbol clock
+> > > +      - description: UFS memory second RX symbol clock
+> > > +      - description: UFS memory first TX symbol clock
+> > > +      - description: UFS card first RX symbol clock
+> > > +      - description: UFS card second RX symbol clock
+> > > +      - description: UFS card first TX symbol clock
+> > > +      - description: Primary USB SuperSpeed pipe clock
+> > > +      - description: gcc_usb4_phy_pipegmux_clk_src
 
-vim +198 fs/netfs/direct_read.c
+there is a better name for this and the other non-word descriptions.
 
-   116	
-   117	/**
-   118	 * netfs_direct_read_iter - Perform a direct I/O read
-   119	 * @iocb: The I/O control descriptor describing the read
-   120	 * @iter: The output buffer (also specifies read length)
-   121	 */
-   122	ssize_t netfs_direct_read_iter(struct kiocb *iocb, struct iov_iter *iter)
-   123	{
-   124		struct netfs_io_request *rreq;
-   125		struct netfs_i_context *ctx;
-   126		ssize_t n, ret;
-   127	
-   128		_enter("");
-   129	
-   130		rreq = netfs_alloc_request(iocb->ki_filp->f_mapping, iocb->ki_filp,
-   131					   iocb->ki_pos, iov_iter_count(iter),
-   132					   NETFS_DIO_READ);
-   133		if (IS_ERR(rreq))
-   134			return PTR_ERR(rreq);
-   135	
-   136		ctx = netfs_i_context(rreq->inode);
-   137		netfs_stat(&netfs_n_rh_dio_read);
-   138		trace_netfs_read(rreq, rreq->start, rreq->len, netfs_read_trace_dio_read);
-   139	
-   140		rreq->buffering = NETFS_DIRECT;
-   141		if (test_bit(NETFS_RREQ_CONTENT_ENCRYPTION, &rreq->flags)) {
-   142			static const enum netfs_buffering buffering[2][2] = {
-   143				/* [async][aligned] */
-   144				[false][false]	= NETFS_BOUNCE_DEC_COPY,
-   145				[false][true]	= NETFS_BOUNCE_DEC_TO_DIRECT,
-   146				[true ][false]	= NETFS_BOUNCE_DEC_COPY_BV,
-   147				[true ][true]	= NETFS_BOUNCE_DEC_TO_DIRECT_BV,
-   148			};
-   149			bool aligned = netfs_is_crypto_aligned(rreq, iter);
-   150			bool async = !is_sync_kiocb(iocb);
-   151	
-   152			rreq->buffering = buffering[async][aligned];
-   153		}
-   154	
-   155		kdebug("remote_i %llx %llx %llx",
-   156		       ctx->remote_i_size, rreq->i_size, i_size_read(netfs_inode(ctx)));
-   157	
-   158		/* If this is an async op, we have to keep track of the destination
-   159		 * buffer for ourselves as the caller's iterator will be trashed when
-   160		 * we return.
-   161		 *
-   162		 * In such a case, extract an iterator to represent as much of the the
-   163		 * output buffer as we can manage.  Note that the extraction might not
-   164		 * be able to allocate a sufficiently large bvec array and may shorten
-   165		 * the request.
-   166		 */
-   167		switch (rreq->buffering) {
-   168		case NETFS_DIRECT:
-   169		case NETFS_BOUNCE_DEC_TO_DIRECT:
-   170		case NETFS_BOUNCE_DEC_COPY:
-   171			rreq->direct_iter = *iter;
-   172			rreq->len = iov_iter_count(&rreq->direct_iter);
-   173			break;
-   174		case NETFS_DIRECT_BV:
-   175		case NETFS_BOUNCE_DEC_TO_DIRECT_BV:
-   176		case NETFS_BOUNCE_DEC_COPY_BV:
-   177			n = extract_iter_to_iter(iter, rreq->len, &rreq->direct_iter,
-   178						 &rreq->direct_bv);
-   179			if (n < 0) {
-   180				ret = n;
-   181				goto out;
-   182			}
-   183			rreq->direct_bv_count = n;
-   184			rreq->len = iov_iter_count(&rreq->direct_iter);
-   185			break;
-   186		default:
-   187			BUG();
-   188		}
-   189	
-   190		/* If we're going to use a bounce buffer, we need to set it up.  We
-   191		 * will then need to pad the request out to the minimum block size.
-   192		 */
-   193		switch (rreq->buffering) {
-   194		case NETFS_BOUNCE_DEC_TO_DIRECT:
-   195		case NETFS_BOUNCE_DEC_COPY:
-   196		case NETFS_BOUNCE_DEC_TO_DIRECT_BV:
-   197		case NETFS_BOUNCE_DEC_COPY_BV:
- > 198			unsigned int min_bsize = 1ULL << ctx->min_bshift;
- > 199			unsigned long long start = round_down(rreq->start, min_bsize);
+USB4 phy pipe gmux clock source?
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> > > +      - description: gcc_usb4_phy_dp_gmux_clk_src
+> > > +      - description: gcc_usb4_phy_sys_pipegmux_clk_src
+> > > +      - description: usb4_phy_gcc_usb4_pcie_pipe_clk
+> > > +      - description: usb4_phy_gcc_usb4rtr_max_pipe_clk
+> > > +      - description: Primary USB4 RX0 clock
+> > > +      - description: Primary USB4 RX1 clock
+> > > +      - description: Secondary USB SuperSpeed pipe clock
+> > > +      - description: gcc_usb4_1_phy_pipegmux_clk_src
+> > > +      - description: gcc_usb4_1_phy_dp_gmux_clk_src
+> > > +      - description: gcc_usb4_1_phy_sys_pipegmux_clk_src
+> > > +      - description: usb4_1_phy_gcc_usb4_pcie_pipe_clk
+> > > +      - description: usb4_1_phy_gcc_usb4rtr_max_pipe_clk
+> > > +      - description: Secondary USB4 RX0 clock
+> > > +      - description: Secondary USB4 RX0 clock
+> > > +      - description: Multiport USB first SupserSpeed pipe clock
+> > > +      - description: Multiport USB second SuperSpeed pipe clock
+> > > +      - description: PCIe 2a pipe clock
+> > > +      - description: PCIe 2b pipe clock
+> > > +      - description: PCIe 3a pipe clock
+> > > +      - description: PCIe 3b pipe clock
+> > > +      - description: PCIe 4 pipe clock
+> > > +      - description: First EMAC controller reference clock
+> > > +      - description: Second EMAC controller reference clock
+> > > +
+> > > +  clock-names:
+> > > +    items:
+> > > +      - const: bi_tcxo
+> > > +      - const: sleep_clk
+> >=20
+> > And "_clk" postfix is redundant in all these strings. Remove?
+> >=20
+>=20
+> In this case I think they should include _clk, as they actually matches
+> the clock names in the documentation.
+>=20
+
+I'd really rather not have clock-names at all because we spend a bunch
+of time comparing strings with them when we could just as easily use
+a number.

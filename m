@@ -2,189 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 358F850CEBA
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 04:57:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D39C50CEBE
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 04:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237836AbiDXDAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 23:00:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43840 "EHLO
+        id S237868AbiDXDAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 23:00:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbiDXDAB (ORCPT
+        with ESMTP id S237791AbiDXDAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 23:00:01 -0400
-Received: from mail.meizu.com (edge07.meizu.com [112.91.151.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B828B13F26B;
-        Sat, 23 Apr 2022 19:57:00 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail11.meizu.com
- (172.16.1.15) with Microsoft SMTP Server (TLS) id 14.3.487.0; Sun, 24 Apr
- 2022 10:56:55 +0800
-Received: from [172.16.137.70] (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Sun, 24 Apr
- 2022 10:56:53 +0800
-Message-ID: <049ccac8-c394-0cdc-c2ed-4ea91cab6439@meizu.com>
-Date:   Sun, 24 Apr 2022 10:56:52 +0800
+        Sat, 23 Apr 2022 23:00:46 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D863413F261;
+        Sat, 23 Apr 2022 19:57:47 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id ay11so8234032qtb.4;
+        Sat, 23 Apr 2022 19:57:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=XjCdzYbvTiumAbdBQKpwnCmY/DB2qhX1zt/3WHbpTBY=;
+        b=ayegxzyF/KPCw0iAe5COmtVy6cQmP7gjyGCPRXwzyrlmv2fFvDaSBDDq5X71qGEf1p
+         sS56u+5lXrAnX8OHWy0sR9L6itSfjlpk5zIYmnekVgolat1BLi4h2Og3clylnKgfl0gt
+         2+jENAj2WkR8fuiv5p/BoeQ+jGlAYlUxDggLlqobnquHJbriTwz0qUyjkOC4uVRa5jEd
+         sb+eoFdDGOOmRJkrgVRqNbiZSHg7uEI5FSIOpOrUmPPTsBZfp8AeNmFd33MCeGEZ3pF8
+         5l3SIqQxl24U4DEUd+4kx8IevioIRcJm4kx24gP3Z+KCzX1+v1GOwRpuNy059UNu2UeG
+         95bQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=XjCdzYbvTiumAbdBQKpwnCmY/DB2qhX1zt/3WHbpTBY=;
+        b=kYXCN9qHO4JCGj3ijctr2yXkODNxescviuO48cVMAOHuvqW9lmmhptizPcse/uYsYA
+         cp9CIYZ4wtqequdsYMss0EJr02mxt+Lg6lWfP972jB1xdlVDbTkmA55KNQ39LKE+Dp9G
+         56nEk8mAGFC1Z4VjceeFACA4+rlx0zIrOOoUwtMVPmame4hCmDQ34f2k9ppSM6GZYZvV
+         WwIQ+ZGtnDtxVkYQjbqlhBT1+VJNkTe0hOa2cuLc2+XcXxzAexEGO9smXAU/l7tPPga+
+         dl62SKX435SXo7LFgDd9TqDPTV2+FmNjFDTegJqdymHeqfRPgFw9AXy0DbcSHuvGdrTh
+         Xdtg==
+X-Gm-Message-State: AOAM530/Jq7WBRvvSYX0wK0WXKpuCy3f52uarJhhIeDAvkKWJmoUbNAC
+        Shz2BrPEUq+7rsps/BEDoZvWbMT+2T0=
+X-Google-Smtp-Source: ABdhPJwq7R1leUtmM43JRhupWQb4TivSOH5A2uF9lwwk82MGTOMgFt7wf6hY3YMrr0jMaMcrSD9vtg==
+X-Received: by 2002:ac8:5b0d:0:b0:2f3:4377:713b with SMTP id m13-20020ac85b0d000000b002f34377713bmr8031486qtw.588.1650769067040;
+        Sat, 23 Apr 2022 19:57:47 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id x24-20020ac87318000000b002f1fc5fcaedsm3629753qto.68.2022.04.23.19.57.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Apr 2022 19:57:45 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: lv.ruyi@zte.com.cn
+To:     kuba@kernel.org
+Cc:     cgel.zte@gmail.com, cuissard@marvell.com, davem@davemloft.net,
+        krzysztof.kozlowski@linaro.org, linux-kernel@vger.kernel.org,
+        lv.ruyi@zte.com.cn, netdev@vger.kernel.org, sameo@linux.intel.com,
+        yashsri421@gmail.com, Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH v2] NFC: nfcmrvl: fix error check return value of irq_of_parse_and_map()
+Date:   Sun, 24 Apr 2022 02:57:10 +0000
+Message-Id: <20220424025710.3166034-1-lv.ruyi@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220422160931.6a4eca42@kernel.org>
+References: <20220422160931.6a4eca42@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/2] docs/zh_CN: sync with original text
- Documentation/vm/page_owner.rst
-To:     Alex Shi <seakeel@gmail.com>, <siyanteng01@gmail.com>
-CC:     <alexs@kernel.org>, <corbet@lwn.net>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <siyanteng@loongson.cn>
-References: <CAEensMzuQ0uAw8_5Xb7u1n685au=DpaJyPevGCT8GCG7xS42ow@mail.gmail.com>
- <1650424016-7225-1-git-send-email-baihaowen@meizu.com>
- <1650424016-7225-2-git-send-email-baihaowen@meizu.com>
- <30d2f96e-99e1-2976-a294-8e112166afff@gmail.com>
-From:   baihaowen <baihaowen@meizu.com>
-In-Reply-To: <30d2f96e-99e1-2976-a294-8e112166afff@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 4/23/22 6:27 PM, Alex Shi 写道:
-> Hi Haowen,
->
-> I hit the mistake again while apply your patch:
-> $git am your_patch
-> error: cannot convert from N to UTF-8
->
-> fatal: could not parse patch
->
->
-> You have to try apply it before sending out your patch.
-> and this patch is better be to be 2nd patch in series.
->
-> Thanks
-> Alex
->
-> On 4/20/22 11:06, Haowen Bai wrote:
->> As the tools/vm/page_owner_sort added some feature and original text
->> updated, sync the translation of zh_CN as below.
->>
->> Commit 8bd16bc0a081 ("tools/vm/page_owner_sort.c: support sorting blocks
->> by multiple keys") add sorting blocks by multiple keys usage
->> description.
->>
->> Commit 78a0b94f3829 ("tools/vm/page_owner_sort.c: support for multi-value
->> selection in single argument") add multi-value selection in single
->> argument usage description.
->>
->> Commit c89b3ad2dea2 ("doc/vm/page_owner.rst: remove content related to -c
->> option") remove  -c option usage description.
->>
->> Commit 9c8a0a8e599f ("tools/vm/page_owner_sort.c: support for user-defined
->> culling rules") add user-defined culling rules usage description.
->>
->> Commit 8ea8613a616a ("tools/vm/page_owner_sort.c: support for selecting by
->> PID, TGID or task command name") add selecting by PID, TGID or task
->> command name usage description.
->>
->> Commit 194d52d771b8 ("tools/vm/page_owner_sort: support for sorting by
->> task command name") add sorting by task command name usage description.
->>
->> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
->> ---
->>  Documentation/translations/zh_CN/vm/page_owner.rst | 61 +++++++++++++++++++++-
->>  1 file changed, 60 insertions(+), 1 deletion(-)
->>
->> diff --git a/Documentation/translations/zh_CN/vm/page_owner.rst b/Documentation/translations/zh_CN/vm/page_owner.rst
->> index 9e951fabba9d..c692e81c724e 100644
->> --- a/Documentation/translations/zh_CN/vm/page_owner.rst
->> +++ b/Documentation/translations/zh_CN/vm/page_owner.rst
->> @@ -103,14 +103,73 @@ page owner在默认情况下是禁用的。所以，如果你想使用它，你
->>  		-m		按总内存排序
->>  		-p		按pid排序。
->>  		-P		按tgid排序。
->> +		-n		按任务名称排序。
->>  		-r		按内存释放时间排序。
->>  		-s		按堆栈跟踪排序。
->>  		-t		按时间排序（默认）。
->> +		--sort <order>	指定排序顺序。排序语法是 [+|-]key[,[+|-]key[,...]]. 从
->> +						**标准格式说明符** 部分选择一个键。"+" 是可选的，因为默认方向是增加数字或字典顺序。
->> +						允许混合使用缩写键和全称键。
->> +
->> +		Examples:
->> +				./page_owner_sort <input> <output> --sort=n,+pid,-tgid
->> +				./page_owner_sort <input> <output> --sort=at
->>  
->>     其它函数:
->>  
->>  	Cull:
->> -		-c		通过比较堆栈跟踪而不是总块来进行剔除。
->> +		--cull <rules>
->> +				指定筛选规则。筛选语法是 key[,key[,...]]。在**标准格式说明符**部分选择一个多字母键
->> +
->> +		<rules> 是逗号分隔列表形式的单个参数，它提供了一种指定单个筛选规则的方法。下面的**标准格式说明
->> +				符**部分描述了可识别的关键字。<rules> 可以由键 k1,k2, ... 顺序指定，如下面的
->> +				STANDARD SORT KEYS 部分所述。允许混合使用缩写形式和完整形式的键。
->>  
->> +		Examples:
->> +				./page_owner_sort <input> <output> --cull=stacktrace
->> +				./page_owner_sort <input> <output> --cull=st,pid,name
->> +				./page_owner_sort <input> <output> --cull=n,f
->>  	Filter:
->>  		-f		过滤掉内存已被释放的块的信息。
->> +
->> +	Select:
->> +		--pid <pidlist>		通过 pid 进行选择。这将选择进程 ID 号出现在 <pidlist> 中的块。
->> +		--tgid <tgidlist>	通过 tgid 进行选择。这将选择线程组 ID 号出现在 <tgidlist> 中的块。
->> +		--name <cmdlist>	按任务名称选择。这将选择任务名称出现在 <cmdlist> 中的块。
->> +
->> +		<pidlist>、<tgidlist>、<cmdlist>是逗号分隔列表形式的单参数，它提供了一种指定单个选择规则的方法。
->> +
->> +
->> +		Examples:
->> +				./page_owner_sort <input> <output> --pid=1
->> +				./page_owner_sort <input> <output> --tgid=1,2,3
->> +				./page_owner_sort <input> <output> --name name1,name2
->> +
->> +标准格式说明符
->> +==============
->> +
->> +--sort 选项:
->> +
->> +        ======          ==========      ===================
->> +        缩写键          全称键          描述
->> +        ======          ==========      ===================
->> +        p               pid             进程 ID
->> +        tg              tgid            线程组 ID
->> +        n               name            任务名称
->> +        st              stacktrace      页面分配的调用栈
->> +        T               txt             块的全文
->> +        ft              free_ts         页面被释放的时间戳
->> +        at              alloc_ts        页面分配的时间戳
->> +        ======          ==========      ===================
->> +
->> +--curl 选项:
->> +
->> +        ======          ==========      ==================
->> +        缩写键          全称键          描述
->> +        ======          ==========      ==================
->> +        p               pid             进程 ID
->> +        tg              tgid            线程组 ID
->> +        n               name            任务名称
->> +        f               free            该页面是否已被释放
->> +        st              stacktrace      页面分配的调用栈
->> +        ======          ==========      ==================
-hi, Alex
-I can apply local.
-➜  linux-next git:(heads/next-20220421) ✗ git am doc_pageonwer_patches/0001-docs-zh_CN-sync-with-original-text-Documentation-vm-.patch
-应用：docs/zh_CN: sync with original text Documentation/vm/page_owner.rst
-➜  linux-next git:(heads/next-20220421) ✗ git am doc_pageonwer_patches/0002-doc-vm-page_owner.rst-Fix-table-display-confusion.patch   
-应用：doc/vm/page_owner.rst: Fix table display confusion
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-I think git send-email will change format by my select. I'll try to resend.
+The irq_of_parse_and_map() function returns 0 on failure, and does not
+return an negative value.
 
+Fixes: b5b3e23e4cac ("NFC: nfcmrvl: add i2c driver")
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+---
+v2: don't print ret, and return -EINVAL rather than 0
+---
+ drivers/nfc/nfcmrvl/i2c.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/nfc/nfcmrvl/i2c.c b/drivers/nfc/nfcmrvl/i2c.c
+index ceef81d93ac9..01329b91d59d 100644
+--- a/drivers/nfc/nfcmrvl/i2c.c
++++ b/drivers/nfc/nfcmrvl/i2c.c
+@@ -167,9 +167,9 @@ static int nfcmrvl_i2c_parse_dt(struct device_node *node,
+ 		pdata->irq_polarity = IRQF_TRIGGER_RISING;
+ 
+ 	ret = irq_of_parse_and_map(node, 0);
+-	if (ret < 0) {
+-		pr_err("Unable to get irq, error: %d\n", ret);
+-		return ret;
++	if (!ret) {
++		pr_err("Unable to get irq\n");
++		return -EINVAL;
+ 	}
+ 	pdata->irq = ret;
+ 
 -- 
-Haowen Bai
+2.25.1
 

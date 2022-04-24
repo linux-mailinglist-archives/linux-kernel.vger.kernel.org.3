@@ -2,84 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B239150D4DA
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 21:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67FB850D4E1
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 21:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239125AbiDXTiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 15:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50716 "EHLO
+        id S239248AbiDXTip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 15:38:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239141AbiDXTiR (ORCPT
+        with ESMTP id S239212AbiDXTij (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 15:38:17 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA30218B
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 12:35:15 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id w16so6537963pfj.2
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 12:35:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=cCbva5d4cTef7JnnRvcj+uHQQXUpXaA+2xK/VFzMO4w=;
-        b=LkVpoRUG75De+9HyDx15Zr4GfiqqMgKd9qwzqES1FhWMMrY8+v5JTEzxsTQCCfk1jL
-         K04ggN0TOWJdxqAzCY1Me9wMzWxsuc9QL7sqhmkoI7zBGn8lIOqHrv+u2X8UTJ1pC8jX
-         tE5hm2Wlj7q5NBIT2o5vny1y8BdpYUBUgcBimpvOD0YtB7e7S2YA2LmSclOIXdUq9/Wa
-         zdqz9bgmcMBM4lB247PUHYAnQYuu18CZ1xTGBnR4y7odqXfhd34vUzc7lXTpACXzaP7u
-         d1Gr6APlLxwJTkAWqCCGLl1csIgXX8n3ATxRvJlNivuYagzEXFQNNpOFPw0QfncBtmdH
-         PSJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=cCbva5d4cTef7JnnRvcj+uHQQXUpXaA+2xK/VFzMO4w=;
-        b=AG0rQ21GzlCptypYUFs+VCEWlo9LF4oc/Xg3JBr8OHGKtEzx38bh19I3aHVVB0bS14
-         rP0aGgKWRuVZWKeNTWeWSMW60/+o5kbdRRgeLUPNkeqlb3LRht7mtnAYfNt5o+5PgGGe
-         6z7MP0VEQkhwO1YHGxqi2xv3KBUD18P0VsCQOKhvZP0Exf5U4NIfk2g3wTUYCBfUVM1u
-         qG8VRv4tSMmhabcEsXFIgx2F23ORNem8ujEuSdyb8G3+/suvDis+3BxDS7szdaRsT4+a
-         +zqH81R5o/1s0wrsPD6UFm3Iy2d/UNWNqDuOEZGFpG91Acu7l/RzA3fUIjEsj+01Axwh
-         aCVQ==
-X-Gm-Message-State: AOAM532IDOe7LxS8l2Un2qDaRuVLh2G9xBq6oGcCmrSdmwG4RhcL+Se0
-        9zmP1+vvGh/GwWrCfBZWT1WqLA==
-X-Google-Smtp-Source: ABdhPJxAgrjUeROv5fCIkxRGxN9Ux15Tld23PamShec+lf7XaV4NluDJ54VcqeoQLkUeWRbRoE962Q==
-X-Received: by 2002:a05:6a00:1702:b0:50a:8181:fed7 with SMTP id h2-20020a056a00170200b0050a8181fed7mr15459151pfc.56.1650828914988;
-        Sun, 24 Apr 2022 12:35:14 -0700 (PDT)
-Received: from [2620:15c:29:204:d4fc:f95c:4d79:861f] ([2620:15c:29:204:d4fc:f95c:4d79:861f])
-        by smtp.gmail.com with ESMTPSA id j10-20020a17090a734a00b001bf31f7520csm4222344pjs.1.2022.04.24.12.35.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 12:35:14 -0700 (PDT)
-Date:   Sun, 24 Apr 2022 12:35:14 -0700 (PDT)
-From:   David Rientjes <rientjes@google.com>
-To:     Yuanchu Xie <yuanchu@google.com>
-cc:     Shuah Khan <shuah@kernel.org>, Markus Boehme <markubo@amazon.de>,
-        SeongJae Park <sj@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND] selftests/damon: add damon to selftests root
- Makefile
-In-Reply-To: <20220418202017.3583638-1-yuanchu@google.com>
-Message-ID: <93c3f9b4-7e14-858b-bf6c-23e4f3bec232@google.com>
-References: <20220418202017.3583638-1-yuanchu@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Sun, 24 Apr 2022 15:38:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE75BF48;
+        Sun, 24 Apr 2022 12:35:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD2B460EF6;
+        Sun, 24 Apr 2022 19:35:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 801DEC385AE;
+        Sun, 24 Apr 2022 19:35:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650828937;
+        bh=wFinVtndMfPomHV0+0abt1jIqt93tYNbvD6uwHeKhM8=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=jA373gT5dKKX/WpUuD7IEbxiPbW4U2kY95xc/wEGzPbMNDPELhdLRh//pjP6Q7AwA
+         Yv3qNs8ibLxPhQGOz8IlIYI9JiNfzXR+OPIpIlkQArnemI71edk5I4/1APaYoDm+5Q
+         mVldHm0Mu6Y920TQXDQMCpLCjBch+9iAQO90K30kygEvY/N19bZAXYyf2W/DoAQwQm
+         nhM/qoLFglhExVGtDsMO4V7hzWYLIGM4PRuv/aqZiY0+N7ctDQHCIRTQAn+c4s8n8S
+         2K/E/cJj7cXNyrHCbTEqjlZSuqtgNH/zFZb3Dh45svfWx8/b0s9pxdUDlXR0fovBft
+         +6fIYxqH/RVCQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 691B8E8DBDA;
+        Sun, 24 Apr 2022 19:35:37 +0000 (UTC)
+Subject: Re: [GIT PULL] EDAC urgent for 5.18
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YmUcwHD0QLywciqo@zn.tnic>
+References: <YmUcwHD0QLywciqo@zn.tnic>
+X-PR-Tracked-List-Id: <linux-edac.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YmUcwHD0QLywciqo@zn.tnic>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v5.18_rc4
+X-PR-Tracked-Commit-Id: e2932d1f6f055b2af2114c7e64a26dc1b5593d0c
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: b877ca4dc816aeee1ac2e27eae3f2ed42179d707
+Message-Id: <165082893742.1098.16164923269814704344.pr-tracker-bot@kernel.org>
+Date:   Sun, 24 Apr 2022 19:35:37 +0000
+To:     Borislav Petkov <bp@suse.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-edac <linux-edac@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 18 Apr 2022, Yuanchu Xie wrote:
+The pull request you sent on Sun, 24 Apr 2022 11:47:44 +0200:
 
-> Currently the damon selftests are not built with the rest of the
-> selftests. We add damon to the list of targets.
-> 
-> Fixes: b348eb7abd09 ("mm/damon: add user space selftests")
-> Reviewed-by: SeongJae Park <sj@kernel.org>
-> Signed-off-by: Yuanchu Xie <yuanchu@google.com>
+> git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v5.18_rc4
 
-Acked-by: David Rientjes <rientjes@google.com>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/b877ca4dc816aeee1ac2e27eae3f2ed42179d707
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

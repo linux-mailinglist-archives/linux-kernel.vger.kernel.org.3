@@ -2,78 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBC4C50D325
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 18:10:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C97D950D30A
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 18:04:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234580AbiDXQNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 12:13:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50092 "EHLO
+        id S233327AbiDXQHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 12:07:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234474AbiDXQMy (ORCPT
+        with ESMTP id S231513AbiDXQHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 12:12:54 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EFF7106DC1;
-        Sun, 24 Apr 2022 09:09:53 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id dk23so1960020ejb.8;
-        Sun, 24 Apr 2022 09:09:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=GRnYvMYthiO14j3rOxFdH46THRDOp7DQhEpnCN4rSCc=;
-        b=BhKCjflQpgVCf4HhsUaejkJ8EqPUozXqYqYzjvRO9F74yIfYiY99oUdToAAJ0NT4+f
-         tG77sQ++s2cd2HeXeUlCEWXWy6FyiRr2GCXp9Nu5H9WPTHuI5oeCjMYOH9CV9y/69fYW
-         LZsxUL4TZDxeawHSYXzgp004Lqdn5Tnn6gHR7ttErkkocY9c0VJxurYKzpGN4YiZPEna
-         oP+Xht9wkmSbcis+wIj5tlTNjTr1/eQY//6C51pHaJqjMqGVR7216ASAflrPshJyiz/E
-         LvINzMBuahbHC7vymPLq4sxC5hensawuEmX5zRkuVU+ZWSqpha02mP3r9U1HVQHikYph
-         2pRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GRnYvMYthiO14j3rOxFdH46THRDOp7DQhEpnCN4rSCc=;
-        b=YXWk0jQ3KRlH02F5BtOcJVEe+4hddWHn5gszrxt6+q0YiWSgBsIB7t5SlSL9lEzgUM
-         s/eyk7/wznHub2TbyhflHpD4WSPJga+Y2y7Boz87cTB4cl0pyyIjEndb7+7gocJ0sOUB
-         2VGK4iepMFZzL45/b/3DGA2jIp4/BSN14DQ2OPlzQJWODo97p6ML7bDoazHtm9SWXD7B
-         BdG3um8eZ8cMqPDUOOtHw19MFkD8YsYN3sXitdSgOHIMxp17XbibKQDTwEH58LCBwQ8E
-         EmBP/FKuCmZKO6+NdlsXeczG+T5eNtdi+K8xEp8P3cnb7QAcraCSiF9bAJecY7wXlzM5
-         XZDA==
-X-Gm-Message-State: AOAM531NBFOxQ+o4DQYwJcezXRDjk76ncv0GbtkMs2luFJ9pbecaJgAS
-        PYF1k+GGgrbdxUc7yzK2NidxzZhQEwVWPCLm
-X-Google-Smtp-Source: ABdhPJzAD7x1l4jW49jnqmFisG1U2MeNPnnuewXOB3Pp5cvZVzHeR1sjJIGYsOTPnPvdAIiYOcMhwQ==
-X-Received: by 2002:a17:907:1624:b0:6db:8caa:d71 with SMTP id hb36-20020a170907162400b006db8caa0d71mr12740868ejc.723.1650816591641;
-        Sun, 24 Apr 2022 09:09:51 -0700 (PDT)
-Received: from fedora ([95.180.24.23])
-        by smtp.gmail.com with ESMTPSA id x14-20020a1709064bce00b006f006948581sm2756876ejv.170.2022.04.24.09.09.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 09:09:50 -0700 (PDT)
-Date:   Sun, 24 Apr 2022 18:09:48 +0200
-From:   Aleksa Savic <savicaleksa83@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jack Doan <me@jackdoan.com>, linux-hwmon@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (aquacomputer_d5next) Add support for
- Aquacomputer Farbwerk
-Message-ID: <YmV2TIcOqTLBA4+U@fedora>
-References: <YmTcrq8Gzel0zYYD@jackdesk>
- <20220424160628.GA719092@roeck-us.net>
+        Sun, 24 Apr 2022 12:07:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558547B127;
+        Sun, 24 Apr 2022 09:04:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 11F0FB80DD4;
+        Sun, 24 Apr 2022 16:04:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44783C385A9;
+        Sun, 24 Apr 2022 16:04:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650816244;
+        bh=g8dkPhiULK/SVyEdnpRLy5JR9O4qchMC2KRkj1DVmx0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OdmrwaqhoK/HFNPQYlIIJDmZbLgVG9fZJG28WGp3SXEV1c6F3+qBQ5enRuBAykzWl
+         x8fvbxJWOHCoM7QIeiUJPyDMI+W7GrN/1CYA5Xg030L5M0FZFhbvHCmwNnUQ5VZHjp
+         Ayr40WNb7fI0t/4Zx+VbFHPYHN0Dg7oLnc+Nx6Loe1Ui3/g9c1FZmuH/9vf7LnadXW
+         9OpZ+jq4hQ7oso3NQ6RjwoP75gRbG7hzZMlrC9a2+TstaCSsO+7Z/nvj7K89OAJ6Pp
+         uANpriusle4YSoHmomU8kudET++FHffsJCWBMgIKEzX8RaAPuW2FB0ztulaYSofCkO
+         kRZkhVSfBZckA==
+Date:   Sun, 24 Apr 2022 17:12:12 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Slawomir Stepien <sst@poczta.fm>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: iio: Fix incorrect compatible strings in
+ examples
+Message-ID: <20220424171212.6d247854@jic23-huawei>
+In-Reply-To: <20220422192039.2590548-1-robh@kernel.org>
+References: <20220422192039.2590548-1-robh@kernel.org>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220424160628.GA719092@roeck-us.net>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you!
+On Fri, 22 Apr 2022 14:20:39 -0500
+Rob Herring <robh@kernel.org> wrote:
 
-Aleksa
+> Fix a couple of examples using incorrect compatible strings.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+or I can pick these up through IIO if preferred.
+
+Thanks,
+
+Jonathan
+
+> ---
+>  Documentation/devicetree/bindings/iio/dac/lltc,ltc2632.yaml     | 2 +-
+>  .../bindings/iio/potentiometer/microchip,mcp4131.yaml           | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/dac/lltc,ltc2632.yaml b/Documentation/devicetree/bindings/iio/dac/lltc,ltc2632.yaml
+> index edf804d0aca2..b1eb77335d05 100644
+> --- a/Documentation/devicetree/bindings/iio/dac/lltc,ltc2632.yaml
+> +++ b/Documentation/devicetree/bindings/iio/dac/lltc,ltc2632.yaml
+> @@ -68,7 +68,7 @@ examples:
+>        #size-cells = <0>;
+>  
+>        dac@0 {
+> -        compatible = "lltc,ltc2632";
+> +        compatible = "lltc,ltc2632-l12";
+>          reg = <0>;    /* CS0 */
+>          spi-max-frequency = <1000000>;
+>          vref-supply = <&vref>;
+> diff --git a/Documentation/devicetree/bindings/iio/potentiometer/microchip,mcp4131.yaml b/Documentation/devicetree/bindings/iio/potentiometer/microchip,mcp4131.yaml
+> index 945a2d644ddc..32e92bced81f 100644
+> --- a/Documentation/devicetree/bindings/iio/potentiometer/microchip,mcp4131.yaml
+> +++ b/Documentation/devicetree/bindings/iio/potentiometer/microchip,mcp4131.yaml
+> @@ -95,7 +95,7 @@ examples:
+>          #size-cells = <0>;
+>  
+>          potentiometer@0 {
+> -            compatible = "mcp4131-502";
+> +            compatible = "microchip,mcp4131-502";
+>              reg = <0>;
+>              spi-max-frequency = <500000>;
+>          };
+

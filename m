@@ -2,133 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83D2A50D3DE
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 19:18:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C41C750D3E3
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 19:21:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236329AbiDXRV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 13:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
+        id S236289AbiDXRYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 13:24:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236289AbiDXRVV (ORCPT
+        with ESMTP id S236394AbiDXRX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 13:21:21 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EBA86FF77;
-        Sun, 24 Apr 2022 10:18:18 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id z2so14756417oic.6;
-        Sun, 24 Apr 2022 10:18:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Gs5UTs020l+gW01sKQqLDKCl0tqBUVQZB/K/2Vj/X5s=;
-        b=EcQN96BbT0hS27iiyZji+xL4168i1B2ZY2PpCuEMQkDB0gQxDREY48J/Csx5qOPI0q
-         +LMRwMmYuW+4Ofa4NslwdbGoTzL7TAo2G7BMwoEv35MMkyw9Rm6QuOcpVbbicxvidV4e
-         YziSWciHMsluN74SsmgeCb7gGKsNIwxejIG4UrZZbAHKkSF8WE1Y3plRhEImivL/f62F
-         i6qmSM1wLX5GaaLZbJ4p4I2xToRC1gftU41CWFDxuv2YYry6NE1mvfNjo2SEokfkA6Sd
-         TYhSqAwHiJ2Nmf+u7BXc5odEfdPS703igsrtAP7k49P0sVXMNQ0vcIS6PKaMJy36SwCm
-         VQZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=Gs5UTs020l+gW01sKQqLDKCl0tqBUVQZB/K/2Vj/X5s=;
-        b=iwUz/BuS7FXasV/1CjQ42rvesAdMOTnRXVlM/e8G2nVqqNqi9oQaLiHUDFMxGXz5bw
-         e9OE2rZhsLuOU2N6eV84PkS8P6FuYEKNbLpiMIg7FDGHnmAyVqftwCkjjFcenoh8Ux3r
-         5zVKZ4tfyUUSvxwdf9uK1+FkqU6bZ6IBcjVd04fowvBmCQ7FQp+8nD2XJpI0v5m/ou+n
-         clXNMcXkEKwKOuGwUR+1EqvxYpe5felsPA01YIiHxbuSlknbwYlrIMxB2bpmW4OdBNjc
-         KvRVk9KoOBD05qggL14qbEqYCihvssCi9vefT8yn9zCn5WHnbt3mRzeasEJJUIfZku+0
-         GH3Q==
-X-Gm-Message-State: AOAM531GOO1bzhi79wNEvoWLcRvrMESjodOuFv/LXBd+iWMwv30fNnBr
-        uIY5zis4QRx8Lh+xFyUCgqNp7pFqxDI=
-X-Google-Smtp-Source: ABdhPJxPYm6vNc7dijlvCZSMaFALq1sItV+Emb8KLA31LsAUUVnHhzlAb6urX4aS2wHnQfDIuM8ASw==
-X-Received: by 2002:aca:df03:0:b0:2ef:895e:7373 with SMTP id w3-20020acadf03000000b002ef895e7373mr6531638oig.177.1650820697900;
-        Sun, 24 Apr 2022 10:18:17 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e18-20020a9d7312000000b006054dfa7eb6sm2907397otk.78.2022.04.24.10.18.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 10:18:17 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 24 Apr 2022 10:18:16 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-fsi@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, jdelvare@suse.com, joel@jms.id.au,
-        jk@ozlabs.org, alistair@popple.id.au
-Subject: Re: [PATCH 2/2] hwmon (occ): Retry for checksum failure
-Message-ID: <20220424171816.GA749761@roeck-us.net>
-References: <20220321153112.12199-1-eajames@linux.ibm.com>
- <20220321153112.12199-3-eajames@linux.ibm.com>
+        Sun, 24 Apr 2022 13:23:58 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2395957B3F;
+        Sun, 24 Apr 2022 10:20:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3096CCE0EA0;
+        Sun, 24 Apr 2022 17:20:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50E1FC385A9;
+        Sun, 24 Apr 2022 17:20:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650820853;
+        bh=4SgAcVXLHGqxh2NVuCquX9xm9/nhdLmAxMSJu3gMgqI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MYh21kkHqtkHrAMHn/d2IYATE6bWshwZufmkNFFqMaffarwSSnQ0JWyKz2w1dudBI
+         oG/0vGaGZKmTFYvYaVwW6V/pCMi1ef4ZTzwnUfirI6b8IIo0QqhhusrLP6Og+LQqCQ
+         fS485VteVO6wC5RHi7itPwhlJBrYLM/hjwAQsXu6biY5f3g32iI9G3iMSyUhZTMKfm
+         mF19N6ijiUsZvPGCtqX8Wn9o8eJEp5CrVsPQeHHy5ACwUOZ57iHDVpF02qKySpXdgC
+         oJ7WRo7qCUdgZLFbOM+Ls8LQJomxxoPSJRfMsfFoQZ9SofyFhzAIk1K48S3QYlyYwK
+         ZZ3IWbNKjBqLg==
+From:   Mike Rapoport <rppt@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guillaume Tucker <gtucker@collabora.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mark-PK Tsai <mark-pk.tsai@mediatek.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Tony Lindgren <tony@atomide.com>,
+        Will Deacon <will@kernel.org>, bot@kernelci.org,
+        kernelci-results@groups.io, linux-arm-kernel@lists.infradead.org,
+        stable@vger.kernel.org
+Subject: [PATCH] arm[64]/memremap: don't abuse pfn_valid() to ensure presence of linear map
+Date:   Sun, 24 Apr 2022 20:20:44 +0300
+Message-Id: <20220424172044.22220-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220321153112.12199-3-eajames@linux.ibm.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 10:31:12AM -0500, Eddie James wrote:
-> Due to the OCC communication design with a shared SRAM area,
-> checkum errors are expected due to corrupted buffer from OCC
-> communications with other system components. Therefore, retry
-> the command twice in the event of a checksum failure.
-> 
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+From: Mike Rapoport <rppt@linux.ibm.com>
 
-I assume this will be applied together with patch 1 of the series.
+The semantics of pfn_valid() is to check presence of the memory map for a
+PFN and not whether a PFN is covered by the linear map. The memory map may
+be present for NOMAP memory regions, but they won't be mapped in the linear
+mapping.  Accessing such regions via __va() when they are memremap()'ed
+will cause a crash.
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+On v5.4.y the crash happens on qemu-arm with UEFI [1]:
 
-Guenter
+<1>[    0.084476] 8<--- cut here ---
+<1>[    0.084595] Unable to handle kernel paging request at virtual address dfb76000
+<1>[    0.084938] pgd = (ptrval)
+<1>[    0.085038] [dfb76000] *pgd=5f7fe801, *pte=00000000, *ppte=00000000
 
-> ---
->  drivers/hwmon/occ/p9_sbe.c | 28 ++++++++++++++++++----------
->  1 file changed, 18 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
-> index 49b13cc01073..7f4c3f979c54 100644
-> --- a/drivers/hwmon/occ/p9_sbe.c
-> +++ b/drivers/hwmon/occ/p9_sbe.c
-> @@ -84,17 +84,25 @@ static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
->  	struct p9_sbe_occ *ctx = to_p9_sbe_occ(occ);
->  	size_t resp_len = sizeof(*resp);
->  	int rc;
-> -
-> -	rc = fsi_occ_submit(ctx->sbe, cmd, len, resp, &resp_len);
-> -	if (rc < 0) {
-> -		if (resp_len) {
-> -			if (p9_sbe_occ_save_ffdc(ctx, resp, resp_len))
-> -				sysfs_notify(&occ->bus_dev->kobj, NULL,
-> -					     bin_attr_ffdc.attr.name);
-> +	int tries = 0;
-> +
-> +	do {
-> +		rc = fsi_occ_submit(ctx->sbe, cmd, len, resp, &resp_len);
-> +		if (rc < 0) {
-> +			if (resp_len) {
-> +				if (p9_sbe_occ_save_ffdc(ctx, resp, resp_len))
-> +					sysfs_notify(&occ->bus_dev->kobj, NULL,
-> +						     bin_attr_ffdc.attr.name);
-> +
-> +				return rc;
-> +			} else if (rc != -EBADE) {
-> +				return rc;
-> +			}
-> +			/* retry twice for checksum failures */
-> +		} else {
-> +			break;
->  		}
-> -
-> -		return rc;
-> -	}
-> +	} while (++tries < 3);
->  
->  	switch (resp->return_status) {
->  	case OCC_RESP_CMD_IN_PRG:
+...
+
+<4>[    0.093923] [<c0ed6ce8>] (memcpy) from [<c16a06f8>] (dmi_setup+0x60/0x418)
+<4>[    0.094204] [<c16a06f8>] (dmi_setup) from [<c16a38d4>] (arm_dmi_init+0x8/0x10)
+<4>[    0.094408] [<c16a38d4>] (arm_dmi_init) from [<c0302e9c>] (do_one_initcall+0x50/0x228)
+<4>[    0.094619] [<c0302e9c>] (do_one_initcall) from [<c16011e4>] (kernel_init_freeable+0x15c/0x1f8)
+<4>[    0.094841] [<c16011e4>] (kernel_init_freeable) from [<c0f028cc>] (kernel_init+0x8/0x10c)
+<4>[    0.095057] [<c0f028cc>] (kernel_init) from [<c03010e8>] (ret_from_fork+0x14/0x2c)
+
+On kernels v5.10.y and newer the same crash won't reproduce on ARM because
+commit b10d6bca8720 ("arch, drivers: replace for_each_membock() with
+for_each_mem_range()") changed the way memory regions are registered in the
+resource tree, but that merely covers up the problem.
+
+On ARM64 memory resources registered in yet another way and there the
+issue of wrong usage of pfn_valid() to ensure availability of the linear
+map is also covered.
+
+Implement arch_memremap_can_ram_remap() on ARM and ARM64 to prevent access
+to NOMAP regions via the linear mapping in memremap().
+
+Link: https://lore.kernel.org/all/Yl65zxGgFzF1Okac@sirena.org.uk
+Reported-by: "kernelci.org bot" <bot@kernelci.org>
+Tested-by: Mark Brown <broonie@kernel.org>
+Cc: stable@vger.kernel.org	# 5.4+
+Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+---
+ arch/arm/include/asm/io.h   | 4 ++++
+ arch/arm/mm/ioremap.c       | 9 ++++++++-
+ arch/arm64/include/asm/io.h | 4 ++++
+ arch/arm64/mm/ioremap.c     | 8 ++++++++
+ kernel/iomem.c              | 2 +-
+ 5 files changed, 25 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/include/asm/io.h b/arch/arm/include/asm/io.h
+index 0c70eb688a00..fbb2eeea7285 100644
+--- a/arch/arm/include/asm/io.h
++++ b/arch/arm/include/asm/io.h
+@@ -145,6 +145,10 @@ extern void __iomem * (*arch_ioremap_caller)(phys_addr_t, size_t,
+ 	unsigned int, void *);
+ extern void (*arch_iounmap)(volatile void __iomem *);
+ 
++extern bool arch_memremap_can_ram_remap(resource_size_t offset, size_t size,
++					unsigned long flags);
++#define arch_memremap_can_ram_remap arch_memremap_can_ram_remap
++
+ /*
+  * Bad read/write accesses...
+  */
+diff --git a/arch/arm/mm/ioremap.c b/arch/arm/mm/ioremap.c
+index aa08bcb72db9..6eb1ad24544d 100644
+--- a/arch/arm/mm/ioremap.c
++++ b/arch/arm/mm/ioremap.c
+@@ -43,7 +43,6 @@
+ #include <asm/mach/pci.h>
+ #include "mm.h"
+ 
+-
+ LIST_HEAD(static_vmlist);
+ 
+ static struct static_vm *find_static_vm_paddr(phys_addr_t paddr,
+@@ -493,3 +492,11 @@ void __init early_ioremap_init(void)
+ {
+ 	early_ioremap_setup();
+ }
++
++bool arch_memremap_can_ram_remap(resource_size_t offset, size_t size,
++				 unsigned long flags)
++{
++	unsigned long pfn = PHYS_PFN(offset);
++
++	return memblock_is_map_memory(pfn);
++}
+diff --git a/arch/arm64/include/asm/io.h b/arch/arm64/include/asm/io.h
+index 7fd836bea7eb..3995652daf81 100644
+--- a/arch/arm64/include/asm/io.h
++++ b/arch/arm64/include/asm/io.h
+@@ -192,4 +192,8 @@ extern void __iomem *ioremap_cache(phys_addr_t phys_addr, size_t size);
+ extern int valid_phys_addr_range(phys_addr_t addr, size_t size);
+ extern int valid_mmap_phys_addr_range(unsigned long pfn, size_t size);
+ 
++extern bool arch_memremap_can_ram_remap(resource_size_t offset, size_t size,
++					unsigned long flags);
++#define arch_memremap_can_ram_remap arch_memremap_can_ram_remap
++
+ #endif	/* __ASM_IO_H */
+diff --git a/arch/arm64/mm/ioremap.c b/arch/arm64/mm/ioremap.c
+index b7c81dacabf0..b21f91cd830d 100644
+--- a/arch/arm64/mm/ioremap.c
++++ b/arch/arm64/mm/ioremap.c
+@@ -99,3 +99,11 @@ void __init early_ioremap_init(void)
+ {
+ 	early_ioremap_setup();
+ }
++
++bool arch_memremap_can_ram_remap(resource_size_t offset, size_t size,
++				 unsigned long flags)
++{
++	unsigned long pfn = PHYS_PFN(offset);
++
++	return pfn_is_map_memory(pfn);
++}
+diff --git a/kernel/iomem.c b/kernel/iomem.c
+index 62c92e43aa0d..e85bed24c0a9 100644
+--- a/kernel/iomem.c
++++ b/kernel/iomem.c
+@@ -33,7 +33,7 @@ static void *try_ram_remap(resource_size_t offset, size_t size,
+ 	unsigned long pfn = PHYS_PFN(offset);
+ 
+ 	/* In the simple case just return the existing linear address */
+-	if (pfn_valid(pfn) && !PageHighMem(pfn_to_page(pfn)) &&
++	if (!PageHighMem(pfn_to_page(pfn)) &&
+ 	    arch_memremap_can_ram_remap(offset, size, flags))
+ 		return __va(offset);
+ 
+
+base-commit: b2d229d4ddb17db541098b83524d901257e93845
+-- 
+2.28.0
+

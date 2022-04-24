@@ -2,156 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6121550D1C3
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 15:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 632FD50D1C6
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 15:03:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231600AbiDXNEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 09:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39548 "EHLO
+        id S231761AbiDXNF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 09:05:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231580AbiDXNEJ (ORCPT
+        with ESMTP id S231551AbiDXNFz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 09:04:09 -0400
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613D81EEE8
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 06:01:07 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R911e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=hongnan.li@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VB1Lv.._1650805264;
-Received: from localhost(mailfrom:hongnan.li@linux.alibaba.com fp:SMTPD_---0VB1Lv.._1650805264)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sun, 24 Apr 2022 21:01:04 +0800
-From:   Hongnan Li <hongnan.li@linux.alibaba.com>
-To:     linux-erofs@lists.ozlabs.org, xiang@kernel.org, chao@kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] erofs: make filesystem exportable
-Date:   Sun, 24 Apr 2022 21:01:04 +0800
-Message-Id: <20220424130104.102365-1-hongnan.li@linux.alibaba.com>
-X-Mailer: git-send-email 2.19.1.6.gb485710b
+        Sun, 24 Apr 2022 09:05:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0FF217C50A;
+        Sun, 24 Apr 2022 06:02:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D56060DBA;
+        Sun, 24 Apr 2022 13:02:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEE58C385AA;
+        Sun, 24 Apr 2022 13:02:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650805374;
+        bh=Sfn37A1dh/fhIxC3f/qXOh/1zuOdRPddO4X4656m+Vc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ev44lSZXtB/5w8YjY8IM8XfTN6cfrvEuTbIjzHk7qrbgL7TMss7qaa2EBAKn3PlgB
+         xGLMXk2wts6/AIFZNcvNF+Vw0Hu5rcBGAh47fZ/fv4FXOA1obYGfZtTtDpF+RJ+fMr
+         TPzMoeJWf2qKnFAfA/5+qzfiwFphHoie8I7nwMTGbHrwE/3NQcy2EuX3KRJxzff29f
+         8Jfl7NsBb7URapT0+Gvsy06leM8GtJLCR5W9LbR5QD+irivnTjF1UHXz5qXvtp9Svp
+         xXvWUkYOhMhyNj5o4laqCEjEJJqm0wPJ9GCEqBA2tjMXxUERVsXDjYI8ISxn8tJdgE
+         VABFusXR0/M9g==
+Date:   Sun, 24 Apr 2022 21:02:47 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Marcel Ziswiler <marcel@ziswiler.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Denys Drozdov <denys.drozdov@toradex.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Stefan Agner <stefan@agner.ch>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 02/14] ARM: dts: imx6ull-colibri: fix vqmmc regulator
+Message-ID: <20220424130247.GV391514@dragon>
+References: <20220414085106.18621-1-marcel@ziswiler.com>
+ <20220414085106.18621-3-marcel@ziswiler.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220414085106.18621-3-marcel@ziswiler.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement export operations in order to make EROFS support accessing
-inodes with filehandles so that it can be exported via NFS and used
-by overlayfs.
+On Thu, Apr 14, 2022 at 10:50:54AM +0200, Marcel Ziswiler wrote:
+> From: Max Krummenacher <max.krummenacher@toradex.com>
+> 
+> The correct spelling for the property is gpios. Otherwise, the regulator
+> will neither reserve nor control any GPIOs. Thus, any SD/MMC card which
+> can use UHS-I modes will fail.
+> 
+> Fixes: c2e4987e ("ARM: dts: imx6ull: add Toradex Colibri iMX6ULL support")
+> Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+> Signed-off-by: Denys Drozdov <denys.drozdov@toradex.com>
+> Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-Without this patch, 'exportfs -rv' will report:
-exportfs: /root/erofs_mp does not support NFS export
-
-Also tested with unionmount-testsuite and the testcase below passes now:
-./run --ov --erofs --verify hard-link
-
-For more details about the testcase, see:
-https://github.com/amir73il/unionmount-testsuite/pull/6
-
-Signed-off-by: Hongnan Li <hongnan.li@linux.alibaba.com>
----
- fs/erofs/internal.h |  2 +-
- fs/erofs/namei.c    |  5 ++---
- fs/erofs/super.c    | 40 ++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 43 insertions(+), 4 deletions(-)
-
-diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-index 5298c4ee277d..12c65f647324 100644
---- a/fs/erofs/internal.h
-+++ b/fs/erofs/internal.h
-@@ -509,7 +509,7 @@ int erofs_getattr(struct user_namespace *mnt_userns, const struct path *path,
- /* namei.c */
- extern const struct inode_operations erofs_dir_iops;
- 
--int erofs_namei(struct inode *dir, struct qstr *name,
-+int erofs_namei(struct inode *dir, const struct qstr *name,
- 		erofs_nid_t *nid, unsigned int *d_type);
- 
- /* dir.c */
-diff --git a/fs/erofs/namei.c b/fs/erofs/namei.c
-index 554efa363317..fd75506799c4 100644
---- a/fs/erofs/namei.c
-+++ b/fs/erofs/namei.c
-@@ -165,9 +165,8 @@ static void *find_target_block_classic(struct erofs_buf *target,
- 	return candidate;
- }
- 
--int erofs_namei(struct inode *dir,
--		struct qstr *name,
--		erofs_nid_t *nid, unsigned int *d_type)
-+int erofs_namei(struct inode *dir, const struct qstr *name, erofs_nid_t *nid,
-+		unsigned int *d_type)
- {
- 	int ndirents;
- 	struct erofs_buf buf = __EROFS_BUF_INITIALIZER;
-diff --git a/fs/erofs/super.c b/fs/erofs/super.c
-index 0c4b41130c2f..17ad271677b6 100644
---- a/fs/erofs/super.c
-+++ b/fs/erofs/super.c
-@@ -13,6 +13,7 @@
- #include <linux/fs_context.h>
- #include <linux/fs_parser.h>
- #include <linux/dax.h>
-+#include <linux/exportfs.h>
- #include "xattr.h"
- 
- #define CREATE_TRACE_POINTS
-@@ -577,6 +578,44 @@ static int erofs_init_managed_cache(struct super_block *sb)
- static int erofs_init_managed_cache(struct super_block *sb) { return 0; }
- #endif
- 
-+static struct inode *erofs_nfs_get_inode(struct super_block *sb,
-+		u64 ino, u32 generation)
-+{
-+	return erofs_iget(sb, ino, false);
-+}
-+
-+static struct dentry *erofs_fh_to_dentry(struct super_block *sb, struct fid *fid,
-+		int fh_len, int fh_type)
-+{
-+	return generic_fh_to_dentry(sb, fid, fh_len, fh_type,
-+				    erofs_nfs_get_inode);
-+}
-+
-+static struct dentry *erofs_fh_to_parent(struct super_block *sb, struct fid *fid,
-+		int fh_len, int fh_type)
-+{
-+	return generic_fh_to_parent(sb, fid, fh_len, fh_type,
-+				    erofs_nfs_get_inode);
-+}
-+
-+struct dentry *erofs_get_parent(struct dentry *child)
-+{
-+	erofs_nid_t nid;
-+	unsigned int d_type;
-+	int err;
-+
-+	err = erofs_namei(d_inode(child), &dotdot_name, &nid, &d_type);
-+	if (err)
-+		return ERR_PTR(err);
-+	return d_obtain_alias(erofs_iget(child->d_sb, nid, d_type == FT_DIR));
-+}
-+
-+static const struct export_operations erofs_export_ops = {
-+	.fh_to_dentry = erofs_fh_to_dentry,
-+	.fh_to_parent = erofs_fh_to_parent,
-+	.get_parent = erofs_get_parent,
-+};
-+
- static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
- {
- 	struct inode *inode;
-@@ -618,6 +657,7 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
- 	sb->s_time_gran = 1;
- 
- 	sb->s_op = &erofs_sops;
-+	sb->s_export_op = &erofs_export_ops;
- 	sb->s_xattr = erofs_xattr_handlers;
- 
- 	if (test_opt(&sbi->opt, POSIX_ACL))
--- 
-2.19.1.6.gb485710b
-
+Applied, thanks!

@@ -2,118 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F074E50D1DA
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 15:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D41F750D1E6
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 15:16:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232889AbiDXNL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 09:11:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40448 "EHLO
+        id S234136AbiDXNSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 09:18:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbiDXNL5 (ORCPT
+        with ESMTP id S233855AbiDXNSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 09:11:57 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735B321818
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 06:08:56 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        Sun, 24 Apr 2022 09:18:43 -0400
+Received: from ixit.cz (ip-94-112-206-30.net.upcbroadband.cz [94.112.206.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49198E75;
+        Sun, 24 Apr 2022 06:15:35 -0700 (PDT)
+Received: from localhost.localdomain (unknown [185.14.232.186])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KmT432ncHz4xLb;
-        Sun, 24 Apr 2022 23:08:51 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1650805731;
-        bh=aD20Ip6O0k4ur0B2dS9sPY/ZrzmWmmRTAz9tDJoSTE8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=W3XW05/8eCCvEe2qhydOVID0LEjQT05ZwmU9KuRH8FhcCtfs3wceZJO22ej56/sSy
-         8VS3VId1vBE0uEiJ97oV3hn3A6DdGYth0DrWfi6hvuJNa6dd2VFnWtfj+7Eg+sLpx4
-         rYTBXYzDbq/MrVI+LkaMPyOQfWncI9lehShYcZCoF7E6ZfgWWigUpOpx2LM3kAJorX
-         JrWq+No3WnEpK11Q5A2V+tCP+BTs7p1Nf7NuovW9gOZYk7hmT6eBhEWICAShHh4cuE
-         /HXV1A25ANAyaIj3uqVqel3INcy8vdVssOELgE2BbXW51rHRSMlLHhThL2yeon+v6u
-         mo7YvutK35KZQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     aik@ozlabs.ru, atrajeev@linux.vnet.ibm.com,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [GIT PULL] Please pull powerpc/linux.git powerpc-5.18-3 tag
-Date:   Sun, 24 Apr 2022 23:08:48 +1000
-Message-ID: <87ilqy8w7z.fsf@mpe.ellerman.id.au>
+        by ixit.cz (Postfix) with ESMTPSA id 4E2392007F;
+        Sun, 24 Apr 2022 15:15:33 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1650806133;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zPQBmF6RCri6FaOeXB4uCyYG7fLRcwk0ijBNbmDhGyI=;
+        b=FW803gmT7/vhnipM26391eda+F4hv/rsvEAPtF+UiR8BmsjvZHJlYqmVsalxuvuPiFgYkV
+        fjSOP5TvQkclAlXIUTS4W2ABpWlC/++Avi/M0sspYsOaspNOmvQ/K9jXChl3xZ6zZsjJwt
+        5LL84YgU2PpCdOihkNndpqFGmkpc3MA=
+From:   David Heidelberg <david@ixit.cz>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Alex Elder <elder@kernel.org>
+Cc:     David Heidelberg <david@ixit.cz>, linux-arm-msm@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/3] dt-bindings: net: qcom,ipa: fix example for upcomming smp2p conversion
+Date:   Sun, 24 Apr 2022 15:15:19 +0200
+Message-Id: <20220424131522.14185-1-david@ixit.cz>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam: Yes
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_DYNAMIC,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA256
+Example of mpss was missing required properties.
 
-Hi Linus,
+Signed-off-by: David Heidelberg <david@ixit.cz>
+---
+ Documentation/devicetree/bindings/net/qcom,ipa.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Please pull some more powerpc fixes for 5.18:
+diff --git a/Documentation/devicetree/bindings/net/qcom,ipa.yaml b/Documentation/devicetree/bindings/net/qcom,ipa.yaml
+index 58ecc62adfaa..852658b4d05c 100644
+--- a/Documentation/devicetree/bindings/net/qcom,ipa.yaml
++++ b/Documentation/devicetree/bindings/net/qcom,ipa.yaml
+@@ -182,6 +182,11 @@ examples:
+ 
+         smp2p-mpss {
+                 compatible = "qcom,smp2p";
++                mboxes = <&apss_shared 14>;
++                qcom,smem = <435>, <428>;
++                qcom,local-pid = <0>;
++                qcom,remote-pid = <1>;
++
+                 ipa_smp2p_out: ipa-ap-to-modem {
+                         qcom,entry-name = "ipa";
+                         #qcom,smem-state-cells = <1>;
+-- 
+2.35.1
 
-The following changes since commit ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e:
-
-  Linux 5.18-rc2 (2022-04-10 14:21:36 -1000)
-
-are available in the git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-5.18-3
-
-for you to fetch changes up to bb82c574691daf8f7fa9a160264d15c5804cb769:
-
-  powerpc/perf: Fix 32bit compile (2022-04-21 23:26:47 +1000)
-
-- ------------------------------------------------------------------
-powerpc fixes for 5.18 #3
-
- - Partly revert a change to our timer_interrupt() that caused lockups with high res
-   timers disabled.
-
- - Fix a bug in KVM TCE handling that could corrupt kernel memory.
-
- - Two commits fixing Power9/Power10 perf alternative event selection.
-
-Thanks to: Alexey Kardashevskiy, Athira Rajeev, David Gibson, Frederic Barrat, Madhavan
-Srinivasan, Miguel Ojeda, Nicholas Piggin.
-
-- ------------------------------------------------------------------
-Alexey Kardashevskiy (2):
-      KVM: PPC: Fix TCE handling for VFIO
-      powerpc/perf: Fix 32bit compile
-
-Athira Rajeev (2):
-      powerpc/perf: Fix power9 event alternatives
-      powerpc/perf: Fix power10 event alternatives
-
-Michael Ellerman (1):
-      powerpc/time: Always set decrementer in timer_interrupt()
-
-
- arch/powerpc/kernel/time.c          | 29 ++++++-------
- arch/powerpc/kvm/book3s_64_vio.c    | 45 ++++++++++----------
- arch/powerpc/kvm/book3s_64_vio_hv.c | 44 +++++++++----------
- arch/powerpc/perf/Makefile          |  4 +-
- arch/powerpc/perf/power10-pmu.c     |  2 +-
- arch/powerpc/perf/power9-pmu.c      |  8 ++--
- 6 files changed, 66 insertions(+), 66 deletions(-)
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEJFGtCPCthwEv2Y/bUevqPMjhpYAFAmJlSSoACgkQUevqPMjh
-pYDAkA/7BkoLPd4V9VwBu847BkwK6Dd15b2Qu71y0ieF0xzDzG8pkOEjpk5gCVmd
-DV17CXSeX8t9ppDcKp82tLtuTnBIDjpZVtoKBALvzxB8tgErTp1CemwRcnlu+ILT
-Y5K/tioe+Y6V07HKcDefLIJrtt73IpHUV7GighPtbah0a/HNLB6+zx6HENzR2vKS
-G5ccs+FDbVgStRxw1tzWSH9JiAC7AznRJTWjA7XDiMcRva4t4qoZHSVU32H6Tlis
-fCQfIwyhyppxS5MizZx45qkumy5oJggdXhb2r7g1Wl7jeSAVPldY/S7Fq3UU8usa
-e2k5ZyUGWVSKZxGAlY7v6h6SwAhs28fspA/+tI0pvSH9a8knBkHk8H8bHlnORKkv
-j6zx1hx3qdD2BnVstEEwdiZzWrff6LwfaEytNfC1Fri7yVTkZoZVGihMKyCGHftB
-7TmRMIg99WsEx8xNNDGelaEePyRhCPGHgrB0oEHrmCzJVi3a4IiVwGcaLZdYUekG
-oEFwcyXz4mStftyS5qV/NhFSHMgum9CuTjV8fi2pqN9fFVcPoDEXoGyaSzji9UDf
-AOIP1NXJMZZGgXAN5rusjRJ9zfyFkzLcRcLPjMUqRtKaDJD86LyGPgvxh+gR8ky4
-8IzPHbwbYt6fMcDXkFjiS5Ks+x0ZfKkL5R7HbHNqyyKYWUSZxK0=
-=21WF
------END PGP SIGNATURE-----

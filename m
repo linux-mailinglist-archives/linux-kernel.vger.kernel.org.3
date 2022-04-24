@@ -2,138 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406D450D482
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 21:06:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3A4950D4BA
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 21:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235922AbiDXTJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 15:09:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47696 "EHLO
+        id S238539AbiDXTPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 15:15:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237847AbiDXTIS (ORCPT
+        with ESMTP id S238572AbiDXTOJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 15:08:18 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 571E122BCB
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 12:05:10 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id 4F6101F4065F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650827109;
-        bh=AlpWMMFY2kuHyruY9FDCsN1f6mNBZxXcpmSdzVCs994=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ry+ZPMXQVP4xnByVPenI0tsSh+KMi7RYEpqpfiLul1cWE2liWNSVpPF7mdvTKsDf8
-         xMV/7sATfjAaFp1aKNpKKZVZHGvay96HMbwMhUZatIDB0+Y34qyQbm+S3NaMyK5Vo6
-         wrUY9C8NjiDr9BUaY0c2Wf2TEv5hgSRBEB9XXA62XAwPCuoRrs7l47RGOkjA8ma+f6
-         dUzSbg2NzG06GPMAywlfYjJu46eJBwFBF3HmrYwUj7wwY/SKwFtl619lyjd8ZUlLqG
-         WAGXyzpQs1vlNCDn5coseHNkg4bI4C/IneTx2kfFrSDJYWgSBtw7izIZVoyE3bfZlw
-         BeS+lMaC6L9zA==
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Herring <robh@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Qiang Yu <yuq825@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Subject: [PATCH v5 17/17] drm/shmem-helper: Remove drm_gem_shmem_purge_locked()
-Date:   Sun, 24 Apr 2022 22:04:24 +0300
-Message-Id: <20220424190424.540501-18-dmitry.osipenko@collabora.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220424190424.540501-1-dmitry.osipenko@collabora.com>
-References: <20220424190424.540501-1-dmitry.osipenko@collabora.com>
+        Sun, 24 Apr 2022 15:14:09 -0400
+Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D6F186EB;
+        Sun, 24 Apr 2022 12:10:52 -0700 (PDT)
+Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
+        by conuserg-10.nifty.com with ESMTP id 23OJ8o5s019069;
+        Mon, 25 Apr 2022 04:08:51 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 23OJ8o5s019069
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1650827331;
+        bh=fS9R10vq4IlpfOs3RJ83vefXngPWoPRwppRrtnqmMAw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OtBPeJ7bd9EDe1GEJXgg5mHO9N9+21LPy/axxihlM7qtLYZspwwC588qjsoNybEGb
+         S2cMP3SJDYch23nwJL6QtyhyMN/uioKiMLg4vVeMGd0OwFzP6Ho8yzKIeUPieX9OIi
+         CT+NFXE6i3ZojxDWDPdfsIaxoqtSsPfoq6sHr/6pcRkr9CjNmOm14FYh5rzAi52zO2
+         Bx9RSErmnXB5+FtQFXjK4jZyQqEztpW6iSjIeYQikpJy/2Y+INxl8tni057MElw3+z
+         qOHUTAO89Wmux7gHa5shiMzWiq5zvKUGvQO3HiSFTStCHby50+eGgOvD424W4HQbdL
+         BNhCUWoFR1lfw==
+X-Nifty-SrcIP: [133.32.177.133]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        llvm@lists.linux.dev
+Subject: [PATCH 00/27] kbuild: yet another series of cleanups (modpost and LTO)
+Date:   Mon, 25 Apr 2022 04:07:44 +0900
+Message-Id: <20220424190811.1678416-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Panfrost driver was the only user of the drm_gem_shmem_purge_locked()
-helper. Panfrost driver was converted to use new generic memory shrinker
-and the helper doesn't have users anymore, remove it.
+This is the third batch of cleanups in this development cycle.
 
-Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
----
- drivers/gpu/drm/drm_gem_shmem_helper.c | 30 --------------------------
- include/drm/drm_gem_shmem_helper.h     |  1 -
- 2 files changed, 31 deletions(-)
+This weekend, I wrote up the code I have been planning.
 
-diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
-index 045921ad4795..ef7691c84fa8 100644
---- a/drivers/gpu/drm/drm_gem_shmem_helper.c
-+++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
-@@ -899,36 +899,6 @@ static void drm_gem_shmem_unpin_pages_locked(struct drm_gem_shmem_object *shmem)
- 	shmem->sgt = NULL;
- }
- 
--void drm_gem_shmem_purge_locked(struct drm_gem_shmem_object *shmem)
--{
--	struct drm_gem_object *obj = &shmem->base;
--	struct drm_device *dev = obj->dev;
--
--	WARN_ON(!drm_gem_shmem_is_purgeable(shmem));
--
--	dma_unmap_sgtable(dev->dev, shmem->sgt, DMA_BIDIRECTIONAL, 0);
--	sg_free_table(shmem->sgt);
--	kfree(shmem->sgt);
--	shmem->sgt = NULL;
--
--	drm_gem_shmem_put_pages_locked(shmem);
--
--	shmem->madv = -1;
--
--	drm_vma_node_unmap(&obj->vma_node, dev->anon_inode->i_mapping);
--	drm_gem_free_mmap_offset(obj);
--
--	/* Our goal here is to return as much of the memory as
--	 * is possible back to the system as we are called from OOM.
--	 * To do this we must instruct the shmfs to drop all of its
--	 * backing pages, *now*.
--	 */
--	shmem_truncate_range(file_inode(obj->filp), 0, (loff_t)-1);
--
--	invalidate_mapping_pages(file_inode(obj->filp)->i_mapping, 0, (loff_t)-1);
--}
--EXPORT_SYMBOL(drm_gem_shmem_purge_locked);
--
- /**
-  * drm_gem_shmem_dumb_create - Create a dumb shmem buffer object
-  * @file: DRM file structure to create the dumb buffer for
-diff --git a/include/drm/drm_gem_shmem_helper.h b/include/drm/drm_gem_shmem_helper.h
-index 972687bf9717..8d7053c36fa6 100644
---- a/include/drm/drm_gem_shmem_helper.h
-+++ b/include/drm/drm_gem_shmem_helper.h
-@@ -195,7 +195,6 @@ int drm_gem_shmem_set_purgeable(struct drm_gem_shmem_object *shmem);
- int drm_gem_shmem_set_purgeable_and_evictable(struct drm_gem_shmem_object *shmem);
- 
- int drm_gem_shmem_swap_in_locked(struct drm_gem_shmem_object *shmem);
--void drm_gem_shmem_purge_locked(struct drm_gem_shmem_object *shmem);
- 
- struct sg_table *drm_gem_shmem_get_sg_table(struct drm_gem_shmem_object *shmem);
- struct sg_table *drm_gem_shmem_get_pages_sgt(struct drm_gem_shmem_object *shmem);
+After a bunch of modpost refactoring, I got rid of the ugly code
+in Makefiles.
+
+With this, Kbuild will get back much simpler and cleaner.
+
+
+
+Masahiro Yamada (27):
+  modpost: use snprintf() instead of sprintf() for safety
+  modpost: do not write out any file when error occurred
+  modpost: remove stale comment about sym_add_exported()
+  modpost: add a separate error for exported symbols without definition
+  modpost: retrieve the module dependency and CRCs in check_exports()
+  modpost: use bool type where appropriate
+  modpost: import include/linux/list.h
+  modpost: traverse modules in order
+  modpost: add sym_add_unresolved() helper
+  modpost: traverse unresolved symbols in order
+  modpost: use doubly linked list for dump_lists
+  modpost: move struct namespace_list to modpost.c
+  modpost: traverse the namespace_list in order
+  modpost: dump Module.symvers in the same order of modules.order
+  modpost: move static EXPORT_SYMBOL check to check_exports()
+  modpost: make multiple export error
+  modpost: make sym_add_exported() always allocate a new symbol
+  modpost: make sym_add_exported() a void function
+  modpost: use hlist for hash table implementation
+  modpost: mitigate false-negatives for static EXPORT_SYMBOL checks
+  kbuild: record symbol versions in *.cmd files
+  kbuild: generate a list of objects in vmlinux
+  modpost: retrieve symbol versions by parsing *.cmd files
+  modpost: generate linker script to collect symbol versions
+  kbuild: embed symbol versions at final link of vmlinux or modules
+  kbuild: stop generating *.symversions
+  kbuild: do not create *.prelink.o for Clang LTO or IBT
+
+ .gitignore                |   1 +
+ Makefile                  |   1 +
+ scripts/Kbuild.include    |   4 +
+ scripts/Makefile.build    | 107 ++------
+ scripts/Makefile.lib      |   7 -
+ scripts/Makefile.modfinal |   6 +-
+ scripts/Makefile.modpost  |   9 +-
+ scripts/link-vmlinux.sh   |  38 ++-
+ scripts/mod/file2alias.c  |   2 -
+ scripts/mod/list.h        | 336 ++++++++++++++++++++++++
+ scripts/mod/modpost.c     | 529 +++++++++++++++++++++++---------------
+ scripts/mod/modpost.h     |  27 +-
+ 12 files changed, 731 insertions(+), 336 deletions(-)
+ create mode 100644 scripts/mod/list.h
+
 -- 
-2.35.1
+2.32.0
 

@@ -2,99 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A482A50D24C
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 16:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2721E50D247
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 16:35:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239347AbiDXOhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 10:37:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39050 "EHLO
+        id S239368AbiDXOh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 10:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239412AbiDXOho (ORCPT
+        with ESMTP id S239416AbiDXOhv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 10:37:44 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB54B338A9;
-        Sun, 24 Apr 2022 07:34:43 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id n8so21552375plh.1;
-        Sun, 24 Apr 2022 07:34:43 -0700 (PDT)
+        Sun, 24 Apr 2022 10:37:51 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB11233A18
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 07:34:49 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id g20so15680962edw.6
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 07:34:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TraAa9qxjleDjcKSV6cdBET+ximOcYjIqFdHiJLXCNQ=;
-        b=d42AiVW50s9TABrjm13XKqTRuodcUHYC6ylnEacp7SaTKcZQ5YklbmqLVJEgRUkeZ+
-         OBeikygE/Ma1lpsB3lIymZrourtRKOLjmMvUstuwB7qev2+BQQryYsRE/f8imrv5NmBA
-         2+nJ/ZO2yvMVfPq8k650+ce/lwDGp6XuZYdwOYBKBbtRl80uniIZ5baC4/9LLdOEGTMu
-         VDwkgZ7d1k7mqBSccztD29kt9v9YAWd2mPl4o4wdrRAh1FjvhT+vf3ACl8OC0PXag828
-         ftIC/UFPZ6ZFGXAr5CLVaufPBfiJzZOq9MQCPogN/a4ISyhPHnuEec+iVXfos9X2JMh4
-         G5+A==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=+IvreAFlZ7WN1oSh6mz8g0KZPjFboEMtyxdYXlqR+YE=;
+        b=Ipg2a/WrYl020qSef2xIrztFmw2oE8T58hCAT35PInriSj0D56ksqS7VDmFLgviXJX
+         Ice0CBq08htvPn8/d6vUxQNRlRJ7dHRqk/jJIt/6daoKzbjtVP+OQnrZifOZhLOnZ043
+         hQzb9WYUXHwp405jlUUZiXkcbd9ms4dNAtjMHSaElujpVf0S+f5vOrTdWUr/TBta0zYv
+         9LLkVNsTHliu8ljLe0dgzRCUlEncQSSKYs1LzQawwpccWuIqZcgMvsmHmz9JWR+D5RU3
+         O4F8EnWE0sDiczy/0feGtEigLfkp1VUT8DYUSQ1xUh7GZk6nLOKky7kiEbrwFrz/ubYP
+         gCHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=TraAa9qxjleDjcKSV6cdBET+ximOcYjIqFdHiJLXCNQ=;
-        b=UIrNp61sCj2+PoJBLQLGXeZpfc8oT7g/08uWPxQBZIxnec+o/kII0ivJWi5LM78Blq
-         3IpgLT9//s5MZ2BYZ2fpfFGULszlavKPj3l+NHADGQ6j3h9tBQrwVWV0TCpF7kYTjkJa
-         rmU6w14bs3mgoHV44pROcU+i8V9RA0ISvuiUC1BEM0TBaVh9Tdl7ZwqzTFzaAc54yj+l
-         CjwZhobNu5CFt7cn3rxKPypnjX5DHErQV9p2JouX5/Sd0YhruISdxiChuwe4XwnPWrSW
-         6qqIQLhVR7m3mCgnacCKmwXLdBsF6FPE52iQNfXnsUfTRa0owM74gNqlzjAD5LvWBKLX
-         oaug==
-X-Gm-Message-State: AOAM531DCK+yDu80tfuDgfeCU4esjBHkwKMbbD7fmToVc6if/Ff0TSqI
-        X9/aHTpA75neYz/z3xQbot7baFvzgoG52w==
-X-Google-Smtp-Source: ABdhPJwTZ6KgukTB9CJWdmkYdUg6KWAiPkj0nDfLsny3nxvpcrrj6CMe+ZGCdXYmnQBissnFmI0UaA==
-X-Received: by 2002:a17:902:f605:b0:154:aa89:bd13 with SMTP id n5-20020a170902f60500b00154aa89bd13mr13819802plg.112.1650810883135;
-        Sun, 24 Apr 2022 07:34:43 -0700 (PDT)
-Received: from localhost.localdomain ([223.212.58.71])
-        by smtp.gmail.com with ESMTPSA id n16-20020a17090a091000b001d2bff34228sm5659369pjn.9.2022.04.24.07.34.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 07:34:42 -0700 (PDT)
-From:   Yuntao Wang <ytcoode@gmail.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yuntao Wang <ytcoode@gmail.com>
-Subject: [PATCH bpf-next] libbpf: Remove unnecessary type cast
-Date:   Sun, 24 Apr 2022 22:34:20 +0800
-Message-Id: <20220424143420.457082-1-ytcoode@gmail.com>
-X-Mailer: git-send-email 2.35.3
+        bh=+IvreAFlZ7WN1oSh6mz8g0KZPjFboEMtyxdYXlqR+YE=;
+        b=q4rYS9IdCZoX9lsJMCaLW074LgAwAEDOHBLrejzIq0hmwKe1L6aq4zGF4r/a2Xp14K
+         4L3UBdAPirsSdfK8wzThooIOgWqytD2IPR3n395eEqnfdYngePTnKfNXaRwyi/O9GhoH
+         1UZj9nBQbOAvbiD6Q5sd8EOXl21OgnzkIP+MRIkcL7vHwQlJNbuGRWoq8exrcdAuUVTd
+         lc94QVvHOJm1ZiBR+Rf9Nt8GOe8/TWzpeMjIpsn/vEy/xvwsXlL5OkKJ9jC6n0H/Ekjc
+         olLokqH+Lf3j9oWsPPevEBkMybCSCRArUIL/KFvg8SjCtOQd5DyagDILiGFJtyM53gJ5
+         qOUw==
+X-Gm-Message-State: AOAM5322PbnvpEibUHttGcX3VYIQIub07hIgBYVuQwfcj+l8Ie/h6gfX
+        qWmaIb/tnE5EjSdBJEkfUAP/63fKxw0hiQ==
+X-Google-Smtp-Source: ABdhPJzzsu4vRs/Z/xkWPmrBGOmgzzRujE4OVmNwYy6mi28SnMI9uYv/8FN3JlyozQ8KHS7wjC0/Lw==
+X-Received: by 2002:a05:6402:209:b0:416:5211:841f with SMTP id t9-20020a056402020900b004165211841fmr14594595edv.59.1650810888302;
+        Sun, 24 Apr 2022 07:34:48 -0700 (PDT)
+Received: from [192.168.0.235] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id z6-20020a170906074600b006efc5a283b4sm2664832ejb.89.2022.04.24.07.34.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 24 Apr 2022 07:34:47 -0700 (PDT)
+Message-ID: <47ccfe2d-5b96-2a76-90b7-6c3679dcec27@linaro.org>
+Date:   Sun, 24 Apr 2022 16:34:46 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [Patch v7 3/4] dt-bindings: memory: Update reg/reg-names
+ validation
+Content-Language: en-US
+To:     Ashish Mhetre <amhetre@nvidia.com>, Rob Herring <robh@kernel.org>
+Cc:     dmitry.osipenko@collabora.com, digetx@gmail.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        vdumpa@nvidia.com, Snikam@nvidia.com
+References: <20220413094012.13589-1-amhetre@nvidia.com>
+ <20220413094012.13589-4-amhetre@nvidia.com>
+ <YlbSGEBKgpVC51dZ@robh.at.kernel.org>
+ <60db2153-2d78-646c-1e5e-e89346991b0c@nvidia.com>
+ <011311d4-7139-c10c-edd7-119f5466469e@nvidia.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <011311d4-7139-c10c-edd7-119f5466469e@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The link variable is already of type 'struct bpf_link *', casting it to
-'struct bpf_link *' is redundant, drop it.
+On 24/04/2022 07:20, Ashish Mhetre wrote:
+>>>
+>>> New, added properties cannot be required. That's an ABI break.
+>>>
+>> This is handled in driver code to make sure driver works with old dts
+>> as well. So is this bindings change fine or shall I change it such that
+>> dt bindings check shall pass with older dts as well?
+>> Or as mentioned by Dmitry, I can update the commit message to reflect
+>> that ABI change is intended and driver is compatible with older DTBs as
+>> well.
+>>
+> Hi Rob,
+> Can you please confirm how shall I go in next version?
+> Is it fine for dt bindings check to fail if driver is compatible with
+> old as well as new dts? Or dt bindings check shall pass with old as
+> well as new dts?
+The driver works fine without reg-names and accepts old DTB, right? In
+such case, just mention this in commit msg, that the bindings require
+reg-names but backwards compatibility will be preserved in the driver. I
+think it's fine to alter bindings such way.
 
-Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
----
- tools/lib/bpf/libbpf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 9a213aaaac8a..cc1a8fc47f72 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -11270,7 +11270,7 @@ static struct bpf_link *bpf_program__attach_btf_id(const struct bpf_program *pro
- 		return libbpf_err_ptr(pfd);
- 	}
- 	link->fd = pfd;
--	return (struct bpf_link *)link;
-+	return link;
- }
- 
- struct bpf_link *bpf_program__attach_trace(const struct bpf_program *prog)
--- 
-2.35.3
-
+Best regards,
+Krzysztof

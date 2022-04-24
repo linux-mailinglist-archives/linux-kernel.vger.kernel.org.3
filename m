@@ -2,118 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2853E50CEC3
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 04:58:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B254150CEC8
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 04:59:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237905AbiDXDBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 23:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47212 "EHLO
+        id S237920AbiDXDCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 23:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237880AbiDXDA5 (ORCPT
+        with ESMTP id S231260AbiDXDCL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 23:00:57 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3EC13FB72;
-        Sat, 23 Apr 2022 19:57:54 -0700 (PDT)
-X-UUID: 83a395d4d9f34e929909b2f9a9eb2d7e-20220424
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:f01cc64b-3fc5-4b64-84b8-fedf49e2cdad,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:faefae9,CLOUDID:f829b9f0-da02-41b4-b6df-58f4ccd36682,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 83a395d4d9f34e929909b2f9a9eb2d7e-20220424
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <zhiyong.tao@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1556752049; Sun, 24 Apr 2022 10:57:48 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Sun, 24 Apr 2022 10:57:43 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Sun, 24 Apr
- 2022 10:57:42 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sun, 24 Apr 2022 10:57:41 +0800
-From:   Zhiyong Tao <zhiyong.tao@mediatek.com>
-To:     <lee.jones@linaro.org>, <robh+dt@kernel.org>,
-        <matthias.bgg@gmail.com>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <eddie.huang@mediatek.com>,
-        <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
-        <fshao@chromium.org>
-CC:     <srv_heupstream@mediatek.com>, <hui.liu@mediatek.com>,
-        <tinghan.shen@mediatek.com>, <zhiyong.tao@mediatek.com>,
-        <hsin-hsiung.wang@mediatek.com>, <sean.wang@mediatek.com>,
-        <macpaul.lin@mediatek.com>, <wen.su@mediatek.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH v3 1/1] pwrap: mediatek: fix FSM timeout issue
-Date:   Sun, 24 Apr 2022 10:57:38 +0800
-Message-ID: <20220424025738.32271-2-zhiyong.tao@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220424025738.32271-1-zhiyong.tao@mediatek.com>
-References: <20220424025738.32271-1-zhiyong.tao@mediatek.com>
+        Sat, 23 Apr 2022 23:02:11 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1954413FD8B;
+        Sat, 23 Apr 2022 19:59:11 -0700 (PDT)
+Received: from dggpeml500022.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KmCXM72zlzhYKj;
+        Sun, 24 Apr 2022 10:58:59 +0800 (CST)
+Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
+ dggpeml500022.china.huawei.com (7.185.36.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sun, 24 Apr 2022 10:59:10 +0800
+Received: from Linux-SUSE12SP5.huawei.com (10.67.189.3) by
+ dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sun, 24 Apr 2022 10:59:09 +0800
+From:   yingelin <yingelin@huawei.com>
+To:     <ebiederm@xmission.com>, <keescook@chromium.org>,
+        <mcgrof@kernel.org>, <yzaikin@google.com>, <yingelin@huawei.com>
+CC:     <kexec@lists.infradead.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <chenjianguo3@huawei.com>,
+        <nixiaoming@huawei.com>, <qiuguorui1@huawei.com>,
+        <young.liuyang@huawei.com>, <zengweilin@huawei.com>
+Subject: [PATCH sysctl-testing v2] kernel/kexec_core: move kexec_core sysctls into its own file
+Date:   Sun, 24 Apr 2022 10:57:40 +0800
+Message-ID: <20220424025740.50371-1-yingelin@huawei.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.189.3]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml100012.china.huawei.com (7.185.36.121)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Zhiyong.Tao" <zhiyong.tao@mediatek.com>
+This move the kernel/kexec_core.c respective sysctls to its own file.
 
-Fix pwrap FSM timeout issue which leads the system crash on GFX VSRAM
-power on.
-Add a usleep delay to avoid busy read for the H/W status.
-For avoiding the system behavior(ex. disable interrupt in suspend/resume
-flow, schedule block task)cause if (time_after()) be turn first,
-we change it after sleep delay.
-Fixes: 1f022d84bd19 ("soc: mediatek: Add PMIC wrapper for MT8135 and
-MT8173 SoCs")
+kernel/sysctl.c has grown to an insane mess, We move sysctls to places
+where features actually belong to improve the readability and reduce
+merge conflicts. At the same time, the proc-sysctl maintainers can easily
+care about the core logic other than the sysctl knobs added for some feature.
 
-Signed-off-by: Zhiyong.Tao <zhiyong.tao@mediatek.com>
+We already moved all filesystem sysctls out. This patch is part of the effort
+to move kexec related sysctls out.
+
+Signed-off-by: yingelin <yingelin@huawei.com>
+
 ---
- drivers/soc/mediatek/mtk-pmic-wrap.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+v2:
+  1. Add the explanation to commit log to help patch review and subsystem
+  maintainers better understand the context/logic behind the migration
+  2. Add CONFIG_SYSCTL to to isolate the sysctl
+  3. Change subject-prefix of sysctl-next to sysctl-testing
 
-diff --git a/drivers/soc/mediatek/mtk-pmic-wrap.c b/drivers/soc/mediatek/mtk-pmic-wrap.c
-index 952bc554f443..ac7139a67e87 100644
---- a/drivers/soc/mediatek/mtk-pmic-wrap.c
-+++ b/drivers/soc/mediatek/mtk-pmic-wrap.c
-@@ -12,6 +12,7 @@
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
- #include <linux/reset.h>
-+#include <linux/delay.h>
- 
- #define PWRAP_MT8135_BRIDGE_IORD_ARB_EN		0x4
- #define PWRAP_MT8135_BRIDGE_WACS3_EN		0x10
-@@ -1197,10 +1198,13 @@ static int pwrap_wait_for_state(struct pmic_wrapper *wrp,
- 	timeout = jiffies + usecs_to_jiffies(10000);
- 
- 	do {
--		if (time_after(jiffies, timeout))
--			return fp(wrp) ? 0 : -ETIMEDOUT;
- 		if (fp(wrp))
- 			return 0;
+v1: https://lore.kernel.org/lkml/20220223030318.213093-1-yingelin@huawei.com/
+  1. Lack more informations in the commit log to help patch review better
+  2. Lack isolation of the sysctl
+  3. Use subject-prefix of sysctl-next
+---
+ kernel/kexec_core.c | 22 ++++++++++++++++++++++
+ kernel/sysctl.c     | 13 -------------
+ 2 files changed, 22 insertions(+), 13 deletions(-)
+
+diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+index 68480f731192..a0456baf52cc 100644
+--- a/kernel/kexec_core.c
++++ b/kernel/kexec_core.c
+@@ -936,6 +936,28 @@ int kimage_load_segment(struct kimage *image,
+ struct kimage *kexec_image;
+ struct kimage *kexec_crash_image;
+ int kexec_load_disabled;
++#ifdef CONFIG_SYSCTL
++static struct ctl_table kexec_core_sysctls[] = {
++	{
++		.procname	= "kexec_load_disabled",
++		.data		= &kexec_load_disabled,
++		.maxlen		= sizeof(int),
++		.mode		= 0644,
++		/* only handle a transition from default "0" to "1" */
++		.proc_handler	= proc_dointvec_minmax,
++		.extra1		= SYSCTL_ONE,
++		.extra2		= SYSCTL_ONE,
++	},
++	{ }
++};
 +
-+		usleep_range(10, 11);
-+
-+		if (time_after(jiffies, timeout))
-+			return fp(wrp) ? 0 : -ETIMEDOUT;
- 	} while (1);
- }
++static int __init kexec_core_sysctl_init(void)
++{
++	register_sysctl_init("kernel", kexec_core_sysctls);
++	return 0;
++}
++late_initcall(kexec_core_sysctl_init);
++#endif
  
+ /*
+  * No panic_cpu check version of crash_kexec().  This function is called
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index b60345cbadf0..0f3cb61a2e39 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -61,7 +61,6 @@
+ #include <linux/capability.h>
+ #include <linux/binfmts.h>
+ #include <linux/sched/sysctl.h>
+-#include <linux/kexec.h>
+ #include <linux/mount.h>
+ #include <linux/userfaultfd_k.h>
+ #include <linux/pid.h>
+@@ -1712,18 +1711,6 @@ static struct ctl_table kern_table[] = {
+ 		.proc_handler	= tracepoint_printk_sysctl,
+ 	},
+ #endif
+-#ifdef CONFIG_KEXEC_CORE
+-	{
+-		.procname	= "kexec_load_disabled",
+-		.data		= &kexec_load_disabled,
+-		.maxlen		= sizeof(int),
+-		.mode		= 0644,
+-		/* only handle a transition from default "0" to "1" */
+-		.proc_handler	= proc_dointvec_minmax,
+-		.extra1		= SYSCTL_ONE,
+-		.extra2		= SYSCTL_ONE,
+-	},
+-#endif
+ #ifdef CONFIG_MODULES
+ 	{
+ 		.procname	= "modprobe",
 -- 
-2.18.0
+2.26.2
 

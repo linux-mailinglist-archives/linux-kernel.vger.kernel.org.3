@@ -2,110 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4C450D0FB
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 12:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BB9350D0FA
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 12:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238991AbiDXKGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 06:06:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43126 "EHLO
+        id S238985AbiDXKGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 06:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238990AbiDXKGN (ORCPT
+        with ESMTP id S236724AbiDXKF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 06:06:13 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5F1174430
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 03:03:13 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 33CAE210EA;
-        Sun, 24 Apr 2022 10:03:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1650794592; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=9LLD+iTz0yZM84SOfGGfYeIkDQx1NxGJm4CTFo6b/Ws=;
-        b=VUWAriDdhCJUg7IHwEEFYdNPBB+hJ24YgoiAbvEugNcVB5nnnosjERpWnnVdVdUvHPo6pv
-        KkzNJmWlspCdXYWyltN6cD6ChjIKRS/EG50dpcmT6G1Mrerc4j0mqhVcELUdpIGwGTvjjm
-        Q5txyIpalVT6AZ0GLNS2urKfIOXyPMA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1650794592;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=9LLD+iTz0yZM84SOfGGfYeIkDQx1NxGJm4CTFo6b/Ws=;
-        b=Zw2uqeGNqOINnYnKpnX65z4mWLZSgTVk9Ntr6QdeReqsKdyzdRiF26ThfM6CXuNT4820mU
-        v8JXSoO5arz3njCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2201F13AE0;
-        Sun, 24 Apr 2022 10:03:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id diJHCGAgZWK2KAAAMHmgww
-        (envelope-from <bp@suse.de>); Sun, 24 Apr 2022 10:03:12 +0000
-Date:   Sun, 24 Apr 2022 12:03:12 +0200
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] perf/urgent for 5.18-rc4
-Message-ID: <YmUgYLZF8ptmhyj/@zn.tnic>
+        Sun, 24 Apr 2022 06:05:59 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2444C16FAF2
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 03:02:57 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R571e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VB0eh7g_1650794574;
+Received: from 30.39.210.25(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VB0eh7g_1650794574)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sun, 24 Apr 2022 18:02:54 +0800
+Message-ID: <4526be44-696b-9719-5a00-6002f61aec01@linux.alibaba.com>
+Date:   Sun, 24 Apr 2022 18:03:32 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] mm: hugetlb: Add missing cache flushing in
+ hugetlb_unshare_all_pmds()
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
+        peterx@redhat.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <419b0e777c9e6d1454dcd906e0f5b752a736d335.1650781755.git.baolin.wang@linux.alibaba.com>
+ <YmT//huUbFX+KHcy@FVFYT0MHHV2J.usts.net>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <YmT//huUbFX+KHcy@FVFYT0MHHV2J.usts.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-11.8 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
 
-please pull two urgent fixes to the perf side of things, for 5.18.
 
-Thx.
+On 4/24/2022 3:45 PM, Muchun Song wrote:
+> On Sun, Apr 24, 2022 at 02:33:19PM +0800, Baolin Wang wrote:
+>> Missed calling flush_cache_range() before removing the sharing PMD entrires,
+>> otherwise data consistence issue may be occurred on some architectures whose
+>> caches are strict and require a virtual–>physical translation to exist for
+>> a virtual address. Thus add it.
+>>
+>> Fixes: 6dfeaff93be1 ("hugetlb/userfaultfd: unshare all pmds for hugetlbfs when register wp")
+>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> 
+> CONFIG_ARCH_WANT_HUGE_PMD_SHARE is only definded on riscv, arm64 and
+> x86.  All of them do not have a VIVT cache.  In others words,
+> flush_cache_range() is null on those architectures. So I suspect
+> in practice this does not cause any issue.  It is better to
+> clarify this in commit log.
 
----
+Yes, just from code inspection and to keep same behaviors when unmapping 
+sharing PMD entrires in case more architectures can support 
+CONFIG_ARCH_WANT_HUGE_PMD_SHARE in future. Will update the commit 
+message in next version.
 
-The following changes since commit b2d229d4ddb17db541098b83524d901257e93845:
+> 
+> Anyway:
+> 
+> Reviewed-by: Muchun Song <songmuchun@bytedance.com>
 
-  Linux 5.18-rc3 (2022-04-17 13:57:31 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/perf_urgent_for_v5.18_rc4
-
-for you to fetch changes up to 528c9f1daf20da14d3e7348dc4b1d7c55743ee64:
-
-  perf/x86/cstate: Add SAPPHIRERAPIDS_X CPU support (2022-04-19 21:15:42 +0200)
-
-----------------------------------------------------------------
-- Add Sapphire Rapids CPU support
-
-- Fix a perf vmalloc-ed buffer mapping error (PERF_USE_VMALLOC in use)
-
-----------------------------------------------------------------
-Zhang Rui (1):
-      perf/x86/cstate: Add SAPPHIRERAPIDS_X CPU support
-
-Zhipeng Xie (1):
-      perf/core: Fix perf_mmap fail when CONFIG_PERF_USE_VMALLOC enabled
-
- arch/x86/events/intel/cstate.c | 7 ++++---
- kernel/events/core.c           | 2 +-
- kernel/events/internal.h       | 5 +++++
- kernel/events/ring_buffer.c    | 5 -----
- 4 files changed, 10 insertions(+), 9 deletions(-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
+Thanks.

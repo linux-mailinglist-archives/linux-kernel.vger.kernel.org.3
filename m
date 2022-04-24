@@ -2,57 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABA3350CFF9
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 08:17:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C427050CFFC
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 08:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238332AbiDXGTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 02:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49232 "EHLO
+        id S238341AbiDXGV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 02:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231567AbiDXGS4 (ORCPT
+        with ESMTP id S231567AbiDXGVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 02:18:56 -0400
-X-Greylist: delayed 913 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 23 Apr 2022 23:15:45 PDT
-Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E004047AD9
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 23:15:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1650780010; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=G89X2QBmE4EgM05XnfpsouYFoZIwMCV4C80WgFtSCHEqtJ1USTKQNGd75ZfgyKFfA/VR+4LaG2l90nRU4ptZDPGbIquuaCq/gh0yYuzFtkuQyQCQ8Xpz8j5aPQkm0PUpx0kmj00glUINx4wBOK4zo/NXy2Psfri2kL3itnB1IHA=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1650780010; h=Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
-        bh=pq60l/Yh375tVKL8zIdox/f7EvRbMx2DWdqcnGIxLow=; 
-        b=my5c5RvIj2i2qc6kQ8YLW6odsXvMl+pdBiN+aPMZdcg21ecrA9g5Mnac3ZSAWWd+wF6k6kWEgyPnKPp0wVtLbAXfQJLzODPIg9HKk7f2yERMXQ+6Xm7s1d9QfxFTXSAnCMxzBwJK2YACb/qXYJ1ZRl2SolMk3MgNQLv0qE3MLgM=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=icenowy.me;
-        spf=pass  smtp.mailfrom=uwu@icenowy.me;
-        dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1650780010;
-        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
-        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
-        bh=pq60l/Yh375tVKL8zIdox/f7EvRbMx2DWdqcnGIxLow=;
-        b=JpEonNAv7xyTDgfxMVHzMV1Qf9VYuiUBA09QEAYdS5WfHIpAKRMHGKWVaHvYHRKO
-        0FZo3Cter02dJQMXBir09R/RCF4bDvYK5a1wcfEpKZ1y0zaZdCotmkgIbqB3unYXgxT
-        EEC+lp18e3PfzcsLeHx+q1kzin2W8zWCaEHGYKNc=
-Received: from petra.. (64.225.114.122 [64.225.114.122]) by mx.zohomail.com
-        with SMTPS id 1650780009289608.5266651606395; Sat, 23 Apr 2022 23:00:09 -0700 (PDT)
-From:   Icenowy Zheng <uwu@icenowy.me>
-To:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Icenowy Zheng <uwu@icenowy.me>
-Subject: [PATCH] clk: sunxi-ng: ccu-sun6i-rtc: set rtc-32k to critical
-Date:   Sun, 24 Apr 2022 13:59:59 +0800
-Message-Id: <20220424055959.109286-1-uwu@icenowy.me>
-X-Mailer: git-send-email 2.35.1
+        Sun, 24 Apr 2022 02:21:54 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC1715E843;
+        Sat, 23 Apr 2022 23:18:55 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id d14so8386274qtw.5;
+        Sat, 23 Apr 2022 23:18:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Yby90S4qeqTNTQCQTqXyyQ6ZkOIT/Nf47vs830JnxMk=;
+        b=VeR4tPYU8LPkCDcI5NL5K7ivslj8+hgD3D79PsoQm5Twy4E1+XDwSJgqbAjD1qCBZq
+         rVY+gvFcnLau0m9u7vzRe+adGhWmiaqhkXO1oTMzLR/5G0WPkeDjtb5GWkp28y3CIfJA
+         hITqWhh0SkpLWJutDnwrukDuq6lsTwqvuXjHrunf3tJEcv6PGtyTcGYR6BFMxHyDu95r
+         cjo3cBpxuJm2eeYNXPHMuJ0JXss+PnOnCIS7WYOMuEFdKiT/5yEYFdCneyzWcGEFcfnP
+         kagGPgd/bicpNsViC/fPKqfo1JjXWwdcY55thaR4Yae9OXCNaWeuSROnZc58aDnQZaiK
+         OugA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Yby90S4qeqTNTQCQTqXyyQ6ZkOIT/Nf47vs830JnxMk=;
+        b=gXujtXxUdlB57JfM239qeL0zk+y++OCnccaV3uP3QdVNiqOprQrS+f7HLNQvL1ZQjb
+         qKUJPueRNwetIzdONrk+WzIUZ9kUpoUa3EI3jJG/fblDwxeH2Nb6eMwrD4p0mO9q4QB1
+         7yChFPLqafQIpT4yEHprufG8ONabPLSy/4STUug0lx0Jy6T3QMijyE59R08p+G34ZCvQ
+         rlQLQE0tYTIt8DfLozVFuYvN/8B7wdTg4wF+E4mUtDpet8pbhDdVrwpM2t+ebvTBYOjO
+         qiqYM8QcyIRwlTJdewWeptPaXLoTFCUkJRSbkJjsbtL9Vj0lPHCnZYTQKOkD9IIBs+z5
+         GBkg==
+X-Gm-Message-State: AOAM533paGnQg2Sve6z4ZFRL1Rr6ZOIS6gQ7X82XBlWk7xrg4D+rQr/+
+        +Rd2RfuKzgiVXI7Hf6plXaA=
+X-Google-Smtp-Source: ABdhPJwK1v96DPTQMFreQtZ9eS9KfM4LtTDRxtiHSTWJVAaGVYKJB316Iqr8jKQ0yfmOPElfpSFzeQ==
+X-Received: by 2002:a05:622a:58c:b0:2f1:f8cf:16bf with SMTP id c12-20020a05622a058c00b002f1f8cf16bfmr8329127qtb.71.1650781134784;
+        Sat, 23 Apr 2022 23:18:54 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id s18-20020a05622a1a9200b002f36470c4f1sm1012500qtc.56.2022.04.23.23.18.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Apr 2022 23:18:54 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: ran.jianping@zte.com.cn
+To:     anil.gurumurthy@qlogic.com
+Cc:     sudarsana.kalluru@qlogic.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ran jianping <ran.jianping@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] scsi: bfa: remove unneeded flush_workqueue
+Date:   Sun, 24 Apr 2022 06:18:45 +0000
+Message-Id: <20220424061845.3218774-1-ran.jianping@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,28 +72,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RTC itself is the one and only consumer of rtc-32k clock. As the rtc
-should be always running, set rtc-32k clock to critical, to prevent it
-from being gated by the kernel.
+From: ran jianping <ran.jianping@zte.com.cn>
 
-Fixes: d91612d7f01a ("clk: sunxi-ng: Add support for the sun6i RTC clocks")
-Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+All work currently pending will be done first by calling destroy_workqueue,
+so there is no need to flush it explicitly.
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: ran jianping <ran.jianping@zte.com.cn>
 ---
- drivers/clk/sunxi-ng/ccu-sun6i-rtc.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/scsi/bfa/bfad_im.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
-index 8a10bade7e0d..3d9c9ce5a3db 100644
---- a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
-+++ b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
-@@ -241,6 +241,7 @@ static struct clk_init_data rtc_32k_init_data = {
- 	.ops		= &ccu_mux_ops,
- 	.parent_hws	= rtc_32k_parents,
- 	.num_parents	= ARRAY_SIZE(rtc_32k_parents), /* updated during probe */
-+	.flags		= CLK_IS_CRITICAL,
- };
- 
- static struct ccu_mux rtc_32k_clk = {
+diff --git a/drivers/scsi/bfa/bfad_im.c b/drivers/scsi/bfa/bfad_im.c
+index 8419a1a89485..c335f7a188d2 100644
+--- a/drivers/scsi/bfa/bfad_im.c
++++ b/drivers/scsi/bfa/bfad_im.c
+@@ -755,7 +755,6 @@ void
+ bfad_destroy_workq(struct bfad_im_s *im)
+ {
+ 	if (im && im->drv_workq) {
+-		flush_workqueue(im->drv_workq);
+ 		destroy_workqueue(im->drv_workq);
+ 		im->drv_workq = NULL;
+ 	}
 -- 
-2.35.1
+2.25.1
 

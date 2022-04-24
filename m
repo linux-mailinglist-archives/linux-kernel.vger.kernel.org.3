@@ -2,94 +2,377 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D99AB50D395
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 18:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD8A250D397
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 18:42:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235769AbiDXQnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 12:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55298 "EHLO
+        id S235837AbiDXQoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 12:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235664AbiDXQnk (ORCPT
+        with ESMTP id S232795AbiDXQoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 12:43:40 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D42E008;
-        Sun, 24 Apr 2022 09:40:39 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 43DC630B;
-        Sun, 24 Apr 2022 18:40:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1650818437;
-        bh=f67DrpMM3WqfmwBxGxHfSZkKGZr/pZm0y+ajUHoXOZ4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jqk3EraTPIM1iGwsaGpmOnGv4XTKyalRg2PmRTMDr3pQ5fpDEixYEmxnsOrav825C
-         Sg6wQS3oQm6Fp89FGS8elNIjnihXdfg+9jzgyVk8LQPGQ1mm5+jByTp5RsR7VbjBOg
-         DKvfdXZP3XX9hwZWTyaykbqFz/vkNbT+Z4utlLuU=
-Date:   Sun, 24 Apr 2022 19:40:37 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Dongliang Mu <dzm91@hust.edu.cn>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: ov7670: remove ov7670_power_off from ov7670_remove
-Message-ID: <YmV9heuEM+zpaE+x@pendragon.ideasonboard.com>
-References: <20220422085408.634616-1-dzm91@hust.edu.cn>
+        Sun, 24 Apr 2022 12:44:06 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C028E008;
+        Sun, 24 Apr 2022 09:41:05 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id k4so10356190plk.7;
+        Sun, 24 Apr 2022 09:41:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=uKZTe7yQ+O8BqMJZ1XBsdEQMbjgQxMztKFfEfSP4DbA=;
+        b=N2dGtr51J+6UMnRMMnlbWSD0N6sxh1/HQLagSI1XCqintMmVx6k7Viugy86ZJc4YNS
+         yc3SpafyfRpmTPnWkgq9WipOYdeVZeA3azWDyevKzYhh9YTjJU5Nug5Sa6eOBdezNOQF
+         /hW/ckKvlg3YCrWN8qitH+/lOIfxS4ZHbr5KmAlzXKYFs7a51XBHB/dyHnrnFGOkcqBV
+         f81QEsRtje6bv+15ppZUjNPHJFOHdk1mbqNFPL8riA1oDBb5xJlY1e6XpS6b3nkmC7VR
+         /mYsLGScTQB28/qvrJ2t7W1GStCwopZskUAe0gi2jl4Hb3qvLSJahYSJIsGMubo0u+jU
+         TCnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=uKZTe7yQ+O8BqMJZ1XBsdEQMbjgQxMztKFfEfSP4DbA=;
+        b=Cj1Fqfkxp8aNGWWhDAPbZa++dvp2KSHJIN+xlb0w/XCMt4Rp7G4ZW7aGKtetpEdgy5
+         xY58zDSwL7QmQbr80S5tZEnC8bIrl2Jzas7zD7inBBGq6lRWBJpamr4uTa9WlAzIPvyC
+         qXQlohWbC/XWCp0tBSwoXwqHTYlv/SMHZ6LYliJ7mO343XoUX+gOAXIAN1O5GsEYMUII
+         gAAhIrgAoWbIA98ehKwLwwYV37VeNC4PNdu8tbIv2skgGETuomXeqEwD+VJDD2hYBWJ/
+         eEtCFTo/gqE+jTEQmgkDNrZd8duy2Sb8rRqAvJKc7kx/g+pITA66BPa4orOmdXyI34qL
+         fKEw==
+X-Gm-Message-State: AOAM5303lVuGOwuUJXUAVy2XoFhkhZ4TofZ7SK+Lts+LeNLgN+RMeYib
+        fgA8Z4hUE4f2TWCenTzRgEL8QfNtkppN83YjsKzq9lmm+HBKvA==
+X-Google-Smtp-Source: ABdhPJz2XXjObfRe2IyPKcnasvgqVGJcah07nXovTNlcQCLCZ+HBofbafKZQqYJ6Wj43BlAoBbK3/agq3N2McD4+zHU=
+X-Received: by 2002:a17:903:11d0:b0:156:6c35:9588 with SMTP id
+ q16-20020a17090311d000b001566c359588mr13846969plh.50.1650818464519; Sun, 24
+ Apr 2022 09:41:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220422085408.634616-1-dzm91@hust.edu.cn>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        TVD_SUBJ_WIPE_DEBT,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+From:   jin young choi <ychoijy@gmail.com>
+Date:   Mon, 25 Apr 2022 01:40:53 +0900
+Message-ID: <CAM36TBuzEE8Afbh4tQNcu20AwUwB916FTNoZ6oh3MnYOK-BKfg@mail.gmail.com>
+Subject: [RESEND PATCH v2] scsi: ufs: wb: Add Manual Flush sysfs and cleanup
+ toggle functions
+To:     Bart Van Assche <bvanassche@acm.org>, linux-kernel@vger.kernel.org,
+        adrian.hunter@intel.com, ALIM AKHTAR <alim.akhtar@samsung.com>,
+        asutoshd@codeaurora.org, Avri Altman <Avri.Altman@wdc.com>,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        jejb@linux.ibm.com, j-young.choi@samsung.com, beanhuo@micron.com,
+        cang@codeaurora.org, Daejun Park <daejun7.park@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dongliang,
+There is the following quirk to bypass "WB Manual Flush" in Write
+Booster.
 
-Thank you for the patch.
+  - UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL
 
-On Fri, Apr 22, 2022 at 04:54:05PM +0800, Dongliang Mu wrote:
-> From: Dongliang Mu <mudongliangabcd@gmail.com>
-> 
-> In ov7670_probe, it always invokes ov7670_power_off() no matter
-> the execution is successful or failed. So we cannot invoke it
-> agiain in ov7670_remove().
-> 
-> Fix this by removing ov7670_power_off from ov7670_remove.
-> 
-> Fixes: 030f9f682e66 ("media: ov7670: control clock along with power")
+If this quirk is not set, there is no knob that can control "WB Manual Flush".
 
-ov7670_power_off() is a no-op if power is already off. What does this
-fix ?
+There are three flags that control Write Booster Feature.
+1. WB ON/OFF
+2. WB Hibern Flush ON/OFF
+3. WB Flush ON/OFF
 
-> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-> ---
->  drivers/media/i2c/ov7670.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/media/i2c/ov7670.c b/drivers/media/i2c/ov7670.c
-> index 196746423116..1be2c0e5bdc1 100644
-> --- a/drivers/media/i2c/ov7670.c
-> +++ b/drivers/media/i2c/ov7670.c
-> @@ -2017,7 +2017,6 @@ static int ov7670_remove(struct i2c_client *client)
->  	v4l2_async_unregister_subdev(sd);
->  	v4l2_ctrl_handler_free(&info->hdl);
->  	media_entity_cleanup(&info->sd.entity);
-> -	ov7670_power_off(sd);
->  	return 0;
->  }
->  
+The sysfs that controls the WB was implemented. (1)
 
+In the case of "Hibern Flush", it is always good to turn on.
+Control may not be required. (2)
+
+Finally, "Manual flush" may be determined that it can affect
+performance or power consumption.
+So the sysfs that controls this may be necessary. (3)
+
+In addition, toggle functions for controlling the above flags are cleaned.
+
+Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
+---
+ drivers/scsi/ufs/ufs-sysfs.c | 46 +++++++++++++++++++++-
+ drivers/scsi/ufs/ufshcd.c    | 76 ++++++++++++++++++------------------
+ drivers/scsi/ufs/ufshcd.h    |  7 ++++
+ 3 files changed, 89 insertions(+), 40 deletions(-)
+
+diff --git a/drivers/scsi/ufs/ufs-sysfs.c b/drivers/scsi/ufs/ufs-sysfs.c
+index 5c405ff7b6ea..e0f6ba7ffefc 100644
+--- a/drivers/scsi/ufs/ufs-sysfs.c
++++ b/drivers/scsi/ufs/ufs-sysfs.c
+@@ -229,7 +229,7 @@ static ssize_t wb_on_store(struct device *dev,
+struct device_attribute *attr,
+  * If the platform supports UFSHCD_CAP_CLK_SCALING, turn WB
+  * on/off will be done while clock scaling up/down.
+  */
+- dev_warn(dev, "To control WB through wb_on is not allowed!\n");
++ dev_warn(dev, "It is not allowed to control WB!\n");
+  return -EOPNOTSUPP;
+  }
+
+@@ -253,6 +253,48 @@ static ssize_t wb_on_store(struct device *dev,
+struct device_attribute *attr,
+  return res < 0 ? res : count;
+ }
+
++static ssize_t wb_buf_flush_en_show(struct device *dev,
++     struct device_attribute *attr,
++     char *buf)
++{
++ struct ufs_hba *hba = dev_get_drvdata(dev);
++
++ return sysfs_emit(buf, "%d\n", hba->dev_info.wb_buf_flush_enabled);
++}
++
++static ssize_t wb_buf_flush_en_store(struct device *dev,
++      struct device_attribute *attr,
++      const char *buf, size_t count)
++{
++ struct ufs_hba *hba = dev_get_drvdata(dev);
++ unsigned int wb_buf_flush_en;
++ ssize_t res;
++
++ if (!ufshcd_is_wb_buf_flush_allowed(hba)) {
++ dev_warn(dev, "It is not allowed to control WB buf flush!\n");
++ return -EOPNOTSUPP;
++ }
++
++ if (kstrtouint(buf, 0, &wb_buf_flush_en))
++ return -EINVAL;
++
++ if (wb_buf_flush_en != 0 && wb_buf_flush_en != 1)
++ return -EINVAL;
++
++ down(&hba->host_sem);
++ if (!ufshcd_is_user_access_allowed(hba)) {
++ res = -EBUSY;
++ goto out;
++ }
++
++ ufshcd_rpm_get_sync(hba);
++ res = ufshcd_wb_toggle_buf_flush(hba, wb_buf_flush_en);
++ ufshcd_rpm_put_sync(hba);
++out:
++ up(&hba->host_sem);
++ return res < 0 ? res : count;
++}
++
+ static DEVICE_ATTR_RW(rpm_lvl);
+ static DEVICE_ATTR_RO(rpm_target_dev_state);
+ static DEVICE_ATTR_RO(rpm_target_link_state);
+@@ -261,6 +303,7 @@ static DEVICE_ATTR_RO(spm_target_dev_state);
+ static DEVICE_ATTR_RO(spm_target_link_state);
+ static DEVICE_ATTR_RW(auto_hibern8);
+ static DEVICE_ATTR_RW(wb_on);
++static DEVICE_ATTR_RW(wb_buf_flush_en);
+
+ static struct attribute *ufs_sysfs_ufshcd_attrs[] = {
+  &dev_attr_rpm_lvl.attr,
+@@ -271,6 +314,7 @@ static struct attribute *ufs_sysfs_ufshcd_attrs[] = {
+  &dev_attr_spm_target_link_state.attr,
+  &dev_attr_auto_hibern8.attr,
+  &dev_attr_wb_on.attr,
++ &dev_attr_wb_buf_flush_en.attr,
+  NULL
+ };
+
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 3f9caafa91bf..153a625b3111 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -248,8 +248,7 @@ static int ufshcd_setup_vreg(struct ufs_hba *hba, bool on);
+ static inline int ufshcd_config_vreg_hpm(struct ufs_hba *hba,
+  struct ufs_vreg *vreg);
+ static int ufshcd_try_to_abort_task(struct ufs_hba *hba, int tag);
+-static void ufshcd_wb_toggle_flush_during_h8(struct ufs_hba *hba, bool set);
+-static inline void ufshcd_wb_toggle_flush(struct ufs_hba *hba, bool enable);
++static void ufshcd_wb_toggle_buf_flush_during_h8(struct ufs_hba *hba,
+bool set);
+ static void ufshcd_hba_vreg_set_lpm(struct ufs_hba *hba);
+ static void ufshcd_hba_vreg_set_hpm(struct ufs_hba *hba);
+
+@@ -269,16 +268,17 @@ static inline void ufshcd_disable_irq(struct ufs_hba *hba)
+  }
+ }
+
+-static inline void ufshcd_wb_config(struct ufs_hba *hba)
++static void ufshcd_wb_set_default_flags(struct ufs_hba *hba)
+ {
+  if (!ufshcd_is_wb_allowed(hba))
+  return;
+
+  ufshcd_wb_toggle(hba, true);
+
+- ufshcd_wb_toggle_flush_during_h8(hba, true);
+- if (!(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL))
+- ufshcd_wb_toggle_flush(hba, true);
++ ufshcd_wb_toggle_buf_flush_during_h8(hba, true);
++
++ if (ufshcd_is_wb_buf_flush_allowed(hba))
++ ufshcd_wb_toggle_buf_flush(hba, true);
+ }
+
+ static void ufshcd_scsi_unblock_requests(struct ufs_hba *hba)
+@@ -1274,9 +1274,10 @@ static int ufshcd_devfreq_scale(struct ufs_hba
+*hba, bool scale_up)
+  }
+  }
+
+- /* Enable Write Booster if we have scaled up else disable it */
+  downgrade_write(&hba->clk_scaling_lock);
+  is_writelock = false;
++
++ /* Enable Write Booster if we have scaled up else disable it */
+  ufshcd_wb_toggle(hba, scale_up);
+
+ out_unprepare:
+@@ -5693,9 +5694,13 @@ static int __ufshcd_wb_toggle(struct ufs_hba
+*hba, bool set, enum flag_idn idn)
+ {
+  u8 index;
+  enum query_opcode opcode = set ? UPIU_QUERY_OPCODE_SET_FLAG :
+-    UPIU_QUERY_OPCODE_CLEAR_FLAG;
++ UPIU_QUERY_OPCODE_CLEAR_FLAG;
++
++ if (!ufshcd_is_wb_allowed(hba))
++ return -EPERM;
+
+  index = ufshcd_wb_get_query_index(hba);
++
+  return ufshcd_query_flag_retry(hba, opcode, idn, index, NULL);
+ }
+
+@@ -5703,60 +5708,51 @@ int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable)
+ {
+  int ret;
+
+- if (!ufshcd_is_wb_allowed(hba))
+- return 0;
+-
+- if (!(enable ^ hba->dev_info.wb_enabled))
++ if (hba->dev_info.wb_enabled == enable)
+  return 0;
+
+  ret = __ufshcd_wb_toggle(hba, enable, QUERY_FLAG_IDN_WB_EN);
+  if (ret) {
+- dev_err(hba->dev, "%s Write Booster %s failed %d\n",
++ dev_err(hba->dev, "%s: failed to %s WB %d\n",
+  __func__, enable ? "enable" : "disable", ret);
+  return ret;
+  }
+
+  hba->dev_info.wb_enabled = enable;
+- dev_info(hba->dev, "%s Write Booster %s\n",
+- __func__, enable ? "enabled" : "disabled");
+
+  return ret;
+ }
+
+-static void ufshcd_wb_toggle_flush_during_h8(struct ufs_hba *hba, bool set)
++static void ufshcd_wb_toggle_buf_flush_during_h8(struct ufs_hba *hba,
++ bool enable)
+ {
+  int ret;
+
+- ret = __ufshcd_wb_toggle(hba, set,
+- QUERY_FLAG_IDN_WB_BUFF_FLUSH_DURING_HIBERN8);
+- if (ret) {
+- dev_err(hba->dev, "%s: WB-Buf Flush during H8 %s failed: %d\n",
+- __func__, set ? "enable" : "disable", ret);
+- return;
+- }
+- dev_dbg(hba->dev, "%s WB-Buf Flush during H8 %s\n",
+- __func__, set ? "enabled" : "disabled");
++ ret = __ufshcd_wb_toggle(hba, enable,
++ QUERY_FLAG_IDN_WB_BUFF_FLUSH_DURING_HIBERN8);
++ if (ret)
++ dev_err(hba->dev, "%s: failed to %s WB buf flush during H8 %d\n",
++ __func__, enable ? "enable" : "disable", ret);
+ }
+
+-static inline void ufshcd_wb_toggle_flush(struct ufs_hba *hba, bool enable)
++int ufshcd_wb_toggle_buf_flush(struct ufs_hba *hba, bool enable)
+ {
+  int ret;
+
+- if (!ufshcd_is_wb_allowed(hba) ||
+-     hba->dev_info.wb_buf_flush_enabled == enable)
+- return;
++ if (hba->dev_info.wb_buf_flush_enabled == enable)
++ return 0;
+
+- ret = __ufshcd_wb_toggle(hba, enable, QUERY_FLAG_IDN_WB_BUFF_FLUSH_EN);
++ ret = __ufshcd_wb_toggle(hba, enable,
++ QUERY_FLAG_IDN_WB_BUFF_FLUSH_EN);
+  if (ret) {
+- dev_err(hba->dev, "%s WB-Buf Flush %s failed %d\n", __func__,
+- enable ? "enable" : "disable", ret);
+- return;
++ dev_err(hba->dev, "%s: failed to %s WB buf flush %d\n",
++ __func__, enable ? "enable" : "disable", ret);
++ return ret;
+  }
+
+  hba->dev_info.wb_buf_flush_enabled = enable;
+
+- dev_dbg(hba->dev, "%s WB-Buf Flush %s\n",
+- __func__, enable ? "enabled" : "disabled");
++ return ret;
+ }
+
+ static bool ufshcd_wb_presrv_usrspc_keep_vcc_on(struct ufs_hba *hba,
+@@ -5790,10 +5786,10 @@ static bool
+ufshcd_wb_presrv_usrspc_keep_vcc_on(struct ufs_hba *hba,
+
+ static void ufshcd_wb_force_disable(struct ufs_hba *hba)
+ {
+- if (!(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL))
+- ufshcd_wb_toggle_flush(hba, false);
++ if (ufshcd_is_wb_buf_flush_allowed(hba))
++ ufshcd_wb_toggle_buf_flush(hba, false);
+
+- ufshcd_wb_toggle_flush_during_h8(hba, false);
++ ufshcd_wb_toggle_buf_flush_during_h8(hba, false);
+  ufshcd_wb_toggle(hba, false);
+  hba->caps &= ~UFSHCD_CAP_WB_EN;
+
+@@ -8178,7 +8174,9 @@ static int ufshcd_probe_hba(struct ufs_hba *hba,
+bool init_dev_params)
+  */
+  ufshcd_set_active_icc_lvl(hba);
+
+- ufshcd_wb_config(hba);
++ /* Enable UFS Write Booster if supported */
++ ufshcd_wb_set_default_flags(hba);
++
+  if (hba->ee_usr_mask)
+  ufshcd_write_ee_control(hba);
+  /* Enable Auto-Hibernate if configured */
+diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+index 94f545be183a..69b5f33d5746 100644
+--- a/drivers/scsi/ufs/ufshcd.h
++++ b/drivers/scsi/ufs/ufshcd.h
+@@ -991,6 +991,12 @@ static inline bool ufshcd_is_wb_allowed(struct
+ufs_hba *hba)
+  return hba->caps & UFSHCD_CAP_WB_EN;
+ }
+
++static inline bool ufshcd_is_wb_buf_flush_allowed(struct ufs_hba *hba)
++{
++ return ufshcd_is_wb_allowed(hba) &&
++ !(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL);
++}
++
+ static inline bool ufshcd_is_user_access_allowed(struct ufs_hba *hba)
+ {
+  return !hba->shutting_down;
+@@ -1209,6 +1215,7 @@ int ufshcd_exec_raw_upiu_cmd(struct ufs_hba *hba,
+       enum query_opcode desc_op);
+
+ int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable);
++int ufshcd_wb_toggle_buf_flush(struct ufs_hba *hba, bool enable);
+ int ufshcd_suspend_prepare(struct device *dev);
+ int __ufshcd_suspend_prepare(struct device *dev, bool rpm_ok_for_spm);
+ void ufshcd_resume_complete(struct device *dev);
 -- 
-Regards,
-
-Laurent Pinchart
+2.25.1

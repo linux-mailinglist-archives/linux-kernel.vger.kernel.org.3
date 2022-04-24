@@ -2,82 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A0F50D392
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 18:40:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D99AB50D395
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 18:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235726AbiDXQmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 12:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49232 "EHLO
+        id S235769AbiDXQnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 12:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235664AbiDXQl5 (ORCPT
+        with ESMTP id S235664AbiDXQnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 12:41:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 186CE13BD69;
-        Sun, 24 Apr 2022 09:38:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B262D61135;
-        Sun, 24 Apr 2022 16:38:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D742C385AD;
-        Sun, 24 Apr 2022 16:38:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650818336;
-        bh=CwRTXxLo3F+1aQhEPT+wAMGo5heYkKH9HOW0ofhMpSs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pBvjGafMLmvsmrHakweLWivvm+TGGr7aswWYYk8FTU1ymE5U2ewQx8F7Z0r/sm+zi
-         UKhV0Vp1H35qmjjRHZjEQMbuit777kQrDkvWPYJ/Amu65FqbKq/at/A+mDVpIBSs1C
-         VZT44sjSD+ISIGy5/aQMjZ9jcKXUej2plYL70UUBLb0akNgjsdRYwTMoCFjnLKkcTg
-         hYN6TXVRaQFTKHvR8Zntrj/QglKe7Up+KKYAgrbjzEeWwN2pySPkQ4466VsCLTujpl
-         ZYQAjPDUNMkXFg1GODFT/663wpvPYHjSN0ehyQCzclxpbicILTTqlrXcgx+fmWVMVE
-         riDRAYa2s+EHQ==
-Received: by mail-pl1-f178.google.com with SMTP id n18so21949615plg.5;
-        Sun, 24 Apr 2022 09:38:56 -0700 (PDT)
-X-Gm-Message-State: AOAM530ADWP9KrtpeH/AmAaizv7ugtQxrOyQ4ZDNp/369fXOYFe7hGZS
-        SHuzkbKCy75n9+FmkbIhZ/EGOtxmSDRCc5p54XQ=
-X-Google-Smtp-Source: ABdhPJxVJ/mEosTAXWAwfHFeBu0LrV7oSxHszej8XtyJL0/TIz7ZDsC2zcj7NyN24092D6xvAcd7BBXGfW/qgYpKDUQ=
-X-Received: by 2002:a17:902:6ac7:b0:150:24d6:b2ee with SMTP id
- i7-20020a1709026ac700b0015024d6b2eemr14386856plt.168.1650818335628; Sun, 24
- Apr 2022 09:38:55 -0700 (PDT)
+        Sun, 24 Apr 2022 12:43:40 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D42E008;
+        Sun, 24 Apr 2022 09:40:39 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 43DC630B;
+        Sun, 24 Apr 2022 18:40:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1650818437;
+        bh=f67DrpMM3WqfmwBxGxHfSZkKGZr/pZm0y+ajUHoXOZ4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jqk3EraTPIM1iGwsaGpmOnGv4XTKyalRg2PmRTMDr3pQ5fpDEixYEmxnsOrav825C
+         Sg6wQS3oQm6Fp89FGS8elNIjnihXdfg+9jzgyVk8LQPGQ1mm5+jByTp5RsR7VbjBOg
+         DKvfdXZP3XX9hwZWTyaykbqFz/vkNbT+Z4utlLuU=
+Date:   Sun, 24 Apr 2022 19:40:37 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Dongliang Mu <dzm91@hust.edu.cn>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: ov7670: remove ov7670_power_off from ov7670_remove
+Message-ID: <YmV9heuEM+zpaE+x@pendragon.ideasonboard.com>
+References: <20220422085408.634616-1-dzm91@hust.edu.cn>
 MIME-Version: 1.0
-References: <20220401214032.3738095-1-michael@walle.cc> <20220401214032.3738095-4-michael@walle.cc>
- <8d9e41b5-a143-eace-72ff-c8e9e399daba@roeck-us.net>
-In-Reply-To: <8d9e41b5-a143-eace-72ff-c8e9e399daba@roeck-us.net>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Sun, 24 Apr 2022 18:38:44 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPeBq62VELj5Qxph3DuS_i2zpfhN7bnpwy5LogBDGXHp1Q@mail.gmail.com>
-Message-ID: <CAJKOXPeBq62VELj5Qxph3DuS_i2zpfhN7bnpwy5LogBDGXHp1Q@mail.gmail.com>
-Subject: Re: [PATCH v4 3/4] dt-bindings: hwmon: add Microchip LAN966x bindings
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Michael Walle <michael@walle.cc>, Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220422085408.634616-1-dzm91@hust.edu.cn>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        TVD_SUBJ_WIPE_DEBT,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 24 Apr 2022 at 18:37, Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 4/1/22 14:40, Michael Walle wrote:
-> > Add a binding for the temperature sensor and the fan controller on the
-> > Microchip LAN966x family.
-> >
-> > Signed-off-by: Michael Walle <michael@walle.cc>
-> > Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
->
-> Still needs approval by a devicetree maintainer.
+Hi Dongliang,
 
-You already have it :)
-https://www.kernel.org/doc/html/latest/process/maintainers.html#open-firmware-and-flattened-device-tree-bindings
+Thank you for the patch.
 
-Best regards,
-Krzysztof
+On Fri, Apr 22, 2022 at 04:54:05PM +0800, Dongliang Mu wrote:
+> From: Dongliang Mu <mudongliangabcd@gmail.com>
+> 
+> In ov7670_probe, it always invokes ov7670_power_off() no matter
+> the execution is successful or failed. So we cannot invoke it
+> agiain in ov7670_remove().
+> 
+> Fix this by removing ov7670_power_off from ov7670_remove.
+> 
+> Fixes: 030f9f682e66 ("media: ov7670: control clock along with power")
+
+ov7670_power_off() is a no-op if power is already off. What does this
+fix ?
+
+> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> ---
+>  drivers/media/i2c/ov7670.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/media/i2c/ov7670.c b/drivers/media/i2c/ov7670.c
+> index 196746423116..1be2c0e5bdc1 100644
+> --- a/drivers/media/i2c/ov7670.c
+> +++ b/drivers/media/i2c/ov7670.c
+> @@ -2017,7 +2017,6 @@ static int ov7670_remove(struct i2c_client *client)
+>  	v4l2_async_unregister_subdev(sd);
+>  	v4l2_ctrl_handler_free(&info->hdl);
+>  	media_entity_cleanup(&info->sd.entity);
+> -	ov7670_power_off(sd);
+>  	return 0;
+>  }
+>  
+
+-- 
+Regards,
+
+Laurent Pinchart

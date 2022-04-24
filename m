@@ -2,150 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5C1750D5EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 01:06:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDA5950D5EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 01:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239870AbiDXXJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 19:09:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51372 "EHLO
+        id S239880AbiDXXTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 19:19:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233081AbiDXXJr (ORCPT
+        with ESMTP id S233081AbiDXXTt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 19:09:47 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B342337AAA;
-        Sun, 24 Apr 2022 16:06:45 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 2398C5C00ED;
-        Sun, 24 Apr 2022 19:06:43 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Sun, 24 Apr 2022 19:06:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm2; t=1650841603; x=1650928003; bh=3OBKHVbbE8+WTVho7BOdi/9Bu
-        3xsWKZkElXAOTZAnrM=; b=kKwWgTyOPXVEgGX1P6Gl/7kmudauDIGT5B+8ZOWOh
-        ELSRGWF0YCFV9tw9G9BKsAos/Zk0ODicyx2o2wYCfEavKcyeivMzFhwG0WJvnwBN
-        uM/IRWJODjrgu6JH4qVoSbe7bUIQH7nP7Ey5Ig5jht9/2fp0yUymH0jMhxUx+jAS
-        r/HNtHExs6o70MnwCFoT5kgTrWmQRhPietIrfP9at6jnU7+Qd0ghXObQVnjGchwQ
-        U5udDeYBL4CN/Kv/pziu2N6eaekplTU6aBcYohmRQYDUbHMkHNQtgWeHSCCybua5
-        0V/gr7buuBGtt+Wyrd26RT14ZbRQrsjl1DI4o3/A01PPw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
-        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm1; t=1650841603; x=1650928003; bh=3
-        OBKHVbbE8+WTVho7BOdi/9Bu3xsWKZkElXAOTZAnrM=; b=JRXOmA2beSZzcjNrF
-        p6Pcn0x8ajbq3XBdIC4LJ5uPE2CdKmZJheKuqF4Rhi21KdgBGoEOF86dtWsXKANN
-        kU7Xyi+XyyrF0Dov4jPlhXnJm9NRzCVx0JtV5KKX+LMTMVM8C2UQCQbucGPIWk/5
-        mIeWl3yuxJcQYCwoFOtT7PL9drTiQOI2t4tl2kiEW7fZkZIPNWelU39Udq2qCmS6
-        Y0MW+LWzjtKt2XD2J6iVzLbm0S7ona3JFyf7fM3oVlGzkkJDX1zz3IIu5WagGMAO
-        v6KeKdnV/nWsYhtvUewPsZvPD2fVrxk5KfkslfyC7miV7U0KG9FO+kdueDhWo2m9
-        bC86Q==
-X-ME-Sender: <xms:AthlYutu5bcxXywKZaOouBuWyn85DftTLy7AbC0kSYoCLEcZmDRKgw>
-    <xme:AthlYjd48cAO5mP00x9b-cGQli6vL8cTzR5Aclm3UndvFC-49-XN2ptdScRMc2qtp
-    pW2bYA9JMJ7CIEeEQ>
-X-ME-Received: <xmr:AthlYpzx5ZQRrBxQiif5HmZHsooFFW5fQAaXX2ZjSWI5l-oD7GKNZ4DzmfyZ-cR10iVmNwO3GwM3PQY66nBeW9yAI0szy4aT_p6YM2bwn4kEgYIqYzyU4U8RCO08dBNICQaewg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddtgddukecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgvlhcu
-    jfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtffrrg
-    htthgvrhhnpeekveelhfejueelleetvdejvdeffeetgeelheeujeffhefgffefkeehhffh
-    keekgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:AthlYpNzrUU2wIU7LDd9B0_KN19l4j30JliBUYgahCqRGvPQQW8m1g>
-    <xmx:AthlYu8LeMIy6xeVywPSyy518ZlBmXfCmUXGwEkNZS4On_svFwKZng>
-    <xmx:AthlYhVrEGs-7bLVbikf6Cr_gFDf871W2JIaX0W7BSPJT_2efb3TkQ>
-    <xmx:A9hlYhVtG_SH9yTsl092Igdr69M2pBebl2i5mD-6t74FP805I-dNbA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 24 Apr 2022 19:06:41 -0400 (EDT)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>, linux-mmc@vger.kernel.org
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Arnd Bergmann <arnd@arndb.de>, Chen-Yu Tsai <wens@csie.org>,
-        Chris Ball <chris@printf.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Mike Turquette <mturquette@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-Subject: [PATCH] mmc: sunxi-mmc: Correct the maximum segment size
-Date:   Sun, 24 Apr 2022 18:06:39 -0500
-Message-Id: <20220424230640.31735-1-samuel@sholland.org>
-X-Mailer: git-send-email 2.35.1
+        Sun, 24 Apr 2022 19:19:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9545DA14;
+        Sun, 24 Apr 2022 16:16:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A30F061403;
+        Sun, 24 Apr 2022 23:16:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC5D0C385A9;
+        Sun, 24 Apr 2022 23:16:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650842204;
+        bh=6T03LaLReh/sJQiUkLFFqaOo6i6Nc3czaMED5kSzdis=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Oo1NQDqPa9tuSnDmrEoK713ufmriHKL3PDGnGM87OPsOownItQTSWT7prWtXciVMJ
+         W4gFw0ZAcjFH1aLKZlj/lxef1AdQOwhHk8ZWjyzUCYkfnIHDDKyP4DkSoVWO4k1lFv
+         d+QvM6tltsONzKMEayOzGYwsmupOZENfrgY5JwpuYxJNo8W5T4HQpn/g0pkilZ6VSS
+         G5MVxPZnzOPBnr7A3V7CSopraCyaZ/H07qeP39rdlLMYvrXOpUM7GfzQdd/cwiCiUP
+         gH8EmfKUAw836si+MzXfzoTMIgjdjOWfKHDAM8Y17grmTuraYM0CgmlQwyqi2BMiPC
+         IhXqwJxDV8m3Q==
+Date:   Mon, 25 Apr 2022 01:16:38 +0200
+From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Nathan Rossi <nathan@nathanrossi.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH v2] net: dsa: mv88e6xxx: Fix port_hidden_wait to account
+ for port_base_addr
+Message-ID: <20220425011638.70065c7b@thinkpad>
+In-Reply-To: <YmXQK7Wzb1GDxwRP@lunn.ch>
+References: <20220424153143.323338-1-nathan@nathanrossi.com>
+        <YmWkgkILCrBP5hRG@lunn.ch>
+        <20220424213359.246cd5ab@thinkpad>
+        <YmXQK7Wzb1GDxwRP@lunn.ch>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to the DMA descriptor documentation, the lowest two bits of
-the size field are ignored, so the size must be rounded up to a multiple
-of 4 bytes. Furthermore, 0 is not a valid buffer size; setting the size
-to 0 will cause that DMA descriptor to be ignored.
+On Mon, 25 Apr 2022 00:33:15 +0200
+Andrew Lunn <andrew@lunn.ch> wrote:
 
-Together, these restrictions limit the maximum DMA segment size to 4
-less than the power-of-two width of the size field.
+> On Sun, Apr 24, 2022 at 09:33:59PM +0200, Marek Beh=C3=BAn wrote:
+> > On Sun, 24 Apr 2022 21:26:58 +0200
+> > Andrew Lunn <andrew@lunn.ch> wrote:
+> >  =20
+> > > On Sun, Apr 24, 2022 at 03:31:43PM +0000, Nathan Rossi wrote: =20
+> > > > The other port_hidden functions rely on the port_read/port_write
+> > > > functions to access the hidden control port. These functions apply =
+the
+> > > > offset for port_base_addr where applicable. Update port_hidden_wait=
+ to
+> > > > use the port_wait_bit so that port_base_addr offsets are accounted =
+for
+> > > > when waiting for the busy bit to change.
+> > > >=20
+> > > > Without the offset the port_hidden_wait function would timeout on
+> > > > devices that have a non-zero port_base_addr (e.g. MV88E6141), howev=
+er
+> > > > devices that have a zero port_base_addr would operate correctly (e.=
+g.
+> > > > MV88E6390).
+> > > >=20
+> > > > Fixes: ea89098ef9a5 ("net: dsa: mv88x6xxx: mv88e6390 errata")   =20
+> > >=20
+> > > That is further back than needed. And due to the code moving around
+> > > and getting renamed, you are added extra burden on those doing the
+> > > back port for no actual gain.
+> > >=20
+> > > Please verify what i suggested, 609070133aff1 is better and then
+> > > repost. =20
+> >=20
+> > The bug was introduced by ea89098ef9a5. =20
+>=20
+> I have to disagree with that. ea89098ef9a5 adds:
+>=20
+> mv88e6390_hidden_wait()
+>=20
+> The mv88e6390_ means it should be used with the mv88e6390 family. And
+> all members of that family have port offset 0. There is no bug here.
+>=20
+> 609070133aff1 renames it to mv88e6xxx_port_hidden_wait(). It now has
+> the generic mv88e6xxx_ prefix, so we can expect it to work with any
+> device. But it does not. This is where the bug has introduced.
 
-Fixes: 3cbcb16095f9 ("mmc: sunxi: Add driver for SD/MMC hosts found on Allwinner sunxi SoCs")
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
+You are right. My bad, sorry.
 
- drivers/mmc/host/sunxi-mmc.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/mmc/host/sunxi-mmc.c b/drivers/mmc/host/sunxi-mmc.c
-index c62afd212692..4bd5f37b1036 100644
---- a/drivers/mmc/host/sunxi-mmc.c
-+++ b/drivers/mmc/host/sunxi-mmc.c
-@@ -214,6 +214,9 @@
- #define SDXC_IDMAC_DES0_CES	BIT(30) /* card error summary */
- #define SDXC_IDMAC_DES0_OWN	BIT(31) /* 1-idma owns it, 0-host owns it */
- 
-+/* Buffer size must be a multiple of 4 bytes. */
-+#define SDXC_IDMAC_SIZE_ALIGN	4
-+
- #define SDXC_CLK_400K		0
- #define SDXC_CLK_25M		1
- #define SDXC_CLK_50M		2
-@@ -361,17 +364,15 @@ static void sunxi_mmc_init_idma_des(struct sunxi_mmc_host *host,
- {
- 	struct sunxi_idma_des *pdes = (struct sunxi_idma_des *)host->sg_cpu;
- 	dma_addr_t next_desc = host->sg_dma;
--	int i, max_len = (1 << host->cfg->idma_des_size_bits);
-+	int i;
- 
- 	for (i = 0; i < data->sg_len; i++) {
- 		pdes[i].config = cpu_to_le32(SDXC_IDMAC_DES0_CH |
- 					     SDXC_IDMAC_DES0_OWN |
- 					     SDXC_IDMAC_DES0_DIC);
- 
--		if (data->sg[i].length == max_len)
--			pdes[i].buf_size = 0; /* 0 == max_len */
--		else
--			pdes[i].buf_size = cpu_to_le32(data->sg[i].length);
-+		pdes[i].buf_size = cpu_to_le32(ALIGN(data->sg[i].length,
-+						     SDXC_IDMAC_SIZE_ALIGN));
- 
- 		next_desc += sizeof(struct sunxi_idma_des);
- 		pdes[i].buf_addr_ptr1 =
-@@ -1420,7 +1421,8 @@ static int sunxi_mmc_probe(struct platform_device *pdev)
- 	mmc->max_blk_count	= 8192;
- 	mmc->max_blk_size	= 4096;
- 	mmc->max_segs		= PAGE_SIZE / sizeof(struct sunxi_idma_des);
--	mmc->max_seg_size	= (1 << host->cfg->idma_des_size_bits);
-+	mmc->max_seg_size	= (1 << host->cfg->idma_des_size_bits) -
-+				  SDXC_IDMAC_SIZE_ALIGN;
- 	mmc->max_req_size	= mmc->max_seg_size * mmc->max_segs;
- 	/* 400kHz ~ 52MHz */
- 	mmc->f_min		=   400000;
--- 
-2.35.1
-
+Marek

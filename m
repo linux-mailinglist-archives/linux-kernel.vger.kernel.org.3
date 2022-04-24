@@ -2,280 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39C2050D320
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 18:07:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B1750D31F
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 18:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233466AbiDXQJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 12:09:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35428 "EHLO
+        id S233804AbiDXQJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 12:09:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233822AbiDXQJd (ORCPT
+        with ESMTP id S233809AbiDXQJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 12:09:33 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3676AAFB0F;
-        Sun, 24 Apr 2022 09:06:32 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-e2442907a1so13758587fac.8;
-        Sun, 24 Apr 2022 09:06:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=E7RcpU21sr3A5Ii7IS+GL1m3DU+NuQDKU4BJWtyW6BQ=;
-        b=Inf2BfhgRtrpcn7sKATwA1wqofAnldBDrvuEIBBxnRxGWClaNx4LeKWi63ulhg+PyS
-         36GXunBx4rd5JCw56OL5po0LUG7rOkOUVe+P7AVxW8SBDRzR0wQmow85ZX2+G6lDuThJ
-         81AmJE/b6G0xh2suIhszUDW0SFTLEZcyubJjzBSdKLDSRFI3MYnS8hP8qtLACiz+fghr
-         esQ+9Pu18sarykkNfIZ0SFk9VHpouknTQqVmTdTBUsj3EPciHxK7mrUX6OnUKhs0hybO
-         rHutipAE21irjABtpqSzVAVWlfTx2ifZauIfph7UQ9zKbBrS1syaZTkIgl4uQUydFOmR
-         DP3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=E7RcpU21sr3A5Ii7IS+GL1m3DU+NuQDKU4BJWtyW6BQ=;
-        b=xshmDBoUxNJTDquz/Js8edGPzG5nWTAbY+IU0k7brUJdDAQbuGLlJXWt6Bi2q0qVIi
-         Rlj/36kp/0duMrP9kgvwhHNDEOu38o2xAwe8RnJOYox6IosEyCPOahC7VoivYYg8mXMF
-         fH2gi7galQDwQGCzwC6MCmnhGmp27Jx62ey15oO6b624HRwWrZycriIPMy3btMTND3WN
-         tnp6aKdgam68KzaEgpCjP8fWwCm/3YKK2Eh+K58gzrly93nrATpC7CixErpLGOTWbyXw
-         WZTEepEkRVR9G6ovrL/pHv0W2wzgTlA+GejpsPstwGL4IxPh4RsixOYgHHVXrmYCLzPc
-         800w==
-X-Gm-Message-State: AOAM532x/90ogIgiReLkX/JWSc1rN969Kk603Dt35C5nCROqjhamnkov
-        aOwcHbrL/hQo5IbTn2A7pgF5vdbfVAc=
-X-Google-Smtp-Source: ABdhPJxpowHhVGu29hb/tVxPU9nUiQ8kQ6wYnTgSiinq4/d3dAjEE2bmFi19bwpWORgx8XbmYNXjjA==
-X-Received: by 2002:a05:6870:1607:b0:de:984:496e with SMTP id b7-20020a056870160700b000de0984496emr5653419oae.290.1650816390783;
-        Sun, 24 Apr 2022 09:06:30 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w2-20020a4a7642000000b0033a2cdbe62fsm3267444ooe.45.2022.04.24.09.06.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 09:06:30 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 24 Apr 2022 09:06:28 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jack Doan <me@jackdoan.com>
-Cc:     linux-hwmon@vger.kernel.org,
-        Aleksa Savic <savicaleksa83@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Sun, 24 Apr 2022 12:09:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0210B3C7D;
+        Sun, 24 Apr 2022 09:06:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 91DC4B80DD4;
+        Sun, 24 Apr 2022 16:06:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5296FC385A9;
+        Sun, 24 Apr 2022 16:06:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650816406;
+        bh=Z6BkxhVfjzdhlhaRDYAuE17V9Z1evObXTCQkezbRmi8=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=IvhtOEhAjEEPB6LOexUkpg34L7pxnmbDkFcMSjgUB26AyuUM20+KZf1izVbehzeip
+         LP4ekFIy2VplhSz+UNys5v87RYkGonBI+Q1GvB4/XHEjXIP775W+nUz5Phb3o+jMFI
+         eDTPN/9tnFeZy7MQXfWpejNr4oKy4xfEfYoLTypdY8SmFjOcVNcdSqSJybRyXzPMql
+         nQ9APFI8pZL1Db3rhI1KlhzvdfgGt25/RumjUw1D+D8AengmWfpkl8WRI2hVF1/cAF
+         4EZ8J93io/YzOhvt5QshwLZUrAro5gJODKn4UZEjnrSJdOoW/jOcJ5PKwdsZeuT4MU
+         Bd1vquawpLHuw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id EFEA95C0364; Sun, 24 Apr 2022 09:06:45 -0700 (PDT)
+Date:   Sun, 24 Apr 2022 09:06:45 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     frederic@kernel.org, rcu@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (aquacomputer_d5next) Add support for
- Aquacomputer Farbwerk
-Message-ID: <20220424160628.GA719092@roeck-us.net>
-References: <YmTcrq8Gzel0zYYD@jackdesk>
+Subject: Re: [PATCH v3] rcu: Dump all rcuc kthreads status for CPUs that not
+ report quiescent state
+Message-ID: <20220424160645.GN4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220424041747.3172671-1-qiang1.zhang@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YmTcrq8Gzel0zYYD@jackdesk>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220424041747.3172671-1-qiang1.zhang@intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 24, 2022 at 12:14:22AM -0500, Jack Doan wrote:
-> Extend aquacomputer_d5next driver to expose hardware
-> temperature sensors of the Aquacomputer Farbwerk RGB controller, which
-> communicates through a proprietary USB HID protocol.
+On Sun, Apr 24, 2022 at 12:17:47PM +0800, Zqiang wrote:
+> If the rcutree.use_softirq is configured, when RCU Stall event
+> happened, dump status of all rcuc kthreads who due to starvation
+> prevented grace period ends on CPUs that not report quiescent
+> state.
 > 
-> Four temperature sensors are available. Additionally, serial number and
-> firmware version are exposed through debugfs.
-> 
-> Also, add Jack Doan to MAINTAINERS for this driver.
-> 
-> Signed-off-by: Jack Doan <me@jackdoan.com>
-> Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 
-Applied.
+Much, much better, thank you!
 
-Thanks,
-Guenter
+A few more comments below.
+
+							Thanx, Paul
 
 > ---
-> Changes in v2:
->   - update Kconfig so it applies cleanly
->   - add "select CRC16" to Kconfig
-> ---
->  Documentation/hwmon/aquacomputer_d5next.rst |  3 +-
->  MAINTAINERS                                 |  1 +
->  drivers/hwmon/Kconfig                       |  5 +--
->  drivers/hwmon/aquacomputer_d5next.c         | 37 ++++++++++++++++++---
->  4 files changed, 38 insertions(+), 8 deletions(-)
+>  v1->v2:
+>  rework rcuc_kthread_dump function
+>  v2->v3:
+>  merge this rcuc-stalled information into print_cpu_stall_info()
 > 
-> diff --git a/Documentation/hwmon/aquacomputer_d5next.rst b/Documentation/hwmon/aquacomputer_d5next.rst
-> index e69f718caf5b..717e28226cde 100644
-> --- a/Documentation/hwmon/aquacomputer_d5next.rst
-> +++ b/Documentation/hwmon/aquacomputer_d5next.rst
-> @@ -6,6 +6,7 @@ Kernel driver aquacomputer-d5next
->  Supported devices:
+>  kernel/rcu/tree_stall.h | 46 ++++++++++++++++-------------------------
+>  1 file changed, 18 insertions(+), 28 deletions(-)
+> 
+> diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
+> index d7956c03edbd..3482e37d2e3e 100644
+> --- a/kernel/rcu/tree_stall.h
+> +++ b/kernel/rcu/tree_stall.h
+> @@ -407,7 +407,19 @@ static bool rcu_is_gp_kthread_starving(unsigned long *jp)
 >  
->  * Aquacomputer D5 Next watercooling pump
-> +* Aquacomputer Farbwerk RGB controller
->  * Aquacomputer Farbwerk 360 RGB controller
->  * Aquacomputer Octo fan controller
->  
-> @@ -32,7 +33,7 @@ better suited for userspace tools.
->  The Octo exposes four temperature sensors and eight PWM controllable fans, along
->  with their speed (in RPM), power, voltage and current.
->  
-> -The Farbwerk 360 exposes four temperature sensors. Depending on the device,
-> +The Farbwerk and Farbwerk 360 expose four temperature sensors. Depending on the device,
->  not all sysfs and debugfs entries will be available.
->  
->  Usage notes
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index fd768d43e048..c5cd8dd866ee 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -1446,6 +1446,7 @@ F:	drivers/media/i2c/aptina-pll.*
->  
->  AQUACOMPUTER D5 NEXT PUMP SENSOR DRIVER
->  M:	Aleksa Savic <savicaleksa83@gmail.com>
-> +M:	Jack Doan <me@jackdoan.com>
->  L:	linux-hwmon@vger.kernel.org
->  S:	Maintained
->  F:	Documentation/hwmon/aquacomputer_d5next.rst
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 1f1bb4d858cb..4a6d6c5b9b69 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -256,13 +256,14 @@ config SENSORS_AHT10
->  	  will be called aht10.
->  
->  config SENSORS_AQUACOMPUTER_D5NEXT
-> -	tristate "Aquacomputer D5 Next, Octo and Farbwerk 360"
-> +	tristate "Aquacomputer D5 Next, Octo, Farbwerk, and Farbwerk 360"
->  	depends on USB_HID
->  	select CRC16
->  	help
->  	  If you say yes here you get support for sensors and fans of
->  	  the Aquacomputer D5 Next watercooling pump, Octo fan
-> -	  controller and Farbwerk 360 RGB controller, where available.
-> +	  controller, Farbwerk and Farbwerk 360 RGB controllers, where
-> +	  available.
->  
->  	  This driver can also be built as a module. If so, the module
->  	  will be called aquacomputer_d5next.
-> diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
-> index a464473bc981..7d2e7279abfb 100644
-> --- a/drivers/hwmon/aquacomputer_d5next.c
-> +++ b/drivers/hwmon/aquacomputer_d5next.c
-> @@ -1,11 +1,12 @@
->  // SPDX-License-Identifier: GPL-2.0+
->  /*
-> - * hwmon driver for Aquacomputer devices (D5 Next, Farbwerk 360, Octo)
-> + * hwmon driver for Aquacomputer devices (D5 Next, Farbwerk, Farbwerk 360, Octo)
->   *
->   * Aquacomputer devices send HID reports (with ID 0x01) every second to report
->   * sensor values.
->   *
->   * Copyright 2021 Aleksa Savic <savicaleksa83@gmail.com>
-> + * Copyright 2022 Jack Doan <me@jackdoan.com>
->   */
->  
->  #include <linux/crc16.h>
-> @@ -19,14 +20,16 @@
->  #include <asm/unaligned.h>
->  
->  #define USB_VENDOR_ID_AQUACOMPUTER	0x0c70
-> +#define USB_PRODUCT_ID_FARBWERK		0xf00a
->  #define USB_PRODUCT_ID_D5NEXT		0xf00e
->  #define USB_PRODUCT_ID_FARBWERK360	0xf010
->  #define USB_PRODUCT_ID_OCTO		0xf011
->  
-> -enum kinds { d5next, farbwerk360, octo };
-> +enum kinds { d5next, farbwerk, farbwerk360, octo };
->  
->  static const char *const aqc_device_names[] = {
->  	[d5next] = "d5next",
-> +	[farbwerk] = "farbwerk",
->  	[farbwerk360] = "farbwerk360",
->  	[octo] = "octo"
->  };
-> @@ -69,6 +72,12 @@ static u8 secondary_ctrl_report[] = {
->  #define D5NEXT_PUMP_CURRENT		112
->  #define D5NEXT_FAN_CURRENT		99
->  
-> +/* Register offsets for the Farbwerk RGB controller */
-> +#define FARBWERK_NUM_SENSORS		4
-> +#define FARBWERK_SENSOR_START		0x2f
-> +#define FARBWERK_SENSOR_SIZE		0x02
-> +#define FARBWERK_SENSOR_DISCONNECTED	0x7FFF
-> +
->  /* Register offsets for the Farbwerk 360 RGB controller */
->  #define FARBWERK360_NUM_SENSORS		4
->  #define FARBWERK360_SENSOR_START	0x32
-> @@ -125,7 +134,7 @@ static const char *const label_d5next_current[] = {
->  	"Fan current"
->  };
->  
-> -/* Labels for Farbwerk 360 and Octo temperature sensors */
-> +/* Labels for Farbwerk, Farbwerk 360 and Octo temperature sensors */
->  static const char *const label_temp_sensors[] = {
->  	"Sensor 1",
->  	"Sensor 2",
-> @@ -319,6 +328,7 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
->  			if (channel == 0)
->  				return 0444;
->  			break;
-> +		case farbwerk:
->  		case farbwerk360:
->  		case octo:
->  			return 0444;
-> @@ -551,8 +561,7 @@ static const struct hwmon_chip_info aqc_chip_info = {
->  	.info = aqc_info,
->  };
->  
-> -static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8 *data,
-> -			 int size)
-> +static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8 *data, int size)
+>  static bool rcu_is_rcuc_kthread_starving(struct rcu_data *rdp, unsigned long *jp)
 >  {
->  	int i, sensor_value;
->  	struct aqc_data *priv;
-> @@ -587,6 +596,17 @@ static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8
->  		priv->current_input[0] = get_unaligned_be16(data + D5NEXT_PUMP_CURRENT);
->  		priv->current_input[1] = get_unaligned_be16(data + D5NEXT_FAN_CURRENT);
->  		break;
-> +	case farbwerk:
-> +		/* Temperature sensor readings */
-> +		for (i = 0; i < FARBWERK_NUM_SENSORS; i++) {
-> +			sensor_value = get_unaligned_be16(data + FARBWERK_SENSOR_START +
-> +							  i * FARBWERK_SENSOR_SIZE);
-> +			if (sensor_value == FARBWERK_SENSOR_DISCONNECTED)
-> +				priv->temp_input[i] = -ENODATA;
-> +			else
-> +				priv->temp_input[i] = sensor_value * 10;
-> +		}
-> +		break;
->  	case farbwerk360:
->  		/* Temperature sensor readings */
->  		for (i = 0; i < FARBWERK360_NUM_SENSORS; i++) {
-> @@ -733,6 +753,11 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
->  		priv->voltage_label = label_d5next_voltages;
->  		priv->current_label = label_d5next_current;
->  		break;
-> +	case USB_PRODUCT_ID_FARBWERK:
-> +		priv->kind = farbwerk;
+> -	unsigned long j = jiffies - READ_ONCE(rdp->rcuc_activity);
+> +	int cpu;
+> +	struct task_struct *rcuc;
+> +	unsigned long j;
 > +
-> +		priv->temp_label = label_temp_sensors;
-> +		break;
->  	case USB_PRODUCT_ID_FARBWERK360:
->  		priv->kind = farbwerk360;
+> +	rcuc = rdp->rcu_cpu_kthread_task;
+> +	if (!rcuc)
+> +		return false;
+> +
+> +	cpu = task_cpu(rcuc);
+> +	if (cpu_is_offline(cpu) || idle_cpu(cpu))
+> +		return false;
+> +
+> +	j = jiffies - READ_ONCE(rdp->rcuc_activity);
+
+Localizing this logic is a good improvement, thank you!
+
+>  	if (jp)
+>  		*jp = j;
+> @@ -432,6 +444,8 @@ static void print_cpu_stall_info(int cpu)
+>  	struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
+>  	char *ticks_title;
+>  	unsigned long ticks_value;
+> +	bool rcuc_starved;
+> +	unsigned long j;
 >  
-> @@ -795,6 +820,7 @@ static void aqc_remove(struct hid_device *hdev)
+>  	/*
+>  	 * We could be printing a lot while holding a spinlock.  Avoid
+> @@ -449,7 +463,8 @@ static void print_cpu_stall_info(int cpu)
+>  	delta = rcu_seq_ctr(rdp->mynode->gp_seq - rdp->rcu_iw_gp_seq);
+>  	falsepositive = rcu_is_gp_kthread_starving(NULL) &&
+>  			rcu_dynticks_in_eqs(rcu_dynticks_snap(rdp));
+> -	pr_err("\t%d-%c%c%c%c: (%lu %s) idle=%03x/%ld/%#lx softirq=%u/%u fqs=%ld %s\n",
+> +	rcuc_starved = rcu_is_rcuc_kthread_starving(rdp, &j);
+> +	pr_err("\t%d-%c%c%c%c: (%lu %s) idle=%03x/%ld/%#lx softirq=%u/%u fqs=%ld rcuc=%ld jiffies(%s) %s\n",
+
+The trick here is to sprintf() to format the "rcuc=%ld jiffies" part of
+the message, then just have "%s" instead of the "rcuc=%ld jiffies(%s)",
+and then ...
+
+>  	       cpu,
+>  	       "O."[!!cpu_online(cpu)],
+>  	       "o."[!!(rdp->grpmask & rdp->mynode->qsmaskinit)],
+> @@ -462,32 +477,10 @@ static void print_cpu_stall_info(int cpu)
+>  	       rdp->dynticks_nesting, rdp->dynticks_nmi_nesting,
+>  	       rdp->softirq_snap, kstat_softirqs_cpu(RCU_SOFTIRQ, cpu),
+>  	       data_race(rcu_state.n_force_qs) - rcu_state.n_force_qs_gpstart,
+> +	       j, rcuc_starved ? "starved" : "",
+
+... here have:
+
+	       rcu_starved ? buf : "",
+
+Where "buf" is the place you sprintf()ed into.  This is especially
+important for kernels that don't have rcuc kthreads in the first place.
+We don't need the poor CPU-stalled systems administrator wasting time
+wondering what an rcuc is an why anyone would care.  ;-)
+
+>  	       falsepositive ? " (false positive?)" : "");
+>  }
 >  
->  static const struct hid_device_id aqc_table[] = {
->  	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_D5NEXT) },
-> +	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_FARBWERK) },
->  	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_FARBWERK360) },
->  	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_OCTO) },
->  	{ }
-> @@ -826,4 +852,5 @@ module_exit(aqc_exit);
+> -static void rcuc_kthread_dump(struct rcu_data *rdp)
+> -{
+> -	int cpu;
+> -	unsigned long j;
+> -	struct task_struct *rcuc;
+> -
+> -	rcuc = rdp->rcu_cpu_kthread_task;
+> -	if (!rcuc)
+> -		return;
+> -
+> -	cpu = task_cpu(rcuc);
+> -	if (cpu_is_offline(cpu) || idle_cpu(cpu))
+> -		return;
+> -
+> -	if (!rcu_is_rcuc_kthread_starving(rdp, &j))
+> -		return;
+> -
+> -	pr_err("%s kthread starved for %ld jiffies\n", rcuc->comm, j);
+> -	sched_show_task(rcuc);
+> -	if (!trigger_single_cpu_backtrace(cpu))
+> -		dump_cpu_task(cpu);
+> -}
+> -
+>  /* Complain about starvation of grace-period kthread.  */
+>  static void rcu_check_gp_kthread_starvation(void)
+>  {
+> @@ -659,9 +652,6 @@ static void print_cpu_stall(unsigned long gps)
+>  	rcu_check_gp_kthread_expired_fqs_timer();
+>  	rcu_check_gp_kthread_starvation();
 >  
->  MODULE_LICENSE("GPL");
->  MODULE_AUTHOR("Aleksa Savic <savicaleksa83@gmail.com>");
-> +MODULE_AUTHOR("Jack Doan <me@jackdoan.com>");
->  MODULE_DESCRIPTION("Hwmon driver for Aquacomputer devices");
+> -	if (!use_softirq)
+> -		rcuc_kthread_dump(rdp);
+> -
+>  	rcu_dump_cpu_stacks();
+>  
+>  	raw_spin_lock_irqsave_rcu_node(rnp, flags);
+> -- 
+> 2.25.1
+> 

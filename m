@@ -2,203 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD7A750D1D7
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 15:05:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F074E50D1DA
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 15:09:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233368AbiDXNIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 09:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55080 "EHLO
+        id S232889AbiDXNL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 09:11:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233689AbiDXNId (ORCPT
+        with ESMTP id S229880AbiDXNL5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 09:08:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4FE13DC3;
-        Sun, 24 Apr 2022 06:05:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 24 Apr 2022 09:11:57 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735B321818
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 06:08:56 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2282E60DF5;
-        Sun, 24 Apr 2022 13:05:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4C71C385A7;
-        Sun, 24 Apr 2022 13:05:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650805529;
-        bh=2X5hMs183RqeHSVY1PeHySg2Ltw/F1NKTy9wX+4K8bw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KMrftHpBO0GWHjcMWBNpkF88AXfqDai7dGL4dx8syqFGEuMWDsOJRnWdsiTuy5ezB
-         NHCnrkUl8ZiFdWw8KVZqHgK4w3RESkC+3VAawZeFBDYOq7FQyPmvUGhDswxvN+xq8m
-         YjnKShTMNpH5scZKDC1ChN55lQOdKUNbvv8CBVflgxvUWK1FvXk9Fr3DPbAKy/MH7d
-         X4N+nqSa2WDgVjIMbIOJ3+cnqtnAYDAxIm/+iVjhLmHIvG4BchGyq9MkD7rmsmubcy
-         NMA0gitQH1hpf3hvBUSIhTG2F07qUHfVSmdzyI7Bvsa9DoQmzIJuHT3gxq4yfHHw7z
-         pWGJmFrCXg9vQ==
-Date:   Sun, 24 Apr 2022 21:05:22 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Marcel Ziswiler <marcel@ziswiler.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Denys Drozdov <denys.drozdov@toradex.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 05/14] ARM: dts: imx6ull-colibri: add touchscreen
- device nodes
-Message-ID: <20220424130522.GW391514@dragon>
-References: <20220414085106.18621-1-marcel@ziswiler.com>
- <20220414085106.18621-6-marcel@ziswiler.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KmT432ncHz4xLb;
+        Sun, 24 Apr 2022 23:08:51 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1650805731;
+        bh=aD20Ip6O0k4ur0B2dS9sPY/ZrzmWmmRTAz9tDJoSTE8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=W3XW05/8eCCvEe2qhydOVID0LEjQT05ZwmU9KuRH8FhcCtfs3wceZJO22ej56/sSy
+         8VS3VId1vBE0uEiJ97oV3hn3A6DdGYth0DrWfi6hvuJNa6dd2VFnWtfj+7Eg+sLpx4
+         rYTBXYzDbq/MrVI+LkaMPyOQfWncI9lehShYcZCoF7E6ZfgWWigUpOpx2LM3kAJorX
+         JrWq+No3WnEpK11Q5A2V+tCP+BTs7p1Nf7NuovW9gOZYk7hmT6eBhEWICAShHh4cuE
+         /HXV1A25ANAyaIj3uqVqel3INcy8vdVssOELgE2BbXW51rHRSMlLHhThL2yeon+v6u
+         mo7YvutK35KZQ==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     aik@ozlabs.ru, atrajeev@linux.vnet.ibm.com,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [GIT PULL] Please pull powerpc/linux.git powerpc-5.18-3 tag
+Date:   Sun, 24 Apr 2022 23:08:48 +1000
+Message-ID: <87ilqy8w7z.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220414085106.18621-6-marcel@ziswiler.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 10:50:57AM +0200, Marcel Ziswiler wrote:
-> From: Denys Drozdov <denys.drozdov@toradex.com>
-> 
-> Move all Atmel nodes from the board-level into the main module-level
-> device tree and prepare the device trees for use with Atmel MXT device
-> tree overlays. Also, add required pinmux groups.
-> 
-> The common scheme for pin groups in touch screen overlays is as follows:
-> - pinctrl_atmel_conn - SODIMM 106/107 pins for INT/RST signals (default)
-> - pinctrl_atmel_adap - SODIMM   28/30 pins for INT/RST signals.
-> 
-> Signed-off-by: Denys Drozdov <denys.drozdov@toradex.com>
-> Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-> ---
-> 
->  .../arm/boot/dts/imx6ull-colibri-nonwifi.dtsi |  4 +-
->  arch/arm/boot/dts/imx6ull-colibri-wifi.dtsi   |  4 +-
->  arch/arm/boot/dts/imx6ull-colibri.dtsi        | 39 +++++++++++++------
->  3 files changed, 31 insertions(+), 16 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/imx6ull-colibri-nonwifi.dtsi b/arch/arm/boot/dts/imx6ull-colibri-nonwifi.dtsi
-> index 95a11b8bcbdb..5e55a6c820bc 100644
-> --- a/arch/arm/boot/dts/imx6ull-colibri-nonwifi.dtsi
-> +++ b/arch/arm/boot/dts/imx6ull-colibri-nonwifi.dtsi
-> @@ -15,10 +15,10 @@ memory@80000000 {
->  &iomuxc {
->  	pinctrl-names = "default";
->  	pinctrl-0 = <&pinctrl_gpio1 &pinctrl_gpio2 &pinctrl_gpio3
-> -		&pinctrl_gpio4 &pinctrl_gpio5 &pinctrl_gpio6 &pinctrl_gpio7>;
-> +		&pinctrl_gpio4 &pinctrl_gpio6 &pinctrl_gpio7>;
->  };
->  
->  &iomuxc_snvs {
->  	pinctrl-names = "default";
-> -	pinctrl-0 = <&pinctrl_snvs_gpio1 &pinctrl_snvs_gpio2 &pinctrl_snvs_gpio3>;
-> +	pinctrl-0 = <&pinctrl_snvs_gpio1 &pinctrl_snvs_gpio3>;
->  };
-> diff --git a/arch/arm/boot/dts/imx6ull-colibri-wifi.dtsi b/arch/arm/boot/dts/imx6ull-colibri-wifi.dtsi
-> index 9f1e38282bee..6e8ddb07e11d 100644
-> --- a/arch/arm/boot/dts/imx6ull-colibri-wifi.dtsi
-> +++ b/arch/arm/boot/dts/imx6ull-colibri-wifi.dtsi
-> @@ -26,13 +26,13 @@ &cpu0 {
->  &iomuxc {
->  	pinctrl-names = "default";
->  	pinctrl-0 = <&pinctrl_gpio1 &pinctrl_gpio2 &pinctrl_gpio3
-> -		&pinctrl_gpio4 &pinctrl_gpio5 &pinctrl_gpio7>;
-> +		&pinctrl_gpio4 &pinctrl_gpio7>;
->  
->  };
->  
->  &iomuxc_snvs {
->  	pinctrl-names = "default";
-> -	pinctrl-0 = <&pinctrl_snvs_gpio1 &pinctrl_snvs_gpio2>;
-> +	pinctrl-0 = <&pinctrl_snvs_gpio1>;
->  };
->  
->  &usdhc2 {
-> diff --git a/arch/arm/boot/dts/imx6ull-colibri.dtsi b/arch/arm/boot/dts/imx6ull-colibri.dtsi
-> index e619da3b00b3..b2345a5573f4 100644
-> --- a/arch/arm/boot/dts/imx6ull-colibri.dtsi
-> +++ b/arch/arm/boot/dts/imx6ull-colibri.dtsi
-> @@ -124,6 +124,19 @@ &i2c1 {
->  	pinctrl-1 = <&pinctrl_i2c1_gpio>;
->  	sda-gpios = <&gpio1 29 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
->  	scl-gpios = <&gpio1 28 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-> +	status = "okay";
-> +
-> +	/* Atmel maxtouch controller */
-> +	atmel_mxt_ts: touchscreen@4a {
-> +		compatible = "atmel,maxtouch";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_atmel_conn>;
-> +		reg = <0x4a>;
-> +		interrupt-parent = <&gpio5>;
-> +		interrupts = <4 IRQ_TYPE_EDGE_FALLING>;       /* SODIMM_107, INT */
-> +		reset-gpios = <&gpio1 10 GPIO_ACTIVE_HIGH>;   /* SODIMM_106, RST */
-> +		status = "disabled";
-> +	};
->  };
->  
->  &i2c2 {
-> @@ -241,6 +254,20 @@ MX6UL_PAD_GPIO1_IO09__GPIO1_IO09        0x3000 /* SODIMM 2 */
->  		>;
->  	};
->  
-> +	pinctrl_atmel_adap: atmel_adap_group {
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
 
-Use hyphen instead of underscore in node name, and try to keep the
-naming style consistent with other pinctrl nodes.
+Hi Linus,
 
-Shawn
+Please pull some more powerpc fixes for 5.18:
 
-> +		fsl,pins = <
-> +			MX6UL_PAD_NAND_DQS__GPIO4_IO16          0xb0a0  /* SODIMM 28 */
-> +			MX6UL_PAD_ENET1_TX_EN__GPIO2_IO05       0xb0a0  /* SODIMM 30 */
-> +		>;
-> +	};
-> +
-> +	pinctrl_atmel_conn: atmel_conn_group {
-> +		fsl,pins = <
-> +			MX6UL_PAD_JTAG_MOD__GPIO1_IO10          0xb0a0  /* SODIMM 106 */
-> +			MX6ULL_PAD_SNVS_TAMPER4__GPIO5_IO04     0xb0a0	/* SODIMM 107 */
-> +		>;
-> +	};
-> +
->  	pinctrl_can_int: canint-grp {
->  		fsl,pins = <
->  			MX6UL_PAD_ENET1_TX_DATA1__GPIO2_IO04	0x13010	/* SODIMM 73 */
-> @@ -347,12 +374,6 @@ MX6UL_PAD_CSI_DATA07__GPIO4_IO28	0x10b0 /* SODIMM 65 */
->  		>;
->  	};
->  
-> -	pinctrl_gpio5: gpio5-grp { /* ATMEL MXT TOUCH */
-> -		fsl,pins = <
-> -			MX6UL_PAD_JTAG_MOD__GPIO1_IO10		0xb0a0 /* SODIMM 106 */
-> -		>;
-> -	};
-> -
->  	pinctrl_gpio6: gpio6-grp { /* Wifi pins */
->  		fsl,pins = <
->  			MX6UL_PAD_GPIO1_IO03__GPIO1_IO03	0x10b0 /* SODIMM 89 */
-> @@ -606,12 +627,6 @@ MX6ULL_PAD_SNVS_TAMPER8__GPIO5_IO08	0x110a0	/* SODIMM 138 */
->  		>;
->  	};
->  
-> -	pinctrl_snvs_gpio2: snvs-gpio2-grp { /* ATMEL MXT TOUCH */
-> -		fsl,pins = <
-> -			MX6ULL_PAD_SNVS_TAMPER4__GPIO5_IO04	0xb0a0	/* SODIMM 107 */
-> -		>;
-> -	};
-> -
->  	pinctrl_snvs_gpio3: snvs-gpio3-grp { /* Wifi pins */
->  		fsl,pins = <
->  			MX6ULL_PAD_BOOT_MODE1__GPIO5_IO11	0x130a0	/* SODIMM 127 */
-> -- 
-> 2.35.1
-> 
+The following changes since commit ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e:
+
+  Linux 5.18-rc2 (2022-04-10 14:21:36 -1000)
+
+are available in the git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-5.18-3
+
+for you to fetch changes up to bb82c574691daf8f7fa9a160264d15c5804cb769:
+
+  powerpc/perf: Fix 32bit compile (2022-04-21 23:26:47 +1000)
+
+- ------------------------------------------------------------------
+powerpc fixes for 5.18 #3
+
+ - Partly revert a change to our timer_interrupt() that caused lockups with high res
+   timers disabled.
+
+ - Fix a bug in KVM TCE handling that could corrupt kernel memory.
+
+ - Two commits fixing Power9/Power10 perf alternative event selection.
+
+Thanks to: Alexey Kardashevskiy, Athira Rajeev, David Gibson, Frederic Barrat, Madhavan
+Srinivasan, Miguel Ojeda, Nicholas Piggin.
+
+- ------------------------------------------------------------------
+Alexey Kardashevskiy (2):
+      KVM: PPC: Fix TCE handling for VFIO
+      powerpc/perf: Fix 32bit compile
+
+Athira Rajeev (2):
+      powerpc/perf: Fix power9 event alternatives
+      powerpc/perf: Fix power10 event alternatives
+
+Michael Ellerman (1):
+      powerpc/time: Always set decrementer in timer_interrupt()
+
+
+ arch/powerpc/kernel/time.c          | 29 ++++++-------
+ arch/powerpc/kvm/book3s_64_vio.c    | 45 ++++++++++----------
+ arch/powerpc/kvm/book3s_64_vio_hv.c | 44 +++++++++----------
+ arch/powerpc/perf/Makefile          |  4 +-
+ arch/powerpc/perf/power10-pmu.c     |  2 +-
+ arch/powerpc/perf/power9-pmu.c      |  8 ++--
+ 6 files changed, 66 insertions(+), 66 deletions(-)
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEJFGtCPCthwEv2Y/bUevqPMjhpYAFAmJlSSoACgkQUevqPMjh
+pYDAkA/7BkoLPd4V9VwBu847BkwK6Dd15b2Qu71y0ieF0xzDzG8pkOEjpk5gCVmd
+DV17CXSeX8t9ppDcKp82tLtuTnBIDjpZVtoKBALvzxB8tgErTp1CemwRcnlu+ILT
+Y5K/tioe+Y6V07HKcDefLIJrtt73IpHUV7GighPtbah0a/HNLB6+zx6HENzR2vKS
+G5ccs+FDbVgStRxw1tzWSH9JiAC7AznRJTWjA7XDiMcRva4t4qoZHSVU32H6Tlis
+fCQfIwyhyppxS5MizZx45qkumy5oJggdXhb2r7g1Wl7jeSAVPldY/S7Fq3UU8usa
+e2k5ZyUGWVSKZxGAlY7v6h6SwAhs28fspA/+tI0pvSH9a8knBkHk8H8bHlnORKkv
+j6zx1hx3qdD2BnVstEEwdiZzWrff6LwfaEytNfC1Fri7yVTkZoZVGihMKyCGHftB
+7TmRMIg99WsEx8xNNDGelaEePyRhCPGHgrB0oEHrmCzJVi3a4IiVwGcaLZdYUekG
+oEFwcyXz4mStftyS5qV/NhFSHMgum9CuTjV8fi2pqN9fFVcPoDEXoGyaSzji9UDf
+AOIP1NXJMZZGgXAN5rusjRJ9zfyFkzLcRcLPjMUqRtKaDJD86LyGPgvxh+gR8ky4
+8IzPHbwbYt6fMcDXkFjiS5Ks+x0ZfKkL5R7HbHNqyyKYWUSZxK0=
+=21WF
+-----END PGP SIGNATURE-----

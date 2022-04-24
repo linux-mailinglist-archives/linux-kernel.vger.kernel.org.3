@@ -2,80 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B4F850D321
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 18:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC4C50D325
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 18:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233938AbiDXQKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 12:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39864 "EHLO
+        id S234580AbiDXQNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 12:13:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233809AbiDXQK2 (ORCPT
+        with ESMTP id S234474AbiDXQMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 12:10:28 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5A2D5579
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 09:07:27 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id n14so1583739lfu.13
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 09:07:27 -0700 (PDT)
+        Sun, 24 Apr 2022 12:12:54 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EFF7106DC1;
+        Sun, 24 Apr 2022 09:09:53 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id dk23so1960020ejb.8;
+        Sun, 24 Apr 2022 09:09:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=P0QTcW9KC8jtIUCRBrIIRQHtbmv2CJL2pbvGJ+qNveo=;
-        b=RiDL8hh90QWpKHeZOtsPDicsUv8uA01P9JI5zDhJzv9S+hSKAbApcqzHs0T8Ldp9TH
-         fAKRmSgdTSQEE98j8anHPESWwfAC2Wr6fwaU0UzzpCRUSoyOzbyPMzyk4xG8MnEvB3iV
-         vXzmNcMzP3+/OStgwtLtURtgOrLqR3sG0n+QrmZd6F+knSa4ckhblkdvzPf132oMlyW7
-         8t9564ctxOVGtPTZPcgIhaetMmVgXzuHspqXhW5Z1CHzDb7rM2I+v0s8lEPpdwVc60cp
-         RKkWFcAQAI+3ep3nitOiLgSd5r38470CHVIt8zrx9Sfl0OWd+5F9Bp8RCTq2DFJy08Ox
-         nIrw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GRnYvMYthiO14j3rOxFdH46THRDOp7DQhEpnCN4rSCc=;
+        b=BhKCjflQpgVCf4HhsUaejkJ8EqPUozXqYqYzjvRO9F74yIfYiY99oUdToAAJ0NT4+f
+         tG77sQ++s2cd2HeXeUlCEWXWy6FyiRr2GCXp9Nu5H9WPTHuI5oeCjMYOH9CV9y/69fYW
+         LZsxUL4TZDxeawHSYXzgp004Lqdn5Tnn6gHR7ttErkkocY9c0VJxurYKzpGN4YiZPEna
+         oP+Xht9wkmSbcis+wIj5tlTNjTr1/eQY//6C51pHaJqjMqGVR7216ASAflrPshJyiz/E
+         LvINzMBuahbHC7vymPLq4sxC5hensawuEmX5zRkuVU+ZWSqpha02mP3r9U1HVQHikYph
+         2pRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=P0QTcW9KC8jtIUCRBrIIRQHtbmv2CJL2pbvGJ+qNveo=;
-        b=nJ875wItR/CFkMQXxdlWMDPRVfsRJxRuJMnfKb5g245Ff5WensxcoHM/+OFxG6+pR1
-         BK2RodiBkMm70Fz5dHx6cjd28abMhoo0IjohWCqUpEQRklQ+ogzl/tYF+84gGNZeWozi
-         NdAOMxLHpI+kVBPVKvIlu9qa8HmUCoJc1aDRBHL/SmXOVOU9veUbfaWSkeG5grrRJx1C
-         CRId1UxLC9VZ8lZbCh4St653f3s5r4Mj1XGfksqdXwHB6TnEqXRzXpsUROD0wI+KXO6H
-         GTDXTIdpGcxefiYsy5UUXva1g31ZXMFPLmctVeXOPU89CvcLIRbPvmia/xZMqJirxwPw
-         yzJQ==
-X-Gm-Message-State: AOAM531sr8/YBbZ8sXi3eT08JS9vGXetakN5bPydaiMWWWOk0E3qcA+Z
-        GLVfxGgLHFwXKKJcIhmpZPE=
-X-Google-Smtp-Source: ABdhPJwXDQKL0ddwC14m+1rm/W4CunYi8dET47R83s7iLr9ZMexO+AO6MY6p46hpbAM/pGFodjYHLQ==
-X-Received: by 2002:a05:6512:685:b0:471:d466:9750 with SMTP id t5-20020a056512068500b00471d4669750mr9842846lfe.623.1650816445822;
-        Sun, 24 Apr 2022 09:07:25 -0700 (PDT)
-Received: from [192.168.1.7] ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id x5-20020a2e9dc5000000b0024dbe5356bcsm925671ljj.91.2022.04.24.09.07.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 24 Apr 2022 09:07:25 -0700 (PDT)
-Subject: Re: [PATCH V1 6/6] arm/xen: Assign xen-grant DMA ops for xen-grant
- DMA devices
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Julien Grall <julien@xen.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>
-References: <1650646263-22047-1-git-send-email-olekstysh@gmail.com>
- <1650646263-22047-7-git-send-email-olekstysh@gmail.com>
- <YmQsagqMn56jidFZ@infradead.org>
-From:   Oleksandr <olekstysh@gmail.com>
-Message-ID: <d102516a-af42-7637-2b5c-f7da33d5036e@gmail.com>
-Date:   Sun, 24 Apr 2022 19:07:23 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GRnYvMYthiO14j3rOxFdH46THRDOp7DQhEpnCN4rSCc=;
+        b=YXWk0jQ3KRlH02F5BtOcJVEe+4hddWHn5gszrxt6+q0YiWSgBsIB7t5SlSL9lEzgUM
+         s/eyk7/wznHub2TbyhflHpD4WSPJga+Y2y7Boz87cTB4cl0pyyIjEndb7+7gocJ0sOUB
+         2VGK4iepMFZzL45/b/3DGA2jIp4/BSN14DQ2OPlzQJWODo97p6ML7bDoazHtm9SWXD7B
+         BdG3um8eZ8cMqPDUOOtHw19MFkD8YsYN3sXitdSgOHIMxp17XbibKQDTwEH58LCBwQ8E
+         EmBP/FKuCmZKO6+NdlsXeczG+T5eNtdi+K8xEp8P3cnb7QAcraCSiF9bAJecY7wXlzM5
+         XZDA==
+X-Gm-Message-State: AOAM531NBFOxQ+o4DQYwJcezXRDjk76ncv0GbtkMs2luFJ9pbecaJgAS
+        PYF1k+GGgrbdxUc7yzK2NidxzZhQEwVWPCLm
+X-Google-Smtp-Source: ABdhPJzAD7x1l4jW49jnqmFisG1U2MeNPnnuewXOB3Pp5cvZVzHeR1sjJIGYsOTPnPvdAIiYOcMhwQ==
+X-Received: by 2002:a17:907:1624:b0:6db:8caa:d71 with SMTP id hb36-20020a170907162400b006db8caa0d71mr12740868ejc.723.1650816591641;
+        Sun, 24 Apr 2022 09:09:51 -0700 (PDT)
+Received: from fedora ([95.180.24.23])
+        by smtp.gmail.com with ESMTPSA id x14-20020a1709064bce00b006f006948581sm2756876ejv.170.2022.04.24.09.09.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Apr 2022 09:09:50 -0700 (PDT)
+Date:   Sun, 24 Apr 2022 18:09:48 +0200
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jack Doan <me@jackdoan.com>, linux-hwmon@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: (aquacomputer_d5next) Add support for
+ Aquacomputer Farbwerk
+Message-ID: <YmV2TIcOqTLBA4+U@fedora>
+References: <YmTcrq8Gzel0zYYD@jackdesk>
+ <20220424160628.GA719092@roeck-us.net>
 MIME-Version: 1.0
-In-Reply-To: <YmQsagqMn56jidFZ@infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220424160628.GA719092@roeck-us.net>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,34 +74,6 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Thank you!
 
-On 23.04.22 19:42, Christoph Hellwig wrote:
-
-Hello Christoph
-
-> On Fri, Apr 22, 2022 at 07:51:03PM +0300, Oleksandr Tyshchenko wrote:
->>   static inline void xen_setup_dma_ops(struct device *dev)
->>   {
->>   #ifdef CONFIG_XEN
->> -	if (xen_swiotlb_detect())
->> +	if (arch_has_restricted_virtio_memory_access() &&
->> +			xen_is_grant_dma_device(dev))
->> +		xen_grant_setup_dma_ops(dev);
->> +	else if (xen_swiotlb_detect())
-> I don't think that arch_has_restricted_virtio_memory_access
-> check should be there as it still is a bit of a layering violation.
-
-Well, I will remove it then (and update commit description).
-
-For virtualized but non-virtio devices, it is not needed at all. For the 
-virtio devices, this check is already present at 
-virtio.c:virtio_features_ok()
-
-
-
->
--- 
-Regards,
-
-Oleksandr Tyshchenko
-
+Aleksa

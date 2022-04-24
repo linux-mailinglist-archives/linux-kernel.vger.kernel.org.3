@@ -2,145 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A13C550D0CF
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 11:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5B9250D0D2
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 11:32:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238862AbiDXJb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 05:31:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45698 "EHLO
+        id S238807AbiDXJfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 05:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236487AbiDXJbz (ORCPT
+        with ESMTP id S235905AbiDXJfp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 05:31:55 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2112.outbound.protection.outlook.com [40.107.215.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA07E90;
-        Sun, 24 Apr 2022 02:28:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gFcqsEmRoxU6aGKv1AXhmMe0Qc1Rjr8/CWoRdg7JphGawKyVCRZyvglSbAZwYI0JY+7Q2zAjbgE65Pkw3Qq8CswE5O/HjcPmAv6dWtaNpBMxGLwMoyEWCjBBlTRTUL8SQQEDektFZtfPb+PBMCONWYqQi8nu58VMOQd5Upp0udpvCsaJvMza2zsJkmjKajlfp9hYMhYvnPj1PUrGBzOJTlJsOg01g7Vrj+yAztLljO28b+m07n4zuwutjJhf3ly4jf8yMDh5LodX6QcTBrezycyRs0xaEQD4Y0aFYPmsl+pr+izpfODxlceVAPa/1KBpP3hQFG2A4C0o1qlm4540Sg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZWZkJsM+sp6Z6MjOgZAlYVYq2AIIkACsvgoulTNnFp4=;
- b=JVdswBeHdkDLi/8ncTjA/VWGx6ZfP2dHGhZ3osN7qMRwYOvuz2NRJ0F8hNjCTThZodPcsA2rUDBgCSHCE2c+xj7GeHo3ZH7QZznaM70+LosE6uTmkivfZ+NFSQmX/C4yNDsdU0xylH3ombTLUdjgDYywU1fOqFFBO6AObmNYGovVoUBREViapdBZfOTXE3wKIddMf2Yx0S6ksXLiVIcts1VCGbXca7gVIdksSfX+75oZezpya6Yv6o1XK3sLsdNomRC0LgFanxJbbpExi4teStTZVjNhUKc23WlxmGkL/p6okreUWSvpnYozdCb7Ahr1SzppiXnxkOKHzgzYhTUZlA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZWZkJsM+sp6Z6MjOgZAlYVYq2AIIkACsvgoulTNnFp4=;
- b=iQY983vN4WTx5Ry+cqNpUmPO3ZlImTuB032Op423VAQFtwJTLl00RKH1C4zHryvb+5ttqwZGhVw43GqGZUbhoEl4xGqLa0kMZUF6DYoSOvR4ZKM5XT1kQ4OHcA76bz6hoXqafej+jYMwabo+b0sPFDIN9KwQcD7lbXIpepsWa84=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
- TYZPR06MB4607.apcprd06.prod.outlook.com (2603:1096:400:123::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5186.15; Sun, 24 Apr 2022 09:28:52 +0000
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::4591:4f3e:f951:6c8c]) by SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::4591:4f3e:f951:6c8c%7]) with mapi id 15.20.5186.019; Sun, 24 Apr 2022
- 09:28:52 +0000
-From:   Wan Jiabing <wanjiabing@vivo.com>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     kael_w@yeah.net, Wan Jiabing <wanjiabing@vivo.com>
-Subject: [PATCH] FDDI: defxx: simplify if-if to if-else
-Date:   Sun, 24 Apr 2022 17:28:42 +0800
-Message-Id: <20220424092842.101307-1-wanjiabing@vivo.com>
-X-Mailer: git-send-email 2.35.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR02CA0199.apcprd02.prod.outlook.com
- (2603:1096:201:20::11) To SG2PR06MB3367.apcprd06.prod.outlook.com
- (2603:1096:4:78::19)
+        Sun, 24 Apr 2022 05:35:45 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458B11EED0;
+        Sun, 24 Apr 2022 02:32:45 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id j15so3621002wrb.2;
+        Sun, 24 Apr 2022 02:32:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=ihBOps3aqfFGtyAnjbwJw3NFhLQ2itqLG+oaeiipt2o=;
+        b=Wysgh/5jB+pe0wLmoUMwLkv0Wf0DzYM8dZMuDYy/NcUbfZThR4gjlnMrOEK8/QcY6b
+         wRBhQXLaxa0nXEx2L8PsAYsSH3dFjhs0WviGWqrTb6/Jdl/XMm0mmNHcde9912/6MNc4
+         wl9c+1APpP0rk1ZWw6ydHMZ7YGhFu0zJ/Hrf5LIxSuGhHJkp/9To6bk9PQZMOi5ck3Qh
+         Qp/VWRpl4eVTbO0Zkc4urC6ElH7FEPR1qUh/eI6parxap8JC+cSOWO5qWsSvuz6mWdgN
+         Bzvy7/s4Utz1W7kHdkf90jfVUpCzI+a2ikSnaBgyATxsez7kDzErn3RS/v3sId+zU6l9
+         MoHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ihBOps3aqfFGtyAnjbwJw3NFhLQ2itqLG+oaeiipt2o=;
+        b=e9yJo/DhDQt+vJGJcd3Gyaj7Mrvf6jPi2nmI8hW8JteZYSD/WExGNLhMO0XwVJvfph
+         BPFeZQthmtb8URRNFiaMM6I7G/Xy6fSVon0cDJqya9Bnx/oe/rf1h6GZGu3uCkXlehU8
+         fCEjzxu8KAz+6teaJxleJSJU67z/kLPWMEs6XDFiH3je9o7/xf5z3jMv+6+2ss/W7e/l
+         9yIOX5Tw5MszU6XQBtaIf4i9wq52I8N/8SnPCK9OBSExJGuqSExQJZ3C1bTBk/X8oFzL
+         LQbB8+Ef7fFmADZrnO86AmGFLv8xVYivq7qWtP4fmtLFspPwE0HezCuA7r+jt4+eYALt
+         yboA==
+X-Gm-Message-State: AOAM532TRbZkp4ZJkyM0vYWxNKcPMemGe1Fnop2v4kJzc92DixezvdTL
+        lKo/+8sUFtyxRptD68dy8MI=
+X-Google-Smtp-Source: ABdhPJzraQqtj+/Gy7TVenq61g+3wc/zfRNPK3Oc5EpStPMjIn+lPmL8UxmX2ckJkwLGn1VvJRZDtA==
+X-Received: by 2002:adf:dc0b:0:b0:20a:a549:d3a6 with SMTP id t11-20020adfdc0b000000b0020aa549d3a6mr9908630wri.34.1650792763634;
+        Sun, 24 Apr 2022 02:32:43 -0700 (PDT)
+Received: from elementary ([94.73.37.128])
+        by smtp.gmail.com with ESMTPSA id g3-20020a5d64e3000000b0020aaa0fea8bsm5930096wri.49.2022.04.24.02.32.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Apr 2022 02:32:43 -0700 (PDT)
+Date:   Sun, 24 Apr 2022 11:32:39 +0200
+From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+To:     Stefan Berzl <stefanberzl@gmail.com>
+Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com, spbnick@gmail.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: Status on hid xppen patch
+Message-ID: <20220424093239.GA4380@elementary>
+References: <941a793a-d2f7-9c2c-59be-b3930e1acfec@gmail.com>
+ <20220423172330.32585-1-jose.exposito89@gmail.com>
+ <95576534-1f5e-c2e3-4f73-c1b0a8300b56@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 628e11b6-b677-4a78-d304-08da25d4d88c
-X-MS-TrafficTypeDiagnostic: TYZPR06MB4607:EE_
-X-Microsoft-Antispam-PRVS: <TYZPR06MB4607A6E51101338830726231ABF99@TYZPR06MB4607.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RaTddzJApX6XtO2dRL5XMCcDDu8ti1+uvknso2eiVw4pOKKFmeQd/ng/pysvD0hYt6xR0kuP4dd5+qzPsZt+TH6EvwYc2wTd5GX2BSyZvOQ/sHAJlEXGwAMNNbW7ZagGCI/755X6MnOsan+Jj4wp6PWyO9xHMkCvqI4eg2E1e+yAi5T3j7+518U9b5b+pfJm6WSxXAgdRj9pgC/EHpXft88+6YNQQRuxrBPmBou5t9gFS7yTPP+hn4KdaBV6euHK0NsU2mPQRM+P8GY5d3HnGj9PahLaTrwxLinqVTj4O78Wxp8CMO0IUJlotgsD3p+/ykQiThGnffYZFQmVHXqUxiIEqJY1QeLI+N0W/WM3yK+O2rFV5KTlzLm9eYelofgjXVIWckQUHwshX8gChZDBRBnq+f4FgYq4baWuprxL6KaXGNc94PcxlIafR0UOADZuCeIESYo2fpmQ7GqFa5l9HtN7TYPK3kgfN+2ysJUkpb1t0fFdvtDucebPAm+SK5SvaQtiR2GUCtbbfI0Ln4YFJyxt8uFk7BoYcX3I8xPikcMHL4ZlUhDqCPmQbraeXB0L5sQCHe7LA7z4/cXjciU0F9EnFfBLeAIw8DLSbQ4WPqqJzKurhoU5ZJ8vlBuBySqDUsMvKEC7KEIfXToBkrWQ58wihyqvNb70TiAFSj7LBN8o0xj3Qvwjq7W+IHCg8CKiRsiQWlwW44ew86g8Gvl5pg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(110136005)(86362001)(36756003)(1076003)(186003)(83380400001)(107886003)(4326008)(38100700002)(38350700002)(2616005)(66476007)(66946007)(66556008)(8676002)(6486002)(6512007)(4744005)(2906002)(26005)(6666004)(5660300002)(52116002)(508600001)(6506007)(8936002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4xdgN6rot8H+XMVyx88My08DAeVR8UJli5UkQc8vzmW6Yna7lVaT4xijPwYo?=
- =?us-ascii?Q?6GtEBxi6YrWVEO/5zQ+viDb0oEbq4r6q///wFU7XhaLhnxMB7ECaAd9SH4iE?=
- =?us-ascii?Q?lzDGKpaSSm6/m2WSDd4QEne0QMvnu0V3lm67rvpoFWd75f7Ln91lNwTnxjGw?=
- =?us-ascii?Q?iVFmWJPBoc+F2RCikk81MsZTUMwP1Ffo6WDVhb4IuJc8huI132m25YbryjJg?=
- =?us-ascii?Q?f4n0N6TqfdUZ69YI1VSAEhRA6XwR15qmw3CkTg/sE3M5JfUiCEBCFZvjSF4z?=
- =?us-ascii?Q?9ZJm+Pi+r+u5BGmtHi1toe4kQ5vlkjzHYF6t05oGAoibGbDNuREmZZjDcf1D?=
- =?us-ascii?Q?0tCut+6jP3qKrC1gxNwYMGelrJxI0L4mckll2RztK/D1rWk1l5/41DpWr2gq?=
- =?us-ascii?Q?z3KcIvptaW/lKuWwlHyOYCIZNhLtsSNBjeAz04OOOQOh1BkghgHlSaj9Djy/?=
- =?us-ascii?Q?5lNifpuIE0gIpLy0ypkQS71qjwFZaNZeo3Sv9/tx1P4Dh2yaUUzusaVD5M5N?=
- =?us-ascii?Q?H0/Cz+A60mMlb5juJonk5xCIAqKFJqNsqJBkFpItK7UtFqDiDpeSDlG2XghZ?=
- =?us-ascii?Q?4bwwn/s04+iGPYw/hw8CjuCX/ECRNgf0uQ0qgcZmWCo74TcbQgZ8evXpY/7k?=
- =?us-ascii?Q?LwLS2gzw8yvrf7FJfs2tH1BtNUhSaljWBs6bSFc71lIFtNQNgecDxu4nPtGI?=
- =?us-ascii?Q?NrXL6A+ru5iaRzBs5dJibOlLc5iCS5+5DuMrw4g3Ky/H13oYiv9mTMPM55AE?=
- =?us-ascii?Q?lgWXgIKrjAKC2/7C4EC0NLDUDHAxBMAVGkxcCKKHezq08woukLTSHlFyhx7e?=
- =?us-ascii?Q?HpSnOlEiw/ueMJ7lKQAav7PbxMTqs/G1dq5TaigVo4ZBao63jggUMRbVjKkb?=
- =?us-ascii?Q?4sM2IwjlMyTD18NUd/QePAzVZunoapvFWC7wh0N2Qq94scbGKpq2k0m/1qGv?=
- =?us-ascii?Q?gt6Al8E/01K77eiym7M6WXSzoMPzP2qUBhgOQrsa7eC9r5aXvEHl7nhsk0cs?=
- =?us-ascii?Q?3L5xuH36XR+kRaV6mSsNXhE4emA0zld+ULhrKYzdv84kwmgBLy5/Zv7j6uvB?=
- =?us-ascii?Q?Z4FiCsdvcIyi63cDhU9dWEsueoknFwopdiVjTsXLRrDRnjSajMPK3Z+zznJA?=
- =?us-ascii?Q?kTqvZ2h7iktj0uCeT86ts9uyqK4t+x285xJl35Q8YkKN3KF9z0gobi+8bVpn?=
- =?us-ascii?Q?xBl5XGfU/usV8BWrb1Guzk+Isaa5V1tvtZo1BuvPNY0DoK3pVqxWpjXIYOX2?=
- =?us-ascii?Q?RtFgVLGxhe3UQvmVw69aj2Wm6iVs1IZ2mMTys+J3RIKIbBEoXY4UQPPPCX8p?=
- =?us-ascii?Q?iPIAFxdtavKaGgq7NWO80QXASR8IStw0RGtRnalvUbJueMZ02VLVkWC0bH2j?=
- =?us-ascii?Q?h3NcbuS0jXMwJia8jHlS7eQTJebStkHqSbsZCg+aYLL1+Xc/JeFUcPjcQ25Q?=
- =?us-ascii?Q?OMxcAw2whCEL5LHIEXWoca27DoZV+fIjcS444NKJt2recHe78QYP9iZghUT/?=
- =?us-ascii?Q?64ng67WNpDaf7qB26GozoEjyGme/2oMQnlRjD7V3DlQ9ByLMiH/l8jhMt5Lb?=
- =?us-ascii?Q?vbpXPjPJLU6a5jxRWvlLrtd0P3iVLbw0bg10lh/2UrXunUAZFr+qGOE2sF65?=
- =?us-ascii?Q?+UGllW/6El416+tYsTjz3HRzOM+v6mxn+BrmKrLaNtHaaYCv47V3f2dCOLOR?=
- =?us-ascii?Q?OH+dn457rvFXPoMfsBTrH/oQsvbNLcgzPNaPh/8dkQUV144BUC89ivueDHIr?=
- =?us-ascii?Q?qAD9nwK8mA=3D=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 628e11b6-b677-4a78-d304-08da25d4d88c
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2022 09:28:52.5092
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bF+Cj0UKgTwpPOwwJjBlVj9bCYUFSFB8IbpHRf8N8lfXLneCjPB9lnlGtMTJPJ97lKXzSB5ICElzhsTd6FiCuQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB4607
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <95576534-1f5e-c2e3-4f73-c1b0a8300b56@gmail.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use if and else instead of if(A) and if (!A).
+Hi Stefan,
 
-Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
----
- drivers/net/fddi/defxx.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Sun, Apr 24, 2022 at 01:19:30AM +0200, Stefan Berzl wrote:
+> >> Hello everynyan!
+> >>
+> >> A while ago I sent in a patch to add support for newer Xp-pen tablets 
+> >> that even made it into patchwork:
+> >>
+> >> https://patchwork.kernel.org/project/linux-input/patch/b401e453-9c66-15e3-1a1d-21f33b7a64e8@gmail.com/
+> >>
+> >> I have never actually gotten any feedback on it though and am wondering 
+> >> if everything is to your liking. Anyway it doesn't build against the 
+> >> current tree anymore. Assuming there is any value it, should I rewrite 
+> >> it against hid master or hid uclogic?
+> >>
+> >> Many thanks
+> >>
+> >> Stefan Berzl
+> > 
+> > Hi Stefan,
+> > 
+> > I just saw your email in the mailing list.
+> > 
+> > Your patch doesn't apply against the current tree because of the changes
+> > from Nikolai/the DIGImend project I'm sending upstream. For reference,
+> > here is the latest batch of patches, with links to the previous ones:
+> > 
+> > https://lore.kernel.org/linux-input/20220421175052.911446-1-jose.exposito89@gmail.com/T/
+> > 
+> > Please note that I'm not the maintainer of the driver, I'm just a web
+> > developer who does free software as a hobby, i.e., this is not my area
+> > of expertise, so take my words as suggestions, not as the path to
+> > follow ;)
+> > 
+> > The development of the uclogic driver takes place on the DIGImend
+> > project (inactive right now):
+> > https://github.com/DIGImend/digimend-kernel-drivers
+> > 
+> > Like you, I wanted to add support for my tablet/improve my kernel
+> > dev skills, but I noticed that I needed some patches from DIGImend, so,
+> > instead of taking what I needed, I decided to upstream all the patches.
+> > 
+> > At the moment of writing this email, 24 patches from DIGImend have been
+> > merged, 5 are under review and 7 more need to be sent. We are close to
+> > the end.
+> > 
+> > My tablet (Parblo A610 PLUS V2) also needs some magic data to be enabled.
+> > Actually, the data is pretty similar to the one in your patch.
+> > You can see my implementation here:
+> > https://github.com/JoseExposito/linux/commit/f1f24e57fab45a2bcf4e0af5ba9d8f5a2245670b
+> > 
+> > I just refactored my patch and extracted the code to send the magic data
+> > to its own function (uclogic_probe_interface), so we can share it.
+> > 
+> > I'd suggest rebasing your code on top of DIGImend's code + my patch
+> > so we can share some code and once all patches are upstream, you can
+> > send it with minor or without conflicts.
+> > 
+> > What do you think?
+> > 
+> > José Expósito
+> > 
+> 
+> Hello José,
+> 
+> nice hearing from you. I was actually thinking of just asking if you
+> want to take my patch under your wing, since you seem to be doing a lot
+> of uclogic related work. But your idea is even better, just submitting  
+> my patch once everything has settled down seems to be the way to go.
 
-diff --git a/drivers/net/fddi/defxx.c b/drivers/net/fddi/defxx.c
-index b584ffe38ad6..3edb2e96f763 100644
---- a/drivers/net/fddi/defxx.c
-+++ b/drivers/net/fddi/defxx.c
-@@ -585,10 +585,10 @@ static int dfx_register(struct device *bdev)
- 			bp->mmio = false;
- 			dfx_get_bars(bp, bar_start, bar_len);
- 		}
--	}
--	if (!dfx_use_mmio)
-+	} else {
- 		region = request_region(bar_start[0], bar_len[0],
- 					bdev->driver->name);
-+	}
- 	if (!region) {
- 		dfx_register_res_err(print_name, dfx_use_mmio,
- 				     bar_start[0], bar_len[0]);
--- 
-2.35.1
+Cool, let's do that. I'll cc you on the last batch of patches so you
+get notified when they get merged.
+ 
+> You are actually the first person to ever contact me about this. I was  
+> pretty worried that the patch is no good, but then I saw that there is  
+> quite a backlog in the maintainers patchwork and some of your patches
+> haven't been reviewed either. Originally I tried showing it to Nikolai,
+> but he said he was rather busy too and then some guys in the Digimend
+> project tried to get me interested in some userspace driver that works  
+> around all the issues of like init-packets and stuff. I always imagined
+> the kernel as this highly organzied, well-structured endeavor where
+> things would be quickly scrutinized and suggestions offered to assure 
+> the highest quality. Yet here we have two web developers working on the
+> graphics tablet driver. Let me say that it's really great you take the
+> time and effort to mainline these patches and help everyone enjoy their
+> tablets on linux!
 
+Well, the kernel is well-structured, but as you mentioned, there is a
+*lot* of work on the maintainers side and I think there is not a big
+community supporting this driver. It's normal that it takes some time
+to get everything reviewed.
+
+> On the technical side, the magic bytes really are very similar, the only
+> difference being the two additional trailing 0x00 for mine. Also my
+> tablet sends a response after activating this new interface which can 
+> get interpreted as a button press if it's not discarded. Is there a nice
+> way to work around this, with subreports or anything?
+
+Same here, my tablet responds with: 02 b1 04 00 00 00 00 00 00 00.
+
+In my case, button presses look like: 02 F0 XX XX 00 00 00 00 00 00.
+Because of the 0xF0 subreport, I think this data gets ignored, but I'll
+do some extra testing just in case.
+
+How did you test it?
+
+> Lastly, do you have an idea in which kernel version the bulk of your
+> patches will have been merged, just so I know when to start looking at
+> this again? I don't mean to belittle the kernel maintainers of course,  
+> for I am sure they have more pressing and difficult issues on their
+> plate, like eBPF and such.   
+
+I couldn't tell, I can imagine that 5.19 or 5.20. Anyway, I'll cc you
+so you can have a good idea about what's going on.
+
+Best wishes,
+José Expósito
+
+> Lets fixie wixie this fucksy uppsy!
+> 
+> Bye
+> 
+> 
+> Stefan Berzl

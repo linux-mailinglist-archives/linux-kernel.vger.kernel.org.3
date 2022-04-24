@@ -2,65 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 320E250CE4C
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 03:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FB1950CE50
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 04:00:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237548AbiDXCBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 22:01:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50990 "EHLO
+        id S237561AbiDXCD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 22:03:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231462AbiDXCBE (ORCPT
+        with ESMTP id S231462AbiDXCD0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 22:01:04 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF3236E00;
-        Sat, 23 Apr 2022 18:58:05 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id g3so9864234pgg.3;
-        Sat, 23 Apr 2022 18:58:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=yvCVUXuZoZuLVMw47+vPYc/UbkVpldMV9je33JT8RXY=;
-        b=BaEnelyLCe6fQtpmxHKMl+7x6ulG+QbSfiACl/qx1EuaK0PIMz5VXI6XpMHLT164qI
-         HfoyHxDJDHm836SwupKNX4N76ujwaEVRoslu6PsGmUfmdmAd3Jmm+6HS28o3NZzZBxeB
-         GfDXaguExILpSsViHR7bmGMdgkP3v2VtdUpCj0kWxhcSvX5kOnHCKyu9/M+iI6jl7Yzn
-         h8eVqPzyPN/bOThkDppJMuNw/hb8n2Q3YjjBr/AHWUPr7AHfun86YhPUYnivOcyU4byS
-         9gf5klvrcBgV09YoOSAa0e0x8ZVr4O3t3TaYHkUre7ZJgtLR0ziLt1e5vAPOOqpfkESL
-         Yfdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=yvCVUXuZoZuLVMw47+vPYc/UbkVpldMV9je33JT8RXY=;
-        b=MQg9y1UzcOf9vz2vYTBExfBebSoF5x1hBb+Zmmn+mSOkeJWJjryWeTzAMZx9wj4KTw
-         4WmMrUx2DQ1MJkGv2JnbGO2IhgBqWVXH0PbwQQ6/kodeAqBca82UwK8HxwbOa8Jg3MHX
-         S1tGcbxQkOeUEPAVzEl8x4aLJj+V+q+waKvka82fbvzZd9NDuZ8a9yZrjzOWGQtEeo0N
-         r1mtK0rz4WQB8GwmuMq7r8DS9ObaHPcgeVxBINEAskiqrSF8F4t+aIrbzuGqrQU/j99b
-         owCJi9TfueYELImTrzYHF/EE3/+6rO41oyLVaM1w5axWd8KoMIX9BNWEw3jxjDxLvcQ4
-         E0Ug==
-X-Gm-Message-State: AOAM5307SBvZBpkJu8H/nlbE71zExvpXGQe9SJFmaNKJfZzAVjy7gDLG
-        7BxPvhI0FtWK2Ae20aNOq4aX4ft64iyOZBWs
-X-Google-Smtp-Source: ABdhPJzCv8OcdvS99ZXrpBWfpomrC4a0+uEtHndmRRaQ1sWwWOzJwnHEkuSAXSN/LVIUVPWKhAhg4Q==
-X-Received: by 2002:a63:257:0:b0:3aa:a481:9159 with SMTP id 84-20020a630257000000b003aaa4819159mr9750819pgc.1.1650765485214;
-        Sat, 23 Apr 2022 18:58:05 -0700 (PDT)
-Received: from zeshkernups01.spreadtrum.com ([117.18.48.102])
-        by smtp.gmail.com with ESMTPSA id j10-20020a17090a734a00b001bf31f7520csm2061092pjs.1.2022.04.23.18.58.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 18:58:04 -0700 (PDT)
-From:   Surong Pang <surong.pang@gmail.com>
-To:     mathias.nyman@linux.intel.com
-Cc:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        surong.pang@gmail.com, Orson.Zhai@unisoc.com, yunguo.wu@unisoc.com
-Subject: [PATCH V2] usb/host: Let usb phy shutdown later
-Date:   Sun, 24 Apr 2022 09:57:57 +0800
-Message-Id: <20220424015757.21993-1-surong.pang@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <e05ec742-c3dc-df7c-c5d7-29358d0a7081@linux.intel.com>
-References: <e05ec742-c3dc-df7c-c5d7-29358d0a7081@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Sat, 23 Apr 2022 22:03:26 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6928F161E8E;
+        Sat, 23 Apr 2022 19:00:26 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KmBCp4fXkz1JBJC;
+        Sun, 24 Apr 2022 09:59:34 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sun, 24 Apr 2022 10:00:23 +0800
+Subject: Re: [PATCH v13 3/7] pagemap,pmem: Introduce ->memory_failure()
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
+CC:     <djwong@kernel.org>, <dan.j.williams@intel.com>,
+        <david@fromorbit.com>, <hch@infradead.org>, <jane.chu@oracle.com>,
+        Christoph Hellwig <hch@lst.de>, <linux-kernel@vger.kernel.org>,
+        <linux-xfs@vger.kernel.org>, <nvdimm@lists.linux.dev>,
+        <linux-mm@kvack.org>, <linux-fsdevel@vger.kernel.org>
+References: <20220419045045.1664996-1-ruansy.fnst@fujitsu.com>
+ <20220419045045.1664996-4-ruansy.fnst@fujitsu.com>
+ <f173f091-d5ca-b049-a8ed-6616032ca83e@huawei.com>
+ <4a808b12-9215-9421-d114-951e70764778@fujitsu.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <cc219e5d-a400-776c-116b-21e5d1470045@huawei.com>
+Date:   Sun, 24 Apr 2022 10:00:23 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
+MIME-Version: 1.0
+In-Reply-To: <4a808b12-9215-9421-d114-951e70764778@fujitsu.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,39 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Surong Pang <surong.pang@unisoc.com>
+On 2022/4/22 15:06, Shiyang Ruan wrote:
+> 
+> 
+...
+>>
+>> Thanks for your patch. There are two questions:
+>>
+>> 1.Is dax_lock_page + dax_unlock_page pair needed here?
+> 
+> They are moved into mf_generic_kill_procs() in Patch2.  Callback will implement its own dax lock/unlock method.  For example, for mf_dax_kill_procs() in Patch4, we implemented dax_lock_mapping_entry()/dax_unlock_mapping_entry() for it.
+> 
+>> 2.hwpoison_filter and SetPageHWPoison will be handled by the callback or they're just ignored deliberately?
+> 
+> SetPageHWPoison() will be handled by callback or by mf_generic_kill_procs().
+> 
+> hwpoison_filter() is moved into mf_generic_kill_procs() too.  The callback will make sure the page is correct, so it is ignored.
 
-Let usb phy shutdown later in xhci_plat_remove function.
-Some phy driver doesn't divide 3.0/2.0 very clear.
-If calls usb_phy_shutdown earlier than usb_remove_hcd(hcd),
-It will case 10s cmd timeout issue.
+I see this when I read the other patches. Many thanks for clarifying!
 
-Call usb phy shutdown later has better compatibility.
-
-Signed-off-by: Surong Pang <surong.pang@unisoc.com>
----
- drivers/usb/host/xhci-plat.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index 649ffd861b44..fe492ed99cb7 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -390,13 +390,13 @@ static int xhci_plat_remove(struct platform_device *dev)
- 
- 	usb_remove_hcd(shared_hcd);
- 	xhci->shared_hcd = NULL;
--	usb_phy_shutdown(hcd->usb_phy);
- 
- 	usb_remove_hcd(hcd);
- 	usb_put_hcd(shared_hcd);
- 
- 	clk_disable_unprepare(clk);
- 	clk_disable_unprepare(reg_clk);
-+	usb_phy_shutdown(hcd->usb_phy);
- 	usb_put_hcd(hcd);
- 
- 	pm_runtime_disable(&dev->dev);
--- 
-2.17.1
+> 
+> 
+> -- 
+> Thanks,
+> Ruan.
+> 
+>>
+>> Thanks!
+>>
+>>>       rc = mf_generic_kill_procs(pfn, flags, pgmap);
+>>>   out:
+>>>       /* drop pgmap ref acquired in caller */
+>>>
+>>
+> 
+> 
+> .
 

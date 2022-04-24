@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 726EF50D473
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 21:05:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B414350D470
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 21:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbiDXTIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 15:08:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45378 "EHLO
+        id S237791AbiDXTIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 15:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237751AbiDXTHr (ORCPT
+        with ESMTP id S237757AbiDXTHs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 15:07:47 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 426EA13976C
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 12:04:45 -0700 (PDT)
+        Sun, 24 Apr 2022 15:07:48 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD9613976C
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 12:04:47 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id EF6FF1F44DAF
+        with ESMTPSA id 0F6D31F40651
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650827083;
-        bh=CWqvGLqMByoxyOodrX4VDvjOrVtokLSbI2qbVKtiRlE=;
+        s=mail; t=1650827086;
+        bh=H5TVWLdKQBunPI+41h2cAjj6IZ6UbyVtXydAliQEN5M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n3gZ507nUEjkxanjrfYvMbPGr6luevyfyePOFTjRbSczf/vG2/OiLqYVnzhLLB3GH
-         DHROBA12hQWd1djtC4QjK9/ZwtJPKJpXqyTiApJO2+kEHymyLUNXN7dmdf9g41VHCi
-         L25WmQ+XFuQFO5WWrqAib6wm7VIZ/Tx189f1bsKblSGKsT1tP1SH109gLw0LUYFESr
-         lr//oA/cxhGISAAr2rL2pU7n6Enj5+sFILtNq3VCK5yk7OQaG9LwSec+CSQa8/uOwp
-         sJPSM5TpcivojKpayK7ZE71AT7HmWJrE22KCHV7qPeUUPikdSmKashSkU6oWr/LRYf
-         4SPJQGhwg48JQ==
+        b=kbBbsmNiTPU+IBOLounBpOr3xvTBE2JCl71TJeU+bnzs4eJKdiqmV2xMznXR4doaq
+         kKwQlLpZKqNTUIggaaiP4bEAwIba5A4kkSBlIVwaQUkdj5fkR9N9ohnXwdchn8jFFt
+         ricB3koe0UhOYVrWj6QYf6oOXJiu00dGMjK+qAcVKNfKfkv1ZtWirkgoiIO61Ga0Cf
+         Kk8Tz79AaQ0cus92M9MYnI/sarH+j+aQvPRIpgD23F9sd6s/k2eW/TXDRCA4X9TYSI
+         iQ3kX6VJ5Fb2JYf2+223wy9D1EdUjHzO5Im+1kntPezGNacGqmy8Tx5HuiDrWZ6Hyo
+         NMJAFLNpt0OUA==
 From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
 To:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
         Gurchetan Singh <gurchetansingh@chromium.org>,
@@ -53,9 +53,9 @@ Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         virtualization@lists.linux-foundation.org,
         Dmitry Osipenko <digetx@gmail.com>,
         Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Subject: [PATCH v5 05/17] drm/virtio: Unlock reservations on dma_resv_reserve_fences() error
-Date:   Sun, 24 Apr 2022 22:04:12 +0300
-Message-Id: <20220424190424.540501-6-dmitry.osipenko@collabora.com>
+Subject: [PATCH v5 06/17] drm/virtio: Use appropriate atomic state in virtio_gpu_plane_cleanup_fb()
+Date:   Sun, 24 Apr 2022 22:04:13 +0300
+Message-Id: <20220424190424.540501-7-dmitry.osipenko@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220424190424.540501-1-dmitry.osipenko@collabora.com>
 References: <20220424190424.540501-1-dmitry.osipenko@collabora.com>
@@ -71,31 +71,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unlock reservations on dma_resv_reserve_fences() error to fix recursive
-locking of the reservations when this error happens.
+Make virtio_gpu_plane_cleanup_fb() to clean the state which DRM core
+wants to clean up and not the current plane's state. Normally the older
+atomic state is cleaned up, but the newer state could also be cleaned up
+in case of aborted commits.
 
 Cc: stable@vger.kernel.org
 Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 ---
- drivers/gpu/drm/virtio/virtgpu_gem.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/virtio/virtgpu_plane.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/virtio/virtgpu_gem.c b/drivers/gpu/drm/virtio/virtgpu_gem.c
-index 580a78809836..7db48d17ee3a 100644
---- a/drivers/gpu/drm/virtio/virtgpu_gem.c
-+++ b/drivers/gpu/drm/virtio/virtgpu_gem.c
-@@ -228,8 +228,10 @@ int virtio_gpu_array_lock_resv(struct virtio_gpu_object_array *objs)
- 
- 	for (i = 0; i < objs->nents; ++i) {
- 		ret = dma_resv_reserve_fences(objs->objs[i]->resv, 1);
--		if (ret)
-+		if (ret) {
-+			virtio_gpu_array_unlock_resv(objs);
- 			return ret;
-+		}
- 	}
- 	return ret;
+diff --git a/drivers/gpu/drm/virtio/virtgpu_plane.c b/drivers/gpu/drm/virtio/virtgpu_plane.c
+index 6d3cc9e238a4..7148f3813d8b 100644
+--- a/drivers/gpu/drm/virtio/virtgpu_plane.c
++++ b/drivers/gpu/drm/virtio/virtgpu_plane.c
+@@ -266,14 +266,14 @@ static int virtio_gpu_plane_prepare_fb(struct drm_plane *plane,
  }
+ 
+ static void virtio_gpu_plane_cleanup_fb(struct drm_plane *plane,
+-					struct drm_plane_state *old_state)
++					struct drm_plane_state *state)
+ {
+ 	struct virtio_gpu_framebuffer *vgfb;
+ 
+-	if (!plane->state->fb)
++	if (!state->fb)
+ 		return;
+ 
+-	vgfb = to_virtio_gpu_framebuffer(plane->state->fb);
++	vgfb = to_virtio_gpu_framebuffer(state->fb);
+ 	if (vgfb->fence) {
+ 		dma_fence_put(&vgfb->fence->f);
+ 		vgfb->fence = NULL;
 -- 
 2.35.1
 

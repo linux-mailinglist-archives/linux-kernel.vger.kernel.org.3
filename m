@@ -2,71 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AEC850D3D6
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 19:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 393DC50D3DB
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 19:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236205AbiDXRSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 13:18:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40078 "EHLO
+        id S236281AbiDXRUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 13:20:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236144AbiDXRSN (ORCPT
+        with ESMTP id S229732AbiDXRUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 13:18:13 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9197D2DD9;
-        Sun, 24 Apr 2022 10:15:12 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id e4so14768308oif.2;
-        Sun, 24 Apr 2022 10:15:12 -0700 (PDT)
+        Sun, 24 Apr 2022 13:20:41 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E776E541;
+        Sun, 24 Apr 2022 10:17:40 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id h5so11509407pgc.7;
+        Sun, 24 Apr 2022 10:17:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JfJ0HfGimDKl5hpR+oluxggQqpBfRFEunRNvW/TZgiA=;
-        b=LEncwMvWMitePVfWjrIBm1Lu6RIl9iSdjcmonn20+ZVxgDt8O+A+6Ukuh3VatsPDZu
-         N9NJQf42VdT914zXAlcJ1zaYe8f2MjKglO4WhWffl5GU6mzEY17gKR1MHLrmIJBzwqdU
-         Vth1rVC27ARprqHXFhR7lDnGW/9t/0J/RfJGm97g5Bpf5ul5JGOZZ3xy36qal2qR+P/s
-         cCA+18l5LPe/gYkhh23dUbp6DzZwRxRE/6dCI0i6FHTiLsMi74LEAlK8j/up4tijnHfB
-         jzlRsZDFWn6RSjUyGPJayibkJGMwI0v6khgJZIeyiL+B8gW7/aOcDoFsyE9Y3zBzz4dI
-         NBvQ==
+        h=mime-version:from:date:message-id:subject:to;
+        bh=uKZTe7yQ+O8BqMJZ1XBsdEQMbjgQxMztKFfEfSP4DbA=;
+        b=NU2rYVB8rZ8L6ovcWBSfXSgFwmagxyaioWqP7wYjs+saiFkXomBBmKnPJhILhsvbd8
+         oZI9qcHmV4TMZzp0FCJacHk37wolUVZp8SNRJwrgUZAg76JJKLXlBz3sLRzaiP2Mkt/A
+         mdeiLsjoExOaeZtRK3r+sUihLqkUj8zKzFQgy3nXk7GSix4/j3/ZLkSJeHuFbzvP3JpX
+         Me3mYiIF6YBoBqTRrU98VirlBCveEvZ/RAwx+gNarGpCOZLNnUAOXHJjU3DJST66NeUH
+         QPuahTzWOEaywMrUqNt0R3LUDqlkQgjvr6V2TuZsNsPYXUsQPchXph/zZhUkGI2melrc
+         MqKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=JfJ0HfGimDKl5hpR+oluxggQqpBfRFEunRNvW/TZgiA=;
-        b=es/U9sOamhCL1Hi4Zm+tm2kH671nmnbAvjR+xmcUs6G3mh3SzoPkZleJaNQnye988e
-         1VogR+4H0O6ORWuURsZbqDcZBTeF5ndPafMjW6e4OqIHFit/Ot5MFayaCva63D5phq9U
-         DGagA+wWsnMpNMDF6bnxPy5ToMZ8TG7xBUMPP4o7P7hBvPbmFp4fHdIhm+4LXySYUrEI
-         UNxOJ34TP6uDY0usSdIxQtRVPRP6TFA4SFO6Z2bveksf2yJRdkb987pzlyx3LkfbF2xI
-         9Cn2Vl/AQ9QxHM8iVFkbxZnl6/O3aeAoY6lrXNpq4Jn87HTq3kGGv8a/eNp0bk1cGOIT
-         Bzdg==
-X-Gm-Message-State: AOAM531ZJT6R417i60NPFWqwobP3/TOHPpS0yyyKgX9GdC6N0BQSV5vZ
-        UOhFn99Zwv49W+xFYUrk8gU=
-X-Google-Smtp-Source: ABdhPJxurq3UaxQ7hMjnuo7hDsVmYUr+2PvUhLxtB+3U+NJn+KbHphqozBxFw52vUHdjov9pFXWk6A==
-X-Received: by 2002:a05:6808:ecc:b0:2fa:7d95:8dec with SMTP id q12-20020a0568080ecc00b002fa7d958decmr10541594oiv.34.1650820511904;
-        Sun, 24 Apr 2022 10:15:11 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w36-20020a05687033a400b000d75f1d9b82sm2455684oae.47.2022.04.24.10.15.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 10:15:10 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 24 Apr 2022 10:15:08 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eduardo Valentin <eduval@amazon.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Eduardo Valentin <evalenti@kernel.org>
-Subject: Re: [PATCH 1/1] drivers: hwmon: pmbus: register with thermal for
- PSC_TEMPERATURE
-Message-ID: <20220424171508.GA748830@roeck-us.net>
-References: <20220322014650.14956-1-eduval@amazon.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=uKZTe7yQ+O8BqMJZ1XBsdEQMbjgQxMztKFfEfSP4DbA=;
+        b=gqLXeHRYITlQ7/QHU5uIgQAd0c6f+7d6KoNwFBpa0FWGx6O6N/hkASfwMDpmpLp0L1
+         SoAFv4J4OfxSucls3kUpyl/+OnvRZ6r0wPT8CgXww0V+E/2bJbRjM0kmGIf3QRbncpQh
+         047cqkH0DkxzI76AOao0v39a/0HJCkaKaOt34UN0dL6wh1IiZbHx8PlR78SzTyfg1JrD
+         O21YxacXb5BpJeBUCWsnmgHIuPL88fbEiPkl9YCOvHfu2mdFpUYpCvGlNhnJ9FmpbTYv
+         rtnmUavquEsd3KNLSl9qX5b2nbS1czQfDyCZvuamMugkYDLKmn87lwUfgwx9uN8hkO1x
+         UXdQ==
+X-Gm-Message-State: AOAM531MH2Tygfg6EzJ775Yd9WSBmhUcecV5k5gbLA03TiaTnHhQ0FkO
+        pRlCFvim2vwZzgRwroZwQAXQz68ZoMh5bpEbvTZJbpRUViixBw==
+X-Google-Smtp-Source: ABdhPJxFD7EaU+eAZ/z9hlrkfBHeDqGKOSztvtOACm6g9JxWEeHUJFeF+tar14FIQ3QSi1/to+ULgBgcGe9fkRElbfA=
+X-Received: by 2002:a63:4c4b:0:b0:3aa:4af8:9ab8 with SMTP id
+ m11-20020a634c4b000000b003aa4af89ab8mr12344493pgl.430.1650820659975; Sun, 24
+ Apr 2022 10:17:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220322014650.14956-1-eduval@amazon.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+From:   Jinyoung CHOI <ychoijy@gmail.com>
+Date:   Mon, 25 Apr 2022 02:17:29 +0900
+Message-ID: <CAM36TBv-ovw+Og=dm1f42f13VJTub-jmmaApWRgedwO_ZS2TTA@mail.gmail.com>
+Subject: [RESEND PATCH v2] scsi: ufs: wb: Add Manual Flush sysfs and cleanup
+ toggle functions
+To:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        adrian.hunter@intel.com, ALIM AKHTAR <alim.akhtar@samsung.com>,
+        asutoshd@codeaurora.org, Avri Altman <Avri.Altman@wdc.com>,
+        martin.petersen@oracle.com, jejb@linux.ibm.com,
+        j-young.choi@samsung.com, beanhuo@micron.com,
+        Bart Van Assche <bvanassche@acm.org>, cang@codeaurora.org,
+        Daejun Park <daejun7.park@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,189 +67,313 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 06:46:50PM -0700, Eduardo Valentin wrote:
-> Some pmbus device drivers have device tree support and
-> may want to use of-thermal to register a thermal zone
-> OF sensor for those device drivers.
-> 
-> This way we allow describing device tree thermal zones
-> for pmbus device drivers with device tree support.
-> 
-> This patch achieves this by registering pmbus sensors
-> with thermal subsystem if they are PSC_TEMPERATURE
-> and are providing _input hwmon interface.
-> 
-> Cc: Guenter Roeck <linux@roeck-us.net> (maintainer:PMBUS HARDWARE MONITORING DRIVERS)
-> Cc: Jean Delvare <jdelvare@suse.com> (maintainer:HARDWARE MONITORING)
-> Cc: linux-hwmon@vger.kernel.org (open list:PMBUS HARDWARE MONITORING DRIVERS)
-> Cc: linux-kernel@vger.kernel.org (open list)
-> Signed-off-by: Eduardo Valentin <eduval@amazon.com>
-> Signed-off-by: Eduardo Valentin <evalenti@kernel.org>
-> ---
->  drivers/hwmon/pmbus/pmbus_core.c | 88 +++++++++++++++++++++++++++++---
->  1 file changed, 80 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 776ee2237be2..a51cdfab1c3e 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -19,6 +19,8 @@
->  #include <linux/pmbus.h>
->  #include <linux/regulator/driver.h>
->  #include <linux/regulator/machine.h>
-> +#include <linux/of.h>
-> +#include <linux/thermal.h>
->  #include "pmbus.h"
->  
->  /*
-> @@ -1078,7 +1080,71 @@ static int pmbus_add_boolean(struct pmbus_data *data,
->  	return pmbus_add_attribute(data, &a->dev_attr.attr);
->  }
->  
-> -static struct pmbus_sensor *pmbus_add_sensor(struct pmbus_data *data,
-> +/* of thermal for pmbus temperature sensors */
-> +struct pmbus_thermal_data {
-> +	struct i2c_client *client;
-> +	struct pmbus_sensor *sensor;
-> +};
-> +
-> +static int pmbus_thermal_get_temp(void *data, int *temp)
-> +{
-> +	struct pmbus_thermal_data *tdata = data;
-> +	struct i2c_client *client = tdata->client;
-> +	struct pmbus_sensor *sensor = tdata->sensor;
-> +	struct pmbus_data *pmbus_data = i2c_get_clientdata(client);
-> +	struct device *dev = pmbus_data->hwmon_dev;
+There is the following quirk to bypass "WB Manual Flush" in Write
+Booster.
 
-The i2c client is also in to_i2c_client(pmbus_data->dev);
-Since pmbus_data is needed anyway, I would suggest to store it
-instead of struct i2c_client * in pmbus_thermal_data.
-That avoids having to change the parameters of pmbus_add_sensor().
+  - UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL
 
-> +	int ret = 0;
-> +
-> +	if (!dev) {
-> +		/* May not even get to hwmon yet */
-> +		*temp = 0;
-> +		return 0;
-> +	}
-> +
-> +	mutex_lock(&pmbus_data->update_lock);
-> +	pmbus_update_sensor_data(client, sensor);
-> +	if (sensor->data < 0)
-> +		ret = sensor->data;
-> +	else
-> +		*temp = (int)pmbus_reg2data(pmbus_data, sensor);
-> +	mutex_unlock(&pmbus_data->update_lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static const struct thermal_zone_of_device_ops pmbus_thermal_ops = {
-> +	.get_temp = pmbus_thermal_get_temp,
-> +};
-> +
-> +static int pmbus_thermal_add_sensor(struct i2c_client *client,
-> +				    struct pmbus_data *pmbus_data,
-> +				    struct pmbus_sensor *sensor, int index)
-> +{
-> +	struct device *dev = pmbus_data->dev;
-> +	struct pmbus_thermal_data *tdata;
-> +	struct thermal_zone_device *tzd;
-> +
-> +	tdata = devm_kzalloc(dev, sizeof(*tdata), GFP_KERNEL);
-> +	if (!tdata)
-> +		return -ENOMEM;
-> +
-> +	tdata->sensor = sensor;
-> +	tdata->client = client;
-> +
-> +	tzd = devm_thermal_zone_of_sensor_register(dev, index, tdata,
-> +						   &pmbus_thermal_ops);
-> +	/*
-> +	 * If CONFIG_THERMAL_OF is disabled, this returns -ENODEV,
-> +	 * so ignore that error but forward any other error.
-> +	 */
-> +	if (IS_ERR(tzd) && (PTR_ERR(tzd) != -ENODEV))
-> +		return PTR_ERR(tzd);
-> +
-> +	return 0;
-> +}
-> +
-> +static struct pmbus_sensor *pmbus_add_sensor(struct i2c_client *client,
-> +					     struct pmbus_data *data,
->  					     const char *name, const char *type,
->  					     int seq, int page, int phase,
->  					     int reg,
-> @@ -1121,6 +1187,10 @@ static struct pmbus_sensor *pmbus_add_sensor(struct pmbus_data *data,
->  	sensor->next = data->sensors;
->  	data->sensors = sensor;
->  
-> +	/* temperature sensors with _input values are registered with thermal */
-> +	if (class == PSC_TEMPERATURE && strcmp(type, "input") == 0)
+If this quirk is not set, there is no knob that can control "WB Manual Flush".
 
-type can be NULL. While that is not currently the case if the class
-is PSC_TEMPERATURE, we should not rely on it.
+There are three flags that control Write Booster Feature.
+1. WB ON/OFF
+2. WB Hibern Flush ON/OFF
+3. WB Flush ON/OFF
 
-> +		pmbus_thermal_add_sensor(client, data, sensor, seq);
-> +
->  	return sensor;
->  }
->  
-> @@ -1216,8 +1286,9 @@ static int pmbus_add_limit_attrs(struct i2c_client *client,
->  
->  	for (i = 0; i < nlimit; i++) {
->  		if (pmbus_check_word_register(client, page, l->reg)) {
-> -			curr = pmbus_add_sensor(data, name, l->attr, index,
-> -						page, 0xff, l->reg, attr->class,
-> +			curr = pmbus_add_sensor(client, data, name, l->attr,
-> +						index, page, 0xff, l->reg,
-> +						attr->class,
->  						attr->update || l->update,
->  						false, true);
->  			if (!curr)
-> @@ -1258,7 +1329,7 @@ static int pmbus_add_sensor_attrs_one(struct i2c_client *client,
->  		if (ret)
->  			return ret;
->  	}
-> -	base = pmbus_add_sensor(data, name, "input", index, page, phase,
-> +	base = pmbus_add_sensor(client, data, name, "input", index, page, phase,
->  				attr->reg, attr->class, true, true, true);
->  	if (!base)
->  		return -ENOMEM;
-> @@ -1887,7 +1958,7 @@ static int pmbus_add_fan_ctrl(struct i2c_client *client,
->  {
->  	struct pmbus_sensor *sensor;
->  
-> -	sensor = pmbus_add_sensor(data, "fan", "target", index, page,
-> +	sensor = pmbus_add_sensor(client, data, "fan", "target", index, page,
->  				  0xff, PMBUS_VIRT_FAN_TARGET_1 + id, PSC_FAN,
->  				  false, false, true);
->  
-> @@ -1898,14 +1969,14 @@ static int pmbus_add_fan_ctrl(struct i2c_client *client,
->  			(data->info->func[page] & PMBUS_HAVE_PWM34)))
->  		return 0;
->  
-> -	sensor = pmbus_add_sensor(data, "pwm", NULL, index, page,
-> +	sensor = pmbus_add_sensor(client, data, "pwm", NULL, index, page,
->  				  0xff, PMBUS_VIRT_PWM_1 + id, PSC_PWM,
->  				  false, false, true);
->  
->  	if (!sensor)
->  		return -ENOMEM;
->  
-> -	sensor = pmbus_add_sensor(data, "pwm", "enable", index, page,
-> +	sensor = pmbus_add_sensor(client, data, "pwm", "enable", index, page,
->  				  0xff, PMBUS_VIRT_PWM_ENABLE_1 + id, PSC_PWM,
->  				  true, false, false);
->  
-> @@ -1947,7 +2018,8 @@ static int pmbus_add_fan_attributes(struct i2c_client *client,
->  			    (!(regval & (PB_FAN_1_INSTALLED >> ((f & 1) * 4)))))
->  				continue;
->  
-> -			if (pmbus_add_sensor(data, "fan", "input", index,
-> +			if (pmbus_add_sensor(client, data, "fan",
-> +					     "input", index,
->  					     page, 0xff, pmbus_fan_registers[f],
->  					     PSC_FAN, true, true, true) == NULL)
->  				return -ENOMEM;
+The sysfs that controls the WB was implemented. (1)
+
+In the case of "Hibern Flush", it is always good to turn on.
+Control may not be required. (2)
+
+Finally, "Manual flush" may be determined that it can affect
+performance or power consumption.
+So the sysfs that controls this may be necessary. (3)
+
+In addition, toggle functions for controlling the above flags are cleaned.
+
+Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
+---
+ drivers/scsi/ufs/ufs-sysfs.c | 46 +++++++++++++++++++++-
+ drivers/scsi/ufs/ufshcd.c    | 76 ++++++++++++++++++------------------
+ drivers/scsi/ufs/ufshcd.h    |  7 ++++
+ 3 files changed, 89 insertions(+), 40 deletions(-)
+
+diff --git a/drivers/scsi/ufs/ufs-sysfs.c b/drivers/scsi/ufs/ufs-sysfs.c
+index 5c405ff7b6ea..e0f6ba7ffefc 100644
+--- a/drivers/scsi/ufs/ufs-sysfs.c
++++ b/drivers/scsi/ufs/ufs-sysfs.c
+@@ -229,7 +229,7 @@ static ssize_t wb_on_store(struct device *dev,
+struct device_attribute *attr,
+  * If the platform supports UFSHCD_CAP_CLK_SCALING, turn WB
+  * on/off will be done while clock scaling up/down.
+  */
+- dev_warn(dev, "To control WB through wb_on is not allowed!\n");
++ dev_warn(dev, "It is not allowed to control WB!\n");
+  return -EOPNOTSUPP;
+  }
+
+@@ -253,6 +253,48 @@ static ssize_t wb_on_store(struct device *dev,
+struct device_attribute *attr,
+  return res < 0 ? res : count;
+ }
+
++static ssize_t wb_buf_flush_en_show(struct device *dev,
++     struct device_attribute *attr,
++     char *buf)
++{
++ struct ufs_hba *hba = dev_get_drvdata(dev);
++
++ return sysfs_emit(buf, "%d\n", hba->dev_info.wb_buf_flush_enabled);
++}
++
++static ssize_t wb_buf_flush_en_store(struct device *dev,
++      struct device_attribute *attr,
++      const char *buf, size_t count)
++{
++ struct ufs_hba *hba = dev_get_drvdata(dev);
++ unsigned int wb_buf_flush_en;
++ ssize_t res;
++
++ if (!ufshcd_is_wb_buf_flush_allowed(hba)) {
++ dev_warn(dev, "It is not allowed to control WB buf flush!\n");
++ return -EOPNOTSUPP;
++ }
++
++ if (kstrtouint(buf, 0, &wb_buf_flush_en))
++ return -EINVAL;
++
++ if (wb_buf_flush_en != 0 && wb_buf_flush_en != 1)
++ return -EINVAL;
++
++ down(&hba->host_sem);
++ if (!ufshcd_is_user_access_allowed(hba)) {
++ res = -EBUSY;
++ goto out;
++ }
++
++ ufshcd_rpm_get_sync(hba);
++ res = ufshcd_wb_toggle_buf_flush(hba, wb_buf_flush_en);
++ ufshcd_rpm_put_sync(hba);
++out:
++ up(&hba->host_sem);
++ return res < 0 ? res : count;
++}
++
+ static DEVICE_ATTR_RW(rpm_lvl);
+ static DEVICE_ATTR_RO(rpm_target_dev_state);
+ static DEVICE_ATTR_RO(rpm_target_link_state);
+@@ -261,6 +303,7 @@ static DEVICE_ATTR_RO(spm_target_dev_state);
+ static DEVICE_ATTR_RO(spm_target_link_state);
+ static DEVICE_ATTR_RW(auto_hibern8);
+ static DEVICE_ATTR_RW(wb_on);
++static DEVICE_ATTR_RW(wb_buf_flush_en);
+
+ static struct attribute *ufs_sysfs_ufshcd_attrs[] = {
+  &dev_attr_rpm_lvl.attr,
+@@ -271,6 +314,7 @@ static struct attribute *ufs_sysfs_ufshcd_attrs[] = {
+  &dev_attr_spm_target_link_state.attr,
+  &dev_attr_auto_hibern8.attr,
+  &dev_attr_wb_on.attr,
++ &dev_attr_wb_buf_flush_en.attr,
+  NULL
+ };
+
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 3f9caafa91bf..153a625b3111 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -248,8 +248,7 @@ static int ufshcd_setup_vreg(struct ufs_hba *hba, bool on);
+ static inline int ufshcd_config_vreg_hpm(struct ufs_hba *hba,
+  struct ufs_vreg *vreg);
+ static int ufshcd_try_to_abort_task(struct ufs_hba *hba, int tag);
+-static void ufshcd_wb_toggle_flush_during_h8(struct ufs_hba *hba, bool set);
+-static inline void ufshcd_wb_toggle_flush(struct ufs_hba *hba, bool enable);
++static void ufshcd_wb_toggle_buf_flush_during_h8(struct ufs_hba *hba,
+bool set);
+ static void ufshcd_hba_vreg_set_lpm(struct ufs_hba *hba);
+ static void ufshcd_hba_vreg_set_hpm(struct ufs_hba *hba);
+
+@@ -269,16 +268,17 @@ static inline void ufshcd_disable_irq(struct ufs_hba *hba)
+  }
+ }
+
+-static inline void ufshcd_wb_config(struct ufs_hba *hba)
++static void ufshcd_wb_set_default_flags(struct ufs_hba *hba)
+ {
+  if (!ufshcd_is_wb_allowed(hba))
+  return;
+
+  ufshcd_wb_toggle(hba, true);
+
+- ufshcd_wb_toggle_flush_during_h8(hba, true);
+- if (!(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL))
+- ufshcd_wb_toggle_flush(hba, true);
++ ufshcd_wb_toggle_buf_flush_during_h8(hba, true);
++
++ if (ufshcd_is_wb_buf_flush_allowed(hba))
++ ufshcd_wb_toggle_buf_flush(hba, true);
+ }
+
+ static void ufshcd_scsi_unblock_requests(struct ufs_hba *hba)
+@@ -1274,9 +1274,10 @@ static int ufshcd_devfreq_scale(struct ufs_hba
+*hba, bool scale_up)
+  }
+  }
+
+- /* Enable Write Booster if we have scaled up else disable it */
+  downgrade_write(&hba->clk_scaling_lock);
+  is_writelock = false;
++
++ /* Enable Write Booster if we have scaled up else disable it */
+  ufshcd_wb_toggle(hba, scale_up);
+
+ out_unprepare:
+@@ -5693,9 +5694,13 @@ static int __ufshcd_wb_toggle(struct ufs_hba
+*hba, bool set, enum flag_idn idn)
+ {
+  u8 index;
+  enum query_opcode opcode = set ? UPIU_QUERY_OPCODE_SET_FLAG :
+-    UPIU_QUERY_OPCODE_CLEAR_FLAG;
++ UPIU_QUERY_OPCODE_CLEAR_FLAG;
++
++ if (!ufshcd_is_wb_allowed(hba))
++ return -EPERM;
+
+  index = ufshcd_wb_get_query_index(hba);
++
+  return ufshcd_query_flag_retry(hba, opcode, idn, index, NULL);
+ }
+
+@@ -5703,60 +5708,51 @@ int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable)
+ {
+  int ret;
+
+- if (!ufshcd_is_wb_allowed(hba))
+- return 0;
+-
+- if (!(enable ^ hba->dev_info.wb_enabled))
++ if (hba->dev_info.wb_enabled == enable)
+  return 0;
+
+  ret = __ufshcd_wb_toggle(hba, enable, QUERY_FLAG_IDN_WB_EN);
+  if (ret) {
+- dev_err(hba->dev, "%s Write Booster %s failed %d\n",
++ dev_err(hba->dev, "%s: failed to %s WB %d\n",
+  __func__, enable ? "enable" : "disable", ret);
+  return ret;
+  }
+
+  hba->dev_info.wb_enabled = enable;
+- dev_info(hba->dev, "%s Write Booster %s\n",
+- __func__, enable ? "enabled" : "disabled");
+
+  return ret;
+ }
+
+-static void ufshcd_wb_toggle_flush_during_h8(struct ufs_hba *hba, bool set)
++static void ufshcd_wb_toggle_buf_flush_during_h8(struct ufs_hba *hba,
++ bool enable)
+ {
+  int ret;
+
+- ret = __ufshcd_wb_toggle(hba, set,
+- QUERY_FLAG_IDN_WB_BUFF_FLUSH_DURING_HIBERN8);
+- if (ret) {
+- dev_err(hba->dev, "%s: WB-Buf Flush during H8 %s failed: %d\n",
+- __func__, set ? "enable" : "disable", ret);
+- return;
+- }
+- dev_dbg(hba->dev, "%s WB-Buf Flush during H8 %s\n",
+- __func__, set ? "enabled" : "disabled");
++ ret = __ufshcd_wb_toggle(hba, enable,
++ QUERY_FLAG_IDN_WB_BUFF_FLUSH_DURING_HIBERN8);
++ if (ret)
++ dev_err(hba->dev, "%s: failed to %s WB buf flush during H8 %d\n",
++ __func__, enable ? "enable" : "disable", ret);
+ }
+
+-static inline void ufshcd_wb_toggle_flush(struct ufs_hba *hba, bool enable)
++int ufshcd_wb_toggle_buf_flush(struct ufs_hba *hba, bool enable)
+ {
+  int ret;
+
+- if (!ufshcd_is_wb_allowed(hba) ||
+-     hba->dev_info.wb_buf_flush_enabled == enable)
+- return;
++ if (hba->dev_info.wb_buf_flush_enabled == enable)
++ return 0;
+
+- ret = __ufshcd_wb_toggle(hba, enable, QUERY_FLAG_IDN_WB_BUFF_FLUSH_EN);
++ ret = __ufshcd_wb_toggle(hba, enable,
++ QUERY_FLAG_IDN_WB_BUFF_FLUSH_EN);
+  if (ret) {
+- dev_err(hba->dev, "%s WB-Buf Flush %s failed %d\n", __func__,
+- enable ? "enable" : "disable", ret);
+- return;
++ dev_err(hba->dev, "%s: failed to %s WB buf flush %d\n",
++ __func__, enable ? "enable" : "disable", ret);
++ return ret;
+  }
+
+  hba->dev_info.wb_buf_flush_enabled = enable;
+
+- dev_dbg(hba->dev, "%s WB-Buf Flush %s\n",
+- __func__, enable ? "enabled" : "disabled");
++ return ret;
+ }
+
+ static bool ufshcd_wb_presrv_usrspc_keep_vcc_on(struct ufs_hba *hba,
+@@ -5790,10 +5786,10 @@ static bool
+ufshcd_wb_presrv_usrspc_keep_vcc_on(struct ufs_hba *hba,
+
+ static void ufshcd_wb_force_disable(struct ufs_hba *hba)
+ {
+- if (!(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL))
+- ufshcd_wb_toggle_flush(hba, false);
++ if (ufshcd_is_wb_buf_flush_allowed(hba))
++ ufshcd_wb_toggle_buf_flush(hba, false);
+
+- ufshcd_wb_toggle_flush_during_h8(hba, false);
++ ufshcd_wb_toggle_buf_flush_during_h8(hba, false);
+  ufshcd_wb_toggle(hba, false);
+  hba->caps &= ~UFSHCD_CAP_WB_EN;
+
+@@ -8178,7 +8174,9 @@ static int ufshcd_probe_hba(struct ufs_hba *hba,
+bool init_dev_params)
+  */
+  ufshcd_set_active_icc_lvl(hba);
+
+- ufshcd_wb_config(hba);
++ /* Enable UFS Write Booster if supported */
++ ufshcd_wb_set_default_flags(hba);
++
+  if (hba->ee_usr_mask)
+  ufshcd_write_ee_control(hba);
+  /* Enable Auto-Hibernate if configured */
+diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+index 94f545be183a..69b5f33d5746 100644
+--- a/drivers/scsi/ufs/ufshcd.h
++++ b/drivers/scsi/ufs/ufshcd.h
+@@ -991,6 +991,12 @@ static inline bool ufshcd_is_wb_allowed(struct
+ufs_hba *hba)
+  return hba->caps & UFSHCD_CAP_WB_EN;
+ }
+
++static inline bool ufshcd_is_wb_buf_flush_allowed(struct ufs_hba *hba)
++{
++ return ufshcd_is_wb_allowed(hba) &&
++ !(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL);
++}
++
+ static inline bool ufshcd_is_user_access_allowed(struct ufs_hba *hba)
+ {
+  return !hba->shutting_down;
+@@ -1209,6 +1215,7 @@ int ufshcd_exec_raw_upiu_cmd(struct ufs_hba *hba,
+       enum query_opcode desc_op);
+
+ int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable);
++int ufshcd_wb_toggle_buf_flush(struct ufs_hba *hba, bool enable);
+ int ufshcd_suspend_prepare(struct device *dev);
+ int __ufshcd_suspend_prepare(struct device *dev, bool rpm_ok_for_spm);
+ void ufshcd_resume_complete(struct device *dev);
+-- 
+2.25.1

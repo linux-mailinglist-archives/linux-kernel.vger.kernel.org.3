@@ -2,64 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4AD850D17D
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 13:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4DAE50D17B
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 13:29:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239282AbiDXLao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 07:30:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36778 "EHLO
+        id S239291AbiDXLbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 07:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233437AbiDXLak (ORCPT
+        with ESMTP id S239288AbiDXLbs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 07:30:40 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE074D271
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 04:27:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650799659; x=1682335659;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=f86awJir5y2qFkW7/f/0NgIk7L9zR1YS6i+/Y6Nxix4=;
-  b=NOy9szBFEK7mxEPIiFs3jNxbl2fLmD5cU57CQ3kizj431PCY8c1NXmuP
-   asANwgnqUZYFf0sk/UufzaqHrYTpEBL3QlKnTa6fxnvSBNmvsHjhZOyaT
-   DikngLpqEZjljfMxBUmTiYyB3/oBUgS8GTH38ghfj6tjrog4m1yFr47oZ
-   nc0Nr1cr4+PyajMpjSFN/zSogE4jFRKEPMDPY2GWZYs/EZFcjW9nu+XBz
-   v/UYjQuFWZ++4hQvdT/M+5KznKw7PDB/CDstJKIlOi9RHUuOEXjZFEx2h
-   ZPnUbfMHki6Zg/iYQNzHckslZT+MpOg1j+1BqR7Tz+ShibJDdr3f2qcty
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="264820818"
-X-IronPort-AV: E=Sophos;i="5.90,286,1643702400"; 
-   d="scan'208";a="264820818"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 04:27:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,286,1643702400"; 
-   d="scan'208";a="704184274"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Apr 2022 04:27:37 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1niaOu-0001Or-Tk;
-        Sun, 24 Apr 2022 11:27:36 +0000
-Date:   Sun, 24 Apr 2022 19:27:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>,
-        Forest Bond <forest@alittletooquiet.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org
-Subject: Re: [PATCH 4/5] staging: vt6655: Replace two VNSvInPortD with
- ioread64_lo_hi
-Message-ID: <202204241941.XzwKN0gg-lkp@intel.com>
-References: <db5ba681cea27de815b172f8b93a8fd1efa30e99.1650784817.git.philipp.g.hortmann@gmail.com>
+        Sun, 24 Apr 2022 07:31:48 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA074D611;
+        Sun, 24 Apr 2022 04:28:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1650799726; x=1682335726;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8k1ES70BmUWZMSrJyoRyHOAjXPeAakRkGgoz8h1dkfU=;
+  b=r8VdgN++kI4+X8jgUgCiP5BEsdt4viZF+/GQ6SbF4ibbZXy4C+pxH9Aq
+   O3LzexRDGSb/M77EUCO6ZactKwCvfmfhu/CQC/YP2RnqJCUa+OXY0ms0R
+   Ny+tHOphgEotHafQQ9jvR2vrsmVBkvK3w5kHOweGGdoHAbN3AS/MpGlPx
+   QV7qSC77Tx3KKcrLjf363+nvpIPxWS5aUW9zXSG+SIB2FSMKPwZlhv+VR
+   62Yi9R+Pz8w49jmu/pCJ7yyHHtggMODhxfHCbDlpKZa1z7q7UYTJZt3Yq
+   YbgGqoslbmbGZeJe6EKulMU+AjZBVAGU6XjCtdj57EmpjX3YGB5TO3Og1
+   A==;
+X-IronPort-AV: E=Sophos;i="5.90,286,1643698800"; 
+   d="scan'208";a="93351080"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Apr 2022 04:28:46 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Sun, 24 Apr 2022 04:28:44 -0700
+Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Sun, 24 Apr 2022 04:28:35 -0700
+From:   Arun Ramadoss <arun.ramadoss@microchip.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, <UNGLinuxDriver@microchip.com>,
+        Woojung Huh <woojung.huh@microchip.com>
+Subject: [Patch net-next] net: dsa: ksz: added the generic port_stp_state_set function
+Date:   Sun, 24 Apr 2022 16:58:31 +0530
+Message-ID: <20220424112831.11504-1-arun.ramadoss@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <db5ba681cea27de815b172f8b93a8fd1efa30e99.1650784817.git.philipp.g.hortmann@gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,74 +65,219 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Philipp,
+The ksz8795 and ksz9477 uses the same algorithm for the
+port_stp_state_set function except the register address is different. So
+moved the algorithm to the ksz_common.c and used the dev_ops for
+register read and write. This function can also used for the lan937x
+part. Hence making it generic for all the parts.
 
-Thank you for the patch! Yet something to improve:
+Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+---
+ drivers/net/dsa/microchip/ksz8795.c     | 35 +---------------------
+ drivers/net/dsa/microchip/ksz8795_reg.h |  3 --
+ drivers/net/dsa/microchip/ksz9477.c     | 33 +-------------------
+ drivers/net/dsa/microchip/ksz9477_reg.h |  4 ---
+ drivers/net/dsa/microchip/ksz_common.c  | 40 +++++++++++++++++++++++++
+ drivers/net/dsa/microchip/ksz_common.h  |  7 +++++
+ 6 files changed, 49 insertions(+), 73 deletions(-)
 
-[auto build test ERROR on staging/staging-testing]
+diff --git a/drivers/net/dsa/microchip/ksz8795.c b/drivers/net/dsa/microchip/ksz8795.c
+index b2752978cb09..f91deea9368e 100644
+--- a/drivers/net/dsa/microchip/ksz8795.c
++++ b/drivers/net/dsa/microchip/ksz8795.c
+@@ -1027,40 +1027,7 @@ static void ksz8_cfg_port_member(struct ksz_device *dev, int port, u8 member)
+ 
+ static void ksz8_port_stp_state_set(struct dsa_switch *ds, int port, u8 state)
+ {
+-	struct ksz_device *dev = ds->priv;
+-	struct ksz_port *p;
+-	u8 data;
+-
+-	ksz_pread8(dev, port, P_STP_CTRL, &data);
+-	data &= ~(PORT_TX_ENABLE | PORT_RX_ENABLE | PORT_LEARN_DISABLE);
+-
+-	switch (state) {
+-	case BR_STATE_DISABLED:
+-		data |= PORT_LEARN_DISABLE;
+-		break;
+-	case BR_STATE_LISTENING:
+-		data |= (PORT_RX_ENABLE | PORT_LEARN_DISABLE);
+-		break;
+-	case BR_STATE_LEARNING:
+-		data |= PORT_RX_ENABLE;
+-		break;
+-	case BR_STATE_FORWARDING:
+-		data |= (PORT_TX_ENABLE | PORT_RX_ENABLE);
+-		break;
+-	case BR_STATE_BLOCKING:
+-		data |= PORT_LEARN_DISABLE;
+-		break;
+-	default:
+-		dev_err(ds->dev, "invalid STP state: %d\n", state);
+-		return;
+-	}
+-
+-	ksz_pwrite8(dev, port, P_STP_CTRL, data);
+-
+-	p = &dev->ports[port];
+-	p->stp_state = state;
+-
+-	ksz_update_port_member(dev, port);
++	ksz_port_stp_state_set(ds, port, state, P_STP_CTRL);
+ }
+ 
+ static void ksz8_flush_dyn_mac_table(struct ksz_device *dev, int port)
+diff --git a/drivers/net/dsa/microchip/ksz8795_reg.h b/drivers/net/dsa/microchip/ksz8795_reg.h
+index d74defcd86b4..4109433b6b6c 100644
+--- a/drivers/net/dsa/microchip/ksz8795_reg.h
++++ b/drivers/net/dsa/microchip/ksz8795_reg.h
+@@ -160,9 +160,6 @@
+ #define PORT_DISCARD_NON_VID		BIT(5)
+ #define PORT_FORCE_FLOW_CTRL		BIT(4)
+ #define PORT_BACK_PRESSURE		BIT(3)
+-#define PORT_TX_ENABLE			BIT(2)
+-#define PORT_RX_ENABLE			BIT(1)
+-#define PORT_LEARN_DISABLE		BIT(0)
+ 
+ #define REG_PORT_1_CTRL_3		0x13
+ #define REG_PORT_2_CTRL_3		0x23
+diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
+index 8222c8a6c5ec..4f617fee9a4e 100644
+--- a/drivers/net/dsa/microchip/ksz9477.c
++++ b/drivers/net/dsa/microchip/ksz9477.c
+@@ -517,38 +517,7 @@ static void ksz9477_cfg_port_member(struct ksz_device *dev, int port,
+ static void ksz9477_port_stp_state_set(struct dsa_switch *ds, int port,
+ 				       u8 state)
+ {
+-	struct ksz_device *dev = ds->priv;
+-	struct ksz_port *p = &dev->ports[port];
+-	u8 data;
+-
+-	ksz_pread8(dev, port, P_STP_CTRL, &data);
+-	data &= ~(PORT_TX_ENABLE | PORT_RX_ENABLE | PORT_LEARN_DISABLE);
+-
+-	switch (state) {
+-	case BR_STATE_DISABLED:
+-		data |= PORT_LEARN_DISABLE;
+-		break;
+-	case BR_STATE_LISTENING:
+-		data |= (PORT_RX_ENABLE | PORT_LEARN_DISABLE);
+-		break;
+-	case BR_STATE_LEARNING:
+-		data |= PORT_RX_ENABLE;
+-		break;
+-	case BR_STATE_FORWARDING:
+-		data |= (PORT_TX_ENABLE | PORT_RX_ENABLE);
+-		break;
+-	case BR_STATE_BLOCKING:
+-		data |= PORT_LEARN_DISABLE;
+-		break;
+-	default:
+-		dev_err(ds->dev, "invalid STP state: %d\n", state);
+-		return;
+-	}
+-
+-	ksz_pwrite8(dev, port, P_STP_CTRL, data);
+-	p->stp_state = state;
+-
+-	ksz_update_port_member(dev, port);
++	ksz_port_stp_state_set(ds, port, state, P_STP_CTRL);
+ }
+ 
+ static void ksz9477_flush_dyn_mac_table(struct ksz_device *dev, int port)
+diff --git a/drivers/net/dsa/microchip/ksz9477_reg.h b/drivers/net/dsa/microchip/ksz9477_reg.h
+index 0bd58467181f..7a2c8d4767af 100644
+--- a/drivers/net/dsa/microchip/ksz9477_reg.h
++++ b/drivers/net/dsa/microchip/ksz9477_reg.h
+@@ -1586,10 +1586,6 @@
+ 
+ #define REG_PORT_LUE_MSTP_STATE		0x0B04
+ 
+-#define PORT_TX_ENABLE			BIT(2)
+-#define PORT_RX_ENABLE			BIT(1)
+-#define PORT_LEARN_DISABLE		BIT(0)
+-
+ /* C - PTP */
+ 
+ #define REG_PTP_PORT_RX_DELAY__2	0x0C00
+diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
+index 8014b18d9391..9b9f570ebb0b 100644
+--- a/drivers/net/dsa/microchip/ksz_common.c
++++ b/drivers/net/dsa/microchip/ksz_common.c
+@@ -372,6 +372,46 @@ int ksz_enable_port(struct dsa_switch *ds, int port, struct phy_device *phy)
+ }
+ EXPORT_SYMBOL_GPL(ksz_enable_port);
+ 
++void ksz_port_stp_state_set(struct dsa_switch *ds, int port,
++			    u8 state, int reg)
++{
++	struct ksz_device *dev = ds->priv;
++	struct ksz_port *p;
++	u8 data;
++
++	ksz_pread8(dev, port, reg, &data);
++	data &= ~(PORT_TX_ENABLE | PORT_RX_ENABLE | PORT_LEARN_DISABLE);
++
++	switch (state) {
++	case BR_STATE_DISABLED:
++		data |= PORT_LEARN_DISABLE;
++		break;
++	case BR_STATE_LISTENING:
++		data |= (PORT_RX_ENABLE | PORT_LEARN_DISABLE);
++		break;
++	case BR_STATE_LEARNING:
++		data |= PORT_RX_ENABLE;
++		break;
++	case BR_STATE_FORWARDING:
++		data |= (PORT_TX_ENABLE | PORT_RX_ENABLE);
++		break;
++	case BR_STATE_BLOCKING:
++		data |= PORT_LEARN_DISABLE;
++		break;
++	default:
++		dev_err(ds->dev, "invalid STP state: %d\n", state);
++		return;
++	}
++
++	ksz_pwrite8(dev, port, reg, data);
++
++	p = &dev->ports[port];
++	p->stp_state = state;
++
++	ksz_update_port_member(dev, port);
++}
++EXPORT_SYMBOL_GPL(ksz_port_stp_state_set);
++
+ struct ksz_device *ksz_switch_alloc(struct device *base, void *priv)
+ {
+ 	struct dsa_switch *ds;
+diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
+index 485d4a948c38..4d978832c448 100644
+--- a/drivers/net/dsa/microchip/ksz_common.h
++++ b/drivers/net/dsa/microchip/ksz_common.h
+@@ -165,6 +165,8 @@ int ksz_port_bridge_join(struct dsa_switch *ds, int port,
+ 			 struct netlink_ext_ack *extack);
+ void ksz_port_bridge_leave(struct dsa_switch *ds, int port,
+ 			   struct dsa_bridge bridge);
++void ksz_port_stp_state_set(struct dsa_switch *ds, int port,
++			    u8 state, int reg);
+ void ksz_port_fast_age(struct dsa_switch *ds, int port);
+ int ksz_port_fdb_dump(struct dsa_switch *ds, int port, dsa_fdb_dump_cb_t *cb,
+ 		      void *data);
+@@ -292,6 +294,11 @@ static inline void ksz_regmap_unlock(void *__mtx)
+ 	mutex_unlock(mtx);
+ }
+ 
++/* STP State Defines */
++#define PORT_TX_ENABLE			BIT(2)
++#define PORT_RX_ENABLE			BIT(1)
++#define PORT_LEARN_DISABLE		BIT(0)
++
+ /* Regmap tables generation */
+ #define KSZ_SPI_OP_RD		3
+ #define KSZ_SPI_OP_WR		2
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Philipp-Hortmann/staging-vt6655-Replace-macro-VNSvInPortW-D-with-ioread16-32/20220424-154730
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git 1efba7ef1d7da5944493728c5375fef5b2130de4
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220424/202204241941.XzwKN0gg-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/6e7e66f536e6d9d9eef8e7786de652b2702e1ee8
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Philipp-Hortmann/staging-vt6655-Replace-macro-VNSvInPortW-D-with-ioread16-32/20220424-154730
-        git checkout 6e7e66f536e6d9d9eef8e7786de652b2702e1ee8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/staging/vt6655/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/staging/vt6655/card.c: In function 'CARDbGetCurrentTSF':
->> drivers/staging/vt6655/card.c:757:23: error: implicit declaration of function 'ioread64_lo_hi' [-Werror=implicit-function-declaration]
-     757 |         *pqwCurrTSF = ioread64_lo_hi(iobase + MAC_REG_TSFCNTR);
-         |                       ^~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +/ioread64_lo_hi +757 drivers/staging/vt6655/card.c
-
-   730	
-   731	/*
-   732	 * Description: Read NIC TSF counter
-   733	 *              Get local TSF counter
-   734	 *
-   735	 * Parameters:
-   736	 *  In:
-   737	 *      priv         - The adapter to be read
-   738	 *  Out:
-   739	 *      qwCurrTSF       - Current TSF counter
-   740	 *
-   741	 * Return Value: true if success; otherwise false
-   742	 */
-   743	bool CARDbGetCurrentTSF(struct vnt_private *priv, u64 *pqwCurrTSF)
-   744	{
-   745		void __iomem *iobase = priv->port_offset;
-   746		unsigned short ww;
-   747		unsigned char data;
-   748	
-   749		MACvRegBitsOn(iobase, MAC_REG_TFTCTL, TFTCTL_TSFCNTRRD);
-   750		for (ww = 0; ww < W_MAX_TIMEOUT; ww++) {
-   751			data = ioread8(iobase + MAC_REG_TFTCTL);
-   752			if (!(data & TFTCTL_TSFCNTRRD))
-   753				break;
-   754		}
-   755		if (ww == W_MAX_TIMEOUT)
-   756			return false;
- > 757		*pqwCurrTSF = ioread64_lo_hi(iobase + MAC_REG_TSFCNTR);
-   758	
-   759		return true;
-   760	}
-   761	
-
+base-commit: cfc1d91a7d78cf9de25b043d81efcc16966d55b3
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.33.0
+

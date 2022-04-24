@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9640250D386
+	by mail.lfdr.de (Postfix) with ESMTP id DE2CF50D387
 	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 18:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235457AbiDXQe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 12:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50220 "EHLO
+        id S235486AbiDXQfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 12:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235325AbiDXQew (ORCPT
+        with ESMTP id S235440AbiDXQe4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 12:34:52 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88AEBFDE
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 09:31:50 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id z21so3801496pgj.1
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 09:31:50 -0700 (PDT)
+        Sun, 24 Apr 2022 12:34:56 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5CB7644
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 09:31:53 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d15so7446328plh.2
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 09:31:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6r7KK/tVAx0sjPVp3tILmKeJu/38lcENgltnQBPPgeQ=;
-        b=fweOx7s7M54r9NkQZOlYnmgGnowpDNCRIhAzw/6OK12Xu63C4TtLHHXpnb/rHRjCUA
-         gbnkjCEbaDWLU5lHZnTf8/I5eeUyfTkfaC5wL0ju/Nq58cD6VbfzbWH0P7vldzhagY7k
-         cacBwsAIbSvrUnk3bR0VV/0I4CLdCK5QTCyIYnJHkw2B20zhSXfpOH39+gUULRP/ggsZ
-         0KYfVV0Xf6s9fOP9CzNmAiimrF7K76B+/jCYr/j/Q4o/2toR3l31qJKa6OOuWuOs41/M
-         LjjJU6cffPfAhEAJuMadPG95GIUB0r+pWkOTQcDquojmLSVaAEFt0J6quYqiyR9/yN0s
-         Tebg==
+        bh=P/noh+5Uc1qGrvG4//CeRZx4MibEjRfxJ6hoprNgkUE=;
+        b=VNeRnw63/ItAEpzBOVWitrcmRTeccS46J4GatZadFJK7b0ByX4ql7Hm2dQfS4A9ORj
+         9bcem5WCbul3TgJrbmgK+vC9mJbWKdLyDGLhcc9OAcKJ+RrCOp4/1/YPQXi6FyIXs1Ev
+         FnGhVSeP7Q4T7PxIj64DqQjLzaxKOoTZvXaVrXBxNpDgvRWjFkuW95e36pfVpCwVp7tU
+         LFVVGsQwZXJw3hbmiiyjEo4iFL83q5HbEIZBjseCQM0K34+6KYWMFH55ZVANLCJtPw1x
+         pRNjbIKdfkmSkLlUrfR/J7zQt2TIg7qhXF5cuIEIdBFImWQ+o5iuHt327eix2vDo10Cq
+         T8QQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6r7KK/tVAx0sjPVp3tILmKeJu/38lcENgltnQBPPgeQ=;
-        b=ilXCez1tILZq6voa6IAeCcD+xPl7HVG7nMNeLshWtGCU00GXrlA+gJmmxq4AqE01Tg
-         Xr3c2fesGbod3XJMI2V/a9dddPzBFW8oHo7Gs5CvxIBMpHpXdTlOaV3IneApW2vzhSyx
-         JTkbhV3ShlVQkG8YXdO42N2Si61UyC3zlASLZnA8FYfgMsfA452oPdsfji7zNG9WGQC2
-         o3jyHRpDJQYYdZthZzRslyuz3l+vkGxrM4cvr7bb/ukpL8TsjQanjmnRYwks5hai0hQ5
-         +gICstLcffOWXPNv5iEn0p11LjA1ngBP1kmkaIGFnysQvnuKA2ScUde0PO9Pznxjh0e+
-         MVwQ==
-X-Gm-Message-State: AOAM5335rUHaM1GQHgRW/hJmz5Xbe9bWsUtUdAdA5OBtX/3obiw0HeMq
-        qxos9juySMiCaG9rMK8rpRw=
-X-Google-Smtp-Source: ABdhPJzIIQ0v51BOpVdy1phawtYwHXhzz9cwWVOjZbc1L6iXmxAf40wS1L03nHY4CWvlG261RaUyqA==
-X-Received: by 2002:a05:6a00:198c:b0:505:c18b:3184 with SMTP id d12-20020a056a00198c00b00505c18b3184mr14649085pfl.82.1650817910032;
-        Sun, 24 Apr 2022 09:31:50 -0700 (PDT)
+        bh=P/noh+5Uc1qGrvG4//CeRZx4MibEjRfxJ6hoprNgkUE=;
+        b=R4vxd6JFoD7czNJYHM+StkEOaUNgF8JWVLMaKbSsf5xqI+EheZqj872qCzfAue91os
+         tyefHirnv03/6FlCAzeFWlxIlTZpWZEqcsPpCmmDykdBJDaUmpCmomY3VbahHWaXMjn+
+         sXpVs3OVjYbXqgqhd6gQlkWlP7o6OnVh5u8DZwPSQ/7a6rHuLaE3tJwmZ8oPw0yoB4NP
+         E8zBy0WIQtG/twj0SVC150YKGl92DaE8HrDQNJmSJ9iOTRcS0tTakVXYY1sY72qf64UA
+         Ctq/jcw9Ey0+tFzPySogRFq3qbvny9k4nrgScFaGJ4gCRHfrIHjp7UC+aWcbY7DxJ4bb
+         IMhg==
+X-Gm-Message-State: AOAM532Iv6ulO5ZzOTMqXcmh+iawIBZ1ANQgK7PhNJ2jxSGpUlvW5Lhl
+        s2UkfbS3hJbKmwaQP0BZfvFwZfMBZVeEiQ==
+X-Google-Smtp-Source: ABdhPJyZkH83VKTOm/vMgLC9ylS+tM2c+7OtyemNTH198Aozf2c2XTcDMLNYBbmXLPaYXdVUxPgBxw==
+X-Received: by 2002:a17:90a:5983:b0:1c9:ee11:76df with SMTP id l3-20020a17090a598300b001c9ee1176dfmr27107739pji.95.1650817913328;
+        Sun, 24 Apr 2022 09:31:53 -0700 (PDT)
 Received: from makvihas.localhost.com ([2405:201:202b:15:b82e:45af:4bb0:4014])
-        by smtp.gmail.com with ESMTPSA id i5-20020a635845000000b003aaba2d78c2sm7113472pgm.71.2022.04.24.09.31.47
+        by smtp.gmail.com with ESMTPSA id i5-20020a635845000000b003aaba2d78c2sm7113472pgm.71.2022.04.24.09.31.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 09:31:49 -0700 (PDT)
+        Sun, 24 Apr 2022 09:31:53 -0700 (PDT)
 From:   Vihas Makwana <makvihas@gmail.com>
 To:     Larry Finger <Larry.Finger@lwfinger.net>,
         Phillip Potter <phil@philpotter.co.uk>,
@@ -57,9 +57,9 @@ Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Dan Carpenter <dan.carpenter@oracle.com>,
         Pavel Skripkin <paskripkin@gmail.com>,
         Vihas Makwana <makvihas@gmail.com>
-Subject: [PATCH 2/3] staging: r8188eu: fix null check in _rtw_enqueue_recvframe
-Date:   Sun, 24 Apr 2022 22:01:31 +0530
-Message-Id: <20220424163132.37007-3-makvihas@gmail.com>
+Subject: [PATCH 3/3] staging: r8188eu: fix null check in _rtw_free_mlme_priv
+Date:   Sun, 24 Apr 2022 22:01:32 +0530
+Message-Id: <20220424163132.37007-4-makvihas@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220424163132.37007-1-makvihas@gmail.com>
 References: <20220424163132.37007-1-makvihas@gmail.com>
@@ -75,35 +75,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There's a NULL check on padapter in rtw_recv.c:189 which makes no sense as
-rtw_recv.c:184 dereferences it unconditionally and it would have already
-crashed at this point.
-Fix this by moving the dereference line inside the check.
+There's a NULL check on pmlmepriv in rtw_mlme.c:112 which makes no sense
+as rtw_free_mlme_priv_ie_data() dereferences it unconditionally and it
+would have already crashed at this point. 
+Fix this by moving rtw_free_mlme_priv_ie_data() inside the check.
 
 Signed-off-by: Vihas Makwana <makvihas@gmail.com>
 ---
- drivers/staging/r8188eu/core/rtw_recv.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/staging/r8188eu/core/rtw_mlme.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
-index 4cf9b4b8f..7d306a3c6 100644
---- a/drivers/staging/r8188eu/core/rtw_recv.c
-+++ b/drivers/staging/r8188eu/core/rtw_recv.c
-@@ -181,12 +181,13 @@ int rtw_free_recvframe(struct recv_frame *precvframe, struct __queue *pfree_recv
- int _rtw_enqueue_recvframe(struct recv_frame *precvframe, struct __queue *queue)
+diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
+index 081c02417..87c754462 100644
+--- a/drivers/staging/r8188eu/core/rtw_mlme.c
++++ b/drivers/staging/r8188eu/core/rtw_mlme.c
+@@ -109,12 +109,10 @@ void rtw_free_mlme_priv_ie_data(struct mlme_priv *pmlmepriv)
+ 
+ void _rtw_free_mlme_priv(struct mlme_priv *pmlmepriv)
  {
- 	struct adapter *padapter = precvframe->adapter;
--	struct recv_priv *precvpriv = &padapter->recvpriv;
-+	struct recv_priv *precvpriv;
+-
+-	rtw_free_mlme_priv_ie_data(pmlmepriv);
+-
+-	if (pmlmepriv)
++	if (pmlmepriv) {
++		rtw_free_mlme_priv_ie_data(pmlmepriv);
+ 		vfree(pmlmepriv->free_bss_buf);
+-
++	}
+ }
  
- 	list_del_init(&precvframe->list);
- 	list_add_tail(&precvframe->list, get_list_head(queue));
- 
- 	if (padapter) {
-+		precvpriv = &padapter->recvpriv;
- 		if (queue == &precvpriv->free_recv_queue)
- 			precvpriv->free_recvframe_cnt++;
- 	}
+ struct	wlan_network *_rtw_alloc_network(struct	mlme_priv *pmlmepriv)/* _queue *free_queue) */
 -- 
 2.30.2
 

@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F9D50D4B0
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 21:12:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0B150D4BD
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 21:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239149AbiDXTPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 15:15:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40408 "EHLO
+        id S239333AbiDXTQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 15:16:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238118AbiDXTNs (ORCPT
+        with ESMTP id S238681AbiDXTON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 15:13:48 -0400
+        Sun, 24 Apr 2022 15:14:13 -0400
 Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813E0226;
-        Sun, 24 Apr 2022 12:10:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA1F20F42;
+        Sun, 24 Apr 2022 12:10:19 -0700 (PDT)
 Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-10.nifty.com with ESMTP id 23OJ8o6E019069;
-        Mon, 25 Apr 2022 04:09:03 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 23OJ8o6E019069
+        by conuserg-10.nifty.com with ESMTP id 23OJ8o6F019069;
+        Mon, 25 Apr 2022 04:09:04 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 23OJ8o6F019069
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1650827343;
-        bh=aWmZsWLtPG9IY+voThD7sKHIw6eSBQ7zPKJZlzBGplE=;
+        s=dec2015msa; t=1650827344;
+        bh=CrEQSNseNqVPSEyOmW1wMEqoTuu9UdoKdG4Y5C9XoQY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x+F/RLrxE+eMTR7IuGCQ2JI67hpRFOzcqDpIQt6yPOVkCId+zjZxyUzIGBbU+YQq9
-         PyVU38dMdFtNqJSS7/NbOEO2vxIqsazZiSgXS2E+xoChMAfPQ0XRAyHGexFEHp6/Lp
-         MQK4rwA4TJnZOgAKJC92UnFoeC9580K/l1BNb12AfRcOpwoSxFTkMa4413Hr3Jz6jf
-         K7tppgjvE2dp3eQwR4uddYyV1gJowEli9YxeBlfJ1qaeySU4SrbWMgI3RvJ2gM7x8L
-         cEzeTuXARToMDLApJL706qEm6ZT3oa5Pue00BT5lG8NyuHaVcFhuLD00G/ir1xnOCq
-         4K8KPcQt8xJNA==
+        b=Tb6OQXWbhXZYmJG283mBaFIK12vCPcqqcD0/TJH0ztShZ1+g8zurcr/nZYjNAVfjB
+         fKzWRT9wm5tG5P6TXNuwWjmr8EJo34ztvJg967BIF9DjqYumLliQAEpMjfoqSqrLgR
+         Zv4o/ZG1z8wf4dQwlWJ/pUxhy/eFnuWPWOLFrRUDVhbdfbEAWHNnGear3thGEZrDXS
+         esHmGjVVrWuGf7C+L327U0n6nkKZ3iy+NLxg66la3+Mdjus38Q976UCiT4ZJi8aQHo
+         nkvc2ipYLQoElydSJ5osWBqv4hwr+f8ahNtmCSpoS2WtId2NGw3i5BuPlETxGCi+Wv
+         jEUt4tg7PFJbA==
 X-Nifty-SrcIP: [133.32.177.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>,
         Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH 20/27] modpost: mitigate false-negatives for static EXPORT_SYMBOL checks
-Date:   Mon, 25 Apr 2022 04:08:04 +0900
-Message-Id: <20220424190811.1678416-21-masahiroy@kernel.org>
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        llvm@lists.linux.dev
+Subject: [PATCH 21/27] kbuild: record symbol versions in *.cmd files
+Date:   Mon, 25 Apr 2022 04:08:05 +0900
+Message-Id: <20220424190811.1678416-22-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220424190811.1678416-1-masahiroy@kernel.org>
 References: <20220424190811.1678416-1-masahiroy@kernel.org>
@@ -53,108 +55,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 'static' specifier and EXPORT_SYMBOL() are an odd combination.
+When CONFIG_MODVERSIONS=y, the output from genksyms is saved in
+separate *.symversions files, and will be used much later when
+CONFIG_LTO_CLANG=y because it is impossible to update LLVM bit code
+here.
 
-Since commit 15bfc2348d54 ("modpost: check for static EXPORT_SYMBOL*
-functions"), modpost tries to detect it, but there are false negatives.
+This approach is not robust because:
 
-Here is the sample code.
+ - *.symversions may or may not exist. If *.symversions does not
+   exist, we never know if it is missing for legitimate reason
+   (i.e. no EXPORT_SYMBOL) or something bad has happened (for
+   example, the user accidentally deleted it). Once it occurs,
+   it is not self-healing because *.symversions is generated
+   as a side effect of the build rule of the object.
 
-[Sample 1]
+ - stale (i.e. invalid) *.symversions might be picked up if an
+   object is generated in a non-ordinary way, and corresponding
+   *.symversions (, which was generated by old builds) just happen
+   to exist.
 
-  Makefile:
+A more robust approach is to save symbol versions in *.cmd files
+because:
 
-    obj-m += mymod1.o mymod2.o
+ - *.cmd always exists (if the object is generated by if_changed
+   rule or friends). Even if the user accidentally deletes it,
+   it will be regenerated in the next build.
 
-  mymod1.c:
+ - *.cmd is always re-generated when the object is updated. This
+   avoid stale version information being picked up.
 
-    #include <linux/export.h>
-    #include <linux/module.h>
-    static void foo(void) {}
-    EXPORT_SYMBOL(foo);
-    MODULE_LICENSE("GPL");
-
-  mymod2.c:
-
-    #include <linux/module.h>
-    void foo(void) {}
-    MODULE_LICENSE("GPL");
-
-mymod1 exports the static symbol 'foo', but modpost cannot catch it
-because it is confused by the same name symbol in another module, mymod2.
-(Without mymod2, modpost can detect the error in mymod1)
-
-find_symbol() returns the first symbol found in the hash table with the
-given name. This hash table is global, so it may return a symbol from
-an unrelated module. So, a global symbol in a module may unset the
-'is_static' flag of a different module.
-
-To mitigate this issue, add find_symbol_in_module(), which receives the
-module pointer as the second argument. If non-NULL pointer is passed, it
-returns the symbol in the specified module. If NULL is passed, it is
-equivalent to find_module().
-
-Please note there are still false positives in the composite module,
-like below (or when both are built-in). I have no idea how to do this
-correctly.
-
-[Sample 2]  (not fixed by this commit)
-
-  Makefile:
-    obj-m += mymod.o
-    mymod-objs := mymod1.o mymod2.o
+I will remove *.symversions later.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- scripts/mod/modpost.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+ scripts/Makefile.build | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 908390b4fa80..fb50927cd241 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -271,7 +271,8 @@ static void sym_add_unresolved(const char *name, struct module *mod, bool weak)
- 	list_add_tail(&sym->list, &mod->unresolved_symbols);
- }
- 
--static struct symbol *find_symbol(const char *name)
-+static struct symbol *find_symbol_in_module(const char *name,
-+					    struct module *mod)
- {
- 	struct symbol *s;
- 
-@@ -280,11 +281,17 @@ static struct symbol *find_symbol(const char *name)
- 		name++;
- 
- 	hash_for_matched_symbol(s, exported_symbols, name) {
--		return s;
-+		if (!mod || s->module == mod)
-+			return s;
- 	}
- 	return NULL;
- }
- 
-+static struct symbol *find_symbol(const char *name)
-+{
-+	return find_symbol_in_module(name, NULL);
-+}
-+
- struct namespace_list {
- 	struct list_head list;
- 	char namespace[];
-@@ -2062,8 +2069,9 @@ static void read_symbols(const char *modname)
- 
- 		if (bind == STB_GLOBAL || bind == STB_WEAK) {
- 			struct symbol *s =
--				find_symbol(remove_dot(info.strtab +
--						       sym->st_name));
-+				find_symbol_in_module(remove_dot(info.strtab +
-+								 sym->st_name),
-+						      mod);
- 
- 			if (s)
- 				s->is_static = false;
+diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+index f6a506318795..e03e85c90b26 100644
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -175,6 +175,8 @@ gen_symversions =								\
+ 	if $(NM) $@ 2>/dev/null | grep -q __ksymtab; then			\
+ 		$(call cmd_gensymtypes_$(1),$(KBUILD_SYMTYPES),$(@:.o=.symtypes)) \
+ 		    > $@.symversions;						\
++		echo >> $(dot-target).cmd ;					\
++		sed 's/\(.*\) = \(.*\);/$(pound)\1=\2/' $@.symversions >> $(dot-target).cmd ; \
+ 	else									\
+ 		rm -f $@.symversions;						\
+ 	fi
 -- 
 2.32.0
 

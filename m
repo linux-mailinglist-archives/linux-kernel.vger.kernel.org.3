@@ -2,146 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B260450D569
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 23:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E6B450D575
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 23:57:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239687AbiDXVzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 17:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37270 "EHLO
+        id S239704AbiDXWAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 18:00:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237265AbiDXVzp (ORCPT
+        with ESMTP id S239689AbiDXWAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 17:55:45 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846463C711
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 14:52:43 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id z99so16373632ede.5
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 14:52:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=HtsX7xXS5KyrSdS4F8RNS0VhDr01GCN2iAGgDFc6qBs=;
-        b=Bk78u/NaLlBh/+udP1b42wGjGXL+P807SEn3bt4RGvsZ6lVNKA9vUhLUIDtJu4SHO9
-         T9/5Z7yK5+CdL++dKToG8H03+Ijpr644TnAzeuf9hCa+Ky3DfQxmNbQ5argOSQrrIU3U
-         GtLq73xG7eQILwhJGkUrnG9H1nHp9VbOLtGWDH+J8duVnfd4noatHsIok+vlhVQxcBwV
-         fU1Niw1hMc/3HNwc+i2lL1L6woChrXpSTZvUa1Z58wx1w8zInanQQoj7M88+ZRlDn2Dj
-         PAvZYWy4uvkiXgYhKbE7+XzaWRy0A+uRrdNZTwRRDs7joSr1nBCKZ/TZFLMqIaVXcRHo
-         le3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=HtsX7xXS5KyrSdS4F8RNS0VhDr01GCN2iAGgDFc6qBs=;
-        b=hxaOJzXE+Gd8BAQOFDrLwhy+olcpbDeLytiiER6DJMxfj1fiNfYs/Z+5NdEiGqAI1J
-         lEHrwXV/yCt8CC1eKB7Wupy6S2WebdRv6gTU4EgyWtQ2EX34CF8opX6HDdtGEPK73+rD
-         B1v9EyVjW+dPPPpZxDduTS4R6ioI/4v9Yfh9QMOLpffMjO/QOoc3hjDPjq4uZ+3zW/KM
-         YCNPjs/+/WllRgs+tqL7Anau/qVgPTIaXhCB/EkLSlAtpgm5OAu1CasiXTbGj5tcQ0fK
-         t7oF3T8FmedkeVwaD/oesfuQPN4qmoXu56yRakNqUjXA0wz2eJbSEUZM8KbdkyYEBZ+2
-         3/KA==
-X-Gm-Message-State: AOAM531oxHQ5JYYd4/h2b0d3a0oT16H/ksFDjecFtFc4KSWTYQLpUXwB
-        AL/PqDmep2YA1GWgEEYdtfVGQA==
-X-Google-Smtp-Source: ABdhPJxA/GkBOyzYFPNHFGGUbgZYaFFMjxcPjHcOGJU9afJPo3NAvQlf/gAy8hcMlADO4H+DYaO7FQ==
-X-Received: by 2002:a05:6402:42d4:b0:416:5cac:a9a0 with SMTP id i20-20020a05640242d400b004165caca9a0mr15984539edc.86.1650837161997;
-        Sun, 24 Apr 2022 14:52:41 -0700 (PDT)
-Received: from [192.168.0.117] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id a94-20020a509ee7000000b00425e7035c4bsm619579edf.61.2022.04.24.14.52.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 24 Apr 2022 14:52:41 -0700 (PDT)
-Message-ID: <0f1e1250-920a-c7d1-900c-98ef3e0456d8@blackwall.org>
-Date:   Mon, 25 Apr 2022 00:52:39 +0300
+        Sun, 24 Apr 2022 18:00:06 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4626393E1
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 14:57:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650837424; x=1682373424;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Fe3LiujnA8YfarQ1OwGBgpnChKUAdW9nUkCdIS58zo0=;
+  b=j5aC1lIenKVpV8wyX+vGrlK0jXyNLRINVqJrF2DLxME+Nln7WTPPutm0
+   s8n0AaDNfKi7PrM5x1DmCkY62ImYcjawmHTrMP7nZjvWH5gyCG/j6kOI9
+   8hG+eoDyAm48Mud7ktiY1yuNuol8Wsh42kqf1SPL15okgVI3erHPTIaeh
+   Q9VGrFQ7YeiYFW/eXcd3LNiDR5CalEu6vo0b6zTBivzEaxCep8f4vnzbE
+   iBtFb/0AGYte7AntuYEumNat0fr5CWRV2F/tc8/pOpnkqfxWW8ow9+CcF
+   NLdEuRLR9nuVotdAbuFMgGgUn3g9pqljiHPazIm0TxqBJmYDPRXvf6gkA
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="245656820"
+X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
+   d="scan'208";a="245656820"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 14:57:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
+   d="scan'208";a="729431358"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 24 Apr 2022 14:57:02 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nikE2-0001oj-6M;
+        Sun, 24 Apr 2022 21:57:02 +0000
+Date:   Mon, 25 Apr 2022 05:56:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 456/2579] net/sched/cls_api.c:3057:1:
+ sparse: sparse: function 'tcf_exts_hw_stats_update' with external linkage
+ has definition
+Message-ID: <202204250557.gOEhsXfK-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH net-next v3 1/2] rtnetlink: add extack support in fdb del
- handlers
-Content-Language: en-US
-To:     Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>,
-        netdev@vger.kernel.org
-Cc:     outreachy@lists.linux.dev, roopa@nvidia.com, jdenham@redhat.com,
-        sbrivio@redhat.com, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
-        alexandre.belloni@bootlin.com, shshaikh@marvell.com,
-        manishc@marvell.com, intel-wired-lan@lists.osuosl.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
-        GR-Linux-NIC-Dev@marvell.com, bridge@lists.linux-foundation.org
-References: <cover.1650800975.git.eng.alaamohamedsoliman.am@gmail.com>
- <c3a882e4fb6f9228f704ebe3c1fcace14ee6cdf2.1650800975.git.eng.alaamohamedsoliman.am@gmail.com>
- <7c8367b6-95c7-ea39-fafe-72495f343625@blackwall.org>
- <d89eefc2-664f-8537-d10e-6fdfbb6823ed@gmail.com>
- <4bf69eef-7444-1238-0f4a-fb0fccda080c@blackwall.org>
- <3bcb2d3d-8b8b-8a8f-1285-7277394b4e6b@gmail.com>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <3bcb2d3d-8b8b-8a8f-1285-7277394b4e6b@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/25/22 00:09, Alaa Mohamed wrote:
-> 
-> On ٢٤‏/٤‏/٢٠٢٢ ٢١:٥٥, Nikolay Aleksandrov wrote:
->> On 24/04/2022 22:49, Alaa Mohamed wrote:
->>> On ٢٤‏/٤‏/٢٠٢٢ ٢١:٠٢, Nikolay Aleksandrov wrote:
->>>> On 24/04/2022 15:09, Alaa Mohamed wrote:
->>>>> Add extack support to .ndo_fdb_del in netdevice.h and
->>>>> all related methods.
->>>>>
->>>>> Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
->>>>> ---
->>>>> changes in V3:
->>>>>           fix errors reported by checkpatch.pl
->>>>> ---
->>>>>    drivers/net/ethernet/intel/ice/ice_main.c        | 4 ++--
->>>>>    drivers/net/ethernet/mscc/ocelot_net.c           | 4 ++--
->>>>>    drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c | 2 +-
->>>>>    drivers/net/macvlan.c                            | 2 +-
->>>>>    drivers/net/vxlan/vxlan_core.c                   | 2 +-
->>>>>    include/linux/netdevice.h                        | 2 +-
->>>>>    net/bridge/br_fdb.c                              | 2 +-
->>>>>    net/bridge/br_private.h                          | 2 +-
->>>>>    net/core/rtnetlink.c                             | 4 ++--
->>>>>    9 files changed, 12 insertions(+), 12 deletions(-)
->>>>>
->>>>> diff --git a/drivers/net/ethernet/intel/ice/ice_main.c 
->>>>> b/drivers/net/ethernet/intel/ice/ice_main.c
->>>>> index d768925785ca..7b55d8d94803 100644
->>>>> --- a/drivers/net/ethernet/intel/ice/ice_main.c
->>>>> +++ b/drivers/net/ethernet/intel/ice/ice_main.c
->>>>> @@ -5678,10 +5678,10 @@ ice_fdb_add(struct ndmsg *ndm, struct 
->>>>> nlattr __always_unused *tb[],
->>>>>    static int
->>>>>    ice_fdb_del(struct ndmsg *ndm, __always_unused struct nlattr *tb[],
->>>>>            struct net_device *dev, const unsigned char *addr,
->>>>> -        __always_unused u16 vid)
->>>>> +        __always_unused u16 vid, struct netlink_ext_ack *extack)
->>>>>    {
->>>>>        int err;
->>>>> -
->>>>> +
->>>> What's changed here?
->>> In the previous version, I removed the blank line after "int err;" 
->>> and you said I shouldn't so I added blank line.
->>>
->> Yeah, my question is are you fixing a dos ending or something else?
->> The blank line is already there, what's wrong with it?
-> No, I didn't.
->>
->> The point is it's not nice to mix style fixes and other changes, more so
->> if nothing is mentioned in the commit message.
-> Got it, So, what should I do to fix it?
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   49e1ec6c70a6eb4b7de9250a455b8b63eb42afbe
+commit: 5b9c6520f729954a730cd549a22775a58758b9f1 [456/2579] headers/uninline: Uninline multi-use function: tcf_exts_stats_update() and tcf_exts_exec()
+config: i386-randconfig-s002 (https://download.01.org/0day-ci/archive/20220425/202204250557.gOEhsXfK-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=5b9c6520f729954a730cd549a22775a58758b9f1
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 5b9c6520f729954a730cd549a22775a58758b9f1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash net/sched/
 
-Don't change that line? I mean I'm even surprised this made it in the 
-patch. As I mentioned above, there is already a new line there so I'm 
-not sure how you're removing it and adding it again. :)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Cheers,
-  Nik
+
+sparse warnings: (new ones prefixed by >>)
+>> net/sched/cls_api.c:3057:1: sparse: sparse: function 'tcf_exts_hw_stats_update' with external linkage has definition
+   net/sched/cls_api.c:286:22: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be16 [usertype] protocol @@     got unsigned int [usertype] protocol @@
+   net/sched/cls_api.c:286:22: sparse:     expected restricted __be16 [usertype] protocol
+   net/sched/cls_api.c:286:22: sparse:     got unsigned int [usertype] protocol
+   net/sched/cls_api.c:1691:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   net/sched/cls_api.c:1691:16: sparse:    struct tcf_proto *
+   net/sched/cls_api.c:1691:16: sparse:    struct tcf_proto [noderef] __rcu *
+   net/sched/cls_api.c:1791:20: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   net/sched/cls_api.c:1791:20: sparse:    struct tcf_proto [noderef] __rcu *
+   net/sched/cls_api.c:1791:20: sparse:    struct tcf_proto *
+   net/sched/cls_api.c:1753:25: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   net/sched/cls_api.c:1753:25: sparse:    struct tcf_proto [noderef] __rcu *
+   net/sched/cls_api.c:1753:25: sparse:    struct tcf_proto *
+   net/sched/cls_api.c:1773:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   net/sched/cls_api.c:1773:16: sparse:    struct tcf_proto *
+   net/sched/cls_api.c:1773:16: sparse:    struct tcf_proto [noderef] __rcu *
+   net/sched/cls_api.c:1838:25: sparse: sparse: restricted __be16 degrades to integer
+   net/sched/cls_api.c:2514:50: sparse: sparse: restricted __be16 degrades to integer
+
+vim +/tcf_exts_hw_stats_update +3057 net/sched/cls_api.c
+
+  3054	
+  3055	#ifdef CONFIG_NET_CLS_ACT
+  3056	extern void
+> 3057	tcf_exts_hw_stats_update(const struct tcf_exts *exts,
+  3058				 u64 bytes, u64 packets, u64 drops, u64 lastuse,
+  3059				 u8 used_hw_stats, bool used_hw_stats_valid)
+  3060	{
+  3061		int i;
+  3062	
+  3063		for (i = 0; i < exts->nr_actions; i++) {
+  3064			struct tc_action *a = exts->actions[i];
+  3065	
+  3066			/* if stats from hw, just skip */
+  3067			if (tcf_action_update_hw_stats(a)) {
+  3068				preempt_disable();
+  3069				tcf_action_stats_update(a, bytes, packets, drops,
+  3070							lastuse, true);
+  3071				preempt_enable();
+  3072	
+  3073				a->used_hw_stats = used_hw_stats;
+  3074				a->used_hw_stats_valid = used_hw_stats_valid;
+  3075			}
+  3076		}
+  3077	}
+  3078	EXPORT_SYMBOL(tcf_exts_hw_stats_update);
+  3079	#endif
+  3080	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

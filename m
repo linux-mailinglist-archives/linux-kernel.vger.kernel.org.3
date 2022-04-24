@@ -2,154 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44E2550CEAB
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 04:44:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F23B50CEAD
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 04:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237736AbiDXCrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 22:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56624 "EHLO
+        id S237783AbiDXCtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 22:49:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237754AbiDXCrb (ORCPT
+        with ESMTP id S236819AbiDXCtA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 22:47:31 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61FD11D230;
-        Sat, 23 Apr 2022 19:44:31 -0700 (PDT)
-Received: from kwepemi500017.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KmCBh2JbXz1JBGZ;
-        Sun, 24 Apr 2022 10:43:40 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi500017.china.huawei.com (7.221.188.110) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sun, 24 Apr 2022 10:44:29 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sun, 24 Apr 2022 10:44:29 +0800
-Subject: Re: [PATCH -next v2 0/5] support concurrent sync io for bfq on a
- specail occasion
-To:     <jack@suse.cz>, <paolo.valente@linaro.org>, <axboe@kernel.dk>,
-        <tj@kernel.org>
-CC:     <linux-block@vger.kernel.org>, <cgroups@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
-References: <20220416093753.3054696-1-yukuai3@huawei.com>
-From:   "yukuai (C)" <yukuai3@huawei.com>
-Message-ID: <c120ed31-860d-99d2-5c97-4023766fea96@huawei.com>
-Date:   Sun, 24 Apr 2022 10:44:28 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Sat, 23 Apr 2022 22:49:00 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 016FB12EB66;
+        Sat, 23 Apr 2022 19:46:01 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 375BB5C00BA;
+        Sat, 23 Apr 2022 22:46:01 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Sat, 23 Apr 2022 22:46:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1650768361; x=
+        1650854761; bh=8Q+ZFt8iLKfw6+gfcY5JTvb5tFIFfrs8cTxnzQhZJ9s=; b=c
+        gybfw8PKzGPaM5ziDhBstmzJgZD9tE6ddGyMu7qOKe2RvB4Cv5bjTUKdCIB/khBN
+        jHBUS/MLaiAS1GSlzDdpwmVZ3Mawe/ufGJCJObgoDyCOeXLqfqxAvqj2XHPlSE+B
+        K3tSvJkeHXMVj+SKPRPOC8i0nXkcwIsTh1b+bvK49Xw5f9MYd5Fm39lzoccdjwqR
+        ZapBY92I9ofh7CsBZ56NabWbWUXPhjV9KeNzDwqit0L0dxM6kosZJ5Z153lpaMoY
+        kL+J8puHGexO6qdiz8kXuvqMStl/XOLt2079x46nNfUlqmGP1D8Qlf+CVU3uS+AR
+        /pDQ8aRYvSV+KQIFy7UmA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1650768361; x=1650854761; bh=8Q+ZFt8iLKfw6
+        +gfcY5JTvb5tFIFfrs8cTxnzQhZJ9s=; b=pg2o/IZLhelFZ7d1s17VVUHpfzBFU
+        +PYgd5T/PxajgWhYPghjoX5VSEDL2aR86SOSQXSbKD2HiZc5IsGtX8ZdD3aAXx5p
+        QHvXqrRqG4suPJmkUNsXF2fZHnc7gD7miiJm33Dkm/ip8Id3Y19M7MtY36+2jUgt
+        bUPBul5fafOBbIMYEVTcrNJ3htZaez1JP4yXqFs5zZXJ5S9+MSH5K7kUmYMiUiLp
+        vG9f9dQSLyH7ZASnK2rwKDgNrAUkEuuxYrVgDeuDyLyuew0x2hOdzkeL+pgg0Pbu
+        Q2PHoVOAS1DpSUkSYfnbpASPQ88vvKR8tENPrhl/U1U/BYMq4fjGNHlDA==
+X-ME-Sender: <xms:6LlkYnt_RD6hthab-1AVaVwL3kYdw7fedR9k9_EGegDpgh5ymQLE7Q>
+    <xme:6LlkYoflDIUy216Iu2Lo3YKrLjzjuITi6DdJnyUsWyIAmD2cXtXj8wtfRMlv65Pdn
+    sPuvJr6b93930ItZw>
+X-ME-Received: <xmr:6LlkYqxcid5qNP8FoJvkBEADdyE6sjNLrLH18MZfPGmhhlGg2756sz2wqUXN89Up6a8ziF1p18nvwS9fgEZhyiTvmKEgjLUHy2WIi9RwN48Hx6EWXn5NSslAAw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrtdejgdeigecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefuvfevfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepffdtveekvdegkeeuueetgfetffeileevudekuefhheelvdfhiedt
+    heduhfduhefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:6blkYmNpMgV_CaUcws0HrxLCFwgpgDCVraQIvkEwnAvphAzKhWA6qw>
+    <xmx:6blkYn-Vrb5Y3IyXxqO_mlZcqR-uw_auyQVFblYUB787TDC7GYmpNw>
+    <xmx:6blkYmVdM5jkbMto-qQgFkd3puQJDEcIIhmMy7A9TRUbn4XsMRgpCA>
+    <xmx:6blkYuaokLQhtCUKmeuIT-kjCUlPPqQ49iCmMXaaCR3dAPjqYCIkqA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 23 Apr 2022 22:46:00 -0400 (EDT)
+Subject: Re: [PATCH v2] cpufreq:fix memory leak in sun50i_cpufreq_nvmem_probe
+To:     Xiaobing Luo <luoxiaobing0926@gmail.com>, tiny.windzz@gmail.com,
+        rafael@kernel.org, viresh.kumar@linaro.org, wens@csie.org,
+        jernej.skrabec@gmail.com, mripard@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220423151204.2102314-1-luoxiaobing0926@gmail.com>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <4ee2421f-79a8-7f4d-f7ef-33f0ccf49337@sholland.org>
+Date:   Sat, 23 Apr 2022 21:46:00 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-In-Reply-To: <20220416093753.3054696-1-yukuai3@huawei.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220423151204.2102314-1-luoxiaobing0926@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-friendly ping ...
+On 4/23/22 10:12 AM, Xiaobing Luo wrote:
+> --------------------------------------------
+> unreferenced object 0xffff000010742a00 (size 128):
+>   comm "swapper/0", pid 1, jiffies 4294902015 (age 1187.652s)
+>   hex dump (first 32 bytes):
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<00000000b4dfebaa>] __kmalloc+0x338/0x474
+>     [<00000000d6e716db>] sun50i_cpufreq_nvmem_probe+0xc4/0x36c
+>     [<000000007d6082a0>] platform_probe+0x98/0x11c
+>     [<00000000c990f549>] really_probe+0x234/0x5a0
+>     [<000000002d9fecc6>] __driver_probe_device+0x194/0x224
+>     [<00000000cf0b94fa>] driver_probe_device+0x64/0x13c
+>     [<00000000f238e4cf>] __device_attach_driver+0xf8/0x180
+>     [<000000006720e418>] bus_for_each_drv+0xf8/0x160
+>     [<00000000df4f14f6>] __device_attach+0x174/0x29c
+>     [<00000000782002fb>] device_initial_probe+0x20/0x30
+>     [<00000000c2681b06>] bus_probe_device+0xfc/0x110
+>     [<00000000964cf3bd>] device_add+0x5f0/0xcd0
+>     [<000000004b9264e3>] platform_device_add+0x198/0x390
+>     [<00000000fa82a9d0>] platform_device_register_full+0x178/0x210
+>     [<000000009a5daf13>] sun50i_cpufreq_init+0xf8/0x168
+>     [<000000000377cc7c>] do_one_initcall+0xe4/0x570
+> --------------------------------------------
+> 
+> if sun50i_cpufreq_get_efuse failed, then opp_tables leak.
+> Fixes: f328584f7bff ("cpufreq: Add sun50i nvmem based CPU scaling driver")
+> 
+> Signed-off-by: Xiaobing Luo <luoxiaobing0926@gmail.com>
 
-ÔÚ 2022/04/16 17:37, Yu Kuai Ð´µÀ:
-> Changes in v2:
->   - Use a different aporch to count root group, which is much simple.
+Two minor style issues: there should be a space after "cpufreq:" in the commit
+subject. And the blank line should come before the "Fixes:" tag, not after.
+Otherwise:
+
+Reviewed-by: Samuel Holland <samuel@sholland.org>
+
+> ---
+>  drivers/cpufreq/sun50i-cpufreq-nvmem.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> Currently, bfq can't handle sync io concurrently as long as they
-> are not issued from root group. This is because
-> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
-> bfq_asymmetric_scenario().
+> diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> index 2deed8d8773f..75e1bf3a08f7 100644
+> --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> @@ -98,8 +98,10 @@ static int sun50i_cpufreq_nvmem_probe(struct platform_device *pdev)
+>  		return -ENOMEM;
+>  
+>  	ret = sun50i_cpufreq_get_efuse(&speed);
+> -	if (ret)
+> +	if (ret) {
+> +		kfree(opp_tables);
+>  		return ret;
+> +	}
+>  
+>  	snprintf(name, MAX_NAME_LEN, "speed%d", speed);
+>  
 > 
-> The way that bfqg is counted to 'num_groups_with_pending_reqs':
-> 
-> Before this patchset:
->   1) root group will never be counted.
->   2) Count if bfqg or it's child bfqgs have pending requests.
->   3) Don't count if bfqg and it's child bfqgs complete all the requests.
-> 
-> After this patchset:
->   1) root group is counted.
->   2) Count if bfqg have pending requests.
-> This is because, for example:
-> if sync ios are issued from cgroup /root/c1/c2, root, c1 and c2 will all
-> be counted into 'num_groups_with_pending_reqs', which makes it impossible
-> to handle sync ios concurrently.
-> 
->   3) Don't count if bfqg complete all the requests.
-> This is because, for example:
-> t1 issue sync io on root group, t2 and t3 issue sync io on the same child
-> group. num_groups_with_pending_reqs is 2 now. After t1 stopped,
-> num_groups_with_pending_reqs is still 2. sync io from t2 and t3 still can't
-> be handled concurrently.
-> 
-> fio test script: startdelay is used to avoid queue merging
-> [global]
-> filename=/dev/nvme0n1
-> allow_mounted_write=0
-> ioengine=psync
-> direct=1
-> ioscheduler=bfq
-> offset_increment=10g
-> group_reporting
-> rw=randwrite
-> bs=4k
-> 
-> [test1]
-> numjobs=1
-> 
-> [test2]
-> startdelay=1
-> numjobs=1
-> 
-> [test3]
-> startdelay=2
-> numjobs=1
-> 
-> [test4]
-> startdelay=3
-> numjobs=1
-> 
-> [test5]
-> startdelay=4
-> numjobs=1
-> 
-> [test6]
-> startdelay=5
-> numjobs=1
-> 
-> [test7]
-> startdelay=6
-> numjobs=1
-> 
-> [test8]
-> startdelay=7
-> numjobs=1
-> 
-> test result:
-> running fio on root cgroup
-> v5.18-rc1:	   550 Mib/s
-> v5.18-rc1-patched: 550 Mib/s
-> 
-> running fio on non-root cgroup
-> v5.18-rc1:	   349 Mib/s
-> v5.18-rc1-patched: 550 Mib/s
-> 
-> Yu Kuai (5):
->    block, bfq: cleanup bfq_weights_tree add/remove apis
->    block, bfq: add fake weight_counter for weight-raised queue
->    bfq, block: record how many queues have pending requests in bfq_group
->    block, bfq: refactor the counting of 'num_groups_with_pending_reqs'
->    block, bfq: do not idle if only one cgroup is activated
-> 
->   block/bfq-cgroup.c  |  1 +
->   block/bfq-iosched.c | 90 +++++++++++++++++++--------------------------
->   block/bfq-iosched.h | 26 ++++++-------
->   block/bfq-wf2q.c    | 30 +++------------
->   4 files changed, 56 insertions(+), 91 deletions(-)
-> 
+

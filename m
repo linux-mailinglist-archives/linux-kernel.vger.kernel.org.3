@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 506FE50CF1D
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 06:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EBB550CF5A
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 06:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238134AbiDXEYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 00:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42922 "EHLO
+        id S238152AbiDXEbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 00:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235553AbiDXEYp (ORCPT
+        with ESMTP id S235553AbiDXEba (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 00:24:45 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5BF71A836
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 21:21:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650774106; x=1682310106;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GzpruI2RiR0MADPFP36Tm9nNam/1lc1RO/Il++9eS9E=;
-  b=GkIfNR5/OHsZpi8aGbHD3NBaA96ZR7zzNh07Etk+1RfFn1IQBv3LJapb
-   AhCNnD41iypLjzt1tQzOEqWEK7QK2xi6qh8t4TEOOdH/THwCtA2aalWcK
-   6NqeHtPXu43VK56DFHWbjKX/ygKRERCTw6hvixFwqlhlgbt7oGDQBwRq3
-   dBh0RffFTUBbDnItzfvUXjSj8n+E0vn+CYZ/TML8h22bmlCGRD84ASMz+
-   rtUFSFl5G4IpqqYeh/+Xya3vSs52j7uuqDizjVxHe53mqcjzpM1q4JeNV
-   fqp04je/1bnTqRjou+bCsXJQjb9Wi7qeFS8ihyZGwAdvfX8bXV1qL1jIj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="262587170"
-X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
-   d="scan'208";a="262587170"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 21:21:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
-   d="scan'208";a="674804980"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 23 Apr 2022 21:21:44 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1niTkl-00010l-Ek;
-        Sun, 24 Apr 2022 04:21:43 +0000
-Date:   Sun, 24 Apr 2022 12:21:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [hnaz-mm:master 34/291] WARNING: modpost: vmlinux.o(.data+0x234bc8):
- Section mismatch in reference from the variable fc2580_driver to the
- function .init.text:set_reset_devices()
-Message-ID: <202204241241.dnUrBBvT-lkp@intel.com>
+        Sun, 24 Apr 2022 00:31:30 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296DCDF3;
+        Sat, 23 Apr 2022 21:28:28 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23O4SA88107176;
+        Sat, 23 Apr 2022 23:28:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1650774490;
+        bh=D04NFhv22/v6yRIdE4I2Z3P2Ja3MaXCtiEB3NsN9G+s=;
+        h=From:To:CC:Subject:Date;
+        b=LaBlHkLO/OjORYKbUZ1+puw/+BYFt/6h5YpIvUCBBBy9OuT4JGB5Qzd3GujAtUw/C
+         FlnCP1I6lj7MBgzkrq1LwiJO0f+2pvFaUikVpk14rzfZQFrjV2UomnvwhnNhFY9Mez
+         TwROFTbPvXSIMDuDaU1CHHOwpacr/xHUUWjlyKlA=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23O4SAB9002674
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sat, 23 Apr 2022 23:28:10 -0500
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Sat, 23
+ Apr 2022 23:28:10 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Sat, 23 Apr 2022 23:28:10 -0500
+Received: from ula0132425.ent.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23O4S5Cj018740;
+        Sat, 23 Apr 2022 23:28:06 -0500
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>
+Subject: [PATCH v3 0/2] arm64: ti: k3-am62: Introduce DT nodes for basic peripherals
+Date:   Sun, 24 Apr 2022 09:57:55 +0530
+Message-ID: <20220424042757.309986-1-vigneshr@ti.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,48 +67,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/hnaz/linux-mm master
-head:   ba42854fa9997614e0ffdbc35b082df3ba6e59da
-commit: 477a4d0f1f38e738d1a50d5005b79aca719c30bc [34/291] mm/hugetlb: take src_mm->write_protect_seq in copy_hugetlb_page_range()
-config: riscv-randconfig-r015-20220420 (https://download.01.org/0day-ci/archive/20220424/202204241241.dnUrBBvT-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/hnaz/linux-mm/commit/477a4d0f1f38e738d1a50d5005b79aca719c30bc
-        git remote add hnaz-mm https://github.com/hnaz/linux-mm
-        git fetch --no-tags hnaz-mm master
-        git checkout 477a4d0f1f38e738d1a50d5005b79aca719c30bc
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+Add nodes for McSPI, OSPI, MMC, DMA and CPSW ethernet switch
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+v3:
+Fix regulator node names as suggested by Krzysztof
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+v2:
+Add aliases for ethernet
+Collect Reviewed-by
 
->> WARNING: modpost: vmlinux.o(.data+0x234bc8): Section mismatch in reference from the variable fc2580_driver to the function .init.text:set_reset_devices()
-The variable fc2580_driver references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
+v2: lore.kernel.org/r/20220422065002.387753-1-vigneshr@ti.com
+v1: lore.kernel.org/r/20220415131917.431137-1-vigneshr@ti.com
 
+Vignesh Raghavendra (2):
+  arm64: dts: ti: k3-am62: Add more peripheral nodes
+  arm64: dts: ti: k3-am625-sk: Enable on board peripherals
 
-Note: the below error/warnings can be found in parent commit:
-<< WARNING: modpost: vmlinux.o(.text+0x13e3592): Section mismatch in reference from the function usbhid_find_interface() to the variable .init.text:.LBB0_1
-<< WARNING: modpost: vmlinux.o(.text+0x13e3596): Section mismatch in reference from the function usbhid_find_interface() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x23ad30): Section mismatch in reference from the variable empty_map to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x258174): Section mismatch in reference from the variable w83795_in to the function .meminit.text:init_reserve_notifier()
-<< WARNING: modpost: vmlinux.o(.data+0x258194): Section mismatch in reference from the variable w83795_in to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x23ba8c): Section mismatch in reference from the variable stm32_cec_driver to the variable .init.text:.LBB20_8
-<< WARNING: modpost: vmlinux.o(.data+0x256558): Section mismatch in reference from the variable w83793_temp to the variable .init.text:.LBB46_1
-<< WARNING: modpost: vmlinux.o(.data+0x25655c): Section mismatch in reference from the variable w83793_temp to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x230444): Section mismatch in reference from the variable ov5695_i2c_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x25c1dc): Section mismatch in reference from the variable sensor_dev_attr_temp1_input to the function .meminit.text:init_reserve_notifier()
+ arch/arm64/boot/dts/ti/k3-am62-main.dtsi | 266 ++++++++++++++++++++++
+ arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi  |  20 ++
+ arch/arm64/boot/dts/ti/k3-am625-sk.dts   | 273 +++++++++++++++++++++++
+ 3 files changed, 559 insertions(+)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.0
+

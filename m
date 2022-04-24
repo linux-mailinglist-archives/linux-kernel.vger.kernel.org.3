@@ -2,123 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7087850D549
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 23:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D1AC50D54D
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 23:38:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239654AbiDXVjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 17:39:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
+        id S239664AbiDXVlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 17:41:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233662AbiDXVjI (ORCPT
+        with ESMTP id S239656AbiDXVlV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 17:39:08 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5A92AC61
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 14:36:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650836164; x=1682372164;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1GsevDkmtYy5fZQ588p/qpFrg3TuZ+86j19KyTEPcbA=;
-  b=XnUEBSG9adL/VCslanR6O5s8fPtPHgZopge6cqng/PVENoYE7Z++CKX6
-   iR31CggIp+re3HvCneweeqoyg8g8jWm6WMSSQKzJKvicwi8+ggJmCDIhh
-   5YP3LO1GKNXg54xPUmzi/RU3JC2ttlfwYA60p6yoBBsNrTMrTpmk0ZLYN
-   AwWaLOiXkAfdp2sJYP+98bRBY+HjbCUiVs7YBGE+qbQnEsd9j9QdrkR9y
-   lIdX90tfKJBlwMfSYIKj2PNKgl3qPmJ2JWOLlWSDWOsglA6RLe999Q9UL
-   dgQz5zrPkaNFkt4LRT7WEf0nxcmAIQAEUI5L6uYOsr4l97imN82fssuMI
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="351537814"
-X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
-   d="scan'208";a="351537814"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 14:36:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
-   d="scan'208";a="675780571"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 24 Apr 2022 14:36:02 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nijth-0001o7-LE;
-        Sun, 24 Apr 2022 21:36:01 +0000
-Date:   Mon, 25 Apr 2022 05:35:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 127/2579] kernel/sched/fair.c:918:32:
- sparse: sparse: cast removes address space '__rcu' of expression
-Message-ID: <202204250519.sArtxmdn-lkp@intel.com>
+        Sun, 24 Apr 2022 17:41:21 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F4815248B
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 14:38:19 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id h3so18395873lfu.8
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 14:38:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8Lj+8I0FO8qrcoAXKsUQ/7bkIYJ5OSyWim41oZ7eGAE=;
+        b=KHxV1EGyudGee9WRj/AK3mRuuSFGQaU2WbRpDeBjO+4p17nGhVHLE1H5WV46pDemIT
+         kLR9CVjz0o6OcYGCl94opQlwarAN2+atjKFY0JzJkSkvtYVU+MmJFCJyMLkyvsRUjJ3L
+         e2bakbwMP3wwR5Bf3TNbjHY/rMlRuB+LJzpWc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8Lj+8I0FO8qrcoAXKsUQ/7bkIYJ5OSyWim41oZ7eGAE=;
+        b=4HDiefD6p721Mp+cceYToNC9EosBwiF0alial5YfRw7y1dbGeoJloMNkkw287pl3zS
+         dJnHlHv7bDJA1KhkE1/4SGMhTZKHzI2zLcN2kGijRl/jn1bkLGXfRYfi2Q6QVL4cz4Rd
+         HKsjzMh08OX9Kx1EAyIXUQSLae/ivX3TmQaDCnR2CLsuu+5v5gUGMpE5Iz22X6nVZAVy
+         6Hry9MC5Q1HP80O2v7WbnUOBQrX4SijALdxer9aPeI5NLtvNyU/pLKKXJY3wDM/vZKw3
+         BgG4aL2b7B1O+wx1JjTvhHpmlfFQDOQr4lCZAuHNOxiAHL5GsRXGeEDxgBxmmAqNj/5H
+         Bhbw==
+X-Gm-Message-State: AOAM5300VOkidALj362yKkxEKfSHjAllA6o438UvPcPsNJibwFsFBFn0
+        rfuptPLEKklpH9x6dQ1Jc4ugwp/xYBuu5u18P10=
+X-Google-Smtp-Source: ABdhPJzW2IGc+IL90UxKiHHM6MAd4aUlFbBies2zIbsUkVimb9UQuHS70OIVWBUdY2bcHbRkw+V12Q==
+X-Received: by 2002:a05:6512:25a4:b0:471:fbe9:8893 with SMTP id bf36-20020a05651225a400b00471fbe98893mr4836858lfb.147.1650836297382;
+        Sun, 24 Apr 2022 14:38:17 -0700 (PDT)
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com. [209.85.167.54])
+        by smtp.gmail.com with ESMTPSA id bu39-20020a05651216a700b004484a8cf5f8sm1153439lfb.302.2022.04.24.14.38.15
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 24 Apr 2022 14:38:15 -0700 (PDT)
+Received: by mail-lf1-f54.google.com with SMTP id g19so23138092lfv.2
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 14:38:15 -0700 (PDT)
+X-Received: by 2002:ac2:5084:0:b0:471:ccb3:8c99 with SMTP id
+ f4-20020ac25084000000b00471ccb38c99mr10965514lfm.435.1650836294999; Sun, 24
+ Apr 2022 14:38:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <alpine.LRH.2.02.2204241648270.17244@file01.intranet.prod.int.rdu2.redhat.com>
+In-Reply-To: <alpine.LRH.2.02.2204241648270.17244@file01.intranet.prod.int.rdu2.redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 24 Apr 2022 14:37:58 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh+Z+OKH3jRttWGHbWSQq2wVMtdnA=ntDiadZu=VxAC7w@mail.gmail.com>
+Message-ID: <CAHk-=wh+Z+OKH3jRttWGHbWSQq2wVMtdnA=ntDiadZu=VxAC7w@mail.gmail.com>
+Subject: Re: [PATCH] hex2bin: make the function hex_to_bin constant-time
+To:     Mikulas Patocka <mpatocka@redhat.com>
+Cc:     Andy Shevchenko <andy@kernel.org>,
+        device-mapper development <dm-devel@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Mike Snitzer <msnitzer@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Milan Broz <gmazyland@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   49e1ec6c70a6eb4b7de9250a455b8b63eb42afbe
-commit: c3b487719a9654b07ba650abe5bf9964e5474b69 [127/2579] headers/deps: Move task_struct::se to per_task()
-config: i386-randconfig-s001 (https://download.01.org/0day-ci/archive/20220425/202204250519.sArtxmdn-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=c3b487719a9654b07ba650abe5bf9964e5474b69
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout c3b487719a9654b07ba650abe5bf9964e5474b69
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash kernel/sched/ mm/ net/ipv4/
+On Sun, Apr 24, 2022 at 1:54 PM Mikulas Patocka <mpatocka@redhat.com> wrote:
+>
+> + *
+> + * Explanation of the logic:
+> + * (ch - '9' - 1) is negative if ch <= '9'
+> + * ('0' - 1 - ch) is negative if ch >= '0'
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+True, but...
 
+Please, just to make me happier, make the sign of 'ch' be something
+very explicit. Right now that code uses 'char ch', which could be
+signed or unsigned.
 
-sparse warnings: (new ones prefixed by >>)
->> kernel/sched/fair.c:918:32: sparse: sparse: cast removes address space '__rcu' of expression
-   kernel/sched/fair.c:5053:22: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/fair.c:5053:22: sparse:    struct task_struct [noderef] __rcu *
-   kernel/sched/fair.c:5053:22: sparse:    struct task_struct *
-   kernel/sched/fair.c:5579:38: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct task_struct *curr @@     got struct task_struct [noderef] __rcu *curr @@
-   kernel/sched/fair.c:5579:38: sparse:     expected struct task_struct *curr
-   kernel/sched/fair.c:5579:38: sparse:     got struct task_struct [noderef] __rcu *curr
-   kernel/sched/fair.c:7137:38: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct task_struct *curr @@     got struct task_struct [noderef] __rcu *curr @@
-   kernel/sched/fair.c:7137:38: sparse:     expected struct task_struct *curr
-   kernel/sched/fair.c:7137:38: sparse:     got struct task_struct [noderef] __rcu *curr
-   kernel/sched/fair.c:7435:38: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct task_struct *curr @@     got struct task_struct [noderef] __rcu *curr @@
-   kernel/sched/fair.c:7435:38: sparse:     expected struct task_struct *curr
-   kernel/sched/fair.c:7435:38: sparse:     got struct task_struct [noderef] __rcu *curr
-   kernel/sched/fair.c:4693:31: sparse: sparse: marked inline, but without a definition
-   kernel/sched/fair.c: note: in included file:
-   kernel/sched/sched.h:2022:25: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/sched.h:2022:25: sparse:    struct task_struct [noderef] __rcu *
-   kernel/sched/sched.h:2022:25: sparse:    struct task_struct *
-   kernel/sched/sched.h:2180:9: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/sched.h:2180:9: sparse:    struct task_struct [noderef] __rcu *
-   kernel/sched/sched.h:2180:9: sparse:    struct task_struct *
-   kernel/sched/sched.h:2022:25: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/sched.h:2022:25: sparse:    struct task_struct [noderef] __rcu *
-   kernel/sched/sched.h:2022:25: sparse:    struct task_struct *
-   kernel/sched/sched.h:2022:25: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/sched.h:2022:25: sparse:    struct task_struct [noderef] __rcu *
-   kernel/sched/sched.h:2022:25: sparse:    struct task_struct *
+It doesn't really matter in this case, since the arithmetic will be
+done in 'int', and as long as 'int' is larger than 'char' as a type
+(to be really nit-picky), it all ends up working ok regardless.
 
-vim +/__rcu +918 kernel/sched/fair.c
+But just to make me happier, and to make the algorithm actually do the
+_same_ thing on every architecture, please use an explicit signedness
+for that 'ch' type.
 
-   915	
-   916	static void update_curr_fair(struct rq *rq)
-   917	{
- > 918		update_curr(cfs_rq_of(&per_task(rq->curr, se)));
-   919	}
-   920	
+Because then that 'ch >= X' is well-defined.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Again - your code _works_. That's not what I worry about. But when
+playing these kinds of tricks, please make it have the same behavior
+across architectures, not just "the end result will be the same
+regardless".
+
+Yes, a 'ch' with the high bit set will always be either >= '0' or <=
+'9', but note how *which* one it is depends on the exact type, and
+'char' is simply not well-defined.
+
+Finally, for the same reason - please don't use ">> 8".  Because I do
+not believe that bit 8 is well-defined in your arithmetic. The *sign*
+bit will be, but I'm not convinced bit 8 is.
+
+So use ">> 31" or similar.
+
+Also, I do worry that this is *exactly* the kind of trick that a
+compiler could easily turn back into a conditional. Usually compilers
+tend to go the other way (ie turn conditionals into arithmetic if
+possible), but..
+
+                    Linus

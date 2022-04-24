@@ -2,88 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B523850D5AB
+	by mail.lfdr.de (Postfix) with ESMTP id 6D01D50D5AA
 	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 00:19:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239782AbiDXWUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 18:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
+        id S239799AbiDXWUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 18:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiDXWUc (ORCPT
+        with ESMTP id S229486AbiDXWUu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 18:20:32 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C48E68F8A;
-        Sun, 24 Apr 2022 15:17:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=4KJhNI7dzi5fLHGxffpbeO6uNcV4HJTh/uEWY/YLuRI=; b=XihePaqfCifBFs/qq8nvPD42yQ
-        HqcV3RCwV8yRJaVIFD8aRofLAgbVYuuOluce0aKidGzus8BeAlbkutDV8Fd77Zyg6dq405Rt63yhH
-        Qua6PLWb3qmFh61VhYpF8IezAeI95051bWrDTe9+fv2nCbGmutAifpBTA+8D9XpzSzNs=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nikXh-00HJW0-2S; Mon, 25 Apr 2022 00:17:21 +0200
-Date:   Mon, 25 Apr 2022 00:17:21 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Wan Jiabing <wanjiabing@vivo.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kael_w@yeah.net
-Subject: Re: [PATCH] FDDI: defxx: simplify if-if to if-else
-Message-ID: <YmXMcUAhUg/p1X3R@lunn.ch>
-References: <20220424092842.101307-1-wanjiabing@vivo.com>
- <alpine.DEB.2.21.2204241137440.9383@angie.orcam.me.uk>
+        Sun, 24 Apr 2022 18:20:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C9B6D86A
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 15:17:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D85661354
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 22:17:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FE35C385A7;
+        Sun, 24 Apr 2022 22:17:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650838667;
+        bh=aCUo1AIugUEcO35y/pU9+Q9FKJzq4qO/ICqLjl72B94=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Sh+ivT3b3v1+G2ABXiYchKxVUsVkrcPie+pUNZayfM4CmKxby6BG2RTMeIX3KbK7o
+         z50QWP+uNmdyWWTldFp0bXqiTPmRr10AeAyrFS2s8JWbZoSHUxZvpafQUW6nmzjtQT
+         I6dxB/37tkvdssNaYbbc0Uce6LzDaolmcVbBCdBJA7uWa8t4L/dnPRBLthPVw2KusV
+         q0WKWOPhHnRgSnevAJ8Kz5AtzRG8Bd+aVyF6YYQWzfm+ceuanapUzstzlI6W4agoXT
+         a4rjvlrT7BVymkzgCA/7bLoxs+qDbG6NXIfk3q57JQXj/e1foE4VEtK/ltSzgEzetB
+         OoViz9Uoin5mw==
+Date:   Sun, 24 Apr 2022 15:17:45 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Palmer Dabbelt <palmerdabbelt@google.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH] checksyscalls: ignore -Wunused-macros
+Message-ID: <YmXMiTXEvFXZ/swU@dev-arch.thelio-3990X>
+References: <20220422151725.1336997-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2204241137440.9383@angie.orcam.me.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220422151725.1336997-1-mailhol.vincent@wanadoo.fr>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 24, 2022 at 11:39:50AM +0100, Maciej W. Rozycki wrote:
-> On Sun, 24 Apr 2022, Wan Jiabing wrote:
+Hi Vincent,
+
+On Sat, Apr 23, 2022 at 12:17:25AM +0900, Vincent Mailhol wrote:
+> The macros defined in this file are for testing only and are purposely
+> not used. When compiled with W=2, both gcc and clang yield some
+> -Wunused-macros warnings. Ignore them.
 > 
-> > diff --git a/drivers/net/fddi/defxx.c b/drivers/net/fddi/defxx.c
-> > index b584ffe38ad6..3edb2e96f763 100644
-> > --- a/drivers/net/fddi/defxx.c
-> > +++ b/drivers/net/fddi/defxx.c
-> > @@ -585,10 +585,10 @@ static int dfx_register(struct device *bdev)
-> >  			bp->mmio = false;
-> >  			dfx_get_bars(bp, bar_start, bar_len);
-> >  		}
-> > -	}
-> > -	if (!dfx_use_mmio)
-> > +	} else {
-> >  		region = request_region(bar_start[0], bar_len[0],
-> >  					bdev->driver->name);
-> > +	}
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+
+The change itself looks fine but a couple of comments:
+
+1. Nick and I do not pick up patches, we rely on others to do so.
+   Additionally, this is not really something within our domain, despite
+   what get_maintainer.pl might say. This change should be sent to
+   either
+
+   Masahiro Yamada <masahiroy@kernel.org>
+   linux-kbuild@vger.kernel.org
+
+   or
+
+   Andrew Morton <akpm@linux-foundation.org>
+
+   so that it can be applied by one of them.
+
+2. I am not sure that silencing warnings from W=2 is that useful, as
+   they are unlikely to be real issues. Not to discourage you by any
+   means but it might be more useful to focus on cleaning up warnings
+   from W=1 and getting those promoted to regular build warnings.
+
+Cheers,
+Nathan
+
+> ---
+>  scripts/checksyscalls.sh | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
->  NAK.  The first conditional optionally sets `bp->mmio = false', which 
-> changes the value of `dfx_use_mmio' in some configurations:
+> diff --git a/scripts/checksyscalls.sh b/scripts/checksyscalls.sh
+> index 9dbab13329fa..cde15f22ec98 100755
+> --- a/scripts/checksyscalls.sh
+> +++ b/scripts/checksyscalls.sh
+> @@ -255,6 +255,7 @@ cat << EOF
+>  /* 64-bit ports never needed these, and new 32-bit ports can use statx */
+>  #define __IGNORE_fstat64
+>  #define __IGNORE_fstatat64
+> +
+>  EOF
+>  }
+>  
+> @@ -268,4 +269,4 @@ syscall_list() {
+>  }
+>  
+>  (ignore_list && syscall_list $(dirname $0)/../arch/x86/entry/syscalls/syscall_32.tbl) | \
+> -$* -Wno-error -E -x c - > /dev/null
+> +$* -Wno-error -Wno-unused-macros -E -x c - > /dev/null
+> -- 
+> 2.35.1
 > 
-> #if defined(CONFIG_EISA) || defined(CONFIG_PCI)
-> #define dfx_use_mmio bp->mmio
-> #else
-> #define dfx_use_mmio true
-> #endif
-
-Which is just asking for trouble like this.
-
-Could i suggest dfx_use_mmio is changed to DFX_USE_MMIO to give a hint
-something horrible is going on.
-
-It probably won't stop the robots finding this if (x) if (!x), but
-there is a chance the robot drivers will wonder why it is upper case.
-
-	  Andrew

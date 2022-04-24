@@ -2,95 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C62850D01F
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 08:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 594AC50D028
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 09:08:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238459AbiDXHCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 03:02:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37276 "EHLO
+        id S238464AbiDXHLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 03:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233788AbiDXHCA (ORCPT
+        with ESMTP id S233814AbiDXHLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 03:02:00 -0400
-Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF70E1A61E4;
-        Sat, 23 Apr 2022 23:59:00 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 9C2E7C01C; Sun, 24 Apr 2022 08:58:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1650783537; bh=d1VjK1xtkmP9URRCXEubGmmd5y56XLQCRFwZdbrT84s=;
+        Sun, 24 Apr 2022 03:11:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E912917ABA;
+        Sun, 24 Apr 2022 00:08:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF70D612D6;
+        Sun, 24 Apr 2022 07:08:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B09D9C385A7;
+        Sun, 24 Apr 2022 07:08:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650784116;
+        bh=rhnPDv3m0PNekYvfKwNPrTY0HxMA1SMyxqQWbEaoOYM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2EEFaDHKB74Y41gspMjN58AfcMH0nOu581BoBWpuRMtCruEUbfUBzJ667erlgE77y
-         OfpaY0jpdZlOUM+sYPdaUx4oY+QnXWN/Cfir8QJUNb1NGMZ2ZNZcvZkizEHHz4X3uw
-         qybPYksS394xjitQHLWWvyILQsd64C+P3jv5d6kNJqd+yCHxPVgTY8YP5ZmHlw7sw/
-         X/dobP2ssY70GowhEU3ip3N6ua5CAkaZA+OHngQ+mYXAvNPmKICkEhJGYiQER9akcI
-         d+wkCTbPcEE52gOs5iN1ykpdBFj2V8TQ5/TGUH+Z+8gb2F3M8o8D9khmeMVjzR28Tj
-         dq12z9n4x1t+Q==
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id DC08BC009;
-        Sun, 24 Apr 2022 08:58:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1650783537; bh=d1VjK1xtkmP9URRCXEubGmmd5y56XLQCRFwZdbrT84s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2EEFaDHKB74Y41gspMjN58AfcMH0nOu581BoBWpuRMtCruEUbfUBzJ667erlgE77y
-         OfpaY0jpdZlOUM+sYPdaUx4oY+QnXWN/Cfir8QJUNb1NGMZ2ZNZcvZkizEHHz4X3uw
-         qybPYksS394xjitQHLWWvyILQsd64C+P3jv5d6kNJqd+yCHxPVgTY8YP5ZmHlw7sw/
-         X/dobP2ssY70GowhEU3ip3N6ua5CAkaZA+OHngQ+mYXAvNPmKICkEhJGYiQER9akcI
-         d+wkCTbPcEE52gOs5iN1ykpdBFj2V8TQ5/TGUH+Z+8gb2F3M8o8D9khmeMVjzR28Tj
-         dq12z9n4x1t+Q==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 0fdac319;
-        Sun, 24 Apr 2022 06:58:50 +0000 (UTC)
-Date:   Sun, 24 Apr 2022 15:58:35 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        KP Singh <kpsingh@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Yonghong Song <yhs@fb.com>, Song Liu <songliubraving@fb.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>
-Subject: Re: [PATCH 1/4] tools/bpf/runqslower: musl compat: explicitly link
- with libargp if found
-Message-ID: <YmT1GxK1HimY2Os9@codewreck.org>
-References: <20220424051022.2619648-1-asmadeus@codewreck.org>
- <20220424051022.2619648-2-asmadeus@codewreck.org>
+        b=UiTHE7IpGZhJ6tSXNNPyh3ytNCEnPa7I6oE602K5jKTsqz6UstCQfxjg2yKScR/vl
+         KdXskO62ktmvkErW0ZXFDsBFwSk0g9VhiMt/hlDi3ogza2DqpYDD+eiHQGmDB0xqbR
+         hE0vVA5ssjRblKkqXg5zITILFm7xNvdoU12WLr+M=
+Date:   Sun, 24 Apr 2022 09:08:33 +0200
+From:   gregkh <gregkh@linuxfoundation.org>
+To:     =?utf-8?B?5byg5bm/6L6J?= <zhang.guanghui@cestc.cn>
+Cc:     roid <roid@nvidia.com>, saeedm <saeedm@nvidia.com>,
+        parav <parav@nvidia.com>, jgg <jgg@nvidia.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>
+Subject: Re: Fix a devlink AB-BA deadlock on net namespace deletion
+Message-ID: <YmT3cSkfIhLx0CVj@kroah.com>
+References: <342746123.81421.1650369512240.JavaMail.xmail@ma-wm-1-new>
+ <2141729194.2508.1650780142235.JavaMail.xmail@wm-2-new>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220424051022.2619648-2-asmadeus@codewreck.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2141729194.2508.1650780142235.JavaMail.xmail@wm-2-new>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dominique Martinet wrote on Sun, Apr 24, 2022 at 02:10:19PM +0900:
-> After having done this work I noticed runqslower is not actually
-> installed, so ideally instead of all of this it'd make more sense to
-> just not build it: would it make sense to take it out of the defaults
-> build targets?
-> I could just directly build the appropriate targets from tools/bpf
-> directory with 'make bpftool bpf_dbg bpf_asm bpf_jit_disasm', but
-> ideally I'd like to keep alpine's build script way of calling make from
-> the tools parent directory, and 'make bpf' there is all or nothing.
+On Sun, Apr 24, 2022 at 02:02:22PM +0800, 张广辉 wrote:
+> 
+> Hi  all
+> 
 
-Well, it turns out runqslower doesn't build if the current kernel or
-vmlinux in tree don't have BTF enabled, so the current alpine builder
-can't build it.
-
-I've dropped this patch from my alpine MR[1] and built things directly
-with make bpftool etc as suggested above, so my suggestion to make it
-more easily buildable that way is probably the way to go?
-[1] https://gitlab.alpinelinux.org/alpine/aports/-/merge_requests/33554
+<snip>
 
 
-Thanks,
--- 
-Dominique
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
+  and can not be applied.  Please read the file,
+  Documentation/email-clients.txt in order to fix this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
+

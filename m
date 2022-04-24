@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD3AB50D4AE
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 21:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC5AB50D4B1
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 21:12:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238714AbiDXTOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 15:14:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40168 "EHLO
+        id S237204AbiDXTPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 15:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238255AbiDXTNu (ORCPT
+        with ESMTP id S238310AbiDXTNy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 15:13:50 -0400
+        Sun, 24 Apr 2022 15:13:54 -0400
 Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E888C62C8;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5872BFF;
         Sun, 24 Apr 2022 12:10:13 -0700 (PDT)
 Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-10.nifty.com with ESMTP id 23OJ8o62019069;
+        by conuserg-10.nifty.com with ESMTP id 23OJ8o63019069;
         Mon, 25 Apr 2022 04:08:56 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 23OJ8o62019069
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 23OJ8o63019069
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1650827336;
-        bh=/rt+evyzPsd3S3ztHUwtb8jwWosNiUJtIBCWGhVH/s0=;
+        s=dec2015msa; t=1650827337;
+        bh=4VwlsHdKnI97n8eITvMnw7a1k5Sa+J49aS2TPed1vyc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jXpk104VNeX1spsVdhf/v5r3U0eBpXZZygK4UYd8DXiVcNAmFqEx0Nsr89DbAukZX
-         8XKxYnL6DkYw1CgdXNClZNBll2laTtNtkhJesrPy3oxToKp55uqfv38BRdh5EoljXi
-         rtL483iwTIydjocVwJfWzxsceM06c44n4AMH0m3TgIxCW/s8ZcBDsxJgIkDTbLGGr+
-         uIl9Bba7d/VreS0KVHYPhIWjICwvjjlDLE6kO60wuUP7cKgokysXnxp4cTHFsQ5VZK
-         l5VLwCijhLMiOdYFfyTqW44j+OCyx1G74ZdYNJIdK7RsnSfhPUTKqcdd+wBzYMA9nW
-         2oUf85fmITcfg==
+        b=DsHUQgWImFEExdp1jJRQC6FpRj1SL/YHOnwlC4xh/963JxECS/k8LgIl8G1m6FmyW
+         BaDLv5/jQEus6v2gwoxp2fYqWnrjIaB1DDSDKG7b0Hxx4eZ7KBsd83NZK1/MFLSDTQ
+         W98gZ+p5IIVZXxSkTE9+KwWfv4vVKr5lpqzHZKk3kvPe0eDjqcjMAYWeJuqJjFrA6g
+         iI6bQ7d6LtEYgH1nHNoCgALs4+uMtWrjZdeJE3X0dYraNa9vVT5SKHtTJRpHNAxKxi
+         z4NXjxFfUkQZevPtrc8t1NEAYyVg24DLh7VGgkVCZXfE/TD7n+h6uh7MtxHglSozBf
+         VnX/5pTORSZeQ==
 X-Nifty-SrcIP: [133.32.177.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
@@ -36,9 +36,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>,
         Michal Marek <michal.lkml@markovi.net>,
         Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH 08/27] modpost: traverse modules in order
-Date:   Mon, 25 Apr 2022 04:07:52 +0900
-Message-Id: <20220424190811.1678416-9-masahiroy@kernel.org>
+Subject: [PATCH 09/27] modpost: add sym_add_unresolved() helper
+Date:   Mon, 25 Apr 2022 04:07:53 +0900
+Message-Id: <20220424190811.1678416-10-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220424190811.1678416-1-masahiroy@kernel.org>
 References: <20220424190811.1678416-1-masahiroy@kernel.org>
@@ -53,111 +53,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, modpost manages modules in a singly liked list; it adds a new
-node to the head, and traverses the list from new to old.
+Add a small helper, sym_add_unresolved() to ease the further
+refactoring.
 
-It works, but the error messages are shown in the reverse order.
-
-If you have a Makefile like this:
-
-  obj-m += foo.o bar.o
-
-then, modpost shows error messages in bar.o, foo.o, in this order.
-
-Use a doubly linked list to keep the order in modules.order; use
-list_add_tail() for the node addition and list_for_each_entry() for
-the list traverse.
-
-Now that the kernel's list macros have been imported to modpost, I will
-use them actively going forward.
+Remove the 'weak' argument from alloc_symbol() because it is sensible
+only for unresolved symbols.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- scripts/mod/modpost.c | 18 +++++++++---------
- scripts/mod/modpost.h |  3 ++-
- 2 files changed, 11 insertions(+), 10 deletions(-)
+ scripts/mod/modpost.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
 diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 52dd07a36379..86416e4af626 100644
+index 86416e4af626..1c7d2831e89d 100644
 --- a/scripts/mod/modpost.c
 +++ b/scripts/mod/modpost.c
-@@ -165,16 +165,17 @@ char *get_line(char **stringp)
- }
- 
- /* A list of all modules we processed */
--static struct module *modules;
-+LIST_HEAD(modules);
- 
- static struct module *find_module(const char *modname)
+@@ -230,14 +230,12 @@ static inline unsigned int tdb_hash(const char *name)
+  * Allocate a new symbols for use in the hash of exported symbols or
+  * the list of unresolved symbols per module
+  **/
+-static struct symbol *alloc_symbol(const char *name, bool weak,
+-				   struct symbol *next)
++static struct symbol *alloc_symbol(const char *name, struct symbol *next)
  {
- 	struct module *mod;
+ 	struct symbol *s = NOFAIL(malloc(sizeof(*s) + strlen(name) + 1));
  
--	for (mod = modules; mod; mod = mod->next)
-+	list_for_each_entry(mod, &modules, list) {
- 		if (strcmp(mod->name, modname) == 0)
--			break;
--	return mod;
-+			return mod;
-+	}
-+	return NULL;
+ 	memset(s, 0, sizeof(*s));
+ 	strcpy(s->name, name);
+-	s->weak = weak;
+ 	s->next = next;
+ 	s->is_static = true;
+ 	return s;
+@@ -250,11 +248,17 @@ static struct symbol *new_symbol(const char *name, struct module *module,
+ 	unsigned int hash;
+ 
+ 	hash = tdb_hash(name) % SYMBOL_HASH_SIZE;
+-	symbolhash[hash] = alloc_symbol(name, false, symbolhash[hash]);
++	symbolhash[hash] = alloc_symbol(name, symbolhash[hash]);
+ 
+ 	return symbolhash[hash];
  }
  
- static struct module *new_module(const char *modname)
-@@ -184,12 +185,11 @@ static struct module *new_module(const char *modname)
- 	mod = NOFAIL(malloc(sizeof(*mod) + strlen(modname) + 1));
- 	memset(mod, 0, sizeof(*mod));
- 
--	/* add to list */
- 	strcpy(mod->name, modname);
- 	mod->is_vmlinux = (strcmp(modname, "vmlinux") == 0);
- 	mod->gpl_compatible = true;
--	mod->next = modules;
--	modules = mod;
++static void sym_add_unresolved(const char *name, struct module *mod, bool weak)
++{
++	mod->unres = alloc_symbol(name, mod->unres);
++	mod->unres->weak = weak;
++}
 +
-+	list_add_tail(&mod->list, &modules);
+ static struct symbol *find_symbol(const char *name)
+ {
+ 	struct symbol *s;
+@@ -701,9 +705,8 @@ static void handle_symbol(struct module *mod, struct elf_info *info,
+ 			}
+ 		}
  
- 	return mod;
+-		mod->unres = alloc_symbol(symname,
+-					  ELF_ST_BIND(sym->st_info) == STB_WEAK,
+-					  mod->unres);
++		sym_add_unresolved(symname, mod,
++				   ELF_ST_BIND(sym->st_info) == STB_WEAK);
+ 		break;
+ 	default:
+ 		/* All exported symbols */
+@@ -2073,7 +2076,7 @@ static void read_symbols(const char *modname)
+ 	 * the automatic versioning doesn't pick it up, but it's really
+ 	 * important anyhow */
+ 	if (modversions)
+-		mod->unres = alloc_symbol("module_layout", false, mod->unres);
++		sym_add_unresolved("module_layout", mod, false);
  }
-@@ -2467,7 +2467,7 @@ static void write_namespace_deps_files(const char *fname)
- 	struct namespace_list *ns;
- 	struct buffer ns_deps_buf = {};
  
--	for (mod = modules; mod; mod = mod->next) {
-+	list_for_each_entry(mod, &modules, list) {
- 
- 		if (mod->from_dump || !mod->missing_namespaces)
- 			continue;
-@@ -2558,7 +2558,7 @@ int main(int argc, char **argv)
- 	if (files_source)
- 		read_symbols_from_files(files_source);
- 
--	for (mod = modules; mod; mod = mod->next) {
-+	list_for_each_entry(mod, &modules, list) {
- 		char fname[PATH_MAX];
- 		int ret;
- 
-diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
-index 4085bf5b33aa..c3b5d2f0e2bb 100644
---- a/scripts/mod/modpost.h
-+++ b/scripts/mod/modpost.h
-@@ -11,6 +11,7 @@
- #include <unistd.h>
- #include <elf.h>
- 
-+#include "list.h"
- #include "elfconfig.h"
- 
- /* On BSD-alike OSes elf.h defines these according to host's word size */
-@@ -114,7 +115,7 @@ struct namespace_list {
- };
- 
- struct module {
--	struct module *next;
-+	struct list_head list;
- 	int gpl_compatible;
- 	struct symbol *unres;
- 	bool from_dump;		/* true if module was loaded from *.symvers */
+ static void read_symbols_from_files(const char *filename)
 -- 
 2.32.0
 

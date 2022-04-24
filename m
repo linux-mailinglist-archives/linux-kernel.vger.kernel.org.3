@@ -2,97 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACC4A50D4D7
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 21:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B239150D4DA
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 21:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239100AbiDXThJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 15:37:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46186 "EHLO
+        id S239125AbiDXTiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 15:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiDXThH (ORCPT
+        with ESMTP id S239141AbiDXTiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 15:37:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 441BA35865;
-        Sun, 24 Apr 2022 12:34:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D9353612E8;
-        Sun, 24 Apr 2022 19:34:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7ACFC385A7;
-        Sun, 24 Apr 2022 19:34:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650828845;
-        bh=1yTMsjzIPbHZvzGsCO7P4g2pcIygu8eX0O+Bh6QMs4g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UyPBSsw5JlCD9LjskAiB6XHMmthvmaAWNa8rv8AdALS5/VS5sm0SeKb5dpABbJEVt
-         cN4HeUjQd/0ZCQ1jFRXXU5wutcGWW6E+9KpzKNsQRtZTCAQTsqwpYUD1DfQRfaFF1q
-         IO/DJUVpV99kaLATYD80QFegSRxRQggpVnArXr6oaerzFVxC3QEwDjATfnnrcrxRQc
-         pn/a6VY3OKpvCuDWRV51NrnbpSwz3K0D/jgKd8WTuFwyvJUM4kMKbInGOhrzhsUGes
-         eEiNYHKlhM4RI8StNcZB0yfmAVYBGddWlopdp9MSlry2XFM5BtqgM7DOw9W/sC/uP1
-         CcY+U9rv47PKw==
-Date:   Sun, 24 Apr 2022 21:33:59 +0200
-From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Nathan Rossi <nathan@nathanrossi.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH v2] net: dsa: mv88e6xxx: Fix port_hidden_wait to account
- for port_base_addr
-Message-ID: <20220424213359.246cd5ab@thinkpad>
-In-Reply-To: <YmWkgkILCrBP5hRG@lunn.ch>
-References: <20220424153143.323338-1-nathan@nathanrossi.com>
-        <YmWkgkILCrBP5hRG@lunn.ch>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Sun, 24 Apr 2022 15:38:17 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA30218B
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 12:35:15 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id w16so6537963pfj.2
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 12:35:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=cCbva5d4cTef7JnnRvcj+uHQQXUpXaA+2xK/VFzMO4w=;
+        b=LkVpoRUG75De+9HyDx15Zr4GfiqqMgKd9qwzqES1FhWMMrY8+v5JTEzxsTQCCfk1jL
+         K04ggN0TOWJdxqAzCY1Me9wMzWxsuc9QL7sqhmkoI7zBGn8lIOqHrv+u2X8UTJ1pC8jX
+         tE5hm2Wlj7q5NBIT2o5vny1y8BdpYUBUgcBimpvOD0YtB7e7S2YA2LmSclOIXdUq9/Wa
+         zdqz9bgmcMBM4lB247PUHYAnQYuu18CZ1xTGBnR4y7odqXfhd34vUzc7lXTpACXzaP7u
+         d1Gr6APlLxwJTkAWqCCGLl1csIgXX8n3ATxRvJlNivuYagzEXFQNNpOFPw0QfncBtmdH
+         PSJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=cCbva5d4cTef7JnnRvcj+uHQQXUpXaA+2xK/VFzMO4w=;
+        b=AG0rQ21GzlCptypYUFs+VCEWlo9LF4oc/Xg3JBr8OHGKtEzx38bh19I3aHVVB0bS14
+         rP0aGgKWRuVZWKeNTWeWSMW60/+o5kbdRRgeLUPNkeqlb3LRht7mtnAYfNt5o+5PgGGe
+         6z7MP0VEQkhwO1YHGxqi2xv3KBUD18P0VsCQOKhvZP0Exf5U4NIfk2g3wTUYCBfUVM1u
+         qG8VRv4tSMmhabcEsXFIgx2F23ORNem8ujEuSdyb8G3+/suvDis+3BxDS7szdaRsT4+a
+         +zqH81R5o/1s0wrsPD6UFm3Iy2d/UNWNqDuOEZGFpG91Acu7l/RzA3fUIjEsj+01Axwh
+         aCVQ==
+X-Gm-Message-State: AOAM532IDOe7LxS8l2Un2qDaRuVLh2G9xBq6oGcCmrSdmwG4RhcL+Se0
+        9zmP1+vvGh/GwWrCfBZWT1WqLA==
+X-Google-Smtp-Source: ABdhPJxAgrjUeROv5fCIkxRGxN9Ux15Tld23PamShec+lf7XaV4NluDJ54VcqeoQLkUeWRbRoE962Q==
+X-Received: by 2002:a05:6a00:1702:b0:50a:8181:fed7 with SMTP id h2-20020a056a00170200b0050a8181fed7mr15459151pfc.56.1650828914988;
+        Sun, 24 Apr 2022 12:35:14 -0700 (PDT)
+Received: from [2620:15c:29:204:d4fc:f95c:4d79:861f] ([2620:15c:29:204:d4fc:f95c:4d79:861f])
+        by smtp.gmail.com with ESMTPSA id j10-20020a17090a734a00b001bf31f7520csm4222344pjs.1.2022.04.24.12.35.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Apr 2022 12:35:14 -0700 (PDT)
+Date:   Sun, 24 Apr 2022 12:35:14 -0700 (PDT)
+From:   David Rientjes <rientjes@google.com>
+To:     Yuanchu Xie <yuanchu@google.com>
+cc:     Shuah Khan <shuah@kernel.org>, Markus Boehme <markubo@amazon.de>,
+        SeongJae Park <sj@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND] selftests/damon: add damon to selftests root
+ Makefile
+In-Reply-To: <20220418202017.3583638-1-yuanchu@google.com>
+Message-ID: <93c3f9b4-7e14-858b-bf6c-23e4f3bec232@google.com>
+References: <20220418202017.3583638-1-yuanchu@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 24 Apr 2022 21:26:58 +0200
-Andrew Lunn <andrew@lunn.ch> wrote:
+On Mon, 18 Apr 2022, Yuanchu Xie wrote:
 
-> On Sun, Apr 24, 2022 at 03:31:43PM +0000, Nathan Rossi wrote:
-> > The other port_hidden functions rely on the port_read/port_write
-> > functions to access the hidden control port. These functions apply the
-> > offset for port_base_addr where applicable. Update port_hidden_wait to
-> > use the port_wait_bit so that port_base_addr offsets are accounted for
-> > when waiting for the busy bit to change.
-> > 
-> > Without the offset the port_hidden_wait function would timeout on
-> > devices that have a non-zero port_base_addr (e.g. MV88E6141), however
-> > devices that have a zero port_base_addr would operate correctly (e.g.
-> > MV88E6390).
-> > 
-> > Fixes: ea89098ef9a5 ("net: dsa: mv88x6xxx: mv88e6390 errata")  
+> Currently the damon selftests are not built with the rest of the
+> selftests. We add damon to the list of targets.
 > 
-> That is further back than needed. And due to the code moving around
-> and getting renamed, you are added extra burden on those doing the
-> back port for no actual gain.
-> 
-> Please verify what i suggested, 609070133aff1 is better and then
-> repost.
+> Fixes: b348eb7abd09 ("mm/damon: add user space selftests")
+> Reviewed-by: SeongJae Park <sj@kernel.org>
+> Signed-off-by: Yuanchu Xie <yuanchu@google.com>
 
-The bug was introduced by ea89098ef9a5.
-609070133aff1 is only requirement for this fix, but Fixes tag should reference
-the commit which introduced the bug, afaik.
-
-So it should be 
-
-Fixes: ea89098ef9a5 ("net: dsa: mv88x6xxx: mv88e6390 errata")
-Cc: stable@vger.kernel.org # 609070133aff ("net: dsa: mv88e6xxx: update code operating on hidden registers")
-
-Marek
+Acked-by: David Rientjes <rientjes@google.com>

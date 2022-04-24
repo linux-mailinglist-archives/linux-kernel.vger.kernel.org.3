@@ -2,199 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C41C750D3E3
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 19:21:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD1F050D3E0
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 19:21:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236289AbiDXRYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 13:24:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32846 "EHLO
+        id S236421AbiDXRX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 13:23:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236394AbiDXRX6 (ORCPT
+        with ESMTP id S236289AbiDXRXz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 13:23:58 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2395957B3F;
-        Sun, 24 Apr 2022 10:20:57 -0700 (PDT)
+        Sun, 24 Apr 2022 13:23:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510B65675F;
+        Sun, 24 Apr 2022 10:20:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3096CCE0EA0;
-        Sun, 24 Apr 2022 17:20:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50E1FC385A9;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 19ECE611DE;
+        Sun, 24 Apr 2022 17:20:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32ED0C385A7;
         Sun, 24 Apr 2022 17:20:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650820853;
-        bh=4SgAcVXLHGqxh2NVuCquX9xm9/nhdLmAxMSJu3gMgqI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=MYh21kkHqtkHrAMHn/d2IYATE6bWshwZufmkNFFqMaffarwSSnQ0JWyKz2w1dudBI
-         oG/0vGaGZKmTFYvYaVwW6V/pCMi1ef4ZTzwnUfirI6b8IIo0QqhhusrLP6Og+LQqCQ
-         fS485VteVO6wC5RHi7itPwhlJBrYLM/hjwAQsXu6biY5f3g32iI9G3iMSyUhZTMKfm
-         mF19N6ijiUsZvPGCtqX8Wn9o8eJEp5CrVsPQeHHy5ACwUOZ57iHDVpF02qKySpXdgC
-         oJ7WRo7qCUdgZLFbOM+Ls8LQJomxxoPSJRfMsfFoQZ9SofyFhzAIk1K48S3QYlyYwK
-         ZZ3IWbNKjBqLg==
-From:   Mike Rapoport <rppt@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guillaume Tucker <gtucker@collabora.com>,
-        Mark Brown <broonie@kernel.org>,
-        Mark-PK Tsai <mark-pk.tsai@mediatek.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Tony Lindgren <tony@atomide.com>,
-        Will Deacon <will@kernel.org>, bot@kernelci.org,
-        kernelci-results@groups.io, linux-arm-kernel@lists.infradead.org,
-        stable@vger.kernel.org
-Subject: [PATCH] arm[64]/memremap: don't abuse pfn_valid() to ensure presence of linear map
-Date:   Sun, 24 Apr 2022 20:20:44 +0300
-Message-Id: <20220424172044.22220-1-rppt@kernel.org>
-X-Mailer: git-send-email 2.28.0
+        s=k20201202; t=1650820852;
+        bh=8YAkiDCHNS9PdDSByTQ12GIjlNhj3SzM6u+5fNxbJO0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YKQ5u6j6e5I5Oog+kDMGmMr9uNIdmteV8T84bSi60THEFgfwCVfnMfukav2R3rMSe
+         hb7A6oRKc5XLbqzAbUwGEBkyxg67ytcaGZ7UqP5lHohQARzzzqPLPxGObMli4olfzE
+         RjbxRkbwYsykQ8KL3T4VNvJ7XLpdNfaXw/n88bODDbSnK7JyHD/vBqZblaJBXFIT+C
+         KiWu1JbznqX2Uwn4wu/2af6sN7rg94QMvEMewiDOXwK9mHZfX5dZwyf7Lj9CdxyQob
+         xPCpWPrTYW0z83wyRUypkQ0E1qNnciMAr18tvbTkxUt3HUniIYXLxg8991za+bR3sP
+         mcIuUk02voFgw==
+Date:   Sun, 24 Apr 2022 19:20:46 +0200
+From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To:     Nathan Rossi <nathan@nathanrossi.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH v2] net: dsa: mv88e6xxx: Fix port_hidden_wait to account
+ for port_base_addr
+Message-ID: <20220424192046.6f77655a@thinkpad>
+In-Reply-To: <20220424153143.323338-1-nathan@nathanrossi.com>
+References: <20220424153143.323338-1-nathan@nathanrossi.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Rapoport <rppt@linux.ibm.com>
+On Sun, 24 Apr 2022 15:31:43 +0000
+Nathan Rossi <nathan@nathanrossi.com> wrote:
 
-The semantics of pfn_valid() is to check presence of the memory map for a
-PFN and not whether a PFN is covered by the linear map. The memory map may
-be present for NOMAP memory regions, but they won't be mapped in the linear
-mapping.  Accessing such regions via __va() when they are memremap()'ed
-will cause a crash.
+> The other port_hidden functions rely on the port_read/port_write
+> functions to access the hidden control port. These functions apply the
+> offset for port_base_addr where applicable. Update port_hidden_wait to
+> use the port_wait_bit so that port_base_addr offsets are accounted for
+> when waiting for the busy bit to change.
+>=20
+> Without the offset the port_hidden_wait function would timeout on
+> devices that have a non-zero port_base_addr (e.g. MV88E6141), however
+> devices that have a zero port_base_addr would operate correctly (e.g.
+> MV88E6390).
+>=20
+> Fixes: ea89098ef9a5 ("net: dsa: mv88x6xxx: mv88e6390 errata")
+> Signed-off-by: Nathan Rossi <nathan@nathanrossi.com>
+> ---
+> Changes in v2:
+> - Add fixes
+> ---
+>  drivers/net/dsa/mv88e6xxx/port_hidden.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/net/dsa/mv88e6xxx/port_hidden.c b/drivers/net/dsa/mv=
+88e6xxx/port_hidden.c
+> index b49d05f0e1..7a9f9ff6de 100644
+> --- a/drivers/net/dsa/mv88e6xxx/port_hidden.c
+> +++ b/drivers/net/dsa/mv88e6xxx/port_hidden.c
+> @@ -40,8 +40,9 @@ int mv88e6xxx_port_hidden_wait(struct mv88e6xxx_chip *c=
+hip)
+>  {
+>  	int bit =3D __bf_shf(MV88E6XXX_PORT_RESERVED_1A_BUSY);
+> =20
+> -	return mv88e6xxx_wait_bit(chip, MV88E6XXX_PORT_RESERVED_1A_CTRL_PORT,
+> -				  MV88E6XXX_PORT_RESERVED_1A, bit, 0);
+> +	return mv88e6xxx_port_wait_bit(chip,
+> +				       MV88E6XXX_PORT_RESERVED_1A_CTRL_PORT,
+> +				       MV88E6XXX_PORT_RESERVED_1A, bit, 0);
+>  }
+> =20
+>  int mv88e6xxx_port_hidden_read(struct mv88e6xxx_chip *chip, int block, i=
+nt port,
 
-On v5.4.y the crash happens on qemu-arm with UEFI [1]:
-
-<1>[    0.084476] 8<--- cut here ---
-<1>[    0.084595] Unable to handle kernel paging request at virtual address dfb76000
-<1>[    0.084938] pgd = (ptrval)
-<1>[    0.085038] [dfb76000] *pgd=5f7fe801, *pte=00000000, *ppte=00000000
-
-...
-
-<4>[    0.093923] [<c0ed6ce8>] (memcpy) from [<c16a06f8>] (dmi_setup+0x60/0x418)
-<4>[    0.094204] [<c16a06f8>] (dmi_setup) from [<c16a38d4>] (arm_dmi_init+0x8/0x10)
-<4>[    0.094408] [<c16a38d4>] (arm_dmi_init) from [<c0302e9c>] (do_one_initcall+0x50/0x228)
-<4>[    0.094619] [<c0302e9c>] (do_one_initcall) from [<c16011e4>] (kernel_init_freeable+0x15c/0x1f8)
-<4>[    0.094841] [<c16011e4>] (kernel_init_freeable) from [<c0f028cc>] (kernel_init+0x8/0x10c)
-<4>[    0.095057] [<c0f028cc>] (kernel_init) from [<c03010e8>] (ret_from_fork+0x14/0x2c)
-
-On kernels v5.10.y and newer the same crash won't reproduce on ARM because
-commit b10d6bca8720 ("arch, drivers: replace for_each_membock() with
-for_each_mem_range()") changed the way memory regions are registered in the
-resource tree, but that merely covers up the problem.
-
-On ARM64 memory resources registered in yet another way and there the
-issue of wrong usage of pfn_valid() to ensure availability of the linear
-map is also covered.
-
-Implement arch_memremap_can_ram_remap() on ARM and ARM64 to prevent access
-to NOMAP regions via the linear mapping in memremap().
-
-Link: https://lore.kernel.org/all/Yl65zxGgFzF1Okac@sirena.org.uk
-Reported-by: "kernelci.org bot" <bot@kernelci.org>
-Tested-by: Mark Brown <broonie@kernel.org>
-Cc: stable@vger.kernel.org	# 5.4+
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
----
- arch/arm/include/asm/io.h   | 4 ++++
- arch/arm/mm/ioremap.c       | 9 ++++++++-
- arch/arm64/include/asm/io.h | 4 ++++
- arch/arm64/mm/ioremap.c     | 8 ++++++++
- kernel/iomem.c              | 2 +-
- 5 files changed, 25 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm/include/asm/io.h b/arch/arm/include/asm/io.h
-index 0c70eb688a00..fbb2eeea7285 100644
---- a/arch/arm/include/asm/io.h
-+++ b/arch/arm/include/asm/io.h
-@@ -145,6 +145,10 @@ extern void __iomem * (*arch_ioremap_caller)(phys_addr_t, size_t,
- 	unsigned int, void *);
- extern void (*arch_iounmap)(volatile void __iomem *);
- 
-+extern bool arch_memremap_can_ram_remap(resource_size_t offset, size_t size,
-+					unsigned long flags);
-+#define arch_memremap_can_ram_remap arch_memremap_can_ram_remap
-+
- /*
-  * Bad read/write accesses...
-  */
-diff --git a/arch/arm/mm/ioremap.c b/arch/arm/mm/ioremap.c
-index aa08bcb72db9..6eb1ad24544d 100644
---- a/arch/arm/mm/ioremap.c
-+++ b/arch/arm/mm/ioremap.c
-@@ -43,7 +43,6 @@
- #include <asm/mach/pci.h>
- #include "mm.h"
- 
--
- LIST_HEAD(static_vmlist);
- 
- static struct static_vm *find_static_vm_paddr(phys_addr_t paddr,
-@@ -493,3 +492,11 @@ void __init early_ioremap_init(void)
- {
- 	early_ioremap_setup();
- }
-+
-+bool arch_memremap_can_ram_remap(resource_size_t offset, size_t size,
-+				 unsigned long flags)
-+{
-+	unsigned long pfn = PHYS_PFN(offset);
-+
-+	return memblock_is_map_memory(pfn);
-+}
-diff --git a/arch/arm64/include/asm/io.h b/arch/arm64/include/asm/io.h
-index 7fd836bea7eb..3995652daf81 100644
---- a/arch/arm64/include/asm/io.h
-+++ b/arch/arm64/include/asm/io.h
-@@ -192,4 +192,8 @@ extern void __iomem *ioremap_cache(phys_addr_t phys_addr, size_t size);
- extern int valid_phys_addr_range(phys_addr_t addr, size_t size);
- extern int valid_mmap_phys_addr_range(unsigned long pfn, size_t size);
- 
-+extern bool arch_memremap_can_ram_remap(resource_size_t offset, size_t size,
-+					unsigned long flags);
-+#define arch_memremap_can_ram_remap arch_memremap_can_ram_remap
-+
- #endif	/* __ASM_IO_H */
-diff --git a/arch/arm64/mm/ioremap.c b/arch/arm64/mm/ioremap.c
-index b7c81dacabf0..b21f91cd830d 100644
---- a/arch/arm64/mm/ioremap.c
-+++ b/arch/arm64/mm/ioremap.c
-@@ -99,3 +99,11 @@ void __init early_ioremap_init(void)
- {
- 	early_ioremap_setup();
- }
-+
-+bool arch_memremap_can_ram_remap(resource_size_t offset, size_t size,
-+				 unsigned long flags)
-+{
-+	unsigned long pfn = PHYS_PFN(offset);
-+
-+	return pfn_is_map_memory(pfn);
-+}
-diff --git a/kernel/iomem.c b/kernel/iomem.c
-index 62c92e43aa0d..e85bed24c0a9 100644
---- a/kernel/iomem.c
-+++ b/kernel/iomem.c
-@@ -33,7 +33,7 @@ static void *try_ram_remap(resource_size_t offset, size_t size,
- 	unsigned long pfn = PHYS_PFN(offset);
- 
- 	/* In the simple case just return the existing linear address */
--	if (pfn_valid(pfn) && !PageHighMem(pfn_to_page(pfn)) &&
-+	if (!PageHighMem(pfn_to_page(pfn)) &&
- 	    arch_memremap_can_ram_remap(offset, size, flags))
- 		return __va(offset);
- 
-
-base-commit: b2d229d4ddb17db541098b83524d901257e93845
--- 
-2.28.0
-
+Reviewed-by: Marek Beh=C3=BAn <kabel@kernel.org>

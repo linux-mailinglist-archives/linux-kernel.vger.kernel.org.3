@@ -2,70 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D39C50CEBE
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 04:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D018950CEBC
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 04:58:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237868AbiDXDAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 23:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46288 "EHLO
+        id S237891AbiDXDAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 23:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237791AbiDXDAq (ORCPT
+        with ESMTP id S237791AbiDXDAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 23:00:46 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D863413F261;
-        Sat, 23 Apr 2022 19:57:47 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id ay11so8234032qtb.4;
-        Sat, 23 Apr 2022 19:57:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=XjCdzYbvTiumAbdBQKpwnCmY/DB2qhX1zt/3WHbpTBY=;
-        b=ayegxzyF/KPCw0iAe5COmtVy6cQmP7gjyGCPRXwzyrlmv2fFvDaSBDDq5X71qGEf1p
-         sS56u+5lXrAnX8OHWy0sR9L6itSfjlpk5zIYmnekVgolat1BLi4h2Og3clylnKgfl0gt
-         2+jENAj2WkR8fuiv5p/BoeQ+jGlAYlUxDggLlqobnquHJbriTwz0qUyjkOC4uVRa5jEd
-         sb+eoFdDGOOmRJkrgVRqNbiZSHg7uEI5FSIOpOrUmPPTsBZfp8AeNmFd33MCeGEZ3pF8
-         5l3SIqQxl24U4DEUd+4kx8IevioIRcJm4kx24gP3Z+KCzX1+v1GOwRpuNy059UNu2UeG
-         95bQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=XjCdzYbvTiumAbdBQKpwnCmY/DB2qhX1zt/3WHbpTBY=;
-        b=kYXCN9qHO4JCGj3ijctr2yXkODNxescviuO48cVMAOHuvqW9lmmhptizPcse/uYsYA
-         cp9CIYZ4wtqequdsYMss0EJr02mxt+Lg6lWfP972jB1xdlVDbTkmA55KNQ39LKE+Dp9G
-         56nEk8mAGFC1Z4VjceeFACA4+rlx0zIrOOoUwtMVPmame4hCmDQ34f2k9ppSM6GZYZvV
-         WwIQ+ZGtnDtxVkYQjbqlhBT1+VJNkTe0hOa2cuLc2+XcXxzAexEGO9smXAU/l7tPPga+
-         dl62SKX435SXo7LFgDd9TqDPTV2+FmNjFDTegJqdymHeqfRPgFw9AXy0DbcSHuvGdrTh
-         Xdtg==
-X-Gm-Message-State: AOAM530/Jq7WBRvvSYX0wK0WXKpuCy3f52uarJhhIeDAvkKWJmoUbNAC
-        Shz2BrPEUq+7rsps/BEDoZvWbMT+2T0=
-X-Google-Smtp-Source: ABdhPJwq7R1leUtmM43JRhupWQb4TivSOH5A2uF9lwwk82MGTOMgFt7wf6hY3YMrr0jMaMcrSD9vtg==
-X-Received: by 2002:ac8:5b0d:0:b0:2f3:4377:713b with SMTP id m13-20020ac85b0d000000b002f34377713bmr8031486qtw.588.1650769067040;
-        Sat, 23 Apr 2022 19:57:47 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id x24-20020ac87318000000b002f1fc5fcaedsm3629753qto.68.2022.04.23.19.57.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 19:57:45 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: lv.ruyi@zte.com.cn
-To:     kuba@kernel.org
-Cc:     cgel.zte@gmail.com, cuissard@marvell.com, davem@davemloft.net,
-        krzysztof.kozlowski@linaro.org, linux-kernel@vger.kernel.org,
-        lv.ruyi@zte.com.cn, netdev@vger.kernel.org, sameo@linux.intel.com,
-        yashsri421@gmail.com, Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH v2] NFC: nfcmrvl: fix error check return value of irq_of_parse_and_map()
-Date:   Sun, 24 Apr 2022 02:57:10 +0000
-Message-Id: <20220424025710.3166034-1-lv.ruyi@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220422160931.6a4eca42@kernel.org>
-References: <20220422160931.6a4eca42@kernel.org>
+        Sat, 23 Apr 2022 23:00:54 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2208113F27A;
+        Sat, 23 Apr 2022 19:57:50 -0700 (PDT)
+X-UUID: 2b76813eb41f48348a21649b3173fd44-20220424
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:343ff536-7bc1-437b-8efa-5c9d1b78a95c,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:54,FILE:0,RULE:Release_Ham,A
+        CTION:release,TS:34
+X-CID-INFO: VERSION:1.1.4,REQID:343ff536-7bc1-437b-8efa-5c9d1b78a95c,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:54,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:34
+X-CID-META: VersionHash:faefae9,CLOUDID:c429b9f0-da02-41b4-b6df-58f4ccd36682,C
+        OID:152b11335294,Recheck:0,SF:13|15|28|100|17|19|48|101,TC:nil,Content:0,E
+        DM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 2b76813eb41f48348a21649b3173fd44-20220424
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <zhiyong.tao@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1129064879; Sun, 24 Apr 2022 10:57:42 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sun, 24 Apr 2022 10:57:40 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sun, 24 Apr 2022 10:57:39 +0800
+From:   Zhiyong Tao <zhiyong.tao@mediatek.com>
+To:     <lee.jones@linaro.org>, <robh+dt@kernel.org>,
+        <matthias.bgg@gmail.com>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <eddie.huang@mediatek.com>,
+        <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
+        <fshao@chromium.org>
+CC:     <srv_heupstream@mediatek.com>, <hui.liu@mediatek.com>,
+        <tinghan.shen@mediatek.com>, <zhiyong.tao@mediatek.com>,
+        <hsin-hsiung.wang@mediatek.com>, <sean.wang@mediatek.com>,
+        <macpaul.lin@mediatek.com>, <wen.su@mediatek.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH v3 0/1] Mediatek PMIC patch 
+Date:   Sun, 24 Apr 2022 10:57:37 +0800
+Message-ID: <20220424025738.32271-1-zhiyong.tao@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,37 +68,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+This patch fix pwrap time out issue.
 
-The irq_of_parse_and_map() function returns 0 on failure, and does not
-return an negative value.
+Changes in patch v3:
+1)add fix tag in patch commmit message
+2)fix file mode from "100755" to "100644"
 
-Fixes: b5b3e23e4cac ("NFC: nfcmrvl: add i2c driver")
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
----
-v2: don't print ret, and return -EINVAL rather than 0
----
- drivers/nfc/nfcmrvl/i2c.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Changes in patch v2:
+1)add explation commit message on the patch.
 
-diff --git a/drivers/nfc/nfcmrvl/i2c.c b/drivers/nfc/nfcmrvl/i2c.c
-index ceef81d93ac9..01329b91d59d 100644
---- a/drivers/nfc/nfcmrvl/i2c.c
-+++ b/drivers/nfc/nfcmrvl/i2c.c
-@@ -167,9 +167,9 @@ static int nfcmrvl_i2c_parse_dt(struct device_node *node,
- 		pdata->irq_polarity = IRQF_TRIGGER_RISING;
- 
- 	ret = irq_of_parse_and_map(node, 0);
--	if (ret < 0) {
--		pr_err("Unable to get irq, error: %d\n", ret);
--		return ret;
-+	if (!ret) {
-+		pr_err("Unable to get irq\n");
-+		return -EINVAL;
- 	}
- 	pdata->irq = ret;
- 
--- 
-2.25.1
+Zhiyong.Tao (1):
+  pwrap: mediatek: fix FSM timeout issue
+
+ drivers/soc/mediatek/mtk-pmic-wrap.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+--
+2.18.0
+
 

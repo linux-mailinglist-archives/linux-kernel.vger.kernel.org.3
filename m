@@ -2,139 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CB6750D52D
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 22:54:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D94150D533
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 22:59:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239592AbiDXU5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 16:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56422 "EHLO
+        id S239614AbiDXVCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 17:02:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233920AbiDXU52 (ORCPT
+        with ESMTP id S233920AbiDXVCu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 16:57:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 92E3154FA1
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 13:54:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650833664;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=DHCWz0NT7/oap0KtY1nMcbeGh8Z12KZ0bXl9rYv24JM=;
-        b=KrrxVrO8PP+RV4+NSbSUQBObC+4rmxqWT3yXwTCyr8tbJi+7+ZcryYvNwsdV4VZLGvG244
-        ShzVcD+Oo+9mNdlkNLvfiRUuM2W7CwVXoLlMRR0KvevsN4NRfPqGgz0XePGYUX+ewYPo5W
-        2jciOY4H5AsyCmT1mb4AixreOecm8qg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-604-QKTgqLN-OMGNQNcJFbt0Wg-1; Sun, 24 Apr 2022 16:54:20 -0400
-X-MC-Unique: QKTgqLN-OMGNQNcJFbt0Wg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B6892101AA45;
-        Sun, 24 Apr 2022 20:54:19 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6311A4087D9C;
-        Sun, 24 Apr 2022 20:54:19 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 23OKsJ9h019671;
-        Sun, 24 Apr 2022 16:54:19 -0400
-Received: from localhost (mpatocka@localhost)
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 23OKsIPc019666;
-        Sun, 24 Apr 2022 16:54:18 -0400
-X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
-Date:   Sun, 24 Apr 2022 16:54:18 -0400 (EDT)
-From:   Mikulas Patocka <mpatocka@redhat.com>
-X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andy Shevchenko <andy@kernel.org>
-cc:     dm-devel@redhat.com, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Mike Snitzer <msnitzer@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Milan Broz <gmazyland@gmail.com>
-Subject: [PATCH] hex2bin: make the function hex_to_bin constant-time
-Message-ID: <alpine.LRH.2.02.2204241648270.17244@file01.intranet.prod.int.rdu2.redhat.com>
-User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
+        Sun, 24 Apr 2022 17:02:50 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F36A69488;
+        Sun, 24 Apr 2022 13:59:48 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id b19so18214611wrh.11;
+        Sun, 24 Apr 2022 13:59:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iC9g0FH3bzlHy7hoAv9K0hivd/arMZ+Ly8xR4y4PBWk=;
+        b=P+8os97Rm5U4fIyuksZFXvRkInCU65BbYq2K9UoiK/mVjmr82Ylpl5MFYaRprjB+tn
+         15C4QL7f4g8WZHtYI+7gd1R04rtCBQZzEjfUkCGHvHxTVpPklYNWEOAHIJp+I3mmeY4l
+         0zA+UEhSK946KfO7C9AzBJ5f4PeevFiabTfmAeNheaYbkuc40D5DgaYLTdOpvVL5+YY8
+         clUsiu+UUHoIN4abTLuAqIBMtsa2fNmfmJ98WdAdba7pmFCufkXCkEaMPiiSKXfH8v1P
+         4oQJCDm9pEBO63zeHJc8j99PWXxiPpkqML4vWfKRAjA5QeDwGNixWskYgsCu6j2Y/fr9
+         tAgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iC9g0FH3bzlHy7hoAv9K0hivd/arMZ+Ly8xR4y4PBWk=;
+        b=yuW37nqSeHohQuwkIDRz1+pxvFbpTjvzVPJTKJ/uUv0nIBYqcFtTwbERMn4FfGmsYw
+         HjJGlPbOpGgv8axgb4SeHf7acaf1Wikhlb3nIqE1UofTfM1Gkf236QB7W9LXTTrIF7zB
+         gwg/GJsWZfZtsoZvUWQ8lcvUxoDCcT/htQDxwVRuVOOnMzogiTTSjv3Femox3EDfUIW2
+         FP+Rk7Hz9ki3BmUjl52gV7z62rfF7S0XXfrB01UfJPFIqqeoUa6rPuqL+lMtN+t/nr9y
+         tuE1YKtnBPAfUYLbR/+ZFoaZzh0PwxXse3rq5s1uuTT1T1ZUfbHJ/hRxYxjLm0ffv7vx
+         TgBw==
+X-Gm-Message-State: AOAM532W9SaO7kCpapX+/RJdGxbVatdJAxWN6qBvMjGaIqiRhyByMVdg
+        1sYubNJulTES07uOSyM7gnI=
+X-Google-Smtp-Source: ABdhPJyOmQXw6y5ZKF2bDQTx9dMffPCO4ImkFLqarqZm9PGwJVZtU39NB9Mq+ZuTOO9z5oke2RehRg==
+X-Received: by 2002:a05:6000:1a44:b0:20a:ccde:c139 with SMTP id t4-20020a0560001a4400b0020accdec139mr9326075wry.320.1650833987138;
+        Sun, 24 Apr 2022 13:59:47 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id m41-20020a05600c3b2900b00393e6f6c130sm3653656wms.42.2022.04.24.13.59.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Apr 2022 13:59:46 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ALSA: pcm: Check for null pointer of pointer substream before dereferencing it
+Date:   Sun, 24 Apr 2022 21:59:45 +0100
+Message-Id: <20220424205945.1372247-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function hex2bin is used to load cryptographic keys into device mapper
-targets dm-crypt and dm-integrity. It should take constant time
-independent on the processed data, so that concurrently running
-unprivileged code can't infer any information about the keys via
-microarchitectural convert channels.
+Pointer substream is being dereferenced on the assignment of pointer card
+before substream is being null checked with the macro PCM_RUNTIME_CHECK.
+Although PCM_RUNTIME_CHECK calls BUG_ON, it still is useful to perform the
+the pointer check before card is assigned.
 
-This patch changes the function hex_to_bin so that it contains no branches
-and no memory accesses.
+Fixes: commit d4cfb30fce03 ("ALSA: pcm: Set per-card upper limit of PCM buffer allocations")
 
-Note that this shouldn't cause performance degradation because the size of
-the new function is the same as the size of the old function (on x86-64) -
-and the new function causes no branch misprediction penalties.
-
-I compile-tested this function with gcc on aarch64 alpha arm hppa hppa64
-i386 ia64 m68k mips32 mips64 powerpc powerpc64 riscv sh4 s390x sparc32
-sparc64 x86_64 and with clang on aarch64 arm hexagon i386 mips32 mips64
-powerpc powerpc64 s390x sparc32 sparc64 x86_64 to verify that there are no
-branches in the generated code.
-
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Cc: stable@vger.kernel.org
-
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- lib/hexdump.c |   27 +++++++++++++++++++++------
- 1 file changed, 21 insertions(+), 6 deletions(-)
+ sound/core/pcm_memory.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Index: linux-2.6/lib/hexdump.c
-===================================================================
---- linux-2.6.orig/lib/hexdump.c	2022-04-24 18:51:20.000000000 +0200
-+++ linux-2.6/lib/hexdump.c	2022-04-24 18:51:20.000000000 +0200
-@@ -22,15 +22,30 @@ EXPORT_SYMBOL(hex_asc_upper);
-  *
-  * hex_to_bin() converts one hex digit to its actual value or -1 in case of bad
-  * input.
-+ *
-+ * This function is used to load cryptographic keys, so it is coded in such a
-+ * way that there are no conditions or memory accesses that depend on data.
-+ *
-+ * Explanation of the logic:
-+ * (ch - '9' - 1) is negative if ch <= '9'
-+ * ('0' - 1 - ch) is negative if ch >= '0'
-+ * we "and" these two values, so the result is negative if ch is in the range
-+ *	'0' ... '9'
-+ * we are only interested in the sign, so we do a shift ">> 8" --- we have -1 if
-+ *	ch is in the range '0' ... '9', 0 otherwise
-+ * we "and" this value with (ch - '0' + 1) --- we have a value 1 ... 10 if ch is
-+ *	in the range '0' ... '9', 0 otherwise
-+ * we add this value to -1 --- we have a value 0 ... 9 if ch is in the range '0'
-+ *	... '9', -1 otherwise
-+ * the next line is similar to the previous one, but we need to decode both
-+ *	uppercase and lowercase letters, so we use (ch & 0xdf), which converts
-+ *	lowercase to uppercase
+diff --git a/sound/core/pcm_memory.c b/sound/core/pcm_memory.c
+index 8848d2f3160d..b8296b6eb2c1 100644
+--- a/sound/core/pcm_memory.c
++++ b/sound/core/pcm_memory.c
+@@ -453,7 +453,6 @@ EXPORT_SYMBOL(snd_pcm_lib_malloc_pages);
   */
- int hex_to_bin(char ch)
+ int snd_pcm_lib_free_pages(struct snd_pcm_substream *substream)
  {
--	if ((ch >= '0') && (ch <= '9'))
--		return ch - '0';
--	ch = tolower(ch);
--	if ((ch >= 'a') && (ch <= 'f'))
--		return ch - 'a' + 10;
--	return -1;
-+	return -1 +
-+		((ch - '0' + 1) & (((ch - '9' - 1) & ('0' - 1 - ch)) >> 8)) +
-+		(((ch & 0xdf) - 'A' + 11) & ((((ch & 0xdf) - 'F' - 1) & ('A' - 1 - (ch & 0xdf))) >> 8));
- }
- EXPORT_SYMBOL(hex_to_bin);
+-	struct snd_card *card = substream->pcm->card;
+ 	struct snd_pcm_runtime *runtime;
  
+ 	if (PCM_RUNTIME_CHECK(substream))
+@@ -462,6 +461,8 @@ int snd_pcm_lib_free_pages(struct snd_pcm_substream *substream)
+ 	if (runtime->dma_area == NULL)
+ 		return 0;
+ 	if (runtime->dma_buffer_p != &substream->dma_buffer) {
++		struct snd_card *card = substream->pcm->card;
++
+ 		/* it's a newly allocated buffer.  release it now. */
+ 		do_free_pages(card, runtime->dma_buffer_p);
+ 		kfree(runtime->dma_buffer_p);
+-- 
+2.35.1
 

@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A27F450D01C
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 08:47:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6B5050D01E
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 08:55:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238423AbiDXGur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 02:50:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49940 "EHLO
+        id S238440AbiDXG5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 02:57:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238421AbiDXGup (ORCPT
+        with ESMTP id S238415AbiDXG5O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 02:50:45 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960805F8FE;
-        Sat, 23 Apr 2022 23:47:46 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id hh4so8384479qtb.10;
-        Sat, 23 Apr 2022 23:47:46 -0700 (PDT)
+        Sun, 24 Apr 2022 02:57:14 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1D11384BC;
+        Sat, 23 Apr 2022 23:54:14 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id a5so9479356qvx.1;
+        Sat, 23 Apr 2022 23:54:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=hhhQDPt+3onB8fGuNsPxKnWw81s4Lk61v9Zm3h8T3Jg=;
-        b=dohdYThYTN60ilx11KueqqbWHOLBxkSudoW+sh5fgVpKPLn5tSrGLfuNRGpXrfuB8D
-         Ao5l7VDsBLm8xpquSXAFXtRr4CAWL/EaZ3QVICNDMT7IiBdQbG5FUDu4FeoTWP/5dJpd
-         GA/PfYkkqbCPPzakixPUzckAHMC8jqdJ8HhhxtFCyT6E/SCUXNIM6Sahaue1bR7ZivMh
-         rjb3I6Hmggr16jvtRncM7aYEEbli/uGJF4+f0bTPH5VvoowOV4uoVrhhyYdjO0IuLGJr
-         7OJmymDRym9jFusB/ffwjcEwFm10nu2dGcdWkmt9d9SofJ8GY8MyBH0/MEt4tk9+wlPr
-         YN3g==
+        bh=r09fsKtZLjwCj1HV5PJv3dMIB0dG9OUJQSIGrDje8nY=;
+        b=D2egTLIFLgTdK0Mc24j9SCSI6wDrCg4nGiVux16xn8hlW2sdIOjQ3pf4I+Yqn1Y5lL
+         Xhy3Ahc1eN0jkl0xr55gL7yzuKHEQzm64p7pXoFqJV6iTBmO+mzh7DymzxFR/3q9sRH0
+         LsOn5JELpc+DR4KK+ymUrZgpiNoT0sysTPjwhyO0QH29cX/F/pocNB375knJDKZ07ALv
+         Jl2s1Nin24pB06fFYExnvTdzfZm4TGYOoVNQ1dzHUF4/Doit2iIXrbYqHLtlrVnlunEx
+         V7R0nn/eaSB5OOIbB/Altmt7O+nQV2u0cm2BsVAmzDLFV75LNGF+GsGjANkCXjv0zs2T
+         P57w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=hhhQDPt+3onB8fGuNsPxKnWw81s4Lk61v9Zm3h8T3Jg=;
-        b=xKP4N9tydegwfvSsJnfU+8nEXOJLHo+SDKgvlWvT7FVy8U+6Tvmq409oWgtF05VT8v
-         190mSpcT6/0I14eS8ZmVZFrMf+JnrgBrY4gqgEoqNjmopuDrC+LYDActxwAuQPiON/Yn
-         E/psu6g2t57/sxBBM9HnztIitjj+PkQIsCxUYb6jNEMeblugrTbjEyoOanR2LMFVrAJX
-         pd2B6JNcb9Ndw929o+HWzw+6LS2fk6XvbHkGhnLFrgbngssmRlpThX5bQ/YKz+vdzdx8
-         3o+VJ1xwYwwjf53u2lNMvwaImAfi9mphcAUbz/UijOqPVZ/WUgeclDJAtl+4/+Zkb40J
-         gHhw==
-X-Gm-Message-State: AOAM531EazvSA9v2FzkU0GSJQ1aBBifUJ6vLK4Mkv/G95lBwzzr7FqzK
-        DBBFlEsXl4KTqVBw2UJ2gXs=
-X-Google-Smtp-Source: ABdhPJyJLxDVPY5Xpf8pMHxnTf/wdGwGvaNPIYIsn0xuGZuPkl9CPj3gmAFUFVkzlnncHuDe29/ZlQ==
-X-Received: by 2002:a05:622a:14c6:b0:2e2:3f:f938 with SMTP id u6-20020a05622a14c600b002e2003ff938mr8446073qtx.358.1650782865856;
-        Sat, 23 Apr 2022 23:47:45 -0700 (PDT)
+        bh=r09fsKtZLjwCj1HV5PJv3dMIB0dG9OUJQSIGrDje8nY=;
+        b=NnTW+gB6kL3Z9a+ZLIQ8d8c52mV0Owbe5syl/uvwhPDA8mlI0ZZKTlYrC7NpAem4Gb
+         +vPCe+ed57Frypp5VRVkCt3WTDnOQ3UaSt9ele6Nmtbd0JtDOTNoJccG1tRooH3iXktf
+         cjB7/JtuIXEzlmK4WU6eHp8Pgxo3z11xBXR7fRMfZQtAcFvgx+6hcelhujbLfuZ69LZX
+         tSQLh4TKdQtfCoLCH9MgzmYQ6ecjctwNHFekirCKEoTpG+PQFU/EUfP+ExkUG/UnLMpj
+         GC7qjVSpzdr0dDROZVU9/DDs/xX0arbskpRErRKDpyhd8yd+p4oTZKkX77RSE3PIof3K
+         dlXw==
+X-Gm-Message-State: AOAM531V3REWHfaLS4CwtNMgADSC17ASOYs08L27SVfxYyu7yJO8JiRD
+        BuDn2Pe/+ysSTW8K21pVQoo=
+X-Google-Smtp-Source: ABdhPJwubd07iNkk3PuN+yBlilLbTVDrO8/SMttaNHqwcN892IygE4Smfa2WL/2CChIU3CEeqvQ8Ag==
+X-Received: by 2002:a05:6214:2342:b0:42d:7c8b:9eac with SMTP id hu2-20020a056214234200b0042d7c8b9eacmr8693302qvb.5.1650783254063;
+        Sat, 23 Apr 2022 23:54:14 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id a4-20020ac85b84000000b002f340e3c703sm3966124qta.41.2022.04.23.23.47.43
+        by smtp.gmail.com with ESMTPSA id e23-20020a05620a12d700b0069ec181a0b2sm3142156qkl.69.2022.04.23.23.54.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 23:47:45 -0700 (PDT)
+        Sat, 23 Apr 2022 23:54:13 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: ran.jianping@zte.com.cn
-To:     colyli@suse.de
-Cc:     kent.overstreet@gmail.com, linux-bcache@vger.kernel.org,
+To:     satishkh@cisco.com
+Cc:     sebaddel@cisco.com, kartilak@cisco.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         ran jianping <ran.jianping@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] bcache: remove unneeded flush_workqueue
-Date:   Sun, 24 Apr 2022 06:47:39 +0000
-Message-Id: <20220424064739.3226800-1-ran.jianping@zte.com.cn>
+Subject: [PATCH] scsi:fnic: remove unneeded flush_workqueue
+Date:   Sun, 24 Apr 2022 06:54:06 +0000
+Message-Id: <20220424065406.3228528-1-ran.jianping@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -79,25 +80,25 @@ so there is no need to flush it explicitly.
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: ran jianping <ran.jianping@zte.com.cn>
 ---
- drivers/md/bcache/writeback.c | 4 +---
+ drivers/scsi/fnic/fnic_main.c | 4 +---
  1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/md/bcache/writeback.c b/drivers/md/bcache/writeback.c
-index 9ee0005874cd..9d0b4140ad8f 100644
---- a/drivers/md/bcache/writeback.c
-+++ b/drivers/md/bcache/writeback.c
-@@ -793,10 +793,8 @@ static int bch_writeback_thread(void *arg)
- 		}
- 	}
- 
--	if (dc->writeback_write_wq) {
--		flush_workqueue(dc->writeback_write_wq);
-+	if (dc->writeback_write_wq)
- 		destroy_workqueue(dc->writeback_write_wq);
+diff --git a/drivers/scsi/fnic/fnic_main.c b/drivers/scsi/fnic/fnic_main.c
+index 9161bd2fd421..460e03a55096 100644
+--- a/drivers/scsi/fnic/fnic_main.c
++++ b/drivers/scsi/fnic/fnic_main.c
+@@ -1146,10 +1146,8 @@ static void __exit fnic_cleanup_module(void)
+ {
+ 	pci_unregister_driver(&fnic_driver);
+ 	destroy_workqueue(fnic_event_queue);
+-	if (fnic_fip_queue) {
+-		flush_workqueue(fnic_fip_queue);
++	if (fnic_fip_queue)
+ 		destroy_workqueue(fnic_fip_queue);
 -	}
- 	cached_dev_put(dc);
- 	wait_for_kthread_stop();
- 
+ 	kmem_cache_destroy(fnic_sgl_cache[FNIC_SGL_CACHE_MAX]);
+ 	kmem_cache_destroy(fnic_sgl_cache[FNIC_SGL_CACHE_DFLT]);
+ 	kmem_cache_destroy(fnic_io_req_cache);
 -- 
 2.25.1
 

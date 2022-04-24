@@ -2,382 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2890950D300
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 17:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8FA050D307
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 18:03:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232933AbiDXQAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 12:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59758 "EHLO
+        id S233151AbiDXQGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 12:06:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiDXQAU (ORCPT
+        with ESMTP id S231513AbiDXQF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 12:00:20 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB281033;
-        Sun, 24 Apr 2022 08:57:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A68CBCE0E64;
-        Sun, 24 Apr 2022 15:57:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F572C385A9;
-        Sun, 24 Apr 2022 15:57:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650815835;
-        bh=hyDA78tEIPX5Y/hSMkh9Pr/zb0L53zVXz4DTZ/vS+Es=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=TcDSb4NQWuTTsbFSpRmWI+bsu+Erdbl1CfG0MMIweUG2AKM6r6g6Ju7bmDO/mooy/
-         ccSaHS9h3t1UZSzqZFDOD19URxNCQky09Ebqhqmy635Xj6eXFwBAbe8BOQneHd9gma
-         l2mLubk0rEUv3A7kK0Jv6xJki1A0ZLbtNO9pBn7A4AQhFN+EK4VgtDT0KpTRReOcuM
-         0MVNrWPjd9UDHfnC5EPlsr5hB68CRyUJEKFFKDoPuwxpn0G9tivpyAG5V4qtxxJrA1
-         47p/Juz+xP7P5HJQ9oOfFXBfhty+/oleKWWnuHbL6X4CF7KgDliY2iSKkaPJs1cVlc
-         PR5ErByIg3uJw==
-Date:   Sun, 24 Apr 2022 17:05:22 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Cosmin Tanislav <demonsingur@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-iio@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>
-Subject: Re: [PATCH v1 1/3] dt-bindings: iio: adc: add AD4130
-Message-ID: <20220424170522.1879c29b@jic23-huawei>
-In-Reply-To: <f0f90430-fa90-129e-77bc-f5594206b76d@gmail.com>
-References: <20220413094011.185269-1-cosmin.tanislav@analog.com>
-        <20220416160040.7e0d6015@jic23-huawei>
-        <f0f90430-fa90-129e-77bc-f5594206b76d@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sun, 24 Apr 2022 12:05:59 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9044A74DE8;
+        Sun, 24 Apr 2022 09:02:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1650816179; x=1682352179;
+  h=from:to:cc:subject:date:message-id;
+  bh=hgmWv2J10YMgm1PnZWc/9wRep8El2UqAWfmRn8325s4=;
+  b=jEt7LQkoynYBAPloafnl0suI/aTOA9YzWNOkiVz0lSTgSjKpjLbSswaD
+   2c2c0LnuOvcjz8gUWaf21W1QudwrIPLnV2BUBKuUNkto3TBGmxXLlBgEQ
+   gYtGE32aDWyRLivpy+WwpZ2VHAwPkBv+AdPystonVEj7jNOZweZ9gnwCp
+   4=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 24 Apr 2022 09:02:58 -0700
+X-QCInternal: smtphost
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 24 Apr 2022 09:02:56 -0700
+X-QCInternal: smtphost
+Received: from c-sbhanu-linux.qualcomm.com ([10.242.50.201])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 24 Apr 2022 21:32:34 +0530
+Received: by c-sbhanu-linux.qualcomm.com (Postfix, from userid 2344807)
+        id 5C3C45B82; Sun, 24 Apr 2022 21:32:33 +0530 (IST)
+From:   Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        adrian.hunter@intel.com, ulf.hansson@linaro.org,
+        p.zabel@pengutronix.de, chris@printf.net, venkatg@codeaurora.org,
+        gdjakov@mm-sol.com, quic_asutoshd@quicinc.com
+Cc:     linux-arm-msm@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_rampraka@quicinc.com,
+        quic_pragalla@quicinc.com, quic_sartgarg@quicinc.com,
+        quic_nitirawa@quicinc.com, quic_sayalil@quicinc.com,
+        Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+Subject: [PATCH V5] mmc: sdhci-msm: Reset GCC_SDCC_BCR register for SDHC
+Date:   Sun, 24 Apr 2022 21:32:33 +0530
+Message-Id: <1650816153-23797-1-git-send-email-quic_c_sbhanu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Reset GCC_SDCC_BCR register before every fresh initilazation. This will
+reset whole SDHC-msm controller, clears the previous power control
+states and avoids, software reset timeout issues as below.
 
->=20
-> >>
-> >> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
-> >> ---
-> >>   .../bindings/iio/adc/adi,ad4130.yaml          | 255 ++++++++++++++++=
-++
-> >>   1 file changed, 255 insertions(+)
-> >>   create mode 100644 Documentation/devicetree/bindings/iio/adc/adi,ad4=
-130.yaml
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml=
- b/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml
-> >> new file mode 100644
-> >> index 000000000000..e9dce54e9802
-> >> --- /dev/null
-> >> +++ b/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml
-> >> @@ -0,0 +1,255 @@
-> >> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> >> +# Copyright 2022 Analog Devices Inc.
-> >> +%YAML 1.2
-> >> +---
-> >> +$id: http://devicetree.org/schemas/iio/adc/adi,ad4130.yaml#
-> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >> +
-> >> +title: Analog Devices AD4130 ADC device driver
-> >> +
-> >> +maintainers:
-> >> +  - Cosmin Tanislav <cosmin.tanislav@analog.com>
-> >> +
-> >> +description: |
-> >> +  Bindings for the Analog Devices AD4130 ADC. Datasheet can be found =
-here:
-> >> +    https://www.analog.com/media/en/technical-documentation/data-shee=
-ts/AD4130-8.pdf
-> >> +
-> >> +properties:
-> >> +  compatible:
-> >> +    enum:
-> >> +      - adi,ad4130-8-16-lfcsp
-> >> +      - adi,ad4130-8-16-wlcsp
-> >> +      - adi,ad4130-8-24-lfcsp
-> >> +      - adi,ad4130-8-24-wlcsp =20
-> >=20
-> > What are the variants?   They look to possibly be package differences?
-> > + resolution differences.
-> > They definitely need some description here.
-> > It may make more sense to have one compatible and then some extra
-> > booleans to say what it supported.
-> > =20
->=20
-> Packaging + available interrupt pins + resolution. Is having extra
-> booleans to describe what is supported really the best approach?
-> It's not really about how the hardware is configured anymore, is it?
-> They're different chips.
+[ 5.458061][ T262] mmc1: Reset 0x1 never completed.
+[ 5.462454][ T262] mmc1: sdhci: ============ SDHCI REGISTER DUMP ===========
+[ 5.469065][ T262] mmc1: sdhci: Sys addr: 0x00000000 | Version: 0x00007202
+[ 5.475688][ T262] mmc1: sdhci: Blk size: 0x00000000 | Blk cnt: 0x00000000
+[ 5.482315][ T262] mmc1: sdhci: Argument: 0x00000000 | Trn mode: 0x00000000
+[ 5.488927][ T262] mmc1: sdhci: Present: 0x01f800f0 | Host ctl: 0x00000000
+[ 5.495539][ T262] mmc1: sdhci: Power: 0x00000000 | Blk gap: 0x00000000
+[ 5.502162][ T262] mmc1: sdhci: Wake-up: 0x00000000 | Clock: 0x00000003
+[ 5.508768][ T262] mmc1: sdhci: Timeout: 0x00000000 | Int stat: 0x00000000
+[ 5.515381][ T262] mmc1: sdhci: Int enab: 0x00000000 | Sig enab: 0x00000000
+[ 5.521996][ T262] mmc1: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000000
+[ 5.528607][ T262] mmc1: sdhci: Caps: 0x362dc8b2 | Caps_1: 0x0000808f
+[ 5.535227][ T262] mmc1: sdhci: Cmd: 0x00000000 | Max curr: 0x00000000
+[ 5.541841][ T262] mmc1: sdhci: Resp[0]: 0x00000000 | Resp[1]: 0x00000000
+[ 5.548454][ T262] mmc1: sdhci: Resp[2]: 0x00000000 | Resp[3]: 0x00000000
+[ 5.555079][ T262] mmc1: sdhci: Host ctl2: 0x00000000
+[ 5.559651][ T262] mmc1: sdhci_msm: ----------- VENDOR REGISTER DUMP-----------
+[ 5.566621][ T262] mmc1: sdhci_msm: DLL sts: 0x00000000 | DLL cfg: 0x6000642c | DLL cfg2: 0x0020a000
+[ 5.575465][ T262] mmc1: sdhci_msm: DLL cfg3: 0x00000000 | DLL usr ctl: 0x00010800 | DDR cfg: 0x80040873
+[ 5.584658][ T262] mmc1: sdhci_msm: Vndr func: 0x00018a9c | Vndr func2 : 0xf88218a8 Vndr func3: 0x02626040
 
-It's unusual to have compatibles for packaging alone and I couldn't find
-any clear references to the variants.  Maybe best we can do here is
-add a bunch of documentation.
+Fixes: 0eb0d9f4de34 ("mmc: sdhci-msm: Initial support for Qualcomm chipsets")
+Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+---
 
->=20
-> > Long shot, but do the different packages have different model IDs?
-> > The datasheet says
-> > Model ID: 24-bit WLCSP Model ID. These bits are set by default for each=
- model and
-> > are read only.  If there is one for each of these models then it would =
-be
-> > better to have a single compatible and do the detection of variant in
-> > the driver.
-> >=20
-> > I'm not immediately spotting the resolution information in the data she=
-et.
-> > It is marked Preliminary but if there are details missing, please menti=
-on
-> > in cover letter so we don't go looking for information that doesn't exi=
-st.
-> > =20
->=20
-> I don't have enough information about the other models to know what
-> Model IDs they will have. That's why I took this approach.
+Changes since V4:
+	- Called reset_control_put() in error path.
 
-My inclination is to probably not add the compatibles for those until we
-do have that information.
+Changes since V3:
+	- Used reset controller local variable as suggested by
+	  Bjorn Andersson.
+	- Passed NULL as a parameter to
+	  devm_reset_control_get_optional_exclusive() as suggested by
+	  Bjorn Andersson.
+	- Replaced devm_reset_control_get_optional_exclusive() with
+	  reset_control_get_optional_exclusive() and called
+	  reset_control_put() before returning to clear the reset
+	  controller as suggested by Bjorn Andersson.
 
->=20
-> >> +
-> >> +  reg:
-> >> +    maxItems: 1
-> >> +
-> >> +  clocks:
-> >> +    maxItems: 1
-> >> +    description: phandle to the master clock (mclk)
-> >> +
-> >> +  clock-names:
-> >> +    items:
-> >> +      - const: mclk
-> >> +
-> >> +  interrupts:
-> >> +    minItems: 1
-> >> +    maxItems: 1
-> >> +
-> >> +  interrupt-names:
-> >> +    minItems: 1
-> >> +    maxItems: 1
-> >> +    description:
-> >> +      Default if not supplied is dout-int.
-> >> +    items:
-> >> +      enum:
-> >> +        - dout-int
-> >> +        - clk
-> >> +        - p1 =20
-> >=20
-> > This is unusual.  It is probably helpful to add more description to
-> > explain that the data ready/ fifo interrupt can be routed to any of the=
-se
-> > pins. =20
->=20
-> Is it unusual? ADIS16480 follows a similar approach.
+Changes since V2:
+	- Dropped new line after fixes tag as suggested by Bjorn
+	  Andersson.
+	- Passed device structure instead of passing platform_device
+	  structure as a argument for sdhci_msm_gcc_reset() as suggested
+	  by Bjorn Andersson.
+	- Replaced dev_err() with dev_err_probe() as suggested by Bjorn
+	  Andersson.
 
-I think I got thrown by the large number of choices for a single interrupt.
-Flexibility of interrupt routing is common but I've never seen 4 choices for
-a single interrupt before :)
+Changes since V1:
+	- Added fixes tag as suggested by Ulf Hansson.
+	- Replaced devm_reset_control_get() with
+	  devm_reset_control_get_optional_exclusive() as suggested by
+	  Ulf Hansson.
+---
+ drivers/mmc/host/sdhci-msm.c | 42 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
->=20
-> description: |
->    Specify which interrupt pin should be configured as Data Ready / FIFO
->    interrupt.
->    Default if not supplied is dout-int.
->=20
-> How does this sound?
+diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
+index 50c71e0..ff9f5b6 100644
+--- a/drivers/mmc/host/sdhci-msm.c
++++ b/drivers/mmc/host/sdhci-msm.c
+@@ -17,6 +17,7 @@
+ #include <linux/regulator/consumer.h>
+ #include <linux/interconnect.h>
+ #include <linux/pinctrl/consumer.h>
++#include <linux/reset.h>
+ 
+ #include "sdhci-pltfm.h"
+ #include "cqhci.h"
+@@ -2482,6 +2483,43 @@ static inline void sdhci_msm_get_of_property(struct platform_device *pdev,
+ 	of_property_read_u32(node, "qcom,dll-config", &msm_host->dll_config);
+ }
+ 
++static int sdhci_msm_gcc_reset(struct device *dev, struct sdhci_host *host)
++{
++	struct reset_control *reset;
++	int ret = 0;
++
++	reset = reset_control_get_optional_exclusive(dev, NULL);
++	if (IS_ERR(reset))
++		return dev_err_probe(dev, PTR_ERR(reset),
++				"unable to acquire core_reset\n");
++
++	if (!reset)
++		return ret;
++
++	ret = reset_control_assert(reset);
++	if (ret) {
++		reset_control_put(reset);
++		return dev_err_probe(dev, ret, "core_reset assert failed\n");
++	}
++
++	/*
++	 * The hardware requirement for delay between assert/deassert
++	 * is at least 3-4 sleep clock (32.7KHz) cycles, which comes to
++	 * ~125us (4/32768). To be on the safe side add 200us delay.
++	 */
++	usleep_range(200, 210);
++
++	ret = reset_control_deassert(reset);
++	if (ret) {
++		reset_control_put(reset);
++		return dev_err_probe(dev, ret, "core_reset deassert failed\n");
++	}
++
++	usleep_range(200, 210);
++	reset_control_put(reset);
++
++	return ret;
++}
+ 
+ static int sdhci_msm_probe(struct platform_device *pdev)
+ {
+@@ -2529,6 +2567,10 @@ static int sdhci_msm_probe(struct platform_device *pdev)
+ 
+ 	msm_host->saved_tuning_phase = INVALID_TUNING_PHASE;
+ 
++	ret = sdhci_msm_gcc_reset(&pdev->dev, host);
++	if (ret)
++		goto pltfm_free;
++
+ 	/* Setup SDCC bus voter clock. */
+ 	msm_host->bus_clk = devm_clk_get(&pdev->dev, "bus");
+ 	if (!IS_ERR(msm_host->bus_clk)) {
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
+of Code Aurora Forum, hosted by The Linux Foundation
 
-Sounds good to me.
-
->=20
-> >  =20
-> >> +        - dout
-> >> +
-> >> +  '#address-cells':
-> >> +    const: 1
-> >> +
-> >> +  '#size-cells':
-> >> +    const: 0
-> >> +
-> >> +  refin1-supply:
-> >> +    description: refin1 supply. Can be used as reference for conversi=
-on.
-> >> +
-> >> +  refin2-supply:
-> >> +    description: refin2 supply. Can be used as reference for conversi=
-on.
-> >> +
-> >> +  avdd-supply:
-> >> +    description: AVDD voltage supply. Can be used as reference for co=
-nversion. =20
-> >=20
-> > Whilst these are optional in theory, you should call out that they must=
- be
-> > provided if any of the channels use them as a reference.
-> >  =20
->=20
-> I thought that "Can be used as reference for conversion." + it being an
-> option in adi,reference-select property would make it obvious, no?
-
-More obvious is always good, but you are probably right and I was just
-not terribly awake when I wrote that :)
-
->=20
-> >> +
-> >> +  iovdd-supply:
-> >> +    description: IOVDD voltage supply. Used for the chip interface.
-> >> +
-> >> +  spi-max-frequency:
-> >> +    maximum: 5000000
-> >> +
-> >> +  adi,mclk-sel:
-> >> +    description: |
-> >> +      Select the clock.
-> >> +      0: Internal 76.8kHz clock.
-> >> +      1: Internal 76.8kHz clock, output to the CLK pin.
-> >> +      2: External 76.8kHz clock.
-> >> +      3. External 153.6kHz clock. =20
-> >=20
-> > For the external clocks, can we use the fact that one is supplied
-> > as enough to tell us we should be using them?  Then query the
-> > frequency directly from that clock?
-> >  =20
->=20
-> Aren't we supposed to set the frequency of that clock ourselves,
-> in the driver?
-
-True, I got that backwards.
-
->=20
-> > If no clock provided then clearly internal.  All that is
-> > necessary after that is a boolean to control if the CLK output
-> > is enabled or not (and ideally constrain that to only be possible
-> > if in internal clock mode).
-> >  =20
->=20
-> Well...
->=20
-> So, mclk present =3D> external, not present =3D> internal.
-> adi,int-clk-out-enable to specify if the internal clock should be
-> exposed? adi,ext-clk-freq to specify the desired clock speed of the
-> external clk?
-
-Yes that sounds good to me.  I just don't like magic numbers
-in bindings if we can avoid them.   With the above a reader should
-be able to figure out what is going on without reading this doc.
-
->=20
-> >> +    $ref: /schemas/types.yaml#/definitions/uint32
-> >> +    enum: [0, 1, 2, 3]
-> >> +    default: 0
-> >> +
-> >> +  adi,int-ref-en: =20
-> >=20
-> > Mentioned below...
-> >  =20
-> >> +    description: |
-> >> +      Specify if internal reference should be enabled.
-> >> +    type: boolean
-> >> +    default: true
-> >> +
-> >> +  adi,bipolar:
-> >> +    description: Specify if the device should be used in bipolar mode.
-> >> +    type: boolean
-> >> +    default: false
-> >> +
-> >> +  adi,vbias-pins:
-> >> +    description: Analog inputs to apply a voltage bias of (AVDD =E2=
-=88=92 AVSS) / 2 to.
-> >> +    items:
-> >> +      minimum: 0
-> >> +      maximum: 15 =20
-> >=20
-> > If I read things correctly VBIAS_CONTROL is a bitmap across the 16 inpu=
-t lines.
-> > So why use a single value rather than either a list of pins, or a bitma=
-p?
-> >  =20
->=20
-> Umm. Isn't this a list of pins? That's why everything is plural here.
-> I guess I should add `maxItems: 16`?
-> I already added `$ref: /schemas/types.yaml#/definitions/uint32-array`.
-
-Ah. Yes, with an array and maxItems this will be fine I think.
-
->=20
-> >> +
-> >> +required:
-> >> +  - compatible
-> >> +  - reg
-> >> +  - interrupts
-> >> +
-> >> +patternProperties:
-> >> +  "^channel@([0-9]|1[0-5])$":
-> >> +    type: object
-> >> +    $ref: adc.yaml
-> >> +
-> >> +    properties:
-> >> +      reg:
-> >> +        description: |
-> >> +          The channel number.
-> >> +        items:
-> >> +          minimum: 0
-> >> +          maximum: 15
-> >> +
-> >> +      diff-channels:
-> >> +        description: |
-> >> +          Besides the analog inputs available, internal inputs can be=
- used.
-> >> +          16: Internal temperature sensor.
-> >> +          17: AVss
-> >> +          18: Internal reference.
-> >> +          19: DGND.
-> >> +          20: (AVDD =E2=88=92 AVSS)/6+
-> >> +          21: (AVDD =E2=88=92 AVSS)/6-
-> >> +          22: (IOVDD =E2=88=92 DGND)/6+
-> >> +          23: (IOVDD =E2=88=92 DGND)/6-
-> >> +          24: (ALDO =E2=88=92 AVSS)/6+
-> >> +          25: (ALDO =E2=88=92 AVSS)/6-
-> >> +          26: (DLDO =E2=88=92 DGND)/6+
-> >> +          27: (DLDO =E2=88=92 DGND)/6-
-> >> +          28: V_MV_P
-> >> +          29: V_MV_M
-> >> +        $ref: adc.yaml
-> >> +        items:
-> >> +          minimum: 0
-> >> +          maximum: 29 =20
-> >=20
-> > Interesting. So we have a part that has a 16 channel sequencer, but
-> > can you have more channels as long as you don't want them all at once?
-> > For example, I doubt anyone wants to permanently configure a device to =
-monitor
-> > the various supplies, but they will want to occasionally.
-> >=20
-> > As such, perhaps we need to treat this device more flexibly?
-> > There are obviously contraints on what channels + references make sense
-> > but maybe we should allow more than 16 to be specified?
-> >  =20
->=20
-> Ehhhhh. Look at the driver. It's already pushing 2k+ lines with
-> the 8 setups for 16 channels situation + all the extra options the
-> chip provides. If we also make it so that channels are rewritten at
-> runtime, it will turn into a mess. Or at least I don't see a clean
-> way of adding that. Besides, then I'd have to do all these extra
-> allocations depending on the number of channels in the device tree...
-> It gets complicated. If a customer expresses his interest in this,
-> I guess I'll have to add it.
-> Also, presumably the extra inputs are marketed as diagnostics.
-
-Another approach would be to 'always' provide those diagnostic channels
-but not via buffered interface (if that's sensible to do).  Then potentially
-drop them from this binding?
-
-Maybe waiting for customer demand is the best way to go.  Even if you
-added a path to read them without them being in DT later it should be
-easy enough to maintain backwards compatibility.
-
-Jonathan

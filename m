@@ -2,97 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6311E50D011
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 08:29:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EC4450D013
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 08:30:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238386AbiDXGcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 02:32:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38722 "EHLO
+        id S238401AbiDXGcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 02:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbiDXGcE (ORCPT
+        with ESMTP id S238400AbiDXGc3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 02:32:04 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8FF184F1B
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 23:29:02 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id hh4so8371343qtb.10
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 23:29:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SPpoWIDfl3jIhP9q6d7XhbI2A7YymanhdXc9XbXpxL0=;
-        b=bO3DGLtmpWVdPwQHVHkfpA6dwxkc28EDMwmB641p5H4JL3YAuq+GHRPwKt1IDJNlXp
-         2tE81jWR/npMO6EhuHt1/q0wNm7hS25KqPHUw9GqAiVo3mQSMZYmakzp3zCG512ed27j
-         uhMVMuSrtU0UCWYeaNKeSrgGR8JPA2bFaiCo5DTLESdcKb/jY2XC4loYv8Oi3i+3vclc
-         1YI+9QbROfvXY1Ahe64pYJHbGcscRDOXIjQJQsZE349ysEaAq6Q+VcQOax33lrdDQ3dB
-         yyCIYlLU6szNZ91bF+19D/xoZ1adsySs8Uf6LOoV+upMvaTkbcZrvrllcIzExAtd1BFV
-         JHGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SPpoWIDfl3jIhP9q6d7XhbI2A7YymanhdXc9XbXpxL0=;
-        b=Ki5U/gol550nWnX789jRR0+mIaeTigIlWVpi1xc6NT6cmIHj0NwDvfMtm2/bcjrGP2
-         9oBl7FX3dliTXcBeP4ujb5j2g1Q1fuz3bEz1lr5VX722Ywj0QbPtNXKAq/fTP1aBHnOQ
-         DHi52+1UBZm2m+U2MLHNHmLBe7YxsADFBNP3dIBLfiQhlcAPi3QuvF+MNh6otXcL03E4
-         nPv9WrkuRKB6uL6lxE5j0ON6/c+KqHKBGOh0+FfkO/uJUTADVIMUJZCSoV9GZf+8Kv/y
-         0pYBef5tCkPbD8T7yu73PmPX4infMfpYtU3TMz3yQDcihAeAB2luzdL5Cp3xid+HUhbm
-         evtQ==
-X-Gm-Message-State: AOAM531RX50BlCAp0rwl8rxweHw1TGNYpPa5vprilhP6u+craFa+yvNs
-        SEUaPulYxpieN+obneqiS5VyjeGSNOM=
-X-Google-Smtp-Source: ABdhPJwjhQ1BMRL7u4uZpLTyOEy6ag403q2P+OxjcZ0LIQbTGvh/wrMs5g8bKSczKjz2uB60Y6+qOQ==
-X-Received: by 2002:a05:622a:1647:b0:2f3:6077:bffb with SMTP id y7-20020a05622a164700b002f36077bffbmr3664110qtj.462.1650781741984;
-        Sat, 23 Apr 2022 23:29:01 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id v67-20020a376146000000b0069ec181a0c6sm3283226qkb.10.2022.04.23.23.28.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 23:29:01 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: ran.jianping@zte.com.cn
-To:     mporter@kernel.crashing.org
-Cc:     alex.bou9@gmail.com, linux-kernel@vger.kernel.org,
-        ran jianping <ran.jianping@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] rapidio: remove unneeded flush_workqueue
-Date:   Sun, 24 Apr 2022 06:28:31 +0000
-Message-Id: <20220424062831.3221620-1-ran.jianping@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Sun, 24 Apr 2022 02:32:29 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E404184F1B
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 23:29:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650781770; x=1682317770;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=mEtVeQ8xCV3wRzfhM2vTLT+erRs7nKtFKJ5thWlpl3k=;
+  b=TOmGcRPxvJ6/DeHMyQQOH8kSopho1o0eBvF6v8sMmIE+v3Wi0FJ6GUcr
+   mX9ZCDot+9UdfKlZvmz0gu29wUm975Xy5mqUHCFBzcFw+yxlMIgykU/2i
+   gniInuvwHhZ6bylr23h+gZx37zJeJlLVbwuVyr9qMZ3xVkiu27svLX77t
+   OivYyUMJNL/MGGNFEq8FmGKH7YPJrqBMy5OsWQSsCPaHM6l8bvAYnbsy2
+   pDRNzCP/3jtzvsHaUQrA1JvPLCJPDyYKDum9dL/+ceK93fATodfhRQwHH
+   6liTxx49lGfD0b32p9k1EfNtXfBX4KNRz3fj8lZhUtvdN1sV6wx8eQxFe
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="351452877"
+X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
+   d="scan'208";a="351452877"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 23:29:29 -0700
+X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
+   d="scan'208";a="674991629"
+Received: from yilinhua-mobl1.ccr.corp.intel.com ([10.254.215.113])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 23:29:25 -0700
+Message-ID: <deb904ae622792fbc1d05f70e89e57838fa84c68.camel@intel.com>
+Subject: Re: [PATCH v3 3/7] drivers/base/node: Add support to write
+ node_states[] via sysfs
+From:   "ying.huang@intel.com" <ying.huang@intel.com>
+To:     Jagdish Gediya <jvgediya@linux.ibm.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org
+Cc:     baolin.wang@linux.alibaba.com, dave.hansen@linux.intel.com,
+        aneesh.kumar@linux.ibm.com, shy828301@gmail.com,
+        weixugc@google.com, gthelen@google.com, dan.j.williams@intel.com
+Date:   Sun, 24 Apr 2022 14:29:21 +0800
+In-Reply-To: <20220422195516.10769-4-jvgediya@linux.ibm.com>
+References: <20220422195516.10769-1-jvgediya@linux.ibm.com>
+         <20220422195516.10769-4-jvgediya@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ran jianping <ran.jianping@zte.com.cn>
+On Sat, 2022-04-23 at 01:25 +0530, Jagdish Gediya wrote:
+> Current /sys/devices/system/node/* interface doesn't support
+> to write node_states[], however write support is needed in case
+> users want to set them manually e.g. when user want to override
+> default N_DEMOTION_TARGETS found by the kernel.
+> 
+> Rename existing _NODE_ATTR to _NODE_ATTR_RO and introduce new
+> _NODE_ATTR_RW which can be used for node_states[] which can
+> be written from sysfs.
+> 
+> It may be necessary to validate written values and take action
+> based on them in a state specific way so a callback 'write' is
+> introduced in 'struct node_attr'.
+> 
+> A new function demotion_targets_write() is added to validate
+> the input nodes for N_DEMOTION_TARGETS which should be subset
+> of N_MEMORY and to build new demotion list based on new nodes.
+> 
+> Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
 
-All work currently pending will be done first by calling destroy_workqueue,
-so there is no need to flush it explicitly.
+How about discussing the ABI design firstly?  I started a discussion in
+the following thread.  I think we can start with the requirements.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: ran jianping <ran.jianping@zte.com.cn>
----
- drivers/rapidio/rio_cm.c | 1 -
- 1 file changed, 1 deletion(-)
+https://lore.kernel.org/lkml/200e95cf36c1642512d99431014db8943fed715d.camel@intel.com/
 
-diff --git a/drivers/rapidio/rio_cm.c b/drivers/rapidio/rio_cm.c
-index db4c265287ae..f2c0d6aa911f 100644
---- a/drivers/rapidio/rio_cm.c
-+++ b/drivers/rapidio/rio_cm.c
-@@ -2198,7 +2198,6 @@ static void riocm_remove_mport(struct device *dev,
- 	if (!found)
- 		return;
- 
--	flush_workqueue(cm->rx_wq);
- 	destroy_workqueue(cm->rx_wq);
- 
- 	/* Release channels bound to this mport */
--- 
-2.25.1
+Best Regards,
+Huang, Ying
+
+> ---
+>  drivers/base/node.c | 62 +++++++++++++++++++++++++++++++++++----------
+>  1 file changed, 49 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/base/node.c b/drivers/base/node.c
+> index 6eef22e6413e..e03eedbc421b 100644
+> --- a/drivers/base/node.c
+> +++ b/drivers/base/node.c
+> @@ -20,6 +20,7 @@
+>  #include <linux/pm_runtime.h>
+>  #include <linux/swap.h>
+>  #include <linux/slab.h>
+> +#include <linux/migrate.h>
+>  
+> 
+> 
+> 
+>  static struct bus_type node_subsys = {
+>  	.name = "node",
+> @@ -1013,6 +1014,7 @@ void unregister_one_node(int nid)
+>  struct node_attr {
+>  	struct device_attribute attr;
+>  	enum node_states state;
+> +	int (*write)(nodemask_t nodes);
+>  };
+>  
+> 
+> 
+> 
+>  static ssize_t show_node_state(struct device *dev,
+> @@ -1024,23 +1026,57 @@ static ssize_t show_node_state(struct device *dev,
+>  			  nodemask_pr_args(&node_states[na->state]));
+>  }
+>  
+> 
+> 
+> 
+> -#define _NODE_ATTR(name, state) \
+> -	{ __ATTR(name, 0444, show_node_state, NULL), state }
+> +static ssize_t store_node_state(struct device *s,
+> +				struct device_attribute *attr,
+> +				const char *buf, size_t count)
+> +{
+> +	nodemask_t nodes;
+> +	struct node_attr *na = container_of(attr, struct node_attr, attr);
+> +
+> +	if (nodelist_parse(buf, nodes))
+> +		return -EINVAL;
+> +
+> +	if (na->write) {
+> +		if (na->write(nodes))
+> +			return -EINVAL;
+> +	} else {
+> +		node_states[na->state] = nodes;
+> +	}
+> +
+> +	return count;
+> +}
+> +
+> +static int demotion_targets_write(nodemask_t nodes)
+> +{
+> +	if (nodes_subset(nodes, node_states[N_MEMORY])) {
+> +		node_states[N_DEMOTION_TARGETS] = nodes;
+> +		set_migration_target_nodes();
+> +		return 0;
+> +	}
+> +
+> +	return -EINVAL;
+> +}
+> +
+> +#define _NODE_ATTR_RO(name, state) \
+> +	{ __ATTR(name, 0444, show_node_state, NULL), state, NULL }
+> +
+> +#define _NODE_ATTR_RW(name, state, write_fn) \
+> +	{ __ATTR(name, 0644, show_node_state, store_node_state), state, write_fn }
+>  
+> 
+> 
+> 
+>  static struct node_attr node_state_attr[] = {
+> -	[N_POSSIBLE] = _NODE_ATTR(possible, N_POSSIBLE),
+> -	[N_ONLINE] = _NODE_ATTR(online, N_ONLINE),
+> -	[N_NORMAL_MEMORY] = _NODE_ATTR(has_normal_memory, N_NORMAL_MEMORY),
+> +	[N_POSSIBLE] = _NODE_ATTR_RO(possible, N_POSSIBLE),
+> +	[N_ONLINE] = _NODE_ATTR_RO(online, N_ONLINE),
+> +	[N_NORMAL_MEMORY] = _NODE_ATTR_RO(has_normal_memory, N_NORMAL_MEMORY),
+>  #ifdef CONFIG_HIGHMEM
+> -	[N_HIGH_MEMORY] = _NODE_ATTR(has_high_memory, N_HIGH_MEMORY),
+> +	[N_HIGH_MEMORY] = _NODE_ATTR_RO(has_high_memory, N_HIGH_MEMORY),
+>  #endif
+> -	[N_MEMORY] = _NODE_ATTR(has_memory, N_MEMORY),
+> -	[N_CPU] = _NODE_ATTR(has_cpu, N_CPU),
+> -	[N_GENERIC_INITIATOR] = _NODE_ATTR(has_generic_initiator,
+> -					   N_GENERIC_INITIATOR),
+> -	[N_DEMOTION_TARGETS] = _NODE_ATTR(demotion_targets,
+> -					  N_DEMOTION_TARGETS),
+> -
+> +	[N_MEMORY] = _NODE_ATTR_RO(has_memory, N_MEMORY),
+> +	[N_CPU] = _NODE_ATTR_RO(has_cpu, N_CPU),
+> +	[N_GENERIC_INITIATOR] = _NODE_ATTR_RO(has_generic_initiator,
+> +					      N_GENERIC_INITIATOR),
+> +	[N_DEMOTION_TARGETS] = _NODE_ATTR_RW(demotion_targets,
+> +					     N_DEMOTION_TARGETS,
+> +					     demotion_targets_write),
+>  };
+>  
+> 
+> 
+> 
+>  static struct attribute *node_state_attrs[] = {
+
 

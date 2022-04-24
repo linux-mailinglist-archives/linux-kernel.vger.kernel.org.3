@@ -2,167 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9656F50D1C2
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 15:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6121550D1C3
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 15:01:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231431AbiDXNDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 09:03:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36368 "EHLO
+        id S231600AbiDXNEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 09:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230198AbiDXNDC (ORCPT
+        with ESMTP id S231580AbiDXNEJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 09:03:02 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EEFA15A09
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 06:00:00 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id k27so352265edk.4
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 06:00:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xiS7jXTGQnjBRoWj5ugUGTqfRqlbiuFUwXWLNi1EeJU=;
-        b=SoA9P8/6lxB7hLukKtbzsp9CZjR0hxa/1dGYCHYuHry7e1fzAxQ6TYBM8js3bDZUdT
-         iOm61Ysfp+VWCcf+9mqf0kUzLrJUYw7YuJ15uXa1Qg/j5yGudMfYL9/jYojurUwjC/PT
-         EF4eq9ZGJxtYkojhD+sVMg2nwuFOqrgxJSR6D5TaQWwjSD288Y4Ge6oKuMs4n8E7w6aM
-         xlBuR90SsvtbwqDUVbaqEvYNuhXy9uc6zPZnL2UfwXO7tlG42uwMzk9iwiMgihzm2CQo
-         Q3x7R66oab/+2CtRiaVN33ycNZmpYEmz8Y7GZZ01aEkb9YareOofyAESNR8hK7Nytuwx
-         horA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xiS7jXTGQnjBRoWj5ugUGTqfRqlbiuFUwXWLNi1EeJU=;
-        b=o8Mi9jhJnln2d20TTieAViwRLDSNqiqqI4ViWbCZbY8OcfNmH55kD8aPgNv+VmSK42
-         NyznSEtpKMOIEIRZhHQ0xvf2q4gYn0l1pfckucPZ6VrOh6/K7xd+oZAg+m37NjDZFXrY
-         KlT8HBSETdAkslYOWdbUl2bkgsaEvXcIXkZFXgaynH6mOEvpETk9rlpGN1VCJ/l22kk0
-         kz2HmeaijvY19MRtaZv56snNxKTujLEbW4x2bt1639otGHA6wNxIVDVhmIvQK7G8BTjZ
-         4p3rO4uFF+r4wYE8B9YWCSZyqNoUTetUacwKpU8AZ/vMEX/OldQ3RKTMGY6xv3yWsRFW
-         yaNw==
-X-Gm-Message-State: AOAM533HaMzmYTeXf6wrZbCTsg0wMMoUs4sALwFB8pDpJKhzh53p3Fdl
-        2YoFlHIUOPoogn1BGm4hruo3+g==
-X-Google-Smtp-Source: ABdhPJzWd6TnX8cfWuoEpPnonVAdlLmH1faYJGpdsybfh5SgAIg5RUp8Wh3mjpXz0jixZJTcziCJFw==
-X-Received: by 2002:a05:6402:2985:b0:425:d51f:ae4 with SMTP id eq5-20020a056402298500b00425d51f0ae4mr6102711edb.379.1650805198838;
-        Sun, 24 Apr 2022 05:59:58 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s ([104.245.96.34])
-        by smtp.gmail.com with ESMTPSA id y14-20020a056402440e00b00416046b623csm3408984eda.2.2022.04.24.05.59.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 05:59:58 -0700 (PDT)
-Date:   Sun, 24 Apr 2022 20:59:51 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Timothy Hayes <timothy.hayes@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH 2/3] perf: arm-spe: Fix SPE events with phys addresses
-Message-ID: <20220424125951.GD978927@leoy-ThinkPad-X240s>
-References: <20220421165205.117662-1-timothy.hayes@arm.com>
- <20220421165205.117662-3-timothy.hayes@arm.com>
+        Sun, 24 Apr 2022 09:04:09 -0400
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613D81EEE8
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 06:01:07 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R911e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=hongnan.li@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VB1Lv.._1650805264;
+Received: from localhost(mailfrom:hongnan.li@linux.alibaba.com fp:SMTPD_---0VB1Lv.._1650805264)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sun, 24 Apr 2022 21:01:04 +0800
+From:   Hongnan Li <hongnan.li@linux.alibaba.com>
+To:     linux-erofs@lists.ozlabs.org, xiang@kernel.org, chao@kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] erofs: make filesystem exportable
+Date:   Sun, 24 Apr 2022 21:01:04 +0800
+Message-Id: <20220424130104.102365-1-hongnan.li@linux.alibaba.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220421165205.117662-3-timothy.hayes@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Timothy,
+Implement export operations in order to make EROFS support accessing
+inodes with filehandles so that it can be exported via NFS and used
+by overlayfs.
 
-On Thu, Apr 21, 2022 at 05:52:04PM +0100, Timothy Hayes wrote:
-> This patch corrects a bug whereby SPE collection is invoked with
-> pa_enable=1 but synthesized events fail to show physical addresses.
-> 
-> Signed-off-by: Timothy Hayes <timothy.hayes@arm.com>
-> ---
->  tools/perf/arch/arm64/util/arm-spe.c | 10 ++++++++++
->  tools/perf/util/arm-spe.c            |  3 ++-
->  2 files changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/perf/arch/arm64/util/arm-spe.c b/tools/perf/arch/arm64/util/arm-spe.c
-> index af4d63af8072..e8b577d33e53 100644
-> --- a/tools/perf/arch/arm64/util/arm-spe.c
-> +++ b/tools/perf/arch/arm64/util/arm-spe.c
-> @@ -148,6 +148,7 @@ static int arm_spe_recording_options(struct auxtrace_record *itr,
->  	bool privileged = perf_event_paranoid_check(-1);
->  	struct evsel *tracking_evsel;
->  	int err;
-> +	u64 bit;
->  
->  	sper->evlist = evlist;
->  
-> @@ -245,6 +246,15 @@ static int arm_spe_recording_options(struct auxtrace_record *itr,
->  	 */
->  	evsel__set_sample_bit(arm_spe_evsel, DATA_SRC);
->  
-> +	/*
-> +	 * The PHYS_ADDR flag does not affect the driver behaviour, it is used to
-> +	 * inform that the resulting output's SPE samples contain physical addresses
-> +	 * where applicable.
-> +	 */
-> +	bit = perf_pmu__format_bits(&arm_spe_pmu->format, "pa_enable");
-> +	if (arm_spe_evsel->core.attr.config & bit)
-> +		evsel__set_sample_bit(arm_spe_evsel, PHYS_ADDR);
-> +
->  	/* Add dummy event to keep tracking */
->  	err = parse_events(evlist, "dummy:u", NULL);
->  	if (err)
-> diff --git a/tools/perf/util/arm-spe.c b/tools/perf/util/arm-spe.c
-> index 151cc38a171c..1a80151baed9 100644
-> --- a/tools/perf/util/arm-spe.c
-> +++ b/tools/perf/util/arm-spe.c
-> @@ -1033,7 +1033,8 @@ arm_spe_synth_events(struct arm_spe *spe, struct perf_session *session)
->  	memset(&attr, 0, sizeof(struct perf_event_attr));
->  	attr.size = sizeof(struct perf_event_attr);
->  	attr.type = PERF_TYPE_HARDWARE;
-> -	attr.sample_type = evsel->core.attr.sample_type & PERF_SAMPLE_MASK;
-> +	attr.sample_type = evsel->core.attr.sample_type &
-> +				(PERF_SAMPLE_MASK | PERF_SAMPLE_PHYS_ADDR);
+Without this patch, 'exportfs -rv' will report:
+exportfs: /root/erofs_mp does not support NFS export
 
-I verified this patch and I can confirm the physical address can be
-dumped successfully.
+Also tested with unionmount-testsuite and the testcase below passes now:
+./run --ov --erofs --verify hard-link
 
-I have a more general question, seems to me, we need to change the
-macro PERF_SAMPLE_MASK in the file util/event.h as below, so
-here doesn't need to 'or' the flag PERF_SAMPLE_PHYS_ADDR anymore.
+For more details about the testcase, see:
+https://github.com/amir73il/unionmount-testsuite/pull/6
 
-@Arnaldo, @Jiri, could you confirm if this is the right way to move
-forward?  I am not sure why PERF_SAMPLE_MASK doesn't contain the bit
-PERF_SAMPLE_PHYS_ADDR in current code.
+Signed-off-by: Hongnan Li <hongnan.li@linux.alibaba.com>
+---
+ fs/erofs/internal.h |  2 +-
+ fs/erofs/namei.c    |  5 ++---
+ fs/erofs/super.c    | 40 ++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 43 insertions(+), 4 deletions(-)
 
-diff --git a/tools/perf/util/event.h b/tools/perf/util/event.h
-index cdd72e05fd28..c905ac32ebad 100644
---- a/tools/perf/util/event.h
-+++ b/tools/perf/util/event.h
-@@ -39,7 +39,7 @@ struct perf_event_attr;
-         PERF_SAMPLE_TIME | PERF_SAMPLE_ADDR |          \
-        PERF_SAMPLE_ID | PERF_SAMPLE_STREAM_ID |        \
-         PERF_SAMPLE_CPU | PERF_SAMPLE_PERIOD |         \
--        PERF_SAMPLE_IDENTIFIER)
-+        PERF_SAMPLE_IDENTIFIER | PERF_SAMPLE_PHYS_ADDR)
+diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+index 5298c4ee277d..12c65f647324 100644
+--- a/fs/erofs/internal.h
++++ b/fs/erofs/internal.h
+@@ -509,7 +509,7 @@ int erofs_getattr(struct user_namespace *mnt_userns, const struct path *path,
+ /* namei.c */
+ extern const struct inode_operations erofs_dir_iops;
+ 
+-int erofs_namei(struct inode *dir, struct qstr *name,
++int erofs_namei(struct inode *dir, const struct qstr *name,
+ 		erofs_nid_t *nid, unsigned int *d_type);
+ 
+ /* dir.c */
+diff --git a/fs/erofs/namei.c b/fs/erofs/namei.c
+index 554efa363317..fd75506799c4 100644
+--- a/fs/erofs/namei.c
++++ b/fs/erofs/namei.c
+@@ -165,9 +165,8 @@ static void *find_target_block_classic(struct erofs_buf *target,
+ 	return candidate;
+ }
+ 
+-int erofs_namei(struct inode *dir,
+-		struct qstr *name,
+-		erofs_nid_t *nid, unsigned int *d_type)
++int erofs_namei(struct inode *dir, const struct qstr *name, erofs_nid_t *nid,
++		unsigned int *d_type)
+ {
+ 	int ndirents;
+ 	struct erofs_buf buf = __EROFS_BUF_INITIALIZER;
+diff --git a/fs/erofs/super.c b/fs/erofs/super.c
+index 0c4b41130c2f..17ad271677b6 100644
+--- a/fs/erofs/super.c
++++ b/fs/erofs/super.c
+@@ -13,6 +13,7 @@
+ #include <linux/fs_context.h>
+ #include <linux/fs_parser.h>
+ #include <linux/dax.h>
++#include <linux/exportfs.h>
+ #include "xattr.h"
+ 
+ #define CREATE_TRACE_POINTS
+@@ -577,6 +578,44 @@ static int erofs_init_managed_cache(struct super_block *sb)
+ static int erofs_init_managed_cache(struct super_block *sb) { return 0; }
+ #endif
+ 
++static struct inode *erofs_nfs_get_inode(struct super_block *sb,
++		u64 ino, u32 generation)
++{
++	return erofs_iget(sb, ino, false);
++}
++
++static struct dentry *erofs_fh_to_dentry(struct super_block *sb, struct fid *fid,
++		int fh_len, int fh_type)
++{
++	return generic_fh_to_dentry(sb, fid, fh_len, fh_type,
++				    erofs_nfs_get_inode);
++}
++
++static struct dentry *erofs_fh_to_parent(struct super_block *sb, struct fid *fid,
++		int fh_len, int fh_type)
++{
++	return generic_fh_to_parent(sb, fid, fh_len, fh_type,
++				    erofs_nfs_get_inode);
++}
++
++struct dentry *erofs_get_parent(struct dentry *child)
++{
++	erofs_nid_t nid;
++	unsigned int d_type;
++	int err;
++
++	err = erofs_namei(d_inode(child), &dotdot_name, &nid, &d_type);
++	if (err)
++		return ERR_PTR(err);
++	return d_obtain_alias(erofs_iget(child->d_sb, nid, d_type == FT_DIR));
++}
++
++static const struct export_operations erofs_export_ops = {
++	.fh_to_dentry = erofs_fh_to_dentry,
++	.fh_to_parent = erofs_fh_to_parent,
++	.get_parent = erofs_get_parent,
++};
++
+ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
+ {
+ 	struct inode *inode;
+@@ -618,6 +657,7 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
+ 	sb->s_time_gran = 1;
+ 
+ 	sb->s_op = &erofs_sops;
++	sb->s_export_op = &erofs_export_ops;
+ 	sb->s_xattr = erofs_xattr_handlers;
+ 
+ 	if (test_opt(&sbi->opt, POSIX_ACL))
+-- 
+2.19.1.6.gb485710b
 
-Thanks,
-Leo
-
->  	attr.sample_type |= PERF_SAMPLE_IP | PERF_SAMPLE_TID |
->  			    PERF_SAMPLE_PERIOD | PERF_SAMPLE_DATA_SRC |
->  			    PERF_SAMPLE_WEIGHT | PERF_SAMPLE_ADDR;
-> -- 
-> 2.25.1
-> 

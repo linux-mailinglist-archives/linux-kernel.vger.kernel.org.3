@@ -2,69 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF3750CE47
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 03:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 320E250CE4C
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 03:58:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237516AbiDXBxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 21:53:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48966 "EHLO
+        id S237548AbiDXCBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 22:01:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231462AbiDXBw6 (ORCPT
+        with ESMTP id S231462AbiDXCBE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 21:52:58 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D894463C4;
-        Sat, 23 Apr 2022 18:49:58 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-e5c42b6e31so12624711fac.12;
-        Sat, 23 Apr 2022 18:49:58 -0700 (PDT)
+        Sat, 23 Apr 2022 22:01:04 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF3236E00;
+        Sat, 23 Apr 2022 18:58:05 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id g3so9864234pgg.3;
+        Sat, 23 Apr 2022 18:58:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=HdDCdJEingdj1BtxscgnBzWm9IeD9qwg7IBZsost16s=;
-        b=l42kw1gmYnAvUPgiz1we0vABR4tN8Zmq+6LT2lVFvUZwiencbyxIPsPUTfzm8brEyN
-         QJnTepcCXLlb8Sc5jkPjLxGhz5xSuEg/vMimqD3Z46kDEiMjpDx80BW2Aqaot/O/BPqv
-         83aJ65IuS/R2L/f5Ek7FnQWFg7BSeQuPT2D1WmQcooBBb7llBsVYXtTmzejOVwoDpykx
-         vj3OEAYKaX6GujKsELOg3of9FIQcdoNTCM0XrqF7wuTBF9OOK7eKhQbT2Qaxj050bHkw
-         nChC5pjZxnLUQ1i31E4QQfLQ9NE12D55L9QLJQF7k5+xQx8HcVsmTISQC19ljud3dMOM
-         8F3Q==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=yvCVUXuZoZuLVMw47+vPYc/UbkVpldMV9je33JT8RXY=;
+        b=BaEnelyLCe6fQtpmxHKMl+7x6ulG+QbSfiACl/qx1EuaK0PIMz5VXI6XpMHLT164qI
+         HfoyHxDJDHm836SwupKNX4N76ujwaEVRoslu6PsGmUfmdmAd3Jmm+6HS28o3NZzZBxeB
+         GfDXaguExILpSsViHR7bmGMdgkP3v2VtdUpCj0kWxhcSvX5kOnHCKyu9/M+iI6jl7Yzn
+         h8eVqPzyPN/bOThkDppJMuNw/hb8n2Q3YjjBr/AHWUPr7AHfun86YhPUYnivOcyU4byS
+         9gf5klvrcBgV09YoOSAa0e0x8ZVr4O3t3TaYHkUre7ZJgtLR0ziLt1e5vAPOOqpfkESL
+         Yfdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=HdDCdJEingdj1BtxscgnBzWm9IeD9qwg7IBZsost16s=;
-        b=xGssTY2xBezH7yFR8ko72s8OqOBrTcqRp2nMkf6lNqfpFqShESCPv0MIAI1wke31Od
-         SNJv1GG7DRKXRIRmA2h4pfD8hG74OajSUoYW62i25S9Fo5zuZVZIcySCmc/HtY8l0e2E
-         kHpUK4typ8yIKkGHsmWxCBX+HCRAob1Va0d4diaPGyzLuEnw3r2L2ZJZE/VQiYrROjZD
-         HH2Gmag0x+lfkH+seZ5P+2Sq/bwAK0j41fBRufsN1H2/jsiGrldV1hZvxvMv7zTEv1p5
-         o3E00bi//YbmVKv8EU41PGEl1+BqSRWZQUOeEgXgvyqVmmBUl3x84X0BmWlW2KYaQvY1
-         V8BA==
-X-Gm-Message-State: AOAM5326Kt+KyAjFeggamczfdwMBz6gHPZxHszS3QQlu57Lw89MLXjKm
-        06q9coQKRZQGmNYLzEVoF/Q=
-X-Google-Smtp-Source: ABdhPJxoSktaRJuA7Ko1CKr2jk8aTGRq/jGF5WkEiuhuaz9dXl92zUa4hbph21RqLF7wZY/67YOOlw==
-X-Received: by 2002:a05:6870:738c:b0:e9:155e:7f40 with SMTP id z12-20020a056870738c00b000e9155e7f40mr2034120oam.124.1650764998232;
-        Sat, 23 Apr 2022 18:49:58 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id lf13-20020a0568700c4d00b000e9254af871sm505374oab.49.2022.04.23.18.49.57
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=yvCVUXuZoZuLVMw47+vPYc/UbkVpldMV9je33JT8RXY=;
+        b=MQg9y1UzcOf9vz2vYTBExfBebSoF5x1hBb+Zmmn+mSOkeJWJjryWeTzAMZx9wj4KTw
+         4WmMrUx2DQ1MJkGv2JnbGO2IhgBqWVXH0PbwQQ6/kodeAqBca82UwK8HxwbOa8Jg3MHX
+         S1tGcbxQkOeUEPAVzEl8x4aLJj+V+q+waKvka82fbvzZd9NDuZ8a9yZrjzOWGQtEeo0N
+         r1mtK0rz4WQB8GwmuMq7r8DS9ObaHPcgeVxBINEAskiqrSF8F4t+aIrbzuGqrQU/j99b
+         owCJi9TfueYELImTrzYHF/EE3/+6rO41oyLVaM1w5axWd8KoMIX9BNWEw3jxjDxLvcQ4
+         E0Ug==
+X-Gm-Message-State: AOAM5307SBvZBpkJu8H/nlbE71zExvpXGQe9SJFmaNKJfZzAVjy7gDLG
+        7BxPvhI0FtWK2Ae20aNOq4aX4ft64iyOZBWs
+X-Google-Smtp-Source: ABdhPJzCv8OcdvS99ZXrpBWfpomrC4a0+uEtHndmRRaQ1sWwWOzJwnHEkuSAXSN/LVIUVPWKhAhg4Q==
+X-Received: by 2002:a63:257:0:b0:3aa:a481:9159 with SMTP id 84-20020a630257000000b003aaa4819159mr9750819pgc.1.1650765485214;
+        Sat, 23 Apr 2022 18:58:05 -0700 (PDT)
+Received: from zeshkernups01.spreadtrum.com ([117.18.48.102])
+        by smtp.gmail.com with ESMTPSA id j10-20020a17090a734a00b001bf31f7520csm2061092pjs.1.2022.04.23.18.58.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 18:49:57 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 23 Apr 2022 18:49:56 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     pali@kernel.org, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (dell-smm) Add cooling device support
-Message-ID: <20220424014956.GA3989878@roeck-us.net>
-References: <20220410163935.7840-1-W_Armin@gmx.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220410163935.7840-1-W_Armin@gmx.de>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        Sat, 23 Apr 2022 18:58:04 -0700 (PDT)
+From:   Surong Pang <surong.pang@gmail.com>
+To:     mathias.nyman@linux.intel.com
+Cc:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        surong.pang@gmail.com, Orson.Zhai@unisoc.com, yunguo.wu@unisoc.com
+Subject: [PATCH V2] usb/host: Let usb phy shutdown later
+Date:   Sun, 24 Apr 2022 09:57:57 +0800
+Message-Id: <20220424015757.21993-1-surong.pang@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <e05ec742-c3dc-df7c-c5d7-29358d0a7081@linux.intel.com>
+References: <e05ec742-c3dc-df7c-c5d7-29358d0a7081@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,16 +68,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 10, 2022 at 06:39:35PM +0200, Armin Wolf wrote:
-> Until now, only the temperature sensors where exported thru
-> the thermal subsystem. Export the fans as "dell-smm-fan[1-3]" too
-> to make them available as cooling devices.
-> Also update Documentation and fix a minor issue with the alphabetic
-> ordering of the includes.
-> 
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+From: Surong Pang <surong.pang@unisoc.com>
 
-Applied to hwmon-next.
+Let usb phy shutdown later in xhci_plat_remove function.
+Some phy driver doesn't divide 3.0/2.0 very clear.
+If calls usb_phy_shutdown earlier than usb_remove_hcd(hcd),
+It will case 10s cmd timeout issue.
 
-Thanks,
-Guenter
+Call usb phy shutdown later has better compatibility.
+
+Signed-off-by: Surong Pang <surong.pang@unisoc.com>
+---
+ drivers/usb/host/xhci-plat.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index 649ffd861b44..fe492ed99cb7 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -390,13 +390,13 @@ static int xhci_plat_remove(struct platform_device *dev)
+ 
+ 	usb_remove_hcd(shared_hcd);
+ 	xhci->shared_hcd = NULL;
+-	usb_phy_shutdown(hcd->usb_phy);
+ 
+ 	usb_remove_hcd(hcd);
+ 	usb_put_hcd(shared_hcd);
+ 
+ 	clk_disable_unprepare(clk);
+ 	clk_disable_unprepare(reg_clk);
++	usb_phy_shutdown(hcd->usb_phy);
+ 	usb_put_hcd(hcd);
+ 
+ 	pm_runtime_disable(&dev->dev);
+-- 
+2.17.1
+

@@ -2,225 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8379650D342
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 18:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABF7250D38B
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 18:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234398AbiDXQ1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 12:27:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49268 "EHLO
+        id S235503AbiDXQkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 12:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232940AbiDXQ1I (ORCPT
+        with ESMTP id S235178AbiDXQkF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 12:27:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0B57DE1A;
-        Sun, 24 Apr 2022 09:24:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7EC1B80E45;
-        Sun, 24 Apr 2022 16:24:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EF52C385A7;
-        Sun, 24 Apr 2022 16:24:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650817445;
-        bh=SKkt44/pdWWtJDnAFjZyfdHI94wAj09CMu8k9vIQhF0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QXHqVXxuifbmtoq8vQmDLAQa4ePAIET9jxbcqo1EU2YpPJvwYwMdMQrg2BgFW22HT
-         ZACr5tMW64j+0WiLqb30/EDOA1mSBAul6pjTVCj0SIlDOlzHrEvi+i3vxAU3CfqBrY
-         zHiWOqOHbu/3GSFzXnAbgThfq8j+l1PYpz/1pXcO8PxdhD5vPq551IPF6pTIBGvI6z
-         zjSSk7ZhvWcVXEM5CdNmagp0J/2KdPB53n06yuN7dZ7FTDezV9IbWJTTZU71F2/j4e
-         ObZ2M6BAoy1oiBl0lK/fePOnVcYISZocdWyZGSHq5t+TBdJxNnBovLmFW+Czd11/2b
-         gXk+UPtVEVoSQ==
-Date:   Sun, 24 Apr 2022 17:32:10 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Shreeya Patel <shreeya.patel@collabora.com>
-Cc:     lars@metafoo.de, robh+dt@kernel.org, Zhigang.Shi@liteon.com,
-        krzk@kernel.org, krisman@collabora.com, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, alvaro.soliverez@collabora.com
-Subject: Re: [PATCH v2 3/3] iio: light: Add support for ltrf216a sensor
-Message-ID: <20220424173210.554c8247@jic23-huawei>
-In-Reply-To: <20220421140133.354498-4-shreeya.patel@collabora.com>
-References: <20220421140133.354498-1-shreeya.patel@collabora.com>
-        <20220421140133.354498-4-shreeya.patel@collabora.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Sun, 24 Apr 2022 12:40:05 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2A222B1A;
+        Sun, 24 Apr 2022 09:37:03 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-e656032735so12552730fac.0;
+        Sun, 24 Apr 2022 09:37:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=8Fp3HdofZJT+o1V6MRR3ocRbEBQWRw3KcjAOJKB2xZA=;
+        b=mC13yybzcnF/RGafypXhT9+9YUUFRvE2P705dGgEC+lIEDYPu5yhhe3TFphLN/Z45q
+         rAiG4A+KS8Q6rvEALqkGqC0NtkVjAPRuPLxFSFbmXN+4h8yZdS8RRGsHLHtvkqDRmToE
+         PQCRK/uCHFP15NqwTVXHLagR14fuUW/eHSdGpxmlVreknDl+hFBaWIoghOUOfQVTaXyY
+         3Asfu3F0XVbGFhIQ04BNcpS1OvLE8YC5/s0+hSrCMFeG1BHMr539SbJ5RTM4ZbTW/HF3
+         tap/KOvZKK3qjYAHtN//lapheE/SjtrvgglilewB5yMcbO0+4xLwDow6qVfhscWWtGqp
+         4LSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=8Fp3HdofZJT+o1V6MRR3ocRbEBQWRw3KcjAOJKB2xZA=;
+        b=Xg784UtGWezSmxW/D4uZBp1NNcWE6mo4g8cQa7TAW7e1epsFRR4XMFqsvAByXpLPug
+         /Ar2J7ifXO5WBhPEQS3XfrxStkYNe4AHuSSm4ssnaq6jcVVF291qe63u5cUGxOtKDBwK
+         JIKScJk/eBqO0b7gPCnkX1b5xXU13swR9omvolJ9QPBom4aF6bP4EkGyzStRGz6VX/zm
+         CRe+f7+ukduoGnjWT5kMMuFvw1PU2KF7sDIRoZ4kTIlUpjbpAW1B/kYAVcQVBcmOD39W
+         RxYFhaTVeT9v7chtaYeCrUjCqFki7tsICClgO10Oa1Y8SGhxP6pm0UmUqvlCXR9aMD2m
+         t4zQ==
+X-Gm-Message-State: AOAM532Y10qAKb70cUgjbJrszWuASTed5l2wfcaiFBma/vm1jUwPCyIS
+        8mcGNHnLWq7s6K2P5gyar1XbyuE7Pxg=
+X-Google-Smtp-Source: ABdhPJy6aseCExIW1K41OsMFQVY720cNY6Zlhp1FypG4mAGAWlQSlpkXr6JyeZymDOS67DmssI+1bw==
+X-Received: by 2002:a05:6870:460f:b0:dd:cd0e:d931 with SMTP id z15-20020a056870460f00b000ddcd0ed931mr10220637oao.196.1650818223040;
+        Sun, 24 Apr 2022 09:37:03 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x24-20020a4a9b98000000b0033a70525c35sm3288394ooj.30.2022.04.24.09.37.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 24 Apr 2022 09:37:02 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <8d9e41b5-a143-eace-72ff-c8e9e399daba@roeck-us.net>
+Date:   Sun, 24 Apr 2022 09:37:00 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4 3/4] dt-bindings: hwmon: add Microchip LAN966x bindings
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>, Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
+References: <20220401214032.3738095-1-michael@walle.cc>
+ <20220401214032.3738095-4-michael@walle.cc>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220401214032.3738095-4-michael@walle.cc>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 21 Apr 2022 19:31:33 +0530
-Shreeya Patel <shreeya.patel@collabora.com> wrote:
-
-> From: Zhigang Shi <Zhigang.Shi@liteon.com>
+On 4/1/22 14:40, Michael Walle wrote:
+> Add a binding for the temperature sensor and the fan controller on the
+> Microchip LAN966x family.
 > 
-> Add initial support for ltrf216a ambient light sensor.
-> 
-> Datasheet: gitlab.steamos.cloud/shreeya/iio/-/blob/main/LTRF216A.pdf
-> Co-developed-by: Shreeya Patel <shreeya.patel@collabora.com>
-> Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
-> Signed-off-by: Zhigang Shi <Zhigang.Shi@liteon.com>
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-Hi Shreeya,
+Still needs approval by a devicetree maintainer.
 
-Looking pretty good.  Just a few minor things in here - I very nearly
-just made the changes whilst applying but the one about reusing the
-available array is slightly more complex than I like to do without
-bouncing it back to the author.
-
-Thanks,
-
-Jonathan
+Guenter
 
 > ---
+>   .../bindings/hwmon/microchip,lan966x.yaml     | 53 +++++++++++++++++++
+>   1 file changed, 53 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,lan966x.yaml
 > 
-> Changes in v2
->   - Add support for 25ms and 50ms integration time.
->   - Rename some of the macros as per names given in datasheet
->   - Add a comment for the mutex lock
->   - Use read_avail callback instead of attributes and set the
->     appropriate _available bit.
->   - Use FIELD_PREP() at appropriate places.
->   - Add a constant lookup table for integration time and reg val
->   - Use BIT() macro for magic numbers.
->   - Improve error handling at few places.
->   - Use get_unaligned_le24() and div_u64()
->   - Use probe_new() callback and devm functions
->   - Return errors in probe using dev_err_probe()
->   - Use DEFINE_SIMPLE_DEV_PM_OPS()
->   - Correct the formula for lux to use 0.45 instead of 0.8
-> 
-> 
->  drivers/iio/light/Kconfig    |  10 +
->  drivers/iio/light/Makefile   |   1 +
->  drivers/iio/light/ltrf216a.c | 349 +++++++++++++++++++++++++++++++++++
->  3 files changed, 360 insertions(+)
->  create mode 100644 drivers/iio/light/ltrf216a.c
-> 
-
-> diff --git a/drivers/iio/light/ltrf216a.c b/drivers/iio/light/ltrf216a.c
+> diff --git a/Documentation/devicetree/bindings/hwmon/microchip,lan966x.yaml b/Documentation/devicetree/bindings/hwmon/microchip,lan966x.yaml
 > new file mode 100644
-> index 000000000000..de6d2e2e7f08
+> index 000000000000..390dd6755ff5
 > --- /dev/null
-> +++ b/drivers/iio/light/ltrf216a.c
-> @@ -0,0 +1,349 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * LTRF216A Ambient Light Sensor
-> + *
-> + * Copyright (C) 2021 Lite-On Technology Corp (Singapore)
-> + * Author: Shi Zhigang <Zhigang.Shi@liteon.com>
-> + *
-> + * IIO driver for LTRF216A (7-bit I2C slave address 0x53).
-> + */
+> +++ b/Documentation/devicetree/bindings/hwmon/microchip,lan966x.yaml
+> @@ -0,0 +1,53 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/microchip,lan966x.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +#include <linux/module.h>
-> +#include <linux/init.h>
-> +#include <linux/i2c.h>
-> +#include <linux/mutex.h>
-> +#include <linux/iio/iio.h>
-> +#include <linux/iio/sysfs.h>
-
-I don't think you are using anything from iio/sysfs.h any more so please
-drop this header (unless I'm missing something!)
-
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/bitfield.h>
-> +#include <linux/pm.h>
-> +#include <linux/delay.h>
-> +#include <asm/unaligned.h>
+> +title: Microchip LAN966x Hardware Monitor
 > +
-Where no other reason to have a particular order for headers IIO preference is
-3 blocks of headers.  First set are the non IIO related ones in alphabetical order.
-Second block typically IIO specific ones.  Final block the asm includes
-
-So here best order is something like
-
-#include <linux/bitfield.h>
-#include <linux/delay.h>
-#include <linux/init.h>
-#include <linux/i2c.h>
-#include <linux/module.h>
-#include <linux/mod_devicetable.h>
-#include <linux/mutex.h>
-#include <linux/pm.h>
-
-#include <linux/iio/iio.h>
-
-#include <asm/unaligned.h>
-
-
-> +#define LTRF216A_ALS_DATA_0		0x0D
+> +maintainers:
+> +  - Michael Walle <michael@walle.cc>
 > +
-> +static const int int_time_mapping[] = { 400000, 200000, 100000, 50000, 25000 };
-
-You should use the array below for the same matching purpose as this one and
-avoid duplicating data.
-
+> +description: |
+> +  Microchip LAN966x temperature monitor and fan controller
 > +
-> +static const int ltrf216a_int_time_available[5][2] = {
-> +	{0, 400000},
-> +	{0, 200000},
-> +	{0, 100000},
-> +	{0, 50000},
-> +	{0, 25000},
-> +};
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - microchip,lan9668-hwmon
 > +
-> +static const int ltrf216a_int_time_reg[5][2] = {
-> +	{400, 0x03},
-> +	{200, 0x13},
-> +	{100, 0x22},
-> +	{50, 0x31},
-> +	{25, 0x40},
-> +};
+> +  reg:
+> +    items:
+> +      - description: PVT registers
+> +      - description: FAN registers
 > +
-> +struct ltrf216a_data {
-> +	struct i2c_client *client;
-> +	u32 int_time;
-> +	u8 int_time_fac;
-> +	u8 als_gain_fac;
-> +	struct mutex mutex; /* Protect read and write operations */
+> +  reg-names:
+> +    items:
+> +      - const: pvt
+> +      - const: fan
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  '#thermal-sensor-cells':
+> +    const: 0
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - clocks
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    hwmon: hwmon@e2010180 {
+> +        compatible = "microchip,lan9668-hwmon";
+> +        reg = <0xe2010180 0xc>,
+> +              <0xe20042a8 0xc>;
+> +        reg-names = "pvt", "fan";
+> +        clocks = <&sys_clk>;
+> +        #thermal-sensor-cells = <0>;
+> +    };
 
-This could probably have been more descriptive. I think you are also
-ensuring that the cached state and the device state are kept in sync.
-
-> +};
-
-
-> +
-> +static int ltrf216a_get_lux(struct ltrf216a_data *data)
-> +{
-> +	int greendata, cleardata;
-> +	u64 lux, div;
-> +
-> +	greendata = ltrf216a_read_data(data, LTRF216A_ALS_DATA_0);
-> +	cleardata = ltrf216a_read_data(data, LTRF216A_CLEAR_DATA_0);
-> +
-> +	if (greendata < 0 || cleardata < 0) {
-> +		return -EINVAL;
-
-As this is an error case and you correctly return directly there is
-no need to have else.  That will reduce indentation and
-allow last line to simply be
-
-return div_u64(lux, div);
-
-> +
-> +	} else {
-> +		lux = greendata * 45 * WIN_FAC * 100;
-> +		div = data->als_gain_fac * data->int_time_fac * 100;
-> +		lux = div_u64(lux, div);
-> +	}
-> +
-> +	return lux;
-> +}
-> +

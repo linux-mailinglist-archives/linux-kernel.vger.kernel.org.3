@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7166B50D196
+	by mail.lfdr.de (Postfix) with ESMTP id 291A050D195
 	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 14:09:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbiDXMLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 08:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48044 "EHLO
+        id S229477AbiDXMLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 08:11:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiDXMLk (ORCPT
+        with ESMTP id S229453AbiDXMLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 24 Apr 2022 08:11:40 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4338825E9B
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9650925E9D
         for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 05:08:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1650802120; x=1682338120;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Ssx/1jaoRTts/axIrhdEeTUJlNCVXWRfEWxOCQgcOeE=;
-  b=MZpi2VnaNvY3k1PO8OVohKrpWt48rSWiBcDzXsO6s/4Uur1MT5QibO5U
-   wPGACF7lCzWfkqGBlFPm1yS8MQ85GaxTt8ycKBVBSBp1v7Elc/62yPzWS
-   3Fk+ov+9SQw1BDOD6PKDxYNI01PDZ/fpElJfNKtaZpsLZfICJHSbjJ0fV
-   1/oW++bE1UXeWS8or/pj90iNZoXPdzNAoa+DwmgAhYXYE2FVzu8N2vkuL
-   7VFG8CitX4soEjbhqj9QDMVyG4jAB1jpl0f5qvnzk2xs9vkZp7qHFsY39
-   0R9RVCpUAfhZs0e0BnxrODZ93YeJWKzI1FTq7Hg5mnXa/PgC2qpv1UpVX
+  bh=tICH0q8g8dbLJL8g4kbFNW/ZxZEvaqnutCmhpsehBNs=;
+  b=hSJ6QsqhjSbgI2VPB8nPN7qlbuHR99KkVIwCJa1Oe3S54/b+bLpBbmwd
+   oeTzeRuuRFbSGctNbUD/YsW26HHyoTfCEqWkns6orl4Ne29bXUVg7FnIE
+   dx7HDDOiy3113RoWcCDm8ivBMLSLoMWE+vop4nEZhaBvr2QZO02MtU4Qe
+   1bUoxmOJ3LPbv8PY6ZVu20k3A6NP8eOhLWkthCliH4pisZEegEHqcr7hN
+   WVKReeyb3whnFDMcKKhSDvstrb3xEAW06f6aeWpRXvs5AIKf3lizVacql
+   vN46duS9c53qUKIw7U0Kdm4yW9t0UDODNTM1trusDzsUTN7dPfIFBikHk
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="351485505"
+X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="245606042"
 X-IronPort-AV: E=Sophos;i="5.90,286,1643702400"; 
-   d="scan'208";a="351485505"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 05:08:39 -0700
+   d="scan'208";a="245606042"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 05:08:40 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,286,1643702400"; 
-   d="scan'208";a="675473093"
+   d="scan'208";a="531643418"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 24 Apr 2022 05:08:38 -0700
+  by orsmga006.jf.intel.com with ESMTP; 24 Apr 2022 05:08:38 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nib2b-0001Q5-LD;
+        id 1nib2b-0001Q3-Kf;
         Sun, 24 Apr 2022 12:08:37 +0000
-Date:   Sun, 24 Apr 2022 20:08:19 +0800
+Date:   Sun, 24 Apr 2022 20:08:20 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: arch/powerpc/platforms/powernv/opal-fadump.c:683:60: sparse: sparse:
- incorrect type in argument 2 (different base types)
-Message-ID: <202204241902.m4kglRy4-lkp@intel.com>
+To:     Tom <support@vamrs.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Emil Renner Berthing <kernel@esmil.dk>
+Subject: [esmil:visionfive 22/56] drivers/soc/sifive/sifive_l2_cache.c:152:3:
+ error: call to undeclared function 'writeq'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202204242055.S0sCOxzU-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -61,163 +64,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   22da5264abf497a10a4ed629f07f4ba28a7ed5eb
-commit: d936f8182e1bd18f5e9e6c5e8d8b69261200ca96 powerpc/powernv: Fix type of opal_mpipl_query_tag() addr argument
-date:   1 year ago
-config: powerpc64-randconfig-s032-20220424 (https://download.01.org/0day-ci/archive/20220424/202204241902.m4kglRy4-lkp@intel.com/config)
-compiler: powerpc64le-linux-gcc (GCC) 11.2.0
-reproduce:
+tree:   https://github.com/esmil/linux visionfive
+head:   0729a282564fe3940277937536b1e67f98885c49
+commit: 82d19ba510f9a07c18a011731401222caaffdb4a [22/56] sifive/sifive_l2_cache: Add sifive_l2_flush64_range function
+config: riscv-randconfig-r016-20220424 (https://download.01.org/0day-ci/archive/20220424/202204242055.S0sCOxzU-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
+reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d936f8182e1bd18f5e9e6c5e8d8b69261200ca96
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout d936f8182e1bd18f5e9e6c5e8d8b69261200ca96
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/esmil/linux/commit/82d19ba510f9a07c18a011731401222caaffdb4a
+        git remote add esmil https://github.com/esmil/linux
+        git fetch --no-tags esmil visionfive
+        git checkout 82d19ba510f9a07c18a011731401222caaffdb4a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/platforms/powernv/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kvm/ drivers/soc/sifive/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
+All error/warnings (new ones prefixed by >>):
 
-sparse warnings: (new ones prefixed by >>)
-   arch/powerpc/platforms/powernv/opal-fadump.c:104:41: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] boot_mem_dest_addr @@     got restricted __be64 const [usertype] dest @@
-   arch/powerpc/platforms/powernv/opal-fadump.c:104:41: sparse:     expected unsigned long long [usertype] boot_mem_dest_addr
-   arch/powerpc/platforms/powernv/opal-fadump.c:104:41: sparse:     got restricted __be64 const [usertype] dest
-   arch/powerpc/platforms/powernv/opal-fadump.c:130:22: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long base @@     got restricted __be64 const [usertype] src @@
-   arch/powerpc/platforms/powernv/opal-fadump.c:130:22: sparse:     expected unsigned long base
-   arch/powerpc/platforms/powernv/opal-fadump.c:130:22: sparse:     got restricted __be64 const [usertype] src
-   arch/powerpc/platforms/powernv/opal-fadump.c:131:22: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long size @@     got restricted __be64 const [usertype] size @@
-   arch/powerpc/platforms/powernv/opal-fadump.c:131:22: sparse:     expected unsigned long size
-   arch/powerpc/platforms/powernv/opal-fadump.c:131:22: sparse:     got restricted __be64 const [usertype] size
-   arch/powerpc/platforms/powernv/opal-fadump.c:146:46: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long reserve_dump_area_start @@     got restricted __be64 const [usertype] dest @@
-   arch/powerpc/platforms/powernv/opal-fadump.c:146:46: sparse:     expected unsigned long reserve_dump_area_start
-   arch/powerpc/platforms/powernv/opal-fadump.c:146:46: sparse:     got restricted __be64 const [usertype] dest
-   arch/powerpc/platforms/powernv/opal-fadump.c:196:41: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be64 [usertype] src @@     got unsigned long long @@
-   arch/powerpc/platforms/powernv/opal-fadump.c:196:41: sparse:     expected restricted __be64 [usertype] src
-   arch/powerpc/platforms/powernv/opal-fadump.c:196:41: sparse:     got unsigned long long
-   arch/powerpc/platforms/powernv/opal-fadump.c:197:41: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be64 [usertype] dest @@     got unsigned long long [usertype] addr @@
-   arch/powerpc/platforms/powernv/opal-fadump.c:197:41: sparse:     expected restricted __be64 [usertype] dest
-   arch/powerpc/platforms/powernv/opal-fadump.c:197:41: sparse:     got unsigned long long [usertype] addr
-   arch/powerpc/platforms/powernv/opal-fadump.c:198:41: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be64 [usertype] size @@     got unsigned long long @@
-   arch/powerpc/platforms/powernv/opal-fadump.c:198:41: sparse:     expected restricted __be64 [usertype] size
-   arch/powerpc/platforms/powernv/opal-fadump.c:198:41: sparse:     got unsigned long long
-   arch/powerpc/platforms/powernv/opal-fadump.c:208:53: sparse: sparse: restricted __be64 degrades to integer
-   arch/powerpc/platforms/powernv/opal-fadump.c:276:56: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected unsigned long long [usertype] src @@     got restricted __be64 [usertype] src @@
-   arch/powerpc/platforms/powernv/opal-fadump.c:276:56: sparse:     expected unsigned long long [usertype] src
-   arch/powerpc/platforms/powernv/opal-fadump.c:276:56: sparse:     got restricted __be64 [usertype] src
-   arch/powerpc/platforms/powernv/opal-fadump.c:277:56: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected unsigned long long [usertype] dest @@     got restricted __be64 [usertype] dest @@
-   arch/powerpc/platforms/powernv/opal-fadump.c:277:56: sparse:     expected unsigned long long [usertype] dest
-   arch/powerpc/platforms/powernv/opal-fadump.c:277:56: sparse:     got restricted __be64 [usertype] dest
-   arch/powerpc/platforms/powernv/opal-fadump.c:278:56: sparse: sparse: incorrect type in argument 4 (different base types) @@     expected unsigned long long [usertype] size @@     got restricted __be64 [usertype] size @@
-   arch/powerpc/platforms/powernv/opal-fadump.c:278:56: sparse:     expected unsigned long long [usertype] size
-   arch/powerpc/platforms/powernv/opal-fadump.c:278:56: sparse:     got restricted __be64 [usertype] size
-   arch/powerpc/platforms/powernv/opal-fadump.c:573:38: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] dumped_bytes @@     got restricted __be64 const [usertype] size @@
-   arch/powerpc/platforms/powernv/opal-fadump.c:573:38: sparse:     expected unsigned long long [usertype] dumped_bytes
-   arch/powerpc/platforms/powernv/opal-fadump.c:573:38: sparse:     got restricted __be64 const [usertype] size
->> arch/powerpc/platforms/powernv/opal-fadump.c:683:60: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected restricted __be64 [usertype] *addr @@     got unsigned long long * @@
-   arch/powerpc/platforms/powernv/opal-fadump.c:683:60: sparse:     expected restricted __be64 [usertype] *addr
-   arch/powerpc/platforms/powernv/opal-fadump.c:683:60: sparse:     got unsigned long long *
-   arch/powerpc/platforms/powernv/opal-fadump.c:689:16: sparse: sparse: cast to restricted __be64
-   arch/powerpc/platforms/powernv/opal-fadump.c:689:16: sparse: sparse: cast to restricted __be64
-   arch/powerpc/platforms/powernv/opal-fadump.c:689:16: sparse: sparse: cast to restricted __be64
-   arch/powerpc/platforms/powernv/opal-fadump.c:689:16: sparse: sparse: cast to restricted __be64
-   arch/powerpc/platforms/powernv/opal-fadump.c:689:16: sparse: sparse: cast to restricted __be64
-   arch/powerpc/platforms/powernv/opal-fadump.c:689:16: sparse: sparse: cast to restricted __be64
-   arch/powerpc/platforms/powernv/opal-fadump.c:689:16: sparse: sparse: cast to restricted __be64
-   arch/powerpc/platforms/powernv/opal-fadump.c:689:16: sparse: sparse: cast to restricted __be64
-   arch/powerpc/platforms/powernv/opal-fadump.c:689:16: sparse: sparse: cast to restricted __be64
-   arch/powerpc/platforms/powernv/opal-fadump.c:689:16: sparse: sparse: cast to restricted __be64
-   arch/powerpc/platforms/powernv/opal-fadump.c:705:57: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected restricted __be64 [usertype] *addr @@     got unsigned long long * @@
-   arch/powerpc/platforms/powernv/opal-fadump.c:705:57: sparse:     expected restricted __be64 [usertype] *addr
-   arch/powerpc/platforms/powernv/opal-fadump.c:705:57: sparse:     got unsigned long long *
-   arch/powerpc/platforms/powernv/opal-fadump.c:707:24: sparse: sparse: cast to restricted __be64
-   arch/powerpc/platforms/powernv/opal-fadump.c:707:24: sparse: sparse: cast to restricted __be64
-   arch/powerpc/platforms/powernv/opal-fadump.c:707:24: sparse: sparse: cast to restricted __be64
-   arch/powerpc/platforms/powernv/opal-fadump.c:707:24: sparse: sparse: cast to restricted __be64
-   arch/powerpc/platforms/powernv/opal-fadump.c:707:24: sparse: sparse: cast to restricted __be64
-   arch/powerpc/platforms/powernv/opal-fadump.c:707:24: sparse: sparse: cast to restricted __be64
-   arch/powerpc/platforms/powernv/opal-fadump.c:707:24: sparse: sparse: cast to restricted __be64
-   arch/powerpc/platforms/powernv/opal-fadump.c:707:24: sparse: sparse: cast to restricted __be64
-   arch/powerpc/platforms/powernv/opal-fadump.c:707:24: sparse: sparse: cast to restricted __be64
-   arch/powerpc/platforms/powernv/opal-fadump.c:707:24: sparse: sparse: cast to restricted __be64
-   arch/powerpc/platforms/powernv/opal-fadump.c: note: in included file:
-   arch/powerpc/platforms/powernv/opal-fadump.h:138:33: sparse: sparse: restricted __be64 degrades to integer
+>> drivers/soc/sifive/sifive_l2_cache.c:152:3: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   writeq(line, l2_base + SIFIVE_L2_FLUSH64);
+                   ^
+>> drivers/soc/sifive/sifive_l2_cache.c:142:19: warning: result of comparison of constant 36507222016 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
+              (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
+              ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
 
-vim +683 arch/powerpc/platforms/powernv/opal-fadump.c
 
-41df5928721ff4 Hari Bathini     2019-09-11  622  
-41df5928721ff4 Hari Bathini     2019-09-11  623  void __init opal_fadump_dt_scan(struct fw_dump *fadump_conf, u64 node)
-41df5928721ff4 Hari Bathini     2019-09-11  624  {
-2a1b06dd3a17ac Hari Bathini     2019-09-11  625  	const __be32 *prop;
-41df5928721ff4 Hari Bathini     2019-09-11  626  	unsigned long dn;
-2a1b06dd3a17ac Hari Bathini     2019-09-11  627  	u64 addr = 0;
-7b1b3b48250acb Hari Bathini     2019-09-11  628  	int i, len;
-2a1b06dd3a17ac Hari Bathini     2019-09-11  629  	s64 ret;
-2a1b06dd3a17ac Hari Bathini     2019-09-11  630  
-41df5928721ff4 Hari Bathini     2019-09-11  631  	/*
-41df5928721ff4 Hari Bathini     2019-09-11  632  	 * Check if Firmware-Assisted Dump is supported. if yes, check
-41df5928721ff4 Hari Bathini     2019-09-11  633  	 * if dump has been initiated on last reboot.
-41df5928721ff4 Hari Bathini     2019-09-11  634  	 */
-41df5928721ff4 Hari Bathini     2019-09-11  635  	dn = of_get_flat_dt_subnode_by_name(node, "dump");
-41df5928721ff4 Hari Bathini     2019-09-11  636  	if (dn == -FDT_ERR_NOTFOUND) {
-41df5928721ff4 Hari Bathini     2019-09-11  637  		pr_debug("FADump support is missing!\n");
-41df5928721ff4 Hari Bathini     2019-09-11  638  		return;
-41df5928721ff4 Hari Bathini     2019-09-11  639  	}
-41df5928721ff4 Hari Bathini     2019-09-11  640  
-41df5928721ff4 Hari Bathini     2019-09-11  641  	if (!of_flat_dt_is_compatible(dn, "ibm,opal-dump")) {
-41df5928721ff4 Hari Bathini     2019-09-11  642  		pr_err("Support missing for this f/w version!\n");
-41df5928721ff4 Hari Bathini     2019-09-11  643  		return;
-41df5928721ff4 Hari Bathini     2019-09-11  644  	}
-41df5928721ff4 Hari Bathini     2019-09-11  645  
-7b1b3b48250acb Hari Bathini     2019-09-11  646  	prop = of_get_flat_dt_prop(dn, "fw-load-area", &len);
-7b1b3b48250acb Hari Bathini     2019-09-11  647  	if (prop) {
-7b1b3b48250acb Hari Bathini     2019-09-11  648  		/*
-7b1b3b48250acb Hari Bathini     2019-09-11  649  		 * Each f/w load area is an (address,size) pair,
-7b1b3b48250acb Hari Bathini     2019-09-11  650  		 * 2 cells each, totalling 4 cells per range.
-7b1b3b48250acb Hari Bathini     2019-09-11  651  		 */
-7b1b3b48250acb Hari Bathini     2019-09-11  652  		for (i = 0; i < len / (sizeof(*prop) * 4); i++) {
-7b1b3b48250acb Hari Bathini     2019-09-11  653  			u64 base, end;
-7b1b3b48250acb Hari Bathini     2019-09-11  654  
-7b1b3b48250acb Hari Bathini     2019-09-11  655  			base = of_read_number(prop + (i * 4) + 0, 2);
-7b1b3b48250acb Hari Bathini     2019-09-11  656  			end = base;
-7b1b3b48250acb Hari Bathini     2019-09-11  657  			end += of_read_number(prop + (i * 4) + 2, 2);
-7b1b3b48250acb Hari Bathini     2019-09-11  658  			if (end > OPAL_FADUMP_MIN_BOOT_MEM) {
-7b1b3b48250acb Hari Bathini     2019-09-11  659  				pr_err("F/W load area: 0x%llx-0x%llx\n",
-7b1b3b48250acb Hari Bathini     2019-09-11  660  				       base, end);
-7b1b3b48250acb Hari Bathini     2019-09-11  661  				pr_err("F/W version not supported!\n");
-7b1b3b48250acb Hari Bathini     2019-09-11  662  				return;
-7b1b3b48250acb Hari Bathini     2019-09-11  663  			}
-7b1b3b48250acb Hari Bathini     2019-09-11  664  		}
-7b1b3b48250acb Hari Bathini     2019-09-11  665  	}
-7b1b3b48250acb Hari Bathini     2019-09-11  666  
-41df5928721ff4 Hari Bathini     2019-09-11  667  	fadump_conf->ops		= &opal_fadump_ops;
-41df5928721ff4 Hari Bathini     2019-09-11  668  	fadump_conf->fadump_supported	= 1;
-2a1b06dd3a17ac Hari Bathini     2019-09-11  669  
-7dee93a9a8808b Hari Bathini     2019-09-11  670  	/*
-7dee93a9a8808b Hari Bathini     2019-09-11  671  	 * Firmware supports 32-bit field for size. Align it to PAGE_SIZE
-7dee93a9a8808b Hari Bathini     2019-09-11  672  	 * and request firmware to copy multiple kernel boot memory regions.
-7dee93a9a8808b Hari Bathini     2019-09-11  673  	 */
-e96d904ede6756 Christophe Leroy 2020-04-20  674  	fadump_conf->max_copy_size = ALIGN_DOWN(U32_MAX, PAGE_SIZE);
-7dee93a9a8808b Hari Bathini     2019-09-11  675  
-2a1b06dd3a17ac Hari Bathini     2019-09-11  676  	/*
-2a1b06dd3a17ac Hari Bathini     2019-09-11  677  	 * Check if dump has been initiated on last reboot.
-2a1b06dd3a17ac Hari Bathini     2019-09-11  678  	 */
-2a1b06dd3a17ac Hari Bathini     2019-09-11  679  	prop = of_get_flat_dt_prop(dn, "mpipl-boot", NULL);
-2a1b06dd3a17ac Hari Bathini     2019-09-11  680  	if (!prop)
-2a1b06dd3a17ac Hari Bathini     2019-09-11  681  		return;
-2a1b06dd3a17ac Hari Bathini     2019-09-11  682  
-2a1b06dd3a17ac Hari Bathini     2019-09-11 @683  	ret = opal_mpipl_query_tag(OPAL_MPIPL_TAG_KERNEL, &addr);
+vim +/writeq +152 drivers/soc/sifive/sifive_l2_cache.c
 
-:::::: The code at line 683 was first introduced by commit
-:::::: 2a1b06dd3a17ac278494da3c15cac84684346d22 powerpc/fadump: process the crashdump by exporting it as /proc/vmcore
-
-:::::: TO: Hari Bathini <hbathini@linux.ibm.com>
-:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
+   123	
+   124	#ifdef CONFIG_SIFIVE_L2_FLUSH
+   125	void sifive_l2_flush64_range(unsigned long start, unsigned long len)
+   126	{
+   127		unsigned long line;
+   128	
+   129		if(!l2_base) {
+   130			pr_warn("L2CACHE: base addr invalid, skipping flush\n");
+   131			return;
+   132		}
+   133	
+   134		/* TODO: if (len == 0), skipping flush or going on? */
+   135		if(!len) {
+   136			pr_debug("L2CACHE: flush64 range @ 0x%lx(len:0)\n", start);
+   137			return;
+   138		}
+   139	
+   140		/* make sure the address is in the range */
+   141		if(start < CONFIG_SIFIVE_L2_FLUSH_START ||
+ > 142		   (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
+   143				     CONFIG_SIFIVE_L2_FLUSH_SIZE)) {
+   144			pr_warn("L2CACHE: flush64 out of range: %lx(%lx), skip flush\n",
+   145				start, len);
+   146			return;
+   147		}
+   148	
+   149		mb();	/* sync */
+   150		for (line = start; line < start + len;
+   151		     line += SIFIVE_L2_FLUSH64_LINE_LEN) {
+ > 152			writeq(line, l2_base + SIFIVE_L2_FLUSH64);
+   153			mb();
+   154		}
+   155	}
+   156	EXPORT_SYMBOL_GPL(sifive_l2_flush64_range);
+   157	#endif
+   158	
 
 -- 
 0-DAY CI Kernel Test Service

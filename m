@@ -2,166 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BD9350D19B
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 14:15:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE3250D1A1
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 14:15:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230437AbiDXMNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 08:13:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52410 "EHLO
+        id S230095AbiDXMOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 08:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbiDXMNb (ORCPT
+        with ESMTP id S229437AbiDXMOf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 08:13:31 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2104.outbound.protection.outlook.com [40.107.215.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D41DF22
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 05:10:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Os7rfj5IbVNF2D4Wg9fHKiv533Y52BU+LR44978M8JwWaKYNq4236ePNdkP1CovOA+LFFTYpmeN9OYNd+KczVinkh8TLQg8QhEaZdi375rvsVoKQgLrt8e44KDkidZGpIBqjlO7x/DjcJPqfDw6HmgkXtfQxGcBGoX9iWU2HR391KBWZe7vHLmZU5xhVEenC4h4ZbEU7ofuOo2rO2kQWzjwslXoWOBLzEfHTml8Cs9pto/mD/dcoJLw0gBlGkxvdCA98/ZkhHduKmpj/E/QYu58TOEMjkN4z5blh4kYZ40R39RAAP9X+bpVTHDibUATJkNoyBW0ZAoD0gO5RVsu0vw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iHnB7VkpXTIHOYVEx4eJrFcQbJi2U751C2sU2QA2x38=;
- b=MqNR2qZ9S6gaREU3HON7vD/rGE1kwXZO52k0PVy5F3WX8B6EirA0DX+eIL9mtRZieety7wRDS+veDEtiAhZvkO/EocHZMKceTJiD0Cgi6YKtFIn1r3wdIDuc493vsdvN6zIEvoxIU3bpLdZpzMAq2eY1RFJHlHMtTgGf4CXh352y3Cyujg3Jvy5f8QcbiZKOy/CHrz27RVtzv/dx8Jpr5KzKiVhbyEsl9P2G9PF+/ViJ6i1GB5LQc2Q+sf9R+UtDEn1p1RV0/0kIpGqr1PKnfPnuXapEc48iT/6s3jThUQBrNZWbLv4acx8ySLrjLBqh/HVy4ZEVkL1lphXGzhHCTA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iHnB7VkpXTIHOYVEx4eJrFcQbJi2U751C2sU2QA2x38=;
- b=NG9CpwrHgMoC4G4kU0SzW/RsFPEGzTCC+as1GjUOeA8DG5YsJPpvOZz32tfHOk7MHaHocxNx202kc+fqsvmk8S6UYsxFoBHJzd9XeSjZPyVzbzGEd5p8S0VxRK7f9XMD9tNor0q4heQ0EzYDpblZRbmPsyqkvUwjrZFxt80iWl4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from HK2PR06MB3492.apcprd06.prod.outlook.com (2603:1096:202:2f::10)
- by PS1PR06MB2712.apcprd06.prod.outlook.com (2603:1096:803:4b::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Sun, 24 Apr
- 2022 12:10:15 +0000
-Received: from HK2PR06MB3492.apcprd06.prod.outlook.com
- ([fe80::88e1:dc04:6851:ad08]) by HK2PR06MB3492.apcprd06.prod.outlook.com
- ([fe80::88e1:dc04:6851:ad08%7]) with mapi id 15.20.5186.020; Sun, 24 Apr 2022
- 12:10:15 +0000
-From:   Guo Zhengkui <guozhengkui@vivo.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-kernel@vger.kernel.org (open list)
-Cc:     zhengkui_guo@outlook.com, Guo Zhengkui <guozhengkui@vivo.com>,
-        Qing Wang <wangqing@vivo.com>
-Subject: [PATCH v2] trace: use WARN instead of printk and WARN_ON
-Date:   Sun, 24 Apr 2022 20:09:54 +0800
-Message-Id: <20220424120954.3368-1-guozhengkui@vivo.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20211207091843.0765fa3f@gandalf.local.home>
-References: <20211207091843.0765fa3f@gandalf.local.home>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: HK0PR03CA0112.apcprd03.prod.outlook.com
- (2603:1096:203:b0::28) To HK2PR06MB3492.apcprd06.prod.outlook.com
- (2603:1096:202:2f::10)
+        Sun, 24 Apr 2022 08:14:35 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D107131216
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 05:11:34 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id s17so21036367plg.9
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 05:11:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=IL/vyz5qrTlppVho9+70kMyfzlTej7WAY5KSj2y4EyI=;
+        b=erpCEIfyoXzHme9/PUZhCvhjhWeyN7F+Rp3dbt53zb0Skvff4fz74bpfaL1ooYJgNc
+         dSZWWD609Lh3Oh8Ql2J7wr62b7iE/nUr6idAp4vE4o9dRUgX2RuoORGKQsXdmOtX+3x9
+         OhYEFZoJAIDfjIynceRGpnB5l0yMJvlt/7/fvBcUAuHFPwKYkBFxAiChEoEanyp669E4
+         PL9L1PVvXK7W0bQbrZeXPs1yKg0qa0RQd9xP43lbT5/1pHrfmSaAQuVQE/kDYQ8C4PuT
+         ELmxTLxt1oU8hyIgsBj8rqHPVoY4E9FCTIdUkwvEZ407MdUDqojfxMmCotrbODJigT+k
+         Iy7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IL/vyz5qrTlppVho9+70kMyfzlTej7WAY5KSj2y4EyI=;
+        b=qY877/rBWIEkHX1bMDvRpQ7VnZpDG5krbRSWnJ+jnEGuD0E4cQM2clpNpD1rCgdXA2
+         DPyYsNwgXQT/ACCgy8gDT6lY8b1j2EfT8kc0QG22R7Sqid5EX4pdPXunLMNN4Xv8mIrI
+         vaLvSgnypmLa+Tyc/QZ5NS0IFoauYFsRa5Lvf1oO3f+rj4iSaB4ZlMyab+05ZOT3Ca0B
+         kBCX3Z9eMkhgO/xpo3BugvohE/mnWDMUiVFsqN22xZlnMWoLX3v6YXxRmt4CvPgFsAIb
+         jb4UOXkZorkTIomn3Q9JHk5dzpvMWUfcgKI28+0mp/fWvTxuELVeo10K0SGNHNI75sBH
+         /UVw==
+X-Gm-Message-State: AOAM530J2N95EAQanT+vKFIZdTzBwm92usmcL7386bUS0CjjSdKeYWJk
+        bA10sN6A4epPTUojjaqEWs/yA7zID8T6Rw==
+X-Google-Smtp-Source: ABdhPJyVAIYGajv6yXgDInlOxdYxEVaIrodUqjo9KXUdb/sF7Fyop5UJJ4ktxGhp9UxALK7O1fhqVg==
+X-Received: by 2002:a17:902:d5cd:b0:156:6263:bbc7 with SMTP id g13-20020a170902d5cd00b001566263bbc7mr13834602plh.160.1650802294179;
+        Sun, 24 Apr 2022 05:11:34 -0700 (PDT)
+Received: from ArchDesktop ([14.100.36.163])
+        by smtp.gmail.com with ESMTPSA id x184-20020a6286c1000000b0050ad3051f53sm8776436pfd.147.2022.04.24.05.11.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Apr 2022 05:11:33 -0700 (PDT)
+Date:   Sun, 24 Apr 2022 20:11:30 +0800
+From:   Solomon Tan <wjsota@gmail.com>
+To:     Michael Straube <straube.linux@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [BUG] staging: r8188eu: KASAN: slab-out-of-bounds in
+ rtw_cmd_thread
+Message-ID: <YmU+cqEZfrGz5XsT@ArchDesktop>
+References: <67e2d10b-7f0f-9c5a-ce31-376b83ffba9e@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6a31ac0f-bf08-4a0e-b8d2-08da25eb63bb
-X-MS-TrafficTypeDiagnostic: PS1PR06MB2712:EE_
-X-Microsoft-Antispam-PRVS: <PS1PR06MB2712E30ADD0557633FD58869C7F99@PS1PR06MB2712.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 76wOKJZJW7AvPJjO787LETbV1wQ54mbHkR3KUoAWxIOwArUd8D6vEaslMvkVdiMVW0Xkfn5IW9RSQu9OtlOREV8A4Z5SUs0M7189xnTB1x7IX47XlRGrSwNl343PdTHLOHj6IPObKIxBelU7vETzT2QEPLMYqLOumB2D8UKMSae86g4IhLMFkVfVu8E25F7zsK02+B4Ii8dZU3NijuI4FEHNvGUsmdb9vjjW9KBUefWpBCXZWTNuqNhIEYvk5tub79FqJxsxDXP+tgr2VYiF0sdd8kqZUnwhSx5ImCuNKefjTIGg4OCvP1lwCAAQuazlEDGvMEEe9nThC/K1m29vcVvCHQcTDU0oDqrTtj6X/nztTm1geRLXSS30juOPoj5q5PZkW+NJ5SCCwUDj+8crdTeI1xUzv9N+jdA/BuJyrcpE2cdMwKOjAnBgIiVRAXtt/oEUBqPQ2smHr13xF7Wm/2HABVg6MKmGM5FZ1bOmTd4iW79IwlAzWZv2mAijTXUm9tMoxtAw3nEkS8N+D24x5HNErenFK3RkCDkG+7UGS4Kl7qIkzFt3lgKBv0fHb+l6tbuJ44MwbGQRVnV23QahE8UehS43/CKH6vtWghF5hqRGaaoPehKk5WQGS+oEnOIs1djT686UYacWOJgtpDuu9KK72sV1I7NzxFF0KU/S/tnZcL+fJrmG1JoyxwsAAK0XKg5zp50ahFYbh3tDhhARMg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK2PR06MB3492.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6506007)(83380400001)(2906002)(6486002)(66556008)(66476007)(6512007)(8676002)(4326008)(1076003)(2616005)(107886003)(8936002)(5660300002)(52116002)(86362001)(26005)(186003)(66946007)(508600001)(316002)(54906003)(110136005)(6666004)(38350700002)(38100700002)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ihQdhDF0KN39gsGGqSducGY+S7ybLV64+ASEMT/ktPmjkk4xxbfCOWrVOoxm?=
- =?us-ascii?Q?V1vbUO0v2aSAsMZVwfRo/C40g7dThphbmaYSorUz5IqkNVbENSdGhZG0BZvu?=
- =?us-ascii?Q?p+a+8ZsEQyyEcG6pZ/0RyWeW7cMKpz+jlDb00b0nYTxjEjnr4deyxLz/cQtU?=
- =?us-ascii?Q?PMBqbeh8i2vsgAuAadAYaBzC2UJzLPS9hZ2zCI7RssfT/YsdXz4N4wXUP+8k?=
- =?us-ascii?Q?8AW5KwgqQn/DOkN3E7/U1Qe4n1vb2fjlAS57j9+Jf3WX5mdVFrwHff6NC2O9?=
- =?us-ascii?Q?c7Lj9unfoNO6gGzlJNqMccu2OLNAQNK5GVAKvnkM7mGHQtBwvlQwKw7pIR/z?=
- =?us-ascii?Q?N6ATsoIArsdOVP/2//255tZSKgWTQDq9XOWFLMmliz4hN+mIM7GRoeQF9TOj?=
- =?us-ascii?Q?0fVcjzoKR5//disiXd2SwRBC9fexZYOZu1TWPV1a3LWivDQAXMUzE2uqmAuD?=
- =?us-ascii?Q?0PO2Bt0DhnsdBcnPP89dA0MEeS04ZpxIt6YmkGgbF7qWQLuAIbO8/yLgCkM/?=
- =?us-ascii?Q?3h5XSOXsE191B1wgyUASnEhUranXSCtLsRRBLoqhQmqigEN6BIykZcx9xxsI?=
- =?us-ascii?Q?9LOwzvcSXJGAosoMCOrEYyDVxB7wsAXdg7d+ypPa4vJk5359AYgFowxapfT7?=
- =?us-ascii?Q?YDbungM5NkpIeUb5vGcOPBYiH7pkF8ZfH++Rak/tuWLqSUkQosP1UJBU5jNM?=
- =?us-ascii?Q?OB0VC1gaa1GPb0ZETAe3ixBKk/rdRwhQlcpSxaV0On5SdEcBiQLEIsRXoe/0?=
- =?us-ascii?Q?CXb6Tw8/todbhw3ue6ktNKgZ0SPgA+6CJm/Bizo7jhW/dXuYANS3Jkshd3Ax?=
- =?us-ascii?Q?4YFWgaA2iLGqJvCA+iNFJqCXEtTz98QFZrztukXg4un5Nju2+0KOqzpQ/0Li?=
- =?us-ascii?Q?LOqAL3lDb893knkuD+6Sj+STI9/U7CA9lU70kPeV4EzCHa4WUqHBrBquN4pY?=
- =?us-ascii?Q?b0HljIdu+fzQjV8WV4rZWVa4L/bH2aVRGuJZMgL4KZ6uY7ykWtba1RKn4MZe?=
- =?us-ascii?Q?+zcdH4a8vJWVWZeT9DfjuzntftF8zV1mlMCkqDaWbTP4Ezdl43zWJP3XGko9?=
- =?us-ascii?Q?sPyZt8AXv62AtJ++OobXkzfoFHg1iczqGigBvPZQhr9hIlqycwiS3qRAIoLk?=
- =?us-ascii?Q?2rJl6aztkeAQX66tsi9lXL+Xr3acD5gKefc0LbCB6h4VxVfVIYtEtL4peiE+?=
- =?us-ascii?Q?S0mF0DNNcpMesIBpdnfS+b+qnknngsiw3DErXcyKKv9DMoAwaEo6+i5lAZwy?=
- =?us-ascii?Q?ZkWDRg/CxKig17lG870f3DJgL/QDLqeal0zC+EFxxVPfqW1JYTFdOiF3XMCh?=
- =?us-ascii?Q?WnG+uHFFqhebFonAMn3KMz1311IvG1FB+F0nvjUd3YtdhOrtvkZW44OhZ3G3?=
- =?us-ascii?Q?jiP8+0iACNdnZLE3R1x6HmS/hHuMZaUVuJyMtybKa7O7J4LvpmfVgGTZmUkJ?=
- =?us-ascii?Q?1T5u60CKjrygZOZXhpYRlARPgT9ntB0cEXZJMaeaOCmRrvoFzIZ4yIKhWdTx?=
- =?us-ascii?Q?+rBCOuDcGjHns5IUyOnVsEhSCTV3OOtDTotPm1j1KhJ9vOXWEr+ouzAommKd?=
- =?us-ascii?Q?Daf9gjvoxWb0SW/UJz6f24FpSxBxk0YEYOdKpds/cGWFeavjfpHaZ1FGsxYZ?=
- =?us-ascii?Q?OfSy90UHNKBJ1n2khDDTaGn1Us0cn9rsp1zfwks1MtUoqehZe/svX4izcqrt?=
- =?us-ascii?Q?ZRIWk1tKQzBzeLpRZUKijYN/qaKx6xpdL/N6Fdx5sMjGi332NNgab3CkaEZh?=
- =?us-ascii?Q?zzUn7y9icg=3D=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6a31ac0f-bf08-4a0e-b8d2-08da25eb63bb
-X-MS-Exchange-CrossTenant-AuthSource: HK2PR06MB3492.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2022 12:10:14.8698
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qaBdp07jebg4eMdCbkuEf8r4JS8NAbAlEct8GljaJSH/jV95XrcVBfhLTQQA250BATW3wQhm5hhTftgOH4Po2Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PS1PR06MB2712
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <67e2d10b-7f0f-9c5a-ce31-376b83ffba9e@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use `WARN(cond, ...)` instead of `if (cond)` + `printk(...)` +
-`WARN_ON(1)`.
+On Sun, Apr 24, 2022 at 12:00:12PM +0200, Michael Straube wrote:
+> Hi,
+> 
+> It looks like
+> commit 0afaa121813e ("staging: r8188eu: use in-kernel ieee channel")
+> intoduced a. See KASAN output below.
+> 
+> That commit replaced the use of struct rtw_ieee80211_channel with struct
+> ieee80211_channel.
+> 
+> There are several calls to memcpy that used sizeof(struct
+> rtw_ieee80211_channel)
+> and now use sizeof(struct ieee80211_channel) but the sizes of these two
+> structures are not equal.
+> 
 
-Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Qing Wang <wangqing@vivo.com>
-Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
----
-v1 -> v2: Put WARN in the condition according to Steven's suggestion.
+Oh no. When does this issue get triggered?
 
- kernel/trace/trace_output.c | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+> regards,
+> Michael
+> 
+> dmesg:
+> 
+>  ==================================================================
+> [  422.214237] BUG: KASAN: slab-out-of-bounds in rtw_cmd_thread+0x1e8/0x430
+> [r8188eu]
+> [  422.214277] Write of size 3600 at addr ffff8881e149d200 by task
+> RTW_CMD_THREAD/2563
+> 
+> [  422.214289] CPU: 11 PID: 2563 Comm: RTW_CMD_THREAD Tainted: G C OE
+> 5.18.0-rc2-staging+ #47 94e3ca73bebf5b7fec506721475e4fff2a023bb9
+> [  422.214301] Hardware name: Gigabyte Technology Co., Ltd. B550M S2H/B550M
+> S2H, BIOS F15a 02/16/2022
+> [  422.214309] Call Trace:
+> [  422.214313]  <TASK>
+> [  422.214317]  dump_stack_lvl+0x45/0x5b
+> [  422.214327]  print_report.cold+0x5e/0x5dc
+> [  422.214335]  ? kasan_set_track+0x21/0x30
+> [  422.214342]  ? kasan_set_free_info+0x20/0x40
+> [  422.214349]  ? rtw_cmd_thread+0x1e8/0x430 [r8188eu
+> 91924fe1575bf49b9b37985ffde2c585d847446d]
+> [  422.214386]  kasan_report+0xab/0x120
+> [  422.214394]  ? rtw_cmd_thread+0x1e8/0x430 [r8188eu
+> 91924fe1575bf49b9b37985ffde2c585d847446d]
+> [  422.214430]  kasan_check_range+0xf6/0x1d0
+> [  422.214436]  memcpy+0x39/0x60
+> [  422.214442]  rtw_cmd_thread+0x1e8/0x430 [r8188eu
+> 91924fe1575bf49b9b37985ffde2c585d847446d]
+> [  422.214479]  ? rtw_setassocsta_cmdrsp_callback+0xd0/0xd0 [r8188eu
+> 91924fe1575bf49b9b37985ffde2c585d847446d]
+> [  422.214516]  kthread+0x15d/0x190
+> [  422.214523]  ? kthread_complete_and_exit+0x20/0x20
+> [  422.214531]  ret_from_fork+0x22/0x30
+> [  422.214540]  </TASK>
 
-diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
-index 8aa493d25c73..d89e3f7e26eb 100644
---- a/kernel/trace/trace_output.c
-+++ b/kernel/trace/trace_output.c
-@@ -778,9 +778,8 @@ int register_trace_event(struct trace_event *event)
- 
- 		list_add_tail(&event->list, list);
- 
--	} else if (event->type > __TRACE_LAST_TYPE) {
--		printk(KERN_WARNING "Need to add type to trace.h\n");
--		WARN_ON(1);
-+	} else if (WARN(event->type > __TRACE_LAST_TYPE,
-+			"Need to add type to trace.h")) {
- 		goto out;
- 	} else {
- 		/* Is this event already used */
-@@ -1571,13 +1570,8 @@ __init static int init_events(void)
- 
- 	for (i = 0; events[i]; i++) {
- 		event = events[i];
--
- 		ret = register_trace_event(event);
--		if (!ret) {
--			printk(KERN_WARNING "event %d failed to register\n",
--			       event->type);
--			WARN_ON_ONCE(1);
--		}
-+		WARN_ONCE(!ret, "event %d failed to register", event->type);
- 	}
- 
- 	return 0;
--- 
-2.20.1
+Sorry, I am not familiar with KASAN. How should I interpret this output?
+I see the paragraph above has references to rtw_cmd_thread. I assume
+that is its way of indicating that rtw_cmd_thread is the cause of the
+problem, but the one below refers to other functions. I'm not sure where
+I should start looking. I would start looking at `rtw_sitesurvey_cmd` and
+`rtw_scan_ch_decision`, which call the memcpy on the
+rtw_ieee80211_channel structure, but they are not on the call trace.
 
+> 
+> [  422.214546] Allocated by task 2522:
+> [  422.214551]  kasan_save_stack+0x1e/0x40
+> [  422.214555]  __kasan_kmalloc+0xa9/0xe0
+> [  422.214559]  rtw_init_cmd_priv+0xd6/0x1b0 [r8188eu]
+> [  422.214589]  rtw_init_drv_sw+0x21/0x370 [r8188eu]
+> [  422.214619]  rtw_drv_init+0x3a6/0x4f0 [r8188eu]
+> [  422.214649]  usb_probe_interface+0x155/0x340 [usbcore]
+> [  422.214705]  really_probe.part.0+0x11f/0x320
+> [  422.214709]  __driver_probe_device+0xe0/0x180
+> [  422.214712]  driver_probe_device+0x4d/0x170
+> [  422.214715]  __driver_attach+0x110/0x250
+> [  422.214718]  bus_for_each_dev+0xe7/0x140
+> [  422.214721]  bus_add_driver+0x25a/0x2b0
+> [  422.214723]  driver_register+0x10f/0x190
+> [  422.214726]  usb_register_driver+0x10e/0x1e0 [usbcore]
+> [  422.214780]  do_one_initcall+0x8a/0x2a0
+> [  422.214784]  do_init_module+0xe4/0x3b0
+> [  422.214787]  load_module+0x41c4/0x4650
+> [  422.214789]  __do_sys_finit_module+0x111/0x190
+> [  422.214791]  do_syscall_64+0x5c/0x80
+> [  422.214795]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> [  422.214802] Last potentially related work creation:
+> [  422.214807]  kasan_save_stack+0x1e/0x40
+> [  422.214810]  __kasan_record_aux_stack+0xb1/0xc0
+> [  422.214813]  call_rcu+0xb5/0xfc0
+> [  422.214817]  netlink_release+0x791/0xa40
+> [  422.214820]  __sock_release+0x72/0x120
+> [  422.214824]  sock_close+0x11/0x20
+> [  422.214828]  __fput+0x10c/0x400
+> [  422.214831]  task_work_run+0x8b/0xc0
+> [  422.214834]  do_exit+0x5a4/0x10e0
+> [  422.214837]  do_group_exit+0x58/0x100
+> [  422.214840]  __x64_sys_exit_group+0x28/0x30
+> [  422.214843]  do_syscall_64+0x5c/0x80
+> [  422.214846]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> [  422.214852] The buggy address belongs to the object at ffff8881e149d000
+>                 which belongs to the cache kmalloc-2k of size 2048
+> [  422.214862] The buggy address is located 512 bytes inside of
+>                 2048-byte region [ffff8881e149d000, ffff8881e149d800)
+> 
+> [  422.214874] The buggy address belongs to the physical page:
+> [  422.214879] page:000000003f187866 refcount:1 mapcount:0
+> mapping:0000000000000000 index:0x0 pfn:0x1e1498
+> [  422.214883] head:000000003f187866 order:3 compound_mapcount:0
+> compound_pincount:0
+> [  422.214885] flags:
+> 0x17ffffc0010200(slab|head|node=0|zone=2|lastcpupid=0x1fffff)
+> [  422.214891] raw: 0017ffffc0010200 ffffea0004f1ca00 dead000000000002
+> ffff888100042f00
+> [  422.214894] raw: 0000000000000000 0000000000080008 00000001ffffffff
+> 0000000000000000
+> [  422.214896] page dumped because: kasan: bad access detected
+> 
+> [  422.214900] Memory state around the buggy address:
+> [  422.214905]  ffff8881e149d500: 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> 00 00
+> [  422.214914]  ffff8881e149d580: 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> 00 00
+> [  422.214921] >ffff8881e149d600: fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+> fc fc
+> [  422.214927]                    ^
+> [  422.214932]  ffff8881e149d680: fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+> fc fc
+> [  422.214939]  ffff8881e149d700: fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+> fc fc
+> [  422.214946]
+> ==================================================================

@@ -2,213 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75B1E50D15E
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 12:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B825750D161
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 13:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236948AbiDXLBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 07:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44820 "EHLO
+        id S239211AbiDXLDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 07:03:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234070AbiDXLBG (ORCPT
+        with ESMTP id S239199AbiDXLDb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 07:01:06 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D75612638
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 03:58:06 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id m20so3723625ejj.10
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 03:58:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=dcNY2DH36HPv7NbH4purwsl1q+khfyhVwK0k3NHViJQ=;
-        b=KCChKWY3LlDWgFSBqGp9yeG4T9gr43DDNemWkKzBgI7Koo72cNSdkdmgD8N29EFfwu
-         3y/8KEI93fLbbeCmaQjILvMimg+TDsF+7UevM71yuisnE6oNQNhEEHEugeQ8wGRkoDEp
-         lfmQAcL/guRAbuS9F5y6ldlpurqt25X9MVdJE8mQk0nH5XH+Gs0YlVBn99JGraozOXNI
-         OEhOKkDjysukELr7lVM/FLjw3bRMGMFeuwpGzpQkzpHpZDSkfWMRL2eccdjUBESBguhC
-         6uVrQ8FdlZI7AfkGxtxe96CpbNfqPdx/XxeL/IS9VPgcoxvZLeJ9W4QN0OWjBVTYmKwV
-         mrNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dcNY2DH36HPv7NbH4purwsl1q+khfyhVwK0k3NHViJQ=;
-        b=XmL/4PH7niNWYnZEsq/bk9xKizQe258C6B7/dsY6tseMmzIF3F9HIvl3WRyQjBvkhu
-         q9J1Dq/RBLnc7+e7PDm78HokE8lrDOSxsuztg8B8lPf/dFUdkAHC4rZy8+wZPVyIVXRO
-         HFBdy82QL1IvRqKSIGba6lcs0jYqS0PDWg4ybsulBwkTDpVWrROSGpDsPi17pF3IPNwN
-         Fh4q/0K4SzkLIjGK4Gt30w6eP+KozvzVY+kv7x1HFusN4//A2LvfKNSTR9+FW2TcSNcp
-         CYbkPTjr05ZWeo2QDKJJ1DdDeAr1IQaAtEfOt3/fUSAfHFt/MM870/JKlDoPXttnJEmd
-         z9gA==
-X-Gm-Message-State: AOAM531QmSvP/pv4/eLoyYVNWHkAcvO9uUtvkdyOMcXYKH39LYbXOcJ2
-        meDF9SpMZkOFCiTp4NTMjItyAA==
-X-Google-Smtp-Source: ABdhPJyUFJ0vMQAvNuwElDV7zr/Z3xxqNhh5KELlIMnFlY1Kk/PGfBGshVXfd3Me0GasMv02FUY1+A==
-X-Received: by 2002:a17:906:94d6:b0:6e8:d608:c960 with SMTP id d22-20020a17090694d600b006e8d608c960mr11929923ejy.96.1650797884710;
-        Sun, 24 Apr 2022 03:58:04 -0700 (PDT)
-Received: from [192.168.0.235] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id y3-20020a50ce03000000b00425bfb7f940sm2997125edi.11.2022.04.24.03.58.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 24 Apr 2022 03:58:04 -0700 (PDT)
-Message-ID: <2642dc72-81c3-b535-a658-025eb23679d7@linaro.org>
-Date:   Sun, 24 Apr 2022 12:58:03 +0200
+        Sun, 24 Apr 2022 07:03:31 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0162CD63
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 04:00:28 -0700 (PDT)
+Received: from kwepemi100005.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KmQCc1z70zhYT6;
+        Sun, 24 Apr 2022 19:00:12 +0800 (CST)
+Received: from kwepemm600020.china.huawei.com (7.193.23.147) by
+ kwepemi100005.china.huawei.com (7.221.188.155) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sun, 24 Apr 2022 19:00:26 +0800
+Received: from DESKTOP-E0KHRBE.china.huawei.com (10.67.111.5) by
+ kwepemm600020.china.huawei.com (7.193.23.147) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sun, 24 Apr 2022 19:00:25 +0800
+From:   Shaobo Huang <huangshaobo6@huawei.com>
+To:     <glider@google.com>, <elver@google.com>, <dvyukov@google.com>,
+        <akpm@linux-foundation.org>, <kasan-dev@googlegroups.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+CC:     <young.liuyang@huawei.com>, <zengweilin@huawei.com>,
+        <chenzefeng2@huawei.com>, <nixiaoming@huawei.com>,
+        <wangbing6@huawei.com>, <huangshaobo6@huawei.com>,
+        <wangfangpeng1@huawei.com>, <zhongjubin@huawei.com>
+Subject: [PATCH v2] kfence: enable check kfence canary in panic via boot param
+Date:   Sun, 24 Apr 2022 18:59:49 +0800
+Message-ID: <20220424105949.50016-1-huangshaobo6@huawei.com>
+X-Mailer: git-send-email 2.21.0.windows.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/5] dt-bindings: mtd: samsung-onenand: Add new binding
-Content-Language: en-US
-To:     Jonathan Bakker <xc-racer2@live.ca>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Kyungmin Park <kyungmin.park@samsung.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>
-References: <20220423034316.366488-2-xc-racer2@live.ca>
- <CY4PR04MB05678FDFC8BF8B15174ED639CBF69@CY4PR04MB0567.namprd04.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CY4PR04MB05678FDFC8BF8B15174ED639CBF69@CY4PR04MB0567.namprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.111.5]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600020.china.huawei.com (7.193.23.147)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/04/2022 05:45, Jonathan Bakker wrote:
-> Add a yaml binding document for the Samsung OneNAND controller.
-> It is found in several older Samsung SoC, notably the S5PV210.
-> 
-> Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
-> ---
->  .../bindings/mtd/samsung,onenand.yaml         | 89 +++++++++++++++++++
->  1 file changed, 89 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mtd/samsung,onenand.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/mtd/samsung,onenand.yaml b/Documentation/devicetree/bindings/mtd/samsung,onenand.yaml
-> new file mode 100644
-> index 000000000000..25012248add6
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mtd/samsung,onenand.yaml
-> @@ -0,0 +1,89 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mtd/samsung,onenand.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Samsung OneNAND controller
-> +
-> +maintainers:
-> +  - Jonathan Bakker <xc-racer2@live.ca>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - samsung,s3c6400-onenand
-> +      - samsung,s3c6410-onenand
-> +      - samsung,s5pv210-onenand
-> +
-> +  reg:
-> +    maxItems: 3
+From: huangshaobo <huangshaobo6@huawei.com>
 
-Please describe the items or add reg-names.
+when writing out of bounds to the red zone, it can only be
+detected at kfree. However, the system may have been reset
+before freeing the memory, which would result in undetected
+oob. Therefore, it is necessary to detect oob behavior in
+panic. Since only the allocated mem call stack is available,
+it may be difficult to find the oob maker. Therefore, this
+feature is disabled by default and can only be enabled via
+boot parameter.
 
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    items:
-> +      - const: bus
-> +      - const: onenand
-> +
-> +  clocks:
-> +    minItems: 2
-> +    maxItems: 2
+Suggested-by: chenzefeng <chenzefeng2@huawei.com>
+Signed-off-by: huangshaobo <huangshaobo6@huawei.com>
+---
+v2:
+- it is only detected in panic.
+- it is disabled by default.
+- can only be enabled via boot parameter.
+- the code is moved to the specified partition.
+Thanks to Marco for the valuable modification suggestion.
+---
+ mm/kfence/core.c | 33 +++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-Drop minItems.
+diff --git a/mm/kfence/core.c b/mm/kfence/core.c
+index 9b2b5f56f4ae..0b2b934a1666 100644
+--- a/mm/kfence/core.c
++++ b/mm/kfence/core.c
+@@ -29,6 +29,8 @@
+ #include <linux/slab.h>
+ #include <linux/spinlock.h>
+ #include <linux/string.h>
++#include <linux/notifier.h>
++#include <linux/panic_notifier.h>
+ 
+ #include <asm/kfence.h>
+ 
+@@ -99,6 +101,10 @@ module_param_named(skip_covered_thresh, kfence_skip_covered_thresh, ulong, 0644)
+ static bool kfence_deferrable __read_mostly = IS_ENABLED(CONFIG_KFENCE_DEFERRABLE);
+ module_param_named(deferrable, kfence_deferrable, bool, 0444);
+ 
++/* If true, check kfence canary in panic. */
++static bool kfence_check_on_panic;
++module_param_named(check_on_panic, kfence_check_on_panic, bool, 0444);
++
+ /* The pool of pages used for guard pages and objects. */
+ char *__kfence_pool __read_mostly;
+ EXPORT_SYMBOL(__kfence_pool); /* Export for test modules. */
+@@ -727,6 +733,30 @@ static int __init kfence_debugfs_init(void)
+ 
+ late_initcall(kfence_debugfs_init);
+ 
++/* === Panic Notifier ====================================================== */
++static void kfence_check_all_canary(void)
++{
++	int i;
++
++	for (i = 0; i < CONFIG_KFENCE_NUM_OBJECTS; i++) {
++		struct kfence_metadata *meta = &kfence_metadata[i];
++
++		if (meta->state == KFENCE_OBJECT_ALLOCATED)
++			for_each_canary(meta, check_canary_byte);
++	}
++}
++
++static int kfence_check_canary_callback(struct notifier_block *nb,
++					unsigned long reason, void *arg)
++{
++	kfence_check_all_canary();
++	return NOTIFY_OK;
++}
++
++static struct notifier_block kfence_check_canary_notifier = {
++	.notifier_call = kfence_check_canary_callback,
++};
++
+ /* === Allocation Gate Timer ================================================ */
+ 
+ static struct delayed_work kfence_timer;
+@@ -804,6 +834,9 @@ static void kfence_init_enable(void)
+ 	else
+ 		INIT_DELAYED_WORK(&kfence_timer, toggle_allocation_gate);
+ 
++	if (kfence_check_on_panic)
++		atomic_notifier_chain_register(&panic_notifier_list, &kfence_check_canary_notifier);
++
+ 	WRITE_ONCE(kfence_enabled, true);
+ 	queue_delayed_work(system_unbound_wq, &kfence_timer, 0);
+ 
+-- 
+2.12.3
 
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
-
-Don't need these, they come from nand-controller.
-
-> +
-> +allOf:
-> +  - $ref: nand-controller.yaml
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - samsung,s5pv210-onenand
-> +    then:
-> +      required:
-> +        - interrupts
-> +        - clock-names
-> +        - clocks
-
-Others require it as well, don't they?
-
-> +
-> +patternProperties:
-> +  "^nand@[a-f0-9]+$":
-> +    type: object
-> +    properties:
-> +      reg:
-> +        minimum: 0
-> +        maximum: 1
-> +
-> +    additionalProperties: false
-
-Also not needed.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-
-With dropping all duplicated properties from nand-controller, this can
-be unevaluatedProperties:false. Unless for some reason parts of
-nand-controller schema are not valid here?
-
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/s5pv210.h>
-> +    onenand: nand-controller@b0600000 {
-> +        compatible = "samsung,s5pv210-onenand";
-> +        reg = <0xb0600000 0x2000>,
-> +          <0xb0000000 0x20000>,
-> +          <0xb0040000 0x20000>;
-
-Align the entries with first <> entry.
-
-> +        interrupt-parent = <&vic1>;
-> +        interrupts = <31>;
-> +        clocks = <&clocks CLK_NANDXL>, <&clocks DOUT_FLASH>;
-> +        clock-names = "bus", "onenand";
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        nand@0 {
-> +          reg = <0>;
-> +        };
-> +    };
-
-
-Best regards,
-Krzysztof

@@ -2,195 +2,360 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2404150D211
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 15:32:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F364250D214
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 15:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236414AbiDXNfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 09:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41606 "EHLO
+        id S236751AbiDXNjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 09:39:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233855AbiDXNfT (ORCPT
+        with ESMTP id S236298AbiDXNj2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 09:35:19 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082C56E8C5
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 06:32:19 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id g28so3292068ybj.10
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 06:32:18 -0700 (PDT)
+        Sun, 24 Apr 2022 09:39:28 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EEF1BF95B
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 06:36:27 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id g23so8571277edy.13
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 06:36:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IRmaRiNmR93d3ALdKPyXM8y47NNkfnslNRnhmG/iMDk=;
-        b=qca+pRIJH72KejbH7dQifTMVoEpBq603vlSllvC8/+XJV/Ih+tkDSp1xTIZKx2bE7P
-         wCKyf1kNMUAqzbJ5iN0WRlbjk0QRWkYJp9ssmHO3QGsK+3ApoKmUX9kT32Ms56iktgng
-         94KQiSr8dxktplNVKUpJiBdArm/g8UziNqYKaykdC8pjNZQu8koRjvXnsVAhPr19DzDy
-         j0WOTu52VoVwREh+exoFNohOOkMc4YecRCzQywPfzzugMZW4px5vPpWtO1hKa4kKQfLA
-         FbV++sAaqsLLj5haVMl5kJ5xr1BiOOgUUmy/PDByI68776hGr8Wk1eDH6O/itMx2D1Bj
-         f7HA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=/EdG3nHwTGUCliwTmZJUfLlt3R/Q52QoI4USODyrZfw=;
+        b=qp1u0vQKHX7wv7Q6+Xuc8ngCOKGvQvZdVYW6bTt8Fq/+2diNEq3D3lGFa6YaH3JfBE
+         9mFClXex0r33AT8UjbYBy2txHvXkjs9jqudPi7ddcDdDexudDU7sGEgpFOMLxxXJrByX
+         t2BIkqj5E5tOd7RnHjUWlepuuCEFKtuXZ09JCKEOP10HS9qTJU83FQbdUBL6VOlfDiWs
+         QvOBG1+R6vIplrlgyMDw5SiOXQDuLK2zwBZeu7CH8aWrHO9eIMqhRDI2cWqGXAnqWp3y
+         vmTOUjiKPZDn+LZ7E4ULmOTcEzMR/6vshgsGoXrNjVJpPs7tVts5SBpJembzQrT+C8xD
+         On+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IRmaRiNmR93d3ALdKPyXM8y47NNkfnslNRnhmG/iMDk=;
-        b=sBbiytYLAdTzkEkvL00CiomBq4mcFDp5BMCNUZ5TxZp3OiuasKPN56ThLw6dA0DPdn
-         IcBvzdI04Hx0XoKjohFylHYuRgQ8ejuL5T03aFdtAQX6UUQjGqoRszVXs2cgEDDAXNHC
-         qONWjHG00zBI95X9ulkyKAH9RYTIAPcKilz8LNSpoC9dgbefINcn6KhYNKDwjoUlvAf8
-         nlLAyGD5BEsgcdEy+TOjecsQ4rn0NsoPETZrkiqJGB3Bv3ppk8esIT4Ya5G8TnRLuIL0
-         FIfUWImARbwJ3rbvlIq2XcBfarESELDMBA+9oV8+M/Fc2YhXyW/OqPhlW57e8igsw/2G
-         CWbQ==
-X-Gm-Message-State: AOAM531yI5ZJ5nJtI/6LuOS180gfDJa4mYAMreDI4517MzM3yNlWN8J8
-        BAeXrCYFO0JDe20rM7XZPkwr4GI3UHTsUdKzOuCrNw==
-X-Google-Smtp-Source: ABdhPJzWaLOsN1IPUwLXHVCcp7mmvqOiHSQKQ2cBiUtnRf6Qy+787bBKwCWUR5ByN3ohMrg0M+I4sRr+GnYQSWZGN44=
-X-Received: by 2002:a25:cc0b:0:b0:648:4590:6cb6 with SMTP id
- l11-20020a25cc0b000000b0064845906cb6mr3692673ybf.87.1650807138108; Sun, 24
- Apr 2022 06:32:18 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=/EdG3nHwTGUCliwTmZJUfLlt3R/Q52QoI4USODyrZfw=;
+        b=hN5377MjGHd8y3L2XoV9B7SGUuyZNvLq9SQfb1xV7MdmlrxR0wSfbSvdgulXQdy17C
+         tH+byuvdKGD5HaPF+cNQWybDx40tQ8mHfEI93gqN9uFBB5GsU5047JQIHFgABmFp7VJs
+         +IT9+1yjh1kiJ7FCA5bTbkxYfCwdi/TpHo0slkLxC8h7TKO5N6T+deHLkDkZPb3oHyGw
+         SJ/WX+FZ2HsWrANxrAU8DmxmIDVPKGHZxkOFFsOPZ56BcYGyoOZF/siRtnUM+HLbXCOm
+         r4Jsey7GR6CDCw4OqNj5T5Nyx5pOWhdltK0iZA8v5/rAfQZRVuNJv74v83ImbRv7FL9p
+         C5TA==
+X-Gm-Message-State: AOAM532XMC/03XKN4yuwIFsQlpPNqXdSQrlu+l33A7dQRgUha+NkqmOg
+        0TWDz/vzQYxx3CAnslTvl7shgg==
+X-Google-Smtp-Source: ABdhPJxlpPGEItk3eQNtWahn1dRXGvHCtQE8Qy+39QGAT0sGcc2ILpn0RBqxOYTuFMVN5KYjpzL1Zg==
+X-Received: by 2002:a05:6402:298c:b0:41d:6b63:aa67 with SMTP id eq12-20020a056402298c00b0041d6b63aa67mr14446366edb.42.1650807385592;
+        Sun, 24 Apr 2022 06:36:25 -0700 (PDT)
+Received: from [192.168.0.235] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id s5-20020a508dc5000000b004241a4abbdfsm3319529edh.45.2022.04.24.06.36.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 24 Apr 2022 06:36:25 -0700 (PDT)
+Message-ID: <184784e4-0a85-c0bb-fdda-b8c41d8abc0f@linaro.org>
+Date:   Sun, 24 Apr 2022 15:36:23 +0200
 MIME-Version: 1.0
-References: <20220424105949.50016-1-huangshaobo6@huawei.com>
-In-Reply-To: <20220424105949.50016-1-huangshaobo6@huawei.com>
-From:   Marco Elver <elver@google.com>
-Date:   Sun, 24 Apr 2022 15:31:42 +0200
-Message-ID: <CANpmjNPEErc2mZMSB=QyT3wq08Q4yGyTGiU3BrOBGV3R5rNw-w@mail.gmail.com>
-Subject: Re: [PATCH v2] kfence: enable check kfence canary in panic via boot param
-To:     Shaobo Huang <huangshaobo6@huawei.com>
-Cc:     glider@google.com, dvyukov@google.com, akpm@linux-foundation.org,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, young.liuyang@huawei.com,
-        zengweilin@huawei.com, chenzefeng2@huawei.com,
-        nixiaoming@huawei.com, wangbing6@huawei.com,
-        wangfangpeng1@huawei.com, zhongjubin@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] dt-bindings: soc: qcom: convert GLINK binding to yaml
+Content-Language: en-US
+To:     David Heidelberg <david@ixit.cz>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220424101637.20721-1-david@ixit.cz>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220424101637.20721-1-david@ixit.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 24 Apr 2022 at 13:00, Shaobo Huang <huangshaobo6@huawei.com> wrote:
->
-> From: huangshaobo <huangshaobo6@huawei.com>
->
-> when writing out of bounds to the red zone, it can only be
-> detected at kfree. However, the system may have been reset
-> before freeing the memory, which would result in undetected
-> oob. Therefore, it is necessary to detect oob behavior in
-> panic. Since only the allocated mem call stack is available,
-> it may be difficult to find the oob maker. Therefore, this
-> feature is disabled by default and can only be enabled via
-> boot parameter.
-
-This description is still not telling the full story or usecase. The
-story goes something like:
-"""
-Out-of-bounds accesses that aren't caught by a guard page will result
-in corruption of canary memory. In pathological cases, where an object
-has certain alignment requirements, an out-of-bounds access might
-never be caught by the guard page. Such corruptions, however, are only
-detected on kfree() normally. If the bug causes the kernel to panic
-before kfree(), KFENCE has no opportunity to report the issue. Such
-corruptions may also indicate failing memory or other faults.
-
-To provide some more information in such cases, add the option to
-check canary bytes on panic. This might help narrow the search for the
-panic cause; but, due to only having the allocation stack trace, such
-reports are difficult to use to diagnose an issue alone. In most
-cases, such reports are inactionable, and is therefore an opt-in
-feature (disabled by default).
-"""
-
-Please feel free to copy or take pieces above to complete the commit message.
-
-> Suggested-by: chenzefeng <chenzefeng2@huawei.com>
-> Signed-off-by: huangshaobo <huangshaobo6@huawei.com>
+On 24/04/2022 12:16, David Heidelberg wrote:
+> Convert Qualcomm GLINK binding to the yaml format.
+> 
+> Signed-off-by: David Heidelberg <david@ixit.cz>
 > ---
-> v2:
-> - it is only detected in panic.
-> - it is disabled by default.
-> - can only be enabled via boot parameter.
-> - the code is moved to the specified partition.
-> Thanks to Marco for the valuable modification suggestion.
-> ---
->  mm/kfence/core.c | 33 +++++++++++++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
->
-> diff --git a/mm/kfence/core.c b/mm/kfence/core.c
-> index 9b2b5f56f4ae..0b2b934a1666 100644
-> --- a/mm/kfence/core.c
-> +++ b/mm/kfence/core.c
-> @@ -29,6 +29,8 @@
->  #include <linux/slab.h>
->  #include <linux/spinlock.h>
->  #include <linux/string.h>
-> +#include <linux/notifier.h>
-> +#include <linux/panic_notifier.h>
+> v1:
+>  - remove quotes around qcom,intent
+>  - use additionalProperties
 
-Please keep these includes sorted alphabetically.
+Thank you for your patch. There is something to discuss/improve.
 
->  #include <asm/kfence.h>
->
-> @@ -99,6 +101,10 @@ module_param_named(skip_covered_thresh, kfence_skip_covered_thresh, ulong, 0644)
->  static bool kfence_deferrable __read_mostly = IS_ENABLED(CONFIG_KFENCE_DEFERRABLE);
->  module_param_named(deferrable, kfence_deferrable, bool, 0444);
->
-> +/* If true, check kfence canary in panic. */
+> 
+>  .../bindings/soc/qcom/qcom,glink.txt          |  94 ----------------
+>  .../bindings/soc/qcom/qcom,glink.yaml         | 103 ++++++++++++++++++
+>  2 files changed, 103 insertions(+), 94 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,glink.txt
+>  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,glink.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,glink.txt b/Documentation/devicetree/bindings/soc/qcom/qcom,glink.txt
+> deleted file mode 100644
+> index 1214192847ac..000000000000
+> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,glink.txt
+> +++ /dev/null
+> @@ -1,94 +0,0 @@
+> -Qualcomm GLINK edge binding
+> -
+> -This binding describes a Qualcomm GLINK edge, a fifo based mechanism for
+> -communication between subsystem-pairs on various Qualcomm platforms. Two types
+> -of edges can be described by the binding; the GLINK RPM edge and a SMEM based
+> -edge.
+> -
+> -- compatible:
+> -	Usage: required for glink-rpm
+> -	Value type: <stringlist>
+> -	Definition: must be "qcom,glink-rpm"
+> -
+> -- label:
+> -	Usage: optional
+> -	Value type: <string>
+> -	Definition: should specify the subsystem name this edge corresponds to.
+> -
+> -- interrupts:
+> -	Usage: required
+> -	Value type: <prop-encoded-array>
+> -	Definition: should specify the IRQ used by the remote processor to
+> -		    signal this processor about communication related events
+> -
+> -- qcom,remote-pid:
+> -	Usage: required for glink-smem
+> -	Value type: <u32>
+> -	Definition: specifies the identifier of the remote endpoint of this edge
+> -
+> -- qcom,rpm-msg-ram:
+> -	Usage: required for glink-rpm
+> -	Value type: <prop-encoded-array>
+> -	Definition: handle to RPM message memory resource
+> -
+> -- mboxes:
+> -	Usage: required
+> -	Value type: <prop-encoded-array>
+> -	Definition: reference to the "rpm_hlos" mailbox in APCS, as described
+> -		    in mailbox/mailbox.txt
+> -
+> -= GLINK DEVICES
+> -Each subnode of the GLINK node represent function tied to a virtual
+> -communication channel. The name of the nodes are not important. The properties
+> -of these nodes are defined by the individual bindings for the specific function
+> -- but must contain the following property:
+> -
+> -- qcom,glink-channels:
+> -	Usage: required
+> -	Value type: <stringlist>
+> -	Definition: a list of channels tied to this function, used for matching
+> -		    the function to a set of virtual channels
+> -
+> -- qcom,intents:
+> -	Usage: optional
+> -	Value type: <prop-encoded-array>
+> -	Definition: a list of size,amount pairs describing what intents should
+> -		    be preallocated for this virtual channel. This can be used
+> -		    to tweak the default intents available for the channel to
+> -		    meet expectations of the remote.
+> -
+> -= EXAMPLE
+> -The following example represents the GLINK RPM node on a MSM8996 device, with
+> -the function for the "rpm_request" channel defined, which is used for
+> -regulators and root clocks.
+> -
+> -	apcs_glb: mailbox@9820000 {
+> -		compatible = "qcom,msm8996-apcs-hmss-global";
+> -		reg = <0x9820000 0x1000>;
+> -
+> -		#mbox-cells = <1>;
+> -	};
+> -
+> -	rpm_msg_ram: memory@68000 {
+> -		compatible = "qcom,rpm-msg-ram";
+> -		reg = <0x68000 0x6000>;
+> -	};
+> -
+> -	rpm-glink {
+> -		compatible = "qcom,glink-rpm";
+> -
+> -		interrupts = <GIC_SPI 168 IRQ_TYPE_EDGE_RISING>;
+> -
+> -		qcom,rpm-msg-ram = <&rpm_msg_ram>;
+> -
+> -		mboxes = <&apcs_glb 0>;
+> -
+> -		rpm-requests {
+> -			compatible = "qcom,rpm-msm8996";
+> -			qcom,glink-channels = "rpm_requests";
+> -
+> -			qcom,intents = <0x400 5
+> -					0x800 1>;
+> -			...
+> -		};
+> -	};
+> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,glink.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,glink.yaml
+> new file mode 100644
+> index 000000000000..12ccc875ff0f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,glink.yaml
+> @@ -0,0 +1,103 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/soc/qcom/qcom,glink.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Qualcomm GLINK edge
+> +
+> +description: |
+> +  Qualcomm GLINK edge, a fifo based mechanism for communication between
+> +  subsystem-pairs on various Qualcomm platforms. Two types of edges can be
+> +  described by the binding; the GLINK RPM edge and a SMEM based.
+> +
+> +maintainers:
+> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "^(rpm-)?glink(-edge)?$"
+> +
+> +  compatible:
+> +    const: qcom,glink-rpm
+> +
+> +  label:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    description: should specify the subsystem name this edge corresponds to
 
-It should be "on panic". E.g. "If true, check all canary bytes on panic."
+Drop all this "should specify" and similar. It's making description
+unnecessary long and complicated. This is therefore "Name of subsystem
+this edge corresponds to".
 
-> +static bool kfence_check_on_panic;
-> +module_param_named(check_on_panic, kfence_check_on_panic, bool, 0444);
 > +
->  /* The pool of pages used for guard pages and objects. */
->  char *__kfence_pool __read_mostly;
->  EXPORT_SYMBOL(__kfence_pool); /* Export for test modules. */
-> @@ -727,6 +733,30 @@ static int __init kfence_debugfs_init(void)
->
->  late_initcall(kfence_debugfs_init);
->
-> +/* === Panic Notifier ====================================================== */
+> +  interrupts:
+> +    description: >
 
-Blank line between /* === ... */ and function.
+No need for '>'.
 
-> +static void kfence_check_all_canary(void)
-> +{
-> +       int i;
+> +      should specify the IRQ used by the remote processor to
+> +      signal this processor about communication related events
+> +    maxItems: 1
 > +
-> +       for (i = 0; i < CONFIG_KFENCE_NUM_OBJECTS; i++) {
-> +               struct kfence_metadata *meta = &kfence_metadata[i];
+> +  mboxes:
+> +    description: >
+
+The same.
+
+> +      reference to the "rpm_hlos" mailbox in APCS, as described
+> +      in mailbox/mailbox.txt
+
+Skip the path (entire last part of sentence).
+
 > +
-> +               if (meta->state == KFENCE_OBJECT_ALLOCATED)
-> +                       for_each_canary(meta, check_canary_byte);
-> +       }
-> +}
+> +  qcom,remote-pid:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: specifies the identifier of the remote endpoint of this edge
 > +
-> +static int kfence_check_canary_callback(struct notifier_block *nb,
-> +                                       unsigned long reason, void *arg)
-> +{
-> +       kfence_check_all_canary();
-> +       return NOTIFY_OK;
-> +}
+> +  qcom,rpm-msg-ram:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: RPM message memory resource
 > +
-> +static struct notifier_block kfence_check_canary_notifier = {
-> +       .notifier_call = kfence_check_canary_callback,
-> +};
+> +additionalProperties:
+
+This is a bit confusing... why it's not part of properties? Looks like
+mix-up schema and actually you miss proper additionalProperties.
+
+> +  type: object
+
+Eh? Object here? I don't think you tested your bindings. If you test,
+you will notice several errors.
+
+> +  properties:
+> +    qcom,glink-channels:
+
+These go to children.
+
+> +      $ref: /schemas/types.yaml#/definitions/string
+
+Isn't this a list of strings?
+
+> +      description: >
+> +        a list of channels tied to this function, used for matching
+> +        the function to a set of virtual channels
 > +
->  /* === Allocation Gate Timer ================================================ */
->
->  static struct delayed_work kfence_timer;
-> @@ -804,6 +834,9 @@ static void kfence_init_enable(void)
->         else
->                 INIT_DELAYED_WORK(&kfence_timer, toggle_allocation_gate);
->
-> +       if (kfence_check_on_panic)
-> +               atomic_notifier_chain_register(&panic_notifier_list, &kfence_check_canary_notifier);
+> +    qcom,intents:
+> +      $ref: /schemas/types.yaml#/definitions/uint32-array
+
+Should
+
+> +      description: >
+> +        a list of size, amount pairs describing what intents should
+> +        be preallocated for this virtual channel. This can be used
+> +        to tweak the default intents available for the channel to
+> +        meet expectations of the remote
+
+min/max items. This looks like matrix, but it seems is not used that way. :(
+
 > +
->         WRITE_ONCE(kfence_enabled, true);
->         queue_delayed_work(system_unbound_wq, &kfence_timer, 0);
->
-> --
-> 2.12.3
->
+> +  required:
+> +    - qcom,glink-channels
+> +
+> +  additionalProperties: false
+> +
+> +required:
+
+compatible
+
+> +  - interrupts
+> +  - mboxes
+> +  - qcom,smem
+
+What's this?
+
+> +  - qcom,local-pid
+
+This is also something new. This does not look like proper bindings
+conversion, or you copied some other bindings as template. You need to
+really go through it and clean it up.
+
+> +  - qcom,remote-pid
+
+Isn't this conflicting with part below?
+
+> +
+> +anyOf:
+> +  - required:
+> +      - qcom,remote-pid
+> +  - required:
+> +      - qcom,rpm-msg-ram
+> +
+> +examples:
+> +  # The following example represents the GLINK RPM node on a MSM8996 device,
+> +  # with the function for the "rpm_request" channel defined, which
+> +  # is used for regulators and root clocks.
+> +  - |
+> +    rpm-glink {
+> +        compatible = "qcom,glink-rpm";
+> +
+> +        interrupts = <0 168 1>;
+> +
+> +        qcom,rpm-msg-ram = <&rpm_msg_ram>;
+> +
+
+Remove unneeded blank lines between properties.
+
+> +        mboxes = <&apcs_glb 0>;
+> +
+> +        rpm-requests {
+> +            compatible = "qcom,rpm-msm8996";
+> +            qcom,glink-channels = "rpm_requests";
+> +
+> +            qcom,intents = <0x400 5
+> +                            0x800 1>;
+> +        };
+> +    };
+
+
+Best regards,
+Krzysztof

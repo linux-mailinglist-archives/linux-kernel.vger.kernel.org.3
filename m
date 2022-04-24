@@ -2,132 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA9F150D318
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 18:06:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3DFD50D31A
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 18:06:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233393AbiDXQI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 12:08:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59734 "EHLO
+        id S233525AbiDXQIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 12:08:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233650AbiDXQIJ (ORCPT
+        with ESMTP id S233806AbiDXQIg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 12:08:09 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA56334;
-        Sun, 24 Apr 2022 09:05:09 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id B38AA5C0107;
-        Sun, 24 Apr 2022 12:05:08 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Sun, 24 Apr 2022 12:05:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1650816308; x=1650902708; bh=0J
-        bi/ZnVf6vIyll9pNxOYAmjLJ95kCyVCsOJ7za8xEE=; b=AdLvEytCeqg5ayMLNV
-        kbMdE91xa/+pBtqXh5joMG4LI680YGPa8iK06FW+fih5AuorL67pknUIvGXtm9kY
-        ido5WuZmqKSPvJUrlOeP0xR7Thw7eGmGL2A66DQgoqFoVMliX3eWs8PnjPL2CVHc
-        knrH0JCRJlYAzTTj925LCxKxGJiOXuK5a6Zy4KDVZssD4De1xIGpV4LvFwOAZ94X
-        Xbqjtdb+IJ6GaHQPa2Lavs4c+FsfhoIBaqnKrrO2r0KkNUwdU7NeW/dSS5Q+uUae
-        9cxcf7Af22dnz8/PzynV5N/Z6fqXHpJbpkPusIaRVVU89pTcF8g2KuCvgdvc4s1J
-        qkNA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1650816308; x=1650902708; bh=0Jbi/ZnVf6vIyll9pNxOYAmjLJ95kCyVCsO
-        J7za8xEE=; b=qXJr1UL65/woDgSwYtU8ouPy++pCSy0SRAo3amrXrYN0VgYv/6q
-        CK41f5AJO/C69/0dErWiRpN9co/nzVpJdRVfsBMy7QI+xAjjJTRTrSgZeaDjpo2C
-        fRpBKeUxGxfShznq1IeJllgTHzYDXV0HvSYWrScP1HLvoVo7MSlLH30orx5CoJrL
-        pfopt8uewRyMzxXlQ45YnF6W5miOUcQxZy3bRyK51mnQw5qbtZR4u7mlCbj3+/pG
-        qwnZu0VQ+F9mNTNsRN9e9d2AoDOGjI82v4vI66IRk01px/Jzxqg+SxsNIXewosq5
-        BAr9AihdbI4sj23Ss623JV8On+ZT79h509w==
-X-ME-Sender: <xms:NHVlYhRNFQwvvPwJZZaQ-Owyb6KjE7Wp8afyrMpI1kVmsFQPZqt2cA>
-    <xme:NHVlYqzlt_b6Uwv8fITWxyzVdbtLhRWUSpZARxJ_FlVuLQadO7Bqd2NicOFq2abDd
-    Dz24mJV0ja3BWMTaw>
-X-ME-Received: <xmr:NHVlYm2qlR5JxjiTKHrIuVR9048mCxn5C3XNIs7sMfLR6yb0rOmX_c1FmhiWhdKR5cmyQ7TeTmRyF4W1mi8moKDR3XXCeJWzBkjsCyvLIopmCZqwGJIpEnHyzT9yCHXcgbXGsQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrtdelgdellecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
-    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
-    frrghtthgvrhhnpedukeetueduhedtleetvefguddvvdejhfefudelgfduveeggeehgfdu
-    feeitdevteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:NHVlYpDqNmQIkTta8itxEmrB32HBRFG7avLYPix2OX4cJpGT4xeSRQ>
-    <xmx:NHVlYqgDI1sM_778-sNzd6oFspyb8SklIRjZIO3MCX_uqjAe2MxBOw>
-    <xmx:NHVlYtoa-NL325qoeaU44pFok7LrspcaiQYSs5uABVd909VMT8HstQ>
-    <xmx:NHVlYlUfgFTuljxbN07loD5PPHg7T4h0-pgwiIUBR4_w2SrJgBjkzw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 24 Apr 2022 12:05:08 -0400 (EDT)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>, Ondrej Jirman <x@xff.cz>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Samuel Holland <samuel@sholland.org>
-Subject: [PATCH v3 4/4] [DO NOT MERGE] arm64: dts: allwinner: pinephone: Add keyboard
-Date:   Sun, 24 Apr 2022 11:04:57 -0500
-Message-Id: <20220424160458.60370-5-samuel@sholland.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220424160458.60370-1-samuel@sholland.org>
-References: <20220424160458.60370-1-samuel@sholland.org>
+        Sun, 24 Apr 2022 12:08:36 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C1D2183;
+        Sun, 24 Apr 2022 09:05:22 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id e189so14603088oia.8;
+        Sun, 24 Apr 2022 09:05:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Ac5EnQuKpLRFocwuDOiyopf1JFrNIjPvay8PD58wgHY=;
+        b=fVtc8R6iX3YyAP6AJ9kz1u++52MqdMBULrH5AyrtMVvrm7bXYrvfwv+REcGr2hE2oL
+         dLCltApQaF199qhPgZspXcjgYmlAfNLcoonKnuu/0pMB690yPuosCOq5krCymER5MhAi
+         SUP2rMT4rfchqMsV29ILZU6ASzReKg0ClgxSWZXxOnqGjfmBCLoV8mpr3eKs7P6tYhn/
+         FZ69GZiduDn/4nuEzc1I62t4UR2iOhJZrJ2pYpxHHEfnBBbc4nzuMddB5HsPv/IkGQr0
+         zBEypu3co2gM6soytAshFUqoxaeAeTp3OT1a59orAfXAKyOfJC54sVdi/Mi5rCb1r44H
+         IR/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=Ac5EnQuKpLRFocwuDOiyopf1JFrNIjPvay8PD58wgHY=;
+        b=ikE6bTzzSvU5dXD0e8nyQYj1qrZHmfxTXLfHvvQpQooS5fajzO5gYjSosW4TpfCauD
+         Y6lig/AJK6le6INIOI/rERRYseGZSEz2k0uNGKCw7he25JVHJtrJ6UycSFhEG6UHBvln
+         wk8Jwzgdk4FI0T/p/BaypXV4sZx926eMkMadL684WmDR7YotUQCpyuFa+TXfZxiXCylY
+         1dHYTHjUbnB1N3F/Tu1FCH/f6z3SMTTlVOGJEbgfkssZEdUlngXzg+wp/PBc7QN8MJef
+         fvNL08P7G5+rNzz3F5EW9R02mIPwMuVMvE5/cyVd2IvrXcnZp6xGIFJlPcA2tObok9Dz
+         SWBg==
+X-Gm-Message-State: AOAM532ufZ3XtW5QtEErl2OiNZi76Yd08sr3UAbzUdGV5gyYHdIl8APC
+        Hg/VN8RoJa02LP6jd9bz02I=
+X-Google-Smtp-Source: ABdhPJwpmbpkn9fi0aIt6tFzND53Dos8K/T2Zuv/UkTrefHxO7YC4k6EUAKnGGMDOQLK53ceEBJjXQ==
+X-Received: by 2002:a05:6808:103:b0:322:6d3f:dfe0 with SMTP id b3-20020a056808010300b003226d3fdfe0mr6596469oie.207.1650816322301;
+        Sun, 24 Apr 2022 09:05:22 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q8-20020a9d57c8000000b006056352c3dbsm2882421oti.29.2022.04.24.09.05.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Apr 2022 09:05:21 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 24 Apr 2022 09:05:20 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     pali@kernel.org, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (dell-smm) Update Documentation regarding
+ firmware bugs
+Message-ID: <20220424160520.GA718874@roeck-us.net>
+References: <20220424154824.9396-1-W_Armin@gmx.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220424154824.9396-1-W_Armin@gmx.de>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The official PinePhone keyboard accessory connects to the phone's POGO
-pins for I2C and interrupts. It has an Injoinic IP5209 power bank IC
-connected to the keyboard's internal I2C bus.
+On Sun, Apr 24, 2022 at 05:48:24PM +0200, Armin Wolf wrote:
+> When adding the Inspiron 3505 to the fan type blacklist,
+> the Documentation was not updated to mention the firmware
+> bug on this machine.
+> Fix that.
+> 
+> Fixes: 6ba463edccb9 (hwmon: (dell-smm) Add Inspiron 3505 to fan type blacklist)
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
+Applied.
 
-Changes in v3:
- - Rename i2c-bus to i2c
+Thanks,
+Guenter
 
- .../dts/allwinner/sun50i-a64-pinephone.dtsi    | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi
-index 87847116ab6d..1d757cce246a 100644
---- a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi
-@@ -208,6 +208,24 @@ accelerometer@68 {
- /* Connected to pogo pins (external spring based pinheader for user addons) */
- &i2c2 {
- 	status = "okay";
-+
-+	keyboard@15 {
-+		compatible = "pine64,pinephone-keyboard";
-+		reg = <0x15>;
-+		interrupt-parent = <&r_pio>;
-+		interrupts = <0 12 IRQ_TYPE_EDGE_FALLING>; /* PL12 */
-+		wakeup-source;
-+
-+		i2c {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			charger@75 {
-+				compatible = "injoinic,ip5209";
-+				reg = <0x75>;
-+			};
-+		};
-+	};
- };
- 
- &lradc {
--- 
-2.35.1
-
+> ---
+>  Documentation/hwmon/dell-smm-hwmon.rst | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> --
+> 2.30.2
+> 
+> diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/dell-smm-hwmon.rst
+> index 41839b7de2c1..e5d85e40972c 100644
+> --- a/Documentation/hwmon/dell-smm-hwmon.rst
+> +++ b/Documentation/hwmon/dell-smm-hwmon.rst
+> @@ -331,6 +331,8 @@ Reading of fan types causes erratic fan behaviour.      Studio XPS 8000
+> 
+>                                                          Inspiron 580
+> 
+> +                                                        Inspiron 3505
+> +
+>  Fan-related SMM calls take too long (about 500ms).      Inspiron 7720
+> 
+>                                                          Vostro 3360

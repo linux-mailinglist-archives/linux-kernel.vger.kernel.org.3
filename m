@@ -2,99 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24A9450CE12
+	by mail.lfdr.de (Postfix) with ESMTP id 6FB6D50CE13
 	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 02:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237314AbiDXAED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 20:04:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48654 "EHLO
+        id S237474AbiDXAML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 20:12:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236902AbiDXAEB (ORCPT
+        with ESMTP id S237453AbiDXAMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 20:04:01 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBBE724979
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 17:01:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650758461; x=1682294461;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0vV2vCN2rMFvugaf0x3OEAD+At1B20d2LF2+PMimzUE=;
-  b=Ct6Hga85abQqfTkztO7aeCsze0ktGS0iw+TjHcuD5arJdptN72zIO+kR
-   Zvnnv3HpyIvJVq7yW5NfqaDCTt3OVbD3bCgEuoslxo7C+eDR5JZ1BNHAU
-   Lja7xFHcuARdIHytotweHJqIC3qiqJnTHp3T5TYY7ENLpYB17DSNIP3Xy
-   9Eu7MbqzMJ8WRrbUeDvazYyfvNuXoDJBG1KNc7nS6I/7ppeLpBDlwYfRL
-   XgsIzDF1iAlU8AfS+xqbchUNuSRFR2oR5+lWRh7oPJpcfv6V6izyhRNkR
-   FFyRJefD+kBbV7RpjZkE5IvLEfieUBsupBaF0Ndmatk6ZN6/bJC7hCr2T
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="265136059"
-X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
-   d="scan'208";a="265136059"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 17:01:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
-   d="scan'208";a="563563630"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 23 Apr 2022 17:01:00 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1niPgR-0000k1-UH;
-        Sun, 24 Apr 2022 00:00:59 +0000
-Date:   Sun, 24 Apr 2022 08:00:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Steven Rostedt (VMware)" <rostedt@goodmis.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: WARNING: modpost: vmlinux.o(.text.unlikely+0x1338): Section mismatch
- in reference from the function trace_define_generic_fields.isra.0() to the
- variable .init.data:initcall_level_names
-Message-ID: <202204240728.DzSAdKzG-lkp@intel.com>
+        Sat, 23 Apr 2022 20:12:08 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A8A27FDC
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 17:09:10 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id q20so7200050wmq.1
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 17:09:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=k8LTYPAepyAs8B5dkmRqbsi402Tvvuo+l9byhO+DGwg=;
+        b=MSWlAm9WaRYd5HBiPCAkLcqnsJjAXK1DMKFah0AZryCvtMzqLtXkFJSQTJEHytlG0D
+         94EcTqw7D9F7eE77xWAzvkIju+HJ/ZctXWqS+UQtzRwp4yfwzn6SjY38aWcycXko4ZmS
+         QgrHA+bIAZoK+cwsbXVIHc0EzpT7qQEb2Wc3zCB9w68ZWoCS2f4TzudwpeYEyGruoVDu
+         shix0FboxHIBEapxIpxYaJM4g8hBfZEg6jw3YNfDN4KBg3Loz+YOZ47OC4GraMbT0O4Q
+         nTEOWfYnOQ13IMhV82kKZBKlalsetY1eQwDB7IC8pFM9hASTo21JoglRAruao/dfq70m
+         3Zug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=k8LTYPAepyAs8B5dkmRqbsi402Tvvuo+l9byhO+DGwg=;
+        b=s6JCkbIOa6yfWbNvomXIc79Kyy3N+ESJcZckeCSxHwrCxeCCG6ZL0b0C1aI87X8lAJ
+         OaPorR9D1hZxt4mIuV1+QnzI1xZWa2MVDnOxrTh3aIJZ3VhPw0UShzbgoHGLyn/+elU8
+         OI4Q16pftjBHSYb/hjjY79k65OpjhBh3NzN5o5l22nY1WaHidCLgbucuVOnnG6+KlccJ
+         06oAOhBMyaS8JqGSQU8TMmNIUiVHjyoEJ/1iPkO0pMvjR8pqDprI/Y9IGYJUz0bHIjzg
+         w5AiRAWtpdKKTf4G+RGUgQjVJIp/q3YiJheV070VIxyUrGcnvE2t7LmpLKKY9RN01++0
+         G8zA==
+X-Gm-Message-State: AOAM530uBNPwYV671KkXs54lmTZ1/8CHzGPrVCtpYbP+S2IgGVzncuZ7
+        PM5CTlgUVRU8kCBkqUjl6UvXm7vpkuAOA0lEarg=
+X-Google-Smtp-Source: ABdhPJxIL/99chFshEHH2nqmv0T8e11O6nvDEUDfUkXkQvs/fI4ZUVNmAbO/pzbZKZa4cFCAL4tf5XYuVCKUo67gek8=
+X-Received: by 2002:a1c:acc6:0:b0:38e:b184:7721 with SMTP id
+ v189-20020a1cacc6000000b0038eb1847721mr10272081wme.94.1650758948080; Sat, 23
+ Apr 2022 17:09:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a5d:4d10:0:0:0:0:0 with HTTP; Sat, 23 Apr 2022 17:09:07
+ -0700 (PDT)
+Reply-To: wijh555@gmail.com
+From:   "Dr. Irene Lam" <confianzayrentabilidad@gmail.com>
+Date:   Sat, 23 Apr 2022 17:09:07 -0700
+Message-ID: <CANrrfX6SZ-3Au62P5HSbhH-eSYAsS+XbX3hf=uat71scg6b9gQ@mail.gmail.com>
+Subject: Greetings,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:32e listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4637]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [confianzayrentabilidad[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [wijh555[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steven,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   13bc32bad7059d6c5671e9d037e6e3ed001cc0f4
-commit: a55f224ff5f238013de8762c4287117e47b86e22 tracing: Fix pid filtering when triggers are attached
-date:   5 months ago
-config: xtensa-randconfig-r002-20220424 (https://download.01.org/0day-ci/archive/20220424/202204240728.DzSAdKzG-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a55f224ff5f238013de8762c4287117e47b86e22
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout a55f224ff5f238013de8762c4287117e47b86e22
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
-
-<< WARNING: modpost: vmlinux.o(.text.unlikely+0x1198): Section mismatch in reference from the function __trace_event_discard_commit() to the variable .init.data:initcall_level_names
->> WARNING: modpost: vmlinux.o(.text.unlikely+0x1338): Section mismatch in reference from the function trace_define_generic_fields.isra.0() to the variable .init.data:initcall_level_names
-The function trace_define_generic_fields.isra.0() references
-the variable __initdata initcall_level_names.
-This is often because trace_define_generic_fields.isra.0 lacks a __initdata
-annotation or the annotation of initcall_level_names is wrong.
-
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Hello,
+I'm Dr. Irene Lam, how are you doing hope you are in good health, the
+Board director
+try to reach you on phone several times Meanwhile, your number was not
+connecting. before he ask me to send you an email to hear from you if
+you are fine. hope to hear you are in good Health.
+
+Sincerely.
+Dr. Irene Lam.

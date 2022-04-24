@@ -2,80 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B57150D4E8
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 21:50:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D594A50D4E9
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 21:51:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238410AbiDXTwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 15:52:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47844 "EHLO
+        id S238900AbiDXTxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 15:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbiDXTww (ORCPT
+        with ESMTP id S230098AbiDXTxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 15:52:52 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7488878C;
-        Sun, 24 Apr 2022 12:49:50 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id d5so2901730wrb.6;
-        Sun, 24 Apr 2022 12:49:49 -0700 (PDT)
+        Sun, 24 Apr 2022 15:53:25 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D633113F6B
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 12:50:23 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id m20so5177643ejj.10
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 12:50:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=boLJh5OyVYiNVu2gAfu6+DUGFNi7Uf7BGILjixvPNTA=;
-        b=WBomqeWwPu/RUbs7dkkNUzrHZNSd1u6N7+Lt/rM4qppND5iCbSPlaHKLPzQElZBNRo
-         AAINaXHz8f0AU8RgSUGcYNvwJ1lkFbS30urOjuAkQuI5cOM0htwNdYCuUdGgaltzOOex
-         Fwn/UKSWCZgunu0bJA3G336ITXibceNRfmiiNqYsguzoRc+UVLUUvwAbiLsbFvCJ3qP7
-         /I3JuREWHvi9Ggl4J9lFv3BwNo65MUAw1jbrmAPGtz7PCFlD+QtL902Lx0bebS3/Zbqt
-         GHTDf5nN1yE+4wMU9T9mrK5I58rZUgn7Ibgk+gcMzi9xnWQ4d9X4q0Uu5kf2msN1aglY
-         dFCA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=SmTw1a3cXWEdJuo5jLxVYG9+0t7TfLjj7xZjD5d7KU0=;
+        b=Tkc1geR52mL1eHBIeDO0XVOmiFXCFA7T1H8DVGwEIkRIYCaCN6MyH7vi4P0I8JMQ+C
+         PJrW0GUKHl/2oG9RUb3dA43QvIqyGjpmGjmHRpae9C7rtOyeLHdKz0MqewJfWv24Bw5/
+         Ns7nxDT6jbS72Rc8Pm01s8gUi4ZQfe8uJ9Xv5aD1BQNMQTMQOIGDHh6T2VkjR0l9lDN+
+         6LRp8pQyLCJpeCO+ogwS0tSEv3wRvaVCHqdqzPRBKOjqoDm8q+ziamR+o5NJ5mbOy484
+         0Jwa/4wMVh09PkhmPeK3aEtLsdhbA6N8SKDZRj5XzS0jTJXFRsKPcdJ6p9eyNXA1WePv
+         ep3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=boLJh5OyVYiNVu2gAfu6+DUGFNi7Uf7BGILjixvPNTA=;
-        b=xjZxqMBr+spzWLSPSX2esXG3ejtoBNFZeCfSmoQ1RS1MfalU1wwdeQ9YsbtuU/4qx/
-         fx8jq2KWnQzDah4e7Uq1wzntxhQLpUPBtKvC0dt1JXXkE1uzkT3WfYy8W0/yNtHOG+A7
-         WMvb02eZiabqRgfTz9e+kIxNzfqUxKSYxrYb6d0o0Q42u5UplEMKErt++Rh0JXqAuOwu
-         RsPXenlRjoUG7DWU+iqkhc5WlyUsJgkt4pWHYYuUVFt1s8Qm1Z0NkEUmJyt6ZjuZMQch
-         t8tnMic8Pr2QtEj6SZTF6dx+cmmQhFip9KFUgQS+U9knz15BPhgatpt7za404isPNCnU
-         93Vw==
-X-Gm-Message-State: AOAM531KvL39zx9nYFN2jElf9jxSKCxycFrYY7qU/ktnYLYREVZQkRPr
-        9g8ehvLKnjlwoUw3RR7MLpk=
-X-Google-Smtp-Source: ABdhPJz4AtWq9RCD+ICjQu6KNVBRmnExGuPcE3pxgqnSKr+WconiJV81IcvQP65/UrJFUbFGq0iJKg==
-X-Received: by 2002:adf:d1ce:0:b0:20a:992a:3b54 with SMTP id b14-20020adfd1ce000000b0020a992a3b54mr11284290wrd.270.1650829788607;
-        Sun, 24 Apr 2022 12:49:48 -0700 (PDT)
-Received: from [192.168.1.5] ([197.57.78.84])
-        by smtp.gmail.com with ESMTPSA id g13-20020a5d64ed000000b0020a9e488976sm7670529wri.25.2022.04.24.12.49.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 24 Apr 2022 12:49:48 -0700 (PDT)
-Message-ID: <d89eefc2-664f-8537-d10e-6fdfbb6823ed@gmail.com>
-Date:   Sun, 24 Apr 2022 21:49:45 +0200
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=SmTw1a3cXWEdJuo5jLxVYG9+0t7TfLjj7xZjD5d7KU0=;
+        b=xs7xJIJTqi2At4VjzZ9X6hZc7qvZdT8ZI8zSQQ8fKFR6VeY/KKSRDt3G8MQLIVlVyR
+         +Jq7/XWx1bp6oXNW+8LaF/CnjeWxk/zw1zUZDSD/8QYwXNIwgMv/fdAs+QqcR4QpvUGk
+         VjUq2EHCDINIRF0kLzMA1Z4ijzUekhl2ZdyRWQmL1eGjhrQ5aNopSzI2PwYT5OuJRowK
+         PtiEsRNYNM+WqlwQQV14d29166h3QwTCilY2W9Rsf6yRb9CDT+9798YIHIAJEU7fe7sa
+         twJtcTQdZym9ElxWYTmoyS5C6WQEq4ONdLJC8dHQJ8dWUE17cV0T/NEzcKVeZanCeZ3i
+         3qbw==
+X-Gm-Message-State: AOAM532yD1KAKWNtmhrDwJWzG5mi2FWsnaJEy/QisOOJD23ORGv7d4rJ
+        m6o5auL4XfTpRsy9FIsFTB4=
+X-Google-Smtp-Source: ABdhPJxVCzu1SCuRlkHLi9y47tFtrClwhJDDPTTX72ySghCaAsZoYOIsD5osaGclr1SKLFVzpUCMqA==
+X-Received: by 2002:a17:906:4783:b0:6d0:9b6e:b5a5 with SMTP id cw3-20020a170906478300b006d09b6eb5a5mr13608722ejc.526.1650829822433;
+        Sun, 24 Apr 2022 12:50:22 -0700 (PDT)
+Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
+        by smtp.gmail.com with ESMTPSA id q6-20020a17090622c600b006f3876cd90csm1068241eja.198.2022.04.24.12.50.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Apr 2022 12:50:21 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        kernel test robot <lkp@intel.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH] irqchip/sun6i-r: Use NULL for chip_data
+Date:   Sun, 24 Apr 2022 21:50:20 +0200
+Message-ID: <2626773.mvXUDI8C0e@kista>
+In-Reply-To: <20220424173952.36591-1-samuel@sholland.org>
+References: <20220424173952.36591-1-samuel@sholland.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH net-next v3 1/2] rtnetlink: add extack support in fdb del
- handlers
-Content-Language: en-US
-To:     Nikolay Aleksandrov <razor@blackwall.org>, netdev@vger.kernel.org
-Cc:     outreachy@lists.linux.dev, roopa@nvidia.com, jdenham@redhat.com,
-        sbrivio@redhat.com, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
-        alexandre.belloni@bootlin.com, shshaikh@marvell.com,
-        manishc@marvell.com, intel-wired-lan@lists.osuosl.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
-        GR-Linux-NIC-Dev@marvell.com, bridge@lists.linux-foundation.org
-References: <cover.1650800975.git.eng.alaamohamedsoliman.am@gmail.com>
- <c3a882e4fb6f9228f704ebe3c1fcace14ee6cdf2.1650800975.git.eng.alaamohamedsoliman.am@gmail.com>
- <7c8367b6-95c7-ea39-fafe-72495f343625@blackwall.org>
-From:   Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-In-Reply-To: <7c8367b6-95c7-ea39-fafe-72495f343625@blackwall.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,180 +75,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Dne nedelja, 24. april 2022 ob 19:39:51 CEST je Samuel Holland napisal(a):
+> sparse complains about using an integer as a NULL pointer.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
 
-On ٢٤‏/٤‏/٢٠٢٢ ٢١:٠٢, Nikolay Aleksandrov wrote:
-> On 24/04/2022 15:09, Alaa Mohamed wrote:
->> Add extack support to .ndo_fdb_del in netdevice.h and
->> all related methods.
->>
->> Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
->> ---
->> changes in V3:
->>          fix errors reported by checkpatch.pl
->> ---
->>   drivers/net/ethernet/intel/ice/ice_main.c        | 4 ++--
->>   drivers/net/ethernet/mscc/ocelot_net.c           | 4 ++--
->>   drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c | 2 +-
->>   drivers/net/macvlan.c                            | 2 +-
->>   drivers/net/vxlan/vxlan_core.c                   | 2 +-
->>   include/linux/netdevice.h                        | 2 +-
->>   net/bridge/br_fdb.c                              | 2 +-
->>   net/bridge/br_private.h                          | 2 +-
->>   net/core/rtnetlink.c                             | 4 ++--
->>   9 files changed, 12 insertions(+), 12 deletions(-)
->>
->> diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
->> index d768925785ca..7b55d8d94803 100644
->> --- a/drivers/net/ethernet/intel/ice/ice_main.c
->> +++ b/drivers/net/ethernet/intel/ice/ice_main.c
->> @@ -5678,10 +5678,10 @@ ice_fdb_add(struct ndmsg *ndm, struct nlattr __always_unused *tb[],
->>   static int
->>   ice_fdb_del(struct ndmsg *ndm, __always_unused struct nlattr *tb[],
->>   	    struct net_device *dev, const unsigned char *addr,
->> -	    __always_unused u16 vid)
->> +	    __always_unused u16 vid, struct netlink_ext_ack *extack)
->>   {
->>   	int err;
->> -
->> +
-> What's changed here?
+Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-In the previous version, I removed the blank line after "int err;" and 
-you said I shouldn't so I added blank line.
+Best regards,
+Jernej
 
->
->>   	if (ndm->ndm_state & NUD_PERMANENT) {
->>   		netdev_err(dev, "FDB only supports static addresses\n");
->>   		return -EINVAL;
->> diff --git a/drivers/net/ethernet/mscc/ocelot_net.c b/drivers/net/ethernet/mscc/ocelot_net.c
->> index 247bc105bdd2..e07c64e3159c 100644
->> --- a/drivers/net/ethernet/mscc/ocelot_net.c
->> +++ b/drivers/net/ethernet/mscc/ocelot_net.c
->> @@ -774,14 +774,14 @@ static int ocelot_port_fdb_add(struct ndmsg *ndm, struct nlattr *tb[],
->>
->>   static int ocelot_port_fdb_del(struct ndmsg *ndm, struct nlattr *tb[],
->>   			       struct net_device *dev,
->> -			       const unsigned char *addr, u16 vid)
->> +			       const unsigned char *addr, u16 vid, struct netlink_ext_ack *extack)
->>   {
->>   	struct ocelot_port_private *priv = netdev_priv(dev);
->>   	struct ocelot_port *ocelot_port = &priv->port;
->>   	struct ocelot *ocelot = ocelot_port->ocelot;
->>   	int port = priv->chip_port;
->>
->> -	return ocelot_fdb_del(ocelot, port, addr, vid, ocelot_port->bridge);
->> +	return ocelot_fdb_del(ocelot, port, addr, vid, ocelot_port->bridge, extack);
->>   }
->>
->>   static int ocelot_port_fdb_dump(struct sk_buff *skb,
->> diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c
->> index d320567b2cca..51fa23418f6a 100644
->> --- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c
->> +++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c
->> @@ -368,7 +368,7 @@ static int qlcnic_set_mac(struct net_device *netdev, void *p)
->>
->>   static int qlcnic_fdb_del(struct ndmsg *ndm, struct nlattr *tb[],
->>   			struct net_device *netdev,
->> -			const unsigned char *addr, u16 vid)
->> +			const unsigned char *addr, u16 vid, struct netlink_ext_ack *extack)
->>   {
->>   	struct qlcnic_adapter *adapter = netdev_priv(netdev);
->>   	int err = -EOPNOTSUPP;
->> diff --git a/drivers/net/macvlan.c b/drivers/net/macvlan.c
->> index 069e8824c264..ffd34d9f7049 100644
->> --- a/drivers/net/macvlan.c
->> +++ b/drivers/net/macvlan.c
->> @@ -1017,7 +1017,7 @@ static int macvlan_fdb_add(struct ndmsg *ndm, struct nlattr *tb[],
->>
->>   static int macvlan_fdb_del(struct ndmsg *ndm, struct nlattr *tb[],
->>   			   struct net_device *dev,
->> -			   const unsigned char *addr, u16 vid)
->> +			   const unsigned char *addr, u16 vid, struct netlink_ext_ack *extack)
->>   {
->>   	struct macvlan_dev *vlan = netdev_priv(dev);
->>   	int err = -EINVAL;
->> diff --git a/drivers/net/vxlan/vxlan_core.c b/drivers/net/vxlan/vxlan_core.c
->> index de97ff98d36e..cf2f60037340 100644
->> --- a/drivers/net/vxlan/vxlan_core.c
->> +++ b/drivers/net/vxlan/vxlan_core.c
->> @@ -1280,7 +1280,7 @@ int __vxlan_fdb_delete(struct vxlan_dev *vxlan,
->>   /* Delete entry (via netlink) */
->>   static int vxlan_fdb_delete(struct ndmsg *ndm, struct nlattr *tb[],
->>   			    struct net_device *dev,
->> -			    const unsigned char *addr, u16 vid)
->> +			    const unsigned char *addr, u16 vid, struct netlink_ext_ack *extack)
->>   {
->>   	struct vxlan_dev *vxlan = netdev_priv(dev);
->>   	union vxlan_addr ip;
->> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
->> index 28ea4f8269d4..d0d2a8f33c73 100644
->> --- a/include/linux/netdevice.h
->> +++ b/include/linux/netdevice.h
->> @@ -1509,7 +1509,7 @@ struct net_device_ops {
->>   					       struct nlattr *tb[],
->>   					       struct net_device *dev,
->>   					       const unsigned char *addr,
->> -					       u16 vid);
->> +					       u16 vid, struct netlink_ext_ack *extack);
->>   	int			(*ndo_fdb_dump)(struct sk_buff *skb,
->>   						struct netlink_callback *cb,
->>   						struct net_device *dev,
->> diff --git a/net/bridge/br_fdb.c b/net/bridge/br_fdb.c
->> index 6ccda68bd473..5bfce2e9a553 100644
->> --- a/net/bridge/br_fdb.c
->> +++ b/net/bridge/br_fdb.c
->> @@ -1110,7 +1110,7 @@ static int __br_fdb_delete(struct net_bridge *br,
->>   /* Remove neighbor entry with RTM_DELNEIGH */
->>   int br_fdb_delete(struct ndmsg *ndm, struct nlattr *tb[],
->>   		  struct net_device *dev,
->> -		  const unsigned char *addr, u16 vid)
->> +		  const unsigned char *addr, u16 vid, struct netlink_ext_ack *extack)
->>   {
->>   	struct net_bridge_vlan_group *vg;
->>   	struct net_bridge_port *p = NULL;
->> diff --git a/net/bridge/br_private.h b/net/bridge/br_private.h
->> index 18ccc3d5d296..95348c1c9ce5 100644
->> --- a/net/bridge/br_private.h
->> +++ b/net/bridge/br_private.h
->> @@ -780,7 +780,7 @@ void br_fdb_update(struct net_bridge *br, struct net_bridge_port *source,
->>   		   const unsigned char *addr, u16 vid, unsigned long flags);
->>
->>   int br_fdb_delete(struct ndmsg *ndm, struct nlattr *tb[],
->> -		  struct net_device *dev, const unsigned char *addr, u16 vid);
->> +		  struct net_device *dev, const unsigned char *addr, u16 vid, struct netlink_ext_ack *extack);
-> This is way too long (111 chars) and checkpatch should've complained about it.
-> WARNING: line length of 111 exceeds 100 columns
-> #234: FILE: net/bridge/br_private.h:782:
-> +		  struct net_device *dev, const unsigned char *addr, u16 vid, struct netlink_ext_ack *extack);
+> ---
+> 
+>  drivers/irqchip/irq-sun6i-r.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-sun6i-r.c b/drivers/irqchip/irq-sun6i-r.c
+> index 4cd3e533740b..a01e44049415 100644
+> --- a/drivers/irqchip/irq-sun6i-r.c
+> +++ b/drivers/irqchip/irq-sun6i-r.c
+> @@ -249,11 +249,13 @@ static int sun6i_r_intc_domain_alloc(struct irq_domain 
+*domain,
+>  	for (i = 0; i < nr_irqs; ++i, ++hwirq, ++virq) {
+>  		if (hwirq == nmi_hwirq) {
+>  			irq_domain_set_hwirq_and_chip(domain, virq, 
+hwirq,
+> -						      
+&sun6i_r_intc_nmi_chip, 0);
+> +						      
+&sun6i_r_intc_nmi_chip,
+> +						      NULL);
+>  			irq_set_handler(virq, 
+handle_fasteoi_ack_irq);
+>  		} else {
+>  			irq_domain_set_hwirq_and_chip(domain, virq, 
+hwirq,
+> -						      
+&sun6i_r_intc_wakeup_chip, 0);
+> +						      
+&sun6i_r_intc_wakeup_chip,
+> +						      NULL);
+>  		}
+>  	}
+>  
+> -- 
+> 2.35.1
+> 
+> 
 
-I will fix it.
 
->
->>   int br_fdb_add(struct ndmsg *nlh, struct nlattr *tb[], struct net_device *dev,
->>   	       const unsigned char *addr, u16 vid, u16 nlh_flags,
->>   	       struct netlink_ext_ack *extack);
->> diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
->> index 4041b3e2e8ec..99b30ae58a47 100644
->> --- a/net/core/rtnetlink.c
->> +++ b/net/core/rtnetlink.c
->> @@ -4223,7 +4223,7 @@ static int rtnl_fdb_del(struct sk_buff *skb, struct nlmsghdr *nlh,
->>   		const struct net_device_ops *ops = br_dev->netdev_ops;
->>
->>   		if (ops->ndo_fdb_del)
->> -			err = ops->ndo_fdb_del(ndm, tb, dev, addr, vid);
->> +			err = ops->ndo_fdb_del(ndm, tb, dev, addr, vid, extack);
->>
->>   		if (err)
->>   			goto out;
->> @@ -4235,7 +4235,7 @@ static int rtnl_fdb_del(struct sk_buff *skb, struct nlmsghdr *nlh,
->>   	if (ndm->ndm_flags & NTF_SELF) {
->>   		if (dev->netdev_ops->ndo_fdb_del)
->>   			err = dev->netdev_ops->ndo_fdb_del(ndm, tb, dev, addr,
->> -							   vid);
->> +							   vid, extack);
->>   		else
->>   			err = ndo_dflt_fdb_del(ndm, tb, dev, addr, vid);
->>
->> --
->> 2.36.0
->>

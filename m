@@ -2,71 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D937C50CE34
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 03:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E15F50CE38
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 03:27:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237452AbiDXBTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 21:19:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42984 "EHLO
+        id S237493AbiDXBar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 21:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbiDXBTK (ORCPT
+        with ESMTP id S229777AbiDXBap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 21:19:10 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB3430548
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 18:16:10 -0700 (PDT)
-Received: from kwepemi500001.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Km9Dj5x1XzfZWc;
-        Sun, 24 Apr 2022 09:15:17 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi500001.china.huawei.com (7.221.188.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sun, 24 Apr 2022 09:16:07 +0800
-Received: from [10.174.179.234] (10.174.179.234) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sun, 24 Apr 2022 09:16:06 +0800
-Message-ID: <4ee686bc-38d4-7709-30a9-0c807919672a@huawei.com>
-Date:   Sun, 24 Apr 2022 09:16:05 +0800
+        Sat, 23 Apr 2022 21:30:45 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D247760AB2;
+        Sat, 23 Apr 2022 18:27:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650763666; x=1682299666;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=IA1Lmj4ocO6/xXKqNHTWqrt9z5lmz4IZWJmRXxw1fbk=;
+  b=cOC+J7B5gLiZDso6hMbROPhzRNuHxAL7gvSWHZ+1c22tFB8Nnci2pfKn
+   gUbKQ9F9bwjF9P9wXLeINcas19aaiHz4bpqwQZpw9KXJ8G3xfHVBHp4bh
+   V0Q67YQUGt4wk2JCqxZg/dNL5TnWZ1dp0smjZPySqGF8n1IMikwypm5hl
+   swZ2ksRQHSWPtM7UFWSQgdDSW39TiT8yxwEopD5j0zG/qxem9uvYuDrXl
+   WoB6Gp2ZMz7PT93zj0k2Sy/aQdKA8SmiBPA9Mr20q+nSryCFvwhZpaaXh
+   /5r0eWQ8hZ2o07Z5olOhFcnrJ+7CDaj7FiyNnZFRbw/5uNesT3qyfW6Nf
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="265144118"
+X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
+   d="scan'208";a="265144118"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 18:27:46 -0700
+X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
+   d="scan'208";a="729114400"
+Received: from mhammack-mobl1.amr.corp.intel.com (HELO [10.212.213.135]) ([10.212.213.135])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 18:27:44 -0700
+Message-ID: <4bff50c3-4065-65a3-b698-28f2391bb776@linux.intel.com>
+Date:   Sat, 23 Apr 2022 18:27:43 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH -next v4 1/7] x86, powerpc: fix function define in
- copy_mc_to_user
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Mark Rutland <mark.rutland@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "Alexander Viro" <viro@zeniv.linux.org.uk>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>
-CC:     <linuxppc-dev@lists.ozlabs.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Xie XiuQi <xiexiuqi@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>
-References: <20220420030418.3189040-1-tongtiangen@huawei.com>
- <20220420030418.3189040-2-tongtiangen@huawei.com>
- <87r15p8n9g.fsf@mpe.ellerman.id.au>
-From:   Tong Tiangen <tongtiangen@huawei.com>
-In-Reply-To: <87r15p8n9g.fsf@mpe.ellerman.id.au>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.234]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: Re: [PATCH v3 08/21] x86/virt/tdx: Do logical-cpu scope TDX module
+ initialization
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, dave.hansen@intel.com,
+        len.brown@intel.com, tony.luck@intel.com,
+        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
+        dan.j.williams@intel.com, peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com, isaku.yamahata@intel.com
+References: <cover.1649219184.git.kai.huang@intel.com>
+ <35081dba60ef61c313c2d7334815247248b8d1da.1649219184.git.kai.huang@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <35081dba60ef61c313c2d7334815247248b8d1da.1649219184.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,48 +71,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-在 2022/4/22 17:45, Michael Ellerman 写道:
-> Tong Tiangen <tongtiangen@huawei.com> writes:
->> x86/powerpc has it's implementation of copy_mc_to_user but not use #define
->> to declare.
->>
->> This may cause problems, for example, if other architectures open
->> CONFIG_ARCH_HAS_COPY_MC, but want to use copy_mc_to_user() outside the
->> architecture, the code add to include/linux/uaddess.h is as follows:
->>
->>      #ifndef copy_mc_to_user
->>      static inline unsigned long __must_check
->>      copy_mc_to_user(void *dst, const void *src, size_t cnt)
->>      {
->> 	    ...
->>      }
->>      #endif
->       
-> The above doesn't exist yet, you add it in patch 3, which is a little
-> confusing for a reader of this commit in isolation.
-> 
-> I think you could safely move that into this patch, and then this patch
-> would be ~= "Add generic fallback version of copy_mc_to_user()".
-> 
-> It's probably not worth doing a whole new version of the series just for
-> that, but if you need to do a new version for some other reason I think
-> it would be cleaner to introduce the fallback in this commit.
-> 
+On 4/5/22 9:49 PM, Kai Huang wrote:
+> Logical-cpu scope initialization requires calling TDH.SYS.LP.INIT on all
+> BIOS-enabled cpus, otherwise the TDH.SYS.CONFIG SEAMCALL will fail.
 
-Agreed, will do in next version.
+IIUC, this change handles logical CPU initialization part of TDX module
+initialization. So why talk about TDH.SYS.CONFIG failure here? Are they
+related?
 
-Thanks,
-Tong.
+> TDH.SYS.LP.INIT can be called concurrently on all cpus.
 
->> Then this definition will conflict with the implementation of x86/powerpc
->> and cause compilation errors as follow:
->>
->> Fixes: ec6347bb4339 ("x86, powerpc: Rename memcpy_mcsafe() to copy_mc_to_{user, kernel}()")
->> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
->> ---
->>   arch/powerpc/include/asm/uaccess.h | 1 +
+IMO, if you move the following paragraph to the beginning, it is easier
+to understand "what" and "why" part of this change.
 > 
-> Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
-> 
-> cheers
-> .
+> Following global initialization, do the logical-cpu scope initialization
+> by calling TDH.SYS.LP.INIT on all online cpus.  Whether all BIOS-enabled
+> cpus are online is not checked here for simplicity.  The caller of
+> tdx_init() should guarantee all BIOS-enabled cpus are online.
+
+Include specification reference for TDX module initialization and
+TDH.SYS.LP.INIT.
+
+In TDX module spec, section 22.2.35 (TDH.SYS.LP.INIT Leaf), mentions
+some environment requirements. I don't see you checking here for it?
+Is this already met?
+
+
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

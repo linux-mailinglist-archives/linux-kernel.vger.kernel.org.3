@@ -2,291 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B449250D285
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 16:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 421AA50D2A1
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 17:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239532AbiDXO70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 10:59:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59324 "EHLO
+        id S230235AbiDXPGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 11:06:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237001AbiDXO7D (ORCPT
+        with ESMTP id S231424AbiDXPGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 10:59:03 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156A13F321;
-        Sun, 24 Apr 2022 07:56:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1650812162; x=1682348162;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=aYryxaY7BHaLW2TQbpiv9pbJ7WvVjDi15s3JWtBHcSQ=;
-  b=i2YsLGiLfjnJfZaplSIYtWVTX1jJO1Ni91YqBrDKJiDNMJLGqvttp25Q
-   nyRG/76E1cm+XXNILgOResTPC9kEmq5Sv91thbqg9gE02gO6R/J8pIaHu
-   +HcH8RWYYajb00t4/WfUjerx1bfdQDwW+ocEghOALTpdEVwgC3nq7dnJD
-   ZcZXFnrWKp3nsKJuACozUePQe9ToU62JQ6oj4Nsc/xNecH9UWfP/ANGt5
-   5/Qq8XOqTgzo3IDPxtdHRLuFL0EH0wUpCOfvV/SFSYngcKqqSgSkQNNOM
-   qgGvAJQrXS/EoEY2HlqtO4D0gp3EpoGIW4pbUOeozfdRKL1ddKdPqUbng
-   g==;
-X-IronPort-AV: E=Sophos;i="5.90,286,1643698800"; 
-   d="scan'208";a="156578219"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Apr 2022 07:56:02 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Sun, 24 Apr 2022 07:56:02 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Sun, 24 Apr 2022 07:55:59 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <UNGLinuxDriver@microchip.com>, <richardcochran@gmail.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net-next 5/5] net: lan966x: Add support for PTP_PF_EXTTS
-Date:   Sun, 24 Apr 2022 16:58:24 +0200
-Message-ID: <20220424145824.2931449-6-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220424145824.2931449-1-horatiu.vultur@microchip.com>
-References: <20220424145824.2931449-1-horatiu.vultur@microchip.com>
+        Sun, 24 Apr 2022 11:06:39 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107831632E7
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 08:03:39 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id d6so10624471ede.8
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 08:03:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oZgdjt03EFmKkCkALdaRUu9j5orxJYcBeTCfsLBxk8A=;
+        b=e79ORiAutXKpfRKfDI4jXkdPYCMgpBeTvyplaO+1daTM2LEQLNjQDBuki3dPzftEbT
+         GeqbES3KlYcCt9jbS8fdgYO84BMtLoYAFxws1eeKquJru9TKMDP7yrYT9BaLthSRO+Aj
+         P/JOyv/te+KN67fq/EL8gGk11S21wp5KVo/RgFA7vLNXQcUwMZawImHOtms4IqKdPIRC
+         YSYII2ER/jGF0nsTT7f9ba3JDw7PBtP9JfoeOSLC/h/aVBLn1j8e/ntS3A2NKc84EfXx
+         VXWJVqVKKBEb6yeaRcj4ws7cKTsq3dXdOoKXkFfqoYbnzN06V/L4a/UOGfF1WBukjaDr
+         S0CQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oZgdjt03EFmKkCkALdaRUu9j5orxJYcBeTCfsLBxk8A=;
+        b=AAxcetVQ5oaF4uQL6CPSUnuRs5czvcOaSZilF5U84Xy9RCjOnAVb90CA3cJkN/a4tv
+         O825D1iDT4DdsTNwySYxwhGmTn1cFu3shO5spCwjp9gLItYIRvtutLjIlZXSGricHC86
+         H8ELUNXajJbYwyaBRsXdzcl/BvtGpAnohJ5mQ1B21LlH1zeqPCGC14C24hEHyFEmfJrW
+         2biFCgl8u01h9Dzlq4RLBo6GIUFtBD8iqh1sVps7B2XkgLpLFYTfgyni6KmGUXgVxbzE
+         2NlDnaaWfdzd2MeUQcOE/CieuarOqOYCmwGu5AZKWw0zSHoYRAF9XPlhe/p+6Wtu4rn+
+         4rrQ==
+X-Gm-Message-State: AOAM532EfNQPr27SrwsOKmbmusEMZhicpu7BXf27e7PiwgD0DFlsTSE0
+        94Cl6IfEARy7Z0Ehf3drypZVKw==
+X-Google-Smtp-Source: ABdhPJytUEtWPCyxY1vXwS1p2kyE6foHlshe66Lm72wo7JRHSm6EBgDpEJrg4kT5X1AqveMjrWjE1Q==
+X-Received: by 2002:a05:6402:370c:b0:425:a9c4:88c4 with SMTP id ek12-20020a056402370c00b00425a9c488c4mr14454907edb.190.1650812616952;
+        Sun, 24 Apr 2022 08:03:36 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id y23-20020a170906071700b006e8a19cefa6sm2655165ejb.106.2022.04.24.08.03.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Apr 2022 08:03:36 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/3] dt-bindings: timer: cdns,ttc: drop unneeded minItems
+Date:   Sun, 24 Apr 2022 17:03:31 +0200
+Message-Id: <20220424150333.75172-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extend the PTP programmable pins to implement also PTP_PF_EXTTS
-function. The PTP pin can be configured to capture only on the rising
-edge of the PPS signal. And once an event is seen then an interrupt is
-generated and the local time counter is saved.
-The interrupt is shared between all the pins.
+There is no need to add minItems when it is equal to maxItems.
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../ethernet/microchip/lan966x/lan966x_main.c |  17 +++
- .../ethernet/microchip/lan966x/lan966x_main.h |   2 +
- .../ethernet/microchip/lan966x/lan966x_ptp.c  | 109 +++++++++++++++++-
- 3 files changed, 127 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/timer/cdns,ttc.yaml | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-index afec115e46eb..6579c7062aa5 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-@@ -692,6 +692,9 @@ static void lan966x_cleanup_ports(struct lan966x *lan966x)
+diff --git a/Documentation/devicetree/bindings/timer/cdns,ttc.yaml b/Documentation/devicetree/bindings/timer/cdns,ttc.yaml
+index c3386076a98c..7d821fd480f6 100644
+--- a/Documentation/devicetree/bindings/timer/cdns,ttc.yaml
++++ b/Documentation/devicetree/bindings/timer/cdns,ttc.yaml
+@@ -17,7 +17,6 @@ properties:
+     maxItems: 1
  
- 	if (lan966x->ptp_irq)
- 		devm_free_irq(lan966x->dev, lan966x->ptp_irq, lan966x);
-+
-+	if (lan966x->ptp_ext_irq)
-+		devm_free_irq(lan966x->dev, lan966x->ptp_ext_irq, lan966x);
- }
- 
- static int lan966x_probe_port(struct lan966x *lan966x, u32 p,
-@@ -1058,6 +1061,20 @@ static int lan966x_probe(struct platform_device *pdev)
- 		lan966x->fdma = true;
- 	}
- 
-+	if (lan966x->ptp) {
-+		lan966x->ptp_ext_irq = platform_get_irq_byname(pdev, "ptp-ext");
-+		if (lan966x->ptp_ext_irq > 0) {
-+			err = devm_request_threaded_irq(&pdev->dev,
-+							lan966x->ptp_ext_irq, NULL,
-+							lan966x_ptp_ext_irq_handler,
-+							IRQF_ONESHOT,
-+							"ptp-ext irq", lan966x);
-+			if (err)
-+				return dev_err_probe(&pdev->dev, err,
-+						     "Unable to use ptp-ext irq");
-+		}
-+	}
-+
- 	/* init switch */
- 	lan966x_init(lan966x);
- 	lan966x_stats_init(lan966x);
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-index 76255e2a86f3..3b86ddddc756 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-@@ -233,6 +233,7 @@ struct lan966x {
- 	int ana_irq;
- 	int ptp_irq;
- 	int fdma_irq;
-+	int ptp_ext_irq;
- 
- 	/* worqueue for fdb */
- 	struct workqueue_struct *fdb_work;
-@@ -394,6 +395,7 @@ int lan966x_ptp_txtstamp_request(struct lan966x_port *port,
- void lan966x_ptp_txtstamp_release(struct lan966x_port *port,
- 				  struct sk_buff *skb);
- irqreturn_t lan966x_ptp_irq_handler(int irq, void *args);
-+irqreturn_t lan966x_ptp_ext_irq_handler(int irq, void *args);
- 
- int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev);
- int lan966x_fdma_change_mtu(struct lan966x *lan966x);
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_ptp.c b/drivers/net/ethernet/microchip/lan966x/lan966x_ptp.c
-index 3199a266ed3d..9c39a3c7e9fa 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_ptp.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_ptp.c
-@@ -321,6 +321,63 @@ irqreturn_t lan966x_ptp_irq_handler(int irq, void *args)
- 	return IRQ_HANDLED;
- }
- 
-+irqreturn_t lan966x_ptp_ext_irq_handler(int irq, void *args)
-+{
-+	struct lan966x *lan966x = args;
-+	struct lan966x_phc *phc;
-+	unsigned long flags;
-+	u64 time = 0;
-+	time64_t s;
-+	int pin, i;
-+	s64 ns;
-+
-+	if (!(lan_rd(lan966x, PTP_PIN_INTR)))
-+		return IRQ_NONE;
-+
-+	/* Go through all domains and see which pin generated the interrupt */
-+	for (i = 0; i < LAN966X_PHC_COUNT; ++i) {
-+		struct ptp_clock_event ptp_event = {0};
-+
-+		phc = &lan966x->phc[i];
-+		pin = ptp_find_pin(phc->clock, PTP_PF_EXTTS, 0);
-+		if (pin == -1)
-+			continue;
-+
-+		if (!(lan_rd(lan966x, PTP_PIN_INTR) & BIT(pin)))
-+			continue;
-+
-+		spin_lock_irqsave(&lan966x->ptp_clock_lock, flags);
-+
-+		/* Enable to get the new interrupt.
-+		 * By writing 1 it clears the bit
-+		 */
-+		lan_wr(BIT(pin), lan966x, PTP_PIN_INTR);
-+
-+		/* Get current time */
-+		s = lan_rd(lan966x, PTP_TOD_SEC_MSB(pin));
-+		s <<= 32;
-+		s |= lan_rd(lan966x, PTP_TOD_SEC_LSB(pin));
-+		ns = lan_rd(lan966x, PTP_TOD_NSEC(pin));
-+		ns &= PTP_TOD_NSEC_TOD_NSEC;
-+
-+		spin_unlock_irqrestore(&lan966x->ptp_clock_lock, flags);
-+
-+		if ((ns & 0xFFFFFFF0) == 0x3FFFFFF0) {
-+			s--;
-+			ns &= 0xf;
-+			ns += 999999984;
-+		}
-+		time = ktime_set(s, ns);
-+
-+		ptp_event.index = pin;
-+		ptp_event.timestamp = time;
-+		ptp_event.type = PTP_CLOCK_EXTTS;
-+		ptp_clock_event(phc->clock, &ptp_event);
-+	}
-+
-+	return IRQ_HANDLED;
-+}
-+
- static int lan966x_ptp_adjfine(struct ptp_clock_info *ptp, long scaled_ppm)
- {
- 	struct lan966x_phc *phc = container_of(ptp, struct lan966x_phc, info);
-@@ -508,6 +565,7 @@ static int lan966x_ptp_verify(struct ptp_clock_info *ptp, unsigned int pin,
- 	switch (func) {
- 	case PTP_PF_NONE:
- 	case PTP_PF_PEROUT:
-+	case PTP_PF_EXTTS:
- 		break;
- 	default:
- 		return -1;
-@@ -524,7 +582,8 @@ static int lan966x_ptp_verify(struct ptp_clock_info *ptp, unsigned int pin,
- 		if (ptp == info)
- 			continue;
- 
--		if (info->pin_config[pin].func == PTP_PF_PEROUT)
-+		if (info->pin_config[pin].func == PTP_PF_PEROUT ||
-+		    info->pin_config[pin].func == PTP_PF_EXTTS)
- 			return -1;
- 	}
- 
-@@ -632,12 +691,59 @@ static int lan966x_ptp_perout(struct ptp_clock_info *ptp,
- 	return 0;
- }
- 
-+static int lan966x_ptp_extts(struct ptp_clock_info *ptp,
-+			     struct ptp_clock_request *rq, int on)
-+{
-+	struct lan966x_phc *phc = container_of(ptp, struct lan966x_phc, info);
-+	struct lan966x *lan966x = phc->lan966x;
-+	unsigned long flags;
-+	int pin;
-+	u32 val;
-+
-+	if (lan966x->ptp_ext_irq <= 0)
-+		return -EOPNOTSUPP;
-+
-+	/* Reject requests with unsupported flags */
-+	if (rq->extts.flags & ~(PTP_ENABLE_FEATURE |
-+				PTP_RISING_EDGE |
-+				PTP_STRICT_FLAGS))
-+		return -EOPNOTSUPP;
-+
-+	pin = ptp_find_pin(phc->clock, PTP_PF_EXTTS, rq->extts.index);
-+	if (pin == -1 || pin >= LAN966X_PHC_PINS_NUM)
-+		return -EINVAL;
-+
-+	spin_lock_irqsave(&lan966x->ptp_clock_lock, flags);
-+	lan_rmw(PTP_PIN_CFG_PIN_ACTION_SET(PTP_PIN_ACTION_SAVE) |
-+		PTP_PIN_CFG_PIN_SYNC_SET(on ? 3 : 0) |
-+		PTP_PIN_CFG_PIN_DOM_SET(phc->index) |
-+		PTP_PIN_CFG_PIN_SELECT_SET(pin),
-+		PTP_PIN_CFG_PIN_ACTION |
-+		PTP_PIN_CFG_PIN_SYNC |
-+		PTP_PIN_CFG_PIN_DOM |
-+		PTP_PIN_CFG_PIN_SELECT,
-+		lan966x, PTP_PIN_CFG(pin));
-+
-+	val = lan_rd(lan966x, PTP_PIN_INTR_ENA);
-+	if (on)
-+		val |= BIT(pin);
-+	else
-+		val &= ~BIT(pin);
-+	lan_wr(val, lan966x, PTP_PIN_INTR_ENA);
-+
-+	spin_unlock_irqrestore(&lan966x->ptp_clock_lock, flags);
-+
-+	return 0;
-+}
-+
- static int lan966x_ptp_enable(struct ptp_clock_info *ptp,
- 			      struct ptp_clock_request *rq, int on)
- {
- 	switch (rq->type) {
- 	case PTP_CLK_REQ_PEROUT:
- 		return lan966x_ptp_perout(ptp, rq, on);
-+	case PTP_CLK_REQ_EXTTS:
-+		return lan966x_ptp_extts(ptp, rq, on);
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-@@ -656,6 +762,7 @@ static struct ptp_clock_info lan966x_ptp_clock_info = {
- 	.verify		= lan966x_ptp_verify,
- 	.enable		= lan966x_ptp_enable,
- 	.n_per_out	= LAN966X_PHC_PINS_NUM,
-+	.n_ext_ts	= LAN966X_PHC_PINS_NUM,
- 	.n_pins		= LAN966X_PHC_PINS_NUM,
- };
- 
+   interrupts:
+-    minItems: 3
+     maxItems: 3
+     description: |
+       A list of 3 interrupts; one per timer channel.
 -- 
-2.33.0
+2.32.0
 

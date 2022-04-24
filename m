@@ -2,123 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 305E350D006
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 08:25:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 160C350D009
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 08:25:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238347AbiDXG0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 02:26:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
+        id S238375AbiDXG1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 02:27:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235842AbiDXG0l (ORCPT
+        with ESMTP id S234018AbiDXG1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 02:26:41 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B5F17BF8A
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 23:23:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650781422; x=1682317422;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=hdl39vHrYW+oIzpH3g6cLzNkwP4xWTa8o4zVWyV7Bu4=;
-  b=h9tZP11SLr8O1Q6JEMW63tfNO5LuBFIMGl4Zn4VlbJKPBKS4sw3Kg406
-   9y51gNILGiQPPskBdW5bVT2iSQapulE50r1Nj8PZYr5nxJyFsLvBgb32g
-   xLkGjW0UifCnrNWc0LmQ3j9puZsstUrVvVQlTDSWwXwpdnj9M8F5bDUzN
-   2Re6s4VEQ7ve1dPTMEpO9dCWeIcYrauZm6OkxUhPw17iqJRlTBDLnqmXP
-   ib8Yfdox5+kTYTSXgWFBjkr3Y1bYqUw73DXb9kkUKO2b3DHP/xgOPStiJ
-   WemZLPdRGn4f3M93sRs2NAE19RZJm35OV119Upn2yuFCy5NsQ603u3t/5
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="325471890"
-X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
-   d="scan'208";a="325471890"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 23:23:41 -0700
-X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
-   d="scan'208";a="578685981"
-Received: from yzhou56-mobl2.ccr.corp.intel.com (HELO [10.249.173.202]) ([10.249.173.202])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 23:23:40 -0700
-Message-ID: <de836242-e188-7798-f779-69703eebd45a@linux.intel.com>
-Date:   Sun, 24 Apr 2022 14:23:38 +0800
+        Sun, 24 Apr 2022 02:27:49 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8DC517BF8A;
+        Sat, 23 Apr 2022 23:24:50 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id d9so8368418qty.12;
+        Sat, 23 Apr 2022 23:24:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YLpMsPvRAfX6udmXoRJxXwHw2EOhu4J52HQ7muhAMJw=;
+        b=jjNtdI7ZYNHG/6XfAgSK95XkyOCwAGjh0AQa+0zP9Nufdaqr0FRifMHSIEPULmqmfL
+         wmZEKVMB4IA63XKk0WZqeU99F8xclpKSYSn6A2qoF3V+YhScBMMAZTL4AianqUr1W4Ux
+         uqpLweLdZD/lhks67PEuibzhzO7/0UkKnSAHUqG3e0oE6m5s8BRaCFXv/3l/Zp+x+i+J
+         LSUWrThF7OiHwmn6ETvCXIZM98iUsW38yMZaMkFTlpMJ/QZ0IwWRFsO4qwmeq9BcwJba
+         ndwbZlUohVL/YdG1f37WBfKHb2xs4h/BsI+7OtaVPYXd2EFLzdHvEL7wHs2BsEzHfnCR
+         uJ2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YLpMsPvRAfX6udmXoRJxXwHw2EOhu4J52HQ7muhAMJw=;
+        b=WoOtrtEN5aWBZkRW2RCiCvseRVLvMkh91ZEsxBb7xsTWOQKw7/iPdX5lfBPCw0H1nW
+         fNqfPwOnUhzufEMgLKEBTBbSyo+Ots85KpEV9qYoXCh25WpyqICG5IRvu9D44XuHrAx5
+         tFCcl/3u4ljuuJR4H1jeen9O3erHM4ZMF0iVn68U5yytclIhurAxDvHGofC7DPDluxOc
+         SDcq/jXm65JStydRX6NCrUK8ZSqRz2G91eUtrh4Kon81k2fJSFPZOhmfQsF74KaDZWDv
+         6vNnXmRS4XbpxSH5PBY0YZ7SS4i+n1zKEhdP7NLDmDQmLjtqzDUY9P5kdBrogoW/HNLx
+         NNQA==
+X-Gm-Message-State: AOAM531MxgiWVlNkW8iFYQchyU2XFZRk9TS/S1Igu0Mm93CxadvxSiuW
+        g+vwFCZgzSuLaQv6cJzuq+I=
+X-Google-Smtp-Source: ABdhPJwsWYEbc1gB3qIjICtF2AGpDLhNtocemr7slKWO+M0xEZIm5JpSvAnGSjOf5RdP67hhOP3hGw==
+X-Received: by 2002:ac8:5855:0:b0:2f3:3eb4:51ee with SMTP id h21-20020ac85855000000b002f33eb451eemr8269058qth.644.1650781489990;
+        Sat, 23 Apr 2022 23:24:49 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id x13-20020a05620a258d00b0069c7468e123sm3296269qko.122.2022.04.23.23.24.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Apr 2022 23:24:49 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: ran.jianping@zte.com.cn
+To:     njavali@marvell.com
+Cc:     GR-QLogic-Storage-Upstream@marvell.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ran jianping <ran.jianping@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] scsi: qla2xxx: remove unneeded flush_workqueue
+Date:   Sun, 24 Apr 2022 06:24:13 +0000
+Message-Id: <20220424062413.3220315-1-ran.jianping@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/4] iommu/vt-d: Check before setting PGSNP bit in
- pasid table entry
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>
-Cc:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220421113558.3504874-1-baolu.lu@linux.intel.com>
- <20220421113558.3504874-2-baolu.lu@linux.intel.com>
- <BN9PR11MB52767A16DC6BB80838C876068CF79@BN9PR11MB5276.namprd11.prod.outlook.com>
- <503795b0-282c-2a8a-b669-5e7a0fc4a696@linux.intel.com>
- <BN9PR11MB52766E90CF544C2B00F364008CF99@BN9PR11MB5276.namprd11.prod.outlook.com>
- <4b2cd2a7-d715-882c-9cce-533dcff8bc79@linux.intel.com>
- <BN9PR11MB5276FA1633851ED6CBD955E38CF99@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-In-Reply-To: <BN9PR11MB5276FA1633851ED6CBD955E38CF99@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/24 13:55, Tian, Kevin wrote:
->> From: Lu Baolu <baolu.lu@linux.intel.com>
->> Sent: Sunday, April 24, 2022 12:38 PM
->>
->> On 2022/4/24 11:37, Tian, Kevin wrote:
->>>>> This should be rebased on top of Jason's enforce coherency series
->>>>> instead of blindly setting it. No matter whether it's legacy mode
->>>>> where we set SNP in PTE or scalable mode where we set PGSNP
->>>>> in PASID entry for entire page table, the trigger point should be
->>>>> same i.e. when someone calls enforce_cache_coherency().
->>>> With Jason's enforce coherency series merged, we even don't need to set
->>>> PGSNP bit of a pasid entry for second level translation. 2nd level
->>>> always supports SNP in PTEs, so set PGSNP in pasid table entry is
->>>> unnecessary.
->>>>
->>> Yes, this sounds correct for 2nd-level.
->>>
->>> but setting PGSNP of 1st level translation is also relevant to that
->>> change when talking about enforcing coherency in the guest. In
->>> this case PASID_FLAG_PAGE_SNOOP should be set also after
->>> enforce_cache_coherency() is called.
->>
->> Yes. Agreed.
->>
->>> Currently it's always set for unmanaged domain in
->>> domain_setup_first_level():
->>>
->>> 	if (domain->domain.type == IOMMU_DOMAIN_UNMANAGED)
->>> 		flags |= PASID_FLAG_PAGE_SNOOP;
->>>
->>> Suppose we need a separate interface to update PGSNP after pasid
->>> entry is set up.
->>
->> Currently enforcing coherency is only used in VFIO. In the VFIO use
->> case, it's safe to always set PGSNP when an UNMANAGED domain is attached
->> on the first level pasid translation. We could add support of updating
->> PGSNP after pasid entry setup once there's a real need.
->>
-> 
-> The real need is here. The iommu driver should not assume the
-> policy of VFIO, which is already communicated via the new
-> enforce_cache_coherency() interface. The same policy should
-> apply no matter whether 1st or 2nd level is in-use.
+From: ran jianping <ran.jianping@zte.com.cn>
 
-Okay, I think I will move this patch out of this series and put it in a
-separated one for VT-d improvements after Jason's enforcing snoop series
-gets merged. Thanks for your suggestions.
+All work currently pending will be done first by calling destroy_workqueue,
+so there is no need to flush it explicitly.
 
-Best regards,
-baolu
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: ran jianping <ran.jianping@zte.com.cn>
+---
+ drivers/scsi/qla2xxx/qla_os.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index 762229d495a8..73073fb08369 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -3933,7 +3933,6 @@ qla2x00_free_device(scsi_qla_host_t *vha)
+ 
+ 	/* Flush the work queue and remove it */
+ 	if (ha->wq) {
+-		flush_workqueue(ha->wq);
+ 		destroy_workqueue(ha->wq);
+ 		ha->wq = NULL;
+ 	}
+-- 
+2.25.1
+

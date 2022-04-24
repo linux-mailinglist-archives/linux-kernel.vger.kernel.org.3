@@ -2,139 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 291A050D195
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 14:09:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1A8950D19C
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 14:15:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229477AbiDXMLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 08:11:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48052 "EHLO
+        id S229613AbiDXMNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 08:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiDXMLk (ORCPT
+        with ESMTP id S229437AbiDXMNE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 08:11:40 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9650925E9D
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 05:08:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650802120; x=1682338120;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tICH0q8g8dbLJL8g4kbFNW/ZxZEvaqnutCmhpsehBNs=;
-  b=hSJ6QsqhjSbgI2VPB8nPN7qlbuHR99KkVIwCJa1Oe3S54/b+bLpBbmwd
-   oeTzeRuuRFbSGctNbUD/YsW26HHyoTfCEqWkns6orl4Ne29bXUVg7FnIE
-   dx7HDDOiy3113RoWcCDm8ivBMLSLoMWE+vop4nEZhaBvr2QZO02MtU4Qe
-   1bUoxmOJ3LPbv8PY6ZVu20k3A6NP8eOhLWkthCliH4pisZEegEHqcr7hN
-   WVKReeyb3whnFDMcKKhSDvstrb3xEAW06f6aeWpRXvs5AIKf3lizVacql
-   vN46duS9c53qUKIw7U0Kdm4yW9t0UDODNTM1trusDzsUTN7dPfIFBikHk
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="245606042"
-X-IronPort-AV: E=Sophos;i="5.90,286,1643702400"; 
-   d="scan'208";a="245606042"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 05:08:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,286,1643702400"; 
-   d="scan'208";a="531643418"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 24 Apr 2022 05:08:38 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nib2b-0001Q3-Kf;
-        Sun, 24 Apr 2022 12:08:37 +0000
-Date:   Sun, 24 Apr 2022 20:08:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tom <support@vamrs.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Emil Renner Berthing <kernel@esmil.dk>
-Subject: [esmil:visionfive 22/56] drivers/soc/sifive/sifive_l2_cache.c:152:3:
- error: call to undeclared function 'writeq'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202204242055.S0sCOxzU-lkp@intel.com>
+        Sun, 24 Apr 2022 08:13:04 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A9D29CB2;
+        Sun, 24 Apr 2022 05:10:03 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id x18so17222615wrc.0;
+        Sun, 24 Apr 2022 05:10:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2JuRhXyb4Ip8swSB1obPedgsH1Io7sAcBXX0fUCg2UY=;
+        b=jbX6/SXWTvvMbmrClbsX++gd1w+2OD/ikoRsd8tpj0m1wta4k5jOn0afedb92k1P2z
+         +XQINnTMiG5QDJtcBkVePlDctVDMI27MIwacGSG55x9yPASrF13hi0M8Ja2lghZD/7WR
+         aXO5aN1Gh/AUJTaW9VNqPFqczdDVzbeF0OA9JE5wqmxFMuDXeYDBVGjpfbtf1O14672Z
+         k0J9PvfQNxqWYo8gRQJTFJr8FYgMYDVYXuhFOpuiATTnF+DkdwHMZJ1VGOAITW3S62Dn
+         t5P7EgxV/cY6odv9qhQkvAoMe9QfLSeQSgAVGmprh1KoqLCMDIvg45x0UWdIfoYGDHwT
+         lWcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2JuRhXyb4Ip8swSB1obPedgsH1Io7sAcBXX0fUCg2UY=;
+        b=lU+1zLnh+XGVXsJldJinwJgkqtRcpbb2/xz6ycRnCf8k9VErDV9SB4Kg8PInqFOG5r
+         wmR+dLN8kyL98sOIKbF1NetA7cwFVZYVc6jnf0e9I8dOfCd1YFiXErbTaJqBa/I5QRfD
+         rQokMcCeMDKrtlGydVxcjRe9Zhxl5DnvrgUxE0eN9aC4KctnV6CUB77rFDtVK1y248nL
+         QpJHyxAPL0Pvr+X21L5S9VU2Ou/3H8MRHEMlrX4pYUQPgK5UefX80o6Y6V8kseRl4CND
+         /r3s/rcUnJVh3bA+3mlzvkJyMT05m21THZlXBAWGv9DhbWj5KUrnkiU0mHUd1p0N6M6C
+         69CA==
+X-Gm-Message-State: AOAM532gMz77WqLph1oCDsjQC8gsg7HAESnEg8ReIiZ+I+SeNN6ZRoRv
+        dkzFH1Ovh01WMn+T1VNrpmc=
+X-Google-Smtp-Source: ABdhPJw0KYa7fhoRDswIm3fxHdgxTAvbu2xgjiARxGl5eH6CMPiXt8aK1ddLkk2hzdMh9Cw0a6r7JQ==
+X-Received: by 2002:a05:6000:100c:b0:20a:c68a:e9a with SMTP id a12-20020a056000100c00b0020ac68a0e9amr10622884wrx.314.1650802201258;
+        Sun, 24 Apr 2022 05:10:01 -0700 (PDT)
+Received: from alaa-emad ([197.57.78.84])
+        by smtp.gmail.com with ESMTPSA id a4-20020a056000188400b0020a9ec6e8e3sm7124788wri.55.2022.04.24.05.10.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Apr 2022 05:10:00 -0700 (PDT)
+From:   Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     outreachy@lists.linux.dev, roopa@nvidia.com, jdenham@redhat.com,
+        sbrivio@redhat.com, jesse.brandeburg@intel.com,
+        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
+        alexandre.belloni@bootlin.com, shshaikh@marvell.com,
+        manishc@marvell.com, razor@blackwall.org,
+        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org,
+        UNGLinuxDriver@microchip.com, GR-Linux-NIC-Dev@marvell.com,
+        bridge@lists.linux-foundation.org,
+        eng.alaamohamedsoliman.am@gmail.com
+Subject: [PATCH net-next v3 0/2] propagate extack to vxlan_fdb_delete
+Date:   Sun, 24 Apr 2022 14:09:43 +0200
+Message-Id: <cover.1650800975.git.eng.alaamohamedsoliman.am@gmail.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/esmil/linux visionfive
-head:   0729a282564fe3940277937536b1e67f98885c49
-commit: 82d19ba510f9a07c18a011731401222caaffdb4a [22/56] sifive/sifive_l2_cache: Add sifive_l2_flush64_range function
-config: riscv-randconfig-r016-20220424 (https://download.01.org/0day-ci/archive/20220424/202204242055.S0sCOxzU-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/esmil/linux/commit/82d19ba510f9a07c18a011731401222caaffdb4a
-        git remote add esmil https://github.com/esmil/linux
-        git fetch --no-tags esmil visionfive
-        git checkout 82d19ba510f9a07c18a011731401222caaffdb4a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kvm/ drivers/soc/sifive/
+In order to propagate extack to vxlan_fdb_delete and vxlan_fdb_parse,
+add extack to .ndo_fdb_del and edit all fdb del handelers
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Alaa Mohamed (2):
+  rtnetlink: add extack support in fdb del handlers
+  net: vxlan: vxlan_core.c: Add extack support to vxlan_fdb_delete
 
-All error/warnings (new ones prefixed by >>):
-
->> drivers/soc/sifive/sifive_l2_cache.c:152:3: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   writeq(line, l2_base + SIFIVE_L2_FLUSH64);
-                   ^
->> drivers/soc/sifive/sifive_l2_cache.c:142:19: warning: result of comparison of constant 36507222016 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
-              (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
-              ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
-
-
-vim +/writeq +152 drivers/soc/sifive/sifive_l2_cache.c
-
-   123	
-   124	#ifdef CONFIG_SIFIVE_L2_FLUSH
-   125	void sifive_l2_flush64_range(unsigned long start, unsigned long len)
-   126	{
-   127		unsigned long line;
-   128	
-   129		if(!l2_base) {
-   130			pr_warn("L2CACHE: base addr invalid, skipping flush\n");
-   131			return;
-   132		}
-   133	
-   134		/* TODO: if (len == 0), skipping flush or going on? */
-   135		if(!len) {
-   136			pr_debug("L2CACHE: flush64 range @ 0x%lx(len:0)\n", start);
-   137			return;
-   138		}
-   139	
-   140		/* make sure the address is in the range */
-   141		if(start < CONFIG_SIFIVE_L2_FLUSH_START ||
- > 142		   (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
-   143				     CONFIG_SIFIVE_L2_FLUSH_SIZE)) {
-   144			pr_warn("L2CACHE: flush64 out of range: %lx(%lx), skip flush\n",
-   145				start, len);
-   146			return;
-   147		}
-   148	
-   149		mb();	/* sync */
-   150		for (line = start; line < start + len;
-   151		     line += SIFIVE_L2_FLUSH64_LINE_LEN) {
- > 152			writeq(line, l2_base + SIFIVE_L2_FLUSH64);
-   153			mb();
-   154		}
-   155	}
-   156	EXPORT_SYMBOL_GPL(sifive_l2_flush64_range);
-   157	#endif
-   158	
+ drivers/net/ethernet/intel/ice/ice_main.c     |  4 +-
+ drivers/net/ethernet/mscc/ocelot_net.c        |  4 +-
+ .../net/ethernet/qlogic/qlcnic/qlcnic_main.c  |  2 +-
+ drivers/net/macvlan.c                         |  2 +-
+ drivers/net/vxlan/vxlan_core.c                | 38 +++++++++++++------
+ include/linux/netdevice.h                     |  2 +-
+ net/bridge/br_fdb.c                           |  2 +-
+ net/bridge/br_private.h                       |  2 +-
+ net/core/rtnetlink.c                          |  4 +-
+ 9 files changed, 37 insertions(+), 23 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.0
+

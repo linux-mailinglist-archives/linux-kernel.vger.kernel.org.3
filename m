@@ -2,103 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC1950D0EA
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 11:48:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5106550D0EB
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 11:48:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238937AbiDXJvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 05:51:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55780 "EHLO
+        id S237066AbiDXJvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 05:51:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238919AbiDXJuw (ORCPT
+        with ESMTP id S238935AbiDXJvE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 05:50:52 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A506344A2D;
-        Sun, 24 Apr 2022 02:47:50 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 02D151F37C;
-        Sun, 24 Apr 2022 09:47:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1650793669; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=nqSoL9Pk0zdOClICjXuOMtQ1MOqmdK1KptVJPWeMYMc=;
-        b=0dlJkFC2fil9ZwQVFdwHoezOXxyrUZeHkKTTOuI3VFsCPMoFyxTYUtU52RIEMc87R+3QVJ
-        3tzpaaTnxC6HRK8WLehSFE7RYvaLnOY3MQWp+P4r3e3TasRF26ulT+G7Ghti5sdy0iLj7B
-        05m81qkHJyDOnLfeiIq704vR2bpIwrU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1650793669;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=nqSoL9Pk0zdOClICjXuOMtQ1MOqmdK1KptVJPWeMYMc=;
-        b=X60gPvvFsUL6AYTgmdoCTXDSnWaprfeART8oddsBq0LGW+hGwg+05xr4RdQP6LsAYdqRZp
-        f8J7L3L5vMWhLQDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E499213780;
-        Sun, 24 Apr 2022 09:47:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id cY5XN8QcZWLkJAAAMHmgww
-        (envelope-from <bp@suse.de>); Sun, 24 Apr 2022 09:47:48 +0000
-Date:   Sun, 24 Apr 2022 11:47:44 +0200
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-edac <linux-edac@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] EDAC urgent for 5.18
-Message-ID: <YmUcwHD0QLywciqo@zn.tnic>
+        Sun, 24 Apr 2022 05:51:04 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1175D44A2D
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 02:48:03 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id e4so14049568oif.2
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 02:48:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NR9IcAf4zZ7TVMjsW1KdEsz3dFd7cHl2Hh7bXybUL2U=;
+        b=mpfmbVoKuOqB1v7GbqmtgQmQm9XWZqwnPNkS8gpI5GQ55pmnrH8oe+FpMHDZm23m6O
+         W1TQIDMzQUgc+KXv59n8mcdwKkwr4lq2n24/ePNScbJe/FItbOCNX5PdFkGoBfBEpsv0
+         Q4SFy38RsMuKKRWSG/l+dTcplTBup0SdpVjHBx+PQmfrAKA4YpWOYRXdTJjcwLvr4qKY
+         4u7SlFk+9zs00GGIgfzRtgXYymJCOZoCtrcD0sAWniVHwbw/4fJueyIgd1d4j28RkfVh
+         oGSDnM79apC53b20BI3Lwrn6cbYg+87WFZ0APD5yhzX63/5E9lVERgiBglCdcFAzdHI0
+         FPKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NR9IcAf4zZ7TVMjsW1KdEsz3dFd7cHl2Hh7bXybUL2U=;
+        b=EAEE0avgvyFOB8MbDqhTfLeBabxiM7lTTEoz2sLzyAA/rTAPWsuJ3rWA0V4eKYx+jc
+         N5a58AmQUFRgq0DYHg4cNV0tKGTGzPRVu7GrqdMGWM2/KZfI1UjLe/YR1QiIHeoOC7F9
+         eHJNmYBFUiWKJbSB7aHLUuo9zy2S4dIa9uHe03QeMtUwoviR51mPXkuLWlH6t4IAr+8T
+         5ckTYswFekEyie8onEwqi+Bb+aRDiySu5XBr8ovVvRZ4yPAuEae9N8Pw3OvaG7R6lbcd
+         29FaMJznVHEIFjcATZR6VrSkTLZo3TGb4aqKIX+rW2cYUaflTFiCfmL2Rrjo6zqPNOJ5
+         egNA==
+X-Gm-Message-State: AOAM530fg58iHRHv/ReCRTWdwtGc9ING3rCoM8H5rB8FGPRKfcEAOp0H
+        WM/bEHzuY8uQWqW1VZcHrwhxFKZobQ4kcFNYejs=
+X-Google-Smtp-Source: ABdhPJyzpVb5ltwaTMr93ZjDy91prWkmEvZHBozs3ZJbbdW41m4CzE+CAzSLMA5Xy2TOBs8IKsNzTFerp04cMal8cTc=
+X-Received: by 2002:aca:1306:0:b0:322:9104:6cf9 with SMTP id
+ e6-20020aca1306000000b0032291046cf9mr5720845oii.112.1650793682840; Sun, 24
+ Apr 2022 02:48:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20220423184745.21134-1-makvihas@gmail.com> <3607997.MHq7AAxBmi@leap>
+ <CAH1kMwSZbogptqDdiJVoiLcZamY_PmX_p0oXPZguoAnY=dibug@mail.gmail.com>
+In-Reply-To: <CAH1kMwSZbogptqDdiJVoiLcZamY_PmX_p0oXPZguoAnY=dibug@mail.gmail.com>
+From:   Vihas Makwana <makvihas@gmail.com>
+Date:   Sun, 24 Apr 2022 15:17:52 +0530
+Message-ID: <CAH1kMwTDaOgDFADR8OMWVOxg6pUmEAeprqOb_m6t3Tig-zOXgw@mail.gmail.com>
+Subject: Re: [PATCH] staging: r8188eu: fix a potential NULL pointer dereference
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Straube <straube.linux@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Pavel Skripkin <paskripkin@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
-
-please pull a single urgent fix for the synopsys EDAC driver.
-
-Thx.
-
----
-
-The following changes since commit ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e:
-
-  Linux 5.18-rc2 (2022-04-10 14:21:36 -1000)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v5.18_rc4
-
-for you to fetch changes up to e2932d1f6f055b2af2114c7e64a26dc1b5593d0c:
-
-  EDAC/synopsys: Read the error count from the correct register (2022-04-14 14:44:49 +0200)
-
-----------------------------------------------------------------
-- Read the reported error count from the proper register on synopsys_edac
-
-----------------------------------------------------------------
-Shubhrajyoti Datta (1):
-      EDAC/synopsys: Read the error count from the correct register
-
- drivers/edac/synopsys_edac.c | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
+Please ignore this patch, Greg.

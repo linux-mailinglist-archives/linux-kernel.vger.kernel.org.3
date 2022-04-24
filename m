@@ -2,310 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A429650CEC5
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 04:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C42A50CECA
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 05:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237900AbiDXDBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 23:01:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49186 "EHLO
+        id S237901AbiDXDER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 23:04:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237843AbiDXDBV (ORCPT
+        with ESMTP id S231260AbiDXDEP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 23:01:21 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC10E13FB45
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 19:58:22 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id i38so2310183ybj.13
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 19:58:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=OfK0tpH8kjdC9aBzVRfEMO2JK1yjN5Ywppuc5BMNAlk=;
-        b=ZrqpxbfZ3cuZUK51/uH7rLYXtNAJAp/IxiV2Sv4efZ2FMmEUNn1nY5gEFyS4300vqQ
-         nSwbu4hfi3bY+mbLS8sSPdqR0jbU+LWXgwB4RS4bluGWteiR7swukscJPG9E0ulfg34d
-         Q/CIQdjpYzQJjlaBv3nTMrHX47NnG8ADeEnzGZrjYtUligyqJWVKKJMxoKQRU8cpGcXF
-         bAJp8b8V7MCArs6ZqKiiuQcNvGpaO/LKBN2nO/2nFqwWA6fswqAcGILOBl4VDAXo0sOj
-         Yo52+gZnB8DYDi93Qe6vI39XcFFbYCO4keXyepqotVBWRgXHv5Z4x9AgUIfIOPbbJcyG
-         K4Dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=OfK0tpH8kjdC9aBzVRfEMO2JK1yjN5Ywppuc5BMNAlk=;
-        b=CKMS05imkDCFGnn+lN+3ulS5n3TwJ54IqwpQA6uiubADbMxKkq8pfadqrzF5suoTUa
-         ofZh/XI4LFHKR+JpO+EsqXhwE65Y99/iJbhCyGr7SBUyoUfaQ8dxCB4kK5dNuprd6wHW
-         VeXoIE9DWI0DgtBghq74r22lzLYo+LNZDbooZHpcKOZ/xxlumAui7vdi8xH4LS/PVD5U
-         QHZ4f/CrfFpP4V8AfgODyIz9WPvMXTMmql4FcU6Of6Hlk8RERQ4MDPJTBn5uZh8MtD+P
-         dHZTZCDDH55HZS6BswWpfomyAnoT3fxd1fH2DXLNFwwDHC0SP0xrLnV55idr8Bwuyxed
-         Xt8w==
-X-Gm-Message-State: AOAM5333DbXZhuwD6UdVUlLQeV8gQGPTnE6KCjMJSnnrc0MjAr5QOD/Z
-        Z+cdFrBd8kEB83lDZp1ImNpttY3/rxbGgjG/R25lbA==
-X-Google-Smtp-Source: ABdhPJzBUuieShvMs1DnGCSDEbXdoma89RFUbZZE+ByU8fSZ14hp0IRrf2Vx+c2nvRmHjMngeES6o3xSHEQNeAOu7sc=
-X-Received: by 2002:a25:b952:0:b0:644:f4a4:4c23 with SMTP id
- s18-20020a25b952000000b00644f4a44c23mr10764420ybm.171.1650769101726; Sat, 23
- Apr 2022 19:58:21 -0700 (PDT)
+        Sat, 23 Apr 2022 23:04:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DB3F813FDA5
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 20:01:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650769275;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=v2xigutMK1jHrbbVOqQLpehzP+OTkeSM63dOSB5Yl6M=;
+        b=RZqu2ICVkj3+5RnxOwPOSDbM6sLoDHcaOsX1G8B9lLIbnoIq/k2ewNFo1jNjJPLrNNYk04
+        pl+ScY+ZIjaUeagh866E+QV+ZJTCmINluVFnCsl3lf3ct8ltH4n+9eR7rB3jp+eGI8ooR2
+        9oujBJf5q9K4e7o0usz9bIHVlsc8CEE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-418-IQQt-5u5N5-Qo4ehDgZP7A-1; Sat, 23 Apr 2022 23:01:12 -0400
+X-MC-Unique: IQQt-5u5N5-Qo4ehDgZP7A-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BDFBC1C05ACA;
+        Sun, 24 Apr 2022 03:01:11 +0000 (UTC)
+Received: from [10.72.13.230] (ovpn-13-230.pek2.redhat.com [10.72.13.230])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A989A53AA;
+        Sun, 24 Apr 2022 03:01:00 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v6 03/18] KVM: arm64: Add SDEI virtualization
+ infrastructure
+To:     Oliver Upton <oupton@google.com>
+Cc:     kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        eauger@redhat.com, Jonathan.Cameron@huawei.com,
+        vkuznets@redhat.com, will@kernel.org, shannon.zhaosl@gmail.com,
+        james.morse@arm.com, mark.rutland@arm.com, maz@kernel.org,
+        pbonzini@redhat.com, shan.gavin@gmail.com
+References: <20220403153911.12332-1-gshan@redhat.com>
+ <20220403153911.12332-4-gshan@redhat.com> <YmMiyt/TDjJt0mdG@google.com>
+ <36899ea9-e8bd-27b2-8dfb-75b76eab50d7@redhat.com>
+ <YmRI7Bh7fWCYLUGT@google.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <0e26da1a-00bb-3d63-a8bf-6cd3271b0a38@redhat.com>
+Date:   Sun, 24 Apr 2022 11:00:56 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-References: <tencent_B683AC1146DB6A6ABB4D73697C0D6A1D7608@qq.com>
- <YlWBkyGeb2ZOGLKl@fyu1.sc.intel.com> <tencent_A9458C6CEBAADD361DA765356477B00E920A@qq.com>
- <tencent_8B6D7835F62688B4CD069C0EFC41B308B407@qq.com> <YllADL6uMoLllzQo@fyu1.sc.intel.com>
- <YmA4pbgevqln/jSO@myrica> <tencent_76E043C4D1B6A21A5253579A61034107EB06@qq.com>
- <tencent_7477100F8A445C6CAFA8F13601A55134480A@qq.com> <YmJ/WA6KAQU/xJjA@myrica>
- <tencent_A4E83BA6071B2204B6F5D4E69A50D21C1A09@qq.com> <YmLOznyBF0f7COYT@myrica>
- <tencent_2922DAB6F3D5789A1CD3A21A843B4007ED09@qq.com>
-In-Reply-To: <tencent_2922DAB6F3D5789A1CD3A21A843B4007ED09@qq.com>
-From:   Zhangfei Gao <zhangfei.gao@linaro.org>
-Date:   Sun, 24 Apr 2022 10:58:10 +0800
-Message-ID: <CABQgh9GzuQqsuPVyur+QurN8p+1BciMfOw0TccwiZSvvtrcowg@mail.gmail.com>
-Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
- allocation and free it on mm exit
-To:     "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>
-Cc:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86 <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        iommu <iommu@lists.linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>, will@kernel.org,
-        robin.murphy@arm.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YmRI7Bh7fWCYLUGT@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 23 Apr 2022 at 19:13, zhangfei.gao@foxmail.com
-<zhangfei.gao@foxmail.com> wrote:
->
-> Hi, Jean
->
-> On 2022/4/22 =E4=B8=8B=E5=8D=8811:50, Jean-Philippe Brucker wrote:
-> > On Fri, Apr 22, 2022 at 09:15:01PM +0800, zhangfei.gao@foxmail.com wrot=
-e:
-> >>> I'm trying to piece together what happens from the kernel point of vi=
-ew.
-> >>>
-> >>> * master process with mm A opens a queue fd through uacce, which call=
-s
-> >>>     iommu_sva_bind_device(dev, A) -> PASID 1
-> >>>
-> >>> * master forks and exits. Child (daemon) gets mm B, inherits the queu=
-e fd.
-> >>>     The device is still bound to mm A with PASID 1, since the queue f=
-d is
-> >>>     still open.
-> >>> We discussed this before, but I don't remember where we left off. The
-> >>> child can't use the queue because its mappings are not copied on fork=
-(),
-> >>> and the queue is still bound to the parent mm A. The child either nee=
-ds to
-> >>> open a new queue or take ownership of the old one with a new uacce io=
-ctl.
-> >> Yes, currently nginx aligned with the case.
-> >> Child process (worker process) reopen uacce,
-> >>
-> >> Master process (do init) open uacce, iommu_sva_bind_device(dev, A) -> =
-PASID
-> >> 1
-> >> Master process fork Child (daemon) and exit.
-> >>
-> >> Child (daemon)  does not use PASID 1 any more, only fork and manage wo=
-rker
-> >> process.
-> >> Worker process reopen uacce, iommu_sva_bind_device(dev, B) PASID 2
-> >>
-> >> So it is expected.
-> > Yes, that's fine
-> >
-> >>> Is that the "IMPLEMENT_DYNAMIC_BIND_FN()" you mention, something out =
-of
-> >>> tree?  This operation should unbind from A before binding to B, no?
-> >>> Otherwise we leak PASID 1.
-> >> In 5.16 PASID 1 from master is hold until nginx service stop.
-> >> nginx start
-> >> master:
-> >> iommu_sva_alloc_pasid mm->pasid=3D1      // master process
-> >>
-> >> lynx https start:
-> >> iommu_sva_alloc_pasid mm->pasid=3D2    //worker process
-> >>
-> >> nginx stop:  from fops_release
-> >> iommu_sva_free_pasid mm->pasid=3D2   // worker process
-> >> iommu_sva_free_pasid mm->pasid=3D1  // master process
-> > That's the expected behavior (master could close its fd before forking,=
- in
-> > order to free things up earlier, but it's not mandatory)
-> Currently we unbind in fops_release, so the ioasid allocated in master
-> can only be freed when nginx stop,
-> when all forked fd are closed.
->
-> >
-> >> Have one silly question.
-> >>
-> >> kerne driver
-> >> fops_open
-> >> iommu_sva_bind_device
-> >>
-> >> fops_release
-> >> iommu_sva_unbind_device
-> >>
-> >> application
-> >> main()
-> >> fd =3D open
-> >> return;
-> >>
-> >> Application exit but not close(fd), is it expected fops_release will b=
-e
-> >> called automatically by system?
-> > Yes, the application doesn't have to call close() explicitly, the file
-> > descriptor is closed automatically on exit. Note that the fd is copied =
-on
-> > fork(), so it is only released once parent and all child processes exit=
-.
-> Yes, in case the application ended unexpected, like ctrl+c
-> >
-> >> On 5.17
-> >> fops_release is called automatically, as well as iommu_sva_unbind_devi=
-ce.
-> >> On 5.18-rc1.
-> >> fops_release is not called, have to manually call close(fd)
-> > Right that's weird
-> Looks it is caused by the fix patch, via mmget, which may add refcount
-> of fd.
->
-> Some experiments
-> 1. 5.17, everything works well.
->
-> 2. 5.17 + patchset of "iommu/sva: Assign a PASID to mm on PASID
-> allocation and free it on mm exit"
->
-> Test application, exit without close uacce fd
-> First time:  fops_release can be called automatically.
->
-> log:
-> ioasid_alloc ioasid=3D1
-> iommu_sva_alloc_pasid pasid=3D1
-> iommu_sva_bind_device handle=3D00000000263a2ee8
-> ioasid_free ioasid=3D1
-> uacce_fops_release q=3D0000000055ca3cdf
-> iommu_sva_unbind_device handle=3D00000000263a2ee8
->
-> Second time: hardware reports error
->
-> uacce_fops_open q=3D000000008e4d6f78
-> ioasid_alloc ioasid=3D1
-> iommu_sva_alloc_pasid pasid=3D1
-> iommu_sva_bind_device handle=3D00000000cfd11788
-> // Haredware reports error
-> hisi_sec2 0000:b6:00.0: qm_acc_do_task_timeout [error status=3D0x20] foun=
-d
-> hisi_sec2 0000:b6:00.0: qm_acc_wb_not_ready_timeout [error status=3D0x40]
-> found
-> hisi_sec2 0000:b6:00.0: sec_fsm_hbeat_rint [error status=3D0x20] found
-> hisi_sec2 0000:b6:00.0: Controller resetting...
-> hisi_sec2 0000:b6:00.0: QM mailbox operation timeout!
-> hisi_sec2 0000:b6:00.0: Failed to dump sqc!
-> hisi_sec2 0000:b6:00.0: Failed to drain out data for stopping!
-> hisi_sec2 0000:b6:00.0: Bus lock! Please reset system.
-> hisi_sec2 0000:b6:00.0: Controller reset failed (-110)
-> hisi_sec2 0000:b6:00.0: controller reset failed (-110)
->
-> 3. Add the fix patch of using mmget in bind.
-> Test application, exit without close uacce fd
->
-> fops_release can NOT be called automatically, looks mmget adds refcount
-> of fd.
+Hi Oliver,
 
-Test application, exit without closing fd.
-> >> kernel driver
-> >> fops_open
-> >> iommu_sva_bind_device
-> >>
-> >> fops_release
-> >> iommu_sva_unbind_device
+On 4/24/22 2:43 AM, Oliver Upton wrote:
+> On Sat, Apr 23, 2022 at 10:18:49PM +0800, Gavin Shan wrote:
+>> On 4/23/22 5:48 AM, Oliver Upton wrote:
+>>> On Sun, Apr 03, 2022 at 11:38:56PM +0800, Gavin Shan wrote:
+>>>> Software Delegated Exception Interface (SDEI) provides a mechanism
+>>>> for registering and servicing system events, as defined by ARM DEN0054C
+>>>> specification. One of these events will be used by Asynchronous Page
+>>>> Fault (Async PF) to deliver notifications from host to guest.
+>>>>
+>>>> The events are classified into shared and private ones according to
+>>>> their scopes. The shared events are system or VM scoped, but the
+>>>> private events are CPU or VCPU scoped. The shared events can be
+>>>> registered, enabled, unregistered and reset through hypercalls
+>>>> issued from any VCPU. However, the private events are registered,
+>>>> enabled, unregistered and reset on the calling VCPU through
+>>>> hypercalls. Besides, the events are also classified into critical
+>>>> and normal events according their priority. During event delivery
+>>>> and handling, the normal event can be preempted by another critical
+>>>> event, but not in reverse way. The critical event is never preempted
+>>>> by another normal event.
+>>>
+>>> We don't have any need for critical events though, right? We should avoid
+>>> building out the plumbing around the concept of critical events until
+>>> there is an actual use case for it.
+>>>
+>>
+>> The Async PF one is critical event, as guest needs to handle it immediately.
+> 
+> But that's the sticking point for me. IIUC, we're going to deliver an
+> aync PF SDEI event to the PE that is waiting on a page so it can go do
+> something else and wait for the page to come in. Normal events preempt
+> ~everything, critical events preempt even normal events.
+> 
+> How can the guest context switch and do something better at an arbitrary
+> instruction boundary (such as in an SDEI handler of normal priority)? If
+> a guest takes a page fault in that context, it may as well wait
+> synchronously for the page to come in.
+> 
+> And in the case of the page ready event, we still need to clean up shop
+> before switching to the unblocked context.
+> 
 
-1.
-5.17 kernel, no mmget & mmput
+The Async PF is working exactly like what you said. The normal event handler
+should be executed in EL1. When the vcpu runs in EL1, no Async PF event will
+be triggered. So the page fault in the normal event context is always resolved
+synchronously. The page ready notification is delivered by PPI instead of
+SDEI event, but yes, we need cleanup before switching to the previously
+suspended context.
 
-wd_release_queue no close
-Compress bz=3D512000 nb=3D1=C3=9710, speed=3D139.5 MB/s (=C2=B10.0% N=3D1) =
-overall=3D122.9
-MB/s (=C2=B10.0%)
-[   16.052989] do_exit current=3Dd380000
-[   16.053828] mmput atomic=3D1
-[   16.054511]  __mmput atomic=3D0
-[   16.070382] exit_task_work
-[   16.070981] uacce_fops_release current=3Dd380000
-[   16.071999] CPU: 0 PID: 176 Comm: test_sva_perf Not tainted
-5.16.0-rc1-27342-ge5f9f3f99a88-dirty #240
-[   16.074007] Hardware name: QEMU KVM Virtual Machine, BIOS 0.0.0 02/06/20=
-15
-[   16.075530] Call trace:
-[   16.076069]  dump_backtrace+0x0/0x1a0
-[   16.076887]  show_stack+0x20/0x30
-[   16.077629]  dump_stack_lvl+0x8c/0xb8
-[   16.078441]  dump_stack+0x18/0x34
-[   16.079176]  uacce_fops_release+0x44/0xdc
-[   16.080060]  __fput+0x78/0x240
-[   16.080743]  ____fput+0x18/0x28
-[   16.081447]  task_work_run+0x88/0x160
-[   16.082259]  do_exit+0x52c/0xa50
-[   16.082974]  do_group_exit+0x84/0xa8
-[   16.083768]  __wake_up_parent+0x0/0x38
-[   16.084597]  invoke_syscall+0x4c/0x110
-[   16.085435]  el0_svc_common.constprop.0+0x68/0x128
-[   16.086501]  do_el0_svc+0x2c/0x90
-[   16.087243]  el0_svc+0x24/0x70
-[   16.087928]  el0t_64_sync_handler+0xb0/0xb8
-[   16.088854]  el0t_64_sync+0x1a0/0x1a4
-[   16.089775]  arm_smmu_sva_unbind
-[   16.090577]  iommu_sva_free_pasid mm->pasid=3D1
-[   16.091763] exit_task_work done
+>> Otherwise, it's possible that guest can't continue its execution. Besides,
+>> the software signaled event (0x0) is normal event. They're the only two
+>> events to be supported, I assume the software signaled event (0x0) is only
+>> used selftest/kvm. So Async PF one becomes the only event and it can be
+>> in normal priority until other SDEI event needs to be added and supported.
+> 
+> I believe there are multiple use cases for guest-initiated SDEI events
+> beyond just testing. Poking a hung PE but one example.
+> 
 
-2. Add mmget in bind and mmput in unbind,
-Since application do not close fd, so no unbind,& mmput
-And fops_release is not called since mm_users account.
+Right. I think we can drop support to the critical event. Lets do this
+in next respin. Prior to working on next revision, I still want to
+confirm with you on the data structures. Please refer the below reply
+about the adjusted data structures.
 
-log:
-[  101.642690] mmput atomic=3D3
-wd_release_queue no close
-Compress bz=3D512000 nb=3D1=C3=9710, speed=3D40.3 MB/s (=C2=B10.0% N=3D1) o=
-verall=3D38.7
-MB/s (=C2=B10.0%)
-[  101.671167] do_exit current=3Dd9daf40
-[  101.672003] mmput atomic=3D2
-[  101.672712] exit_task_work
-[  101.673292] exit_task_work done
+>> However, the logic to support critical/normal events has been here. So
+>> I think it's probably nice to keep it. At least, it make it easier to
+>> add a new SDEI event in future. We dropped the support for the shared
+>> event from v5 to v6, I think we probably never need a shared event for
+>> ever :)
+> 
+> But then we're sprinkling a lot of dead code throughout KVM, right? It
+> makes KVM's job even easier if it doesn't have to worry about nesting
+> SDEI events.
+>>>> +struct kvm_sdei_exposed_event {
+>>>> +	unsigned int	num;
+>>>> +	unsigned char	type;
+>>>> +	unsigned char	signaled;
+>>>
+>>> what is this used for?
+>>>
+>>
+>> It indicates the event can be raised by software or not. For those
+>> events exposed by KVM should be raised by software, so this should
+>> always be true.
+> 
+> Isn't there always going to be some piece of software that raises an
+> event?
+> 
+> For KVM, we have guest-initiated 'software-signaled' events and KVM-initiated
+> async PF (whatever else may follow as well).
+> 
 
-Thanks
+Yes, The assumption that all events are always singled by software should
+be true. So this field (@signaled) can be dropped either. So I plan to
+change the data structures like below, according to the suggestions given
+by you. Please double check if there are anything missed.
+
+(1) Those fields of struct kvm_sdei_exposed_event are dropped or merged
+     to struct kvm_sdei_event.
+
+     struct kvm_sdei_event {
+            unsigned int          num;
+            unsigned long         ep_addr;
+            unsigned long         ep_arg;
+#define KVM_SDEI_EVENT_STATE_REGISTERED         0
+#define KVM_SDEI_EVENT_STATE_ENABLED            1
+#define KVM_SDEI_EVENT_STATE_UNREGISTER_PENDING 2
+            unsigned long         state;                 /* accessed by {test,set,clear}_bit() */
+            unsigned long         event_count;
+     };
+
+(2) In arch/arm64/kvm/sdei.c
+
+     static kvm_sdei_event exposed_events[] = {
+            { .num = SDEI_SW_SIGNALED_EVENT },
+     };
+
+(3) In arch/arm64/kvm/sdei.c::kvm_sdei_create_vcpu(), the SDEI events
+     are instantiated based on @exposed_events[]. It's just what we're
+     doing and nothing is changed.
+
+>>> Do we need this if we disallow nesting events?
+>>>
+>>
+>> Yes, we need this. "event == NULL" is used as indication of invalid
+>> context. @event is the associated SDEI event when the context is
+>> valid.
+> 
+> What if we use some other plumbing to indicate the state of the vCPU? MP
+> state comes to mind, for example.
+> 
+
+Even the indication is done by another state, kvm_sdei_vcpu_context still
+need to be linked (associated) with the event. After the vCPU context becomes
+valid after the event is delivered, we still need to know the associated
+event when some of hypercalls are triggered. SDEI_1_0_FN_SDEI_EVENT_COMPLETE
+is one of the examples, we need to decrease struct kvm_sdei_event::event_count
+for the hypercall.
+
+There are several options I can figure out for now. Please let me know your
+preference.
+
+(1) Rename 'struct kvm_sdei_event *event' to 'unsigned int num'. We use
+     the check of '@num == KVM_SDEI_INVALID_NUM' as the indication.
+     KVM_SDEI_INVALID_NUM is defined as -1U. With the change, no pointer
+     is left in kvm_sdei_vcpu_context.
+
+(2) Add field of 'struct kvm_sdei_event *current_event' to kvm_sdei_vcpu,
+     to associate the event with the vCPU context. We still use the
+     check of '@current_event == NULL' as the indication.
+
+(3) Have changes in (1) and (2) in the mean while.
+
+Besides, the data structures needs somewhat adjustment as you suggested
+previously. The major changes are to drop @lock and critical event support.
+
+    struct kvm_sdei_vcpu_context {
+         struct kvm_sdei_event   *event;                      /* need your confirm */
+         unsigned long           regs[18];
+         unsigned long           pc;
+         unsigned long           pstate;
+    };
+
+    struct kvm_sdei_vcpu {
+         struct kvm_sdei_event           *events;            /* instantiated from @exposed_events[] */
+         unsigned char                   masked;             /* vCPU is masked off or not           */
+         unsigned long                   event_count;        /* Total count of pending events       */
+         struct kvm_sdei_vcpu_context    context;            /* vCPU context for SDEI event         */
+    };
+
+>>>> +/*
+>>>> + * According to SDEI specification (v1.1), the event number spans 32-bits
+>>>> + * and the lower 24-bits are used as the (real) event number. I don't
+>>>> + * think we can use that much event numbers in one system. So we reserve
+>>>> + * two bits from the 24-bits real event number, to indicate its types:
+>>>> + * physical or virtual event. One reserved bit is enough for now, but
+>>>> + * two bits are reserved for possible extension in future.
+>>>> + *
+>>>> + * The physical events are owned by firmware while the virtual events
+>>>> + * are used by VMM and KVM.
+>>>
+>>> Doesn't KVM own everything? I don't see how the guest could interact
+>>> with another SDEI implementation.
+>>>
+>>
+>> I might be overthinking on the scheme. The host's firmware might have
+>> SDEI supported and we want to propogate these events originated from
+>> host's firmware to guest. In this case, we need to distinguish the events
+>> originated from host's firmware and kvm (guest's firmware). Even this
+>> case isn't possible to happen, I think it's still nice to distinguish
+>> the events originated from a real firmware or KVM emulated firmware.
+> 
+> The guest ABI w.r.t. SDEI is under full ownership of KVM. Any other
+> implementations events will never get exposed to the guest.
+> 
+> Couldn't the guest own the host if it was talking to our firmware
+> anyway?
+> 
+
+Right. Lets drop these macros and kvm_sdei_is_virtual() in next respin.
+As you suggested, we need to iterate struct kvm_sdei_vcpu::events to
+see if the event (number) is valid or not.
+
+>>>> + */
+>>>> +#define KVM_SDEI_EVENT_NUM_TYPE_SHIFT	22
+>>>> +#define KVM_SDEI_EVENT_NUM_TYPE_MASK	(3 << KVM_SDEI_EVENT_NUM_TYPE_SHIFT)
+>>>> +#define KVM_SDEI_EVENT_NUM_TYPE_PHYS	0
+>>>> +#define KVM_SDEI_EVENT_NUM_TYPE_VIRT	1
+>>>> +
+>>>> +static inline bool kvm_sdei_is_virtual(unsigned int num)
+>>>> +{
+>>>> +	unsigned int type;
+>>>> +
+>>>> +	type = (num & KVM_SDEI_EVENT_NUM_TYPE_MASK) >>
+>>>> +	       KVM_SDEI_EVENT_NUM_TYPE_SHIFT;
+>>>> +	if (type == KVM_SDEI_EVENT_NUM_TYPE_VIRT)
+>>>> +		return true;
+>>>> +
+>>>> +	return false;
+>>>> +}
+>>>> +
+>>>> +static inline bool kvm_sdei_is_virtual(unsigned int num)
+>>>> +{
+>>>> +	return num == SDEI_SW_SIGNALED_EVENT;
+>>>> +}
+>>>
+>>> Couldn't the caller just check the event number on their own?
+>>>
+>>
+>> It would be hard because the caller can be guest. Generally, the
+>> event and its associated information/state are accessed by hypercalls,
+>> event injection and delivery, migration to be supported in future.
+>> So I think it's good to check the event number by ourselves.
+> 
+> What I'm saying is, can't the caller of kvm_sdei_is_sw_signaled() just
+> do the comparison?
+> 
+
+The only caller of kvm_sdei_is_sw_signaled() is hypercall_signal(). So
+lets drop kvm_sdei_is_sw_signaled() and do the comparison in hypercall_signal()
+in next respin.
 
 
+Thanks,
+Gavin
 
->
-> So the fix method of using mmget blocks fops_release to be called once
-> fd is closed without unbind.
->
-> >> Since nginx may have a issue, it does not call close(fd) when nginx -s=
- quit.
-> > And you're sure that none of the processes are still alive or in zombie
-> > state?  Just to cover every possibility.
-> It can also reproduced by a simple application exit without close(uacce_f=
-d)
->
-> Thanks
->

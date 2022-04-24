@@ -2,121 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DD0E50CE67
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 04:12:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3579C50CE6E
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 04:22:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236611AbiDXCPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 22:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48758 "EHLO
+        id S237670AbiDXCZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 22:25:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiDXCPm (ORCPT
+        with ESMTP id S237651AbiDXCZe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 22:15:42 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250E3B8980;
-        Sat, 23 Apr 2022 19:12:44 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id EAD735C00C4;
-        Sat, 23 Apr 2022 22:12:40 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Sat, 23 Apr 2022 22:12:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1650766360; x=
-        1650852760; bh=d5V+nt7E5ITm5vT0iO+QXQjdBcEjDfwSXY/0u6QYCgI=; b=w
-        zb6oI7dx/gVnlSw6FJo9WJ3J04XhpPBExty31LO0MJJRuEZix+yPFwkJYNyyQxFN
-        RZsOOxyqhgpcIOjdtow5W8LwiWJGdP/0CRxi4+BDKPmq40eesSOjayNV04hDz/a4
-        DMLJZI2G0Dqic6iAWECIbuj5iHDAuRjef0A1TBEZkDeYBV4TZ2lHRFX0JZunGOsG
-        ABs8z0vLnaQ8fSVYYtEdEQR4ZmubpiwWkow2mgxhqw0Ie/ZdgPz8EV6fbEzcaOVa
-        Dvq4ssuKY+R6HVLYePiEqSAwvO4QQ0f2i//+hT43foItN6HpETvYhE+q8LiMHWyL
-        Aa+c7WnYIythQ/PeK489w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1650766360; x=1650852760; bh=d5V+nt7E5ITm5
-        vT0iO+QXQjdBcEjDfwSXY/0u6QYCgI=; b=Rm7ka/b9oCpcyqN6/gikFclufp50p
-        GAIZqtnhUC1jG9JM6U5lKZU+sDwhD6v1y9Ig6YBrzxCi5P7gdTcaRoRTH1egVdsj
-        FtsySReTuhJOv4zHw6POzqZ2clik5oKFzGNL5hVeqkDtRvpxcxKo88BU2BLjl74N
-        qSIxiumTpV9i/h6YJU4ILpRtwQy/UIAVct0kQ60co8wMx6yi36rTLGZ49pwgF93c
-        XcCcuQOoJvOS/4HVy/oC3WOAFntJa8VhSTvxpBMJi38VUl+p2XX+qYXNiyc17xRW
-        0CXMCMmFT+0h7kOJfjXXqFdzyTmJ8tFN98KI2afZ6h1leZLvZnMCp+dFw==
-X-ME-Sender: <xms:GLJkYo2c8O2Ce10V7VEQXgbEeP6ssH27j_Wry-c2qOJOc4--TxUHVg>
-    <xme:GLJkYjFyC1zz0aAuG__LJvE6AHAkTZZvks2Wo0JS4IMWhQer1DL1VQ7QlcEJs_JtS
-    Aihx_Qp6wb-BJVnug>
-X-ME-Received: <xmr:GLJkYg79AzSJeOKyecAMpsjQzh6iGy3hWIe50n9UNJpoqv6RAUi-Enc_zQrLBWJGxDR-PKr-rGVY3EkRXQ3NDNnuU15gz0wuzRCCjS4aCZHIsTlsz4Kw_QLgFA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrtdejgdehkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefuvfevfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepleetjeffvdegheektdekveeuueetffetffehudefueejvddufedu
-    teeiieejveelnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghruf
-    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhhohhllhgr
-    nhgurdhorhhg
-X-ME-Proxy: <xmx:GLJkYh2_2GylcTYYYs881XF-pxngd-LqDxQkuNT3Awjgng_vl8r1kA>
-    <xmx:GLJkYrEx_aQom2nmu97nUi0j7DCs8HbB8PaiMXUe8Pe4vvkjkE20yA>
-    <xmx:GLJkYq_KhYjc5Fj2h8jF1wwbzxaBNeN0jcp457InwgMwf7rR3qXK2A>
-    <xmx:GLJkYj-SR1OWPk-NbtUY1NxrSD0io_5KoCVTJlM-Vgdx-gnf0qT8cg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 23 Apr 2022 22:12:39 -0400 (EDT)
-Subject: Re: [PATCH 06/12] clk: sunxi=ng: add support for R329 CCUs
-To:     Icenowy Zheng <icenowy@aosc.io>
-Cc:     Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Icenowy Zheng <icenowy@aosc.io>
-References: <20220422140902.1058101-1-icenowy@aosc.io>
- <BYAPR20MB2472930AAFFBDC0ACB9A7487BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <c858b944-d72f-4e59-6a1a-329b5b8949c4@sholland.org>
-Date:   Sat, 23 Apr 2022 21:12:38 -0500
+        Sat, 23 Apr 2022 22:25:34 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBBC0237FD;
+        Sat, 23 Apr 2022 19:22:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1650766936;
+        bh=vQSnzM7QzzmtqW5J8MHPmlvBtPWy0o7IqH7jrgwJ9QY=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=XSDrKul9Y2F9pfIAad+mhBaWG9EpAfW4WIp/KgAUTHf+1zJI1WLZeI/lbl+Lwe/Ct
+         xmIaudurZW9klVJnXQX0i7MG4Q0qTvtZhvhzv3F5issBacXzgP9F1jbhzbhBOWlv3u
+         jPnlQpKV5MiJ4RSCTXU7i7XwQtLXC+9ZvqKfvmMU=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.0.33] ([46.223.2.193]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MWzfv-1nOx4D075d-00XOQn; Sun, 24
+ Apr 2022 04:22:16 +0200
+Subject: Re: [PATCH v3 0/4] Fixes for TPM interrupt handling
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        =?UTF-8?Q?Michael_Niew=c3=b6hner?= <linux@mniewoehner.de>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        stefanb@linux.ibm.com, James.Bottomley@hansenpartnership.com,
+        keescook@chromium.org, jsnitsel@redhat.com, ml.linux@elloe.vision,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        twawrzynczak@chromium.org, Lukas Wunner <lukas@wunner.de>,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>
+References: <20210501135727.17747-1-LinoSanfilippo@gmx.de>
+ <20210501135727.17747-3-LinoSanfilippo@gmx.de> <YJAby8mmiJ74qWAh@kernel.org>
+ <6722bf6f-1a3f-ee9c-55e2-cf63c64266a9@gmx.de> <YJNKs8bUMGOzFre+@kernel.org>
+ <2a1a1cf61732eff1608aeae74054a0c135c1671f.camel@mniewoehner.de>
+ <Yj0lhqTP1RoedxSc@iki.fi>
+ <0d6c22b40a2f17d4b260f287d4c479a96a88b0b1.camel@mniewoehner.de>
+ <efdb99b3-6d33-38b1-64a0-671821101631@gmx.de>
+ <c8c0c5fb614d8b2de2a5faee2ef5ff3214281064.camel@kernel.org>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Message-ID: <77374443-dc9b-5d1d-c652-0d093b6029f4@gmx.de>
+Date:   Sun, 24 Apr 2022 04:22:11 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <BYAPR20MB2472930AAFFBDC0ACB9A7487BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+In-Reply-To: <c8c0c5fb614d8b2de2a5faee2ef5ff3214281064.camel@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:120S5x/kr26FHH+mVXUazZ1hLDKaXtRBYFV2Z+LOc3uJ/bIqBHd
+ WB0je9ptnnc6zraRHhcXMOsxFXxdyF27y73lFJOAQWxSkVeW5vboUIbr17YcFpsvQ+PgtEg
+ 1rOQIr900dQDDMh2Hklc6fItWusYpHJKbl+Wp5y79FzbBd2aVw0Z7LSv0YLgV2H5usUfb47
+ FyG3UnOjTcM3aoet5Ueww==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:2+PvYJTu1oo=:nqZGsauAE/5flHlLeMYG7/
+ zRgmdUcHOwlqe0GBLYTTy4RjI5H5Z8/sg3uBQvCkK06LDI+HVHIsOEszsl6+rjT8pJTejKOTh
+ RjzPh3N3dzDe5lp1mkUkfgGUwPR89NxXOz914Mj2v0D3cpTAIRXSjMHOfVxvsLwyojPRjCh9x
+ esS79hTaa99wvheuX3Xw9MDEXyALHuDHQUd1Gtet51Rg98kVs0LM9SbHdGR5Lxaz6IPJZ8DKB
+ BZ7SZf2NsHPjcZXAOOg/QX0ew1np4MGU5wdNBEMqV/UF/BJVrEp/W+FJqN2kMWSgD/s8/osFk
+ RwmoraibnuQKBJjGv9H71RSct0qulXm8GqvTG8wsbsoGunDwJLgB/Nq/XZd71UCzEelPghPqw
+ VlGbRf7Zu35KMig6f0OOxgt/AGcgg/vk3JKV+QJnWuiBmDDUlcFPDeGcio0IhUJmBOFkm9RT9
+ NCBYn9Vp6/P9XWKZQppMUDENxRTvmLKW2LUktVHjrnSKRHXYnkxIV9lJMslEwoNosYLtZ5yod
+ nQC+cGu27N4+J6wXMTCAcp/4XhI1/hjn8O2SzUw1MuOAnEML7OiNH3sCwH6cHFGQ2TImPb5d5
+ 072nOCg7OILlJZLnPNNzzWwZxNunTYSPmxLvfP3LAnV+ERH7R+idskAblJSGFBDBbgkjAzLRP
+ pLp1gqeWaGovASzAZAHyh7i/xmW/8aDZgFb854a1sbDn+KkisWdm8qFCYgLDqCEOo4LnF72kK
+ GKoS0TCtP2FfwAWangdEHmA9GXgab6GVb4K5OXGFyXlSzW7u8+BBrZutMgRSmP9NJKR1rR3V2
+ HLZp54mVtIs+XTJf+QcL9wKZ31GioXChzyAdcDQXL0H8Y+ss0Q9EYA3gY3dPRnN4FTKqHttY8
+ 21uDNrKlDp2hee6lXovTnA+CC0cR6x9JSDoxUtHeNcdETUlsxvJ6nY8xhJD4KtiO7I55FuGeb
+ VZXJTh+ZZV64g6X3BHmxvyT4JzWgcnMtmoCjlo4YuwXo3xlciMP0DtLyqFBGKMMqeNy9De2kX
+ EOUXs8qsi9/wFo6JMmLoiijLUIenAtEipu8Qi5eEkOne9063/ZUXwq1j5s4XQQHoqpdKLbwaj
+ fUTBA1AiQHTTA4=
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/22/22 10:41 AM, icenowy@outlook.com wrote:
-> From: Icenowy Zheng <icenowy@aosc.io>
-> 
-> Allwinner R329 has two CCUs, one in CPUX and another in PRCM.
-> 
-> Add support for them.
-> 
-> Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
 
-There is a typo in your commit title. = should be -.
+Hi,
 
-Thanks for updating the driver to use .fw_name and be loadable as a module. All
-of those changes look good.
+On 20.04.22 at 07:30, Jarkko Sakkinen wrote:
+> n Sat, 2022-03-26 at 04:24 +0100, Lino Sanfilippo wrote:
+>>
+>> Hi Michael,
+>>
+>> On 25.03.22 at 13:32, Michael Niew=C3=B6hner wrote:
+>>>>>
+>>>>> Lino, I'd be happy to test the patches, when you have time and inter=
+est to
+>>>>> work
+>>>>> on this again!
+>>>>>
+>>>>> Thanks, Michael
+>>>>
+>>>> It's quite easy to test them out. Both fixes are in the mainline GIT =
+tree.
+>>>> E.g. give a shot rc1, and please report if any issues persists to:
+>>>>
+>>>> =C2=A0 linux-integrity@vger.kernel.org=C2=A0
+>>>>
+>>>> BR, Jarkko
+>>>
+>>> I don't see Linos patches on mainline. Also, the series included four =
+patches:
+>>> [PATCH v3 0/4] Fixes for TPM interrupt handling
+>>> [PATCH v3 1/4] tpm: Use a threaded interrupt handler
+>>> [PATCH v3 2/4] tpm: Simplify locality handling
+>>> [PATCH v3 3/4] tpm: Fix test for interrupts
+>>> [PATCH v3 4/4] tpm: Only enable supported irqs
+>>>
+>>> Three of them are relevant for the interrupt problem, which is still p=
+resent in
+>>> mainline, as these patches were refused:
+>>> [PATCH v3 1/4] tpm: Use a threaded interrupt handler
+>>> [PATCH v3 2/4] tpm: Simplify locality handling
+>>> [PATCH v3 3/4] tpm: Fix test for interrupts
+>>>
+>>> Michael
+>>>
+>>
+>> You are right, the interrupts are still not working in the mainline ker=
+nel.
+>> I would gladly make another attempt to fix this but rather step by step
+>> than in a series that tries to fix (different) things at once.
+>>
+>> A first step could be to have a sleepable context for the interrupt han=
+dling,
+>> since in case of SPI the accesses to the irq status register may sleep.
+>>
+>> I sent a patch for this purpose once, but it seems to have gone lost:
+>>
+>> https://lore.kernel.org/all/20210620023444.14684-1-LinoSanfilippo@gmx.d=
+e/
+>>
+>>
+>> Best regards,
+>> Lino
+>
+> I went these through one by one>
+> # Above linked patch
+>
+> Boolean parameters are considered bad. I.e. use named flags
+> instead. This is for above linked patch.
 
-There are still some missing clocks here compared to the BSP, and a couple of
-other minor issues. Please see my earlier review:
+Ok, we could extend tpm_tis_flags by a flag "TPM_TIS_USE_THREADED_IRQ"
+for this.
 
-https://lore.kernel.org/linux-sunxi/99a74950-fdc0-ecfe-e5f0-ba4a7d8751f0@sholland.org/
+>
+> # [PATCH v3 3/4] tpm: Fix test for interrupts
+>
+> 1. Please remove "unnecessarily complicated" sentence because
+>    it cannot be evaluated. It's your opinion, which might perhaps
+>    be correct, but it is irrelevant for any possible patch
+>    description.
+> 2. There's no such thing as "fix by re-implementation". Please
+>    explain instead code change is relevant for the bug fix.
+> 3. If set_bit() et al necessarily to fix a possible race condition
+>    you need to have a separate patch for that.
+>
+> To move forward, start with a better summary such as
+>
+> "tpm: move interrupt test to tpm_tis_probe_irq_single()"
+>
+> I'd also either revert the change for flags, or alternatively
+> move it to separate patch explaining race condition. Otherwise,
+> there's no argument of saying that using set_bit() is more
+> proper. This will make the change more localized.
+>
 
-So far it's been consistent that any settable bits in the CCU registers actually
-do something. So I would expect all of those bits to have an index reserved in
-the binding, even if we do not model them. I want to avoid having to go back and
-add gates to the binding out-of-order later, like we are doing for H6.
+Ok, I will split the fix for the irq test into two patches then.
 
-Regards,
-Samuel
+>
+> # [PATCH v3 2/4] tpm: Simplify locality handling
+>
+> "As a side-effect these modifications fix a bug which results in the
+> following warning when using TPM 2:"
+>
+> Generally speaking, the simplifications should be done on top of code
+> that does not have known bugs, even if the simplification renders out
+> the bug. This is because then we have code that have potentially unknown
+> unknown bugs.
+>
+> I hope you see my point. The problem with these patches were then
+> and is still that they intermix bug fixes and other modifications and
+> thus cannot be taken in.
+>
+
+Yes, I can see that point.
+
+> BR, Jarkko
+>
+
+Thanks a lot for the review. I will prepare new patches with the suggested
+changes.
+
+Best regards,
+Lino
+

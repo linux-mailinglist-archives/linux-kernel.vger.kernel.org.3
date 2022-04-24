@@ -2,186 +2,318 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F47550D1AF
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 14:28:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C86850D1B1
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 14:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230296AbiDXMbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 08:31:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32772 "EHLO
+        id S230412AbiDXMbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 08:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiDXMbN (ORCPT
+        with ESMTP id S229491AbiDXMbT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 08:31:13 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D3B6156E01;
-        Sun, 24 Apr 2022 05:28:13 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id k4so9516697plk.7;
-        Sun, 24 Apr 2022 05:28:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EXDLg2Vp0AC/t/EqsmDWIrB5o6mOUO0+b4I0HDcqdTY=;
-        b=J5nr6f2U9GGqp1Snl4AgUYzRt0ssrc/d3eE0Z7PcnoIBmGY/jmkGy5R7gUhJQteKIe
-         CbTsoXV1TsaCWdvlSIr+kiMmDGpNcYJR9p0aGasg8ocy3zcyede9Uq8Vq7lfOqByY33H
-         jy9Xqle4J6WgiDSlPontC5i1SxWED0T65SgM0L8bTOYUUq0/9N8afP+kf3pTOKmWg7sL
-         qwcb+rcQ1iP813BR65q6asciP8ygQdo9A1fo9NP2lH3qA0biJrHZbAS6kQBo33roD5tZ
-         j9PkE8V80sYAMA3uL9c3xFvMIdFjuevws9yza1fQeZlQch2O8gA1SjCeLdCOkwU1gSUF
-         ZvrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EXDLg2Vp0AC/t/EqsmDWIrB5o6mOUO0+b4I0HDcqdTY=;
-        b=sih+1E9zeX3aVLwpSfHHOX+51L/dRJw7DrgkxbassCu/Wx0rgzP7b1ITAAhdYTWrDZ
-         e/F+1T2YH5sqWl9ULl3HY8b5KUK6+EOiWpyCLk3kMI6BxHEARzlXWBN/ymzXFG9HE0Fc
-         yrXXPzMd5QiuYzdaEc0NztR2Bi2X6EjaTKhY6TClyTSPzsG0M9Xp5CBmNf/oqqZ0Aiwe
-         o37OxxRxwkx2BMKLeFm6GUNjCG8lCjkNUdogd95hl6AmBWkIXUHXEWf54NamS8MyEwyF
-         uUXohAn7nGob52Bd9xfb83CreCuNo5/tdHLWQsxH5EHVMRzKrH+yeVjEhQt7zyC9T34h
-         ARIw==
-X-Gm-Message-State: AOAM531lKC6s8tAblkVy2kzyWZB/LZC9gfQxyuNcQ2KqgLa1g8AGrBB/
-        UeOQESvXq26/1Ss016yWAtI=
-X-Google-Smtp-Source: ABdhPJxLbKv6WL/dGoeGF8RxmOZAZ7JfQoGbtWweN7jMLJ1BIfYv9BktM7X76Tp2/Z7P46uBJ+EWcA==
-X-Received: by 2002:a17:90b:3a8e:b0:1d9:323b:7b5 with SMTP id om14-20020a17090b3a8e00b001d9323b07b5mr7203916pjb.149.1650803292801;
-        Sun, 24 Apr 2022 05:28:12 -0700 (PDT)
-Received: from localhost.localdomain ([240b:12:16e1:e200:17dd:4a15:2ec3:3232])
-        by smtp.gmail.com with ESMTPSA id br18-20020a17090b0f1200b001cd4989fed4sm11703815pjb.32.2022.04.24.05.28.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 05:28:11 -0700 (PDT)
-From:   Kosuke Fujimoto <fujimotokosuke0@gmail.com>
-To:     akiyks@gmail.com
-Cc:     Kosuke Fujimoto <fujimotokosuke0@gmail.com>, corbet@lwn.net,
-        shibata@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [PATCH v2] docs/ja_JP/howto: Don't mention specific kernel versions
-Date:   Sun, 24 Apr 2022 21:27:45 +0900
-Message-Id: <20220424122745.15386-1-fujimotokosuke0@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 24 Apr 2022 08:31:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 714FB1586D6;
+        Sun, 24 Apr 2022 05:28:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0F093B80E0F;
+        Sun, 24 Apr 2022 12:28:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 821C2C385A9;
+        Sun, 24 Apr 2022 12:28:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650803295;
+        bh=U07pGZ+oM4pZZ0DXrmNNM3ozgqH/xrTg93BTN5x0lVo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WL/yr6H3gcdvelIo2aqZSTrd21bZ1Tt4bynqV/k5PdsNKgUdVtayclaXFZ+G70PGw
+         2Rrbid7nQS2GLOk44fSAcRlbrHQNKr9C+vqVzqJa9m4XA9/NBNvc6VlcLRITw/TmMT
+         pO4ddgV9mKs3pXtN9B0NLE80wRY4MI/5uMqHqQP1Vsod05Ou2kfibURYctzKUkk+q/
+         IU+oJNsQx0gONSqtsHU8tD9lashXOaNI0HXethlyR2Q3LoFeNBn9XEBAQfMqvBj0Tg
+         7ArEBvL/XWzGyhwstz/3UbxXciufr3sNpfhw3/S2A7o+NpsufyJ6wGnO0y4eD+YjTm
+         pLcVwVayVHgyg==
+Date:   Sun, 24 Apr 2022 20:28:08 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Manoj Sai <abbaraju.manojsai@amarulasolutions.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Matteo Lisi <matteo.lisi@engicam.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-amarula@amarulasolutions.com,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
+        Suniel Mahesh <sunil@amarulasolutions.com>,
+        Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Subject: Re: [PATCH v2 3/3] Engicam EDIMM2.2 Starter Kit is an EDIMM 2.2 Form
+ Factor CapacitiveEvaluation Board.
+Message-ID: <20220424122808.GT391514@dragon>
+References: <20220330191437.614065-2-abbaraju.manojsai@amarulasolutions.com>
+ <20220418144907.327511-1-abbaraju.manojsai@amarulasolutions.com>
+ <20220418144907.327511-3-abbaraju.manojsai@amarulasolutions.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220418144907.327511-3-abbaraju.manojsai@amarulasolutions.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This change is based on commit d2b008f134b7
-("Documentation/process/howto: Update for 4.x -> 5.x versioning").
+On Mon, Apr 18, 2022 at 08:19:07PM +0530, Manoj Sai wrote:
+> Genaral features:
+> - LCD 7" C.Touch
+> - microSD slot
+> - Ethernet 1Gb
+> - Wifi/BT
+> - 2x LVDS Full HD interfaces
+> - 3x USB 2.0
+> - 1x USB 3.0
+> - HDMI Out
+> - Plus PCIe
+> - MIPI CSI
+> - 2x CAN
+> - Audio Out
+> 
+> i.Core MX8M Plus is an EDIMM SoM based on NXP i.MX8M Plus from Engicam.
+> 
+> i.Core MX8M Plus needs to mount on top of this Evaluation board for
+> creating complete i.Core MX8M Plus EDIMM2.2 Starter Kit.
+> 
+> Add support for it.
+> 
+> Signed-off-by: Manoj Sai <abbaraju.manojsai@amarulasolutions.com>
+> Signed-off-by: Matteo Lisi <matteo.lisi@engicam.com>
+> Reviewed-by: Jagan Teki <jagan@amarulasolutions.com>
 
-Replace "4.x kernel version" with generic term such as "mainline tree"
+Please have a short patch subject and prefix it like 'arm64: dts: ...'
 
-Signed-off-by: Kosuke Fujimoto <fujimotokosuke0@gmail.com>
-Reviewed-by: Akira Yokosawa <akiyks@gmail.com>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Tsugikazu Shibata <shibata@linuxfoundation.org>
-Cc: Akira Yokosawa <akiyks@gmail.com>
-Cc: linux-doc@vger.kernel.org
----
-V2: Reformatted commit log message
----
- Documentation/translations/ja_JP/howto.rst | 43 ++++++++++------------
- 1 file changed, 20 insertions(+), 23 deletions(-)
+> ---
+> Changes for v2:
+>  -corrected the naming convetion of nodes as per existing
+>   sources and bindings.
+>  -added the iomux to the end as per nxp convention.
+> ---
+>  arch/arm64/boot/dts/freescale/Makefile        |   1 +
+>  .../freescale/imx8mp-icore-mx8mp-edimm2.2.dts | 176 ++++++++++++++++++
+>  2 files changed, 177 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-icore-mx8mp-edimm2.2.dts
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+> index 85c2c9ba5110..1c06393b8ba9 100644
+> --- a/arch/arm64/boot/dts/freescale/Makefile
+> +++ b/arch/arm64/boot/dts/freescale/Makefile
+> @@ -83,6 +83,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-verdin-nonwifi-dahlia.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mp-verdin-nonwifi-dev.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mp-verdin-wifi-dahlia.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mp-verdin-wifi-dev.dtb
+> +dtb-$(CONFIG_ARCH_MXC) += imx8mp-icore-mx8mp-edimm2.2.dtb
 
-diff --git a/Documentation/translations/ja_JP/howto.rst b/Documentation/translations/ja_JP/howto.rst
-index d667f9d8a02a..9b711932ae6d 100644
---- a/Documentation/translations/ja_JP/howto.rst
-+++ b/Documentation/translations/ja_JP/howto.rst
-@@ -262,21 +262,21 @@ Linux カーネルの開発プロセスは現在幾つかの異なるメイン
- チ」と多数のサブシステム毎のカーネルブランチから構成されます。これらの
- ブランチとは -
- 
--  - メインの 4.x カーネルツリー
--  - 4.x.y -stable カーネルツリー
--  - サブシステム毎のカーネルツリーとパッチ
--  - 統合テストのための 4.x -next カーネルツリー
-+  - Linus のメインラインツリー
-+  - メジャー番号をまたぐ数本の安定版ツリー
-+  - サブシステム毎のカーネルツリー
-+  - 統合テストのための linux-next カーネルツリー
- 
--4.x カーネルツリー
-+メインラインツリー
- ~~~~~~~~~~~~~~~~~~
- 
--4.x カーネルは Linus Torvalds によってメンテナンスされ、
--https://kernel.org の pub/linux/kernel/v4.x/ ディレクトリに存在します。
-+メインラインツリーは Linus Torvalds によってメンテナンスされ、
-+https://kernel.org のリポジトリに存在します。
- この開発プロセスは以下のとおり -
- 
-   - 新しいカーネルがリリースされた直後に、2週間の特別期間が設けられ、
-     この期間中に、メンテナ達は Linus に大きな差分を送ることができます。
--    このような差分は通常 -next カーネルに数週間含まれてきたパッチです。
-+    このような差分は通常 linux-next カーネルに数週間含まれてきたパッチです。
-     大きな変更は git(カーネルのソース管理ツール、詳細は
-     http://git-scm.com/ 参照) を使って送るのが好ましいやり方ですが、パッ
-     チファイルの形式のまま送るのでも十分です。
-@@ -303,20 +303,17 @@ Andrew Morton が Linux-kernel メーリングリストにカーネルリリー
-         前もって決められた計画によってリリースされるものではないから
-         です。」*
- 
--4.x.y -stable カーネルツリー
--~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+メジャー番号をまたぐ数本の安定版ツリー
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 
- バージョン番号が3つの数字に分かれているカーネルは -stable カーネルです。
--これには、4.x カーネルで見つかったセキュリティ問題や重大な後戻りに対す
--る比較的小さい重要な修正が含まれます。
-+これには最初の2つの数字に対応した、メインラインリリースで見つかったセキュリティ問題や
-+重大な後戻りに対する比較的小さい重要な修正が含まれます。
- 
- これは、開発/実験的バージョンのテストに協力することに興味が無く、最新
- の安定したカーネルを使いたいユーザに推奨するブランチです。
- 
--もし、4.x.y カーネルが存在しない場合には、番号が一番大きい 4.x が最新
--の安定版カーネルです。
--
--4.x.y は "stable" チーム <stable@vger.kernel.org> でメンテされており、
-+安定版カーネル は "stable" チーム <stable@vger.kernel.org> でメンテされており、
- 必要に応じてリリースされます。通常のリリース期間は 2週間毎ですが、差
- し迫った問題がなければもう少し長くなることもあります。セキュリティ関
- 連の問題の場合はこれに対してだいたいの場合、すぐにリリースがされます。
-@@ -326,7 +323,7 @@ Documentation/process/stable-kernel-rules.rst ファイルにはどのような
- 類の変更が -stable ツリーに受け入れ可能か、またリリースプロセスがどう
- 動くかが記述されています。
- 
--サブシステム毎のカーネルツリーとパッチ
-+サブシステム毎のカーネルツリー
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 
- それぞれのカーネルサブシステムのメンテナ達は --- そして多くのカーネル
-@@ -351,19 +348,19 @@ quilt シリーズとして公開されているパッチキューも使われ
- けることができます。大部分のこれらの patchwork のサイトは
- https://patchwork.kernel.org/ でリストされています。
- 
--統合テストのための 4.x -next カーネルツリー
--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+統合テストのための linux-next カーネルツリー
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 
--サブシステムツリーの更新内容がメインラインの 4.x ツリーにマージされる
-+サブシステムツリーの更新内容がメインラインツリーにマージされる
- 前に、それらは統合テストされる必要があります。この目的のため、実質的に
- 全サブシステムツリーからほぼ毎日プルされてできる特別なテスト用のリポジ
- トリが存在します-
- 
-        https://git.kernel.org/?p=linux/kernel/git/next/linux-next.git
- 
--このやり方によって、-next カーネルは次のマージ機会でどんなものがメイン
--ラインカーネルにマージされるか、おおまかなの展望を提供します。-next カー
--ネルの実行テストを行う冒険好きなテスターは大いに歓迎されます。
-+このやり方によって、linux-next は次のマージ機会でどんなものがメイン
-+ラインにマージされるか、おおまかなの展望を提供します。
-+linux-next の実行テストを行う冒険好きなテスターは大いに歓迎されます。
- 
- バグレポート
- -------------
--- 
-2.25.1
+Keep the list sort alphabetically.
 
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mq-evk.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mq-hummingboard-pulse.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mq-kontron-pitx-imx8m.dtb
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-icore-mx8mp-edimm2.2.dts b/arch/arm64/boot/dts/freescale/imx8mp-icore-mx8mp-edimm2.2.dts
+> new file mode 100644
+> index 000000000000..d623ea9dea2b
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/freescale/imx8mp-icore-mx8mp-edimm2.2.dts
+> @@ -0,0 +1,176 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright (c) 2018 NXP
+> + * Copyright (c) 2019 Engicam srl
+> + * Copyright (c) 2020 Amarula Solutons(India)
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "imx8mp.dtsi"
+> +#include "imx8mp-icore-mx8mp.dtsi"
+> +#include <dt-bindings/usb/pd.h>
+> +
+> +/ {
+> +	model = "Engicam i.Core MX8M Plus EDIMM2.2 Starter Kit";
+> +	compatible = "engicam,icore-mx8mp-edimm2.2", "engicam,icore-mx8mp",
+> +		     "fsl,imx8mp";
+> +
+> +	chosen {
+> +		stdout-path = &uart2;
+> +	};
+> +
+> +	reg_usb1_vbus: regulator-usb1 {
+> +		compatible = "regulator-fixed";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_reg_usb1>;
+> +		regulator-name = "usb1_host_vbus";
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +		regulator-always-on;
+
+Why always-on?  Shouldn't be controlled by client device (usb1)?
+
+> +		gpio = <&gpio1 14 GPIO_ACTIVE_HIGH>;
+> +		enable-active-high;
+> +	};
+> +
+> +	reg_usdhc2_vmmc: regulator-usdhc2 {
+> +		compatible = "regulator-fixed";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_reg_usdhc2_vmmc>;
+> +		regulator-name = "VSD_3V3";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		gpio = <&gpio2 19 GPIO_ACTIVE_HIGH>;
+> +		enable-active-high;
+> +	};
+> +};
+> +
+> +/* Ethernet */
+> +&eqos {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_eqos>;
+> +	phy-mode = "rgmii-id";
+> +	phy-handle = <&ethphy0>;
+> +	status = "okay";
+> +
+> +	mdio {
+> +		compatible = "snps,dwmac-mdio";
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		ethphy0: ethernet-phy@7 {
+> +			compatible = "ethernet-phy-ieee802.3-c22";
+> +			micrel,led-mode = <0>;
+> +			reg = <7>;
+> +		};
+> +	};
+> +};
+> +
+> +/* console */
+> +&uart2 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_uart2>;
+> +	status = "okay";
+> +};
+> +
+> +&usb3_phy0 {
+> +	status = "okay";
+> +};
+> +
+> +&usb3_0 {
+
+Keep labeling nodes sort alphabetically.
+
+> +	status = "okay";
+> +};
+> +
+> +&usb_dwc3_0 {
+> +	dr_mode = "host";
+> +	status = "okay";
+> +};
+> +
+> +&usb3_phy1 {
+> +	status = "okay";
+> +};
+> +
+> +&usb3_1 {
+> +	status = "okay";
+> +};
+> +
+> +&usb_dwc3_1 {
+> +	dr_mode = "host";
+> +	status = "okay";
+> +};
+> +
+> +/* SDCARD */
+> +&usdhc2 {
+> +	pinctrl-names = "default" ;
+> +	pinctrl-0 = <&pinctrl_usdhc2>, <&pinctrl_usdhc2_gpio>;
+> +	cd-gpios = <&gpio2 12 GPIO_ACTIVE_LOW>;
+> +	vmmc-supply = <&reg_usdhc2_vmmc>;
+> +	bus-width = <4>;
+> +	status = "okay";
+> +};
+> +
+> +&iomuxc {
+> +	pinctrl_eqos: eqosgrp {
+> +		fsl,pins = <
+> +			MX8MP_IOMUXC_ENET_MDC__ENET_QOS_MDC				0x3
+> +			MX8MP_IOMUXC_ENET_MDIO__ENET_QOS_MDIO				0x3
+> +			MX8MP_IOMUXC_ENET_RD0__ENET_QOS_RGMII_RD0			0x91
+> +			MX8MP_IOMUXC_ENET_RD1__ENET_QOS_RGMII_RD1			0x91
+> +			MX8MP_IOMUXC_ENET_RD2__ENET_QOS_RGMII_RD2			0x91
+> +			MX8MP_IOMUXC_ENET_RD3__ENET_QOS_RGMII_RD3			0x91
+> +			MX8MP_IOMUXC_ENET_RXC__CCM_ENET_QOS_CLOCK_GENERATE_RX_CLK	0x91
+> +			MX8MP_IOMUXC_ENET_RX_CTL__ENET_QOS_RGMII_RX_CTL			0x91
+> +			MX8MP_IOMUXC_ENET_TD0__ENET_QOS_RGMII_TD0			0x1f
+> +			MX8MP_IOMUXC_ENET_TD1__ENET_QOS_RGMII_TD1			0x1f
+> +			MX8MP_IOMUXC_ENET_TD2__ENET_QOS_RGMII_TD2			0x1f
+> +			MX8MP_IOMUXC_ENET_TD3__ENET_QOS_RGMII_TD3			0x1f
+> +			MX8MP_IOMUXC_ENET_TX_CTL__ENET_QOS_RGMII_TX_CTL			0x1f
+> +			MX8MP_IOMUXC_ENET_TXC__CCM_ENET_QOS_CLOCK_GENERATE_TX_CLK	0x1f
+> +			MX8MP_IOMUXC_NAND_DATA01__GPIO3_IO07				0x19
+> +		>;
+> +	};
+> +
+> +	pinctrl_reg_usdhc2_vmmc: regusdhc2vmmcgrp {
+> +		fsl,pins = <
+> +			MX8MP_IOMUXC_SD2_RESET_B__GPIO2_IO19	0x41
+> +		>;
+> +	};
+> +
+> +	pinctrl_uart2: uart2grp {
+> +		fsl,pins = <
+> +			MX8MP_IOMUXC_UART2_RXD__UART2_DCE_RX	0x49
+> +			MX8MP_IOMUXC_UART2_TXD__UART2_DCE_TX	0x49
+> +		>;
+> +	};
+> +
+> +	pinctrl_uart3: uart3grp {
+> +		fsl,pins = <
+> +			MX8MP_IOMUXC_UART3_RXD__UART3_DCE_RX	0x140
+> +			MX8MP_IOMUXC_UART3_TXD__UART3_DCE_TX	0x140
+> +			MX8MP_IOMUXC_SD1_STROBE__UART3_DCE_CTS	0x140
+> +		>;
+> +	};
+> +
+> +	pinctrl_reg_usb1: regusb1grp {
+
+Keep pinctrl nodes sort alphabetically.
+
+Shawn
+
+> +		fsl,pins = <
+> +			MX8MP_IOMUXC_GPIO1_IO14__GPIO1_IO14	0x19
+> +		>;
+> +	};
+> +
+> +	pinctrl_usdhc2_gpio: usdhc2gpiogrp {
+> +		fsl,pins = <
+> +			MX8MP_IOMUXC_SD2_CD_B__GPIO2_IO12	0x1c4
+> +		>;
+> +	};
+> +
+> +	pinctrl_usdhc2: usdhc2grp {
+> +		fsl,pins = <
+> +			MX8MP_IOMUXC_SD2_CLK__USDHC2_CLK	0x190
+> +			MX8MP_IOMUXC_SD2_CMD__USDHC2_CMD	0x1d0
+> +			MX8MP_IOMUXC_SD2_DATA0__USDHC2_DATA0	0x1d0
+> +			MX8MP_IOMUXC_SD2_DATA1__USDHC2_DATA1	0x1d0
+> +			MX8MP_IOMUXC_SD2_DATA2__USDHC2_DATA2	0x1d0
+> +			MX8MP_IOMUXC_SD2_DATA3__USDHC2_DATA3	0x1d0
+> +			MX8MP_IOMUXC_GPIO1_IO04__USDHC2_VSELECT	0xc1
+> +		>;
+> +	};
+> +};
+> -- 
+> 2.25.1
+> 

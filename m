@@ -2,75 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DDAC50D280
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 16:56:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8F5D50D286
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 17:00:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239518AbiDXO5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 10:57:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56456 "EHLO
+        id S235614AbiDXPAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 11:00:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239551AbiDXO5q (ORCPT
+        with ESMTP id S239528AbiDXO6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 10:57:46 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF35615376B
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 07:54:44 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id g23so8694627edy.13
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 07:54:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=EXaQ5O6aW8iOE3VBZEqJgvs17b11E7AVbZySzMC4mZo=;
-        b=lFLRsmUweurnZio4Op9D3iGC6LXYcYZfRxPk4bYIxlu7WaTFQMqqwV/9yf7mQ7FA+9
-         uJRb017zkfqE0vUj4jbbRSfmY3FM5Fr63eQN08zS0JkxNODus+apiVB3VUCrod99TaAb
-         41RpDVD6xWpqYD0FQuh/l4MmspWZ5Htvi/NVhBzxD6Xi+BqEek/nl0ROvJuyFehoJvWb
-         MuONtx6hapPxAMeo1gvfCW8czIqz73J3F57DzPsIqQdjQdF2lYRmy3Wmmxf6DSo9n+1Q
-         rDyDS/Q1p+FgPnNHXV8ZFdOMcojlVsUAFHuCHPEpRvMBOofmRsfBdhLYiVkTaxYEtCvf
-         vLvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=EXaQ5O6aW8iOE3VBZEqJgvs17b11E7AVbZySzMC4mZo=;
-        b=VTcS4ZiKo60q893Y/WWQA3/kWRzLVXSoPaWxxlEEeMxiW+MI/eYKajbOeROVt4bQNm
-         AuFB31CBIkkyzwRxwZupcaYiVpSXUkp5T52w+PoYy6HnhmwMADnTl6amgz1Gk5Jf9hxr
-         rt71nCHzM/GnlD8MHsS+EL0z4a6hPfbJWI6TExp+2OnE5S1uFXV4BVwgiYBXXqBIpxh2
-         zuJyoSC4LJS3qSslN+oytog+NthkGTc9hbSPPmIAX2Gb49BCDMNAMbRMTBpuY1hU/8WT
-         Lh4Kf7rvRFMORTB03dt6b/yrmbwPgao4U7el9+yj1qg7/nNEm4U7fvtNpXAkmz24fIgn
-         pkUQ==
-X-Gm-Message-State: AOAM531P3JewF8HE21SRrHnkkHk1YmkGdHifA7XOzMWXqa8dUrWOUWIR
-        xBU7+RRtYeU3w8ZyESj2rI11cA==
-X-Google-Smtp-Source: ABdhPJyBj/3ZR5Z4mHJautXp1JxdAru2RHWfVsabA5bNk+VNIPYcKegIT+Ze+i41iNOexvZP+d1MkA==
-X-Received: by 2002:a50:eb87:0:b0:425:c3e2:17a9 with SMTP id y7-20020a50eb87000000b00425c3e217a9mr11268271edr.109.1650812083494;
-        Sun, 24 Apr 2022 07:54:43 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id l17-20020a056402231100b0041d98ed7ad8sm3387712eda.46.2022.04.24.07.54.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 07:54:43 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-samsung-soc@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>
-Subject: Re: [RESEND PATCH v2] dt-bindings: timer: exynos4210-mct: describe known hardware and its interrupts
-Date:   Sun, 24 Apr 2022 16:54:40 +0200
-Message-Id: <165081207650.53958.14139766049160653161.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220407194127.19004-1-krzysztof.kozlowski@linaro.org>
-References: <20220407194127.19004-1-krzysztof.kozlowski@linaro.org>
+        Sun, 24 Apr 2022 10:58:54 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C912C37A06;
+        Sun, 24 Apr 2022 07:55:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1650812151; x=1682348151;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=j8Lu4AiqbRbjV2E8MKRFPqyrfc9jWVbRk95FXIFed+c=;
+  b=qlylYjrcnuHfKO8SWgMxny1IOQB2uXjCZ1mzU1Gie9Aw1WDdhmfcNUEe
+   WwqsYQWqGhKXyD6lXQckmylKEXqIlkUFo9Oz7KczJa/JpKLlh/5qWPayz
+   jlfwWDOgLtVJl5MjvOTwGEsj4vxN3UBJMiAfAXfws09DezNRk2jsH4Rsz
+   fpNr0q6B3Az3Yp4Ga/FbXPC3phmQwB8Y31BVWoa6+NTYe87MDm5+fT0VJ
+   a7ccHYwoA37/9VujXOxsYMXuNupD/8/AFuVAqywl903kyIidIWTTXxo+5
+   +SBSHFDFVvZpJpsHu9VY4UkjO3HQrFBF8WUJFSITBa0auGHgOzu1ifQRa
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.90,286,1643698800"; 
+   d="scan'208";a="153623558"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Apr 2022 07:55:50 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Sun, 24 Apr 2022 07:55:49 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Sun, 24 Apr 2022 07:55:46 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <UNGLinuxDriver@microchip.com>, <richardcochran@gmail.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next 0/5] net: lan966x: Add support for PTP programmable pins
+Date:   Sun, 24 Apr 2022 16:58:19 +0200
+Message-ID: <20220424145824.2931449-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,23 +63,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 7 Apr 2022 21:41:27 +0200, Krzysztof Kozlowski wrote:
-> Most of the Samsung Exynos SoCs use almost the same Multi-Core Timer
-> block, so only two compatibles were used so far (for Exynos4210 and
-> Exynos4412 flavors) with Exynos4210-one being used in most of the SoCs.
-> However the Exynos4210 flavor actually differs by number of interrupts.
-> 
-> Add new compatibles, maintaining backward compatibility with Exynos4210,
-> and constraints for number of interrupts.  This allows to exactly match
-> the Exynos MCT hardware.
-> 
-> [...]
+Lan966x has 8 PTP programmable pins. The last pin is hardcoded to be used
+by PHC0 and all the rest are shareable between the PHCs. The PTP pins can
+implement both extts and perout functions.
 
-Applied, thanks!
+Horatiu Vultur (5):
+  dt-bindings: net: lan966x: Extend with the ptp external interrupt.
+  net: lan966x: Change the PTP pin used to read/write the PHC.
+  net: lan966x: Add registers used to configure the PTP pin
+  net: lan966x: Add support for PTP_PF_PEROUT
+  net: lan966x: Add support for PTP_PF_EXTTS
 
-[1/1] dt-bindings: timer: exynos4210-mct: describe known hardware and its interrupts
-      commit: 5fe580196dd9b7d8eb2a99629055bb4ffa00f262
+ .../net/microchip,lan966x-switch.yaml         |   2 +
+ .../ethernet/microchip/lan966x/lan966x_main.c |  17 ++
+ .../ethernet/microchip/lan966x/lan966x_main.h |   4 +
+ .../ethernet/microchip/lan966x/lan966x_ptp.c  | 276 +++++++++++++++++-
+ .../ethernet/microchip/lan966x/lan966x_regs.h |  40 +++
+ 5 files changed, 338 insertions(+), 1 deletion(-)
 
-Best regards,
 -- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+2.33.0
+

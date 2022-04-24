@@ -2,205 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3579C50CE6E
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 04:22:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1FA350CE6A
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 04:22:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237670AbiDXCZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 22:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58294 "EHLO
+        id S237620AbiDXCZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 22:25:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237651AbiDXCZe (ORCPT
+        with ESMTP id S229779AbiDXCZa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 22:25:34 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBBC0237FD;
-        Sat, 23 Apr 2022 19:22:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1650766936;
-        bh=vQSnzM7QzzmtqW5J8MHPmlvBtPWy0o7IqH7jrgwJ9QY=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=XSDrKul9Y2F9pfIAad+mhBaWG9EpAfW4WIp/KgAUTHf+1zJI1WLZeI/lbl+Lwe/Ct
-         xmIaudurZW9klVJnXQX0i7MG4Q0qTvtZhvhzv3F5issBacXzgP9F1jbhzbhBOWlv3u
-         jPnlQpKV5MiJ4RSCTXU7i7XwQtLXC+9ZvqKfvmMU=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.33] ([46.223.2.193]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MWzfv-1nOx4D075d-00XOQn; Sun, 24
- Apr 2022 04:22:16 +0200
-Subject: Re: [PATCH v3 0/4] Fixes for TPM interrupt handling
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        =?UTF-8?Q?Michael_Niew=c3=b6hner?= <linux@mniewoehner.de>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        stefanb@linux.ibm.com, James.Bottomley@hansenpartnership.com,
-        keescook@chromium.org, jsnitsel@redhat.com, ml.linux@elloe.vision,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        twawrzynczak@chromium.org, Lukas Wunner <lukas@wunner.de>,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>
-References: <20210501135727.17747-1-LinoSanfilippo@gmx.de>
- <20210501135727.17747-3-LinoSanfilippo@gmx.de> <YJAby8mmiJ74qWAh@kernel.org>
- <6722bf6f-1a3f-ee9c-55e2-cf63c64266a9@gmx.de> <YJNKs8bUMGOzFre+@kernel.org>
- <2a1a1cf61732eff1608aeae74054a0c135c1671f.camel@mniewoehner.de>
- <Yj0lhqTP1RoedxSc@iki.fi>
- <0d6c22b40a2f17d4b260f287d4c479a96a88b0b1.camel@mniewoehner.de>
- <efdb99b3-6d33-38b1-64a0-671821101631@gmx.de>
- <c8c0c5fb614d8b2de2a5faee2ef5ff3214281064.camel@kernel.org>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <77374443-dc9b-5d1d-c652-0d093b6029f4@gmx.de>
-Date:   Sun, 24 Apr 2022 04:22:11 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Sat, 23 Apr 2022 22:25:30 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BD8237FD;
+        Sat, 23 Apr 2022 19:22:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1650766950;
+  x=1682302950;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=QDh0au46jwGUKNxxZkaZpw8h8HU6jf4Ztj+mwSJXuEk=;
+  b=hoRItIIpXJVMNqiT1T4kGsVH4TPcT9U+AlvzuxlBZUFSWIEfP4BfnK76
+   ZCQ/m7PB5udbTK5mjIW7hfSJyxI8tBfNjM9+EmY+CXnGdvhikq6O3OHaE
+   /pIq+4Mi9PAarSBEjoAtbOE3u7YOl9eSRA41qgOxO7mgTCb1gUdQZu7zt
+   bCreesVyHjovGu7mZO/rlQbc85G/rwxQQL5nTknWaTph6xVGxZRfqQFgJ
+   QyRRYUvB7vTntHFRGZcE00Hz7khDoQUx3Yl6GfuNBzL2XTZHHhMRTwvz7
+   4ZpV25h/tj+PXPuGxO1k/OxuGa+HkNiV1ahslMYh6bxu5VBRVYszAKzhg
+   w==;
+From:   Hermes Zhang <chenhui.zhang@axis.com>
+To:     Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+CC:     <kernel@axis.com>, Hermes Zhang <chenhuiz@axis.com>,
+        <linux-wireless@vger.kernel.org>,
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        <SHA-cyfmac-dev-list@infineon.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3] brcmfmac: of: introduce new property to allow disable PNO
+Date:   Sun, 24 Apr 2022 10:22:24 +0800
+Message-ID: <20220424022224.3609950-1-chenhui.zhang@axis.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <c8c0c5fb614d8b2de2a5faee2ef5ff3214281064.camel@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:120S5x/kr26FHH+mVXUazZ1hLDKaXtRBYFV2Z+LOc3uJ/bIqBHd
- WB0je9ptnnc6zraRHhcXMOsxFXxdyF27y73lFJOAQWxSkVeW5vboUIbr17YcFpsvQ+PgtEg
- 1rOQIr900dQDDMh2Hklc6fItWusYpHJKbl+Wp5y79FzbBd2aVw0Z7LSv0YLgV2H5usUfb47
- FyG3UnOjTcM3aoet5Ueww==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:2+PvYJTu1oo=:nqZGsauAE/5flHlLeMYG7/
- zRgmdUcHOwlqe0GBLYTTy4RjI5H5Z8/sg3uBQvCkK06LDI+HVHIsOEszsl6+rjT8pJTejKOTh
- RjzPh3N3dzDe5lp1mkUkfgGUwPR89NxXOz914Mj2v0D3cpTAIRXSjMHOfVxvsLwyojPRjCh9x
- esS79hTaa99wvheuX3Xw9MDEXyALHuDHQUd1Gtet51Rg98kVs0LM9SbHdGR5Lxaz6IPJZ8DKB
- BZ7SZf2NsHPjcZXAOOg/QX0ew1np4MGU5wdNBEMqV/UF/BJVrEp/W+FJqN2kMWSgD/s8/osFk
- RwmoraibnuQKBJjGv9H71RSct0qulXm8GqvTG8wsbsoGunDwJLgB/Nq/XZd71UCzEelPghPqw
- VlGbRf7Zu35KMig6f0OOxgt/AGcgg/vk3JKV+QJnWuiBmDDUlcFPDeGcio0IhUJmBOFkm9RT9
- NCBYn9Vp6/P9XWKZQppMUDENxRTvmLKW2LUktVHjrnSKRHXYnkxIV9lJMslEwoNosYLtZ5yod
- nQC+cGu27N4+J6wXMTCAcp/4XhI1/hjn8O2SzUw1MuOAnEML7OiNH3sCwH6cHFGQ2TImPb5d5
- 072nOCg7OILlJZLnPNNzzWwZxNunTYSPmxLvfP3LAnV+ERH7R+idskAblJSGFBDBbgkjAzLRP
- pLp1gqeWaGovASzAZAHyh7i/xmW/8aDZgFb854a1sbDn+KkisWdm8qFCYgLDqCEOo4LnF72kK
- GKoS0TCtP2FfwAWangdEHmA9GXgab6GVb4K5OXGFyXlSzW7u8+BBrZutMgRSmP9NJKR1rR3V2
- HLZp54mVtIs+XTJf+QcL9wKZ31GioXChzyAdcDQXL0H8Y+ss0Q9EYA3gY3dPRnN4FTKqHttY8
- 21uDNrKlDp2hee6lXovTnA+CC0cR6x9JSDoxUtHeNcdETUlsxvJ6nY8xhJD4KtiO7I55FuGeb
- VZXJTh+ZZV64g6X3BHmxvyT4JzWgcnMtmoCjlo4YuwXo3xlciMP0DtLyqFBGKMMqeNy9De2kX
- EOUXs8qsi9/wFo6JMmLoiijLUIenAtEipu8Qi5eEkOne9063/ZUXwq1j5s4XQQHoqpdKLbwaj
- fUTBA1AiQHTTA4=
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Hermes Zhang <chenhuiz@axis.com>
 
-Hi,
+Some versions of the Broadcom firmware for this chip seem to hang
+if the PNO feature is enabled when connecting to a dummy or
+non-existent AP.
+Add a new property to allow the disabling of PNO for devices with
+this specific firmware.
 
-On 20.04.22 at 07:30, Jarkko Sakkinen wrote:
-> n Sat, 2022-03-26 at 04:24 +0100, Lino Sanfilippo wrote:
->>
->> Hi Michael,
->>
->> On 25.03.22 at 13:32, Michael Niew=C3=B6hner wrote:
->>>>>
->>>>> Lino, I'd be happy to test the patches, when you have time and inter=
-est to
->>>>> work
->>>>> on this again!
->>>>>
->>>>> Thanks, Michael
->>>>
->>>> It's quite easy to test them out. Both fixes are in the mainline GIT =
-tree.
->>>> E.g. give a shot rc1, and please report if any issues persists to:
->>>>
->>>> =C2=A0 linux-integrity@vger.kernel.org=C2=A0
->>>>
->>>> BR, Jarkko
->>>
->>> I don't see Linos patches on mainline. Also, the series included four =
-patches:
->>> [PATCH v3 0/4] Fixes for TPM interrupt handling
->>> [PATCH v3 1/4] tpm: Use a threaded interrupt handler
->>> [PATCH v3 2/4] tpm: Simplify locality handling
->>> [PATCH v3 3/4] tpm: Fix test for interrupts
->>> [PATCH v3 4/4] tpm: Only enable supported irqs
->>>
->>> Three of them are relevant for the interrupt problem, which is still p=
-resent in
->>> mainline, as these patches were refused:
->>> [PATCH v3 1/4] tpm: Use a threaded interrupt handler
->>> [PATCH v3 2/4] tpm: Simplify locality handling
->>> [PATCH v3 3/4] tpm: Fix test for interrupts
->>>
->>> Michael
->>>
->>
->> You are right, the interrupts are still not working in the mainline ker=
-nel.
->> I would gladly make another attempt to fix this but rather step by step
->> than in a series that tries to fix (different) things at once.
->>
->> A first step could be to have a sleepable context for the interrupt han=
-dling,
->> since in case of SPI the accesses to the irq status register may sleep.
->>
->> I sent a patch for this purpose once, but it seems to have gone lost:
->>
->> https://lore.kernel.org/all/20210620023444.14684-1-LinoSanfilippo@gmx.d=
-e/
->>
->>
->> Best regards,
->> Lino
->
-> I went these through one by one>
-> # Above linked patch
->
-> Boolean parameters are considered bad. I.e. use named flags
-> instead. This is for above linked patch.
+Signed-off-by: Hermes Zhang <chenhuiz@axis.com>
+---
 
-Ok, we could extend tpm_tis_flags by a flag "TPM_TIS_USE_THREADED_IRQ"
-for this.
+Notes:
+    Comments update
 
->
-> # [PATCH v3 3/4] tpm: Fix test for interrupts
->
-> 1. Please remove "unnecessarily complicated" sentence because
->    it cannot be evaluated. It's your opinion, which might perhaps
->    be correct, but it is irrelevant for any possible patch
->    description.
-> 2. There's no such thing as "fix by re-implementation". Please
->    explain instead code change is relevant for the bug fix.
-> 3. If set_bit() et al necessarily to fix a possible race condition
->    you need to have a separate patch for that.
->
-> To move forward, start with a better summary such as
->
-> "tpm: move interrupt test to tpm_tis_probe_irq_single()"
->
-> I'd also either revert the change for flags, or alternatively
-> move it to separate patch explaining race condition. Otherwise,
-> there's no argument of saying that using set_bit() is more
-> proper. This will make the change more localized.
->
+ drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Ok, I will split the fix for the irq test into two patches then.
-
->
-> # [PATCH v3 2/4] tpm: Simplify locality handling
->
-> "As a side-effect these modifications fix a bug which results in the
-> following warning when using TPM 2:"
->
-> Generally speaking, the simplifications should be done on top of code
-> that does not have known bugs, even if the simplification renders out
-> the bug. This is because then we have code that have potentially unknown
-> unknown bugs.
->
-> I hope you see my point. The problem with these patches were then
-> and is still that they intermix bug fixes and other modifications and
-> thus cannot be taken in.
->
-
-Yes, I can see that point.
-
-> BR, Jarkko
->
-
-Thanks a lot for the review. I will prepare new patches with the suggested
-changes.
-
-Best regards,
-Lino
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c
+index 8623bde5eb70..121a195e4054 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c
+@@ -11,6 +11,7 @@
+ #include "core.h"
+ #include "common.h"
+ #include "of.h"
++#include "feature.h"
+ 
+ static int brcmf_of_get_country_codes(struct device *dev,
+ 				      struct brcmf_mp_device *settings)
+@@ -102,6 +103,9 @@ void brcmf_of_probe(struct device *dev, enum brcmf_bus_type bus_type,
+ 	if (bus_type != BRCMF_BUSTYPE_SDIO)
+ 		return;
+ 
++	if (of_find_property(np, "brcm,pno-disable", NULL))
++		settings->feature_disable |= BIT(BRCMF_FEAT_PNO);
++
+ 	if (of_property_read_u32(np, "brcm,drive-strength", &val) == 0)
+ 		sdio->drive_strength = val;
+ 
+-- 
+2.30.2
 

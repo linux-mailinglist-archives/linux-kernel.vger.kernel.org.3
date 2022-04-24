@@ -2,213 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BC1150CF09
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 05:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C95950CF0A
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 05:56:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238094AbiDXD4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 23:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34122 "EHLO
+        id S238105AbiDXD5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 23:57:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236524AbiDXD4W (ORCPT
+        with ESMTP id S238101AbiDXD5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 23:56:22 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8E918351;
-        Sat, 23 Apr 2022 20:53:23 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id a5so9302724qvx.1;
-        Sat, 23 Apr 2022 20:53:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=6jWJt9XTXVVwmHW6n7cY0VehyahZoXhvY7honrosNaM=;
-        b=UHOC4oaV0BK0SaJf96f+kbk6a9WOcVogxsr62v7w+RBq1tdVir5KiH5uikGln619q3
-         dkaRuLKXu+QOZOXiEejJziFxEyogLLE3eQezNiv80pEIbt8qn9ESnd1m+36MHWqEsOlg
-         BI5kR8SmQtMLYmvizST8jFFom5YQ2wnu/ctkNMO9pDGgs4ysrYc7HehF1WUly3KSf6bQ
-         3RJZZKOIwUEpNBRwmgTzB48flpCNmiKJGChCtiwLeOmRM4hjzFXWl8TydWWyZhbESz+H
-         f6R2Hua/4A8qF5iAt4D+D79e4uubIVgLyam5gGoUSIlqAyA4Sty1FHWiAyo9g/quGH2u
-         6Tmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=6jWJt9XTXVVwmHW6n7cY0VehyahZoXhvY7honrosNaM=;
-        b=7CXkcVus//QbnKRTJr5JvPqUeK63avo3wCW0tzgBbXi/VD/o+WqSn9iMXonT8YyfxQ
-         dO30KmzLkSzyMqLgLqv4tYMWi06HlYuryW49dBF98pv70d5rDBWM6K8Qq879LQeLYN8E
-         AMJshC/vMpADMMChsfGpt3aITJi7UgRulLmIHZATURHjxNoD3/cuupKepVLjGchgJNdS
-         vPwG4WqVvQC87ba5vdrxKTjTC5M6cmaoKOdpjTK14gDS6zpNcDOmS0jjAO0/y7CcZaG8
-         a/PPNHvnRMN/k78suaYLqC4n3CYJM3NcMso7TtGzOLsgbAfnJy5Io2BAONtVYVh/hS1C
-         zM3Q==
-X-Gm-Message-State: AOAM530lTNQtRy66+xxj6xz1CXVvUXpNiscQw3W5sWRHHjh3ec+EsvcH
-        CjEg2siQCAOjCm6KY/jXxnU=
-X-Google-Smtp-Source: ABdhPJz5JdrJrl5qLtHz+/NCpPnsgRZA3P+rkWCFTYCInOshw9B3LibU+/G07m3g5ZT2dcBgwo6hIw==
-X-Received: by 2002:a05:6214:2344:b0:441:8201:7246 with SMTP id hu4-20020a056214234400b0044182017246mr9094442qvb.120.1650772402262;
-        Sat, 23 Apr 2022 20:53:22 -0700 (PDT)
-Received: from [10.4.10.60] (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id r7-20020a05622a034700b002f337000725sm3855022qtw.42.2022.04.23.20.53.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Apr 2022 20:53:21 -0700 (PDT)
-Message-ID: <506edc5d-8f66-5414-361a-0b517d8c4f38@gmail.com>
-Date:   Sat, 23 Apr 2022 23:53:19 -0400
+        Sat, 23 Apr 2022 23:57:01 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF7652B2A
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 20:54:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650772442; x=1682308442;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=UKJQEnsMftdGE/bY8JiKT7d4w5bXIEmB3cqQhlhwCY4=;
+  b=ReCe4X3OLMXSixyLzXJh9IQ9B05WjXEqPG1PIKtRreDgGdIXXjzuQDjz
+   a0rdbyUAaun/0r3qtfciOSqpv9IgYuvzSBsb4X+XkYUONR9zPoKW2IrGl
+   etW5sR0X2rIH//2ZvhRLopM/WhJrHpGSsvmtuSSW6JlBFxD11iB9q4aph
+   b1orzP8rRFwetxSdnbNGmfxOY8QLfnxe5D8ZmfZX59Cuh1j2G8OYqX3Ur
+   ERThdgESBuq5/LUgvo+QKQJ4EyTt0KOmiZeDFYtZBQDkKF+HraInM6Whb
+   TWbvIZX0hzXZd3si9uoZf8S4r2tqHns+kNn7Ny1G4Rfmzd7OPQA6IbwTe
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="245558731"
+X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
+   d="scan'208";a="245558731"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 20:54:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
+   d="scan'208";a="729142199"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 23 Apr 2022 20:54:00 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1niTJv-0000yn-RP;
+        Sun, 24 Apr 2022 03:53:59 +0000
+Date:   Sun, 24 Apr 2022 11:53:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 35/44]
+ include/linux/instrumented.h:101: undefined reference to `fscache_n_updates'
+Message-ID: <202204241147.EvsFGZii-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v1 08/12] clk: imx: Add initial support for i.MXRT1170
- clock driver
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>, linux-imx@nxp.com
-Cc:     robh+dt@kernel.org, mturquette@baylibre.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        aisheng.dong@nxp.com, stefan@agner.ch, linus.walleij@linaro.org,
-        daniel.lezcano@linaro.org, tglx@linutronix.de, arnd@arndb.de,
-        olof@lixom.net, soc@kernel.org, linux@armlinux.org.uk,
-        abel.vesa@nxp.com, dev@lynxeye.de, marcel.ziswiler@toradex.com,
-        tharvey@gateworks.com, leoyang.li@nxp.com,
-        sebastian.reichel@collabora.com, cniedermaier@dh-electronics.com,
-        clin@suse.com, giulio.benetti@benettiengineering.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org
-References: <20220326144313.673549-1-Mr.Bossman075@gmail.com>
- <20220326144313.673549-9-Mr.Bossman075@gmail.com>
- <20220423030331.0E85CC385A0@smtp.kernel.org>
-From:   Jesse Taube <mr.bossman075@gmail.com>
-In-Reply-To: <20220423030331.0E85CC385A0@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
+head:   931e50676c6598d0eda1954ead465519ff91874d
+commit: f343507aeda88b2f1a528a659b8fadaa9b6b0f79 [35/44] netfs: Implement buffered writes through netfs_file_write_iter()
+config: x86_64-rhel-8.3-func (https://download.01.org/0day-ci/archive/20220424/202204241147.EvsFGZii-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/ammarfaizi2/linux-block/commit/f343507aeda88b2f1a528a659b8fadaa9b6b0f79
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
+        git checkout f343507aeda88b2f1a528a659b8fadaa9b6b0f79
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   ld: fs/netfs/buffered_write.o: in function `instrument_atomic_read_write':
+>> include/linux/instrumented.h:101: undefined reference to `fscache_n_updates'
+   ld: fs/netfs/buffered_write.o: in function `arch_atomic_inc':
+>> arch/x86/include/asm/atomic.h:95: undefined reference to `fscache_n_updates'
+   ld: fs/netfs/output.o: in function `fscache_begin_write_operation':
+   include/linux/fscache.h:540: undefined reference to `__fscache_begin_write_operation'
 
 
-On 4/22/22 23:03, Stephen Boyd wrote:
-> Quoting Jesse Taube (2022-03-26 07:43:09)
->> diff --git a/drivers/clk/imx/clk-imxrt1170.c b/drivers/clk/imx/clk-imxrt1170.c
->> new file mode 100644
->> index 000000000000..041aea3d4b02
->> --- /dev/null
->> +++ b/drivers/clk/imx/clk-imxrt1170.c
->> @@ -0,0 +1,391 @@
->> +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
->> +/*
->> + * Copyright (C) 2022
->> + * Author(s):
->> + * Jesse Taube <Mr.Bossman075@gmail.com>
->> + */
->> +#include <linux/clk.h>
->> +#include <linux/of_address.h>
-> 
-> Is this include used?
-> 
-Yes `of_iomap`
->> +#include <linux/of_irq.h>
-> 
-> Is this include used?
-> 
-No, but includes
-#include <linux/slab.h>
-for `kzalloc`
->> +#include <linux/platform_device.h>
-> 
-> Need to include clk-provider.h
-> 
->> +#include <dt-bindings/clock/imxrt1170-clock.h>
->> +
->> +#include "clk.h"
->> +
->> +#define CLOCK_MUX_DEFAULT "rcosc48M_div2", "osc", "rcosc400M", "rcosc16M"
->> +
->> +#define LPCG_GATE(gate) (0x6000 + (gate * 0x20))
->> +
->> +#define DEF_CLOCK(flags, macro, name) \
->> +do { \
->> +       hws[macro##_SEL] = imx_clk_hw_mux(#name"_sel", ccm_base + (name * 0x80), \
->> +               8, 3, root_clocks[name], 8); \
->> +       hws[macro##_GATE] = imx_clk_hw_gate_dis_flags(#name"_gate", #name"_sel", \
->> +               ccm_base + (name * 0x80), 24, flags); \
->> +       hws[macro] = imx_clk_hw_divider(#name, #name"_gate", ccm_base + (name * 0x80), 0, 8); \
->> +} while (0)
->> +
->> +enum root_clock_names {
->> +       m7,             /* root clock m7. */
-> 
-> Is the comment adding any value? It has the enum name after "root clock"
-> and the enum is "root_clock_names" so it looks very obvious.
-> 
->> +       m4,             /* root clock m4. */
->> +       bus,            /* root clock bus. */
->> +       bus_lpsr,       /* root clock bus lpsr. */
-> [...]
->> +       end,            /* root clock end. */
->> +};
->> +
->> +static const char * const root_clocks[79][8] = {
->> +       {CLOCK_MUX_DEFAULT, "pll_arm", "pll1_sys", "pll3_sys", "pll_video"},
-> 
-> Space after { and before }
-> 
->> +       {CLOCK_MUX_DEFAULT, "pll3_pfd3", "pll3_sys", "pll2_sys", "pll1_div5"},
->> +       {CLOCK_MUX_DEFAULT, "pll3_sys", "pll1_div5", "pll2_sys", "pll2_pfd3"},
-> [...]
->> +       {CLOCK_MUX_DEFAULT, "pll2_pfd3", "rcosc48M", "pll3_pfd1", "pll_audio"}
->> +};
->> +
->> +static const char * const pll_arm_mux[] = {"pll_arm_pre", "osc"};
->> +static const char * const pll3_mux[] = {"pll3_pre", "osc"};
->> +static const char * const pll2_mux[] = {"pll2_pre", "osc"};
->> +
->> +static const struct clk_div_table post_div_table[] = {
->> +       { .val = 3, .div = 1, },
->> +       { .val = 2, .div = 8, },
->> +       { .val = 1, .div = 4, },
->> +       { .val = 0, .div = 2, },
->> +       { }
->> +};
->> +
->> +static struct clk_hw **hws;
->> +static struct clk_hw_onecell_data *clk_hw_data;
-> 
-> Do either of these need to be static global variables? They could be
-> local function pointers allocated on the heap (like they already are).
-> 
->> +
->> +static int imxrt1170_clocks_probe(struct platform_device *pdev)
->> +{
-> [...]
->> +       hws[IMXRT1170_CLK_PLL2_PFD3] = imx_clk_hw_pfd("pll2_pfd3", "pll2_sys", pll_base + 0x270, 3);
->> +
->> +       /* CCM clocks */
->> +       ccm_base = devm_platform_ioremap_resource(pdev, 0);
->> +       if (WARN_ON(IS_ERR(ccm_base)))
->> +               return PTR_ERR(ccm_base);
->> +
->> +       DEF_CLOCK(CLK_IS_CRITICAL, IMXRT1170_CLK_M7, m7);
-> 
-> Don't have macros do things to variables that are in global scope. It
-> makes things very non-obvious. Instead, pass hw to the macro, or better
-> yet make a static inline function and let the compiler decide to inline
-> it or not.
-> 
->> +       DEF_CLOCK(CLK_IS_CRITICAL, IMXRT1170_CLK_M4, m4);
-> [...]
->> +       DEF_CLOCK(0, IMXRT1170_CLK_CSI2_UI, csi2_ui);
->> +       DEF_CLOCK(0, IMXRT1170_CLK_CSI, csi);
->> +       DEF_CLOCK(0, IMXRT1170_CLK_CKO1, cko1);
->> +       DEF_CLOCK(0, IMXRT1170_CLK_CKO2, cko2);
->> +
->> +       hws[IMXRT1170_CLK_USB] = imx_clk_hw_gate("usb", "bus", ccm_base + LPCG_GATE(115), 0);
->> +
->> +       clk_set_rate(hws[IMXRT1170_CLK_PLL_ARM]->clk, 90000000);
-> 
-> Use assigned-clock-rates?
-> 
->> +
->> +       imx_check_clk_hws(hws, IMXRT1170_CLK_END);
+vim +101 include/linux/instrumented.h
+
+36e4d4dd4fc4f1 Marco Elver 2020-01-21   89  
+00047c2e6d7c57 Marco Elver 2020-07-24   90  /**
+00047c2e6d7c57 Marco Elver 2020-07-24   91   * instrument_atomic_read_write - instrument atomic read-write access
+00047c2e6d7c57 Marco Elver 2020-07-24   92   *
+00047c2e6d7c57 Marco Elver 2020-07-24   93   * Instrument an atomic read-write access. The instrumentation should be
+00047c2e6d7c57 Marco Elver 2020-07-24   94   * inserted before the actual write happens.
+00047c2e6d7c57 Marco Elver 2020-07-24   95   *
+00047c2e6d7c57 Marco Elver 2020-07-24   96   * @ptr address of access
+00047c2e6d7c57 Marco Elver 2020-07-24   97   * @size size of access
+00047c2e6d7c57 Marco Elver 2020-07-24   98   */
+00047c2e6d7c57 Marco Elver 2020-07-24   99  static __always_inline void instrument_atomic_read_write(const volatile void *v, size_t size)
+00047c2e6d7c57 Marco Elver 2020-07-24  100  {
+00047c2e6d7c57 Marco Elver 2020-07-24 @101  	kasan_check_write(v, size);
+00047c2e6d7c57 Marco Elver 2020-07-24  102  	kcsan_check_atomic_read_write(v, size);
+00047c2e6d7c57 Marco Elver 2020-07-24  103  }
+00047c2e6d7c57 Marco Elver 2020-07-24  104  
+
+:::::: The code at line 101 was first introduced by commit
+:::::: 00047c2e6d7c576c1a847f7db07ef0fc58085f22 instrumented.h: Introduce read-write instrumentation hooks
+
+:::::: TO: Marco Elver <elver@google.com>
+:::::: CC: Paul E. McKenney <paulmck@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

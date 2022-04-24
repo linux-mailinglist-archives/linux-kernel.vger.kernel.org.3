@@ -2,409 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C7F050CF5B
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 06:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D858B50CF64
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 06:34:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238172AbiDXEbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 00:31:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36318 "EHLO
+        id S237538AbiDXEhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 00:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238137AbiDXEbc (ORCPT
+        with ESMTP id S231513AbiDXEhN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 00:31:32 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD50F10FC;
-        Sat, 23 Apr 2022 21:28:32 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23O4SJLU072338;
-        Sat, 23 Apr 2022 23:28:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1650774499;
-        bh=/J4N0LuQ2VmY1Tv2duDWCi12yErErm4q9ESKhrIrtlI=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=g/dJUNusDJ4Dkep3LDTH7694+gL0YY4Lizf6uy3oKIfJRJkPUE52mKBDEqWUhIOt9
-         9iiHpLGqKXvIpNQuMN0oyo+C1/gSv908FjVw4Or9YRsRKEgJ1PLoNHeJ/pj4m/Y9WB
-         4ZXLuaJBlvetRI3ZfNPho4Ogz5ja0uXi6741QQoc=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23O4SI73068385
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sat, 23 Apr 2022 23:28:18 -0500
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Sat, 23
- Apr 2022 23:28:18 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Sat, 23 Apr 2022 23:28:18 -0500
-Received: from ula0132425.ent.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23O4S5Cl018740;
-        Sat, 23 Apr 2022 23:28:15 -0500
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>
-Subject: [PATCH v3 2/2] arm64: dts: ti: k3-am625-sk: Enable on board peripherals
-Date:   Sun, 24 Apr 2022 09:57:57 +0530
-Message-ID: <20220424042757.309986-3-vigneshr@ti.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220424042757.309986-1-vigneshr@ti.com>
-References: <20220424042757.309986-1-vigneshr@ti.com>
+        Sun, 24 Apr 2022 00:37:13 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B735263D6
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 21:34:13 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id i27so23592751ejd.9
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 21:34:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NMPVhO322uRvW4wqOFytQMqWXVF6MqnlRZpkBGXZkD4=;
+        b=Qfpn63omQO+LaU94AP11P+BH8G1Cx+nRlmx/zm+/i239z2pBlO82Tm5UrkzVGKozxF
+         YXehEc5M7127yXsH+AqhUAi+I2uOQYCDNfUQsYSJ3VfQExHShI8PNBG5BKRb9eAx58tg
+         Gjg66Eku+RxuW8dRwfiLpkzMDpeeJDzjGAKEGksnoYu4D7N8uOXAuS7V8wwVgCNvDEaC
+         4A5bvwPgvpldnBT4FXALN/eou7A9ZvV/dzB7HKHsvsrdpP8pp/d2k+JjyoG+rciQvfo1
+         C2IasGNWs22tc5IAAbcEd/TP49wXKF+XKFgnsgjWEIpSwoPuBhPpZ1XKwr3j4Nt6tlj3
+         h9ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NMPVhO322uRvW4wqOFytQMqWXVF6MqnlRZpkBGXZkD4=;
+        b=pcepA7pIskikh8z29+Z2i5IksQaeEJJGs3+5UHIC+beoV9JokfJs3sb9KIDOa4omWc
+         TVYSJZCRgD+UW7QtnpGGl810T4qq/Td2+pixyKPWdTmxs/mgNK21vkXPveOgZBfDggVm
+         vyKAxnBoA4ltyvsUai4CDnM5Wz+kaj3OYo3VR0oi2ANzidVhGQ6rIimaEXiOQgA2c8m2
+         E/CMnXqQvJx47ViKvtHL8yzlo/XYv/rulXjEw3Rm5J1YmNeznonPlIDuzM/MvlGuPxS3
+         WGGdPmIaoUydLURkKl0KHow6ohqcO3n6GvYpsyC7qcG1hrw27/jvea1SmFLr6Jtp5BQk
+         kvJQ==
+X-Gm-Message-State: AOAM532fG3oLIsPC70f00Of+HJVgvr0AxH3YL/ZuWgIHl6p2vcIMQrUz
+        fwQo0mO7hsfMSXOdXY9dmQg+RqdP+tABaYS035w=
+X-Google-Smtp-Source: ABdhPJznRxqjruhF6HjM9fyrlu0bowE7Y8O5joGhHDjkHw45KRU8x5Wno1N583/AnR+pZksazfYTTGXsYUl0gZTXI78=
+X-Received: by 2002:a17:907:7f09:b0:6f0:2991:9c76 with SMTP id
+ qf9-20020a1709077f0900b006f029919c76mr10559045ejc.170.1650774852174; Sat, 23
+ Apr 2022 21:34:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220424032734.1542-1-lipeifeng@oppo.com>
+In-Reply-To: <20220424032734.1542-1-lipeifeng@oppo.com>
+From:   Barry Song <21cnbao@gmail.com>
+Date:   Sun, 24 Apr 2022 16:34:01 +1200
+Message-ID: <CAGsJ_4xVSnGNVQLbkPu2oib2qjaji_kiKvePUZJaRhnCkX4SaA@mail.gmail.com>
+Subject: Re: [PATCH] mm/page_alloc: give priority to free cma-pages from
+ pcplist to buddy
+To:     =?UTF-8?B?5p2O5Z+56ZSLKHdpbmsp?= <lipeifeng@oppo.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        robin.murphy@arm.com
+Cc:     Andrew Morton <akpm@linux-foundation.org>, peifeng55@gmail.com,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
+        <zhangshiming@oppo.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add nodes for I2C IO expander, OSPI Flash, Eth PHYs, SD and eMMC that
-are present on AM625 SK board.
+On Sun, Apr 24, 2022 at 3:28 PM <lipeifeng@oppo.com> wrote:
+>
+> From: lipeifeng <lipeifeng@oppo.com>
+>
+> Cma-pages will be fallback to movable pages in many scenarios.when cma
+> pages are freed to pcplist, we give priority to free it from pcplist
+> to buddy in order to  avoids cma-pages to be used as movable-pages soon
+> if there is enough free-movable-pages, which saves more cma-pages in
+> buddy to decrease pages migration when cma_alloc.
+>
+> Signed-off-by: lipeifeng <lipeifeng@oppo.com>
+> ---
 
-Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
-Reviewed-by: Bryan Brattlof <bb@ti.com>
----
- arch/arm64/boot/dts/ti/k3-am625-sk.dts | 273 +++++++++++++++++++++++++
- 1 file changed, 273 insertions(+)
++ Christoph, Marek, Robin as it is cma-related.
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk.dts b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-index 0de4113ccd5de..5c38ee5ff9b2c 100644
---- a/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-+++ b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-@@ -9,6 +9,7 @@
- 
- #include <dt-bindings/leds/common.h>
- #include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/net/ti-dp83867.h>
- #include "k3-am625.dtsi"
- 
- / {
-@@ -17,6 +18,12 @@ / {
- 
- 	aliases {
- 		serial2 = &main_uart0;
-+		mmc0 = &sdhci0;
-+		mmc1 = &sdhci1;
-+		mmc2 = &sdhci2;
-+		spi0 = &ospi0;
-+		ethernet0 = &cpsw_port1;
-+		ethernet1 = &cpsw_port2;
- 	};
- 
- 	chosen {
-@@ -87,6 +94,33 @@ vcc_3v3_sys: regulator-2 {
- 		regulator-boot-on;
- 	};
- 
-+	vdd_mmc1: regulator-3 {
-+		/* TPS22918DBVR */
-+		compatible = "regulator-fixed";
-+		regulator-name = "vdd_mmc1";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		regulator-boot-on;
-+		enable-active-high;
-+		vin-supply = <&vcc_3v3_sys>;
-+		gpio = <&exp1 3 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	vdd_sd_dv: regulator-4 {
-+		/* Output of TLV71033 */
-+		compatible = "regulator-gpio";
-+		regulator-name = "tlv71033";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&vdd_sd_dv_pins_default>;
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+		regulator-boot-on;
-+		vin-supply = <&vcc_5v0>;
-+		gpios = <&main_gpio0 31 GPIO_ACTIVE_HIGH>;
-+		states = <1800000 0x0>,
-+			 <3300000 0x1>;
-+	};
-+
- 	leds {
- 		compatible = "gpio-leds";
- 		pinctrl-names = "default";
-@@ -124,11 +158,114 @@ AM62X_IOPAD(0x1ec, PIN_INPUT_PULLUP, 0) /* (A17) I2C1_SDA */
- 		>;
- 	};
- 
-+	main_i2c2_pins_default: main-i2c2-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x0b0, PIN_INPUT_PULLUP, 1) /* (K22) GPMC0_CSn2.I2C2_SCL */
-+			AM62X_IOPAD(0x0b4, PIN_INPUT_PULLUP, 1) /* (K24) GPMC0_CSn3.I2C2_SDA */
-+		>;
-+	};
-+
-+	main_mmc0_pins_default: main-mmc0-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x220, PIN_INPUT, 0) /* (Y3) MMC0_CMD */
-+			AM62X_IOPAD(0x218, PIN_INPUT, 0) /* (AB1) MMC0_CLK */
-+			AM62X_IOPAD(0x214, PIN_INPUT, 0) /* (AA2) MMC0_DAT0 */
-+			AM62X_IOPAD(0x210, PIN_INPUT, 0) /* (AA1) MMC0_DAT1 */
-+			AM62X_IOPAD(0x20c, PIN_INPUT, 0) /* (AA3) MMC0_DAT2 */
-+			AM62X_IOPAD(0x208, PIN_INPUT, 0) /* (Y4) MMC0_DAT3 */
-+			AM62X_IOPAD(0x204, PIN_INPUT, 0) /* (AB2) MMC0_DAT4 */
-+			AM62X_IOPAD(0x200, PIN_INPUT, 0) /* (AC1) MMC0_DAT5 */
-+			AM62X_IOPAD(0x1fc, PIN_INPUT, 0) /* (AD2) MMC0_DAT6 */
-+			AM62X_IOPAD(0x1f8, PIN_INPUT, 0) /* (AC2) MMC0_DAT7 */
-+		>;
-+	};
-+
-+	main_mmc1_pins_default: main-mmc1-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x23c, PIN_INPUT, 0) /* (A21) MMC1_CMD */
-+			AM62X_IOPAD(0x234, PIN_INPUT, 0) /* (B22) MMC1_CLK */
-+			AM62X_IOPAD(0x230, PIN_INPUT, 0) /* (A22) MMC1_DAT0 */
-+			AM62X_IOPAD(0x22c, PIN_INPUT, 0) /* (B21) MMC1_DAT1 */
-+			AM62X_IOPAD(0x228, PIN_INPUT, 0) /* (C21) MMC1_DAT2 */
-+			AM62X_IOPAD(0x224, PIN_INPUT, 0) /* (D22) MMC1_DAT3 */
-+			AM62X_IOPAD(0x240, PIN_INPUT, 0) /* (D17) MMC1_SDCD */
-+		>;
-+	};
-+
- 	usr_led_pins_default: usr-led-pins-default {
- 		pinctrl-single,pins = <
- 			AM62X_IOPAD(0x244, PIN_OUTPUT, 7) /* (C17) MMC1_SDWP.GPIO1_49 */
- 		>;
- 	};
-+
-+	main_mdio1_pins_default: main-mdio1-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x160, PIN_OUTPUT, 0) /* (AD24) MDIO0_MDC */
-+			AM62X_IOPAD(0x15c, PIN_INPUT, 0) /* (AB22) MDIO0_MDIO */
-+		>;
-+	};
-+
-+	main_rgmii1_pins_default: main-rgmii1-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x14c, PIN_INPUT, 0) /* (AB17) RGMII1_RD0 */
-+			AM62X_IOPAD(0x150, PIN_INPUT, 0) /* (AC17) RGMII1_RD1 */
-+			AM62X_IOPAD(0x154, PIN_INPUT, 0) /* (AB16) RGMII1_RD2 */
-+			AM62X_IOPAD(0x158, PIN_INPUT, 0) /* (AA15) RGMII1_RD3 */
-+			AM62X_IOPAD(0x148, PIN_INPUT, 0) /* (AD17) RGMII1_RXC */
-+			AM62X_IOPAD(0x144, PIN_INPUT, 0) /* (AE17) RGMII1_RX_CTL */
-+			AM62X_IOPAD(0x134, PIN_OUTPUT, 0) /* (AE20) RGMII1_TD0 */
-+			AM62X_IOPAD(0x138, PIN_OUTPUT, 0) /* (AD20) RGMII1_TD1 */
-+			AM62X_IOPAD(0x13c, PIN_OUTPUT, 0) /* (AE18) RGMII1_TD2 */
-+			AM62X_IOPAD(0x140, PIN_OUTPUT, 0) /* (AD18) RGMII1_TD3 */
-+			AM62X_IOPAD(0x130, PIN_OUTPUT, 0) /* (AE19) RGMII1_TXC */
-+			AM62X_IOPAD(0x12c, PIN_OUTPUT, 0) /* (AD19) RGMII1_TX_CTL */
-+		>;
-+	};
-+
-+	main_rgmii2_pins_default: main-rgmii2-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x184, PIN_INPUT, 0) /* (AE23) RGMII2_RD0 */
-+			AM62X_IOPAD(0x188, PIN_INPUT, 0) /* (AB20) RGMII2_RD1 */
-+			AM62X_IOPAD(0x18c, PIN_INPUT, 0) /* (AC21) RGMII2_RD2 */
-+			AM62X_IOPAD(0x190, PIN_INPUT, 0) /* (AE22) RGMII2_RD3 */
-+			AM62X_IOPAD(0x180, PIN_INPUT, 0) /* (AD23) RGMII2_RXC */
-+			AM62X_IOPAD(0x17c, PIN_INPUT, 0) /* (AD22) RGMII2_RX_CTL */
-+			AM62X_IOPAD(0x16c, PIN_OUTPUT, 0) /* (Y18) RGMII2_TD0 */
-+			AM62X_IOPAD(0x170, PIN_OUTPUT, 0) /* (AA18) RGMII2_TD1 */
-+			AM62X_IOPAD(0x174, PIN_OUTPUT, 0) /* (AD21) RGMII2_TD2 */
-+			AM62X_IOPAD(0x178, PIN_OUTPUT, 0) /* (AC20) RGMII2_TD3 */
-+			AM62X_IOPAD(0x168, PIN_OUTPUT, 0) /* (AE21) RGMII2_TXC */
-+			AM62X_IOPAD(0x164, PIN_OUTPUT, 0) /* (AA19) RGMII2_TX_CTL */
-+		>;
-+	};
-+
-+	ospi0_pins_default: ospi0-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x000, PIN_OUTPUT, 0) /* (H24) OSPI0_CLK */
-+			AM62X_IOPAD(0x02c, PIN_OUTPUT, 0) /* (F23) OSPI0_CSn0 */
-+			AM62X_IOPAD(0x00c, PIN_INPUT, 0) /* (E25) OSPI0_D0 */
-+			AM62X_IOPAD(0x010, PIN_INPUT, 0) /* (G24) OSPI0_D1 */
-+			AM62X_IOPAD(0x014, PIN_INPUT, 0) /* (F25) OSPI0_D2 */
-+			AM62X_IOPAD(0x018, PIN_INPUT, 0) /* (F24) OSPI0_D3 */
-+			AM62X_IOPAD(0x01c, PIN_INPUT, 0) /* (J23) OSPI0_D4 */
-+			AM62X_IOPAD(0x020, PIN_INPUT, 0) /* (J25) OSPI0_D5 */
-+			AM62X_IOPAD(0x024, PIN_INPUT, 0) /* (H25) OSPI0_D6 */
-+			AM62X_IOPAD(0x028, PIN_INPUT, 0) /* (J22) OSPI0_D7 */
-+			AM62X_IOPAD(0x008, PIN_INPUT, 0) /* (J24) OSPI0_DQS */
-+		>;
-+	};
-+
-+	vdd_sd_dv_pins_default: vdd-sd-dv-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x07c, PIN_OUTPUT, 7) /* (P25) GPMC0_CLK.GPIO0_31 */
-+		>;
-+	};
-+
-+	main_gpio1_ioexp_intr_pins_default: main-gpio1-ioexp-intr-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x01d4, PIN_INPUT, 7) /* (B15) UART0_RTSn.GPIO1_23 */
-+		>;
-+	};
- };
- 
- &wkup_uart0 {
-@@ -188,6 +325,33 @@ &main_i2c1 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&main_i2c1_pins_default>;
- 	clock-frequency = <400000>;
-+
-+	exp1: gpio@22 {
-+		compatible = "ti,tca6424";
-+		reg = <0x22>;
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+		gpio-line-names = "GPIO_CPSW2_RST", "GPIO_CPSW1_RST",
-+				   "PRU_DETECT", "MMC1_SD_EN",
-+				   "VPP_LDO_EN", "EXP_PS_3V3_En",
-+				   "EXP_PS_5V0_En", "EXP_HAT_DETECT",
-+				   "GPIO_AUD_RSTn", "GPIO_eMMC_RSTn",
-+				   "UART1_FET_BUF_EN", "WL_LT_EN",
-+				   "GPIO_HDMI_RSTn", "CSI_GPIO1",
-+				   "CSI_GPIO2", "PRU_3V3_EN",
-+				   "HDMI_INTn", "TEST_GPIO2",
-+				   "MCASP1_FET_EN", "MCASP1_BUF_BT_EN",
-+				   "MCASP1_FET_SEL", "UART1_FET_SEL",
-+				   "TSINT#", "IO_EXP_TEST_LED";
-+
-+		interrupt-parent = <&main_gpio1>;
-+		interrupts = <23 IRQ_TYPE_EDGE_FALLING>;
-+		interrupt-controller;
-+		#interrupt-cells = <2>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&main_gpio1_ioexp_intr_pins_default>;
-+	};
- };
- 
- &main_i2c2 {
-@@ -198,9 +362,118 @@ &main_i2c3 {
- 	status = "disabled";
- };
- 
-+&sdhci0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_mmc0_pins_default>;
-+	ti,driver-strength-ohm = <50>;
-+	disable-wp;
-+};
-+
-+&sdhci1 {
-+	/* SD/MMC */
-+	vmmc-supply = <&vdd_mmc1>;
-+	vqmmc-supply = <&vdd_sd_dv>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_mmc1_pins_default>;
-+	ti,driver-strength-ohm = <50>;
-+	disable-wp;
-+};
-+
-+&cpsw3g {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_mdio1_pins_default
-+		     &main_rgmii1_pins_default
-+		     &main_rgmii2_pins_default>;
-+};
-+
-+&cpsw_port1 {
-+	phy-mode = "rgmii-rxid";
-+	phy-handle = <&cpsw3g_phy0>;
-+};
-+
-+&cpsw_port2 {
-+	phy-mode = "rgmii-rxid";
-+	phy-handle = <&cpsw3g_phy1>;
-+};
-+
-+&cpsw3g_mdio {
-+	cpsw3g_phy0: ethernet-phy@0 {
-+		reg = <0>;
-+		ti,rx-internal-delay = <DP83867_RGMIIDCTL_2_00_NS>;
-+		ti,fifo-depth = <DP83867_PHYCR_FIFO_DEPTH_4_B_NIB>;
-+		ti,min-output-impedance;
-+	};
-+
-+	cpsw3g_phy1: ethernet-phy@1 {
-+		reg = <1>;
-+		ti,rx-internal-delay = <DP83867_RGMIIDCTL_2_00_NS>;
-+		ti,fifo-depth = <DP83867_PHYCR_FIFO_DEPTH_4_B_NIB>;
-+		ti,min-output-impedance;
-+	};
-+};
-+
- &mailbox0_cluster0 {
- 	mbox_m4_0: mbox-m4-0 {
- 		ti,mbox-rx = <0 0 0>;
- 		ti,mbox-tx = <1 0 0>;
- 	};
- };
-+
-+&ospi0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&ospi0_pins_default>;
-+
-+	flash@0{
-+		compatible = "jedec,spi-nor";
-+		reg = <0x0>;
-+		spi-tx-bus-width = <8>;
-+		spi-rx-bus-width = <8>;
-+		spi-max-frequency = <25000000>;
-+		cdns,tshsl-ns = <60>;
-+		cdns,tsd2d-ns = <60>;
-+		cdns,tchsh-ns = <60>;
-+		cdns,tslch-ns = <60>;
-+		cdns,read-delay = <4>;
-+
-+		partitions {
-+			compatible = "fixed-partitions";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			partition@0 {
-+				label = "ospi.tiboot3";
-+				reg = <0x0 0x80000>;
-+			};
-+
-+			partition@80000 {
-+				label = "ospi.tispl";
-+				reg = <0x80000 0x200000>;
-+			};
-+
-+			partition@280000 {
-+				label = "ospi.u-boot";
-+				reg = <0x280000 0x400000>;
-+			};
-+
-+			partition@680000 {
-+				label = "ospi.env";
-+				reg = <0x680000 0x40000>;
-+			};
-+
-+			partition@6c0000 {
-+				label = "ospi.env.backup";
-+				reg = <0x6c0000 0x40000>;
-+			};
-+
-+			partition@800000 {
-+				label = "ospi.rootfs";
-+				reg = <0x800000 0x37c0000>;
-+			};
-+
-+			partition@3fc0000 {
-+				label = "ospi.phypattern";
-+				reg = <0x3fc0000 0x40000>;
-+			};
-+		};
-+	};
-+};
--- 
-2.36.0
 
+>  mm/page_alloc.c | 28 ++++++++++++++++++++++++----
+>  1 file changed, 24 insertions(+), 4 deletions(-)
+>
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 3589feb..69369ed 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -3372,7 +3372,7 @@ static int nr_pcp_high(struct per_cpu_pages *pcp, struct zone *zone)
+>  }
+>
+>  static void free_unref_page_commit(struct page *page, unsigned long pfn,
+> -                                  int migratetype, unsigned int order)
+> +                                  int migratetype, unsigned int order, bool fast_free)
+>  {
+>         struct zone *zone = page_zone(page);
+>         struct per_cpu_pages *pcp;
+> @@ -3382,7 +3382,10 @@ static void free_unref_page_commit(struct page *page, unsigned long pfn,
+>         __count_vm_event(PGFREE);
+>         pcp = this_cpu_ptr(zone->per_cpu_pageset);
+>         pindex = order_to_pindex(migratetype, order);
+> -       list_add(&page->lru, &pcp->lists[pindex]);
+> +       if (fast_free)
+> +               list_add_tail(&page->lru, &pcp->lists[pindex]);
+> +       else
+> +               list_add(&page->lru, &pcp->lists[pindex]);
+
+Ok. This is interesting, we used to have a separate cma pcp list but
+now MIGRATE_CMA is an outsider so cma pages are placed in the
+MIGRATE_MOVABLE list.
+
+enum migratetype {
+        MIGRATE_UNMOVABLE,
+        MIGRATE_MOVABLE,
+        MIGRATE_RECLAIMABLE,
+        MIGRATE_PCPTYPES,       /* the number of types on the pcp lists */
+        MIGRATE_HIGHATOMIC = MIGRATE_PCPTYPES,
+#ifdef CONFIG_CMA
+        ...
+        MIGRATE_CMA,
+#endif
+#ifdef CONFIG_MEMORY_ISOLATION
+        MIGRATE_ISOLATE,        /* can't allocate from here */
+#endif
+        MIGRATE_TYPES
+};
+
+#define NR_PCP_LISTS (MIGRATE_PCPTYPES * (PAGE_ALLOC_COSTLY_ORDER + 1
++ NR_PCP_THP))
+
+>         pcp->count += 1 << order;
+>         high = nr_pcp_high(pcp, zone);
+>         if (pcp->count >= high) {
+> @@ -3400,6 +3403,7 @@ void free_unref_page(struct page *page, unsigned int order)
+>         unsigned long flags;
+>         unsigned long pfn = page_to_pfn(page);
+>         int migratetype;
+> +       bool fast_free = false;
+>
+>         if (!free_unref_page_prepare(page, pfn, order))
+>                 return;
+> @@ -3419,9 +3423,15 @@ void free_unref_page(struct page *page, unsigned int order)
+>                 }
+>                 migratetype = MIGRATE_MOVABLE;
+>         }
+> +       /*
+> +        * Give priority to free cma-pages to buddy in order to
+> +        * decrease pages migration when cma_alloc.
+> +        */
+> +       if (migratetype == MIGRATE_CMA)
+> +               fast_free = true;
+>
+>         local_lock_irqsave(&pagesets.lock, flags);
+> -       free_unref_page_commit(page, pfn, migratetype, order);
+> +       free_unref_page_commit(page, pfn, migratetype, order, fast_free);
+>         local_unlock_irqrestore(&pagesets.lock, flags);
+>  }
+>
+> @@ -3459,6 +3469,8 @@ void free_unref_page_list(struct list_head *list)
+>
+>         local_lock_irqsave(&pagesets.lock, flags);
+>         list_for_each_entry_safe(page, next, list, lru) {
+> +               bool fast_free = false;
+> +
+>                 pfn = page_private(page);
+>                 set_page_private(page, 0);
+>
+> @@ -3467,11 +3479,19 @@ void free_unref_page_list(struct list_head *list)
+>                  * to the MIGRATE_MOVABLE pcp list.
+>                  */
+>                 migratetype = get_pcppage_migratetype(page);
+> +
+> +               /*
+> +                * Give priority to free cma-pages to buddy in order to
+> +                * decrease pages migration when cma_alloc.
+> +                */
+> +               if (migratetype == MIGRATE_CMA)
+> +                       fast_free = true;
+> +
+>                 if (unlikely(migratetype >= MIGRATE_PCPTYPES))
+>                         migratetype = MIGRATE_MOVABLE;
+>
+>                 trace_mm_page_free_batched(page);
+> -               free_unref_page_commit(page, pfn, migratetype, 0);
+> +               free_unref_page_commit(page, pfn, migratetype, 0, fast_free);
+
+i'd  call get_pcppage_migratetype() again in free_unref_page_commit()
+rather than adding a parameter to increase a couple cross functions.
+
+>
+>                 /*
+>                  * Guard against excessive IRQ disabled times when we get
+> --
+> 2.7.4
+>
+
+Thanks
+Barry

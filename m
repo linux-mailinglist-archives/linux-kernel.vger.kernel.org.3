@@ -2,177 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B63E50D334
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 18:13:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C604850D333
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 18:13:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234194AbiDXQQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 12:16:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
+        id S234291AbiDXQQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 12:16:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234064AbiDXQQb (ORCPT
+        with ESMTP id S234208AbiDXQQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 12:16:31 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B1114DEB5;
-        Sun, 24 Apr 2022 09:13:30 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id E74225C00F3;
-        Sun, 24 Apr 2022 12:13:29 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Sun, 24 Apr 2022 12:13:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm2; t=1650816809; x=1650903209; bh=Amtp5NNZNgrfLBOwmjY+ypTL6
-        6su3Et14GjUFZ6fFmM=; b=iw26k8bKvmbiyhRpTibDeE7Q89TNWqm4ukmNpaYFH
-        mzluwqo3E+HtMw2P+jg1Jj1V4oVCGpjRUwk8tb07rK1PuFu6z/+goP9E+SmvO5zJ
-        y5YcbSosmrBbc3PKmXVfQmRt1aF99jUNQkd14PsP1Ef02hMBXE6Vfn/Z2Mc69UZ0
-        sEsr5VGDiPk/RngZIVE/v0nRE7qlGY+EzaS6d770WZMG6kpq+r9193zx1zR5gP8P
-        fxPfww+wJubisCIaJ/z0AwhFwAnUIT+x1K7PxOrpkPW678gi2b+Dd1VAC2jlmqOA
-        afRYL1Z/Y8A63qzN5I13Gr9sXGRnw16SIdBCAmSqrK3oA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
-        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm1; t=1650816809; x=1650903209; bh=A
-        mtp5NNZNgrfLBOwmjY+ypTL66su3Et14GjUFZ6fFmM=; b=bUsNk+qTj5SFxcCWj
-        f48+i0I8OwVshv5J7TEgFfjWPFwwolR0cr9uqkR2ghim/E51FpUoVkpzTrxy0Uig
-        jW4tyAyei1N+voect8PshOIAMj1nmvntdAjSSKY+KT3KjKn6e9xs8XtL7QWcF2fN
-        ZN0v3ycbMVsyqzhc0xbVY3/dSXgWC9IBQgf6pMfLIUYHAt1Fua2NhqtdV9US8zPy
-        EdcBBd7KFxVmBlGOC9olBONWRySikAUZBpu1PNr29Ij3Qy/FWDcpqyvHu5h7pmvf
-        gLbZme/err7uiVohyj5M5jwCFtlFxold0HfkZPAvUvjMeU5Pekj5DZSx3+Ey7x12
-        9dOsA==
-X-ME-Sender: <xms:KXdlYtkYARM1dtbO4yrwXL8kOBTJY4IOz3aZ9yGueZ2ifAXaNM7K3Q>
-    <xme:KXdlYo2mzHHTOACGHv3Zt-dbuERvLUg9aOw4CxxInL7nryf8U99uz6ZBLi0SC44tK
-    dQpvPqMF0itibIYUQ>
-X-ME-Received: <xmr:KXdlYjrwIRk6cDxCi-qc4JDd4w35yflkOwIXy_Niy1DBygrsvS-ezqS_MKyRoZG1VZZ98YRp_hMKpXrZOzrl9DdpfvreYU0ANcLoYUog2fqcLCj7m9Jz646fWnCq045UL5kWlg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrtdelgddutddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
-    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
-    grthhtvghrnhepkeevlefhjeeuleeltedvjedvfeefteegleehueejffehgffffeekhefh
-    hfekkeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:KXdlYtnQojeq1PVkRkrdj8Hu0boxiWu9Q0KFKEG0n_6gEZ4mPa8ESw>
-    <xmx:KXdlYr2mRerp2gs2FHexJrHncwG5kPJunAtrDzWuzdzfHl8NgXwl6w>
-    <xmx:KXdlYstomHBIJ_IMiwU3H96nOLC9VFivwAMRdPsWg6b7k-_CvJXV6A>
-    <xmx:KXdlYkJbdXdM0bBMwGpKFFMYKFm_tdpLn-7sqQgDUbspwYa2bYXzgw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 24 Apr 2022 12:13:28 -0400 (EDT)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Ondrej Jirman <x@xff.cz>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: [PATCH v5] Input: sun4i-lradc-keys - Add wakeup support
-Date:   Sun, 24 Apr 2022 11:13:27 -0500
-Message-Id: <20220424161328.61103-1-samuel@sholland.org>
+        Sun, 24 Apr 2022 12:16:34 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A87F14DEB5;
+        Sun, 24 Apr 2022 09:13:33 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id x3so7914320wmj.5;
+        Sun, 24 Apr 2022 09:13:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+ObLcZEUQxD8FwLhd5DJnfColWxUYkRGqghpm3bA5uM=;
+        b=ncvMStXd44nfdtehxW3QyeCA9dTGDoz0HQIC9gjUtqGA4Iom4noF68Ld2hN/+86Vaa
+         otCal3sGJ9Oy34hY0kEz5vx2n58DyRb6aqG4IONt+ieYQOBL7qtsxyfgN8CzBSEAeO2p
+         ttWSTb0tJ/RwnAqpbaHOkSgVe53l2H45vfdcuRt2P70KMs7XXxRN1yP1RubOSGFf7LNW
+         eSIoRelsI15zZQW8zzkUY0H7hqD7DpmpzyrDTHz18WOyskaHQNxjevmmS2zwul9Klyd3
+         an7rreHbFQlVduA9o1EGniC/qBWBBIghxgcxTh0UQw8I9qxnU/loW80CZpIy6NKO8B2T
+         v59A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+ObLcZEUQxD8FwLhd5DJnfColWxUYkRGqghpm3bA5uM=;
+        b=DTkcDBp/gw9jqQxnki3pMCB6XstgBWEFm6wYCTw0SohJNO0L4QEBbKamwsiWmFTirS
+         aT6WEHgcf13EpcKdzD2i9eKQU9XWgMUCf015O3CBJkaIrmMzVCLq7nVIxH9IzV6voAMV
+         HPvPnOm0JfBWcagChYtso8ftbdpvCtNjXJ0zEoMXAez55V53ZBt/36SVJHy7E1+bFUcK
+         c3RCPvev+NGk9R8q2Q+ISCrOGmuUAhaxi0BivSLViO1oPF2ufq2O/DPdfP1oFRYkvhuW
+         H6qqYJvW3jsLlVfbZndi5CeEtOiP3cckaDbaYkeG80jXaZxA07TeUsJzlkVTG19vGaoq
+         C+9w==
+X-Gm-Message-State: AOAM530W7enj8QVxEGuwQBrgGshL++zsw2eXnnbjeY7kk1+GPxnyeVx1
+        jGe02Qr/wZF8PuiKqfBTzsg=
+X-Google-Smtp-Source: ABdhPJyh3p31G4sIeVZXTGFdvpzzk7/VTR2UidhWmiitY7AivHww4XQg6U7xwHJh/6v4nJfIiLzehg==
+X-Received: by 2002:a7b:c94a:0:b0:38e:c252:4a58 with SMTP id i10-20020a7bc94a000000b0038ec2524a58mr22601807wml.177.1650816812065;
+        Sun, 24 Apr 2022 09:13:32 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id a7-20020adffb87000000b00207982c7f4dsm6840310wrr.67.2022.04.24.09.13.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Apr 2022 09:13:31 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Dave Kleikamp <shaggy@kernel.org>,
+        jfs-discussion@lists.sourceforge.net
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] jfs: remove unused pointer tblk
+Date:   Sun, 24 Apr 2022 17:13:30 +0100
+Message-Id: <20220424161330.1360068-1-colin.i.king@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ondrej Jirman <x@xff.cz>
+The pointer tlbk is not used, it is redundant and can be removed.
+Cleans up cppcheck warning:
 
-Allow the driver to wake the system on key press if the "wakeup-source"
-property is provided in the device tree. Using the LRADC as a wakeup
-source requires keeping the AVCC domain active during sleep. Since this
-has a nontrivial impact on power consumption (sometimes doubling it),
-disable the LRADC wakeup source by default.
+linux/fs/jfs/jfs_xtree.c:2551:17: style: Unused variable: tblk [unusedVariable]
 
-Signed-off-by: Ondrej Jirman <x@xff.cz>
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Signed-off-by: Samuel Holland <samuel@sholland.org>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
+ fs/jfs/jfs_xtree.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Changes in v5:
-  - Fix typo in commit subject
-  - Update Ondrej's e-mail address per his request
-
-Changes in v4:
-  - Only mark device as wakeup capable if setting the wakeirq succeeds
-  - An entirely different, but equivalent, DT binding patch was merged,
-    so there is only one patch left
-
-Changes in v3:
-  - Dropped unnecessary pr_err in platform_get_irq() error path
-  - Dropped patch 3 (DT update) as it was merged
-  - Added Acked-by/Reviewed-by tags
-
-Changes in v2:
-  - Add requisite DT binding change
-  - Only add wakeup capability if "wakeup-source" is present
-  - Warn but do not error out if setting the wake IRQ fails
-  - Add "wakeup-source" property to PinePhone device tree
-
- drivers/input/keyboard/sun4i-lradc-keys.c | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/input/keyboard/sun4i-lradc-keys.c b/drivers/input/keyboard/sun4i-lradc-keys.c
-index 4a796bed48ac..781f9b053115 100644
---- a/drivers/input/keyboard/sun4i-lradc-keys.c
-+++ b/drivers/input/keyboard/sun4i-lradc-keys.c
-@@ -22,6 +22,8 @@
- #include <linux/module.h>
- #include <linux/of_platform.h>
- #include <linux/platform_device.h>
-+#include <linux/pm_wakeirq.h>
-+#include <linux/pm_wakeup.h>
- #include <linux/regulator/consumer.h>
- #include <linux/slab.h>
- 
-@@ -226,8 +228,7 @@ static int sun4i_lradc_probe(struct platform_device *pdev)
- {
- 	struct sun4i_lradc_data *lradc;
- 	struct device *dev = &pdev->dev;
--	int i;
--	int error;
-+	int error, i, irq;
- 
- 	lradc = devm_kzalloc(dev, sizeof(struct sun4i_lradc_data), GFP_KERNEL);
- 	if (!lradc)
-@@ -272,8 +273,11 @@ static int sun4i_lradc_probe(struct platform_device *pdev)
- 	if (IS_ERR(lradc->base))
- 		return PTR_ERR(lradc->base);
- 
--	error = devm_request_irq(dev, platform_get_irq(pdev, 0),
--				 sun4i_lradc_irq, 0,
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return irq;
-+
-+	error = devm_request_irq(dev, irq, sun4i_lradc_irq, 0,
- 				 "sun4i-a10-lradc-keys", lradc);
- 	if (error)
- 		return error;
-@@ -282,6 +286,14 @@ static int sun4i_lradc_probe(struct platform_device *pdev)
- 	if (error)
- 		return error;
- 
-+	if (device_property_read_bool(dev, "wakeup-source")) {
-+		error = dev_pm_set_wake_irq(dev, irq);
-+		if (error)
-+			dev_warn(dev, "Failed to set wake IRQ\n");
-+		else
-+			device_set_wakeup_capable(dev, true);
-+	}
-+
- 	return 0;
- }
- 
+diff --git a/fs/jfs/jfs_xtree.c b/fs/jfs/jfs_xtree.c
+index 3148e9b35f3b..d29979d0a6aa 100644
+--- a/fs/jfs/jfs_xtree.c
++++ b/fs/jfs/jfs_xtree.c
+@@ -2548,7 +2548,6 @@ xtRelocate(tid_t tid, struct inode * ip, xad_t * oxad,	/* old XAD */
+ 	   int xtype)
+ {				/* extent type: XTPAGE or DATAEXT */
+ 	int rc = 0;
+-	struct tblock *tblk;
+ 	struct tlock *tlck;
+ 	struct xtlock *xtlck;
+ 	struct metapage *mp, *pmp, *lmp, *rmp;	/* meta-page buffer */
 -- 
 2.35.1
 

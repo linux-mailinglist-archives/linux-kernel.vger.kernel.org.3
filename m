@@ -2,67 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5686C50D4D0
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 21:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40E4A50D4D1
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 21:23:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238304AbiDXT0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 15:26:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33640 "EHLO
+        id S238787AbiDXT0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 15:26:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233170AbiDXT0b (ORCPT
+        with ESMTP id S238470AbiDXT0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 15:26:31 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D7C62A07;
-        Sun, 24 Apr 2022 12:23:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Xh7LUAmFoIqxYbksJd78ZOLHOPH0rZu20hznpGLh6Sc=; b=AUxGYIQrS3y3W3q8SWzPJltLQ9
-        CxG+f+R0sS2hArtvwedFK/KIQ0hukY2anrXqk/Sh2nYfpIRBGYl9+DrbjB7acifAtveO6BSnMm98C
-        gZjhQS3bH9FVHS3UbbiWXOLOM5K0OtMPVDoMGQzxl3WOX5Md0Qkv6M2JftRCIpL7jOZH3x11Z8xAe
-        uFdxQFZ+jnq12GqyZaITinJk7xQ0obhKIB7lrop24PuziXQmeV6zzqdyD4B+o1lufiGfj141pOaAJ
-        qI8+CrZMwppNccNn4bX6IQDLL2kT3rsQNxQtx19veCIsuntpm5kqgmjgmKjoM0Mw1xrRXjSDcaYBT
-        vf5WiztA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nihpF-00887x-E1; Sun, 24 Apr 2022 19:23:17 +0000
-Date:   Sun, 24 Apr 2022 20:23:17 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Junwen Wu <wudaemon@163.com>
-Cc:     adobriyan@gmail.com, akpm@linux-foundation.org, ddiss@suse.de,
-        fweimer@redhat.com, keescook@chromium.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] proc: limit schedstate node write operation
-Message-ID: <YmWjpWWdwN0qxFSR@casper.infradead.org>
-References: <YmNs+i/unWKvj4Kx@casper.infradead.org>
- <YmNs+i/unWKvj4Kx@casper.infradead.org>
+        Sun, 24 Apr 2022 15:26:41 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EAF62A24
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 12:23:39 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id b12so7666930plg.4
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 12:23:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=fwqOFLLrsgU55uAqDKEizrE8R/j0TAX1IaPsL9wmeVs=;
+        b=nB3yHTvPw9vWCkj0c9Tr7qt++xWK4EkmpAlmiPG+iGtQQYF6rwgsvq+F2XnbwTGmIC
+         g5MOwNtNiS0kVYV4I1pOBDpz3s9qebx3ZZtxZ6u8bUTrJkEZyy7IX0rwogkqmyXBsu7p
+         JtoKnGGr22DyTTW48qvx8RWAYvn6hQ/YgS4dMif4CXs4XqFApdQJ1+MCTBobjfsGmbul
+         rvy7kIQGg20qzZ1MnABDnld/9ANra+nzoAocB3Ij3jVtzbH9qj0/q5rSpad5mZ9D0zsm
+         FsJe3N9D0cQcWrNO/7PWnv41yOywbKgyhyezLNL1/AwKQTimJNHzQpqYpgHzNoeqhYiM
+         Kwtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=fwqOFLLrsgU55uAqDKEizrE8R/j0TAX1IaPsL9wmeVs=;
+        b=zfzLD9TVSs/VsJg6USyFb2RBEN9PS62toByGOnVJ6UHgTZQH1EJeTYJCzRfLYtVe8S
+         BBzn6TIyTGi1TZ09Gp3Y4jhbMrqIwQfXzhMDYeoCWZEIVXKU02NL1bCxxjqTREjTxa/0
+         9i0by2fKbNdD/TceyvshbO4USQcV60GFURLXg8sf/RUXoIfl57EV5jdH3eHCTlC1hmky
+         H3GIrrZZU0Aej8cY9He5rvS23Y9aEN4Db0XnD0/kiEl4ub6ggt1BjdZLWKGF35Ry+jVf
+         an/zWYfPLIcsOzHZ1dlnigLKUAxQsN1+ouY/pmP8IM6wU/0Bdc1Zjz/FUDsxB2t7pSkR
+         bOYw==
+X-Gm-Message-State: AOAM530eW2wGuSSMD6hlSFEiLY40KQqRIv18Imhuofl1L8KflywVrety
+        oLM5vWULOLRl/V0xo7e8ZqClbmnMQvLhfQ==
+X-Google-Smtp-Source: ABdhPJxRQiIY2nukKQxvL0gJS/kitsBeAi2DpnoUgBNNhEOm+iXEXe2LOIBMYji8TKrfxKPLnRj3DA==
+X-Received: by 2002:a17:902:9043:b0:14f:aa08:8497 with SMTP id w3-20020a170902904300b0014faa088497mr14731650plz.109.1650828219004;
+        Sun, 24 Apr 2022 12:23:39 -0700 (PDT)
+Received: from [2620:15c:29:204:d4fc:f95c:4d79:861f] ([2620:15c:29:204:d4fc:f95c:4d79:861f])
+        by smtp.gmail.com with ESMTPSA id l4-20020a056a0016c400b004f79504ef9csm9366747pfc.3.2022.04.24.12.23.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Apr 2022 12:23:38 -0700 (PDT)
+Date:   Sun, 24 Apr 2022 12:23:38 -0700 (PDT)
+From:   David Rientjes <rientjes@google.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/mempolicy: clean up the code logic in
+ queue_pages_pte_range
+In-Reply-To: <20220419122234.45083-1-linmiaohe@huawei.com>
+Message-ID: <e6d5e06e-426a-19cf-dd93-9b6011a33cb0@google.com>
+References: <20220419122234.45083-1-linmiaohe@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YmNs+i/unWKvj4Kx@casper.infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 24, 2022 at 03:23:54PM +0000, Junwen Wu wrote:
-> From: Matthew Wilcox <willy@infradead.org>
-> 
-> On Sat, Apr 23, 2022 at 02:31:04AM +0000, Junwen Wu wrote:
-> > Whatever value is written to /proc/$pid/sched, a task's schedstate data
-> > will reset.In some cases, schedstate will drop by accident. We restrict
-> > writing a certain value to this node before the data is reset.
-> 
-> ... and break the existing scripts which expect the current behaviour.
-> 
-> 
-> Hi, Matthew,can you describe it in more detail.
+On Tue, 19 Apr 2022, Miaohe Lin wrote:
 
-What detail do you need?  Existing scripts depend on the existing
-behaviour.  Your change to the behaviour will break them.  That's not
-allowed, so your patch is rejected.
+> Since commit e5947d23edd8 ("mm: mempolicy: don't have to split pmd for
+> huge zero page"), THP is never splited in queue_pages_pmd. Thus 2 is
+> never returned now. We can remove such unnecessary ret != 2 check and
+> clean up the relevant comment. Minor improvements in readability.
+> 
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+
+Acked-by: David Rientjes <rientjes@google.com>

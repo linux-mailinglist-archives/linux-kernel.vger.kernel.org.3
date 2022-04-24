@@ -2,115 +2,368 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE64F50D042
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 09:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B82A750D044
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 09:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238511AbiDXHhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 03:37:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49496 "EHLO
+        id S238524AbiDXHlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 03:41:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235755AbiDXHhK (ORCPT
+        with ESMTP id S232508AbiDXHlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 03:37:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E507175DD7;
-        Sun, 24 Apr 2022 00:34:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AB12E612A0;
-        Sun, 24 Apr 2022 07:34:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3071C385AB;
-        Sun, 24 Apr 2022 07:34:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650785650;
-        bh=xI1NIfvXpmPp9D3ctWwWfmXIYM7XRmpUpv+03lUnZqY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Z3YaV9tdWWy2hStE6/D5nBZ8H+tgRYDaZJuLqEMQOpdcaTA5btejAKV5nGs4FVkFw
-         lztUtmGnYL7ij4B3m5usmfn0kp6+WDZwm3wV85W3giGmPvsaMI6qcSM6tkSYLBZuGJ
-         F4K0ZjWW9IrtktJUZbMtT1AAO+znqc47yH1DejHSU1OHVpLM2Tfm7mP+IdGl9MBbfH
-         r3HqJ7fsdf8SHeFANAll2AaNybVbsKpj85C9uZRc9QMSA26xvawE4saVHPevzSROBp
-         ik352AGAWQmV7O8Ra4j8tKA8RJ+DAoNedBydzG76onwRCgpKbb1MAbN0Y+lalgPvbZ
-         dP46StgCi9pDw==
-Received: by mail-ua1-f51.google.com with SMTP id o10so4588332uar.0;
-        Sun, 24 Apr 2022 00:34:09 -0700 (PDT)
-X-Gm-Message-State: AOAM530iLLyzTv5TdSaT1NPAYRa8npRDvn969HJuI6pO2pijGjisYvMb
-        5rJ4YcytSPnp8xlWP0ubWamFuhFFC6Asq3SxQWY=
-X-Google-Smtp-Source: ABdhPJwjPIhNxj9bMKUtEcaBvPXsYsrvGPar68HbF3WXf8ryDmI47RVT1niIuAX7Rtzo9xZ57yNdHmTuxo5upiU+VlA=
-X-Received: by 2002:ab0:375b:0:b0:355:c2b3:f6c with SMTP id
- i27-20020ab0375b000000b00355c2b30f6cmr3613271uat.84.1650785648925; Sun, 24
- Apr 2022 00:34:08 -0700 (PDT)
+        Sun, 24 Apr 2022 03:41:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C9EB6EB3A
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 00:38:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650785929;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aeiwmar2mjn4F7rvuWpMH83PXSO922EnacbHvVQ42iw=;
+        b=Omu7QFDPTcg/pjhMV1ich4lH2+IwGd+Smum5QHM0cJPhn0aXghnMdm6Egz6K25gsjzeocJ
+        kBw4ADX+6EGdIseTt1F2gcuSdk8yj1Ow8ubXDidOaBH6WTw3GArETRxawXSVTGBxJR1ZLS
+        OXgB4s8clSAzX3H1cPqQdIro+qZzy4o=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-367-ug_BwEMePxSqshgFx2VLkQ-1; Sun, 24 Apr 2022 03:38:48 -0400
+X-MC-Unique: ug_BwEMePxSqshgFx2VLkQ-1
+Received: by mail-ej1-f72.google.com with SMTP id dp12-20020a170906c14c00b006e7e8234ae2so5869390ejc.2
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 00:38:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=aeiwmar2mjn4F7rvuWpMH83PXSO922EnacbHvVQ42iw=;
+        b=oeKsm+X52kO7uXIS7+kNdDMTKnrhTjN8XOTgyRrNiakeldbdyvJaCrm9ypIvLTQv7T
+         oc/u64YHgAjjVyhwo0qJRTKyRJ9J3MmJ+vL9bGnkmsZvyXzAV7Plhl1lo69v4G5XhKtv
+         Q5KGvC/qVeoNkBabDBP5gOafkYN743KsG0NjCmsfaDoWA+G63zeqiDtoJ+nvEIlCysiu
+         BeSDECnJHao88/K6KNiC3PY6AorufWFT2ue4yu7TM4CIHoxGWq095qpu9uXuwm+N5AX2
+         ExblEWR6ea/9Wjf7VKKv/dG3HKQPO1DIs3X8dcX9J13eiB56nNOwgLG/l2mhyB+FXk2C
+         Dyqg==
+X-Gm-Message-State: AOAM530LdR/++l39kKZ7ez6H6OisuYhiqbxf7O8KHiM9HmDE44k7hRcE
+        +p3o+pePUaVt+FvxjRZ/ZWVbKsEgjyhHmdgoEa7RogowMtdKwl47IthLELWKR2EOOE160F2Nf8p
+        iPs+dh2tr2natOPUVNAANqx3m6PtTSQyg1B5h6Ohi
+X-Received: by 2002:a17:906:cb09:b0:6f3:87ca:1351 with SMTP id lk9-20020a170906cb0900b006f387ca1351mr2240286ejb.674.1650785926630;
+        Sun, 24 Apr 2022 00:38:46 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy8kFA9bXUvHnBeHjic7diOwUfCfucAAIdV2iBjNEd/Ug79h3L3ClXAKZSFLtJeSJSWR9zmDU4PeQfuLa9AM7k=
+X-Received: by 2002:a17:906:cb09:b0:6f3:87ca:1351 with SMTP id
+ lk9-20020a170906cb0900b006f387ca1351mr2240275ejb.674.1650785926385; Sun, 24
+ Apr 2022 00:38:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <mhng-320b7f4f-08bf-4ee8-938e-4bf687760468@palmer-ri-x1c9> <mhng-d2e23c07-fd6f-4ae8-a2c7-fc1825e50503@palmer-ri-x1c9>
-In-Reply-To: <mhng-d2e23c07-fd6f-4ae8-a2c7-fc1825e50503@palmer-ri-x1c9>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sun, 24 Apr 2022 15:33:57 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSaAmg_-G+z7G=wea=cM_F_c17WvoDtxryxacT9wseMvg@mail.gmail.com>
-Message-ID: <CAJF2gTSaAmg_-G+z7G=wea=cM_F_c17WvoDtxryxacT9wseMvg@mail.gmail.com>
-Subject: Re: [PATCH V3] riscv: patch_text: Fixup last cpu should be master
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>, stable@vger.kernel.org
+References: <20220419014025.218121-1-lulu@redhat.com> <32c1113d-4991-0ab0-5a85-33fe85295b93@redhat.com>
+ <CACLfguUTXD0r3bDYCA3YkYQ8Oe8L0pMU2gaXsemh392WKNjOwA@mail.gmail.com>
+ <CACLfguVubBQ4N6EFZCPC0ksibmso5Yryy0e_oreKMPg==k9f_Q@mail.gmail.com> <CACGkMEujYU-qpjEYVKpy41AqyhuHeifV4kO7wAZafi63YpFkrA@mail.gmail.com>
+In-Reply-To: <CACGkMEujYU-qpjEYVKpy41AqyhuHeifV4kO7wAZafi63YpFkrA@mail.gmail.com>
+From:   Cindy Lu <lulu@redhat.com>
+Date:   Sun, 24 Apr 2022 15:38:09 +0800
+Message-ID: <CACLfguXBosk1Rtdf-MJ7o5+VA1TdZaP3ik-jHoSoeX39fmANHg@mail.gmail.com>
+Subject: Re: [PATCH v1] vdpa/vp_vdpa : add vdpa tool support in vp_vdpa
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Michael Tsirkin <mst@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 23, 2022 at 12:02 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+On Fri, Apr 22, 2022 at 2:23 PM Jason Wang <jasowang@redhat.com> wrote:
 >
-> On Thu, 21 Apr 2022 15:57:32 PDT (-0700), Palmer Dabbelt wrote:
-> > On Wed, 06 Apr 2022 07:16:49 PDT (-0700), guoren@kernel.org wrote:
-> >> From: Guo Ren <guoren@linux.alibaba.com>
-> >>
-> >> These patch_text implementations are using stop_machine_cpuslocked
-> >> infrastructure with atomic cpu_count. The original idea: When the
-> >> master CPU patch_text, the others should wait for it. But current
-> >> implementation is using the first CPU as master, which couldn't
-> >> guarantee the remaining CPUs are waiting. This patch changes the
-> >> last CPU as the master to solve the potential risk.
-> >>
-> >> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> >> Signed-off-by: Guo Ren <guoren@kernel.org>
-> >> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-> >> Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
-> >> Cc: <stable@vger.kernel.org>
-> >> ---
-> >>  arch/riscv/kernel/patch.c | 2 +-
-> >>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/arch/riscv/kernel/patch.c b/arch/riscv/kernel/patch.c
-> >> index 0b552873a577..765004b60513 100644
-> >> --- a/arch/riscv/kernel/patch.c
-> >> +++ b/arch/riscv/kernel/patch.c
-> >> @@ -104,7 +104,7 @@ static int patch_text_cb(void *data)
-> >>      struct patch_insn *patch = data;
-> >>      int ret = 0;
-> >>
-> >> -    if (atomic_inc_return(&patch->cpu_count) == 1) {
-> >> +    if (atomic_inc_return(&patch->cpu_count) == num_online_cpus()) {
-> >>              ret =
-> >>                  patch_text_nosync(patch->addr, &patch->insn,
-> >>                                          GET_INSN_LENGTH(patch->insn));
+> On Fri, Apr 22, 2022 at 1:57 PM Cindy Lu <lulu@redhat.com> wrote:
 > >
-> > Thanks, this is on fixes.
+> > On Wed, Apr 20, 2022 at 2:27 PM Cindy Lu <lulu@redhat.com> wrote:
+> > >
+> > >
+> > >
+> > > On Wed, Apr 20, 2022 at 11:21 AM Jason Wang <jasowang@redhat.com> wro=
+te:
+> > >>
+> > >>
+> > >> =E5=9C=A8 2022/4/19 09:40, Cindy Lu =E5=86=99=E9=81=93:
+> > >> > this patch is to add the support for vdpa tool in vp_vdpa
+> > >> > here is the example steps
+> > >> > modprobe vp_vdpa
+> > >> > modprobe vhost_vdpa
+> > >> >
+> > >> > echo 0000:00:06.0>/sys/bus/pci/drivers/virtio-pci/unbind
+> > >> > echo 1af4 1041 > /sys/bus/pci/drivers/vp-vdpa/new_id
+> > >> >
+> > >> > vdpa dev add name vdpa1 mgmtdev pci/0000:00:06.0
+> > >> >
+> > >> > Signed-off-by: Cindy Lu <lulu@redhat.com>
+> > >> > ---
+> > >> >   drivers/vdpa/virtio_pci/vp_vdpa.c | 86 +++++++++++++++++++++++++=
++++---
+> > >> >   1 file changed, 78 insertions(+), 8 deletions(-)
+> > >> >
+> > >> > diff --git a/drivers/vdpa/virtio_pci/vp_vdpa.c b/drivers/vdpa/virt=
+io_pci/vp_vdpa.c
+> > >> > index cce101e6a940..d8a1d2f8e9bb 100644
+> > >> > --- a/drivers/vdpa/virtio_pci/vp_vdpa.c
+> > >> > +++ b/drivers/vdpa/virtio_pci/vp_vdpa.c
+> > >> > @@ -17,6 +17,8 @@
+> > >> >   #include <linux/virtio_ring.h>
+> > >> >   #include <linux/virtio_pci.h>
+> > >> >   #include <linux/virtio_pci_modern.h>
+> > >> > +#include <uapi/linux/virtio_net.h>
+> > >> > +#include <uapi/linux/vdpa.h>
+> > >> >
+> > >> >   #define VP_VDPA_QUEUE_MAX 256
+> > >> >   #define VP_VDPA_DRIVER_NAME "vp_vdpa"
+> > >> > @@ -41,6 +43,18 @@ struct vp_vdpa {
+> > >> >       int vectors;
+> > >> >   };
+> > >> >
+> > >> > +struct vp_vdpa_mgmtdev {
+> > >> > +     struct vdpa_mgmt_dev mgtdev;
+> > >> > +     struct vp_vdpa *vp_vdpa;
+> > >> > +     struct pci_dev *pdev;
+> > >> > +};
+> > >> > +
+> > >> > +#define VP_VDPA_NET_FEATURES                                     =
+              \
+> > >> > +     ((1ULL << VIRTIO_F_ANY_LAYOUT) | (1ULL << VIRTIO_F_VERSION_1=
+) |        \
+> > >> > +      (1ULL << VIRTIO_F_ACCESS_PLATFORM))
+> > >> > +
+> > >> > +#define VP_VDPA_NET_VQ_NUM 2
+> > >>
+> > >>
+> > >> Let's not go backwards, e.g we've already support any kind of virtio
+> > >> device with any kind of features. see the comment in vp_vdpa_probe()=
+.
+> > >>
+> > >>
+> > > got it, I will fix this
+> > >>
+> > >> > +
+> > >> >   static struct vp_vdpa *vdpa_to_vp(struct vdpa_device *vdpa)
+> > >> >   {
+> > >> >       return container_of(vdpa, struct vp_vdpa, vdpa);
+> > >> > @@ -454,9 +468,14 @@ static void vp_vdpa_free_irq_vectors(void *da=
+ta)
+> > >> >       pci_free_irq_vectors(data);
+> > >> >   }
+> > >> >
+> > >> > -static int vp_vdpa_probe(struct pci_dev *pdev, const struct pci_d=
+evice_id *id)
+> > >> > +static int vp_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const ch=
+ar *name,
+> > >> > +                        const struct vdpa_dev_set_config *add_con=
+fig)
+> > >> >   {
+> > >> > +     struct vp_vdpa_mgmtdev *vp_vdpa_mgtdev =3D
+> > >> > +             container_of(v_mdev, struct vp_vdpa_mgmtdev, mgtdev)=
+;
+> > >> > +
+> > >> >       struct virtio_pci_modern_device *mdev;
+> > >> > +     struct pci_dev *pdev =3D vp_vdpa_mgtdev->pdev;
+> > >> >       struct device *dev =3D &pdev->dev;
+> > >> >       struct vp_vdpa *vp_vdpa;
+> > >> >       int ret, i;
+> > >> > @@ -465,8 +484,9 @@ static int vp_vdpa_probe(struct pci_dev *pdev,=
+ const struct pci_device_id *id)
+> > >> >       if (ret)
+> > >> >               return ret;
+> > >> >
+> > >> > -     vp_vdpa =3D vdpa_alloc_device(struct vp_vdpa, vdpa,
+> > >> > -                                 dev, &vp_vdpa_ops, NULL, false);
+> > >> > +     vp_vdpa =3D vdpa_alloc_device(struct vp_vdpa, vdpa, dev, &vp=
+_vdpa_ops,
+> > >> > +                                 name, false);
+> > >>
+> > >>
+> > >> Nit: let's keep the line of vdpa_alloc_device() unchanged to reduce =
+the
+> > >> changeset.
+> > >>
+> > >>
+> > > will fix this
+> > >>
+> > >> > +
+> > >> >       if (IS_ERR(vp_vdpa)) {
+> > >> >               dev_err(dev, "vp_vdpa: Failed to allocate vDPA struc=
+ture\n");
+> > >> >               return PTR_ERR(vp_vdpa);
+> > >> > @@ -480,9 +500,10 @@ static int vp_vdpa_probe(struct pci_dev *pdev=
+, const struct pci_device_id *id)
+> > >> >               dev_err(&pdev->dev, "Failed to probe modern PCI devi=
+ce\n");
+> > >> >               goto err;
+> > >> >       }
+> > >> > +     vp_vdpa_mgtdev->vp_vdpa =3D vp_vdpa;
+> > >> >
+> > >> >       pci_set_master(pdev);
+> > >> > -     pci_set_drvdata(pdev, vp_vdpa);
+> > >> > +     pci_set_drvdata(pdev, vp_vdpa_mgtdev);
+> > >> >
+> > >> >       vp_vdpa->vdpa.dma_dev =3D &pdev->dev;
+> > >> >       vp_vdpa->queues =3D vp_modern_get_num_queues(mdev);
+> > >> > @@ -516,7 +537,8 @@ static int vp_vdpa_probe(struct pci_dev *pdev,=
+ const struct pci_device_id *id)
+> > >> >       }
+> > >> >       vp_vdpa->config_irq =3D VIRTIO_MSI_NO_VECTOR;
+> > >> >
+> > >> > -     ret =3D vdpa_register_device(&vp_vdpa->vdpa, vp_vdpa->queues=
+);
+> > >> > +     vp_vdpa->vdpa.mdev =3D &vp_vdpa_mgtdev->mgtdev;
+> > >> > +     ret =3D _vdpa_register_device(&vp_vdpa->vdpa, vp_vdpa->queue=
+s);
+> > >> >       if (ret) {
+> > >> >               dev_err(&pdev->dev, "Failed to register to vdpa bus\=
+n");
+> > >> >               goto err;
+> > >> > @@ -529,12 +551,60 @@ static int vp_vdpa_probe(struct pci_dev *pde=
+v, const struct pci_device_id *id)
+> > >> >       return ret;
+> > >> >   }
+> > >> >
+> > >> > -static void vp_vdpa_remove(struct pci_dev *pdev)
+> > >> > +static void vp_vdpa_dev_del(struct vdpa_mgmt_dev *v_mdev,
+> > >> > +                         struct vdpa_device *dev)
+> > >> >   {
+> > >> > -     struct vp_vdpa *vp_vdpa =3D pci_get_drvdata(pdev);
+> > >> > +     struct vp_vdpa_mgmtdev *vp_vdpa_mgtdev =3D
+> > >> > +             container_of(v_mdev, struct vp_vdpa_mgmtdev, mgtdev)=
+;
+> > >> > +
+> > >> > +     struct vp_vdpa *vp_vdpa =3D vp_vdpa_mgtdev->vp_vdpa;
+> > >> >
+> > >> >       vp_modern_remove(&vp_vdpa->mdev);
+> > >> > -     vdpa_unregister_device(&vp_vdpa->vdpa);
+> > >> > +     _vdpa_unregister_device(&vp_vdpa->vdpa);
+> > >> > +     vp_vdpa_mgtdev->vp_vdpa =3D NULL;
+> > >> > +}
+> > >> > +
+> > >> > +static const struct vdpa_mgmtdev_ops vp_vdpa_mdev_ops =3D {
+> > >> > +     .dev_add =3D vp_vdpa_dev_add,
+> > >> > +     .dev_del =3D vp_vdpa_dev_del,
+> > >> > +};
+> > >> > +
+> > >> > +static struct virtio_device_id vp_vdpa_id_table[] =3D {
+> > >> > +     { VIRTIO_ID_NET, VIRTIO_DEV_ANY_ID },
+> > >> > +     { 0 },
+> > >> > +};
+> > >>
+> > >>
+> > >> Let's not limit the vp_vdpa to net, it can support all other virtio =
+devices.
+> > >>
+> > >>
+> > > sure, will fix this
+> > >>
+> > >> > +
+> > >> > +static int vp_vdpa_probe(struct pci_dev *pdev, const struct pci_d=
+evice_id *id)
+> > >> > +{
+> > >> > +     struct vp_vdpa_mgmtdev *vp_vdpa_mgtdev;
+> > >> > +     struct vdpa_mgmt_dev *mgtdev;
+> > >> > +     struct device *dev =3D &pdev->dev;
+> > >> > +     int err;
+> > >> > +
+> > >> > +     vp_vdpa_mgtdev =3D kzalloc(sizeof(*vp_vdpa_mgtdev), GFP_KERN=
+EL);
+> > >> > +     if (!vp_vdpa_mgtdev)
+> > >> > +             return -ENOMEM;
+> > >> > +     mgtdev =3D &vp_vdpa_mgtdev->mgtdev;
+> > >> > +
+> > >> > +     mgtdev->ops =3D &vp_vdpa_mdev_ops;
+> > >> > +     mgtdev->device =3D dev;
+> > >> > +     mgtdev->id_table =3D vp_vdpa_id_table;
+> > >> > +     vp_vdpa_mgtdev->pdev =3D pdev;
+> > >> > +
+> > >> > +     mgtdev->max_supported_vqs =3D VP_VDPA_NET_VQ_NUM;
+> > >>
+> > >>
+> > >> Let's read this from the device instead of using the hard-coded valu=
+e.
+> > >>
+> > >>
+> > >> > +     mgtdev->supported_features =3D VP_VDPA_NET_FEATURES;
+> > >>
+> > >>
+> > >> Let's read this from the device.
+> > >>
+> > > sure will fix this
+> > HI Jason, I have check the code, maybe we can't read these
+> > informations from device here,
+> > because the  virtio_pci_modern_device   was inited in vp_vdpa_dev_add()=
+,
+> > if we want to read these information in vp_vdpa_probe(). maybe we need
+> > to change the struct in vp_vdpa. and separate the
+> > struct virtio_pci_modern_device  from struct vp_vdpa. I'm not sure if
+> > this is ok to do?
 >
-> Sorry, I forgot to add the Fixes and stable tags.  I just fixed that up,
-> but I'm going to hold off on this one until next week's PR to make sure
-> it has time to go through linux-next.
+> Any reason we can't do vdpa_alloc_device() in the vp_vdpa_probe() and
+> register it in dev_add?
+>
+we cann't use vdpa_alloc_device in vp_vdpa_probe because the device
+name was input in
+callback function dev_add
+vp_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
+                 const struct vdpa_dev_set_config *add_config)
+so maybe we cann't jump this part
 
-https://lore.kernel.org/linux-riscv/20220407073323.743224-3-guoren@kernel.org/
+> If we can't I'd then decouple virtio_pci_moder_device out of vp_vdpa:
+>
+> struct vp_vdpa {
+>     struct vdpa_device vdpa;
+>     struct virtio_pci_modern_device *mdev;
+> };
+>
+sure, Thanks Jason I will provide a new version soon.
+> Thanks
+>
+> >
+> > struct vp_vdpa {
+> > struct vdpa_device vdpa;
+> > struct virtio_pci_modern_device mdev;
+> > struct vp_vring *vring;
+> > struct vdpa_callback config_cb;
+> > char msix_name[VP_VDPA_NAME_SIZE];
+> > int config_irq;
+> > int queues;
+> > int vectors;
+> > };
+> > Thanks
+> > cindy
+> > >>
+> > >>
+> > >> > +
+> > >> > +     err =3D vdpa_mgmtdev_register(mgtdev);
+> > >>
+> > >>
+> > >> Do we need to free the vp_vdpa_mgtdev here?
+> > >>
+> > > will add the this
+> > >>
+> > >> Thanks
+> > >>
+> > >>
+> > >> > +
+> > >> > +     return err;
+> > >> > +}
+> > >> > +
+> > >> > +static void vp_vdpa_remove(struct pci_dev *pdev)
+> > >> > +{
+> > >> > +     struct vp_vdpa_mgmtdev *vp_vdpa_mgtdev =3D pci_get_drvdata(p=
+dev);
+> > >> > +
+> > >> > +     vdpa_mgmtdev_unregister(&vp_vdpa_mgtdev->mgtdev);
+> > >> > +     kfree(vp_vdpa_mgtdev);
+> > >> >   }
+> > >> >
+> > >> >   static struct pci_driver vp_vdpa_driver =3D {
+> > >>
+> >
+>
 
--- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/

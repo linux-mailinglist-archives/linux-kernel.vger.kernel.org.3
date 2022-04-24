@@ -2,94 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EF2D50CF69
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 06:35:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62FC850CF71
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 06:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238182AbiDXEh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 00:37:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54586 "EHLO
+        id S238185AbiDXEkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 00:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238219AbiDXEhq (ORCPT
+        with ESMTP id S235308AbiDXEkr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 00:37:46 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBC1626A;
-        Sat, 23 Apr 2022 21:34:46 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id i11-20020a9d4a8b000000b005cda3b9754aso8480683otf.12;
-        Sat, 23 Apr 2022 21:34:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ErfZuYBRCWu7UGDAs1dgWCKIrnFFZmeMA+Cj0r+40SU=;
-        b=lUfwRXGtyBiDQ/KJjl8mfPheqfWD/lxSpOqdh0u4Y0rdgWXiCaolq1aybg7oj/S5t7
-         2BUf6rkj83r5T33gRL4SEHtnAS7UhnyncTe2ABd/mXKiTV0v+1pWC4ZR9iRMJHZCO1GK
-         C8s/RTpvzT+JPam8T9gdUEjeHDgzqUN7xVC+rfisEmWXnfA8X9UqJC2EjYPo/CjDjoc4
-         2coGCQxaY3QdJpq5mcyTCO96Y+d8fNu0aW7rj9OQC3+Jq6BBAisZAgEV1Bh+zmYqLDrF
-         nCCbk1kgkwG9R8bk25G3pAnAGQKiyG2LlSvttmsGyuI1PxwFu0DRBxqcLe1husaj1Jo/
-         zr6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=ErfZuYBRCWu7UGDAs1dgWCKIrnFFZmeMA+Cj0r+40SU=;
-        b=qc1usehOyi8vZOtDwLG6qr+yYK0TzBZP2RfaXsBeE8J+QPFLO2W6pKQbGF4vh7KpoP
-         BQgM8u0BtJ23g3CvgzdzBlpdojf3dwUC/k1hHC/mZEsW0uVv7Oq3u3RuRr6YzBstDSv/
-         DfD+khysYSWqcKKsObFIKsTkTKwXLU7WxbTo4b4+kgZcqkKV6Lz+uqQo+NR/6mn5olh8
-         A4wFcTZpKDXFgECWsaTfLMy1GhRtvli+G0bdNZoiS33J0SvaDVfvRbllSJnGLUt9OFaU
-         VlovX9C42PXmpt3euKikntDRu+UVOYoCQYNdwFvhhUxCOvmb+cckZLnlp6JgMKS410j2
-         XPnQ==
-X-Gm-Message-State: AOAM533aa6YpnInIpfyEGSEN6Xrb5SQh2L2ipCWyiW99OvVg3AQZDMKm
-        8CIY6MZ/Ggp6I/EsCcotnsnNAItYRE4=
-X-Google-Smtp-Source: ABdhPJwGTURk0pp704LZTJ19hhlI95VpVZ+N8lWoeZk1qPGfXJW2fH5KInU8o9O+ALBI8WZTzaT+0w==
-X-Received: by 2002:a9d:734c:0:b0:605:5cef:cdf5 with SMTP id l12-20020a9d734c000000b006055cefcdf5mr4581407otk.126.1650774886186;
-        Sat, 23 Apr 2022 21:34:46 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ps8-20020a0568709e0800b000e910249ee3sm1468537oab.9.2022.04.23.21.34.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 21:34:45 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 23 Apr 2022 21:34:44 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Camel Guo <camel.guo@axis.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@axis.com
-Subject: Re: [PATCH v4 2/2] hwmon: (tmp401) Add support of three advanced
- features
-Message-ID: <20220424043444.GA4001077@roeck-us.net>
-References: <20220414075824.2634839-1-camel.guo@axis.com>
- <20220414075824.2634839-3-camel.guo@axis.com>
+        Sun, 24 Apr 2022 00:40:47 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4CABE04
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 21:37:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650775068; x=1682311068;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=HAFqm/cKTB4j4+tV4YQ9J7Ui8jD83jhADG6UUK2gF68=;
+  b=U8WlFTvF8czbZEyPF8M3gX6I1ti8+UJJjwQUSBDlrNSp5yHufABAEfY2
+   8Jc3LyRSRgl0Cwgk7rIUGvt8gBByGwToe3ysS79V4EfTzbZxomUc4o53z
+   eU5Zi29+Z4bycOv3nCZ8OT1pA4JOIoa6FLra8mSA944Jcrlz4cp1r5lFX
+   pdjC4rJ352BnFAfIzf03MCzHKJSFYJ3w4MqZiz1TJepuZaHNJ7ebtaY5O
+   w/r130Vxvi3issudIsDYCQxLmV+J5ges5DT4HZQEl+ihSDZ8emlBpAL2/
+   hIFmULDKAIR78IXaAzSf+tm3l6gMRUcFZouOilhs5x5bHu7TEORfQcacu
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="244922575"
+X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
+   d="scan'208";a="244922575"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 21:37:48 -0700
+X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
+   d="scan'208";a="578658846"
+Received: from yzhou56-mobl2.ccr.corp.intel.com (HELO [10.249.173.202]) ([10.249.173.202])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 21:37:46 -0700
+Message-ID: <4b2cd2a7-d715-882c-9cce-533dcff8bc79@linux.intel.com>
+Date:   Sun, 24 Apr 2022 12:37:44 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220414075824.2634839-3-camel.guo@axis.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 1/4] iommu/vt-d: Check before setting PGSNP bit in
+ pasid table entry
+Content-Language: en-US
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>
+Cc:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220421113558.3504874-1-baolu.lu@linux.intel.com>
+ <20220421113558.3504874-2-baolu.lu@linux.intel.com>
+ <BN9PR11MB52767A16DC6BB80838C876068CF79@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <503795b0-282c-2a8a-b669-5e7a0fc4a696@linux.intel.com>
+ <BN9PR11MB52766E90CF544C2B00F364008CF99@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+In-Reply-To: <BN9PR11MB52766E90CF544C2B00F364008CF99@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 09:58:23AM +0200, Camel Guo wrote:
-> tmp401 driver supports TMP401, TMP411 and TMP43X temperature sensors.
-> According to their datasheet:
-> - all of them support extended temperature range feature;
-> - TMP411 and TPM43X support n-factor correction feature;
-> - TMP43X support beta compensation feature.
+On 2022/4/24 11:37, Tian, Kevin wrote:
+>>> This should be rebased on top of Jason's enforce coherency series
+>>> instead of blindly setting it. No matter whether it's legacy mode
+>>> where we set SNP in PTE or scalable mode where we set PGSNP
+>>> in PASID entry for entire page table, the trigger point should be
+>>> same i.e. when someone calls enforce_cache_coherency().
+>> With Jason's enforce coherency series merged, we even don't need to set
+>> PGSNP bit of a pasid entry for second level translation. 2nd level
+>> always supports SNP in PTEs, so set PGSNP in pasid table entry is
+>> unnecessary.
+>>
+> Yes, this sounds correct for 2nd-level.
 > 
-> In order to support setting them during bootup, this commit reads
-> ti,extended-range-enable, ti,n-factor and ti,beta-compensation and set
-> the corresponding registers during probing.
+> but setting PGSNP of 1st level translation is also relevant to that
+> change when talking about enforcing coherency in the guest. In
+> this case PASID_FLAG_PAGE_SNOOP should be set also after
+> enforce_cache_coherency() is called.
+
+Yes. Agreed.
+
+> Currently it's always set for unmanaged domain in
+> domain_setup_first_level():
 > 
-> Signed-off-by: Camel Guo <camel.guo@axis.com>
+> 	if (domain->domain.type == IOMMU_DOMAIN_UNMANAGED)
+> 		flags |= PASID_FLAG_PAGE_SNOOP;
+> 
+> Suppose we need a separate interface to update PGSNP after pasid
+> entry is set up.
 
-Applied to hwmon-next.
+Currently enforcing coherency is only used in VFIO. In the VFIO use
+case, it's safe to always set PGSNP when an UNMANAGED domain is attached
+on the first level pasid translation. We could add support of updating
+PGSNP after pasid entry setup once there's a real need.
 
-Thanks,
-Guenter
+Best regards,
+baolu

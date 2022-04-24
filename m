@@ -2,199 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A04C50D336
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 18:15:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7887850D33C
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 18:19:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234325AbiDXQSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 12:18:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43048 "EHLO
+        id S234394AbiDXQWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 12:22:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234208AbiDXQSP (ORCPT
+        with ESMTP id S234208AbiDXQWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 12:18:15 -0400
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E310764F8;
-        Sun, 24 Apr 2022 09:15:10 -0700 (PDT)
+        Sun, 24 Apr 2022 12:22:53 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CFF1606AB;
+        Sun, 24 Apr 2022 09:19:52 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id v65so9929156oig.10;
+        Sun, 24 Apr 2022 09:19:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=dFgs9qbEcOWsSo2xl3UGtyLPP/Q/SV+0PLsA8mb0eTY=;
-  b=dJdcRpTbIo2wX6tp1wmNIOoT4XSB97unPa6eLJxbBD6cK9oSQsZf2NAh
-   MPSl5DWl6R2F4p+F2aI8TURJAZys3mHpOrWHoITR7itSnGDiz/bCLVsMs
-   OP24VAz6XesPAIVv9yPxq5MeXovM/OmjTg5Ku7Nbv+sBksL1F+kW45Qcr
-   M=;
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.90,286,1643670000"; 
-   d="scan'208";a="12281397"
-Received: from ip-214.net-89-2-7.rev.numericable.fr (HELO hadrien) ([89.2.7.214])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 18:15:08 +0200
-Date:   Sun, 24 Apr 2022 18:15:06 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-cc:     netdev@vger.kernel.org, outreachy@lists.linux.dev,
-        roopa@nvidia.com, jdenham@redhat.com, sbrivio@redhat.com,
-        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
-        alexandre.belloni@bootlin.com, shshaikh@marvell.com,
-        manishc@marvell.com, razor@blackwall.org,
-        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, GR-Linux-NIC-Dev@marvell.com,
-        bridge@lists.linux-foundation.org
-Subject: Re: [PATCH net-next v3 2/2] net: vxlan: vxlan_core.c: Add extack
- support to vxlan_fdb_delete
-In-Reply-To: <0d09ad611bb78b9113491007955f2211f3a06e82.1650800975.git.eng.alaamohamedsoliman.am@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2204241813210.7691@hadrien>
-References: <cover.1650800975.git.eng.alaamohamedsoliman.am@gmail.com> <0d09ad611bb78b9113491007955f2211f3a06e82.1650800975.git.eng.alaamohamedsoliman.am@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=4tNCsdnlVnPEJ7/xhc5Cq22tippVdust1ZNiw0N7EtA=;
+        b=Jd1/eSljZ1f2OryQk8wmUVQZbEffQoMUhrL8PFGn1II4+G604oiaQSCWK46EHa9HEi
+         dFCZZKpkd0XjKaUBBgYfpj+kQz8CoEErL6uOC9fo3tc6sx4XtDYoNyqqvLJW6/zSJVat
+         q/64W2dCQK4HoRO5K9teE3c1rbGAGn/e/OlYH/Eqn41+iuKg6FOZrV5563TmXby6FQqW
+         iwvKpGkO5wJ7GqLlEZzhiTbX4bAVElj3/8mwpSTLSvrFxkg8Mohdk9I154arU0sUC5Gt
+         hhkgYyiSkIqRjQtibdB6ggsQtBCWFfbOZmALGKHKvCBTKrSd3z64xBkdCghdAtlI7YLI
+         jxDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=4tNCsdnlVnPEJ7/xhc5Cq22tippVdust1ZNiw0N7EtA=;
+        b=zRjhcTZPyPGbgbrnR15/gDtp4mwEM4L02Gt3gDTpUjKIJDZHuggY7zUVieO7fDfHug
+         ATXccZDhUR52qID34WJI6RL5dnJVGdGEBNjir8aDRGecZ2OiATp59Fz/UGVfWcQCaRVT
+         QSXVfOH0bDbHmYhY9kzpQDpqn/zTYCqOHk2O7OxdPg7Ocjs4wSvnDDp/35GHjq+MU+d7
+         DuWYRcZ55D9w0YSqXNKSMXdlDbDP+UY3bMJOo6lbx/Imv/fayqExjq78epqbL5bQ3krY
+         irgsCRKrpsFZpNDfN/8zUrTyHdsQQgvB8V+y7jAnRthaWkZas0z80I3fbLm2ajIxhYKa
+         H2Dw==
+X-Gm-Message-State: AOAM530HwyQ59ea5GeExbGMoe9u7J7v2bx5mgZfq2W/O0j4t+9GvSAm8
+        /e8XABXNw23pxpqPRt5VBnE=
+X-Google-Smtp-Source: ABdhPJzp5UJS8K9KqriWBEetcOKWxWj90jUPJ370wZJnUrNCtpB65v5aAKHrP6qpIHK5OsSXsIfRzw==
+X-Received: by 2002:aca:f389:0:b0:322:3753:bf51 with SMTP id r131-20020acaf389000000b003223753bf51mr10155645oih.44.1650817191970;
+        Sun, 24 Apr 2022 09:19:51 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u7-20020a4a85c7000000b0035c12c8be73sm3317675ooh.29.2022.04.24.09.19.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 24 Apr 2022 09:19:51 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <665df671-23bb-475d-5148-8613cb6cf16c@roeck-us.net>
+Date:   Sun, 24 Apr 2022 09:19:49 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] hwmon: (pmbus/max16601) Add MAX16602 support
+Content-Language: en-US
+To:     "Ofluoglu, Atif" <Atif.Ofluoglu@analog.com>
+Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.com>
+References: <BYAPR03MB40063CFD52C6D8831A8740AD8AEE9@BYAPR03MB4006.namprd03.prod.outlook.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <BYAPR03MB40063CFD52C6D8831A8740AD8AEE9@BYAPR03MB4006.namprd03.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 4/15/22 07:06, Ofluoglu, Atif wrote:
+>>From e2a1f7d1a836188a9b284fc473af9118aa160ddb Mon Sep 17 00:00:00 2001
+> From: Atif Ofluoglu <mailto:atif.ofluoglu@maximintegrated.com>
+> Date: Fri, 15 Apr 2022 16:34:29 +0300
+> Subject: [PATCH] hwmon: (pmbus/max16601) Add MAX16602 support
+> 
+> Adding another MAX16602 chip support to MAX16601 driver
+> Tested with MAX16602 works as expected.
+> 
+> Signed-off-by: Atif Ofluoglu <mailto:atif.ofluoglu@maximintegrated.com>
 
+Never mind, applied. The problem was that your e-mail system adds
+"mailto:" to all e-mail addresses. See above and in the patch.
+Also, the actual patch was embedded in another e-mail frame which
+confused git. After fixing that up, that the patch applied cleanly.
+In the future, please make sure that your e-mail system leaves
+any patches you send alone.
 
-On Sun, 24 Apr 2022, Alaa Mohamed wrote:
-
-> Add extack to vxlan_fdb_delete and vxlan_fdb_parse
-
-It could be helpful to say more about what adding extack support involves.
-
->
-> Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-> ---
-> changes in V2:
-> 	- fix spelling vxlan_fdb_delete
-> 	- add missing braces
-> 	- edit error message
-> ---
-> changes in V3:
-> 	fix errors reported by checkpatch.pl
-
-But your changes would seem to also be introducing more checkpatch errors,
-because the Linux kernel coding style puts a space before an { at the
-start of an if branch.
-
-julia
+Thanks,
+Guenter
 
 > ---
->  drivers/net/vxlan/vxlan_core.c | 36 +++++++++++++++++++++++-----------
->  1 file changed, 25 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/net/vxlan/vxlan_core.c b/drivers/net/vxlan/vxlan_core.c
-> index cf2f60037340..4e1886655101 100644
-> --- a/drivers/net/vxlan/vxlan_core.c
-> +++ b/drivers/net/vxlan/vxlan_core.c
-> @@ -1129,19 +1129,23 @@ static void vxlan_fdb_dst_destroy(struct vxlan_dev *vxlan, struct vxlan_fdb *f,
->
->  static int vxlan_fdb_parse(struct nlattr *tb[], struct vxlan_dev *vxlan,
->  			   union vxlan_addr *ip, __be16 *port, __be32 *src_vni,
-> -			   __be32 *vni, u32 *ifindex, u32 *nhid)
-> +			   __be32 *vni, u32 *ifindex, u32 *nhid, struct netlink_ext_ack *extack)
->  {
->  	struct net *net = dev_net(vxlan->dev);
->  	int err;
->
->  	if (tb[NDA_NH_ID] && (tb[NDA_DST] || tb[NDA_VNI] || tb[NDA_IFINDEX] ||
-> -	    tb[NDA_PORT]))
-> -		return -EINVAL;
-> +	    tb[NDA_PORT])){
-> +			NL_SET_ERR_MSG(extack, "DST, VNI, ifindex and port are mutually exclusive with NH_ID");
-> +			return -EINVAL;
-> +		}
->
->  	if (tb[NDA_DST]) {
->  		err = vxlan_nla_get_addr(ip, tb[NDA_DST]);
-> -		if (err)
-> +		if (err){
-> +			NL_SET_ERR_MSG(extack, "Unsupported address family");
->  			return err;
-> +		}
->  	} else {
->  		union vxlan_addr *remote = &vxlan->default_dst.remote_ip;
->
-> @@ -1157,24 +1161,30 @@ static int vxlan_fdb_parse(struct nlattr *tb[], struct vxlan_dev *vxlan,
->  	}
->
->  	if (tb[NDA_PORT]) {
-> -		if (nla_len(tb[NDA_PORT]) != sizeof(__be16))
-> +		if (nla_len(tb[NDA_PORT]) != sizeof(__be16)){
-> +			NL_SET_ERR_MSG(extack, "Invalid vxlan port");
->  			return -EINVAL;
-> +		}
->  		*port = nla_get_be16(tb[NDA_PORT]);
->  	} else {
->  		*port = vxlan->cfg.dst_port;
->  	}
->
->  	if (tb[NDA_VNI]) {
-> -		if (nla_len(tb[NDA_VNI]) != sizeof(u32))
-> +		if (nla_len(tb[NDA_VNI]) != sizeof(u32)){
-> +			NL_SET_ERR_MSG(extack, "Invalid vni");
->  			return -EINVAL;
-> +		}
->  		*vni = cpu_to_be32(nla_get_u32(tb[NDA_VNI]));
->  	} else {
->  		*vni = vxlan->default_dst.remote_vni;
->  	}
->
->  	if (tb[NDA_SRC_VNI]) {
-> -		if (nla_len(tb[NDA_SRC_VNI]) != sizeof(u32))
-> +		if (nla_len(tb[NDA_SRC_VNI]) != sizeof(u32)){
-> +			NL_SET_ERR_MSG(extack, "Invalid src vni");
->  			return -EINVAL;
-> +		}
->  		*src_vni = cpu_to_be32(nla_get_u32(tb[NDA_SRC_VNI]));
->  	} else {
->  		*src_vni = vxlan->default_dst.remote_vni;
-> @@ -1183,12 +1193,16 @@ static int vxlan_fdb_parse(struct nlattr *tb[], struct vxlan_dev *vxlan,
->  	if (tb[NDA_IFINDEX]) {
->  		struct net_device *tdev;
->
-> -		if (nla_len(tb[NDA_IFINDEX]) != sizeof(u32))
-> +		if (nla_len(tb[NDA_IFINDEX]) != sizeof(u32)){
-> +			NL_SET_ERR_MSG(extack, "Invalid ifindex");
->  			return -EINVAL;
-> +		}
->  		*ifindex = nla_get_u32(tb[NDA_IFINDEX]);
->  		tdev = __dev_get_by_index(net, *ifindex);
-> -		if (!tdev)
-> +		if (!tdev){
-> +			NL_SET_ERR_MSG(extack,"Device not found");
->  			return -EADDRNOTAVAIL;
-> +		}
->  	} else {
->  		*ifindex = 0;
->  	}
-> @@ -1226,7 +1240,7 @@ static int vxlan_fdb_add(struct ndmsg *ndm, struct nlattr *tb[],
->  		return -EINVAL;
->
->  	err = vxlan_fdb_parse(tb, vxlan, &ip, &port, &src_vni, &vni, &ifindex,
-> -			      &nhid);
-> +			      &nhid, extack);
->  	if (err)
->  		return err;
->
-> @@ -1291,7 +1305,7 @@ static int vxlan_fdb_delete(struct ndmsg *ndm, struct nlattr *tb[],
->  	int err;
->
->  	err = vxlan_fdb_parse(tb, vxlan, &ip, &port, &src_vni, &vni, &ifindex,
-> -			      &nhid);
-> +			      &nhid, extack);
->  	if (err)
->  		return err;
->
-> --
-> 2.36.0
->
->
->
+>   Documentation/hwmon/max16601.rst |  8 ++++++++
+>   drivers/hwmon/pmbus/Kconfig      |  4 ++--
+>   drivers/hwmon/pmbus/max16601.c   | 13 ++++++++-----
+>   3 files changed, 18 insertions(+), 7 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/max16601.rst b/Documentation/hwmon/max16601.rst
+> index 92c0a7d7808c..6a4eef8efbaf 100644
+> --- a/Documentation/hwmon/max16601.rst
+> +++ b/Documentation/hwmon/max16601.rst
+> @@ -21,6 +21,14 @@ Supported chips:
+>   
+>       Datasheet: Not published
+>   
+> +  * Maxim MAX16602
+> +
+> +    Prefix: 'max16602'
+> +
+> +    Addresses scanned: -
+> +
+> +    Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX16602.pdf
+> +
+>   Author: Guenter Roeck <mailto:linux@roeck-us.net>
+>   
+>   
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index a2ea1d5a8765..53683d2d0fb2 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -228,10 +228,10 @@ config SENSORS_MAX16064
+>   	  be called max16064.
+>   
+>   config SENSORS_MAX16601
+> -	tristate "Maxim MAX16508, MAX16601"
+> +	tristate "Maxim MAX16508, MAX16601, MAX16602"
+>   	help
+>   	  If you say yes here you get hardware monitoring support for Maxim
+> -	  MAX16508 and MAX16601.
+> +	  MAX16508, MAX16601 and MAX16602.
+>   
+>   	  This driver can also be built as a module. If so, the module will
+>   	  be called max16601.
+> diff --git a/drivers/hwmon/pmbus/max16601.c b/drivers/hwmon/pmbus/max16601.c
+> index 5a226a564776..b628405e6586 100644
+> --- a/drivers/hwmon/pmbus/max16601.c
+> +++ b/drivers/hwmon/pmbus/max16601.c
+> @@ -1,6 +1,6 @@
+>   // SPDX-License-Identifier: GPL-2.0
+>   /*
+> - * Hardware monitoring driver for Maxim MAX16508 and MAX16601.
+> + * Hardware monitoring driver for Maxim MAX16508, MAX16601 and MAX16602.
+>    *
+>    * Implementation notes:
+>    *
+> @@ -31,7 +31,7 @@
+>   
+>   #include "pmbus.h"
+>   
+> -enum chips { max16508, max16601 };
+> +enum chips { max16508, max16601, max16602 };
+>   
+>   #define REG_DEFAULT_NUM_POP	0xc4
+>   #define REG_SETPT_DVID		0xd1
+> @@ -202,7 +202,7 @@ static int max16601_identify(struct i2c_client *client,
+>   	else
+>   		info->vrm_version[0] = vr12;
+>   
+> -	if (data->id != max16601)
+> +	if (data->id != max16601 && data->id != max16602)
+>   		return 0;
+>   
+>   	reg = i2c_smbus_read_byte_data(client, REG_DEFAULT_NUM_POP);
+> @@ -264,6 +264,7 @@ static void max16601_remove(void *_data)
+>   static const struct i2c_device_id max16601_id[] = {
+>   	{"max16508", max16508},
+>   	{"max16601", max16601},
+> +	{"max16602", max16602},
+>   	{}
+>   };
+>   MODULE_DEVICE_TABLE(i2c, max16601_id);
+> @@ -280,13 +281,15 @@ static int max16601_get_id(struct i2c_client *client)
+>   		return -ENODEV;
+>   
+>   	/*
+> -	 * PMBUS_IC_DEVICE_ID is expected to return "MAX16601y.xx"
+> -	 * or "MAX16500y.xx".
+> +	 * PMBUS_IC_DEVICE_ID is expected to return "MAX16601y.xx" or
+> +	 * MAX16602y.xx or "MAX16500y.xx".cdxxcccccccccc
+>   	 */
+>   	if (!strncmp(buf, "MAX16500", 8)) {
+>   		id = max16508;
+>   	} else if (!strncmp(buf, "MAX16601", 8)) {
+>   		id = max16601;
+> +	} else if (!strncmp(buf, "MAX16602", 8)) {
+> +		id = max16602;
+>   	} else {
+>   		buf[ret] = '\0';
+>   		dev_err(dev, "Unsupported chip '%s'\n", buf);
+

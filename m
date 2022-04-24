@@ -2,147 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC4DF50D449
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 20:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BB3150D44C
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 20:52:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237194AbiDXSwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 14:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44386 "EHLO
+        id S237246AbiDXSzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 14:55:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbiDXSwA (ORCPT
+        with ESMTP id S229929AbiDXSze (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 14:52:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 848D813F51;
-        Sun, 24 Apr 2022 11:48:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B01276124F;
-        Sun, 24 Apr 2022 18:48:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12B0CC385B1;
-        Sun, 24 Apr 2022 18:48:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650826137;
-        bh=ipl3oSa3DODJXFqNROBx1CoqGwslciyjMuC+i+Saf6s=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=BOkM82fII90m6hiFZrsM+S6NoOx/9JSXO645uDox3wouyvV5cDVRWJxz7xq/cB9au
-         LYrBwqxSBkhIKBzBNs0hwtCBHRO1gixAqGnRtxVTd+01UzyFfxHSDne9WN6ttlm+rb
-         jcQBniXrkaKqn2jBmZOb15DeGZFcd9PAC8aU0sErmt9X3VJ12+DgM2/0JBOHnN/nNw
-         G4IIFddQ3lsrPoLfBPfhYi7wy7+MEYhHtnQkavlIidm5fb5N3XrXiQ6swPnyQws0/W
-         CtU43okgiFy2OpjRFiWX3gSYz6BOM2afEEdzeBOnonvAaXEfnmyinRGY3cRVziG/FD
-         TihvS5WssHAGA==
-Received: by mail-wm1-f49.google.com with SMTP id n126-20020a1c2784000000b0038e8af3e788so8339736wmn.1;
-        Sun, 24 Apr 2022 11:48:56 -0700 (PDT)
-X-Gm-Message-State: AOAM532dCbbuPtNLiFWY0oLFZs8XVfrMBbWkSdIYLtsNfBb72iV3o7bU
-        it6YCv5pHi/kxy42HhEx37g9WQ8uhZLw+EPMKaw=
-X-Google-Smtp-Source: ABdhPJy0bXzhrJhOMZ1X8kbnkslFxEyAGa0Ih/9fgvnO3mTuzgN7/0kU+dSPN2u/9dZRAXnrV+Nc5ftINsUw3V0d/rc=
-X-Received: by 2002:a05:600c:4e4a:b0:392:88e1:74a7 with SMTP id
- e10-20020a05600c4e4a00b0039288e174a7mr22771106wmq.174.1650826135238; Sun, 24
- Apr 2022 11:48:55 -0700 (PDT)
+        Sun, 24 Apr 2022 14:55:34 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE4A36B6C;
+        Sun, 24 Apr 2022 11:52:31 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id x18so18044751wrc.0;
+        Sun, 24 Apr 2022 11:52:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=lReuseCvVNEXlTNL6o6EN+A35b6tYTj8OfIs+Kswr2w=;
+        b=Q/lDeS27Mli6BRmeY0+ReefxtLnq4WxEwOUeT23rab46xj9eLTLuRI+y6emQa/uvJ3
+         yifh02I+4aZKTF/Vy/urexsI9DOfBN6/Kj4U0Gx1K9JVqsaatT8Oi3amtqIn6ixWZiHv
+         XF9M01eykb6CK6J27qfas0wtFodk89XkyCgvO1B6dTvnLtP3+SRjiIOyaBU762tRIgc0
+         fxOA5ZUa80Z0V2zzMwxGYyG2MhhjWo/D/J4a4Y17sALe1ZZ6E8LBhd3SmPFxchcimHwo
+         FaWsMtf8VdXiZuEc1jFR1kSCszoDsbFSMWMp8h0/wGkm9GWRG4HO+kArfHJJJKzcJHkY
+         d4dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=lReuseCvVNEXlTNL6o6EN+A35b6tYTj8OfIs+Kswr2w=;
+        b=DJHv4Il9wgVpj/XMgc5sLj9BlvtHhlAqlQaqubGZlbQsYwsDA+tVKGVIoTDUi0Pg32
+         0Q84KRDYADus8OCM2cMaL5Ai7c+gqPNAsbV5pfo2CixxufNQRurAWCXiR69L6ZePVebR
+         Bt0Yo86ME3R/QOSIG4gA7NzZqdNAKGHJe1luqs3x1ofHM9IeoslKXRzNizi0NMv7ytp6
+         D/jXAO326uOGFzOydcY50DpBVffQ23buHOH76n5YQrQ5sopUHSkM/Lcyt+rLhO+zst7E
+         sAVckSFoh7fR8uSkAq4OvgRQl3tYd0audjB/xQNfPvafpG2f8w3GRDaEuzfUOK0f9rgP
+         /ElA==
+X-Gm-Message-State: AOAM5313T6Ry7zM9OIxkX1459P5TwM2NYwT/Dh7yeq94EoMRJqHPgkWd
+        TgqfmRMpVao62kcMhJrjI7c=
+X-Google-Smtp-Source: ABdhPJzdSu+tOKnYLk2M4Bt2LpLZBmteIWBUSxTUVFX3oPW3/U02vyy5C9c3xv5wG+t2IljNl73spg==
+X-Received: by 2002:a05:6000:381:b0:20a:8690:9ac6 with SMTP id u1-20020a056000038100b0020a86909ac6mr11485726wrf.209.1650826350182;
+        Sun, 24 Apr 2022 11:52:30 -0700 (PDT)
+Received: from [192.168.1.5] ([197.57.78.84])
+        by smtp.gmail.com with ESMTPSA id a4-20020a056000188400b0020a9ec6e8e3sm7871526wri.55.2022.04.24.11.52.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 24 Apr 2022 11:52:29 -0700 (PDT)
+Message-ID: <06622e4c-b9a5-1c4f-2764-a72733000b4e@gmail.com>
+Date:   Sun, 24 Apr 2022 20:52:27 +0200
 MIME-Version: 1.0
-References: <20220419163810.2118169-1-arnd@kernel.org> <20220422170530.GA2338209@roeck-us.net>
- <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
- <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net> <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
- <20220422234150.GA3442771@roeck-us.net> <CAK8P3a3qZdEqnJ2nTOKwDMossngOgCpEvZq4cQMPQjSsUoU=6g@mail.gmail.com>
- <3b4046ed-fd75-13ea-fac3-06469172806c@roeck-us.net> <CAK8P3a1LzEG1vo+5nMrnL3TOMcbSKJ3u=StcfY8dajV2raUBjA@mail.gmail.com>
- <3df135a2-17f5-d6c6-b4a8-e1a60e254297@roeck-us.net>
-In-Reply-To: <3df135a2-17f5-d6c6-b4a8-e1a60e254297@roeck-us.net>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Sun, 24 Apr 2022 20:48:39 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2EHMQPN4ny9sXXuReFG0jN0hyRV7h9v_AR_0pqpOU41w@mail.gmail.com>
-Message-ID: <CAK8P3a2EHMQPN4ny9sXXuReFG0jN0hyRV7h9v_AR_0pqpOU41w@mail.gmail.com>
-Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Tomas Cech <sleep_walker@suse.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH net-next v3 2/2] net: vxlan: vxlan_core.c: Add extack
+ support to vxlan_fdb_delete
+Content-Language: en-US
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     netdev@vger.kernel.org, outreachy@lists.linux.dev,
+        roopa@nvidia.com, jdenham@redhat.com, sbrivio@redhat.com,
+        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
+        alexandre.belloni@bootlin.com, shshaikh@marvell.com,
+        manishc@marvell.com, razor@blackwall.org,
+        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org,
+        UNGLinuxDriver@microchip.com, GR-Linux-NIC-Dev@marvell.com,
+        bridge@lists.linux-foundation.org
+References: <cover.1650800975.git.eng.alaamohamedsoliman.am@gmail.com>
+ <0d09ad611bb78b9113491007955f2211f3a06e82.1650800975.git.eng.alaamohamedsoliman.am@gmail.com>
+ <alpine.DEB.2.22.394.2204241813210.7691@hadrien>
+From:   Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+In-Reply-To: <alpine.DEB.2.22.394.2204241813210.7691@hadrien>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 24, 2022 at 5:28 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> On 4/24/22 01:52, Arnd Bergmann wrote:
-> > On Sun, Apr 24, 2022 at 4:09 AM Guenter Roeck <linux@roeck-us.net> wrote:
-> > into the defconfig file, otherwise the multiplatform target defaults to
-> > an ARMv7 instead of ARMv5 build. For an OMAP15xx as in the SX1,
-> > you also need to enable CONFIG_ARCH_MULTI_V4T.
-> >
-> > This is slightly unfortunate, but I don't see any way to avoid it, and the
-> > modified defconfig will still work fine with older kernel trees.
-> >
+
+On ٢٤‏/٤‏/٢٠٢٢ ١٨:١٥, Julia Lawall wrote:
 >
-> Yes, that works. I changed it in my configuration.
-
-Ok, great!. I managed to boot the z2 machine with PCMCIA support
-and it gets around the issue with my patch, correctly detecting the
-CF card.
-
-> >>> One thing I keep having to apply myself is this snippet:
-> >>>
-> >>> diff --git a/arch/arm/mm/proc-arm925.S b/arch/arm/mm/proc-arm925.S
-> >>> index 0bfad62ea858..87c695703580 100644
-> >>> --- a/arch/arm/mm/proc-arm925.S
-> >>> +++ b/arch/arm/mm/proc-arm925.S
-> >>> @@ -441,7 +441,6 @@ __arm925_setup:
-> >>>
-> >>>    #ifdef CONFIG_CPU_DCACHE_WRITETHROUGH
-> >>>           mov     r0, #4                          @ disable write-back
-> >>> on caches explicitly
-> >>> -       mcr     p15, 7, r0, c15, c0, 0
-> >>>    #endif
-> >>
-> >> it does not have CONFIG_CPU_DCACHE_WRITETHROUGH enabled.
-> >
-> > Maybe it was disabled explicitly for the sx1_defconfig because of this
-> > bug. I would think that this is required for actual sx1 hardware because the
-> > option is default-enabled for ARM925T, and that CPU core is exclusively
-> > used in OMAP15xx.
-> >
+> On Sun, 24 Apr 2022, Alaa Mohamed wrote:
 >
-> That looks like a bug in qemu. ARM925T instruction support is limited to V4T
-> instructions. qemu doesn't have explicit 5T support. It is either V4T
-> or V5.
-
-I'm not entirely sure what instructions the CPU supports, but Linux
-treats it as ARMv4T as well, and qemu supports some of the 925t
-specific instructions as "ti925t" in target/arm/cpu_tcg.c, it just seems
-it's missing some others.
-
-      Arnd
+>> Add extack to vxlan_fdb_delete and vxlan_fdb_parse
+> It could be helpful to say more about what adding extack support involves.
+>
+>> Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+>> ---
+>> changes in V2:
+>> 	- fix spelling vxlan_fdb_delete
+>> 	- add missing braces
+>> 	- edit error message
+>> ---
+>> changes in V3:
+>> 	fix errors reported by checkpatch.pl
+> But your changes would seem to also be introducing more checkpatch errors,
+> because the Linux kernel coding style puts a space before an { at the
+> start of an if branch.
+I ran checkpatch script before submitting this patch and got no error
+>
+> julia
+>
+>> ---
+>>   drivers/net/vxlan/vxlan_core.c | 36 +++++++++++++++++++++++-----------
+>>   1 file changed, 25 insertions(+), 11 deletions(-)
+>>
+>> diff --git a/drivers/net/vxlan/vxlan_core.c b/drivers/net/vxlan/vxlan_core.c
+>> index cf2f60037340..4e1886655101 100644
+>> --- a/drivers/net/vxlan/vxlan_core.c
+>> +++ b/drivers/net/vxlan/vxlan_core.c
+>> @@ -1129,19 +1129,23 @@ static void vxlan_fdb_dst_destroy(struct vxlan_dev *vxlan, struct vxlan_fdb *f,
+>>
+>>   static int vxlan_fdb_parse(struct nlattr *tb[], struct vxlan_dev *vxlan,
+>>   			   union vxlan_addr *ip, __be16 *port, __be32 *src_vni,
+>> -			   __be32 *vni, u32 *ifindex, u32 *nhid)
+>> +			   __be32 *vni, u32 *ifindex, u32 *nhid, struct netlink_ext_ack *extack)
+>>   {
+>>   	struct net *net = dev_net(vxlan->dev);
+>>   	int err;
+>>
+>>   	if (tb[NDA_NH_ID] && (tb[NDA_DST] || tb[NDA_VNI] || tb[NDA_IFINDEX] ||
+>> -	    tb[NDA_PORT]))
+>> -		return -EINVAL;
+>> +	    tb[NDA_PORT])){
+>> +			NL_SET_ERR_MSG(extack, "DST, VNI, ifindex and port are mutually exclusive with NH_ID");
+>> +			return -EINVAL;
+>> +		}
+>>
+>>   	if (tb[NDA_DST]) {
+>>   		err = vxlan_nla_get_addr(ip, tb[NDA_DST]);
+>> -		if (err)
+>> +		if (err){
+>> +			NL_SET_ERR_MSG(extack, "Unsupported address family");
+>>   			return err;
+>> +		}
+>>   	} else {
+>>   		union vxlan_addr *remote = &vxlan->default_dst.remote_ip;
+>>
+>> @@ -1157,24 +1161,30 @@ static int vxlan_fdb_parse(struct nlattr *tb[], struct vxlan_dev *vxlan,
+>>   	}
+>>
+>>   	if (tb[NDA_PORT]) {
+>> -		if (nla_len(tb[NDA_PORT]) != sizeof(__be16))
+>> +		if (nla_len(tb[NDA_PORT]) != sizeof(__be16)){
+>> +			NL_SET_ERR_MSG(extack, "Invalid vxlan port");
+>>   			return -EINVAL;
+>> +		}
+>>   		*port = nla_get_be16(tb[NDA_PORT]);
+>>   	} else {
+>>   		*port = vxlan->cfg.dst_port;
+>>   	}
+>>
+>>   	if (tb[NDA_VNI]) {
+>> -		if (nla_len(tb[NDA_VNI]) != sizeof(u32))
+>> +		if (nla_len(tb[NDA_VNI]) != sizeof(u32)){
+>> +			NL_SET_ERR_MSG(extack, "Invalid vni");
+>>   			return -EINVAL;
+>> +		}
+>>   		*vni = cpu_to_be32(nla_get_u32(tb[NDA_VNI]));
+>>   	} else {
+>>   		*vni = vxlan->default_dst.remote_vni;
+>>   	}
+>>
+>>   	if (tb[NDA_SRC_VNI]) {
+>> -		if (nla_len(tb[NDA_SRC_VNI]) != sizeof(u32))
+>> +		if (nla_len(tb[NDA_SRC_VNI]) != sizeof(u32)){
+>> +			NL_SET_ERR_MSG(extack, "Invalid src vni");
+>>   			return -EINVAL;
+>> +		}
+>>   		*src_vni = cpu_to_be32(nla_get_u32(tb[NDA_SRC_VNI]));
+>>   	} else {
+>>   		*src_vni = vxlan->default_dst.remote_vni;
+>> @@ -1183,12 +1193,16 @@ static int vxlan_fdb_parse(struct nlattr *tb[], struct vxlan_dev *vxlan,
+>>   	if (tb[NDA_IFINDEX]) {
+>>   		struct net_device *tdev;
+>>
+>> -		if (nla_len(tb[NDA_IFINDEX]) != sizeof(u32))
+>> +		if (nla_len(tb[NDA_IFINDEX]) != sizeof(u32)){
+>> +			NL_SET_ERR_MSG(extack, "Invalid ifindex");
+>>   			return -EINVAL;
+>> +		}
+>>   		*ifindex = nla_get_u32(tb[NDA_IFINDEX]);
+>>   		tdev = __dev_get_by_index(net, *ifindex);
+>> -		if (!tdev)
+>> +		if (!tdev){
+>> +			NL_SET_ERR_MSG(extack,"Device not found");
+>>   			return -EADDRNOTAVAIL;
+>> +		}
+>>   	} else {
+>>   		*ifindex = 0;
+>>   	}
+>> @@ -1226,7 +1240,7 @@ static int vxlan_fdb_add(struct ndmsg *ndm, struct nlattr *tb[],
+>>   		return -EINVAL;
+>>
+>>   	err = vxlan_fdb_parse(tb, vxlan, &ip, &port, &src_vni, &vni, &ifindex,
+>> -			      &nhid);
+>> +			      &nhid, extack);
+>>   	if (err)
+>>   		return err;
+>>
+>> @@ -1291,7 +1305,7 @@ static int vxlan_fdb_delete(struct ndmsg *ndm, struct nlattr *tb[],
+>>   	int err;
+>>
+>>   	err = vxlan_fdb_parse(tb, vxlan, &ip, &port, &src_vni, &vni, &ifindex,
+>> -			      &nhid);
+>> +			      &nhid, extack);
+>>   	if (err)
+>>   		return err;
+>>
+>> --
+>> 2.36.0
+>>
+>>
+>>

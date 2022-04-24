@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13D5850D5D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 00:45:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D01150D5E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 00:59:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239852AbiDXWsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 18:48:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59634 "EHLO
+        id S239863AbiDXXCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 19:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239805AbiDXWsU (ORCPT
+        with ESMTP id S238037AbiDXXB6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 18:48:20 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B8255FEB;
-        Sun, 24 Apr 2022 15:45:17 -0700 (PDT)
+        Sun, 24 Apr 2022 19:01:58 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4EC62A0A;
+        Sun, 24 Apr 2022 15:58:55 -0700 (PDT)
 Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E1242824;
-        Mon, 25 Apr 2022 00:45:15 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1420C822;
+        Mon, 25 Apr 2022 00:58:53 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1650840316;
-        bh=QuNx9M5h0yWH2ZiR8750JVdiuGmZkxKvi94dD/ugCaY=;
+        s=mail; t=1650841133;
+        bh=OxWe0iWDKlDp8IlBYHKkZ/JxNlQhxReU1GVBOdxPQFM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LBPYJd7yjellY+h6G6ncXNqbymTdi1MKZ8AOLeYGA1HzG9W7wPS+1nWRLFC3FQzoL
-         vB3gKBMxtw3GH/8JesaIKfEUoZsKFw62gN+EdB6pu1rVAlBHz/PdTE65ElN3o/kKJx
-         9hQhO6xJg8fTtK/FwwxFJO6S+cYBBsGKvBcuC+rY=
-Date:   Mon, 25 Apr 2022 01:45:15 +0300
+        b=nOHXz+99CHZ8PNaRjyq32HlyKTg11IJ+T8pHih1HRaU9oKYH8WqEjF9emBhEPgTiZ
+         Zw1LRdei+KAmhQ2IHGul2Qz7+pe/giraberMWqrAPFred20b5zwl8p7v1WZnAX6Tet
+         96VnKuipkUKycaJVPSrvCtSIkIor++CoLIEivywE=
+Date:   Mon, 25 Apr 2022 01:58:52 +0300
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: Re: [PATCH v2] docs: media: uvcvideo: Use linux-media mailing list
-Message-ID: <YmXS+2co6XGEDIDm@pendragon.ideasonboard.com>
-References: <20220315221007.1045878-1-j.neuschaefer@gmx.net>
- <YjEQz1GhLV0Kf3mO@pendragon.ideasonboard.com>
- <YjESZwTHRuD4pBkY@latitude>
- <YjEVzF1NMWJZ1MQw@pendragon.ideasonboard.com>
- <YlrhavU2K3neXNEy@latitude>
+To:     Dan Vacura <w36195@motorola.com>
+Cc:     linux-usb@vger.kernel.org, stable@vger.kernel.org,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bhupesh Sharma <bhupesh.sharma@st.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] usb: gadget: uvc: Fix crash when encoding data for
+ usb request
+Message-ID: <YmXWLFfN4KTFp0wW@pendragon.ideasonboard.com>
+References: <20220331184024.23918-1-w36195@motorola.com>
+ <Yl8frWT5VYRdt5zA@pendragon.ideasonboard.com>
+ <YmB6v8AbzdOgITT8@p1g3>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YlrhavU2K3neXNEy@latitude>
+In-Reply-To: <YmB6v8AbzdOgITT8@p1g3>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
@@ -52,67 +52,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jonathan,
+Hi Dan,
 
-On Sat, Apr 16, 2022 at 05:31:54PM +0200, Jonathan Neuschäfer wrote:
-> On Wed, Mar 16, 2022 at 12:40:12AM +0200, Laurent Pinchart wrote:
-> > On Tue, Mar 15, 2022 at 11:25:43PM +0100, Jonathan Neuschäfer wrote:
-> > > On Wed, Mar 16, 2022 at 12:18:55AM +0200, Laurent Pinchart wrote:
-> > > > On Tue, Mar 15, 2022 at 11:10:06PM +0100, Jonathan Neuschäfer wrote:
-> > > > > As discussed with other developers, the linux-uvc-devel mailing list is
-> > > > > not very useful anymore, and it's better to send people to the general
-> > > > > linux-media mailing list.
-> > > > > 
-> > > > > Replace/remove the old mailing list address in uvcvideo.rst and
-> > > > > MAINTAINERS.
-> > > > > 
-> > > > > Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-> > > > > ---
-> > > > > 
-> > > > > v2:
-> > > > > - Changed mailing list to linux-media@vger.kernel.org instead
-> > > > > 
-> > > > > v1:
-> > > > > - https://lore.kernel.org/lkml/20220312203323.626657-1-j.neuschaefer@gmx.net/
-> > > > > ---
-> > > > >  Documentation/userspace-api/media/drivers/uvcvideo.rst | 2 +-
-> > > > >  MAINTAINERS                                            | 1 -
-> > > > 
-> > > > This looks good, but I think we should also add the following:
-> > > > 
-> > > > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> > > > index 5f394d4efc21..6c6a82af07ce 100644
-> > > > --- a/drivers/media/usb/uvc/uvc_driver.c
-> > > > +++ b/drivers/media/usb/uvc/uvc_driver.c
-> > > > @@ -2443,7 +2443,7 @@ static int uvc_probe(struct usb_interface *intf,
-> > > >  			 "Forcing device quirks to 0x%x by module parameter for testing purpose.\n",
-> > > >  			 dev->quirks);
-> > > >  		dev_info(&dev->udev->dev,
-> > > > -			 "Please report required quirks to the linux-uvc-devel mailing list.\n");
-> > > > +			 "Please report required quirks to the linux-media mailing list.\n");
-> > > >  	}
-> > > > 
-> > > >  	if (dev->info->uvc_version) {
-> > > > 
-> > > > If you're fine with that change, there's no need to resubmit, I can
-> > > > handle this locally.
-> > > > 
-> > > > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > > 
-> > > Ah, just before I saw your reply, I noticed this instance too, and sent
-> > > a separate patch for it.
+On Wed, Apr 20, 2022 at 04:27:27PM -0500, Dan Vacura wrote:
+> On Tue, Apr 19, 2022 at 11:46:37PM +0300, Laurent Pinchart wrote:
 > > 
-> > I'd say great minds think alike if it wasn't presumptuous :-)
-> > 
-> > > I'll leave it up to you to handle it as you wish, I'm fine with it
-> > > either way.
-> > 
-> > I'll squash the two patches as they're closely related.
+> > This indeed fixes an issue, so I think we can merge the patch, but I
+> > also believe we need further improvements on top (of course if you would
+> > like to improve the implementation in a v4, I won't complain :-))
 > 
-> Ping — I don't see this patch in linux-next. Is there something I can do
-> to help?
+> It looks like Greg has already accepted the change and it's in
+> linux-next. We can discuss here how to better handle these -EXDEV errors
+> for future improvements, as it seems like it's been an issue in the past
+> as well:
+> https://www.mail-archive.com/linux-usb@vger.kernel.org/msg105615.html
+> 
+> > As replied in v2 (sorry for the late reply), it seems that this error
+> > can occur under normal conditions. This means we shouldn't cancel the
+> > queue, at least when the error is intermitent (if all URBs fail that's
+> > another story).
+> 
+> My impression was that canceling the queue was still necessary as we may
+> be in progress for the current frame. Perhaps we don't need to flush all
+> the frames from the queue, but at a minimum we need to reset the
+> buf_used value.
 
-I've just sent a pull request, the patch should make it to v5.19.
+I think we have three classes of errors:
+
+- "Packet-level" errors, resulting in either data loss or erroneous data
+  being transferred to the host for one (or more) packets in a frame.
+  When such errors occur, we should probably notify the application (on
+  the gadget side), but we can continue sending the rest of the frame.
+
+- "Frame-level" errors, resulting in errors in the rest of the frame.
+  When such an error occurs, we should notify the application, and stop
+  sending data for the current frame, moving to the next frame.
+
+- "Stream-level" errors, resulting in errors in all subsequent frames.
+  When such an error occurs, we should notify the application and stop
+  sending data until the application takes corrective measures.
+
+I'm not sure if packet-level errors make sense, if data is lost, maybe
+we would be better off just cancelling the current frame and moving to
+the next one.
+
+For both packet-level errors and frame-level errors, the buffer should
+be marked as erroneous to notify the application, but there should be no
+need to cancel the queue and drop all queued buffers. We can just move
+to the next buffer.
+
+For stream-level errors, I would cancel the queue, and additionally
+prevent new buffers from being queued until the application stops and
+restarts the stream.
+
+Finally, which class an error belongs to may not be an intrinsic
+property of the error itself, packet-level or frame-level errors that
+occur too often may be worth cancelling the queue (I'm not sure how to
+quantify "too often" though).
+
+Does this make sense ?
+
+> > We likely need to differentiate between -EXDEV and other errors in
+> > uvc_video_complete(), as I'd like to be conservative and cancel the
+> > queue for unknown errors. We also need to improve the queue cancellation
+> > implementation so that userspace gets an error when queuing further
+> > buffers.
+> 
+> We already feedback to userspace the error, via the state of
+> vb2_buffer_done(). When userspace dequeues the buffer it can check if
+> v4l2_buffer.flags has V4L2_BUF_FLAG_ERROR to see if things failed, then
+> decide what to do like re-queue that frame. However, this appears to not
+> always occur since I believe the pump thread is independent of the
+> uvc_video_complete() callback. As a result, the complete callback of the
+> failed URB may be associated with a buffer that was already released
+> back to the userspace client.
+
+Good point. That would only be the case for errors in the last
+request(s) for a frame, right ?
+
+> In this case, I don't know if there's
+> anything to be done, since a new buffer and subsequent URBs might
+> already be queued up. You suggested an error on a subsequent buffer
+> queue, but I don't know how helpful that'd be at this point, perhaps in
+> the scenario that all URBs are failing?
+
+Should we delay sending the buffer back to userspace until all the
+requests for the buffer have completed ?
 
 -- 
 Regards,

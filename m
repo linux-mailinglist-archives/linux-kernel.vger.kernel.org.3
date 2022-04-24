@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98CB850CEA1
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 04:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D074D50CE9A
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 04:42:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237394AbiDXCoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Apr 2022 22:44:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39900 "EHLO
+        id S237814AbiDXCoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Apr 2022 22:44:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237738AbiDXCnt (ORCPT
+        with ESMTP id S237747AbiDXCnw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Apr 2022 22:43:49 -0400
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253CA7DE3E
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 19:40:49 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VAzRZYU_1650768047;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VAzRZYU_1650768047)
+        Sat, 23 Apr 2022 22:43:52 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01DD17DE3E
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Apr 2022 19:40:51 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R741e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VAzpPIS_1650768048;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VAzpPIS_1650768048)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Sun, 24 Apr 2022 10:40:47 +0800
+          Sun, 24 Apr 2022 10:40:48 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         Jason Wang <jasowang@redhat.com>,
         virtualization@lists.linux-foundation.org
-Subject: [RFC PATCH 03/16] virtio_ring: split: extract virtqueue_update_split()
-Date:   Sun, 24 Apr 2022 10:40:31 +0800
-Message-Id: <20220424024044.94749-4-xuanzhuo@linux.alibaba.com>
+Subject: [RFC PATCH 04/16] virtio_ring: split: extract detach_from_vring_split()
+Date:   Sun, 24 Apr 2022 10:40:32 +0800
+Message-Id: <20220424024044.94749-5-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.31.0
 In-Reply-To: <20220424024044.94749-1-xuanzhuo@linux.alibaba.com>
 References: <20220424024044.94749-1-xuanzhuo@linux.alibaba.com>
@@ -43,140 +43,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Separate the logic for updating the vq state from virtqueue_add_split().
+To handle freeing buf from the detached vring, do a split for
+detach_buf_split().
 
-In this way, when the subsequent patch implements the logic of reusing
-the buffer when resize, we can share this function.
+The split function detach_buf_from_vring_split() is used to release buf
+from vring, and the vq passed in is read-only. All modifications are for
+vring.
+
+In this way, detach_buf_from_vring_split() becomes a general function,
+which can be used for detach_buf_split() and also for handling detached
+vrings.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- drivers/virtio/virtio_ring.c | 95 ++++++++++++++++++++----------------
- 1 file changed, 54 insertions(+), 41 deletions(-)
+ drivers/virtio/virtio_ring.c | 54 +++++++++++++++++++++++-------------
+ 1 file changed, 34 insertions(+), 20 deletions(-)
 
 diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-index f3ad9322b512..6fd45c9a3517 100644
+index 6fd45c9a3517..aa85058978cb 100644
 --- a/drivers/virtio/virtio_ring.c
 +++ b/drivers/virtio/virtio_ring.c
-@@ -507,6 +507,51 @@ static inline unsigned int virtqueue_add_desc_split(struct virtqueue *vq,
- 	return next;
+@@ -734,54 +734,68 @@ static bool virtqueue_kick_prepare_split(struct virtqueue *_vq)
+ 	return needs_kick;
  }
  
-+static inline void virtqueue_update_split(struct vring_virtqueue *vq,
-+					  u32 descs_used,
-+					  u32 next,
-+					  struct vring_desc *desc,
-+					  void *data)
-+{
-+	struct virtqueue *_vq = &vq->vq;
-+	u32 avail, head;
-+
-+	head = vq->free_head;
-+
-+	/* We're using some buffers from the free list. */
-+	vq->vq.num_free -= descs_used;
-+
-+	/* Update free pointer */
-+	vq->free_head = next;
-+
-+	/* Store token and indirect buffer state. */
-+	vq->split.desc_state[head].data = data;
-+	vq->split.desc_state[head].indir_desc = desc;
-+
-+	/* Put entry in available array (but don't update avail->idx until they
-+	 * do sync).
-+	 */
-+	avail = vq->split.avail_idx_shadow & (vq->split.vring.num - 1);
-+	vq->split.vring.avail->ring[avail] = cpu_to_virtio16(_vq->vdev, head);
-+
-+	/* Descriptors and available array need to be set before we expose the
-+	 * new available array entries.
-+	 */
-+	virtio_wmb(vq->weak_barriers);
-+	vq->split.avail_idx_shadow++;
-+	vq->split.vring.avail->idx = cpu_to_virtio16(_vq->vdev,
-+						vq->split.avail_idx_shadow);
-+	vq->num_added++;
-+
-+	pr_debug("Added buffer head %i to %p\n", head, vq);
-+
-+	/* This is very unlikely, but theoretically possible.  Kick
-+	 * just in case.
-+	 */
-+	if (unlikely(vq->num_added == (1 << 16) - 1))
-+		virtqueue_kick(_vq);
-+}
-+
- static inline int virtqueue_add_split(struct virtqueue *_vq,
- 				      struct scatterlist *sgs[],
- 				      unsigned int total_sg,
-@@ -519,7 +564,7 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
- 	struct vring_virtqueue *vq = to_vvq(_vq);
- 	struct scatterlist *sg;
- 	struct vring_desc *desc;
--	unsigned int i, n, avail, descs_used, prev, err_idx;
-+	unsigned int i, n, descs_used, prev, err_idx;
- 	int head;
- 	bool indirect;
+-static void detach_buf_split(struct vring_virtqueue *vq, unsigned int head,
+-			     void **ctx)
++static int detach_buf_from_vring_split(struct vring_virtqueue_split *vring,
++				       struct vring_virtqueue const *vq,
++				       unsigned int head,
++				       unsigned int free_head,
++				       void **ctx)
+ {
+-	unsigned int i, j;
++	unsigned int i, j, num = 0;
+ 	__virtio16 nextflag = cpu_to_virtio16(vq->vq.vdev, VRING_DESC_F_NEXT);
  
-@@ -619,50 +664,18 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
- 		if (vring_mapping_error(vq, addr))
- 			goto unmap_release;
+ 	/* Clear data ptr. */
+-	vq->split.desc_state[head].data = NULL;
++	vring->desc_state[head].data = NULL;
  
--		virtqueue_add_desc_split(_vq, vq->split.vring.desc,
--					 head, addr,
--					 total_sg * sizeof(struct vring_desc),
--					 VRING_DESC_F_INDIRECT,
--					 false);
-+		i = virtqueue_add_desc_split(_vq, vq->split.vring.desc,
-+					     head, addr,
-+					     total_sg * sizeof(struct vring_desc),
-+					     VRING_DESC_F_INDIRECT,
-+					     false);
-+	} else {
-+		desc = ctx;
+ 	/* Put back on free list: unmap first-level descriptors and find end */
+ 	i = head;
+ 
+-	while (vq->split.vring.desc[i].flags & nextflag) {
+-		vring_unmap_one_split(vq, &vq->split.desc_extra[i]);
+-		i = vq->split.desc_extra[i].next;
+-		vq->vq.num_free++;
++	while (vring->vring.desc[i].flags & nextflag) {
++		vring_unmap_one_split(vq, &vring->desc_extra[i]);
++		i = vring->desc_extra[i].next;
++		++num;
  	}
  
--	/* We're using some buffers from the free list. */
--	vq->vq.num_free -= descs_used;
--
--	/* Update free pointer */
--	if (indirect)
--		vq->free_head = vq->split.desc_extra[head].next;
--	else
--		vq->free_head = i;
--
--	/* Store token and indirect buffer state. */
--	vq->split.desc_state[head].data = data;
--	if (indirect)
--		vq->split.desc_state[head].indir_desc = desc;
--	else
--		vq->split.desc_state[head].indir_desc = ctx;
--
--	/* Put entry in available array (but don't update avail->idx until they
--	 * do sync). */
--	avail = vq->split.avail_idx_shadow & (vq->split.vring.num - 1);
--	vq->split.vring.avail->ring[avail] = cpu_to_virtio16(_vq->vdev, head);
--
--	/* Descriptors and available array need to be set before we expose the
--	 * new available array entries. */
--	virtio_wmb(vq->weak_barriers);
--	vq->split.avail_idx_shadow++;
--	vq->split.vring.avail->idx = cpu_to_virtio16(_vq->vdev,
--						vq->split.avail_idx_shadow);
--	vq->num_added++;
--
--	pr_debug("Added buffer head %i to %p\n", head, vq);
-+	virtqueue_update_split(vq, descs_used, i, desc, data);
- 	END_USE(vq);
+-	vring_unmap_one_split(vq, &vq->split.desc_extra[i]);
+-	vq->split.desc_extra[i].next = vq->free_head;
+-	vq->free_head = head;
++	vring_unmap_one_split(vq, &vring->desc_extra[i]);
++	vring->desc_extra[i].next = free_head;
  
--	/* This is very unlikely, but theoretically possible.  Kick
--	 * just in case. */
--	if (unlikely(vq->num_added == (1 << 16) - 1))
--		virtqueue_kick(_vq);
--
- 	return 0;
+-	/* Plus final descriptor */
+-	vq->vq.num_free++;
++	++num;
  
- unmap_release:
+ 	if (vq->indirect) {
+ 		struct vring_desc *indir_desc =
+-				vq->split.desc_state[head].indir_desc;
++				vring->desc_state[head].indir_desc;
+ 		u32 len;
+ 
+ 		/* Free the indirect table, if any, now that it's unmapped. */
+ 		if (!indir_desc)
+-			return;
++			return num;
+ 
+-		len = vq->split.desc_extra[head].len;
++		len = vring->desc_extra[head].len;
+ 
+-		BUG_ON(!(vq->split.desc_extra[head].flags &
+-				VRING_DESC_F_INDIRECT));
++		BUG_ON(!(vring->desc_extra[head].flags & VRING_DESC_F_INDIRECT));
+ 		BUG_ON(len == 0 || len % sizeof(struct vring_desc));
+ 
+ 		for (j = 0; j < len / sizeof(struct vring_desc); j++)
+ 			vring_unmap_one_split_indirect(vq, &indir_desc[j]);
+ 
+ 		kfree(indir_desc);
+-		vq->split.desc_state[head].indir_desc = NULL;
++		vring->desc_state[head].indir_desc = NULL;
+ 	} else if (ctx) {
+-		*ctx = vq->split.desc_state[head].indir_desc;
++		*ctx = vring->desc_state[head].indir_desc;
+ 	}
++
++	return num;
++}
++
++static void detach_buf_split(struct vring_virtqueue *vq, unsigned int head,
++			     void **ctx)
++{
++	int num;
++
++	num = detach_buf_from_vring_split(&vq->split, vq, head, vq->free_head,
++					  ctx);
++
++	vq->vq.num_free += num;
++	vq->free_head = head;
+ }
+ 
+ static inline bool more_used_split(const struct vring_virtqueue *vq)
 -- 
 2.31.0
 

@@ -2,70 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE58850D14C
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 12:48:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E83F50D151
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 12:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239145AbiDXKva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 06:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57498 "EHLO
+        id S239136AbiDXKwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 06:52:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239046AbiDXKvN (ORCPT
+        with ESMTP id S239126AbiDXKwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 06:51:13 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C71E17D496
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 03:48:12 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id dk23so1099006ejb.8
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 03:48:12 -0700 (PDT)
+        Sun, 24 Apr 2022 06:52:03 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF84B240A0
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 03:49:02 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id i27so24408895ejd.9
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 03:49:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ifhTT6RWFXDH8HUEGtKLOt2yTklDAIxczpprS6iV9sg=;
-        b=n55X0jCN3rd+35JSwnUSgh9WdYBxyYC0C/eVbUYHLd6G/I6dl3R66sgt7bEARIfGPa
-         U92qMQviohsxEm8dzT6VPNZAOWPWPkmkagUDnTXNEahjzw0aG1oXAZvj+PL5VLH+k6W7
-         Raogl5ajpBl4qazS8tw3BSG+K91ZsMchhewqdP2+R4NlVa+C3SEM1/7YXBrVsbW1cDpw
-         G7ofklYP3B9U9CJKYXyNZXllYXfe1t7SSugAFpFbyF9PtSXVrOmlCArrgfsDbksCPs6p
-         Q5G1HXk+YyEETVU2m7kWdTuzlcU4En35jAd5km5GeX1MOwcdWcCKqQuS7eCU+xYpnE04
-         hlUg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ZeFfic7NkdYVY76qjghFYEa4bj1suXvfyxykTnL7iSU=;
+        b=EQzrSr7IPIJEN2vBGd4rtciOiq7x+HzcyycDjE3DJxCACvRuhViJsJVxgtyGYh77h+
+         bXh+U/bRcLGD5btOet6OMQS0+DcPPBQmkNKLpwqpCNUE/M7CWf6vmecux8Sx+g/Klret
+         /jZs65AzmSB0w7b60opHRrvd9dKn0TWDKz9/rdlzpp8VB5QzmrzrgXjvwfABEwq5bQJj
+         AhI1w3mx3C5pJbod0RjZibSlzG5KtixYP6rvxDcqTwDfIP0MbzPY2aeAjuSzGRv0oyyC
+         /DNrWd4lGo8dVjhCQY4vrNz1RNpRBanlq35mLozoeTIB8R3cGuG4LZqglrzTfz7qzx7d
+         skMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=ifhTT6RWFXDH8HUEGtKLOt2yTklDAIxczpprS6iV9sg=;
-        b=iXpMTJuPU1zVhx+C/Zewr8KaC5hafUw8BBiLoZx7jpgGU6/o76bETiQCSJV1+PZXxP
-         xehlA7ec49MkxPAVXPOUmg8wkSPiEWzMbBbj15B/lSb/kKZ1QjCbRi8OGa7JZCFxp2Qv
-         cZjTYC+99ufeKMcjPTKA5ZXGfAMKE4WLWcYp3Ml00NXjoKLIP1r8EhNdoOuzG4zOaiyV
-         /eqelOYS5YGwFdsKWj9fN2+AbIZvkfl5d2yR1J+2GQCNU9QTZPNK3oGyJcCvXzCYhjUl
-         E/rvOExd7meGMXd66aB/KqLUD137WHN0JAd6vHxSlMOC6vQplkrj65m1k7enJCubHpWg
-         3Cew==
-X-Gm-Message-State: AOAM533ZOkl0rBLBsLKI7b8Q4glvuM5msuTpWm1OOKRwD18GyevLD7ul
-        18cqvJhquVY3/rtlkEZH4f8=
-X-Google-Smtp-Source: ABdhPJyLnX5s8GUwwVixgNEumHfZfhOyeKA+Mb3i/nZlf3WAx/M2bsxGm8F1BOaIVNiAJKwj/PVt9A==
-X-Received: by 2002:a17:906:c116:b0:6f3:832f:3c8 with SMTP id do22-20020a170906c11600b006f3832f03c8mr3765451ejc.235.1650797291042;
-        Sun, 24 Apr 2022 03:48:11 -0700 (PDT)
-Received: from localhost.localdomain (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
-        by smtp.gmail.com with ESMTPSA id h8-20020a1709066d8800b006e09a49a713sm2488133ejt.159.2022.04.24.03.48.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 03:48:09 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Ira Weiny <ira.weiny@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        linux-kernel@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Subject: [RFC PATCH] mm/highmem: VM_BUG_ON() if offset + len > PAGE_SIZE
-Date:   Sun, 24 Apr 2022 12:48:06 +0200
-Message-Id: <20220424104806.25396-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        bh=ZeFfic7NkdYVY76qjghFYEa4bj1suXvfyxykTnL7iSU=;
+        b=AcXwrkzrvkMdsVEoiApZKYcKjX2lMlEsKLnOdC9Fm2mOkTLpFUs36Q6MExGTVanfJF
+         KrIF56BXRJqhaisRHqVdadbZskPBtcOGBko6xSOEZ6AzIlAU/982RY+9w/G13eBKqC0s
+         0ZXGEQ/wX1wDTCYLQXmPq+YPF7PxKxomW0MM8BK7jj5MI1hun3UtBbv2eoexp3+9A5YI
+         S9VnfOLzstEvqFNZTjxwhJOm7weGkIxh8wbhLUYxuVXV/qc3PYoviTuFhX8D9mlHzE1/
+         dpbUxs3JzXr1cSeOpzyUTMp2o+CDiuWeBQuQD/ZAwLzo6pJ9tyI0Jb9YLZpDdrjemRVk
+         cvdg==
+X-Gm-Message-State: AOAM531/J4ezmKvVbofxFeIpO0/UeRT/NdTpRtOOSSE+fe1oX+rimrgF
+        e3CeqgjGO6Lf4sHCgHuKAeOYSg==
+X-Google-Smtp-Source: ABdhPJxu1SgZxDPFJ4hqAIpFqD034Z/96Fhc0oCnQnk01+fVNPLw3U0KEHFw/qjT9d5lLeTmJz/g7Q==
+X-Received: by 2002:a17:907:7f0d:b0:6f3:85c0:7c6e with SMTP id qf13-20020a1709077f0d00b006f385c07c6emr3054591ejc.693.1650797341532;
+        Sun, 24 Apr 2022 03:49:01 -0700 (PDT)
+Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id h22-20020a056402281600b004206bd9d0c6sm3244860ede.8.2022.04.24.03.49.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 24 Apr 2022 03:49:01 -0700 (PDT)
+Message-ID: <5b41d217-a5d6-91f0-bae8-4086173bb5db@linaro.org>
+Date:   Sun, 24 Apr 2022 12:49:00 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 0/5] mtd: onenand: samsung: Add support for device tree
+Content-Language: en-US
+To:     Jonathan Bakker <xc-racer2@live.ca>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Kyungmin Park <kyungmin.park@samsung.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+References: <CY4PR04MB0567451F82EEBED23A7559EFCBF69@CY4PR04MB0567.namprd04.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CY4PR04MB0567451F82EEBED23A7559EFCBF69@CY4PR04MB0567.namprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,36 +78,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Call VM_BUG_ON() if offset + len > PAGE_SIZE.
+On 23/04/2022 05:43, Jonathan Bakker wrote:
+> This builds off a patchset submitted in 2019 [1] and adds support for DT
+> initialization to the Samsung OneNAND driver.
 
-This is an RFC patch because I'm not sure if we actually need to BUG_ON(),
-so I'd like to know what Maintainers and other developers think about this
-proposal.
+Please rebase your patchset first on recent kernel, because it seems you
+missed some addresses in Cc, so your get maintainers are from older tree.
 
-Please note that memset_page() uses VM_BUG_ON() to prevent the same issue.
-
-Furthermore, I also cannot understand why memset_page() does not call
-flush_dcache_page() after memset() but I suppose that the different
-implementations of these two functions should be addressed in another RFC.
-
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
- include/linux/highmem.h | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/include/linux/highmem.h b/include/linux/highmem.h
-index c3d562b5f0c1..bdb16d5f8148 100644
---- a/include/linux/highmem.h
-+++ b/include/linux/highmem.h
-@@ -349,6 +349,8 @@ static inline void memcpy_to_page(struct page *page, size_t offset,
- static inline void memzero_page(struct page *page, size_t offset, size_t len)
- {
- 	char *addr = kmap_local_page(page);
-+
-+	VM_BUG_ON(offset + len > PAGE_SIZE);
- 	memset(addr + offset, 0, len);
- 	flush_dcache_page(page);
- 	kunmap_local(addr);
--- 
-2.34.1
-
+Best regards,
+Krzysztof

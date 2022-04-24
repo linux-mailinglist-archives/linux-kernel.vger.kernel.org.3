@@ -2,49 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F9450D57F
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 00:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9D9F50D585
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 00:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239722AbiDXWHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 18:07:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
+        id S239733AbiDXWIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 18:08:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234105AbiDXWHV (ORCPT
+        with ESMTP id S234833AbiDXWII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 18:07:21 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7915B54697;
-        Sun, 24 Apr 2022 15:04:19 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 92131822;
-        Mon, 25 Apr 2022 00:04:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1650837857;
-        bh=r46ShRAcDqpoKdBbLpASO9i+HH59TI1+EaMgiwY8r8A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aotRcrCKGhT/CB0CNuD2sRNaiGkTn1q1gCoBfQiJYTEkMxJy/suxTeBrMifBhzKxP
-         HW8o7kt74XYaIYdwqJTT1GgxgIGJc9xpEhn8L/fkl7/4iO8fc8MVYX/mJxxL7tbiQU
-         Y9dXF/RrzFrcGMq9mZeN9LKXiOY/pFSfwIsh2VxA=
-Date:   Mon, 25 Apr 2022 01:04:17 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     James_Lin <Ping-lei.Lin@mediatek.com>
-Cc:     nicolas@ndufresne.ca, acourbot@chromium.org, arnd@arndb.de,
-        ezequiel@vanguardiasur.com.ar, hverkuil-cisco@xs4all.nl,
-        lecopzer.chen@mediatek.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, matthias.bgg@gmail.com,
-        max.yan@mediatek.com, mchehab@kernel.org, ribalda@chromium.org,
-        sakari.ailus@linux.intel.com, senozhatsky@chromium.org,
-        sherlock.chang@mediatek.com, tm.wu@mediatek.com
-Subject: Re: [PATCH v3] media: usb: uvc: Add UVC_GUID_FORMAT_H265
-Message-ID: <YmXJYUvJMGCXb9kt@pendragon.ideasonboard.com>
-References: <4b6b65e72b3f3cd74af5a3f0069838c86a6725e9.camel@ndufresne.ca>
- <20220421092354.16774-1-Ping-lei.Lin@mediatek.com>
+        Sun, 24 Apr 2022 18:08:08 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD78B66;
+        Sun, 24 Apr 2022 15:05:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=BpAGnTX3cRjgnnULh2igVvCZe9Ph4m0kRJX8wZHboPs=; b=OjepdWkxMDhQkjCYvK5WcLdOD7
+        plwpZj68/QrAIacyZeRmOYPusW3y90m2LobTaSBsKZHuM3NUZQZQza+tYV7A+PhKr49OdDFOTXCph
+        0oMxEtWZ+B9HnVXGzKwcnlOdHl166Oy3eyr5tztbOEasY4wqHA8VTuR7X12xFFg3JLgE=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nikLg-00HJQn-Sw; Mon, 25 Apr 2022 00:04:56 +0200
+Date:   Mon, 25 Apr 2022 00:04:56 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Hermes Zhang <chenhui.zhang@axis.com>
+Cc:     Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, kernel@axis.com,
+        Hermes Zhang <chenhuiz@axis.com>,
+        linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] brcmfmac: of: introduce new property to allow disable
+ PNO
+Message-ID: <YmXJiCamPQSRqiCq@lunn.ch>
+References: <20220424022224.3609950-1-chenhui.zhang@axis.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220421092354.16774-1-Ping-lei.Lin@mediatek.com>
+In-Reply-To: <20220424022224.3609950-1-chenhui.zhang@axis.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
@@ -54,97 +58,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi James,
-
-On Thu, Apr 21, 2022 at 05:23:54PM +0800, James_Lin wrote:
-> Hi All,
+On Sun, Apr 24, 2022 at 10:22:24AM +0800, Hermes Zhang wrote:
+> From: Hermes Zhang <chenhuiz@axis.com>
 > 
-> Do I need to add the comment 
-> "some cameras represent hevc as h265"
-> at /drivers/media/usb/uvc/uvc_driver.c ?
-> Also, is there anything else that needs to be modified?
-> 
-> Or can it move to queue on next merged window?
-> thanks for your reply
+> Some versions of the Broadcom firmware for this chip seem to hang
+> if the PNO feature is enabled when connecting to a dummy or
+> non-existent AP.
+> Add a new property to allow the disabling of PNO for devices with
+> this specific firmware.
 
-I've queued the patch in my tree and will send a pull request. I don't
-think we need an additional comment, H.265 and HEVC being used
-interchangeably isn't specific to UVC, and if someone gets puzzled by
-this in the uvcvideo driver, there's always the git history.
+If you know the specific version of the firmware which is broken, why
+do you need a DT property? Why not just check the firmware version and
+disable it automatically?
 
-> On WED, 20 Apr 2022 at 01:37, Nicolas Dufresne wrote:
-> > Le mardi 19 avril 2022 à 14:18 +0200, Ricardo Ribalda a écrit :
-> > > On Tue, 19 Apr 2022 at 14:17, Laurent Pinchart wrote:
-> > > > On Tue, Apr 19, 2022 at 01:46:15PM +0200, Ricardo Ribalda wrote:
-> > > > > On Mon, 18 Apr 2022 at 11:07, James_Lin <Ping-lei.Lin@mediatek.com> wrote:
-> > > > > > 
-> > > > > > This patch aims to add UVC_GUID_FORMAT_H265 High Efficiency 
-> > > > > > Video Coding (HEVC), also known as H.265 and MPEG-H Part 2.
-> > > > > > They describe the same video encoding method.
-> > > > > > So for handling their behavior is the same.
-> > > > > > However, when external camera device describes this encoding 
-> > > > > > method, some use hevc, some use h265.
-> > > > > > There is no uniform specification to describe this encoding method.
-> > > > > > So if an external camera device use h265 to describe this 
-> > > > > > encoding method, driver will not recognize it.
-> > > > > > Therefore, this patch is to enable driver to read HEVC/H265 and 
-> > > > > > convert it to V4L2_PIX_FMT_HEVC.
-> > > > > > 
-> > > > > > Signed-off-by: James_Lin <Ping-lei.Lin@mediatek.com>
-> > > > > 
-> > > > > Reviewed-by: Ricardo Ribalda <ribalda@chromium.org>
-> > > > > > ---
-> > > > > >  drivers/media/usb/uvc/uvc_driver.c | 5 +++++
-> > > > > >  drivers/media/usb/uvc/uvcvideo.h   | 3 +++
-> > > > > >  2 files changed, 8 insertions(+)
-> > > > > > 
-> > > > > > diff --git a/drivers/media/usb/uvc/uvc_driver.c 
-> > > > > > b/drivers/media/usb/uvc/uvc_driver.c
-> > > > > > index dda0f0aa78b8..e437e9f95890 100644
-> > > > > > --- a/drivers/media/usb/uvc/uvc_driver.c
-> > > > > > +++ b/drivers/media/usb/uvc/uvc_driver.c
-> > > > > > @@ -154,6 +154,11 @@ static struct uvc_format_desc uvc_fmts[] = {
-> > > > > >                 .guid           = UVC_GUID_FORMAT_H264,
-> > > > > >                 .fcc            = V4L2_PIX_FMT_H264,
-> > > > > >         },
-> > > > > 
-> > > > > Maybe I would add a comment here saying that some cameras 
-> > > > > represent hevc as h265.
-> > > > 
-> > > > I wish there would be a 4CC and GUID standard with a centralized 
-> > > > registry...
-> > > 
-> > > Thought that was the kernel codebase :)
-> > 
-> > You'll find multiple fourcc for the same thing in the linux kernel ;-P
-> > 
-> > > > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > > > 
-> > > > > > +       {
-> > > > > > +               .name           = "H.265",
-> > > > > > +               .guid           = UVC_GUID_FORMAT_H265,
-> > > > > > +               .fcc            = V4L2_PIX_FMT_HEVC,
-> > > > > > +       },
-> > > > > >         {
-> > > > > >                 .name           = "Greyscale 8 L/R (Y8I)",
-> > > > > >                 .guid           = UVC_GUID_FORMAT_Y8I,
-> > > > > > diff --git a/drivers/media/usb/uvc/uvcvideo.h 
-> > > > > > b/drivers/media/usb/uvc/uvcvideo.h
-> > > > > > index 143230b3275b..41f4d8c33f2a 100644
-> > > > > > --- a/drivers/media/usb/uvc/uvcvideo.h
-> > > > > > +++ b/drivers/media/usb/uvc/uvcvideo.h
-> > > > > > @@ -139,6 +139,9 @@
-> > > > > >  #define UVC_GUID_FORMAT_H264 \
-> > > > > >         { 'H',  '2',  '6',  '4', 0x00, 0x00, 0x10, 0x00, \
-> > > > > >          0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-> > > > > > +#define UVC_GUID_FORMAT_H265 \
-> > > > > > +       { 'H',  '2',  '6',  '5', 0x00, 0x00, 0x10, 0x00, \
-> > > > > > +        0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-> > > > > >  #define UVC_GUID_FORMAT_Y8I \
-> > > > > >         { 'Y',  '8',  'I',  ' ', 0x00, 0x00, 0x10, 0x00, \
-> > > > > >          0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
+It does not seem like you are describing hardware here, which is what
+DT is for.
 
--- 
-Regards,
-
-Laurent Pinchart
+	Andrew

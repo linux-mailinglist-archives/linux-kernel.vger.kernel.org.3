@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD1F050D3E0
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 19:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B5650D3D4
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 19:13:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236421AbiDXRX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 13:23:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60840 "EHLO
+        id S236140AbiDXRQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 13:16:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236289AbiDXRXz (ORCPT
+        with ESMTP id S229914AbiDXRQ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 13:23:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510B65675F;
-        Sun, 24 Apr 2022 10:20:53 -0700 (PDT)
+        Sun, 24 Apr 2022 13:16:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3501D366B1;
+        Sun, 24 Apr 2022 10:13:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19ECE611DE;
-        Sun, 24 Apr 2022 17:20:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32ED0C385A7;
-        Sun, 24 Apr 2022 17:20:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C63F7B80E60;
+        Sun, 24 Apr 2022 17:13:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A212C385A7;
+        Sun, 24 Apr 2022 17:13:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650820852;
-        bh=8YAkiDCHNS9PdDSByTQ12GIjlNhj3SzM6u+5fNxbJO0=;
+        s=k20201202; t=1650820405;
+        bh=54+FNxJrtS+PrIP/GplOrQ2ETgEi8Y4HA7qnqoDfr+w=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YKQ5u6j6e5I5Oog+kDMGmMr9uNIdmteV8T84bSi60THEFgfwCVfnMfukav2R3rMSe
-         hb7A6oRKc5XLbqzAbUwGEBkyxg67ytcaGZ7UqP5lHohQARzzzqPLPxGObMli4olfzE
-         RjbxRkbwYsykQ8KL3T4VNvJ7XLpdNfaXw/n88bODDbSnK7JyHD/vBqZblaJBXFIT+C
-         KiWu1JbznqX2Uwn4wu/2af6sN7rg94QMvEMewiDOXwK9mHZfX5dZwyf7Lj9CdxyQob
-         xPCpWPrTYW0z83wyRUypkQ0E1qNnciMAr18tvbTkxUt3HUniIYXLxg8991za+bR3sP
-         mcIuUk02voFgw==
-Date:   Sun, 24 Apr 2022 19:20:46 +0200
-From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To:     Nathan Rossi <nathan@nathanrossi.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH v2] net: dsa: mv88e6xxx: Fix port_hidden_wait to account
- for port_base_addr
-Message-ID: <20220424192046.6f77655a@thinkpad>
-In-Reply-To: <20220424153143.323338-1-nathan@nathanrossi.com>
-References: <20220424153143.323338-1-nathan@nathanrossi.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        b=aKF3fshSlVNO57BiSKhBa+d043riqhvpRPuUC43Ab39oG1ORBKIrt8PjxsEQAuE3i
+         mFAIGeDoWxiz3ebgfFnfBCmQ/Cz5D+DAQ750R6mak5O/AH7ArmKIXp6q3C1JmToXSa
+         8D2CWKcQ4z7ucMNeeOOlyNWKOF7AdN3woFLomMNBvWLcLriB0thz8sH4CbJ1z2cWwm
+         cMMPJpLRweU9qtWuOx/2m+cJY3e+vAFJ2VJraSDDYjUDS0VhHf/j/d2D90uWmX0Q4A
+         ILO5NmOJd5VagCLv8zX1Wvxd8xzmqq5cISOwS2wd1j5iPSQpC3CZGqG1laWyf8B5bd
+         PjzInJO/C1mNA==
+Date:   Sun, 24 Apr 2022 18:21:31 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Cixi Geng <gengcixi@gmail.com>, lars@metafoo.de,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        orsonzhai@gmail.com, baolin.wang7@gmail.com, zhang.lyra@gmail.com,
+        yuming.zhu1@unisoc.com, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V4 1/7] dt-bindings:iio:adc: add sprd,ump9620-adc
+ dt-binding
+Message-ID: <20220424182131.0e0fc06d@jic23-huawei>
+In-Reply-To: <2bcf42e0-c58e-99f7-b667-8c212022ff19@linaro.org>
+References: <20220419142458.884933-1-gengcixi@gmail.com>
+        <20220419142458.884933-2-gengcixi@gmail.com>
+        <2bcf42e0-c58e-99f7-b667-8c212022ff19@linaro.org>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,47 +60,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 24 Apr 2022 15:31:43 +0000
-Nathan Rossi <nathan@nathanrossi.com> wrote:
+On Wed, 20 Apr 2022 09:01:51 +0200
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-> The other port_hidden functions rely on the port_read/port_write
-> functions to access the hidden control port. These functions apply the
-> offset for port_base_addr where applicable. Update port_hidden_wait to
-> use the port_wait_bit so that port_base_addr offsets are accounted for
-> when waiting for the busy bit to change.
->=20
-> Without the offset the port_hidden_wait function would timeout on
-> devices that have a non-zero port_base_addr (e.g. MV88E6141), however
-> devices that have a zero port_base_addr would operate correctly (e.g.
-> MV88E6390).
->=20
-> Fixes: ea89098ef9a5 ("net: dsa: mv88x6xxx: mv88e6390 errata")
-> Signed-off-by: Nathan Rossi <nathan@nathanrossi.com>
-> ---
-> Changes in v2:
-> - Add fixes
-> ---
->  drivers/net/dsa/mv88e6xxx/port_hidden.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/net/dsa/mv88e6xxx/port_hidden.c b/drivers/net/dsa/mv=
-88e6xxx/port_hidden.c
-> index b49d05f0e1..7a9f9ff6de 100644
-> --- a/drivers/net/dsa/mv88e6xxx/port_hidden.c
-> +++ b/drivers/net/dsa/mv88e6xxx/port_hidden.c
-> @@ -40,8 +40,9 @@ int mv88e6xxx_port_hidden_wait(struct mv88e6xxx_chip *c=
-hip)
->  {
->  	int bit =3D __bf_shf(MV88E6XXX_PORT_RESERVED_1A_BUSY);
-> =20
-> -	return mv88e6xxx_wait_bit(chip, MV88E6XXX_PORT_RESERVED_1A_CTRL_PORT,
-> -				  MV88E6XXX_PORT_RESERVED_1A, bit, 0);
-> +	return mv88e6xxx_port_wait_bit(chip,
-> +				       MV88E6XXX_PORT_RESERVED_1A_CTRL_PORT,
-> +				       MV88E6XXX_PORT_RESERVED_1A, bit, 0);
->  }
-> =20
->  int mv88e6xxx_port_hidden_read(struct mv88e6xxx_chip *chip, int block, i=
-nt port,
+> On 19/04/2022 16:24, Cixi Geng wrote:
+> > -  nvmem-cell-names:
+> > -    items:
+> > -      - const: big_scale_calib
+> > -      - const: small_scale_calib
+> > +  nvmem-cell-names: true  
+> > +> +if:  
+> 
+> Better to include it under "allOf:" so next time you need more of such
+> if-then, you do not need to change indentation. But anyway looks good:
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Reviewed-by: Marek Beh=C3=BAn <kabel@kernel.org>
+I added the allOf: whilst applying.
+
+Thanks,
+
+Jonathan
+
+> 
+> > +  not:
+> > +    properties:
+> > +      compatible:  
+> 
+> 
+> 
+> Best regards,
+> Krzysztof
+

@@ -2,103 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E4150D2F6
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 17:48:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64EEE50D2FA
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Apr 2022 17:49:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232530AbiDXPu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 11:50:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50328 "EHLO
+        id S232707AbiDXPv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 11:51:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiDXPuY (ORCPT
+        with ESMTP id S229657AbiDXPvz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 11:50:24 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64082369E3;
-        Sun, 24 Apr 2022 08:47:23 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id j15so4374946wrb.2;
-        Sun, 24 Apr 2022 08:47:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HL7fiyqBRJgE+CGCRvNmcBkaeCPL+1i1yCArETsMyBM=;
-        b=n2yWnonI7du9MFsjYTSAWxBiEk3Zx4vMDTNeK4HGkocQMwrAHedYIpioUmELh5BuMf
-         tw+hs3iMD8c2kPcRipWzi9NEy25L7t6RVmlW8YuLJyIMMIHSkH/sd9Fw+uZPqeJ9F7iS
-         8tRKAXD7zsFUplY5aKdHoePaghWshlXzK/j4Cxjz8GAcz1RW7d1BEsy/Z/qmC7MaXGfi
-         lF+7Z96VQzo8YOqGaSA26zAmR04pOO0Vf30YRWGGFmhPvVUZ+ddlT+PqfFFcCGqhSTAN
-         dsvDMmePDzEWLKv6Dsq3SzcrbUh6woAPxlIhsjYI3PGHNVPDsvPLeK5sOqx2zn2D5k8Q
-         sXSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HL7fiyqBRJgE+CGCRvNmcBkaeCPL+1i1yCArETsMyBM=;
-        b=EEplXDSsqZLiNdkv/XM+pYpqd+i6Gzp6TaKaXLa+iP5CTrVaYeEwrPU1bOAfqQRyUx
-         DF2VK/XGZeCOYxYgcOT/F/w8OKRz/pUqhD1zXsC8EOA6i7dWHQ/dIjiqSO1eOh2349jv
-         a19ytkqq0thA61icnr87sURm6ucqEFplXIP0hF/MtJbL0lo88Fn/0Zr0yK38j/Mw1Z77
-         7TI62MpPkN71QY3Z4Alp5LtOUhqTUlYh3PkEKQp7wxk0JPH8Fe0UpP/7mMhvfw8Z/3fM
-         E6OVDYpfqFxybWp2EPUxaQSWVUrwI5r+f1SUAfAePjfbm1aZhIgT+OpWxIn9fn6VT2lb
-         tirg==
-X-Gm-Message-State: AOAM533m4Oah7k2G+wd3fKxj1J32h3JdKTIUVMeduw64ksX5EQjxWvAg
-        q+ftVKzWkI5EUbhEo2AZ3Es=
-X-Google-Smtp-Source: ABdhPJztWvLsOXWw956Mfgn5IeL2UgX9y+VtogVSBEpQQHlKROzfOtMt4S3ZnFmm8Ws3U3WoOKUyhw==
-X-Received: by 2002:adf:db86:0:b0:205:bccf:8cbf with SMTP id u6-20020adfdb86000000b00205bccf8cbfmr10914407wri.346.1650815241868;
-        Sun, 24 Apr 2022 08:47:21 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id q16-20020a1ce910000000b0038eabd31749sm7937628wmc.32.2022.04.24.08.47.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 08:47:21 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: dvbdev: remove redundant initialization of variable ret
-Date:   Sun, 24 Apr 2022 16:47:20 +0100
-Message-Id: <20220424154720.1356873-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Sun, 24 Apr 2022 11:51:55 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7554C37034;
+        Sun, 24 Apr 2022 08:48:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1650815310;
+        bh=dM80CE4Hxz/HXDZj9f/WT2hePOrxx+6iBlw5smBqUvU=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=hhtVxyceNEJdNpBy0WWvKBsXz53J08znmTwbSELoVwwweiXvNUMrhq4pmWEQG3sOO
+         p03JiFwI0oCpi/MKf5SW99vnCcfhJHZE92hvgya7+lOXomXkK9Da2mPOCQJHfe6Wzr
+         UY1V6emEzAjngBpn08oZaaIkvYZlWBwzT9NyIntQ=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1Mk0NU-1oBMWc0mj2-00kNDx; Sun, 24 Apr 2022 17:48:30 +0200
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     pali@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (dell-smm) Update Documentation regarding firmware bugs
+Date:   Sun, 24 Apr 2022 17:48:24 +0200
+Message-Id: <20220424154824.9396-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:rV6AgNBN3rAfW2XGLJW3HrQQl4Cp8C0wEE2JUTT4+NaBbl9WpQs
+ s0ChGobIykCt2Wqv5lYw5t2EwnlE3DAHuYUdugBWI7ccIeUay3i+pl0+wOW1Qu+iWuTCrbX
+ M1uuqY5E066+aGE32SuCamOjn2MFno5fucxD5qW7yBqpyaezRbUehbN27YhY/oS7jkbmbQ/
+ aLYkUBrkzOTCQOp2PG6nA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:CYclG5nPRS4=:yiJ/bFmOQH4r2vgZbqFoRO
+ 5LMUsQljpVKXOMUFAcUMnPdw5PDRo/oATaCSykndNIUJlA8FmxmUEdFPBhCw0v0Vd9whJRGjA
+ /akmXbBjnSCca0aQWyFZN07QfhQ8TAelA3vZDk+wEwycrMwtCLGtC9BPz+KrLrlN3U15bf1W7
+ /v42em3m0Ds3BrVt/HHZWbsl8AeKPA5qwzEHFywgDOq/7/IbQYMBr67KRa6yRg7ewjNHfm7no
+ bNrWz/w7FQ6JfEgOjxZMjH+MIsUEUJM0UOjdYlzj5FakBowdyQBsjjFaPbX61+oF7BaihVsLj
+ /m2+jnDHkEtc/qyI8EZr6cz0lD5EtB7R5+mMjXWXrPklaNz4Bk+0mfcpO20v5FrLCtteqNuAk
+ 4f6kNshPBkjeVz9sYB0M9L/IcfWmqUPCpaN4aGvF/RX69e5vBZPaw3+R1WEZyy9j3qZcDCQmJ
+ tzB4BZCOoJvZzZ2qgUxmvaFpgt80aMgY6oM8YNA4ixo8SEnX6dCiASfpaUQcC2YVH+x16mZH4
+ cAKy1iQxwVPnFwhcTMi5SiLsmueAJZ6XKZ5woClhW7lrRadzfzxD5Du/FR980YAwJcijLWRBM
+ yn9+UnHhRIYV1afzqEY4VwtA9JPTRJ6qGs2H+NLmOksThnX2TYIASloscwuava71Y/oDOMRut
+ YcS+523FtCRLUUdCazgaJViZvRmdFAtst9mfWCp2b6wn6vJJoqC4jzvtTayAAJ1ydstOkQJuP
+ babbzlhkoUZImhY3okczUeXVtVTvmBSDe15w6zU5/bc6jZxRABa9FQrf3DS8FrWmUetYQfk3G
+ WM5jvYcahLYdAHmS0S13OnBmXxF+p75u1z49k8OsGvUGNsivrFeJ4JUbMQOTWqdcCaNWx2g7X
+ gu4jXoXmH7uyTXogt5ursDwZ9N909kJhf29ZLWivzQ+79CE/QhpQhvWBRGfNjQUxqXQBh/Gnz
+ F/ZTMszVVG9LSpS9mC4IXiwqK+SmOiI+98aCcUuP8L8j7Z/XvkDcV5K6Ij1lSD9Ngt4i1eyqu
+ MEqLUQ9ZecLy4dyRpU3zYdVN9X9qrmOp1XBXKxlc21SZTv+7KAeqROHUdCid//RUbPNS+ovh2
+ Np+Bwjl/ea9mg8=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable ret is being ininitialized with a value that is never read.
-The ininitializtion is redundant and can be removed. Move the variable
-to the scope it is required.
+When adding the Inspiron 3505 to the fan type blacklist,
+the Documentation was not updated to mention the firmware
+bug on this machine.
+Fix that.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/media/dvb-core/dvbdev.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Fixes: 6ba463edccb9 (hwmon: (dell-smm) Add Inspiron 3505 to fan type black=
+list)
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ Documentation/hwmon/dell-smm-hwmon.rst | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/dvb-core/dvbdev.c b/drivers/media/dvb-core/dvbdev.c
-index 675d877a67b2..d5a142ef9876 100644
---- a/drivers/media/dvb-core/dvbdev.c
-+++ b/drivers/media/dvb-core/dvbdev.c
-@@ -243,7 +243,7 @@ static void dvb_media_device_free(struct dvb_device *dvbdev)
- static int dvb_create_tsout_entity(struct dvb_device *dvbdev,
- 				    const char *name, int npads)
- {
--	int i, ret = 0;
-+	int i;
- 
- 	dvbdev->tsout_pads = kcalloc(npads, sizeof(*dvbdev->tsout_pads),
- 				     GFP_KERNEL);
-@@ -260,6 +260,7 @@ static int dvb_create_tsout_entity(struct dvb_device *dvbdev,
- 	for (i = 0; i < npads; i++) {
- 		struct media_pad *pads = &dvbdev->tsout_pads[i];
- 		struct media_entity *entity = &dvbdev->tsout_entity[i];
-+		int ret;
- 
- 		entity->name = kasprintf(GFP_KERNEL, "%s #%d", name, i);
- 		if (!entity->name)
--- 
-2.35.1
+diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/=
+dell-smm-hwmon.rst
+index 41839b7de2c1..e5d85e40972c 100644
+=2D-- a/Documentation/hwmon/dell-smm-hwmon.rst
++++ b/Documentation/hwmon/dell-smm-hwmon.rst
+@@ -331,6 +331,8 @@ Reading of fan types causes erratic fan behaviour.    =
+  Studio XPS 8000
+
+                                                         Inspiron 580
+
++                                                        Inspiron 3505
++
+ Fan-related SMM calls take too long (about 500ms).      Inspiron 7720
+
+                                                         Vostro 3360
+=2D-
+2.30.2
 

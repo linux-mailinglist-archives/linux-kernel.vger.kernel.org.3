@@ -2,106 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2FCB50DAD0
+	by mail.lfdr.de (Postfix) with ESMTP id 06D1A50DACE
 	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234718AbiDYIEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 04:04:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56924 "EHLO
+        id S234462AbiDYIE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 04:04:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231393AbiDYIEb (ORCPT
+        with ESMTP id S231858AbiDYIEd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 04:04:31 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4024816584
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:01:27 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id i27so27990845ejd.9
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:01:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=vUPD6VhzeB7zQVubYjnWfebnf/uKU9eOqTOFGR1Ibsc=;
-        b=lvCvkXXeSMP0tsuNy/214D6eqt9aD4AP4kyhlANYk6wvP/lfyVKxMOKuupaMEawFHW
-         e7XYuzXCH6SetnjxuswZtomM+a4U9wp1eLRzOvM1OAiLy421XGtZFX4rL1lv2SUrfKZF
-         jt1BZzSupgtwCYaaUCoK/RDDfoxh3mgcvI0Wf7eDKK1BFOkHogXmTCxFCAtrx1AxgFo4
-         mWIIPYe2dC6JSucSpJd4VRVTlRQKGfSYrHMTMkGGaCm7m654XI9AMfJymeUr77hXZlOl
-         9AGSaTOp3dUUsc8xlE2F35q+P4+qHEMXPMzxAHJhFWjBCef0mzEh0UeZSu45AvV23xSa
-         3XiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vUPD6VhzeB7zQVubYjnWfebnf/uKU9eOqTOFGR1Ibsc=;
-        b=4rilcZCPyoErIIl50Rkb2VjwfBm4xxtcghHxWh/F4w5yD22Q9oGFqGzwyTDYAzRTYn
-         pbe165gAs3PnKot0ybrtpEBg4dsTRXC5uUQhi+RB2GQV/4yetEpH8VbUvcfjEGPyBOhc
-         fjgIUshULv0g9wq0OQPPtUtFlCmp8b4wrcuNpw3s3PjV8S2UVysu3vCBRuY1D94psfu7
-         ZDg931JMJLCEiX8RWRpqSCExyaC3EmG0hnXF2n4kZZYpNe6rkGYKDl2OlEmyZeJIi26Q
-         /SaHqHLuNNm2cqAb/WhEGZ5t8DWtoRw5tx3OU5GncPHX26r7J75ww1tu0zteUQ4Zfbsy
-         pJPA==
-X-Gm-Message-State: AOAM530gknA0C3mbuZ/hroX0rcxWY3lKtN/AKZRNv88BNWlvDd1HPGzQ
-        LG9/i4C4wQe/mJH1OJtvZEgAiQ==
-X-Google-Smtp-Source: ABdhPJz/QT1MiqhW4PVFNiEaRMSLsnIjsG6Zz64ueE1ZdzHZK45v/bDUNqYA5+0xSFwuO/sBTSEO0w==
-X-Received: by 2002:a17:907:1b05:b0:6f0:18d8:7be0 with SMTP id mp5-20020a1709071b0500b006f018d87be0mr15148939ejc.561.1650873685852;
-        Mon, 25 Apr 2022 01:01:25 -0700 (PDT)
-Received: from [192.168.0.240] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id g16-20020a170906521000b006d58773e992sm3351837ejm.188.2022.04.25.01.01.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 01:01:25 -0700 (PDT)
-Message-ID: <fe4b42c9-f747-145a-5fce-9be6fc3e19af@linaro.org>
-Date:   Mon, 25 Apr 2022 10:01:24 +0200
+        Mon, 25 Apr 2022 04:04:33 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E7B1582E
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:01:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650873689; x=1682409689;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/QcU6MWYTPWZ4Kj6gQUq7qXQoT/0fHP0aO/R9fTkgkM=;
+  b=f2Kovs0+xiMAdXoeeTg2xYqIJujz6xbcIBg33eCw9Gy0WQaDVZDAcjk+
+   j/9E7T2MBRwAC+NfLilbCB8N12p0BDnp6Doksbpv8iGpK+6b+SF8jebRd
+   BPqdPSaUGZeRnhrPt2RaN9HeNAc1i/9LcZEpz8sSw2TZPAqYqZZn4TJ+d
+   CqWiPiFbsZtiDou/4ixfH1HmnMf7uTGyV1+FhPxIzJ0MIDjI5PYQhariH
+   cfgvtkEMVclBSJbeL0h2+E6LHuEwKJnhYy+i12oWGnCHjY9D64QFMkxfc
+   PmJC/Byk6JZwU0KlDVIfKuN1Zv1Lh3FTT9qbLsXfDS1lrXTYMSc/CD/kc
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="351623413"
+X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
+   d="scan'208";a="351623413"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 01:01:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
+   d="scan'208";a="579155418"
+Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.138])
+  by orsmga008.jf.intel.com with ESMTP; 25 Apr 2022 01:01:26 -0700
+Date:   Mon, 25 Apr 2022 16:01:26 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
+        Denys Vlasenko <dvlasenk@redhat.com>
+Subject: Re: [PATCH v2] x86, vmlinux.lds: Add debug option to force all data
+ sections aligned
+Message-ID: <20220425080126.GA33905@shbuild999.sh.intel.com>
+References: <20220424122533.27590-1-feng.tang@intel.com>
+ <20220425075335.GZ2731@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 2/2] regulator: richtek,rt4801: parse GPIOs per
- regulator
-Content-Language: en-US
-To:     ChiYuan Huang <u0084500@gmail.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220425072455.27356-1-krzysztof.kozlowski@linaro.org>
- <20220425072455.27356-3-krzysztof.kozlowski@linaro.org>
- <20220425075812.GA29439@cyhuang-hp-elitebook-840-g3.rt>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220425075812.GA29439@cyhuang-hp-elitebook-840-g3.rt>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220425075335.GZ2731@worktop.programming.kicks-ass.net>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/04/2022 09:58, ChiYuan Huang wrote:
->>  
->> -	priv->enable_gpios = devm_gpiod_get_array_optional(&i2c->dev, "enable", GPIOD_OUT_HIGH);
->> -	if (IS_ERR(priv->enable_gpios)) {
->> -		dev_err(&i2c->dev, "Failed to get gpios\n");
->> -		return PTR_ERR(priv->enable_gpios);
->> +	for (i = 0; i < DSV_OUT_MAX; i++) {
->> +		priv->enable_gpios[i] = devm_gpiod_get_index_optional(&i2c->dev,
->> +								      "enable",
->> +								      i,
->> +								      GPIOD_OUT_HIGH);
->> +		if (IS_ERR(priv->enable_gpios[i])) {
->> +			dev_err(&i2c->dev, "Failed to get gpios\n");
->> +			return PTR_ERR(priv->enable_gpios[i]);
->> +		}
->>  	}
-> You can directly removed all about 'enable-gpios' in probe phase.
-> Just keep of_parse_cb to get per regulator 'enable' gpio. 
+Hi Peter,
 
-We cannot, it would break the ABI and make the change backwards
-incompatible.
+On Mon, Apr 25, 2022 at 09:53:35AM +0200, Peter Zijlstra wrote:
+> On Sun, Apr 24, 2022 at 08:25:33PM +0800, Feng Tang wrote:
+> 
+> > diff --git a/arch/x86/Kconfig.debug b/arch/x86/Kconfig.debug
+> > index d3a6f74a94bd..7b8cfe9717f2 100644
+> > --- a/arch/x86/Kconfig.debug
+> > +++ b/arch/x86/Kconfig.debug
+> > @@ -225,6 +225,19 @@ config PUNIT_ATOM_DEBUG
+> >  	  The current power state can be read from
+> >  	  /sys/kernel/debug/punit_atom/dev_power_state
+> > 
+> > +config DEBUG_FORCE_DATA_SECTION_ALIGNED
+> > +	bool "Force all data sections to be THREAD_SIZE aligned"
+> 
+> s/THREAD_SIZE/PAGE_SIZE/ as that seems to be what the actual patch does.
 
+Thanks for the catch! It was changed from v1 to v2, I should reviewed 
+these texts more carefully, and there is another similar typo in the
+commit log.
 
-Best regards,
-Krzysztof
+> > +	depends on EXPERT && !DYNAMIC_DEBUG
+> > +	help
+> > +	  There are cases that a commit from one kernel domain changes
+> > +	  data sections' alignment of other domains, as they are all
+> > +	  linked together compactly, and cause magic performance bump
+> > +	  (regression or improvement), which is hard to debug. Enable
+> > +	  this option will help to verify if the bump is caused by
+> > +	  data alignment changes.
+> > +
+> > +	  It is mainly for debug and performance tuning use.
+> > +
+> >  choice
+> >  	prompt "Choose kernel unwinder"
+> >  	default UNWINDER_ORC if X86_64
+> > diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
+> > index 7fda7f27e762..6add703de45f 100644
+> > --- a/arch/x86/kernel/vmlinux.lds.S
+> > +++ b/arch/x86/kernel/vmlinux.lds.S
+> > @@ -155,7 +155,17 @@ SECTIONS
+> >  	X86_ALIGN_RODATA_END
+> > 
+> >  	/* Data */
+> > -	.data : AT(ADDR(.data) - LOAD_OFFSET) {
+> > +	.data : AT(ADDR(.data) - LOAD_OFFSET)
+> > +#ifdef CONFIG_DEBUG_FORCE_DATA_SECTION_ALIGNED
+> > +	/*
+> > +	 * In theroy, THREAD_SIZE as the biggest alignment of below sections
+> 
+> I think the more common spelling is: 'theory' :-)
+
+Yes, will change in the next verson.
+
+Thanks,
+Feng
+
+> > +	 * should be picked, but since upper 'X86_ALIGN_RODATA_END' can
+> > +	 * ganrantees the alignment of 'INIT_TASK_DATA', PAGE_SIZE is picked
+> > +	 * instead to reduce size of kernel binary
+> > +	 */
+> > +	SUBALIGN(PAGE_SIZE)
+> > +#endif
+> > +	{
+> >  		/* Start of data section */
+> >  		_sdata = .;
+> > 
+> > --
+> > 2.27.0
+> > 

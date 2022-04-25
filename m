@@ -2,208 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0229450DA17
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 09:27:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 771DF50DA1A
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 09:29:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiDYHaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 03:30:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47320 "EHLO
+        id S233506AbiDYHbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 03:31:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236435AbiDYHaS (ORCPT
+        with ESMTP id S232696AbiDYHbL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 03:30:18 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B67767D
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 00:27:13 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id q8so1899078plx.3
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 00:27:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=rxyP1rA1NVCKi+Fqd9RTEgWTAs6MpVuSe+By3MBiK+g=;
-        b=uhHdnNiHGlo6+p+WxcM0C9NfBcZ1yMZ4ZL8lPJjCqFO59XftyiBXmxLnJ4x/8IHesk
-         Iz/e+72c+hpYYtSkpN9st79ktLRdF9ucEIcsSZFrJz8zW/33b/zII36XFlgftlgRt/Rn
-         NcV0nn+GcFItTljdcQkhhruORyaimT8Hcjdf+33DifIdLTWHRc7f4BBjOpmEow9TxUAk
-         H3AoQBVj8pg7peGOZ40pMWJPb4v77MByQ/hq2wnaWxWmitojdTlAcivhdbQ8eALivIcc
-         CxsiobTeJA1GwrggCLqf/tliVYwpbUOcyyC+5xohbYhPGazYOIMkwv+sGtPOlvneNaO1
-         ub6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=rxyP1rA1NVCKi+Fqd9RTEgWTAs6MpVuSe+By3MBiK+g=;
-        b=QRv7FMQS9nvA03GXabUGUN+r2UrN49dpeHpSET1gHoZTHekJDWEX+BnbFK9gQx1fWA
-         5eM0GGhzIUJxATXQuU7dBRvNaXyn8/YMDgBRuY13a2S3xgVpoETOvinrbauL+G9RBuhX
-         IfR9NabAN+u97K11VNbQZ5kaB3fufxeRvdIEmkANsEKEPaCwCxT6MYJhA1oXZ7q/T7U2
-         DqWV407i+rlS/p1ir8HFoTk/hbogYSxSFRXMSfETKQ2iKFC69Dsph9o9ZyybM+rBd47S
-         K+36CPxu7uzJkamN8YIARnHvXuPyfwHfm4hO0LC9ulvRyGUDug3/XJ0nls9dzFyOElow
-         uGHA==
-X-Gm-Message-State: AOAM533baGVUZXrh14TLIXbZ7dcVd6XnSNdjuZ9hZuBmFfYSqqnkGyOp
-        XwFLsjHvAEJ+1pzeWnGqD0qP7Q==
-X-Google-Smtp-Source: ABdhPJxE5RcvTjEYwI71Iu772xtRFctxCEAFvy9tKFHoG9lHlSKr+lSmvTHqmcMFobuMjeZomF3jKA==
-X-Received: by 2002:a17:90b:3b46:b0:1c7:9ca8:a19e with SMTP id ot6-20020a17090b3b4600b001c79ca8a19emr29586651pjb.245.1650871632716;
-        Mon, 25 Apr 2022 00:27:12 -0700 (PDT)
-Received: from localhost ([122.171.250.232])
-        by smtp.gmail.com with ESMTPSA id p4-20020a637404000000b00375948e63d6sm8596664pgc.91.2022.04.25.00.27.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 00:27:12 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 12:57:10 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [RFC PATCH v2 4/6] PM: opp: allow control of multiple clocks
-Message-ID: <20220425072710.v6gwo4gu3aouezg4@vireshk-i7>
-References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
- <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
+        Mon, 25 Apr 2022 03:31:11 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE93C9FF6;
+        Mon, 25 Apr 2022 00:28:07 -0700 (PDT)
+Received: from kwepemi500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KmxRP6BjCzfb5t;
+        Mon, 25 Apr 2022 15:27:13 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi500023.china.huawei.com (7.221.188.76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 25 Apr 2022 15:28:05 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 25 Apr 2022 15:28:04 +0800
+Subject: Re: [PATCH -next RFC v3 0/8] improve tag allocation under heavy load
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        <axboe@kernel.dk>, <bvanassche@acm.org>,
+        <andriy.shevchenko@linux.intel.com>, <john.garry@huawei.com>,
+        <ming.lei@redhat.com>, <qiulaibin@huawei.com>
+CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>
+References: <20220415101053.554495-1-yukuai3@huawei.com>
+ <dc800086-43c6-1ff2-659e-258cb75649dd@huawei.com>
+ <3fbadd9f-11dd-9043-11cf-f0839dcf30e1@opensource.wdc.com>
+ <63e84f2a-2487-a0c3-cab2-7d2011bc2db4@huawei.com>
+ <55e8b04f-0d2f-2ce1-6514-5abd0b67fd48@opensource.wdc.com>
+ <6957af40-8720-d74b-5be7-6bcdd9aa1089@huawei.com>
+ <237a43f0-3b09-46d0-e73c-57ef51e39590@opensource.wdc.com>
+ <c11ebf9e-a232-4a5d-d539-f95f584f220e@huawei.com>
+ <2e7969ea-68d0-964a-808e-ee8943de70e3@opensource.wdc.com>
+From:   "yukuai (C)" <yukuai3@huawei.com>
+Message-ID: <35f18afa-0db1-b423-5824-4d5631b0422f@huawei.com>
+Date:   Mon, 25 Apr 2022 15:28:03 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <2e7969ea-68d0-964a-808e-ee8943de70e3@opensource.wdc.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11-04-22, 17:43, Krzysztof Kozlowski wrote:
-> Devices might need to control several clocks when scaling the frequency
-> and voltage.  Example is the Universal Flash Storage (UFS) which scales
-> several independent clocks with change of performance levels.
+在 2022/04/25 15:06, Damien Le Moal 写道:
+
+>>> By the way, did you check that doing something like:
+>>>
+>>> echo 2048 > /sys/block/sdX/queue/nr_requests
+>>>
+>>> improves performance for your high number of jobs test case ?
+>>
+>> Yes, performance will not degrade when numjobs is not greater than 256
+>> in this case.
 > 
-> Add parsing of multiple clocks and clock names
+> That is my thinking as well. I am asking if did check that (did you run it ?).
 
-This part is fine, the OPP core should be able to do this.
+Hi,
 
-> and scale all of them,
+I'm sure I ran it with 256 jobs before.
 
-This is tricky as the OPP core can't really assume the order in which the clocks
-needs to be programmed. We had the same problem with multiple regulators and the
-same is left for drivers to do via the custom-api.
+However, I didn't run it with 512 jobs. And following is the result I
+just tested:
 
-Either we can take the same route here, and let platforms add their own OPP
-drivers which can handle this, Or hide this all behind a basic device clock's
-driver, which you get with clk_get(dev, NULL).
+ratio of sequential io: 49.1%
 
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+Read|Write seek 
 
-> +static int _generic_set_opp_clks_only(struct device *dev,
-> +				      struct opp_table *opp_table,
-> +				      struct dev_pm_opp *opp)
-> +{
-> +	int i, ret;
-> +
-> +	if (!opp_table->clks)
-> +		return 0;
-> +
-> +	for (i = 0; i < opp_table->clk_count; i++) {
-> +		if (opp->rates[i]) {
+cnt 99338, zero cnt 48753 
 
-This should mean that we can disable that clock and it isn't required.
-
-> +			ret = _generic_set_opp_clk_only(dev, opp_table->clks[i],
-> +							opp->rates[i]);
-> +			if (ret) {
-> +				dev_err(dev, "%s: failed to set clock %pC rate: %d\n",
-> +					__func__, opp_table->clks[i], ret);
-> +				return ret;
-> +			}
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-
-As said earlier, this won't work in the core.
-
-> +
->  static int _generic_set_opp_regulator(struct opp_table *opp_table,
->  				      struct device *dev,
->  				      struct dev_pm_opp *opp,
-> @@ -796,7 +835,7 @@ static int _generic_set_opp_regulator(struct opp_table *opp_table,
->  	}
->  
->  	/* Change frequency */
-> -	ret = _generic_set_opp_clk_only(dev, opp_table->clk, freq);
-> +	ret = _generic_set_opp_clks_only(dev, opp_table, opp);
->  	if (ret)
->  		goto restore_voltage;
->  
-> @@ -820,7 +859,7 @@ static int _generic_set_opp_regulator(struct opp_table *opp_table,
->  	return 0;
->  
->  restore_freq:
-> -	if (_generic_set_opp_clk_only(dev, opp_table->clk, old_opp->rate))
-> +	if (_generic_set_opp_clks_only(dev, opp_table, old_opp))
->  		dev_err(dev, "%s: failed to restore old-freq (%lu Hz)\n",
->  			__func__, old_opp->rate);
->  restore_voltage:
-> @@ -880,7 +919,7 @@ static int _set_opp_custom(const struct opp_table *opp_table,
-
-This is where we can handle it in your case, if you don't want to hide it behind
-a clk driver.
-
->  	}
->  
->  	data->regulators = opp_table->regulators;
-> -	data->clk = opp_table->clk;
-> +	data->clk = (opp_table->clks ? opp_table->clks[0] : NULL);
->  	data->dev = dev;
->  	data->old_opp.rate = old_opp->rate;
->  	data->new_opp.rate = freq;
-> @@ -969,8 +1008,8 @@ static void _find_current_opp(struct device *dev, struct opp_table *opp_table)
-
-I think this routine breaks as soon as we add support for multiple clocks.
-clks[0]'s frequency can be same for multiple OPPs and this won't get you the
-right OPP then.
-
->  	struct dev_pm_opp *opp = ERR_PTR(-ENODEV);
->  	unsigned long freq;
->  
-> -	if (!IS_ERR(opp_table->clk)) {
-> -		freq = clk_get_rate(opp_table->clk);
-> +	if (opp_table->clks && !IS_ERR(opp_table->clks[0])) {
-> +		freq = clk_get_rate(opp_table->clks[0]);
->  		opp = _find_freq_ceil(opp_table, &freq);
->  	}
->  
-> @@ -1070,7 +1109,7 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
->  						 scaling_down);
->  	} else {
->  		/* Only frequency scaling */
-> -		ret = _generic_set_opp_clk_only(dev, opp_table->clk, freq);
-> +		ret = _generic_set_opp_clks_only(dev, opp_table, opp);
->  	}
->  
->  	if (ret)
-> @@ -1135,11 +1174,15 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
-
-This should have a BUG or WARN _ON() now if clock count is more than one. This
-routine can't be called unless custom handler is available.
-
-I skipped rest of the code as we need to work/decide on the design first.
-
-Thanks.
-
--- 
-viresh
+     >=(KB) .. <(KB)     : count       ratio |distribution 
+              |
+          0 .. 1         : 48753       49.1% 
+|########################################|
+          1 .. 2         : 0            0.0% | 
+              |
+          2 .. 4         : 0            0.0% | 
+              |
+          4 .. 8         : 0            0.0% | 
+              |
+          8 .. 16        : 0            0.0% | 
+              |
+         16 .. 32        : 0            0.0% | 
+              |
+         32 .. 64        : 0            0.0% | 
+              |
+         64 .. 128       : 4975         5.0% |##### 
+              |
+        128 .. 256       : 4439         4.5% |#### 
+              |
+        256 .. 512       : 2615         2.6% |### 
+              |
+        512 .. 1024      : 967          1.0% |# 
+              |
+       1024 .. 2048      : 213          0.2% |# 
+              |
+       2048 .. 4096      : 375          0.4% |# 
+              |
+       4096 .. 8192      : 723          0.7% |# 
+              |
+       8192 .. 16384     : 1436         1.4% |## 
+              |
+      16384 .. 32768     : 2626         2.6% |### 
+              |
+      32768 .. 65536     : 4197         4.2% |#### 
+              |
+      65536 .. 131072    : 6431         6.5% |###### 
+              |
+     131072 .. 262144    : 7590         7.6% |####### 
+              |
+     262144 .. 524288    : 6433         6.5% |###### 
+              |
+     524288 .. 1048576   : 4583         4.6% |#### 
+              |
+    1048576 .. 2097152   : 2237         2.3% |## 
+              |
+    2097152 .. 4194304   : 489          0.5% |# 
+              |
+    4194304 .. 8388608   : 83           0.1% |# 
+              |
+    8388608 .. 16777216  : 36           0.0% |# 
+              |
+   16777216 .. 33554432  : 0            0.0% | 
+              |
+   33554432 .. 67108864  : 0            0.0% | 
+              |
+   67108864 .. 134217728 : 137          0.1% |# 
+              |

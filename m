@@ -2,111 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 068F150E93B
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 21:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1158350E94A
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 21:16:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244884AbiDYTOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 15:14:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60614 "EHLO
+        id S244860AbiDYTR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 15:17:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244893AbiDYTOV (ORCPT
+        with ESMTP id S242986AbiDYTR4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 15:14:21 -0400
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6016E2F3BA;
-        Mon, 25 Apr 2022 12:11:15 -0700 (PDT)
-Received: by mail-ot1-f50.google.com with SMTP id s21-20020a0568301e1500b006054da8e72dso11470331otr.1;
-        Mon, 25 Apr 2022 12:11:15 -0700 (PDT)
+        Mon, 25 Apr 2022 15:17:56 -0400
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6399B2ED62;
+        Mon, 25 Apr 2022 12:14:51 -0700 (PDT)
+Received: by mail-lf1-f51.google.com with SMTP id w19so27934949lfu.11;
+        Mon, 25 Apr 2022 12:14:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KfvsdaNrqzE1BZExO2gpU9gM5Zw3mrEmzjGsDm/IN7Y=;
-        b=zz5caVfHghNswkFwZTDIF9TLg4iqUZDC266wt2z+Pnkn4OLLPEK8fChgsfPgRNAyaz
-         g+GtzOwR+e4vB0Va0sSHi6zeozHckSNs1SnzWHCLSELVXh4Bd5nPsKiDWzinavrlxo9c
-         RM3zjKxldq1C0WjZYtx2kFF4O5w8RU4ceAmdoRCoKZhaTQjB+Onqsy+/Aa1JkqnwkQ7e
-         RfqywunEM8laY5yx5jm3GMj8DwoeaLb1KkTcSM5GCcV/csjw6qrWSC6FvLIqWkW0gXoE
-         V9I8JjrLbNxUuSnjfzboPhvq+YJYz3aE+MWnDUFuERYPOS08uPjaAVAxNgwaVHceDttl
-         0amA==
-X-Gm-Message-State: AOAM531mphJOpbOAxlUaSuewTSG1PUV+2G4/SVoFop1ABau+4ifqTCCe
-        pPXoYRgAf/7vAYiOpYln7oJ+gotNCg==
-X-Google-Smtp-Source: ABdhPJw9uxpUO9LKnG040QuMwHyOzS4tHc0WimyBmaTy2/e4n1V3ST1BXyUY9YaMQrHV8DrvaiVaAQ==
-X-Received: by 2002:a05:6830:18f:b0:605:433b:c568 with SMTP id q15-20020a056830018f00b00605433bc568mr6954877ota.46.1650913874611;
-        Mon, 25 Apr 2022 12:11:14 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e26-20020a056820061a00b0035e46250f56sm4020495oow.13.2022.04.25.12.11.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 12:11:14 -0700 (PDT)
-Received: (nullmailer pid 83469 invoked by uid 1000);
-        Mon, 25 Apr 2022 19:11:13 -0000
-Date:   Mon, 25 Apr 2022 14:11:13 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Marek Vasut <marex@denx.de>
-Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>, arnd@arndb.de,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>, soc@kernel.org,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-kernel@vger.kernel.org,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>, etienne.carriere@st.com
-Subject: Re: [PATCH 2/8] dt-bindings: clock: stm32mp1: describes clocks if
- "st,stm32mp1-rcc-secure"
-Message-ID: <YmbyUc5uTXoTD/nt@robh.at.kernel.org>
-References: <20220422150952.20587-1-alexandre.torgue@foss.st.com>
- <20220422150952.20587-3-alexandre.torgue@foss.st.com>
- <dd48a7b5-ce08-5fb2-8236-8802ac91d827@denx.de>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dHw3bSR/H7CsKHNYVZ388J1hNpCRBRDwS8dgecfZChM=;
+        b=hicR/D69ANxKVPCF+DF7id9Artecst5j9WieldcfF6yVeaMpAHW6VxiUua7Otzi/qZ
+         c9WmgBjW8pnONB4M9Xqd4cKTl/I8nOegNHNZ9d8UGf44ToG3buIHAwO0ZRCokmF2TX7n
+         GFMEMWzJU84BAhiDZq5lbBsYjyt2GroP8f6UHniOmR0ICTx06dvJbwbqX9QxklEYItUo
+         xkWDwb5pBgRjUZckmlcVuvj10j0YfhKiUSbMTroBihMnXR3osaLmSegNLDyHVjQgl8Gd
+         B+xaHrKaZK8PEzEkRjUOm31DIr/A7WuRvpvj1RH9YeLzebQiJ60pRjOzpxfIjuRvIatX
+         R/vg==
+X-Gm-Message-State: AOAM533C4KkQnlExerDEwAtpOda7J2hl1v0cRji05/QQwMdACFtTdCvA
+        K8ClGO6hYIuq6Z6JIzqg69LY5tUIxXj+7BgQMCk=
+X-Google-Smtp-Source: ABdhPJyhIu6bV/7PCchygWQAOXBLRo+nw25DWy7AdnYXRE222Wbp82PwUfbfw5cBzUzTpTwxnu0Yw930jpFPtAOIVa8=
+X-Received: by 2002:ac2:4c4f:0:b0:44a:4357:c285 with SMTP id
+ o15-20020ac24c4f000000b0044a4357c285mr13820828lfk.99.1650914089654; Mon, 25
+ Apr 2022 12:14:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dd48a7b5-ce08-5fb2-8236-8802ac91d827@denx.de>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220416004048.1514900-1-namhyung@kernel.org> <20220416004048.1514900-2-namhyung@kernel.org>
+ <CAP-5=fX5S2CR58REzAhXH4s8_27=D2LbKksS7mHoSoxYOOmN4g@mail.gmail.com>
+In-Reply-To: <CAP-5=fX5S2CR58REzAhXH4s8_27=D2LbKksS7mHoSoxYOOmN4g@mail.gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Mon, 25 Apr 2022 12:14:38 -0700
+Message-ID: <CAM9d7cgSZu43YLAWgJdw8d1TUS9geD9QrWqSQw1sWPU7ocVRtQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] perf symbol: Pass is_kallsyms to symbols__fixup_end()
+To:     Ian Rogers <irogers@google.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Michael Petlan <mpetlan@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        John Garry <john.garry@huawei.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 06:31:25PM +0200, Marek Vasut wrote:
-> On 4/22/22 17:09, Alexandre Torgue wrote:
-> > In case of "st,stm32mp1-rcc-secure" (stm32mp1 clock driver with RCC
-> > security support hardened), "clocks" and "clock-names" describe oscillators
-> > and are required.
-> > 
-> > Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
-> > 
-> > diff --git a/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml b/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
-> > index 7a251264582d..bb0e0b92e907 100644
-> > --- a/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
-> > +++ b/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
-> > @@ -58,14 +58,8 @@ properties:
-> >             - st,stm32mp1-rcc-secure
-> >             - st,stm32mp1-rcc
-> >         - const: syscon
-> > -
-> > -  clocks:
-> > -    description:
-> > -      Specifies the external RX clock for ethernet MAC.
-> > -    maxItems: 1
-> > -
-> > -  clock-names:
-> > -    const: ETH_RX_CLK/ETH_REF_CLK
-> > +  clocks: true
-> > +  clock-names: true
-> 
-> It looks like this should rather be a property than a compatible string --
-> the compatible string is used by the OS to determine which hardware is
-> represented by a node, but here it is the same hardware in either case,
-> "st,stm32mp1-rcc" and "st,stm32mp1-rcc-secure", it is still the same
-> STM32MP1 RCC block, just configured differently by some bootloader stage.
-> 
-> So why not just add one-liner property of the RCC block like ?
-> st,rcc-in-secure-configuration
+Hi Ian,
 
-Because using compatible was already decided.
+On Sat, Apr 16, 2022 at 7:59 AM Ian Rogers <irogers@google.com> wrote:
+>
+> On Fri, Apr 15, 2022 at 8:40 PM Namhyung Kim <namhyung@kernel.org> wrote:
+> >
+> > The symbol fixup is necessary for symbols in kallsyms since they don't
+> > have size info.  So we use the next symbol's address to calculate the
+> > size.  Now it's also used for user binaries because sometimes they
+> > miss size for hand-written asm functions.
+> >
+> > There's a arch-specific function to handle kallsyms differently but
+> > currently it cannot distinguish kallsyms from others.  Pass this
+> > information explicitly to handle it properly.  Note that those arch
+> > functions will be moved to the generic function so I didn't added it
+> > to the arch-functions.
+>
+> Thanks Namhyung, in:
+> https://lore.kernel.org/linux-perf-users/20220412154817.2728324-3-irogers@google.com/
+> I used "dso->kernel != DSO_SPACE__USER" in symbol-elf to make this
+> more than just kallsyms as presumably kernel code is the issue. Do we
+> know elf kernel code has correctly sized symbols?
 
-Rob
+Yeah, IIUC the whole point of the symbol end fixup is because the
+kallsyms doesn't have the symbol size info.  Every ELF binaries
+should have the size except for some hand-written asm functions
+which missed adding it manually.  I guess that's the reason it was
+added to other DSO loading paths.
+
+Also considering "[" (and "]") in the symbol name is specific to
+kallsyms which has both kernel and module symbols together.
+
+Thanks,
+Namhyung

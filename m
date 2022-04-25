@@ -2,59 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1CC250E432
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:17:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A124450E435
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242804AbiDYPUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 11:20:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56942 "EHLO
+        id S234807AbiDYPVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 11:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242873AbiDYPUP (ORCPT
+        with ESMTP id S230471AbiDYPVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 11:20:15 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF996BABA4;
-        Mon, 25 Apr 2022 08:17:00 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2a02:3030:e:60d7:2277:ba57:a2c0:3])
+        Mon, 25 Apr 2022 11:21:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3D6B6E4B
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 08:18:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sebastianfricke)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 114AF1F431C4;
-        Mon, 25 Apr 2022 16:16:59 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650899819;
-        bh=UmvIinIkuSWeMLIsxuIACv1w2HkCY+hYynbPsEzqCY8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VrWg80IjgoqHrYPMdAIK4XgC7ycga10CVgMzJSwUh6/MpAlc7ThUdiaTXJHmypMcs
-         b3HRPJfCvhSVl+Ys8lOD/D8kxYV6nooBiZrscn1TC1J5mH/gikDYaHruqMPoSbNLs1
-         sU2DBsc5RVJdSw/98MRJfCYvTqz3pXhtBXYHK4OZYg2bCbLHIgjfbbZFpmI7QCyyRI
-         aVr4eIz5CHYFfYtvLiMNZo4gBsPPv0g7lTA3VHV2Slc9fCwAZ5aq8foJxORMaIJ/yp
-         rF9kwHq4HYbOnABwHmNRLBNemitd8/rBqYhJfFH7HKdOyGNzJ7TXL7kTL7kAoE6DUC
-         Aktb2kdzr77WA==
-Date:   Mon, 25 Apr 2022 17:16:56 +0200
-From:   Sebastian Fricke <sebastian.fricke@collabora.com>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     mchehab@kernel.org, hverkuil@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, mripard@kernel.org,
-        paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        nicolas.dufresne@collabora.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v5 06/17] media: uapi: HEVC: Change pic_order_cnt
- definition in v4l2_hevc_dpb_entry
-Message-ID: <20220425151656.pphta4u6qa5kymoa@basti-XPS-13-9310>
-References: <20220407152940.738159-1-benjamin.gaignard@collabora.com>
- <20220407152940.738159-7-benjamin.gaignard@collabora.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5225B60E06
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 15:18:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B7E6C385A7;
+        Mon, 25 Apr 2022 15:18:35 +0000 (UTC)
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Luis Machado <luis.machado@arm.com>,
+        Richard Earnshaw <Richard.Earnshaw@arm.com>
+Subject: [PATCH] elf: Fix the arm64 MTE ELF segment name and value
+Date:   Mon, 25 Apr 2022 16:18:33 +0100
+Message-Id: <20220425151833.2603830-1-catalin.marinas@arm.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220407152940.738159-7-benjamin.gaignard@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,120 +45,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Benjamin,
+Unfortunately, the name/value choice for the MTE ELF segment type
+(PT_ARM_MEMTAG_MTE) was pretty poor: LOPROC+1 is already in use by
+PT_AARCH64_UNWIND, as defined in the AArch64 ELF ABI
+(https://github.com/ARM-software/abi-aa/blob/main/aaelf64/aaelf64.rst).
 
-On 07.04.2022 17:29, Benjamin Gaignard wrote:
->HEVC specifications say that:
+Update the ELF segment type value to LOPROC+2 and also change the define
+to PT_AARCH64_MEMTAG_MTE to match the AArch64 ELF ABI namespace. The
+AArch64 ELF ABI document is updating accordingly (segment type not
+previously mentioned in the document).
 
-s/HEVC specifications say that:/
-   The HEVC specification describes the following:/
+Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+Fixes: 761b9b366cec ("elf: Introduce the ARM MTE ELF segment type")
+Cc: Will Deacon <will@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Eric Biederman <ebiederm@xmission.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Luis Machado <luis.machado@arm.com>
+Cc: Richard Earnshaw <Richard.Earnshaw@arm.com>
+---
 
-Greetings,
-Sebastian
+Luckily, the commit being fixed here only went in for 5.18-rc1, so there is no
+ABI change in a mainline release.
 
->"PicOrderCntVal is derived as follows:
->PicOrderCntVal = PicOrderCntMsb + slice_pic_order_cnt_lsb
->The value of PicOrderCntVal shall be in the range of −231 to 231 − 1, inclusive."
->
->To match with these definitions change __u16 pic_order_cnt[2]
->into __s32 pic_order_cnt_val.
->
->Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->---
->version 5:
->- change __u16 pic_order_cnt[2] into __s32 pic_order_cnt_val
-> drivers/staging/media/hantro/hantro_g2_hevc_dec.c | 4 ++--
-> drivers/staging/media/hantro/hantro_hevc.c        | 2 +-
-> drivers/staging/media/hantro/hantro_hw.h          | 4 ++--
-> drivers/staging/media/sunxi/cedrus/cedrus_h265.c  | 4 ++--
-> include/media/hevc-ctrls.h                        | 2 +-
-> 5 files changed, 8 insertions(+), 8 deletions(-)
->
->diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
->index c524af41baf5..6f3c774aa3d9 100644
->--- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
->+++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
->@@ -386,7 +386,7 @@ static int set_ref(struct hantro_ctx *ctx)
-> 	 * pic_order_cnt[0] and ignore pic_order_cnt[1] used in field-coding.
-> 	 */
-> 	for (i = 0; i < decode_params->num_active_dpb_entries && i < ARRAY_SIZE(cur_poc); i++) {
->-		char poc_diff = decode_params->pic_order_cnt_val - dpb[i].pic_order_cnt[0];
->+		char poc_diff = decode_params->pic_order_cnt_val - dpb[i].pic_order_cnt_val;
->
-> 		hantro_reg_write(vpu, &cur_poc[i], poc_diff);
-> 	}
->@@ -413,7 +413,7 @@ static int set_ref(struct hantro_ctx *ctx)
-> 	dpb_longterm_e = 0;
-> 	for (i = 0; i < decode_params->num_active_dpb_entries &&
-> 	     i < (V4L2_HEVC_DPB_ENTRIES_NUM_MAX - 1); i++) {
->-		luma_addr = hantro_hevc_get_ref_buf(ctx, dpb[i].pic_order_cnt[0]);
->+		luma_addr = hantro_hevc_get_ref_buf(ctx, dpb[i].pic_order_cnt_val);
-> 		if (!luma_addr)
-> 			return -ENOMEM;
->
->diff --git a/drivers/staging/media/hantro/hantro_hevc.c b/drivers/staging/media/hantro/hantro_hevc.c
->index b6ec86d03d91..fadd40768579 100644
->--- a/drivers/staging/media/hantro/hantro_hevc.c
->+++ b/drivers/staging/media/hantro/hantro_hevc.c
->@@ -54,7 +54,7 @@ static void hantro_hevc_ref_init(struct hantro_ctx *ctx)
-> }
->
-> dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx,
->-				   int poc)
->+				   s32 poc)
-> {
-> 	struct hantro_hevc_dec_hw_ctx *hevc_dec = &ctx->hevc_dec;
-> 	int i;
->diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
->index ed018e293ba0..a648c529662b 100644
->--- a/drivers/staging/media/hantro/hantro_hw.h
->+++ b/drivers/staging/media/hantro/hantro_hw.h
->@@ -131,7 +131,7 @@ struct hantro_hevc_dec_hw_ctx {
-> 	struct hantro_aux_buf tile_bsd;
-> 	struct hantro_aux_buf ref_bufs[NUM_REF_PICTURES];
-> 	struct hantro_aux_buf scaling_lists;
->-	int ref_bufs_poc[NUM_REF_PICTURES];
->+	s32 ref_bufs_poc[NUM_REF_PICTURES];
-> 	u32 ref_bufs_used;
-> 	struct hantro_hevc_dec_ctrls ctrls;
-> 	unsigned int num_tile_cols_allocated;
->@@ -337,7 +337,7 @@ int hantro_hevc_dec_init(struct hantro_ctx *ctx);
-> void hantro_hevc_dec_exit(struct hantro_ctx *ctx);
-> int hantro_g2_hevc_dec_run(struct hantro_ctx *ctx);
-> int hantro_hevc_dec_prepare_run(struct hantro_ctx *ctx);
->-dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx, int poc);
->+dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx, s32 poc);
-> int hantro_hevc_add_ref_buf(struct hantro_ctx *ctx, int poc, dma_addr_t addr);
-> void hantro_hevc_ref_remove_unused(struct hantro_ctx *ctx);
-> size_t hantro_hevc_chroma_offset(const struct v4l2_ctrl_hevc_sps *sps);
->diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
->index 44f385be9f6c..d04521ffd920 100644
->--- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
->+++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
->@@ -143,8 +143,8 @@ static void cedrus_h265_frame_info_write_dpb(struct cedrus_ctx *ctx,
-> 	for (i = 0; i < num_active_dpb_entries; i++) {
-> 		int buffer_index = vb2_find_timestamp(vq, dpb[i].timestamp, 0);
-> 		u32 pic_order_cnt[2] = {
->-			dpb[i].pic_order_cnt[0],
->-			dpb[i].pic_order_cnt[1]
->+			dpb[i].pic_order_cnt_val & 0xffff,
->+			(dpb[i].pic_order_cnt_val >> 16) & 0xffff
-> 		};
->
-> 		cedrus_h265_frame_info_write_single(ctx, i, dpb[i].field_pic,
->diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
->index b3540167df9e..2812778b41f4 100644
->--- a/include/media/hevc-ctrls.h
->+++ b/include/media/hevc-ctrls.h
->@@ -138,7 +138,7 @@ struct v4l2_hevc_dpb_entry {
-> 	__u64	timestamp;
-> 	__u8	flags;
-> 	__u8	field_pic;
->-	__u16	pic_order_cnt[2];
->+	__s32	pic_order_cnt_val;
-> 	__u8	padding[2];
-> };
->
->-- 
->2.32.0
->
+FYI, the corresponding pull request for the AArch64 ELF ABI:
+
+https://github.com/ARM-software/abi-aa/pull/148
+
+I don't expect any further change to the segment name/value.
+
+ Documentation/arm64/memory-tagging-extension.rst | 4 ++--
+ arch/arm64/kernel/elfcore.c                      | 2 +-
+ include/uapi/linux/elf.h                         | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/Documentation/arm64/memory-tagging-extension.rst b/Documentation/arm64/memory-tagging-extension.rst
+index dd27f78d7608..dbae47bba25e 100644
+--- a/Documentation/arm64/memory-tagging-extension.rst
++++ b/Documentation/arm64/memory-tagging-extension.rst
+@@ -228,10 +228,10 @@ Core dump support
+ -----------------
+ 
+ The allocation tags for user memory mapped with ``PROT_MTE`` are dumped
+-in the core file as additional ``PT_ARM_MEMTAG_MTE`` segments. The
++in the core file as additional ``PT_AARCH64_MEMTAG_MTE`` segments. The
+ program header for such segment is defined as:
+ 
+-:``p_type``: ``PT_ARM_MEMTAG_MTE``
++:``p_type``: ``PT_AARCH64_MEMTAG_MTE``
+ :``p_flags``: 0
+ :``p_offset``: segment file offset
+ :``p_vaddr``: segment virtual address, same as the corresponding
+diff --git a/arch/arm64/kernel/elfcore.c b/arch/arm64/kernel/elfcore.c
+index 2b3f3d0544b9..98d67444a5b6 100644
+--- a/arch/arm64/kernel/elfcore.c
++++ b/arch/arm64/kernel/elfcore.c
+@@ -95,7 +95,7 @@ int elf_core_write_extra_phdrs(struct coredump_params *cprm, loff_t offset)
+ 	for_each_mte_vma(current, vma) {
+ 		struct elf_phdr phdr;
+ 
+-		phdr.p_type = PT_ARM_MEMTAG_MTE;
++		phdr.p_type = PT_AARCH64_MEMTAG_MTE;
+ 		phdr.p_offset = offset;
+ 		phdr.p_vaddr = vma->vm_start;
+ 		phdr.p_paddr = 0;
+diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
+index 787c657bfae8..7ce993e6786c 100644
+--- a/include/uapi/linux/elf.h
++++ b/include/uapi/linux/elf.h
+@@ -42,7 +42,7 @@ typedef __s64	Elf64_Sxword;
+ 
+ 
+ /* ARM MTE memory tag segment type */
+-#define PT_ARM_MEMTAG_MTE	(PT_LOPROC + 0x1)
++#define PT_AARCH64_MEMTAG_MTE	(PT_LOPROC + 0x2)
+ 
+ /*
+  * Extended Numbering

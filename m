@@ -2,62 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A9B350D75F
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 05:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD6A50D765
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 05:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240502AbiDYDMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 23:12:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41776 "EHLO
+        id S239572AbiDYDOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 23:14:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240474AbiDYDMH (ORCPT
+        with ESMTP id S240568AbiDYDN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 23:12:07 -0400
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4C64E385;
-        Sun, 24 Apr 2022 20:09:04 -0700 (PDT)
-Received: by mail-pf1-f172.google.com with SMTP id i24so13579084pfa.7;
-        Sun, 24 Apr 2022 20:09:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tsGZFIEixUEnJNolXV8dfGKJqfTCfEpZ3B2cSrfx1vM=;
-        b=eWbthMyR5pl1rFlPdMKr3HSLFSx73sk+wZ1uL96OKuPPahT/UJrpXsIkRtJRNAuCPN
-         SZxKyWI70mcH+164+Um+v1onym4X4h+w11oNv0UkFLZvD10Gc/gidP138PHMOlE066iA
-         Qs7Y2SWaimJBdX2sa6G7tZ6NDzzEv810ic0NC/KxYmZlphJ1ijHTLT7Q5ZmbEcRbC48f
-         Pa6aBeDNFJ5hOpXcOqG0QDLUSTtDap6VAnSEWgf7/j04nJMpqcK5LSUuP3PJAGBcKSzY
-         XugPnCCRPHSpHKZ0GLup7sgjpM5+1PY5L5d7S1PWxgMsaN0vyo8w9XBCu728UsefeJ8b
-         qbeg==
-X-Gm-Message-State: AOAM532k9noiUdzKMgIkVI2hTf86GQdehfXvov2VyY5HY/AKD7f39DBX
-        OqdSuLVZnlO2DxeAuuEyusgRhrcCfyc=
-X-Google-Smtp-Source: ABdhPJzOQj9ikbTemWkl0X4L6g7+gJVC6zzs6svuR4Q/oiKun077BKe3V8PtBTFA63SVbSHmMXRfuw==
-X-Received: by 2002:a05:6a00:2d0:b0:4f4:1f34:e39d with SMTP id b16-20020a056a0002d000b004f41f34e39dmr16617024pft.14.1650856143804;
-        Sun, 24 Apr 2022 20:09:03 -0700 (PDT)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id t2-20020a17090a448200b001cd4989ff40sm9147432pjg.7.2022.04.24.20.09.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 24 Apr 2022 20:09:02 -0700 (PDT)
-Message-ID: <450b5ab6-fb82-06dc-2a11-e0b464901c74@acm.org>
-Date:   Sun, 24 Apr 2022 20:09:01 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH -next RFC v3 0/8] improve tag allocation under heavy load
-Content-Language: en-US
-To:     Yu Kuai <yukuai3@huawei.com>, axboe@kernel.dk,
-        andriy.shevchenko@linux.intel.com, john.garry@huawei.com,
-        ming.lei@redhat.com, qiulaibin@huawei.com
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-References: <20220415101053.554495-1-yukuai3@huawei.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220415101053.554495-1-yukuai3@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        Sun, 24 Apr 2022 23:13:28 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0368B1C92D;
+        Sun, 24 Apr 2022 20:10:19 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [10.15.192.164])
+        by mail-app3 (Coremail) with SMTP id cC_KCgB31fALEWZi3VruAg--.23940S2;
+        Mon, 25 Apr 2022 11:10:07 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     krzysztof.kozlowski@linaro.org, linux-kernel@vger.kernel.org
+Cc:     netdev@vger.kernel.org, broonie@kernel.org,
+        akpm@linux-foundation.org, alexander.deucher@amd.com,
+        gregkh@linuxfoundation.org, davem@davemloft.net, linma@zju.edu.cn,
+        Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH] drivers: nfc: nfcmrvl: reorder destructive operations in nfcmrvl_nci_unregister_dev to avoid bugs
+Date:   Mon, 25 Apr 2022 11:10:02 +0800
+Message-Id: <20220425031002.56254-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cC_KCgB31fALEWZi3VruAg--.23940S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAFW5Xw43WrWUAw17ZFy7Wrg_yoWrXw17pF
+        4YgFy5CF1DKr4FqF45tF4qqFyfuFZ3GFW5Cry7tr93Aws0yFWvyw1qyay5ZFnruryUJFWY
+        ka43A3s8GF4vyF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvv1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW0oVCq3wA2z4x0Y4vEx4A2
+        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52
+        x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWU
+        XwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
+        8JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY
+        0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r4fKr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+        14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+        IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E
+        87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
+        IFyTuYvjfUF9a9DUUUU
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgMLAVZdtZYtGwABsU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,25 +54,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/15/22 03:10, Yu Kuai wrote:
-> The single io performance(randwrite):
-> 
-> | bs       | 128k | 256k | 512k | 1m   | 1280k | 2m   | 4m   |
-> | -------- | ---- | ---- | ---- | ---- | ----- | ---- | ---- |
-> | bw MiB/s | 20.1 | 33.4 | 51.8 | 67.1 | 74.7  | 82.9 | 82.9 |
+There are destructive operations such as nfcmrvl_fw_dnld_abort and
+gpio_free in nfcmrvl_nci_unregister_dev. The resources such as firmware,
+gpio and so on could be destructed while the upper layer functions such as
+nfcmrvl_fw_dnld_start and nfcmrvl_nci_recv_frame is executing, which leads
+to double-free, use-after-free and null-ptr-deref bugs.
 
-Although the above data is interesting, it is not sufficient. The above 
-data comes from a setup with a single hard disk. There are many other 
-configurations that are relevant (hard disk array, high speed NVMe, QD=1 
-USB stick, ...) but for which no conclusions can be drawn from the above 
-data.
+There are three situations that could lead to double-free bugs.
 
-Another question is whether the approach of this patch series is the 
-right approach? I would expect that round-robin wakeup of waiters would 
-be ideal from a fairness point of view. However, there are patches in 
-this patch series that guarantee that wakeup of tag waiters won't happen 
-in a round robin fashion.
+The first situation is shown below:
 
-Thanks,
+   (Thread 1)                 |      (Thread 2)
+nfcmrvl_fw_dnld_start         |
+ ...                          |  nfcmrvl_nci_unregister_dev
+ release_firmware()           |   nfcmrvl_fw_dnld_abort
+  kfree(fw) //(1)             |    fw_dnld_over
+                              |     release_firmware
+  ...                         |      kfree(fw) //(2)
+                              |     ...
 
-Bart.
+The second situation is shown below:
+
+   (Thread 1)                 |      (Thread 2)
+nfcmrvl_fw_dnld_start         |
+ ...                          |
+ mod_timer                    |
+ (wait a time)                |
+ fw_dnld_timeout              |  nfcmrvl_nci_unregister_dev
+   fw_dnld_over               |   nfcmrvl_fw_dnld_abort
+    release_firmware          |    fw_dnld_over
+     kfree(fw) //(1)          |     release_firmware
+     ...                      |      kfree(fw) //(2)
+
+The third situation is shown below:
+
+       (Thread 1)               |       (Thread 2)
+nfcmrvl_nci_recv_frame          |
+ if(..->fw_download_in_progress)|
+  nfcmrvl_fw_dnld_recv_frame    |
+   queue_work                   |
+                                |
+fw_dnld_rx_work                 | nfcmrvl_nci_unregister_dev
+ fw_dnld_over                   |  nfcmrvl_fw_dnld_abort
+  release_firmware              |   fw_dnld_over
+   kfree(fw) //(1)              |    release_firmware
+                                |     kfree(fw) //(2)
+
+The firmware struct is deallocated in position (1) and deallocated
+in position (2) again.
+
+The crash trace triggered by POC is like below:
+
+[  122.640457] BUG: KASAN: double-free or invalid-free in fw_dnld_over+0x28/0xf0
+[  122.640457] Call Trace:
+[  122.640457]  <TASK>
+[  122.640457]  kfree+0xb0/0x330
+[  122.640457]  fw_dnld_over+0x28/0xf0
+[  122.640457]  nfcmrvl_nci_unregister_dev+0x61/0x70
+[  122.640457]  nci_uart_tty_close+0x87/0xd0
+[  122.640457]  tty_ldisc_kill+0x3e/0x80
+[  122.640457]  tty_ldisc_hangup+0x1b2/0x2c0
+[  122.640457]  __tty_hangup.part.0+0x316/0x520
+[  122.640457]  tty_release+0x200/0x670
+[  122.640457]  __fput+0x110/0x410
+[  122.640457]  task_work_run+0x86/0xd0
+[  122.640457]  exit_to_user_mode_prepare+0x1aa/0x1b0
+[  122.640457]  syscall_exit_to_user_mode+0x19/0x50
+[  122.640457]  do_syscall_64+0x48/0x90
+[  122.640457]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[  122.640457] RIP: 0033:0x7f68433f6beb
+
+What's more, there are also use-after-free and null-ptr-deref bugs
+in nfcmrvl_fw_dnld_start. If we deallocate firmware struct, gpio or
+set null to the members of priv->fw_dnld in nfcmrvl_nci_unregister_dev,
+then, we dereference firmware, gpio or the members of priv->fw_dnld in
+nfcmrvl_fw_dnld_start, the UAF or NPD bugs will happen.
+
+This patch reorders destructive operations after nci_unregister_device
+to avoid the double-free, UAF and NPD bugs, as nci_unregister_device
+is well synchronized and won't return if there is a running routine.
+This was mentioned in commit 3e3b5dfcd16a ("NFC: reorder the logic in
+nfc_{un,}register_device").
+
+Fixes: 3194c6870158 ("NFC: nfcmrvl: add firmware download support")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Reviewed-by: Lin Ma <linma@zju.edu.cn>
+---
+ drivers/nfc/nfcmrvl/main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/nfc/nfcmrvl/main.c b/drivers/nfc/nfcmrvl/main.c
+index 2fcf545012b..1a5284de434 100644
+--- a/drivers/nfc/nfcmrvl/main.c
++++ b/drivers/nfc/nfcmrvl/main.c
+@@ -183,6 +183,7 @@ void nfcmrvl_nci_unregister_dev(struct nfcmrvl_private *priv)
+ {
+ 	struct nci_dev *ndev = priv->ndev;
+ 
++	nci_unregister_device(ndev);
+ 	if (priv->ndev->nfc_dev->fw_download_in_progress)
+ 		nfcmrvl_fw_dnld_abort(priv);
+ 
+@@ -191,7 +192,6 @@ void nfcmrvl_nci_unregister_dev(struct nfcmrvl_private *priv)
+ 	if (gpio_is_valid(priv->config.reset_n_io))
+ 		gpio_free(priv->config.reset_n_io);
+ 
+-	nci_unregister_device(ndev);
+ 	nci_free_device(ndev);
+ 	kfree(priv);
+ }
+-- 
+2.17.1
+

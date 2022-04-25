@@ -2,73 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FCEA50E742
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 19:29:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F04B450E748
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 19:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243027AbiDYR3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 13:29:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49100 "EHLO
+        id S244010AbiDYR3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 13:29:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244024AbiDYR2T (ORCPT
+        with ESMTP id S243996AbiDYR2F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 13:28:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B2C41314;
-        Mon, 25 Apr 2022 10:25:04 -0700 (PDT)
+        Mon, 25 Apr 2022 13:28:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CFB40E7A;
+        Mon, 25 Apr 2022 10:25:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DD580B81928;
-        Mon, 25 Apr 2022 17:25:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD13AC385A4;
-        Mon, 25 Apr 2022 17:25:00 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ZgCdYYjy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1650907499;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zeWdts0X6m9V2/VnLwn5mW/GWlrj70BIE54pn8ZTWWI=;
-        b=ZgCdYYjyecfhJXYgil1H4xLnivPbVaYGH2skIwSmg3BK1qPKXaNGF3WAd4LZELKkYdNbDO
-        R3x0a3HxyYEl9fMLW6Kjy8dXNrYhtY2VU/UKDNhnNlxTZsw7RB2OwUyZJ77JlL3per9yKR
-        Rz6zV78iMisPtC3xR5Ohtx0NJbFyDhA=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 506a2217 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CCCEA614D1;
         Mon, 25 Apr 2022 17:24:59 +0000 (UTC)
-Date:   Mon, 25 Apr 2022 19:24:55 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        arnd@arndb.de, Borislav Petkov <bp@alien8.de>, x86@kernel.org
-Subject: Re: [PATCH v6 13/17] x86: use fallback for random_get_entropy()
- instead of zero
-Message-ID: <YmbZZwXxaC+S863+@zx2c4.com>
-References: <20220423212623.1957011-1-Jason@zx2c4.com>
- <20220423212623.1957011-14-Jason@zx2c4.com>
- <871qxl2vdw.ffs@tglx>
- <Ymak7LJd6GnFxsOo@zx2c4.com>
- <87ilqx14ed.ffs@tglx>
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DF16C385A9;
+        Mon, 25 Apr 2022 17:24:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650907499;
+        bh=vXLMQVewDuf4CxFBhVBTEkU0dP04DdfcWaEPsVlr1IQ=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=dPjlomPC9joKWwiksbIl6XiclQs1VrjOgEzaja2x7BIWGLucSaLbm3rcDs95VAxLo
+         hHM9Zc+XanlnzufRPZBt+DCG1ntiZ6c66VjbljVi9BN1743KLpw7qPAL4Uf24pIDMg
+         5e+sjVDN827TAZ/ma6JDNY1lV7QXameZQKf5c6lr0Xx2NZEyT0+zQBr2zKyQbj+iHC
+         xRbTS4CYyhxw4mVvp8OLnAgchxvDMWm8ToGAu0NVyqqrqcKLBhFtlK1KgZaPkaiH9y
+         byN84hIFljmbs3zMhSXRty5TupfqWORXZBL12BL1FBQqQakKee4SeaDKSKcwvStCIm
+         VY/IvlY1q/qaQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     krzk+dt@kernel.org, zhouyanjie@wanyeetech.com, robh+dt@kernel.org
+Cc:     linux-spi@vger.kernel.org, sernia.zhou@foxmail.com,
+        dongsheng.qiu@ingenic.com, contact@artur-rojek.eu,
+        reimu@sudomaker.com, linux-mips@vger.kernel.org,
+        zhenwenjin@gmail.com, linux-kernel@vger.kernel.org,
+        rick.tyliu@ingenic.com, aric.pzqi@ingenic.com,
+        devicetree@vger.kernel.org, paul@crapouillou.net
+In-Reply-To: <1650724725-93758-1-git-send-email-zhouyanjie@wanyeetech.com>
+References: <1650724725-93758-1-git-send-email-zhouyanjie@wanyeetech.com>
+Subject: Re: [PATCH v3 0/3] Improve SPI support for Ingenic SoCs.
+Message-Id: <165090749609.584172.16916188059494565113.b4-ty@kernel.org>
+Date:   Mon, 25 Apr 2022 18:24:56 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87ilqx14ed.ffs@tglx>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Thomas,
+On Sat, 23 Apr 2022 22:38:42 +0800, 周琰杰 (Zhou Yanjie) wrote:
+> 1.Add support for using GPIOs as chip select lines on Ingenic SoCs.
+> 2.Add support for probing the spi-ingenic driver on the JZ4775 SoC,
+>   the X1000 SoC, and the X2000 SoC.
+> 3.Modify annotation texts to be more in line with the current state.
+> 
+> v1->v2:
+> Use "device_property_read_u32()" instead "of_property_read_u32()" as
+> Paul Cercueil's suggestion.
+> 
+> [...]
 
-On Mon, Apr 25, 2022 at 07:03:54PM +0200, Thomas Gleixner wrote:
-> Bah. Indeed. Misread the patch, but yes, if you are at it to make that
-> cpu_feature_enabled() then change the config thing to IS_ENABLED() too.
+Applied to
 
-Alright, will do for v7. I also just confirmed the !IS_ENABLED() way
-produces the same code as the #ifndef.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Jason
+Thanks!
+
+[1/3] SPI: Ingenic: Add support for use GPIO as chip select line.
+      commit: e64e9ad267ca22ee3db6f9d7a02dc8400a23d4c8
+[2/3] dt-bindings: SPI: Add bindings for new Ingenic SoCs.
+      commit: aecec8bbb225965c6f775b946ad7bf40736c8f09
+[3/3] SPI: Ingenic: Add support for new Ingenic SoCs.
+      commit: 6d72b11403549a34b485d2fe323c8a57b4dd1958
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

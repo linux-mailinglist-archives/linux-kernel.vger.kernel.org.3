@@ -2,133 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A38350DFCC
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 14:18:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F34450DFD0
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 14:21:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237505AbiDYMVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 08:21:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50322 "EHLO
+        id S232565AbiDYMX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 08:23:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232982AbiDYMVh (ORCPT
+        with ESMTP id S229631AbiDYMXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 08:21:37 -0400
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED801A3AB
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 05:18:33 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:c150:c4b6:d197:3811])
-        by xavier.telenet-ops.be with bizsmtp
-        id P0JU270033M22MD010JUHG; Mon, 25 Apr 2022 14:18:31 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1nixff-0026ck-Ci; Mon, 25 Apr 2022 14:18:27 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1nixfe-006ZU1-UT; Mon, 25 Apr 2022 14:18:26 +0200
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH] staging: vc04_services: Re-add dependency on HAS_DMA to BCM2835_VCHIQ
-Date:   Mon, 25 Apr 2022 14:18:25 +0200
-Message-Id: <da55bd87eebf1a969dc8ccd807843319833f6c40.1650888813.git.geert@linux-m68k.org>
-X-Mailer: git-send-email 2.25.1
+        Mon, 25 Apr 2022 08:23:49 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CC62716E
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 05:20:45 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id bz24so10125112qtb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 05:20:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=qUXK/auVrcDYzDc/pir8kuiNpWKdf1m37eJ7GrbKczM=;
+        b=BIZMPo1GCdlCUYl98HeZCOo31dYdM5COiq5taoeztoRhu3OaWZNcNyOuilx+q+/nE8
+         /C/redzk+1GLQVMk/xctTsZCsGrNrWPtTiXWmXWAERipSRAqs8Q/0q1aKfBG6BX61uCY
+         W4jg1s+5xque4aCPtF7ZKQkHV9wvwtV1cVIg/K0J2rhz8y+tIbk1vNzuh+n31D2oegNK
+         VHuAlIAJ40eTJeK46F09p6YWnYtEoLvt2RXUs24fNiX3vs8f/BjJJjExOjqkxD90fv0T
+         R5kTZ5hToCJqCpGqJ64aaj+sLERIiKnjh2l0xcLA6o/5ZOvxExEbBzsPOpfYUA5Q2/o8
+         29gQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=qUXK/auVrcDYzDc/pir8kuiNpWKdf1m37eJ7GrbKczM=;
+        b=k3OsofdNaGNr3kRIwbC6w1ddylsjpdwPpbnJYajuxMx2UTy+sLZ3/CguqTLZ1/hnGE
+         rFDYwH7WDlidlVYrQ5rZJM45v6yRaDAW9sQtcG7PmaEbJC7kyY6s3JgND0feRYCACnoX
+         VILDgprznPmqgQi6BecbkMULt6uGGDZAaEk20HaiZMQM8EUakG4F/uSoIIo/VlLldP3l
+         uCQ+CLyxLOWV4yoW1QWN6QC7fgxAJ2Jh1ysd5TpL+/W1CWx7VtmrGR/UiI00qF0nLCxS
+         1gjSGrddlufA7U60Y6Blr2JsTC+sApRTfZ9MCXg+8mtXQQWd+3f/dRmVRDwPOGrCXUxX
+         E6nQ==
+X-Gm-Message-State: AOAM531aHT3qtpPn6jARsj060sIAQjaXtlByko82KTHqBL6j6JjrY5LO
+        CehHm+bq6dcUfzu3/rWkRYTGdnJOoOavYlwT86M=
+X-Google-Smtp-Source: ABdhPJxmOTOQvI4ZVnrqA6or2KWmdCsP8DsSxq2XwHfAj9RI5eZGsRxQtMnu0dBUX8IOizbt33uzGkQ6rIqZ9KJOL0g=
+X-Received: by 2002:a05:622a:1314:b0:2f3:5726:e034 with SMTP id
+ v20-20020a05622a131400b002f35726e034mr11517897qtk.297.1650889244518; Mon, 25
+ Apr 2022 05:20:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6214:5092:0:0:0:0 with HTTP; Mon, 25 Apr 2022 05:20:44
+ -0700 (PDT)
+Reply-To: carriganedwards26@gmail.com
+From:   Carrigan Edwards <morinjack120@gmail.com>
+Date:   Mon, 25 Apr 2022 05:20:44 -0700
+Message-ID: <CAGDRVaHQ77m=r_2YztgwV31WaM9ebxU_TdQBEGnOare6CLcByQ@mail.gmail.com>
+Subject: I have a Business Proposal for you
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:82d listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5004]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [morinjack120[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [carriganedwards26[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [morinjack120[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks to stubs for the NO_DMA=y case, drivers that use the DMA API can
-be compile-tested on systems that do not support DMA.  Hence the
-dependency of BCM2835_VCHIQ on HAS_DMA was dropped to increase compile
-coverage.
-
-Unfortunately compilers became smarter, leading to new failures.
-E.g. for a CONFIG_SUN3=y allmodconfig kernel with gcc 9.4.0:
-
-    drivers/staging/vc04_services/interface/vchiq_arm/vchiq_2835_arm.c: In function ‘free_pagelist’:
-    arch/m68k/include/asm/string.h:72:25: warning: argument 2 null where non-null expected [-Wnonnull]
-       72 | #define memcpy(d, s, n) __builtin_memcpy(d, s, n)
-	  |                         ^~~~~~~~~~~~~~~~~~~~~~~~~
-    drivers/staging/vc04_services/interface/vchiq_arm/vchiq_2835_arm.c:614:4: note: in expansion of macro ‘memcpy’
-      614 |    memcpy((char *)kmap(pages[0]) +
-	  |    ^~~~~~
-    arch/m68k/include/asm/string.h:72:25: note: in a call to built-in function ‘__builtin_memcpy’
-       72 | #define memcpy(d, s, n) __builtin_memcpy(d, s, n)
-	  |                         ^~~~~~~~~~~~~~~~~~~~~~~~~
-    drivers/staging/vc04_services/interface/vchiq_arm/vchiq_2835_arm.c:614:4: note: in expansion of macro ‘memcpy’
-      614 |    memcpy((char *)kmap(pages[0]) +
-	  |    ^~~~~~
-
-This happens because the compiler can trace back the source pointer to a
-allocation by dma_alloc_attrs(), which always returns NULL if NO_DMA=y.
-
-Avoid this reinstating the dependency of the BCM2835_VCHIQ symbol on
-HAS_DMA, and by restricting the selection of BCM2835_VCHIQ.
-
-Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
----
- drivers/staging/vc04_services/Kconfig                | 1 +
- drivers/staging/vc04_services/bcm2835-audio/Kconfig  | 2 +-
- drivers/staging/vc04_services/bcm2835-camera/Kconfig | 4 ++--
- 3 files changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/staging/vc04_services/Kconfig b/drivers/staging/vc04_services/Kconfig
-index cb7c82403dbf22cb..31e58c9d1a110441 100644
---- a/drivers/staging/vc04_services/Kconfig
-+++ b/drivers/staging/vc04_services/Kconfig
-@@ -13,6 +13,7 @@ if BCM_VIDEOCORE
- 
- config BCM2835_VCHIQ
- 	tristate "BCM2835 VCHIQ"
-+	depends on HAS_DMA
- 	imply VCHIQ_CDEV
- 	help
- 		Broadcom BCM2835 and similar SoCs have a VPU called VideoCore. This config
-diff --git a/drivers/staging/vc04_services/bcm2835-audio/Kconfig b/drivers/staging/vc04_services/bcm2835-audio/Kconfig
-index d32ea348e846f2c0..5a3a5279551eb702 100644
---- a/drivers/staging/vc04_services/bcm2835-audio/Kconfig
-+++ b/drivers/staging/vc04_services/bcm2835-audio/Kconfig
-@@ -3,7 +3,7 @@ config SND_BCM2835
- 	tristate "BCM2835 Audio"
- 	depends on (ARCH_BCM2835 || COMPILE_TEST) && SND
- 	select SND_PCM
--	select BCM2835_VCHIQ
-+	select BCM2835_VCHIQ if HAS_DMA
- 	help
- 	  Say Y or M if you want to support BCM2835 built in audio
- 
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/Kconfig b/drivers/staging/vc04_services/bcm2835-camera/Kconfig
-index dcda565f9b38090f..870c9afb223a220b 100644
---- a/drivers/staging/vc04_services/bcm2835-camera/Kconfig
-+++ b/drivers/staging/vc04_services/bcm2835-camera/Kconfig
-@@ -3,8 +3,8 @@ config VIDEO_BCM2835
- 	tristate "BCM2835 Camera"
- 	depends on MEDIA_SUPPORT
- 	depends on VIDEO_DEV && (ARCH_BCM2835 || COMPILE_TEST)
--	select BCM2835_VCHIQ
--	select BCM2835_VCHIQ_MMAL
-+	select BCM2835_VCHIQ if HAS_DMA
-+	select BCM2835_VCHIQ_MMAL if HAS_DMA
- 	select VIDEOBUF2_VMALLOC
- 	select BTREE
- 	help
 -- 
-2.25.1
+Hello,
 
+
+
+It's a pleasure writing you on this platform. I have a great Business
+proposal and I'd like to ask if you are interested because it is
+highly beneficial to both parties. I need a kind co-operation from you
+in executing a lucrative deal. Kindly indicate your interest for more
+details.
+
+
+Carrigan E.

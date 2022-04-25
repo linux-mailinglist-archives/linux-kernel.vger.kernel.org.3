@@ -2,66 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A18EE50E283
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:59:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60BB150E285
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:59:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbiDYOCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 10:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
+        id S242254AbiDYOCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 10:02:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232366AbiDYOCa (ORCPT
+        with ESMTP id S242296AbiDYOCx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 10:02:30 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4767CDF5
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 06:59:25 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23PDxN8M125376;
-        Mon, 25 Apr 2022 08:59:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1650895163;
-        bh=ZuX+Dv5ok96kB5bh1Icur2gHnboOIZXk4RragEK6O78=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=f+DDjO3HJSDefgOAGWh+PGo/lBMYc2Qj8LNAWEO7kq48gnlMlN2B7WE1f6ZuMA+S3
-         Pjnd1yhgh4iMilXkFHgglkp3JHhkSxof6rsFzkBneJ4/gM70yfl/ujZOxTueUYb6pM
-         bQ94/2WSb1flWSgC1ofYRy7YIP49nZv7XVtBk+nk=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23PDxNh6027153
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 25 Apr 2022 08:59:23 -0500
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 25
- Apr 2022 08:59:23 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 25 Apr 2022 08:59:23 -0500
-Received: from [10.250.34.159] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23PDxMUa117768;
-        Mon, 25 Apr 2022 08:59:23 -0500
-Message-ID: <06faec69-15e8-2aca-24cd-a4d7034c5920@ti.com>
-Date:   Mon, 25 Apr 2022 08:59:22 -0500
+        Mon, 25 Apr 2022 10:02:53 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C92E888E6;
+        Mon, 25 Apr 2022 06:59:48 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id p8so14850721pfh.8;
+        Mon, 25 Apr 2022 06:59:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=U9Wjvt/VVtyGnx2gynxkIq7TC4qs0Sv68BPfUKYpPQ0=;
+        b=ZcsfDlOIFwZM39m/IxN0g/tlNL+hrCsPSv6JzypZl9gYTalOG5a4hh1l2fCoY4m29S
+         zYpvFWUBCTg8AlJUhsrEllvaUpJ4j0uZaiQeI2NfwUohL2xSPWJCTZ24qtUAkKtRlRzz
+         djcsf7npJjJOR/sdRybdIdDxyY1oOqtA0kW+Ped/uyxOgCQ+35BgNbJUjUIVKctxDqpH
+         O+U2QPaw+g14OMsYAE8KjpIeA+zy21+Tfev4wy/AnSRWoaiplJged/Bdsxpd2Ma4mzCY
+         /DFyS6UKnGRGjVegt83lJBvCFiCmKi/RlRnWXcipwajZN9ZYqSGzh8EeKl7knqauHhg0
+         28Yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=U9Wjvt/VVtyGnx2gynxkIq7TC4qs0Sv68BPfUKYpPQ0=;
+        b=AwNQP0N43txPzVYhpakAbzmFb4hWxM107yjeybqa+gfyf/gJS2P90nn2f1kn1MA5vp
+         7Ospv5qCEW1IPIDvkj63SYo4VK/xhpcdw0+8zpteGK3k/wcwrRjf5LyLz8fNXdlIY8Z+
+         sUbcEvtI/yD2O994HwmPoOaaFcGB9J/Vo1F/md/WIsuNCUnE+coJnPeUwz+0C8Xksf/U
+         NEwaJPcnyxOkeDS05JKe5e7kk8HMh6gyjVi7ONwTOLBBGa6iQdE1N7meFmWFxoGO4+Ja
+         OEmN0da+N4XuvJnhlMhpAtflhxVbt/zq6YlSZDRPCsZ8k2KvVLbLTCKsjAFPyhzlvdHC
+         p6AQ==
+X-Gm-Message-State: AOAM532yMjb1CzxDYpJwACe+Hz0+wWD+UqWEGAiTuk9/a+/v+wxr2A5R
+        1lnPCqHutwGRK/VpiXr8+OE=
+X-Google-Smtp-Source: ABdhPJww4LZvZ49fuCfm49ls7d2wLu5v7RbMyxRVzxzAienUjJ1CFcm+Rwrx4uobvPMe3ckLtdwnfA==
+X-Received: by 2002:a05:6a00:8c9:b0:4fe:ecc:9bcd with SMTP id s9-20020a056a0008c900b004fe0ecc9bcdmr18936853pfu.34.1650895187844;
+        Mon, 25 Apr 2022 06:59:47 -0700 (PDT)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id b13-20020a056a00114d00b004c122b90703sm11999538pfm.27.2022.04.25.06.59.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Apr 2022 06:59:47 -0700 (PDT)
+Message-ID: <0056f4fc-e5ec-35ba-4c6f-0fb09bd504b0@gmail.com>
+Date:   Mon, 25 Apr 2022 22:59:43 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 2/2] tee: remove flags TEE_IOCTL_SHM_MAPPED and
- TEE_IOCTL_SHM_DMA_BUF
+Subject: Re: [PATCH v2] docs/ja_JP/index: update section title in Japanese
 Content-Language: en-US
-To:     Sumit Garg <sumit.garg@linaro.org>
-CC:     Jens Wiklander <jens.wiklander@linaro.org>,
-        <op-tee@lists.trustedfirmware.org>, <linux-kernel@vger.kernel.org>
-References: <20220422180139.13447-1-afd@ti.com>
- <20220422180139.13447-2-afd@ti.com>
- <CAFA6WYPK2NS08pdzqS5Ze5pdJic2iQ7hC6h0SK+JT=EbPkg+Sg@mail.gmail.com>
-From:   Andrew Davis <afd@ti.com>
-In-Reply-To: <CAFA6WYPK2NS08pdzqS5Ze5pdJic2iQ7hC6h0SK+JT=EbPkg+Sg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+To:     Kosuke Fujimoto <fujimotokosuke0@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Tsugikazu Shibata <shibata@linuxfoundation.org>,
+        linux-doc@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>
+References: <20220425124853.8347-1-fujimotokosuke0@gmail.com>
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <20220425124853.8347-1-fujimotokosuke0@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,66 +75,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/25/22 1:46 AM, Sumit Garg wrote:
-> On Fri, 22 Apr 2022 at 23:31, Andrew Davis <afd@ti.com> wrote:
->>
->> These look to be leftover from an early edition of this driver. Userspace
->> does not need this information. Checking all users of this that I have
->> access to I have verified no one is using them.
->>
->> They leak internal use flags out to userspace. Even more they are not
->> correct anymore after a45ea4efa358. Lets drop these flags before
->> someone does try to use them for something and they become ABI.
->>
-> 
-> Sounds reasonable to me.
-> 
->> Signed-off-by: Andrew Davis <afd@ti.com>
->> ---
->>   drivers/tee/tee_core.c   | 1 -
->>   include/uapi/linux/tee.h | 4 ----
->>   2 files changed, 5 deletions(-)
->>
->> diff --git a/drivers/tee/tee_core.c b/drivers/tee/tee_core.c
->> index 8aa1a4836b92f..650dd87a38e77 100644
->> --- a/drivers/tee/tee_core.c
->> +++ b/drivers/tee/tee_core.c
->> @@ -339,7 +339,6 @@ tee_ioctl_shm_register(struct tee_context *ctx,
->>                  return PTR_ERR(shm);
->>
->>          data.id = shm->id;
->> -       data.flags = shm->flags;
->>          data.length = shm->size;
->>
-> 
-> This change is required for tee_ioctl_shm_alloc() as well.
-> 
+On Mon, 25 Apr 2022 21:48:53 +0900,
+Kosuke Fujimoto wrote:
+> Update section title "Japanese Translation" in Japanese.
+> This change is to keep consistency with other translations.
+>=20
+> Signed-off-by: Kosuke Fujimoto <fujimotokosuke0@gmail.com>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: Tsugikazu Shibata <shibata@linuxfoundation.org>
+> Cc: Akira Yokosawa <akiyks@gmail.com>
+Reviewed-by: Akira Yokosawa <akiyks@gmail.com>
 
+        Thanks, Akira
 
-Indeed it is, adding for v2.
-
-Thanks,
-Andrew
-
-
-> -Sumit
-> 
->>          if (copy_to_user(udata, &data, sizeof(data)))
->> diff --git a/include/uapi/linux/tee.h b/include/uapi/linux/tee.h
->> index 25a6c534beb1b..23e57164693c4 100644
->> --- a/include/uapi/linux/tee.h
->> +++ b/include/uapi/linux/tee.h
->> @@ -42,10 +42,6 @@
->>   #define TEE_IOC_MAGIC  0xa4
->>   #define TEE_IOC_BASE   0
->>
->> -/* Flags relating to shared memory */
->> -#define TEE_IOCTL_SHM_MAPPED   0x1     /* memory mapped in normal world */
->> -#define TEE_IOCTL_SHM_DMA_BUF  0x2     /* dma-buf handle on shared memory */
->> -
->>   #define TEE_MAX_ARG_SIZE       1024
->>
->>   #define TEE_GEN_CAP_GP         (1 << 0)/* GlobalPlatform compliant TEE */
->> --
->> 2.17.1
->>
+> Cc: linux-doc@vger.kernel.org
+> ---
+>  Documentation/translations/ja_JP/index.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/translations/ja_JP/index.rst b/Documentation=
+/translations/ja_JP/index.rst
+> index 20738c931d02..43b9fb7246d3 100644
+> --- a/Documentation/translations/ja_JP/index.rst
+> +++ b/Documentation/translations/ja_JP/index.rst
+> @@ -5,7 +5,7 @@
+>  	\kerneldocCJKon
+>  	\kerneldocBeginJP{
+> =20
+> -Japanese translations
+> +=E6=97=A5=E6=9C=AC=E8=AA=9E=E8=A8=B3
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> =20
+>  .. toctree::

@@ -2,78 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4092D50E791
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 19:54:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E7C50E794
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 19:56:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244120AbiDYR4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 13:56:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43574 "EHLO
+        id S244123AbiDYR6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 13:58:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244109AbiDYR4q (ORCPT
+        with ESMTP id S236920AbiDYR6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 13:56:46 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C99810772F
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 10:53:42 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id w1so27559080lfa.4
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 10:53:42 -0700 (PDT)
+        Mon, 25 Apr 2022 13:58:49 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEBDD1839A
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 10:55:43 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-e2fa360f6dso16896997fac.2
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 10:55:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=/LM5ApeDrM+ZiQkhPKo2nD8z3VPb3CiZfRSSBlkwszA=;
-        b=BsY4pOkfn3DG5B5zct/wRzU14afza6Td5Lww1u3ewMVuTqlUDLuuUSSqkL5GiYshCE
-         Af5nvn4SN/67YfETMMEi2NtXlQOejoI+5yvUA5qfEs9uGHOdZvqJA8BxEijrFHNTDfUl
-         aDeCEhneNkVbrDwdkHnVsK7wqLVmqL9Kk0+S8=
+        bh=NXFAC2IHRVkyeVboZLBfX7Ba1biHdUse85NUhdHGxTI=;
+        b=WbCZmixVJm2Bmbgib3awwgetaxMvcxocv1dRfoys8Ibh6yKiTzbSlMEfASsx8EJcGz
+         MAMtlVp7hWjCvdVo5P58iEjT2QfTazUX+gup39QZ1eb/jrrObx14IoaKVf1PLPByYFhU
+         VUtV2f4+kXPdiQTeipQJXJ4fgRM/XjRhRW6kiV+MhNiBsSMTyzvsVlDNRC3ocS6nDk98
+         ceJXxMQbAEO14zR68b4JKrMJXj4EoebLcC0BkHxGavO9f1xK/HFX1ubx3aRYNhpwtEwg
+         ah9wTa8hvQIRQmuSxeu1lqXL9QDF8NoiQmzZt4xn/HN0bDgvTaEzRmT4NfDfC2xfVdzU
+         QIaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=/LM5ApeDrM+ZiQkhPKo2nD8z3VPb3CiZfRSSBlkwszA=;
-        b=VoYDlhgmZM9+FcmJhSg3oQfsGoMKOjf4TExIBkj/du0VwrmfjAZjBpzPwTu/CumsTg
-         uTlSEUkenzSCvWtIBuPnxMLrP/bRkStBgO7zIi5DLHDSVCrYqNzZhhodidAl0T6d8lrK
-         4XNzREzE5S50o7Roe0QhSHYVEGeKY8+bSd6EjrInAkE1FubaxyE+9O3/2VZdWKX7o4wv
-         JJEMfqG9+LsCwHRsWEWIRWlAZt4Q3FscBUBjD+hEsyH7YzCg3PdGzqIV60w51VMoTh/s
-         bsXUNI+qDXSOh0ZOb+tu127/sBn+cVsxOQQbZWXNYdRIiEFoln1A/ZAwH6Rz3XWTEtsU
-         MB6Q==
-X-Gm-Message-State: AOAM531SfquPjDThu/u/PozsnlIcXENPKivLuoBaPHl8A/W59qzArPzQ
-        ajjmWAY8xxpAHETzLHy8tYBssyXrBnkjJO6Z4/0=
-X-Google-Smtp-Source: ABdhPJwX5ZJGL6IRDOkMIIW2et6ZUHboUxHNxh97eeC+DkcQ9o5u/8+72fEE5VFqmAJEb713gJLazQ==
-X-Received: by 2002:a19:4f56:0:b0:471:f883:7af0 with SMTP id a22-20020a194f56000000b00471f8837af0mr8720394lfk.284.1650909220194;
-        Mon, 25 Apr 2022 10:53:40 -0700 (PDT)
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com. [209.85.167.53])
-        by smtp.gmail.com with ESMTPSA id t5-20020a19dc05000000b004720e0fa073sm250221lfg.252.2022.04.25.10.53.39
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 10:53:39 -0700 (PDT)
-Received: by mail-lf1-f53.google.com with SMTP id bq30so27583345lfb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 10:53:39 -0700 (PDT)
-X-Received: by 2002:a05:6512:1193:b0:471:af88:2d74 with SMTP id
- g19-20020a056512119300b00471af882d74mr13719233lfr.531.1650909219017; Mon, 25
- Apr 2022 10:53:39 -0700 (PDT)
+        bh=NXFAC2IHRVkyeVboZLBfX7Ba1biHdUse85NUhdHGxTI=;
+        b=WiXbwB1C64+sI+5qjSHNu+jz+C6eoNo3Mt8fFWYnn9Knlj9jr/zzD2YBV0yWJ+SP2P
+         Uur7gsDvEC5Udy9lmTFlRH3V4bF6w1iRT1m1eE2/Wsxt62q4csiKLh53ccjlW8T8Aoh1
+         sZZBcibnki+z1i4hdTkBkoap20XgPJWsBxOqHjLb2q31QO3LNX86TXI9bBvQtLjeY6Md
+         4F0JjbNXc7X077c0pS8Amh9mKQo3qWLpyGdvfOQaJ1BzpsfN8zu5pPCMgTS3fYWpyJOU
+         uRb5pf4uCEoR9WxcAQPccUEMtDXSFbJlWama6bnpkfDuLRYmGHiF+T9A8BlpNnq8V6P8
+         ZY7g==
+X-Gm-Message-State: AOAM532TMmaaJPlev9k/wImJW+edtRSbJA2NyOrM8Yqkbo5GnIbRdrVL
+        KxpuI0F1hcAq8vEhRZinlVbV0xARY2STauvw/IU=
+X-Google-Smtp-Source: ABdhPJzQbz55hcjBsibxoT2dF8eTY6kR4H/8Rvs3ujIV60F44UwSLTFgtSRMK1IEsCdR4UkZTxHZ7S+A7aZ20p/tMvE=
+X-Received: by 2002:a05:6870:89a1:b0:d2:ca93:8797 with SMTP id
+ f33-20020a05687089a100b000d2ca938797mr7428640oaq.112.1650909343234; Mon, 25
+ Apr 2022 10:55:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <alpine.LRH.2.02.2204241648270.17244@file01.intranet.prod.int.rdu2.redhat.com>
- <CAHk-=wh+Z+OKH3jRttWGHbWSQq2wVMtdnA=ntDiadZu=VxAC7w@mail.gmail.com> <alpine.LRH.2.02.2204250723120.26714@file01.intranet.prod.int.rdu2.redhat.com>
-In-Reply-To: <alpine.LRH.2.02.2204250723120.26714@file01.intranet.prod.int.rdu2.redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 25 Apr 2022 10:53:22 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjhP7EdVkj9V2aWbUtPbC=rNxvJ1R1Bs45jFz4KT3xg-Q@mail.gmail.com>
-Message-ID: <CAHk-=wjhP7EdVkj9V2aWbUtPbC=rNxvJ1R1Bs45jFz4KT3xg-Q@mail.gmail.com>
-Subject: Re: [PATCH v2] hex2bin: make the function hex_to_bin constant-time
-To:     Mikulas Patocka <mpatocka@redhat.com>
-Cc:     Andy Shevchenko <andy@kernel.org>,
-        device-mapper development <dm-devel@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Mike Snitzer <msnitzer@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Milan Broz <gmazyland@gmail.com>
+References: <20220424163132.37007-1-makvihas@gmail.com> <20220424163132.37007-4-makvihas@gmail.com>
+ <2e4fa41d-cd06-75e4-17ac-120127fe9b2a@gmail.com>
+In-Reply-To: <2e4fa41d-cd06-75e4-17ac-120127fe9b2a@gmail.com>
+From:   Vihas Makwana <makvihas@gmail.com>
+Date:   Mon, 25 Apr 2022 23:25:32 +0530
+Message-ID: <CAH1kMwTT7kEB5O6ZvCWEJk3RGzkRek_fzaNPUnUpFFKq_fhGvQ@mail.gmail.com>
+Subject: Re: [PATCH 3/3] staging: r8188eu: fix null check in _rtw_free_mlme_priv
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Straube <straube.linux@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,41 +71,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 5:07 AM Mikulas Patocka <mpatocka@redhat.com> wrote:
+On Mon, Apr 25, 2022 at 12:30 AM Pavel Skripkin <paskripkin@gmail.com> wrote:
 >
-> We are subtracting values that are in the 0 ... 255 range.
-
-Well, except that's not what the original patch did.
-
-It was subtracting values that were in the -128 ... 255 range (where
-the exact range depended on the sign of 'char').
-
-But yeah, I think bit8 was always safe. Probably. Particularly as the
-possible ranges across different architectures is bigger than the
-range within one _particular_ architecture (so you'll never see "255 -
--128" even when the sign wasn't defined ;)
-
-> > Also, I do worry that this is *exactly* the kind of trick that a
-> > compiler could easily turn back into a conditional. Usually compilers
-> > tend to go the other way (ie turn conditionals into arithmetic if
-> > possible), but..
+> Hi Vihas,
 >
-> Some old version that I tried used "(ch - '0' + 1) * ((unsigned)(ch - '0')
-> <= 9)" - it worked with gcc, but clang was too smart and turned it into a
-> cmov when compiling for i686 and to a conditional branch when compiling
-> for i586.
+> On 4/24/22 19:31, Vihas Makwana wrote:
+> > There's a NULL check on pmlmepriv in rtw_mlme.c:112 which makes no sense
+> > as rtw_free_mlme_priv_ie_data() dereferences it unconditionally and it
+> > would have already crashed at this point.
+> > Fix this by moving rtw_free_mlme_priv_ie_data() inside the check.
+> >
+> > Signed-off-by: Vihas Makwana <makvihas@gmail.com>
 >
-> Another version used "-(c - '0' + 1) * (((unsigned)(c - '0') >= 10) - 1)"
-> - it almost worked, except that clang still turned it into a conditional
-> jump on sparc32 and powerpc32.
+> That's good catch, but looks like the check is just redundant
 >
-> So, I came up with this version that avoids comparison operators at all
-> and tested it with gcc and clang on all architectures that I could try.
+> This function is called only from it's wrapper called
+> rtw_free_mlme_priv() and rtw_free_mlme_priv() is called from 2 places:
+>
+> 4 drivers/staging/r8188eu/os_dep/os_intfs.c|531 col 2|
+> rtw_free_mlme_priv(&padapter->mlmepriv);
+> 5 drivers/staging/r8188eu/os_dep/os_intfs.c|579 col 2|
+> rtw_free_mlme_priv(&padapter->mlmepriv);
+>
+> _Very_ unlikely that `&padapter->mlmepriv` expression will become NULL.
+>
+So I guess either we should remove the check or mark it with the
+`unlikely()` macro.
+>
+> > ---
+> >   drivers/staging/r8188eu/core/rtw_mlme.c | 8 +++-----
+> >   1 file changed, 3 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
+> > index 081c02417..87c754462 100644
+> > --- a/drivers/staging/r8188eu/core/rtw_mlme.c
+> > +++ b/drivers/staging/r8188eu/core/rtw_mlme.c
+> > @@ -109,12 +109,10 @@ void rtw_free_mlme_priv_ie_data(struct mlme_priv *pmlmepriv)
+> >
+> >   void _rtw_free_mlme_priv(struct mlme_priv *pmlmepriv)
+> >   {
+> > -
+> > -     rtw_free_mlme_priv_ie_data(pmlmepriv);
+> > -
+> > -     if (pmlmepriv)
+> > +     if (pmlmepriv) {
+> > +             rtw_free_mlme_priv_ie_data(pmlmepriv);
+> >               vfree(pmlmepriv->free_bss_buf);
+> > -
+> > +     }
+> >   }
+> >
+> >   struct      wlan_network *_rtw_alloc_network(struct mlme_priv *pmlmepriv)/* _queue *free_queue) */
+>
+>
+>
+>
+> With regards,
+> Pavel Skripkin
 
-Yeah, the thing about those compiler heuristics is that they are often
-based on almost arbitrary patterns that just happen to be what
-somebody has found in some benchmark.
 
-Hopefully nobody ever uses something like this as a benchmark.
 
-             Linus
+-- 
+Thanks,
+Vihas

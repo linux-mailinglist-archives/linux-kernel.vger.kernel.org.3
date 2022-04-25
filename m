@@ -2,183 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2130950E8E6
+	by mail.lfdr.de (Postfix) with ESMTP id 692C050E8E7
 	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:56:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244707AbiDYS60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 14:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51986 "EHLO
+        id S244729AbiDYS6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 14:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244732AbiDYS5a (ORCPT
+        with ESMTP id S241056AbiDYS60 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 14:57:30 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA8DCD65C
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:54:25 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id y3so11058559ejo.12
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:54:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HWkRDQJwMPlR19wYgPWzNkV4z1riKbIU1L+c6IyBvKg=;
-        b=lF1JmNOWX9Ja9KWsat+tf3cfY25xezlLRLC7mGeCe9/40bk6BQBEsjZjW9xwRmPCP1
-         8tii9cpMQHMQO48lpGeHlRPGSuRdz/1Z76IG45t77exBvY/KO96xA82PZgX0NVrX8QZB
-         0QrIxx3xQ4oQS3R8ytYiA5FBT2CLW8F/P8WdZR9CbctqlZZw1bqG2wO9j7NJyOy1YIyo
-         tdsNT4vTepS0SFFYgKGUISsThaziqHzM3z7J+NXkCAZEZ89rN2+SNA1DOrPuB8AOzC3l
-         R9KYHkLaKf/sobq/2vHIARBeVrbBL2so6wm/Sy77mdfqFH+3kUhr6YLdaTYjgs5P0PYa
-         VjxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HWkRDQJwMPlR19wYgPWzNkV4z1riKbIU1L+c6IyBvKg=;
-        b=BBCI8IlNd/Zu/vjc3iHbTAzXrWcf/IgQSmhIO9tCRyFOocqtmO/2rTuc4g1U1bBlMo
-         MKSi0MuxdVBeCdLocvl1j1g/4h62Cxs8KuLfu9B4WxNy2SANdsRJWmCKfi0+dpQrlfdq
-         1StAKERYK7po36TbZAFFdcV0Vs5RLfeADfrvKAeOw+VcJekJit+jFgDl/z4RaHPMkPmN
-         tyHK2L4qk+qIBgRVw0OHQGdEExM1wqGyfIrvW9dTJV80XQOl4h9pcMZ3XUJEHzlr+u5r
-         Osx4zAmTz+2JtiejCSDCnyZEX++vrKbLGae4bUHOtVjI8IS0GLN/ivHF68NysHvUAxww
-         2jBw==
-X-Gm-Message-State: AOAM532fIJ/Kf25o5a5iSOm6/7hZBsEGfJuTRmbg7QrUJdeQE9XLCWrc
-        69jiKkcH2giFFoLgUaGZUryLfBE51wrI1LTuL32ryg==
-X-Google-Smtp-Source: ABdhPJxi/Fir6KRp+xFbi2zKLAqREypE5RELrBklhwSwvtecFh1/ffYTT07TB8BSuve6uqIUojMg1JBeeJdpj0F7J/Y=
-X-Received: by 2002:a17:906:1841:b0:6e8:872d:8999 with SMTP id
- w1-20020a170906184100b006e8872d8999mr17408232eje.492.1650912863652; Mon, 25
- Apr 2022 11:54:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220425184631.684906-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220425184631.684906-1-krzysztof.kozlowski@linaro.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 25 Apr 2022 20:54:13 +0200
-Message-ID: <CAMRc=McwGpZU7FJ8v_OXkkx6Sdh_As3z7zZR=UaSHtO=Qm9eDQ@mail.gmail.com>
-Subject: Re: [RESENT PATCH v3] dt-bindings: gpio: add common consumer GPIO lines
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>
+        Mon, 25 Apr 2022 14:58:26 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5722641E;
+        Mon, 25 Apr 2022 11:55:20 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nicolas)
+        with ESMTPSA id 328231F42FFC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1650912919;
+        bh=UeDlmqQj8a7ajqfg6WiA/qN0a19sf47WMImO06/MAHQ=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=bfRYX0DKAOr83SgdDu+dNiIGZNolkLDWunS2dPJPcoNGKDvOBzhMm9e5czLmV8KRW
+         EcAmqFXa16zRv57Ue0x/rPB/sPH1BJtCdNNf3oEeUcK/0jTfpMsrXMjquR+pVECaM7
+         H55o0X7+E8wwXqq3KNC/C08+cUSBPgNJbh4baJ/GdFh3bCdT53eQuYaYIY3J10EyTH
+         QdBiDm/xxABXYxKgd6wphCB1MvrEoGORZiGkgUGzmvBhvXwi56pPlx7CFisBa1lITs
+         wo6l1tmHjA/LSK/di44KHjdQLPIMsaoO2KrmTh8qS/KuKP8OfXLJLue1RKa3obJm3+
+         iBJqo/Lt647qw==
+Message-ID: <0780cc3ddd985f580a5513e5222cdde852e6aaab.camel@collabora.com>
+Subject: Re: [PATCH v3 17/24] media: rkvdec: h264: Fix reference frame_num
+ wrap for second field
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Sebastian Fricke <sebastian.fricke@collabora.com>,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev
+Date:   Mon, 25 Apr 2022 14:55:04 -0400
+In-Reply-To: <8f6c8a5c-200d-fbbd-0b8a-966d94467aad@xs4all.nl>
+References: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
+         <20220405204426.259074-18-nicolas.dufresne@collabora.com>
+         <8f6c8a5c-200d-fbbd-0b8a-966d94467aad@xs4all.nl>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 8:46 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> Typical GPIO lines like enable, powerdown, reset or wakeup are not
-> documented as common, which leads to new variations of these (e.g.
-> pwdn-gpios).  Add a common schema which serves also as a documentation
-> for preferred naming.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
->
-> ---
->
-> Reason for resend:
-> ==================
-> Previously patch was on hold because richtek,rt4801 bindings were using
-> two GPIOs in "enable-gpios", so this schema would complain.  This was
-> resolved here:
-> https://lore.kernel.org/all/165089886500.211842.728549769223794277.b4-ty@kernel.org/
->
-> Changes since v2:
-> ==================
-> 1. Correct my email address.
-> 2. Add Rob's review.
->
-> Changes since v1:
-> ==================
-> 1. Select-true, add maxItems and description for each entry (Rob).
-> 2. Mention ACTIVE_LOW in bindings description (Linus).
-> 3. Add allOf for pwrseq reset-gpios case.
-> ---
->  .../bindings/gpio/gpio-consumer-common.yaml   | 64 +++++++++++++++++++
->  1 file changed, 64 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/gpio/gpio-consumer-common.yaml
->
-> diff --git a/Documentation/devicetree/bindings/gpio/gpio-consumer-common.yaml b/Documentation/devicetree/bindings/gpio/gpio-consumer-common.yaml
-> new file mode 100644
-> index 000000000000..40d0be31e200
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/gpio/gpio-consumer-common.yaml
-> @@ -0,0 +1,64 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/gpio/gpio-consumer-common.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Common GPIO lines
-> +
-> +maintainers:
-> +  - Bartosz Golaszewski <brgl@bgdev.pl>
-> +  - Linus Walleij <linus.walleij@linaro.org>
-> +
-> +description:
-> +  Pay attention to using proper GPIO flag (e.g. GPIO_ACTIVE_LOW) for the GPIOs
-> +  using inverted signal (e.g. RESETN).
-> +
-> +select: true
-> +
-> +properties:
-> +  enable-gpios:
-> +    maxItems: 1
-> +    description:
-> +      GPIO connected to the enable control pin.
-> +
-> +  reset-gpios:
-> +    description:
-> +      GPIO (or GPIOs for power sequence) connected to the device reset pin
-> +      (e.g. RESET or RESETN).
-> +
-> +  powerdown-gpios:
-> +    maxItems: 1
-> +    description:
-> +      GPIO connected to the power down pin (hardware power down or power cut,
-> +      e.g. PD or PWDN).
-> +
-> +  pwdn-gpios:
-> +    maxItems: 1
-> +    description: Use powerdown-gpios
-> +    deprecated: true
-> +
-> +  wakeup-gpios:
-> +    maxItems: 1
-> +    description:
-> +      GPIO connected to the pin waking up the device from suspend or other
-> +      power-saving modes.
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - mmc-pwrseq-simple
-> +    then:
-> +      properties:
-> +        reset-gpios:
-> +          minItems: 1
-> +          maxItems: 32
-> +    else:
-> +      properties:
-> +        reset-gpios:
-> +          maxItems: 1
-> +
-> +additionalProperties: true
-> --
-> 2.32.0
->
+Le vendredi 22 avril 2022 =C3=A0 09:43 +0200, Hans Verkuil a =C3=A9crit=C2=
+=A0:
+> On 05/04/2022 22:44, Nicolas Dufresne wrote:
+> > From: Jonas Karlman <jonas@kwiboo.se>
+> >=20
+> > When decoding the second field in a complementary field pair the second
+> > field is sharing the same frame_num with the first field.
+> >=20
+> > Currently the frame_num for the first field is wrapped when it matches =
+the
+> > field being decoded, this cause issues to decode the second field in a
+>=20
+> cause issues to decode -> caused issues decoding
+>=20
+> > complementary field pair.
+> >=20
+> > Fix this by using inclusive comparison, less than or equal.
+>=20
+> I would change this last sentence to:
+>=20
+> 	Fix this by using inclusive comparison: 'less than or equal'.
+>=20
+> It makes it a bit easier to parse.
+>=20
+> >=20
+> > Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
+> > Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> > Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
+> > Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+> > ---
+> >  drivers/staging/media/rkvdec/rkvdec-h264.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/stagi=
+ng/media/rkvdec/rkvdec-h264.c
+> > index f081b476340f..60eaf06b6e25 100644
+> > --- a/drivers/staging/media/rkvdec/rkvdec-h264.c
+> > +++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
+> > @@ -781,7 +781,7 @@ static void assemble_hw_rps(struct rkvdec_ctx *ctx,
+> >  			continue;
+> > =20
+> >  		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM ||
+> > -		    dpb[i].frame_num < dec_params->frame_num) {
+> > +		    dpb[i].frame_num <=3D dec_params->frame_num) {
+>=20
+> I wonder if a comment should be added here, explaining the reason for '<=
+=3D'.
+>=20
+> It doesn't seem obvious to me. Up to you, though.
 
-Applied, thanks!
+I guess I could, the algo for wrapping in the spec is (formula 8-27):
 
-Bart
+    if( FrameNum > frame_num )
+        FrameNumWrap =3D FrameNum =E2=88=92 MaxFrameNum
+    else
+        FrameNumWrap =3D FrameNum
+
+Our implementation has the branch condition flip over, and the flipped vers=
+ion of that is:
+
+    if( FrameNum <=3D frame_num )
+        FrameNumWrap =3D FrameNum
+    else
+        FrameNumWrap =3D FrameNum =E2=88=92 MaxFrameNum
+
+There is no deeper rationale since we simply follow the recipe described in=
+ the
+spec. This is done so that we can share that condition with that long term
+reference handling.
+
+>=20
+> >  			p[i] =3D dpb[i].frame_num;
+> >  			continue;
+> >  		}
+>=20
+> Regards,
+>=20
+> 	Hans
+

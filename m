@@ -2,201 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1820C50E27D
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A18EE50E283
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:59:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242293AbiDYN7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 09:59:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33430 "EHLO
+        id S229880AbiDYOCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 10:02:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242306AbiDYN7c (ORCPT
+        with ESMTP id S232366AbiDYOCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 09:59:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F43E2558D;
-        Mon, 25 Apr 2022 06:56:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F0B90B817FE;
-        Mon, 25 Apr 2022 13:56:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10CB5C385A4;
-        Mon, 25 Apr 2022 13:56:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650894984;
-        bh=FcggaBLYFmXfUnvykIxa7coqHlNFLqYXIU23AZ10GS0=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=i2urg+wuXKOIDbr6jA8I/Vc6yvbVb9q+0K7i2IxvGvotnr6GXDLM3KVy01DEja/M/
-         ht0o/qSQgGj9BnhIEL9CkJIsD1TKUV7x9PEjO+yof3utdL6HOTadKkVK01vK5mLPDg
-         F+sikVp5E7APi7P2LZu66ACq4Oz8+5ohHaRlfVmfEsr7vjbqy9ezxKS87lQbuXyUy8
-         r5IjxAoXNSAds7J4k6RBnDeKi96wvGNA8NQI4GA3aspp3bwas8UNGTWEME/TuyURZa
-         uN24tmOSiU1e3kxGw463gjrANev4rTI/AK0eWyTxHSl2iFVwlG+VHVWUdP1i9Okqo+
-         7CD+MwapbZkwA==
-Message-ID: <8ed6cf56ddd8e75a26cc8ea56be36dc54356f02d.camel@kernel.org>
-Subject: Re: [PATCH v3 0/4] Fixes for TPM interrupt handling
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Michael =?ISO-8859-1?Q?Niew=F6hner?= <linux@mniewoehner.de>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        stefanb@linux.ibm.com, James.Bottomley@hansenpartnership.com,
-        keescook@chromium.org, jsnitsel@redhat.com, ml.linux@elloe.vision,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        twawrzynczak@chromium.org, Lukas Wunner <lukas@wunner.de>,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>
-Date:   Mon, 25 Apr 2022 16:57:51 +0300
-In-Reply-To: <77374443-dc9b-5d1d-c652-0d093b6029f4@gmx.de>
-References: <20210501135727.17747-1-LinoSanfilippo@gmx.de>
-         <20210501135727.17747-3-LinoSanfilippo@gmx.de>
-         <YJAby8mmiJ74qWAh@kernel.org> <6722bf6f-1a3f-ee9c-55e2-cf63c64266a9@gmx.de>
-         <YJNKs8bUMGOzFre+@kernel.org>
-         <2a1a1cf61732eff1608aeae74054a0c135c1671f.camel@mniewoehner.de>
-         <Yj0lhqTP1RoedxSc@iki.fi>
-         <0d6c22b40a2f17d4b260f287d4c479a96a88b0b1.camel@mniewoehner.de>
-         <efdb99b3-6d33-38b1-64a0-671821101631@gmx.de>
-         <c8c0c5fb614d8b2de2a5faee2ef5ff3214281064.camel@kernel.org>
-         <77374443-dc9b-5d1d-c652-0d093b6029f4@gmx.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1 
+        Mon, 25 Apr 2022 10:02:30 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4767CDF5
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 06:59:25 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23PDxN8M125376;
+        Mon, 25 Apr 2022 08:59:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1650895163;
+        bh=ZuX+Dv5ok96kB5bh1Icur2gHnboOIZXk4RragEK6O78=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=f+DDjO3HJSDefgOAGWh+PGo/lBMYc2Qj8LNAWEO7kq48gnlMlN2B7WE1f6ZuMA+S3
+         Pjnd1yhgh4iMilXkFHgglkp3JHhkSxof6rsFzkBneJ4/gM70yfl/ujZOxTueUYb6pM
+         bQ94/2WSb1flWSgC1ofYRy7YIP49nZv7XVtBk+nk=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23PDxNh6027153
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 25 Apr 2022 08:59:23 -0500
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 25
+ Apr 2022 08:59:23 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 25 Apr 2022 08:59:23 -0500
+Received: from [10.250.34.159] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23PDxMUa117768;
+        Mon, 25 Apr 2022 08:59:23 -0500
+Message-ID: <06faec69-15e8-2aca-24cd-a4d7034c5920@ti.com>
+Date:   Mon, 25 Apr 2022 08:59:22 -0500
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 2/2] tee: remove flags TEE_IOCTL_SHM_MAPPED and
+ TEE_IOCTL_SHM_DMA_BUF
+Content-Language: en-US
+To:     Sumit Garg <sumit.garg@linaro.org>
+CC:     Jens Wiklander <jens.wiklander@linaro.org>,
+        <op-tee@lists.trustedfirmware.org>, <linux-kernel@vger.kernel.org>
+References: <20220422180139.13447-1-afd@ti.com>
+ <20220422180139.13447-2-afd@ti.com>
+ <CAFA6WYPK2NS08pdzqS5Ze5pdJic2iQ7hC6h0SK+JT=EbPkg+Sg@mail.gmail.com>
+From:   Andrew Davis <afd@ti.com>
+In-Reply-To: <CAFA6WYPK2NS08pdzqS5Ze5pdJic2iQ7hC6h0SK+JT=EbPkg+Sg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-04-24 at 04:22 +0200, Lino Sanfilippo wrote:
->=20
-> Hi,
->=20
-> On 20.04.22 at 07:30, Jarkko Sakkinen wrote:
-> > n Sat, 2022-03-26 at 04:24 +0100, Lino Sanfilippo wrote:
-> > >=20
-> > > Hi Michael,
-> > >=20
-> > > On 25.03.22 at 13:32, Michael Niew=C3=B6hner wrote:
-> > > > > >=20
-> > > > > > Lino, I'd be happy to test the patches, when you have time and =
-interest to
-> > > > > > work
-> > > > > > on this again!
-> > > > > >=20
-> > > > > > Thanks, Michael
-> > > > >=20
-> > > > > It's quite easy to test them out. Both fixes are in the mainline =
-GIT tree.
-> > > > > E.g. give a shot rc1, and please report if any issues persists to=
-:
-> > > > >=20
-> > > > > =C2=A0 linux-integrity@vger.kernel.org=C2=A0
-> > > > >=20
-> > > > > BR, Jarkko
-> > > >=20
-> > > > I don't see Linos patches on mainline. Also, the series included fo=
-ur patches:
-> > > > [PATCH v3 0/4] Fixes for TPM interrupt handling
-> > > > [PATCH v3 1/4] tpm: Use a threaded interrupt handler
-> > > > [PATCH v3 2/4] tpm: Simplify locality handling
-> > > > [PATCH v3 3/4] tpm: Fix test for interrupts
-> > > > [PATCH v3 4/4] tpm: Only enable supported irqs
-> > > >=20
-> > > > Three of them are relevant for the interrupt problem, which is stil=
-l present in
-> > > > mainline, as these patches were refused:
-> > > > [PATCH v3 1/4] tpm: Use a threaded interrupt handler
-> > > > [PATCH v3 2/4] tpm: Simplify locality handling
-> > > > [PATCH v3 3/4] tpm: Fix test for interrupts
-> > > >=20
-> > > > Michael
-> > > >=20
-> > >=20
-> > > You are right, the interrupts are still not working in the mainline k=
-ernel.
-> > > I would gladly make another attempt to fix this but rather step by st=
-ep
-> > > than in a series that tries to fix (different) things at once.
-> > >=20
-> > > A first step could be to have a sleepable context for the interrupt h=
-andling,
-> > > since in case of SPI the accesses to the irq status register may slee=
-p.
-> > >=20
-> > > I sent a patch for this purpose once, but it seems to have gone lost:
-> > >=20
-> > > https://lore.kernel.org/all/20210620023444.14684-1-LinoSanfilippo@gmx=
-.de/
-> > >=20
-> > >=20
-> > > Best regards,
-> > > Lino
-> >=20
-> > I went these through one by one>
-> > # Above linked patch
-> >=20
-> > Boolean parameters are considered bad. I.e. use named flags
-> > instead. This is for above linked patch.
->=20
-> Ok, we could extend tpm_tis_flags by a flag "TPM_TIS_USE_THREADED_IRQ"
-> for this.
->=20
-> >=20
-> > # [PATCH v3 3/4] tpm: Fix test for interrupts
-> >=20
-> > 1. Please remove "unnecessarily complicated" sentence because
-> > =C2=A0=C2=A0 it cannot be evaluated. It's your opinion, which might per=
-haps
-> > =C2=A0=C2=A0 be correct, but it is irrelevant for any possible patch
-> > =C2=A0=C2=A0 description.
-> > 2. There's no such thing as "fix by re-implementation". Please
-> > =C2=A0=C2=A0 explain instead code change is relevant for the bug fix.
-> > 3. If set_bit() et al necessarily to fix a possible race condition
-> > =C2=A0=C2=A0 you need to have a separate patch for that.
-> >=20
-> > To move forward, start with a better summary such as
-> >=20
-> > "tpm: move interrupt test to tpm_tis_probe_irq_single()"
-> >=20
-> > I'd also either revert the change for flags, or alternatively
-> > move it to separate patch explaining race condition. Otherwise,
-> > there's no argument of saying that using set_bit() is more
-> > proper. This will make the change more localized.
-> >=20
->=20
-> Ok, I will split the fix for the irq test into two patches then.
->=20
-> >=20
-> > # [PATCH v3 2/4] tpm: Simplify locality handling
-> >=20
-> > "As a side-effect these modifications fix a bug which results in the
-> > following warning when using TPM 2:"
-> >=20
-> > Generally speaking, the simplifications should be done on top of code
-> > that does not have known bugs, even if the simplification renders out
-> > the bug. This is because then we have code that have potentially unknow=
-n
-> > unknown bugs.
-> >=20
-> > I hope you see my point. The problem with these patches were then
-> > and is still that they intermix bug fixes and other modifications and
-> > thus cannot be taken in.
-> >=20
->=20
-> Yes, I can see that point.
->=20
-> > BR, Jarkko
-> >=20
->=20
-> Thanks a lot for the review. I will prepare new patches with the suggeste=
-d
-> changes.
+On 4/25/22 1:46 AM, Sumit Garg wrote:
+> On Fri, 22 Apr 2022 at 23:31, Andrew Davis <afd@ti.com> wrote:
+>>
+>> These look to be leftover from an early edition of this driver. Userspace
+>> does not need this information. Checking all users of this that I have
+>> access to I have verified no one is using them.
+>>
+>> They leak internal use flags out to userspace. Even more they are not
+>> correct anymore after a45ea4efa358. Lets drop these flags before
+>> someone does try to use them for something and they become ABI.
+>>
+> 
+> Sounds reasonable to me.
+> 
+>> Signed-off-by: Andrew Davis <afd@ti.com>
+>> ---
+>>   drivers/tee/tee_core.c   | 1 -
+>>   include/uapi/linux/tee.h | 4 ----
+>>   2 files changed, 5 deletions(-)
+>>
+>> diff --git a/drivers/tee/tee_core.c b/drivers/tee/tee_core.c
+>> index 8aa1a4836b92f..650dd87a38e77 100644
+>> --- a/drivers/tee/tee_core.c
+>> +++ b/drivers/tee/tee_core.c
+>> @@ -339,7 +339,6 @@ tee_ioctl_shm_register(struct tee_context *ctx,
+>>                  return PTR_ERR(shm);
+>>
+>>          data.id = shm->id;
+>> -       data.flags = shm->flags;
+>>          data.length = shm->size;
+>>
+> 
+> This change is required for tee_ioctl_shm_alloc() as well.
+> 
 
-Yeah, I mean the point being: it's OK to suggest clean ups but with bug fix=
-es
-you should aim for the lowest common denominator as far as you possibly can=
-.
 
-BR, Jarkko
+Indeed it is, adding for v2.
 
+Thanks,
+Andrew
+
+
+> -Sumit
+> 
+>>          if (copy_to_user(udata, &data, sizeof(data)))
+>> diff --git a/include/uapi/linux/tee.h b/include/uapi/linux/tee.h
+>> index 25a6c534beb1b..23e57164693c4 100644
+>> --- a/include/uapi/linux/tee.h
+>> +++ b/include/uapi/linux/tee.h
+>> @@ -42,10 +42,6 @@
+>>   #define TEE_IOC_MAGIC  0xa4
+>>   #define TEE_IOC_BASE   0
+>>
+>> -/* Flags relating to shared memory */
+>> -#define TEE_IOCTL_SHM_MAPPED   0x1     /* memory mapped in normal world */
+>> -#define TEE_IOCTL_SHM_DMA_BUF  0x2     /* dma-buf handle on shared memory */
+>> -
+>>   #define TEE_MAX_ARG_SIZE       1024
+>>
+>>   #define TEE_GEN_CAP_GP         (1 << 0)/* GlobalPlatform compliant TEE */
+>> --
+>> 2.17.1
+>>

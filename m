@@ -2,148 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28BD550E627
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:50:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D98C50E62A
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240207AbiDYQwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 12:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46318 "EHLO
+        id S243592AbiDYQx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 12:53:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243585AbiDYQwm (ORCPT
+        with ESMTP id S232888AbiDYQxx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 12:52:42 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D69A724969;
-        Mon, 25 Apr 2022 09:49:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650905377; x=1682441377;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=x1VjlOLFf7+Iwtn5He+Gw098wHontYefP4lyjR1he+4=;
-  b=b9bi1/SdNNCgm03qImb79kNc92BtVmgknXpIjjRJuDxvy4oDjCTtqueq
-   gOBs0YVnAoorP14Igtzhn/qLLjuIKqG0fJnjx/u61CBaFAqtVw1o6zllf
-   1LEm4Zzv4NWjfZ9vcwOC+H/mv6jhSRLRNlcb1ULIgc9H0v8IF/9/r48mS
-   aH6mO9AT9N8/L2O+E/cOGtSkyszGaDrCGKORKKwAcyyK0+geK43PHoJ+Z
-   XhYJHbY0xu0VV+t6nZpCFvEain3xhqvXgRMGGgXPnwuyn6Fv1uFSFr2JR
-   Ul0E86yoKJxqAsGZnMqAsa/36nuPW/6jjAUL4ZDbjttyPBXULknzsSjRj
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="264822399"
-X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
-   d="scan'208";a="264822399"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 09:49:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,289,1643702400"; 
-   d="scan'208";a="628115236"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga004.fm.intel.com with ESMTP; 25 Apr 2022 09:49:36 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Mon, 25 Apr 2022 09:49:36 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Mon, 25 Apr 2022 09:49:35 -0700
-Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
- fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.027;
- Mon, 25 Apr 2022 09:49:35 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-CC:     "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "markgross@kernel.org" <markgross@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "Joseph, Jithu" <jithu.joseph@intel.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
-Subject: RE: [PATCH v4 09/10] trace: platform/x86/intel/ifs: Add trace point
- to track Intel IFS operations
-Thread-Topic: [PATCH v4 09/10] trace: platform/x86/intel/ifs: Add trace point
- to track Intel IFS operations
-Thread-Index: AQHYVoPmGcq84+Hs50ec7Nq4KoK2Oa0BMJaA//+oPOA=
-Date:   Mon, 25 Apr 2022 16:49:35 +0000
-Message-ID: <1752057af33e4eb28bcea0fd75e44048@intel.com>
-References: <20220419163859.2228874-1-tony.luck@intel.com>
-        <20220422200219.2843823-1-tony.luck@intel.com>
-        <20220422200219.2843823-10-tony.luck@intel.com>
- <20220425105251.3f5e8021@gandalf.local.home>
-In-Reply-To: <20220425105251.3f5e8021@gandalf.local.home>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.401.20
-x-originating-ip: [10.1.200.100]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 25 Apr 2022 12:53:53 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F3DA8DE8F;
+        Mon, 25 Apr 2022 09:50:47 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BC45F1FB;
+        Mon, 25 Apr 2022 09:50:47 -0700 (PDT)
+Received: from lpieralisi (unknown [10.57.13.157])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AB9873F5A1;
+        Mon, 25 Apr 2022 09:50:44 -0700 (PDT)
+Date:   Mon, 25 Apr 2022 17:50:37 +0100
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
+Cc:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Wei Hu <weh@microsoft.com>, Rob Herring <robh@kernel.org>,
+        Krzysztof Wilczynski <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/6] PCI: hv: Use vmbus_requestor to generate
+ transaction IDs for VMbus hardening
+Message-ID: <20220425165037.GA17718@lpieralisi>
+References: <20220419122325.10078-1-parri.andrea@gmail.com>
+ <20220419122325.10078-3-parri.andrea@gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220419122325.10078-3-parri.andrea@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > Add tracing support which may be useful for debugging systems that fail=
- to complete
-> > In Field Scan tests.
-> >
-> > Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-> > Signed-off-by: Tony Luck <tony.luck@intel.com>
-> > ---
-> >  MAINTAINERS                              |  1 +
-> >  drivers/platform/x86/intel/ifs/runtest.c |  5 ++++
-> >  include/trace/events/intel_ifs.h         | 38 ++++++++++++++++++++++++
->
-> From the tracing POV:
->
-> Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+On Tue, Apr 19, 2022 at 02:23:21PM +0200, Andrea Parri (Microsoft) wrote:
+> Currently, pointers to guest memory are passed to Hyper-V as transaction
+> IDs in hv_pci.  In the face of errors or malicious behavior in Hyper-V,
+> hv_pci should not expose or trust the transaction IDs returned by
+> Hyper-V to be valid guest memory addresses.  Instead, use small integers
+> generated by vmbus_requestor as request (transaction) IDs.
+> 
+> Suggested-by: Michael Kelley <mikelley@microsoft.com>
+> Signed-off-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
+> ---
+>  drivers/pci/controller/pci-hyperv.c | 39 +++++++++++++++++++++--------
+>  1 file changed, 29 insertions(+), 10 deletions(-)
 
-Question for the future of this driver.  There are a couple more scan tools=
- coming
-in the future. The interface is similar:
+Acked-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
 
-	WRMSR to start a scan
-	RDMSR to get the results
-
-For this first one, I made the trace code do some user friendly decoding of=
- the
-WRMSR value to just show the two interesting fields (start & stop).
-
-The future scan modes will have different fields.
-
-I see two paths:
-
-1) Create a new user friendly trace point for each new scan mode.
-2) Just provide a generic one that dumps both the 64-bit WRMSR and RDMSR va=
-lues.
-
-Q: Are trace points "expensive" in some way ... so better to just have one =
-than three?
-     Or are the cheap enough that decoding for the user is an OK thing?
-
-Thanks
-
--Tony
-
-
+> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+> index 88b3b56d05228..0252b4bbc8d15 100644
+> --- a/drivers/pci/controller/pci-hyperv.c
+> +++ b/drivers/pci/controller/pci-hyperv.c
+> @@ -91,6 +91,13 @@ static enum pci_protocol_version_t pci_protocol_versions[] = {
+>  /* space for 32bit serial number as string */
+>  #define SLOT_NAME_SIZE 11
+>  
+> +/*
+> + * Size of requestor for VMbus; the value is based on the observation
+> + * that having more than one request outstanding is 'rare', and so 64
+> + * should be generous in ensuring that we don't ever run out.
+> + */
+> +#define HV_PCI_RQSTOR_SIZE 64
+> +
+>  /*
+>   * Message Types
+>   */
+> @@ -1407,7 +1414,7 @@ static void hv_int_desc_free(struct hv_pci_dev *hpdev,
+>  	int_pkt->wslot.slot = hpdev->desc.win_slot.slot;
+>  	int_pkt->int_desc = *int_desc;
+>  	vmbus_sendpacket(hpdev->hbus->hdev->channel, int_pkt, sizeof(*int_pkt),
+> -			 (unsigned long)&ctxt.pkt, VM_PKT_DATA_INBAND, 0);
+> +			 0, VM_PKT_DATA_INBAND, 0);
+>  	kfree(int_desc);
+>  }
+>  
+> @@ -2649,7 +2656,7 @@ static void hv_eject_device_work(struct work_struct *work)
+>  	ejct_pkt->message_type.type = PCI_EJECTION_COMPLETE;
+>  	ejct_pkt->wslot.slot = hpdev->desc.win_slot.slot;
+>  	vmbus_sendpacket(hbus->hdev->channel, ejct_pkt,
+> -			 sizeof(*ejct_pkt), (unsigned long)&ctxt.pkt,
+> +			 sizeof(*ejct_pkt), 0,
+>  			 VM_PKT_DATA_INBAND, 0);
+>  
+>  	/* For the get_pcichild() in hv_pci_eject_device() */
+> @@ -2696,8 +2703,9 @@ static void hv_pci_onchannelcallback(void *context)
+>  	const int packet_size = 0x100;
+>  	int ret;
+>  	struct hv_pcibus_device *hbus = context;
+> +	struct vmbus_channel *chan = hbus->hdev->channel;
+>  	u32 bytes_recvd;
+> -	u64 req_id;
+> +	u64 req_id, req_addr;
+>  	struct vmpacket_descriptor *desc;
+>  	unsigned char *buffer;
+>  	int bufferlen = packet_size;
+> @@ -2715,8 +2723,8 @@ static void hv_pci_onchannelcallback(void *context)
+>  		return;
+>  
+>  	while (1) {
+> -		ret = vmbus_recvpacket_raw(hbus->hdev->channel, buffer,
+> -					   bufferlen, &bytes_recvd, &req_id);
+> +		ret = vmbus_recvpacket_raw(chan, buffer, bufferlen,
+> +					   &bytes_recvd, &req_id);
+>  
+>  		if (ret == -ENOBUFS) {
+>  			kfree(buffer);
+> @@ -2743,11 +2751,14 @@ static void hv_pci_onchannelcallback(void *context)
+>  		switch (desc->type) {
+>  		case VM_PKT_COMP:
+>  
+> -			/*
+> -			 * The host is trusted, and thus it's safe to interpret
+> -			 * this transaction ID as a pointer.
+> -			 */
+> -			comp_packet = (struct pci_packet *)req_id;
+> +			req_addr = chan->request_addr_callback(chan, req_id);
+> +			if (req_addr == VMBUS_RQST_ERROR) {
+> +				dev_err(&hbus->hdev->device,
+> +					"Invalid transaction ID %llx\n",
+> +					req_id);
+> +				break;
+> +			}
+> +			comp_packet = (struct pci_packet *)req_addr;
+>  			response = (struct pci_response *)buffer;
+>  			comp_packet->completion_func(comp_packet->compl_ctxt,
+>  						     response,
+> @@ -3428,6 +3439,10 @@ static int hv_pci_probe(struct hv_device *hdev,
+>  		goto free_dom;
+>  	}
+>  
+> +	hdev->channel->next_request_id_callback = vmbus_next_request_id;
+> +	hdev->channel->request_addr_callback = vmbus_request_addr;
+> +	hdev->channel->rqstor_size = HV_PCI_RQSTOR_SIZE;
+> +
+>  	ret = vmbus_open(hdev->channel, pci_ring_size, pci_ring_size, NULL, 0,
+>  			 hv_pci_onchannelcallback, hbus);
+>  	if (ret)
+> @@ -3758,6 +3773,10 @@ static int hv_pci_resume(struct hv_device *hdev)
+>  
+>  	hbus->state = hv_pcibus_init;
+>  
+> +	hdev->channel->next_request_id_callback = vmbus_next_request_id;
+> +	hdev->channel->request_addr_callback = vmbus_request_addr;
+> +	hdev->channel->rqstor_size = HV_PCI_RQSTOR_SIZE;
+> +
+>  	ret = vmbus_open(hdev->channel, pci_ring_size, pci_ring_size, NULL, 0,
+>  			 hv_pci_onchannelcallback, hbus);
+>  	if (ret)
+> -- 
+> 2.25.1
+> 

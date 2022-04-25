@@ -2,151 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5A3150DA87
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 09:52:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C79F450DA8E
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 09:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241501AbiDYHyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 03:54:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50634 "EHLO
+        id S234446AbiDYHzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 03:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241506AbiDYHww (ORCPT
+        with ESMTP id S241524AbiDYHyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 03:52:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0BA2113
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 00:49:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650872987;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TMN+SqXsYo3d//MTs5uT9QiA8HmOLnYDXkfcKG4wEW0=;
-        b=TbhaCiBaF9AI+T98PJCpx3PSJK5do5TcxE744+jrhiFVumzjdmrCRo2/Vk8LKYutC3rXIS
-        NmTTeoUU4oiIWtj7C0w5BD29+bWJA/YHmFFJPbsDHGQk6+/ZZ0dq6iE6Qa43soNkyiiFSb
-        V0XeKbcem+SMVejshZgoMA2Qmpyp6eQ=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-119-KHfZ2AkNMSK6h0TDdzmzOw-1; Mon, 25 Apr 2022 03:49:46 -0400
-X-MC-Unique: KHfZ2AkNMSK6h0TDdzmzOw-1
-Received: by mail-wr1-f70.google.com with SMTP id n17-20020adfc611000000b0020a7e397ccaso3033011wrg.23
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 00:49:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=TMN+SqXsYo3d//MTs5uT9QiA8HmOLnYDXkfcKG4wEW0=;
-        b=NoznD0kFFXRbkOpvkY1ueJNitl8NEArVmcHj3V88dF7gbZ2HYUZ3lBDdpaerTyo0kn
-         8DSVYee6aiXTxpa1Ds0Ka73KuWdMxaOl+QoNREzgunet1skq8MWfGuPvz67FYURBCv8O
-         jaKi5LwQr8aCtiMTsO8BczZTsvILn+GcWzGi7hsajJQo1oNYoPCHfYVYepYdT7QG4ajG
-         etNN+WhBdNVMmloZ28Sgpsk20u3GQTr3tZqoT3lx8RyKZijYn1S42DcDNZ5QtdWeVzOp
-         r0fuqu/ivBxjfcgnTC9fGr6jgjTvaXm2NiWPAzGab5wLBTyYlCmN2Uf+byb2Sux9Jl4h
-         noEw==
-X-Gm-Message-State: AOAM533h2QXKRv9cqP5fJwxb0xh69ETJWwBgCZntKBQsEFBPxlkYer1k
-        btIyBuqKHQ3QJ7FGgRyk921YeNC/FF6MN7ydox3SPUiCGTMhTZ70Vvg6bx2wXCmD6KV+m5w1vRi
-        nwL6yvSQpDAVjnFAozFrmzlZe
-X-Received: by 2002:a05:600c:350f:b0:393:ec06:4262 with SMTP id h15-20020a05600c350f00b00393ec064262mr3417383wmq.165.1650872985017;
-        Mon, 25 Apr 2022 00:49:45 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyxQO8+qq0D++pW4n/MjMu77yOzpy/8PzYibDLgHNPuYQDzKI0pe3hNoGJFI6KjwOY0rJrejg==
-X-Received: by 2002:a05:600c:350f:b0:393:ec06:4262 with SMTP id h15-20020a05600c350f00b00393ec064262mr3417358wmq.165.1650872984803;
-        Mon, 25 Apr 2022 00:49:44 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c700:fc00:490d:ed6a:8b22:223a? (p200300cbc700fc00490ded6a8b22223a.dip0.t-ipconnect.de. [2003:cb:c700:fc00:490d:ed6a:8b22:223a])
-        by smtp.gmail.com with ESMTPSA id s10-20020adf978a000000b0020ae0154f1esm373753wrb.5.2022.04.25.00.49.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 00:49:44 -0700 (PDT)
-Message-ID: <f88412b4-83db-e594-fc48-2f4b8b9f3be8@redhat.com>
-Date:   Mon, 25 Apr 2022 09:49:43 +0200
+        Mon, 25 Apr 2022 03:54:36 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam07on2084.outbound.protection.outlook.com [40.107.95.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6133D25C5F;
+        Mon, 25 Apr 2022 00:50:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=C45K3Qaju3SnJwhvdiy05t5u35QoK5QYI2m5jTIOXoVvVUYoaD/YV4ds6y8AU4YpQDnTtqc/cSuP+5z+AErUAxdi0PO18OUg5Np/J4nosqimvJN6QUsag2MGzEF67FI+aILM1xwdpgRyBYIeDtkvSYyWkGW3HdmClhzHD38GubdkxkSms01deNnO5GgdCWDu/TR6Dd5grUpM6uaOQR4xZiJwSzAp9KMDofvcEXKviODwTbNGvF8GzrRPJcc+NE1C/gG6QqKRmOP7siQeD4oXf7T5sLppCCy7tATjDgKudkQwsm+EOW4eEu3f9Qk9Fuak0eqcMuGNj3+bzLJvC13lqw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=q2Oc58YS2bntBt7DCXUQ7MuAdw+B3FRabD0LESnq4hU=;
+ b=oa9tDILm1I2HVXWNIao5dtdYz6NfxSLyaV6SrDcmR++X9kaaG9qJgSww4tJnkV/6vihnvXNfHoWnKMT5E2pmvUsRV8J0+fA5+B67300yIMkX+6n9F3tXAtd8/6p3/naZLmVC9C5jDtagGuzUHTTBdD5rGl5g1tw3iGUvb7rMotzmnWU2r7wlNJik8FmU6TBirCpzMNGaxcKtsR2V9a04PDdxSnKxviOmZOhYmcCDOYT3Jz1IelxQjm3l+U4YMnu/XJFKxW4ipnevQ6MDA4cQG1S8dnhdEocmMR1+DB9QKI5Ok+5884+mXa2qWXfC5jffrOPrs5b4235jTqHjWX+i4g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.236) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=q2Oc58YS2bntBt7DCXUQ7MuAdw+B3FRabD0LESnq4hU=;
+ b=Fec9u8mzYQ1VsfsirVWIj8Ge8cjZzgPmb6+KneXNqQCDc0R4QP/qVAwv6l4hL8q4peUmCblSVmLy5lWkIRVYCzuGU/8+V69zxXPikFegQLjPZCCZ46FjCoaXMg/c9G4mrbSrHmoVvnDJ1zXGbTptKXOGjI4O5S9QdObE4S4Ey2VaRAyH6Jq1lykMvONj8wNW/oQjZlccXODG2S/HsCHwylregOtpz9gZDHjwoTci31/t6TS9C/70K4Ocw040mYULtdG9RqPMN/0diMXq85auKHnaz1sRGB4yYMijaBW8A73m0kACuxPoh63A5dZaBczakHiLT52AEtj6IVOFUL9tAw==
+Received: from MW4PR03CA0235.namprd03.prod.outlook.com (2603:10b6:303:b9::30)
+ by DM5PR1201MB0171.namprd12.prod.outlook.com (2603:10b6:4:56::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Mon, 25 Apr
+ 2022 07:50:53 +0000
+Received: from CO1NAM11FT033.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:b9:cafe::d8) by MW4PR03CA0235.outlook.office365.com
+ (2603:10b6:303:b9::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13 via Frontend
+ Transport; Mon, 25 Apr 2022 07:50:53 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.236; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.236) by
+ CO1NAM11FT033.mail.protection.outlook.com (10.13.174.247) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5186.14 via Frontend Transport; Mon, 25 Apr 2022 07:50:53 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by DRHQMAIL109.nvidia.com
+ (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Mon, 25 Apr
+ 2022 07:50:52 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 25 Apr
+ 2022 00:50:52 -0700
+Received: from amhetre.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server id 15.2.986.22 via Frontend
+ Transport; Mon, 25 Apr 2022 00:50:48 -0700
+From:   Ashish Mhetre <amhetre@nvidia.com>
+To:     <krzysztof.kozlowski@linaro.org>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <digetx@gmail.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <dmitry.osipenko@collabora.com>, <linux-kernel@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <devicetree@vger.kernel.org>
+CC:     <vdumpa@nvidia.com>, <Snikam@nvidia.com>,
+        Ashish Mhetre <amhetre@nvidia.com>
+Subject: [Patch v8 0/4] memory: tegra: Add MC channels and error logging
+Date:   Mon, 25 Apr 2022 13:20:32 +0530
+Message-ID: <20220425075036.30098-1-amhetre@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v3 1/3] mm/swapfile: unuse_pte can map random data if swap
- read fails
-Content-Language: en-US
-To:     "ying.huang@intel.com" <ying.huang@intel.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
-Cc:     willy@infradead.org, vbabka@suse.cz, dhowells@redhat.com,
-        neilb@suse.de, apopple@nvidia.com, surenb@google.com,
-        minchan@kernel.org, peterx@redhat.com, sfr@canb.auug.org.au,
-        naoya.horiguchi@nec.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20220424091105.48374-1-linmiaohe@huawei.com>
- <20220424091105.48374-2-linmiaohe@huawei.com>
- <8aeebc2f0b2a251d3d70402cd0edf063ba911013.camel@intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <8aeebc2f0b2a251d3d70402cd0edf063ba911013.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 974327e0-9f5c-42e3-0219-08da269052ed
+X-MS-TrafficTypeDiagnostic: DM5PR1201MB0171:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR1201MB017115EF0588E7AECFA9B12CCAF89@DM5PR1201MB0171.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +D3IM/B3PIq9gW4llDfAFabu0KQ/xPaBo9fbKqKhdiw7nO8ArGiv0mTMUJmdQm0Zie282BfWf9VPWSe9gCtRwYBKB/hqJYUIHRfaHvAHj6iwC9ArV4xSn4RkUUrO+fp35FC65tQxS2G9KUeAIrFIRVdSYOjprJ/g54Pj0bqW2Ai2dEnxHd1BEdpNtuRyZDJLC4E4bMaPo+GosaPieHEDXkMp+g+Gn8e1k9VdnOENQk98pHlp1GYKES5oXEFvF1EsXTx08iLR+9L9/G0dCFBQxXn7Rdm3t2IKsgB2QP6paBQspfd3S0LI+qz4YjVNdL7YbYEDbNvQEd8hAoUY4z2xM/A2FUfxPGwD/uNjqJBm6FJNDHXFK3F3pO1+YiUa32Em9ZjaE+ScWyO5a+a06zdccPy3Us9LN7QFHbuYhYUFiWZpqHoNbK7Mfun+G+/9Si9F4Dlt75gcUhyYBA2YwNEoP/vr9Xub91QqMTanEB6kg9zRF06DjDmvA97QtUUZN5wk2UIHB6rg2NFHhhj/aJwpSjllXazrJcEr86P9FbzaL2p5jYKFUoGK29LISnINDQhxo2pTLuZ5H6VtOgciyviWzP7SuIzAov2zBATDAkjmY3rMK0ZEyuALVuiEbncVXvo7HiF06nV2Rsae2b2T5S6d3EBaRav7H9Esqk6AMrAnlQokUkvm+Bb+ThG3kC/EoRARE7lXECGTTiUSrsB3sZxKXqV0FCbfuLPLGbhIj0LB7Z8=
+X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(426003)(336012)(4326008)(70586007)(70206006)(8676002)(186003)(82310400005)(36756003)(6666004)(26005)(316002)(7696005)(81166007)(921005)(356005)(2616005)(1076003)(47076005)(54906003)(86362001)(110136005)(5660300002)(107886003)(2906002)(36860700001)(83380400001)(40460700003)(508600001)(8936002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2022 07:50:53.3819
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 974327e0-9f5c-42e3-0219-08da269052ed
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT033.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1201MB0171
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.04.22 09:41, ying.huang@intel.com wrote:
-> Hi, Miaohe,
-> 
-> On Sun, 2022-04-24 at 17:11 +0800, Miaohe Lin wrote:
->> There is a bug in unuse_pte(): when swap page happens to be unreadable,
->> page filled with random data is mapped into user address space.  In case
->> of error, a special swap entry indicating swap read fails is set to the
->> page table.  So the swapcache page can be freed and the user won't end up
->> with a permanently mounted swap because a sector is bad.  And if the page
->> is accessed later, the user process will be killed so that corrupted data
->> is never consumed.  On the other hand, if the page is never accessed, the
->> user won't even notice it.
->>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> Acked-by: David Hildenbrand <david@redhat.com>
->> ---
->>  include/linux/swap.h    |  7 ++++++-
->>  include/linux/swapops.h | 10 ++++++++++
->>  mm/memory.c             |  5 ++++-
->>  mm/swapfile.c           | 11 +++++++++++
->>  4 files changed, 31 insertions(+), 2 deletions(-)
->>
->> diff --git a/include/linux/swap.h b/include/linux/swap.h
->> index 5553189d0215..b82c196d8867 100644
->> --- a/include/linux/swap.h
->> +++ b/include/linux/swap.h
->> @@ -55,6 +55,10 @@ static inline int current_is_kswapd(void)
->>   * actions on faults.
->>   */
->>
->> +#define SWP_SWAPIN_ERROR_NUM 1
->> +#define SWP_SWAPIN_ERROR     (MAX_SWAPFILES + SWP_HWPOISON_NUM + \
->> +			     SWP_MIGRATION_NUM + SWP_DEVICE_NUM + \
->> +			     SWP_PTE_MARKER_NUM)
->>
->>
-> 
-> It appears wasteful to use another swap device number. 
+From tegra186 onward, memory controllers support multiple channels.
+Add memory controller channels in device tree and add support to map
+address spaces of these channels in tegra MC driver.
+When memory controller interrupt occurs, registers from these channels
+are required to be read in order to get error information.
+Add error logging support from tegra186 onward for memory controller
+interrupts.
 
-Do we really care?
+Ashish Mhetre (4):
+  memory: tegra: Add memory controller channels support
+  memory: tegra: Add MC error logging on tegra186 onward
+  dt-bindings: memory: tegra: Update validation for reg and reg-names
+  arm64: tegra: Add memory controller channels
 
-We currently use 5 bits for swap types, so we have a total of 32.
+---
+Changes in v8:
+- Updated the bindings patch commit message to reflect the ABI change
+  and added "tegra" in subject
+- Updated function name with "mc_" prefix
+- Used snprintf instead of sprintf
+- Set mc->bcast_ch_regs to NULL in case of old bindings and checking for
+  NULL before accessing it
 
-SWP_HWPOISON_NUM -> 1
-SWP_MIGRATION_NUM -> 3
-SWP_PTE_MARKER_NUM -> 1
-SWP_DEVICE_NUM -> 4
-SWP_SWAPIN_ERROR_NUM -> 1
+Changes in v7:
+- Updated reg-names as per comments on v6
+- Removed use of of_property_count_elems_of_size() and used broadcast
+  reg for checking whether old or new DTS is getting used
+- Updated variable names as per comments on v6
+- Added helper function for getting global_intstatus bit from channel
+- Used to_platform_device() instead of passing pdev pointer to
+  map_regs()
+- Allocated ch_regs at runtime
+- Updated DT binding documentation to add validation for reg-names
 
-Which would leave us with 32 - 10 = 22 swap devices. IMHO that's plenty
-for real life scenarios.
+Changes in v6:
+- Added reg-names for each reg item of memory controller node
+- Added logging for interrupts on multiple memory controller channels
+- Added clearing interrupt support for global intstatus
+- Updated DT binding documentation to work with existing DTS as well
+- Updated function to get MC channels
+- Updated variable names
 
-I'd prefer reworking this when we really run into trouble (and we could
-think about using more bits for applicable architectures then, for
-select 64bit architectures it might be fairly easily possible).
+Changes in v5:
+- Updated patch sequence such that driver patches are before DT patches
+- Fixed DT ABI break from v4
+- Fixed smatch bug
+- Updated description in DT binding documentation
+- Updated variable names
+
+Changes in v4:
+- Added memory controller channels support
+- Added newlines after every break statement of all switch cases
+- Fixed compile error with W=1 build
+- Fixed the interrupt mask bit logic
+
+Changes in v3:
+- Removed unnecessary ifdefs
+- Grouped newly added MC registers with existing MC registers
+- Removed unnecessary initialization of variables
+- Updated code to use newly added field 'has_addr_hi_reg' instead of ifdefs
+
+Changes in v2:
+- Updated patch subject and commit message
+- Removed separate irq handlers
+- Updated tegra30_mc_handle_irq to be used for tegra186 onwards as well
+
+ .../nvidia,tegra186-mc.yaml                   |  80 +++++++++-
+ arch/arm64/boot/dts/nvidia/tegra186.dtsi      |   8 +-
+ arch/arm64/boot/dts/nvidia/tegra194.dtsi      |  24 ++-
+ arch/arm64/boot/dts/nvidia/tegra234.dtsi      |  24 ++-
+ drivers/memory/tegra/mc.c                     | 140 ++++++++++++++++--
+ drivers/memory/tegra/mc.h                     |  43 +++++-
+ drivers/memory/tegra/tegra186.c               |  43 ++++++
+ drivers/memory/tegra/tegra194.c               |   9 ++
+ drivers/memory/tegra/tegra234.c               |   8 +
+ include/soc/tegra/mc.h                        |   7 +
+ 10 files changed, 356 insertions(+), 30 deletions(-)
 
 -- 
-Thanks,
-
-David / dhildenb
+2.17.1
 

@@ -2,64 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E54B50E9B5
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 21:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E56750E9B7
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 21:46:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245019AbiDYTs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 15:48:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48360 "EHLO
+        id S245029AbiDYTtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 15:49:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235400AbiDYTsX (ORCPT
+        with ESMTP id S245022AbiDYTsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 15:48:23 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD3311168;
-        Mon, 25 Apr 2022 12:45:18 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-e93ff05b23so4088607fac.9;
-        Mon, 25 Apr 2022 12:45:18 -0700 (PDT)
+        Mon, 25 Apr 2022 15:48:54 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93BE1EEEC
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 12:45:49 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id z2so18323646oic.6
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 12:45:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ZX5Ys886fW/dmB+y6iFegf8FHLGn6ZOTOb6+Agc8SSc=;
+        b=W6JtEO0fy4FEMHz7GdcCLTFoa3nMGdRUexkGRjdE4DmKHqVMbwdEAXaRezpnGHYW4Y
+         71vyN9AX8EumgZpr7rUGaS1eqcWf4/IpOSaszRZMKJb6ISY4FwHJje4ENHBPoWHefpLS
+         TFk3aIxgTGsKEuCiKunc+Qlmmon2BGs648krw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nL+zI+HWL/Tih9Z10+rT6WnqT+vKhCLQplUzncGeQbU=;
-        b=Nevxqm17qYNyJva4a1XbwzS93Gwg/i6CUhmKKmdclWckdkc5WsCIUry4BePUNJ/Kna
-         +y/qXXX8wQM25+X4qprwgcnz6ZQGzIL1vDrVNanC5ync8KAbzK8qiNYAzzTME34SKRap
-         a/RJWyclK5lBDYbqovOoI6YHSKmrMzDdFpcRScM7i/m32ACwZEWBL4S8g6inXoKKyTI2
-         fjStQ4RpuJ89ure/Kx0iQ1J0h7Hn1t0Oz63Xog9QGxhIuVlrGtSk24J8xJ0feygTIJ6g
-         b/QT17tNaCM9IQcONf/+r9L+EM3mQF3/hh3R3+m3D3253Y0OzLIQlKZS0xjjVzbnLa3r
-         GYWg==
-X-Gm-Message-State: AOAM532ZbwceNgaUj9TsmhoyiCJgEcAwWx9njP7MIZYY6/5j8x4Pxanc
-        U8Y5JcAe1YlzZFIGbJs95Q==
-X-Google-Smtp-Source: ABdhPJwU6Qvqcjkg3G5Dn0bvO1Vo7TQvRWAH7QA5M92uiSPM2Nm8T/EVBDnhSuaENAu2wfdcAu/93A==
-X-Received: by 2002:a05:6870:438d:b0:e9:1da4:a027 with SMTP id r13-20020a056870438d00b000e91da4a027mr4468458oah.145.1650915918147;
-        Mon, 25 Apr 2022 12:45:18 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s4-20020a0568301e0400b006015bafee43sm4249922otr.46.2022.04.25.12.45.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 12:45:17 -0700 (PDT)
-Received: (nullmailer pid 143488 invoked by uid 1000);
-        Mon, 25 Apr 2022 19:45:17 -0000
-Date:   Mon, 25 Apr 2022 14:45:17 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Slawomir Stepien <sst@poczta.fm>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: iio: Fix incorrect compatible strings in
- examples
-Message-ID: <Ymb6TfADJKd+a6Ys@robh.at.kernel.org>
-References: <20220422192039.2590548-1-robh@kernel.org>
- <20220424171212.6d247854@jic23-huawei>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ZX5Ys886fW/dmB+y6iFegf8FHLGn6ZOTOb6+Agc8SSc=;
+        b=Oqk0FuAgWoq6iA/dnxkwkkT/Z13V2bp8TdQ0oc45/a0nVxT8PnDeXYFq0U0VH3mL2x
+         cfoNTgeLvHUPPsFf+wzbrAonzGeez85Sner0UXXrop+KhVKiWUgyreteDjmAMItu86Db
+         2MRPcdoWGyExafuiAcphG7YCylDaGpKmdxXXqnQaBXkjuyFdDK2Jtsa16laB30J+LNAK
+         XkL0FPK4RnY/fGakBBrZS4wOkurAkc9cfh4mntd/wWvydoIvPYf7VPvNsdemVFprYXfH
+         DPivBU+XKwQXoBy6SiMrrVjuosGuVJ1QygqGndk00f/z0XiAUeEn1nadTCBNLPG9Ve07
+         Ni/g==
+X-Gm-Message-State: AOAM5313v27K5hJFTZBZu9YRWk6cW5RgRutRN5ImmtKoPiPM0Y7BSr0R
+        lItqwa6KVaNQtNfHL87prwlIHg==
+X-Google-Smtp-Source: ABdhPJxTQzTraVnJy0Bh8b4T5Ky3qs+HiBT9vzOXWWhdmnV1EHCnCrF8OpXJbepsLkiyfOAAH+XhXw==
+X-Received: by 2002:a05:6808:1b06:b0:325:2c06:dadf with SMTP id bx6-20020a0568081b0600b003252c06dadfmr3244673oib.159.1650915949018;
+        Mon, 25 Apr 2022 12:45:49 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id c19-20020a05687093d300b000e686d1386csm40543oal.6.2022.04.25.12.45.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Apr 2022 12:45:48 -0700 (PDT)
+Subject: Re: [PATCH 3/5] selftests: firmware: Fix the
+ request_firmware_into_buf() test for XZ format
+To:     Takashi Iwai <tiwai@suse.de>, Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Nick Terrell <terrelln@fb.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220421152908.4718-1-tiwai@suse.de>
+ <20220421152908.4718-4-tiwai@suse.de>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <da541a1d-8d09-7eb1-fa12-9416d1da3366@linuxfoundation.org>
+Date:   Mon, 25 Apr 2022 13:45:47 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220424171212.6d247854@jic23-huawei>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <20220421152908.4718-4-tiwai@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,17 +76,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 24, 2022 at 05:12:12PM +0100, Jonathan Cameron wrote:
-> On Fri, 22 Apr 2022 14:20:39 -0500
-> Rob Herring <robh@kernel.org> wrote:
+On 4/21/22 9:29 AM, Takashi Iwai wrote:
+> The test uses a different firmware name, and we forgot to adapt for
+> the XZ compressed file tests.
 > 
-> > Fix a couple of examples using incorrect compatible strings.
-> > 
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Fixes: 1798045900b7 ("selftests: firmware: Add request_firmware_into_buf tests")
+> https://lore.kernel.org/all/20210127154939.13288-1-tiwai@suse.de/
+> Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> ---
+>   tools/testing/selftests/firmware/fw_filesystem.sh | 2 ++
+>   1 file changed, 2 insertions(+)
 > 
-> or I can pick these up through IIO if preferred.
+> diff --git a/tools/testing/selftests/firmware/fw_filesystem.sh b/tools/testing/selftests/firmware/fw_filesystem.sh
+> index 731f011def78..3ac09b401a83 100755
+> --- a/tools/testing/selftests/firmware/fw_filesystem.sh
+> +++ b/tools/testing/selftests/firmware/fw_filesystem.sh
+> @@ -504,6 +504,7 @@ test "$HAS_FW_LOADER_COMPRESS" != "yes" && exit 0
+>   
+>   # test with both files present
+>   $RUN_XZ -k $FW
+> +$RUN_XZ -k $FW_INTO_BUF
+>   config_set_name $NAME
+>   echo
+>   echo "Testing with both plain and xz files present..."
+> @@ -529,6 +530,7 @@ done
+>   
+>   # test with only xz file present
+>   mv "$FW" "${FW}-orig"
+> +mv "$FW_INTO_BUF" "${FW_INTO_BUF}-orig"
+>   echo
+>   echo "Testing with only xz file present..."
+>   for i in $(seq 1 5); do
+> 
 
-Yes, please apply.
+Thank you. Looks good to me.
 
-Rob
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah

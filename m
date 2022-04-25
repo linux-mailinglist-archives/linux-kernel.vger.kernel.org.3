@@ -2,98 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A93C850EC1D
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 00:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E91250EC20
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 00:30:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232141AbiDYWc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 18:32:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54616 "EHLO
+        id S231373AbiDYWdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 18:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235146AbiDYWcr (ORCPT
+        with ESMTP id S236200AbiDYWc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 18:32:47 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DCA8C21;
-        Mon, 25 Apr 2022 15:28:26 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KnKRD5ksPz4xL5;
-        Tue, 26 Apr 2022 08:28:24 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1650925705;
-        bh=PoAwKcwE9MQNmrzG4V65dtzER/1e/XUchnDW3IGbI4U=;
-        h=Date:From:To:Cc:Subject:From;
-        b=geqAAuOWYinV3zT8p826NFGh6bt5gjqJ5isiq56yHdSIXrZypzhE4p3NyJuLMQEuH
-         4Gmxiyykocn3T62g2EnWyuUoINycmOXl1YY81PWPAc1Z7ANzLLSpUxD3KJqS7KPyjw
-         KznbjdbpNM02VQCB5+UP1W0veIae/fmljLhuRrVABSwFcxagA6jyIHrpOGIkHxff/2
-         3nQk3VJj6Iz2Stz3Ax34WzzoM5T7HSd3nUgolMTU8Roe8iXRqrEAnqD6Pd8TbJUJEw
-         x8N0Kd1Y3LKW1IuRoSJllEEkGIJ75/00bdYoakRaxxN0OD25LnCvuRP08En5//TDZC
-         UfT6kWsKqkyeA==
-Date:   Tue, 26 Apr 2022 08:28:24 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Camel Guo <camel.guo@axis.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the hwmon-staging tree
-Message-ID: <20220426082824.04f63d08@canb.auug.org.au>
+        Mon, 25 Apr 2022 18:32:56 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB3CA185;
+        Mon, 25 Apr 2022 15:29:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1650925781; x=1682461781;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5Xh4n6qYzYGCgES5QzsoDE6tDwiLaiGMdlmL/LBrteY=;
+  b=uIw/yiLU0irgRBFt2jpaDY1yDhFSI/DbKSGCj2QG6BZuexvQ83h70q3l
+   0WPswGsaobE8vJ68/uAWysFuPxZbEu7y3sYdKSZsZTkrir/vDqSbWIr/s
+   iWFtweNMnss6kIgaU+Ey8iWA/WZ0LxhHmm0S0reE006y2/xk7er+DNz6p
+   I=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 25 Apr 2022 15:29:41 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 15:29:40 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 25 Apr 2022 15:29:40 -0700
+Received: from [10.110.33.26] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 25 Apr
+ 2022 15:29:39 -0700
+Message-ID: <07f1e701-f921-b06a-7492-63810a937322@quicinc.com>
+Date:   Mon, 25 Apr 2022 15:29:30 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/uQD0hQhrqaoRsnVoqopBDKR";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] drm/msm/dp: tear down main link at unplug handle
+ immediately
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
+        <airlied@linux.ie>, <bjorn.andersson@linaro.org>,
+        <daniel@ffwll.ch>, <dmitry.baryshkov@linaro.org>,
+        <robdclark@gmail.com>, <sean@poorly.run>, <vkoul@kernel.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1649970223-9522-1-git-send-email-quic_khsieh@quicinc.com>
+ <CAE-0n51rp73v6tod98TX3Y_q8TuOppJVdm9Te_9kSNyqyFuoog@mail.gmail.com>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <CAE-0n51rp73v6tod98TX3Y_q8TuOppJVdm9Te_9kSNyqyFuoog@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/uQD0hQhrqaoRsnVoqopBDKR
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On 4/20/2022 3:38 PM, Stephen Boyd wrote:
+> Quoting Kuogee Hsieh (2022-04-14 14:03:43)
+>> Two stages are required to setup up main link to be ready to transmit
+>> video stream.
+>> Stage 1: dp_hpd_plug_handle() perform link training to set up main link
+>> stage 2: user space framework (msm_dp_display_enable()) to enable pixel
+>> clock and transfer main link to video ready state.
+>>
+>> At current implementation, when dongle unplugged dp_hdp_unplug_handle()
+>> has to wait until stage 2 completed before it can send link down uevent
+>> to user space framework to disable pixel clock followed by tearing down
+>> main link.  This introduce unnecessary latency if dongle unplugged happen
+>> after stage 1 and before stage 2. It also has possibility leave main link
+>> stay at ready state after dongle unplugged if framework does not response
+>> to link down uevent notification. This will prevent next dongle plug in
+>> from working. This scenario could possibly happen when dongle unplug while
+>> system in the middle of suspending.
+>>
+>> This patch allow unplug handle to tear down main link and notify
+>> framework link down immediately if dongle unplugged happen after
+>> stage 1 and before stage 2. With this approach, dp driver is much
+>> more resilient to any different scenarios. Also redundant both
+>> dp_connect_pending_timeout() and dp_disconnect_pending_timeout()
+>> are removed to reduce logic complexity.
+>>
+>> Fixes: 8ede2ecc3e5e ("drm/msm/dp: Add DP compliance tests on Snapdragon Chipsets")
+>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+>
+> Some questions below but doesn't seem like it will hold up this patch.
+>
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+>> index 01453db..f5bd8f5 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+>> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+>> @@ -615,24 +598,21 @@ static int dp_hpd_unplug_handle(struct dp_display_private *dp, u32 data)
+>>                  if (dp->link->sink_count == 0) {
+>>                          dp_display_host_phy_exit(dp);
+>>                  }
+>> +               dp_display_notify_disconnect(&dp->pdev->dev);
+>>                  mutex_unlock(&dp->event_mutex);
+>>                  return 0;
+>> -       }
+>> -
+>> -       if (state == ST_DISCONNECT_PENDING) {
+>> +       } else if (state == ST_DISCONNECT_PENDING) {
+>>                  mutex_unlock(&dp->event_mutex);
+>>                  return 0;
+>> -       }
+>> -
+>> -       if (state == ST_CONNECT_PENDING) {
+>> -               /* wait until CONNECTED */
+>> -               dp_add_event(dp, EV_HPD_UNPLUG_INT, 0, 1); /* delay = 1 */
+>> +       } else if (state == ST_CONNECT_PENDING) {
+> I take it that ST_CONNECT_PENDING is sort of like "userspace hasn't
+> handled the uevent yet and modeset hasn't been called but the link is
+> setup and now we want to tear it down". The state name may want to be
+> changed to something else.
+yes, how about change to  ST_MAINLINK_READY?
+>
+>> +               dp_ctrl_off_link(dp->ctrl);
+>> +               dp_display_host_phy_exit(dp);
+>> +               dp->hpd_state = ST_DISCONNECTED;
+>> +               dp_display_notify_disconnect(&dp->pdev->dev);
+>>                  mutex_unlock(&dp->event_mutex);
+>>                  return 0;
+>>          }
+>>
+>> -       dp->hpd_state = ST_DISCONNECT_PENDING;
+>> -
+>>          /* disable HPD plug interrupts */
+>>          dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_PLUG_INT_MASK, false);
+>>
+>> @@ -640,10 +620,13 @@ static int dp_hpd_unplug_handle(struct dp_display_private *dp, u32 data)
+>>           * We don't need separate work for disconnect as
+>>           * connect/attention interrupts are disabled
+>>           */
+>> -       dp_display_usbpd_disconnect_cb(&dp->pdev->dev);
+>> +       dp_display_notify_disconnect(&dp->pdev->dev);
+>>
+>> -       /* start sentinel checking in case of missing uevent */
+>> -       dp_add_event(dp, EV_DISCONNECT_PENDING_TIMEOUT, 0, DP_TIMEOUT_5_SECOND);
+>> +       if (state == ST_DISPLAY_OFF) {
+>> +               dp->hpd_state = ST_DISCONNECTED;
+>> +       } else {
+>> +               dp->hpd_state = ST_DISCONNECT_PENDING;
+>> +       }
+> Nitpick: No braces needed for single line if clauses.
+>
+>>          DRM_DEBUG_DP("hpd_state=%d\n", state);
+>>          /* signal the disconnect event early to ensure proper teardown */
+>> @@ -1529,8 +1480,11 @@ int msm_dp_display_enable(struct msm_dp *dp, struct drm_encoder *encoder)
+>>
+>>          mutex_lock(&dp_display->event_mutex);
+>>
+>> -       /* stop sentinel checking */
+>> -       dp_del_event(dp_display, EV_CONNECT_PENDING_TIMEOUT);
+>> +       state = dp_display->hpd_state;
+>> +       if (state != ST_DISPLAY_OFF && state != ST_CONNECT_PENDING) {
+> Is this to guard against userspace doing an atomic commit when the
+> display isn't connected? Is that even possible?
 
-In commit
+No, it used to guard follow scenario in timing order,
 
-  251a486d3a93 ("hwmon: (tmp401) Fix incorrect return value of tmp401_init_=
-client")
+1) plugin had been handled and mainlink is ready,
 
-Fixes tag
+2)  userspace hasn't handled the uevent yet and modeset hasn't been called
 
-  Fixes: c825ca044988 ("hwmon: (tmp401) Add support of three advanced featu=
-res")
+3) unplugged happen, mainlink be teared down
 
-has these problem(s):
+4) user space start to response to uevent  and try to enable display. 
+(it too late since mainlink had been teared down)
 
-  - Target SHA1 does not exist
 
-Maybe you meant
-
-Fixes: a7e1e934855c ("hwmon: (tmp401) Add support of three advanced feature=
-s")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/uQD0hQhrqaoRsnVoqopBDKR
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJnIIgACgkQAVBC80lX
-0GwO/Qf7B6qCUY/Tps9S2Ari0Fz5BTIrzf+kheF7nK/HFsI4v1GtR7ZYonK6sH46
-zEzTldt7RPmVlJeFi52K5zbAg9/0+rkh79r7//diRcO6ATcLV+ADxmC+1bKt5new
-JX4tdM/VuTfvQlWvY9mttSJCiWboYK9hsBU/3a57YYdhMTAhtFDuXsjXkWR15Ab6
-yNcbCgjpf4L61rxUZWn6/YggWGuPh4S76K94keAxVYvrGQrnDK2CImCtM2IhriYG
-MJC7O0JxfbSncpK38KoapgKQ9fw+vpEpvMn7YBeRKfmcwZo82TrCZG+o5xnkqRFW
-YPzWTxl/gBL/D9Ed9OvR047y7735cQ==
-=rzjE
------END PGP SIGNATURE-----
-
---Sig_/uQD0hQhrqaoRsnVoqopBDKR--
+>> +               mutex_unlock(&dp_display->event_mutex);
+>> +               return rc;
+>> +       }
+>>
+>>          rc = dp_display_set_mode(dp, &dp_display->dp_mode);
+>>          if (rc) {

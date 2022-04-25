@@ -2,93 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29D4050E701
+	by mail.lfdr.de (Postfix) with ESMTP id BA85850E703
 	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 19:24:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243909AbiDYRZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 13:25:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34816 "EHLO
+        id S241225AbiDYRZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 13:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240400AbiDYRZA (ORCPT
+        with ESMTP id S236798AbiDYRZZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 13:25:00 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8415D40E40
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 10:21:56 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id a11so4177961pff.1
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 10:21:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KT5fi63ozoeP2wgW9QoaoX7sMxApWUElWOAK6Kp+zQc=;
-        b=OobYMCoXgSiP2AxcFbw0t/VqyqEQWOu++/jLTLUMHdgst1dMB9oOBVWhNTL1NW/W3q
-         vZKPDj0KPORzseCkhVLgovr4lZq1vCXHkhpnHegjZPAr3kZH4sZAXj5EPFLUbeWEurxV
-         QlRrHodOko+ps8HFRb9uXHfObwiw1INdQ4JvzN5Ah/Qakzl0cD4n35XYqPr64nxpcOcb
-         nKF1WH+hBsDzjNhlQjB9EJIO5Zj1Sm02y0PdquMd6pAZS71h5KCLs+pECnbzgkR1uQid
-         ZNcYQtpWiEC6AcX/KNCHAdPQugpP2Lvk2czvjp2wmB+0pLjiMFv4jyi9SZfpMOnhDicE
-         iyAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=KT5fi63ozoeP2wgW9QoaoX7sMxApWUElWOAK6Kp+zQc=;
-        b=qNeqHIGaCUe4Yq+/AYBgqesjaEBRcL0OFLo44xrQ4Yy3RgSZqIh5jS516W6PAMTtH8
-         oH67zKVXi+qayZ5C/bHQIF5sDGP82ndTg1Ys+2cu+8Qu4bRk4RYAKp4mJqBDBiLxmGgD
-         /O0J1AnBP3VGurbCs9mS//CjKVlCycQ88yw1A82Qtpw7L6rL7E1JISj1ijAKH9ZXi87L
-         zABKu3RvqXxVwUR42OEWHfkLSTnO2ipp5YoczwJPyvhTwI93WvjcKmpqh0C7vF/aHkxK
-         lW0UAQYH+EJt97irELNG4dHmZTeimDOU7JK5ctS8rJdOEKEzZYgcnvrZuk2nc0mbs6Rd
-         I8TA==
-X-Gm-Message-State: AOAM530WmKmCvK6rpJ4Z2BMwyPZVhN88ytwXHhjIg1d2ra/eaJ4p+Zmr
-        hQWFnQKlv5HjTD1KzUwOzKk=
-X-Google-Smtp-Source: ABdhPJzubSG9msXx3WTpPuvCVw2GvWI+MLBo2EIP7EogKkY+yQnWeSCxXyV3Su1gQw0hFObsiWpqHQ==
-X-Received: by 2002:a63:224f:0:b0:399:4a1a:b01f with SMTP id t15-20020a63224f000000b003994a1ab01fmr16153268pgm.123.1650907315638;
-        Mon, 25 Apr 2022 10:21:55 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:2e9])
-        by smtp.gmail.com with ESMTPSA id w187-20020a6230c4000000b00505cde77826sm11913760pfw.159.2022.04.25.10.21.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 10:21:54 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 25 Apr 2022 07:21:52 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Imran Khan <imran.f.khan@oracle.com>
-Cc:     viro@zeniv.linux.org.uk, gregkh@linuxfoundation.org,
-        ebiederm@xmission.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 00/10] kernfs: Remove reference counting for
- kernfs_open_node.
-Message-ID: <YmbYsI0wkH01u5M5@slm.duckdns.org>
-References: <20220410023719.1752460-1-imran.f.khan@oracle.com>
- <YmLfxHcekrr89IFl@slm.duckdns.org>
- <f2ca9d19-023f-76d9-5c76-6f08ccfbe348@oracle.com>
+        Mon, 25 Apr 2022 13:25:25 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C467A40E41
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 10:22:19 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nj2PY-0007mf-CH; Mon, 25 Apr 2022 19:22:08 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nj2PV-005Bnw-TK; Mon, 25 Apr 2022 19:22:04 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nj2PT-005ZQF-Q7; Mon, 25 Apr 2022 19:22:03 +0200
+Date:   Mon, 25 Apr 2022 19:21:59 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Yihao Han <hanyihao@vivo.com>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Corentin Labbe <clabbe@baylibre.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        kernel@vivo.com
+Subject: Re: [PATCH v2] macintosh: macio_asic: fix resource_size.cocci
+ warnings
+Message-ID: <20220425172159.5u6q74gd2cmmipzd@pengutronix.de>
+References: <20220421141821.11519-1-hanyihao@vivo.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="smo2nizlx27ixiz4"
 Content-Disposition: inline
-In-Reply-To: <f2ca9d19-023f-76d9-5c76-6f08ccfbe348@oracle.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220421141821.11519-1-hanyihao@vivo.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-On Sat, Apr 23, 2022 at 06:49:49PM +1000, Imran Khan wrote:
-> Thanks again for reviewing this and I agree with your suggestion. So far
-> most of the concerns have been around usage of kernfs_rwsem and those
-> can be addressed independent of first 5 (even first 7 )changes here.
-> Just one question in this regard, should I send the new patch set
-> (addressing open_file_mutex and list conversion) as a separate patch set
-> or should I sent it as v9 of ongoing change set. I guess first option is
-> better but thought of confirming once before proceeding.
+--smo2nizlx27ixiz4
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Either way is okay but I like the first one too. Let's break it up to
-smaller pieces so that we can make progress piece by piece.
+On Thu, Apr 21, 2022 at 07:18:07AM -0700, Yihao Han wrote:
+> drivers/macintosh/macio_asic.c:219:26-29: WARNING:Suspicious code. resour=
+ce_size is maybe missing with res
+> drivers/macintosh/macio_asic.c:221:26-29: WARNING:Suspicious code. resour=
+ce_size is maybe missing with res
+>=20
+> Use resource_size function on resource object instead of
+> explicit computation.
+>=20
+> Generated by: scripts/coccinelle/api/resource_size.cocci
+>=20
+> Signed-off-by: Yihao Han <hanyihao@vivo.com>
+> ---
+> v2: drop parenthesis around resource_size(res) and edit commit message
+> ---
+>  drivers/macintosh/macio_asic.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/macintosh/macio_asic.c b/drivers/macintosh/macio_asi=
+c.c
+> index 1943a007e2d5..260fccb3863e 100644
+> --- a/drivers/macintosh/macio_asic.c
+> +++ b/drivers/macintosh/macio_asic.c
+> @@ -216,9 +216,9 @@ static int macio_resource_quirks(struct device_node *=
+np, struct resource *res,
+>  	/* Some older IDE resources have bogus sizes */
+>  	if (of_node_name_eq(np, "IDE") || of_node_name_eq(np, "ATA") ||
+>  	    of_node_is_type(np, "ide") || of_node_is_type(np, "ata")) {
+> -		if (index =3D=3D 0 && (res->end - res->start) > 0xfff)
+> +		if (index =3D=3D 0 && resource_size(res) > 0xfff)
 
-Thanks.
+Michael Ellerman noted in the v1 thread, that this is wrong as
+resource_size evaluates to end - start + 1. So this has to be
 
--- 
-tejun
+		if (index =3D=3D 0 && resource_size(res) > 0x1000)
+
+to be equivalent.
+
+>  			res->end =3D res->start + 0xfff;
+> -		if (index =3D=3D 1 && (res->end - res->start) > 0xff)
+> +		if (index =3D=3D 1 && resource_size(res) > 0xff)
+
+Similar here.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--smo2nizlx27ixiz4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmJm2LQACgkQwfwUeK3K
+7AleZQf/Ws4dgW+0xEXABSKmjeSg2f0okoCcUGbtNPI5xRg22jicN6D5KvbLUa9J
+fi0Ifraz34Sep8UpRywMZPcm9YKVgj4IIQvcWLwqnZKhHA0kh+khKYCDuV7KFooi
+ForysDPwPHIB+Yi5e3aAEKTHxV6yX65fG7It0lsfZRQRYwGdnjW0T2dozvlTApQE
+tZG+55HiL0OQyKqs39cibsjJZLgIDGiPIqt5bHCVT7gS/IVKEKL2ua9kGMm4BOzE
+c5GCGFItjwslkVtCaN1QZeDiGgLbmMmsMWl/r3gCBYTIsyNhPAwbp3Po0eRjWVXX
+ajT/ljg/13jzeGyN7N1UcoFFgVWTWA==
+=gdFa
+-----END PGP SIGNATURE-----
+
+--smo2nizlx27ixiz4--

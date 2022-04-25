@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB97A50E80D
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7507E50E81D
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:24:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244346AbiDYS0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 14:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42454 "EHLO
+        id S244356AbiDYS0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 14:26:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244345AbiDYS0L (ORCPT
+        with ESMTP id S244352AbiDYS0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 14:26:11 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD9C8930A;
-        Mon, 25 Apr 2022 11:23:01 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id y3so10901158ejo.12;
-        Mon, 25 Apr 2022 11:23:01 -0700 (PDT)
+        Mon, 25 Apr 2022 14:26:12 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7B8112449;
+        Mon, 25 Apr 2022 11:23:03 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id z19so6217755edx.9;
+        Mon, 25 Apr 2022 11:23:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Sy9YYlqoJiTojSfiEVFCuiM/Ui3tj6aKx8yzbCiNSKs=;
-        b=gWJUKBpSNwQFr5FQCSopcOkFGCSxYO3JlAbeOsu7x1AJ/1kgbLtOit+EL5oX5DYcy+
-         yWAH3TZfoNrhUhWEeNahXRJFVDxeaZdPJ7N60qTt4EPNaF/NviRRjU8RxFcMXSHnStO+
-         nFrHoZ3XKbFdlQtwQ6PHTJ3a2YRnSPlX5IYjeNIOB6O71ypz2zNzPh8S2iYgYvdFyDx2
-         N8MWLfpyWU8qYxN8NwvGfSuxcd0r2mU32pAg9e0WnJCktAQRu1PrMMAUtuv5abhq4wKQ
-         kXbJSZ4MaXf3eyNMUSOJj4cM48BpKqZDaMT9CSaIUogNMpIB1vXWWD0fJH4+LSMl0YJE
-         AWRQ==
+        bh=cqD7UOhZCtWdKNLvjvzBP8sV3y6BYgIA/pnNxZjz8oc=;
+        b=gPvnxTLlvLR8cTTUXmjcl1R9wSZiNpgICF2IyBg6eezIoDI/QZb9sNe02E2peEg6Zl
+         B4OZrlq5PScSUaMoLo74jDHXFO9P5DSsM0rXvHmCXzKnIYQsTv0pQj84XuNuknGd8O9E
+         vuABKLEr52M7GWYi/eGoe6zcGsmOjazA/oQaoxhnJ3P703O/x4t+XERyO07eV2GMggNS
+         amCewNSoN8rPp+57j7lQnAvqHrm74i2OvpxuaDnz+hWkRhQ/I1qmF9/cK5mHTqeYFHc9
+         v6hJzKbQNaej4wMOR62pNNTCEL8582/iTpNUzZ4AiWU4nS7SXPo3tTTHHJkrT7jVb80a
+         ymwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Sy9YYlqoJiTojSfiEVFCuiM/Ui3tj6aKx8yzbCiNSKs=;
-        b=5quaRHLe9z3i5gcqChriCo8JbFYW1haje4xMl4iELiQOQZeH1IBb+WOIS24E1sKIgQ
-         Z69LmoaFgOaLThWwU6lZaryY672lo3h7caaU13zums8/YZReVMTvD5XNUA15FmRxdCQ7
-         jC/Kc+an8o1nJVe67FjG080dzoCTlEV9HzvRnMt1EgRDJrU+Ae9q/mrQohm7WjcjXsiR
-         El53BS1o5mFTxMuzZz5KQq2XPMJtgKJ3phuvcjvoNExg/eAoRkVmdf92iudk6H4YS1w5
-         /7OkXD+fGWTkwLo1+cZKHsoruy8h12Rtm0eA1Dy28qD5ZMN2cnq2FW82FlT+zllZopSh
-         3ZAQ==
-X-Gm-Message-State: AOAM531PDlqhLhJctSQcQKOVqArlMOHr9DDTvT2l0/dGDlDtK3BN7WRY
-        mkdAEw3Ro8yroNp8trIVh+E=
-X-Google-Smtp-Source: ABdhPJwTJ8vN7QbZjR6I7kkhlLs864ySN5/U5PHeZeg8Vr/EZIRGA3WvQ+7FlD8PpWlxTuiA5NRUyA==
-X-Received: by 2002:a17:907:1c92:b0:6f0:f17:14a with SMTP id nb18-20020a1709071c9200b006f00f17014amr17007620ejc.475.1650910979850;
-        Mon, 25 Apr 2022 11:22:59 -0700 (PDT)
+        bh=cqD7UOhZCtWdKNLvjvzBP8sV3y6BYgIA/pnNxZjz8oc=;
+        b=AhI19RttwrQgOsKXEn2oRwO1d0PcxsQ/FmW+obNfSwaxhQSHZ1Kl4SA/ME9RfQ2H0l
+         JiuwIyE9SfGlsenz15iBUe/EC5PyuzlNeYGRHHci6+5xanykEBM8qALmGR5QUsOontZf
+         1JhTQtTHw0JBB4phzGhfAXJgnWmkn6qD6oKX9OwlOAAs5go16SvZqbcpSIeS0PO3Gg3T
+         o+n6fIEMOngQUc//VxQ5YvCdZMcDPbZhN6vuFD5xkO+FMkPVsYdys/r4JHjANjkVjI4q
+         LOV9p17QCeZQJZuXsTULf82RLEth2Zk1xleyd4ASpuxI8j1RG1rMa3cpRimlaxAnYmS8
+         fUHg==
+X-Gm-Message-State: AOAM5308vpq9kn1mNsFbLc3QVzdfy7x70b6eHtrwOcKr/8GshXYohtwZ
+        VFXL6JGLRevqft9Woehrtg/dSgH0/Rl21A==
+X-Google-Smtp-Source: ABdhPJzVLO9S/2ivLHgLiR+ZbsKq/+AUaDHJSmuxinNEjlWRlLnYSk+IYmvc6LtVVr6jL/Du+x1tdw==
+X-Received: by 2002:a05:6402:26c9:b0:423:d545:9d49 with SMTP id x9-20020a05640226c900b00423d5459d49mr20466407edd.242.1650910981728;
+        Mon, 25 Apr 2022 11:23:01 -0700 (PDT)
 Received: from fedora.robimarko.hr (cpe-94-253-165-91.zg.cable.xnet.hr. [94.253.165.91])
-        by smtp.googlemail.com with ESMTPSA id h13-20020a170906590d00b006f39021e683sm1677210ejq.12.2022.04.25.11.22.58
+        by smtp.googlemail.com with ESMTPSA id h13-20020a170906590d00b006f39021e683sm1677210ejq.12.2022.04.25.11.23.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 11:22:59 -0700 (PDT)
+        Mon, 25 Apr 2022 11:23:01 -0700 (PDT)
 From:   Robert Marko <robimarko@gmail.com>
 To:     agross@kernel.org, bjorn.andersson@linaro.org,
         mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
@@ -55,9 +55,9 @@ To:     agross@kernel.org, bjorn.andersson@linaro.org,
         linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
 Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH 5/7] clk: qcom: ipq8074: add PPE crypto clock
-Date:   Mon, 25 Apr 2022 20:22:47 +0200
-Message-Id: <20220425182249.2753690-5-robimarko@gmail.com>
+Subject: [PATCH 6/7] dt-bindings: clock: qcom: ipq8074: add PPE crypto clock
+Date:   Mon, 25 Apr 2022 20:22:48 +0200
+Message-Id: <20220425182249.2753690-6-robimarko@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220425182249.2753690-1-robimarko@gmail.com>
 References: <20220425182249.2753690-1-robimarko@gmail.com>
@@ -73,53 +73,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The built-in PPE engine has a dedicated clock for the EIP-197 crypto
-engine.
-
-So, since the required clock currently missing add support for it.
+Add binding for the PPE crypto clock in IPQ8074.
 
 Signed-off-by: Robert Marko <robimarko@gmail.com>
 ---
- drivers/clk/qcom/gcc-ipq8074.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ include/dt-bindings/clock/qcom,gcc-ipq8074.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/clk/qcom/gcc-ipq8074.c b/drivers/clk/qcom/gcc-ipq8074.c
-index 37af41d8b192..e6625b9fab35 100644
---- a/drivers/clk/qcom/gcc-ipq8074.c
-+++ b/drivers/clk/qcom/gcc-ipq8074.c
-@@ -3182,6 +3182,24 @@ static struct clk_branch gcc_nss_ptp_ref_clk = {
- 	},
- };
+diff --git a/include/dt-bindings/clock/qcom,gcc-ipq8074.h b/include/dt-bindings/clock/qcom,gcc-ipq8074.h
+index 9b1c42bc430c..2197185cb1a2 100644
+--- a/include/dt-bindings/clock/qcom,gcc-ipq8074.h
++++ b/include/dt-bindings/clock/qcom,gcc-ipq8074.h
+@@ -233,6 +233,7 @@
+ #define GCC_PCIE0_AXI_S_BRIDGE_CLK		224
+ #define GCC_PCIE0_RCHNG_CLK_SRC			225
+ #define GCC_PCIE0_RCHNG_CLK			226
++#define GCC_CRYPTO_PPE_CLK			227
  
-+static struct clk_branch gcc_crypto_ppe_clk = {
-+	.halt_reg = 0x68310,
-+	.halt_bit = 31,
-+	.clkr = {
-+		.enable_reg = 0x68310,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "gcc_crypto_ppe_clk",
-+			.parent_names = (const char *[]){
-+				"nss_ppe_clk_src"
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
- static struct clk_branch gcc_nssnoc_ce_apb_clk = {
- 	.halt_reg = 0x6830c,
- 	.clkr = {
-@@ -4644,6 +4662,7 @@ static struct clk_regmap *gcc_ipq8074_clks[] = {
- 	[GCC_PCIE0_RCHNG_CLK_SRC] = &pcie0_rchng_clk_src.clkr,
- 	[GCC_PCIE0_RCHNG_CLK] = &gcc_pcie0_rchng_clk.clkr,
- 	[GCC_PCIE0_AXI_S_BRIDGE_CLK] = &gcc_pcie0_axi_s_bridge_clk.clkr,
-+	[GCC_CRYPTO_PPE_CLK] = &gcc_crypto_ppe_clk.clkr,
- };
- 
- static const struct qcom_reset_map gcc_ipq8074_resets[] = {
+ #define GCC_BLSP1_BCR				0
+ #define GCC_BLSP1_QUP1_BCR			1
 -- 
 2.35.1
 

@@ -2,98 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A271350E1EA
+	by mail.lfdr.de (Postfix) with ESMTP id 4C13A50E1E9
 	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:34:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239279AbiDYNgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 09:36:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60694 "EHLO
+        id S242106AbiDYNg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 09:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiDYNgN (ORCPT
+        with ESMTP id S242078AbiDYNgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 09:36:13 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F40C04
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 06:33:09 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id d3so9304683ilr.10
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 06:33:09 -0700 (PDT)
+        Mon, 25 Apr 2022 09:36:23 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482FE1135
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 06:33:19 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id f38so27061000ybi.3
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 06:33:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Gnjzt+1NzH4Eu2LF0ewfanCh28nJVLbVajLnqOyr7so=;
-        b=qXgKC+wGX6JUjSmbOLeCpcvFuKT0dg8qOs6PnXS15L5ncoNkRtCqiDgePn75kofNgm
-         2tCSFz+93T4dTrz5WENecqA044vqKd79ROI43d4bZZc4lYwpp1E6NtPVnFW/Nr856ujx
-         eat6iqRyEdXPWA3l2TbnFnebo8PX4ga3C+QuE80EqcZeEI1lw0U4OhFE2w/O6uododXg
-         0rfhGvGLA3PN9blzFmc5i9gJ6FrbEu0nqfBO7cwR94h5AUXuLo4iPSwDjkLR74tBNBdp
-         HNPvsRj8bOhtz/3WzQ42aQrJRE5GhZsW+JMGRBDC3ZoVy4CUUMyGjrgHcl6z91GHd5rQ
-         32JA==
+        bh=tnGDk2mXj8ducKZ6TjV0CCxMODc0uQNA4u/k6GAYohE=;
+        b=Ru6CMFDL+759FDN0Z+W8VThj6ZOWjiqunT3Ldu7hr9+T/EwHJ2ill2Bu8QHwYvuSAJ
+         7dKDDU5+92cjc7riK3wLgypUn1DzhEiOL9atp+b4uHycuIbPimmCeKShAzX3/lEkWClR
+         Dw2NBC/VWTnBFQz+EwaDuGAPMCRx5eDKSvbaXRIiTCMVvdOcx71g4s8y03U9A5Yqfk9a
+         x5hIjscu80Kro5O/30lo0/Sc7GCIThTycK8Ke4jCFwjwWctzEXd4/X3ORRR8i9V61+nl
+         ueObE4uewQRN9FEHR07RR5YAM4Y118mzN8MbKAPq/riqju6hAdF621UPSpiO9WZo8tWU
+         VXLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Gnjzt+1NzH4Eu2LF0ewfanCh28nJVLbVajLnqOyr7so=;
-        b=FEDMkqpEG0q3eB4nAtsYrmFcgPel+ls7OLOt/o58ECmRpj0BMxdLpnHtdofkPw7yNR
-         JEFYtXzhJbyH7Kf8t3kqndKWUrFFpvLKGU3cUEsGVEI1j5nyuid0WCsjFGF0fEXEoRVc
-         hpKfmYP/5WJEE4yVEKT8gqKHPp8v0GJQOTv3C05V12nNA9IkoaiqdZbAAgz6lpEGfur1
-         uvbSxnQmR4wZ6BjUhTJsHT1KJK9YSojuurHY2ykUwUbzzxR1m5kTseNzM6sJL9zPtVCL
-         Il+UrrF+zZLlDL5ttja3W1U92SQJ/knYdPdABP+etfvmR2nxibDCyncJf3F5uQjF/2XT
-         oAhg==
-X-Gm-Message-State: AOAM531ojZK7KauQjqygNbfhKWlJr/9jydtqHuUFKQOIrlb0ujUfyLFH
-        8FBPr/XzfsVlEPgGp7E8OzgDFClogXNemG74E45MaChws82gaQ==
-X-Google-Smtp-Source: ABdhPJwU2Z2Qn+3InewKbrhAehIeUwIOfVw1iC4HFdM8oHuC387OrrzP3I5kpiS4vu2DoaZ4MO/LLBVW0mIyLTs7XjE=
-X-Received: by 2002:a05:6e02:f52:b0:2ca:95e4:f4b5 with SMTP id
- y18-20020a056e020f5200b002ca95e4f4b5mr5918655ilj.240.1650893588740; Mon, 25
- Apr 2022 06:33:08 -0700 (PDT)
+        bh=tnGDk2mXj8ducKZ6TjV0CCxMODc0uQNA4u/k6GAYohE=;
+        b=E95C2rFsiNNjvEkQ7tkFSgoV6h6hhBAGq8FEatsDtt/G67XrF7hcDpzTVJpEnRwEGF
+         vr2kHI+tLKETAwxZ3eMKtty3RMz5KirmfeJFxzio1RX0p3ZjGGNQBr6II79Mngv9eNN5
+         zRaFHo9Y8jeYR7hGYnncSI1HmX6iohvEtrTlZlIFk6vrT4EsPaKgPtE/x8A8+I11YY6b
+         1hyJC9lEscOK48ksXAfbijZAz7T1EviNTWb0NP2c5op2xE/1rvbeF88eF+iihAEugnyZ
+         LdIHnd/1ubjCxqQlixufdgdCrHVGJMk8SlosNq1ACqMWKjjHTMjIOGgYmX+yYB9q6M83
+         448Q==
+X-Gm-Message-State: AOAM533aD/MOaTPyG8S/ijgwsgl/yIordy9/n+DUNhTUELVFLy9Tjgiy
+        EJtspjWYefisM/gJyRgSgb6u4K7exDiEzrn1qWI/54eSWbc=
+X-Google-Smtp-Source: ABdhPJxT1xHvYnJnmKXomu4Hq7g2Z8f4tfldPU9/2l3zAc4G9If5Or8Dwfh4kiaoWtqonKY9HjM1w65uQiZFxTj56RY=
+X-Received: by 2002:a25:aa94:0:b0:648:62f2:ef4e with SMTP id
+ t20-20020a25aa94000000b0064862f2ef4emr4562504ybi.626.1650893598522; Mon, 25
+ Apr 2022 06:33:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220325132126.61949-1-zhangjiachen.jaycee@bytedance.com> <CAJfpeguESQm1KsQLyoMRTevLttV8N8NTGsb2tRbNS1AQ_pNAww@mail.gmail.com>
-In-Reply-To: <CAJfpeguESQm1KsQLyoMRTevLttV8N8NTGsb2tRbNS1AQ_pNAww@mail.gmail.com>
-From:   Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
-Date:   Mon, 25 Apr 2022 21:32:57 +0800
-Message-ID: <CAFQAk7ibzCn8OD84-nfg6_AePsKFTu9m7pXuQwcQP5OBp7ZCag@mail.gmail.com>
-Subject: Re: Re: [RFC PATCH] fuse: support cache revalidation in
- writeback_cache mode
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xie Yongji <xieyongji@bytedance.com>
+References: <20220421091055.12d6465c@canb.auug.org.au> <CACRpkdaD1G9J+jTJH4oGrcF_dinMjBjHCGMJqRZh8FC0dy+Xfw@mail.gmail.com>
+ <bf90c37b-0184-845c-dd6a-c2f4a038b075@postmarketos.org>
+In-Reply-To: <bf90c37b-0184-845c-dd6a-c2f4a038b075@postmarketos.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 25 Apr 2022 15:33:06 +0200
+Message-ID: <CACRpkday2DXDNJJJ7srC5-Fj_d9iiqX-nqY9np1TnsBsOG6sCg@mail.gmail.com>
+Subject: Re: linux-next: Fixes tags need some work in the pinctrl tree
+To:     Caleb Connolly <kc@postmarketos.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 8:41 PM Miklos Szeredi <miklos@szeredi.hu> wrote:
->
-> On Fri, 25 Mar 2022 at 14:23, Jiachen Zhang
-> <zhangjiachen.jaycee@bytedance.com> wrote:
-> >
-> > Hi all,
-> >
-> > This RFC patch implements attr cache and data cache revalidation for
-> > fuse writeback_cache mode in kernel. Looking forward to any suggestions
-> > or comments on this feature.
->
-> Quick question before going into the details:  could the cache
-> revalidation be done in the userspace filesystem instead, which would
-> set/clear FOPEN_KEEP_CACHE based on the result of the revalidation?
->
-> Thanks,
-> Miklos
+On Mon, Apr 25, 2022 at 2:27 PM Caleb Connolly <kc@postmarketos.org> wrote:
 
-Hi, Miklos,
+> The patch shouldn't be backported to stable as it will introduce a bug if ported
+> without the second patch (and as above, I don't think this series should be
+> backported at all). Could you let me know how to get this dropped from backporting?
 
-Thanks for replying. Yes, I believe we can also perform the
-revalidation in userspace, and we can invalidate the data cache with
-FOPEN_KEEP_CACHE cleared. But for now, there is no way we can
-invalidate attr cache (c/mtime and size)  in writeback mode.
+If Greg or Sasha etc propose the patch for stable (which will not happen
+automatically unless you explicitly add Cc: stable@vger.kernel.org)
+they send out a proposal "I will add this patch to stable", with CC to the
+author, and then you can say you don't want it backported.
 
-If it is more concise to implement most of the logic in userspace, do
-you think we should add a flag for attr cache just like what
-FOPEN_KEEP_CACHE does for data cache?
+Many Fixes:-tagged patches do not get picked up for stable, it is not
+what the tag means, if you want things to be picked for stable, the
+rule is Cc: stable@, it's just that sometimes the stable maintainers
+(and an AI!) pick some Fixes: patches anyways.
 
-Thanks,
-Jiachen
+Yours,
+Linus Walleij

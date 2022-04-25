@@ -2,123 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A124450E435
+	by mail.lfdr.de (Postfix) with ESMTP id 10A2C50E433
 	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234807AbiDYPVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 11:21:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
+        id S239096AbiDYPWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 11:22:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230471AbiDYPVq (ORCPT
+        with ESMTP id S230471AbiDYPV7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 11:21:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3D6B6E4B
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 08:18:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 25 Apr 2022 11:21:59 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01241B8223
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 08:18:51 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id ACC051F38C;
+        Mon, 25 Apr 2022 15:18:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1650899930; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EkBnaufcLFfEkTT9s0vwpbCPqXIXbPR63rO+8FOit3c=;
+        b=UPlcn0yOlHK4dfvdW+G0xAtQ6roAOYSlEChpI8+lw8iUuDpnhMiAArDE1epOe+pKrXCQxS
+        0e2O+ZM+jamG2B6GNvaHMgf/aZvw7J/Tzjs7VHB+eQ+jOLIJRIUNparywrz7Gypk4ZRZtQ
+        eB3NT6CkUdSJ4cZlzcnCj44pxZB/kaA=
+Received: from suse.cz (unknown [10.100.224.162])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5225B60E06
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 15:18:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B7E6C385A7;
-        Mon, 25 Apr 2022 15:18:35 +0000 (UTC)
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Luis Machado <luis.machado@arm.com>,
-        Richard Earnshaw <Richard.Earnshaw@arm.com>
-Subject: [PATCH] elf: Fix the arm64 MTE ELF segment name and value
-Date:   Mon, 25 Apr 2022 16:18:33 +0100
-Message-Id: <20220425151833.2603830-1-catalin.marinas@arm.com>
-X-Mailer: git-send-email 2.30.2
+        by relay2.suse.de (Postfix) with ESMTPS id 5BAEF2C14B;
+        Mon, 25 Apr 2022 15:18:50 +0000 (UTC)
+Date:   Mon, 25 Apr 2022 17:18:47 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH printk v3 14/15] printk: extend console_lock for proper
+ kthread support
+Message-ID: <Yma71x2p10d6yOLU@alley>
+References: <20220419234637.357112-1-john.ogness@linutronix.de>
+ <20220419234637.357112-15-john.ogness@linutronix.de>
+ <20220421124119.GB11747@pathway.suse.cz>
+ <875yn2h5ku.fsf@jogness.linutronix.de>
+ <YmKnp3Ccu7laW3E4@alley>
+ <87o80tp5lv.fsf@jogness.linutronix.de>
+ <YmLGfuSV5u7xp5BZ@alley>
+ <877d7gu7yg.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <877d7gu7yg.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unfortunately, the name/value choice for the MTE ELF segment type
-(PT_ARM_MEMTAG_MTE) was pretty poor: LOPROC+1 is already in use by
-PT_AARCH64_UNWIND, as defined in the AArch64 ELF ABI
-(https://github.com/ARM-software/abi-aa/blob/main/aaelf64/aaelf64.rst).
+On Fri 2022-04-22 23:31:11, John Ogness wrote:
+> On 2022-04-22, Petr Mladek <pmladek@suse.com> wrote:
+> > Another problem is that the ordering is not stable. The console
+> > might come and go.
+> 
+> The console list is protected by @console_sem, so it wouldn't be an
+> actual problem. The real issue is that lockdep would not like it. A new
+> lockdep class would need to be setup for each register_console().
 
-Update the ELF segment type value to LOPROC+2 and also change the define
-to PT_AARCH64_MEMTAG_MTE to match the AArch64 ELF ABI namespace. The
-AArch64 ELF ABI document is updating accordingly (segment type not
-previously mentioned in the document).
+Yeah. I did not mention it explicitely but I meant it as a problem
+with lockdep.
 
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-Fixes: 761b9b366cec ("elf: Introduce the ARM MTE ELF segment type")
-Cc: Will Deacon <will@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Eric Biederman <ebiederm@xmission.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Luis Machado <luis.machado@arm.com>
-Cc: Richard Earnshaw <Richard.Earnshaw@arm.com>
----
+> >> Anyway, I will first look into the nested locking solution. That
+> >> seems more promising to me and it would go a long way to simplify the
+> >> locking hierarchy.
+> >
+> > Please, do not spend too much time on this. The solution must be
+> > simple in principle. If it gets complicated than it will likely
+> > be worse than the current code.
+> 
+> Sure. The goal is to simplify. The only complexity will be doing in a
+> way that allow lockdep to understand it.
 
-Luckily, the commit being fixed here only went in for 5.18-rc1, so there is no
-ABI change in a mainline release.
+I am not sure how to distinguish intentional and non-intentional
+ordering change.
 
-FYI, the corresponding pull request for the AArch64 ELF ABI:
 
-https://github.com/ARM-software/abi-aa/pull/148
+> > Alternative solution would be to reduce the number of variables
+> > affected by the race. I mean:
+> >
+> >    + replace CON_THB_BLOCKED flag with con->blocked to avoid
+> >      the needed of READ_ONCE()/WRITE_ONCE().
+> >
+> >    + check con->blocked right after taking con->lock in
+> >      printk_kthread_func() so that all the other accesses are
+> >      safe.
+> 
+> Honestly, I would prefer this to what v4 is doing. The only reason
+> CON_THD_BLOCKED is a flag is to save space. But we are only talking
+> about a few bytes being saved. There aren't that many consoles.
+> 
+> It would be a very simple change. Literally just replacing the 3 lines
+> that set/clear CON_THD_BLOCKED and replacing/reordering the 2 lines that
+> check the flag. Then all the READ_ONCE/WRITE_ONCE to @flags could be
+> removed.
 
-I don't expect any further change to the segment name/value.
+I agree that it sounds like the easiest solution for now. If you
+prepare v5 with this change then I push it into linux-next instead
+of v4.
 
- Documentation/arm64/memory-tagging-extension.rst | 4 ++--
- arch/arm64/kernel/elfcore.c                      | 2 +-
- include/uapi/linux/elf.h                         | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+Well, I think that we need to make con->lock safe to use in the long
+term. The above workaround in printk_kthread_func() is good enough
+for now because this is the only location where con->lock is taken without
+console_sem. But I am sure that we/people will want to do more
+console-specific operations without console_sem in the future.
 
-diff --git a/Documentation/arm64/memory-tagging-extension.rst b/Documentation/arm64/memory-tagging-extension.rst
-index dd27f78d7608..dbae47bba25e 100644
---- a/Documentation/arm64/memory-tagging-extension.rst
-+++ b/Documentation/arm64/memory-tagging-extension.rst
-@@ -228,10 +228,10 @@ Core dump support
- -----------------
- 
- The allocation tags for user memory mapped with ``PROT_MTE`` are dumped
--in the core file as additional ``PT_ARM_MEMTAG_MTE`` segments. The
-+in the core file as additional ``PT_AARCH64_MEMTAG_MTE`` segments. The
- program header for such segment is defined as:
- 
--:``p_type``: ``PT_ARM_MEMTAG_MTE``
-+:``p_type``: ``PT_AARCH64_MEMTAG_MTE``
- :``p_flags``: 0
- :``p_offset``: segment file offset
- :``p_vaddr``: segment virtual address, same as the corresponding
-diff --git a/arch/arm64/kernel/elfcore.c b/arch/arm64/kernel/elfcore.c
-index 2b3f3d0544b9..98d67444a5b6 100644
---- a/arch/arm64/kernel/elfcore.c
-+++ b/arch/arm64/kernel/elfcore.c
-@@ -95,7 +95,7 @@ int elf_core_write_extra_phdrs(struct coredump_params *cprm, loff_t offset)
- 	for_each_mte_vma(current, vma) {
- 		struct elf_phdr phdr;
- 
--		phdr.p_type = PT_ARM_MEMTAG_MTE;
-+		phdr.p_type = PT_AARCH64_MEMTAG_MTE;
- 		phdr.p_offset = offset;
- 		phdr.p_vaddr = vma->vm_start;
- 		phdr.p_paddr = 0;
-diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
-index 787c657bfae8..7ce993e6786c 100644
---- a/include/uapi/linux/elf.h
-+++ b/include/uapi/linux/elf.h
-@@ -42,7 +42,7 @@ typedef __s64	Elf64_Sxword;
- 
- 
- /* ARM MTE memory tag segment type */
--#define PT_ARM_MEMTAG_MTE	(PT_LOPROC + 0x1)
-+#define PT_AARCH64_MEMTAG_MTE	(PT_LOPROC + 0x2)
- 
- /*
-  * Extended Numbering
+IMHO, the only sane approach is to follow the proposed rules:
+
+    + console_lock() will synchronize both global and per-console
+      stuff.
+
+    + con->lock will synchronize per-console stuff.
+
+    + con->lock could not be taken alone when the big console_lock()
+      is taken.
+
+
+I currently know only about two solutions:
+
+    1. The nested locking. console_lock() will take console_sem
+       and all con->lock's and will keep them locked.
+
+       It is rather trivial in principle. The problem is lockdep
+       and possible ABBA deadlocks caused by unstable ordering.
+
+
+    2. Create the wrappers around con->lock that will check
+       whether console_sem is taken (con->locked flag).
+
+       It will require additional per-console waitqueue. But all
+       the magic will be hidden in the wrappers.
+
+
+I personally prefer 2nd approach for the long term solution. It might
+look more complicated but it will not break lockdep.
+
+Best Regards,
+Petr

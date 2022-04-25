@@ -2,156 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2443E50D899
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 07:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0105D50D89F
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 07:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241158AbiDYFFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 01:05:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44560 "EHLO
+        id S241170AbiDYFJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 01:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiDYFE4 (ORCPT
+        with ESMTP id S241161AbiDYFJN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 01:04:56 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1327C8233A;
-        Sun, 24 Apr 2022 22:01:48 -0700 (PDT)
-X-UUID: e1b52e78c8164e8cae9f58f6ec9460f2-20220425
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:33ab0d5a-3c1a-4018-b834-97e52a98695e,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-INFO: VERSION:1.1.4,REQID:33ab0d5a-3c1a-4018-b834-97e52a98695e,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:45
-X-CID-META: VersionHash:faefae9,CLOUDID:4737faef-06b0-4305-bfbf-554bfc9d151a,C
-        OID:IGNORED,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,File:ni
-        l,QS:0,BEC:nil
-X-UUID: e1b52e78c8164e8cae9f58f6ec9460f2-20220425
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1368655794; Mon, 25 Apr 2022 13:01:43 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 25 Apr 2022 13:01:42 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 25 Apr 2022 13:01:42 +0800
-Message-ID: <5ec37a01b0b84140a7d171b9a5cff7ad8f9fbe87.camel@mediatek.com>
-Subject: Re: [PATCH V3 12/17] dt-binding: mt8192: Add infra_ao reset bit
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        Chun-Jie Chen =?UTF-8?Q?=28=E9=99=B3=E6=B5=9A=E6=A1=80=29?= 
-        <Chun-Jie.Chen@mediatek.com>,
-        "wenst@chromium.org" <wenst@chromium.org>,
-        Runyang Chen =?UTF-8?Q?=28=E9=99=88=E6=B6=A6=E6=B4=8B=29?= 
-        <Runyang.Chen@mediatek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 25 Apr 2022 13:01:42 +0800
-In-Reply-To: <e5b18654-ce83-44ee-e4c8-4cdfc4ceaa1d@linaro.org>
-References: <20220422060152.13534-1-rex-bc.chen@mediatek.com>
-         <20220422060152.13534-13-rex-bc.chen@mediatek.com>
-         <e5b18654-ce83-44ee-e4c8-4cdfc4ceaa1d@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 25 Apr 2022 01:09:13 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54F78C7C4
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 22:06:07 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id q8so1275551plx.3
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 22:06:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=gNvaAoMPbdbdyvNqhaTtDMGsJUQFjlXi46W57sai814=;
+        b=NKY5xGBqWdv1qptYi67G9s1QIJ57Ku3frhJzM74pZxsLSWQd3yGijZwqvpsfapeTSv
+         ciClB3KxoTrc1xQ+TglZAorvsC5xzJmyKKSXlKKHCDdqdirRKannkSUmPr9zZywT+Bz4
+         ToUJxiflwolHfGYbJiGmq6FDTq2Xxcb7eDK1qR0daTZVhI2aCIztxoAJHyoEtr158TQO
+         +WU1o2FQ3VPVx1ngQsmc0FgbIEYGWk4Hfv9u109YdchiW4PGtaPXUDEXSLjo3cbT+cp6
+         uJrsyjjetqBcXf1KxiqOadLPtU6M+ubji3ZOGb9QMjnJs45xc06rZKn5bhHuT1sW7y4s
+         kL7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=gNvaAoMPbdbdyvNqhaTtDMGsJUQFjlXi46W57sai814=;
+        b=l78Ynet0O5+k8ae2a3L7BCjghMOqXMmbIQC8W4EyMnyPb0q0r2E01pFYNi5Y//u9Ju
+         +HvGJt7ggDijmnuAgqtV/6rL7vQt/6d41zyaseYZNqwRrGSIQqKJwSU3KLt9hl41PKIf
+         +YkX6RgkmCz6wfCE6fjaTK/n5XUXOIlqkKRLhNfb4uOXp87C+2mOLiDzpVxGxsPRzFvE
+         EewbobLToMDHDfO4WCgUoyHPG6xNdgXhNRYsEbJn60r9/y5jgp7UCjagKbcts5iq5nCz
+         6mRrOjjJu2nppzn5PcXAnSvaH3OGVC55R4PEAweiC9Xsda1lMSghFwuqfkqxZvXGcdru
+         SDZw==
+X-Gm-Message-State: AOAM531/WwWBRuATuxwrhkLIs8HUmpWIlfKcep8lOeYqpLu8yWeT+1ZY
+        ZpqsL4XqK9VfaTdiQSDobL6dMg==
+X-Google-Smtp-Source: ABdhPJyk6HWS+uLuAV1Fn7IQFtK1dt2aoEgyN3lkCaQS7r5QtxgXFkshOgNrfrKAaTBDliwuWIE75g==
+X-Received: by 2002:a17:902:8698:b0:158:99d4:6256 with SMTP id g24-20020a170902869800b0015899d46256mr16749805plo.104.1650863167283;
+        Sun, 24 Apr 2022 22:06:07 -0700 (PDT)
+Received: from localhost ([122.171.250.232])
+        by smtp.gmail.com with ESMTPSA id l2-20020a056a0016c200b004f7e3181a41sm10159399pfc.98.2022.04.24.22.06.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Apr 2022 22:06:06 -0700 (PDT)
+Date:   Mon, 25 Apr 2022 10:36:04 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Xiaobing Luo <luoxiaobing0926@gmail.com>, tiny.windzz@gmail.com,
+        rafael@kernel.org, wens@csie.org, jernej.skrabec@gmail.com,
+        mripard@kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] cpufreq:fix memory leak in sun50i_cpufreq_nvmem_probe
+Message-ID: <20220425050604.fv4f3s74jmvx6rlp@vireshk-i7>
+References: <20220423151204.2102314-1-luoxiaobing0926@gmail.com>
+ <4ee2421f-79a8-7f4d-f7ef-33f0ccf49337@sholland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4ee2421f-79a8-7f4d-f7ef-33f0ccf49337@sholland.org>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-04-23 at 18:28 +0800, Krzysztof Kozlowski wrote:
-> On 22/04/2022 08:01, Rex-BC Chen wrote:
-> > To support reset of infra_ao, add the bit definition for
-> > thermal/PCIe/SVS.
+On 23-04-22, 21:46, Samuel Holland wrote:
+> On 4/23/22 10:12 AM, Xiaobing Luo wrote:
+> > --------------------------------------------
+> > unreferenced object 0xffff000010742a00 (size 128):
+> >   comm "swapper/0", pid 1, jiffies 4294902015 (age 1187.652s)
+> >   hex dump (first 32 bytes):
+> >     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+> >     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+> >   backtrace:
+> >     [<00000000b4dfebaa>] __kmalloc+0x338/0x474
+> >     [<00000000d6e716db>] sun50i_cpufreq_nvmem_probe+0xc4/0x36c
+> >     [<000000007d6082a0>] platform_probe+0x98/0x11c
+> >     [<00000000c990f549>] really_probe+0x234/0x5a0
+> >     [<000000002d9fecc6>] __driver_probe_device+0x194/0x224
+> >     [<00000000cf0b94fa>] driver_probe_device+0x64/0x13c
+> >     [<00000000f238e4cf>] __device_attach_driver+0xf8/0x180
+> >     [<000000006720e418>] bus_for_each_drv+0xf8/0x160
+> >     [<00000000df4f14f6>] __device_attach+0x174/0x29c
+> >     [<00000000782002fb>] device_initial_probe+0x20/0x30
+> >     [<00000000c2681b06>] bus_probe_device+0xfc/0x110
+> >     [<00000000964cf3bd>] device_add+0x5f0/0xcd0
+> >     [<000000004b9264e3>] platform_device_add+0x198/0x390
+> >     [<00000000fa82a9d0>] platform_device_register_full+0x178/0x210
+> >     [<000000009a5daf13>] sun50i_cpufreq_init+0xf8/0x168
+> >     [<000000000377cc7c>] do_one_initcall+0xe4/0x570
+> > --------------------------------------------
 > > 
-> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> > ---
-> >  include/dt-bindings/reset/mt8192-resets.h | 10 ++++++++++
-> >  1 file changed, 10 insertions(+)
+> > if sun50i_cpufreq_get_efuse failed, then opp_tables leak.
+> > Fixes: f328584f7bff ("cpufreq: Add sun50i nvmem based CPU scaling driver")
 > > 
-> > diff --git a/include/dt-bindings/reset/mt8192-resets.h
-> > b/include/dt-bindings/reset/mt8192-resets.h
-> > index be9a7ca245b9..d5f3433175c1 100644
-> > --- a/include/dt-bindings/reset/mt8192-resets.h
-> > +++ b/include/dt-bindings/reset/mt8192-resets.h
-> > @@ -27,4 +27,14 @@
-> >  
-> >  #define MT8192_TOPRGU_SW_RST_NUM				23
-> >  
-> > +/* INFRA RST0 */
-> > +#define MT8192_INFRA_RST0_LVTS_AP_RST				
-> > 0
-> > +/* INFRA RST2 */
-> > +#define MT8192_INFRA_RST2_PCIE_PHY_RST				
-> > 15
-> > +/* INFRA RST3 */
-> > +#define MT8192_INFRA_RST3_PTP_RST				5
-> > +/* INFRA RST4 */
-> > +#define MT8192_INFRA_RST4_LVTS_MCU				12
-> > +#define MT8192_INFRA_RST4_PCIE_TOP				1
+> > Signed-off-by: Xiaobing Luo <luoxiaobing0926@gmail.com>
 > 
-> These should be the IDs of reset, not some register values/offsets.
-> Therefore it is expected to have them incremented by 1.
+> Two minor style issues: there should be a space after "cpufreq:" in the commit
+> subject. And the blank line should come before the "Fixes:" tag, not after.
+> Otherwise:
 > 
-> 
+> Reviewed-by: Samuel Holland <samuel@sholland.org>
 
-Hello Krzysztof,
+Applied, thanks.
 
-This is define bit.
-
-There is serveral reset set for infra_ao while it's not serial.
-For MT8192, it's 0x120/0x130/0x140/0x150/0x730.
-We are implement #reset-cells = <2>, and we can use this reset drive
-more easier.
-
-For example, in dts, we can define
-infra_ao: syscon {
-	compatible = "mediatek,mt8192-infracfg", "syscon";
- 	reg = <0 0x10001000 0 0x1000>;
- 	#clock-cells = <1>;
-	#reset-cells = <2>;
-};
-
-thermal {
-	...
-	resets = <&infra_ao 0x730 MT8192_INFRA_RST4_LVTS_MCU>;
-	...
-};
-
-If it's acceptabel, I can update all bit difinition from 0 to 15 for
-all reset set.
-
-BRs,
-Rex
-> > +
-> >  #endif  /* _DT_BINDINGS_RESET_CONTROLLER_MT8192 */
-> 
-> 
-> Best regards,
-> Krzysztof
-
+-- 
+viresh

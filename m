@@ -2,109 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2704C50D7E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 05:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7632950D7E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 05:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240777AbiDYDxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 23:53:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53426 "EHLO
+        id S238583AbiDYD6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 23:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236662AbiDYDxs (ORCPT
+        with ESMTP id S240804AbiDYD5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 23:53:48 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3110031DF7
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 20:50:45 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23P0Gfx9019844;
-        Mon, 25 Apr 2022 03:50:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : content-type :
- mime-version; s=pp1; bh=eBflnmzLESrq6CuPI7QfTsH+lCF0zHeYjCfsYSkI1X0=;
- b=Mu3XD/w1kDn/CBKiDsg5F/2/7tY233Ea7mfb8Pmz5tjeQztfIIyY32JpXUF3efm0ETdR
- HuMBOuSm95lGksSC/B6vnb0QmqOpyVaiPKA6IpZug9LCNYFOOsDJUm19v4blpAkcZ2Lf
- 9hNyPLai79eAQxHzgIe3HR+Xmtb2B3JuuCBFoxdxApSZFnNIuiCqxCxYBcWNOo3dZAkE
- FBB3Dma/neXvlX2Vkq1tqP8OR3kaH7+wL5x+kTYP6bbzTzotg8o/y6WiFUgpnzAXHQNh
- 0b+XphGHESJ5KRjlA5fhZ1P7THn6+63OhLsOPxtE5XCGtvKJEyPM5Thj1NOeKnoeIKfp Aw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fmu33fhff-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Apr 2022 03:50:28 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23P3gjEB006954;
-        Mon, 25 Apr 2022 03:50:28 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fmu33fhfb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Apr 2022 03:50:27 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23P3h7wk021099;
-        Mon, 25 Apr 2022 03:50:27 GMT
-Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
-        by ppma04wdc.us.ibm.com with ESMTP id 3fm939b0ma-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Apr 2022 03:50:27 +0000
-Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23P3oQuo14483802
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 25 Apr 2022 03:50:26 GMT
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4D8CC136055;
-        Mon, 25 Apr 2022 03:50:26 +0000 (GMT)
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5D048136053;
-        Mon, 25 Apr 2022 03:50:20 +0000 (GMT)
-Received: from skywalker.linux.ibm.com (unknown [9.43.95.32])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Mon, 25 Apr 2022 03:50:19 +0000 (GMT)
-X-Mailer: emacs 29.0.50 (via feedmail 11-beta-1 I)
-From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-To:     "ying.huang@intel.com" <ying.huang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Greg Thelen <gthelen@google.com>,
-        MichalHocko <mhocko@kernel.org>,
-        Brice Goglin <brice.goglin@gmail.com>
-Subject: Re: [PATCH v2 0/5] mm: demotion: Introduce new node state
- N_DEMOTION_TARGETS
-In-Reply-To: <200e95cf36c1642512d99431014db8943fed715d.camel@intel.com>
-References: <CAAPL-u_pSWD6U0yQ8Ws+_Yfb_3ZEmNXJsYcRJjAFBkyDk=nq8g@mail.gmail.com>
- <ea73f6fda9cafdd0cb6ba8351139e6f4b47354a8.camel@intel.com>
- <CAAPL-u-aeceXFUNdok_GYb2aLhZa0zBBuSqHxFznQob3PbJt7Q@mail.gmail.com>
- <a80647053bba44623094995730e061f0e6129677.camel@intel.com>
- <CAAPL-u89Jxutu1VH0LnO5VGdMbkLvc2M9eapuwP-y9oG9QSsrA@mail.gmail.com>
- <610ccaad03f168440ce765ae5570634f3b77555e.camel@intel.com>
- <CAAPL-u9ktM82zAW_OVwqTmQsr-XC8XOPmAsjoiCLo18cxUWA=A@mail.gmail.com>
- <8e31c744a7712bb05dbf7ceb2accf1a35e60306a.camel@intel.com>
- <CAAPL-u9uP+FUh7Yn0ByOECo+EP32ZABnCvNPKQB9JCA68VHEqQ@mail.gmail.com>
- <78b5f4cfd86efda14c61d515e4db9424e811c5be.camel@intel.com>
- <YmKKwXa2XI/nwac0@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
- <200e95cf36c1642512d99431014db8943fed715d.camel@intel.com>
-Date:   Mon, 25 Apr 2022 09:20:14 +0530
-Message-ID: <8735i1zurt.fsf@linux.ibm.com>
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: XG6ckU-tAxoC5O7NqW5j0tz4eHqrccJH
-X-Proofpoint-ORIG-GUID: 7bmJ2IxB12aIOp-sdFQbTEWk7HGPdmRh
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Sun, 24 Apr 2022 23:57:39 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38F0326DF
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 20:54:33 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id a15so13637537pfv.11
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 20:54:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nQMh4D1p1qUFFd/ENYkyd6a4ed7ywJDvuoHtnCfZxxc=;
+        b=Bs0SRpa23sDZt6vNjRxBBzhpJC2UblN1G1+OnEPlhxziULEeoQFpwo0xDvIopvMUCw
+         HkRZBGO9PVA8JBB/Gk2o5EuqWtpCSwli9tTSv0h42Nc8NJ5Bo+TWbzAM8dvz5FtEjf3E
+         cQ+EVzcjWpy+yA9XpPno1xouHknR0/juYvLghHsHM67P1w69KYKHwkUEY91aDFg0+tFq
+         mySeuKbFId0BCa6P8IqsQs89ri/KTOMpk/ASf1aVoFA4abENNFyqlDcrqZRr0TObUiRc
+         bf6ViEub7tSVYfrsECpiJ6hqALK/TWiIpXYS458+rMtD5Ei8Ny4gud8sRl5Dr9fdKK3f
+         ZvUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nQMh4D1p1qUFFd/ENYkyd6a4ed7ywJDvuoHtnCfZxxc=;
+        b=nfb2gejU6M8BCHWnROR2k1LsRlr88lRzrcSd/vb2RATm/iRNFO5rM4avCM96LnZ7LD
+         oAgGgyoTPu7auu2M/4Si+MHYkCvEMStX4ODGIlAG93/z+tFWkFA061nPvYf0ZE/3UruK
+         rL6UXgXz9CLPZ1VbKglt6kSFuF4gmfDkEO7/FqxEUBqsDuwD1SfgjncKGjhRr00x7jXt
+         CEJlMMl1YtOBvxpCuXwEFHc2jtlKn6mTjBkqnbOrZ9oTv+INIe5ycbNXkb34qvdw6KoG
+         nc/z8JkcnqaDVlizfum5i+pr40mJvcA/iS5gi8TTLy7bQEUudZVUzxkZAva50swcgtnv
+         Ha/w==
+X-Gm-Message-State: AOAM532IVO3J2X+pqTzrpvNeTirkHnz+5AMiPgKx9UsLj9wjIVfDAp72
+        yPO2d7RMO6yw/VM/oBMQ9n+6CA==
+X-Google-Smtp-Source: ABdhPJw3MQhqUGTALqOLtdCdPnevRR163RkOrfRhAO8+KyCaQAzLIwl5Jeo54ZZFWuFgMxcxdRKUCQ==
+X-Received: by 2002:a05:6a00:22cd:b0:50a:69c9:1806 with SMTP id f13-20020a056a0022cd00b0050a69c91806mr17026948pfj.51.1650858873463;
+        Sun, 24 Apr 2022 20:54:33 -0700 (PDT)
+Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.239])
+        by smtp.gmail.com with ESMTPSA id n16-20020a17090a091000b001d2bff34228sm6958176pjn.9.2022.04.24.20.54.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Apr 2022 20:54:33 -0700 (PDT)
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     cl@linux.com, penberg@kernel.org, rientjes@google.com,
+        iamjoonsoo.kim@lge.com, akpm@linux-foundation.org, vbabka@suse.cz,
+        roman.gushchin@linux.dev
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        smuchun@gmail.com, Muchun Song <songmuchun@bytedance.com>
+Subject: [PATCH] mm: slab: optimize memcg_slab_free_hook()
+Date:   Mon, 25 Apr 2022 11:54:06 +0800
+Message-Id: <20220425035406.9337-1-songmuchun@bytedance.com>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-25_01,2022-04-22_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- lowpriorityscore=0 suspectscore=0 clxscore=1011 impostorscore=0
- mlxlogscore=999 priorityscore=1501 adultscore=0 bulkscore=0 malwarescore=0
- spamscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204250014
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -112,182 +69,269 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"ying.huang@intel.com" <ying.huang@intel.com> writes:
+Most callers of memcg_slab_free_hook() already know the slab,  which could
+be passed to memcg_slab_free_hook() directly to reduce the overhead of an
+another call of virt_to_slab().  For bulk freeing of objects, the call of
+slab_objcgs() in the loop in memcg_slab_free_hook() is redundant as well.
+Rework memcg_slab_free_hook() and build_detached_freelist() to reduce
+those unnecessary overhead and make memcg_slab_free_hook() can handle bulk
+freeing in slab_free().
 
-> Hi, All,
->
-> On Fri, 2022-04-22 at 16:30 +0530, Jagdish Gediya wrote:
->
-> [snip]
->
->> I think it is necessary to either have per node demotion targets
->> configuration or the user space interface supported by this patch
->> series. As we don't have clear consensus on how the user interface
->> should look like, we can defer the per node demotion target set
->> interface to future until the real need arises.
->> 
->> Current patch series sets N_DEMOTION_TARGET from dax device kmem
->> driver, it may be possible that some memory node desired as demotion
->> target is not detected in the system from dax-device kmem probe path.
->> 
->> It is also possible that some of the dax-devices are not preferred as
->> demotion target e.g. HBM, for such devices, node shouldn't be set to
->> N_DEMOTION_TARGETS. In future, Support should be added to distinguish
->> such dax-devices and not mark them as N_DEMOTION_TARGETS from the
->> kernel, but for now this user space interface will be useful to avoid
->> such devices as demotion targets.
->> 
->> We can add read only interface to view per node demotion targets
->> from /sys/devices/system/node/nodeX/demotion_targets, remove
->> duplicated /sys/kernel/mm/numa/demotion_target interface and instead
->> make /sys/devices/system/node/demotion_targets writable.
->> 
->> Huang, Wei, Yang,
->> What do you suggest?
->
-> We cannot remove a kernel ABI in practice.  So we need to make it right
-> at the first time.  Let's try to collect some information for the kernel
-> ABI definitation.
->
-> The below is just a starting point, please add your requirements.
->
-> 1. Jagdish has some machines with DRAM only NUMA nodes, but they don't
-> want to use that as the demotion targets.  But I don't think this is a
-> issue in practice for now, because demote-in-reclaim is disabled by
-> default.
+Move the calling site of memcg_slab_free_hook() from do_slab_free() to
+slab_free() for slub to make the code clearer since the logic is weird
+(e.g. the caller need to judge whether it needs to call
+memcg_slab_free_hook()). It is easy to make mistakes like missing calling
+of memcg_slab_free_hook() like fixes of:
 
-It is not just that the demotion can be disabled. We should be able to
-use demotion on a system where we can find DRAM only NUMA nodes. That
-cannot be achieved by /sys/kernel/mm/numa/demotion_enabled. It needs
-something similar to to N_DEMOTION_TARGETS
+  commit d1b2cf6cb84a ("mm: memcg/slab: uncharge during kmem_cache_free_bulk()")
+  commit ae085d7f9365 ("mm: kfence: fix missing objcg housekeeping for SLAB")
 
->
-> 2. For machines with PMEM installed in only 1 of 2 sockets, for example,
->
-> Node 0 & 2 are cpu + dram nodes and node 1 are slow
-> memory node near node 0,
->
-> available: 3 nodes (0-2)
-> node 0 cpus: 0 1
-> node 0 size: n MB
-> node 0 free: n MB
-> node 1 cpus:
-> node 1 size: n MB
-> node 1 free: n MB
-> node 2 cpus: 2 3
-> node 2 size: n MB
-> node 2 free: n MB
-> node distances:
-> node   0   1   2
->   0:  10  40  20
->   1:  40  10  80
->   2:  20  80  10
->
-> We have 2 choices,
->
-> a)
-> node	demotion targets
-> 0	1
-> 2	1
+Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+---
+ mm/slab.c |  4 ++--
+ mm/slab.h | 30 ++++++++---------------------
+ mm/slub.c | 66 +++++++++++++++++++++------------------------------------------
+ 3 files changed, 32 insertions(+), 68 deletions(-)
 
-This is achieved by 
+diff --git a/mm/slab.c b/mm/slab.c
+index a301f266efd1..e868b4af4346 100644
+--- a/mm/slab.c
++++ b/mm/slab.c
+@@ -3407,9 +3407,10 @@ static __always_inline void __cache_free(struct kmem_cache *cachep, void *objp,
+ {
+ 	bool init;
+ 
++	memcg_slab_free_hook(cachep, virt_to_slab(objp), &objp, 1);
++
+ 	if (is_kfence_address(objp)) {
+ 		kmemleak_free_recursive(objp, cachep->flags);
+-		memcg_slab_free_hook(cachep, &objp, 1);
+ 		__kfence_free(objp);
+ 		return;
+ 	}
+@@ -3442,7 +3443,6 @@ void ___cache_free(struct kmem_cache *cachep, void *objp,
+ 	check_irq_off();
+ 	kmemleak_free_recursive(objp, cachep->flags);
+ 	objp = cache_free_debugcheck(cachep, objp, caller);
+-	memcg_slab_free_hook(cachep, &objp, 1);
+ 
+ 	/*
+ 	 * Skip calling cache_free_alien() when the platform is not numa.
+diff --git a/mm/slab.h b/mm/slab.h
+index db9fb5c8dae7..a8d5eb1c323f 100644
+--- a/mm/slab.h
++++ b/mm/slab.h
+@@ -547,36 +547,22 @@ static inline void memcg_slab_post_alloc_hook(struct kmem_cache *s,
+ 	obj_cgroup_put(objcg);
+ }
+ 
+-static inline void memcg_slab_free_hook(struct kmem_cache *s_orig,
++static inline void memcg_slab_free_hook(struct kmem_cache *s, struct slab *slab,
+ 					void **p, int objects)
+ {
+-	struct kmem_cache *s;
+ 	struct obj_cgroup **objcgs;
+-	struct obj_cgroup *objcg;
+-	struct slab *slab;
+-	unsigned int off;
+ 	int i;
+ 
+ 	if (!memcg_kmem_enabled())
+ 		return;
+ 
+-	for (i = 0; i < objects; i++) {
+-		if (unlikely(!p[i]))
+-			continue;
+-
+-		slab = virt_to_slab(p[i]);
+-		/* we could be given a kmalloc_large() object, skip those */
+-		if (!slab)
+-			continue;
+-
+-		objcgs = slab_objcgs(slab);
+-		if (!objcgs)
+-			continue;
++	objcgs = slab_objcgs(slab);
++	if (!objcgs)
++		return;
+ 
+-		if (!s_orig)
+-			s = slab->slab_cache;
+-		else
+-			s = s_orig;
++	for (i = 0; i < objects; i++) {
++		struct obj_cgroup *objcg;
++		unsigned int off;
+ 
+ 		off = obj_to_index(s, slab, p[i]);
+ 		objcg = objcgs[off];
+@@ -628,7 +614,7 @@ static inline void memcg_slab_post_alloc_hook(struct kmem_cache *s,
+ {
+ }
+ 
+-static inline void memcg_slab_free_hook(struct kmem_cache *s,
++static inline void memcg_slab_free_hook(struct kmem_cache *s, struct slab *slab,
+ 					void **p, int objects)
+ {
+ }
+diff --git a/mm/slub.c b/mm/slub.c
+index 6dc703488d30..86c50eb6c670 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -3437,9 +3437,6 @@ static __always_inline void do_slab_free(struct kmem_cache *s,
+ 	struct kmem_cache_cpu *c;
+ 	unsigned long tid;
+ 
+-	/* memcg_slab_free_hook() is already called for bulk free. */
+-	if (!tail)
+-		memcg_slab_free_hook(s, &head, 1);
+ redo:
+ 	/*
+ 	 * Determine the currently cpus per cpu slab.
+@@ -3499,9 +3496,10 @@ static __always_inline void do_slab_free(struct kmem_cache *s,
+ }
+ 
+ static __always_inline void slab_free(struct kmem_cache *s, struct slab *slab,
+-				      void *head, void *tail, int cnt,
++				      void *head, void *tail, void **p, int cnt,
+ 				      unsigned long addr)
+ {
++	memcg_slab_free_hook(s, slab, p, cnt);
+ 	/*
+ 	 * With KASAN enabled slab_free_freelist_hook modifies the freelist
+ 	 * to remove objects, whose reuse must be delayed.
+@@ -3523,7 +3521,7 @@ void kmem_cache_free(struct kmem_cache *s, void *x)
+ 	if (!s)
+ 		return;
+ 	trace_kmem_cache_free(_RET_IP_, x, s->name);
+-	slab_free(s, virt_to_slab(x), x, NULL, 1, _RET_IP_);
++	slab_free(s, virt_to_slab(x), x, NULL, &x, 1, _RET_IP_);
+ }
+ EXPORT_SYMBOL(kmem_cache_free);
+ 
+@@ -3564,79 +3562,59 @@ static inline
+ int build_detached_freelist(struct kmem_cache *s, size_t size,
+ 			    void **p, struct detached_freelist *df)
+ {
+-	size_t first_skipped_index = 0;
+ 	int lookahead = 3;
+ 	void *object;
+ 	struct folio *folio;
+-	struct slab *slab;
+-
+-	/* Always re-init detached_freelist */
+-	df->slab = NULL;
+-
+-	do {
+-		object = p[--size];
+-		/* Do we need !ZERO_OR_NULL_PTR(object) here? (for kfree) */
+-	} while (!object && size);
+-
+-	if (!object)
+-		return 0;
++	size_t same;
+ 
++	object = p[--size];
+ 	folio = virt_to_folio(object);
+ 	if (!s) {
+ 		/* Handle kalloc'ed objects */
+ 		if (unlikely(!folio_test_slab(folio))) {
+ 			free_large_kmalloc(folio, object);
+-			p[size] = NULL; /* mark object processed */
++			df->slab = NULL;
+ 			return size;
+ 		}
+ 		/* Derive kmem_cache from object */
+-		slab = folio_slab(folio);
+-		df->s = slab->slab_cache;
++		df->slab = folio_slab(folio);
++		df->s = df->slab->slab_cache;
+ 	} else {
+-		slab = folio_slab(folio);
++		df->slab = folio_slab(folio);
+ 		df->s = cache_from_obj(s, object); /* Support for memcg */
+ 	}
+ 
+-	if (is_kfence_address(object)) {
+-		slab_free_hook(df->s, object, false);
+-		__kfence_free(object);
+-		p[size] = NULL; /* mark object processed */
+-		return size;
+-	}
+-
+ 	/* Start new detached freelist */
+-	df->slab = slab;
+-	set_freepointer(df->s, object, NULL);
+ 	df->tail = object;
+ 	df->freelist = object;
+-	p[size] = NULL; /* mark object processed */
+ 	df->cnt = 1;
+ 
++	if (is_kfence_address(object))
++		return size;
++
++	set_freepointer(df->s, object, NULL);
++
++	same = size;
+ 	while (size) {
+ 		object = p[--size];
+-		if (!object)
+-			continue; /* Skip processed objects */
+-
+ 		/* df->slab is always set at this point */
+ 		if (df->slab == virt_to_slab(object)) {
+ 			/* Opportunity build freelist */
+ 			set_freepointer(df->s, object, df->freelist);
+ 			df->freelist = object;
+ 			df->cnt++;
+-			p[size] = NULL; /* mark object processed */
+-
++			same--;
++			if (size != same)
++				swap(p[size], p[same]);
+ 			continue;
+ 		}
+ 
+ 		/* Limit look ahead search */
+ 		if (!--lookahead)
+ 			break;
+-
+-		if (!first_skipped_index)
+-			first_skipped_index = size + 1;
+ 	}
+ 
+-	return first_skipped_index;
++	return same;
+ }
+ 
+ /* Note that interrupts must be enabled when calling this function. */
+@@ -3645,7 +3623,6 @@ void kmem_cache_free_bulk(struct kmem_cache *s, size_t size, void **p)
+ 	if (WARN_ON(!size))
+ 		return;
+ 
+-	memcg_slab_free_hook(s, p, size);
+ 	do {
+ 		struct detached_freelist df;
+ 
+@@ -3653,7 +3630,8 @@ void kmem_cache_free_bulk(struct kmem_cache *s, size_t size, void **p)
+ 		if (!df.slab)
+ 			continue;
+ 
+-		slab_free(df.s, df.slab, df.freelist, df.tail, df.cnt, _RET_IP_);
++		slab_free(df.s, df.slab, df.freelist, df.tail, &p[size], df.cnt,
++			  _RET_IP_);
+ 	} while (likely(size));
+ }
+ EXPORT_SYMBOL(kmem_cache_free_bulk);
+@@ -4556,7 +4534,7 @@ void kfree(const void *x)
+ 		return;
+ 	}
+ 	slab = folio_slab(folio);
+-	slab_free(slab->slab_cache, slab, object, NULL, 1, _RET_IP_);
++	slab_free(slab->slab_cache, slab, object, NULL, &object, 1, _RET_IP_);
+ }
+ EXPORT_SYMBOL(kfree);
+ 
+-- 
+2.11.0
 
-[PATCH v2 1/5] mm: demotion: Set demotion list differently
-
->
-> b)
-> node	demotion targets
-> 0	1
-> 2	X
-
-
->
-> a) is good to take advantage of PMEM.  b) is good to reduce cross-socket
-> traffic.  Both are OK as defualt configuration.  But some users may
-> prefer the other one.  So we need a user space ABI to override the
-> default configuration.
->
-> 3. For machines with HBM (High Bandwidth Memory), as in
->
-> https://lore.kernel.org/lkml/39cbe02a-d309-443d-54c9-678a0799342d@gmail.com/
->
->> [1] local DDR = 10, remote DDR = 20, local HBM = 31, remote HBM = 41
->
-> Although HBM has better performance than DDR, in ACPI SLIT, their
-> distance to CPU is longer.  We need to provide a way to fix this.  The
-> user space ABI is one way.  The desired result will be to use local DDR
-> as demotion targets of local HBM.
-
-
-IMHO the above (2b and 3) can be done using per node demotion targets. Below is
-what I think we could do with a single slow memory NUMA node 4.
-
-/sys/devices/system/node# cat node[0-4]/demotion_targets
-4
-4
-4
-4
-
-/sys/devices/system/node# echo 1 > node1/demotion_targets 
-bash: echo: write error: Invalid argument
-/sys/devices/system/node# cat node[0-4]/demotion_targets
-4
-4
-4
-4
-
-/sys/devices/system/node# echo 0 > node1/demotion_targets 
-/sys/devices/system/node# cat node[0-4]/demotion_targets
-4
-0
-4
-4
-
-/sys/devices/system/node# echo 1 > node0/demotion_targets 
-bash: echo: write error: Invalid argument
-/sys/devices/system/node# cat node[0-4]/demotion_targets
-4
-0
-4
-4
-
-Disable demotion for a specific node.
-/sys/devices/system/node# echo > node1/demotion_targets 
-/sys/devices/system/node# cat node[0-4]/demotion_targets
-4
-
-4
-4
-
-Reset demotion to default
-/sys/devices/system/node# echo -1 > node1/demotion_targets 
-/sys/devices/system/node# cat node[0-4]/demotion_targets
-4
-4
-4
-4
-
-When a specific device/NUMA node is used for demotion target via the user interface, it is taken
-out of other NUMA node targets.
-root@ubuntu-guest:/sys/devices/system/node# cat node[0-4]/demotion_targets
-4
-4
-4
-4
-
-/sys/devices/system/node# echo 4 > node1/demotion_targets 
-/sys/devices/system/node# cat node[0-4]/demotion_targets
-
-4
-
-
-
-If more than one node requies the same demotion target
-/sys/devices/system/node# echo 4 > node0/demotion_targets 
-/sys/devices/system/node# cat node[0-4]/demotion_targets
-4
-4
-
-
-
--aneesh

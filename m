@@ -2,208 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6457A50E28A
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D94BE50E290
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242311AbiDYODk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 10:03:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48806 "EHLO
+        id S238921AbiDYOFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 10:05:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237443AbiDYODi (ORCPT
+        with ESMTP id S230398AbiDYOFb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 10:03:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C7982B188
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 07:00:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650895233;
+        Mon, 25 Apr 2022 10:05:31 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E447C8BF21;
+        Mon, 25 Apr 2022 07:02:25 -0700 (PDT)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 146A022246;
+        Mon, 25 Apr 2022 16:02:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1650895343;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=N9u2nqt1fAgYEoKl131YI31Ovqdnkz65FuwgpqzDfxQ=;
-        b=Dq+09mjexC42LCC3wIEYrbHG+x5G5z90idXswC0wSQAKUke4FWexKWQiZxy+Bfs7cyCQwE
-        nJs6F0Be3uYj+Z5DSszjKHLC9rg/q2x277wKMhNxpP/q0fCp3ed2H3jL0FDIREGJxX0lQW
-        6x9+nEmK8Uhg6OKPAhMpf4wGOyuNgAQ=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-297-LYSozPFZMxyq024Gpjh51A-1; Mon, 25 Apr 2022 10:00:31 -0400
-X-MC-Unique: LYSozPFZMxyq024Gpjh51A-1
-Received: by mail-ed1-f71.google.com with SMTP id co27-20020a0564020c1b00b00425ab566200so5922243edb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 07:00:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=N9u2nqt1fAgYEoKl131YI31Ovqdnkz65FuwgpqzDfxQ=;
-        b=1V8SFVBh1tk16pS13qiVV9hn6j1XElfKAhEflFKjaSoS7U1oQodPImghzmjdCoXZ1J
-         kW8mNW/Hj+LUelM0Nzykne9J9l0aSzpQDObhU5n2JdSwIEQRL46XAIcOwRJlli2x/HkC
-         VxWiZjCPG6T1Q1ScV7WnRDCstYEhxBppewjCTEQeNk3pfk2Bt4129+qCLa9jL5ya9ltn
-         0iNZafpnAKYSYHvyJRjWNFiCIAbHQguBPIkARnJ+MEfESGiiuZM+Qw//emGOOxHpvqtm
-         R5aRwOl7zLMzjkQu6BXArmo3HDeHmDK3r9gwnLQm2WhZFPveFSy1+TA68CZPiRUdKWOP
-         pvXQ==
-X-Gm-Message-State: AOAM533ceGc2VPcDTn3RTAhVmn7ECnjenNB9Qh5p6Alp1kd0UZGrW+Fw
-        nOyLeqM0qQhmhcl6lpmeyHVURoq9TD8Ryf1eO/pmGEzR2oo1CkwMf070J3XgzdkthLk+e0ZANEB
-        EWYQuQi6CRxNXSw7HpZR+fHdJ
-X-Received: by 2002:a05:6402:2689:b0:422:15c4:e17e with SMTP id w9-20020a056402268900b0042215c4e17emr19469794edd.33.1650895230352;
-        Mon, 25 Apr 2022 07:00:30 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx0qu9w9vjCP20szbQtRmFzELzT/qvzG9iDj/X//vDCrHXo1NIhXjB+U9HZPw7Lp6Dq2qoQfA==
-X-Received: by 2002:a05:6402:2689:b0:422:15c4:e17e with SMTP id w9-20020a056402268900b0042215c4e17emr19469762edd.33.1650895230131;
-        Mon, 25 Apr 2022 07:00:30 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id u12-20020aa7d54c000000b00423e004bf9asm4651103edr.86.2022.04.25.07.00.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 07:00:29 -0700 (PDT)
-Message-ID: <7e8cfa5f-2779-f95a-edcf-d9097e18af52@redhat.com>
-Date:   Mon, 25 Apr 2022 16:00:27 +0200
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=jp57dIVExTBYOFH5u8qjTvs5w4CxGPSFpn5RQoFRCE4=;
+        b=EqpkE5HtM8/VXMFbhvVPoirUhwzWMTMJAT1wrhnc+6NoVMyPk5q1oco/cfXkezkRWYofRy
+        J7/TGBZna99K2MQqUFAasg+ZN9STod4oo4gGfA/aQktce/B1nosGgGw0h/SyrLXJj0ZnaA
+        8cnWQHai0YuG9B2H4GaUPUljfIYxTQQ=
+From:   Michael Walle <michael@walle.cc>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Li Yang <leoyang.li@nxp.com>, Michael Walle <michael@walle.cc>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] dt-bindings: interrupt-controller: fsl,ls-extirq: convert to YAML
+Date:   Mon, 25 Apr 2022 16:02:13 +0200
+Message-Id: <20220425140214.32448-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] mmc: sunxi-mmc: Correct the maximum segment size
-Content-Language: en-US
-To:     Samuel Holland <samuel@sholland.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>, linux-mmc@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Chen-Yu Tsai <wens@csie.org>,
-        Chris Ball <chris@printf.net>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Mike Turquette <mturquette@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-References: <20220424230640.31735-1-samuel@sholland.org>
- <dcc1b028-7e53-cb94-9a66-41890393f2ed@redhat.com>
- <31a12028-8593-c558-0f21-044d69f97e6f@sholland.org>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <31a12028-8593-c558-0f21-044d69f97e6f@sholland.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Convert the fsl,ls-extirq binding to the new YAML format.
 
-On 4/25/22 15:40, Samuel Holland wrote:
-> On 4/25/22 5:40 AM, Hans de Goede wrote:
->> Hi Samuel,
->>
->> On 4/25/22 01:06, Samuel Holland wrote:
->>> According to the DMA descriptor documentation, the lowest two bits of
->>> the size field are ignored, so the size must be rounded up to a multiple
->>> of 4 bytes. Furthermore, 0 is not a valid buffer size; setting the size
->>> to 0 will cause that DMA descriptor to be ignored.
->>>
->>> Together, these restrictions limit the maximum DMA segment size to 4
->>> less than the power-of-two width of the size field.
->>
->> I assume that you were seeing some problems where things where not working
->> which caused you to investigate this; and that this patch fixes those
->> problems?   If yes then it would be good to also mention the problems +
->> investigative process in the commit message.
-> 
-> No, this is just based on reading the manual. I was investigating some problems
-> when I originally wrote this patch, but they turned out to be unrelated, and
-> reverting this patch doesn't cause any obvious regression.
+In contrast to the original binding documentation, there are three
+compatibles which are used in their corresponding device trees which
+have a specific compatible and the (already documented) fallback
+compatible:
+ - "fsl,ls1046a-extirq", "fsl,ls1043a-extirq"
+ - "fsl,ls2080a-extirq", "fsl,ls1088a-extirq"
+ - "fsl,lx2160a-extirq", "fsl,ls1088a-extirq"
 
-I see, I'm not sure if we should proceed with this patch then,
-since at least on the older boards with 13 idma_des_size_bits
-the current code is likely correct given all the testing it has
-seen.
+Signed-off-by: Michael Walle <michael@walle.cc>
+---
+changes since v1:
+ - new patch, because it's reference in patch 2/2
 
->> I'm no longer involved in sunxi development, but still I wonder if the
->> subtraction of 4 from the max_seg_size is really necessary? This seems
->> to be based on the notion that as you say "0 is not a valid buffer size"
->> where as the code so far has been operating under the assumption that
->> putting 0 in sunxi_idma_des.buf_size means maximum buf-size.
->>
->> I'm pretty sure that 0 meaning maximum buf-size is correct for at least
->> the older chips where idma_des_size_bits equals 13, which means that
->> only 2 4K pages fit in a single desc, so we almost certainly have been
->> hitting this code path ?
->>
->> Although: drivers/mmc/host/dw_mmc.c which seems to be for similar
->> hw suggests that on designs where idma_des_size_bits == 13 only
->> 4k can be used, which sorta matches what you are doing here except
->> that you limit things to 8k - 4 instead of to just 4k.
->>
->> Anyways I was just wondering about all this...
-> 
-> It probably deserves someone testing this specific scenario, so we can either
-> verify the fix is needed, or add a comment explaining that the documentation is
-> wrong.
+ .../interrupt-controller/fsl,ls-extirq.txt    | 53 -----------
+ .../interrupt-controller/fsl,ls-extirq.yaml   | 88 +++++++++++++++++++
+ 2 files changed, 88 insertions(+), 53 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.txt
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.yaml
 
-I agree that this should be verified before merging this patch. As for the
-documentation, which documentation are you referring too ? At least for the
-older sunxi SoCs which I'm familiar with the MMC controller bits were not
-documented at all.
-
-Regards,
-
-Hans
-
-
-
->>>
->>> Fixes: 3cbcb16095f9 ("mmc: sunxi: Add driver for SD/MMC hosts found on Allwinner sunxi SoCs")
->>> Signed-off-by: Samuel Holland <samuel@sholland.org>
->>> ---
->>>
->>>  drivers/mmc/host/sunxi-mmc.c | 14 ++++++++------
->>>  1 file changed, 8 insertions(+), 6 deletions(-)
->>>
->>> diff --git a/drivers/mmc/host/sunxi-mmc.c b/drivers/mmc/host/sunxi-mmc.c
->>> index c62afd212692..4bd5f37b1036 100644
->>> --- a/drivers/mmc/host/sunxi-mmc.c
->>> +++ b/drivers/mmc/host/sunxi-mmc.c
->>> @@ -214,6 +214,9 @@
->>>  #define SDXC_IDMAC_DES0_CES	BIT(30) /* card error summary */
->>>  #define SDXC_IDMAC_DES0_OWN	BIT(31) /* 1-idma owns it, 0-host owns it */
->>>  
->>> +/* Buffer size must be a multiple of 4 bytes. */
->>> +#define SDXC_IDMAC_SIZE_ALIGN	4
->>> +
->>>  #define SDXC_CLK_400K		0
->>>  #define SDXC_CLK_25M		1
->>>  #define SDXC_CLK_50M		2
->>> @@ -361,17 +364,15 @@ static void sunxi_mmc_init_idma_des(struct sunxi_mmc_host *host,
->>>  {
->>>  	struct sunxi_idma_des *pdes = (struct sunxi_idma_des *)host->sg_cpu;
->>>  	dma_addr_t next_desc = host->sg_dma;
->>> -	int i, max_len = (1 << host->cfg->idma_des_size_bits);
->>> +	int i;
->>>  
->>>  	for (i = 0; i < data->sg_len; i++) {
->>>  		pdes[i].config = cpu_to_le32(SDXC_IDMAC_DES0_CH |
->>>  					     SDXC_IDMAC_DES0_OWN |
->>>  					     SDXC_IDMAC_DES0_DIC);
->>>  
->>> -		if (data->sg[i].length == max_len)
->>> -			pdes[i].buf_size = 0; /* 0 == max_len */
->>> -		else
->>> -			pdes[i].buf_size = cpu_to_le32(data->sg[i].length);
->>> +		pdes[i].buf_size = cpu_to_le32(ALIGN(data->sg[i].length,
->>> +						     SDXC_IDMAC_SIZE_ALIGN));
->>>  
->>>  		next_desc += sizeof(struct sunxi_idma_des);
->>>  		pdes[i].buf_addr_ptr1 =
->>> @@ -1420,7 +1421,8 @@ static int sunxi_mmc_probe(struct platform_device *pdev)
->>>  	mmc->max_blk_count	= 8192;
->>>  	mmc->max_blk_size	= 4096;
->>>  	mmc->max_segs		= PAGE_SIZE / sizeof(struct sunxi_idma_des);
->>> -	mmc->max_seg_size	= (1 << host->cfg->idma_des_size_bits);
->>> +	mmc->max_seg_size	= (1 << host->cfg->idma_des_size_bits) -
->>> +				  SDXC_IDMAC_SIZE_ALIGN;
->>>  	mmc->max_req_size	= mmc->max_seg_size * mmc->max_segs;
->>>  	/* 400kHz ~ 52MHz */
->>>  	mmc->f_min		=   400000;
->>
-> 
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.txt b/Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.txt
+deleted file mode 100644
+index 4d47df1a5c91..000000000000
+--- a/Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.txt
++++ /dev/null
+@@ -1,53 +0,0 @@
+-* Freescale Layerscape external IRQs
+-
+-Some Layerscape SOCs (LS1021A, LS1043A, LS1046A
+-LS1088A, LS208xA, LX216xA) support inverting
+-the polarity of certain external interrupt lines.
+-
+-The device node must be a child of the node representing the
+-Supplemental Configuration Unit (SCFG).
+-
+-Required properties:
+-- compatible: should be "fsl,<soc-name>-extirq", e.g. "fsl,ls1021a-extirq".
+-  "fsl,ls1043a-extirq": for LS1043A, LS1046A.
+-  "fsl,ls1088a-extirq": for LS1088A, LS208xA, LX216xA.
+-- #interrupt-cells: Must be 2. The first element is the index of the
+-  external interrupt line. The second element is the trigger type.
+-- #address-cells: Must be 0.
+-- interrupt-controller: Identifies the node as an interrupt controller
+-- reg: Specifies the Interrupt Polarity Control Register (INTPCR) in
+-  the SCFG or the External Interrupt Control Register (IRQCR) in
+-  the ISC.
+-- interrupt-map: Specifies the mapping from external interrupts to GIC
+-  interrupts.
+-- interrupt-map-mask: Must be <0xffffffff 0>.
+-
+-Example:
+-	scfg: scfg@1570000 {
+-		compatible = "fsl,ls1021a-scfg", "syscon";
+-		reg = <0x0 0x1570000 0x0 0x10000>;
+-		big-endian;
+-		#address-cells = <1>;
+-		#size-cells = <1>;
+-		ranges = <0x0 0x0 0x1570000 0x10000>;
+-
+-		extirq: interrupt-controller@1ac {
+-			compatible = "fsl,ls1021a-extirq";
+-			#interrupt-cells = <2>;
+-			#address-cells = <0>;
+-			interrupt-controller;
+-			reg = <0x1ac 4>;
+-			interrupt-map =
+-				<0 0 &gic GIC_SPI 163 IRQ_TYPE_LEVEL_HIGH>,
+-				<1 0 &gic GIC_SPI 164 IRQ_TYPE_LEVEL_HIGH>,
+-				<2 0 &gic GIC_SPI 165 IRQ_TYPE_LEVEL_HIGH>,
+-				<3 0 &gic GIC_SPI 167 IRQ_TYPE_LEVEL_HIGH>,
+-				<4 0 &gic GIC_SPI 168 IRQ_TYPE_LEVEL_HIGH>,
+-				<5 0 &gic GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH>;
+-			interrupt-map-mask = <0xffffffff 0x0>;
+-		};
+-	};
+-
+-
+-	interrupts-extended = <&gic GIC_SPI 88 IRQ_TYPE_LEVEL_HIGH>,
+-			      <&extirq 1 IRQ_TYPE_LEVEL_LOW>;
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.yaml b/Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.yaml
+new file mode 100644
+index 000000000000..39d120ad7549
+--- /dev/null
++++ b/Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.yaml
+@@ -0,0 +1,88 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/interrupt-controller/fsl,ls-extirq.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Freescale Layerscape External Interrupt Controller
++
++maintainers:
++  - Shawn Guo <shawnguo@kernel.org>
++  - Li Yang <leoyang.li@nxp.com>
++
++description: |
++  Some Layerscape SOCs (LS1021A, LS1043A, LS1046A LS1088A, LS208xA,
++  LX216xA) support inverting the polarity of certain external interrupt
++  lines.
++
++allOf:
++  - $ref: /schemas/interrupt-controller.yaml#
++
++properties:
++  compatible:
++    oneOf:
++      - enum:
++          - fsl,ls1021a-extirq
++          - fsl,ls1043a-extirq
++          - fsl,ls1088a-extirq
++      - items:
++          - enum:
++              - fsl,ls1046a-extirq
++          - const: fsl,ls1043a-extirq
++      - items:
++          - enum:
++              - fsl,ls2080a-extirq
++              - fsl,lx2160a-extirq
++          - const: fsl,ls1088a-extirq
++
++  '#interrupt-cells':
++    const: 2
++
++  '#address-cells':
++    const: 0
++
++  interrupt-controller: true
++
++  reg:
++    maxItems: 1
++    description:
++      Specifies the Interrupt Polarity Control Register (INTPCR) in the
++      SCFG or the External Interrupt Control Register (IRQCR) in the ISC.
++
++  interrupt-map:
++    description: Specifies the mapping from external interrupts to GIC interrupts.
++
++  interrupt-map-mask:
++    items:
++      - const: 0xffffffff
++      - const: 0
++
++required:
++  - compatible
++  - '#interrupt-cells'
++  - '#address-cells'
++  - interrupt-controller
++  - reg
++  - interrupt-map
++  - interrupt-map-mask
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    interrupt-controller@1ac {
++            compatible = "fsl,ls1021a-extirq";
++            #interrupt-cells = <2>;
++            #address-cells = <0>;
++            interrupt-controller;
++            reg = <0x1ac 4>;
++            interrupt-map =
++                    <0 0 &gic GIC_SPI 163 IRQ_TYPE_LEVEL_HIGH>,
++                    <1 0 &gic GIC_SPI 164 IRQ_TYPE_LEVEL_HIGH>,
++                    <2 0 &gic GIC_SPI 165 IRQ_TYPE_LEVEL_HIGH>,
++                    <3 0 &gic GIC_SPI 167 IRQ_TYPE_LEVEL_HIGH>,
++                    <4 0 &gic GIC_SPI 168 IRQ_TYPE_LEVEL_HIGH>,
++                    <5 0 &gic GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH>;
++            interrupt-map-mask = <0xffffffff 0x0>;
++    };
+-- 
+2.30.2
 

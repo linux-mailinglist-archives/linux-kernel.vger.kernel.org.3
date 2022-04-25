@@ -2,149 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 771DF50DA1A
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 09:29:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D01D50DA20
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 09:30:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233506AbiDYHbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 03:31:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49586 "EHLO
+        id S234893AbiDYHdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 03:33:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232696AbiDYHbL (ORCPT
+        with ESMTP id S231650AbiDYHdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 03:31:11 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE93C9FF6;
-        Mon, 25 Apr 2022 00:28:07 -0700 (PDT)
-Received: from kwepemi500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KmxRP6BjCzfb5t;
-        Mon, 25 Apr 2022 15:27:13 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi500023.china.huawei.com (7.221.188.76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 25 Apr 2022 15:28:05 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 25 Apr 2022 15:28:04 +0800
-Subject: Re: [PATCH -next RFC v3 0/8] improve tag allocation under heavy load
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        <axboe@kernel.dk>, <bvanassche@acm.org>,
-        <andriy.shevchenko@linux.intel.com>, <john.garry@huawei.com>,
-        <ming.lei@redhat.com>, <qiulaibin@huawei.com>
-CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yi.zhang@huawei.com>
-References: <20220415101053.554495-1-yukuai3@huawei.com>
- <dc800086-43c6-1ff2-659e-258cb75649dd@huawei.com>
- <3fbadd9f-11dd-9043-11cf-f0839dcf30e1@opensource.wdc.com>
- <63e84f2a-2487-a0c3-cab2-7d2011bc2db4@huawei.com>
- <55e8b04f-0d2f-2ce1-6514-5abd0b67fd48@opensource.wdc.com>
- <6957af40-8720-d74b-5be7-6bcdd9aa1089@huawei.com>
- <237a43f0-3b09-46d0-e73c-57ef51e39590@opensource.wdc.com>
- <c11ebf9e-a232-4a5d-d539-f95f584f220e@huawei.com>
- <2e7969ea-68d0-964a-808e-ee8943de70e3@opensource.wdc.com>
-From:   "yukuai (C)" <yukuai3@huawei.com>
-Message-ID: <35f18afa-0db1-b423-5824-4d5631b0422f@huawei.com>
-Date:   Mon, 25 Apr 2022 15:28:03 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Mon, 25 Apr 2022 03:33:19 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF059BF47;
+        Mon, 25 Apr 2022 00:30:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650871816; x=1682407816;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=v33AZ1EXAwq6WXUADhV0AAEUbQzxeq80/j/EQgk+qSk=;
+  b=GcLe6cA8Oz831plPs1tKGai0rsyJvaxL+HIzHF4pm9QbxwB0/5Ph1bfZ
+   hONxxu9hwQKzBUnT0nttmD5ToYxpvD4A4w8N0vsSnElYu4g2MFyl8HQuz
+   0F9zT6WCWGaLe3EeMDOrFtcuVBYOpMBbH4tUwe35qevbZT7diowiwsTC9
+   fqKuo0fln+m81N/eXOis7juto9TUTpZRcsngXAroNhAk1c94oJXuMipsG
+   KKoTYi5VfKlCusJwPWU9qOGBFVujF+M31WHTvT/y1oGstXFxy1Cmu9r/l
+   a/xq14s6yZjdCw+ir0Ol7J1G8ZBwoXwqMA0FutDH/hMh4+LFAr14bg729
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="325656067"
+X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
+   d="scan'208";a="325656067"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 00:30:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
+   d="scan'208";a="531983853"
+Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.138])
+  by orsmga006.jf.intel.com with ESMTP; 25 Apr 2022 00:30:12 -0700
+Date:   Mon, 25 Apr 2022 15:30:11 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>, ying.huang@intel.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] cgroup/cpuset: Remove redundant cpu/node masks setup in
+ cpuset_init_smp()
+Message-ID: <20220425073011.GJ46405@shbuild999.sh.intel.com>
+References: <20220425020926.1264611-1-longman@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <2e7969ea-68d0-964a-808e-ee8943de70e3@opensource.wdc.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220425020926.1264611-1-longman@redhat.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/04/25 15:06, Damien Le Moal 写道:
+Hi Waiman,
 
->>> By the way, did you check that doing something like:
->>>
->>> echo 2048 > /sys/block/sdX/queue/nr_requests
->>>
->>> improves performance for your high number of jobs test case ?
->>
->> Yes, performance will not degrade when numjobs is not greater than 256
->> in this case.
+Thanks for the patch!
+
+On Sun, Apr 24, 2022 at 10:09:26PM -0400, Waiman Long wrote:
+> There are 3 places where the cpu and node masks of the top cpuset can
+> be initialized in the order they are executed:
+>  1) start_kernel -> cpuset_init()
+>  2) start_kernel -> cgroup_init() -> cpuset_bind()
+>  3) kernel_init_freeable() -> do_basic_setup() -> cpuset_init_smp()
 > 
-> That is my thinking as well. I am asking if did check that (did you run it ?).
+> The first cpuset_init() function just sets all the bits in the masks.
+> The last one executed is cpuset_init_smp() which sets up cpu and node
+> masks suitable for v1, but not v2.  cpuset_bind() does the right setup
+> for both v1 and v2 assuming that effective_mems and effective_cpus have
+> been set up properly which is not strictly the case here. As a result,
+> cpu and memory node hot add may fail to update the cpu and node masks
+> of the top cpuset to include the newly added cpu or node in a cgroup
+> v2 environment.
+> 
+> To fix this problem, the redundant cpus_allowed and mems_allowed
+> mask setup in cpuset_init_smp() are removed. The effective_cpus and
+> effective_mems setup there are moved to cpuset_bind().
+> 
+> cc: stable@vger.kernel.org
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  kernel/cgroup/cpuset.c | 10 +++-------
+>  1 file changed, 3 insertions(+), 7 deletions(-)
+> 
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 9390bfd9f1cd..a2e15a43397e 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -2961,6 +2961,9 @@ static void cpuset_bind(struct cgroup_subsys_state *root_css)
+>  	percpu_down_write(&cpuset_rwsem);
+>  	spin_lock_irq(&callback_lock);
+>  
+> +	cpumask_copy(top_cpuset.effective_cpus, cpu_active_mask);
+> +	top_cpuset.effective_mems = node_states[N_MEMORY];
+> +
+>  	if (is_in_v2_mode()) {
+>  		cpumask_copy(top_cpuset.cpus_allowed, cpu_possible_mask);
+>  		top_cpuset.mems_allowed = node_possible_map;
+> @@ -3390,13 +3393,6 @@ static struct notifier_block cpuset_track_online_nodes_nb = {
+>   */
+>  void __init cpuset_init_smp(void)
+>  {
+> -	cpumask_copy(top_cpuset.cpus_allowed, cpu_active_mask);
+> -	top_cpuset.mems_allowed = node_states[N_MEMORY];
+> -	top_cpuset.old_mems_allowed = top_cpuset.mems_allowed;
+> -
+> -	cpumask_copy(top_cpuset.effective_cpus, cpu_active_mask);
+> -	top_cpuset.effective_mems = node_states[N_MEMORY];
 
-Hi,
+IIUC, the init order is:
+	cpuset_bind()
+	smp_init()
+	cpuset_init_smp()
 
-I'm sure I ran it with 256 jobs before.
+while all cpus except boot cpu is brought up in smp_init(), so I'm
+thinking moving the cpus_allowed init from cpuset_init_smp() to
+cpuset_bind() may cause some problem.
 
-However, I didn't run it with 512 jobs. And following is the result I
-just tested:
-
-ratio of sequential io: 49.1%
-
-Read|Write seek 
-
-cnt 99338, zero cnt 48753 
-
-     >=(KB) .. <(KB)     : count       ratio |distribution 
-              |
-          0 .. 1         : 48753       49.1% 
-|########################################|
-          1 .. 2         : 0            0.0% | 
-              |
-          2 .. 4         : 0            0.0% | 
-              |
-          4 .. 8         : 0            0.0% | 
-              |
-          8 .. 16        : 0            0.0% | 
-              |
-         16 .. 32        : 0            0.0% | 
-              |
-         32 .. 64        : 0            0.0% | 
-              |
-         64 .. 128       : 4975         5.0% |##### 
-              |
-        128 .. 256       : 4439         4.5% |#### 
-              |
-        256 .. 512       : 2615         2.6% |### 
-              |
-        512 .. 1024      : 967          1.0% |# 
-              |
-       1024 .. 2048      : 213          0.2% |# 
-              |
-       2048 .. 4096      : 375          0.4% |# 
-              |
-       4096 .. 8192      : 723          0.7% |# 
-              |
-       8192 .. 16384     : 1436         1.4% |## 
-              |
-      16384 .. 32768     : 2626         2.6% |### 
-              |
-      32768 .. 65536     : 4197         4.2% |#### 
-              |
-      65536 .. 131072    : 6431         6.5% |###### 
-              |
-     131072 .. 262144    : 7590         7.6% |####### 
-              |
-     262144 .. 524288    : 6433         6.5% |###### 
-              |
-     524288 .. 1048576   : 4583         4.6% |#### 
-              |
-    1048576 .. 2097152   : 2237         2.3% |## 
-              |
-    2097152 .. 4194304   : 489          0.5% |# 
-              |
-    4194304 .. 8388608   : 83           0.1% |# 
-              |
-    8388608 .. 16777216  : 36           0.0% |# 
-              |
-   16777216 .. 33554432  : 0            0.0% | 
-              |
-   33554432 .. 67108864  : 0            0.0% | 
-              |
-   67108864 .. 134217728 : 137          0.1% |# 
-              |
+Thanks,
+Feng

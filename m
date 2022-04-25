@@ -2,94 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80EE050E863
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:38:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B45A50E868
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244466AbiDYSlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 14:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46294 "EHLO
+        id S244472AbiDYSmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 14:42:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234489AbiDYSlm (ORCPT
+        with ESMTP id S234489AbiDYSmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 14:41:42 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E690B237DE
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:38:37 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id dk23so8024988ejb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:38:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=2latj0rCBnXB64zl9c6Cd4vtnzztQbgWSngjJHYi/kM=;
-        b=R1Ks/9VYznUMf2TQhtXGXR5aCkjzpdLUoWSfaisR97spPF4MehiNMwCt2AeqyIYy75
-         Wryd0MHXCKTU21lUmvIGkIuIeOlWaeNBOQ0o292DP09Z1cWiXWVBkw8cj/fYovRG0B5M
-         wv0OXSnZxZGMDzoB1EOuzL0Fcj1aKm9bUykaECp1yy7ehhVHEo4oUp/azHJkJhQoaCQa
-         mFF0ublqOsMX91jVHalDN4LBBcPbnmDe7jYLGVrDaVZJcAyqqndzSYwPOVJtkze7Cmit
-         T6pckRJUm7TQiFu+VAmnUu67olfcZyBPO5s2OpDsEdbwgtZtQAKuhrKCLH8rKt0xRRAa
-         Iv8g==
+        Mon, 25 Apr 2022 14:42:22 -0400
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EBA47AC3;
+        Mon, 25 Apr 2022 11:39:18 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-2f7d19cac0bso51559667b3.13;
+        Mon, 25 Apr 2022 11:39:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2latj0rCBnXB64zl9c6Cd4vtnzztQbgWSngjJHYi/kM=;
-        b=3kv6IYITi8oK+dO4RbljR8tSqXEPw0TnKWdotdVXQZG427gx6ATtXCqNc1IXqi/CiK
-         KCfhA5bRNFIAwq6f+fqiQFCZVThJysD4VAl7YLeZGeyn+lclR1bE2T4CmYlNDJv68APP
-         Jd008R0ZxFGWuP/ff5Jth2GQGOfRI1zFYg3tc+sFAOVafICUACGzKr00sGSWkZIDXlXz
-         78LHcEEtrJ8DY6xYJyak7M/OzfSou1TB1syrRigScWkTRFCu2Mip5QPiPvKztW7kel+2
-         1GmxfPeJS4Qkj+q1k2ZYg+eLX8GW4Z1ziPmT+bjBA7Gu1nXr+zfqqlrSnWI7pbhF9xef
-         +ugw==
-X-Gm-Message-State: AOAM533pz8IEOCq0oI6PXLnwjchjG9MC+qELA0dHf4D3QSAeZpeJrakH
-        xqmGrZbwuZAHAmMZSTUGWWVRzpgqAOhncg==
-X-Google-Smtp-Source: ABdhPJwTaQxRYtmIxrzTKoSqzXvGLx5o3bPjluBri5ZQs2MVn/RNMPy0a/UiPVSixIOrD98hgW/a4g==
-X-Received: by 2002:a17:906:3adb:b0:6b7:876c:d11b with SMTP id z27-20020a1709063adb00b006b7876cd11bmr17342840ejd.250.1650911916512;
-        Mon, 25 Apr 2022 11:38:36 -0700 (PDT)
-Received: from [192.168.0.244] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id q8-20020a056402040800b004227b347ee3sm5000201edv.56.2022.04.25.11.38.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 11:38:35 -0700 (PDT)
-Message-ID: <5c6b1ec7-5ab7-e23a-8d89-9fd1d927a3cc@linaro.org>
-Date:   Mon, 25 Apr 2022 20:38:34 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qK8e2AVrSefevGs2imvyVDDkPKL0eZ2yImHKmj2kieU=;
+        b=hiIh9yliRYgIIqZdaqIq91nhnKPeMl6dnP+7PltevRma+jXQ10CJpo8IIiAz57Tkll
+         sJhzZY54q+Y56Z4XGA3ZyR17whxkUbrjP519rv/UsU2T1RVPRWDJc2cpb7Qji5/p92Iv
+         C7IuMr0VSuT/zsDI4qRE3RcuhhmfFJKckci7O4doM+1STycvO4pQP0Czu0WcNbmR7V/6
+         qGhcjl91XHoJ+QkbQW/Yzh/2hX89w0DT8sPibuykEWIIRTD3Rj3y2ricg65IzF5E3v/J
+         kAreLplkGv0kgBdim6Ij6NFi0llv8FhHTzFDMf9xJO1At4f5pRpp+ICYNIM/iI6beObA
+         BZ0Q==
+X-Gm-Message-State: AOAM5339X2GHeZTNqnAW3eYApG60w6mQDuBvthxvbthzyQXVpBVevaDI
+        R8TPVagWlhKKAap/jAzuMyCV639G7Wy4+iKSmgY=
+X-Google-Smtp-Source: ABdhPJyX2wtgcldMFdGQD6xuBRzIvUcLOck00Bh9QMuV5obcAZBrDOa4Dhb+1z3doxcjU9Q/k7OQjfZ8azxMw1ZuAQc=
+X-Received: by 2002:a81:36cf:0:b0:2e5:2597:a026 with SMTP id
+ d198-20020a8136cf000000b002e52597a026mr18178120ywa.301.1650911956879; Mon, 25
+ Apr 2022 11:39:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] dt-bindings: fsl: convert fsl,layerscape-dcfg to YAML
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Li Yang <leoyang.li@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220425140433.33936-1-michael@walle.cc>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220425140433.33936-1-michael@walle.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220423150132.GA1552054@bhelgaas> <44ebf450aa3300e02aba6ec009d8bea20c0fc535.camel@linux.intel.com>
+In-Reply-To: <44ebf450aa3300e02aba6ec009d8bea20c0fc535.camel@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 25 Apr 2022 20:39:05 +0200
+Message-ID: <CAJZ5v0hs1HPaJNZticZfxz+CeAVuq-Rrw7J50-wv6-wWn5L_2Q@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
+To:     David Box <david.e.box@linux.intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Jingar, Rajvi" <rajvi.jingar@intel.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
+        "koba.ko@canonical.com" <koba.ko@canonical.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Russell Currey <ruscur@russell.cc>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/04/2022 16:04, Michael Walle wrote:
-> Convert the fsl,layerscape-dcfg binding to the new YAML format.
-> 
-> In the device trees, the device node always have a "syscon"
-> compatible, which wasn't mentioned in the previous binding.
-> 
-> One thing added here, compared to the original binding is the clock
-> controller subnode of the LS1028A SoC and its "simple-mfd" compatible as
-> used in arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi as well as the
-> little-endian and big-endian properties.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
+On Mon, Apr 25, 2022 at 8:33 PM David E. Box
+<david.e.box@linux.intel.com> wrote:
+>
+> On Sat, 2022-04-23 at 10:01 -0500, Bjorn Helgaas wrote:
+> > On Sat, Apr 23, 2022 at 12:43:14AM +0000, Jingar, Rajvi wrote:
+> > > > -----Original Message-----
+> > > > From: Bjorn Helgaas <helgaas@kernel.org>
+> > > > On Thu, Apr 14, 2022 at 07:54:02PM +0200, Rafael J. Wysocki wrote:
+> > > > > On 3/25/2022 8:50 PM, Rajvi Jingar wrote:
+> > > > > > For the PCIe devices (like nvme) that do not go into D3 state still
+> > > > > > need to
+> > > > > > disable PTM on PCIe root ports to allow the port to enter a lower-
+> > > > > > power PM
+> > > > > > state and the SoC to reach a lower-power idle state as a whole. Move
+> > > > > > the
+> > > > > > pci_disable_ptm() out of pci_prepare_to_sleep() as this code path is
+> > > > > > not
+> > > > > > followed for devices that do not go into D3. This patch fixes the
+> > > > > > issue
+> > > > > > seen on Dell XPS 9300 with Ice Lake CPU and Dell Precision 5530 with
+> > > > > > Coffee
+> > > > > > Lake CPU platforms to get improved residency in low power idle states.
+> > > > > >
+> > > > > > Fixes: a697f072f5da ("PCI: Disable PTM during suspend to save power")
+> > > > > > Signed-off-by: Rajvi Jingar <rajvi.jingar@intel.com>
+> > > > > > Suggested-by: David E. Box <david.e.box@linux.intel.com>
+> > > > > > ---
+> > > > > >   drivers/pci/pci-driver.c | 10 ++++++++++
+> > > > > >   drivers/pci/pci.c        | 10 ----------
+> > > > > >   2 files changed, 10 insertions(+), 10 deletions(-)
+> > > > > >
+> > > > > > diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+> > > > > > index 8b55a90126a2..ab733374a260 100644
+> > > > > > --- a/drivers/pci/pci-driver.c
+> > > > > > +++ b/drivers/pci/pci-driver.c
+> > > > > > @@ -847,6 +847,16 @@ static int pci_pm_suspend_noirq(struct device
+> > > > > > *dev)
+> > > > > >       if (!pci_dev->state_saved) {
+> > > > > >               pci_save_state(pci_dev);
+> > > > > > +             /*
+> > > > > > +              * There are systems (for example, Intel mobile chips
+> > > > > > since
+> > > > Coffee
+> > > > > > +              * Lake) where the power drawn while suspended can be
+> > > > significantly
+> > > > > > +              * reduced by disabling PTM on PCIe root ports as this
+> > > > > > allows the
+> > > > > > +              * port to enter a lower-power PM state and the SoC to
+> > > > > > reach a
+> > > > > > +              * lower-power idle state as a whole.
+> > > > > > +              */
+> > > > > > +             if (pci_pcie_type(pci_dev) == PCI_EXP_TYPE_ROOT_PORT)
+> > > > > > +                     pci_disable_ptm(pci_dev);
+> > > >
+> > > > Why is disabling PTM dependent on pci_dev->state_saved?  The point of
+> > > > this is to change the behavior of the device, and it seems like we
+> > > > want to do that regardless of whether the driver has used
+> > > > pci_save_state().
+> > >
+> > > Because we use the saved state to restore PTM on the root port.
+> > > And it's under this condition that the root port state gets saved.
+> >
+> > Yes, I understand that pci_restore_ptm_state() depends on a previous
+> > call to pci_save_ptm_state().
+> >
+> > The point I'm trying to make is that pci_disable_ptm() changes the
+> > state of the device, and that state change should not depend on
+> > whether the driver has used pci_save_state().
+>
+> We do it here because D3 depends on whether the device state was saved by the
+> driver.
+>
+>         if (!pci_dev->state_saved) {
+>                 pci_save_state(pci_dev);
+>
+>                 /* disable PTM here */
+>
+>                 if (pci_power_manageable(pci_dev))
+>                         pci_prepare_to_sleep(pci_dev);
+>         }
+>
+>
+> If we disable PTM before the check, we will have saved "PTM disabled" as the
+> restore state. And we can't do it after the check as the device will be in D3.
+>
+> As to disabling PTM on all devices, I see no problem with this, but the
+> reasoning is different. We disabled the root port PTM for power savings.
 
+Right.  As per the comment explaining why it is disabled.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
+> >
+> > When we're putting a device into a low-power state, I think we want to
+> > disable PTM *always*, no matter what the driver did.  And I think we
+> > want to do it for all devices, not just Root Ports.
+> >
+> > Bjorn
+>

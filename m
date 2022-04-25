@@ -2,115 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1507B50EB02
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 23:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4C8450EB14
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 23:09:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245678AbiDYVKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 17:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49492 "EHLO
+        id S245702AbiDYVLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 17:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245536AbiDYVKd (ORCPT
+        with ESMTP id S245685AbiDYVLm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 17:10:33 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D9B66F81
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 14:07:28 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id q12so14333577pgj.13
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 14:07:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2yfkLHIGendK7asqrB3cDu3rcvHBz4MAJahFLz57ZkQ=;
-        b=V4iT+hMJVcqcQiKtfpts5LIiBYKBt1Jhpp/0+ZFS86rofurh3eEgQJnex0pBwJ0njo
-         reGg6t4nGczMtMbw2LEwuA56ivqvdLjRRwrk0W4ANdeCyzOlOBrrk6dUFYAM7LRADDpD
-         E6FsQ0yfoB1o8CqmrKhTNNZ6rZ7xy/rYF6Nfs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2yfkLHIGendK7asqrB3cDu3rcvHBz4MAJahFLz57ZkQ=;
-        b=2UVhqaKoudVQnNFICiCjBmy1/Oz64kQaUs9XQ7kE4Qsl7W6nC6NwJKwR0/APfxe/75
-         ka2VRVSavsaurbgAPmrJiB3j/8V3xvxULD9TR0ALaKpEHS9Ppk/tmRLlqjxeP2mluoku
-         OQyod8yU52p61/e+iwKsGWLUSUZOVzCbksezBU4JuBE9+YodcC4duSqhh+G2AF1F16NE
-         jPtSvKlo1nlNqP8aZpP3CY9aMYqzwDjxh4aKIgY4TEgXs/bcAjoToYMSUB91MPyLcb7q
-         dyU4IeDzMLEkRU2IlbRqd+AXy6SQxIvbVvFoXd/GBR/J4LgLUQF4omnJyLXrozUnyGd1
-         W7Nw==
-X-Gm-Message-State: AOAM533sh+Pb9lpYSb8ZoMWQgqRTU+0MFfLHSU7vX6eEgDme2m3hkUw3
-        wbsMBsCOfdjJ8yTqHj57P6a6Tg==
-X-Google-Smtp-Source: ABdhPJyb9GFRAJd41b6tfRbfDmjkrPPMtCMSDUzHsF8HzvtcmNI07PBkoIsL+OZ9etzob8tZql/62g==
-X-Received: by 2002:a63:475b:0:b0:3aa:436f:8812 with SMTP id w27-20020a63475b000000b003aa436f8812mr16652814pgk.607.1650920848531;
-        Mon, 25 Apr 2022 14:07:28 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:202:201:15d7:3f2:9d41:116f])
-        by smtp.gmail.com with ESMTPSA id k11-20020a056a00168b00b004f7e1555538sm12617373pfc.190.2022.04.25.14.07.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 14:07:28 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>
-Subject: [PATCH v2] Input: cros-ec-keyb: Only register keyboard if rows/columns exist
-Date:   Mon, 25 Apr 2022 14:07:26 -0700
-Message-Id: <20220425210726.3813477-1-swboyd@chromium.org>
-X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
+        Mon, 25 Apr 2022 17:11:42 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EEFC6D976;
+        Mon, 25 Apr 2022 14:08:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650920916; x=1682456916;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=w9h6Cdx4XjslBo66HrakyPOtDRXWJENi2JZ7dmBusrQ=;
+  b=WxiLxXoLjnOUypy6ZJghPASHB/D/JGsUdE+mW994LJmgleaZ0DV0SP97
+   TNZLIIRMYBdO+owWgjTVBA7ikq2ALPcV/V9jLgY2qE7buxplLmoPVwQ14
+   0CMrJXtOHA84Ka1KSxAccosqGFLS8fz8m1LtcqvaW8FtBhCJvMpLQ//Lc
+   opg5THyeHyddVhjua25DV+wzfaIF6CGha0QsO2FxZF4MU4eSEm8Xk73Mc
+   h8SFVItnO3eQQdjezEbbBGGf46h1cPYRof0/jgqu93azAwLjOpmdYe7UI
+   etozUQ0XzfNgRE5PrjHGb6uEQOLV2+gDejN6KKTd4aIYStIvkxQmkwpgp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="262961519"
+X-IronPort-AV: E=Sophos;i="5.90,289,1643702400"; 
+   d="scan'208";a="262961519"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 14:08:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,289,1643702400"; 
+   d="scan'208";a="564254914"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 25 Apr 2022 14:08:32 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nj5wd-0002sj-V6;
+        Mon, 25 Apr 2022 21:08:31 +0000
+Date:   Tue, 26 Apr 2022 05:08:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Russ Weight <russell.h.weight@intel.com>, mdf@kernel.org,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, trix@redhat.com,
+        marpagan@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
+        hao.wu@intel.com, matthew.gerlach@linux.intel.com,
+        tianfei.zhang@intel.com, Russ Weight <russell.h.weight@intel.com>
+Subject: Re: [PATCH v1 1/1] fpga: dfl: fix the kernel warning when
+ release/assign ports for SRIOV
+Message-ID: <202204260456.dOkQIjjg-lkp@intel.com>
+References: <20220425174827.89819-1-russell.h.weight@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220425174827.89819-1-russell.h.weight@intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the device is a detachable, we may still probe this device because
-there are some button switches, e.g. volume buttons and power buttons,
-registered by this driver. Let's allow the device node to be missing row
-and column device properties to indicate that the keyboard matrix
-shouldn't be registered. This removes an input device on Trogdor devices
-such as Wormdingler that don't have a matrix keyboard, but still have
-power and volume buttons. That helps userspace understand there isn't
-a keyboard present when the detachable keyboard is disconnected.
+Hi Russ,
 
-Cc: Benson Leung <bleung@chromium.org>
-Cc: Guenter Roeck <groeck@chromium.org>
-Cc: Douglas Anderson <dianders@chromium.org>
-Cc: Hsin-Yi Wang <hsinyi@chromium.org>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
+I love your patch! Perhaps something to improve:
 
-Changes from v1 (https://lore.kernel.org/r/20220413033334.1514008-1-swboyd@chromium.org):
- * Use device_property_present
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.18-rc4 next-20220422]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
- drivers/input/keyboard/cros_ec_keyb.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+url:    https://github.com/intel-lab-lkp/linux/commits/Russ-Weight/fpga-dfl-fix-the-kernel-warning-when-release-assign-ports-for-SRIOV/20220426-014949
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git af2d861d4cd2a4da5137f795ee3509e6f944a25b
+config: hexagon-randconfig-r041-20220425 (https://download.01.org/0day-ci/archive/20220426/202204260456.dOkQIjjg-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/4b4db40cd1b608457d6e1fcf95443bd940d01f3c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Russ-Weight/fpga-dfl-fix-the-kernel-warning-when-release-assign-ports-for-SRIOV/20220426-014949
+        git checkout 4b4db40cd1b608457d6e1fcf95443bd940d01f3c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/fpga/
 
-diff --git a/drivers/input/keyboard/cros_ec_keyb.c b/drivers/input/keyboard/cros_ec_keyb.c
-index 6534dfca60b4..ceb23e2e0d94 100644
---- a/drivers/input/keyboard/cros_ec_keyb.c
-+++ b/drivers/input/keyboard/cros_ec_keyb.c
-@@ -537,6 +537,15 @@ static int cros_ec_keyb_register_matrix(struct cros_ec_keyb *ckdev)
- 	u32 key_pos;
- 	unsigned int row, col, scancode, n_physmap;
- 
-+	/*
-+	 * No rows and columns? There isn't a matrix but maybe there are
-+	 * switches to register in cros_ec_keyb_register_bs() because this is a
-+	 * detachable device.
-+	 */
-+	if (!device_property_present(dev, "keypad,num-rows") &&
-+	    !device_property_present(dev, "keypad,num-cols"))
-+		return 0;
-+
- 	err = matrix_keypad_parse_properties(dev, &ckdev->rows, &ckdev->cols);
- 	if (err)
- 		return err;
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-base-commit: 3123109284176b1532874591f7c81f3837bbdc17
+All warnings (new ones prefixed by >>):
+
+   drivers/fpga/dfl.c:54: warning: cannot understand function prototype: 'struct dfl_dev_info '
+   drivers/fpga/dfl.c:74: warning: cannot understand function prototype: 'struct dfl_chardev_info '
+   drivers/fpga/dfl.c:154: warning: Function parameter or member 'fdata' not described in 'dfl_fpga_port_ops_get'
+   drivers/fpga/dfl.c:154: warning: Excess function parameter 'pdev' description in 'dfl_fpga_port_ops_get'
+   drivers/fpga/dfl.c:220: warning: Function parameter or member 'fdata' not described in 'dfl_fpga_check_port_id'
+   drivers/fpga/dfl.c:220: warning: Excess function parameter 'pdev' description in 'dfl_fpga_check_port_id'
+   drivers/fpga/dfl.c:716: warning: Function parameter or member 'revision' not described in 'dfl_feature_info'
+>> drivers/fpga/dfl.c:1509: warning: expecting prototype for __dfl_fpga_cdev_find_port(). Prototype was for __dfl_fpga_cdev_find_port_data() instead
+
+
+vim +1509 drivers/fpga/dfl.c
+
+543be3d8c999b3 Wu Hao   2018-06-30  1490  
+5d56e117001996 Wu Hao   2018-06-30  1491  /**
+5d56e117001996 Wu Hao   2018-06-30  1492   * __dfl_fpga_cdev_find_port - find a port under given container device
+5d56e117001996 Wu Hao   2018-06-30  1493   *
+5d56e117001996 Wu Hao   2018-06-30  1494   * @cdev: container device
+5d56e117001996 Wu Hao   2018-06-30  1495   * @data: data passed to match function
+5d56e117001996 Wu Hao   2018-06-30  1496   * @match: match function used to find specific port from the port device list
+5d56e117001996 Wu Hao   2018-06-30  1497   *
+5d56e117001996 Wu Hao   2018-06-30  1498   * Find a port device under container device. This function needs to be
+5d56e117001996 Wu Hao   2018-06-30  1499   * invoked with lock held.
+5d56e117001996 Wu Hao   2018-06-30  1500   *
+5d56e117001996 Wu Hao   2018-06-30  1501   * Return: pointer to port's platform device if successful, NULL otherwise.
+5d56e117001996 Wu Hao   2018-06-30  1502   *
+5d56e117001996 Wu Hao   2018-06-30  1503   * NOTE: you will need to drop the device reference with put_device() after use.
+5d56e117001996 Wu Hao   2018-06-30  1504   */
+4b4db40cd1b608 Xu Yilun 2022-04-25  1505  struct dfl_feature_dev_data *
+4b4db40cd1b608 Xu Yilun 2022-04-25  1506  __dfl_fpga_cdev_find_port_data(struct dfl_fpga_cdev *cdev, void *data,
+4b4db40cd1b608 Xu Yilun 2022-04-25  1507  			       int (*match)(struct dfl_feature_dev_data *,
+4b4db40cd1b608 Xu Yilun 2022-04-25  1508  					    void *))
+5d56e117001996 Wu Hao   2018-06-30 @1509  {
+4b4db40cd1b608 Xu Yilun 2022-04-25  1510  	struct dfl_feature_dev_data *fdata;
+5d56e117001996 Wu Hao   2018-06-30  1511  
+4b4db40cd1b608 Xu Yilun 2022-04-25  1512  	list_for_each_entry(fdata, &cdev->port_dev_list, node) {
+4b4db40cd1b608 Xu Yilun 2022-04-25  1513  		if (match(fdata, data))
+4b4db40cd1b608 Xu Yilun 2022-04-25  1514  			return fdata;
+5d56e117001996 Wu Hao   2018-06-30  1515  	}
+5d56e117001996 Wu Hao   2018-06-30  1516  
+5d56e117001996 Wu Hao   2018-06-30  1517  	return NULL;
+5d56e117001996 Wu Hao   2018-06-30  1518  }
+4b4db40cd1b608 Xu Yilun 2022-04-25  1519  EXPORT_SYMBOL_GPL(__dfl_fpga_cdev_find_port_data);
+5d56e117001996 Wu Hao   2018-06-30  1520  
+
 -- 
-https://chromeos.dev
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

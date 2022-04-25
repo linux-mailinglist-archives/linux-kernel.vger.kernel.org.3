@@ -2,91 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D74E50E49A
+	by mail.lfdr.de (Postfix) with ESMTP id 2542D50E499
 	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242971AbiDYPnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 11:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59770 "EHLO
+        id S238673AbiDYPmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 11:42:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242949AbiDYPm5 (ORCPT
+        with ESMTP id S242976AbiDYPmq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 11:42:57 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD463BB92A
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 08:39:52 -0700 (PDT)
-Received: from mail-wm1-f42.google.com ([209.85.128.42]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1N9cDF-1nvEig0Aqr-015ZFq for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022
- 17:39:51 +0200
-Received: by mail-wm1-f42.google.com with SMTP id k36-20020a05600c1ca400b00393f18c8fc5so64373wms.4
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 08:39:51 -0700 (PDT)
-X-Gm-Message-State: AOAM533YaXjW3sm5CVz60m55vSSc1D7s/DEYhu/EwItLgosxTo1Rx79R
-        m88kk5D89yqn0nwS919h0LMagiiLnxuhfWRZSl0=
-X-Google-Smtp-Source: ABdhPJx3dRForqktI5tG6zc7Id5adoLrBcuwto/Tk7V3DlzIdPzsaznerWa1gJFwUvcdxfCzZVIFc9T72li7k+sp1GI=
-X-Received: by 2002:a7b:ce15:0:b0:38e:b7b0:79be with SMTP id
- m21-20020a7bce15000000b0038eb7b079bemr16961733wmc.71.1650901190683; Mon, 25
- Apr 2022 08:39:50 -0700 (PDT)
+        Mon, 25 Apr 2022 11:42:46 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 848DE4476C;
+        Mon, 25 Apr 2022 08:39:42 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id z99so18901709ede.5;
+        Mon, 25 Apr 2022 08:39:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=T01Vsboe7BIJvmOZnpFBnqjbW+9iDm8fcl2QrWQykBc=;
+        b=kPM/SNHsAbBB6TPmDqMIcF3+pw23OqniiDoKpyCh8WM3av7/TyIAZaj6mkSAGUIcjv
+         wFg+zJ5PJZ+OWSTcT08+l6llF1V5IgIUQ9t9PmYB8P1utoqI0nFy9Sdd2k3AgNv1l1FZ
+         QMAzyQq1xVzv7dZo/YM6MGJvSX6DHz7za/D8I82l0lzgoEB/wX1qUpMZ5UpQ7sSIAkay
+         eN5yzepL0YRYBfLDwIPqUdkAGkJswqyaldV+jhNmHzLZbiOEdgabkRZ5U26w8TJcEOHl
+         KWg4YZcX1tRWUsPoJozBH5dm9g0k5T0XGeJWULpmf/oYCe3yRJQ/UT3aBDA/kFoxJykM
+         xorg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=T01Vsboe7BIJvmOZnpFBnqjbW+9iDm8fcl2QrWQykBc=;
+        b=dg2TK1V3l+BNwoVp5HBqGyGgPqT/nie4YyEFxcgBZ5L9iNnU/wBr+2AKRr6sepWaqd
+         7T0gAzLbH/A+1U8RsROhdR2QZikL7ZjL2BikvGC8leIX/biU2JDMvpyF7JsCTka1aNle
+         apd/9DwCmN2USNA/o4Z1sJAn9jM48mxzpZ4uUwW/gRSsEvZHWJRdvauj2+N6mu5IFEOu
+         GqJ2Or9C8QgBoX9S6wzCcCAG9cvtUu4xrjzd2kK9XxJjVJWlT8sM1aODXD6D+gxY/Zqh
+         x8tLaZEutP5FkxXf3f8Agy11wu5LJ4WvI4MkjEu+MGkIQdqZVijaqwmzwt78LoOCihiH
+         1vRg==
+X-Gm-Message-State: AOAM530H1/G4B2SJVcPgxYHbU2TFDpC2588V3FV6ywNOMSCu9Y73oNnK
+        PYQc2pRISlZ18ylEo+l80R4=
+X-Google-Smtp-Source: ABdhPJzIyVAdyqYhswiICra1oKeo5UKFm4s/D+QpyQPj+7Teup4JNUsf36N9FoOwox9FncoffG3lOQ==
+X-Received: by 2002:a05:6402:909:b0:416:6f3c:5c1d with SMTP id g9-20020a056402090900b004166f3c5c1dmr19408479edz.108.1650901181156;
+        Mon, 25 Apr 2022 08:39:41 -0700 (PDT)
+Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
+        by smtp.gmail.com with ESMTPSA id g6-20020a056402090600b0041d8c2f9e61sm4826215edz.31.2022.04.25.08.39.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 08:39:40 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     tiny.windzz@gmail.com, rafael@kernel.org, viresh.kumar@linaro.org,
+        wens@csie.org, samuel@sholland.org, mripard@kernel.org,
+        Xiaobing Luo <luoxiaobing0926@gmail.com>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Xiaobing Luo <luoxiaobing0926@gmail.com>
+Subject: Re: [PATCH v3] cpufreq: fix memory leak in sun50i_cpufreq_nvmem_probe
+Date:   Mon, 25 Apr 2022 17:39:39 +0200
+Message-ID: <3099618.5fSG56mABF@kista>
+In-Reply-To: <20220425113009.2182485-1-luoxiaobing0926@gmail.com>
+References: <20220425113009.2182485-1-luoxiaobing0926@gmail.com>
 MIME-Version: 1.0
-References: <YmX7z+BirkA3VAfW@zx2c4.com> <CAK8P3a3Af5FBx-OnedHPrf28ikX4DZK1d0ERLsV+oKyBHyCXiw@mail.gmail.com>
- <YmaJUvg6hmekvkXE@zx2c4.com> <CAK8P3a3FZeXzBJKyTEvmvw_DaHGQFf5rQKs=_wBW=GZ2+=rJ_Q@mail.gmail.com>
- <Yma8OQ3zY3PzY87T@zx2c4.com>
-In-Reply-To: <Yma8OQ3zY3PzY87T@zx2c4.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 25 Apr 2022 17:39:34 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0Y3BFCkg8e-o5i6xPfb9WVQzOQOACXtrH1VmQJkSriDQ@mail.gmail.com>
-Message-ID: <CAK8P3a0Y3BFCkg8e-o5i6xPfb9WVQzOQOACXtrH1VmQJkSriDQ@mail.gmail.com>
-Subject: Re: odd endianness toolchains for crosstool
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:9g6gubwe3RUQxydeeYrBzc9VI9NLg7FhrkVsd9G/g3z0aGg3Kc5
- 8Fer3+1lhbgDqCr7ZhsCMofj3rpQpyYW7WhOnjwTkIQX4xJ4/TOCNBvfaFj4LQLXRiVe/gR
- LsGJnCq55phyJ26v6u9FnyL5k7dFqHvmdHaeaNdggnKeS7OjnsIH7fVQEJAKjMt3Wjq7BEp
- QYKBXDaTu4kgmRmFg8YQQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:b4eslfbJHds=:YwB9fAaxuEadN7Bxvggt4c
- aMMgOzazMHbVrPtQ5pJsFxgbwJhHuQGT/DilEn0IHLEoPFDv56tJKFRBBBBBX61VobxW4uCcA
- Um0E+o/1AefdwS36oSxlC4AbjG1LmnjO3RoTEoPzEYXCZC/65umykiyXb4Eyi7Y9+/S84HZ5H
- iJjSg2ZapUzqaQshkdT/al8jiGwr1/YJvRQ7M452GQuWZwFzD5J8wKBRTcPEwz6wcqh/nD1ah
- pk8QlP6ntiSgl9uqVFSknUKrs7Z9XGzDwnEAVKSGCvqwmQ9hX7BZUhIjSdVMXx0ol9hM+krvV
- 0+OL95s0Tw6oOf/gSEGrFhrGlPqxsI0cBDRitO9IQyxWB1CicInQNXhjMTP4Q9aVpYGyL0PSh
- gjBa1BMC/dnpBO5fv9F92JEI/02bwhvLa0X4fROHiOrT+exzN4s58L4fY2F35ReLjeG+2yymZ
- 85bGaMucNYqywW0KnTSGsc7NXh/MNz682pigr/iGDsFMsB9z54OgLDsVXpysiey8RVry7sTdk
- Dz6Nebn2ivkScbb/29HEGgR/w83Ja4SeTmAc6uEswUBocAX2cOzF1nIWzueuytRtr2Vzj1U7u
- z45xHtEfOrUNpalmqe9I69sQpqohuF8TF7Gjkd7c7k0lM/3kYaYvFdMZJkt8n3xksVoNoq3xV
- ObYreTsZ9pmYvL+smC9AqYw0y4CsxtRHdUJZqUXo06kUTj93D75th+jYrgorUpXY/oq5P7Rtd
- ZGqkLZ1et+MFjO3H7/8qxFOzrHHnLv2rgmaMW40nVn6svz7I9CLXgi/Xw2qVTOeVBU7U0WE+m
- 9neKgpILJcDk6PJ46OkJnQ7mr8tz+TJG0qh5QMtXkhqGsRfaww=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 5:20 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+Dne ponedeljek, 25. april 2022 ob 13:30:09 CEST je Xiaobing Luo napisal(a):
+> --------------------------------------------
+> unreferenced object 0xffff000010742a00 (size 128):
+>   comm "swapper/0", pid 1, jiffies 4294902015 (age 1187.652s)
+>   hex dump (first 32 bytes):
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<00000000b4dfebaa>] __kmalloc+0x338/0x474
+>     [<00000000d6e716db>] sun50i_cpufreq_nvmem_probe+0xc4/0x36c
+>     [<000000007d6082a0>] platform_probe+0x98/0x11c
+>     [<00000000c990f549>] really_probe+0x234/0x5a0
+>     [<000000002d9fecc6>] __driver_probe_device+0x194/0x224
+>     [<00000000cf0b94fa>] driver_probe_device+0x64/0x13c
+>     [<00000000f238e4cf>] __device_attach_driver+0xf8/0x180
+>     [<000000006720e418>] bus_for_each_drv+0xf8/0x160
+>     [<00000000df4f14f6>] __device_attach+0x174/0x29c
+>     [<00000000782002fb>] device_initial_probe+0x20/0x30
+>     [<00000000c2681b06>] bus_probe_device+0xfc/0x110
+>     [<00000000964cf3bd>] device_add+0x5f0/0xcd0
+>     [<000000004b9264e3>] platform_device_add+0x198/0x390
+>     [<00000000fa82a9d0>] platform_device_register_full+0x178/0x210
+>     [<000000009a5daf13>] sun50i_cpufreq_init+0xf8/0x168
+>     [<000000000377cc7c>] do_one_initcall+0xe4/0x570
+> --------------------------------------------
+> 
+> if sun50i_cpufreq_get_efuse failed, then opp_tables leak.
+> 
+> Fixes: f328584f7bff ("cpufreq: Add sun50i nvmem based CPU scaling driver")
+> Signed-off-by: Xiaobing Luo <luoxiaobing0926@gmail.com>
 
-> Right, exactly. So if you simply add little endian libgcc to ppc64, ppc,
-> mips, and mips64, and add big endian libgcc to arm and arm64, then we'd
-> be set.
+This patch was already applied (v2).
 
-I see that gcc-11.3 was just released, so I should probably try
-building that in the
-near future. I'll see if I can manage to come up with multiarch
-configs for that,
-and maybe even get those merged upstream so I don't have to carry patches
-against the gcc source tree (all the other builds are for unmodified sources).
+Best regards,
+Jernej
 
-I can probably do that before migrating to the new machine, but I can't
-promise how quickly I find time to start.
+> ---
+>  drivers/cpufreq/sun50i-cpufreq-nvmem.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-
+cpufreq-nvmem.c
+> index 2deed8d8773f..75e1bf3a08f7 100644
+> --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> @@ -98,8 +98,10 @@ static int sun50i_cpufreq_nvmem_probe(struct 
+platform_device *pdev)
+>  		return -ENOMEM;
+>  
+>  	ret = sun50i_cpufreq_get_efuse(&speed);
+> -	if (ret)
+> +	if (ret) {
+> +		kfree(opp_tables);
+>  		return ret;
+> +	}
+>  
+>  	snprintf(name, MAX_NAME_LEN, "speed%d", speed);
+>  
+> -- 
+> 2.36.0
+> 
+> 
 
-> (And also, build ppc32 with --enable-secureplt --with-long-double-64.)
 
-Can you explain what those are about? Is this related to the ELFv1
-vs ELFv2 difference or something else? Is this needed in both the
-ppc32 and ppc64 compilers that each come with both targets?
-
-      Arnd

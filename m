@@ -2,69 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B65FD50E7F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:18:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C3C750E7F8
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244293AbiDYSUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 14:20:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49398 "EHLO
+        id S244231AbiDYSWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 14:22:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244294AbiDYSUh (ORCPT
+        with ESMTP id S238098AbiDYSWO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 14:20:37 -0400
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED020473B0;
-        Mon, 25 Apr 2022 11:17:29 -0700 (PDT)
-Received: by mail-oo1-f49.google.com with SMTP id n22-20020a4ae1d6000000b0033a6eedbc7bso2933417oot.11;
-        Mon, 25 Apr 2022 11:17:29 -0700 (PDT)
+        Mon, 25 Apr 2022 14:22:14 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 366FE3B285
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:19:08 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id y32so27696579lfa.6
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:19:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XWjyOTk2tGd4SQizwMeiUoN3Sq9yf6dGtgMTU28R/fY=;
+        b=a6NU1EkhZkIg5psdckl12MWVLCiPzHkalwosSurPX+10R3BE0fypNlCtJNK5S9Fm33
+         2YEBEEi/UVhjabcO80zk2m6oTTAPL81az32tapOcMzG6J4ZlxrymUqBd4GfVxeyw/A89
+         sUCvynHn5KtU6pQJnPWYUPBm3E6c0NPhN3bvgcM1IM3aePtqlWuejGE3+hgWGe8DRBe8
+         0r+WXQ6IP9CXTs3YirPawMoZtchf9K6PSVl4/lRm0wzOJeFm0s+arS5klDkoGekVaja8
+         KG4uDg1BebEPxb+JyNRmkofOgdTFfPXEqg1X4MYfyXJ3lNrbTxa73xI8/nIT30F8YeJw
+         3y3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4rJiDQtT2Kr6DvbEmZOVS6E8qO0XbKUrOt2r4t7PCms=;
-        b=3NoYjBiyjHlH+1PDzqT9HwaFr/mp1a6zR3i7QLonIm9oBybSThUDGt+oWsaRdq3zJn
-         K96v4N+tDRhx5OQNQj6ZxG12mXu+z/VaqLofxs3osoD7cuPtGKJqQmTwnJbvuzAn7lir
-         +Y5i3XV5hNFkYi9lLk5BxO+0bCtV/E1FTjzr0TcqPeu5xbADpeY5cIuwin9yIvTUEihm
-         2t1aFmVZBp8LVeiw8HXAkaJuBrQlostAgHbxVEYZ+9KrJFfwUTBa6dh7WOSGmdimsOcj
-         RlbcdwsUxqr2G/q12k34a9OuPngMm4uHyjnKp9/3RiQfToxqVjGN3bGeTlrZW2hy53F7
-         O+UQ==
-X-Gm-Message-State: AOAM531HsXNYuU8nDk1De2ugXOP1grfe+JyBMzwa1QlXKzoMSWd5jhlO
-        n6bepk0imkvD02thx21XeQ==
-X-Google-Smtp-Source: ABdhPJy0sH5LDDGTkYImy+b4nC/tu7YBKEVoi9LDSgWyWQA75TWi8anRIDY4X6qWQX2nXTQd+nM+XA==
-X-Received: by 2002:a4a:87:0:b0:35e:7494:4afe with SMTP id 129-20020a4a0087000000b0035e74944afemr1283672ooh.60.1650910649258;
-        Mon, 25 Apr 2022 11:17:29 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v5-20020a0568301bc500b00604fdc97d31sm4110930ota.39.2022.04.25.11.17.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 11:17:28 -0700 (PDT)
-Received: (nullmailer pid 4186964 invoked by uid 1000);
-        Mon, 25 Apr 2022 18:17:27 -0000
-Date:   Mon, 25 Apr 2022 13:17:27 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Markuss Broks <markuss.broks@gmail.com>
-Cc:     phone-devel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v5 2/5] dt-bindings: regulator: Add bindings for Silicon
- Mitus SM5703 regulators
-Message-ID: <Ymblt4+v/PaUZlxw@robh.at.kernel.org>
-References: <20220423085319.483524-1-markuss.broks@gmail.com>
- <20220423085319.483524-3-markuss.broks@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XWjyOTk2tGd4SQizwMeiUoN3Sq9yf6dGtgMTU28R/fY=;
+        b=M6mhRLTV4ky4ICQdWQaJ7S0jzvlEgwXE4Tr00kiJmHd3SZdreZli66In7rwxoOr0qE
+         qzgz8z+RE052Tppsgaa2cXUKZxQpiOV6gIudtpSvVZL7vZMWXfqywvye2U9wPIoPDTk1
+         lmhkDCbJ8uTyGMhENBBwCYNYRGCpIlF5bNp/sdrUHhSItsh7q8bukxFZ2HF5sNtCtDlJ
+         BFhyfwwgFIqfbTm95lzPPsYjaSD2tvgTBZ0T9tZmNShWVQyCzF1+jh26FuDggKoxKnv2
+         C3GlaOkt1rSqzexV4Z6bsseCYQpq3eYw11xH9rzPsNpJUhNT7VLlFuFtQxoav1NrJQ2z
+         rQnQ==
+X-Gm-Message-State: AOAM532h9VaZUVTEZ7/NDIKLDKAHKaSiiD/Pv5thvKZsWwOf2c1vl0Qr
+        GuVu0QoZ2dk0EPyvfhqAfHfgpin6aFwLjWGqR86vQw==
+X-Google-Smtp-Source: ABdhPJxr648XHmFtOsQbv/5l+cltqwh0ON3p+8hRlhV3L+DYFg9FO6UTQTq49XCNNQmDYsjURyqaNrLntwLPrDMxrKk=
+X-Received: by 2002:ac2:4188:0:b0:471:96f4:c1d4 with SMTP id
+ z8-20020ac24188000000b0047196f4c1d4mr13990835lfh.626.1650910746293; Mon, 25
+ Apr 2022 11:19:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220423085319.483524-3-markuss.broks@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20220424190811.1678416-1-masahiroy@kernel.org> <20220424190811.1678416-4-masahiroy@kernel.org>
+In-Reply-To: <20220424190811.1678416-4-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 25 Apr 2022 11:18:54 -0700
+Message-ID: <CAKwvOdkvoFFpn58uwLsB4dsvZ4Xk51MvusmefOeSaLmzcku_1Q@mail.gmail.com>
+Subject: Re: [PATCH 03/27] modpost: remove stale comment about sym_add_exported()
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,15 +67,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 23 Apr 2022 11:53:15 +0300, Markuss Broks wrote:
-> This patch adds device-tree bindings for regulators on Silicon Mitus
-> SM5703 MFD.
-> 
-> Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
-> ---
->  .../siliconmitus,sm5703-regulator.yaml        | 49 +++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/regulator/siliconmitus,sm5703-regulator.yaml
-> 
+On Sun, Apr 24, 2022 at 12:09 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> The description,
+>
+>   it may have already been added without a
+>   CRC, in this case just update the CRC
+>
+> ... is no longer valid.
+>
+> In very old days, this function was used to update the CRC as well.
+>
+> Commit 040fcc819a2e ("kbuild: improved modversioning support for
+> external modules") started to use a separate function (sym_update_crc)
+> for updating the CRC.
+>
+> The first part, "Add an exported symbol" is correct, but it is too
+> obvious from the function name. Drop this comment entirely.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>
+>  scripts/mod/modpost.c | 4 ----
+>  1 file changed, 4 deletions(-)
+>
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index f0d48f65fb33..c7cfeeb088f7 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -387,10 +387,6 @@ static void sym_update_namespace(const char *symname, const char *namespace)
+>         s->namespace = namespace[0] ? NOFAIL(strdup(namespace)) : NULL;
+>  }
+>
+> -/**
+> - * Add an exported symbol - it may have already been added without a
+> - * CRC, in this case just update the CRC
+> - **/
+>  static struct symbol *sym_add_exported(const char *name, struct module *mod,
+>                                        enum export export)
+>  {
+> --
+> 2.32.0
+>
+
+
+-- 
+Thanks,
+~Nick Desaulniers

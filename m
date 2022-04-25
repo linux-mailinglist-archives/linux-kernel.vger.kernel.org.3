@@ -2,161 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B55150EBF6
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 00:25:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B6DC50EC0E
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 00:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232161AbiDYWZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 18:25:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46262 "EHLO
+        id S235397AbiDYW2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 18:28:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343730AbiDYWVb (ORCPT
+        with ESMTP id S231767AbiDYWZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 18:21:31 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2135.outbound.protection.outlook.com [40.107.223.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90308644E6;
-        Mon, 25 Apr 2022 15:18:25 -0700 (PDT)
+        Mon, 25 Apr 2022 18:25:51 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA2A7A9A7;
+        Mon, 25 Apr 2022 15:21:49 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23PJat6R022547;
+        Mon, 25 Apr 2022 22:21:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=/VugjAkkwakedsnbxxxfoh52iUiJK7Gbd9Zf81j3sNk=;
+ b=KkBH2bpZc/6jvIx9/juUqUhPkIIVJh9gthmtQ7dNyaXVKh/VYMOYE8v9+bhtj9ASaK2Z
+ MVPrMLLFi9g8UeFmtu471/PIJLvxjlALqcxxk6nVqCJBxYaMGrIhixjrBXz8/m/BnMC/
+ WyxPi+u6UD7ZjduQBA9ABz58E8RMBVSD/jkYg2kmVlCranVTqLyYihzMVRrBOIcy6dBT
+ xLKOu2lLmK4mR9yVmAMDP4Vjyse0XddJ0k10xXEm0XFzEjQ8cNzIt2cxBhbktJ4obZYu
+ XWBuJlz1033XPGxS5kLhII6X10Me8DXwIwgnmVOM+Z3AkbyhYyps1XKcZ8STlHPcAeTQ Tg== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3fmb0yvcv8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 25 Apr 2022 22:21:34 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23PMAP50009898;
+        Mon, 25 Apr 2022 22:21:33 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2047.outbound.protection.outlook.com [104.47.66.47])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fm7w2c8bx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 25 Apr 2022 22:21:33 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PneKFFdCBFRNLuqo4vt7WhHL1V6MmokbBbh290DvwoPDPQs0Di5bgQ+jVlKT9loAtFsWDtbbWhMExIKLD9dbfyvc4AZRxBfQ1geJBDr5ZVw2A6UD4vqNM+iwSkAhzLiw36LBCNJCs4jivDSBzXFGXFy4tjTZIPOtPz1u1+38noRcVFMGDvkVl8+t8Jj9taCdu81RhyqXNs81dTfouIPeUmoWNc2JDnvB3mVzlQHf2PhAvMMpH8bYD+syCTbekPKUwinto7Nimnqq/QXQeeCmcTdtf9bW5qreQJWJ/N+Ole6qPXd/0GrR0wAnJ0tdhBajby6KYf9j0fwRefn4NlnhdA==
+ b=WLIWEPobBeqLutUK7gGFAZ/UfENqIuZRy6J0FAXSwlghqME/a1wp2WtuqUKkhTmMICYRSTdhGF/M+xVxCwynODOI6zRXrRed2fET3Q3xlzk3vwTtp8SbIfkD0pWgesSR7K5vC4Us+IOHbqO5kvZeK3QhC1USCH0pONfwkv+7Hdhc8mV5trbW9t7DqjgW+2zqcF6o7lXK4NnQWjCOGErkOpGwuSDk8Ulnm3j2/s8i7bXwmS2XMifvEC+BOrxU9jJpB3PpBPYo38/79RDR5tdowF0AnjBuRbTIwedagiFt37ubo1Ez1vXe7R/qXOanC4kwCVcad3ZiNEHhPak3YTbGGQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CtrvvNBlBlQElBlRpv1FH8wYGHhXgw41j18xQ1uOJaM=;
- b=A3ptzbBPpBYBHfGVSPpbFIpuly5JOam08RT9asjTOLQnacz/8qPVCFiND/fiSahKg2a40G1n5OQtBYE41We3wuIiAcZKgIIjsraxdv13PxJtrXztj1CdMOc+aow85yg7HM1y+E6BcJeg2X1/00wgcR8cPQmzDbdhA7u8dLoaYBLYt0bX4DKCzvNBbwhhCQJWErMl0FYofKFERpLJUNx/T4HjuIj3b358bwyQTA6RL23AeArTd0DZ2NflTDKHDxhXYfGr5ck0Ua5SM9tbVa5Hh07wztTBQdjxPTxkLihWXGqilpeG+X6TIa+Rcfaz0yhaMnco4Q/+Whr/XcfS9zgR5A==
+ bh=/VugjAkkwakedsnbxxxfoh52iUiJK7Gbd9Zf81j3sNk=;
+ b=XO0KHubWOz6VgQpYvflgOkkkKucIRYH41Nx17Bw+OH1DmuYT4W3bYYDANuie5RsEVuP3igYkMkISUIyrM9lyXcL7DaqOeWYbswnUXgzNRJCYaoTOwOKA3JrxKRHTzsd6mG+ItIEkZ9+nQBXOCJnhV1u6F1B/VieuXYQ9sahjR7p88qmPaEkkwGAIzX70rt7vgeimgLr0asUSnHBdcp6kED9ifqLlnvTkR0Or4v7JgZoxlUekNrDRRQP13idSaf+cND8HB7KIgS1n9zbXmi4ayWWHk7ryEKfZcem/fUQ2kiEQggcY5zkehvIIi8miWRxD27Xdu3t6fJY/rrfTXUhGSQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CtrvvNBlBlQElBlRpv1FH8wYGHhXgw41j18xQ1uOJaM=;
- b=X2QLgZAF0+BfjtaQDB2fahjdoiJAMDpnxy7HIXeKz/IRFqUaaA9SXs/7HwURFKa0hZ/gtLscVtviIhyW6J5nMQUvRUnqKbsl47aBKAGYGaz7eF11y0co0iTrcPAJ/RFlOSsyx1Yq7k9iejap5gZk/9hup2TB+cNHH3HYqt0QgIo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from DM5PR0102MB3590.prod.exchangelabs.com (2603:10b6:4:a4::25) by
- SN6PR0102MB3598.prod.exchangelabs.com (2603:10b6:805:d::24) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5186.14; Mon, 25 Apr 2022 22:18:21 +0000
-Received: from DM5PR0102MB3590.prod.exchangelabs.com
- ([fe80::6523:e373:99c:8ce]) by DM5PR0102MB3590.prod.exchangelabs.com
- ([fe80::6523:e373:99c:8ce%5]) with mapi id 15.20.5186.021; Mon, 25 Apr 2022
- 22:18:21 +0000
-From:   Ilkka Koskinen <ilkka@os.amperecomputing.com>
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     Len Brown <lenb@kernel.org>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ACPI: AGDI: Fix missing prototype warning for acpi_agdi_init()
-Date:   Mon, 25 Apr 2022 15:18:02 -0700
-Message-Id: <20220425221802.68498-1-ilkka@os.amperecomputing.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain; charset=UTF-8
+ bh=/VugjAkkwakedsnbxxxfoh52iUiJK7Gbd9Zf81j3sNk=;
+ b=BLoVO8nQZ/2tARu6xb3/yq6CxN2ksz92LlEv9clo0dueAO7IDLV63+BenVGM3H8YIuqEj/9gF8gbNcmy5BY8gCcBwMYH0RESkUbU/a/v7YD9QZf+WXpxg8+ADYywni2GSczier4yh8niJurqP5pRqI/jxAXGZ3iwfOduauB6Ruc=
+Received: from CH2PR10MB4150.namprd10.prod.outlook.com (2603:10b6:610:ac::13)
+ by DM6PR10MB3228.namprd10.prod.outlook.com (2603:10b6:5:1a7::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Mon, 25 Apr
+ 2022 22:21:31 +0000
+Received: from CH2PR10MB4150.namprd10.prod.outlook.com
+ ([fe80::7ded:5b3:a28f:2e55]) by CH2PR10MB4150.namprd10.prod.outlook.com
+ ([fe80::7ded:5b3:a28f:2e55%5]) with mapi id 15.20.5186.021; Mon, 25 Apr 2022
+ 22:21:31 +0000
+From:   Eric Snowberg <eric.snowberg@oracle.com>
+To:     zohar@linux.ibm.com
+Cc:     dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        eric.snowberg@oracle.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] integrity: Allow ima_appraise bootparam to be set when SB is enabled
+Date:   Mon, 25 Apr 2022 18:21:20 -0400
+Message-Id: <20220425222120.1998888-1-eric.snowberg@oracle.com>
+X-Mailer: git-send-email 2.27.0
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: CH0PR03CA0012.namprd03.prod.outlook.com
- (2603:10b6:610:b0::17) To DM5PR0102MB3590.prod.exchangelabs.com
- (2603:10b6:4:a4::25)
+Content-Type: text/plain
+X-ClientProxiedBy: BY3PR04CA0016.namprd04.prod.outlook.com
+ (2603:10b6:a03:217::21) To CH2PR10MB4150.namprd10.prod.outlook.com
+ (2603:10b6:610:ac::13)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fbe2f045-1896-41f6-ede1-08da27098209
-X-MS-TrafficTypeDiagnostic: SN6PR0102MB3598:EE_
-X-Microsoft-Antispam-PRVS: <SN6PR0102MB3598DD1D6EE29EA71F734E7C9DF89@SN6PR0102MB3598.prod.exchangelabs.com>
+X-MS-Office365-Filtering-Correlation-Id: e2974f27-cf64-46e9-8f7f-08da2709f25a
+X-MS-TrafficTypeDiagnostic: DM6PR10MB3228:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR10MB322877EAF40C936A046ED5B587F89@DM6PR10MB3228.namprd10.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2NKKsb+OCDE1EXmTVnnQ90cbR+n5oseYhXeel5Mq9SzP/7Brf2NjTbdKPu5HIlDba5s4QxrFnOCbEDg+wWPvzfUFmKFHjn3T3veaqLQH752L8xMJe5tzUXre2r6RkTM7apmgjhe/vtb2ncsMWZCx8wfQ4zCAOz2ShgLR/dwr86Rw3mzidulzgAtwL/pnbhEWXitWRCzBeLXpFTSGPieHkL4IploTT9Js3gWdFine3FprHftGsgnssUMeTBJ4jg8rw9dk3lLgwvAWnSynJrikLaYuTCqDU/6Svo2OrbNRil8MpEzqDpBNwmgDrGWs7HGPIaZpZC9IlG6P2WIkz+xh9o2unsNpSYt4iOk5fU4ZWaDe/jw5++hyA9B9HB4nvycDTWr7o2eIyLF6yNu+kqpyH0+cwflQ0RD4wb/5Ez44fFqWn90zHQzGFq1+lrxIJT1pd39/TkT1B3jBO+1mc4OnGYlgU4XtBQdV3e22EbY2WSCqtiY8mwPdiYpzozasalbU5gjCrF5zxYbrY+yc8IuoZVZet1rA56irW9hOlFvL0DmFMkoQzBxwY6Fz8lLaHkVkQLtJ2xeIez1mSvcIm1i7I2NRnKjLvamFLMvsakcBt7/AwxABexJ4kBAlEvVGOTv2WluioNmxr9InHH5hFU6yWNYrKhyhK3xrH9RA/icjvPDa8FybqufIz90MskX82JUeoNXNP95DDhwLF9MfkQap+g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR0102MB3590.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(52116002)(4326008)(6486002)(6666004)(6506007)(6512007)(26005)(186003)(2616005)(1076003)(66946007)(66476007)(83380400001)(66556008)(8676002)(54906003)(86362001)(38100700002)(5660300002)(8936002)(38350700002)(4744005)(2906002)(316002)(110136005);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: T0wv1I4iyHxCPxsqosnvZlIkc6OO9JBNei6Catt3wYwENwngVGnac+tju8C27j32UL0zU5xnvj101QIdIuTHnu8Jc7NULwSb2mQXPpb5/ZAiCfXj3BPdCF5yiycWASp9EZPuhg2f0dJuglOYbLoEkscMCyq9Yy+VFDZy77ll3onIAsodyungyB5fz9ekeutb8KhzPhx+0QnbUDXDmo468q9P97X3BSz8N6H1337vbkH5EiHJK8TGouUJlTOMOjDyV86YjoyES6xpBT0jwf64E26xLgyArcfohcUueuRehCFeW9jhfjcyybnUzKGRB1iS/LC1yfZ2ut1NpFm6k8FT2s7Jb23pvoJB1Z5ZJzLjsLE9GQdC//HkLAnKu4a4UYacVgYdSOu9nuO97Jco/J/5RG+JmjeFM+OrwP9ie+cmrE/1at0PBfPXnAilBykAUrcGn84gFH2BtA/UqQknkBQD4zVepQxVnumYrRKrPK6+dpYuv/lWgd1vt/KSQX4TzmAYGzIWMr/EUcN46V8ZI2J5hrSvPUi6u2qQgMGPrfWLoAyrJj2eHmUcEkrPCulH2WnDpk0JtyV1IOu6WzGOeWjrvnz+VM7ixgqRtB77Q5BuQSZWLTSwcRHOYi3BjM6IrHzWacxWV9bngX1d/fUf+NJA0AdUCotH7AftXcFHQ7z6/xoaoBNGhYWBV3WIMvpKFSkFDhayE3kbwUCNMltWY6869A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4150.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(186003)(1076003)(38100700002)(83380400001)(38350700002)(86362001)(508600001)(8936002)(36756003)(5660300002)(44832011)(2906002)(6506007)(52116002)(26005)(66476007)(2616005)(4326008)(6916009)(6512007)(8676002)(66946007)(66556008)(316002)(6666004)(6486002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZzFYZy8xQnZpSnFNME5XL3dMWWxYYVZiSFlqYi9iR1hGUk16SnBUNHlKTmFU?=
- =?utf-8?B?ZXhsQ3AwdEpPaVk3MUpibnloQkdyTWx3S2pFN3R4UW54di9pb1NObGl5a1FX?=
- =?utf-8?B?ZTl1T1paTVdnVkFqNU82RitHeG5aeFFyeFR1K0p0ZUYrYkJndFpTS040QzJO?=
- =?utf-8?B?NnpBRHYyMTQvNjdETzgzYUVXTW5ldy9tTWlvbnkyaWM1YlBzd3ZmYjI1OUdw?=
- =?utf-8?B?UmVuNmNscTBFZHlER1RpMDJReGIwenFzbCs1MmFmVkduRHh2NFNQTkY3R2dy?=
- =?utf-8?B?WFU0Wk1lVWZUdGRjU0FqbDRiVFZXenplb3o5b1QySmlJWEdjU211L01PWXFy?=
- =?utf-8?B?ODAzUlg5UVl6T2Z4ckZoSkRpYVJ1RVoxdzl2Ly9JRDR3aDVCWVVZTTk1M0t5?=
- =?utf-8?B?TVY5MVdEZ21GQmFCSzdQdW9ET2hlbXp3TjJKUUJkS1lRQ1JkcnJxcDRrUkhB?=
- =?utf-8?B?a2hQZGVJdzlodUFCYnhva0t0dUNBZ1lYTk40TUhQK1ZPczFwQVZacktUMlNE?=
- =?utf-8?B?ZmFGbEZhRDR3MFdmSDF0MXoySFB6L1ZMbEdZakZwTGJhN2Zyaytwa1lKaFJH?=
- =?utf-8?B?RlVxQmV0SnNtaVN5QWFaVlp0bGpWKzNrVFFkbUZxcUg4Qjc0bDZIZldzNy93?=
- =?utf-8?B?eG9YK3QzVmpiWG9FOWtMQWs3NWt6M2NWMDcxeG1tMGRiSXJvMHFmQStjMHFS?=
- =?utf-8?B?UlpPMlVUVGFYTk96TmFpdmJNeVZQeGpTc256Qk1pVjdOeUR2aGxGck1DQzFs?=
- =?utf-8?B?M05XdFM5alhuWnVqSS9aYWVXRHRpZTZkVXNJU2xxNTJxTW02dHhhdTNiVmhu?=
- =?utf-8?B?Z015S3RyMFgzZi9Tdktuc1czMHlGRk5KTURKY2dyMGNLRVphL0VyMEpFVWdn?=
- =?utf-8?B?ek1sVCtNK0R5UUJYY3hEK1pacWEzZmE4M2hkd20zTERMa3NBOURjMWJLQmc3?=
- =?utf-8?B?TUkxVGJMZDdsdWNDa0UycHN2NnlHN1Z2U20ydHRPSE5MN3ZTVzdGNEhRZWZ6?=
- =?utf-8?B?cTVySVpESUZyNU5YdmN3TWRQNmxtZTdXSlVUQVBjRG9jejJwcWpjU0ZoTVRw?=
- =?utf-8?B?RkN5eGZuSXhjUktEY3JSMnRwWEQyY0E1NkZVL2drVlpEOTg1VFhDak9JT3pn?=
- =?utf-8?B?WkN6czJaa282QUhybTdSemVLSkYvZkE0OXVJbXRzVjh1cmd0c1hJU3JlN2FD?=
- =?utf-8?B?RTJVYTZvZjN4TXFwWllNOGp0M2ZlQ2NCUG9hclRvNUEwY0wzR2FIeEI1YWNV?=
- =?utf-8?B?bWNnK2pzUTlSOGxPTWpYckJaSlA0Qm9VSFVETzNBTCtpZFd4V2NMcDlIYmsy?=
- =?utf-8?B?QlhqT2w2VTN3NUFRbDlRT25vdkk4OGd4R1NyWXB5YTdERkM2WGQ3Q0R4TDgv?=
- =?utf-8?B?VHVNS0owS1RqMmNEMHY5STkrTzUrbHo5cWhnbVNFZjY5bnVFVFNuQzA2dk5V?=
- =?utf-8?B?aEh0VHZyM3hoVkQ0Y3dEY0tVWGEzV3NRc1lUS1BmYkg1cC9TMnNJTFhueVRO?=
- =?utf-8?B?MllMb0ozTTljNSthc1loTGV5M1pPRlUwK3VpQUFYd1R2NW5wN0FselhrNjFT?=
- =?utf-8?B?ejFybHhlWGZJVjcxSTA5TzVDOVp3NUtzUWlmM1B1Zmx2cDBBNk9pekVaa2lx?=
- =?utf-8?B?aDJEUlhBcVZFS3dOdDljR1RyQjhlNWNVVTZPcUtlcnBvc0Z5Vjc4QTZmR1gx?=
- =?utf-8?B?U2trMW1wMVVWcHlVYWJtUkdVSkpJUmQ2Vi9SQWVrdnIwMEdoeXcyODZwWlNM?=
- =?utf-8?B?Q3FKbGhJL25VMVR0V0NJYmdXdXV3THdvMUYycFB1TE1FaFc4dkJabnA5MCtY?=
- =?utf-8?B?TDZJVjdPeFd3bWsway9DZUcyL1AyeW5rYUY0SjBsTDBod3BSY1pqQmpJS2dN?=
- =?utf-8?B?VXpzSS9QRUFZajVTQ2JvUDJvMkRHY3B1eUpTUDJ3NE5IZmovZUNFYysxQ1lJ?=
- =?utf-8?B?ZDBqUzFkL0s0R3ZYb3c1VThyalV4VmRFYk1lY2FxSDRORVZ3NWpxOENEYzds?=
- =?utf-8?B?bU1vVlZOelB6QWk2NWIybEg4R05XRXVxeXBPajQ2WU5obkplRXJSRmc0NHc1?=
- =?utf-8?B?dmsyZEFURDdvNDdCWklRaDdmVk5QQUdZWlJRZ1JxL0lGeXcxL2FESHVtTThT?=
- =?utf-8?B?bWpHWjNGMUV6a25aMEN5SGZNK2U1SDludlAxVFJaSGpqMlFNbU5EcERTaHU5?=
- =?utf-8?B?QjYrcksvUHF5dFNJNVdRZjhLWXQvY2RUVDZlTzFLYm5nKytYTFA0N2NVTyt2?=
- =?utf-8?B?cURFWWZXYTU0SzFmUWhzb2JvQ1pCdkhoUHNTSWdoNjZkaUIzUGhCcTNJZ2Vr?=
- =?utf-8?B?WnNRckFKV1NxTStya3B6ZEVQelhEUzY3cFRYQUYyczdkTndpRklib1M2SGRl?=
- =?utf-8?Q?eujT09KyapBhsUWQfKHSrcE1TkJy1KLxiampF?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fbe2f045-1896-41f6-ede1-08da27098209
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR0102MB3590.prod.exchangelabs.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?JDVKU9h8KEqM4dH2+Q2+Rj+3vub40E5xaI5mPcTfnv5dHOoIsxKGHrsgjmuL?=
+ =?us-ascii?Q?X3KOgm1QmGCl7S/tX0kuApv3Ae5GFVtM4jGmOKn4Aix0hFkgsy29lrniarws?=
+ =?us-ascii?Q?04bJUPK9y4MGJ+8G45da4FZBP/C1dUXCi31EGmjHsCSAoR1zbkgBBIO6EzRc?=
+ =?us-ascii?Q?C0uB4vuWZIKZokjG6FuqoLEu7QCN+WJhhR9Lp6/9TAbewnEmuunrr4vdQe7y?=
+ =?us-ascii?Q?Y1xMBp+IdaFF9+j267bpMyQPSTK5gk+D0qtPKqaav8svgXw5PQgliwmK84Th?=
+ =?us-ascii?Q?/G42CdpdhiE+oaiZHGcwi/wUHw9A0cludntArW+me9BowMxr7VsER6Xh5Bd/?=
+ =?us-ascii?Q?T7Y7TLoWmYiT53fOMGqPFH16WmCH9tIaQ04OxvlrFm7pEXTs48fVmY8krIrg?=
+ =?us-ascii?Q?U+V4kOBkBeVLGeoz8GHvXAqdXxohuba6MZ0rd4qvAdJfzDjpEpN/1DzTnnut?=
+ =?us-ascii?Q?USme0pLjLHx8tz27PH1a5Jjavl95+pk9oM33lnQyMuHTT+uAz4shPXEcazzj?=
+ =?us-ascii?Q?aX/Frsy07TGu8yx96NQceKNZj6WX+ghCAWE1Tdkp8e0xPASmHN5NZbrT6xqg?=
+ =?us-ascii?Q?1sVSadGgfNf09VQXk05vU10qB0fw4dwiRPJe8GWKYvYF/mA+u+kQxoGiRDiX?=
+ =?us-ascii?Q?5+BbENYhEeBqp/3yNJEa48X0uSVX6EwmJmMyeEP2jYJmxz+1EcKkYvnbZiIM?=
+ =?us-ascii?Q?mS6NIYqo3oP7NNRGb//PKwANSaV+GhyJxpMtOal7qGUJ+9J1cHZ927aGJ2hf?=
+ =?us-ascii?Q?4EYy8CFU/JZtN5246nThwXEQ0Y4pSLDWWRemOV8lH2g4BW5XY2vsVzbk1ucC?=
+ =?us-ascii?Q?c12QGtEmfIOiT4BZViN0b7Q4b3Ut1w/Hya9hXZsyK7G/x36vJSxXawE/i/U9?=
+ =?us-ascii?Q?NiRdSZvc1i6rvoXBrFTZ4tPJmepEY3dMkv9cpSup+kKPWUlHWOVDh2t/LAlt?=
+ =?us-ascii?Q?L1IY7lN4Gg1M2FDTrtQV/0Ub5vFO6E8eMlnW8vy+uMR1bGREzD24ekjv6/kg?=
+ =?us-ascii?Q?KN/g/GjnE2q8akziFXifwNvAMA5zRLXm50uanbVyh39KXBPuqCE3fZI3zdXs?=
+ =?us-ascii?Q?MoMwXjcR4mM2zC4Gjliu3TZrCZlIc8Caji8xptr95+e1pE5RlLw5YKYITWLw?=
+ =?us-ascii?Q?eisYZ1eCKEYFmgrxxvQ1S7RNIaDgBI7Z2C+zGbOHXjwzToVwNel49AmpXShK?=
+ =?us-ascii?Q?ukVKIzj3mVcBkiQr4d/Ywx0zOz+t/OUmlUsJWKhAB9tF2OWTpxHEwIjvhSlX?=
+ =?us-ascii?Q?hAAJkKeAmx6HqLKARY0p+PmvcrDtnMG+1+6B0zc3xgFEN/4mXaHcbR2qdwES?=
+ =?us-ascii?Q?tpjrNBs1cCx5pUe+89Tw+2dRykGHknJVp2DryvqTmOp8ATklxpFNlzWyxdTp?=
+ =?us-ascii?Q?yEkV1CWkBvQVMB5zOCLUvt0QsDaIfUHCPzNfecaiVXE+wGAf+vAeVaqPHa0C?=
+ =?us-ascii?Q?xB53womRAy1DNTuZSjp2WhdIAqav2iMRO+c5YYe/cj1qaofxF1/R4eVeYrsx?=
+ =?us-ascii?Q?fiHj384qJxnf62aNJWV162iJI+lvXZq8rqCkBk64YCj/5vlwgr0BTTRZaQzx?=
+ =?us-ascii?Q?rqI+kh2riylmI/rHezqHZs2e6/SwRy5IRzExW/zPFVR/6ok4dzsEqtmfIUkx?=
+ =?us-ascii?Q?5exEGMB4/Oj58IFQKYtXhuED3Zz1Z+ZdYWr++/9UKGtujJPIGRIjTP1bwlzZ?=
+ =?us-ascii?Q?tUJsVC8fgoZUyT/FTg2l0hy7/v61/Z3iz+mQ0hNZlMCrfjk3lpYC5hgOsEQ/?=
+ =?us-ascii?Q?U1GTtz/sRT23ZEZWG0iThxw2m9PBRM0=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e2974f27-cf64-46e9-8f7f-08da2709f25a
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR10MB4150.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2022 22:18:21.7786
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2022 22:21:30.9317
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oFZCEcG1Atms31XCYR0Ui/uBAPReSu4PukRX+Yfa7GXuzdeevfXXJljuL4QyLkkqlpJHEc1aIa7f2BSazUPs3uKOJCTv19tBfDMQYW+n+t56KtmnLTjXNWjqizsa2u0J
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR0102MB3598
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: HPLfzVw1ZQgFb15oV6MaALEHq3seoPvtFsZ5bP+EQzzz7MskZBS4SfxuJkz+YXwj+ySftC8MdBBzkYgGDdnnFoXvBWyRUyyOLJuwlAM+pnw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB3228
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
+ definitions=2022-04-25_08:2022-04-25,2022-04-25 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 suspectscore=0 spamscore=0
+ malwarescore=0 mlxlogscore=999 adultscore=0 mlxscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204250099
+X-Proofpoint-ORIG-GUID: P8lPI_FkKH-WjONUiStvHiA0iDxqSlC9
+X-Proofpoint-GUID: P8lPI_FkKH-WjONUiStvHiA0iDxqSlC9
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building with W=1, we get the following warning:
+The IMA_APPRAISE_BOOTPARM config allows enabling different "ima_appraise="
+modes (log, fix, enforce) to be configured at boot time.  When booting
+with Secure Boot enabled, all modes are ignored except enforce.  To use
+log or fix, Secure Boot must be disabled.
 
-drivers/acpi/arm64/agdi.c:88:13: warning: no previous prototype for ‘acpi_agdi_init’ [-Wmissing-prototypes]
- void __init acpi_agdi_init(void)
+With a policy such as:
 
-Include AGDI driver's header file to pull in the prototype definition
-for acpi_agdi_init() to get rid of the compiler warning
+appraise func=BPRM_CHECK appraise_type=imasig
 
-Fixes: a2a591fb76e6 ("ACPI: AGDI: Add driver for Arm Generic Diagnostic Dump and Reset device")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Ilkka Koskinen <ilkka@os.amperecomputing.com>
+A user may just want to audit signature validation. Not all users
+are interested in full enforcement and find the audit log appropriate
+for their use case.
+
+Add a new IMA_APPRAISE_SB_BOOTPARAM config allowing "ima_appraise="
+to work when Secure Boot is enabled.
+
+Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
 ---
- drivers/acpi/arm64/agdi.c | 1 +
- 1 file changed, 1 insertion(+)
+ security/integrity/ima/Kconfig        | 9 +++++++++
+ security/integrity/ima/ima_appraise.c | 2 +-
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/acpi/arm64/agdi.c b/drivers/acpi/arm64/agdi.c
-index 4df337d545b7..cf31abd0ed1b 100644
---- a/drivers/acpi/arm64/agdi.c
-+++ b/drivers/acpi/arm64/agdi.c
-@@ -9,6 +9,7 @@
- #define pr_fmt(fmt) "ACPI: AGDI: " fmt
+diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
+index f3a9cc201c8c..66d25345e478 100644
+--- a/security/integrity/ima/Kconfig
++++ b/security/integrity/ima/Kconfig
+@@ -237,6 +237,15 @@ config IMA_APPRAISE_BOOTPARAM
+ 	  This option enables the different "ima_appraise=" modes
+ 	  (eg. fix, log) from the boot command line.
  
- #include <linux/acpi.h>
-+#include <linux/acpi_agdi.h>
- #include <linux/arm_sdei.h>
- #include <linux/io.h>
- #include <linux/kernel.h>
++config IMA_APPRAISE_SB_BOOTPARAM
++	bool "ima_appraise secure boot parameter"
++	depends on IMA_APPRAISE_BOOTPARAM
++	default n
++	help
++	  This option enables the different "ima_appraise=" modes
++	  (eg. fix, log) from the boot command line when booting
++	  with Secure Boot enabled.
++
+ config IMA_APPRAISE_MODSIG
+ 	bool "Support module-style signatures for appraisal"
+ 	depends on IMA_APPRAISE
+diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
+index 17232bbfb9f9..a66b1e271806 100644
+--- a/security/integrity/ima/ima_appraise.c
++++ b/security/integrity/ima/ima_appraise.c
+@@ -43,7 +43,7 @@ void __init ima_appraise_parse_cmdline(void)
+ 
+ 	/* If appraisal state was changed, but secure boot is enabled,
+ 	 * keep its default */
+-	if (sb_state) {
++	if (sb_state && !IS_ENABLED(CONFIG_IMA_APPRAISE_SB_BOOTPARAM)) {
+ 		if (!(appraisal_state & IMA_APPRAISE_ENFORCE))
+ 			pr_info("Secure boot enabled: ignoring ima_appraise=%s option",
+ 				str);
 -- 
-2.17.1
+2.27.0
 

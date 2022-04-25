@@ -2,144 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7EC550D7DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 05:48:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C40DD50D7E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 05:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240437AbiDYDun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 23:50:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
+        id S240747AbiDYDxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 23:53:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240634AbiDYDu2 (ORCPT
+        with ESMTP id S231730AbiDYDxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 23:50:28 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A71D3B9;
-        Sun, 24 Apr 2022 20:47:07 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id b15so13647129pfm.5;
-        Sun, 24 Apr 2022 20:47:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7VhljdC5qfgvF8YkpQHi5caMI2K36nYGNnMwDGsYTi4=;
-        b=PLJQOMoBO2sR0lbBytKX+x7YhWEmudhd6tkz1e0TrsQQhULjx++oJMZBbvkoeraHC9
-         GXOUe7XeiXg7WQmzb/Fzq4r99noiAAr0b0tTsPq3Lh0YDE/MZ1NBHrmLsjmY99IVxQYI
-         Xswdw1cHjnQ4CDHMUELJV4e5TBeJfxk4PwnASI+dq80Yt4WoV0GRfacTgWJ0Dpxjomz7
-         nReMFscLp28UFfVU3cr0iigUYQW4CFOGqds+ZPAA5bhvfN5yyymEhSXQxzeKO/gr9tAj
-         vgyWi/BsG6EE7zzSBSID0RLUYb01vRZqkQq5lJ/T2eBKcXAhl7oxG1milmieGth+opj8
-         svZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7VhljdC5qfgvF8YkpQHi5caMI2K36nYGNnMwDGsYTi4=;
-        b=51a6EkVmrIxzqD+OJLUcDew/aypCd6hktYcrfxaf0dT/uXfmQye2sKy6mNXFFKjY3D
-         oHSFNbkuIayFMzScsq3XNnaFiQHtQeggQPocwyO2nogvcltdea1H/794nvynH9TST9s/
-         jsqb5Q7T11hcyOXeTHhicNJssv1dPdCmNJeWktt15HfgImePgIiUwIvcwKni6zSBpZEz
-         0+cly4eeNm+ZUQS25fFPrJlQUqbjqvilvzljDlZdVCcswILWpyaXyHeSImSkoKt1i29w
-         jD5TbyWQHSfOGN0hS+FJK+Oa5g0XLhhipjzRa6SOJANrhgMCYd+cfEuWvoUGm/FtkIuC
-         1aWg==
-X-Gm-Message-State: AOAM5326DNYJxSc82fBK/oUAqa7GKrKXpFkV6CNZ3Ad/vfztj+D0wLLH
-        HicmD/Rr6z2Rp7N9EF6ZVE4=
-X-Google-Smtp-Source: ABdhPJyzITr4L56y2maJflc4flrw3rp7brBf35hCOREn6LkiCOJKjLCoM5NRBv3jnt8R81I7BCISGA==
-X-Received: by 2002:a05:6a00:856:b0:50a:431b:c298 with SMTP id q22-20020a056a00085600b0050a431bc298mr16683814pfk.75.1650858426733;
-        Sun, 24 Apr 2022 20:47:06 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:282a:d50e:e0fc:c145])
-        by smtp.gmail.com with ESMTPSA id 9-20020a631449000000b003aabd688921sm8025285pgu.13.2022.04.24.20.47.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 20:47:05 -0700 (PDT)
-Date:   Sun, 24 Apr 2022 20:47:03 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        linux-input@vger.kernel.org, chrome-platform@lists.linux.dev,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>
-Subject: Re: [PATCH 1/2] Input: cros-ec-keyb: Only register keyboard if
- rows/columns exist
-Message-ID: <YmYZt7WQC17aE1fS@google.com>
-References: <20220413033334.1514008-1-swboyd@chromium.org>
- <20220413033334.1514008-2-swboyd@chromium.org>
+        Sun, 24 Apr 2022 23:53:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73F502F021
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 20:50:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650858600;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6+BjK5j3p07NV8YTOKQRJe/TLrsI/cMPaYzFnvSMXsY=;
+        b=aTq2xpoiL1fV+LGJAJxSgdALkp2FfcztOy2w2EcQ9xvJUhgi+c4VgdWSAfu/gXoctmIwSu
+        M3CyevPvVtFASmBTCNbg9KpsLIfRp9GIIqI1CL/lbUh3vegAk1Q7WnKOUKqMWbPzbaLumx
+        1mXg5SjAYWJ2ectCh+XfinKEhK9o3Q4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-671-66BGPX6ZN3KzlUNj4q2GrQ-1; Sun, 24 Apr 2022 23:49:54 -0400
+X-MC-Unique: 66BGPX6ZN3KzlUNj4q2GrQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4C3E13810D40;
+        Mon, 25 Apr 2022 03:49:53 +0000 (UTC)
+Received: from localhost (ovpn-12-73.pek2.redhat.com [10.72.12.73])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id C317755105D;
+        Mon, 25 Apr 2022 03:49:51 +0000 (UTC)
+Date:   Mon, 25 Apr 2022 11:49:48 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+Subject: Re: [PATCH v22 1/9] kdump: return -ENOENT if required cmdline option
+ does not exist
+Message-ID: <YmYaXDrEYOXLzT5H@MiWiFi-R3L-srv>
+References: <20220414115720.1887-1-thunder.leizhen@huawei.com>
+ <20220414115720.1887-2-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220413033334.1514008-2-swboyd@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220414115720.1887-2-thunder.leizhen@huawei.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
-
-On Tue, Apr 12, 2022 at 08:33:33PM -0700, Stephen Boyd wrote:
-> If the device is a detachable, we may still probe this device because
-> there are some button switches, e.g. volume buttons and power buttons,
-> registered by this driver. Let's allow the device node to be missing row
-> and column device properties to indicate that the keyboard matrix
-> shouldn't be registered. This removes an input device on Trogdor devices
-> such as Wormdingler that don't have a matrix keyboard, but still have
-> power and volume buttons. That helps userspace understand there isn't
-> a keyboard present when the detachable keyboard is disconnected.
+On 04/14/22 at 07:57pm, Zhen Lei wrote:
+> According to the current crashkernel=Y,low support in other ARCHes, it's
+> an optional command-line option. When it doesn't exist, kernel will try
+> to allocate minimum required memory below 4G automatically.
 > 
-> Cc: Benson Leung <bleung@chromium.org>
-> Cc: Guenter Roeck <groeck@chromium.org>
-> Cc: Douglas Anderson <dianders@chromium.org>
-> Cc: Hsin-Yi Wang <hsinyi@chromium.org>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> However, __parse_crashkernel() returns '-EINVAL' for all error cases. It
+> can't distinguish the nonexistent option from invalid option.
+> 
+> Change __parse_crashkernel() to return '-ENOENT' for the nonexistent option
+> case. With this change, crashkernel,low memory will take the default
+> value if crashkernel=,low is not specified; while crashkernel reservation
+> will fail and bail out if an invalid option is specified.
+> 
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+
+Acked-by: Baoquan He <bhe@redhat.com>
+
 > ---
+>  kernel/crash_core.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> I tried to use mkbp info to query the number of rows and columns, but my
-> EC firmware doesn't have commit 8505881ed0b9 ("mkbp: Separate MKBP_INFO
-> host command from the keyboard driver") so it always returns 8 and 13
-> for the rows and columns. Sigh. With updated firmware we could query it,
-> or we could rely on DT like we do already.
-> 
-> Originally I was setting the properties to 0, but
-> matrix_keypad_parse_properties() spits out an error message in that case
-> and so it seems better to delete the properties and check for their
-> existence instead. Another alternative would be to change the compatible
-> to be "google,cros-ec-keyb-switches" or something that indicates there
-> are only switches and no matrix keyboard.
-> 
->  drivers/input/keyboard/cros_ec_keyb.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/drivers/input/keyboard/cros_ec_keyb.c b/drivers/input/keyboard/cros_ec_keyb.c
-> index 6534dfca60b4..ac9a953bff02 100644
-> --- a/drivers/input/keyboard/cros_ec_keyb.c
-> +++ b/drivers/input/keyboard/cros_ec_keyb.c
-> @@ -537,6 +537,15 @@ static int cros_ec_keyb_register_matrix(struct cros_ec_keyb *ckdev)
->  	u32 key_pos;
->  	unsigned int row, col, scancode, n_physmap;
+> diff --git a/kernel/crash_core.c b/kernel/crash_core.c
+> index 256cf6db573cd09..4d57c03714f4e13 100644
+> --- a/kernel/crash_core.c
+> +++ b/kernel/crash_core.c
+> @@ -243,9 +243,8 @@ static int __init __parse_crashkernel(char *cmdline,
+>  	*crash_base = 0;
 >  
-> +	/*
-> +	 * No rows and columns? There isn't a matrix but maybe there are
-> +	 * switches to register in cros_ec_keyb_register_bs() because this is a
-> +	 * detachable device.
-> +	 */
-> +	if (!device_property_read_bool(dev, "keypad,num-rows") &&
-> +	    !device_property_read_bool(dev, "keypad,num-cols"))
-
-Why are we abusing device_property_read_bool() for properties that are
-not flags instead of using device_property_present()?
-
-> +		return 0;
-> +
->  	err = matrix_keypad_parse_properties(dev, &ckdev->rows, &ckdev->cols);
->  	if (err)
->  		return err;
+>  	ck_cmdline = get_last_crashkernel(cmdline, name, suffix);
+> -
+>  	if (!ck_cmdline)
+> -		return -EINVAL;
+> +		return -ENOENT;
+>  
+>  	ck_cmdline += strlen(name);
+>  
 > -- 
-> https://chromeos.dev
+> 2.25.1
 > 
 
-Thanks.
-
--- 
-Dmitry

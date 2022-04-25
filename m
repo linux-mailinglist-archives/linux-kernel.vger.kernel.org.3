@@ -2,117 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2487E50E650
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC01A50E656
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:57:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239754AbiDYQ7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 12:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43924 "EHLO
+        id S243664AbiDYQ7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 12:59:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbiDYQ7A (ORCPT
+        with ESMTP id S243665AbiDYQ71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 12:59:00 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0116D15727
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 09:55:55 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id iq2-20020a17090afb4200b001d93cf33ae9so504712pjb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 09:55:55 -0700 (PDT)
+        Mon, 25 Apr 2022 12:59:27 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC30238DA6;
+        Mon, 25 Apr 2022 09:56:22 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id g28so8798767ybj.10;
+        Mon, 25 Apr 2022 09:56:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fHj0AXFpbHX+x5jOd8SRt9e16ihhUng0D/feKZZnpv8=;
-        b=FEvSxjhbaiBv88L8kOktym3iC8R8O3qQefPdoXOLlesqLA7PHFDH4Ly1WACA+rAmHU
-         WFYWAsFAgO9K4ek0AIY1Py4MA2xes8OeKQTniMnqopB4OUBWhSYZyycRYIIrrO66eF+q
-         TezSS9rHfXn8M6biPzALcA8etR6djyTk3IYCFtRAc6AtM9o311inxeF5QVFsv9YOJdtQ
-         Iav/UtTiNPUp3qqSJW9SDbHTJ8n7Qn1kEQ7qIAsed4W8ZdZMYBKJuCxFSbqn3W4cofC3
-         vxKrxlTxfU0xkOltUvgpDhUIfB2B58Ap/oM5hMcHQAVk2ZVy/hup4ude5BbsD80l9n+2
-         sAUA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3nHqpeRMqi5ydu/1+qACR0gpSXJ+684PjSvA8TxDFDQ=;
+        b=TNxzFJ8skf6JzWlQLq0qfcPcp7scN5ongV1p4rF70j/cQMSIwM3xmHdr80cGpfnQ8t
+         bwU+6TOYcj9nf/oQV2ZDfEAdjpln2UkrxwU/0EGj0iOaLrsX4/cm/hZEEALcXe5VrY6/
+         epw0T6c0XF4XjmANfKc5Ro97ve1Wni1Yb4QjwuoQ0ic9X4aaAhzZ3QkwzFRrCGZEw+9F
+         4DxdR8elStD1ojHmhL/sxWsFJ1pSQ3sm5tHtwLFQtbLxEz9Au5fk5Y/8i2DZIhaNnmNy
+         Lnr3yoHg7X4I2WDsUGxjIcgC/MW+iUyyipAXDluVM+TRG+++tnVEarotaTD+ex+NJAu4
+         gtaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fHj0AXFpbHX+x5jOd8SRt9e16ihhUng0D/feKZZnpv8=;
-        b=C774qNL1wSyXXfBR9riEAUbygMlAwQ05EnADJQdJmPPHn5jrw9QAHHhMXeVQNJ33gD
-         1NLxud0w0jjPIgusdNd/WhgOdr55Az/nf2M5ykdxLJ2BgwiTVun7i4YAQSuTJqCudZXe
-         3QVGzuv9od73mgIfPkNi+lXCb55TBAPoXcfqMb/uH1g2Ij+FhqJfQ+0ELw8YDQpNk3l4
-         gOF2Y7UZxOGp9t949G05PkdrckmalF1GhvcC+B6URt2ZZKycDe1YcJMDnXfZfycR0LsU
-         5RUcmFKj9zGZEKBxg6Y3GyyjZprixzog1KIcuhzl+VTBOD8+XJTIi2+yF+LVyCPqEr9g
-         IPVw==
-X-Gm-Message-State: AOAM533QNp3bZ5hcPFbGQA6cPgMfT/wbNbPkViaFAPurRt2yNL6MawpG
-        vY1l0wQZ/XeXwRcJIH5PGQ8BhJ86WEboZg==
-X-Google-Smtp-Source: ABdhPJy8UDRi8nvlNJ/DZUcck1tp5UrommAF25tWePBOj8Foc0cM4QAxsDb5oZ1qiqmpv2T1TVm1OQ==
-X-Received: by 2002:a17:90b:255:b0:1cf:39e7:a7aa with SMTP id fz21-20020a17090b025500b001cf39e7a7aamr22087982pjb.137.1650905755524;
-        Mon, 25 Apr 2022 09:55:55 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id d20-20020a056a00199400b005060849909esm14038460pfl.176.2022.04.25.09.55.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 09:55:54 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 10:55:52 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Hangyu Hua <hbh25y@gmail.com>
-Cc:     bjorn.andersson@linaro.org, arnaud.pouliquen@foss.st.com,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rpmsg: virtio: fix possible double free in rpmsg_probe()
-Message-ID: <20220425165552.GB1917807@p14s>
-References: <20220418093144.40859-1-hbh25y@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3nHqpeRMqi5ydu/1+qACR0gpSXJ+684PjSvA8TxDFDQ=;
+        b=M4WARQ91y+4nbqa7G+njd7DlU/p2qi33X9j2v9cuwsidtrlNdyVZPfnWW1rmzfeBzx
+         oslWWwe1eulQkgZZixoJQnbhhGrD2Vk99Mo0M7B5JoVyVNdajFJ3nUGg9j8qHYyC/N1A
+         jq4LHi2vQto3nZqMr1XMSCB2Tqt4VXrDxodvoP3811NBF0BJd48+Ho1cHbjOiAm7sR+e
+         e3nweB4HIOe2nMmMVEHx3hrFS8wr8GMa1YDCp8CWugVgNRzIK0AUFBA/RPrTYjTX4MG/
+         1ydv/NnDDwmd3CfFX/q4/R9dW5cu5SlNEktnEE/XFlGibcgXdfPb1cX1MW9u4uV/AE33
+         gF7Q==
+X-Gm-Message-State: AOAM532P+gHh1KhkPSlewkx5R/ko2Ue1kADw8FI/B18+zV5POaUxeGuC
+        2imYEw1gB12VKbS5hnxPTtMYVkVRS+05t19q6yM=
+X-Google-Smtp-Source: ABdhPJyWZiXKSCBdfFrt30g49h5Yv7uJinQN6d/QX58gjVXXpGO8EFW+Kr8l2GgSAyg0gVQdgXt/gqLoy+hS947pohI=
+X-Received: by 2002:a25:42cd:0:b0:645:d805:4fcb with SMTP id
+ p196-20020a2542cd000000b00645d8054fcbmr13531376yba.182.1650905782127; Mon, 25
+ Apr 2022 09:56:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220418093144.40859-1-hbh25y@gmail.com>
+References: <20220421203555.29011-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220421203555.29011-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAMuHMdX4_PKsGGRj6yGhDGfaRD-6PqiJeCnKq0yUicfMutOP4g@mail.gmail.com>
+ <CA+V-a8uJM0etygB-v+rs0+EKY6_tz90wH_ZOVH8Zbc8dQPmQGw@mail.gmail.com> <CAMuHMdXHqn5_segVMhn_biEXnOSyaLpPfv4jkFp2uxv-=bfqew@mail.gmail.com>
+In-Reply-To: <CAMuHMdXHqn5_segVMhn_biEXnOSyaLpPfv4jkFp2uxv-=bfqew@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Mon, 25 Apr 2022 17:55:55 +0100
+Message-ID: <CA+V-a8sYWv+K8_QRFFzEupWMD3i4Y9MCta-FfM2_Qv37dHNsAg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] ASoC: sh: rz-ssi: Drop unused macros
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Pavel Machek <pavel@denx.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 05:31:44PM +0800, Hangyu Hua wrote:
-> vch will be free in virtio_rpmsg_release_device() when
-> rpmsg_ns_register_device() fails. There is no need to call kfree() again.
-> 
-> Fix this by changing error path from free_vch to free_ctrldev.
-> 
-> Fixes: c486682ae1e2 ("rpmsg: virtio: Register the rpmsg_char device")
-> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-> ---
->  drivers/rpmsg/virtio_rpmsg_bus.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
-> index 3ede25b1f2e4..603233f0686e 100644
-> --- a/drivers/rpmsg/virtio_rpmsg_bus.c
-> +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
-> @@ -973,7 +973,7 @@ static int rpmsg_probe(struct virtio_device *vdev)
->  
->  		err = rpmsg_ns_register_device(rpdev_ns);
->  		if (err)
-> -			goto free_vch;
+Hi Geert,
 
-Please add a comment that highlights where 'vch' will be free'd to avoid
-receiving patches that will introduce another kfree().  Same for your other
-patch.
+On Mon, Apr 25, 2022 at 5:14 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Prabhakar,
+>
+> On Mon, Apr 25, 2022 at 6:09 PM Lad, Prabhakar
+> <prabhakar.csengg@gmail.com> wrote:
+> > On Mon, Apr 25, 2022 at 1:49 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > On Fri, Apr 22, 2022 at 7:32 PM Lad Prabhakar
+> > > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> > > > Drop unused macros SSIFSR_TDC and SSIFSR_RDC.
+> > > >
+> > > > Reported-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+> > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > >
+> > > Thanks for your patch!
+> > >
+> > > What does this fix?
+> > > Is the real issue that there are 32 FIFO entries, and the TDC and RDC
+> > > fields are 6 bits wide, while the mask uses 0x1f instead of 0x3f?
+> > >
+> > I was in two minds here as you have already spotted the masks are
+> > incorrect, instead of fixing the masks I choose to drop the macros
+> > itself as they were not used. Let me know what are your thoughts on
+> > this.
+>
+> IC.
+>
+> I don't have a preference.
+> So please either remove them, and make it clear they were wrong,
+> so no one is tempted to just revert the removal to start using the
+> definitions, or either keep them, and fix the definitions.
+>
+I'll go with dropping them and make it clear they were wrong.
 
-In the next revision please use a cover letter and add Arnaud's patches to it.
+Cheers,
+Prabhakar
 
-Thanks,
-Mathieu
-
-> +			goto free_ctrldev;
->  	}
->  
->  	/*
-> @@ -997,8 +997,6 @@ static int rpmsg_probe(struct virtio_device *vdev)
->  
->  	return 0;
->  
-> -free_vch:
-> -	kfree(vch);
->  free_ctrldev:
->  	rpmsg_virtio_del_ctrl_dev(rpdev_ctrl);
->  free_coherent:
-> -- 
-> 2.25.1
-> 
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds

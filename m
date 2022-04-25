@@ -2,232 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8732450DBC2
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:55:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0761B50DBC6
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:56:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239369AbiDYI6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 04:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54054 "EHLO
+        id S230257AbiDYI6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 04:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239965AbiDYI5n (ORCPT
+        with ESMTP id S236727AbiDYI6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 04:57:43 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0BEF5A;
-        Mon, 25 Apr 2022 01:54:32 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DB8B0210E5;
-        Mon, 25 Apr 2022 08:54:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1650876870; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/4Xzadw6ONsr1NkImq8B2Up17ajpTuPobm04Tzf1iZA=;
-        b=YQE9CVpbFF4r0bx3MZvQcS4ZpjgquD1pPUvXSL6DWlzal1kM/qbDrYQTWyxAS5L6JdD9fB
-        O2VSsFSg6rDjowFIxeJnP1oxPByojOdW49J9LiKS/3VQpDX397wjFAnya8kGGuiEkwPXV/
-        N9cqVjQvNVmqzztn1dIh8h5FH8vXK+E=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1650876870;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/4Xzadw6ONsr1NkImq8B2Up17ajpTuPobm04Tzf1iZA=;
-        b=jeuSfuf6ULKMEKEfa1VADZfeNo51754Uw+Uceuer4lccqUOYn/YiZpCn7fbNnMdMVF8Shj
-        ZiuWCpkiMaY1yjAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7359413AED;
-        Mon, 25 Apr 2022 08:54:30 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id GvLpGsZhZmKOCgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 25 Apr 2022 08:54:30 +0000
-Message-ID: <535ebbe4-605c-daf5-1afb-f5225e4bb3a8@suse.de>
-Date:   Mon, 25 Apr 2022 10:54:29 +0200
+        Mon, 25 Apr 2022 04:58:39 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62EDF13DCA
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:55:32 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id dk23so4923203ejb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:55:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=IcmGf7R5oIWNJUW6YdAgXljamJfNzgr+F6RCVbOHK3E=;
+        b=lnUMKK+1OUk9P/nASz5GkwqePWMvnfPG+lQJXZnZkCmVP4gQrMoFLGORFc2hEqvtZK
+         sAb2sZQC8Fdx16dteLPlaMVwYzc07q+My98+bFhcwvZ2Tc4T7zlDoq0YuBAr5W1MeCIW
+         4HghiKVjdKGLQp+/LutqOTTazYWT1v2za6tbR00yDrK036UXNGvWVe7auEC2ckESqqwh
+         Dhz9QIdvpTrJvAJ+AMtG21UdzhQVOK56D5HzpmwzLXsAzKxwunKrBjGFXE2VfsxRbUzv
+         cv7XDo2P/2VaJtvuBDJW9PSyA3dqjQ4w/LrPHrbvk3rc+IC4oI6yB0nDHKHRS+j+Ddif
+         hAOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IcmGf7R5oIWNJUW6YdAgXljamJfNzgr+F6RCVbOHK3E=;
+        b=weI7jHRZgVBI2wHGsO0xio9w/IVPiTcV6id5wgRlzW0AHD2fHCr4A2WBEUPN6vKh3t
+         saXLeFiDCv/69lPgbYnRZQcX7SdwzKtQJo5ieboXsYj6xMI7oB/vMDw2Iyu2JI1lONdi
+         h8VFUd4XCOVU2bYSOTb19LkpHQnJDKJ8/cgTjGTS2MH6QcI/qfeSe2Tqm5wYpH8moJCS
+         1fm/p/ZyVZgIetElpwrOcVRCA5FIjvX1lXanlnvwgbOJGlPMdFMUMKT66cRmxDGIXTMo
+         USLD4e5emCOy45zsPbro6r/bTb5IybNgVAxKEZy5SgV91URQ/8PODjSFPHcTz4c75TcJ
+         GZGQ==
+X-Gm-Message-State: AOAM533a6q0URrfwc68l7kuhPOmksXl+gFidR/frfejiQfeEmbp6igAJ
+        GTLeztCubl1cn/WnC0XDHeShIA==
+X-Google-Smtp-Source: ABdhPJzVqoCmpWy0gNz3RLiWwx/wLVbIA8e6fPMteVvo0inali36p0hVI/pVtBzsJGwIy/owIIIRYw==
+X-Received: by 2002:a17:906:49d4:b0:6d6:e5ec:9a23 with SMTP id w20-20020a17090649d400b006d6e5ec9a23mr15443661ejv.79.1650876930923;
+        Mon, 25 Apr 2022 01:55:30 -0700 (PDT)
+Received: from [192.168.0.240] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id c5-20020a170906d18500b006ce371f09d4sm3368048ejz.57.2022.04.25.01.55.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Apr 2022 01:55:30 -0700 (PDT)
+Message-ID: <7873f0fa-25c3-191f-5096-3ceb9afd50cc@linaro.org>
+Date:   Mon, 25 Apr 2022 10:55:29 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v3 0/5] Fix some race conditions that exists between fbmem
- and sysfb
+ Thunderbird/91.7.0
+Subject: Re: [PATCH V4 01/14] dt-bindings: cpufreq: mediatek: Add MediaTek CCI
+ property
 Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel@lists.freedesktop.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Borislav Petkov <bp@suse.de>,
-        Changcheng Deng <deng.changcheng@zte.com.cn>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Helge Deller <deller@gmx.de>, Johan Hovold <johan@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Peter Jones <pjones@redhat.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Yizhuo Zhai <yzhai003@ucr.edu>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        linux-doc@vger.kernel.org, linux-fbdev@vger.kernel.org
-References: <20220420085303.100654-1-javierm@redhat.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220420085303.100654-1-javierm@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------Rc95TRwpQQWj5pxD9yvjBCU3"
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, rafael@kernel.org,
+        viresh.kumar@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        matthias.bgg@gmail.com
+Cc:     jia-wei.chang@mediatek.com, roger.lu@mediatek.com,
+        hsinyi@google.com, khilman@baylibre.com,
+        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220422075239.16437-1-rex-bc.chen@mediatek.com>
+ <20220422075239.16437-2-rex-bc.chen@mediatek.com>
+ <f2e5a34b-ed02-91a1-bc7b-fecaa95e227e@linaro.org>
+ <811bf944-a230-ab9b-583a-840e57af8a1e@linaro.org>
+ <28f75ac2995b116af9b2accf760786d1d1798c93.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <28f75ac2995b116af9b2accf760786d1d1798c93.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------Rc95TRwpQQWj5pxD9yvjBCU3
-Content-Type: multipart/mixed; boundary="------------ix4uCpa8tuHsKOBCkz4wJM0I";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>,
- linux-kernel@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Daniel Vetter <daniel.vetter@ffwll.ch>, dri-devel@lists.freedesktop.org,
- Alex Deucher <alexander.deucher@amd.com>, Borislav Petkov <bp@suse.de>,
- Changcheng Deng <deng.changcheng@zte.com.cn>, Daniel Vetter
- <daniel@ffwll.ch>, Hans de Goede <hdegoede@redhat.com>,
- Helge Deller <deller@gmx.de>, Johan Hovold <johan@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Miaoqian Lin <linmq006@gmail.com>,
- Peter Jones <pjones@redhat.com>, Sam Ravnborg <sam@ravnborg.org>,
- Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
- Yizhuo Zhai <yzhai003@ucr.edu>, Zhen Lei <thunder.leizhen@huawei.com>,
- linux-doc@vger.kernel.org, linux-fbdev@vger.kernel.org
-Message-ID: <535ebbe4-605c-daf5-1afb-f5225e4bb3a8@suse.de>
-Subject: Re: [PATCH v3 0/5] Fix some race conditions that exists between fbmem
- and sysfb
-References: <20220420085303.100654-1-javierm@redhat.com>
-In-Reply-To: <20220420085303.100654-1-javierm@redhat.com>
+On 25/04/2022 08:19, Rex-BC Chen wrote:
+> On Fri, 2022-04-22 at 19:34 +0200, Krzysztof Kozlowski wrote:
+>> On 22/04/2022 19:26, Krzysztof Kozlowski wrote:
+>>> On 22/04/2022 09:52, Rex-BC Chen wrote:
+>>>> MediaTek Cache Coherent Interconnect (CCI) uses software devfreq
+>>>> module
+>>>> for scaling clock frequency and adjust voltage.
+>>>> The phandle could be linked between CPU and MediaTek CCI for some
+>>>> MediaTek SoCs, like MT8183 and MT8186.
+>>>> Therefore, we add this property in cpufreq-mediatek.txt.
+>>>>
+>>>> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+>>>> ---
+>>>>  .../devicetree/bindings/cpufreq/cpufreq-mediatek.txt         | 5
+>>>> +++++
+>>>>  1 file changed, 5 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-
+>>>> mediatek.txt b/Documentation/devicetree/bindings/cpufreq/cpufreq-
+>>>> mediatek.txt
+>>>> index b8233ec91d3d..3387e1e2a2df 100644
+>>>> --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-
+>>>> mediatek.txt
+>>>> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-
+>>>> mediatek.txt
+>>>> @@ -20,6 +20,11 @@ Optional properties:
+>>>>  	       Vsram to fit SoC specific needs. When absent, the
+>>>> voltage scaling
+>>>>  	       flow is handled by hardware, hence no software "voltage
+>>>> tracking" is
+>>>>  	       needed.
+>>>> +- mediatek,cci:
+>>>> +	MediaTek Cache Coherent Interconnect (CCI) uses the software
+>>>> devfreq module to
+>>>> +	scale the clock frequency and adjust the voltage.
+>>>
+>>> Devfreq is a SW mechanism, it should not be part of bindings
+>>> description.
+> 
+> Hello Krzysztof,
+> 
+> The reason we want to get the "mediatek,cci":
+> We need to check the mediatek cci is ready and probed done.
+> Because cpufreq and mediatek cci are sharing the same regulator in
+> little core cpus.
+> Therefore, to prevent high frequency low voltage issue, we need to make
+> sure the mediatek cci is ready.
+> 
+> If mediatek cci is ready, cpufreq and mediatek cci will register the
+> same regulator and from regulator's implementation, if there are two
+> device using the same regulator, the framwork will make sure it's using
+> the max voltage.
 
---------------ix4uCpa8tuHsKOBCkz4wJM0I
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Thanks for explanation. The property should be described with what you
+said here. The property and description should match hardware, so there
+is no place for devfreq. Instead mention that power rail is shared or
+voltage regulators are common.
 
-SGkNCg0KQW0gMjAuMDQuMjIgdW0gMTA6NTIgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
-aWxsYXM6DQo+IEhlbGxvLA0KPiANCj4gVGhlIHBhdGNoZXMgaW4gdGhpcyBzZXJpZXMgYXJl
-IG1vc3RseSBjaGFuZ2VzIHN1Z2dlc3RlZCBieSBEYW5pZWwgVmV0dGVyDQo+IHRvIGZpeCBz
-b21lIHJhY2UgY29uZGl0aW9ucyB0aGF0IGV4aXN0cyBiZXR3ZWVuIHRoZSBmYmRldiBjb3Jl
-IChmYm1lbSkNCj4gYW5kIHN5c2ZiIHdpdGggcmVnYXJkIHRvIGRldmljZSByZWdpc3RyYXRp
-b24gYW5kIHJlbW92YWwuDQo+IA0KPiBGb3IgZXhhbXBsZSwgaXQgaXMgY3VycmVudGx5IHBv
-c3NpYmxlIGZvciBzeXNmYiB0byByZWdpc3RlciBhIHBsYXRmb3JtDQo+IGRldmljZSBhZnRl
-ciBhIHJlYWwgRFJNIGRyaXZlciB3YXMgcmVnaXN0ZXJlZCBhbmQgcmVxdWVzdGVkIHRvIHJl
-bW92ZSB0aGUNCj4gY29uZmxpY3RpbmcgZnJhbWVidWZmZXJzLg0KPiANCj4gQSBzeW1wdG9t
-IG9mIHRoaXMgaXNzdWUsIHdhcyB3b3JrZWQgYXJvdW5kIHdpdGggYnkgY29tbWl0IGZiNTYx
-YmY5YWJkZQ0KPiAoImZiZGV2OiBQcmV2ZW50IHByb2JpbmcgZ2VuZXJpYyBkcml2ZXJzIGlm
-IGEgRkIgaXMgYWxyZWFkeSByZWdpc3RlcmVkIikNCj4gYnV0IHRoYXQncyByZWFsbHkgYSBo
-YWNrIGFuZCBzaG91bGQgYmUgcmV2ZXJ0ZWQuDQoNCkFzIEkgbWVudGlvbmVkIG9uIElSQywg
-SSB0aGluayB0aGlzIHNlcmllcyBzaG91bGQgYmUgbWVyZ2VkIGZvciB0aGUgDQpyZWFzb25z
-IEkgZ2l2ZSBpbiB0aGUgb3RoZXIgY29tbWVudHMuDQoNCj4gDQo+IFRoaXMgc2VyaWVzIGF0
-dGVtcHQgdG8gZml4IGl0IG1vcmUgcHJvcGVybHkgYW5kIHJldmVydCB0aGUgbWVudGlvbmVk
-IGhhY2suDQo+IFRoYXQgd2lsbCBhbHNvIHVuYmxvY2sgYSBwZW5kaW5nIHBhdGNoIHRvIG5v
-dCBtYWtlIHRoZSBudW1fcmVnaXN0ZXJlZF9mYg0KPiB2YXJpYWJsZSB2aXNpYmxlIHRvIGRy
-aXZlcnMgYW55bW9yZSwgc2luY2UgdGhhdCdzIGludGVybmFsIHRvIGZiZGV2IGNvcmUuDQoN
-CkhlcmUncyBhcyBmYXIgYXMgSSB1bmRlcnN0YW5kIHRoZSBwcm9ibGVtOg0KDQogIDEpIGJ1
-aWxkIERSTS9mYmRldiBhbmQgc3lzZmIgY29kZSBpbnRvIHRoZSBrZXJuZWwNCiAgMikgZHVy
-aW5nIGJvb3QsIGxvYWQgdGhlIERSTS9mYmRldiBtb2R1bGVzIGFuZCBoYXZlIHRoZW0gYWNx
-dWlyZSBJL08gDQpyYW5nZXMNCiAgMykgYWZ0ZXJ3YXJkcyBsb2FkIHN5c2ZiIGFuZCBoYXZl
-IGl0IHJlZ2lzdGVyIHBsYXRmb3JtIGRldmljZXMgZm9yIHRoZSANCmdlbmVyaWMgZnJhbWVi
-dWZmZXJzDQogIDQpIHRoZXNlIGRldmljZXMgbm93IGNvbmZsaWN0IHdpdGggdGhlIGFscmVh
-ZHktcmVnaXN0ZXJlZCBEUk0vZmJkZXYgDQpkZXZpY2VzDQoNCklmIHRoYXQgaXMgdGhlIHBy
-b2JsZW0gaGVyZSwgbGV0J3Mgc2ltcGx5IHNldCBhIHN5c2ZiX2Rpc2FibGUgZmxhZyBpbiAN
-CnN5c2ZiIGNvZGUgd2hlbiB0aGUgZmlyc3QgRFJNL2ZiZGV2IGRyaXZlciBmaXJzdCBsb2Fk
-cy4gV2l0aCB0aGUgZmxhZyANCnNldCwgc3lzZmIgd29uJ3QgY3JlYXRlIGFueSBwbGF0Zm9y
-bSBkZXZpY2VzLiBXZSBhc3N1bWUgdGhhdCB0aGVyZSBhcmUgDQpub3cgRFJNL2ZiZGV2IGRy
-aXZlcnMgZm9yIHRoZSBmcmFtZWJ1ZmZlcnMgYW5kIHN5c2ZiIHdvbid0IGJlIG5lZWRlZC4N
-Cg0KV2UgY2FuIHNldCB0aGUgZmxhZyBpbnRlcm5hbGx5IGZyb20gZHJtX2FwZXJ0dXJlX2Rl
-dGFjaF9kcml2ZXJzKCkgWzFdIA0KYW5kIGRvX3JlbW92ZV9jb25mbGljdGluZ19mcmFtZWJ1
-ZmZlcnMoKSBbMl0uDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNClsxXSANCmh0dHBzOi8v
-ZWxpeGlyLmJvb3RsaW4uY29tL2xpbnV4L3Y1LjE3LjQvc291cmNlL2RyaXZlcnMvZ3B1L2Ry
-bS9kcm1fYXBlcnR1cmUuYyNMMjUzDQpbMl0gDQpodHRwczovL2VsaXhpci5ib290bGluLmNv
-bS9saW51eC92NS4xNy40L3NvdXJjZS9kcml2ZXJzL3ZpZGVvL2ZiZGV2L2NvcmUvZmJtZW0u
-YyNMMTU1OQ0KDQo+IA0KPiBQYXRjaCAjMSBpcyBqdXN0IGEgdHJpdmlhbCBwcmVwYXJhdG9y
-eSBjaGFuZ2UuDQo+IA0KPiBQYXRjaCAjMiBhZGQgc3lzZmJfZGlzYWJsZSgpIGFuZCBzeXNm
-Yl90cnlfdW5yZWdpc3RlcigpIGhlbHBlcnMgZm9yIGZibWVtDQo+IHRvIHVzZSB0aGVtLg0K
-PiANCj4gUGF0Y2ggIzMgY2hhbmdlcyBob3cgaXMgZGVhbHQgd2l0aCBjb25mbGljdGluZyBm
-cmFtZWJ1ZmZlcnMgdW5yZWdpc3RlcmluZywNCj4gcmF0aGVyIHRoYW4gaGF2aW5nIGEgdmFy
-aWFibGUgdG8gZGV0ZXJtaW5lIGlmIGEgbG9jayBzaG91bGQgYmUgdGFrZSwgaXQNCj4ganVz
-dCBkcm9wcyB0aGUgbG9jayBiZWZvcmUgdW5yZWdpc3RlcmluZyB0aGUgcGxhdGZvcm0gZGV2
-aWNlLg0KPiANCj4gUGF0Y2ggIzQgZml4ZXMgdGhlIG1lbnRpb25lZCByYWNlIGNvbmRpdGlv
-bnMgYW5kIGZpbmFsbHkgcGF0Y2ggIzUgaXMgdGhlDQo+IHJldmVydCBwYXRjaCB0aGF0IHdh
-cyBwb3N0ZWQgYnkgRGFuaWVsIGJlZm9yZSBidXQgaGUgZHJvcHBlZCBmcm9tIGhpcyBzZXQu
-DQo+IA0KPiBUaGUgcGF0Y2hlcyB3ZXJlIHRlc3RlZCBvbiBhIHJwaTQgdXNpbmcgZGlmZmVy
-ZW50IHZpZGVvIGNvbmZpZ3VyYXRpb25zOg0KPiAoc2ltcGxlZHJtIC0+IHZjNCBib3RoIGJ1
-aWx0aW4sIG9ubHkgdmM0IGJ1aWx0aW4sIG9ubHkgc2ltcGxlZHJtIGJ1aWx0aW4NCj4gYW5k
-IHNpbXBsZWRybSBidWlsdGluIHdpdGggdmM0IGJ1aWx0IGFzIGEgbW9kdWxlKS4NCj4gDQo+
-IEJlc3QgcmVnYXJkcywNCj4gSmF2aWVyDQo+IA0KPiBDaGFuZ2VzIGluIHYzOg0KPiAtIFJl
-YmFzZSBvbiB0b3Agb2YgbGF0ZXN0IGRybS1taXNjLW5leHQgYnJhbmNoLg0KPiANCj4gQ2hh
-bmdlcyBpbiB2MjoNCj4gLSBSZWJhc2Ugb24gdG9wIG9mIGxhdGVzdCBkcm0tbWlzYy1uZXh0
-IGFuZCBmaXggY29uZmxpY3RzIChEYW5pZWwgVmV0dGVyKS4NCj4gLSBBZGQga2VybmVsLWRv
-YyBjb21tZW50cyBhbmQgaW5jbHVkZSBpbiBvdGhlcl9pbnRlcmZhY2VzLnJzdCAoRGFuaWVs
-IFZldHRlcikuDQo+IC0gRXhwbGFpbiBpbiB0aGUgY29tbWl0IG1lc3NhZ2UgdGhhdCBmYm1l
-bSBoYXMgdG8gdW5yZWdpc3RlciB0aGUgZGV2aWNlDQo+ICAgIGFzIGZhbGxiYWNrIGlmIGEg
-ZHJpdmVyIHJlZ2lzdGVyZWQgdGhlIGRldmljZSBpdHNlbGYgKERhbmllbCBWZXR0ZXIpLg0K
-PiAtIEFsc28gZXhwbGFpbiB0aGF0IGZhbGxiYWNrIGluIGEgY29tbWVudCBpbiB0aGUgY29k
-ZSAoRGFuaWVsIFZldHRlcikuDQo+IC0gRG9uJ3QgZW5jb2RlIGluIGZibWVtIHRoZSBhc3N1
-bXB0aW9uIHRoYXQgc3lzZmIgd2lsbCBhbHdheXMgcmVnaXN0ZXINCj4gICAgcGxhdGZvcm0g
-ZGV2aWNlcyAoRGFuaWVsIFZldHRlcikuDQo+IC0gQWRkIGEgRklYTUUgY29tbWVudCBhYm91
-dCBkcml2ZXJzIHJlZ2lzdGVyaW5nIGRldmljZXMgKERhbmllbCBWZXR0ZXIpLg0KPiAtIERy
-b3AgUkZDIHByZWZpeCBzaW5jZSBwYXRjaGVzIHdlcmUgYWxyZWFkeSByZXZpZXdlZCBieSBE
-YW5pZWwgVmV0dGVyLg0KPiAtIEFkZCBEYW5pZWwgUmV2aWV3ZWQtYnkgdGFncyB0byB0aGUg
-cGF0Y2hlcy4NCj4gDQo+IERhbmllbCBWZXR0ZXIgKDEpOg0KPiAgICBSZXZlcnQgImZiZGV2
-OiBQcmV2ZW50IHByb2JpbmcgZ2VuZXJpYyBkcml2ZXJzIGlmIGEgRkIgaXMgYWxyZWFkeQ0K
-PiAgICAgIHJlZ2lzdGVyZWQiDQo+IA0KPiBKYXZpZXIgTWFydGluZXogQ2FuaWxsYXMgKDQp
-Og0KPiAgICBmaXJtd2FyZTogc3lzZmI6IE1ha2Ugc3lzZmJfY3JlYXRlX3NpbXBsZWZiKCkg
-cmV0dXJuIGEgcGRldiBwb2ludGVyDQo+ICAgIGZpcm13YXJlOiBzeXNmYjogQWRkIGhlbHBl
-cnMgdG8gdW5yZWdpc3RlciBhIHBkZXYgYW5kIGRpc2FibGUNCj4gICAgICByZWdpc3RyYXRp
-b24NCj4gICAgZmJkZXY6IFJlc3RhcnQgY29uZmxpY3RpbmcgZmIgcmVtb3ZhbCBsb29wIHdo
-ZW4gdW5yZWdpc3RlcmluZyBkZXZpY2VzDQo+ICAgIGZiZGV2OiBGaXggc29tZSByYWNlIGNv
-bmRpdGlvbnMgYmV0d2VlbiBmYm1lbSBhbmQgc3lzZmINCj4gDQo+ICAgLi4uL2RyaXZlci1h
-cGkvZmlybXdhcmUvb3RoZXJfaW50ZXJmYWNlcy5yc3QgIHwgIDYgKysNCj4gICBkcml2ZXJz
-L2Zpcm13YXJlL3N5c2ZiLmMgICAgICAgICAgICAgICAgICAgICAgfCA3NyArKysrKysrKysr
-KysrKysrKy0tDQo+ICAgZHJpdmVycy9maXJtd2FyZS9zeXNmYl9zaW1wbGVmYi5jICAgICAg
-ICAgICAgIHwgMTYgKystLQ0KPiAgIGRyaXZlcnMvdmlkZW8vZmJkZXYvY29yZS9mYm1lbS5j
-ICAgICAgICAgICAgICB8IDYyICsrKysrKysrKysrKy0tLQ0KPiAgIGRyaXZlcnMvdmlkZW8v
-ZmJkZXYvZWZpZmIuYyAgICAgICAgICAgICAgICAgICB8IDExIC0tLQ0KPiAgIGRyaXZlcnMv
-dmlkZW8vZmJkZXYvc2ltcGxlZmIuYyAgICAgICAgICAgICAgICB8IDExIC0tLQ0KPiAgIGlu
-Y2x1ZGUvbGludXgvZmIuaCAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAxIC0NCj4g
-ICBpbmNsdWRlL2xpbnV4L3N5c2ZiLmggICAgICAgICAgICAgICAgICAgICAgICAgfCAyOSAr
-KysrKy0tDQo+ICAgOCBmaWxlcyBjaGFuZ2VkLCAxNTggaW5zZXJ0aW9ucygrKSwgNTUgZGVs
-ZXRpb25zKC0pDQo+IA0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2
-ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1h
-eGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcg
-TsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
+However I am not sure if you solved your problem... see below:
 
---------------ix4uCpa8tuHsKOBCkz4wJM0I--
+> For example:
+> mediatek cci set 1.2V originally. When cpufreq want to adjust lower
+> frequency adn set voltage to 1.0V.
+> The framework will remain using 1.2V to prevent crash of mediatek cci.
 
---------------Rc95TRwpQQWj5pxD9yvjBCU3
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+No, regulator_set_voltage() for proc_reg says:
+"NOTE: If the regulator is shared between several devices then the lowest
+ request voltage that meets the system constraints will be used."
 
------BEGIN PGP SIGNATURE-----
+Not the highest. So when your devfreq and cpufreq boots, calling
+regulator_set_voltage will still cause high frequency and low voltage.
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJmYcYFAwAAAAAACgkQlh/E3EQov+AP
-fBAAwj+zxf+d/jGDZGUcK1nkudhe+CNq3bSDDOd4wp0JJ+VC3X4oX9Sp6a6zJOGpSsL1NInqSO/y
-oikzH+INlFUFKbSMGvFBXLh09CjUSY5YIqLc6fx88tviFICU2FwmusbGEnT1U1xob/L4fW4SybED
-tORN2VBYegPKrcPfs5L+Ph5PNDt6z8oOLKu83PvCtHyRbLnnb4PylOxgnGpXb8FmQzVwviRn9mtI
-+yx4XnjaZ1jchYcT71XUHNmZx06BFSfXo05qqD56oD2GrD+6Css36Luxf/IKjTQVFCOU4qK9rjal
-2Esr8Hq0EwmAgmquEWa7ENm3ahJcXr09L5gyjubJK39PP39V6p1ZbT6P75RQlabvSWPIvgqxlH9v
-vEP5HVlcK+tcBcSkaws978Ea1kKbKqsgEsVuAa8vk5v/+Btu0x6qikjBraRPf86Ad8pZfV7aLIiL
-5xXD7dytYOhmxwBpcJDY+ZnY3E1p54I8ve/RZzg0pFvgdFvcKGoM8G8bQeChbz5n9P91Hln+idSb
-uVO7CixCMX4FQUgaagAFhlHTDHcnakmxIEeO60TzLbzeab2GCstgA8JfFErxsa6jvaKyGij0ZC2Q
-la6VaO6pOutVhqSw9JOTk7jBvZFpktuPKpJ7LEaSUZoC1wiBR+yHLFciFTuakD74CM4qyWRPAbbQ
-2rY=
-=X50l
------END PGP SIGNATURE-----
+> 
+> Therefore, we need to confirm the mediatek cci is ready and register
+> the regulator.
+>
+>>>
+>>>> +	For details, please refer to
+>>>> +	Documentation/devicetree/bindings/interconnect/mediatek,cci.yam
+>>>> l
+>>>
+>>> Since the file does not exist, I have troubles reviewing it. First
+>>> of
+>>> all, you already have "mediatek,cci-control" property in DT, so why
+>>> using different name?
+> 
+> I am not sure where is "mediatek,cci-control". I think this name is not
+> used before.
+> 
 
---------------Rc95TRwpQQWj5pxD9yvjBCU3--
+Documentation/devicetree/bindings/net/mediatek-net.txt
+
+>>>
+>>> Second, it looks like you want to put devfreq into bindings instead
+>>> of
+>>> using proper interconnect bindings.
+>>
+>> Actually judging by the driver this looks like some
+>> device-boot-time-ordering, so I wonder whether this is a proper way
+>> to
+>> express it.
+> 
+> Yes, we need to get the mediatek cci node and let cpufreq and mediatek
+> cci link succefully. In that case, we can know the mediatek cci is
+> ready. And we can set the voltage using the regulator framwork.
+> 
+> [1]: 
+> https://patchwork.kernel.org/project/linux-mediatek/patch/20220422075239.16437-11-rex-bc.chen@mediatek.com/
+
+Yes, I see the use case. I am not convinced yet whether this is proper
+approach...
+
+
+Best regards,
+Krzysztof

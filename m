@@ -2,160 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F9350D8DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 07:32:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EA9250D8E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 07:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241299AbiDYFfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 01:35:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
+        id S241305AbiDYFjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 01:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239961AbiDYFfE (ORCPT
+        with ESMTP id S235393AbiDYFix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 01:35:04 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48966263F;
-        Sun, 24 Apr 2022 22:32:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650864721; x=1682400721;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=uRjpvrn6fat50gU61mLUaxLzgOtTofX/Vbsr1sYOfiE=;
-  b=X8rEeaR2l2NB2wIWs511Lvv4BK8F/Fu8CjDWmJtf8+3jcZVXF+k/LgC/
-   hZmZSNMrFVUs9YhFKNSTw4NsSfrm6PTLdXp8BOF7cUV8GwIs4p5jXa8wO
-   IRIPWfR6N3eXS+SUoPVr2HW05ImIFDr4ig8+fWbw1JAjkCxGHqQZWX3Mw
-   FYkG1hnbx7es7Hfg9g8CbzqoUBrnwEHAdYtrTZqeg/dnTI2F+rYeVSDzn
-   ZqC+IR7abBotuvildJlAdRUlLOUeI9F4mEuWhM4D8P3gVLKPbzyYf766X
-   ltPFhfZG5OdTJv3Y2zy3FR0bvZZlnFpaHM/Cez3xcTPk9WHqBOu/Gzbuq
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="351592660"
-X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
-   d="scan'208";a="351592660"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 22:31:06 -0700
-X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
-   d="scan'208";a="579083258"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.46.155])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 22:30:59 -0700
-Message-ID: <50fd2671-6070-0eba-ea68-9df9b79ccac3@intel.com>
-Date:   Mon, 25 Apr 2022 08:30:55 +0300
+        Mon, 25 Apr 2022 01:38:53 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD1013F0B
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 22:35:51 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id k4so12988956plk.7
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 22:35:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=T2oxad3crhUuqjbi9y9dJMMYmCSsVXY7Ev+0B50BV+0=;
+        b=qDZG8k5tDIz4MvJx+OydJWKJelMxeRJN8ZN7/tavSk56FfCWp42xJTc/KSu57tV/mZ
+         fQdDDY/W8fp3//v3jBXi+EzaeIh882MAvQjc/0XqLfj2HLHTZtv/toIofCQo0DwZJvn3
+         gUyEmZBF+WiGVi2Wo1cwrDkw9jzGN6wgZoPmaip+7AESEsTdWwnuB/R9UZMFolm1bJxN
+         qpTJpPhIsP6ZscFHpeY/314oVST+nmNBwwDHAwiXJQbBfWK/aHZGgFZJmLd+iYV1Fwng
+         Yrh+1rzRBta+YycnMKuqiaaC2ddt7bzzYWAre8fH0Gf9NAOQkK39kzEGpHxJRZ5yIjJt
+         nUOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=T2oxad3crhUuqjbi9y9dJMMYmCSsVXY7Ev+0B50BV+0=;
+        b=6AdF7GwzvYsU+6GSQFcXdkg+FKQxnTXM4yJ1voveAyUetkA//58Sm+jFQZwzmAZd1i
+         Re91BBF1fnGOQWoS7x/RsOcVc8ws6Wko9o3G3Xl/zV6L/xnnszlPsD87YTwUB3K2X32u
+         usY3FehGbW/48zYRnOCFVZX1MaFij6qTBVzWrO/df7joJbccqqBVqE2sRd2Ho1eLmuj5
+         egZQXJIzhS5nhXzHPd1FHQ+bUCGIMTM9N4NR5gf5kH2rK4ciiqGynGNJxsk6ZP0C9h1Y
+         3zVXTzRSvwjFVVJ3hUPNHQUecmR/B1kyJq+PkeEAMqjeXbYA4fllMHlKHDoJDdpdib+R
+         HXXA==
+X-Gm-Message-State: AOAM531O79QWi7FCTApgb65e8XI6970NrmS8eS1iT2GsYykwB2DiWAvn
+        cxJcom1ii2iq0lBpBQ9sAds6QQ==
+X-Google-Smtp-Source: ABdhPJwnOiyciQSstf5JSoNHFmid7vkH7V23CkAvcMQLZ9tHebui2ItXK187LidqDcgz+iDQDT6d2Q==
+X-Received: by 2002:a17:903:410b:b0:15c:fd57:aa34 with SMTP id r11-20020a170903410b00b0015cfd57aa34mr6247282pld.82.1650864950700;
+        Sun, 24 Apr 2022 22:35:50 -0700 (PDT)
+Received: from localhost ([122.171.250.232])
+        by smtp.gmail.com with ESMTPSA id d141-20020a621d93000000b00505aa1026f1sm9768440pfd.51.2022.04.24.22.35.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Apr 2022 22:35:50 -0700 (PDT)
+Date:   Mon, 25 Apr 2022 11:05:48 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
+Cc:     rafael@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
+        roger.lu@mediatek.com, hsinyi@google.com, khilman@baylibre.com,
+        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH V4 07/14] cpufreq: mediatek: Add .get function
+Message-ID: <20220425053548.72w2jh2g6lpzgz6g@vireshk-i7>
+References: <20220422075239.16437-1-rex-bc.chen@mediatek.com>
+ <20220422075239.16437-8-rex-bc.chen@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.7.0
-Subject: Re: [PATCH V2 03/11] perf/x86: Add support for TSC in nanoseconds as
- a perf event clock
-Content-Language: en-US
-From:   Adrian Hunter <adrian.hunter@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        H Peter Anvin <hpa@zytor.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "sdeep@vmware.com" <sdeep@vmware.com>,
-        "pv-drivers@vmware.com" <pv-drivers@vmware.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "kys@microsoft.com" <kys@microsoft.com>,
-        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "Andrew.Cooper3@citrix.com" <Andrew.Cooper3@citrix.com>,
-        "Hall, Christopher S" <christopher.s.hall@intel.com>
-References: <20220214110914.268126-1-adrian.hunter@intel.com>
- <20220214110914.268126-4-adrian.hunter@intel.com>
- <YiIXFmA4vpcTSk2L@hirez.programming.kicks-ass.net>
- <853ce127-25f0-d0fe-1d8f-0b0dd4f3ce71@intel.com>
- <YiXVgEk/1UClkygX@hirez.programming.kicks-ass.net>
- <30383f92-59cb-2875-1e1b-ff1a0eacd235@intel.com>
- <YiYZv+LOmjzi5wcm@hirez.programming.kicks-ass.net>
- <013b5425-2a60-e4d4-b846-444a576f2b28@intel.com>
- <6f07a7d4e1ad4440bf6c502c8cb6c2ed@intel.com>
- <c3e1842b-79c3-634a-3121-938b5160ca4c@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <c3e1842b-79c3-634a-3121-938b5160ca4c@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220422075239.16437-8-rex-bc.chen@mediatek.com>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/03/22 13:50, Adrian Hunter wrote:
-> On 08/03/2022 23:06, Hall, Christopher S wrote:
->> Adrian Hunter wrote:
->>> On 7.3.2022 16.42, Peter Zijlstra wrote:
->>>> On Mon, Mar 07, 2022 at 02:36:03PM +0200, Adrian Hunter wrote:
->>>>
->>>>>> diff --git a/arch/x86/kernel/paravirt.c b/arch/x86/kernel/paravirt.c
->>>>>> index 4420499f7bb4..a1f179ed39bf 100644
->>>>>> --- a/arch/x86/kernel/paravirt.c
->>>>>> +++ b/arch/x86/kernel/paravirt.c
->>>>>> @@ -145,6 +145,15 @@ DEFINE_STATIC_CALL(pv_sched_clock, native_sched_clock);
->>>>>>
->>>>>>  void paravirt_set_sched_clock(u64 (*func)(void))
->>>>>>  {
->>>>>> +	/*
->>>>>> +	 * Anything with ART on promises to have sane TSC, otherwise the whole
->>>>>> +	 * ART thing is useless. In order to make ART useful for guests, we
->>>>>> +	 * should continue to use the TSC. As such, ignore any paravirt
->>>>>> +	 * muckery.
->>>>>> +	 */
->>>>>> +	if (cpu_feature_enabled(X86_FEATURE_ART))
->>>>>
->>>>> Does not seem to work because the feature X86_FEATURE_ART does not seem to get set.
->>>>> Possibly because detect_art() excludes anything running on a hypervisor.
->>>>
->>>> Simple enough to delete that clause I suppose. Christopher, what is
->>>> needed to make that go away? I suppose the guest needs to be aware of
->>>> the active TSC scaling parameters to make it work ?
->>>
->>> There is also not X86_FEATURE_NONSTOP_TSC nor values for art_to_tsc_denominator
->>> or art_to_tsc_numerator.  Also, from the VM's point of view, TSC will jump
->>> forwards every VM-Exit / VM-Entry unless the hypervisor changes the offset
->>> every VM-Entry, which KVM does not, so it still cannot be used as a stable
->>> clocksource.
->>
->> Translating between ART and the guest TSC can be a difficult problem and ART software
->> support is disabled by default in a VM.
->>
->> There are two major issues translating ART to TSC in a VM:
->>
->> The range of the TSC scaling field in the VMCS is much larger than the range of values
->> that can be represented using CPUID[15H], i.e., it is not possible to communicate this
->> to the VM using the current CPUID interface. The range of scaling would need to be
->> restricted or another para-virtualized method - preferably OS/hypervisor agnostic - to
->> communicate the scaling factor to the guest needs to be invented.
->>
->> TSC offsetting may also be a problem. The VMCS TSC offset must be discoverable by the
->> guest. This can be done via TSC_ADJUST MSR. The offset in the VMCS and the guest
->> TSC_ADJUST MSR must always be equivalent, i.e. a write to TSC_ADJUST in the guest
->> must be reflected in the VMCS and any changes to the offset in the VMCS must be
->> reflected in the TSC_ADJUST MSR. Otherwise a para-virtualized method must
->> be invented to communicate an arbitrary VMCS TSC offset to the guest.
->>
+On 22-04-22, 15:52, Rex-BC Chen wrote:
+> From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
 > 
-> In my view it is reasonable for perf to support TSC as a perf clock in any case
-> because:
-> 	a) it allows users to work entirely with TSC if they wish
-> 	b) other kernel performance / debug facilities like ftrace already support TSC
-> 	c) the patches to add TSC support are relatively small and straight-forward
+> We want to get opp frequency via opp table. Therefore, we add the function
+> "mtk_cpufreq_get()" to do this.
 > 
-> May we have support for TSC as a perf event clock?
+> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> ---
+>  drivers/cpufreq/mediatek-cpufreq.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+> index e070a2619bcb..0b2ca0c8eddc 100644
+> --- a/drivers/cpufreq/mediatek-cpufreq.c
+> +++ b/drivers/cpufreq/mediatek-cpufreq.c
+> @@ -71,6 +71,15 @@ static struct mtk_cpu_dvfs_info *mtk_cpu_dvfs_info_lookup(int cpu)
+>  	return NULL;
+>  }
+>  
+> +static unsigned int mtk_cpufreq_get(unsigned int cpu)
+> +{
+> +	struct mtk_cpu_dvfs_info *info;
+> +
+> +	info = mtk_cpu_dvfs_info_lookup(cpu);
+> +
+> +	return !info ? 0 : (info->opp_freq / 1000);
+> +}
+> +
+>  static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
+>  					int new_vproc)
+>  {
+> @@ -588,7 +597,7 @@ static struct cpufreq_driver mtk_cpufreq_driver = {
+>  		 CPUFREQ_IS_COOLING_DEV,
+>  	.verify = cpufreq_generic_frequency_table_verify,
+>  	.target_index = mtk_cpufreq_set_target,
+> -	.get = cpufreq_generic_get,
+> +	.get = mtk_cpufreq_get,
 
-Any update on this?
+The .get callback should read the real frequency from hardware instead of
+fetching a cached freq value.
+
+>  	.init = mtk_cpufreq_init,
+>  	.exit = mtk_cpufreq_exit,
+>  	.register_em = cpufreq_register_em_with_opp,
+> -- 
+> 2.18.0
+
+-- 
+viresh

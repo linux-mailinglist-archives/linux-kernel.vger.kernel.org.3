@@ -2,228 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6EE50DC0C
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 11:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E67E050DC5A
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 11:20:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237439AbiDYJMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 05:12:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33330 "EHLO
+        id S241569AbiDYJTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 05:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240406AbiDYJL5 (ORCPT
+        with ESMTP id S241528AbiDYJSr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 05:11:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E2CCC9B69
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 02:08:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650877732;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7UCwzHE3i1dq/qNGOoGWSbel4RLLAWZDbZnWwu5x7jM=;
-        b=OQUqyHSPU8BSkHxON+WM0Z48HdGUtMBjPbXiiD3GIb5FEMPkmhu4lFF86RP6BaaO4E7378
-        rOzSvBfAJ5Tx9MrG+jlGznmmu3Xnh3ADC2NbxCpjIpRcp/SUjJF2WJhDn8E8Xv/fCDOSes
-        jxR4QTuHhGE2WnUtQg1eLVNwoVuC/GM=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-325-O2SkeOk2ObGCQN1eWXmqrA-1; Mon, 25 Apr 2022 05:08:49 -0400
-X-MC-Unique: O2SkeOk2ObGCQN1eWXmqrA-1
-Received: by mail-wm1-f69.google.com with SMTP id bh11-20020a05600c3d0b00b003928fe7ba07so6910231wmb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 02:08:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=7UCwzHE3i1dq/qNGOoGWSbel4RLLAWZDbZnWwu5x7jM=;
-        b=kZdbv7NScAhnCDjHmMLd1JjN7VgRa66vW0XXq8tk2mi/GE9mgqszegfhZ+D893B10L
-         Za1BCVtlxMGvnKxmHB98mJH9MWbGpyQ++6bPK8cEGjKZzfmHs9t5uYOq5WNjOdVgYljQ
-         NmczUpsSSfSgrMk8pmQIdedsnnqdfaJ1jN1DAN4TtWGeGlLG1GNVLQ80OgtkWOuRvqCs
-         HB2pI6B3qmT2JdhadMG7dto9Rx0Z42Cc5YkyC1VHlhk1lEPu4UJYM1gXnHLwgckt3vmV
-         vaqeltqBqiIZ0PO2j6oAAINtLyM05mMpo+e0aw2j+I4wlMwceeBdzfwHdSSIH0YtjcOt
-         OlmQ==
-X-Gm-Message-State: AOAM530y7EdyCWE71Yesox7HWEK1JmRWCXDSMeVc+8fs2p2AzalWIju3
-        y072WxcieETK5VqyI68YT1E4WX88NUBItAxydopQOIETmi9cnK4nPI1vla1UpdyQaH1MEvBESZr
-        Ek3JBq2IqP5NLpSwZ+CBs6Kc=
-X-Received: by 2002:a05:600c:281:b0:38e:bc6e:5971 with SMTP id 1-20020a05600c028100b0038ebc6e5971mr15608769wmk.111.1650877728046;
-        Mon, 25 Apr 2022 02:08:48 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy+ka7rhRqfE4pSkDVBAfjJmPXrDOYb219F24apu+8D+rAjhTBnw9h3sbZ1t4AjyPzHf5C+Sg==
-X-Received: by 2002:a05:600c:281:b0:38e:bc6e:5971 with SMTP id 1-20020a05600c028100b0038ebc6e5971mr15608749wmk.111.1650877727825;
-        Mon, 25 Apr 2022 02:08:47 -0700 (PDT)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id l10-20020a05600002aa00b0020a7cc29000sm9325070wry.75.2022.04.25.02.08.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 02:08:46 -0700 (PDT)
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     mcgrof@kernel.org
-Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
-        christophe.leroy@csgroup.eu, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        atomlin@atomlin.com, ghalat@redhat.com, oleksandr@natalenko.name,
-        neelx@redhat.com
-Subject: [PATCH v4 2/2] module: Introduce module unload taint tracking
-Date:   Mon, 25 Apr 2022 10:08:41 +0100
-Message-Id: <20220425090841.3958494-3-atomlin@redhat.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220425090841.3958494-1-atomlin@redhat.com>
-References: <20220425090841.3958494-1-atomlin@redhat.com>
+        Mon, 25 Apr 2022 05:18:47 -0400
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A4E0DD5A;
+        Mon, 25 Apr 2022 02:15:42 -0700 (PDT)
+Received: by ajax-webmail-mail-app4 (Coremail) ; Mon, 25 Apr 2022 17:09:34
+ +0800 (GMT+08:00)
+X-Originating-IP: [10.190.64.42]
+Date:   Mon, 25 Apr 2022 17:09:34 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   duoming@zju.edu.cn
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        broonie@kernel.org, akpm@linux-foundation.org,
+        alexander.deucher@amd.com, gregkh@linuxfoundation.org,
+        davem@davemloft.net, linma@zju.edu.cn
+Subject: Re: Re: [PATCH] drivers: nfc: nfcmrvl: reorder destructive
+ operations in nfcmrvl_nci_unregister_dev to avoid bugs
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <d7aefec5-a51d-00ba-10d6-79c90fbc8eb4@linaro.org>
+References: <20220425031002.56254-1-duoming@zju.edu.cn>
+ <d7aefec5-a51d-00ba-10d6-79c90fbc8eb4@linaro.org>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Message-ID: <1ce1ec63.1b911.1805ffbb915.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cS_KCgAXGfBOZWZi5gPCAQ--.61012W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgwLAVZdtZZGlAADs9
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, only the initial module that tainted the kernel is
-recorded e.g. when an out-of-tree module is loaded.
-
-The purpose of this patch is to allow the kernel to maintain a record of
-each unloaded module that taints the kernel. So, in addition to
-displaying a list of linked modules (see print_modules()) e.g. in the
-event of a detected bad page, unloaded modules that carried a taint/or
-taints are displayed too. A tainted module unload count is maintained.
-
-The number of tracked modules is not fixed. This feature is disabled by
-default.
-
-Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
----
- init/Kconfig         | 11 ++++++++
- kernel/module/main.c | 65 ++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 76 insertions(+)
-
-diff --git a/init/Kconfig b/init/Kconfig
-index ddcbefe535e9..6b30210f787d 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -2118,6 +2118,17 @@ config MODULE_FORCE_UNLOAD
- 	  rmmod).  This is mainly for kernel developers and desperate users.
- 	  If unsure, say N.
- 
-+config MODULE_UNLOAD_TAINT_TRACKING
-+	bool "Tainted module unload tracking"
-+	depends on MODULE_UNLOAD
-+	default n
-+	help
-+	  This option allows you to maintain a record of each unloaded
-+	  module that tainted the kernel. In addition to displaying a
-+	  list of linked (or loaded) modules e.g. on detection of a bad
-+	  page (see bad_page()), the aforementioned details are also
-+	  shown. If unsure, say N.
-+
- config MODVERSIONS
- 	bool "Module versioning support"
- 	help
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index ea78cec316dd..35686e63b32f 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -68,6 +68,16 @@
-  */
- DEFINE_MUTEX(module_mutex);
- LIST_HEAD(modules);
-+#ifdef CONFIG_MODULE_UNLOAD_TAINT_TRACKING
-+static LIST_HEAD(unloaded_tainted_modules);
-+
-+struct mod_unload_taint {
-+	struct list_head list;
-+	char name[MODULE_NAME_LEN];
-+	unsigned long taints;
-+	u64 count;
-+};
-+#endif
- 
- /* Work queue for freeing init sections in success case */
- static void do_free_init(struct work_struct *w);
-@@ -150,6 +160,41 @@ int unregister_module_notifier(struct notifier_block *nb)
- }
- EXPORT_SYMBOL(unregister_module_notifier);
- 
-+#ifdef CONFIG_MODULE_UNLOAD_TAINT_TRACKING
-+static int try_add_tainted_module(struct module *mod)
-+{
-+	struct mod_unload_taint *mod_taint;
-+
-+	module_assert_mutex_or_preempt();
-+
-+	list_for_each_entry_rcu(mod_taint, &unloaded_tainted_modules, list,
-+				lockdep_is_held(&module_mutex)) {
-+		size_t len = strlen(mod_taint->name);
-+
-+		if (!strncmp(mod_taint->name, mod->name, len) &&
-+		    mod_taint->taints & mod->taints) {
-+			mod_taint->count++;
-+			goto out;
-+		}
-+	}
-+
-+	mod_taint = kmalloc(sizeof(*mod_taint), GFP_KERNEL);
-+	if (unlikely(!mod_taint))
-+		return -ENOMEM;
-+	strscpy(mod_taint->name, mod->name, MODULE_NAME_LEN);
-+	mod_taint->taints = mod->taints;
-+	list_add_rcu(&mod_taint->list, &unloaded_tainted_modules);
-+	mod_taint->count = 1;
-+out:
-+	return 0;
-+}
-+#else /* MODULE_UNLOAD_TAINT_TRACKING */
-+static int try_add_tainted_module(struct module *mod)
-+{
-+	return 0;
-+}
-+#endif
-+
- /*
-  * We require a truly strong try_module_get(): 0 means success.
-  * Otherwise an error is returned due to ongoing or failed
-@@ -1201,6 +1246,9 @@ static void free_module(struct module *mod)
- 	module_bug_cleanup(mod);
- 	/* Wait for RCU-sched synchronizing before releasing mod->list and buglist. */
- 	synchronize_rcu();
-+	if (try_add_tainted_module(mod))
-+		pr_err("%s: adding tainted module to the unloaded tainted modules list failed.\n",
-+		       mod->name);
- 	mutex_unlock(&module_mutex);
- 
- 	/* Clean up CFI for the module. */
-@@ -3126,6 +3174,9 @@ struct module *__module_text_address(unsigned long addr)
- void print_modules(void)
- {
- 	struct module *mod;
-+#ifdef CONFIG_MODULE_UNLOAD_TAINT_TRACKING
-+	struct mod_unload_taint *mod_taint;
-+#endif
- 	char buf[MODULE_FLAGS_BUF_SIZE];
- 
- 	printk(KERN_DEFAULT "Modules linked in:");
-@@ -3136,6 +3187,20 @@ void print_modules(void)
- 			continue;
- 		pr_cont(" %s%s", mod->name, module_flags(mod, buf));
- 	}
-+#ifdef CONFIG_MODULE_UNLOAD_TAINT_TRACKING
-+	if (!list_empty(&unloaded_tainted_modules)) {
-+		printk(KERN_DEFAULT "Unloaded tainted modules:");
-+		list_for_each_entry_rcu(mod_taint, &unloaded_tainted_modules,
-+					list) {
-+			size_t l;
-+
-+			l = module_flags_taint(mod_taint->taints, buf);
-+			buf[l++] = '\0';
-+			pr_cont(" %s(%s):%llu", mod_taint->name, buf,
-+				mod_taint->count);
-+		}
-+	}
-+#endif
- 	preempt_enable();
- 	if (last_unloaded_module[0])
- 		pr_cont(" [last unloaded: %s]", last_unloaded_module);
--- 
-2.34.1
-
+SGVsbG8sCgpPbiBNb24sIDI1IEFwciAyMDIyIDA5OjU5OjMyICswMjAwIEtyenlzenRvZiB3cm90
+ZToKCj4gPiBUaGVyZSBhcmUgZGVzdHJ1Y3RpdmUgb3BlcmF0aW9ucyBzdWNoIGFzIG5mY21ydmxf
+ZndfZG5sZF9hYm9ydCBhbmQKPiA+IGdwaW9fZnJlZSBpbiBuZmNtcnZsX25jaV91bnJlZ2lzdGVy
+X2Rldi4gVGhlIHJlc291cmNlcyBzdWNoIGFzIGZpcm13YXJlLAo+ID4gZ3BpbyBhbmQgc28gb24g
+Y291bGQgYmUgZGVzdHJ1Y3RlZCB3aGlsZSB0aGUgdXBwZXIgbGF5ZXIgZnVuY3Rpb25zIHN1Y2gg
+YXMKPiA+IG5mY21ydmxfZndfZG5sZF9zdGFydCBhbmQgbmZjbXJ2bF9uY2lfcmVjdl9mcmFtZSBp
+cyBleGVjdXRpbmcsIHdoaWNoIGxlYWRzCj4gPiB0byBkb3VibGUtZnJlZSwgdXNlLWFmdGVyLWZy
+ZWUgYW5kIG51bGwtcHRyLWRlcmVmIGJ1Z3MuCj4gCj4gWW91IG5lZWQgdG8gY29ycmVjdCB0aGUg
+c3ViamVjdCBwcmVmaXggYmVjYXVzZSBpdCBkb2VzIG5vdCBkZXNjcmliZSB0aGUKPiBzdWJzeXN0
+ZW0gKGdpdCBsb2cgb25lbGluZSAtLSkuCgpJIHdpbGwgY2hhbmdlIHRoZSBzdWJqZWN0IHByZWZp
+eCB0byAibmZjOiBuZmNtcnZsOiB1YXJ0OiAiLgoKPiA+IAo+ID4gVGhlcmUgYXJlIHRocmVlIHNp
+dHVhdGlvbnMgdGhhdCBjb3VsZCBsZWFkIHRvIGRvdWJsZS1mcmVlIGJ1Z3MuCj4gPiAKPiA+IFRo
+ZSBmaXJzdCBzaXR1YXRpb24gaXMgc2hvd24gYmVsb3c6Cj4gPiAKPiA+ICAgIChUaHJlYWQgMSkg
+ICAgICAgICAgICAgICAgIHwgICAgICAoVGhyZWFkIDIpCj4gPiBuZmNtcnZsX2Z3X2RubGRfc3Rh
+cnQgICAgICAgICB8Cj4gPiAgLi4uICAgICAgICAgICAgICAgICAgICAgICAgICB8ICBuZmNtcnZs
+X25jaV91bnJlZ2lzdGVyX2Rldgo+ID4gIHJlbGVhc2VfZmlybXdhcmUoKSAgICAgICAgICAgfCAg
+IG5mY21ydmxfZndfZG5sZF9hYm9ydAo+ID4gICBrZnJlZShmdykgLy8oMSkgICAgICAgICAgICAg
+fCAgICBmd19kbmxkX292ZXIKPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAg
+IHJlbGVhc2VfZmlybXdhcmUKPiA+ICAgLi4uICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAg
+ICBrZnJlZShmdykgLy8oMikKPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAg
+IC4uLgo+ID4gCj4gPiBUaGUgc2Vjb25kIHNpdHVhdGlvbiBpcyBzaG93biBiZWxvdzoKPiA+IAo+
+ID4gICAgKFRocmVhZCAxKSAgICAgICAgICAgICAgICAgfCAgICAgIChUaHJlYWQgMikKPiA+IG5m
+Y21ydmxfZndfZG5sZF9zdGFydCAgICAgICAgIHwKPiA+ICAuLi4gICAgICAgICAgICAgICAgICAg
+ICAgICAgIHwKPiA+ICBtb2RfdGltZXIgICAgICAgICAgICAgICAgICAgIHwKPiA+ICAod2FpdCBh
+IHRpbWUpICAgICAgICAgICAgICAgIHwKPiA+ICBmd19kbmxkX3RpbWVvdXQgICAgICAgICAgICAg
+IHwgIG5mY21ydmxfbmNpX3VucmVnaXN0ZXJfZGV2Cj4gPiAgICBmd19kbmxkX292ZXIgICAgICAg
+ICAgICAgICB8ICAgbmZjbXJ2bF9md19kbmxkX2Fib3J0Cj4gPiAgICAgcmVsZWFzZV9maXJtd2Fy
+ZSAgICAgICAgICB8ICAgIGZ3X2RubGRfb3Zlcgo+ID4gICAgICBrZnJlZShmdykgLy8oMSkgICAg
+ICAgICAgfCAgICAgcmVsZWFzZV9maXJtd2FyZQo+ID4gICAgICAuLi4gICAgICAgICAgICAgICAg
+ICAgICAgfCAgICAgIGtmcmVlKGZ3KSAvLygyKQo+ID4gCj4gPiBUaGUgdGhpcmQgc2l0dWF0aW9u
+IGlzIHNob3duIGJlbG93Ogo+ID4gCj4gPiAgICAgICAgKFRocmVhZCAxKSAgICAgICAgICAgICAg
+IHwgICAgICAgKFRocmVhZCAyKQo+ID4gbmZjbXJ2bF9uY2lfcmVjdl9mcmFtZSAgICAgICAgICB8
+Cj4gPiAgaWYoLi4tPmZ3X2Rvd25sb2FkX2luX3Byb2dyZXNzKXwKPiA+ICAgbmZjbXJ2bF9md19k
+bmxkX3JlY3ZfZnJhbWUgICAgfAo+ID4gICAgcXVldWVfd29yayAgICAgICAgICAgICAgICAgICB8
+Cj4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwKPiA+IGZ3X2RubGRfcnhfd29y
+ayAgICAgICAgICAgICAgICAgfCBuZmNtcnZsX25jaV91bnJlZ2lzdGVyX2Rldgo+ID4gIGZ3X2Ru
+bGRfb3ZlciAgICAgICAgICAgICAgICAgICB8ICBuZmNtcnZsX2Z3X2RubGRfYWJvcnQKPiA+ICAg
+cmVsZWFzZV9maXJtd2FyZSAgICAgICAgICAgICAgfCAgIGZ3X2RubGRfb3Zlcgo+ID4gICAga2Zy
+ZWUoZncpIC8vKDEpICAgICAgICAgICAgICB8ICAgIHJlbGVhc2VfZmlybXdhcmUKPiA+ICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgICAga2ZyZWUoZncpIC8vKDIpCj4gPiAKPiA+
+IFRoZSBmaXJtd2FyZSBzdHJ1Y3QgaXMgZGVhbGxvY2F0ZWQgaW4gcG9zaXRpb24gKDEpIGFuZCBk
+ZWFsbG9jYXRlZAo+ID4gaW4gcG9zaXRpb24gKDIpIGFnYWluLgo+ID4gCj4gPiBUaGUgY3Jhc2gg
+dHJhY2UgdHJpZ2dlcmVkIGJ5IFBPQyBpcyBsaWtlIGJlbG93Ogo+ID4gCj4gPiBbICAxMjIuNjQw
+NDU3XSBCVUc6IEtBU0FOOiBkb3VibGUtZnJlZSBvciBpbnZhbGlkLWZyZWUgaW4gZndfZG5sZF9v
+dmVyKzB4MjgvMHhmMAo+ID4gWyAgMTIyLjY0MDQ1N10gQ2FsbCBUcmFjZToKPiA+IFsgIDEyMi42
+NDA0NTddICA8VEFTSz4KPiA+IFsgIDEyMi42NDA0NTddICBrZnJlZSsweGIwLzB4MzMwCj4gPiBb
+ICAxMjIuNjQwNDU3XSAgZndfZG5sZF9vdmVyKzB4MjgvMHhmMAo+ID4gWyAgMTIyLjY0MDQ1N10g
+IG5mY21ydmxfbmNpX3VucmVnaXN0ZXJfZGV2KzB4NjEvMHg3MAo+ID4gWyAgMTIyLjY0MDQ1N10g
+IG5jaV91YXJ0X3R0eV9jbG9zZSsweDg3LzB4ZDAKPiA+IFsgIDEyMi42NDA0NTddICB0dHlfbGRp
+c2Nfa2lsbCsweDNlLzB4ODAKPiA+IFsgIDEyMi42NDA0NTddICB0dHlfbGRpc2NfaGFuZ3VwKzB4
+MWIyLzB4MmMwCj4gPiBbICAxMjIuNjQwNDU3XSAgX190dHlfaGFuZ3VwLnBhcnQuMCsweDMxNi8w
+eDUyMAo+ID4gWyAgMTIyLjY0MDQ1N10gIHR0eV9yZWxlYXNlKzB4MjAwLzB4NjcwCj4gPiBbICAx
+MjIuNjQwNDU3XSAgX19mcHV0KzB4MTEwLzB4NDEwCj4gPiBbICAxMjIuNjQwNDU3XSAgdGFza193
+b3JrX3J1bisweDg2LzB4ZDAKPiA+IFsgIDEyMi42NDA0NTddICBleGl0X3RvX3VzZXJfbW9kZV9w
+cmVwYXJlKzB4MWFhLzB4MWIwCj4gPiBbICAxMjIuNjQwNDU3XSAgc3lzY2FsbF9leGl0X3RvX3Vz
+ZXJfbW9kZSsweDE5LzB4NTAKPiA+IFsgIDEyMi42NDA0NTddICBkb19zeXNjYWxsXzY0KzB4NDgv
+MHg5MAo+ID4gWyAgMTIyLjY0MDQ1N10gIGVudHJ5X1NZU0NBTExfNjRfYWZ0ZXJfaHdmcmFtZSsw
+eDQ0LzB4YWUKPiA+IFsgIDEyMi42NDA0NTddIFJJUDogMDAzMzoweDdmNjg0MzNmNmJlYgo+ID4g
+Cj4gPiBXaGF0J3MgbW9yZSwgdGhlcmUgYXJlIGFsc28gdXNlLWFmdGVyLWZyZWUgYW5kIG51bGwt
+cHRyLWRlcmVmIGJ1Z3MKPiA+IGluIG5mY21ydmxfZndfZG5sZF9zdGFydC4gSWYgd2UgZGVhbGxv
+Y2F0ZSBmaXJtd2FyZSBzdHJ1Y3QsIGdwaW8gb3IKPiA+IHNldCBudWxsIHRvIHRoZSBtZW1iZXJz
+IG9mIHByaXYtPmZ3X2RubGQgaW4gbmZjbXJ2bF9uY2lfdW5yZWdpc3Rlcl9kZXYsCj4gPiB0aGVu
+LCB3ZSBkZXJlZmVyZW5jZSBmaXJtd2FyZSwgZ3BpbyBvciB0aGUgbWVtYmVycyBvZiBwcml2LT5m
+d19kbmxkIGluCj4gPiBuZmNtcnZsX2Z3X2RubGRfc3RhcnQsIHRoZSBVQUYgb3IgTlBEIGJ1Z3Mg
+d2lsbCBoYXBwZW4uCj4gPiAKPiA+IFRoaXMgcGF0Y2ggcmVvcmRlcnMgZGVzdHJ1Y3RpdmUgb3Bl
+cmF0aW9ucyBhZnRlciBuY2lfdW5yZWdpc3Rlcl9kZXZpY2UKPiA+IHRvIGF2b2lkIHRoZSBkb3Vi
+bGUtZnJlZSwgVUFGIGFuZCBOUEQgYnVncywgYXMgbmNpX3VucmVnaXN0ZXJfZGV2aWNlCj4gPiBp
+cyB3ZWxsIHN5bmNocm9uaXplZCBhbmQgd29uJ3QgcmV0dXJuIGlmIHRoZXJlIGlzIGEgcnVubmlu
+ZyByb3V0aW5lLgo+ID4gVGhpcyB3YXMgbWVudGlvbmVkIGluIGNvbW1pdCAzZTNiNWRmY2QxNmEg
+KCJORkM6IHJlb3JkZXIgdGhlIGxvZ2ljIGluCj4gPiBuZmNfe3VuLH1yZWdpc3Rlcl9kZXZpY2Ui
+KS4KPiA+IAo+ID4gRml4ZXM6IDMxOTRjNjg3MDE1OCAoIk5GQzogbmZjbXJ2bDogYWRkIGZpcm13
+YXJlIGRvd25sb2FkIHN1cHBvcnQiKQo+ID4gU2lnbmVkLW9mZi1ieTogRHVvbWluZyBaaG91IDxk
+dW9taW5nQHpqdS5lZHUuY24+Cj4gPiBSZXZpZXdlZC1ieTogTGluIE1hIDxsaW5tYUB6anUuZWR1
+LmNuPgo+IAo+IEl0J3MgdGhlIGZpcnN0IHN1Ym1pc3Npb24sIGhvdyB0aGlzIHJldmlldyBhcHBl
+YXJlZD8KCkkgd2lsbCByZW1vdmUgdGhlIHJldmlldyB0YWcuCgo+IE9uIHRoZSBvdGhlciBoYW5k
+LCB5b3UgYWxyZWFkeSBzZW50IHNvbWV0aGluZyBzaW1pbGFyLCBzbyBpcyBpdCBhIHYyPyBJCj4g
+YW0gc29ycnkgYnV0IHRoaXMgaXMgdmVyeSBjb25mdXNpbmcuIExvb2tzIGxpa2UKPiBodHRwczov
+L2xvcmUua2VybmVsLm9yZy9hbGwvMjAyMjA0MjUwMDU3MTguMzM2MzktMS1kdW9taW5nQHpqdS5l
+ZHUuY24vCj4gYnV0IHRoZXJlIGlzIG5vIGNoYW5nZWxvZyBhbmQgY29tbWl0IGRlc2NyaXB0aW9u
+IGlzIGRpZmZlcmVudC4KCkkgYW0gc29ycnkgdGhlIGFib3ZlIGxpbmsgaXMganVzdCBhIHRlc3Qs
+IEkgZm9yZ2V0IHRvIHJlbW92ZSAiQ2M6IHN0YWJsZUB2Z2VyLmtlcm5lbC5vcmciLgoKPiBQbGVh
+c2UgcmVhZDoKPiBodHRwczovL2VsaXhpci5ib290bGluLmNvbS9saW51eC92NS4xOC1yYzQvc291
+cmNlL0RvY3VtZW50YXRpb24vcHJvY2Vzcy9zdWJtaXR0aW5nLXBhdGNoZXMucnN0Cj4gCgpJIHdp
+bGwgc2VuZCAiW1BBVENIIG5ldCBWMl0gbmZjOiBuZmNtcnZsOiB1YXJ0OiByZW9yZGVyIGRlc3Ry
+dWN0aXZlIG9wZXJhdGlvbnMgaW4gbmZjbXJ2bF9uY2lfdW5yZWdpc3Rlcl9kZXYgdG8gYXZvaWQg
+YnVncyIuCgpCZXN0IHJlZ2FyZHMsCkR1b21pbmcgWmhvdQ==

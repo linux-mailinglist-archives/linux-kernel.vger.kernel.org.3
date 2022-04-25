@@ -2,145 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4109350DC73
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 11:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED64F50DC72
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 11:23:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235748AbiDYJZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 05:25:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39136 "EHLO
+        id S235009AbiDYJ0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 05:26:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbiDYJZv (ORCPT
+        with ESMTP id S235407AbiDYJZz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 05:25:51 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C57E23158;
-        Mon, 25 Apr 2022 02:22:47 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23P9McRQ057744;
-        Mon, 25 Apr 2022 04:22:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1650878558;
-        bh=EfsyaX8ZUh64mXOdkBafAJQoTecRctMPR+QpHeJde8w=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=JeHG4uT4zWBnSHrvNbzVU9tr9k/1Ymuw9U8kVu23U9ZHzlOwoW1+biSb1OTA/9/p4
-         m4ppHgqYnJCFvPTeHEQg4DNafDcjA+2s6NQAmvzwYva6FiISzsowYVJ/R7vpyEJurb
-         oTGLf5lYp8uMahizoBBTX7KwkCUnkeBfzGwYBg1w=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23P9MccG086809
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 25 Apr 2022 04:22:38 -0500
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 25
- Apr 2022 04:22:38 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 25 Apr 2022 04:22:38 -0500
-Received: from [172.24.222.171] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23P9MYMk118330;
-        Mon, 25 Apr 2022 04:22:35 -0500
-Message-ID: <8517d504-af9c-53f5-a51b-3bcdbb86d09f@ti.com>
-Date:   Mon, 25 Apr 2022 14:52:33 +0530
+        Mon, 25 Apr 2022 05:25:55 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FAE223BDB
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 02:22:51 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id dk23so5052072ejb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 02:22:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=C+My26IIBkGHnWqzT5e9buhiPYzGS0kFzEbKHclvwks=;
+        b=h19q9rjY0D6I4icTltt3JNTdIkZkWj/qR1q6wKwitvu1LQHwQXfcdR0dXCMzxIWeGT
+         SWKRbOWBVMNwTdOhQAQDXXNQi4v7jOK/TC0Pqjr2/CjEuKpFLrKaAjTWO00ATyL1KfYF
+         xK3pDmaEzDYzRsETeVDGTVpnXpa/IJNZFCPf7yJGpndq4/c+6JeaCN9Kof/QngF3Hb9V
+         jZfDRMO/Sq9+k99wai3yPq6cFng0edfccCIXKOGcDYHD1BHNW04dGFJUIXG9gTUU8poe
+         tCwquSd5fpa0PdG3ga7FMAkKTeaqMGgKQNdYgcDF0ByaDQsScV6ZdddQgLVIvxz0rjFJ
+         qFaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=C+My26IIBkGHnWqzT5e9buhiPYzGS0kFzEbKHclvwks=;
+        b=snKBizW30KvOEpc1KY5i5zEp7/yxJXEO6O5r8P8z+RJbt7LraUMZpagfjHnZDcT3cT
+         lcqBhNPfbMV+oMFkbVd7z6xFQ2bBxfX4rc8ATGu5oRCxwJhGn0oB1akj8PMjDYQDoVFq
+         dBD+ShdYYRNtg7SPdhiNe/LAjiwgxER2q6YtM+V8+Y80TdpjPkaFfCF5w0sAIYIBfIa2
+         Niqjcji6WyLqoaXPmo9amzAEkayp0qOspC0XPHE7OD/j8Mtd3e97EFVc0DBoi+j4r1KC
+         JBe4nb+NR1baLLwfuyD27fFXcZ9sOx3ZGCd7xXxb/G4mcmjPDHkxZPIjvbpdiajppUut
+         bJQg==
+X-Gm-Message-State: AOAM530T71KC0q1+AcJVn4QtYxVLImRyNVUb9DYc+NH/ghqyN4tuBRPB
+        XTvy0VCV2UrtkFu+JUPTHm8cHw==
+X-Google-Smtp-Source: ABdhPJw2y1QUfvUQT+8ZNrtW+ktihEmwITibW19pkg4hT74JLMh/1lQfxcnOGzJSCpHTl6aUbzmkiA==
+X-Received: by 2002:a17:906:1b1b:b0:6f3:9044:5fb4 with SMTP id o27-20020a1709061b1b00b006f390445fb4mr4740378ejg.763.1650878570269;
+        Mon, 25 Apr 2022 02:22:50 -0700 (PDT)
+Received: from [192.168.0.241] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id k15-20020aa7c04f000000b004229daeaf37sm4309599edo.40.2022.04.25.02.22.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Apr 2022 02:22:49 -0700 (PDT)
+Message-ID: <24bfb681-faec-3567-3089-9cd5ee182710@linaro.org>
+Date:   Mon, 25 Apr 2022 11:22:48 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 2/2] arm64: dts: ti: k3-am625-sk: Enable on board
- peripherals
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/4] scsi: core: constify pointer to scsi_host_template
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>
-References: <20220422065002.387753-1-vigneshr@ti.com>
- <20220422065002.387753-3-vigneshr@ti.com>
- <c40a2dad-c7aa-f778-f1ac-971185691950@linaro.org>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <c40a2dad-c7aa-f778-f1ac-971185691950@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     John Garry <john.garry@huawei.com>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     "Ewan D. Milne" <emilne@redhat.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Doug Gilbert <dgilbert@interlog.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        james.smart@broadcom.com
+References: <20220408103027.311624-1-krzysztof.kozlowski@linaro.org>
+ <2a88a992-641a-b3ff-fe39-7a61fff87cb6@huawei.com>
+ <4c3be5b6-50ef-9e9a-6cee-9642df943342@linaro.org>
+ <7b3885e3-dbae-ff0b-21dc-c28d635d950b@huawei.com>
+ <c121430b1b5c8f5816b2b42b9178d00889260c90.camel@redhat.com>
+ <b6af3fe8-db9a-b5dc-199f-21c05d7664a2@huawei.com>
+ <Yl+wJ7xSHzWmR+bR@infradead.org>
+ <d09faf74-a52e-8d93-cf26-08b43b12c564@huawei.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <d09faf74-a52e-8d93-cf26-08b43b12c564@huawei.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
-
-On 23/04/22 4:02 pm, Krzysztof Kozlowski wrote:
-> On 22/04/2022 08:50, Vignesh Raghavendra wrote:
->> Add nodes for I2C IO expander, OSPI Flash, Eth PHYs, SD and eMMC that
->> are present on AM625 SK board.
->>
->> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
->> Reviewed-by: Bryan Brattlof <bb@ti.com>
->> ---
->>  arch/arm64/boot/dts/ti/k3-am625-sk.dts | 273 +++++++++++++++++++++++++
->>  1 file changed, 273 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk.dts b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
->> index 0de4113ccd5de..5fc35898a1e2e 100644
->> --- a/arch/arm64/boot/dts/ti/k3-am625-sk.dts
->> +++ b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
->> @@ -9,6 +9,7 @@
->>  
->>  #include <dt-bindings/leds/common.h>
->>  #include <dt-bindings/gpio/gpio.h>
->> +#include <dt-bindings/net/ti-dp83867.h>
->>  #include "k3-am625.dtsi"
->>  
->>  / {
->> @@ -17,6 +18,12 @@ / {
->>  
->>  	aliases {
->>  		serial2 = &main_uart0;
->> +		mmc0 = &sdhci0;
->> +		mmc1 = &sdhci1;
->> +		mmc2 = &sdhci2;
->> +		spi0 = &ospi0;
->> +		ethernet0 = &cpsw_port1;
->> +		ethernet1 = &cpsw_port2;
->>  	};
->>  
->>  	chosen {
->> @@ -87,6 +94,33 @@ vcc_3v3_sys: regulator-2 {
->>  		regulator-boot-on;
->>  	};
->>  
->> +	vdd_mmc1: fixed-regulator-sd {
+On 25/04/2022 10:58, John Garry wrote:
+> On 20/04/2022 08:03, Christoph Hellwig wrote:
+>>> The standard flow is:
+>>>
+>>> shost = scsi_host_alloc(sht, )
+>>>
+>>> // modify shost, like
+>>> shost->cmd_per_lun = 5;
+>>>
+>>> scsi_add_host(shost)
+>>>
+>>> Is there some reason for which those two drivers can't follow that?
+>> I think they should.  Method tables should not be mutable data.
+>> .
 > 
-> Don't encode the type of binding into node name. Node name should be
-> generic, so either regulator-0 or regulator-sd.
+> Hi Krzysztof,
 > 
->> +		/* TPS22918DBVR */
->> +		compatible = "regulator-fixed";
->> +		regulator-name = "vdd_mmc1";
->> +		regulator-min-microvolt = <3300000>;
->> +		regulator-max-microvolt = <3300000>;
->> +		regulator-boot-on;
->> +		enable-active-high;
->> +		vin-supply = <&vcc_3v3_sys>;
->> +		gpio = <&exp1 3 GPIO_ACTIVE_HIGH>;
->> +	};
->> +
->> +	vdd_sd_dv: gpio-regulator-TLV71033 {
-> 
-> The same + do not mix cases, so regulator-1 or regulator-tlv71033
+> Do you have any interest in going further with your work and trying to 
+> change all SCSI driver instances of scsi_host_template to be const? I am 
+> not sure if it has been attempted before...
 
-I have fixed this in v3. But had one question though:
+I can work on this, but what about the SCSI core modifying the template?
+For example scsi_proc_hostdir_rm(): 'present' and 'proc_dir' members.
+Where should they be stored? Should they be moved to the Scsi_Host?
 
-Per DT spec, 2.2.3 Path Names seems to indicate node-name-N when N is
-1,2,3.. So, is it valid to have regulator-tlv71033 as node-name -> does
-not strictly seem to fit into node-name-N format ?
 
-Regards
-Vignesh
+Best regards,
+Krzysztof

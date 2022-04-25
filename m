@@ -2,57 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0587D50E43D
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE6550E43E
 	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:21:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237702AbiDYPXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 11:23:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42132 "EHLO
+        id S242754AbiDYPXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 11:23:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiDYPXj (ORCPT
+        with ESMTP id S229557AbiDYPXm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 11:23:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C402B822E
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 08:20:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F227DB815E2
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 15:20:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29B81C385A4;
-        Mon, 25 Apr 2022 15:20:31 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="JnGRaUGf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1650900029;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AtXYxoxurgVSo3CaX68xSK3Nxjuk3GGkga1qWcCUL/s=;
-        b=JnGRaUGf3h9PnJvj9whZD4f73bceBwzAN0b0BV7mLe4f3zrZY7mb911HhA+tq+sS9KctSg
-        OjyQdhH9GQYu46IDnRPsUaLxJ0EV65ZOsfxqvf2slRDGfLebFQZ4a0HQ+sizF7/zaNOHyt
-        5EGv2T2wAmi0m/5Ik3U59+85r74kDrs=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 9eae9dd0 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 25 Apr 2022 15:20:29 +0000 (UTC)
-Date:   Mon, 25 Apr 2022 17:20:25 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: odd endianness toolchains for crosstool
-Message-ID: <Yma8OQ3zY3PzY87T@zx2c4.com>
-References: <YmX7z+BirkA3VAfW@zx2c4.com>
- <CAK8P3a3Af5FBx-OnedHPrf28ikX4DZK1d0ERLsV+oKyBHyCXiw@mail.gmail.com>
- <YmaJUvg6hmekvkXE@zx2c4.com>
- <CAK8P3a3FZeXzBJKyTEvmvw_DaHGQFf5rQKs=_wBW=GZ2+=rJ_Q@mail.gmail.com>
+        Mon, 25 Apr 2022 11:23:42 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43425BF32A;
+        Mon, 25 Apr 2022 08:20:38 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id k27so3655567edk.4;
+        Mon, 25 Apr 2022 08:20:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fbFo0WfowGPP9sPESJqw4Wjx6QEMuAVeUZmPdLIEBDc=;
+        b=X+1gub6Wv0mDmrdLwSu3+rRVhrEPi9qz9oFTepTKw8ILEPJsa37Jo3TuUHudV6ufJY
+         UGysEIZUwx0H1HmlcGOfzeB8e17g40U5fJpnU/Ud2rRjeg+vztspRgjQwvMa/y33MrF9
+         5KhB9t5/+NIBlbsK64BsSqMtZB4u/NRFF8UQntJJWvgPZzRymEZU/tNDlbnz1e97OG7M
+         5Y79WXLCsMyUxhrTmzPEEya+BvW6fApqAfV82T2HAxWI5VYU+okS6q14gu9QbjT9dBP8
+         NnjB/e5Q7s+eyA3DQxU/cdTVAMB6Ukujo03IenjhsjGFKu6mtEVTbQ7ivY3aR8X/kToG
+         cSsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fbFo0WfowGPP9sPESJqw4Wjx6QEMuAVeUZmPdLIEBDc=;
+        b=VPBmPCEZZoDXa2CN/o9IyzdHm0AZDCJpZBiCAZPT7CDspp+s7dj7ofMICupy1vc5Mp
+         FtCJbcEIFeT6aeHmY1+0DTyKalr3eouTnNn91I0CaNa6JA2OV9Mv5bONP9kbU/yI4GrP
+         kAaeRYzvCHjWY5bqC7PheaxftzysUWUfetz4rYYbRJrL3wQh2vtXp7o3l84wqw4rcCgJ
+         BB6Ja3Hu1woe3Ql5bpMH/ZDhY0moNpwfTBKu4wZmuNG0IKCifb+hWaev/St9rL98Ls/l
+         5qrf1Y4sZ9tmjpJhn847idVLYN3pbBTMPIOZejtVbfvRqCdiAlBcSjBy6tvRugIctbQR
+         djqw==
+X-Gm-Message-State: AOAM532gKqHI6Jet/Fq4A6yVSb86+ufjuQNK4gasKmxkIFujkArtvjgG
+        wqAUzdVkp/GL0d/VnsE5JRX+9tlplus=
+X-Google-Smtp-Source: ABdhPJwnjNAACi3/RaJ/oigSRsvntTMGmnyYT17JnY2mZjztEGiMH7PmI1yuCwG7JSmqjxyrcu5wXg==
+X-Received: by 2002:a05:6402:42d4:b0:412:c26b:789 with SMTP id i20-20020a05640242d400b00412c26b0789mr19842837edc.232.1650900036465;
+        Mon, 25 Apr 2022 08:20:36 -0700 (PDT)
+Received: from localhost.localdomain (dynamic-2a01-0c23-b81b-0800-f22f-74ff-fe21-0725.c23.pool.telefonica.de. [2a01:c23:b81b:800:f22f:74ff:fe21:725])
+        by smtp.googlemail.com with ESMTPSA id l17-20020a056402231100b0041d98ed7ad8sm4802863eda.46.2022.04.25.08.20.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 08:20:35 -0700 (PDT)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     netdev@vger.kernel.org
+Cc:     hauke@hauke-m.de, linux-kernel@vger.kernel.org, andrew@lunn.ch,
+        vivien.didelot@gmail.com, olteanv@gmail.com, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        stable@vger.kernel.org, Jan Hoffmann <jan@3e8.eu>
+Subject: [PATCH net] net: dsa: lantiq_gswip: Don't set GSWIP_MII_CFG_RMII_CLK
+Date:   Mon, 25 Apr 2022 17:20:27 +0200
+Message-Id: <20220425152027.2220750-1-martin.blumenstingl@googlemail.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a3FZeXzBJKyTEvmvw_DaHGQFf5rQKs=_wBW=GZ2+=rJ_Q@mail.gmail.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,58 +71,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Arnd,
+Commit 4b5923249b8fa4 ("net: dsa: lantiq_gswip: Configure all remaining
+GSWIP_MII_CFG bits") added all known bits in the GSWIP_MII_CFGp
+register. It helped bring this register into a well-defined state so the
+driver has to rely less on the bootloader to do things right.
+Unfortunately it also sets the GSWIP_MII_CFG_RMII_CLK bit without any
+possibility to configure it. Upon further testing it turns out that all
+boards which are supported by the GSWIP driver in OpenWrt which use an
+RMII PHY have a dedicated oscillator on the board which provides the
+50MHz RMII reference clock.
 
-On Mon, Apr 25, 2022 at 04:55:20PM +0200, Arnd Bergmann wrote:
-> I suppose the only thing you are missing is libgcc (or libcompiler-rt)
-> for those platforms. I had a closer look into what is or can be included
-> here, and I see that my builds include multiple versions on some of
-> the  architectures, but not on others:
-> 
-> aarch64-linux/lib/gcc/aarch64-linux/11.1.0/libgcc.a
-> alpha-linux/lib/gcc/alpha-linux/11.1.0/libgcc.a
-> arc-linux/lib/gcc/arc-linux/11.1.0/libgcc.a
-> arc-linux/lib/gcc/arc-linux/11.1.0/hs/libgcc.a
-> arc-linux/lib/gcc/arc-linux/11.1.0/archs/libgcc.a
-> arc-linux/lib/gcc/arc-linux/11.1.0/hs38/libgcc.a
-> arc-linux/lib/gcc/arc-linux/11.1.0/hs38_linux/libgcc.a
-> arc-linux/lib/gcc/arc-linux/11.1.0/arc700/libgcc.a
-> arc-linux/lib/gcc/arc-linux/11.1.0/nps400/libgcc.a
-> arm-linux-gnueabi/lib/gcc/arm-linux-gnueabi/11.1.0/libgcc.a
-> ...
-> powerpc-linux/lib/gcc/powerpc-linux/11.1.0/libgcc.a
-> powerpc-linux/lib/gcc/powerpc-linux/11.1.0/64/libgcc.a
-> powerpc-linux/lib/gcc/powerpc-linux/11.1.0/64/le/libgcc.a
-> powerpc-linux/lib/gcc/powerpc-linux/11.1.0/le/libgcc.a
-> powerpc-linux/lib/gcc/powerpc-linux/11.1.0/32/le/libgcc.a
-> powerpc64-linux/lib/gcc/powerpc64-linux/11.1.0/libgcc.a
-> powerpc64-linux/lib/gcc/powerpc64-linux/11.1.0/32/libgcc.a
-> powerpc64-linux/lib/gcc/powerpc64-linux/11.1.0/32/le/libgcc.a
-> powerpc64-linux/lib/gcc/powerpc64-linux/11.1.0/le/libgcc.a
-> powerpc64-linux/lib/gcc/powerpc64-linux/11.1.0/64/le/libgcc.a
-> mips-linux/lib/gcc/mips-linux/11.1.0/libgcc.a
-> mips-linux/lib/gcc/mips-linux/11.1.0/n32/libgcc.a
-> mips-linux/lib/gcc/mips-linux/11.1.0/64/libgcc.a
-> mips64-linux/lib/gcc/mips64-linux/11.1.0/libgcc.a
-> mips64-linux/lib/gcc/mips64-linux/11.1.0/32/libgcc.a
-> mips64-linux/lib/gcc/mips64-linux/11.1.0/64/libgcc.a
-> 
-> So on powerpc, there are already both big-endian and
-> little-endian binaries, but arm and mips only have one of the
-> two. I asked our local compiler experts, and they suggested
-> that one can add further multiarch-configs like the one
-> in gcc/config/arm/t-aprofile to allow building for a different
-> subset of the hundreds of possible configurations.
-> 
-> the t-aprofile builds libgcc for a couple of combinations of
-> cpu architecture level and FPU ABIs, but they are all the
-> same endianess. gcc/config/rs6000/t-linux64lebe is the
-> corresponding file for powerpc that enables all combinations
-> of 32/64 and be/le.
+Don't set the GSWIP_MII_CFG_RMII_CLK bit (but keep the code which always
+clears it) to fix support for the Fritz!Box 7362 SL in OpenWrt. This is
+a board with two Atheros AR8030 RMII PHYs. With the "RMII clock" bit set
+the MAC also generates the RMII reference clock whose signal then
+conflicts with the signal from the oscillator on the board. This results
+in a constant cycle of the PHY detecting link up/down (and as a result
+of that: the two ports using the AR8030 PHYs are not working).
 
-Right, exactly. So if you simply add little endian libgcc to ppc64, ppc,
-mips, and mips64, and add big endian libgcc to arm and arm64, then we'd
-be set. (And also, build ppc32 with --enable-secureplt
---with-long-double-64.)
+At the time of writing this patch there's no known board where the MAC
+(GSWIP) has to generate the RMII reference clock. If needed this can be
+implemented in future by providing a device-tree flag so the
+GSWIP_MII_CFG_RMII_CLK bit can be toggled per port.
 
-Jason
+Fixes: 4b5923249b8fa4 ("net: dsa: lantiq_gswip: Configure all remaining GSWIP_MII_CFG bits")
+Cc: stable@vger.kernel.org
+Tested-by: Jan Hoffmann <jan@3e8.eu>
+Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+---
+ drivers/net/dsa/lantiq_gswip.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/drivers/net/dsa/lantiq_gswip.c b/drivers/net/dsa/lantiq_gswip.c
+index a416240d001b..12c15da55664 100644
+--- a/drivers/net/dsa/lantiq_gswip.c
++++ b/drivers/net/dsa/lantiq_gswip.c
+@@ -1681,9 +1681,6 @@ static void gswip_phylink_mac_config(struct dsa_switch *ds, int port,
+ 		break;
+ 	case PHY_INTERFACE_MODE_RMII:
+ 		miicfg |= GSWIP_MII_CFG_MODE_RMIIM;
+-
+-		/* Configure the RMII clock as output: */
+-		miicfg |= GSWIP_MII_CFG_RMII_CLK;
+ 		break;
+ 	case PHY_INTERFACE_MODE_RGMII:
+ 	case PHY_INTERFACE_MODE_RGMII_ID:
+-- 
+2.36.0
+

@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA85850E703
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 19:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 122C850E707
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 19:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241225AbiDYRZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 13:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36960 "EHLO
+        id S243912AbiDYR01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 13:26:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236798AbiDYRZZ (ORCPT
+        with ESMTP id S236300AbiDYR0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 13:25:25 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C467A40E41
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 10:22:19 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nj2PY-0007mf-CH; Mon, 25 Apr 2022 19:22:08 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nj2PV-005Bnw-TK; Mon, 25 Apr 2022 19:22:04 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nj2PT-005ZQF-Q7; Mon, 25 Apr 2022 19:22:03 +0200
-Date:   Mon, 25 Apr 2022 19:21:59 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Yihao Han <hanyihao@vivo.com>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        kernel@vivo.com
-Subject: Re: [PATCH v2] macintosh: macio_asic: fix resource_size.cocci
- warnings
-Message-ID: <20220425172159.5u6q74gd2cmmipzd@pengutronix.de>
-References: <20220421141821.11519-1-hanyihao@vivo.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="smo2nizlx27ixiz4"
-Content-Disposition: inline
-In-Reply-To: <20220421141821.11519-1-hanyihao@vivo.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        Mon, 25 Apr 2022 13:26:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DCCC40E40;
+        Mon, 25 Apr 2022 10:23:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2D3E8B818B0;
+        Mon, 25 Apr 2022 17:23:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24C5FC385A4;
+        Mon, 25 Apr 2022 17:23:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1650907397;
+        bh=VjTnhuQicGOmkGkCoCTapKBWoxqmayPx+DgY9NCIrMg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RzBpZ2Qln5fmrU4WNMsYu1/qxHLDWPtHTCKeTegCgw9hNDSJoE+fYL6PineKaHxWU
+         dK3D9Zy38F9lCRx0NXhUD3NA97VUNAkNa3CUxqqYmigxJY51ZxkwERrB5F+v4PxSWb
+         fnA0rmV8lSPenJ74LzplsDKWefkm6nZ91fYfga5k=
+Date:   Mon, 25 Apr 2022 10:23:16 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Martin Fernandez <martin.fernandez@eclypsium.com>
+Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
+        gregkh@linuxfoundation.org, rafael@kernel.org, rppt@kernel.org,
+        daniel.gutson@eclypsium.com, hughsient@gmail.com,
+        alex.bazhaniuk@eclypsium.com, alison.schofield@intel.com,
+        keescook@chromium.org
+Subject: Re: [PATCH v7 0/8] x86: Show in sysfs if a memory node is able to
+ do encryption
+Message-Id: <20220425102316.5c6ae3065363767e89d8855f@linux-foundation.org>
+In-Reply-To: <20220425171526.44925-1-martin.fernandez@eclypsium.com>
+References: <20220425171526.44925-1-martin.fernandez@eclypsium.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,76 +59,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 25 Apr 2022 14:15:18 -0300 Martin Fernandez <martin.fernandez@eclypsium.com> wrote:
 
---smo2nizlx27ixiz4
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Show for each node if every memory descriptor in that node has the
+> EFI_MEMORY_CPU_CRYPTO attribute.
 
-On Thu, Apr 21, 2022 at 07:18:07AM -0700, Yihao Han wrote:
-> drivers/macintosh/macio_asic.c:219:26-29: WARNING:Suspicious code. resour=
-ce_size is maybe missing with res
-> drivers/macintosh/macio_asic.c:221:26-29: WARNING:Suspicious code. resour=
-ce_size is maybe missing with res
->=20
-> Use resource_size function on resource object instead of
-> explicit computation.
->=20
-> Generated by: scripts/coccinelle/api/resource_size.cocci
->=20
-> Signed-off-by: Yihao Han <hanyihao@vivo.com>
-> ---
-> v2: drop parenthesis around resource_size(res) and edit commit message
-> ---
->  drivers/macintosh/macio_asic.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/macintosh/macio_asic.c b/drivers/macintosh/macio_asi=
-c.c
-> index 1943a007e2d5..260fccb3863e 100644
-> --- a/drivers/macintosh/macio_asic.c
-> +++ b/drivers/macintosh/macio_asic.c
-> @@ -216,9 +216,9 @@ static int macio_resource_quirks(struct device_node *=
-np, struct resource *res,
->  	/* Some older IDE resources have bogus sizes */
->  	if (of_node_name_eq(np, "IDE") || of_node_name_eq(np, "ATA") ||
->  	    of_node_is_type(np, "ide") || of_node_is_type(np, "ata")) {
-> -		if (index =3D=3D 0 && (res->end - res->start) > 0xfff)
-> +		if (index =3D=3D 0 && resource_size(res) > 0xfff)
-
-Michael Ellerman noted in the v1 thread, that this is wrong as
-resource_size evaluates to end - start + 1. So this has to be
-
-		if (index =3D=3D 0 && resource_size(res) > 0x1000)
-
-to be equivalent.
-
->  			res->end =3D res->start + 0xfff;
-> -		if (index =3D=3D 1 && (res->end - res->start) > 0xff)
-> +		if (index =3D=3D 1 && resource_size(res) > 0xff)
-
-Similar here.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---smo2nizlx27ixiz4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmJm2LQACgkQwfwUeK3K
-7AleZQf/Ws4dgW+0xEXABSKmjeSg2f0okoCcUGbtNPI5xRg22jicN6D5KvbLUa9J
-fi0Ifraz34Sep8UpRywMZPcm9YKVgj4IIQvcWLwqnZKhHA0kh+khKYCDuV7KFooi
-ForysDPwPHIB+Yi5e3aAEKTHxV6yX65fG7It0lsfZRQRYwGdnjW0T2dozvlTApQE
-tZG+55HiL0OQyKqs39cibsjJZLgIDGiPIqt5bHCVT7gS/IVKEKL2ua9kGMm4BOzE
-c5GCGFItjwslkVtCaN1QZeDiGgLbmMmsMWl/r3gCBYTIsyNhPAwbp3Po0eRjWVXX
-ajT/ljg/13jzeGyN7N1UcoFFgVWTWA==
-=gdFa
------END PGP SIGNATURE-----
-
---smo2nizlx27ixiz4--
+The MM patches look OK to me.  Mike, can you please opine?

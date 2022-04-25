@@ -2,97 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DD5850E8BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4B9150E8D2
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244636AbiDYSxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 14:53:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35292 "EHLO
+        id S244684AbiDYS4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 14:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243538AbiDYSxh (ORCPT
+        with ESMTP id S244656AbiDYS4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 14:53:37 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C1890CD1
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:50:33 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id kq17so8268013ejb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:50:33 -0700 (PDT)
+        Mon, 25 Apr 2022 14:56:12 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62338B7163;
+        Mon, 25 Apr 2022 11:53:07 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id w1so27838985lfa.4;
+        Mon, 25 Apr 2022 11:53:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=I8OGAy692x2HlX0zDRT2WU4OQLJqBZjTeofFJMqhneQ=;
-        b=yJtZUQbKaP4+1vaymO4wTdai+PwZjfZGL0Qv/GR27elZWHbpeL6kCjftSG2f0FChs/
-         PL5SN243GPEnWSJ3LQTJXQZ146BTqccn2NGQL2nVfINMe4oWwerIYVRjDL6Qg1bnsdFs
-         V15im6vwngYNzIohkZBUJ7Cd1jhBPdxlX4MGD+5qqiDnAutR2PAfLdSFIIFBzzT+PE3D
-         Nip0LKHDnt2jITH47p6IeSNy7hXKUSimfnbs/tOfVlSqHn6ehA1AOaDUvcVX3eXNOxlj
-         w/sYwfMmoWjBqtijJlFIEx2Fa0CnQOMzea986Z/A0BczlPCVCzTWkaO7nTUFLKJIP6NG
-         Oijw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YzTyrWH6+Wmk4+451HNCK7O6EmDtB2NHfsrNY09RFZs=;
+        b=HH8AORSsfgDEfn76V7UwF3hOOxtho3xvZ0tLDir4jXG21k7MkZLS67kn2igk6xuVtR
+         CiitBHALNRsQrsODtOsyZpbBzwNU2DgbueO+okSkhikdkg4bOq5oeHf6u3gbQITQ/opY
+         SZPtI7PWdX6wqyKxcdOX0SR14KEBhTvYrecjy/27KmCYdXj6jnKjKJa9fzx7ZrtncJ+B
+         GMgIx2AaUmY+NvedS2hVXuojvnKG8P1uGFByte5ioDtRtEzALRWzcHg/rFbKwhEMjgW+
+         6Ps3s9KJuugUdUyLu8fv7Rq7e+NIvZgs9QXwVts37+p+w7ckfUveBDBqDijK4Xpgx/tV
+         jlew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=I8OGAy692x2HlX0zDRT2WU4OQLJqBZjTeofFJMqhneQ=;
-        b=M84GDsjw0MyFgVaEtHwny0dcr5SRpZR/8Jm7hsJMxKZjoWbwqtgwpHkG0e61+Ox0xK
-         UbyUTXFa1JJ77QdQMGMFBfpkysBW26ILV6wYEpDC/kTBqcN3tyLHuR9GwTyDIT7/APQf
-         qmGrH8RvycwDx9W5/HbQGi9zIHOkXClhMZJulKyKsb22GaQBhWlrSpW2yfpD3aXVylfM
-         mf1dyhWal2j0HOgPEP+TcN/NXAKg65ocsLFjoBYUFoCiGYZScP4a+NBucDgRvm/TN/29
-         cgH7RSxwc+JgAEMGcugEkQIaCndMVWQlZkba/rKhxLjVdK1g0tBdQQMbsCraKNmt5Fdk
-         lZPw==
-X-Gm-Message-State: AOAM530YyFX43LO2hN1NJ8SP5v9RKHOXLWWDyeK4/meYabjYOlGsQC0W
-        XP+46+AEgm1YEauYnPh6v+6B6w==
-X-Google-Smtp-Source: ABdhPJwRiWolCCzfTOXvZ/aMVmJ7USEy6FBXDNaZxg/9Y1L8Bsf/Q7l9Ym1+l8z14ohrkIth/+dThQ==
-X-Received: by 2002:a17:907:72d5:b0:6ef:a49f:133a with SMTP id du21-20020a17090772d500b006efa49f133amr17969076ejc.420.1650912631700;
-        Mon, 25 Apr 2022 11:50:31 -0700 (PDT)
-Received: from [192.168.0.244] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id p24-20020a056402045800b0041614c8f79asm4937824edw.88.2022.04.25.11.50.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 11:50:31 -0700 (PDT)
-Message-ID: <4ab44d3b-8a10-e24d-7c60-f0073e6e89f5@linaro.org>
-Date:   Mon, 25 Apr 2022 20:50:30 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 1/3] media: dt-bindings: media: rockchip-vdec: Add
- RK3328 compatible
-Content-Language: en-US
-To:     Christopher Obbard <chris.obbard@collabora.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        bh=YzTyrWH6+Wmk4+451HNCK7O6EmDtB2NHfsrNY09RFZs=;
+        b=ZGtdxt0prC70CE/s6eu8bPRbx4yy53RdeECvcacK2+fdq1O5j/9DzavYt3qat8DdPV
+         QrTCY4dPqcE5H3n2eFHc3jjN31UGo5k0rArJucyQwpQZ6qMizG+f7qij98T7D9nxD9RP
+         RaNKBDm/84a0wQgxKnr9wZQwuyO67BEch1Mrk+sl74uKiuyl62H4dov+ix5F4jTQsQCr
+         Kz3KSEQYUgDV0enhGRcE2nJ+dTtpVQXq8CWk4R1GGVcSPZttN7AM6kFjm0+ykfRwIKbf
+         8y0k53Z2S1jfb2fCK7J0vrHYkrc8N52ngg/PwVxDJj5+4ezlT3AkSA31CnS0hg1YPXDD
+         z4eA==
+X-Gm-Message-State: AOAM53124wdB8kyOYrbetqdZeAI7UMEUz7VCXVk3DjTA0e1D1ONdvnRC
+        iNsNn/v8pFfAg/YhhM8w3wKbJmSmSfs=
+X-Google-Smtp-Source: ABdhPJxNJrgjtFLeb/dKqVCKzs9JdNGuIEMDQUNTOSSAC1RSYOZ4HfsCWdfpge8QEkSN7TSv9Dne5A==
+X-Received: by 2002:a05:6512:11cc:b0:44a:5770:7425 with SMTP id h12-20020a05651211cc00b0044a57707425mr13478200lfr.406.1650912785452;
+        Mon, 25 Apr 2022 11:53:05 -0700 (PDT)
+Received: from localhost.localdomain (adla4.neoplus.adsl.tpnet.pl. [79.185.4.4])
+        by smtp.gmail.com with ESMTPSA id r20-20020ac25f94000000b00471fcf5b4basm913135lfe.90.2022.04.25.11.53.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 11:53:05 -0700 (PDT)
+From:   Adam Skladowski <a39.skl@gmail.com>
+To:     phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        Adam Skladowski <a39.skl@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Elaine Zhang <zhangqing@rock-chips.com>
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-References: <20220425184510.1138446-1-chris.obbard@collabora.com>
- <20220425184510.1138446-2-chris.obbard@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220425184510.1138446-2-chris.obbard@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH 0/3] MSM8976 GCC updates
+Date:   Mon, 25 Apr 2022 20:51:37 +0200
+Message-Id: <20220425185140.15154-1-a39.skl@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/04/2022 20:45, Christopher Obbard wrote:
-> Document the RK3328 compatible for rockchip-vdec. The driver shares
-> the same base functionality as the RK3399 hardware so make sure that
-> the RK3399 compatible is also included in the device tree.
-> 
-> Signed-off-by: Christopher Obbard <chris.obbard@collabora.com>
+This patch series brings small fixes for SDCC clocks and adds reset for modem.
 
+Adam Skladowski (3):
+  clk: qcom: gcc-msm8976: Set floor ops for SDCC
+  dt-bindings: clk: qcom: gcc-msm8976:Add modem reset
+  clk: qcom: gcc-msm8976:Add modem reset
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ drivers/clk/qcom/gcc-msm8976.c               | 7 ++++---
+ include/dt-bindings/clock/qcom,gcc-msm8976.h | 1 +
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
+-- 
+2.25.1
 
-Best regards,
-Krzysztof

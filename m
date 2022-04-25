@@ -2,105 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A3B50D96A
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 08:27:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3114E50D96C
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 08:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231935AbiDYGaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 02:30:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33600 "EHLO
+        id S234262AbiDYGbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 02:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbiDYGaW (ORCPT
+        with ESMTP id S232297AbiDYGau (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 02:30:22 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A875C64F
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 23:27:18 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 71012210F3;
-        Mon, 25 Apr 2022 06:27:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1650868037; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QOnKlAHRJyRZh6UTpzLqlrkzZwi4pUejGOJI+FgSH1M=;
-        b=TkM+ckAIkflSnwvJTgnOGO3a95nO9NarZAJ6TJosfV58gJ69hE+wbR1ci0u3R4dfBitSo2
-        Ps4ohRYff7nxZkkwh+DCyzVsyKyG6tHRZY6rpkAKFLlsoYpj9G8gdRTl19cdZ4Veb2OQ7P
-        oq1Yn5xO3s+c0mG513ZlMHggQzwtMeo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1650868037;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QOnKlAHRJyRZh6UTpzLqlrkzZwi4pUejGOJI+FgSH1M=;
-        b=hnG7m/7l7EV0wMdRJvVFE/G6qqbPbmjrE5uP2daOHr9LJmtSt834+h1G6t3dO7jtk7aQnX
-        3Vjwhb9vlqGKEUAw==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 25 Apr 2022 02:30:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 04CD05C64F
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 23:27:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650868065;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=5Ogrdsii+6dWLb5V9VSJwUH4kCOo8+gJfoP2H8fYZIg=;
+        b=IDC6EWzGkp40OSVGwhjPRAQROg1vcyMnRBgwpsWsftRPy2NszPZETl/tpxAe+DM8y4QlDp
+        RQJiGxTidUUhWJkUNlgIB5DNdost2Tly+/v1me1UJLub4RtkRVkEkub5liHc4ocjUYhTDx
+        sqRkboXFfzTufkkq3JVqZ+jJvTq58ho=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-634-i9gwxzNbOnCj5AGT82FGgQ-1; Mon, 25 Apr 2022 02:27:44 -0400
+X-MC-Unique: i9gwxzNbOnCj5AGT82FGgQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 53DA72C141;
-        Mon, 25 Apr 2022 06:27:17 +0000 (UTC)
-Date:   Mon, 25 Apr 2022 08:27:17 +0200 (CEST)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Peter Zijlstra <peterz@infradead.org>
-cc:     Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F03C680B71C;
+        Mon, 25 Apr 2022 06:27:43 +0000 (UTC)
+Received: from server.redhat.com (ovpn-12-110.pek2.redhat.com [10.72.12.110])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B16F940C1421;
+        Mon, 25 Apr 2022 06:27:41 +0000 (UTC)
+From:   Cindy Lu <lulu@redhat.com>
+To:     mst@redhat.com, jasowang@redhat.com, lulu@redhat.com,
+        virtualization@lists.linux-foundation.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 15/25] objtool: Rework ibt and extricate from stack
- validation
-In-Reply-To: <20220422105037.GV2731@worktop.programming.kicks-ass.net>
-Message-ID: <alpine.LSU.2.21.2204250826540.25526@pobox.suse.cz>
-References: <cover.1650300597.git.jpoimboe@redhat.com> <fd1435e46bb95f81031b8fb1fa360f5f787e4316.1650300597.git.jpoimboe@redhat.com> <alpine.LSU.2.21.2204201755580.1205@pobox.suse.cz> <20220422105037.GV2731@worktop.programming.kicks-ass.net>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+Subject: [PATCH v2 1/2] vdpa: add the check for id_table in struct vdpa_mgmt_dev
+Date:   Mon, 25 Apr 2022 14:27:33 +0800
+Message-Id: <20220425062735.172576-1-lulu@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Apr 2022, Peter Zijlstra wrote:
+To support the dynamic ids in vp_vdpa, we need to add the check for
+id table. If the id table is NULL, will not set the device type
 
-> On Wed, Apr 20, 2022 at 07:25:16PM +0200, Miroslav Benes wrote:
-> > A nit and it was there even before this patch...
-> > 
-> > > -static struct instruction *
-> > > -validate_ibt_reloc(struct objtool_file *file, struct reloc *reloc)
-> > > -{
-> > > -	struct instruction *dest;
-> > > -	struct section *sec;
-> > > -	unsigned long off;
-> > > -
-> > > -	sec = reloc->sym->sec;
-> > > -	off = reloc->sym->offset;
-> > > -
-> > > -	if ((reloc->sec->base->sh.sh_flags & SHF_EXECINSTR) &&
-> > > -	    (reloc->type == R_X86_64_PC32 || reloc->type == R_X86_64_PLT32))
-> > > -		off += arch_dest_reloc_offset(reloc->addend);
-> > 
-> > here...
-> > 
-> > > +static int validate_ibt_insn(struct objtool_file *file, struct instruction *insn)
-> > > +{
-> > 
-> > ...
-> > > +		off = reloc->sym->offset;
-> > > +		if (reloc->type == R_X86_64_PC32 || reloc->type == R_X86_64_PLT32)
-> > > +			off += arch_dest_reloc_offset(reloc->addend);
-> > > +		else
-> > > +			off += reloc->addend;
-> > 
-> > it looks kind of strange to have arch_dest_reloc_offset() and still 
-> > reference arch-specific relocation types here. On the other hand it seems 
-> > difficult to achieve complete arch-agnostic code, so take it just as a 
-> > note and maybe someone porting objtool to a different architecture will 
-> > split the code, make it all arch-independent and all will be nice and 
-> > shiny.
-> 
-> Something like so perhaps? Seems to build and boot x86_64-defconfig.
+Signed-off-by: Cindy Lu <lulu@redhat.com>
+---
+ drivers/vdpa/vdpa.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-Yes, that looks good. Thanks.
+diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
+index 1ea525433a5c..09edd92cede0 100644
+--- a/drivers/vdpa/vdpa.c
++++ b/drivers/vdpa/vdpa.c
+@@ -492,10 +492,13 @@ static int vdpa_mgmtdev_fill(const struct vdpa_mgmt_dev *mdev, struct sk_buff *m
+ 	if (err)
+ 		goto msg_err;
+ 
+-	while (mdev->id_table[i].device) {
+-		if (mdev->id_table[i].device <= 63)
+-			supported_classes |= BIT_ULL(mdev->id_table[i].device);
+-		i++;
++	if (mdev->id_table != NULL) {
++		while (mdev->id_table[i].device) {
++			if (mdev->id_table[i].device <= 63)
++				supported_classes |=
++					BIT_ULL(mdev->id_table[i].device);
++			i++;
++		}
+ 	}
+ 
+ 	if (nla_put_u64_64bit(msg, VDPA_ATTR_MGMTDEV_SUPPORTED_CLASSES,
+-- 
+2.34.1
 
-Miroslav

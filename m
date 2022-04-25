@@ -2,101 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6976650D8B1
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 07:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93C5B50D8B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 07:14:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241201AbiDYFPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 01:15:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44096 "EHLO
+        id S241204AbiDYFQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 01:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237644AbiDYFPh (ORCPT
+        with ESMTP id S237644AbiDYFQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 01:15:37 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0BA3DA
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 22:12:32 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id a11so2547625pff.1
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 22:12:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=6+nWr4Y0lknbWn2i7wUGZGpJdQiqZVDrE2sy90jRX2k=;
-        b=TXnE9l6fWX6RBgCxLzk7kJDu38m1Gt9aaNpsNNgU9ILQkJTaVwa+/01ZW5jCf/zhO1
-         5kmzX/Q6sBx0Q85L0rbArtyCUpQRGsqYnBDPpn8xpYXs8th8ZSHpO63MnEjY/ds7MWaf
-         QqnyzXzICuDDntnHLWdiYr58fUo5i7Cqgl6GY/xAqG2Sz568Q4KuEKSBEsbtg8qdaYEp
-         Ry7cHmRM1GaUy97JxFeyxHG0s8Ur+1jj4hxVon48ACVFOixNnCHML76Sjn3z21lNnAV6
-         IT7DRyM693oRuXOgQULXMJi+QFycj9ko6Hk86E8B4mUR2x9V95K++1qEpK81XfD1VD2I
-         GRBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=6+nWr4Y0lknbWn2i7wUGZGpJdQiqZVDrE2sy90jRX2k=;
-        b=1ACsHirVlgSUO1U5qs+7HDuaNAuAbKTYcds/avJHk7LJpo0F2tLAj5K/vzoy5WMNJs
-         0doWMbhoOn04n9enQECEMz4b0c/LnlorzKaObEuSow6M0AtFrxURYiIZEmHnGZIbCYad
-         xtjxLxJ6+4IhaOPQlnNmjHzAelhH6xDPtfKeDUA7SfyPYMLfdhHAfPE/cE1pvtaVB0py
-         eFHgaAiq//z6uJn4BjhRJXs/QG+rIz6Pqi9nKxCPPVqla1pgCvXGfNl2au2/6yMw0+o8
-         MCTHH2+Q+Bctrb14bRUgyaAr82AMQpRRS992f1rMBLky9g4v0CotE5SHltTVK5WlTlSk
-         8Mlw==
-X-Gm-Message-State: AOAM530mq/OOtUObv2MiNx9qBe3GR0c2iH+FmlIRzibNQyjylH1B9W1+
-        l1RyeLtHJALXzDoS4PcEOfTX8w==
-X-Google-Smtp-Source: ABdhPJxoAdqqZYNLUfEPEATeFhzguNqLrENazm9zPZWZ0M/HzCefiyvBIFHsjvJu5u3knhJllQPxAw==
-X-Received: by 2002:a63:5b53:0:b0:39c:c6b8:d53b with SMTP id l19-20020a635b53000000b0039cc6b8d53bmr13467754pgm.166.1650863552491;
-        Sun, 24 Apr 2022 22:12:32 -0700 (PDT)
-Received: from localhost ([122.171.250.232])
-        by smtp.gmail.com with ESMTPSA id j2-20020a17090ae60200b001d96bc27a57sm2575040pjy.54.2022.04.24.22.12.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 22:12:32 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 10:42:30 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Rex-BC Chen <rex-bc.chen@mediatek.com>, rafael@kernel.org,
-        robh+dt@kernel.org, krzk+dt@kernel.org, matthias.bgg@gmail.com,
-        jia-wei.chang@mediatek.com, roger.lu@mediatek.com,
-        hsinyi@google.com, khilman@baylibre.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        "Andrew-sh . Cheng" <andrew-sh.cheng@mediatek.com>
-Subject: Re: [PATCH V4 04/14] cpufreq: mediatek: Record previous target vproc
- value
-Message-ID: <20220425051230.74gqbqgwi5afmyby@vireshk-i7>
-References: <20220422075239.16437-1-rex-bc.chen@mediatek.com>
- <20220422075239.16437-5-rex-bc.chen@mediatek.com>
- <f8f9bfa4-8591-0399-73a9-6e4b7261df07@collabora.com>
+        Mon, 25 Apr 2022 01:16:38 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D07ADA
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 22:13:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650863615; x=1682399615;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kI+Eb3HXZmO8tMdYWAtqwTvLTzUUWhx8e2ynN6/5zlc=;
+  b=dT0cUK+nAa8SQP5FQWOcE4wBTVI7FG/5DZT7pbce6seNUzRRGZmYqCBI
+   TermwmVldgaNTb0keuBthEWJlhk2EmHgcXqI8DK/Q8bkMeti0TNUSHkc1
+   oCLy/MCT/Rcj/IEjGjUCdKAyzPG/JK45ibxnpCvLl0Kf8MT54rTfszSHq
+   HUCOCzEG7aSwxARj9+i8fAAwNew2LsM1B4Aui5G5R5h7rYVvD0r2rggR5
+   4bJBYt7wYewBBlhx1EKhtNQuBNnGZQnZFQddLPi/P0qTsS9QdyqIkKlSD
+   qUISIEVNtXAgsvGuGA5+bkOk4/GilFFNTlhNy2tZ0nWCYp8uQJd0mSwCb
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="290276389"
+X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
+   d="scan'208";a="290276389"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 22:13:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
+   d="scan'208";a="704401579"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 24 Apr 2022 22:13:29 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nir2P-0002AF-3Q;
+        Mon, 25 Apr 2022 05:13:29 +0000
+Date:   Mon, 25 Apr 2022 13:12:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Collingbourne <pcc@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        vbabka@suse.cz, penberg@kernel.org, roman.gushchin@linux.dev,
+        iamjoonsoo.kim@lge.com, rientjes@google.com,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH v3] mm: make minimum slab alignment a runtime property
+Message-ID: <202204251346.WbwgrNZw-lkp@intel.com>
+References: <20220422201830.288018-1-pcc@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f8f9bfa4-8591-0399-73a9-6e4b7261df07@collabora.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220422201830.288018-1-pcc@google.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-04-22, 10:21, AngeloGioacchino Del Regno wrote:
-> Il 22/04/22 09:52, Rex-BC Chen ha scritto:
-> > From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > 
-> > We found the buck voltage may not be exactly the same with what we set
-> > because CPU may share the same buck with other module.
-> > Therefore, we need to record the previous desired value instead of reading
-> > it from regulators.
-> > 
-> > Signed-off-by: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
-> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> 
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Hi Peter,
 
-Applied. Thanks.
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on hnaz-mm/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Collingbourne/mm-make-minimum-slab-alignment-a-runtime-property/20220423-042024
+base:   https://github.com/hnaz/linux-mm master
+config: arm64-buildonly-randconfig-r002-20220425 (https://download.01.org/0day-ci/archive/20220425/202204251346.WbwgrNZw-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/3aef97055dd4a480e05dff758164f153aaddbb49
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Peter-Collingbourne/mm-make-minimum-slab-alignment-a-runtime-property/20220423-042024
+        git checkout 3aef97055dd4a480e05dff758164f153aaddbb49
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 prepare
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from kernel/bounds.c:10:
+   In file included from include/linux/page-flags.h:10:
+   In file included from include/linux/bug.h:5:
+   In file included from arch/arm64/include/asm/bug.h:26:
+   In file included from include/asm-generic/bug.h:22:
+   In file included from include/linux/printk.h:9:
+   In file included from include/linux/cache.h:6:
+   In file included from arch/arm64/include/asm/cache.h:56:
+   In file included from include/linux/kasan-enabled.h:5:
+   In file included from include/linux/static_key.h:1:
+>> include/linux/jump_label.h:285:2: error: call to undeclared function 'WARN'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           STATIC_KEY_CHECK_USE(key);
+           ^
+   include/linux/jump_label.h:81:35: note: expanded from macro 'STATIC_KEY_CHECK_USE'
+   #define STATIC_KEY_CHECK_USE(key) WARN(!static_key_initialized,               \
+                                     ^
+   include/linux/jump_label.h:291:2: error: call to undeclared function 'WARN'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           STATIC_KEY_CHECK_USE(key);
+           ^
+   include/linux/jump_label.h:81:35: note: expanded from macro 'STATIC_KEY_CHECK_USE'
+   #define STATIC_KEY_CHECK_USE(key) WARN(!static_key_initialized,               \
+                                     ^
+   include/linux/jump_label.h:313:2: error: call to undeclared function 'WARN'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           STATIC_KEY_CHECK_USE(key);
+           ^
+   include/linux/jump_label.h:81:35: note: expanded from macro 'STATIC_KEY_CHECK_USE'
+   #define STATIC_KEY_CHECK_USE(key) WARN(!static_key_initialized,               \
+                                     ^
+>> include/linux/jump_label.h:316:3: error: call to undeclared function 'WARN_ON_ONCE'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   WARN_ON_ONCE(atomic_read(&key->enabled) != 1);
+                   ^
+   include/linux/jump_label.h:324:2: error: call to undeclared function 'WARN'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           STATIC_KEY_CHECK_USE(key);
+           ^
+   include/linux/jump_label.h:81:35: note: expanded from macro 'STATIC_KEY_CHECK_USE'
+   #define STATIC_KEY_CHECK_USE(key) WARN(!static_key_initialized,               \
+                                     ^
+   include/linux/jump_label.h:327:3: error: call to undeclared function 'WARN_ON_ONCE'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   WARN_ON_ONCE(atomic_read(&key->enabled) != 0);
+                   ^
+   6 errors generated.
+   make[2]: *** [scripts/Makefile.build:122: kernel/bounds.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1283: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:226: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +/WARN +285 include/linux/jump_label.h
+
+bf5438fca2950b Jason Baron     2010-09-17  282  
+c5905afb0ee655 Ingo Molnar     2012-02-24  283  static inline void static_key_slow_inc(struct static_key *key)
+d430d3d7e646eb Jason Baron     2011-03-16  284  {
+5cdda5117e125e Borislav Petkov 2017-10-18 @285  	STATIC_KEY_CHECK_USE(key);
+d430d3d7e646eb Jason Baron     2011-03-16  286  	atomic_inc(&key->enabled);
+d430d3d7e646eb Jason Baron     2011-03-16  287  }
+bf5438fca2950b Jason Baron     2010-09-17  288  
+c5905afb0ee655 Ingo Molnar     2012-02-24  289  static inline void static_key_slow_dec(struct static_key *key)
+bf5438fca2950b Jason Baron     2010-09-17  290  {
+5cdda5117e125e Borislav Petkov 2017-10-18  291  	STATIC_KEY_CHECK_USE(key);
+d430d3d7e646eb Jason Baron     2011-03-16  292  	atomic_dec(&key->enabled);
+bf5438fca2950b Jason Baron     2010-09-17  293  }
+bf5438fca2950b Jason Baron     2010-09-17  294  
+ce48c146495a1a Peter Zijlstra  2018-01-22  295  #define static_key_slow_inc_cpuslocked(key) static_key_slow_inc(key)
+ce48c146495a1a Peter Zijlstra  2018-01-22  296  #define static_key_slow_dec_cpuslocked(key) static_key_slow_dec(key)
+ce48c146495a1a Peter Zijlstra  2018-01-22  297  
+4c3ef6d79328c0 Jason Baron     2010-09-17  298  static inline int jump_label_text_reserved(void *start, void *end)
+4c3ef6d79328c0 Jason Baron     2010-09-17  299  {
+4c3ef6d79328c0 Jason Baron     2010-09-17  300  	return 0;
+4c3ef6d79328c0 Jason Baron     2010-09-17  301  }
+4c3ef6d79328c0 Jason Baron     2010-09-17  302  
+91bad2f8d30574 Jason Baron     2010-10-01  303  static inline void jump_label_lock(void) {}
+91bad2f8d30574 Jason Baron     2010-10-01  304  static inline void jump_label_unlock(void) {}
+91bad2f8d30574 Jason Baron     2010-10-01  305  
+d430d3d7e646eb Jason Baron     2011-03-16  306  static inline int jump_label_apply_nops(struct module *mod)
+d430d3d7e646eb Jason Baron     2011-03-16  307  {
+d430d3d7e646eb Jason Baron     2011-03-16  308  	return 0;
+d430d3d7e646eb Jason Baron     2011-03-16  309  }
+b202952075f626 Gleb Natapov    2011-11-27  310  
+e33886b38cc82a Peter Zijlstra  2015-07-24  311  static inline void static_key_enable(struct static_key *key)
+e33886b38cc82a Peter Zijlstra  2015-07-24  312  {
+5cdda5117e125e Borislav Petkov 2017-10-18  313  	STATIC_KEY_CHECK_USE(key);
+e33886b38cc82a Peter Zijlstra  2015-07-24  314  
+1dbb6704de91b1 Paolo Bonzini   2017-08-01  315  	if (atomic_read(&key->enabled) != 0) {
+1dbb6704de91b1 Paolo Bonzini   2017-08-01 @316  		WARN_ON_ONCE(atomic_read(&key->enabled) != 1);
+1dbb6704de91b1 Paolo Bonzini   2017-08-01  317  		return;
+1dbb6704de91b1 Paolo Bonzini   2017-08-01  318  	}
+1dbb6704de91b1 Paolo Bonzini   2017-08-01  319  	atomic_set(&key->enabled, 1);
+e33886b38cc82a Peter Zijlstra  2015-07-24  320  }
+e33886b38cc82a Peter Zijlstra  2015-07-24  321  
 
 -- 
-viresh
+0-DAY CI Kernel Test Service
+https://01.org/lkp

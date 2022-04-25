@@ -2,121 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A22A950DD91
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 12:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8645E50DD94
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 12:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240758AbiDYKG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 06:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43126 "EHLO
+        id S238731AbiDYKHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 06:07:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241478AbiDYKGQ (ORCPT
+        with ESMTP id S241526AbiDYKGt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 06:06:16 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B2722529
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 03:03:11 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id bv19so28573576ejb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 03:03:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=2WgIrPk8Gi6VJyQTSCt7yrmHnUX10MpNP4vrR/luUsk=;
-        b=FtmLTt9nLJTfd8E53+GL35FEXD6Y2iUV/bCMkbQrdI1H1Mn+b+qjzwcSx9WoKwN1oZ
-         3ibqxm1YuE+QsJOp0cAPCUCldZX2uxaSb3Q0hBhc2DHv8QVBidVPj4A8R+h56IxQkEDK
-         la6PsdSwjHEknO4cjKbgVgXZQxYuKYffSxEuJ7UpCt0nyri7ESoqrygRVL2BWIKYtY39
-         tcr0n6yb72i7KItNmP0T1QnDjjl3r+iq1ddxZo+DYAJHff7TDwycGbc8nGDwjCkg0T/W
-         sj2WopWH2wMf4CjEDllsNO8lLi0C3dRfAfv/JdAFGE9DvVFJatS8LuGF2RKoO8+JfirJ
-         Tmiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2WgIrPk8Gi6VJyQTSCt7yrmHnUX10MpNP4vrR/luUsk=;
-        b=JoPzzyymJdZfdulpazgFvjSumHcGxdyavW17Q2cpyCjz4B1IHShm9TfvlOUsxhZvk8
-         eFwefa+ScUIveK0A1PPJCjsdzntlO7tUuQRpDT5rGeQiVPiGGbC3u7abnuO6WUq7iGzd
-         fNbqkdl57nACei4g/GDq6OJU0i0fJHXaUnvsp2Dzq8XlmTiM3WCsbSbjZW8XWHPR+4jy
-         QiYKm1fanYgy/Z9lbVtwborwWtbZNTWCXulD7JuX7+S266xmYr9cg0dorgiPupynE3gX
-         9RHoSMYxfNUl6TznZ6Ttdb03oS1De2LI1vHoWfOmJRql/+lMWuVtFYi41bTXSVMb5cMT
-         0fkg==
-X-Gm-Message-State: AOAM531Ukc88P/02b2SUySkXkjOrfK/XrvbtIOisV7FxZWFCuzU0DO9z
-        b3NRT7UjWFaE7q9rjYGQI4dnOQ==
-X-Google-Smtp-Source: ABdhPJzkai7WwAl5gkr1Z6X8P9PyQmQBzG0zYuIWg22TReBOZg1vlzz5jQ1xhjuQjOsO2p5ns99SXQ==
-X-Received: by 2002:a17:907:1ca0:b0:6f3:a59c:288e with SMTP id nb32-20020a1709071ca000b006f3a59c288emr175991ejc.716.1650880990272;
-        Mon, 25 Apr 2022 03:03:10 -0700 (PDT)
-Received: from [192.168.0.241] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id g17-20020a056402425100b00425f2816b85sm381941edb.27.2022.04.25.03.03.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 03:03:09 -0700 (PDT)
-Message-ID: <e059bd49-a301-032a-d089-9ef6cb313089@linaro.org>
-Date:   Mon, 25 Apr 2022 12:03:08 +0200
+        Mon, 25 Apr 2022 06:06:49 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94AB9255BB
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 03:03:38 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BEAF41FB;
+        Mon, 25 Apr 2022 03:03:37 -0700 (PDT)
+Received: from [10.57.80.98] (unknown [10.57.80.98])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BCEDF3F73B;
+        Mon, 25 Apr 2022 03:03:35 -0700 (PDT)
+Message-ID: <9debe3ab-603d-0d30-a6aa-8963b48e83d4@arm.com>
+Date:   Mon, 25 Apr 2022 11:03:27 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v2 4/6] PM: opp: allow control of multiple clocks
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Andy Gross <agross@kernel.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Nishanth Menon <nm@ti.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        Viresh Kumar <vireshk@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
- <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
- <20220422234402.B66DDC385A4@smtp.kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220422234402.B66DDC385A4@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2] iommu/mediatek: fix NULL pointer dereference when
+ printing dev_name
+Content-Language: en-GB
+To:     Miles Chen <miles.chen@mediatek.com>,
+        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Joerg Roedel <jroedel@suse.de>, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220425082449.1821-1-miles.chen@mediatek.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220425082449.1821-1-miles.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/04/2022 01:44, Stephen Boyd wrote:
-> Quoting Krzysztof Kozlowski (2022-04-11 08:43:45)
->> Devices might need to control several clocks when scaling the frequency
->> and voltage.  Example is the Universal Flash Storage (UFS) which scales
->> several independent clocks with change of performance levels.
->>
->> Add parsing of multiple clocks and clock names and scale all of them,
->> when needed.  If only one clock is provided, the code should behave the
->> same as before.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
+On 2022-04-25 09:24, Miles Chen via iommu wrote:
+> When larbdev is NULL (in the case I hit, the node is incorrectly set
+> iommus = <&iommu NUM>), it will cause device_link_add() fail and
+> kernel crashes when we try to print dev_name(larbdev).
 > 
-> I vaguely recall that scaling more than one clk with an OPP table is
-> confusing? I think it's because things like dev_pm_opp_find_freq_ceil()
-> don't make sense when there's more than one frequency table. How is that
-> handled here?
+> Fix it by adding a NULL pointer check before
+> device_link_add/device_link_remove.
+> 
+> It should work for normal correct setting and avoid the crash caused
+> by my incorrect setting.
+> 
+> Error log:
+> [   18.189042][  T301] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000050
+> [   18.190247][  T301] Mem abort info:
+> [   18.190255][  T301]   ESR = 0x96000005
+> [   18.190263][  T301]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [   18.192142][  T301]   SET = 0, FnV = 0
+> [   18.192151][  T301]   EA = 0, S1PTW = 0
+> [   18.194710][  T301]   FSC = 0x05: level 1 translation fault
+> [   18.195424][  T301] Data abort info:
+> [   18.195888][  T301]   ISV = 0, ISS = 0x00000005
+> [   18.196500][  T301]   CM = 0, WnR = 0
+> [   18.196977][  T301] user pgtable: 4k pages, 39-bit VAs, pgdp=0000000104f9e000
+> [   18.197889][  T301] [0000000000000050] pgd=0000000000000000, p4d=0000000000000000, pud=0000000000000000
+> [   18.199220][  T301] Internal error: Oops: 96000005 [#1] PREEMPT SMP
+> [   18.343152][  T301] Kernel Offset: 0x1444080000 from 0xffffffc008000000
+> [   18.343988][  T301] PHYS_OFFSET: 0x40000000
+> [   18.344519][  T301] pstate: a0400005 (NzCv daif +PAN -UAO)
+> [   18.345213][  T301] pc : mtk_iommu_probe_device+0xf8/0x118 [mtk_iommu]
+> [   18.346050][  T301] lr : mtk_iommu_probe_device+0xd0/0x118 [mtk_iommu]
+> [   18.346884][  T301] sp : ffffffc00a5635e0
+> [   18.347392][  T301] x29: ffffffc00a5635e0 x28: ffffffd44a46c1d8
+> [   18.348156][  T301] x27: ffffff80c39a8000 x26: ffffffd44a80cc38
+> [   18.348917][  T301] x25: 0000000000000000 x24: ffffffd44a80cc38
+> [   18.349677][  T301] x23: ffffffd44e4da4c6 x22: ffffffd44a80cc38
+> [   18.350438][  T301] x21: ffffff80cecd1880 x20: 0000000000000000
+> [   18.351198][  T301] x19: ffffff80c439f010 x18: ffffffc00a50d0c0
+> [   18.351959][  T301] x17: ffffffffffffffff x16: 0000000000000004
+> [   18.352719][  T301] x15: 0000000000000004 x14: ffffffd44eb5d420
+> [   18.353480][  T301] x13: 0000000000000ad2 x12: 0000000000000003
+> [   18.354241][  T301] x11: 00000000fffffad2 x10: c0000000fffffad2
+> [   18.355003][  T301] x9 : a0d288d8d7142d00 x8 : a0d288d8d7142d00
+> [   18.355763][  T301] x7 : ffffffd44c2bc640 x6 : 0000000000000000
+> [   18.356524][  T301] x5 : 0000000000000080 x4 : 0000000000000001
+> [   18.357284][  T301] x3 : 0000000000000000 x2 : 0000000000000005
+> [   18.358045][  T301] x1 : 0000000000000000 x0 : 0000000000000000
+> [   18.360208][  T301] Hardware name: MT6873 (DT)
+> [   18.360771][  T301] Call trace:
+> [   18.361168][  T301]  dump_backtrace+0xf8/0x1f0
+> [   18.361737][  T301]  dump_stack_lvl+0xa8/0x11c
+> [   18.362305][  T301]  dump_stack+0x1c/0x2c
+> [   18.362816][  T301]  mrdump_common_die+0x184/0x40c [mrdump]
+> [   18.363575][  T301]  ipanic_die+0x24/0x38 [mrdump]
+> [   18.364230][  T301]  atomic_notifier_call_chain+0x128/0x2b8
+> [   18.364937][  T301]  die+0x16c/0x568
+> [   18.365394][  T301]  __do_kernel_fault+0x1e8/0x214
+> [   18.365402][  T301]  do_page_fault+0xb8/0x678
+> [   18.366934][  T301]  do_translation_fault+0x48/0x64
+> [   18.368645][  T301]  do_mem_abort+0x68/0x148
+> [   18.368652][  T301]  el1_abort+0x40/0x64
+> [   18.368660][  T301]  el1h_64_sync_handler+0x54/0x88
+> [   18.368668][  T301]  el1h_64_sync+0x68/0x6c
+> [   18.368673][  T301]  mtk_iommu_probe_device+0xf8/0x118 [mtk_iommu]
+> [   18.369840][  T301]  __iommu_probe_device+0x12c/0x358
+> [   18.370880][  T301]  iommu_probe_device+0x3c/0x31c
+> [   18.372026][  T301]  of_iommu_configure+0x200/0x274
+> [   18.373587][  T301]  of_dma_configure_id+0x1b8/0x230
+> [   18.375200][  T301]  platform_dma_configure+0x24/0x3c
+> [   18.376456][  T301]  really_probe+0x110/0x504
+> [   18.376464][  T301]  __driver_probe_device+0xb4/0x188
+> [   18.376472][  T301]  driver_probe_device+0x5c/0x2b8
+> [   18.376481][  T301]  __driver_attach+0x338/0x42c
+> [   18.377992][  T301]  bus_add_driver+0x218/0x4c8
+> [   18.379389][  T301]  driver_register+0x84/0x17c
+> [   18.380580][  T301]  __platform_driver_register+0x28/0x38
+> ...
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Fixes: 635319a4a744 ("media: iommu/mediatek: Add device_link between the consumer and the larb devices")
+> Signed-off-by: Miles Chen <miles.chen@mediatek.com>
+> 
+> ---
+> 
+> Change since v1
+> fix a build warning reported by kernel test robot
+> https://lore.kernel.org/lkml/202204231446.IYKdZ674-lkp@intel.com/
+> 
+> ---
+>   drivers/iommu/mtk_iommu.c    | 13 ++++++++-----
+>   drivers/iommu/mtk_iommu_v1.c | 13 ++++++++-----
+>   2 files changed, 16 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+> index 6fd75a60abd6..03e0133f346a 100644
+> --- a/drivers/iommu/mtk_iommu.c
+> +++ b/drivers/iommu/mtk_iommu.c
+> @@ -581,10 +581,12 @@ static struct iommu_device *mtk_iommu_probe_device(struct device *dev)
+>   		}
+>   	}
+>   	larbdev = data->larb_imu[larbid].dev;
+> -	link = device_link_add(dev, larbdev,
+> -			       DL_FLAG_PM_RUNTIME | DL_FLAG_STATELESS);
+> -	if (!link)
+> -		dev_err(dev, "Unable to link %s\n", dev_name(larbdev));
+> +	if (larbdev) {
 
-The assumption (which might need better documentation) is that first
-clock frequency is the main one:
-1. It is still in opp->rate field, so it is used everywhere when OPPs
-are compared/checked for rates.
-1. Usually is used also in opp-table nodes names.
+Until the MT8195 infra MMU support lands, is there ever a case where 
+it's actually valid for larbdev to be NULL? If not, I think it would be 
+a lot clearer to explicitly fail the probe here, rather than silently 
+continue and risk fatal errors, hangs, or other weird behaviour if 
+there's no guarantee that the correct LARB is powered up (plus then the 
+release callbacks wouldn't need to worry about it either).
 
-The logical explanation is that devices has some main operating
-frequency, e.g. the core clock, and this determines the performance. In
-the same time such device might not be able to scale this on core clock
-independently from others, this this patches.
+Robin.
 
-Best regards,
-Krzysztof
+> +		link = device_link_add(dev, larbdev,
+> +				       DL_FLAG_PM_RUNTIME | DL_FLAG_STATELESS);
+> +		if (!link)
+> +			dev_err(dev, "Unable to link %s\n", dev_name(larbdev));
+> +	}
+>   	return &data->iommu;
+>   }
+>   
+> @@ -601,7 +603,8 @@ static void mtk_iommu_release_device(struct device *dev)
+>   	data = dev_iommu_priv_get(dev);
+>   	larbid = MTK_M4U_TO_LARB(fwspec->ids[0]);
+>   	larbdev = data->larb_imu[larbid].dev;
+> -	device_link_remove(dev, larbdev);
+> +	if (larbdev)
+> +		device_link_remove(dev, larbdev);
+>   
+>   	iommu_fwspec_free(dev);
+>   }
+> diff --git a/drivers/iommu/mtk_iommu_v1.c b/drivers/iommu/mtk_iommu_v1.c
+> index ecff800656e6..18365c73eeb2 100644
+> --- a/drivers/iommu/mtk_iommu_v1.c
+> +++ b/drivers/iommu/mtk_iommu_v1.c
+> @@ -467,10 +467,12 @@ static struct iommu_device *mtk_iommu_probe_device(struct device *dev)
+>   	}
+>   
+>   	larbdev = data->larb_imu[larbid].dev;
+> -	link = device_link_add(dev, larbdev,
+> -			       DL_FLAG_PM_RUNTIME | DL_FLAG_STATELESS);
+> -	if (!link)
+> -		dev_err(dev, "Unable to link %s\n", dev_name(larbdev));
+> +	if (larbdev) {
+> +		link = device_link_add(dev, larbdev,
+> +				       DL_FLAG_PM_RUNTIME | DL_FLAG_STATELESS);
+> +		if (!link)
+> +			dev_err(dev, "Unable to link %s\n", dev_name(larbdev));
+> +	}
+>   
+>   	return &data->iommu;
+>   }
+> @@ -502,7 +504,8 @@ static void mtk_iommu_release_device(struct device *dev)
+>   	data = dev_iommu_priv_get(dev);
+>   	larbid = mt2701_m4u_to_larb(fwspec->ids[0]);
+>   	larbdev = data->larb_imu[larbid].dev;
+> -	device_link_remove(dev, larbdev);
+> +	if (larbdev)
+> +		device_link_remove(dev, larbdev);
+>   
+>   	iommu_fwspec_free(dev);
+>   }

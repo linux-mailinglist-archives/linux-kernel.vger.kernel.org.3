@@ -2,116 +2,408 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E205050E5D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:29:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47D3E50E5D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241127AbiDYQcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 12:32:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58020 "EHLO
+        id S243414AbiDYQdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 12:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243466AbiDYQci (ORCPT
+        with ESMTP id S238415AbiDYQdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 12:32:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D1E1DB1A9C
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 09:29:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650904165;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=K7g3AatLSzn8/HLimbJLWaWvwBPHnQqNizbHt7sJOJ8=;
-        b=CythLHqhzFkZvdocx29D+dh4T3KhFkeRuP8jbIzwS9JCVZVjc4leqaLUn+QUi36Y6PDAoL
-        ybNC0rkMxt7zXWCbK2sPwFlLbuzJn5+itfh31zggwfEhhV8dcKm6xQh/33IgvsUIP9lolA
-        7X9m7dLR7xYMttUldVh0IILtwVSH21s=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-297-AVsaUf9RP2yJGQNI6O5rkw-1; Mon, 25 Apr 2022 12:29:24 -0400
-X-MC-Unique: AVsaUf9RP2yJGQNI6O5rkw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 099CD1C0513A;
-        Mon, 25 Apr 2022 16:29:24 +0000 (UTC)
-Received: from fuller.cnet (ovpn-112-4.gru2.redhat.com [10.97.112.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 293C640CF91E;
-        Mon, 25 Apr 2022 16:29:22 +0000 (UTC)
-Received: by fuller.cnet (Postfix, from userid 1000)
-        id 592EF416F574; Mon, 25 Apr 2022 13:29:04 -0300 (-03)
-Date:   Mon, 25 Apr 2022 13:29:04 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Mon, 25 Apr 2022 12:33:12 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05BF313F07;
+        Mon, 25 Apr 2022 09:30:07 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23PEhvwi009798;
+        Mon, 25 Apr 2022 16:29:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=r4qkiLwhya5oWZXoi5ouFooIYkto4KiJzfBMS5CvVYM=;
+ b=H3hq947eLC+CFFdD35aKY0hERPS+HEmVriGh1o8Cf8MuVy6P8ziyl9cksWwKUWzswkz4
+ FzGGj/O993TdLOuutE1C9j7WNJFvc/yPhmXj5NHRL5GglpjQs6pp/WMvM189cfc3ukoj
+ d98Nw16kYpRTNGiB2Wd+btFImlPExKvcXoTd8rFpq4azXYsdYrlOva6Zpy1OkWaeLnvy
+ 6U+TCrkS+KM7Q0KT4uWGoREo1pXp97QhFC5sD3b74h8Z3P+AbM5L9J2FqmUhRWqa5aYJ
+ e1ZR7KwXrn8rvV6otwQvCNCVThVNkD8XeYz5wT2bTQzgbPmWHDPtyT/mGmjxf/MewGb+ bA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fnwng2mgn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Apr 2022 16:29:39 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23PFKJPY014482;
+        Mon, 25 Apr 2022 16:29:39 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fnwng2mg1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Apr 2022 16:29:39 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23PGIeo1016077;
+        Mon, 25 Apr 2022 16:29:37 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04fra.de.ibm.com with ESMTP id 3fm938t6dc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Apr 2022 16:29:37 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23PGTYFu45810120
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 25 Apr 2022 16:29:34 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B9E8E42041;
+        Mon, 25 Apr 2022 16:29:34 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EBF644203F;
+        Mon, 25 Apr 2022 16:29:32 +0000 (GMT)
+Received: from sig-9-65-74-143.ibm.com (unknown [9.65.74.143])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 25 Apr 2022 16:29:32 +0000 (GMT)
+Message-ID: <12108732c287a85a417927de37cb027cefae6e06.camel@linux.ibm.com>
+Subject: Re: [PATCH] Carry forward IMA measurement log on kexec on x86_64
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Jonathan McDowell <noodles@fb.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, Nitesh Lal <nilal@redhat.com>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Christoph Lameter <cl@linux.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Oscar Shiang <oscar0225@livemail.tw>
-Subject: Re: [patch v12 00/13] extensible prctl task isolation interface and
- vmstat sync
-Message-ID: <YmbMUAkOxsStAP36@fuller.cnet>
-References: <20220315153132.717153751@fedora.localdomain>
- <20220317150804.GB459366@lothringen>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220317150804.GB459366@lothringen>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Date:   Mon, 25 Apr 2022 12:29:17 -0400
+In-Reply-To: <YmKyvlF3my1yWTvK@noodles-fedora-PC23Y6EG>
+References: <YmKyvlF3my1yWTvK@noodles-fedora-PC23Y6EG>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 4FwVakIQWg86GLLMMxT-Ze_t5LsdqQFz
+X-Proofpoint-ORIG-GUID: 9JPt9lCb21sjsaUK0mdH3MYBGlCHKxiw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-25_08,2022-04-25_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 adultscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0
+ spamscore=0 phishscore=0 priorityscore=1501 clxscore=1011 mlxscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204250068
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 04:08:04PM +0100, Frederic Weisbecker wrote:
-> On Tue, Mar 15, 2022 at 12:31:32PM -0300, Marcelo Tosatti wrote:
-> > The logic to disable vmstat worker thread, when entering
-> > nohz full, does not cover all scenarios. For example, it is possible
-> > for the following to happen:
-> > 
-> > 1) enter nohz_full, which calls refresh_cpu_vm_stats, syncing the stats.
-> > 2) app runs mlock, which increases counters for mlock'ed pages.
-> > 3) start -RT loop
-> > 
-> > Since refresh_cpu_vm_stats from nohz_full logic can happen _before_
-> > the mlock, vmstat shepherd can restart vmstat worker thread on
-> > the CPU in question.
-> > 
-> > To fix this, add task isolation prctl interface to quiesce
-> > deferred actions when returning to userspace.
-> > 
-> > The patchset is based on ideas and code from the
-> > task isolation patchset from Alex Belits:
-> > https://lwn.net/Articles/816298/
-> > 
-> > Please refer to Documentation/userspace-api/task_isolation.rst
-> > (patch 1) for details. Its attached at the end of this message
-> > in .txt format as well.
-> > 
-> > Note: the prctl interface is independent of nohz_full=.
-> > 
-> > The userspace patches can be found at https://people.redhat.com/~mtosatti/task-isol-v6-userspace-patches/
-> > 
-> > - qemu-task-isolation.patch: activate task isolation from CPU execution loop
-> > - rt-tests-task-isolation.patch: add task isolation activation to cyclictest/oslat
-> > - util-linux-chisol.patch: add chisol tool to util-linux.
-> 
-> I still see a few details to sort out but overall the whole thing looks good:
-> 
->   Acked-by: Frederic Weisbecker <fweisbec@gmail.com>
-> 
-> Perhaps it's time to apply this patchset on some branch and iterate from there.
-> 
-> Thomas, Peter, what do you think?
-> 
-> Thanks!
+Hi Jonathan,
 
-Ping ?
+On Fri, 2022-04-22 at 13:50 +0000, Jonathan McDowell wrote:
+> On kexec file load Integrity Measurement Architecture (IMA) subsystem
+> may verify the IMA signature of the kernel and initramfs, and measure
+> it. The command line parameters passed to the kernel in the kexec call
+> may also be measured by IMA. A remote attestation service can verify
+> a TPM quote based on the TPM event log, the IMA measurement list, and
+> the TPM PCR data. This can be achieved only if the IMA measurement log
+> is carried over from the current kernel to the next kernel across
+> the kexec call.
+> 
+> powerpc and ARM64 both achieve this using device tree with a
+> "linux,ima-kexec-buffer" node. x86 platforms generally don't make use of
+> device tree, so the IMA infrastructure is extended to allow non device
+> tree platforms to provide a log buffer. x86 then passes the IMA buffer
+> to the new kernel via the setup_data mechanism.
+> 
+> Signed-off-by: Jonathan McDowell <noodles@fb.com>
+
+FYI, after applying, building, and booting a kernel with this patch,
+"kexec -s -l /boot/vmlinuz-5.18.0-rc4+ --reuse-cmdline --
+initrd=/boot/initramfs-5.18.0-rc4+.img" properly loads the kernel, but
+"kexec -s -e" fails to reboot, at least on a test laptop even with only
+the "boot_aggregate" measurement record.
+
+Without enabling CONFIG_IMA_KEXEC, kexec boots properly.
+
+thanks,
+
+Mimi
+
+> ---
+>  arch/x86/Kconfig                      |  1 +
+>  arch/x86/include/uapi/asm/bootparam.h |  9 ++++
+>  arch/x86/kernel/e820.c                |  6 +--
+>  arch/x86/kernel/kexec-bzimage64.c     | 37 ++++++++++++++++-
+>  arch/x86/kernel/setup.c               | 26 ++++++++++++
+>  include/linux/ima.h                   |  1 +
+>  security/integrity/ima/ima_kexec.c    | 59 ++++++++++++++++++++++++++-
+>  7 files changed, 134 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index b0142e01002e..bde4959d9bdc 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -2017,6 +2017,7 @@ config KEXEC_FILE
+>  	bool "kexec file based system call"
+>  	select KEXEC_CORE
+>  	select BUILD_BIN2C
+> +	select HAVE_IMA_KEXEC if IMA
+>  	depends on X86_64
+>  	depends on CRYPTO=y
+>  	depends on CRYPTO_SHA256=y
+> diff --git a/arch/x86/include/uapi/asm/bootparam.h b/arch/x86/include/uapi/asm/bootparam.h
+> index b25d3f82c2f3..2f7b138a9388 100644
+> --- a/arch/x86/include/uapi/asm/bootparam.h
+> +++ b/arch/x86/include/uapi/asm/bootparam.h
+> @@ -10,6 +10,7 @@
+>  #define SETUP_EFI			4
+>  #define SETUP_APPLE_PROPERTIES		5
+>  #define SETUP_JAILHOUSE			6
+> +#define SETUP_IMA			7
+>  
+>  #define SETUP_INDIRECT			(1<<31)
+>  
+> @@ -171,6 +172,14 @@ struct jailhouse_setup_data {
+>  	} __attribute__((packed)) v2;
+>  } __attribute__((packed));
+>  
+> +/*
+> + * IMA buffer setup data information from the previous kernel during kexec
+> + */
+> +struct ima_setup_data {
+> +	__u64 addr;
+> +	__u64 size;
+> +} __attribute__((packed));
+> +
+>  /* The so-called "zeropage" */
+>  struct boot_params {
+>  	struct screen_info screen_info;			/* 0x000 */
+> diff --git a/arch/x86/kernel/e820.c b/arch/x86/kernel/e820.c
+> index f267205f2d5a..9dac24680ff8 100644
+> --- a/arch/x86/kernel/e820.c
+> +++ b/arch/x86/kernel/e820.c
+> @@ -1017,10 +1017,10 @@ void __init e820__reserve_setup_data(void)
+>  		e820__range_update(pa_data, sizeof(*data)+data->len, E820_TYPE_RAM, E820_TYPE_RESERVED_KERN);
+>  
+>  		/*
+> -		 * SETUP_EFI is supplied by kexec and does not need to be
+> -		 * reserved.
+> +		 * SETUP_EFI and SETUP_IMA are supplied by kexec and do not need
+> +		 * to be reserved.
+>  		 */
+> -		if (data->type != SETUP_EFI)
+> +		if (data->type != SETUP_EFI && data->type != SETUP_IMA)
+>  			e820__range_update_kexec(pa_data,
+>  						 sizeof(*data) + data->len,
+>  						 E820_TYPE_RAM, E820_TYPE_RESERVED_KERN);
+> diff --git a/arch/x86/kernel/kexec-bzimage64.c b/arch/x86/kernel/kexec-bzimage64.c
+> index 170d0fd68b1f..07625da33075 100644
+> --- a/arch/x86/kernel/kexec-bzimage64.c
+> +++ b/arch/x86/kernel/kexec-bzimage64.c
+> @@ -186,6 +186,32 @@ setup_efi_state(struct boot_params *params, unsigned long params_load_addr,
+>  }
+>  #endif /* CONFIG_EFI */
+>  
+> +#ifdef CONFIG_IMA_KEXEC
+> +static void
+> +setup_ima_state(const struct kimage *image, struct boot_params *params,
+> +		unsigned long params_load_addr,
+> +		unsigned int ima_setup_data_offset)
+> +{
+> +	struct setup_data *sd = (void *)params + ima_setup_data_offset;
+> +	struct ima_setup_data *ima = (void *)sd + sizeof(struct setup_data);
+> +	unsigned long setup_data_phys;
+> +
+> +	if (!image->ima_buffer_size)
+> +		return;
+> +
+> +	sd->type = SETUP_IMA;
+> +	sd->len = sizeof(*ima);
+> +
+> +	ima->addr = image->ima_buffer_addr;
+> +	ima->size = image->ima_buffer_size;
+> +
+> +	/* Add setup data */
+> +	setup_data_phys = params_load_addr + ima_setup_data_offset;
+> +	sd->next = params->hdr.setup_data;
+> +	params->hdr.setup_data = setup_data_phys;
+> +}
+> +#endif /* CONFIG_IMA_KEXEC */
+> +
+>  static int
+>  setup_boot_parameters(struct kimage *image, struct boot_params *params,
+>  		      unsigned long params_load_addr,
+> @@ -247,6 +273,13 @@ setup_boot_parameters(struct kimage *image, struct boot_params *params,
+>  	setup_efi_state(params, params_load_addr, efi_map_offset, efi_map_sz,
+>  			efi_setup_data_offset);
+>  #endif
+> +
+> +#ifdef CONFIG_IMA_KEXEC
+> +	/* Setup IMA log buffer state */
+> +	setup_ima_state(image, params, params_load_addr,
+> +			efi_setup_data_offset + ALIGN(efi_map_sz, 16) + sizeof(struct setup_data));
+> +#endif
+> +
+>  	/* Setup EDD info */
+>  	memcpy(params->eddbuf, boot_params.eddbuf,
+>  				EDDMAXNR * sizeof(struct edd_info));
+> @@ -401,7 +434,9 @@ static void *bzImage64_load(struct kimage *image, char *kernel,
+>  	params_cmdline_sz = ALIGN(params_cmdline_sz, 16);
+>  	kbuf.bufsz = params_cmdline_sz + ALIGN(efi_map_sz, 16) +
+>  				sizeof(struct setup_data) +
+> -				sizeof(struct efi_setup_data);
+> +				sizeof(struct efi_setup_data) +
+> +				sizeof(struct setup_data) +
+> +				sizeof(struct ima_setup_data);
+>  
+>  	params = kzalloc(kbuf.bufsz, GFP_KERNEL);
+>  	if (!params)
+> diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+> index c95b9ac5a457..8b0e7725f918 100644
+> --- a/arch/x86/kernel/setup.c
+> +++ b/arch/x86/kernel/setup.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/dma-map-ops.h>
+>  #include <linux/dmi.h>
+>  #include <linux/efi.h>
+> +#include <linux/ima.h>
+>  #include <linux/init_ohci1394_dma.h>
+>  #include <linux/initrd.h>
+>  #include <linux/iscsi_ibft.h>
+> @@ -335,6 +336,28 @@ static void __init reserve_initrd(void)
+>  }
+>  #endif /* CONFIG_BLK_DEV_INITRD */
+>  
+> +#ifdef CONFIG_IMA_KEXEC
+> +static void __init add_early_ima_buffer(u64 phys_addr)
+> +{
+> +	struct ima_setup_data *data;
+> +
+> +	data = early_memremap(phys_addr + sizeof(struct setup_data),
+> +			      sizeof(*data));
+> +	if (!data) {
+> +		pr_warn("setup: failed to memremap ima_setup_data entry\n");
+> +		return;
+> +	}
+> +	memblock_reserve(data->addr, data->size);
+> +	ima_set_kexec_buffer(data->addr, data->size);
+> +	early_memunmap(data, sizeof(*data));
+> +}
+> +#else
+> +static void __init add_early_ima_buffer(u64 phys_addr)
+> +{
+> +	pr_warn("Passed IMA kexec data, but CONFIG_IMA_KEXEC not set. Ignoring.\n");
+> +}
+> +#endif
+> +
+>  static void __init parse_setup_data(void)
+>  {
+>  	struct setup_data *data;
+> @@ -360,6 +383,9 @@ static void __init parse_setup_data(void)
+>  		case SETUP_EFI:
+>  			parse_efi_setup(pa_data, data_len);
+>  			break;
+> +		case SETUP_IMA:
+> +			add_early_ima_buffer(pa_data);
+> +			break;
+>  		default:
+>  			break;
+>  		}
+> diff --git a/include/linux/ima.h b/include/linux/ima.h
+> index 426b1744215e..f58aed7acad4 100644
+> --- a/include/linux/ima.h
+> +++ b/include/linux/ima.h
+> @@ -48,6 +48,7 @@ static inline void ima_appraise_parse_cmdline(void) {}
+>  
+>  #ifdef CONFIG_IMA_KEXEC
+>  extern void ima_add_kexec_buffer(struct kimage *image);
+> +extern void ima_set_kexec_buffer(phys_addr_t phys_addr, size_t size);
+>  #endif
+>  
+>  #else
+> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
+> index 13753136f03f..419c50cfe6b9 100644
+> --- a/security/integrity/ima/ima_kexec.c
+> +++ b/security/integrity/ima/ima_kexec.c
+> @@ -10,6 +10,7 @@
+>  #include <linux/seq_file.h>
+>  #include <linux/vmalloc.h>
+>  #include <linux/kexec.h>
+> +#include <linux/memblock.h>
+>  #include <linux/of.h>
+>  #include <linux/ima.h>
+>  #include "ima.h"
+> @@ -134,10 +135,66 @@ void ima_add_kexec_buffer(struct kimage *image)
+>  }
+>  #endif /* IMA_KEXEC */
+>  
+> +#ifndef CONFIG_OF
+> +static phys_addr_t ima_early_kexec_buffer_phys;
+> +static size_t ima_early_kexec_buffer_size;
+> +
+> +void __init ima_set_kexec_buffer(phys_addr_t phys_addr, size_t size)
+> +{
+> +	if (size == 0)
+> +		return;
+> +
+> +	ima_early_kexec_buffer_phys = phys_addr;
+> +	ima_early_kexec_buffer_size = size;
+> +}
+> +
+> +int __init ima_free_kexec_buffer(void)
+> +{
+> +	int rc;
+> +
+> +	if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
+> +		return -ENOTSUPP;
+> +
+> +	if (ima_early_kexec_buffer_size == 0)
+> +		return -ENOENT;
+> +
+> +	rc = memblock_phys_free(ima_early_kexec_buffer_phys,
+> +				ima_early_kexec_buffer_size);
+> +	if (rc)
+> +		return rc;
+> +
+> +	ima_early_kexec_buffer_phys = 0;
+> +	ima_early_kexec_buffer_size = 0;
+> +
+> +	return 0;
+> +}
+> +
+> +int __init ima_get_kexec_buffer(void **addr, size_t *size)
+> +{
+> +	if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
+> +		return -ENOTSUPP;
+> +
+> +	if (ima_early_kexec_buffer_size == 0)
+> +		return -ENOENT;
+> +
+> +	*addr = __va(ima_early_kexec_buffer_phys);
+> +	*size = ima_early_kexec_buffer_size;
+> +
+> +	return 0;
+> +}
+> +
+> +#else
+> +
+> +void __init ima_set_kexec_buffer(phys_addr_t phys_addr, size_t size)
+> +{
+> +	pr_warn("CONFIG_OF enabled, ignoring call to set buffer details.\n");
+> +}
+> +#endif /* CONFIG_OF */
+> +
+>  /*
+>   * Restore the measurement list from the previous kernel.
+>   */
+> -void ima_load_kexec_buffer(void)
+> +void __init ima_load_kexec_buffer(void)
+>  {
+>  	void *kexec_buffer = NULL;
+>  	size_t kexec_buffer_size = 0;
+
 

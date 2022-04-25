@@ -2,200 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9095A50E1F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:34:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2910150E1D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:32:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242091AbiDYNfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 09:35:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55642 "EHLO
+        id S242032AbiDYNe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 09:34:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242078AbiDYNe6 (ORCPT
+        with ESMTP id S242061AbiDYNeW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 09:34:58 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C509BDE
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 06:31:54 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id v1so14442766ljv.3
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 06:31:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ccosb5OLlMLmZzgxt/IQ3pX0ynIyPqTno6b0V3kf4QY=;
-        b=h7uireBSCGtFURN6YqTRU6eeR3CHZOnsJGdnJeqP6QwMQSj2SGyD6UbXohwPydwgpb
-         vmp6zbfchpXP81+EMOgnQ6MZBbHkyY+H4yQJgu97wVoKnngHY0EhbUDlsCHJWCWJOO55
-         ivlRGRKFNW6E+Wcrd419jbvv0nqOCS8FuzKv8YcVTHRAUJ1b4xfdBe+mJkWIk6FPRvLy
-         NXvWLG8SAvVKJJ0hmO9ASek+ULoemo+DFdWIJR+7SwMOvu6bmOAjjCB7A6VYeShtF2II
-         fBr7jitEgZWVGOD0KrQl+SLq9Cylu1iLDtOwjDbx64PfOPqPBDHlSZFYZ1M5Tpp9qfVm
-         00XA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ccosb5OLlMLmZzgxt/IQ3pX0ynIyPqTno6b0V3kf4QY=;
-        b=QKJlog7IOpNFoAcyUtqqsr1P7BXztNNEgjdzZqyib/atp1OMF0xO9aKl9qJq4vsd5S
-         0l0FvPbAbJz+dUgFMcdClFASLgm8VWbcSFxgPwAZb9uWZBlXGgoiQN+VyPe3vOxiOrm3
-         8B4WRAqqaoXXDL0P7Vro47TCKQ5C7LoeMQBHfJsa5/9BOJw8XYxoiogIOHGMHymKqoIL
-         WRkFVTcsfz8uw+EpLlS5UEuJ08sSUSHd+0ZvMo6ZmxqKJxBvwRCpw/D1MecEPMeN6oFL
-         Y9ihZWpcxh992Y1bl2PGiMfkIWewt/9Dg0eW3ZNpgeANNPdG7VoO0GPQJgV+q5tjgVuA
-         +78Q==
-X-Gm-Message-State: AOAM533ZCVzO4ofDcIl9IVRo+OEIexOV6JSN/I3E5onYN922kyg3SVA7
-        X9j2ugC9lVU3FLPeYOqhZLR7Dw==
-X-Google-Smtp-Source: ABdhPJwNvTMsZhVhg8b9FrfRFyxjyOQegcTFZsO1MwPyhBNFwitqNOpsc85qd0SqXs/hSiiuG2mNFA==
-X-Received: by 2002:a2e:701a:0:b0:24f:a7d:2b2c with SMTP id l26-20020a2e701a000000b0024f0a7d2b2cmr5702849ljc.51.1650893512260;
-        Mon, 25 Apr 2022 06:31:52 -0700 (PDT)
-Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id v7-20020a196107000000b0046d05202c61sm1414553lfb.65.2022.04.25.06.31.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 06:31:51 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Johan Hovold <johan@kernel.org>, Rob Herring <robh+dt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        devicetree@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH v3] dt-bindings: gnss: Rewrite Mediatek bindings in YAML
-Date:   Mon, 25 Apr 2022 15:29:47 +0200
-Message-Id: <20220425132947.1311171-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.35.1
+        Mon, 25 Apr 2022 09:34:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CFCFF2A6
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 06:31:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650893476;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=vRkFZZ+bpHCqYl5M+UHtMrybHZdURp3ea7MDvTxPK6I=;
+        b=fDpfV6Gilsm7IrLB5+RD8C85Wxrm4JoJlS7Zdgjiwf5YUbWAXfINqvpakQPOL0KpoFwaJk
+        5qeA6jnGn8pL2whcrqDekkKrB1r1SjIPRm3CLjZTaP/GsVFho8CzjY7O+V+/6TmLuCZMhL
+        6NRR4/EIIjaiI2RF2+vGQH+0tyuoy8o=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-624-6m0Yp1bkP2SlnB40Z61Srw-1; Mon, 25 Apr 2022 09:31:14 -0400
+X-MC-Unique: 6m0Yp1bkP2SlnB40Z61Srw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 47F7C380050C;
+        Mon, 25 Apr 2022 13:31:13 +0000 (UTC)
+Received: from localhost (unknown [10.76.0.40])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BB71F404E4A6;
+        Mon, 25 Apr 2022 13:31:12 +0000 (UTC)
+From:   Vaibhav Nagare <vnagare@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-staging@lists.linux.dev, johan@kernel.org, elder@kernel.org,
+        gregkh@linuxfoundation.org, greybus-dev@lists.linaro.org,
+        vnagare@redhat.com
+Subject: [PATCH] staging: greybus: tools: fix spelling
+Date:   Mon, 25 Apr 2022 19:01:11 +0530
+Message-Id: <20220425133111.118257-1-vnagare@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This rewrites the Mediatek GNSS bindings in YAML.
+Fixed the spelling mistake of appendation to appending.
 
-Cc: devicetree@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzk@kernel.org>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Vaibhav Nagare <vnagare@redhat.com>
 ---
-ChangeLog v2->v3:
-- Add the missed gnss-fix-gpios.
-- Move allOf to right before the properties.
-- Keep the description on timepulse-gpios because it documents
-  which pins are used on this chip.
-ChangeLog v1->v2:
-- New patch since Krzysztof pointed out there is really just
-  one more binding to convert, so why not.
----
- .../devicetree/bindings/gnss/mediatek.txt     | 35 -----------
- .../devicetree/bindings/gnss/mediatek.yaml    | 59 +++++++++++++++++++
- 2 files changed, 59 insertions(+), 35 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/gnss/mediatek.txt
- create mode 100644 Documentation/devicetree/bindings/gnss/mediatek.yaml
+ drivers/staging/greybus/tools/loopback_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/gnss/mediatek.txt b/Documentation/devicetree/bindings/gnss/mediatek.txt
-deleted file mode 100644
-index 80cb802813c5..000000000000
---- a/Documentation/devicetree/bindings/gnss/mediatek.txt
-+++ /dev/null
-@@ -1,35 +0,0 @@
--Mediatek-based GNSS Receiver DT binding
--
--Mediatek chipsets are used in GNSS-receiver modules produced by several
--vendors and can use a UART interface.
--
--Please see Documentation/devicetree/bindings/gnss/gnss.txt for generic
--properties.
--
--Required properties:
--
--- compatible	: Must be
--
--			"globaltop,pa6h"
--
--- vcc-supply	: Main voltage regulator (pin name: VCC)
--
--Optional properties:
--
--- current-speed		: Default UART baud rate
--- gnss-fix-gpios	: GPIO used to determine device position fix state
--			  (pin name: FIX, 3D_FIX)
--- reset-gpios		: GPIO used to reset the device (pin name: RESET, NRESET)
--- timepulse-gpios	: Time pulse GPIO (pin name: PPS1, 1PPS)
--- vbackup-supply	: Backup voltage regulator (pin name: VBAT, VBACKUP)
--
--Example:
--
--serial@1234 {
--	compatible = "ns16550a";
--
--	gnss {
--		compatible = "globaltop,pa6h";
--		vcc-supply = <&vcc_3v3>;
--	};
--};
-diff --git a/Documentation/devicetree/bindings/gnss/mediatek.yaml b/Documentation/devicetree/bindings/gnss/mediatek.yaml
-new file mode 100644
-index 000000000000..45cf01b27700
---- /dev/null
-+++ b/Documentation/devicetree/bindings/gnss/mediatek.yaml
-@@ -0,0 +1,59 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/gnss/mediatek.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Mediatek GNSS Receiver Device Tree Bindings
-+
-+maintainers:
-+  - Johan Hovold <johan@kernel.org>
-+
-+description:
-+  Mediatek chipsets are used in GNSS-receiver modules produced by several
-+  vendors and can use a UART interface.
-+
-+allOf:
-+  - $ref: gnss-common.yaml#
-+
-+properties:
-+  compatible:
-+    const: globaltop,pa6h
-+
-+  vcc-supply:
-+    description:
-+      Main voltage regulator, pin name VCC.
-+
-+  reset-gpios:
-+    maxItems: 1
-+    description: An optional reset line, with names such as RESET or NRESET.
-+      If the line is active low it should be flagged with GPIO_ACTIVE_LOW.
-+
-+  timepulse-gpios:
-+    description: Comes with pin names such as PPS1 or 1PPS.
-+
-+  gnss-fix-gpios:
-+    maxItems: 1
-+    description: GPIO used to determine device position fix state, pin names
-+      FIX or 3D_FIX.
-+
-+  vbackup-supply:
-+    description:
-+      Regulator providing backup voltage, pin names such as VBAT or VBACKUP.
-+
-+required:
-+  - compatible
-+  - vcc-supply
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    serial {
-+        gnss {
-+            compatible = "globaltop,pa6h";
-+            vcc-supply = <&vcc_3v3>;
-+            reset-gpios = <&gpio 1 GPIO_ACTIVE_LOW>;
-+        };
-+    };
+diff --git a/drivers/staging/greybus/tools/loopback_test.c b/drivers/staging/greybus/tools/loopback_test.c
+index 867bf289df2e..4c42e393cd3d 100644
+--- a/drivers/staging/greybus/tools/loopback_test.c
++++ b/drivers/staging/greybus/tools/loopback_test.c
+@@ -533,7 +533,7 @@ static int log_results(struct loopback_test *t)
+ 
+ 		fd = open(file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
+ 		if (fd < 0) {
+-			fprintf(stderr, "unable to open %s for appendation\n", file_name);
++			fprintf(stderr, "unable to open %s for appending\n", file_name);
+ 			abort();
+ 		}
+ 
 -- 
-2.35.1
+2.27.0
 

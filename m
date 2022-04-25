@@ -2,93 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D8650D7E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 05:56:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E9FF50D7EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 05:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240807AbiDYD7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 23:59:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37994 "EHLO
+        id S240814AbiDYEBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 00:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240612AbiDYD7Q (ORCPT
+        with ESMTP id S229996AbiDYEBW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 23:59:16 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59662326E0;
-        Sun, 24 Apr 2022 20:56:11 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id k14so12386896pga.0;
-        Sun, 24 Apr 2022 20:56:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=nRYoxd4SVcaYEgYokuQbUOJXKX9A1z1JFiyvn7Q7fAk=;
-        b=jdKLJO/DgNU4XwfRtwLmT6K93znOtIz79LvBpvHyt225nnMskN7zRJBDrfqWJer7sz
-         QMRi9NB5nwrMvxTV8AjMpnlshoKu0El3zZCjMDi7hw6/cBI03oFILfUJ1IIXdPoJM54o
-         RVvRH/sZA0lmE1OcMEVOJrIXwy7k3HLB+e5ll2AVmopvYJJsLgp4BOCNWsXun903qiMV
-         XCOQnHxHHZzIsc+3EOgDJEJ1fSpfSkuHJCf6OCy7y7ZVTsVz33bGsMk3qhCuynOn7WMS
-         nCjyxjh54j4MR+AzSIvSQGxML5D/1ra8EJCXXhiWBUcL4mzVerTMXlJeijdm3dN5k5FF
-         5rSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=nRYoxd4SVcaYEgYokuQbUOJXKX9A1z1JFiyvn7Q7fAk=;
-        b=F7bhBiR69XDF8oDcU/ub9kH1L6cJQahVl4A5HOfWYw+tjSo75EggG00nUhDSh7umK/
-         oj82Lsvbu/wGRj5eAObRevENFdoOow72Av36WLY4JY23LkdTFA9bfeElYvL4spk2xtgD
-         uGOjxRLXVcVyxbMOpdvYASYsNrE0AwwYDgVYCghtPy7BZPg2KXfEBaZ1LHSUdwA1ejE0
-         K7aLUK7/WknRslTL27Z+jeuTkkapZAEe5yeZqIYwERTI9W+RjVLP2L9JE3FjUkhrfE5K
-         u48+iIbpN/lA5ijNHAf3Pr8997GZxaudjmW05P2RRQo4MyOcK+m5yH0gcUbmH8wbIGzd
-         cVsA==
-X-Gm-Message-State: AOAM53150z91Or9YNf5viTsdVTeJiI0KXLxQ/PCVot30Ojb1tQpBEziZ
-        YWBPlrAhN8N3Yl1FfXyOyX5h7y6spHuUKw==
-X-Google-Smtp-Source: ABdhPJyvohF2mxJIDNu78p/OKu6B2/C8x6iyU+yZ8mxW1TvHW9NQI2XkF2PBcDR24NESDzSLO4NMxA==
-X-Received: by 2002:a63:fd07:0:b0:3aa:1cd9:194f with SMTP id d7-20020a63fd07000000b003aa1cd9194fmr13536057pgh.509.1650858970763;
-        Sun, 24 Apr 2022 20:56:10 -0700 (PDT)
-Received: from ethan-Latitude-7280.localdomain (125-228-239-174.hinet-ip.hinet.net. [125.228.239.174])
-        by smtp.googlemail.com with ESMTPSA id n59-20020a17090a5ac100b001cd498dc153sm15123367pji.3.2022.04.24.20.56.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 20:56:10 -0700 (PDT)
-From:   Ethan Yang <ipis.yang@gmail.com>
-X-Google-Original-From: Ethan Yang <etyang@sierrawireless.com>
-To:     johan@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     gchiang@sierrawireless.com, ipis.yang@gmail.com,
-        Ethan Yang <etyang@sierrawireless.com>
-Subject: [PATCH v2] add support for Sierra Wireless EM7590 0xc080 and 0xc081 compositions.
-Date:   Mon, 25 Apr 2022 11:55:20 +0800
-Message-Id: <20220425035520.4717-1-etyang@sierrawireless.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220425034204.4345-1-etyang@sierrawireless.com>
-References: <20220425034204.4345-1-etyang@sierrawireless.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 25 Apr 2022 00:01:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E5A35AAC;
+        Sun, 24 Apr 2022 20:58:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3950A60F52;
+        Mon, 25 Apr 2022 03:58:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F4153C385A4;
+        Mon, 25 Apr 2022 03:58:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650859096;
+        bh=Qg2qC4MlVV8ba/9Yso7PQ4kibU52a66r+hx9krqhIq0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oF8RXR1SU9VpaGp2Xxe2qjZ867pLsHYNH4mGXr8ciFPnEO0gwjcYmhWU8+71iZa6A
+         Zb1l/Put2MGXbfsiiRVjVaLm6dYVjCA2uCfd9EFznRmUc74Y1KI6UcNMHJNqhTCbO3
+         StY27togyW6lLrjN1Agca5+p8VgKMsubGjjGy5gOX0lAsWmDukumP0lysW7ET0Dn2l
+         h2E9ZPg71hza1+dNjMQB5ZHzK3VYs7rVgk0cT2aLyuiV/u90OFg1o6YZ3NwIQVNX46
+         zgFeGIiLYzMMBQfPhXKn/d8PCOC5tJjqbRb3WPVvzI2koosu7z8mXifSh1wHFriX75
+         /oXvxzxGgE+Vw==
+Date:   Mon, 25 Apr 2022 06:58:08 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guillaume Tucker <gtucker@collabora.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mark-PK Tsai <mark-pk.tsai@mediatek.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Tony Lindgren <tony@atomide.com>,
+        Will Deacon <will@kernel.org>,
+        "kernelci . org bot" <bot@kernelci.org>,
+        kernelci-results@groups.io,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "# 3.4.x" <stable@vger.kernel.org>
+Subject: Re: [PATCH] arm[64]/memremap: don't abuse pfn_valid() to ensure
+ presence of linear map
+Message-ID: <YmYcUEZfyk1FbJyW@kernel.org>
+References: <20220424172044.22220-1-rppt@kernel.org>
+ <CAMj1kXGzL2u1gOBs7EutZXXej-2-a+EouEZySXXsQ0Dz0gaKTA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXGzL2u1gOBs7EutZXXej-2-a+EouEZySXXsQ0Dz0gaKTA@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-add support for Sierra Wireless EM7590 0xc080 and 0xc081
+On Sun, Apr 24, 2022 at 11:19:05PM +0200, Ard Biesheuvel wrote:
+> On Sun, 24 Apr 2022 at 19:22, Mike Rapoport <rppt@kernel.org> wrote:
+> >
+> > From: Mike Rapoport <rppt@linux.ibm.com>
+> >
+> > The semantics of pfn_valid() is to check presence of the memory map for a
+> > PFN and not whether a PFN is covered by the linear map. The memory map may
+> > be present for NOMAP memory regions, but they won't be mapped in the linear
+> > mapping.  Accessing such regions via __va() when they are memremap()'ed
+> > will cause a crash.
 
-Signed-off-by: Ethan Yang <etyang@sierrawireless.com>
----
- drivers/usb/serial/qcserial.c | 2 ++
- 1 file changed, 2 insertions(+)
+...
 
-diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
-index c18bf8164bc2..586ef5551e76 100644
---- a/drivers/usb/serial/qcserial.c
-+++ b/drivers/usb/serial/qcserial.c
-@@ -166,6 +166,8 @@ static const struct usb_device_id id_table[] = {
- 	{DEVICE_SWI(0x1199, 0x9090)},	/* Sierra Wireless EM7565 QDL */
- 	{DEVICE_SWI(0x1199, 0x9091)},	/* Sierra Wireless EM7565 */
- 	{DEVICE_SWI(0x1199, 0x90d2)},	/* Sierra Wireless EM9191 QDL */
-+	{DEVICE_SWI(0x1199, 0xc080)},	/* Sierra Wireless EM7590 QDL */
-+	{DEVICE_SWI(0x1199, 0xc081)},	/* Sierra Wireless EM7590 */
- 	{DEVICE_SWI(0x413c, 0x81a2)},	/* Dell Wireless 5806 Gobi(TM) 4G LTE Mobile Broadband Card */
- 	{DEVICE_SWI(0x413c, 0x81a3)},	/* Dell Wireless 5570 HSPA+ (42Mbps) Mobile Broadband Card */
- 	{DEVICE_SWI(0x413c, 0x81a4)},	/* Dell Wireless 5570e HSPA+ (42Mbps) Mobile Broadband Card */
+> > diff --git a/kernel/iomem.c b/kernel/iomem.c
+> > index 62c92e43aa0d..e85bed24c0a9 100644
+> > --- a/kernel/iomem.c
+> > +++ b/kernel/iomem.c
+> > @@ -33,7 +33,7 @@ static void *try_ram_remap(resource_size_t offset, size_t size,
+> >         unsigned long pfn = PHYS_PFN(offset);
+> >
+> >         /* In the simple case just return the existing linear address */
+> > -       if (pfn_valid(pfn) && !PageHighMem(pfn_to_page(pfn)) &&
+> > +       if (!PageHighMem(pfn_to_page(pfn)) &&
+> 
+> This looks wrong to me. Calling any of the PageXxx() accessors is only
+> safe if the PFN is valid, since otherwise, we don't know if the
+> associated struct page exists.
+
+Yeah, you are right, was over-enthusiastic here...
+ 
+> >             arch_memremap_can_ram_remap(offset, size, flags))
+> >                 return __va(offset);
+> >
+> >
+> > base-commit: b2d229d4ddb17db541098b83524d901257e93845
+> > --
+> > 2.28.0
+> >
+
 -- 
-2.17.1
-
+Sincerely yours,
+Mike.

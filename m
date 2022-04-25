@@ -2,74 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07B2650DEDA
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 13:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37EE750DF43
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 13:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236530AbiDYLgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 07:36:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53628 "EHLO
+        id S241760AbiDYLtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 07:49:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiDYLge (ORCPT
+        with ESMTP id S241752AbiDYLtJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 07:36:34 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7E4FE5
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 04:33:30 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Kn2vK3cXLzhYm4;
-        Mon, 25 Apr 2022 19:33:17 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 25 Apr 2022 19:33:28 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 25 Apr
- 2022 19:33:28 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <iommu@lists.linux-foundation.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <joro@8bytes.org>, <will@kernel.org>, <robin.murphy@arm.com>
-Subject: [PATCH] iommu/arm-smmu-v3: check return value after calling platform_get_resource()
-Date:   Mon, 25 Apr 2022 19:45:25 +0800
-Message-ID: <20220425114525.2651143-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 25 Apr 2022 07:49:09 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14932403DA;
+        Mon, 25 Apr 2022 04:45:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650887148; x=1682423148;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=rgiGyZX6H+3caT4Vfhz7ZAHWIv86hUhLawBSz9Mm5wg=;
+  b=HK28XE3MuWvA8Xcp2CUBHCTZAv/Yq68zzrIxwPy/TEh2LBywp/PnT8jH
+   kBqpeMz/Nn+cBNOnuKGh92/v+zKNS478m2S/7BRF/7XfirvfcjgJajfr4
+   eXpwxf/+G+mAaDXjaY0VnSUDl2cLiEBY0jnhjcRXELdk/Puqy8fh18CKR
+   7bzuOHMYkgGWkd/gvE0E8szt71cJyZmRRILWWSXXVxXixqYP4AGDPGTNZ
+   DmuYyH1IauBKWPTe3SV7Z0f1sWW7zWnIKFFduBsA/jvXgFnnBLylfsPNB
+   SYtvPqTwixS0mWLAqdFTJlzioayRKygXiavNuedrI2dUrbYcc6FFFLeSI
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="264075334"
+X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
+   d="scan'208";a="264075334"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 04:45:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
+   d="scan'208";a="704526065"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 25 Apr 2022 04:45:44 -0700
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v1 0/2] acpi: Remove acpi_release_memory()
+Date:   Mon, 25 Apr 2022 14:45:42 +0300
+Message-Id: <20220425114544.37595-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It will cause null-ptr-deref if platform_get_resource() returns NULL,
-we need check the return value.
+Hi,
 
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 2 ++
- 1 file changed, 2 insertions(+)
+It seems there never were and there never will be actual devices that
+expose the UCSI ACPI mailbox interface. There are now PD controllers
+that support the UCSI interface, but they do not use the ACPI mailbox.
 
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-index 627a3ed5ee8f..88817a3376ef 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-@@ -3770,6 +3770,8 @@ static int arm_smmu_device_probe(struct platform_device *pdev)
- 
- 	/* Base address */
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (!res)
-+		return -EINVAL;
- 	if (resource_size(res) < arm_smmu_resource_size(smmu)) {
- 		dev_err(dev, "MMIO region too small (%pr)\n", res);
- 		return -EINVAL;
+So there is no point in mapping the mailbox with ioremap(), we can
+just use memremap(). That should make it possible to also remove the
+function acpi_release_memory(). That function was only there to make
+it possible to use ioremap() in the UCSI ACPI driver.
+
+thanks,
+
+Heikki Krogerus (2):
+  usb: typec: ucsi: acpi: Map the mailbox with memremap()
+  acpi: Remove the helper for deactivating memory region
+
+ drivers/acpi/osl.c                 | 86 ------------------------------
+ drivers/usb/typec/ucsi/ucsi_acpi.c | 19 ++-----
+ include/linux/acpi.h               |  3 --
+ 3 files changed, 4 insertions(+), 104 deletions(-)
+
 -- 
-2.25.1
+2.35.1
 

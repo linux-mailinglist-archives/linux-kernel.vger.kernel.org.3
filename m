@@ -2,208 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB6850DB98
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:48:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97CEA50DBA0
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:50:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237506AbiDYIvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 04:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37654 "EHLO
+        id S238499AbiDYIw7 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 25 Apr 2022 04:52:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237397AbiDYIvS (ORCPT
+        with ESMTP id S235825AbiDYIw5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 04:51:18 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7781D90CFA;
-        Mon, 25 Apr 2022 01:48:10 -0700 (PDT)
-X-UUID: 2e560d5a45c44bc8bbdbb1d4c8f693b3-20220425
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:7d832b6c-6a11-4cc6-9244-ef1b24255576,OB:0,LO
-        B:0,IP:0,URL:25,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,A
-        CTION:release,TS:5
-X-CID-META: VersionHash:faefae9,CLOUDID:c31d03f0-06b0-4305-bfbf-554bfc9d151a,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 2e560d5a45c44bc8bbdbb1d4c8f693b3-20220425
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <allen-kh.cheng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1047185239; Mon, 25 Apr 2022 16:48:05 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 25 Apr 2022 16:48:04 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 25 Apr
- 2022 16:48:03 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 25 Apr 2022 16:48:03 +0800
-From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski@canonical.com>
-CC:     Lala Lin <lala.lin@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        "Chen-Yu Tsai" <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Subject: [PATCH v2 1/1] dt-bindings: nvmem: mediatek: Convert mtk-efuse binding to YAML
-Date:   Mon, 25 Apr 2022 16:48:00 +0800
-Message-ID: <20220425084800.2021-2-allen-kh.cheng@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220425084800.2021-1-allen-kh.cheng@mediatek.com>
-References: <20220425084800.2021-1-allen-kh.cheng@mediatek.com>
+        Mon, 25 Apr 2022 04:52:57 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61AADB1888;
+        Mon, 25 Apr 2022 01:49:54 -0700 (PDT)
+Received: from mail-wm1-f53.google.com ([209.85.128.53]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1Ml6i4-1oAWSa3GV2-00lXOo; Mon, 25 Apr 2022 10:49:52 +0200
+Received: by mail-wm1-f53.google.com with SMTP id q20so8830299wmq.1;
+        Mon, 25 Apr 2022 01:49:52 -0700 (PDT)
+X-Gm-Message-State: AOAM533GogKGJ857zi7cqT1tBhDCnJI99in9rszKdBW6z/wQ3o6GvAox
+        eXpUkLLZ/9WGyR9O3SDxl3lQv0kKwxG8lYAr8wA=
+X-Google-Smtp-Source: ABdhPJznBo55D1o0+WIRuh7wr97I06MCGT/Bj0IN0lqL0hSs0OuVvnsKvU+rzU5QmLcLYLe1/6Wmmx7p2/jDZLH/xxI=
+X-Received: by 2002:a05:600c:25c5:b0:38f:f0b9:4c8c with SMTP id
+ 5-20020a05600c25c500b0038ff0b94c8cmr16117479wml.20.1650876592353; Mon, 25 Apr
+ 2022 01:49:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220422151725.1336997-1-mailhol.vincent@wanadoo.fr>
+ <YmXMiTXEvFXZ/swU@dev-arch.thelio-3990X> <CAMZ6Rq+3XOze01dZZRTe+V44N2uo5J_=rtd9bKH7d7Fq9sNxVw@mail.gmail.com>
+ <CAK8P3a31WAyh_vLqNwvv2GMcZ8SQp7gC=OV8c=Nc9pBtOSR8-g@mail.gmail.com> <CAMZ6RqL8G4uVn--Y5pBC+_c9Ex3Sjf8OJuVRwkVFFPwWd_ezLQ@mail.gmail.com>
+In-Reply-To: <CAMZ6RqL8G4uVn--Y5pBC+_c9Ex3Sjf8OJuVRwkVFFPwWd_ezLQ@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 25 Apr 2022 10:49:36 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1_XoyjOPQ0ghku_QUjUL5V6BK9kSNUXoQj2RYaA=JxFg@mail.gmail.com>
+Message-ID: <CAK8P3a1_XoyjOPQ0ghku_QUjUL5V6BK9kSNUXoQj2RYaA=JxFg@mail.gmail.com>
+Subject: Re: [PATCH] checksyscalls: ignore -Wunused-macros
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Linux API <linux-api@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:YnibiRNyIgeuI2nPVLClsnhP1828FAbmVUYeoPkiNrTa8wA+aCl
+ 6nzkkwwCK5ra4jSO7yof9xi3ag8OBY0xP5UmorHgQsejui3M9qi3murGQaZFx/Mg2kGKXHq
+ FPp3V1OHPtZbC7El9/GdWOZ+P1nSrAIqMoxlf2oErQQKh0McIDvYWRYQ4ekb5/5J01PdiXZ
+ Ye1OtdgWjHzcSyzU6COLg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:etjVTRUMtNY=:8cGRRh6scKpqNjfImdGj3i
+ g+ZFj0No7LeBfPC67hzJbwkxVfMshswEBhgLUO4slSJQiXYB1DEi6eT2/qsqIWEnGBQrgO2R7
+ LifyBz0oqLavS2KzlAF3bCy73b/s+/27PO3mk2+zc+Oxfo7qg2azx7n3yS+xb3FRzeZbOZhya
+ ivvzL3J/xylS5rS8IbqUAvrJ9EmfShRzWWqgyzcdGY+O+z9HXlqXn/IY+QZFzaUd4SNtZ7adu
+ H1yPXH64w1wEya33VsrnWUNDvUuAaeQPxar2UeHROM6j8veInZY+5CKE2OUS+IoO2pEmrre6/
+ 3q9oICfw7ubdw6Ur7GL9WuR9idFrSiNGG02qhObVaSIwZb6WaZkGt0OGGzVwVo7Onwdb+3OYc
+ qc5VXwRXZYyZgzSoM2PcFClSl4+sD+ddqPDQwPhr2V3YU3CoS6Iso0qMpZYciuyG3vDWgjpzr
+ Vs/Cyi9F6lSDwgLMFBZdoTIxwAMWW5LmZ9Y6/+4aAbaPIUyC7QcqDo4WPFphSfQiMrpJExoEQ
+ VcQ5jokFi6lMeSlPkZmQQeGU0MqPwG9aiS5Jo43oqrtY+2ulyT84SMts6WK0NZ1k03n2GTFh0
+ LwGjgh3Yzr/D3Gj/BNgaHXB2qEX/V33xfv8gPC1oyEMCL2bl0JED4J20Dz+2uLmWW4yYubmU0
+ /P+xgXZW2jd0nbn0sElVaHX0uM40jvaS9B5WwgIM0MY2f2MpScUU0w0VloDmCtK3oYvPAYto4
+ YvSnHaGXQji3ociDCFODER4kmqhvG5y50UJmSSIXJ25HkMT/Qbxu7Gcfe3bEdambM6+TUdJTf
+ yovSdyNhvk2gDEoTKwnHy2XIq8BXy1ixZj3euLHFjUYMO7Wo1k=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert MediaTek eFuse devicetree binding to YAML.
+On Mon, Apr 25, 2022 at 9:42 AM Vincent MAILHOL
+<mailhol.vincent@wanadoo.fr> wrote:
+> On Mon. 25 Apr 2022 at 15:50, Arnd Bergmann <arnd@arndb.de> wrote:
+> > On Mon, Apr 25, 2022 at 8:17 AM Vincent MAILHOL> <mailhol.vincent@wanadoo.fr> wrote:
+> > > When I run W=2, I want to only see the warnings of the file I am
+> > > working on. So I find it useful to fix the W=2 warnings which
+> > > show up when building other files to not get spammed by
+> > > irrelevant issues and to simplify the triage.
+> > >
+> > > My initial message lacked the rationale. I will add additional
+> > > explanations in the v2 of this patch.
+> >
+> > I agree this is worth fixing if we want to make W=2 have any meaning at all.
+> >
+> > Your approach is probably fine. We could try to improve this by comparing
+> > against the list from include/uapi/asm-generic/unistd.h instead of the i386
+> > list. I suppose that would involve rewriting the script into a simpler one,
+> > but I'm not sure if anyone has an interest in working on this.
+>
+> If someone wants to do it, great, but I do not have the
+> confidence to do it myself so I hope you will forgive me for
+> taking a pass here.
 
-Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
----
- .../devicetree/bindings/nvmem/mtk,efuse.yaml  | 70 +++++++++++++++++++
- .../devicetree/bindings/nvmem/mtk-efuse.txt   | 43 ------------
- 2 files changed, 70 insertions(+), 43 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/nvmem/mtk,efuse.yaml
- delete mode 100644 Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
+Sure, no worries.
 
-diff --git a/Documentation/devicetree/bindings/nvmem/mtk,efuse.yaml b/Documentation/devicetree/bindings/nvmem/mtk,efuse.yaml
-new file mode 100644
-index 000000000000..d056bc61dd5b
---- /dev/null
-+++ b/Documentation/devicetree/bindings/nvmem/mtk,efuse.yaml
-@@ -0,0 +1,70 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/nvmem/mtk,efuse.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MediaTek eFuse device tree bindings
-+
-+maintainers:
-+  - Lala Lin <lala.lin@mediatek.com>
-+  - Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-+
-+allOf:
-+  - $ref: "nvmem.yaml#"
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - enum:
-+          - mediatek,mt8173-efuse
-+          - mediatek,efuse
-+      - items:
-+          - enum:
-+              - mediatek,mt7622-efuse
-+              - mediatek,mt7623-efuse
-+              - mediatek,mt8183-efuse
-+              - mediatek,mt8192-efuse
-+              - mediatek,mt8195-efuse
-+              - mediatek,mt8516-efuse
-+          - const: mediatek,efuse
-+
-+  reg:
-+    maxItems: 1
-+
-+patternProperties:
-+  "^.*@[0-9a-f]+$":
-+    type: object
-+
-+    properties:
-+      reg:
-+        maxItems: 1
-+        description:
-+          Offset and size in bytes within the storage device.
-+
-+    required:
-+      - reg
-+
-+    additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+
-+    efuse: efuse@10206000 {
-+            compatible = "mediatek,mt8173-efuse";
-+            reg	   = <0x10206000 0x1000>;
-+            #address-cells = <1>;
-+            #size-cells = <1>;
-+
-+            /* Data cells */
-+            thermal_calibration: calib@528 {
-+                reg = <0x528 0xc>;
-+            };
-+    };
-+...
-diff --git a/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt b/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
-deleted file mode 100644
-index 39d529599444..000000000000
---- a/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
-+++ /dev/null
-@@ -1,43 +0,0 @@
--= Mediatek MTK-EFUSE device tree bindings =
--
--This binding is intended to represent MTK-EFUSE which is found in most Mediatek SOCs.
--
--Required properties:
--- compatible: should be
--	      "mediatek,mt7622-efuse", "mediatek,efuse": for MT7622
--	      "mediatek,mt7623-efuse", "mediatek,efuse": for MT7623
--	      "mediatek,mt8173-efuse" or "mediatek,efuse": for MT8173
--	      "mediatek,mt8192-efuse", "mediatek,efuse": for MT8192
--	      "mediatek,mt8195-efuse", "mediatek,efuse": for MT8195
--	      "mediatek,mt8516-efuse", "mediatek,efuse": for MT8516
--- reg: Should contain registers location and length
--- bits: contain the bits range by offset and size
--
--= Data cells =
--Are child nodes of MTK-EFUSE, bindings of which as described in
--bindings/nvmem/nvmem.txt
--
--Example:
--
--	efuse: efuse@10206000 {
--		compatible = "mediatek,mt8173-efuse";
--		reg	   = <0 0x10206000 0 0x1000>;
--		#address-cells = <1>;
--		#size-cells = <1>;
--
--		/* Data cells */
--		thermal_calibration: calib@528 {
--			reg = <0x528 0xc>;
--		};
--	};
--
--= Data consumers =
--Are device nodes which consume nvmem data cells.
--
--For example:
--
--	thermal {
--		...
--		nvmem-cells = <&thermal_calibration>;
--		nvmem-cell-names = "calibration";
--	};
--- 
-2.18.0
+> Another alternative I considered was to only call
+> checksyscalls.sh when doing a 'make all'. This way, we keep the
+> warning but people won’t be spammed when building sub projects
+> because the script would not be executed.
 
+Right, I like that as well, one less thing to be done for every
+iterative make as well. The syscall table really doesn't change
+all that much that this needs to be run by most developers.
+
+      Arnd

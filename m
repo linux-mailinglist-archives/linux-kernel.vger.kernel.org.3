@@ -2,102 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7201150DE5B
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 13:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E52E50DE5E
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 13:01:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241601AbiDYLDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 07:03:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36262 "EHLO
+        id S230501AbiDYLDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 07:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236072AbiDYLDI (ORCPT
+        with ESMTP id S238315AbiDYLDT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 07:03:08 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555E88BF08;
-        Mon, 25 Apr 2022 04:00:05 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id k4so14582577plk.7;
-        Mon, 25 Apr 2022 04:00:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8w9f5PNtLEl7ZLk63CUD7eXiyQq65I/krAjjIwxYN/I=;
-        b=mFLITgqplJs5mRnQtmPw57KqDc7oFwKeQ/4Xy187E/VOS9/pipsaGD/rv28qbGguqm
-         sOA4Dn3gmntR/4pgrjVt51tq7cytjMwNu81vncONy/svCxNEo00FJKIwzL4gMkO0Hwuf
-         q37SjvRpADxgv6CIEoIVuBle8stVTlqhR88u+4NwOe/Hnz7tDDm0iCQ9/MGo56gvhmhs
-         8Puvf6EtKmiktzJGv31F86Lo42mEQeubgmb7KB6oDnSlzl4YX1kkaP9e2SNt5zUOt0hZ
-         WOYkXUZy4MdD4rpOBuIv80ERNJPUlGmFpI221nBjn6c+w0+6bm3ud1/EjONvM85ltkTB
-         NGGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8w9f5PNtLEl7ZLk63CUD7eXiyQq65I/krAjjIwxYN/I=;
-        b=hQA6gt9dSqMOz5uHUrZ3tjlanoElf6CWoOu/oQG3wnPeExqIYSfh/WNb9323YM4AHJ
-         Zk1bSvKBjCv5+9ab+FRSghD/9FNucCTVw5RDe0QXOSIJmDu6UapZfHMfLrSNo+mhqgHa
-         3GyLXT6YQi+laRBJQrKIw3D/EZ/zPmmaylrGRQ3qbMdd4I66XnLtNseAOlJinhf3Oyzo
-         5AuCr7+TTAIbQOYz45WjI3xijE/a2iEsKfsJX/Q8YJUU61sVijGetaXroyT8ggP938FK
-         Co188ir8WQYF0bxKxtw1albZ1mX4tjD1DL06yjFffYyg3DfnWmrgb0Iz3nP+DcwcduTp
-         Mjxw==
-X-Gm-Message-State: AOAM5316tZse08ntQrO9zCX2LHfZwwQ6UrtA4Txhk34pYZOYqjDg8PFq
-        ZvQetOOsGxEQqz0nkEilynycMENjrJKxhXnsvQ4=
-X-Google-Smtp-Source: ABdhPJxvUTUDJSrvCw6wnWTU9BopbW2+XVnkCjuKf0UxDEW7SnsoexUeF2YKLnYx2Go8N/kc+Qg/w9/S5cOeO3lSGus=
-X-Received: by 2002:a17:90a:c20a:b0:1d7:4cd5:ac82 with SMTP id
- e10-20020a17090ac20a00b001d74cd5ac82mr21471769pjt.212.1650884404905; Mon, 25
- Apr 2022 04:00:04 -0700 (PDT)
+        Mon, 25 Apr 2022 07:03:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A945B8CCFF;
+        Mon, 25 Apr 2022 04:00:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F373FB815BE;
+        Mon, 25 Apr 2022 11:00:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 94204C385B0;
+        Mon, 25 Apr 2022 11:00:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650884411;
+        bh=Qu5ATgLDxCPCLmOegobXU0UXuqRM25UYt4vqDM5wPEk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=HewJ+/wmSRJrkZmtRRJwrff8RPtBMQozqRN4Klg3a1Pr6x831M961CGNEqC9y1thY
+         AnhlBrcdsYSiAcm6NB3h/2bbfXdOVhESiIEUPyVKA0TZwvPcuEvoS+RCyWi1yKQHep
+         KxQlqFKcC7Z7TGVHakW0fWqoVwGQqFO1lIIN3DMpHflvqXRwQLgWhpDs3Zv9bndwVm
+         sXPODyBe3uxKTeYJXPNP4Ioag6TBDsgftyuceP9XnC0SyoOcinov3HVdA2Cvl3uETR
+         wq1/iLomHiu1PXDCCvNgICd32ikoenQbAhr36seZitROjQgV5io8/6m2cSy+fgrEL5
+         hTch38yUA3jdA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7F2F3E6D402;
+        Mon, 25 Apr 2022 11:00:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <CGME20220422120240epcms2p24bdcb416becf76b417f7c39006aa40f2@epcms2p1>
- <1891546521.01650629881201.JavaMail.epsvc@epcpadp4> <DM6PR04MB6575EB87D425CE431CC4A8F8FCF79@DM6PR04MB6575.namprd04.prod.outlook.com>
- <CAM36TBtsU0k1e+8-_Ew4ve3SJ0yExUFwPAYnmQy_-AXUHGoeZw@mail.gmail.com> <0f061fc0-d7ee-aa48-278b-4ca7dc3ce53f@acm.org>
-In-Reply-To: <0f061fc0-d7ee-aa48-278b-4ca7dc3ce53f@acm.org>
-From:   Jinyoung Choi <ychoijy@gmail.com>
-Date:   Mon, 25 Apr 2022 19:59:45 +0900
-Message-ID: <CAM36TBuch4Zrb8AWdh+q5oTCMB+T3KgFhR4q49T8G_pwk2NFgg@mail.gmail.com>
-Subject: Re: [PATCH] scsi: ufs: wb: Add Manual Flush sysfs and cleanup toggle functions
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     Avri Altman <Avri.Altman@wdc.com>,
-        "j-young.choi@samsung.com" <j-young.choi@samsung.com>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        Daejun Park <daejun7.park@samsung.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] arp: fix unused variable warnning when
+ CONFIG_PROC_FS=n
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165088441151.15733.12108814407313013302.git-patchwork-notify@kernel.org>
+Date:   Mon, 25 Apr 2022 11:00:11 +0000
+References: <20220422061431.1905579-1-yajun.deng@linux.dev>
+In-Reply-To: <20220422061431.1905579-1-yajun.deng@linux.dev>
+To:     Yajun Deng <yajun.deng@linux.dev>
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lkp@intel.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> On 4/23/22 07:24, jin young choi wrote:
->
-> >>> +static DEVICE_ATTR_RW(wb_flush_on);
-> >> Maybe wb_flush_enable ?
-> >>
-> > 'wb_on' sysfs already existed. So I named it in the same format (_on)
-> > I'll change both. (_on -> _enable)
->
-> sysfs attributes constitute an ABI. Breaking the user space ABI is not
-> allowed. Hence, renaming existing sysfs attributes is not an option.
->
-> Thanks,
->
-> Bart.
-I got it. Applied to v2 patch.
-I sent a mail from Google Web,
-but the mailing list was messed up with a tab problem.
-(Changed to git send-email)
-I'll be careful.
+Hello:
 
-Thanks,
-Jinyoung.
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Fri, 22 Apr 2022 14:14:31 +0800 you wrote:
+> net/ipv4/arp.c:1412:36: warning: unused variable 'arp_seq_ops' [-Wunused-const-variable]
+> 
+> Add #ifdef CONFIG_PROC_FS for 'arp_seq_ops'.
+> 
+> Fixes: e968b1b3e9b8 ("arp: Remove #ifdef CONFIG_PROC_FS")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next] arp: fix unused variable warnning when CONFIG_PROC_FS=n
+    https://git.kernel.org/netdev/net-next/c/b0e653b2a0d9
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

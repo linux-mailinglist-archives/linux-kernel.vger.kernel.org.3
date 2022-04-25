@@ -2,59 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BEB250D7C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 05:45:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3796F50D7CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 05:45:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240813AbiDYDqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 23:46:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57960 "EHLO
+        id S240853AbiDYDq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 23:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240909AbiDYDqD (ORCPT
+        with ESMTP id S240916AbiDYDqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 24 Apr 2022 23:46:03 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0956E29CAC;
-        Sun, 24 Apr 2022 20:42:23 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id n8so24208055plh.1;
-        Sun, 24 Apr 2022 20:42:23 -0700 (PDT)
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A9229CB2;
+        Sun, 24 Apr 2022 20:42:25 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id g9so12318604pgc.10;
+        Sun, 24 Apr 2022 20:42:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=ohE50qU4qaQMeCii+Z+po7lmX+itL/YGUd1v4oq6lSE=;
-        b=QFRvN00dPEFFBl991bCGDjOG7DP6CFyFhqSf7G0NoTIUctzPGQu3fHWyT6m4pCMO3L
-         HTeL8qM/nN7T5xBOdgqqcVhO2yCTe46B+EIw71grg/NQy+WgcTnDU6+aTUyXZnDHYQ4s
-         qy3qbqqcRuAQV78uesb40eVtoe4Gzl3FFMfZFz0NxtMIup7YD34UQ039Fk/89G55jAuc
-         U76yPK7DaHYZtOXSHULHVknFfsjNre++JetVxzoonixo9G9h1sZdJerrG9hA0HEAwddl
-         tnX0M2Hqij0gau10lhQcxtGQh69ReFtyPi4GL34lIymcpj8YwPCjNZACPPE/l1Qky4ZW
-         BVEw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zxBn91rD5NsN+ULE3f1MzjrrPmMEdVQzDsirY+3w7kk=;
+        b=Bv9YRe2DobLRH6V6NLIkIwohK0wEB3NgdyeGivI3/PHxuApWmwSkIL1JObFqchi+Q9
+         laLBACYhpjl6Dqi49ln4/AxWiRbhgSnWkRXI74FG+NaCDIDKixJOaPRrCpaTf0fvqHMs
+         ciQx/AnGHixBP96lSfl1Nb47N9YpF9iaQQB575vVQtZdCa0PhvOKGfB6lETHLv1Ru9cw
+         ejgow6Vf6BkvTHJD3SpjtQVh0tN82elMHdycYBi2wUz/Zqzlyc6qRutfuIkP/PKafruu
+         g5T9GlyiRYLKAbVZCGtE0RoAxzl42amqJq7WscEY7G2BpVFJD6IiBcGv+c8QE0zr9IE0
+         +/4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=ohE50qU4qaQMeCii+Z+po7lmX+itL/YGUd1v4oq6lSE=;
-        b=Jcy4SkRWhNoca0HYJvOKM9DKzpPKLBYgA3Z8wI/X3cYA8wB3nFhVwdmF4WDmLuPaZT
-         7mdZ1ZS9I/pcLd6eDEnXPL7LqTcb7YrAPT4mlMlbSUWLSafAztaTXg2ZAxCAY/IljwyO
-         A9UL/ft33znRR3nURqplZHByZb7Y26FVTUe1gZynsUulkaAnIxZqOYs2XKV5sJPcFDsq
-         sobqiye/0PBEBznOWvM/nDdJmTTzowefn4khTQqSnQwRj54HKmvWfuV5cqJilBDUGJju
-         YLT1adGJKwnbvYZMZOGFFa5Yre8EwhVQdJ/0eSSmUEV39GoWW5ydwp1YLRQh1Ffat29t
-         tXTQ==
-X-Gm-Message-State: AOAM5308xT6sudPHqWpFXDVzceB+P8M6t68VQWKj8MMzxDc487LnL8jv
-        Xyjg0aqumbe82JoVcIv9nAc=
-X-Google-Smtp-Source: ABdhPJzUDhFmD+FGEc/XuB74nBKfc3m5WWIREDnnzzQrZQWELhYTpfSJ2Bji24Ge1HEhBreek/OB7g==
-X-Received: by 2002:a17:90a:df0f:b0:1d9:2372:b55e with SMTP id gp15-20020a17090adf0f00b001d92372b55emr12678494pjb.104.1650858143030;
-        Sun, 24 Apr 2022 20:42:23 -0700 (PDT)
-Received: from ethan-Latitude-7280.localdomain (125-228-239-174.hinet-ip.hinet.net. [125.228.239.174])
-        by smtp.googlemail.com with ESMTPSA id t21-20020a17090a951500b001d77f392280sm10450231pjo.30.2022.04.24.20.42.20
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zxBn91rD5NsN+ULE3f1MzjrrPmMEdVQzDsirY+3w7kk=;
+        b=A+MpLebewlitU1IdFpWEfgWJ5pW3GblZU7QjSGDlKp7ENEH5RY3e8XypkorjTQRx0g
+         CDOyYqLG2SCBvnt+yXeFlQipUBvenmEDGF5nhmYrbJ4bB5Pk9h1fj0eYjCgF+L7PjDj5
+         hXfahlh0sT2pbaHAkpR/6WVmTqW2k9+IJaBY0MjEtjubSf5s4383nygGu9TlZnYxbJL5
+         v93Acew1haofpll09LF5pJNOkQFhnI6DA/1p2MO8vjA330iV9Km8ixcsk7FnLKCKfDRs
+         4NOA9RqCWtSYbdZ8Mb1AYqgRmpk0fAQ8hxImmk2R5728EYGOpolw5Y26Tb+AqtJlgCzj
+         4srw==
+X-Gm-Message-State: AOAM532u4em9NanLNayQVHpLm7PzBYps+L3s2TfeE60tQulcvdi4WBfA
+        co6GVxe891+Gq8Omt/Slf3A=
+X-Google-Smtp-Source: ABdhPJxKAcyR3oTaEZRQCMKouRShYJNrjazsPLwZeuJxY32fcoS3VNvik5Wi3eUWkWzEVUckR4G8Lw==
+X-Received: by 2002:a65:6946:0:b0:39d:a0c3:71f with SMTP id w6-20020a656946000000b0039da0c3071fmr13344951pgq.160.1650858144813;
+        Sun, 24 Apr 2022 20:42:24 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:282a:d50e:e0fc:c145])
+        by smtp.gmail.com with ESMTPSA id i1-20020a17090a650100b001cd8e9ea22asm13013984pjj.52.2022.04.24.20.42.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 20:42:22 -0700 (PDT)
-From:   Ethan Yang <ipis.yang@gmail.com>
-X-Google-Original-From: Ethan Yang <etyang@sierrawireless.com>
-To:     johan@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     gchiang@sierrawireless.com, Ethan Yang <etyang@sierrawireless.com>
-Subject: [PATCH] add support for Sierra Wireless EM7590 0xc080 and 0xc081 compositions.
-Date:   Mon, 25 Apr 2022 11:42:04 +0800
-Message-Id: <20220425034204.4345-1-etyang@sierrawireless.com>
-X-Mailer: git-send-email 2.17.1
+        Sun, 24 Apr 2022 20:42:23 -0700 (PDT)
+Date:   Sun, 24 Apr 2022 20:42:20 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Rob Herring <robh@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: Re: [PATCH v2 2/3] Input: sun4i-lradc-keys: Add optional clock/reset
+ support
+Message-ID: <YmYYnOgLhbB2CdrN@google.com>
+References: <20220414002349.24332-1-samuel@sholland.org>
+ <20220414002349.24332-2-samuel@sholland.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220414002349.24332-2-samuel@sholland.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -65,26 +80,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-add support for Sierra Wireless EM7590 0xc080 and 0xc081 compositions.
+On Wed, Apr 13, 2022 at 07:23:47PM -0500, Samuel Holland wrote:
+> Until the R329, the LRADC hardware was always active. Now it requires
+> enabling a clock gate and deasserting a reset line. Add support for this
+> variant of the hardware.
+> 
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
 
-Signed-off-by: Ethan Yang <etyang@sierrawireless.com>
----
- drivers/usb/serial/qcserial.c | 2 ++
- 1 file changed, 2 insertions(+)
+Applied, thank you.
 
-diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
-index c18bf8164bc2..38e70a573e2c 100644
---- a/drivers/usb/serial/qcserial.c
-+++ b/drivers/usb/serial/qcserial.c
-@@ -166,6 +166,8 @@ static const struct usb_device_id id_table[] = {
- 	{DEVICE_SWI(0x1199, 0x9090)},	/* Sierra Wireless EM7565 QDL */
- 	{DEVICE_SWI(0x1199, 0x9091)},	/* Sierra Wireless EM7565 */
- 	{DEVICE_SWI(0x1199, 0x90d2)},	/* Sierra Wireless EM9191 QDL */
-+	{DEVICE_SWI(0x1199, 0xc080)},	/* Sierra Wireless EM7590 */
-+	{DEVICE_SWI(0x1199, 0xc081)},	/* Sierra Wireless EM7590 QDL */
- 	{DEVICE_SWI(0x413c, 0x81a2)},	/* Dell Wireless 5806 Gobi(TM) 4G LTE Mobile Broadband Card */
- 	{DEVICE_SWI(0x413c, 0x81a3)},	/* Dell Wireless 5570 HSPA+ (42Mbps) Mobile Broadband Card */
- 	{DEVICE_SWI(0x413c, 0x81a4)},	/* Dell Wireless 5570e HSPA+ (42Mbps) Mobile Broadband Card */
 -- 
-2.17.1
-
+Dmitry

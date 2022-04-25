@@ -2,138 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D385C50E0DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 14:55:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BACB50E0E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 14:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235730AbiDYM6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 08:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59990 "EHLO
+        id S234802AbiDYNAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 09:00:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235070AbiDYM6o (ORCPT
+        with ESMTP id S235833AbiDYM72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 08:58:44 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A029713E0F;
-        Mon, 25 Apr 2022 05:55:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0CE9CCE1119;
-        Mon, 25 Apr 2022 12:55:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9287CC385A7;
-        Mon, 25 Apr 2022 12:55:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650891331;
-        bh=HkfcpCc1eqbiLwGyeTmgQdMI4j+rgg6rvsaSC4eQ5IA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HnRk+psz8v1zx0VWCDqtiKUsIUhuHir+2OLLtUzHdXMQoKT1OTp29AKJtqiTBc9RH
-         Wxhj7GhbEkaD7JrhP6P8L70oos0BwM5CaxhCrTvJ6NOsBnDJ5byl7PgoxBHcuyQ3iy
-         AWOgIjAPo0glLjQdDJtt2oGa57B/TAs4nXFAdORYVulc2Dqnu+I51ADvdDHjDymhI5
-         WHauj0zBcdDceGsp6AWPEf4882AImysACZIP29oRLvVFvl+b/KWPkblFV3pofeGm7N
-         3U0QYOsC2GMUQLBr7ywyW3RuCV6QkpBPtY8oHP2rO53dQOqY9ZlkDawIusF89P3BEX
-         UmJwJ+mBCirGw==
-Date:   Mon, 25 Apr 2022 13:55:25 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik@cutebit.org>
-Cc:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>
-Subject: Re: [RFC PATCH 3/5] HACK: ASoC: Tolerate N-cpus-to-M-codecs links
-Message-ID: <YmaaPa8A03rWV7HE@sirena.org.uk>
-References: <20220331000449.41062-1-povik+lin@cutebit.org>
- <20220331000449.41062-4-povik+lin@cutebit.org>
- <YkrkbBNYULLgeS5w@sirena.org.uk>
- <904EB8A1-5561-4555-8030-B85703E24F2E@cutebit.org>
- <YmaTHTKWAfM7FCcY@sirena.org.uk>
- <9F8BCBA8-5EE3-4F87-9518-91CB7AB4E077@cutebit.org>
+        Mon, 25 Apr 2022 08:59:28 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F9C1409E;
+        Mon, 25 Apr 2022 05:55:56 -0700 (PDT)
+X-UUID: 61afe927d777481899c1cc36f86b09c2-20220425
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:effaf1d9-7688-43a2-91b5-191fa1153c8c,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:-20
+X-CID-META: VersionHash:faefae9,CLOUDID:403409f0-06b0-4305-bfbf-554bfc9d151a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 61afe927d777481899c1cc36f86b09c2-20220425
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <johnson.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1770244614; Mon, 25 Apr 2022 20:55:51 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 25 Apr 2022 20:55:49 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 25 Apr 2022 20:55:49 +0800
+From:   Johnson Wang <johnson.wang@mediatek.com>
+To:     <cw00.choi@samsung.com>, <krzk+dt@kernel.org>,
+        <robh+dt@kernel.org>, <kyungmin.park@samsung.com>
+CC:     <khilman@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <jia-wei.chang@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Johnson Wang <johnson.wang@mediatek.com>
+Subject: [PATCH v3 0/2] Introduce MediaTek CCI devfreq driver
+Date:   Mon, 25 Apr 2022 20:55:44 +0800
+Message-ID: <20220425125546.4129-1-johnson.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="O7wLMv3y86gLGqlc"
-Content-Disposition: inline
-In-Reply-To: <9F8BCBA8-5EE3-4F87-9518-91CB7AB4E077@cutebit.org>
-X-Cookie: An apple a day makes 365 apples a year.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The Cache Coherent Interconnect (CCI) is the management of cache
+coherency by hardware. CCI DEVFREQ is DVFS driver for power saving by
+scaling clock frequency and supply voltage of CCI. CCI uses the same
+input clock source and power rail as LITTLE CPUs on Mediatek SoCs.
 
---O7wLMv3y86gLGqlc
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This series depends on:
+Chanwoo's repo: kernel/git/chanwoo/linux.git
+branch: devfreq-testing
+[1]: PM / devfreq: Export devfreq_get_freq_range symbol within devfreq
+[2]: PM / devfreq: Add cpu based scaling support to passive governor
+[3]: PM / devfreq: passive: Reduce duplicate code when passive_devfreq case
+[4]: PM / devfreq: passive: Update frequency when start governor
 
-On Mon, Apr 25, 2022 at 02:34:33PM +0200, Martin Povi=C5=A1er wrote:
-> > On 25. 4. 2022, at 14:25, Mark Brown <broonie@kernel.org> wrote:
+Changes in v3:
+- Move binding document to 'interconnect' and rename it.
+- Add COMPILE_TEST dependence symbol.
+- Remove need_voltage_tracking variable.
+- Move mtk_ccifreq_voltage_tracking() code into mtk_ccifreq_set_voltage().
+- Add an interation limit in the while() loop.
+- Replace 'cci_dev' with 'dev'
+- Replace old_* with pre_*
+- Remove of_match_ptr()
+- Use module_platform_driver()
 
-> > If you register two separate DAIs (well, links) with the API without
-> > doing anything else the API will just expose them to userspace as two
-> > separate things with no indication that they're related.
+Changes in v2:
+- Take MT8183 as example in binding document.
+- Use dev_err() instead of pr_err().
+- Use 'goto' statement to handle error case.
+- Clean up driver code.
 
-> Sure, but what I am addressing here is a single DAI link with multiple
-> CPU DAIs, invoked in DT like this:
+Johnson Wang (2):
+  dt-bindings: devfreq: mediatek: Add mtk cci devfreq dt-bindings
+  PM / devfreq: mediatek: Introduce MediaTek CCI devfreq driver
 
-> 	dai-link@0 {
-> 		link-name =3D "Speakers";
-> 		mclk-fs =3D <256>;
->=20
-> 		cpu {
-> 			sound-dai =3D <&mca 0>, <&mca 1>;
-> 		};
-> 		codec {
-> 			sound-dai =3D <&speaker_left_woof1>,
-> 				<&speaker_right_woof1>,
-> 				<&speaker_left_tweet>,
-> 				<&speaker_right_tweet>,
-> 				<&speaker_left_woof2>,
-> 				<&speaker_right_woof2>;
-> 		};
-> 	};
+ .../devicetree/bindings/devfreq/mtk-cci.yaml  |  72 +++
+ drivers/devfreq/Kconfig                       |  10 +
+ drivers/devfreq/Makefile                      |   1 +
+ drivers/devfreq/mtk-cci-devfreq.c             | 479 ++++++++++++++++++
+ 4 files changed, 562 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/devfreq/mtk-cci.yaml
+ create mode 100644 drivers/devfreq/mtk-cci-devfreq.c
 
-You could parse this into two separate links for the benefit of the
-framewokr if you're using a custom machine driver (which I suspect you
-probably have to).
+-- 
+2.18.0
 
-> >> What about this interim solution: In case of N-to-M links we put in
-> >> the most restrictive condition for checking capture/playback stream
-> >> validity: we check all of the CPU DAIs. Whatever ends up being the
-> >> proper solution later can only be less restrictive than this.
-
-> > That's not the issue here?
-
-> Well to me it looks like it is. Because if I invoke the DAI link like
-> I quoted above, and the platform driver supports it, the playback/capture
-> stream validity check is the only place it breaks down. Notwithstanding
-> this may be the wrong API as you wrote.
-
-I am surprised that doesn't otherwise explode TBH - at the very least
-I'd expect it to show two PCMs to userspace which if I'm understanding
-your description correctly isn't really what's going on.
-
---O7wLMv3y86gLGqlc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJmmjwACgkQJNaLcl1U
-h9ARDQf/Vj3omBxQfzF9VW1hJ6eknKjHUHK3xR8JtMc6NNBVbLKwOHLwte5cwTT6
-Fyi8T+yuuIC8qEXbIR0UYYTPHK3oBqj+tqL+BCqbjJM47ZzpwOIJuBcdn6fU/QpC
-umLT2bIQOsVpkGmlvn9UH+U/dESOzPv8PjiSruIXiRGYam0j8H/jh8hiTQi6n6BZ
-yRy+GgjLdF9Ws9aB//xps5zY7RvauQ5CmnOYz0++56JITDTrWV1xXdZNEs7PXmCe
-UN4KxiMDwLX0nfce0k8S7Gyb8yE8PaZ5AQ66QCBKY7c1tI/qliUdrEhWieaCzt9/
-K78aAw2cGspFrQODHj8LAnpKCacFiQ==
-=QJEI
------END PGP SIGNATURE-----
-
---O7wLMv3y86gLGqlc--

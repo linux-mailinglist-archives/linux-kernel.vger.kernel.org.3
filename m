@@ -2,105 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E991550D664
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 02:47:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A44550D666
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 02:50:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240040AbiDYAtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 20:49:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34660 "EHLO
+        id S240047AbiDYAxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 20:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240032AbiDYAtF (ORCPT
+        with ESMTP id S237688AbiDYAxB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 20:49:05 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E371C903;
-        Sun, 24 Apr 2022 17:46:00 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id v2so2727496qto.6;
-        Sun, 24 Apr 2022 17:46:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lUfRNFCLBP3uFMSuVP2gohDe8N80eyAcPJ7OERj4nyU=;
-        b=Zhlu1wPjtycgm4h/SbFthtBn6M7XP5HH9QzvnlBs8/gkCnV1FfpIpmYLGTTiXqmfaZ
-         b/XOB9GBUX7NsJJvw3DYcjZemRe4zK2AVq7vICdzvDbsG4y1qf6fcfsQThlXZJ+ZLhug
-         Zgrjq3EiuyKsZKBr1Lqd5H7GfgD+LkCsu/E4fXYKQoQp+nOVDfl2TZdq1kSQlXYE+spq
-         vKG9RSg8ClFj2el1cExDAPn9vMq3/2p9IbMttzTeQPZu/p7ZamPuJAVwpZWjuR9dJ7D2
-         HrQvJZRxTSYMsO5a8HNmVB5VBZjns/lk1r/oV+p3m+ywT27uFdWXc9pL9M59NhtpuXbW
-         hmGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lUfRNFCLBP3uFMSuVP2gohDe8N80eyAcPJ7OERj4nyU=;
-        b=UnsNH8S9kJlwQ19wAT2wuKjzwMImALqtRz3IDxGlz8rH5utNy6C4GfRCJ68nmATrO4
-         n1HzryiSDDF3bGMte/LStQReZF77jE2OZU7Zh3NG4IF83ChHyRHFW5+6iiNZQ96MwW2e
-         wqakNfzj7FFhRAUF3sjsRvtetAHDnky72UyutXSaEsQkhTsbWk6TkxBOiIoVfWoU4xYc
-         F1pcX0cypwqBCBLCcnMBiNE+hWHzO+4Gw8lFXac1KDMCTctEnZDfFkeqVA2Nla3AeCfj
-         o8Rm08D627OSbBpRuTmBjLuaZ5Pq+1eSEFQ+m5xNrEXzT2+ZHMwbHFb/99uJcnsRhqDy
-         wfnQ==
-X-Gm-Message-State: AOAM5326YgZUKi6PRCAjea7keeBeWAFTKuMS2bJP3b89MutP7iyA0H9d
-        t0t74lLuCjnLmYb4RsrlkQ==
-X-Google-Smtp-Source: ABdhPJyI5g4R5aAGDCwE3uoQfWTCQnIEklx2JnXGiFsOoOFU+YQFmrGStZwOa52FAmkfmSaAOohC8Q==
-X-Received: by 2002:ac8:7d08:0:b0:2f1:e349:adb7 with SMTP id g8-20020ac87d08000000b002f1e349adb7mr10338487qtb.616.1650847559580;
-        Sun, 24 Apr 2022 17:45:59 -0700 (PDT)
-Received: from moria.home.lan (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id p13-20020a05622a048d00b002e1ce0c627csm5625644qtx.58.2022.04.24.17.45.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 17:45:58 -0700 (PDT)
-Date:   Sun, 24 Apr 2022 20:45:56 -0400
-From:   Kent Overstreet <kent.overstreet@gmail.com>
-To:     Joe Perches <joe@perches.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, hch@lst.de, hannes@cmpxchg.org,
-        akpm@linux-foundation.org, linux-clk@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-input@vger.kernel.org,
-        roman.gushchin@linux.dev
-Subject: Re: [PATCH v2 1/8] lib/printbuf: New data structure for
- heap-allocated strings
-Message-ID: <20220425004556.psqcz3vxfhetuuak@moria.home.lan>
-References: <20220421234837.3629927-1-kent.overstreet@gmail.com>
- <20220421234837.3629927-7-kent.overstreet@gmail.com>
- <fcaf18ed6efaafa6ca7df79712d9d317645215f8.camel@perches.com>
+        Sun, 24 Apr 2022 20:53:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93BE16595;
+        Sun, 24 Apr 2022 17:49:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AF073B8108E;
+        Mon, 25 Apr 2022 00:49:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3504CC385A7;
+        Mon, 25 Apr 2022 00:49:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650847795;
+        bh=F1o86+c3i27P7lXaQREiQ3xGCoQJ5F/6dbeDXC2Hv+8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NNNl2oY39OmGQht4oPedgUc5AAbsNs5dCdeNish0v9zUwAm4Y9lbMjwf8EcfuAWup
+         qcFw9YUWOwk6wbfJWvEo9T8S3AARfyUw0ONzssRewEuitHeBNB4tqp7lBcOoq+mcdW
+         2A+BIncUk9HPmEyRctmQmw/afV/4FDqj47jTsuc3RmbpmHBbP+VpeTsaBV0zrMYXGa
+         WRswl1PJY/bA5HC1DFZa+pnRsYqCp1NuSgeh0IHN0BGhXN7dhxCHwQMR24HPCckAmS
+         i5f8Cjb/uHMB2kdNPcB/mQAUYAK8tadxIH//xkb5mqksoYP2avFOrAHMUfAuN/hCsF
+         oKXRoocw/A6gQ==
+Date:   Sun, 24 Apr 2022 20:49:53 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Klaus Jensen <its@irrelevant.dk>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Keith Busch <kbusch@kernel.org>,
+        Sagi Grimberg <sagi@grimberg.me>, axboe@fb.com,
+        linux-nvme@lists.infradead.org
+Subject: Re: [PATCH AUTOSEL 5.10 18/18] nvme-pci: disable namespace
+ identifiers for Qemu controllers
+Message-ID: <YmXwMUdka3m01hUV@sashalap>
+References: <20220419181353.485719-1-sashal@kernel.org>
+ <20220419181353.485719-18-sashal@kernel.org>
+ <YmBWdMfQ/WIACcTg@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <fcaf18ed6efaafa6ca7df79712d9d317645215f8.camel@perches.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YmBWdMfQ/WIACcTg@bombadil.infradead.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 24, 2022 at 04:46:03PM -0700, Joe Perches wrote:
-> On Thu, 2022-04-21 at 19:48 -0400, Kent Overstreet wrote:
-> > This adds printbufs: simple heap-allocated strings meant for building up
-> > structured messages, for logging/procfs/sysfs and elsewhere. They've
-> > been heavily used in bcachefs for writing .to_text() functions/methods -
-> > pretty printers, which has in turn greatly improved the overall quality
-> > of error messages.
-> > 
-> > Basic usage is documented in include/linux/printbuf.h.
-> 
-> Given the maximum printk output is less than 1024 bytes, why should
-> this be allowed to be larger than that or larger than PAGE_SIZE?
+On Wed, Apr 20, 2022 at 11:52:36AM -0700, Luis Chamberlain wrote:
+>On Tue, Apr 19, 2022 at 02:13:52PM -0400, Sasha Levin wrote:
+>> From: Christoph Hellwig <hch@lst.de>
+>>
+>> [ Upstream commit 66dd346b84d79fde20832ed691a54f4881eac20d ]
+>>
+>> Qemu unconditionally reports a UUID, which depending on the qemu version
+>> is either all-null (which is incorrect but harmless) or contains a single
+>> bit set for all controllers.  In addition it can also optionally report
+>> a eui64 which needs to be manually set.  Disable namespace identifiers
+>> for Qemu controlles entirely even if in some cases they could be set
+>> correctly through manual intervention.
+>>
+>> Reported-by: Luis Chamberlain <mcgrof@kernel.org>
+>> Signed-off-by: Christoph Hellwig <hch@lst.de>
+>> Reviewed-by: Keith Busch <kbusch@kernel.org>
+>> Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
+>> Signed-off-by: Sasha Levin <sashal@kernel.org>
+>
+>Huh? The NVME_QUIRK_BOGUS_NID is a new define and the code which uses
+>this quirk is also new, and so I'm curious *how and why* the auto-sel
+>stuff for stable can decide to merge this and this should not even
+>compile? I see this was backported to v5.15  and v5.17 as well.
 
-It's not just used there - in bcachefs I use it for sysfs & debugfs, as well as
-userspace code for e.g. printing out the superblock (which gets pretty big when
-including all the variable length sections).
+Because we take quirks for -stable?
 
-> > + * pr_human_readable_u64, pr_human_readable_s64: Print an integer with human
-> > + * readable units.
-> 
-> Why not extend vsprintf for this using something like %pH[8|16|32|64] 
-> or %pH[c|s|l|ll|uc|us|ul|ull] ?
+It does compile apparently... At least with the configs we test.
 
-It'd be incompatible with userspace printf. I do like the way we extend printf
-is the kernel, but I'm trying to make sure the code I write now is by default
-portable between both kernel space and userspace. Glibc has its own mechanism
-for extending printf, I've been meaning to look at that more and see if it'd be
-possible to do something more generic and extensible that works for both.
+>I didn't get Cc'd on perhaps some other patches, but this immediately
+>caught my attention as not applicable, unless of course the patch
+>"nvme: add a quirk to disable namespace identifiers" was also sent
+>as part of this series to stable kernels. And if that was done, well
+>holy crap, really?
+
+Yes, it was.
+
+I'm not sure why we shouldn't be picking it up?
+
+-- 
+Thanks,
+Sasha

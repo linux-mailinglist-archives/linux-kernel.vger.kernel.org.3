@@ -2,72 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F8F50E926
+	by mail.lfdr.de (Postfix) with ESMTP id 41FF250E925
 	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 21:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244846AbiDYTJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 15:09:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40342 "EHLO
+        id S244853AbiDYTKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 15:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238763AbiDYTI4 (ORCPT
+        with ESMTP id S235701AbiDYTKL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 15:08:56 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA37221E06;
-        Mon, 25 Apr 2022 12:05:51 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id bx5so6475319pjb.3;
-        Mon, 25 Apr 2022 12:05:51 -0700 (PDT)
+        Mon, 25 Apr 2022 15:10:11 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A9523BC3;
+        Mon, 25 Apr 2022 12:07:06 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id t25so27914590lfg.7;
+        Mon, 25 Apr 2022 12:07:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8BTa2zUpGurx+0zTiTi5KLzMhsEOnJ4yDviZ2KNo380=;
-        b=TkM9nwho7iyu/T36e2WC2dsmKOQej6nKiy3Rw9KRdZTew1l17p9vqHA7RyPLhE9mra
-         SAcZVegNyhwvv1jKWSD3L5b0qPmxn+kOKROoAnzzxDRbTKJ3VSgAzPVPzysOL1AY93iK
-         zJ+o6CwXpfK4xoPUQIYogLtSVi0uVCztWnVTQXJ27JZq9v7n6EdjQHimfGBz/ZnkYPFn
-         h5pqmnyuDParbCz40b8PxMt89In5fXzrWjEskyQHYQvzNzhTzciRUTg6NiCA2kIUITaj
-         yTe7da/kSYX6lxpfU+UMnA721US4IUnUD28YdDVBjNrv1EDGFHCDrD1KYwj3gKFIcIbz
-         Pmuw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1RWly8sd7d8QeY693RwMY0EPR+uMtvTexbsydzgQnqc=;
+        b=D3xhXPdv2YvHfaWlGmDiw1VHNflMWXOyMgJ3FJZzVuqatITEPlZjbNSmUQ704Lx4/S
+         u/p1f3uX5f2yrgz7dURzivu2lTtIHSFMr2dVcFe38wVtChTeGUD58LKwS86yzyciqITA
+         J1SIQmN7tag8YN0S+YaSxKILd3kxcPDQep5TqySwcQA13ClugAGKo8u7sopM3+Zn0v8F
+         7KLnfagruoRL6vpDH1paSm4xv4GUrOyAiis0PGfYEQiaZSZJKRnNH2BZfxTM3czLP4o4
+         EzcUfns0WK9KhjG4OCgvQmlIbfDLa42oIiAIYKt9DaiTge1mx3/cnys5/WQq0dHg394e
+         XRow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8BTa2zUpGurx+0zTiTi5KLzMhsEOnJ4yDviZ2KNo380=;
-        b=r/kH0r1piYq1hYW72ZdsGbqXuRTPbsknfMHPnva6WcxRi95qLKDSPptPCjhyG7dTyv
-         06SwQhwtT2D/E/viyDzkECLkAgb2y9sdog49jw+z9uPuTg15qrjBZiV6kXZHrehlJUHS
-         zp9dtnabZo4DKOd6zK8B5ZMIEhrGKQGLMGz3I6e/ilz8lSNwZjRb/EkO4UlwEICbJdtZ
-         /C0n5yAQNU9hauo8jx8N21q8AMDAXhOJzExRzmtcLtNitMWpz4JxjgkqZlda9FheKBCs
-         EDA0aPsQBqn4mTN2ITVzrlD4hBAqe7g53kAn61Qu3oyhxbVKTLQW+h1uYwke3rq2EGqk
-         1h/w==
-X-Gm-Message-State: AOAM532DbbwSu2UdDA8ktxXJa3fMcS8M3eH6FxxIXxtQukY7OEH7kxvC
-        fNU3mPu4I5Slqf3t9TJBDQ==
-X-Google-Smtp-Source: ABdhPJx5ynNtHJwOAQ9bAmgn9hP4sqAmb5Qu/oBN5mn3mXKdYPvWPQQ2V2O+iwMzn23d/SSovaP2iw==
-X-Received: by 2002:a17:90b:1a8a:b0:1d2:e93e:6604 with SMTP id ng10-20020a17090b1a8a00b001d2e93e6604mr33218316pjb.233.1650913551187;
-        Mon, 25 Apr 2022 12:05:51 -0700 (PDT)
-Received: from bytedance (215.178.194.35.bc.googleusercontent.com. [35.194.178.215])
-        by smtp.gmail.com with ESMTPSA id x36-20020a056a000be400b0050a40b8290dsm12006538pfu.54.2022.04.25.12.05.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 12:05:50 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 12:05:42 -0700
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Eric Dumazet <eric.dumazet@gmail.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 0/2] Make [IP6]GRE[TAP] devices always
- NETIF_F_LLTX
-Message-ID: <20220425190542.GA40273@bytedance>
-References: <cover.1650580763.git.peilin.ye@bytedance.com>
- <20220425110259.389ed44b@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1RWly8sd7d8QeY693RwMY0EPR+uMtvTexbsydzgQnqc=;
+        b=X+CoLsDD33I1N/oeCeM4ILolnMKG5etWrRuB3bx1XLARksbcnEbXReXdg+qryFxAcm
+         S4etWd6wVhJ/QgGAhxwsD0Tmvs/xuSi/MOPkJJ3bsNSPmeZuW6MeSjPjd8aPL9oKIslr
+         4tpAyMj5durhLCSq0LcI7zpua6BYwh3zLzodbQu/TdsJITCaAqNB3fa/Bvr4LeqoYeMj
+         9g2X0UEap70JwLCYggNi0BUFzi9LF6I39dyDc2JJksagCpCwBh2kfkJMnpTgsaYbbsyj
+         VpWi9iPlpkFwa5GG4X2NzZHemPohhtZxRGHhuqdF7OFBpo3ks6j+pb/5t4bCfQldPIwQ
+         Yffg==
+X-Gm-Message-State: AOAM531emnATTrUOB5rp5iLjUhLjqnhfkHdcFGjXbY2afwtzguwEMJTq
+        lgdBMXF0HD8OKFBldnI7HQtdf+hd+MEHH+oe7S4=
+X-Google-Smtp-Source: ABdhPJw6h8yF0Zjrpmx4ZLwfZr1STa170xBpI63ul7sWlIWlHbQItStw+dfUFyehDEhIUNbd0AUhyF3ko9xpDkX3fJs=
+X-Received: by 2002:a05:6512:39cf:b0:471:ea64:70cb with SMTP id
+ k15-20020a05651239cf00b00471ea6470cbmr12124971lfu.47.1650913624575; Mon, 25
+ Apr 2022 12:07:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220425110259.389ed44b@kernel.org>
+References: <20220420102354.468173-1-florian.fischer@muhq.space>
+ <YmA48V09iBbqy6su@kernel.org> <CAM9d7cjcA0aYC1otY4WvCJ_h71P9wiHu42GK7iyv3=i01rQ26Q@mail.gmail.com>
+ <20220423121557.z5gzbqadonmrg6ef@pasture>
+In-Reply-To: <20220423121557.z5gzbqadonmrg6ef@pasture>
+From:   Namhyung Kim <namhyung@gmail.com>
+Date:   Mon, 25 Apr 2022 12:06:53 -0700
+Message-ID: <CAM9d7cgcx42xD8QxOB+JBEL85mZU_va8FMiF31SRxABH8CakLg@mail.gmail.com>
+Subject: Re: [PATCHSET v4 next 0/3] perf stat: add user_time and system_time
+ tool events
+To:     Florian Fischer <florian.fischer@muhq.space>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -78,29 +74,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jakub,
+On Sat, Apr 23, 2022 at 5:16 AM Florian Fischer
+<florian.fischer@muhq.space> wrote:
+>
+> On 22.04.2022 16:52, Namhyung Kim wrote:
+> > Hello,
+> >
+> > On Fri, Apr 22, 2022 at 3:05 PM Arnaldo Carvalho de Melo
+> > <acme@kernel.org> wrote:
+> > >
+> > > Em Wed, Apr 20, 2022 at 12:23:51PM +0200, Florian Fischer escreveu:
+> > > > This patch series adds new internal events to perf stat exposing the times spend
+> > > > in user and kernel mode in nanoseconds reported by rusage.
+> > > >
+> > > > During some benchmarking using perf it bothered me that I could not easily
+> > > > retrieve those times from perf stat when using the machine readable output.
+> > > >
+> > > > But perf definitely knows about those values because in the human readable output
+> > > > they are present.
+> > > >
+> > > > Therefore I exposed the times reported by rusage via the new tool events:
+> > > > user_time and system_time.
+> > > >
+> > > > This allows to retrieved them in machine-readable output:
+> > > >
+> > > > $ ./perf stat -x, -e duration_time,user_time,system_time,cache-misses -- grep -q -r duration_time tools/perf
+> > > > 72134524,ns,duration_time:u,72134524,100.00,,
+> > > > 65225000,ns,user_time:u,65225000,100.00,,
+> > > > 6865000,ns,ssystem_time:u,6865000,100.00,,
 
-On Mon, Apr 25, 2022 at 11:02:59AM -0700, Jakub Kicinski wrote:
-> On Thu, 21 Apr 2022 15:43:42 -0700 Peilin Ye wrote:
-> > This patchset depends on these fixes [1].  Since o_seqno is now atomic_t,
-> > we can always turn on NETIF_F_LLTX for [IP6]GRE[TAP] devices, since we no
-> > longer need the TX lock (&txq->_xmit_lock).
-> 
-> LGTM, thanks, but please repost on Thu / Fri. The fixes make their way
-> into net-next on Thu so until then we can't apply.
+> > Anyway it looks a little bit strange to me if we can get
+> > system time in user mode only (the 'u' modifier).
+>
+> Sorry but I don't really understand what you mean.
+> The system_time is reported to userspace via rusage filled by wait4(2).
+> It will always report the value reported to the user space regardless of what
+> counters perf has access to.
+>
+> If you run perf as user you get the same system_time (but with the ':u' suffix)
+> as when you run perf as root or lower kernel.perf_event_paranoid to allow access
+> to more counters.
 
-Thanks for the review!
+The ':u' modifier means that the event should count only in user mode.
+So I think system_time:u should be 0 by definition.
+Likewise, user_time:k should be handled as such.
 
-> > We could probably do the same thing to [IP6]ERSPAN devices as well, but
-> > I'm not familiar with them yet.  For example, ERSPAN devices are
-> > initialized as |= GRE_FEATURES in erspan_tunnel_init(), but I don't see
-> > IP6ERSPAN devices being initialized as |= GRE6_FEATURES.  Please suggest
-> > if I'm missing something, thanks!
-> 
-> Probably good to CC William when you repost.
-
-Sure, I will resend then.
+But as I said before, we already have the task-clock event, so it's not
+clear why we need this too.  Also these tool events won't work for
+other use cases like perf record.
 
 Thanks,
-Peilin Ye
-
+Namhyung

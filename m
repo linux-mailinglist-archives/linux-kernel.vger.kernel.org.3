@@ -2,150 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BCE050D68A
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 03:27:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B150E50D68C
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 03:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240144AbiDYBaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 21:30:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43986 "EHLO
+        id S240151AbiDYBbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 21:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240137AbiDYB37 (ORCPT
+        with ESMTP id S240145AbiDYBbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 21:29:59 -0400
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B94D6DAA3C;
-        Sun, 24 Apr 2022 18:26:56 -0700 (PDT)
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id BA3F98E0B9F;
-        Mon, 25 Apr 2022 01:26:55 +0000 (UTC)
-Received: from pdx1-sub0-mail-a217.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 1F2C88E0E54;
-        Mon, 25 Apr 2022 01:26:55 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1650850015; a=rsa-sha256;
-        cv=none;
-        b=AJTc5pceriIXzpoC45Di3Lyrr0fstNJmdAtNj0FOFOjfmUoNEZlWGppsZdGv/vI+ErZSAU
-        E9+IgGK8EuoxIagX2zShgaAW30/IpPu7jSkh29Ek0es61WQzLNiu3vWOZ8FNMHgs53mu9R
-        +1jcIVkI17uGpJWpompXlWCgca5AmPBLSkpbmfvcO/USapf1q2kfRFkIVaHOCEHCm1dnz5
-        kPx+Gnu7TOib0ghbqEHE4pcz7Rk3+ktCcabaUo562QOuiXq3AlyHhlHsj6iX8KSewyDvWa
-        5cnztJicF0ceNb70JgLDLRtBTbbYUyh3xCwH0QCQPgADl7bkHEdfkMT/Oj3WSw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1650850015;
+        Sun, 24 Apr 2022 21:31:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8BBDEDE935
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 18:28:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650850090;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:dkim-signature;
-        bh=s5AE6U1EnsQ1lOXAx7PW4d2cLdYTvCRln/x/datINi8=;
-        b=tjFrNQgRa6H/A/f8j9f9/NckO8ZAQJTgsrh2poA+2gaU/MFdywciJh53FFteIgjMssUaT6
-        1rlxC5whnRs4CFw60nBt4HiO5iS/fWJVWVdGCLtviciGb8jvnK2Od2fpcoqOwQO6zCs2NK
-        rL+LV1lAFmERvpsKOsRbU/i7170+ku/AuXrGW8lw6M0xcBm5b1rEjHhly4BLvOOyIDI8Xo
-        um/KrKsoQjYfqen6h+193Tnm5vuK9Tbg70Dbl2HOex47zGnaU5lp9KeKepS0e/2TKrMBGT
-        KGxLODZuCdL0JQMW4u+IBS8lZbkOrYzIeAT29XyYiZE/TwS4FMIgWZRDkhSHZg==
-ARC-Authentication-Results: i=1;
-        rspamd-6dfbdcb948-tsjnr;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=ian@linux.cowan.aero
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|ian@linux.cowan.aero
-X-MailChannels-Auth-Id: dreamhost
-X-Bored-Turn: 1d5ead037e07d7bd_1650850015369_2800847731
-X-MC-Loop-Signature: 1650850015369:3213417145
-X-MC-Ingress-Time: 1650850015369
-Received: from pdx1-sub0-mail-a217.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.127.95.118 (trex/6.7.1);
-        Mon, 25 Apr 2022 01:26:55 +0000
-Received: from localhost.localdomain (unknown [69.12.38.97])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yWGAvjQef7xMOnO4TUloUSDXWdlreZxNm5RKmGNAwQs=;
+        b=G+dl9n0fvE10riqusbhyaIT0WHDuziAbxZVeDxmlMHclSdNxGJB6vU6904Mx74CKo1RVrW
+        58hSl/3BttQd5GXwpOS3SdtsRFKPM0cCQxO7iBCXXxwlEM5637DlUoTnV3DDW38ngpl9xJ
+        ZV54q89Li4cuQcJR7bQ3zG9rWPrM2/A=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-1-HvICT7MBPIa_1yJKboZq2Q-1; Sun, 24 Apr 2022 21:28:07 -0400
+X-MC-Unique: HvICT7MBPIa_1yJKboZq2Q-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: ian@linux.cowan.aero)
-        by pdx1-sub0-mail-a217.dreamhost.com (Postfix) with ESMTPSA id 4KmnRf0lvBz1K1;
-        Sun, 24 Apr 2022 18:26:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.cowan.aero;
-        s=dreamhost; t=1650850014;
-        bh=s5AE6U1EnsQ1lOXAx7PW4d2cLdYTvCRln/x/datINi8=;
-        h=From:To:Cc:Subject:Date:Content-Transfer-Encoding;
-        b=QxjzROhG7uV5c6ih0J1Jn1MWnplsVCDqINNSVCJqBwTNgBPkF3mMPaT/Fuqmu5bAF
-         bSmyXGk6wjDvguQuSUHEW1Kngf6qzZqjtiPKz7IwqNd+90k0+gbuPRYD3ged5qhNJM
-         AXdvWqauKCDpa2WOhm7AqcdHQCVYt5BxKld0lskveDrDFn1LHKkYLPVCpKQQsBZnrF
-         Df9tZN71Y9Jdat46jQdrGh3/tebpgkWQxDaFF2iVr98sMHRCxZ+mxJ6XY+X3JoMkWa
-         f/O/UJBiQ6kI7VQ96DzcFWDwoQPelKmJGixPYCcVmQz/2hLgsOIsGRg0CPnt5uzjvW
-         HiH8lfdH19Yog==
-From:   Ian Cowan <ian@linux.cowan.aero>
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        mjpeg-users@lists.sourceforge.net, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Ian Cowan <ian@linux.cowan.aero>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH 2/4] staging: media: zoran: setup videocodec header for debugging macros
-Date:   Sun, 24 Apr 2022 21:26:40 -0400
-Message-Id: <20220425012640.440717-1-ian@linux.cowan.aero>
-X-Mailer: git-send-email 2.35.1
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6A5AD1C0514D;
+        Mon, 25 Apr 2022 01:28:06 +0000 (UTC)
+Received: from localhost (ovpn-12-73.pek2.redhat.com [10.72.12.73])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id EFC6B40EC001;
+        Mon, 25 Apr 2022 01:28:04 +0000 (UTC)
+Date:   Mon, 25 Apr 2022 09:28:01 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     yingelin <yingelin@huawei.com>
+Cc:     ebiederm@xmission.com, keescook@chromium.org, mcgrof@kernel.org,
+        yzaikin@google.com, kexec@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        chenjianguo3@huawei.com, nixiaoming@huawei.com,
+        qiuguorui1@huawei.com, young.liuyang@huawei.com,
+        zengweilin@huawei.com
+Subject: Re: [PATCH sysctl-testing v2] kernel/kexec_core: move kexec_core
+ sysctls into its own file
+Message-ID: <YmX5Ic8eyMQZbIxY@MiWiFi-R3L-srv>
+References: <20220424025740.50371-1-yingelin@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220424025740.50371-1-yingelin@huawei.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds inline functions in the videocodec header file to convert the
-videocodec and videocodec_master structs to their respective contained
-zoran struct. This will be used to pass the zoran struct to the
-zrdev_XXX() macros defined in the zoran header.
+On 04/24/22 at 10:57am, yingelin wrote:
+> This move the kernel/kexec_core.c respective sysctls to its own file.
+> 
+> kernel/sysctl.c has grown to an insane mess, We move sysctls to places
+> where features actually belong to improve the readability and reduce
+> merge conflicts. At the same time, the proc-sysctl maintainers can easily
+> care about the core logic other than the sysctl knobs added for some feature.
+> 
+> We already moved all filesystem sysctls out. This patch is part of the effort
+> to move kexec related sysctls out.
+> 
+> Signed-off-by: yingelin <yingelin@huawei.com>
 
-In the zoran header, the new include is added to ensure all variables
-can be completely defined with the zoran and videocodec includes where
-they are located.
+LGTM,
 
-Signed-off-by: Ian Cowan <ian@linux.cowan.aero>
----
- drivers/staging/media/zoran/videocodec.h | 15 +++++++++++++++
- drivers/staging/media/zoran/zoran.h      |  1 +
- 2 files changed, 16 insertions(+)
+Acked-by: Baoquan He <bhe@redhat.com>
 
-diff --git a/drivers/staging/media/zoran/videocodec.h b/drivers/staging/media/zoran/videocodec.h
-index 9dea348fee40..5e6057edd339 100644
---- a/drivers/staging/media/zoran/videocodec.h
-+++ b/drivers/staging/media/zoran/videocodec.h
-@@ -307,4 +307,19 @@ extern int videocodec_unregister(const struct videocodec *);
- 
- int videocodec_debugfs_show(struct seq_file *m);
- 
-+#include "zoran.h"
-+static inline struct zoran *videocodec_master_to_zoran(struct videocodec_master *master)
-+{
-+	struct zoran *zr = master->data;
-+
-+	return zr;
-+}
-+
-+static inline struct zoran *videocodec_to_zoran(struct videocodec *codec)
-+{
-+	struct videocodec_master *master = codec->master_data;
-+
-+	return videocodec_master_to_zoran(master);
-+}
-+
- #endif				/*ifndef __LINUX_VIDEOCODEC_H */
-diff --git a/drivers/staging/media/zoran/zoran.h b/drivers/staging/media/zoran/zoran.h
-index 42b86356c022..674658154e88 100644
---- a/drivers/staging/media/zoran/zoran.h
-+++ b/drivers/staging/media/zoran/zoran.h
-@@ -20,6 +20,7 @@
- 
- #include <linux/debugfs.h>
- #include <linux/dev_printk.h>
-+#include <linux/i2c-algo-bit.h>
- #include <media/v4l2-device.h>
- #include <media/v4l2-ctrls.h>
- #include <media/videobuf2-core.h>
--- 
-2.35.1
+> 
+> ---
+> v2:
+>   1. Add the explanation to commit log to help patch review and subsystem
+>   maintainers better understand the context/logic behind the migration
+>   2. Add CONFIG_SYSCTL to to isolate the sysctl
+>   3. Change subject-prefix of sysctl-next to sysctl-testing
+> 
+> v1: https://lore.kernel.org/lkml/20220223030318.213093-1-yingelin@huawei.com/
+>   1. Lack more informations in the commit log to help patch review better
+>   2. Lack isolation of the sysctl
+>   3. Use subject-prefix of sysctl-next
+> ---
+>  kernel/kexec_core.c | 22 ++++++++++++++++++++++
+>  kernel/sysctl.c     | 13 -------------
+>  2 files changed, 22 insertions(+), 13 deletions(-)
+> 
+> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+> index 68480f731192..a0456baf52cc 100644
+> --- a/kernel/kexec_core.c
+> +++ b/kernel/kexec_core.c
+> @@ -936,6 +936,28 @@ int kimage_load_segment(struct kimage *image,
+>  struct kimage *kexec_image;
+>  struct kimage *kexec_crash_image;
+>  int kexec_load_disabled;
+> +#ifdef CONFIG_SYSCTL
+> +static struct ctl_table kexec_core_sysctls[] = {
+> +	{
+> +		.procname	= "kexec_load_disabled",
+> +		.data		= &kexec_load_disabled,
+> +		.maxlen		= sizeof(int),
+> +		.mode		= 0644,
+> +		/* only handle a transition from default "0" to "1" */
+> +		.proc_handler	= proc_dointvec_minmax,
+> +		.extra1		= SYSCTL_ONE,
+> +		.extra2		= SYSCTL_ONE,
+> +	},
+> +	{ }
+> +};
+> +
+> +static int __init kexec_core_sysctl_init(void)
+> +{
+> +	register_sysctl_init("kernel", kexec_core_sysctls);
+> +	return 0;
+> +}
+> +late_initcall(kexec_core_sysctl_init);
+> +#endif
+>  
+>  /*
+>   * No panic_cpu check version of crash_kexec().  This function is called
+> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+> index b60345cbadf0..0f3cb61a2e39 100644
+> --- a/kernel/sysctl.c
+> +++ b/kernel/sysctl.c
+> @@ -61,7 +61,6 @@
+>  #include <linux/capability.h>
+>  #include <linux/binfmts.h>
+>  #include <linux/sched/sysctl.h>
+> -#include <linux/kexec.h>
+>  #include <linux/mount.h>
+>  #include <linux/userfaultfd_k.h>
+>  #include <linux/pid.h>
+> @@ -1712,18 +1711,6 @@ static struct ctl_table kern_table[] = {
+>  		.proc_handler	= tracepoint_printk_sysctl,
+>  	},
+>  #endif
+> -#ifdef CONFIG_KEXEC_CORE
+> -	{
+> -		.procname	= "kexec_load_disabled",
+> -		.data		= &kexec_load_disabled,
+> -		.maxlen		= sizeof(int),
+> -		.mode		= 0644,
+> -		/* only handle a transition from default "0" to "1" */
+> -		.proc_handler	= proc_dointvec_minmax,
+> -		.extra1		= SYSCTL_ONE,
+> -		.extra2		= SYSCTL_ONE,
+> -	},
+> -#endif
+>  #ifdef CONFIG_MODULES
+>  	{
+>  		.procname	= "modprobe",
+> -- 
+> 2.26.2
+> 
+> 
+> _______________________________________________
+> kexec mailing list
+> kexec@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/kexec
+> 
 

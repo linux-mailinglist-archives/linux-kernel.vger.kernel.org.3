@@ -2,58 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B13CD50ECB0
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 01:35:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B44650ECB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 01:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235669AbiDYXho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 19:37:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51574 "EHLO
+        id S234633AbiDYXjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 19:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231827AbiDYXhm (ORCPT
+        with ESMTP id S230338AbiDYXjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 19:37:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E6489CC2
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 16:34:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C4DB361570
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:34:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5DB8C385A4;
-        Mon, 25 Apr 2022 23:34:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1650929676;
-        bh=Eb05Em8JyGymAnY18gau+jnazmwGgMGqqJHMO8BcqEA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=mDZAIzTbhfrTVINNUPKfY3iFdNiym/TmrJK94cBioGkuUjv6wwjvUSb1gNy5Y8eQk
-         xZ07TFcINLWAe8jbTzAjwgLE9MHOQKbczWol+deAepUCLMLdV1cBKtccb79shkG91/
-         ROexynsf2fwPoqxl108PqlQ7E6blmB/OuOPCwaiQ=
-Date:   Mon, 25 Apr 2022 16:34:34 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     kernel test robot <oliver.sang@intel.com>,
-        Julius Hemanth Pitti <jpitti@cisco.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>, Ingo Molnar <mingo@elte.hu>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        lkp@intel.com, Eli Cohen <elic@nvidia.com>
-Subject: Re: [proc/sysctl]  1dd38979b2:
- BUG:kernel_NULL_pointer_dereference,address
-Message-Id: <20220425163434.5f8f47e8c301ea30c2f94a5a@linux-foundation.org>
-In-Reply-To: <YmcqCVLv3HQ+Kxeq@bombadil.infradead.org>
-References: <20220425083302.GD21864@xsang-OptiPlex-9020>
-        <YmbvxQVNFESRwxxU@bombadil.infradead.org>
-        <20220425144607.2c2588e6b1f00ab8a6f3f6ea@linux-foundation.org>
-        <YmcqCVLv3HQ+Kxeq@bombadil.infradead.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        Mon, 25 Apr 2022 19:39:35 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A41A9D4E5
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 16:36:29 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id r85so18920342oie.7
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 16:36:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=8CYkzLyZNDYyfxPkGfe6LKGFiAIegv8y3Y+39SG6y/0=;
+        b=iElhaDiq7666Pe1ltzVcIyHEia/YX/Pc93gZQXu5H76/L7MrqrNRsMlMKCoQWEbulH
+         oTBC6SEunGrcGhSMfhUj9r7Tk1YjTxapEgEJPbxbH6QAWfuzFo4pJ/Yr6AGR7CZ2mKvi
+         D1GkWs8F2kN0J0jGUUtBQOWmJav+YgbFPXpXk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=8CYkzLyZNDYyfxPkGfe6LKGFiAIegv8y3Y+39SG6y/0=;
+        b=EmJ3FCIAC8kmtUMZ8/6WzKNBFXTt5WfozB/5fX8Dmo8UxqDZQ5yffWrezfhZZDFcC4
+         2o1diDwi7bWFWbTe99MtBfR6U6PwM9BCot4OrpuwNeL5rWsknDN8nmSlxb+U4o9qmi38
+         wMjJoc+EIeK0DbtKdZ05EJLqRLtFDGh6U8fp0FVC7KnIhqosk0myPlJNQ1rp6Va+7fo+
+         MU3MFfjYImFrtCwsUK6jKRfr6rOLl6Tnr4to958MS3WOQKokj0+YyJwBOT1+PWqWyTNp
+         /bTSFF7mvsiOApRcgPsTrIPPWIi0y8tTKc1SbgBCwDmXPe2/0MFiDg2qQCLdo9d2yaaW
+         mpOQ==
+X-Gm-Message-State: AOAM530Yb6RKroJMLItDbKWgjqVzGDZAo8iIDMSHJh5PJUJziti3P4nH
+        iKrne+ca6v6xJHufHdZUBToYB6kGmWeh8bXkKuT0Pw==
+X-Google-Smtp-Source: ABdhPJwJdLuhTmLM1sAkCD1ZUwA3O1OfcfJESjTRieFzCIvosW4mzYhx+MOJVTCdWblyz/gBvfFcbYY73xTNZt3LZOw=
+X-Received: by 2002:a05:6808:1296:b0:325:8fb:68f3 with SMTP id
+ a22-20020a056808129600b0032508fb68f3mr5575460oiw.193.1650929788965; Mon, 25
+ Apr 2022 16:36:28 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 25 Apr 2022 16:36:28 -0700
+MIME-Version: 1.0
+In-Reply-To: <1650924663-24892-2-git-send-email-quic_khsieh@quicinc.com>
+References: <1650924663-24892-1-git-send-email-quic_khsieh@quicinc.com> <1650924663-24892-2-git-send-email-quic_khsieh@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Mon, 25 Apr 2022 16:36:28 -0700
+Message-ID: <CAE-0n51djgvHx=1CTRUnzeQ2deAPSXFPobET==A4P5N1HTvMaQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] drm/msm/dp: reset DP controller before transmit
+ phy test pattern
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
+        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
+        dmitry.baryshkov@linaro.org, dri-devel@lists.freedesktop.org,
+        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,37 +70,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 25 Apr 2022 16:08:57 -0700 Luis Chamberlain <mcgrof@kernel.org> wrote:
+Quoting Kuogee Hsieh (2022-04-25 15:11:02)
+> DP controller state can not switch from video ready state to
+> transmit phy pattern state at run time. DP mainlink has to be
+> teared down followed by reset controller to default state to have
+> DP controller switch to transmit phy test pattern state and start
+> generate specified phy test pattern to sinker once main link setup
+> again.
+>
+> Fixes: ee35444be0c8 ("drm/msm/dp: use dp_ctrl_off_link_stream during PHY compliance test run")
 
-> On Mon, Apr 25, 2022 at 02:46:07PM -0700, Andrew Morton wrote:
-> > On Mon, 25 Apr 2022 12:00:21 -0700 Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > 
-> > > Andrew, can we drop this patch for now?
-> > 
-> > I've been sitting on (ie, forgotten about) this patch
-> > (https://lore.kernel.org/all/20200709235115.56954-1-jpitti@cisco.com/T/#u)
-> 
-> Jesh, yeah I see.
-> 
-> > for two years.  Evidently waiting for you/Kees/Ingo to provide
-> > guidance.  So sure, the need seems very unurgent so I can drop it.
-> 
-> Well Keew as OK with it, but I yeah I can't decipher the issue at this
-> point in time.
-> 
-> > However I fail to see how that patch could have caused this crash.  I'm
-> > suspecting a bisection error?
-> > 
-> > Maybe something is unwell in drivers/vdpa/vdpa_user/vduse_dev.c.
-> 
-> At a quick glance, yes it could very well by vduse_init() is messy and
-> races somehow with init, but if a race does lurk here my instincts tell
-> me this can't be the only place.
-> 
-> Not sure if leaving a patch in place more time to see how else things
-> can explode is worth it.
+What commit is this? I think it's supposed to be
 
-Confused.  Are you thinking that the above-linked patch was somehow
-involved in this crash?  If so, but how?  All it does it to permit
-unprivileged reads to four ints via proc_dointvec_minmax()?
+Fixes: 52352fe2f866 ("drm/msm/dp: use dp_ctrl_off_link_stream during
+PHY compliance test run")
 
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+
+Otherwise,
+
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>

@@ -2,133 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A7C850D746
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 04:58:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED19750D745
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 04:58:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240532AbiDYDBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 23:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44376 "EHLO
+        id S240504AbiDYDBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 23:01:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240514AbiDYDBS (ORCPT
+        with ESMTP id S229577AbiDYDBK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 23:01:18 -0400
-Received: from out203-205-221-210.mail.qq.com (out203-205-221-210.mail.qq.com [203.205.221.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C739B84ED6
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 19:58:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1650855488;
-        bh=HucfxWg7WLzKK33ibHuCmIEtwQY3NwivHh2WljaMSPk=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=QZdi3CdCyKj1C4fVLcPcm4rK4IBLJ0vsJp5yBIiUw9Td4uqxZdbVvLk5ANwrG7ucN
-         5H07mqKtK089BFQ2c+FeO1RAgoICcN5A/5yAUVZfOyeQZ6nAYO0WGrD3dtiwUqiTO3
-         vQup7Se/15B7oorh7+kshRjaW9lorhNF5k8AXvOw=
-Received: from [10.27.0.6] ([94.177.118.128])
-        by newxmesmtplogicsvrsza8.qq.com (NewEsmtp) with SMTP
-        id E7715EE1; Mon, 25 Apr 2022 10:57:55 +0800
-X-QQ-mid: xmsmtpt1650855475te67wfj42
-Message-ID: <tencent_5151C34BC7D86055C4C7768C1A4653505A06@qq.com>
-X-QQ-XMAILINFO: MQ+wLuVvI2LQC/KJV6LaTwBj061LhYfOrByOSpey+K3S1udv28bAJjd5Bdllfd
-         pNb7IEi0EY/cpHk10CYCm+d4cYqiCLcqqx/UcZ9XIVctITwZhcaxrq4AXXKFmiHMzFmtOaxWriNQ
-         4hCNKjJs4cvj9qjSwWboYISnOiamhpm3yGXZ+WAmnQqWDDu5uS8Y7eYFmxHJwuwcHHM4B6Qaz2mI
-         wWuVLmL0i/W/vSNlo3/tQiiviDuSL2NxALnbXwUkBqHNAuxFAEjZnZZYRF5kfCz9bvnys4jlOYBs
-         bMlE2272nyI0aVjUA4mnUxCdHyImXVnpX+fzFlSwpcGJHmuVPt4j5WEfL7Ybo1XI4WBnq0Bn3lV4
-         iE6jqCw3iMWqKMtshFuaHGNoUP5Uetko1WTX/8KW49AOaE9ix1IUdW2q7EP8sxF3iC+IRoCgTZ6t
-         3YWYr6gLxB6mwTgHj/j7aQrqNhECc1f0hGC5xfxUVPTTvnRDXgLi8Y8qE9/eIHoWC56ibR9x/W/I
-         zTOkiWDLBTv0L5Ba+/J/ZF3GrVEuBYuoHZSsWYASi4WTqhFmT/wBikEosE422A4nweHtC7ao5Gqc
-         6eHmokCHPzg4hk0QMnGLXm7jD/Xj8ey9dgYk6UC8Uq3CPMxaDNl1LpTXeDVxxWsTjcILOZKuo2xp
-         F8pvRpJDYBHcV7xhV8+OxlftqHtBYLJoGQKeFnLRufsIcTLkw/yR6LFWtLZkitCdUEF0Fa3JmEeT
-         m6wjurCIXKFXX1wQOMsa+yb/OcBI0a+/VnCxpH0gWGLg84Aa7qAN4Y0C1CVwRIiX5CJE9Y+jHRxv
-         h244I2/fM5O5tmDQ3142Jof8BbQa69HKjH8fmK8bdFk/g3BNNOrK54rWxGiId5ajoz4cy3UuCiqs
-         mRjBozcKxwJifU8C3We0p/Xkouf5HGrEi4elXPN5nNbrYRzFmUkMyI2YPSE9oMzXcF5S934HkO
-Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
- allocation and free it on mm exit
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Cc:     Joerg Roedel <joro@8bytes.org>, Fenghua Yu <fenghua.yu@intel.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86 <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        iommu <iommu@lists.linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        zhangfei <zhangfei.gao@linaro.org>
-References: <20220207230254.3342514-6-fenghua.yu@intel.com>
- <Ygt4h0PgYzKOiB38@8bytes.org>
- <tencent_F6830A1196DB4C6A904D7C691F0D961D1108@qq.com>
- <56ed509d-a7cf-1fde-676c-a28eb204989b@intel.com>
- <tencent_9920B633D50E9B80D3A41A723BCE06972309@qq.com>
- <f439dde5-0eaa-52e4-9cf7-2ed1f62ea07f@intel.com>
- <tencent_F73C11A7DBAC6AF24D3369DF0DCA1D7E8308@qq.com>
- <a139dbad-2f42-913b-677c-ef35f1eebfed@intel.com>
- <tencent_B683AC1146DB6A6ABB4D73697C0D6A1D7608@qq.com>
- <41ed3405-66d9-0cde-fc01-b3eacb85a081@intel.com> <YlWWavIDMNpbD3Ye@larix>
- <8b1e40c9-b2e8-7b73-d9ad-2c6a5a167370@intel.com>
-From:   "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>
-X-OQ-MSGID: <6daae664-fad2-fe1f-0c22-b8c8aceab841@foxmail.com>
-Date:   Mon, 25 Apr 2022 10:57:52 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Sun, 24 Apr 2022 23:01:10 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307C58300D;
+        Sun, 24 Apr 2022 19:58:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650855488; x=1682391488;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7zP9c6Hz0+ADerHzpKpE29M8TOXpPgBNwoa4g9n2RUg=;
+  b=TzmUn2Mc1ToSYxtkuKjdRcTQR29MKmAp9u98/qonL7RPs4xuyBgvjyIT
+   mIEvWKbgl81XaXCW8dZPNmzss/iqRDp75VyzZuzxqauEl1KxsG4L66W+G
+   zHV8YVbCJbveHRf28o8D+ACLjCzKHzufobvbHaVYFtTC0Ro3qMRCrylgd
+   2BXhBf+D6r4u0GjHhF7g1p47GXo6pIm3OtwPtMTHpAOAXe534WpwTXKtT
+   dUOTz9FEH+9YmdZWgp6FpHvUlAsYUUauEhm7QdZ9g/PIrKof/RsBJoda4
+   uklt1taVfXZt3xcV0GWqKUGZpJDwOipnD8axcSCL1vWOEsy/tr9Y0vOW/
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="245048012"
+X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
+   d="scan'208";a="245048012"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 19:58:07 -0700
+X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
+   d="scan'208";a="512426692"
+Received: from jbapanap-mobl.amr.corp.intel.com (HELO [10.212.136.45]) ([10.212.136.45])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 19:58:06 -0700
+Message-ID: <8972b2ac-c786-8ff5-74fc-040cd4d81c86@linux.intel.com>
+Date:   Sun, 24 Apr 2022 19:58:06 -0700
 MIME-Version: 1.0
-In-Reply-To: <8b1e40c9-b2e8-7b73-d9ad-2c6a5a167370@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: Re: [PATCH v3 09/21] x86/virt/tdx: Get information about TDX module
+ and convertible memory
 Content-Language: en-US
-X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
-        FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, dave.hansen@intel.com,
+        len.brown@intel.com, tony.luck@intel.com,
+        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
+        dan.j.williams@intel.com, peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com, isaku.yamahata@intel.com
+References: <cover.1649219184.git.kai.huang@intel.com>
+ <145620795852bf24ba2124a3f8234fd4aaac19d4.1649219184.git.kai.huang@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <145620795852bf24ba2124a3f8234fd4aaac19d4.1649219184.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Dave
 
-On 2022/4/12 下午11:35, Dave Hansen wrote:
-> On 4/12/22 08:10, Jean-Philippe Brucker wrote:
->>> I wonder if the Intel and ARM IOMMU code differ in the way they keep
->>> references to the mm, or if this affects Intel as well, but we just
->>> haven't tested the code enough.
->> The Arm code was written expecting the PASID to be freed on unbind(), not
->> mm exit. I missed the change of behavior, sorry (I thought your plan was
->> to extend PASID lifetime, not shorten it?) but as is it seems very broken.
->> For example in the iommu_sva_unbind_device(), we have
->> arm_smmu_mmu_notifier_put() clearing the PASID table entry for
->> "mm->pasid", which is going to end badly if the PASID has been cleared or
->> reallocated. We can't clear the PASID entry in mm exit because at that
->> point the device may still be issuing DMA for that PASID and we need to
->> quiesce the entry rather than deactivate it.
-> I think we ended up flipping some of this around on the Intel side.
-> Instead of having to quiesce the device on mm exit, we don't let the mm
-> exit until the device is done.
->
-> When you program the pasid into the device, it's a lot like when you
-> create a thread.  We bump the reference count on the mm when we program
-> the page table pointer into a CPU.  We drop the thread's reference to
-> the mm when the thread exits and will no longer be using the page tables.
->
-> Same thing with pasids.  We bump the refcount on the mm when the pasid
-> is programmed into the device.  Once the device is done with the mm, we
-> drop the mm.
->
-> Basically, instead of recounting the pasid itself, we just refcount the mm.
-This has issue, since refcount the mm will block  fops_release to be 
-called, where unbind may really happen.
 
-For example, user driver are ended unexpectedly,
-usually system will end all applications via close fd -> fops_release -> 
-unbind may happen here.
-Now mmget is called, fops_release -> unbind has NO chance to be called, 
-so ioasid can NOT be freed.
+On 4/5/22 9:49 PM, Kai Huang wrote:
+> TDX provides increased levels of memory confidentiality and integrity.
+> This requires special hardware support for features like memory
+> encryption and storage of memory integrity checksums.  Not all memory
+> satisfies these requirements.
+> 
+> As a result, TDX introduced the concept of a "Convertible Memory Region"
+> (CMR).  During boot, the firmware builds a list of all of the memory
+> ranges which can provide the TDX security guarantees.  The list of these
+> ranges, along with TDX module information, is available to the kernel by
+> querying the TDX module via TDH.SYS.INFO SEAMCALL.
+> 
+> Host kernel can choose whether or not to use all convertible memory
+> regions as TDX memory.  Before TDX module is ready to create any TD
+> guests, all TDX memory regions that host kernel intends to use must be
+> configured to the TDX module, using specific data structures defined by
+> TDX architecture.  Constructing those structures requires information of
+> both TDX module and the Convertible Memory Regions.  Call TDH.SYS.INFO
+> to get this information as preparation to construct those structures.
+> 
+> Signed-off-by: Kai Huang <kai.huang@intel.com>
+> ---
 
-Thanks
+Looks good. Some minor comments.
 
+>   arch/x86/virt/vmx/tdx/tdx.c | 131 ++++++++++++++++++++++++++++++++++++
+>   arch/x86/virt/vmx/tdx/tdx.h |  61 +++++++++++++++++
+>   2 files changed, 192 insertions(+)
+> 
+> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
+> index ef2718423f0f..482e6d858181 100644
+> --- a/arch/x86/virt/vmx/tdx/tdx.c
+> +++ b/arch/x86/virt/vmx/tdx/tdx.c
+> @@ -80,6 +80,11 @@ static DEFINE_MUTEX(tdx_module_lock);
+>   
+>   static struct p_seamldr_info p_seamldr_info;
+>   
+> +/* Base address of CMR array needs to be 512 bytes aligned. */
+> +static struct cmr_info tdx_cmr_array[MAX_CMRS] __aligned(CMR_INFO_ARRAY_ALIGNMENT);
+> +static int tdx_cmr_num;
+> +static struct tdsysinfo_struct tdx_sysinfo;
+> +
+>   static bool __seamrr_enabled(void)
+>   {
+>   	return (seamrr_mask & SEAMRR_ENABLED_BITS) == SEAMRR_ENABLED_BITS;
+> @@ -468,6 +473,127 @@ static int tdx_module_init_cpus(void)
+>   	return seamcall_on_each_cpu(&sc);
+>   }
+>   
+> +static inline bool cmr_valid(struct cmr_info *cmr)
+> +{
+> +	return !!cmr->size;
+> +}
+> +
+> +static void print_cmrs(struct cmr_info *cmr_array, int cmr_num,
+> +		       const char *name)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < cmr_num; i++) {
+> +		struct cmr_info *cmr = &cmr_array[i];
+> +
+> +		pr_info("%s : [0x%llx, 0x%llx)\n", name,
+> +				cmr->base, cmr->base + cmr->size);
+> +	}
+
+I am not sure if it is ok to print this info by default or pr_debug
+would be better. I will let maintainers decide about it.
+
+> +}
+> +
+> +static int sanitize_cmrs(struct cmr_info *cmr_array, int cmr_num)
+
+Since this function only deals with tdx_cmr_array, why pass it
+as argument?
+
+> +{
+> +	int i, j;
+> +
+> +	/*
+> +	 * Intel TDX module spec, 20.7.3 CMR_INFO:
+> +	 *
+> +	 *   TDH.SYS.INFO leaf function returns a MAX_CMRS (32) entry
+> +	 *   array of CMR_INFO entries. The CMRs are sorted from the
+> +	 *   lowest base address to the highest base address, and they
+> +	 *   are non-overlapping.
+> +	 *
+> +	 * This implies that BIOS may generate invalid empty entries
+> +	 * if total CMRs are less than 32.  Skip them manually.
+> +	 */
+> +	for (i = 0; i < cmr_num; i++) {
+> +		struct cmr_info *cmr = &cmr_array[i];
+> +		struct cmr_info *prev_cmr = NULL;
+
+Why not keep declarations together at the top of the function?
+
+> +
+> +		/* Skip further invalid CMRs */
+> +		if (!cmr_valid(cmr))
+> +			break;
+> +
+> +		if (i > 0)
+> +			prev_cmr = &cmr_array[i - 1];
+> +
+> +		/*
+> +		 * It is a TDX firmware bug if CMRs are not
+> +		 * in address ascending order.
+> +		 */
+> +		if (prev_cmr && ((prev_cmr->base + prev_cmr->size) >
+> +					cmr->base)) {
+> +			pr_err("Firmware bug: CMRs not in address ascending order.\n");
+> +			return -EFAULT;
+> +		}
+
+Since above condition is only true for i > 0 case, why not combine them
+together if (i > 0) {...}
+
+> +	}
+> +
+> +	/*
+> +	 * Also a sane BIOS should never generate invalid CMR(s) between
+> +	 * two valid CMRs.  Sanity check this and simply return error in
+> +	 * this case.
+> +	 *
+> +	 * By reaching here @i is the index of the first invalid CMR (or
+> +	 * cmr_num).  Starting with next entry of @i since it has already
+> +	 * been checked.
+> +	 */
+> +	for (j = i + 1; j < cmr_num; j++)
+> +		if (cmr_valid(&cmr_array[j])) {
+> +			pr_err("Firmware bug: invalid CMR(s) among valid CMRs.\n");
+> +			return -EFAULT;
+> +		}
+> +
+> +	/*
+> +	 * Trim all tail invalid empty CMRs.  BIOS should generate at
+> +	 * least one valid CMR, otherwise it's a TDX firmware bug.
+> +	 */
+> +	tdx_cmr_num = i;
+> +	if (!tdx_cmr_num) {
+> +		pr_err("Firmware bug: No valid CMR.\n");
+> +		return -EFAULT;
+> +	}
+> +
+> +	/* Print kernel sanitized CMRs */
+> +	print_cmrs(tdx_cmr_array, tdx_cmr_num, "Kernel-sanitized-CMR");
+> +
+> +	return 0;
+> +}
+> +
+
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

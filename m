@@ -2,135 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2BA50E92F
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 21:10:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6234050E931
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 21:10:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244859AbiDYTNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 15:13:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55966 "EHLO
+        id S244862AbiDYTNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 15:13:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244756AbiDYTM7 (ORCPT
+        with ESMTP id S244861AbiDYTNT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 15:12:59 -0400
-Received: from smtp.smtpout.orange.fr (smtp07.smtpout.orange.fr [80.12.242.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4E46A02B
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 12:09:54 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.180.246])
-        by smtp.orange.fr with ESMTPA
-        id j45gnYOhTjXpHj45gnJl9o; Mon, 25 Apr 2022 21:09:51 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Mon, 25 Apr 2022 21:09:51 +0200
-X-ME-IP: 86.243.180.246
-Message-ID: <7b62c83b-e284-ce43-a229-2b7774edaf95@wanadoo.fr>
-Date:   Mon, 25 Apr 2022 21:09:44 +0200
+        Mon, 25 Apr 2022 15:13:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A532655F;
+        Mon, 25 Apr 2022 12:10:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 986F0B81A03;
+        Mon, 25 Apr 2022 19:10:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 37B36C385A9;
+        Mon, 25 Apr 2022 19:10:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650913811;
+        bh=fNpeq6T3pkA5NkTQjgnnd8/ubclmUGEEr/oMQiksv0s=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=uEjPQGJvA9oBbjAjslDqjTWF1ZO/7aE1muVcllH3K+0A62AqpifTFqKvVN3C0RZTK
+         Rq0BJzHzrNmmmOkV6ZdRAdrGImHgnwe5OfgLZD7MOWRTgDxrT10SvIe1ikNvFGPmqk
+         oJtF65mI7RDHzPbiGKZieOKVlF8UVna+aa1g0Yie94SbbAKXvtrg72TnMK3Do8JzZg
+         uKArRWgX94sz0/fU6qRuIJDENMkSq1ZEzCni8/SLxyGIwbxq3040F2it6qc75zlv2p
+         LzWnnSQ+XXpHxWI+9D9KA7+RUYDoyyUuxinzbFpHrL8odNFPGbUAan4jk/LR3STGZv
+         MIipebvfXjuIg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1943EEAC09C;
+        Mon, 25 Apr 2022 19:10:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 07/34] x86/hyperv: Introduce
- HV_MAX_SPARSE_VCPU_BANKS/HV_VCPUS_PER_SPARSE_BANK constants
-Content-Language: en-ZA
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220414132013.1588929-1-vkuznets@redhat.com>
- <20220414132013.1588929-8-vkuznets@redhat.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220414132013.1588929-8-vkuznets@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH net 0/2] net/smc: Two fixes for smc fallback
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165091381110.9058.15067070581057696641.git-patchwork-notify@kernel.org>
+Date:   Mon, 25 Apr 2022 19:10:11 +0000
+References: <1650614179-11529-1-git-send-email-guwen@linux.alibaba.com>
+In-Reply-To: <1650614179-11529-1-git-send-email-guwen@linux.alibaba.com>
+To:     Wen Gu <guwen@linux.alibaba.com>
+Cc:     kgraul@linux.ibm.com, davem@davemloft.net, kuba@kernel.org,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello:
 
-Le 14/04/2022 à 15:19, Vitaly Kuznetsov a écrit :
-> It may not come clear from where the magical '64' value used in
-> __cpumask_to_vpset() come from. Moreover, '64' means both the maximum
-> sparse bank number as well as the number of vCPUs per bank. Add defines
-> to make things clear. These defines are also going to be used by KVM.
+This series was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Fri, 22 Apr 2022 15:56:17 +0800 you wrote:
+> This patch set includes two fixes for smc fallback:
 > 
-> No functional change.
+> Patch 1/2 introduces some simple helpers to wrap the replacement
+> and restore of clcsock's callback functions. Make sure that only
+> the original callbacks will be saved and not overwritten.
 > 
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->   include/asm-generic/hyperv-tlfs.h |  5 +++++
->   include/asm-generic/mshyperv.h    | 11 ++++++-----
->   2 files changed, 11 insertions(+), 5 deletions(-)
+> Patch 2/2 fixes a syzbot reporting slab-out-of-bound issue where
+> smc_fback_error_report() accesses the already freed smc sock (see
+> https://lore.kernel.org/r/00000000000013ca8105d7ae3ada@google.com/).
+> The patch fixes it by resetting sk_user_data and restoring clcsock
+> callback functions timely in fallback situation.
 > 
-> diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
-> index fdce7a4cfc6f..020ca9bdbb79 100644
-> --- a/include/asm-generic/hyperv-tlfs.h
-> +++ b/include/asm-generic/hyperv-tlfs.h
-> @@ -399,6 +399,11 @@ struct hv_vpset {
->   	u64 bank_contents[];
->   } __packed;
->   
-> +/* The maximum number of sparse vCPU banks which can be encoded by 'struct hv_vpset' */
-> +#define HV_MAX_SPARSE_VCPU_BANKS (64)
-> +/* The number of vCPUs in one sparse bank */
-> +#define HV_VCPUS_PER_SPARSE_BANK (64)
-> +
->   /* HvCallSendSyntheticClusterIpi hypercall */
->   struct hv_send_ipi {
->   	u32 vector;
-> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
-> index c08758b6b364..0abe91df1ef6 100644
-> --- a/include/asm-generic/mshyperv.h
-> +++ b/include/asm-generic/mshyperv.h
-> @@ -214,9 +214,10 @@ static inline int __cpumask_to_vpset(struct hv_vpset *vpset,
->   {
->   	int cpu, vcpu, vcpu_bank, vcpu_offset, nr_bank = 1;
->   	int this_cpu = smp_processor_id();
-> +	int max_vcpu_bank = hv_max_vp_index / HV_VCPUS_PER_SPARSE_BANK;
->   
-> -	/* valid_bank_mask can represent up to 64 banks */
-> -	if (hv_max_vp_index / 64 >= 64)
-> +	/* vpset.valid_bank_mask can represent up to HV_MAX_SPARSE_VCPU_BANKS banks */
-> +	if (max_vcpu_bank >= HV_MAX_SPARSE_VCPU_BANKS)
->   		return 0;
->   
->   	/*
-> @@ -224,7 +225,7 @@ static inline int __cpumask_to_vpset(struct hv_vpset *vpset,
->   	 * structs are not cleared between calls, we risk flushing unneeded
->   	 * vCPUs otherwise.
->   	 */
-> -	for (vcpu_bank = 0; vcpu_bank <= hv_max_vp_index / 64; vcpu_bank++)
-> +	for (vcpu_bank = 0; vcpu_bank <= max_vcpu_bank; vcpu_bank++)
->   		vpset->bank_contents[vcpu_bank] = 0;
->   
->   	/*
-> @@ -236,8 +237,8 @@ static inline int __cpumask_to_vpset(struct hv_vpset *vpset,
->   		vcpu = hv_cpu_number_to_vp_number(cpu);
->   		if (vcpu == VP_INVAL)
->   			return -1;
-> -		vcpu_bank = vcpu / 64;
-> -		vcpu_offset = vcpu % 64;
-> +		vcpu_bank = vcpu / HV_VCPUS_PER_SPARSE_BANK;
-> +		vcpu_offset = vcpu % HV_VCPUS_PER_SPARSE_BANK;
->   		__set_bit(vcpu_offset, (unsigned long *)
->   			  &vpset->bank_contents[vcpu_bank]);
+> [...]
 
-Here, we could also use directly:
-	__set_bit(vcpu, vpset->bank_contents);
+Here is the summary with links:
+  - [net,1/2] net/smc: Only save the original clcsock callback functions
+    https://git.kernel.org/netdev/net/c/97b9af7a7093
+  - [net,2/2] net/smc: Fix slab-out-of-bounds issue in fallback
+    https://git.kernel.org/netdev/net/c/0558226cebee
 
-This is simpler, more readable (IMHO) and also makes 'vcpu_offset' useless.
-And in case gcc is not able to optimize it by itself, this should also 
-save a few cycles.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Just my 2c,
-CJ
-
->   		if (vcpu_bank >= nr_bank)
 

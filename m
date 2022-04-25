@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FEF450E746
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 19:29:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3E7650E74B
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 19:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243607AbiDYR3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 13:29:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47692 "EHLO
+        id S243716AbiDYR3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 13:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244099AbiDYR2B (ORCPT
+        with ESMTP id S244097AbiDYR2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 25 Apr 2022 13:28:01 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BE0A4130D;
-        Mon, 25 Apr 2022 10:24:57 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF89941307;
+        Mon, 25 Apr 2022 10:24:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 982CECE18E6;
-        Mon, 25 Apr 2022 17:24:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A42EC385A9;
-        Mon, 25 Apr 2022 17:24:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B82361585;
+        Mon, 25 Apr 2022 17:24:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68287C385A4;
+        Mon, 25 Apr 2022 17:24:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650907493;
-        bh=mvFjQvGDLrQO3UKthtsQolM5bkR9ybZ3sqbDhcll+MQ=;
+        s=k20201202; t=1650907495;
+        bh=+80wHVodptz//ofhkGGYWEEAicTPsSLWn5+WM/nG7v4=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=X0ZAS4g1JdQ/DXyYYIoAgCbcfFX785SKb0rjMWSvEyrXyRxYMZqdrFdA9FT/OVrn9
-         f2iPkph0DJym6mdTSfnwod/Usn0LDH81dB/mktNAQHBuySR9sJ+TrWVKY0xlI8tVnW
-         oGsny/gj7F7ome6N1LDD3fm8qp4TUxc3SKitDO0dIaYbJnrGFRbPEMmm+G0lxaL+Mz
-         ZWeQM7a6Gc2YblMutHULc59e2Hq2jxa1h+3N+P3+WyrjDP2keYhYsoP3bZpVMLKbS9
-         ob49Y5WzZOZYf4o3lObhMwNrKA3GhCZj03EaAvvHR2qVEEgkb5/qtsu42vaZOfvRMV
-         Yacia59+nleDA==
+        b=hG4sh8Adq815IjPH7rdRf8US4h3Qr/fh9BekQURg5sIFT5j1PUnNmtAmQ1hcPTche
+         W8tzXKnhlZDoQj7LcED+fVZas8hrZORY2tafZ8QKSJ7kJVCfr9Yj1Kbm8aYsy5PVtl
+         Q68P+Oa9HpGK3mUcmaph7kAGU+ANM4rFFUFP3zpTH3cgdMDZjXdjQpyNi5VWRsNgLJ
+         zYTsJ39bHxbmx0bRoJseuv7+ci/2zOVLI74GnLxRQs4tAI9iwYvkIbeE6N3H9Cmb0T
+         kDm3SXSzhuzM/Ztgn6rMjatmKiRjfosh2bjJP291O9WehxRP4IVl03vQt7R+vUHR9F
+         qKFBDKd5cpz6w==
 From:   Mark Brown <broonie@kernel.org>
-To:     matthias.schiffer@ew.tq-group.com
-Cc:     linux-spi@vger.kernel.org, vigneshr@ti.com,
-        linux-kernel@vger.kernel.org, tudor.ambarus@microchip.com,
-        p.yadav@ti.com, vadivel.muruganx.ramuthevar@linux.intel.com
-In-Reply-To: <20220420155616.281730-1-matthias.schiffer@ew.tq-group.com>
-References: <20220420155616.281730-1-matthias.schiffer@ew.tq-group.com>
-Subject: Re: [PATCH v2 1/2] spi: cadence-quadspi: drop cqspi_set_protocol()
-Message-Id: <165090749221.584172.15272036659287081946.b4-ty@kernel.org>
-Date:   Mon, 25 Apr 2022 18:24:52 +0100
+To:     luca.ceresoli@bootlin.com, linux-spi@vger.kernel.org
+Cc:     chris.ruehl@gtsys.com.hk, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        heiko@sntech.de
+In-Reply-To: <20220421213251.1077899-1-luca.ceresoli@bootlin.com>
+References: <20220421213251.1077899-1-luca.ceresoli@bootlin.com>
+Subject: Re: [PATCH] spi: rockchip: fix missing error on unsupported SPI_CS_HIGH
+Message-Id: <165090749413.584172.1969660470967557422.b4-ty@kernel.org>
+Date:   Mon, 25 Apr 2022 18:24:54 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,18 +54,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 20 Apr 2022 17:56:15 +0200, Matthias Schiffer wrote:
-> As suggested, this removes the whole cqspi_set_protocol() function, as it
-> is not actually needed:
+On Thu, 21 Apr 2022 23:32:51 +0200, Luca Ceresoli wrote:
+> The hardware (except for the ROCKCHIP_SPI_VER2_TYPE2 version) does not
+> support active-high native chip selects. However if such a CS is configured
+> the core does not error as it normally should, because the
+> 'ctlr->use_gpio_descriptors = true' line in rockchip_spi_probe() makes the
+> core set SPI_CS_HIGH in ctlr->mode_bits.
 > 
-> - Checks for unsupported operations are already handled by supports_op(),
->   removing the need to distinguish DTR and non-DTR modes in the buswidth
->   setup
-> - supports_op() ensures that the DTR flags match for all relevant parts of
->   an operation, so op->cmd.dtr can be used instead of copying the flag to
->   the cqspi_flash_pdata
-> - The logic in cqspi_set_protocol() is moved to cqspi_calc_rdreg() and
->   cqspi_write_setup() (with a helper macro CQSPI_OP_WIDTH())
+> In such a case the spi-rockchip driver operates normally but produces an
+> active-low chip select signal without notice.
 > 
 > [...]
 
@@ -75,10 +72,8 @@ Applied to
 
 Thanks!
 
-[1/2] spi: cadence-quadspi: drop cqspi_set_protocol()
-      commit: 28ac902aedd18abf4faf8816b1bea6623d0e9509
-[2/2] spi: cadence-quadspi: allow operations with cmd/addr buswidth >1
-      commit: 1aeda0966693574c07c5fa72adf41be43d491f96
+[1/1] spi: rockchip: fix missing error on unsupported SPI_CS_HIGH
+      commit: d5d933f09ac326aebad85bfb787cc786ad477711
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

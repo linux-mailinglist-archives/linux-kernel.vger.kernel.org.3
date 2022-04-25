@@ -2,154 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CA8750D670
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 03:01:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC3F150D671
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 03:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235292AbiDYBEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 21:04:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
+        id S240079AbiDYBGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 21:06:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240068AbiDYBEs (ORCPT
+        with ESMTP id S230410AbiDYBGw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 21:04:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8290F4B853
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 18:01:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650848504;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5murYanTtEXbPZyarPU70weW32pWscxaeP6vQe3sXWI=;
-        b=Nk8vKt9NxPLVeEFiEA7vFl0oTSwH5ZwQccvGwo1DHDeCyPH0TRKhslpYTflv/KGEuHGdAV
-        fmCK2Ny/JcTmrx6lnxQibDqu1ZVbdKaKTaKpw4KkZaWGuOFWEwx11Cmvvd6EM0fO7tB8Gp
-        SidHHmOc0aAudZZI5YOdFT4yVuYlIdk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-587-Cnei6zKlNruIH1kVOzyOwg-1; Sun, 24 Apr 2022 21:01:40 -0400
-X-MC-Unique: Cnei6zKlNruIH1kVOzyOwg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1EA4A1E18D44;
-        Mon, 25 Apr 2022 01:01:40 +0000 (UTC)
-Received: from [10.22.8.132] (unknown [10.22.8.132])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7A437145B96B;
-        Mon, 25 Apr 2022 01:01:39 +0000 (UTC)
-Message-ID: <cd0b2d8c-1bbb-1da5-89f5-51abf5a8a6ce@redhat.com>
-Date:   Sun, 24 Apr 2022 21:01:39 -0400
+        Sun, 24 Apr 2022 21:06:52 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B80A072440;
+        Sun, 24 Apr 2022 18:03:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650848629; x=1682384629;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=iZS+98Xl33K6rmKKZ7NI1zRHdkd/31tlWUvecI4w6Rs=;
+  b=B9QjH8/9VczX0n3ZiV3wrxf+s378mB0FxiFgX9ZNvnlKpNGF0f34/KKx
+   D+qUj3qggJ4qFpMvt+4kIeV+QcCDpPpC0QXzGcQJA1jvtbG431KXCuSV+
+   Iz9gqoqlL3I3lrRqZEcs/K16eqo+9o00b9DyLxOREPS7jfDj4CP1kR/Z1
+   A5tTdvO5lz0/ZR8weDjDjBe8P8WrXOTo8XKLsGL6GoArUM2EbVdru0r7z
+   6xE6CmlWy3SoF2/UbTTFTyKOJaHx6YM0mzbreCi49+a9dZDuYaYhX5Ar2
+   RBwFvypBYlTyk08mIKZCpvg1UTKlgeqHXzOpiQPHvZfJnMEXheHcdRVpK
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="245032855"
+X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
+   d="scan'208";a="245032855"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 18:03:49 -0700
+X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
+   d="scan'208";a="531858966"
+Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.125])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 18:03:47 -0700
+From:   Zqiang <qiang1.zhang@intel.com>
+To:     paulmck@kernel.org, frederic@kernel.org
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4] rcu: Dump all rcuc kthreads status for CPUs that not report quiescent state
+Date:   Mon, 25 Apr 2022 09:04:04 +0800
+Message-Id: <20220425010404.3249118-1-qiang1.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] mm/memcg: Free percpu stats memory of dying memcg's
-Content-Language: en-US
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-References: <20220421145845.1044652-1-longman@redhat.com>
- <YmGHYNuAp8957ouq@carbon> <112a4d7f-bc53-6e59-7bb8-6fecb65d045d@redhat.com>
- <YmGbmrH/Hg1VJlUc@carbon> <58c41f14-356e-88dd-54aa-dc6873bf80ff@redhat.com>
- <YmITEEdEbaKCK3BN@FVFYT0MHHV2J.usts.net>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YmITEEdEbaKCK3BN@FVFYT0MHHV2J.usts.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/21/22 22:29, Muchun Song wrote:
-> On Thu, Apr 21, 2022 at 02:46:00PM -0400, Waiman Long wrote:
->> On 4/21/22 13:59, Roman Gushchin wrote:
->>> On Thu, Apr 21, 2022 at 01:28:20PM -0400, Waiman Long wrote:
->>>> On 4/21/22 12:33, Roman Gushchin wrote:
->>>>> On Thu, Apr 21, 2022 at 10:58:45AM -0400, Waiman Long wrote:
->>>>>> For systems with large number of CPUs, the majority of the memory
->>>>>> consumed by the mem_cgroup structure is actually the percpu stats
->>>>>> memory. When a large number of memory cgroups are continuously created
->>>>>> and destroyed (like in a container host), it is possible that more
->>>>>> and more mem_cgroup structures remained in the dying state holding up
->>>>>> increasing amount of percpu memory.
->>>>>>
->>>>>> We can't free up the memory of the dying mem_cgroup structure due to
->>>>>> active references in some other places. However, the percpu stats memory
->>>>>> allocated to that mem_cgroup is a different story.
->>>>>>
->>>>>> This patch adds a new percpu_stats_disabled variable to keep track of
->>>>>> the state of the percpu stats memory. If the variable is set, percpu
->>>>>> stats update will be disabled for that particular memcg. All the stats
->>>>>> update will be forward to its parent instead. Reading of the its percpu
->>>>>> stats will return 0.
->>>>>>
->>>>>> The flushing and freeing of the percpu stats memory is a multi-step
->>>>>> process. The percpu_stats_disabled variable is set when the memcg is
->>>>>> being set to offline state. After a grace period with the help of RCU,
->>>>>> the percpu stats data are flushed and then freed.
->>>>>>
->>>>>> This will greatly reduce the amount of memory held up by dying memory
->>>>>> cgroups.
->>>>>>
->>>>>> By running a simple management tool for container 2000 times per test
->>>>>> run, below are the results of increases of percpu memory (as reported
->>>>>> in /proc/meminfo) and nr_dying_descendants in root's cgroup.stat.
->>>>> Hi Waiman!
->>>>>
->>>>> I've been proposing the same idea some time ago:
->>>>> https://lore.kernel.org/all/20190312223404.28665-7-guro@fb.com/T/ .
->>>>>
->>>>> However I dropped it with the thinking that with many other fixes
->>>>> preventing the accumulation of the dying cgroups it's not worth the added
->>>>> complexity and a potential cpu overhead.
->>>>>
->>>>> I think it ultimately comes to the number of dying cgroups. If it's low,
->>>>> memory savings are not worth the cpu overhead. If it's high, they are.
->>>>> I hope long-term to drive it down significantly (with lru-pages reparenting
->>>>> being the first major milestone), but it might take a while.
->>>>>
->>>>> I don't have a strong opinion either way, just want to dump my thoughts
->>>>> on this.
->>>> I have quite a number of customer cases complaining about increasing percpu
->>>> memory usages. The number of dying memcg's can go to tens of thousands. From
->>>> my own investigation, I believe that those dying memcg's are not freed
->>>> because they are pinned down by references in the page structure. I am aware
->>>> that we support the use of objcg in the page structure which will allow easy
->>>> reparenting, but most pages don't do that and it is not easy to do this
->>>> conversion and it may take quite a while to do that.
->>> The big question is whether there is a memory pressure on those systems.
->>> If yes, and the number of dying cgroups is growing, it's worth investigating.
->>> It might be due to the sharing of pagecache pages and this will be ultimately
->>> fixed with implementing of the pagecache reparenting. But it also might be due
->>> to other bugs, which are fixable, so it would be great to understand.
->>
->> Pagecache reparenting will probably fix the problem that I have seen. Is
->> someone working on this?
->>
-> We also encountered dying cgroup issue on our servers for a long time.
-> I have worked on this for a while and proposed a resolution [1] based
-> on obj_cgroup APIs to charge the LRU pages.
->
-> [1] https://lore.kernel.org/all/20220216115132.52602-1-songmuchun@bytedance.com/
+If the rcutree.use_softirq is configured, when RCU Stall event
+happened, dump status of all rcuc kthreads who due to starvation
+prevented grace period ends on CPUs that not report quiescent
+state.
 
-Thanks for the pointer. I am interested in this patch series. Please cc 
-me if you need to generate a new revision.
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+---
+ v1->v2:
+ rework rcuc_kthread_dump function
+ v2->v3:
+ merge this rcuc-stalled information into print_cpu_stall_info()
+ v3->v4:
+ print rcuc info only when rcuc kthread is starved
 
-Cheers,
-Longman
+ kernel/rcu/tree_stall.h | 49 ++++++++++++++++++-----------------------
+ 1 file changed, 21 insertions(+), 28 deletions(-)
+
+diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
+index d7956c03edbd..a3d33c471cbb 100644
+--- a/kernel/rcu/tree_stall.h
++++ b/kernel/rcu/tree_stall.h
+@@ -407,7 +407,19 @@ static bool rcu_is_gp_kthread_starving(unsigned long *jp)
+ 
+ static bool rcu_is_rcuc_kthread_starving(struct rcu_data *rdp, unsigned long *jp)
+ {
+-	unsigned long j = jiffies - READ_ONCE(rdp->rcuc_activity);
++	int cpu;
++	struct task_struct *rcuc;
++	unsigned long j;
++
++	rcuc = rdp->rcu_cpu_kthread_task;
++	if (!rcuc)
++		return false;
++
++	cpu = task_cpu(rcuc);
++	if (cpu_is_offline(cpu) || idle_cpu(cpu))
++		return false;
++
++	j = jiffies - READ_ONCE(rdp->rcuc_activity);
+ 
+ 	if (jp)
+ 		*jp = j;
+@@ -432,6 +444,9 @@ static void print_cpu_stall_info(int cpu)
+ 	struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
+ 	char *ticks_title;
+ 	unsigned long ticks_value;
++	bool rcuc_starved;
++	unsigned long j;
++	char buf[32];
+ 
+ 	/*
+ 	 * We could be printing a lot while holding a spinlock.  Avoid
+@@ -449,7 +464,10 @@ static void print_cpu_stall_info(int cpu)
+ 	delta = rcu_seq_ctr(rdp->mynode->gp_seq - rdp->rcu_iw_gp_seq);
+ 	falsepositive = rcu_is_gp_kthread_starving(NULL) &&
+ 			rcu_dynticks_in_eqs(rcu_dynticks_snap(rdp));
+-	pr_err("\t%d-%c%c%c%c: (%lu %s) idle=%03x/%ld/%#lx softirq=%u/%u fqs=%ld %s\n",
++	rcuc_starved = rcu_is_rcuc_kthread_starving(rdp, &j);
++	if (rcuc_starved)
++		sprintf(buf, "rcuc=%ld jiffies(starved)", j);
++	pr_err("\t%d-%c%c%c%c: (%lu %s) idle=%03x/%ld/%#lx softirq=%u/%u fqs=%ld %s %s\n",
+ 	       cpu,
+ 	       "O."[!!cpu_online(cpu)],
+ 	       "o."[!!(rdp->grpmask & rdp->mynode->qsmaskinit)],
+@@ -462,32 +480,10 @@ static void print_cpu_stall_info(int cpu)
+ 	       rdp->dynticks_nesting, rdp->dynticks_nmi_nesting,
+ 	       rdp->softirq_snap, kstat_softirqs_cpu(RCU_SOFTIRQ, cpu),
+ 	       data_race(rcu_state.n_force_qs) - rcu_state.n_force_qs_gpstart,
++	       rcuc_starved ? buf : "",
+ 	       falsepositive ? " (false positive?)" : "");
+ }
+ 
+-static void rcuc_kthread_dump(struct rcu_data *rdp)
+-{
+-	int cpu;
+-	unsigned long j;
+-	struct task_struct *rcuc;
+-
+-	rcuc = rdp->rcu_cpu_kthread_task;
+-	if (!rcuc)
+-		return;
+-
+-	cpu = task_cpu(rcuc);
+-	if (cpu_is_offline(cpu) || idle_cpu(cpu))
+-		return;
+-
+-	if (!rcu_is_rcuc_kthread_starving(rdp, &j))
+-		return;
+-
+-	pr_err("%s kthread starved for %ld jiffies\n", rcuc->comm, j);
+-	sched_show_task(rcuc);
+-	if (!trigger_single_cpu_backtrace(cpu))
+-		dump_cpu_task(cpu);
+-}
+-
+ /* Complain about starvation of grace-period kthread.  */
+ static void rcu_check_gp_kthread_starvation(void)
+ {
+@@ -659,9 +655,6 @@ static void print_cpu_stall(unsigned long gps)
+ 	rcu_check_gp_kthread_expired_fqs_timer();
+ 	rcu_check_gp_kthread_starvation();
+ 
+-	if (!use_softirq)
+-		rcuc_kthread_dump(rdp);
+-
+ 	rcu_dump_cpu_stacks();
+ 
+ 	raw_spin_lock_irqsave_rcu_node(rnp, flags);
+-- 
+2.25.1
 

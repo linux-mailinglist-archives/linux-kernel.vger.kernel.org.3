@@ -2,142 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489EB50EC93
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 01:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD50B50EC96
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 01:31:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237658AbiDYXal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 19:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54764 "EHLO
+        id S237812AbiDYXey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 19:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231223AbiDYXak (ORCPT
+        with ESMTP id S231223AbiDYXew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 19:30:40 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D374E3B2
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 16:27:34 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1650929252;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=XzijQAge0g89gvUrSzz3FX6p0MRkFUXLNxnrJ7DF4DE=;
-        b=kBEyZ55od/TF7AtcKuEJ5Xr1drsvLAWFj7m7dcEE4x9ejzCWS36+yfD3UWXyZ+4jljFixE
-        qcNEV0QVjV/ygHp6ApcTIoBFbQQMENkBTpoztwUlKPG3nRel0Pj0KD9brmFkyhxaYD/Lbn
-        GthxwXdUyj+Fi4kroMXA0HlLkUG7X6w01NCNuoRNIzF2rXznl9yPW0KyDyj/1h1H+DxGLj
-        tPFUjeUTzzwqg0xZRH+0EQEdDrhraPSeKsjWoRFXJ7CziEInM2v8KBb6d77FGehjc/M2se
-        8cHEEWqOKP3aTmx+M7w4pf2ncGpY9Geb13Z0bxi9yZTjqVhnuBK6bePcKaXxkA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1650929252;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=XzijQAge0g89gvUrSzz3FX6p0MRkFUXLNxnrJ7DF4DE=;
-        b=Pi6abstAJhkxcijAUhcpfHz/jongQ6IVzDmYFZAyDKGgUDjxY4+/Q0xgQNFi4WoWz/4AVJ
-        MkHxNqvQU8sjLNDQ==
-To:     Marcelo Tosatti <mtosatti@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     Nitesh Lal <nilal@redhat.com>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Oscar Shiang <oscar0225@livemail.tw>
-Subject: Re: [patch v12 06/13] procfs: add per-pid task isolation state
-In-Reply-To: <20220315153313.997111717@fedora.localdomain>
-Date:   Tue, 26 Apr 2022 01:27:32 +0200
-Message-ID: <87v8uwzqu3.ffs@tglx>
+        Mon, 25 Apr 2022 19:34:52 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F726A06A
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 16:31:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650929506; x=1682465506;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0lhndJjDn/HqgkGA/clNmjLMRbgedTdtPzE+IXmrLsA=;
+  b=ZSullI0b5ugojomUjr5LBHDfrIf1jPrxuPVTuEdmSBvToKDCtxhe9bPp
+   RHi4ccvNd+Tzp9Ge+NpXKocNOYyWE58MK3V1APnw8rOPhRTk09LtgPUUW
+   Uch16Ofu+D2F7qf9+0GXi+S2bsq3l1IKLOY5Dl9+hSiMAv3eP3ld1E+Gp
+   vQcNktkEOmxiRTw9yleSMqGtnFMGlYz9ZwCM9J8ZZdfhAo1H6C/7ZQrQn
+   sDqfMzrxmXDixDINJbEnQXr5vSrFHchEErRGa0mJ5J35pGVcqMs+grPml
+   5r2iWvV/Hv2aDwZ37gNYAT8bSXX5sAhiMrZnemEswZ7kH80UDRpCwYZct
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="290534265"
+X-IronPort-AV: E=Sophos;i="5.90,289,1643702400"; 
+   d="scan'208";a="290534265"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 16:31:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,289,1643702400"; 
+   d="scan'208";a="616729829"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 25 Apr 2022 16:31:45 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nj8BE-000308-K4;
+        Mon, 25 Apr 2022 23:31:44 +0000
+Date:   Tue, 26 Apr 2022 07:30:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Haiyue Wang <haiyue.wang@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: drivers/net/ethernet/intel/iavf/iavf_fdir.c:340:5: warning: format
+ specifies type 'unsigned short' but the argument has type 'int'
+Message-ID: <202204260715.M6oOAjgw-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15 2022 at 12:31, Marcelo Tosatti wrote:
-> Add /proc/pid/task_isolation file, to query the state of
-> task isolation configuration.
->
-> ---
+Hi Haiyue,
 
-Lacks a Signed-off-by...
+FYI, the error/warning still remains.
 
->  fs/proc/base.c |   68 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d615b5416f8a1afeb82d13b238f8152c572d59c0
+commit: 527691bf0682d7ddcca77fc17dabd2fa090572ff iavf: Support IPv4 Flow Director filters
+date:   1 year, 1 month ago
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220426/202204260715.M6oOAjgw-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=527691bf0682d7ddcca77fc17dabd2fa090572ff
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 527691bf0682d7ddcca77fc17dabd2fa090572ff
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/ethernet/intel/iavf/
 
-> +#ifdef CONFIG_TASK_ISOLATION
-> +
-> +struct qoptions {
-> +	unsigned long mask;
-> +	char *name;
-> +};
-> +
-> +static struct qoptions iopts[] = {
-> +	{ISOL_F_QUIESCE, "quiesce"},
-> +};
-> +#define ILEN (sizeof(iopts) / sizeof(struct qoptions))
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reinventing ARRAY_SIZE() just because this isolation muck is special?
+All warnings (new ones prefixed by >>):
 
-> +static struct qoptions qopts[] = {
-> +	{ISOL_F_QUIESCE_VMSTATS, "vmstat_sync"},
-> +};
-> +#define QLEN (sizeof(qopts) / sizeof(struct qoptions))
+>> drivers/net/ethernet/intel/iavf/iavf_fdir.c:340:5: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+                            ntohs(fltr->ip_data.dst_port),
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:118:33: note: expanded from macro 'dev_info'
+           _dev_info(dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                  ~~~     ^~~~~~~~~~~
+   include/linux/byteorder/generic.h:142:18: note: expanded from macro 'ntohs'
+   #define ntohs(x) ___ntohs(x)
+                    ^~~~~~~~~~~
+   include/linux/byteorder/generic.h:137:21: note: expanded from macro '___ntohs'
+   #define ___ntohs(x) __be16_to_cpu(x)
+                       ^~~~~~~~~~~~~~~~
+   include/uapi/linux/byteorder/little_endian.h:42:26: note: expanded from macro '__be16_to_cpu'
+   #define __be16_to_cpu(x) __swab16((__force __u16)(__be16)(x))
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/linux/swab.h:105:2: note: expanded from macro '__swab16'
+           (__builtin_constant_p((__u16)(x)) ?     \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/intel/iavf/iavf_fdir.c:341:5: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+                            ntohs(fltr->ip_data.src_port));
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:118:33: note: expanded from macro 'dev_info'
+           _dev_info(dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                  ~~~     ^~~~~~~~~~~
+   include/linux/byteorder/generic.h:142:18: note: expanded from macro 'ntohs'
+   #define ntohs(x) ___ntohs(x)
+                    ^~~~~~~~~~~
+   include/linux/byteorder/generic.h:137:21: note: expanded from macro '___ntohs'
+   #define ___ntohs(x) __be16_to_cpu(x)
+                       ^~~~~~~~~~~~~~~~
+   include/uapi/linux/byteorder/little_endian.h:42:26: note: expanded from macro '__be16_to_cpu'
+   #define __be16_to_cpu(x) __swab16((__force __u16)(__be16)(x))
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/linux/swab.h:105:2: note: expanded from macro '__swab16'
+           (__builtin_constant_p((__u16)(x)) ?     \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
 
-Ditto.
 
-> +static void show_isolation_state(struct seq_file *m,
-> +				 struct qoptions *iopt,
-> +				 int mask,
-> +				 const char *hdr)
-> +{
-> +	int i;
-> +
-> +	seq_printf(m, hdr);
-> +	for (i = 0; i < ILEN; i++) {
-> +		if (mask & iopt->mask)
-> +			seq_printf(m, "%s ", iopt->name);
-> +		iopt++;
-> +	}
-> +	if (mask == 0)
-> +		seq_printf(m, "none ");
-> +	seq_printf(m, "\n");
-> +}
-> +
-> +int proc_pid_task_isolation(struct seq_file *m, struct pid_namespace *ns,
-> +			    struct pid *pid, struct task_struct *t)
+vim +340 drivers/net/ethernet/intel/iavf/iavf_fdir.c
 
-This is required to be global without a prototype because?
+   316	
+   317	/**
+   318	 * iavf_print_fdir_fltr
+   319	 * @adapter: adapter structure
+   320	 * @fltr: Flow Director filter to print
+   321	 *
+   322	 * Print the Flow Director filter
+   323	 **/
+   324	void iavf_print_fdir_fltr(struct iavf_adapter *adapter, struct iavf_fdir_fltr *fltr)
+   325	{
+   326		const char *proto = iavf_fdir_flow_proto_name(fltr->flow_type);
+   327	
+   328		if (!proto)
+   329			return;
+   330	
+   331		switch (fltr->flow_type) {
+   332		case IAVF_FDIR_FLOW_IPV4_TCP:
+   333		case IAVF_FDIR_FLOW_IPV4_UDP:
+   334		case IAVF_FDIR_FLOW_IPV4_SCTP:
+   335			dev_info(&adapter->pdev->dev, "Rule ID: %u dst_ip: %pI4 src_ip %pI4 %s: dst_port %hu src_port %hu\n",
+   336				 fltr->loc,
+   337				 &fltr->ip_data.v4_addrs.dst_ip,
+   338				 &fltr->ip_data.v4_addrs.src_ip,
+   339				 proto,
+ > 340				 ntohs(fltr->ip_data.dst_port),
+   341				 ntohs(fltr->ip_data.src_port));
+   342			break;
+   343		case IAVF_FDIR_FLOW_IPV4_AH:
+   344		case IAVF_FDIR_FLOW_IPV4_ESP:
+   345			dev_info(&adapter->pdev->dev, "Rule ID: %u dst_ip: %pI4 src_ip %pI4 %s: SPI %u\n",
+   346				 fltr->loc,
+   347				 &fltr->ip_data.v4_addrs.dst_ip,
+   348				 &fltr->ip_data.v4_addrs.src_ip,
+   349				 proto,
+   350				 ntohl(fltr->ip_data.spi));
+   351			break;
+   352		case IAVF_FDIR_FLOW_IPV4_OTHER:
+   353			dev_info(&adapter->pdev->dev, "Rule ID: %u dst_ip: %pI4 src_ip %pI4 proto: %u L4_bytes: 0x%x\n",
+   354				 fltr->loc,
+   355				 &fltr->ip_data.v4_addrs.dst_ip,
+   356				 &fltr->ip_data.v4_addrs.src_ip,
+   357				 fltr->ip_data.proto,
+   358				 ntohl(fltr->ip_data.l4_header));
+   359			break;
+   360		default:
+   361			break;
+   362		}
+   363	}
+   364	
 
-> +{
-> +	int active_mask, quiesce_mask, conf_mask;
-> +	struct task_isol_info *task_isol_info;
-> +	struct inode *inode = m->private;
-> +	struct task_struct *task = get_proc_task(inode);
-> +
-> +	task_isol_info = t->task_isol_info;
-> +	if (!task_isol_info)
-> +		active_mask = quiesce_mask = conf_mask = 0;
-> +	else {
-> +		active_mask = task_isol_info->active_mask;
-> +		quiesce_mask = task_isol_info->quiesce_mask;
-> +		conf_mask = task_isol_info->conf_mask;
-> +	}
-> +
-> +	show_isolation_state(m, iopts, conf_mask, "Configured state: ");
-> +	show_isolation_state(m, iopts, active_mask, "Active state: ");
-> +	show_isolation_state(m, qopts, quiesce_mask, "Quiescing: ");
-
-And once you have 10 features with 10 subfeature masks supported, all of
-this ends up in fs/proc/base.c just because all of this nonsense is
-required to be disconnected from the actual task isolation code, right?
-
-Just because a lot of crap has been dumped over time into that file does
-not justify to mindlessly dump more crap into it.
-
-Thanks,
-
-        tglx
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

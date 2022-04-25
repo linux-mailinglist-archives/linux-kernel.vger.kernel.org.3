@@ -2,83 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D573050DC4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 11:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB55050DC4A
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 11:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241011AbiDYJS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 05:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45934 "EHLO
+        id S240996AbiDYJTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 05:19:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241559AbiDYJQ7 (ORCPT
+        with ESMTP id S241584AbiDYJRO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 05:16:59 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B52F321
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 02:13:51 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23P8dEd6030426;
-        Mon, 25 Apr 2022 09:13:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=6X2jedQwijB4Kh0e2riYItaL9nIyj05CViCMzGahzWk=;
- b=PdJt77zs0jrYt5X4a5k+7M3MnYsAbWu5t+mzzaHVpgDSTGJwH8E+tV2zVEIcRpZUaB+0
- xjR/FCJm8tm9RbXXuIizJf1AJrXLYGXUZuMjSpdJfa/v/bMfRB8xcjQBwZ9w3QKhavb5
- u1pWkzhEZtnJT22NPcr+y3CPoYd7f5wPHS/zXy/K3TJNxgL6fbV2TC2VBLZ1M1eX2Q8T
- f7dTxEJlvQMuCxcs5Z0xF4+0lWBvCodxLN1CSYriy+eHIk+IoW0vRSL23jbI0XYu/i/T
- ARYaR23fUhtSGal2Rox0ak9PCcrpLmP3ndXiHsqpdcZrdZTkagkH3J+L6QCBvwwlPYeA Dw== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fnraugqb2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Apr 2022 09:13:49 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23P99NnW002691;
-        Mon, 25 Apr 2022 09:13:47 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 3fm938t3aj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Apr 2022 09:13:47 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23P9DiQ220578720
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 25 Apr 2022 09:13:44 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5537DAE055;
-        Mon, 25 Apr 2022 09:13:44 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0C8D2AE051;
-        Mon, 25 Apr 2022 09:13:44 +0000 (GMT)
-Received: from osiris (unknown [9.145.60.82])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Mon, 25 Apr 2022 09:13:43 +0000 (GMT)
-Date:   Mon, 25 Apr 2022 11:13:42 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Sven Schnelle <svens@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] s390: disable -Warray-bounds
-Message-ID: <YmZmRlvK1Ad2R4tW@osiris>
-References: <20220422134308.1613610-1-svens@linux.ibm.com>
- <202204221052.85D0C427@keescook>
+        Mon, 25 Apr 2022 05:17:14 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78731321;
+        Mon, 25 Apr 2022 02:14:10 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id b17so11297389qvf.12;
+        Mon, 25 Apr 2022 02:14:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=91flSxJRmaGK0ryyqZaGiTUm7eWeBTNwUgCLD8/8Uro=;
+        b=L9/rhY2ePaHSSwjdh2A33AILDVsApMM7Ctenn2VhSyYRJ3fiISwNKGfVzE1HyIKKhV
+         HyCydbVX1/3CrF8ivT3BVWT9cmWfwSNUoXZoY5BLtqHij5fLwx+4eVpFSRQCSQtG3mY4
+         RbijpuYanTqiJdu+31HKaT+e46zNROKwvThGkl2H6sn84brODGHnJV8l8p7b8DqSSPuW
+         dvtxQOcdxn4pPmxemgCMc/sZHYpJfYDV2yK6LKjneC9DjEMAKmoTe6oDyPyr/stSzmo1
+         eE2/oq9Dede1dFJokr+53OQRxjgMPn0TUkTqWRU84P7/EhUBDwjnjpSmgMECiYHJJpxB
+         kDdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=91flSxJRmaGK0ryyqZaGiTUm7eWeBTNwUgCLD8/8Uro=;
+        b=3D5zX1cF0XeSw890mzeAqDKXxrskhLryMvPvCBwjAfYSnc+PoAQZtVJkZWD/wTYzkS
+         K967ekVzBNzY2PgxOOnf/TI7YLHZq+BED/t8nXcclwOVp8ZkyHDpmr2Ty+CbCN94TTtm
+         Z8W///BKmMdWvpO2sU5pBUbc/GrpWypur9C6yhU9wLFV0mQL5GKWowMTj5p/+oj9/eYk
+         MCOWAaCrvBkA/f8OpwkzMmcNenAHTW5gloyK1g3k/fBhEms/8rDfCXU+gIIDBLi74dpH
+         7dXagxDBqXjo2nRa3ntNQW/tSyUins3HS5Uh87iSp6alG+rBS5nMy1xciXuvnULwmMyr
+         LovQ==
+X-Gm-Message-State: AOAM532Vzpy9WMKwwB6vwabpeF+uAH2kGCVhklqMDFEgqRC3u5hcWE8f
+        uBYFL0eC+SIucUtQpE0/BXg=
+X-Google-Smtp-Source: ABdhPJyY45oyFv7a9F5kcWk6B4Z5OsbslNhlS7WGnw+lfI2L+vnaW/SdJypqKXT6ac8e4TFniW3m9w==
+X-Received: by 2002:ad4:5b81:0:b0:456:2c7f:97ab with SMTP id 1-20020ad45b81000000b004562c7f97abmr6640486qvp.71.1650878049672;
+        Mon, 25 Apr 2022 02:14:09 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id b2-20020a37b202000000b0069c7ad47221sm4701011qkf.38.2022.04.25.02.14.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 02:14:09 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: lv.ruyi@zte.com.cn
+To:     benh@kernel.crashing.org, joel@jms.id.au
+Cc:     brendanhiggins@google.com, tglx@linutronix.de, maz@kernel.org,
+        andrew@aj.id.au, linux-i2c@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] drm/msm/dsi: fix error check return value of irq_of_parse_and_map()
+Date:   Mon, 25 Apr 2022 09:14:02 +0000
+Message-Id: <20220425091402.3499657-1-lv.ruyi@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202204221052.85D0C427@keescook>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: kFHppHQ3132OF6_IEtMjIkGaIK8ytjbm
-X-Proofpoint-GUID: kFHppHQ3132OF6_IEtMjIkGaIK8ytjbm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-25_05,2022-04-22_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
- mlxscore=0 lowpriorityscore=0 clxscore=1011 priorityscore=1501 bulkscore=0
- impostorscore=0 mlxlogscore=381 adultscore=0 suspectscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204250040
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,28 +73,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 10:54:09AM -0700, Kees Cook wrote:
-> On Fri, Apr 22, 2022 at 03:43:08PM +0200, Sven Schnelle wrote:
-> > gcc-12 shows a lot of array bound warnings on s390. This is caused
-> > by our S390_lowcore macro:
-> > 
-> > which uses an hardcoded address of 0. Wrapping that with
-> > absolute_pointer() works, but gcc no longer knows that a 12 bit
-> > instruction is sufficient to access lowcore. So it emits instructions
-> > like 'lghi %r1,0; l %rx,xxx(%r1)' instead of a single load/store
-> > instruction. As s390 stores variables often read/written in lowcore,
-> > this is considered problematic. Therefore disable -Warray-bounds on
-> > s390 for now until there is a better real solution.
-> > 
-> > Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
-> 
-> It looks like the source of this problem (the literal-values-treated-as-NULL)
-> is gcc-12 specific. From the discussions, it sounded like Jacob was
-> going to fix this "correctly" in gcc-13. It might be a good idea to make
-> this version-checked? (i.e. only disable on gcc-12)
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-That makes sense, so we still get at least some coverage for compilers
-< gcc 12; and also latest clang still seems to do the right thing.
+The irq_of_parse_and_map() function returns 0 on failure, and does not
+return a negative value anyhow, so never enter this conditional branch.
 
-Sven, could you either send an updated patch, or an addon patch,
-please? Whatever you prefer.
+Fixes: bf94ec093d0 ("drm/msm/dsi: do not enable irq handler before powering up the host")
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+---
+ drivers/gpu/drm/msm/dsi/dsi_host.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+index d51e70fab93d..29199e6e15ee 100644
+--- a/drivers/gpu/drm/msm/dsi/dsi_host.c
++++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+@@ -1873,10 +1873,9 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
+ 	}
+ 
+ 	msm_host->irq = irq_of_parse_and_map(pdev->dev.of_node, 0);
+-	if (msm_host->irq < 0) {
+-		ret = msm_host->irq;
+-		dev_err(&pdev->dev, "failed to get irq: %d\n", ret);
+-		return ret;
++	if (!msm_host->irq) {
++		dev_err(&pdev->dev, "failed to get irq\n");
++		return -EINVAL;
+ 	}
+ 
+ 	/* do not autoenable, will be enabled later */
+-- 
+2.25.1
+

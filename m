@@ -2,98 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CBBC50E3D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:59:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3125050E3D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242644AbiDYPCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 11:02:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46518 "EHLO
+        id S242650AbiDYPCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 11:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232022AbiDYPCU (ORCPT
+        with ESMTP id S242680AbiDYPC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 11:02:20 -0400
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C4F11BEAE;
-        Mon, 25 Apr 2022 07:59:16 -0700 (PDT)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.94.2)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1nj0BG-0000pW-BT; Mon, 25 Apr 2022 16:59:14 +0200
-Date:   Mon, 25 Apr 2022 15:59:08 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     linux-block@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Tom Rini <trini@konsulko.com>, Jens Axboe <axboe@kernel.dk>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [RFC PATCH 3/5] partitions/efi: add support for uImage.FIT
- sub-partitions
-Message-ID: <Yma3PN/g+k+Rh1Un@makrotopia.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,PDS_OTHER_BAD_TLD,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Mon, 25 Apr 2022 11:02:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C81119EFF
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 07:59:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 58FB96169F
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 14:59:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EBE7C385A7;
+        Mon, 25 Apr 2022 14:59:24 +0000 (UTC)
+Message-ID: <6a8e2b72f44047985b976423887aa06413503d9a.camel@kernel.org>
+Subject: Re: [PATCH] tracing: Fix potential double free in create_var_ref()
+From:   Tom Zanussi <tom.zanussi@linux.intel.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org
+Date:   Mon, 25 Apr 2022 09:59:22 -0500
+In-Reply-To: <20220423001311.31e2dff59708ddd3043e55af@kernel.org>
+References: <20220422060025.1436075-1-keitasuzuki.park@sslab.ics.keio.ac.jp>
+         <20220423001311.31e2dff59708ddd3043e55af@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add new GUID allowing to parse uImage.FIT stored in a GPT partition
-and map filesystem sub-image as sub-partitions.
+On Sat, 2022-04-23 at 00:13 +0900, Masami Hiramatsu wrote:
+> Hi Keita,
+> 
+> On Fri, 22 Apr 2022 06:00:25 +0000
+> Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp> wrote:
+> 
+> > In create_var_ref(), init_var_ref() is called to initialize the
+> > fields
+> > of variable ref_field, which is allocated in the previous function
+> > call
+> > to create_hist_field(). Function init_var_ref() allocates the
+> > corresponding fields such as ref_field->system, but frees these
+> > fields
+> > when the function encounters an error. The caller later calls
+> > destroy_hist_field() to conduct error handling, which frees the
+> > fields
+> > and the variable itself. This results in double free of the fields
+> > which
+> > are already freed in the previous function.
+> > 
+> > Fix this by storing NULL to the corresponding fields when they are
+> > freed
+> > in init_var_ref().
+> > 
+> 
+> Good catch! this looks good to me.
+> 
+> Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
 
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
- block/partitions/efi.c | 9 +++++++++
- block/partitions/efi.h | 3 +++
- 2 files changed, 12 insertions(+)
 
-diff --git a/block/partitions/efi.c b/block/partitions/efi.c
-index 5e9be13a56a82a..9999da6f7f8056 100644
---- a/block/partitions/efi.c
-+++ b/block/partitions/efi.c
-@@ -716,6 +716,9 @@ int efi_partition(struct parsed_partitions *state)
- 	gpt_entry *ptes = NULL;
- 	u32 i;
- 	unsigned ssz = queue_logical_block_size(state->disk->queue) / 512;
-+#ifdef CONFIG_FIT_PARTITION
-+	u32 extra_slot = 64;
-+#endif
- 
- 	if (!find_valid_gpt(state, &gpt, &ptes) || !gpt || !ptes) {
- 		kfree(gpt);
-@@ -749,6 +752,12 @@ int efi_partition(struct parsed_partitions *state)
- 				ARRAY_SIZE(ptes[i].partition_name));
- 		utf16_le_to_7bit(ptes[i].partition_name, label_max, info->volname);
- 		state->parts[i + 1].has_info = true;
-+#ifdef CONFIG_FIT_PARTITION
-+		/* If this is a U-Boot FIT volume it may have subpartitions */
-+		if (!efi_guidcmp(ptes[i].partition_type_guid, PARTITION_LINUX_FIT_GUID))
-+			(void) parse_fit_partitions(state, start * ssz, size * ssz,
-+						    &extra_slot, 127, 1);
-+#endif
- 	}
- 	kfree(ptes);
- 	kfree(gpt);
-diff --git a/block/partitions/efi.h b/block/partitions/efi.h
-index 84b9f36b9e4797..06c11f6ae3989c 100644
---- a/block/partitions/efi.h
-+++ b/block/partitions/efi.h
-@@ -51,6 +51,9 @@
- #define PARTITION_LINUX_LVM_GUID \
-     EFI_GUID( 0xe6d6d379, 0xf507, 0x44c2, \
-               0xa2, 0x3c, 0x23, 0x8f, 0x2a, 0x3d, 0xf9, 0x28)
-+#define PARTITION_LINUX_FIT_GUID \
-+    EFI_GUID( 0xcae9be83, 0xb15f, 0x49cc, \
-+              0x86, 0x3f, 0x08, 0x1b, 0x74, 0x4a, 0x2d, 0x93)
- 
- typedef struct _gpt_header {
- 	__le64 signature;
--- 
-2.36.0
+Looks fine to me too, thanks,
+
+Reviewed-by: Tom Zanussi <zanussi@kernel.org>
+
+
+> 
+> 
+> BTW, could you Cc the original code authoer and  if you fix a bug and
+> add Fixes: tag? That will help the original author can check the bug
+> and
+> help stable kernel maintainers to pick the patch. :)
+> 
+> To find the original commit, you can use the 'git blame'.
+> 
+> $ git blame kernel/trace/trace_events_hist.c -L 2093,2100
+> 067fe038e70f6 (Tom Zanussi 2018-01-15 20:51:56 -0600
+> 2093)      return err;
+> 067fe038e70f6 (Tom Zanussi 2018-01-15 20:51:56 -0600 2094)  free:
+> 067fe038e70f6 (Tom Zanussi 2018-01-15 20:51:56 -0600
+> 2095)      kfree(ref_field->system);
+> 067fe038e70f6 (Tom Zanussi 2018-01-15 20:51:56 -0600
+> 2096)      kfree(ref_field->event_name);
+> 067fe038e70f6 (Tom Zanussi 2018-01-15 20:51:56 -0600
+> 2097)      kfree(ref_field->name);
+> 067fe038e70f6 (Tom Zanussi 2018-01-15 20:51:56 -0600 2098) 
+> 067fe038e70f6 (Tom Zanussi 2018-01-15 20:51:56 -0600 2099)      goto
+> out;
+> 067fe038e70f6 (Tom Zanussi 2018-01-15 20:51:56 -0600 2100) }
+> 
+> Then, git show will tell you the original author.
+> $ git show 067fe038e70f6
+> 
+> And get the format of the commit for Fixes tag.
+> 
+> $ git --no-pager show -s --abbrev-commit --abbrev=12 --
+> pretty=format:"%h (\"%s\")%n" 067fe038e70f6
+> 067fe038e70f ("tracing: Add variable reference handling to hist
+> triggers")
+> 
+> Then you can add lines like:
+> 
+> Fixes: 067fe038e70f ("tracing: Add variable reference handling to
+> hist triggers")
+> Cc: stable@vger.kernel.org
+> 
+> Thank you,
+> 
+> > Signed-off-by: Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>
+> > ---
+> >  kernel/trace/trace_events_hist.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/kernel/trace/trace_events_hist.c
+> > b/kernel/trace/trace_events_hist.c
+> > index 44db5ba9cabb..a0e41906d9ce 100644
+> > --- a/kernel/trace/trace_events_hist.c
+> > +++ b/kernel/trace/trace_events_hist.c
+> > @@ -2093,8 +2093,11 @@ static int init_var_ref(struct hist_field
+> > *ref_field,
+> >  	return err;
+> >   free:
+> >  	kfree(ref_field->system);
+> > +	ref_field->system = NULL;
+> >  	kfree(ref_field->event_name);
+> > +	ref_field->event_name = NULL;
+> >  	kfree(ref_field->name);
+> > +	ref_field->name = NULL;
+> >  
+> >  	goto out;
+> >  }
+> > -- 
+> > 2.25.1
+> > 
+> 
+> 
 

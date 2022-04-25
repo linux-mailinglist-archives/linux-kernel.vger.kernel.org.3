@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 492D950E224
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:44:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D51750E21D
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:44:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242115AbiDYNpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 09:45:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35010 "EHLO
+        id S242131AbiDYNpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 09:45:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232864AbiDYNpH (ORCPT
+        with ESMTP id S242117AbiDYNpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 09:45:07 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2F149698
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 06:42:02 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id y21so11557154edo.2
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 06:42:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Sr6NHdWKU3G7E0q97WawXDyYijNKn/3Z9o8oYg5lN24=;
-        b=fL8CwR2tPXkWXaAQUuSJKgbPIwbYhIxgddaWq/Kmn1MpbmxF8jXZwaZSVPOmueO1Hg
-         +EjW6bFvMcc3wQd+SeKDvuaCSRLj8RjOLxXUT0jiN5Jw+ce4tN1swlKdjpRLiycy/X+B
-         cOPgpIj104tgqAi1o39gLM1emMbRExpAK9Txg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Sr6NHdWKU3G7E0q97WawXDyYijNKn/3Z9o8oYg5lN24=;
-        b=Pw6XkiAAGlaF7Igz/p7plKwM2xv3c6xGNSS1DFaNRyIhcruIJ6O/ZJhCGO9hOvjsyl
-         PvyWo95M0Qf9Zrks/v+a8EugKITndLGejt6SOOGOHnDgYkv0tyeQcxod18uKuo/cGjED
-         F3kLMz0O9+hmTPTHCrAGiESgDVr0+UGzs8Gq1r5Aerw/N9qoiHBb5wmtfd/qXgr954Xk
-         llyGlZsNyVUKaMbsPLU7gSCH14cXSNmhCyluCCRRPrSV7dgYAWTsJo9Rv+Qv1PzD/tym
-         k7KvS+htLlPMOn5Wr31B/Tq1g/5/GNr6nfvIPLgERTM4dCNUYHQGgLcR176HOnDBPhPj
-         YvFw==
-X-Gm-Message-State: AOAM531LuvYvyBRyV8QIZ94lVp7UjGBrp4wuNwspSTkSH5xELSabIwtQ
-        WS2F0CHc2IBed46HtnXsJgWyZ9OsWg33Gqw61txYRg==
-X-Google-Smtp-Source: ABdhPJyX+EHJxdRI3uyGY/iGAMM47DqAOjilYLyRNrx72zYkSB/r0Gc06ojy5VbdvQ13OFRRaKr6oelSCSlx+b/T5G0=
-X-Received: by 2002:a05:6402:50cb:b0:423:d7a8:719e with SMTP id
- h11-20020a05640250cb00b00423d7a8719emr18800324edb.37.1650894120851; Mon, 25
- Apr 2022 06:42:00 -0700 (PDT)
+        Mon, 25 Apr 2022 09:45:09 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F6A49276;
+        Mon, 25 Apr 2022 06:42:05 -0700 (PDT)
+Received: from kwepemi100013.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Kn5kv6Hqzz1JBhH;
+        Mon, 25 Apr 2022 21:41:11 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100013.china.huawei.com (7.221.188.136) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 25 Apr 2022 21:42:03 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 25 Apr 2022 21:42:02 +0800
+Subject: Re: [PATCH -next RFC v3 0/8] improve tag allocation under heavy load
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        <axboe@kernel.dk>, <bvanassche@acm.org>,
+        <andriy.shevchenko@linux.intel.com>, <john.garry@huawei.com>,
+        <ming.lei@redhat.com>, <qiulaibin@huawei.com>
+CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>
+References: <20220415101053.554495-1-yukuai3@huawei.com>
+ <dc800086-43c6-1ff2-659e-258cb75649dd@huawei.com>
+ <3fbadd9f-11dd-9043-11cf-f0839dcf30e1@opensource.wdc.com>
+ <63e84f2a-2487-a0c3-cab2-7d2011bc2db4@huawei.com>
+ <55e8b04f-0d2f-2ce1-6514-5abd0b67fd48@opensource.wdc.com>
+ <6957af40-8720-d74b-5be7-6bcdd9aa1089@huawei.com>
+ <237a43f0-3b09-46d0-e73c-57ef51e39590@opensource.wdc.com>
+ <c11ebf9e-a232-4a5d-d539-f95f584f220e@huawei.com>
+ <2e7969ea-68d0-964a-808e-ee8943de70e3@opensource.wdc.com>
+ <35f18afa-0db1-b423-5824-4d5631b0422f@huawei.com>
+ <88d9e8f4-cc5a-4897-f511-8f5b7d9a0acd@opensource.wdc.com>
+From:   "yukuai (C)" <yukuai3@huawei.com>
+Message-ID: <937972f1-5718-0409-c849-37d757950e14@huawei.com>
+Date:   Mon, 25 Apr 2022 21:42:01 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <20220325132126.61949-1-zhangjiachen.jaycee@bytedance.com>
- <CAJfpeguESQm1KsQLyoMRTevLttV8N8NTGsb2tRbNS1AQ_pNAww@mail.gmail.com> <CAFQAk7ibzCn8OD84-nfg6_AePsKFTu9m7pXuQwcQP5OBp7ZCag@mail.gmail.com>
-In-Reply-To: <CAFQAk7ibzCn8OD84-nfg6_AePsKFTu9m7pXuQwcQP5OBp7ZCag@mail.gmail.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Mon, 25 Apr 2022 15:41:49 +0200
-Message-ID: <CAJfpegsbaz+RRcukJEOw+H=G3ft43vjDMnJ8A24JiuZFQ24eHA@mail.gmail.com>
-Subject: Re: Re: [RFC PATCH] fuse: support cache revalidation in
- writeback_cache mode
-To:     Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xie Yongji <xieyongji@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <88d9e8f4-cc5a-4897-f511-8f5b7d9a0acd@opensource.wdc.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,35 +66,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 25 Apr 2022 at 15:33, Jiachen Zhang
-<zhangjiachen.jaycee@bytedance.com> wrote:
->
-> On Mon, Apr 25, 2022 at 8:41 PM Miklos Szeredi <miklos@szeredi.hu> wrote:
-> >
-> > On Fri, 25 Mar 2022 at 14:23, Jiachen Zhang
-> > <zhangjiachen.jaycee@bytedance.com> wrote:
-> > >
-> > > Hi all,
-> > >
-> > > This RFC patch implements attr cache and data cache revalidation for
-> > > fuse writeback_cache mode in kernel. Looking forward to any suggestions
-> > > or comments on this feature.
-> >
-> > Quick question before going into the details:  could the cache
-> > revalidation be done in the userspace filesystem instead, which would
-> > set/clear FOPEN_KEEP_CACHE based on the result of the revalidation?
-> >
-> > Thanks,
-> > Miklos
->
-> Hi, Miklos,
->
-> Thanks for replying. Yes, I believe we can also perform the
-> revalidation in userspace, and we can invalidate the data cache with
-> FOPEN_KEEP_CACHE cleared. But for now, there is no way we can
-> invalidate attr cache (c/mtime and size)  in writeback mode.
+在 2022/04/25 19:20, Damien Le Moal 写道:
+> On 4/25/22 16:28, yukuai (C) wrote:
+>> 在 2022/04/25 15:06, Damien Le Moal 写道:
+>>
+>>>>> By the way, did you check that doing something like:
+>>>>>
+>>>>> echo 2048 > /sys/block/sdX/queue/nr_requests
+>>>>>
+>>>>> improves performance for your high number of jobs test case ?
+>>>>
+>>>> Yes, performance will not degrade when numjobs is not greater than 256
+>>>> in this case.
+>>>
+>>> That is my thinking as well. I am asking if did check that (did you run it ?).
+>>
+>> Hi,
+>>
+>> I'm sure I ran it with 256 jobs before.
+>>
+>> However, I didn't run it with 512 jobs. And following is the result I
+>> just tested:
+> 
+> What was nr_requests ? The default 64 ?
+> If you increase that number, do you see better throughput/more requests
+> being sequential ?
 
-Can you please describe the use case for invalidating the attr cache?
+Sorry if I didn't explain this clearly.
 
-Thanks,
-Miklos
+If nr_requests is 64, numjobs is 512, the ratio of sequential is about
+20%. If nr_requests is 2048, numjobs is 512, the ratio is 49.1%.
+
+Then yes, increase nr_requests can improve performance in the test case.
+
+> 
+> 
+>>
+>> ratio of sequential io: 49.1%
+>>
+>> Read|Write seek
+>>
+>> cnt 99338, zero cnt 48753
+>>
+>>       >=(KB) .. <(KB)     : count       ratio |distribution
+>>                |
+>>            0 .. 1         : 48753       49.1%
+>> |########################################|
+>>            1 .. 2         : 0            0.0% |
+>>                |
+>>            2 .. 4         : 0            0.0% |
+>>                |
+>>            4 .. 8         : 0            0.0% |
+>>                |
+>>            8 .. 16        : 0            0.0% |
+>>                |
+>>           16 .. 32        : 0            0.0% |
+>>                |
+>>           32 .. 64        : 0            0.0% |
+>>                |
+>>           64 .. 128       : 4975         5.0% |#####
+>>                |
+>>          128 .. 256       : 4439         4.5% |####
+>>                |
+>>          256 .. 512       : 2615         2.6% |###
+>>                |
+>>          512 .. 1024      : 967          1.0% |#
+>>                |
+>>         1024 .. 2048      : 213          0.2% |#
+>>                |
+>>         2048 .. 4096      : 375          0.4% |#
+>>                |
+>>         4096 .. 8192      : 723          0.7% |#
+>>                |
+>>         8192 .. 16384     : 1436         1.4% |##
+>>                |
+>>        16384 .. 32768     : 2626         2.6% |###
+>>                |
+>>        32768 .. 65536     : 4197         4.2% |####
+>>                |
+>>        65536 .. 131072    : 6431         6.5% |######
+>>                |
+>>       131072 .. 262144    : 7590         7.6% |#######
+>>                |
+>>       262144 .. 524288    : 6433         6.5% |######
+>>                |
+>>       524288 .. 1048576   : 4583         4.6% |####
+>>                |
+>>      1048576 .. 2097152   : 2237         2.3% |##
+>>                |
+>>      2097152 .. 4194304   : 489          0.5% |#
+>>                |
+>>      4194304 .. 8388608   : 83           0.1% |#
+>>                |
+>>      8388608 .. 16777216  : 36           0.0% |#
+>>                |
+>>     16777216 .. 33554432  : 0            0.0% |
+>>                |
+>>     33554432 .. 67108864  : 0            0.0% |
+>>                |
+>>     67108864 .. 134217728 : 137          0.1% |#
+>>                |
+> 
+> 

@@ -2,262 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02BB650D828
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 06:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1ACD50D7F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 06:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241037AbiDYEMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 00:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54286 "EHLO
+        id S240847AbiDYEGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 00:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238959AbiDYELV (ORCPT
+        with ESMTP id S238046AbiDYEGg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 00:11:21 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0732118E10
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 21:08:05 -0700 (PDT)
-Received: from epcas3p3.samsung.com (unknown [182.195.41.21])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220425040803epoutp04f6542046d4d83dfbb54fecfcb9fc4748~pCCKm5hJd0156401564epoutp04n
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 04:08:03 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220425040803epoutp04f6542046d4d83dfbb54fecfcb9fc4748~pCCKm5hJd0156401564epoutp04n
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1650859683;
-        bh=ysCeGAZbJmfIpJ2BTe1KDt+Ea1Y2UlSnlu5rWTG3AQg=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=HEVcBLts9rhAXNnfG6CBOlPFDqMIcBIcTAcSwr0KRfl2TkUe4r41AcoRVGbY5n1wx
-         d+/dZAba0EQZqUeDZvwaPHRQZsCLY5KyFhmot40kJ20Bit1WVWfzMkGPdS2Bht50mq
-         kqlJauqEnqNQRm3TYTPe8GUctTsbrmKd2Of3hB5Q=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas3p1.samsung.com (KnoxPortal) with ESMTP id
-        20220425040802epcas3p19682822a319aedd2870fa1aeffada508~pCCKJoJEb1934819348epcas3p1f;
-        Mon, 25 Apr 2022 04:08:02 +0000 (GMT)
-Received: from epcpadp4 (unknown [182.195.40.18]) by epsnrtp3.localdomain
-        (Postfix) with ESMTP id 4Kms1Z5Ccbz4x9Q3; Mon, 25 Apr 2022 04:08:02 +0000
-        (GMT)
-Mime-Version: 1.0
-Subject: RE: [PATCH v3 5/6] scsi: ufshpb: Add handing of device reset HPB
- regions Infos in HPB device mode
-Reply-To: keosung.park@samsung.com
-Sender: Keoseong Park <keosung.park@samsung.com>
-From:   Keoseong Park <keosung.park@samsung.com>
-To:     Bean Huo <huobean@gmail.com>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
-        Daejun Park <daejun7.park@samsung.com>,
-        Keoseong Park <keosung.park@samsung.com>,
-        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
-        "powen.kao@mediatek.com" <powen.kao@mediatek.com>,
-        cpgsproxy3 <cpgsproxy3@samsung.com>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20220424220713.1253049-6-huobean@gmail.com>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <1796371666.21650859682732.JavaMail.epsvc@epcpadp4>
-Date:   Mon, 25 Apr 2022 12:54:04 +0900
-X-CMS-MailID: 20220425035404epcms2p49ec6b7202d89e665a93ff92c662d0519
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Hop-Count: 3
-X-CMS-RootMailID: 20220424220755epcas2p231c49e8ae1326d63429b0fdd31600733
-References: <20220424220713.1253049-6-huobean@gmail.com>
-        <20220424220713.1253049-1-huobean@gmail.com>
-        <CGME20220424220755epcas2p231c49e8ae1326d63429b0fdd31600733@epcms2p4>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 25 Apr 2022 00:06:36 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812DA5FB6;
+        Sun, 24 Apr 2022 21:03:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1650859412; x=1682395412;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=95L4LBmFjRpSaPEhBEromX4eFp/3bjhdeB6+xAg2/Dw=;
+  b=vusZMNHGmKxZiKFduJ0lsg7yxeu8wNwRNs8HurgoG5ITmz1NbyFMmEx3
+   rwMp2WGe07O6T4hVNUOyE1L5FnwN4WebMNOX/1aBCzwVTaWEhzGyIyaW8
+   p1O3dWihDxaeVnXluoUz30Pqdltvu+EF4akxhM1dj4/ZouW05TuzLjGLD
+   Y=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 24 Apr 2022 21:03:31 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 21:03:30 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Sun, 24 Apr 2022 21:03:29 -0700
+Received: from jinlmao-gv.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Sun, 24 Apr 2022 21:03:26 -0700
+From:   Mao Jinlong <quic_jinlmao@quicinc.com>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>
+CC:     Mao Jinlong <quic_jinlmao@quicinc.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: [PATCH v6 00/10] Coresight: Add support for TPDM and TPDA
+Date:   Mon, 25 Apr 2022 12:02:54 +0800
+Message-ID: <20220425040304.37487-1-quic_jinlmao@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->From: Bean Huo <beanhuo@micron.com>
->=20
->In UFS HPB Spec JESD220-3A,
->=20
->"5.8. Active and inactive information upon power cycle
->...
->When the device is powered off by the host, the device may restore L2P map=
- data
->upon power up or build from the host=E2=80=99s HPB READ command. In case d=
-evice powered
->up and lost HPB information, device can signal to the host through HPB Sen=
-se data,
->by setting HPB Operation as =E2=80=982=E2=80=99 which will inform the host=
- that device reset HPB
->information."
->=20
->Therefore, for HPB device control mode, if the UFS device is reset via the=
- RST_N
->pin, the active region information in the device will be reset. If the hos=
-t side
->receives this notification from the device side, it is recommended to inac=
-tivate
->all active regions in the host's HPB cache.
->=20
->Signed-off-by: Bean Huo <beanhuo@micron.com>
->---
-> drivers/scsi/ufs/ufshpb.c | 82 +++++++++++++++++++++++++++------------
-> 1 file changed, 58 insertions(+), 24 deletions(-)
->=20
->diff --git a/drivers/scsi/ufs/ufshpb.c b/drivers/scsi/ufs/ufshpb.c
->index e7f311bb4401..7868412054bf 100644
->--- a/drivers/scsi/ufs/ufshpb.c
->+++ b/drivers/scsi/ufs/ufshpb.c
->@@ -1137,6 +1137,39 @@ static int ufshpb_add_region(struct ufshpb_lu *hpb,=
- struct ufshpb_region *rgn)
->         spin_unlock_irqrestore(&hpb->rgn_state_lock, flags);
->         return ret;
-> }
->+/**
->+ *ufshpb_submit_region_inactive() - submit a region to be inactivated lat=
-er
->+ *@hpb: per-LU HPB instance
->+ *@region_index: the index associated with the region that will be inacti=
-vated later
->+ */
->+static void ufshpb_submit_region_inactive(struct ufshpb_lu *hpb, int regi=
-on_index)
->+{
->+        int subregion_index;
->+        struct ufshpb_region *rgn;
->+        struct ufshpb_subregion *srgn;
->+
->+        /*
->+         * Remove this region from active region list and add it to inact=
-ive list
->+         */
->+        spin_lock(&hpb->rsp_list_lock);
->+        ufshpb_update_inactive_info(hpb, region_index);
->+        spin_unlock(&hpb->rsp_list_lock);
->+
->+        rgn =3D hpb->rgn_tbl + region_index;
->+
->+        /*
->+         * Set subregion state to be HPB_SRGN_INVALID, there will no HPB =
-read on this subregion
->+         */
->+        spin_lock(&hpb->rgn_state_lock);
->+        if (rgn->rgn_state !=3D HPB_RGN_INACTIVE) {
->+                for (subregion_index =3D 0; subregion_index < rgn->srgn_c=
-nt; subregion_index++) {
->+                        srgn =3D rgn->srgn_tbl + subregion_index;
->+                        if (srgn->srgn_state =3D=3D HPB_SRGN_VALID)
->+                                srgn->srgn_state =3D HPB_SRGN_INVALID;
->+                }
->+        }
->+        spin_unlock(&hpb->rgn_state_lock);
->+}
->=20
-> static void ufshpb_rsp_req_region_update(struct ufshpb_lu *hpb,
->                                          struct utp_hpb_rsp *rsp_field)
->@@ -1196,25 +1229,8 @@ static void ufshpb_rsp_req_region_update(struct ufs=
-hpb_lu *hpb,
->=20
->         for (i =3D 0; i < rsp_field->inactive_rgn_cnt; i++) {
->                 rgn_i =3D be16_to_cpu(rsp_field->hpb_inactive_field[i]);
->-                dev_dbg(&hpb->sdev_ufs_lu->sdev_dev,
->-                        "inactivate(%d) region %d\n", i, rgn_i);
->-
->-                spin_lock(&hpb->rsp_list_lock);
->-                ufshpb_update_inactive_info(hpb, rgn_i);
->-                spin_unlock(&hpb->rsp_list_lock);
->-
->-                rgn =3D hpb->rgn_tbl + rgn_i;
->-
->-                spin_lock(&hpb->rgn_state_lock);
->-                if (rgn->rgn_state !=3D HPB_RGN_INACTIVE) {
->-                        for (srgn_i =3D 0; srgn_i < rgn->srgn_cnt; srgn_i=
-++) {
->-                                srgn =3D rgn->srgn_tbl + srgn_i;
->-                                if (srgn->srgn_state =3D=3D HPB_SRGN_VALI=
-D)
->-                                        srgn->srgn_state =3D HPB_SRGN_INV=
-ALID;
->-                        }
->-                }
->-                spin_unlock(&hpb->rgn_state_lock);
->-
->+                dev_dbg(&hpb->sdev_ufs_lu->sdev_dev, "inactivate(%d) regi=
-on %d\n", i, rgn_i);
->+                ufshpb_submit_region_inactive(hpb, rgn_i);
->         }
->=20
-> out:
->@@ -1249,14 +1265,32 @@ static void ufshpb_dev_reset_handler(struct ufs_hb=
-a *hba)
->=20
->         __shost_for_each_device(sdev, hba->host) {
->                 hpb =3D ufshpb_get_hpb_data(sdev);
->-                if (hpb && hpb->is_hcm)
->+                if (!hpb)
->+                        continue;
->+
->+                if (hpb->is_hcm) {
->                         /*
->-                         * For the HPB host mode, in case device powered =
-up and lost HPB
->-                         * information, we will set the region flag to be=
- RGN_FLAG_UPDATE,
->-                         * it will let host reload its L2P entries(re-act=
-ivate the region
->-                         * in the UFS device).
->+                         * For the HPB host control mode, in case device =
-powered up and lost HPB
->+                         * information, we will set the region flag to be=
- RGN_FLAG_UPDATE, it will
->+                         * let host reload its L2P entries(reactivate reg=
-ion in the UFS device).
->                          */
->                         ufshpb_set_regions_update(hpb);
->+                } else {
->+                        /*
->+                         * For the HPB device control mode, if host side =
-receives 02h:HPB Operation
->+                         * in UPIU response, which means device recommend=
-s the host side should
->+                         * inactivate all active regions. Here we add all=
- active regions to inactive
->+                         * list, they will be inactivated later in ufshpb=
-_map_work_handler().
->+                         */
->+                        struct victim_select_info *lru_info =3D &hpb->lru=
-_info;
->+                        struct ufshpb_region *rgn;
->+
->+                        list_for_each_entry(rgn, &lru_info->lh_lru_rgn, l=
-ist_lru_rgn)
->+                                ufshpb_submit_region_inactive(hpb, rgn->r=
-gn_idx);
->+
->+                        if (ufshpb_get_state(hpb) =3D=3D HPB_PRESENT)
->+                                queue_work(ufshpb_wq, &hpb->map_work);
->+                }
->         }
-> }
->=20
->--=20
->2.34.1
->=20
->=20
-Looks good to me.
+This series adds support for the trace performance monitoring and
+diagnostics hardware (TPDM and TPDA). It is composed of two major
+elements.
+a) Changes for original coresight framework to support for TPDM and TPDA.
+b) Add driver code for TPDM and TPDA.
 
-Reviewed-by: Keoseong Park <keosung.park@samsung.com>
+Introduction of changes for original coresight framework
+Support TPDM as new coresight source.
+Since only STM and ETM are supported as coresight source originally.
+TPDM is a newly added coresight source. We need to change
+the original way of saving coresight path to support more types source
+for coresight driver.
+The following patch is to add support more coresight sources.
+    coresight: core: Use IDR for non-cpu bound sources' paths.
 
-Best Regards,
-Keoseong Park
+Introduction of TPDM and TPDA
+TPDM - The trace performance monitoring and diagnostics monitor or TPDM in
+short serves as data collection component for various dataset types
+specified in the QPMDA(Qualcomm performance monitoring and diagnostics
+architecture) spec. The primary use case of the TPDM is to collect data
+from different data sources and send it to a TPDA for packetization,
+timestamping and funneling.
+     Coresight: Add coresight TPDM source driver
+     dt-bindings: arm: Adds CoreSight TPDM hardware definitions
+     coresight-tpdm: Add DSB dataset support
+     coresight-tpdm: Add integration test support
+     docs: sysfs: coresight: Add sysfs ABI documentation for TPDM
+
+TPDA - The trace performance monitoring and diagnostics aggregator or
+TPDA in short serves as an arbitration and packetization engine for the
+performance monitoring and diagnostics network as specified in the QPMDA
+(Qualcomm performance monitoring and diagnostics architecture)
+specification. The primary use case of the TPDA is to provide
+packetization, funneling and timestamping of Monitor data as specified
+in the QPMDA specification.
+The following patch is to add driver for TPDA.
+     Coresight: Add TPDA link driver
+     dt-bindings: arm: Adds CoreSight TPDA hardware definitions
+
+The last patch of this series is a device tree modification, which add
+the TPDM and TPDA configuration to device tree for validating.
+    ARM: dts: msm: Add coresight components for SM8250
+    ARM: dts: msm: Add tpdm mm/prng for sm8250
+
+Once this series patches are applied properly, the tpdm and tpda nodes
+should be observed at the coresight path /sys/bus/coresight/devices
+e.g.
+/sys/bus/coresight/devices # ls -l | grep tpd
+tpda0 -> ../../../devices/platform/soc@0/6004000.tpda/tpda0
+tpdm0 -> ../../../devices/platform/soc@0/6c08000.mm.tpdm/tpdm0
+
+We can use the commands are similar to the below to validate TPDMs.
+Enable coresight sink first.
+
+echo 1 > /sys/bus/coresight/devices/tmc_etf0/enable_sink
+echo 1 > /sys/bus/coresight/devices/tpdm0/enable_source
+echo 1 > /sys/bus/coresight/devices/tpdm0/integration_test
+echo 2 > /sys/bus/coresight/devices/tpdm0/integration_test
+The test data will be collected in the coresight sink which is enabled.
+If rwp register of the sink is keeping updating when do
+integration_test (by cat tmc_etf0/mgmt/rwp), it means there is data
+generated from TPDM to sink.
+
+There must be a tpda between tpdm and the sink. When there are some
+other trace event hw components in the same HW block with tpdm, tpdm
+and these hw components will connect to the coresight funnel. When
+there is only tpdm trace hw in the HW block, tpdm will connect to
+tpda directly.
+  
+    +---------------+                +-------------+
+    |  tpdm@6c08000 |                |tpdm@684C000 |
+    +-------|-------+                +------|------+
+            |                               |
+    +-------|-------+                       |
+    | funnel@6c0b000|                       |
+    +-------|-------+                       |
+            |                               |
+    +-------|-------+                       |
+    |funnel@6c2d000 |                       |
+    +-------|-------+                       |
+            |                               |
+            |    +---------------+          |
+            +----- tpda@6004000  -----------+
+                 +-------|-------+
+                         |
+                 +-------|-------+
+                 |funnel@6005000 |
+                 +---------------+
+
+This patch series depends on patch series
+"coresight: Add new API to allocate trace source ID values".
+https://patchwork.kernel.org/project/linux-arm-kernel/cover/20220308205000.27646-1-mike.leach@linaro.org/ 
+
+Changes from V5:
+1. Update maintainers in tpdm/tpda yaml file. -- Mike Leach <mike.leach@linaro.org>
+2. Set the .remove function pointer in the amba_driver structure
+   of tpdm/tpda driver. Add tpda_remove function for tpda driver. -- Mike Leach <mike.leach@linaro.org>
+3. Define datasets of tpdm as unsigned long. -- Mike Leach <mike.leach@linaro.org>
+4. Move all coresight nodes to sm8250.dtsi.
+   -- Mike Leach <mike.leach@linaro.org>;Konrad Dybcio <konrad.dybcio@somainline.org>
+5. Remove CORESIGHT_TPDM_INTEGRATION_TEST config. -- Mike Leach <mike.leach@linaro.org>
+
+Mao Jinlong (10):
+  coresight: core: Use IDR for non-cpu bound sources' paths.
+  Coresight: Add coresight TPDM source driver
+  dt-bindings: arm: Adds CoreSight TPDM hardware definitions
+  coresight-tpdm: Add DSB dataset support
+  coresight-tpdm: Add integration test support
+  docs: sysfs: coresight: Add sysfs ABI documentation for TPDM
+  Coresight: Add TPDA link driver
+  dt-bindings: arm: Adds CoreSight TPDA hardware definitions
+  ARM: dts: msm: Add coresight components for SM8250
+  ARM: dts: msm: Add tpdm mm/prng for sm8250
+
+ .../testing/sysfs-bus-coresight-devices-tpdm  |  13 +
+ .../bindings/arm/coresight-tpda.yaml          | 119 ++++
+ .../bindings/arm/coresight-tpdm.yaml          |  99 +++
+ .../devicetree/bindings/arm/coresight.txt     |   7 +
+ MAINTAINERS                                   |   1 +
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          | 658 ++++++++++++++++++
+ drivers/hwtracing/coresight/Kconfig           |  24 +
+ drivers/hwtracing/coresight/Makefile          |   2 +
+ drivers/hwtracing/coresight/coresight-core.c  |  42 +-
+ drivers/hwtracing/coresight/coresight-tpda.c  | 201 ++++++
+ drivers/hwtracing/coresight/coresight-tpda.h  |  33 +
+ drivers/hwtracing/coresight/coresight-tpdm.c  | 258 +++++++
+ drivers/hwtracing/coresight/coresight-tpdm.h  |  63 ++
+ include/linux/coresight.h                     |   1 +
+ 14 files changed, 1509 insertions(+), 12 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+ create mode 100644 Documentation/devicetree/bindings/arm/coresight-tpda.yaml
+ create mode 100644 Documentation/devicetree/bindings/arm/coresight-tpdm.yaml
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpda.c
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpda.h
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.c
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.h
+
+-- 
+2.17.1
+

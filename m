@@ -2,70 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F09550E809
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B31F50E824
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244330AbiDYS0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 14:26:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42528 "EHLO
+        id S243733AbiDYS14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 14:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244361AbiDYS0N (ORCPT
+        with ESMTP id S244406AbiDYS1p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 14:26:13 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34519112D86;
-        Mon, 25 Apr 2022 11:23:05 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id g20so19487696edw.6;
-        Mon, 25 Apr 2022 11:23:05 -0700 (PDT)
+        Mon, 25 Apr 2022 14:27:45 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FBE1112466
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:24:41 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id x33so27731960lfu.1
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:24:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=skFtK8ncz5bLZC06oqy32h7OgmhSsmfTgt/itwzobJE=;
-        b=dwRQLvdu6XNrpRRZMbEGioslLD2l3FZDjYQUVE6jvecnieVuQ/DBGDTQ1mnBuAkmCX
-         ci1z0BpH9hSRLYWoLG6OxQGaJWx6Aj5OcezkTVpR/kAEWtx9OSgpvOl/iZ6B7MZb9pWz
-         EDVp1s1DbbZnAUVGS/hNccs3xUjeXOOZKPBZ4v1kkxCUB52HGNid31eyeHq1DSBKdL11
-         N38m3Frn0OJTMsp6LTxjt+yFmiHfKRaPTAKOTnzki1To8McjxmI3AvDGslKJLunuBCDY
-         09G/a7YBiNE6f/seRgVhIRKiMWKr1XLLrPpL0T31bs7WeRzUuqafnyC4Z12N7nWgZle6
-         /tAQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=u+Bm1DAFY3a8c577iEDG2hIjq68c814xK3d9uMwZmUM=;
+        b=YhgUKDTxWXPeGRi2+kquXswG35aUOTl/8oXm32nfH4U/Ixt2ZBAnHY0/swZ7jBoPol
+         sESc2sUaZk2B0yfa7VPQFAy3bJK7bM/mNma/RGSoqH68b7vWFTTPl2m8TOmkRAG2gkhD
+         jOuwFtQMVi+5h1WGEhRlen6K3pIR104qz8ZZkltxPfF0e6SsLNP9fC0jiG6wsOUTjwm8
+         uc7uAVbtUz4gd9Gr/dLx28JBzsBUf0319BUy7ZoIK4KQSE3n6njN/1/VxGwTOkVXEfV8
+         zm7DPKEiPVIDsLiPm98mqddIB7E0wRs2Y+zcBxclJxxXiOAGj0s9ncPQd6ksDt4F3Ih+
+         H7iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=skFtK8ncz5bLZC06oqy32h7OgmhSsmfTgt/itwzobJE=;
-        b=2S9kYFK0rLBQtkKpt+FnGeIdWl+NFykSPHY27MPPtYF6fhBTf6Ztl8b3bguEXF7pEW
-         euX9POwk6eqmMy8g2LLFMMjStPkexbH+99858uovtOgkLWCjnERVaXW4PBJHOUDfKcPc
-         kaEP5OOI2IwCqkmxNY9GCZa3bsDTkqMhGcnoswJXnEK5ZyIYLbACWX00pOw/s73s96TZ
-         RiQJsOIS6YsYUOGe73tkCdm/ysvnImxTSM3L3Jz6a53NFj4y9MQwwWcjwKeyq2vPTLBE
-         XuaPPnaWHuTqMvnI9dpHXvMneVyuxc/T4zlWwi+r+md6+vMd0djsB4UoRXe7I9TF7lSM
-         fWsw==
-X-Gm-Message-State: AOAM530LF+jmFHsgHcIT5lbjnjYZc8O8WMIGgCOyMPlUk8psUZV1CfWe
-        F2xq6a6Tm+vxMJtg/RqnGSg=
-X-Google-Smtp-Source: ABdhPJxaljTXaNgBN3bYcRjbPSiSTMx4+U+v5Egsu66uRc/+ybXlZidl56pqtndCU45GhBwlMyXlrw==
-X-Received: by 2002:a05:6402:3593:b0:425:dfd4:2947 with SMTP id y19-20020a056402359300b00425dfd42947mr9098632edc.137.1650910983810;
-        Mon, 25 Apr 2022 11:23:03 -0700 (PDT)
-Received: from fedora.robimarko.hr (cpe-94-253-165-91.zg.cable.xnet.hr. [94.253.165.91])
-        by smtp.googlemail.com with ESMTPSA id h13-20020a170906590d00b006f39021e683sm1677210ejq.12.2022.04.25.11.23.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 11:23:03 -0700 (PDT)
-From:   Robert Marko <robimarko@gmail.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, absahu@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH 7/7] clk: qcom: ipq8074: set BRANCH_HALT_DELAY flag for UBI clocks
-Date:   Mon, 25 Apr 2022 20:22:49 +0200
-Message-Id: <20220425182249.2753690-7-robimarko@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220425182249.2753690-1-robimarko@gmail.com>
-References: <20220425182249.2753690-1-robimarko@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=u+Bm1DAFY3a8c577iEDG2hIjq68c814xK3d9uMwZmUM=;
+        b=Fcj0M3iCcmLfYaCVtlnwO6qAonRE4HvuQaP71pedkPTUn7ol43bcUAikeRXsCeD3Vv
+         HMgKZ8y5FXq8yXvvHp1/jeWxnjd/WscW36hcVI0c9EkyjSSaHpovKDXy1L82Z06B0AfC
+         E2VhufmYMaoGf04PKzuQ3OWXjgWgmZ15kUbwVF+ryVfzMJQEyNrixb8YML/CVoZFpsjc
+         ARNG+UADNZu2eIPQ8OT/HL0KUGGfrTkoMOx+CSCRrYRrCPAIdyoHE+R/E1Z8MP6BQY26
+         SGW9iSfMK3W0IsmVNwM/d8elT1cR4EiwPNm3mPSCb/tZA9zT2wOdx4WFx3i9WUbmjOHw
+         FiNQ==
+X-Gm-Message-State: AOAM531LwIOYGrIm7UnJRHXOp5VRwGaOHu+hG6jBgC6ppdGC5NXJFt65
+        syc8tdDSNkSqsJXD85IN8Eg1TE1LyK7z4/JDO095Ob3v7QY=
+X-Google-Smtp-Source: ABdhPJxOcDZUVTz/YHvMTfvHtM7X3O1aySJYZAE8sk2pPu5R2svDimItoW/LQNuuJT2Yz0RxxEoyyr5plEP2rzhchdQ=
+X-Received: by 2002:ac2:4188:0:b0:471:96f4:c1d4 with SMTP id
+ z8-20020ac24188000000b0047196f4c1d4mr14006334lfh.626.1650911079102; Mon, 25
+ Apr 2022 11:24:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220424190811.1678416-1-masahiroy@kernel.org> <20220424190811.1678416-6-masahiroy@kernel.org>
+In-Reply-To: <20220424190811.1678416-6-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 25 Apr 2022 11:24:27 -0700
+Message-ID: <CAKwvOdm=m7uZC5p52RZTBQ7NpaRS+s_wBtC6K0M1CzQyOUjadA@mail.gmail.com>
+Subject: Re: [PATCH 05/27] modpost: retrieve the module dependency and CRCs in check_exports()
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,104 +67,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, attempting to enable the UBI clocks will cause the stuck at
-off warning to be printed and clk_enable will fail.
+On Sun, Apr 24, 2022 at 12:09 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Do not repeat the similar code.
+>
+> It is simpler to do this in check_exports() instead of add_versions().
 
-[   14.936694] gcc_ubi1_ahb_clk status stuck at 'off'
+The 2 loops have been fused into 1. :)
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Downstream 5.4 QCA kernel has fixed this by seting the BRANCH_HALT_DELAY
-flag on UBI clocks, so lets do the same.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>
+>  scripts/mod/modpost.c | 16 ++++++----------
+>  1 file changed, 6 insertions(+), 10 deletions(-)
+>
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index 969a081dba62..f9cbb6b6b7a5 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -2159,6 +2159,11 @@ static void check_exports(struct module *mod)
+>                               s->name, mod->name);
+>                         continue;
+>                 }
+> +
+> +               s->module = exp->module;
+> +               s->crc_valid = exp->crc_valid;
+> +               s->crc = exp->crc;
+> +
+>                 basename = strrchr(mod->name, '/');
+>                 if (basename)
+>                         basename++;
+> @@ -2251,16 +2256,7 @@ static void add_staging_flag(struct buffer *b, const char *name)
+>   **/
+>  static void add_versions(struct buffer *b, struct module *mod)
+>  {
+> -       struct symbol *s, *exp;
+> -
+> -       for (s = mod->unres; s; s = s->next) {
+> -               exp = find_symbol(s->name);
+> -               if (!exp || exp->module == mod)
+> -                       continue;
+> -               s->module = exp->module;
+> -               s->crc_valid = exp->crc_valid;
+> -               s->crc = exp->crc;
+> -       }
+> +       struct symbol *s;
+>
+>         if (!modversions)
+>                 return;
+> --
+> 2.32.0
+>
 
-Fixes: 5736294aef83 ("clk: qcom: ipq8074: add NSS clocks")
-Signed-off-by: Robert Marko <robimarko@gmail.com>
----
- drivers/clk/qcom/gcc-ipq8074.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/clk/qcom/gcc-ipq8074.c b/drivers/clk/qcom/gcc-ipq8074.c
-index e6625b9fab35..54f292ab1f0d 100644
---- a/drivers/clk/qcom/gcc-ipq8074.c
-+++ b/drivers/clk/qcom/gcc-ipq8074.c
-@@ -3372,6 +3372,7 @@ static struct clk_branch gcc_nssnoc_ubi1_ahb_clk = {
- 
- static struct clk_branch gcc_ubi0_ahb_clk = {
- 	.halt_reg = 0x6820c,
-+	.halt_check = BRANCH_HALT_DELAY,
- 	.clkr = {
- 		.enable_reg = 0x6820c,
- 		.enable_mask = BIT(0),
-@@ -3389,6 +3390,7 @@ static struct clk_branch gcc_ubi0_ahb_clk = {
- 
- static struct clk_branch gcc_ubi0_axi_clk = {
- 	.halt_reg = 0x68200,
-+	.halt_check = BRANCH_HALT_DELAY,
- 	.clkr = {
- 		.enable_reg = 0x68200,
- 		.enable_mask = BIT(0),
-@@ -3406,6 +3408,7 @@ static struct clk_branch gcc_ubi0_axi_clk = {
- 
- static struct clk_branch gcc_ubi0_nc_axi_clk = {
- 	.halt_reg = 0x68204,
-+	.halt_check = BRANCH_HALT_DELAY,
- 	.clkr = {
- 		.enable_reg = 0x68204,
- 		.enable_mask = BIT(0),
-@@ -3423,6 +3426,7 @@ static struct clk_branch gcc_ubi0_nc_axi_clk = {
- 
- static struct clk_branch gcc_ubi0_core_clk = {
- 	.halt_reg = 0x68210,
-+	.halt_check = BRANCH_HALT_DELAY,
- 	.clkr = {
- 		.enable_reg = 0x68210,
- 		.enable_mask = BIT(0),
-@@ -3440,6 +3444,7 @@ static struct clk_branch gcc_ubi0_core_clk = {
- 
- static struct clk_branch gcc_ubi0_mpt_clk = {
- 	.halt_reg = 0x68208,
-+	.halt_check = BRANCH_HALT_DELAY,
- 	.clkr = {
- 		.enable_reg = 0x68208,
- 		.enable_mask = BIT(0),
-@@ -3457,6 +3462,7 @@ static struct clk_branch gcc_ubi0_mpt_clk = {
- 
- static struct clk_branch gcc_ubi1_ahb_clk = {
- 	.halt_reg = 0x6822c,
-+	.halt_check = BRANCH_HALT_DELAY,
- 	.clkr = {
- 		.enable_reg = 0x6822c,
- 		.enable_mask = BIT(0),
-@@ -3474,6 +3480,7 @@ static struct clk_branch gcc_ubi1_ahb_clk = {
- 
- static struct clk_branch gcc_ubi1_axi_clk = {
- 	.halt_reg = 0x68220,
-+	.halt_check = BRANCH_HALT_DELAY,
- 	.clkr = {
- 		.enable_reg = 0x68220,
- 		.enable_mask = BIT(0),
-@@ -3491,6 +3498,7 @@ static struct clk_branch gcc_ubi1_axi_clk = {
- 
- static struct clk_branch gcc_ubi1_nc_axi_clk = {
- 	.halt_reg = 0x68224,
-+	.halt_check = BRANCH_HALT_DELAY,
- 	.clkr = {
- 		.enable_reg = 0x68224,
- 		.enable_mask = BIT(0),
-@@ -3508,6 +3516,7 @@ static struct clk_branch gcc_ubi1_nc_axi_clk = {
- 
- static struct clk_branch gcc_ubi1_core_clk = {
- 	.halt_reg = 0x68230,
-+	.halt_check = BRANCH_HALT_DELAY,
- 	.clkr = {
- 		.enable_reg = 0x68230,
- 		.enable_mask = BIT(0),
-@@ -3525,6 +3534,7 @@ static struct clk_branch gcc_ubi1_core_clk = {
- 
- static struct clk_branch gcc_ubi1_mpt_clk = {
- 	.halt_reg = 0x68228,
-+	.halt_check = BRANCH_HALT_DELAY,
- 	.clkr = {
- 		.enable_reg = 0x68228,
- 		.enable_mask = BIT(0),
 -- 
-2.35.1
-
+Thanks,
+~Nick Desaulniers

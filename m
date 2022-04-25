@@ -2,304 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A83C850E747
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 19:29:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CCD050E751
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 19:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242268AbiDYRcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 13:32:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49816 "EHLO
+        id S243580AbiDYRcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 13:32:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244035AbiDYRb7 (ORCPT
+        with ESMTP id S244035AbiDYRcb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 13:31:59 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DDEE18B0B;
-        Mon, 25 Apr 2022 10:28:40 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id u15so30930100ejf.11;
-        Mon, 25 Apr 2022 10:28:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oK0ezFxjsDQohkSOshmvpXLStP35S74J5IdQbdyQYMo=;
-        b=Ipdr3gojS9WuJPuZDUK6RpMD7bSSqP0t07BSua45YD3OhWTpKdJy69azstXRunucRh
-         cn6HNAzYR7tx9UCCc0QzmMX8mhR/pcmyQKvijdCRa3svPEuc70i6eO4lspWGLGjaqwyQ
-         FSlctTaX1VdSxEGMYAVz3pMSAQRrK1BqzRSFPaoo84Ayl+S00uOaTwgrl20oUnCtJ5Tk
-         xm0xWL2AMLPASSzLt8ak9V4yGb25vHmMzcqVJQ30V0zuEGsAeTU84m/M3KJloPsv0sPn
-         pEyAXvlDlXsyy/6cogmsYsRHhCEfLjioHlScFXY5UvdbCEECKktwqbg2xQDNeIrbSi2A
-         yjXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oK0ezFxjsDQohkSOshmvpXLStP35S74J5IdQbdyQYMo=;
-        b=mvkCHFjHA5gxuEIxUjG4lI/6DHSUKXpPmHpUCkKOJlqHx6tRzYxIK9+AkMMhD9kTyx
-         zLgEFUxfZX1WHxeDPkTEMj6x+mbIwiRQiMVhKmmRa1/VaBUqP/qq6vZNzblUD+lg8JLl
-         K8lrkigL1fbTYqXBRx/RfVrHq2ECPqI9e82VWYs5YCMY37ra/h+zwGQVKREtQOmoXTU5
-         W3WMSPj1owkuYCGns+DJcuIA/BQgxnACPwx8aUl5XMTXMRCwzufXOWsVPvpvruvGT83l
-         U4W4TzlSovRExY5Ius9o6ZdNIoOzgJ1H8AURmF3jrmhqo529CM7vlmelNnjyuJdAfxp8
-         ahZQ==
-X-Gm-Message-State: AOAM531MYxnGnmE5F3q2NveRkx31LGxc1m4aCPEJ82R1+xuk0mlx2rl+
-        DrMu6cHOFgFjVpHhbVmAo32hztV725rNp4l9Lws=
-X-Google-Smtp-Source: ABdhPJwVk7LnqtviCJ13JHRHVWmGE/Lb5aSKGj2vgILM4TnGtJgt3nn1VoKTmhDnxt9g06dYraSvekxM0FhmTUVLElc=
-X-Received: by 2002:a17:907:62a9:b0:6da:7953:4df0 with SMTP id
- nd41-20020a17090762a900b006da79534df0mr17581063ejc.316.1650907718621; Mon, 25
- Apr 2022 10:28:38 -0700 (PDT)
+        Mon, 25 Apr 2022 13:32:31 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA48C13;
+        Mon, 25 Apr 2022 10:29:26 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23PEi3wm010252;
+        Mon, 25 Apr 2022 17:29:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=N0FdWIrseGzC8YyI83oVDNXfI2pKptqK1F8lrNfRxC8=;
+ b=eVLgFZgy5ODeXwQi/DvL9VEkt9tmujPkq6f8T+itF2W3fuMfg393We6Nz8mYTanWBu4Y
+ Z+8qPBNZ8X329UOMSFDAtjwcEsxNyu9IWFgsrxGPnMXB49aE7t9mD9pVifZYaJyLxs4R
+ /5wHOCYMtO+0ToYIcxdZTqGBUSRS/62Nf9EbNI69+REEog/X7S37vp+DYQUwzhiDJvkU
+ NlgW7Fd7P76oo+CW9wCeaFVOlMTNuOmvP2vENdm0dt8VC7ijQnaYO2AbgEr1nW4Py1i4
+ jIJqJOlgY8KgmbzqiPC5BGgLF6o2TMoj8xYbGa35xH0boVKgmGa+19zpWqhWm2zPvyYp xQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fnwng3yjj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Apr 2022 17:29:23 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23PGqWLb019269;
+        Mon, 25 Apr 2022 17:29:23 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fnwng3yhv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Apr 2022 17:29:22 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23PHTDqp027136;
+        Mon, 25 Apr 2022 17:29:21 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 3fm938tqnp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Apr 2022 17:29:20 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23PHTUuk12452370
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 25 Apr 2022 17:29:30 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B6A45AE045;
+        Mon, 25 Apr 2022 17:29:17 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2ACB4AE04D;
+        Mon, 25 Apr 2022 17:29:17 +0000 (GMT)
+Received: from [9.171.38.55] (unknown [9.171.38.55])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 25 Apr 2022 17:29:17 +0000 (GMT)
+Message-ID: <13d0d706-abc4-3e4d-88c3-6447636fd1fd@linux.ibm.com>
+Date:   Mon, 25 Apr 2022 19:29:16 +0200
 MIME-Version: 1.0
-References: <20220412135534.2796158-1-aford173@gmail.com> <20220412135534.2796158-4-aford173@gmail.com>
- <CAPY8ntCfL=ZPwPr_1N-m_J1FTq+V77-3fggY-joZCyyu-k_qvQ@mail.gmail.com> <CAPY8ntCuTt65-ELTV8_n+-7=n306p5+HmF3HcMd-8arCTVLezQ@mail.gmail.com>
-In-Reply-To: <CAPY8ntCuTt65-ELTV8_n+-7=n306p5+HmF3HcMd-8arCTVLezQ@mail.gmail.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Mon, 25 Apr 2022 12:28:27 -0500
-Message-ID: <CAHCN7xLThYzFFsS1pgHztOTjKAvP8ka+pPAya4wf4aSfvCWWGg@mail.gmail.com>
-Subject: Re: [PATCH 3/4] media: i2c: imx219: Enable variable XCLK
-To:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        cstevens@beaconembedded.com,
-        Adam Ford-BE <aford@beaconembedded.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 0/2] Dirtying, failing memop: don't indicate
+ suppression
+Content-Language: en-US
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+References: <20220425100147.1755340-1-scgl@linux.ibm.com>
+ <8095d0de-dd99-0388-b1d4-e59b01dc4be0@linux.ibm.com>
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+In-Reply-To: <8095d0de-dd99-0388-b1d4-e59b01dc4be0@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ZkwzIZly1vuuNPivtdv1igWVwga-Mhr3
+X-Proofpoint-ORIG-GUID: 7Fiwm8QBpGHHlEky2A7xZEoSpjPTUcbd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-25_09,2022-04-25_03,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 adultscore=0 mlxlogscore=962 suspectscore=0 malwarescore=0
+ spamscore=0 phishscore=0 priorityscore=1501 clxscore=1015 mlxscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204250076
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 11:13 AM Dave Stevenson
-<dave.stevenson@raspberrypi.com> wrote:
->
-> Hi again
->
-> On Mon, 25 Apr 2022 at 16:58, Dave Stevenson
-> <dave.stevenson@raspberrypi.com> wrote:
-> >
-> > Hi Adam
-> >
-> > I have no way of testing with an alternate XCLK value, so I'm working
-> > based on the datasheet only.
-> >
-> > On Tue, 12 Apr 2022 at 14:55, Adam Ford <aford173@gmail.com> wrote:
-> > >
-> > > The datasheet shows the external clock can be anything
-> > > from 6MHz to 27MHz, but EXCK, PREPLLCK_VT_DIV and
-> > > PREPLLCK_OP_DIV need to change based on the clock, so
-> > > create helper functions to set these registers based on
-> > > the rate of xclk.
-> > >
-> > > Move the validation of the clock rate into imx219_check_hwcfg
-> > > which means delaying the call to it until after xclk has been
-> > > determined.
-> > >
-> > > Signed-off-by: Adam Ford <aford173@gmail.com>
-> > > ---
-> > >  drivers/media/i2c/imx219.c | 79 ++++++++++++++++++++++++++++++--------
-> > >  1 file changed, 63 insertions(+), 16 deletions(-)
-> > >
-> > > diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-> > > index d13ce5c1ece6..08e7d0e72430 100644
-> > > --- a/drivers/media/i2c/imx219.c
-> > > +++ b/drivers/media/i2c/imx219.c
-> > > @@ -39,8 +39,12 @@
-> > >  #define IMX219_REG_CHIP_ID             0x0000
-> > >  #define IMX219_CHIP_ID                 0x0219
-> > >
-> > > -/* External clock frequency is 24.0M */
-> > > -#define IMX219_XCLK_FREQ               24000000
-> > > +/* Default external clock frequency is 24.0M */
-> > > +#define IMX219_XCLK_MIN_FREQ           6000000
-> > > +#define IMX219_XCLK_MAX_FREQ           27000000
-> > > +#define IMX219_REG_EXCK                        0x012a
-> > > +#define IMX219_REG_PREPLLCK_VT_DIV     0x0304
-> > > +#define IMX219_REG_PREPLLCK_OP_DIV     0x0305
-> > >
-> > >  /* Pixel rate is fixed for all the modes */
-> > >  #define IMX219_PIXEL_RATE              182400000
-> > > @@ -166,8 +170,6 @@ static const struct imx219_reg pll_clk_table[] = {
-> > >
-> > >         {0x0301, 0x05}, /* VTPXCK_DIV */
-> > >         {0x0303, 0x01}, /* VTSYSCK_DIV */
-> > > -       {0x0304, 0x03}, /* PREPLLCK_VT_DIV 0x03 = AUTO set */
-> > > -       {0x0305, 0x03}, /* PREPLLCK_OP_DIV 0x03 = AUTO set */
-> > >         {0x0306, 0x00}, /* PLL_VT_MPY */
-> > >         {0x0307, 0x39},
-> > >         {0x030b, 0x01}, /* OP_SYS_CLK_DIV */
-> > > @@ -182,7 +184,6 @@ static const struct imx219_reg pll_clk_table[] = {
-> > >   */
-> > >  static const struct imx219_reg mode_3280x2464_regs[] = {
-> > >         {0x0128, 0x00},
-> > > -       {0x012a, 0x18},
-> > >         {0x012b, 0x00},
-> > >         {0x0164, 0x00},
-> > >         {0x0165, 0x00},
-> > > @@ -222,7 +223,6 @@ static const struct imx219_reg mode_3280x2464_regs[] = {
-> > >
-> > >  static const struct imx219_reg mode_1920_1080_regs[] = {
-> > >         {0x0128, 0x00},
-> > > -       {0x012a, 0x18},
-> > >         {0x012b, 0x00},
-> > >         {0x0162, 0x0d},
-> > >         {0x0163, 0x78},
-> > > @@ -262,7 +262,6 @@ static const struct imx219_reg mode_1920_1080_regs[] = {
-> > >
-> > >  static const struct imx219_reg mode_1640_1232_regs[] = {
-> > >         {0x0128, 0x00},
-> > > -       {0x012a, 0x18},
-> > >         {0x012b, 0x00},
-> > >         {0x0164, 0x00},
-> > >         {0x0165, 0x00},
-> > > @@ -302,7 +301,6 @@ static const struct imx219_reg mode_1640_1232_regs[] = {
-> > >
-> > >  static const struct imx219_reg mode_640_480_regs[] = {
-> > >         {0x0128, 0x00},
-> > > -       {0x012a, 0x18},
-> > >         {0x012b, 0x00},
-> > >         {0x0162, 0x0d},
-> > >         {0x0163, 0x78},
-> > > @@ -1015,6 +1013,50 @@ static int imx219_configure_lanes(struct imx219 *imx219)
-> > >         return ret;
-> > >  };
-> > >
-> > > +static int imx219_set_exck_freq(struct imx219 *imx219)
-> > > +{
-> > > +       int ret;
-> > > +       /* The imx219 registers need MHz not Hz */
-> > > +       u8 clk = (u8) (imx219->xclk_freq/1000000U);
-> > > +
-> > > +       /* Set the clock frequency in MHz */
-> > > +       ret = imx219_write_reg(imx219, IMX219_REG_EXCK,
-> > > +                              IMX219_REG_VALUE_08BIT, clk);
->
-> In reviewing your other patch I noticed that the EXCK register is
-> actually a 16 bit value. The integer part is in 0x012a, and the
-> fractional part (1/256) in 0x012b, which is currently initialised from
-> the mode tables.
-> Your division discards the fractional part totally, so if the
-> configured frequency was 19.2MHz, then it would be programmed
-> incorrectly.
->
-> The value for register 0x012b needs to be computed and set here.
+On 4/25/22 18:30, Christian Borntraeger wrote:
+> Am 25.04.22 um 12:01 schrieb Janis Schoetterl-Glausch:
+>> If a memop fails due to key checked protection, after already having
+>> written to the guest, don't indicate suppression to the guest, as that
+>> would imply that memory wasn't modified.
+>>
+>> This could be considered a fix to the code introducing storage key
+>> support, however this is a bug in KVM only if we emulate an
+>> instructions writing to an operand spanning multiple pages, which I
+>> don't believe we do.
+>>
+> 
+> Thanks applied. I think it makes sense for 5.18 nevertheless.
 
-That makes sense.
-I am understanding your comment about register 0x12b, would the
-example frequency of 19.2MHz translate to 51 for register 12b?
+Janosch had some concerns because the protection code being 000 implies
+that the effective address in the TEID is unpredictable.
+Let's see if he chimes in.
 
-Part of me thinks I should drop this patch because I have no real way
-to test it, and I don't like writing 'theoretical' code.
+> 
+>> v1 -> v2
+>>   * Reword commit message of patch 1
+>>
+>> Janis Schoetterl-Glausch (2):
+>>    KVM: s390: Don't indicate suppression on dirtying, failing memop
+>>    KVM: s390: selftest: Test suppression indication on key prot exception
+>>
+>>   arch/s390/kvm/gaccess.c                   | 47 ++++++++++++++---------
+>>   tools/testing/selftests/kvm/s390x/memop.c | 43 ++++++++++++++++++++-
+>>   2 files changed, 70 insertions(+), 20 deletions(-)
+>>
+>>
+>> base-commit: af2d861d4cd2a4da5137f795ee3509e6f944a25b
+> 
 
-adam
->
-> > > +
-> > > +       /* Configure the PREPLLCK_VT_DIV and PREPLLCK_OP_DIV for automatic */
-> > > +       switch (clk) {
-> > > +       case 6 ... 11:
-> > > +               ret = imx219_write_reg(imx219, IMX219_REG_PREPLLCK_VT_DIV,
-> > > +                              IMX219_REG_VALUE_08BIT, 0x01);
-> > > +               if (ret)
-> > > +                       return ret;
-> > > +               ret = imx219_write_reg(imx219, IMX219_REG_PREPLLCK_OP_DIV,
-> > > +                              IMX219_REG_VALUE_08BIT, 0x01);
-> > > +               return ret;
-> > > +       case 12 ... 23:
-> > > +               ret = imx219_write_reg(imx219, IMX219_REG_PREPLLCK_VT_DIV,
-> > > +                              IMX219_REG_VALUE_08BIT, 0x02);
-> > > +               if (ret)
-> > > +                       return ret;
-> > > +
-> > > +               ret = imx219_write_reg(imx219, IMX219_REG_PREPLLCK_OP_DIV,
-> > > +                              IMX219_REG_VALUE_08BIT, 0x02);
-> > > +
-> > > +               return ret;
-> > > +       case 24 ... 27:
-> > > +               ret = imx219_write_reg(imx219, IMX219_REG_PREPLLCK_VT_DIV,
-> > > +                              IMX219_REG_VALUE_08BIT, 0x03);
-> > > +               if (ret)
-> > > +                       return ret;
-> > > +               ret = imx219_write_reg(imx219, IMX219_REG_PREPLLCK_OP_DIV,
-> > > +                              IMX219_REG_VALUE_08BIT, 0x03);
-> > > +               return ret;
-> > > +       default:
-> > > +               /* Should never get here */
-> > > +               return -EINVAL;
-> > > +       }
-> > > +}
-> > > +
-> > >  static int imx219_start_streaming(struct imx219 *imx219)
-> > >  {
-> > >         struct i2c_client *client = v4l2_get_subdevdata(&imx219->sd);
-> > > @@ -1039,6 +1081,9 @@ static int imx219_start_streaming(struct imx219 *imx219)
-> > >                 goto err_rpm_put;
-> > >         }
-> > >
-> > > +       /* Configure clock based on reference clock frequency */
-> > > +       imx219_set_exck_freq(imx219);
-> >
-> > You're not checking the return value from this function, so any I2C
-> > failures will be ignored.
-> >
-> > > +
-> > >         /* Apply default values of current mode */
-> > >         reg_list = &imx219->mode->reg_list;
-> > >         ret = imx219_write_regs(imx219, reg_list->regs, reg_list->num_of_regs);
-> > > @@ -1428,6 +1473,13 @@ static int imx219_check_hwcfg(struct imx219 *imx219)
-> > >                 return -EINVAL;
-> > >         }
-> > >
-> > > +       if ((imx219->xclk_freq < IMX219_XCLK_MIN_FREQ) ||
-> > > +            imx219->xclk_freq > IMX219_XCLK_MAX_FREQ) {
-> > > +               dev_err(&client->dev, "xclk frequency not supported: %d Hz\n",
-> >
-> > imx219->xclk_freq is unsigned, so %u
-> >
-> > > +                       imx219->xclk_freq);
-> > > +               return -EINVAL;
-> > > +       }
-> > > +
-> > >         return 0;
-> > >  }
-> > >
-> > > @@ -1478,10 +1530,6 @@ static int imx219_probe(struct i2c_client *client)
-> > >         if (ret)
-> > >                 return ret;
-> > >
-> > > -       /* Check the hardware configuration in device tree */
-> > > -       if (imx219_check_hwcfg(imx219))
-> > > -               return -EINVAL;
-> > > -
-> > >         /* Get system clock (xclk) */
-> > >         imx219->xclk = devm_clk_get(dev, NULL);
-> > >         if (IS_ERR(imx219->xclk)) {
-> > > @@ -1490,11 +1538,10 @@ static int imx219_probe(struct i2c_client *client)
-> > >         }
-> > >
-> > >         imx219->xclk_freq = clk_get_rate(imx219->xclk);
-> >
-> > My bug admittedly, but clk_get_rate returns an unsigned long, but
-> > imx219->xclk_freq is u32.
-> > Ideally imx219->xclk_freq should be unsigned long to match, and the
-> > dev_err I commented on earlier should be %lu.
-> >
-> > Cheers.
-> >   Dave
-> >
-> > > -       if (imx219->xclk_freq != IMX219_XCLK_FREQ) {
-> > > -               dev_err(dev, "xclk frequency not supported: %d Hz\n",
-> > > -                       imx219->xclk_freq);
-> > > +
-> > > +       /* Check the hardware configuration in device tree */
-> > > +       if (imx219_check_hwcfg(imx219))
-> > >                 return -EINVAL;
-> > > -       }
-> > >
-> > >         ret = imx219_get_regulators(imx219);
-> > >         if (ret) {
-> > > --
-> > > 2.34.1
-> > >

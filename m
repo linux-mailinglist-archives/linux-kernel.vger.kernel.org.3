@@ -2,76 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D284D50E381
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9C0250E37E
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242544AbiDYOoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 10:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60832 "EHLO
+        id S242551AbiDYOop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 10:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232448AbiDYOoT (ORCPT
+        with ESMTP id S242532AbiDYOom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 10:44:19 -0400
+        Mon, 25 Apr 2022 10:44:42 -0400
 Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A48851CB03;
-        Mon, 25 Apr 2022 07:41:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C1A22B36;
+        Mon, 25 Apr 2022 07:41:35 -0700 (PDT)
 Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 466202C1DB4;
-        Mon, 25 Apr 2022 14:41:06 +0000 (UTC)
+        by relay.mailchannels.net (Postfix) with ESMTP id B893D2A25A4;
+        Mon, 25 Apr 2022 14:41:32 +0000 (UTC)
 Received: from pdx1-sub0-mail-a217.dreamhost.com (unknown [127.0.0.6])
         (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 77C052C26D2;
-        Mon, 25 Apr 2022 14:41:05 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1650897665; a=rsa-sha256;
+        by relay.mailchannels.net (Postfix) with ESMTPA id 126AC2A24A0;
+        Mon, 25 Apr 2022 14:41:31 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1650897692; a=rsa-sha256;
         cv=none;
-        b=GYdyTQKUbDhCYxetgr2SjFaMCBXFLEZ+iIHZ7uI9DWrfwQbcRSorI2Ib49bOYkp+mnwZsX
-        X1WQKnDY0xYXcXeXHHsfdq6KNYfDqPC4nRIKbYhWEpSBUsyD3O7Q2KT9/oyjILsv2TChiL
-        oWPPXkv0yZgGgSjse7xnoil3FQWi+LkC8gEw/XA0uh/3zMD3mkaWFfdqYQrKAzse+cZA5d
-        ZcdF3Ob9GfOY9ldcq0sEjyLpEk72O2glOzO5B+lWjlPyjK8cOKg/Qz5+XPuCC0yP84SG36
-        d1er8+to8eyRvXLTQVBQXXbTsGq5p5RwmfUyelXsnNAB46WI9QT4w4SwWhr9Rg==
+        b=x+ew0KM2BY/ZHUiXF954wNaAtiK/mMdnVXwKBcsS/AcOaw4D8iu3vM3S+XntZBErUeSjX7
+        wjODAYfXuO8kEBQh8z8/WJCSgXoWRoBoDXqxCahOaoEkKryO+TKVyvMlCtQyT3D3CkQW7M
+        e4DjpcHfO1QhWr0Li7bFayaAIzwGHeVpB48x9AvOZNQrOhli9RBBcVD0KMymcU1fakoZnR
+        IB9plPq+Mm+zTL5LIlGGSHMLJ5brP34TGO9Gq8rggXMfXG24zndBo5EZSjnhSM8dobsud2
+        dElyVHyqOSChk04QdsYZfeXbSxagPXxTVB0skEmiuXA5v/m/wpE+gnpwV1lVvw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mailchannels.net;
-        s=arc-2022; t=1650897665;
+        s=arc-2022; t=1650897692;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:dkim-signature;
-        bh=+psUphEJW6Umr1LIo6q4QeNSaZlC5n4VwlbP0vJs6YU=;
-        b=EvTx6N6gVhvdqjf2eB0p4I28h5WysRE8GY1lT1mai2M9EN/qORsZ62emRp+nKrk+LID5NS
-        I/7CFqreKCkNEBXGaS9KAG3YnWSueNDCOxoKX1bUp/WPLqp9bajvwhj7+UVi7iDP45w8lM
-        R4cz43Ucl0dAeyP0Kh2ClX8/zqd2qwnoV2D+jeehxT1cUiVznkMoYeTdHhE0mJtJ13+vdp
-        fXad8TWYvrR8F/n54I7LvtosPASSZuczggXbhZYnTVKelAQ8TZxrchXctvI+wv5ERt0KvR
-        1F6dzqKB0LmT5WXmGkFp+DMM2yy7Ovq+zDNGhWj2Vf9GVEEieAjyV5w8c9eKyw==
+        bh=05Mweot+ojh0zTSOokJnFBngeZ/lzOkLg56VU81WwD4=;
+        b=cDwHJ8G5rLMwANexfyZkDlHNf+XGFyGX2aWY+zBIw4hgQiwJhDM02WAYlF4FO6FiLKgV5s
+        ApZwXpt6iesBGEMkuuRgKbDvNwR2v0UIjMO0Shx9U/mvJzptvy+PRBnDQrbzenYa/45AYS
+        EYhgSI5+WHqgxXh30hnD4wtYCW5q/MOE5n0SDPqgiw0mhp28FoLga3btllA/Adt4gbkLpc
+        ODyF+4GT6mtJh6ndh3e4QWVX0XXXyI/RhcuFUchemMy84Zbim4Bv4gC3ReLxL3gLQ/skbE
+        Aomx5fFf7oev7bW2ydlaIY2n59ahy/+sWseLOBY1Ye5NyYMcSHe+pHCPCj8JCg==
 ARC-Authentication-Results: i=1;
-        rspamd-67b64f579b-vgdqh;
+        rspamd-67b64f579b-xftg8;
         auth=pass smtp.auth=dreamhost smtp.mailfrom=ian@linux.cowan.aero
 X-MC-Relay: Neutral
 X-MailChannels-SenderId: dreamhost|x-authsender|ian@linux.cowan.aero
 X-MailChannels-Auth-Id: dreamhost
-X-Little-Skirt: 2d992c1b0486d142_1650897665962_903589680
-X-MC-Loop-Signature: 1650897665962:279871743
-X-MC-Ingress-Time: 1650897665961
+X-Little-Hysterical: 1b2d62ce11d21cba_1650897692459_131318409
+X-MC-Loop-Signature: 1650897692459:3564636864
+X-MC-Ingress-Time: 1650897692458
 Received: from pdx1-sub0-mail-a217.dreamhost.com (pop.dreamhost.com
  [64.90.62.162])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.107.255.136 (trex/6.7.1);
-        Mon, 25 Apr 2022 14:41:05 +0000
+        by 100.121.210.129 (trex/6.7.1);
+        Mon, 25 Apr 2022 14:41:32 +0000
 Received: from localhost.localdomain (unknown [69.12.38.97])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: ian@linux.cowan.aero)
-        by pdx1-sub0-mail-a217.dreamhost.com (Postfix) with ESMTPSA id 4Kn7400g0jz1Rf;
-        Mon, 25 Apr 2022 07:41:03 -0700 (PDT)
+        by pdx1-sub0-mail-a217.dreamhost.com (Postfix) with ESMTPSA id 4Kn74V4Pf7znb;
+        Mon, 25 Apr 2022 07:41:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.cowan.aero;
-        s=dreamhost; t=1650897665;
-        bh=+psUphEJW6Umr1LIo6q4QeNSaZlC5n4VwlbP0vJs6YU=;
+        s=dreamhost; t=1650897691;
+        bh=05Mweot+ojh0zTSOokJnFBngeZ/lzOkLg56VU81WwD4=;
         h=From:To:Cc:Subject:Date:Content-Transfer-Encoding;
-        b=tfwUCy6OL4WnEaOQKzkIvN6N7FsDWNVDd6JiqcC8Dibj43YrnKrtcAUhlLriMLIcr
-         Aaz/VPkbNTLQGkhiKGzFVSxT6mgRPcqbAFzchUl05AIevUHGZIlAHRutPKV9JTUAEE
-         aRhUOou6LjPYb5U1sC4/HoE/a+dJV9zoeM6emyns8qy3UvSSU+mjbJjxrfD7xwopzz
-         uzAuSol1ZU/k9yifWLoanVWeHOj1cBMSPR4gjr7N2HXbddwkamo0Vhv0hi6LagnJYN
-         tl0LssNYKFFR2I3G1sLa67EUD0HQKzT4IAZYDoR8pOXPjRnM5hydjoUskTyAvsq/25
-         zQu0nQdPnF7fA==
+        b=Y028je4bcEPUJMexID9Ux01kwpvnI4sscbs7zXlj2i6dQvMqFFkB4AhkEErtVL0XI
+         F0UINE9dwnQtBtvfZLe57Nvq+hBy/qqLlqsmFLQkOyUQPcO+YMGyCQtqthbmzV/ze7
+         ssSe271z8PSvXKqcuY4GZKoegbXpdiuEEnsF9Jbj1n4sLwPA8I0As1x5y6ZVftWX00
+         ya1TDdJjCL9aAQugBd+JX2lxTDv0NnWDMC30PiIupjaRRmkee4+ycpFs+ZN2v8HDBZ
+         g0QsUNMF+edWXXNawZmtL26g6vHk2aHY6NU74fVw2XyqrQi/yhdn4s/h6LVfrt/tMk
+         Wr926lyrBms+Q==
 From:   Ian Cowan <ian@linux.cowan.aero>
 To:     Corentin Labbe <clabbe@baylibre.com>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -80,9 +80,9 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Ian Cowan <ian@linux.cowan.aero>,
         Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH v2 3/4] staging: media: zoran: replace all pr_err() with zrdev_err()
-Date:   Mon, 25 Apr 2022 10:40:50 -0400
-Message-Id: <20220425144050.133104-1-ian@linux.cowan.aero>
+Subject: [PATCH v2 4/4] staging: media: zoran: replace dprintk with new debugging macros
+Date:   Mon, 25 Apr 2022 10:41:10 -0400
+Message-Id: <20220425144110.133316-1-ian@linux.cowan.aero>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -95,161 +95,381 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This replaces all of the pr_err() calls to the preferred zrdev_err()
-macro that calls the dev_dbg() macro.
+This replaces all of the dprintk() macro calls to the zrdev_dbg(),
+zrdev_info(), or zrdev_err() calls as appropriate. This allows for the
+removal of the dprintk() macro from each file it is defined in, along
+with removal of the module params that track the debugging level.
+
+In the case that a debugging level was used in a comparison, this has
+been replaced with checking the console level debugging and making a
+decision from there. If the console debugging level is at least the
+KERN_ debugging level equivalent, then the comparison will evaluate as
+true.
+
+There are a few instances where pr_debug() must be used over the
+zrdev_dbg(). These occur in the module cleanup functions because there
+should be no devices defined once we get to those modules, so we have no
+devices to pass to zrdev_dbg().
 
 Signed-off-by: Ian Cowan <ian@linux.cowan.aero>
 ---
- drivers/staging/media/zoran/videocodec.c | 32 +++++++++++++-----------
- drivers/staging/media/zoran/zr36016.c    | 28 +++++++++++++--------
- drivers/staging/media/zoran/zr36050.c    |  5 ++--
- drivers/staging/media/zoran/zr36060.c    | 19 +++++++++-----
- 4 files changed, 52 insertions(+), 32 deletions(-)
+ drivers/staging/media/zoran/videocodec.c |  55 ++++------
+ drivers/staging/media/zoran/zr36016.c    |  60 +++++------
+ drivers/staging/media/zoran/zr36050.c    | 131 +++++++++++------------
+ drivers/staging/media/zoran/zr36060.c    |  74 ++++++-------
+ 4 files changed, 143 insertions(+), 177 deletions(-)
 
 diff --git a/drivers/staging/media/zoran/videocodec.c b/drivers/staging/media/zoran/videocodec.c
-index 3af7d02bd910..cabb291d302c 100644
+index cabb291d302c..64ca3efbd3f5 100644
 --- a/drivers/staging/media/zoran/videocodec.c
 +++ b/drivers/staging/media/zoran/videocodec.c
-@@ -47,20 +47,21 @@ static struct codec_list *codeclist_top;
- struct videocodec *videocodec_attach(struct videocodec_master *master)
- {
- 	struct codec_list *h = codeclist_top;
-+	struct zoran *zr = videocodec_master_to_zoran(master);
- 	struct attached_list *a, *ptr;
+@@ -16,16 +16,6 @@
+ 
+ #include "videocodec.h"
+ 
+-static int videocodec_debug;
+-module_param(videocodec_debug, int, 0);
+-MODULE_PARM_DESC(videocodec_debug, "Debug level (0-4)");
+-
+-#define dprintk(num, format, args...) \
+-	do { \
+-		if (videocodec_debug >= num) \
+-			printk(format, ##args); \
+-	} while (0)
+-
+ struct attached_list {
  	struct videocodec *codec;
- 	int res;
+ 	struct attached_list *next;
+@@ -69,7 +59,7 @@ struct videocodec *videocodec_attach(struct videocodec_master *master)
+ 		// attach only if the slave has at least the flags
+ 		// expected by the master
+ 		if ((master->flags & h->codec->flags) == master->flags) {
+-			dprintk(4, "%s: try '%s'\n", __func__, h->codec->name);
++			zrdev_dbg(zr, "%s: try '%s'\n", __func__, h->codec->name);
  
- 	if (!master) {
--		pr_err("%s: no data\n", __func__);
-+		zrdev_err(zr, "%s: no data\n", __func__);
- 		return NULL;
- 	}
+ 			codec = kmemdup(h->codec, sizeof(struct videocodec), GFP_KERNEL);
+ 			if (!codec)
+@@ -80,7 +70,7 @@ struct videocodec *videocodec_attach(struct videocodec_master *master)
+ 			codec->master_data = master;
+ 			res = codec->setup(codec);
+ 			if (res == 0) {
+-				dprintk(3, "%s: '%s'\n", __func__, codec->name);
++				zrdev_dbg(zr, "%s: '%s'\n", __func__, codec->name);
+ 				ptr = kzalloc(sizeof(*ptr), GFP_KERNEL);
+ 				if (!ptr)
+ 					goto out_kfree;
+@@ -89,12 +79,13 @@ struct videocodec *videocodec_attach(struct videocodec_master *master)
+ 				a = h->list;
+ 				if (!a) {
+ 					h->list = ptr;
+-					dprintk(4, "videocodec: first element\n");
++					zrdev_dbg(zr, "videocodec: first element\n");
+ 				} else {
+ 					while (a->next)
+ 						a = a->next;	// find end
+ 					a->next = ptr;
+-					dprintk(4, "videocodec: in after '%s'\n", h->codec->name);
++					zrdev_dbg(zr, "videocodec: in after '%s'\n",
++						  h->codec->name);
+ 				}
  
--	dprintk(2, "%s: '%s', flags %lx, magic %lx\n", __func__,
--		master->name, master->flags, master->magic);
-+	zrdev_dbg(zr, "%s: '%s', flags %lx, magic %lx\n", __func__,
-+		  master->name, master->flags, master->magic);
- 
- 	if (!h) {
--		pr_err("%s: no device available\n", __func__);
-+		zrdev_err(zr, "%s: no device available\n", __func__);
- 		return NULL;
- 	}
- 
-@@ -105,7 +106,7 @@ struct videocodec *videocodec_attach(struct videocodec_master *master)
- 		h = h->next;
- 	}
- 
--	pr_err("%s: no codec found!\n", __func__);
-+	zrdev_err(zr, "%s: no codec found!\n", __func__);
- 	return NULL;
- 
-  out_kfree:
-@@ -116,11 +117,12 @@ struct videocodec *videocodec_attach(struct videocodec_master *master)
- int videocodec_detach(struct videocodec *codec)
- {
- 	struct codec_list *h = codeclist_top;
-+	struct zoran *zr = videocodec_to_zoran(codec);
- 	struct attached_list *a, *prev;
- 	int res;
- 
- 	if (!codec) {
--		pr_err("%s: no data\n", __func__);
-+		zrdev_err(zr, "%s: no data\n", __func__);
+ 				h->attached += 1;
+@@ -126,8 +117,8 @@ int videocodec_detach(struct videocodec *codec)
  		return -EINVAL;
  	}
  
-@@ -128,7 +130,7 @@ int videocodec_detach(struct videocodec *codec)
- 		codec->name, codec->type, codec->flags, codec->magic);
+-	dprintk(2, "%s: '%s', type: %x, flags %lx, magic %lx\n", __func__,
+-		codec->name, codec->type, codec->flags, codec->magic);
++	zrdev_dbg(zr, "%s: '%s', type: %x, flags %lx, magic %lx\n", __func__,
++		  codec->name, codec->type, codec->flags, codec->magic);
  
  	if (!h) {
--		pr_err("%s: no device left...\n", __func__);
-+		zrdev_err(zr, "%s: no device left...\n", __func__);
- 		return -ENXIO;
- 	}
- 
-@@ -142,7 +144,7 @@ int videocodec_detach(struct videocodec *codec)
- 					dprintk(3, "%s: '%s'\n", __func__, a->codec->name);
+ 		zrdev_err(zr, "%s: no device left...\n", __func__);
+@@ -141,7 +132,7 @@ int videocodec_detach(struct videocodec *codec)
+ 			if (codec == a->codec) {
+ 				res = a->codec->unset(a->codec);
+ 				if (res >= 0) {
+-					dprintk(3, "%s: '%s'\n", __func__, a->codec->name);
++					zrdev_dbg(zr, "%s: '%s'\n", __func__, a->codec->name);
  					a->codec->master_data = NULL;
  				} else {
--					pr_err("%s: '%s'\n", __func__, a->codec->name);
-+					zrdev_err(zr, "%s: '%s'\n", __func__, a->codec->name);
- 					a->codec->master_data = NULL;
+ 					zrdev_err(zr, "%s: '%s'\n", __func__, a->codec->name);
+@@ -149,10 +140,10 @@ int videocodec_detach(struct videocodec *codec)
  				}
  				if (!prev) {
-@@ -163,16 +165,17 @@ int videocodec_detach(struct videocodec *codec)
- 		h = h->next;
- 	}
- 
--	pr_err("%s: given codec not found!\n", __func__);
-+	zrdev_err(zr, "%s: given codec not found!\n", __func__);
- 	return -EINVAL;
- }
- 
- int videocodec_register(const struct videocodec *codec)
- {
- 	struct codec_list *ptr, *h = codeclist_top;
-+	struct zoran *zr = videocodec_to_zoran((struct videocodec *)codec);
- 
- 	if (!codec) {
--		pr_err("%s: no data!\n", __func__);
-+		zrdev_err(zr, "%s: no data!\n", __func__);
+ 					h->list = a->next;
+-					dprintk(4, "videocodec: delete first\n");
++					zrdev_dbg(zr, "videocodec: delete first\n");
+ 				} else {
+ 					prev->next = a->next;
+-					dprintk(4, "videocodec: delete middle\n");
++					zrdev_dbg(zr, "videocodec: delete middle\n");
+ 				}
+ 				kfree(a->codec);
+ 				kfree(a);
+@@ -179,9 +170,8 @@ int videocodec_register(const struct videocodec *codec)
  		return -EINVAL;
  	}
  
-@@ -202,9 +205,10 @@ int videocodec_register(const struct videocodec *codec)
- int videocodec_unregister(const struct videocodec *codec)
- {
- 	struct codec_list *prev = NULL, *h = codeclist_top;
-+	struct zoran *zr = videocodec_to_zoran((struct videocodec *)codec);
+-	dprintk(2,
+-		"videocodec: register '%s', type: %x, flags %lx, magic %lx\n",
+-		codec->name, codec->type, codec->flags, codec->magic);
++	zrdev_dbg(zr, "videocodec: register '%s', type: %x, flags %lx, magic %lx\n",
++		  codec->name, codec->type, codec->flags, codec->magic);
  
- 	if (!codec) {
--		pr_err("%s: no data!\n", __func__);
-+		zrdev_err(zr, "%s: no data!\n", __func__);
- 		return -EINVAL;
- 	}
- 
-@@ -213,14 +217,14 @@ int videocodec_unregister(const struct videocodec *codec)
- 		codec->name, codec->type, codec->flags, codec->magic);
+ 	ptr = kzalloc(sizeof(*ptr), GFP_KERNEL);
+ 	if (!ptr)
+@@ -190,13 +180,13 @@ int videocodec_register(const struct videocodec *codec)
  
  	if (!h) {
--		pr_err("%s: no device left...\n", __func__);
-+		zrdev_err(zr, "%s: no device left...\n", __func__);
- 		return -ENXIO;
+ 		codeclist_top = ptr;
+-		dprintk(4, "videocodec: hooked in as first element\n");
++		zrdev_dbg(zr, "videocodec: hooked in as first element\n");
+ 	} else {
+ 		while (h->next)
+ 			h = h->next;	// find the end
+ 		h->next = ptr;
+-		dprintk(4, "videocodec: hooked in after '%s'\n",
+-			h->codec->name);
++		zrdev_dbg(zr, "videocodec: hooked in after '%s'\n",
++			  h->codec->name);
  	}
  
- 	while (h) {
- 		if (codec == h->codec) {
- 			if (h->attached) {
--				pr_err("videocodec: '%s' is used\n", h->codec->name);
-+				zrdev_err(zr, "videocodec: '%s' is used\n", h->codec->name);
+ 	return 0;
+@@ -212,9 +202,8 @@ int videocodec_unregister(const struct videocodec *codec)
+ 		return -EINVAL;
+ 	}
+ 
+-	dprintk(2,
+-		"videocodec: unregister '%s', type: %x, flags %lx, magic %lx\n",
+-		codec->name, codec->type, codec->flags, codec->magic);
++	zrdev_dbg(zr, "videocodec: unregister '%s', type: %x, flags %lx, magic %lx\n",
++		  codec->name, codec->type, codec->flags, codec->magic);
+ 
+ 	if (!h) {
+ 		zrdev_err(zr, "%s: no device left...\n", __func__);
+@@ -227,16 +216,14 @@ int videocodec_unregister(const struct videocodec *codec)
+ 				zrdev_err(zr, "videocodec: '%s' is used\n", h->codec->name);
  				return -EBUSY;
  			}
- 			dprintk(3, "videocodec: unregister '%s' is ok.\n",
-@@ -241,7 +245,7 @@ int videocodec_unregister(const struct videocodec *codec)
- 		h = h->next;
- 	}
- 
--	pr_err("%s: given codec not found!\n", __func__);
-+	zrdev_err(zr, "%s: given codec not found!\n", __func__);
- 	return -EINVAL;
- }
- 
+-			dprintk(3, "videocodec: unregister '%s' is ok.\n",
+-				h->codec->name);
++			zrdev_dbg(zr, "videocodec: unregister '%s' is ok.\n",
++				  h->codec->name);
+ 			if (!prev) {
+ 				codeclist_top = h->next;
+-				dprintk(4,
+-					"videocodec: delete first element\n");
++				zrdev_dbg(zr, "videocodec: delete first element\n");
+ 			} else {
+ 				prev->next = h->next;
+-				dprintk(4,
+-					"videocodec: delete middle element\n");
++				zrdev_dbg(zr, "videocodec: delete middle element\n");
+ 			}
+ 			kfree(h);
+ 			return 0;
 diff --git a/drivers/staging/media/zoran/zr36016.c b/drivers/staging/media/zoran/zr36016.c
-index 26c7c32b6bc0..3e3376af0cfa 100644
+index 3e3376af0cfa..afdd74e7c59f 100644
 --- a/drivers/staging/media/zoran/zr36016.c
 +++ b/drivers/staging/media/zoran/zr36016.c
-@@ -26,7 +26,6 @@ static int zr36016_debug;
- module_param(zr36016_debug, int, 0);
- MODULE_PARM_DESC(zr36016_debug, "Debug level (0-4)");
+@@ -22,16 +22,6 @@
+ /* amount of chips attached via this driver */
+ static int zr36016_codecs;
  
+-static int zr36016_debug;
+-module_param(zr36016_debug, int, 0);
+-MODULE_PARM_DESC(zr36016_debug, "Debug level (0-4)");
 -
- #define dprintk(num, format, args...) \
- 	do { \
- 		if (zr36016_debug >= num) \
-@@ -42,13 +41,14 @@ MODULE_PARM_DESC(zr36016_debug, "Debug level (0-4)");
+-#define dprintk(num, format, args...) \
+-	do { \
+-		if (zr36016_debug >= num) \
+-			printk(format, ##args); \
+-	} while (0)
+-
+ /* =========================================================================
+    Local hardware I/O functions:
+ 
+@@ -50,7 +40,7 @@ static u8 zr36016_read(struct zr36016 *ptr, u16 reg)
+ 	else
+ 		zrdev_err(zr, "%s: invalid I/O setup, nothing read!\n", ptr->name);
+ 
+-	dprintk(4, "%s: reading from 0x%04x: %02x\n", ptr->name, reg, value);
++	zrdev_dbg(zr, "%s: reading from 0x%04x: %02x\n", ptr->name, reg, value);
+ 
+ 	return value;
+ }
+@@ -59,7 +49,7 @@ static void zr36016_write(struct zr36016 *ptr, u16 reg, u8 value)
+ {
+ 	struct zoran *zr = videocodec_to_zoran(ptr->codec);
+ 
+-	dprintk(4, "%s: writing 0x%02x to 0x%04x\n", ptr->name, value, reg);
++	zrdev_dbg(zr, "%s: writing 0x%02x to 0x%04x\n", ptr->name, value, reg);
+ 
+ 	// just in case something is wrong...
+ 	if (ptr->codec->master_data->writereg)
+@@ -84,7 +74,7 @@ static u8 zr36016_readi(struct zr36016 *ptr, u16 reg)
+ 		zrdev_err(zr, "%s: invalid I/O setup, nothing read (i)!\n", ptr->name);
+ 	}
+ 
+-	dprintk(4, "%s: reading indirect from 0x%04x: %02x\n", ptr->name, reg, value);
++	zrdev_dbg(zr, "%s: reading indirect from 0x%04x: %02x\n", ptr->name, reg, value);
+ 	return value;
+ }
+ 
+@@ -92,8 +82,8 @@ static void zr36016_writei(struct zr36016 *ptr, u16 reg, u8 value)
+ {
+ 	struct zoran *zr = videocodec_to_zoran(ptr->codec);
+ 
+-	dprintk(4, "%s: writing indirect 0x%02x to 0x%04x\n", ptr->name,
+-		value, reg);
++	zrdev_dbg(zr, "%s: writing indirect 0x%02x to 0x%04x\n", ptr->name,
++		  value, reg);
+ 
+ 	/* just in case something is wrong... */
+ 	if (ptr->codec->master_data->writereg) {
+@@ -127,14 +117,14 @@ static int zr36016_basic_test(struct zr36016 *ptr)
+ {
+ 	struct zoran *zr = videocodec_to_zoran(ptr->codec);
+ 
+-	if (zr36016_debug) {
++	if (*KERN_INFO <= CONSOLE_LOGLEVEL_DEFAULT) {
+ 		int i;
+ 
+ 		zr36016_writei(ptr, ZR016I_PAX_LO, 0x55);
+-		dprintk(1, KERN_INFO "%s: registers: ", ptr->name);
++		zrdev_info(zr, "%s: registers: ", ptr->name);
+ 		for (i = 0; i <= 0x0b; i++)
+-			dprintk(1, "%02x ", zr36016_readi(ptr, i));
+-		dprintk(1, "\n");
++			zrdev_dbg(zr, "%02x ", zr36016_readi(ptr, i));
++		zrdev_dbg(zr, "\n");
+ 	}
+ 	// for testing just write 0, then the default value to a register and read
+ 	// it back in both cases
+@@ -171,10 +161,11 @@ static int zr36016_pushit(struct zr36016 *ptr,
+ 			   u16             len,
+ 			   const char     *data)
+ {
++	struct zoran *zr = videocodec_to_zoran(ptr->codec);
+ 	int i = 0;
+ 
+-	dprintk(4, "%s: write data block to 0x%04x (len=%d)\n",
+-		ptr->name, startreg, len);
++	zrdev_dbg(zr, "%s: write data block to 0x%04x (len=%d)\n",
++		  ptr->name, startreg, len);
+ 	while (i < len) {
+ 		zr36016_writei(ptr, startreg++,  data[i++]);
+ 	}
+@@ -232,8 +223,9 @@ static void zr36016_init(struct zr36016 *ptr)
+ static int zr36016_set_mode(struct videocodec *codec, int mode)
+ {
+ 	struct zr36016 *ptr = (struct zr36016 *)codec->data;
++	struct zoran *zr = videocodec_to_zoran(codec);
+ 
+-	dprintk(2, "%s: set_mode %d call\n", ptr->name, mode);
++	zrdev_dbg(zr, "%s: set_mode %d call\n", ptr->name, mode);
+ 
+ 	if ((mode != CODEC_DO_EXPANSION) && (mode != CODEC_DO_COMPRESSION))
+ 		return -EINVAL;
+@@ -249,11 +241,12 @@ static int zr36016_set_video(struct videocodec *codec, const struct tvnorm *norm
+ 			     struct vfe_settings *cap, struct vfe_polarity *pol)
+ {
+ 	struct zr36016 *ptr = (struct zr36016 *)codec->data;
++	struct zoran *zr = videocodec_to_zoran(codec);
+ 
+-	dprintk(2, "%s: set_video %d.%d, %d/%d-%dx%d (0x%x) call\n",
+-		ptr->name, norm->h_start, norm->v_start,
+-		cap->x, cap->y, cap->width, cap->height,
+-		cap->decimation);
++	zrdev_dbg(zr, "%s: set_video %d.%d, %d/%d-%dx%d (0x%x) call\n",
++		  ptr->name, norm->h_start, norm->v_start,
++		  cap->x, cap->y, cap->width, cap->height,
++		  cap->decimation);
+ 
+ 	/* if () return -EINVAL;
+ 	 * trust the master driver that it knows what it does - so
+@@ -283,9 +276,10 @@ static int zr36016_set_video(struct videocodec *codec, const struct tvnorm *norm
+ static int zr36016_control(struct videocodec *codec, int type, int size, void *data)
+ {
+ 	struct zr36016 *ptr = (struct zr36016 *)codec->data;
++	struct zoran *zr = videocodec_to_zoran(codec);
+ 	int *ival = (int *)data;
+ 
+-	dprintk(2, "%s: control %d call with %d byte\n", ptr->name, type, size);
++	zrdev_dbg(zr, "%s: control %d call with %d byte\n", ptr->name, type, size);
+ 
+ 	switch (type) {
+ 	case CODEC_G_STATUS:	/* get last status - we don't know it ... */
+@@ -332,11 +326,12 @@ static int zr36016_control(struct videocodec *codec, int type, int size, void *d
+ static int zr36016_unset(struct videocodec *codec)
+ {
+ 	struct zr36016 *ptr = codec->data;
++	struct zoran *zr = videocodec_to_zoran(codec);
+ 
+ 	if (ptr) {
+ 		/* do wee need some codec deinit here, too ???? */
+ 
+-		dprintk(1, "%s: finished codec #%d\n", ptr->name, ptr->num);
++		zrdev_dbg(zr, "%s: finished codec #%d\n", ptr->name, ptr->num);
+ 		kfree(ptr);
+ 		codec->data = NULL;
+ 
+@@ -362,7 +357,7 @@ static int zr36016_setup(struct videocodec *codec)
+ 	struct zr36016 *ptr;
+ 	int res;
+ 
+-	dprintk(2, "zr36016: initializing VFE subsystem #%d.\n", zr36016_codecs);
++	zrdev_dbg(zr, "zr36016: initializing VFE subsystem #%d.\n", zr36016_codecs);
+ 
+ 	if (zr36016_codecs == MAX_CODECS) {
+ 		zrdev_err(zr, "zr36016: Can't attach more codecs!\n");
+@@ -392,7 +387,7 @@ static int zr36016_setup(struct videocodec *codec)
+ 	ptr->ydec = 0;
+ 	zr36016_init(ptr);
+ 
+-	dprintk(1, KERN_INFO "%s: codec v%d attached and running\n", ptr->name, ptr->version);
++	zrdev_info(zr, "%s: codec v%d attached and running\n", ptr->name, ptr->version);
+ 
+ 	return 0;
+ }
+@@ -425,9 +420,8 @@ int zr36016_init_module(void)
+ void zr36016_cleanup_module(void)
+ {
+ 	if (zr36016_codecs) {
+-		dprintk(1,
+-			"zr36016: something's wrong - %d codecs left somehow.\n",
+-			zr36016_codecs);
++		pr_debug("zr36016: something's wrong - %d codecs left somehow.\n",
++			 zr36016_codecs);
+ 	}
+ 	videocodec_unregister(&zr36016_codec);
+ }
+diff --git a/drivers/staging/media/zoran/zr36050.c b/drivers/staging/media/zoran/zr36050.c
+index 950dd79f5c81..b26b0711461c 100644
+--- a/drivers/staging/media/zoran/zr36050.c
++++ b/drivers/staging/media/zoran/zr36050.c
+@@ -29,17 +29,6 @@
+ /* amount of chips attached via this driver */
+ static int zr36050_codecs;
+ 
+-/* debugging is available via module parameter */
+-static int zr36050_debug;
+-module_param(zr36050_debug, int, 0);
+-MODULE_PARM_DESC(zr36050_debug, "Debug level (0-4)");
+-
+-#define dprintk(num, format, args...) \
+-	do { \
+-		if (zr36050_debug >= num) \
+-			printk(format, ##args); \
+-	} while (0)
+-
+ /* =========================================================================
+    Local hardware I/O functions:
+ 
+@@ -49,32 +38,32 @@ MODULE_PARM_DESC(zr36050_debug, "Debug level (0-4)");
  /* read and write functions */
- static u8 zr36016_read(struct zr36016 *ptr, u16 reg)
+ static u8 zr36050_read(struct zr36050 *ptr, u16 reg)
  {
 +	struct zoran *zr = videocodec_to_zoran(ptr->codec);
  	u8 value = 0;
@@ -258,231 +478,566 @@ index 26c7c32b6bc0..3e3376af0cfa 100644
  	if (ptr->codec->master_data->readreg)
  		value = (ptr->codec->master_data->readreg(ptr->codec, reg)) & 0xFF;
  	else
--		pr_err("%s: invalid I/O setup, nothing read!\n", ptr->name);
+-		dprintk(1,
+-			KERN_ERR "%s: invalid I/O setup, nothing read!\n", ptr->name);
 +		zrdev_err(zr, "%s: invalid I/O setup, nothing read!\n", ptr->name);
  
- 	dprintk(4, "%s: reading from 0x%04x: %02x\n", ptr->name, reg, value);
- 
-@@ -57,13 +57,15 @@ static u8 zr36016_read(struct zr36016 *ptr, u16 reg)
- 
- static void zr36016_write(struct zr36016 *ptr, u16 reg, u8 value)
- {
-+	struct zoran *zr = videocodec_to_zoran(ptr->codec);
-+
- 	dprintk(4, "%s: writing 0x%02x to 0x%04x\n", ptr->name, value, reg);
- 
- 	// just in case something is wrong...
- 	if (ptr->codec->master_data->writereg)
- 		ptr->codec->master_data->writereg(ptr->codec, reg, value);
- 	else
--		pr_err("%s: invalid I/O setup, nothing written!\n", ptr->name);
-+		zrdev_err(zr, "%s: invalid I/O setup, nothing written!\n", ptr->name);
- }
- 
- /* indirect read and write functions */
-@@ -71,6 +73,7 @@ static void zr36016_write(struct zr36016 *ptr, u16 reg, u8 value)
-  * writing it all time cost not much and is safer... */
- static u8 zr36016_readi(struct zr36016 *ptr, u16 reg)
- {
-+	struct zoran *zr = videocodec_to_zoran(ptr->codec);
- 	u8 value = 0;
- 
- 	/* just in case something is wrong... */
-@@ -78,7 +81,7 @@ static u8 zr36016_readi(struct zr36016 *ptr, u16 reg)
- 		ptr->codec->master_data->writereg(ptr->codec, ZR016_IADDR, reg & 0x0F);	// ADDR
- 		value = (ptr->codec->master_data->readreg(ptr->codec, ZR016_IDATA)) & 0xFF;	// DATA
- 	} else {
--		pr_err("%s: invalid I/O setup, nothing read (i)!\n", ptr->name);
-+		zrdev_err(zr, "%s: invalid I/O setup, nothing read (i)!\n", ptr->name);
- 	}
- 
- 	dprintk(4, "%s: reading indirect from 0x%04x: %02x\n", ptr->name, reg, value);
-@@ -87,6 +90,8 @@ static u8 zr36016_readi(struct zr36016 *ptr, u16 reg)
- 
- static void zr36016_writei(struct zr36016 *ptr, u16 reg, u8 value)
- {
-+	struct zoran *zr = videocodec_to_zoran(ptr->codec);
-+
- 	dprintk(4, "%s: writing indirect 0x%02x to 0x%04x\n", ptr->name,
- 		value, reg);
- 
-@@ -95,7 +100,7 @@ static void zr36016_writei(struct zr36016 *ptr, u16 reg, u8 value)
- 		ptr->codec->master_data->writereg(ptr->codec, ZR016_IADDR, reg & 0x0F);	// ADDR
- 		ptr->codec->master_data->writereg(ptr->codec, ZR016_IDATA, value & 0x0FF);	// DATA
- 	} else {
--		pr_err("%s: invalid I/O setup, nothing written (i)!\n", ptr->name);
-+		zrdev_err(zr, "%s: invalid I/O setup, nothing written (i)!\n", ptr->name);
- 	}
- }
- 
-@@ -120,6 +125,8 @@ static u8 zr36016_read_version(struct zr36016 *ptr)
- 
- static int zr36016_basic_test(struct zr36016 *ptr)
- {
-+	struct zoran *zr = videocodec_to_zoran(ptr->codec);
-+
- 	if (zr36016_debug) {
- 		int i;
- 
-@@ -133,19 +140,19 @@ static int zr36016_basic_test(struct zr36016 *ptr)
- 	// it back in both cases
- 	zr36016_writei(ptr, ZR016I_PAX_LO, 0x00);
- 	if (zr36016_readi(ptr, ZR016I_PAX_LO) != 0x0) {
--		pr_err("%s: attach failed, can't connect to vfe processor!\n", ptr->name);
-+		zrdev_err(zr, "%s: attach failed, can't connect to vfe processor!\n", ptr->name);
- 		return -ENXIO;
- 	}
- 	zr36016_writei(ptr, ZR016I_PAX_LO, 0x0d0);
- 	if (zr36016_readi(ptr, ZR016I_PAX_LO) != 0x0d0) {
--		pr_err("%s: attach failed, can't connect to vfe processor!\n", ptr->name);
-+		zrdev_err(zr, "%s: attach failed, can't connect to vfe processor!\n", ptr->name);
- 		return -ENXIO;
- 	}
- 	// we allow version numbers from 0-3, should be enough, though
- 	zr36016_read_version(ptr);
- 	if (ptr->version & 0x0c) {
--		pr_err("%s: attach failed, suspicious version %d found...\n", ptr->name,
--		       ptr->version);
-+		zrdev_err(zr, "%s: attach failed, suspicious version %d found...\n", ptr->name,
-+			  ptr->version);
- 		return -ENXIO;
- 	}
- 
-@@ -351,13 +358,14 @@ static int zr36016_unset(struct videocodec *codec)
- 
- static int zr36016_setup(struct videocodec *codec)
- {
-+	struct zoran *zr = videocodec_to_zoran(codec);
- 	struct zr36016 *ptr;
- 	int res;
- 
- 	dprintk(2, "zr36016: initializing VFE subsystem #%d.\n", zr36016_codecs);
- 
- 	if (zr36016_codecs == MAX_CODECS) {
--		pr_err("zr36016: Can't attach more codecs!\n");
-+		zrdev_err(zr, "zr36016: Can't attach more codecs!\n");
- 		return -ENOSPC;
- 	}
- 	//mem structure init
-diff --git a/drivers/staging/media/zoran/zr36050.c b/drivers/staging/media/zoran/zr36050.c
-index 38f7021e7b06..950dd79f5c81 100644
---- a/drivers/staging/media/zoran/zr36050.c
-+++ b/drivers/staging/media/zoran/zr36050.c
-@@ -385,6 +385,7 @@ static int zr36050_set_dri(struct zr36050 *ptr)
-    ========================================================================= */
- static void zr36050_init(struct zr36050 *ptr)
- {
-+	struct zoran *zr = videocodec_to_zoran(ptr->codec);
- 	int sum = 0;
- 	long bitcnt, tmp;
- 
-@@ -446,7 +447,7 @@ static void zr36050_init(struct zr36050 *ptr)
- 			ptr->name, ptr->status1);
- 
- 		if ((ptr->status1 & 0x4) == 0) {
--			pr_err("%s: init aborted!\n", ptr->name);
-+			zrdev_err(zr, "%s: init aborted!\n", ptr->name);
- 			return;	// something is wrong, its timed out!!!!
- 		}
- 
-@@ -515,7 +516,7 @@ static void zr36050_init(struct zr36050 *ptr)
- 			ptr->name, ptr->status1);
- 
- 		if ((ptr->status1 & 0x4) == 0) {
--			pr_err("%s: init aborted!\n", ptr->name);
-+			zrdev_err(zr, "%s: init aborted!\n", ptr->name);
- 			return;	// something is wrong, its timed out!!!!
- 		}
- 
-diff --git a/drivers/staging/media/zoran/zr36060.c b/drivers/staging/media/zoran/zr36060.c
-index d0c369e31c81..c09910669585 100644
---- a/drivers/staging/media/zoran/zr36060.c
-+++ b/drivers/staging/media/zoran/zr36060.c
-@@ -50,26 +50,29 @@ MODULE_PARM_DESC(zr36060_debug, "Debug level (0-4)");
- 
- static u8 zr36060_read(struct zr36060 *ptr, u16 reg)
- {
-+	struct zoran *zr = videocodec_to_zoran(ptr->codec);
- 	u8 value = 0;
- 
- 	// just in case something is wrong...
- 	if (ptr->codec->master_data->readreg)
- 		value = (ptr->codec->master_data->readreg(ptr->codec, reg)) & 0xff;
- 	else
--		pr_err("%s: invalid I/O setup, nothing read!\n", ptr->name);
-+		zrdev_err(zr, "%s: invalid I/O setup, nothing read!\n", ptr->name);
+-	dprintk(4, "%s: reading from 0x%04x: %02x\n", ptr->name, reg, value);
++	zrdev_dbg(zr, "%s: reading from 0x%04x: %02x\n", ptr->name, reg, value);
  
  	return value;
  }
  
- static void zr36060_write(struct zr36060 *ptr, u16 reg, u8 value)
+ static void zr36050_write(struct zr36050 *ptr, u16 reg, u8 value)
  {
+-	dprintk(4, "%s: writing 0x%02x to 0x%04x\n", ptr->name, value, reg);
 +	struct zoran *zr = videocodec_to_zoran(ptr->codec);
 +
- 	dprintk(4, "0x%02x @0x%04x\n", value, reg);
++	zrdev_dbg(zr, "%s: writing 0x%02x to 0x%04x\n", ptr->name, value, reg);
  
- 	// just in case something is wrong...
+ 	/* just in case something is wrong... */
  	if (ptr->codec->master_data->writereg)
  		ptr->codec->master_data->writereg(ptr->codec, reg, value);
  	else
--		pr_err("%s: invalid I/O setup, nothing written!\n", ptr->name);
-+		zrdev_err(zr, "%s: invalid I/O setup, nothing written!\n", ptr->name);
+-		dprintk(1,
+-			KERN_ERR
+-			"%s: invalid I/O setup, nothing written!\n",
+-			ptr->name);
++		zrdev_err(zr, "%s: invalid I/O setup, nothing written!\n",
++			  ptr->name);
  }
  
  /* =========================================================================
-@@ -117,15 +120,17 @@ static void zr36060_wait_end(struct zr36060 *ptr)
- /* Basic test of "connectivity", writes/reads to/from memory the SOF marker */
- static int zr36060_basic_test(struct zr36060 *ptr)
+@@ -117,14 +106,14 @@ static u16 zr36050_read_scalefactor(struct zr36050 *ptr)
+ 
+ static void zr36050_wait_end(struct zr36050 *ptr)
+ {
++	struct zoran *zr = videocodec_to_zoran(ptr->codec);
+ 	int i = 0;
+ 
+ 	while (!(zr36050_read_status1(ptr) & 0x4)) {
+ 		udelay(1);
+ 		if (i++ > 200000) {	// 200ms, there is for sure something wrong!!!
+-			dprintk(1,
+-				"%s: timeout at wait_end (last status: 0x%02x)\n",
+-				ptr->name, ptr->status1);
++			zrdev_dbg(zr, "%s: timeout at wait_end (last status: 0x%02x)\n",
++				  ptr->name, ptr->status1);
+ 			break;
+ 		}
+ 	}
+@@ -138,33 +127,29 @@ static void zr36050_wait_end(struct zr36050 *ptr)
+ 
+ static int zr36050_basic_test(struct zr36050 *ptr)
  {
 +	struct zoran *zr = videocodec_to_zoran(ptr->codec);
 +
- 	if ((zr36060_read(ptr, ZR060_IDR_DEV) != 0x33) &&
- 	    (zr36060_read(ptr, ZR060_IDR_REV) != 0x01)) {
--		pr_err("%s: attach failed, can't connect to jpeg processor!\n", ptr->name);
-+		zrdev_err(zr, "%s: attach failed, can't connect to jpeg processor!\n", ptr->name);
+ 	zr36050_write(ptr, ZR050_SOF_IDX, 0x00);
+ 	zr36050_write(ptr, ZR050_SOF_IDX + 1, 0x00);
+ 	if ((zr36050_read(ptr, ZR050_SOF_IDX) |
+ 	     zr36050_read(ptr, ZR050_SOF_IDX + 1)) != 0x0000) {
+-		dprintk(1,
+-			KERN_ERR
+-			"%s: attach failed, can't connect to jpeg processor!\n",
+-			ptr->name);
++		zrdev_err(zr, "%s: attach failed, can't connect to jpeg processor!\n",
++			  ptr->name);
+ 		return -ENXIO;
+ 	}
+ 	zr36050_write(ptr, ZR050_SOF_IDX, 0xff);
+ 	zr36050_write(ptr, ZR050_SOF_IDX + 1, 0xc0);
+ 	if (((zr36050_read(ptr, ZR050_SOF_IDX) << 8) |
+ 	     zr36050_read(ptr, ZR050_SOF_IDX + 1)) != 0xffc0) {
+-		dprintk(1,
+-			KERN_ERR
+-			"%s: attach failed, can't connect to jpeg processor!\n",
+-			ptr->name);
++		zrdev_err(zr, "%s: attach failed, can't connect to jpeg processor!\n",
++			  ptr->name);
  		return -ENXIO;
  	}
  
- 	zr36060_wait_end(ptr);
- 	if (ptr->status & ZR060_CFSR_BUSY) {
--		pr_err("%s: attach failed, jpeg processor failed (end flag)!\n", ptr->name);
-+		zrdev_err(zr, "%s: attach failed, jpeg processor failed (end flag)!\n", ptr->name);
+ 	zr36050_wait_end(ptr);
+ 	if ((ptr->status1 & 0x4) == 0) {
+-		dprintk(1,
+-			KERN_ERR
+-			"%s: attach failed, jpeg processor failed (end flag)!\n",
+-			ptr->name);
++		zrdev_err(zr, "%s: attach failed, jpeg processor failed (end flag)!\n",
++			  ptr->name);
  		return -EBUSY;
  	}
  
-@@ -319,6 +324,7 @@ static int zr36060_set_dri(struct zr36060 *ptr)
-  */
- static void zr36060_init(struct zr36060 *ptr)
+@@ -179,10 +164,11 @@ static int zr36050_basic_test(struct zr36050 *ptr)
+ 
+ static int zr36050_pushit(struct zr36050 *ptr, u16 startreg, u16 len, const char *data)
  {
 +	struct zoran *zr = videocodec_to_zoran(ptr->codec);
- 	int sum = 0;
+ 	int i = 0;
+ 
+-	dprintk(4, "%s: write data block to 0x%04x (len=%d)\n", ptr->name,
+-		startreg, len);
++	zrdev_dbg(zr, "%s: write data block to 0x%04x (len=%d)\n", ptr->name,
++		  startreg, len);
+ 	while (i < len)
+ 		zr36050_write(ptr, startreg++, data[i++]);
+ 
+@@ -305,11 +291,12 @@ static const char zr36050_decimation_v[8] = { 1, 1, 1, 0, 0, 0, 0, 0 };
+ 
+ static int zr36050_set_sof(struct zr36050 *ptr)
+ {
++	struct zoran *zr = videocodec_to_zoran(ptr->codec);
+ 	char sof_data[34];	// max. size of register set
+ 	int i;
+ 
+-	dprintk(3, "%s: write SOF (%dx%d, %d components)\n", ptr->name,
+-		ptr->width, ptr->height, NO_OF_COMPONENTS);
++	zrdev_dbg(zr, "%s: write SOF (%dx%d, %d components)\n", ptr->name,
++		  ptr->width, ptr->height, NO_OF_COMPONENTS);
+ 	sof_data[0] = 0xff;
+ 	sof_data[1] = 0xc0;
+ 	sof_data[2] = 0x00;
+@@ -336,10 +323,11 @@ static int zr36050_set_sof(struct zr36050 *ptr)
+ 
+ static int zr36050_set_sos(struct zr36050 *ptr)
+ {
++	struct zoran *zr = videocodec_to_zoran(ptr->codec);
+ 	char sos_data[16];	// max. size of register set
+ 	int i;
+ 
+-	dprintk(3, "%s: write SOS\n", ptr->name);
++	zrdev_dbg(zr, "%s: write SOS\n", ptr->name);
+ 	sos_data[0] = 0xff;
+ 	sos_data[1] = 0xda;
+ 	sos_data[2] = 0x00;
+@@ -363,9 +351,10 @@ static int zr36050_set_sos(struct zr36050 *ptr)
+ 
+ static int zr36050_set_dri(struct zr36050 *ptr)
+ {
++	struct zoran *zr = videocodec_to_zoran(ptr->codec);
+ 	char dri_data[6];	// max. size of register set
+ 
+-	dprintk(3, "%s: write DRI\n", ptr->name);
++	zrdev_dbg(zr, "%s: write DRI\n", ptr->name);
+ 	dri_data[0] = 0xff;
+ 	dri_data[1] = 0xdd;
+ 	dri_data[2] = 0x00;
+@@ -390,7 +379,7 @@ static void zr36050_init(struct zr36050 *ptr)
  	long bitcnt, tmp;
  
-@@ -444,7 +450,7 @@ static void zr36060_init(struct zr36060 *ptr)
- 	dprintk(2, "%s: Status after table preload: 0x%02x\n", ptr->name, ptr->status);
+ 	if (ptr->mode == CODEC_DO_COMPRESSION) {
+-		dprintk(2, "%s: COMPRESSION SETUP\n", ptr->name);
++		zrdev_dbg(zr, "%s: COMPRESSION SETUP\n", ptr->name);
  
- 	if (ptr->status & ZR060_CFSR_BUSY) {
--		pr_err("%s: init aborted!\n", ptr->name);
-+		zrdev_err(zr, "%s: init aborted!\n", ptr->name);
- 		return;		// something is wrong, its timed out!!!!
- 	}
- }
-@@ -777,13 +783,14 @@ static int zr36060_unset(struct videocodec *codec)
-  */
- static int zr36060_setup(struct videocodec *codec)
+ 		/* 050 communicates with 057 in master mode */
+ 		zr36050_write(ptr, ZR050_HARDWARE, ZR050_HW_MSTR);
+@@ -420,7 +409,7 @@ static void zr36050_init(struct zr36050 *ptr)
+ 
+ 		/* setup the fixed jpeg tables - maybe variable, though -
+ 		 * (see table init section above) */
+-		dprintk(3, "%s: write DQT, DHT, APP\n", ptr->name);
++		zrdev_dbg(zr, "%s: write DQT, DHT, APP\n", ptr->name);
+ 		sum += zr36050_pushit(ptr, ZR050_DQT_IDX,
+ 				      sizeof(zr36050_dqt), zr36050_dqt);
+ 		sum += zr36050_pushit(ptr, ZR050_DHT_IDX,
+@@ -443,8 +432,8 @@ static void zr36050_init(struct zr36050 *ptr)
+ 
+ 		zr36050_write(ptr, ZR050_GO, 1);	// launch codec
+ 		zr36050_wait_end(ptr);
+-		dprintk(2, "%s: Status after table preload: 0x%02x\n",
+-			ptr->name, ptr->status1);
++		zrdev_dbg(zr, "%s: Status after table preload: 0x%02x\n",
++			  ptr->name, ptr->status1);
+ 
+ 		if ((ptr->status1 & 0x4) == 0) {
+ 			zrdev_err(zr, "%s: init aborted!\n", ptr->name);
+@@ -458,9 +447,8 @@ static void zr36050_init(struct zr36050 *ptr)
+ 		bitcnt = sum << 3;	/* need the size in bits */
+ 
+ 		tmp = bitcnt >> 16;
+-		dprintk(3,
+-			"%s: code: csize=%d, tot=%d, bit=%ld, highbits=%ld\n",
+-			ptr->name, sum, ptr->real_code_vol, bitcnt, tmp);
++		zrdev_dbg(zr, "%s: code: csize=%d, tot=%d, bit=%ld, highbits=%ld\n",
++			  ptr->name, sum, ptr->real_code_vol, bitcnt, tmp);
+ 		zr36050_write(ptr, ZR050_TCV_NET_HI, tmp >> 8);
+ 		zr36050_write(ptr, ZR050_TCV_NET_MH, tmp & 0xff);
+ 		tmp = bitcnt & 0xffff;
+@@ -471,8 +459,8 @@ static void zr36050_init(struct zr36050 *ptr)
+ 		bitcnt -= ((bitcnt * 5) >> 6);	// bits without eob
+ 
+ 		tmp = bitcnt >> 16;
+-		dprintk(3, "%s: code: nettobit=%ld, highnettobits=%ld\n",
+-			ptr->name, bitcnt, tmp);
++		zrdev_dbg(zr, "%s: code: nettobit=%ld, highnettobits=%ld\n",
++			  ptr->name, bitcnt, tmp);
+ 		zr36050_write(ptr, ZR050_TCV_DATA_HI, tmp >> 8);
+ 		zr36050_write(ptr, ZR050_TCV_DATA_MH, tmp & 0xff);
+ 		tmp = bitcnt & 0xffff;
+@@ -490,7 +478,7 @@ static void zr36050_init(struct zr36050 *ptr)
+ 			      ((ptr->app.len > 0) ? ZR050_ME_APP : 0) |
+ 			      ((ptr->com.len > 0) ? ZR050_ME_COM : 0));
+ 	} else {
+-		dprintk(2, "%s: EXPANSION SETUP\n", ptr->name);
++		zrdev_dbg(zr, "%s: EXPANSION SETUP\n", ptr->name);
+ 
+ 		/* 050 communicates with 055 in master mode */
+ 		zr36050_write(ptr, ZR050_HARDWARE,
+@@ -503,7 +491,7 @@ static void zr36050_init(struct zr36050 *ptr)
+ 		zr36050_write(ptr, ZR050_INT_REQ_0, 0);
+ 		zr36050_write(ptr, ZR050_INT_REQ_1, 3);	// low 2 bits always 1
+ 
+-		dprintk(3, "%s: write DHT\n", ptr->name);
++		zrdev_dbg(zr, "%s: write DHT\n", ptr->name);
+ 		zr36050_pushit(ptr, ZR050_DHT_IDX, sizeof(zr36050_dht),
+ 			       zr36050_dht);
+ 
+@@ -512,8 +500,8 @@ static void zr36050_init(struct zr36050 *ptr)
+ 
+ 		zr36050_write(ptr, ZR050_GO, 1);	// launch codec
+ 		zr36050_wait_end(ptr);
+-		dprintk(2, "%s: Status after table preload: 0x%02x\n",
+-			ptr->name, ptr->status1);
++		zrdev_dbg(zr, "%s: Status after table preload: 0x%02x\n",
++			  ptr->name, ptr->status1);
+ 
+ 		if ((ptr->status1 & 0x4) == 0) {
+ 			zrdev_err(zr, "%s: init aborted!\n", ptr->name);
+@@ -540,8 +528,9 @@ static void zr36050_init(struct zr36050 *ptr)
+ static int zr36050_set_mode(struct videocodec *codec, int mode)
  {
+ 	struct zr36050 *ptr = (struct zr36050 *)codec->data;
 +	struct zoran *zr = videocodec_to_zoran(codec);
- 	struct zr36060 *ptr;
+ 
+-	dprintk(2, "%s: set_mode %d call\n", ptr->name, mode);
++	zrdev_dbg(zr, "%s: set_mode %d call\n", ptr->name, mode);
+ 
+ 	if ((mode != CODEC_DO_EXPANSION) && (mode != CODEC_DO_COMPRESSION))
+ 		return -EINVAL;
+@@ -557,12 +546,13 @@ static int zr36050_set_video(struct videocodec *codec, const struct tvnorm *norm
+ 			     struct vfe_settings *cap, struct vfe_polarity *pol)
+ {
+ 	struct zr36050 *ptr = (struct zr36050 *)codec->data;
++	struct zoran *zr = videocodec_to_zoran(codec);
+ 	int size;
+ 
+-	dprintk(2, "%s: set_video %d.%d, %d/%d-%dx%d (0x%x) q%d call\n",
+-		ptr->name, norm->h_start, norm->v_start,
+-		cap->x, cap->y, cap->width, cap->height,
+-		cap->decimation, cap->quality);
++	zrdev_dbg(zr, "%s: set_video %d.%d, %d/%d-%dx%d (0x%x) q%d call\n",
++		  ptr->name, norm->h_start, norm->v_start,
++		  cap->x, cap->y, cap->width, cap->height,
++		  cap->decimation, cap->quality);
+ 	/* if () return -EINVAL;
+ 	 * trust the master driver that it knows what it does - so
+ 	 * we allow invalid startx/y and norm for now ... */
+@@ -595,10 +585,11 @@ static int zr36050_set_video(struct videocodec *codec, const struct tvnorm *norm
+ static int zr36050_control(struct videocodec *codec, int type, int size, void *data)
+ {
+ 	struct zr36050 *ptr = (struct zr36050 *)codec->data;
++	struct zoran *zr = videocodec_to_zoran(codec);
+ 	int *ival = (int *)data;
+ 
+-	dprintk(2, "%s: control %d call with %d byte\n", ptr->name, type,
+-		size);
++	zrdev_dbg(zr, "%s: control %d call with %d byte\n", ptr->name, type,
++		  size);
+ 
+ 	switch (type) {
+ 	case CODEC_G_STATUS:	/* get last status */
+@@ -714,12 +705,12 @@ static int zr36050_control(struct videocodec *codec, int type, int size, void *d
+ static int zr36050_unset(struct videocodec *codec)
+ {
+ 	struct zr36050 *ptr = codec->data;
++	struct zoran *zr = videocodec_to_zoran(codec);
+ 
+ 	if (ptr) {
+ 		/* do wee need some codec deinit here, too ???? */
+ 
+-		dprintk(1, "%s: finished codec #%d\n", ptr->name,
+-			ptr->num);
++		zrdev_dbg(zr, "%s: finished codec #%d\n", ptr->name, ptr->num);
+ 		kfree(ptr);
+ 		codec->data = NULL;
+ 
+@@ -742,14 +733,14 @@ static int zr36050_unset(struct videocodec *codec)
+ static int zr36050_setup(struct videocodec *codec)
+ {
+ 	struct zr36050 *ptr;
++	struct zoran *zr = videocodec_to_zoran(codec);
  	int res;
  
- 	dprintk(2, "zr36060: initializing MJPEG subsystem #%d.\n", zr36060_codecs);
+-	dprintk(2, "zr36050: initializing MJPEG subsystem #%d.\n",
+-		zr36050_codecs);
++	zrdev_dbg(zr, "zr36050: initializing MJPEG subsystem #%d.\n",
++		  zr36050_codecs);
  
- 	if (zr36060_codecs == MAX_CODECS) {
--		pr_err("zr36060: Can't attach more codecs!\n");
-+		zrdev_err(zr, "zr36060: Can't attach more codecs!\n");
+ 	if (zr36050_codecs == MAX_CODECS) {
+-		dprintk(1,
+-			KERN_ERR "zr36050: Can't attach more codecs!\n");
++		zrdev_err(zr, "zr36050: Can't attach more codecs!\n");
  		return -ENOSPC;
  	}
  	//mem structure init
+@@ -790,8 +781,7 @@ static int zr36050_setup(struct videocodec *codec)
+ 
+ 	zr36050_init(ptr);
+ 
+-	dprintk(1, KERN_INFO "%s: codec attached and running\n",
+-		ptr->name);
++	zrdev_info(zr, "%s: codec attached and running\n", ptr->name);
+ 
+ 	return 0;
+ }
+@@ -824,9 +814,8 @@ int zr36050_init_module(void)
+ void zr36050_cleanup_module(void)
+ {
+ 	if (zr36050_codecs) {
+-		dprintk(1,
+-			"zr36050: something's wrong - %d codecs left somehow.\n",
+-			zr36050_codecs);
++		pr_debug("zr36050: something's wrong - %d codecs left somehow.\n",
++			 zr36050_codecs);
+ 	}
+ 	videocodec_unregister(&zr36050_codec);
+ }
+diff --git a/drivers/staging/media/zoran/zr36060.c b/drivers/staging/media/zoran/zr36060.c
+index c09910669585..81e8bfd05d6a 100644
+--- a/drivers/staging/media/zoran/zr36060.c
++++ b/drivers/staging/media/zoran/zr36060.c
+@@ -32,16 +32,6 @@ static bool low_bitrate;
+ module_param(low_bitrate, bool, 0);
+ MODULE_PARM_DESC(low_bitrate, "Buz compatibility option, halves bitrate");
+ 
+-static int zr36060_debug;
+-module_param(zr36060_debug, int, 0);
+-MODULE_PARM_DESC(zr36060_debug, "Debug level (0-4)");
+-
+-#define dprintk(num, format, args...) \
+-	do { \
+-		if (zr36060_debug >= num) \
+-			printk(format, ##args); \
+-	} while (0)
+-
+ /* =========================================================================
+  * Local hardware I/O functions:
+  * read/write via codec layer (registers are located in the master device)
+@@ -66,7 +56,7 @@ static void zr36060_write(struct zr36060 *ptr, u16 reg, u8 value)
+ {
+ 	struct zoran *zr = videocodec_to_zoran(ptr->codec);
+ 
+-	dprintk(4, "0x%02x @0x%04x\n", value, reg);
++	zrdev_dbg(zr, "0x%02x @0x%04x\n", value, reg);
+ 
+ 	// just in case something is wrong...
+ 	if (ptr->codec->master_data->writereg)
+@@ -104,14 +94,14 @@ static u16 zr36060_read_scalefactor(struct zr36060 *ptr)
+ /* wait if codec is ready to proceed (end of processing) or time is over */
+ static void zr36060_wait_end(struct zr36060 *ptr)
+ {
++	struct zoran *zr = videocodec_to_zoran(ptr->codec);
+ 	int i = 0;
+ 
+ 	while (zr36060_read_status(ptr) & ZR060_CFSR_BUSY) {
+ 		udelay(1);
+ 		if (i++ > 200000) {	// 200ms, there is for sure something wrong!!!
+-			dprintk(1,
+-				"%s: timeout at wait_end (last status: 0x%02x)\n",
+-				ptr->name, ptr->status);
++			zrdev_dbg(zr, "%s: timeout at wait_end (last status: 0x%02x)\n",
++				  ptr->name, ptr->status);
+ 			break;
+ 		}
+ 	}
+@@ -140,10 +130,11 @@ static int zr36060_basic_test(struct zr36060 *ptr)
+ /* simple loop for pushing the init datasets */
+ static int zr36060_pushit(struct zr36060 *ptr, u16 startreg, u16 len, const char *data)
+ {
++	struct zoran *zr = videocodec_to_zoran(ptr->codec);
+ 	int i = 0;
+ 
+-	dprintk(4, "%s: write data block to 0x%04x (len=%d)\n", ptr->name,
+-		startreg, len);
++	zrdev_dbg(zr, "%s: write data block to 0x%04x (len=%d)\n", ptr->name,
++		  startreg, len);
+ 	while (i < len)
+ 		zr36060_write(ptr, startreg++, data[i++]);
+ 
+@@ -254,11 +245,12 @@ static const char zr36060_decimation_v[8] = { 1, 1, 1, 0, 0, 0, 0, 0 };
+ /* SOF (start of frame) segment depends on width, height and sampling ratio of each color component */
+ static int zr36060_set_sof(struct zr36060 *ptr)
+ {
++	struct zoran *zr = videocodec_to_zoran(ptr->codec);
+ 	char sof_data[34];	// max. size of register set
+ 	int i;
+ 
+-	dprintk(3, "%s: write SOF (%dx%d, %d components)\n", ptr->name,
+-		ptr->width, ptr->height, NO_OF_COMPONENTS);
++	zrdev_dbg(zr, "%s: write SOF (%dx%d, %d components)\n", ptr->name,
++		  ptr->width, ptr->height, NO_OF_COMPONENTS);
+ 	sof_data[0] = 0xff;
+ 	sof_data[1] = 0xc0;
+ 	sof_data[2] = 0x00;
+@@ -282,10 +274,11 @@ static int zr36060_set_sof(struct zr36060 *ptr)
+ /* SOS (start of scan) segment depends on the used scan components of each color component */
+ static int zr36060_set_sos(struct zr36060 *ptr)
+ {
++	struct zoran *zr = videocodec_to_zoran(ptr->codec);
+ 	char sos_data[16];	// max. size of register set
+ 	int i;
+ 
+-	dprintk(3, "%s: write SOS\n", ptr->name);
++	zrdev_dbg(zr, "%s: write SOS\n", ptr->name);
+ 	sos_data[0] = 0xff;
+ 	sos_data[1] = 0xda;
+ 	sos_data[2] = 0x00;
+@@ -307,9 +300,10 @@ static int zr36060_set_sos(struct zr36060 *ptr)
+ /* DRI (define restart interval) */
+ static int zr36060_set_dri(struct zr36060 *ptr)
+ {
++	struct zoran *zr = videocodec_to_zoran(ptr->codec);
+ 	char dri_data[6];	// max. size of register set
+ 
+-	dprintk(3, "%s: write DRI\n", ptr->name);
++	zrdev_dbg(zr, "%s: write DRI\n", ptr->name);
+ 	dri_data[0] = 0xff;
+ 	dri_data[1] = 0xdd;
+ 	dri_data[2] = 0x00;
+@@ -329,7 +323,7 @@ static void zr36060_init(struct zr36060 *ptr)
+ 	long bitcnt, tmp;
+ 
+ 	if (ptr->mode == CODEC_DO_COMPRESSION) {
+-		dprintk(2, "%s: COMPRESSION SETUP\n", ptr->name);
++		zrdev_dbg(zr, "%s: COMPRESSION SETUP\n", ptr->name);
+ 
+ 		zr36060_write(ptr, ZR060_LOAD, ZR060_LOAD_SYNC_RST);
+ 
+@@ -382,9 +376,8 @@ static void zr36060_init(struct zr36060 *ptr)
+ 		bitcnt = sum << 3;	/* need the size in bits */
+ 
+ 		tmp = bitcnt >> 16;
+-		dprintk(3,
+-			"%s: code: csize=%d, tot=%d, bit=%ld, highbits=%ld\n",
+-			ptr->name, sum, ptr->real_code_vol, bitcnt, tmp);
++		zrdev_dbg(zr, "%s: code: csize=%d, tot=%d, bit=%ld, highbits=%ld\n",
++			  ptr->name, sum, ptr->real_code_vol, bitcnt, tmp);
+ 		zr36060_write(ptr, ZR060_TCV_NET_HI, tmp >> 8);
+ 		zr36060_write(ptr, ZR060_TCV_NET_MH, tmp & 0xff);
+ 		tmp = bitcnt & 0xffff;
+@@ -395,8 +388,8 @@ static void zr36060_init(struct zr36060 *ptr)
+ 		bitcnt -= ((bitcnt * 5) >> 6);	// bits without eob
+ 
+ 		tmp = bitcnt >> 16;
+-		dprintk(3, "%s: code: nettobit=%ld, highnettobits=%ld\n",
+-			ptr->name, bitcnt, tmp);
++		zrdev_dbg(zr, "%s: code: nettobit=%ld, highnettobits=%ld\n",
++			  ptr->name, bitcnt, tmp);
+ 		zr36060_write(ptr, ZR060_TCV_DATA_HI, tmp >> 8);
+ 		zr36060_write(ptr, ZR060_TCV_DATA_MH, tmp & 0xff);
+ 		tmp = bitcnt & 0xffff;
+@@ -414,7 +407,7 @@ static void zr36060_init(struct zr36060 *ptr)
+ 		zr36060_write(ptr, ZR060_VCR, ZR060_VCR_RANGE);
+ 
+ 	} else {
+-		dprintk(2, "%s: EXPANSION SETUP\n", ptr->name);
++		zrdev_dbg(zr, "%s: EXPANSION SETUP\n", ptr->name);
+ 
+ 		zr36060_write(ptr, ZR060_LOAD, ZR060_LOAD_SYNC_RST);
+ 
+@@ -447,7 +440,7 @@ static void zr36060_init(struct zr36060 *ptr)
+ 	/* Load the tables */
+ 	zr36060_write(ptr, ZR060_LOAD, ZR060_LOAD_SYNC_RST | ZR060_LOAD_LOAD);
+ 	zr36060_wait_end(ptr);
+-	dprintk(2, "%s: Status after table preload: 0x%02x\n", ptr->name, ptr->status);
++	zrdev_dbg(zr, "%s: Status after table preload: 0x%02x\n", ptr->name, ptr->status);
+ 
+ 	if (ptr->status & ZR060_CFSR_BUSY) {
+ 		zrdev_err(zr, "%s: init aborted!\n", ptr->name);
+@@ -467,8 +460,9 @@ static void zr36060_init(struct zr36060 *ptr)
+ static int zr36060_set_mode(struct videocodec *codec, int mode)
+ {
+ 	struct zr36060 *ptr = (struct zr36060 *)codec->data;
++	struct zoran *zr = videocodec_to_zoran(codec);
+ 
+-	dprintk(2, "%s: set_mode %d call\n", ptr->name, mode);
++	zrdev_dbg(zr, "%s: set_mode %d call\n", ptr->name, mode);
+ 
+ 	if (mode != CODEC_DO_EXPANSION && mode != CODEC_DO_COMPRESSION)
+ 		return -EINVAL;
+@@ -484,11 +478,12 @@ static int zr36060_set_video(struct videocodec *codec, const struct tvnorm *norm
+ 			     struct vfe_settings *cap, struct vfe_polarity *pol)
+ {
+ 	struct zr36060 *ptr = (struct zr36060 *)codec->data;
++	struct zoran *zr = videocodec_to_zoran(codec);
+ 	u32 reg;
+ 	int size;
+ 
+-	dprintk(2, "%s: set_video %d/%d-%dx%d (%%%d) call\n", ptr->name,
+-		cap->x, cap->y, cap->width, cap->height, cap->decimation);
++	zrdev_dbg(zr, "%s: set_video %d/%d-%dx%d (%%%d) call\n", ptr->name,
++		  cap->x, cap->y, cap->width, cap->height, cap->decimation);
+ 
+ 	/* if () return -EINVAL;
+ 	 * trust the master driver that it knows what it does - so
+@@ -643,10 +638,11 @@ static int zr36060_set_video(struct videocodec *codec, const struct tvnorm *norm
+ static int zr36060_control(struct videocodec *codec, int type, int size, void *data)
+ {
+ 	struct zr36060 *ptr = (struct zr36060 *)codec->data;
++	struct zoran *zr = videocodec_to_zoran(codec);
+ 	int *ival = (int *)data;
+ 
+-	dprintk(2, "%s: control %d call with %d byte\n", ptr->name, type,
+-		size);
++	zrdev_dbg(zr, "%s: control %d call with %d byte\n", ptr->name, type,
++		  size);
+ 
+ 	switch (type) {
+ 	case CODEC_G_STATUS:	/* get last status */
+@@ -759,11 +755,12 @@ static int zr36060_control(struct videocodec *codec, int type, int size, void *d
+ static int zr36060_unset(struct videocodec *codec)
+ {
+ 	struct zr36060 *ptr = codec->data;
++	struct zoran *zr = videocodec_to_zoran(codec);
+ 
+ 	if (ptr) {
+ 		/* do wee need some codec deinit here, too ???? */
+ 
+-		dprintk(1, "%s: finished codec #%d\n", ptr->name, ptr->num);
++		zrdev_dbg(zr, "%s: finished codec #%d\n", ptr->name, ptr->num);
+ 		kfree(ptr);
+ 		codec->data = NULL;
+ 
+@@ -787,7 +784,7 @@ static int zr36060_setup(struct videocodec *codec)
+ 	struct zr36060 *ptr;
+ 	int res;
+ 
+-	dprintk(2, "zr36060: initializing MJPEG subsystem #%d.\n", zr36060_codecs);
++	zrdev_dbg(zr, "zr36060: initializing MJPEG subsystem #%d.\n", zr36060_codecs);
+ 
+ 	if (zr36060_codecs == MAX_CODECS) {
+ 		zrdev_err(zr, "zr36060: Can't attach more codecs!\n");
+@@ -830,7 +827,7 @@ static int zr36060_setup(struct videocodec *codec)
+ 
+ 	zr36060_init(ptr);
+ 
+-	dprintk(1, KERN_INFO "%s: codec attached and running\n", ptr->name);
++	zrdev_info(zr, "%s: codec attached and running\n", ptr->name);
+ 
+ 	return 0;
+ }
+@@ -859,9 +856,8 @@ int zr36060_init_module(void)
+ void zr36060_cleanup_module(void)
+ {
+ 	if (zr36060_codecs) {
+-		dprintk(1,
+-			"zr36060: something's wrong - %d codecs left somehow.\n",
+-			zr36060_codecs);
++		pr_debug("zr36060: something's wrong - %d codecs left somehow.\n",
++			 zr36060_codecs);
+ 	}
+ 
+ 	/* however, we can't just stay alive */
 -- 
 2.35.1
 

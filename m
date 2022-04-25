@@ -2,65 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598F950E8F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51C2B50E8F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:58:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244742AbiDYS7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 14:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60128 "EHLO
+        id S244641AbiDYTAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 15:00:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244641AbiDYS7f (ORCPT
+        with ESMTP id S234574AbiDYTAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 14:59:35 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919E31229C4
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:56:30 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id k12so3458166lfr.9
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:56:30 -0700 (PDT)
+        Mon, 25 Apr 2022 15:00:37 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E6DE124D83
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:57:33 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id j6so13338963pfe.13
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:57:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Jyx9VAg/T+a6pNMMHSmxlNhkA8BQhETmaaAMOL1rXa4=;
-        b=tMZZ4zxj/dpWyU3rAZ+bHBaebx7EadCioxFOZg3u5Qd1IYmurkN6KMIasZpgF+4q1U
-         sEQrPMz2QE88U9mUTYSZMfkE4M1jbkZaSsQYjBlhRflcU4+02VligPLY/L4k16twt00q
-         0nTEO0hLBY6CwhOoYNngs4tckWqXE8mt0UEepcOJonLUo4hmrPT0OcQnYUVN0tGbcKoN
-         j4r9JAOEEmStoAOjEw8TjyKStjfoPjm8mT44GSDSfzj8C861Iqyqx8KmM+/dLFxQ1WUV
-         tmwR8a2SUscwFpNZnFjuuCASZW7m3DrSvYl2mQrNqiDIqLBOfmUBvOqjBODYpfVUj7jm
-         1I1A==
+        bh=6o+SI4yj6/1QuIDP6FADkDckBUMPioD3y38MqpuhkSo=;
+        b=P1K4PYS25TS0Jd/Wx1fojI8IZ5I9h3+RLAY7MrwpwNS/97M2bik+Fzj4uCxSceTFqC
+         By1zfFuX/dRkCdeEJYZr+gPWBQpJmKS+xMan4GPia2P7HYavXB/ti79lxVJxwM7d4LM4
+         aPK1RRSJ/R9VAaoblJjSjAtxHnDWIJPEq87p8VBqlTtFdSmnFgJdFtRWqMM0h49u6xc9
+         rhrP0KJj3lMgZHRcTs+tyLa2KjZgBcbNipfstGdWxKKlnvCyT2TaW1Syc4TU9KG3ibtj
+         4zHlVZKN7G/200mOGcecQer5k4ANX/oi0/zChwRmOOQUjYp8HN+wmH5LUUnSU34FuuRS
+         Hgeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Jyx9VAg/T+a6pNMMHSmxlNhkA8BQhETmaaAMOL1rXa4=;
-        b=DtDa3W4xOLo2B/rv3p8UM8/Uq5qtl0anAGmfotHQ5dZJ0wJ56TulpJc87YM0vhgJSj
-         FuB0tHGW2Qxik4rxvCCa/cOI/BdZpsOY/QVz+Tm165tlFN2HIEWRSg0K0rhU0D3GpyVv
-         sqqtkfFpwv3hhFXa8+0Q2RI8EbKNkyuup1D8cmWx85LDggZhOfgm4+/5OpCdjARLasBi
-         C5A5BP/dK2RGsMfnBsup4LqAS+6Czrf2bF8hc8tO588fnJ4y5xo4oQUqj6mWfaohJNUE
-         ugb+dhRo4AFCGba1cllku8fCkW6PJ5QljsyWeASPwPGRqw+6qABdLnnm2dV8Y3Z/sE1u
-         4sMQ==
-X-Gm-Message-State: AOAM532H0M1OR4DHD5aSJ1hQW++vtNhrBXlbdnQpMylMAkThSq3zZF5W
-        B17TvCXSFEur1/u3dw76Xtge4bP4w+tMWt38pQBUh38Wuhw=
-X-Google-Smtp-Source: ABdhPJwkk9WfalacarRaRB/KsFrIqj7GGz2BZSMlaebEITrcDACJMvRtAXqr5dD4RghjVmzivFfFVQPqB6LoZOyJS7g=
-X-Received: by 2002:ac2:4646:0:b0:472:108e:51af with SMTP id
- s6-20020ac24646000000b00472108e51afmr1773669lfo.184.1650912988676; Mon, 25
- Apr 2022 11:56:28 -0700 (PDT)
+        bh=6o+SI4yj6/1QuIDP6FADkDckBUMPioD3y38MqpuhkSo=;
+        b=n67zavTJEjzhIpn13pxrEI+pVvn6Cs0Q8Hr0uAY1UXKUXQcSeBDfa7tvC84SWw/mUA
+         xBFyQRYdEajmKebjJDwdYRwOekbeqBHuE/UduSwS/jOqCRCOKsl92oRY4x5xPyLzgR2E
+         7OlS5L3pMNx4N4Zy9L9CcBzjvnfLElNyic2zWL20mkk7m3ZlVX43RRpJGuJcF1GAzYML
+         h4LG7w4IGo6EZoEyVgian609zu3BdtatSq34U1CEXN0Hxmh74N67dP8oEeODD86ouLcW
+         f4OIV5XXiZc8+Y3FUpOBLxw5L6bPuXGzByilI6DLyAHkOdf4mPvSqssvkhZzBMPFpCTg
+         +yeg==
+X-Gm-Message-State: AOAM531ELiVk+lYx6QQ3rWQr8NOD4nR0jvR0+Vq+Sp/w8FyNOwBprmbn
+        4emVuNgDuAEqcv0Ra2C7Zkk0Whq1Kv3KdIa+7smk0Q==
+X-Google-Smtp-Source: ABdhPJyUxljZXNAY57tBgo6I/sBtSCxjGKyLUSTbY3/eBgitnlYZPc3dWMb2Osy5fBb0Ykt3C3DNXYRbEpXXGPyfmdk=
+X-Received: by 2002:a05:6a00:e14:b0:4fe:3cdb:23f with SMTP id
+ bq20-20020a056a000e1400b004fe3cdb023fmr20248514pfb.86.1650913052859; Mon, 25
+ Apr 2022 11:57:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220424190811.1678416-1-masahiroy@kernel.org>
- <20220424190811.1678416-7-masahiroy@kernel.org> <CAKwvOdmDiD11Az02U1i8OtxL49V3SH1ORRj8C5jy6Btv3LFY_g@mail.gmail.com>
-In-Reply-To: <CAKwvOdmDiD11Az02U1i8OtxL49V3SH1ORRj8C5jy6Btv3LFY_g@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 25 Apr 2022 11:56:17 -0700
-Message-ID: <CAKwvOdmeOYsBGSZrprdtoxcUmpy1oscnBfLUaSARPNKsH4Aeug@mail.gmail.com>
-Subject: Re: [PATCH 06/27] modpost: use bool type where appropriate
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>
+References: <165055518776.3745911.9346998911322224736.stgit@dwillia2-desk3.amr.corp.intel.com>
+ <165055519869.3745911.10162603933337340370.stgit@dwillia2-desk3.amr.corp.intel.com>
+ <YmNBJBTxUCvDHMbw@iweiny-desk3> <CAPcyv4jtNgfjWLyu6MtBAjwUiqe2qEBW802AzZZeg2gZ_wU9AQ@mail.gmail.com>
+ <CAPcyv4hhD5t-qm_c_=bRjbJZFg9Mjkzbvu_2MEJB87fKy3hh-g@mail.gmail.com>
+ <20220425103307.GI2731@worktop.programming.kicks-ass.net> <CAPcyv4i9ONW5w6p2P+E5rpw25_kmzpYf6SbmRM4+eP5hK4si-A@mail.gmail.com>
+In-Reply-To: <CAPcyv4i9ONW5w6p2P+E5rpw25_kmzpYf6SbmRM4+eP5hK4si-A@mail.gmail.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Mon, 25 Apr 2022 11:57:21 -0700
+Message-ID: <CAPcyv4hT7TcTxV_x1hhp8zVev21SMMUO7o2NkJw5OozjDRO4dQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/8] cxl/acpi: Add root device lockdep validation
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ira Weiny <ira.weiny@intel.com>, linux-cxl@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,41 +79,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 11:34 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
+On Mon, Apr 25, 2022 at 9:05 AM Dan Williams <dan.j.williams@intel.com> wrote:
 >
-> /On Sun, Apr 24, 2022 at 12:09 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> On Mon, Apr 25, 2022 at 3:33 AM Peter Zijlstra <peterz@infradead.org> wrote:
 > >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > ---
+> > On Sat, Apr 23, 2022 at 10:27:52AM -0700, Dan Williams wrote:
 > >
-> >  scripts/mod/modpost.c | 60 +++++++++++++++++++++----------------------
-> >  scripts/mod/modpost.h | 10 ++++----
-> >  2 files changed, 35 insertions(+), 35 deletions(-)
+> > > ...so I'm going to drop it and just add a comment about the
+> > > expectations. As Peter said there's already a multitude of ways to
+> > > cause false positive / negative results with lockdep so this is just
+> > > one more area where one needs to be careful and understand the lock
+> > > context they might be overriding.
 > >
-> > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> > index f9cbb6b6b7a5..52dd07a36379 100644
-> > --- a/scripts/mod/modpost.c
-> > +++ b/scripts/mod/modpost.c
-> > @@ -203,10 +203,10 @@ struct symbol {
-> >         struct symbol *next;
-> >         struct module *module;
-> >         unsigned int crc;
-> > -       int crc_valid;
-> > +       bool crc_valid;
-> >         char *namespace;
-> > -       unsigned int weak:1;
-> > -       unsigned int is_static:1;  /* 1 if symbol is not global */
-> > +       bool weak;
-> > +       bool is_static;         /* true if symbol is not global */
-> >         enum export  export;       /* Type of export */
-> >         char name[];
-> >  };
+> > One safe-guard might be to check the class you're overriding is indeed
+> > __no_validate__, and WARN if not. Then the unconditional reset is
+> > conistent.
+> >
+> > Then, if/when, that WARN ever triggers you can revisit all this.
+>
+> Ok, that does seem to need a dummy definition of lockdep_match_class()
+> in the CONFIG_LOCKDEP=n case, but that seems worth it to me for the
+> sanity check.
 
-This will change the sizeof(struct symbol).  I'm guessing we have lots
-of symbols to process? If we have many live at once, perhaps it would
-be better to keep these as bitfields, but additionally move them to
-the end of the struct definition so as to save space?
--- 
-Thanks,
-~Nick Desaulniers
+Thankfully the comment in lockdep.h to not define a
+lockdep_match_class() for the CONFIG_LOCKDEP=n stopped me from going
+that direction.

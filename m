@@ -2,133 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89D4850E8F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3601550E8F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 21:00:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244748AbiDYTBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 15:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39384 "EHLO
+        id S244755AbiDYTD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 15:03:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244746AbiDYTB1 (ORCPT
+        with ESMTP id S239830AbiDYTDU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 15:01:27 -0400
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF8DB8239;
-        Mon, 25 Apr 2022 11:58:22 -0700 (PDT)
-Received: by mail-lj1-f177.google.com with SMTP id 16so3891567lju.13;
-        Mon, 25 Apr 2022 11:58:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uh705JoKTDQRQJusLSsjTMb0HHI0Eet0wNuabBGRfZY=;
-        b=aeuiUQIt3A/93O5ddRACPCbF5H4ILMrGTyMupYAKSulLDswuGcErEiHcnNBvmUThBz
-         p1eyMh/Yav8JBaLS7ygmAAAGi8SIZ2ABSL3rOqBnha3gAU4fCOwTBCVs3EmKJ0YmgKFw
-         fTCBiCmEAoEfa9BbYwZmTQvo3WCrmRXQ4upby84qOnmMfpYDznYwv6kYitlPx/7efbPk
-         IeLhDtuW2lS2rYTmQ3x5xpYcpfQb6AZy8UKKEB+sHRu5/Zkt0Nr6YRrxiR+OlPUbN2FP
-         rjSriquQKoNct1n/O1yfgg2n56oKe1Er84lPKtQV6Ryd2JJrceOZ0IDXhMl2s9MsifKQ
-         ye3g==
-X-Gm-Message-State: AOAM532wi5jzbf/tndYnMjk1KRK1JHMyB0stUoXbko9wq5BzXMzIHws7
-        M3HN5ncqZplQy26f+lLBoWEvc8itiVIf3LuQU0Y=
-X-Google-Smtp-Source: ABdhPJwpX3kYyNLe4gGWlgl0x87nw1uxFMKjnKa7O35yPOrnRenGrreh8fpgJHeXe06kZCMfSMwLBSK1bpGXcYe9JLg=
-X-Received: by 2002:a2e:b98c:0:b0:24f:f63:913a with SMTP id
- p12-20020a2eb98c000000b0024f0f63913amr4903381ljp.366.1650913100520; Mon, 25
- Apr 2022 11:58:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220422053401.208207-1-namhyung@kernel.org> <35121321.B44TWeBT9p@milian-workstation>
- <CAM9d7cjU6RGMStG4YOW5D50Sx4PRia2dfzcPKxb4JLh5Q668mw@mail.gmail.com> <5616892.dGzqbEiDyy@milian-workstation>
-In-Reply-To: <5616892.dGzqbEiDyy@milian-workstation>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Mon, 25 Apr 2022 11:58:09 -0700
-Message-ID: <CAM9d7cgxkQ3x_to9W7N8bd18s-0SJbL7bNre++tJfvF8AqiETA@mail.gmail.com>
-Subject: Re: [RFC 0/4] perf record: Implement off-cpu profiling with BPF (v1)
-To:     Milian Wolff <milian.wolff@kdab.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
-        bpf <bpf@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Blake Jones <blakejones@google.com>
+        Mon, 25 Apr 2022 15:03:20 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C4AB1C2;
+        Mon, 25 Apr 2022 12:00:15 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nicolas)
+        with ESMTPSA id 1E5471F43028
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1650913214;
+        bh=bg3UhcnZlvv3RfrkW9O8KrBoXkIZozgniP3zQSLLpV8=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=d5YlbhJaQYcd9qYuNgr2Vyn2VsGsbRYC+8jKl1De+8+TUvzBWleYXbUZ1AG9OitPd
+         pvSYmNX2z65O2svMCx6vRTO2M3XGqYWk9d12Dm2rR1vuzt9nWfxnUeJ52SMO5WAxcq
+         DBLxwG/cdHjqnCEdgXPehtCkD82vJFeJJBnOZ9ObNg7IKsw29i+lFh5pcLiK72Uowj
+         mwUbQMLl3JxPvmfppZHKAQoXmOt6vmduM9KXDgV0TOte/RjBDdzt4+5inUiymAi3CZ
+         IXCCeNZsVUEwvI6kuZjy/9sEaHiZ1uqj4K90d6rwWCs8OoRCFzRPCO1MA9JwgrSwHG
+         aSK8R5YCKraVg==
+Message-ID: <bd0b59212d16af5b54c1ad5d89de5ba7b8794fac.camel@collabora.com>
+Subject: Re: [PATCH v3 17/24] media: rkvdec: h264: Fix reference frame_num
+ wrap for second field
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Sebastian Fricke <sebastian.fricke@collabora.com>,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev
+Date:   Mon, 25 Apr 2022 15:00:02 -0400
+In-Reply-To: <0780cc3ddd985f580a5513e5222cdde852e6aaab.camel@collabora.com>
+References: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
+         <20220405204426.259074-18-nicolas.dufresne@collabora.com>
+         <8f6c8a5c-200d-fbbd-0b8a-966d94467aad@xs4all.nl>
+         <0780cc3ddd985f580a5513e5222cdde852e6aaab.camel@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 5:42 AM Milian Wolff <milian.wolff@kdab.com> wrote:
->
-> On Freitag, 22. April 2022 17:01:15 CEST Namhyung Kim wrote:
-> > Hi Milian,
-> >
-> > On Fri, Apr 22, 2022 at 3:21 AM Milian Wolff <milian.wolff@kdab.com> wrote:
-> > > On Freitag, 22. April 2022 07:33:57 CEST Namhyung Kim wrote:
-> > > > Hello,
-> > > >
-> > > > This is the first version of off-cpu profiling support.  Together with
-> > > > (PMU-based) cpu profiling, it can show holistic view of the performance
-> > > > characteristics of your application or system.
-> > >
-> > > Hey Namhyung,
-> > >
-> > > this is awesome news! In hotspot, I've long done off-cpu profiling
-> > > manually by looking at the time between --switch-events. The downside is
-> > > that we also need to track the sched:sched_switch event to get a call
-> > > stack. But this approach also works with dwarf based unwinding, and also
-> > > includes kernel stacks.
-> >
-> > Thanks, I've also briefly thought about the switch event based off-cpu
-> > profiling as it doesn't require root.  But collecting call stacks is hard
-> > and I'd like to do it in kernel/bpf to reduce the overhead.
->
-> I'm all for reducing the overhead, I just wonder about the practicality. At
-> the very least, please make sure to note this limitation explicitly to end
-> users. As a preacher for perf, I have come across lots of people stumbling
-> over `perf record -g` not producing any sensible output because they are
-> simply not aware that this requires frame pointers which are basically non
-> existing on most "normal" distributions. Nowadays `man perf record` tries to
-> educate people, please do the same for the new `--off-cpu` switch.
+Le lundi 25 avril 2022 =C3=A0 14:55 -0400, Nicolas Dufresne a =C3=A9crit=C2=
+=A0:
+> Le vendredi 22 avril 2022 =C3=A0 09:43 +0200, Hans Verkuil a =C3=A9crit=
+=C2=A0:
+> > On 05/04/2022 22:44, Nicolas Dufresne wrote:
+> > > From: Jonas Karlman <jonas@kwiboo.se>
+> > >=20
+> > > When decoding the second field in a complementary field pair the seco=
+nd
+> > > field is sharing the same frame_num with the first field.
+> > >=20
+> > > Currently the frame_num for the first field is wrapped when it matche=
+s the
+> > > field being decoded, this cause issues to decode the second field in =
+a
+> >=20
+> > cause issues to decode -> caused issues decoding
+> >=20
+> > > complementary field pair.
+> > >=20
+> > > Fix this by using inclusive comparison, less than or equal.
+> >=20
+> > I would change this last sentence to:
+> >=20
+> > 	Fix this by using inclusive comparison: 'less than or equal'.
+> >=20
+> > It makes it a bit easier to parse.
+> >=20
+> > >=20
+> > > Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
+> > > Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> > > Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
+> > > Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+> > > ---
+> > >  drivers/staging/media/rkvdec/rkvdec-h264.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >=20
+> > > diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/sta=
+ging/media/rkvdec/rkvdec-h264.c
+> > > index f081b476340f..60eaf06b6e25 100644
+> > > --- a/drivers/staging/media/rkvdec/rkvdec-h264.c
+> > > +++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
+> > > @@ -781,7 +781,7 @@ static void assemble_hw_rps(struct rkvdec_ctx *ct=
+x,
+> > >  			continue;
+> > > =20
+> > >  		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM ||
+> > > -		    dpb[i].frame_num < dec_params->frame_num) {
+> > > +		    dpb[i].frame_num <=3D dec_params->frame_num) {
+> >=20
+> > I wonder if a comment should be added here, explaining the reason for '=
+<=3D'.
+> >=20
+> > It doesn't seem obvious to me. Up to you, though.
+>=20
+> I guess I could, the algo for wrapping in the spec is (formula 8-27):
+>=20
+>     if( FrameNum > frame_num )
+>         FrameNumWrap =3D FrameNum =E2=88=92 MaxFrameNum
+>     else
+>         FrameNumWrap =3D FrameNum
+>=20
+> Our implementation has the branch condition flip over, and the flipped ve=
+rsion of that is:
+>=20
+>     if( FrameNum <=3D frame_num )
+>         FrameNumWrap =3D FrameNum
+>     else
+>         FrameNumWrap =3D FrameNum =E2=88=92 MaxFrameNum
+>=20
+> There is no deeper rationale since we simply follow the recipe described =
+in the
+> spec. This is done so that we can share that condition with that long ter=
+m
+> reference handling.
 
-Good point, will add it .
+Now I come to realize that in patch "[v3,19/24] media: rkvdec-h264: Add fie=
+ld
+decoding support" all this code is removed. This is because the wrapping is
+already done by the ref-builder, so while enabling field decoding, I now us=
+e the
+wrapped value from the ref builder. I'm mostly keeping the patch so that th=
+is
+fix is well documented. I will leave it like this then.
 
->
-> > > > With BPF, it can aggregate scheduling stats for interested tasks
-> > > > and/or states and convert the data into a form of perf sample records.
-> > > > I chose the bpf-output event which is a software event supposed to be
-> > > > consumed by BPF programs and renamed it as "offcpu-time".  So it
-> > > > requires no change on the perf report side except for setting sample
-> > > > types of bpf-output event.
-> > > >
-> > > > Basically it collects userspace callstack for tasks as it's what users
-> > > > want mostly.  Maybe we can add support for the kernel stacks but I'm
-> > > > afraid that it'd cause more overhead.  So the offcpu-time event will
-> > > > always have callchains regardless of the command line option, and it
-> > > > enables the children mode in perf report by default.
-> > >
-> > > Has anything changed wrt perf/bpf and user applications not compiled with
-> > > `- fno-omit-frame-pointer`? I.e. does this new utility only work for
-> > > specially compiled applications, or do we also get backtraces for
-> > > "normal" binaries that we can install through package managers?
-> >
-> > I am not aware of such changes, it still needs a frame pointer to get
-> > backtraces.
->
-> May I ask what kind of setup you are using this on? Do you use something like
-> Gentoo or yocto where you compile your whole system with `-fno-omit-frame-
-> pointer`? Because otherwise, any kind of off-cpu time in system libraries will
-> not be resolved properly, no?
+>=20
+> >=20
+> > >  			p[i] =3D dpb[i].frame_num;
+> > >  			continue;
+> > >  		}
+> >=20
+> > Regards,
+> >=20
+> > 	Hans
+>=20
 
-In my work environment, everything is built with the frame pointer.
-It's unfortunate most distros build without it, but as Ian said, I hope
-we can lift the limitation with recent technologies soon.
-
-Thanks,
-Namhyung

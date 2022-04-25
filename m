@@ -2,75 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34EC650DDC2
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 12:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27B1D50DD82
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 12:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240102AbiDYKXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 06:23:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57224 "EHLO
+        id S240551AbiDYKFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 06:05:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241507AbiDYKWz (ORCPT
+        with ESMTP id S240866AbiDYKFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 06:22:55 -0400
-X-Greylist: delayed 1616 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 25 Apr 2022 03:19:50 PDT
-Received: from margared.com (margared.com [67.207.81.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0074BBBA;
-        Mon, 25 Apr 2022 03:19:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=margared.com; s=mail; h=Message-ID:Reply-To:Subject:To:From:Date:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:Sender:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=myigy0V621liyXgDglQKeYEADXupsv1PoWpM1wCwa28=; b=KDv5UHaidJWrkxZdCaCsbnxPoH
-        jzDMz7JJEnQN0jhP/2Z7noFCw9SBaT8aXK8jglAFeavA3OjJ8q7YSGON89rV24qNOZMFOjznEK99U
-        4krGXIryNoeI2FVTaIwyQoVL2AbOAJ/DnW40IBw4gvMnrvqIpKFqX5CiwqqDeFu/Pd9E=;
-Received: from localhost ([127.0.0.1] helo=margared.com)
-        by margared.com with esmtpa (Exim 4.90_1)
-        (envelope-from <info@margared.com>)
-        id 1niuhG-0001WC-KO; Mon, 25 Apr 2022 09:07:54 +0000
+        Mon, 25 Apr 2022 06:05:08 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66431121;
+        Mon, 25 Apr 2022 03:02:02 -0700 (PDT)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23P8bA8V017221;
+        Mon, 25 Apr 2022 10:01:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=yJ1zH/5or4oymVpE6MpywAGJV0sLnLwAeYGgNXujOL8=;
+ b=dWVxAJAz+HE8ivoCl8W0bOjuORNpod8q4Qkj3TavutRtDVY1XxRbMLUkpG6HDeRZmkSs
+ VrBQcKOF7A6ROkeOuhGQiCe7gbiM8vCBKepsyxTCN4S/ziyKhfKvcJTjR4FNvALYy7dq
+ DoXl9Hea+zosN4de4+vd4Uxgr4f2abmg8miSuBYJrEFf3FXJGoCXSttU8bSj6r56FWan
+ ggUDG5DJETjGhssmEFUmaaqbiHbaYv+bnwB0S98zDfMJrNt2YD/afAyCoAijgrop37BS
+ LpJuRk+BdfXOZ/WjjRMAEHxGmI5RJ9I2aip5ZoB/AJ2nESmnvSXneimp4fBLfArlNVMI eA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fmtt75xkj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Apr 2022 10:01:58 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23P9sQ43010172;
+        Mon, 25 Apr 2022 10:01:58 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fmtt75xju-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Apr 2022 10:01:57 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23P9rKOR010822;
+        Mon, 25 Apr 2022 10:01:55 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3fm938t5p7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Apr 2022 10:01:55 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23PA1qB746858678
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 25 Apr 2022 10:01:52 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 215764203F;
+        Mon, 25 Apr 2022 10:01:52 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A56F742047;
+        Mon, 25 Apr 2022 10:01:51 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 25 Apr 2022 10:01:51 +0000 (GMT)
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: [PATCH v2 0/2] Dirtying, failing memop: don't indicate suppression
+Date:   Mon, 25 Apr 2022 12:01:45 +0200
+Message-Id: <20220425100147.1755340-1-scgl@linux.ibm.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 25 Apr 2022 04:07:54 -0500
-From:   Maria Ramos <info@margared.com>
-To:     undisclosed-recipients:;
-Subject: Hi
-Reply-To: 98233422r@gmail.com
-Mail-Reply-To: 98233422r@gmail.com
-Message-ID: <fa56fe3c83f5bb09f16989949fbe6a49@margared.com>
-X-Sender: info@margared.com
-User-Agent: Roundcube Webmail/1.3.6
-X-Spam-Status: Yes, score=6.4 required=5.0 tests=BAYES_60,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        ODD_FREEM_REPTO,SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
-        *      [score: 0.6995]
-        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  3.0 ODD_FREEM_REPTO Has unusual reply-to header
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: ******
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 4VQjVuQ6EtulenyNeAdKeaZfUj349-xi
+X-Proofpoint-ORIG-GUID: IplMkzRrx3fmY94QmOmdYV35_zj0R7q5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-25_05,2022-04-22_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 bulkscore=0 adultscore=0 mlxlogscore=739 mlxscore=0
+ suspectscore=0 spamscore=0 clxscore=1015 phishscore=0 impostorscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204250040
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, am very concerned and I feel ignored because both emails I sent 
-to you, am yet to hear from you. What could be the reason?
+If a memop fails due to key checked protection, after already having
+written to the guest, don't indicate suppression to the guest, as that
+would imply that memory wasn't modified.
+
+This could be considered a fix to the code introducing storage key
+support, however this is a bug in KVM only if we emulate an
+instructions writing to an operand spanning multiple pages, which I
+don't believe we do.
+
+v1 -> v2
+ * Reword commit message of patch 1
+
+Janis Schoetterl-Glausch (2):
+  KVM: s390: Don't indicate suppression on dirtying, failing memop
+  KVM: s390: selftest: Test suppression indication on key prot exception
+
+ arch/s390/kvm/gaccess.c                   | 47 ++++++++++++++---------
+ tools/testing/selftests/kvm/s390x/memop.c | 43 ++++++++++++++++++++-
+ 2 files changed, 70 insertions(+), 20 deletions(-)
 
 
-Regards,
+base-commit: af2d861d4cd2a4da5137f795ee3509e6f944a25b
+-- 
+2.32.0
 
-
-Maria Ramos..

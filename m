@@ -2,103 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BDD650E034
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 14:27:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EEE050E03D
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 14:28:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241909AbiDYM33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 08:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33968 "EHLO
+        id S241807AbiDYMa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 08:30:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241787AbiDYM3L (ORCPT
+        with ESMTP id S242139AbiDYMaC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 08:29:11 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D303689A5
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 05:23:34 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id k27so2986432edk.4
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 05:23:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=4NatFtrmA7Gzh76Aj3XWil5U9hfb9RBYqAXRtIqLhmI=;
-        b=n4V/hVzSxjz2gmRf52QZupgnfGttrS0NTVUlwheFVKmfElItPuTviGQEjDIhELSlIu
-         nsQ/ktFMogzgDoNVDgn1AQMzQZ8ttX9n5raSevSOEBoIsm3X0WPpkZ2nFfV10BuGx69H
-         QvwF1T6DyNEix7iawvSewDwzWcpPrc2ux79fPlBFX05jWYEZ8q/TxA1TPXpNUUBYuPve
-         OAyZh5W9aRfKELtCv3f0Db6pFZZXQyPB1vob+7l974gfn1OvdQ1X3gORIrgh5ean0NVX
-         1eP5aO7R4IczdyOkJGfziuK5cT33nT/Y0Sq7rwXbjlCmpt3u1vjys/9Vzwsgprg0gXnE
-         IOaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=4NatFtrmA7Gzh76Aj3XWil5U9hfb9RBYqAXRtIqLhmI=;
-        b=mE5IJOhAkaunbBBq3rN4z9UOLlY+CnQCk2Xd1uygDkO3gFZGgZfnmS/RQpx7PwoOAJ
-         eYoHRkOgs4HPkNfRcvRjpFLkmIrGggKrBWWIw7gpIKBUJvjJuNUchu4HpRs1HGhM2RbP
-         MUXSOSFos+Nux5tOToBedYMP9gjS/eWTRu3hOVT09knKFFi2toPJJlyAmpbac12aFJNf
-         47kXoBNKvAhlsOr0GCDDD+ZklEk73tqajZsLX4fhc44D6qDV3lwEwhOr6DPtv3dH7I+6
-         XTin0+cY67ac2lg+Sgslr4l0XPjAiwD33O5vhsNZs9i25jWe/G3l5PUv8l6BlfF9LQLI
-         Tw9w==
-X-Gm-Message-State: AOAM533Id9eF7hqPvGQfbrF5BhSt3rUpAgHrM4CchFar1TsEqCVuu6xU
-        7D0va8Qs/J48y8rNf77ZqGuNN/gj8Levt28cP24=
-X-Google-Smtp-Source: ABdhPJxtig7pIwM/oO6JB6Ya9LF/a/Jdk+4+ZawgEBJCmQKA6j/a6rZnlGosO+4CR/5q05bZ/Omfbe0V+sYfybdD3mw=
-X-Received: by 2002:a05:6402:4008:b0:425:e769:c001 with SMTP id
- d8-20020a056402400800b00425e769c001mr4913520eda.34.1650889412611; Mon, 25 Apr
- 2022 05:23:32 -0700 (PDT)
+        Mon, 25 Apr 2022 08:30:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0E1B7EE;
+        Mon, 25 Apr 2022 05:25:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 12115B81607;
+        Mon, 25 Apr 2022 12:25:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CF4DC385A4;
+        Mon, 25 Apr 2022 12:25:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650889507;
+        bh=6GrE4NWT57K7czTKp7ru4wzIZWD6o9ArIieCTvXxaTE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gz1V7yk8c6K7MiFjBSSxV6qtIy6DDMy+HAPCGj9Ixxl8JOX44rM2EQF8KscugLMyJ
+         BD2rViz7o/zR649dKviwIwUSg1U+hg84qvs0L4abD3hHR+AFZtZzipCD1+oKeIRTdi
+         h6L8q97SxDCW0Hj7Jrpj0CswJcXt+9DBtQ0mtDZllWjmgrsH669j5+GzW8F6Q4q7N4
+         nyeHoDGjle1jNO3OLOTdHYEym9AWzvJy/Ohsi6Hw8mB/0aTRmGaRT9LPK3ZJJrI3Mx
+         6dDyVYCUd+gC8tggiYxlH4q3GkRg42btwhdC3j524PNnSUv8aftrrZjDZKsIsim8Hv
+         zIw/NsAm+2mVQ==
+Date:   Mon, 25 Apr 2022 13:25:01 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik@cutebit.org>
+Cc:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Kettenis <kettenis@openbsd.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>
+Subject: Re: [RFC PATCH 3/5] HACK: ASoC: Tolerate N-cpus-to-M-codecs links
+Message-ID: <YmaTHTKWAfM7FCcY@sirena.org.uk>
+References: <20220331000449.41062-1-povik+lin@cutebit.org>
+ <20220331000449.41062-4-povik+lin@cutebit.org>
+ <YkrkbBNYULLgeS5w@sirena.org.uk>
+ <904EB8A1-5561-4555-8030-B85703E24F2E@cutebit.org>
 MIME-Version: 1.0
-Received: by 2002:a50:7205:0:0:0:0:0 with HTTP; Mon, 25 Apr 2022 05:23:32
- -0700 (PDT)
-Reply-To: ahmdkalifaz@gmail.com
-From:   Ahmed kalifa <walkerderson@gmail.com>
-Date:   Mon, 25 Apr 2022 05:23:32 -0700
-Message-ID: <CA+g+r8of-f4aTB3jQJx1b-Nj+47CriEvu6eXJHMmzBvzCeEG0Q@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:52f listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5034]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [walkerderson[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="b1F3yj0YVHTi5nws"
+Content-Disposition: inline
+In-Reply-To: <904EB8A1-5561-4555-8030-B85703E24F2E@cutebit.org>
+X-Cookie: An apple a day makes 365 apples a year.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Attention Please,
 
-My name is Mr.Ahmed Kalifa, Branch Manager Dubai Islamic Bank United
-Arab Emirate
-Are you the real owner of this email address? I have important information
-to the owner of this email address.
-Due to the sensitivity of the information, I want to be sure I am
-communicating with the rightful owner of this email
-address to avoid making a mistake.
-write to me so that i can give you the important information for your own good.
-Congratulations if you are the real owner of this email address.
-I am waiting for your speedy response
-Thank you for your understanding
-warm regards from
-Mr.Ahmed kalifa
+--b1F3yj0YVHTi5nws
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Apr 22, 2022 at 04:06:06PM +0200, Martin Povi=C5=A1er wrote:
+> > On 4. 4. 2022, at 14:28, Mark Brown <broonie@kernel.org> wrote:
+
+> > We need to figure out an interface for describing which CODEC/CPU
+> > combinations are connected to each other.  I'm not seeing a great way to
+> > do that right now, probably some side data table is going to be needed,
+> > or perhaps the CPU DAI drivers can be persuaded to only have one DAI
+> > actually register and claim to support more channels?  I'm not sure how
+> > a configuraiton like this is going to work at userspace level if the
+> > multiple CPU DAIs end up being visible...
+
+> To understand the issue better: How could the multiple CPU DAIs be
+> visible from userspace?
+
+If you register two separate DAIs (well, links) with the API without
+doing anything else the API will just expose them to userspace as two
+separate things with no indication that they're related.
+
+> What about this interim solution: In case of N-to-M links we put in
+> the most restrictive condition for checking capture/playback stream
+> validity: we check all of the CPU DAIs. Whatever ends up being the
+> proper solution later can only be less restrictive than this.
+
+That's not the issue here? =20
+
+> As a reminder what happens on the Macs: the platform driver drives
+> all the CPU-side I2S ports that belong to the link with the same data,
+> so the particular CPU/CODEC wiring doesn=E2=80=99t matter.
+
+Oh, that's not something I was aware of.  In that case this is the wrong
+API - you should be using DPCM to map one front end onto multiple back
+ends (Kirkwood does something similar IIRC, there will be other examples
+but that's probably the simplest).  The back ends probably don't really
+need to know that they're on the same physical bus (if indeed they are).
+
+--b1F3yj0YVHTi5nws
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJmkx0ACgkQJNaLcl1U
+h9AXZQf/TTU2DnW1ZuWYtCiYoQytNm53DGhJatv03n1CX5CEQnTpF2SqtDQXWV7P
+FFaj07c+6IYGLOqLmA6TrABjGUoF5YgAmHBesHfS7uLK1pT/dz3c2wB8Dz3agqh5
+qSh562UKa7k6eXV17jANpgVJSBoWf/XjQTc031lOcsV1SPT6Z+if6WTBuXu+JGRt
+IBk9JY4WLK+c2eQUXKeaV2sPISK9CQObtHXr8CVBlgYuUIGnNTUarF19Vdoyq+2y
+QUsZDshFnfBtx/ArsyDMfgX9wO84Ids6rjPSe4pQ0WdRp+TsUiUk1useAx87UMd1
+JkINblZc68f3bqMDmN1HJoVYVFHa1g==
+=9iG+
+-----END PGP SIGNATURE-----
+
+--b1F3yj0YVHTi5nws--

@@ -2,62 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5212150E582
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40E0250E586
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:23:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243343AbiDYQZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 12:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56950 "EHLO
+        id S243363AbiDYQZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 12:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240823AbiDYQZ1 (ORCPT
+        with ESMTP id S243350AbiDYQZt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 12:25:27 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671BB71A25;
-        Mon, 25 Apr 2022 09:22:22 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-e2442907a1so16580715fac.8;
-        Mon, 25 Apr 2022 09:22:22 -0700 (PDT)
+        Mon, 25 Apr 2022 12:25:49 -0400
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE02F74DD4;
+        Mon, 25 Apr 2022 09:22:44 -0700 (PDT)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-e656032735so15329653fac.0;
+        Mon, 25 Apr 2022 09:22:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=4CENEZKLdazSfBwTXd/Wd5rug0RnZCb0GE0cZM8DZsw=;
-        b=IdR/kSsBa2TuG8roUhmM4ijt85cZP2kVzQgEM4YpqdxA44Qcuo4q6IleFXGbDCzdX3
-         8d/fSRMiH6EEWD/q+31ScR5fDILWJuSWEYf/e+ZW0B1mMwUNGm6Y5Sk1XOCKy+oIzA+j
-         bIIC8a15VKLNfIA36840ch1iaoKCEuHzlwubvSwkBasoIyKCV3sOnS/d+foiwz98hnm3
-         RGYEZCjuPWmaKJMT2LUjMv6rHKTfFdIzwXnNj6y1UsY6FVnoJ+qqjZD1iGp8Gf+ZYYEY
-         HeFYa3S+VWpwA+Z/dHuqYvD9pTICCelpH/dMpD0XyBrg/ndDp8osEmnRfXt/QsZslWDd
-         l4gA==
-X-Gm-Message-State: AOAM533gqysl+HFiBhgLj0/kkCF8vHfuxJEloBMegFyNNgEJIQCV36hy
-        Cv+KwMx9vZ5AJo/Fagp1+g==
-X-Google-Smtp-Source: ABdhPJyI/nEGtLPHWlc0Symt/VRUWTe4lUKlOBu98Q75GPEnylf//TQhRgBUI583eoUOFky3f9Ezxw==
-X-Received: by 2002:a05:6870:ac06:b0:e9:cba:68cc with SMTP id kw6-20020a056870ac0600b000e90cba68ccmr5631933oab.144.1650903741623;
-        Mon, 25 Apr 2022 09:22:21 -0700 (PDT)
+        bh=NJJ4MlQDWGdcucY/n+jk42HsIAR7AmzGGwh/ZWVfw90=;
+        b=H/CIOYgzAe/DdnaRgjdzfUDCOAHLHHkdNkBsdxTl0jy8+ITa/I+BEeXlRZsUn6wP/T
+         9YXuxBaj/OiKReVdnOvaRCRPOuc6ij5poue4KWZG0xn1PwAsESEj84AYHzDBpSdUaagR
+         WEBMxG7TsvMGT6u/VF+7+R2eCpcpIzL9foQCTwKLyRjIDEMPdwYAqQQkEy4jYGnNGg7Y
+         gx5+PdfX4U1sU/QLsF77KLpX4176wx4OvYSfe+JIOU+JR436mBe2n2b2MI6HjaCsbjEa
+         i6VUvPdobXZdnT6YpVAgs3aDwROGqnUtVmlMxeleZlmxkKUUXgcLqq1/mFcj8CEgwEqJ
+         qTvA==
+X-Gm-Message-State: AOAM533cmBb5l6+mLtHPpuse4ovOLzvh+QVUTFFk6erqPSNnzHV5katX
+        P0Cu1v+/xzbC8b9gtBhyJA==
+X-Google-Smtp-Source: ABdhPJz2Q8h6HJWppCeHvd5QUxPsDsw4tdPTaqARl3xywCV2yPWTYjUrsfGofEGxgbwQJXmVyZ8RPg==
+X-Received: by 2002:a05:6870:538e:b0:e6:7957:31ab with SMTP id h14-20020a056870538e00b000e6795731abmr8435293oan.89.1650903764148;
+        Mon, 25 Apr 2022 09:22:44 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p17-20020a4a3651000000b0035d9b838f21sm4534439ooe.10.2022.04.25.09.22.20
+        by smtp.gmail.com with ESMTPSA id n62-20020acaef41000000b002ef646e6690sm3922328oih.53.2022.04.25.09.22.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 09:22:21 -0700 (PDT)
-Received: (nullmailer pid 3999297 invoked by uid 1000);
-        Mon, 25 Apr 2022 16:22:20 -0000
-Date:   Mon, 25 Apr 2022 11:22:20 -0500
+        Mon, 25 Apr 2022 09:22:43 -0700 (PDT)
+Received: (nullmailer pid 4000023 invoked by uid 1000);
+        Mon, 25 Apr 2022 16:22:42 -0000
+Date:   Mon, 25 Apr 2022 11:22:42 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Drew Fustini <dfustini@baylibre.com>
-Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Nishanth Menon <nm@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Dave Gerlach <d-gerlach@ti.com>,
-        Tony Lindgren <tony@atomide.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Keerthy <j-keerthy@ti.com>
-Subject: Re: [PATCH 1/2] dt-bindings: wkup-m3-ipc: Add ti,scale-data-fw
- property
-Message-ID: <YmbKvN00F6vGawpE@robh.at.kernel.org>
-References: <20220425052806.484590-1-dfustini@baylibre.com>
- <20220425052806.484590-2-dfustini@baylibre.com>
+To:     Peter Rosin <peda@axentia.se>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-hwmon@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Add Atmel AT30TS74
+Message-ID: <YmbK0vQBGjiJIVZC@robh.at.kernel.org>
+References: <abe35ea9-1929-941a-6391-2ce1bc047161@axentia.se>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220425052806.484590-2-dfustini@baylibre.com>
+In-Reply-To: <abe35ea9-1929-941a-6391-2ce1bc047161@axentia.se>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -69,61 +64,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 24, 2022 at 10:28:05PM -0700, Drew Fustini wrote:
-> From: Dave Gerlach <d-gerlach@ti.com>
+On Mon, 25 Apr 2022 07:59:12 +0200, Peter Rosin wrote:
+> Document the Atmel (now Microchip) AT30TS74 which is an LM75 based
+> temperature sensor.
 > 
-> Add documentation for ti,scale-data-fw property to enable I2C PMIC
-> voltage scaling during deep sleep. The property contains the name of a
-> binary file for the CM3 firmware to load.
-> 
-> Based on previous work by Russ Dill.
-> 
-> Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
-> Signed-off-by: Keerthy <j-keerthy@ti.com>
-> [dfustini: split from driver patch and convert to json-schema]
-> Signed-off-by: Drew Fustini <dfustini@baylibre.com>
+> Signed-off-by: Peter Rosin <peda@axentia.se>
 > ---
->  .../devicetree/bindings/soc/ti/wkup-m3-ipc.yaml       | 11 +++++++++++
->  1 file changed, 11 insertions(+)
+>   Documentation/devicetree/bindings/hwmon/lm75.yaml | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/soc/ti/wkup-m3-ipc.yaml b/Documentation/devicetree/bindings/soc/ti/wkup-m3-ipc.yaml
-> index 88d690de050c..d2c248d82384 100644
-> --- a/Documentation/devicetree/bindings/soc/ti/wkup-m3-ipc.yaml
-> +++ b/Documentation/devicetree/bindings/soc/ti/wkup-m3-ipc.yaml
-> @@ -40,6 +40,12 @@ description: |+
->    override the pin's existing bias (pull-up/pull-down) and value (high/low) when
->    IO isolation is active.
->  
-> +  Support for I2C PMIC Voltage Scaling
-> +  ====================================
-> +  It is possible to pass the name of a binary file to load into the CM3 memory.
-> +  The binary data is the I2C sequences for the CM3 to send out to the PMIC
-> +  during low power mode entry.
-> +
->  properties:
->    compatible:
->      enum:
-> @@ -67,6 +73,11 @@ properties:
->        mbox_wkupm3 child node.
->      maxItems: 1
->  
-> +  ti,scale-data-fw:
-> +    $ref: /schemas/types.yaml#/definitions/string
-> +    description:
-> +      Name of the firmware binary in /lib/firmware to copy to CM3 aux data
 
-The location of firmware files is up to the OS.
-
-Is there other firmware? If not, 'firmware-name' is the somewhat 
-standard property for this.
-
-What's the default name?
-
-> +
->    ti,vtt-gpio-pin:
->      $ref: /schemas/types.yaml#/definitions/uint32
->      description: GPIO pin connected to enable pin on VTT regulator
-> -- 
-> 2.32.0
-> 
-> 
+Acked-by: Rob Herring <robh@kernel.org>

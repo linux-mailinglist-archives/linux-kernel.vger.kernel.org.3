@@ -2,182 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E51150E272
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6EC950E277
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232904AbiDYN6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 09:58:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57010 "EHLO
+        id S239108AbiDYN6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 09:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242329AbiDYN57 (ORCPT
+        with ESMTP id S235351AbiDYN6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 09:57:59 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7076FA22;
-        Mon, 25 Apr 2022 06:54:54 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2a02:3030:e:60d7:2277:ba57:a2c0:3])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sebastianfricke)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id D98E61F41B44;
-        Mon, 25 Apr 2022 14:54:52 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650894893;
-        bh=KOusw7cXs3MDqJINDlnUk/U6BRhfalYdRnA/nyjvGXI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XhVxhs220pUU9U1AKATihNKU0yq5EJ3iWzgQnq0u6iLmGqcIOjPH6rk/dy7hKcunm
-         T0KGfYQ7YpWCjjbLRmekISI/RIgw7CR8le0yXDYKeArrOoJs8FH9g+yWx3MAvXJAyM
-         yy7PEa9lvNtxmtp5BJqVrEYjSgZ61hZuOvbVkFGGmdCSPVfBAFqykZcZa/ZyvYWVvv
-         P2LGPB3gv4dtDdq5fxPZ8n44vKqtMU+nkL3QCmMAmPsYiKF7Lq7So/QbxupEIN+EIB
-         CJIhVMQ+FAvfQ7NzdxY7LI7srXIvfHnRmfyqswESFG1f5yYGnWtaVwgcktvrcuCYRs
-         WNdnBJ1qWzD2A==
-Date:   Mon, 25 Apr 2022 15:54:49 +0200
-From:   Sebastian Fricke <sebastian.fricke@collabora.com>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     mchehab@kernel.org, hverkuil@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, mripard@kernel.org,
-        paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        nicolas.dufresne@collabora.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v5 04/17] media: uapi: HEVC: Add missing fields in HEVC
- controls
-Message-ID: <20220425135449.oapsrqqyq34s2ii3@basti-XPS-13-9310>
-References: <20220407152940.738159-1-benjamin.gaignard@collabora.com>
- <20220407152940.738159-5-benjamin.gaignard@collabora.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220407152940.738159-5-benjamin.gaignard@collabora.com>
+        Mon, 25 Apr 2022 09:58:42 -0400
+Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2EB2018A;
+        Mon, 25 Apr 2022 06:55:35 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
+        t=1650894932; bh=Mp3nuT0PzmWhzqqEzvPIZpiHN6vPDTUyd5pO9HIeeQE=;
+        h=Subject:From:In-Reply-To:Date:Cc:References:To;
+        b=ZhKh5Zpv/e7gcY9lFUXrmj4qBfrN5wGHNLlS0qLvcK7ucxitGfOZj2+edVgt61Qkv
+         QtJC2BWkOb6nJy2iL8Bg5jwW1Nx9Xvawuw8/NMFuVNbeSuANWERn39FQoX1v4xTRTv
+         PQGWAj7ofOlRGmNiePsij2NrYN+2qIs5TGD91Vgg=
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: Re: [RFC PATCH 3/5] HACK: ASoC: Tolerate N-cpus-to-M-codecs links
+From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik@cutebit.org>
+In-Reply-To: <YmamSZKNtNai7KyM@sirena.org.uk>
+Date:   Mon, 25 Apr 2022 15:55:32 +0200
+Cc:     =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Kettenis <kettenis@openbsd.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <5C42BB2F-EED6-4F6E-A29E-B43768760244@cutebit.org>
+References: <20220331000449.41062-1-povik+lin@cutebit.org>
+ <20220331000449.41062-4-povik+lin@cutebit.org>
+ <YkrkbBNYULLgeS5w@sirena.org.uk>
+ <904EB8A1-5561-4555-8030-B85703E24F2E@cutebit.org>
+ <YmaTHTKWAfM7FCcY@sirena.org.uk>
+ <9F8BCBA8-5EE3-4F87-9518-91CB7AB4E077@cutebit.org>
+ <YmaaPa8A03rWV7HE@sirena.org.uk>
+ <4CF6B0A7-F218-4798-BB21-18D563309D5C@cutebit.org>
+ <YmamSZKNtNai7KyM@sirena.org.uk>
+To:     Mark Brown <broonie@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_FAIL,SPF_HELO_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.04.2022 17:29, Benjamin Gaignard wrote:
->Complete the HEVC controls with missing fields from H.265 specifications.
->Even if these fields aren't used by the current mainlined drivers
->they will be need for (at least) rkvdec driver.
 
-s/be need/be required/
-or
-s/be need/be needed/
+> On 25. 4. 2022, at 15:46, Mark Brown <broonie@kernel.org> wrote:
+>=20
+> On Mon, Apr 25, 2022 at 03:11:14PM +0200, Martin Povi=C5=A1er wrote:
+>>> On 25. 4. 2022, at 14:55, Mark Brown <broonie@kernel.org> wrote:
+>=20
+>>> I am surprised that doesn't otherwise explode TBH - at the very =
+least
+>>> I'd expect it to show two PCMs to userspace which if I'm =
+understanding
+>>> your description correctly isn't really what's going on.
+>=20
+>> I fill in a single snd_soc_dai_link, it exposes a single PCM and =
+works
+>> like a charm. That is as long as I patch the playback/capture check =
+in
+>> question.
+>=20
+>> I read that to be the clear intention of ASoC code: a DAI link =
+becomes
+>> one snd_soc_pcm_runtime.
+>=20
+> Yes, so long as you boil it down to a single link it works fine but =
+the
+> bit on top of the binding where you tie the two CPU DAIs to what is
+> actually exposed is all in code.  The reason this stuff isn't filled =
+in
+> is that connecting the thing that applications see to the physical =
+links
+> isn't at all obvious and needs at least some driver sitting in the
+> middle to make the links - I'd imagine there's a DSP sitting there =
+which
+> probably has quite a bit of flexability about how the various hardware
+> components available are actually related.  This makes figuring out =
+what
+> to do with the relationship between the multiple CPU DAIs hard.
 
-s/rkvdec/the rkvdec/
+I get the gist. Anyway unless you tell me otherwise I will assume I need
+to move to DPCM with the platform/machine driver.
 
->
->Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->---
-> .../media/v4l/ext-ctrls-codec.rst             | 19 +++++++++++++++++++
-> include/media/hevc-ctrls.h                    |  6 +++++-
-> 2 files changed, 24 insertions(+), 1 deletion(-)
->
->diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->index 4cd7c541fc30..dbb08603217b 100644
->--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->@@ -2661,6 +2661,16 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->     :stub-columns: 0
->     :widths:       1 1 2
->
->+    * - __u8
->+      - ``video_parameter_set_id``
->+      - Specifies the value of the vps_video_parameter_set_id of the active VPS
->+        as descibed in section "7.4.3.2.1 General sequence parameter set RBSP semantics"
->+        of H.265 specifications.
->+    * - __u8
->+      - ``seq_parameter_set_id``
->+      - Provides an identifier for the SPS for reference by other syntax elements
->+        as descibed in section "7.4.3.2.1 General sequence parameter set RBSP semantics"
->+        of H.265 specifications.
->     * - __u16
->       - ``pic_width_in_luma_samples``
->       -
->@@ -2800,6 +2810,9 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->     :stub-columns: 0
->     :widths:       1 1 2
->
->+    * - __u8
->+      - ``pic_parameter_set_id``
->+      - Identifies the PPS for reference by other syntax elements.
->     * - __u8
->       - ``num_extra_slice_header_bits``
->       -
->@@ -3026,6 +3039,12 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->     * - __u8
->       - ``ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
->       - The list of L1 reference elements as indices in the DPB.
->+    * - __u16
->+      - ``short_term_ref_pic_set_size``
->+      - Specifies the size of short-term reference pictures set included in the SPS.
-
-s/size of/size of the/
-
-Section 7.4.8 depicts that the st_ref_pic_set syntax
-structure can be part of the SPS or the slice header.
-
-I think we should mention that we talk about the size of the st_ref_pic_set
-syntax structure from section 7.4.8 of the specification. 
-
->+    * - __u16
->+      - ``long_term_ref_pic_set_size``
->+      - Specifies the size of long-term reference pictures set include in the SPS.
-
-s/size of/size of the/
-
-Can we make this a bit more helpful? The specification doesn't contain
-a similar structure to `st_ref_pic_set` for long term pictures. So, as a
-programmer this leaves me guessing:
-- Which syntax structure's size are we talking about?
-- Does this correlate to any of the existing sections of the
-specification?
-Because in the end, I feel like this documentation should be able to
-help a programmer to provide the correct data for the uABI.
-
-Greetings,
-Sebastian
-
->     * - __u8
->       - ``padding``
->       - Applications and drivers must set this to zero.
->diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
->index 01ccda48d8c5..a329e086a89a 100644
->--- a/include/media/hevc-ctrls.h
->+++ b/include/media/hevc-ctrls.h
->@@ -58,6 +58,8 @@ enum v4l2_mpeg_video_hevc_start_code {
-> /* The controls are not stable at the moment and will likely be reworked. */
-> struct v4l2_ctrl_hevc_sps {
-> 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Sequence parameter set */
->+	__u8	video_parameter_set_id;
->+	__u8	seq_parameter_set_id;
-> 	__u16	pic_width_in_luma_samples;
-> 	__u16	pic_height_in_luma_samples;
-> 	__u8	bit_depth_luma_minus8;
->@@ -108,6 +110,7 @@ struct v4l2_ctrl_hevc_sps {
->
-> struct v4l2_ctrl_hevc_pps {
-> 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Picture parameter set */
->+	__u8	pic_parameter_set_id;
-> 	__u8	num_extra_slice_header_bits;
-> 	__u8	num_ref_idx_l0_default_active_minus1;
-> 	__u8	num_ref_idx_l1_default_active_minus1;
->@@ -199,7 +202,8 @@ struct v4l2_ctrl_hevc_slice_params {
-> 	__u32	slice_segment_addr;
-> 	__u8	ref_idx_l0[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
-> 	__u8	ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
->-
->+	__u16	short_term_ref_pic_set_size;
->+	__u16	long_term_ref_pic_set_size;
-> 	__u8	padding;
->
-> 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Weighted prediction parameter */
->-- 
->2.32.0
->

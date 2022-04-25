@@ -2,112 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF94150D779
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 05:21:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAA2950D7A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 05:38:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240594AbiDYDYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 23:24:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40710 "EHLO
+        id S240664AbiDYDlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 23:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240588AbiDYDYC (ORCPT
+        with ESMTP id S234525AbiDYDlQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 23:24:02 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEDC619A;
-        Sun, 24 Apr 2022 20:20:58 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 23P3KUlqC001722, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 23P3KUlqC001722
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 25 Apr 2022 11:20:30 +0800
-Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
- RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Mon, 25 Apr 2022 11:20:30 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Mon, 25 Apr 2022 11:20:30 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::34e7:ab63:3da4:27c6]) by
- RTEXMBS04.realtek.com.tw ([fe80::34e7:ab63:3da4:27c6%5]) with mapi id
- 15.01.2308.021; Mon, 25 Apr 2022 11:20:30 +0800
-From:   Pkshih <pkshih@realtek.com>
-To:     "davem@davemloft.net" <davem@davemloft.net>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "guozhengkui@vivo.com" <guozhengkui@vivo.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "kuba@kernel.org" <kuba@kernel.org>
-CC:     "zhengkui_guo@outlook.com" <zhengkui_guo@outlook.com>
-Subject: Re: [PATCH v2] rtlwifi: btcoex: fix if == else warning
-Thread-Topic: [PATCH v2] rtlwifi: btcoex: fix if == else warning
-Thread-Index: AQHYWFMSYioLZF5z0kqUPwFdtHEht6z/cAWA
-Date:   Mon, 25 Apr 2022 03:20:29 +0000
-Message-ID: <aac189b6207e76fa1c1551c3424f295ee532547e.camel@realtek.com>
-References: <0355f52ad7bf46454af4d5cb28fd6d59f678c25f.camel@realtek.com>
-         <20220425031725.5808-1-guozhengkui@vivo.com>
-In-Reply-To: <20220425031725.5808-1-guozhengkui@vivo.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.36.1-2 
-x-originating-ip: [125.224.87.177]
-x-kse-serverinfo: RTEXMBS01.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzQvMjQg5LiL5Y2IIDExOjQxOjAw?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
+        Sun, 24 Apr 2022 23:41:16 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C2E1A81B
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 20:38:09 -0700 (PDT)
+Received: from epcas3p4.samsung.com (unknown [182.195.41.22])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220425033802epoutp03a5cfba1cd164148d7373962cb7250c71~pBn9rryAq1023310233epoutp03H
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 03:38:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220425033802epoutp03a5cfba1cd164148d7373962cb7250c71~pBn9rryAq1023310233epoutp03H
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1650857882;
+        bh=kLLPKOJheZoOZst7vOsZrRhAcfeNzU817A4tSgnfK0o=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=N8+1pfH+xTmEcOLEQ0R7cUIMBH84clMQLovgLoY6j5v65ymtD+OvaOvPk/Hxzmron
+         yXTzWlV/ePr9dYvl5eu2+4alQR1VCDbBLyTPPqXHWrHghlA/ghN39gsP0kH2fkeOwz
+         rfHeU0tCjZrdnad+Xem7QBXOQYpbQUtxXo0M1S8I=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas3p1.samsung.com (KnoxPortal) with ESMTP id
+        20220425033802epcas3p15634c5ad5d04c529fc8c036a2dab9b25~pBn9Me9Ek1747617476epcas3p1K;
+        Mon, 25 Apr 2022 03:38:02 +0000 (GMT)
+Received: from epcpadp4 (unknown [182.195.40.18]) by epsnrtp2.localdomain
+        (Postfix) with ESMTP id 4KmrLy1B7wz4x9Q0; Mon, 25 Apr 2022 03:38:02 +0000
+        (GMT)
+Mime-Version: 1.0
+Subject: RE: [PATCH v3 3/6] scsi: ufshpb: Cleanup the handler when device
+ reset HPB information
+Reply-To: keosung.park@samsung.com
+Sender: Keoseong Park <keosung.park@samsung.com>
+From:   Keoseong Park <keosung.park@samsung.com>
+To:     Bean Huo <huobean@gmail.com>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        Keoseong Park <keosung.park@samsung.com>,
+        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
+        "powen.kao@mediatek.com" <powen.kao@mediatek.com>,
+        cpgsproxy3 <cpgsproxy3@samsung.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <20220424220713.1253049-4-huobean@gmail.com>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <1889248251.21650857882164.JavaMail.epsvc@epcpadp4>
+Date:   Mon, 25 Apr 2022 12:23:46 +0900
+X-CMS-MailID: 20220425032346epcms2p17f067428de98f364f97be8eb5381d9dc
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="utf-8"
-Content-ID: <C24627702B3BA44282035DD74F663F59@realtek.com>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Hop-Count: 3
+X-CMS-RootMailID: 20220424220758epcas2p1c518cbee68ebefaf1565909f60711561
+References: <20220424220713.1253049-4-huobean@gmail.com>
+        <20220424220713.1253049-1-huobean@gmail.com>
+        <CGME20220424220758epcas2p1c518cbee68ebefaf1565909f60711561@epcms2p1>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gTW9uLCAyMDIyLTA0LTI1IGF0IDExOjE3ICswODAwLCBHdW8gWmhlbmdrdWkgd3JvdGU6DQo+
-IEZpeCB0aGUgZm9sbG93aW5nIGNvY2NpY2hlY2sgd2FybmluZzoNCj4gDQo+IGRyaXZlcnMvbmV0
-L3dpcmVsZXNzL3JlYWx0ZWsvcnRsd2lmaS9idGNvZXhpc3QvaGFsYnRjODgyMWExYW50LmM6MTYw
-NDoyLTQ6DQo+IFdBUk5JTkc6IHBvc3NpYmxlIGNvbmRpdGlvbiB3aXRoIG5vIGVmZmVjdCAoaWYg
-PT0gZWxzZSkuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBHdW8gWmhlbmdrdWkgPGd1b3poZW5na3Vp
-QHZpdm8uY29tPg0KDQpBY2tlZC1ieTogUGluZy1LZSBTaGloIDxwa3NoaWhAcmVhbHRlay5jb20+
-DQoNClRoYW5rIHlvdQ0KDQo+IC0tLQ0KPiB2MSAtPiB2MjogTW9kaWZ5IHRoZSBjb21tZW50IGFj
-Y29yZGluZyB0byBQaW5nLUtlJ3Mgc3VnZ2VzdGlvbi4NCj4gDQo+ICAuLi4vcmVhbHRlay9ydGx3
-aWZpL2J0Y29leGlzdC9oYWxidGM4ODIxYTFhbnQuYyAgfCAxNiArKysrLS0tLS0tLS0tLS0tDQo+
-ICAxIGZpbGUgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCspLCAxMiBkZWxldGlvbnMoLSkNCj4gDQo+
-IGRpZmYgLS1naXQgYS9kcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0bHdpZmkvYnRjb2V4
-aXN0L2hhbGJ0Yzg4MjFhMWFudC5jDQo+IGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9y
-dGx3aWZpL2J0Y29leGlzdC9oYWxidGM4ODIxYTFhbnQuYw0KPiBpbmRleCBhMThkZmZjODc1M2Eu
-LjY3ZDBiOWFlZTA2NCAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRl
-ay9ydGx3aWZpL2J0Y29leGlzdC9oYWxidGM4ODIxYTFhbnQuYw0KPiArKysgYi9kcml2ZXJzL25l
-dC93aXJlbGVzcy9yZWFsdGVrL3J0bHdpZmkvYnRjb2V4aXN0L2hhbGJ0Yzg4MjFhMWFudC5jDQo+
-IEBAIC0xNjAwLDE4ICsxNjAwLDEwIEBAIHN0YXRpYyB2b2lkIGJ0Yzg4MjFhMWFudF9hY3Rfd2lm
-aV9jb25fYnRfYWNsX2J1c3koc3RydWN0IGJ0Y19jb2V4aXN0DQo+ICpidGNvZXhpc3QsDQo+ICAJ
-CQljb2V4X2RtLT5hdXRvX3RkbWFfYWRqdXN0ID0gZmFsc2U7DQo+ICAJCX0NCj4gIAl9IGVsc2Ug
-aWYgKGJ0X2xpbmtfaW5mby0+aGlkX2V4aXN0ICYmIGJ0X2xpbmtfaW5mby0+YTJkcF9leGlzdCkg
-ew0KPiAtCQkvKiBISUQrQTJEUCAqLw0KPiAtCQlpZiAoKGJ0X3Jzc2lfc3RhdGUgPT0gQlRDX1JT
-U0lfU1RBVEVfSElHSCkgfHwNCj4gLQkJICAgIChidF9yc3NpX3N0YXRlID09IEJUQ19SU1NJX1NU
-QVRFX1NUQVlfSElHSCkpIHsNCj4gLQkJCWJ0Yzg4MjFhMWFudF9wc190ZG1hKGJ0Y29leGlzdCwg
-Tk9STUFMX0VYRUMsDQo+IC0JCQkJCSAgICAgdHJ1ZSwgMTQpOw0KPiAtCQkJY29leF9kbS0+YXV0
-b190ZG1hX2FkanVzdCA9IGZhbHNlOw0KPiAtCQl9IGVsc2Ugew0KPiAtCQkJLypmb3IgbG93IEJU
-IFJTU0kqLw0KPiAtCQkJYnRjODgyMWExYW50X3BzX3RkbWEoYnRjb2V4aXN0LCBOT1JNQUxfRVhF
-QywNCj4gLQkJCQkJICAgICB0cnVlLCAxNCk7DQo+IC0JCQljb2V4X2RtLT5hdXRvX3RkbWFfYWRq
-dXN0ID0gZmFsc2U7DQo+IC0JCX0NCj4gKwkJLyogSElEK0EyRFAgKG5vIG5lZWQgdG8gY29uc2lk
-ZXIgQlQgUlNTSSkgKi8NCj4gKwkJYnRjODgyMWExYW50X3BzX3RkbWEoYnRjb2V4aXN0LCBOT1JN
-QUxfRVhFQywNCj4gKwkJCQkgICAgIHRydWUsIDE0KTsNCj4gKwkJY29leF9kbS0+YXV0b190ZG1h
-X2FkanVzdCA9IGZhbHNlOw0KPiAgDQo+ICAJCWJ0Yzg4MjFhMWFudF9jb2V4X3RhYmxlX3dpdGhf
-dHlwZShidGNvZXhpc3QsIE5PUk1BTF9FWEVDLCAxKTsNCj4gIAl9IGVsc2UgaWYgKChidF9saW5r
-X2luZm8tPnBhbl9vbmx5KSB8fA0KDQoNCg==
+>From: Bean Huo <beanhuo@micron.com>
+>=20
+>"When the device is powered off by the host, the device may restore L2P ma=
+p data
+>upon power up or build from the host=E2=80=99s HPB READ command. In case d=
+evice powered
+>up and lost HPB information, device can signal to the host through HPB Sen=
+se data,
+>by setting HPB Operation as =E2=80=982=E2=80=99 which will inform the host=
+ that device reset HPB
+>information."
+>=20
+>This patch is to clean up the handler and make the intent of this handler =
+more
+>readable, no functional change.
+>=20
+>Signed-off-by: Bean Huo <beanhuo@micron.com>
+Reviewed-by: Keoseong Park <keosung.park@samsung.com>
+
+Best Regards,
+Keoseong Park
+
+>---
+> drivers/scsi/ufs/ufshpb.c | 35 +++++++++++++++++++++++------------
+> 1 file changed, 23 insertions(+), 12 deletions(-)
+>=20
+>diff --git a/drivers/scsi/ufs/ufshpb.c b/drivers/scsi/ufs/ufshpb.c
+>index 167643969165..f1f30d4c3d65 100644
+>--- a/drivers/scsi/ufs/ufshpb.c
+>+++ b/drivers/scsi/ufs/ufshpb.c
+>@@ -1225,7 +1225,10 @@ static void ufshpb_rsp_req_region_update(struct ufs=
+hpb_lu *hpb,
+>                 queue_work(ufshpb_wq, &hpb->map_work);
+> }
+>=20
+>-static void ufshpb_dev_reset_handler(struct ufshpb_lu *hpb)
+>+/*
+>+ * Set the flags of all active regions to RGN_FLAG_UPDATE to let host sid=
+e reload L2P entries later
+>+ */
+>+static void ufshpb_set_regions_update(struct ufshpb_lu *hpb)
+> {
+>         struct victim_select_info *lru_info =3D &hpb->lru_info;
+>         struct ufshpb_region *rgn;
+>@@ -1239,6 +1242,24 @@ static void ufshpb_dev_reset_handler(struct ufshpb_=
+lu *hpb)
+>         spin_unlock_irqrestore(&hpb->rgn_state_lock, flags);
+> }
+>=20
+>+static void ufshpb_dev_reset_handler(struct ufs_hba *hba)
+>+{
+>+        struct scsi_device *sdev;
+>+        struct ufshpb_lu *hpb;
+>+
+>+        __shost_for_each_device(sdev, hba->host) {
+>+                hpb =3D ufshpb_get_hpb_data(sdev);
+>+                if (hpb && hpb->is_hcm)
+>+                        /*
+>+                         * For the HPB host mode, in case device powered =
+up and lost HPB
+>+                         * information, we will set the region flag to be=
+ RGN_FLAG_UPDATE,
+>+                         * it will let host reload its L2P entries(re-act=
+ivate the region
+>+                         * in the UFS device).
+>+                         */
+>+                        ufshpb_set_regions_update(hpb);
+>+        }
+>+}
+>+
+> /*
+>  * This function will parse recommended active subregion information in s=
+ense
+>  * data field of response UPIU with SAM_STAT_GOOD state.
+>@@ -1313,17 +1334,7 @@ void ufshpb_rsp_upiu(struct ufs_hba *hba, struct uf=
+shcd_lrb *lrbp)
+>         case HPB_RSP_DEV_RESET:
+>                 dev_warn(&hpb->sdev_ufs_lu->sdev_dev,
+>                          "UFS device lost HPB information during PM.\n");
+>-
+>-                if (hpb->is_hcm) {
+>-                        struct scsi_device *sdev;
+>-
+>-                        __shost_for_each_device(sdev, hba->host) {
+>-                                struct ufshpb_lu *h =3D sdev->hostdata;
+>-
+>-                                if (h)
+>-                                        ufshpb_dev_reset_handler(h);
+>-                        }
+>-                }
+>+                ufshpb_dev_reset_handler(hba);
+>=20
+>                 break;
+>         default:
+>--=20
+>2.34.1
+>=20
+>

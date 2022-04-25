@@ -2,245 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C10450DDCA
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 12:21:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B98950DDCC
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 12:22:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239153AbiDYKYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 06:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60352 "EHLO
+        id S235338AbiDYKYs convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 25 Apr 2022 06:24:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236544AbiDYKYL (ORCPT
+        with ESMTP id S235072AbiDYKYf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 06:24:11 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A4F853E11;
-        Mon, 25 Apr 2022 03:21:06 -0700 (PDT)
-X-UUID: 08903f58e0914418b670cfa033d53c5e-20220425
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:42a19959-8c17-493e-af10-58856b0d30c9,OB:0,LO
-        B:0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:25
-X-CID-META: VersionHash:faefae9,CLOUDID:241006f0-06b0-4305-bfbf-554bfc9d151a,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 08903f58e0914418b670cfa033d53c5e-20220425
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 748409254; Mon, 25 Apr 2022 18:20:58 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 25 Apr 2022 18:20:57 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 25 Apr
- 2022 18:20:55 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 25 Apr 2022 18:20:55 +0800
-Message-ID: <c1b910098a0a5cbe06ec971c1bf745ac37986274.camel@mediatek.com>
-Subject: Re: [PATCH V4 01/14] dt-bindings: cpufreq: mediatek: Add MediaTek
- CCI property
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
-        <matthias.bgg@gmail.com>
-CC:     <jia-wei.chang@mediatek.com>, <roger.lu@mediatek.com>,
-        <hsinyi@google.com>, <khilman@baylibre.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 25 Apr 2022 18:20:55 +0800
-In-Reply-To: <7873f0fa-25c3-191f-5096-3ceb9afd50cc@linaro.org>
-References: <20220422075239.16437-1-rex-bc.chen@mediatek.com>
-         <20220422075239.16437-2-rex-bc.chen@mediatek.com>
-         <f2e5a34b-ed02-91a1-bc7b-fecaa95e227e@linaro.org>
-         <811bf944-a230-ab9b-583a-840e57af8a1e@linaro.org>
-         <28f75ac2995b116af9b2accf760786d1d1798c93.camel@mediatek.com>
-         <7873f0fa-25c3-191f-5096-3ceb9afd50cc@linaro.org>
+        Mon, 25 Apr 2022 06:24:35 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A7B583B2
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 03:21:30 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1nivqI-00049H-9V; Mon, 25 Apr 2022 12:21:18 +0200
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1nivqH-0057yg-Ob; Mon, 25 Apr 2022 12:21:16 +0200
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1nivqF-0005uW-Hw; Mon, 25 Apr 2022 12:21:15 +0200
+Message-ID: <1ec5ce3673dcdaa914e20ef2aae03f549d05ff9a.camel@pengutronix.de>
+Subject: Re: [PATCH v2 0/3] add fwnode support to reset subsystem
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     =?ISO-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     Lizhi Hou <lizhi.hou@xilinx.com>,
+        Sonal Santan <sonal.santan@xilinx.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Brown <broonie@kernel.org>
+Date:   Mon, 25 Apr 2022 12:21:15 +0200
+In-Reply-To: <20220408174841.34458529@fixe.home>
+References: <20220324141237.297207-1-clement.leger@bootlin.com>
+         <Ykst0Vb4fk+iALzc@robh.at.kernel.org> <20220405092434.6e424ed4@fixe.home>
+         <YkxWeMNw9Ba0KjHM@robh.at.kernel.org> <20220405175120.23fc6b2a@fixe.home>
+         <CAL_JsqLdBcAw1KPnrATHqEngRWkx6moxDODH1xV67EKAufc6_w@mail.gmail.com>
+         <20220406094019.670a2956@fixe.home> <Yk2TVAfPVh9a1tUR@robh.at.kernel.org>
+         <20220408174841.34458529@fixe.home>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-04-25 at 10:55 +0200, Krzysztof Kozlowski wrote:
-> On 25/04/2022 08:19, Rex-BC Chen wrote:
-> > On Fri, 2022-04-22 at 19:34 +0200, Krzysztof Kozlowski wrote:
-> > > On 22/04/2022 19:26, Krzysztof Kozlowski wrote:
-> > > > On 22/04/2022 09:52, Rex-BC Chen wrote:
-> > > > > MediaTek Cache Coherent Interconnect (CCI) uses software
-> > > > > devfreq
-> > > > > module
-> > > > > for scaling clock frequency and adjust voltage.
-> > > > > The phandle could be linked between CPU and MediaTek CCI for
-> > > > > some
-> > > > > MediaTek SoCs, like MT8183 and MT8186.
-> > > > > Therefore, we add this property in cpufreq-mediatek.txt.
+Hi Clément,
+
+On Fr, 2022-04-08 at 17:48 +0200, Clément Léger wrote:
+[...]
+> > > > > > I've told the Xilinx folks the same thing, but I would separate this
+> > > > > > into 2 parts. First is just h/w work in a DT based system. Second is
+> > > > > > creating a base tree an overlay can be applied to. The first part should
+> > > > > > be pretty straightforward. We already have PCI bus bindings. The only
+> > > > > > tricky part is getting address translation working from leaf device thru
+> > > > > > the PCI bus to host bus, but support for that should all be in place
+> > > > > > (given we support ISA buses off of PCI bus). The second part will
+> > > > > > require generating PCI DT nodes at runtime. That may be needed for both
+> > > > > > DT and ACPI systems as we don't always describe all the PCI hierarchy
+> > > > > > in DT.    
 > > > > > 
-> > > > > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> > > > > ---
-> > > > >  .../devicetree/bindings/cpufreq/cpufreq-
-> > > > > mediatek.txt         | 5
-> > > > > +++++
-> > > > >  1 file changed, 5 insertions(+)
-> > > > > 
-> > > > > diff --git
-> > > > > a/Documentation/devicetree/bindings/cpufreq/cpufreq-
-> > > > > mediatek.txt
-> > > > > b/Documentation/devicetree/bindings/cpufreq/cpufreq-
-> > > > > mediatek.txt
-> > > > > index b8233ec91d3d..3387e1e2a2df 100644
-> > > > > --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-
-> > > > > mediatek.txt
-> > > > > +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-
-> > > > > mediatek.txt
-> > > > > @@ -20,6 +20,11 @@ Optional properties:
-> > > > >  	       Vsram to fit SoC specific needs. When absent,
-> > > > > the
-> > > > > voltage scaling
-> > > > >  	       flow is handled by hardware, hence no software
-> > > > > "voltage
-> > > > > tracking" is
-> > > > >  	       needed.
-> > > > > +- mediatek,cci:
-> > > > > +	MediaTek Cache Coherent Interconnect (CCI) uses the
-> > > > > software
-> > > > > devfreq module to
-> > > > > +	scale the clock frequency and adjust the voltage.
+> > > > > But then, if the driver generate the nodes, it will most probably
+> > > > > have to describe the nodes by hardcoding them right ?    
 > > > > 
-> > > > Devfreq is a SW mechanism, it should not be part of bindings
-> > > > description.
-> > 
-> > Hello Krzysztof,
-> > 
-> > The reason we want to get the "mediatek,cci":
-> > We need to check the mediatek cci is ready and probed done.
-> > Because cpufreq and mediatek cci are sharing the same regulator in
-> > little core cpus.
-> > Therefore, to prevent high frequency low voltage issue, we need to
-> > make
-> > sure the mediatek cci is ready.
-> > 
-> > If mediatek cci is ready, cpufreq and mediatek cci will register
-> > the
-> > same regulator and from regulator's implementation, if there are
-> > two
-> > device using the same regulator, the framwork will make sure it's
-> > using
-> > the max voltage.
-> 
-> Thanks for explanation. The property should be described with what
-> you
-> said here. The property and description should match hardware, so
-> there
-> is no place for devfreq. Instead mention that power rail is shared or
-> voltage regulators are common.
-> 
-
-Hello Krzysztof,
-
-I will modify the description to the reason why we need mediatek,cci.
-
-> However I am not sure if you solved your problem... see below:
-> 
-> > For example:
-> > mediatek cci set 1.2V originally. When cpufreq want to adjust lower
-> > frequency adn set voltage to 1.0V.
-> > The framework will remain using 1.2V to prevent crash of mediatek
-> > cci.
-> 
-> No, regulator_set_voltage() for proc_reg says:
-> "NOTE: If the regulator is shared between several devices then the
-> lowest
->  request voltage that meets the system constraints will be used."
-> 
-> Not the highest. So when your devfreq and cpufreq boots, calling
-> regulator_set_voltage will still cause high frequency and low
-> voltage.
-> 
-
-From the driver comment, I think it still needs to match "meets the
-system constraints".
-
-From drivers, we can trace the driver and it finally to
-regulator_get_optimal_voltage().
-In [1], the framework will get max voltage while finding each device's
-voltage.
-
-[1]: 
-https://elixir.bootlin.com/linux/latest/source/drivers/regulator/core.c#L3815
-
-> > 
-> > Therefore, we need to confirm the mediatek cci is ready and
-> > register
-> > the regulator.
-> > 
-> > > > 
-> > > > > +	For details, please refer to
-> > > > > +	Documentation/devicetree/bindings/interconnect/mediatek
-> > > > > ,cci.yam
-> > > > > l
-> > > > 
-> > > > Since the file does not exist, I have troubles reviewing it.
-> > > > First
-> > > > of
-> > > > all, you already have "mediatek,cci-control" property in DT, so
-> > > > why
-> > > > using different name?
-> > 
-> > I am not sure where is "mediatek,cci-control". I think this name is
-> > not
-> > used before.
-> > 
-> 
-> Documentation/devicetree/bindings/net/mediatek-net.txt
-> 
-> > > > 
-> > > > Second, it looks like you want to put devfreq into bindings
-> > > > instead
-> > > > of
-> > > > using proper interconnect bindings.
+> > > > No, the kernel already maintains its own tree of devices. You just
+> > > > need to use that to generate the tree. That's really not much more
+> > > > than nodes with a 'reg' property encoding the device and function
+> > > > numbers.  
 > > > 
-> > > Actually judging by the driver this looks like some
-> > > device-boot-time-ordering, so I wonder whether this is a proper
-> > > way
-> > > to
-> > > express it.
+> > > Just to clarified a point, my PCI device exposes multiple peripherals
+> > > behind one single PCI function.  
 > > 
-> > Yes, we need to get the mediatek cci node and let cpufreq and
-> > mediatek
-> > cci link succefully. In that case, we can know the mediatek cci is
-> > ready. And we can set the voltage using the regulator framwork.
+> > Right. I would expect your PCI device DT node to have a 'simple-bus' 
+> > child node with all those peripherals. And maybe there's other nodes 
+> > like fixed-clocks, etc.
 > > 
-> > [1]: 
+> > > To be sure I understood what you are suggesting, you propose to create
+> > > a DT node from the PCI driver that has been probed dynamically
+> > > matching this same PCI device with a 'reg' property. I also think
+> > > this would requires to generate some 'pci-ranges' to remap the
+> > > downstream devices that are described in the DTBO, finally, load the
+> > > overlay to be apply under this newly created node. Is that right ?  
 > > 
-https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-mediatek/patch/20220422075239.16437-11-rex-bc.chen@mediatek.com/__;!!CTRNKA9wMg0ARbw!xOuKKyjBosmRcUseQXU9SiPu8msBXrrQAASdxwVbR0SU2inuXUtO180Y0Erkpy-JmOwu$
-> >  
+> > Right. You'll need to take the BAR address(es) for the device and stick 
+> > those into 'ranges' to translate offsets to BAR+offset.
 > 
-> Yes, I see the use case. I am not convinced yet whether this is
-> proper
-> approach...
+> Hi Rob,
 > 
-
-When mediatek cci is ready (probe done and register regulator done), we
-can confirm that regulator framwork will make sure the voltage setting
-is safe.
-
-BRs,
-Rex
-
+> I got something working (address translation, probing and so on) using
+> what you started. I switch to using changeset however, I'm not sure that
+> it make sense for property creation since the node has not yet been
+> added to the tree. Attaching the node with changeset however seems
+> to make sense. But I'm no expert here, so any advise is welcome.
+>
+> Based on what we said, I created a PCI driver which uses a builtin
+> overlay. In order to be able to apply the overlay on the correct PCI
+> node -the one on which the card was plugged) and thus be totally plug
+> and play, the 'target-path' property is patched using direct fdt
+> function and replaced the target with the PCI device node path.
+> I don't see any other way to do that before applying the overlay since
+> of_overlay_fdt_apply() takes a fdt blob as input.
 > 
-> Best regards,
-> Krzysztof
+> The driver also insert correct ranges into the PCI device in order to
+> translate the downstream node addresses to BAR addresses. It seems
+> reasonnable to assume that this depends on the driver and thus should
+> not be done by the PCI of core at all.
+> 
+> Finally, the driver probes the newly added childs using
+> of_platform_populate(). With all of that, the address translation
+> and the probing works correctly and the platform devices are created.
+> There is still a few things to fix such as the following:
+> 
+> [ 2830.324773] OF: overlay: WARNING: memory leak will occur if overlay
+> removed, property: /pci/pci@2,6/dev@0,0/compatible
+> 
+> But it seems like this is something that works and would allow to
+> support various use cases. From what I see, it should also work on
+> other platforms. Major advantage of that over fwnode is that the
+> changes are pretty small and relatively contained.
 
+Could you show this off somewhere?
+
+From this I take that fwnode support in the reset subsystem is not of
+use to you anymore. I'll postpone taking your patches then, until they
+are needed.
+
+regards
+Philipp

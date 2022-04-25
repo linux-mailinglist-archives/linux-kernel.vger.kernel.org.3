@@ -2,90 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A67F850DFA6
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 14:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19FC750DFAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 14:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239974AbiDYMKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 08:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40720 "EHLO
+        id S238474AbiDYMLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 08:11:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiDYMKB (ORCPT
+        with ESMTP id S232495AbiDYMLC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 08:10:01 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6557C4C43C;
-        Mon, 25 Apr 2022 05:06:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=F+wEY33ANWUtYg71aqPrc+AB1BTI6Adh9M1qs1IIjjs=; b=5nhbs9GYvPdZxBd8ZMwJvFd37R
-        1TAIliDayrCvWbT6U+AjG2ydOccbVTtmQf2h1TLEY5xzBDbYBLfc9PnI8YWAuC+quDvBW39V7vmJ8
-        tO5a0to474WxsEE92DyxQ1OTSusUZTUjR1boABsz0NeOqXZP7LpmKtqxY0HoBQBQfSF4=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nixUG-00HOZ3-3x; Mon, 25 Apr 2022 14:06:40 +0200
-Date:   Mon, 25 Apr 2022 14:06:40 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Wan Jiabing <wanjiabing@vivo.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kael_w@yeah.net
-Subject: Re: [PATCH] FDDI: defxx: simplify if-if to if-else
-Message-ID: <YmaO0PEZS6mjsHhO@lunn.ch>
-References: <20220424092842.101307-1-wanjiabing@vivo.com>
- <alpine.DEB.2.21.2204241137440.9383@angie.orcam.me.uk>
- <YmXMcUAhUg/p1X3R@lunn.ch>
- <alpine.DEB.2.21.2204250009240.9383@angie.orcam.me.uk>
+        Mon, 25 Apr 2022 08:11:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9305F580C2
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 05:07:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650888477;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3I28rQJDnhHxMtAGkz1SevfRVOxy1YWGVvIDo5VbNQY=;
+        b=X9w6Cl6qSOLz38Ul2YXC2RPhMArsTITZrk9axM+3E1Pwc0BgGc3EExCm9a+C3+JFJtbVjf
+        OWb8S+GU4kl/9m/fOaRUhi3qk8taMghhI31sppqTr3mMAvsbsTAApsq8DzD+k8K4r6Hbn9
+        mfYLuJ3i4m9nnNoaJ9Lv+BO19ZOq6MA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-6-OAw2PWF8O5CZiGHgMX8hCw-1; Mon, 25 Apr 2022 08:07:56 -0400
+X-MC-Unique: OAw2PWF8O5CZiGHgMX8hCw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A3EC580005D;
+        Mon, 25 Apr 2022 12:07:55 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.13])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2AB599E71;
+        Mon, 25 Apr 2022 12:07:42 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <Yk9V/03wgdYi65Lb@casper.infradead.org>
+References: <Yk9V/03wgdYi65Lb@casper.infradead.org> <Yk5W6zvvftOB+80D@casper.infradead.org> <164928615045.457102.10607899252434268982.stgit@warthog.procyon.org.uk> <164928630577.457102.8519251179327601178.stgit@warthog.procyon.org.uk> <469869.1649313707@warthog.procyon.org.uk>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Steve French <sfrench@samba.org>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        linux-cifs@vger.kernel.org, Jeff Layton <jlayton@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH 14/14] mm, netfs, fscache: Stop read optimisation when folio removed from pagecache
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2204250009240.9383@angie.orcam.me.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3118842.1650888461.1@warthog.procyon.org.uk>
+Date:   Mon, 25 Apr 2022 13:07:41 +0100
+Message-ID: <3118843.1650888461@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 12:26:10AM +0100, Maciej W. Rozycki wrote:
-> On Mon, 25 Apr 2022, Andrew Lunn wrote:
-> 
-> > >  NAK.  The first conditional optionally sets `bp->mmio = false', which 
-> > > changes the value of `dfx_use_mmio' in some configurations:
-> > > 
-> > > #if defined(CONFIG_EISA) || defined(CONFIG_PCI)
-> > > #define dfx_use_mmio bp->mmio
-> > > #else
-> > > #define dfx_use_mmio true
-> > > #endif
-> > 
-> > Which is just asking for trouble like this.
-> > 
-> > Could i suggest dfx_use_mmio is changed to DFX_USE_MMIO to give a hint
-> > something horrible is going on.
-> 
->  There's legacy behind it, `dfx_use_mmio' used to be a proper variable and 
-> references were retained not to obfuscate the changes that ultimately led 
-> to the current arrangement.  I guess at this stage it could be changed to 
-> a function-like macro or a static inline function taking `bp' as the 
-> argument.
+Matthew Wilcox <willy@infradead.org> wrote:
 
-Yes, something like that would be good.
+> OK.  You suggested that releasepage was an acceptable place to call it.
+> How about we have AS_RELEASE_ALL (... or something ...) and then
+> page_has_private() becomes a bit more complicated ... to the point
+> where we should probably get rid of it (by embedding it into
+> filemap_release_folio():
 
-> > It probably won't stop the robots finding this if (x) if (!x), but
-> > there is a chance the robot drivers will wonder why it is upper case.
-> 
->  Well, blindly relying on automation is bound to cause trouble.
+I'm not sure page_has_private() is quite so easy to get rid of.
+shrink_page_list() and collapse_file(), for example, use it to conditionalise
+a call to try_to_release_page() plus some other bits.
 
-Unfortunately, there are a number of bot drivers who do blindly rely
-on automation. We have had to undo the same broken bot driven changes
-a few times, and ended up adding extra comments to catch the eye of
-the bot drivers.
+I think that, for the moment, I would need to add a check for AS_RELEASE_ALL
+to page_has_private().
 
-    Andrew
+David
+

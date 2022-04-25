@@ -2,96 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C737950DBD1
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:59:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B88DC50DBD2
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240244AbiDYJB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 05:01:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35354 "EHLO
+        id S240317AbiDYJCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 05:02:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230087AbiDYJBy (ORCPT
+        with ESMTP id S232056AbiDYJCE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 05:01:54 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391B513DCE;
-        Mon, 25 Apr 2022 01:58:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1650877131; x=1682413131;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/LMMZBwH6tN0t1Z2BqS7eB4GESXopgySii1X8NSdGyk=;
-  b=b7IWoB4kBBhkk9jD6uJZ3sb9228iQx4NjF8BOLHgffkxcH/8+ZsTIbJr
-   YhtipDj06g0rwjx93Uu03P5rv96Mr++Wp+qFODAqcv6rFsaTypgg0OkO7
-   ys4bQ/puZh6OnX5OEuBfBFSxjIH5wVniJLKMlePg/Pp4uzTZt7acxyR03
-   8=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 25 Apr 2022 01:58:50 -0700
-X-QCInternal: smtphost
-Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 01:58:50 -0700
-Received: from mingxue-gv.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 25 Apr 2022 01:58:48 -0700
-Date:   Mon, 25 Apr 2022 16:58:44 +0800
-From:   Minghao Xue <quic_mingxue@quicinc.com>
-To:     <mst@redhat.com>
-CC:     "Michael S. Tsirkin" <mst@redhat.com>, <jasowang@redhat.com>,
-        <robh+dt@kernel.org>, <jean-philippe@linaro.org>,
-        <virtualization@lists.linux-foundation.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ztu@quicinc.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: virtio: mmio: add optional
- wakeup-source property
-Message-ID: <20220425085844.GA7652@mingxue-gv.qualcomm.com>
-References: <20220325015945.GA17578@mingxue-gv.qualcomm.com>
- <20220328164228-mutt-send-email-mst@kernel.org>
- <20220329074610.GA20342@mingxue-gv.qualcomm.com>
- <a35529be-d9cb-9913-76aa-653faed87b54@linaro.org>
+        Mon, 25 Apr 2022 05:02:04 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF0513E20;
+        Mon, 25 Apr 2022 01:59:01 -0700 (PDT)
+Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KmzQB4MQmz6801v;
+        Mon, 25 Apr 2022 16:56:18 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Mon, 25 Apr 2022 10:58:58 +0200
+Received: from [10.47.92.213] (10.47.92.213) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.24; Mon, 25 Apr
+ 2022 09:58:57 +0100
+Message-ID: <d09faf74-a52e-8d93-cf26-08b43b12c564@huawei.com>
+Date:   Mon, 25 Apr 2022 09:58:56 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <a35529be-d9cb-9913-76aa-653faed87b54@linaro.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 1/4] scsi: core: constify pointer to scsi_host_template
+To:     Christoph Hellwig <hch@infradead.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     "Ewan D. Milne" <emilne@redhat.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Alim Akhtar" <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "Doug Gilbert" <dgilbert@interlog.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <james.smart@broadcom.com>
+References: <20220408103027.311624-1-krzysztof.kozlowski@linaro.org>
+ <2a88a992-641a-b3ff-fe39-7a61fff87cb6@huawei.com>
+ <4c3be5b6-50ef-9e9a-6cee-9642df943342@linaro.org>
+ <7b3885e3-dbae-ff0b-21dc-c28d635d950b@huawei.com>
+ <c121430b1b5c8f5816b2b42b9178d00889260c90.camel@redhat.com>
+ <b6af3fe8-db9a-b5dc-199f-21c05d7664a2@huawei.com>
+ <Yl+wJ7xSHzWmR+bR@infradead.org>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <Yl+wJ7xSHzWmR+bR@infradead.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.92.213]
+X-ClientProxiedBy: lhreml702-chm.china.huawei.com (10.201.108.51) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 09:59:31AM +0200, Krzysztof Kozlowski wrote:
-> On 29/03/2022 09:46, Minghao Xue wrote:
-> > On Mon, Mar 28, 2022 at 04:42:59PM -0400, Michael S. Tsirkin wrote:
-> >> On Fri, Mar 25, 2022 at 09:59:45AM +0800, Minghao Xue wrote:
-> >>> Some systems want to set the interrupt of virtio_mmio device
-> >>> as a wakeup source. On such systems, we'll use the existence
-> >>> of the "wakeup-source" property as a signal of requirement.
-> >>>
-> >>> Signed-off-by: Minghao Xue <quic_mingxue@quicinc.com>
-> >>
-> >> I don't have enough of a clue about dt to review this.
-> >> Pls get some acks from people with DT expertise.
-> >>
-> > Hi Michael,
-> > I had a discussion with Krzysztof on the first version of patch. And we've
-> > got aligned. 
-> > 
-> 
-> I thought I reviewed this and provided an ack, but apparently I did not.
-> Sorry for late response.
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-Hi Michael,
-I'm writting email to ask will you help upstream these two patches? And
-how's the progress?
+On 20/04/2022 08:03, Christoph Hellwig wrote:
+>> The standard flow is:
+>>
+>> shost = scsi_host_alloc(sht, )
+>>
+>> // modify shost, like
+>> shost->cmd_per_lun = 5;
+>>
+>> scsi_add_host(shost)
+>>
+>> Is there some reason for which those two drivers can't follow that?
+> I think they should.  Method tables should not be mutable data.
+> .
+
+Hi Krzysztof,
+
+Do you have any interest in going further with your work and trying to 
+change all SCSI driver instances of scsi_host_template to be const? I am 
+not sure if it has been attempted before...
 
 Thanks,
-Minghao
+John

@@ -2,106 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99C5B50E7E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:16:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6191D50E7F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244270AbiDYSSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 14:18:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41874 "EHLO
+        id S244283AbiDYSUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 14:20:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234471AbiDYSSw (ORCPT
+        with ESMTP id S244282AbiDYSU0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 14:18:52 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB63A3B03C
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:15:47 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id v4so6742146ljd.10
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:15:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SrA3q5vKgnexwjJdLQyRp9dPvv3gEmYky32fImzfWNM=;
-        b=tnNzFQymgy81reA0SdtSKkRmjtKzwlkfCUQvGH7B7FxvRgOP5O0G6gWrASkUUAJU78
-         Wrv6OHeQPTAlnp6uNUezR6QrCWigfM7Qr4RmaBg3sRQSfcwIrb2HBcHvu/yBqE8SKllL
-         2OQxjHqisYomqKtQHlUL8ut+3aPahVsRSbXBFlf3l9hGtetpIBN4LaCSRdudnhHMe2Sh
-         6b17AD3BIy7+qtvPATr8W9zwnaWK7/NvEwhSDicpgkY8BspqxcJn6DXfn5gMCkW4aQ/6
-         ShX40NDIuY11/907JjNsLCnq8av8gmc/2vW/C/pQy1VeINHEb6+y4wju9Wv7lASvLyDm
-         3J4w==
+        Mon, 25 Apr 2022 14:20:26 -0400
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204383B28B;
+        Mon, 25 Apr 2022 11:17:22 -0700 (PDT)
+Received: by mail-oi1-f170.google.com with SMTP id z8so18032318oix.3;
+        Mon, 25 Apr 2022 11:17:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SrA3q5vKgnexwjJdLQyRp9dPvv3gEmYky32fImzfWNM=;
-        b=63MXBr4E0IDZYJHco8GWYaWhLCey/unGUw9NGT5691LgLXaM0bO4uNLUPMIhZGHrFz
-         qdOVdpa7KaSmxdZzUFwBnY5wn4kq7WubYyBewCC4Cjm6NALBlHln+myXHdofAswlx7a1
-         Umhd4SoGJ15KxGmclPNgBPZn4k+Dyk/ObL9mtBnanqorSivDcziVqgfk3qwDU8xvUkrL
-         qlsUfwLMvFKWS/uX0Tk03hcXhwZyEQ6QjAcEaqBUHkwwL3W05OzNuwQRFCOYfWInDtz5
-         wg6ZhAtD0YuHOjNSybxauE/mm3Sx/idB/ztV0sizP/vYupJKgi5eAoP1o4wuXMSPIO86
-         121g==
-X-Gm-Message-State: AOAM532zCphH4iRcNx/r5APHqEIduOSOb6UJ+wpVDZmxOgkYZn+JKIiT
-        z6T9gS1t/Br7YWgGLDE5MhGxTRIaeE1doTfzieBqYw==
-X-Google-Smtp-Source: ABdhPJxEwBsQ97Hw9qzkEutYtpAQSiAjp3/B7GwVMw1cNq5pD2OtsI7/Yv6zprYNpd1nT+AQEBddlzn5NaXA2ilTuWU=
-X-Received: by 2002:a05:651c:553:b0:24f:18c1:d2a1 with SMTP id
- q19-20020a05651c055300b0024f18c1d2a1mr391342ljp.239.1650910545571; Mon, 25
- Apr 2022 11:15:45 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zK0XbZYFHIbn4YEvbtlTS5+ILlqbhfjpcFXsN6SS8C4=;
+        b=qghc5s1fMzwhPD2eX+cGr5ndUY5qbRTOgqxpsYHPMIRdH4ZAgf9b4IKEFC0zA1j9+m
+         FfJVMlv7l+KAmqrG/xPqsELWKetCDXIqYIbw89+mkdfyAX4TIvC0W/IoYIZSSp8E9g5k
+         62EvjUp21N7zF3gkCdntzkBAm5ArUqrDbJ/dB/vd9V+NKIOt4xW0GJ8XWMPm17m7vD6D
+         NFbPuE4dbV+UWGgUCLtyAF2OJ++cRiHbK1PgyRQFUINCuP/zZUh1oH6kxeJ2BXX0ktq/
+         DlaAbuJMkjCES7QDdMlKUTnMLXdgI9IzsZ+SK4PSTuXlRvh2qNtZUGROBQnZZ2+x8sbj
+         Cfyw==
+X-Gm-Message-State: AOAM532+Wnotiw99BN/Ga4voHDHoBwKIOfDzt2AgsNhlUwgi7VPYddPy
+        etQNplQ62izPgE26ac6rbg==
+X-Google-Smtp-Source: ABdhPJwpGMq3v6GY16e0pPz8kVCaVX6IjaGt3PcOCofp6hpO6qfoizLRg+SlvikHqN4Fd6Xv7H84Iw==
+X-Received: by 2002:a05:6808:302c:b0:2f9:41e0:26e6 with SMTP id ay44-20020a056808302c00b002f941e026e6mr8502192oib.151.1650910641329;
+        Mon, 25 Apr 2022 11:17:21 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id ed22-20020a056870b79600b000da32eab691sm3492657oab.23.2022.04.25.11.17.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 11:17:20 -0700 (PDT)
+Received: (nullmailer pid 4186706 invoked by uid 1000);
+        Mon, 25 Apr 2022 18:17:19 -0000
+Date:   Mon, 25 Apr 2022 13:17:19 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Markuss Broks <markuss.broks@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 3/5] dt-bindings: mfd: Add bindings for Silicon Mitus
+ SM5703 MFD
+Message-ID: <Ymblr1TdU/LZWXKM@robh.at.kernel.org>
+References: <20220423085319.483524-1-markuss.broks@gmail.com>
+ <20220423085319.483524-4-markuss.broks@gmail.com>
 MIME-Version: 1.0
-References: <20220424190811.1678416-1-masahiroy@kernel.org> <20220424190811.1678416-3-masahiroy@kernel.org>
-In-Reply-To: <20220424190811.1678416-3-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 25 Apr 2022 11:15:28 -0700
-Message-ID: <CAKwvOdnTh+qVRHsQ3YRrZ8b22wmfVUQ3eLd7R8VHJgNw7WA=MQ@mail.gmail.com>
-Subject: Re: [PATCH 02/27] modpost: do not write out any file when error occurred
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220423085319.483524-4-markuss.broks@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 24, 2022 at 12:09 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> If an error occurs, modpost will fail anyway. Do not write out
-> any content (, which might be invalid).
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-
-The callers could probably do less work before calling write_buf, too,
-but this is ok.
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
+On Sat, Apr 23, 2022 at 11:53:16AM +0300, Markuss Broks wrote:
+> This patch adds device-tree bindings for the Silicon Mitus
+> SM5703 MFD.
+> 
+> Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
 > ---
->
->  scripts/mod/modpost.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 141370ebbfd3..f0d48f65fb33 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -2333,6 +2333,9 @@ static void write_buf(struct buffer *b, const char *fname)
->  {
->         FILE *file;
->
-> +       if (error_occurred)
-> +               return;
-> +
->         file = fopen(fname, "w");
->         if (!file) {
->                 perror(fname);
-> --
-> 2.32.0
->
+>  .../bindings/mfd/siliconmitus,sm5703.yaml     | 84 +++++++++++++++++++
+>  1 file changed, 84 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml
 
-
--- 
-Thanks,
-~Nick Desaulniers
+Reviewed-by: Rob Herring <robh@kernel.org>

@@ -2,144 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D27BB50D831
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 06:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17EC750D863
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 06:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241006AbiDYEWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 00:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58856 "EHLO
+        id S241027AbiDYEeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 00:34:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240876AbiDYEWS (ORCPT
+        with ESMTP id S235076AbiDYEd5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 00:22:18 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89BB018361;
-        Sun, 24 Apr 2022 21:19:13 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id q75so9986891qke.6;
-        Sun, 24 Apr 2022 21:19:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=n9ZQHKz6biJiRkpy+CyyBSek4fjy21imjdDmRA8Vqgw=;
-        b=cmnAJJkP34bjVns2uO/86rkj5RTyiJm45vA+lAwj5O1/o0Y0+K/ZQz858LHcAhf/Wj
-         o33vdISVSpM7OTXmNjeVFiQpYuzIAYHFTIFr/IYykpp2p63xBZDt34cM8T6iFOltM7N8
-         BTBERl3etwNlD+7WAHI7TqcOWnntTf1hJQFhTL/j3Bi5MkhQ/TXngcZTR0s9OshoZPXm
-         opl0oTVWYCec68WYkUBR1YC+i11/f3aNqqKMbRxnS2w5mpyFYdu7LWtdLCtiaIerJMuz
-         ixhVtMKpJYI4FqxSKCKzcGJWRJb/98HN+0dlS3m8onn1Pv0gnODJbuUKWmbSuMFM8sXb
-         fDcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=n9ZQHKz6biJiRkpy+CyyBSek4fjy21imjdDmRA8Vqgw=;
-        b=FzTzXzfDOVo6KZWSvrVVJd7N1BnSky+E8rDcZPGUAOqoDnL2xO8qlgcu+Dfc5ZwGhk
-         PlBMZPdqDbT/btapAEVtwZdI8koUTD0s7Kq/GaSmau4J3coNwKtq6hry/sFEeIrs5LCt
-         Ev4GQN4Gvue/foWPINI+5fJXs3mKZaug4azUVrr7vFOFY1enjB0e+RTKZFlOX97m0I8g
-         wzBLYmTM+579t5KcOYvkXDdRe72lVAllMshkCrMX1eCsWDuqhduSQXjckwOZX0ntPkAh
-         FNViIbV8NB3RS57XZFKWrkeT6BZacEw2/TLZNJm+NJw5b/e4qko00n2BElcnzLij6aw+
-         L0Bg==
-X-Gm-Message-State: AOAM530MM6mwXT330QR99OYABeCH7+deLTWpsSMnvME1rTaGUcm0mMhY
-        RmjYMmFMdxxR+vMmwuYMAA==
-X-Google-Smtp-Source: ABdhPJxeI09oROlDGdyr6/aGBGZksem4gbPjLwqSs0XVQfJosORnc9e+ZOIM168DGIgRrzo9YgWVhA==
-X-Received: by 2002:a05:620a:13a5:b0:69e:e3b1:91a0 with SMTP id m5-20020a05620a13a500b0069ee3b191a0mr8995546qki.5.1650860352586;
-        Sun, 24 Apr 2022 21:19:12 -0700 (PDT)
-Received: from moria.home.lan (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id c21-20020ac87dd5000000b002f36347ddabsm3300316qte.77.2022.04.24.21.19.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 21:19:11 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 00:19:09 -0400
-From:   Kent Overstreet <kent.overstreet@gmail.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Joe Perches <joe@perches.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, hch@lst.de,
-        hannes@cmpxchg.org, akpm@linux-foundation.org,
-        linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-input@vger.kernel.org, roman.gushchin@linux.dev
-Subject: Re: [PATCH v2 1/8] lib/printbuf: New data structure for
- heap-allocated strings
-Message-ID: <20220425041909.hcyirjphrkhxz6hx@moria.home.lan>
-References: <20220421234837.3629927-1-kent.overstreet@gmail.com>
- <20220421234837.3629927-7-kent.overstreet@gmail.com>
- <fcaf18ed6efaafa6ca7df79712d9d317645215f8.camel@perches.com>
- <YmYLEovwj9BqeZQA@casper.infradead.org>
+        Mon, 25 Apr 2022 00:33:57 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655513F309;
+        Sun, 24 Apr 2022 21:30:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650861054; x=1682397054;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=89hd6kJ3nzrRo6JJusipc/9vdsoN37aiQs7fLUUIQdg=;
+  b=mn5LGffrr5SDiOVEciRw0vTjOg0pPbC7EGeMyG2IipO4LoN1uBSaDsSr
+   vyHv7qvfuxv0UukwvszEqJgNlpu+pngPPUXvYgq5tfNbtW5qXOB6Y/EXg
+   33qv+0IK0foeFVmLNx96vSvWG2WD1IVrRkCfwigZtu1NnUgFiHmJ1PeCi
+   uwQ6biOGdntNlOXDjcNjJIbwkbVvmM4BXCliAfSgYp7LLykHIMpJTZzZa
+   CZt/48cPCXqEeWx2saAQ+oGmIGjFG/exTrpPyyMu0Rg6LRO0IlDDe0CWS
+   HTjr7cDqSGk0zWo4w92PliWsnKr6gYvV2cNGCnG7lE10G+Xi+F7sgTNc5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="264933285"
+X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
+   d="scan'208";a="264933285"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 21:30:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
+   d="scan'208";a="512461881"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
+  by orsmga003.jf.intel.com with ESMTP; 24 Apr 2022 21:30:51 -0700
+Date:   Mon, 25 Apr 2022 12:23:10 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Nava kishore Manne <nava.manne@xilinx.com>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
+        michal.simek@xilinx.com, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        git@xilinx.com
+Subject: Re: [PATCH v6 2/5] fpga: fix for coding style issues
+Message-ID: <20220425042310.GA363075@yilunxu-OptiPlex-7050>
+References: <20220423170235.2115479-1-nava.manne@xilinx.com>
+ <20220423170235.2115479-3-nava.manne@xilinx.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YmYLEovwj9BqeZQA@casper.infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220423170235.2115479-3-nava.manne@xilinx.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 03:44:34AM +0100, Matthew Wilcox wrote:
-> On Sun, Apr 24, 2022 at 04:46:03PM -0700, Joe Perches wrote:
-> > > + * pr_human_readable_u64, pr_human_readable_s64: Print an integer with human
-> > > + * readable units.
-> > 
-> > Why not extend vsprintf for this using something like %pH[8|16|32|64] 
-> > or %pH[c|s|l|ll|uc|us|ul|ull] ?
+On Sat, Apr 23, 2022 at 10:32:32PM +0530, Nava kishore Manne wrote:
+> fixes the below checks reported by checkpatch.pl:
+> - Lines should not end with a '('
+> - Alignment should match open parenthesis
 > 
-> The %pX extension we have is _cute_, but ultimately a bad idea.  It
-> centralises all kinds of unrelated things in vsprintf.c, eg bdev_name()
-> and clock() and ip_addr_string().
+> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
 
-And it's not remotely discoverable. I didn't realize we had bdev_name()
-available as a format string until just now or I would've been using it!
+Acked-by: Xu Yilun <yilun.xu@intel.com>
 
-> Really, it's working around that we don't have something like Java's
-> StringBuffer (which I see both seq_buf and printbuf as attempting to
-> be).  So we have this primitive format string hack instead of exposing
-> methods like:
+> ---
+> Changes for v2:
+>                 -None.
+> Changes for v3:
+>                -Fixed similar issue exists in "drivers/fpga/*".
+> Changes for v4:
+>                -None.
+> Changes for v5:
+>               - Reduced the length of the 'fpga_mgr_write_init(...)' API
+>                 as suggested by Joe.
+>               - To align Include declaration and definition of APIs updated
+>                 the FPGA-region.h file as suggested by joe.
+>               - Fixed similar issue exists with of_fpga_region_parse_ov() API.
 > 
-> void dentry_string(struct strbuf *, struct dentry *);
-
-Exactly!
-
-> as an example,
->                 if (unlikely(ino == dir->i_ino)) {
->                         EXT4_ERROR_INODE(dir, "'%pd' linked to parent dir",
->                                          dentry);
->                         return ERR_PTR(-EFSCORRUPTED);
->                 }
+> Changes for v6:
+>               - Align the declaration and definition of APIs as suggested by
+>                 Yilun and Joe.
+>               - Move the 'count' handling logic into 'else' block as suggested
+>                 by Yilun.
 > 
-> would become something like:
+>  drivers/fpga/fpga-mgr.c          | 9 +++++----
+>  drivers/fpga/fpga-region.c       | 6 +++---
+>  drivers/fpga/of-fpga-region.c    | 6 +++---
+>  include/linux/fpga/fpga-region.h | 6 +++---
+>  4 files changed, 14 insertions(+), 13 deletions(-)
 > 
-> 		if (unlikely(ino == dir->i_ino)) {
-> 			struct strbuf strbuf;
-> 			strbuf_char(strbuf, '\'');
-> 			dentry_string(strbuf, dentry);
-> 			strbuf_string(strbuf, "' linked to parent dir");
-> 			EXT4_ERROR_INODE(dir, strbuf);
-> 			return ERR_PTR(-EFSCORRUPTED);
-> 		}
-> 
-> which isn't terribly nice, but C has sucky syntax for string
-> construction.  Other languages have done this better, including Rust.
-
-Over IRC just now you proposed "%p(%p)", dentry_name, dentry - I'm _really_
-liking this idea, especially if we can get glibc to take it.
-
-Then your ext4 example becomes just 
-
-	if (unlikely(ino == dir->i_ino)) {
-		EXT4_ERROR_INODE(dir, "'%p(%p)' linked to parent dir",
-				 dentry_name, dentry);
-		return ERR_PTR(-EFSCORRUPTED);
-	}
-
-And you can cscope to the pretty-printer! And dentry_name becomes just
-
-void dentry_name(struct printbuf *out, struct dentry *dentry)
-{
-	...
-}
-
-Which is quite a bit simpler than the current definition.
-
-Sweeeeeet.
+> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
+> index d49a9ce34568..24dee27c7897 100644
+> --- a/drivers/fpga/fpga-mgr.c
+> +++ b/drivers/fpga/fpga-mgr.c
+> @@ -148,11 +148,12 @@ static int fpga_mgr_write_init_buf(struct fpga_manager *mgr,
+>  	int ret;
+>  
+>  	mgr->state = FPGA_MGR_STATE_WRITE_INIT;
+> -	if (!mgr->mops->initial_header_size)
+> +	if (!mgr->mops->initial_header_size) {
+>  		ret = fpga_mgr_write_init(mgr, info, NULL, 0);
+> -	else
+> -		ret = fpga_mgr_write_init(
+> -		    mgr, info, buf, min(mgr->mops->initial_header_size, count));
+> +	} else {
+> +		count = min(mgr->mops->initial_header_size, count);
+> +		ret = fpga_mgr_write_init(mgr, info, buf, count);
+> +	}
+>  
+>  	if (ret) {
+>  		dev_err(&mgr->dev, "Error preparing FPGA for writing\n");
+> diff --git a/drivers/fpga/fpga-region.c b/drivers/fpga/fpga-region.c
+> index b0ac18de4885..485948e3c0db 100644
+> --- a/drivers/fpga/fpga-region.c
+> +++ b/drivers/fpga/fpga-region.c
+> @@ -18,9 +18,9 @@
+>  static DEFINE_IDA(fpga_region_ida);
+>  static struct class *fpga_region_class;
+>  
+> -struct fpga_region *fpga_region_class_find(
+> -	struct device *start, const void *data,
+> -	int (*match)(struct device *, const void *))
+> +struct fpga_region *
+> +fpga_region_class_find(struct device *start, const void *data,
+> +		       int (*match)(struct device *, const void *))
+>  {
+>  	struct device *dev;
+>  
+> diff --git a/drivers/fpga/of-fpga-region.c b/drivers/fpga/of-fpga-region.c
+> index 50b83057c048..a598d03626af 100644
+> --- a/drivers/fpga/of-fpga-region.c
+> +++ b/drivers/fpga/of-fpga-region.c
+> @@ -189,9 +189,9 @@ static int child_regions_with_firmware(struct device_node *overlay)
+>   *   fpga_image_info struct if there is an image to program.
+>   *   error code for invalid overlay.
+>   */
+> -static struct fpga_image_info *of_fpga_region_parse_ov(
+> -						struct fpga_region *region,
+> -						struct device_node *overlay)
+> +static struct fpga_image_info *
+> +of_fpga_region_parse_ov(struct fpga_region *region,
+> +			struct device_node *overlay)
+>  {
+>  	struct device *dev = &region->dev;
+>  	struct fpga_image_info *info;
+> diff --git a/include/linux/fpga/fpga-region.h b/include/linux/fpga/fpga-region.h
+> index 3b87f232425c..9d4d32909340 100644
+> --- a/include/linux/fpga/fpga-region.h
+> +++ b/include/linux/fpga/fpga-region.h
+> @@ -52,9 +52,9 @@ struct fpga_region {
+>  
+>  #define to_fpga_region(d) container_of(d, struct fpga_region, dev)
+>  
+> -struct fpga_region *fpga_region_class_find(
+> -	struct device *start, const void *data,
+> -	int (*match)(struct device *, const void *));
+> +struct fpga_region *
+> +fpga_region_class_find(struct device *start, const void *data,
+> +		       int (*match)(struct device *, const void *));
+>  
+>  int fpga_region_program_fpga(struct fpga_region *region);
+>  
+> -- 
+> 2.25.1

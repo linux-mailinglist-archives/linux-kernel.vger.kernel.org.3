@@ -2,101 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E410A50EC52
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 00:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2491050EC56
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 00:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235817AbiDYW7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 18:59:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51376 "EHLO
+        id S235812AbiDYXBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 19:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235741AbiDYW7o (ORCPT
+        with ESMTP id S234409AbiDYXBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 18:59:44 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D153A5ED
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 15:56:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650927400; x=1682463400;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=ED/M6gunqGqtqPcX2JL1MS5E+6aZpSysFeyzL8nmuak=;
-  b=PvdRdccY7IPxitaLZ+MuaYmROhLmZvSLbgikhQ+slWeMb/hdIH10kPHC
-   /t6ytJFGRZQlj99T3nyVXxfzABHK99gdVxmKmz4WuK7x6aacy8JJL6Yg8
-   DKnvw+K/dCEC3C4ynF7Hk4PnZlqoO/+sgGoROpyMq3oHd3PMkczaHsaOQ
-   KV2Y4F2KqeShFD7BSLgD/RXTD87+9IWFyeT1Bg24EohvlITKLSm91x/R5
-   bCEdxK7JVaLYjj7kVk38g1DJ3/IiYzwAra0wvGwRqcKHMqfqEDGwEXEVZ
-   4IG2ohMzDv2a4mdwT33QRz2dDVCVjJXbigamfg7BDnwGF/Ho42NsaYLJh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="247314428"
-X-IronPort-AV: E=Sophos;i="5.90,289,1643702400"; 
-   d="scan'208";a="247314428"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 15:56:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,289,1643702400"; 
-   d="scan'208";a="677530009"
-Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
-  by orsmga004.jf.intel.com with ESMTP; 25 Apr 2022 15:56:39 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Mon, 25 Apr 2022 15:56:38 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Mon, 25 Apr 2022 15:56:38 -0700
-Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
- fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.027;
- Mon, 25 Apr 2022 15:56:38 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     Borislav Petkov <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Smita Koralahalli Channabasappa 
-        <smita.koralahallichannabasappa@amd.com>,
-        Wei Huang <wei.huang2@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>
-Subject: RE: [PATCH] topology/sysfs: Hide PPIN on systems that do not support
- it.
-Thread-Topic: [PATCH] topology/sysfs: Hide PPIN on systems that do not support
- it.
-Thread-Index: AQHYSgHuySQXf0KA6k2XiES1Q5bhWK0BzeAA//+NOpA=
-Date:   Mon, 25 Apr 2022 22:56:38 +0000
-Message-ID: <f7cb74f128e34b67999ba87a21897f70@intel.com>
-References: <Yfhbj7Q99dqRIYaL@zn.tnic>
-        <20220406220150.63855-1-tony.luck@intel.com>
- <20220425154616.a0e38aea35649d13d5afb5d4@linux-foundation.org>
-In-Reply-To: <20220425154616.a0e38aea35649d13d5afb5d4@linux-foundation.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.401.20
-x-originating-ip: [10.1.200.100]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 25 Apr 2022 19:01:44 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788293A5F5
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 15:58:36 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id u6-20020a17090a1f0600b001d86bd69427so767062pja.5
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 15:58:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/I7oaQmzvZvVLsaaj3AYps814z1htG5kX5EnwlbSP44=;
+        b=RviRw+YceB7Rg0blJFW8YvIVKwTDqm1qJuVwiHNXPeIr0r53aLUL9STDSq8ck0GOO/
+         KG9sk+owSOOf+daD4KNmj99m91Feb2diJ6VP1QH2g2QL/o19QIoLgA7QKvPqzaDz4bNv
+         6ZH6LQ8Ueklr5M+iHrjRP2+J4HVNfaRemwp4Z23NanMXK87Nkd2KkkLfS9vyBuwIc3Ox
+         2gGO0goYLRUnrx8doguglL1Uqlddi8IxSv0B4yOv+hexy0kWl9cHWCXTT4DJ6TkZYmw9
+         NOrkKG1jCvOcIxCHK8k4hq6LYyEtZ4jqfNMy4Vx0QR6MnzjFEiUeCLrczPv6Uv/50zUz
+         xnfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=/I7oaQmzvZvVLsaaj3AYps814z1htG5kX5EnwlbSP44=;
+        b=M9/SbsD/M6vn5DhfbEkWmBjyN0BkI21zkmNS3OcjOC9+Kj1iNgzWHUE4xlDFplH+kJ
+         OPsUU2mwA3zA2tJDmAbCxFvV3TCDDBoVUb9KlteQPmfbGw7DgS+RDbziIq+gmPV8MWp4
+         64NqUoMF9dSlnfOu2Yj+OyEWG6rsm8QkB7CeA0qhe3vxYmEYJve87e7JHOXTTWfUU8hc
+         f9JQUbQVpFdARR7GwIWPeGCrzkDr2uCaVAxS7BvvIiJ2R3VqGTYgQdbeCAvJPgQ+7/Ds
+         a9f9InKGG1j4ju+Nh7rhpm7Km48atT07Eq3SZb6Nc9kcxlqF9ErS/UJi25EwatSoQKgF
+         6rYw==
+X-Gm-Message-State: AOAM531Wvc5FPlEjOSKT0v8psLFcFIVWpm2afnSQ/5GxciXyI7A8i2C+
+        Vcy69vv7sa1j3UK6mTqCs0qQFCEr7L4=
+X-Google-Smtp-Source: ABdhPJyCbn+0oNbCmdUD9RQa98a4NgJ97TLtDUYmc+7Shrbbk6/niJItR5fzXqzBIwnDoWdBPMXXUw==
+X-Received: by 2002:a17:90a:550e:b0:1cd:e722:8b82 with SMTP id b14-20020a17090a550e00b001cde7228b82mr34310226pji.223.1650927515892;
+        Mon, 25 Apr 2022 15:58:35 -0700 (PDT)
+Received: from google.com ([2620:15c:211:201:d773:e034:d79d:ca70])
+        by smtp.gmail.com with ESMTPSA id w129-20020a628287000000b0050d4246fbedsm4090549pfd.187.2022.04.25.15.58.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 15:58:35 -0700 (PDT)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Mon, 25 Apr 2022 15:58:33 -0700
+From:   Minchan Kim <minchan@kernel.org>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>
+Subject: Re: [RFC PATCH 0/6] Drain remote per-cpu directly
+Message-ID: <YmcnmZBtZEgJrrUv@google.com>
+References: <20220420095906.27349-1-mgorman@techsingularity.net>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220420095906.27349-1-mgorman@techsingularity.net>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> I suggest this be fixed in the topology_ppin() stub implementation.  Do
-> it as a nice inlined C function which avoids such problems.  Rather
-> than as a crappy macro which causes them...
+On Wed, Apr 20, 2022 at 10:59:00AM +0100, Mel Gorman wrote:
+> This series has the same intent as Nicolas' series "mm/page_alloc: Remote
+> per-cpu lists drain support" -- avoid interference of a high priority
+> task due to a workqueue item draining per-cpu page lists. While many
+> workloads can tolerate a brief interruption, it may be cause a real-time
+> task runnning on a NOHZ_FULL CPU to miss a deadline and at minimum,
+> the draining in non-deterministic.
 
-Greg already fixed this in his tree by dropping the local variable.
+Yeah, the non-deterministic is a problem. I saw the kworker-based draining
+takes 100+ms(up to 300ms observed) sometimes in alloc_contig_range if CPUs
+are heavily loaded.
 
-Fix should propagate to linux-next today.
+I am not sure Nicolas already observed. it's not only problem of
+per_cpu_pages but it is also lru_pvecs (pagevec) draining.
+Do we need to introduce similar(allow remote drainning with spin_lock)
+solution for pagevec?
 
--Tony
-
+> 
+> Currently an IRQ-safe local_lock protects the page allocator per-cpu lists.
+> The local_lock on its own prevents migration and the IRQ disabling protects
+> from corruption due to an interrupt arriving while a page allocation is
+> in progress. The locking is inherently unsafe for remote access unless
+> the CPU is hot-removed.
+> 
+> This series adjusts the locking. A spin-lock is added to struct
+> per_cpu_pages to protect the list contents while local_lock_irq continues
+> to prevent migration and IRQ reentry. This allows a remote CPU to safely
+> drain a remote per-cpu list.
+> 
+> This series is a partial series. Follow-on work would allow the
+> local_irq_save to be converted to a local_irq to avoid IRQs being
+> disabled/enabled in most cases. However, there are enough corner cases
+> that it deserves a series on its own separated by one kernel release and
+> the priority right now is to avoid interference of high priority tasks.
+> 
+> Patch 1 is a cosmetic patch to clarify when page->lru is storing buddy pages
+> 	and when it is storing per-cpu pages.
+> 
+> Patch 2 shrinks per_cpu_pages to make room for a spin lock. Strictly speaking
+> 	this is not necessary but it avoids per_cpu_pages consuming another
+> 	cache line.
+> 
+> Patch 3 is a preparation patch to avoid code duplication.
+> 
+> Patch 4 is a simple micro-optimisation that improves code flow necessary for
+> 	a later patch to avoid code duplication.
+> 
+> Patch 5 uses a spin_lock to protect the per_cpu_pages contents while still
+> 	relying on local_lock to prevent migration, stabilise the pcp
+> 	lookup and prevent IRQ reentrancy.
+> 
+> Patch 6 remote drains per-cpu pages directly instead of using a workqueue.
+> 
+>  include/linux/mm_types.h |   5 +
+>  include/linux/mmzone.h   |  12 +-
+>  mm/page_alloc.c          | 333 ++++++++++++++++++++++++---------------
+>  3 files changed, 222 insertions(+), 128 deletions(-)
+> 
+> -- 
+> 2.34.1
+> 
+> 

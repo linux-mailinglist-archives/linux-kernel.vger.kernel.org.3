@@ -2,66 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 589B750DB4F
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:37:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFDEA50DB55
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:37:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235277AbiDYIkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 04:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36718 "EHLO
+        id S236145AbiDYIkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 04:40:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231161AbiDYIkB (ORCPT
+        with ESMTP id S231917AbiDYIkx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 04:40:01 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFDC5689BB
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:36:56 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id c12so25395392plr.6
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:36:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=H6a9DJnLZoyjSQqOJbXpXtPYv+DY5RZMT8ENRg4/RRI=;
-        b=g5zrZirvfr2sxgv+XDrJRRRSZcWaqfvFpzLqxrmEp7xkC39qL/RVOOXr69CMvQCGeV
-         /gIrCbN+uEgn37C7qiUE3SHKxyg+dJk9odyEDO/Lakj7Pveh9RzJuNqUnzg/wQxFDw6E
-         uaY6v7d9oJ+k3czUhRDUAGkU18PJd2xrPWA4gzHMn1zxjBdoiHDtfO3Up8fcpBGQhrlj
-         tD2XyqZW1SiX90hLF/xqG9Rwgc8BZbPTaNGdtMAgkOoBzD+ug/+7AyZhStq7X6BE5Y0C
-         klb7pyBiFLprePXeABQy1IT53YaY+r9Xqr2g1xCWAy3+eT8SHStdUuA6dzu0dcc1WG/L
-         LFLQ==
+        Mon, 25 Apr 2022 04:40:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A9F7C6A40D
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:37:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650875868;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hcJjktltsy20pk/1TUGpfeSXdGLoP34V6e5SW63r+UU=;
+        b=jUmP/IhbgGNglEKcaXPUaH1NKp/VZBxGpTIIurcnSmyrAffLcYVJ3UIMkz4NKi1hmcKGGq
+        LJXSLyjVVYioETCKI9TYvQTb5anUrNJkILliUQUfZ7Jt+WXgYqJjkzGjKa4EGLfdijjCdN
+        aH56pC2y86SXWWyaPgrPlAhAZ3yssHw=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-633-oHr1IlvAM0KcAAu83NgxMQ-1; Mon, 25 Apr 2022 04:37:46 -0400
+X-MC-Unique: oHr1IlvAM0KcAAu83NgxMQ-1
+Received: by mail-wm1-f72.google.com with SMTP id g13-20020a1c4e0d000000b0038eba16aa46so6878290wmh.7
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:37:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=H6a9DJnLZoyjSQqOJbXpXtPYv+DY5RZMT8ENRg4/RRI=;
-        b=5fIVsvPB5rypMwrg1QjUTHDvajWGMWk+1J6z74Svwm/5KR7SI8uH+7RruQKZci8zX3
-         PTu9NhNitL1hNY8sWHuzLkc0LVIeslkWuTJi9LewTbiWKULNeMIevixKjToq+ELhgrne
-         13jjeTT3ztL9upqFprYlmYsUDqLW4YP2GbaSYytY1QkRpwLsCpflyYo/q/dCUzm9bmVD
-         a9CS0egXBPNMKRwrpeRsWFZQv3DTga4KD2v5C6zwAN15nSk1bzxB2ZYvBrpL5VCw8deL
-         RhV41wFgnT455KbKvfRCxV1GESxs7GCmh4f1+0/S50BM+UxkmIUtaS2i5tsWMw6XR0x5
-         9IEA==
-X-Gm-Message-State: AOAM531o80wvWcc5Te7c1R/cMmIuKLpjOBWco80rPTrzFbt2J5+YSSfQ
-        8X+UElEeG0y4D+NOzb4i+yI=
-X-Google-Smtp-Source: ABdhPJxghzCfW0thhWYjfw24Amn1z8l+dauqX8/znkFHaiZCi6E5K5+kGscszYD9cjDbVz42ddGOVA==
-X-Received: by 2002:a17:902:7d83:b0:158:c7e9:1ff3 with SMTP id a3-20020a1709027d8300b00158c7e91ff3mr17117826plm.55.1650875816320;
-        Mon, 25 Apr 2022 01:36:56 -0700 (PDT)
-Received: from localhost.localdomain ([103.84.139.165])
-        by smtp.gmail.com with ESMTPSA id b7-20020a056a00114700b004f7be3231d6sm10826176pfm.7.2022.04.25.01.36.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 01:36:55 -0700 (PDT)
-From:   Hangyu Hua <hbh25y@gmail.com>
-To:     yuq825@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
-        andrey.grodzovsky@amd.com
-Cc:     dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>
-Subject: [PATCH] gpu: drm: remove redundant dma_fence_put() when drm_sched_job_add_dependency() fails
-Date:   Mon, 25 Apr 2022 16:36:45 +0800
-Message-Id: <20220425083645.25922-1-hbh25y@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=hcJjktltsy20pk/1TUGpfeSXdGLoP34V6e5SW63r+UU=;
+        b=VAQZ4Wmfww3uY+1XAutoTy3nrNDOXU+8Brsq62NwqxYtFhvyaBwDca20Fu8OUVjXHI
+         Lsq+mwyeWoLKV5S+VJ2y+NzL0ExuZRQOmvhUGEeoBq1JazvOKY3Zei1R1xT5kCSzYuP5
+         kNyd1BNBSg0jpV1aXXmE8V22B3FZzZ3QCknTu4t6Sa3r0lf9TD34OnVOlxA8boVOKJ1V
+         ub0wH0zy5B+C2aa6waN8n82ZektFv/7/rEOEZB4maHH41FXG1lNCfjMRlSuKb9xrnsX6
+         ZWthiH2gMV/RcCekzUfot3MCHAqoJclEQgfu/e+1Nuq0uEbGyERrVEMl/nHhkv4789/Z
+         ggqQ==
+X-Gm-Message-State: AOAM533ITlHVZBEmoha3MkdS1cVLXWnEnoHGZBDA4BF52eisGYm7eiFe
+        Uq3lyjGk45R30/NcsJ8kIzlpLVe5eHug7Ou1wzgMgFQwYtbfDbpath7aOqaIVy/OmTs1qvbw00i
+        EhWyMKH0Pm4j88xQQ7X6m/mEI
+X-Received: by 2002:a1c:3b89:0:b0:38e:b37f:52d with SMTP id i131-20020a1c3b89000000b0038eb37f052dmr15325218wma.197.1650875865759;
+        Mon, 25 Apr 2022 01:37:45 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwkDkiuHJY5bNGU58CjLV3AycTkBgdIf0DyWp+hIAcCSv4pw19dJ8Ap5RCImavOptKADqXHsg==
+X-Received: by 2002:a1c:3b89:0:b0:38e:b37f:52d with SMTP id i131-20020a1c3b89000000b0038eb37f052dmr15325190wma.197.1650875865524;
+        Mon, 25 Apr 2022 01:37:45 -0700 (PDT)
+Received: from [192.168.1.129] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id d29-20020adf9b9d000000b0020ada099ed5sm2698552wrc.17.2022.04.25.01.37.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Apr 2022 01:37:45 -0700 (PDT)
+Message-ID: <41362e99-820c-727c-019a-11ec5f38083c@redhat.com>
+Date:   Mon, 25 Apr 2022 10:37:43 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3 3/5] fbdev: Restart conflicting fb removal loop when
+ unregistering devices
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        linux-fbdev@vger.kernel.org
+References: <20220420085303.100654-1-javierm@redhat.com>
+ <20220420085303.100654-4-javierm@redhat.com>
+ <44804419-0e83-b584-96d9-a35939b715bf@suse.de>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <44804419-0e83-b584-96d9-a35939b715bf@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,42 +92,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When drm_sched_job_add_dependency() fails, dma_fence_put() will be called
-internally. Calling it again after drm_sched_job_add_dependency() finishes
-may result in a dangling pointer.
+Hello Thomas,
 
-Fix this by removing redundant dma_fence_put().
+Thanks for the feedback.
 
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
----
- drivers/gpu/drm/lima/lima_gem.c        | 1 -
- drivers/gpu/drm/scheduler/sched_main.c | 1 -
- 2 files changed, 2 deletions(-)
+On 4/25/22 10:27, Thomas Zimmermann wrote:
+> Hi
+> 
+> Am 20.04.22 um 10:53 schrieb Javier Martinez Canillas:
+>> Drivers that want to remove registered conflicting framebuffers prior to
+>> register their own framebuffer, calls remove_conflicting_framebuffers().
+>>
+>> This function takes the registration_lock mutex, to prevent a races when
+>> drivers register framebuffer devices. But if a conflicting framebuffer
+>> device is found, the underlaying platform device is unregistered and this
+>> will lead to the platform driver .remove callback to be called, which in
+>> turn will call to the unregister_framebuffer() that takes the same lock.
+>>
+>> To prevent this, a struct fb_info.forced_out field was used as indication
+>> to unregister_framebuffer() whether the mutex has to be grabbed or not.
+>>
+>> A cleaner solution is to drop the lock before platform_device_unregister()
+>> so unregister_framebuffer() can take it when called from the fbdev driver,
+>> and just grab the lock again after the device has been registered and do
+>> a removal loop restart.
+> 
+> I don't see how this patch improves the situation. So far, 
+> do_remove_conflicting_framebuffers() had no business in maintaining 
+> locks. And now it's doing this in in a goto-loop where it keeps 
+> getting/dropping locks.  That's asking for bugs IMHO.
+>
 
-diff --git a/drivers/gpu/drm/lima/lima_gem.c b/drivers/gpu/drm/lima/lima_gem.c
-index 55bb1ec3c4f7..99c8e7f6bb1c 100644
---- a/drivers/gpu/drm/lima/lima_gem.c
-+++ b/drivers/gpu/drm/lima/lima_gem.c
-@@ -291,7 +291,6 @@ static int lima_gem_add_deps(struct drm_file *file, struct lima_submit *submit)
- 
- 		err = drm_sched_job_add_dependency(&submit->task->base, fence);
- 		if (err) {
--			dma_fence_put(fence);
- 			return err;
- 		}
- 	}
-diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
-index b81fceb0b8a2..ebab9eca37a8 100644
---- a/drivers/gpu/drm/scheduler/sched_main.c
-+++ b/drivers/gpu/drm/scheduler/sched_main.c
-@@ -708,7 +708,6 @@ int drm_sched_job_add_implicit_dependencies(struct drm_sched_job *job,
- 		dma_fence_get(fence);
- 		ret = drm_sched_job_add_dependency(job, fence);
- 		if (ret) {
--			dma_fence_put(fence);
- 			return ret;
- 		}
- 	}
+It's true that do_remove_conflicting_framebuffers() gets more complicated
+with all the locks release/re-acquire but OTOH unregister_framebuffer()
+doesn't do conditionally locking, and more importantly the drivers .remove
+callback isn't called with the lock held, which IMHO is also quite fragile.
+
 -- 
-2.25.1
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 

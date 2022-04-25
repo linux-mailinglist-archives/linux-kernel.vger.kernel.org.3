@@ -2,146 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1948850EC97
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 01:32:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 502B950ECA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 01:32:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237912AbiDYXfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 19:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41146 "EHLO
+        id S238141AbiDYXfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 19:35:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237847AbiDYXfB (ORCPT
+        with ESMTP id S238099AbiDYXfP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 19:35:01 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5A86AA6B
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 16:31:54 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id e4so18936879oif.2
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 16:31:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=NMTL6L2VrzguuHoJj+eS47MoD+AdGFAgjBbMQT1LAfk=;
-        b=DsJPHn9qlvhjepUxbe1mS4y4tphW5Ixi0wICkYVkrvZjBzOlp4U0QpwZBvCZCJOCcH
-         X64tx2ZQl4sSrhMxuDciBCTq6RvjAPoN9ox7lUQRRD6OAMf1uzRhxRSdgfUpmEKJVo8P
-         NjDbGwEZ9WFD0E/8UJwM+lP1EbEJBD0JJiKas=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=NMTL6L2VrzguuHoJj+eS47MoD+AdGFAgjBbMQT1LAfk=;
-        b=2rG5cV62ub56u33edHFTRkPmEy/ty/+Z0lcL7ZgcuxqmIcEoGFPuvXODH7e5LfDqVd
-         yi1Bn1SHHHyf8ruYIhLUXHVuxHm3tLX5vSbOiApk0637EMnc5L01EkpGALQROvgS9JxX
-         MTyGrRaoYviG/9RgKs71BLKmPzA4ezhyfeBuAvK0BhR3RFpIE7KZGoTipO7OHRYAjMzT
-         xncEMp4nRTKkP1D0VNC1Oyg2AEvyNmY+ORCWhRYMM+DOO95cmRELKeIit3Iyegr54coC
-         BEg3aSetm2O09SEiq2ge5VDnSgxcmKI2IBNct+lHQ9dd8QhloIN62ZoBoC0gOFfgl04j
-         f68A==
-X-Gm-Message-State: AOAM532cdvkiRJlDhI9yVBWXkzGIAgYDGGix+CvC0QEE+1CkDEDGHuPg
-        5DGIyrEonBeW7idLI+T2GMTHWajdn/nFetaLMtbeCg==
-X-Google-Smtp-Source: ABdhPJyAqAt/Vs4U0AzeuQNzAdOSMhGGm8q3VNwihxuNmza3IIrOZ8hMP07I64/ydEqXYcAhOUYiz1eKsHnwvkf4mSQ=
-X-Received: by 2002:a05:6808:1296:b0:325:8fb:68f3 with SMTP id
- a22-20020a056808129600b0032508fb68f3mr5568052oiw.193.1650929514075; Mon, 25
- Apr 2022 16:31:54 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 25 Apr 2022 16:31:53 -0700
+        Mon, 25 Apr 2022 19:35:15 -0400
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B656D3AC;
+        Mon, 25 Apr 2022 16:32:09 -0700 (PDT)
+Received: from [192.168.192.153] (unknown [50.126.114.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id A8B6B3F62C;
+        Mon, 25 Apr 2022 23:32:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1650929527;
+        bh=37RT2Gxa/Ye1KUZxv0+gJqpDi1jYOdYJ7QppPkL8Dug=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=dqOdzcPtIr9P6Zjcv//FuUiVDh7avdcYftvc7cvxXCjw8uDiwYGaRLK7BfG9Mf8ah
+         p3AmVnQXrO6TswcEBpfUt0FNGfYlK6ex+dx5zr+95PkKWb6HAGAtLnx+gNLn03kw1O
+         NuRO3VE4may+zyrOS7ekbZovRuLvSG3cHecEvgajJyh5noQft4o9GYpuctDXeDGYBw
+         JMuhWvlRmxClRh9jDc3PEAxoGuL//EXR1DloZqDLHIWoWMxrfU7e96C9/GNWQa6b5w
+         yEyfcf5zNvh+ycoiku5vwxAlqTSICe9svVOM9Z3ml+5llZhynkARHo05F21rGUnvJE
+         wG6qyu5emBBdw==
+Message-ID: <c196795a-910a-1e70-4809-c96717767e39@canonical.com>
+Date:   Mon, 25 Apr 2022 16:32:04 -0700
 MIME-Version: 1.0
-In-Reply-To: <20220425153650.1.Iedd71976a78d53c301ce0134832de95a989c9195@changeid>
-References: <20220425153650.1.Iedd71976a78d53c301ce0134832de95a989c9195@changeid>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Mon, 25 Apr 2022 16:31:53 -0700
-Message-ID: <CAE-0n52OdZLLRKot+eu4YN9Tu3p4Lau0NR0vTbwfGiHhBCmZQw@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: qcom: sc7280: eDP for herobrine boards
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>
-Cc:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@chromium.org>, quic_kalyant@quicinc.com,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v35 22/29] Audit: Keep multiple LSM data in audit_names
+Content-Language: en-US
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        casey.schaufler@intel.com, jmorris@namei.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
+Cc:     linux-audit@redhat.com, keescook@chromium.org,
+        penguin-kernel@i-love.sakura.ne.jp, paul@paul-moore.com,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org
+References: <20220418145945.38797-1-casey@schaufler-ca.com>
+ <20220418145945.38797-23-casey@schaufler-ca.com>
+From:   John Johansen <john.johansen@canonical.com>
+Organization: Canonical
+In-Reply-To: <20220418145945.38797-23-casey@schaufler-ca.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Douglas Anderson (2022-04-25 15:36:55)
-> This change adds in eDP for herobrine boards, splitting up amongst the
+On 4/18/22 07:59, Casey Schaufler wrote:
+> Replace the osid field in the audit_names structure
+> with a lsmblob structure. This accomodates the use
+> of an lsmblob in security_audit_rule_match() and
+> security_inode_getsecid().
+> 
+> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> Acked-by: Paul Moore <paul@paul-moore.com>
+> ---
+>  kernel/audit.h   |  2 +-
+>  kernel/auditsc.c | 22 ++++++++--------------
+>  2 files changed, 9 insertions(+), 15 deletions(-)
+> 
+> diff --git a/kernel/audit.h b/kernel/audit.h
+> index 316fac62d5f7..4af63e7dde17 100644
+> --- a/kernel/audit.h
+> +++ b/kernel/audit.h
+> @@ -82,7 +82,7 @@ struct audit_names {
+>  	kuid_t			uid;
+>  	kgid_t			gid;
+>  	dev_t			rdev;
+> -	u32			osid;
+> +	struct lsmblob		lsmblob;
+>  	struct audit_cap_data	fcap;
+>  	unsigned int		fcap_ver;
+>  	unsigned char		type;		/* record type */
+> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+> index 231631f61550..6fe9f2525fc1 100644
+> --- a/kernel/auditsc.c
+> +++ b/kernel/auditsc.c
+> @@ -700,17 +700,16 @@ static int audit_filter_rules(struct task_struct *tsk,
+>  					 * lsmblob, which happens later in
+>  					 * this patch set.
+>  					 */
+> -					lsmblob_init(&blob, name->osid);
+>  					result = security_audit_rule_match(
+> -								&blob,
+> +								&name->lsmblob,
+>  								f->type,
+>  								f->op,
+>  								&f->lsm_rules);
+>  				} else if (ctx) {
+>  					list_for_each_entry(n, &ctx->names_list, list) {
+> -						lsmblob_init(&blob, n->osid);
+>  						if (security_audit_rule_match(
+> -							&blob, f->type, f->op,
+> +							&n->lsmblob,
+> +							f->type, f->op,
+>  							&f->lsm_rules)) {
+>  							++result;
+>  							break;
+> @@ -1589,13 +1588,12 @@ static void audit_log_name(struct audit_context *context, struct audit_names *n,
+>  				 from_kgid(&init_user_ns, n->gid),
+>  				 MAJOR(n->rdev),
+>  				 MINOR(n->rdev));
+> -	if (n->osid != 0) {
+> -		struct lsmblob blob;
+> +	if (lsmblob_is_set(&n->lsmblob)) {
+>  		struct lsmcontext lsmctx;
+>  
+> -		lsmblob_init(&blob, n->osid);
+> -		if (security_secid_to_secctx(&blob, &lsmctx, LSMBLOB_FIRST)) {
+> -			audit_log_format(ab, " osid=%u", n->osid);
+> +		if (security_secid_to_secctx(&n->lsmblob, &lsmctx,
+> +					     LSMBLOB_FIRST)) {
+> +			audit_log_format(ab, " osid=?");
 
-Imperative mood please.
+is there something better we can do here? This feels like a regression
 
- $ git grep "This patch" -- Documentation/process/
+>  			if (call_panic)
+>  				*call_panic = 2;
+>  		} else {
+> @@ -2297,17 +2295,13 @@ static void audit_copy_inode(struct audit_names *name,
+>  			     const struct dentry *dentry,
+>  			     struct inode *inode, unsigned int flags)
+>  {
+> -	struct lsmblob blob;
+> -
+>  	name->ino   = inode->i_ino;
+>  	name->dev   = inode->i_sb->s_dev;
+>  	name->mode  = inode->i_mode;
+>  	name->uid   = inode->i_uid;
+>  	name->gid   = inode->i_gid;
+>  	name->rdev  = inode->i_rdev;
+> -	security_inode_getsecid(inode, &blob);
+> -	/* scaffolding until osid is updated */
+> -	name->osid = lsmblob_first(&blob);
+> +	security_inode_getsecid(inode, &name->lsmblob);
+>  	if (flags & AUDIT_INODE_NOEVAL) {
+>  		name->fcap_ver = -1;
+>  		return;
 
-Add eDP support to herobrine boards, splitting up ..
-
-> different files as makes sense. Rationale for the current split of
-> things:
-> * The eDP connector itself is on qcard. However, not all devices with
->   a qcard will use an eDP panel. Some might use MIPI and, presumably,
->   someone could build a device with qcard that had no display at all.
-> * The qcard provides a PWM for backlight that goes to the eDP
->   connector. This PWM is also is provided to the board and it's
-
-s/also is/also/
-
->   expected that it would be used as the backlight PWM even for
->   herobrine devices with MIPI displays.
-[...]
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-> index d58045dd7334..769d440d1917 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-> @@ -367,6 +367,14 @@ &vreg_l2c_1p8 {
->
->  /* ADDITIONS TO NODES DEFINED IN PARENT DEVICE TREE FILES */
->
-> +&edp_panel {
-> +       /*
-> +        * Now that we've defined which power supply we give to qcard for
-> +        * eDP we can hook it up in the panel node.
-
-I don't understand this comment. "Now" triggers my brain to think that
-something happened when this line was written. But maybe it means
-something was done earlier in the file? When is "now"? I don't really
-know. Maybe this is clearer:
-
-	/* Our board provides power to the qcard for the eDP panel. */
-
-> +        */
-> +       power-supply = <&vreg_edp_3p3>;
-> +};
-> +
->  ap_sar_sensor_i2c: &i2c1 {
->         clock-frequency = <400000>;
->         status = "disabled";
-> @@ -429,6 +445,20 @@ &pcie1 {
->         vddpe-3v3-supply = <&pp3300_ssd>;
->  };
->
-> +&pm8350c_pwm {
-> +       status = "okay";
-> +};
-> +
-> +&pm8350c_pwm_backlight {
-> +       status = "okay";
-> +
-> +       /*
-> +        * Now that we've defined which power supply we give to qcard for
-> +        * backlight we can hook it up in the panel node.
-
-Same comment.
-
-> +        */
-> +       power-supply = <&vreg_edp_bl>;
-> +};
-> +

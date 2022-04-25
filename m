@@ -2,180 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A63D50E131
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:10:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3923750E135
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:11:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237381AbiDYNNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 09:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47120 "EHLO
+        id S241192AbiDYNOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 09:14:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235807AbiDYNNe (ORCPT
+        with ESMTP id S239409AbiDYNNx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 09:13:34 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118553584D
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 06:10:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1650892227; x=1682428227;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=CEWV/Z+GlppMECo73UC2kLNULAnWi/wSuZ1HeiCWPO0=;
-  b=YYUoJB6NnW35XNyw+ip0SGaYvgjkFCdfjr9t1OK6lhZpcVC1sjd0V+sZ
-   ZC2sXFR7l2tIK8p3vymIU9pQ4SHVz0KK2z43d/lMebcFfiuenXi/7ypm/
-   2OF4Dz4eNtuhdlTXprzuDr3WNPLzMA86dwzF345uve3FhrqCvCXzagtpJ
-   c=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 25 Apr 2022 06:10:26 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 06:10:25 -0700
-Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 25 Apr 2022 06:10:22 -0700
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <tglx@linutronix.de>, <sboyd@kernel.org>, <rafael@kernel.org>,
-        <johannes@sipsolutions.net>, <gregkh@linuxfoundation.org>,
-        Mukesh Ojha <quic_mojha@quicinc.com>
-Subject: [PATCH v2 ] devcoredump : Serialize devcd_del work
-Date:   Mon, 25 Apr 2022 18:39:53 +0530
-Message-ID: <1650892193-12888-1-git-send-email-quic_mojha@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Mon, 25 Apr 2022 09:13:53 -0400
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FE8D36150;
+        Mon, 25 Apr 2022 06:10:49 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-2f16645872fso147339497b3.4;
+        Mon, 25 Apr 2022 06:10:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=i7c2v7QR8oXgGlZvD0BmKxXARsR8kLJUPUUmnl0AnKQ=;
+        b=ulz94szbdz1I+5MSS8TbfBzLubnZN+UXGjYz3sXuuBQdDtA8YRb8v++eD1dkKDq5dK
+         ary5jRkwplNPwdLEqwS0DP6g9Nd1uy8CGeawm2j4UKwF+FwXj6f707qkC+Lapf+7oKjA
+         Iif4oLU1F7E5KzK7Nm5RmBcXZf2OpMbTZUU0vK1I96dnr1UpUSiRoiTvZcZYICgNU0Dz
+         uHO1Cn/XTE7GZfGlTMbd0Wf6ChVP8D5KzlT9MNVLqxtHK1rFmdvosGrhLHCzh6JCNtId
+         QuAXUokHQQVqmAR59x5vDqkjtgKl0zItBGeOFiEUEQC34sGS1QAVN+oyleLfsqFqIQh2
+         CHuw==
+X-Gm-Message-State: AOAM532Js7khIC4G/SWE/aAVpRw/1Gh6LXDgna0kP8Uh88fKFSfajdCS
+        5mbX9ozcA7EdrBdhvYYVLS2hjGkcN9N8R4aOGvA=
+X-Google-Smtp-Source: ABdhPJzsxLOP2iOHQgzmaNGQJ4i3z8UrQRDVythXRgq2c7oCq8OfkYAOoBruduWV8gK7jPJqYVVhITVm+n/+AaJlPOk=
+X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
+ b145-20020a811b97000000b002db640f49d8mr16189906ywb.326.1650892248584; Mon, 25
+ Apr 2022 06:10:48 -0700 (PDT)
 MIME-Version: 1.0
+References: <4350dfbf785cd482d3fafa72b2b49c83102df3ce.1650386317.git.pawan.kumar.gupta@linux.intel.com>
+ <CAJZ5v0gQCzmnMX_1_6TCiexARJ99rtLKg58Ewi-xwUKUrGOQzg@mail.gmail.com> <20220422215132.3lmmgzkzhw36iabu@guptapa-desk>
+In-Reply-To: <20220422215132.3lmmgzkzhw36iabu@guptapa-desk>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 25 Apr 2022 15:10:33 +0200
+Message-ID: <CAJZ5v0jXUpGRh-NBLZa=Cvj=mN7vOV30A_WcQyMJW+w0yjOyeg@mail.gmail.com>
+Subject: Re: [PATCH] x86/cpu: Load microcode during restore_processor_state()
+To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Pavel Machek <pavel@ucw.cz>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Pelton, Kyle D" <kyle.d.pelton@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.47.97.222)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In following scenario(diagram), when one thread X running dev_coredumpm() adds devcd
-device to the framework which sends uevent notification to userspace
-and another thread Y reads this uevent and call to devcd_data_write()
-which eventually try to delete the queued timer that is not initialized/queued yet.
+On Fri, Apr 22, 2022 at 11:51 PM Pawan Gupta
+<pawan.kumar.gupta@linux.intel.com> wrote:
+>
+> On Fri, Apr 22, 2022 at 04:09:57PM +0200, Rafael J. Wysocki wrote:
+> >On Tue, Apr 19, 2022 at 6:52 PM Pawan Gupta
+> ><pawan.kumar.gupta@linux.intel.com> wrote:
+> >>
+> >> From: Borislav Petkov <bp@suse.de>
+> >>
+> >> When resuming from system sleep state, restore_processor_state()
+> >> restores the boot CPU MSRs. These MSRs could be emulated by the
+> >> microcode. If microcode is not loaded yet, writing to emulated MSRs
+> >> leads to unchecked MSR access error:
+> >>
+> >>   [   28.702947] PM: Calling lapic_suspend+0x0/0x210
+> >>   [   28.703345] unchecked MSR access error: WRMSR to 0x10f (tried to write 0=x0000000000000000) at rIP: 0xffffffff9b2819e4 (native_write_msr+0x4/0x20)
+> >>   [   28.703357] Call Trace:
+> >>   [   28.703359]  <TASK>
+> >>   [   28.703361]  ? restore_processor_state+0x255/0x2d0
+> >>   [   28.703369]  x86_acpi_suspend_lowlevel+0x11f/0x170
+> >>   [   28.703374]  acpi_suspend_enter+0x4f/0x1f0
+> >>   [   28.703379]  suspend_devices_and_enter+0x6e0/0x7d0
+> >>   [   28.703384]  pm_suspend.cold+0x35c/0x3a7
+> >>   [   28.703388]  state_store+0x81/0xe0
+> >>   [   28.703392]  kobj_attr_store+0x12/0x20
+> >>   [   28.703396]  sysfs_kf_write+0x3f/0x50
+> >>   [   28.703399]  kernfs_fop_write_iter+0x13b/0x1d0
+> >>   [   28.703403]  new_sync_write+0x101/0x180
+> >>   [   28.703408]  vfs_write+0x217/0x2a0
+> >>   [   28.703413]  ksys_write+0x67/0xe0
+> >>   [   28.703417]  __x64_sys_write+0x1a/0x20
+> >>   [   28.703421]  do_syscall_64+0x3b/0x90
+> >>   [   28.703426]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> >>   [   28.703429] RIP: 0033:0x7fda13c260a7
+> >>   [   28.703434] Code: 64 89 02 48 c7 c0 ff ff ff ff eb bb 0f 1f 80 00 00 00 =
+> >>   00 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75 10 b8 01 00 00 00 0f 05 <48=
+> >>   > 3d 00 f0 ff ff 77 51 c3 48 83 ec 28 48 89 54 24 18 48 89 74 24
+> >>   [   28.703437] RSP: 002b:00007fffa4060268 EFLAGS: 00000246 ORIG_RAX: 000000=0000000001
+> >>   [   28.703441] RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 00007fda13c=260a7
+> >>   [   28.703443] RDX: 0000000000000004 RSI: 000055a41f65a570 RDI: 00000000000=00004
+> >>   [   28.703444] RBP: 000055a41f65a570 R08: 0000000000000000 R09: 00000000000=00004
+> >>   [   28.703446] R10: 000055a41f0cc2a6 R11: 0000000000000246 R12: 00000000000=00004
+> >>   [   28.703447] R13: 000055a41f657510 R14: 00007fda13d014a0 R15: 00007fda13d=008a0
+> >
+> >__restore_processor_state() is used during resume from both
+> >suspend-to-RAM and hibernation, but I don't think that the latter is
+> >affected by the issue at hand, because microcode should be loaded by
+> >the restore kernel in that case.  However, loading the boot processor
+> >microcode in __restore_processor_state() during resume from
+> >hibernation still works, although it is redundant in that case.
+> >
+> >It would be good to acknowledge the above in the changelog and also
+> >mention in it that the issue is specific to suspend-to-RAM (ACPI S3 on
+> >x86 PC systems).
+>
+> Yes, it will be good to add this.
+>
+> [...]
+> >> @@ -262,11 +263,18 @@ static void notrace __restore_processor_state(struct saved_context *ctxt)
+> >>         x86_platform.restore_sched_clock_state();
+> >>         mtrr_bp_restore();
+> >>         perf_restore_debug_store();
+> >> -       msr_restore_context(ctxt);
+> >>
+> >>         c = &cpu_data(smp_processor_id());
+> >>         if (cpu_has(c, X86_FEATURE_MSR_IA32_FEAT_CTL))
+> >>                 init_ia32_feat_ctl(c);
+> >
+> >The change of the ordering between the above and msr_restore_context()
+> >needs to be explained in the changelog too.
+>
+> This patch is already queued in tip tree. I am not sure if we can update
+> the commit message in tip tree?
 
-So, debug object reports some warning and in the meantime, timer is initialized
-and queued from X path. and from Y path, it gets reinitialized again and
-timer->entry.pprev=NULL and try_to_grab_pending() stucks.
-
-To fix this, introduce mutex to serialize the behaviour.
-
- 	cpu0(X)			                      cpu1(Y)
-
-    dev_coredump() uevent sent to userspace
-    device_add()  =========================> userspace process Y reads the uevents
-                                             writes to devcd fd which
-                                             results into writes to
-
-                                            devcd_data_write()
-                                              mod_delayed_work()
-                                                try_to_grab_pending()
-                                                  del_timer()
-                                                    debug_assert_init()
-   INIT_DELAYED_WORK
-   schedule_delayed_work
-                                                     debug_object_fixup()
-                                                      timer_fixup_assert_init()
-                                                       timer_setup()
-                                                         do_init_timer()   ==> reinitialized the
-                                                                                 timer to
-                                                                                 timer->entry.pprev=NULL
-
-                                                  timer_pending()
-                                                   !hlist_unhashed_lockless(&timer->entry)
-                                                     !h->pprev  ==> del_timer checks
-                                                                  and finds it to be NULL
- 								  try_to_grab_pending() stucks.
-
-Link: https://lore.kernel.org/lkml/2e1f81e2-428c-f11f-ce92-eb11048cb271@quicinc.com/
-Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
----
-v1->v2:
- - Added del_wk_queued to serialize the race between devcd_data_write()
-   and disabled_store().
-
- drivers/base/devcoredump.c | 21 ++++++++++++++++++---
- 1 file changed, 18 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/base/devcoredump.c b/drivers/base/devcoredump.c
-index f4d794d..3e6fd6b 100644
---- a/drivers/base/devcoredump.c
-+++ b/drivers/base/devcoredump.c
-@@ -25,6 +25,8 @@ struct devcd_entry {
- 	struct device devcd_dev;
- 	void *data;
- 	size_t datalen;
-+	struct mutex mutex;
-+	bool del_wk_queued;
- 	struct module *owner;
- 	ssize_t (*read)(char *buffer, loff_t offset, size_t count,
- 			void *data, size_t datalen);
-@@ -84,7 +86,12 @@ static ssize_t devcd_data_write(struct file *filp, struct kobject *kobj,
- 	struct device *dev = kobj_to_dev(kobj);
- 	struct devcd_entry *devcd = dev_to_devcd(dev);
- 
--	mod_delayed_work(system_wq, &devcd->del_wk, 0);
-+	mutex_lock(&devcd->mutex);
-+	if (!devcd->del_wk_queued) {
-+		devcd->del_wk_queued = true;
-+		mod_delayed_work(system_wq, &devcd->del_wk, 0);
-+	}
-+	mutex_unlock(&devcd->mutex);
- 
- 	return count;
- }
-@@ -112,7 +119,12 @@ static int devcd_free(struct device *dev, void *data)
- {
- 	struct devcd_entry *devcd = dev_to_devcd(dev);
- 
-+	mutex_lock(&devcd->mutex);
-+	if (!devcd->del_wk_queued)
-+		devcd->del_wk_queued = true;
-+
- 	flush_delayed_work(&devcd->del_wk);
-+	mutex_unlock(&devcd->mutex);
- 	return 0;
- }
- 
-@@ -278,13 +290,15 @@ void dev_coredumpm(struct device *dev, struct module *owner,
- 	devcd->read = read;
- 	devcd->free = free;
- 	devcd->failing_dev = get_device(dev);
--
-+	mutex_init(&devcd->mutex);
- 	device_initialize(&devcd->devcd_dev);
- 
- 	dev_set_name(&devcd->devcd_dev, "devcd%d",
- 		     atomic_inc_return(&devcd_count));
- 	devcd->devcd_dev.class = &devcd_class;
- 
-+	mutex_lock(&devcd->mutex);
-+	devcd->del_wk_queued = false;
- 	if (device_add(&devcd->devcd_dev))
- 		goto put_device;
- 
-@@ -301,10 +315,11 @@ void dev_coredumpm(struct device *dev, struct module *owner,
- 
- 	INIT_DELAYED_WORK(&devcd->del_wk, devcd_del);
- 	schedule_delayed_work(&devcd->del_wk, DEVCD_TIMEOUT);
--
-+	mutex_unlock(&devcd->mutex);
- 	return;
-  put_device:
- 	put_device(&devcd->devcd_dev);
-+	mutex_unlock(&devcd->mutex);
-  put_module:
- 	module_put(owner);
-  free:
--- 
-2.7.4
-
+That depends on the maintainer who has applied the patch.

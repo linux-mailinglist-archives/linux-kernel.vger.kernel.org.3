@@ -2,80 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6325250EC00
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 00:25:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A989350EBF4
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 00:25:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiDYW1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 18:27:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55864 "EHLO
+        id S234403AbiDYW0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 18:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343499AbiDYV2W (ORCPT
+        with ESMTP id S1343507AbiDYV3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 17:28:22 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4FFE4A
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 14:25:14 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id g3so13755365pgg.3
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 14:25:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=u7hl5IFxDI2eHkQRlXGbeDMciir9ECH93wIEe4AG2EI=;
-        b=OJOPp5x6ocU08AevEsYvyRugrSR63fLG3uhAcQNzXko/tlxNS4dLzOSy6TOP4qTHY7
-         3EylhuL4O3ShsCABXnEpCklGW1WYN4raTNoymTAYIRqGXUEl6Pd7wkV6q4QoxJB36ehW
-         Z10y5YmwWpTLQKr+I6SmSdiEvgO7Z5w7qAOqxdJX1O/OgGy2hd1r4OgWbtXlqRkG3vBy
-         dqnqJJ0XY4tRDVxOtEGc7LoAMyO+f6qCYGMSM+56h9NWqZZyV8J59JVP39MUs4eZ7Ui1
-         TDm+0paEaftGWOhnk73QHvi7K0Bun+9M0L1zTcqLMstbZCosXO6LusdaQsTPlrg1qShU
-         bd6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=u7hl5IFxDI2eHkQRlXGbeDMciir9ECH93wIEe4AG2EI=;
-        b=fxV2r5yimbi+M/T90AIh2E8xWtDxmj/xzq0IP8dcoxAgCGRYEnvIdzDEZ5m1iG5XIm
-         Wb9DA6GN8OcTppjZvM4ylER1ChbpPBkjJvTqFF/hF0KlzKKvMPnYRG5qYoHu+NF+v7Pj
-         h17HtiqfjEa3NQxM6oWjA8RqWp/PWmcvtIzGUcf08MEttIlk93BNx/11K6OblBzNv4ix
-         sUxv+ocxFe7qo18sobfhe2u9MSeunU1UyMYZNvMyVdPGs4kL2icQLaTFJBMW4+DSXNa0
-         mYgTF/jIpOwE72f2gbD0JOykA5x1Ar3lozDyoCwSw9kWZDu38XWMZr9gcH9sxltozI7O
-         zmmQ==
-X-Gm-Message-State: AOAM531IYNxf0EeOJ08lD6EYXkOC+TokjgAvxD6o+vUSe+ahQRF+Rm2E
-        7NkzaYuufv4n1DmkcHmu3yU7ZH/ID2+q147gyX7FfQ==
-X-Google-Smtp-Source: ABdhPJyjvuSyMhaDXA5uS4wqJXkzuCx/QHOdMUNQ0WA32JkkTRIkvO9Y+T/QmJNrakGd6o2JPiD3KA9ScfGvzuSGj78=
-X-Received: by 2002:a63:42:0:b0:3a8:47f7:bf0d with SMTP id 63-20020a630042000000b003a847f7bf0dmr16823748pga.276.1650921914481;
- Mon, 25 Apr 2022 14:25:14 -0700 (PDT)
+        Mon, 25 Apr 2022 17:29:15 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9F1220CE
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 14:26:08 -0700 (PDT)
+Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B81DA1EC04A6;
+        Mon, 25 Apr 2022 23:26:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1650921961;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VzCRn9yN2ByyCFR5QKv9+K8B8VcoQwcA3ZVz2Ifi7JQ=;
+        b=fNnh8YiUMApB0I9iM+V6r0nvmh8FA7oNdMa5U7S15/LCpqbI1/jM6tKwfyZ0aDGbo5ZAAv
+        UISb+73NpqVJqWCi+Fa1hLJKqxhd+c42n4JjVcHL1lptzDXi9IsAxaLj9BDartlz8vh+99
+        YmQB5O8tl20QGO/Fbc7aZfQyJMnzDYU=
+Date:   Mon, 25 Apr 2022 23:25:57 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Oleksandr <olekstysh@gmail.com>
+Cc:     Juergen Gross <jgross@suse.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Julien Grall <julien@xen.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: Re: [PATCH V1 3/6] xen/virtio: Add option to restrict memory access
+ under Xen
+Message-ID: <YmcR5bfaYh1z7VUq@zn.tnic>
+References: <1650646263-22047-1-git-send-email-olekstysh@gmail.com>
+ <1650646263-22047-4-git-send-email-olekstysh@gmail.com>
+ <YmQsFb36UEH9BUnN@infradead.org>
+ <6c5042fe-dafc-eb4f-c1fa-03b0faf252de@gmail.com>
+ <abc5d23d-3d38-d198-4646-e886df2e83d4@suse.com>
+ <YmZUpua3hkCPdbfx@infradead.org>
+ <147f68f6-7d67-1884-bd14-5040639b3396@suse.com>
+ <67c7460a-3001-35a6-8e5b-f367270b257a@gmail.com>
 MIME-Version: 1.0
-References: <20220424051022.2619648-1-asmadeus@codewreck.org> <20220424051022.2619648-5-asmadeus@codewreck.org>
-In-Reply-To: <20220424051022.2619648-5-asmadeus@codewreck.org>
-From:   Quentin Monnet <quentin@isovalent.com>
-Date:   Mon, 25 Apr 2022 22:25:03 +0100
-Message-ID: <CACdoK4+WVdXz0jqKijF+wg=1M9V-=JpBHeJD5RJfNzq67TD+5A@mail.gmail.com>
-Subject: Re: [PATCH 4/4] tools/bpf: replace sys/fcntl.h by fcntl.h
-To:     Dominique Martinet <asmadeus@codewreck.org>
-Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        KP Singh <kpsingh@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Yonghong Song <yhs@fb.com>, Song Liu <songliubraving@fb.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <67c7460a-3001-35a6-8e5b-f367270b257a@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 24 Apr 2022 at 06:11, Dominique Martinet <asmadeus@codewreck.org> wrote:
->
-> musl does not like including sys/fcntl.h directly:
->     1 | #warning redirecting incorrect #include <sys/fcntl.h> to <fcntl.h>
->
-> Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+On Mon, Apr 25, 2022 at 11:38:36PM +0300, Oleksandr wrote:
+> diff --git a/include/linux/cc_platform.h b/include/linux/cc_platform.h
+> index efd8205..d06bc7a 100644
+> --- a/include/linux/cc_platform.h
+> +++ b/include/linux/cc_platform.h
+> @@ -72,6 +72,19 @@ enum cc_attr {
+>          * Examples include TDX guest & SEV.
+>          */
+>         CC_ATTR_GUEST_UNROLL_STRING_IO,
+> +
+> +       /**
+> +        * @CC_ATTR_GUEST_MEM_ACCESS_RESTRICTED: Restricted memory access to
+> +        *                                       Guest memory is active
+> +        *
+> +        * The platform/OS is running as a guest/virtual machine and uses
+> +        * the restricted access to its memory. This attribute is set if
+> either
+> +        * Guest memory encryption or restricted memory access using Xen
+> grant
+> +        * mappings is active.
+> +        *
+> +        * Examples include Xen guest and SEV.
 
-Acked-by: Quentin Monnet <quentin@isovalent.com>
+Wait, whaaat?
+
+The cc_platform* stuff is for *confidential computing* guests to check
+different platform aspects.
+
+From quickly skimming over this, this looks like a misuse to me.
+
+Why can't you query this from the hypervisor just like you do your other
+querying about what is supported, etc? Hypercalls, CPUID, whatever...
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

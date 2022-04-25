@@ -2,103 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 080F150E782
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 19:50:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7B2250E789
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 19:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240357AbiDYRw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 13:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54464 "EHLO
+        id S244092AbiDYRyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 13:54:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240316AbiDYRw0 (ORCPT
+        with ESMTP id S232240AbiDYRyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 13:52:26 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E352315F
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 10:49:21 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id k27so4185823edk.4
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 10:49:21 -0700 (PDT)
+        Mon, 25 Apr 2022 13:54:50 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E3F105D5E
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 10:51:46 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id n14so6835993lfu.13
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 10:51:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Ebs8VcYRuiG+zzhZhkPws5bq5vcKW6ksXUqkXvhEbOo=;
-        b=iXrgNRyV83lwioUyOZL8W/AIYM5JHiPr6br+5XItDScpeJEhyxUamNqrkP1GNvuB4F
-         0rtU2XS2uFQnFAr1PgzutYWxU/15uokzTnOaF7LHSS7UaVIIN6Qzg9Mk+AXUxAye5tgW
-         AwA6ZnaFTjpxG6F0NfvbuawjkDYhOG2IL/y0UASQtX57S3SH3vcEpRBD5+Qylfm/q2eJ
-         c4oW4BbeFD5xqFwqAZz4weOzvYCue1dPWqgYNNv1triLjtfLRVEbO3/QG95bgDbgcC1d
-         DeJPnyRE0Ftd7yReucky1l0aLvE7D4r36f6IuQEU10mxrNl5+R28vgpoeiXKXfGRxWWn
-         4kTg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=d4CKusOmKFpB//zpJna6TMOVyVV+HbHdecXxRDxqWJE=;
+        b=KbnauGYZbd2ceBOD/lP8RHEg9djTXfQAqnpQ28WeYUkk5sNd18iz3LlronhYaLANkw
+         pg5xLLuZraGQoEPZe2/GSkeSMbrvolPyxjnwwA1FoiNfOfiwSWUhV20aJXNOVAYV0Ry2
+         cwllTyb3FXsbfpuBFn2xTo2Efq34vbdmn/ZN/QXPOoaAMDV8mCVaVu+NdWEMwGLowlJO
+         9QoN6avMZS3/+VHZaHXMN1wn5v2Zl1NQzcuUZ9k2rmJCRKd3YOVbJP5ddUmAFfqMts1B
+         3D6z8Z7yUMhAcEsXjjDw3FrQE4cz5rKnBYsSi+IvBxi7ozMKqCAv90tLTFGCM0CD5H6r
+         tkpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Ebs8VcYRuiG+zzhZhkPws5bq5vcKW6ksXUqkXvhEbOo=;
-        b=etloIDlzLoHC1v3+ZnI/wklyH+wkqCJuOoFUJjGkifgiTqjoCHG85um37mr6ZUBBFq
-         hGPfvfZfWWQDuH8tY/Z9yEuoF/Ppcy2652Qov26ORoQ5/VCptSFu2SBy0yRsDs/p4m10
-         g9TiNRTlPzZXuXATdlTbO0VHBihKGDQL1WGk/zLuxilZafPH7OVGz0/M4SeHO4UOqLdM
-         q6CRd3QxCB1HmiJij1Ryvy4shK4wV6nTYeBk0dy5+69VSd8X+RPJNUzmqonEWZMdJLxF
-         Ri0NB2KSeY4eg54+g++FE2HfqpYq6nZgiaknEDW/2CCmCzJRpQbakM7iqEOvxBaspGvV
-         ftFw==
-X-Gm-Message-State: AOAM532G3OUgbC2bFeIlqjxl7dZ8S1Z35m7MDpgIHapINctDq+nFQrVp
-        /9ogatf9n7VnPFkYLLlg3oLPsQ==
-X-Google-Smtp-Source: ABdhPJytD6knxvp6CsJvkJx/IH81yIZHxKnzXf77zdVl/498MQRk/dpFPQ8ZQs0MWHIyvlEj4hDaKg==
-X-Received: by 2002:a05:6402:1e88:b0:412:fc6b:f271 with SMTP id f8-20020a0564021e8800b00412fc6bf271mr20657984edf.345.1650908959893;
-        Mon, 25 Apr 2022 10:49:19 -0700 (PDT)
-Received: from [192.168.0.244] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id z19-20020a1709067e5300b006f39880d8e5sm1205180ejr.78.2022.04.25.10.49.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 10:49:19 -0700 (PDT)
-Message-ID: <ede50fc5-177d-3821-1f47-7297a7a8ebf3@linaro.org>
-Date:   Mon, 25 Apr 2022 19:49:18 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=d4CKusOmKFpB//zpJna6TMOVyVV+HbHdecXxRDxqWJE=;
+        b=s/4MwN95vE4iy8dQDHUgMnxmoZt8KSP4SZnxcxqj1TjsUi9d96DvAu9L16ER8xwPRz
+         T1gBwc/TpCn/8ae4TGVTT6wQcUyUT1wOr4Ny7vvuhpjeYxhKYgs9fD9fpGPlZGb+qFmL
+         zCZz9rOM/r+i/miyxPErv+DDT7ioOwh3iHwZybfgXL+MGs7LQQkFcsMyJCqA7/kZJXCt
+         Dnk4z1JsAK+oiZ0mlhGzPqkb8ZS6BqYyZhhVxo8PQ1JZ/sdhiyiEq8+H1pp1hYBJOgyc
+         oRPVSsNOTH/aQSiyF+nZIP3ryV35Xw9z0c5ksie5hfkTKPnbz9EZSv0Hil6NzupY4fu1
+         mPQA==
+X-Gm-Message-State: AOAM532MnOZ4dACo8TF3vKTQ9l4Vs7pzGxOamqLScJHzj4bThwpgrrLw
+        b2PlnuXh3ncO8vX6Mc41YQ1960/KhP2tU6k4kDnucg==
+X-Google-Smtp-Source: ABdhPJzYxIj3xqgaFZ1xKTponeM1pO9KPmIP8f/N+5TRbu+uuD3iTwOshtcQQhkuqn75wv91nWbwA0TMDleufJhexPw=
+X-Received: by 2002:a05:6512:1d1:b0:471:f63a:b182 with SMTP id
+ f17-20020a05651201d100b00471f63ab182mr9658870lfp.392.1650909102664; Mon, 25
+ Apr 2022 10:51:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3] dt-bindings: gnss: Rewrite Mediatek bindings in YAML
-Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Johan Hovold <johan@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220425132947.1311171-1-linus.walleij@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220425132947.1311171-1-linus.walleij@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAKwvOdmwyFDYKMpq0dcvbq06drtZonpNJ3PqLx2RMBE00beHZA@mail.gmail.com>
+ <CAK7LNARx_z1Cv4YOkYkdbgrv3PKVa3msHh8mCZDFvYDib++4kQ@mail.gmail.com>
+In-Reply-To: <CAK7LNARx_z1Cv4YOkYkdbgrv3PKVa3msHh8mCZDFvYDib++4kQ@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 25 Apr 2022 10:51:30 -0700
+Message-ID: <CAKwvOdnzHJX1+H2d4QxhtDS_W96Jq0YAgZJTHwHxmbHRVPx-uA@mail.gmail.com>
+Subject: Re: plumbers session on syscall wrapping and kernel header libc
+ circular depdence?
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Florian Weimer <fweimer@redhat.com>,
+        Arnd Bergmann <arnd@kernel.org>,
+        "Jose E. Marchesi" <jemarch@gnu.org>,
+        linux-toolchains@vger.kernel.org,
+        clang-built-linux <llvm@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/04/2022 15:29, Linus Walleij wrote:
-> This rewrites the Mediatek GNSS bindings in YAML.
-> 
-> Cc: devicetree@vger.kernel.org
-> Cc: Krzysztof Kozlowski <krzk@kernel.org>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
-> ChangeLog v2->v3:
-> - Add the missed gnss-fix-gpios.
-> - Move allOf to right before the properties.
-> - Keep the description on timepulse-gpios because it documents
->   which pins are used on this chip.
-> ChangeLog v1->v2:
-> - New patch since Krzysztof pointed out there is really just
->   one more binding to convert, so why not.
-> ---
->  .../devicetree/bindings/gnss/mediatek.txt     | 35 -----------
->  .../devicetree/bindings/gnss/mediatek.yaml    | 59 +++++++++++++++++++
+On Sun, Apr 24, 2022 at 9:45 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Hello Nick,
+>
+> Sorry for the late reply.
+>
+> On Sat, Apr 16, 2022 at 2:48 AM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+> >
+> > Hi Florian, Arnd, and Masahiro,
+> > Jose and I are currently in the planning process to put together a
+> > Kernel+Toolchain microconference track at Linux Plumbers Conference
+> > this year (Sept 12-14) in Dublin, Ireland.
+> >
+> > Would you all be interested in a session (if you're planning on
+> > attending) discussing syscall wrapping for libc's and UAPI circular
+> > dependency on the libc?
+> >
+> > Masahiro and I were recently discussing the feasibility of building
+> > the kernel UAPI header tests with -nostdinc, but there are some
+> > interesting complications perhaps worth sharing with others?
+> > --
+> > Thanks,
+> > ~Nick Desaulniers
+>
+>
+> I am not sure about the travel at the moment.
 
-Bindings look good, just the filename should be probably more specific,
-to match the model... but then who is the vendor? mediatek,pa6h.yaml or
-mediatek,globaltop-pa6h.yaml? I sincerely do not know, so:
+Bummer.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> I may be able to attend it remotely if the the plumbers is held as a
+> hybrid conference.
 
+I think it will be.
+https://lore.kernel.org/llvm/3119c35ba1fa7247e87d7acb56e85ea99092d0a4.camel@HansenPartnership.com/
 
-Best regards,
-Krzysztof
+> I am not quite sure how many developers would be interested in this topic,
+> but we can continue discussion in the ML as well.
+
+Ok, based on the feedback, we will scrap the idea for the topic. I
+will follow up with the UAPI discussions on the list.
+--
+Thanks,
+~Nick Desaulniers

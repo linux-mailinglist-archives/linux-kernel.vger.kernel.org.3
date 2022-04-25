@@ -2,114 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1FA050E2DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:17:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E062950E2D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:17:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242410AbiDYOUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 10:20:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52544 "EHLO
+        id S242406AbiDYOTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 10:19:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237175AbiDYOU3 (ORCPT
+        with ESMTP id S242378AbiDYOTs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 10:20:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD2421D336
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 07:17:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650896243;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3M0aoxkyxBu8tMQw8TfYWG0VMojy3pZmIs9OKgeG0uY=;
-        b=I45q1LiJfmZlSy/1hvA6gRGwZ1cXOHYPrCAwnT7HIxZwb0yc8FL01DE2XA97cxK+zvHe+w
-        U81smKudZNz3npuDjwB76hoNUjY+kgGBq1HNqnLCiebWhJ3luoMQdA0yTRT1MV7EEgVOGC
-        U+PWjXskryQDWqCWlrtNz9Y3pJULoQY=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-315-a92EowTmN7aRTbViTfYHQA-1; Mon, 25 Apr 2022 10:17:22 -0400
-X-MC-Unique: a92EowTmN7aRTbViTfYHQA-1
-Received: by mail-wm1-f69.google.com with SMTP id t2-20020a7bc3c2000000b003528fe59cb9so7205321wmj.5
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 07:17:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3M0aoxkyxBu8tMQw8TfYWG0VMojy3pZmIs9OKgeG0uY=;
-        b=qmeTYiRYZgbobjS8Nvv/Na7B0/W43ly2Aapz6+AIOTK/MevRHcuJ32JTHAWkHlwSvf
-         1kEhjQ528f4XscuUxtYE+coxmhxHeLuhNeL1NuONweRiY/6AdTBXC3p35T0zoTatjMUT
-         iHJxA2FcJigA5Od8PAMNFYonNc72KBnGKXW9xadD/pMEMbsyym00p0tCpqfDZbR43Zp0
-         Hm6/9xVR/qQ/YjQ40l91Ibec8zbQPA7A3GDaOtBq9yb14sMI/oDCB3297DF9OXlbu06K
-         KZWtXrLpv27S4MnCtT2aQDqwCGYOypdQwgkLL8KyjzlmBdnd62PW/Usb/nB8OigF9fLY
-         WwVg==
-X-Gm-Message-State: AOAM531X4Xlu5TvF/B4MDxX8SMk8aY+97dXdJ6jDdlLjMj2TTzDXvF0u
-        WXZu/U+qSZEUo8BNc7xBiOUXR5Fh4CSqjHu/uEPKJb1NLp9bNuh+LlkDMi2z8xsWohf6KjWjlPg
-        N4BIgoHatlPvtX3gmBPwAZPo=
-X-Received: by 2002:a7b:c84f:0:b0:393:e729:e670 with SMTP id c15-20020a7bc84f000000b00393e729e670mr8781326wml.153.1650896241040;
-        Mon, 25 Apr 2022 07:17:21 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyMT+A2bqCqaIIs9ZgaQ2ZSK7SudVpQXxznSITCu/tmHcNBfasGTF4frwxIwbGgb5wHo/ba1w==
-X-Received: by 2002:a7b:c84f:0:b0:393:e729:e670 with SMTP id c15-20020a7bc84f000000b00393e729e670mr8781309wml.153.1650896240824;
-        Mon, 25 Apr 2022 07:17:20 -0700 (PDT)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id t2-20020a1c4602000000b003917d43d339sm11918988wma.4.2022.04.25.07.17.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 07:17:19 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 15:17:17 +0100
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Christoph Lameter <cl@gentwo.de>, frederic@kernel.org,
-        mtosatti@redhat.com, tglx@linutronix.de, mingo@kernel.org,
-        pauld@redhat.com, neelx@redhat.com, oleksandr@natalenko.name,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [RFC PATCH v3] tick/sched: Ensure quiet_vmstat() is called when
- the idle tick was stopped too
-Message-ID: <20220425141717.vw2jfnn3zp6c5ib2@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
-References: <20220422193647.3808657-1-atomlin@redhat.com>
- <alpine.DEB.2.22.394.2204250919400.2367@gentwo.de>
- <20220425113909.u3smtztp66svlw4o@ava.usersys.com>
- <alpine.DEB.2.22.394.2204251406370.13839@gentwo.de>
- <20220425132700.GK2731@worktop.programming.kicks-ass.net>
+        Mon, 25 Apr 2022 10:19:48 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3CF1EEF6
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 07:16:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650896204; x=1682432204;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=AAEEDt7xXTl7wGJqN1W/OSkx+JBqKQDu+fVaYieXLSM=;
+  b=gefvwP6r1mZw50UfZMrTXr7xr5Y6X5vxgQesFgriQ/N3p+d3XzveoMZv
+   0Th/OJwNjY9nJZzcEoY6rD4K4rxRin2ZJ/cdbKd3K5EPrEca1vYu7k6mX
+   BYTPLyPsfvAuX31V7T4vacrR2mxECno70k2blLl3nWA3UwwLXibmf24dB
+   XsqnIp80cPTt3knafgtdAB6x8b8EL92UmrGUFBApy8d5wXsS4/9ioX1qH
+   GiTxeHcclVC/As2KziAJN8ZxvtNl2SiBlPVjBvW2qHP6KDL1izHPJF1IE
+   EYV8Ip+EMPTYEWcL+NFOWfhdG+iPdjXItfID9CyCbKNEAR3fr+pSv9Og2
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="265423517"
+X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
+   d="scan'208";a="265423517"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 07:16:44 -0700
+X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
+   d="scan'208";a="595254808"
+Received: from bjkrist-mobl.amr.corp.intel.com (HELO [10.212.88.70]) ([10.212.88.70])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 07:16:43 -0700
+Message-ID: <76ec6342-0d7c-7c7b-c132-2892e4048fa1@intel.com>
+Date:   Mon, 25 Apr 2022 07:18:36 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220425132700.GK2731@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
+ allocation and free it on mm exit
+Content-Language: en-US
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>
+Cc:     Fenghua Yu <fenghua.yu@intel.com>, Joerg Roedel <joro@8bytes.org>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86 <x86@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        iommu <iommu@lists.linux-foundation.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>, will@kernel.org,
+        robin.murphy@arm.com, zhangfei.gao@linaro.org
+References: <tencent_A9458C6CEBAADD361DA765356477B00E920A@qq.com>
+ <tencent_8B6D7835F62688B4CD069C0EFC41B308B407@qq.com>
+ <YllADL6uMoLllzQo@fyu1.sc.intel.com> <YmA4pbgevqln/jSO@myrica>
+ <tencent_76E043C4D1B6A21A5253579A61034107EB06@qq.com>
+ <tencent_7477100F8A445C6CAFA8F13601A55134480A@qq.com>
+ <YmJ/WA6KAQU/xJjA@myrica>
+ <tencent_A4E83BA6071B2204B6F5D4E69A50D21C1A09@qq.com>
+ <YmLOznyBF0f7COYT@myrica>
+ <tencent_2922DAB6F3D5789A1CD3A21A843B4007ED09@qq.com>
+ <Yman5hLomw9/c+bi@myrica>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <Yman5hLomw9/c+bi@myrica>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-04-25 15:27 +0200, Peter Zijlstra wrote:
-> On Mon, Apr 25, 2022 at 02:09:06PM +0200, Christoph Lameter wrote:
-> > On Mon, 25 Apr 2022, Aaron Tomlin wrote:
-> > 
-> > > Yes, in the context of nohz, this patch should ensure it, if required, when
-> > > the idle tick is to be stopped.
-> > 
-> > What I said was that it is generally useful. Even in the non NOHZ case.
-> > 
-> > Folding the vmstat diffs *always* when entering idle prevents unnecessary
-> > wakeups and processing in the future and also provides more accurate
-> > counters for the VM allowing better decision to be made on reclaim.
+On 4/25/22 06:53, Jean-Philippe Brucker wrote:
+> On Sat, Apr 23, 2022 at 07:13:39PM +0800, zhangfei.gao@foxmail.com wrote:
+>>>> On 5.17
+>>>> fops_release is called automatically, as well as iommu_sva_unbind_device.
+>>>> On 5.18-rc1.
+>>>> fops_release is not called, have to manually call close(fd)
+>>> Right that's weird
+>> Looks it is caused by the fix patch, via mmget, which may add refcount of
+>> fd.
+> Yes indirectly I think: when the process mmaps the queue, mmap_region()
+> takes a reference to the uacce fd. That reference is released either by
+> explicit close() or munmap(), or by exit_mmap() (which is triggered by
+> mmput()). Since there is an mm->fd dependency, we cannot add a fd->mm
+> dependency, so no mmget()/mmput() in bind()/unbind().
 > 
-> I'm thinking you're going to find a ton of regressions if you try it
-> though; some workloads go idle *very* shortly, doing all this accounting
-> is going to be counter-productive.
+> I guess we should go back to refcounted PASIDs instead, to avoid freeing
+> them until unbind().
 
-Hi Peter, Christoph,
+Yeah, this is a bit gnarly for -rc4.  Let's just make sure there's
+nothing else simple we can do.
 
-Indeed. Which was why I decided, initially, against the general-purpose
-case/or approach. Personally, I would prefer to keep this somewhat
-restrictive to nohz.
-
-
-Kind regards,
-
--- 
-Aaron Tomlin
-
+How does the IOMMU hardware know that all activity to a given PASID is
+finished?  That activity should, today, be independent of an mm or a
+fd's lifetime.

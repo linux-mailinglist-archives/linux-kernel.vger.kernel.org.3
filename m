@@ -2,280 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D64250D93F
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 08:11:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1337750D942
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 08:13:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233376AbiDYGO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 02:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47666 "EHLO
+        id S235030AbiDYGQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 02:16:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232989AbiDYGOE (ORCPT
+        with ESMTP id S233887AbiDYGOc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 02:14:04 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733D23AA5F
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 23:11:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650867061; x=1682403061;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=2h0S1kU+PSsC6Vl1bnr3IxMhRTqaRHpITQXb+3TY0ss=;
-  b=j1LKHMMRvHkQ1RqA30/MuEeQWHpQFbMWyib+ZYQqxl/m2EaJbciacek7
-   JtNinJYS07GNB8DtxoDvCQZEG/tB9ZJqTtM+eagfBxyo/551upVFTNROi
-   4meFGDOd8l10jLVmM28CgJOBWTlh3x9yVUipnU6VHrMiFJfFY+ptmhKyO
-   RQ/5dhXAwMaORaGdSGk0iNduVEEl4llpn9teCMLHfb4rENZ3Z83lTjIIm
-   vUJZ89t6buha9xy6WzLCMFgMZ0NL+No1M9uAvFKlLJDS8o2kzgPD4VpZQ
-   FwS+c0ClGh38ktAWsycVr1UFOfAYjKyjbNGkPcRBtXpp39z1CT9mwTkmQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="247076545"
-X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
-   d="scan'208";a="247076545"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 23:11:01 -0700
-X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
-   d="scan'208";a="557555790"
-Received: from wupeng-mobl.ccr.corp.intel.com ([10.254.215.115])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 23:10:57 -0700
-Message-ID: <ea9d01e16de655af85c0041c96964d83f59fb6d2.camel@intel.com>
-Subject: Re: [PATCH v2 0/5] mm: demotion: Introduce new node state
- N_DEMOTION_TARGETS
-From:   "ying.huang@intel.com" <ying.huang@intel.com>
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Greg Thelen <gthelen@google.com>,
-        MichalHocko <mhocko@kernel.org>,
-        Brice Goglin <brice.goglin@gmail.com>
-Date:   Mon, 25 Apr 2022 14:10:55 +0800
-In-Reply-To: <8735i1zurt.fsf@linux.ibm.com>
-References: <CAAPL-u_pSWD6U0yQ8Ws+_Yfb_3ZEmNXJsYcRJjAFBkyDk=nq8g@mail.gmail.com>
-         <ea73f6fda9cafdd0cb6ba8351139e6f4b47354a8.camel@intel.com>
-         <CAAPL-u-aeceXFUNdok_GYb2aLhZa0zBBuSqHxFznQob3PbJt7Q@mail.gmail.com>
-         <a80647053bba44623094995730e061f0e6129677.camel@intel.com>
-         <CAAPL-u89Jxutu1VH0LnO5VGdMbkLvc2M9eapuwP-y9oG9QSsrA@mail.gmail.com>
-         <610ccaad03f168440ce765ae5570634f3b77555e.camel@intel.com>
-         <CAAPL-u9ktM82zAW_OVwqTmQsr-XC8XOPmAsjoiCLo18cxUWA=A@mail.gmail.com>
-         <8e31c744a7712bb05dbf7ceb2accf1a35e60306a.camel@intel.com>
-         <CAAPL-u9uP+FUh7Yn0ByOECo+EP32ZABnCvNPKQB9JCA68VHEqQ@mail.gmail.com>
-         <78b5f4cfd86efda14c61d515e4db9424e811c5be.camel@intel.com>
-         <YmKKwXa2XI/nwac0@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
-         <200e95cf36c1642512d99431014db8943fed715d.camel@intel.com>
-         <8735i1zurt.fsf@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Mon, 25 Apr 2022 02:14:32 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 535803AA5F;
+        Sun, 24 Apr 2022 23:11:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=ZA5E+4I7a3EZc7EJ3G+9W5c7mVAeSDt2GcOP+gGk7Kw=;
+  b=txkM4NEjMqa1s9VaE7dJDTAR/3Pyriw+r6LfY9m54jks7YkcW6UOaX50
+   Hn1AqcX8PRe93D+3cxYE+pouJPjAvqngZeuSjmPCYQsk3oMJPcpUboxa5
+   mAWGGQSapMrl7qLhC37j6Au+i3h/7JH3FBcX5xo+u/IyMcov0dAsdj9Hq
+   E=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.90,287,1643670000"; 
+   d="scan'208";a="33083160"
+Received: from ip-214.net-89-2-7.rev.numericable.fr (HELO hadrien) ([89.2.7.214])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 08:11:22 +0200
+Date:   Mon, 25 Apr 2022 08:11:22 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+cc:     Nikolay Aleksandrov <razor@blackwall.org>, netdev@vger.kernel.org,
+        outreachy@lists.linux.dev, roopa@nvidia.com, jdenham@redhat.com,
+        sbrivio@redhat.com, jesse.brandeburg@intel.com,
+        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
+        alexandre.belloni@bootlin.com, shshaikh@marvell.com,
+        manishc@marvell.com, intel-wired-lan@lists.osuosl.org,
+        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
+        GR-Linux-NIC-Dev@marvell.com, bridge@lists.linux-foundation.org
+Subject: Re: [PATCH net-next v3 1/2] rtnetlink: add extack support in fdb
+ del handlers
+In-Reply-To: <3bcb2d3d-8b8b-8a8f-1285-7277394b4e6b@gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2204250808280.2759@hadrien>
+References: <cover.1650800975.git.eng.alaamohamedsoliman.am@gmail.com> <c3a882e4fb6f9228f704ebe3c1fcace14ee6cdf2.1650800975.git.eng.alaamohamedsoliman.am@gmail.com> <7c8367b6-95c7-ea39-fafe-72495f343625@blackwall.org> <d89eefc2-664f-8537-d10e-6fdfbb6823ed@gmail.com>
+ <4bf69eef-7444-1238-0f4a-fb0fccda080c@blackwall.org> <3bcb2d3d-8b8b-8a8f-1285-7277394b4e6b@gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1725770404-1650867082=:2759"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-04-25 at 09:20 +0530, Aneesh Kumar K.V wrote:
-> "ying.huang@intel.com" <ying.huang@intel.com> writes:
-> 
-> > Hi, All,
-> > 
-> > On Fri, 2022-04-22 at 16:30 +0530, Jagdish Gediya wrote:
-> > 
-> > [snip]
-> > 
-> > > I think it is necessary to either have per node demotion targets
-> > > configuration or the user space interface supported by this patch
-> > > series. As we don't have clear consensus on how the user interface
-> > > should look like, we can defer the per node demotion target set
-> > > interface to future until the real need arises.
-> > > 
-> > > Current patch series sets N_DEMOTION_TARGET from dax device kmem
-> > > driver, it may be possible that some memory node desired as demotion
-> > > target is not detected in the system from dax-device kmem probe path.
-> > > 
-> > > It is also possible that some of the dax-devices are not preferred as
-> > > demotion target e.g. HBM, for such devices, node shouldn't be set to
-> > > N_DEMOTION_TARGETS. In future, Support should be added to distinguish
-> > > such dax-devices and not mark them as N_DEMOTION_TARGETS from the
-> > > kernel, but for now this user space interface will be useful to avoid
-> > > such devices as demotion targets.
-> > > 
-> > > We can add read only interface to view per node demotion targets
-> > > from /sys/devices/system/node/nodeX/demotion_targets, remove
-> > > duplicated /sys/kernel/mm/numa/demotion_target interface and instead
-> > > make /sys/devices/system/node/demotion_targets writable.
-> > > 
-> > > Huang, Wei, Yang,
-> > > What do you suggest?
-> > 
-> > We cannot remove a kernel ABI in practice.  So we need to make it right
-> > at the first time.  Let's try to collect some information for the kernel
-> > ABI definitation.
-> > 
-> > The below is just a starting point, please add your requirements.
-> > 
-> > 1. Jagdish has some machines with DRAM only NUMA nodes, but they don't
-> > want to use that as the demotion targets.  But I don't think this is a
-> > issue in practice for now, because demote-in-reclaim is disabled by
-> > default.
-> 
-> It is not just that the demotion can be disabled. We should be able to
-> use demotion on a system where we can find DRAM only NUMA nodes. That
-> cannot be achieved by /sys/kernel/mm/numa/demotion_enabled. It needs
-> something similar to to N_DEMOTION_TARGETS
-> 
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Can you show NUMA information of your machines with DRAM-only nodes and
-PMEM nodes?  We can try to find the proper demotion order for the
-system.  If you can not show it, we can defer N_DEMOTION_TARGETS until
-the machine is available.
-
-> > 2. For machines with PMEM installed in only 1 of 2 sockets, for example,
-> > 
-> > Node 0 & 2 are cpu + dram nodes and node 1 are slow
-> > memory node near node 0,
-> > 
-> > available: 3 nodes (0-2)
-> > node 0 cpus: 0 1
-> > node 0 size: n MB
-> > node 0 free: n MB
-> > node 1 cpus:
-> > node 1 size: n MB
-> > node 1 free: n MB
-> > node 2 cpus: 2 3
-> > node 2 size: n MB
-> > node 2 free: n MB
-> > node distances:
-> > node   0   1   2
-> >   0:  10  40  20
-> >   1:  40  10  80
-> >   2:  20  80  10
-> > 
-> > We have 2 choices,
-> > 
-> > a)
-> > node	demotion targets
-> > 0	1
-> > 2	1
-> 
-> This is achieved by 
-> 
-> [PATCH v2 1/5] mm: demotion: Set demotion list differently
-> 
-> > 
-> > b)
-> > node	demotion targets
-> > 0	1
-> > 2	X
-> 
-> 
-> > 
-> > a) is good to take advantage of PMEM.  b) is good to reduce cross-socket
-> > traffic.  Both are OK as defualt configuration.  But some users may
-> > prefer the other one.  So we need a user space ABI to override the
-> > default configuration.
-> > 
-> > 3. For machines with HBM (High Bandwidth Memory), as in
-> > 
-> > https://lore.kernel.org/lkml/39cbe02a-d309-443d-54c9-678a0799342d@gmail.com/
-> > 
-> > > [1] local DDR = 10, remote DDR = 20, local HBM = 31, remote HBM = 41
-> > 
-> > Although HBM has better performance than DDR, in ACPI SLIT, their
-> > distance to CPU is longer.  We need to provide a way to fix this.  The
-> > user space ABI is one way.  The desired result will be to use local DDR
-> > as demotion targets of local HBM.
-> 
-> 
-> IMHO the above (2b and 3) can be done using per node demotion targets. Below is
-> what I think we could do with a single slow memory NUMA node 4.
-
-If we can use writable per-node demotion targets as ABI, then we don't
-need N_DEMOTION_TARGETS.
-
-> /sys/devices/system/node# cat node[0-4]/demotion_targets
-> 4
-> 4
-> 4
-> 4
-> 
-> /sys/devices/system/node# echo 1 > node1/demotion_targets 
-> bash: echo: write error: Invalid argument
-> /sys/devices/system/node# cat node[0-4]/demotion_targets
-> 4
-> 4
-> 4
-> 4
-> 
-> /sys/devices/system/node# echo 0 > node1/demotion_targets 
-> /sys/devices/system/node# cat node[0-4]/demotion_targets
-> 4
-> 0
-> 4
-> 4
-> 
-> /sys/devices/system/node# echo 1 > node0/demotion_targets 
-> bash: echo: write error: Invalid argument
-> /sys/devices/system/node# cat node[0-4]/demotion_targets
-> 4
-> 0
-> 4
-> 4
-> 
-> Disable demotion for a specific node.
-> /sys/devices/system/node# echo > node1/demotion_targets 
-> /sys/devices/system/node# cat node[0-4]/demotion_targets
-> 4
-> 
-> 4
-> 4
-> 
-> Reset demotion to default
-> /sys/devices/system/node# echo -1 > node1/demotion_targets 
-> /sys/devices/system/node# cat node[0-4]/demotion_targets
-> 4
-> 4
-> 4
-> 4
-> 
-> When a specific device/NUMA node is used for demotion target via the user interface, it is taken
-> out of other NUMA node targets.
-
-IMHO, we should be careful about interaction between auto-generated and
-overridden demotion order.
-
-Best Regards,
-Huang, Ying
-
-> root@ubuntu-guest:/sys/devices/system/node# cat node[0-4]/demotion_targets
-> 4
-> 4
-> 4
-> 4
-> 
-> /sys/devices/system/node# echo 4 > node1/demotion_targets 
-> /sys/devices/system/node# cat node[0-4]/demotion_targets
-> 
-> 4
-> 
-> 
-> 
-> If more than one node requies the same demotion target
-> /sys/devices/system/node# echo 4 > node0/demotion_targets 
-> /sys/devices/system/node# cat node[0-4]/demotion_targets
-> 4
-> 4
-> 
-> 
-> 
-> -aneesh
+--8323329-1725770404-1650867082=:2759
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
 
+
+On Sun, 24 Apr 2022, Alaa Mohamed wrote:
+
+>
+> On ٢٤/٤/٢٠٢٢ ٢١:٥٥, Nikolay Aleksandrov wrote:
+> > On 24/04/2022 22:49, Alaa Mohamed wrote:
+> > > On ٢٤/٤/٢٠٢٢ ٢١:٠٢, Nikolay Aleksandrov wrote:
+> > > > On 24/04/2022 15:09, Alaa Mohamed wrote:
+> > > > > Add extack support to .ndo_fdb_del in netdevice.h and
+> > > > > all related methods.
+> > > > >
+> > > > > Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+> > > > > ---
+> > > > > changes in V3:
+> > > > >           fix errors reported by checkpatch.pl
+> > > > > ---
+> > > > >    drivers/net/ethernet/intel/ice/ice_main.c        | 4 ++--
+> > > > >    drivers/net/ethernet/mscc/ocelot_net.c           | 4 ++--
+> > > > >    drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c | 2 +-
+> > > > >    drivers/net/macvlan.c                            | 2 +-
+> > > > >    drivers/net/vxlan/vxlan_core.c                   | 2 +-
+> > > > >    include/linux/netdevice.h                        | 2 +-
+> > > > >    net/bridge/br_fdb.c                              | 2 +-
+> > > > >    net/bridge/br_private.h                          | 2 +-
+> > > > >    net/core/rtnetlink.c                             | 4 ++--
+> > > > >    9 files changed, 12 insertions(+), 12 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/net/ethernet/intel/ice/ice_main.c
+> > > > > b/drivers/net/ethernet/intel/ice/ice_main.c
+> > > > > index d768925785ca..7b55d8d94803 100644
+> > > > > --- a/drivers/net/ethernet/intel/ice/ice_main.c
+> > > > > +++ b/drivers/net/ethernet/intel/ice/ice_main.c
+> > > > > @@ -5678,10 +5678,10 @@ ice_fdb_add(struct ndmsg *ndm, struct nlattr
+> > > > > __always_unused *tb[],
+> > > > >    static int
+> > > > >    ice_fdb_del(struct ndmsg *ndm, __always_unused struct nlattr *tb[],
+> > > > >            struct net_device *dev, const unsigned char *addr,
+> > > > > -        __always_unused u16 vid)
+> > > > > +        __always_unused u16 vid, struct netlink_ext_ack *extack)
+> > > > >    {
+> > > > >        int err;
+> > > > > -
+> > > > > +
+> > > > What's changed here?
+> > > In the previous version, I removed the blank line after "int err;" and you
+> > > said I shouldn't so I added blank line.
+> > >
+> > Yeah, my question is are you fixing a dos ending or something else?
+> > The blank line is already there, what's wrong with it?
+> No, I didn't.
+
+OK, so what is the answer to the question about what changed?  It looks
+like you remove a blank line and then add it back.  But that should not
+show up as a difference when you generate the patch.
+
+When you answer a comment, please put a blank line before and after your
+answer.  Otherwise it can be hard to see your answer when it is in the
+middle of a larger patch.
+
+> >
+> > The point is it's not nice to mix style fixes and other changes, more so
+> > if nothing is mentioned in the commit message.
+> Got it, So, what should I do to fix it?
+
+A series?  But it is not clear that any change is needed here at all.
+
+julia
+
+> > > > >        if (ndm->ndm_state & NUD_PERMANENT) {
+> > > > >            netdev_err(dev, "FDB only supports static addresses\n");
+> > > > >            return -EINVAL;
+> > > > > diff --git a/drivers/net/ethernet/mscc/ocelot_net.c
+> > > > > b/drivers/net/ethernet/mscc/ocelot_net.c
+> > > > > index 247bc105bdd2..e07c64e3159c 100644
+> > > > > --- a/drivers/net/ethernet/mscc/ocelot_net.c
+> > > > > +++ b/drivers/net/ethernet/mscc/ocelot_net.c
+> > > > > @@ -774,14 +774,14 @@ static int ocelot_port_fdb_add(struct ndmsg
+> > > > > *ndm, struct nlattr *tb[],
+> > > > >
+> > > > >    static int ocelot_port_fdb_del(struct ndmsg *ndm, struct nlattr
+> > > > > *tb[],
+> > > > >                       struct net_device *dev,
+> > > > > -                   const unsigned char *addr, u16 vid)
+> > > > > +                   const unsigned char *addr, u16 vid, struct
+> > > > > netlink_ext_ack *extack)
+> > > > >    {
+> > > > >        struct ocelot_port_private *priv = netdev_priv(dev);
+> > > > >        struct ocelot_port *ocelot_port = &priv->port;
+> > > > >        struct ocelot *ocelot = ocelot_port->ocelot;
+> > > > >        int port = priv->chip_port;
+> > > > >
+> > > > > -    return ocelot_fdb_del(ocelot, port, addr, vid,
+> > > > > ocelot_port->bridge);
+> > > > > +    return ocelot_fdb_del(ocelot, port, addr, vid,
+> > > > > ocelot_port->bridge, extack);
+> > > > >    }
+> > > > >
+> > > > >    static int ocelot_port_fdb_dump(struct sk_buff *skb,
+> > > > > diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c
+> > > > > b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c
+> > > > > index d320567b2cca..51fa23418f6a 100644
+> > > > > --- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c
+> > > > > +++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c
+> > > > > @@ -368,7 +368,7 @@ static int qlcnic_set_mac(struct net_device
+> > > > > *netdev, void *p)
+> > > > >
+> > > > >    static int qlcnic_fdb_del(struct ndmsg *ndm, struct nlattr *tb[],
+> > > > >                struct net_device *netdev,
+> > > > > -            const unsigned char *addr, u16 vid)
+> > > > > +            const unsigned char *addr, u16 vid, struct
+> > > > > netlink_ext_ack *extack)
+> > > > >    {
+> > > > >        struct qlcnic_adapter *adapter = netdev_priv(netdev);
+> > > > >        int err = -EOPNOTSUPP;
+> > > > > diff --git a/drivers/net/macvlan.c b/drivers/net/macvlan.c
+> > > > > index 069e8824c264..ffd34d9f7049 100644
+> > > > > --- a/drivers/net/macvlan.c
+> > > > > +++ b/drivers/net/macvlan.c
+> > > > > @@ -1017,7 +1017,7 @@ static int macvlan_fdb_add(struct ndmsg *ndm,
+> > > > > struct nlattr *tb[],
+> > > > >
+> > > > >    static int macvlan_fdb_del(struct ndmsg *ndm, struct nlattr *tb[],
+> > > > >                   struct net_device *dev,
+> > > > > -               const unsigned char *addr, u16 vid)
+> > > > > +               const unsigned char *addr, u16 vid, struct
+> > > > > netlink_ext_ack *extack)
+> > > > >    {
+> > > > >        struct macvlan_dev *vlan = netdev_priv(dev);
+> > > > >        int err = -EINVAL;
+> > > > > diff --git a/drivers/net/vxlan/vxlan_core.c
+> > > > > b/drivers/net/vxlan/vxlan_core.c
+> > > > > index de97ff98d36e..cf2f60037340 100644
+> > > > > --- a/drivers/net/vxlan/vxlan_core.c
+> > > > > +++ b/drivers/net/vxlan/vxlan_core.c
+> > > > > @@ -1280,7 +1280,7 @@ int __vxlan_fdb_delete(struct vxlan_dev *vxlan,
+> > > > >    /* Delete entry (via netlink) */
+> > > > >    static int vxlan_fdb_delete(struct ndmsg *ndm, struct nlattr *tb[],
+> > > > >                    struct net_device *dev,
+> > > > > -                const unsigned char *addr, u16 vid)
+> > > > > +                const unsigned char *addr, u16 vid, struct
+> > > > > netlink_ext_ack *extack)
+> > > > >    {
+> > > > >        struct vxlan_dev *vxlan = netdev_priv(dev);
+> > > > >        union vxlan_addr ip;
+> > > > > diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> > > > > index 28ea4f8269d4..d0d2a8f33c73 100644
+> > > > > --- a/include/linux/netdevice.h
+> > > > > +++ b/include/linux/netdevice.h
+> > > > > @@ -1509,7 +1509,7 @@ struct net_device_ops {
+> > > > >                               struct nlattr *tb[],
+> > > > >                               struct net_device *dev,
+> > > > >                               const unsigned char *addr,
+> > > > > -                           u16 vid);
+> > > > > +                           u16 vid, struct netlink_ext_ack *extack);
+> > > > >        int            (*ndo_fdb_dump)(struct sk_buff *skb,
+> > > > >                            struct netlink_callback *cb,
+> > > > >                            struct net_device *dev,
+> > > > > diff --git a/net/bridge/br_fdb.c b/net/bridge/br_fdb.c
+> > > > > index 6ccda68bd473..5bfce2e9a553 100644
+> > > > > --- a/net/bridge/br_fdb.c
+> > > > > +++ b/net/bridge/br_fdb.c
+> > > > > @@ -1110,7 +1110,7 @@ static int __br_fdb_delete(struct net_bridge
+> > > > > *br,
+> > > > >    /* Remove neighbor entry with RTM_DELNEIGH */
+> > > > >    int br_fdb_delete(struct ndmsg *ndm, struct nlattr *tb[],
+> > > > >              struct net_device *dev,
+> > > > > -          const unsigned char *addr, u16 vid)
+> > > > > +          const unsigned char *addr, u16 vid, struct netlink_ext_ack
+> > > > > *extack)
+> > > > >    {
+> > > > >        struct net_bridge_vlan_group *vg;
+> > > > >        struct net_bridge_port *p = NULL;
+> > > > > diff --git a/net/bridge/br_private.h b/net/bridge/br_private.h
+> > > > > index 18ccc3d5d296..95348c1c9ce5 100644
+> > > > > --- a/net/bridge/br_private.h
+> > > > > +++ b/net/bridge/br_private.h
+> > > > > @@ -780,7 +780,7 @@ void br_fdb_update(struct net_bridge *br, struct
+> > > > > net_bridge_port *source,
+> > > > >               const unsigned char *addr, u16 vid, unsigned long
+> > > > > flags);
+> > > > >
+> > > > >    int br_fdb_delete(struct ndmsg *ndm, struct nlattr *tb[],
+> > > > > -          struct net_device *dev, const unsigned char *addr, u16
+> > > > > vid);
+> > > > > +          struct net_device *dev, const unsigned char *addr, u16 vid,
+> > > > > struct netlink_ext_ack *extack);
+> > > > This is way too long (111 chars) and checkpatch should've complained
+> > > > about it.
+> > > > WARNING: line length of 111 exceeds 100 columns
+> > > > #234: FILE: net/bridge/br_private.h:782:
+> > > > +          struct net_device *dev, const unsigned char *addr, u16 vid,
+> > > > struct netlink_ext_ack *extack);
+> > > I will fix it.
+> > >
+> > > > >    int br_fdb_add(struct ndmsg *nlh, struct nlattr *tb[], struct
+> > > > > net_device *dev,
+> > > > >               const unsigned char *addr, u16 vid, u16 nlh_flags,
+> > > > >               struct netlink_ext_ack *extack);
+> > > > > diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
+> > > > > index 4041b3e2e8ec..99b30ae58a47 100644
+> > > > > --- a/net/core/rtnetlink.c
+> > > > > +++ b/net/core/rtnetlink.c
+> > > > > @@ -4223,7 +4223,7 @@ static int rtnl_fdb_del(struct sk_buff *skb,
+> > > > > struct nlmsghdr *nlh,
+> > > > >            const struct net_device_ops *ops = br_dev->netdev_ops;
+> > > > >
+> > > > >            if (ops->ndo_fdb_del)
+> > > > > -            err = ops->ndo_fdb_del(ndm, tb, dev, addr, vid);
+> > > > > +            err = ops->ndo_fdb_del(ndm, tb, dev, addr, vid, extack);
+> > > > >
+> > > > >            if (err)
+> > > > >                goto out;
+> > > > > @@ -4235,7 +4235,7 @@ static int rtnl_fdb_del(struct sk_buff *skb,
+> > > > > struct nlmsghdr *nlh,
+> > > > >        if (ndm->ndm_flags & NTF_SELF) {
+> > > > >            if (dev->netdev_ops->ndo_fdb_del)
+> > > > >                err = dev->netdev_ops->ndo_fdb_del(ndm, tb, dev, addr,
+> > > > > -                               vid);
+> > > > > +                               vid, extack);
+> > > > >            else
+> > > > >                err = ndo_dflt_fdb_del(ndm, tb, dev, addr, vid);
+> > > > >
+> > > > > --
+> > > > > 2.36.0
+> > > > >
+>
+>
+--8323329-1725770404-1650867082=:2759--

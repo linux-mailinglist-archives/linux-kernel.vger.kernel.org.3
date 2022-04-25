@@ -2,66 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82A0750DB1C
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3B4C50DB2D
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235710AbiDYI3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 04:29:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35904 "EHLO
+        id S235385AbiDYIay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 04:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240736AbiDYI2G (ORCPT
+        with ESMTP id S237626AbiDYIa3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 04:28:06 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79155DF07
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:25:02 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2f7b815ac06so63970857b3.3
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:25:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6PKUUhwBuA+ch0Uuq1T1DwshtjMaHDXX/uf2rDKBNDQ=;
-        b=LfPW9WXgTpr+8/iVd5AE2JI65Goo9Kb2vfmKqdAD7xilZMOadB4Hs7hyaEuHJcebSq
-         Jb6OAXCefLv+Q4wDL3KmNpjmMTgKBGfeHRrT+Wa1UxLqcTruKd81ztbl6lCMZFjlmDC4
-         g9lfIGc9u5ZZt7MRgeKrf6IK7WUXWAptRCM0o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6PKUUhwBuA+ch0Uuq1T1DwshtjMaHDXX/uf2rDKBNDQ=;
-        b=WTHR5e6rVADX2mHyvYaGWeyT1lbJaIDHxOKFsLEgOMlfRTDJUZsT5J+ZvHnaj+2Apy
-         RvXM7l9VEedwzDRym64ODnBOKUNZsPk07x7GVhwcQVJfanlVDNdjw9aEEF2XuTjtL3MJ
-         oRwQsT1wEVVb4SzP0o5J+mcueuCr0WLzw1Pf1UouJUUKdlw3y7C4p8N58Wr5ow3afY5U
-         0Xv0AY7ooiagYJEm2ahWdhtOn4Es/dR52Y0bwxOsUBFeCcETcx0GRwFtNAdLERS2BuzS
-         x2VaIetHKn8CAtP374wc4ZtYGAE3m+8miI6VxVB26JgLaaY0L65fQSAF7U0lvJnd/EMv
-         L6RQ==
-X-Gm-Message-State: AOAM531P7UcEd3cN85ojMwlw6Jl3JxWsEckHEEbs31PXiu8F7q71EzHa
-        P+9nIiph01KO3lJz6nvHqQi94gLTYw3XlqSgcL+Ohg==
-X-Google-Smtp-Source: ABdhPJxbt5i4+hFeo1dGmq14YTb4HSm9CGzOHMOg7ZYoAkkPlsj1JpB9JC+WReAMlPR0hNsAbsVPwv+zgr881d/xQJs=
-X-Received: by 2002:a81:b044:0:b0:2d6:bd1f:5d8b with SMTP id
- x4-20020a81b044000000b002d6bd1f5d8bmr15448618ywk.27.1650875101688; Mon, 25
- Apr 2022 01:25:01 -0700 (PDT)
+        Mon, 25 Apr 2022 04:30:29 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488C71DA57;
+        Mon, 25 Apr 2022 01:27:02 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 01AE21F37D;
+        Mon, 25 Apr 2022 08:27:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1650875221; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=w4ANeXLzjcqotnphnOK0rUPz/EKYu7iEZD+lfX94N5M=;
+        b=AklELnOH5ksAZwBokZhcRdfs2KA+xCZFzqI4I8LzcMbiOxJ8L0C6QlnWkvSs5xF0CvPape
+        4zd3lNTLNfNmqZwvA5cqCXf4uNwfhirt4X7Ay32IM78ZUgBA4nHCDawmPcEqZ6d/BbyMCu
+        NJRiFfmAWIKgTe6IqYTaZr5IxDKDpL8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1650875221;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=w4ANeXLzjcqotnphnOK0rUPz/EKYu7iEZD+lfX94N5M=;
+        b=LKWQEiQj0RfY51/CMozD8tJt6TuYAXiTApafez9NxgDnRXuIpqc4hX+ppNMq/1Mzy9sPzG
+        3Iqf8Ge2GMBCx/Cg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B3BD513AED;
+        Mon, 25 Apr 2022 08:27:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id kMzhKlRbZmIjfAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 25 Apr 2022 08:27:00 +0000
+Message-ID: <44804419-0e83-b584-96d9-a35939b715bf@suse.de>
+Date:   Mon, 25 Apr 2022 10:27:00 +0200
 MIME-Version: 1.0
-References: <20220422084720.959271-1-xji@analogixsemi.com> <20220422084720.959271-4-xji@analogixsemi.com>
- <CAG3jFytWGSUM9mevHewdmEe-hq3JgB74s7_f0fsEQqkXr9VUHg@mail.gmail.com> <CAG3jFyvEYbwkdGtiNR-6vFEXTLjcyT_viqp9qeVxFTu0PrJEVA@mail.gmail.com>
-In-Reply-To: <CAG3jFyvEYbwkdGtiNR-6vFEXTLjcyT_viqp9qeVxFTu0PrJEVA@mail.gmail.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Mon, 25 Apr 2022 16:24:50 +0800
-Message-ID: <CAGXv+5E1cCNWD98fMDjC38y2UztZd=PNQ+=G=wrBYfoXkswvHA@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] drm/bridge: anx7625: Use DPI bus type
-To:     Robert Foss <robert.foss@linaro.org>, Xin Ji <xji@analogixsemi.com>
-Cc:     dri-devel@lists.freedesktop.org, Jonas Karlman <jonas@kwiboo.se>,
-        David Airlie <airlied@linux.ie>, qwen@analogixsemi.com,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-kernel@vger.kernel.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        bliang@analogixsemi.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v3 3/5] fbdev: Restart conflicting fb removal loop when
+ unregistering devices
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        linux-fbdev@vger.kernel.org
+References: <20220420085303.100654-1-javierm@redhat.com>
+ <20220420085303.100654-4-javierm@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220420085303.100654-4-javierm@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------ZBj3qqpnqvIaLxVKiCxcVXoT"
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,67 +82,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 10:13 PM Robert Foss <robert.foss@linaro.org> wrote:
->
-> On Fri, 22 Apr 2022 at 16:01, Robert Foss <robert.foss@linaro.org> wrote:
-> >
-> > On Fri, 22 Apr 2022 at 10:49, Xin Ji <xji@analogixsemi.com> wrote:
-> > >
-> > > As V4L2_FWNODE_BUS_TYPE_PARALLEL not properly descript for DPI
-> > > interface, this patch use new defined V4L2_FWNODE_BUS_TYPE_DPI for it.
-> > >
-> > > Fixes: fd0310b6fe7d ("drm/bridge: anx7625: add MIPI DPI input feature")
-> > > Signed-off-by: Xin Ji <xji@analogixsemi.com>
-> > > ---
-> > >  drivers/gpu/drm/bridge/analogix/anx7625.c | 8 ++++----
-> > >  1 file changed, 4 insertions(+), 4 deletions(-)
-> > >
-> > > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > > index 376da01243a3..71df977e8f53 100644
-> > > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > > @@ -1623,14 +1623,14 @@ static int anx7625_parse_dt(struct device *dev,
-> > >
-> > >         anx7625_get_swing_setting(dev, pdata);
-> > >
-> > > -       pdata->is_dpi = 1; /* default dpi mode */
-> > > +       pdata->is_dpi = 0; /* default dsi mode */
-> > >         pdata->mipi_host_node = of_graph_get_remote_node(np, 0, 0);
-> > >         if (!pdata->mipi_host_node) {
-> > >                 DRM_DEV_ERROR(dev, "fail to get internal panel.\n");
-> > >                 return -ENODEV;
-> > >         }
-> > >
-> > > -       bus_type = V4L2_FWNODE_BUS_TYPE_PARALLEL;
-> > > +       bus_type = 0;
-> > >         mipi_lanes = MAX_LANES_SUPPORT;
-> > >         ep0 = of_graph_get_endpoint_by_regs(np, 0, 0);
-> > >         if (ep0) {
-> > > @@ -1640,8 +1640,8 @@ static int anx7625_parse_dt(struct device *dev,
-> > >                 mipi_lanes = of_property_count_u32_elems(ep0, "data-lanes");
-> > >         }
-> > >
-> > > -       if (bus_type == V4L2_FWNODE_BUS_TYPE_PARALLEL) /* bus type is Parallel(DSI) */
-> > > -               pdata->is_dpi = 0;
-> > > +       if (bus_type == V4L2_FWNODE_BUS_TYPE_DPI) /* bus type is DPI */
-> > > +               pdata->is_dpi = 1;
-> > >
-> > >         pdata->mipi_lanes = mipi_lanes;
-> > >         if (pdata->mipi_lanes > MAX_LANES_SUPPORT || pdata->mipi_lanes <= 0)
-> >
-> > Reviewed-by: Robert Foss <robert.foss@linaro.org>
->
-> Acked-by: Robert Foss <robert.foss@linaro.org>
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------ZBj3qqpnqvIaLxVKiCxcVXoT
+Content-Type: multipart/mixed; boundary="------------tndJ8OcZcz64aezTVTn0Tn0n";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ linux-kernel@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Daniel Vetter <daniel.vetter@ffwll.ch>, dri-devel@lists.freedesktop.org,
+ Alex Deucher <alexander.deucher@amd.com>,
+ Changcheng Deng <deng.changcheng@zte.com.cn>, Daniel Vetter
+ <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
+ Sam Ravnborg <sam@ravnborg.org>, Zhen Lei <thunder.leizhen@huawei.com>,
+ linux-fbdev@vger.kernel.org
+Message-ID: <44804419-0e83-b584-96d9-a35939b715bf@suse.de>
+Subject: Re: [PATCH v3 3/5] fbdev: Restart conflicting fb removal loop when
+ unregistering devices
+References: <20220420085303.100654-1-javierm@redhat.com>
+ <20220420085303.100654-4-javierm@redhat.com>
+In-Reply-To: <20220420085303.100654-4-javierm@redhat.com>
 
-Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+--------------tndJ8OcZcz64aezTVTn0Tn0n
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Confirmed this fixes the display on Juniper (Acer Chromebook Spin 311) on
-mainline (next-20220422).
+SGkNCg0KQW0gMjAuMDQuMjIgdW0gMTA6NTMgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
+aWxsYXM6DQo+IERyaXZlcnMgdGhhdCB3YW50IHRvIHJlbW92ZSByZWdpc3RlcmVkIGNvbmZs
+aWN0aW5nIGZyYW1lYnVmZmVycyBwcmlvciB0bw0KPiByZWdpc3RlciB0aGVpciBvd24gZnJh
+bWVidWZmZXIsIGNhbGxzIHJlbW92ZV9jb25mbGljdGluZ19mcmFtZWJ1ZmZlcnMoKS4NCj4g
+DQo+IFRoaXMgZnVuY3Rpb24gdGFrZXMgdGhlIHJlZ2lzdHJhdGlvbl9sb2NrIG11dGV4LCB0
+byBwcmV2ZW50IGEgcmFjZXMgd2hlbg0KPiBkcml2ZXJzIHJlZ2lzdGVyIGZyYW1lYnVmZmVy
+IGRldmljZXMuIEJ1dCBpZiBhIGNvbmZsaWN0aW5nIGZyYW1lYnVmZmVyDQo+IGRldmljZSBp
+cyBmb3VuZCwgdGhlIHVuZGVybGF5aW5nIHBsYXRmb3JtIGRldmljZSBpcyB1bnJlZ2lzdGVy
+ZWQgYW5kIHRoaXMNCj4gd2lsbCBsZWFkIHRvIHRoZSBwbGF0Zm9ybSBkcml2ZXIgLnJlbW92
+ZSBjYWxsYmFjayB0byBiZSBjYWxsZWQsIHdoaWNoIGluDQo+IHR1cm4gd2lsbCBjYWxsIHRv
+IHRoZSB1bnJlZ2lzdGVyX2ZyYW1lYnVmZmVyKCkgdGhhdCB0YWtlcyB0aGUgc2FtZSBsb2Nr
+Lg0KPiANCj4gVG8gcHJldmVudCB0aGlzLCBhIHN0cnVjdCBmYl9pbmZvLmZvcmNlZF9vdXQg
+ZmllbGQgd2FzIHVzZWQgYXMgaW5kaWNhdGlvbg0KPiB0byB1bnJlZ2lzdGVyX2ZyYW1lYnVm
+ZmVyKCkgd2hldGhlciB0aGUgbXV0ZXggaGFzIHRvIGJlIGdyYWJiZWQgb3Igbm90Lg0KPiAN
+Cj4gQSBjbGVhbmVyIHNvbHV0aW9uIGlzIHRvIGRyb3AgdGhlIGxvY2sgYmVmb3JlIHBsYXRm
+b3JtX2RldmljZV91bnJlZ2lzdGVyKCkNCj4gc28gdW5yZWdpc3Rlcl9mcmFtZWJ1ZmZlcigp
+IGNhbiB0YWtlIGl0IHdoZW4gY2FsbGVkIGZyb20gdGhlIGZiZGV2IGRyaXZlciwNCj4gYW5k
+IGp1c3QgZ3JhYiB0aGUgbG9jayBhZ2FpbiBhZnRlciB0aGUgZGV2aWNlIGhhcyBiZWVuIHJl
+Z2lzdGVyZWQgYW5kIGRvDQo+IGEgcmVtb3ZhbCBsb29wIHJlc3RhcnQuDQoNCkkgZG9uJ3Qg
+c2VlIGhvdyB0aGlzIHBhdGNoIGltcHJvdmVzIHRoZSBzaXR1YXRpb24uIFNvIGZhciwgDQpk
+b19yZW1vdmVfY29uZmxpY3RpbmdfZnJhbWVidWZmZXJzKCkgaGFkIG5vIGJ1c2luZXNzIGlu
+IG1haW50YWluaW5nIA0KbG9ja3MuIEFuZCBub3cgaXQncyBkb2luZyB0aGlzIGluIGluIGEg
+Z290by1sb29wIHdoZXJlIGl0IGtlZXBzIA0KZ2V0dGluZy9kcm9wcGluZyBsb2Nrcy4gIFRo
+YXQncyBhc2tpbmcgZm9yIGJ1Z3MgSU1ITy4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0K
+PiANCj4gU2luY2UgdGhlIGZyYW1lYnVmZmVyIGRldmljZXMgd2lsbCBhbHJlYWR5IGJlIHJl
+bW92ZWQsIHRoZSBsb29wIHdvdWxkIGp1c3QNCj4gZmluaXNoIHdoZW4gbm8gbW9yZSBjb25m
+bGljdGluZyBmcmFtZWJ1ZmZlcnMgYXJlIGZvdW5kLg0KPiANCj4gU3VnZ2VzdGVkLWJ5OiBE
+YW5pZWwgVmV0dGVyIDxkYW5pZWwudmV0dGVyQGZmd2xsLmNoPg0KPiBTaWduZWQtb2ZmLWJ5
+OiBKYXZpZXIgTWFydGluZXogQ2FuaWxsYXMgPGphdmllcm1AcmVkaGF0LmNvbT4NCj4gUmV2
+aWV3ZWQtYnk6IERhbmllbCBWZXR0ZXIgPGRhbmllbC52ZXR0ZXJAZmZ3bGwuY2g+DQo+IC0t
+LQ0KPiANCj4gKG5vIGNoYW5nZXMgc2luY2UgdjEpDQo+IA0KPiAgIGRyaXZlcnMvdmlkZW8v
+ZmJkZXYvY29yZS9mYm1lbS5jIHwgMjIgKysrKysrKysrKysrKysrLS0tLS0tLQ0KPiAgIGlu
+Y2x1ZGUvbGludXgvZmIuaCAgICAgICAgICAgICAgIHwgIDEgLQ0KPiAgIDIgZmlsZXMgY2hh
+bmdlZCwgMTUgaW5zZXJ0aW9ucygrKSwgOCBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1n
+aXQgYS9kcml2ZXJzL3ZpZGVvL2ZiZGV2L2NvcmUvZmJtZW0uYyBiL2RyaXZlcnMvdmlkZW8v
+ZmJkZXYvY29yZS9mYm1lbS5jDQo+IGluZGV4IDg0NDI3NDcwMzY3Yi4uMGJiNDU5MjU4ZGYz
+IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3ZpZGVvL2ZiZGV2L2NvcmUvZmJtZW0uYw0KPiAr
+KysgYi9kcml2ZXJzL3ZpZGVvL2ZiZGV2L2NvcmUvZmJtZW0uYw0KPiBAQCAtMTU1Myw2ICsx
+NTUzLDcgQEAgc3RhdGljIHZvaWQgZG9fcmVtb3ZlX2NvbmZsaWN0aW5nX2ZyYW1lYnVmZmVy
+cyhzdHJ1Y3QgYXBlcnR1cmVzX3N0cnVjdCAqYSwNCj4gICB7DQo+ICAgCWludCBpOw0KPiAg
+IA0KPiArcmVzdGFydF9yZW1vdmFsOg0KPiAgIAkvKiBjaGVjayBhbGwgZmlybXdhcmUgZmJz
+IGFuZCBraWNrIG9mZiBpZiB0aGUgYmFzZSBhZGRyIG92ZXJsYXBzICovDQo+ICAgCWZvcl9l
+YWNoX3JlZ2lzdGVyZWRfZmIoaSkgew0KPiAgIAkJc3RydWN0IGFwZXJ0dXJlc19zdHJ1Y3Qg
+Kmdlbl9hcGVyOw0KPiBAQCAtMTU4NSwxMiArMTU4NiwyMyBAQCBzdGF0aWMgdm9pZCBkb19y
+ZW1vdmVfY29uZmxpY3RpbmdfZnJhbWVidWZmZXJzKHN0cnVjdCBhcGVydHVyZXNfc3RydWN0
+ICphLA0KPiAgIAkJCQlwcl93YXJuKCJmYiVkOiBubyBkZXZpY2Ugc2V0XG4iLCBpKTsNCj4g
+ICAJCQkJZG9fdW5yZWdpc3Rlcl9mcmFtZWJ1ZmZlcihyZWdpc3RlcmVkX2ZiW2ldKTsNCj4g
+ICAJCQl9IGVsc2UgaWYgKGRldl9pc19wbGF0Zm9ybShkZXZpY2UpKSB7DQo+IC0JCQkJcmVn
+aXN0ZXJlZF9mYltpXS0+Zm9yY2VkX291dCA9IHRydWU7DQo+ICsJCQkJLyoNCj4gKwkJCQkg
+KiBEcm9wIHRoZSBsb2NrIGJlY2F1c2UgaWYgdGhlIGRldmljZSBpcyB1bnJlZ2lzdGVyZWQs
+IGl0cw0KPiArCQkJCSAqIGRyaXZlciB3aWxsIGNhbGwgdG8gdW5yZWdpc3Rlcl9mcmFtZWJ1
+ZmZlcigpLCB0aGF0IHRha2VzDQo+ICsJCQkJICogdGhpcyBsb2NrLg0KPiArCQkJCSAqLw0K
+PiArCQkJCW11dGV4X3VubG9jaygmcmVnaXN0cmF0aW9uX2xvY2spOw0KPiAgIAkJCQlwbGF0
+Zm9ybV9kZXZpY2VfdW5yZWdpc3Rlcih0b19wbGF0Zm9ybV9kZXZpY2UoZGV2aWNlKSk7DQo+
+ICsJCQkJbXV0ZXhfbG9jaygmcmVnaXN0cmF0aW9uX2xvY2spOw0KPiAgIAkJCX0gZWxzZSB7
+DQo+ICAgCQkJCXByX3dhcm4oImZiJWQ6IGNhbm5vdCByZW1vdmUgZGV2aWNlXG4iLCBpKTsN
+Cj4gICAJCQkJZG9fdW5yZWdpc3Rlcl9mcmFtZWJ1ZmZlcihyZWdpc3RlcmVkX2ZiW2ldKTsN
+Cj4gICAJCQl9DQo+ICsJCQkvKg0KPiArCQkJICogUmVzdGFydCB0aGUgcmVtb3ZhbCBsb29w
+IG5vdyB0aGF0IHRoZSBkZXZpY2UgaGFzIGJlZW4NCj4gKwkJCSAqIHVucmVnaXN0ZXJlZCBh
+bmQgaXRzIGFzc29jaWF0ZWQgZnJhbWVidWZmZXIgZ29uZS4NCj4gKwkJCSAqLw0KPiArCQkJ
+Z290byByZXN0YXJ0X3JlbW92YWw7DQo+ICAgCQl9DQo+ICAgCX0NCj4gICB9DQo+IEBAIC0x
+ODk3LDEzICsxOTA5LDkgQEAgRVhQT1JUX1NZTUJPTChyZWdpc3Rlcl9mcmFtZWJ1ZmZlcik7
+DQo+ICAgdm9pZA0KPiAgIHVucmVnaXN0ZXJfZnJhbWVidWZmZXIoc3RydWN0IGZiX2luZm8g
+KmZiX2luZm8pDQo+ICAgew0KPiAtCWJvb2wgZm9yY2VkX291dCA9IGZiX2luZm8tPmZvcmNl
+ZF9vdXQ7DQo+IC0NCj4gLQlpZiAoIWZvcmNlZF9vdXQpDQo+IC0JCW11dGV4X2xvY2soJnJl
+Z2lzdHJhdGlvbl9sb2NrKTsNCj4gKwltdXRleF9sb2NrKCZyZWdpc3RyYXRpb25fbG9jayk7
+DQo+ICAgCWRvX3VucmVnaXN0ZXJfZnJhbWVidWZmZXIoZmJfaW5mbyk7DQo+IC0JaWYgKCFm
+b3JjZWRfb3V0KQ0KPiAtCQltdXRleF91bmxvY2soJnJlZ2lzdHJhdGlvbl9sb2NrKTsNCj4g
+KwltdXRleF91bmxvY2soJnJlZ2lzdHJhdGlvbl9sb2NrKTsNCj4gICB9DQo+ICAgRVhQT1JU
+X1NZTUJPTCh1bnJlZ2lzdGVyX2ZyYW1lYnVmZmVyKTsNCj4gICANCj4gZGlmZiAtLWdpdCBh
+L2luY2x1ZGUvbGludXgvZmIuaCBiL2luY2x1ZGUvbGludXgvZmIuaA0KPiBpbmRleCBmOTVk
+YTFhZjlmZjYuLmI3ODFiYzcyMTExMyAxMDA2NDQNCj4gLS0tIGEvaW5jbHVkZS9saW51eC9m
+Yi5oDQo+ICsrKyBiL2luY2x1ZGUvbGludXgvZmIuaA0KPiBAQCAtNTAyLDcgKzUwMiw2IEBA
+IHN0cnVjdCBmYl9pbmZvIHsNCj4gICAJfSAqYXBlcnR1cmVzOw0KPiAgIA0KPiAgIAlib29s
+IHNraXBfdnRfc3dpdGNoOyAvKiBubyBWVCBzd2l0Y2ggb24gc3VzcGVuZC9yZXN1bWUgcmVx
+dWlyZWQgKi8NCj4gLQlib29sIGZvcmNlZF9vdXQ7IC8qIHNldCB3aGVuIGJlaW5nIHJlbW92
+ZWQgYnkgYW5vdGhlciBkcml2ZXIgKi8NCj4gICB9Ow0KPiAgIA0KPiAgIHN0YXRpYyBpbmxp
+bmUgc3RydWN0IGFwZXJ0dXJlc19zdHJ1Y3QgKmFsbG9jX2FwZXJ0dXJlcyh1bnNpZ25lZCBp
+bnQgbWF4X251bSkgew0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2
+ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1h
+eGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcg
+TsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
 
-Xin, in the future, please send the whole series to all recipients of
-all patches listed by get_maintainers.pl, not just the recipients of
-each patch. In the case of this series, they should have been sent
-to all of the mailing lists (media, devicetree, dri-devel) so that
-everyone has the same, full view of the patches.
+--------------tndJ8OcZcz64aezTVTn0Tn0n--
 
-ChenYu
+--------------ZBj3qqpnqvIaLxVKiCxcVXoT
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJmW1QFAwAAAAAACgkQlh/E3EQov+D5
+EQ/+LYErdR2uljbQz9gIF56jHpRYK9entfnaNT/iWs4+3EE6NRaPYieK3BOP8fkOGKx0njYfBl/k
+/dlQ1INXlX8rcn/5VmWMbtYt///Rd6eaw0n8plz4lbq69sEEzRAIAxgC8nA78lQ6ipHnDXXso3C7
+hpj5u/eNdsfUCoGNy8Msi3NcNfZmk/jnMQyu3UsoBJnMIukI+EvAeHCIX9O1uj3JkZcf2udE97QP
+3RWb5UaQhc69Rl4fe8WSq3E00edwo+UDgazzfGckjvYYUaoIuQdnUwzehRFylnpEPfZkL95eVm6w
+tQkgJTBCMI14mAhyEyNMg/Y7Rb5zsnFywCSY/wHD1mkygUn1MvUUw0QXBUkHQ8e3p0kVfa+cUMW/
+bzumF9LIn2IpBEh2VbSqLVNO6P9lZz4Otelu3Z6knfCyCd3Fw/YDWJcNv+QZidz/SrgvCkpA0jLh
+A0m7xyhha6wTOiaOdSe55+1S4bEaoq8YCcfzD9uGMwHailGjXanw+aUC9v2mDpyK95lEVPud22nx
+QTJ+yI6WZwg2bvfpV/wQtqoyDO+LrHW/tevSijiDex5W/akVz8OtrlBF//TxTJfYDNWPCO/MBuOY
+BLYT1Z2HH63P9X4jJbw4QsVwLeLeNvP9K4n/Qka8OAwkDv/5xbM6Jd+Y0NL0AR5V002Lt0bX030o
+wVw=
+=4Zal
+-----END PGP SIGNATURE-----
+
+--------------ZBj3qqpnqvIaLxVKiCxcVXoT--

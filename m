@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88BE050DF7D
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 13:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 906A150DF7B
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 13:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237570AbiDYL7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 07:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35132 "EHLO
+        id S233384AbiDYL72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 07:59:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235216AbiDYL7X (ORCPT
+        with ESMTP id S233463AbiDYL7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 25 Apr 2022 07:59:23 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 423DB65DC
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 04:56:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2E9F12AC5
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 04:56:17 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EEEA7113E;
-        Mon, 25 Apr 2022 04:56:14 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E69AC11FB;
+        Mon, 25 Apr 2022 04:56:16 -0700 (PDT)
 Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B62003F73B;
-        Mon, 25 Apr 2022 04:56:13 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id AA4FC3F73B;
+        Mon, 25 Apr 2022 04:56:15 -0700 (PDT)
 From:   Mark Rutland <mark.rutland@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     akpm@linux-foundation.org, alex.popov@linux.com,
         catalin.marinas@arm.com, keescook@chromium.org,
         linux-arm-kernel@lists.infradead.org, luto@kernel.org,
         mark.rutland@arm.com, will@kernel.org
-Subject: [PATCH 2/8] stackleak: move skip_erasing() check earlier
-Date:   Mon, 25 Apr 2022 12:55:57 +0100
-Message-Id: <20220425115603.781311-3-mark.rutland@arm.com>
+Subject: [PATCH 3/8] stackleak: rework stack low bound handling
+Date:   Mon, 25 Apr 2022 12:55:58 +0100
+Message-Id: <20220425115603.781311-4-mark.rutland@arm.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220425115603.781311-1-mark.rutland@arm.com>
 References: <20220425115603.781311-1-mark.rutland@arm.com>
@@ -43,74 +43,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In stackleak_erase() we check skip_erasing() after accessing some fields
-from current. As generating the address of current uses asm which
-hazards with the static branch asm, this work is always performed, even
-when the static branch is patched to jump to the return a the end of the
-function.
+In stackleak_task_init(), stackleak_track_stack(), and
+__stackleak_erase(), we open-code skipping the STACK_END_MAGIC at the
+bottom of the stack. Each case is implemented slightly differently, and
+only the __stackleak_erase() case is commented.
 
-This patch avoids this redundant work by moving the skip_erasing() check
-earlier.
+In stackleak_task_init() and stackleak_track_stack() we unconditionally
+add sizeof(unsigned long) to the lowest stack address. In
+stackleak_task_init() we use end_of_stack() for this, and in
+stackleak_track_stack() we use task_stack_page(). In __stackleak_erase()
+we handle this by detecting if `kstack_ptr` has hit the stack end
+boundary, and if so, conditionally moving it above the magic.
 
-To avoid complicating initialization within stackleak_erase(), the body
-of the function is split out into a __stackleak_erase() helper, with the
-check left in a wrapper function. The __stackleak_erase() helper is
-marked __always_inline to ensure that this is inlined into
-stackleak_erase() and not instrumented.
+This patch adds a new stackleak_task_low_bound() helper which is used in
+all three cases, which unconditionally adds sizeof(unsigned long) to the
+lowest address on the task stack, with commentary as to why. This uses
+end_of_stack() as stackleak_task_init() did prior to this patch, as this
+is consistent with the code in kernel/fork.c which initializes the
+STACK_END_MAGIC value.
 
-Before this patch, on x86-64 w/ GCC 11.1.0 the start of the function is:
+In __stackleak_erase() we no longer need to check whether we've spilled
+into the STACK_END_MAGIC value, as stackleak_track_stack() ensures that
+`current->lowest_stack` stops immediately above this, and similarly the
+poison scan will stop immediately above this.
 
-<stackleak_erase>:
-   65 48 8b 04 25 00 00    mov    %gs:0x0,%rax
-   00 00
-   48 8b 48 20             mov    0x20(%rax),%rcx
-   48 8b 80 98 0a 00 00    mov    0xa98(%rax),%rax
-   66 90                   xchg   %ax,%ax  <------------ static branch
-   48 89 c2                mov    %rax,%rdx
-   48 29 ca                sub    %rcx,%rdx
-   48 81 fa ff 3f 00 00    cmp    $0x3fff,%rdx
-
-After this patch, on x86-64 w/ GCC 11.1.0 the start of the function is:
-
-<stackleak_erase>:
-   0f 1f 44 00 00          nopl   0x0(%rax,%rax,1)  <--- static branch
-   65 48 8b 04 25 00 00    mov    %gs:0x0,%rax
-   00 00
-   48 8b 48 20             mov    0x20(%rax),%rcx
-   48 8b 80 98 0a 00 00    mov    0xa98(%rax),%rax
-   48 89 c2                mov    %rax,%rdx
-   48 29 ca                sub    %rcx,%rdx
-   48 81 fa ff 3f 00 00    cmp    $0x3fff,%rdx
-
-Before this patch, on arm64 w/ GCC 11.1.0 the start of the function is:
-
-<stackleak_erase>:
-   d503245f        bti     c
-   d5384100        mrs     x0, sp_el0
-   f9401003        ldr     x3, [x0, #32]
-   f9451000        ldr     x0, [x0, #2592]
-   d503201f        nop  <------------------------------- static branch
-   d503233f        paciasp
-   cb030002        sub     x2, x0, x3
-   d287ffe1        mov     x1, #0x3fff
-   eb01005f        cmp     x2, x1
-
-After this patch, on arm64 w/ GCC 11.1.0 the start of the function is:
-
-<stackleak_erase>:
-   d503245f        bti     c
-   d503201f        nop  <------------------------------- static branch
-   d503233f        paciasp
-   d5384100        mrs     x0, sp_el0
-   f9401003        ldr     x3, [x0, #32]
-   d287ffe1        mov     x1, #0x3fff
-   f9451000        ldr     x0, [x0, #2592]
-   cb030002        sub     x2, x0, x3
-   eb01005f        cmp     x2, x1
-
-While this may not be a huge win on its own, moving the static branch
-will permit further optimization of the body of the function in
-subsequent patches.
+For stackleak_task_init() and stackleak_track_stack() this results in no
+change to code generation. For __stackleak_erase() the generated
+assembly is slightly simpler and shorter.
 
 Signed-off-by: Mark Rutland <mark.rutland@arm.com>
 Cc: Alexander Popov <alex.popov@linux.com>
@@ -118,47 +77,79 @@ Cc: Andrew Morton <akpm@linux-foundation.org>
 Cc: Andy Lutomirski <luto@kernel.org>
 Cc: Kees Cook <keescook@chromium.org>
 ---
- kernel/stackleak.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ include/linux/stackleak.h | 15 ++++++++++++++-
+ kernel/stackleak.c        | 14 ++++----------
+ 2 files changed, 18 insertions(+), 11 deletions(-)
 
+diff --git a/include/linux/stackleak.h b/include/linux/stackleak.h
+index ccaab2043fcd5..67430faa5c518 100644
+--- a/include/linux/stackleak.h
++++ b/include/linux/stackleak.h
+@@ -15,9 +15,22 @@
+ #ifdef CONFIG_GCC_PLUGIN_STACKLEAK
+ #include <asm/stacktrace.h>
+ 
++/*
++ * The lowest address on tsk's stack which we can plausibly erase.
++ */
++static __always_inline unsigned long
++stackleak_task_low_bound(const struct task_struct *tsk)
++{
++	/*
++	 * The lowest unsigned long on the task stack contains STACK_END_MAGIC,
++	 * which we must not corrupt.
++	 */
++	return (unsigned long)end_of_stack(tsk) + sizeof(unsigned long);
++}
++
+ static inline void stackleak_task_init(struct task_struct *t)
+ {
+-	t->lowest_stack = (unsigned long)end_of_stack(t) + sizeof(unsigned long);
++	t->lowest_stack = stackleak_task_low_bound(t);
+ # ifdef CONFIG_STACKLEAK_METRICS
+ 	t->prev_lowest_stack = t->lowest_stack;
+ # endif
 diff --git a/kernel/stackleak.c b/kernel/stackleak.c
-index ddb5a7f48d69e..753eab797a04d 100644
+index 753eab797a04d..0472956d9a2ce 100644
 --- a/kernel/stackleak.c
 +++ b/kernel/stackleak.c
-@@ -70,7 +70,7 @@ late_initcall(stackleak_sysctls_init);
- #define skip_erasing()	false
- #endif /* CONFIG_STACKLEAK_RUNTIME_DISABLE */
+@@ -72,9 +72,11 @@ late_initcall(stackleak_sysctls_init);
  
--asmlinkage void noinstr stackleak_erase(void)
-+static __always_inline void __stackleak_erase(void)
+ static __always_inline void __stackleak_erase(void)
  {
++	const unsigned long task_stack_low = stackleak_task_low_bound(current);
++
  	/* It would be nice not to have 'kstack_ptr' and 'boundary' on stack */
  	unsigned long kstack_ptr = current->lowest_stack;
-@@ -78,9 +78,6 @@ asmlinkage void noinstr stackleak_erase(void)
+-	unsigned long boundary = (unsigned long)end_of_stack(current);
++	unsigned long boundary = task_stack_low;
  	unsigned int poison_count = 0;
  	const unsigned int depth = STACKLEAK_SEARCH_DEPTH / sizeof(unsigned long);
  
--	if (skip_erasing())
--		return;
--
- 	/* Check that 'lowest_stack' value is sane */
- 	if (unlikely(kstack_ptr - boundary >= THREAD_SIZE))
- 		kstack_ptr = boundary;
-@@ -125,6 +122,14 @@ asmlinkage void noinstr stackleak_erase(void)
- 	current->lowest_stack = current_top_of_stack() - THREAD_SIZE/64;
- }
+@@ -92,13 +94,6 @@ static __always_inline void __stackleak_erase(void)
+ 		kstack_ptr -= sizeof(unsigned long);
+ 	}
  
-+asmlinkage void noinstr stackleak_erase(void)
-+{
-+	if (skip_erasing())
-+		return;
-+
-+	__stackleak_erase();
-+}
-+
- void __used __no_caller_saved_registers noinstr stackleak_track_stack(void)
- {
- 	unsigned long sp = current_stack_pointer;
+-	/*
+-	 * One 'long int' at the bottom of the thread stack is reserved and
+-	 * should not be poisoned (see CONFIG_SCHED_STACK_END_CHECK=y).
+-	 */
+-	if (kstack_ptr == boundary)
+-		kstack_ptr += sizeof(unsigned long);
+-
+ #ifdef CONFIG_STACKLEAK_METRICS
+ 	current->prev_lowest_stack = kstack_ptr;
+ #endif
+@@ -144,8 +139,7 @@ void __used __no_caller_saved_registers noinstr stackleak_track_stack(void)
+ 	/* 'lowest_stack' should be aligned on the register width boundary */
+ 	sp = ALIGN(sp, sizeof(unsigned long));
+ 	if (sp < current->lowest_stack &&
+-	    sp >= (unsigned long)task_stack_page(current) +
+-						sizeof(unsigned long)) {
++	    sp >= stackleak_task_low_bound(current)) {
+ 		current->lowest_stack = sp;
+ 	}
+ }
 -- 
 2.30.2
 

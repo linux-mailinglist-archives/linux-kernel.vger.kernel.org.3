@@ -2,240 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7784B50DED5
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 13:31:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A0A50DEDB
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 13:34:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238643AbiDYLeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 07:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46302 "EHLO
+        id S238505AbiDYLh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 07:37:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiDYLeR (ORCPT
+        with ESMTP id S231455AbiDYLhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 07:34:17 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0EFEB7
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 04:31:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650886273; x=1682422273;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version:content-transfer-encoding;
-  bh=2B2qF7ouiCd0JZFcYIGy5M7pqO0kLaQtk6/N2v8nVhA=;
-  b=cy7pPk/DDUfauZrOboUn+PyZLDv5ZyyYBfb7HFLY/NpXvhRJEHRAGmD+
-   j3PVWDTxmjGtnypSSORBt3XoYApZqenKNO5yQNsQaTio2g1pW8Ax45wdc
-   t2Pdmd07wCtkV/CPzhMhqI3/GLDv4duqUTdNg3azvBpEsUKTnHLNJrV8X
-   f+r1y5/MS0i82cI+ufuCqgtRk9dVKRnYO6C+iIhPy1lxGVd6aXq2sF4Sj
-   DfQ4U61KdKWp55Zuzgt2ByOLrqNYAiJXJ49v/xiDmpJQ4mIPq6UGwlpYe
-   KbzJ61qz7XjfSU+k6EXiyjxEWy44MzVsrDQmOhUt0PXDvC+jHFfBEJt4n
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="247148446"
-X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
-   d="scan'208";a="247148446"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 04:31:13 -0700
-X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
-   d="scan'208";a="532071727"
-Received: from tgiecew-mobl.ger.corp.intel.com (HELO localhost) ([10.249.131.125])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 04:31:09 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     "Wang, Zhi A" <zhi.a.wang@intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
-Subject: Re: [PULL v3] gvt-next
-In-Reply-To: <25a713cd-0b7d-4c09-7d91-4f4ef6c9eb11@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <25a713cd-0b7d-4c09-7d91-4f4ef6c9eb11@intel.com>
-Date:   Mon, 25 Apr 2022 14:31:06 +0300
-Message-ID: <87o80pv1qd.fsf@intel.com>
+        Mon, 25 Apr 2022 07:37:23 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB0EFE5
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 04:34:18 -0700 (PDT)
+Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kn2w93PKFzhYjF;
+        Mon, 25 Apr 2022 19:34:01 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
+ kwepemi500024.china.huawei.com (7.221.188.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 25 Apr 2022 19:34:16 +0800
+Received: from [10.174.179.234] (10.174.179.234) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 25 Apr 2022 19:34:15 +0800
+Message-ID: <8ce3eb46-2b18-e268-1013-d713c4c8f90b@huawei.com>
+Date:   Mon, 25 Apr 2022 19:34:14 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH -next v5 3/5] mm: page_table_check: add hooks to public
+ helpers
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+CC:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-riscv@lists.infradead.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Guohanjun <guohanjun@huawei.com>
+References: <20220421082042.1167967-1-tongtiangen@huawei.com>
+ <20220421082042.1167967-4-tongtiangen@huawei.com>
+ <7fc56f41-a3c2-76be-7a20-dda392f3c4fc@arm.com>
+ <eaf17cfc-880e-2181-b253-d520781c428f@huawei.com>
+ <0f4de9db-1e36-b9d8-bd94-6e3ec3842940@arm.com>
+From:   Tong Tiangen <tongtiangen@huawei.com>
+In-Reply-To: <0f4de9db-1e36-b9d8-bd94-6e3ec3842940@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.234]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 21 Apr 2022, "Wang, Zhi A" <zhi.a.wang@intel.com> wrote:
-> Hi folks:
->
-> Here is the PR of gvt-next. Thanks so much for the patience.
 
-Thanks, pulled to drm-intel-next, applied the below fix for the silent
-conflict on top, and pushed out. Should show up in linux-next shortly.
 
-BR,
-Jani.
+在 2022/4/25 13:52, Anshuman Khandual 写道:
+> 
+> 
+> On 4/24/22 09:40, Tong Tiangen wrote:
+>>
+>>
+>> 在 2022/4/22 14:05, Anshuman Khandual 写道:
+>>>
+>>>
+>>> On 4/21/22 13:50, Tong Tiangen wrote:
+>>>> Move ptep_clear() to the include/linux/pgtable.h and add page table check
+>>>> relate hooks to some helpers, it's prepare for support page table check
+>>>> feature on new architecture.
+>>>
+>>> Could instrumenting generic page table helpers (fallback instances when its
+>>> corresponding __HAVE_ARCH_XXX is not defined on the platform), might add all
+>>> the page table check hooks into paths on platforms which have not subscribed
+>>> ARCH_SUPPORTS_PAGE_TABLE_CHECK in the first place ? Although these looks have
+>>> !CONFIG_PAGE_TABLE_CHECK fallback stubs in the header, hence a build problem
+>>> gets avoided.
+>>
+>> Right, build problems are avoided by fallback stubs in the header file.
+> 
+> Although there might not be a build problem as such, but should non subscribing
+> platforms get their page table helpers instrumented with page table check hooks
+> in the first place ? The commit message should address these questions.
+> 
+Add description in commit message to explain that:
+Non subscription platforms will call a fallback ptc stubs when getting 
+their page table helpers[1] in include/linux/pgtable.h.
 
->
-> Mostly it includes the patch bundle of GVT-g re-factor patches for adapti=
-ng the GVT-g with the
-> new MDEV interfaces:
->
-> - Separating the MMIO table from GVT-g. (Zhi)
-> - GVT-g re-factor. (Christoph)
-> - GVT-g mdev API cleanup. (Jason)
-> - GVT-g trace/makefile cleanup. (Jani)
->
-> Thanks so much for making this happen.
->
-> This PR has been tested as following and no problem shows up:
->
-> $dim update-branches
-> $dim apply-pull drm-intel-next < this_email.eml
->
-> When merging this pull to drm-intel-next, please include the following co=
-de in the merge commit:
->
-> diff --git a/drivers/gpu/drm/i915/intel_gvt_mmio_table.c b/drivers/gpu/dr=
-m/i915/intel_gvt_mmio_table.c
-> index 03a7fcd0f904..72dac1718f3e 100644
-> --- a/drivers/gpu/drm/i915/intel_gvt_mmio_table.c
-> +++ b/drivers/gpu/drm/i915/intel_gvt_mmio_table.c
-> @@ -3,6 +3,7 @@
->   * Copyright =C2=A9 2020 Intel Corporation
->   */
->=20=20
-> +#include "display/intel_dmc_regs.h"
->  #include "display/vlv_dsi_pll_regs.h"
->  #include "gt/intel_gt_regs.h"
->  #include "gvt/gvt.h"
->
->
-> The following changes since commit 3123109284176b1532874591f7c81f3837bbdc=
-17:
->
->   Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
->
-> are available in the Git repository at:
->
->   https://github.com/intel/gvt-linux tags/gvt-next-2022-04-21-for-christo=
-ph
->
-> for you to fetch changes up to 2917f53113be3b7a0f374e02cebe6d6b749366b5:
->
->   vfio/mdev: Remove mdev drvdata (2022-04-21 07:36:56 -0400)
->
-> ----------------------------------------------------------------
-> gvt-next-2022-04-21-for-christoph
->
-> - Separating the MMIO table from GVT-g. (Zhi)
-> - GVT-g re-factor. (Christoph)
-> - GVT-g mdev API cleanup. (Jason)
-> - GVT-g trace/makefile cleanup. (Jani)
->
-> ----------------------------------------------------------------
-> Christoph Hellwig (27):
->       drm/i915/gvt: remove module refcounting in intel_gvt_{,un}register_=
-hypervisor
->       drm/i915/gvt: remove enum hypervisor_type
->       drm/i915/gvt: rename intel_vgpu_ops to intel_vgpu_mdev_ops
->       drm/i915/gvt: move the gvt code into kvmgt.ko
->       drm/i915/gvt: remove intel_gvt_ops
->       drm/i915/gvt: remove the map_gfn_to_mfn and set_trap_area ops
->       drm/i915/gvt: remove the unused from_virt_to_mfn op
->       drm/i915/gvt: merge struct kvmgt_vdev into struct intel_vgpu
->       drm/i915/gvt: merge struct kvmgt_guest_info into strut intel_vgpu
->       drm/i915/gvt: remove vgpu->handle
->       drm/i915/gvt: devirtualize ->{read,write}_gpa
->       drm/i915/gvt: devirtualize ->{get,put}_vfio_device
->       drm/i915/gvt: devirtualize ->set_edid and ->set_opregion
->       drm/i915/gvt: devirtualize ->detach_vgpu
->       drm/i915/gvt: devirtualize ->inject_msi
->       drm/i915/gvt: devirtualize ->is_valid_gfn
->       drm/i915/gvt: devirtualize ->gfn_to_mfn
->       drm/i915/gvt: devirtualize ->{enable,disable}_page_track
->       drm/i915/gvt: devirtualize ->dma_{,un}map_guest_page
->       drm/i915/gvt: devirtualize dma_pin_guest_page
->       drm/i915/gvt: remove struct intel_gvt_mpt
->       drm/i915/gvt: remove the extra vfio_device refcounting for dmabufs
->       drm/i915/gvt: streamline intel_vgpu_create
->       drm/i915/gvt: pass a struct intel_vgpu to the vfio read/write helpe=
-rs
->       drm/i915/gvt: remove kvmgt_guest_{init,exit}
->       drm/i915/gvt: convert to use vfio_register_emulated_iommu_dev
->       drm/i915/gvt: merge gvt.c into kvmgvt.c
->
-> Jani Nikula (2):
->       drm/i915/gvt: fix trace TRACE_INCLUDE_PATH
->       drm/i915/gvt: better align the Makefile with i915 Makefile
->
-> Jason Gunthorpe (5):
->       vfio/mdev: Remove vfio_mdev.c
->       vfio/mdev: Remove mdev_parent_ops dev_attr_groups
->       vfio/mdev: Remove mdev_parent_ops
->       vfio/mdev: Use the driver core to create the 'remove' file
->       vfio/mdev: Remove mdev drvdata
->
-> Zhi Wang (3):
->       i915/gvt: Separate the MMIO tracking table from GVT-g
->       i915/gvt: Save the initial HW state snapshot in i915
->       i915/gvt: Use the initial HW state snapshot saved in i915
->
->  Documentation/driver-api/vfio-mediated-device.rst |   27 +-
->  drivers/gpu/drm/i915/Kconfig                      |   36 +-
->  drivers/gpu/drm/i915/Makefile                     |    8 +-
->  drivers/gpu/drm/i915/gvt/Makefile                 |   30 +-
->  drivers/gpu/drm/i915/gvt/cfg_space.c              |   89 +-
->  drivers/gpu/drm/i915/gvt/cmd_parser.c             |    4 +-
->  drivers/gpu/drm/i915/gvt/dmabuf.c                 |   36 +-
->  drivers/gpu/drm/i915/gvt/execlist.c               |   12 +-
->  drivers/gpu/drm/i915/gvt/firmware.c               |   25 +-
->  drivers/gpu/drm/i915/gvt/gtt.c                    |   55 +-
->  drivers/gpu/drm/i915/gvt/gvt.c                    |  340 ------
->  drivers/gpu/drm/i915/gvt/gvt.h                    |  128 +-
->  drivers/gpu/drm/i915/gvt/handlers.c               | 1033 +++------------=
---
->  drivers/gpu/drm/i915/gvt/hypercall.h              |   82 --
->  drivers/gpu/drm/i915/gvt/interrupt.c              |   40 +-
->  drivers/gpu/drm/i915/gvt/kvmgt.c                  | 1097 +++++++++------=
---
->  drivers/gpu/drm/i915/gvt/mmio.c                   |    4 +-
->  drivers/gpu/drm/i915/gvt/mmio.h                   |    1 -
->  drivers/gpu/drm/i915/gvt/mpt.h                    |  400 -------
->  drivers/gpu/drm/i915/gvt/opregion.c               |  148 +--
->  drivers/gpu/drm/i915/gvt/page_track.c             |    8 +-
->  drivers/gpu/drm/i915/gvt/reg.h                    |    9 +-
->  drivers/gpu/drm/i915/gvt/scheduler.c              |   37 +-
->  drivers/gpu/drm/i915/gvt/trace.h                  |    2 +-
->  drivers/gpu/drm/i915/gvt/vgpu.c                   |   22 +-
->  drivers/gpu/drm/i915/i915_driver.c                |    7 -
->  drivers/gpu/drm/i915/i915_drv.h                   |    3 +
->  drivers/gpu/drm/i915/intel_gvt.c                  |  248 +++-
->  drivers/gpu/drm/i915/intel_gvt.h                  |   32 +-
->  drivers/gpu/drm/i915/intel_gvt_mmio_table.c       | 1291 +++++++++++++++=
-++++++
->  drivers/s390/cio/vfio_ccw_ops.c                   |    7 +-
->  drivers/s390/crypto/vfio_ap_ops.c                 |    9 +-
->  drivers/vfio/mdev/Makefile                        |    2 +-
->  drivers/vfio/mdev/mdev_core.c                     |   52 +-
->  drivers/vfio/mdev/mdev_driver.c                   |   10 -
->  drivers/vfio/mdev/mdev_private.h                  |    6 +-
->  drivers/vfio/mdev/mdev_sysfs.c                    |   37 +-
->  drivers/vfio/mdev/vfio_mdev.c                     |  152 ---
->  include/linux/mdev.h                              |   82 +-
->  samples/vfio-mdev/mbochs.c                        |    9 +-
->  samples/vfio-mdev/mdpy.c                          |    9 +-
->  samples/vfio-mdev/mtty.c                          |   39 +-
->  42 files changed, 2530 insertions(+), 3138 deletions(-)
->  delete mode 100644 drivers/gpu/drm/i915/gvt/gvt.c
->  delete mode 100644 drivers/gpu/drm/i915/gvt/hypercall.h
->  delete mode 100644 drivers/gpu/drm/i915/gvt/mpt.h
->  create mode 100644 drivers/gpu/drm/i915/intel_gvt_mmio_table.c
->  delete mode 100644 drivers/vfio/mdev/vfio_mdev.c
+[1] 
+ptep_clear/ptep_get_and_clear/pmdp_huge_get_and_clear/pudp_huge_get_and_clear
 
---=20
-Jani Nikula, Intel Open Source Graphics Center
+Am i right? :)
+
+Thanks,
+Tong.
+>>
+>>>
+>>>>
+>>>> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
+>>>> Acked-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+>>>> ---
+>>>>    arch/x86/include/asm/pgtable.h | 10 ----------
+>>>>    include/linux/pgtable.h        | 26 ++++++++++++++++++--------
+>>>>    2 files changed, 18 insertions(+), 18 deletions(-)
+>>>>
+>>>> diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+>>>> index 564abe42b0f7..51cd39858f81 100644
+>>>> --- a/arch/x86/include/asm/pgtable.h
+>>>> +++ b/arch/x86/include/asm/pgtable.h
+>>>> @@ -1073,16 +1073,6 @@ static inline pte_t ptep_get_and_clear_full(struct mm_struct *mm,
+>>>>        return pte;
+>>>>    }
+>>>>    -#define __HAVE_ARCH_PTEP_CLEAR
+>>>
+>>> AFICS X86 is the only platform subscribing __HAVE_ARCH_PTEP_CLEAR. Hence if
+>>> this is getting dropped for generic ptep_clear(), then no need to add back
+>>> #ifnded __HAVE_ARCH_PTEP_CLEAR construct. Generic ptep_clear() is the only
+>>> definition for all platforms ?
+>>>
+>>> Also if this patch is trying to drop off __HAVE_ARCH_PTEP_CLEAR along with
+>>> other page table check related changes, it needs to be done via a separate
+>>> patch instead.
+>>
+>> Agreed.
+>> IMO, this fix can be patched later.
+>>
+>>>
+>>>> -static inline void ptep_clear(struct mm_struct *mm, unsigned long addr,
+>>>> -                  pte_t *ptep)
+>>>> -{
+>>>> -    if (IS_ENABLED(CONFIG_PAGE_TABLE_CHECK))
+>>>> -        ptep_get_and_clear(mm, addr, ptep);
+>>>> -    else
+>>>> -        pte_clear(mm, addr, ptep);
+>>>> -}
+>>>> -
+>>>>    #define __HAVE_ARCH_PTEP_SET_WRPROTECT
+>>>>    static inline void ptep_set_wrprotect(struct mm_struct *mm,
+>>>>                          unsigned long addr, pte_t *ptep)
+>>>> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+>>>> index 49ab8ee2d6d7..10d2d91edf20 100644
+>>>> --- a/include/linux/pgtable.h
+>>>> +++ b/include/linux/pgtable.h
+>>>> @@ -12,6 +12,7 @@
+>>>>    #include <linux/bug.h>
+>>>>    #include <linux/errno.h>
+>>>>    #include <asm-generic/pgtable_uffd.h>
+>>>> +#include <linux/page_table_check.h>
+>>>>      #if 5 - defined(__PAGETABLE_P4D_FOLDED) - defined(__PAGETABLE_PUD_FOLDED) - \
+>>>>        defined(__PAGETABLE_PMD_FOLDED) != CONFIG_PGTABLE_LEVELS
+>>>> @@ -272,14 +273,6 @@ static inline bool arch_has_hw_pte_young(void)
+>>>>    }
+>>>>    #endif
+>>>>    -#ifndef __HAVE_ARCH_PTEP_CLEAR
+>>>> -static inline void ptep_clear(struct mm_struct *mm, unsigned long addr,
+>>>> -                  pte_t *ptep)
+>>>> -{
+>>>> -    pte_clear(mm, addr, ptep);
+>>>> -}
+>>>> -#endif
+>>>> -
+>>>>    #ifndef __HAVE_ARCH_PTEP_GET_AND_CLEAR
+>>>>    static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
+>>>>                           unsigned long address,
+>>>> @@ -287,10 +280,22 @@ static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
+>>>>    {
+>>>>        pte_t pte = *ptep;
+>>>>        pte_clear(mm, address, ptep);
+>>>> +    page_table_check_pte_clear(mm, address, pte);
+>>>>        return pte;
+>>>>    }
+>>>>    #endif
+>>>>    +#ifndef __HAVE_ARCH_PTEP_CLEAR
+>>>> +static inline void ptep_clear(struct mm_struct *mm, unsigned long addr,
+>>>> +                  pte_t *ptep)
+>>>> +{
+>>>> +    if (IS_ENABLED(CONFIG_PAGE_TABLE_CHECK))
+>>>> +        ptep_get_and_clear(mm, addr, ptep);
+>>>> +    else
+>>>> +        pte_clear(mm, addr, ptep);
+>>>
+>>> Could not this be reworked to avoid IS_ENABLED() ? This is confusing. If the page
+>>> table hooks can be added to all potential page table paths via generic helpers,
+>>> irrespective of CONFIG_PAGE_TABLE_CHECK option, there is no rationale for doing
+>>> a IS_ENABLED() check here.
+>>>
+>>
+>>  From the perspective of code logic, we need to check the pte before being cleared. Whether pte check is required depends on IS_ENABLED().
+>>
+>> Are there any suggestions for better implementation?
+> 
+> But other generic page table helpers already have page table check hooks
+> instrumented without IS_ENABLED() checks, then why this is any different.
+> 
+Maybe i understand what you said, the more reasonable implement is:
+
+static inline pte_t ptep_get_and_clear(struct mm_struct *mm, unsigned 
+long address, pte_t *ptep)
+  {
+  	pte_t pte = *ptep;
+  	pte_clear(mm, address, ptep);
+	page_table_check_pte_clear(mm, address, pte);
+  	return pte;
+  }
+
+static inline void ptep_clear(struct mm_struct *mm, unsigned long addr, 
+pte_t *ptep)
+{
+	ptep_get_and_clear(mm, address, ptep);
+}
+
+>>
+>> Thank you,
+>> Tong.
+>>
+>>>> +}
+>>>> +#endif
+>>>> +
+>>>>    #ifndef __HAVE_ARCH_PTEP_GET
+>>>>    static inline pte_t ptep_get(pte_t *ptep)
+>>>>    {
+>>>> @@ -360,7 +365,10 @@ static inline pmd_t pmdp_huge_get_and_clear(struct mm_struct *mm,
+>>>>                            pmd_t *pmdp)
+>>>>    {
+>>>>        pmd_t pmd = *pmdp;
+>>>> +
+>>>>        pmd_clear(pmdp);
+>>>> +    page_table_check_pmd_clear(mm, address, pmd);
+>>>> +
+>>>>        return pmd;
+>>>>    }
+>>>>    #endif /* __HAVE_ARCH_PMDP_HUGE_GET_AND_CLEAR */
+>>>> @@ -372,6 +380,8 @@ static inline pud_t pudp_huge_get_and_clear(struct mm_struct *mm,
+>>>>        pud_t pud = *pudp;
+>>>>          pud_clear(pudp);
+>>>> +    page_table_check_pud_clear(mm, address, pud);
+>>>> +
+>>>>        return pud;
+>>>>    }
+>>>>    #endif /* __HAVE_ARCH_PUDP_HUGE_GET_AND_CLEAR */
+>>> .
+> .

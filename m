@@ -2,162 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 483D850E18E
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87BFE50E1D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:32:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242002AbiDYN17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 09:27:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33394 "EHLO
+        id S242109AbiDYNep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 09:34:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241995AbiDYN12 (ORCPT
+        with ESMTP id S242078AbiDYNee (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 09:27:28 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D2136B65
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 06:24:22 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id m23so6980234ljc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 06:24:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=caM+vLuNWYVORv3rxDBPjphWOSPmMGej9yvUojmZGAw=;
-        b=AXeei8U3Y7CuBFSNXZhaxy5IfluR0msbktvlq5Qq3T76ZMWl+akgZKYeuToOL96XZ5
-         7EYahLSVcAjRoEoeOAtFBvoWDYMbzFD+QffmVFxa5fiI1QEJq66zG8d3zFul6eYGW/yX
-         0TuajuLTlhCtJjS85bdtg1m3g1z6QrhkNirYH9q7GpbD++Nalm52fYFP5wmebmbU00kq
-         8LVpPWtF4E/4yNB0x0DQsVCEomNOnMtBxtN6ciFxJS4WwU++agjn6Zt43IWUnpKrxGaX
-         7kM/TLiU/qCRtlRTl08ciR+Xr44/Yuejg6T0X42vvXzaToq8a7T8kF/ytn5wB5zN4f0E
-         VPkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=caM+vLuNWYVORv3rxDBPjphWOSPmMGej9yvUojmZGAw=;
-        b=UZJY7oHJSeKU6fPqMyCbDyhXJw8L9MoLNbPYlX6FGBZ/CIDlrhqENAJ7feYF/d+ZA1
-         aIJFhBoW8tCvGT4Op9DGtDtXQKEEdW6zglJb77QY3T3zhZ5VQXsbxDvY4puU4EEa3+xo
-         oIOs5vioyICfu7xIYA3pTJXO4eFGeYkc2Lib5Fi20ovvTaYhtA9FjYOrZXU+ke+/hE4t
-         kARuvSO1Z7rO9NYcwG88FNhGutwM3QaNhT1eL0Zko1yVmkCre+6E4jIEChFu39yUe+2R
-         YjhF+iIFI9q2HjNX0dndj2n+g7Hk4sH+5RYpPeymeUpgAB3TlFylqsSpZwq4omaLjQWW
-         lkKg==
-X-Gm-Message-State: AOAM532R8vXAZMbAN8oJVnaK0orcaII6E0UOsVNJCtTqpLPMpeG0Bs3k
-        f156u7jwOcSj2hEXpK9Mbz3bJA==
-X-Google-Smtp-Source: ABdhPJyCPaMaWm10rhF+he0H6qsfcgxcaz11xEHicik6Tbl7NLrZGIjTVyUX0+GuKR9YLuHmk/4GpA==
-X-Received: by 2002:a2e:5c41:0:b0:24b:156c:7100 with SMTP id q62-20020a2e5c41000000b0024b156c7100mr11466984ljb.80.1650893059670;
-        Mon, 25 Apr 2022 06:24:19 -0700 (PDT)
-Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id q21-20020a05651232b500b0046bacf73c9fsm1411752lfe.151.2022.04.25.06.24.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 06:24:19 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Johan Hovold <johan@kernel.org>, Rob Herring <robh+dt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        devicetree@vger.kernel.org, phone-devel@vger.kernel.org
-Subject: [PATCH v2] dt-bindings: gnss: Add Broacom BCM4751 family bindings
-Date:   Mon, 25 Apr 2022 15:22:15 +0200
-Message-Id: <20220425132215.1309216-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.35.1
+        Mon, 25 Apr 2022 09:34:34 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A44EFBA5;
+        Mon, 25 Apr 2022 06:31:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650893490; x=1682429490;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LeeHzvwWWIhoJET4Iby9NAsLpM72fA5MdvAHRDjBpqQ=;
+  b=mRO0MNdsbOJI6HUbDPtpFlxZJSpWLWYEZQetSRdeJeA46CsInfy41C11
+   wo2TVI5MiSoNsV/Wfs+K6O0o4tTK0psb6rfH5xu3gttldeBV5g1+7fx5B
+   hdly0soWuDImL61DQQQFyDMjp7spVhVTwRS3slwm3rpA1ST0fX2QkwEWC
+   JNrv0jSQbMlGfbtAnlzgdBVeSkO3ymngfFXT/s7igoX9ypx8e339uy0FY
+   DgUwzGso//PuZmB13WQMY0xbYXSLkj9Fah/C3iBlOyMWkDVUxhpGkJPis
+   pPH1gtU6VlN2pL5/v9v2wdI/EBxRe1HAEL2kP8YTi1iskx7UDRrvH89bY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="247174639"
+X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
+   d="scan'208";a="247174639"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 06:31:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
+   d="scan'208";a="579286511"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
+  by orsmga008.jf.intel.com with ESMTP; 25 Apr 2022 06:31:28 -0700
+Date:   Mon, 25 Apr 2022 21:23:46 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Nava kishore Manne <nava.manne@xilinx.com>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
+        michal.simek@xilinx.com, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        git@xilinx.com
+Subject: Re: [PATCH v6 1/5] fpga: zynq: Fix incorrect variable type
+Message-ID: <20220425132346.GB367066@yilunxu-OptiPlex-7050>
+References: <20220423170235.2115479-1-nava.manne@xilinx.com>
+ <20220423170235.2115479-2-nava.manne@xilinx.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220423170235.2115479-2-nava.manne@xilinx.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Broadcom BCM4751 family of (A-)GPS chips have been around for
-some years. The latest iteration BCM4753 is for example mounted
-on the Huawei HiKey970.
+On Sat, Apr 23, 2022 at 10:32:31PM +0530, Nava kishore Manne wrote:
+> zynq_fpga_has_sync () API is expecting "u8 *" but the
+> formal parameter that was passed is of type "const char *".
+> fix this issue by changing the buf type to "const char *"
+> 
+> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
+> Acked-by: Xu Yilun <yilun.xu@intel.com>
 
-Cc: devicetree@vger.kernel.org
-Cc: phone-devel@vger.kernel.org
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-ChangeLog v1->v2:
-- Switch do dual GPL/BSD license.
----
- .../bindings/gnss/brcm,bcm4751.yaml           | 69 +++++++++++++++++++
- 1 file changed, 69 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/gnss/brcm,bcm4751.yaml
+Hi Nava:
 
-diff --git a/Documentation/devicetree/bindings/gnss/brcm,bcm4751.yaml b/Documentation/devicetree/bindings/gnss/brcm,bcm4751.yaml
-new file mode 100644
-index 000000000000..e62b30386ac2
---- /dev/null
-+++ b/Documentation/devicetree/bindings/gnss/brcm,bcm4751.yaml
-@@ -0,0 +1,69 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/gnss/brcm,bcm4751.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Broadcom BCM4751 family GNSS Receiver Device Tree Bindings
-+
-+maintainers:
-+  - Johan Hovold <johan@kernel.org>
-+  - Linus Walleij <linus.walleij@linaro.org>
-+
-+description:
-+  Broadcom GPS chips can be used over the UART or I2C bus. The UART
-+  bus requires CTS/RTS support. The number of the capsule is more
-+  elaborate than the compatibles BCM4751 may be printed
-+  BCM4751IFBG for example.
-+
-+allOf:
-+  - $ref: gnss-common.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - brcm,bcm4751
-+      - brcm,bcm4752
-+      - brcm,bcm4753
-+
-+  reg:
-+    description:
-+      The I2C Address, not required on UART buses.
-+
-+  vdd-auxin-supply:
-+    description:
-+      Main voltage supply, pin name VDD_AUXIN, typically connected
-+      directly to a battery such as LiIon 3.8V battery or a 2.6V supply.
-+
-+  vddio-supply:
-+    description:
-+      IO voltage supply, pin name VDDIO, typically 1.8V
-+
-+  reset-gpios:
-+    maxItems: 1
-+    description: An optional active low reset line, should be flagged with
-+      GPIO_ACTIVE_LOW.
-+
-+  enable-gpios:
-+    description: Enable GPIO line, connected to pins named REGPU or NSTANDBY.
-+      If the line is active low such as NSTANDBY, it should be tagged
-+      GPIO_ACTIVE_LOW.
-+
-+required:
-+  - compatible
-+  - enable-gpios
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    serial {
-+        gnss {
-+            compatible = "brcm,bcm4751";
-+            vdd-auxin-supply = <&vbat>;
-+            reset-gpios = <&gpio0 15 GPIO_ACTIVE_LOW>;
-+            enable-gpios = <&gpio0 16 GPIO_ACTIVE_HIGH>;
-+            current-speed = <38400>;
-+        };
-+    };
--- 
-2.35.1
+There is a lkp bug report yet to be fixed. Please fix it.
 
+Thanks,
+Yilun
+
+> ---
+> Changes for v2:
+>                 -None.
+> Changes for v3:
+>                - Changed arg buf type to "const char *" as suggested by Tom.
+>                - update zynq_fpga_has_sync () API description to align with API
+>                  functionality.
+> Changes for v4:
+>                - None.
+> 
+> Changes for v5:
+>                - Dropped the irrelevant doc update changes.
+> Changes for v6:
+>                - None.
+> 
+>  drivers/fpga/zynq-fpga.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
+> index 426aa34c6a0d..6beaba9dfe97 100644
+> --- a/drivers/fpga/zynq-fpga.c
+> +++ b/drivers/fpga/zynq-fpga.c
+> @@ -239,7 +239,7 @@ static irqreturn_t zynq_fpga_isr(int irq, void *data)
+>   * the correct byte order, and be dword aligned. The input is a Xilinx .bin
+>   * file with every 32 bit quantity swapped.
+>   */
+> -static bool zynq_fpga_has_sync(const u8 *buf, size_t count)
+> +static bool zynq_fpga_has_sync(const char *buf, size_t count)
+>  {
+>  	for (; count >= 4; buf += 4, count -= 4)
+>  		if (buf[0] == 0x66 && buf[1] == 0x55 && buf[2] == 0x99 &&
+> -- 
+> 2.25.1

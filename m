@@ -2,114 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AB4D50DAC1
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 09:59:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E56E50DABB
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 09:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbiDYH76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 03:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51782 "EHLO
+        id S231728AbiDYIAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 04:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241547AbiDYH4z (ORCPT
+        with ESMTP id S234298AbiDYH7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 03:56:55 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35422716
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 00:53:46 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id z99so17345585ede.5
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 00:53:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=OiK9CfJmGobcKXoR/dSPps5LgKGx0NOgsw4L8/dJuus=;
-        b=ExJdKICN8IBJk5lwYIf06MEy9FFprcu4zkW60YPGX6p5vrEl4y6eoYg//8OShTJ+EV
-         5BFiUh4ElVofGoJWGYwh6kAvauwtOVwvj1bDQ5fpxQnxbYMtLCsUEdQmRehE4BfbOeJO
-         I1lk1lxK2gfmG2JOlToGQc1nJE9kMgWwVwFFjuiYBYkEN/mrljIFDlkA6OMxU8B+ENxH
-         dNI7FczHVKl4YnTIdMlFeQ0rHuynNZ3HngnLGBF4KLOoY5HM6LObpbIyn39YSvbyh8Fk
-         64NwKlZRZ/m3/4z/hhD9OWrOHzRaF9f3kUGQgW/xlqw0/HzZ84G4/2AoqlLbTdzXAAhT
-         fE7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=OiK9CfJmGobcKXoR/dSPps5LgKGx0NOgsw4L8/dJuus=;
-        b=ZsawwNF3Bkd/U0dLBx7vfjBgknghmjyCuefxBHTs/hJg2RxetzEEN5q93w80f6xqWQ
-         EWb3wlpihGj3Agn2isyqFP6uaUZBNjhtQrrj9KQUqKMMiQ5GRJNhqf+yJrYdTcqtkYsE
-         3X1gQUEdt4iP1tbOk7Kn/nSyD/CEfLewp802GleerwSECq4crunsbqt9/caKbP99UVqI
-         JpVtr7JeyDItTaLhetwhUbD99TImpOoK30naoGm9HDvxmfai/sW3gt7pm8ubA4OISg1N
-         /QhoB6vTuSuPVG8eHGF5yNm/ACcr/RcNjxRw/2PCgUNdMB6QPt3v522Z/2C/mPLqmdmz
-         Kfeg==
-X-Gm-Message-State: AOAM530fl9IcQ6GzyaVzXtSUlK+WaWPcJ7JzkXXU8ddz1nLRpO9DiVev
-        hjjPORD3zi5esbh9R4hMr0ryeA==
-X-Google-Smtp-Source: ABdhPJztHTkEpB7MVHqX/Ny1SZCOSlStNRQ6mr3ZjdYNdrfB6wI15Hl3ZlezTmilaoywtLjJooZh9A==
-X-Received: by 2002:aa7:da43:0:b0:425:cd4c:e43f with SMTP id w3-20020aa7da43000000b00425cd4ce43fmr10883182eds.106.1650873225101;
-        Mon, 25 Apr 2022 00:53:45 -0700 (PDT)
-Received: from [192.168.0.239] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id t19-20020a508d53000000b00425c9fd2b10sm3129190edt.68.2022.04.25.00.53.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 00:53:44 -0700 (PDT)
-Message-ID: <5175fe30-0449-ac5f-7e37-53c07adc433a@linaro.org>
-Date:   Mon, 25 Apr 2022 09:53:43 +0200
+        Mon, 25 Apr 2022 03:59:12 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390AFCD2
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 00:55:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650873359; x=1682409359;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=n+/wbTwudVU2aA3nzC/xFgJqQskv98VvTFPXw2JV4mQ=;
+  b=UBtBpH0K/GUlICOaqLI+e74cpEsRkf6NGMzvCjs9gsyGj6joRUQrH8vc
+   h4xD9FinqA3D3Yz4LAH6gLIv0CQidNA/gEEwuxqLE+IpyHjf2bDgYP2OV
+   7yvPPKJUUNamlx6j5aMnacBz1745G1ASnSeSn02MzuPvLDXYfIyFIYVVC
+   Rc21vSbsohC7LgO2f77g6+KWaDQ1r4Ijck3nWjl6NO44l8KOYp0Cxa+Pm
+   8aV+r8a/H+mqrVqOEpEDpGQzwuBdpito0j9qgApHYJZMb7q/xORDPACdf
+   wa/7xu/loEJiNgBOC2CBJg/l330B8E/rgTtNTyiCoIWLuMwB40cUUrhsS
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="351622192"
+X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
+   d="scan'208";a="351622192"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 00:55:58 -0700
+X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
+   d="scan'208";a="579152268"
+Received: from wupeng-mobl.ccr.corp.intel.com ([10.254.215.115])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 00:55:54 -0700
+Message-ID: <6c6694965fa3e6d85d78d56703090f227a55bb83.camel@intel.com>
+Subject: Re: [PATCH v3 1/3] mm/swapfile: unuse_pte can map random data if
+ swap read fails
+From:   "ying.huang@intel.com" <ying.huang@intel.com>
+To:     David Hildenbrand <david@redhat.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
+Cc:     willy@infradead.org, vbabka@suse.cz, dhowells@redhat.com,
+        neilb@suse.de, apopple@nvidia.com, surenb@google.com,
+        minchan@kernel.org, peterx@redhat.com, sfr@canb.auug.org.au,
+        naoya.horiguchi@nec.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Tim C Chen <tim.c.chen@intel.com>
+Date:   Mon, 25 Apr 2022 15:55:51 +0800
+In-Reply-To: <f88412b4-83db-e594-fc48-2f4b8b9f3be8@redhat.com>
+References: <20220424091105.48374-1-linmiaohe@huawei.com>
+         <20220424091105.48374-2-linmiaohe@huawei.com>
+         <8aeebc2f0b2a251d3d70402cd0edf063ba911013.camel@intel.com>
+         <f88412b4-83db-e594-fc48-2f4b8b9f3be8@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 2/2] dt-bindings: watchdog: mediatek: Convert binding to
- YAML
-Content-Language: en-US
-To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, nfraprado@collabora.com
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        srv_heupstream@mediatek.com, Chen-Yu Tsai <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>
-References: <20220422121017.23920-1-allen-kh.cheng@mediatek.com>
- <20220422121017.23920-3-allen-kh.cheng@mediatek.com>
- <e2e4ead0-d8eb-1302-93e9-f330807d811e@linaro.org>
- <b850f88f5044eb6cd57bec4fb864e5670618c9e7.camel@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <b850f88f5044eb6cd57bec4fb864e5670618c9e7.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/04/2022 09:37, allen-kh.cheng wrote:
-
->>> +examples:
->>> +  - |
->>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
->>> +
->>> +    watchdog@10007000 {
->>> +        compatible = "mediatek,mt8183-wdt",
->>> +                     "mediatek,mt6589-wdt";
->>> +        mediatek,disable-extrst;
->>
->> Did you test your bindings? Does not look like. Please run
->> dt_binding_check (see writing-schema for instructions).
->>
+On Mon, 2022-04-25 at 09:49 +0200, David Hildenbrand wrote:
+> On 25.04.22 09:41, ying.huang@intel.com wrote:
+> > Hi, Miaohe,
+> > 
+> > On Sun, 2022-04-24 at 17:11 +0800, Miaohe Lin wrote:
+> > > There is a bug in unuse_pte(): when swap page happens to be unreadable,
+> > > page filled with random data is mapped into user address space.  In case
+> > > of error, a special swap entry indicating swap read fails is set to the
+> > > page table.  So the swapcache page can be freed and the user won't end up
+> > > with a permanently mounted swap because a sector is bad.  And if the page
+> > > is accessed later, the user process will be killed so that corrupted data
+> > > is never consumed.  On the other hand, if the page is never accessed, the
+> > > user won't even notice it.
+> > > 
+> > > Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> > > Acked-by: David Hildenbrand <david@redhat.com>
+> > > ---
+> > >  include/linux/swap.h    |  7 ++++++-
+> > >  include/linux/swapops.h | 10 ++++++++++
+> > >  mm/memory.c             |  5 ++++-
+> > >  mm/swapfile.c           | 11 +++++++++++
+> > >  4 files changed, 31 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/include/linux/swap.h b/include/linux/swap.h
+> > > index 5553189d0215..b82c196d8867 100644
+> > > --- a/include/linux/swap.h
+> > > +++ b/include/linux/swap.h
+> > > @@ -55,6 +55,10 @@ static inline int current_is_kswapd(void)
+> > >   * actions on faults.
+> > >   */
+> > > 
+> > > +#define SWP_SWAPIN_ERROR_NUM 1
+> > > +#define SWP_SWAPIN_ERROR     (MAX_SWAPFILES + SWP_HWPOISON_NUM + \
+> > > +			     SWP_MIGRATION_NUM + SWP_DEVICE_NUM + \
+> > > +			     SWP_PTE_MARKER_NUM)
+> > > 
+> > > 
+> > 
+> > It appears wasteful to use another swap device number. 
 > 
-> Yes, I have run dt_binding_check.
+> Do we really care?
 > 
-> But example is from original binding txt file.
+> We currently use 5 bits for swap types, so we have a total of 32.
 > 
-> Is it ok I can write a new expample?
+> SWP_HWPOISON_NUM -> 1
+> SWP_MIGRATION_NUM -> 3
+> SWP_PTE_MARKER_NUM -> 1
+> SWP_DEVICE_NUM -> 4
+> SWP_SWAPIN_ERROR_NUM -> 1
+> 
+> Which would leave us with 32 - 10 = 22 swap devices. IMHO that's plenty
+> for real life scenarios.
 
-Yes, please. Correct the example in the conversion so it is
-reasonable/proper.
+Creating multiple swap partitions on one disk can improve the
+scalability of swap subsystem, although we usually don't have so many
+disks for swap. 
+
+> I'd prefer reworking this when we really run into trouble (and we could
+> think about using more bits for applicable architectures then, for
+> select 64bit architectures it might be fairly easily possible).
+
+Best Regards,
+Huang, Ying
 
 
-Best regards,
-Krzysztof

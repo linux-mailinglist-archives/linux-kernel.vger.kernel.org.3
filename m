@@ -2,188 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD58950E4A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8ED450E4A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242961AbiDYPpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 11:45:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42228 "EHLO
+        id S242970AbiDYPq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 11:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234777AbiDYPpu (ORCPT
+        with ESMTP id S232562AbiDYPq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 11:45:50 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2080.outbound.protection.outlook.com [40.107.94.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243AE38BFB
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 08:42:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=J41YB/KU7txszTc4NoGE2EcL6Bs4iDGsCMjZmvrqlQ9U1nzenR9zdeS0h8Dat53lJ9nY6UWZab8kXFtyJXVANVIBxqti1K55zdV+gNE7EcB3mSaJ/UgFPOg+qjuiy98E24YtrpqFithJEj0vP/yiU2mCU1G+Y/3rSElybBMMtLxmEaNnRGq+QQoGnVDNrzgOHqOBccK+ykke2Oq5/hVY0EOngVdrVXw4AN/XIKAaNV5areqn/J6wj23B0FrppZtbjjjMcK7cyWvT0cFsIWD5ae2Mylkr9MAYYnF1uOD6NIWhO1LCI0LEX8lwp9PvwaYMtIXPPWpubmYJ79Nvd5+e3w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4r5LVmuy33I4I6Wm0epx7EXL6GIo7Xl6nw/G4jtm6ug=;
- b=ktCPHM7I7FZxworPeZY0+ExWX852zRRaDlWtB43cAomagzLUG69dJure4yUkIVnCQFORqTiXxnTNo3zlkAfJcSvlXNLqCki4HkpfMQS8mAIlIdbVI60X5NZz7WJYnSWO35xrTn9JRVnVFjeZ7vEqkie/dhOOEFCLfgsHmbwg12/92Qq6oFVohF6PYJjKwzIvVwD0oOXeMWW2OsS51/Omj7kocVaArLEKO6Nb82rFI4XIBaGlfCkXZ9QNKZqO3oz/gRMbYJNGykfl9Nc1GaziJ7UF0JiTwpRqbx5mXAJhVqZTgi4XGc8tQmNEACmqb9zURbkr8oX6wKa/F6QwxeoOuA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4r5LVmuy33I4I6Wm0epx7EXL6GIo7Xl6nw/G4jtm6ug=;
- b=Z5za6+S3/DdOGCvmHghqQdFFuFAUuQHkdFHWd2zyW0zlJURtOtn0p1KHRGwgCO4eOmWlVpD+Ei3zHhSVCnXXyKj8bXIxePsXBEhcJ+trySAPg3qPZENFF5m1wD3FqqCV5bDy3fUZIxm9CcLmW+O16I/Ea/474FQo2E9GV2BWJUQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM5PR12MB1947.namprd12.prod.outlook.com (2603:10b6:3:111::23)
- by PH0PR12MB5500.namprd12.prod.outlook.com (2603:10b6:510:ef::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Mon, 25 Apr
- 2022 15:42:42 +0000
-Received: from DM5PR12MB1947.namprd12.prod.outlook.com
- ([fe80::1ce8:827f:a09:f6e]) by DM5PR12MB1947.namprd12.prod.outlook.com
- ([fe80::1ce8:827f:a09:f6e%5]) with mapi id 15.20.5186.021; Mon, 25 Apr 2022
- 15:42:40 +0000
-Message-ID: <b7d8956e-5ac6-8200-d8b1-4ce828f04665@amd.com>
-Date:   Mon, 25 Apr 2022 11:42:37 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] gpu: drm: remove redundant dma_fence_put() when
- drm_sched_job_add_dependency() fails
-Content-Language: en-US
-To:     Hangyu Hua <hbh25y@gmail.com>, yuq825@gmail.com, airlied@linux.ie,
-        daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20220425083645.25922-1-hbh25y@gmail.com>
-From:   Andrey Grodzovsky <andrey.grodzovsky@amd.com>
-In-Reply-To: <20220425083645.25922-1-hbh25y@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR20CA0064.namprd20.prod.outlook.com
- (2603:10b6:208:235::33) To DM5PR12MB1947.namprd12.prod.outlook.com
- (2603:10b6:3:111::23)
+        Mon, 25 Apr 2022 11:46:26 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2044091B
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 08:43:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650901402; x=1682437402;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=B9xdmkCFan9QX8u0ZKiJ85elK2ua+19ObcVwnrm8I4c=;
+  b=Xx4Wjg3b/WOOKHABEzb8vlwmzAbWupwdH5BWz8QqTe7whme0fxsU/soD
+   t3MsCKnAmHz6akpKqsMGhj3OiCrndBxZIprTZyc8pCKUysnhg+6OPcYQ+
+   srPJTnepRRTtBXKEvB/ak88NvS4X/WJSFnLMt7+LJ8UfwK+pYHEZcahL0
+   iPMyFLdmCk+qMdcwF+Yq0vdKv4oiJk5fbhs6hd+2pPllckz0r3MDqCEtV
+   XYpdS90MCeBwfiwQNUVVKzVbTr03eKeUwoZ28DS/qmMjqihcCitjDkIrq
+   cloY2E6ee97TwEczHyC3isf7nij7DJDZVusDtfJJyN+agMRVmMNq1xytY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="325770924"
+X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
+   d="scan'208";a="325770924"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 08:43:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
+   d="scan'208";a="677273352"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 25 Apr 2022 08:43:17 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nj0rt-0002dN-32;
+        Mon, 25 Apr 2022 15:43:17 +0000
+Date:   Mon, 25 Apr 2022 23:42:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Steve Lee <steve.lee.analog@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [broonie-ci:v2_20220425_rf_asoc_add_macros_for_signed_tlv_controls_with_callbacks
+ 70/84] sound/soc/codecs/max98390.c:1076:22: error: implicit declaration of
+ function 'devm_gpiod_get_optional'; did you mean
+ 'devm_regulator_get_optional'?
+Message-ID: <202204252359.tBUr22QD-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0bf588f0-ea32-4bbc-ef7c-08da26d23b34
-X-MS-TrafficTypeDiagnostic: PH0PR12MB5500:EE_
-X-Microsoft-Antispam-PRVS: <PH0PR12MB550080F3F65A867FB3B586F4EAF89@PH0PR12MB5500.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: flDgKB2MALHT9DURuHn8mEbdI3X8F6fPE1CYHUJrazdROHE9yBSYk+MtR8rgd7O+p/otJbAXado7dVDig5nJedxNaG2BNV9myGaPogWz5Qnk1+//2TE/1eUWRDAd/HXCMMgJU5M0ew3L+zWqqOInuGC8QOPZouGJj5L3dJeRhOydSlEB9UVB8okomUSK8zboPpvkioOvVfYehHAGBhdIQToYIm6r+XqLRGAx760+P9+RRQ/SbCMuHQW7e5rzFX/7pobXqk06fD+9eVANY9pFYrUTbPYWqWrCuIDx9XiC4SDZHJ7iEpa0y6HnJrrNiPFEdj0w/dQ6wz1JX7pSaspH3oQdtBGxnLqDGEDxLzaLWzXfz312wm/5xeufUoM7W8daO8qmtjvM0oNUuV2BSJve3y7VRlKCoCOC91Mie0Cnoj2tGtXs2laTXirzUbu9TLcTb7T5cKqbW3KkM3ySDauBwKImGIX5TWXal37E7fZOJGo1WIdCU2v74jMsRmIGaZFqnltmPktq5CB4EQTlhBCsxEalbjsHQrV2SBk1RBTvdw9guBgYt2Jf4BbIVCvJeE1d9TBGKzAu1An+0441FGHcHbDcVUm7QXXTnbLLk3pmCXyGk62UWkIj2+dRw0VUD7mpr6OjTGnPsts2G6LViNvqmb445KJ1HUiw9AdooK1l6LJcMMvxNl4bAPZSVgcIUDVXONxoRFLJrTTcaeU13Znxy4SzW1diFE3koeDjOSdhC6s=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB1947.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4326008)(6666004)(8936002)(31686004)(36756003)(6506007)(6512007)(53546011)(5660300002)(508600001)(6486002)(8676002)(66476007)(44832011)(83380400001)(66946007)(86362001)(31696002)(66556008)(2616005)(316002)(186003)(2906002)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bjFwV1d1Ky9zamtiQXpreW54Nlh2RVRWUmFiOEFEUFFuL0RqQk1remhkTE8v?=
- =?utf-8?B?NVVsMGpSU2NMdElCZ0gzYm02eVhJSUlvUUtORXBpTU0zZHFHTi84TGZpVE5I?=
- =?utf-8?B?WTVQem5rUjhMWTBhMWQyY1hrc1B0aHNhQ0d1SHdPZzVxd3pLTW5QMlZ4bC9w?=
- =?utf-8?B?bmRSU2VRNFJSQk8yNlNKZGVhNERTK2J3TDlCa1RwSFE0N2JMTHRiUnZUNE5K?=
- =?utf-8?B?U21LUEtaclhiYzRLUDFJUktEaVdyUC9UZzF6SkFuZUtmOFFkK3h3Y2dKRkgr?=
- =?utf-8?B?ZG5CTURSdFFuRUpKS1VHMGVXcUx6b2dXZ0xyYXRuaUNLYk11Rm8xZGVUNTVr?=
- =?utf-8?B?dnV6dzNkRW15UGNmZmdnbWFRaDR5aTNxU1plQ1hya2RadDRXRUk5b1R0UExX?=
- =?utf-8?B?UlcxR1YyRkVxanMyWlB4eERxamtoZ0Uvek9NME1EOEhSLzZBQlNDd0U5azht?=
- =?utf-8?B?NmRNa0xMY1VWalZvV3R6dTRRTE9VM1ZZa3ZCcjdZOHgvQldla242Qm5VckVF?=
- =?utf-8?B?K3JyWVh1N0VvaTRGUGdlRjhZNHVMVk5OTjF0ZGlPQ3lKQzI1N2dtY3BwZ1pM?=
- =?utf-8?B?SmtPWkk5UDRUajZWM3lvazJNaTJpOE5EaTJiU1hJK3p4U1h4Vmg5d3ovV0lX?=
- =?utf-8?B?eXRIUm56THNLdXZmSUNjRVVnSi9NRjFjbitLRGVTVUJ6RHI3RmcvZjVaVHRV?=
- =?utf-8?B?aG44LzBPVUNEdUZjQm5lYzl0YXNPUVhjNEFCZHF2Z3lJSG1Pamp5ZVZVS053?=
- =?utf-8?B?M21jVHBSL2l4UDQ4SVBZRVRFeW1VSEFlS1ZWZ2NOT21PYVJwTlJtV29RSHAy?=
- =?utf-8?B?K2JDVDB0dEJoTW9BVkFGZG5JR0N6d3J5MDR5OFZnQWg3QWtWM1JoS0hvaFJV?=
- =?utf-8?B?SkdGU2JUR2xSZUk2RlFYOHRBN1NTNWJqNmlVdkM0NjJabU9lbzNaZGtKUXZE?=
- =?utf-8?B?aDNSbUk4REkrMStYRTk1TkVGUEEwYXZRQkJMS1NzQ0RFOGo3SnY4ampTdng3?=
- =?utf-8?B?ZnNkZmMvQmZ5MksyMlh4ZkdpSUZlRTRqNEZrR1RGd21CcEFqTzNCdWk2THcz?=
- =?utf-8?B?amlRanREWkt0RVk4cytHNDRYZm45OFdsWEtBc05DZDhWUUxLWGpkLzcvTnpY?=
- =?utf-8?B?RVN3SEZ1R3RyRWh3OEJSYk96Z000MWZnenRIMmJUb1NmVEFldlZub2EyVTNE?=
- =?utf-8?B?UjNLNnJvRXZkQmlkQmZ6ekQrRWl5RTlNb2R0bTgyQStVVEJwcW50S29Scjd5?=
- =?utf-8?B?TklONnhFVDZZbnZmbDZhVTRFWUVaSFFuYVFJRkE3cE9hbk5xb2IzUDBTWHhu?=
- =?utf-8?B?RjM0UjgyaFYzcjRoMlh3OU5aNVJkUlZnN01Pam02S2l6WkxPQnAwbDRFN0dr?=
- =?utf-8?B?VEc3OHgrSjk3ajRwZzNTajZxS1RrVVgzWFloeXFwdGRxTlFzUkNIOVgySWRO?=
- =?utf-8?B?U2lrMGg0R3pRMXo3NjdwUFpXY0YxbUpubkFJa21mRDdaZ2dyeFFVMVR1QnR0?=
- =?utf-8?B?NTdqTXM1c24rQTBNNnJvV1F2emxkT0p2YldjUmd4MHllUWpuazhkMHJ5MmRR?=
- =?utf-8?B?RkNHdDlvKzdkNGdkcVR5dnljUmdNNUJ1M2pFWkltdW1OQnhJK1ZhWGYwc0hq?=
- =?utf-8?B?bVpydmgzMjBZMzlvSnhxa1k2eW1MUmJtdUg4OWZmRURrYjVRU2RVaDRBWjk4?=
- =?utf-8?B?YU9SNTdQMnNKQm5NaTVuQmtUeTRjWmxMQzRQVjlpZWxQUkdIb09Ha1NVVDZ5?=
- =?utf-8?B?akJ5aG1VT1N1dWgvajQ0OXdJZzZObHF5RWNYL3ltU0t3OHNYZnExK3pLbEtL?=
- =?utf-8?B?M3RxNmoxZm5id1ZFZnpiUndPUE5nbWR0UE5qakZpdmNKNTUxYmRpZlVsSFdl?=
- =?utf-8?B?OGNVR1BBNjFRRlMzV2RCNE56a0VMNmJEejd4SUl0NVpkT3Q0N0ExOG52S3pE?=
- =?utf-8?B?RWM0OFJVN0RIYmNDSjZPVHN3TjFSMUVxbDdLakxOYjZ5a0Q1TytSSkRUY0VR?=
- =?utf-8?B?R21FdGtiNXFPOXdtSU9WSFMrOXZIN0IweCtSUmNLUll6aW54MmluYW5odXF2?=
- =?utf-8?B?ODZXUmFqN2pwQXpLWnRpaHpmOUlOalpBRGs1MTUzbUp5UHY5Wjc2NTBqY1VI?=
- =?utf-8?B?VGxsUlozZVlWaFpSM1dHdm5WMEZjanE3eGE5OHVFL2YzYnFPMEdCWk5YVjBj?=
- =?utf-8?B?eW8vZ0prbVdJc2NUTzFjazVkNS9wbUFkNGVscmx3STFtd1dvMlZtNjNEbFBu?=
- =?utf-8?B?ZjBGK1VTTFBaZEx4WEp2U3ptZFNxUkpJVjBEQVg1TWFGeGlQMEFTMEFXWG9l?=
- =?utf-8?B?LzZGK1ZjL2d0Nks0eXp3YVNzWnViTjJSenpScHZtWkkreUVUQ3pNdGxUYVcr?=
- =?utf-8?Q?ItygUpeABTcsTZPy2kXDqFar7Rq0HkhieiNC25WyS1WmD?=
-X-MS-Exchange-AntiSpam-MessageData-1: lqgutPOuBOlKUQ==
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0bf588f0-ea32-4bbc-ef7c-08da26d23b34
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB1947.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2022 15:42:40.8408
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LD8Q1EIBFgxTy8WCwOkwW/Tg8fat5GBQHSRahf8rCSFHxdQbn6E+hJ6NkhGgWWobgBoIYOYbQhS3NbDywZNFTQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5500
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-04-25 04:36, Hangyu Hua wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git v2_20220425_rf_asoc_add_macros_for_signed_tlv_controls_with_callbacks
+head:   5349c0c93d15dff27d99fec12fc82040fab340bd
+commit: 397ff024960634962af93e9e2775fc0e4fe7de92 [70/84] ASoC: max98390: Add reset gpio control
+config: sh-randconfig-r032-20220425 (https://download.01.org/0day-ci/archive/20220425/202204252359.tBUr22QD-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git/commit/?id=397ff024960634962af93e9e2775fc0e4fe7de92
+        git remote add broonie-ci https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git
+        git fetch --no-tags broonie-ci v2_20220425_rf_asoc_add_macros_for_signed_tlv_controls_with_callbacks
+        git checkout 397ff024960634962af93e9e2775fc0e4fe7de92
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash sound/soc/codecs/
 
-> When drm_sched_job_add_dependency() fails, dma_fence_put() will be called
-> internally. Calling it again after drm_sched_job_add_dependency() finishes
-> may result in a dangling pointer.
->
-> Fix this by removing redundant dma_fence_put().
->
-> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-> ---
->   drivers/gpu/drm/lima/lima_gem.c        | 1 -
->   drivers/gpu/drm/scheduler/sched_main.c | 1 -
->   2 files changed, 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/lima/lima_gem.c b/drivers/gpu/drm/lima/lima_gem.c
-> index 55bb1ec3c4f7..99c8e7f6bb1c 100644
-> --- a/drivers/gpu/drm/lima/lima_gem.c
-> +++ b/drivers/gpu/drm/lima/lima_gem.c
-> @@ -291,7 +291,6 @@ static int lima_gem_add_deps(struct drm_file *file, struct lima_submit *submit)
->   
->   		err = drm_sched_job_add_dependency(&submit->task->base, fence);
->   		if (err) {
-> -			dma_fence_put(fence);
->   			return err;
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
 
-Makes sense here
-
-
->   		}
->   	}
-> diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
-> index b81fceb0b8a2..ebab9eca37a8 100644
-> --- a/drivers/gpu/drm/scheduler/sched_main.c
-> +++ b/drivers/gpu/drm/scheduler/sched_main.c
-> @@ -708,7 +708,6 @@ int drm_sched_job_add_implicit_dependencies(struct drm_sched_job *job,
->   		dma_fence_get(fence);
->   		ret = drm_sched_job_add_dependency(job, fence);
->   		if (ret) {
-> -			dma_fence_put(fence);
+   sound/soc/codecs/max98390.c: In function 'max98390_i2c_probe':
+>> sound/soc/codecs/max98390.c:1076:22: error: implicit declaration of function 'devm_gpiod_get_optional'; did you mean 'devm_regulator_get_optional'? [-Werror=implicit-function-declaration]
+    1076 |         reset_gpio = devm_gpiod_get_optional(&i2c->dev,
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~
+         |                      devm_regulator_get_optional
+>> sound/soc/codecs/max98390.c:1077:55: error: 'GPIOD_OUT_HIGH' undeclared (first use in this function); did you mean 'GPIOF_INIT_HIGH'?
+    1077 |                                              "reset", GPIOD_OUT_HIGH);
+         |                                                       ^~~~~~~~~~~~~~
+         |                                                       GPIOF_INIT_HIGH
+   sound/soc/codecs/max98390.c:1077:55: note: each undeclared identifier is reported only once for each function it appears in
+>> sound/soc/codecs/max98390.c:1083:17: error: implicit declaration of function 'gpiod_set_value_cansleep'; did you mean 'gpio_set_value_cansleep'? [-Werror=implicit-function-declaration]
+    1083 |                 gpiod_set_value_cansleep(reset_gpio, 0);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+         |                 gpio_set_value_cansleep
+   cc1: some warnings being treated as errors
 
 
+vim +1076 sound/soc/codecs/max98390.c
 
-Not sure about this one since if you look at the relevant commits -
-'drm/scheduler: fix drm_sched_job_add_implicit_dependencies' and
-'drm/scheduler: fix drm_sched_job_add_implicit_dependencies harder'
-You will see that the dma_fence_put here balances the extra dma_fence_get
-above
+  1016	
+  1017	static int max98390_i2c_probe(struct i2c_client *i2c)
+  1018	{
+  1019		int ret = 0;
+  1020		int reg = 0;
+  1021	
+  1022		struct max98390_priv *max98390 = NULL;
+  1023		struct i2c_adapter *adapter = i2c->adapter;
+  1024		struct gpio_desc *reset_gpio;
+  1025	
+  1026		ret = i2c_check_functionality(adapter,
+  1027			I2C_FUNC_SMBUS_BYTE
+  1028			| I2C_FUNC_SMBUS_BYTE_DATA);
+  1029		if (!ret) {
+  1030			dev_err(&i2c->dev, "I2C check functionality failed\n");
+  1031			return -ENXIO;
+  1032		}
+  1033	
+  1034		max98390 = devm_kzalloc(&i2c->dev, sizeof(*max98390), GFP_KERNEL);
+  1035		if (!max98390) {
+  1036			ret = -ENOMEM;
+  1037			return ret;
+  1038		}
+  1039		i2c_set_clientdata(i2c, max98390);
+  1040	
+  1041		ret = device_property_read_u32(&i2c->dev, "maxim,temperature_calib",
+  1042					       &max98390->ambient_temp_value);
+  1043		if (ret) {
+  1044			dev_info(&i2c->dev,
+  1045				 "no optional property 'temperature_calib' found, default:\n");
+  1046		}
+  1047		ret = device_property_read_u32(&i2c->dev, "maxim,r0_calib",
+  1048					       &max98390->ref_rdc_value);
+  1049		if (ret) {
+  1050			dev_info(&i2c->dev,
+  1051				 "no optional property 'r0_calib' found, default:\n");
+  1052		}
+  1053	
+  1054		dev_info(&i2c->dev,
+  1055			"%s: r0_calib: 0x%x,temperature_calib: 0x%x",
+  1056			__func__, max98390->ref_rdc_value,
+  1057			max98390->ambient_temp_value);
+  1058	
+  1059		ret = device_property_read_string(&i2c->dev, "maxim,dsm_param_name",
+  1060					       &max98390->dsm_param_name);
+  1061		if (ret)
+  1062			max98390->dsm_param_name = "default";
+  1063	
+  1064		/* voltage/current slot configuration */
+  1065		max98390_slot_config(i2c, max98390);
+  1066	
+  1067		/* regmap initialization */
+  1068		max98390->regmap = devm_regmap_init_i2c(i2c, &max98390_regmap);
+  1069		if (IS_ERR(max98390->regmap)) {
+  1070			ret = PTR_ERR(max98390->regmap);
+  1071			dev_err(&i2c->dev,
+  1072				"Failed to allocate regmap: %d\n", ret);
+  1073			return ret;
+  1074		}
+  1075	
+> 1076		reset_gpio = devm_gpiod_get_optional(&i2c->dev,
+> 1077						     "reset", GPIOD_OUT_HIGH);
+  1078	
+  1079		/* Power on device */
+  1080		if (reset_gpio) {
+  1081			usleep_range(1000, 2000);
+  1082			/* bring out of reset */
+> 1083			gpiod_set_value_cansleep(reset_gpio, 0);
+  1084			usleep_range(1000, 2000);
+  1085		}
+  1086	
+  1087		/* Check Revision ID */
+  1088		ret = regmap_read(max98390->regmap,
+  1089			MAX98390_R24FF_REV_ID, &reg);
+  1090		if (ret) {
+  1091			dev_err(&i2c->dev,
+  1092				"ret=%d, Failed to read: 0x%02X\n",
+  1093				ret, MAX98390_R24FF_REV_ID);
+  1094			return ret;
+  1095		}
+  1096		dev_info(&i2c->dev, "MAX98390 revisionID: 0x%02X\n", reg);
+  1097	
+  1098		ret = devm_snd_soc_register_component(&i2c->dev,
+  1099				&soc_codec_dev_max98390,
+  1100				max98390_dai, ARRAY_SIZE(max98390_dai));
+  1101	
+  1102		return ret;
+  1103	}
+  1104	
 
-Andrey
-
-
->   			return ret;
->   		}
->   	}
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

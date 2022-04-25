@@ -2,73 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24B4450E9AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 21:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D03AB50E9AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 21:44:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245016AbiDYTqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 15:46:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43408 "EHLO
+        id S245046AbiDYTrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 15:47:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242459AbiDYTqt (ORCPT
+        with ESMTP id S245038AbiDYTrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 15:46:49 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE095FBA
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 12:43:44 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id e189so18301292oia.8
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 12:43:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=0aTHmoXAI9ckVhBXYqW+KGFj4vYpnPPYoC21k+D/akY=;
-        b=A70sBr3ukAROhfERsnpuaTksTAVdueKAyJnBu8vbCjrrsmHFswHleN5SHj+nPSft1I
-         fe9cpOiwFa6zM655tmjdpbWmJ13JYdXj8GhM1s0VBXFhbBihidYe+VWMZf/dvBM6CJG8
-         sZ4RFJlj8JLv2PxTtHP78xFyrnYdlIj1bfO4M=
+        Mon, 25 Apr 2022 15:47:09 -0400
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FB62A71A;
+        Mon, 25 Apr 2022 12:44:04 -0700 (PDT)
+Received: by mail-oo1-f48.google.com with SMTP id g30-20020a4a251e000000b0033a39d8340aso2983475ooa.5;
+        Mon, 25 Apr 2022 12:44:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=0aTHmoXAI9ckVhBXYqW+KGFj4vYpnPPYoC21k+D/akY=;
-        b=J/rCWQUTGj7waCIHFszBXNGxv14yOXoaRaIur7YC43inCcjC/lfC8gOLzREBwNRdYw
-         qFIsR+3XcaJdOxnXLLlVIrprCZetC6XZrG07vtXEm4/02UH442ddQK+J0RedYFrmURmP
-         QOeUXQZp7l04lx+c49ithRKw49tSBn1M82SfybfwcYZDiRV3FotAZaTIcjZzBtGS+bBd
-         csq0+4asd1mth/jjkjPWtWSiSYTyaaCdD9+hzHFIwZRDan5Q7xn7y67AbiHvM+Pix+Tt
-         NIb+ZQ324waQokz/mFMHccOXvszY5DF+f93TKImeKNZhCl2JIFSLTh2CYBF5FOO7CAKh
-         aS2g==
-X-Gm-Message-State: AOAM531/tk/40CoD6oPg8sh/L2TaKZyW0t87ByamZFztGR6V9Aqj0UNb
-        f9uQfrQ0q3Hz8nHNOcUgg6Intw==
-X-Google-Smtp-Source: ABdhPJzXOpDGltCA1h4xv5EReUs7VallhjEZ2YKzIS/Apm5GZuqqQnXUisUGfkL/Ki318t8MqD23vg==
-X-Received: by 2002:a05:6808:1819:b0:322:9337:9030 with SMTP id bh25-20020a056808181900b0032293379030mr9059262oib.297.1650915823542;
-        Mon, 25 Apr 2022 12:43:43 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id q203-20020acad9d4000000b002f8ee3f69e2sm4125393oig.52.2022.04.25.12.43.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 12:43:43 -0700 (PDT)
-Subject: Re: [PATCH 2/5] selftests: firmware: Use smaller dictionary for XZ
- compression
-To:     Takashi Iwai <tiwai@suse.de>, Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Nick Terrell <terrelln@fb.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220421152908.4718-1-tiwai@suse.de>
- <20220421152908.4718-3-tiwai@suse.de>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <156bafb7-19e2-ed2f-63aa-64236d28a06e@linuxfoundation.org>
-Date:   Mon, 25 Apr 2022 13:43:42 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3MgO8upGLQIT7MA1c1wZtenkS69Cr8OOjspSzkPpmss=;
+        b=VdK/ikbGzF8vyJbzdErm17h3UVQcKhQ4ouDT0f/q4y73e1YKtOE4LoE0LTsM3N5BuK
+         0tRsUDymTkqEdFAJWAEPtgxgPwXbhoCaVJSTLQFSVCQ5Cv+U0tFaCg08zHYu8Hwi25Xh
+         xXq8WLRl+Xb7MMB3L8OJmCdM9X0mDIj6dO/JrQT0wEvU7N9xH69EcnyFb0xZ4kO8rkYQ
+         +AVPP20N4h831POP1s+hPFDZ4MT22B0ofLuqVF33TKkC3D6syPen+vfDxpPxPJ1tEb16
+         JuR+oMd/u+R8LCdv8J/0+pwhX9OHoOfVBPJIr+UhWntZddkm4E5qhpaMOTQBVYJrjT47
+         ELtQ==
+X-Gm-Message-State: AOAM531K/0LdO5/HmQ/4M/bRWx7oFg4ZmBYfCtn55LIvCA1JYt+B19B2
+        1WshILB86MNfNhdrJGWceQ==
+X-Google-Smtp-Source: ABdhPJwf4Xyx+/VQ5kGcMOPdAcQfh7fvYOnVekrEwwDVyJaLDX2aks6e0Ho5r/lUEmXwJDUSbQPsMg==
+X-Received: by 2002:a4a:dfd7:0:b0:35e:499c:7bb5 with SMTP id p23-20020a4adfd7000000b0035e499c7bb5mr4695942ood.36.1650915843421;
+        Mon, 25 Apr 2022 12:44:03 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id f63-20020a9d2c45000000b005e973e22081sm4115852otb.37.2022.04.25.12.44.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 12:44:02 -0700 (PDT)
+Received: (nullmailer pid 141172 invoked by uid 1000);
+        Mon, 25 Apr 2022 19:44:01 -0000
+Date:   Mon, 25 Apr 2022 14:44:01 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@lists.collabora.co.uk,
+        Kever Yang <kever.yang@rock-chips.com>, kernel@collabora.com
+Subject: Re: [PATCHv1 19/19] arm64: dts: rockchip: Add rk3588-evb1 board
+Message-ID: <Ymb6AWcLkUnqsslp@robh.at.kernel.org>
+References: <20220422170920.401914-1-sebastian.reichel@collabora.com>
+ <20220422170920.401914-20-sebastian.reichel@collabora.com>
+ <46e72600-b96a-03a9-134d-28a0cb4bc078@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <20220421152908.4718-3-tiwai@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <46e72600-b96a-03a9-134d-28a0cb4bc078@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,60 +77,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/21/22 9:29 AM, Takashi Iwai wrote:
-> The xz -9 option leads to an unnecessarily too large dictionary that
-> isn't really suitable for the kernel firmware loader.  Pass the
-> dictionary size explicitly, instead.
+On Sat, Apr 23, 2022 at 12:09:21PM +0200, Krzysztof Kozlowski wrote:
+> On 22/04/2022 19:09, Sebastian Reichel wrote:
+> > From: Kever Yang <kever.yang@rock-chips.com>
+> > 
+> > Add board file for the RK3588 evaluation board. While the hardware
+> > offers plenty of peripherals and connectivity this basic implementation
+> > just handles things required to successfully boot Linux from eMMC
+> > and connect via UART.
+> > 
+> > Signed-off-by: Kever Yang <kever.yang@rock-chips.com>
+> > [rebase, update commit message, use EVB1 for SoC bringup]
+> > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> > ---
+> >  .../devicetree/bindings/arm/rockchip.yaml     |  5 +++
+> >  arch/arm64/boot/dts/rockchip/Makefile         |  1 +
+> >  .../boot/dts/rockchip/rk3588-evb1-v10.dts     | 34 +++++++++++++++++++
+> >  3 files changed, 40 insertions(+)
+> >  create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts
+> > 
+> > diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
+> > index eece92f83a2d..b14d0c84c69b 100644
+> > --- a/Documentation/devicetree/bindings/arm/rockchip.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
+> > @@ -664,6 +664,11 @@ properties:
+> >            - const: rockchip,rk3568-bpi-r2pro
+> >            - const: rockchip,rk3568
+> >  
+> > +      - description: Rockchip RK3588 Evaluation board
+> > +        items:
+> > +          - const: rockchip,rk3588-evb1-v10
+> > +          - const: rockchip,rk3588
+> > +
+> >  additionalProperties: true
+> >  
+> >  ...
+> > diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
+> > index 4ae9f35434b8..8a53ab6d37a1 100644
+> > --- a/arch/arm64/boot/dts/rockchip/Makefile
+> > +++ b/arch/arm64/boot/dts/rockchip/Makefile
+> > @@ -61,3 +61,4 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-pinenote-v1.2.dtb
+> >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-quartz64-a.dtb
+> >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb1-v10.dtb
+> >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-bpi-r2-pro.dtb
+> > +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588-evb1-v10.dtb
+> > diff --git a/arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts b/arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts
+> > new file mode 100644
+> > index 000000000000..68b19acb1550
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts
+> > @@ -0,0 +1,34 @@
+> > +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> > +/*
+> > + * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
+> > + *
+> > + */
+> > +
+> > +/dts-v1/;
+> > +
+> > +#include "rk3588.dtsi"
+> > +
+> > +/ {
+> > +	model = "Rockchip RK3588 EVB1 V10 Board";
+> > +	compatible = "rockchip,rk3588-evb1-v10", "rockchip,rk3588";
+> > +
+> > +	chosen {
+> > +		stdout-path = "serial2:1500000n8";
+> > +	};
+> > +};
+> > +
+> > +&sdhci {
+> > +	bus-width = <8>;
+> > +	no-sdio;
+> > +	no-sd;
+> > +	non-removable;
+> > +	max-frequency = <200000000>;
+> > +	mmc-hs400-1_8v;
+> > +	mmc-hs400-enhanced-strobe;
+> > +	status = "ok";
+> > +};
+> > +
+> > +&uart2 {
+> > +	status = "ok";
 > 
-> While we're at it, make the xz command call defined in $RUN_XZ for
-> simplicity.
-> 
-> Fixes: 108ae07c5036 ("selftests: firmware: Add compressed firmware tests")
-> Signed-off-by: Takashi Iwai <tiwai@suse.de>
-> ---
->   tools/testing/selftests/firmware/fw_filesystem.sh | 8 +++++---
->   1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/firmware/fw_filesystem.sh b/tools/testing/selftests/firmware/fw_filesystem.sh
-> index c2a2a100114b..731f011def78 100755
-> --- a/tools/testing/selftests/firmware/fw_filesystem.sh
-> +++ b/tools/testing/selftests/firmware/fw_filesystem.sh
-> @@ -11,6 +11,8 @@ TEST_REQS_FW_SET_CUSTOM_PATH="yes"
->   TEST_DIR=$(dirname $0)
->   source $TEST_DIR/fw_lib.sh
->   
-> +RUN_XZ="xz -C crc32 --lzma2=dict=2MiB"
-> +
->   check_mods
->   check_setup
->   verify_reqs
-> @@ -410,9 +412,9 @@ test_request_firmware_nowait_custom()
->   	RANDOM_FILE_PATH=$(setup_random_file)
->   	RANDOM_FILE="$(basename $RANDOM_FILE_PATH)"
->   	if [ "$2" = "both" ]; then
-> -		xz -9 -C crc32 -k $RANDOM_FILE_PATH
-> +		$RUN_XZ -k $RANDOM_FILE_PATH
->   	elif [ "$2" = "xzonly" ]; then
-> -		xz -9 -C crc32 $RANDOM_FILE_PATH
-> +		$RUN_XZ $RANDOM_FILE_PATH
->   	fi
->   	config_set_name $RANDOM_FILE
->   	config_trigger_async
-> @@ -501,7 +503,7 @@ test_request_partial_firmware_into_buf_nofile 2 10
->   test "$HAS_FW_LOADER_COMPRESS" != "yes" && exit 0
->   
->   # test with both files present
-> -xz -9 -C crc32 -k $FW
-> +$RUN_XZ -k $FW
->   config_set_name $NAME
->   echo
->   echo "Testing with both plain and xz files present..."
-> 
+> Usually status goes at the end of properties and rockchip sources use
+> "okay" instead of "ok".
 
-Thank you. Looks good to me.
+"okay" is what's documented in the spec and in the schemas, so please 
+fix. 
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+No need for reviewers to tell you this though, please run 'make 
+dtbs_checks' on the dts file and don't add new warnings.
 
-thanks,
--- Shuah
-
+Rob

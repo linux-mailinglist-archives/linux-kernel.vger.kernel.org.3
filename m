@@ -2,119 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADD5250D6E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 04:10:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C833850D6E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 04:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240289AbiDYCN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 22:13:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56688 "EHLO
+        id S240337AbiDYCR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 22:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240332AbiDYCNW (ORCPT
+        with ESMTP id S240320AbiDYCRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 22:13:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 37E402ACC
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 19:10:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650852606;
+        Sun, 24 Apr 2022 22:17:24 -0400
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F303F894;
+        Sun, 24 Apr 2022 19:14:20 -0700 (PDT)
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 12AF7121D3A;
+        Mon, 25 Apr 2022 02:14:19 +0000 (UTC)
+Received: from pdx1-sub0-mail-a217.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 835C5121E04;
+        Mon, 25 Apr 2022 02:14:18 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1650852858; a=rsa-sha256;
+        cv=none;
+        b=d1vemvf4nhgWkSZZzsz9nDtbSdj/tDA84mWlcc4KPOGCIyqd/jxYvlRyUI471/sVAVDCLy
+        MF+tHuTClI+V66j7OwOi4Gzt2zyJwFafqFrpXN5YyLodfnQvt91e4xXRlSeehiMug8CNhg
+        kZJpjfb8IhAReuVCowZ9+FewJerGpYmFipm5S1HKFbo7XPys4Yh5VwIXA7Rycj2hsKj/MI
+        DfieP10fyg0egW4dH6X15RzxOkLSHEnoCzMFs2hDc7/X7FHrFueJMF9StDuotu5CkC7Tei
+        Zd4Te3jFx1zVUGenR+OHOptQXxPXybZDpFARk6Z9AOvYyj6FTI760KkSPmLelA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1650852858;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=IWt3Bi21zseUs/ls2Wi4USmCY2Ri5eVFWeb4jdyhkTo=;
-        b=PAI//Ovtp8uolwrF7EEWDedph3p8Zve/4SQYteUxIC8Nvx6Kb3CfqjYkKhsRGbCRIi9Ukm
-        7XcWBiXtifvpu12SRljOgS1qEPFkEVHb6Tak8aCxeKyCrWkTpVXKE0+6FXpPjKXq+QXOQF
-        DiDCsDF4UXAe25vXmdo0mLiqyqjcZ4g=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-578-3p3NdwLTNfuzW-O3zKYrLw-1; Sun, 24 Apr 2022 22:10:01 -0400
-X-MC-Unique: 3p3NdwLTNfuzW-O3zKYrLw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:dkim-signature;
+        bh=KxnLMzjR75kF8mNlPzwLdtNEw5lVgw9YWOw5RLRjW2E=;
+        b=7ADHk7i9oKsQDDEYGoheIvlO+aeQizWNv5mCd1H816rPtvyoD2jbyY/wO7WxV2pIikqwdJ
+        snVotR97pDqpcV0bMX06PFxz/fKOGIIqgCpNMN1dTnRkBw9Hbx2X6t8slu5pNoicc1lsKV
+        BhRg38i4fe6zvG/wL9wKQAOGqnEtaARaW1hs+yjUaqfDmH/EeRkWkDPy+sLjpHpXowK6yL
+        uncrhJq2d3G6OR/Ug2U5s7meV/BL1xYMS1XMo0Bm+LVUBUo4y2kPKLdBPCHjKeOFG6t3H/
+        9+e8fZOIZIZZZY9Us9Xiux0XKr9AR+Mgfh1ag72gn7/d++kClyxyf9ygX66zvQ==
+ARC-Authentication-Results: i=1;
+        rspamd-67b64f579b-tg62q;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=ian@linux.cowan.aero
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|ian@linux.cowan.aero
+X-MailChannels-Auth-Id: dreamhost
+X-Wipe-Spot: 7569185d58f77829_1650852858927_1998791521
+X-MC-Loop-Signature: 1650852858927:3081617291
+X-MC-Ingress-Time: 1650852858926
+Received: from pdx1-sub0-mail-a217.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.121.210.129 (trex/6.7.1);
+        Mon, 25 Apr 2022 02:14:18 +0000
+Received: from localhost.localdomain (unknown [69.12.38.97])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B8C44811E75;
-        Mon, 25 Apr 2022 02:09:55 +0000 (UTC)
-Received: from llong.com (unknown [10.22.8.132])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EA0122026D6A;
-        Mon, 25 Apr 2022 02:09:50 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>
-Cc:     cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Feng Tang <feng.tang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>, ying.huang@intel.com,
-        Waiman Long <longman@redhat.com>, stable@vger.kernel.org
-Subject: [PATCH] cgroup/cpuset: Remove redundant cpu/node masks setup in cpuset_init_smp()
-Date:   Sun, 24 Apr 2022 22:09:26 -0400
-Message-Id: <20220425020926.1264611-1-longman@redhat.com>
+        (Authenticated sender: ian@linux.cowan.aero)
+        by pdx1-sub0-mail-a217.dreamhost.com (Postfix) with ESMTPSA id 4KmpVK606Qz2n;
+        Sun, 24 Apr 2022 19:14:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.cowan.aero;
+        s=dreamhost; t=1650852858;
+        bh=KxnLMzjR75kF8mNlPzwLdtNEw5lVgw9YWOw5RLRjW2E=;
+        h=From:To:Cc:Subject:Date:Content-Transfer-Encoding;
+        b=c+2XlTSYiuVRbaPwwBz5Uh1RUz5FRMKTCCEONOiUgQZ2Mte1D3uUP3XEoQDiyQ0m1
+         Ww29UOnQkKm3xW1i9B0B+AcKUQtvqwC1mh42eQErtOi/G+qGF4rt2qCcCiWbupCkbO
+         MIyQ9zONnTUsJoLQDvqEwLTLK8RB5Nzq2f/jw9rjd9kbOyvDPzuDRiZidXCDYRpa0A
+         TPwwrPgKsrQmVO7Q9jnNV+RTvrIxX7+S0hh/RiezPxPXJlsYK9MXzu/129tpCqbrbZ
+         3PGlCNEiMNwXbwMmIiPNBwDqm8eqbi092/7fzxSNhFdR7EQSskY4rSUQC0Gyx1C6Fo
+         SBCMnYkFmK96Q==
+From:   Ian Cowan <ian@linux.cowan.aero>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ian Cowan <ian@linux.cowan.aero>
+Subject: [PATCH] drivers: acpi: clean up spaces to be consistent
+Date:   Sun, 24 Apr 2022 22:14:07 -0400
+Message-Id: <20220425021407.486916-1-ian@linux.cowan.aero>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are 3 places where the cpu and node masks of the top cpuset can
-be initialized in the order they are executed:
- 1) start_kernel -> cpuset_init()
- 2) start_kernel -> cgroup_init() -> cpuset_bind()
- 3) kernel_init_freeable() -> do_basic_setup() -> cpuset_init_smp()
+This cleans up a few line spaces so that it is consistent with the rest
+of the file. There are a few places where a space was added before a
+return and two spots where a double line space was made into one line
+space.
 
-The first cpuset_init() function just sets all the bits in the masks.
-The last one executed is cpuset_init_smp() which sets up cpu and node
-masks suitable for v1, but not v2.  cpuset_bind() does the right setup
-for both v1 and v2 assuming that effective_mems and effective_cpus have
-been set up properly which is not strictly the case here. As a result,
-cpu and memory node hot add may fail to update the cpu and node masks
-of the top cpuset to include the newly added cpu or node in a cgroup
-v2 environment.
-
-To fix this problem, the redundant cpus_allowed and mems_allowed
-mask setup in cpuset_init_smp() are removed. The effective_cpus and
-effective_mems setup there are moved to cpuset_bind().
-
-cc: stable@vger.kernel.org
-Signed-off-by: Waiman Long <longman@redhat.com>
+Signed-off-by: Ian Cowan <ian@linux.cowan.aero>
 ---
- kernel/cgroup/cpuset.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ drivers/acpi/ac.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 9390bfd9f1cd..a2e15a43397e 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -2961,6 +2961,9 @@ static void cpuset_bind(struct cgroup_subsys_state *root_css)
- 	percpu_down_write(&cpuset_rwsem);
- 	spin_lock_irq(&callback_lock);
+diff --git a/drivers/acpi/ac.c b/drivers/acpi/ac.c
+index db487ff9dd1b..f8ec48cd7659 100644
+--- a/drivers/acpi/ac.c
++++ b/drivers/acpi/ac.c
+@@ -32,7 +32,6 @@ MODULE_AUTHOR("Paul Diefenbaugh");
+ MODULE_DESCRIPTION("ACPI AC Adapter Driver");
+ MODULE_LICENSE("GPL");
  
-+	cpumask_copy(top_cpuset.effective_cpus, cpu_active_mask);
-+	top_cpuset.effective_mems = node_states[N_MEMORY];
+-
+ static int acpi_ac_add(struct acpi_device *device);
+ static int acpi_ac_remove(struct acpi_device *device);
+ static void acpi_ac_notify(struct acpi_device *device, u32 event);
+@@ -125,6 +124,7 @@ static int get_ac_property(struct power_supply *psy,
+ 	default:
+ 		return -EINVAL;
+ 	}
 +
- 	if (is_in_v2_mode()) {
- 		cpumask_copy(top_cpuset.cpus_allowed, cpu_possible_mask);
- 		top_cpuset.mems_allowed = node_possible_map;
-@@ -3390,13 +3393,6 @@ static struct notifier_block cpuset_track_online_nodes_nb = {
-  */
- void __init cpuset_init_smp(void)
- {
--	cpumask_copy(top_cpuset.cpus_allowed, cpu_active_mask);
--	top_cpuset.mems_allowed = node_states[N_MEMORY];
--	top_cpuset.old_mems_allowed = top_cpuset.mems_allowed;
--
--	cpumask_copy(top_cpuset.effective_cpus, cpu_active_mask);
--	top_cpuset.effective_mems = node_states[N_MEMORY];
--
- 	register_hotmemory_notifier(&cpuset_track_online_nodes_nb);
+ 	return 0;
+ }
  
- 	cpuset_migrate_mm_wq = alloc_ordered_workqueue("cpuset_migrate_mm", 0);
+@@ -190,12 +190,14 @@ static int acpi_ac_battery_notify(struct notifier_block *nb,
+ static int __init thinkpad_e530_quirk(const struct dmi_system_id *d)
+ {
+ 	ac_sleep_before_get_state_ms = 1000;
++
+ 	return 0;
+ }
+ 
+ static int __init ac_only_quirk(const struct dmi_system_id *d)
+ {
+ 	ac_only = 1;
++
+ 	return 0;
+ }
+ 
+@@ -286,6 +288,7 @@ static int acpi_ac_resume(struct device *dev)
+ 		return 0;
+ 	if (old_state != ac->state)
+ 		kobject_uevent(&ac->charger->dev.kobj, KOBJ_CHANGE);
++
+ 	return 0;
+ }
+ #else
+@@ -296,7 +299,6 @@ static int acpi_ac_remove(struct acpi_device *device)
+ {
+ 	struct acpi_ac *ac = NULL;
+ 
+-
+ 	if (!device || !acpi_driver_data(device))
+ 		return -EINVAL;
+ 
 -- 
-2.27.0
+2.35.1
 

@@ -2,254 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85A4850DCE1
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 11:38:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A35F50DCF5
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 11:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240475AbiDYJlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 05:41:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42880 "EHLO
+        id S235452AbiDYJmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 05:42:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240617AbiDYJkW (ORCPT
+        with ESMTP id S240617AbiDYJlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 05:40:22 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F4B91A83E
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 02:36:44 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id r13so28463687ejd.5
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 02:36:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=nuXvyXcfSlNNf+vXWbc6QlS7EMXyhZacegPBGO4WZEs=;
-        b=LofUgeVi0Jw8/ef3AsJTGrYnJHHHe49mIAEj8U+4jh9GWrmr/JEr5K7s/JaE8pkdQc
-         ldRehpBumgnOkWBH4HoP8RjF+mPFQpXTivbJnAz9/ZJwXzYxWLHVq4/zv+1TsqZDUCPe
-         FUXh0c/rJ/FXHYflHmrvIQ28U9mNJBVGoaWw8ilrRcVg/tCBYOQygMV9WKM8aXhiU+CK
-         ki881ebBGEDLu2hGbI4fbe0Y8HF2SSK6SELRQpD/zj9nyG52zCCdzhftcw10L9DzMVGL
-         qwuMBdmqeraSZ/X6F2VltV8ys4qFqSzWMRZF303+fBMNDJ6deaBlyEr+q3xOMoJdlt5d
-         Lacw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nuXvyXcfSlNNf+vXWbc6QlS7EMXyhZacegPBGO4WZEs=;
-        b=dGWrTVuRykqy4KLPyFYUx1xNDEMdv4U1TWDsRGJ52p8a2p5FJgzio7QzCpjIChez9F
-         R3vJesv1QyyZFeoIJkFTfNGgX6yaHlO36MmeR1hmAmqCMkV6SMcJC9bVC6k4tNvj1olK
-         m+yBaz0+iTBif9KzU1P2oD+EOuYsKoPc/cjLC9BSFKNY2z2pIltTSr72LZ+/fiS7GIVU
-         c+WQswD2C38e68zanPjA847M4xX0CJBaHmz/NTe2wL4nxd95nZw2K2Fw53CxHIaXCcEk
-         hGNFA1rX0ifYzFeXETWMeA0sYea0/WVL+k9VokX38PhifPz7DX8Vo2F3aww7wjTPKRrb
-         8b8A==
-X-Gm-Message-State: AOAM533+WKQzDBF0JDBZw5cZ0QcoEvHcu3Yd3jNqPpRyzgXvHkzXwz+s
-        RUPV08yMsOqdWPa1lB1BuJQqTQ==
-X-Google-Smtp-Source: ABdhPJzwCPLJ4SHeT4lNCV0T5wY9lLZjkgpo2vprKwldO/cFdtJ3tXRPuO09NOtQsRvHlnNH7XK6AQ==
-X-Received: by 2002:a17:906:3104:b0:6ce:6b85:ecc9 with SMTP id 4-20020a170906310400b006ce6b85ecc9mr15154977ejx.339.1650879403173;
-        Mon, 25 Apr 2022 02:36:43 -0700 (PDT)
-Received: from [192.168.0.241] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id ak18-20020a170906889200b006f39a445b93sm694706ejc.141.2022.04.25.02.36.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 02:36:42 -0700 (PDT)
-Message-ID: <b852a9d2-8d83-fa9f-52b3-32c9f2ca1e66@linaro.org>
-Date:   Mon, 25 Apr 2022 11:36:41 +0200
+        Mon, 25 Apr 2022 05:41:24 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BD017051;
+        Mon, 25 Apr 2022 02:37:20 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id BCF1D210E5;
+        Mon, 25 Apr 2022 09:37:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1650879438; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XKzPZSZjl/CuIwENsnn/SueNKmgq+oSUkjLiGdxjrMA=;
+        b=RjxNMVpIYiZeOVcck2OTzhAgsn/etT3h6srkKhwtsjKo6HtUVxvjbuDwIT/0mg/Ua7fJhw
+        pwGeeIon9y/cWp9fs9hZEVH0l18cIBdAxdS8K9797rxvkDQQ2isqTAxrS2x0hpNK/UFOUP
+        RGgmMyPduVR6UIsFmKaxYgqsTkQgI9g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1650879438;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XKzPZSZjl/CuIwENsnn/SueNKmgq+oSUkjLiGdxjrMA=;
+        b=BhZGwetAzIrrfnZsS/+C5b2Y8bNuVhmDcP2dSQuLjyce8OsHoOrcFx6hWf9hmrOcKEF5Is
+        bxCyxSbQic/PapAA==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 9AC792C142;
+        Mon, 25 Apr 2022 09:37:18 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 35574A0620; Mon, 25 Apr 2022 11:37:15 +0200 (CEST)
+Date:   Mon, 25 Apr 2022 11:37:15 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Yu Kuai <yukuai3@huawei.com>
+Cc:     jack@suse.cz, paolo.valente@linaro.org, axboe@kernel.dk,
+        tj@kernel.org, linux-block@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH -next v2 1/5] block, bfq: cleanup bfq_weights_tree
+ add/remove apis
+Message-ID: <20220425093715.5ufwrgqrtyoqzjp3@quack3.lan>
+References: <20220416093753.3054696-1-yukuai3@huawei.com>
+ <20220416093753.3054696-2-yukuai3@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] dt-bindings: nvmem: mediatek: Convert binding to YAML
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Lala Lin <lala.lin@mediatek.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>
-References: <20220422123823.24577-1-allen-kh.cheng@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220422123823.24577-1-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220416093753.3054696-2-yukuai3@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/04/2022 14:38, Allen-KH Cheng wrote:
-> Convert Mediatek EFUSE devicetree binding to YAML.
+On Sat 16-04-22 17:37:49, Yu Kuai wrote:
+> They already pass 'bfqd' as the first parameter, there is no need to
+> pass 'bfqd->queue_weights_tree' as another parameter.
 > 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+
+Nice cleanup. Feel free to add:
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
 > ---
->  .../devicetree/bindings/nvmem/mtk-efuse.txt   | 43 ------------
->  .../devicetree/bindings/nvmem/mtk-efuse.yaml  | 69 +++++++++++++++++++
-
-Same comments as usual, so "vendor,device-name", e.g. "mediatek,efuse"
-if this is going to match all possible future MediaTek chips or
-"mediatek,mt7622-efuse"
-
-
-Folks in MediaTek: it would be useful if we did not have to repeat same
-review to all of you for every patch. If you keep forcing the reviewers
-to repeat the same and the same, eventually they become grumpier and
-grumpier. :)
-
->  2 files changed, 69 insertions(+), 43 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
->  create mode 100644 Documentation/devicetree/bindings/nvmem/mtk-efuse.yaml
+>  block/bfq-iosched.c | 14 +++++++-------
+>  block/bfq-iosched.h |  7 ++-----
+>  block/bfq-wf2q.c    | 16 +++++-----------
+>  3 files changed, 14 insertions(+), 23 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt b/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
-> deleted file mode 100644
-> index 39d529599444..000000000000
-> --- a/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
-> +++ /dev/null
-> @@ -1,43 +0,0 @@
-> -= Mediatek MTK-EFUSE device tree bindings =
-> -
-> -This binding is intended to represent MTK-EFUSE which is found in most Mediatek SOCs.
-> -
-> -Required properties:
-> -- compatible: should be
-> -	      "mediatek,mt7622-efuse", "mediatek,efuse": for MT7622
-> -	      "mediatek,mt7623-efuse", "mediatek,efuse": for MT7623
-> -	      "mediatek,mt8173-efuse" or "mediatek,efuse": for MT8173
-> -	      "mediatek,mt8192-efuse", "mediatek,efuse": for MT8192
-> -	      "mediatek,mt8195-efuse", "mediatek,efuse": for MT8195
-> -	      "mediatek,mt8516-efuse", "mediatek,efuse": for MT8516
-> -- reg: Should contain registers location and length
-> -- bits: contain the bits range by offset and size
-> -
-> -= Data cells =
-> -Are child nodes of MTK-EFUSE, bindings of which as described in
-> -bindings/nvmem/nvmem.txt
-> -
-> -Example:
-> -
-> -	efuse: efuse@10206000 {
-> -		compatible = "mediatek,mt8173-efuse";
-> -		reg	   = <0 0x10206000 0 0x1000>;
-> -		#address-cells = <1>;
-> -		#size-cells = <1>;
-> -
-> -		/* Data cells */
-> -		thermal_calibration: calib@528 {
-> -			reg = <0x528 0xc>;
-> -		};
-> -	};
-> -
-> -= Data consumers =
-> -Are device nodes which consume nvmem data cells.
-> -
-> -For example:
-> -
-> -	thermal {
-> -		...
-> -		nvmem-cells = <&thermal_calibration>;
-> -		nvmem-cell-names = "calibration";
-> -	};
-> diff --git a/Documentation/devicetree/bindings/nvmem/mtk-efuse.yaml b/Documentation/devicetree/bindings/nvmem/mtk-efuse.yaml
-> new file mode 100644
-> index 000000000000..307c05f69cb9
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/nvmem/mtk-efuse.yaml
-> @@ -0,0 +1,69 @@
-> +# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/nvmem/mtk-efuse.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+> index 2e0dd68a3cbe..2deea2d07a1f 100644
+> --- a/block/bfq-iosched.c
+> +++ b/block/bfq-iosched.c
+> @@ -862,9 +862,9 @@ static bool bfq_asymmetric_scenario(struct bfq_data *bfqd,
+>   * In most scenarios, the rate at which nodes are created/destroyed
+>   * should be low too.
+>   */
+> -void bfq_weights_tree_add(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+> -			  struct rb_root_cached *root)
+> +void bfq_weights_tree_add(struct bfq_data *bfqd, struct bfq_queue *bfqq)
+>  {
+> +	struct rb_root_cached *root = &bfqd->queue_weights_tree;
+>  	struct bfq_entity *entity = &bfqq->entity;
+>  	struct rb_node **new = &(root->rb_root.rb_node), *parent = NULL;
+>  	bool leftmost = true;
+> @@ -936,13 +936,14 @@ void bfq_weights_tree_add(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+>   * See the comments to the function bfq_weights_tree_add() for considerations
+>   * about overhead.
+>   */
+> -void __bfq_weights_tree_remove(struct bfq_data *bfqd,
+> -			       struct bfq_queue *bfqq,
+> -			       struct rb_root_cached *root)
+> +void __bfq_weights_tree_remove(struct bfq_data *bfqd, struct bfq_queue *bfqq)
+>  {
+> +	struct rb_root_cached *root;
 > +
-> +title: Mediatek eFuse device tree bindings
-
-s/device tree bindings//
-
-Folks in MediaTek: it would be useful if we did not have to repeat same
-review to all of you for every patch.
-
-> +
-> +maintainers:
-> +  - Lala Lin <lala.lin@mediatek.com>
-> +  - Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> +
-> +allOf:
-> +  - $ref: "nvmem.yaml#"
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - const: mediatek,efuse
-
-1. Please add a comment for which compatible this is valid. Such generic
-compatibles should not be used standalone. The binding was accepted
-(without DT review), so it's done, but let's not spread it over new DTS.
-
-Actually I would prefer to deprecate it in second patch.
-
-2. Same comments as usual - this is enum.
-Folks in MediaTek: it would be useful if we did not have to repeat same
-review to all of you for every patch.
-
-> +      - const: mediatek,mt8173-efuse
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt7622-efuse
-> +              - mediatek,mt7623-efuse
-> +              - mediatek,mt8183-efuse
-> +              - mediatek,mt8192-efuse
-> +              - mediatek,mt8195-efuse
-> +              - mediatek,mt8516-efuse
-> +          - const: mediatek,efuse
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +patternProperties:
-> +  "^.*@[0-9a-f]+$":
-> +    type: object
-
-No need, it comes from nvmem.yaml.
-> +
-> +    properties:
-> +      reg:
-> +        maxItems: 1
-> +        description:
-> +          Offset and size in bytes within the storage device.
-> +
-> +    required:
-> +      - reg
-> +
-> +    additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +
-
-Unneeded blank line.
-
-> +    efuse: efuse@10206000 {
-> +            compatible = "mediatek,mt8173-efuse";
-> +            reg = <0x10206000 0x1000>;
-> +            #address-cells = <1>;
-> +            #size-cells = <1>;
-> +
-> +            /* Data cells */
-> +            thermal_calibration: calib@528 {
-> +                reg = <0x528 0xc>;
-> +            };
-> +    };
-> +...
-
-
-Best regards,
-Krzysztof
+>  	if (!bfqq->weight_counter)
+>  		return;
+>  
+> +	root = &bfqd->queue_weights_tree;
+>  	bfqq->weight_counter->num_active--;
+>  	if (bfqq->weight_counter->num_active > 0)
+>  		goto reset_entity_pointer;
+> @@ -1004,8 +1005,7 @@ void bfq_weights_tree_remove(struct bfq_data *bfqd,
+>  	 * has no dispatched request. DO NOT use bfqq after the next
+>  	 * function invocation.
+>  	 */
+> -	__bfq_weights_tree_remove(bfqd, bfqq,
+> -				  &bfqd->queue_weights_tree);
+> +	__bfq_weights_tree_remove(bfqd, bfqq);
+>  }
+>  
+>  /*
+> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
+> index 3b83e3d1c2e5..072099b0c11a 100644
+> --- a/block/bfq-iosched.h
+> +++ b/block/bfq-iosched.h
+> @@ -969,11 +969,8 @@ struct bfq_queue *bic_to_bfqq(struct bfq_io_cq *bic, bool is_sync);
+>  void bic_set_bfqq(struct bfq_io_cq *bic, struct bfq_queue *bfqq, bool is_sync);
+>  struct bfq_data *bic_to_bfqd(struct bfq_io_cq *bic);
+>  void bfq_pos_tree_add_move(struct bfq_data *bfqd, struct bfq_queue *bfqq);
+> -void bfq_weights_tree_add(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+> -			  struct rb_root_cached *root);
+> -void __bfq_weights_tree_remove(struct bfq_data *bfqd,
+> -			       struct bfq_queue *bfqq,
+> -			       struct rb_root_cached *root);
+> +void bfq_weights_tree_add(struct bfq_data *bfqd, struct bfq_queue *bfqq);
+> +void __bfq_weights_tree_remove(struct bfq_data *bfqd, struct bfq_queue *bfqq);
+>  void bfq_weights_tree_remove(struct bfq_data *bfqd,
+>  			     struct bfq_queue *bfqq);
+>  void bfq_bfqq_expire(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+> diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
+> index f8eb340381cf..a1296058c1ec 100644
+> --- a/block/bfq-wf2q.c
+> +++ b/block/bfq-wf2q.c
+> @@ -707,7 +707,6 @@ __bfq_entity_update_weight_prio(struct bfq_service_tree *old_st,
+>  		struct bfq_queue *bfqq = bfq_entity_to_bfqq(entity);
+>  		unsigned int prev_weight, new_weight;
+>  		struct bfq_data *bfqd = NULL;
+> -		struct rb_root_cached *root;
+>  #ifdef CONFIG_BFQ_GROUP_IOSCHED
+>  		struct bfq_sched_data *sd;
+>  		struct bfq_group *bfqg;
+> @@ -770,19 +769,15 @@ __bfq_entity_update_weight_prio(struct bfq_service_tree *old_st,
+>  		 * queue, remove the entity from its old weight counter (if
+>  		 * there is a counter associated with the entity).
+>  		 */
+> -		if (prev_weight != new_weight && bfqq) {
+> -			root = &bfqd->queue_weights_tree;
+> -			__bfq_weights_tree_remove(bfqd, bfqq, root);
+> -		}
+> +		if (prev_weight != new_weight && bfqq)
+> +			__bfq_weights_tree_remove(bfqd, bfqq);
+>  		entity->weight = new_weight;
+>  		/*
+>  		 * Add the entity, if it is not a weight-raised queue,
+>  		 * to the counter associated with its new weight.
+>  		 */
+> -		if (prev_weight != new_weight && bfqq && bfqq->wr_coeff == 1) {
+> -			/* If we get here, root has been initialized. */
+> -			bfq_weights_tree_add(bfqd, bfqq, root);
+> -		}
+> +		if (prev_weight != new_weight && bfqq && bfqq->wr_coeff == 1)
+> +			bfq_weights_tree_add(bfqd, bfqq);
+>  
+>  		new_st->wsum += entity->weight;
+>  
+> @@ -1686,8 +1681,7 @@ void bfq_add_bfqq_busy(struct bfq_data *bfqd, struct bfq_queue *bfqq)
+>  
+>  	if (!bfqq->dispatched)
+>  		if (bfqq->wr_coeff == 1)
+> -			bfq_weights_tree_add(bfqd, bfqq,
+> -					     &bfqd->queue_weights_tree);
+> +			bfq_weights_tree_add(bfqd, bfqq);
+>  
+>  	if (bfqq->wr_coeff > 1)
+>  		bfqd->wr_busy_queues++;
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

@@ -2,55 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84CD450DE15
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 12:41:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 133B250DE17
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 12:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233355AbiDYKoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 06:44:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50782 "EHLO
+        id S238654AbiDYKos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 06:44:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237829AbiDYKoD (ORCPT
+        with ESMTP id S229568AbiDYKoq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 06:44:03 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63BB726AD7
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 03:40:59 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Kn1kk0nPlzhYnf;
-        Mon, 25 Apr 2022 18:40:46 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 25 Apr 2022 18:40:57 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 25 Apr 2022 18:40:57 +0800
-Message-ID: <22536b1c-f38d-45b1-8187-636c158b8e4b@huawei.com>
-Date:   Mon, 25 Apr 2022 18:40:56 +0800
+        Mon, 25 Apr 2022 06:44:46 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7157839174;
+        Mon, 25 Apr 2022 03:41:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1650883294;
+        bh=eS5xgqerK1TiBIx9t59uxIQwu9PVi7U3ty9Nd3fK92Y=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=CraBjXnwikjdKu7+6znmXNu8P1Kh4QrEMvEWyl2snKBvnLXVstCUARaLcOzJaDO4t
+         ZSiw7aQaWsEuXYRNqnSAU19HjwZnu90hF5+RbVscjGqqrBTlYPLGbFF1ZFZrnewPU+
+         PpjhZX45Y9wwjRVLF2/tza7MWrReKkuLbGvcFK5Q=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([37.201.215.103]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M9Wyy-1nmDwP3yHU-005WbX; Mon, 25
+ Apr 2022 12:41:34 +0200
+Date:   Mon, 25 Apr 2022 12:41:31 +0200
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: Re: [PATCH v2] docs: media: uvcvideo: Use linux-media mailing list
+Message-ID: <YmZ623/GyPf4XPcn@latitude>
+References: <20220315221007.1045878-1-j.neuschaefer@gmx.net>
+ <YjEQz1GhLV0Kf3mO@pendragon.ideasonboard.com>
+ <YjESZwTHRuD4pBkY@latitude>
+ <YjEVzF1NMWJZ1MQw@pendragon.ideasonboard.com>
+ <YlrhavU2K3neXNEy@latitude>
+ <YmXS+2co6XGEDIDm@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH] mm: use pgprot_val to get value of pgprot
-Content-Language: en-US
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        liusongtang <liusongtang@huawei.com>, <akpm@linux-foundation.org>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <nixiaoming@huawei.com>, <young.liuyang@huawei.com>,
-        <trivial@kernel.org>
-References: <20220425081736.249130-1-liusongtang@huawei.com>
- <f9e48ed2-0e90-1a2d-c62e-739c33c4cc53@arm.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <f9e48ed2-0e90-1a2d-c62e-739c33c4cc53@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kCejIUofgrTY23p2"
+Content-Disposition: inline
+In-Reply-To: <YmXS+2co6XGEDIDm@pendragon.ideasonboard.com>
+X-Provags-ID: V03:K1:x2uV9GpYUBu/QLpjOhHhx8gG6ofbBeKj5cNda7QKN1y2Th/MtCK
+ mIYmxYI0XctqyMU8p1ZSBCfJ7NRgXJ0yV+a2YpaHIREfybayun25d1J9rVZUE6TD7/asKlL
+ o6BcJkIkHnZ2w6Nh0EJSyUM/jqCd5ZgmlLGsq+cNf0WB1r0te9SQgU0INgGLXpVoJxD3JI3
+ W4z1uEdooId8PJTIiJZYQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:f5o7mwFOnWU=:5ghxKSst1SS6P8U1/0LJ9Z
+ su7WcLSMfPkWqiD229zLLqRd3Ph3/fe1d2NRmBjule2vL9uodVrkGbq82nr7ZSXyC1XmBbRQp
+ v2Owdjx0kNauTBKqXFttYyZ2ay8VKLDbcwlQ1Uuuj3vAy7paqv8zv2WcqSV4crDVQdUOonE36
+ aV4BQt2Whk7mHePOg2lIVfrekqJ+pawM4z4cnmTiDzfUu4mtE2yYFXkLzlCwbfsveceVLkvNS
+ IFtSa+/0z2fZfYneylX54AqlNujdRrKMKy7kjujQgg7fUE76pMu75YkkW4yLyOiGPVKkY06Nl
+ IF7deWkFBy6thhlplo7ONVJDl/mLAIdsFKBcQMr0z+fUa1B+e9OTaJEtqlTNVlHBZgTN1w84b
+ sDu+R94K97VxxrMSctr/+Zgj+FvVwE66E0AAdj+p0AF9ndblv/zPS1w1Ty4WgtuvslVff67Ed
+ GKRZj2wv44uUYYSso1fIpkZ9/WqWGe1uj8JpPqw+0I1s8Jk8KBOv2ET9okSYhYlaNHWoEmjrB
+ nbTs4mi1LtHEuwe4QRxIqeExHp+Dlq1IeKeOLM5H62hsvLa2wv6zs3GiwtU6nH/ZJu5GBC6rs
+ +e/Vx0M36K6KApAgBFDxx2KE9TnIGxw/9K8GeOL4xs8y9H89XzPo5HexObPkdHSRLMYKyNq7x
+ 5ztVMS1Rwua6hVqpYuRVeVG7zfKsjk2grwk2wsiR4Ks3GAP1iShw3aHT4Si4uvc8XGHtp+78R
+ SUqKCehgGtFju38+onA709uWrqtQ5cjsQQe1XootuAmiOvW0UgS73xRtEj9ihwBHtiH/1DZhu
+ 8GQe1agJp8b/PhtUcW7Lz6YepThTf8pA4Wz6JF1UK1uU9nPKVfztvYexpeY4D2eMTjuwbw/wD
+ Oh8JKUpeAmA6DtAuf50IeN7uEB6k6qQnesI++5ybuhtbu3QNsu36ydAB9YoIptli615bdQI6X
+ Qn7mBBokXAg2WCSnOd2FBk8o2oJiZJBleMtzhxIkiR7da2Fj4VA7y2bPA7Tx3hAe3pFpZwi6D
+ 63x3Y/rx8Qm0tI4UqdpAV7D32iMqmc0spJ7jkRUuRRWQob7GR7QxSpD/84whwXqu7IizA3/Oj
+ tGoi2FYmHt290E=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -58,50 +77,42 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 2022/4/25 18:29, Anshuman Khandual wrote:
-> Should have added 'memory_hotplug' in the subject line. Otherwise
-> this does not specify where the change is (neither does the commit
-> message below).
->
-> mm/memory_hotplug: use pgprot_val to get value of pgprot
+--kCejIUofgrTY23p2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, Apr 25, 2022 at 01:45:15AM +0300, Laurent Pinchart wrote:
+> On Sat, Apr 16, 2022 at 05:31:54PM +0200, Jonathan Neusch=C3=A4fer wrote:
+[...]
+> > Ping =E2=80=94 I don't see this patch in linux-next. Is there something=
+ I can do
+> > to help?
+>=20
+> I've just sent a pull request, the patch should make it to v5.19.
 
-$ git grep "pgprot\.pgprot"
-arch/ia64/mm/init.c:    if (WARN_ON_ONCE(params->pgprot.pgprot != 
-PAGE_KERNEL.pgprot))
-arch/s390/mm/init.c:    if (WARN_ON_ONCE(params->pgprot.pgprot != 
-PAGE_KERNEL.pgprot))
-arch/sh/mm/init.c:      if (WARN_ON_ONCE(params->pgprot.pgprot != 
-PAGE_KERNEL.pgprot))
-mm/memory_hotplug.c:    if (WARN_ON_ONCE(!params->pgprot.pgprot))
+Great, thanks.
 
-You can change other's codes too.
+Jonathan
 
->
-> On 4/25/22 13:47, liusongtang wrote:
->> pgprot.pgprot is a non-portable code, it should be replaced by
->> portable macro pgprot_val.
->>
->> Signed-off-by: liusongtang <liusongtang@huawei.com>
->> ---
->>   mm/memory_hotplug.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
->> index 416b38c..bf7d181 100644
->> --- a/mm/memory_hotplug.c
->> +++ b/mm/memory_hotplug.c
->> @@ -303,7 +303,7 @@ int __ref __add_pages(int nid, unsigned long pfn, unsigned long nr_pages,
->>   	int err;
->>   	struct vmem_altmap *altmap = params->altmap;
->>   
->> -	if (WARN_ON_ONCE(!params->pgprot.pgprot))
->> +	if (WARN_ON_ONCE(!pgprot_val(params->pgprot)))
->>   		return -EINVAL;
->>   
->>   	VM_BUG_ON(!mhp_range_allowed(PFN_PHYS(pfn), nr_pages * PAGE_SIZE, false));
-> Otherwise LGTM.
->
-> Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
->
-> .
+--kCejIUofgrTY23p2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmJmeroACgkQCDBEmo7z
+X9uS8RAAjuwukWerNeVsngMxOIZJqHZZ4TZ+wrGbvTrkyYa1/oZozvcgX631PHsv
+ajUiaOHPS+UIizJ3cAj3MAlqxdIAW4KQXal044zXF3Isc6Ej9UYl2b1dqlZJqFAl
+8g5cqHbTMMG6+WzqExHXf8PfWEiib+QOQoY/+Z16d8ystk0VvlBY0sq8OZkZ/C8Z
+pLf5U5fiuZA0GfaQuKgRbFgPqyAgP0wCrTyCMtKjDUPI20BHl+/XbRlnkH+5YpSF
+jtjDa22oXIBY38vnfHFplFQok7jb4hzcziTbhlwRuOOhaRei0qD2M3f0dyWZL4tp
+oBC1h+o8RqyJm7qxmLCw06NiHhrjWaRQbYfg/6a4sdBJ2AakBC9cel+2H+EecqZq
+qjiH9YqUA7hK3Q9b9Cm6836XF5kmoh279kjTxCz24w/wlrLM6PbMOw1/o/AxLtNC
+KntyeX7JyvZ9Bc86AzF83JAfahPQkDgJ8E5A7yw6PZqM5Ajr6uy18TUzfR+Jb8Ah
+2moVslSt942OV0nZSHkTo6rAd2gtYtq3Q/zBKXydZdJSxSltp815CmJZmVGx70k5
+VIg0mKeU7m9PjxC81TCbEN9tCgwbheDyPcONBrUhTZ/yipIVekoudRUBbVWOIbGs
+6GN7IuiyNcEHmS2bNAXt3A9CkVncQySSrq6OsveezuZRxebS/8U=
+=ngak
+-----END PGP SIGNATURE-----
+
+--kCejIUofgrTY23p2--

@@ -2,93 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F51850E055
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 14:31:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C820F50E05B
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 14:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241842AbiDYMeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 08:34:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35956 "EHLO
+        id S241845AbiDYMfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 08:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239099AbiDYMeH (ORCPT
+        with ESMTP id S234169AbiDYMfh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 08:34:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8040E689A9;
-        Mon, 25 Apr 2022 05:31:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 25 Apr 2022 08:35:37 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D0464BF8;
+        Mon, 25 Apr 2022 05:32:33 -0700 (PDT)
+Received: from obbardc-laptop.home (unknown [IPv6:2a00:23c7:6883:e501:cf51:f3a2:10b5:accf])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DEB861387;
-        Mon, 25 Apr 2022 12:31:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B728C385A7;
-        Mon, 25 Apr 2022 12:30:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650889861;
-        bh=N0EPdIugLassIihiD8xp49ZT5dPSUmJIgdJqAlE+nSE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z/yuTpraSYCgI0XxlJDCsizFMfmjirMAtKX4Y1wt7s9LdG4YGyGgc84912JNJ8JjN
-         T4vNJwTVGfWLG1aPhxej5T8tjcPU+wGTPRO90URvR4LCJCQDKi+dOxDSNRUmTCVtrK
-         Y+vieWmMQPB1oe9xczsqo0kQ7KWJv+LRM6Ks/3Wm0OCeCJKFuXBoVnU+mvwMESXPio
-         36iSjDG1FYJlLE7c+wNeN0R3TJ5uUrWD8Rj0q8oLPBLV2zhRq1ggKHHtlB1ER1ApUp
-         jufUFMZsfFplUoevdVHPeluIdm6iuFsSIOpyVZC3CqCtzmuJArkGz+P8KwqVMa1rhc
-         Ep3wwEYs/48Ag==
-Date:   Mon, 25 Apr 2022 13:30:54 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Ryan Lee <ryan.lee.analog@gmail.com>
-Cc:     lgirdwood@gmail.com, robh+dt@kernel.org, krzk+dt@kernel.org,
-        perex@perex.cz, tiwai@suse.com, srinivas.kandagatla@linaro.org,
-        ckeepax@opensource.cirrus.com, tanureal@opensource.cirrus.com,
-        cy_huang@richtek.com, pierre-louis.bossart@linux.intel.com,
-        drhodes@opensource.cirrus.com, pbrobinson@gmail.com,
-        hdegoede@redhat.com, lukas.bulwahn@gmail.com, stephan@gerhold.net,
-        arnd@arndb.de, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ryans.lee@analog.com, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH V3 2/2] ASoC: max98396: add amplifier driver
-Message-ID: <YmaUfkvy7YKCSLST@sirena.org.uk>
-References: <20220423021558.1773598-1-ryan.lee.analog@gmail.com>
+        (Authenticated sender: obbardc)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id BDF171F43529;
+        Mon, 25 Apr 2022 13:32:27 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1650889952;
+        bh=0RLY0AvODmXKcFUYfeALdqinoBMAga8pPmBnDWL/Q9c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Tq6rlV8r1JqEu97gVwaJB9UdEYlq9wCw7JiKFMPpSz3vLyPVfX2bH+HJ0csLD6Yvs
+         xmSAhkXuKNC0NRr+5mltd+e7npsSqR3SltJBnwE5gemWwzFx4Drf+FMkJMMAspeD3g
+         Yji0Boiq1TNqd61WAoT0XXJRMJpMyN7kr7uJdL/xgOWe9n/G4tuTwBPmV3XmXk1gpF
+         pNc7MwhxzWKNsd4OI0VEpduju95YZkR0SzSRwmZumTub8gBd4cdQTLcHbwSXgiW9p4
+         Q6p1HU4imNOgVDYhLW2BvP2GP3iiAcjlcez13DNfLVfhS5DwUP8ZunRJsrjrUABYv0
+         35p7J+rtMJhKQ==
+From:   Christopher Obbard <chris.obbard@collabora.com>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Elaine Zhang <zhangqing@rock-chips.com>
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Christopher Obbard <chris.obbard@collabora.com>
+Subject: [PATCH v2 0/3] Rockchip RK3328 VDEC support
+Date:   Mon, 25 Apr 2022 13:32:12 +0100
+Message-Id: <20220425123215.1055251-1-chris.obbard@collabora.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2viRuOuJVnHOO/9B"
-Content-Disposition: inline
-In-Reply-To: <20220423021558.1773598-1-ryan.lee.analog@gmail.com>
-X-Cookie: An apple a day makes 365 apples a year.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series adds VDEC support for the Rockchip RK3328 SoC which
+uses the staging rkvdec driver.
 
---2viRuOuJVnHOO/9B
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Testing was performed using both v4l-compliance and (mainline) gstreamer
+using the fluster framework:
 
-On Fri, Apr 22, 2022 at 07:15:58PM -0700, Ryan Lee wrote:
-> This series of patches adds support for Analog Devices MAX98396
-> mono amplifier with IV sense. The device provides a PCM interface
-> for audio data and a standard I2C interface for control data
-> communication. This driver also supports MAX98397 which is
-> a variant of MAX98396 with wide input supply range.
+    $ v4l2-compliance -m0
+    v4l2-compliance 1.22.1, 64 bits, 64-bit time_t
+    ...
+    Grand Total for rkvdec device /dev/media0: 54, Succeeded: 54, Failed: 0, Warnings: 0
 
-I'm missing patch 1 with the DT bindings?
 
---2viRuOuJVnHOO/9B
-Content-Type: application/pgp-signature; name="signature.asc"
+    $ python3 fluster.py run -j1 -ts JVT-AVC_V1 -d GStreamer-H.264-V4L2SL-Gst1.0
+    ...
+    Ran 111/135 tests successfully               in 392.885 secs
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJmlH0ACgkQJNaLcl1U
-h9Au7wf+LPH2wys4lkiylSgsOXYqnmceMt/19R5Cc7v3Z19l8s2kwrklNBSav+U9
-ckbIb9YbZ37YFCy74pHh2xZvWkxVXDIVsqoOIP2cLN04FKahUI7ENAwpjlfDSYZ5
-cTkHjfQYhD7s1viNKzbsVrH/G0rXHmBXmS8Pzimf5ycTngeel0RJ1mZY6ydMSjwR
-hpEzx5ZUGUnnQ1ukNtwdFcCmnh3eAXgKmhq+fLy1MYkDuiCKvNGGHK5a5pEVEvSa
-1g7CFjB8Sxb+WXYXa2d2hjLmfLlb1taU9p64va0uS4ritLofg+vNnwJCV5nZWx/5
-JOcQi7nrDP94gooyMGwjc5iVP6byqw==
-=R52l
------END PGP SIGNATURE-----
+    $ python3 fluster.py run -j1 -ts VP9-TEST-VECTORS -d GStreamer-VP9-V4L2SL-Gst1.0
+    ...
+    Ran 206/303 tests successfully               in 1170.120 secs
 
---2viRuOuJVnHOO/9B--
+
+Changes in v2:
+ - Fix mistake in dt-binding compatible documentation
+ - Remove unused reset nodes from devicetree
+ - Improve some commit messages
+ - Check all dts files against dtbs_check
+ - Collect review tags on unchanged patches
+
+Christopher Obbard (3):
+  media: dt-bindings: media: rockchip-vdec: Add RK3328 compatible
+  arm64: dts: rockchip: Rename vdec_mmu node for RK3328
+  arm64: dts: rockchip: Add vdec support for RK3328
+
+ .../bindings/media/rockchip,vdec.yaml         |  3 +++
+ arch/arm64/boot/dts/rockchip/rk3328.dtsi      | 22 +++++++++++++++++--
+ 2 files changed, 23 insertions(+), 2 deletions(-)
+
+-- 
+2.34.1
+

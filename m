@@ -2,98 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB0BC50D8EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 07:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A423850D8ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 07:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241336AbiDYFrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 01:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
+        id S241385AbiDYFrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 01:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235447AbiDYFpX (ORCPT
+        with ESMTP id S241348AbiDYFrK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 01:45:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FF1167DB
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 22:42:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A0F94B81056
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 05:42:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEC2EC385A9;
-        Mon, 25 Apr 2022 05:42:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650865321;
-        bh=T9+MBuMTNpr9JFwAQ6LYoWsbsniZT5XNIj9InLV87fc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xlOAWvvbsm5qII+RIpNQfzN/p1pxzWueC42v2bWmPqQFLSTyIdnlGKoghNvPkAMzk
-         1bVGPooqB+Jp3lgxmzdHDwIAODLZsjwhC3EJbY3Z+b5hz8Yp9wWRZqt1RUSgT0J8/C
-         x3TyEhslJipgSWZ7PLccmBS5QAZOIeAgiWJIHRtY=
-Date:   Mon, 25 Apr 2022 07:41:57 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Ren Zhijie <renzhijie2@huawei.com>
-Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] base: topology: fix unused variable compile error
-Message-ID: <YmY0pSEEYhwNizck@kroah.com>
-References: <20220425024149.259189-1-renzhijie2@huawei.com>
+        Mon, 25 Apr 2022 01:47:10 -0400
+Received: from louie.mork.no (louie.mork.no [IPv6:2001:41c8:51:8a:feff:ff:fe00:e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B1E167C6;
+        Sun, 24 Apr 2022 22:44:07 -0700 (PDT)
+Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9d:7e00:0:0:0:1])
+        (authenticated bits=0)
+        by louie.mork.no (8.15.2/8.15.2) with ESMTPSA id 23P5hjwM1259869
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Mon, 25 Apr 2022 06:43:47 +0100
+Received: from miraculix.mork.no ([IPv6:2a01:799:c9d:7e02:9be5:c549:1a72:4709])
+        (authenticated bits=0)
+        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 23P5he0X1180515
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Mon, 25 Apr 2022 07:43:40 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1650865420; bh=ubeZAY5nG60pdB6+hliBhW+n40tOFGvsik1n3S1XKFM=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=BfVZ1/I7oUZ4/JUQTdMT1MpihZUzbQjbVz07QISdZirP8T1FkpJLSVHq+9h57hDKR
+         gujLPuzfxSOqLYy91u2Zee8aboweR13xLwB8Imp4+IachGjj9m5+Z2f1XDwZ2QcgHL
+         vxxkRKm6dhidiGoEzMJzT1m2upqJ7IvnYA1w0h1Y=
+Received: (nullmailer pid 1107055 invoked by uid 1000);
+        Mon, 25 Apr 2022 05:43:40 -0000
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     ipis.yang@gmail.com
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gchiang@sierrawireless.com,
+        Ethan Yang <etyang@sierrawireless.com>
+Subject: Re: [PATCH v2] net: usb: qmi_wwan: add support for Sierra Wireless
+ EM7590
+Organization: m
+References: <87bkwpkayv.fsf@miraculix.mork.no>
+        <20220425054028.5444-1-etyang@sierrawireless.com>
+Date:   Mon, 25 Apr 2022 07:43:40 +0200
+In-Reply-To: <20220425054028.5444-1-etyang@sierrawireless.com> (ipis yang's
+        message of "Mon, 25 Apr 2022 13:40:28 +0800")
+Message-ID: <8735i1k99v.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220425024149.259189-1-renzhijie2@huawei.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.103.5 at canardo
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 10:41:49AM +0800, Ren Zhijie wrote:
-> compile error:
-> drivers/base/topology.c: In function ‘topology_is_visible’:
-> drivers/base/topology.c:158:17: error: unused variable ‘dev’ [-Werror=unused-variable]
->   struct device *dev = kobj_to_dev(kobj);
->                  ^~~
-> cc1: all warnings being treated as errors
-> 
-> If CONFIG_SMP is N, the macro 'topology_ppin()'expands as follows.
-> "topology_ppin(dev->id) -> boot_cpu_data.ppin"
-> This cause an unused variable warning for 'dev' which used in the
-> topology_is_visible().
-> 
-> To fix build warning unused attribute added to the 'dev' variable.
-> 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Fixes:aa63a74d4535("topology/sysfs: Hide PPIN on systems that do not support it.")
-> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
-> ---
->  drivers/base/topology.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/base/topology.c b/drivers/base/topology.c
-> index 706dbf8bf249..70962a4bcb1f 100644
-> --- a/drivers/base/topology.c
-> +++ b/drivers/base/topology.c
-> @@ -155,7 +155,8 @@ static struct attribute *default_attrs[] = {
->  static umode_t topology_is_visible(struct kobject *kobj,
->  				   struct attribute *attr, int unused)
->  {
-> -	struct device *dev = kobj_to_dev(kobj);
-> +	struct device *dev __maybe_unused;
-> 
-> +	dev = kobj_to_dev(kobj);
->  
->  	if (attr == &dev_attr_ppin.attr && !topology_ppin(dev->id))
->  		return 0;
-> -- 
-> 2.17.1
-> 
+Thanks!
 
-Thanks for this, but I've already queued up the commit here:
-	https://lore.kernel.org/r/20220422062653.3899972-1-gregkh@linuxfoundation.org
-which is simpler and smaller and it should show up in the next
-linux-next release.
-
-greg k-h
+Acked-by: Bj=C3=B8rn Mork <bjorn@mork.no>

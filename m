@@ -2,111 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB9C650DA51
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 09:41:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F35550DA53
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 09:43:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240010AbiDYHoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 03:44:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54758 "EHLO
+        id S240257AbiDYHqH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 25 Apr 2022 03:46:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238882AbiDYHop (ORCPT
+        with ESMTP id S240756AbiDYHp7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 03:44:45 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B48B3BA55
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 00:41:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650872501; x=1682408501;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ypRaFhfgGoMckctkb+UqL7k4rnajuSRtG45ikgdAanE=;
-  b=dt4PuQlOL5GaZIfy+q2lWWZwL1hGo8v1j0ZmhAjeiPmIi407am1IXxMb
-   K4UBzCoHgDwvlEneMztk+PvyZxMP+z9ob9TiDHKdFvuLy8gKbv2VvtifN
-   eVHyJBORMWQkPVFPrZe3KwjSRmXTAsjfxQfeUt32SvOVmNTgC0jOJ43K7
-   85NviFrP37mLDFhlD39IYmscSwubW9IBKSmqYrHXHQeAMDVnNLgH3BJik
-   U3i1rU2Fazx6fEpAeYuTHbblJLJyBU+gEgS4R/k1HZJlTsUR+pYt4fdBp
-   g6LnzVMQxIVH3al5HPzL1g9L2HRFHt2E/O8hBCN3AahxeaYwYW6+/Zpc9
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="264022261"
-X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
-   d="scan'208";a="264022261"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 00:41:33 -0700
-X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
-   d="scan'208";a="676565732"
-Received: from wupeng-mobl.ccr.corp.intel.com ([10.254.215.115])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 00:41:27 -0700
-Message-ID: <8aeebc2f0b2a251d3d70402cd0edf063ba911013.camel@intel.com>
-Subject: Re: [PATCH v3 1/3] mm/swapfile: unuse_pte can map random data if
- swap read fails
-From:   "ying.huang@intel.com" <ying.huang@intel.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
-Cc:     willy@infradead.org, vbabka@suse.cz, dhowells@redhat.com,
-        neilb@suse.de, david@redhat.com, apopple@nvidia.com,
-        surenb@google.com, minchan@kernel.org, peterx@redhat.com,
-        sfr@canb.auug.org.au, naoya.horiguchi@nec.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 25 Apr 2022 15:41:25 +0800
-In-Reply-To: <20220424091105.48374-2-linmiaohe@huawei.com>
-References: <20220424091105.48374-1-linmiaohe@huawei.com>
-         <20220424091105.48374-2-linmiaohe@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Mon, 25 Apr 2022 03:45:59 -0400
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B863BBD0;
+        Mon, 25 Apr 2022 00:42:37 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id i38so6494132ybj.13;
+        Mon, 25 Apr 2022 00:42:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=FzWf0IlKm0WlWwUvnTwOql8/+3g8LAVAbjzV5OJCv40=;
+        b=7dSQtzkcx4U9FTpil+IAC2jKtSfstvWH1WYNPznUi1pkGrtOAi63l+e4u18PoO0xdr
+         6U3tv3g6XiRMdmd2Gd+oMsKN0vckNur7DTIDh+xg8stT90UzfjF+0sXzyWZJH3k9ulCi
+         pHwg5Dt9R1LDa+x76m+sJVss/Bx0OAH8Zz7JC03RLZQsvhNXiOXFc3cU2EpTZQF7mmC8
+         CI6Z1p7c4NIiYOj31TyOD4Vj3iNuI+Pkffkj91Xj0FTlG51VZKvRcZhhY8U5VuTvLnY/
+         22e85XaZgHo37LBDxWfgIkepJCm/9frVlJOudzUMDpZwNxDvA23Y9Q6GWC7B9soQAa78
+         Am5w==
+X-Gm-Message-State: AOAM533Rz4iPb20UIcopLJjSEBh/9bfIbtfWZQq/gPtP2szxjfPrwBaz
+        ICcX+trc1FPmwCwZQLLSju2X6IpTdXOVi1d9EQ8=
+X-Google-Smtp-Source: ABdhPJxoquitjR/CgWqxiQggvdjEfLTVH93JgWAsDE1w9KXG5pEboj4HBXfMD3vXswPoWKwRsD9CYDzZyIRa9lbYoN4=
+X-Received: by 2002:a25:df0a:0:b0:648:6364:a150 with SMTP id
+ w10-20020a25df0a000000b006486364a150mr3606038ybg.381.1650872556572; Mon, 25
+ Apr 2022 00:42:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220422151725.1336997-1-mailhol.vincent@wanadoo.fr>
+ <YmXMiTXEvFXZ/swU@dev-arch.thelio-3990X> <CAMZ6Rq+3XOze01dZZRTe+V44N2uo5J_=rtd9bKH7d7Fq9sNxVw@mail.gmail.com>
+ <CAK8P3a31WAyh_vLqNwvv2GMcZ8SQp7gC=OV8c=Nc9pBtOSR8-g@mail.gmail.com>
+In-Reply-To: <CAK8P3a31WAyh_vLqNwvv2GMcZ8SQp7gC=OV8c=Nc9pBtOSR8-g@mail.gmail.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Mon, 25 Apr 2022 16:42:25 +0900
+Message-ID: <CAMZ6RqL8G4uVn--Y5pBC+_c9Ex3Sjf8OJuVRwkVFFPwWd_ezLQ@mail.gmail.com>
+Subject: Re: [PATCH] checksyscalls: ignore -Wunused-macros
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Linux API <linux-api@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Miaohe,
+On Mon. 25 Apr 2022 at 15:50, Arnd Bergmann <arnd@arndb.de> wrote:
+> On Mon, Apr 25, 2022 at 8:17 AM Vincent MAILHOL
+> <mailhol.vincent@wanadoo.fr> wrote:
+> > On Mon. 25 Apr 2022 at 07:17, Nathan Chancellor <nathan@kernel.org> wrote:
+> > > Hi Vincent,
+> > >
+> > > On Sat, Apr 23, 2022 at 12:17:25AM +0900, Vincent Mailhol wrote:
+> > > > The macros defined in this file are for testing only and are purposely
+> > > > not used. When compiled with W=2, both gcc and clang yield some
+> > > > -Wunused-macros warnings. Ignore them.
+> > > >
+> > > > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > >
+> > > The change itself looks fine but a couple of comments:
+> > >
+> > > 1. Nick and I do not pick up patches, we rely on others to do so.
+> > >    Additionally, this is not really something within our domain, despite
+> > >    what get_maintainer.pl might say. This change should be sent to
+> > >    either
+> > >
+> > >    Masahiro Yamada <masahiroy@kernel.org>
+> > >    linux-kbuild@vger.kernel.org
+> > >
+> > >    or
+> > >
+> > >    Andrew Morton <akpm@linux-foundation.org>
+> > >
+> > >    so that it can be applied by one of them.
+> >
+> > Ack. As you pointed out, I indeed just followed get_maintainer.pl.
+> > I will resend a v2 to the people you pointed out (and exclude you).
+> >
+> > > 2. I am not sure that silencing warnings from W=2 is that useful, as
+> > >    they are unlikely to be real issues. Not to discourage you by any
+> > >    means but it might be more useful to focus on cleaning up warnings
+> > >    from W=1 and getting those promoted to regular build warnings.
+> >
+> > Normally I agree, but there is one reason to fix this W=2: this
+> > warning appears when building other files.
+> >
+> > Example:
+> > | $ make W=2 drivers/net/dummy.o
+> > |   CALL    scripts/checksyscalls.sh
+> > | <stdin>:21: warning: macro "__IGNORE_stat64" is not used [-Wunused-macros]
+> > | <stdin>:22: warning: macro "__IGNORE_lstat64" is not used [-Wunused-macros]
+> > | <stdin>:75: warning: macro "__IGNORE_llseek" is not used [-Wunused-macros]
+> > | <stdin>:159: warning: macro "__IGNORE_madvise1" is not used [-Wunused-macros]
+> > (rest of the output redacted).
+> >
+> > When I run W=2, I want to only see the warnings of the file I am
+> > working on. So I find it useful to fix the W=2 warnings which
+> > show up when building other files to not get spammed by
+> > irrelevant issues and to simplify the triage.
+> >
+> > My initial message lacked the rationale. I will add additional
+> > explanations in the v2 of this patch.
+>
+> I agree this is worth fixing if we want to make W=2 have any meaning at all.
+>
+> Your approach is probably fine. We could try to improve this by comparing
+> against the list from include/uapi/asm-generic/unistd.h instead of the i386
+> list. I suppose that would involve rewriting the script into a simpler one,
+> but I'm not sure if anyone has an interest in working on this.
 
-On Sun, 2022-04-24 at 17:11 +0800, Miaohe Lin wrote:
-> There is a bug in unuse_pte(): when swap page happens to be unreadable,
-> page filled with random data is mapped into user address space.  In case
-> of error, a special swap entry indicating swap read fails is set to the
-> page table.  So the swapcache page can be freed and the user won't end up
-> with a permanently mounted swap because a sector is bad.  And if the page
-> is accessed later, the user process will be killed so that corrupted data
-> is never consumed.  On the other hand, if the page is never accessed, the
-> user won't even notice it.
-> 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> Acked-by: David Hildenbrand <david@redhat.com>
-> ---
->  include/linux/swap.h    |  7 ++++++-
->  include/linux/swapops.h | 10 ++++++++++
->  mm/memory.c             |  5 ++++-
->  mm/swapfile.c           | 11 +++++++++++
->  4 files changed, 31 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/swap.h b/include/linux/swap.h
-> index 5553189d0215..b82c196d8867 100644
-> --- a/include/linux/swap.h
-> +++ b/include/linux/swap.h
-> @@ -55,6 +55,10 @@ static inline int current_is_kswapd(void)
->   * actions on faults.
->   */
-> 
-> +#define SWP_SWAPIN_ERROR_NUM 1
-> +#define SWP_SWAPIN_ERROR     (MAX_SWAPFILES + SWP_HWPOISON_NUM + \
-> +			     SWP_MIGRATION_NUM + SWP_DEVICE_NUM + \
-> +			     SWP_PTE_MARKER_NUM)
-> 
-> 
+If someone wants to do it, great, but I do not have the
+confidence to do it myself so I hope you will forgive me for
+taking a pass here.
 
-It appears wasteful to use another swap device number.  Is it possible
-to use a special swap offset?  For example, 0 or -1?
+Another alternative I considered was to only call
+checksyscalls.sh when doing a 'make all'. This way, we keep the
+warning but people won’t be spammed when building sub projects
+because the script would not be executed.
 
-Best Regards,
-Huang, Ying
+I tried to be as less disruptive as possible. Unless people show
+interest in one of the alternative approaches, I will keep using
+the -Wno-unused-macros approach in the v2.
 
+> diff --git a/scripts/checksyscalls.sh b/scripts/checksyscalls.sh
+> index 9dbab13329fa..cde15f22ec98 100755
+> --- a/scripts/checksyscalls.sh
+> +++ b/scripts/checksyscalls.sh
+> @@ -255,6 +255,7 @@ cat << EOF
+>  /* 64-bit ports never needed these, and new 32-bit ports can use statx */
+>  #define __IGNORE_fstat64
+>  #define __IGNORE_fstatat64
+> +
 
-[snip]
+Just realized that I added a new line for no reason.
+This will be removed in v2. Sorry.
 
+>  EOF
+>  }
+>
+> @@ -268,4 +269,4 @@ syscall_list() {
+>  }
+>
+>  (ignore_list && syscall_list $(dirname $0)/../arch/x86/entry/syscalls/syscall_32.tbl) | \
+> -$* -Wno-error -E -x c - > /dev/null
+> +$* -Wno-error -Wno-unused-macros -E -x c - > /dev/null
+> --
+> 2.35.1
 
+Yours sincerely,
+Vincent Mailhol

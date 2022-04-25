@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B114050EA2A
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 22:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F2E050EA4B
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 22:26:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245329AbiDYUZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 16:25:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43178 "EHLO
+        id S245426AbiDYUZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 16:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245276AbiDYUZ1 (ORCPT
+        with ESMTP id S245337AbiDYUZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 25 Apr 2022 16:25:27 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CB5B12D205
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 13:21:45 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id ay11-20020a05600c1e0b00b0038eb92fa965so235010wmb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 13:21:45 -0700 (PDT)
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA9812D228
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 13:21:46 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id i5so3425353wrc.13
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 13:21:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=R5vq5Bgg0GZnREfAKsIq2BCzfZlNqniOuDOVX7ptgS8=;
-        b=K5apVdfdWrDo9ukPlzrj9+9KY0m9iTK/hWQiRgYqK4IyaLYt/oe+4gOgJEV1Ut+JLy
-         3bGm/+BOtad6o7dyE4SKlF+fJJGsTMS/oci4c8fLSGu5VUOhJQnmQsBasBbtYncRjs+j
-         LF64bbzC0iIrv0RN1Um6AYNLpbmblKVdJ6d6Fj/UNxdJDg7nrrPiqzuq+S67FRdDF7D3
-         tY9wn2O0FcbC5IaVjD5RoHZIrNowsysvogyf6bzlLrc+IXBkzr0UpUQRhqRbpsB8MTRq
-         P7b4e1mRhMecvuvTBsQojNto+5d0H229E2d0lqiA8J7qZniSkmkc/t8/S67ocGA9GLNu
-         2pFg==
+        bh=X5cmGbysdlCxPOGBZlu+t3JbOARc2ikAJ1rgjSkwJRA=;
+        b=gkkLdFaSFOADuQpex7MgMLo3q4WHaUhNXEw9O3ZM6oZIBtP0PG69DqNLxD8Jq6s08D
+         Hu48yf7Gi3pH5BWFcQyuoQZ902YYQ6mZWKaKZmjIxbCZyZ1m7tga+Jn8FIv9sMtWi/bh
+         4FJIBHiGvi6IQXbEees57YriwC5I/0x44U2WGcgRdKXz0BEKxFg9wTsFzgKpYEPbSioT
+         Pc9PPxebTrrDxqz3S5W4S6AWq8r/vZRhthOlJu0v+YnP+Im6OVBXvPSrJ2Qg5SnsDDgY
+         7N2R3M+GhcEP0DqRgyvXpmMnkVXLPP3vLFje+GBGExtzvHQhdrv9DhRUJ/2/QntaeV3h
+         M2WQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=R5vq5Bgg0GZnREfAKsIq2BCzfZlNqniOuDOVX7ptgS8=;
-        b=wk1NfJpF3BxBYiiehWEU6fftpWgWpBIyrtEyKDkN8iWhND836LAgywMwsNv8qTttIG
-         bdGD5Q6Wq3IjCmMzSvYRoJMDei+8nPTBXhmJd3DJmRBPBKypiPUUevUqDgRuXVHidueu
-         AIX+Q0Vhu6IBlK5xijlQ6EFu+TOKmeSvBfHgj6yuf6sv9IDyM727OZFhLpXuBb7L4Z8L
-         gcP2A1u6rUF+Ut/tdHIPektjN6UR4Fgv/PfeVA06Q+wk798UbTDVWZdyfu+HsEDm4bJ0
-         Hh3gesPVMpgY8GCVNtRRhfFZb043h8UvI6e0zLzmggOa29AtI0CFpR0Mg9LyWrjbU+zO
-         tduw==
-X-Gm-Message-State: AOAM530+iy9hMEKWJsvfhEWEbkZYEYHVkk48ZrDLAapEzB/hwjCamGqr
-        ecFiSzppsaNVZQM0sIhrjrFx2g==
-X-Google-Smtp-Source: ABdhPJxiTR3Xs8owoOBUUZ1RHATewVGrE2jNvNEZzcFLtdHPjVHWqKyvmVdU63TsDULIwyoN/yCu1g==
-X-Received: by 2002:a05:600c:348f:b0:393:dcff:f95b with SMTP id a15-20020a05600c348f00b00393dcfff95bmr15403757wmq.76.1650918103942;
-        Mon, 25 Apr 2022 13:21:43 -0700 (PDT)
+        bh=X5cmGbysdlCxPOGBZlu+t3JbOARc2ikAJ1rgjSkwJRA=;
+        b=y9q4Ld3U934HkRhxbmEeOsPLw+oYyI7+/ubwsa21MMCg/hhptrZU1liTb2z/ATCdJF
+         AENu+K1pHerwNd734e4aYJejnPJ4nRG0y1sd8hD9jCsYx0Nfv8YSgBGsOb3Wgqhf3Zap
+         KYkNiHX3DPF9XDYy0vlB6fQpLOOciPTvLDPu2JGvYksF7uTRgeaqQbS8OUi3/7WtkMGO
+         B5UtbIoPFCJL29RR7oj4onCL+Qj3PudD0QXx5tRnVU5BjrOEr28lyTp3vtgS+igCljSK
+         D+MC4qC95bJDYjMz93zC+IEvJkFwr+FjnCAYSZg0QJ05JO9uNcu0tDfpyg3WIkv1o9Hj
+         1OtQ==
+X-Gm-Message-State: AOAM531omdahlYfnM8wTaaAwtfO5uxJ/ls8FuYzlb6vHjxtpw1bDrzaH
+        /3SIZoP4g+8gtXkmMoJ1xfFpFw==
+X-Google-Smtp-Source: ABdhPJx0ehWDWEpwXPfa0LsCViUZIZpEn0Nh5dIMf8V9qNJCHLboNq+t7FnAM3CEdE2QivxRKgTvGw==
+X-Received: by 2002:a5d:42c8:0:b0:20a:d91f:87b5 with SMTP id t8-20020a5d42c8000000b0020ad91f87b5mr6850064wrr.301.1650918104899;
+        Mon, 25 Apr 2022 13:21:44 -0700 (PDT)
 Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id p3-20020a5d59a3000000b0020a9132d1fbsm11101003wrr.37.2022.04.25.13.21.43
+        by smtp.googlemail.com with ESMTPSA id p3-20020a5d59a3000000b0020a9132d1fbsm11101003wrr.37.2022.04.25.13.21.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 13:21:43 -0700 (PDT)
+        Mon, 25 Apr 2022 13:21:44 -0700 (PDT)
 From:   Corentin Labbe <clabbe@baylibre.com>
 To:     heiko@sntech.de, herbert@gondor.apana.org.au,
         krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org
@@ -55,9 +55,9 @@ Cc:     linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org,
         Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH v6 17/33] crypto: rockchip: use read_poll_timeout
-Date:   Mon, 25 Apr 2022 20:21:03 +0000
-Message-Id: <20220425202119.3566743-18-clabbe@baylibre.com>
+Subject: [PATCH v6 18/33] crypto: rockchip: fix style issue
+Date:   Mon, 25 Apr 2022 20:21:04 +0000
+Message-Id: <20220425202119.3566743-19-clabbe@baylibre.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220425202119.3566743-1-clabbe@baylibre.com>
 References: <20220425202119.3566743-1-clabbe@baylibre.com>
@@ -72,56 +72,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use read_poll_timeout instead of open coding it.
-In the same time, fix indentation of related comment.
+This patch fixes some warning reported by checkpatch
 
 Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 ---
- drivers/crypto/rockchip/rk3288_crypto_ahash.c | 24 +++++++++----------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ drivers/crypto/rockchip/rk3288_crypto_ahash.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/crypto/rockchip/rk3288_crypto_ahash.c b/drivers/crypto/rockchip/rk3288_crypto_ahash.c
-index 137013bd4410..1fbab86c9238 100644
+index 1fbab86c9238..fae779d73c84 100644
 --- a/drivers/crypto/rockchip/rk3288_crypto_ahash.c
 +++ b/drivers/crypto/rockchip/rk3288_crypto_ahash.c
-@@ -10,6 +10,7 @@
-  */
- #include <linux/device.h>
- #include <asm/unaligned.h>
-+#include <linux/iopoll.h>
- #include "rk3288_crypto.h"
+@@ -336,7 +336,7 @@ static int rk_cra_hash_init(struct crypto_tfm *tfm)
  
- /*
-@@ -295,18 +296,17 @@ static int rk_hash_run(struct crypto_engine *engine, void *breq)
- 		sg = sg_next(sg);
+ 	/* for fallback */
+ 	tctx->fallback_tfm = crypto_alloc_ahash(alg_name, 0,
+-					       CRYPTO_ALG_NEED_FALLBACK);
++						CRYPTO_ALG_NEED_FALLBACK);
+ 	if (IS_ERR(tctx->fallback_tfm)) {
+ 		dev_err(tctx->dev->dev, "Could not load fallback driver.\n");
+ 		return PTR_ERR(tctx->fallback_tfm);
+@@ -394,8 +394,8 @@ struct rk_crypto_tmp rk_ahash_sha1 = {
+ 				  .cra_init = rk_cra_hash_init,
+ 				  .cra_exit = rk_cra_hash_exit,
+ 				  .cra_module = THIS_MODULE,
+-				  }
+-			 }
++			}
++		}
  	}
+ };
  
--		/*
--		 * it will take some time to process date after last dma
--		 * transmission.
--		 *
--		 * waiting time is relative with the last date len,
--		 * so cannot set a fixed time here.
--		 * 10us makes system not call here frequently wasting
--		 * efficiency, and make it response quickly when dma
--		 * complete.
--		 */
--	while (!CRYPTO_READ(tctx->dev, RK_CRYPTO_HASH_STS))
--		udelay(10);
-+	/*
-+	 * it will take some time to process date after last dma
-+	 * transmission.
-+	 *
-+	 * waiting time is relative with the last date len,
-+	 * so cannot set a fixed time here.
-+	 * 10us makes system not call here frequently wasting
-+	 * efficiency, and make it response quickly when dma
-+	 * complete.
-+	 */
-+	readl_poll_timeout(tctx->dev->reg + RK_CRYPTO_HASH_STS, v, v == 0, 10, 1000);
+@@ -424,8 +424,8 @@ struct rk_crypto_tmp rk_ahash_sha256 = {
+ 				  .cra_init = rk_cra_hash_init,
+ 				  .cra_exit = rk_cra_hash_exit,
+ 				  .cra_module = THIS_MODULE,
+-				  }
+-			 }
++			}
++		}
+ 	}
+ };
  
- 	for (i = 0; i < crypto_ahash_digestsize(tfm) / 4; i++) {
- 		v = readl(tctx->dev->reg + RK_CRYPTO_HASH_DOUT_0 + i * 4);
+@@ -454,7 +454,7 @@ struct rk_crypto_tmp rk_ahash_md5 = {
+ 				  .cra_init = rk_cra_hash_init,
+ 				  .cra_exit = rk_cra_hash_exit,
+ 				  .cra_module = THIS_MODULE,
+-				  }
+ 			}
++		}
+ 	}
+ };
 -- 
 2.35.1
 

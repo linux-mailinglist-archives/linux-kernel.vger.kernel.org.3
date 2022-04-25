@@ -2,179 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33E3650D6F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 04:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23CF950D6FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 04:37:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240383AbiDYCii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 22:38:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39524 "EHLO
+        id S240392AbiDYCkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 22:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240370AbiDYCid (ORCPT
+        with ESMTP id S240315AbiDYCkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 22:38:33 -0400
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA7B38B6;
-        Sun, 24 Apr 2022 19:35:23 -0700 (PDT)
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 6C54F8E19FC;
-        Mon, 25 Apr 2022 02:35:23 +0000 (UTC)
-Received: from pdx1-sub0-mail-a217.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 8F28D8E19E9;
-        Mon, 25 Apr 2022 02:35:22 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1650854123; a=rsa-sha256;
-        cv=none;
-        b=Bn3GCg5qIxFPAN0ipEYfxjwToCGQDZ+0oEim8U4qG7/ftzxtluFky0c6nL5nTmvK6zga/H
-        yjHdAlwO5gGb7cXrlHsenbNVOwRG6I5KAkVlykYDlipDgidevYuttpKWYkaLq5X1yBxzPW
-        G8nF9eyVZyBxItl18UajlxiGLKLsGB49BnGVAEK0HBWpZ3j14YnGBkJPYvLsrzzfyOzab/
-        nId6N1g++hQOPnE0TgFnyZ27bIBuH4oXLUbDq8fEHLFisfWNqlGW/K4keRZlCyJ7b7dEcb
-        Vm360xPYZGbNiEOK2rMN/LkbJvj3CBnJyuMWbxnEYO56Shw4wfxv1GMotAXpIg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1650854123;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:dkim-signature;
-        bh=7zItbbh/pambe0Jl/RcuQk654dqnszM7BO9yP/9Zzo8=;
-        b=Z3rPjluSQ7kWyhoj9sloYvuJIrDkZ1fqVz8R+pQseNT8QOP47ghnbZkfIrZMJrIEYcrKlw
-        QInwqSMYCgqhQpOqtevHZyh9/5bSsY8PJWl+IVBIIR0vM8DOK4zYtZ12KexEwyee4D1lif
-        hVUDnOPbwOOGDrBAb26tm4KjB0FimOC7tBXwkFpDoNyDPvIANwz9TS7w2HIGqx33iTcEy4
-        QeSmoMiIKelX46W8ekcRsy+hkREZgKWyGE5xrpraZ6E42g4LxPI89g8e9ZorhdLjQIJdr6
-        uSq9rkV0YhgMizTb0KNqzbhoAMu8qW47KKgUotdNSyLzEXkEz5UTaWTUeIRKwg==
-ARC-Authentication-Results: i=1;
-        rspamd-6dfbdcb948-z5c67;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=ian@linux.cowan.aero
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|ian@linux.cowan.aero
-X-MailChannels-Auth-Id: dreamhost
-X-Well-Made-Whispering: 02e4ef101dcd17bf_1650854123287_99724531
-X-MC-Loop-Signature: 1650854123286:1623070866
-X-MC-Ingress-Time: 1650854123286
-Received: from pdx1-sub0-mail-a217.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.127.95.118 (trex/6.7.1);
-        Mon, 25 Apr 2022 02:35:23 +0000
-Received: from localhost.localdomain (unknown [69.12.38.97])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: ian@linux.cowan.aero)
-        by pdx1-sub0-mail-a217.dreamhost.com (Postfix) with ESMTPSA id 4Kmpyd5V8vz1K1;
-        Sun, 24 Apr 2022 19:35:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.cowan.aero;
-        s=dreamhost; t=1650854122;
-        bh=7zItbbh/pambe0Jl/RcuQk654dqnszM7BO9yP/9Zzo8=;
-        h=From:To:Cc:Subject:Date:Content-Transfer-Encoding;
-        b=uxU6x2jU9IwI1OtbgTRyZ5qg0o11mcQBdJMUpNLjojl2nkDkJ/9+c1yTIcFuAjzX1
-         4Y+Unqi4fkNYCb4P9C9m69r+BWyQF4gGDBDsCusZncgD7z7/DlbIRkY+PAQfv9/ozQ
-         88qKHtS0RayWHyJ7SWovFRKVy6fUP9g+NaKPsqs//GIEWgUylV/o9bxwSi1/MjN+gT
-         SCH/bovOAZQbwiNfkG4l3m8tpHIsfl9yksOOXYH0ICv2zAX52XuHr3JEBe0+CsH/Bt
-         RZt92zht7LX/UiYz5jDQ4LSoerYvdvGgkUFmR3ZdnzIFLHGTOS4ZE+N3XMjzXQnmJu
-         8yqctGdkmSzTA==
-From:   Ian Cowan <ian@linux.cowan.aero>
-To:     "David S. Miller" <davem@davemloft.net>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ian Cowan <ian@linux.cowan.aero>
-Subject: [PATCH] net: appletalk: cleanup brace styling
-Date:   Sun, 24 Apr 2022 22:35:12 -0400
-Message-Id: <20220425023512.502988-1-ian@linux.cowan.aero>
-X-Mailer: git-send-email 2.35.1
+        Sun, 24 Apr 2022 22:40:11 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D794B417;
+        Sun, 24 Apr 2022 19:37:08 -0700 (PDT)
+X-UUID: f4ba8226d13c448dbc6b2e2d86ee9c43-20220425
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:b40454e7-8c83-49e6-8c7b-f0fe2e99d525,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:faefae9,CLOUDID:ce2af5ef-06b0-4305-bfbf-554bfc9d151a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: f4ba8226d13c448dbc6b2e2d86ee9c43-20220425
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 201482578; Mon, 25 Apr 2022 10:37:04 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 25 Apr 2022 10:37:03 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 25 Apr 2022 10:37:03 +0800
+Message-ID: <fdedea6f20738bfe2ede7e526aa653af1ac35768.camel@mediatek.com>
+Subject: Re: [PATCH V3 11/17] dt-bindings: arm: mediatek: Add #reset-cells
+ property for MT8192-sys-clock
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        Chun-Jie Chen =?UTF-8?Q?=28=E9=99=B3=E6=B5=9A=E6=A1=80=29?= 
+        <Chun-Jie.Chen@mediatek.com>,
+        "wenst@chromium.org" <wenst@chromium.org>,
+        Runyang Chen =?UTF-8?Q?=28=E9=99=88=E6=B6=A6=E6=B4=8B=29?= 
+        <Runyang.Chen@mediatek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Mon, 25 Apr 2022 10:37:02 +0800
+In-Reply-To: <288f55f3-b3ed-32b8-9a44-652f3d53617d@linaro.org>
+References: <20220422060152.13534-1-rex-bc.chen@mediatek.com>
+         <20220422060152.13534-12-rex-bc.chen@mediatek.com>
+         <288f55f3-b3ed-32b8-9a44-652f3d53617d@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This cleans up some brace styling to meet the style guide. There is one
-exception where the compiler wants unnecessary braces to prevent
-multiple if/else ambiguity.
+On Sat, 2022-04-23 at 18:27 +0800, Krzysztof Kozlowski wrote:
+> On 22/04/2022 08:01, Rex-BC Chen wrote:
+> > We will use the infra_ao reset which is defined in mt8192-sys-
+> > clock.
+> > The maximum value of reset-cells is 2. Therefore, we add this patch
+> > to
+> > define it.
+> 
+> Remove entire last sentence, does not make sense in the commit.
+> 
 
-Signed-off-by: Ian Cowan <ian@linux.cowan.aero>
----
- net/appletalk/ddp.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+Hello Krzysztof,
 
-diff --git a/net/appletalk/ddp.c b/net/appletalk/ddp.c
-index bf5736c1d458..2709d9621b25 100644
---- a/net/appletalk/ddp.c
-+++ b/net/appletalk/ddp.c
-@@ -161,8 +161,9 @@ static void atalk_destroy_timer(struct timer_list *t)
- 	if (sk_has_allocations(sk)) {
- 		sk->sk_timer.expires = jiffies + SOCK_DESTROY_TIME;
- 		add_timer(&sk->sk_timer);
--	} else
-+	} else {
- 		sock_put(sk);
-+	}
- }
- 
- static inline void atalk_destroy_socket(struct sock *sk)
-@@ -174,8 +175,9 @@ static inline void atalk_destroy_socket(struct sock *sk)
- 		timer_setup(&sk->sk_timer, atalk_destroy_timer, 0);
- 		sk->sk_timer.expires	= jiffies + SOCK_DESTROY_TIME;
- 		add_timer(&sk->sk_timer);
--	} else
-+	} else {
- 		sock_put(sk);
-+	}
- }
- 
- /**************************************************************************\
-@@ -211,8 +213,9 @@ static void atif_drop_device(struct net_device *dev)
- 			dev_put(dev);
- 			kfree(tmp);
- 			dev->atalk_ptr = NULL;
--		} else
-+		} else {
- 			iface = &tmp->next;
-+		}
- 	}
- 	write_unlock_bh(&atalk_interfaces_lock);
- }
-@@ -444,12 +447,13 @@ static struct atalk_route *atrtr_find(struct atalk_addr *target)
- 				 */
- 				if (r->target.s_node == target->s_node)
- 					goto out;
--			} else
-+			} else {
- 				/*
- 				 * this route will work if there isn't a
- 				 * direct host route, so cache it
- 				 */
- 				net_route = r;
-+			}
- 		}
- 	}
- 
-@@ -615,8 +619,9 @@ static void atrtr_device_down(struct net_device *dev)
- 			*r = tmp->next;
- 			dev_put(dev);
- 			kfree(tmp);
--		} else
-+		} else {
- 			r = &tmp->next;
-+		}
- 	}
- 	write_unlock_bh(&atalk_routes_lock);
- 
-@@ -1386,8 +1391,9 @@ static int atalk_route_packet(struct sk_buff *skb, struct net_device *dev,
- 		struct sk_buff *nskb = skb_realloc_headroom(skb, 32);
- 		kfree_skb(skb);
- 		skb = nskb;
--	} else
-+	} else {
- 		skb = skb_unshare(skb, GFP_ATOMIC);
-+	}
- 
- 	/*
- 	 * If the buffer didn't vanish into the lack of space bitbucket we can
--- 
-2.35.1
+Thanks for your review.
+I will drop "Therefore, we add this patch to define it." and add more
+detailed messages in next version.
+
+> > 
+> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >  .../bindings/arm/mediatek/mediatek,mt8192-sys-clock.yaml       | 3
+> > +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git
+> > a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8192-
+> > sys-clock.yaml
+> > b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8192-
+> > sys-clock.yaml
+> > index 5705bcf1fe47..28ebcecc8258 100644
+> > ---
+> > a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8192-
+> > sys-clock.yaml
+> > +++
+> > b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8192-
+> > sys-clock.yaml
+> > @@ -29,6 +29,9 @@ properties:
+> >    '#clock-cells':
+> >      const: 1
+> >  
+> > +  '#reset-cells':
+> > +    maximum: 2
+> 
+> Why this is a maximum? Usually this is const, so how do you use it
+> (with
+> what values)?
+> 
+We need to let the driver compatible with previous setting in
+drivers/clk/mediatek/reset.c
+
+There are two use cases in our reset driver:
+(Refer to [1])
+
+1. #reset-cells = <1>
+   When we input the argument, the older driver
+use is to calculate  
+   bank and bit by different method. From the implementation of
+   reset_xlate(), we can see if the argument number is 1, it will
+   return directly.
+
+2. #reset-cells = <2>
+   The input arguments is offset and bit. When we input two arguments,
+   we can use reset_xlate() to calculate the corresponding id to assert
+   and deassert.
+
+[1]:
+https://lore.kernel.org/all/20220422060152.13534-10-rex-bc.chen@mediatek.com/
+
+If it's acceptable, I will add this in commit message.
+
+BRs,
+Rex
+> > +
+> >  required:
+> >    - compatible
+> >    - reg
+> 
+> 
+> Best regards,
+> Krzysztof
 

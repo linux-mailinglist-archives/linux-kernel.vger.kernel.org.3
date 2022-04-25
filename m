@@ -2,107 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8546A50E91D
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 21:04:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FF1D50E920
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 21:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244840AbiDYTGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 15:06:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59836 "EHLO
+        id S244850AbiDYTHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 15:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238545AbiDYTGk (ORCPT
+        with ESMTP id S244711AbiDYTHs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 15:06:40 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1B212C42A;
-        Mon, 25 Apr 2022 12:03:35 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id t15so18209407oie.1;
-        Mon, 25 Apr 2022 12:03:35 -0700 (PDT)
+        Mon, 25 Apr 2022 15:07:48 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5B112C6B1
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 12:04:42 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id p4so3995367edx.0
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 12:04:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wJ0D3EKOcgTdOzKv30C8SbeC6VBxjhBJOkCVIoZZVnI=;
-        b=M6/7ROsGV/CkFVvgAfwLfgarULW5t6Y3RW8SnGJVBqz5jQMrCJJNs4aaJK5BSMbP47
-         l+7Hvn3mALysMGo6BSAGYBHP4JOThfvwPi75s2ZJ0aEbjJneToUopaMWLZRNNNdIHhfe
-         luDEnid3+wKAKL7lo6n2x7zCA7NOWIqU4cfp6RqOGGIMF78NPn5zkmr4ZkYtloyP6ldw
-         C/iF1qRcnt9kU1JdizsHTLrkPPM9Q66Vzp+FxmmaER/T4eIS0cXfSKnMp2UMZbIvHM+r
-         1AWp8PdWPNko4nfTOfzBN+k1i7ZQMAkAMu4Y5l37cWqAT8c+cbQgurwk8gnetQ55xXDv
-         9YCQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=dkJK/bIXn+MjYWm2XRzMDddvE/wybEFyuqEkS+yBujQ=;
+        b=w2hlctq3j0qr6JmyRLhuyLCwiyKXnEGlMGtrwDINRO5qUUg7AP3r/DE+QY8iz+289K
+         9UnbpwX6BVc3ryyYMIK9dlsTjGrfHX0OnuJfe3w2Dwxk+MZLH3YlomnC76yxuiHIT82n
+         7cNw7m1Jc0osEfCPcsjUYmsqv9OZ5dtkoA3Fk8aUyJHf2sw30WeBRVJR/ADQ+wSu65py
+         TqR0/yydhPPvNuoxOYJSOXwD1irZR4r7s8SrysTYxthYTxi9zs9N4eh4SUszu2aGGSgm
+         AW7mneB8qxrK92xEO4RpB/svfdOF7ag8G/dsMF9Qh8z4+0YVfv7WgquuTplHgCM/Hyq1
+         kJmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=wJ0D3EKOcgTdOzKv30C8SbeC6VBxjhBJOkCVIoZZVnI=;
-        b=RKJkzb2Q8aLIFeJCnnTccNLdkQgp7xtuGx9s6SELzD3SpaibN4oxkXh/odLd1IgWWN
-         5DeYK0+0Zh/ELUDH6Nzv5kQvHZqsiKzITNnysps59lAEOBlAULisy874gqbgweIxMMbj
-         97zmuQVUXpyzqj2DtHSsK5R21xWbsgXLeQFwGZ+6U8F20L+I4GAlesKtogj0Rt79nfp9
-         z6lklIRaId4mlI/O4QpA1TyPqCG2zTfR1yJOo2/Chl7Z3FROpaUWqwFL3I4kva+5SNwc
-         Vd/WSeDMsBO5nZtJkE/REhajyBtG4bymljDYM4OhfuOrAQO72NvcccO2Qy9rzPIAQQlJ
-         2Yug==
-X-Gm-Message-State: AOAM530TOlZJDuKIQXkeSy8JG3a5IT91P/sffPFeNBIl5o36ww5TsiMT
-        m8Mz4ir6BPb0rELoAuE1bnc=
-X-Google-Smtp-Source: ABdhPJzNOOXzib9XHOLrtlybvfyD+5ewebR8S0mLhAA1pfnmUqVRIeVjsDE3w1iD7UE8dv8Y5d28Zg==
-X-Received: by 2002:a05:6808:181b:b0:322:7181:a183 with SMTP id bh27-20020a056808181b00b003227181a183mr9397048oib.295.1650913415264;
-        Mon, 25 Apr 2022 12:03:35 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q12-20020a4ad54c000000b003245ac0a745sm4644878oos.22.2022.04.25.12.03.33
+        bh=dkJK/bIXn+MjYWm2XRzMDddvE/wybEFyuqEkS+yBujQ=;
+        b=c0ZPeJ2lbF/tlZgJ9dFSr8iOdBljwkUzChBXcGjdI9ou+au9rxjw0QFvsrWO/AjDtf
+         gverl9LJUhd7r8DnX9Vo+2MYbQOU5uT7G2j4QW09u7ObtstZeGxhaWxM6tYFqSBrkRI5
+         1C0W+H96Q8KfdAWcoFE6b5iwpCy/aSc+5f34EMVt9ditfGTnG8PeWSKhblPWalE7Okbp
+         +9i9RPvn9be+kMksLk44yYJ9R08+Rh+7zNw/L+zWcHNvfL88N4HHi5SqdrqUQunP4aAT
+         J6biHd0OMS1oJevhOBSEswt0YUhwr0i7WLTeUXrmbiSEeRSl9Og4D8SucL1Sx00FWiZ7
+         /F1g==
+X-Gm-Message-State: AOAM530DNfQrKk2jWlreDl1QfsUKDFUn65CuiyEsoi3CDiitK1CYe38E
+        4OyQRmVy9ep83haGzYlWVeq7Qg==
+X-Google-Smtp-Source: ABdhPJx9ZZG4M6AYqL/6gLcP9gmx1DMtXiCtvOZldKX8Fm4IY4JLn4h8Lxwf+bdbC7O3xNQVDZZitA==
+X-Received: by 2002:a50:9f06:0:b0:425:c1ba:5037 with SMTP id b6-20020a509f06000000b00425c1ba5037mr17765566edf.285.1650913478943;
+        Mon, 25 Apr 2022 12:04:38 -0700 (PDT)
+Received: from [192.168.0.244] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id z14-20020a170906944e00b006f38c33b6e3sm1894061ejx.68.2022.04.25.12.04.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 12:03:34 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ad6ecb09-7ea2-16e3-35bf-ba430b92885d@roeck-us.net>
-Date:   Mon, 25 Apr 2022 12:03:32 -0700
+        Mon, 25 Apr 2022 12:04:37 -0700 (PDT)
+Message-ID: <377a84e8-504f-7716-937a-4c97d8a04a2a@linaro.org>
+Date:   Mon, 25 Apr 2022 21:04:36 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Add Atmel AT30TS74
+Subject: Re: [PATCH 1/3] clk: qcom: gcc-msm8976: Set floor ops for SDCC
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Peter Rosin <peda@axentia.se>, linux-kernel@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+To:     Adam Skladowski <a39.skl@gmail.com>, phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
-References: <abe35ea9-1929-941a-6391-2ce1bc047161@axentia.se>
- <de0b6b20-7b4d-64cb-0ae0-457bbc78cc59@linaro.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <de0b6b20-7b4d-64cb-0ae0-457bbc78cc59@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220425185140.15154-1-a39.skl@gmail.com>
+ <20220425185140.15154-2-a39.skl@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220425185140.15154-2-a39.skl@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/25/22 11:49, Krzysztof Kozlowski wrote:
-> On 25/04/2022 07:59, Peter Rosin wrote:
->> Document the Atmel (now Microchip) AT30TS74 which is an LM75 based
->> temperature sensor.
->>
->> Signed-off-by: Peter Rosin <peda@axentia.se>
->> ---
->>    Documentation/devicetree/bindings/hwmon/lm75.yaml | 1 +
->>    1 file changed, 1 insertion(+)
->>
->> diff --git a/Documentation/devicetree/bindings/hwmon/lm75.yaml b/Documentation/devicetree/bindings/hwmon/lm75.yaml
->> index 72980d083c21..8226e3b5d028 100644
->> --- a/Documentation/devicetree/bindings/hwmon/lm75.yaml
->> +++ b/Documentation/devicetree/bindings/hwmon/lm75.yaml
->> @@ -14,6 +14,7 @@ properties:
->>      compatible:
->>        enum:
->>          - adi,adt75
->> +      - atmel,at30ts74
-> 
-> Looks like wrong indentation.
-> 
+Thank you for your patch. There is something to discuss/improve.
 
-Actually, the patch is corrupted. Unchanged lines have an extra space.
+On 25/04/2022 20:51, Adam Skladowski wrote:
+> Just like in case of other SoCs change SDCC1/SDCC2 ops to floor to avoid overclocking controller.
+> This commit only sets SDCC1/SDCC2 which are used for EMMC/SDCARD.
+> It leaves SDCC3 because on this platform it's mostly used for WIFI/BT chips like on Sony Loire family devices.
 
-Guenter
+You need to wrap your commit msg.
+
+https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst#L586
+
+
+Best regards,
+Krzysztof

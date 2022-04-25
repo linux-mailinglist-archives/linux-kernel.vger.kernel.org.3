@@ -2,179 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA25C50E2B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:10:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0094A50E2BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:10:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232677AbiDYONc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 10:13:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54214 "EHLO
+        id S229570AbiDYONp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 10:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiDYONa (ORCPT
+        with ESMTP id S232506AbiDYONd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 10:13:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A88891FCC7
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 07:10:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650895824;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bQqZOAGGz8cVHdnTZIYoAUITNiAmyVcVqVE5emNQD/c=;
-        b=HM2a++OoXmTsZmQnJWNobYPQoWlwkPhAPWdkp3OELMqORys+N75Ln9tdiei6tlRRzxCpB+
-        +gRbdEDfG3qvxpu2UWlh/sPJc5a+gLzXF4XWVVDxElpfqQFq6qpuosa7eYM9XA0segaw3f
-        fxFXA3lHwgR6zPUS6e6jRb1vG2OWUlw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-546-BWga3YOdOem8z4yuh6x95g-1; Mon, 25 Apr 2022 10:10:19 -0400
-X-MC-Unique: BWga3YOdOem8z4yuh6x95g-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D853E38337F6;
-        Mon, 25 Apr 2022 14:10:18 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.13])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 075F5401E97;
-        Mon, 25 Apr 2022 14:10:16 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <YmKp68xvZEjBFell@codewreck.org>
-References: <YmKp68xvZEjBFell@codewreck.org> <YlySEa6QGmIHlrdG@codewreck.org> <YlyFEuTY7tASl8aY@codewreck.org> <1050016.1650537372@warthog.procyon.org.uk> <1817268.LulUJvKFVv@silver>
-To:     asmadeus@codewreck.org
-Cc:     dhowells@redhat.com,
-        Christian Schoenebeck <linux_oss@crudebyte.com>,
-        David Kahurani <k.kahurani@gmail.com>, davem@davemloft.net,
-        ericvh@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        lucho@ionkov.net, netdev@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net, Greg Kurz <groug@kaod.org>
-Subject: Re: 9p EBADF with cache enabled (Was: 9p fs-cache tests/benchmark (was: 9p fscache Duplicate cookie detected))
+        Mon, 25 Apr 2022 10:13:33 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473C51135;
+        Mon, 25 Apr 2022 07:10:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650895829; x=1682431829;
+  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=I6pbNh7Vvjp6206TEWobvDHIwjXcGBl7BZL/qhyjK3o=;
+  b=KVQJZcffmZr/BVgpl73cx7FLmQUhXCbEK9ka8RHzq/zz/WLyv989Wqck
+   j5HEjTrc6bOU3CJmgAI4CF+b+4ncHxgj7CgAOrXWiTTvCNadwIG33YraI
+   ery7CWr1+mdSFUssM8WkcfRUi227ggQd9LlbH+FHtr7PUSXyZKOma6PE9
+   OgSpkE9ohKAm/x4ofPHjCjf/BKLsBePaKKiG6ICMsJhSTEqKdhAE8mwOB
+   D1TyqlIjNz3H4ObFWm/l21ltAL9JhOO8efVxmZrmBVdVc9QpXXdA5So/7
+   V48sfDRgaFtEusUANwZReMCcsk0VpbJH5tw76uhxNj0whf54rrO88Lglw
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="290394809"
+X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
+   d="scan'208";a="290394809"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 07:10:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
+   d="scan'208";a="537556753"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga002.jf.intel.com with ESMTP; 25 Apr 2022 07:10:28 -0700
+Received: from jiunhong-mobl.amr.corp.intel.com (jiunhong-mobl.amr.corp.intel.com [10.209.83.58])
+        by linux.intel.com (Postfix) with ESMTP id 930CC5809EB;
+        Mon, 25 Apr 2022 07:10:28 -0700 (PDT)
+Message-ID: <ccc214492fb66bfec88a9aec516e4cbeff80eb99.camel@linux.intel.com>
+Subject: Re: [PATCH] platform/x86/intel: pmc/core: change pmc_lpm_modes to
+ static
+From:   "David E. Box" <david.e.box@linux.intel.com>
+Reply-To: david.e.box@linux.intel.com
+To:     Tom Rix <trix@redhat.com>, irenic.rajneesh@gmail.com,
+        david.e.box@intel.com, hdegoede@redhat.com, markgross@kernel.org
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 25 Apr 2022 07:10:28 -0700
+In-Reply-To: <20220423123048.591405-1-trix@redhat.com>
+References: <20220423123048.591405-1-trix@redhat.com>
+Organization: David E. Box
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3174157.1650895816.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Mon, 25 Apr 2022 15:10:16 +0100
-Message-ID: <3174158.1650895816@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There may be a quick and dirty workaround.  I think the problem is that un=
-less
-the O_APPEND read starts at the beginning of a page, netfs is going to enf=
-orce
-a read.  Does the attached patch fix the problem?  (note that it's unteste=
-d)
+On Sat, 2022-04-23 at 08:30 -0400, Tom Rix wrote:
+> Sparse reports this issue
+> core.c: note: in included file:
+> core.h:239:12: warning: symbol 'pmc_lpm_modes' was not declared. Should it be
+> static?
+> 
+> Global variables should not be defined in headers.  This only works
+> because core.h is only included by core.c. Single file use
+> variables should be static, so change its storage-class specifier
+> to static.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Also, can you get the contents of /proc/fs/fscache/stats from after
-reproducing the problem?
+Reviewed-by: David E. Box <david.e.box@linux.intel.com>
 
-David
----
-diff --git a/fs/9p/vfs_addr.c b/fs/9p/vfs_addr.c
-index 501128188343..5f61fdb950b0 100644
---- a/fs/9p/vfs_addr.c
-+++ b/fs/9p/vfs_addr.c
-@@ -291,16 +291,25 @@ static int v9fs_write_end(struct file *filp, struct =
-address_space *mapping,
- 	struct folio *folio =3D page_folio(subpage);
- 	struct inode *inode =3D mapping->host;
- 	struct v9fs_inode *v9inode =3D V9FS_I(inode);
-+	size_t fsize =3D folio_size(folio);
-+	size_t offset =3D pos & (fsize - 1);
-+	/* With multipage folio support, we may be given len > fsize */
-+	size_t copy_size =3D min_t(size_t, len, fsize - offset);
- =
+Thanks
 
- 	p9_debug(P9_DEBUG_VFS, "filp %p, mapping %p\n", filp, mapping);
- =
-
- 	if (!folio_test_uptodate(folio)) {
--		if (unlikely(copied < len)) {
-+		if (unlikely(copied < copy_size)) {
- 			copied =3D 0;
- 			goto out;
- 		}
--
--		folio_mark_uptodate(folio);
-+		if (offset =3D=3D 0) {
-+			if (copied =3D=3D fsize)
-+				folio_mark_uptodate(folio);
-+			/* Could clear to end of page if last_pos =3D=3D new EOF
-+			 * and then mark uptodate
-+			 */
-+		}
- 	}
- =
-
- 	/*
-diff --git a/fs/netfs/buffered_read.c b/fs/netfs/buffered_read.c
-index 281a88a5b8dc..78439f628c23 100644
---- a/fs/netfs/buffered_read.c
-+++ b/fs/netfs/buffered_read.c
-@@ -364,6 +364,12 @@ int netfs_write_begin(struct file *file, struct addre=
-ss_space *mapping,
- 	if (folio_test_uptodate(folio))
- 		goto have_folio;
- =
-
-+	if (!netfs_is_cache_enabled(ctx) &&
-+	    (file->f_flags & (O_APPEND | O_ACCMODE)) =3D=3D (O_APPEND | O_WRONLY=
-)) {
-+		netfs_stat(&netfs_n_rh_write_append);
-+		goto have_folio_no_wait;
-+	}
-+
- 	/* If the page is beyond the EOF, we want to clear it - unless it's
- 	 * within the cache granule containing the EOF, in which case we need
- 	 * to preload the granule.
-diff --git a/fs/netfs/internal.h b/fs/netfs/internal.h
-index b7b0e3d18d9e..a1cd649197dc 100644
---- a/fs/netfs/internal.h
-+++ b/fs/netfs/internal.h
-@@ -67,6 +67,7 @@ extern atomic_t netfs_n_rh_read_failed;
- extern atomic_t netfs_n_rh_zero;
- extern atomic_t netfs_n_rh_short_read;
- extern atomic_t netfs_n_rh_write;
-+extern atomic_t netfs_n_rh_write_append;
- extern atomic_t netfs_n_rh_write_begin;
- extern atomic_t netfs_n_rh_write_done;
- extern atomic_t netfs_n_rh_write_failed;
-diff --git a/fs/netfs/stats.c b/fs/netfs/stats.c
-index 5510a7a14a40..fce87f86f950 100644
---- a/fs/netfs/stats.c
-+++ b/fs/netfs/stats.c
-@@ -23,6 +23,7 @@ atomic_t netfs_n_rh_read_failed;
- atomic_t netfs_n_rh_zero;
- atomic_t netfs_n_rh_short_read;
- atomic_t netfs_n_rh_write;
-+atomic_t netfs_n_rh_write_append;
- atomic_t netfs_n_rh_write_begin;
- atomic_t netfs_n_rh_write_done;
- atomic_t netfs_n_rh_write_failed;
-@@ -37,10 +38,11 @@ void netfs_stats_show(struct seq_file *m)
- 		   atomic_read(&netfs_n_rh_write_zskip),
- 		   atomic_read(&netfs_n_rh_rreq),
- 		   atomic_read(&netfs_n_rh_sreq));
--	seq_printf(m, "RdHelp : ZR=3D%u sh=3D%u sk=3D%u\n",
-+	seq_printf(m, "RdHelp : ZR=3D%u sh=3D%u sk=3D%u wa=3D%u\n",
- 		   atomic_read(&netfs_n_rh_zero),
- 		   atomic_read(&netfs_n_rh_short_read),
--		   atomic_read(&netfs_n_rh_write_zskip));
-+		   atomic_read(&netfs_n_rh_write_zskip),
-+		   atomic_read(&netfs_n_rh_write_append));
- 	seq_printf(m, "RdHelp : DL=3D%u ds=3D%u df=3D%u di=3D%u\n",
- 		   atomic_read(&netfs_n_rh_download),
- 		   atomic_read(&netfs_n_rh_download_done),
+> ---
+>  drivers/platform/x86/intel/pmc/core.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/platform/x86/intel/pmc/core.h
+> b/drivers/platform/x86/intel/pmc/core.h
+> index a46d3b53bf61..7a059e02c265 100644
+> --- a/drivers/platform/x86/intel/pmc/core.h
+> +++ b/drivers/platform/x86/intel/pmc/core.h
+> @@ -236,7 +236,7 @@ enum ppfear_regs {
+>  #define ADL_LPM_STATUS_LATCH_EN_OFFSET		0x1704
+>  #define ADL_LPM_LIVE_STATUS_OFFSET		0x1764
+>  
+> -const char *pmc_lpm_modes[] = {
+> +static const char *pmc_lpm_modes[] = {
+>  	"S0i2.0",
+>  	"S0i2.1",
+>  	"S0i2.2",
 

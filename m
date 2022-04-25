@@ -2,113 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D13C650E97D
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 21:29:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4C3050E985
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 21:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244940AbiDYTck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 15:32:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47250 "EHLO
+        id S244953AbiDYTfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 15:35:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbiDYTcj (ORCPT
+        with ESMTP id S244947AbiDYTfe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 15:32:39 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6179710771F
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 12:29:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=awj94s8QiSJk5QQmmIocE0WQKxO9tJBA8flAnToejHg=; b=SmFdvDD4mJo2pKI7CD1gbRKQqj
-        Np1t+o4po8Vpok0gKDKfgVbUesNtbuZwJitQASEJit2Y0n3xegqc8sDgJfqtZctsRM/tqF2dJnjsS
-        7l1slBliK8pWZotOZJYx8KycoSJhlSC48KIW+GLVZWRw5Zp30WrJkav94Fn5uRd5LVGFxa3dg2ALw
-        z6aTkpW4MDT7V6SRk+s5yDKkuHtqlsuMUGFdDiPHKwm/FFn4mnZiOgPnMWucuONRC7OeijqDoBTm7
-        rPpE9tC1X83OFpgKwQR0FwX2P30qeB1pps6fRXMC2bCD8BN586uZtGpHsAn6ZXfn8Ye2OoodI2JP1
-        sRfpaCVA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nj4OI-008xx7-QQ; Mon, 25 Apr 2022 19:28:58 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BF0D8980DC6; Mon, 25 Apr 2022 21:28:56 +0200 (CEST)
-Date:   Mon, 25 Apr 2022 21:28:56 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Stephen Zhang <starzhangzsd@gmail.com>, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, laijs@linux.alibaba.com,
-        lihuafei1@huawei.com, fenghua.yu@intel.com,
-        chang.seok.bae@intel.com, zhangshida@kylinos.cn,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86/traps: add CONFIG_BUG to the use of __warn()
-Message-ID: <20220425192856.GG2762@worktop.programming.kicks-ass.net>
-References: <20220425055935.458583-1-starzhangzsd@gmail.com>
- <7558ae3d-a1fa-6c11-cccd-ad0f65cde25b@intel.com>
- <20220425182456.GL2731@worktop.programming.kicks-ass.net>
+        Mon, 25 Apr 2022 15:35:34 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F5B111148
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 12:32:28 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id j8-20020a17090a060800b001cd4fb60dccso322483pjj.2
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 12:32:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oeezvirplzSzLTVDs1gNBFptZE26wQUimqKa8jXdb5Y=;
+        b=DcMgm0ZRPmqLuBXlvrG+IVaxdGyMozez0lMkhgiAsb1rFFrlAo+EiFEygQczk2veU/
+         7euIG+J6TVNbCDHuF4nqQFoK3KT4a9Twwi6a0+Wah2zlGh++9DZhr4YHujmaQohx4b7Y
+         ybdpbndSZU44IcsvIka3R6/pX8/viZpL4iDaxUjLkvInRZPIy5k70JBb+UP3lqySnk4/
+         a+/1FhiFA6Fsfb6auI8STl+On8SCg2NwjOdFlfWKiKRxSHLeCsiQpzGlNdqHHKeA/isL
+         ab/slbL6gSK0hJmVa29T0+E1vT8wPqQn5ErKEp91yxreT8k3VnuwN4wD5AdgjcZLd8dK
+         Cu7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oeezvirplzSzLTVDs1gNBFptZE26wQUimqKa8jXdb5Y=;
+        b=6cY7Cq6w3Hef1J0QIECLIsoNtmfrM2n78OfYe78Dq8yBxvwLnIvmCobHYUC+V08BRr
+         uSrLFVEcO8jnoWyKoRhDhr7msOCGyyQy0aPa6e3mSUpPJ05b+pkyBnMNJPX1HtPp4lgA
+         rujtD4VETdg8tsv8BLnC2X2w6BZSR4fd9AUUti0YRq7i/U0sKmGVquxSCrY3y8PZHP1E
+         N3e9gPp4sJkltLKTOrOOwqN9iX0UbaD8Ed2z25yJPzr+fGJFhV+CMkptk5kDsP0SHZHp
+         Lhs/Z/KeNgkgQwGGUcY8xYHxEfhrKwCLVWFYXXPGFFSJ38tMJXduTmHvSA6ZEidj0EPz
+         EGiA==
+X-Gm-Message-State: AOAM530YlXNzwdZU0F0v3PzFGrOMVNprAofqR+HHiczFuhOW30JRC1OO
+        42C5J7Wja6WfRD39CRpZ0dHJAM30KXrG3f8fBqgiwciG2bRNEg==
+X-Google-Smtp-Source: ABdhPJwBvZDhhnZuuA7aqKCzlJsXI5si0z0hDX8ibOaKh3XVtbZVtAyVMNXVBMw5HvPVjbtnUEUD9Yz4KTFz6sonyfM=
+X-Received: by 2002:a17:902:8b88:b0:156:2b14:cb6e with SMTP id
+ ay8-20020a1709028b8800b001562b14cb6emr19882747plb.14.1650915147597; Mon, 25
+ Apr 2022 12:32:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220425182456.GL2731@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220425190040.2475377-1-yosryahmed@google.com>
+ <20220425190040.2475377-2-yosryahmed@google.com> <a4c3d067-d08d-409d-e7b-b6e0b1d2dfda@google.com>
+In-Reply-To: <a4c3d067-d08d-409d-e7b-b6e0b1d2dfda@google.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Mon, 25 Apr 2022 12:31:51 -0700
+Message-ID: <CAJD7tka_96du2UUx0xuseR62wu005-KPf7fSyDTAuXOWsgUQDg@mail.gmail.com>
+Subject: Re: [PATCH v5 1/4] memcg: introduce per-memcg reclaim interface
+To:     David Rientjes <rientjes@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Chen Wandun <chenwandun@huawei.com>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
+        Michal Hocko <mhocko@suse.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 08:24:56PM +0200, Peter Zijlstra wrote:
-> On Mon, Apr 25, 2022 at 09:05:17AM -0700, Dave Hansen wrote:
-> > On 4/24/22 22:59, Stephen Zhang wrote:
-> > > --- a/arch/x86/kernel/traps.c
-> > > +++ b/arch/x86/kernel/traps.c
-> > > @@ -246,7 +246,9 @@ DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
-> > >  	pr_err("Missing ENDBR: %pS\n", (void *)instruction_pointer(regs));
-> > >  	if (!ibt_fatal) {
-> > >  		printk(KERN_DEFAULT CUT_HERE);
-> > > +#ifdef CONFIG_BUG
-> > >  		__warn(__FILE__, __LINE__, (void *)regs->ip, TAINT_WARN, regs, NULL);
-> > > +#endif
-> > 
-> > This really should be done with an #ifdef'd stub in in bug.h, not an
-> > #ifdef at every call site.  I assume there was a good reason for not
-> > using the normal WARN*() macros.
-> 
-> I think the idea was to have the pr_err() unconditional, and if you have
-> the fancy crap on also print a full backtrace or something.
-> 
-> But yeah, a few stubs in bug.h ought to make this go away too.
+On Mon, Apr 25, 2022 at 12:15 PM David Rientjes <rientjes@google.com> wrote:
+>
+> On Mon, 25 Apr 2022, Yosry Ahmed wrote:
+>
+> > From: Shakeel Butt <shakeelb@google.com>
+> >
+> > Introduce a memcg interface to trigger memory reclaim on a memory cgroup.
+> >
+> > Use case: Proactive Reclaim
+> > ---------------------------
+> >
+> > A userspace proactive reclaimer can continuously probe the memcg to
+> > reclaim a small amount of memory. This gives more accurate and
+> > up-to-date workingset estimation as the LRUs are continuously
+> > sorted and can potentially provide more deterministic memory
+> > overcommit behavior. The memory overcommit controller can provide
+> > more proactive response to the changing behavior of the running
+> > applications instead of being reactive.
+> >
+> > A userspace reclaimer's purpose in this case is not a complete replacement
+> > for kswapd or direct reclaim, it is to proactively identify memory savings
+> > opportunities and reclaim some amount of cold pages set by the policy
+> > to free up the memory for more demanding jobs or scheduling new jobs.
+> >
+> > A user space proactive reclaimer is used in Google data centers.
+> > Additionally, Meta's TMO paper recently referenced a very similar
+> > interface used for user space proactive reclaim:
+> > https://dl.acm.org/doi/pdf/10.1145/3503222.3507731
+> >
+> > Benefits of a user space reclaimer:
+> > -----------------------------------
+> >
+> > 1) More flexible on who should be charged for the cpu of the memory
+> > reclaim. For proactive reclaim, it makes more sense to be centralized.
+> >
+> > 2) More flexible on dedicating the resources (like cpu). The memory
+> > overcommit controller can balance the cost between the cpu usage and
+> > the memory reclaimed.
+> >
+> > 3) Provides a way to the applications to keep their LRUs sorted, so,
+> > under memory pressure better reclaim candidates are selected. This also
+> > gives more accurate and uptodate notion of working set for an
+> > application.
+> >
+> > Why memory.high is not enough?
+> > ------------------------------
+> >
+> > - memory.high can be used to trigger reclaim in a memcg and can
+> >   potentially be used for proactive reclaim.
+> >   However there is a big downside in using memory.high. It can potentially
+> >   introduce high reclaim stalls in the target application as the
+> >   allocations from the processes or the threads of the application can hit
+> >   the temporary memory.high limit.
+> >
+> > - Userspace proactive reclaimers usually use feedback loops to decide
+> >   how much memory to proactively reclaim from a workload. The metrics
+> >   used for this are usually either refaults or PSI, and these metrics
+> >   will become messy if the application gets throttled by hitting the
+> >   high limit.
+> >
+> > - memory.high is a stateful interface, if the userspace proactive
+> >   reclaimer crashes for any reason while triggering reclaim it can leave
+> >   the application in a bad state.
+> >
+> > - If a workload is rapidly expanding, setting memory.high to proactively
+> >   reclaim memory can result in actually reclaiming more memory than
+> >   intended.
+> >
+> > The benefits of such interface and shortcomings of existing interface
+> > were further discussed in this RFC thread:
+> > https://lore.kernel.org/linux-mm/5df21376-7dd1-bf81-8414-32a73cea45dd@google.com/
+> >
+> > Interface:
+> > ----------
+> >
+> > Introducing a very simple memcg interface 'echo 10M > memory.reclaim' to
+> > trigger reclaim in the target memory cgroup.
+> >
+> > The interface is introduced as a nested-keyed file to allow for future
+> > optional arguments to be easily added to configure the behavior of
+> > reclaim.
+> >
+> > Possible Extensions:
+> > --------------------
+> >
+> > - This interface can be extended with an additional parameter or flags
+> >   to allow specifying one or more types of memory to reclaim from (e.g.
+> >   file, anon, ..).
+> >
+> > - The interface can also be extended with a node mask to reclaim from
+> >   specific nodes. This has use cases for reclaim-based demotion in memory
+> >   tiering systens.
+> >
+> > - A similar per-node interface can also be added to support proactive
+> >   reclaim and reclaim-based demotion in systems without memcg.
+> >
+> > - Add a timeout parameter to make it easier for user space to call the
+> >   interface without worrying about being blocked for an undefined amount
+> >   of time.
+> >
+> > For now, let's keep things simple by adding the basic functionality.
+> >
+> > [yosryahmed@google.com: worked on versions v2 onwards, refreshed to
+> > current master, updated commit message based on recent
+> > discussions and use cases]
+> >
+> > Signed-off-by: Shakeel Butt <shakeelb@google.com>
+> > Co-developed-by: Yosry Ahmed <yosryahmed@google.com>
+> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> > Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+> > Acked-by: Michal Hocko <mhocko@suse.com>
+> > Acked-by: Wei Xu <weixugc@google.com>
+> > Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+>
+> Acked-by: David Rientjes <rientjes@google.com>
+>
+> "can over or under reclaim from the target cgroup" begs the question of
+> how much more memory the kernel can decide to reclaim :)  I think it's
+> assumed that it's minimal and that matches the current implementation that
+> rounds up to SWAP_CLUSTER_MAX, though, so looks good.
+>
+> Thanks Yosry!
 
-As pointed out by Boris, __warn is actually uncondtionally defined in
-panic.c, the below seems to build.
-
----
-diff --git a/include/asm-generic/bug.h b/include/asm-generic/bug.h
-index edb0e2a602a8..ba1f860af38b 100644
---- a/include/asm-generic/bug.h
-+++ b/include/asm-generic/bug.h
-@@ -21,6 +21,12 @@
- #include <linux/panic.h>
- #include <linux/printk.h>
- 
-+struct warn_args;
-+struct pt_regs;
-+
-+void __warn(const char *file, int line, void *caller, unsigned taint,
-+	    struct pt_regs *regs, struct warn_args *args);
-+
- #ifdef CONFIG_BUG
- 
- #ifdef CONFIG_GENERIC_BUG
-@@ -110,11 +116,6 @@ extern __printf(1, 2) void __warn_printk(const char *fmt, ...);
- #endif
- 
- /* used internally by panic.c */
--struct warn_args;
--struct pt_regs;
--
--void __warn(const char *file, int line, void *caller, unsigned taint,
--	    struct pt_regs *regs, struct warn_args *args);
- 
- #ifndef WARN_ON
- #define WARN_ON(condition) ({						\
+I think it could be more complex than this. Some functions that get
+called during reclaim only use the nr_to_reclaim parameter to check if
+they need one more iteration, but not to limit the actual reclaimed
+pages per say. For example, nr_to_reclaim is not even passed to
+shrink_slab() or mem_cgroup_soft_limit_reclaim(), so they have no way
+to know that they should stop if nr_to_reclaim was already satisfied.
+I think the general assumption is that each of these calls normally
+does not reclaim a huge number of pages, so like you said, the kernel
+should not over-reclaim too much. However, I don't think there are
+guarantees about this.

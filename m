@@ -2,64 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C3C750E7F8
+	by mail.lfdr.de (Postfix) with ESMTP id E85C950E7FA
 	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244231AbiDYSWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 14:22:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55998 "EHLO
+        id S244299AbiDYSWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 14:22:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238098AbiDYSWO (ORCPT
+        with ESMTP id S236782AbiDYSWX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 14:22:14 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 366FE3B285
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:19:08 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id y32so27696579lfa.6
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:19:08 -0700 (PDT)
+        Mon, 25 Apr 2022 14:22:23 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B511E762BB;
+        Mon, 25 Apr 2022 11:19:18 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id k29-20020a056830243d00b006040caa0988so11356390ots.6;
+        Mon, 25 Apr 2022 11:19:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XWjyOTk2tGd4SQizwMeiUoN3Sq9yf6dGtgMTU28R/fY=;
-        b=a6NU1EkhZkIg5psdckl12MWVLCiPzHkalwosSurPX+10R3BE0fypNlCtJNK5S9Fm33
-         2YEBEEi/UVhjabcO80zk2m6oTTAPL81az32tapOcMzG6J4ZlxrymUqBd4GfVxeyw/A89
-         sUCvynHn5KtU6pQJnPWYUPBm3E6c0NPhN3bvgcM1IM3aePtqlWuejGE3+hgWGe8DRBe8
-         0r+WXQ6IP9CXTs3YirPawMoZtchf9K6PSVl4/lRm0wzOJeFm0s+arS5klDkoGekVaja8
-         KG4uDg1BebEPxb+JyNRmkofOgdTFfPXEqg1X4MYfyXJ3lNrbTxa73xI8/nIT30F8YeJw
-         3y3Q==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=uvc5bXo42oHV87Iw9NQ/VTqufRs0I0hy2e2+bdje3+g=;
+        b=VUxb4hFjZXiyUmglDD5gpJqRXkW4D39teQmSSqugFTQHRlNDVeiy0RgmlforeYQNn9
+         FPKS98aqWUrOebLtGt+ud/nycq+dyLhGbVJFFsDA8XrRLaKGlkYP1hceFtR8IcMU1XJs
+         x2ngq188gNkg02jCIZBuoYtBPlAokEie23BWlGa8iNgAZ1OAkMQ9iL4cXRmEbw/f9sWy
+         n5UXoUp3st7UxkRQbLl4b2c8EQ2fsE7azOCUIv8RkQt47JWJ9SaBrdoZagQEBDysk+x0
+         Gq6a20E96ap7BRniFuem8Qkr+HSVfE2ItyBkp51oUoAbfsHy0gSeQdce2cR3S1ZrufKY
+         1ZIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XWjyOTk2tGd4SQizwMeiUoN3Sq9yf6dGtgMTU28R/fY=;
-        b=M6mhRLTV4ky4ICQdWQaJ7S0jzvlEgwXE4Tr00kiJmHd3SZdreZli66In7rwxoOr0qE
-         qzgz8z+RE052Tppsgaa2cXUKZxQpiOV6gIudtpSvVZL7vZMWXfqywvye2U9wPIoPDTk1
-         lmhkDCbJ8uTyGMhENBBwCYNYRGCpIlF5bNp/sdrUHhSItsh7q8bukxFZ2HF5sNtCtDlJ
-         BFhyfwwgFIqfbTm95lzPPsYjaSD2tvgTBZ0T9tZmNShWVQyCzF1+jh26FuDggKoxKnv2
-         C3GlaOkt1rSqzexV4Z6bsseCYQpq3eYw11xH9rzPsNpJUhNT7VLlFuFtQxoav1NrJQ2z
-         rQnQ==
-X-Gm-Message-State: AOAM532h9VaZUVTEZ7/NDIKLDKAHKaSiiD/Pv5thvKZsWwOf2c1vl0Qr
-        GuVu0QoZ2dk0EPyvfhqAfHfgpin6aFwLjWGqR86vQw==
-X-Google-Smtp-Source: ABdhPJxr648XHmFtOsQbv/5l+cltqwh0ON3p+8hRlhV3L+DYFg9FO6UTQTq49XCNNQmDYsjURyqaNrLntwLPrDMxrKk=
-X-Received: by 2002:ac2:4188:0:b0:471:96f4:c1d4 with SMTP id
- z8-20020ac24188000000b0047196f4c1d4mr13990835lfh.626.1650910746293; Mon, 25
- Apr 2022 11:19:06 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=uvc5bXo42oHV87Iw9NQ/VTqufRs0I0hy2e2+bdje3+g=;
+        b=vEjZjDwMPGf+bJJk6o2W6oQONMybiiodO48eL6uYFWj2teD5F5TP6nhr5so5j09iDY
+         rq3dSnDCIEX/e9jxS1v+Y6juD1SZkk81ncHZtGlFUnNZI/Bykv9NtP+7PSE+aqIDPpFH
+         CSMDbUOH1dADptlzA8eddjKe8+wpBi8jvWg7pYVO273CqCasuj/gu/D/WhdgDQTB7s1n
+         +mNXGbvEX1vxs+EkYu6lj38wiK1Habe1FN1PP8PhohwFCTIVEjrM3G7LQ00zYsZNCkQG
+         2Do4jL7shAQDpvenBq6H+GLlb7NHDm71RrGp/wJLIFDdwcCiPlEliv1yP7qb8qfmS/nw
+         /oog==
+X-Gm-Message-State: AOAM5314RZxa5ZjA/gtW+5l+A9Fvi0Y9zTb6gui6TPDmbsOqiOQCzLC6
+        sP5V2pSzg12TMnlsBK0Cnbw=
+X-Google-Smtp-Source: ABdhPJzc0+Nh5njthZAYBYW8ruRLx2H8O0qHhlQJFMBkpAlDlpy9erArbqSgW3chxUCdDMPo79oiqQ==
+X-Received: by 2002:a9d:5f14:0:b0:5e6:c009:213f with SMTP id f20-20020a9d5f14000000b005e6c009213fmr7163684oti.35.1650910757973;
+        Mon, 25 Apr 2022 11:19:17 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u7-20020a05687036c700b000da4bcdae42sm3475587oak.13.2022.04.25.11.19.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 11:19:17 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 25 Apr 2022 11:19:15 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Camel Guo <camel.guo@axis.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@axis.com
+Subject: Re: [PATCH] hwmon: (tmp401) Fix incorrect return value of
+ tmp401_init_client
+Message-ID: <20220425181915.GA4175249@roeck-us.net>
+References: <20220425100019.562781-1-camel.guo@axis.com>
 MIME-Version: 1.0
-References: <20220424190811.1678416-1-masahiroy@kernel.org> <20220424190811.1678416-4-masahiroy@kernel.org>
-In-Reply-To: <20220424190811.1678416-4-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 25 Apr 2022 11:18:54 -0700
-Message-ID: <CAKwvOdkvoFFpn58uwLsB4dsvZ4Xk51MvusmefOeSaLmzcku_1Q@mail.gmail.com>
-Subject: Re: [PATCH 03/27] modpost: remove stale comment about sym_add_exported()
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220425100019.562781-1-camel.guo@axis.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,54 +73,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 24, 2022 at 12:09 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> The description,
->
->   it may have already been added without a
->   CRC, in this case just update the CRC
->
-> ... is no longer valid.
->
-> In very old days, this function was used to update the CRC as well.
->
-> Commit 040fcc819a2e ("kbuild: improved modversioning support for
-> external modules") started to use a separate function (sym_update_crc)
-> for updating the CRC.
->
-> The first part, "Add an exported symbol" is correct, but it is too
-> obvious from the function name. Drop this comment entirely.
+On Mon, Apr 25, 2022 at 12:00:19PM +0200, Camel Guo wrote:
+> When ti,n-factor, ti,beta-compentation are not defined in devicetree,
+> of_property_read_u32|s32 returns -EINVAL. In this case,
+> tmp401_init_client should return 0 instead of simply pass ret to its
+> caller.
+> 
+> Fixes: c825ca044988 ("hwmon: (tmp401) Add support of three advanced features")
+> Signed-off-by: Camel Guo <camel.guo@axis.com>
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Good catch. Thanks, applied.
 
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Guenter
+
 > ---
->
->  scripts/mod/modpost.c | 4 ----
->  1 file changed, 4 deletions(-)
->
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index f0d48f65fb33..c7cfeeb088f7 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -387,10 +387,6 @@ static void sym_update_namespace(const char *symname, const char *namespace)
->         s->namespace = namespace[0] ? NOFAIL(strdup(namespace)) : NULL;
+>  drivers/hwmon/tmp401.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/tmp401.c b/drivers/hwmon/tmp401.c
+> index 8f49da997367..a58a2f31a07e 100644
+> --- a/drivers/hwmon/tmp401.c
+> +++ b/drivers/hwmon/tmp401.c
+> @@ -604,7 +604,7 @@ static int tmp401_init_client(struct tmp401_data *data)
+>  			return ret;
+>  	}
+>  
+> -	return ret;
+> +	return 0;
 >  }
->
-> -/**
-> - * Add an exported symbol - it may have already been added without a
-> - * CRC, in this case just update the CRC
-> - **/
->  static struct symbol *sym_add_exported(const char *name, struct module *mod,
->                                        enum export export)
->  {
-> --
-> 2.32.0
->
-
-
--- 
-Thanks,
-~Nick Desaulniers
+>  
+>  static int tmp401_detect(struct i2c_client *client,

@@ -2,95 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 925A750D8E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 07:41:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB0BC50D8EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 07:44:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241332AbiDYFoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 01:44:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60734 "EHLO
+        id S241336AbiDYFrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 01:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241318AbiDYFoJ (ORCPT
+        with ESMTP id S235447AbiDYFpX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 01:44:09 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EC9AF12ABA
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 22:41:05 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7B52A1FB;
-        Sun, 24 Apr 2022 22:41:05 -0700 (PDT)
-Received: from [10.163.40.250] (unknown [10.163.40.250])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ABF7A3F774;
-        Sun, 24 Apr 2022 22:40:55 -0700 (PDT)
-Message-ID: <1ad261fc-4eb0-21f4-2f6b-11696cd5c1c3@arm.com>
-Date:   Mon, 25 Apr 2022 11:11:46 +0530
+        Mon, 25 Apr 2022 01:45:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FF1167DB
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 22:42:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A0F94B81056
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 05:42:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEC2EC385A9;
+        Mon, 25 Apr 2022 05:42:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650865321;
+        bh=T9+MBuMTNpr9JFwAQ6LYoWsbsniZT5XNIj9InLV87fc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xlOAWvvbsm5qII+RIpNQfzN/p1pxzWueC42v2bWmPqQFLSTyIdnlGKoghNvPkAMzk
+         1bVGPooqB+Jp3lgxmzdHDwIAODLZsjwhC3EJbY3Z+b5hz8Yp9wWRZqt1RUSgT0J8/C
+         x3TyEhslJipgSWZ7PLccmBS5QAZOIeAgiWJIHRtY=
+Date:   Mon, 25 Apr 2022 07:41:57 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ren Zhijie <renzhijie2@huawei.com>
+Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] base: topology: fix unused variable compile error
+Message-ID: <YmY0pSEEYhwNizck@kroah.com>
+References: <20220425024149.259189-1-renzhijie2@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH -next v5 4/5] arm64: mm: add support for page table check
-Content-Language: en-US
-To:     Tong Tiangen <tongtiangen@huawei.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>
-References: <20220421082042.1167967-1-tongtiangen@huawei.com>
- <20220421082042.1167967-5-tongtiangen@huawei.com>
- <89ec03a9-5fee-7f4f-d189-67eb2aad24a3@arm.com>
- <c64e2159-d560-b560-f37e-4594692d88e1@huawei.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <c64e2159-d560-b560-f37e-4594692d88e1@huawei.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220425024149.259189-1-renzhijie2@huawei.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/24/22 09:44, Tong Tiangen wrote:
+On Mon, Apr 25, 2022 at 10:41:49AM +0800, Ren Zhijie wrote:
+> compile error:
+> drivers/base/topology.c: In function ‘topology_is_visible’:
+> drivers/base/topology.c:158:17: error: unused variable ‘dev’ [-Werror=unused-variable]
+>   struct device *dev = kobj_to_dev(kobj);
+>                  ^~~
+> cc1: all warnings being treated as errors
 > 
+> If CONFIG_SMP is N, the macro 'topology_ppin()'expands as follows.
+> "topology_ppin(dev->id) -> boot_cpu_data.ppin"
+> This cause an unused variable warning for 'dev' which used in the
+> topology_is_visible().
 > 
-> 在 2022/4/22 14:45, Anshuman Khandual 写道:
->> Please change the subject line as
->>
->> arm64/mm: Enable ARCH_SUPPORTS_PAGE_TABLE_CHECK
->>
->> OR
->>
->> arm64/mm: Subscribe ARCH_SUPPORTS_PAGE_TABLE_CHECK
->>
->> On 4/21/22 13:50, Tong Tiangen wrote:
->>> From: Kefeng Wang <wangkefeng.wang@huawei.com>
->>>
->>> As commit d283d422c6c4 ("x86: mm: add x86_64 support for page table
->>> check"), add some necessary page table check hooks into routines that
->>> modify user page tables.
->>
->> Please make the commit message comprehensive, which should include
->>
->> - Enabling ARCH_SUPPORTS_PAGE_TABLE_CHECK on arm64
->> - Adding all additional page table helpers required for PAGE_TABLE_CHECK
->> - Instrumenting existing page table helpers with page table check hooks
->>
+> To fix build warning unused attribute added to the 'dev' variable.
 > 
-> Good suggestion, if i need to do a new version for some other reason i think it should be described more comprehensivel
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Fixes:aa63a74d4535("topology/sysfs: Hide PPIN on systems that do not support it.")
+> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
+> ---
+>  drivers/base/topology.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/base/topology.c b/drivers/base/topology.c
+> index 706dbf8bf249..70962a4bcb1f 100644
+> --- a/drivers/base/topology.c
+> +++ b/drivers/base/topology.c
+> @@ -155,7 +155,8 @@ static struct attribute *default_attrs[] = {
+>  static umode_t topology_is_visible(struct kobject *kobj,
+>  				   struct attribute *attr, int unused)
+>  {
+> -	struct device *dev = kobj_to_dev(kobj);
+> +	struct device *dev __maybe_unused;
+> 
+> +	dev = kobj_to_dev(kobj);
+>  
+>  	if (attr == &dev_attr_ppin.attr && !topology_ppin(dev->id))
+>  		return 0;
+> -- 
+> 2.17.1
+> 
 
+Thanks for this, but I've already queued up the commit here:
+	https://lore.kernel.org/r/20220422062653.3899972-1-gregkh@linuxfoundation.org
+which is simpler and smaller and it should show up in the next
+linux-next release.
 
-This series needs revision to accommodate earlier comments.
+greg k-h

@@ -2,60 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7709150E25F
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:51:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2224650E269
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:53:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242235AbiDYNyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 09:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43716 "EHLO
+        id S242258AbiDYN4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 09:56:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238228AbiDYNyr (ORCPT
+        with ESMTP id S237131AbiDYN4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 09:54:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC555A082;
-        Mon, 25 Apr 2022 06:51:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1AF77B8180A;
-        Mon, 25 Apr 2022 13:51:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E302C385A7;
-        Mon, 25 Apr 2022 13:51:39 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Z8dcto5O"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1650894698;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jIgd/PKWEzsWj3P5DRugWZ6j3osZ7OCTzMJj+6jxPmg=;
-        b=Z8dcto5O+eDr7AHq4YeOfCJY3gUT3DE1z67dCpgQRonnlVYObKX4ITBlJAg05iG1eY5MId
-        n0oNYHBpHuniyd6a+A+oYRpaJUzvzIgYWEPacSml21G/1Li4poweEZAz73SkIeuNthVens
-        MHFMa7Cw0Y4pYPQGVBSNJwqE1zGt8mc=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d0db84be (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 25 Apr 2022 13:51:38 +0000 (UTC)
-Date:   Mon, 25 Apr 2022 15:51:35 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        arnd@arndb.de, Borislav Petkov <bp@alien8.de>, x86@kernel.org
-Subject: Re: [PATCH v6 13/17] x86: use fallback for random_get_entropy()
- instead of zero
-Message-ID: <YmanZ3Gw5mIXSebE@zx2c4.com>
-References: <20220423212623.1957011-1-Jason@zx2c4.com>
- <20220423212623.1957011-14-Jason@zx2c4.com>
- <871qxl2vdw.ffs@tglx>
- <Ymak7LJd6GnFxsOo@zx2c4.com>
+        Mon, 25 Apr 2022 09:56:00 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BAD163BDF
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 06:52:55 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id g21so15856408iom.13
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 06:52:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qelDa8vHGzUXR/z/LXOyg/fUpae4yTXkY4tJDrA/hXE=;
+        b=76/Cqj2bL97JJrVz/LFe2xu4mIreDAgh+6lrOtd0LvmA+X0Tpul7jQ1Vh/EBPcEYkw
+         QV5i60hujKAaXiSsT+crrIy0VmTEp/Efp9ifFj0OJndkRXgZW8n6+mtMu3JRet0yGiln
+         QKNVQxFDDpJGY3FHwZJWOwTjUck6bMjOSh0T0rJ1mrALx8x7wObgm3g5f9v7ShEgmrhO
+         c++pjOzjbdggHSwqPnFc2oCWptWcLuhukGAWV8Eb+/NiZx4Cvji0NLvSpkvUwdPuDhyR
+         GgszofIP7lO/YygwmNS7nXvN9jMe1HoH1gslhGdOBjfQVvpUIBglpU7SpJiKWACfZPYQ
+         /QEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qelDa8vHGzUXR/z/LXOyg/fUpae4yTXkY4tJDrA/hXE=;
+        b=vOnAeUaN5KW7vZAPRUSQKLaU5jiL2H2lYbYwQgFWIhMzNx5tqfSGjM9dfFjTSPTAEO
+         VB/IXmrpI2nUMP7Av5IM+f9fA0yIGIBAhpOnDQw/hB0g+Yr9OJA8dpXcX/VzVTStB8eW
+         iFS3py87J/5Z7aaGhKGb4wdRwyPohYBgeuhiKi7H3b0tddXUNTfRyzLnTzfGF13b5f5w
+         qDUUa8x0hQZskdMtiCUoHerqIvKzJU8fIFvrklB5t6aZrmmGcN1myTbrAE0DjiLY7RRE
+         hkItCobaf3rWLGTCxIYx9YYM5b8l0Wgq2Gn5vRW4/s693wig/MggjrJeijJ/9Wl2VxS4
+         390Q==
+X-Gm-Message-State: AOAM532CBPpp0DvWaqIvZwjQyCdaBqve4r0D3ClwHsLcl9YpcIEn3OvL
+        /OfmE8k72Wur3ikk92usrxQh5OgYXWZOrfdyff7RmchIs0U=
+X-Google-Smtp-Source: ABdhPJxzc1v0Z/He5ukiS1OuqhumsEkKEUAUkOj/D09LTyLPzsEHhIEe4srXorEszGfwGSE5ZqGrdJMQDIyz+M2soNg=
+X-Received: by 2002:a05:6638:a48:b0:32a:d97f:659b with SMTP id
+ 8-20020a0566380a4800b0032ad97f659bmr3943645jap.320.1650894774977; Mon, 25 Apr
+ 2022 06:52:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Ymak7LJd6GnFxsOo@zx2c4.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220325132126.61949-1-zhangjiachen.jaycee@bytedance.com>
+ <CAJfpeguESQm1KsQLyoMRTevLttV8N8NTGsb2tRbNS1AQ_pNAww@mail.gmail.com>
+ <CAFQAk7ibzCn8OD84-nfg6_AePsKFTu9m7pXuQwcQP5OBp7ZCag@mail.gmail.com> <CAJfpegsbaz+RRcukJEOw+H=G3ft43vjDMnJ8A24JiuZFQ24eHA@mail.gmail.com>
+In-Reply-To: <CAJfpegsbaz+RRcukJEOw+H=G3ft43vjDMnJ8A24JiuZFQ24eHA@mail.gmail.com>
+From:   Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+Date:   Mon, 25 Apr 2022 21:52:44 +0800
+Message-ID: <CAFQAk7hakYNfBaOeMKRmMPTyxFb2xcyUTdugQG1D6uZB_U1zBg@mail.gmail.com>
+Subject: Re: Re: Re: [RFC PATCH] fuse: support cache revalidation in
+ writeback_cache mode
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xie Yongji <xieyongji@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,43 +68,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 03:41:00PM +0200, Jason A. Donenfeld wrote:
-> .text:0000000000001A70 add_interrupt_randomness proc near
-> .text:0000000000001A70                 movsxd  rcx, edi
-> .text:0000000000001A73                 rdtsc
-> .text:0000000000001A75                 shl     rdx, 20h
-> .text:0000000000001A79                 mov     rdi, [rsp+0]
-> .text:0000000000001A7D                 or      rax, rdx
-> .text:0000000000001A80                 mov     rdx, offset irq_randomness
-> .text:0000000000001A87                 mov     rsi, gs:__irq_regs
-> .text:0000000000001A8F                 add     rdx, gs:this_cpu_off
+On Mon, Apr 25, 2022 at 9:42 PM Miklos Szeredi <miklos@szeredi.hu> wrote:
+>
+> On Mon, 25 Apr 2022 at 15:33, Jiachen Zhang
+> <zhangjiachen.jaycee@bytedance.com> wrote:
+> >
+> > On Mon, Apr 25, 2022 at 8:41 PM Miklos Szeredi <miklos@szeredi.hu> wrote:
+> > >
+> > > On Fri, 25 Mar 2022 at 14:23, Jiachen Zhang
+> > > <zhangjiachen.jaycee@bytedance.com> wrote:
+> > > >
+> > > > Hi all,
+> > > >
+> > > > This RFC patch implements attr cache and data cache revalidation for
+> > > > fuse writeback_cache mode in kernel. Looking forward to any suggestions
+> > > > or comments on this feature.
+> > >
+> > > Quick question before going into the details:  could the cache
+> > > revalidation be done in the userspace filesystem instead, which would
+> > > set/clear FOPEN_KEEP_CACHE based on the result of the revalidation?
+> > >
+> > > Thanks,
+> > > Miklos
+> >
+> > Hi, Miklos,
+> >
+> > Thanks for replying. Yes, I believe we can also perform the
+> > revalidation in userspace, and we can invalidate the data cache with
+> > FOPEN_KEEP_CACHE cleared. But for now, there is no way we can
+> > invalidate attr cache (c/mtime and size)  in writeback mode.
+>
+> Can you please describe the use case for invalidating the attr cache?
+>
 
-For context, here's what your suggested change looks like:
+Some users may want both the high performance of writeback mode and a
+little bit more consistency among FUSE mounts. In the current
+writeback mode implementation, users of one FUSE mount can never see
+the file expansion done by other FUSE mounts.
 
-.text:0000000000001AF0 add_interrupt_randomness proc near
-.text:0000000000001AF0                 push    rbx
-.text:0000000000001AF1                 movsxd  rbx, edi
-.text:0000000000001AF4                 jmp     loc_25AA
-.text:0000000000001AF9 loc_1AF9:                               ; CODE XREF: add_interrupt_randomness+AC1↓j
-.text:0000000000001AF9                 rdtsc
-.text:0000000000001AFB                 shl     rdx, 20h
-.text:0000000000001AFF                 or      rax, rdx
-.text:0000000000001B02
-.text:0000000000001B02 loc_1B02:                               ; CODE XREF: add_interrupt_randomness+12C↓j
-.text:0000000000001B02                 mov     rdx, offset irq_randomness
-.text:0000000000001B09                 mov     rcx, gs:__irq_regs
-.text:0000000000001B11                 add     rdx, gs:this_cpu_off
-[...]
-.altinstr_aux:00000000000025AA loc_25AA:                               ; CODE XREF: add_interrupt_randomness+4↑j
-.altinstr_aux:00000000000025AA                 test    byte ptr cs:boot_cpu_data+20h, 10h
-.altinstr_aux:00000000000025B1                 jnz     loc_1AF9
-.altinstr_aux:00000000000025B7                 jmp     loc_1C17
-
-So an extra push, and then that jmp gets nop'd out (I hope). Plus the
-altinstr area. I guess that's not awful, but I fail to see what we
-actually gain here over the existing code, which doesn't bother messing
-with this at runtime when the kernel builder opts out. The ifdef has
-always been there; what's the reason for adding it now in 2022?
-Virtualization cannot be it.
-
-Jason
+Thanks,
+Jiachen

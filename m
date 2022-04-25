@@ -2,34 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D94BE50E290
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:02:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8201C50E292
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:02:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238921AbiDYOFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 10:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54470 "EHLO
+        id S240057AbiDYOFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 10:05:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbiDYOFb (ORCPT
+        with ESMTP id S229557AbiDYOFb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 25 Apr 2022 10:05:31 -0400
 Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E447C8BF21;
-        Mon, 25 Apr 2022 07:02:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136078BF35;
+        Mon, 25 Apr 2022 07:02:26 -0700 (PDT)
 Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 146A022246;
-        Mon, 25 Apr 2022 16:02:22 +0200 (CEST)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 267B922248;
+        Mon, 25 Apr 2022 16:02:24 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1650895343;
+        t=1650895344;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=jp57dIVExTBYOFH5u8qjTvs5w4CxGPSFpn5RQoFRCE4=;
-        b=EqpkE5HtM8/VXMFbhvVPoirUhwzWMTMJAT1wrhnc+6NoVMyPk5q1oco/cfXkezkRWYofRy
-        J7/TGBZna99K2MQqUFAasg+ZN9STod4oo4gGfA/aQktce/B1nosGgGw0h/SyrLXJj0ZnaA
-        8cnWQHai0YuG9B2H4GaUPUljfIYxTQQ=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Zxpt+P2/TjbAsFLFo9zxjw6TUQFtzK8CrPo1AAgUn9I=;
+        b=JkkjRENvmm37PQILYRfSyk3KDcHOWnCUw5+wVDLkhGMfxR6Y6u2E3IyftnpRInVgLgHLlg
+        +clgR21tFwJOaOIaTOTFC6/UKeFJnAn1qdoBZ0o1kDr31Mjkvv6YjXRCbfay3ng3YaIEBI
+        wAtoYTC69BMGtZY4z9GCKQoLwupZNUY=
 From:   Michael Walle <michael@walle.cc>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
@@ -39,10 +40,12 @@ Cc:     Li Yang <leoyang.li@nxp.com>, Michael Walle <michael@walle.cc>,
         Marc Zyngier <maz@kernel.org>, linuxppc-dev@lists.ozlabs.org,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/2] dt-bindings: interrupt-controller: fsl,ls-extirq: convert to YAML
-Date:   Mon, 25 Apr 2022 16:02:13 +0200
-Message-Id: <20220425140214.32448-1-michael@walle.cc>
+Subject: [PATCH v2 2/2] dt-bindings: fsl: convert fsl,layerscape-scfg to YAML
+Date:   Mon, 25 Apr 2022 16:02:14 +0200
+Message-Id: <20220425140214.32448-2-michael@walle.cc>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220425140214.32448-1-michael@walle.cc>
+References: <20220425140214.32448-1-michael@walle.cc>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -54,179 +57,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the fsl,ls-extirq binding to the new YAML format.
+Convert the fsl,layerscape-scfg binding to the new YAML format.
 
-In contrast to the original binding documentation, there are three
-compatibles which are used in their corresponding device trees which
-have a specific compatible and the (already documented) fallback
-compatible:
- - "fsl,ls1046a-extirq", "fsl,ls1043a-extirq"
- - "fsl,ls2080a-extirq", "fsl,ls1088a-extirq"
- - "fsl,lx2160a-extirq", "fsl,ls1088a-extirq"
+In the device trees, the device node always have a "syscon"
+compatible, which wasn't mentioned in the previous binding.
+
+Also added, compared to the original binding, is the
+interrupt-controller subnode as used in arch/arm/boot/dts/ls1021a.dtsi
+as well as the litte-endian and big-endian properties.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
 ---
 changes since v1:
- - new patch, because it's reference in patch 2/2
+ - moved to soc/fsl/fsl,layerscape-scfg.yaml
+ - generic name for node in example
+ - mention added "syscon" compatible in commit message
+ - reference specific interrupt controller
 
- .../interrupt-controller/fsl,ls-extirq.txt    | 53 -----------
- .../interrupt-controller/fsl,ls-extirq.yaml   | 88 +++++++++++++++++++
- 2 files changed, 88 insertions(+), 53 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.txt
- create mode 100644 Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.yaml
+ .../arm/freescale/fsl,layerscape-scfg.txt     | 19 ------
+ .../bindings/soc/fsl/fsl,layerscape-scfg.yaml | 58 +++++++++++++++++++
+ 2 files changed, 58 insertions(+), 19 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/arm/freescale/fsl,layerscape-scfg.txt
+ create mode 100644 Documentation/devicetree/bindings/soc/fsl/fsl,layerscape-scfg.yaml
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.txt b/Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.txt
+diff --git a/Documentation/devicetree/bindings/arm/freescale/fsl,layerscape-scfg.txt b/Documentation/devicetree/bindings/arm/freescale/fsl,layerscape-scfg.txt
 deleted file mode 100644
-index 4d47df1a5c91..000000000000
---- a/Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.txt
+index 0ab67b0b216d..000000000000
+--- a/Documentation/devicetree/bindings/arm/freescale/fsl,layerscape-scfg.txt
 +++ /dev/null
-@@ -1,53 +0,0 @@
--* Freescale Layerscape external IRQs
+@@ -1,19 +0,0 @@
+-Freescale SCFG
 -
--Some Layerscape SOCs (LS1021A, LS1043A, LS1046A
--LS1088A, LS208xA, LX216xA) support inverting
--the polarity of certain external interrupt lines.
--
--The device node must be a child of the node representing the
--Supplemental Configuration Unit (SCFG).
+-SCFG is the supplemental configuration unit, that provides SoC specific
+-configuration and status registers for the chip. Such as getting PEX port
+-status.
 -
 -Required properties:
--- compatible: should be "fsl,<soc-name>-extirq", e.g. "fsl,ls1021a-extirq".
--  "fsl,ls1043a-extirq": for LS1043A, LS1046A.
--  "fsl,ls1088a-extirq": for LS1088A, LS208xA, LX216xA.
--- #interrupt-cells: Must be 2. The first element is the index of the
--  external interrupt line. The second element is the trigger type.
--- #address-cells: Must be 0.
--- interrupt-controller: Identifies the node as an interrupt controller
--- reg: Specifies the Interrupt Polarity Control Register (INTPCR) in
--  the SCFG or the External Interrupt Control Register (IRQCR) in
--  the ISC.
--- interrupt-map: Specifies the mapping from external interrupts to GIC
--  interrupts.
--- interrupt-map-mask: Must be <0xffffffff 0>.
+-  - compatible: Should contain a chip-specific compatible string,
+-	Chip-specific strings are of the form "fsl,<chip>-scfg",
+-	The following <chip>s are known to be supported:
+-	ls1012a, ls1021a, ls1043a, ls1046a, ls2080a.
+-
+-  - reg: should contain base address and length of SCFG memory-mapped registers
 -
 -Example:
 -	scfg: scfg@1570000 {
--		compatible = "fsl,ls1021a-scfg", "syscon";
+-		compatible = "fsl,ls1021a-scfg";
 -		reg = <0x0 0x1570000 0x0 0x10000>;
--		big-endian;
--		#address-cells = <1>;
--		#size-cells = <1>;
--		ranges = <0x0 0x0 0x1570000 0x10000>;
--
--		extirq: interrupt-controller@1ac {
--			compatible = "fsl,ls1021a-extirq";
--			#interrupt-cells = <2>;
--			#address-cells = <0>;
--			interrupt-controller;
--			reg = <0x1ac 4>;
--			interrupt-map =
--				<0 0 &gic GIC_SPI 163 IRQ_TYPE_LEVEL_HIGH>,
--				<1 0 &gic GIC_SPI 164 IRQ_TYPE_LEVEL_HIGH>,
--				<2 0 &gic GIC_SPI 165 IRQ_TYPE_LEVEL_HIGH>,
--				<3 0 &gic GIC_SPI 167 IRQ_TYPE_LEVEL_HIGH>,
--				<4 0 &gic GIC_SPI 168 IRQ_TYPE_LEVEL_HIGH>,
--				<5 0 &gic GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH>;
--			interrupt-map-mask = <0xffffffff 0x0>;
--		};
 -	};
--
--
--	interrupts-extended = <&gic GIC_SPI 88 IRQ_TYPE_LEVEL_HIGH>,
--			      <&extirq 1 IRQ_TYPE_LEVEL_LOW>;
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.yaml b/Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.yaml
+diff --git a/Documentation/devicetree/bindings/soc/fsl/fsl,layerscape-scfg.yaml b/Documentation/devicetree/bindings/soc/fsl/fsl,layerscape-scfg.yaml
 new file mode 100644
-index 000000000000..39d120ad7549
+index 000000000000..8d088b5fe823
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.yaml
-@@ -0,0 +1,88 @@
++++ b/Documentation/devicetree/bindings/soc/fsl/fsl,layerscape-scfg.yaml
+@@ -0,0 +1,58 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/interrupt-controller/fsl,ls-extirq.yaml#
++$id: http://devicetree.org/schemas/soc/fsl/fsl,layerscape-scfg.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Freescale Layerscape External Interrupt Controller
++title: Freescale Layerscape Supplemental Configuration Unit
 +
 +maintainers:
 +  - Shawn Guo <shawnguo@kernel.org>
 +  - Li Yang <leoyang.li@nxp.com>
 +
 +description: |
-+  Some Layerscape SOCs (LS1021A, LS1043A, LS1046A LS1088A, LS208xA,
-+  LX216xA) support inverting the polarity of certain external interrupt
-+  lines.
-+
-+allOf:
-+  - $ref: /schemas/interrupt-controller.yaml#
++  SCFG is the supplemental configuration unit, that provides SoC specific
++  configuration and status registers for the chip. Such as getting PEX port
++  status.
 +
 +properties:
 +  compatible:
-+    oneOf:
++    items:
 +      - enum:
-+          - fsl,ls1021a-extirq
-+          - fsl,ls1043a-extirq
-+          - fsl,ls1088a-extirq
-+      - items:
-+          - enum:
-+              - fsl,ls1046a-extirq
-+          - const: fsl,ls1043a-extirq
-+      - items:
-+          - enum:
-+              - fsl,ls2080a-extirq
-+              - fsl,lx2160a-extirq
-+          - const: fsl,ls1088a-extirq
-+
-+  '#interrupt-cells':
-+    const: 2
-+
-+  '#address-cells':
-+    const: 0
-+
-+  interrupt-controller: true
++          - fsl,ls1012a-scfg
++          - fsl,ls1021a-scfg
++          - fsl,ls1028a-scfg
++          - fsl,ls1043a-scfg
++          - fsl,ls1046a-scfg
++      - const: syscon
 +
 +  reg:
 +    maxItems: 1
-+    description:
-+      Specifies the Interrupt Polarity Control Register (INTPCR) in the
-+      SCFG or the External Interrupt Control Register (IRQCR) in the ISC.
 +
-+  interrupt-map:
-+    description: Specifies the mapping from external interrupts to GIC interrupts.
++  little-endian: true
++  big-endian: true
 +
-+  interrupt-map-mask:
-+    items:
-+      - const: 0xffffffff
-+      - const: 0
++  '#address-cells':
++    const: 1
++
++  '#size-cells':
++    const: 1
++
++  ranges: true
++
++patternProperties:
++  "^interrupt-controller@[a-z0-9]+$":
++    $ref: /schemas/interrupt-controller/fsl,ls-extirq.yaml#
 +
 +required:
 +  - compatible
-+  - '#interrupt-cells'
-+  - '#address-cells'
-+  - interrupt-controller
 +  - reg
-+  - interrupt-map
-+  - interrupt-map-mask
 +
 +additionalProperties: false
 +
 +examples:
 +  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    interrupt-controller@1ac {
-+            compatible = "fsl,ls1021a-extirq";
-+            #interrupt-cells = <2>;
-+            #address-cells = <0>;
-+            interrupt-controller;
-+            reg = <0x1ac 4>;
-+            interrupt-map =
-+                    <0 0 &gic GIC_SPI 163 IRQ_TYPE_LEVEL_HIGH>,
-+                    <1 0 &gic GIC_SPI 164 IRQ_TYPE_LEVEL_HIGH>,
-+                    <2 0 &gic GIC_SPI 165 IRQ_TYPE_LEVEL_HIGH>,
-+                    <3 0 &gic GIC_SPI 167 IRQ_TYPE_LEVEL_HIGH>,
-+                    <4 0 &gic GIC_SPI 168 IRQ_TYPE_LEVEL_HIGH>,
-+                    <5 0 &gic GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH>;
-+            interrupt-map-mask = <0xffffffff 0x0>;
++    syscon@1570000 {
++        compatible = "fsl,ls1021a-scfg", "syscon";
++        reg = <0x1570000 0x10000>;
 +    };
 -- 
 2.30.2

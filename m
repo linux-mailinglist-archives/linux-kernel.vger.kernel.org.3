@@ -2,139 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E67E050DC5A
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 11:20:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C5B50DC1A
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 11:10:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241569AbiDYJTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 05:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50112 "EHLO
+        id S241499AbiDYJN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 05:13:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241528AbiDYJSr (ORCPT
+        with ESMTP id S241548AbiDYJNB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 05:18:47 -0400
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A4E0DD5A;
-        Mon, 25 Apr 2022 02:15:42 -0700 (PDT)
-Received: by ajax-webmail-mail-app4 (Coremail) ; Mon, 25 Apr 2022 17:09:34
- +0800 (GMT+08:00)
-X-Originating-IP: [10.190.64.42]
-Date:   Mon, 25 Apr 2022 17:09:34 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   duoming@zju.edu.cn
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        broonie@kernel.org, akpm@linux-foundation.org,
-        alexander.deucher@amd.com, gregkh@linuxfoundation.org,
-        davem@davemloft.net, linma@zju.edu.cn
-Subject: Re: Re: [PATCH] drivers: nfc: nfcmrvl: reorder destructive
- operations in nfcmrvl_nci_unregister_dev to avoid bugs
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <d7aefec5-a51d-00ba-10d6-79c90fbc8eb4@linaro.org>
-References: <20220425031002.56254-1-duoming@zju.edu.cn>
- <d7aefec5-a51d-00ba-10d6-79c90fbc8eb4@linaro.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Mon, 25 Apr 2022 05:13:01 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D548C9B69;
+        Mon, 25 Apr 2022 02:09:58 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id fu34so9854893qtb.8;
+        Mon, 25 Apr 2022 02:09:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fxgLQ1soDdNo6GOHgPvluqBZIfBwx/V3C+hOxuZtNW8=;
+        b=BtwHxyPpct0J/94b6H6JFnfA626J0AL2B34MiNkgVl/GmKQdL0t7FSK6PAhiLi7Km6
+         h876ttC1XBP68qbB3vc4+a93XEN5R9ZwU/dKsbGptAD3v+11FS+3wniG62kH+RdmoDLV
+         zt79dPL4a8c0YUu3WvbCSchqL2EyqvClNf4zAlgruLcHdamP2Ll6euQm5p7yAKi7Sw1v
+         ZmGYY9bmlAHDsDAXexFR8zv64kfP9DKxxg5/uOZ9egdrB98PmSnG8LKTl2pX7fYdU+wR
+         a4tqIPxNnHfzca27KN5WaSkZCNc9OkxMXrTysh5MHJupPxFOXcAGmz2Dq4xmkElk+UDO
+         2Gvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fxgLQ1soDdNo6GOHgPvluqBZIfBwx/V3C+hOxuZtNW8=;
+        b=pVA0M82VWdSIBRcNek1JU8JYUA+Fnp9Wt5v9db4WikuviSI10BK436uV9qNxr4yCuB
+         L8YrZz76h4nrog6im5aKr1/psINAzjyF+aSX6BvaRtySy1nxNtaa63RSMY7WsI0wuGkR
+         zcghAzHRhT4FZI7Vf7OeAI5IPsL+OT0dk5B9OKD6mJD7vstVyUnE6Z1BIeViq25Cbj1W
+         /09bhMQdku9FCFJZlaXXnYKoNq9zT0duevQnpwyJ/PAi7JrOxBoEPbxu4bsdD+IQ+hqL
+         Gzxg2F0X4bbSKI8XfelhAwz3oJktaYg0wD9zEJWxNGESI/3sj3jPQ0A5V1ADrr8tS5f4
+         5hBw==
+X-Gm-Message-State: AOAM533tcAmOhoQiZdjw4qYgIe6V26T9l/7gECbODmrK7GtnrRH2LIlb
+        f5rVNZSXxrhktqQPXNRGwFzpP850GuI=
+X-Google-Smtp-Source: ABdhPJwBdVMVBLRA8VCjJ4w1pDSTXYa39d9cefp0lgq6pG4EAjTTfJBWbxdQxFOYYMlZhszBt2D22w==
+X-Received: by 2002:a05:622a:100a:b0:2f3:391c:3ce6 with SMTP id d10-20020a05622a100a00b002f3391c3ce6mr11187185qte.351.1650877797522;
+        Mon, 25 Apr 2022 02:09:57 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id y189-20020a37afc6000000b0069ede17247csm4799225qke.86.2022.04.25.02.09.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 02:09:57 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: lv.ruyi@zte.com.cn
+To:     robdclark@gmail.com, sean@poorly.run
+Cc:     quic_abhinavk@quicinc.com, airlied@linux.ie, daniel@ffwll.ch,
+        dmitry.baryshkov@linaro.org, swboyd@chromium.org,
+        bjorn.andersson@linaro.org,
+        angelogioacchino.delregno@somainline.org, tiny.windzz@gmail.com,
+        architt@codeaurora.org, jsanka@codeaurora.org,
+        skolluku@codeaurora.org, ryadav@codeaurora.org,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] drm/msm/dpu: fix error check return value of irq_of_parse_and_map()
+Date:   Mon, 25 Apr 2022 09:09:47 +0000
+Message-Id: <20220425090947.3498897-1-lv.ruyi@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Message-ID: <1ce1ec63.1b911.1805ffbb915.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cS_KCgAXGfBOZWZi5gPCAQ--.61012W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgwLAVZdtZZGlAADs9
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8sCgpPbiBNb24sIDI1IEFwciAyMDIyIDA5OjU5OjMyICswMjAwIEtyenlzenRvZiB3cm90
-ZToKCj4gPiBUaGVyZSBhcmUgZGVzdHJ1Y3RpdmUgb3BlcmF0aW9ucyBzdWNoIGFzIG5mY21ydmxf
-ZndfZG5sZF9hYm9ydCBhbmQKPiA+IGdwaW9fZnJlZSBpbiBuZmNtcnZsX25jaV91bnJlZ2lzdGVy
-X2Rldi4gVGhlIHJlc291cmNlcyBzdWNoIGFzIGZpcm13YXJlLAo+ID4gZ3BpbyBhbmQgc28gb24g
-Y291bGQgYmUgZGVzdHJ1Y3RlZCB3aGlsZSB0aGUgdXBwZXIgbGF5ZXIgZnVuY3Rpb25zIHN1Y2gg
-YXMKPiA+IG5mY21ydmxfZndfZG5sZF9zdGFydCBhbmQgbmZjbXJ2bF9uY2lfcmVjdl9mcmFtZSBp
-cyBleGVjdXRpbmcsIHdoaWNoIGxlYWRzCj4gPiB0byBkb3VibGUtZnJlZSwgdXNlLWFmdGVyLWZy
-ZWUgYW5kIG51bGwtcHRyLWRlcmVmIGJ1Z3MuCj4gCj4gWW91IG5lZWQgdG8gY29ycmVjdCB0aGUg
-c3ViamVjdCBwcmVmaXggYmVjYXVzZSBpdCBkb2VzIG5vdCBkZXNjcmliZSB0aGUKPiBzdWJzeXN0
-ZW0gKGdpdCBsb2cgb25lbGluZSAtLSkuCgpJIHdpbGwgY2hhbmdlIHRoZSBzdWJqZWN0IHByZWZp
-eCB0byAibmZjOiBuZmNtcnZsOiB1YXJ0OiAiLgoKPiA+IAo+ID4gVGhlcmUgYXJlIHRocmVlIHNp
-dHVhdGlvbnMgdGhhdCBjb3VsZCBsZWFkIHRvIGRvdWJsZS1mcmVlIGJ1Z3MuCj4gPiAKPiA+IFRo
-ZSBmaXJzdCBzaXR1YXRpb24gaXMgc2hvd24gYmVsb3c6Cj4gPiAKPiA+ICAgIChUaHJlYWQgMSkg
-ICAgICAgICAgICAgICAgIHwgICAgICAoVGhyZWFkIDIpCj4gPiBuZmNtcnZsX2Z3X2RubGRfc3Rh
-cnQgICAgICAgICB8Cj4gPiAgLi4uICAgICAgICAgICAgICAgICAgICAgICAgICB8ICBuZmNtcnZs
-X25jaV91bnJlZ2lzdGVyX2Rldgo+ID4gIHJlbGVhc2VfZmlybXdhcmUoKSAgICAgICAgICAgfCAg
-IG5mY21ydmxfZndfZG5sZF9hYm9ydAo+ID4gICBrZnJlZShmdykgLy8oMSkgICAgICAgICAgICAg
-fCAgICBmd19kbmxkX292ZXIKPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAg
-IHJlbGVhc2VfZmlybXdhcmUKPiA+ICAgLi4uICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAg
-ICBrZnJlZShmdykgLy8oMikKPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAg
-IC4uLgo+ID4gCj4gPiBUaGUgc2Vjb25kIHNpdHVhdGlvbiBpcyBzaG93biBiZWxvdzoKPiA+IAo+
-ID4gICAgKFRocmVhZCAxKSAgICAgICAgICAgICAgICAgfCAgICAgIChUaHJlYWQgMikKPiA+IG5m
-Y21ydmxfZndfZG5sZF9zdGFydCAgICAgICAgIHwKPiA+ICAuLi4gICAgICAgICAgICAgICAgICAg
-ICAgICAgIHwKPiA+ICBtb2RfdGltZXIgICAgICAgICAgICAgICAgICAgIHwKPiA+ICAod2FpdCBh
-IHRpbWUpICAgICAgICAgICAgICAgIHwKPiA+ICBmd19kbmxkX3RpbWVvdXQgICAgICAgICAgICAg
-IHwgIG5mY21ydmxfbmNpX3VucmVnaXN0ZXJfZGV2Cj4gPiAgICBmd19kbmxkX292ZXIgICAgICAg
-ICAgICAgICB8ICAgbmZjbXJ2bF9md19kbmxkX2Fib3J0Cj4gPiAgICAgcmVsZWFzZV9maXJtd2Fy
-ZSAgICAgICAgICB8ICAgIGZ3X2RubGRfb3Zlcgo+ID4gICAgICBrZnJlZShmdykgLy8oMSkgICAg
-ICAgICAgfCAgICAgcmVsZWFzZV9maXJtd2FyZQo+ID4gICAgICAuLi4gICAgICAgICAgICAgICAg
-ICAgICAgfCAgICAgIGtmcmVlKGZ3KSAvLygyKQo+ID4gCj4gPiBUaGUgdGhpcmQgc2l0dWF0aW9u
-IGlzIHNob3duIGJlbG93Ogo+ID4gCj4gPiAgICAgICAgKFRocmVhZCAxKSAgICAgICAgICAgICAg
-IHwgICAgICAgKFRocmVhZCAyKQo+ID4gbmZjbXJ2bF9uY2lfcmVjdl9mcmFtZSAgICAgICAgICB8
-Cj4gPiAgaWYoLi4tPmZ3X2Rvd25sb2FkX2luX3Byb2dyZXNzKXwKPiA+ICAgbmZjbXJ2bF9md19k
-bmxkX3JlY3ZfZnJhbWUgICAgfAo+ID4gICAgcXVldWVfd29yayAgICAgICAgICAgICAgICAgICB8
-Cj4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwKPiA+IGZ3X2RubGRfcnhfd29y
-ayAgICAgICAgICAgICAgICAgfCBuZmNtcnZsX25jaV91bnJlZ2lzdGVyX2Rldgo+ID4gIGZ3X2Ru
-bGRfb3ZlciAgICAgICAgICAgICAgICAgICB8ICBuZmNtcnZsX2Z3X2RubGRfYWJvcnQKPiA+ICAg
-cmVsZWFzZV9maXJtd2FyZSAgICAgICAgICAgICAgfCAgIGZ3X2RubGRfb3Zlcgo+ID4gICAga2Zy
-ZWUoZncpIC8vKDEpICAgICAgICAgICAgICB8ICAgIHJlbGVhc2VfZmlybXdhcmUKPiA+ICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgICAga2ZyZWUoZncpIC8vKDIpCj4gPiAKPiA+
-IFRoZSBmaXJtd2FyZSBzdHJ1Y3QgaXMgZGVhbGxvY2F0ZWQgaW4gcG9zaXRpb24gKDEpIGFuZCBk
-ZWFsbG9jYXRlZAo+ID4gaW4gcG9zaXRpb24gKDIpIGFnYWluLgo+ID4gCj4gPiBUaGUgY3Jhc2gg
-dHJhY2UgdHJpZ2dlcmVkIGJ5IFBPQyBpcyBsaWtlIGJlbG93Ogo+ID4gCj4gPiBbICAxMjIuNjQw
-NDU3XSBCVUc6IEtBU0FOOiBkb3VibGUtZnJlZSBvciBpbnZhbGlkLWZyZWUgaW4gZndfZG5sZF9v
-dmVyKzB4MjgvMHhmMAo+ID4gWyAgMTIyLjY0MDQ1N10gQ2FsbCBUcmFjZToKPiA+IFsgIDEyMi42
-NDA0NTddICA8VEFTSz4KPiA+IFsgIDEyMi42NDA0NTddICBrZnJlZSsweGIwLzB4MzMwCj4gPiBb
-ICAxMjIuNjQwNDU3XSAgZndfZG5sZF9vdmVyKzB4MjgvMHhmMAo+ID4gWyAgMTIyLjY0MDQ1N10g
-IG5mY21ydmxfbmNpX3VucmVnaXN0ZXJfZGV2KzB4NjEvMHg3MAo+ID4gWyAgMTIyLjY0MDQ1N10g
-IG5jaV91YXJ0X3R0eV9jbG9zZSsweDg3LzB4ZDAKPiA+IFsgIDEyMi42NDA0NTddICB0dHlfbGRp
-c2Nfa2lsbCsweDNlLzB4ODAKPiA+IFsgIDEyMi42NDA0NTddICB0dHlfbGRpc2NfaGFuZ3VwKzB4
-MWIyLzB4MmMwCj4gPiBbICAxMjIuNjQwNDU3XSAgX190dHlfaGFuZ3VwLnBhcnQuMCsweDMxNi8w
-eDUyMAo+ID4gWyAgMTIyLjY0MDQ1N10gIHR0eV9yZWxlYXNlKzB4MjAwLzB4NjcwCj4gPiBbICAx
-MjIuNjQwNDU3XSAgX19mcHV0KzB4MTEwLzB4NDEwCj4gPiBbICAxMjIuNjQwNDU3XSAgdGFza193
-b3JrX3J1bisweDg2LzB4ZDAKPiA+IFsgIDEyMi42NDA0NTddICBleGl0X3RvX3VzZXJfbW9kZV9w
-cmVwYXJlKzB4MWFhLzB4MWIwCj4gPiBbICAxMjIuNjQwNDU3XSAgc3lzY2FsbF9leGl0X3RvX3Vz
-ZXJfbW9kZSsweDE5LzB4NTAKPiA+IFsgIDEyMi42NDA0NTddICBkb19zeXNjYWxsXzY0KzB4NDgv
-MHg5MAo+ID4gWyAgMTIyLjY0MDQ1N10gIGVudHJ5X1NZU0NBTExfNjRfYWZ0ZXJfaHdmcmFtZSsw
-eDQ0LzB4YWUKPiA+IFsgIDEyMi42NDA0NTddIFJJUDogMDAzMzoweDdmNjg0MzNmNmJlYgo+ID4g
-Cj4gPiBXaGF0J3MgbW9yZSwgdGhlcmUgYXJlIGFsc28gdXNlLWFmdGVyLWZyZWUgYW5kIG51bGwt
-cHRyLWRlcmVmIGJ1Z3MKPiA+IGluIG5mY21ydmxfZndfZG5sZF9zdGFydC4gSWYgd2UgZGVhbGxv
-Y2F0ZSBmaXJtd2FyZSBzdHJ1Y3QsIGdwaW8gb3IKPiA+IHNldCBudWxsIHRvIHRoZSBtZW1iZXJz
-IG9mIHByaXYtPmZ3X2RubGQgaW4gbmZjbXJ2bF9uY2lfdW5yZWdpc3Rlcl9kZXYsCj4gPiB0aGVu
-LCB3ZSBkZXJlZmVyZW5jZSBmaXJtd2FyZSwgZ3BpbyBvciB0aGUgbWVtYmVycyBvZiBwcml2LT5m
-d19kbmxkIGluCj4gPiBuZmNtcnZsX2Z3X2RubGRfc3RhcnQsIHRoZSBVQUYgb3IgTlBEIGJ1Z3Mg
-d2lsbCBoYXBwZW4uCj4gPiAKPiA+IFRoaXMgcGF0Y2ggcmVvcmRlcnMgZGVzdHJ1Y3RpdmUgb3Bl
-cmF0aW9ucyBhZnRlciBuY2lfdW5yZWdpc3Rlcl9kZXZpY2UKPiA+IHRvIGF2b2lkIHRoZSBkb3Vi
-bGUtZnJlZSwgVUFGIGFuZCBOUEQgYnVncywgYXMgbmNpX3VucmVnaXN0ZXJfZGV2aWNlCj4gPiBp
-cyB3ZWxsIHN5bmNocm9uaXplZCBhbmQgd29uJ3QgcmV0dXJuIGlmIHRoZXJlIGlzIGEgcnVubmlu
-ZyByb3V0aW5lLgo+ID4gVGhpcyB3YXMgbWVudGlvbmVkIGluIGNvbW1pdCAzZTNiNWRmY2QxNmEg
-KCJORkM6IHJlb3JkZXIgdGhlIGxvZ2ljIGluCj4gPiBuZmNfe3VuLH1yZWdpc3Rlcl9kZXZpY2Ui
-KS4KPiA+IAo+ID4gRml4ZXM6IDMxOTRjNjg3MDE1OCAoIk5GQzogbmZjbXJ2bDogYWRkIGZpcm13
-YXJlIGRvd25sb2FkIHN1cHBvcnQiKQo+ID4gU2lnbmVkLW9mZi1ieTogRHVvbWluZyBaaG91IDxk
-dW9taW5nQHpqdS5lZHUuY24+Cj4gPiBSZXZpZXdlZC1ieTogTGluIE1hIDxsaW5tYUB6anUuZWR1
-LmNuPgo+IAo+IEl0J3MgdGhlIGZpcnN0IHN1Ym1pc3Npb24sIGhvdyB0aGlzIHJldmlldyBhcHBl
-YXJlZD8KCkkgd2lsbCByZW1vdmUgdGhlIHJldmlldyB0YWcuCgo+IE9uIHRoZSBvdGhlciBoYW5k
-LCB5b3UgYWxyZWFkeSBzZW50IHNvbWV0aGluZyBzaW1pbGFyLCBzbyBpcyBpdCBhIHYyPyBJCj4g
-YW0gc29ycnkgYnV0IHRoaXMgaXMgdmVyeSBjb25mdXNpbmcuIExvb2tzIGxpa2UKPiBodHRwczov
-L2xvcmUua2VybmVsLm9yZy9hbGwvMjAyMjA0MjUwMDU3MTguMzM2MzktMS1kdW9taW5nQHpqdS5l
-ZHUuY24vCj4gYnV0IHRoZXJlIGlzIG5vIGNoYW5nZWxvZyBhbmQgY29tbWl0IGRlc2NyaXB0aW9u
-IGlzIGRpZmZlcmVudC4KCkkgYW0gc29ycnkgdGhlIGFib3ZlIGxpbmsgaXMganVzdCBhIHRlc3Qs
-IEkgZm9yZ2V0IHRvIHJlbW92ZSAiQ2M6IHN0YWJsZUB2Z2VyLmtlcm5lbC5vcmciLgoKPiBQbGVh
-c2UgcmVhZDoKPiBodHRwczovL2VsaXhpci5ib290bGluLmNvbS9saW51eC92NS4xOC1yYzQvc291
-cmNlL0RvY3VtZW50YXRpb24vcHJvY2Vzcy9zdWJtaXR0aW5nLXBhdGNoZXMucnN0Cj4gCgpJIHdp
-bGwgc2VuZCAiW1BBVENIIG5ldCBWMl0gbmZjOiBuZmNtcnZsOiB1YXJ0OiByZW9yZGVyIGRlc3Ry
-dWN0aXZlIG9wZXJhdGlvbnMgaW4gbmZjbXJ2bF9uY2lfdW5yZWdpc3Rlcl9kZXYgdG8gYXZvaWQg
-YnVncyIuCgpCZXN0IHJlZ2FyZHMsCkR1b21pbmcgWmhvdQ==
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
+
+The irq_of_parse_and_map() function returns 0 on failure, and does not
+return a negative value anyhow, so never enter this conditional branch.
+
+Fixes: 25fdd5933e4c ("drm/msm: Add SDM845 DPU support")
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+---
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+index e29796c4f27b..36eeeae7fe45 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+@@ -1187,9 +1187,9 @@ struct msm_kms *dpu_kms_init(struct drm_device *dev)
+ 	dpu_kms = to_dpu_kms(priv->kms);
+ 
+ 	irq = irq_of_parse_and_map(dpu_kms->pdev->dev.of_node, 0);
+-	if (irq < 0) {
+-		DPU_ERROR("failed to get irq: %d\n", irq);
+-		return ERR_PTR(irq);
++	if (!irq) {
++		DPU_ERROR("failed to get irq\n");
++		return ERR_PTR(-EINVAL);
+ 	}
+ 	dpu_kms->base.irq = irq;
+ 
+-- 
+2.25.1
+

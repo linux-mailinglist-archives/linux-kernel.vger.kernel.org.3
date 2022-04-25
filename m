@@ -2,44 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57A1F50DBFA
+	by mail.lfdr.de (Postfix) with ESMTP id 0EC3550DBF9
 	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 11:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240869AbiDYJGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 05:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42478 "EHLO
+        id S240951AbiDYJHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 05:07:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241455AbiDYJGG (ORCPT
+        with ESMTP id S241263AbiDYJGw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 05:06:06 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F3933A713
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 02:01:42 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EF6AA11FB;
-        Mon, 25 Apr 2022 02:01:25 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0F8F83F73B;
-        Mon, 25 Apr 2022 02:01:23 -0700 (PDT)
-Message-ID: <05c87803-59d3-2b3f-80ab-47b418c3f10f@arm.com>
-Date:   Mon, 25 Apr 2022 11:01:14 +0200
+        Mon, 25 Apr 2022 05:06:52 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5420E3B3DC;
+        Mon, 25 Apr 2022 02:02:02 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id x18so19871020wrc.0;
+        Mon, 25 Apr 2022 02:02:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9t0HgoYfqKZIbnosS9/A6elnAUUEJHQis7OqIO8CjYM=;
+        b=jEX7v0HF7e+RNysnH8IwY2eiHAH7j0itFrYEU9tR8vc4jupq9quEZ9Z0Rs8qZvrdMM
+         DXBCcQBJRc+6vxKA636VhIoqhRqZL5hYnuW+Wbsp2jWjzVX5T2My7pmkAWdVH+rbISHM
+         3TYBSGsBPO8N3l2eT8SHav7FqfnOq/q0HYwGNcX+WEELqKhqORdcsljwQi9bVsKYBqde
+         M7sUGlpvZo8Re2YiIHzdG//i5EQWKCuRXhoAS3pfXOscpBwtf31zkCdIu9UrzP7NqHuu
+         HXaK36Ye+oNYg3ZvuaS0n/E+gmOBXvtH2LjsGCmzh6dCIKdLNm7+OfZKWEHXT1uKf2/w
+         JfJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9t0HgoYfqKZIbnosS9/A6elnAUUEJHQis7OqIO8CjYM=;
+        b=qAC5KXNszQGvYhedNj49/TcdcR5RJS0Dn2S7IJD0HBbdMFi59tv1f/vT5qP6T7T9hf
+         ZiDcy5GWbZMxFv4bDdJuV7D9sXRhXq0LEtML2xyd5PouJRkq3kaeE7FpLwLxU2qG2twR
+         NCW49knVAotMXwecqi/VSrmKXlvqMLXDmvkwJqvZyOW50p0UlAwQjv/BQoZUja7VnWqr
+         BHrgl/gFshQcvlVT8gV0pkLbis5nXsjbiP0KP/8KDJjYsRXHIf2ZZPzc81FrfEFLPshJ
+         oH7M0lWcmzAnxwc/qSeQ3pxq1RfzvIkKn9VvgWTWhoBVG3RkoMZdRxJX5WT6QJBdJiTW
+         1FsA==
+X-Gm-Message-State: AOAM530nf2ex4b6NZrP4p3CI7+vR3ykGyPFfiAanZoWAvtqSfndlJKAc
+        +la6AdjC6GEU6CSmVVehRsDDF5rDnDBM9g==
+X-Google-Smtp-Source: ABdhPJxhhXFOV4O8t4UT6CiS5ozM8qdiTViUASxd0Me3fCLBcNOlbxYsmFSgBUMuN8Qnv+OdFxmM3w==
+X-Received: by 2002:a5d:4882:0:b0:207:97dd:111c with SMTP id g2-20020a5d4882000000b0020797dd111cmr14047154wrq.115.1650877320109;
+        Mon, 25 Apr 2022 02:02:00 -0700 (PDT)
+Received: from [192.168.0.210] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.googlemail.com with ESMTPSA id m7-20020adfe0c7000000b002060e7bbe49sm9966505wri.45.2022.04.25.02.01.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Apr 2022 02:01:59 -0700 (PDT)
+Message-ID: <097f369b-3f3c-9eb6-a446-24f46e4ec59f@gmail.com>
+Date:   Mon, 25 Apr 2022 10:01:58 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] sched/fair: Fix decision matrix of type misfit_task
+ Thunderbird/91.7.0
+Subject: Re: ctcm: rename READ/WRITE defines to avoid redefinitions
 Content-Language: en-US
-To:     zgpeng <zgpeng.linux@gmail.com>, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, rostedt@goodmis.org,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        linux-kernel@vger.kernel.org
-References: <1650787010-8701-1-git-send-email-zgpeng@tencent.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <1650787010-8701-1-git-send-email-zgpeng@tencent.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+To:     Alexandra Winter <wintera@linux.ibm.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        linux-s390@vger.kernel.org,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <ae612043-0252-e8c3-0773-912f116421c1@gmail.com>
+ <3572a765-17b4-b2df-e3d5-0d30485c4c67@linux.ibm.com>
+From:   "Colin King (gmail)" <colin.i.king@gmail.com>
+In-Reply-To: <3572a765-17b4-b2df-e3d5-0d30485c4c67@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,33 +81,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/04/2022 09:56, zgpeng wrote:
-> When the group type of the busiest is misfit_task, as
-> long as the type of the local group is not equal to
-> has_spare, those situation already filtered while
-> updating statistics.
+On 25/04/2022 09:38, Alexandra Winter wrote:
 > 
-> Signed-off-by: zgpeng <zgpeng@tencent.com>
-> Reviewed-by: Samuel Liao <samuelliao@tencent.com>
-> ---
->  kernel/sched/fair.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index d4bd299..b8c67e7 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -9495,7 +9495,7 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
->   * busiest \ local has_spare fully_busy misfit asym imbalanced overloaded
->   * has_spare        nr_idle   balanced   N/A    N/A  balanced   balanced
->   * fully_busy       nr_idle   nr_idle    N/A    N/A  balanced   balanced
-> - * misfit_task      force     N/A        N/A    N/A  force      force
-> + * misfit_task      force     N/A        N/A    N/A  N/A        N/A
->   * asym_packing     force     force      N/A    N/A  force      force
->   * imbalanced       force     force      N/A    N/A  force      force
->   * overloaded       force     force      N/A    N/A  force      avg_load
+> On 24.04.22 20:58, Colin King (gmail) wrote:
+>> Hi,
+>>
+>> static analysis with cppcheck detected a potential null pointer deference with the following commit:
+>>
+>> commit 3c09e2647b5e1f1f9fd383971468823c2505e1b0
+>> Author: Ursula Braun <ursula.braun@de.ibm.com>
+>> Date:   Thu Aug 12 01:58:28 2010 +0000
+>>
+>>      ctcm: rename READ/WRITE defines to avoid redefinitions
+>>
+>>
+>> The analysis is as follows:
+>>
+>> drivers/s390/net/ctcm_sysfs.c:43:8: note: Assuming that condition 'priv' is not redundant
+>>   if (!(priv && priv->channel[CTCM_READ] && ndev)) {
+>>         ^
+>> drivers/s390/net/ctcm_sysfs.c:42:9: note: Null pointer dereference
+>>   ndev = priv->channel[CTCM_READ]->netdev;
+>>
+>> The code in question is as follows:
+>>
+>>          ndev = priv->channel[CTCM_READ]->netdev;
+>>
+>>          ^^ priv may be null, as per check below but it is being dereferenced when assigning ndev
+>>
+>>          if (!(priv && priv->channel[CTCM_READ] && ndev)) {
+>>                  CTCM_DBF_TEXT(SETUP, CTC_DBF_ERROR, "bfnondev");
+>>                  return -ENODEV;
+>>          }
+>>
+>> Colin
+> 
+> Thank you very much for reporting this, we will provide a patch.
 
-This issue has been sorted. Patch from Tao Zhou <tao.zhou@linux.dev> is
-already on tip sched/core.
+Thanks for working on a fix. Much appreciated.
 
-https://lkml.kernel.org/r/165062326028.4207.17060214721845047142.tip-bot2@tip-bot2
+> 
+> Do you have any special requests for the Reported-by flag? Or is
+> Reported-by: Colin King (gmail) <colin.i.king@gmail.com>
+> fine with you?
+> 
+
+Can I have:
+
+Reported by: Colin Ian King <colin.i.king@gmail.com>
+
+Thank you!
+
+Colin
+
+> Kind regards
+> Alexandra
+

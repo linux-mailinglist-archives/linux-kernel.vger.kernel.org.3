@@ -2,214 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD0B850DA16
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 09:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0229450DA17
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 09:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236435AbiDYHag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 03:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47340 "EHLO
+        id S229728AbiDYHaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 03:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236638AbiDYHaV (ORCPT
+        with ESMTP id S236435AbiDYHaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 03:30:21 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FCE7649
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 00:27:16 -0700 (PDT)
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23P4eJYK002375;
-        Mon, 25 Apr 2022 07:27:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=u1UT4CUxd/YYFOMSOf/exDLoJmvo9HMj2jhqr5BX2UA=;
- b=eKgsore+6intfYeqAMNACX+VvMDB9KSUWlNtDlMLlgXRfmeAnmCICpKiQjzIlWXL5reC
- FKJYNZMK/jjMO/WKheNVl0Glh+NPNP3Qa45dqqeiWMVFcSm2Xqye4vHdR0P3yFEOEYVM
- R25E7aeilUykt/+yHAaXiFRKJHBKuwqS8XLblVZ7EQPCa5cTEiPxR1P4l7ay/d97pJkI
- ZGnp8r6D5ADbQpCqvTyRR6j/RbfvRu32x2DKqfHPJXjYNMUilN5OBm/okv19ovs/KY+9
- Kr/TfY0hJjuZJ17G4/r/dVscTZY7nZKac42REnwlhLCLeXXdcPXWfquMBea5y0R4eS48 Jg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fmu3k2mu2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Apr 2022 07:27:07 +0000
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23P70uD2013338;
-        Mon, 25 Apr 2022 07:27:06 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fmu3k2mtk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Apr 2022 07:27:06 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23P79HeN028341;
-        Mon, 25 Apr 2022 07:27:04 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06ams.nl.ibm.com with ESMTP id 3fm8qj1ykj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Apr 2022 07:27:04 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23P7E3Zq35389700
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 25 Apr 2022 07:14:03 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4201242042;
-        Mon, 25 Apr 2022 07:27:02 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7D48D42041;
-        Mon, 25 Apr 2022 07:26:58 +0000 (GMT)
-Received: from li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com (unknown [9.43.47.198])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Mon, 25 Apr 2022 07:26:58 +0000 (GMT)
-Date:   Mon, 25 Apr 2022 12:56:51 +0530
-From:   Jagdish Gediya <jvgediya@linux.ibm.com>
-To:     "ying.huang@intel.com" <ying.huang@intel.com>
-Cc:     Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Greg Thelen <gthelen@google.com>,
-        MichalHocko <mhocko@kernel.org>,
-        Brice Goglin <brice.goglin@gmail.com>
-Subject: Re: [PATCH v2 0/5] mm: demotion: Introduce new node state
- N_DEMOTION_TARGETS
-Message-ID: <YmZNO3Ec+yhP+xvJ@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
-References: <CAAPL-u-aeceXFUNdok_GYb2aLhZa0zBBuSqHxFznQob3PbJt7Q@mail.gmail.com>
- <a80647053bba44623094995730e061f0e6129677.camel@intel.com>
- <CAAPL-u89Jxutu1VH0LnO5VGdMbkLvc2M9eapuwP-y9oG9QSsrA@mail.gmail.com>
- <610ccaad03f168440ce765ae5570634f3b77555e.camel@intel.com>
- <CAAPL-u9ktM82zAW_OVwqTmQsr-XC8XOPmAsjoiCLo18cxUWA=A@mail.gmail.com>
- <8e31c744a7712bb05dbf7ceb2accf1a35e60306a.camel@intel.com>
- <CAAPL-u9uP+FUh7Yn0ByOECo+EP32ZABnCvNPKQB9JCA68VHEqQ@mail.gmail.com>
- <78b5f4cfd86efda14c61d515e4db9424e811c5be.camel@intel.com>
- <YmKKwXa2XI/nwac0@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
- <200e95cf36c1642512d99431014db8943fed715d.camel@intel.com>
+        Mon, 25 Apr 2022 03:30:18 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B67767D
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 00:27:13 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id q8so1899078plx.3
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 00:27:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=rxyP1rA1NVCKi+Fqd9RTEgWTAs6MpVuSe+By3MBiK+g=;
+        b=uhHdnNiHGlo6+p+WxcM0C9NfBcZ1yMZ4ZL8lPJjCqFO59XftyiBXmxLnJ4x/8IHesk
+         Iz/e+72c+hpYYtSkpN9st79ktLRdF9ucEIcsSZFrJz8zW/33b/zII36XFlgftlgRt/Rn
+         NcV0nn+GcFItTljdcQkhhruORyaimT8Hcjdf+33DifIdLTWHRc7f4BBjOpmEow9TxUAk
+         H3AoQBVj8pg7peGOZ40pMWJPb4v77MByQ/hq2wnaWxWmitojdTlAcivhdbQ8eALivIcc
+         CxsiobTeJA1GwrggCLqf/tliVYwpbUOcyyC+5xohbYhPGazYOIMkwv+sGtPOlvneNaO1
+         ub6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=rxyP1rA1NVCKi+Fqd9RTEgWTAs6MpVuSe+By3MBiK+g=;
+        b=QRv7FMQS9nvA03GXabUGUN+r2UrN49dpeHpSET1gHoZTHekJDWEX+BnbFK9gQx1fWA
+         5eM0GGhzIUJxATXQuU7dBRvNaXyn8/YMDgBRuY13a2S3xgVpoETOvinrbauL+G9RBuhX
+         IfR9NabAN+u97K11VNbQZ5kaB3fufxeRvdIEmkANsEKEPaCwCxT6MYJhA1oXZ7q/T7U2
+         DqWV407i+rlS/p1ir8HFoTk/hbogYSxSFRXMSfETKQ2iKFC69Dsph9o9ZyybM+rBd47S
+         K+36CPxu7uzJkamN8YIARnHvXuPyfwHfm4hO0LC9ulvRyGUDug3/XJ0nls9dzFyOElow
+         uGHA==
+X-Gm-Message-State: AOAM533baGVUZXrh14TLIXbZ7dcVd6XnSNdjuZ9hZuBmFfYSqqnkGyOp
+        XwFLsjHvAEJ+1pzeWnGqD0qP7Q==
+X-Google-Smtp-Source: ABdhPJxE5RcvTjEYwI71Iu772xtRFctxCEAFvy9tKFHoG9lHlSKr+lSmvTHqmcMFobuMjeZomF3jKA==
+X-Received: by 2002:a17:90b:3b46:b0:1c7:9ca8:a19e with SMTP id ot6-20020a17090b3b4600b001c79ca8a19emr29586651pjb.245.1650871632716;
+        Mon, 25 Apr 2022 00:27:12 -0700 (PDT)
+Received: from localhost ([122.171.250.232])
+        by smtp.gmail.com with ESMTPSA id p4-20020a637404000000b00375948e63d6sm8596664pgc.91.2022.04.25.00.27.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 00:27:12 -0700 (PDT)
+Date:   Mon, 25 Apr 2022 12:57:10 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [RFC PATCH v2 4/6] PM: opp: allow control of multiple clocks
+Message-ID: <20220425072710.v6gwo4gu3aouezg4@vireshk-i7>
+References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
+ <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <200e95cf36c1642512d99431014db8943fed715d.camel@intel.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: H2_R4E_GrH1eKUI8sMbLSOf6PSJVSiT1
-X-Proofpoint-ORIG-GUID: WorVUv7tIRt1tXSWRCFP6wR7nKuAFNm4
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-25_02,2022-04-22_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 malwarescore=0 mlxscore=0 phishscore=0 adultscore=0
- bulkscore=0 impostorscore=0 clxscore=1011 mlxlogscore=999 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204250031
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 24, 2022 at 11:02:47AM +0800, ying.huang@intel.com wrote:
-> Hi, All,
+On 11-04-22, 17:43, Krzysztof Kozlowski wrote:
+> Devices might need to control several clocks when scaling the frequency
+> and voltage.  Example is the Universal Flash Storage (UFS) which scales
+> several independent clocks with change of performance levels.
 > 
-> On Fri, 2022-04-22 at 16:30 +0530, Jagdish Gediya wrote:
-> 
-> [snip]
-> 
-> > I think it is necessary to either have per node demotion targets
-> > configuration or the user space interface supported by this patch
-> > series. As we don't have clear consensus on how the user interface
-> > should look like, we can defer the per node demotion target set
-> > interface to future until the real need arises.
-> > 
-> > Current patch series sets N_DEMOTION_TARGET from dax device kmem
-> > driver, it may be possible that some memory node desired as demotion
-> > target is not detected in the system from dax-device kmem probe path.
-> > 
-> > It is also possible that some of the dax-devices are not preferred as
-> > demotion target e.g. HBM, for such devices, node shouldn't be set to
-> > N_DEMOTION_TARGETS. In future, Support should be added to distinguish
-> > such dax-devices and not mark them as N_DEMOTION_TARGETS from the
-> > kernel, but for now this user space interface will be useful to avoid
-> > such devices as demotion targets.
-> > 
-> > We can add read only interface to view per node demotion targets
-> > from /sys/devices/system/node/nodeX/demotion_targets, remove
-> > duplicated /sys/kernel/mm/numa/demotion_target interface and instead
-> > make /sys/devices/system/node/demotion_targets writable.
-> > 
-> > Huang, Wei, Yang,
-> > What do you suggest?
-> 
-> We cannot remove a kernel ABI in practice.  So we need to make it right
-> at the first time.  Let's try to collect some information for the kernel
-> ABI definitation.
+> Add parsing of multiple clocks and clock names
 
-/sys/kernel/mm/numa/demotion_target was introduced in v2, I was
-talking about removing it from next version of the series as the
-similar interface is available as a result of introducing
-N_DEMOTION_TARGETS at /sys/devices/system/node/demotion_targets, so
-instead of introducing duplicate interface to write N_DEMOTION_TARGETS,
-we can instead make /sys/devices/system/node/demotion_targets writable.
+This part is fine, the OPP core should be able to do this.
 
-> The below is just a starting point, please add your requirements.
-> 
-> 1. Jagdish has some machines with DRAM only NUMA nodes, but they don't
-> want to use that as the demotion targets.  But I don't think this is a
-> issue in practice for now, because demote-in-reclaim is disabled by
-> default.
-> 
-> 2. For machines with PMEM installed in only 1 of 2 sockets, for example,
-> 
-> Node 0 & 2 are cpu + dram nodes and node 1 are slow
-> memory node near node 0,
-> 
-> available: 3 nodes (0-2)
-> node 0 cpus: 0 1
-> node 0 size: n MB
-> node 0 free: n MB
-> node 1 cpus:
-> node 1 size: n MB
-> node 1 free: n MB
-> node 2 cpus: 2 3
-> node 2 size: n MB
-> node 2 free: n MB
-> node distances:
-> node   0   1   2
->   0:  10  40  20
->   1:  40  10  80
->   2:  20  80  10
-> 
-> We have 2 choices,
-> 
-> a)
-> node	demotion targets
-> 0	1
-> 2	1
-> 
-> b)
-> node	demotion targets
-> 0	1
-> 2	X
-> 
-> a) is good to take advantage of PMEM.  b) is good to reduce cross-socket
-> traffic.  Both are OK as defualt configuration.  But some users may
-> prefer the other one.  So we need a user space ABI to override the
-> default configuration.
-> 
-> 3. For machines with HBM (High Bandwidth Memory), as in
-> 
-> https://lore.kernel.org/lkml/39cbe02a-d309-443d-54c9-678a0799342d@gmail.com/
-> 
-> > [1] local DDR = 10, remote DDR = 20, local HBM = 31, remote HBM = 41
-> 
-> Although HBM has better performance than DDR, in ACPI SLIT, their
-> distance to CPU is longer.  We need to provide a way to fix this.  The
-> user space ABI is one way.  The desired result will be to use local DDR
-> as demotion targets of local HBM.
-> 
-> Best Regards,
-> Huang, Ying
-> 
-> 
+> and scale all of them,
+
+This is tricky as the OPP core can't really assume the order in which the clocks
+needs to be programmed. We had the same problem with multiple regulators and the
+same is left for drivers to do via the custom-api.
+
+Either we can take the same route here, and let platforms add their own OPP
+drivers which can handle this, Or hide this all behind a basic device clock's
+driver, which you get with clk_get(dev, NULL).
+
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+
+> +static int _generic_set_opp_clks_only(struct device *dev,
+> +				      struct opp_table *opp_table,
+> +				      struct dev_pm_opp *opp)
+> +{
+> +	int i, ret;
+> +
+> +	if (!opp_table->clks)
+> +		return 0;
+> +
+> +	for (i = 0; i < opp_table->clk_count; i++) {
+> +		if (opp->rates[i]) {
+
+This should mean that we can disable that clock and it isn't required.
+
+> +			ret = _generic_set_opp_clk_only(dev, opp_table->clks[i],
+> +							opp->rates[i]);
+> +			if (ret) {
+> +				dev_err(dev, "%s: failed to set clock %pC rate: %d\n",
+> +					__func__, opp_table->clks[i], ret);
+> +				return ret;
+> +			}
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+
+As said earlier, this won't work in the core.
+
+> +
+>  static int _generic_set_opp_regulator(struct opp_table *opp_table,
+>  				      struct device *dev,
+>  				      struct dev_pm_opp *opp,
+> @@ -796,7 +835,7 @@ static int _generic_set_opp_regulator(struct opp_table *opp_table,
+>  	}
+>  
+>  	/* Change frequency */
+> -	ret = _generic_set_opp_clk_only(dev, opp_table->clk, freq);
+> +	ret = _generic_set_opp_clks_only(dev, opp_table, opp);
+>  	if (ret)
+>  		goto restore_voltage;
+>  
+> @@ -820,7 +859,7 @@ static int _generic_set_opp_regulator(struct opp_table *opp_table,
+>  	return 0;
+>  
+>  restore_freq:
+> -	if (_generic_set_opp_clk_only(dev, opp_table->clk, old_opp->rate))
+> +	if (_generic_set_opp_clks_only(dev, opp_table, old_opp))
+>  		dev_err(dev, "%s: failed to restore old-freq (%lu Hz)\n",
+>  			__func__, old_opp->rate);
+>  restore_voltage:
+> @@ -880,7 +919,7 @@ static int _set_opp_custom(const struct opp_table *opp_table,
+
+This is where we can handle it in your case, if you don't want to hide it behind
+a clk driver.
+
+>  	}
+>  
+>  	data->regulators = opp_table->regulators;
+> -	data->clk = opp_table->clk;
+> +	data->clk = (opp_table->clks ? opp_table->clks[0] : NULL);
+>  	data->dev = dev;
+>  	data->old_opp.rate = old_opp->rate;
+>  	data->new_opp.rate = freq;
+> @@ -969,8 +1008,8 @@ static void _find_current_opp(struct device *dev, struct opp_table *opp_table)
+
+I think this routine breaks as soon as we add support for multiple clocks.
+clks[0]'s frequency can be same for multiple OPPs and this won't get you the
+right OPP then.
+
+>  	struct dev_pm_opp *opp = ERR_PTR(-ENODEV);
+>  	unsigned long freq;
+>  
+> -	if (!IS_ERR(opp_table->clk)) {
+> -		freq = clk_get_rate(opp_table->clk);
+> +	if (opp_table->clks && !IS_ERR(opp_table->clks[0])) {
+> +		freq = clk_get_rate(opp_table->clks[0]);
+>  		opp = _find_freq_ceil(opp_table, &freq);
+>  	}
+>  
+> @@ -1070,7 +1109,7 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
+>  						 scaling_down);
+>  	} else {
+>  		/* Only frequency scaling */
+> -		ret = _generic_set_opp_clk_only(dev, opp_table->clk, freq);
+> +		ret = _generic_set_opp_clks_only(dev, opp_table, opp);
+>  	}
+>  
+>  	if (ret)
+> @@ -1135,11 +1174,15 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
+
+This should have a BUG or WARN _ON() now if clock count is more than one. This
+routine can't be called unless custom handler is available.
+
+I skipped rest of the code as we need to work/decide on the design first.
+
+Thanks.
+
+-- 
+viresh

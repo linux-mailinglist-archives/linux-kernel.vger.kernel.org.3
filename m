@@ -2,134 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C0150E4CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:52:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E859C50E4D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:53:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243035AbiDYPzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 11:55:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54620 "EHLO
+        id S243048AbiDYP41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 11:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243039AbiDYPzo (ORCPT
+        with ESMTP id S243037AbiDYP4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 11:55:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C9FA3A5D5
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 08:52:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650901958;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PgM2qLhKg/3g0W0oCL8uf4x0vy/kiKECpAJOInvAhdA=;
-        b=YY8OLUvMc05gLkk6cj1FhUBkKiy4YBEmR31SMvjTMvQKnjKqK9wTvPTmS+tYbzzS9ARuGi
-        peSK5vhmr+2/YeQepgJLc9ybfn40SUNdkryKmMFn81KmJaYxOBc7APDy6OUXOKCX63IYXe
-        YVgzsA+vyN5MUaAnlmmlg9fZvS0jITs=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-216-hho1pBBFOQKlwzBFil1bRA-1; Mon, 25 Apr 2022 11:52:37 -0400
-X-MC-Unique: hho1pBBFOQKlwzBFil1bRA-1
-Received: by mail-wr1-f70.google.com with SMTP id j21-20020adfa555000000b0020adb9ac14fso965206wrb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 08:52:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=PgM2qLhKg/3g0W0oCL8uf4x0vy/kiKECpAJOInvAhdA=;
-        b=e3M7Gc1ATdAB0v4UDinl13nTxKwzPw+d9robGlHj9tIlFNVJ50sFOuayA6ANNdKMJm
-         Mdpc8BhxQsOBv+xQmkyVGap1+pc6rV7pDZdonTz610PgHzGQOR6/9sQrl940TZcr4LCL
-         KjH+WQ+JMNHwCg8fzlyc9gayKFpbSlnrui7umBL1IgsGCr8c9rdPzPehjkSMHUzVqCTF
-         mxpHNRcYEUiLqYACx/Dobd7/GorDcCW3AuajYSC+uPdbWDtVqEBfm1D2KTwSbmUPbHih
-         qLyE8PfTaFaZ5Twi9jkMxuAc1O7I0NY63nRlYWu+8rXk1QzxVBjBbig0jq9ctaqOrtEr
-         dIMQ==
-X-Gm-Message-State: AOAM531NoUNoVk0gCtRxJL3M9Qr++LGDcUhCXrX1BDkh/yTkVMH0IQl4
-        K/BsHzZQx8DFbiAhQTgwpMwVNAlBLcHlmYMq1CPhVsDQ5o9WrkUWq94XBQ2T+xeQUAUEOLAC4Fp
-        vlfanqOpNxZFSx7Bfy8s663em
-X-Received: by 2002:a05:600c:3d88:b0:391:7aa1:792b with SMTP id bi8-20020a05600c3d8800b003917aa1792bmr26724762wmb.8.1650901955377;
-        Mon, 25 Apr 2022 08:52:35 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwXdS6DKZ39EGCFmJ23OR4S+8zKDnitjM6K6I4cX/sVeJrTdSCHoRxjgN/pW6sercbfDqR91A==
-X-Received: by 2002:a05:600c:3d88:b0:391:7aa1:792b with SMTP id bi8-20020a05600c3d8800b003917aa1792bmr26724743wmb.8.1650901955144;
-        Mon, 25 Apr 2022 08:52:35 -0700 (PDT)
-Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id q14-20020a1cf30e000000b0038986a18ec8sm9119916wmq.46.2022.04.25.08.52.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 08:52:34 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Huang Ying <ying.huang@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Huang Ying <ying.huang@intel.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Ingo Molnar <mingo@redhat.com>, Mel Gorman <mgorman@suse.de>,
-        Rik van Riel <riel@surriel.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-Subject: Re: [PATCH -V2] sched,topology: Update sched topology atomically
-In-Reply-To: <20220421003125.195470-1-ying.huang@intel.com>
-References: <20220421003125.195470-1-ying.huang@intel.com>
-Date:   Mon, 25 Apr 2022 16:52:33 +0100
-Message-ID: <xhsmh7d7d9n3y.mognet@vschneid.remote.csb>
+        Mon, 25 Apr 2022 11:56:25 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777683A5D1;
+        Mon, 25 Apr 2022 08:53:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650902000; x=1682438000;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=pOPEGCHnvjVwA0raKpTtQf9A6l+ZYep4d2AzfqFxgnE=;
+  b=fGySLy0FaviT+3TG+eZOc5vGRwVdoQt26aHGzQI2sg49tl1wV6AlZFMe
+   XfObs8geao+EmKfgUfJKaCPW5KUoT/u2zJgd2QOdnn0wCS9UCQ/Jr6vg8
+   GYeiG5gTuGRaCEXkeBLW01xQAIFJROMph9EV/WvJB33vP40ysXiEy0bTV
+   7PmwjQqCpqlW/LwDOy+ZgHajZYk0BH2ZQN6LL/y3lEK+HDYpXNN8qMHSk
+   uj4kT1lRFf84dzvog8xQvKvaP32UXJMVblUiFApE1rzAAvAfPKIK1fcCI
+   iHirCgpFQPjbdHbtwUSQGrxdg0QMX14f83fntHMKHToS7YLAHfcJbcwuq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="264804504"
+X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
+   d="scan'208";a="264804504"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 08:53:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
+   d="scan'208";a="704612125"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 25 Apr 2022 08:53:17 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nj11Z-0002dq-CB;
+        Mon, 25 Apr 2022 15:53:17 +0000
+Date:   Mon, 25 Apr 2022 23:53:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anders Roxell <anders.roxell@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-doc@vger.kernel.org
+Subject: [linux-stable-rc:linux-5.15.y 5378/5978]
+ arch/powerpc/kvm/book3s_hv_rm_xics.c:887: warning: This comment starts with
+ '/**', but isn't a kernel-doc comment. Refer
+ Documentation/doc-guide/kernel-doc.rst
+Message-ID: <202204252334.Cd2IsiII-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/04/22 08:31, Huang Ying wrote:
-> When Peter Zijlstra reviewed commit 0fb3978b0aac ("sched/numa: Fix
-> NUMA topology for systems with CPU-less nodes") [1], he pointed out
-> that sched_domains_numa_distance and sched_domains_numa_masks are made
-> separate RCU variables.  That could go side-ways if there were a
-> function using both, although there isn't for now.
->
-> So we update sched_domains_numa_distance and sched_domains_numa_masks
-> and some other related sched topology parameters atomically to address
-> the potential issues.
->
-> [1] https://lkml.kernel.org/r/20220214121553.582248-1-ying.huang@intel.com
->
-> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-> Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> Cc: Valentin Schneider <valentin.schneider@arm.com>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Mel Gorman <mgorman@suse.de>
-> Cc: Rik van Riel <riel@surriel.com>
-> Cc: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
->
-> Changelog:
->
-> v2:
->
-> - Addressed comments from Valentin Schneider, Thanks!
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+head:   81d8d30c35edf29c5c70186ccb14dac4a5ca38a8
+commit: 2d67222b2380949f2e00b35104a2cc0a62b4631b [5378/5978] powerpc: Fix build errors with newer binutils
+config: powerpc64-randconfig-r023-20220425 (https://download.01.org/0day-ci/archive/20220425/202204252334.Cd2IsiII-lkp@intel.com/config)
+compiler: powerpc64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=2d67222b2380949f2e00b35104a2cc0a62b4631b
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-5.15.y
+        git checkout 2d67222b2380949f2e00b35104a2cc0a62b4631b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/kvm/
 
-One small bug and a whitespace nit below, with those fixed:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reviewed-by: Valentin Schneider <vschneid@redhat.com>
+All warnings (new ones prefixed by >>):
 
-FWIW I briefly tested this vs hotplug on QEMU.
+>> arch/powerpc/kvm/book3s_hv_rm_xics.c:887: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Host Operations poked by RM KVM
 
-> @@ -1806,8 +1873,7 @@ void sched_init_numa(int offline_node)
->
->                       if (distance < LOCAL_DISTANCE || distance >= NR_DISTANCE_VALUES) {
->                               sched_numa_warn("Invalid distance value range");
-> -				bitmap_free(distance_map);
-> -				return;
-> +                                goto free_bitmap;
 
-The indentation here is wrong (spaces vs tabs).
+vim +887 arch/powerpc/kvm/book3s_hv_rm_xics.c
 
->                       }
->
->                       bitmap_set(distance_map, distance, 1);
+0c2a66062470cd Suresh Warrier 2015-12-17  885  
+0c2a66062470cd Suresh Warrier 2015-12-17  886  /**
+0c2a66062470cd Suresh Warrier 2015-12-17 @887   * Host Operations poked by RM KVM
+0c2a66062470cd Suresh Warrier 2015-12-17  888   */
+0c2a66062470cd Suresh Warrier 2015-12-17  889  static void rm_host_ipi_action(int action, void *data)
+0c2a66062470cd Suresh Warrier 2015-12-17  890  {
+0c2a66062470cd Suresh Warrier 2015-12-17  891  	switch (action) {
+0c2a66062470cd Suresh Warrier 2015-12-17  892  	case XICS_RM_KICK_VCPU:
+0c2a66062470cd Suresh Warrier 2015-12-17  893  		kvmppc_host_rm_ops_hv->vcpu_kick(data);
+0c2a66062470cd Suresh Warrier 2015-12-17  894  		break;
+0c2a66062470cd Suresh Warrier 2015-12-17  895  	default:
+0c2a66062470cd Suresh Warrier 2015-12-17  896  		WARN(1, "Unexpected rm_action=%d data=%p\n", action, data);
+0c2a66062470cd Suresh Warrier 2015-12-17  897  		break;
+0c2a66062470cd Suresh Warrier 2015-12-17  898  	}
+0c2a66062470cd Suresh Warrier 2015-12-17  899  
 
->       /* Compute default topology size */
->       for (i = 0; sched_domain_topology[i].mask; i++);
+:::::: The code at line 887 was first introduced by commit
+:::::: 0c2a66062470cd1f6d11ae6db31059f59d3f725f KVM: PPC: Book3S HV: Host side kick VCPU when poked by real-mode KVM
 
-After the original boot this will now be the default topology with the NUMA
-bits on top, so we'll just keep growing the array every time we hotplug a
-node. This should use sched_domain_topology_default instead (ditto for the
-copy loop further down).
+:::::: TO: Suresh Warrier <warrier@linux.vnet.ibm.com>
+:::::: CC: Paul Mackerras <paulus@samba.org>
 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

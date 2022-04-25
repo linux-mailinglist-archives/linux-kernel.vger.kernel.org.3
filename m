@@ -2,124 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78B2F50DED0
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 13:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7784B50DED5
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 13:31:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240429AbiDYLdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 07:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44774 "EHLO
+        id S238643AbiDYLeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 07:34:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238443AbiDYLdk (ORCPT
+        with ESMTP id S229468AbiDYLeR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 07:33:40 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F596592;
-        Mon, 25 Apr 2022 04:30:32 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d15so26309912pll.10;
-        Mon, 25 Apr 2022 04:30:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jq3lZaJRWmUC1+/YH0KaBe1qk/+UKzuPPxjecR22D8I=;
-        b=FoikZIM5R9luRPxIlH8rApfm/qpfKWJbs1ksYjkd4SJBe3V7l6HI0fF1ZWVFSGCxJ7
-         ndio9iXLaNi7fKs5F/5KAULIbINTFEznMBMLZ8gYetFUOQ7ajvbAeCtjFzvp/q4uOnsB
-         R26i3dJfeRkfqktQWFGVNsM9Opm9s8xd8ZDnk5jcxIkXouauxKutvc0bDNAi8zuUhPsE
-         mTGXQu29XlCN9Ehfw7Prztx3JeO4GQ44LWZzH5stAgHImRd5/On3vpCHtdYjz95pSdS4
-         fbZvEFCgGHKpEbbFdFDJaHMkw+TtFu43dgkcUYROO+86i9QVwRvi9x5r4pG7FyUFmbfe
-         ApIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jq3lZaJRWmUC1+/YH0KaBe1qk/+UKzuPPxjecR22D8I=;
-        b=v+GLyhbYmg/5LTL3xfN0d9W0fopu0ZmGzFXMetuXLjDOM9yDpmVPMoa6OYMlfvEfkp
-         Yvvjphk7pS56ok1X4lSeMYfEsduKzVBEyCShPXE7gjRDRNi6DgV+CaN200T52QUN2otu
-         sLI2Szz3G4r7St+eDN6Hmug+fb35MkzMY1CIOMRTpDdUcyXIyLVsLBbHlyNE5Oz0diQp
-         Vn9yPJ9XQNsTWsdxNTnaF2oAHzaKyu0AYvVzj6QEYFpEXwpvr34Hux6PO+2B4MHecBwF
-         PVeRyzJucPducEXRhZLfPlmN4dNEJo0XxvCtrLIBGGQfpSXGRR72a5fHq+oWMsohxInq
-         zgIQ==
-X-Gm-Message-State: AOAM533NEWW0rtIeZI5yekVxIYXW1vFUFTBBe0fxyGbiqxJ2CZBKjkp1
-        pYm3HvepuewXnwJHUzYD2Qg=
-X-Google-Smtp-Source: ABdhPJzOBPsNT1iiha9Pn7HKouA6c3xrQ/DXkWrAOftr5V7RJf9IPtWYLNYqi8A9p0/ZbHO348dWhw==
-X-Received: by 2002:a17:902:b406:b0:14f:bb35:95ab with SMTP id x6-20020a170902b40600b0014fbb3595abmr17610765plr.140.1650886232444;
-        Mon, 25 Apr 2022 04:30:32 -0700 (PDT)
-Received: from ip-172-31-12-67.us-west-1.compute.internal (ec2-54-241-4-221.us-west-1.compute.amazonaws.com. [54.241.4.221])
-        by smtp.gmail.com with ESMTPSA id i11-20020a654d0b000000b0039d82c3e68csm9819072pgt.55.2022.04.25.04.30.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 04:30:31 -0700 (PDT)
-From:   Xiaobing Luo <luoxiaobing0926@gmail.com>
-To:     tiny.windzz@gmail.com, rafael@kernel.org, viresh.kumar@linaro.org,
-        wens@csie.org, jernej.skrabec@gmail.com, samuel@sholland.org,
-        mripard@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Xiaobing Luo <luoxiaobing0926@gmail.com>
-Subject: [PATCH v3] cpufreq: fix memory leak in sun50i_cpufreq_nvmem_probe
-Date:   Mon, 25 Apr 2022 11:30:09 +0000
-Message-Id: <20220425113009.2182485-1-luoxiaobing0926@gmail.com>
-X-Mailer: git-send-email 2.36.0
+        Mon, 25 Apr 2022 07:34:17 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0EFEB7
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 04:31:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650886273; x=1682422273;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version:content-transfer-encoding;
+  bh=2B2qF7ouiCd0JZFcYIGy5M7pqO0kLaQtk6/N2v8nVhA=;
+  b=cy7pPk/DDUfauZrOboUn+PyZLDv5ZyyYBfb7HFLY/NpXvhRJEHRAGmD+
+   j3PVWDTxmjGtnypSSORBt3XoYApZqenKNO5yQNsQaTio2g1pW8Ax45wdc
+   t2Pdmd07wCtkV/CPzhMhqI3/GLDv4duqUTdNg3azvBpEsUKTnHLNJrV8X
+   f+r1y5/MS0i82cI+ufuCqgtRk9dVKRnYO6C+iIhPy1lxGVd6aXq2sF4Sj
+   DfQ4U61KdKWp55Zuzgt2ByOLrqNYAiJXJ49v/xiDmpJQ4mIPq6UGwlpYe
+   KbzJ61qz7XjfSU+k6EXiyjxEWy44MzVsrDQmOhUt0PXDvC+jHFfBEJt4n
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="247148446"
+X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
+   d="scan'208";a="247148446"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 04:31:13 -0700
+X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
+   d="scan'208";a="532071727"
+Received: from tgiecew-mobl.ger.corp.intel.com (HELO localhost) ([10.249.131.125])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 04:31:09 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     "Wang, Zhi A" <zhi.a.wang@intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
+Subject: Re: [PULL v3] gvt-next
+In-Reply-To: <25a713cd-0b7d-4c09-7d91-4f4ef6c9eb11@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <25a713cd-0b7d-4c09-7d91-4f4ef6c9eb11@intel.com>
+Date:   Mon, 25 Apr 2022 14:31:06 +0300
+Message-ID: <87o80pv1qd.fsf@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---------------------------------------------
-unreferenced object 0xffff000010742a00 (size 128):
-  comm "swapper/0", pid 1, jiffies 4294902015 (age 1187.652s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<00000000b4dfebaa>] __kmalloc+0x338/0x474
-    [<00000000d6e716db>] sun50i_cpufreq_nvmem_probe+0xc4/0x36c
-    [<000000007d6082a0>] platform_probe+0x98/0x11c
-    [<00000000c990f549>] really_probe+0x234/0x5a0
-    [<000000002d9fecc6>] __driver_probe_device+0x194/0x224
-    [<00000000cf0b94fa>] driver_probe_device+0x64/0x13c
-    [<00000000f238e4cf>] __device_attach_driver+0xf8/0x180
-    [<000000006720e418>] bus_for_each_drv+0xf8/0x160
-    [<00000000df4f14f6>] __device_attach+0x174/0x29c
-    [<00000000782002fb>] device_initial_probe+0x20/0x30
-    [<00000000c2681b06>] bus_probe_device+0xfc/0x110
-    [<00000000964cf3bd>] device_add+0x5f0/0xcd0
-    [<000000004b9264e3>] platform_device_add+0x198/0x390
-    [<00000000fa82a9d0>] platform_device_register_full+0x178/0x210
-    [<000000009a5daf13>] sun50i_cpufreq_init+0xf8/0x168
-    [<000000000377cc7c>] do_one_initcall+0xe4/0x570
---------------------------------------------
+On Thu, 21 Apr 2022, "Wang, Zhi A" <zhi.a.wang@intel.com> wrote:
+> Hi folks:
+>
+> Here is the PR of gvt-next. Thanks so much for the patience.
 
-if sun50i_cpufreq_get_efuse failed, then opp_tables leak.
+Thanks, pulled to drm-intel-next, applied the below fix for the silent
+conflict on top, and pushed out. Should show up in linux-next shortly.
 
-Fixes: f328584f7bff ("cpufreq: Add sun50i nvmem based CPU scaling driver")
-Signed-off-by: Xiaobing Luo <luoxiaobing0926@gmail.com>
----
- drivers/cpufreq/sun50i-cpufreq-nvmem.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+BR,
+Jani.
 
-diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-index 2deed8d8773f..75e1bf3a08f7 100644
---- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-+++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-@@ -98,8 +98,10 @@ static int sun50i_cpufreq_nvmem_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 
- 	ret = sun50i_cpufreq_get_efuse(&speed);
--	if (ret)
-+	if (ret) {
-+		kfree(opp_tables);
- 		return ret;
-+	}
- 
- 	snprintf(name, MAX_NAME_LEN, "speed%d", speed);
- 
--- 
-2.36.0
+>
+> Mostly it includes the patch bundle of GVT-g re-factor patches for adapti=
+ng the GVT-g with the
+> new MDEV interfaces:
+>
+> - Separating the MMIO table from GVT-g. (Zhi)
+> - GVT-g re-factor. (Christoph)
+> - GVT-g mdev API cleanup. (Jason)
+> - GVT-g trace/makefile cleanup. (Jani)
+>
+> Thanks so much for making this happen.
+>
+> This PR has been tested as following and no problem shows up:
+>
+> $dim update-branches
+> $dim apply-pull drm-intel-next < this_email.eml
+>
+> When merging this pull to drm-intel-next, please include the following co=
+de in the merge commit:
+>
+> diff --git a/drivers/gpu/drm/i915/intel_gvt_mmio_table.c b/drivers/gpu/dr=
+m/i915/intel_gvt_mmio_table.c
+> index 03a7fcd0f904..72dac1718f3e 100644
+> --- a/drivers/gpu/drm/i915/intel_gvt_mmio_table.c
+> +++ b/drivers/gpu/drm/i915/intel_gvt_mmio_table.c
+> @@ -3,6 +3,7 @@
+>   * Copyright =C2=A9 2020 Intel Corporation
+>   */
+>=20=20
+> +#include "display/intel_dmc_regs.h"
+>  #include "display/vlv_dsi_pll_regs.h"
+>  #include "gt/intel_gt_regs.h"
+>  #include "gvt/gvt.h"
+>
+>
+> The following changes since commit 3123109284176b1532874591f7c81f3837bbdc=
+17:
+>
+>   Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+>
+> are available in the Git repository at:
+>
+>   https://github.com/intel/gvt-linux tags/gvt-next-2022-04-21-for-christo=
+ph
+>
+> for you to fetch changes up to 2917f53113be3b7a0f374e02cebe6d6b749366b5:
+>
+>   vfio/mdev: Remove mdev drvdata (2022-04-21 07:36:56 -0400)
+>
+> ----------------------------------------------------------------
+> gvt-next-2022-04-21-for-christoph
+>
+> - Separating the MMIO table from GVT-g. (Zhi)
+> - GVT-g re-factor. (Christoph)
+> - GVT-g mdev API cleanup. (Jason)
+> - GVT-g trace/makefile cleanup. (Jani)
+>
+> ----------------------------------------------------------------
+> Christoph Hellwig (27):
+>       drm/i915/gvt: remove module refcounting in intel_gvt_{,un}register_=
+hypervisor
+>       drm/i915/gvt: remove enum hypervisor_type
+>       drm/i915/gvt: rename intel_vgpu_ops to intel_vgpu_mdev_ops
+>       drm/i915/gvt: move the gvt code into kvmgt.ko
+>       drm/i915/gvt: remove intel_gvt_ops
+>       drm/i915/gvt: remove the map_gfn_to_mfn and set_trap_area ops
+>       drm/i915/gvt: remove the unused from_virt_to_mfn op
+>       drm/i915/gvt: merge struct kvmgt_vdev into struct intel_vgpu
+>       drm/i915/gvt: merge struct kvmgt_guest_info into strut intel_vgpu
+>       drm/i915/gvt: remove vgpu->handle
+>       drm/i915/gvt: devirtualize ->{read,write}_gpa
+>       drm/i915/gvt: devirtualize ->{get,put}_vfio_device
+>       drm/i915/gvt: devirtualize ->set_edid and ->set_opregion
+>       drm/i915/gvt: devirtualize ->detach_vgpu
+>       drm/i915/gvt: devirtualize ->inject_msi
+>       drm/i915/gvt: devirtualize ->is_valid_gfn
+>       drm/i915/gvt: devirtualize ->gfn_to_mfn
+>       drm/i915/gvt: devirtualize ->{enable,disable}_page_track
+>       drm/i915/gvt: devirtualize ->dma_{,un}map_guest_page
+>       drm/i915/gvt: devirtualize dma_pin_guest_page
+>       drm/i915/gvt: remove struct intel_gvt_mpt
+>       drm/i915/gvt: remove the extra vfio_device refcounting for dmabufs
+>       drm/i915/gvt: streamline intel_vgpu_create
+>       drm/i915/gvt: pass a struct intel_vgpu to the vfio read/write helpe=
+rs
+>       drm/i915/gvt: remove kvmgt_guest_{init,exit}
+>       drm/i915/gvt: convert to use vfio_register_emulated_iommu_dev
+>       drm/i915/gvt: merge gvt.c into kvmgvt.c
+>
+> Jani Nikula (2):
+>       drm/i915/gvt: fix trace TRACE_INCLUDE_PATH
+>       drm/i915/gvt: better align the Makefile with i915 Makefile
+>
+> Jason Gunthorpe (5):
+>       vfio/mdev: Remove vfio_mdev.c
+>       vfio/mdev: Remove mdev_parent_ops dev_attr_groups
+>       vfio/mdev: Remove mdev_parent_ops
+>       vfio/mdev: Use the driver core to create the 'remove' file
+>       vfio/mdev: Remove mdev drvdata
+>
+> Zhi Wang (3):
+>       i915/gvt: Separate the MMIO tracking table from GVT-g
+>       i915/gvt: Save the initial HW state snapshot in i915
+>       i915/gvt: Use the initial HW state snapshot saved in i915
+>
+>  Documentation/driver-api/vfio-mediated-device.rst |   27 +-
+>  drivers/gpu/drm/i915/Kconfig                      |   36 +-
+>  drivers/gpu/drm/i915/Makefile                     |    8 +-
+>  drivers/gpu/drm/i915/gvt/Makefile                 |   30 +-
+>  drivers/gpu/drm/i915/gvt/cfg_space.c              |   89 +-
+>  drivers/gpu/drm/i915/gvt/cmd_parser.c             |    4 +-
+>  drivers/gpu/drm/i915/gvt/dmabuf.c                 |   36 +-
+>  drivers/gpu/drm/i915/gvt/execlist.c               |   12 +-
+>  drivers/gpu/drm/i915/gvt/firmware.c               |   25 +-
+>  drivers/gpu/drm/i915/gvt/gtt.c                    |   55 +-
+>  drivers/gpu/drm/i915/gvt/gvt.c                    |  340 ------
+>  drivers/gpu/drm/i915/gvt/gvt.h                    |  128 +-
+>  drivers/gpu/drm/i915/gvt/handlers.c               | 1033 +++------------=
+--
+>  drivers/gpu/drm/i915/gvt/hypercall.h              |   82 --
+>  drivers/gpu/drm/i915/gvt/interrupt.c              |   40 +-
+>  drivers/gpu/drm/i915/gvt/kvmgt.c                  | 1097 +++++++++------=
+--
+>  drivers/gpu/drm/i915/gvt/mmio.c                   |    4 +-
+>  drivers/gpu/drm/i915/gvt/mmio.h                   |    1 -
+>  drivers/gpu/drm/i915/gvt/mpt.h                    |  400 -------
+>  drivers/gpu/drm/i915/gvt/opregion.c               |  148 +--
+>  drivers/gpu/drm/i915/gvt/page_track.c             |    8 +-
+>  drivers/gpu/drm/i915/gvt/reg.h                    |    9 +-
+>  drivers/gpu/drm/i915/gvt/scheduler.c              |   37 +-
+>  drivers/gpu/drm/i915/gvt/trace.h                  |    2 +-
+>  drivers/gpu/drm/i915/gvt/vgpu.c                   |   22 +-
+>  drivers/gpu/drm/i915/i915_driver.c                |    7 -
+>  drivers/gpu/drm/i915/i915_drv.h                   |    3 +
+>  drivers/gpu/drm/i915/intel_gvt.c                  |  248 +++-
+>  drivers/gpu/drm/i915/intel_gvt.h                  |   32 +-
+>  drivers/gpu/drm/i915/intel_gvt_mmio_table.c       | 1291 +++++++++++++++=
+++++++
+>  drivers/s390/cio/vfio_ccw_ops.c                   |    7 +-
+>  drivers/s390/crypto/vfio_ap_ops.c                 |    9 +-
+>  drivers/vfio/mdev/Makefile                        |    2 +-
+>  drivers/vfio/mdev/mdev_core.c                     |   52 +-
+>  drivers/vfio/mdev/mdev_driver.c                   |   10 -
+>  drivers/vfio/mdev/mdev_private.h                  |    6 +-
+>  drivers/vfio/mdev/mdev_sysfs.c                    |   37 +-
+>  drivers/vfio/mdev/vfio_mdev.c                     |  152 ---
+>  include/linux/mdev.h                              |   82 +-
+>  samples/vfio-mdev/mbochs.c                        |    9 +-
+>  samples/vfio-mdev/mdpy.c                          |    9 +-
+>  samples/vfio-mdev/mtty.c                          |   39 +-
+>  42 files changed, 2530 insertions(+), 3138 deletions(-)
+>  delete mode 100644 drivers/gpu/drm/i915/gvt/gvt.c
+>  delete mode 100644 drivers/gpu/drm/i915/gvt/hypercall.h
+>  delete mode 100644 drivers/gpu/drm/i915/gvt/mpt.h
+>  create mode 100644 drivers/gpu/drm/i915/intel_gvt_mmio_table.c
+>  delete mode 100644 drivers/vfio/mdev/vfio_mdev.c
 
+--=20
+Jani Nikula, Intel Open Source Graphics Center

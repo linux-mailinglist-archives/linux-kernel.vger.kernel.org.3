@@ -2,206 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC4DD50E94D
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 21:16:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1CB250E94F
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 21:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243007AbiDYTS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 15:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49890 "EHLO
+        id S239109AbiDYTTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 15:19:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241000AbiDYTSz (ORCPT
+        with ESMTP id S230083AbiDYTTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 15:18:55 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD9C35A98
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 12:15:50 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id gj17-20020a17090b109100b001d8b390f77bso243388pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 12:15:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=ecsUxmyFwe8I77x+9cA1HTTii6mLSDL9ggSg8/7/5Lo=;
-        b=lSv3D+xXudt8kuycOWKphR/+PTAKkjLYPnzKliiGicQEjNUPwftnMMBs2cG9pNFHPV
-         Rx5m56PnLtd6rUJslmzMmG0HpEdKW4PPVfBjF3VEMO4+y8q8bkRuqgB6GFRLiMtUC//+
-         dIID5FA51QMkhLndJJnDP4lfVmsSD3tZw1djRdoRfaC+JPv8o1fwE6rkxfTqwELj3BHr
-         mXgDscQMSgJLeW+ALlwLXot4+PkLBbSajgNXMds+bAuLTm3k9Vn2cCn7eblMwAcCVs5g
-         1aPwVBuFa8VfQ32WIX08L2Ouzo2vqpTVIC81Gj14Rz1jpg4RvV3la7P2rAGcA5/ySaJV
-         hj/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=ecsUxmyFwe8I77x+9cA1HTTii6mLSDL9ggSg8/7/5Lo=;
-        b=WgR0AD/QyQwlgRBsMBKYFRm/UVtRP1ytOCBfvaYN3vRmvCCx1OLP3gQEUX6EFkFxwc
-         lq4XJp6JZWT2w9BSYtCeaLj+oFM3owlfRkElQ/+WB8uZLMHDPY/6S16OSr3xIB3NhCHp
-         PPFjgG1Yz55FvugJw/jJXfPlZ87vLGfj4hz7gkJATae/vTjPNE0EUk0MBbp3gHiBXz0B
-         OSN+JPxQViSPis6OZKFvlHwdBXeVcjGHMYBHJZeefrVIspL3PBrLPLuKITt6cF7n05Cp
-         sXdcnSzc4U7laOM5iyHS/6sfKRT+MUzZUicIHiKVtqTNPOcFAOdmG33V+spYYO6cNVLO
-         tdwA==
-X-Gm-Message-State: AOAM530/0h6p5fz10CzEJZGJWmyDgx4gsJgdYrvYuecigNPaWAkqDUjW
-        GwQdhculkkmRBcwJuwJaSlQ07w==
-X-Google-Smtp-Source: ABdhPJxVDk2aBeKX93y2/cNj0dtdmux5xztwRbAL9FG9GNAcURiUqYol+3kkAIs0S0BKpuya0KJacA==
-X-Received: by 2002:a17:90a:b10c:b0:1d9:49de:81c5 with SMTP id z12-20020a17090ab10c00b001d949de81c5mr12523263pjq.120.1650914149899;
-        Mon, 25 Apr 2022 12:15:49 -0700 (PDT)
-Received: from [2620:15c:29:204:185b:8dcc:84d4:fb71] ([2620:15c:29:204:185b:8dcc:84d4:fb71])
-        by smtp.gmail.com with ESMTPSA id i11-20020a654d0b000000b0039d82c3e68csm10711275pgt.55.2022.04.25.12.15.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 12:15:49 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 12:15:48 -0700 (PDT)
-From:   David Rientjes <rientjes@google.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Chen Wandun <chenwandun@huawei.com>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Michal Hocko <mhocko@suse.com>
-Subject: Re: [PATCH v5 1/4] memcg: introduce per-memcg reclaim interface
-In-Reply-To: <20220425190040.2475377-2-yosryahmed@google.com>
-Message-ID: <a4c3d067-d08d-409d-e7b-b6e0b1d2dfda@google.com>
-References: <20220425190040.2475377-1-yosryahmed@google.com> <20220425190040.2475377-2-yosryahmed@google.com>
+        Mon, 25 Apr 2022 15:19:30 -0400
+Received: from smtp.smtpout.orange.fr (smtp07.smtpout.orange.fr [80.12.242.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DA6387BB
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 12:16:16 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.180.246])
+        by smtp.orange.fr with ESMTPA
+        id j4BrnYRN3jXpHj4BrnJm6d; Mon, 25 Apr 2022 21:16:15 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Mon, 25 Apr 2022 21:16:15 +0200
+X-ME-IP: 86.243.180.246
+Message-ID: <19a812b3-73b4-7e5a-8885-ec652598a5ce@wanadoo.fr>
+Date:   Mon, 25 Apr 2022 21:16:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 07/34] x86/hyperv: Introduce
+ HV_MAX_SPARSE_VCPU_BANKS/HV_VCPUS_PER_SPARSE_BANK constants
+Content-Language: fr
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220414132013.1588929-1-vkuznets@redhat.com>
+ <20220414132013.1588929-8-vkuznets@redhat.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220414132013.1588929-8-vkuznets@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 25 Apr 2022, Yosry Ahmed wrote:
+Le 14/04/2022 à 15:19, Vitaly Kuznetsov a écrit :
+> It may not come clear from where the magical '64' value used in
+> __cpumask_to_vpset() come from. Moreover, '64' means both the maximum
+> sparse bank number as well as the number of vCPUs per bank. Add defines
+> to make things clear. These defines are also going to be used by KVM.
+> 
+> No functional change.
+> 
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>   include/asm-generic/hyperv-tlfs.h |  5 +++++
+>   include/asm-generic/mshyperv.h    | 11 ++++++-----
+>   2 files changed, 11 insertions(+), 5 deletions(-)
+> 
+> diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
+> index fdce7a4cfc6f..020ca9bdbb79 100644
+> --- a/include/asm-generic/hyperv-tlfs.h
+> +++ b/include/asm-generic/hyperv-tlfs.h
+> @@ -399,6 +399,11 @@ struct hv_vpset {
+>   	u64 bank_contents[];
+>   } __packed;
+>   
+> +/* The maximum number of sparse vCPU banks which can be encoded by 'struct hv_vpset' */
+> +#define HV_MAX_SPARSE_VCPU_BANKS (64)
+> +/* The number of vCPUs in one sparse bank */
+> +#define HV_VCPUS_PER_SPARSE_BANK (64)
+> +
+>   /* HvCallSendSyntheticClusterIpi hypercall */
+>   struct hv_send_ipi {
+>   	u32 vector;
+> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+> index c08758b6b364..0abe91df1ef6 100644
+> --- a/include/asm-generic/mshyperv.h
+> +++ b/include/asm-generic/mshyperv.h
+> @@ -214,9 +214,10 @@ static inline int __cpumask_to_vpset(struct hv_vpset *vpset,
+>   {
+>   	int cpu, vcpu, vcpu_bank, vcpu_offset, nr_bank = 1;
+>   	int this_cpu = smp_processor_id();
+> +	int max_vcpu_bank = hv_max_vp_index / HV_VCPUS_PER_SPARSE_BANK;
+>   
+> -	/* valid_bank_mask can represent up to 64 banks */
+> -	if (hv_max_vp_index / 64 >= 64)
+> +	/* vpset.valid_bank_mask can represent up to HV_MAX_SPARSE_VCPU_BANKS banks */
+> +	if (max_vcpu_bank >= HV_MAX_SPARSE_VCPU_BANKS)
+>   		return 0;
+>   
+>   	/*
+> @@ -224,7 +225,7 @@ static inline int __cpumask_to_vpset(struct hv_vpset *vpset,
+>   	 * structs are not cleared between calls, we risk flushing unneeded
+>   	 * vCPUs otherwise.
+>   	 */
+> -	for (vcpu_bank = 0; vcpu_bank <= hv_max_vp_index / 64; vcpu_bank++)
+> +	for (vcpu_bank = 0; vcpu_bank <= max_vcpu_bank; vcpu_bank++)
+>   		vpset->bank_contents[vcpu_bank] = 0;
 
-> From: Shakeel Butt <shakeelb@google.com>
-> 
-> Introduce a memcg interface to trigger memory reclaim on a memory cgroup.
-> 
-> Use case: Proactive Reclaim
-> ---------------------------
-> 
-> A userspace proactive reclaimer can continuously probe the memcg to
-> reclaim a small amount of memory. This gives more accurate and
-> up-to-date workingset estimation as the LRUs are continuously
-> sorted and can potentially provide more deterministic memory
-> overcommit behavior. The memory overcommit controller can provide
-> more proactive response to the changing behavior of the running
-> applications instead of being reactive.
-> 
-> A userspace reclaimer's purpose in this case is not a complete replacement
-> for kswapd or direct reclaim, it is to proactively identify memory savings
-> opportunities and reclaim some amount of cold pages set by the policy
-> to free up the memory for more demanding jobs or scheduling new jobs.
-> 
-> A user space proactive reclaimer is used in Google data centers.
-> Additionally, Meta's TMO paper recently referenced a very similar
-> interface used for user space proactive reclaim:
-> https://dl.acm.org/doi/pdf/10.1145/3503222.3507731
-> 
-> Benefits of a user space reclaimer:
-> -----------------------------------
-> 
-> 1) More flexible on who should be charged for the cpu of the memory
-> reclaim. For proactive reclaim, it makes more sense to be centralized.
-> 
-> 2) More flexible on dedicating the resources (like cpu). The memory
-> overcommit controller can balance the cost between the cpu usage and
-> the memory reclaimed.
-> 
-> 3) Provides a way to the applications to keep their LRUs sorted, so,
-> under memory pressure better reclaim candidates are selected. This also
-> gives more accurate and uptodate notion of working set for an
-> application.
-> 
-> Why memory.high is not enough?
-> ------------------------------
-> 
-> - memory.high can be used to trigger reclaim in a memcg and can
->   potentially be used for proactive reclaim.
->   However there is a big downside in using memory.high. It can potentially
->   introduce high reclaim stalls in the target application as the
->   allocations from the processes or the threads of the application can hit
->   the temporary memory.high limit.
-> 
-> - Userspace proactive reclaimers usually use feedback loops to decide
->   how much memory to proactively reclaim from a workload. The metrics
->   used for this are usually either refaults or PSI, and these metrics
->   will become messy if the application gets throttled by hitting the
->   high limit.
-> 
-> - memory.high is a stateful interface, if the userspace proactive
->   reclaimer crashes for any reason while triggering reclaim it can leave
->   the application in a bad state.
-> 
-> - If a workload is rapidly expanding, setting memory.high to proactively
->   reclaim memory can result in actually reclaiming more memory than
->   intended.
-> 
-> The benefits of such interface and shortcomings of existing interface
-> were further discussed in this RFC thread:
-> https://lore.kernel.org/linux-mm/5df21376-7dd1-bf81-8414-32a73cea45dd@google.com/
-> 
-> Interface:
-> ----------
-> 
-> Introducing a very simple memcg interface 'echo 10M > memory.reclaim' to
-> trigger reclaim in the target memory cgroup.
-> 
-> The interface is introduced as a nested-keyed file to allow for future
-> optional arguments to be easily added to configure the behavior of
-> reclaim.
-> 
-> Possible Extensions:
-> --------------------
-> 
-> - This interface can be extended with an additional parameter or flags
->   to allow specifying one or more types of memory to reclaim from (e.g.
->   file, anon, ..).
-> 
-> - The interface can also be extended with a node mask to reclaim from
->   specific nodes. This has use cases for reclaim-based demotion in memory
->   tiering systens.
-> 
-> - A similar per-node interface can also be added to support proactive
->   reclaim and reclaim-based demotion in systems without memcg.
-> 
-> - Add a timeout parameter to make it easier for user space to call the
->   interface without worrying about being blocked for an undefined amount
->   of time.
-> 
-> For now, let's keep things simple by adding the basic functionality.
-> 
-> [yosryahmed@google.com: worked on versions v2 onwards, refreshed to
-> current master, updated commit message based on recent
-> discussions and use cases]
-> 
-> Signed-off-by: Shakeel Butt <shakeelb@google.com>
-> Co-developed-by: Yosry Ahmed <yosryahmed@google.com>
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
-> Acked-by: Michal Hocko <mhocko@suse.com>
-> Acked-by: Wei Xu <weixugc@google.com>
-> Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+and here:
+	bitmap_clear(vpset->bank_contents, 0, hv_max_vp_index);
+or maybe even if it is safe to do so:
+	bitmap_zero(vpset->bank_contents, hv_max_vp_index);
 
-Acked-by: David Rientjes <rientjes@google.com>
+CJ
 
-"can over or under reclaim from the target cgroup" begs the question of 
-how much more memory the kernel can decide to reclaim :)  I think it's 
-assumed that it's minimal and that matches the current implementation that 
-rounds up to SWAP_CLUSTER_MAX, though, so looks good.
+>   
+>   	/*
+> @@ -236,8 +237,8 @@ static inline int __cpumask_to_vpset(struct hv_vpset *vpset,
+>   		vcpu = hv_cpu_number_to_vp_number(cpu);
+>   		if (vcpu == VP_INVAL)
+>   			return -1;
+> -		vcpu_bank = vcpu / 64;
+> -		vcpu_offset = vcpu % 64;
+> +		vcpu_bank = vcpu / HV_VCPUS_PER_SPARSE_BANK;
+> +		vcpu_offset = vcpu % HV_VCPUS_PER_SPARSE_BANK;
+>   		__set_bit(vcpu_offset, (unsigned long *)
+>   			  &vpset->bank_contents[vcpu_bank]);
+>   		if (vcpu_bank >= nr_bank)
 
-Thanks Yosry!

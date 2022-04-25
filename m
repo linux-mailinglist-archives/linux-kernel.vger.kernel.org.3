@@ -2,196 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EB5650DC59
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 11:20:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2777C50DC2F
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 11:16:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235658AbiDYJSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 05:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47024 "EHLO
+        id S241527AbiDYJSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 05:18:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241591AbiDYJRe (ORCPT
+        with ESMTP id S241627AbiDYJRs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 05:17:34 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2110.outbound.protection.outlook.com [40.107.94.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB05E29E
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 02:14:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LRRvslAW776ddlYfoW001JUElwalR992gNioYeqXsLB0x/mPmIQ8htZWIdjxncJfeJqKdgc8jFLiWhPnmPf3QsaaD5UfFLJ6PBq+WA1WvnZMlxf4+yuANYndHX6QmQ8+6eNbxY2tJNkPzoIEolRUVqhG/ce4C5bOlFZImXzklSGbQhbbc5/dAG9V/24AJdsoXz+baVYqHtmNovrU1ruj80zpd7TzNbLyTY7Dm4AxqEwkgnW1dSfWFfJzQwB0EioGOTvc9WR2peaj8vsrBhNFuK3IC72fshkl6Wkab6TcQvat7HMITDChdBLXA0/XIi8jyjIvbjohPSQtBJ+0e7jbxw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SwOrSybOzWSr5qWMNPDEpPPILVMRXcVS2oipLakb7QA=;
- b=DVLdBKWJwLew9KiuAa1Xlk8pDYykaUg0z6WW5T3urxqVtl82cU5aGpa5c2bMLHR7xSwLeSwu4NmooJpPGyN5ZtG51HRbinfbKEmYF05g9LyItDQ+kVcNKYEDX+AGeQ8HgNhIt7buetride0rTd9uAG2UHiYn6QA91QKZjONHe84zaMlkMnSzzDSGk7i0Sr1fKfTw0GV/eYVe1a9EkIQu4FEe1bA0SDcE2PsIHIB37nZTakiU/w4XAK+CucDL3OiLccccLkir6jdDfGK1T2l9Soe+uvivKTsLo7XAHEHN6QJ0/NHKn7xtP1Y5pQr+fhQCh5mauffTvPhwfgLlCRpdxg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
- header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
+        Mon, 25 Apr 2022 05:17:48 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939CC2FF
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 02:14:43 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id v4so4859698ljd.10
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 02:14:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SwOrSybOzWSr5qWMNPDEpPPILVMRXcVS2oipLakb7QA=;
- b=BQDO1RieY2E3iJqYz1FBhFW+RaKraWgkbVqErKbm+rFUuYqiPfCOVIFe4ablYF7fl100hEA1uOV56qaHE2E4UbZok1O+ueiMBl8C+4PvYx7AXiQMTIO5eThx8FrvLZG3VBQXBLPbc5FsTHr+R2WhE24e5CXQndzl26qaKsW7y9c=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=analogixsemi.com;
-Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
- by CO6PR04MB7746.namprd04.prod.outlook.com (2603:10b6:5:356::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13; Mon, 25 Apr
- 2022 09:14:27 +0000
-Received: from BY5PR04MB6739.namprd04.prod.outlook.com
- ([fe80::e9ba:4c90:6e9c:39f]) by BY5PR04MB6739.namprd04.prod.outlook.com
- ([fe80::e9ba:4c90:6e9c:39f%4]) with mapi id 15.20.5186.021; Mon, 25 Apr 2022
- 09:14:27 +0000
-Date:   Mon, 25 Apr 2022 17:14:19 +0800
-From:   Xin Ji <xji@analogixsemi.com>
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     Robert Foss <robert.foss@linaro.org>,
-        dri-devel@lists.freedesktop.org, Jonas Karlman <jonas@kwiboo.se>,
-        David Airlie <airlied@linux.ie>, qwen@analogixsemi.com,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-kernel@vger.kernel.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        bliang@analogixsemi.com
-Subject: Re: [PATCH v2 4/4] drm/bridge: anx7625: Use DPI bus type
-Message-ID: <20220425091419.GA967110@anxtwsw-Precision-3640-Tower>
-References: <20220422084720.959271-1-xji@analogixsemi.com>
- <20220422084720.959271-4-xji@analogixsemi.com>
- <CAG3jFytWGSUM9mevHewdmEe-hq3JgB74s7_f0fsEQqkXr9VUHg@mail.gmail.com>
- <CAG3jFyvEYbwkdGtiNR-6vFEXTLjcyT_viqp9qeVxFTu0PrJEVA@mail.gmail.com>
- <CAGXv+5E1cCNWD98fMDjC38y2UztZd=PNQ+=G=wrBYfoXkswvHA@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGXv+5E1cCNWD98fMDjC38y2UztZd=PNQ+=G=wrBYfoXkswvHA@mail.gmail.com>
-X-ClientProxiedBy: TY2PR06CA0014.apcprd06.prod.outlook.com
- (2603:1096:404:42::26) To BY5PR04MB6739.namprd04.prod.outlook.com
- (2603:10b6:a03:229::8)
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=2m/c+HTiq67jsqWp8uamRbhLl470hiH704V1w+W3v9Y=;
+        b=IEPMtmNYpYNsPilFsWFkpFumP+L7VSIZrUb7VXsi5gcC35pMvie121W8IFgUp01fmD
+         TPAt6nUofwHecJ+orsdIp5f/Mt5RJqIJKg1SuDWUV3hNzj8R74B7PJM94HGra93amAZv
+         X6rMtN1Z6EDd4kWzexCnO/gGjBqpveqH2buVZSmGym6WhWvplIav6fLaUzZpky6KVii1
+         SUYGXFofBn63ftIrEpVpw3Qgwh46a9LIGcXeAHO71Y2LpVNz4C1lYgC2E8hJ9gbF4cRf
+         3abbpeuvsKAXkWyZSWr+SK0OYVWwDHec4wsuz0+02muh1FoFBc27XLOgqQlCoH7lAdUw
+         jVGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=2m/c+HTiq67jsqWp8uamRbhLl470hiH704V1w+W3v9Y=;
+        b=g1oddxLn11y/pb8TBgJ+Wrw5L/uhhFt2hShErIZaROMFw5cVdjNENGC4lvwbFGFKtH
+         PZ+JjwH5YTmMiHxfAeWHjZN/gj5KPg8yKrj7V0UaRKvPc9h8uk7BXsUrRYTVn8BxnSKE
+         71kIZ2WMkosYvGve7N7fPnZUSFmJCT7DwhqoGIqZhrPzW3OXthiPP1Vg8qnxokEdjXtD
+         LnBjp3f4ZsoC+rFHYn5EKSTAYj0EpCY8VhMBtcdn5ewbY+IRM2WouGTCpvsr4k6Yjag0
+         L/3xkRhOpiVgTiZXxOd8FHuGbQ4S8ZImPOpqRanxiqxeYEMMozOH3NAIpI4MHg4IcG0v
+         EgUg==
+X-Gm-Message-State: AOAM530gzy72px+CAoShbMEjxRqJUaAf13BypoYEtXQ1SRBzR50w6cpA
+        TeMMz1Ob/CN5FsSm+B0iNMjbBSujDh1f1AcyELdfgb4DxopVJRiA
+X-Google-Smtp-Source: ABdhPJx/cFWK1IfOxeLnXIj3ul0cs5h4+up+3rAHZwWY31NpGNkudu/DvbMxci3Gsimd1N+DLcHm0s/0jmSF1E162ic=
+X-Received: by 2002:a2e:93c6:0:b0:24d:422f:f8f0 with SMTP id
+ p6-20020a2e93c6000000b0024d422ff8f0mr10872689ljh.469.1650878081497; Mon, 25
+ Apr 2022 02:14:41 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7ef4eba5-0ddc-422a-376e-08da269bfeee
-X-MS-TrafficTypeDiagnostic: CO6PR04MB7746:EE_
-X-Microsoft-Antispam-PRVS: <CO6PR04MB7746D0314A3761D3766D4FDAC7F89@CO6PR04MB7746.namprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BI5qR5z1/9MP5U5njOQyDDFmTkj+A0xeNKRDUoCt9OTtaZFuMcHa6B2jAKOGoH50X8bU7U4AhSz7lvZ6Mu0q+9UHsv3ncka0w8zZZV0AmxI92JO0L5FeqteAcqPYAkrRnDa72XZA/5IsWy+5UMgEHgJhAKcxJcBMHViOFOlf6yNzTOWioxpuJR6/2NNHch0ENBx1QFsMtQYS2M3GT8Gj3PzxyBOoDz9XDEXv5APhUMTCyXXvOFJojCuLrzxjon+f0IEmY1hhE/smfUjLUJ1v4U3+HAHSgtfjbwqKKynWYSsmj2Q3Y12nkHBDLFlZqc6/HxJPgcGM2X4zyI1KrZyRrKzctm4K33CX/IdjxYzoAofhB54AxLQlKJuf1411sZzOcp8wK1z1eDXpwoKyXtOVSEvOS2kISkmmG7H9ZP9Q/fRp+jTG6P0evEunFBhek2BHr4vp7j+drESSpMPWa1EhLa8V7D0hefFwxCjVNNsg7qsyAO2y18MViTJqSvO+UPd+NkPwtvpEBevHen+rIxOI9CVHw/d2e+VzQmK0IhJZ2mJBF96bxWTHd7OZGgSM8Zee3hftpIw0aILsDEPIwsGUmnFJmgreqdjXEq6FjqXRG2xOPfTBw1PK2zlmJCuyJJCllPM177/jcwAokUgmoBBmVEpHLOVLkBxUabkeV2iJV4IwXj9soFwlJBNchQ8pg2jdyGiZwaaeNfceqHzZ1l+dXg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(8676002)(4326008)(66946007)(66556008)(53546011)(55236004)(86362001)(316002)(38100700002)(6916009)(54906003)(6506007)(6512007)(52116002)(9686003)(7416002)(186003)(8936002)(2906002)(6486002)(5660300002)(1076003)(107886003)(38350700002)(66476007)(33656002)(26005)(83380400001)(508600001)(33716001)(6666004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XjfmbmGxeuIzjlWvpZQTiU35q9qI11XOrEFSy24Xh2g1NhiUbbi8DbjM1lux?=
- =?us-ascii?Q?nSkDXss+L7qLjEdwQeeOaZ7Thx/gRUkT9EYRtBsw/CgMSw/dShmyFFFHu+tH?=
- =?us-ascii?Q?8iRBBHCqSPXZjaIWMKzgMRUUApTPaB8lXCU68F1mW7STYbOV2TRGB/DcU6Mr?=
- =?us-ascii?Q?KCCzJEoKs6SMw3FM9LEAk26PSAZ3wxvKerMRdGFh1J5bmmk0tBDY/w4FFgH0?=
- =?us-ascii?Q?6aWIpQD2CINpyhv0kap1fiCaKVzpANklTa08MiSt4VdR9B+ZbMr3bmhQFl0b?=
- =?us-ascii?Q?FmDE4qQcfBpY8nGeDRYTEur0awYBTDrki+N/rNBal8V3cTxaUnqiWKHz03X5?=
- =?us-ascii?Q?kCgyag8+pUZ/V+Dfh2L82LJaQLKXpkmiuD5UrVwcOgfRKWihF2nRzSHfM9YG?=
- =?us-ascii?Q?bu89Y/dPBz2NAgL8EJAGMiL1mE/XsIeiKT/Di03cmXyQRf4hmwoyNJst72ll?=
- =?us-ascii?Q?G5s0QbpAgmNC7rF+UaX2Z7+YxeGIcACis46RTJUhcN/1qlN7x32glEjEn/NX?=
- =?us-ascii?Q?CI1ZeFAMfl5HtTVozDKAxcpPjK+jr5gIZV8QZG2aVlsrPjjyZ4QQ1oPqaK2r?=
- =?us-ascii?Q?6VrSrzmAh1cnaIsODS+w0PvCqnsPJCOjbXnUGk/rQbrxeEsOSJANrTIdFD0H?=
- =?us-ascii?Q?mCUc72QCjGwUD49ez6tFngGniWDPrWBgzO+O9RcIBdJTXga9QiCjvzZlQqgE?=
- =?us-ascii?Q?Ufo5zVI6e0dKeZDrj8LcIE8IJz5QX54J9/3rzmITh4qcUhdxPKo2VRDXrO11?=
- =?us-ascii?Q?EXDjEDHnBAWVjhmHNse+8Inng3lmJN3B90Y77IRxD5r8IdEDhIN2owLIqHYJ?=
- =?us-ascii?Q?CCgXlN47C0NCqVOVV96DhSviPrCQvuPkzwrAwWlGmp0aCSjboczXwn/uuZgn?=
- =?us-ascii?Q?ZrWl+YmSHgUCMDUL66RiE/jSjMBFq9QLH/J02xpUmf047MDZGDtaPNF2uGHb?=
- =?us-ascii?Q?wkapdFJbSkKzeWq0KEo58ST97eMc0F6/JBWH4gVaphegc7/r5tjFzMQrQoxn?=
- =?us-ascii?Q?e/LvlN8clye7bSxqhPfWRhpY8Z/4JAgywT8XOzEG8TF2vBJgfrq1vPEuuv5v?=
- =?us-ascii?Q?IOg0OYoz/o7YiCFdDYlYLFsPF4pqVIuRRORGcDHMrGqEVIwdISO8xjheZ8PH?=
- =?us-ascii?Q?IkO83EZRWah2xUu2TI88L0GuSVNbMnVTSo1SMnVImzs58MNiaJ37AaLSiirz?=
- =?us-ascii?Q?VO3tSlUh7ekMYK1FCrvD9TecvMZNIx7FZGbJvEVJvb2tIjh31DTTO9FA+LCD?=
- =?us-ascii?Q?pPk7a/neTPCMNTG8zk+NaBf1lxXcvyYHjwIf930D6twx9UMe+LBs8equH6Ca?=
- =?us-ascii?Q?GBJL+/mGxv1rKarNRrA0L2dQLdGbVBa9HdvV4fCvKmjr7mvurSAUfAy2hm2k?=
- =?us-ascii?Q?NU7io7D73b57B0xuqlrZdrOtxU4+9OUgTV8pzSmGd9EcEhfoG5WR+S32Smxb?=
- =?us-ascii?Q?F44EgZBO1QQ8iqYsGWDFWg/Alj4aJ0D7N1QGp4T5NneV8cM8V7tbFLiYQIvN?=
- =?us-ascii?Q?dnMsxS1YReKBTTuGXtc0O8oG/QZV0AApclklj7cawcJsR4r3WGLmvGhkHamm?=
- =?us-ascii?Q?QBPyL4Kv9DZ/U5B81S56TlSuf0/bdr9poCf1Y28NyftpAa/mePtCzwE0eJeg?=
- =?us-ascii?Q?61ut4XXWYauI62RglsY+mhHlLQOe8zT1IptiDHR6tfjhCvaRYy21OSVTPUmW?=
- =?us-ascii?Q?pdzXjbTN/sHhCgelfAkenMFPkC2E5e4kQIGkvUY8CVA05DoBikYGis0Hd6Q1?=
- =?us-ascii?Q?rYZPhihwuQ=3D=3D?=
-X-OriginatorOrg: analogixsemi.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7ef4eba5-0ddc-422a-376e-08da269bfeee
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2022 09:14:26.8438
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2h5y7Dsb29MTh0JSgqbM65WIpEarE2off2yB1SvWdC6sp2VGqIccmUz4N9yOT3gv6vQ1GvnLk0SrkPYcBNeAIQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR04MB7746
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Sender: mitchfastloans@gmail.com
+Received: by 2002:a9a:4c46:0:b0:1b9:a92f:831f with HTTP; Mon, 25 Apr 2022
+ 02:14:40 -0700 (PDT)
+From:   "Warren E. Buffett" <wbuffett534@gmail.com>
+Date:   Mon, 25 Apr 2022 02:14:40 -0700
+X-Google-Sender-Auth: eicktLY4gQjjtEnyIIROxeP0nQg
+Message-ID: <CAKMcEtPKy8pNL0fqJXyx1HpmhYJX0MiYFQUq8RezD7VwupKb3Q@mail.gmail.com>
+Subject: Darowizna !!!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=2.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 04:24:50PM +0800, Chen-Yu Tsai wrote:
-> On Fri, Apr 22, 2022 at 10:13 PM Robert Foss <robert.foss@linaro.org> wrote:
-> >
-> > On Fri, 22 Apr 2022 at 16:01, Robert Foss <robert.foss@linaro.org> wrote:
-> > >
-> > > On Fri, 22 Apr 2022 at 10:49, Xin Ji <xji@analogixsemi.com> wrote:
-> > > >
-> > > > As V4L2_FWNODE_BUS_TYPE_PARALLEL not properly descript for DPI
-> > > > interface, this patch use new defined V4L2_FWNODE_BUS_TYPE_DPI for it.
-> > > >
-> > > > Fixes: fd0310b6fe7d ("drm/bridge: anx7625: add MIPI DPI input feature")
-> > > > Signed-off-by: Xin Ji <xji@analogixsemi.com>
-> > > > ---
-> > > >  drivers/gpu/drm/bridge/analogix/anx7625.c | 8 ++++----
-> > > >  1 file changed, 4 insertions(+), 4 deletions(-)
-> > > >
-> > > > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > > > index 376da01243a3..71df977e8f53 100644
-> > > > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > > > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > > > @@ -1623,14 +1623,14 @@ static int anx7625_parse_dt(struct device *dev,
-> > > >
-> > > >         anx7625_get_swing_setting(dev, pdata);
-> > > >
-> > > > -       pdata->is_dpi = 1; /* default dpi mode */
-> > > > +       pdata->is_dpi = 0; /* default dsi mode */
-> > > >         pdata->mipi_host_node = of_graph_get_remote_node(np, 0, 0);
-> > > >         if (!pdata->mipi_host_node) {
-> > > >                 DRM_DEV_ERROR(dev, "fail to get internal panel.\n");
-> > > >                 return -ENODEV;
-> > > >         }
-> > > >
-> > > > -       bus_type = V4L2_FWNODE_BUS_TYPE_PARALLEL;
-> > > > +       bus_type = 0;
-> > > >         mipi_lanes = MAX_LANES_SUPPORT;
-> > > >         ep0 = of_graph_get_endpoint_by_regs(np, 0, 0);
-> > > >         if (ep0) {
-> > > > @@ -1640,8 +1640,8 @@ static int anx7625_parse_dt(struct device *dev,
-> > > >                 mipi_lanes = of_property_count_u32_elems(ep0, "data-lanes");
-> > > >         }
-> > > >
-> > > > -       if (bus_type == V4L2_FWNODE_BUS_TYPE_PARALLEL) /* bus type is Parallel(DSI) */
-> > > > -               pdata->is_dpi = 0;
-> > > > +       if (bus_type == V4L2_FWNODE_BUS_TYPE_DPI) /* bus type is DPI */
-> > > > +               pdata->is_dpi = 1;
-> > > >
-> > > >         pdata->mipi_lanes = mipi_lanes;
-> > > >         if (pdata->mipi_lanes > MAX_LANES_SUPPORT || pdata->mipi_lanes <= 0)
-> > >
-> > > Reviewed-by: Robert Foss <robert.foss@linaro.org>
-> >
-> > Acked-by: Robert Foss <robert.foss@linaro.org>
-> 
-> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
-> 
-> Confirmed this fixes the display on Juniper (Acer Chromebook Spin 311) on
-> mainline (next-20220422).
-> 
-> Xin, in the future, please send the whole series to all recipients of
-> all patches listed by get_maintainers.pl, not just the recipients of
-> each patch. In the case of this series, they should have been sent
-> to all of the mailing lists (media, devicetree, dri-devel) so that
-> everyone has the same, full view of the patches.
-Hi ChenYu, OK, I'll send to all media, devicetree, dri-devel next time.
-Thanks,
-Xin
-> 
-> ChenYu
+--=20
+Drogi Zwyci=C4=99zco,
+
+
+ Nazywam si=C4=99 Warren E. Buffett, jestem ameryka=C5=84skim magnatem
+biznesowym, inwestorem i filantropem. Jestem odnosz=C4=85cym najwi=C4=99ksz=
+e
+sukcesy inwestorem na =C5=9Bwiecie. G=C5=82=C4=99boko wierz=C4=99 w zasad=
+=C4=99 "dawania za
+=C5=BCycia". Mam jedn=C4=85 ide=C4=99, kt=C3=B3ra nigdy nie zmieni=C5=82a s=
+i=C4=99 w moim umy=C5=9Ble, =C5=BCe
+powiniene=C5=9B u=C5=BCywa=C4=87 swojego bogactwa, aby pomaga=C4=87 ludziom=
+ i zdecydowa=C5=82em
+si=C4=99 przekaza=C4=87 { 3,500,000.00 Euro } Trzy Miliony Pi=C4=99=C4=87se=
+t Tysi=C4=99cy Euro
+losowo wybranym ludziom na ca=C5=82ym =C5=9Bwiecie. Kiedy otrzymasz ten e-m=
+ail,
+powiniene=C5=9B liczy=C4=87 si=C4=99 jako szcz=C4=99=C5=9Bciarz, poniewa=C5=
+=BC Tw=C3=B3j adres e-mail
+zosta=C5=82 wybrany online podczas losowego wyszukiwania.
+
+
+Prosz=C4=99 odezwij si=C4=99 do mnie szybko, abym wiedzia=C5=82, =C5=BCe Tw=
+=C3=B3j adres e-mail
+jest poprawny.
+
+
+Odwied=C5=BA t=C4=99 stron=C4=99: https://en.wikipedia.org/wiki/Warren_Buff=
+ett lub
+wyszukaj moje nazwisko w google, aby uzyska=C4=87 wi=C4=99cej informacji:
+(Warren E. Buffett).
+
+
+Z niecierpliwo=C5=9Bci=C4=85 czekam na odpowied=C5=BA.
+
+
+Z powa=C5=BCaniem,
+Pan Warren E. Buffett
+Dyrektor Generalny: Berkshire Hathaway
+
+http://www.berkshirehathaway.com/

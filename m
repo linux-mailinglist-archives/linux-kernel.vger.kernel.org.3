@@ -2,84 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE3D50E4C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:50:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AA8A50E4C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:51:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243015AbiDYPxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 11:53:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44722 "EHLO
+        id S243024AbiDYPyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 11:54:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242990AbiDYPxT (ORCPT
+        with ESMTP id S241638AbiDYPyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 11:53:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD1F1A80D;
-        Mon, 25 Apr 2022 08:50:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CB9CCB817A8;
-        Mon, 25 Apr 2022 15:50:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 942F1C385A9;
-        Mon, 25 Apr 2022 15:50:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650901811;
-        bh=xCiXIyB1/9rUM4Y1cYvZ+2b6PvYqWTxHDP+v2W+MwYQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=tz9w144WPnfJJL/IW3IrbxXbnD4HLlwKaqn5LIAOvkbryTIyBy3PjMImhZ+Alat1B
-         PjtVU9VjkAUDH+3+/446jAVjOZKs4a40ww9Fk/Kybqat2NUuJ6ip+Dur4FAL4qKZU+
-         GQwvqJqAJ4vfiPcTw4dS3SGxsX+fx/N57HEJ4M5BU+nVXjFgPCSADJ4JgkkCKmxKZ+
-         OnApJheuylV3Vh0Pe+DksBIsB28DNA5RLtGSX/1M7c5ip+psyiYA+erhIDb10m6AfX
-         eP4S4kV7YIgwgofr5pkaYf7I/wbuGtOFZVL8t7fugIYXFboBQab8ql+2ZBvDRxunon
-         0NCKvEsTAeSbA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7CF35E85D90;
-        Mon, 25 Apr 2022 15:50:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 25 Apr 2022 11:54:22 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D653A5CB
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 08:51:18 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id q22so16319017iod.2
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 08:51:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=KRYSOrgaeJ2D4S/Wx7GywXi3KDyCDXqWNNYrYsjMpyU=;
+        b=a6Tudt/FF4aceLEyf67ZDqeMl/oD+rorEIh9wu4NaBa+KN9uq7+ipS69p9kzfR/otj
+         yThrGkkFG+OzNwE6bjcMjkTgPe6X65RjUzbfj5jsh/xq7SprTpJYlyJ/P+eZSSzGlA+R
+         3rEQpLJx9dIrpizhRymVDP1HswnMdVjv8WuJI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=KRYSOrgaeJ2D4S/Wx7GywXi3KDyCDXqWNNYrYsjMpyU=;
+        b=0OGXdsmQvM/Lg6FzANs5p5Lv9ZTdoTogyiU48td+hHreDMLxUEk3Iss8Fw9w0ZMVyN
+         LWv+fhu8b4BCsJjzXIg29VDwmKrSFol+LotlucWSsY8cYqWLhycJAZlJtidu9l0s0fMs
+         RqHKZGj7C+XUQmWugH/YSRS0Q6zjHrhgLKg3G1lnZY9wX/6sRO/wqrc/3cmdw4tOJKfJ
+         Gra1ucYFYg355iYM3A4sooidUvR+tihn3s7YzZNPmV4G8cwHQAz2BoAVNo+cUukuaf9Q
+         rT3K8eR3Xey2EYA9TvQHYWoMa0WvjiKbDTxlP7VOsLqQzYXisl6UwcoN4FLFU26jSA/s
+         /SUQ==
+X-Gm-Message-State: AOAM5308zOHpZaAqHBOUbPofHKDu+PqKQUd1XKKz/Sxgto+xpnlZmMvf
+        eSiTbXNpg4RJqnsnR7rFxVSL0w==
+X-Google-Smtp-Source: ABdhPJyJq9cXy0E5jrK4OxRObAqzGlCYjTa42Sbs2Sfq9yDNZHOJz2BGh5L/eAtEME6MySvniXiqTw==
+X-Received: by 2002:a5d:9318:0:b0:649:a18:dab8 with SMTP id l24-20020a5d9318000000b006490a18dab8mr7829255ion.96.1650901877580;
+        Mon, 25 Apr 2022 08:51:17 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id j12-20020a6b310c000000b0065744ce0180sm7683070ioa.8.2022.04.25.08.51.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Apr 2022 08:51:17 -0700 (PDT)
+Subject: Re: [PATCH] selftests/resctrl: Fix null pointer dereference on open
+ failed
+To:     Colin Ian King <colin.i.king@gmail.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>, Babu Moger <babu.moger@amd.com>,
+        Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>,
+        linux-kselftest@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220424211536.1373878-1-colin.i.king@gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <04a35a47-d83a-67a1-5ed4-ba314c6e1ecf@linuxfoundation.org>
+Date:   Mon, 25 Apr 2022 09:51:16 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] libbpf: Remove unnecessary type cast
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165090181150.3120.18254701364580010836.git-patchwork-notify@kernel.org>
-Date:   Mon, 25 Apr 2022 15:50:11 +0000
-References: <20220424143420.457082-1-ytcoode@gmail.com>
-In-Reply-To: <20220424143420.457082-1-ytcoode@gmail.com>
-To:     Yuntao Wang <ytcoode@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220424211536.1373878-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
-
-On Sun, 24 Apr 2022 22:34:20 +0800 you wrote:
-> The link variable is already of type 'struct bpf_link *', casting it to
-> 'struct bpf_link *' is redundant, drop it.
+On 4/24/22 3:15 PM, Colin Ian King wrote:
+> Currently if opening /dev/null fails to open then file pointer fp
+> is null and further access to fp via fprintf will cause a null
+> pointer dereference. Fix this by returning a negative error value
+> when a null fp is detected.
 > 
-> Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
+
+How did you find this problem and how can it be reproduced? Is there
+a case where test fails to open "/dev/null"?
+
+> Fixes: a2561b12fe39 ("selftests/resctrl: Add built in benchmark")
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 > ---
->  tools/lib/bpf/libbpf.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>   tools/testing/selftests/resctrl/fill_buf.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/resctrl/fill_buf.c b/tools/testing/selftests/resctrl/fill_buf.c
+> index 51e5cf22632f..56ccbeae0638 100644
+> --- a/tools/testing/selftests/resctrl/fill_buf.c
+> +++ b/tools/testing/selftests/resctrl/fill_buf.c
+> @@ -121,8 +121,10 @@ static int fill_cache_read(unsigned char *start_ptr, unsigned char *end_ptr,
+>   
+>   	/* Consume read result so that reading memory is not optimized out. */
+>   	fp = fopen("/dev/null", "w");
+> -	if (!fp)
+> +	if (!fp) {
+>   		perror("Unable to write to /dev/null");
+> +		return -1;
+> +	}
+>   	fprintf(fp, "Sum: %d ", ret);
+>   	fclose(fp);
+>   
+> 
 
-Here is the summary with links:
-  - [bpf-next] libbpf: Remove unnecessary type cast
-    https://git.kernel.org/bpf/bpf-next/c/003fed595c0f
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+thanks,
+-- Shuah

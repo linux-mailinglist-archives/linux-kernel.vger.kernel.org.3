@@ -2,153 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B98950DDCC
+	by mail.lfdr.de (Postfix) with ESMTP id EC10E50DDCE
 	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 12:22:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235338AbiDYKYs convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 25 Apr 2022 06:24:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32976 "EHLO
+        id S239632AbiDYKZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 06:25:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235072AbiDYKYf (ORCPT
+        with ESMTP id S232020AbiDYKZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 06:24:35 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A7B583B2
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 03:21:30 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nivqI-00049H-9V; Mon, 25 Apr 2022 12:21:18 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nivqH-0057yg-Ob; Mon, 25 Apr 2022 12:21:16 +0200
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nivqF-0005uW-Hw; Mon, 25 Apr 2022 12:21:15 +0200
-Message-ID: <1ec5ce3673dcdaa914e20ef2aae03f549d05ff9a.camel@pengutronix.de>
-Subject: Re: [PATCH v2 0/3] add fwnode support to reset subsystem
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     =?ISO-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     Lizhi Hou <lizhi.hou@xilinx.com>,
-        Sonal Santan <sonal.santan@xilinx.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Brown <broonie@kernel.org>
-Date:   Mon, 25 Apr 2022 12:21:15 +0200
-In-Reply-To: <20220408174841.34458529@fixe.home>
-References: <20220324141237.297207-1-clement.leger@bootlin.com>
-         <Ykst0Vb4fk+iALzc@robh.at.kernel.org> <20220405092434.6e424ed4@fixe.home>
-         <YkxWeMNw9Ba0KjHM@robh.at.kernel.org> <20220405175120.23fc6b2a@fixe.home>
-         <CAL_JsqLdBcAw1KPnrATHqEngRWkx6moxDODH1xV67EKAufc6_w@mail.gmail.com>
-         <20220406094019.670a2956@fixe.home> <Yk2TVAfPVh9a1tUR@robh.at.kernel.org>
-         <20220408174841.34458529@fixe.home>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        Mon, 25 Apr 2022 06:25:01 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143935D187;
+        Mon, 25 Apr 2022 03:21:57 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23P8MpI7023893;
+        Mon, 25 Apr 2022 10:21:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=Au4JzryWRBYgy4L1Xbqp/CvWbSnc2mAQbKPn+mwsVH0=;
+ b=DgoOhFsX4udMT/K6Kx6FVRwcQGIpR2htQo3Bt4+5upakDxiQ4d9CkTflaZJBvPd/JRnz
+ VNHCTsf2mbuooCU6nPiENk3rHgZgr5JMrP8hUxyn5cSALo3HO66P6Sv++Tp/wV04BB+2
+ iG4oGUXqHS+bSrbHW1RHdCJc3IlGNxluXLErKPP5zwGu5iXWLaVp51N7x5swU2Twcvx7
+ K6KGD4Eor6M9iPMYL8ouMk9mZX7+07J2XLHOxQEdGjgRWJQo3x5Cldyd+O/x+ul2l4Z5
+ HkVQHnFKStFdbbK2TxtHCO+QbngL7Mcu4WPs7PY/AHrQie8Ep/Pua9zRovkfFiU8JhmH Nw== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fmuh5wydy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Apr 2022 10:21:44 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23PADNWg029499;
+        Mon, 25 Apr 2022 10:21:42 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06fra.de.ibm.com with ESMTP id 3fm8qhhtdt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Apr 2022 10:21:42 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23PALp3856164610
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 25 Apr 2022 10:21:51 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E0FE2A4054;
+        Mon, 25 Apr 2022 10:21:38 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7E186A405B;
+        Mon, 25 Apr 2022 10:21:38 +0000 (GMT)
+Received: from osiris (unknown [9.145.60.82])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Mon, 25 Apr 2022 10:21:38 +0000 (GMT)
+Date:   Mon, 25 Apr 2022 12:21:37 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        tglx@linutronix.de, arnd@arndb.de,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>
+Subject: Re: [PATCH v6 02/17] s390: define get_cycles macro for arch-override
+Message-ID: <YmZ2MSQssUNwoprd@osiris>
+References: <20220423212623.1957011-1-Jason@zx2c4.com>
+ <20220423212623.1957011-3-Jason@zx2c4.com>
+ <YmZtJz4tsP6hr2H5@osiris>
+ <CAHmME9r84RAvALEA91b+uRaRfhM1VJn=bQkPWQ=n+_ZWpnPb5w@mail.gmail.com>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHmME9r84RAvALEA91b+uRaRfhM1VJn=bQkPWQ=n+_ZWpnPb5w@mail.gmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: dLjpCHMTCJRAW-5iEGbUuGwEdFn7OJKS
+X-Proofpoint-GUID: dLjpCHMTCJRAW-5iEGbUuGwEdFn7OJKS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-25_06,2022-04-25_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ phishscore=0 adultscore=0 bulkscore=0 spamscore=0 mlxlogscore=626
+ lowpriorityscore=0 malwarescore=0 priorityscore=1501 suspectscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204250045
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Clément,
+On Mon, Apr 25, 2022 at 11:48:34AM +0200, Jason A. Donenfeld wrote:
+> On 4/25/22, Heiko Carstens <hca@linux.ibm.com> wrote:
+> > Is any of your subsequent patches making sure that the asm generic
+> > header file gets included everywhere? Otherwise I don't see the point
+> > of this patch.
+> 
+> Yes; patch 6 requires this as a prereq. I'm not doing this arbitrarily.
 
-On Fr, 2022-04-08 at 17:48 +0200, Clément Léger wrote:
-[...]
-> > > > > > I've told the Xilinx folks the same thing, but I would separate this
-> > > > > > into 2 parts. First is just h/w work in a DT based system. Second is
-> > > > > > creating a base tree an overlay can be applied to. The first part should
-> > > > > > be pretty straightforward. We already have PCI bus bindings. The only
-> > > > > > tricky part is getting address translation working from leaf device thru
-> > > > > > the PCI bus to host bus, but support for that should all be in place
-> > > > > > (given we support ISA buses off of PCI bus). The second part will
-> > > > > > require generating PCI DT nodes at runtime. That may be needed for both
-> > > > > > DT and ACPI systems as we don't always describe all the PCI hierarchy
-> > > > > > in DT.    
-> > > > > 
-> > > > > But then, if the driver generate the nodes, it will most probably
-> > > > > have to describe the nodes by hardcoding them right ?    
-> > > > 
-> > > > No, the kernel already maintains its own tree of devices. You just
-> > > > need to use that to generate the tree. That's really not much more
-> > > > than nodes with a 'reg' property encoding the device and function
-> > > > numbers.  
-> > > 
-> > > Just to clarified a point, my PCI device exposes multiple peripherals
-> > > behind one single PCI function.  
-> > 
-> > Right. I would expect your PCI device DT node to have a 'simple-bus' 
-> > child node with all those peripherals. And maybe there's other nodes 
-> > like fixed-clocks, etc.
-> > 
-> > > To be sure I understood what you are suggesting, you propose to create
-> > > a DT node from the PCI driver that has been probed dynamically
-> > > matching this same PCI device with a 'reg' property. I also think
-> > > this would requires to generate some 'pci-ranges' to remap the
-> > > downstream devices that are described in the DTBO, finally, load the
-> > > overlay to be apply under this newly created node. Is that right ?  
-> > 
-> > Right. You'll need to take the BAR address(es) for the device and stick 
-> > those into 'ranges' to translate offsets to BAR+offset.
-> 
-> Hi Rob,
-> 
-> I got something working (address translation, probing and so on) using
-> what you started. I switch to using changeset however, I'm not sure that
-> it make sense for property creation since the node has not yet been
-> added to the tree. Attaching the node with changeset however seems
-> to make sense. But I'm no expert here, so any advise is welcome.
->
-> Based on what we said, I created a PCI driver which uses a builtin
-> overlay. In order to be able to apply the overlay on the correct PCI
-> node -the one on which the card was plugged) and thus be totally plug
-> and play, the 'target-path' property is patched using direct fdt
-> function and replaced the target with the PCI device node path.
-> I don't see any other way to do that before applying the overlay since
-> of_overlay_fdt_apply() takes a fdt blob as input.
-> 
-> The driver also insert correct ranges into the PCI device in order to
-> translate the downstream node addresses to BAR addresses. It seems
-> reasonnable to assume that this depends on the driver and thus should
-> not be done by the PCI of core at all.
-> 
-> Finally, the driver probes the newly added childs using
-> of_platform_populate(). With all of that, the address translation
-> and the probing works correctly and the platform devices are created.
-> There is still a few things to fix such as the following:
-> 
-> [ 2830.324773] OF: overlay: WARNING: memory leak will occur if overlay
-> removed, property: /pci/pci@2,6/dev@0,0/compatible
-> 
-> But it seems like this is something that works and would allow to
-> support various use cases. From what I see, it should also work on
-> other platforms. Major advantage of that over fwnode is that the
-> changes are pretty small and relatively contained.
+Ok, that was not obvious to me, especially since I was only cc'ed for
+this patch and assumed this was actually a bug fix.
+Thanks for clarifying.
 
-Could you show this off somewhere?
-
-From this I take that fwnode support in the reset subsystem is not of
-use to you anymore. I'll postpone taking your patches then, until they
-are needed.
-
-regards
-Philipp
+Acked-by: Heiko Carstens <hca@linux.ibm.com>

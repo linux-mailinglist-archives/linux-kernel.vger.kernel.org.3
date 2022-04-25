@@ -2,46 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D11950E57F
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:22:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5937050E57E
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:21:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243345AbiDYQYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 12:24:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54114 "EHLO
+        id S243333AbiDYQYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 12:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237107AbiDYQYp (ORCPT
+        with ESMTP id S243332AbiDYQYe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 12:24:45 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5DFBA6D857
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 09:21:40 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7CAA11FB;
-        Mon, 25 Apr 2022 09:21:39 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6F1EC3F774;
-        Mon, 25 Apr 2022 09:21:37 -0700 (PDT)
-Message-ID: <cfab5ffc-af96-8368-0aae-927a6be65472@arm.com>
-Date:   Mon, 25 Apr 2022 18:21:20 +0200
+        Mon, 25 Apr 2022 12:24:34 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A406D1B6
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 09:21:30 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id z19so11802940iof.12
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 09:21:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=m8zyZFhgZtJWBx1ewY9EOqVFGvVP4XffFDuTR4TMpZg=;
+        b=MQGT7rHPHJlegzzdydwoJhuaK1pG/0OJnThzowwuLn6x+cXtb77D9y87kJTDstyih4
+         YK/CNOa++pAeVSwwTe6cUUrtkx09oMp5w3WBMvA1GfvwY0vxBhcovOYOaasRLYY1ARbM
+         OngZjpYsSL2SXEYYNa/u687tdECwchngQQkWc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=m8zyZFhgZtJWBx1ewY9EOqVFGvVP4XffFDuTR4TMpZg=;
+        b=z7u8AKq9V4EOT4MJXXrZmIRIVfSo9qUoiWGdqdvHpfT7wrobqYIzrgDapeL0L5fgDJ
+         eXFdnLewNrDWVJFP2SNwlhwjwlpkCDq6TnVeE44p9UShSvLw2lWAH5Fd3tdbalwRhxsA
+         3lAiVWGv22Qs9fUh26J36FkxHx/KWr+YilykBl/Z9Mv3aduJ0VsWZYzX6dqvKyFQTNht
+         HGlijnWpIiha60Y7f8ITkii7qqvwGw0xW8YibvtVBaKKvd14fXLggmysXYJKuAqoKc/h
+         OianOKMIs4rRrEfdXmAF5FcTmraaX2iPrujd6b/qdOFkNVwgtGK8O4wRP69iM0PvyZOe
+         Za1w==
+X-Gm-Message-State: AOAM5331rJEbOLlJ8W0EA9jlcq2THLN/eyHEk1tPRBfy1cyAr/18uVBE
+        1MxyPQ11mgZpFVkF6zoJQOoP7w==
+X-Google-Smtp-Source: ABdhPJyMkwLOWnY1zix4ts8sFxUiiA+CSi4WCWiBdfUop6aOA7TnBZaYztTUMenPZ4hB53BjOvzegw==
+X-Received: by 2002:a05:6638:41a0:b0:32a:90ae:f7a1 with SMTP id az32-20020a05663841a000b0032a90aef7a1mr7963693jab.101.1650903690100;
+        Mon, 25 Apr 2022 09:21:30 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id m8-20020a92cac8000000b002ca9d826c3fsm6495170ilq.34.2022.04.25.09.21.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Apr 2022 09:21:29 -0700 (PDT)
+Subject: Re: [PATCH] selftests/resctrl: Fix null pointer dereference on open
+ failed
+To:     "Colin King (gmail)" <colin.i.king@gmail.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>, Babu Moger <babu.moger@amd.com>,
+        Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>,
+        linux-kselftest@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220424211536.1373878-1-colin.i.king@gmail.com>
+ <04a35a47-d83a-67a1-5ed4-ba314c6e1ecf@linuxfoundation.org>
+ <604ea061-c566-e032-67cf-9bc622aa76ae@gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <a238cdbb-e5fd-64f1-ea18-8ef2e7481d33@linuxfoundation.org>
+Date:   Mon, 25 Apr 2022 10:21:29 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 2/2] sched/dl: Remove some comments and adjust code in
- push_dl_task
+In-Reply-To: <604ea061-c566-e032-67cf-9bc622aa76ae@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Hao Jia <jiahao.os@bytedance.com>, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, rostedt@goodmis.org,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com
-Cc:     linux-kernel@vger.kernel.org
-References: <20220422090944.52618-1-jiahao.os@bytedance.com>
- <20220422090944.52618-3-jiahao.os@bytedance.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20220422090944.52618-3-jiahao.os@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,44 +79,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/04/2022 11:09, Hao Jia wrote:
-
-Nitpick: I would change the message slightly into something like:
-
-sched/deadline: Remove superfluous rq clock update in push_dl_task()
-
-> The change to call update_rq_clock() before activate_task()
-> commit 840d719604b0 ("sched/deadline: Update rq_clock of later_rq
-> when pushing a task") is no longer needed since commit f4904815f97a
-> ("sched/deadline: Fix double accounting of rq/running bw in push & pull")
-> removed the add_running_bw() before the activate_task().
+On 4/25/22 10:06 AM, Colin King (gmail) wrote:
+> On 25/04/2022 16:51, Shuah Khan wrote:
+>> On 4/24/22 3:15 PM, Colin Ian King wrote:
+>>> Currently if opening /dev/null fails to open then file pointer fp
+>>> is null and further access to fp via fprintf will cause a null
+>>> pointer dereference. Fix this by returning a negative error value
+>>> when a null fp is detected.
+>>>
+>>
+>> How did you find this problem and how can it be reproduced? Is there
+>> a case where test fails to open "/dev/null"?
 > 
-> So we remove some comments that are no longer needed and update
-> rq clock in activate_task().
+> Found with static analysis, cppcheck. Open on /dev/null is unlikely to fail, but it's good to fail reliably rather than have a SIGSEGV :-)
 > 
-> Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
-> ---
->  kernel/sched/deadline.c | 8 +-------
->  1 file changed, 1 insertion(+), 7 deletions(-)
-> 
-> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-> index fb4255ae0b2c..8eb694ed7ac1 100644
-> --- a/kernel/sched/deadline.c
-> +++ b/kernel/sched/deadline.c
-> @@ -2319,13 +2319,7 @@ static int push_dl_task(struct rq *rq)
->  
->  	deactivate_task(rq, next_task, 0);
->  	set_task_cpu(next_task, later_rq->cpu);
-> -
-> -	/*
-> -	 * Update the later_rq clock here, because the clock is used
-> -	 * by the cpufreq_update_util() inside __add_running_bw().
-> -	 */
-> -	update_rq_clock(later_rq);
-> -	activate_task(later_rq, next_task, ENQUEUE_NOCLOCK);
-> +	activate_task(later_rq, next_task, 0);
->  	ret = 1;
->  
->  	resched_curr(later_rq);
 
-Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+I don't see how /dev/null open could fail here in this test.
+However, I will take this fix. Please add information how
+you found it and include the cppheck log in the commit log
+and send me v2.
+
+thanks,
+-- Shuah

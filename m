@@ -2,100 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 089E250E757
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 19:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C76C450E75E
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 19:33:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243991AbiDYRec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 13:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
+        id S244013AbiDYRg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 13:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238514AbiDYReb (ORCPT
+        with ESMTP id S233502AbiDYRg0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 13:34:31 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4121583A2;
-        Mon, 25 Apr 2022 10:31:24 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id w16so9751600ejb.13;
-        Mon, 25 Apr 2022 10:31:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Lx7n01ak613wao/PeGm56R/NraVbxP43cN5ZMlrScAY=;
-        b=AWomtSHBSdpy50i/AiQTF1zEO67p6sM2bAacCXCIrE1EI3drNnFByVmoCM0R/JmKoO
-         9gRqHx/Jriy3h41XZP3C0mqTsYL8gZMgJtK5YGBcBAM13cfn2MrAbHZu+63WnkD3pA0M
-         DlNSX4/BDpYDhYNLxlybbm4UpTRPqmYx6mc07No5+cFKexLhyMCE/gp0T9Y5ncFf9UlH
-         4t+iuhsW2AwBCXq8A0RuQ0hp4vsOhB/eDpAaHSKVH5lGxCZa6y2yaOCbBcLTm58dwi5j
-         2mokqtKMGMcjlCu7ZnzTM9o/NOIptNtADfUmrdCmKHoADrK3HZRdkAov3SEu1yD6nH7F
-         2pNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Lx7n01ak613wao/PeGm56R/NraVbxP43cN5ZMlrScAY=;
-        b=yWaRFSJ4t1V7Q49cde4pYMMv83Ld2nWxCRXiwgtdeRmlRF2wUnNS7CsJ2q3tOrfAqK
-         8ZfO85p+EuhzFYnTSpB2HAqVtQfVhRCphB0OhnjX/CUycBvYU10wZU9WSYhMBwuVbVaH
-         xbu3eQyNvmHSticVzD5ZRNsgC3eIET0s1BaS89Fiya7BPMzrXu0hfwz6mZQB+zu2Vd8p
-         aYZZ6YetqoA0BbdylwKaUlHVzkUe0/d7ToTV1ha+pLD1uC/4C2Np4QT8PEnYDfmuRg0J
-         XoGYsKDbEXjyGGO0whsQ00vGuCWHSLwHUhUzGlqcQiZ056FsQhxxDLajlunr8QlYfLcp
-         ahFg==
-X-Gm-Message-State: AOAM532W6UEKmkjKrz4Ls9t4DiZf1NCfJ00SBXNyT1PHD0v9zkeLnNR6
-        6hJ4tqpi2zzJXOZ7K30cV2c=
-X-Google-Smtp-Source: ABdhPJxvwSr3XtyRkaaNJxbkUJVkHfpHdLP+s0Vc1yhmamJDJWKzG5omORC7vSs528rfOCd348xwnw==
-X-Received: by 2002:a17:907:6289:b0:6e0:eb0c:8ee7 with SMTP id nd9-20020a170907628900b006e0eb0c8ee7mr16442680ejc.245.1650907883149;
-        Mon, 25 Apr 2022 10:31:23 -0700 (PDT)
-Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
-        by smtp.gmail.com with ESMTPSA id r19-20020a17090638d300b006d6e4fc047bsm3884297ejd.11.2022.04.25.10.31.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 10:31:22 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Chen-Yu Tsai <wens@csie.org>, Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: Re: [PATCH] bus: sunxi-rsb: Fix the return value of sunxi_rsb_device_create()
-Date:   Mon, 25 Apr 2022 19:31:21 +0200
-Message-ID: <2699804.BEx9A2HvPv@kista>
-In-Reply-To: <ff0ae741-efc4-ba6f-d869-4cb8fb7149ad@sholland.org>
-References: <ef2b9576350bba4c8e05e669e9535e9e2a415763.1650551719.git.christophe.jaillet@wanadoo.fr> <ff0ae741-efc4-ba6f-d869-4cb8fb7149ad@sholland.org>
+        Mon, 25 Apr 2022 13:36:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB3269495
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 10:33:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A7006148C
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 17:33:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDE66C385A7;
+        Mon, 25 Apr 2022 17:33:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650908000;
+        bh=5KkkCHMQlKS4LIUUedJqXCNf/v4WgrQgG5Czu2mEFYI=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=h/Q3XCjShWcJryVc0iyXgeDGTTOuJGUs50y4Sy9oaTtmZhwY7kRtNtixJvE36lhnV
+         YAKGDeRFj7quRkhVPn8Xx+J5TVHmx9WcefstSTluqG7xfGl+nbmQ48Z1bgQW873iWy
+         W6neIhH54mfYvcXPhaWvGCPSjecpdEVIJ5N+bBOKKCzsxeVRdk6VkieiPvOBu9NSAk
+         jVV61HYEB7QYN8aIUv49i1L7PskKwHJesEKxcMB+ORV13tfedhx/c78r0OAEfEV6ll
+         Qakyf7Q/YfUhYMkG4bOW7CB0raRyGWxbYb4ViH5a7rJPOpns8eEkwgfUHfdbCHOsk1
+         do783ozekP9OA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 606C45C042D; Mon, 25 Apr 2022 10:33:20 -0700 (PDT)
+Date:   Mon, 25 Apr 2022 10:33:20 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com
+Subject: Re: "Dying CPU not properly vacated" splat
+Message-ID: <20220425173320.GX4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220421193821.GA173010@paulmck-ThinkPad-P17-Gen-1>
+ <xhsmh4k2h9m26.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <xhsmh4k2h9m26.mognet@vschneid.remote.csb>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne sobota, 23. april 2022 ob 21:39:45 CEST je Samuel Holland napisal(a):
-> On 4/21/22 9:35 AM, Christophe JAILLET wrote:
-> > This code is really spurious.
-> > It always returns an ERR_PTR, even when err is known to be 0 and calls
-> > put_device() after a successful device_register() call.
-> > 
-> > It is likely that the return statement in the normal path is missing.
-> > Add 'return rdev;' to fix it.
+On Mon, Apr 25, 2022 at 05:15:13PM +0100, Valentin Schneider wrote:
 > 
-> Thanks for the patch. This definitely looks to be the case.
+> Hi Paul,
 > 
-> > Fixes: d787dcdb9c8f ("bus: sunxi-rsb: Add driver for Allwinner Reduced 
-Serial Bus")
-> > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> On 21/04/22 12:38, Paul E. McKenney wrote:
+> > Hello!
+> >
+> > The rcutorture TREE03 scenario got the following splat, which appears
+> > to be a one-off, or if not, having an MTBF in the thousands of hours,
+> > even assuming that it is specific to TREE03.  (If it is not specific to
+> > TREE03, we are talking tens of thousands of hours of rcutorture runtime.)
+> >
+> > So just in case this rings any bells or there are some diagnostics I
+> > should add in case this ever happens again.  ;-)
 > 
-> Reviewed-by: Samuel Holland <samuel@sholland.org>
-> Tested-by: Samuel Holland <samuel@sholland.org>
+> There should be a dump of the enqueued tasks right after the snippet you've
+> sent, any chance you could share that if it's there? That should tell us
+> which tasks are potentially misbehaving.
+
+And now that I know to look for them, there they are!  Thank you!!!
+
+CPU7 enqueued tasks (2 total):
+ pid: 52, name: migration/7
+ pid: 135, name: rcu_torture_rea
+smpboot: CPU 7 is now offline
+
+So what did rcu_torture_reader() do wrong here?  ;-)
+
+                                                      Thanx, Paul
+
+> > ------------------------------------------------------------------------
+> >
+> > [29213.585252] ------------[ cut here ]------------
+> > [29213.586287] Dying CPU not properly vacated!
+> > [29213.586314] WARNING: CPU: 7 PID: 52 at kernel/sched/core.c:9386 sched_cpu_dying.cold.167+0xc/0xc3
+> > [29213.589181] Modules linked in:
+> > [29213.589864] CPU: 7 PID: 52 Comm: migration/7 Not tainted 5.18.0-rc1-00196-g24f4daa283b8 #5468
+> > [29213.591720] Hardware name: Red Hat KVM/RHEL-AV, BIOS 1.13.0-2.module_el8.5.0+746+bbd5d70c 04/01/2014
+> > [29213.593698] Stopper: multi_cpu_stop+0x0/0xf0 <- stop_machine_cpuslocked+0xea/0x120
+> > [29213.595333] RIP: 0010:sched_cpu_dying.cold.167+0xc/0xc3
+> > [29213.596463] Code: 1f ea 00 49 89 e8 48 8d 93 38 07 00 00 48 c7 c7 60 2b d8 b9 e8 be 2a 00 00 e9 4b 7d 4a ff 48 c7 c7 18 2c d8 b9 e8 80 ed ff ff <0f> 0b 44 8b ab d0 09 00 00 8b 4b 04 48 c7 c6 95 d5 d6 b9 48 c7 c7
+> > [29213.600479] RSP: 0018:ffff9cbbc023bd88 EFLAGS: 00010082
+> > [29213.601630] RAX: 0000000000000000 RBX: ffff9b98df3e8cc0 RCX: 0000000000000003
+> > [29213.603175] RDX: 0000000000000003 RSI: 0000000100021495 RDI: 00000000ffffffff
+> > [29213.604699] RBP: 0000000000000086 R08: 0000000000000000 R09: c000000100021495
+> > [29213.606230] R10: 000000000081dc88 R11: ffff9cbbc023bba8 R12: ffffffffb889d6c0
+> > [29213.607755] R13: 0000000000000000 R14: 0000000000000000 R15: ffff9cbbc05bfd01
+> > [29213.609297] FS:  0000000000000000(0000) GS:ffff9b98df3c0000(0000) knlGS:0000000000000000
+> > [29213.611045] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > [29213.612279] CR2: 0000000000000000 CR3: 0000000016c0c000 CR4: 00000000000006e0
+> > [29213.613821] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > [29213.615433] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > [29213.616972] Call Trace:
+> > [29213.617516]  <TASK>
+> > [29213.617992]  ? sched_cpu_wait_empty+0x70/0x70
+> > [29213.618935]  cpuhp_invoke_callback+0x100/0x4a0
+> > [29213.619899]  cpuhp_invoke_callback_range+0x3b/0x80
+> > [29213.620933]  take_cpu_down+0x55/0x80
+> > [29213.621703]  multi_cpu_stop+0x61/0xf0
+> > [29213.622503]  ? stop_machine_yield+0x10/0x10
+> > [29213.623408]  cpu_stopper_thread+0x84/0x120
+> > [29213.624300]  smpboot_thread_fn+0x181/0x220
+> > [29213.625192]  ? sort_range+0x20/0x20
+> > [29213.625961]  kthread+0xe3/0x110
+> > [29213.626641]  ? kthread_complete_and_exit+0x20/0x20
+> > [29213.627777]  ret_from_fork+0x22/0x30
+> > [29213.628655]  </TASK>
+> > [29213.629185] ---[ end trace 0000000000000000 ]---
 > 
-
-Applied to sunxi/fixes-for-5.18, thanks!
-
-Best regards,
-Jernej
-
-

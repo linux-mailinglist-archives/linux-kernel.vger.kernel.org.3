@@ -2,68 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2346650E0EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 14:59:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50EB450E0F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:00:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238540AbiDYNCm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 25 Apr 2022 09:02:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42820 "EHLO
+        id S241186AbiDYNDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 09:03:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238933AbiDYNCb (ORCPT
+        with ESMTP id S239806AbiDYNC4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 09:02:31 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2489A13F1B
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 05:59:27 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-246-RsRt4rMLMJSg1HNL0-UwSg-1; Mon, 25 Apr 2022 13:59:24 +0100
-X-MC-Unique: RsRt4rMLMJSg1HNL0-UwSg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Mon, 25 Apr 2022 13:59:23 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Mon, 25 Apr 2022 13:59:23 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Mikulas Patocka' <mpatocka@redhat.com>
-CC:     'Linus Torvalds' <torvalds@linux-foundation.org>,
-        Andy Shevchenko <andy@kernel.org>,
-        device-mapper development <dm-devel@redhat.com>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Mike Snitzer <msnitzer@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Milan Broz <gmazyland@gmail.com>
-Subject: RE: [PATCH] hex2bin: make the function hex_to_bin constant-time
-Thread-Topic: [PATCH] hex2bin: make the function hex_to_bin constant-time
-Thread-Index: AQHYWCRFXKVloRHnAkSgNzNf81l36q0AX1CggAAH/4CAAC5kEA==
-Date:   Mon, 25 Apr 2022 12:59:23 +0000
-Message-ID: <e8de034196df450cb352fa60a570acca@AcuMS.aculab.com>
-References: <alpine.LRH.2.02.2204241648270.17244@file01.intranet.prod.int.rdu2.redhat.com>
- <CAHk-=wh+Z+OKH3jRttWGHbWSQq2wVMtdnA=ntDiadZu=VxAC7w@mail.gmail.com>
- <CAHk-=wibmkFz6dybsdpW_3kUnV20FhJazerWDcbm7yCp_Xv+CA@mail.gmail.com>
- <789f0463ce974e90a93f4dbf8c471156@AcuMS.aculab.com>
- <alpine.LRH.2.02.2204250701410.10912@file01.intranet.prod.int.rdu2.redhat.com>
-In-Reply-To: <alpine.LRH.2.02.2204250701410.10912@file01.intranet.prod.int.rdu2.redhat.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 25 Apr 2022 09:02:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2308113FB3
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 05:59:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650891578;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DnYEkw8ulZZ9zI2h3SIen3Sz7tMMDf8FghFH38SaqtA=;
+        b=TdvZFGNNiKXbuw5TfT+DufT5lE6My53TbGe3/1LmTXUYJxpngjVK7GFkN5kuK7EvKkEIu1
+        iVLCIiHQmts/sFgLRlZrsZhohJERN2v139BNMQwxwgC/K9kZ5+lFL+qvAttXVm5fi6Aki5
+        YjvaPcNJuy16/EuioXbem90EWYF9CDk=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-547-eekxLXqQO-OJFkKCj6nInw-1; Mon, 25 Apr 2022 08:59:37 -0400
+X-MC-Unique: eekxLXqQO-OJFkKCj6nInw-1
+Received: by mail-qk1-f198.google.com with SMTP id s63-20020a372c42000000b0069ec0715d5eso9617847qkh.10
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 05:59:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DnYEkw8ulZZ9zI2h3SIen3Sz7tMMDf8FghFH38SaqtA=;
+        b=pEhKsKeFj4y1zSrOo8o7gXE2GNIeuR/+f4wjt+Nh1W7iyR1gW4SKtgcTeYk9sGBLMv
+         8hqj1jO8jqsGBf7mvi8wmhKnz5iux++lCWVfkUOegQ33CGTGgoFg3uxpCOgVzFB9RbMo
+         gHVXgqKr0/pFQGFLC540C6w4U9CdIU2yLN96BSrnVkku1u2gnBiZBbnkw50was0h0bz0
+         8Mf4exIHufj5+YBc+3+lBq5vVt3KgmR7xyV2LO4jss5akt8IB6PUe9mTant1hbQG+LyA
+         1i6bjC6floVXhBttOMJDvY4Ei67Ly+psCPlyavSir4AodDfvDavZ3IXN5ixLwveDT07D
+         xxuw==
+X-Gm-Message-State: AOAM532YGaRtRGRT621W1dZ2OpuYdrnnnVcuPzUXpQ/MgLSaA3V699JO
+        f2ptxYuDUfnIC91+Dys2JfmL8QTR8C39QEDUEJNsJzVeiEoKFTjOJSu+C1m14Ha6mHYx4SbXrNH
+        jD1BTIEbrJc69L2icqnqGa0Wm
+X-Received: by 2002:ad4:5be8:0:b0:44e:b1dd:49dd with SMTP id k8-20020ad45be8000000b0044eb1dd49ddmr12215251qvc.57.1650891575420;
+        Mon, 25 Apr 2022 05:59:35 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJysjc4g9+k5z/ZgAsfyFPnG8gT7QemK7pZ8EjCjjux5cSOsib6kKtaTFEXjZGt0O10zOOulRg==
+X-Received: by 2002:ad4:5be8:0:b0:44e:b1dd:49dd with SMTP id k8-20020ad45be8000000b0044eb1dd49ddmr12215241qvc.57.1650891575205;
+        Mon, 25 Apr 2022 05:59:35 -0700 (PDT)
+Received: from halaneylaptop (068-184-200-203.res.spectrum.com. [68.184.200.203])
+        by smtp.gmail.com with ESMTPSA id v14-20020a05622a144e00b002f1f32f86a6sm5974951qtx.5.2022.04.25.05.59.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 05:59:34 -0700 (PDT)
+Date:   Mon, 25 Apr 2022 07:59:31 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        martin.petersen@oracle.com, jejb@linux.ibm.com,
+        avri.altman@wdc.com, alim.akhtar@samsung.com,
+        linux-arm-msm@vger.kernel.org, quic_asutoshd@quicinc.com,
+        quic_cang@quicinc.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bvanassche@acm.org
+Subject: Re: [PATCH v2 1/5] scsi: ufs: qcom: Fix acquiring the optional reset
+ control line
+Message-ID: <20220425125931.g3ub2fprsfa56bl6@halaneylaptop>
+References: <20220423140245.394092-1-manivannan.sadhasivam@linaro.org>
+ <20220423140245.394092-2-manivannan.sadhasivam@linaro.org>
+ <YmQURV7yQMof4RB8@ripper>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmQURV7yQMof4RB8@ripper>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,64 +83,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikulas Patocka
-> Sent: 25 April 2022 12:04
+On Sat, Apr 23, 2022 at 07:59:17AM -0700, Bjorn Andersson wrote:
+> On Sat 23 Apr 07:02 PDT 2022, Manivannan Sadhasivam wrote:
 > 
-> On Mon, 25 Apr 2022, David Laight wrote:
+> > On Qcom UFS platforms, the reset control line seems to be optional
+> > (for SoCs like MSM8996 and probably for others too). The current logic
+> > tries to mimic the `devm_reset_control_get_optional()` API but it also
+> > continues the probe if there is an error with the declared reset line in
+> > DT/ACPI.
+> > 
+> > In an ideal case, if the reset line is not declared in DT/ACPI, the probe
+> > should continue. But if there is problem in acquiring the declared reset
+> > line (like EPROBE_DEFER) it should fail and return the appropriate error
+> > code.
+> > 
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >  drivers/scsi/ufs/ufs-qcom.c | 10 +++++-----
+> >  1 file changed, 5 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
+> > index 0d2e950d0865..bee81b45299e 100644
+> > --- a/drivers/scsi/ufs/ufs-qcom.c
+> > +++ b/drivers/scsi/ufs/ufs-qcom.c
+> > @@ -1002,13 +1002,13 @@ static int ufs_qcom_init(struct ufs_hba *hba)
+> >  	host->hba = hba;
+> >  	ufshcd_set_variant(hba, host);
+> >  
+> > -	/* Setup the reset control of HCI */
+> > -	host->core_reset = devm_reset_control_get(hba->dev, "rst");
+> > +	/* Setup the optional reset control of HCI */
+> > +	host->core_reset = devm_reset_control_get_optional(hba->dev, "rst");
+> >  	if (IS_ERR(host->core_reset)) {
+> >  		err = PTR_ERR(host->core_reset);
+> > -		dev_warn(dev, "Failed to get reset control %d\n", err);
+> > -		host->core_reset = NULL;
+> > -		err = 0;
+> > +		if (err != -EPROBE_DEFER)
 > 
-> > From: Linus Torvalds
-> > > Sent: 24 April 2022 22:42
-> > >
-> > > On Sun, Apr 24, 2022 at 2:37 PM Linus Torvalds
-> > > <torvalds@linux-foundation.org> wrote:
-> > > >
-> > > > Finally, for the same reason - please don't use ">> 8".  Because I do
-> > > > not believe that bit 8 is well-defined in your arithmetic. The *sign*
-> > > > bit will be, but I'm not convinced bit 8 is.
-> > >
-> > > Hmm.. I think it's ok. It can indeed overflow in 'char' and change the
-> > > sign in bit #7, but I suspect bit #8 is always fine.
-> > >
-> > > Still, If you want to just extend the sign bit, ">> 31" _is_ the
-> > > obvious thing to use (yeah, yeah, properly "sizeof(int)*8-1" or
-> > > whatever, you get my drift).
-> >
-> > Except that right shifts of signed values are UB.
-> > In particular it has always been valid to do an unsigned
-> > shift right on a 2's compliment negative number.
-> >
-> > 	David
+> dev_err_probe() does this comparison internally, so you can omit it
+> here.
 > 
-> Yes. All the standard versions (C89, C99, C11, C2X) say that right shift
-> of a negative value is implementation-defined.
+> With that removed, feel free to add my:
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 > 
-> So, we should cast it to "unsigned" before shifting it.
+> Regards,
+> Bjorn
 
-Except that the intent appears to be to replicate the sign bit.
++1; well with that change in place:
+Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
 
-If it is 'implementation defined' (rather than suddenly being UB)
-it might be that the linux kernel requires sign propagating
-right shifts of negative values.
-This is typically what happens on 2's compliment systems.
-But not all small cpu have the required shift instruction.
-OTOH all the ones bit enough to run Linux probably do.
-(And gcc doesn't support '1's compliment' or 'sign overpunch' cpus.)
+Thanks,
+Andrew
 
-The problem is that the compiler writers seem to be entering
-a mindset where they are optimising code based on UB behaviour.
-So given:
-void foo(int x)
-{
-	if (x >> 1 < 0)
-		return;
-	do_something();
-}
-they decide the test is UB, so can always be assumed to be true
-and thus do_something() is compiled away.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+> 
+> > +			dev_err_probe(dev, err, "Failed to get reset control\n");
+> > +		goto out_variant_clear;
+> >  	}
+> >  
+> >  	/* Fire up the reset controller. Failure here is non-fatal. */
+> > -- 
+> > 2.25.1
+> > 
+> 
 

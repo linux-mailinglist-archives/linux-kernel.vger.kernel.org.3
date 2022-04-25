@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDC6D50EA59
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 22:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A6150EA41
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 22:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245353AbiDYU1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 16:27:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43466 "EHLO
+        id S245411AbiDYU1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 16:27:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244287AbiDYU0P (ORCPT
+        with ESMTP id S245369AbiDYU0Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 16:26:15 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B30E12EF1D
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 13:22:03 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id bg25so9251447wmb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 13:22:03 -0700 (PDT)
+        Mon, 25 Apr 2022 16:26:16 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E963131CC4
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 13:22:05 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id u17-20020a05600c211100b0038eaf4cdaaeso252599wml.1
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 13:22:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=7MLyGA4WUDMi+Qf8y5tCaEOv26U6HFRODkGLHS/fFC8=;
-        b=1DGhKkAlmKMj8VjnV3ep4FYXi7E1a5hXQPg4RCAOuYNXy5SdyEQnKSSbw6+ApsWwBv
-         C5cYpKhEabT21nYudVPxZEmxpBPHGcdq4QIFXhS4Oor7QWGDt6WuXmBRzTJWz3jSJfcr
-         +xMIrsGPlzHVgEh5KL4hYmmmXn/RGBfaKr98GkiMLXI6MlGTQnsQtnmnBHbPyUOyy1bj
-         zdg1f8KDja2Lowt4UoTqs1On1ic1XDcb6B2MarKSebXtATBssNXRMfQNgQ5rNjuACKs0
-         UGbF+bxuprQwjv7uPWkVNX5KMg9TQjw0/UZf1GUpPy8QB5ZSSZzDVTPK2Y7twFlr/5F/
-         ZYRw==
+        bh=X4PiWPA2z+YwiPjwmkViEPpFlveGzLMoVQh4AfeqXKE=;
+        b=Qg1O2zSUnx2ygBmjovdhwaM7vW9gnnEAw3GRJ4lBZwTX75TRGOMiYJoySJqWBipp5Z
+         MKRamTDF25d2ASVhsQfG6tCR145SE+548nJHkJEx00FuqVJ10ylltJiEC7iUcH6v2CH/
+         Zqsq954ZLyfe0fdH/cRuRjSewsNcETaEpjPllFdahMmuz8CxAI8GnXMgZxXbGnCllBxj
+         f682bYJHmquE0I4aBl1kSwmhL1kroEK2+dvoaDJTD/m6VRrv0irtflo4QWekYEBQCkW5
+         GA/CfL04y+lo/FK5okHXfXu/V9ivmpTnTrUtYaWOzCD95+LxvB04QO/vG4gonFiYvcfX
+         xHrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=7MLyGA4WUDMi+Qf8y5tCaEOv26U6HFRODkGLHS/fFC8=;
-        b=7psYrsERQiJ7dbqty3CqoB0QIZBG9vagTCDWmvrtfsUm3DwrFNyRGJaA8AcHCfR31p
-         DgmUJvaVkz83BuFsVEkRfjcWamqUMCK2jRt0xv5XF9bIqE3iMLgxfoTQjTahzyjFabJu
-         qmM24XciEt8sBsu1rUYPRGezf1BsZMkrJTQCoqxeSNa702vPsVYK5bqti4PKE/aoiv6A
-         dYywNK1BM7tzexqbLtBoxh6vPDmezIBoN/44a95BlhvCbMqMItLrA8viUGLf0+AnzCH9
-         XceTETJkg0OpzG6v/SQhi7ccap0vkcrd5iDAfGg/eNQwRvcLmucwKhdNcsemZs2oF44J
-         CiKA==
-X-Gm-Message-State: AOAM5337BxqYid1htS+DpZ727e19hymjZuBQvmiwkh3+q4Dyffp2k0kg
-        acHqu7Ug5j4k+up/oLYwseFACmzc/8qIbg==
-X-Google-Smtp-Source: ABdhPJxtGcvDjSJow9NUiLdDEYv7ckDaPYq/azkLYCavmxyFb1xlL8kzUOm+RLN0ln3aPeHhQ7pADA==
-X-Received: by 2002:a05:600c:4e4a:b0:392:88e1:74a7 with SMTP id e10-20020a05600c4e4a00b0039288e174a7mr27460256wmq.174.1650918113681;
-        Mon, 25 Apr 2022 13:21:53 -0700 (PDT)
+        bh=X4PiWPA2z+YwiPjwmkViEPpFlveGzLMoVQh4AfeqXKE=;
+        b=NyV8xPJGGZ+aEstfg4D6u+e+eNfeJAwFA9WRlV5+RQx5iLYK8ARM4tFpnHVQvo70Ud
+         0IjSJHZi7T+naq6040e4h+4XdVSt69gXaKBCpIA/BUUlBcJ3kYuMEfxD/dLqGyYXNfxt
+         SAlIgldPJYp18zjVt6fPpsOUfAtJ1R/BzTCCljlr3CtK03ffnKe2WGzyOLj4rfh+JYtJ
+         L0LEM4IHikfvD/FSlu8WXeqPjZmBcdPzIMS+t9+X/ZFoSOn719ZqW6SW/CNF+SqfZvdt
+         QAqZX1ZtUHqTC1yiTd5ecQhAPHcM4+TB1VNnf2SdJ3EEEMFNgJMzNyP5BMpzf6FvJc2u
+         dGDg==
+X-Gm-Message-State: AOAM530xl/y/SLJWELlwPJBNAcjrvPj01NCuQT3R1u17qeUazksmEcQN
+        9lcYo91nn6okyY5h9ZZ9aDK7SA==
+X-Google-Smtp-Source: ABdhPJzrD0nES3DLaCfKsbFatbnjfGfnZ61YdcgcPshkhinZzFOeQEiHBkt/Y/5AVAXrlqcsVjOwXQ==
+X-Received: by 2002:a7b:c403:0:b0:38e:7c57:9af7 with SMTP id k3-20020a7bc403000000b0038e7c579af7mr17529379wmi.144.1650918114629;
+        Mon, 25 Apr 2022 13:21:54 -0700 (PDT)
 Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id p3-20020a5d59a3000000b0020a9132d1fbsm11101003wrr.37.2022.04.25.13.21.52
+        by smtp.googlemail.com with ESMTPSA id p3-20020a5d59a3000000b0020a9132d1fbsm11101003wrr.37.2022.04.25.13.21.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 13:21:53 -0700 (PDT)
+        Mon, 25 Apr 2022 13:21:54 -0700 (PDT)
 From:   Corentin Labbe <clabbe@baylibre.com>
 To:     heiko@sntech.de, herbert@gondor.apana.org.au,
         krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org
@@ -55,9 +55,9 @@ Cc:     linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org,
         Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH v6 27/33] arm64: dts: rockchip: add rk3328 crypto node
-Date:   Mon, 25 Apr 2022 20:21:13 +0000
-Message-Id: <20220425202119.3566743-28-clabbe@baylibre.com>
+Subject: [PATCH v6 28/33] arm64: dts: rockchip: rk3399: add crypto node
+Date:   Mon, 25 Apr 2022 20:21:14 +0000
+Message-Id: <20220425202119.3566743-29-clabbe@baylibre.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220425202119.3566743-1-clabbe@baylibre.com>
 References: <20220425202119.3566743-1-clabbe@baylibre.com>
@@ -72,36 +72,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rk3328 has a crypto IP handled by the rk3288 crypto driver so adds a
+The rk3399 has a crypto IP handled by the rk3288 crypto driver so adds a
 node for it.
 
 Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 ---
- arch/arm64/boot/dts/rockchip/rk3328.dtsi | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ arch/arm64/boot/dts/rockchip/rk3399.dtsi | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3328.dtsi b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
-index b822533dc7f1..c23fa985e66d 100644
---- a/arch/arm64/boot/dts/rockchip/rk3328.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
-@@ -1007,6 +1007,17 @@ gic: interrupt-controller@ff811000 {
- 		      (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+index a90beec50f6a..b9b16008813e 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+@@ -582,6 +582,26 @@ saradc: saradc@ff100000 {
+ 		status = "disabled";
  	};
  
-+	crypto: crypto@ff060000 {
-+		compatible = "rockchip,rk3328-crypto";
-+		reg = <0x0 0xff060000 0x0 0x4000>;
-+		interrupts = <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&cru HCLK_CRYPTO_MST>, <&cru HCLK_CRYPTO_SLV>,
-+			 <&cru SCLK_CRYPTO>;
++	crypto0: crypto@ff8b0000 {
++		compatible = "rockchip,rk3399-crypto";
++		reg = <0x0 0xff8b0000 0x0 0x4000>;
++		interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH 0>;
++		clocks = <&cru HCLK_M_CRYPTO0>, <&cru HCLK_S_CRYPTO0>, <&cru SCLK_CRYPTO0>;
 +		clock-names = "hclk_master", "hclk_slave", "sclk";
-+		resets = <&cru SRST_CRYPTO>;
-+		reset-names = "crypto-rst";
++		resets = <&cru SRST_CRYPTO0>, <&cru SRST_CRYPTO0_S>, <&cru SRST_CRYPTO0_M>;
++		reset-names = "rst_master", "rst_slave", "crypto-rst";
 +	};
 +
- 	pinctrl: pinctrl {
- 		compatible = "rockchip,rk3328-pinctrl";
- 		rockchip,grf = <&grf>;
++	crypto1: crypto@ff8b8000 {
++		compatible = "rockchip,rk3399-crypto";
++		reg = <0x0 0xff8b8000 0x0 0x4000>;
++		interrupts = <GIC_SPI 135 IRQ_TYPE_LEVEL_HIGH 0>;
++		clocks = <&cru HCLK_M_CRYPTO1>, <&cru HCLK_S_CRYPTO1>, <&cru SCLK_CRYPTO1>;
++		clock-names = "hclk_master", "hclk_slave", "sclk";
++		resets = <&cru SRST_CRYPTO1>, <&cru SRST_CRYPTO1_S>, <&cru SRST_CRYPTO1_M>;
++		reset-names = "rst_master", "rst_slave", "crypto-rst";
++	};
++
+ 	i2c1: i2c@ff110000 {
+ 		compatible = "rockchip,rk3399-i2c";
+ 		reg = <0x0 0xff110000 0x0 0x1000>;
 -- 
 2.35.1
 

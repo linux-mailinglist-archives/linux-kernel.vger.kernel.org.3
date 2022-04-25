@@ -2,172 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1AA850DBE1
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 11:01:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF8D350DBEF
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 11:03:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241105AbiDYJDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 05:03:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39364 "EHLO
+        id S241509AbiDYJFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 05:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240916AbiDYJDX (ORCPT
+        with ESMTP id S241482AbiDYJFQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 05:03:23 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5FC186C8
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 02:00:14 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id kq17so5134289ejb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 02:00:14 -0700 (PDT)
+        Mon, 25 Apr 2022 05:05:16 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2EF2497D
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 02:01:04 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id t13so12863687pgn.8
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 02:01:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=w3IxbLwGG5AOreFgCaa2xIIUFHyNEgC4AZtZjxOzrog=;
-        b=t6e/aV7+adIXldn+lDhrKWw3VnVedpv9hCrz6tFIISVjzmysEbe5zTjdbRTb7bm3Ia
-         HWNa9xDFWcmvf7H4BNoMSRtMo/QRFj8Q83a48zgJ4sJOfqXfbKK91PVjn4b/Nhd6cpNS
-         6+fw/Uxhcw9GcgMXrK7ceLBui8w7jq3YpdqV/RgPnCjRuPBlcvnb+BIlHga4Cz2VxszA
-         U2wxzlrMMXgguJvgiQ/IByjwIHbo4jkeEP0BM3UBYBgmrCRad+wRwkZ/IR8V4GVA3/dD
-         krbZu0cTCm3qrP2aA+15+0pTP01kT9lpXl7VQYgjuTCwTDn5zkdE/cxe95bRhpWp5LYg
-         3luw==
+        d=labau-com-tw.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=VvnpDJ7qOTxDZh/4xd/DqiAuIjrxDaVMEK6Af8UX0JE=;
+        b=x1BbinRbIsluu6F4DnGVj7K83rShQ3FApyAtaeUAhxWOWfe+X2fSiU/CN6h+aAvL+z
+         HZac9e6MJ0RKQxx3bJ21rntV0PPFuvQ1CmlQ0BQ0D20FejW8+YE8TBf8dAfhtzaiUZAk
+         i7cG8Sf2PFGGeNB+TWurclN7I4thZYGs7wKSvWW4DE2XNlgXPLf7HDO7daACWMCVnuWT
+         Hd5wxHqbLo3x26w7RPUxc9pl+7zJ7V8TYyLBTLc84Rmx24zpqTSsR06KfHcAchl9G6To
+         IcDmnd7aNPxBVOAVwzI70Hm4FqQvjobmz0OWhVZMR7EVRKjUT9G5dWyXwWpvWSSbdi8U
+         nI7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=w3IxbLwGG5AOreFgCaa2xIIUFHyNEgC4AZtZjxOzrog=;
-        b=kfrHlb/mwt9T1XLHRoHcj5GbmghXr5wd+YS2iaZdADIo4O4DMZXrYP29MVSHU234Nt
-         t4Eay4FsCfxMRQnhOK+MVji8silP2zRcQyuORpWaKW89NhGVwAspfe2arJBv+rCZKh88
-         cXhaXEjiVnD4S6pNsQxKMgz2n9SeoaGNW/OQH0XLZP7iEbT0e/24ZpI5JSB3SKp1xEiQ
-         4bC/EOaHa3s8HkoEm2MDSe+GyE2avV/PO0Qf6Gm7KQCK99h6LWjrdHswOV+AA3uKdmHg
-         XO/DWafpy1ATQra0YFwGTa2mtHXO9/7uwApoM2J0SMqEkIgF4krQItp7vugl7ELdPCJp
-         i5Ag==
-X-Gm-Message-State: AOAM531akhdAwPBhMeIMtHbJmPZ5yMqiMPDIi4SRHs1X6vK4DX8Kn+76
-        DSUydcT3kWjmvNdKQyA6xhMhJA==
-X-Google-Smtp-Source: ABdhPJzdbNg2b9AX+OMDJh3C6SX9WPbUhIqKlPOP8EHiK7RMRR8j+81XqbqyspeHGmnaUkmKKwBXMQ==
-X-Received: by 2002:a17:906:9746:b0:6e0:5c9a:1a20 with SMTP id o6-20020a170906974600b006e05c9a1a20mr15830210ejy.714.1650877212608;
-        Mon, 25 Apr 2022 02:00:12 -0700 (PDT)
-Received: from [192.168.0.241] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id el14-20020a056402360e00b0042121aee887sm4087663edb.77.2022.04.25.02.00.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 02:00:12 -0700 (PDT)
-Message-ID: <0423e827-9592-ce6f-74ca-111a099a263f@linaro.org>
-Date:   Mon, 25 Apr 2022 11:00:11 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V3 1/3] dt-bindings: clk: sprd: Add bindings for ums512
- clock controller
-Content-Language: en-US
-To:     Cixi Geng <gengcixi@gmail.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>, sboyd@kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Orson Zhai <orsonzhai@gmail.com>,
-        "baolin.wang7@gmail.com" <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        linux-clk@vger.kernel.org,
-        Devicetree List <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220418125630.2342538-1-gengcixi@gmail.com>
- <20220418125630.2342538-2-gengcixi@gmail.com>
- <714caf6e-5f81-6d73-7629-b2c675f1f1d4@linaro.org>
- <CAF12kFv6uioc7ATtXLpGTTDBFT1wYWZUBoyjQqP1bSUnut0pKA@mail.gmail.com>
- <a5a59f3c-00a3-afc5-24aa-1ae3de2600ec@linaro.org>
- <CAF12kFu5KW+fw=0kP6LrEqOvKYR38mELfPjG64=n+gudRxsZUQ@mail.gmail.com>
- <baa73bda-91af-8a31-67f4-6d5615862c73@linaro.org>
- <CAF12kFsxqdYERwhjC3tq9bNqzWS3P6Sb7VPCwHmQ=StF28Q-+A@mail.gmail.com>
- <5b00db5b-b179-af0f-71e4-e940c6a41018@linaro.org>
- <CAF12kFt=L7CV5RDBViPSNb9Y_Te4JJ-TZrx2N+w_P2px7_FemQ@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAF12kFt=L7CV5RDBViPSNb9Y_Te4JJ-TZrx2N+w_P2px7_FemQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=VvnpDJ7qOTxDZh/4xd/DqiAuIjrxDaVMEK6Af8UX0JE=;
+        b=cjNwp+O7B2uo3xerszZUjb/3Ce/UZ+qIXe/5EJ+1jmmlU3n8MH+Y7qKmamM8RBfSr1
+         SVYsPpUAvRCafibhUDqGdSO8b19NSxnz4EJfwB+cTxcMinXF7r0x2Q60GToHaWAsecWk
+         UHKPC384tOLwCV5aDzcltAaodW8+MohbhrohcHgu/m98NtKweReoIvEu5yPEFpYX62gM
+         GP7TWfBXg+gGGkGuxXzjLmVLcxkuAH+ObtFNKDZ2MLbhQ78ysoEIbRnLdTj/XkhC4VxA
+         OJL3z7wFAL9yA8VSLkH4i14fqoAHCwMarYS4t7CnAQOYEURALXDPCGA37lpKymLrwfyL
+         CTXg==
+X-Gm-Message-State: AOAM531Ovl5lRmMbcSOq6AGcqy0nSLxqOKKxReU5hqffbYtjD28LRjPV
+        oaKReH+AV2moBDlZhPd7DHLRKw==
+X-Google-Smtp-Source: ABdhPJzepf2TmJLDWgUN5ULvbXU9RZT7889AlSpPVSzWUCY/EHtBxQqBgibcpsEygLKce54h8vH51A==
+X-Received: by 2002:a63:c015:0:b0:385:fe06:eb86 with SMTP id h21-20020a63c015000000b00385fe06eb86mr13948328pgg.132.1650877263742;
+        Mon, 25 Apr 2022 02:01:03 -0700 (PDT)
+Received: from labau-virtual-machine.localdomain (61-228-66-64.dynamic-ip.hinet.net. [61.228.66.64])
+        by smtp.gmail.com with ESMTPSA id a38-20020a056a001d2600b004f70d5e92basm10970123pfx.34.2022.04.25.02.01.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 02:01:03 -0700 (PDT)
+From:   Scott Chen <scott@labau.com.tw>
+Cc:     young@labau.com.tw, roger@labau.com.tw,
+        Scott Chen <scott@labau.com.tw>,
+        Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] USB: serial: pl2303: add device id for HP LM930 Display
+Date:   Mon, 25 Apr 2022 17:00:20 +0800
+Message-Id: <20220425090020.33683-1-scott@labau.com.tw>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/04/2022 17:12, Cixi Geng wrote:
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> 于2022年4月24日周日 22:30写道：
->>
->> On 24/04/2022 16:22, Cixi Geng wrote:
->>>>>>
->>>>>> Neither here nor later you did not answer the question - why do you need
->>>>>> such complex construction, instead of adding syscon to the clock controller?
->>>>>>
->>>>>> Let me paste again my concerns:
->>>>>>
->>>>>>   You have nodes with reg but without unit address ("rpll"). These nodes
->>>>>>   are modeled as children but they are not children - it's a workaround
->>>>>>   for exposing syscon, isn't it? The sc9863a looks like broken design,
->>>>>>   so please do not duplicate it here.
->>>>>>
->>>>>> IOW, sc9863a uses similar pattern as here and the DTS is made wrong.
->>>>>> Because of this you need to create complex ways to get the regmap for
->>>>>> the clock controller... Why not making it simple? Clock controller with
->>>>>> syscon?
->>>>>
->>>>> I find the history discuss about the sp9863 clock[1] and last
->>>>> ums512-clk dt-bindings patch[2] which from chunyan.
->>>>> please refer to the reasons below.
->>>>>
->>>>> These clocks are at the same register range with global registers.
->>>>> the registers shared with more than one devices  which  basically
->>>>> are multimedia devices. You may noticed that these are all gate
->>>>> clocks which are in the global registers  ranges and are used to
->>>>> controll the enable status of some devices or some part of devices.
->>>>>
->>>>> [1] https://lore.kernel.org/all/CAAfSe-s0gcehu0ZDj=FTe5S7CzAHC5mahXBH2fJm7mXS7Xys1Q@mail.gmail.com/#r
->>>>> [2] https://lore.kernel.org/all/163425295208.1688384.11023187625793114662@swboyd.mtv.corp.google.com/#r
->>>>
->>>> Which looks like discussion about different bindings. You had there a
->>>> clock controller and additional clock device using "sprd,syscon". Why
->>>> the rpll is a subdevice and not a part of clock controller. The same as
->>>> all other clocks coming from that clock-controller, right? What is so
->>>> special about rpll that is is a separate device, not part of the clock
->>>> controller? It's the same address space, isn't it?
->>> The hardware spec design these clocks are not belonged to the syscon,
->>> the phandle is only used to get virtual  map address for clocks which
->>> have the same phsical address base with one syscon.(I don't know the
->>> historical reason for this design) It also can wroten a clock sperated from
->>> syscon by add the reg which same as syscon. but will lead to a duplicate
->>> mapping--one is from the clock,and one is from syscon. which make difficulty
->>>  in analyzing some panic problems.
->>
->> I don't understand still. You said that they do not belong to same
->> address space, right? But the sprd,ums512-apahb-gate in this patch or
->> mentioned rpll
->> (https://elixir.bootlin.com/linux/v5.18-rc3/source/arch/arm64/boot/dts/sprd/sharkl3.dtsi#L106)
->> does not reference any other address space. It's entire address space is
->> the same as address space of glbregs.
-> Maybe I didn't describe clearly, what I said is these clocks isn't the
-> syscom sub-clock.
-> from chunyan's explain:
->  they  are at the same register range with global registers. in
-> originally we put them
-> directly onto the bus indeed when submitting the patches for SC9863A
-> clocks last year,
-> and it had a private property named 'sprd,syscon' which could provide
-> regmap for these clocks.
-> after follow Rob's suggetion we make them a child of the syscon. these
-> are all gate clocks which
-> are in the global registers ranges and are used to controll the enable
-> status of some devices
-> or some part of devices.
+Add the device id for the HPLM930Display which is a PL2303GC based device
 
-You need to help me here with the naming. What is "global registers"
-range? Let's focus on sharkl3.dtsi and syscon@4035c000 with "rpll".
+Signed-off-by: Scott Chen <scott@labau.com.tw>
+---
+ Changes in v2:
+  - Product id uses tab instead of spaces
 
-You have a clock controller @4035c000, which provides several clocks,
-right? Then you have a rpll also @4035c000, so the register range is the
-same. The register range is the same, isn't it?
+ drivers/usb/serial/pl2303.c | 1 +
+ drivers/usb/serial/pl2303.h | 1 +
+ 2 files changed, 2 insertions(+)
 
-I still don't see the answer to my question - why do you need a child
-device for one clock if this looks like part of the clock-controller?
+diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
+index 88b284d61681..1d878d05a658 100644
+--- a/drivers/usb/serial/pl2303.c
++++ b/drivers/usb/serial/pl2303.c
+@@ -106,6 +106,7 @@ static const struct usb_device_id id_table[] = {
+ 	{ USB_DEVICE(HP_VENDOR_ID, HP_LCM220_PRODUCT_ID) },
+ 	{ USB_DEVICE(HP_VENDOR_ID, HP_LCM960_PRODUCT_ID) },
+ 	{ USB_DEVICE(HP_VENDOR_ID, HP_LM920_PRODUCT_ID) },
++	{ USB_DEVICE(HP_VENDOR_ID, HP_LM930_PRODUCT_ID) },
+ 	{ USB_DEVICE(HP_VENDOR_ID, HP_LM940_PRODUCT_ID) },
+ 	{ USB_DEVICE(HP_VENDOR_ID, HP_TD620_PRODUCT_ID) },
+ 	{ USB_DEVICE(CRESSI_VENDOR_ID, CRESSI_EDY_PRODUCT_ID) },
+diff --git a/drivers/usb/serial/pl2303.h b/drivers/usb/serial/pl2303.h
+index c5406452b774..732f9b13ad5d 100644
+--- a/drivers/usb/serial/pl2303.h
++++ b/drivers/usb/serial/pl2303.h
+@@ -135,6 +135,7 @@
+ #define HP_TD620_PRODUCT_ID	0x0956
+ #define HP_LD960_PRODUCT_ID	0x0b39
+ #define HP_LD381_PRODUCT_ID	0x0f7f
++#define HP_LM930_PRODUCT_ID	0x0f9b
+ #define HP_LCM220_PRODUCT_ID	0x3139
+ #define HP_LCM960_PRODUCT_ID	0x3239
+ #define HP_LD220_PRODUCT_ID	0x3524
+-- 
+2.17.1
 
-Best regards,
-Krzysztof

@@ -2,154 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E3E650DBC1
+	by mail.lfdr.de (Postfix) with ESMTP id 8732450DBC2
 	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:55:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235278AbiDYI6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 04:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54060 "EHLO
+        id S239369AbiDYI6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 04:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239953AbiDYI5j (ORCPT
+        with ESMTP id S239965AbiDYI5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 04:57:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A6EECF5
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:54:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650876869;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q7eIeWS47Em435MDdVzeQsQsPcR5jLBoUJYfnOUHKBU=;
-        b=MG8j2Sb12nlEsDzTA4mpbtN1NsWNpl+JDi5VbKajyf6yj2dl0gVKphWjg/iKDWKRmV7nwH
-        SpkCUh1xo5aOhbpPWlZ1SvdpxUUNQyiY7iDo56C6LO8D+j2VlDSumtinp2QWC/Oe7ShQI0
-        kG+YMXVpMgXCdae77xgjwo+lUXPdq/I=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-625-OxcRZ2GINRaOhAtSpaFdkw-1; Mon, 25 Apr 2022 04:54:26 -0400
-X-MC-Unique: OxcRZ2GINRaOhAtSpaFdkw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 25 Apr 2022 04:57:43 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0BEF5A;
+        Mon, 25 Apr 2022 01:54:32 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E7999811E7A;
-        Mon, 25 Apr 2022 08:54:25 +0000 (UTC)
-Received: from localhost (unknown [10.39.192.116])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9EAC51402427;
-        Mon, 25 Apr 2022 08:54:25 +0000 (UTC)
-From:   Cornelia Huck <cohuck@redhat.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, sgarzare@redhat.com,
-        eperezma@redhat.com, lulu@redhat.com, tglx@linutronix.de,
-        peterz@infradead.org, paulmck@kernel.org, maz@kernel.org,
-        pasic@linux.ibm.com
-Subject: Re: [PATCH V3 6/9] virtio-ccw: implement synchronize_cbs()
-In-Reply-To: <20220425040512-mutt-send-email-mst@kernel.org>
-Organization: Red Hat GmbH
-References: <20220425024418.8415-1-jasowang@redhat.com>
- <20220425024418.8415-7-jasowang@redhat.com>
- <20220425040512-mutt-send-email-mst@kernel.org>
-User-Agent: Notmuch/0.34 (https://notmuchmail.org)
-Date:   Mon, 25 Apr 2022 10:54:24 +0200
-Message-ID: <87a6c98rwf.fsf@redhat.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id DB8B0210E5;
+        Mon, 25 Apr 2022 08:54:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1650876870; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/4Xzadw6ONsr1NkImq8B2Up17ajpTuPobm04Tzf1iZA=;
+        b=YQE9CVpbFF4r0bx3MZvQcS4ZpjgquD1pPUvXSL6DWlzal1kM/qbDrYQTWyxAS5L6JdD9fB
+        O2VSsFSg6rDjowFIxeJnP1oxPByojOdW49J9LiKS/3VQpDX397wjFAnya8kGGuiEkwPXV/
+        N9cqVjQvNVmqzztn1dIh8h5FH8vXK+E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1650876870;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/4Xzadw6ONsr1NkImq8B2Up17ajpTuPobm04Tzf1iZA=;
+        b=jeuSfuf6ULKMEKEfa1VADZfeNo51754Uw+Uceuer4lccqUOYn/YiZpCn7fbNnMdMVF8Shj
+        ZiuWCpkiMaY1yjAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7359413AED;
+        Mon, 25 Apr 2022 08:54:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id GvLpGsZhZmKOCgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 25 Apr 2022 08:54:30 +0000
+Message-ID: <535ebbe4-605c-daf5-1afb-f5225e4bb3a8@suse.de>
+Date:   Mon, 25 Apr 2022 10:54:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v3 0/5] Fix some race conditions that exists between fbmem
+ and sysfb
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Borislav Petkov <bp@suse.de>,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Helge Deller <deller@gmx.de>, Johan Hovold <johan@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Peter Jones <pjones@redhat.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Yizhuo Zhai <yzhai003@ucr.edu>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        linux-doc@vger.kernel.org, linux-fbdev@vger.kernel.org
+References: <20220420085303.100654-1-javierm@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220420085303.100654-1-javierm@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------Rc95TRwpQQWj5pxD9yvjBCU3"
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25 2022, "Michael S. Tsirkin" <mst@redhat.com> wrote:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------Rc95TRwpQQWj5pxD9yvjBCU3
+Content-Type: multipart/mixed; boundary="------------ix4uCpa8tuHsKOBCkz4wJM0I";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ linux-kernel@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Daniel Vetter <daniel.vetter@ffwll.ch>, dri-devel@lists.freedesktop.org,
+ Alex Deucher <alexander.deucher@amd.com>, Borislav Petkov <bp@suse.de>,
+ Changcheng Deng <deng.changcheng@zte.com.cn>, Daniel Vetter
+ <daniel@ffwll.ch>, Hans de Goede <hdegoede@redhat.com>,
+ Helge Deller <deller@gmx.de>, Johan Hovold <johan@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Miaoqian Lin <linmq006@gmail.com>,
+ Peter Jones <pjones@redhat.com>, Sam Ravnborg <sam@ravnborg.org>,
+ Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+ Yizhuo Zhai <yzhai003@ucr.edu>, Zhen Lei <thunder.leizhen@huawei.com>,
+ linux-doc@vger.kernel.org, linux-fbdev@vger.kernel.org
+Message-ID: <535ebbe4-605c-daf5-1afb-f5225e4bb3a8@suse.de>
+Subject: Re: [PATCH v3 0/5] Fix some race conditions that exists between fbmem
+ and sysfb
+References: <20220420085303.100654-1-javierm@redhat.com>
+In-Reply-To: <20220420085303.100654-1-javierm@redhat.com>
 
-> On Mon, Apr 25, 2022 at 10:44:15AM +0800, Jason Wang wrote:
->> This patch tries to implement the synchronize_cbs() for ccw. For the
->> vring_interrupt() that is called via virtio_airq_handler(), the
->> synchronization is simply done via the airq_info's lock. For the
->> vring_interrupt() that is called via virtio_ccw_int_handler(), a per
->> device spinlock for irq is introduced ans used in the synchronization
->> method.
->> 
->> Cc: Thomas Gleixner <tglx@linutronix.de>
->> Cc: Peter Zijlstra <peterz@infradead.org>
->> Cc: "Paul E. McKenney" <paulmck@kernel.org>
->> Cc: Marc Zyngier <maz@kernel.org>
->> Cc: Halil Pasic <pasic@linux.ibm.com>
->> Cc: Cornelia Huck <cohuck@redhat.com>
->> Signed-off-by: Jason Wang <jasowang@redhat.com>
->
->
-> This is the only one that is giving me pause. Halil, Cornelia,
-> should we be concerned about the performance impact here?
-> Any chance it can be tested?
+--------------ix4uCpa8tuHsKOBCkz4wJM0I
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-We can have a bunch of devices using the same airq structure, and the
-sync cb creates a choke point, same as registering/unregistering. If
-invoking the sync cb is a rare operation (same as (un)registering), it
-should not affect interrupt processing for other devices too much, but
-it really should be rare.
+SGkNCg0KQW0gMjAuMDQuMjIgdW0gMTA6NTIgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
+aWxsYXM6DQo+IEhlbGxvLA0KPiANCj4gVGhlIHBhdGNoZXMgaW4gdGhpcyBzZXJpZXMgYXJl
+IG1vc3RseSBjaGFuZ2VzIHN1Z2dlc3RlZCBieSBEYW5pZWwgVmV0dGVyDQo+IHRvIGZpeCBz
+b21lIHJhY2UgY29uZGl0aW9ucyB0aGF0IGV4aXN0cyBiZXR3ZWVuIHRoZSBmYmRldiBjb3Jl
+IChmYm1lbSkNCj4gYW5kIHN5c2ZiIHdpdGggcmVnYXJkIHRvIGRldmljZSByZWdpc3RyYXRp
+b24gYW5kIHJlbW92YWwuDQo+IA0KPiBGb3IgZXhhbXBsZSwgaXQgaXMgY3VycmVudGx5IHBv
+c3NpYmxlIGZvciBzeXNmYiB0byByZWdpc3RlciBhIHBsYXRmb3JtDQo+IGRldmljZSBhZnRl
+ciBhIHJlYWwgRFJNIGRyaXZlciB3YXMgcmVnaXN0ZXJlZCBhbmQgcmVxdWVzdGVkIHRvIHJl
+bW92ZSB0aGUNCj4gY29uZmxpY3RpbmcgZnJhbWVidWZmZXJzLg0KPiANCj4gQSBzeW1wdG9t
+IG9mIHRoaXMgaXNzdWUsIHdhcyB3b3JrZWQgYXJvdW5kIHdpdGggYnkgY29tbWl0IGZiNTYx
+YmY5YWJkZQ0KPiAoImZiZGV2OiBQcmV2ZW50IHByb2JpbmcgZ2VuZXJpYyBkcml2ZXJzIGlm
+IGEgRkIgaXMgYWxyZWFkeSByZWdpc3RlcmVkIikNCj4gYnV0IHRoYXQncyByZWFsbHkgYSBo
+YWNrIGFuZCBzaG91bGQgYmUgcmV2ZXJ0ZWQuDQoNCkFzIEkgbWVudGlvbmVkIG9uIElSQywg
+SSB0aGluayB0aGlzIHNlcmllcyBzaG91bGQgYmUgbWVyZ2VkIGZvciB0aGUgDQpyZWFzb25z
+IEkgZ2l2ZSBpbiB0aGUgb3RoZXIgY29tbWVudHMuDQoNCj4gDQo+IFRoaXMgc2VyaWVzIGF0
+dGVtcHQgdG8gZml4IGl0IG1vcmUgcHJvcGVybHkgYW5kIHJldmVydCB0aGUgbWVudGlvbmVk
+IGhhY2suDQo+IFRoYXQgd2lsbCBhbHNvIHVuYmxvY2sgYSBwZW5kaW5nIHBhdGNoIHRvIG5v
+dCBtYWtlIHRoZSBudW1fcmVnaXN0ZXJlZF9mYg0KPiB2YXJpYWJsZSB2aXNpYmxlIHRvIGRy
+aXZlcnMgYW55bW9yZSwgc2luY2UgdGhhdCdzIGludGVybmFsIHRvIGZiZGV2IGNvcmUuDQoN
+CkhlcmUncyBhcyBmYXIgYXMgSSB1bmRlcnN0YW5kIHRoZSBwcm9ibGVtOg0KDQogIDEpIGJ1
+aWxkIERSTS9mYmRldiBhbmQgc3lzZmIgY29kZSBpbnRvIHRoZSBrZXJuZWwNCiAgMikgZHVy
+aW5nIGJvb3QsIGxvYWQgdGhlIERSTS9mYmRldiBtb2R1bGVzIGFuZCBoYXZlIHRoZW0gYWNx
+dWlyZSBJL08gDQpyYW5nZXMNCiAgMykgYWZ0ZXJ3YXJkcyBsb2FkIHN5c2ZiIGFuZCBoYXZl
+IGl0IHJlZ2lzdGVyIHBsYXRmb3JtIGRldmljZXMgZm9yIHRoZSANCmdlbmVyaWMgZnJhbWVi
+dWZmZXJzDQogIDQpIHRoZXNlIGRldmljZXMgbm93IGNvbmZsaWN0IHdpdGggdGhlIGFscmVh
+ZHktcmVnaXN0ZXJlZCBEUk0vZmJkZXYgDQpkZXZpY2VzDQoNCklmIHRoYXQgaXMgdGhlIHBy
+b2JsZW0gaGVyZSwgbGV0J3Mgc2ltcGx5IHNldCBhIHN5c2ZiX2Rpc2FibGUgZmxhZyBpbiAN
+CnN5c2ZiIGNvZGUgd2hlbiB0aGUgZmlyc3QgRFJNL2ZiZGV2IGRyaXZlciBmaXJzdCBsb2Fk
+cy4gV2l0aCB0aGUgZmxhZyANCnNldCwgc3lzZmIgd29uJ3QgY3JlYXRlIGFueSBwbGF0Zm9y
+bSBkZXZpY2VzLiBXZSBhc3N1bWUgdGhhdCB0aGVyZSBhcmUgDQpub3cgRFJNL2ZiZGV2IGRy
+aXZlcnMgZm9yIHRoZSBmcmFtZWJ1ZmZlcnMgYW5kIHN5c2ZiIHdvbid0IGJlIG5lZWRlZC4N
+Cg0KV2UgY2FuIHNldCB0aGUgZmxhZyBpbnRlcm5hbGx5IGZyb20gZHJtX2FwZXJ0dXJlX2Rl
+dGFjaF9kcml2ZXJzKCkgWzFdIA0KYW5kIGRvX3JlbW92ZV9jb25mbGljdGluZ19mcmFtZWJ1
+ZmZlcnMoKSBbMl0uDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNClsxXSANCmh0dHBzOi8v
+ZWxpeGlyLmJvb3RsaW4uY29tL2xpbnV4L3Y1LjE3LjQvc291cmNlL2RyaXZlcnMvZ3B1L2Ry
+bS9kcm1fYXBlcnR1cmUuYyNMMjUzDQpbMl0gDQpodHRwczovL2VsaXhpci5ib290bGluLmNv
+bS9saW51eC92NS4xNy40L3NvdXJjZS9kcml2ZXJzL3ZpZGVvL2ZiZGV2L2NvcmUvZmJtZW0u
+YyNMMTU1OQ0KDQo+IA0KPiBQYXRjaCAjMSBpcyBqdXN0IGEgdHJpdmlhbCBwcmVwYXJhdG9y
+eSBjaGFuZ2UuDQo+IA0KPiBQYXRjaCAjMiBhZGQgc3lzZmJfZGlzYWJsZSgpIGFuZCBzeXNm
+Yl90cnlfdW5yZWdpc3RlcigpIGhlbHBlcnMgZm9yIGZibWVtDQo+IHRvIHVzZSB0aGVtLg0K
+PiANCj4gUGF0Y2ggIzMgY2hhbmdlcyBob3cgaXMgZGVhbHQgd2l0aCBjb25mbGljdGluZyBm
+cmFtZWJ1ZmZlcnMgdW5yZWdpc3RlcmluZywNCj4gcmF0aGVyIHRoYW4gaGF2aW5nIGEgdmFy
+aWFibGUgdG8gZGV0ZXJtaW5lIGlmIGEgbG9jayBzaG91bGQgYmUgdGFrZSwgaXQNCj4ganVz
+dCBkcm9wcyB0aGUgbG9jayBiZWZvcmUgdW5yZWdpc3RlcmluZyB0aGUgcGxhdGZvcm0gZGV2
+aWNlLg0KPiANCj4gUGF0Y2ggIzQgZml4ZXMgdGhlIG1lbnRpb25lZCByYWNlIGNvbmRpdGlv
+bnMgYW5kIGZpbmFsbHkgcGF0Y2ggIzUgaXMgdGhlDQo+IHJldmVydCBwYXRjaCB0aGF0IHdh
+cyBwb3N0ZWQgYnkgRGFuaWVsIGJlZm9yZSBidXQgaGUgZHJvcHBlZCBmcm9tIGhpcyBzZXQu
+DQo+IA0KPiBUaGUgcGF0Y2hlcyB3ZXJlIHRlc3RlZCBvbiBhIHJwaTQgdXNpbmcgZGlmZmVy
+ZW50IHZpZGVvIGNvbmZpZ3VyYXRpb25zOg0KPiAoc2ltcGxlZHJtIC0+IHZjNCBib3RoIGJ1
+aWx0aW4sIG9ubHkgdmM0IGJ1aWx0aW4sIG9ubHkgc2ltcGxlZHJtIGJ1aWx0aW4NCj4gYW5k
+IHNpbXBsZWRybSBidWlsdGluIHdpdGggdmM0IGJ1aWx0IGFzIGEgbW9kdWxlKS4NCj4gDQo+
+IEJlc3QgcmVnYXJkcywNCj4gSmF2aWVyDQo+IA0KPiBDaGFuZ2VzIGluIHYzOg0KPiAtIFJl
+YmFzZSBvbiB0b3Agb2YgbGF0ZXN0IGRybS1taXNjLW5leHQgYnJhbmNoLg0KPiANCj4gQ2hh
+bmdlcyBpbiB2MjoNCj4gLSBSZWJhc2Ugb24gdG9wIG9mIGxhdGVzdCBkcm0tbWlzYy1uZXh0
+IGFuZCBmaXggY29uZmxpY3RzIChEYW5pZWwgVmV0dGVyKS4NCj4gLSBBZGQga2VybmVsLWRv
+YyBjb21tZW50cyBhbmQgaW5jbHVkZSBpbiBvdGhlcl9pbnRlcmZhY2VzLnJzdCAoRGFuaWVs
+IFZldHRlcikuDQo+IC0gRXhwbGFpbiBpbiB0aGUgY29tbWl0IG1lc3NhZ2UgdGhhdCBmYm1l
+bSBoYXMgdG8gdW5yZWdpc3RlciB0aGUgZGV2aWNlDQo+ICAgIGFzIGZhbGxiYWNrIGlmIGEg
+ZHJpdmVyIHJlZ2lzdGVyZWQgdGhlIGRldmljZSBpdHNlbGYgKERhbmllbCBWZXR0ZXIpLg0K
+PiAtIEFsc28gZXhwbGFpbiB0aGF0IGZhbGxiYWNrIGluIGEgY29tbWVudCBpbiB0aGUgY29k
+ZSAoRGFuaWVsIFZldHRlcikuDQo+IC0gRG9uJ3QgZW5jb2RlIGluIGZibWVtIHRoZSBhc3N1
+bXB0aW9uIHRoYXQgc3lzZmIgd2lsbCBhbHdheXMgcmVnaXN0ZXINCj4gICAgcGxhdGZvcm0g
+ZGV2aWNlcyAoRGFuaWVsIFZldHRlcikuDQo+IC0gQWRkIGEgRklYTUUgY29tbWVudCBhYm91
+dCBkcml2ZXJzIHJlZ2lzdGVyaW5nIGRldmljZXMgKERhbmllbCBWZXR0ZXIpLg0KPiAtIERy
+b3AgUkZDIHByZWZpeCBzaW5jZSBwYXRjaGVzIHdlcmUgYWxyZWFkeSByZXZpZXdlZCBieSBE
+YW5pZWwgVmV0dGVyLg0KPiAtIEFkZCBEYW5pZWwgUmV2aWV3ZWQtYnkgdGFncyB0byB0aGUg
+cGF0Y2hlcy4NCj4gDQo+IERhbmllbCBWZXR0ZXIgKDEpOg0KPiAgICBSZXZlcnQgImZiZGV2
+OiBQcmV2ZW50IHByb2JpbmcgZ2VuZXJpYyBkcml2ZXJzIGlmIGEgRkIgaXMgYWxyZWFkeQ0K
+PiAgICAgIHJlZ2lzdGVyZWQiDQo+IA0KPiBKYXZpZXIgTWFydGluZXogQ2FuaWxsYXMgKDQp
+Og0KPiAgICBmaXJtd2FyZTogc3lzZmI6IE1ha2Ugc3lzZmJfY3JlYXRlX3NpbXBsZWZiKCkg
+cmV0dXJuIGEgcGRldiBwb2ludGVyDQo+ICAgIGZpcm13YXJlOiBzeXNmYjogQWRkIGhlbHBl
+cnMgdG8gdW5yZWdpc3RlciBhIHBkZXYgYW5kIGRpc2FibGUNCj4gICAgICByZWdpc3RyYXRp
+b24NCj4gICAgZmJkZXY6IFJlc3RhcnQgY29uZmxpY3RpbmcgZmIgcmVtb3ZhbCBsb29wIHdo
+ZW4gdW5yZWdpc3RlcmluZyBkZXZpY2VzDQo+ICAgIGZiZGV2OiBGaXggc29tZSByYWNlIGNv
+bmRpdGlvbnMgYmV0d2VlbiBmYm1lbSBhbmQgc3lzZmINCj4gDQo+ICAgLi4uL2RyaXZlci1h
+cGkvZmlybXdhcmUvb3RoZXJfaW50ZXJmYWNlcy5yc3QgIHwgIDYgKysNCj4gICBkcml2ZXJz
+L2Zpcm13YXJlL3N5c2ZiLmMgICAgICAgICAgICAgICAgICAgICAgfCA3NyArKysrKysrKysr
+KysrKysrKy0tDQo+ICAgZHJpdmVycy9maXJtd2FyZS9zeXNmYl9zaW1wbGVmYi5jICAgICAg
+ICAgICAgIHwgMTYgKystLQ0KPiAgIGRyaXZlcnMvdmlkZW8vZmJkZXYvY29yZS9mYm1lbS5j
+ICAgICAgICAgICAgICB8IDYyICsrKysrKysrKysrKy0tLQ0KPiAgIGRyaXZlcnMvdmlkZW8v
+ZmJkZXYvZWZpZmIuYyAgICAgICAgICAgICAgICAgICB8IDExIC0tLQ0KPiAgIGRyaXZlcnMv
+dmlkZW8vZmJkZXYvc2ltcGxlZmIuYyAgICAgICAgICAgICAgICB8IDExIC0tLQ0KPiAgIGlu
+Y2x1ZGUvbGludXgvZmIuaCAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAxIC0NCj4g
+ICBpbmNsdWRlL2xpbnV4L3N5c2ZiLmggICAgICAgICAgICAgICAgICAgICAgICAgfCAyOSAr
+KysrKy0tDQo+ICAgOCBmaWxlcyBjaGFuZ2VkLCAxNTggaW5zZXJ0aW9ucygrKSwgNTUgZGVs
+ZXRpb25zKC0pDQo+IA0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2
+ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1h
+eGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcg
+TsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
 
-For testing, you would probably want to use a setup with many devices
-that share the same airq area (you can fit a lot of devices if they have
-few queues), generate traffic on the queues, and then do something that
-triggers the callback (adding/removing a new device in a loop?)
+--------------ix4uCpa8tuHsKOBCkz4wJM0I--
 
-I currently don't have such a setup handy; Halil, would you be able to
-test that?
+--------------Rc95TRwpQQWj5pxD9yvjBCU3
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
->
->> ---
->>  drivers/s390/virtio/virtio_ccw.c | 27 +++++++++++++++++++++++++++
->>  1 file changed, 27 insertions(+)
->> 
->> diff --git a/drivers/s390/virtio/virtio_ccw.c b/drivers/s390/virtio/virtio_ccw.c
->> index d35e7a3f7067..c19f07a82d62 100644
->> --- a/drivers/s390/virtio/virtio_ccw.c
->> +++ b/drivers/s390/virtio/virtio_ccw.c
->> @@ -62,6 +62,7 @@ struct virtio_ccw_device {
->>  	unsigned int revision; /* Transport revision */
->>  	wait_queue_head_t wait_q;
->>  	spinlock_t lock;
->> +	spinlock_t irq_lock;
->>  	struct mutex io_lock; /* Serializes I/O requests */
->>  	struct list_head virtqueues;
->>  	bool is_thinint;
->> @@ -984,6 +985,27 @@ static const char *virtio_ccw_bus_name(struct virtio_device *vdev)
->>  	return dev_name(&vcdev->cdev->dev);
->>  }
->>  
->> +static void virtio_ccw_synchronize_cbs(struct virtio_device *vdev)
->> +{
->> +	struct virtio_ccw_device *vcdev = to_vc_device(vdev);
->> +	struct airq_info *info = vcdev->airq_info;
->> +
->> +	/*
->> +	 * Synchronize with the vring_interrupt() called by
->> +	 * virtio_ccw_int_handler().
->> +	 */
->> +	spin_lock(&vcdev->irq_lock);
->> +	spin_unlock(&vcdev->irq_lock);
->> +
->> +	if (info) {
->> +		/*
->> +		 * Synchronize with the vring_interrupt() with airq indicator
->> +		 */
->> +		write_lock(&info->lock);
->> +		write_unlock(&info->lock);
->> +	}
+-----BEGIN PGP SIGNATURE-----
 
-I think we can make this an either/or operation (devices will either use
-classic interrupts or adapter interrupts)?
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJmYcYFAwAAAAAACgkQlh/E3EQov+AP
+fBAAwj+zxf+d/jGDZGUcK1nkudhe+CNq3bSDDOd4wp0JJ+VC3X4oX9Sp6a6zJOGpSsL1NInqSO/y
+oikzH+INlFUFKbSMGvFBXLh09CjUSY5YIqLc6fx88tviFICU2FwmusbGEnT1U1xob/L4fW4SybED
+tORN2VBYegPKrcPfs5L+Ph5PNDt6z8oOLKu83PvCtHyRbLnnb4PylOxgnGpXb8FmQzVwviRn9mtI
++yx4XnjaZ1jchYcT71XUHNmZx06BFSfXo05qqD56oD2GrD+6Css36Luxf/IKjTQVFCOU4qK9rjal
+2Esr8Hq0EwmAgmquEWa7ENm3ahJcXr09L5gyjubJK39PP39V6p1ZbT6P75RQlabvSWPIvgqxlH9v
+vEP5HVlcK+tcBcSkaws978Ea1kKbKqsgEsVuAa8vk5v/+Btu0x6qikjBraRPf86Ad8pZfV7aLIiL
+5xXD7dytYOhmxwBpcJDY+ZnY3E1p54I8ve/RZzg0pFvgdFvcKGoM8G8bQeChbz5n9P91Hln+idSb
+uVO7CixCMX4FQUgaagAFhlHTDHcnakmxIEeO60TzLbzeab2GCstgA8JfFErxsa6jvaKyGij0ZC2Q
+la6VaO6pOutVhqSw9JOTk7jBvZFpktuPKpJ7LEaSUZoC1wiBR+yHLFciFTuakD74CM4qyWRPAbbQ
+2rY=
+=X50l
+-----END PGP SIGNATURE-----
 
->> +}
->> +
->>  static const struct virtio_config_ops virtio_ccw_config_ops = {
->>  	.get_features = virtio_ccw_get_features,
->>  	.finalize_features = virtio_ccw_finalize_features,
-
+--------------Rc95TRwpQQWj5pxD9yvjBCU3--

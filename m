@@ -2,121 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31BF250E9E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 22:04:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF8E050E9E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 22:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234273AbiDYUGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 16:06:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56562 "EHLO
+        id S245109AbiDYUIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 16:08:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245106AbiDYUGM (ORCPT
+        with ESMTP id S240903AbiDYUIj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 16:06:12 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2162128CCC
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 13:03:07 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id d3so10069446ilr.10
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 13:03:07 -0700 (PDT)
+        Mon, 25 Apr 2022 16:08:39 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A96101DA
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 13:05:34 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id d6so14701258ede.8
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 13:05:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=6IUFVGvfVxw7l6YMhU424l8XqBpC7fGs6gju1QrjU6I=;
-        b=b3u4xyXqePElE6uzOsARKY8+PI4TX3Kfwz1v+pt+aDBG6YYxf8B4BFF122dVgsWa0G
-         wTroXZKBEgXygfLWgFZ6duEffBwEcqbKlxo2oXvU6f5+c465slS+cKlD6utjJ9VRtGKz
-         E23GQlTrmCfcHJ2Lo22SWt5mHhkrQ8ecf4i5M=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Lb5AF8pOqBTQnb+ZwEbBUTl5TVNJNRrybvIcYoGIxmg=;
+        b=JZRgQQ5uFa+mDxsUi5f4rJzM1iIINQYPxxTxq1j6XqBlrBWUKwkoawWLXPRtlCJBJ3
+         TUxxSPXmmKAgUULv58luBSDMYVRpyqDPSR6xCXDSr8Uh8gj3G5SaTLDb5MSj6H6xB+02
+         vnPAYfBkyYp/DzbUQHKMuj/Pv2rJcu0MBvLW+jzTWgzLln9eH1Tqn1DvVGicK2vEODKl
+         OD6yd0Azokmi1sz7T5uW0DzjsxskwPuCGKX0iqK+4cBsiST3pxTd4uIkzGCjUsVhYIpU
+         NG/BOTF/DKqYzbFfZZDAnliFiKbcJgaEdQBgReF6ut/jNMHV1lgIGxhxaTKT5IHtZ04d
+         MD8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=6IUFVGvfVxw7l6YMhU424l8XqBpC7fGs6gju1QrjU6I=;
-        b=XZM0NqrhcA0bpz5gaUEK1H8CnfFkBhAXBZ2vkMfBItv17TCFRA5JsIgntBnEhRnpEf
-         4iMrEBdsU23Td8LMKGWCpsZpSp3Qbt+Lf7ZxIaMDILIi89ioCMeqgqMf+R8OZv3+UWPU
-         SLkayCIetB8g4LsyFxRCvl6Y/Tuph8J8kxG7GGtaCkqDAE11cfB+42UvXrG2w7k04qvl
-         qAUEwLQArnoxSFhpwja54AR8mFSUY4rEo7UQkPFffeCWGE6zpHPgDMAK++zAwafu7/7d
-         rb6etVxHgyfDvBQcVOqUI65YH+4YB77LlT9wOHmk01fpwwfPWLvnpkOeHeCHMn0j7+QV
-         Y2gw==
-X-Gm-Message-State: AOAM5313ak1jF992t0QT6mwUXmwSgtqg3fCsRDumJNbq3Z10oo8tpSd5
-        Co9wDWvwq6nWrdteDefL91sgNw==
-X-Google-Smtp-Source: ABdhPJz7jabMcQMahAgzEB+tpsiYw2q8m1KcTY1nfihf3Zk6kiyb14v45rF0wOE1m6bpHahdMHyESw==
-X-Received: by 2002:a05:6e02:190c:b0:2cd:9331:2750 with SMTP id w12-20020a056e02190c00b002cd93312750mr3026582ilu.214.1650916987125;
-        Mon, 25 Apr 2022 13:03:07 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id s8-20020a056e021a0800b002cd8179e7a0sm5202881ild.16.2022.04.25.13.03.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 13:03:06 -0700 (PDT)
-Subject: Re: [PATCH RESEND] selftests/damon: add damon to selftests root
- Makefile
-To:     Yuanchu Xie <yuanchu@google.com>, SeongJae Park <sj@kernel.org>
-Cc:     Shuah Khan <shuah@kernel.org>, Markus Boehme <markubo@amazon.de>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        David Rientjes <rientjes@google.com>
-References: <20220418202017.3583638-1-yuanchu@google.com>
- <93c3f9b4-7e14-858b-bf6c-23e4f3bec232@google.com>
- <31edb348-d802-0ee5-c13d-a9ef17b2ea8a@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <f6cc50f0-318f-097f-af13-271a2fb4d645@linuxfoundation.org>
-Date:   Mon, 25 Apr 2022 14:03:05 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Lb5AF8pOqBTQnb+ZwEbBUTl5TVNJNRrybvIcYoGIxmg=;
+        b=b0MjrvYiyCjEKS48v486aP7b2oMBa43dg7ggM6Nb9Wt9BYzEw7ZRJBlVZgQQfVdses
+         zb/Kyf/Nx2ZgVvsCATuuaNt4N/yOpQNU4lMTVY0fiLIt0ctBkrhggfCaJTgpaXLmP/Wg
+         ozfbCeJLrHLwLWtBjVXbP56CN74ZPwqmVleNuGOcGJm4bMe3UksF+g/zJrKTkjPK9TtW
+         fyvmS1R5uC3JSuKQTENdLnr12mtjXUuRA1RUWQDgBHsW0+o+NDiRaddDofiR74Yd4tRW
+         sf+lCR4RoGPwNQ5BOXPJbIg9bSv681BlQzXtYNp1oTaKvmsWwmSCFei9T44Iyz0F+iFX
+         xAHA==
+X-Gm-Message-State: AOAM532hLCi3XD9eFJtJKBMK4T056CO6z79KGj0noU8WexT5M2V9yh5j
+        d6W7YMSK3oOP2fDJTlA39kOP3fjHPd8=
+X-Google-Smtp-Source: ABdhPJwQByRT76WrZmCsDWAUWn2odTnHictXVZQh3HjufCt8YiKfglc5EdGkXh2V2bRo+bAnIdnhMg==
+X-Received: by 2002:aa7:d651:0:b0:425:c3a4:2291 with SMTP id v17-20020aa7d651000000b00425c3a42291mr17599606edr.54.1650917132662;
+        Mon, 25 Apr 2022 13:05:32 -0700 (PDT)
+Received: from leap.localnet (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
+        by smtp.gmail.com with ESMTPSA id h23-20020a0564020e9700b00420fff23180sm4896431eda.41.2022.04.25.13.05.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 13:05:31 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] mm/highmem: VM_BUG_ON() if offset + len > PAGE_SIZE
+Date:   Mon, 25 Apr 2022 22:05:29 +0200
+Message-ID: <2701286.BEx9A2HvPv@leap>
+In-Reply-To: <YmbQluz5i95fkhn9@iweiny-desk3>
+References: <20220424104806.25396-1-fmdefrancesco@gmail.com> <8929547.CDJkKcVGEf@leap> <YmbQluz5i95fkhn9@iweiny-desk3>
 MIME-Version: 1.0
-In-Reply-To: <31edb348-d802-0ee5-c13d-a9ef17b2ea8a@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/25/22 1:37 PM, Shuah Khan wrote:
-> On 4/24/22 1:35 PM, David Rientjes wrote:
->> On Mon, 18 Apr 2022, Yuanchu Xie wrote:
->>
->>> Currently the damon selftests are not built with the rest of the
->>> selftests. We add damon to the list of targets.
->>>
->>> Fixes: b348eb7abd09 ("mm/damon: add user space selftests")
->>> Reviewed-by: SeongJae Park <sj@kernel.org>
->>> Signed-off-by: Yuanchu Xie <yuanchu@google.com>
->>
->> Acked-by: David Rientjes <rientjes@google.com>
->>
-> 
-> Thank you. Applied to linux-kselftest next for 5.19-rc1.
-> 
+On luned=C3=AC 25 aprile 2022 18:47:18 CEST Ira Weiny wrote:
+> On Mon, Apr 25, 2022 at 03:47:38AM +0200, Fabio M. De Francesco wrote:
+> > On domenica 24 aprile 2022 12:48:06 CEST Fabio M. De Francesco wrote:
+> > > Call VM_BUG_ON() if offset + len > PAGE_SIZE.
+> > >=20
+> > > This is an RFC patch because I'm not sure if we actually need to=20
+> > BUG_ON(),
+> >=20
+> > Actually I considered VM_BUG_ON() for consistency with the other=20
+functions=20
+> > in highmem.h
+> >=20
+> > What about VM_WARN_ON_ONCE() here and also in memset_page?
+>=20
+> For consistency leave this as a VM_BUG_ON[1]
+>=20
+> I've been down a similar path[2] and there was a long discussion about=20
+it.[3]
+>=20
+> In the end we settled on VM_BUG_ON.[4]
 
-The test builds with warnings. Would you like to fix these as
-well?
+Thanks for your reply and for providing so many helpful links :)
 
-make
-gcc     huge_count_read_write.c  -o linux_5.18/tools/testing/selftests/damon/huge_count_read_write
-huge_count_read_write.c: In function ‘write_read_with_huge_count’:
-huge_count_read_write.c:23:9: warning: ‘write’ reading 4294967295 bytes from a region of size 1 [-Wstringop-overread]
-    23 |         write(filedesc, "", 0xfffffffful);
-       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-In file included from huge_count_read_write.c:8:
-/usr/include/unistd.h:378:16: note: in a call to function ‘write’ declared with attribute ‘access (read_only, 2, 3)’
-   378 | extern ssize_t write (int __fd, const void *__buf, size_t __n) __wur
-       |                ^~~~~
-huge_count_read_write.c:25:15: warning: ‘read’ writing 4294967295 bytes into a region of size 25 overflows the destination [-Wstringop-overflow=]
-    25 |         ret = read(filedesc, buf, 0xfffffffful);
-       |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-huge_count_read_write.c:14:14: note: destination object ‘buf’ of size 25
-    14 |         char buf[25];
-       |              ^~~
-In file included from huge_count_read_write.c:8:
-/usr/include/unistd.h:371:16: note: in a call to function ‘read’ declared with attribute ‘access (write_only, 2, 3)’
-   371 | extern ssize_t read (int __fd, void *__buf, size_t __nbytes) __wur
-       |                ^~~~
+I just read the ones related to VM_BUG_ON() (I don't have time for=20
+flush_dcache_page() today). Since the consensus for these kinds of issues=20
+is in favor of using VM_BUG_ON(), that's OK for me.
 
-thanks,
--- Shuah
+I will send a "real" patch by tomorrow.
+
+Again, thanks,
+
+=46abio
+
+> As to the addition of flush_dcache_page().  There was a discussion here.
+>=20
+> https://lore.kernel.org/lkml/CAHk-=3DwiKac4t-fOP_3fAf7nETfFLhT3ShmRmBq2J9=
+6y6jAr56Q@mail.gmail.com/
+>=20
+> Ira
+>=20
+> [1] https://lore.kernel.org/lkml/20210209205249.GB2975576@iweiny-DESK2.sc=
+=2Eintel.com/
+>=20
+> [2] https://lore.kernel.org/lkml/20201209022250.GP1563847@iweiny-DESK2.sc=
+=2Eintel.com/
+>=20
+> [3] https://lore.kernel.org/lkml/20201208213255.GO1563847@iweiny-DESK2.sc=
+=2Eintel.com/
+>=20
+> [4] https://lore.kernel.org/lkml/20210210174928.3156073-1-ira.weiny@intel=
+=2Ecom/
+
+
+

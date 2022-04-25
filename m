@@ -2,51 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4967D50D67E
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 03:17:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5310650D680
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 03:20:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240104AbiDYBUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 21:20:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43026 "EHLO
+        id S240105AbiDYBWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 21:22:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240021AbiDYBUW (ORCPT
+        with ESMTP id S240021AbiDYBWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 21:20:22 -0400
-Received: from mail.meizu.com (unknown [14.29.68.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E014EF58;
-        Sun, 24 Apr 2022 18:17:18 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail04.meizu.com
- (172.16.1.16) with Microsoft SMTP Server (TLS) id 14.3.487.0; Mon, 25 Apr
- 2022 09:17:16 +0800
-Received: from [172.16.137.70] (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Mon, 25 Apr
- 2022 09:17:16 +0800
-Message-ID: <0be9fe6a-b01e-b355-9283-6ad8372932d6@meizu.com>
-Date:   Mon, 25 Apr 2022 09:17:15 +0800
+        Sun, 24 Apr 2022 21:22:51 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947037B13B
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 18:19:49 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id b12so8817097plg.4
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 18:19:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=UC3UUz3+3Li+KSXitsNBzOD/5C0DEIQhctDbkXoSxco=;
+        b=Z7rboODG/yWX8bCEnoh6B7AguUHh2w+BdLUv1l6MHxHitsLsTr1vaekb/aXKsHftt+
+         g5rnbjq1gN5Z2noUFol5RLkEVQRutGiXnKaQFunhyxa2JgGt6WPZoF5/msdQJianTXVv
+         nRcAoXcZf+Xy3/UTBNOpy2fjVR7mxgv51/51R6IJJBhrdmKAoOCmhRwH3lPsKUlZcQia
+         rreoDsZXbuQrOYPTymAdqR6E/shpOMIPKpr0E6u1+cvU9D0JV4Qkt5xjRrkpKzGBChFU
+         kxdr4I3Mc5fKYd2JQ7HUg74A0+T7jeJYHNYuDd0HQo4HUZ/sR60he1eICFQl1ZnqGWqn
+         zKUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UC3UUz3+3Li+KSXitsNBzOD/5C0DEIQhctDbkXoSxco=;
+        b=qp6jOOJA8sq6ZM5vrQL/dvdQISfmZdjYUEj03UCcTq/otUhkodxdl/ijY1J6jeKsFM
+         S3qql2Nt9pD13t10ryNP/hYFa1DvsuLgixeC3gDJILdDKCN5UdUWpFSDMfGZCAcBbNVz
+         Ob2h6Qcojb7gTLm24yjBWzu9MGG9Frx1xIyD1q1Poh9oSV0YwyF9lHCKDcv2bP7HX3nQ
+         eSUq2/Kh3EHtrEG/QdOe+1N0ywxwLhS2g+fIGhGmkY1XlgRW8PL1lQk0/iqphQTvS/Yf
+         n6Fm72ceJeHf4Vngbio/+Lsd4KEHCKvNoMGjk+r+0RdNIM0gdQhxpjm6NyBBCsfDKR/h
+         SLyA==
+X-Gm-Message-State: AOAM531oqZdFw3rRSrhbR0cfTAI838HZ9OFKHH39VDIpGUBT+FqmSHDI
+        KT5ohPCz7EIqvOIXvGnn1Cc=
+X-Google-Smtp-Source: ABdhPJwu0pHVzic4N9d0cQf/8eWFhfTH4BXxnUjj0DLOSheOLv6NcJlGfGcXfNZUfAvWCSoBUMEPgA==
+X-Received: by 2002:a17:903:32c5:b0:158:f6bb:fae0 with SMTP id i5-20020a17090332c500b00158f6bbfae0mr15689329plr.62.1650849589122;
+        Sun, 24 Apr 2022 18:19:49 -0700 (PDT)
+Received: from ArchDesktop ([14.100.36.163])
+        by smtp.gmail.com with ESMTPSA id q9-20020a056a00088900b004fe1a045e97sm9483399pfj.118.2022.04.24.18.19.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Apr 2022 18:19:48 -0700 (PDT)
+Date:   Mon, 25 Apr 2022 09:19:45 +0800
+From:   Solomon Tan <wjsota@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        straube.linux@gmail.com
+Subject: Re: [PATCH] Revert "staging: r8188eu: use in-kernel ieee channel"
+Message-ID: <YmX3MYF2dAaARwFc@ArchDesktop>
+References: <20220425002735.112666-1-wjsota@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/2] docs/zh_CN: sync with original text
- Documentation/vm/page_owner.rst
-To:     Alex Shi <seakeel@gmail.com>, <siyanteng01@gmail.com>
-CC:     <alexs@kernel.org>, <corbet@lwn.net>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <siyanteng@loongson.cn>
-References: <CAEensMzuQ0uAw8_5Xb7u1n685au=DpaJyPevGCT8GCG7xS42ow@mail.gmail.com>
- <1650424016-7225-1-git-send-email-baihaowen@meizu.com>
- <1650424016-7225-2-git-send-email-baihaowen@meizu.com>
- <30d2f96e-99e1-2976-a294-8e112166afff@gmail.com>
- <049ccac8-c394-0cdc-c2ed-4ea91cab6439@meizu.com>
- <c498b2a7-8f0e-4f6d-10ba-49c4c7794ff9@gmail.com>
-From:   baihaowen <baihaowen@meizu.com>
-In-Reply-To: <c498b2a7-8f0e-4f6d-10ba-49c4c7794ff9@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220425002735.112666-1-wjsota@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,29 +70,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 4/24/22 11:16 AM, Alex Shi 写道:
->
-> On 4/24/22 10:56, baihaowen wrote:
->>>> +        ======          ==========      ==================
->> hi, Alex
->> I can apply local.
->> ➜  linux-next git:(heads/next-20220421) ✗ git am doc_pageonwer_patches/0001-docs-zh_CN-sync-with-original-text-Documentation-vm-.patch
->> 应用：docs/zh_CN: sync with original text Documentation/vm/page_owner.rst
->> ➜  linux-next git:(heads/next-20220421) ✗ git am doc_pageonwer_patches/0002-doc-vm-page_owner.rst-Fix-table-display-confusion.patch   
->> 应用：doc/vm/page_owner.rst: Fix table display confusion
->>
->> I think git send-email will change format by my select. I'll try to resend.
-> Send to yourself only then get it from your email client and try applying. 
->
-> Thanks
-> Alex
-Hi Alex
+On Mon, Apr 25, 2022 at 08:27:36AM +0800, Solomon Tan wrote:
+> rtw_ieee80211_channel to ieee802_channel causes a memcpy bug as reported
 
-Could you tell me how do you do when you get a patch from email ?
-
-I get my patch from email and then copy-patse to a new file, then git am xx.patch.
-It will notice 补丁格式检测失败。
-
--- 
-Haowen Bai
-
+Apologies for the spelling error. It should be ieee80211_channel instead
+of ieee802_channel. I will amend the commit message and send it as v2.

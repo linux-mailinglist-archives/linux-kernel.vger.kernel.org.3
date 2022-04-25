@@ -2,56 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C68150DC36
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 11:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D573050DC4D
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 11:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241274AbiDYJQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 05:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
+        id S241011AbiDYJS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 05:18:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238730AbiDYJPp (ORCPT
+        with ESMTP id S241559AbiDYJQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 05:15:45 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3092ADF2C;
-        Mon, 25 Apr 2022 02:12:41 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AA9821FB;
-        Mon, 25 Apr 2022 02:12:40 -0700 (PDT)
-Received: from [10.57.13.137] (unknown [10.57.13.137])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0139C3F73B;
-        Mon, 25 Apr 2022 02:12:37 -0700 (PDT)
-Message-ID: <322009d2-330c-22d4-4075-eca2042f64e1@arm.com>
-Date:   Mon, 25 Apr 2022 10:12:36 +0100
+        Mon, 25 Apr 2022 05:16:59 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B52F321
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 02:13:51 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23P8dEd6030426;
+        Mon, 25 Apr 2022 09:13:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=6X2jedQwijB4Kh0e2riYItaL9nIyj05CViCMzGahzWk=;
+ b=PdJt77zs0jrYt5X4a5k+7M3MnYsAbWu5t+mzzaHVpgDSTGJwH8E+tV2zVEIcRpZUaB+0
+ xjR/FCJm8tm9RbXXuIizJf1AJrXLYGXUZuMjSpdJfa/v/bMfRB8xcjQBwZ9w3QKhavb5
+ u1pWkzhEZtnJT22NPcr+y3CPoYd7f5wPHS/zXy/K3TJNxgL6fbV2TC2VBLZ1M1eX2Q8T
+ f7dTxEJlvQMuCxcs5Z0xF4+0lWBvCodxLN1CSYriy+eHIk+IoW0vRSL23jbI0XYu/i/T
+ ARYaR23fUhtSGal2Rox0ak9PCcrpLmP3ndXiHsqpdcZrdZTkagkH3J+L6QCBvwwlPYeA Dw== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fnraugqb2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Apr 2022 09:13:49 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23P99NnW002691;
+        Mon, 25 Apr 2022 09:13:47 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03ams.nl.ibm.com with ESMTP id 3fm938t3aj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Apr 2022 09:13:47 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23P9DiQ220578720
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 25 Apr 2022 09:13:44 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5537DAE055;
+        Mon, 25 Apr 2022 09:13:44 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0C8D2AE051;
+        Mon, 25 Apr 2022 09:13:44 +0000 (GMT)
+Received: from osiris (unknown [9.145.60.82])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Mon, 25 Apr 2022 09:13:43 +0000 (GMT)
+Date:   Mon, 25 Apr 2022 11:13:42 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] s390: disable -Warray-bounds
+Message-ID: <YmZmRlvK1Ad2R4tW@osiris>
+References: <20220422134308.1613610-1-svens@linux.ibm.com>
+ <202204221052.85D0C427@keescook>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 2/3] perf: arm-spe: Fix SPE events with phys addresses
-Content-Language: en-US
-To:     Leo Yan <leo.yan@linaro.org>, Timothy Hayes <timothy.hayes@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-References: <20220421165205.117662-1-timothy.hayes@arm.com>
- <20220421165205.117662-3-timothy.hayes@arm.com>
- <20220424125951.GD978927@leoy-ThinkPad-X240s>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <20220424125951.GD978927@leoy-ThinkPad-X240s>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202204221052.85D0C427@keescook>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: kFHppHQ3132OF6_IEtMjIkGaIK8ytjbm
+X-Proofpoint-GUID: kFHppHQ3132OF6_IEtMjIkGaIK8ytjbm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-25_05,2022-04-22_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
+ mlxscore=0 lowpriorityscore=0 clxscore=1011 priorityscore=1501 bulkscore=0
+ impostorscore=0 mlxlogscore=381 adultscore=0 suspectscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204250040
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,113 +86,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 24/04/2022 13:59, Leo Yan wrote:
-> Hi Timothy,
+On Fri, Apr 22, 2022 at 10:54:09AM -0700, Kees Cook wrote:
+> On Fri, Apr 22, 2022 at 03:43:08PM +0200, Sven Schnelle wrote:
+> > gcc-12 shows a lot of array bound warnings on s390. This is caused
+> > by our S390_lowcore macro:
+> > 
+> > which uses an hardcoded address of 0. Wrapping that with
+> > absolute_pointer() works, but gcc no longer knows that a 12 bit
+> > instruction is sufficient to access lowcore. So it emits instructions
+> > like 'lghi %r1,0; l %rx,xxx(%r1)' instead of a single load/store
+> > instruction. As s390 stores variables often read/written in lowcore,
+> > this is considered problematic. Therefore disable -Warray-bounds on
+> > s390 for now until there is a better real solution.
+> > 
+> > Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
 > 
-> On Thu, Apr 21, 2022 at 05:52:04PM +0100, Timothy Hayes wrote:
->> This patch corrects a bug whereby SPE collection is invoked with
->> pa_enable=1 but synthesized events fail to show physical addresses.
->>
->> Signed-off-by: Timothy Hayes <timothy.hayes@arm.com>
->> ---
->>  tools/perf/arch/arm64/util/arm-spe.c | 10 ++++++++++
->>  tools/perf/util/arm-spe.c            |  3 ++-
->>  2 files changed, 12 insertions(+), 1 deletion(-)
->>
->> diff --git a/tools/perf/arch/arm64/util/arm-spe.c b/tools/perf/arch/arm64/util/arm-spe.c
->> index af4d63af8072..e8b577d33e53 100644
->> --- a/tools/perf/arch/arm64/util/arm-spe.c
->> +++ b/tools/perf/arch/arm64/util/arm-spe.c
->> @@ -148,6 +148,7 @@ static int arm_spe_recording_options(struct auxtrace_record *itr,
->>  	bool privileged = perf_event_paranoid_check(-1);
->>  	struct evsel *tracking_evsel;
->>  	int err;
->> +	u64 bit;
->>  
->>  	sper->evlist = evlist;
->>  
->> @@ -245,6 +246,15 @@ static int arm_spe_recording_options(struct auxtrace_record *itr,
->>  	 */
->>  	evsel__set_sample_bit(arm_spe_evsel, DATA_SRC);
->>  
->> +	/*
->> +	 * The PHYS_ADDR flag does not affect the driver behaviour, it is used to
->> +	 * inform that the resulting output's SPE samples contain physical addresses
->> +	 * where applicable.
->> +	 */
->> +	bit = perf_pmu__format_bits(&arm_spe_pmu->format, "pa_enable");
->> +	if (arm_spe_evsel->core.attr.config & bit)
->> +		evsel__set_sample_bit(arm_spe_evsel, PHYS_ADDR);
->> +
->>  	/* Add dummy event to keep tracking */
->>  	err = parse_events(evlist, "dummy:u", NULL);
->>  	if (err)
->> diff --git a/tools/perf/util/arm-spe.c b/tools/perf/util/arm-spe.c
->> index 151cc38a171c..1a80151baed9 100644
->> --- a/tools/perf/util/arm-spe.c
->> +++ b/tools/perf/util/arm-spe.c
->> @@ -1033,7 +1033,8 @@ arm_spe_synth_events(struct arm_spe *spe, struct perf_session *session)
->>  	memset(&attr, 0, sizeof(struct perf_event_attr));
->>  	attr.size = sizeof(struct perf_event_attr);
->>  	attr.type = PERF_TYPE_HARDWARE;
->> -	attr.sample_type = evsel->core.attr.sample_type & PERF_SAMPLE_MASK;
->> +	attr.sample_type = evsel->core.attr.sample_type &
->> +				(PERF_SAMPLE_MASK | PERF_SAMPLE_PHYS_ADDR);
-> 
-> I verified this patch and I can confirm the physical address can be
-> dumped successfully.
-> 
-> I have a more general question, seems to me, we need to change the
-> macro PERF_SAMPLE_MASK in the file util/event.h as below, so
-> here doesn't need to 'or' the flag PERF_SAMPLE_PHYS_ADDR anymore.
-> 
-> @Arnaldo, @Jiri, could you confirm if this is the right way to move
-> forward?  I am not sure why PERF_SAMPLE_MASK doesn't contain the bit
-> PERF_SAMPLE_PHYS_ADDR in current code.
+> It looks like the source of this problem (the literal-values-treated-as-NULL)
+> is gcc-12 specific. From the discussions, it sounded like Jacob was
+> going to fix this "correctly" in gcc-13. It might be a good idea to make
+> this version-checked? (i.e. only disable on gcc-12)
 
-I think there is a reason that PERF_SAMPLE_MASK is a subset of all the
-bits. This comment below suggests it. Is it so the mask only includes fields
-that are 64bits? That makes the __evsel__sample_size() function a simple
-multiplication of a count of all the fields that are 64bits.
+That makes sense, so we still get at least some coverage for compilers
+< gcc 12; and also latest clang still seems to do the right thing.
 
-  static int
-  perf_event__check_size(union perf_event *event, unsigned int sample_size)
-  {
-	/*
-	 * The evsel's sample_size is based on PERF_SAMPLE_MASK which includes
-	 * up to PERF_SAMPLE_PERIOD.  After that overflow() must be used to
-	 * check the format does not go past the end of the event.
-	 */
-	if (sample_size + sizeof(event->header) > event->header.size)
-		return -EFAULT;
-
-	return 0;
-  }
-
-Having said that, the mask was updated once to add PERF_SAMPLE_IDENTIFIER to
-it, so that comment is slightly out of date now.
-
-
-> 
-> diff --git a/tools/perf/util/event.h b/tools/perf/util/event.h
-> index cdd72e05fd28..c905ac32ebad 100644
-> --- a/tools/perf/util/event.h
-> +++ b/tools/perf/util/event.h
-> @@ -39,7 +39,7 @@ struct perf_event_attr;
->          PERF_SAMPLE_TIME | PERF_SAMPLE_ADDR |          \
->         PERF_SAMPLE_ID | PERF_SAMPLE_STREAM_ID |        \
->          PERF_SAMPLE_CPU | PERF_SAMPLE_PERIOD |         \
-> -        PERF_SAMPLE_IDENTIFIER)
-> +        PERF_SAMPLE_IDENTIFIER | PERF_SAMPLE_PHYS_ADDR)
-> 
-> Thanks,
-> Leo
-> 
->>  	attr.sample_type |= PERF_SAMPLE_IP | PERF_SAMPLE_TID |
->>  			    PERF_SAMPLE_PERIOD | PERF_SAMPLE_DATA_SRC |
->>  			    PERF_SAMPLE_WEIGHT | PERF_SAMPLE_ADDR;
->> -- 
->> 2.25.1
->>
+Sven, could you either send an updated patch, or an addon patch,
+please? Whatever you prefer.

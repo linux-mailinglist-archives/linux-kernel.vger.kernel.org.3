@@ -2,126 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AA7D50E528
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B82250E52D
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:07:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235529AbiDYQJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 12:09:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52440 "EHLO
+        id S243229AbiDYQKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 12:10:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243220AbiDYQJ1 (ORCPT
+        with ESMTP id S240107AbiDYQK2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 12:09:27 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C1A3D490;
-        Mon, 25 Apr 2022 09:06:23 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id i5so2514725wrc.13;
-        Mon, 25 Apr 2022 09:06:22 -0700 (PDT)
+        Mon, 25 Apr 2022 12:10:28 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F6A3D4A7
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 09:07:23 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id d6so13925510ede.8
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 09:07:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=blqu47Mx6LTQVUbobou5/IDLU7rEhbmkIfzaQTG4m8A=;
-        b=gjKm36X2xzU6/RWmcvUlbhbvzopGNlSol4DzQcHwkc9K/t0tVDmqHhoRfYEPi29GcJ
-         kRzEbf9aiMGa+r+mb90+qzFN4TdGQg/pNEHUNmfViUmT73B14FvezDUVIM23/S95VUUT
-         mKd2E2tS7465n+qcCW7OrUMihCBx0+VbzZAiILJPO6E9a6XhjPcQ+bEOq79WJ+3pd3D1
-         DKbpwaA8EH994BQegrs2j1J+hjkIRIXaiTFRznD1Ibwnk8Zl8wNjxwesNYrcdjvL7Nxz
-         EweshHsisXNOhFcYCjQ1nTZraraOhSsyNtNI2DnI08UrVc666Mzb0fEA5W7ws1kvBESi
-         qozw==
+        d=raspberrypi.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bXSnvoi7do4d0Cw+AqoAw/T18ZVUWnuc6GpNpfIH19c=;
+        b=BR68WEsUU9ruE04R4C4gbsu8wC2yAPqXm017Rao0x8cacuQmHe1eOgwJYKQH0jzmJ4
+         oSoRBzz29bJ22lqPwFCiuv9ainoLDkhAoTNF70iaDOAtzBhgznhbLlCNdb9Hrycbb9EL
+         4ujvLSOQApuUAw63cRM6u13KDYE7yArbn4czXZ3YuO9FgPuZibXY9I2/GQ4Mb/1fKmBi
+         TTFrbSSgUcVj1aNVfjRAHtZKI3FdxztPvsSAXKpAMZq688yfX6ERkW1zarAtgeHX58Zq
+         GxdRR3qL4JXJx3KJpxrzpGshXdOwjVLhpaMlcKYb76RCssgP6EmhJLx/s1Y6NJRpkhY5
+         T2Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=blqu47Mx6LTQVUbobou5/IDLU7rEhbmkIfzaQTG4m8A=;
-        b=lpTvy9AQ6RWb33WVX4f+u1Bxz2H3zEVpPeEgPZXyQTJ2WvR27I1R15M4PCyjZ4gJfM
-         MZY2kXKWvPzXuod+QM6Zlynx+RerBC/k6lPTfCBWIlGz4aDG+8pDFdg98eVwg0sv6fGM
-         QFiF8B9xY26xSO7Yw5sNAu+VvusPIOPXVAEPmjpOTiHMxmr9U/sjb1GC9ew9+PokVQLm
-         vMl7RQA2VKZ+8LxHFM9y+QlzUy52s15KPZTVzlEDR2tPZ++sQP0H1dl+G/wzWnmql3cS
-         MgH9XPGNdKkWw3gjhp36DhRKMJrD1xDN4KuEMUTyxdnON7MwwNRan8tvls088bELKqhD
-         Seng==
-X-Gm-Message-State: AOAM533fKWvnu0Kod7wTXttSbH4Xnu/2XF5DRvLd0muqYNofb9uHcuHj
-        H1WUnPJi3N5QCHFbnTyl40I=
-X-Google-Smtp-Source: ABdhPJxdQ5VI2gYM49Wkm/hGApwl+pGt0s+YwzPr0CQUrnwglwNs5Armvx4ev2JcQ/MzApojJZq5pw==
-X-Received: by 2002:a5d:6e89:0:b0:20a:de31:18d1 with SMTP id k9-20020a5d6e89000000b0020ade3118d1mr3567340wrz.449.1650902781578;
-        Mon, 25 Apr 2022 09:06:21 -0700 (PDT)
-Received: from [192.168.0.210] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.googlemail.com with ESMTPSA id l6-20020a1c2506000000b0038e6fe8e8d8sm11229610wml.5.2022.04.25.09.06.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 09:06:21 -0700 (PDT)
-Message-ID: <604ea061-c566-e032-67cf-9bc622aa76ae@gmail.com>
-Date:   Mon, 25 Apr 2022 17:06:19 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bXSnvoi7do4d0Cw+AqoAw/T18ZVUWnuc6GpNpfIH19c=;
+        b=2nXaDVwmqMthq3rpbacvwNgekVDrMh9P7BAbEdNKvL2xT2sAtHtWty/QR+4+8QgS+7
+         NGK2+fYfIcWdvDZ6xl+EokTdEbHVEIJF02+98E5Upu+SliYKKXTIcczlddluY0i9MzqB
+         RDDgIzB5+kViBk3GD07atGM4BrB8yb8Z+0EOLZze8HyWeJHZ1kY50hOaBzoBUbAb8WUL
+         zHy0QpTR/EuT8+pxSwegmpz8b2zUKujrRjKKSw+obbf9BvcoBmYmw/wZfGj/L16are0x
+         o8sv382D4aK8aBi1c8+k1+Ona2g9HY07WgvLnswEyON94wHJypSTO6G8jgcvYLMpuGAV
+         53PA==
+X-Gm-Message-State: AOAM533Dcvp1y96U4dgXelZCd/516kfB7HaiSRwLe5q5qU2kLWc2mLS4
+        7O8KyyKtuzvTNsJSURtKprwZiyRm78c8RGGrKv6zzA==
+X-Google-Smtp-Source: ABdhPJwhiteEqaKegPnzPkmDW2Lw00gDy5cmL0DM91noXMDgC0CtFdV2JeuzqnvNaPwoZFBMzqyNSDxSdoQXlgKtqmA=
+X-Received: by 2002:a50:d08b:0:b0:425:eb86:f36d with SMTP id
+ v11-20020a50d08b000000b00425eb86f36dmr5027784edd.235.1650902842151; Mon, 25
+ Apr 2022 09:07:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] selftests/resctrl: Fix null pointer dereference on open
- failed
-Content-Language: en-US
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>, Babu Moger <babu.moger@amd.com>,
-        Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>,
-        linux-kselftest@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220424211536.1373878-1-colin.i.king@gmail.com>
- <04a35a47-d83a-67a1-5ed4-ba314c6e1ecf@linuxfoundation.org>
-From:   "Colin King (gmail)" <colin.i.king@gmail.com>
-In-Reply-To: <04a35a47-d83a-67a1-5ed4-ba314c6e1ecf@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220412135534.2796158-1-aford173@gmail.com> <20220412135534.2796158-5-aford173@gmail.com>
+In-Reply-To: <20220412135534.2796158-5-aford173@gmail.com>
+From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
+Date:   Mon, 25 Apr 2022 17:07:06 +0100
+Message-ID: <CAPY8ntD+HqQLeb=Z4du2X==22yBzkfqpGEjo_v6=W1zFU1F2Ow@mail.gmail.com>
+Subject: Re: [PATCH 4/4] media: i2c: imx219: Create DPHY helper function
+To:     Adam Ford <aford173@gmail.com>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Tim Harvey <tharvey@gateworks.com>,
+        cstevens@beaconembedded.com, aford@beaconembedded.com,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/04/2022 16:51, Shuah Khan wrote:
-> On 4/24/22 3:15 PM, Colin Ian King wrote:
->> Currently if opening /dev/null fails to open then file pointer fp
->> is null and further access to fp via fprintf will cause a null
->> pointer dereference. Fix this by returning a negative error value
->> when a null fp is detected.
->>
-> 
-> How did you find this problem and how can it be reproduced? Is there
-> a case where test fails to open "/dev/null"?
+Hi Adam
 
-Found with static analysis, cppcheck. Open on /dev/null is unlikely to 
-fail, but it's good to fail reliably rather than have a SIGSEGV :-)
+On Tue, 12 Apr 2022 at 14:55, Adam Ford <aford173@gmail.com> wrote:
+>
+> In the table of modes, each mode sets the DPHY to auto.
+> Create a helper function which does the same thing while
+> removing the entry for auto DPHY from ever mode entry.
 
-Colin
+s/ever/every
 
-> 
->> Fixes: a2561b12fe39 ("selftests/resctrl: Add built in benchmark")
->> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
->> ---
->>   tools/testing/selftests/resctrl/fill_buf.c | 4 +++-
->>   1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/resctrl/fill_buf.c 
->> b/tools/testing/selftests/resctrl/fill_buf.c
->> index 51e5cf22632f..56ccbeae0638 100644
->> --- a/tools/testing/selftests/resctrl/fill_buf.c
->> +++ b/tools/testing/selftests/resctrl/fill_buf.c
->> @@ -121,8 +121,10 @@ static int fill_cache_read(unsigned char 
->> *start_ptr, unsigned char *end_ptr,
->>       /* Consume read result so that reading memory is not optimized 
->> out. */
->>       fp = fopen("/dev/null", "w");
->> -    if (!fp)
->> +    if (!fp) {
->>           perror("Unable to write to /dev/null");
->> +        return -1;
->> +    }
->>       fprintf(fp, "Sum: %d ", ret);
->>       fclose(fp);
->>
-> 
-> thanks,
-> -- Shuah
+>
+> Signed-off-by: Adam Ford <aford173@gmail.com>
+> ---
+>  drivers/media/i2c/imx219.c | 24 ++++++++++++++++++++----
+>  1 file changed, 20 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
+> index 08e7d0e72430..bb0bc1b8d91c 100644
+> --- a/drivers/media/i2c/imx219.c
+> +++ b/drivers/media/i2c/imx219.c
+> @@ -35,6 +35,10 @@
+>  #define IMX219_MODE_STANDBY            0x00
+>  #define IMX219_MODE_STREAMING          0x01
+>
+> +
+> +#define IMX219_REG_DPHY_CTRL           0x0128
+> +#define IMX219_DPHY_AUTO               0
+> +
+>  /* Chip ID */
+>  #define IMX219_REG_CHIP_ID             0x0000
+>  #define IMX219_CHIP_ID                 0x0219
+> @@ -183,7 +187,6 @@ static const struct imx219_reg pll_clk_table[] = {
+>   * 3280x2464 = mode 2, 1920x1080 = mode 1, 1640x1232 = mode 4, 640x480 = mode 7.
+>   */
+>  static const struct imx219_reg mode_3280x2464_regs[] = {
+> -       {0x0128, 0x00},
+>         {0x012b, 0x00},
+>         {0x0164, 0x00},
+>         {0x0165, 0x00},
+> @@ -222,7 +225,6 @@ static const struct imx219_reg mode_3280x2464_regs[] = {
+>  };
+>
+>  static const struct imx219_reg mode_1920_1080_regs[] = {
+> -       {0x0128, 0x00},
+>         {0x012b, 0x00},
+>         {0x0162, 0x0d},
+>         {0x0163, 0x78},
+> @@ -261,7 +263,6 @@ static const struct imx219_reg mode_1920_1080_regs[] = {
+>  };
+>
+>  static const struct imx219_reg mode_1640_1232_regs[] = {
+> -       {0x0128, 0x00},
+>         {0x012b, 0x00},
+>         {0x0164, 0x00},
+>         {0x0165, 0x00},
+> @@ -300,7 +301,6 @@ static const struct imx219_reg mode_1640_1232_regs[] = {
+>  };
+>
+>  static const struct imx219_reg mode_640_480_regs[] = {
+> -       {0x0128, 0x00},
+>         {0x012b, 0x00},
+>         {0x0162, 0x0d},
+>         {0x0163, 0x78},
+> @@ -999,6 +999,15 @@ static int imx219_get_selection(struct v4l2_subdev *sd,
+>         return -EINVAL;
+>  }
+>
+> +static int imx219_enable_dphy(struct imx219 *imx219, u8 mode)
+> +{
+> +       int ret;
+> +
+> +       ret = imx219_write_reg(imx219, IMX219_REG_DPHY_CTRL,
+> +                              IMX219_REG_VALUE_08BIT, mode);
 
+Is there a specific reason to extract this one register, but leave the block
+    {0x455e, 0x00},
+    {0x471e, 0x4b},
+    {0x4767, 0x0f},
+    {0x4750, 0x14},
+    {0x4540, 0x00},
+    {0x47b4, 0x14},
+    {0x4713, 0x30},
+    {0x478b, 0x10},
+    {0x478f, 0x10},
+    {0x4793, 0x10},
+    {0x4797, 0x0e},
+    {0x479b, 0x0e},
+    {0x0162, 0x0d},
+    {0x0163, 0x78},
+that appear to also be common to all modes.
+
+Other drivers break that lot out into a global registers array that is
+always sent, rather than individual register writes.
+Having this one register extra write as a new function is actually
+likely to increase the size of the module overall, instead of reducing
+it.
+
+  Dave
+
+> +       return ret;
+> +};
+> +
+>  static int imx219_configure_lanes(struct imx219 *imx219)
+>  {
+>         int ret;
+> @@ -1081,6 +1090,13 @@ static int imx219_start_streaming(struct imx219 *imx219)
+>                 goto err_rpm_put;
+>         }
+>
+> +       /* Setup DPHY */
+> +       ret = imx219_enable_dphy(imx219, IMX219_DPHY_AUTO);
+> +       if (ret) {
+> +               dev_err(&client->dev, "%s failed to configure dphy\n", __func__);
+> +               goto err_rpm_put;
+> +       }
+> +
+>         /* Configure clock based on reference clock frequency */
+>         imx219_set_exck_freq(imx219);
+>
+> --
+> 2.34.1
+>

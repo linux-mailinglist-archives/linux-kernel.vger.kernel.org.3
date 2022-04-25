@@ -2,78 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 387DC50E08D
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 14:41:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 970FC50E09E
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 14:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241838AbiDYMoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 08:44:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42916 "EHLO
+        id S240801AbiDYMpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 08:45:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232660AbiDYMod (ORCPT
+        with ESMTP id S231204AbiDYMpO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 08:44:33 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F2BCE4AB
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 05:41:29 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id p4so2609430edx.0
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 05:41:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9DsLpqQPuxCK2Mrehw4P0708AXzU3xBMKVlsThqy3Zc=;
-        b=YIsai6GVstoGAERSXy61aZOo146osRmFisTtgf1r43CWKdN0WObYtifthAbCAQXzY3
-         tqDNkB8lZMG8O+ZA3BI7ARoIlT9sDW4DiT6LNdT+qU2+HKoMz7Klz4vA4aiecr6cuU0N
-         31+H7m93zTKZRdQm5Ly7aMJZqVx4OM7TEkO7E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9DsLpqQPuxCK2Mrehw4P0708AXzU3xBMKVlsThqy3Zc=;
-        b=H3JIonjIVdYaDwlTxrgJ5T3eSDkIFRlA6PaWgT687Ch13vlO8giekbN/aHuFgbilxc
-         ZXA8I35mSMgNQg7+M7zYZQ4w2PR07wPkEhyrOReDqTpQ+xfoYJOHDQJ2Ay5ZYnBytbGw
-         GwQQWMA8wv7eVLIT2nxweZdFZE47R1X/NDOYNWUpd/VL/r1FT+Pv9a6ndKnQQ/bFE/kv
-         YL6qh+s/0t6MJa0HjPmiB/LJHEHIjdso29UZnu9toKPT5OKO0BYwCfwdFkPmBIOXQY1i
-         LcIpU0W0bmswSki2rQAeLM+6IwsRUdngKk6sVL0Ji/U9AmIU1ttpddfypmnrwsbN32On
-         FtdQ==
-X-Gm-Message-State: AOAM533BQiEJAC37OH6KxBmPM/KFG5EPyz8C9M6DqE/uAhFGkwnQn6H+
-        s2OWZcCt19lAMGNBSUdUE71b6i54m2siI00eEh4vuA==
-X-Google-Smtp-Source: ABdhPJyXkzITV2ceShfI11A54nnWGtHFrfecC+LpX/i3C5jj2uy9aIr5gNUmnebtnuLIX3bX+4PSPJXxoydBw/Mil7M=
-X-Received: by 2002:a05:6402:274b:b0:423:fe73:95a0 with SMTP id
- z11-20020a056402274b00b00423fe7395a0mr18665932edd.224.1650890487604; Mon, 25
- Apr 2022 05:41:27 -0700 (PDT)
+        Mon, 25 Apr 2022 08:45:14 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B3350D891A;
+        Mon, 25 Apr 2022 05:42:10 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7A817ED1;
+        Mon, 25 Apr 2022 05:42:10 -0700 (PDT)
+Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 01FFE3F5A1;
+        Mon, 25 Apr 2022 05:42:08 -0700 (PDT)
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     joro@8bytes.org
+Cc:     baolu.lu@linux.intel.com, andreas.noever@gmail.com,
+        michael.jamet@intel.com, mika.westerberg@linux.intel.com,
+        YehezkelShB@gmail.com, iommu@lists.linux-foundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mario.limonciello@amd.com, hch@lst.de
+Subject: [PATCH v4 0/4] iommu, thunderbolt: Make iommu_dma_protection more accurate
+Date:   Mon, 25 Apr 2022 13:42:01 +0100
+Message-Id: <cover.1650878781.git.robin.murphy@arm.com>
+X-Mailer: git-send-email 2.35.3.dirty
 MIME-Version: 1.0
-References: <20220325132126.61949-1-zhangjiachen.jaycee@bytedance.com>
-In-Reply-To: <20220325132126.61949-1-zhangjiachen.jaycee@bytedance.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Mon, 25 Apr 2022 14:41:16 +0200
-Message-ID: <CAJfpeguESQm1KsQLyoMRTevLttV8N8NTGsb2tRbNS1AQ_pNAww@mail.gmail.com>
-Subject: Re: [RFC PATCH] fuse: support cache revalidation in writeback_cache mode
-To:     Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xie Yongji <xieyongji@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Mar 2022 at 14:23, Jiachen Zhang
-<zhangjiachen.jaycee@bytedance.com> wrote:
->
-> Hi all,
->
-> This RFC patch implements attr cache and data cache revalidation for
-> fuse writeback_cache mode in kernel. Looking forward to any suggestions
-> or comments on this feature.
+Hi all, 
 
-Quick question before going into the details:  could the cache
-revalidation be done in the userspace filesystem instead, which would
-set/clear FOPEN_KEEP_CACHE based on the result of the revalidation?
+As promised, here's the really-actually-final version, cleaning up the
+new interface in patch #1 to not introduce the new parameter before it's
+ready, and rebased to make sure it correctly applies on -rc3.
 
 Thanks,
-Miklos
+Robin.
+
+
+Mario Limonciello (1):
+  iommu/amd: Indicate whether DMA remap support is enabled
+
+Robin Murphy (3):
+  iommu: Introduce device_iommu_capable()
+  iommu: Add capability for pre-boot DMA protection
+  thunderbolt: Make iommu_dma_protection more accurate
+
+ drivers/iommu/amd/amd_iommu_types.h |  4 +++
+ drivers/iommu/amd/init.c            |  3 ++
+ drivers/iommu/amd/iommu.c           |  2 ++
+ drivers/iommu/intel/iommu.c         |  2 ++
+ drivers/iommu/iommu.c               | 23 +++++++++++++++
+ drivers/thunderbolt/domain.c        | 12 ++------
+ drivers/thunderbolt/nhi.c           | 44 +++++++++++++++++++++++++++++
+ include/linux/iommu.h               |  8 ++++++
+ include/linux/thunderbolt.h         |  2 ++
+ 9 files changed, 91 insertions(+), 9 deletions(-)
+
+-- 
+2.35.3.dirty
+

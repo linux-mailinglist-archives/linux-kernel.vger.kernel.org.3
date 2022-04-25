@@ -2,117 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1913550E2FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:23:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0154E50E307
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:25:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242343AbiDYO0b convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 25 Apr 2022 10:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47048 "EHLO
+        id S242529AbiDYO2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 10:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232374AbiDYO03 (ORCPT
+        with ESMTP id S242511AbiDYO20 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 10:26:29 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFDDA220E2
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 07:23:24 -0700 (PDT)
-Received: (Authenticated sender: christophe@dinechin.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id A8EAA1BF205;
-        Mon, 25 Apr 2022 14:23:18 +0000 (UTC)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [PATCH 1/3] sched/headers: Fix compilation error with GCC 12
-From:   Christophe de Dinechin <christophe@dinechin.org>
-In-Reply-To: <20220414133050.b820fa45d42de4cfc24db82b@linux-foundation.org>
-Date:   Mon, 25 Apr 2022 16:23:17 +0200
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Christophe de Dinechin <dinechin@redhat.com>,
-        trivial@kernel.org, Ben Segall <bsegall@google.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Mel Gorman <mgorman@suse.de>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Juri Lelli <juri.lelli@redhat.com>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <6139D443-68FC-4A8D-9401-4FA5CDA158AD@dinechin.org>
-References: <20220414150855.2407137-1-dinechin@redhat.com>
- <20220414150855.2407137-2-dinechin@redhat.com>
- <Ylg73c83AJGwz9UN@hirez.programming.kicks-ass.net>
- <20220414133050.b820fa45d42de4cfc24db82b@linux-foundation.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-X-Mailer: Apple Mail (2.3696.80.82.1.1)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 25 Apr 2022 10:28:26 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF93E1EEC3;
+        Mon, 25 Apr 2022 07:25:21 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id i5so2063654wrc.13;
+        Mon, 25 Apr 2022 07:25:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OhzJ18rUdY++br4oj9YWYkBT8GEB1PEcZ+V/iXVMZrg=;
+        b=Yp2ksl18LS/4Zs/ovpsVTlQwPq8RKkSp5QpY5tBP2+j05ULF7qPRftNv6iD6RV/IlN
+         wBgjKe+jfS8pkoAlzDTWhfuCNXo8tuvgYq8GdjluJNdsL0Egy2XuECnoZ1b2EPAjXUe+
+         jMVbqPb4/rU9tF+FQiWisfBHk5ZPwSSW1FGaE1as3zRZF/Bl8U0iJvqlG30E5ae4IJ3/
+         fULg5bRvkciOv3RjeFApqNa7WkOnypR+SOycWijAO17Hx98IiaXeUtULZ3nSGJ+2vbiX
+         wDgY8NgfbOWevz+rMK4KPWxSboDV2TSMJmbRhXZAbyf/q0RpPAAY7AoTalW7Zk59XBqQ
+         a2EA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OhzJ18rUdY++br4oj9YWYkBT8GEB1PEcZ+V/iXVMZrg=;
+        b=KcibpJf1Nd9TI+lS9IVvgzAb0v3iuuxCaeFGAUO110G7ewAH6tVnIzrguJ5YXwg/3X
+         aigwSpsh2IJfGAfkzESHvH0HlamCoTJgkSJIyaPtH7P6GKFwbDRfA0FRZ+r9G0g0+v+i
+         qoTRznD8fFUcCXj7grZba8pO/Iffg3FmJYOC2bwlCbcu/hOaGefOWxh3d8AeYs7Hz3q5
+         BWCiqFo70tP9TxRzXkdr4eFu/5JpxDd5V8JXoqfVBHuSGvY7LHDZ3KrcKtjxG5oPO8pd
+         JlNSYnrcgjkyYE07aH9aaarxjDydqhT3HNrLzlPZW6IBSttLp1//JVdxsOLEuGj0YWs8
+         yEUQ==
+X-Gm-Message-State: AOAM531vti3sIfrfiDdMdCcf1igZDOwpUo20WGGskEZbtsPimU5ClgZc
+        BkBTnlceuSprYFwqyadfBtE=
+X-Google-Smtp-Source: ABdhPJzUAnIDjq4TtxReYzY4dzLCr4HXcpG6aANRg5FZdis9Nq2Rs17U9H23mO/9FxTROOaYVJ/RSA==
+X-Received: by 2002:a05:6000:1f09:b0:20a:c427:c7c with SMTP id bv9-20020a0560001f0900b0020ac4270c7cmr14209914wrb.337.1650896720308;
+        Mon, 25 Apr 2022 07:25:20 -0700 (PDT)
+Received: from alaa-emad ([197.57.226.213])
+        by smtp.gmail.com with ESMTPSA id d4-20020a05600c3ac400b0039082eeff53sm8615670wms.22.2022.04.25.07.25.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 07:25:19 -0700 (PDT)
+From:   Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     outreachy@lists.linux.dev, roopa@nvidia.com, jdenham@redhat.com,
+        sbrivio@redhat.com, jesse.brandeburg@intel.com,
+        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
+        alexandre.belloni@bootlin.com, shshaikh@marvell.com,
+        manishc@marvell.com, razor@blackwall.org,
+        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org,
+        UNGLinuxDriver@microchip.com, GR-Linux-NIC-Dev@marvell.com,
+        bridge@lists.linux-foundation.org,
+        eng.alaamohamedsoliman.am@gmail.com
+Subject: [PATCH net-next v4 0/2] propagate extack to vxlan_fdb_delete
+Date:   Mon, 25 Apr 2022 16:25:05 +0200
+Message-Id: <cover.1650896000.git.eng.alaamohamedsoliman.am@gmail.com>
+X-Mailer: git-send-email 2.36.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In order to propagate extack to vxlan_fdb_delete and vxlan_fdb_parse,
+add extack to .ndo_fdb_del and edit all fdb del handelers
 
+Alaa Mohamed (2):
+  rtnetlink: add extack support in fdb del handlers
+  net: vxlan: vxlan_core.c: Add extack support to vxlan_fdb_delete
 
-> On 14 Apr 2022, at 22:30, Andrew Morton <akpm@linux-foundation.org> wrote:
-> 
-> On Thu, 14 Apr 2022 17:21:01 +0200 Peter Zijlstra <peterz@infradead.org> wrote:
-> 
->>> +/* The + 1 below places the pointers within the range of their array */
->>> #define for_class_range(class, _from, _to) \
->>> -	for (class = (_from); class != (_to); class--)
->>> +	for (class = (_from); class + 1 != (_to) + 1; class--)
->> 
->> Urgh, so now we get less readable code, just because GCC is being
->> stupid?
->> 
->> What's wrong with negative array indexes? memory is memory, stuff works.
-> 
-> What's more, C is C.  Glorified assembly language in which people do odd
-> stuff.
+ drivers/net/ethernet/intel/ice/ice_main.c     |  2 +-
+ drivers/net/ethernet/mscc/ocelot_net.c        |  4 +-
+ .../net/ethernet/qlogic/qlcnic/qlcnic_main.c  |  2 +-
+ drivers/net/macvlan.c                         |  2 +-
+ drivers/net/vxlan/vxlan_core.c                | 39 +++++++++++++------
+ include/linux/netdevice.h                     |  2 +-
+ net/bridge/br_fdb.c                           |  2 +-
+ net/bridge/br_private.h                       |  3 +-
+ net/core/rtnetlink.c                          |  4 +-
+ 9 files changed, 38 insertions(+), 22 deletions(-)
 
-Notably since the advent of clang, we moved a bit beyond glorified assembly language.
-There is no 1 on 1 correspondence between what you write and the generated
-assembly anymore, by a long shot. I’m sure you know that ;-), but that’s an
-opportunity to plug Jason Turner’s conference on writing a C64 pong game using C++17
-(https://www.youtube.com/watch?v=zBkNBP00wJE). That demonstrates,
-in a funny way, just how far compilers go these days to massage your code.
-
-> 
-> But this is presumably a released gcc version and we need to do
-> something.  And presumably, we need to do a backportable something, so
-> people can compile older kernels with gcc-12.
-
-Hmm, I must admit I had not considered the backporting implications.
-
-> 
-> Is it possible to suppress just this warning with a gcc option? And if
-> so, are we confident that this warning will never be useful in other
-> places in the kernel?
-
-I would advise against it, and not just because of warnings.
-
-With GCC’s ability to track pointers to individual C objects, you can expect
-that they will soon start optimising based on that collected knowledge.
-
-An example of useful optimisation based on that knowledge is to
-avoid memory reloads, The idea is that a write in array B[] does
-not force you to reload all data you already fetched from array A[].
-But that requires the compiler to prove that pointers to A[] stay in A[]
-and that you don’t purposely build negative indexes from B[] or
-anything weird like that.
-
-
-> If no||no then we'll need to add workarounds such as these?
-
-It is definitely possible to silence that warning. I would still recommend
-adding this kind of changes, which I would personally describe more as
-“accurate description intended of memory accesses” rather than “workarounds”.
-To me, it’s on the same level as putting memory fences, for example.
-
-> 
+-- 
+2.36.0
 

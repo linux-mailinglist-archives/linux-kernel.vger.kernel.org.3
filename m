@@ -2,607 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C4D850D8EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 07:45:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0BDF50D8F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 07:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233694AbiDYFrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 01:47:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40454 "EHLO
+        id S235552AbiDYFxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 01:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241375AbiDYFrf (ORCPT
+        with ESMTP id S230052AbiDYFxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 01:47:35 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2663013DC8
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 22:44:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650865471; x=1682401471;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=gUdlofkHX2fTvrRa1FrbMXtZMZcDWRhPheoUkVhKlGI=;
-  b=dZnHsZ7/YmR4vHkcKkCHoYM554C4QJpRqF3AyvHD3Q9sSUwYHhKSo0uX
-   muYDU3rVv2/H2vQuURhCaOD5nDwRsxZpuulIzgtA/YimlGkuG6v7EuQht
-   PBcXvQ5MoQfPCh4+W71leHBhGXlF60WfUQ8gQ4//Ij32C3BPhJmgogOXK
-   3zz/OIVCSV01UvY9n1Di3U0u8Lh48mqe/x2dh7BbMtysBgtCIZ++m36p8
-   t7/u3PoZfTH2J7nDobsEyFEVxuWuZ7G6fPZBAASv5KVf0wH04LpflOBgu
-   +eipHLCngRwMu7Fz2hVIq+GMAMlrilu+gvw9bHaMvzRuGpC1v3Olk4raO
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="351594635"
-X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
-   d="scan'208";a="351594635"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 22:44:30 -0700
-X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
-   d="scan'208";a="512484976"
-Received: from wpeng-mobl1.ccr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.31.217])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 22:44:27 -0700
-Message-ID: <0457ce8e78ddd1d6c7832176368e095adae1bc18.camel@intel.com>
-Subject: Re: [PATCH v4 1/3] x86/tdx: Add TDX Guest attestation interface
- driver
-From:   Kai Huang <kai.huang@intel.com>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org
-Date:   Mon, 25 Apr 2022 17:44:25 +1200
-In-Reply-To: <20220422233418.1203092-2-sathyanarayanan.kuppuswamy@linux.intel.com>
-References: <20220422233418.1203092-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-         <20220422233418.1203092-2-sathyanarayanan.kuppuswamy@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Mon, 25 Apr 2022 01:53:19 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E3E22530;
+        Sun, 24 Apr 2022 22:50:16 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d15so24604037pll.10;
+        Sun, 24 Apr 2022 22:50:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=QtDanb++15hBXNtBohBibz08hgDs29LL2PnLGIAiZD8=;
+        b=ky0IXZBBsPIDqP7EVAQluRnJOVYLTSPPI4fvbyU4LCSr5qMPTKPvpGtijHGkr3ex7M
+         o7jr/Gm2KwS2UqeZmgoz/1fErqEGvfp8u8K2a0hLxzr/uqqcpJS3Ee6kLcLOUhvFrtIa
+         E1XfoHdm4auPynYE3pM1bsTVSbQj6fBXWQ3bylXzdCIxeVo8Igz3ZIJzqKykggs7AP9+
+         8yA6BKOEE40a37fLEt0OU+bBK7oBkiczHDGo/bAHbu8HHOQzZ7dwMFLu26acZ3YC+51D
+         Xxa3IT02NkKZa9b5jy1+zO4Urpco+PMJrK/3rUpFbSdNv4l0oSIriH1lI1+TC0VmnTMd
+         NJJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=QtDanb++15hBXNtBohBibz08hgDs29LL2PnLGIAiZD8=;
+        b=IlpdQWcc7/vsCOlC1nojfZOai/HNq5P6Ol9UjR0PZ3DFXSSf/J8Ge3vW65d/S7db8F
+         ZJHfr94Il+LE02I0f4sCtzcyM4P3FVG4+BgoAolFWNkSPEFqSmkg5t0s2JbW1Kag66Ku
+         qz8LypeE84YdhXM2Z9WQz3dK2yRN/PG9wzqrhihoXENW76vZBCO2R3r2kI3S0xe1PoWg
+         B0uFQPp6RBlNrU+PJ+kzxFbH5k86DhLZn5PBKlI5MlwV40/GX5gYofADEz3BWu6ldZ9K
+         ETAnlVzXtro7iuLqJ+Tn1XIKJ3tEVWBNvyry4/dTjL6BPX94FMstGLL4KO2WZ5lFHZTq
+         c1ng==
+X-Gm-Message-State: AOAM530slL1rj2rjLQNu2uamrEfKLjs6kHNmZZTASMUwdB13c+uuN1sb
+        MtujyfV48rijsb2cAEsyq+F+kl8vheQ=
+X-Google-Smtp-Source: ABdhPJzfsCJlnygDTA3grtoAOGlWYa2odyE4V9vfonHtKHDtQ9xY3Krf9kJeLnbaJfay6azSUfxHJg==
+X-Received: by 2002:a17:902:a987:b0:158:b020:e5b8 with SMTP id bh7-20020a170902a98700b00158b020e5b8mr16375807plb.103.1650865815433;
+        Sun, 24 Apr 2022 22:50:15 -0700 (PDT)
+Received: from cyhuang-hp-elitebook-840-g3.rt ([2402:7500:46a:c2e1:d402:1333:c60b:f1a1])
+        by smtp.gmail.com with ESMTPSA id k10-20020a056a00168a00b004f7e2a550ccsm10029597pfc.78.2022.04.24.22.50.02
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 24 Apr 2022 22:50:10 -0700 (PDT)
+Date:   Mon, 25 Apr 2022 13:49:53 +0800
+From:   ChiYuan Huang <u0084500@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] regulator: richtek,rt4801: use existing ena_gpiod
+ feature
+Message-ID: <20220425054943.GA3993@cyhuang-hp-elitebook-840-g3.rt>
+References: <20220423181419.19397-1-krzysztof.kozlowski@linaro.org>
+ <20220423181419.19397-3-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220423181419.19397-3-krzysztof.kozlowski@linaro.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-22 at 16:34 -0700, Kuppuswamy Sathyanarayanan wrote:
-> In TDX guest, attestation is used to verify the trustworthiness of a TD
-> to other entities before making any secure communication.
-
-Before provisioning secrets to the TD.
-
+On Sat, Apr 23, 2022 at 08:14:19PM +0200, Krzysztof Kozlowski wrote:
+> The driver duplicated regulator core feature of controlling
+> regulators with GPIOs (of_parse_cb + ena_gpiod) and created its own
+> enable-gpios property with multiple GPIOs.
 > 
-> One usage example is, when a TD guest uses encrypted drive and the
-> decryption keys required to access the drive are stored in a secure
-> 3rd party keyserver, TD guest can use the quote generated via the
-> attestation process to prove its trustworthiness with keyserver and
-> get access to the storage keys.
-
-"The key server can use attestation to verify TD's trustworthiness and release
-the decryption keys to the TD".
-
-It is the key server who starts the attestation request, but not the TD.
-
+> The core already does it. Keep old method for backwards compatibility.
 > 
-> General steps involved in attestation process are,
-> 
->   1. TD guest generates the TDREPORT that contains version information
->      about the Intel TDX module, measurement of the TD, along with a
->      TD-specified nonce.
->   2. TD guest shares the TDREPORT with TD host via GetQuote hypercall
->      which is used by the host to generate a quote via quoting
->      enclave (QE).
->   3. Quote generation completion notification is sent to TD OS via
->      callback interrupt vector configured by TD using
->      SetupEventNotifyInterrupt hypercall.
->   4. After receiving the generated TDQUOTE, a remote verifier can be
->      used to verify the quote and confirm the trustworthiness of the
->      TD.
-
-Let's separate TDREPORT generation and Quote generation, and get rid of details
-of how to get Quote part for now. Detail of GetQuote belongs to the patch which
-implements it.  Here I think we should focus on explaining why we need such a
-basic driver to allow userspace to get the TDREPORT.
-
-Below is for your reference:
-
-"
-The attestation process consists of two steps: TDREPORT generation and Quote
-generation.  TDREPORT (TDREPORT_STRUCT) is a fixed-size data structure generated
-by the TDX module to contain the TD-specific informatin (such as TD
-measurements), platform information such as the security version of the platform
-and the TDX module and the MAC to protect the integrity of the TDREPORT. TD
-kernel uses TDCALL[TDG.MR.REPORT] to get the TDREPORT from the TDX module.  A
-user-provided 64-Byte REPORTDATA is used as input and included in the TDREPORT.
-Typically it can be some nonce provided by attestation service so the TDREPORT
-can be verified uniquely.
-
-TDREPORT can only be verified locally as the MAC key is bound to the platform. 
-TDX attestation leverages Intel SGX Quote Enclave (QE) to verify the TDREPORT
-locally and convert it to a remote verifiable Quote to support remote
-attestation of the TDREPORT.  After getting the TDREPORT, the second step of
-attestation process is to send the TDREPORT to QE to generate the Quote.
-
-How is the QE, or Quote Generation Service (QGS) in general, implemented and
-deployed is implementation specific.  As a result, how to send the TDREPORT to
-QE/QGS also depends on QE/QGS implementation and the deployment.  TDX doesn't
-support SGX inside a TD, so the QE/QGS can be deployed in the host, or inside a
-dedicated legacy VM.
-
-A typical implementation is TD userspace attestation software gets the TDREPORT
-from TD kernel, sends it to QE/QGS, and QE/QGS returns the Quote.  The data and
-data format that TD userspace attestation software sends to the QE/QGS is also
-implementation specific, but not necessarily just the raw TDREPORT.  TD
-attestation software can use any available communication channel to talk to
-QE/QGS, such as using vsock and tcp/ip.
-
-To support the case that those communication channels are not directly available
-to the TD, TDX also defines TDVMCALLs to allow TD to use TDVMCALL to ask VMM to
-help with sending the TDREPORT and receiving the Quote.  This support is
-documented in the GHCI spec "5.4 TD attestation".
-
-Implement a basic attestation driver to allow TD userspace to get the TDREPORT
-so the attestation software can send it to the QE to generate a Quote for remote
-verification.
-"
-
-
->      
-> More details on above mentioned steps can be found in TDX Guest-Host
-> Communication Interface (GHCI) for Intel TDX 1.0, section titled
-> "TD attestation".
-> 
-> To allow the attestation agent (user application) to implement this
-> feature, add an IOCTL interface to get TDREPORT and TDQUOTE from the
-> user space. Since attestation agent can also use methods like vosck or
-> TCP/IP to get the TDQUOTE, adding an IOCTL interface for it is an
-> optional feature. So to simplify the driver, first add support for
-> TDX_CMD_GET_TDREPORT IOCTL. Support for TDQUOTE IOCTL will be added by
-> follow-on patches.
-> 
-> TDREPORT can be generated by sending a TDCALL with leaf ID as 0x04.
-> More details about the TDREPORT TDCALL can be found in Intel Trust
-> Domain Extensions (Intel TDX) Module specification, section titled
-> "TDG.MR.REPORT Leaf". Add a wrapper function (tdx_mcall_tdreport())
-> to get the TDREPORT from the TDX Module. This API will be used by the
-> interface driver to request for TDREPORT.
-> 
-> Also note that explicit access permissions are not enforced in this
-> driver because the quote and measurements are not a secret. However
-> the access permissions of the device node can be used to set any
-> desired access policy. The udev default is usually root access
-> only.
-> 
-> Reviewed-by: Tony Luck <tony.luck@intel.com>
-> Reviewed-by: Andi Kleen <ak@linux.intel.com>
-> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  arch/x86/coco/tdx/Makefile      |   2 +-
->  arch/x86/coco/tdx/attest.c      | 191 ++++++++++++++++++++++++++++++++
->  arch/x86/coco/tdx/tdx.c         |  45 ++++++++
->  arch/x86/include/asm/tdx.h      |   2 +
->  arch/x86/include/uapi/asm/tdx.h |  23 ++++
->  5 files changed, 262 insertions(+), 1 deletion(-)
->  create mode 100644 arch/x86/coco/tdx/attest.c
->  create mode 100644 arch/x86/include/uapi/asm/tdx.h
+>  drivers/regulator/rt4801-regulator.c | 68 ++++++++++++++++++++++++----
+>  1 file changed, 58 insertions(+), 10 deletions(-)
 > 
-> diff --git a/arch/x86/coco/tdx/Makefile b/arch/x86/coco/tdx/Makefile
-> index 46c55998557d..d2db3e6770e5 100644
-> --- a/arch/x86/coco/tdx/Makefile
-> +++ b/arch/x86/coco/tdx/Makefile
-> @@ -1,3 +1,3 @@
->  # SPDX-License-Identifier: GPL-2.0
+> diff --git a/drivers/regulator/rt4801-regulator.c b/drivers/regulator/rt4801-regulator.c
+> index 7a87788d3f09..22efe44cd3a0 100644
+> --- a/drivers/regulator/rt4801-regulator.c
+> +++ b/drivers/regulator/rt4801-regulator.c
+> @@ -29,17 +29,71 @@
 >  
-> -obj-y += tdx.o tdcall.o
-> +obj-y += tdx.o tdcall.o attest.o
-> diff --git a/arch/x86/coco/tdx/attest.c b/arch/x86/coco/tdx/attest.c
-> new file mode 100644
-> index 000000000000..b776e81f6c20
-> --- /dev/null
-> +++ b/arch/x86/coco/tdx/attest.c
-> @@ -0,0 +1,191 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * attest.c - TDX guest attestation interface driver.
-> + *
-> + * Implements user interface to trigger attestation process and
-> + * read the TD Quote result.
-
-Read TDREPORT.  You can extend it in later patch if you want to call out
-TDREPORT, Quote.  But I don't think it's even necessary.  Perhaps just say "TDX
-attestation support" in general is enough.
-
-> + *
-> + * Copyright (C) 2022 Intel Corporation
-> + *
-> + */
-> +
-> +#define pr_fmt(fmt) "x86/tdx: attest: " fmt
-> +
-> +#include <linux/module.h>
-> +#include <linux/miscdevice.h>
-> +#include <linux/uaccess.h>
-> +#include <linux/fs.h>
-> +#include <linux/mm.h>
-> +#include <linux/slab.h>
-> +#include <linux/set_memory.h>
-> +#include <linux/dma-mapping.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/jiffies.h>
-> +#include <linux/io.h>
-> +#include <asm/apic.h>
-> +#include <asm/tdx.h>
-> +#include <asm/irq_vectors.h>
-> +#include <uapi/asm/tdx.h>
-> +
-> +#define DRIVER_NAME "tdx-attest"
-> +
-> +static struct platform_device *pdev;
-> +static struct miscdevice miscdev;
-> +
-> +static long tdx_get_tdreport(void __user *argp)
-> +{
-> +	void *report_buf = NULL, *tdreport_buf = NULL;
-> +	long ret = 0, err;
-> +
-> +	/* Allocate space for report data */
-> +	report_buf = kmalloc(TDX_REPORT_DATA_LEN, GFP_KERNEL);
-> +	if (!report_buf)
-> +		return -ENOMEM;
-> +
+>  struct rt4801_priv {
+>  	struct device *dev;
 > +	/*
-> +	 * Allocate space for TDREPORT buffer (1024-byte aligned).
-> +	 * Full page alignment is more than enough.
+> +	 * Driver supports enable GPIOs in two ways:
+> +	 * 1. Legacy enable-gpios property with multiple entries and enable
+> +	 *    control handled by the driver.
+> +	 * 2. Per-regulator enable-gpios property with enable control handled by
+> +	 *    the regulator core.
+> +	 *
+> +	 * The enable_gpios and enable_flag properties are for the (1) case.
 > +	 */
-> +	tdreport_buf = (void *)get_zeroed_page(GFP_KERNEL);
-> +	if (!tdreport_buf) {
-> +		ret = -ENOMEM;
-> +		goto tdreport_failed;
-> +	}
-> +
-> +	/* Copy report data to kernel buffer */
-> +	if (copy_from_user(report_buf, argp, TDX_REPORT_DATA_LEN)) {
-> +		ret = -EFAULT;
-> +		goto tdreport_failed;
-> +	}
-> +
-> +	/* Generate TDREPORT using report data in report_buf */
-> +	err = tdx_mcall_tdreport(tdreport_buf, report_buf);
-> +	if (err) {
-> +		/* If failed, pass TDCALL error code back to user */
-> +		ret = put_user(err, (long __user *)argp);
-> +		ret = -EIO;
-> +		goto tdreport_failed;
-> +	}
-
-If you want support this, I guess it's better to explicitly use some data
-structure so userspace software can be very clear about what does this IOCTL do:
-
-	struct tdx_get_tdreport {
-		union {
-			/* Input: REPORTDATA for TDCALL[TDG.MR.REPORT] */
-			__u8 reportdata[TDX_REPORT_DATA_LEN];
-			/* Output when TDCALL[TDG.MR.REPORT] fails */
-			__u64 tdcall_err;
-		} buf;
-	};
-
-And you need to explain in the comment saying -EIO means TDCALL failed, and the
-error code is returned to userspace.
-
-But I am not sure whether this is necessary.  The spec says TDG.MR.REPORT can
-return: TDX_OPERAND_BUSY, TDX_OPERAND_INVALID, TDX_SUCCESS.  
-
-TDX_OPERAND_INVALID basically happens when buffer alignment doesn't meet, GPA is
-wrong, etc, so this case is kernel bug.  I don't see there's a need to expose it
-to userspace as userspace won't be able to do anything anyway.
-
-The BUSY case is (if I understand correctly, I took a look at the SEAM module
-code) basically there's another thread updating the TDMR (registers for runtime
-measurement update).  Since it seems current kernel doesn't support
-TDG.MR.RTMR.EXTEND, TDX_OPERAND_BUSY should not happen either.  Even considering
-the support of TDG.MR.RTMR.EXTEND in the future, I think kernel should use some
-mutex to serialize it with TDG.MR.REPORT? 
-
-The bottom line is even we want to report BUSY to userspace, we choose to 
-return -EBUSY to indicate this case.  So basically I don't see the value of
-exposing TDCALL error to userspace.
-
-
-> +
-> +	/* Copy TDREPORT data back to user buffer */
-> +	if (copy_to_user(argp, tdreport_buf, TDX_TDREPORT_LEN))
-> +		ret = -EFAULT;
-> +
-> +tdreport_failed:
-> +	kfree(report_buf);
-> +	if (tdreport_buf)
-> +		free_pages((unsigned long)tdreport_buf, 0);
-> +
-> +	return ret;
-> +}
-> +
-> +static long tdx_attest_ioctl(struct file *file, unsigned int cmd,
-> +			     unsigned long arg)
+>  	struct gpio_descs *enable_gpios;
+>  	unsigned int enable_flag;
+>  	unsigned int volt_sel[DSV_OUT_MAX];
+>  };
+>  
+> +static int rt4801_of_parse_cb(struct device_node *np,
+> +			      const struct regulator_desc *desc,
+> +			      struct regulator_config *config)
 > +{
-> +	void __user *argp = (void __user *)arg;
-> +	long ret = 0;
+> +	struct rt4801_priv *priv = config->driver_data;
 > +
-> +	switch (cmd) {
-> +	case TDX_CMD_GET_TDREPORT:
-> +		ret = tdx_get_tdreport(argp);
-> +		break;
-> +	default:
-> +		pr_err("cmd %d not supported\n", cmd);
-> +		break;
-
-Seems you are returning 0 in the default case.
-
+> +	if (priv->enable_gpios) {
+> +		dev_warn(priv->dev, "duplicated enable-gpios property\n");
+> +		return 0;
 > +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static const struct file_operations tdx_attest_fops = {
-> +	.owner		= THIS_MODULE,
-> +	.unlocked_ioctl	= tdx_attest_ioctl,
-> +	.llseek		= no_llseek,
-> +};
-> +
-> +static int tdx_attest_probe(struct platform_device *attest_pdev)
-> +{
-> +	struct device *dev = &attest_pdev->dev;
-> +	long ret = 0;
-> +
-> +	/* Only single device is allowed */
-> +	if (pdev)
-> +		return -EBUSY;
-> +
-> +	pdev = attest_pdev;
-> +
-> +	miscdev.name = DRIVER_NAME;
-> +	miscdev.minor = MISC_DYNAMIC_MINOR;
-> +	miscdev.fops = &tdx_attest_fops;
-> +	miscdev.parent = dev;
-> +
-> +	ret = misc_register(&miscdev);
-> +	if (ret) {
-> +		pr_err("misc device registration failed\n");
-> +		goto failed;
-> +	}
-> +
-> +	pr_debug("module initialization success\n");
-> +
-> +	return 0;
-> +
-> +failed:
-> +	misc_deregister(&miscdev);
-> +
-> +	pr_debug("module initialization failed\n");
-> +
-> +	return ret;
-> +}
-> +
-> +static int tdx_attest_remove(struct platform_device *attest_pdev)
-> +{
-> +	misc_deregister(&miscdev);
-> +	pr_debug("module is successfully removed\n");
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver tdx_attest_driver = {
-> +	.probe		= tdx_attest_probe,
-> +	.remove		= tdx_attest_remove,
-> +	.driver		= {
-> +		.name	= DRIVER_NAME,
-> +	},
-> +};
-> +
-> +static int __init tdx_attest_init(void)
-> +{
-> +	int ret;
-> +
-> +	/* Make sure we are in a valid TDX platform */
-> +	if (!cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
-> +		return -EIO;
-> +
-> +	ret = platform_driver_register(&tdx_attest_driver);
-> +	if (ret) {
-> +		pr_err("failed to register driver, err=%d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	pdev = platform_device_register_simple(DRIVER_NAME, -1, NULL, 0);
-> +	if (IS_ERR(pdev)) {
-> +		ret = PTR_ERR(pdev);
-> +		pr_err("failed to allocate device, err=%d\n", ret);
-> +		platform_driver_unregister(&tdx_attest_driver);
-> +		return ret;
-> +	}
+> +	config->ena_gpiod = fwnode_gpiod_get_index(of_fwnode_handle(np),
+> +						   "enable-gpios",
+'enable' only, gpiod API will automatically concat it to 'enable-gpios'.
+> +						   0,
+> +						   GPIOD_OUT_HIGH |
+> +						   GPIOD_FLAGS_BIT_NONEXCLUSIVE,
+> +						   "rt4801");
+> +	if (IS_ERR(config->ena_gpiod))
+> +		config->ena_gpiod = NULL;
 > +
 > +	return 0;
 > +}
 > +
-> +static void __exit tdx_attest_exit(void)
+> +/*
+> + * regulator_ops->is_enabled() implementation
+> + */
+> +static int rt4801_is_enabled(struct regulator_dev *rdev)
 > +{
-> +	platform_device_unregister(pdev);
-> +	platform_driver_unregister(&tdx_attest_driver);
+> +	struct rt4801_priv *priv = rdev_get_drvdata(rdev);
+> +	int id = rdev_get_id(rdev);
+> +
+> +	return !!(priv->enable_flag & BIT(id));
 > +}
 > +
-> +module_init(tdx_attest_init);
-> +module_exit(tdx_attest_exit);
-
-Is there any particular reason to use platform driver and support it as a
-module?
-
-SGX driver uses misc_register() to register /dev/sgx_enclave during boot.  Looks
-it would be simpler.  
-
+> +/*
+> + * Internally used only is_enabled() implementation using also ena_pin from
+> + * regulator core.
+> + */
+> +static bool rt4801_is_enabled_ena_pin(struct regulator_dev *rdev)
+> +{
+> +	if (rdev->ena_pin)
+> +		return rdev->ena_gpio_state;
 > +
-> +MODULE_AUTHOR("Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>");
-> +MODULE_DESCRIPTION("TDX attestation driver");
-> +MODULE_LICENSE("GPL");
-> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-> index 03deb4d6920d..2a79ca92a52d 100644
-> --- a/arch/x86/coco/tdx/tdx.c
-> +++ b/arch/x86/coco/tdx/tdx.c
-> @@ -11,10 +11,12 @@
->  #include <asm/insn.h>
->  #include <asm/insn-eval.h>
->  #include <asm/pgtable.h>
-> +#include <asm/io.h>
->  
->  /* TDX module Call Leaf IDs */
->  #define TDX_GET_INFO			1
->  #define TDX_GET_VEINFO			3
-> +#define TDX_GET_REPORT			4
->  #define TDX_ACCEPT_PAGE			6
->  
->  /* TDX hypercall Leaf IDs */
-> @@ -34,6 +36,10 @@
->  #define VE_GET_PORT_NUM(e)	((e) >> 16)
->  #define VE_IS_IO_STRING(e)	((e) & BIT(4))
->  
-> +/* TDX Module call error codes */
-> +#define TDCALL_RETURN_CODE_MASK		0xffffffff00000000
-> +#define TDCALL_RETURN_CODE(a)		((a) & TDCALL_RETURN_CODE_MASK)
+> +	return rt4801_is_enabled(rdev);
+> +}
 > +
->  /*
->   * Wrapper for standard use of __tdx_hypercall with no output aside from
->   * return code.
-> @@ -98,6 +104,45 @@ static inline void tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
->  		panic("TDCALL %lld failed (Buggy TDX module!)\n", fn);
+>  static int rt4801_set_voltage_sel(struct regulator_dev *rdev, unsigned int selector)
+>  {
+>  	struct rt4801_priv *priv = rdev_get_drvdata(rdev);
+>  	int id = rdev_get_id(rdev), ret;
+>  
+> -	if (priv->enable_flag & BIT(id)) {
+> +	if (rt4801_is_enabled_ena_pin(rdev)) {
+>  		ret = regulator_set_voltage_sel_regmap(rdev, selector);
+>  		if (ret)
+>  			return ret;
+> @@ -54,7 +108,7 @@ static int rt4801_get_voltage_sel(struct regulator_dev *rdev)
+>  	struct rt4801_priv *priv = rdev_get_drvdata(rdev);
+>  	int id = rdev_get_id(rdev);
+>  
+> -	if (priv->enable_flag & BIT(id))
+> +	if (rt4801_is_enabled_ena_pin(rdev))
+>  		return regulator_get_voltage_sel_regmap(rdev);
+>  
+>  	return priv->volt_sel[id];
+> @@ -100,14 +154,6 @@ static int rt4801_disable(struct regulator_dev *rdev)
+>  	return 0;
 >  }
 >  
-> +/*
-> + * tdx_mcall_tdreport() - Generate TDREPORT_STRUCT using TDCALL.
-> + *
-> + * @data        : Address of 1024B aligned data to store
-> + *                TDREPORT_STRUCT.
-> + * @reportdata  : Address of 64B aligned report data
-> + *
-> + * return 0 on success or failure error number.
-> + */
-> +long tdx_mcall_tdreport(void *data, void *reportdata)
+> -static int rt4801_is_enabled(struct regulator_dev *rdev)
+> -{
+> -	struct rt4801_priv *priv = rdev_get_drvdata(rdev);
+> -	int id = rdev_get_id(rdev);
+> -
+> -	return !!(priv->enable_flag & BIT(id));
+> -}
+> -
+>  static const struct regulator_ops rt4801_regulator_ops = {
+>  	.list_voltage = regulator_list_voltage_linear,
+>  	.set_voltage_sel = rt4801_set_voltage_sel,
+> @@ -122,6 +168,7 @@ static const struct regulator_desc rt4801_regulator_descs[] = {
+>  		.name = "DSVP",
+>  		.ops = &rt4801_regulator_ops,
+>  		.of_match = of_match_ptr("DSVP"),
+> +		.of_parse_cb = rt4801_of_parse_cb,
+>  		.type = REGULATOR_VOLTAGE,
+>  		.id = DSV_OUT_POS,
+>  		.min_uV = MIN_UV,
+> @@ -135,6 +182,7 @@ static const struct regulator_desc rt4801_regulator_descs[] = {
+>  		.name = "DSVN",
+>  		.ops = &rt4801_regulator_ops,
+>  		.of_match = of_match_ptr("DSVN"),
+> +		.of_parse_cb = rt4801_of_parse_cb,
+>  		.type = REGULATOR_VOLTAGE,
+>  		.id = DSV_OUT_NEG,
+>  		.min_uV = MIN_UV,
 
-Change 'data' to be something more meaningful, i.e. tdreport?
+There's one problem.
+If 'ena_gpiod' is specified, it cannot be conexisted with ops
+'enable/disable/is_enabled' by regulator framework.
+It will cause no one to recover the voltage back.
+You can check the original 'enable' ops.
 
-> +{
-> +	u64 ret;
-> +
-> +	/*
-> +	 * Check for a valid TDX guest to ensure this API is only
-> +	 * used by TDX guest platform. Also make sure "data" and
-> +	 * "reportdata" pointers are valid.
-> +	 */
-> +	if (!data || !reportdata || !cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
-> +		return -EINVAL;
+How about to only parse gpio in 'of_parse_cb' and put it all into the
+driver data, not to use regulator framework 'ena_gpiod'?
 
-Other TDCALL wrappers such as tdx_get_ve_info() doesn't have
-X86_FEATURE_TDX_GUEST check.  Why is it needed in this particular one?
-
-> +
-> +	/*
-> +	 * Pass the physical address of user generated report data
-> +	 * and the physical address of output buffer to the TDX module
-> +	 * to generate the TD report. Generated data contains
-> +	 * measurements/configuration data of the TD guest. More info
-> +	 * about ABI can be found in TDX 1.0 Module specification, sec
-> +	 * titled "TDG.MR.REPORT".
-> +	 */
-> +	ret = __tdx_module_call(TDX_GET_REPORT, virt_to_phys(data),
-> +				virt_to_phys(reportdata), 0, 0, NULL);
-> +
-> +	if (ret)
-> +		return TDCALL_RETURN_CODE(ret);
-
-If we don't expose TDCALL error to userspace, I don't think this is required?
-
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(tdx_mcall_tdreport);
-
-If you use SGX similar way to use misc_register() at boot but don't support the
-driver as module, then you don't have to export this symbol.
-
-> +
->  static u64 get_cc_mask(void)
->  {
->  	struct tdx_module_output out;
-> diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-> index 020c81a7c729..a151f69dd6ef 100644
-> --- a/arch/x86/include/asm/tdx.h
-> +++ b/arch/x86/include/asm/tdx.h
-> @@ -67,6 +67,8 @@ void tdx_safe_halt(void);
->  
->  bool tdx_early_handle_ve(struct pt_regs *regs);
->  
-> +long tdx_mcall_tdreport(void *data, void *reportdata);
-> +
->  #else
->  
->  static inline void tdx_early_init(void) { };
-> diff --git a/arch/x86/include/uapi/asm/tdx.h b/arch/x86/include/uapi/asm/tdx.h
-> new file mode 100644
-> index 000000000000..c21f9d6fe88b
-> --- /dev/null
-> +++ b/arch/x86/include/uapi/asm/tdx.h
-> @@ -0,0 +1,23 @@
-> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> +#ifndef _UAPI_ASM_X86_TDX_H
-> +#define _UAPI_ASM_X86_TDX_H
-> +
-> +#include <linux/types.h>
-> +#include <linux/ioctl.h>
-> +
-> +/* Input report data length for TDX_CMD_GET_TDREPORT IOCTL request */
-> +#define TDX_REPORT_DATA_LEN		64
-
-I'd change to TDX_REPORTDATA_LEN to make it consistent with spec.
-
-REPORT_DATA can be vague.
-
-> +
-> +/* Output TD report data length after TDX_CMD_GET_TDREPORT IOCTL execution */
-> +#define TDX_TDREPORT_LEN		1024
-> +
-> +/*
-> + * TDX_CMD_GET_TDREPORT IOCTL is used to get TDREPORT data from the TDX
-
-"TDREPORT data" -> "TDREPORT", or "TDREPORT_STRUCT".
-
-> + * Module. Users should pass report data of size TDX_REPORT_DATA_LEN bytes
-> + * via user input buffer of size TDX_TDREPORT_LEN. Once IOCTL is successful
-> + * TDREPORT data is copied to the user buffer. On failure, TDCALL error
-> + * code is copied back to the user buffer.
-
-As I commented above, I am not convinced we need to copy TDCALL error code back
-to userspace.  If we want to do that, we need to explicitly tell on what error
-code (-EIO, i.e.), the TDCALL error code is copied back.
-
-> + */
-> +#define TDX_CMD_GET_TDREPORT		_IOWR('T', 0x01, __u64)
-
-I personally think it's better to define a structure to represent the argument
-used by this IOCTL:
-
-	struct tdx_get_tdreport {
-		__u8 reportdata[TDX_REPORTDATA_LEN];
-	};
-
-You might add some padding for  future expending too.
-
-Then we can have a clearer comment explaining what the reportdata.  Below is
-just for your reference.  You may come up with better words.
-
-"User-defined 64-Byte REPORTDATA to be included into the TDREPORT. Typically it
-can be some nonce provided by attestation software so the generated TDREPORT can
-be uniquely verified."
-
-> +
-> +#endif /* _UAPI_ASM_X86_TDX_H */
-
+Best regards,
+ChiYuan Huang.
+> -- 
+> 2.32.0
+> 

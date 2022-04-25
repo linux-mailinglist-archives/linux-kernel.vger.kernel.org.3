@@ -2,110 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E062950E2D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0D4450E2E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242406AbiDYOTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 10:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49672 "EHLO
+        id S242418AbiDYOWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 10:22:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242378AbiDYOTs (ORCPT
+        with ESMTP id S231361AbiDYOWB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 10:19:48 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3CF1EEF6
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 07:16:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650896204; x=1682432204;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=AAEEDt7xXTl7wGJqN1W/OSkx+JBqKQDu+fVaYieXLSM=;
-  b=gefvwP6r1mZw50UfZMrTXr7xr5Y6X5vxgQesFgriQ/N3p+d3XzveoMZv
-   0Th/OJwNjY9nJZzcEoY6rD4K4rxRin2ZJ/cdbKd3K5EPrEca1vYu7k6mX
-   BYTPLyPsfvAuX31V7T4vacrR2mxECno70k2blLl3nWA3UwwLXibmf24dB
-   XsqnIp80cPTt3knafgtdAB6x8b8EL92UmrGUFBApy8d5wXsS4/9ioX1qH
-   GiTxeHcclVC/As2KziAJN8ZxvtNl2SiBlPVjBvW2qHP6KDL1izHPJF1IE
-   EYV8Ip+EMPTYEWcL+NFOWfhdG+iPdjXItfID9CyCbKNEAR3fr+pSv9Og2
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="265423517"
-X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
-   d="scan'208";a="265423517"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 07:16:44 -0700
-X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
-   d="scan'208";a="595254808"
-Received: from bjkrist-mobl.amr.corp.intel.com (HELO [10.212.88.70]) ([10.212.88.70])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 07:16:43 -0700
-Message-ID: <76ec6342-0d7c-7c7b-c132-2892e4048fa1@intel.com>
-Date:   Mon, 25 Apr 2022 07:18:36 -0700
+        Mon, 25 Apr 2022 10:22:01 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7A91F610
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 07:18:57 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d15so27276925pll.10
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 07:18:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=34R6TCm5dOXxCSCPteYCdV9oQ3SrvUL6TjoVApRAPyA=;
+        b=rKhoq9rj7V21/dSBiuO+irr6LlHbxDqcCLQpYECeIGt8kL7By/MR3EyWj84oZ3Qm+K
+         7J8o0eRSX8Pff3PswT8uq++deAWHjgx4NGr6B9gLD9hGl0ZmbKsH0D7LvWtmYtzN0KKp
+         aDsh1jjczDoNpAGXlQqJSHRfwI1dDyrILALAkxOMP9+Ng3hYFcjTN5bVxYD/5QRcdcjX
+         hOsEF5De0EhGuBOZVXEdTuUAQFhUAN3IMDAgo0xpW7eDhWqpq9grcVAMmAcTbNOy+zFP
+         YnQKvIfsw0Vy33sbUX96qeU8wMzj5Mon/I6G18wOD03RGON/RbiH2SEcqA5xJgxHQrF0
+         f5vA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=34R6TCm5dOXxCSCPteYCdV9oQ3SrvUL6TjoVApRAPyA=;
+        b=xQUcuiZ7d9BoXl9kL7k3Lzj1EOYDEWdkH8HzPHfJFaQsO6KNJ6kWVei3yZIofJU3zS
+         NeFHdLvzVxeS9bBRGl7a+lPodL0pktVVdBMzxEX2zhhFoKA4f4WvEPrqvhJMa5qMYlGK
+         pb5gsYear6HEZABPRKiy9AolMJlaj5dzlpYCyKfWnBqiA4oI0hEF9LdAPLtYSs9qslGH
+         jw3sJuZh75tXUSLF+GBF9eLFarQe/TCmYwZwHHnF0Ldddab/Gt8W8Yr90jQ30mdLaZMr
+         MxhlUTiB7YEI+AKmOp36POS1Kqn3Ud98V2kMlhEj1yaGbXJY+YKE5lhKEzg3brfvlqwJ
+         XX9w==
+X-Gm-Message-State: AOAM530bVn5Ed8l/1KedS9RE/SMsnH5VVGPSfFK8ZPrch8JNl8d6J15I
+        LgK7HwqVWV2CoGkyKjn2ZO6DTtr7aSHtNktOxa7u9CL8KP4oZw==
+X-Google-Smtp-Source: ABdhPJyM5CmdcL/mAU2sTH7BML/sQzHjXqgWVTuTNWDJV7jfPvh4xxvZIToS71OCDcD4V+vpkGIku1/FqIQtrUM52Mc=
+X-Received: by 2002:a17:902:9f96:b0:15d:1ee7:4231 with SMTP id
+ g22-20020a1709029f9600b0015d1ee74231mr3161790plq.131.1650896337383; Mon, 25
+ Apr 2022 07:18:57 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
- allocation and free it on mm exit
-Content-Language: en-US
-To:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>, Joerg Roedel <joro@8bytes.org>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86 <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        iommu <iommu@lists.linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>, will@kernel.org,
-        robin.murphy@arm.com, zhangfei.gao@linaro.org
-References: <tencent_A9458C6CEBAADD361DA765356477B00E920A@qq.com>
- <tencent_8B6D7835F62688B4CD069C0EFC41B308B407@qq.com>
- <YllADL6uMoLllzQo@fyu1.sc.intel.com> <YmA4pbgevqln/jSO@myrica>
- <tencent_76E043C4D1B6A21A5253579A61034107EB06@qq.com>
- <tencent_7477100F8A445C6CAFA8F13601A55134480A@qq.com>
- <YmJ/WA6KAQU/xJjA@myrica>
- <tencent_A4E83BA6071B2204B6F5D4E69A50D21C1A09@qq.com>
- <YmLOznyBF0f7COYT@myrica>
- <tencent_2922DAB6F3D5789A1CD3A21A843B4007ED09@qq.com>
- <Yman5hLomw9/c+bi@myrica>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <Yman5hLomw9/c+bi@myrica>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220425141617.23925-1-afd@ti.com> <20220425141617.23925-2-afd@ti.com>
+In-Reply-To: <20220425141617.23925-2-afd@ti.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Mon, 25 Apr 2022 19:48:46 +0530
+Message-ID: <CAFA6WYN7GG6ZgxQ=AMinZ91f7QDh+aEPhL-Obx1s=zqReViAew@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] tee: remove flags TEE_IOCTL_SHM_MAPPED and TEE_IOCTL_SHM_DMA_BUF
+To:     Andrew Davis <afd@ti.com>
+Cc:     Jens Wiklander <jens.wiklander@linaro.org>,
+        op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/25/22 06:53, Jean-Philippe Brucker wrote:
-> On Sat, Apr 23, 2022 at 07:13:39PM +0800, zhangfei.gao@foxmail.com wrote:
->>>> On 5.17
->>>> fops_release is called automatically, as well as iommu_sva_unbind_device.
->>>> On 5.18-rc1.
->>>> fops_release is not called, have to manually call close(fd)
->>> Right that's weird
->> Looks it is caused by the fix patch, via mmget, which may add refcount of
->> fd.
-> Yes indirectly I think: when the process mmaps the queue, mmap_region()
-> takes a reference to the uacce fd. That reference is released either by
-> explicit close() or munmap(), or by exit_mmap() (which is triggered by
-> mmput()). Since there is an mm->fd dependency, we cannot add a fd->mm
-> dependency, so no mmget()/mmput() in bind()/unbind().
-> 
-> I guess we should go back to refcounted PASIDs instead, to avoid freeing
-> them until unbind().
+On Mon, 25 Apr 2022 at 19:46, Andrew Davis <afd@ti.com> wrote:
+>
+> These look to be leftover from an early edition of this driver. Userspace
+> does not need this information. Checking all users of this that I have
+> access to I have verified no one is using them.
+>
+> They leak internal use flags out to userspace. Even more they are not
+> correct anymore after a45ea4efa358. Lets drop these flags before
+> someone does try to use them for something and they become ABI.
+>
+> Signed-off-by: Andrew Davis <afd@ti.com>
+> ---
+>
+> Changes from v1:
+>  - Removed flags return from tee_ioctl_shm_alloc()
+>
 
-Yeah, this is a bit gnarly for -rc4.  Let's just make sure there's
-nothing else simple we can do.
+Acked-by: Sumit Garg <sumit.garg@linaro.org>
 
-How does the IOMMU hardware know that all activity to a given PASID is
-finished?  That activity should, today, be independent of an mm or a
-fd's lifetime.
+-Sumit
+
+>  drivers/tee/tee_core.c   | 2 --
+>  include/uapi/linux/tee.h | 4 ----
+>  2 files changed, 6 deletions(-)
+>
+> diff --git a/drivers/tee/tee_core.c b/drivers/tee/tee_core.c
+> index 8aa1a4836b92f..af0f7c603fa46 100644
+> --- a/drivers/tee/tee_core.c
+> +++ b/drivers/tee/tee_core.c
+> @@ -302,7 +302,6 @@ static int tee_ioctl_shm_alloc(struct tee_context *ctx,
+>                 return PTR_ERR(shm);
+>
+>         data.id = shm->id;
+> -       data.flags = shm->flags;
+>         data.size = shm->size;
+>
+>         if (copy_to_user(udata, &data, sizeof(data)))
+> @@ -339,7 +338,6 @@ tee_ioctl_shm_register(struct tee_context *ctx,
+>                 return PTR_ERR(shm);
+>
+>         data.id = shm->id;
+> -       data.flags = shm->flags;
+>         data.length = shm->size;
+>
+>         if (copy_to_user(udata, &data, sizeof(data)))
+> diff --git a/include/uapi/linux/tee.h b/include/uapi/linux/tee.h
+> index 25a6c534beb1b..23e57164693c4 100644
+> --- a/include/uapi/linux/tee.h
+> +++ b/include/uapi/linux/tee.h
+> @@ -42,10 +42,6 @@
+>  #define TEE_IOC_MAGIC  0xa4
+>  #define TEE_IOC_BASE   0
+>
+> -/* Flags relating to shared memory */
+> -#define TEE_IOCTL_SHM_MAPPED   0x1     /* memory mapped in normal world */
+> -#define TEE_IOCTL_SHM_DMA_BUF  0x2     /* dma-buf handle on shared memory */
+> -
+>  #define TEE_MAX_ARG_SIZE       1024
+>
+>  #define TEE_GEN_CAP_GP         (1 << 0)/* GlobalPlatform compliant TEE */
+> --
+> 2.17.1
+>

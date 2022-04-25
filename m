@@ -2,105 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1158350E94A
+	by mail.lfdr.de (Postfix) with ESMTP id EC4DD50E94D
 	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 21:16:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244860AbiDYTR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 15:17:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47098 "EHLO
+        id S243007AbiDYTS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 15:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242986AbiDYTR4 (ORCPT
+        with ESMTP id S241000AbiDYTSz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 15:17:56 -0400
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6399B2ED62;
-        Mon, 25 Apr 2022 12:14:51 -0700 (PDT)
-Received: by mail-lf1-f51.google.com with SMTP id w19so27934949lfu.11;
-        Mon, 25 Apr 2022 12:14:51 -0700 (PDT)
+        Mon, 25 Apr 2022 15:18:55 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD9C35A98
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 12:15:50 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id gj17-20020a17090b109100b001d8b390f77bso243388pjb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 12:15:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=ecsUxmyFwe8I77x+9cA1HTTii6mLSDL9ggSg8/7/5Lo=;
+        b=lSv3D+xXudt8kuycOWKphR/+PTAKkjLYPnzKliiGicQEjNUPwftnMMBs2cG9pNFHPV
+         Rx5m56PnLtd6rUJslmzMmG0HpEdKW4PPVfBjF3VEMO4+y8q8bkRuqgB6GFRLiMtUC//+
+         dIID5FA51QMkhLndJJnDP4lfVmsSD3tZw1djRdoRfaC+JPv8o1fwE6rkxfTqwELj3BHr
+         mXgDscQMSgJLeW+ALlwLXot4+PkLBbSajgNXMds+bAuLTm3k9Vn2cCn7eblMwAcCVs5g
+         1aPwVBuFa8VfQ32WIX08L2Ouzo2vqpTVIC81Gj14Rz1jpg4RvV3la7P2rAGcA5/ySaJV
+         hj/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dHw3bSR/H7CsKHNYVZ388J1hNpCRBRDwS8dgecfZChM=;
-        b=hicR/D69ANxKVPCF+DF7id9Artecst5j9WieldcfF6yVeaMpAHW6VxiUua7Otzi/qZ
-         c9WmgBjW8pnONB4M9Xqd4cKTl/I8nOegNHNZ9d8UGf44ToG3buIHAwO0ZRCokmF2TX7n
-         GFMEMWzJU84BAhiDZq5lbBsYjyt2GroP8f6UHniOmR0ICTx06dvJbwbqX9QxklEYItUo
-         xkWDwb5pBgRjUZckmlcVuvj10j0YfhKiUSbMTroBihMnXR3osaLmSegNLDyHVjQgl8Gd
-         B+xaHrKaZK8PEzEkRjUOm31DIr/A7WuRvpvj1RH9YeLzebQiJ60pRjOzpxfIjuRvIatX
-         R/vg==
-X-Gm-Message-State: AOAM533C4KkQnlExerDEwAtpOda7J2hl1v0cRji05/QQwMdACFtTdCvA
-        K8ClGO6hYIuq6Z6JIzqg69LY5tUIxXj+7BgQMCk=
-X-Google-Smtp-Source: ABdhPJyhIu6bV/7PCchygWQAOXBLRo+nw25DWy7AdnYXRE222Wbp82PwUfbfw5cBzUzTpTwxnu0Yw930jpFPtAOIVa8=
-X-Received: by 2002:ac2:4c4f:0:b0:44a:4357:c285 with SMTP id
- o15-20020ac24c4f000000b0044a4357c285mr13820828lfk.99.1650914089654; Mon, 25
- Apr 2022 12:14:49 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=ecsUxmyFwe8I77x+9cA1HTTii6mLSDL9ggSg8/7/5Lo=;
+        b=WgR0AD/QyQwlgRBsMBKYFRm/UVtRP1ytOCBfvaYN3vRmvCCx1OLP3gQEUX6EFkFxwc
+         lq4XJp6JZWT2w9BSYtCeaLj+oFM3owlfRkElQ/+WB8uZLMHDPY/6S16OSr3xIB3NhCHp
+         PPFjgG1Yz55FvugJw/jJXfPlZ87vLGfj4hz7gkJATae/vTjPNE0EUk0MBbp3gHiBXz0B
+         OSN+JPxQViSPis6OZKFvlHwdBXeVcjGHMYBHJZeefrVIspL3PBrLPLuKITt6cF7n05Cp
+         sXdcnSzc4U7laOM5iyHS/6sfKRT+MUzZUicIHiKVtqTNPOcFAOdmG33V+spYYO6cNVLO
+         tdwA==
+X-Gm-Message-State: AOAM530/0h6p5fz10CzEJZGJWmyDgx4gsJgdYrvYuecigNPaWAkqDUjW
+        GwQdhculkkmRBcwJuwJaSlQ07w==
+X-Google-Smtp-Source: ABdhPJxVDk2aBeKX93y2/cNj0dtdmux5xztwRbAL9FG9GNAcURiUqYol+3kkAIs0S0BKpuya0KJacA==
+X-Received: by 2002:a17:90a:b10c:b0:1d9:49de:81c5 with SMTP id z12-20020a17090ab10c00b001d949de81c5mr12523263pjq.120.1650914149899;
+        Mon, 25 Apr 2022 12:15:49 -0700 (PDT)
+Received: from [2620:15c:29:204:185b:8dcc:84d4:fb71] ([2620:15c:29:204:185b:8dcc:84d4:fb71])
+        by smtp.gmail.com with ESMTPSA id i11-20020a654d0b000000b0039d82c3e68csm10711275pgt.55.2022.04.25.12.15.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 12:15:49 -0700 (PDT)
+Date:   Mon, 25 Apr 2022 12:15:48 -0700 (PDT)
+From:   David Rientjes <rientjes@google.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Chen Wandun <chenwandun@huawei.com>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Michal Hocko <mhocko@suse.com>
+Subject: Re: [PATCH v5 1/4] memcg: introduce per-memcg reclaim interface
+In-Reply-To: <20220425190040.2475377-2-yosryahmed@google.com>
+Message-ID: <a4c3d067-d08d-409d-e7b-b6e0b1d2dfda@google.com>
+References: <20220425190040.2475377-1-yosryahmed@google.com> <20220425190040.2475377-2-yosryahmed@google.com>
 MIME-Version: 1.0
-References: <20220416004048.1514900-1-namhyung@kernel.org> <20220416004048.1514900-2-namhyung@kernel.org>
- <CAP-5=fX5S2CR58REzAhXH4s8_27=D2LbKksS7mHoSoxYOOmN4g@mail.gmail.com>
-In-Reply-To: <CAP-5=fX5S2CR58REzAhXH4s8_27=D2LbKksS7mHoSoxYOOmN4g@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Mon, 25 Apr 2022 12:14:38 -0700
-Message-ID: <CAM9d7cgSZu43YLAWgJdw8d1TUS9geD9QrWqSQw1sWPU7ocVRtQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] perf symbol: Pass is_kallsyms to symbols__fixup_end()
-To:     Ian Rogers <irogers@google.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Michael Petlan <mpetlan@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ian,
+On Mon, 25 Apr 2022, Yosry Ahmed wrote:
 
-On Sat, Apr 16, 2022 at 7:59 AM Ian Rogers <irogers@google.com> wrote:
->
-> On Fri, Apr 15, 2022 at 8:40 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> >
-> > The symbol fixup is necessary for symbols in kallsyms since they don't
-> > have size info.  So we use the next symbol's address to calculate the
-> > size.  Now it's also used for user binaries because sometimes they
-> > miss size for hand-written asm functions.
-> >
-> > There's a arch-specific function to handle kallsyms differently but
-> > currently it cannot distinguish kallsyms from others.  Pass this
-> > information explicitly to handle it properly.  Note that those arch
-> > functions will be moved to the generic function so I didn't added it
-> > to the arch-functions.
->
-> Thanks Namhyung, in:
-> https://lore.kernel.org/linux-perf-users/20220412154817.2728324-3-irogers@google.com/
-> I used "dso->kernel != DSO_SPACE__USER" in symbol-elf to make this
-> more than just kallsyms as presumably kernel code is the issue. Do we
-> know elf kernel code has correctly sized symbols?
+> From: Shakeel Butt <shakeelb@google.com>
+> 
+> Introduce a memcg interface to trigger memory reclaim on a memory cgroup.
+> 
+> Use case: Proactive Reclaim
+> ---------------------------
+> 
+> A userspace proactive reclaimer can continuously probe the memcg to
+> reclaim a small amount of memory. This gives more accurate and
+> up-to-date workingset estimation as the LRUs are continuously
+> sorted and can potentially provide more deterministic memory
+> overcommit behavior. The memory overcommit controller can provide
+> more proactive response to the changing behavior of the running
+> applications instead of being reactive.
+> 
+> A userspace reclaimer's purpose in this case is not a complete replacement
+> for kswapd or direct reclaim, it is to proactively identify memory savings
+> opportunities and reclaim some amount of cold pages set by the policy
+> to free up the memory for more demanding jobs or scheduling new jobs.
+> 
+> A user space proactive reclaimer is used in Google data centers.
+> Additionally, Meta's TMO paper recently referenced a very similar
+> interface used for user space proactive reclaim:
+> https://dl.acm.org/doi/pdf/10.1145/3503222.3507731
+> 
+> Benefits of a user space reclaimer:
+> -----------------------------------
+> 
+> 1) More flexible on who should be charged for the cpu of the memory
+> reclaim. For proactive reclaim, it makes more sense to be centralized.
+> 
+> 2) More flexible on dedicating the resources (like cpu). The memory
+> overcommit controller can balance the cost between the cpu usage and
+> the memory reclaimed.
+> 
+> 3) Provides a way to the applications to keep their LRUs sorted, so,
+> under memory pressure better reclaim candidates are selected. This also
+> gives more accurate and uptodate notion of working set for an
+> application.
+> 
+> Why memory.high is not enough?
+> ------------------------------
+> 
+> - memory.high can be used to trigger reclaim in a memcg and can
+>   potentially be used for proactive reclaim.
+>   However there is a big downside in using memory.high. It can potentially
+>   introduce high reclaim stalls in the target application as the
+>   allocations from the processes or the threads of the application can hit
+>   the temporary memory.high limit.
+> 
+> - Userspace proactive reclaimers usually use feedback loops to decide
+>   how much memory to proactively reclaim from a workload. The metrics
+>   used for this are usually either refaults or PSI, and these metrics
+>   will become messy if the application gets throttled by hitting the
+>   high limit.
+> 
+> - memory.high is a stateful interface, if the userspace proactive
+>   reclaimer crashes for any reason while triggering reclaim it can leave
+>   the application in a bad state.
+> 
+> - If a workload is rapidly expanding, setting memory.high to proactively
+>   reclaim memory can result in actually reclaiming more memory than
+>   intended.
+> 
+> The benefits of such interface and shortcomings of existing interface
+> were further discussed in this RFC thread:
+> https://lore.kernel.org/linux-mm/5df21376-7dd1-bf81-8414-32a73cea45dd@google.com/
+> 
+> Interface:
+> ----------
+> 
+> Introducing a very simple memcg interface 'echo 10M > memory.reclaim' to
+> trigger reclaim in the target memory cgroup.
+> 
+> The interface is introduced as a nested-keyed file to allow for future
+> optional arguments to be easily added to configure the behavior of
+> reclaim.
+> 
+> Possible Extensions:
+> --------------------
+> 
+> - This interface can be extended with an additional parameter or flags
+>   to allow specifying one or more types of memory to reclaim from (e.g.
+>   file, anon, ..).
+> 
+> - The interface can also be extended with a node mask to reclaim from
+>   specific nodes. This has use cases for reclaim-based demotion in memory
+>   tiering systens.
+> 
+> - A similar per-node interface can also be added to support proactive
+>   reclaim and reclaim-based demotion in systems without memcg.
+> 
+> - Add a timeout parameter to make it easier for user space to call the
+>   interface without worrying about being blocked for an undefined amount
+>   of time.
+> 
+> For now, let's keep things simple by adding the basic functionality.
+> 
+> [yosryahmed@google.com: worked on versions v2 onwards, refreshed to
+> current master, updated commit message based on recent
+> discussions and use cases]
+> 
+> Signed-off-by: Shakeel Butt <shakeelb@google.com>
+> Co-developed-by: Yosry Ahmed <yosryahmed@google.com>
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+> Acked-by: Michal Hocko <mhocko@suse.com>
+> Acked-by: Wei Xu <weixugc@google.com>
+> Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
 
-Yeah, IIUC the whole point of the symbol end fixup is because the
-kallsyms doesn't have the symbol size info.  Every ELF binaries
-should have the size except for some hand-written asm functions
-which missed adding it manually.  I guess that's the reason it was
-added to other DSO loading paths.
+Acked-by: David Rientjes <rientjes@google.com>
 
-Also considering "[" (and "]") in the symbol name is specific to
-kallsyms which has both kernel and module symbols together.
+"can over or under reclaim from the target cgroup" begs the question of 
+how much more memory the kernel can decide to reclaim :)  I think it's 
+assumed that it's minimal and that matches the current implementation that 
+rounds up to SWAP_CLUSTER_MAX, though, so looks good.
 
-Thanks,
-Namhyung
+Thanks Yosry!

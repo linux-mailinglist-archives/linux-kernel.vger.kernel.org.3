@@ -2,115 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E688F50E271
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:54:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E51150E272
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:55:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242272AbiDYN5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 09:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53960 "EHLO
+        id S232904AbiDYN6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 09:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237810AbiDYN5P (ORCPT
+        with ESMTP id S242329AbiDYN57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 09:57:15 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 242B96C956
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 06:54:11 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id v12so14167722wrv.10
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 06:54:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Ju3MNG0l6PZT3NlPuxMjxhTveM28nyA7MnYp02HrA3g=;
-        b=c2XdBLBOlfmLEWkJaYwfFywTyfskFCw6bpnjcfeqXhyBmEqmUQjwPOV4AyIggXagiD
-         wzbWZxTpH9r3DOzhbxg/99dGPHgdmS7G6aaQOo6gNeyvelEh9kNT4uPxd9Z3fIJVbjDv
-         1fgHdpRRPrpYkpZZ/ehfVQYYOrTkk727CPzkR2PczdmVc0zgqan189Bu3CV6+ledwkUm
-         8gnLVa+acEhbE8q59GCjNiopmnkAZhjUwfsAw7wH8xszCr1FVSxY8y+/STArB0DN2OLL
-         mD4bmmHVRXPEkOUcwIR5fe4iZhXszr8h0kAleiNz0H98aT9Qq55L3b+WKDDrRLitbGXy
-         G1pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Ju3MNG0l6PZT3NlPuxMjxhTveM28nyA7MnYp02HrA3g=;
-        b=0/yMGqSJlEx83lfjsGdd2zqhAFE3BScfWvRUSHRYf5wQFW/Jf5AqjhkHd4IFVim0b3
-         Z6B04KC51LAjM7yXnzj8BtO7Ey48PSBuXTluWDZwyJTDJaYbBzSPn9flvSNKotMDxnYi
-         1Gxf4447ApWNYdMEUkXdaSGugyhLJt6GNTEVSBEaNDkgy6RwDo9U2nGRI/lR2s97Gfcg
-         ijIJh3Ndp6WCbOM9AyJ2CuAsxhydZ8oBAt1R1BwhSKETHIKU1SMAgnBqnt3UUEk3aUS8
-         mWkbwRly+WPnRZDQqbHMhyowMLndXy79S4RNHGogUMXdPcer8BL4hHW+h2pbOf5GALkX
-         S3sg==
-X-Gm-Message-State: AOAM531kKmChyKmFIzFyaSrvnh5OzsyHnL0UQp3zm8kOGNtpSxMA2rgb
-        QimjptvEkoFT80rfjW6uzgCB7w==
-X-Google-Smtp-Source: ABdhPJz+1hYJkj+HhnpfpVFJ6D5wdXQQNaTjTH0Nimfg+P2+HGw1UFJpbD4CnfWYJewGKpHqxsVDQg==
-X-Received: by 2002:a05:6000:49:b0:20a:da03:951f with SMTP id k9-20020a056000004900b0020ada03951fmr4757075wrx.519.1650894849681;
-        Mon, 25 Apr 2022 06:54:09 -0700 (PDT)
-Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id q15-20020adfaa4f000000b0020ac7bd4affsm11029272wrd.0.2022.04.25.06.54.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 06:54:08 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 14:53:42 +0100
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86 <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        iommu <iommu@lists.linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>, will@kernel.org,
-        robin.murphy@arm.com, zhangfei.gao@linaro.org
-Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
- allocation and free it on mm exit
-Message-ID: <Yman5hLomw9/c+bi@myrica>
-References: <tencent_A9458C6CEBAADD361DA765356477B00E920A@qq.com>
- <tencent_8B6D7835F62688B4CD069C0EFC41B308B407@qq.com>
- <YllADL6uMoLllzQo@fyu1.sc.intel.com>
- <YmA4pbgevqln/jSO@myrica>
- <tencent_76E043C4D1B6A21A5253579A61034107EB06@qq.com>
- <tencent_7477100F8A445C6CAFA8F13601A55134480A@qq.com>
- <YmJ/WA6KAQU/xJjA@myrica>
- <tencent_A4E83BA6071B2204B6F5D4E69A50D21C1A09@qq.com>
- <YmLOznyBF0f7COYT@myrica>
- <tencent_2922DAB6F3D5789A1CD3A21A843B4007ED09@qq.com>
+        Mon, 25 Apr 2022 09:57:59 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7076FA22;
+        Mon, 25 Apr 2022 06:54:54 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2a02:3030:e:60d7:2277:ba57:a2c0:3])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sebastianfricke)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id D98E61F41B44;
+        Mon, 25 Apr 2022 14:54:52 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1650894893;
+        bh=KOusw7cXs3MDqJINDlnUk/U6BRhfalYdRnA/nyjvGXI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XhVxhs220pUU9U1AKATihNKU0yq5EJ3iWzgQnq0u6iLmGqcIOjPH6rk/dy7hKcunm
+         T0KGfYQ7YpWCjjbLRmekISI/RIgw7CR8le0yXDYKeArrOoJs8FH9g+yWx3MAvXJAyM
+         yy7PEa9lvNtxmtp5BJqVrEYjSgZ61hZuOvbVkFGGmdCSPVfBAFqykZcZa/ZyvYWVvv
+         P2LGPB3gv4dtDdq5fxPZ8n44vKqtMU+nkL3QCmMAmPsYiKF7Lq7So/QbxupEIN+EIB
+         CJIhVMQ+FAvfQ7NzdxY7LI7srXIvfHnRmfyqswESFG1f5yYGnWtaVwgcktvrcuCYRs
+         WNdnBJ1qWzD2A==
+Date:   Mon, 25 Apr 2022 15:54:49 +0200
+From:   Sebastian Fricke <sebastian.fricke@collabora.com>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     mchehab@kernel.org, hverkuil@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        nicolas.dufresne@collabora.com, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v5 04/17] media: uapi: HEVC: Add missing fields in HEVC
+ controls
+Message-ID: <20220425135449.oapsrqqyq34s2ii3@basti-XPS-13-9310>
+References: <20220407152940.738159-1-benjamin.gaignard@collabora.com>
+ <20220407152940.738159-5-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
-In-Reply-To: <tencent_2922DAB6F3D5789A1CD3A21A843B4007ED09@qq.com>
+In-Reply-To: <20220407152940.738159-5-benjamin.gaignard@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 23, 2022 at 07:13:39PM +0800, zhangfei.gao@foxmail.com wrote:
-> > > On 5.17
-> > > fops_release is called automatically, as well as iommu_sva_unbind_device.
-> > > On 5.18-rc1.
-> > > fops_release is not called, have to manually call close(fd)
-> > Right that's weird
-> Looks it is caused by the fix patch, via mmget, which may add refcount of
-> fd.
+On 07.04.2022 17:29, Benjamin Gaignard wrote:
+>Complete the HEVC controls with missing fields from H.265 specifications.
+>Even if these fields aren't used by the current mainlined drivers
+>they will be need for (at least) rkvdec driver.
 
-Yes indirectly I think: when the process mmaps the queue, mmap_region()
-takes a reference to the uacce fd. That reference is released either by
-explicit close() or munmap(), or by exit_mmap() (which is triggered by
-mmput()). Since there is an mm->fd dependency, we cannot add a fd->mm
-dependency, so no mmget()/mmput() in bind()/unbind().
+s/be need/be required/
+or
+s/be need/be needed/
 
-I guess we should go back to refcounted PASIDs instead, to avoid freeing
-them until unbind().
+s/rkvdec/the rkvdec/
 
-Thanks,
-Jean
+>
+>Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>---
+> .../media/v4l/ext-ctrls-codec.rst             | 19 +++++++++++++++++++
+> include/media/hevc-ctrls.h                    |  6 +++++-
+> 2 files changed, 24 insertions(+), 1 deletion(-)
+>
+>diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>index 4cd7c541fc30..dbb08603217b 100644
+>--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>@@ -2661,6 +2661,16 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>     :stub-columns: 0
+>     :widths:       1 1 2
+>
+>+    * - __u8
+>+      - ``video_parameter_set_id``
+>+      - Specifies the value of the vps_video_parameter_set_id of the active VPS
+>+        as descibed in section "7.4.3.2.1 General sequence parameter set RBSP semantics"
+>+        of H.265 specifications.
+>+    * - __u8
+>+      - ``seq_parameter_set_id``
+>+      - Provides an identifier for the SPS for reference by other syntax elements
+>+        as descibed in section "7.4.3.2.1 General sequence parameter set RBSP semantics"
+>+        of H.265 specifications.
+>     * - __u16
+>       - ``pic_width_in_luma_samples``
+>       -
+>@@ -2800,6 +2810,9 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>     :stub-columns: 0
+>     :widths:       1 1 2
+>
+>+    * - __u8
+>+      - ``pic_parameter_set_id``
+>+      - Identifies the PPS for reference by other syntax elements.
+>     * - __u8
+>       - ``num_extra_slice_header_bits``
+>       -
+>@@ -3026,6 +3039,12 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>     * - __u8
+>       - ``ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
+>       - The list of L1 reference elements as indices in the DPB.
+>+    * - __u16
+>+      - ``short_term_ref_pic_set_size``
+>+      - Specifies the size of short-term reference pictures set included in the SPS.
 
+s/size of/size of the/
+
+Section 7.4.8 depicts that the st_ref_pic_set syntax
+structure can be part of the SPS or the slice header.
+
+I think we should mention that we talk about the size of the st_ref_pic_set
+syntax structure from section 7.4.8 of the specification. 
+
+>+    * - __u16
+>+      - ``long_term_ref_pic_set_size``
+>+      - Specifies the size of long-term reference pictures set include in the SPS.
+
+s/size of/size of the/
+
+Can we make this a bit more helpful? The specification doesn't contain
+a similar structure to `st_ref_pic_set` for long term pictures. So, as a
+programmer this leaves me guessing:
+- Which syntax structure's size are we talking about?
+- Does this correlate to any of the existing sections of the
+specification?
+Because in the end, I feel like this documentation should be able to
+help a programmer to provide the correct data for the uABI.
+
+Greetings,
+Sebastian
+
+>     * - __u8
+>       - ``padding``
+>       - Applications and drivers must set this to zero.
+>diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
+>index 01ccda48d8c5..a329e086a89a 100644
+>--- a/include/media/hevc-ctrls.h
+>+++ b/include/media/hevc-ctrls.h
+>@@ -58,6 +58,8 @@ enum v4l2_mpeg_video_hevc_start_code {
+> /* The controls are not stable at the moment and will likely be reworked. */
+> struct v4l2_ctrl_hevc_sps {
+> 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Sequence parameter set */
+>+	__u8	video_parameter_set_id;
+>+	__u8	seq_parameter_set_id;
+> 	__u16	pic_width_in_luma_samples;
+> 	__u16	pic_height_in_luma_samples;
+> 	__u8	bit_depth_luma_minus8;
+>@@ -108,6 +110,7 @@ struct v4l2_ctrl_hevc_sps {
+>
+> struct v4l2_ctrl_hevc_pps {
+> 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Picture parameter set */
+>+	__u8	pic_parameter_set_id;
+> 	__u8	num_extra_slice_header_bits;
+> 	__u8	num_ref_idx_l0_default_active_minus1;
+> 	__u8	num_ref_idx_l1_default_active_minus1;
+>@@ -199,7 +202,8 @@ struct v4l2_ctrl_hevc_slice_params {
+> 	__u32	slice_segment_addr;
+> 	__u8	ref_idx_l0[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+> 	__u8	ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+>-
+>+	__u16	short_term_ref_pic_set_size;
+>+	__u16	long_term_ref_pic_set_size;
+> 	__u8	padding;
+>
+> 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Weighted prediction parameter */
+>-- 
+>2.32.0
+>

@@ -2,104 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46BC550E801
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EAF650E803
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244307AbiDYSYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 14:24:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34570 "EHLO
+        id S244312AbiDYSY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 14:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244301AbiDYSYV (ORCPT
+        with ESMTP id S229668AbiDYSY5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 14:24:21 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585EA79385
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:21:16 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id z99so19461916ede.5
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:21:16 -0700 (PDT)
+        Mon, 25 Apr 2022 14:24:57 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A56A8930A
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:21:52 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id p12so22157733lfs.5
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:21:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=wLhrlS1biKXpq5R4CE1YOn/L6FhykNWvxC4seQ/LW7U=;
-        b=Fdw8tEJ7RzBEPPkeLkKiIRIonHGhUX5ZA2Ot4Xn7/Yf6h0e59AOylh6JysSNkqVKKz
-         yeVOsu0matmwSl2qhR5pORhklf/+jvhzgB2PvcZyAbBmumv8gfAqge0Ufny3JDw0W9Wh
-         fRXYNNTn+1W6VCYwgRbuxg4bQuC+nfFjpA7SgNRay92xwXG8bTDNw5l7E8oUhTFNhq2O
-         bN67RgacYBXUua0id/Z0rSQXJNw+oK2jnAbWuWerE6tFYB52XBIBho1mVKC7OrSzlsi+
-         DU26J+WDV0VSAUxCbrymNsH5yDPP8207EqHb5qqGGK/ec+v1O40t2OC3ropUGVruR2VX
-         or1Q==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=da88Nu7vq7XE+J8Tfq4WUYeq5HXdHwOYLlI0FzHNI8I=;
+        b=IDpo6ikWwvM+FaQcO+CIaSuMGHm/JZ3q4SIxY4sRzW0Jyg8HNlBWOW9UsCAdnaNy6g
+         GQrN+3AbAfjDxqxng5pSy+A5fRamOcinx5CaBggk3VVsDLV09qhJOMGy7xi7oxMCKTrx
+         4yEGTR7RIPGAtDBuymTlE4fC6tPmqorfhFuMRFu8WqEVDTj1Glsyn6PsgU/oC4Ea50Uu
+         pTktpdVb88+KGiGuSD+NfiRIFN0oBu/j06GA8pemzdvIXOlD0uCSrmCbzd/l6y1hUzZo
+         g9bv0wfyvQev97QBP/prvaS/npXYApavrvlKxJ2kLhRF1cEtrhw5Epyz7bIrhPOzxErk
+         RKmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wLhrlS1biKXpq5R4CE1YOn/L6FhykNWvxC4seQ/LW7U=;
-        b=42ZejlKjOl845SzA829u0y8VJKAuJ9ho+8q3hGoF4vMqFIoYkos6Rpu4sMOKMdMxk0
-         SEEiJHruit7HDpeDwfLjGyzJDJUzgNgKUU+E8ve+qdArcP/EDKioFTVy6X5jqzUIMckb
-         rkY7A+co+rmY+0heUAfNDbRHIYINSP3Cg11xAInzvygltNlCnOjudOgkeQYF8PmJ/Dfh
-         PhOvSJAZP/ZJD9pDV4sJq3MY2NS/uF7b5QzKhX4EJd0BxYua3GjKRluOSF88k4zFtrz1
-         tebh4S/V1+yeEl8IYlvsJS+M87hbqfGZFkw6Rjb44i1gqYvatV3gXeBSCbColJdkzTa2
-         4yyw==
-X-Gm-Message-State: AOAM532Qt9l1bT6Z/wG1EzitlquOj4XbAuqJCBA6lILOE6dWxUkscyDr
-        Ssh20IjQ7z5qq0XO3KeoOTuk1A==
-X-Google-Smtp-Source: ABdhPJwFoDnOLO0ckjGSwySlRYkY5M6AxkwPge7ifg3C7ch3KjrcUQD9X+CEAmNNCNFRJ3zcSLN5lg==
-X-Received: by 2002:a05:6402:1450:b0:425:e43f:7ccd with SMTP id d16-20020a056402145000b00425e43f7ccdmr7717463edx.299.1650910874949;
-        Mon, 25 Apr 2022 11:21:14 -0700 (PDT)
-Received: from [192.168.0.244] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id kb9-20020a1709070f8900b006e889aad94esm3894075ejc.128.2022.04.25.11.21.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 11:21:14 -0700 (PDT)
-Message-ID: <edcd5a65-26ef-a8de-be44-56aa63e485c3@linaro.org>
-Date:   Mon, 25 Apr 2022 20:21:13 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=da88Nu7vq7XE+J8Tfq4WUYeq5HXdHwOYLlI0FzHNI8I=;
+        b=kA+QEajgXYsf6CO1qR3cYLA6RqDN9sn3pCjgUWdQSfAYqLWbGLvsdacSUbByj4oQcn
+         RfYYjUnxiHxwC0YFDI19TGpcn6DxtC5SH2oZrRCEofqMIFQgQts8rLrVV2sBaFsQbX+o
+         wD1GRP/DyikF4Pl2TqvNqbXl17snHkrX9kNsYqNEG/IB/jmHyyl1znQwqLLKlcI4gQLh
+         c701NZaGjzDtLjFPOgAV5WT8Q8VpdY+GbmSTAYE5E2HlEPakdtN2ySpN1x21yGBagf9u
+         4PP+r61SbWo6+QR92/B2w9gaffe0fGuqRKrRGEMO1aPiGS5BcO0aTj1BCgcip4vryXaF
+         H7Iw==
+X-Gm-Message-State: AOAM533gPhwPmeTjcy9OxIYJfsdVaRSLu6WPH9CVRRWOW9kYXLXZ7Mdy
+        8kh0DN4/CcvvkIQXWWTDzYcXBJ7F85RRhkqwHC56rQ==
+X-Google-Smtp-Source: ABdhPJzVT4Ww3FyZ1/tzCoZ84eU4ZLq3do4Ia7/DX6eU9noDs3zWVOvLLGPOtU8KdI2xszEKyJGmmfN60DRhUlrY5Ks=
+X-Received: by 2002:ac2:5223:0:b0:448:5100:e427 with SMTP id
+ i3-20020ac25223000000b004485100e427mr14021593lfl.87.1650910910695; Mon, 25
+ Apr 2022 11:21:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 2/2] dt-bindings: fsl: convert fsl,layerscape-scfg to
- YAML
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Li Yang <leoyang.li@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220425140214.32448-1-michael@walle.cc>
- <20220425140214.32448-2-michael@walle.cc>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220425140214.32448-2-michael@walle.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220424190811.1678416-1-masahiroy@kernel.org> <20220424190811.1678416-5-masahiroy@kernel.org>
+In-Reply-To: <20220424190811.1678416-5-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 25 Apr 2022 11:21:39 -0700
+Message-ID: <CAKwvOdk6WEz-408f_4m=9QeZGPveRX4hF6zxqtMVv1dCET0ruA@mail.gmail.com>
+Subject: Re: [PATCH 04/27] modpost: add a separate error for exported symbols
+ without definition
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/04/2022 16:02, Michael Walle wrote:
-> Convert the fsl,layerscape-scfg binding to the new YAML format.
-> 
-> In the device trees, the device node always have a "syscon"
-> compatible, which wasn't mentioned in the previous binding.
-> 
-> Also added, compared to the original binding, is the
-> interrupt-controller subnode as used in arch/arm/boot/dts/ls1021a.dtsi
-> as well as the litte-endian and big-endian properties.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
+On Sun, Apr 24, 2022 at 12:09 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> It took me a while to understand the intent of "exp->module == mod".
+>
+> This code goes back to 2003 (pre-git era).
+>
+> The commit is not in this git repository, and might be worth a little
+> explanation.
+>
+> You can add EXPORT_SYMBOL() with no definition in the same file (but you
+> need to put a declaration).
+>
+>   int foo(void);
+>   EXPORT_SYMBOL(foo);
+>
+> This is typical when EXPORT_SYMBOL() is defined in a C file, but the
+> actual implementation is in a separate assembly file. In old days,
+> EXPORT_SYMBOL() were only available in C files (but this limitation
+> does not exist any more).
+>
+> Add a separate, clearer message if an exported symbol has no definition.
+> It should be an error even if KBUILD_MODPOST_WARN is given.
+>
+> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git/commit/?id=2763b6bcb96e6a38a2fe31108fe5759ec5bcc80a
+
+Differentiating between the two (and your explanation of how to reach
+such a situation) is a nice touch.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 > ---
-> changes since v1:
->  - moved to soc/fsl/fsl,layerscape-scfg.yaml
->  - generic name for node in example
->  - mention added "syscon" compatible in commit message
->  - reference specific interrupt controller
+>
+>  scripts/mod/modpost.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+>
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index c7cfeeb088f7..969a081dba62 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -2147,13 +2147,18 @@ static void check_exports(struct module *mod)
+>         for (s = mod->unres; s; s = s->next) {
+>                 const char *basename;
+>                 exp = find_symbol(s->name);
+> -               if (!exp || exp->module == mod) {
+> +               if (!exp) {
+>                         if (!s->weak && nr_unresolved++ < MAX_UNRESOLVED_REPORTS)
+>                                 modpost_log(warn_unresolved ? LOG_WARN : LOG_ERROR,
+>                                             "\"%s\" [%s.ko] undefined!\n",
+>                                             s->name, mod->name);
+>                         continue;
+>                 }
+> +               if (exp->module == mod) {
+> +                       error("\"%s\" [%s.ko] was exported without definition\n",
+> +                             s->name, mod->name);
+> +                       continue;
+> +               }
+>                 basename = strrchr(mod->name, '/');
+>                 if (basename)
+>                         basename++;
+> --
+> 2.32.0
+>
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
+-- 
+Thanks,
+~Nick Desaulniers

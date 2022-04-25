@@ -2,260 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2822250E635
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:53:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2114E50E63E
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241080AbiDYQzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 12:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55888 "EHLO
+        id S243637AbiDYQzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 12:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241922AbiDYQzO (ORCPT
+        with ESMTP id S234895AbiDYQzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 12:55:14 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD60D1A064
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 09:52:08 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2ec42eae76bso154890477b3.10
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 09:52:08 -0700 (PDT)
+        Mon, 25 Apr 2022 12:55:42 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E781A046;
+        Mon, 25 Apr 2022 09:52:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zFVXbK88HMZ7irS1EV3QbO6i92VJWq/msMeGHj6PNxc=;
-        b=bUVEaQ2wIuKybo7kKQmoFYoEvIZ5UirP/KvquexNzuYtWoi/ArniVP0TSRhp/xPvF4
-         pjO88yRVQp/fFable34gX1YDVyJpMA9C9G2vEf8Kz486GPzw+RzufdXY/0jM7gTVCCsg
-         PidMDRcF1CNXJn+3SjKJOWvA3RIB/cb9JqrhsFBu+iWytoAeilSrA/RMTgGjycGiMs+r
-         5N3rDehjoLGsJNyxZeUrYK3zFPcD2g2ZEbJpTAcnk8wQD7D/F/BZsTof8SScGzFdqDS7
-         6k9Kc58dLAu+v9oHuXu7fYVxWXbc48epu/owuKJq0cWH+V02p84jlw6M/HppCcWvNYzi
-         MMOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zFVXbK88HMZ7irS1EV3QbO6i92VJWq/msMeGHj6PNxc=;
-        b=J1hhXiN7VSxLzMGO6qR51mRURvKqG6Ctg93kRJN3Xfu1d1eubA+/Y+1jLayfPYm6FP
-         nv4xEgGc107hEH5/x/lLccwL1OqhBgyWjcdjPY0X3LWrEOCwL4qvtBf1drbSwW4LozZ2
-         4VWI7GD7PMk5hZ/yPYdCUGXkQL5EjCgjMjGstUCtykQpnK9clyHEf9Dant9wqvwVlzQJ
-         1ZAxu1Z6symp/RWEARkdklvx6ATMTXj8cc5ThcYGPsTdR2QrHWJjfwSKzmkEd4WQ0bIE
-         OfbnT1h0ajJW/9yC7Cv7WyHI0b1pl31OX6kWdx+NqFPzanCsgbCZZbSDGHiFEgdgSh1G
-         /QqA==
-X-Gm-Message-State: AOAM531GW5CY5zmYiiD7dN5PplzYUNJsvrwoWQqbiogxr0IcGl3i4b3o
-        vVX7/xsQu1yMVdoU2fllTCHS7pw83KJB5QyyIUvQlQ==
-X-Google-Smtp-Source: ABdhPJxTfEfeqBKHmxyw2CtMbyEAYltfx7GpPViRfckEPW8IinZNEjDVmPt5S7rAbMebL6fc8qUZBmNt0weWMmdOubU=
-X-Received: by 2002:a0d:f007:0:b0:2f4:ce96:514b with SMTP id
- z7-20020a0df007000000b002f4ce96514bmr17915775ywe.148.1650905527631; Mon, 25
- Apr 2022 09:52:07 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1650905558; x=1682441558;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=AgfX5/2iQb8JHqqi1XJskglaQs20L2PujAVkMJ7391c=;
+  b=guWduVqxNNHNPcsGXutz/B8Ub9xwwyo2Sccrj5VhQuDSIEdxxC7hBc1G
+   DP17e8T3ZAR4w4Ch5pWNGxBiWz1NQNszGgxs11z/DsRCZTuiPxyndOPVZ
+   gxl/d67L3iUxrGrmk3RJepjVK+MEkDiuie5Uise8hp/07Tez6Vfutgi/1
+   o=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 25 Apr 2022 09:52:37 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 09:52:28 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 25 Apr 2022 09:52:28 -0700
+Received: from [10.226.58.18] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 25 Apr
+ 2022 09:52:27 -0700
+Message-ID: <adbcd493-3821-b0d7-c4e4-4fcd92dd5a14@quicinc.com>
+Date:   Mon, 25 Apr 2022 10:52:26 -0600
 MIME-Version: 1.0
-References: <20220423000328.2103733-1-rananta@google.com> <20220423000328.2103733-5-rananta@google.com>
- <CAAeT=Fyc3=uoOdeXrLKfYxKtL3PFV0U_Bwj_g+bca_Em63wGhw@mail.gmail.com>
-In-Reply-To: <CAAeT=Fyc3=uoOdeXrLKfYxKtL3PFV0U_Bwj_g+bca_Em63wGhw@mail.gmail.com>
-From:   Raghavendra Rao Ananta <rananta@google.com>
-Date:   Mon, 25 Apr 2022 09:51:56 -0700
-Message-ID: <CAJHc60zR4Pa=y-Y4Dp27FoAvqpBrONCN727KbnhSoxNGRiBGuA@mail.gmail.com>
-Subject: Re: [PATCH v6 4/9] KVM: arm64: Add vendor hypervisor firmware register
-To:     Reiji Watanabe <reijiw@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v2] PCI: hv: Fix multi-MSI to allow more than one MSI
+ vector
+Content-Language: en-US
+To:     Wei Liu <wei.liu@kernel.org>
+CC:     <kys@microsoft.com>, <haiyangz@microsoft.com>,
+        <sthemmin@microsoft.com>, <decui@microsoft.com>,
+        <lorenzo.pieralisi@arm.com>, <robh@kernel.org>, <kw@linux.com>,
+        <bhelgaas@google.com>, <jakeo@microsoft.com>,
+        <bjorn.andersson@linaro.org>, <linux-hyperv@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1649856981-14649-1-git-send-email-quic_jhugo@quicinc.com>
+ <2100eed4-8081-6070-beaf-7c6ba65ad9be@quicinc.com>
+ <20220425153344.lgo3kdnrbef75jcq@liuwe-devbox-debian-v2>
+ <20220425154955.2glxbfeln47m4cin@liuwe-devbox-debian-v2>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <20220425154955.2glxbfeln47m4cin@liuwe-devbox-debian-v2>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Reiji,
+On 4/25/2022 9:49 AM, Wei Liu wrote:
+> On Mon, Apr 25, 2022 at 03:33:44PM +0000, Wei Liu wrote:
+>> On Wed, Apr 20, 2022 at 08:13:22AM -0600, Jeffrey Hugo wrote:
+>>> On 4/13/2022 7:36 AM, Jeffrey Hugo wrote:
+>>>> If the allocation of multiple MSI vectors for multi-MSI fails in the core
+>>>> PCI framework, the framework will retry the allocation as a single MSI
+>>>> vector, assuming that meets the min_vecs specified by the requesting
+>>>> driver.
+>>>>
+>>>> Hyper-V advertises that multi-MSI is supported, but reuses the VECTOR
+>>>> domain to implement that for x86.  The VECTOR domain does not support
+>>>> multi-MSI, so the alloc will always fail and fallback to a single MSI
+>>>> allocation.
+>>>>
+>>>> In short, Hyper-V advertises a capability it does not implement.
+>>>>
+>>>> Hyper-V can support multi-MSI because it coordinates with the hypervisor
+>>>> to map the MSIs in the IOMMU's interrupt remapper, which is something the
+>>>> VECTOR domain does not have.  Therefore the fix is simple - copy what the
+>>>> x86 IOMMU drivers (AMD/Intel-IR) do by removing
+>>>> X86_IRQ_ALLOC_CONTIGUOUS_VECTORS after calling the VECTOR domain's
+>>>> pci_msi_prepare().
+>>>>
+>>>> Fixes: 4daace0d8ce8 ("PCI: hv: Add paravirtual PCI front-end for Microsoft Hyper-V VMs")
+>>>> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+>>>> Reviewed-by: Dexuan Cui <decui@microsoft.com>
+>>>> ---
+>>>
+>>> Ping?
+>>>
+>>> I don't see this in -next, nor have I seen any replies.  It is possible I
+>>> have missed some kind of update, but currently I'm wondering if this change
+>>> is progressing or not.  If there is some kind of process used in this area,
+>>> I'm not familiar with it, so I would appreciate an introduction.
+>>
+>> I expect the PCI maintainers to pick this up. If I don't see this picked
+>> up in this week I will apply it to hyperv-next.
+> 
+> Actually I will pick this up via hyperv-next, because there is another
+> series which will also touch this driver but at the some time depend on
+> vmbus changes. I can fix up any potential conflicts easily.
 
-On Sun, Apr 24, 2022 at 11:22 PM Reiji Watanabe <reijiw@google.com> wrote:
->
-> Hi Raghu,
->
-> On Fri, Apr 22, 2022 at 5:03 PM Raghavendra Rao Ananta
-> <rananta@google.com> wrote:
-> >
-> > Introduce the firmware register to hold the vendor specific
-> > hypervisor service calls (owner value 6) as a bitmap. The
-> > bitmap represents the features that'll be enabled for the
-> > guest, as configured by the user-space. Currently, this
-> > includes support for KVM-vendor features along with
-> > reading the UID, represented by bit-0, and Precision Time
-> > Protocol (PTP), represented by bit-1.
-> >
-> > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> > ---
-> >  arch/arm64/include/asm/kvm_host.h |  2 ++
-> >  arch/arm64/include/uapi/asm/kvm.h |  4 ++++
-> >  arch/arm64/kvm/hypercalls.c       | 23 ++++++++++++++++++-----
-> >  include/kvm/arm_hypercalls.h      |  2 ++
-> >  4 files changed, 26 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-> > index 27d4b2a7970e..a025c2ba012a 100644
-> > --- a/arch/arm64/include/asm/kvm_host.h
-> > +++ b/arch/arm64/include/asm/kvm_host.h
-> > @@ -106,10 +106,12 @@ struct kvm_arch_memory_slot {
-> >   *
-> >   * @std_bmap: Bitmap of standard secure service calls
-> >   * @std_hyp_bmap: Bitmap of standard hypervisor service calls
-> > + * @vendor_hyp_bmap: Bitmap of vendor specific hypervisor service calls
-> >   */
-> >  struct kvm_smccc_features {
-> >         unsigned long std_bmap;
-> >         unsigned long std_hyp_bmap;
-> > +       unsigned long vendor_hyp_bmap;
-> >  };
-> >
-> >  struct kvm_arch {
-> > diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
-> > index 9eecc7ee8c14..e7d5ae222684 100644
-> > --- a/arch/arm64/include/uapi/asm/kvm.h
-> > +++ b/arch/arm64/include/uapi/asm/kvm.h
-> > @@ -344,6 +344,10 @@ struct kvm_arm_copy_mte_tags {
-> >  #define KVM_REG_ARM_STD_HYP_BMAP               KVM_REG_ARM_FW_FEAT_BMAP_REG(1)
-> >  #define KVM_REG_ARM_STD_HYP_BIT_PV_TIME                0
-> >
-> > +#define KVM_REG_ARM_VENDOR_HYP_BMAP            KVM_REG_ARM_FW_FEAT_BMAP_REG(2)
-> > +#define KVM_REG_ARM_VENDOR_HYP_BIT_FUNC_FEAT   0
-> > +#define KVM_REG_ARM_VENDOR_HYP_BIT_PTP         1
-> > +
-> >  /* Device Control API: ARM VGIC */
-> >  #define KVM_DEV_ARM_VGIC_GRP_ADDR      0
-> >  #define KVM_DEV_ARM_VGIC_GRP_DIST_REGS 1
-> > diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
-> > index f097bebdad39..76e626d0e699 100644
-> > --- a/arch/arm64/kvm/hypercalls.c
-> > +++ b/arch/arm64/kvm/hypercalls.c
-> > @@ -72,9 +72,6 @@ static bool kvm_hvc_call_default_allowed(struct kvm_vcpu *vcpu, u32 func_id)
-> >          */
-> >         case ARM_SMCCC_VERSION_FUNC_ID:
-> >         case ARM_SMCCC_ARCH_FEATURES_FUNC_ID:
-> > -       case ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID:
-> > -       case ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID:
-> > -       case ARM_SMCCC_VENDOR_HYP_KVM_PTP_FUNC_ID:
-> >                 return true;
-> >         default:
-> >                 return kvm_psci_func_id_is_valid(vcpu, func_id);
-> > @@ -97,6 +94,13 @@ static bool kvm_hvc_call_allowed(struct kvm_vcpu *vcpu, u32 func_id)
-> >         case ARM_SMCCC_HV_PV_TIME_ST:
-> >                 return kvm_arm_fw_reg_feat_enabled(&smccc_feat->std_hyp_bmap,
-> >                                         KVM_REG_ARM_STD_HYP_BIT_PV_TIME);
-> > +       case ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID:
-> > +       case ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID:
-> > +               return kvm_arm_fw_reg_feat_enabled(&smccc_feat->vendor_hyp_bmap,
-> > +                                       KVM_REG_ARM_VENDOR_HYP_BIT_FUNC_FEAT);
-> > +       case ARM_SMCCC_VENDOR_HYP_KVM_PTP_FUNC_ID:
-> > +               return kvm_arm_fw_reg_feat_enabled(&smccc_feat->vendor_hyp_bmap,
-> > +                                       KVM_REG_ARM_VENDOR_HYP_BIT_PTP);
-> >         default:
-> >                 return kvm_hvc_call_default_allowed(vcpu, func_id);
-> >         }
-> > @@ -189,8 +193,7 @@ int kvm_hvc_call_handler(struct kvm_vcpu *vcpu)
-> >                 val[3] = ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_3;
-> >                 break;
-> >         case ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID:
-> > -               val[0] = BIT(ARM_SMCCC_KVM_FUNC_FEATURES);
-> > -               val[0] |= BIT(ARM_SMCCC_KVM_FUNC_PTP);
-> > +               val[0] = smccc_feat->vendor_hyp_bmap;
-> >                 break;
-> >         case ARM_SMCCC_VENDOR_HYP_KVM_PTP_FUNC_ID:
-> >                 kvm_ptp_get_time(vcpu, val);
-> > @@ -217,6 +220,7 @@ static const u64 kvm_arm_fw_reg_ids[] = {
-> >         KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3,
-> >         KVM_REG_ARM_STD_BMAP,
-> >         KVM_REG_ARM_STD_HYP_BMAP,
-> > +       KVM_REG_ARM_VENDOR_HYP_BMAP,
-> >  };
-> >
-> >  void kvm_arm_init_hypercalls(struct kvm *kvm)
-> > @@ -225,6 +229,7 @@ void kvm_arm_init_hypercalls(struct kvm *kvm)
-> >
-> >         smccc_feat->std_bmap = KVM_ARM_SMCCC_STD_FEATURES;
-> >         smccc_feat->std_hyp_bmap = KVM_ARM_SMCCC_STD_HYP_FEATURES;
-> > +       smccc_feat->vendor_hyp_bmap = KVM_ARM_SMCCC_VENDOR_HYP_FEATURES;
-> >  }
-> >
-> >  int kvm_arm_get_fw_num_regs(struct kvm_vcpu *vcpu)
-> > @@ -317,6 +322,9 @@ int kvm_arm_get_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
-> >         case KVM_REG_ARM_STD_HYP_BMAP:
-> >                 val = READ_ONCE(smccc_feat->std_hyp_bmap);
-> >                 break;
-> > +       case KVM_REG_ARM_VENDOR_HYP_BMAP:
-> > +               val = READ_ONCE(smccc_feat->vendor_hyp_bmap);
-> > +               break;
-> >         default:
-> >                 return -ENOENT;
-> >         }
-> > @@ -343,6 +351,10 @@ static int kvm_arm_set_fw_reg_bmap(struct kvm_vcpu *vcpu, u64 reg_id, u64 val)
-> >                 fw_reg_bmap = &smccc_feat->std_hyp_bmap;
-> >                 fw_reg_features = KVM_ARM_SMCCC_STD_HYP_FEATURES;
-> >                 break;
-> > +       case KVM_REG_ARM_VENDOR_HYP_BMAP:
-> > +               fw_reg_bmap = &smccc_feat->vendor_hyp_bmap;
-> > +               fw_reg_features = KVM_ARM_SMCCC_VENDOR_HYP_FEATURES;
-> > +               break;
-> >         default:
-> >                 return -ENOENT;
-> >         }
-> > @@ -445,6 +457,7 @@ int kvm_arm_set_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
-> >                 return 0;
-> >         case KVM_REG_ARM_STD_BMAP:
-> >         case KVM_REG_ARM_STD_HYP_BMAP:
-> > +       case KVM_REG_ARM_VENDOR_HYP_BMAP:
-> >                 return kvm_arm_set_fw_reg_bmap(vcpu, reg->id, val);
-> >         default:
-> >                 return -ENOENT;
-> > diff --git a/include/kvm/arm_hypercalls.h b/include/kvm/arm_hypercalls.h
-> > index aadd6ae3ab72..4ebfdd26e486 100644
-> > --- a/include/kvm/arm_hypercalls.h
-> > +++ b/include/kvm/arm_hypercalls.h
-> > @@ -9,9 +9,11 @@
-> >  /* Last valid bits of the bitmapped firmware registers */
-> >  #define KVM_REG_ARM_STD_BMAP_BIT_MAX           0
-> >  #define KVM_REG_ARM_STD_HYP_BMAP_BIT_MAX       0
-> > +#define KVM_REG_ARM_VENDOR_HYP_BMAP_BIT_MAX    1
->
-> Nit: IMHO perhaps it might be more convenient to define the MAX macro
-> in arch/arm64/include/uapi/asm/kvm.h like below for maintenance ?
-> (The same comments are applied to other KVM_REG_ARM_*_BMAP_BIT_MAX)
->
-> #define KVM_REG_ARM_VENDOR_HYP_BIT_MAX KVM_REG_ARM_VENDOR_HYP_BIT_PTP
->
-We have been going back and forth on this :)
-It made sense for me to keep it in uapi as well, but I took Oliver's
-suggestion of keeping it outside of uapi since this is something that
-could be constantly changing [1].
+Sounds good to me.  Let me know if you do run into conflicts, and I can 
+help.
 
-Thank you.
-Raghavendra
+-Jeff
 
-[1]: https://lore.kernel.org/lkml/CAJHc60wz5WsZWTn66i41+G4-dsjCFuFkthXU_Vf6QeXHkgzrZg@mail.gmail.com/
-
-> Thanks,
-> Reiji
->
->
-> >
-> >  #define KVM_ARM_SMCCC_STD_FEATURES             GENMASK(KVM_REG_ARM_STD_BMAP_BIT_MAX, 0)
-> >  #define KVM_ARM_SMCCC_STD_HYP_FEATURES         GENMASK(KVM_REG_ARM_STD_HYP_BMAP_BIT_MAX, 0)
-> > +#define KVM_ARM_SMCCC_VENDOR_HYP_FEATURES      GENMASK(KVM_REG_ARM_VENDOR_HYP_BMAP_BIT_MAX, 0)
-> >
-> >  int kvm_hvc_call_handler(struct kvm_vcpu *vcpu);
-> >
-> > --
-> > 2.36.0.rc2.479.g8af0fa9b8e-goog
-> >

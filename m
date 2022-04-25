@@ -2,96 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3A4650E0C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 14:51:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0838850E0CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 14:51:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240892AbiDYMy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 08:54:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43356 "EHLO
+        id S237556AbiDYMyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 08:54:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241963AbiDYMxt (ORCPT
+        with ESMTP id S241984AbiDYMyD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 08:53:49 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0ED2E9C4
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 05:50:27 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23PAhaRZ024908;
-        Mon, 25 Apr 2022 07:50:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=B+fAVScuRJvjR0vYP6PQpK/WVXd6VhFizgRnHYQuDNE=;
- b=NeYbHQ//zvzvlOYJ/he54DhlLgfbrnjPFcTqZXn4juoYeVGNsFWn0z5Uc0UCcMuOr5tq
- qdgUH3rGH67WyTgrCREoZ10YNjHixmoU9xwfe8UoriCo/Z/B9Rdr90uEso5nBMi9svwc
- dR59SrIVZJWEpF3FtqwL85qDi5x4/avQPBp72PtjMVF8sBnoG4cqBmOKBllqdzVBxJko
- qry62Hk1VS7Yvx/aa7juOMhlM54LztGhZ/vCPWGGeoP0bam55W2ItRi6pmqeXT23VD3y
- PVWnP7A12JwufhJirbVhBBoDaWExTJTyN23QKT1UZxbTeVZRgiB2jXl6HiGOrWnR/PMW Hg== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3fmev31x5p-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 25 Apr 2022 07:50:17 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 25 Apr
- 2022 13:50:14 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
- Transport; Mon, 25 Apr 2022 13:50:14 +0100
-Received: from debianA11184.ad.cirrus.com (debianA11184.ad.cirrus.com [198.90.251.83])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 83963B1A;
-        Mon, 25 Apr 2022 12:50:14 +0000 (UTC)
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-To:     <broonie@kernel.org>
-CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH v2 2/2] ASoC: soc.h: Add SOC_SINGLE_S_EXT_TLV macro
-Date:   Mon, 25 Apr 2022 13:50:12 +0100
-Message-ID: <20220425125012.3044919-3-rf@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220425125012.3044919-1-rf@opensource.cirrus.com>
-References: <20220425125012.3044919-1-rf@opensource.cirrus.com>
+        Mon, 25 Apr 2022 08:54:03 -0400
+Received: from dvalin.narfation.org (dvalin.narfation.org [213.160.73.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA2C184;
+        Mon, 25 Apr 2022 05:50:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=narfation.org;
+        s=20121; t=1650891042;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RuGwl2hwKjdiBN+xQt2K7PK+6H9hVtI6INGqk1BZ3MQ=;
+        b=bzC/NVfpIoMtLD1rLqbV0/KYVQ8RveWKmFoVna65i6PQYMW8wk/hdMPr7uRQJQyu+I7Adc
+        vmlc3JHfTnyOeL7KbhGPhOWgQWES7gBPWZKeCjFzNEtfliiyGxir6F8jPCdkWUX8QRC18B
+        atZa9HuSx+aSRrtVEEoUldXSoWX5c4k=
+From:   Sven Eckelmann <sven@narfation.org>
+To:     mareklindner@neomailbox.ch, sw@simonwunderlich.de, a@unstable.cc,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        Yu Zhe <yuzhe@nfschina.com>
+Cc:     b.a.t.m.a.n@lists.open-mesh.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, liqiong@nfschina.com,
+        kernel-janitors@vger.kernel.org, Yu Zhe <yuzhe@nfschina.com>
+Subject: Re: [PATCH] batman-adv: remove unnecessary type castings
+Date:   Mon, 25 Apr 2022 14:50:38 +0200
+Message-ID: <2133162.nbW41nx31j@ripper>
+In-Reply-To: <20220425113635.1609532-1-yuzhe@nfschina.com>
+References: <20220421154829.9775-1-yuzhe@nfschina.com> <20220425113635.1609532-1-yuzhe@nfschina.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 0Om3h4JeItrgkyajjMheeyJqad035wKk
-X-Proofpoint-GUID: 0Om3h4JeItrgkyajjMheeyJqad035wKk
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="nextPart1665509.GfMoWaoWtX"; micalg="pgp-sha512"; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a SOC_SINGLE_S_EXT_TLV macro as a convenience wrapper
-around SOC_DOUBLE_R_S_EXT_TLV for mono volume controls.
+--nextPart1665509.GfMoWaoWtX
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
+From: Sven Eckelmann <sven@narfation.org>
+To: mareklindner@neomailbox.ch, sw@simonwunderlich.de, a@unstable.cc, davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, Yu Zhe <yuzhe@nfschina.com>
+Cc: b.a.t.m.a.n@lists.open-mesh.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, liqiong@nfschina.com, kernel-janitors@vger.kernel.org, Yu Zhe <yuzhe@nfschina.com>
+Subject: Re: [PATCH] batman-adv: remove unnecessary type castings
+Date: Mon, 25 Apr 2022 14:50:38 +0200
+Message-ID: <2133162.nbW41nx31j@ripper>
+In-Reply-To: <20220425113635.1609532-1-yuzhe@nfschina.com>
+References: <20220421154829.9775-1-yuzhe@nfschina.com> <20220425113635.1609532-1-yuzhe@nfschina.com>
 
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
----
- include/sound/soc.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+On Monday, 25 April 2022 13:36:35 CEST Yu Zhe wrote:
+> remove unnecessary void* type castings.
+> 
+> Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
+> ---
+>  net/batman-adv/translation-table.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/include/sound/soc.h b/include/sound/soc.h
-index 8368b69dfef8..f906e5a70830 100644
---- a/include/sound/soc.h
-+++ b/include/sound/soc.h
-@@ -293,6 +293,12 @@
- 	.get = xhandler_get, .put = xhandler_put, \
- 	.private_value = SOC_DOUBLE_R_S_VALUE(reg_left, reg_right, xshift, \
- 					      xmin, xmax, xsign_bit, xinvert) }
-+#define SOC_SINGLE_S_EXT_TLV(xname, xreg, xshift, xmin, xmax, \
-+			     xsign_bit, xinvert, xhandler_get, xhandler_put, \
-+			     tlv_array) \
-+	SOC_DOUBLE_R_S_EXT_TLV(xname, xreg, xreg, xshift, xmin, xmax, \
-+			       xsign_bit, xinvert, xhandler_get, xhandler_put, \
-+			       tlv_array)
- #define SOC_SINGLE_BOOL_EXT(xname, xdata, xhandler_get, xhandler_put) \
- {	.iface = SNDRV_CTL_ELEM_IFACE_MIXER, .name = xname, \
- 	.info = snd_soc_info_bool_ext, \
--- 
-2.30.2
+If you send a second version then please use `git format-patch -v2 ...` to 
+format the patch. Now it looks in patchworks like you've resent the first 
+version again. And please also add a little changelog after "---" which 
+explains what you've changed. It is trivial in this little patch but still 
+might be useful.
+
+Regarding the patch: Now you've removed bridge_loop_avoidance.c + 
+batadv_choose_tt instead of fixing your patch. I would really prefer this 
+patch version:
+
+https://git.open-mesh.org/linux-merge.git/commitdiff/8864d2fcf04385cabb8c8bb159f1f2ba5790cf71
+
+Kind regards,
+	Sven
+--nextPart1665509.GfMoWaoWtX
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEF10rh2Elc9zjMuACXYcKB8Eme0YFAmJmmR4ACgkQXYcKB8Em
+e0ZF9w//UFNInA7OC2T9+5zJHFRLWNgj6+C6pX9JeoShV3BYfv11IUXGEoIOjJo8
+b3H97XoTedEQ+tfmHQZTeEwKInyaMFeBUI0DDATjtezwmlHmTkUe7cepupPhv2Oy
+7eVxA4FN9pjDl2TIfN9qSkKiFNnCbgzLclwFsnLrTWt0R1o2Wtkb2HN5qXEPXg5Z
+Cpsh1GUDuYhec+w+xyK3rcqeTrfgUdwTh6SvzckPPweX6QIMBIHFLjmsvmRiYDAc
+7KFaXJxA7KvMduW7zQN26VblEZrhbHwlmTozo7VvdZo+k0ekhSdRseFj5dIRfhs9
+r2b6weEAM7NBI/+NHGHHXIS9kFs+LqLpiwAkZhpDrLPD0OvtqMPtjR0e8sBtFhx0
+llMZOfJJgcQ5QH0WuPyQ4c7YBYBHUXK9UzMlOkMFe12xPERXt8kIR2Vb2dAmdOMk
+5JYrxNRvoCEcID5uGrPpXJ1V2G7KJfaiekEmG56nWgk4Q4ys+wMLnDtzs5GuQ67W
+zlKSkJeoViMevRRH4EoyDdezeToP3LPQb9NoTLncPEtnyIu91ugfoxPgigBjINq5
+qu8JoJqH7UHRkNIdYvWxyuN9DFY/bwsZFToBJjDK4kaobfrL1/ATGfC8mTUSv3pl
+kno8dU9pOOTqTLgZTWfSyrubhNwJ6K0k+JCHx4saaNIF0ERrNOw=
+=bG0x
+-----END PGP SIGNATURE-----
+
+--nextPart1665509.GfMoWaoWtX--
+
+
 

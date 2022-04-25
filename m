@@ -2,46 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 679B650E48E
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:38:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6717950E487
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242905AbiDYPki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 11:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49920 "EHLO
+        id S242906AbiDYPkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 11:40:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242916AbiDYPkd (ORCPT
+        with ESMTP id S239039AbiDYPkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 11:40:33 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AAF2744A17
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 08:37:25 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7094A1FB;
-        Mon, 25 Apr 2022 08:37:25 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EFD233F774;
-        Mon, 25 Apr 2022 08:37:23 -0700 (PDT)
-Message-ID: <c7b19b42-d7b1-74bb-46ea-e5674837e491@arm.com>
-Date:   Mon, 25 Apr 2022 17:37:02 +0200
+        Mon, 25 Apr 2022 11:40:21 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8643D4B8;
+        Mon, 25 Apr 2022 08:37:16 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id t15so17534771oie.1;
+        Mon, 25 Apr 2022 08:37:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=e5PTJeJCNYuORw416nhi+yZ3YmrDs9PcHs4fRVUAraQ=;
+        b=S/0r/sG+69t8vIc4rRd9ip+BWioIzJzL84iN3IZ+2lK1LfEy1xqRUb1f+Gcbqt2caw
+         YUEQhfu7kq+wvTZPUbWoGUT2SPW+ySmK9NbmUC4UZTE1/oW8+IDiEuxIruhJEF/Gddzv
+         RdbCFbiC15tXBpkxpHfDz6nVOwzOF6fZsP7wMf3UA/fAy+/CSmgiwaVpubKmwirhQuKx
+         sl6YQ9M0JL+0Y950FkChdwK8DJHU9LSg/KyAw64NMV/oXPjLSJ+tm9VBMUsGqs/XNusz
+         anBgQjs+QMAbpbH+XBZRZgToxXA8Ja36RzDatYI4xOIgTcoWuH1WZipA9BOBLUslFM0J
+         J9Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=e5PTJeJCNYuORw416nhi+yZ3YmrDs9PcHs4fRVUAraQ=;
+        b=ekmm9FCw3DxI9TUEDRlB27nrbyxN2CVGQPiXWgBfg9/hiwb5Bvly7BHb9I5MFsKJTH
+         GNqYqHOAY70kldpLWWRvPChT/AQAh4ZzzPeoZcb++1wfVMAfO7V5CJxj154s7tPGvKYK
+         N0WLEcG57ogGR1eABnjf37/bmPI9OGCwE+j650jZrlhS/m5W7hqz28Vv2NcXGJ9leIeo
+         JgFUBscw0cPKQ0hem7GtT8d/jYTRkHX3q3muHlsfVPB1RYnIMhIV+OGypgFf22Eb9Phh
+         MEk8RtFtwbVkOjCHucuI1VCVMaK4hVYQmHNxO553f/3XXckmnnss8FckhAAKNdg1tOxI
+         6YHw==
+X-Gm-Message-State: AOAM533vdMvrZUaSmoDXbn4EkjRLSkLuHgVcdMM6YD6J+cTHN26OSLuk
+        LldPrY7Gy816wQEpHv5qKjY=
+X-Google-Smtp-Source: ABdhPJzA8s3dOAXlFx4kKXDnyLGHgEKnJAU358v0B7oQlMKqnHOSFsUtzWCB6DHlN3Bsv+7wgUofNA==
+X-Received: by 2002:a05:6808:d48:b0:322:a49f:a7e1 with SMTP id w8-20020a0568080d4800b00322a49fa7e1mr12686501oik.181.1650901036118;
+        Mon, 25 Apr 2022 08:37:16 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m5-20020a056808024500b003222ff73171sm3820741oie.17.2022.04.25.08.37.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 08:37:15 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 25 Apr 2022 08:37:14 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Renze Nicolai <renze@rnplus.nl>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 6/6] hwmon: (nct6775) Add i2c driver
+Message-ID: <20220425153714.GA4167482@roeck-us.net>
+References: <20220309005047.5107-1-zev@bewilderbeest.net>
+ <20220309005047.5107-7-zev@bewilderbeest.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 1/2] sched/core: Avoid obvious double update_rq_clock
- warning
-Content-Language: en-US
-To:     Hao Jia <jiahao.os@bytedance.com>, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, rostedt@goodmis.org,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com
-Cc:     linux-kernel@vger.kernel.org
-References: <20220422090944.52618-1-jiahao.os@bytedance.com>
- <20220422090944.52618-2-jiahao.os@bytedance.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20220422090944.52618-2-jiahao.os@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220309005047.5107-7-zev@bewilderbeest.net>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,135 +75,269 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/04/2022 11:09, Hao Jia wrote:
-> When we use raw_spin_rq_lock to acquire the rq lock and have to
-> update the rq clock while holding the lock, the kernel may issue
-> a WARN_DOUBLE_CLOCK warning.
+On Tue, Mar 08, 2022 at 04:50:47PM -0800, Zev Weiss wrote:
+> This driver provides an i2c I/O mechanism for the core nct6775 driver,
+> as might be used by a BMC.  Because the Super I/O chip is shared with
+> the host CPU in such a scenario (and the host should ultimately be in
+> control of it), the i2c driver is strictly read-only to avoid
+> interfering with any usage by the host (aside from the bank-select
+> register, which seems to be replicated for the i2c interface).
 > 
-> Since we directly use raw_spin_rq_lock to acquire rq lock instead of
-> rq_lock, there is no corresponding change to rq->clock_update_flags.
-> In particular, we have obtained the rq lock of other cores,
-> the core rq->clock_update_flags may be RQCF_UPDATED at this time, and
-> then calling update_rq_clock will trigger the WARN_DOUBLE_CLOCK warning.
+> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+> Tested-by: Renze Nicolai <renze@rnplus.nl>
+> ---
+>  MAINTAINERS                 |   6 ++
+>  drivers/hwmon/Kconfig       |  17 ++++
+>  drivers/hwmon/Makefile      |   1 +
+>  drivers/hwmon/nct6775-i2c.c | 179 ++++++++++++++++++++++++++++++++++++
+>  4 files changed, 203 insertions(+)
+>  create mode 100644 drivers/hwmon/nct6775-i2c.c
 > 
-> So we need to clear RQCF_UPDATED of rq->clock_update_flags synchronously
-> to avoid the WARN_DOUBLE_CLOCK warning.
-> 
-> Some call trace reports:
-> Call Trace 1:
->  <IRQ>
->  sched_rt_period_timer+0x10f/0x3a0
->  ? enqueue_top_rt_rq+0x110/0x110
->  __hrtimer_run_queues+0x1a9/0x490
->  hrtimer_interrupt+0x10b/0x240
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index f093e40d2b16..02202555ccfe 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -13296,6 +13296,12 @@ F:	drivers/hwmon/nct6775-core.c
+>  F:	drivers/hwmon/nct6775-platform.c
+>  F:	drivers/hwmon/nct6775.h
+>  
+> +NCT6775 HARDWARE MONITOR DRIVER - I2C DRIVER
+> +M:	Zev Weiss <zev@bewilderbeest.net>
+> +L:	linux-hwmon@vger.kernel.org
+> +S:	Maintained
+> +F:	drivers/hwmon/nct6775-i2c.c
+> +
+>  NETDEVSIM
+>  M:	Jakub Kicinski <kuba@kernel.org>
+>  S:	Maintained
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 1c657100c392..fd2d32140066 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -1483,6 +1483,23 @@ config SENSORS_NCT6775_PLATFORM
+>  	  This driver can also be built as a module. If so, the module
+>  	  will be called nct6775-platform.
+>  
+> +config SENSORS_NCT6775_I2C
+> +	tristate "I2C driver for Nuvoton NCT6775F and compatibles"
+> +	depends on I2C
+> +	select REGMAP_I2C
 
-[...]
+This driver doesn't really use regmap, much less regmap_i2c.
+The core driver should select REGMAP.
 
-For the  sched_rt_period_timer() case you simply replace
-raw_spin_rq_lock()/raw_spin_rq_unlock() with rq_lock()/rq_unlock().
-I.e. you're not using the new double_rq_clock_clear_update() which
-is depicted in the text above.
+Guenter
 
-> Call Trace 2:
->  <TASK>
->  activate_task+0x8b/0x110
->  push_rt_task.part.108+0x241/0x2c0
->  push_rt_tasks+0x15/0x30
->  finish_task_switch+0xaa/0x2e0
->  ? __switch_to+0x134/0x420
->  __schedule+0x343/0x8e0
-
-[...]
-
-> Call Trace 3:
->  <TASK>
->  deactivate_task+0x93/0xe0
->  pull_rt_task+0x33e/0x400
->  balance_rt+0x7e/0x90
->  __schedule+0x62f/0x8e0
->  do_task_dead+0x3f/0x50
-
-[...]
-
-> Steps to reproduce:
-> 1. Enable CONFIG_SCHED_DEBUG when compiling the kernel
-> 2. echo 1 > /sys/kernel/debug/clear_warn_once
->    echo "WARN_DOUBLE_CLOCK" > /sys/kernel/debug/sched_features
-
-s/sched_features/sched/features
-
->    echo "NO_RT_PUSH_IPI" > /sys/kernel/debug/sched_features
-
-s/sched_features/sched/features
-
-> 3. Run some rt tasks that periodically change the priority and sleep
-
-Not sure about the `change the priority` part? I'm using rt-app with 2*n
-rt or dl (90% running) tasks (on a system with n CPUs) and can trigger
-all of these cases.
- 
-> Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
-> Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-
-You can remove this Signed-off-by. I can provide a Reviewed-By for the
-next version.
-
-[...]
-
-When running PREEMPT_RT kernel there is another similar case in DL.
-
-[  215.158100] ------------[ cut here ]------------
-[  215.158105] rq->clock_update_flags & RQCF_UPDATED
-[  215.158113] WARNING: CPU: 2 PID: 1942 at kernel/sched/core.c:690 update_rq_clock+0x128/0x1a0
-...
-[  215.158245]  update_rq_clock+0x128/0x1a0
-[  215.158253]  migrate_task_rq_dl+0xec/0x310    <--- !!!
-[  215.158259]  set_task_cpu+0x84/0x1e4
-[  215.158264]  try_to_wake_up+0x1d8/0x5c0
-[  215.158268]  wake_up_process+0x1c/0x30
-[  215.158272]  hrtimer_wakeup+0x24/0x3c
-[  215.158279]  __hrtimer_run_queues+0x114/0x270
-[  215.158285]  hrtimer_interrupt+0xe8/0x244
-[  215.158291]  arch_timer_handler_phys+0x30/0x50
-[  215.158301]  handle_percpu_devid_irq+0x88/0x140
-[  215.158306]  generic_handle_domain_irq+0x40/0x60
-[  215.158313]  gic_handle_irq+0x48/0xe0
-[  215.158320]  call_on_irq_stack+0x2c/0x60
-[  215.158327]  do_interrupt_handler+0x80/0x84
-
-For a non_contending task, this is the same issue as in sched_rt_period_timer().
-
--->8--
-
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index cfe7b40bc4ff..668a9910cd6d 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -1804,6 +1804,7 @@ select_task_rq_dl(struct task_struct *p, int cpu, int flags)
- 
- static void migrate_task_rq_dl(struct task_struct *p, int new_cpu __maybe_unused)
- {
-+	struct rq_flags rf;
- 	struct rq *rq;
- 
- 	if (READ_ONCE(p->__state) != TASK_WAKING)
-@@ -1815,7 +1816,7 @@ static void migrate_task_rq_dl(struct task_struct *p, int new_cpu __maybe_unused
- 	 * from try_to_wake_up(). Hence, p->pi_lock is locked, but
- 	 * rq->lock is not... So, lock it
- 	 */
--	raw_spin_rq_lock(rq);
-+	rq_lock(rq, &rf);
- 	if (p->dl.dl_non_contending) {
- 		update_rq_clock(rq);
- 		sub_running_bw(&p->dl, &rq->dl);
-@@ -1831,7 +1832,7 @@ static void migrate_task_rq_dl(struct task_struct *p, int new_cpu __maybe_unused
- 			put_task_struct(p);
- 	}
- 	sub_rq_bw(&p->dl, &rq->dl);
--	raw_spin_rq_unlock(rq);
-+	rq_unlock(rq, &rf);
- }
- 
- static void check_preempt_equal_dl(struct rq *rq, struct task_struct *p)
--- 
-2.25.1
+> +	select SENSORS_NCT6775
+> +	help
+> +	  If you say yes here you get support for the hardware monitoring
+> +	  functionality of the Nuvoton NCT6106D, NCT6775F, NCT6776F, NCT6779D,
+> +	  NCT6791D, NCT6792D, NCT6793D, NCT6795D, NCT6796D, and compatible
+> +	  Super-I/O chips via their I2C interface.
+> +
+> +	  If you're not building a kernel for a BMC, this is probably
+> +	  not the driver you want (see CONFIG_SENSORS_NCT6775_PLATFORM).
+> +
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called nct6775-i2c.
+> +
+>  config SENSORS_NCT7802
+>  	tristate "Nuvoton NCT7802Y"
+>  	depends on I2C
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index 2453c087cf1d..e1da423d46d5 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -156,6 +156,7 @@ obj-$(CONFIG_SENSORS_MR75203)	+= mr75203.o
+>  obj-$(CONFIG_SENSORS_NCT6683)	+= nct6683.o
+>  obj-$(CONFIG_SENSORS_NCT6775)	+= nct6775-core.o
+>  obj-$(CONFIG_SENSORS_NCT6775_PLATFORM) += nct6775-platform.o
+> +obj-$(CONFIG_SENSORS_NCT6775_I2C) += nct6775-i2c.o
+>  obj-$(CONFIG_SENSORS_NCT7802)	+= nct7802.o
+>  obj-$(CONFIG_SENSORS_NCT7904)	+= nct7904.o
+>  obj-$(CONFIG_SENSORS_NPCM7XX)	+= npcm750-pwm-fan.o
+> diff --git a/drivers/hwmon/nct6775-i2c.c b/drivers/hwmon/nct6775-i2c.c
+> new file mode 100644
+> index 000000000000..e36cf814c8e9
+> --- /dev/null
+> +++ b/drivers/hwmon/nct6775-i2c.c
+> @@ -0,0 +1,179 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * nct6775-i2c - I2C driver for the hardware monitoring functionality of
+> + *	         Nuvoton NCT677x Super-I/O chips
+> + *
+> + * Copyright (C) 2022 Zev Weiss <zev@bewilderbeest.net>
+> + *
+> + * This driver interacts with the chip via it's "back door" i2c interface, as
+> + * is often exposed to a BMC.  Because the host may still be operating the
+> + * chip via the ("front door") LPC interface, this driver cannot assume that
+> + * it actually has full control of the chip, and in particular must avoid
+> + * making any changes that could confuse the host's LPC usage of it.  It thus
+> + * operates in a strictly read-only fashion, with the only exception being the
+> + * bank-select register (which seems, thankfully, to be replicated for the i2c
+> + * interface so it doesn't affect the LPC interface).
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/init.h>
+> +#include <linux/i2c.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/hwmon-sysfs.h>
+> +#include <linux/err.h>
+> +#include <linux/of_device.h>
+> +#include <linux/regmap.h>
+> +#include "nct6775.h"
+> +
+> +static int nct6775_i2c_read(void *ctx, unsigned int reg, unsigned int *val)
+> +{
+> +	int ret;
+> +	u32 tmp;
+> +	u8 bank = reg >> 8;
+> +	struct nct6775_data *data = ctx;
+> +	struct i2c_client *client = data->driver_data;
+> +
+> +	if (bank != data->bank) {
+> +		ret = i2c_smbus_write_byte_data(client, NCT6775_REG_BANK, bank);
+> +		if (ret)
+> +			return ret;
+> +		data->bank = bank;
+> +	}
+> +
+> +	ret = i2c_smbus_read_byte_data(client, reg & 0xff);
+> +	if (ret < 0)
+> +		return ret;
+> +	tmp = ret;
+> +
+> +	if (nct6775_reg_is_word_sized(data, reg)) {
+> +		ret = i2c_smbus_read_byte_data(client, (reg & 0xff) + 1);
+> +		if (ret < 0)
+> +			return ret;
+> +		tmp = (tmp << 8) | ret;
+> +	}
+> +
+> +	*val = tmp;
+> +	return 0;
+> +}
+> +
+> +/*
+> + * The write operation is a dummy so as not to disturb anything being done
+> + * with the chip via LPC.
+> + */
+> +static int nct6775_i2c_write(void *ctx, unsigned int reg, unsigned int value)
+> +{
+> +	struct nct6775_data *data = ctx;
+> +	struct i2c_client *client = data->driver_data;
+> +
+> +	dev_dbg(&client->dev, "skipping attempted write: %02x -> %03x\n", value, reg);
+> +
+> +	/*
+> +	 * This is a lie, but writing anything but the bank-select register is
+> +	 * something this driver shouldn't be doing.
+> +	 */
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id __maybe_unused nct6775_i2c_of_match[] = {
+> +	{ .compatible = "nuvoton,nct6106", .data = (void *)nct6106, },
+> +	{ .compatible = "nuvoton,nct6116", .data = (void *)nct6116, },
+> +	{ .compatible = "nuvoton,nct6775", .data = (void *)nct6775, },
+> +	{ .compatible = "nuvoton,nct6776", .data = (void *)nct6776, },
+> +	{ .compatible = "nuvoton,nct6779", .data = (void *)nct6779, },
+> +	{ .compatible = "nuvoton,nct6791", .data = (void *)nct6791, },
+> +	{ .compatible = "nuvoton,nct6792", .data = (void *)nct6792, },
+> +	{ .compatible = "nuvoton,nct6793", .data = (void *)nct6793, },
+> +	{ .compatible = "nuvoton,nct6795", .data = (void *)nct6795, },
+> +	{ .compatible = "nuvoton,nct6796", .data = (void *)nct6796, },
+> +	{ .compatible = "nuvoton,nct6797", .data = (void *)nct6797, },
+> +	{ .compatible = "nuvoton,nct6798", .data = (void *)nct6798, },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, nct6775_i2c_of_match);
+> +
+> +static const struct i2c_device_id nct6775_i2c_id[] = {
+> +	{ "nct6106", nct6106 },
+> +	{ "nct6116", nct6116 },
+> +	{ "nct6775", nct6775 },
+> +	{ "nct6776", nct6776 },
+> +	{ "nct6779", nct6779 },
+> +	{ "nct6791", nct6791 },
+> +	{ "nct6792", nct6792 },
+> +	{ "nct6793", nct6793 },
+> +	{ "nct6795", nct6795 },
+> +	{ "nct6796", nct6796 },
+> +	{ "nct6797", nct6797 },
+> +	{ "nct6798", nct6798 },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(i2c, nct6775_i2c_id);
+> +
+> +static int nct6775_i2c_probe_init(struct nct6775_data *data)
+> +{
+> +	/*
+> +	 * The i2c interface doesn't provide access to the control registers
+> +	 * needed to determine the presence of other fans, but fans 1 and 2
+> +	 * are (in principle) always there.
+> +	 *
+> +	 * In practice this is perhaps a little silly, because the system
+> +	 * using this driver is mostly likely a BMC, and hence probably has
+> +	 * totally separate fan tachs & pwms of its own that are actually
+> +	 * controlling/monitoring the fans -- these are thus unlikely to be
+> +	 * doing anything actually useful.
+> +	 */
+> +	data->has_fan = 0x03;
+> +	data->has_fan_min = 0x03;
+> +	data->has_pwm = 0x03;
+> +	return 0;
+> +}
+> +
+> +static const struct regmap_config nct6775_i2c_regmap_config = {
+> +	.reg_bits = 16,
+> +	.val_bits = 16,
+> +	.reg_read = nct6775_i2c_read,
+> +	.reg_write = nct6775_i2c_write,
+> +};
+> +
+> +static int nct6775_i2c_probe(struct i2c_client *client)
+> +{
+> +	struct nct6775_data *data;
+> +	const struct of_device_id *of_id;
+> +	const struct i2c_device_id *i2c_id;
+> +	struct device *dev = &client->dev;
+> +
+> +	of_id = of_match_device(nct6775_i2c_of_match, dev);
+> +	i2c_id = i2c_match_id(nct6775_i2c_id, client);
+> +
+> +	if (of_id && (unsigned long)of_id->data != i2c_id->driver_data)
+> +		dev_notice(dev, "Device mismatch: %s in device tree, %s detected\n",
+> +			   of_id->name, i2c_id->name);
+> +
+> +	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	data->kind = i2c_id->driver_data;
+> +
+> +	data->read_only = true;
+> +	data->driver_data = client;
+> +	data->driver_init = nct6775_i2c_probe_init;
+> +
+> +	return nct6775_probe(dev, data, &nct6775_i2c_regmap_config);
+> +}
+> +
+> +static struct i2c_driver nct6775_i2c_driver = {
+> +	.class = I2C_CLASS_HWMON,
+> +	.driver = {
+> +		.name = "nct6775-i2c",
+> +		.of_match_table = of_match_ptr(nct6775_i2c_of_match),
+> +	},
+> +	.probe_new = nct6775_i2c_probe,
+> +	.id_table = nct6775_i2c_id,
+> +};
+> +
+> +module_i2c_driver(nct6775_i2c_driver);
+> +
+> +MODULE_AUTHOR("Zev Weiss <zev@bewilderbeest.net>");
+> +MODULE_DESCRIPTION("I2C driver for NCT6775F and compatible chips");
+> +MODULE_LICENSE("GPL");
+> +MODULE_IMPORT_NS(HWMON_NCT6775);

@@ -2,115 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7066350DAA9
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 09:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AB4D50DAC1
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 09:59:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232576AbiDYH6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 03:58:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51766 "EHLO
+        id S230340AbiDYH76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 03:59:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234283AbiDYH5D (ORCPT
+        with ESMTP id S241547AbiDYH4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 03:57:03 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A203BCF5
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 00:53:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=GRc/u2VY9j2J1+X39lc63KFsRB/jvBEkfMYe0ddJlyg=; b=CiFWcvcs+5lKGEQ3/31C2xjRMq
-        GU/6NvG7ToDQgZTdsEwcJdhiANFRnxUGvDD0uOkC58W8oOH6ceAqIp4nFm+agX7WyviL9YEjC6ysc
-        41iRjMXAadNj9Tg3nBOA7f7yzZQr8LV3ZV3Exam11Xqz9/nmaC0LW8dNVPSUsi/NjuSuYiyXCXCbC
-        ympNVeC6nMYONHt1sdHDfywIfhFp42EXzpX63e4Tu8Qei4EvyeJpTOiNc4N54uYjZ5z5GJzfInAV6
-        PUZR4xUky5sP/UxyiPJ20An9L8hgAh9w5KqhZblQQ1T8nbaNg1mrSDljCSbzY4DY/mdurOz+NXC7G
-        0TOchEew==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nitXO-008WQ7-FX; Mon, 25 Apr 2022 07:53:38 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B1CF8986167; Mon, 25 Apr 2022 09:53:35 +0200 (CEST)
-Date:   Mon, 25 Apr 2022 09:53:35 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
-        Denys Vlasenko <dvlasenk@redhat.com>
-Subject: Re: [PATCH v2] x86, vmlinux.lds: Add debug option to force all data
- sections aligned
-Message-ID: <20220425075335.GZ2731@worktop.programming.kicks-ass.net>
-References: <20220424122533.27590-1-feng.tang@intel.com>
+        Mon, 25 Apr 2022 03:56:55 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35422716
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 00:53:46 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id z99so17345585ede.5
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 00:53:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=OiK9CfJmGobcKXoR/dSPps5LgKGx0NOgsw4L8/dJuus=;
+        b=ExJdKICN8IBJk5lwYIf06MEy9FFprcu4zkW60YPGX6p5vrEl4y6eoYg//8OShTJ+EV
+         5BFiUh4ElVofGoJWGYwh6kAvauwtOVwvj1bDQ5fpxQnxbYMtLCsUEdQmRehE4BfbOeJO
+         I1lk1lxK2gfmG2JOlToGQc1nJE9kMgWwVwFFjuiYBYkEN/mrljIFDlkA6OMxU8B+ENxH
+         dNI7FczHVKl4YnTIdMlFeQ0rHuynNZ3HngnLGBF4KLOoY5HM6LObpbIyn39YSvbyh8Fk
+         64NwKlZRZ/m3/4z/hhD9OWrOHzRaF9f3kUGQgW/xlqw0/HzZ84G4/2AoqlLbTdzXAAhT
+         fE7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=OiK9CfJmGobcKXoR/dSPps5LgKGx0NOgsw4L8/dJuus=;
+        b=ZsawwNF3Bkd/U0dLBx7vfjBgknghmjyCuefxBHTs/hJg2RxetzEEN5q93w80f6xqWQ
+         EWb3wlpihGj3Agn2isyqFP6uaUZBNjhtQrrj9KQUqKMMiQ5GRJNhqf+yJrYdTcqtkYsE
+         3X1gQUEdt4iP1tbOk7Kn/nSyD/CEfLewp802GleerwSECq4crunsbqt9/caKbP99UVqI
+         JpVtr7JeyDItTaLhetwhUbD99TImpOoK30naoGm9HDvxmfai/sW3gt7pm8ubA4OISg1N
+         /QhoB6vTuSuPVG8eHGF5yNm/ACcr/RcNjxRw/2PCgUNdMB6QPt3v522Z/2C/mPLqmdmz
+         Kfeg==
+X-Gm-Message-State: AOAM530fl9IcQ6GzyaVzXtSUlK+WaWPcJ7JzkXXU8ddz1nLRpO9DiVev
+        hjjPORD3zi5esbh9R4hMr0ryeA==
+X-Google-Smtp-Source: ABdhPJztHTkEpB7MVHqX/Ny1SZCOSlStNRQ6mr3ZjdYNdrfB6wI15Hl3ZlezTmilaoywtLjJooZh9A==
+X-Received: by 2002:aa7:da43:0:b0:425:cd4c:e43f with SMTP id w3-20020aa7da43000000b00425cd4ce43fmr10883182eds.106.1650873225101;
+        Mon, 25 Apr 2022 00:53:45 -0700 (PDT)
+Received: from [192.168.0.239] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id t19-20020a508d53000000b00425c9fd2b10sm3129190edt.68.2022.04.25.00.53.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Apr 2022 00:53:44 -0700 (PDT)
+Message-ID: <5175fe30-0449-ac5f-7e37-53c07adc433a@linaro.org>
+Date:   Mon, 25 Apr 2022 09:53:43 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220424122533.27590-1-feng.tang@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 2/2] dt-bindings: watchdog: mediatek: Convert binding to
+ YAML
+Content-Language: en-US
+To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, nfraprado@collabora.com
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        srv_heupstream@mediatek.com, Chen-Yu Tsai <wenst@chromium.org>,
+        Ryder Lee <ryder.lee@kernel.org>
+References: <20220422121017.23920-1-allen-kh.cheng@mediatek.com>
+ <20220422121017.23920-3-allen-kh.cheng@mediatek.com>
+ <e2e4ead0-d8eb-1302-93e9-f330807d811e@linaro.org>
+ <b850f88f5044eb6cd57bec4fb864e5670618c9e7.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <b850f88f5044eb6cd57bec4fb864e5670618c9e7.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 24, 2022 at 08:25:33PM +0800, Feng Tang wrote:
+On 25/04/2022 09:37, allen-kh.cheng wrote:
 
-> diff --git a/arch/x86/Kconfig.debug b/arch/x86/Kconfig.debug
-> index d3a6f74a94bd..7b8cfe9717f2 100644
-> --- a/arch/x86/Kconfig.debug
-> +++ b/arch/x86/Kconfig.debug
-> @@ -225,6 +225,19 @@ config PUNIT_ATOM_DEBUG
->  	  The current power state can be read from
->  	  /sys/kernel/debug/punit_atom/dev_power_state
+>>> +examples:
+>>> +  - |
+>>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>>> +
+>>> +    watchdog@10007000 {
+>>> +        compatible = "mediatek,mt8183-wdt",
+>>> +                     "mediatek,mt6589-wdt";
+>>> +        mediatek,disable-extrst;
+>>
+>> Did you test your bindings? Does not look like. Please run
+>> dt_binding_check (see writing-schema for instructions).
+>>
 > 
-> +config DEBUG_FORCE_DATA_SECTION_ALIGNED
-> +	bool "Force all data sections to be THREAD_SIZE aligned"
-
-s/THREAD_SIZE/PAGE_SIZE/ as that seems to be what the actual patch does.
-
-> +	depends on EXPERT && !DYNAMIC_DEBUG
-> +	help
-> +	  There are cases that a commit from one kernel domain changes
-> +	  data sections' alignment of other domains, as they are all
-> +	  linked together compactly, and cause magic performance bump
-> +	  (regression or improvement), which is hard to debug. Enable
-> +	  this option will help to verify if the bump is caused by
-> +	  data alignment changes.
-> +
-> +	  It is mainly for debug and performance tuning use.
-> +
->  choice
->  	prompt "Choose kernel unwinder"
->  	default UNWINDER_ORC if X86_64
-> diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
-> index 7fda7f27e762..6add703de45f 100644
-> --- a/arch/x86/kernel/vmlinux.lds.S
-> +++ b/arch/x86/kernel/vmlinux.lds.S
-> @@ -155,7 +155,17 @@ SECTIONS
->  	X86_ALIGN_RODATA_END
+> Yes, I have run dt_binding_check.
 > 
->  	/* Data */
-> -	.data : AT(ADDR(.data) - LOAD_OFFSET) {
-> +	.data : AT(ADDR(.data) - LOAD_OFFSET)
-> +#ifdef CONFIG_DEBUG_FORCE_DATA_SECTION_ALIGNED
-> +	/*
-> +	 * In theroy, THREAD_SIZE as the biggest alignment of below sections
-
-I think the more common spelling is: 'theory' :-)
-
-> +	 * should be picked, but since upper 'X86_ALIGN_RODATA_END' can
-> +	 * ganrantees the alignment of 'INIT_TASK_DATA', PAGE_SIZE is picked
-> +	 * instead to reduce size of kernel binary
-> +	 */
-> +	SUBALIGN(PAGE_SIZE)
-> +#endif
-> +	{
->  		/* Start of data section */
->  		_sdata = .;
+> But example is from original binding txt file.
 > 
-> --
-> 2.27.0
-> 
+> Is it ok I can write a new expample?
+
+Yes, please. Correct the example in the conversion so it is
+reasonable/proper.
+
+
+Best regards,
+Krzysztof

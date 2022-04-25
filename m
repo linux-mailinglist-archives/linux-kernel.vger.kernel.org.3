@@ -2,133 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CE0950E87D
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CA6350E885
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244510AbiDYSsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 14:48:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40696 "EHLO
+        id S244528AbiDYSs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 14:48:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244484AbiDYSsG (ORCPT
+        with ESMTP id S244516AbiDYSs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 14:48:06 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3DE187
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:45:01 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id j4so3298830lfh.8
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:45:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rPYT150/TgDCQnQi6RAX3N2BAWKYB/YL6OZrjYbF8qs=;
-        b=PzhYBMGk3KmW7fU21XlBba4klpEtyP9pF/8aiI74Vtl/bASHLfyHVC9RublvjZ76Nj
-         EJshZ4vUTZvh/bzH5PDwDsmigevSQK7xIf/Dy+mfP9KxgNfvRYY4/pSMSVJmGXsAOgGT
-         YtPa9FmCbtqWn3Zx84Vmhd0KWeXeEnm7mRfn9N8wh4qm2K6uWiQg6aw3QFz5MxYMdbWv
-         dnafjlHZoCDFG06v2E51q6G5bIKpHZMJH4goSsrv4c9xX8Yf6Aj9+ZhyJIMzO5Vi2Gtj
-         rqRcw35Zu4ClXT7FQwugzuTpDOV9CiMaDP++5kS1fdYNXkZ0OFeycRxLTux+ix2DVDuV
-         /rCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rPYT150/TgDCQnQi6RAX3N2BAWKYB/YL6OZrjYbF8qs=;
-        b=OYVOk6OC58H6tact1qRMwhSGsGsSnzsdAEkSGLvGSRPUAPFKp1g7cVpf/IyWQ5mrd6
-         naKWzHaBzepfYICeoFDm56DE71AqdA05Ie6otrmENeoNbYgrjAv6CL8qp4T3pvgoljC3
-         D4XNcjSxqTidkcdClNAxWsJLKZ8gjd4/UQ+IS/oZQMCzM3/K0yt25yQrVIFQRUw7+OhX
-         nH4xPDpXIliGyY32ykX4jN/h9sGPu/7gCaHApeCUebhwmuDmzmtInq4ovSmeW3dMURM1
-         ++8FrD2ma6BpfRX5PgbyiVKonHnbwCgpXx/zMbZ9DgroN96cE97xokI5wIQPVGGDz3ON
-         i8Lw==
-X-Gm-Message-State: AOAM531NS/pMxLaC06ViBuT97uYuBF9exBJE8xSJ2XQH9JNJmd+pGsRN
-        PXaTVpBr7Ya0ISyt4rrwtJ8/Aar1Gsjr5+NgVO45Vp9B6/xWog==
-X-Google-Smtp-Source: ABdhPJwjgTPoMpc+pBz6fYD1asL1ro/MpPg0IKB3kD8/kkVxYqrx0AlVFLe3aazNH9tSZKtztKmmuHjMoXyvT4rmG+w=
-X-Received: by 2002:ac2:4646:0:b0:472:108e:51af with SMTP id
- s6-20020ac24646000000b00472108e51afmr1740247lfo.184.1650912299561; Mon, 25
- Apr 2022 11:44:59 -0700 (PDT)
+        Mon, 25 Apr 2022 14:48:27 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8101125D5;
+        Mon, 25 Apr 2022 11:45:19 -0700 (PDT)
+Received: from obbardc-laptop.home (unknown [IPv6:2a00:23c7:6883:e501:cf51:f3a2:10b5:accf])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: obbardc)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 696C11F42FFF;
+        Mon, 25 Apr 2022 19:45:18 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1650912318;
+        bh=6WX0YykginR4rs3mKf/Gy2eH7P20D1yl5xmmnw4gzAI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hBHdhWOxKse9yEF0khUOx+cNRA4mTQyt7Rh9RKH9rFYVYCpmaIO7bJhRLZizFRufk
+         BI4g+MSg05TnFlSFL/hngaRgu1QV+2V8RbXRzgZXROSTjgATZiDm2WQwT8VU3bp9cF
+         aZXtAj5zhMzUBdW0SjhW4ER45f3oYENcwT+t1o8hxteCSQIzkZWf29QXABqFIHJ+ng
+         0vB1RdIPjzOMr1DyGAzUEibgrdiTUYwkSY7VA5PVAPi3458tSMnk9bQw8Lf09flgv0
+         9Tp3bYXN6d/sCRxJLgaAJRcnHM1+II7pIvho62HwAA5yYS3/coeNVF0uza3z7YzR8e
+         MiS8pOjbLZRlA==
+From:   Christopher Obbard <chris.obbard@collabora.com>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Elaine Zhang <zhangqing@rock-chips.com>
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Christopher Obbard <chris.obbard@collabora.com>
+Subject: [PATCH v3 0/3] Rockchip RK3328 VDEC support
+Date:   Mon, 25 Apr 2022 19:45:07 +0100
+Message-Id: <20220425184510.1138446-1-chris.obbard@collabora.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220424190811.1678416-1-masahiroy@kernel.org> <20220424190811.1678416-13-masahiroy@kernel.org>
-In-Reply-To: <20220424190811.1678416-13-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 25 Apr 2022 11:44:48 -0700
-Message-ID: <CAKwvOd=DHNvJU_tNGNLEVTJQZVOTBB1Y1gpTRmz_=Qr-OBaEGw@mail.gmail.com>
-Subject: Re: [PATCH 12/27] modpost: move struct namespace_list to modpost.c
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 24, 2022 at 12:09 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> There is no good reason to define struct namespace_list in modpost.h
->
-> struct module has pointers to struct namespace_list, but that does
-> not require the definition of struct namespace_list.
->
-> Move it to modpost.c.
+This series adds VDEC support for the Rockchip RK3328 SoC which
+uses the staging rkvdec driver.
 
-Looks like modpost.h is included in:
-- scripts/mod/sumversion.c
-- scripts/mod/file2alias.c
-- scripts/mod/modpost.c
+Testing was performed using both v4l-compliance and (mainline) gstreamer
+using the fluster framework:
 
-But indeed, only modpost.c uses struct namespace_list.
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+    $ v4l2-compliance -m0
+    v4l2-compliance 1.22.1, 64 bits, 64-bit time_t
+    ...
+    Grand Total for rkvdec device /dev/media0: 54, Succeeded: 54, Failed: 0, Warnings: 0
 
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
->  scripts/mod/modpost.c | 5 +++++
->  scripts/mod/modpost.h | 5 -----
->  2 files changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 4c074d6c1721..6f2748340746 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -281,6 +281,11 @@ static struct symbol *find_symbol(const char *name)
->         return NULL;
->  }
->
-> +struct namespace_list {
-> +       struct namespace_list *next;
-> +       char namespace[];
-> +};
-> +
->  static bool contains_namespace(struct namespace_list *list,
->                                const char *namespace)
->  {
-> diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
-> index 6a90bfc08458..2dbafbda9b0f 100644
-> --- a/scripts/mod/modpost.h
-> +++ b/scripts/mod/modpost.h
-> @@ -109,11 +109,6 @@ buf_printf(struct buffer *buf, const char *fmt, ...);
->  void
->  buf_write(struct buffer *buf, const char *s, int len);
->
-> -struct namespace_list {
-> -       struct namespace_list *next;
-> -       char namespace[];
-> -};
-> -
->  struct module {
->         struct list_head list;
->         int gpl_compatible;
-> --
-> 2.32.0
->
 
+    $ python3 fluster.py run -j1 -ts JVT-AVC_V1 -d GStreamer-H.264-V4L2SL-Gst1.0
+    ...
+    Ran 111/135 tests successfully               in 392.885 secs
+
+
+    $ python3 fluster.py run -j1 -ts VP9-TEST-VECTORS -d GStreamer-VP9-V4L2SL-Gst1.0
+    ...
+    Ran 206/303 tests successfully               in 1170.120 secs
+
+Changes in v3:
+ - Finally fix mistable in dt-binding compatible documentation
+
+Changes in v2:
+ - Fix mistake in dt-binding compatible documentation
+ - Remove unused reset nodes from devicetree
+ - Improve some commit messages
+ - Check all dts files against dtbs_check
+ - Collect review tags on unchanged patches
+
+Christopher Obbard (3):
+  media: dt-bindings: media: rockchip-vdec: Add RK3328 compatible
+  arm64: dts: rockchip: Rename vdec_mmu node for RK3328
+  arm64: dts: rockchip: Add vdec support for RK3328
+
+ .../bindings/media/rockchip,vdec.yaml         |  3 +++
+ arch/arm64/boot/dts/rockchip/rk3328.dtsi      | 22 +++++++++++++++++--
+ 2 files changed, 23 insertions(+), 2 deletions(-)
 
 -- 
-Thanks,
-~Nick Desaulniers
+2.34.1
+

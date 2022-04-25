@@ -2,131 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04CBC50E7C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:08:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6145950E7C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:06:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244219AbiDYSJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 14:09:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
+        id S244215AbiDYSJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 14:09:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237543AbiDYSJb (ORCPT
+        with ESMTP id S237543AbiDYSJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 14:09:31 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F5138BCA
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:06:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650909987; x=1682445987;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rrOdhDVkrjSqoJ/S0GscDU5/gE99xaEHwiNxAV66yds=;
-  b=L0AEbTcSGjvsLxPnGJVaLh1UTCGaNVQLkLU21aa1JWEVt75zqYP5eGct
-   vxY8N6wRIB6F56BqjzrgxQhYW4JLaU2c2bBaSt9XP+cBFE904JoqZt3wa
-   jgO9Vfexk+04SFaVx9cxzWUnttnlgOSDYYD05qSVmhqRTnGb0xZd7jOO5
-   GFSWJXgCoTEttzIWPWXGCO61g2Fj5kS4rxG22zqvAMCvumr7kN5bDLyT4
-   WnRnmo4plF/N7xUKMcH0Vr5SwwNOIBd3WRzr6sb19jSI61JcFaw72EKzJ
-   3E/ZIv4fGwlplv6QwDhXsptHZunSUkUpHlOPrmimk+0iuMSvyAowE7mUq
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="325813053"
-X-IronPort-AV: E=Sophos;i="5.90,289,1643702400"; 
-   d="scan'208";a="325813053"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 11:06:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,289,1643702400"; 
-   d="scan'208";a="704670374"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 25 Apr 2022 11:06:24 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nj36N-0002kk-RW;
-        Mon, 25 Apr 2022 18:06:23 +0000
-Date:   Tue, 26 Apr 2022 02:05:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     cgel.zte@gmail.com, daniel@thingy.jp
-Cc:     kbuild-all@lists.01.org, romain.perier@gmail.com,
-        daniel.lezcano@linaro.org, tglx@linutronix.de,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] clocksource/drivers: remove unnecessary return in switch
- statement
-Message-ID: <202204260158.ccGqDClt-lkp@intel.com>
-References: <20220425084644.3495153-1-chi.minghao@zte.com.cn>
+        Mon, 25 Apr 2022 14:09:04 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B41137A9C
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:05:59 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id w5-20020a17090aaf8500b001d74c754128so107843pjq.0
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:05:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dZjxS8fBZfnR3tUEX7Fr5ztB4W2O+gimFL+bSmgOq2s=;
+        b=kfCDV3l8Tzq8EH4ez/sUJPhWAElJ73hf6OfXyLuBr/woeGMaWpnAT75qaBBeO7ZT1j
+         +EcBOxDilOCDErNMCZgX76g9JNLgfeyFiX46m0UuZDTaAAi7IAqhb5e32imp1iTgJq9e
+         471hpfCybYAtAITF6Eq2yfYNJnvCbN74XVaMKONa6BFFAl5Y646B/5oExF4BhFIMTlSH
+         jn9oH9hZQxD8hZ3k8T2JeLtu6PAKCWDAMX/wOa/hYw22aXcf8WheT3E3SGuVRp/1++6Y
+         mrMNXRy88KWiD6kM7VYGa816h9SGkok9z96WCBLbsqjBMQfEjT3BX02ZL87ASGEFhcYO
+         4GUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dZjxS8fBZfnR3tUEX7Fr5ztB4W2O+gimFL+bSmgOq2s=;
+        b=HHItoVPT2iazxgDP4YBvyE3z6zl8zCoYMb8plH/LNfjLuURbZCDtNsSXNgVYyVxilz
+         tJmXClVrvJpFpp6Z+wzfNsnRoE8D8fIXDOSk9ogsw6cwGqoUONrjOmWuTtY68WLtYPbe
+         ljECNopL6vmJa0ASO0wJ1y9FrLMXgJex28fpV3tsE/Sl7Kmd+gvj5ssVzgoEQEo/BPtw
+         BZzoD9CjL88+o1dZH74iNkIqT4pByU/SfctkLA/Eb6zVqlELM1b4wZLT6gjf81w+PiN7
+         jk9HVNfIjJkL95Ol58RFg0HsNNMgKIcOYsdqCWb/eZBbd6/6Rjvi0BnYKI/AEBN2qPRL
+         ctVw==
+X-Gm-Message-State: AOAM532V6P72+QzvizcLE1WuHoo3ylhL2/ueVF4K/sYP0XUAZl2ECPpz
+        DjQ/j3IQ/cMyOQElfHPt5fU=
+X-Google-Smtp-Source: ABdhPJz9EIG5URy5xH6gweblXRtHIbe0/OQUnlnhnyJTsFIZd3E8d/59I0zMBGiFt/Zn3EjtUL0j9A==
+X-Received: by 2002:a17:903:28c:b0:15d:1fc6:8fcd with SMTP id j12-20020a170903028c00b0015d1fc68fcdmr3786908plr.20.1650909958599;
+        Mon, 25 Apr 2022 11:05:58 -0700 (PDT)
+Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:ddfa:cc28:10d9:30b5])
+        by smtp.gmail.com with ESMTPSA id v65-20020a626144000000b0050a839e490bsm12227096pfb.185.2022.04.25.11.05.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 11:05:57 -0700 (PDT)
+From:   Max Filippov <jcmvbkbc@gmail.com>
+To:     linux-xtensa@linux-xtensa.org
+Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Max Filippov <jcmvbkbc@gmail.com>
+Subject: [PATCH] xtensa: enable ARCH_HAS_DEBUG_VM_PGTABLE
+Date:   Mon, 25 Apr 2022 11:05:40 -0700
+Message-Id: <20220425180540.880632-1-jcmvbkbc@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220425084644.3495153-1-chi.minghao@zte.com.cn>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+xtensa kernels successfully build and run with
+CONFIG_DEBUG_VM_PGTABLE=y, enable arch support for it.
 
-Thank you for the patch! Perhaps something to improve:
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ Documentation/features/debug/debug-vm-pgtable/arch-support.txt | 2 +-
+ arch/xtensa/Kconfig                                            | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-[auto build test WARNING on tip/timers/core]
-[also build test WARNING on v5.18-rc4 next-20220422]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/cgel-zte-gmail-com/clocksource-drivers-remove-unnecessary-return-in-switch-statement/20220425-170540
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git ce8abf340e40e1126bfcb9e7679b3d6b524ae3e0
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220426/202204260158.ccGqDClt-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f185e49aea517bee5dfb706df47fa5f70bfac370
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review cgel-zte-gmail-com/clocksource-drivers-remove-unnecessary-return-in-switch-statement/20220425-170540
-        git checkout f185e49aea517bee5dfb706df47fa5f70bfac370
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/clocksource/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/clocksource/timer-msc313e.c: In function 'msc313e_timer_init':
->> drivers/clocksource/timer-msc313e.c:230:13: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-     230 |         int ret = 0;
-         |             ^~~
-
-
-vim +/ret +230 drivers/clocksource/timer-msc313e.c
-
-5fc1f93f69989e Romain Perier 2021-12-17  227  
-5fc1f93f69989e Romain Perier 2021-12-17  228  static int __init msc313e_timer_init(struct device_node *np)
-5fc1f93f69989e Romain Perier 2021-12-17  229  {
-5fc1f93f69989e Romain Perier 2021-12-17 @230  	int ret = 0;
-5fc1f93f69989e Romain Perier 2021-12-17  231  	static int num_called;
-5fc1f93f69989e Romain Perier 2021-12-17  232  
-5fc1f93f69989e Romain Perier 2021-12-17  233  	switch (num_called) {
-5fc1f93f69989e Romain Perier 2021-12-17  234  	case 0:
-5fc1f93f69989e Romain Perier 2021-12-17  235  		ret = msc313e_clksrc_init(np);
-5fc1f93f69989e Romain Perier 2021-12-17  236  		break;
-5fc1f93f69989e Romain Perier 2021-12-17  237  
-5fc1f93f69989e Romain Perier 2021-12-17  238  	default:
-5fc1f93f69989e Romain Perier 2021-12-17  239  		ret = msc313e_clkevt_init(np);
-5fc1f93f69989e Romain Perier 2021-12-17  240  		break;
-5fc1f93f69989e Romain Perier 2021-12-17  241  	}
-5fc1f93f69989e Romain Perier 2021-12-17  242  
-5fc1f93f69989e Romain Perier 2021-12-17  243  	num_called++;
-5fc1f93f69989e Romain Perier 2021-12-17  244  
-5fc1f93f69989e Romain Perier 2021-12-17  245  	return 0;
-5fc1f93f69989e Romain Perier 2021-12-17  246  }
-5fc1f93f69989e Romain Perier 2021-12-17  247  
-
+diff --git a/Documentation/features/debug/debug-vm-pgtable/arch-support.txt b/Documentation/features/debug/debug-vm-pgtable/arch-support.txt
+index 83eafe1a7f68..ff21a83abe62 100644
+--- a/Documentation/features/debug/debug-vm-pgtable/arch-support.txt
++++ b/Documentation/features/debug/debug-vm-pgtable/arch-support.txt
+@@ -27,5 +27,5 @@
+     |       sparc: | TODO |
+     |          um: | TODO |
+     |         x86: |  ok  |
+-    |      xtensa: | TODO |
++    |      xtensa: |  ok  |
+     -----------------------
+diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
+index 2ed897299f19..903b910ebc10 100644
+--- a/arch/xtensa/Kconfig
++++ b/arch/xtensa/Kconfig
+@@ -4,6 +4,7 @@ config XTENSA
+ 	select ARCH_32BIT_OFF_T
+ 	select ARCH_HAS_BINFMT_FLAT if !MMU
+ 	select ARCH_HAS_CURRENT_STACK_POINTER
++	select ARCH_HAS_DEBUG_VM_PGTABLE
+ 	select ARCH_HAS_DMA_PREP_COHERENT if MMU
+ 	select ARCH_HAS_SYNC_DMA_FOR_CPU if MMU
+ 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE if MMU
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.30.2
+

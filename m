@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF46B50E6B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 19:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C583850E6B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 19:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243789AbiDYRRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 13:17:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57048 "EHLO
+        id S243802AbiDYRRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 13:17:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243756AbiDYRQ4 (ORCPT
+        with ESMTP id S243759AbiDYRQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 25 Apr 2022 13:16:56 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AEC018364;
-        Mon, 25 Apr 2022 10:13:50 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id 1so1323931qvs.8;
-        Mon, 25 Apr 2022 10:13:50 -0700 (PDT)
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB5C13DD7;
+        Mon, 25 Apr 2022 10:13:51 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id e128so11259192qkd.7;
+        Mon, 25 Apr 2022 10:13:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=s77Njj2Eom5x0HLbfJedPsYIdxNJX9SrLtCBw7r9BJI=;
-        b=cWfu5B9KVG4HPZaLMMC3NeI9CrkUh8GOBVoOfmN6qUo+H5kY6oaJJD+9OCftTd+EmI
-         x0V2FXej7qvvueaC/U0U7v+3OHbefL2JaM8+oFas//pE4IfJjj8MLZBFmt0+8DYfDbVh
-         CJkMynhhbGoSJ1hS0zEyL9nr8NbaO1GnuPNFw/3IDcxpQidP26M00WTM64y3UaERiMvz
-         vKOfS4fyuxGSMOwU6b8CyGwjvSQPNf4/RAh0m207E5eSrrIAcpF/bqQvPCjl+nzwlaSo
-         Gzkhwz2QTnyED/MyzksxVD56lCDnVfC8LxEsdGooRX8V7J1U40HyY0MyEHAeedoXk+ss
-         JN7A==
+        bh=zdBkDQmKoIggvVv+9nKr+EG7gevAiBpcUOqfYxzGhEU=;
+        b=paxMNbaCwj5l3BgZd9lXV3mk+YDHGTTipw58Fdv/lu3cA8wVeGSVFUT4BcRfYY7TJ8
+         KFmWRn8nG2Z29rqjm72k8XN1HnSVkIxfZprfp3gH84s9xECBZ+J26J2jiJxI8WzAeS/P
+         9YGQ5pOgxCJC0sL7bhLQuIEN0f/bX+7KXfINO2VPnaVXTr3ByI2AIWkL846sovb6hhhn
+         Uz9dP4c4CmE0FsHMmXXrVFIBKV+Wq7/BRbKRbnxie9kBXcoOdERewQkGzBLkUQs4G+E+
+         KvdMqn+Gl7HWGDzlC3t2CsoRUyQRIsHlN5dlyJ2nIbI8ri+GwpIpPt8241yPRxtuxDCP
+         JxJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=s77Njj2Eom5x0HLbfJedPsYIdxNJX9SrLtCBw7r9BJI=;
-        b=SZ9S4N/rKigXNY+7y+FCKNu7qPUCUCdBqspcThjRNIIZGX7QQDXDNiB3E1Bs9Fdj1Q
-         qUMGRrAJ9BIcScqq1+JhK2EmaJGgjcmpkm68YE0BRbe+tpyZzRLSmsr5oHZwpIdadwSD
-         o/SpSRpmhLcmmpqDF5cHaoQ6iMKGM/3E5Wbo4haxdQpGEU3gFPDlnHKhoUOl0DfsIXVV
-         pdEb0fIG2qjHcTstx1vRqng9q2GuIgkfTLB8g5S2Yp3JQvvnRmINY+gvolZCMmJk/oKr
-         qHwJWArYrEC0giV/6zqjLEE9VMloQZEAOGXH66IwQT7dHtlJ1RHekguKJR2gxXBmRYxm
-         nNRQ==
-X-Gm-Message-State: AOAM5331TzH2uirsydk0Wxs3qDWRSon3bPXuqRTLIdjtqJtYF0JkOtBg
-        pIlzMgQCrI1+O4irI1vs/4c=
-X-Google-Smtp-Source: ABdhPJyro5vTEBEMuwz58jmXSQvQ7tsKDOfZB5SwaI6jAUxxh0kmIsH4yE9T9NaRpmY5OGThtkH+TA==
-X-Received: by 2002:a05:6214:20ab:b0:446:26a7:ef2f with SMTP id 11-20020a05621420ab00b0044626a7ef2fmr13622003qvd.37.1650906829286;
-        Mon, 25 Apr 2022 10:13:49 -0700 (PDT)
+        bh=zdBkDQmKoIggvVv+9nKr+EG7gevAiBpcUOqfYxzGhEU=;
+        b=k1VeV790DM16bxO6xv4cug4U6GDQHLQV6W0boplYRyr1Q2JhiAXzwd6cOshqgQvg/U
+         gqt5kQYFm8rzUoZyk4bDZvAmx9gTm8H7a3TevwV5vXK3O2yWNnt6558+6B6jJ1v7jNNM
+         z2bStbfxZrlkgc4FO6ShbydynUOe+aQRvL9PGZK8wEdy+garIBH7boDVRIgWMNcTymvI
+         70WzecwyxDBf5VrJpT5evICOrWHtgCDK8N6dn6KIXKoiyHWx/PaSwDFT6C507SYxkK6V
+         uK85P96p+XDJn+qEpZqfumV1T1HOldhnrThPPaVe32Y/4EW3/ilstaEYmxfBDGGXqkZn
+         GnEA==
+X-Gm-Message-State: AOAM530CnCoa29T9UsT/v0mSrxpi1vaundM0Bbht2bSbpfalJ18NIRub
+        QfXGCOuyaZFBPzlIMNcIILE=
+X-Google-Smtp-Source: ABdhPJxb2SXF9ciMnaHs12z+YBgFKGrTWnGOCo6+3US1a6jJS7uDHVoqaFxdI5yGP+IDlmXKOilTYQ==
+X-Received: by 2002:a37:b686:0:b0:69e:99ba:4ce2 with SMTP id g128-20020a37b686000000b0069e99ba4ce2mr10728313qkf.721.1650906830113;
+        Mon, 25 Apr 2022 10:13:50 -0700 (PDT)
 Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
-        by smtp.gmail.com with ESMTPSA id v3-20020a05622a014300b002e1dcd4cfa9sm7154928qtw.64.2022.04.25.10.13.48
+        by smtp.gmail.com with ESMTPSA id v3-20020a05622a014300b002e1dcd4cfa9sm7154928qtw.64.2022.04.25.10.13.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 25 Apr 2022 10:13:49 -0700 (PDT)
 From:   Peter Geis <pgwipeout@gmail.com>
@@ -55,9 +55,9 @@ To:     linux-rockchip@lists.infradead.org,
         Heiko Stuebner <heiko@sntech.de>
 Cc:     Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 3/7] dt-bindings: arm: rockchip: Add Firefly Station M2
-Date:   Mon, 25 Apr 2022 13:13:40 -0400
-Message-Id: <20220425171344.1924057-4-pgwipeout@gmail.com>
+Subject: [PATCH v1 4/7] arm64: dts: rockchip: add rk356x sfc support
+Date:   Mon, 25 Apr 2022 13:13:41 -0400
+Message-Id: <20220425171344.1924057-5-pgwipeout@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220425171344.1924057-1-pgwipeout@gmail.com>
 References: <20220425171344.1924057-1-pgwipeout@gmail.com>
@@ -73,30 +73,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Station M2 is a compact single board computer based on the rk3566
-SoC. It outputs on uart2 for debug and console purposes.
+Add the sfc node to the rk356x device tree. This enables spi flash
+support for this soc.
 
 Signed-off-by: Peter Geis <pgwipeout@gmail.com>
 ---
- Documentation/devicetree/bindings/arm/rockchip.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
-index ad940e4127d9..b6254baffa67 100644
---- a/Documentation/devicetree/bindings/arm/rockchip.yaml
-+++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
-@@ -133,6 +133,11 @@ properties:
-               - firefly,roc-rk3399-pc-plus
-           - const: rockchip,rk3399
+diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+index ca20d7b91fe5..61a6d9d4c8a0 100644
+--- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+@@ -750,6 +750,17 @@ sdmmc1: mmc@fe2c0000 {
+ 		status = "disabled";
+ 	};
  
-+      - description: Firefly Station M2
-+        items:
-+          - const: firefly,rk3566-roc-pc
-+          - const: rockchip,rk3566
++	sfc: spi@fe300000 {
++		compatible = "rockchip,sfc";
++		reg = <0x0 0xfe300000 0x0 0x4000>;
++		interrupts = <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&cru SCLK_SFC>, <&cru HCLK_SFC>;
++		clock-names = "clk_sfc", "hclk_sfc";
++		pinctrl-0 = <&fspi_pins>;
++		pinctrl-names = "default";
++		status = "disabled";
++	};
 +
-       - description: FriendlyElec NanoPi R2S
-         items:
-           - const: friendlyarm,nanopi-r2s
+ 	sdhci: mmc@fe310000 {
+ 		compatible = "rockchip,rk3568-dwcmshc";
+ 		reg = <0x0 0xfe310000 0x0 0x10000>;
 -- 
 2.25.1
 

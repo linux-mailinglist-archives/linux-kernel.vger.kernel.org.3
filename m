@@ -2,126 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8FA550E332
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:32:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8BA50E335
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242485AbiDYOfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 10:35:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49900 "EHLO
+        id S242325AbiDYOfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 10:35:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237408AbiDYOeh (ORCPT
+        with ESMTP id S238920AbiDYOej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 10:34:37 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280D7286EF
+        Mon, 25 Apr 2022 10:34:39 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B012B25A
         for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 07:31:33 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 8D32C5C0164;
-        Mon, 25 Apr 2022 10:31:32 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 25 Apr 2022 10:31:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1650897092; x=1650983492; bh=RypWuAcjXYhvuMrAXCozdcgxcIlBzpaT89Q
-        2nmHZmv8=; b=D5uhdhKfZsWZJIiNwrYTpLyeejy7tifoZrD6Jw6grTvCevtOo4+
-        pukYeJ21+jwXCD+HCsI55c35QRp5sWWgm8OyZ3kQfjZsEoRYTUvvREu9c6MIRD30
-        6SnY7hWWIriRowoJTvWDWeVPvDtruV/xjyY/Xeyk/I3IOonR++GQFuVlN4/BTbWt
-        ULB7LF6lYWoMY1ci0hLEYjwQSOBkqxNPjowExCj5PePqS8iNfs0K528zvw1bG5SU
-        CrmXHo5p4mf8H6sni0AW8DRIzFjTuxWuc/eJq7cFDGPNz6zEduG/HIlnJvCFO8ij
-        VoVxTsqYjmWNmTNB1r6p9sMbKjMJUOfIk6Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:reply-to:sender
-        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm1; t=1650897092; x=1650983492; bh=R
-        ypWuAcjXYhvuMrAXCozdcgxcIlBzpaT89Q2nmHZmv8=; b=vw2kQpwrp/ECD/KAm
-        wvBZK1OZK+1cr/Lx5BBB62qILIkfjHbsGZlNwfwXg+R6orfq1W9q9vB9nx6rSTE/
-        0SyywO0ZXE+iYjvHkK9JP2uwtJCB4XIWHjlzq/CaEpiKXuZ0Yi73Cflu7T72sFvR
-        6g1aauAs+mT6R47rpLO6hn4qm+WH4dIU4rhCONK6zvOFtSkk9P2QfjxI81ygOeRk
-        U2qwEIznwcMRQjYI6MnsoxuU0C4Zec77ilUjwOs5qsLFU9a5JLmDOfRveD+j9XAB
-        pdZ+PaJlfmn1www5IS6myrcgId2ng4tdyFWWm+V13tFb7uZ+tsMzUnBFooIhO549
-        aAZ9Q==
-X-ME-Sender: <xms:xLBmYk-3aioErbE2FmVghcnXJJ19PHgv4GsHQq9Po1LehdtwdKlcqA>
-    <xme:xLBmYssi67ZEmj1WON6VUj6_CFt4gUT_iKMpg5X0JxD7Wp5GeZzKu35_9-5HkW20r
-    lSxKjDU-RFNKA8EUA>
-X-ME-Received: <xmr:xLBmYqCK5Df2EfKfYyl-rSVfrlS_VYfwompN_1mSKRB3-tzvpRTCC8uuOGzxkfegFhgyR27MlpbEkqWjpQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddugdejhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvfevufffkffojghfrhggtgfgsehtqhertdertdejnecuhfhrohhmpegkihcu
-    jggrnhcuoeiiihdrhigrnhesshgvnhhtrdgtohhmqeenucggtffrrghtthgvrhhnpeevhe
-    evleehgfduhffhudefteehhfegjeeiudevheevffetuedttdfhkeeuleehudenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpeiiihdrhigrnhessh
-    gvnhhtrdgtohhm
-X-ME-Proxy: <xmx:xLBmYkcyPvHuTjDSsqEAtDTEr_MIX9lZKZ-pfM3AnFJdAWs-zaJbiA>
-    <xmx:xLBmYpP2XsBSpEsQQcl2iYWqVRagOb73o-M12e4NtpqZlSLPpXA9sA>
-    <xmx:xLBmYumqYYQmcJf7VIP6Veodr_tX_0NgpMoEdpbvQBWGNZvaWvmAVA>
-    <xmx:xLBmYqFTDAH3T3rJAI0qHHcJDQiN67BJBqWlI27zckTN_PhT13BITg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 25 Apr 2022 10:31:31 -0400 (EDT)
-From:   Zi Yan <zi.yan@sent.com>
-To:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Eric Ren <renzhengeek@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Zi Yan <ziy@nvidia.com>
-Subject: [PATCH v11 6/6] drivers: virtio_mem: use pageblock size as the minimum virtio_mem size.
-Date:   Mon, 25 Apr 2022 10:31:18 -0400
-Message-Id: <20220425143118.2850746-7-zi.yan@sent.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220425143118.2850746-1-zi.yan@sent.com>
-References: <20220425143118.2850746-1-zi.yan@sent.com>
-Reply-To: Zi Yan <ziy@nvidia.com>
+Received: by mail-wr1-x42a.google.com with SMTP id s21so6450672wrb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 07:31:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+Ec2V5shBteoRtCqtxfW2R62kxRNZBNcV3MF01Vbbug=;
+        b=QiN4139opvnc7CzgbwFybNYp1p3HrZRT5GCNAgla0IVM2Zrl5QTbNwNt7O6QWpiq5c
+         q6aozGBMEuD/hUZ+T5epxetNThR1L4cIfvuoI13PXL/jFD9gZ+VWcNjBmz70A5PG2rci
+         e2/svw3agvKn4K+x9FgPUk07rU0TEUq2zSZ13z1b6qtrofG2F8ncB1eGFCBfcKE/zv/q
+         Qrur4q76PDloWwTneErY1Pd0sUCFQ0EwN+sg89GAJm8TpnbEI+PdLLmXj5xqKnHRAXK2
+         2jfMMqmjoahdP2tEKgAy63jvuySR0jTe3oGPhe78+TIoNhxvnbDVkGUd+d9Ju9h3tkES
+         8P+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+Ec2V5shBteoRtCqtxfW2R62kxRNZBNcV3MF01Vbbug=;
+        b=KN6TD8RFxXjfg4G8Oo4kIs8vEViccSqPMO1j68tCLEFb2YzjEMxYMtgVoC+OF/t5fn
+         UypYkJwGXaEmWs8XN4TqYfGqs+G6QkuCUYnh3j7nFylUpGhX0X7jGBCu9ptitvcu9Xmq
+         D8l3bTA8CFCFHpW8xlfk/b0v+EMpv23fn0ozmSeCl8ghAPUG+uKzO3FzZERE32IDHRXW
+         vNiaeg0/zZYCh6RMAjBDik5kkaPRPwxI2mVqAYQ0QEC93560FOTJsx6w1mGAg9uQL+pF
+         q9j158c4cPg4oRD6VspnK6MWTFuLUXUC2el94NpiGfh1u2Nejv4G08qXnSP7uaEDr2qB
+         If7g==
+X-Gm-Message-State: AOAM530lgneCFidNlvQl7csqSM5NZjl5LY5OuDaM/L51h/uvlkq3/RuL
+        W1nPDdXiz2wNE1eqR+4QzTGusA==
+X-Google-Smtp-Source: ABdhPJwVJGTJ+1Rl6zqnCeUHjHWgEqFfE9hWxTo8PFA94FMtT7qnou41+6gxfsBIHbspyhCxwJpuxg==
+X-Received: by 2002:a5d:4645:0:b0:20a:db5d:258f with SMTP id j5-20020a5d4645000000b0020adb5d258fmr4355178wrs.135.1650897092310;
+        Mon, 25 Apr 2022 07:31:32 -0700 (PDT)
+Received: from groot.home ([2a01:cb19:85e6:1900:ce86:3a65:67d7:726d])
+        by smtp.gmail.com with ESMTPSA id s13-20020a5d4ecd000000b00207b4c92594sm8679525wrv.59.2022.04.25.07.31.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 07:31:32 -0700 (PDT)
+From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        linux-input@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>
+Subject: [PATCH] MAINTAINERS: input: add mattijs for mt6779-keypad
+Date:   Mon, 25 Apr 2022 16:31:25 +0200
+Message-Id: <20220425143125.163799-1-mkorpershoek@baylibre.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zi Yan <ziy@nvidia.com>
+As stated in [1]:
+Fengping has no longer interest and time to maintain this driver so he
+agreed to transfer maintainership over to me.
 
-alloc_contig_range() now only needs to be aligned to pageblock_nr_pages,
-drop virtio_mem size requirement that it needs to be MAX_ORDER_NR_PAGES.
+Add a dedicated maintainer entry as well for the driver to make sure
+that I can help with patch reviews.
 
-Signed-off-by: Zi Yan <ziy@nvidia.com>
+[1] https://lore.kernel.org/r/20220421140255.2781505-1-mkorpershoek@baylibre.com
+Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
 ---
- drivers/virtio/virtio_mem.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ MAINTAINERS | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/virtio/virtio_mem.c b/drivers/virtio/virtio_mem.c
-index e7d6b679596d..e07486f01999 100644
---- a/drivers/virtio/virtio_mem.c
-+++ b/drivers/virtio/virtio_mem.c
-@@ -2476,10 +2476,10 @@ static int virtio_mem_init_hotplug(struct virtio_me=
-m *vm)
- 				      VIRTIO_MEM_DEFAULT_OFFLINE_THRESHOLD);
-=20
- 	/*
--	 * TODO: once alloc_contig_range() works reliably with pageblock
--	 * granularity on ZONE_NORMAL, use pageblock_nr_pages instead.
-+	 * alloc_contig_range() works reliably with pageblock
-+	 * granularity on ZONE_NORMAL, use pageblock_nr_pages.
- 	 */
--	sb_size =3D PAGE_SIZE * MAX_ORDER_NR_PAGES;
-+	sb_size =3D PAGE_SIZE * pageblock_nr_pages;
- 	sb_size =3D max_t(uint64_t, vm->device_block_size, sb_size);
-=20
- 	if (sb_size < memory_block_size_bytes() && !force_bbm) {
---=20
-2.35.1
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 5936f2d9d8ed..d092414ae7be 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12139,6 +12139,12 @@ S:	Supported
+ F:	Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.txt
+ F:	drivers/media/platform/mtk-jpeg/
+ 
++MEDIATEK KEYPAD DRIVER
++M:	Mattijs Korpershoek <mkorpershoek@baylibre.com>
++S:	Supported
++F:	Documentation/devicetree/bindings/input/mediatek,mt6779-keypad.yaml
++F:	drivers/input/keyboard/mt6779-keypad.c
++
+ MEDIATEK MDP DRIVER
+ M:	Minghsiu Tsai <minghsiu.tsai@mediatek.com>
+ M:	Houlong Wei <houlong.wei@mediatek.com>
+-- 
+2.32.0
 

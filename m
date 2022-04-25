@@ -2,356 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A412D50DBAA
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:52:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC4C050DBB4
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:53:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238772AbiDYIys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 04:54:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47598 "EHLO
+        id S238876AbiDYI4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 04:56:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234506AbiDYIyn (ORCPT
+        with ESMTP id S233912AbiDYIz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 04:54:43 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C34186CC
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:51:38 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id n32-20020a05600c3ba000b00393ea7192faso1649388wms.2
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:51:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=r8gmk/Y8kYJJSNmAxsxnRcCrrC53OdedXOlRSAZKcrg=;
-        b=N+0GiReXOFfsIurNcFWRG3m8dEEMpLUSOyopasQUoZNMIK5SRScn6PP62nyDQVPnvo
-         GrS1DyAiet8nRRK25Xu+x/b/plL6Tzy91W4WHp1B0J53tNM7UaCPqnVPHWTdl1AMx0Z7
-         KYocwJAgwWnfJRfjCAwFHLVR3cYfWczdMLuaX4jegRLqCo0bhY4J9eTItXd47VBhTmwt
-         EXtqw6JdZi9hYxL3QyARBBMv/hAlpTG1R7WEbiU7OeaSVthcvXRLsKbZKbdFcZtx/QnD
-         PNioKdRslkU0uM01YMikpp9Vsx6jE91cxE9/xhKEPTs+KfFjmdNhpaGkJjXpZ6FHn8j0
-         RCNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=r8gmk/Y8kYJJSNmAxsxnRcCrrC53OdedXOlRSAZKcrg=;
-        b=ubhJ6z0y5x3M5wjtlK+3Y2rIN94xIGlexs/O1Siws2qMdXOIgK8e1hs80kl680Yy18
-         WEQN2iayvxhG839HtTy1o/Hpl6PS0KKogox+r8AU+lySScBWuUhlciYG4Ab3qEHhqUIV
-         tapUgprn8Mxsyp7iv5N/J7ZLG8jk6ReI4GIHg0uwieG8lPJ8jletEUg19Q6dnnB+tlls
-         im6gH23HThM8FqYXIh1Rs6GNUShKZIKpmIAl1SE9baerBjoXEeW1QGSuMfi4c16nG3iK
-         xe9y1a5L/Bd3ULH3sPY7uHfzVjF50eTnBRm5aKvz70UZ7vPmYGYzw9s++AKmzm8NHnMb
-         GAzA==
-X-Gm-Message-State: AOAM532VoIr1gECZBaKTYofcm1ZQIhuSueuaGiok8qHzFDD6PwefT8qW
-        IleKpsF/CvfiJvXdQmwJofTJ+mQAFas8NQ==
-X-Google-Smtp-Source: ABdhPJznm8nKufmFRZ6mxgn54SnY4H+FsHX5OM3ysyUAfvX0UiA6FrHxj6QgKg3z7S0bZgsMj+CRdQ==
-X-Received: by 2002:a05:600c:3b18:b0:393:ec81:9356 with SMTP id m24-20020a05600c3b1800b00393ec819356mr3103955wms.193.1650876696512;
-        Mon, 25 Apr 2022 01:51:36 -0700 (PDT)
-Received: from lmecxl0524.lme.st.com ([2a04:cec0:1017:f048:b81d:eca1:1a27:59be])
-        by smtp.gmail.com with ESMTPSA id v18-20020adfc5d2000000b0020589b76704sm9371035wrg.70.2022.04.25.01.51.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 01:51:35 -0700 (PDT)
-From:   Etienne Carriere <etienne.carriere@linaro.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Etienne Carriere <etienne.carriere@linaro.org>
-Subject: [PATCH v3] firmware: arm_scmi: support optee shared memory in optee transport
-Date:   Mon, 25 Apr 2022 10:51:27 +0200
-Message-Id: <20220425085127.2009-1-etienne.carriere@linaro.org>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 25 Apr 2022 04:55:57 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F06E0DB
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:52:54 -0700 (PDT)
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23P6AuXc016852;
+        Mon, 25 Apr 2022 08:52:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=07zn5sdc5RwJAHIT/a4gQPJf5/nDCu2e2UAv7dWlQlU=;
+ b=cFPVZ0H65KLflGUMCAASjhvmwpL1z6v80vU/n0frbSBKjrfg0E8awK1De2iIJiEoWbhG
+ j6nV6ToMuFHYw8sOqX2ncbiJd/ZCtTHBVTuGBUsHlTYUzjrRvdZbrzjmMyHrTD2aAEAR
+ E+vDi6Hy8MovZfIlubdhnyHU9j/169gS51gs31PnY+lq5khvIwBtVatquKxQtCrNYSU8
+ Sya/Q5NshiLFA6QoFHUMUfpG0ErS9Eru/7iLFjrZLQtnKlHchsmkyGXqFGwEUkFw9rVQ
+ Ii5bl7z/vADIW6UNisoKnJLlcuKpRogaNlmeSl/NmQbYaQHbvkmbyyp7fqdOADEQr/Ck vw== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fmuddm1ma-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Apr 2022 08:52:43 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23P8nZOH019260;
+        Mon, 25 Apr 2022 08:52:41 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06fra.de.ibm.com with ESMTP id 3fm8qhhpyd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Apr 2022 08:52:41 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23P8qcWZ42139974
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 25 Apr 2022 08:52:38 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A1AF952050;
+        Mon, 25 Apr 2022 08:52:38 +0000 (GMT)
+Received: from li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com.com (unknown [9.43.47.198])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 5AC605204E;
+        Mon, 25 Apr 2022 08:52:36 +0000 (GMT)
+From:   Jagdish Gediya <jvgediya@linux.ibm.com>
+To:     andy@kernel.org, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Cc:     minchan@kernel.org, ying.huang@intel.com, dave.hansen@intel.com,
+        Jagdish Gediya <jvgediya@linux.ibm.com>
+Subject: [RESEND PATCH] string_helpers: sysfs: Add helper to get bool from string
+Date:   Mon, 25 Apr 2022 14:22:33 +0530
+Message-Id: <20220425085233.82576-1-jvgediya@linux.ibm.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: eXeCMTjS6e25Q_eAbBxKa14A7imBUKkG
+X-Proofpoint-GUID: eXeCMTjS6e25Q_eAbBxKa14A7imBUKkG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-25_05,2022-04-22_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
+ impostorscore=0 clxscore=1011 lowpriorityscore=0 phishscore=0 mlxscore=0
+ mlxlogscore=999 bulkscore=0 spamscore=0 suspectscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204250038
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds support for tee shared memory in optee scmi transport. When using
-tee shared memory, scmi optee transport manages SCMI messages using
-msg protocol (from msg.c) in shared memory, whereas smt (from shmem.c)
-protocol is used with static IOMEM shared buffers.
+At many places in kernel, It is necessary to convert sysfs input
+to corrosponding bool value e.g. "false" or "0" need to be converted
+to bool false, "true" or "1" need to be converted to bool true,
+places where such conversion is needed currently check the input
+string manually. Also, such conversions compare sysfs input using
+strncmp functions so even if certain number of character match in the
+beginning, they assume the string as valid bool, which is not the
+right semantic e.g. false is bool but falseX is not.
 
-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+Introduce new string helper function to convert sysfs input to
+corrosponding bool value. Modify existing such conversions to use
+this new function.
+
+logs,
+$ cat /sys/kernel/mm/numa/demotion_enabled
+false
+$ echo true > /sys/kernel/mm/numa/demotion_enabled
+$ cat demotion_enabled
+true
+$ echo truex > /sys/kernel/mm/numa/demotion_enabled
+-bash: echo: write error: Invalid argument
+$ echo 10 > /sys/kernel/mm/numa/demotion_enabled
+-bash: echo: write error: Invalid argument
+$ echo false > /sys/kernel/mm/numa/demotion_enabled
+$ cat demotion_enabled
+false
+$ echo falseabc > /sys/kernel/mm/numa/demotion_enabled
+-bash: echo: write error: Invalid argument
+$ echo 1 > /sys/kernel/mm/numa/demotion_enabled
+$ cat demotion_enabled
+true
+$ echo 0 > /sys/kernel/mm/numa/demotion_enabled
+$ cat demotion_enabled
+false
+
+This patch doesn't have any functionality change.
+
+Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
 ---
-Changes since v2:
-- Select configuration switch ARM_SCMI_HAVE_MSG when
-  ARM_SCMI_TRANSPORT_OPTEE is enabled.
-- Don't consider tee_shm in invoke_process_smt_channel() since
-  this function now assumes TEE shared memory is not used for SMT
-  based channel.
+Resending as initially forgot to add linux-mm in recipients.
 
-Changes since v1:
-- Remove call to scmi_rx_callback() in scmi_optee_send_message().
----
- drivers/firmware/arm_scmi/Kconfig |   1 +
- drivers/firmware/arm_scmi/optee.c | 144 ++++++++++++++++++++++--------
- 2 files changed, 109 insertions(+), 36 deletions(-)
+ include/linux/string.h |  1 +
+ lib/string_helpers.c   | 20 ++++++++++++++++++++
+ mm/migrate.c           |  7 ++-----
+ mm/swap_state.c        |  6 +-----
+ 4 files changed, 24 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/firmware/arm_scmi/Kconfig b/drivers/firmware/arm_scmi/Kconfig
-index 7794bd41eaa0..1e7b7fec97d9 100644
---- a/drivers/firmware/arm_scmi/Kconfig
-+++ b/drivers/firmware/arm_scmi/Kconfig
-@@ -59,6 +59,7 @@ config ARM_SCMI_TRANSPORT_OPTEE
- 	depends on OPTEE=y || OPTEE=ARM_SCMI_PROTOCOL
- 	select ARM_SCMI_HAVE_TRANSPORT
- 	select ARM_SCMI_HAVE_SHMEM
-+	select ARM_SCMI_HAVE_MSG
- 	default y
- 	help
- 	  This enables the OP-TEE service based transport for SCMI.
-diff --git a/drivers/firmware/arm_scmi/optee.c b/drivers/firmware/arm_scmi/optee.c
-index 8302a2b4aeeb..b503c22cfd32 100644
---- a/drivers/firmware/arm_scmi/optee.c
-+++ b/drivers/firmware/arm_scmi/optee.c
-@@ -64,6 +64,22 @@ enum scmi_optee_pta_cmd {
- 	 * [in]     value[0].b: Requested capabilities mask (enum pta_scmi_caps)
- 	 */
- 	PTA_SCMI_CMD_GET_CHANNEL = 3,
-+
-+	/*
-+	 * PTA_SCMI_CMD_PROCESS_MSG_CHANNEL - Process SCMI message in a MSG
-+	 * buffer pointed by memref parameters
-+	 *
-+	 * [in]     value[0].a: Channel handle
-+	 * [in]     memref[1]: Message buffer (MSG and SCMI payload)
-+	 * [out]    memref[2]: Response buffer (MSG and SCMI payload)
-+	 *
-+	 * Shared memories used for SCMI message/response are MSG buffers
-+	 * referenced by param[1] and param[2]. MSG transport protocol
-+	 * uses a 32bit header to carry SCMI meta-data (protocol ID and
-+	 * protocol message ID) followed by the effective SCMI message
-+	 * payload.
-+	 */
-+	PTA_SCMI_CMD_PROCESS_MSG_CHANNEL = 4,
- };
+diff --git a/include/linux/string.h b/include/linux/string.h
+index b6572aeca2f5..3c00991b456a 100644
+--- a/include/linux/string.h
++++ b/include/linux/string.h
+@@ -170,6 +170,7 @@ static inline void memcpy_flushcache(void *dst, const void *src, size_t cnt)
  
- /*
-@@ -72,9 +88,17 @@ enum scmi_optee_pta_cmd {
-  * PTA_SCMI_CAPS_SMT_HEADER
-  * When set, OP-TEE supports command using SMT header protocol (SCMI shmem) in
-  * shared memory buffers to carry SCMI protocol synchronisation information.
+ void *memchr_inv(const void *s, int c, size_t n);
+ char *strreplace(char *s, char old, char new);
++int sysfs_strbool(const char *s, bool *output);
+ 
+ extern void kfree_const(const void *x);
+ 
+diff --git a/lib/string_helpers.c b/lib/string_helpers.c
+index 4f877e9551d5..cd3580b7ea06 100644
+--- a/lib/string_helpers.c
++++ b/lib/string_helpers.c
+@@ -967,6 +967,26 @@ void memcpy_and_pad(void *dest, size_t dest_len, const void *src, size_t count,
+ }
+ EXPORT_SYMBOL(memcpy_and_pad);
+ 
++/**
++ * sysfs_strbool - Get bool value corrosponding to string
++ * @s: The string to operate on.
++ * @output: Pointer to fill resulting bool value
 + *
-+ * PTA_SCMI_CAPS_MSG_HEADER
-+ * When set, OP-TEE supports command using MSG header protocol in an OP-TEE
-+ * shared memory to carry SCMI protocol synchronisation information and SCMI
-+ * message payload.
-  */
- #define PTA_SCMI_CAPS_NONE		0
- #define PTA_SCMI_CAPS_SMT_HEADER	BIT(0)
-+#define PTA_SCMI_CAPS_MSG_HEADER	BIT(1)
-+#define PTA_SCMI_CAPS_MASK		(PTA_SCMI_CAPS_SMT_HEADER | \
-+					 PTA_SCMI_CAPS_MSG_HEADER)
- 
- /**
-  * struct scmi_optee_channel - Description of an OP-TEE SCMI channel
-@@ -85,7 +109,8 @@ enum scmi_optee_pta_cmd {
-  * @mu: Mutex protection on channel access
-  * @cinfo: SCMI channel information
-  * @shmem: Virtual base address of the shared memory
-- * @tee_shm: Reference to TEE shared memory or NULL if using static shmem
-+ * @req: Shared memory protocol handle for SCMI request and synchronous response
-+ * @tee_shm: TEE shared memory handle @req or NULL if using IOMEM shmem
-  * @link: Reference in agent's channel list
-  */
- struct scmi_optee_channel {
-@@ -94,7 +119,10 @@ struct scmi_optee_channel {
- 	u32 caps;
- 	struct mutex mu;
- 	struct scmi_chan_info *cinfo;
--	struct scmi_shared_mem __iomem *shmem;
-+	union {
-+		struct scmi_shared_mem __iomem *shmem;
-+		struct scmi_msg_payld *msg;
-+	} req;
- 	struct tee_shm *tee_shm;
- 	struct list_head link;
- };
-@@ -178,8 +206,8 @@ static int get_capabilities(struct scmi_optee_agent *agent)
- 
- 	caps = param[0].u.value.a;
- 
--	if (!(caps & PTA_SCMI_CAPS_SMT_HEADER)) {
--		dev_err(agent->dev, "OP-TEE SCMI PTA doesn't support SMT\n");
-+	if (!(caps & (PTA_SCMI_CAPS_SMT_HEADER | PTA_SCMI_CAPS_MSG_HEADER))) {
-+		dev_err(agent->dev, "OP-TEE SCMI PTA doesn't support SMT and MSG\n");
- 		return -EOPNOTSUPP;
- 	}
- 
-@@ -193,9 +221,14 @@ static int get_channel(struct scmi_optee_channel *channel)
- 	struct device *dev = scmi_optee_private->dev;
- 	struct tee_ioctl_invoke_arg arg = { };
- 	struct tee_param param[1] = { };
--	unsigned int caps = PTA_SCMI_CAPS_SMT_HEADER;
-+	unsigned int caps = 0;
- 	int ret;
- 
-+	if (channel->tee_shm)
-+		caps = PTA_SCMI_CAPS_MSG_HEADER;
-+	else
-+		caps = PTA_SCMI_CAPS_SMT_HEADER;
-+
- 	arg.func = PTA_SCMI_CMD_GET_CHANNEL;
- 	arg.session = channel->tee_session;
- 	arg.num_params = 1;
-@@ -220,25 +253,48 @@ static int get_channel(struct scmi_optee_channel *channel)
- 
- static int invoke_process_smt_channel(struct scmi_optee_channel *channel)
- {
--	struct tee_ioctl_invoke_arg arg = { };
--	struct tee_param param[2] = { };
-+	struct tee_ioctl_invoke_arg arg = {
-+		.func = PTA_SCMI_CMD_PROCESS_SMT_CHANNEL,
-+		.session = channel->tee_session,
-+		.num_params = 1,
-+	};
-+	struct tee_param param[1] = { };
- 	int ret;
- 
--	arg.session = channel->tee_session;
- 	param[0].attr = TEE_IOCTL_PARAM_ATTR_TYPE_VALUE_INPUT;
- 	param[0].u.value.a = channel->channel_id;
- 
--	if (channel->tee_shm) {
--		param[1].attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INOUT;
--		param[1].u.memref.shm = channel->tee_shm;
--		param[1].u.memref.size = SCMI_OPTEE_MAX_MSG_SIZE;
--		arg.num_params = 2;
--		arg.func = PTA_SCMI_CMD_PROCESS_SMT_CHANNEL_MESSAGE;
--	} else {
--		arg.num_params = 1;
--		arg.func = PTA_SCMI_CMD_PROCESS_SMT_CHANNEL;
-+	ret = tee_client_invoke_func(scmi_optee_private->tee_ctx, &arg, param);
-+	if (ret < 0 || arg.ret) {
-+		dev_err(scmi_optee_private->dev, "Can't invoke channel %u: %d / %#x\n",
-+			channel->channel_id, ret, arg.ret);
-+		return -EIO;
- 	}
- 
-+	return 0;
-+}
-+
-+static int invoke_process_msg_channel(struct scmi_optee_channel *channel, size_t msg_size)
++ * Returns 1 if string represents bool value, 0 otherwise
++ */
++int sysfs_strbool(const char *s, bool *output)
 +{
-+	struct tee_ioctl_invoke_arg arg = {
-+		.func = PTA_SCMI_CMD_PROCESS_MSG_CHANNEL,
-+		.session = channel->tee_session,
-+		.num_params = 3,
-+	};
-+	struct tee_param param[3] = { };
-+	int ret;
-+
-+	param[0].attr = TEE_IOCTL_PARAM_ATTR_TYPE_VALUE_INPUT;
-+	param[0].u.value.a = channel->channel_id;
-+
-+	param[1].attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INPUT;
-+	param[1].u.memref.shm = channel->tee_shm;
-+	param[1].u.memref.size = msg_size;
-+
-+	param[2].attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_OUTPUT;
-+	param[2].u.memref.shm = channel->tee_shm;
-+	param[2].u.memref.size = SCMI_OPTEE_MAX_MSG_SIZE;
-+
- 	ret = tee_client_invoke_func(scmi_optee_private->tee_ctx, &arg, param);
- 	if (ret < 0 || arg.ret) {
- 		dev_err(scmi_optee_private->dev, "Can't invoke channel %u: %d / %#x\n",
-@@ -279,7 +335,26 @@ static void scmi_optee_clear_channel(struct scmi_chan_info *cinfo)
- {
- 	struct scmi_optee_channel *channel = cinfo->transport_info;
- 
--	shmem_clear_channel(channel->shmem);
-+	if (!channel->tee_shm)
-+		shmem_clear_channel(channel->req.shmem);
-+}
-+
-+static int setup_dynamic_shmem(struct device *dev, struct scmi_optee_channel *channel)
-+{
-+	const size_t msg_size = SCMI_OPTEE_MAX_MSG_SIZE;
-+	void *shbuf;
-+
-+	channel->tee_shm = tee_shm_alloc_kernel_buf(scmi_optee_private->tee_ctx, msg_size);
-+	if (IS_ERR(channel->tee_shm)) {
-+		dev_err(channel->cinfo->dev, "shmem allocation failed\n");
-+		return -ENOMEM;
-+	}
-+
-+	shbuf = tee_shm_get_va(channel->tee_shm, 0);
-+	memset(shbuf, 0, msg_size);
-+	channel->req.msg = shbuf;
-+
-+	return 0;
- }
- 
- static int setup_static_shmem(struct device *dev, struct scmi_chan_info *cinfo,
-@@ -304,8 +379,8 @@ static int setup_static_shmem(struct device *dev, struct scmi_chan_info *cinfo,
- 
- 	size = resource_size(&res);
- 
--	channel->shmem = devm_ioremap(dev, res.start, size);
--	if (!channel->shmem) {
-+	channel->req.shmem = devm_ioremap(dev, res.start, size);
-+	if (!channel->req.shmem) {
- 		dev_err(dev, "Failed to ioremap SCMI Tx shared memory\n");
- 		ret = -EADDRNOTAVAIL;
- 		goto out;
-@@ -325,7 +400,7 @@ static int setup_shmem(struct device *dev, struct scmi_chan_info *cinfo,
- 	if (of_find_property(cinfo->dev->of_node, "shmem", NULL))
- 		return setup_static_shmem(dev, cinfo, channel);
- 	else
--		return -ENOMEM;
-+		return setup_dynamic_shmem(dev, channel);
- }
- 
- static int scmi_optee_chan_setup(struct scmi_chan_info *cinfo, struct device *dev, bool tx)
-@@ -405,27 +480,22 @@ static int scmi_optee_chan_free(int id, void *p, void *data)
- 	return 0;
- }
- 
--static struct scmi_shared_mem __iomem *
--get_channel_shm(struct scmi_optee_channel *chan, struct scmi_xfer *xfer)
--{
--	if (!chan)
--		return NULL;
--
--	return chan->shmem;
--}
--
--
- static int scmi_optee_send_message(struct scmi_chan_info *cinfo,
- 				   struct scmi_xfer *xfer)
- {
- 	struct scmi_optee_channel *channel = cinfo->transport_info;
--	struct scmi_shared_mem __iomem *shmem = get_channel_shm(channel, xfer);
- 	int ret;
- 
- 	mutex_lock(&channel->mu);
--	shmem_tx_prepare(shmem, xfer);
- 
--	ret = invoke_process_smt_channel(channel);
-+	if (channel->tee_shm) {
-+		msg_tx_prepare(channel->req.msg, xfer);
-+		ret = invoke_process_msg_channel(channel, msg_command_size(xfer));
-+	} else {
-+		shmem_tx_prepare(channel->req.shmem, xfer);
-+		ret = invoke_process_smt_channel(channel);
-+	}
-+
- 	if (ret)
- 		mutex_unlock(&channel->mu);
- 
-@@ -436,9 +506,11 @@ static void scmi_optee_fetch_response(struct scmi_chan_info *cinfo,
- 				      struct scmi_xfer *xfer)
- {
- 	struct scmi_optee_channel *channel = cinfo->transport_info;
--	struct scmi_shared_mem __iomem *shmem = get_channel_shm(channel, xfer);
- 
--	shmem_fetch_response(shmem, xfer);
-+	if (channel->tee_shm)
-+		msg_fetch_response(channel->req.msg, SCMI_OPTEE_MAX_MSG_SIZE, xfer);
++	if (sysfs_streq(s, "1") || sysfs_streq(s, "true"))
++		*output = true;
++	else if (sysfs_streq(s, "0") || sysfs_streq(s, "false"))
++		*output = false;
 +	else
-+		shmem_fetch_response(channel->req.shmem, xfer);
- }
++		return 0;
++
++	return 1;
++}
++EXPORT_SYMBOL(sysfs_strbool);
++
+ #ifdef CONFIG_FORTIFY_SOURCE
+ /* These are placeholders for fortify compile-time warnings. */
+ void __read_overflow2_field(size_t avail, size_t wanted) { }
+diff --git a/mm/migrate.c b/mm/migrate.c
+index 6c31ee1e1c9b..a5b105144016 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -49,6 +49,7 @@
+ #include <linux/oom.h>
+ #include <linux/memory.h>
+ #include <linux/random.h>
++#include <linux/string.h>
+ #include <linux/sched/sysctl.h>
  
- static void scmi_optee_mark_txdone(struct scmi_chan_info *cinfo, int ret,
+ #include <asm/tlbflush.h>
+@@ -2523,11 +2524,7 @@ static ssize_t numa_demotion_enabled_store(struct kobject *kobj,
+ 					   struct kobj_attribute *attr,
+ 					   const char *buf, size_t count)
+ {
+-	if (!strncmp(buf, "true", 4) || !strncmp(buf, "1", 1))
+-		numa_demotion_enabled = true;
+-	else if (!strncmp(buf, "false", 5) || !strncmp(buf, "0", 1))
+-		numa_demotion_enabled = false;
+-	else
++	if (!sysfs_strbool(buf, &numa_demotion_enabled))
+ 		return -EINVAL;
+ 
+ 	return count;
+diff --git a/mm/swap_state.c b/mm/swap_state.c
+index 013856004825..4f439845d176 100644
+--- a/mm/swap_state.c
++++ b/mm/swap_state.c
+@@ -865,11 +865,7 @@ static ssize_t vma_ra_enabled_store(struct kobject *kobj,
+ 				      struct kobj_attribute *attr,
+ 				      const char *buf, size_t count)
+ {
+-	if (!strncmp(buf, "true", 4) || !strncmp(buf, "1", 1))
+-		enable_vma_readahead = true;
+-	else if (!strncmp(buf, "false", 5) || !strncmp(buf, "0", 1))
+-		enable_vma_readahead = false;
+-	else
++	if (!sysfs_strbool(buf, &enable_vma_readahead))
+ 		return -EINVAL;
+ 
+ 	return count;
 -- 
-2.17.1
+2.35.1
 

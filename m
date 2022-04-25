@@ -2,327 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC34450D9CC
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 08:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D47FF50D9CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 08:53:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231345AbiDYGyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 02:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37740 "EHLO
+        id S237688AbiDYG4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 02:56:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234442AbiDYGyM (ORCPT
+        with ESMTP id S229757AbiDYG4b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 02:54:12 -0400
-Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DEA74DFA
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 23:51:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1650869471; x=1682405471;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Bn9NamgWck9hp1UlL3e6xhXreOyU34muBbW7Q2cIKAA=;
-  b=OGFGNN60ApsslYvJxVIx2sAgiTvc4yXzpxj3H7Cl4PxbzQ4flhRbM0o9
-   W94Fca5slUUGCypZDVIOnsb2cDDlp7ns8JFmT4USAwR/dO5XVFDWk5Jsx
-   DbWj2i7Sj20avMcarTXt+mq5I2LYSEdWEe5QFp2HHz9QflFg/awUQfrMV
-   RiCHGLjuxikJNMzivUQuY0iJHZXS1L4EfrhXCAOhv+fx15brKSZiUmcv2
-   wuvug66MSrFleB/13YGEhAPrRbZ6Fk9g5OaviP4IiY0E+Mg+RR5pPPRHm
-   UX3Gu/Velfh9S1u+smTnpkJB8bW6bNg7gFg30fh5fKWDld4arKmexSWSm
-   w==;
-X-IronPort-AV: E=Sophos;i="5.90,287,1643644800"; 
-   d="scan'208";a="199626128"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 25 Apr 2022 14:51:05 +0800
-IronPort-SDR: 4LvRko8GCB7MKFPSxumQG6EbEsI4WHIQ4LTZtJ9DsG+5A2+KevSaJMwgBSk81kUVA3DZyNhRX1
- /IaqdB+Yo25KoNqbGGTRm794V5lP9wNcEl5TOS5+Hh27ip9UsR+OVKKAqIVJx5il/Fb2HuTh16
- 8QMg34vI4Ox6AbU+AwlEVbviWTlnBzsN3y2T4nJ3UXlxo23hPKXPlIDaJGW8OYq0m50gc7NfXJ
- dCHYDB2iLYYhNNSZbN4gqWXH8AML0Cjp5JClqzCzuEMoc31eVTVPFa+fY6ibO7yZHGyxg60CFS
- 046JjL6IZfjMsjtgZLcSemzT
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 24 Apr 2022 23:21:17 -0700
-IronPort-SDR: IjvHzvNdRFrHLN1WAtiaQuuMCQTc7UWtFH6y9hKBmBQyVJqYaziGrixflekBXWl3Q/sH+/aGEp
- AMYmUYtQvJvXDM/cOsqL1x5E1/TMF9+ZdLLnAWAA3oIrRfS7bKNpDFUoLVr3k00Ygu+mSRuuEk
- yS73Vm2WxPvLC5q3L8Y+DNNbixEH3n9hwMfg+XdTcbiDovj75dcLGnUSzf0p1vKAjTdv4Nxinf
- b7pxsHwDJ1RuN2RCRtq2Fq+mvcjnE8u1ajFEa4LADdpDrTF+gl7IF9+zNgzSNl68oYAReTemNr
- LXA=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 24 Apr 2022 23:51:04 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Kmwdg4kSMz1SVp1
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 23:51:03 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1650869462; x=1653461463; bh=Bn9NamgWck9hp1UlL3e6xhXreOyU34muBbW
-        7Q2cIKAA=; b=RZcpX0U7y/oEb+yS9qqs404l/IfWNGrEBu5P8WCQv7E3kzbpDD4
-        upMNAFbgTHvSnVzLZmdlNMqN0/ERQw1WcaObCbFhrC4lKuL9P+ospCHIGLSfc5LB
-        Ky4BvssBopHlBtH11NkUds9cmvBwDyn11UcMA/oQb9PTcy0dUyNCkyB+TAnfuir9
-        5i/BN3sO2qzGo/XQVbPrpL1t+FA2H/ngHw1XZSYV8siEDslmhwUbOVU9lakyZc7C
-        dl3EfcohpGOBAOHPjeQ0ZUeUlFShLQAbOhWmKQnwje5MOvZj4WyMpPro1geVCJGu
-        U3q4j0qPlpHDPN3cE3YSTwU/9w2uFlt+cOQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id Tm8M__IIoV_7 for <linux-kernel@vger.kernel.org>;
-        Sun, 24 Apr 2022 23:51:02 -0700 (PDT)
-Received: from [10.225.163.24] (unknown [10.225.163.24])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Kmwdc22ntz1Rvlx;
-        Sun, 24 Apr 2022 23:51:00 -0700 (PDT)
-Message-ID: <237a43f0-3b09-46d0-e73c-57ef51e39590@opensource.wdc.com>
-Date:   Mon, 25 Apr 2022 15:50:58 +0900
+        Mon, 25 Apr 2022 02:56:31 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC3281649
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 23:53:27 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23P4YCpD023866;
+        Mon, 25 Apr 2022 06:53:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=5aD8nS5ZBNmtuBmsZRYQChd71qyKA5B66NT7xRKy+CU=;
+ b=hlMlz6Vcxikh9I+MXbj9B/r/CXsNkI+NBRP8XOzeeE4cqNKv1HKCv81lL+ed55C7r08i
+ EfVQKh/wSw2tdqllie6kwcwfHxWu/Q4Xm1RP3lxOxcooUxAnNIkJ4sbeeCpFlM16Nhii
+ TGYWJAi00uf3+Ky5aJNrTSoYCYSIpDuD6XtN3oQSizMKrTjhd2yxYfw6eqDFaWzRqAzv
+ /iGhFlDkyTIkf15me188ndnhfAaE8WHfS1CR0i/GUWpiZia2Ch6inKe42r9yMebGolFO
+ l/OhSfRQFgAziQZ2XRfbPLLKRUmDzLPjaFiIp6E3GiuKIHQfgnFuCpc43IP5P+7YIhZR AQ== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fmuh5sqhq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Apr 2022 06:53:23 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23P6nPok005173;
+        Mon, 25 Apr 2022 06:53:22 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06fra.de.ibm.com with ESMTP id 3fm8qhhjuw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Apr 2022 06:53:21 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23P6rV2T918194
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 25 Apr 2022 06:53:31 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 69B64A4040;
+        Mon, 25 Apr 2022 06:53:19 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EFB91A404D;
+        Mon, 25 Apr 2022 06:53:17 +0000 (GMT)
+Received: from li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com.com (unknown [9.43.47.198])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 25 Apr 2022 06:53:17 +0000 (GMT)
+From:   Jagdish Gediya <jvgediya@linux.ibm.com>
+To:     andy@kernel.org, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jagdish Gediya <jvgediya@linux.ibm.com>
+Subject: [PATCH] string_helpers: sysfs: Add helper to get bool from string
+Date:   Mon, 25 Apr 2022 12:23:13 +0530
+Message-Id: <20220425065313.77213-1-jvgediya@linux.ibm.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH -next RFC v3 0/8] improve tag allocation under heavy load
-Content-Language: en-US
-To:     "yukuai (C)" <yukuai3@huawei.com>, axboe@kernel.dk,
-        bvanassche@acm.org, andriy.shevchenko@linux.intel.com,
-        john.garry@huawei.com, ming.lei@redhat.com, qiulaibin@huawei.com
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-References: <20220415101053.554495-1-yukuai3@huawei.com>
- <dc800086-43c6-1ff2-659e-258cb75649dd@huawei.com>
- <3fbadd9f-11dd-9043-11cf-f0839dcf30e1@opensource.wdc.com>
- <63e84f2a-2487-a0c3-cab2-7d2011bc2db4@huawei.com>
- <55e8b04f-0d2f-2ce1-6514-5abd0b67fd48@opensource.wdc.com>
- <6957af40-8720-d74b-5be7-6bcdd9aa1089@huawei.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <6957af40-8720-d74b-5be7-6bcdd9aa1089@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 0LY8KJN1Oeyyv-ytK2fx1nUxclhauXEm
+X-Proofpoint-GUID: 0LY8KJN1Oeyyv-ytK2fx1nUxclhauXEm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-25_02,2022-04-22_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
+ phishscore=0 adultscore=0 bulkscore=0 spamscore=0 mlxlogscore=999
+ lowpriorityscore=0 malwarescore=0 priorityscore=1501 suspectscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204250029
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/25/22 15:47, yukuai (C) wrote:
-> =E5=9C=A8 2022/04/25 14:23, Damien Le Moal =E5=86=99=E9=81=93:
->> On 4/25/22 15:14, yukuai (C) wrote:
->>> =E5=9C=A8 2022/04/25 11:24, Damien Le Moal =E5=86=99=E9=81=93:
->>>> On 4/24/22 11:43, yukuai (C) wrote:
->>>>> friendly ping ...
->>>>>
->>>>> =E5=9C=A8 2022/04/15 18:10, Yu Kuai =E5=86=99=E9=81=93:
->>>>>> Changes in v3:
->>>>>>     - update 'waiters_cnt' before 'ws_active' in sbitmap_prepare_t=
-o_wait()
->>>>>>     in patch 1, in case __sbq_wake_up() see 'ws_active > 0' while
->>>>>>     'waiters_cnt' are all 0, which will cause deap loop.
->>>>>>     - don't add 'wait_index' during each loop in patch 2
->>>>>>     - fix that 'wake_index' might mismatch in the first wake up in=
- patch 3,
->>>>>>     also improving coding for the patch.
->>>>>>     - add a detection in patch 4 in case io hung is triggered in c=
-orner
->>>>>>     cases.
->>>>>>     - make the detection, free tags are sufficient, more flexible.
->>>>>>     - fix a race in patch 8.
->>>>>>     - fix some words and add some comments.
->>>>>>
->>>>>> Changes in v2:
->>>>>>     - use a new title
->>>>>>     - add patches to fix waitqueues' unfairness - path 1-3
->>>>>>     - delete patch to add queue flag
->>>>>>     - delete patch to split big io thoroughly
->>>>>>
->>>>>> In this patchset:
->>>>>>     - patch 1-3 fix waitqueues' unfairness.
->>>>>>     - patch 4,5 disable tag preemption on heavy load.
->>>>>>     - patch 6 forces tag preemption for split bios.
->>>>>>     - patch 7,8 improve large random io for HDD. We do meet the pr=
-oblem and
->>>>>>     I'm trying to fix it at very low cost. However, if anyone stil=
-l thinks
->>>>>>     this is not a common case and not worth to optimize, I'll drop=
- them.
->>>>>>
->>>>>> There is a defect for blk-mq compare to blk-sq, specifically split=
- io
->>>>>> will end up discontinuous if the device is under high io pressure,=
- while
->>>>>> split io will still be continuous in sq, this is because:
->>>>>>
->>>>>> 1) new io can preempt tag even if there are lots of threads waitin=
-g.
->>>>>> 2) split bio is issued one by one, if one bio can't get tag, it wi=
-ll go
->>>>>> to wail.
->>>>>> 3) each time 8(or wake batch) requests is done, 8 waiters will be =
-woken up.
->>>>>> Thus if a thread is woken up, it will unlikey to get multiple tags=
-.
->>>>>>
->>>>>> The problem was first found by upgrading kernel from v3.10 to v4.1=
-8,
->>>>>> test device is HDD with 256 'max_sectors_kb', and test case is iss=
-uing 1m
->>>>>> ios with high concurrency.
->>>>>>
->>>>>> Noted that there is a precondition for such performance problem:
->>>>>> There is a certain gap between bandwidth for single io with
->>>>>> bs=3Dmax_sectors_kb and disk upper limit.
->>>>>>
->>>>>> During the test, I found that waitqueues can be extremly unbalance=
-d on
->>>>>> heavy load. This is because 'wake_index' is not set properly in
->>>>>> __sbq_wake_up(), see details in patch 3.
->>>>>>
->>>>>> Test environment:
->>>>>> arm64, 96 core with 200 BogoMIPS, test device is HDD. The default
->>>>>> 'max_sectors_kb' is 1280(Sorry that I was unable to test on the ma=
-chine
->>>>>> where 'max_sectors_kb' is 256).>>
->>>>>> The single io performance(randwrite):
->>>>>>
->>>>>> | bs       | 128k | 256k | 512k | 1m   | 1280k | 2m   | 4m   |
->>>>>> | -------- | ---- | ---- | ---- | ---- | ----- | ---- | ---- |
->>>>>> | bw MiB/s | 20.1 | 33.4 | 51.8 | 67.1 | 74.7  | 82.9 | 82.9 |
->>>>
->>>> These results are extremely strange, unless you are running with the
->>>> device write cache disabled ? If you have the device write cache ena=
-bled,
->>>> the problem you mention above would be most likely completely invisi=
-ble,
->>>> which I guess is why nobody really noticed any issue until now.
->>>>
->>>> Similarly, with reads, the device side read-ahead may hide the probl=
-em,
->>>> albeit that depends on how "intelligent" the drive is at identifying
->>>> sequential accesses.
->>>>
->>>>>>
->>>>>> It can be seen that 1280k io is already close to upper limit, and =
-it'll
->>>>>> be hard to see differences with the default value, thus I set
->>>>>> 'max_sectors_kb' to 128 in the following test.
->>>>>>
->>>>>> Test cmd:
->>>>>>            fio \
->>>>>>            -filename=3D/dev/$dev \
->>>>>>            -name=3Dtest \
->>>>>>            -ioengine=3Dpsync \
->>>>>>            -allow_mounted_write=3D0 \
->>>>>>            -group_reporting \
->>>>>>            -direct=3D1 \
->>>>>>            -offset_increment=3D1g \
->>>>>>            -rw=3Drandwrite \
->>>>>>            -bs=3D1024k \
->>>>>>            -numjobs=3D{1,2,4,8,16,32,64,128,256,512} \
->>>>>>            -runtime=3D110 \
->>>>>>            -ramp_time=3D10
->>>>>>
->>>>>> Test result: MiB/s
->>>>>>
->>>>>> | numjobs | v5.18-rc1 | v5.18-rc1-patched |
->>>>>> | ------- | --------- | ----------------- |
->>>>>> | 1       | 67.7      | 67.7              |
->>>>>> | 2       | 67.7      | 67.7              |
->>>>>> | 4       | 67.7      | 67.7              |
->>>>>> | 8       | 67.7      | 67.7              |
->>>>>> | 16      | 64.8      | 65.6              |
->>>>>> | 32      | 59.8      | 63.8              |
->>>>>> | 64      | 54.9      | 59.4              |
->>>>>> | 128     | 49        | 56.9              |
->>>>>> | 256     | 37.7      | 58.3              |
->>>>>> | 512     | 31.8      | 57.9              |
->>>>
->>>> Device write cache disabled ?
->>>>
->>>> Also, what is the max QD of this disk ?
->>>>
->>>> E.g., if it is SATA, it is 32, so you will only get at most 64 sched=
-uler
->>>> tags. So for any of your tests with more than 64 threads, many of th=
-e
->>>> threads will be waiting for a scheduler tag for the BIO before the
->>>> bio_split problem you explain triggers. Given that the numbers you s=
-how
->>>> are the same for before-after patch with a number of threads <=3D 64=
-, I am
->>>> tempted to think that the problem is not really BIO splitting...
->>>>
->>>> What about random read workloads ? What kind of results do you see ?
->>>
->>> Hi,
->>>
->>> Sorry about the misleading of this test case.
->>>
->>> This testcase is high concurrency huge randwrite, it's just for the
->>> problem that split bios won't be issued continuously, which is the
->>> root cause of the performance degradation as the numjobs increases.
->>>
->>> queue_depth is 32, and numjobs is 64, thus when numjobs is not greate=
-r
->>> than 8, performance is fine, because the ratio of sequential io shoul=
-d
->>> be 7/8. However, as numjobs increases, performance is worse because
->>> the ratio is lower. For example, when numjobs is 512, the ratio of
->>> sequential io is about 20%.
->>
->> But with 512 jobs, you will get only 64 jobs only with IOs in the queu=
-e.
->> All other jobs will be waiting for a scheduler tag before being able t=
-o
->> issue their large BIO. No ?
->=20
-> Hi,
->=20
-> It's right.
->=20
-> In fact, after this patchset, since each large io will need total 8
-> tags, only 8 jobs can be in the queue while others are waiting for
-> scheduler tag.
->=20
->>
->> It sounds like the set of scheduler tags should be a bit more elastic:
->> always allow BIOs from a split of a large BIO to be submitted (that is=
- to
->> get a scheduler tag) even if that causes a temporary excess of the num=
-ber
->> of requests beyond the default number of scheduler tags. Doing so, all
->> fragments of a large BIOs can be queued immediately. From there, if th=
-e
->> scheduler operates correctly, all the requests from the large BIOs spl=
-it
->> would be issued in sequence to the device.
->=20
-> This solution sounds feasible in theory, however, I'm not sure yet how
-> to implement that 'temporary excess'.
+At many places in kernel, It is necessary to convert sysfs input
+to corrosponding bool value e.g. "false" or "0" need to be converted
+to bool false, "true" or "1" need to be converted to bool true,
+places where such conversion is needed currently check the input
+string manually. Also, such conversions compare sysfs input using
+strncmp functions so even if certain number of character match in the
+beginning, they assume the string as valid bool, which is not the
+right semantic e.g. false is bool but falseX is not.
 
-It should not be too hard.
+Introduce new string helper function to convert sysfs input to
+corrosponding bool value. Modify existing such conversions to use
+this new function.
 
-By the way, did you check that doing something like:
+logs,
+$ cat /sys/kernel/mm/numa/demotion_enabled
+false
+$ echo true > /sys/kernel/mm/numa/demotion_enabled
+$ cat demotion_enabled
+true
+$ echo truex > /sys/kernel/mm/numa/demotion_enabled
+-bash: echo: write error: Invalid argument
+$ echo 10 > /sys/kernel/mm/numa/demotion_enabled
+-bash: echo: write error: Invalid argument
+$ echo false > /sys/kernel/mm/numa/demotion_enabled
+$ cat demotion_enabled
+false
+$ echo falseabc > /sys/kernel/mm/numa/demotion_enabled
+-bash: echo: write error: Invalid argument
+$ echo 1 > /sys/kernel/mm/numa/demotion_enabled
+$ cat demotion_enabled
+true
+$ echo 0 > /sys/kernel/mm/numa/demotion_enabled
+$ cat demotion_enabled
+false
 
-echo 2048 > /sys/block/sdX/queue/nr_requests
+This patch doesn't have any functionality change.
 
-improves performance for your high number of jobs test case ?
+Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
+---
+ include/linux/string.h |  1 +
+ lib/string_helpers.c   | 20 ++++++++++++++++++++
+ mm/migrate.c           |  7 ++-----
+ mm/swap_state.c        |  6 +-----
+ 4 files changed, 24 insertions(+), 10 deletions(-)
 
->=20
-> Thanks,
-> Kuai
->>
->>
->>>
->>> patch 6-8 will let split bios still be issued continuously under high
->>> pressure.
->>>
->>> Thanks,
->>> Kuai
->>>
->>
->>
+diff --git a/include/linux/string.h b/include/linux/string.h
+index b6572aeca2f5..3c00991b456a 100644
+--- a/include/linux/string.h
++++ b/include/linux/string.h
+@@ -170,6 +170,7 @@ static inline void memcpy_flushcache(void *dst, const void *src, size_t cnt)
+ 
+ void *memchr_inv(const void *s, int c, size_t n);
+ char *strreplace(char *s, char old, char new);
++int sysfs_strbool(const char *s, bool *output);
+ 
+ extern void kfree_const(const void *x);
+ 
+diff --git a/lib/string_helpers.c b/lib/string_helpers.c
+index 4f877e9551d5..cd3580b7ea06 100644
+--- a/lib/string_helpers.c
++++ b/lib/string_helpers.c
+@@ -967,6 +967,26 @@ void memcpy_and_pad(void *dest, size_t dest_len, const void *src, size_t count,
+ }
+ EXPORT_SYMBOL(memcpy_and_pad);
+ 
++/**
++ * sysfs_strbool - Get bool value corrosponding to string
++ * @s: The string to operate on.
++ * @output: Pointer to fill resulting bool value
++ *
++ * Returns 1 if string represents bool value, 0 otherwise
++ */
++int sysfs_strbool(const char *s, bool *output)
++{
++	if (sysfs_streq(s, "1") || sysfs_streq(s, "true"))
++		*output = true;
++	else if (sysfs_streq(s, "0") || sysfs_streq(s, "false"))
++		*output = false;
++	else
++		return 0;
++
++	return 1;
++}
++EXPORT_SYMBOL(sysfs_strbool);
++
+ #ifdef CONFIG_FORTIFY_SOURCE
+ /* These are placeholders for fortify compile-time warnings. */
+ void __read_overflow2_field(size_t avail, size_t wanted) { }
+diff --git a/mm/migrate.c b/mm/migrate.c
+index 6c31ee1e1c9b..a5b105144016 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -49,6 +49,7 @@
+ #include <linux/oom.h>
+ #include <linux/memory.h>
+ #include <linux/random.h>
++#include <linux/string.h>
+ #include <linux/sched/sysctl.h>
+ 
+ #include <asm/tlbflush.h>
+@@ -2523,11 +2524,7 @@ static ssize_t numa_demotion_enabled_store(struct kobject *kobj,
+ 					   struct kobj_attribute *attr,
+ 					   const char *buf, size_t count)
+ {
+-	if (!strncmp(buf, "true", 4) || !strncmp(buf, "1", 1))
+-		numa_demotion_enabled = true;
+-	else if (!strncmp(buf, "false", 5) || !strncmp(buf, "0", 1))
+-		numa_demotion_enabled = false;
+-	else
++	if (!sysfs_strbool(buf, &numa_demotion_enabled))
+ 		return -EINVAL;
+ 
+ 	return count;
+diff --git a/mm/swap_state.c b/mm/swap_state.c
+index 013856004825..4f439845d176 100644
+--- a/mm/swap_state.c
++++ b/mm/swap_state.c
+@@ -865,11 +865,7 @@ static ssize_t vma_ra_enabled_store(struct kobject *kobj,
+ 				      struct kobj_attribute *attr,
+ 				      const char *buf, size_t count)
+ {
+-	if (!strncmp(buf, "true", 4) || !strncmp(buf, "1", 1))
+-		enable_vma_readahead = true;
+-	else if (!strncmp(buf, "false", 5) || !strncmp(buf, "0", 1))
+-		enable_vma_readahead = false;
+-	else
++	if (!sysfs_strbool(buf, &enable_vma_readahead))
+ 		return -EINVAL;
+ 
+ 	return count;
+-- 
+2.35.1
 
-
---=20
-Damien Le Moal
-Western Digital Research

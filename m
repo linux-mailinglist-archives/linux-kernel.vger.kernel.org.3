@@ -2,136 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D1A50DACE
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:02:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA7C50DAD6
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:03:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234462AbiDYIE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 04:04:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57042 "EHLO
+        id S234103AbiDYIFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 04:05:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231858AbiDYIEd (ORCPT
+        with ESMTP id S236360AbiDYIF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 04:04:33 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E7B1582E
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:01:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650873689; x=1682409689;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/QcU6MWYTPWZ4Kj6gQUq7qXQoT/0fHP0aO/R9fTkgkM=;
-  b=f2Kovs0+xiMAdXoeeTg2xYqIJujz6xbcIBg33eCw9Gy0WQaDVZDAcjk+
-   j/9E7T2MBRwAC+NfLilbCB8N12p0BDnp6Doksbpv8iGpK+6b+SF8jebRd
-   BPqdPSaUGZeRnhrPt2RaN9HeNAc1i/9LcZEpz8sSw2TZPAqYqZZn4TJ+d
-   CqWiPiFbsZtiDou/4ixfH1HmnMf7uTGyV1+FhPxIzJ0MIDjI5PYQhariH
-   cfgvtkEMVclBSJbeL0h2+E6LHuEwKJnhYy+i12oWGnCHjY9D64QFMkxfc
-   PmJC/Byk6JZwU0KlDVIfKuN1Zv1Lh3FTT9qbLsXfDS1lrXTYMSc/CD/kc
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="351623413"
-X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
-   d="scan'208";a="351623413"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 01:01:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
-   d="scan'208";a="579155418"
-Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.138])
-  by orsmga008.jf.intel.com with ESMTP; 25 Apr 2022 01:01:26 -0700
-Date:   Mon, 25 Apr 2022 16:01:26 +0800
-From:   Feng Tang <feng.tang@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
-        Denys Vlasenko <dvlasenk@redhat.com>
-Subject: Re: [PATCH v2] x86, vmlinux.lds: Add debug option to force all data
- sections aligned
-Message-ID: <20220425080126.GA33905@shbuild999.sh.intel.com>
-References: <20220424122533.27590-1-feng.tang@intel.com>
- <20220425075335.GZ2731@worktop.programming.kicks-ass.net>
+        Mon, 25 Apr 2022 04:05:27 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480416422
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:02:23 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id CD0361F37D;
+        Mon, 25 Apr 2022 08:02:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1650873741; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=w5Tk4oDFEanymODdq96eWOFTX3QvPF5TUrMk/o4N45Q=;
+        b=g4nHKPDAkhLvkjXM4pdWMiQsK2suLUPfdXpvl1Jw8oRtRyenhbQi9rKtMw/OS2WcEi1t9g
+        tdD5KZgYKVTUe04zCpouJctpYK1eTyt5zsZiTRGaNSCX9j8ftW/dqVjV8oiuO+hwlghjci
+        lO+BZACO1z9d9o07ZAcoaDL7sMfrIhA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1650873741;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=w5Tk4oDFEanymODdq96eWOFTX3QvPF5TUrMk/o4N45Q=;
+        b=goixNxvVmoPUYuf6KSnxv9IRh8uXsBDfEv6m8OKISwxdwycx2D3cCTgwhD97aie3pkZyBn
+        WgSMaYAdq/RFzUBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A295813AED;
+        Mon, 25 Apr 2022 08:02:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ++jLJo1VZmKbcAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 25 Apr 2022 08:02:21 +0000
+Message-ID: <586da154-5494-aaab-aa07-30f77daebbc2@suse.de>
+Date:   Mon, 25 Apr 2022 10:02:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220425075335.GZ2731@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v3 1/5] firmware: sysfb: Make sysfb_create_simplefb()
+ return a pdev pointer
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Miaoqian Lin <linmq006@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        dri-devel@lists.freedesktop.org, Johan Hovold <johan@kernel.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Borislav Petkov <bp@suse.de>
+References: <20220420085303.100654-1-javierm@redhat.com>
+ <20220420085303.100654-2-javierm@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220420085303.100654-2-javierm@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------p9b3lgGX5M0ZNMnk3qxrzvXd"
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------p9b3lgGX5M0ZNMnk3qxrzvXd
+Content-Type: multipart/mixed; boundary="------------cvHUVJ0gd3HRdWMecaNGN0D2";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ linux-kernel@vger.kernel.org
+Cc: Miaoqian Lin <linmq006@gmail.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ dri-devel@lists.freedesktop.org, Johan Hovold <johan@kernel.org>,
+ Daniel Vetter <daniel.vetter@ffwll.ch>, Borislav Petkov <bp@suse.de>
+Message-ID: <586da154-5494-aaab-aa07-30f77daebbc2@suse.de>
+Subject: Re: [PATCH v3 1/5] firmware: sysfb: Make sysfb_create_simplefb()
+ return a pdev pointer
+References: <20220420085303.100654-1-javierm@redhat.com>
+ <20220420085303.100654-2-javierm@redhat.com>
+In-Reply-To: <20220420085303.100654-2-javierm@redhat.com>
 
-On Mon, Apr 25, 2022 at 09:53:35AM +0200, Peter Zijlstra wrote:
-> On Sun, Apr 24, 2022 at 08:25:33PM +0800, Feng Tang wrote:
-> 
-> > diff --git a/arch/x86/Kconfig.debug b/arch/x86/Kconfig.debug
-> > index d3a6f74a94bd..7b8cfe9717f2 100644
-> > --- a/arch/x86/Kconfig.debug
-> > +++ b/arch/x86/Kconfig.debug
-> > @@ -225,6 +225,19 @@ config PUNIT_ATOM_DEBUG
-> >  	  The current power state can be read from
-> >  	  /sys/kernel/debug/punit_atom/dev_power_state
-> > 
-> > +config DEBUG_FORCE_DATA_SECTION_ALIGNED
-> > +	bool "Force all data sections to be THREAD_SIZE aligned"
-> 
-> s/THREAD_SIZE/PAGE_SIZE/ as that seems to be what the actual patch does.
+--------------cvHUVJ0gd3HRdWMecaNGN0D2
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Thanks for the catch! It was changed from v1 to v2, I should reviewed 
-these texts more carefully, and there is another similar typo in the
-commit log.
+DQoNCkFtIDIwLjA0LjIyIHVtIDEwOjUyIHNjaHJpZWIgSmF2aWVyIE1hcnRpbmV6IENhbmls
+bGFzOg0KPiBUaGlzIGZ1bmN0aW9uIGp1c3QgcmV0dXJuZWQgMCBvbiBzdWNjZXNzIG9yIGFu
+IGVycm5vIGNvZGUgb24gZXJyb3IsIGJ1dCBpdA0KPiBjb3VsZCBiZSB1c2VmdWwgZm9yIHN5
+c2ZiX2luaXQoKSBjYWxsZXJzIHRvIGhhdmUgYSBwb2ludGVyIHRvIHRoZSBkZXZpY2UuDQo+
+IA0KPiBTaWduZWQtb2ZmLWJ5OiBKYXZpZXIgTWFydGluZXogQ2FuaWxsYXMgPGphdmllcm1A
+cmVkaGF0LmNvbT4NCj4gUmV2aWV3ZWQtYnk6IERhbmllbCBWZXR0ZXIgPGRhbmllbC52ZXR0
+ZXJAZmZ3bGwuY2g+DQoNClJldmlld2VkLWJ5OiBUaG9tYXMgWmltbWVybWFubiA8dHppbW1l
+cm1hbm5Ac3VzZS5kZT4NCg0KPiAtLS0NCj4gDQo+IChubyBjaGFuZ2VzIHNpbmNlIHYyKQ0K
+PiANCj4gQ2hhbmdlcyBpbiB2MjoNCj4gLSBSZWJhc2Ugb24gdG9wIG9mIGxhdGVzdCBkcm0t
+bWlzYy1uZXh0IGFuZCBmaXggY29uZmxpY3RzIChEYW5pZWwgVmV0dGVyKS4NCj4gDQo+ICAg
+ZHJpdmVycy9maXJtd2FyZS9zeXNmYi5jICAgICAgICAgIHwgIDQgKystLQ0KPiAgIGRyaXZl
+cnMvZmlybXdhcmUvc3lzZmJfc2ltcGxlZmIuYyB8IDE2ICsrKysrKysrLS0tLS0tLS0NCj4g
+ICBpbmNsdWRlL2xpbnV4L3N5c2ZiLmggICAgICAgICAgICAgfCAxMCArKysrKy0tLS0tDQo+
+ICAgMyBmaWxlcyBjaGFuZ2VkLCAxNSBpbnNlcnRpb25zKCspLCAxNSBkZWxldGlvbnMoLSkN
+Cj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2Zpcm13YXJlL3N5c2ZiLmMgYi9kcml2ZXJz
+L2Zpcm13YXJlL3N5c2ZiLmMNCj4gaW5kZXggMmJmYmIwNWY3ZDg5Li5iMDMyZjQwYTkyZGUg
+MTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZmlybXdhcmUvc3lzZmIuYw0KPiArKysgYi9kcml2
+ZXJzL2Zpcm13YXJlL3N5c2ZiLmMNCj4gQEAgLTQ2LDggKzQ2LDggQEAgc3RhdGljIF9faW5p
+dCBpbnQgc3lzZmJfaW5pdCh2b2lkKQ0KPiAgIAkvKiB0cnkgdG8gY3JlYXRlIGEgc2ltcGxl
+LWZyYW1lYnVmZmVyIGRldmljZSAqLw0KPiAgIAljb21wYXRpYmxlID0gc3lzZmJfcGFyc2Vf
+bW9kZShzaSwgJm1vZGUpOw0KPiAgIAlpZiAoY29tcGF0aWJsZSkgew0KPiAtCQlyZXQgPSBz
+eXNmYl9jcmVhdGVfc2ltcGxlZmIoc2ksICZtb2RlKTsNCj4gLQkJaWYgKCFyZXQpDQo+ICsJ
+CXBkID0gc3lzZmJfY3JlYXRlX3NpbXBsZWZiKHNpLCAmbW9kZSk7DQo+ICsJCWlmICghSVNf
+RVJSKHBkKSkNCj4gICAJCQlyZXR1cm4gMDsNCj4gICAJfQ0KPiAgIA0KPiBkaWZmIC0tZ2l0
+IGEvZHJpdmVycy9maXJtd2FyZS9zeXNmYl9zaW1wbGVmYi5jIGIvZHJpdmVycy9maXJtd2Fy
+ZS9zeXNmYl9zaW1wbGVmYi5jDQo+IGluZGV4IGJkYTg3MTJiZmQ4Yy4uYTM1M2UyN2Y4M2Y1
+IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2Zpcm13YXJlL3N5c2ZiX3NpbXBsZWZiLmMNCj4g
+KysrIGIvZHJpdmVycy9maXJtd2FyZS9zeXNmYl9zaW1wbGVmYi5jDQo+IEBAIC01Nyw4ICs1
+Nyw4IEBAIF9faW5pdCBib29sIHN5c2ZiX3BhcnNlX21vZGUoY29uc3Qgc3RydWN0IHNjcmVl
+bl9pbmZvICpzaSwNCj4gICAJcmV0dXJuIGZhbHNlOw0KPiAgIH0NCj4gICANCj4gLV9faW5p
+dCBpbnQgc3lzZmJfY3JlYXRlX3NpbXBsZWZiKGNvbnN0IHN0cnVjdCBzY3JlZW5faW5mbyAq
+c2ksDQo+IC0JCQkJIGNvbnN0IHN0cnVjdCBzaW1wbGVmYl9wbGF0Zm9ybV9kYXRhICptb2Rl
+KQ0KPiArX19pbml0IHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnN5c2ZiX2NyZWF0ZV9zaW1w
+bGVmYihjb25zdCBzdHJ1Y3Qgc2NyZWVuX2luZm8gKnNpLA0KPiArCQkJCQkJICAgICBjb25z
+dCBzdHJ1Y3Qgc2ltcGxlZmJfcGxhdGZvcm1fZGF0YSAqbW9kZSkNCj4gICB7DQo+ICAgCXN0
+cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkOw0KPiAgIAlzdHJ1Y3QgcmVzb3VyY2UgcmVzOw0K
+PiBAQCAtNzYsNyArNzYsNyBAQCBfX2luaXQgaW50IHN5c2ZiX2NyZWF0ZV9zaW1wbGVmYihj
+b25zdCBzdHJ1Y3Qgc2NyZWVuX2luZm8gKnNpLA0KPiAgIAkJYmFzZSB8PSAodTY0KXNpLT5l
+eHRfbGZiX2Jhc2UgPDwgMzI7DQo+ICAgCWlmICghYmFzZSB8fCAodTY0KShyZXNvdXJjZV9z
+aXplX3QpYmFzZSAhPSBiYXNlKSB7DQo+ICAgCQlwcmludGsoS0VSTl9ERUJVRyAic3lzZmI6
+IGluYWNjZXNzaWJsZSBWUkFNIGJhc2VcbiIpOw0KPiAtCQlyZXR1cm4gLUVJTlZBTDsNCj4g
+KwkJcmV0dXJuIEVSUl9QVFIoLUVJTlZBTCk7DQo+ICAgCX0NCj4gICANCj4gICAJLyoNCj4g
+QEAgLTkzLDcgKzkzLDcgQEAgX19pbml0IGludCBzeXNmYl9jcmVhdGVfc2ltcGxlZmIoY29u
+c3Qgc3RydWN0IHNjcmVlbl9pbmZvICpzaSwNCj4gICAJbGVuZ3RoID0gbW9kZS0+aGVpZ2h0
+ICogbW9kZS0+c3RyaWRlOw0KPiAgIAlpZiAobGVuZ3RoID4gc2l6ZSkgew0KPiAgIAkJcHJp
+bnRrKEtFUk5fV0FSTklORyAic3lzZmI6IFZSQU0gc21hbGxlciB0aGFuIGFkdmVydGlzZWRc
+biIpOw0KPiAtCQlyZXR1cm4gLUVJTlZBTDsNCj4gKwkJcmV0dXJuIEVSUl9QVFIoLUVJTlZB
+TCk7DQo+ICAgCX0NCj4gICAJbGVuZ3RoID0gUEFHRV9BTElHTihsZW5ndGgpOw0KPiAgIA0K
+PiBAQCAtMTA0LDExICsxMDQsMTEgQEAgX19pbml0IGludCBzeXNmYl9jcmVhdGVfc2ltcGxl
+ZmIoY29uc3Qgc3RydWN0IHNjcmVlbl9pbmZvICpzaSwNCj4gICAJcmVzLnN0YXJ0ID0gYmFz
+ZTsNCj4gICAJcmVzLmVuZCA9IHJlcy5zdGFydCArIGxlbmd0aCAtIDE7DQo+ICAgCWlmIChy
+ZXMuZW5kIDw9IHJlcy5zdGFydCkNCj4gLQkJcmV0dXJuIC1FSU5WQUw7DQo+ICsJCXJldHVy
+biBFUlJfUFRSKC1FSU5WQUwpOw0KPiAgIA0KPiAgIAlwZCA9IHBsYXRmb3JtX2RldmljZV9h
+bGxvYygic2ltcGxlLWZyYW1lYnVmZmVyIiwgMCk7DQo+ICAgCWlmICghcGQpDQo+IC0JCXJl
+dHVybiAtRU5PTUVNOw0KPiArCQlyZXR1cm4gRVJSX1BUUigtRU5PTUVNKTsNCj4gICANCj4g
+ICAJc3lzZmJfYXBwbHlfZWZpX3F1aXJrcyhwZCk7DQo+ICAgDQo+IEBAIC0xMjQsMTAgKzEy
+NCwxMCBAQCBfX2luaXQgaW50IHN5c2ZiX2NyZWF0ZV9zaW1wbGVmYihjb25zdCBzdHJ1Y3Qg
+c2NyZWVuX2luZm8gKnNpLA0KPiAgIAlpZiAocmV0KQ0KPiAgIAkJZ290byBlcnJfcHV0X2Rl
+dmljZTsNCj4gICANCj4gLQlyZXR1cm4gMDsNCj4gKwlyZXR1cm4gcGQ7DQo+ICAgDQo+ICAg
+ZXJyX3B1dF9kZXZpY2U6DQo+ICAgCXBsYXRmb3JtX2RldmljZV9wdXQocGQpOw0KPiAgIA0K
+PiAtCXJldHVybiByZXQ7DQo+ICsJcmV0dXJuIEVSUl9QVFIocmV0KTsNCj4gICB9DQo+IGRp
+ZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L3N5c2ZiLmggYi9pbmNsdWRlL2xpbnV4L3N5c2Zi
+LmgNCj4gaW5kZXggYjBkY2ZhMjZkMDdiLi43MDgxNTJlOTAzN2IgMTAwNjQ0DQo+IC0tLSBh
+L2luY2x1ZGUvbGludXgvc3lzZmIuaA0KPiArKysgYi9pbmNsdWRlL2xpbnV4L3N5c2ZiLmgN
+Cj4gQEAgLTcyLDggKzcyLDggQEAgc3RhdGljIGlubGluZSB2b2lkIHN5c2ZiX2FwcGx5X2Vm
+aV9xdWlya3Moc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGQpDQo+ICAgDQo+ICAgYm9vbCBz
+eXNmYl9wYXJzZV9tb2RlKGNvbnN0IHN0cnVjdCBzY3JlZW5faW5mbyAqc2ksDQo+ICAgCQkg
+ICAgICBzdHJ1Y3Qgc2ltcGxlZmJfcGxhdGZvcm1fZGF0YSAqbW9kZSk7DQo+IC1pbnQgc3lz
+ZmJfY3JlYXRlX3NpbXBsZWZiKGNvbnN0IHN0cnVjdCBzY3JlZW5faW5mbyAqc2ksDQo+IC0J
+CQkgIGNvbnN0IHN0cnVjdCBzaW1wbGVmYl9wbGF0Zm9ybV9kYXRhICptb2RlKTsNCj4gK3N0
+cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnN5c2ZiX2NyZWF0ZV9zaW1wbGVmYihjb25zdCBzdHJ1
+Y3Qgc2NyZWVuX2luZm8gKnNpLA0KPiArCQkJCQkgICAgICBjb25zdCBzdHJ1Y3Qgc2ltcGxl
+ZmJfcGxhdGZvcm1fZGF0YSAqbW9kZSk7DQo+ICAgDQo+ICAgI2Vsc2UgLyogQ09ORklHX1NZ
+U0ZCX1NJTVBMRSAqLw0KPiAgIA0KPiBAQCAtODMsMTAgKzgzLDEwIEBAIHN0YXRpYyBpbmxp
+bmUgYm9vbCBzeXNmYl9wYXJzZV9tb2RlKGNvbnN0IHN0cnVjdCBzY3JlZW5faW5mbyAqc2ks
+DQo+ICAgCXJldHVybiBmYWxzZTsNCj4gICB9DQo+ICAgDQo+IC1zdGF0aWMgaW5saW5lIGlu
+dCBzeXNmYl9jcmVhdGVfc2ltcGxlZmIoY29uc3Qgc3RydWN0IHNjcmVlbl9pbmZvICpzaSwN
+Cj4gLQkJCQkJIGNvbnN0IHN0cnVjdCBzaW1wbGVmYl9wbGF0Zm9ybV9kYXRhICptb2RlKQ0K
+PiArc3RhdGljIGlubGluZSBzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpzeXNmYl9jcmVhdGVf
+c2ltcGxlZmIoY29uc3Qgc3RydWN0IHNjcmVlbl9pbmZvICpzaSwNCj4gKwkJCQkJCQkgICAg
+Y29uc3Qgc3RydWN0IHNpbXBsZWZiX3BsYXRmb3JtX2RhdGEgKm1vZGUpDQo+ICAgew0KPiAt
+CXJldHVybiAtRUlOVkFMOw0KPiArCXJldHVybiBFUlJfUFRSKC1FSU5WQUwpOw0KPiAgIH0N
+Cj4gICANCj4gICAjZW5kaWYgLyogQ09ORklHX1NZU0ZCX1NJTVBMRSAqLw0KDQotLSANClRo
+b21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3
+YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJu
+YmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bD
+vGhyZXI6IEl2byBUb3Rldg0K
 
-> > +	depends on EXPERT && !DYNAMIC_DEBUG
-> > +	help
-> > +	  There are cases that a commit from one kernel domain changes
-> > +	  data sections' alignment of other domains, as they are all
-> > +	  linked together compactly, and cause magic performance bump
-> > +	  (regression or improvement), which is hard to debug. Enable
-> > +	  this option will help to verify if the bump is caused by
-> > +	  data alignment changes.
-> > +
-> > +	  It is mainly for debug and performance tuning use.
-> > +
-> >  choice
-> >  	prompt "Choose kernel unwinder"
-> >  	default UNWINDER_ORC if X86_64
-> > diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
-> > index 7fda7f27e762..6add703de45f 100644
-> > --- a/arch/x86/kernel/vmlinux.lds.S
-> > +++ b/arch/x86/kernel/vmlinux.lds.S
-> > @@ -155,7 +155,17 @@ SECTIONS
-> >  	X86_ALIGN_RODATA_END
-> > 
-> >  	/* Data */
-> > -	.data : AT(ADDR(.data) - LOAD_OFFSET) {
-> > +	.data : AT(ADDR(.data) - LOAD_OFFSET)
-> > +#ifdef CONFIG_DEBUG_FORCE_DATA_SECTION_ALIGNED
-> > +	/*
-> > +	 * In theroy, THREAD_SIZE as the biggest alignment of below sections
-> 
-> I think the more common spelling is: 'theory' :-)
+--------------cvHUVJ0gd3HRdWMecaNGN0D2--
 
-Yes, will change in the next verson.
+--------------p9b3lgGX5M0ZNMnk3qxrzvXd
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-Thanks,
-Feng
+-----BEGIN PGP SIGNATURE-----
 
-> > +	 * should be picked, but since upper 'X86_ALIGN_RODATA_END' can
-> > +	 * ganrantees the alignment of 'INIT_TASK_DATA', PAGE_SIZE is picked
-> > +	 * instead to reduce size of kernel binary
-> > +	 */
-> > +	SUBALIGN(PAGE_SIZE)
-> > +#endif
-> > +	{
-> >  		/* Start of data section */
-> >  		_sdata = .;
-> > 
-> > --
-> > 2.27.0
-> > 
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJmVYwFAwAAAAAACgkQlh/E3EQov+Cc
+/w//ZfRJyzKtRKxpw3PkyBZ75t5j3UTedgePeW78iL2lRBza5KzCVrAJgZ0rTtg4arZdlSekw3Um
+HhjTo4WOiCkT/G2Jnf8XuDekLbouskdDq16Vunm5/dzJBMg2DpcThMSHHO0K8fDGq/7dtDw/TA4u
+hmuB/Xa5skFPk/b4LVk9djrwbsYY6E6BPXsrR0qfhId5IfnBjOzOnwva4zq9D8ZpqMnKhoC4sQkI
+8F7uZRErf5EntMUWztlEwT1zH4KP6F7Cv6B7m7lVUVsZdqW1tFlPcguoHJ5GrmpUa8Cnt1rRAg2X
+/hOOsqrjwIP3bZRySh7/WSpEWs8Hpi7pC5H9TjWo9+oxoeUXGwWxbeD1A2EBJ/F1s6HDuVqULGds
+vARxU0Y2zWvoeHNtUAF3ayu0ciuyCW1mIyjCmt/GtGbd5CupEOT6qwMhxsHdcZ5IbZp1RMkK9DFc
+2n4AqzpSlQOUT4H72bPqFO0ba8AVjBS+dFReqIUmGa4WlaEoQfMxpu0MWZ2IAxz2GNCkQoMXYZv4
+E+hM14LBnLNxMzu0lgn8HG73xneVZSQOI7SdrJa6lvfaclb/UJaczppOjvncWwn3Vkt5VAqpSZdb
+kkmeIGIgqF7FB5Ph6ulrpviFkxkYGpic+Nv7dATHtL+JNnctfZu4E055+VmwuLVmAD3vJWPArqHD
+kQQ=
+=L3B5
+-----END PGP SIGNATURE-----
+
+--------------p9b3lgGX5M0ZNMnk3qxrzvXd--

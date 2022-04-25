@@ -2,130 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EFCA50E5E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:30:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6486C50E5E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243452AbiDYQdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 12:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33184 "EHLO
+        id S243439AbiDYQfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 12:35:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238415AbiDYQdk (ORCPT
+        with ESMTP id S238415AbiDYQfm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 12:33:40 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092051FA58;
-        Mon, 25 Apr 2022 09:30:35 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23PFg1b3004817;
-        Mon, 25 Apr 2022 16:30:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=OK6ExQBuUuS94Nk7iOz+d7Y/2oyL+hly7Zu/AJFdhUk=;
- b=AhKi63fqXYMJ+1F3Dpo9FcnexxMMV7aOLeQX8wOIpgN+ZGLvT1MW/Rj1nAdtPYBStSzO
- 5616BWjKi0zdoNyxjg5ODebHcPkdvWInGLeuF9+9JND0cWhuuAq1h1GtkyOmavwiOO7O
- qIZF503p+L3bT9lkmXEdyrdnFE/AaSc82mM6UZNOQBW49UCt9bsfVsiXFNtV7N0IqYwF
- gM33pU32bvmM9ODMlxmh0DzVtdmpGtoqzY0TUa2OqX/iGCCeNg8poxj16qrpd+GttTMR
- JmdIb3HWvbNYzOESR/qoMNCJeYPysY9h3fWp4tou4xM1BoIZNG3kOIuxb8QhnpHKrcLY Bg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fnxgy953c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Apr 2022 16:30:34 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23PGSGno028811;
-        Mon, 25 Apr 2022 16:30:33 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fnxgy952h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Apr 2022 16:30:33 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23PGIbLQ014453;
-        Mon, 25 Apr 2022 16:30:31 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3fm8qj2pph-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Apr 2022 16:30:31 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23PGURtv48824670
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 25 Apr 2022 16:30:27 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C1D9BAE051;
-        Mon, 25 Apr 2022 16:30:27 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 200C0AE045;
-        Mon, 25 Apr 2022 16:30:27 +0000 (GMT)
-Received: from [9.171.39.215] (unknown [9.171.39.215])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 25 Apr 2022 16:30:27 +0000 (GMT)
-Message-ID: <8095d0de-dd99-0388-b1d4-e59b01dc4be0@linux.ibm.com>
-Date:   Mon, 25 Apr 2022 18:30:26 +0200
+        Mon, 25 Apr 2022 12:35:42 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3544DB2E5
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 09:32:37 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id h12so23968719plf.12
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 09:32:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=SU4snmKXWtmqMgmf+YL3GPUxwYJ/zeZEVVxVgsxU6BE=;
+        b=DCphld+PNkslqfr0tqpWckkYRCBJBfYn1HxPjNMV1cHZDuajJJl4THSXprXdfBDtQE
+         HcKfKXDcbhVLFrF3RSseNXymTVK91tNXvqB0gc3m9b8oVl4g08XpB4HIC9h1dRwf2GZ8
+         8QzModH5f1x4WvTDtAJJpax3uYDfRR/l9aTpGzyG+J01RDwOyCAmM+RkuezhIhcwnuvi
+         RqnR+2vNVNn+Ksxxw3eff7sW8O/IXbjSuKfSoYrTzNxWPcYAnwzpPxRLVhewJ4KEA1HW
+         5dgPgSQUf5VZMxPrkOtFMYY0774IXB1uwyCby7sJbVHS64x+Iya99TRZdI2x/vXvsufe
+         +wXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=SU4snmKXWtmqMgmf+YL3GPUxwYJ/zeZEVVxVgsxU6BE=;
+        b=CWVfUPDHbdiM9dksKea051x1jOde/KLefmDOjN3lUg8r782QeinZqloGJ8xHXyb/Zg
+         2MIV7BuYSCMau8i/bccNqeyqrqCW2FlgCOgJMC5XAV9HAu5D6D/A8Y6ypBgrFpIwYV0V
+         jR6RV7TbKJ6hyTBL4sp3vpqelxMGHEeFW7US9Cchfskt5XN3SofWiz6bRrx8a4vcDE/8
+         obwItJ5Irfmjyp5pGn4oYmn/VJ/vFjODJYfek2T9UJFjmqeWph7/CWiVQr1h7Ad3R6wn
+         oHyyoyCkobTiHc4HOpu2O+i3Iss/KFxk/WLCTelMESmX2YPN9uWGxT5qknafNVbjv0H7
+         h9Iw==
+X-Gm-Message-State: AOAM533pEBjPfK6mNqR3AxWtKSYMbnYu9E5MFgaucQKFdcOlSzC/NgE0
+        Xu13IHwtFb+PNCc+5ZHx2NPgaQ==
+X-Google-Smtp-Source: ABdhPJxDv9chIy+dHhAv0Uji/MbNlmLCS9A+a4nNPRo5jf8fX4zUUo491fyAtNCvtcFV4xzQ0BA2Fw==
+X-Received: by 2002:a17:902:b586:b0:159:684:c522 with SMTP id a6-20020a170902b58600b001590684c522mr18713198pls.39.1650904357139;
+        Mon, 25 Apr 2022 09:32:37 -0700 (PDT)
+Received: from hermes.local (204-195-112-199.wavecable.com. [204.195.112.199])
+        by smtp.gmail.com with ESMTPSA id x36-20020a056a000be400b0050a40b8290dsm11775416pfu.54.2022.04.25.09.32.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 09:32:36 -0700 (PDT)
+Date:   Mon, 25 Apr 2022 09:32:34 -0700
+From:   Stephen Hemminger <stephen@networkplumber.org>
+To:     Wells Lu <wellslutw@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, robh+dt@kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
+        pabeni@redhat.com, krzk+dt@kernel.org, roopa@nvidia.com,
+        andrew@lunn.ch, edumazet@google.com, wells.lu@sunplus.com
+Subject: Re: [PATCH net-next v9 2/2] net: ethernet: Add driver for Sunplus
+ SP7021
+Message-ID: <20220425093234.0ab232ff@hermes.local>
+In-Reply-To: <1650882640-7106-3-git-send-email-wellslutw@gmail.com>
+References: <1650882640-7106-1-git-send-email-wellslutw@gmail.com>
+        <1650882640-7106-3-git-send-email-wellslutw@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 0/2] Dirtying, failing memop: don't indicate
- suppression
-Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-References: <20220425100147.1755340-1-scgl@linux.ibm.com>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <20220425100147.1755340-1-scgl@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: j2-ToqVXNkjWhQQpXyEU8Wpr-6Y7rgmL
-X-Proofpoint-ORIG-GUID: 7TJi_9jCaUf-v_0adHwGjz37J-a1uNtl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-25_08,2022-04-25_03,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- lowpriorityscore=0 impostorscore=0 spamscore=0 mlxlogscore=959
- malwarescore=0 phishscore=0 priorityscore=1501 adultscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204250071
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 25.04.22 um 12:01 schrieb Janis Schoetterl-Glausch:
-> If a memop fails due to key checked protection, after already having
-> written to the guest, don't indicate suppression to the guest, as that
-> would imply that memory wasn't modified.
-> 
-> This could be considered a fix to the code introducing storage key
-> support, however this is a bug in KVM only if we emulate an
-> instructions writing to an operand spanning multiple pages, which I
-> don't believe we do.
-> 
+On Mon, 25 Apr 2022 18:30:40 +0800
+Wells Lu <wellslutw@gmail.com> wrote:
 
-Thanks applied. I think it makes sense for 5.18 nevertheless.
+> +
+> +int spl2sw_rx_poll(struct napi_struct *napi, int budget)
+> +{
+> +	struct spl2sw_common *comm = container_of(napi, struct spl2sw_common, rx_napi);
+> +	struct spl2sw_mac_desc *desc, *h_desc;
+> +	struct net_device_stats *stats;
+> +	struct sk_buff *skb, *new_skb;
+> +	struct spl2sw_skb_info *sinfo;
+> +	int budget_left = budget;
+> +	u32 rx_pos, pkg_len;
+> +	u32 num, rx_count;
+> +	s32 queue;
+> +	u32 mask;
+> +	int port;
+> +	u32 cmd;
+> +
+> +	/* Process high-priority queue and then low-priority queue. */
+> +	for (queue = 0; queue < RX_DESC_QUEUE_NUM; queue++) {
+> +		rx_pos = comm->rx_pos[queue];
+> +		rx_count = comm->rx_desc_num[queue];
+> +
+> +		for (num = 0; num < rx_count && budget_left; num++) {
+> +			sinfo = comm->rx_skb_info[queue] + rx_pos;
+> +			desc = comm->rx_desc[queue] + rx_pos;
+> +			cmd = desc->cmd1;
+> +
+> +			if (cmd & RXD_OWN)
+> +				break;
+> +
+> +			port = FIELD_GET(RXD_PKT_SP, cmd);
+> +			if (port < MAX_NETDEV_NUM && comm->ndev[port])
+> +				stats = &comm->ndev[port]->stats;
+> +			else
+> +				goto spl2sw_rx_poll_rec_err;
+> +
+> +			pkg_len = FIELD_GET(RXD_PKT_LEN, cmd);
+> +			if (unlikely((cmd & RXD_ERR_CODE) || pkg_len < ETH_ZLEN + 4)) {
+> +				stats->rx_length_errors++;
+> +				stats->rx_dropped++;
+> +				goto spl2sw_rx_poll_rec_err;
+> +			}
+> +
+> +			dma_unmap_single(&comm->pdev->dev, sinfo->mapping,
+> +					 comm->rx_desc_buff_size, DMA_FROM_DEVICE);
+> +
+> +			skb = sinfo->skb;
+> +			skb_put(skb, pkg_len - 4); /* Minus FCS */
+> +			skb->ip_summed = CHECKSUM_NONE;
+> +			skb->protocol = eth_type_trans(skb, comm->ndev[port]);
+> +			netif_receive_skb(skb);
+> +
+> +			stats->rx_packets++;
+> +			stats->rx_bytes += skb->len;
+> +
+> +			/* Allocate a new skb for receiving. */
+> +			new_skb = netdev_alloc_skb(NULL, comm->rx_desc_buff_size);
+> +			if (unlikely(!new_skb)) {
+> +				desc->cmd2 = (rx_pos == comm->rx_desc_num[queue] - 1) ?
+> +					     RXD_EOR : 0;
+> +				sinfo->skb = NULL;
+> +				sinfo->mapping = 0;
+> +				desc->addr1 = 0;
+> +				goto spl2sw_rx_poll_alloc_err;
+> +			}
+> +
+> +			sinfo->mapping = dma_map_single(&comm->pdev->dev, new_skb->data,
+> +							comm->rx_desc_buff_size,
+> +							DMA_FROM_DEVICE);
+> +			if (dma_mapping_error(&comm->pdev->dev, sinfo->mapping)) {
+> +				dev_kfree_skb_irq(new_skb);
+> +				desc->cmd2 = (rx_pos == comm->rx_desc_num[queue] - 1) ?
+> +					     RXD_EOR : 0;
+> +				sinfo->skb = NULL;
+> +				sinfo->mapping = 0;
+> +				desc->addr1 = 0;
+> +				goto spl2sw_rx_poll_alloc_err;
+> +			}
+> +
+> +			sinfo->skb = new_skb;
+> +			desc->addr1 = sinfo->mapping;
+> +
+> +spl2sw_rx_poll_rec_err:
+> +			desc->cmd2 = (rx_pos == comm->rx_desc_num[queue] - 1) ?
+> +				     RXD_EOR | comm->rx_desc_buff_size :
+> +				     comm->rx_desc_buff_size;
+> +
+> +			wmb();	/* Set RXD_OWN after other fields are effective. */
+> +			desc->cmd1 = RXD_OWN;
+> +
+> +spl2sw_rx_poll_alloc_err:
+> +			/* Move rx_pos to next position */
+> +			rx_pos = ((rx_pos + 1) == comm->rx_desc_num[queue]) ? 0 : rx_pos + 1;
+> +
+> +			budget_left--;
+> +
+> +			/* If there are packets in high-priority queue,
+> +			 * stop processing low-priority queue.
+> +			 */
+> +			if (queue == 1 && !(h_desc->cmd1 & RXD_OWN))
+> +				break;
+> +		}
+> +
+> +		comm->rx_pos[queue] = rx_pos;
+> +
+> +		/* Save pointer to last rx descriptor of high-priority queue. */
+> +		if (queue == 0)
+> +			h_desc = comm->rx_desc[queue] + rx_pos;
+> +	}
+> +
+> +	wmb();	/* make sure settings are effective. */
+> +	mask = readl(comm->l2sw_reg_base + L2SW_SW_INT_MASK_0);
+> +	mask &= ~MAC_INT_RX;
+> +	writel(mask, comm->l2sw_reg_base + L2SW_SW_INT_MASK_0);
+> +
+> +	napi_complete(napi);
+> +	return 0;
+> +}
+> +
+> +int spl2sw_tx_poll(struct napi_struct *napi, int budget)
+> +{
+> +	struct spl2sw_common *comm = container_of(napi, struct spl2sw_common, tx_napi);
+> +	struct spl2sw_skb_info *skbinfo;
+> +	struct net_device_stats *stats;
+> +	int budget_left = budget;
+> +	u32 tx_done_pos;
+> +	u32 mask;
+> +	u32 cmd;
+> +	int i;
+> +
+> +	spin_lock(&comm->tx_lock);
+> +
+> +	tx_done_pos = comm->tx_done_pos;
+> +	while (((tx_done_pos != comm->tx_pos) || (comm->tx_desc_full == 1)) && budget_left) {
+> +		cmd = comm->tx_desc[tx_done_pos].cmd1;
+> +		if (cmd & TXD_OWN)
+> +			break;
+> +
+> +		skbinfo = &comm->tx_temp_skb_info[tx_done_pos];
+> +		if (unlikely(!skbinfo->skb))
+> +			goto spl2sw_tx_poll_next;
+> +
+> +		i = ffs(FIELD_GET(TXD_VLAN, cmd)) - 1;
+> +		if (i < MAX_NETDEV_NUM && comm->ndev[i])
+> +			stats = &comm->ndev[i]->stats;
+> +		else
+> +			goto spl2sw_tx_poll_unmap;
+> +
+> +		if (unlikely(cmd & (TXD_ERR_CODE))) {
+> +			stats->tx_errors++;
+> +		} else {
+> +			stats->tx_packets++;
+> +			stats->tx_bytes += skbinfo->len;
+> +		}
+> +
+> +spl2sw_tx_poll_unmap:
+> +		dma_unmap_single(&comm->pdev->dev, skbinfo->mapping, skbinfo->len,
+> +				 DMA_TO_DEVICE);
+> +		skbinfo->mapping = 0;
+> +		dev_kfree_skb_irq(skbinfo->skb);
+> +		skbinfo->skb = NULL;
+> +
+> +spl2sw_tx_poll_next:
+> +		/* Move tx_done_pos to next position */
+> +		tx_done_pos = ((tx_done_pos + 1) == TX_DESC_NUM) ? 0 : tx_done_pos + 1;
+> +
+> +		if (comm->tx_desc_full == 1)
+> +			comm->tx_desc_full = 0;
+> +
+> +		budget_left--;
+> +	}
+> +
+> +	comm->tx_done_pos = tx_done_pos;
+> +	if (!comm->tx_desc_full)
+> +		for (i = 0; i < MAX_NETDEV_NUM; i++)
+> +			if (comm->ndev[i])
+> +				if (netif_queue_stopped(comm->ndev[i]))
+> +					netif_wake_queue(comm->ndev[i]);
+> +
+> +	spin_unlock(&comm->tx_lock);
+> +
+> +	wmb();			/* make sure settings are effective. */
+> +	mask = readl(comm->l2sw_reg_base + L2SW_SW_INT_MASK_0);
+> +	mask &= ~MAC_INT_TX;
+> +	writel(mask, comm->l2sw_reg_base + L2SW_SW_INT_MASK_0);
+> +
+> +	napi_complete(napi);
+> +	return 0;
+> +}
 
-> v1 -> v2
->   * Reword commit message of patch 1
-> 
-> Janis Schoetterl-Glausch (2):
->    KVM: s390: Don't indicate suppression on dirtying, failing memop
->    KVM: s390: selftest: Test suppression indication on key prot exception
-> 
->   arch/s390/kvm/gaccess.c                   | 47 ++++++++++++++---------
->   tools/testing/selftests/kvm/s390x/memop.c | 43 ++++++++++++++++++++-
->   2 files changed, 70 insertions(+), 20 deletions(-)
-> 
-> 
-> base-commit: af2d861d4cd2a4da5137f795ee3509e6f944a25b
+This doesn't look like it is doing NAPI properly.
 
+The driver is supposed to return the amount of packets processed.
+If budget is used, it should return budget.

@@ -2,216 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7903950E484
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:35:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1962E50E472
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242903AbiDYPi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 11:38:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41216 "EHLO
+        id S232786AbiDYPeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 11:34:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242842AbiDYPiL (ORCPT
+        with ESMTP id S233191AbiDYPeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 11:38:11 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D986D45519
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 08:35:06 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1nj0jW-0001it-Ip; Mon, 25 Apr 2022 17:34:38 +0200
-Message-ID: <4b958892ba788a0e9e73a9135c305aacbe33294d.camel@pengutronix.de>
-Subject: Re: [PATCH V4 07/11] arm64: dts: imx8mq: Enable both G1 and G2
- VPU's with vpu-blk-ctrl
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Adam Ford <aford173@gmail.com>, linux-media@vger.kernel.org
-Cc:     aford@beaconembedded.com, cphealy@gmail.com,
-        kernel test robot <lkp@intel.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Date:   Mon, 25 Apr 2022 17:34:34 +0200
-In-Reply-To: <d6c5c5663f8ae904d409240063295cf516e17dd1.camel@puri.sm>
-References: <20220125171129.472775-1-aford173@gmail.com>
-         <20220125171129.472775-8-aford173@gmail.com>
-         <d6c5c5663f8ae904d409240063295cf516e17dd1.camel@puri.sm>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        Mon, 25 Apr 2022 11:34:15 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63BAF21E10
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 08:31:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650900671; x=1682436671;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=QmBvHFEL8jCRZp/04JCJNkoj3kFPY6FDP8vzsw7y6UI=;
+  b=nEFkiNRGu6R/J+fU6DJzljwldao92uHfDZvnSuUkUcAsGFt5o+IE6upm
+   bsXjlqRUMEe0SxyXKgH31TG/kCffDxRUBUP3OWRl5EBvcBpUaxrUnnrdf
+   x6vz5BRfZdqWGLgomlrF0LXUMLU8fZjd+I1fv8+536f1/HOg2Fu+IiMJN
+   tDuc++1cBxN+V7kNOg16DNl3mIvZjVYJATHq3Mbqv+W/5Pql2xx6E6zwV
+   WaxYd7Hga2vCXpjw/frhl2AvN3iDR6IEXOw6dI/O3ti6fitR1kYaVx2t6
+   jO5J7tujm7qGr6Gmpr4MDhMIqOeg6fk+wz6avjmS7FRJ/tZmT9Os/FU/t
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="247208240"
+X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
+   d="scan'208";a="247208240"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 08:31:07 -0700
+X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
+   d="scan'208";a="579340231"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 08:31:06 -0700
+Date:   Mon, 25 Apr 2022 08:34:44 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>, robin.murphy@arm.com,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86 <x86@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        iommu <iommu@lists.linux-foundation.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>, zhangfei.gao@linaro.org,
+        Thomas Gleixner <tglx@linutronix.de>, will@kernel.org,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
+ allocation and free it on mm exit
+Message-ID: <20220425083444.00af5674@jacob-builder>
+In-Reply-To: <YmavoKkVu+hd+x0M@myrica>
+References: <YllADL6uMoLllzQo@fyu1.sc.intel.com>
+        <YmA4pbgevqln/jSO@myrica>
+        <tencent_76E043C4D1B6A21A5253579A61034107EB06@qq.com>
+        <tencent_7477100F8A445C6CAFA8F13601A55134480A@qq.com>
+        <YmJ/WA6KAQU/xJjA@myrica>
+        <tencent_A4E83BA6071B2204B6F5D4E69A50D21C1A09@qq.com>
+        <YmLOznyBF0f7COYT@myrica>
+        <tencent_2922DAB6F3D5789A1CD3A21A843B4007ED09@qq.com>
+        <Yman5hLomw9/c+bi@myrica>
+        <76ec6342-0d7c-7c7b-c132-2892e4048fa1@intel.com>
+        <YmavoKkVu+hd+x0M@myrica>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Martin,
+Hi Jean-Philippe,
 
-Am Montag, dem 25.04.2022 um 17:22 +0200 schrieb Martin Kepplinger:
-> Am Dienstag, dem 25.01.2022 um 11:11 -0600 schrieb Adam Ford:
-> > With the Hantro G1 and G2 now setup to run independently, update
-> > the device tree to allow both to operate.  This requires the
-> > vpu-blk-ctrl node to be configured.  Since vpu-blk-ctrl needs
-> > certain clock enabled to handle the gating of the G1 and G2
-> > fuses, the clock-parents and clock-rates for the various VPU's
-> > to be moved into the pgc_vpu because they cannot get re-parented
-> > once enabled, and the pgc_vpu is the highest in the chain.
+On Mon, 25 Apr 2022 15:26:40 +0100, Jean-Philippe Brucker
+<jean-philippe@linaro.org> wrote:
+
+> On Mon, Apr 25, 2022 at 07:18:36AM -0700, Dave Hansen wrote:
+> > On 4/25/22 06:53, Jean-Philippe Brucker wrote:  
+> > > On Sat, Apr 23, 2022 at 07:13:39PM +0800, zhangfei.gao@foxmail.com
+> > > wrote:  
+> > >>>> On 5.17
+> > >>>> fops_release is called automatically, as well as
+> > >>>> iommu_sva_unbind_device. On 5.18-rc1.
+> > >>>> fops_release is not called, have to manually call close(fd)  
+> > >>> Right that's weird  
+> > >> Looks it is caused by the fix patch, via mmget, which may add
+> > >> refcount of fd.  
+> > > Yes indirectly I think: when the process mmaps the queue,
+> > > mmap_region() takes a reference to the uacce fd. That reference is
+> > > released either by explicit close() or munmap(), or by exit_mmap()
+> > > (which is triggered by mmput()). Since there is an mm->fd dependency,
+> > > we cannot add a fd->mm dependency, so no mmget()/mmput() in
+> > > bind()/unbind().
+> > > 
+> > > I guess we should go back to refcounted PASIDs instead, to avoid
+> > > freeing them until unbind().  
 > > 
-> > Signed-off-by: Adam Ford <aford173@gmail.com>
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+> > Yeah, this is a bit gnarly for -rc4.  Let's just make sure there's
+> > nothing else simple we can do.
 > > 
-> > diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> > b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> > index 2df2510d0118..549b2440f55d 100644
-> > --- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> > +++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> > @@ -737,7 +737,21 @@ pgc_gpu: power-domain@5 {
-> >                                         pgc_vpu: power-domain@6 {
-> >                                                 #power-domain-cells =
-> > <0>;
-> >                                                 reg =
-> > <IMX8M_POWER_DOMAIN_VPU>;
-> > -                                               clocks = <&clk
-> > IMX8MQ_CLK_VPU_DEC_ROOT>;
-> > +                                               clocks = <&clk
-> > IMX8MQ_CLK_VPU_DEC_ROOT>,
-> > +                                                        <&clk
-> > IMX8MQ_CLK_VPU_G1_ROOT>,
-> > +                                                        <&clk
-> > IMX8MQ_CLK_VPU_G2_ROOT>;
-> > +                                               assigned-clocks =
-> > <&clk IMX8MQ_CLK_VPU_G1>,
-> > +                                                                
-> > <&clk IMX8MQ_CLK_VPU_G2>,
-> > +                                                                
-> > <&clk IMX8MQ_CLK_VPU_BUS>,
-> > +                                                                
-> > <&clk IMX8MQ_VPU_PLL_BYPASS>;
-> > +                                               assigned-clock-
-> > parents = <&clk IMX8MQ_VPU_PLL_OUT>,
-> > +                                                                    
-> >     <&clk IMX8MQ_VPU_PLL_OUT>,
-> > +                                                                    
-> >     <&clk IMX8MQ_SYS1_PLL_800M>,
-> > +                                                                    
-> >     <&clk IMX8MQ_VPU_PLL>;
-> > +                                               assigned-clock-rates
-> > = <600000000>,
-> > +                                                                    
-> >   <600000000>,
-> > +                                                                    
-> >   <800000000>,
-> > +                                                                    
-> >   <0>;
-> >                                         };
-> >  
-> >                                         pgc_disp: power-domain@7 {
-> > @@ -1457,30 +1471,31 @@ usb3_phy1: usb-phy@382f0040 {
-> >                         status = "disabled";
-> >                 };
-> >  
-> > -               vpu: video-codec@38300000 {
-> > -                       compatible = "nxp,imx8mq-vpu";
-> > -                       reg = <0x38300000 0x10000>,
-> > -                             <0x38310000 0x10000>,
-> > -                             <0x38320000 0x10000>;
-> > -                       reg-names = "g1", "g2", "ctrl";
-> > -                       interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
-> > -                                    <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
-> > -                       interrupt-names = "g1", "g2";
-> > +               vpu_g1: video-codec@38300000 {
-> > +                       compatible = "nxp,imx8mq-vpu-g1";
-> > +                       reg = <0x38300000 0x10000>;
-> > +                       interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
-> > +                       clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>;
-> > +                       power-domains = <&vpu_blk_ctrl
-> > IMX8MQ_VPUBLK_PD_G1>;
-> > +               };
-> > +
-> > +               vpu_g2: video-codec@38310000 {
-> > +                       compatible = "nxp,imx8mq-vpu-g2";
-> > +                       reg = <0x38310000 0x10000>;
-> > +                       interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
-> > +                       clocks = <&clk IMX8MQ_CLK_VPU_G2_ROOT>;
-> > +                       power-domains = <&vpu_blk_ctrl
-> > IMX8MQ_VPUBLK_PD_G2>;
-> > +               };
-> > +
-> > +               vpu_blk_ctrl: blk-ctrl@38320000 {
-> > +                       compatible = "fsl,imx8mq-vpu-blk-ctrl";
-> > +                       reg = <0x38320000 0x100>;
-> > +                       power-domains = <&pgc_vpu>, <&pgc_vpu>,
-> > <&pgc_vpu>;
-> > +                       power-domain-names = "bus", "g1", "g2";
-> >                         clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>,
-> > -                                <&clk IMX8MQ_CLK_VPU_G2_ROOT>,
-> > -                                <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
-> > -                       clock-names = "g1", "g2", "bus";
-> > -                       assigned-clocks = <&clk IMX8MQ_CLK_VPU_G1>,
-> > -                                         <&clk IMX8MQ_CLK_VPU_G2>,
-> > -                                         <&clk IMX8MQ_CLK_VPU_BUS>,
-> > -                                         <&clk
-> > IMX8MQ_VPU_PLL_BYPASS>;
-> > -                       assigned-clock-parents = <&clk
-> > IMX8MQ_VPU_PLL_OUT>,
-> > -                                                <&clk
-> > IMX8MQ_VPU_PLL_OUT>,
-> > -                                                <&clk
-> > IMX8MQ_SYS1_PLL_800M>,
-> > -                                                <&clk
-> > IMX8MQ_VPU_PLL>;
-> > -                       assigned-clock-rates = <600000000>,
-> > <600000000>,
-> > -                                              <800000000>, <0>;
-> > -                       power-domains = <&pgc_vpu>;
-> > +                                <&clk IMX8MQ_CLK_VPU_G2_ROOT>;
-> > +                       clock-names = "g1", "g2";
-> > +                       #power-domain-cells = <1>;
-> >                 };
-> >  
-> >                 pcie0: pcie@33800000 {
+> > How does the IOMMU hardware know that all activity to a given PASID is
+> > finished?  That activity should, today, be independent of an mm or a
+> > fd's lifetime.  
 > 
-> With this update, when testing suspend to ram on imx8mq, I get:
+> In the case of uacce, it's tied to the fd lifetime: opening an accelerator
+> queue calls iommu_sva_bind_device(), which sets up the PASID context in
+> the IOMMU. Closing the queue calls iommu_sva_unbind_device() which
+> destroys the PASID context (after the device driver stopped all DMA for
+> this PASID).
 > 
-> buck4: failed to disable: -ETIMEDOUT
-> 
-> where buck4 is power-supply of pgc_vpu. And thus the transition to
-> suspend (and resuming) fails.
-> 
-> Have you tested system suspend after the imx8m-blk-ctrl update on
-> imx8mq?
+For VT-d, it is essentially the same flow except managed by the individual
+drivers such as DSA.
+If free() happens before unbind(), we deactivate the PASIDs and suppress
+faults from the device. When the unbind finally comes, we finalize the
+PASID teardown. It seems we have a need for an intermediate state where
+PASID is "pending free"?
 
-I haven't tested system suspend, don't know if anyone else did. However
-I guess that this is just uncovering a preexisting issue in the system
-suspend sequencing, which you would also hit if the video decoders were
-active at system suspend time.
+> Thanks,
+> Jean
+> _______________________________________________
+> iommu mailing list
+> iommu@lists.linux-foundation.org
+> https://lists.linuxfoundation.org/mailman/listinfo/iommu
 
-My guess is that the regulator disable fails, due to the power domains
-being disabled quite late in the suspend sequence, where i2c
-communication with the PMIC is no longer possible due to i2c being
-suspended already or something like that. Maybe you can dig in a bit on
-the actual sequence on your system and we can see how we can rework
-things to suspend the power domains at a time where communication with
-the PMIC is still possible?
 
-Regards,
-Lucas
+Thanks,
 
+Jacob

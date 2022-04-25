@@ -2,154 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69EB550DEA9
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 13:18:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81E1850DEB2
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 13:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238642AbiDYLVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 07:21:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33874 "EHLO
+        id S239802AbiDYLW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 07:22:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238029AbiDYLV3 (ORCPT
+        with ESMTP id S241798AbiDYLWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 07:21:29 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2136.outbound.protection.outlook.com [40.107.255.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75200C848F
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 04:18:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iZq0Ge5VOaf2I/S6vadSscRblfPJBOyggKeSkNNkfJ0k5LPfSpJPLK4G+lhKMJruS3UChjl3SClMXEUJ1MmK5VuM2ocodAchrF2y7c0yd1pnA84HX2eWdqPOuUSm3UMdR1J2T1gE26XHqX+dwfZqrW6isIWH5rBVjOqcATV00JSknt8Orsd4R963CCJXhdAd0ueswo95KTeZNFeHXPFY56VATatGeVpXAfQj47wYbNQ9XUAFu6iQaLU1HTbwGSKKlAsfB6x6qwK5QoqE4FrjJy3BMPXOW1qXbxzetjxyIA8CbSLCW1np3/jApnPJ5A/L5dlUgzPkfodi337QStoodA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=60HQpwcAZRp/QG//RkUbAxkmgusSz5Yb6XW7oVzN9Uo=;
- b=eBy7QSqzN6QOYsFX/dyzFpY/dBzZYJd4e0pu5cj7RX/7S2Auj+ZEBQDBR6DIOGQnomlraC4OthQorOfSY1XkH0s+TmkmgVi4MPrfO0WvzLr/O/U8iIhATMwFBwzcsR/dxfZUqw6PruXDmcRqtt6pVtSQWvMVi/kLJUrvBmoZcqxtSE9++07/k7jeCIxVsMOLat8I6gMgI16lGRVqljV0LiEHqpaZUOveDlPzb/yS+np+r+vVNihjKx64P0ObQiC9T0KtXAfUfVJWSoTNcXt/Jo4FXwitx3be+dxEhE8Rt5g+2TV5yhWYUA9CLGzrACmzOzE4dID2hBgGiSPRPyZV4g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=60HQpwcAZRp/QG//RkUbAxkmgusSz5Yb6XW7oVzN9Uo=;
- b=f5MZZ1gaPC6F2jcs9Fde9OIvxk5czr2DSIKxSq4hDQoFmN3Yxutuwgei2aEkmYeKrBRmV9Zr3n8UD7npKVqTv0TuTc4CtYAjJ2Mv7x9z7xHNSWuxX590t1IXzofKIcxuSB1txJp2RcjYf377qolBz6MOGwzo0ckLrjN1FRMeYeI=
-Received: from SL2PR06MB3082.apcprd06.prod.outlook.com (2603:1096:100:37::17)
- by TYZPR06MB4580.apcprd06.prod.outlook.com (2603:1096:400:123::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Mon, 25 Apr
- 2022 11:18:22 +0000
-Received: from SL2PR06MB3082.apcprd06.prod.outlook.com
- ([fe80::e468:c298:cfe5:84fc]) by SL2PR06MB3082.apcprd06.prod.outlook.com
- ([fe80::e468:c298:cfe5:84fc%6]) with mapi id 15.20.5186.021; Mon, 25 Apr 2022
- 11:18:21 +0000
-From:   =?gb2312?B?zfXH5g==?= <wangqing@vivo.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-CC:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
+        Mon, 25 Apr 2022 07:22:55 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C4AC848F;
+        Mon, 25 Apr 2022 04:19:49 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id EB32EC0004;
+        Mon, 25 Apr 2022 11:19:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1650885588;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VFE0BQwSW0F3lbSi+iOzFQLCVz0h/2OYs8AJaioXACM=;
+        b=Ydc/aBRJdngbs/8Ph6u3Y3iVWXowapQIWXpkVOh0z5gXMd/HPq2amCssJ83Q50Umo4lt2/
+        JTNQ5tvRP+27xBCUdZNslrgOjS01zMv43RSjNQIuAK60nY9b0fbyQGwQ4OxuffjERvvCW1
+        BWHQFzq1mZumQMnY+vsM1wZT8lBesv+XxYXMC7YGdBb+Vv/lM48QxKsAF0pen/7WIMWsoh
+        kD+LCa4G3VSUw69ItvnxkvAyRZHKiAFDVZF/38+XLgjr/IAmfJ3wFyEL4iIhC9zilir+xk
+        S/dJijsU8oJi3mzawVkk45vGk28ZjkrzM1H2XXoND/dazW0T+PXfbFipjamzVw==
+Date:   Mon, 25 Apr 2022 13:18:30 +0200
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Rob Herring <robh@kernel.org>, Lizhi Hou <lizhi.hou@xilinx.com>,
+        Sonal Santan <sonal.santan@xilinx.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>
-Subject: [PATCH V2] arm64: add SCHED_CLUSTER's dependency on ACPI
-Thread-Topic: [PATCH V2] arm64: add SCHED_CLUSTER's dependency on ACPI
-Thread-Index: AQHYWE/nPyW0oeJKi0iRN/lm7iJKMK0AZ6qAgAAP2Uc=
-Date:   Mon, 25 Apr 2022 11:18:21 +0000
-Message-ID: <SL2PR06MB308217E24459AB685FBF6FD2BDF89@SL2PR06MB3082.apcprd06.prod.outlook.com>
-References: <1650855303-91388-1-git-send-email-wangqing@vivo.com>
- <20220425100635.ig4dxvlflglfagpx@bogus>
-In-Reply-To: <20220425100635.ig4dxvlflglfagpx@bogus>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9182bda6-7858-4a04-35c7-08da26ad4ea0
-x-ms-traffictypediagnostic: TYZPR06MB4580:EE_
-x-microsoft-antispam-prvs: <TYZPR06MB45802FFFBA1E16267931CC7ABDF89@TYZPR06MB4580.apcprd06.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: kTFMK1mdHzQy+P9WUjY8fWbMiyB9QMaf+rSgubh8MEq6pFugXngTDYPX5WVzmB63GWJ9llB3h5D6eBA0IakC0YKXqYiAb5C3mm2tse8zsG5Zu+OV1TA5hIiyo2IhnEX9J0Kja/i9ja71krneRrpgjUJ+YhOEaXmg64Sq9DFEecckrI06k9fdiuKdIlb0P2qfIvF60p5E4d5mUB2j+kj2Jv6P9OB2jETP5jzN35BhvFkRdrmz1rRF4OGm0vQZv5G73Xda+JxS3hGiaUe/W+proH7m7DQnVH+lPZy/P36Yh27wxokoMPsn3evaUHeubA0NzTUJ/dWP27T1mu3U7WPmpYAHGFKg3Ap8LkLR+0PutcGlNoZHsGvoa5cCvISEptJZAKexX4GaOSh3LuJnmSd84gCVIbGm8U3Y9zZ8XRyc2PeLZdYsbWzKQtYynPCLeCdeIA3RdmkO0jkkWvtpW/urilb5R0+Qs7p8LbibifcbQDv5dxhZAOo60HajCKCD8hdCKIVH+eNFmOEH7t1V5fOcT7zZomMvPjBXCgHMccxSy1shX0vyoHNOuq4iJ6/txLhITaV72toCMiArmUmUpozSEwjacwWZUlZHCSbVip2FxFk9NfSu0vYz2vZwlV+5EzNBBVTw4oK7dkT5XQkzJ13WQZX7iWiKzQX0dWfIl9oHzgMUKme8RgKoKzjlWWpRCEjq1++TGzJ/tYrMKUFHWYhqgg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR06MB3082.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(52536014)(85182001)(9686003)(26005)(54906003)(6916009)(316002)(5660300002)(33656002)(186003)(6506007)(7696005)(2906002)(4744005)(86362001)(122000001)(508600001)(38070700005)(38100700002)(71200400001)(55016003)(8676002)(4326008)(66556008)(76116006)(66946007)(66476007)(91956017)(64756008)(66446008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?gb2312?B?YlJZeTVaTUhTdnd2MXEzeDluNVhZSDQrNlVUZ1ArWTJiQVdlWW5KUmFLZW12?=
- =?gb2312?B?NDFpMU5WbUxrUjRiMXZhcjdwZkRDQjA4Qlk1V0JWSHNNTU81UWtKc1FlaXEw?=
- =?gb2312?B?cWFzOWJNUWlKM2YvWWJwa0NjcTg5dWlvSTBQaFMrNUhEaWRLK2U3L21yaDRN?=
- =?gb2312?B?ZEljQlBCZEFQeWI5NkIrWEZVUmJUamxJa2oxLzQ2V2FtNVdTaS95Y1lmaVZn?=
- =?gb2312?B?TGc0enpHNmlMNXJSVXFlNC9ERTMxOWZSRWo1ek41UFB5ZFhicTFJNElHSENr?=
- =?gb2312?B?MGhFYWtvRkZoZGhyS0l2MmQ4bnVKbk0wT0xFTWVkeW5aNE1oeSs2RzNKcnlB?=
- =?gb2312?B?dWpxSkUxdVJoelVjcEgvc3B5eTdJRWdxRVBIZXNNWWVNK0dmdWtUTHJZTHNa?=
- =?gb2312?B?YzB4UXdoTmVIRExRZ0pkOUs3QktIYklpc0drMUE0bkdPQ2s1cHN4dnhORVRS?=
- =?gb2312?B?TTNlUVNMSDJ1V3YzNXlFRWZOdjN1YmtvUDM2RUlicEJPTDZucFJ2VHdhQXly?=
- =?gb2312?B?d2RRZENVV3VQajhEUW15ZzRqY2IxNFlQUEp2WmJ5dTgxdzd4eTYrUERwbGgw?=
- =?gb2312?B?N25hN0lGMjlVVDJHUzVWdWRvTlUvelhIeTZNNFp4cUhBZlZ0R0pmWTZ4a20v?=
- =?gb2312?B?alN2VmhsZ29BeUx5WTUwOW1VSkJEaDdacU9qVk15bXJTQlM4ejZzYWg3ZWha?=
- =?gb2312?B?U2pWbnJ0YTN4SzdkTG5RTkczbUtqTEpmUkhDbE42VjV1b2h4R2RNMTdCVTla?=
- =?gb2312?B?em1MSkVxYTNpTW9ISXpDTWNwLzFuaXZWNGdJL0lyU1laaGhULzh4UlEySmtM?=
- =?gb2312?B?bTZKRGpIa3pFNVhPNVl0WWhDRXFLRW5Fb0RoSlVrM3JTcUNHM1ZiZDRTREdB?=
- =?gb2312?B?Zy92TVlyc3FlVzI4cWlsRzBkNG9ocGRXNlZNL2RkQ3ZkNXAreXhhYThzTWNF?=
- =?gb2312?B?bUkzOWh3U0ZSOUQzRnhFeXJ4NXoraWF1VExTU2NvTzQwUTdFNlpJVkF4RlZp?=
- =?gb2312?B?aldybHRzYldxT0VqY0xlc3F6d1hiVWVEcmk4cWJGZ3pLYm8rdjVETkZPbDQz?=
- =?gb2312?B?MU9KMXBieVZpNHBTZXBscFJZMllSQWlmMTZpNElzSE1scGRXRm52UndUTjMy?=
- =?gb2312?B?d09BdkRZbmdXZlNDcHhhOXJ3a1lRcWJHSEJrcE9OV3VWSVdTZGlQaTAyd0pE?=
- =?gb2312?B?eG44Smlxd1dmSW94bWsxa2VYODZhSUkvc3M2VGMxNmpwMVliRzg1Wm0vb2JR?=
- =?gb2312?B?QUp0NlYzcEFuNEFUcWJ4eHpmT2Q2dkNkRk9HdVFwaWhrSklEYzRsemtCUm0x?=
- =?gb2312?B?NGNhelpIdUY1QUJYc3hXN3Z5aWdVS0ZKRGE5UVE0aUQyVkxZdjlRVnF5Yi9k?=
- =?gb2312?B?cVA2SVlsKy9jYzE1WElxRWxibVlXdTdHZEg1TnVOTjRvekVxcWlMeFRVbExP?=
- =?gb2312?B?Z0FIZStTV1RPMHkvN0MvKytzVXZlaGVwRTd0Uk1WekIzMHVqMSszalBDaXBu?=
- =?gb2312?B?RDROdjNybTZBZHdhRWs0cTFBYUltbVo2clhOaFQ1WmRoaTh4VWJ5WlhodTZp?=
- =?gb2312?B?TTMxQzZZbzRLaVZLNlFKSHBVNGJubnNOaSt3NDRwR0QxQndjKzJNNHJGQUpn?=
- =?gb2312?B?cTUwR2gwRDVzUnpYSkNZMEpTNkFZK3pWVXQrckhhaVpINUxFUkk3TXZXSVdV?=
- =?gb2312?B?UG44Z1Z5eHMxaUhFQTlQQnhrTFpuNEZ2Nm1US0FPUmVmdEVZbnpPcWd0S3Zp?=
- =?gb2312?B?WEpPMEVTdU1FNDFROEFxRTFVa2lpQVNIOUZJdElYL1h5N0o5aE9OaGNFZ0g5?=
- =?gb2312?B?T01ZbUxsMTNxL250WEZvQitmU1FhN3M1YUhtS1lGZzNmU293dVB1Nktydlor?=
- =?gb2312?B?WERkSHF3aVFLTXNhRWRWd2JwMGtya0JjZld1eTl4Y1FJMXY3ZC96bHdNY2tN?=
- =?gb2312?B?L3IvT3QxNTlRdWo0WTRxZDNMTGZCMzltZDdIeURqTzIzYkxYcHlUY0k0RHlm?=
- =?gb2312?B?U3F4cERtUWYyRDZrMEpjOHN0Z1JQVFRFWDlQUUhUTkI4Wkl5VTZscjRad1NF?=
- =?gb2312?B?Q2VlTWJjTWdNd2IvQlU0dTd1WmlqWDNUdklCZDRkejdteW02K1RTMk1OR25W?=
- =?gb2312?B?elBLdHg4SExod0E5bkFnRzdIRmZhUEY0QWxqQmdCaHVWNjc0ZzJSMWh3OG9m?=
- =?gb2312?B?bk5UUzVJOTh4OUdCWUF2VW9HYjFQVGFubXZuNGlhRVlmVnc4VElYc01FR1NT?=
- =?gb2312?B?YVJJNDJLV3NQeXI0RjE5ZkI4azFtRjVqdWxvVFNLbTZaNVNqalB2bk1KVzJE?=
- =?gb2312?Q?6tETEQN07RpF3ebijk?=
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        devicetree@vger.kernel.org,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH v2 0/3] add fwnode support to reset subsystem
+Message-ID: <20220425131830.29aab83b@fixe.home>
+In-Reply-To: <1ec5ce3673dcdaa914e20ef2aae03f549d05ff9a.camel@pengutronix.de>
+References: <20220324141237.297207-1-clement.leger@bootlin.com>
+        <Ykst0Vb4fk+iALzc@robh.at.kernel.org>
+        <20220405092434.6e424ed4@fixe.home>
+        <YkxWeMNw9Ba0KjHM@robh.at.kernel.org>
+        <20220405175120.23fc6b2a@fixe.home>
+        <CAL_JsqLdBcAw1KPnrATHqEngRWkx6moxDODH1xV67EKAufc6_w@mail.gmail.com>
+        <20220406094019.670a2956@fixe.home>
+        <Yk2TVAfPVh9a1tUR@robh.at.kernel.org>
+        <20220408174841.34458529@fixe.home>
+        <1ec5ce3673dcdaa914e20ef2aae03f549d05ff9a.camel@pengutronix.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SL2PR06MB3082.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9182bda6-7858-4a04-35c7-08da26ad4ea0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Apr 2022 11:18:21.6354
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 7IHNY2jN4GYzNtVF3S2waEIOyGXqmOM8Oh9N32Du6Z/rPormWWYWRbIitLnURW0oXWSPQg8hJkOXPRkqmSQwhg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB4580
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cj4+IEZyb206IFdhbmcgUWluZyA8d2FuZ3FpbmdAdml2by5jb20+Cj4+IAo+PiBjbHVzdGVyIHNj
-aGVkX2RvbWFpbiBjb25maWd1cmVkIGJ5IGNwdV90b3BvbG9neVtdLmNsdXN0ZXJfc2libGluZywg
-Cj4+IHdoaWNoIGlzIHNldCBieSBjbHVzdGVyX2lkLCBjbHVzdGVyX2lkIGNhbiBvbmx5IGdldCBm
-cm9tIEFDUEkuCj4+IAo+PiBJZiB0aGUgc3lzdGVtIGRvZXMgbm90IGVuYWJsZSBBQ1BJLCBjbHVz
-dGVyX2lkIGlzIGFsd2F5cyAtMSwgZXZlbiBlbmFibGUKPj4gU0NIRURfQ0xVU1RFUiBpcyBpbnZh
-bGlkLCB0aGlzIGlzIG1pc2xlYWRpbmcuIAo+PiAKPj4gU28gd2UgYWRkIFNDSEVEX0NMVVNURVIn
-cyBkZXBlbmRlbmN5IG9uIEFDUEkgaGVyZS4KPj4KPgo+QW55IHJlYXNvbiB3aHkgdGhpcyBjYW4n
-dCBiZSBleHRlbmRlZCB0byBzdXBwb3J0IERUIGJhc2VkIHN5c3RlbXMgdmlhCj5jcHUtbWFwIGlu
-IHRoZSBkZXZpY2UgdHJlZS4gSU1PIHdlIGFsbW9zdCBoYXZlIGV2ZXJ5dGhpbmcgdy5yLnQgdG9w
-b2xvZ3kKPmluIERUIGFuZCBubyByZWFzb24gdG8gZGV2aWF0ZSB0aGlzIGZlYXR1cmUgYmV0d2Vl
-biBBQ1BJIGFuZCBEVC4KPgpUaGF0J3MgdGhlIHByb2JsZW0sIHdlIHBhcnNlIG91dCAiY2x1c3Rl
-ciIgaW5mbyBhY2NvcmRpbmcgdG8gdGhlCmRlc2NyaXB0aW9uIGluIGNwdS1tYXAsIGJ1dCBkbyBh
-c3NpZ24gaXQgdG8gcGFja2FnZV9pZCwgd2hpY2ggdXNlZCB0bwpjb25maWd1cmUgdGhlIE1DIHNj
-aGVkIGRvbWFpbiwgbm90IGNsdXN0ZXIgc2NoZWQgZG9tYWluLgoKVGhhdCBpcyB0byBzYXksICJj
-bHVzdGVyIiBpbiBjcHUtbWFwIGlzIHVzZWQgdG8gZGVzY3JpYmUgdGhlIHBhY2thZ2VfaWQuCldl
-IGNhbid0IGdldCBjbHVzdGVyX2lkIGZyb20gRFQuCgpUaGFua3MsClFpbmcKCj4tLSAKPlJlZ2Fy
-ZHMsCj5TdWRlZXA=
+Le Mon, 25 Apr 2022 12:21:15 +0200,
+Philipp Zabel <p.zabel@pengutronix.de> a =C3=A9crit :
+
+> Hi Cl=C3=A9ment,
+>=20
+> On Fr, 2022-04-08 at 17:48 +0200, Cl=C3=A9ment L=C3=A9ger wrote:
+> [...]
+> > > > > > > I've told the Xilinx folks the same thing, but I would separa=
+te this
+> > > > > > > into 2 parts. First is just h/w work in a DT based system. Se=
+cond is
+> > > > > > > creating a base tree an overlay can be applied to. The first =
+part should
+> > > > > > > be pretty straightforward. We already have PCI bus bindings. =
+The only
+> > > > > > > tricky part is getting address translation working from leaf =
+device thru
+> > > > > > > the PCI bus to host bus, but support for that should all be i=
+n place
+> > > > > > > (given we support ISA buses off of PCI bus). The second part =
+will
+> > > > > > > require generating PCI DT nodes at runtime. That may be neede=
+d for both
+> > > > > > > DT and ACPI systems as we don't always describe all the PCI h=
+ierarchy
+> > > > > > > in DT.     =20
+> > > > > >=20
+> > > > > > But then, if the driver generate the nodes, it will most probab=
+ly
+> > > > > > have to describe the nodes by hardcoding them right ?     =20
+> > > > >=20
+> > > > > No, the kernel already maintains its own tree of devices. You just
+> > > > > need to use that to generate the tree. That's really not much more
+> > > > > than nodes with a 'reg' property encoding the device and function
+> > > > > numbers.   =20
+> > > >=20
+> > > > Just to clarified a point, my PCI device exposes multiple periphera=
+ls
+> > > > behind one single PCI function.   =20
+> > >=20
+> > > Right. I would expect your PCI device DT node to have a 'simple-bus'=
+=20
+> > > child node with all those peripherals. And maybe there's other nodes=
+=20
+> > > like fixed-clocks, etc.
+> > >  =20
+> > > > To be sure I understood what you are suggesting, you propose to cre=
+ate
+> > > > a DT node from the PCI driver that has been probed dynamically
+> > > > matching this same PCI device with a 'reg' property. I also think
+> > > > this would requires to generate some 'pci-ranges' to remap the
+> > > > downstream devices that are described in the DTBO, finally, load the
+> > > > overlay to be apply under this newly created node. Is that right ? =
+  =20
+> > >=20
+> > > Right. You'll need to take the BAR address(es) for the device and sti=
+ck=20
+> > > those into 'ranges' to translate offsets to BAR+offset. =20
+> >=20
+> > Hi Rob,
+> >=20
+> > I got something working (address translation, probing and so on) using
+> > what you started. I switch to using changeset however, I'm not sure that
+> > it make sense for property creation since the node has not yet been
+> > added to the tree. Attaching the node with changeset however seems
+> > to make sense. But I'm no expert here, so any advise is welcome.
+> >
+> > Based on what we said, I created a PCI driver which uses a builtin
+> > overlay. In order to be able to apply the overlay on the correct PCI
+> > node -the one on which the card was plugged) and thus be totally plug
+> > and play, the 'target-path' property is patched using direct fdt
+> > function and replaced the target with the PCI device node path.
+> > I don't see any other way to do that before applying the overlay since
+> > of_overlay_fdt_apply() takes a fdt blob as input.
+> >=20
+> > The driver also insert correct ranges into the PCI device in order to
+> > translate the downstream node addresses to BAR addresses. It seems
+> > reasonnable to assume that this depends on the driver and thus should
+> > not be done by the PCI of core at all.
+> >=20
+> > Finally, the driver probes the newly added childs using
+> > of_platform_populate(). With all of that, the address translation
+> > and the probing works correctly and the platform devices are created.
+> > There is still a few things to fix such as the following:
+> >=20
+> > [ 2830.324773] OF: overlay: WARNING: memory leak will occur if overlay
+> > removed, property: /pci/pci@2,6/dev@0,0/compatible
+> >=20
+> > But it seems like this is something that works and would allow to
+> > support various use cases. From what I see, it should also work on
+> > other platforms. Major advantage of that over fwnode is that the
+> > changes are pretty small and relatively contained. =20
+>=20
+> Could you show this off somewhere?
+>=20
+> From this I take that fwnode support in the reset subsystem is not of
+> use to you anymore. I'll postpone taking your patches then, until they
+> are needed.
+>=20
+> regards
+> Philipp
+
+Hi Philip,
+
+Sorry for the lack of asnwer. Indeed, the fwnode support can be left
+out. I'm preparing the patches for contribution for this OF overlay
+thing, and everything regarding the subsystem have been removed. You
+can look at commits [1], [2], [3] and at a driver using them [4]. This
+allows the subsystem to be kept entirely without a single modification
+(except for the PCI/OF one).
+
+Thanks,
+
+Cl=C3=A9ment
+
+
+[1]
+https://github.com/clementleger/linux/commit/248d7f25951f90cf5647d295e1c505=
+1cc72ed970
+[2]
+https://github.com/clementleger/linux/commit/bf3c4c0749e5110b6a58ac9622cafc=
+10872ed17f
+[3]
+https://github.com/clementleger/linux/commit/8764a2e386fdede73991415277b95e=
+79553622f3
+[4]
+https://github.com/clementleger/linux/commit/7c66a1ad8f3fadfb538c410f192c95=
+73c66338d5
+
+
+
+
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com

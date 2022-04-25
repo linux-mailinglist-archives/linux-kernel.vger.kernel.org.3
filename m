@@ -2,86 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 332DD50E553
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:13:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D859250E552
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:13:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238305AbiDYQQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 12:16:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51068 "EHLO
+        id S243264AbiDYQQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 12:16:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237393AbiDYQQf (ORCPT
+        with ESMTP id S234854AbiDYQQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 25 Apr 2022 12:16:35 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C907411C987
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B228C11BEB3
         for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 09:13:30 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id w16so9332067ejb.13
+Received: by mail-ej1-x634.google.com with SMTP id w16so9332060ejb.13
         for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 09:13:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=GlOlAhS+OLlgHOZ0Skxe6Lfb/bGYsvoHqLs8XtmumJU=;
-        b=SnnXtcb27udbuQaeffIv6evHq0/Gn57swPViAVrmSy/us95OXTrnJeAdcz7cFH4lBn
-         TfMg85bpUIf4t++h8FJ3BksIiqxjMZFojsl8fkcKxQ6WqAyWi2H1osm+qjhhpXSb2xSf
-         eGF8nCIh46iZUcoBnjalnAO3SXG9fhhn9QHxIOlRVxW4dnR4jxmPJLxIE+j8zd6f4rKb
-         KPJsQnt+MO8GsbvO2lz2d38G/P6GoNlXVYP9nBMiq3hbc+DGbRPnaid66Rz8+r5lW0PP
-         CtK1dh/9TmhksmpMA05tGRcT7xyomeNpdbObbYJoQWBGHVcNESCVfCwLTUPm27eKa9OC
-         yPoQ==
+        d=raspberrypi.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JbOyJi8rlTpsIdDJseiW/5atS0yFPXCZtTwWRG2W9lA=;
+        b=m460SiG24MBquyBpdjPiRPFdYhzeYym/9p7Mz2S50l70YSXywZvcoVS53U9Wcf/oIs
+         nLugHzHZa4SrEGpdLYz1euQIitgJxuridQIqkR4pRavTpkX/rDdGAmytmWESmtvvvm/5
+         Cjx5Co0TblLprvLYanp+xRHHyNI3ocBZfjLRS89WLaAYTe/6NpHKNNpkRutzCiMUSISi
+         eTIfWHL7HzHvF5G3LZu3S29hMwqx8VembQhPPHZvwmx8scbdtlfkV0c6Hx+fqzHGTVq4
+         cDtQkcjszurENeO0uRTDt4Ie+ftF4rGY3apSLyqXZyB6icb0eNqt1cZnE5XmNwl01usI
+         at1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GlOlAhS+OLlgHOZ0Skxe6Lfb/bGYsvoHqLs8XtmumJU=;
-        b=T3C9xpRQF0ibV+VR1ryDtwsXy4wNZzdYdZL1pfylvzOWnN7Sl2rdQcLGIZ49JRuRm/
-         gYXX7dHJ/L+QbrzA0ubcGjUxOSG6eAzP2E9zRJM2eeZoOZpNJNKP6uXEaaKYR78a0cHv
-         RRzyX1iwUN2s+2makhhdbgxbIkmY/7Y5EQDa583A2pUPS8KZSZWLZUeNxGlO3RADQkd3
-         RuNT/IpK8Q3GpULBQIMJ3Kg6vC9jalYS+dgevHaI1ogFZyYZyH0khKfWHLSPCpQjirbN
-         Ylr/tDIERfwuxgVy6eLMk+pHCp+XAegbCCdNAZTtoIEHvt39etlNzGUiaZMuNL2jEOQv
-         5dkg==
-X-Gm-Message-State: AOAM530QQk6SYENLiKHGANBvSxkvPhJl+LuOZ7ogS7ibt/7HBYmDDyQ4
-        HHXvUr9/fr2uwYBYWZoIVchIJQ==
-X-Google-Smtp-Source: ABdhPJyOGh9q3n9fkZwfv1B3DW38Srr0+LaLCQTU7rtck/9ORV637dA3G4znxrSrihaNj4rdwot81w==
-X-Received: by 2002:a17:907:2da8:b0:6f3:75e1:f9b1 with SMTP id gt40-20020a1709072da800b006f375e1f9b1mr10916437ejc.139.1650903209383;
-        Mon, 25 Apr 2022 09:13:29 -0700 (PDT)
-Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id o22-20020a170906289600b006e44a0c1105sm3763114ejd.46.2022.04.25.09.13.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 09:13:28 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 17:13:02 +0100
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>, robin.murphy@arm.com,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86 <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        iommu <iommu@lists.linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>, zhangfei.gao@linaro.org,
-        Thomas Gleixner <tglx@linutronix.de>, will@kernel.org
-Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
- allocation and free it on mm exit
-Message-ID: <YmbIjnHtibY7n4Wb@myrica>
-References: <tencent_76E043C4D1B6A21A5253579A61034107EB06@qq.com>
- <tencent_7477100F8A445C6CAFA8F13601A55134480A@qq.com>
- <YmJ/WA6KAQU/xJjA@myrica>
- <tencent_A4E83BA6071B2204B6F5D4E69A50D21C1A09@qq.com>
- <YmLOznyBF0f7COYT@myrica>
- <tencent_2922DAB6F3D5789A1CD3A21A843B4007ED09@qq.com>
- <Yman5hLomw9/c+bi@myrica>
- <76ec6342-0d7c-7c7b-c132-2892e4048fa1@intel.com>
- <YmavoKkVu+hd+x0M@myrica>
- <20220425083444.00af5674@jacob-builder>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JbOyJi8rlTpsIdDJseiW/5atS0yFPXCZtTwWRG2W9lA=;
+        b=SgLXlufQj3zr2UshuU5ZtxufPiXoPPQLgBRVFPhOXgkTCegBRQs8uyFJ8TG2yAmwyz
+         73IJfviyQTb5F2uuuZ3R7FZrJZsjXKawboPmvDo/O7VBA517Dzi1yGrXjI3pQ98NQmrO
+         as3yjFtAPTa2oxmwE5gKRMtEJjnJP6JngUG98nvRobqR64hDU98j2aVkifsNqDExss4E
+         7Os53rB5YbHyB+Qo/TuLP9im6bqc9J7L5D9eVPavcBo7AD3PNO6ZiLJNykOiM+Ptk9ZU
+         B5aBObIGKWWL2XR7lbzj+66br8syoqUX/WgSOe70OjDr2XSgyS4xCeZJyjeVI5fbTa3O
+         wBgg==
+X-Gm-Message-State: AOAM532xHsv1CydRJPz3dGrWVPqNeBP2skX3Hrl9VIQYHC64hTkMkELy
+        fIXes2grhEdfese2MADAeo3LIOi6nPWimFDaQmsPNg==
+X-Google-Smtp-Source: ABdhPJxYrvnJPQDo05h+nwt0yjGxY9bMwqLHxIz4/2VqcsFm0HKGj26Jm3NLsP323afSJ3SRagqMQVP5XlpavDCbh8I=
+X-Received: by 2002:a17:907:961c:b0:6f3:a3f9:bcef with SMTP id
+ gb28-20020a170907961c00b006f3a3f9bcefmr2040347ejc.425.1650903209250; Mon, 25
+ Apr 2022 09:13:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220425083444.00af5674@jacob-builder>
+References: <20220412135534.2796158-1-aford173@gmail.com> <20220412135534.2796158-4-aford173@gmail.com>
+ <CAPY8ntCfL=ZPwPr_1N-m_J1FTq+V77-3fggY-joZCyyu-k_qvQ@mail.gmail.com>
+In-Reply-To: <CAPY8ntCfL=ZPwPr_1N-m_J1FTq+V77-3fggY-joZCyyu-k_qvQ@mail.gmail.com>
+From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
+Date:   Mon, 25 Apr 2022 17:13:13 +0100
+Message-ID: <CAPY8ntCuTt65-ELTV8_n+-7=n306p5+HmF3HcMd-8arCTVLezQ@mail.gmail.com>
+Subject: Re: [PATCH 3/4] media: i2c: imx219: Enable variable XCLK
+To:     Adam Ford <aford173@gmail.com>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Tim Harvey <tharvey@gateworks.com>,
+        cstevens@beaconembedded.com, aford@beaconembedded.com,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -91,63 +71,221 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jacob,
+Hi again
 
-On Mon, Apr 25, 2022 at 08:34:44AM -0700, Jacob Pan wrote:
-> Hi Jean-Philippe,
-> 
-> On Mon, 25 Apr 2022 15:26:40 +0100, Jean-Philippe Brucker
-> <jean-philippe@linaro.org> wrote:
-> 
-> > On Mon, Apr 25, 2022 at 07:18:36AM -0700, Dave Hansen wrote:
-> > > On 4/25/22 06:53, Jean-Philippe Brucker wrote:  
-> > > > On Sat, Apr 23, 2022 at 07:13:39PM +0800, zhangfei.gao@foxmail.com
-> > > > wrote:  
-> > > >>>> On 5.17
-> > > >>>> fops_release is called automatically, as well as
-> > > >>>> iommu_sva_unbind_device. On 5.18-rc1.
-> > > >>>> fops_release is not called, have to manually call close(fd)  
-> > > >>> Right that's weird  
-> > > >> Looks it is caused by the fix patch, via mmget, which may add
-> > > >> refcount of fd.  
-> > > > Yes indirectly I think: when the process mmaps the queue,
-> > > > mmap_region() takes a reference to the uacce fd. That reference is
-> > > > released either by explicit close() or munmap(), or by exit_mmap()
-> > > > (which is triggered by mmput()). Since there is an mm->fd dependency,
-> > > > we cannot add a fd->mm dependency, so no mmget()/mmput() in
-> > > > bind()/unbind().
-> > > > 
-> > > > I guess we should go back to refcounted PASIDs instead, to avoid
-> > > > freeing them until unbind().  
-> > > 
-> > > Yeah, this is a bit gnarly for -rc4.  Let's just make sure there's
-> > > nothing else simple we can do.
-> > > 
-> > > How does the IOMMU hardware know that all activity to a given PASID is
-> > > finished?  That activity should, today, be independent of an mm or a
-> > > fd's lifetime.  
-> > 
-> > In the case of uacce, it's tied to the fd lifetime: opening an accelerator
-> > queue calls iommu_sva_bind_device(), which sets up the PASID context in
-> > the IOMMU. Closing the queue calls iommu_sva_unbind_device() which
-> > destroys the PASID context (after the device driver stopped all DMA for
-> > this PASID).
-> > 
-> For VT-d, it is essentially the same flow except managed by the individual
-> drivers such as DSA.
-> If free() happens before unbind(), we deactivate the PASIDs and suppress
-> faults from the device. When the unbind finally comes, we finalize the
-> PASID teardown. It seems we have a need for an intermediate state where
-> PASID is "pending free"?
+On Mon, 25 Apr 2022 at 16:58, Dave Stevenson
+<dave.stevenson@raspberrypi.com> wrote:
+>
+> Hi Adam
+>
+> I have no way of testing with an alternate XCLK value, so I'm working
+> based on the datasheet only.
+>
+> On Tue, 12 Apr 2022 at 14:55, Adam Ford <aford173@gmail.com> wrote:
+> >
+> > The datasheet shows the external clock can be anything
+> > from 6MHz to 27MHz, but EXCK, PREPLLCK_VT_DIV and
+> > PREPLLCK_OP_DIV need to change based on the clock, so
+> > create helper functions to set these registers based on
+> > the rate of xclk.
+> >
+> > Move the validation of the clock rate into imx219_check_hwcfg
+> > which means delaying the call to it until after xclk has been
+> > determined.
+> >
+> > Signed-off-by: Adam Ford <aford173@gmail.com>
+> > ---
+> >  drivers/media/i2c/imx219.c | 79 ++++++++++++++++++++++++++++++--------
+> >  1 file changed, 63 insertions(+), 16 deletions(-)
+> >
+> > diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
+> > index d13ce5c1ece6..08e7d0e72430 100644
+> > --- a/drivers/media/i2c/imx219.c
+> > +++ b/drivers/media/i2c/imx219.c
+> > @@ -39,8 +39,12 @@
+> >  #define IMX219_REG_CHIP_ID             0x0000
+> >  #define IMX219_CHIP_ID                 0x0219
+> >
+> > -/* External clock frequency is 24.0M */
+> > -#define IMX219_XCLK_FREQ               24000000
+> > +/* Default external clock frequency is 24.0M */
+> > +#define IMX219_XCLK_MIN_FREQ           6000000
+> > +#define IMX219_XCLK_MAX_FREQ           27000000
+> > +#define IMX219_REG_EXCK                        0x012a
+> > +#define IMX219_REG_PREPLLCK_VT_DIV     0x0304
+> > +#define IMX219_REG_PREPLLCK_OP_DIV     0x0305
+> >
+> >  /* Pixel rate is fixed for all the modes */
+> >  #define IMX219_PIXEL_RATE              182400000
+> > @@ -166,8 +170,6 @@ static const struct imx219_reg pll_clk_table[] = {
+> >
+> >         {0x0301, 0x05}, /* VTPXCK_DIV */
+> >         {0x0303, 0x01}, /* VTSYSCK_DIV */
+> > -       {0x0304, 0x03}, /* PREPLLCK_VT_DIV 0x03 = AUTO set */
+> > -       {0x0305, 0x03}, /* PREPLLCK_OP_DIV 0x03 = AUTO set */
+> >         {0x0306, 0x00}, /* PLL_VT_MPY */
+> >         {0x0307, 0x39},
+> >         {0x030b, 0x01}, /* OP_SYS_CLK_DIV */
+> > @@ -182,7 +184,6 @@ static const struct imx219_reg pll_clk_table[] = {
+> >   */
+> >  static const struct imx219_reg mode_3280x2464_regs[] = {
+> >         {0x0128, 0x00},
+> > -       {0x012a, 0x18},
+> >         {0x012b, 0x00},
+> >         {0x0164, 0x00},
+> >         {0x0165, 0x00},
+> > @@ -222,7 +223,6 @@ static const struct imx219_reg mode_3280x2464_regs[] = {
+> >
+> >  static const struct imx219_reg mode_1920_1080_regs[] = {
+> >         {0x0128, 0x00},
+> > -       {0x012a, 0x18},
+> >         {0x012b, 0x00},
+> >         {0x0162, 0x0d},
+> >         {0x0163, 0x78},
+> > @@ -262,7 +262,6 @@ static const struct imx219_reg mode_1920_1080_regs[] = {
+> >
+> >  static const struct imx219_reg mode_1640_1232_regs[] = {
+> >         {0x0128, 0x00},
+> > -       {0x012a, 0x18},
+> >         {0x012b, 0x00},
+> >         {0x0164, 0x00},
+> >         {0x0165, 0x00},
+> > @@ -302,7 +301,6 @@ static const struct imx219_reg mode_1640_1232_regs[] = {
+> >
+> >  static const struct imx219_reg mode_640_480_regs[] = {
+> >         {0x0128, 0x00},
+> > -       {0x012a, 0x18},
+> >         {0x012b, 0x00},
+> >         {0x0162, 0x0d},
+> >         {0x0163, 0x78},
+> > @@ -1015,6 +1013,50 @@ static int imx219_configure_lanes(struct imx219 *imx219)
+> >         return ret;
+> >  };
+> >
+> > +static int imx219_set_exck_freq(struct imx219 *imx219)
+> > +{
+> > +       int ret;
+> > +       /* The imx219 registers need MHz not Hz */
+> > +       u8 clk = (u8) (imx219->xclk_freq/1000000U);
+> > +
+> > +       /* Set the clock frequency in MHz */
+> > +       ret = imx219_write_reg(imx219, IMX219_REG_EXCK,
+> > +                              IMX219_REG_VALUE_08BIT, clk);
 
-Yes we do have that state, though I'm not sure we need to make it explicit
-in the ioasid allocator.
+In reviewing your other patch I noticed that the EXCK register is
+actually a 16 bit value. The integer part is in 0x012a, and the
+fractional part (1/256) in 0x012b, which is currently initialised from
+the mode tables.
+Your division discards the fractional part totally, so if the
+configured frequency was 19.2MHz, then it would be programmed
+incorrectly.
 
-Could we move mm_pasid_drop() to __mmdrop() instead of __mmput()?  For Arm
-we do need to hold the mm_count until unbind(), and mmgrab()/mmdrop() is
-also part of Lu's rework [1].
+The value for register 0x012b needs to be computed and set here.
 
-Thanks,
-Jean
-
-[1] https://lore.kernel.org/linux-iommu/20220421052121.3464100-9-baolu.lu@linux.intel.com/
+> > +
+> > +       /* Configure the PREPLLCK_VT_DIV and PREPLLCK_OP_DIV for automatic */
+> > +       switch (clk) {
+> > +       case 6 ... 11:
+> > +               ret = imx219_write_reg(imx219, IMX219_REG_PREPLLCK_VT_DIV,
+> > +                              IMX219_REG_VALUE_08BIT, 0x01);
+> > +               if (ret)
+> > +                       return ret;
+> > +               ret = imx219_write_reg(imx219, IMX219_REG_PREPLLCK_OP_DIV,
+> > +                              IMX219_REG_VALUE_08BIT, 0x01);
+> > +               return ret;
+> > +       case 12 ... 23:
+> > +               ret = imx219_write_reg(imx219, IMX219_REG_PREPLLCK_VT_DIV,
+> > +                              IMX219_REG_VALUE_08BIT, 0x02);
+> > +               if (ret)
+> > +                       return ret;
+> > +
+> > +               ret = imx219_write_reg(imx219, IMX219_REG_PREPLLCK_OP_DIV,
+> > +                              IMX219_REG_VALUE_08BIT, 0x02);
+> > +
+> > +               return ret;
+> > +       case 24 ... 27:
+> > +               ret = imx219_write_reg(imx219, IMX219_REG_PREPLLCK_VT_DIV,
+> > +                              IMX219_REG_VALUE_08BIT, 0x03);
+> > +               if (ret)
+> > +                       return ret;
+> > +               ret = imx219_write_reg(imx219, IMX219_REG_PREPLLCK_OP_DIV,
+> > +                              IMX219_REG_VALUE_08BIT, 0x03);
+> > +               return ret;
+> > +       default:
+> > +               /* Should never get here */
+> > +               return -EINVAL;
+> > +       }
+> > +}
+> > +
+> >  static int imx219_start_streaming(struct imx219 *imx219)
+> >  {
+> >         struct i2c_client *client = v4l2_get_subdevdata(&imx219->sd);
+> > @@ -1039,6 +1081,9 @@ static int imx219_start_streaming(struct imx219 *imx219)
+> >                 goto err_rpm_put;
+> >         }
+> >
+> > +       /* Configure clock based on reference clock frequency */
+> > +       imx219_set_exck_freq(imx219);
+>
+> You're not checking the return value from this function, so any I2C
+> failures will be ignored.
+>
+> > +
+> >         /* Apply default values of current mode */
+> >         reg_list = &imx219->mode->reg_list;
+> >         ret = imx219_write_regs(imx219, reg_list->regs, reg_list->num_of_regs);
+> > @@ -1428,6 +1473,13 @@ static int imx219_check_hwcfg(struct imx219 *imx219)
+> >                 return -EINVAL;
+> >         }
+> >
+> > +       if ((imx219->xclk_freq < IMX219_XCLK_MIN_FREQ) ||
+> > +            imx219->xclk_freq > IMX219_XCLK_MAX_FREQ) {
+> > +               dev_err(&client->dev, "xclk frequency not supported: %d Hz\n",
+>
+> imx219->xclk_freq is unsigned, so %u
+>
+> > +                       imx219->xclk_freq);
+> > +               return -EINVAL;
+> > +       }
+> > +
+> >         return 0;
+> >  }
+> >
+> > @@ -1478,10 +1530,6 @@ static int imx219_probe(struct i2c_client *client)
+> >         if (ret)
+> >                 return ret;
+> >
+> > -       /* Check the hardware configuration in device tree */
+> > -       if (imx219_check_hwcfg(imx219))
+> > -               return -EINVAL;
+> > -
+> >         /* Get system clock (xclk) */
+> >         imx219->xclk = devm_clk_get(dev, NULL);
+> >         if (IS_ERR(imx219->xclk)) {
+> > @@ -1490,11 +1538,10 @@ static int imx219_probe(struct i2c_client *client)
+> >         }
+> >
+> >         imx219->xclk_freq = clk_get_rate(imx219->xclk);
+>
+> My bug admittedly, but clk_get_rate returns an unsigned long, but
+> imx219->xclk_freq is u32.
+> Ideally imx219->xclk_freq should be unsigned long to match, and the
+> dev_err I commented on earlier should be %lu.
+>
+> Cheers.
+>   Dave
+>
+> > -       if (imx219->xclk_freq != IMX219_XCLK_FREQ) {
+> > -               dev_err(dev, "xclk frequency not supported: %d Hz\n",
+> > -                       imx219->xclk_freq);
+> > +
+> > +       /* Check the hardware configuration in device tree */
+> > +       if (imx219_check_hwcfg(imx219))
+> >                 return -EINVAL;
+> > -       }
+> >
+> >         ret = imx219_get_regulators(imx219);
+> >         if (ret) {
+> > --
+> > 2.34.1
+> >

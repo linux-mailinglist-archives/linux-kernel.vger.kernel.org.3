@@ -2,75 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA06350E6A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 19:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61E8D50E6C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 19:16:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243748AbiDYRPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 13:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52312 "EHLO
+        id S243757AbiDYRQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 13:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235346AbiDYRPu (ORCPT
+        with ESMTP id S230167AbiDYRQw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 13:15:50 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED4F15FF8
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 10:12:45 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 16so3536689lju.13
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 10:12:45 -0700 (PDT)
+        Mon, 25 Apr 2022 13:16:52 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD86413DD7;
+        Mon, 25 Apr 2022 10:13:47 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id c1so11235141qkf.13;
+        Mon, 25 Apr 2022 10:13:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=N7fee2Yrx0qNzoi9PdXZ5hx4nrnlVdrW/GV2fmMxG2M=;
-        b=acRadtvAlYLUZrCmq9O5iI5dPYliXwwNI96yUgxN2vvYnQyHFYWbIq3YSk6wxSOnDA
-         GX9RTiQdnHyQtA4OQ7FAx/eRuBe2F7nW7K20QiBw/g4p0zT/aDNIb6GoMhyOYCqluUsp
-         w966oKCZq/KG44LRlyljtZupZ4wx32aOVe7+Hy5Wp+N7xnx+tccplGXtnJVAGCdgqJyB
-         1sBDmWynVnSD+y20tg/j5uLrhve94nndrnKPQyKku8wVj2d2fT/EX/EyAnZIXYqJGaZp
-         x6AKN+qlvspopkwCnb+v9+yZhH/oDM5Srj9sWSLPXfpmXjBom7/BSqtbI/xONPkGOToT
-         8cJQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+japc2t+wot5+BSTXiQ5huwoEirJRSQFwasvOhZa43s=;
+        b=P17sJtcPbya+arEjYzIf9eJ0Vmt77u/n8PikxlHSV731+iMxLKqMw1fsDM0fxfyTkp
+         ws5xYKolRE/l0fbzmjA8jsRE6khpEyF+3R6mLXlTo5i63n8sG/jUBpX3xP5LyCUH8xxM
+         mVLUS/KlgpZotG+j96lvJydzF57TMfpcTy6BJT9HOguNj3sDS/0QljNyEanew1mw+2/m
+         ji1afJOmx82YpEOR0TNcadGAUEbtc1gE7D2DjUx25jxTVW6Pm+uN34DUAjLjYuarnLTj
+         RBrqHk6XPqjsgDNXyI5qE0K8kGueY7IpPApyKVJYMDC6As3VjGNh4Hw8/XzDs+7fcM9d
+         pP+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=N7fee2Yrx0qNzoi9PdXZ5hx4nrnlVdrW/GV2fmMxG2M=;
-        b=nf6gGX+ZY4oK5layIs4CH8PtCjHXSitZ0/OFwhuHfsso+V2tpt+xT+Zzt1ZhzZs0Ui
-         OeIy/eU/jrITx8vFhBquBIjSLaPaer2iGmQQ+1ZfnxhsdU0q43MYI+KwNCVybTdsKh5i
-         MH1PVx8V4IOcYMx5e2sw8D8ijKWCPUSWZ7UdLSYxAmaJmuIMj5ta38dcbWota94u2u2Z
-         2t7NsWh6JAyrbUannBI7DULyC7oOK5Lbgo1hV6bgrAMVRfW9nqFFNeUZzlkGYRpBxFjl
-         y9Pz+rZd/wXcXK9guUZFRY4qXsKxw73tgzxujz6ryfJAatOEyEjbR6iK1947VfHVmG0v
-         t5sA==
-X-Gm-Message-State: AOAM5304zIfLr5QwYKqBwC+8X6tkUUm31jo4e/vr4s6wAZni3mEtmiiE
-        QIlocEO1s0hGQdFTNt2gDJFGTjjCN00WV/hn7LEkIA==
-X-Google-Smtp-Source: ABdhPJxUrJi15zmGDPYrRdXhEhm6WWYpITF+DKeRbw52izZPXspEXizuIrsiftQCpGs1t6FoJos6DDldjOwxUQ8ZRFY=
-X-Received: by 2002:a2e:5c6:0:b0:24f:5bd:5f89 with SMTP id 189-20020a2e05c6000000b0024f05bd5f89mr7433707ljf.170.1650906763210;
- Mon, 25 Apr 2022 10:12:43 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+japc2t+wot5+BSTXiQ5huwoEirJRSQFwasvOhZa43s=;
+        b=4jTzh20ykGlUbHGDCl880Km2Gj+3e+uv+i2itPXBDSZRdiOPOMau9KnFoAMmAW9jaK
+         xTl0EyTYdRekXRd2Un85cRWxJH7gDTMT/t7JoiO1CFDObD0nYJdbX+jyz/1eYTDkowj+
+         +f1bckkEOArsuWIoLEjjyZD7BUuGtdULejS4yBZYEeIhnO+cz+8hdVj+CJkbhK1p5cre
+         acJ7imskinhhKFGAQpbGF52z+Ql5oc4IiTFQLTAMnIn78ePfHz4xZhgvgr2ABmQnJYqd
+         NQzEgexDN7JZdisawOYzHjYfKY998eCymR2sYep+scx3x+iiQBKP7rmFnfSlEr6OEwAC
+         V0MA==
+X-Gm-Message-State: AOAM532zdBqGecUKv2dND9laItTz1Uwd3X4L/0gVksRx9PjxPNfbaNEi
+        oqppcNUlMV1C+k+SSFKapcU=
+X-Google-Smtp-Source: ABdhPJxkllM4++LB6/9J4wC5bXxDX3s8LLt4srPcIdugcklZ6pg7vea5I8GIU8fS4b8lp8Cm9CHPiw==
+X-Received: by 2002:a05:620a:2847:b0:67d:2bad:422f with SMTP id h7-20020a05620a284700b0067d2bad422fmr10702993qkp.559.1650906826798;
+        Mon, 25 Apr 2022 10:13:46 -0700 (PDT)
+Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
+        by smtp.gmail.com with ESMTPSA id v3-20020a05622a014300b002e1dcd4cfa9sm7154928qtw.64.2022.04.25.10.13.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 10:13:46 -0700 (PDT)
+From:   Peter Geis <pgwipeout@gmail.com>
+To:     linux-rockchip@lists.infradead.org
+Cc:     heiko@sntech.de, Peter Geis <pgwipeout@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/7] Add support for several new rk3566 SBCs
+Date:   Mon, 25 Apr 2022 13:13:37 -0400
+Message-Id: <20220425171344.1924057-1-pgwipeout@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220423000328.2103733-1-rananta@google.com> <20220423000328.2103733-5-rananta@google.com>
- <CAAeT=Fyc3=uoOdeXrLKfYxKtL3PFV0U_Bwj_g+bca_Em63wGhw@mail.gmail.com> <CAJHc60zR4Pa=y-Y4Dp27FoAvqpBrONCN727KbnhSoxNGRiBGuA@mail.gmail.com>
-In-Reply-To: <CAJHc60zR4Pa=y-Y4Dp27FoAvqpBrONCN727KbnhSoxNGRiBGuA@mail.gmail.com>
-From:   Oliver Upton <oupton@google.com>
-Date:   Mon, 25 Apr 2022 10:12:32 -0700
-Message-ID: <CAOQ_QsjFtyy1AFq5c-jLSY-r9fWEL4H5fuKNbt9QcFirnU2wmg@mail.gmail.com>
-Subject: Re: [PATCH v6 4/9] KVM: arm64: Add vendor hypervisor firmware register
-To:     Raghavendra Rao Ananta <rananta@google.com>
-Cc:     Reiji Watanabe <reijiw@google.com>, Marc Zyngier <maz@kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,31 +69,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 9:52 AM Raghavendra Rao Ananta
-<rananta@google.com> wrote:
+The following series adds support for the following single board
+computers:
+- Pine64 Quartz64 Model B
+- Pine64 SoQuartz SoM with RPi CM4IO carrier board
+- Firefly Station M2
 
-[...]
+Patches 1, 2, and 3 add the requisite dt-bindings.
+Patch 4 adds support for the SFC to the rk356x device tree.
+Patch 5 adds the Quartz64 Model B device tree.
+Patch 6 adds the SoQuartz CM4IO device tree.
+Patch 7 adds the Firefly Station M2 device tree.
 
-> > > +#define KVM_REG_ARM_VENDOR_HYP_BMAP_BIT_MAX    1
-> >
-> > Nit: IMHO perhaps it might be more convenient to define the MAX macro
-> > in arch/arm64/include/uapi/asm/kvm.h like below for maintenance ?
-> > (The same comments are applied to other KVM_REG_ARM_*_BMAP_BIT_MAX)
-> >
-> > #define KVM_REG_ARM_VENDOR_HYP_BIT_MAX KVM_REG_ARM_VENDOR_HYP_BIT_PTP
-> >
-> We have been going back and forth on this :)
-> It made sense for me to keep it in uapi as well, but I took Oliver's
-> suggestion of keeping it outside of uapi since this is something that
-> could be constantly changing [1].
+Please review and apply at your convenience.
 
-The maximum set of features in a given bitmap register is a property
-of the running system, not the headers chosen at compile time. There
-is an illusion of ABI breakage when adding new bits to the registers
-if we've declared the max bit in UAPI. We also define
-KVM_VCPU_MAX_FEATURES outside of UAPI, even though it is related to
-the KVM_ARM_VCPU_INIT ioctl.
+Very Respectfully,
+Peter Geis
 
---
-Thanks,
-Oliver
+Furkan Kardame (1):
+  arm64: dts: rockchip: add dts for Firefly Station M2 rk3566
+
+Peter Geis (6):
+  dt-bindings: arm: rockchip: Add Pine64 Quartz64 Model B
+  dt-bindings: arm: rockchip: Add Pine64 SoQuartz SoM
+  dt-bindings: arm: rockchip: Add Firefly Station M2
+  arm64: dts: rockchip: add rk356x sfc support
+  arm64: dts: rockchip: add Pine64 Quartz64-B device tree
+  arm64: dts: rockchip: add SoQuartz CM4IO dts
+
+ .../devicetree/bindings/arm/rockchip.yaml     |  17 +
+ arch/arm64/boot/dts/rockchip/Makefile         |   3 +
+ .../boot/dts/rockchip/rk3566-quartz64-b.dts   | 615 ++++++++++++++++++
+ .../arm64/boot/dts/rockchip/rk3566-roc-pc.dts | 580 +++++++++++++++++
+ .../boot/dts/rockchip/rk3566-soquartz-cm4.dts | 167 +++++
+ .../boot/dts/rockchip/rk3566-soquartz.dtsi    | 607 +++++++++++++++++
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi      |  11 +
+ 7 files changed, 2000 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-roc-pc.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi
+
+-- 
+2.25.1
+

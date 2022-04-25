@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B434250E70C
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 19:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD71250E70F
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 19:25:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243943AbiDYR1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 13:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44418 "EHLO
+        id S244079AbiDYR16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 13:27:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243924AbiDYR1O (ORCPT
+        with ESMTP id S240241AbiDYR1T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 13:27:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC04340E71
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 10:24:10 -0700 (PDT)
+        Mon, 25 Apr 2022 13:27:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2A540E7D
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 10:24:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 47E8D61501
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 17:24:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1491EC385A7;
-        Mon, 25 Apr 2022 17:24:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 70398B81905
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 17:24:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 646ECC385A4;
+        Mon, 25 Apr 2022 17:24:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650907449;
-        bh=igC0ln6z4ICo6ruvrsN2YbYFK79LIxKWX9Rvb44n6u8=;
+        s=k20201202; t=1650907452;
+        bh=zDTFfsXP5TQsh6QxZ0lZ30NVKp51Bfdj/1GB7CjYytc=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=KViDhhEVNj1ZMJuVPkbgL6JTA7Y1qc5POj9NALGnayCO0s7fKQL4glnXOovcs0KN0
-         0Hj/GramaJewFU0IOqKsIhkXU1sMHpe9LW55Qe5R4+VxAosw2uU0lH+2FK9g7AZ3v+
-         etbUTLjcbaH0rwO+lYpt9X0kmYNx1qpGyhEU1yDB2NMSd3AfMYBOQbeoEcy2PAJX+W
-         Tr27uWkBvrKxGtU48QU9+11jRGcqzZa8GecRNdJBFMNVVgtjl/7RmyGlHnCs9UZsfr
-         YoDsuWHkXGwiCsemLxpjIQ7vcdqLt854THYdm0xpIAJ2ErE8Z2BcbFnkRYenfcigP3
-         glA8kuQIjNDjg==
+        b=PlpUOGdi5gYZ5GIuSwhftkR5FLmJPochry0pyq0b0XhANVZ3fyhEIPnGGuw60F5Cy
+         leWUg0kyaDIC58lkBgU3KvclV3lbHm5MHa4nbamHUwkysRAU62NkSmDzPbe1lZzuMi
+         PACUoCd/zz+lqjUkPpxPBeUAXOxTN4t0agl1O+NvCcAxV93y6RLhr52t8Bm1lqDMEe
+         i3WQ8587OGevsszm2WNYX/UipUHZzz3q/n8/FwVptlAUMknBpdiKNwEI4JqgYpxaRm
+         MmCJ0X4K372biIi5ju1jj8b7QvGn9EoyCyhOlYJ3wUsUzcNUrKcD4eUo/3txW94dGI
+         98Vwn8XLU3DhA==
 From:   Mark Brown <broonie@kernel.org>
 To:     lgirdwood@gmail.com, cgel.zte@gmail.com
 Cc:     alsa-devel@alsa-project.org, chi.minghao@zte.com.cn,
         zealci@zte.com.cn, linux-kernel@vger.kernel.org
-In-Reply-To: <20220414085310.2541546-1-chi.minghao@zte.com.cn>
-References: <20220414085310.2541546-1-chi.minghao@zte.com.cn>
-Subject: Re: [PATCH] ASoC: img-i2s-in: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-Message-Id: <165090744779.583823.15729249408440513217.b4-ty@kernel.org>
-Date:   Mon, 25 Apr 2022 18:24:07 +0100
+In-Reply-To: <20220420030246.2575629-1-chi.minghao@zte.com.cn>
+References: <20220420030246.2575629-1-chi.minghao@zte.com.cn>
+Subject: Re: [PATCH] ASoC: img-parallel-out: using pm_runtime_resume_and_get
+Message-Id: <165090744992.583823.8247124310315131790.b4-ty@kernel.org>
+Date:   Mon, 25 Apr 2022 18:24:09 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -53,7 +53,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Apr 2022 08:53:10 +0000, cgel.zte@gmail.com wrote:
+On Wed, 20 Apr 2022 03:02:46 +0000, cgel.zte@gmail.com wrote:
 > From: Minghao Chi <chi.minghao@zte.com.cn>
 > 
 > Using pm_runtime_resume_and_get() to replace pm_runtime_get_sync and
@@ -69,8 +69,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: img-i2s-in: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-      commit: e5737cceeee5c085f6f4ea76ae99e67e4ca1bdd5
+[1/1] ASoC: img-parallel-out: using pm_runtime_resume_and_get
+      commit: 9470aa1c46098587270ff34c112d670b58ff5d34
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

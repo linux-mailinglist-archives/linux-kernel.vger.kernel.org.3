@@ -2,66 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9971650E3ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:03:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6CF050E3F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:05:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237886AbiDYPGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 11:06:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60922 "EHLO
+        id S242704AbiDYPHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 11:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234132AbiDYPGK (ORCPT
+        with ESMTP id S232990AbiDYPHE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 11:06:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0ACEBC8E;
-        Mon, 25 Apr 2022 08:03:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D6F960AEC;
-        Mon, 25 Apr 2022 15:03:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76B13C385A7;
-        Mon, 25 Apr 2022 15:03:05 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="FmlRDvmV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1650898982;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IRG2KHeOyDhcUmVlkf7s8JUrvKt8qVlfa0xo+V7Zi+4=;
-        b=FmlRDvmVWhzLXhqsNjg6ICBQOautm7yeN+whkRHB+yIdFQ1VdhHUaQB5JtALIZG+9SF3O9
-        J/uT5NnFu9NsR5hvOQB47KceJtYgct192LdP31FZ6IEfuVbBUTB8eMVvido1YB0l2QpCHj
-        sn/y9Qn1H8mHxXpgEVnTNWBGNY56UbU=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 6854621e (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 25 Apr 2022 15:03:01 +0000 (UTC)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-2f7d19cac0bso44552677b3.13;
-        Mon, 25 Apr 2022 08:03:01 -0700 (PDT)
-X-Gm-Message-State: AOAM532LaL7aMsUhIZcomVCQrzso4tjZme0mD+h8+MxQM2fwiKmTtGXO
-        SxNMmR2zmvXRbdqhPf0SEwg5n6bJM7SbI9o4JiM=
-X-Google-Smtp-Source: ABdhPJwRBkzycZNtw+Xpgw+TUn2gCHD/52y23ZaBb64ec3dvvERDUW8hwIJ64xGWlSDPyjvcqUgcHuAr8LcjyaS7fTE=
-X-Received: by 2002:a81:515:0:b0:2f7:f0f8:b521 with SMTP id
- 21-20020a810515000000b002f7f0f8b521mr3983397ywf.2.1650898980131; Mon, 25 Apr
- 2022 08:03:00 -0700 (PDT)
+        Mon, 25 Apr 2022 11:07:04 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58082120A2
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 08:03:59 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id 12so17358176oix.12
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 08:03:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8G4/8iMnjJuOlBkbsr3GuWjcrP2t2EtWHZyD3A4fE/A=;
+        b=DGXPvVKKadnRlgKp3HL9QCeWJhYXLKkKJrj1YJ1VdYfefgHPAuo8dK7s31xvyq2kwi
+         vrkfbKvlfk9GLe7f5H4wChjJ+HQXl3PkysQR8nJSRCaUvsXonRGtOdebq9YKDj3UzOtk
+         8hJ1nY1xtsqbCwXIYxcA5cPAiW3zY6DTsBpCfIf221YY25JDeZDh1DA2D1wp5sH9jTLO
+         vzL5330zPkSpgxZFQ91tquYjKzCHoHygH3lomqJApW3ShehIDo/dHIR4Z4wT93EJC4hD
+         +UWyAUUzTKz+hCZJBJa7oARaJXHnu3h9ACfVvIF55q6SWo3v6d7z5wOWNW7v/3nUtYos
+         M9oA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=8G4/8iMnjJuOlBkbsr3GuWjcrP2t2EtWHZyD3A4fE/A=;
+        b=A6gnJVKPJji4SUWs0nzCmouyLBqA2bhCbg2qxcIYrI+Gb5ISovuoLMySn/LQoO7GjF
+         l9L/IfNQ7qiNSmJfXr3JH35m7abRQ45vgxo36zpuTU1f6Wmxl74SLVDN0Lzlsz3k72IJ
+         kT1V2p1GTyikF2cQ6llD1XbOKCaR7QchNaE3Hxr5+rp8Oi4JKEcj2kViQb+JxHWWzwOg
+         +dmoWhcqVJNFJt48mCkZBd/ZSiP1c5esASiEv2n/8JGHdWpR30PYApXJCYyfD7aWLBlt
+         JC3qOYzNL34Kn0w28dVlWGf8BMQcQXt2W/nliekePuc+7MyTKvFNV4AEPv4uSNtHAUMI
+         ilHg==
+X-Gm-Message-State: AOAM530pubyn5Uo027KwUbj76Vk9PVx2dozHgLz3AhHaGTxe1OUhyzMQ
+        pc5Qq+rySEUPJ1DxqJyo8uPDJv7cidc=
+X-Google-Smtp-Source: ABdhPJzQ/OlwCGCQgdnmYMHuXegiX/UWMe3zzPtpD4URIZDo0YGj+7azYcf6fM7pIDZSvZr2FLMxtQ==
+X-Received: by 2002:a05:6808:1926:b0:323:3c4:947d with SMTP id bf38-20020a056808192600b0032303c4947dmr9969024oib.103.1650899038658;
+        Mon, 25 Apr 2022 08:03:58 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k22-20020a056870959600b000d277c48d18sm3529887oao.3.2022.04.25.08.03.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 08:03:57 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 25 Apr 2022 08:03:56 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Linux 5.18-rc4
+Message-ID: <20220425150356.GA4138752@roeck-us.net>
+References: <CAHk-=whmtHMzjaVUF9bS+7vE_rrRctcCTvsAeB8fuLYcyYLN-g@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220423212623.1957011-9-Jason@zx2c4.com> <mhng-57e67f41-bbc5-437c-b4cd-c6f5f9924a67@palmer-mbp2014>
-In-Reply-To: <mhng-57e67f41-bbc5-437c-b4cd-c6f5f9924a67@palmer-mbp2014>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 25 Apr 2022 17:02:49 +0200
-X-Gmail-Original-Message-ID: <CAHmME9qosSq+3RYtBCMiS6yCaiZcJtaBW=8StMTACEkr3hVSow@mail.gmail.com>
-Message-ID: <CAHmME9qosSq+3RYtBCMiS6yCaiZcJtaBW=8StMTACEkr3hVSow@mail.gmail.com>
-Subject: Re: [PATCH v6 08/17] riscv: use fallback for random_get_entropy()
- instead of zero
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=whmtHMzjaVUF9bS+7vE_rrRctcCTvsAeB8fuLYcyYLN-g@mail.gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,39 +71,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Palmer,
+On Sun, Apr 24, 2022 at 03:22:59PM -0700, Linus Torvalds wrote:
+> Fairly slow and calm week - which makes me just suspect that the other
+> shoe will drop at some point.
+> 
+> But maybe things are just going really well this release. It's bound
+> to happen _occasionally_, after all.
+> 
+> It's not only a fairly small set of commits, the diffstat is pretty
+> small and flat too. The biggest single patch is literally killing off
+> a zombie file that had already been deleted - well, renamed, really -
+> once, but it didn't know to stay dead, and was resurrected by a merge
+> mistake.
+> 
+> The changes are sprinkled all over, they just aren't all that big:
+> arch updates (sound being the bulk of it, but "bulk" really is fairly
+> misleading), some driver updates, a couple of filesystem fixes, memory
+> management, networking, and some tooling (mainly a couple of
+> selftests).
+> 
 
-On Mon, Apr 25, 2022 at 4:55 PM Palmer Dabbelt <palmer@dabbelt.com> wrote:
-> Fine for me if this goes in via some other tree, but also happy to take
-> it via the RISC-V tree if you'd like.
+Build results:
+	total: 151 pass: 131 fail: 20
+Failed builds:
+	arm:allnoconfig
+	arm:tinyconfig
+	h8300:allnoconfig
+	h8300:tinyconfig
+	h8300:edosk2674_defconfig
+	h8300:h8300h-sim_defconfig
+	h8300:h8s-sim_defconfig
+	m68k:allnoconfig
+	m68k:tinyconfig
+	m68k_nommu:m5272c3_defconfig
+	m68k_nommu:m5307c3_defconfig
+	m68k_nommu:m5249evb_defconfig
+	m68k_nommu:m5407c3_defconfig
+	riscv32:allnoconfig
+	riscv32:tinyconfig
+	riscv:allnoconfig
+	riscv:tinyconfig
+	s390:allmodconfig
+	sh:allnoconfig
+	sh:tinyconfig
+Qemu test results:
+	total: 489 pass: 486 fail: 3
+Failed tests:
+	arm:mps2-an385:mps2_defconfig:mps2-an385:initrd
+	mcf5208evb:m5208:m5208evb_defconfig:initrd
+	xtensa:de212:kc705-nommu:nommu_kc705_defconfig
 
-I'm going to take this series through the random.git tree, as I've got
-things that build on top of it for random.c slated for 5.19.
+As far as I can see this is all due to
 
-> IMO we could just call this a
-> fix, maybe
->
-> Fixes: aa9887608e77 ("RISC-V: Check clint_time_val before use")
->
-> (but that just brought this back, so there's likely older kernels broken
-> too).  Shouldn't be breaking any real hardware, though, so no rush on my
-> end.
+error: page_alloc.c: undefined reference to `vmalloc_huge'
 
-That'd be fine with me, but it'd involve also backporting the
-timekeeping patch, which adds a new API, so maybe we better err on the
-side of caution with that new code.
+as already reported.
 
-> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-> Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
-
-Thanks for the review.
-
-> Makes sense: we had an architecturally-mandated timer at the time, but
-> we don't any more.
-
-That's too bad. Out of curiosity, what happened? Was that deemed too
-expensive for certain types of chips that western digital wanted to
-produce for their hard drives, or some really constrained use case
-like that?
-
-Jason
+Guenter

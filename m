@@ -2,172 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17EC750D863
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 06:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D5B50D834
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 06:24:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241027AbiDYEeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 00:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56622 "EHLO
+        id S241022AbiDYE1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 00:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235076AbiDYEd5 (ORCPT
+        with ESMTP id S240876AbiDYE1Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 00:33:57 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655513F309;
-        Sun, 24 Apr 2022 21:30:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650861054; x=1682397054;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=89hd6kJ3nzrRo6JJusipc/9vdsoN37aiQs7fLUUIQdg=;
-  b=mn5LGffrr5SDiOVEciRw0vTjOg0pPbC7EGeMyG2IipO4LoN1uBSaDsSr
-   vyHv7qvfuxv0UukwvszEqJgNlpu+pngPPUXvYgq5tfNbtW5qXOB6Y/EXg
-   33qv+0IK0foeFVmLNx96vSvWG2WD1IVrRkCfwigZtu1NnUgFiHmJ1PeCi
-   uwQ6biOGdntNlOXDjcNjJIbwkbVvmM4BXCliAfSgYp7LLykHIMpJTZzZa
-   CZt/48cPCXqEeWx2saAQ+oGmIGjFG/exTrpPyyMu0Rg6LRO0IlDDe0CWS
-   HTjr7cDqSGk0zWo4w92PliWsnKr6gYvV2cNGCnG7lE10G+Xi+F7sgTNc5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="264933285"
-X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
-   d="scan'208";a="264933285"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 21:30:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
-   d="scan'208";a="512461881"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by orsmga003.jf.intel.com with ESMTP; 24 Apr 2022 21:30:51 -0700
-Date:   Mon, 25 Apr 2022 12:23:10 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Nava kishore Manne <nava.manne@xilinx.com>
-Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
-        michal.simek@xilinx.com, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        git@xilinx.com
-Subject: Re: [PATCH v6 2/5] fpga: fix for coding style issues
-Message-ID: <20220425042310.GA363075@yilunxu-OptiPlex-7050>
-References: <20220423170235.2115479-1-nava.manne@xilinx.com>
- <20220423170235.2115479-3-nava.manne@xilinx.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220423170235.2115479-3-nava.manne@xilinx.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 25 Apr 2022 00:27:25 -0400
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 31B56DF;
+        Sun, 24 Apr 2022 21:24:16 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [10.15.192.164])
+        by mail-app3 (Coremail) with SMTP id cC_KCgDHz3thImZikSbvAg--.24521S2;
+        Mon, 25 Apr 2022 12:24:05 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-kernel@vger.kernel.org
+Cc:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH net] drivers: net: can: Fix deadlock in grcan_close()
+Date:   Mon, 25 Apr 2022 12:24:00 +0800
+Message-Id: <20220425042400.66517-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cC_KCgDHz3thImZikSbvAg--.24521S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kr4kXF45Xw1xWr4kWr4kJFb_yoW8Gw4xpw
+        47KFyfAFWvvr4UK3Z7Xw4kZF1rZ3WDWFWUJFy5Wws5Zwn3ZF15JF1rKa4UuF47KFyDKFsx
+        uF1rXrZ3CFs8GrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUka1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
+        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
+        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
+        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgkLAVZdtZYwoQAFs9
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 23, 2022 at 10:32:32PM +0530, Nava kishore Manne wrote:
-> fixes the below checks reported by checkpatch.pl:
-> - Lines should not end with a '('
-> - Alignment should match open parenthesis
-> 
-> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
+There are deadlocks caused by del_timer_sync(&priv->hang_timer)
+and del_timer_sync(&priv->rr_timer) in grcan_close(), one of
+the deadlocks are shown below:
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+   (Thread 1)              |      (Thread 2)
+                           | grcan_reset_timer()
+grcan_close()              |  mod_timer()
+ spin_lock_irqsave() //(1) |  (wait a time)
+ ...                       | grcan_initiate_running_reset()
+ del_timer_sync()          |  spin_lock_irqsave() //(2)
+ (wait timer to stop)      |  ...
 
-> ---
-> Changes for v2:
->                 -None.
-> Changes for v3:
->                -Fixed similar issue exists in "drivers/fpga/*".
-> Changes for v4:
->                -None.
-> Changes for v5:
->               - Reduced the length of the 'fpga_mgr_write_init(...)' API
->                 as suggested by Joe.
->               - To align Include declaration and definition of APIs updated
->                 the FPGA-region.h file as suggested by joe.
->               - Fixed similar issue exists with of_fpga_region_parse_ov() API.
-> 
-> Changes for v6:
->               - Align the declaration and definition of APIs as suggested by
->                 Yilun and Joe.
->               - Move the 'count' handling logic into 'else' block as suggested
->                 by Yilun.
-> 
->  drivers/fpga/fpga-mgr.c          | 9 +++++----
->  drivers/fpga/fpga-region.c       | 6 +++---
->  drivers/fpga/of-fpga-region.c    | 6 +++---
->  include/linux/fpga/fpga-region.h | 6 +++---
->  4 files changed, 14 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
-> index d49a9ce34568..24dee27c7897 100644
-> --- a/drivers/fpga/fpga-mgr.c
-> +++ b/drivers/fpga/fpga-mgr.c
-> @@ -148,11 +148,12 @@ static int fpga_mgr_write_init_buf(struct fpga_manager *mgr,
->  	int ret;
->  
->  	mgr->state = FPGA_MGR_STATE_WRITE_INIT;
-> -	if (!mgr->mops->initial_header_size)
-> +	if (!mgr->mops->initial_header_size) {
->  		ret = fpga_mgr_write_init(mgr, info, NULL, 0);
-> -	else
-> -		ret = fpga_mgr_write_init(
-> -		    mgr, info, buf, min(mgr->mops->initial_header_size, count));
-> +	} else {
-> +		count = min(mgr->mops->initial_header_size, count);
-> +		ret = fpga_mgr_write_init(mgr, info, buf, count);
-> +	}
->  
->  	if (ret) {
->  		dev_err(&mgr->dev, "Error preparing FPGA for writing\n");
-> diff --git a/drivers/fpga/fpga-region.c b/drivers/fpga/fpga-region.c
-> index b0ac18de4885..485948e3c0db 100644
-> --- a/drivers/fpga/fpga-region.c
-> +++ b/drivers/fpga/fpga-region.c
-> @@ -18,9 +18,9 @@
->  static DEFINE_IDA(fpga_region_ida);
->  static struct class *fpga_region_class;
->  
-> -struct fpga_region *fpga_region_class_find(
-> -	struct device *start, const void *data,
-> -	int (*match)(struct device *, const void *))
-> +struct fpga_region *
-> +fpga_region_class_find(struct device *start, const void *data,
-> +		       int (*match)(struct device *, const void *))
->  {
->  	struct device *dev;
->  
-> diff --git a/drivers/fpga/of-fpga-region.c b/drivers/fpga/of-fpga-region.c
-> index 50b83057c048..a598d03626af 100644
-> --- a/drivers/fpga/of-fpga-region.c
-> +++ b/drivers/fpga/of-fpga-region.c
-> @@ -189,9 +189,9 @@ static int child_regions_with_firmware(struct device_node *overlay)
->   *   fpga_image_info struct if there is an image to program.
->   *   error code for invalid overlay.
->   */
-> -static struct fpga_image_info *of_fpga_region_parse_ov(
-> -						struct fpga_region *region,
-> -						struct device_node *overlay)
-> +static struct fpga_image_info *
-> +of_fpga_region_parse_ov(struct fpga_region *region,
-> +			struct device_node *overlay)
->  {
->  	struct device *dev = &region->dev;
->  	struct fpga_image_info *info;
-> diff --git a/include/linux/fpga/fpga-region.h b/include/linux/fpga/fpga-region.h
-> index 3b87f232425c..9d4d32909340 100644
-> --- a/include/linux/fpga/fpga-region.h
-> +++ b/include/linux/fpga/fpga-region.h
-> @@ -52,9 +52,9 @@ struct fpga_region {
->  
->  #define to_fpga_region(d) container_of(d, struct fpga_region, dev)
->  
-> -struct fpga_region *fpga_region_class_find(
-> -	struct device *start, const void *data,
-> -	int (*match)(struct device *, const void *));
-> +struct fpga_region *
-> +fpga_region_class_find(struct device *start, const void *data,
-> +		       int (*match)(struct device *, const void *));
->  
->  int fpga_region_program_fpga(struct fpga_region *region);
->  
-> -- 
-> 2.25.1
+We hold priv->lock in position (1) of thread 1 and use
+del_timer_sync() to wait timer to stop, but timer handler
+also need priv->lock in position (2) of thread 2.
+As a result, grcan_close() will block forever.
+
+This patch extracts del_timer_sync() from the protection of
+spin_lock_irqsave(), which could let timer handler to obtain
+the needed lock.
+
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+ drivers/net/can/grcan.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/net/can/grcan.c b/drivers/net/can/grcan.c
+index d0c5a7a60da..1189057b5d6 100644
+--- a/drivers/net/can/grcan.c
++++ b/drivers/net/can/grcan.c
+@@ -1102,8 +1102,10 @@ static int grcan_close(struct net_device *dev)
+ 
+ 	priv->closing = true;
+ 	if (priv->need_txbug_workaround) {
++		spin_unlock_irqrestore(&priv->lock, flags);
+ 		del_timer_sync(&priv->hang_timer);
+ 		del_timer_sync(&priv->rr_timer);
++		spin_lock_irqsave(&priv->lock, flags);
+ 	}
+ 	netif_stop_queue(dev);
+ 	grcan_stop_hardware(dev);
+-- 
+2.17.1
+

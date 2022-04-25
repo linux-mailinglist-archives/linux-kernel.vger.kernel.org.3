@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A7150E05D
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 14:33:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF95950E062
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 14:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240644AbiDYMf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 08:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41952 "EHLO
+        id S236445AbiDYMgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 08:36:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238197AbiDYMfi (ORCPT
+        with ESMTP id S238226AbiDYMfi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 25 Apr 2022 08:35:38 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27A9674E8;
-        Mon, 25 Apr 2022 05:32:33 -0700 (PDT)
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2E66A006;
+        Mon, 25 Apr 2022 05:32:34 -0700 (PDT)
 Received: from obbardc-laptop.home (unknown [IPv6:2a00:23c7:6883:e501:cf51:f3a2:10b5:accf])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: obbardc)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 4D3871F43548;
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 96F101F43553;
         Mon, 25 Apr 2022 13:32:32 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1650889952;
-        bh=ZflrCY90qDvsRTN/89T+MYpE5uYdGwBIfCIw17JRHS0=;
+        bh=hSDAXRypJ/Z4HhJhylWfvqB1KkaymD9gTFsthsCapJw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E/tPmOb+xaNf/oC8pddMWa4lFhJe+aS1VLPMk5ZO7j+apfoz6+NgkH7y2a6W4NDYa
-         Ol+uWluOXKcp+62SFTw5H34uqUp7E93idAwM3/ySY/hvNjIEim3RuEN5u4Bgz4S7hZ
-         FFe35LU6mUT+Y4N3D4sJ/3QwpPR71xwVzpyr/S0rG38xnbPo6YzxpNUbNTa2P+6920
-         Pt78Zbauoad9IkfcEGX+jMaFCWRlddvqxjzfalTVHhVcVBIsWaocbi/flqgV/THfmo
-         HdhvaG1VCuVEhH5Yseq8mkqFK/kXizCuK47VzrbL0cCEbYxXSCoxuKcLvWA8Gkz81r
-         OxZjmWQIhDdyA==
+        b=W9/PsLcXtG01Bhrekqx6eBoE2aNTbSa/do5zzv6WiKHJ23ya8u1xJ5tJSXLyeqWEX
+         xlP9nxXmiaIHq2/y2zkVxl9d5AoR/6mC6r4AsKYZBUJBx2N8q16LnN0JWmu13vG24e
+         JhJt0DtwSIlLSfW4H/ZY40fBUVDiwbS8c0ZAAS48OzVtA2b0YSvmdk97cCzChpratl
+         aXkuV1eUWMb07D/h2MpF4XZnD50qezVCxEKxbtP8RmlWzEB26842lBoqiS2BVb1nnY
+         byk/CyFPGLgU089nacef9TjA6oxF1fIoIS7l9E2IZnoHmOXWOsYhf33kuEJgU3Cb0V
+         Pf0Y8rgeZ5iLQ==
 From:   Christopher Obbard <chris.obbard@collabora.com>
 To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -43,9 +43,9 @@ Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, kernel@collabora.com,
         Christopher Obbard <chris.obbard@collabora.com>
-Subject: [PATCH v2 2/3] arm64: dts: rockchip: Rename vdec_mmu node for RK3328
-Date:   Mon, 25 Apr 2022 13:32:14 +0100
-Message-Id: <20220425123215.1055251-3-chris.obbard@collabora.com>
+Subject: [PATCH v2 3/3] arm64: dts: rockchip: Add vdec support for RK3328
+Date:   Mon, 25 Apr 2022 13:32:15 +0100
+Message-Id: <20220425123215.1055251-4-chris.obbard@collabora.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220425123215.1055251-1-chris.obbard@collabora.com>
 References: <20220425123215.1055251-1-chris.obbard@collabora.com>
@@ -60,30 +60,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All other rockchip devices which have vdec nodes do not
-have an rk prefix. Remove the prefix from the (currently
-unused) rkvdec_mmu node for consistency with other
-devices.
+The RK3328 has an vdec device with dedicated iommu.
+Describe the vdec device, the required power-domains
+and enable the iommu in the devicetree.
 
 Signed-off-by: Christopher Obbard <chris.obbard@collabora.com>
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 ---
- arch/arm64/boot/dts/rockchip/rk3328.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/rockchip/rk3328.dtsi | 20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm64/boot/dts/rockchip/rk3328.dtsi b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
-index b822533dc7f1..f8ef149fedad 100644
+index f8ef149fedad..49ae15708a0b 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3328.dtsi
 +++ b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
-@@ -660,7 +660,7 @@ vpu_mmu: iommu@ff350800 {
+@@ -306,6 +306,10 @@ power-domain@RK3328_PD_HEVC {
+ 			};
+ 			power-domain@RK3328_PD_VIDEO {
+ 				reg = <RK3328_PD_VIDEO>;
++				clocks = <&cru ACLK_RKVDEC>,
++					 <&cru HCLK_RKVDEC>,
++					 <&cru SCLK_VDEC_CABAC>,
++					 <&cru SCLK_VDEC_CORE>;
+ 				#power-domain-cells = <0>;
+ 			};
+ 			power-domain@RK3328_PD_VPU {
+@@ -660,6 +664,20 @@ vpu_mmu: iommu@ff350800 {
  		power-domains = <&power RK3328_PD_VPU>;
  	};
  
--	rkvdec_mmu: iommu@ff360480 {
-+	vdec_mmu: iommu@ff360480 {
++	vdec: video-codec@ff360000 {
++		compatible = "rockchip,rk3328-vdec", "rockchip,rk3399-vdec";
++		reg = <0x0 0xff360000 0x0 0x400>;
++		interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&cru ACLK_RKVDEC>, <&cru HCLK_RKVDEC>,
++			 <&cru SCLK_VDEC_CABAC>, <&cru SCLK_VDEC_CORE>;
++		clock-names = "axi", "ahb", "cabac", "core";
++		assigned-clocks = <&cru ACLK_RKVDEC>, <&cru SCLK_VDEC_CABAC>,
++				  <&cru SCLK_VDEC_CORE>;
++		assigned-clock-rates = <400000000>, <400000000>, <300000000>;
++		iommus = <&vdec_mmu>;
++		power-domains = <&power RK3328_PD_VIDEO>;
++	};
++
+ 	vdec_mmu: iommu@ff360480 {
  		compatible = "rockchip,iommu";
  		reg = <0x0 0xff360480 0x0 0x40>, <0x0 0xff3604c0 0x0 0x40>;
- 		interrupts = <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>;
+@@ -667,7 +685,7 @@ vdec_mmu: iommu@ff360480 {
+ 		clocks = <&cru ACLK_RKVDEC>, <&cru HCLK_RKVDEC>;
+ 		clock-names = "aclk", "iface";
+ 		#iommu-cells = <0>;
+-		status = "disabled";
++		power-domains = <&power RK3328_PD_VIDEO>;
+ 	};
+ 
+ 	vop: vop@ff370000 {
 -- 
 2.34.1
 

@@ -2,94 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFD1E50E2A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:06:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 418B550E2AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242338AbiDYOJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 10:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39260 "EHLO
+        id S242362AbiDYOJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 10:09:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241525AbiDYOJJ (ORCPT
+        with ESMTP id S242356AbiDYOJN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 10:09:09 -0400
-Received: from ixit.cz (ip-94-112-206-30.net.upcbroadband.cz [94.112.206.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB9825C;
-        Mon, 25 Apr 2022 07:05:59 -0700 (PDT)
-Received: from [10.0.0.209] (_gateway [10.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id B761B2007F;
-        Mon, 25 Apr 2022 16:05:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1650895557;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YzzpAD5S0leawcwC8SUp83/bhKkhf4LJmp7cBJfQdME=;
-        b=XQnZVrDKNKWF8jIPrC4gratZ6yMzIvjprTeXGN1lcY1Hxgnc2z76/Chkb9YfZiXt3TyuOr
-        P224uakTiUeks8zOcQ9ZWfY+GL1xLUmubfN4SAGjVbuMeg2eIsfvjy2RoL/uEiR3aOWBGy
-        oBnOBb776rCWyMzPTaYx+iFDO1StgTE=
-Message-ID: <33da014b-bfb0-a39f-aba7-f469fcb5cfbb@ixit.cz>
-Date:   Mon, 25 Apr 2022 16:05:57 +0200
+        Mon, 25 Apr 2022 10:09:13 -0400
+Received: from gentwo.de (gentwo.de [IPv6:2a02:c206:2048:5042::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DD417E22
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 07:06:06 -0700 (PDT)
+Received: by gentwo.de (Postfix, from userid 1001)
+        id C740DB007C2; Mon, 25 Apr 2022 16:06:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.de; s=default;
+        t=1650895564; bh=nDKTXvgIrS0KW55Y8bufayt9wZdLWKMW/+y5ICeabUg=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=HUuJvmqsL7jRfNorE28mQo/poBW1j2BTtD+bAkVS0T2ya8XCyVi6D6LmbvBwM9ZTQ
+         w7uRR+5vOektZFT775qvqH1rkaDOXVQadFuq5m7fcwiMI8X+mttqoaJounXE2plgKJ
+         zgbkKdWGpTyGl9KPIjyXN06vx0uesngoxynakt5ApbNgzkR4dr55macmGAIyf0YG7t
+         18z5bg6hMaAJHJt9CaTI6UhZLiqE1RsBp7ll/UBEEaqxxewjCncuX2+LQFA9DrkPyj
+         fxZYsmCL0d8dEfO0Ij8cXUEC+hipz/sIRRWwDT7Mzzn1EfLylaF1xkICRIz74FMT/E
+         1gUlxM8QLcUpw==
+Received: from localhost (localhost [127.0.0.1])
+        by gentwo.de (Postfix) with ESMTP id C5F84B0072F;
+        Mon, 25 Apr 2022 16:06:04 +0200 (CEST)
+Date:   Mon, 25 Apr 2022 16:06:04 +0200 (CEST)
+From:   Christoph Lameter <cl@gentwo.de>
+To:     Peter Zijlstra <peterz@infradead.org>
+cc:     Aaron Tomlin <atomlin@redhat.com>, frederic@kernel.org,
+        mtosatti@redhat.com, tglx@linutronix.de, mingo@kernel.org,
+        pauld@redhat.com, neelx@redhat.com, oleksandr@natalenko.name,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [RFC PATCH v3] tick/sched: Ensure quiet_vmstat() is called when
+ the idle tick was stopped too
+In-Reply-To: <20220425132700.GK2731@worktop.programming.kicks-ass.net>
+Message-ID: <alpine.DEB.2.22.394.2204251603570.25814@gentwo.de>
+References: <20220422193647.3808657-1-atomlin@redhat.com> <alpine.DEB.2.22.394.2204250919400.2367@gentwo.de> <20220425113909.u3smtztp66svlw4o@ava.usersys.com> <alpine.DEB.2.22.394.2204251406370.13839@gentwo.de>
+ <20220425132700.GK2731@worktop.programming.kicks-ass.net>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: mailbox: qcom-ipcc: add missing
- compatible for SM8450
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20220425134717.55418-1-david@ixit.cz>
- <6f72be3c-c907-bc7a-6b64-6becfc76934e@linaro.org>
-From:   David Heidelberg <david@ixit.cz>
-In-Reply-To: <6f72be3c-c907-bc7a-6b64-6becfc76934e@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_DYNAMIC,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/04/2022 15:51, Krzysztof Kozlowski wrote:
-> On 25/04/2022 15:47, David Heidelberg wrote:
->> Adds forgotten compatible and update SPDX header.
-> You need to explain what is this "forgotten compatible". It's to vague.
-Forgotten by someone who implemented it in driver. Hope that clarify it 
-for you and possibly other readers. Btw. qcom,*sm8450* compatibles are 
-widely used and fact that `make dtbs_check` noticed it missing here 
-isn't suprising..
+On Mon, 25 Apr 2022, Peter Zijlstra wrote:
+
+> > Folding the vmstat diffs *always* when entering idle prevents unnecessary
+> > wakeups and processing in the future and also provides more accurate
+> > counters for the VM allowing better decision to be made on reclaim.
 >
-> The SPDX update lacks answer to "why". There is no reason to do it, so
-> please explain why it is needed.
+> I'm thinking you're going to find a ton of regressions if you try it
+> though; some workloads go idle *very* shortly, doing all this accounting
+> is going to be counter-productive.
 
-Please read https://spdx.org/licenses/GPL-2.0.html (red colored text).
+Well there is usually not much to do in terms of accounting. If there are
+a lot of updates then it is worthwhile because if the numbers are off too
+much then the VM has trouble assessing its own situation.
 
-I personally encountered situation, where usage GPL license without 
-specific `-only` or `-or-later` caused unnecessary confusion and 
-uncertainty.
+It may depend though on how long the idle periods are. Do we have
+statistics on the duration? Always folding the vmstat deltas may also
+increase the length of the idle periods.
 
->
->
-> Best regards,
-> Krzysztof
-
--- 
-David Heidelberg
-Consultant Software Engineer
-
-Matrix: @okias:matrix.org
 

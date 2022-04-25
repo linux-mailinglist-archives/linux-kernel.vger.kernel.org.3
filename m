@@ -2,136 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31B7850DD78
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 12:02:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95B8650DD76
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 12:02:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241401AbiDYKEK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 25 Apr 2022 06:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36246 "EHLO
+        id S241119AbiDYKEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 06:04:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241547AbiDYKDj (ORCPT
+        with ESMTP id S241552AbiDYKDm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 06:03:39 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1C7766B
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 03:00:32 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nivVw-0001AZ-Kr; Mon, 25 Apr 2022 12:00:16 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nivVv-0057YD-Bh; Mon, 25 Apr 2022 12:00:13 +0200
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nivVt-0005AB-9C; Mon, 25 Apr 2022 12:00:13 +0200
-Message-ID: <0e642da615b8f52fb36cd1248f8a124ea4e4b7b8.camel@pengutronix.de>
-Subject: Re: [PATCH v17 14/21] drm/mediatek: add ETHDR support for MT8195
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     "Nancy.Lin" <nancy.lin@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        wim@linux-watchdog.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, linux@roeck-us.net
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "jason-jh . lin" <jason-jh.lin@mediatek.com>,
-        Yongqiang Niu <yongqiang.niu@mediatek.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, llvm@lists.linux.dev,
-        singo.chang@mediatek.com, srv_heupstream@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Date:   Mon, 25 Apr 2022 12:00:13 +0200
-In-Reply-To: <20220416020749.29010-15-nancy.lin@mediatek.com>
-References: <20220416020749.29010-1-nancy.lin@mediatek.com>
-         <20220416020749.29010-15-nancy.lin@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        Mon, 25 Apr 2022 06:03:42 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399ED627D;
+        Mon, 25 Apr 2022 03:00:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1650880837;
+  x=1682416837;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2TQZYCx5ikLMtqq9rZGikO1te9HCqCd3K7Ahb1z4JPg=;
+  b=o5TQ2lyp7C6NaGzOBeBg1iA8D4ROI/3VJWc3zFIQgocBLlkQBDpF4z6/
+   ip4hT2Vhd1sXrXxHHhz5tInCs5MQrx8+BNf4SJTNO0scmA7J8PRM1HOCU
+   3g3vIibDZ/jsI8dX4HcGP0/FA3k+TmIWq525N5RicAu6n3n+duwlVeXZO
+   gevAaostmxdl1o0dSDlhFP62eN0q9DO7y1csIObasHOrQ0k5+XDLxzxt5
+   b7i2H7e0f1hVExEb9zGOI0SU33HCLDjKRcgYg0ETLlFfplZh292VXzaUF
+   xAlLN+I/E1updt88Gbc0elw41TiudGkTlNyp3RZBIQxga6J3TzC2S0mAg
+   Q==;
+From:   Camel Guo <camel.guo@axis.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+CC:     Camel Guo <camel.guo@axis.com>, <linux-hwmon@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@axis.com>
+Subject: [PATCH] hwmon: (tmp401) Fix incorrect return value of tmp401_init_client
+Date:   Mon, 25 Apr 2022 12:00:19 +0200
+Message-ID: <20220425100019.562781-1-camel.guo@axis.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sa, 2022-04-16 at 10:07 +0800, Nancy.Lin wrote:
-> ETHDR is a part of ovl_adaptor.
-> ETHDR is designed for HDR video and graphics conversion in the external
-> display path. It handles multiple HDR input types and performs tone
-> mapping, color space/color format conversion, and then combine
-> different layers, output the required HDR or SDR signal to the
-> subsequent display path.
-> 
-> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
-[...]
-> +static int mtk_ethdr_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct mtk_ethdr *priv;
-> +	int ret;
-> +	int i;
-> +
-> +	dev_info(dev, "%s+\n", __func__);
+When ti,n-factor, ti,beta-compentation are not defined in devicetree,
+of_property_read_u32|s32 returns -EINVAL. In this case,
+tmp401_init_client should return 0 instead of simply pass ret to its
+caller.
 
-Left-over debug statements?
+Fixes: c825ca044988 ("hwmon: (tmp401) Add support of three advanced features")
+Signed-off-by: Camel Guo <camel.guo@axis.com>
+---
+ drivers/hwmon/tmp401.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +
-> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	for (i = 0; i < ETHDR_ID_MAX; i++) {
-> +		priv->ethdr_comp[i].dev = dev;
-> +		priv->ethdr_comp[i].regs = of_iomap(dev->of_node, i);
-> +#if IS_REACHABLE(CONFIG_MTK_CMDQ)
-> +		ret = cmdq_dev_get_client_reg(dev,
-> +					      &priv->ethdr_comp[i].cmdq_base, i);
-> +		if (ret)
-> +			dev_dbg(dev, "get mediatek,gce-client-reg fail!\n");
-> +#endif
-> +		dev_dbg(dev, "[DRM]regs:0x%p, node:%d\n", priv->ethdr_comp[i].regs, i);
-> +	}
-> +
-> +	for (i = 0; i < ETHDR_CLK_NUM; i++)
-> +		priv->ethdr_clk[i].id = ethdr_clk_str[i];
-> +	ret = devm_clk_bulk_get_optional(dev, ETHDR_CLK_NUM, priv->ethdr_clk);
-> +	if (ret)
-> +		return ret;
-> +
-> +	priv->irq = platform_get_irq(pdev, 0);
-> +	if (priv->irq < 0)
-> +		priv->irq = 0;
-> +
-> +	if (priv->irq) {
-> +		ret = devm_request_irq(dev, priv->irq, mtk_ethdr_irq_handler,
-> +				       IRQF_TRIGGER_NONE, dev_name(dev), priv);
-> +		if (ret < 0) {
-> +			dev_err(dev, "Failed to request irq %d: %d\n", priv->irq, ret);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	priv->reset_ctl = devm_reset_control_array_get_optional_exclusive(dev);
+diff --git a/drivers/hwmon/tmp401.c b/drivers/hwmon/tmp401.c
+index 8f49da997367..a58a2f31a07e 100644
+--- a/drivers/hwmon/tmp401.c
++++ b/drivers/hwmon/tmp401.c
+@@ -604,7 +604,7 @@ static int tmp401_init_client(struct tmp401_data *data)
+ 			return ret;
+ 	}
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ static int tmp401_detect(struct i2c_client *client,
+-- 
+2.30.2
 
-This is missing error handling. You could use dev_err_probe() here.
-
-regards
-Philipp

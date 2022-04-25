@@ -2,123 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A95B550EA88
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 22:29:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5861250EA92
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 22:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245335AbiDYUcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 16:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44452 "EHLO
+        id S245459AbiDYUdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 16:33:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245438AbiDYUb5 (ORCPT
+        with ESMTP id S235083AbiDYUdb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 16:31:57 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D3C6308
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 13:28:51 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id d6so14768269ede.8
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 13:28:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=wvQYRS1pWv21ehmcnJxWSnYJsytlKQ2x5bcgfTp8r5E=;
-        b=E0AIy0zXFuolgxRDb6PvDyvlBJBmvpqPHHcjwYTOkAWDEUeIUtIAo/PcJH+Sqz4TQw
-         BygwGSFokKDLhRDupuKtC+Sx2WpgzowmMxZ1481MaNrRoA8VdiIpmYLpfulvqPM3Aaqd
-         8W+Cs0N+RIrgubsLqEi7loNgGPcNvMbYEv5GIJu8deV/2nKJjwqS3Z8S8CwZx4WFtbHc
-         jRKGWVem2UtxgqJkGzaRvc3vKAHN+hpuOipNzr/0icY8AJxL5zNRntxCyIBXmpe3JtB+
-         +L9t1qxTai6pqXw/c7GTAMezs/b8j4yPrAJX25C3WratWnWYCHDYLgkv4LztKutixayI
-         V3LA==
+        Mon, 25 Apr 2022 16:33:31 -0400
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8181AF2E;
+        Mon, 25 Apr 2022 13:30:26 -0700 (PDT)
+Received: by mail-ot1-f42.google.com with SMTP id l9-20020a056830268900b006054381dd35so11626429otu.4;
+        Mon, 25 Apr 2022 13:30:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wvQYRS1pWv21ehmcnJxWSnYJsytlKQ2x5bcgfTp8r5E=;
-        b=dxAHxyNtXNum86bceBAXCD/EOfh3PeKrZnDOPTZZwes/rrC+mnggbOBsPNaUZSS4bE
-         bZudbrOsh/cIbKNftDYUNfrZYfnU5v8QtgsrFntBSeoKJgDnBmMQCtGl0mvA5hk6Hy07
-         47YrZ8hGR12aRwUTjYKr9LvDJ1tyPAj3SrFkhzp3atmbUD/wAyEDAYXyr1YyYEGmmnoz
-         GmlQ2Gg9FtqUuBf64a5uNhpCv+C2DfBHIdbyFumyGBXAhJXdsjCQYarRY462XFgCY01O
-         rc9MD2HyEW6BZEiAZp5IYdsU4+E92Vz12Qceii800IO67hUHLWF79jF1eIMjLHC/NTSU
-         NtSA==
-X-Gm-Message-State: AOAM531fpSc7nJoj5ICSe8XG8ZxZgixE2syhxVJSwIhTyJZ8iWwwU2ag
-        f3Xoj8uCSOCi5UyCLvmGm1M1rw==
-X-Google-Smtp-Source: ABdhPJxRiXQdrMEZ1bEiijQmU3oSqmhzoZsPoezAg48UIyxDJ1owz8UIf9lbzN8JjioalA7frYn1kA==
-X-Received: by 2002:a05:6402:26c5:b0:425:f7f0:fb6c with SMTP id x5-20020a05640226c500b00425f7f0fb6cmr1385802edd.133.1650918530508;
-        Mon, 25 Apr 2022 13:28:50 -0700 (PDT)
-Received: from [192.168.0.244] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id 17-20020a170906059100b006cee1bceddasm3893124ejn.130.2022.04.25.13.28.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 13:28:50 -0700 (PDT)
-Message-ID: <8db5f7cc-dbad-3636-0fd2-7d6dc29ee409@linaro.org>
-Date:   Mon, 25 Apr 2022 22:28:48 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] dt-bindings: clock: qcom,gcc-apq8064: Fix typo in
- compatible string
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=m960rHYQMT5ec31Ba8Q7vx7Lhukm/+6mto0BJCbs4mM=;
+        b=RMq2VYJ+VMXms9N+3VOcKp9hJHaoLrs1g6SoooBUcadCKjKAN+uwV3eJGZhbE4XEnt
+         OlT70M+fg/s4qPkITy6AVxv/g+yOqTIDoDO2HAEvbnPCcUXAa4EEr/FMIb5w3Ep6sZkn
+         R24zj7fCMqZ3+CYUx3orYRbfUNWsfIrv4go18gHXzwHfHHBstAw6mDtCot2fZS0rw3ul
+         cmPy1u0GgnIXI90kSTEPJZLmueuJs0DCfOqHznCIAaS/RuUu8FEulj8j2NccfYbk7AUQ
+         YgdCbMSeAqvc9E/QNgdbfCc7acKKxaQyG91zT2yQR+xcbMZHWUVWzqG+yR66s///HCdt
+         +jAQ==
+X-Gm-Message-State: AOAM5331Yyf3/QR9agMtSXPXdk9pc2i4pfzKLdICpoLN0nbj9i/B4YiJ
+        3PAi6kX8uPu6WSiKOWR/PQ==
+X-Google-Smtp-Source: ABdhPJyWoKaQ+tANQen6zRwgyqIt1c7O4dW+6NqSD3A8CnOB74HXWs5JAxN1XmGn7H2r2Rxq3F/8ww==
+X-Received: by 2002:a9d:7a4e:0:b0:605:4e1d:47ce with SMTP id z14-20020a9d7a4e000000b006054e1d47cemr7242704otm.150.1650918625933;
+        Mon, 25 Apr 2022 13:30:25 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id x15-20020a056830408f00b006054688cba0sm4142755ott.52.2022.04.25.13.30.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 13:30:25 -0700 (PDT)
+Received: (nullmailer pid 219429 invoked by uid 1000);
+        Mon, 25 Apr 2022 20:30:24 -0000
+Date:   Mon, 25 Apr 2022 15:30:24 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Michael Walle <michael@walle.cc>
+Cc:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh@kernel.org>, Taniya Das <tdas@codeaurora.org>
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220425133527.3723233-1-robh@kernel.org>
- <20220425193253.06828C385A4@smtp.kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220425193253.06828C385A4@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        linux-kernel@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Li Yang <leoyang.li@nxp.com>
+Subject: Re: [PATCH v2] dt-bindings: fsl: convert fsl,layerscape-dcfg to YAML
+Message-ID: <YmcE4K/qM5Xy0ADj@robh.at.kernel.org>
+References: <20220425140433.33936-1-michael@walle.cc>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220425140433.33936-1-michael@walle.cc>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/04/2022 21:32, Stephen Boyd wrote:
-> Quoting Rob Herring (2022-04-25 06:35:27)
->> The compatible string should be 'qcom,gcc-apq8064', not
->> 'qcom,gcc-apq8084'. Found by enabling undocumented compatible checks.
->>
->> Cc: Ansuel Smith <ansuelsmth@gmail.com>
->> Signed-off-by: Rob Herring <robh@kernel.org>
->> ---
->>  Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
->> index 97936411b6b4..9910a3e033bb 100644
->> --- a/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
->> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
->> @@ -25,7 +25,7 @@ description: |
->>  
->>  properties:
->>    compatible:
->> -    const: qcom,gcc-apq8084
->> +    const: qcom,gcc-apq8064
+On Mon, 25 Apr 2022 16:04:33 +0200, Michael Walle wrote:
+> Convert the fsl,layerscape-dcfg binding to the new YAML format.
 > 
-> This file has dt-bindings/clock/qcom,gcc-apq8084.h referenced. Should
-> that be removed? It looks like commit a469bf89a009 ("dt-bindings: clock:
-> simplify qcom,gcc-apq8064 Documentation") took the more than just the
-> compatible for apq8084 from qcom,gcc-other.yaml and put it in here while
-> removing gcc-apq8064. Probably the apq8084 part needs to be a copy of
-> the apq8064 file with the single compatible changed.
+> In the device trees, the device node always have a "syscon"
+> compatible, which wasn't mentioned in the previous binding.
+> 
+> One thing added here, compared to the original binding is the clock
+> controller subnode of the LS1028A SoC and its "simple-mfd" compatible as
+> used in arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi as well as the
+> little-endian and big-endian properties.
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+> changes since v1:
+>  - moved to soc/fsl/fsl,layerscape-dcfg.yaml
+>  - generic name for node in example
+>  - mention added "syscon" compatible in commit message
+>  - reference specific clock controller
+> 
+>  .../arm/freescale/fsl,layerscape-dcfg.txt     | 19 ------
+>  .../bindings/soc/fsl/fsl,layerscape-dcfg.yaml | 68 +++++++++++++++++++
+>  2 files changed, 68 insertions(+), 19 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/arm/freescale/fsl,layerscape-dcfg.txt
+>  create mode 100644 Documentation/devicetree/bindings/soc/fsl/fsl,layerscape-dcfg.yaml
+> 
 
-Good point, Rob's commit removes entirely qcom,gcc-apq8084 compatible,
-which is and was used.
-
-Probably the intention of that commit was to merge apq8064 and apq8084.
-The first uses dt-bindings/clock/qcom,gcc-msm8960.h header for IDs. The
-second has its own headers, added in mentioned commit.
-
-I am not sure it is worth splitting this into two files. Adding here
-enum for 8064 and 8084 should work fine.
-
-Best regards,
-Krzysztof
+Applied, thanks!

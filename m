@@ -2,84 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACF5950DB77
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01C2750DB7B
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237320AbiDYIpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 04:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50148 "EHLO
+        id S236519AbiDYIqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 04:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbiDYIpJ (ORCPT
+        with ESMTP id S232124AbiDYIqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 04:45:09 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0636683016
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:42:04 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 63031C000D;
-        Mon, 25 Apr 2022 08:42:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650876122;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=deyfR/jFFfSBZAa0aePAr9OXuLMhTGf/khYat66l9nE=;
-        b=B1oL6rmENQ72/SO9FbFEtrSqvb0mn0UOX1/nlYSe+iAiItjxoRxrTLNwejSIBrY8ThjN6b
-        2wF9/5bhzFLCdlT3vp0GyhUrZlUp24Dusz4zHo3F3tCqFWfy4vnWI9fsZt5ArERQm1otKf
-        DbVpDwimXO45kxpzB2/FEqH7GBQL7Gy/PiiYGKU9hogp5iy1bqkdmJvWYeHARX7QrKplHI
-        9bqP/GRx0c+7a1SSfKcf1hfLgFDjktn/I4fpB4VupT1DEay2KDy2eONAA+i9omibGWB0Ou
-        wd9QLAf7P2BJGGyq33+EKNyehQ/vY7iWeLj1IXXNzI60fpiCFIY3wBJIfAKSVw==
-Date:   Mon, 25 Apr 2022 10:42:01 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Jean-Marc Eurin <jmeurin@google.com>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/3] mtd: mtdoops: Add timestamp to the dumped oops
- header.
-Message-ID: <20220425104201.173e65fa@xps13>
-In-Reply-To: <20220421234244.2172003-1-jmeurin@google.com>
-References: <20220415001321.252848-1-jmeurin@google.com>
-        <20220421234244.2172003-1-jmeurin@google.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Mon, 25 Apr 2022 04:46:16 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E147183022;
+        Mon, 25 Apr 2022 01:43:12 -0700 (PDT)
+Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Kmz3y2955z67yLV;
+        Mon, 25 Apr 2022 16:40:30 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 25 Apr 2022 10:43:10 +0200
+Received: from [10.47.92.213] (10.47.92.213) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.24; Mon, 25 Apr
+ 2022 09:43:09 +0100
+Message-ID: <380af884-94f2-231b-040b-2d89a544b8ed@huawei.com>
+Date:   Mon, 25 Apr 2022 09:43:08 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 4/4] scsi: hisi_sas: Use libsas internal abort support
+To:     Hannes Reinecke <hare@suse.de>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <jinpu.wang@cloud.ionos.com>,
+        <damien.lemoal@opensource.wdc.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <Ajish.Koshy@microchip.com>, <linuxarm@huawei.com>,
+        <Viswas.G@microchip.com>, <hch@lst.de>, <liuqi115@huawei.com>,
+        <chenxiang66@hisilicon.com>
+References: <1646309930-138960-1-git-send-email-john.garry@huawei.com>
+ <1646309930-138960-5-git-send-email-john.garry@huawei.com>
+ <ce7c8535-a3dd-5549-1319-a3af1d0cee0b@suse.de>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <ce7c8535-a3dd-5549-1319-a3af1d0cee0b@suse.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.47.92.213]
+X-ClientProxiedBy: lhreml702-chm.china.huawei.com (10.201.108.51) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jean-Marc,
+On 20/04/2022 13:29, Hannes Reinecke wrote:
+> On 3/3/22 13:18, John Garry wrote:
+>> Use the common libsas internal abort functionality.
+>>
+>> In addition, this driver has special handling for internal abort 
+>> timeouts -
+>> specifically whether to reset the controller in that instance, so extend
+>> the API for that.
+>>
+> Huh? Is there a reason _not_ to reset the controller once abort times out?
 
-jmeurin@google.com wrote on Thu, 21 Apr 2022 16:42:41 -0700:
+There's a bug in v2 HW where the internal abort may timeout due to HW 
+bug but it is not fatal, i.e. the HW state is not totally buggered, so 
+can continue without a reset.
 
-> The current header consists of 2 32-bit values which makes it difficult
-> and error prone to expand. This creates a structure for the header.
-> 
-> Some oops only have time relative to boot, this adds an absolute timestamp.
-> 
-> Changelog since v3:
->   Fix the printk format for sizeof to %zu.
-> 
-> Changelog since v2:
-> - Add a timestamp to the header.
-> 
-> Changelog since v1:
-> - Create a header structure to simplify code.
-> - Patches in series.
-> - Patch prefix.
-> 
-> Jean-Marc Eurin (3):
->   mtd: mtdoops: Fix the size of the header read buffer.
->   mtd: mtdoops: Create a header structure for the saved mtdoops.
->   mtd: mtdoops: Add a timestamp to the mtdoops header.
+> And why isn't that delegated to SCSI EH?
 
-Looks like the last patch was not sent to the list?
+For sure, SCSI EH will reset the host if all else fails. However, it may 
+take some time to get to the point of deciding to reset - including lots 
+of timeouts. To accelerate this, we set a host flag to say that we have 
+a HW fault, and don't bother with nexus reset, LU reset, etc. once the 
+initial task abort fails due to HW fault and fail straight away. Maybe 
+the core code could do something similar but it seems messy/hard to 
+generalise.
 
+Thanks,
+John

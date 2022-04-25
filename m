@@ -2,134 +2,327 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1767E50D9CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 08:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC34450D9CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 08:51:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232470AbiDYGxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 02:53:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36610 "EHLO
+        id S231345AbiDYGyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 02:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231721AbiDYGxu (ORCPT
+        with ESMTP id S234442AbiDYGyM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 02:53:50 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9D372E0E;
-        Sun, 24 Apr 2022 23:50:45 -0700 (PDT)
-Received: from mail-wr1-f51.google.com ([209.85.221.51]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MuF4v-1o1vTi2ySb-00uXUa; Mon, 25 Apr 2022 08:50:43 +0200
-Received: by mail-wr1-f51.google.com with SMTP id x18so19417170wrc.0;
-        Sun, 24 Apr 2022 23:50:43 -0700 (PDT)
-X-Gm-Message-State: AOAM531qquoFZpNNmgpU9hlQVwGxWR2i/DYAjGaEIEGAqHWxb/uINC+k
-        oNd9BmePSv7vkaBHsPhVG6MwqRu0sslqBhxGo30=
-X-Google-Smtp-Source: ABdhPJxPmwV5WfcLnmUcvdXXaS8GyG1IsSnRTeCouUj2lCvJavpxFpqEWw5tHbS8gyEonBI8l0BcoD/6n15ffRVK4JY=
-X-Received: by 2002:a5d:49cb:0:b0:20a:cee3:54fc with SMTP id
- t11-20020a5d49cb000000b0020acee354fcmr8897626wrs.12.1650869443104; Sun, 24
- Apr 2022 23:50:43 -0700 (PDT)
+        Mon, 25 Apr 2022 02:54:12 -0400
+Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DEA74DFA
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 23:51:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1650869471; x=1682405471;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Bn9NamgWck9hp1UlL3e6xhXreOyU34muBbW7Q2cIKAA=;
+  b=OGFGNN60ApsslYvJxVIx2sAgiTvc4yXzpxj3H7Cl4PxbzQ4flhRbM0o9
+   W94Fca5slUUGCypZDVIOnsb2cDDlp7ns8JFmT4USAwR/dO5XVFDWk5Jsx
+   DbWj2i7Sj20avMcarTXt+mq5I2LYSEdWEe5QFp2HHz9QflFg/awUQfrMV
+   RiCHGLjuxikJNMzivUQuY0iJHZXS1L4EfrhXCAOhv+fx15brKSZiUmcv2
+   wuvug66MSrFleB/13YGEhAPrRbZ6Fk9g5OaviP4IiY0E+Mg+RR5pPPRHm
+   UX3Gu/Velfh9S1u+smTnpkJB8bW6bNg7gFg30fh5fKWDld4arKmexSWSm
+   w==;
+X-IronPort-AV: E=Sophos;i="5.90,287,1643644800"; 
+   d="scan'208";a="199626128"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 25 Apr 2022 14:51:05 +0800
+IronPort-SDR: 4LvRko8GCB7MKFPSxumQG6EbEsI4WHIQ4LTZtJ9DsG+5A2+KevSaJMwgBSk81kUVA3DZyNhRX1
+ /IaqdB+Yo25KoNqbGGTRm794V5lP9wNcEl5TOS5+Hh27ip9UsR+OVKKAqIVJx5il/Fb2HuTh16
+ 8QMg34vI4Ox6AbU+AwlEVbviWTlnBzsN3y2T4nJ3UXlxo23hPKXPlIDaJGW8OYq0m50gc7NfXJ
+ dCHYDB2iLYYhNNSZbN4gqWXH8AML0Cjp5JClqzCzuEMoc31eVTVPFa+fY6ibO7yZHGyxg60CFS
+ 046JjL6IZfjMsjtgZLcSemzT
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 24 Apr 2022 23:21:17 -0700
+IronPort-SDR: IjvHzvNdRFrHLN1WAtiaQuuMCQTc7UWtFH6y9hKBmBQyVJqYaziGrixflekBXWl3Q/sH+/aGEp
+ AMYmUYtQvJvXDM/cOsqL1x5E1/TMF9+ZdLLnAWAA3oIrRfS7bKNpDFUoLVr3k00Ygu+mSRuuEk
+ yS73Vm2WxPvLC5q3L8Y+DNNbixEH3n9hwMfg+XdTcbiDovj75dcLGnUSzf0p1vKAjTdv4Nxinf
+ b7pxsHwDJ1RuN2RCRtq2Fq+mvcjnE8u1ajFEa4LADdpDrTF+gl7IF9+zNgzSNl68oYAReTemNr
+ LXA=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 24 Apr 2022 23:51:04 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Kmwdg4kSMz1SVp1
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 23:51:03 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1650869462; x=1653461463; bh=Bn9NamgWck9hp1UlL3e6xhXreOyU34muBbW
+        7Q2cIKAA=; b=RZcpX0U7y/oEb+yS9qqs404l/IfWNGrEBu5P8WCQv7E3kzbpDD4
+        upMNAFbgTHvSnVzLZmdlNMqN0/ERQw1WcaObCbFhrC4lKuL9P+ospCHIGLSfc5LB
+        Ky4BvssBopHlBtH11NkUds9cmvBwDyn11UcMA/oQb9PTcy0dUyNCkyB+TAnfuir9
+        5i/BN3sO2qzGo/XQVbPrpL1t+FA2H/ngHw1XZSYV8siEDslmhwUbOVU9lakyZc7C
+        dl3EfcohpGOBAOHPjeQ0ZUeUlFShLQAbOhWmKQnwje5MOvZj4WyMpPro1geVCJGu
+        U3q4j0qPlpHDPN3cE3YSTwU/9w2uFlt+cOQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Tm8M__IIoV_7 for <linux-kernel@vger.kernel.org>;
+        Sun, 24 Apr 2022 23:51:02 -0700 (PDT)
+Received: from [10.225.163.24] (unknown [10.225.163.24])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Kmwdc22ntz1Rvlx;
+        Sun, 24 Apr 2022 23:51:00 -0700 (PDT)
+Message-ID: <237a43f0-3b09-46d0-e73c-57ef51e39590@opensource.wdc.com>
+Date:   Mon, 25 Apr 2022 15:50:58 +0900
 MIME-Version: 1.0
-References: <20220422151725.1336997-1-mailhol.vincent@wanadoo.fr>
- <YmXMiTXEvFXZ/swU@dev-arch.thelio-3990X> <CAMZ6Rq+3XOze01dZZRTe+V44N2uo5J_=rtd9bKH7d7Fq9sNxVw@mail.gmail.com>
-In-Reply-To: <CAMZ6Rq+3XOze01dZZRTe+V44N2uo5J_=rtd9bKH7d7Fq9sNxVw@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 25 Apr 2022 08:50:26 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a31WAyh_vLqNwvv2GMcZ8SQp7gC=OV8c=Nc9pBtOSR8-g@mail.gmail.com>
-Message-ID: <CAK8P3a31WAyh_vLqNwvv2GMcZ8SQp7gC=OV8c=Nc9pBtOSR8-g@mail.gmail.com>
-Subject: Re: [PATCH] checksyscalls: ignore -Wunused-macros
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux API <linux-api@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:UaCMRLV59oKpIUu2ubDKLDGAgKT/RVqgR8o7Sf6wAJ/o26k9drx
- WATwG6fvMDAyx288U/tjPp5okwmDteAFpSxMDG3S1dSCJ5yDePznIVqIXpkC1FmgOAbevrJ
- dnLwwIGZh5sxeHIDpm//TWSO85V5MYVnMfN/KpK9+LswndgTOQWNueoxackeKNH4IRWfahd
- PF+b8jqKnmbCSW3e9MS1w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:jMQQiCIRwX8=:wKorjLd+Zoo+h0Kv890um+
- WjBeDynLgYmGe5x5ReBXQO/w+F6WshAK6vXNlK2/UHeiG2nSjluBH4X28x1VmPEBy1O7I7N2a
- lO+Vuy2EisyyRIBhUpNXHzKPlSA/A3SLHyHHbcyjj8hRTgtmoEag9iBWhk7VY0/dtq9CDFWrM
- OkORDMPW4IQOlVts47wjV6tfd5wG1LWaixW4OacmFxnT/Ewy/KZvXD/q2tl0fQwCROTbZxqhe
- VWsshz0zFqevDI4t073M1FcDhcmgbWFwPd4IgiEQCQm4Onv7CdnLcTg66ktXZFVVoLR4JzuPz
- K5WaJQBmjS4U/efocBwYW8JFKsZ22e6uHN/yhN3n9QPVdehhYseod24oRuj0gfPaIN1iW0r5j
- 8tTb/v0wwDHgaWF4KAeJLyC+OIQw96RqIXEyf3pYeX0miTjy5afPvPEHj5U/vgiMRNTRIIjG3
- 2JxWK2eOJkmstit8OSIf4ACG0lqUWa4yYvdlsf5Ez5D34qEjCTkOM6SHsi9Ctu8ekwRI38Hd/
- ae83ypvhaCCKF0YakZoa2IsaquRVxLEy/bSiYZtzrnd8tf4REGpMZ4+EU9x0VuqhNX232HTbN
- jhUDMR+2ALf9pEX+chA+E3kDW7c5r2lFORRDtvevKEk2au1baecut64vtft05qnr9A2ZqD1e0
- aUbltgMrAFl+na9BpQnOc8aR+98v4rlCFvVbPLU7LpTGvMnK3V3m1/lMCQHCEROxymnxjYUC3
- wu2K6A09ax/MqZGP7oaOjZItUaKdbGRdmxGVYzOU1VLC3rcsPh7u1chG+UxhJh5QBHUC/B8ka
- xScis/z4WdVg1FTv0S6ay5gV6rqYyeZBEu5q43QI1nrIPRkD+4=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH -next RFC v3 0/8] improve tag allocation under heavy load
+Content-Language: en-US
+To:     "yukuai (C)" <yukuai3@huawei.com>, axboe@kernel.dk,
+        bvanassche@acm.org, andriy.shevchenko@linux.intel.com,
+        john.garry@huawei.com, ming.lei@redhat.com, qiulaibin@huawei.com
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+References: <20220415101053.554495-1-yukuai3@huawei.com>
+ <dc800086-43c6-1ff2-659e-258cb75649dd@huawei.com>
+ <3fbadd9f-11dd-9043-11cf-f0839dcf30e1@opensource.wdc.com>
+ <63e84f2a-2487-a0c3-cab2-7d2011bc2db4@huawei.com>
+ <55e8b04f-0d2f-2ce1-6514-5abd0b67fd48@opensource.wdc.com>
+ <6957af40-8720-d74b-5be7-6bcdd9aa1089@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <6957af40-8720-d74b-5be7-6bcdd9aa1089@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 8:17 AM Vincent MAILHOL
-<mailhol.vincent@wanadoo.fr> wrote:
-> On Mon. 25 Apr 2022 at 07:17, Nathan Chancellor <nathan@kernel.org> wrote:
-> > Hi Vincent,
-> >
-> > On Sat, Apr 23, 2022 at 12:17:25AM +0900, Vincent Mailhol wrote:
-> > > The macros defined in this file are for testing only and are purposely
-> > > not used. When compiled with W=2, both gcc and clang yield some
-> > > -Wunused-macros warnings. Ignore them.
-> > >
-> > > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> >
-> > The change itself looks fine but a couple of comments:
-> >
-> > 1. Nick and I do not pick up patches, we rely on others to do so.
-> >    Additionally, this is not really something within our domain, despite
-> >    what get_maintainer.pl might say. This change should be sent to
-> >    either
-> >
-> >    Masahiro Yamada <masahiroy@kernel.org>
-> >    linux-kbuild@vger.kernel.org
-> >
-> >    or
-> >
-> >    Andrew Morton <akpm@linux-foundation.org>
-> >
-> >    so that it can be applied by one of them.
->
-> Ack. As you pointed out, I indeed just followed get_maintainer.pl.
-> I will resend a v2 to the people you pointed out (and exclude you).
->
-> > 2. I am not sure that silencing warnings from W=2 is that useful, as
-> >    they are unlikely to be real issues. Not to discourage you by any
-> >    means but it might be more useful to focus on cleaning up warnings
-> >    from W=1 and getting those promoted to regular build warnings.
->
-> Normally I agree, but there is one reason to fix this W=2: this
-> warning appears when building other files.
->
-> Example:
-> | $ make W=2 drivers/net/dummy.o
-> |   CALL    scripts/checksyscalls.sh
-> | <stdin>:21: warning: macro "__IGNORE_stat64" is not used [-Wunused-macros]
-> | <stdin>:22: warning: macro "__IGNORE_lstat64" is not used [-Wunused-macros]
-> | <stdin>:75: warning: macro "__IGNORE_llseek" is not used [-Wunused-macros]
-> | <stdin>:159: warning: macro "__IGNORE_madvise1" is not used [-Wunused-macros]
-> (rest of the output redacted).
->
-> When I run W=2, I want to only see the warnings of the file I am
-> working on. So I find it useful to fix the W=2 warnings which
-> show up when building other files to not get spammed by
-> irrelevant issues and to simplify the triage.
->
-> My initial message lacked the rationale. I will add additional
-> explanations in the v2 of this patch.
+On 4/25/22 15:47, yukuai (C) wrote:
+> =E5=9C=A8 2022/04/25 14:23, Damien Le Moal =E5=86=99=E9=81=93:
+>> On 4/25/22 15:14, yukuai (C) wrote:
+>>> =E5=9C=A8 2022/04/25 11:24, Damien Le Moal =E5=86=99=E9=81=93:
+>>>> On 4/24/22 11:43, yukuai (C) wrote:
+>>>>> friendly ping ...
+>>>>>
+>>>>> =E5=9C=A8 2022/04/15 18:10, Yu Kuai =E5=86=99=E9=81=93:
+>>>>>> Changes in v3:
+>>>>>>     - update 'waiters_cnt' before 'ws_active' in sbitmap_prepare_t=
+o_wait()
+>>>>>>     in patch 1, in case __sbq_wake_up() see 'ws_active > 0' while
+>>>>>>     'waiters_cnt' are all 0, which will cause deap loop.
+>>>>>>     - don't add 'wait_index' during each loop in patch 2
+>>>>>>     - fix that 'wake_index' might mismatch in the first wake up in=
+ patch 3,
+>>>>>>     also improving coding for the patch.
+>>>>>>     - add a detection in patch 4 in case io hung is triggered in c=
+orner
+>>>>>>     cases.
+>>>>>>     - make the detection, free tags are sufficient, more flexible.
+>>>>>>     - fix a race in patch 8.
+>>>>>>     - fix some words and add some comments.
+>>>>>>
+>>>>>> Changes in v2:
+>>>>>>     - use a new title
+>>>>>>     - add patches to fix waitqueues' unfairness - path 1-3
+>>>>>>     - delete patch to add queue flag
+>>>>>>     - delete patch to split big io thoroughly
+>>>>>>
+>>>>>> In this patchset:
+>>>>>>     - patch 1-3 fix waitqueues' unfairness.
+>>>>>>     - patch 4,5 disable tag preemption on heavy load.
+>>>>>>     - patch 6 forces tag preemption for split bios.
+>>>>>>     - patch 7,8 improve large random io for HDD. We do meet the pr=
+oblem and
+>>>>>>     I'm trying to fix it at very low cost. However, if anyone stil=
+l thinks
+>>>>>>     this is not a common case and not worth to optimize, I'll drop=
+ them.
+>>>>>>
+>>>>>> There is a defect for blk-mq compare to blk-sq, specifically split=
+ io
+>>>>>> will end up discontinuous if the device is under high io pressure,=
+ while
+>>>>>> split io will still be continuous in sq, this is because:
+>>>>>>
+>>>>>> 1) new io can preempt tag even if there are lots of threads waitin=
+g.
+>>>>>> 2) split bio is issued one by one, if one bio can't get tag, it wi=
+ll go
+>>>>>> to wail.
+>>>>>> 3) each time 8(or wake batch) requests is done, 8 waiters will be =
+woken up.
+>>>>>> Thus if a thread is woken up, it will unlikey to get multiple tags=
+.
+>>>>>>
+>>>>>> The problem was first found by upgrading kernel from v3.10 to v4.1=
+8,
+>>>>>> test device is HDD with 256 'max_sectors_kb', and test case is iss=
+uing 1m
+>>>>>> ios with high concurrency.
+>>>>>>
+>>>>>> Noted that there is a precondition for such performance problem:
+>>>>>> There is a certain gap between bandwidth for single io with
+>>>>>> bs=3Dmax_sectors_kb and disk upper limit.
+>>>>>>
+>>>>>> During the test, I found that waitqueues can be extremly unbalance=
+d on
+>>>>>> heavy load. This is because 'wake_index' is not set properly in
+>>>>>> __sbq_wake_up(), see details in patch 3.
+>>>>>>
+>>>>>> Test environment:
+>>>>>> arm64, 96 core with 200 BogoMIPS, test device is HDD. The default
+>>>>>> 'max_sectors_kb' is 1280(Sorry that I was unable to test on the ma=
+chine
+>>>>>> where 'max_sectors_kb' is 256).>>
+>>>>>> The single io performance(randwrite):
+>>>>>>
+>>>>>> | bs       | 128k | 256k | 512k | 1m   | 1280k | 2m   | 4m   |
+>>>>>> | -------- | ---- | ---- | ---- | ---- | ----- | ---- | ---- |
+>>>>>> | bw MiB/s | 20.1 | 33.4 | 51.8 | 67.1 | 74.7  | 82.9 | 82.9 |
+>>>>
+>>>> These results are extremely strange, unless you are running with the
+>>>> device write cache disabled ? If you have the device write cache ena=
+bled,
+>>>> the problem you mention above would be most likely completely invisi=
+ble,
+>>>> which I guess is why nobody really noticed any issue until now.
+>>>>
+>>>> Similarly, with reads, the device side read-ahead may hide the probl=
+em,
+>>>> albeit that depends on how "intelligent" the drive is at identifying
+>>>> sequential accesses.
+>>>>
+>>>>>>
+>>>>>> It can be seen that 1280k io is already close to upper limit, and =
+it'll
+>>>>>> be hard to see differences with the default value, thus I set
+>>>>>> 'max_sectors_kb' to 128 in the following test.
+>>>>>>
+>>>>>> Test cmd:
+>>>>>>            fio \
+>>>>>>            -filename=3D/dev/$dev \
+>>>>>>            -name=3Dtest \
+>>>>>>            -ioengine=3Dpsync \
+>>>>>>            -allow_mounted_write=3D0 \
+>>>>>>            -group_reporting \
+>>>>>>            -direct=3D1 \
+>>>>>>            -offset_increment=3D1g \
+>>>>>>            -rw=3Drandwrite \
+>>>>>>            -bs=3D1024k \
+>>>>>>            -numjobs=3D{1,2,4,8,16,32,64,128,256,512} \
+>>>>>>            -runtime=3D110 \
+>>>>>>            -ramp_time=3D10
+>>>>>>
+>>>>>> Test result: MiB/s
+>>>>>>
+>>>>>> | numjobs | v5.18-rc1 | v5.18-rc1-patched |
+>>>>>> | ------- | --------- | ----------------- |
+>>>>>> | 1       | 67.7      | 67.7              |
+>>>>>> | 2       | 67.7      | 67.7              |
+>>>>>> | 4       | 67.7      | 67.7              |
+>>>>>> | 8       | 67.7      | 67.7              |
+>>>>>> | 16      | 64.8      | 65.6              |
+>>>>>> | 32      | 59.8      | 63.8              |
+>>>>>> | 64      | 54.9      | 59.4              |
+>>>>>> | 128     | 49        | 56.9              |
+>>>>>> | 256     | 37.7      | 58.3              |
+>>>>>> | 512     | 31.8      | 57.9              |
+>>>>
+>>>> Device write cache disabled ?
+>>>>
+>>>> Also, what is the max QD of this disk ?
+>>>>
+>>>> E.g., if it is SATA, it is 32, so you will only get at most 64 sched=
+uler
+>>>> tags. So for any of your tests with more than 64 threads, many of th=
+e
+>>>> threads will be waiting for a scheduler tag for the BIO before the
+>>>> bio_split problem you explain triggers. Given that the numbers you s=
+how
+>>>> are the same for before-after patch with a number of threads <=3D 64=
+, I am
+>>>> tempted to think that the problem is not really BIO splitting...
+>>>>
+>>>> What about random read workloads ? What kind of results do you see ?
+>>>
+>>> Hi,
+>>>
+>>> Sorry about the misleading of this test case.
+>>>
+>>> This testcase is high concurrency huge randwrite, it's just for the
+>>> problem that split bios won't be issued continuously, which is the
+>>> root cause of the performance degradation as the numjobs increases.
+>>>
+>>> queue_depth is 32, and numjobs is 64, thus when numjobs is not greate=
+r
+>>> than 8, performance is fine, because the ratio of sequential io shoul=
+d
+>>> be 7/8. However, as numjobs increases, performance is worse because
+>>> the ratio is lower. For example, when numjobs is 512, the ratio of
+>>> sequential io is about 20%.
+>>
+>> But with 512 jobs, you will get only 64 jobs only with IOs in the queu=
+e.
+>> All other jobs will be waiting for a scheduler tag before being able t=
+o
+>> issue their large BIO. No ?
+>=20
+> Hi,
+>=20
+> It's right.
+>=20
+> In fact, after this patchset, since each large io will need total 8
+> tags, only 8 jobs can be in the queue while others are waiting for
+> scheduler tag.
+>=20
+>>
+>> It sounds like the set of scheduler tags should be a bit more elastic:
+>> always allow BIOs from a split of a large BIO to be submitted (that is=
+ to
+>> get a scheduler tag) even if that causes a temporary excess of the num=
+ber
+>> of requests beyond the default number of scheduler tags. Doing so, all
+>> fragments of a large BIOs can be queued immediately. From there, if th=
+e
+>> scheduler operates correctly, all the requests from the large BIOs spl=
+it
+>> would be issued in sequence to the device.
+>=20
+> This solution sounds feasible in theory, however, I'm not sure yet how
+> to implement that 'temporary excess'.
 
-I agree this is worth fixing if we want to make W=2 have any meaning at all.
+It should not be too hard.
 
-Your approach is probably fine. We could try to improve this by comparing
-against the list from include/uapi/asm-generic/unistd.h instead of the i386
-list. I suppose that would involve rewriting the script into a simpler one,
-but I'm not sure if anyone has an interest in working on this.
+By the way, did you check that doing something like:
 
-       Arnd
+echo 2048 > /sys/block/sdX/queue/nr_requests
+
+improves performance for your high number of jobs test case ?
+
+>=20
+> Thanks,
+> Kuai
+>>
+>>
+>>>
+>>> patch 6-8 will let split bios still be issued continuously under high
+>>> pressure.
+>>>
+>>> Thanks,
+>>> Kuai
+>>>
+>>
+>>
+
+
+--=20
+Damien Le Moal
+Western Digital Research

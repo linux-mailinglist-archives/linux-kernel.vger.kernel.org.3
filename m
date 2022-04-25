@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF0650DE47
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 12:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7926150DE4A
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 12:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240952AbiDYK5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 06:57:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51382 "EHLO
+        id S241648AbiDYK6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 06:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236870AbiDYK5X (ORCPT
+        with ESMTP id S241645AbiDYK57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 06:57:23 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4433783011
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 03:54:17 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id t11so3081941qto.11
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 03:54:17 -0700 (PDT)
+        Mon, 25 Apr 2022 06:57:59 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06DC883011;
+        Mon, 25 Apr 2022 03:54:56 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id d19so10445759qko.3;
+        Mon, 25 Apr 2022 03:54:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=VE7hLnL2JzRWXBL+x2KNohSUhmDWu5UxatJoTC8eSZw=;
-        b=l2FcOdRwsh6qq4j24xk78eBC9Z8WD4+I4ThlceSG6NfKkURxWys6zBSGDcC+3Yxrgs
-         6IfTQnSbiP6D7EhuiMICx3ZuYnNSwTkHGCGkpwQGnSIhcPtvoZSJHmDBvYHUhJXB7xy3
-         bD8/z/m5I3WDL7bymmNvWNcwknlqlkqUxDCV4E0lffylHyR9UN6lKz9ZmbYOiNuzI8hQ
-         3Z+SGYFuAwV98LDtZtzhGgjdLfav5+C2w/p+CqNqZ+NLwIxCNcuvrn7fsZY6iF6VD3ps
-         QMEWPFzcp1KzPd0aX5J6YvYR9Fd2Z2A9nA65ssz0gbiLRfdyIDKdhSY00XUqFQvmGxix
-         /KZw==
+        bh=Jp4XLXB+yuFIyEeNeA7P4d0RwkNykKV21HzQvLnUYDI=;
+        b=WvoIZbMKGUK6CAV3ViG2gZsOpJ9sDx9/EXvYDMk6k4AKGTTYFByX8z7U6qJMjkzfno
+         SLYTZynKNW5fKDVYAketkQIdbSakw1+wq/5l21KeFKPqjRfOS8YQZr+JMDCxu3YnkE2k
+         72T0/FcP6YlFZN2VXFe4bQyBVAFwSFktTtWe7yDaWP/DVFK81XphtBORNqm/He0z/4Xi
+         W4/bRbtQ4NSyRdHWvEtp9sA35ad/OLGs/byCwlqcjUoym9oP0qnKb0/CI8J9Wez2tFlD
+         Yvxje1XIzolJerN7DOcEkg/krw5FXz1+Zm8nv7SuTljcHiaBAcxz5IX8u/RRIU6JElxu
+         C/Mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=VE7hLnL2JzRWXBL+x2KNohSUhmDWu5UxatJoTC8eSZw=;
-        b=72A57WOwY8kzYEIxAUKfYxd+pTbh1ZY7bGT4ezf/ivGkqKZ6Uj26pAw+pcPp3OvUCt
-         4wqU2v4O/6KJnEgCX8FdrrhL5U84cxBhOx/fDVj5mlZWFf2gJHb8dmqbzk5YNG0L83jn
-         kreXrWfh9z0I08s2eEvhoXbcHUsBfUghppUsvrI8Nn32Jt+TmM1sQyYWpYwO+Eol4plo
-         E3YK/eO+FYhPkb1nUnUR29coV1L/LGAIkQTVSwjYfpXjWeVJAQXMgZanVdJJyPKn2i7m
-         zeWcusnB0jng2cDmRG1I8LwJBWRAFkBkVL+GzuRHoDnnCKWtRreIbduCx/XpN6DdL1wg
-         54tg==
-X-Gm-Message-State: AOAM5322B2HHkPoaWjcCgtsY0KZte1CItwBTcjWm7qE5/aTKzJwe2rZX
-        wK79NCDYSHQB5fZzCpoUsSI=
-X-Google-Smtp-Source: ABdhPJxK8392ELC/VE00huZoYudJKEZoU3OodsWWeiGYf+b55ZMR4GSr+F6YXtPGed3PR+ijfJyt7Q==
-X-Received: by 2002:a05:622a:144:b0:2f3:3bbd:3db5 with SMTP id v4-20020a05622a014400b002f33bbd3db5mr11540024qtw.95.1650884056495;
-        Mon, 25 Apr 2022 03:54:16 -0700 (PDT)
+        bh=Jp4XLXB+yuFIyEeNeA7P4d0RwkNykKV21HzQvLnUYDI=;
+        b=bGR3b3pAcNSY2k5S/QqnwSpPi/NQRct+IdBUkiOMB753HDN73eMQmZMrRqNSAerLmw
+         bgDNCyNIMuTQCXjY2ooqF54Slm5FWduCcNwzfepasX+UybPx3WdThVdxh6GWlPVc/AFl
+         PWKBSmqZtjGkvG4rIOTK63LV27rnGCivqRsOHUcSMn//j/B13XYOIbq+AOb00seOZiFK
+         OtZT+ELKItlvYpZix6SXejvYzaG98ORWHeWNDLhsaZ7zbFpFr+/JQCBZAMj5ChZD4OqN
+         TPN9R2nDnpmthpZmODdIgqI/lFVB1WxjCdOeBr/gGyAiPIlaxFSQlbwEcRm/dSLYCIxa
+         TZoA==
+X-Gm-Message-State: AOAM533j2SX/cNbflBc+2jY2ELV8eIeRTtJTAQkUxXhIC45agqjo5heI
+        YDkHjYPhOgxBF9DC4Hm4OmA=
+X-Google-Smtp-Source: ABdhPJyDBcW0PosEENTQ3sDnBnPDKMXjaubTO3wpbz5ZLuwfqkkTwpFfSQbEl1mu/+AxQkwsFMixpg==
+X-Received: by 2002:a05:620a:280e:b0:680:d1b9:6b0 with SMTP id f14-20020a05620a280e00b00680d1b906b0mr9704297qkp.391.1650884095232;
+        Mon, 25 Apr 2022 03:54:55 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id g4-20020ac87d04000000b002e06b4674a1sm6423576qtb.61.2022.04.25.03.54.13
+        by smtp.gmail.com with ESMTPSA id k14-20020ac85fce000000b002f344fc0e0bsm6521472qta.38.2022.04.25.03.54.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 03:54:15 -0700 (PDT)
+        Mon, 25 Apr 2022 03:54:54 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     dan.j.williams@intel.com
-Cc:     vishal.l.verma@intel.com, dave.jiang@intel.com,
-        ira.weiny@intel.com, nvdimm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+To:     corentin.chary@gmail.com
+Cc:     hdegoede@redhat.com, markgross@kernel.org,
+        acpi4asus-user@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] libnvdimm: use kobj_to_dev()
-Date:   Mon, 25 Apr 2022 10:54:09 +0000
-Message-Id: <20220425105409.3515505-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] platform/x86: use kobj_to_dev()
+Date:   Mon, 25 Apr 2022 10:54:46 +0000
+Message-Id: <20220425105446.3515663-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -78,22 +79,22 @@ Use kobj_to_dev() instead of open-coding it.
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- drivers/nvdimm/namespace_devs.c | 2 +-
+ drivers/platform/x86/asus-wmi.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/nvdimm/namespace_devs.c b/drivers/nvdimm/namespace_devs.c
-index 62b83b2e26e3..e9f021da743c 100644
---- a/drivers/nvdimm/namespace_devs.c
-+++ b/drivers/nvdimm/namespace_devs.c
-@@ -1380,7 +1380,7 @@ static struct attribute *nd_namespace_attributes[] = {
- static umode_t namespace_visible(struct kobject *kobj,
- 		struct attribute *a, int n)
+diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
+index 2104a2621e50..c840e83947d6 100644
+--- a/drivers/platform/x86/asus-wmi.c
++++ b/drivers/platform/x86/asus-wmi.c
+@@ -2529,7 +2529,7 @@ static struct attribute *asus_fan_curve_attr[] = {
+ static umode_t asus_fan_curve_is_visible(struct kobject *kobj,
+ 					 struct attribute *attr, int idx)
  {
 -	struct device *dev = container_of(kobj, struct device, kobj);
 +	struct device *dev = kobj_to_dev(kobj);
+ 	struct asus_wmi *asus = dev_get_drvdata(dev->parent);
  
- 	if (is_namespace_pmem(dev)) {
- 		if (a == &dev_attr_size.attr)
+ 	/*
 -- 
 2.25.1
 

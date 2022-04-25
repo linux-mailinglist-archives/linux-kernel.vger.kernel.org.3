@@ -2,152 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EFF550E40D
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 369B050E42D
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242748AbiDYPLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 11:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51786 "EHLO
+        id S242771AbiDYPTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 11:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231972AbiDYPLK (ORCPT
+        with ESMTP id S234730AbiDYPTh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 11:11:10 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D81689AA;
-        Mon, 25 Apr 2022 08:08:05 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-e5ca5c580fso16355866fac.3;
-        Mon, 25 Apr 2022 08:08:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=za1mZHss+li0ybPEY6i/L34F8j+pk+2DumO4nFr5Nqw=;
-        b=HOTPf6CKzKzNtGoZg5BVXqz56lD0FnvFQgQD/QpQp1mfRh5BLZkKlYB/4e+q1voe+D
-         DvtwJpjx10q5fE3em4lCpWGNIECHmNi/ok0z7UsAjJO94VwvAmVWERtLUUF/AVyUCoEN
-         bBB/TG/yuJpuEnfJyvea0qz7bVQhCfUoVb+fh/W4vL4a6B5oXDSiV/0RFgvBJHLaVs05
-         K8vGTzOh2yoHv6De3UwwJoNkzCC8aDfGjjmWOCDv7ugp9P8iT2RbrboATd+nd1ltD4Cd
-         pW5/ti8Yr/Jon7QRkHj4YBoClzCR3Bj+D0+CMCuVVyzlC5/g0jaUrW61hp8+6EtC9f0F
-         8gZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=za1mZHss+li0ybPEY6i/L34F8j+pk+2DumO4nFr5Nqw=;
-        b=5olCd3kCrKoIFbMlk0e2RrhfbtAiUszljHgncmYMPCHNXTuvh249JwvTbYRSyP1pPe
-         6MaxPaz3Un2H01z98DeGAhluSkMG7egTV7ZFzgi4Y5zzHFWcjqAPTwYr0O3RGWJsQa9r
-         rsecOvwMNKY+kN/avneQg1S88M/cZq7JjVMP1++9pC6TQ3p/T3rNDVH8+zA/sqLoljtw
-         xFrBIVB8n+J1s28nTtwCtLy7u10K5WPy80u1xcdhbPYSLAb6z1bB1fu0VBebpJq9KwG1
-         LrCnvJMgI//4i4c0NStqO5SDEk2he3Cscbnf7ZaOyaQwymOuULduPUnlNNXsI5+/0GJ+
-         EVlA==
-X-Gm-Message-State: AOAM531xNR3bGsQzV1PHm/Ip+X9Dj4FIR15ZL5w8rd37h8ZqUxP3lih6
-        0W4ZNhowKdIUXv0uLw5xKRQ21k7CjmE=
-X-Google-Smtp-Source: ABdhPJyzc6gXFrcLW8x8oJ6ozRGcsrCXhmmdRz6dFfIR7Qz8FnM7l8VZx/RvOA7UfN3sl1y6XrSwIA==
-X-Received: by 2002:a05:6870:15d0:b0:e9:12ad:288c with SMTP id k16-20020a05687015d000b000e912ad288cmr4799481oad.223.1650899284840;
-        Mon, 25 Apr 2022 08:08:04 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e26-20020a056820061a00b0035e46250f56sm3782576oow.13.2022.04.25.08.07.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 08:07:57 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 25 Apr 2022 08:07:48 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Renze Nicolai <renze@rnplus.nl>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: Re: [PATCH v2 1/6] dt-bindings: hwmon: Add nuvoton,nct6775
-Message-ID: <20220425150748.GA4165124@roeck-us.net>
-References: <20220309005047.5107-1-zev@bewilderbeest.net>
- <20220309005047.5107-2-zev@bewilderbeest.net>
+        Mon, 25 Apr 2022 11:19:37 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E841FAC04F
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 08:16:32 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 65DEA1FB;
+        Mon, 25 Apr 2022 08:16:32 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.57.42.68])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C19143F774;
+        Mon, 25 Apr 2022 08:16:30 -0700 (PDT)
+From:   Vincent Donnefort <vincent.donnefort@arm.com>
+To:     peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org
+Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        morten.rasmussen@arm.com, chris.redpath@arm.com,
+        qperret@google.com, Vincent Donnefort <vincent.donnefort@arm.com>
+Subject: [PATCH v5 0/7] feec() energy margin removal
+Date:   Mon, 25 Apr 2022 16:16:05 +0100
+Message-Id: <20220425151612.3322972-1-vincent.donnefort@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220309005047.5107-2-zev@bewilderbeest.net>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 04:50:42PM -0800, Zev Weiss wrote:
-> These Super I/O chips have an i2c interface that some systems expose
-> to a BMC; the BMC's device tree can now describe that via this
-> binding.
-> 
-> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+find_energy_efficient() (feec()) will migrate a task to save energy only
+if it saves at least 6% of the total energy consumed by the system. This
+conservative approach is a problem on a system where a lot of small tasks
+create a huge load on the overall: very few of them will be allowed to migrate
+to a smaller CPU, wasting a lot of energy. Instead of trying to determine yet
+another margin, let's try to remove it.
 
-This is still waiting for DT maintainer approval.
+The first elements of this patch-set are various fixes and improvement that
+stabilizes task_util and ensures energy comparison fairness across all CPUs of
+the topology. Only once those fixed, we can completely remove the margin and
+let feec() aggressively place task and save energy.
 
-Do you expect to add further properties along the line ?
-If not, you might consider adding the chips to trivial devices instead.
+This has been validated by two different ways:
 
-Guenter
+First using LISA's eas_behaviour test suite. This is composed of a set of
+scenario and verify if the task placement is optimum. No failure have been
+observed and it also improved some tests such as Ramp-Down (as the placement
+is now more energy oriented) and *ThreeSmall (as no bouncing between clusters
+happen anymore).
 
-> ---
->  .../bindings/hwmon/nuvoton,nct6775.yaml       | 48 +++++++++++++++++++
->  1 file changed, 48 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml b/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
-> new file mode 100644
-> index 000000000000..7b1054db46b3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
-> @@ -0,0 +1,48 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +
-> +$id: http://devicetree.org/schemas/hwmon/nuvoton,nct6775.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Nuvoton NCT6775 and compatible Super I/O chips
-> +
-> +maintainers:
-> +  - Zev Weiss <zev@bewilderbeest.net>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - nuvoton,nct6106
-> +      - nuvoton,nct6116
-> +      - nuvoton,nct6775
-> +      - nuvoton,nct6776
-> +      - nuvoton,nct6779
-> +      - nuvoton,nct6791
-> +      - nuvoton,nct6792
-> +      - nuvoton,nct6793
-> +      - nuvoton,nct6795
-> +      - nuvoton,nct6796
-> +      - nuvoton,nct6797
-> +      - nuvoton,nct6798
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        superio@4d {
-> +            compatible = "nuvoton,nct6779";
-> +            reg = <0x4d>;
-> +        };
-> +    };
+  * Hikey960: 100% PASSED
+  * DB-845C:  100% PASSED
+  * RB5:      100% PASSED
+
+Second, using an Android benchmark: PCMark2 on a Pixel4, with a lot of
+backports to have a scheduler as close as we can from mainline. 
+
+  +------------+-----------------+-----------------+
+  |    Test    |      Perf       |    Energy [1]   |
+  +------------+-----------------+-----------------+
+  | Web2       | -0.3% pval 0.03 | -1.8% pval 0.00 |
+  | Video2     | -0.3% pval 0.13 | -5.6% pval 0.00 |
+  | Photo2 [2] | -3.8% pval 0.00 | -1%   pval 0.00 |
+  | Writing2   |  0%   pval 0.13 | -1%   pval 0.00 |
+  | Data2      |  0%   pval 0.8  | -0.43 pval 0.00 |
+  +------------+-----------------+-----------------+ 
+
+The margin removal let the kernel make the best use of the Energy Model,
+tasks are more likely to be placed where they fit and this saves a 
+substantial amount of energy, while having a limited impact on performances.
+
+[1] This is an energy estimation based on the CPU activity and the Energy Model
+for this device. "All models are wrong but some are useful"; yes, this is an
+imperfect estimation that doesn't take into account some idle states and shared
+power rails. Nonetheless this is based on the information the kernel has during
+runtime and it proves the scheduler can take better decisions based solely on
+those data.
+
+[2] This is the only performance impact observed. The debugging of this test
+showed no issue with task placement. The better score was solely due to some
+critical threads held on better performing CPUs. If a thread needs a higher
+capacity CPU, the placement must result from a user input (with e.g. uclamp
+min) instead of being artificially held on less efficient CPUs by feec().
+Notice also, the experiment didn't use the Android only latency_sensitive
+feature which would hide this problem on a real-life device.
+
+v4 -> v5:
+  - PELT migration decay: timestamp only at idle time (Vincent G.)
+  - PELT migration decay: split timestamp values (enter_idle / clock_pelt_idle)
+    (Vincent G.)
+
+v3 -> v4:
+  - Minor cosmetic changes (Dietmar)
+
+v2 -> v3:
+  - feec(): introduce energy_env struct (Dietmar)
+  - PELT migration decay: Only apply when src CPU is idle (Vincent G.)
+  - PELT migration decay: Do not apply when cfs_rq is throttled
+  - PELT migration decay: Snapshot the lag at cfs_rq's level
+
+v1 -> v2:
+  - Fix PELT migration last_update_time (previously root cfs_rq's).
+  - Add Dietmar's patches to refactor feec()'s CPU loop.
+  - feec(): renaming busy time functions get_{pd,tsk}_busy_time()
+  - feec(): pd_cap computation in the first for_each_cpu loop.
+  - feec(): create get_pd_max_util() function (previously within compute_energy())
+  - feec(): rename base_energy_pd to base_energy.
+
+Dietmar Eggemann (3):
+  sched, drivers: Remove max param from
+    effective_cpu_util()/sched_cpu_util()
+  sched/fair: Rename select_idle_mask to select_rq_mask
+  sched/fair: Use the same cpumask per-PD throughout
+    find_energy_efficient_cpu()
+
+Vincent Donnefort (4):
+  sched/fair: Provide u64 read for 32-bits arch helper
+  sched/fair: Decay task PELT values during wakeup migration
+  sched/fair: Remove task_util from effective utilization in feec()
+  sched/fair: Remove the energy margin in feec()
+
+ drivers/powercap/dtpm_cpu.c       |  33 +--
+ drivers/thermal/cpufreq_cooling.c |   6 +-
+ include/linux/sched.h             |   2 +-
+ kernel/sched/core.c               |  15 +-
+ kernel/sched/cpufreq_schedutil.c  |   5 +-
+ kernel/sched/fair.c               | 379 ++++++++++++++++++------------
+ kernel/sched/pelt.h               |  28 ++-
+ kernel/sched/sched.h              |  53 ++++-
+ 8 files changed, 318 insertions(+), 203 deletions(-)
+
+-- 
+2.25.1
+

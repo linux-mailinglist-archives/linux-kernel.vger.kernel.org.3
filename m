@@ -2,107 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9A4450EBE6
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 00:22:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D7150EC06
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 00:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238157AbiDYWZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 18:25:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40854 "EHLO
+        id S233373AbiDYW1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 18:27:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232405AbiDYVYF (ORCPT
+        with ESMTP id S1343491AbiDYV1y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 17:24:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76AEC8BF5D;
-        Mon, 25 Apr 2022 14:21:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FCA161422;
-        Mon, 25 Apr 2022 21:21:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B989C385A7;
-        Mon, 25 Apr 2022 21:20:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650921659;
-        bh=yeW9+BBUV3mLk/jfmzfFnnmQesZ+9KRuhHEuOliabrk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=E/JcjnDmi7uOq5bko2zU6SjHLd+HzINwHPRYwmO9Gp0hKeaMyU1dxx9ZmrEOsf7Zj
-         pIEW7sM6WK2FbIV/zrXyRju9itO4v7kfA4YUtVR7YRq0ogeDwPDsZSduI6gyqAynkM
-         6+hoAgKuLvu9CXOOLyq/V+VIIs6ASajy7LDcx8lpWHipD89wNms2zwFjMBIeYpahuu
-         cnMBtBCYdPAee6EVicQpPLLhoG8TccCTbBG/wetCvdki0dmUZOKfS/pyCP95jBMqkA
-         X6ioiWzvNJ2dRltuNo5uLSf+DExXSHn3aZg9HC1nCRXd7GCxkGFURSpczrBLiH8Qxo
-         K+k8Ys/6UzJhA==
-Received: by mail-yb1-f177.google.com with SMTP id r189so29435566ybr.6;
-        Mon, 25 Apr 2022 14:20:59 -0700 (PDT)
-X-Gm-Message-State: AOAM532D1L70MPCgiEa466nVhgk3bkILwVvwn1ckPI7QwS0DUNGpkOMK
-        90VxGDR8EQS8O2EalmgleKAGU0VajX5sNNFibSo=
-X-Google-Smtp-Source: ABdhPJwWKrStNu9Uj5Vqn7auM4uV4Q5j2aLQeQPBqYMe2nRVht9c4yaM2xOWTUMUx+yYi+q7fhM3ZxXsG5XCzei+6us=
-X-Received: by 2002:a05:6902:114c:b0:641:87a7:da90 with SMTP id
- p12-20020a056902114c00b0064187a7da90mr18971886ybu.561.1650921658476; Mon, 25
- Apr 2022 14:20:58 -0700 (PDT)
+        Mon, 25 Apr 2022 17:27:54 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095ED107700
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 14:24:48 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id p6so1061034pjm.1
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 14:24:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9RYuhCQRZSGGvQlvR3KQE72md5GMXY8uozyrhKpZbH4=;
+        b=76+cFpJlB2znElEluziuC+lYgS8j/y2ZEoL/3Ey3E/ltwLqQH/caL2CbKx/CjviqTf
+         VAaanrajTbqytcF+DAjxDxfemaieNsNjWEIwzrpenjDnuT3/Vvt91nO3RSOu+HURxpbK
+         xZGwSNJa/1fZh35VZAg66cOoBhCb5R93A36Y8b6aFV3V8SsN5YV4OJIqwVDg2rVMlhKQ
+         P3HvUczasvOvTuh312jNOy/Hb8K7vagFPrwqtDxTo+p3o4Vg6PlUrTa0KLpPggpj9dsW
+         X1tD8lce6FcfSlraB0XhUaoAIl5/WlVdnVLVivKxVON4WbD/O6yXfbjLvVxaLd5+EfZA
+         BhjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9RYuhCQRZSGGvQlvR3KQE72md5GMXY8uozyrhKpZbH4=;
+        b=p1D3tASo43xFYxapSyQWwwNKg6PcyZPTR85zfL2GQZuqKDpJxBc6+XUT9l2MEZXBdN
+         rBn3U2C5tMLqo0BYK61vXRp9o+YIThq8hs1GX9iCmnasdnJTZoeH9jVg/rq1RLF+MSDp
+         uvIBMeku2sD8oEgXfPipqjT1eXAngA4o7/w9qC3tqDZbF1oEq9bRtcgmzwTE1FgYDO9A
+         iyOOHoXT7iHJ/gxAtz8qrMWMQNno7J1akSWTuK80NVWXwJj32vHCLUzONPiMze6bu2uW
+         kDngoWUF0/aohzKXfcVMUU0CQJ1H8SV31bnz2x6LZmVnJo8p3woaeLlbfYFDZSt8JSxq
+         EgvA==
+X-Gm-Message-State: AOAM530XZF8KaikALqJM7cPl23Dbo5USFknnx5c7KQuXSArfbkcHDjOr
+        TxuIvt6tuNzkPieSRLBdvT8VY/QxmQxb9B3+gnNbew==
+X-Google-Smtp-Source: ABdhPJysD+6GxIKJGVU76kXWf16Gd4VaOx1Mwbkre+dhBbQ/oZx7AXi6WajOGSoOZadUd7bvIs6Q73h8n6Qn3HjHypQ=
+X-Received: by 2002:a17:90b:1d12:b0:1d9:8499:545d with SMTP id
+ on18-20020a17090b1d1200b001d98499545dmr5770592pjb.96.1650921888547; Mon, 25
+ Apr 2022 14:24:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220421194558.59667-1-david.sloan@eideticom.com>
-In-Reply-To: <20220421194558.59667-1-david.sloan@eideticom.com>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 25 Apr 2022 14:20:47 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW7B=n6HYSCJxfQbumO4-e5TacvUGbOXBMHfB-TvD0M7zA@mail.gmail.com>
-Message-ID: <CAPhsuW7B=n6HYSCJxfQbumO4-e5TacvUGbOXBMHfB-TvD0M7zA@mail.gmail.com>
-Subject: Re: [PATCH] md: Replace role magic numbers with defined constants
-To:     David Sloan <david.sloan@eideticom.com>
-Cc:     linux-raid <linux-raid@vger.kernel.org>,
+References: <20220424051022.2619648-1-asmadeus@codewreck.org> <20220424051022.2619648-4-asmadeus@codewreck.org>
+In-Reply-To: <20220424051022.2619648-4-asmadeus@codewreck.org>
+From:   Quentin Monnet <quentin@isovalent.com>
+Date:   Mon, 25 Apr 2022 22:24:37 +0100
+Message-ID: <CACdoK4LH3b-n3j_9r4hbgAus1UiJkfMBOMxboTzSVWbqi+j4wg@mail.gmail.com>
+Subject: Re: [PATCH 3/4] tools/bpf: musl compat: replace nftw with FTW_ACTIONRETVAL
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>
+        KP Singh <kpsingh@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Yonghong Song <yhs@fb.com>, Song Liu <songliubraving@fb.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 12:46 PM David Sloan <david.sloan@eideticom.com> wrote:
+On Sun, 24 Apr 2022 at 06:11, Dominique Martinet <asmadeus@codewreck.org> wrote:
 >
-> There are several instances where magic numbers are used in md.c instead
-> of the defined constants in md_p.h. This patch set improves code
-> readability by replacing all occurrences of 0xffff, 0xfffe, and 0xfffd when
-> relating to md roles with their equivalent defined constant.
+> musl nftw implementation does not support FTW_ACTIONRETVAL.
 >
-> Signed-off-by: David Sloan <david.sloan@eideticom.com>
-> Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
-
-Thanks for the clean up!
-
-> ---
->  drivers/md/md.c | 13 ++++++++-----
->  1 file changed, 8 insertions(+), 5 deletions(-)
+> There have been multiple attempts at pushing the feature in musl
+> upstream but it has been refused or ignored all the times:
+> https://www.openwall.com/lists/musl/2021/03/26/1
+> https://www.openwall.com/lists/musl/2022/01/22/1
 >
-> diff --git a/drivers/md/md.c b/drivers/md/md.c
-> index 309b3af906ad..b34b72fc5887 100644
-> --- a/drivers/md/md.c
-> +++ b/drivers/md/md.c
-> @@ -2645,11 +2645,12 @@ static bool does_sb_need_changing(struct mddev *mddev)
->         rdev_for_each(rdev, mddev) {
->                 role = le16_to_cpu(sb->dev_roles[rdev->desc_nr]);
->                 /* Device activated? */
-> -               if (role == 0xffff && rdev->raid_disk >=0 &&
-> +               if (role == MD_DISK_ROLE_SPARE && rdev->raid_disk >= 0 &&
->                     !test_bit(Faulty, &rdev->flags))
->                         return true;
->                 /* Device turned faulty? */
-> -               if (test_bit(Faulty, &rdev->flags) && (role < 0xfffd))
-> +               if (test_bit(Faulty, &rdev->flags) &&
-> +                   role < MD_DISK_ROLE_JOURNAL)
+> In this case we only care about /proc/<pid>/fd/<fd>, so it's not
+> too difficult to reimplement directly instead, and the new
+> implementation makes 'bpftool perf' slightly faster because it doesn't
+> needlessly stat/readdir unneeded directories (54ms -> 13ms on my machine)
+>
+> Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
 
-I changed this to role < MD_DISK_ROLE_MAX.
-
-Also made some minor style changes, and applied it to md-next.
-
-Thanks,
-Song
-
->                         return true;
->         }
-
-[...]
+Acked-by: Quentin Monnet <quentin@isovalent.com>

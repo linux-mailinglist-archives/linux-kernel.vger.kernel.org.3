@@ -2,102 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 134CB50E20E
+	by mail.lfdr.de (Postfix) with ESMTP id 7E81B50E20F
 	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:41:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242110AbiDYNoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 09:44:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58690 "EHLO
+        id S242029AbiDYNoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 09:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242017AbiDYNn7 (ORCPT
+        with ESMTP id S236348AbiDYNn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 09:43:59 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE9D49276
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 06:40:55 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2f7bb893309so68447087b3.12
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 06:40:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0iW0lfnOAQF5cFI1vUpJrSs+pwJtGVWKWvpMUuWdKzw=;
-        b=a+4h19FIk30YOSOnT/EZ40c6x1uajSyiYVz5RRsTKaKN1eJGtIyF+2r5q+eNdqyBBl
-         XIQoID+tBiBPNrscesCiG4KqQt0dg0KP03zgfjtqy8IXImQPeYwJTvXtbhdA9/9YKgVa
-         za6lWLnHoXo+B9bQTRCOygkqQD8Uzd9Gvvxg45OueC7y69tCefIlMbj0v7FaR/0VXpqJ
-         SRSU1QAVzrqhVDWYqVcpTwWWxpXq0DAaGj9oJyWbE8h6Ru6nmgFRoZUV5vtHrXZs0DYh
-         Nz8aN0NZaESQOyygNvXnoDRbUCvTEuQ0xFVpJxPQpuloFRUaXbhytj2y2xhHlkWmyNu1
-         nNNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0iW0lfnOAQF5cFI1vUpJrSs+pwJtGVWKWvpMUuWdKzw=;
-        b=hU927sPmPXUgH+kTtPR34uwv/3RU7YYE78EiDgL0lnaIOgfICQyZb0h50a46TnLlih
-         eYP8jOkjPgmHHvVcA+WT1Kjm1bNeuZsiE99R1WD84x2WBzNTlgq8FcaUkMckfMOM1c6X
-         +nSwGlC2P3cnN93Sid9SiprZ9qlpLwvUtG4ZpuSvyxT09+BWXxGXzyy8eqESG804PzIM
-         LZDsEuUWhHEPdhbJxFuojKmn3to7LSdm3fF81rGLK238gLA0AXQTIXMhb9FRRQmz+/T8
-         EYb6EHxoNay9DRcsLZ0IR/svwhiJ5EbInaVZZSynPjr8AEBJurb3H4HRqZelX0RsrAKU
-         YDVw==
-X-Gm-Message-State: AOAM531xpraxk5oEOX7EHPAte11Sd47j1n6K/XAFEpaUA4orN4BQ6pZX
-        9s6zYeIBkMzzyERmC/pzagUxzj7NLY9wr/Rh85twgg==
-X-Google-Smtp-Source: ABdhPJyLGPhTNmwcVKp/aPjOE6zhKyC+wcn0ap56Z0HIRwG+0xlW9MTQtYt2TvyL34lPTJFEh5UsTwcwn5RaRNHPmiQ=
-X-Received: by 2002:a0d:c4c2:0:b0:2f1:6c00:9eb4 with SMTP id
- g185-20020a0dc4c2000000b002f16c009eb4mr17318800ywd.448.1650894054719; Mon, 25
- Apr 2022 06:40:54 -0700 (PDT)
+        Mon, 25 Apr 2022 09:43:57 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60574926F;
+        Mon, 25 Apr 2022 06:40:52 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2ADF25C0193;
+        Mon, 25 Apr 2022 09:40:49 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Mon, 25 Apr 2022 09:40:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1650894049; x=
+        1650980449; bh=2nn2zqCEpHBXhjVLysWsPIDVph3o6ucuHdfZc6bQZOA=; b=U
+        5uXUoEihluXC0I2wYVBW2QH/01k5ZcB58KsO9Ta2TQfOqh8qDJfZvCAvKUq4Xdbr
+        mhRQENUXqsT2biDI46VQ5Iz0OTBq63xoFUa70FsnKl/Fk4gI8qhwhOFy5fcgufLv
+        IbKo19jpF2BzTqKnSdU6idK2SMEyFL9STfyZZHY3/gTzOe+yReoYMXRF1jYiH/RG
+        qDWMTBMf5wT6HiKqIY1d0nES84oIvFN0B3/31InKYZB2d8kF3oJQf2oePriFPFVY
+        +h9nT3y+xZNrW1Gi3rFjnWiSgTpS74mPm9x6p0Ti001x09Onv3497PJV/erWwGz8
+        Tn7S44gdN1NAJvQs5sVQA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1650894049; x=1650980449; bh=2nn2zqCEpHBXh
+        jVLysWsPIDVph3o6ucuHdfZc6bQZOA=; b=l6rrplDG3ZzlR3ohQ0f5YvlRX30fU
+        xa47F4+1TDWKudtTnP/kevd+q9UuMBwZ3R27x/GvmGFYUqBmcijXf/gWDX4v4P5g
+        OGr5VcQevoTv0L8XC4mS6wjSX9VX7QUJlEowgvQadLfKdKm1zT6jMRf9SFxrN/nO
+        fR8wFh/PqDWDKt9wG5XoU+O08AQQyziqA+wCItFGbRyxwmf+TA8VNzNdYjnydREE
+        KQxvymWb8nwctsEM1uVXviB2o3slsdAeqBQ2DP54AZZ6XTE7liCt5uEnKWhJB5VA
+        6ix9gVe0DA6Fdj+xGDL+Eiwm9AGw65Q1tnoCooANi3E4O4GpWFNs6W0Mw==
+X-ME-Sender: <xms:4KRmYrsBEyli04JEkheQcS8JKqGIaErI0zrWqdZzDV24bMiXA5zYfg>
+    <xme:4KRmYsfa_5r2vnmp2EYaRrHRdndpxooh4TlO8_hbJn_BqToZY2E06sPfXUQlm7KzE
+    hx6zlf5llzKKq5eVQ>
+X-ME-Received: <xmr:4KRmYuxIUxafzbh7j1-Se95uFE7DCMaEbpwyDVImN96vU3qC20Rcupygc5eh6D-Jiq8w56wF0falLw_sJZhrlspZQOzfFAtRtQNDv7sljBOwFOxk9wZcWsKvig>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddugdeihecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefuvfevfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepffdtveekvdegkeeuueetgfetffeileevudekuefhheelvdfhiedt
+    heduhfduhefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:4KRmYqOAbXv_2O2IZzhdJAlf8Q4heBTdY9ZleQi4oVAn5DjvnIQxmA>
+    <xmx:4KRmYr_7uRt3Oy0hEnrnFJftUAaJiqGaW9NSHdTu0_T8S-jbO9RIHg>
+    <xmx:4KRmYqVmWB3JW7V8t6jwSls_cbGxGiDdzmlFVBK9AMhC0Tcv-FFqVA>
+    <xmx:4aRmYs37IsFYIFCv3hOS6dQwLLJb2ig1qGo2OZvmS2KmOtPrC3OeTg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 25 Apr 2022 09:40:47 -0400 (EDT)
+Subject: Re: [PATCH] mmc: sunxi-mmc: Correct the maximum segment size
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, linux-mmc@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, Chen-Yu Tsai <wens@csie.org>,
+        Chris Ball <chris@printf.net>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Mike Turquette <mturquette@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+References: <20220424230640.31735-1-samuel@sholland.org>
+ <dcc1b028-7e53-cb94-9a66-41890393f2ed@redhat.com>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <31a12028-8593-c558-0f21-044d69f97e6f@sholland.org>
+Date:   Mon, 25 Apr 2022 08:40:46 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-References: <YYCOTx68LXu1Tn1i@fedora> <CACRpkdYmw4yBm3Y1P42TcRs4fFNEiy3LXxmO_j=zeTv_usDR+g@mail.gmail.com>
- <56052bc6e3b6cab6bfdfc5f706ec9984bea16bba.camel@pengutronix.de>
-In-Reply-To: <56052bc6e3b6cab6bfdfc5f706ec9984bea16bba.camel@pengutronix.de>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 25 Apr 2022 15:40:43 +0200
-Message-ID: <CACRpkdZYgym8f0o00EU7QKOUzkzOJZMeZYmQL6XoNLP6V7rz3g@mail.gmail.com>
-Subject: Re: [PATCH v3] PCI: imx6: Replace legacy gpio interface for gpiod interface
-To:     Lucas Stach <l.stach@pengutronix.de>
-Cc:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
-        hongxing.zhu@nxp.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
-        bhelgaas@google.com, helgaas@kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, linux-imx@nxp.com,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <dcc1b028-7e53-cb94-9a66-41890393f2ed@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 2:07 PM Lucas Stach <l.stach@pengutronix.de> wrote:
+On 4/25/22 5:40 AM, Hans de Goede wrote:
+> Hi Samuel,
+> 
+> On 4/25/22 01:06, Samuel Holland wrote:
+>> According to the DMA descriptor documentation, the lowest two bits of
+>> the size field are ignored, so the size must be rounded up to a multiple
+>> of 4 bytes. Furthermore, 0 is not a valid buffer size; setting the size
+>> to 0 will cause that DMA descriptor to be ignored.
+>>
+>> Together, these restrictions limit the maximum DMA segment size to 4
+>> less than the power-of-two width of the size field.
+> 
+> I assume that you were seeing some problems where things where not working
+> which caused you to investigate this; and that this patch fixes those
+> problems?   If yes then it would be good to also mention the problems +
+> investigative process in the commit message.
 
-> The binding explicitly describes the GPIO as not polarity aware and has
-> a separate property "reset-gpio-active-high" to avoid breaking old
-> DTBs. I don't think it's helpful to dismiss this explicit backward
-> compat just because the driver code looks nicer that way.
+No, this is just based on reading the manual. I was investigating some problems
+when I originally wrote this patch, but they turned out to be unrelated, and
+reverting this patch doesn't cause any obvious regression.
 
-I see. We handle such things a specific way.
+> I'm no longer involved in sunxi development, but still I wonder if the
+> subtraction of 4 from the max_seg_size is really necessary? This seems
+> to be based on the notion that as you say "0 is not a valid buffer size"
+> where as the code so far has been operating under the assumption that
+> putting 0 in sunxi_idma_des.buf_size means maximum buf-size.
+> 
+> I'm pretty sure that 0 meaning maximum buf-size is correct for at least
+> the older chips where idma_des_size_bits equals 13, which means that
+> only 2 4K pages fit in a single desc, so we almost certainly have been
+> hitting this code path ?
+> 
+> Although: drivers/mmc/host/dw_mmc.c which seems to be for similar
+> hw suggests that on designs where idma_des_size_bits == 13 only
+> 4k can be used, which sorta matches what you are doing here except
+> that you limit things to 8k - 4 instead of to just 4k.
+> 
+> Anyways I was just wondering about all this...
 
-Look in drivers/gpio/gpiolib-of.c, especially the function
-of_gpio_flags_quirks().
+It probably deserves someone testing this specific scenario, so we can either
+verify the fix is needed, or add a comment explaining that the documentation is
+wrong.
 
-Here we special-case all bindings which for some reason introduced
-something necessary custom, like in this case not using the proper
-polarity flag.
+Regards,
+Samuel
 
-Add code to this file in the proper place to handle and hide the
-old style DTBs using "reset-gpio-active-high" as active high flag
-and assuming active low otherwise in this file.
+> Regards,
+> 
+> Hans
+> 
+> 
+> 
+>>
+>> Fixes: 3cbcb16095f9 ("mmc: sunxi: Add driver for SD/MMC hosts found on Allwinner sunxi SoCs")
+>> Signed-off-by: Samuel Holland <samuel@sholland.org>
+>> ---
+>>
+>>  drivers/mmc/host/sunxi-mmc.c | 14 ++++++++------
+>>  1 file changed, 8 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/mmc/host/sunxi-mmc.c b/drivers/mmc/host/sunxi-mmc.c
+>> index c62afd212692..4bd5f37b1036 100644
+>> --- a/drivers/mmc/host/sunxi-mmc.c
+>> +++ b/drivers/mmc/host/sunxi-mmc.c
+>> @@ -214,6 +214,9 @@
+>>  #define SDXC_IDMAC_DES0_CES	BIT(30) /* card error summary */
+>>  #define SDXC_IDMAC_DES0_OWN	BIT(31) /* 1-idma owns it, 0-host owns it */
+>>  
+>> +/* Buffer size must be a multiple of 4 bytes. */
+>> +#define SDXC_IDMAC_SIZE_ALIGN	4
+>> +
+>>  #define SDXC_CLK_400K		0
+>>  #define SDXC_CLK_25M		1
+>>  #define SDXC_CLK_50M		2
+>> @@ -361,17 +364,15 @@ static void sunxi_mmc_init_idma_des(struct sunxi_mmc_host *host,
+>>  {
+>>  	struct sunxi_idma_des *pdes = (struct sunxi_idma_des *)host->sg_cpu;
+>>  	dma_addr_t next_desc = host->sg_dma;
+>> -	int i, max_len = (1 << host->cfg->idma_des_size_bits);
+>> +	int i;
+>>  
+>>  	for (i = 0; i < data->sg_len; i++) {
+>>  		pdes[i].config = cpu_to_le32(SDXC_IDMAC_DES0_CH |
+>>  					     SDXC_IDMAC_DES0_OWN |
+>>  					     SDXC_IDMAC_DES0_DIC);
+>>  
+>> -		if (data->sg[i].length == max_len)
+>> -			pdes[i].buf_size = 0; /* 0 == max_len */
+>> -		else
+>> -			pdes[i].buf_size = cpu_to_le32(data->sg[i].length);
+>> +		pdes[i].buf_size = cpu_to_le32(ALIGN(data->sg[i].length,
+>> +						     SDXC_IDMAC_SIZE_ALIGN));
+>>  
+>>  		next_desc += sizeof(struct sunxi_idma_des);
+>>  		pdes[i].buf_addr_ptr1 =
+>> @@ -1420,7 +1421,8 @@ static int sunxi_mmc_probe(struct platform_device *pdev)
+>>  	mmc->max_blk_count	= 8192;
+>>  	mmc->max_blk_size	= 4096;
+>>  	mmc->max_segs		= PAGE_SIZE / sizeof(struct sunxi_idma_des);
+>> -	mmc->max_seg_size	= (1 << host->cfg->idma_des_size_bits);
+>> +	mmc->max_seg_size	= (1 << host->cfg->idma_des_size_bits) -
+>> +				  SDXC_IDMAC_SIZE_ALIGN;
+>>  	mmc->max_req_size	= mmc->max_seg_size * mmc->max_segs;
+>>  	/* 400kHz ~ 52MHz */
+>>  	mmc->f_min		=   400000;
+> 
 
-I imagine it begins with
-
-if (IS_ENABLED(CONFIG_PCI_IMX6)) { ... }
-
-Then modify the code in drivers/pci/controller/dwc/pci-imx6.c
-to act as if gpiolib handles polarity inversion. Include all changes
-to all files in the same patch so this is changed in tandem (one technical
-step).
-
-Yours,
-Linus Walleij

@@ -2,151 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08C5150E7C8
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD9E50E7C9
 	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244229AbiDYSJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 14:09:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35238 "EHLO
+        id S238537AbiDYSKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 14:10:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238709AbiDYSJc (ORCPT
+        with ESMTP id S234370AbiDYSKa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 14:09:32 -0400
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2782F38BD7
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:06:28 -0700 (PDT)
-Received: by mail-ua1-x92d.google.com with SMTP id 63so5942380uaw.10
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:06:28 -0700 (PDT)
+        Mon, 25 Apr 2022 14:10:30 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A2F104F3A
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:07:25 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id k27so4245276edk.4
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:07:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VsCWtGvQdpehXpOnJzf3Xy4LkzxOmS8c7itH/1kQMSU=;
-        b=KeTmEFAL7NujVcG7aypNbHt9mUPTHmIapKOtNOb1rSbp7sY7D18ulNsQ+OWs4CBHpP
-         Ta1EjNmapbeR/qBgcEZhfW1J8aIDhrlx75HHgVSxpg4UZ1i2VHQY0gXr5+R35AUpG3Fr
-         RO0CoBQ5rz8l/z8SecS/fDj+s4LPDDsCU7M4B35wKjeq8y7+/R+zMG1+AnlV4jrJO3sv
-         QVZlhIAAH+IAZMIbEL9ZlKkYZVRy9zJjJltJE7Eq9SQt0m4l9phmmfi2cnB2fxMBEtrF
-         Qoet435VR3xYvNO3eIoYzJ9CYgpb295PmP7ONqd3SZiWt+nzL7ULdZxl0wibOY3y3a9N
-         gXNg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=O9XRVoAwaLqAz0VKvjdeTs+/WnNOyWkzSBKJjr1GgWI=;
+        b=KoaLI3WM6grOMDa/FBfYgJOEeXjsYzxUTObsQw6bUlLEy23Gf6/trLsbjs4thc5+om
+         +oRP1e9jWYmCno0y3RYw71REOH1VzySgtXbWYkfwyoSB+WY7Ow0JSEVGLl+Nk5JdmeIz
+         JVaDGhJVztFjgYH8uSq/Ol6LzmnrYjBP81l9D2loWzb0nCDaam5BfqCLB6Vjzez9+3s3
+         cAfL3MZBIHHvit45pXqWwVz1sq5EFA38dbnXLCvbqJno3yJE55Hgwr60XhF7wL6dR3FR
+         yrEeHORCoPqGl5xWPogNLGmRsUqh4gT7jkpMgtJPZcJbKfe4bMSvwXWLV60CTLXqBu2f
+         JDTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VsCWtGvQdpehXpOnJzf3Xy4LkzxOmS8c7itH/1kQMSU=;
-        b=MqQZ+yu4//ldfhZ/nvS+80CwUiUnXyI8IllBZVsRiXbunpB6bLZ7xWxelGXnf1liKg
-         yRQ1dYqWnTnZhfuBB55Il10RnrlURO1cMG86uzNYKny9D97fmmSoZvP6/PeuS25M3/hn
-         dM61lCNXDzmAWauPIVKWzBwmC4KGE9Go80Mcq0Ll2AY7G4C9XZVLf1HEBmgakPzd8dXe
-         +IaFxoer9788GRj15PGEzzfplLHJLsyn1D8+E40cNbfPIcIic6qyeJ9guuaIP+wjqj1f
-         flqjIOs/cgrQE94tcin6uWuw43GEtZljfFshpoOo7yuDJEfQgtz4R1J0N/m/8SMgI1h8
-         EpQg==
-X-Gm-Message-State: AOAM5326t6sVnZ2uyw8jLJuwRVmU4lG9XDJ3Zyss/9qK+TUup7MAD9Uj
-        stLJQHvPycn3QKYgUwfL9NSLINuC6jilulzkDAPkVQ==
-X-Google-Smtp-Source: ABdhPJyEjWKt6MQz612hu23UA90+bvp40aD7BMW+buy6PMhx+mCqvc6VvEtk/VNzTsIK/CoeIzcC8MCZfSDNmWZjURY=
-X-Received: by 2002:ab0:77d5:0:b0:352:42d7:88c2 with SMTP id
- y21-20020ab077d5000000b0035242d788c2mr5531417uar.1.1650909987129; Mon, 25 Apr
- 2022 11:06:27 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=O9XRVoAwaLqAz0VKvjdeTs+/WnNOyWkzSBKJjr1GgWI=;
+        b=RUR2p5tihU+BOIn4CzIJloA+Bs+SaYdaLV5wP252XbYonR3Ko3MCX39BLXhW3kgBPc
+         zAapyTRY20dWOjjBomCThQJyFlQwIX9J0/Nm9k9YtiCylvOqfEo3lPFij3z6gbAMAPxl
+         7hnu+EmVQzY6qa8jrWdfRaklP9buU2enKLMgG9an7+igmZxB8z9m1WQdym527w7O21Lp
+         Vo7mAep2E9Q/AzouFDCRpMhkRBmcTLSfj9pXQ+kRyGc8rTqvl2/ULWN3TUhqOIT/zGEo
+         2BvpRhuvL49bmIb6fjCAW+zNVHorQbkXr+8y/lKQPqGkbHWmiI5g6nZLEp8D4hDTXmN3
+         quKA==
+X-Gm-Message-State: AOAM531ScEEi5t/VQOlMFCwQzbwCAka6/IKZIT9JZuvvxpwogeamLWvJ
+        sRDVwp4u6B/DogmwSO510tChuA==
+X-Google-Smtp-Source: ABdhPJwa+byKv5S02qlMuGalcgKB61+HRaH8VosHoz/v2tW0VkTTVPLO8+wiJ+jqDrfpL08r3LJcwg==
+X-Received: by 2002:a05:6402:4253:b0:423:e4e0:fdd8 with SMTP id g19-20020a056402425300b00423e4e0fdd8mr20208800edb.193.1650910044403;
+        Mon, 25 Apr 2022 11:07:24 -0700 (PDT)
+Received: from [192.168.0.244] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id d11-20020a1709067f0b00b006f395247b5esm1414114ejr.84.2022.04.25.11.07.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Apr 2022 11:07:23 -0700 (PDT)
+Message-ID: <2c347033-bd63-05a8-94fb-2eb467e63e76@linaro.org>
+Date:   Mon, 25 Apr 2022 20:07:22 +0200
 MIME-Version: 1.0
-References: <20220414121911.8bb89fc3681b13af1566d79c@linux-foundation.org>
- <YlkaiUopM5HKWEdX@google.com> <20220416010259.4gbz5hgvm2lgr3sj@revolver>
- <CAOUHufZ8zPnpamkkpKK6KcSLTF91Eiba+S9VTX-ivhFrPQ_Cpw@mail.gmail.com>
- <20220416151923.ig5zavuptjsufm3d@revolver> <CAOUHufZewjQyMy1pHKxRkY82J5STPbUSJor7Q2aJgrkpZvU6bw@mail.gmail.com>
- <20220419155055.qf52xpcftqb3r5nj@revolver> <CAOUHufbX_aq+aHf-EVKFLN_jw6hXJ5vtKpG0jskD6uXVKB406w@mail.gmail.com>
- <20220419231748.omnhkl43vl5ep2j5@revolver> <CAOUHufaR3Pbv_PgGpzfmzzCHLLwBkHT8G-RcDfe1bo0zESekPw@mail.gmail.com>
- <20220420134336.bny7wza3ez2ldjsd@revolver>
-In-Reply-To: <20220420134336.bny7wza3ez2ldjsd@revolver>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Mon, 25 Apr 2022 12:05:51 -0600
-Message-ID: <CAOUHufZZbF-e6LF=xgig-Q8zuTSq_hvgPc-rMOwhyPdsD5=p0w@mail.gmail.com>
-Subject: Re: [PATCH v7 00/70] Introducing the Maple Tree
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 1/3] media: dt-bindings: media: rockchip-vdec: Add
+ RK3328 compatible
+Content-Language: en-US
+To:     Christopher Obbard <chris.obbard@collabora.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Elaine Zhang <zhangqing@rock-chips.com>
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+References: <20220425123215.1055251-1-chris.obbard@collabora.com>
+ <20220425123215.1055251-2-chris.obbard@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220425123215.1055251-2-chris.obbard@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 7:43 AM Liam Howlett <liam.howlett@oracle.com> wrote:
->
-> * Yu Zhao <yuzhao@google.com> [220419 19:23]:
-> > On Tue, Apr 19, 2022 at 5:18 PM Liam Howlett <liam.howlett@oracle.com> wrote:
-> > >
-> > > * Yu Zhao <yuzhao@google.com> [220419 17:59]:
-> > > > On Tue, Apr 19, 2022 at 9:51 AM Liam Howlett <liam.howlett@oracle.com> wrote:
-> > > > >
-> > > > > * Yu Zhao <yuzhao@google.com> [220416 15:30]:
-> > > > > > On Sat, Apr 16, 2022 at 9:19 AM Liam Howlett <liam.howlett@oracle.com> wrote:
-> > > > > > >
-> > > > > >
-> > > > > > <snipped>
-> > > > > >
-> > > > > > > How did you hit this issue?  Just on boot?
-> > > > > >
-> > > > > > I was hoping this is known to you or you have something I can verify for you.
-> > > > >
-> > > > >
-> > > > > Thanks, yes.  I believe that both crashes are the same root cause.  The
-> > > > > cause is that I was not cleaning up after the kmem bulk allocation
-> > > > > failure on my side.  Please test with this patch.
-> > > >
-> > > > Thanks. I applied this patch and hit a LOCKDEP and then a BUG_ON:
-> > > >
-> > > >   lib/maple_tree.c:847 suspicious rcu_dereference_protected() usage!
-> > > >   Call Trace:
-> > > >    <TASK>
-> > > >    dump_stack_lvl+0x6c/0x9a
-> > > >    dump_stack+0x10/0x12
-> > > >    lockdep_rcu_suspicious+0x12c/0x140
-> > > >    __mt_destroy+0x96/0xd0
-> > > >    exit_mmap+0x2a0/0x360
-> > > >    __mmput+0x34/0x100
-> > > >    mmput+0x2f/0x40
-> > > >    free_bprm+0x64/0xe0
-> > > >    kernel_execve+0x129/0x330
-> > > >    call_usermodehelper_exec_async+0xd8/0x130
-> > > >    ? proc_cap_handler+0x210/0x210
-> > > >    ret_from_fork+0x1f/0x30
-> > > >    </TASK>
-> > >
-> > > Thanks - I'm not sure how this got through, but this should fix it.
-> > >
-> > > This should be added to 4236a642ad185 to avoid the LOCKDEP issue.
-> > >
-> > > --- a/mm/mmap.c
-> > > +++ b/mm/mmap.c
-> > > @@ -3163,9 +3163,9 @@ void exit_mmap(struct mm_struct *mm)
-> > >
-> > >         BUG_ON(count != mm->map_count);
-> > >
-> > > -       mmap_write_unlock(mm);
-> > >         trace_exit_mmap(mm);
-> > >         __mt_destroy(&mm->mm_mt);
-> > > +       mmap_write_unlock(mm);
-> > >         vm_unacct_memory(nr_accounted);
-> > >  }
-> >
-> > Will try this.
->
->
-> Andrew,
->
-> Please add this fix to the commit 4236a642ad185 "mm: start tracking VMAs
-> with maple tree"
->
-> I've attached the patch for your convenience.
+On 25/04/2022 14:32, Christopher Obbard wrote:
+> Document the RK3328 compatible for rockchip-vdec.
+> 
+> Signed-off-by: Christopher Obbard <chris.obbard@collabora.com>
+> ---
+>  Documentation/devicetree/bindings/media/rockchip,vdec.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/media/rockchip,vdec.yaml b/Documentation/devicetree/bindings/media/rockchip,vdec.yaml
+> index 089f11d21b25..ce06835e8d61 100644
+> --- a/Documentation/devicetree/bindings/media/rockchip,vdec.yaml
+> +++ b/Documentation/devicetree/bindings/media/rockchip,vdec.yaml
+> @@ -20,6 +20,9 @@ properties:
+>        - items:
+>            - const: rockchip,rk3228-vdec
+>            - const: rockchip,rk3399-vdec
+> +      - items:
+> +          - const: rockchip,rk3328-vdec
+> +          - const: rockchip,rk3399-vdec
 
-Hi Liam,
 
-I assume you are still looking at the BUG_ON problem. I'll restart my
-testing once you have something for me to try.
+This should be rather an enum with rk3228, so:
+- enum
+   - rockchip,rk3228-vdec
+   - rockchip,rk3328-vdec
+- const: rockchip,rk3399-vdec
 
-Thanks.
+Best regards,
+Krzysztof

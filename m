@@ -2,101 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A44550D666
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 02:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA16350D668
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 02:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240047AbiDYAxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 20:53:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45188 "EHLO
+        id S240056AbiDYA4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 20:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237688AbiDYAxB (ORCPT
+        with ESMTP id S240049AbiDYA4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 20:53:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93BE16595;
-        Sun, 24 Apr 2022 17:49:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF073B8108E;
-        Mon, 25 Apr 2022 00:49:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3504CC385A7;
-        Mon, 25 Apr 2022 00:49:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650847795;
-        bh=F1o86+c3i27P7lXaQREiQ3xGCoQJ5F/6dbeDXC2Hv+8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NNNl2oY39OmGQht4oPedgUc5AAbsNs5dCdeNish0v9zUwAm4Y9lbMjwf8EcfuAWup
-         qcFw9YUWOwk6wbfJWvEo9T8S3AARfyUw0ONzssRewEuitHeBNB4tqp7lBcOoq+mcdW
-         2A+BIncUk9HPmEyRctmQmw/afV/4FDqj47jTsuc3RmbpmHBbP+VpeTsaBV0zrMYXGa
-         WRswl1PJY/bA5HC1DFZa+pnRsYqCp1NuSgeh0IHN0BGhXN7dhxCHwQMR24HPCckAmS
-         i5f8Cjb/uHMB2kdNPcB/mQAUYAK8tadxIH//xkb5mqksoYP2avFOrAHMUfAuN/hCsF
-         oKXRoocw/A6gQ==
-Date:   Sun, 24 Apr 2022 20:49:53 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Klaus Jensen <its@irrelevant.dk>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Keith Busch <kbusch@kernel.org>,
-        Sagi Grimberg <sagi@grimberg.me>, axboe@fb.com,
-        linux-nvme@lists.infradead.org
-Subject: Re: [PATCH AUTOSEL 5.10 18/18] nvme-pci: disable namespace
- identifiers for Qemu controllers
-Message-ID: <YmXwMUdka3m01hUV@sashalap>
-References: <20220419181353.485719-1-sashal@kernel.org>
- <20220419181353.485719-18-sashal@kernel.org>
- <YmBWdMfQ/WIACcTg@bombadil.infradead.org>
+        Sun, 24 Apr 2022 20:56:36 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 444492AE33;
+        Sun, 24 Apr 2022 17:53:34 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id m128so6450814ybm.5;
+        Sun, 24 Apr 2022 17:53:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KZQ3FMYUd+p/inKfEtNk7azbI0rl4BBbugTy82Pulbk=;
+        b=mbKKUDoML1MgFijTXSdszOCRfm204iehbQFamK9YL4OyLefmNETkuWOTg/55yhQZlz
+         MOXMOrlZT7yx0AgHeBMIlQbduznxpKMqwxqmgvRzZetaFQHTAPPoo/pZWUrGabIepYbj
+         JR0lGeXqIslccK99hoTJR3G5DVavQ6KkAd46lsjJInfLmzO6+Nb/pl41I07ixAnWMjtu
+         z0J32fG2tMN9h7rP7mvXPAqxLf4+BRcgSvBqmeK/zxynEiOt8QzAriq5EP5+CZn22PxS
+         hhgnDqpPdVJC2bmeKKk2qJc/QoY/LXU7f8cOzZrS8/CdnBPn+hKPUnt0a4xDS9gIaJCg
+         TG3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KZQ3FMYUd+p/inKfEtNk7azbI0rl4BBbugTy82Pulbk=;
+        b=APEwmD9HKRw4UJqRb4yNKqRynHVTOWEPy324MdnGVQGv7ldJFSpCMTrr7XExOz3Eke
+         U3GdVecbjrwob6WE7Saw03NlLKmoK5aTaydMTaDsee+NG1wVyPHL7Qm4G0ZWJ3geXl07
+         7tzSc/65EkNQUdv1UA5ePVfU2OWLPjJmzXQZg6xUVF9ahmaQSRrH4uJ0mj154KN1Tg+t
+         Iq4ECC4sAtc5ZCOEOnUAaifF0YcN96CWA0VAWsnpNROGJaVuUIs8k8tKAjkGLWMk3Lqq
+         6KhLqcu40RzJlcibqCzxefC615ZHWKT1aLPbuwrD26FztIdUR4GgpAK8n922PAVwSlyw
+         D2eA==
+X-Gm-Message-State: AOAM530AHadXLUU4TbPedatbV1sbUhtfMXIgcTYoX9Lh6u1E7R4XpP8u
+        Ng2eNGtEWL1LNERExviwJZuawOy8JdVLOOmOzyE=
+X-Google-Smtp-Source: ABdhPJw9e1BG4zkQJcj7cJbfdiKChlhybqzcCD3J0heWIWKkippV6yvT97DgC67kxkdfxYrYsFP+8++rsK102W9Yy3k=
+X-Received: by 2002:a25:3a06:0:b0:641:cbcd:73b2 with SMTP id
+ h6-20020a253a06000000b00641cbcd73b2mr14691974yba.64.1650848013511; Sun, 24
+ Apr 2022 17:53:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <YmBWdMfQ/WIACcTg@bombadil.infradead.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220414094945.457500-1-benchuanggli@gmail.com> <CAPDyKFo2YhqgEStGcQb0ZWcuhrUcGeamgHk1Hov6_DzS=TNe3A@mail.gmail.com>
+In-Reply-To: <CAPDyKFo2YhqgEStGcQb0ZWcuhrUcGeamgHk1Hov6_DzS=TNe3A@mail.gmail.com>
+From:   Ben Chuang <benchuanggli@gmail.com>
+Date:   Mon, 25 Apr 2022 08:53:22 +0800
+Message-ID: <CACT4zj9rRmwPBTg6GE1qd_F_sUuaJeQbB4U3K0h24jWKe8oRWQ@mail.gmail.com>
+Subject: Re: [RESEND, PATCH] mmc: sdhci-pci-gli: A workaround to allow GL9755
+ to enter ASPM L1.2
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        SeanHY.Chen@genesyslogic.com.tw,
+        Ben Chuang <ben.chuang@genesyslogic.com.tw>,
+        greg.tu@genesyslogic.com.tw,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 11:52:36AM -0700, Luis Chamberlain wrote:
->On Tue, Apr 19, 2022 at 02:13:52PM -0400, Sasha Levin wrote:
->> From: Christoph Hellwig <hch@lst.de>
->>
->> [ Upstream commit 66dd346b84d79fde20832ed691a54f4881eac20d ]
->>
->> Qemu unconditionally reports a UUID, which depending on the qemu version
->> is either all-null (which is incorrect but harmless) or contains a single
->> bit set for all controllers.  In addition it can also optionally report
->> a eui64 which needs to be manually set.  Disable namespace identifiers
->> for Qemu controlles entirely even if in some cases they could be set
->> correctly through manual intervention.
->>
->> Reported-by: Luis Chamberlain <mcgrof@kernel.org>
->> Signed-off-by: Christoph Hellwig <hch@lst.de>
->> Reviewed-by: Keith Busch <kbusch@kernel.org>
->> Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
+On Thu, Apr 21, 2022 at 9:55 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
 >
->Huh? The NVME_QUIRK_BOGUS_NID is a new define and the code which uses
->this quirk is also new, and so I'm curious *how and why* the auto-sel
->stuff for stable can decide to merge this and this should not even
->compile? I see this was backported to v5.15  and v5.17 as well.
+> On Thu, 14 Apr 2022 at 11:49, Ben Chuang <benchuanggli@gmail.com> wrote:
+> >
+> > From: Ben Chuang <ben.chuang@genesyslogic.com.tw>
+> >
+> > When GL9755 enters ASPM L1 sub-states, it will stay at L1.1 and will not
+> > enter L1.2. The workaround is to toggle PM state to allow GL9755 to enter
+> > ASPM L1.2.
+> >
+> > Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
+>
+> This didn't apply cleanly, I fixed it up this time. So, applied for
+> next, thanks!
+>
+> Kind regards
+> Uffe
 
-Because we take quirks for -stable?
+I forgot to rebase to v5.18rc. I will pay more attention next time. Thank you.
 
-It does compile apparently... At least with the configs we test.
+Best regards,
+Ben
 
->I didn't get Cc'd on perhaps some other patches, but this immediately
->caught my attention as not applicable, unless of course the patch
->"nvme: add a quirk to disable namespace identifiers" was also sent
->as part of this series to stable kernels. And if that was done, well
->holy crap, really?
-
-Yes, it was.
-
-I'm not sure why we shouldn't be picking it up?
-
--- 
-Thanks,
-Sasha
+>
+>
+> > ---
+> >  drivers/mmc/host/sdhci-pci-gli.c | 10 ++++++++++
+> >  1 file changed, 10 insertions(+)
+> >
+> > diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pci-gli.c
+> > index 97035d77c18c..52230857388f 100644
+> > --- a/drivers/mmc/host/sdhci-pci-gli.c
+> > +++ b/drivers/mmc/host/sdhci-pci-gli.c
+> > @@ -137,6 +137,9 @@
+> >  #define PCI_GLI_9755_SerDes  0x70
+> >  #define PCI_GLI_9755_SCP_DIS   BIT(19)
+> >
+> > +#define PCI_GLI_9755_PM_CTRL     0xFC
+> > +#define   PCI_GLI_9755_PM_STATE    GENMASK(1, 0)
+> > +
+> >  #define GLI_MAX_TUNING_LOOP 40
+> >
+> >  /* Genesys Logic chipset */
+> > @@ -597,6 +600,13 @@ static void gl9755_hw_setting(struct sdhci_pci_slot *slot)
+> >                             GLI_9755_CFG2_L1DLY_VALUE);
+> >         pci_write_config_dword(pdev, PCI_GLI_9755_CFG2, value);
+> >
+> > +       /* toggle PM state to allow GL9755 to enter ASPM L1.2 */
+> > +       pci_read_config_dword(pdev, PCI_GLI_9755_PM_CTRL, &value);
+> > +       value |= PCI_GLI_9755_PM_STATE;
+> > +       pci_write_config_dword(pdev, PCI_GLI_9755_PM_CTRL, value);
+> > +       value &= ~PCI_GLI_9755_PM_STATE;
+> > +       pci_write_config_dword(pdev, PCI_GLI_9755_PM_CTRL, value);
+> > +
+> >         gl9755_wt_off(pdev);
+> >  }
+> >
+> > --
+> > 2.35.1
+> >

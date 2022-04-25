@@ -2,110 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB1B50E2BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:11:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BE2950E2BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235592AbiDYOOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 10:14:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56186 "EHLO
+        id S238442AbiDYOOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 10:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234697AbiDYOOA (ORCPT
+        with ESMTP id S231335AbiDYOO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 10:14:00 -0400
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B17BDD;
-        Mon, 25 Apr 2022 07:10:55 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R451e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=shile.zhang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VBH0a0i_1650895845;
-Received: from e18g09479.et15sqa.tbsite.net(mailfrom:shile.zhang@linux.alibaba.com fp:SMTPD_---0VBH0a0i_1650895845)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 25 Apr 2022 22:10:52 +0800
-From:   Shile Zhang <shile.zhang@linux.alibaba.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     stable@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        Shile Zhang <shile.zhang@linux.alibaba.com>
-Subject: [PATCH v2] drm/cirrus: fix a NULL vs IS_ERR() checks
-Date:   Mon, 25 Apr 2022 22:10:43 +0800
-Message-Id: <20220425141043.214024-1-shile.zhang@linux.alibaba.com>
-X-Mailer: git-send-email 2.33.0.rc2
+        Mon, 25 Apr 2022 10:14:28 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7E62B2
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 07:11:24 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id k23so29904199ejd.3
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 07:11:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=hbNq8UvBnN7+r4Fd2yWxDnQ9hsYwZngmugC9ubWuoPM=;
+        b=tM68+Ax+c59zekowsoZDmmi4d+26x0+qsaJ+zYByavNorx6Uq9ihBhPkrjYGueEand
+         YbXMfFOq9veOveoLIodGDVBpDL1InoOVXLlB8n5GOcTVlN9jC6FG1YQZh2/AsoDVpHhU
+         LOvw3okgzu+aa3brpJxC5a0sT1LJNVySGwT9X+9k5Y1Le8GmmHJffJzjJGI+71L0fUKp
+         30LTUUICVyXh6EQIQCXxjCo7jmuq9Ih2n0+QDYhTQnxbyCLpwLvoi2qo6RZKN+pw622R
+         ecGpGQTPbtkRYZ5tEOZDOKQeO7pDs+IsKLr9KoUveEgJOmQ2iFaN+/l1etXZPfS874bu
+         zGhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hbNq8UvBnN7+r4Fd2yWxDnQ9hsYwZngmugC9ubWuoPM=;
+        b=HJuA1PSPcXIp2Gv5RALBVIY1qrBRzD0nhay52nAVjG1h3VaLM5PFnWlc9x1pc4GwH6
+         OIijVWlrsMuhrGl+0iqJQd8NoYghKODK86gzbxfMV2HgaMlRY+hYDJCBGLMp90EvCND5
+         +3I09iy6pzQlbVoYoYpsY/oq4DAmBVXEHCPKjv15vPMIL6q4wXeLLKUqIYgwZp/XfMwp
+         p/6RAxtIRSelVS22YBM0Z6jMs3eu0+KUH8ctoy3AJOVz1L+QhLRIHnK3AjFSB/MS6S5Y
+         0dSdmgH0G4LH+qdPe1WfFziruGPTDIzEDN1dHd4Abf931ed8tBpt1QMmpdN1R4ETk1pB
+         nVFA==
+X-Gm-Message-State: AOAM5335wNU0Z8LZfD5GCawH68SJdismOAgUhjeijcYTrmmVLcZGmBIu
+        E3RfglGuCy4Y1nHMt8ypl1sq9A==
+X-Google-Smtp-Source: ABdhPJxbhn3boE1o3X/8j8VbZQ/AXjtkDwzYBO0vBbDatkzQ9OM04+IR/v3GrPVceJO4HphUCbP7IQ==
+X-Received: by 2002:a17:907:6d08:b0:6f3:9c6a:d82f with SMTP id sa8-20020a1709076d0800b006f39c6ad82fmr3326924ejc.632.1650895883017;
+        Mon, 25 Apr 2022 07:11:23 -0700 (PDT)
+Received: from [192.168.0.243] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id f1-20020a056402194100b00416b174987asm4775820edz.35.2022.04.25.07.11.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Apr 2022 07:11:22 -0700 (PDT)
+Message-ID: <6ce4f8a6-42c0-2f49-bd19-744d8cca716b@linaro.org>
+Date:   Mon, 25 Apr 2022 16:11:21 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 1/2] dt-bindings: mailbox: qcom-ipcc: add missing
+ compatible for SM8450
+Content-Language: en-US
+To:     David Heidelberg <david@ixit.cz>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20220425134717.55418-1-david@ixit.cz>
+ <6f72be3c-c907-bc7a-6b64-6becfc76934e@linaro.org>
+ <33da014b-bfb0-a39f-aba7-f469fcb5cfbb@ixit.cz>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <33da014b-bfb0-a39f-aba7-f469fcb5cfbb@ixit.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function drm_gem_shmem_vmap can returns error pointers as well,
-which could cause following kernel crash:
+On 25/04/2022 16:05, David Heidelberg wrote:
+> On 25/04/2022 15:51, Krzysztof Kozlowski wrote:
+>> On 25/04/2022 15:47, David Heidelberg wrote:
+>>> Adds forgotten compatible and update SPDX header.
+>> You need to explain what is this "forgotten compatible". It's to vague.
+> Forgotten by someone who implemented it in driver. Hope that clarify it 
+> for you and possibly other readers. Btw. qcom,*sm8450* compatibles are 
+> widely used and fact that `make dtbs_check` noticed it missing here 
+> isn't suprising..
 
-BUG: unable to handle page fault for address: fffffffffffffffc
-PGD 1426a12067 P4D 1426a12067 PUD 1426a14067 PMD 0
-Oops: 0000 [#1] SMP NOPTI
-CPU: 12 PID: 3598532 Comm: stress-ng Kdump: loaded Not tainted 5.10.50.x86_64 #1
-...
-RIP: 0010:memcpy_toio+0x23/0x50
-Code: 00 00 00 00 0f 1f 00 0f 1f 44 00 00 48 85 d2 74 28 40 f6 c7 01 75 2b 48 83 fa 01 76 06 40 f6 c7 02 75 17 48 89 d1 48 c1 e9 02 <f3> a5 f6 c2 02 74 02 66 a5 f6 c2 01 74 01 a4 c3 66 a5 48 83 ea 02
-RSP: 0018:ffffafbf8a203c68 EFLAGS: 00010216
-RAX: 0000000000000000 RBX: fffffffffffffffc RCX: 0000000000000200
-RDX: 0000000000000800 RSI: fffffffffffffffc RDI: ffffafbf82000000
-RBP: ffffafbf82000000 R08: 0000000000000002 R09: 0000000000000000
-R10: 00000000000002b5 R11: 0000000000000000 R12: 0000000000000800
-R13: ffff8a6801099300 R14: 0000000000000001 R15: 0000000000000300
-FS:  00007f4a6bc5f740(0000) GS:ffff8a8641900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: fffffffffffffffc CR3: 00000016d3874001 CR4: 00000000003606e0
-Call Trace:
- drm_fb_memcpy_dstclip+0x5e/0x80 [drm_kms_helper]
- cirrus_fb_blit_rect.isra.0+0xb7/0xe0 [cirrus]
- cirrus_pipe_update+0x9f/0xa8 [cirrus]
- drm_atomic_helper_commit_planes+0xb8/0x220 [drm_kms_helper]
- drm_atomic_helper_commit_tail+0x42/0x80 [drm_kms_helper]
- commit_tail+0xce/0x130 [drm_kms_helper]
- drm_atomic_helper_commit+0x113/0x140 [drm_kms_helper]
- drm_client_modeset_commit_atomic+0x1c4/0x200 [drm]
- drm_client_modeset_commit_locked+0x53/0x80 [drm]
- drm_client_modeset_commit+0x24/0x40 [drm]
- drm_fbdev_client_restore+0x48/0x85 [drm_kms_helper]
- drm_client_dev_restore+0x64/0xb0 [drm]
- drm_release+0xf2/0x110 [drm]
- __fput+0x96/0x240
- task_work_run+0x5c/0x90
- exit_to_user_mode_loop+0xce/0xd0
- exit_to_user_mode_prepare+0x6a/0x70
- syscall_exit_to_user_mode+0x12/0x40
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x7f4a6bd82c2b
+This has to be in the commit msg, that you document compatibles already
+being used. "forgotten" does not explain that.
 
-Fixes: ab3e023b1b4c9 ("drm/cirrus: rewrite and modernize driver.")
+>>
+>> The SPDX update lacks answer to "why". There is no reason to do it, so
+>> please explain why it is needed.
+> 
+> Please read https://spdx.org/licenses/GPL-2.0.html (red colored text).
 
-Signed-off-by: Shile Zhang <shile.zhang@linux.alibaba.com>
----
-v2: rebase to latest stable linux-5.10.y branch.
-v1: https://lore.kernel.org/lkml/550e9439-adf6-3df8-41a0-9a7ee5447907@linux.alibaba.com/
----
- drivers/gpu/drm/tiny/cirrus.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The kernel lists it as valid SPDX and we did not deprecate it. For the
+kernel it is still considered valid.
 
-diff --git a/drivers/gpu/drm/tiny/cirrus.c b/drivers/gpu/drm/tiny/cirrus.c
-index 744a8e337e41e..d64f6bb767eeb 100644
---- a/drivers/gpu/drm/tiny/cirrus.c
-+++ b/drivers/gpu/drm/tiny/cirrus.c
-@@ -323,7 +323,7 @@ static int cirrus_fb_blit_rect(struct drm_framebuffer *fb,
- 
- 	ret = -ENOMEM;
- 	vmap = drm_gem_shmem_vmap(fb->obj[0]);
--	if (!vmap)
-+	if (IS_ERR_OR_NULL(vmap))
- 		goto out_dev_exit;
- 
- 	if (cirrus->cpp == fb->format->cpp[0])
--- 
-2.33.0.rc2
+Feel free to propose otherwise but then you need to explain it in commit
+msg and update LICENSES/preferred/GPL-2.0.
 
+> 
+> I personally encountered situation, where usage GPL license without 
+> specific `-only` or `-or-later` caused unnecessary confusion and 
+> uncertainty.
+
+Could be, I am not arguing with it. Yet kernel explicitly makes it a
+valid SPDX.
+
+Best regards,
+Krzysztof

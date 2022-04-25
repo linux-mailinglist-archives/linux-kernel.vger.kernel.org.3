@@ -2,211 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81E1850DEB2
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 13:20:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BAA850DEB7
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 13:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239802AbiDYLW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 07:22:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38496 "EHLO
+        id S239539AbiDYLXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 07:23:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241798AbiDYLWz (ORCPT
+        with ESMTP id S241748AbiDYLXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 07:22:55 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C4AC848F;
-        Mon, 25 Apr 2022 04:19:49 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id EB32EC0004;
-        Mon, 25 Apr 2022 11:19:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650885588;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VFE0BQwSW0F3lbSi+iOzFQLCVz0h/2OYs8AJaioXACM=;
-        b=Ydc/aBRJdngbs/8Ph6u3Y3iVWXowapQIWXpkVOh0z5gXMd/HPq2amCssJ83Q50Umo4lt2/
-        JTNQ5tvRP+27xBCUdZNslrgOjS01zMv43RSjNQIuAK60nY9b0fbyQGwQ4OxuffjERvvCW1
-        BWHQFzq1mZumQMnY+vsM1wZT8lBesv+XxYXMC7YGdBb+Vv/lM48QxKsAF0pen/7WIMWsoh
-        kD+LCa4G3VSUw69ItvnxkvAyRZHKiAFDVZF/38+XLgjr/IAmfJ3wFyEL4iIhC9zilir+xk
-        S/dJijsU8oJi3mzawVkk45vGk28ZjkrzM1H2XXoND/dazW0T+PXfbFipjamzVw==
-Date:   Mon, 25 Apr 2022 13:18:30 +0200
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Rob Herring <robh@kernel.org>, Lizhi Hou <lizhi.hou@xilinx.com>,
-        Sonal Santan <sonal.santan@xilinx.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v2 0/3] add fwnode support to reset subsystem
-Message-ID: <20220425131830.29aab83b@fixe.home>
-In-Reply-To: <1ec5ce3673dcdaa914e20ef2aae03f549d05ff9a.camel@pengutronix.de>
-References: <20220324141237.297207-1-clement.leger@bootlin.com>
-        <Ykst0Vb4fk+iALzc@robh.at.kernel.org>
-        <20220405092434.6e424ed4@fixe.home>
-        <YkxWeMNw9Ba0KjHM@robh.at.kernel.org>
-        <20220405175120.23fc6b2a@fixe.home>
-        <CAL_JsqLdBcAw1KPnrATHqEngRWkx6moxDODH1xV67EKAufc6_w@mail.gmail.com>
-        <20220406094019.670a2956@fixe.home>
-        <Yk2TVAfPVh9a1tUR@robh.at.kernel.org>
-        <20220408174841.34458529@fixe.home>
-        <1ec5ce3673dcdaa914e20ef2aae03f549d05ff9a.camel@pengutronix.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Mon, 25 Apr 2022 07:23:19 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2045.outbound.protection.outlook.com [40.107.92.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501BC13E36;
+        Mon, 25 Apr 2022 04:20:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cPAl6LdxtTEKI3WFS++egJusBbkXaii8IkLnZEOV1jGUZ86qirgDVnAjj2W2AbDbpSJsYBqqzT+2/7qDRE739avUmLpxxCy4AOTdN+dyyJTumX79/0C/khsf1KgiLBx42xoWvxFqLPYzOQFrqUqd7QNEgNb0/QYgjlaD+a/dq+oJFLc2r5xAHlVuMAg1m1hhzaw7OzTEtQB+nKLFLouaq0S8vfDWN2orWDSI3G1CLyIHqcA3q0b90pIew23OgeVFN9hGxMiV8SOZPvGSiDEnqTuHylTrIu3YRE9Nc7Uz57GiXiYjBgsViMTSa/L8w95XN2kdMES+yttpdNWobir2YA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=h5Rp1v1IocZCPs29O+2faMQ6BGtqzTGVvxpLCE1pwOQ=;
+ b=B7wR6Vz3EyNG5aWYa8PvoywIHT6nrriULAfqSe259sOMNGfIx4ddHuXx4qEaSEMRHaEDD9T64AumPti6VLCZWNFSRJbjbCBcDk5IxErtF7ENqa/mz6URnWSFNmP4tNNH2KBgdP+vmyNv5KvNaNbj7NUPdsXROY4re0KN9x3ojzOJ+yWoKu3y0LYv6Z2voeucx8x8nTz+zg47beF/1odMvKY0So19VE2HzuPHmbxS8IFbElgTIdi4RfaaxiVOAuB6RHWny8DG7oW4dfqJHcUSrHGzPu7KacL0xcZrHTH99yH68JZygNjY+3cCLGo4KwwhXb2ooUrmAYyYc00cipS5mQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=h5Rp1v1IocZCPs29O+2faMQ6BGtqzTGVvxpLCE1pwOQ=;
+ b=EEZjBxA6GO415/vNh3elHNapNhcxGJTUao19ToN/Z1YHq3hVXXYJ7xZ/CdT2gDr7A928cxCPCQsOC2Slm3jMwqI2IKGnn5ChmRy6nEEHE9e1t9MICyTmc1pAGNPf+cNeymc/+LRsTGHl6rC5YhVjkPOeaYc9zS8I0t45zdJZF4jIZ1inx0sUcnuh1EjzHcroMoczVl85LV5AKiJSxp+1oaCGFxodRAkc2jPDnrQutztBWKumfwAeBIBNW5mczs7/gNDZ9Jq03z2uhhnpEfC5+miwaiJXtc7p/L0/M7pSJVTAX2eeZ6uyOuIWvlQv68hW2a50aVQ6t2h6on/CnyaCqw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
+ MN2PR12MB4190.namprd12.prod.outlook.com (2603:10b6:208:1dd::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Mon, 25 Apr
+ 2022 11:20:12 +0000
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::a4b2:cd18:51b1:57e0]) by CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::a4b2:cd18:51b1:57e0%4]) with mapi id 15.20.5186.021; Mon, 25 Apr 2022
+ 11:20:12 +0000
+Message-ID: <c5fad2c0-598d-a90c-5272-398ce48399fe@nvidia.com>
+Date:   Mon, 25 Apr 2022 12:20:04 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RESEND PATCH] arm64: dts: tegra: Fix boolean properties with
+ values
+Content-Language: en-US
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Rob Herring <robh@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-stm32@st-md-mailman.stormreply.com, soc@kernel.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <Yk3nShkFzNJaI3/Z@robh.at.kernel.org> <YlVAy95eF/9b1nmu@orome>
+From:   Jon Hunter <jonathanh@nvidia.com>
+In-Reply-To: <YlVAy95eF/9b1nmu@orome>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO2P265CA0029.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:61::17) To CO6PR12MB5444.namprd12.prod.outlook.com
+ (2603:10b6:5:35e::8)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6eda6e54-4dab-447b-37bc-08da26ad90a4
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4190:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB4190F8FFEED92954D5977AC0D9F89@MN2PR12MB4190.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8ZxZFUiceNj01zzQKzQLNaMu+QhNkhLsJxsdLcHIeL9uHwNDv/B66pi/sJzfF0zwojZbBTU3IgSkVTOL4hpOhW1824lJop7wwYs8GoSmjtRmpBa8oaxS+St+djHBuySpFFiIjwXinXBhvbYF6ABannXPznx+Nf3h3zZVCD7kLWI0BGiutBOxx1T/A9O8mgnOS2SLWC52kT2CjNc6JwkwUdFVqlxadudzWC0hTwEmLReTaIH8NAN/xqmJDhNP1AhcR9xbnrHKPfmgTh6arGqjgBFAaR7jMfWIio02W4iY7w+eVL2PEo1VHqKPezLLMTuAxTMGe6I5HL4eZgShE2EERisVCqau4JjbOAQnhfgIkV+oHruMpI4ec4jMzT0aLYOfSf/0FMzNnfyAEuk+oY9ZMZSWj24xDCOcRxHnCZPt7UDbf6pNEcxq4ebvtMNb1zVzlwXJdOhdESVWa1JHNoVoKZwln2fnfLQQJvNpPrrGNxaRpgP4x5Tumg/Hgu3KeJE2EtUpUNCNjd050Ig4pF55wl20He9wympGamIJfkzDEqtfh4b+xJZc6xnPB+m89bDtZg+kwc+d+0YLjaa0B6cIhQrxRdEpo59WKecp5ngmK2btpU7w9TreFbFwV2Gx6UTG9QDd7PncKkNLS6+kX1t4YLs+THeysrLivfdauq7rfXvKvZJ7jFYodih9vgUCos5wj3MOi8YoNMEtQ7h7SFBM0rkdSfHP8Y8VHlRhukrEL9AK50Yq+7fhT7Lbt9zGCVGx
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6506007)(66946007)(86362001)(26005)(6666004)(8936002)(31696002)(66556008)(36756003)(6512007)(54906003)(110136005)(316002)(8676002)(5660300002)(7416002)(508600001)(4326008)(6486002)(66476007)(31686004)(2906002)(186003)(38100700002)(83380400001)(53546011)(55236004)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ekptYWZvZkR2ZU1xTDZKM3lHcTBNdTRvZEUvMlhSL2RJTXl0TFBUdTJiMFRv?=
+ =?utf-8?B?TGhIVGJIT2pwYWtSU09RM0liR0VYSkp5bHNmQm9mMTRmWnh5UCtGV0xDVkZv?=
+ =?utf-8?B?bWtLVTUrOVVXMi96UFNxSGhsUnRjY05lcmJlMlA4eGRNcCsyVUFSbnQ3MVdM?=
+ =?utf-8?B?Z2R5Y0lKZzVLWnd4VXFFdnF3VE1NMHYyM2VQNGZ5TWdVNk1YcDMzZVBPS25X?=
+ =?utf-8?B?alJRazVOZG9adTRNUysyd3krOUc5NUI5ZnVwTVlxd0hqN213UFJnUFpvSjhM?=
+ =?utf-8?B?bWtwOGRxWFE1RU5aTDdDUG5tazU2Z1FiWFBpRnVva3dSSmFRYURtLzkvVUky?=
+ =?utf-8?B?WWlNSGVIaGRJVzJQdTB0aDdPT1dmUko3YkNBem9DRlNNcm4yOXI1dVB4eDVr?=
+ =?utf-8?B?Tm1yVUw3eHZGaU40bU4reHZVY2luQm1DcU8rUG1KVlZRV0E3LytIZ0JRZmZX?=
+ =?utf-8?B?aHVCT3dTNk9lRld0a2RnNmJadk5NUzF6RGE4dzBiMEhVeVljcy9FdURxbCtS?=
+ =?utf-8?B?UEVHSGxPZng0TFFmS0pIN0tpelpPUTdoT2VZQ2E2cEw1c25RRVJJUllQWHZD?=
+ =?utf-8?B?VGJqWGhXdkRJNGZGQmR3Zy80N3NNZ2RiYXpvbXdtTzNaU0h3UlFZdHppQU9x?=
+ =?utf-8?B?Ym9rcFZtdGIxclNNdTJZMGFFVEFDTTBJVVQwWTI1S2tTWU1zdURzMHpMNkhR?=
+ =?utf-8?B?NjN1ZjFxU2k4TkRSbWtUaTlKWk5hN2QwQXVucnF3RUxKVjRkTGZPUUNxVU01?=
+ =?utf-8?B?dTh4cWQzRm5lbEZKSGZ6MGpzTVR5S0NsNHdXUjJhc0FyQ05Fc2ZkWXhVM1FQ?=
+ =?utf-8?B?NGFCdjBhU3l1aDJNb0VCSmJFcTR0MXhGSXppRzAyUVpkVkYvbGxJb25Ub3RE?=
+ =?utf-8?B?dERxdHhFVENuRjd0OGkzR2t2VzdzZ2QvL3YrdlJSVkhNRGdPUEt5S2hmTWdu?=
+ =?utf-8?B?Z0VPRmVDa0V4T1N6RWhFMlFaVS9sd2xqc3JleFB1TWgveTdGZDYrN01aUjlx?=
+ =?utf-8?B?Y05jVlVWT0kvV0w3RVJydG5qc1Mya3hIODluWDZxRUhIaVhRK1Z5SnBJTVZG?=
+ =?utf-8?B?UGRBTEczS1g4SzhuZXVyQTVtVjQxdmREOVBuS2M4S1RMN2Zka01pRGQxbmo4?=
+ =?utf-8?B?S09oMFVacG1tVDYydE9tUS9vVVJ4bzdEVmZyS2tyY3lHUUdodU5HaVY3eEoy?=
+ =?utf-8?B?M0p0L2lpWlUrMnhFUnJvbHRkM2JkSE53Y2twY0xyQ3dMVEJxUWdKcE04cDZk?=
+ =?utf-8?B?TktCNnZnTW5lYW80NmgwVXRnMEluLzlQa0NyVkpGM3lhQllDSkx2NDVkUFdv?=
+ =?utf-8?B?MFRnYjREcHpSN280K2JHZTUrNzVzWXczU2lTdXErVkdxK0F4ZFM0cWFJWGYv?=
+ =?utf-8?B?eDN5WW9EZjF3ajlIazB4UWNFZVBQNGVsSFJzK2JRUTlKRFJBODNCYkFBYWs2?=
+ =?utf-8?B?SG9KckQ0MFZmc3QrdTd1aFNYN1I5KzYvTHhJeWxvd21qL2VPUVJZc0tuN0dj?=
+ =?utf-8?B?UWR2T1p6a2Y1UzFTSkhXMGNQNU8yZCtJVE5HNlFHZ2hRWGh2bVA1NnIranli?=
+ =?utf-8?B?LzNsVW4vMFI0M2ZBOUJmNWE2Rit6cHBWT2FHSDRXR3NuKys1VmIyV2FhdW9O?=
+ =?utf-8?B?UG53K29mRkJ5dWhEK3pyVVdrRXFIVjBoMzRJd2M5SGFDOFdMYTJWK1NrNXVB?=
+ =?utf-8?B?aktvSmpxWUdQWGdTV29NRFliTGRFMXUzWkN3S1h6NW1yYnhBUk55SE5UMXQx?=
+ =?utf-8?B?Um5jclVEYlhIOXVndlMwblBUdDUzMk52Q25OQ3JhUm1idFpGczRVZTlRT1Ew?=
+ =?utf-8?B?bnZ3aWVJa0dTSVVWSng0Rk1yMVB2WXlEaTFGNUh1cTJaZU0rcUNlQ3Z5Rzlh?=
+ =?utf-8?B?eFM4SzdLSlNJVlh3L1Z6ZkNGMzlCWElwVkNJZE5qLzRjNFhhQXRSU3dPWVR0?=
+ =?utf-8?B?cVdaQ0dLRnZ5Sitac1VYSG5ESnphQXRZdlRHUDlMdGMxRGpOWUxhL0NMQmMx?=
+ =?utf-8?B?THhUQUNId29MelIyMG1jaGRxdHpVMFRQNXJ0NGlHZ2JITXJZbUYvYjVLUmpS?=
+ =?utf-8?B?V01qU3hJbTkvMWlGZTRkVDdGY3BnRjNCRXN4SUgwbmdVWGFRNWFrcmVZbHRk?=
+ =?utf-8?B?alM4eTQyM0l6b0Nrcjc3N1ZhcGd5WEtGeTYwVUVpUDdCRThZaWhVYXRWbmVz?=
+ =?utf-8?B?QnVGaEpIdCtyaHN2TElCRklWbDdYKzhLcCs2cDEraS90Wk01emRMVmg1dEI1?=
+ =?utf-8?B?cS9LOFFublhheG4xb1cvcVpJN210WHdVcjBpalBuUmVuMFBuM1ZaRHp1NkJQ?=
+ =?utf-8?B?cWlDNjg4TWk0dzB1aUF5SVZ2SUNhSEhrSFJqWWNYNjhjMUw2RVNsbFB3NFVV?=
+ =?utf-8?Q?eqg6A1RdzvOJCHR4=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6eda6e54-4dab-447b-37bc-08da26ad90a4
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2022 11:20:12.8130
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 86J9006EG+CRvyf8jR3H9afgl2LHfpd5+P/N/+3w/OdySgyoCwBjuLXD9KGaKhZxYEfrKtgJi+KFf2ZsbBkQtg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4190
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Mon, 25 Apr 2022 12:21:15 +0200,
-Philipp Zabel <p.zabel@pengutronix.de> a =C3=A9crit :
 
-> Hi Cl=C3=A9ment,
->=20
-> On Fr, 2022-04-08 at 17:48 +0200, Cl=C3=A9ment L=C3=A9ger wrote:
-> [...]
-> > > > > > > I've told the Xilinx folks the same thing, but I would separa=
-te this
-> > > > > > > into 2 parts. First is just h/w work in a DT based system. Se=
-cond is
-> > > > > > > creating a base tree an overlay can be applied to. The first =
-part should
-> > > > > > > be pretty straightforward. We already have PCI bus bindings. =
-The only
-> > > > > > > tricky part is getting address translation working from leaf =
-device thru
-> > > > > > > the PCI bus to host bus, but support for that should all be i=
-n place
-> > > > > > > (given we support ISA buses off of PCI bus). The second part =
-will
-> > > > > > > require generating PCI DT nodes at runtime. That may be neede=
-d for both
-> > > > > > > DT and ACPI systems as we don't always describe all the PCI h=
-ierarchy
-> > > > > > > in DT.     =20
-> > > > > >=20
-> > > > > > But then, if the driver generate the nodes, it will most probab=
-ly
-> > > > > > have to describe the nodes by hardcoding them right ?     =20
-> > > > >=20
-> > > > > No, the kernel already maintains its own tree of devices. You just
-> > > > > need to use that to generate the tree. That's really not much more
-> > > > > than nodes with a 'reg' property encoding the device and function
-> > > > > numbers.   =20
-> > > >=20
-> > > > Just to clarified a point, my PCI device exposes multiple periphera=
-ls
-> > > > behind one single PCI function.   =20
-> > >=20
-> > > Right. I would expect your PCI device DT node to have a 'simple-bus'=
-=20
-> > > child node with all those peripherals. And maybe there's other nodes=
-=20
-> > > like fixed-clocks, etc.
-> > >  =20
-> > > > To be sure I understood what you are suggesting, you propose to cre=
-ate
-> > > > a DT node from the PCI driver that has been probed dynamically
-> > > > matching this same PCI device with a 'reg' property. I also think
-> > > > this would requires to generate some 'pci-ranges' to remap the
-> > > > downstream devices that are described in the DTBO, finally, load the
-> > > > overlay to be apply under this newly created node. Is that right ? =
-  =20
-> > >=20
-> > > Right. You'll need to take the BAR address(es) for the device and sti=
-ck=20
-> > > those into 'ranges' to translate offsets to BAR+offset. =20
-> >=20
-> > Hi Rob,
-> >=20
-> > I got something working (address translation, probing and so on) using
-> > what you started. I switch to using changeset however, I'm not sure that
-> > it make sense for property creation since the node has not yet been
-> > added to the tree. Attaching the node with changeset however seems
-> > to make sense. But I'm no expert here, so any advise is welcome.
-> >
-> > Based on what we said, I created a PCI driver which uses a builtin
-> > overlay. In order to be able to apply the overlay on the correct PCI
-> > node -the one on which the card was plugged) and thus be totally plug
-> > and play, the 'target-path' property is patched using direct fdt
-> > function and replaced the target with the PCI device node path.
-> > I don't see any other way to do that before applying the overlay since
-> > of_overlay_fdt_apply() takes a fdt blob as input.
-> >=20
-> > The driver also insert correct ranges into the PCI device in order to
-> > translate the downstream node addresses to BAR addresses. It seems
-> > reasonnable to assume that this depends on the driver and thus should
-> > not be done by the PCI of core at all.
-> >=20
-> > Finally, the driver probes the newly added childs using
-> > of_platform_populate(). With all of that, the address translation
-> > and the probing works correctly and the platform devices are created.
-> > There is still a few things to fix such as the following:
-> >=20
-> > [ 2830.324773] OF: overlay: WARNING: memory leak will occur if overlay
-> > removed, property: /pci/pci@2,6/dev@0,0/compatible
-> >=20
-> > But it seems like this is something that works and would allow to
-> > support various use cases. From what I see, it should also work on
-> > other platforms. Major advantage of that over fwnode is that the
-> > changes are pretty small and relatively contained. =20
->=20
-> Could you show this off somewhere?
->=20
-> From this I take that fwnode support in the reset subsystem is not of
-> use to you anymore. I'll postpone taking your patches then, until they
-> are needed.
->=20
-> regards
-> Philipp
-
-Hi Philip,
-
-Sorry for the lack of asnwer. Indeed, the fwnode support can be left
-out. I'm preparing the patches for contribution for this OF overlay
-thing, and everything regarding the subsystem have been removed. You
-can look at commits [1], [2], [3] and at a driver using them [4]. This
-allows the subsystem to be kept entirely without a single modification
-(except for the PCI/OF one).
-
-Thanks,
-
-Cl=C3=A9ment
+On 12/04/2022 10:05, Thierry Reding wrote:
+> On Wed, Apr 06, 2022 at 02:17:30PM -0500, Rob Herring wrote:
+>> Boolean properties in DT are present or not present and don't take a value.
+>> A property such as 'foo = <0>;' evaluated to true. IOW, the value doesn't
+>> matter.
+>>
+>> It may have been intended that 0 values are false, but there is no change
+>> in behavior with this patch.
+>>
+>> Signed-off-by: Rob Herring <robh@kernel.org>
+>> ---
+>> Can someone apply this for 5.18.
+>>
+>>   arch/arm64/boot/dts/nvidia/tegra186-p3310.dtsi            | 8 ++++----
+>>   .../boot/dts/nvidia/tegra186-p3509-0000+p3636-0001.dts    | 8 ++++----
+>>   arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi            | 6 +++---
+>>   arch/arm64/boot/dts/nvidia/tegra194-p3668.dtsi            | 6 +++---
+>>   arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi            | 6 +++---
+>>   arch/arm64/boot/dts/nvidia/tegra210-p2894.dtsi            | 8 ++++----
+>>   arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts        | 8 ++++----
+>>   arch/arm64/boot/dts/nvidia/tegra210-smaug.dts             | 4 ++--
+>>   8 files changed, 27 insertions(+), 27 deletions(-)
+> 
+> This causes multiple regressions on Tegra boards. The reason for this is
+> that these properties are not in fact boolean, despite what the DT
+> bindings say. If you look at the code that handles these, you'll notice
+> that they are single-cell properties, typically with <0> and <1> values.
+> What may have led to the conclusion that these are boolean is that there
+> is also a special case where these can be left out, but the meaning of
+> that is not the "false" (<0>) value. Instead, leaving these out means
+> that the values should be left at whatever is currently in the register.
+> 
+> See pinconf_generic_parse_dt_config() and parse_dt_cfg() specifically in
+> drivers/pinctrl/pinconf-generic.c.
+> 
+> Arnd, can you please revert this so that these boards can be unbroken?
 
 
-[1]
-https://github.com/clementleger/linux/commit/248d7f25951f90cf5647d295e1c505=
-1cc72ed970
-[2]
-https://github.com/clementleger/linux/commit/bf3c4c0749e5110b6a58ac9622cafc=
-10872ed17f
-[3]
-https://github.com/clementleger/linux/commit/8764a2e386fdede73991415277b95e=
-79553622f3
-[4]
-https://github.com/clementleger/linux/commit/7c66a1ad8f3fadfb538c410f192c95=
-73c66338d5
+Arnd, any feedback on this? A lot of Tegra boards are still not booting 
+with v5.18-rc4.
 
+Jon
 
-
-
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+-- 
+nvpublic

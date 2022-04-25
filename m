@@ -2,358 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D359D50DBA7
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E28AA50DBA8
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:51:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234933AbiDYIxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 04:53:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43230 "EHLO
+        id S238307AbiDYIyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 04:54:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234310AbiDYIxW (ORCPT
+        with ESMTP id S236808AbiDYIyM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 04:53:22 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86B4B1887;
-        Mon, 25 Apr 2022 01:50:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650876617; x=1682412617;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lgfwzF/QUvAmGUo4sQq1gEPq7nKsV+VBzxrAk5mJJsU=;
-  b=DsrsMqjsduQ34qU6eZTqDLImGH/SBdwmZJrBS4VZcTA13ylpWmPBfV7q
-   mUfrweWCJaJedt9atd/Iji7Xmv+yz7Ar/s2xTWcCtdZ4ReBs3tEIFkWW0
-   JA+wVOLa4GR9Y5/HqhHQFPu+4PwD2MGyTYNZ8NbS77GC1Zzbr7olgQUai
-   rlymIpFyr1M192fF4rZi2DLVsfxvzQG32VTfC77tQr/8NgRS4JnBIzslM
-   T9vmVHKSEdDvOhXkG8YL4+cdlSdQLD9PyW4hBM+dx8LefKu/fkiCakpfE
-   IwAO4R9JgrpaFaQ4JhAADGoQyuLtx2noRzrCjxtEpb7+yEvOnGC2y7m33
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="351633971"
-X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
-   d="scan'208";a="351633971"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 01:50:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
-   d="scan'208";a="704469162"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 25 Apr 2022 01:50:12 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 25 Apr 2022 11:50:11 +0300
-Date:   Mon, 25 Apr 2022 11:50:11 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v5 7/7] usb: typec: mux: Add On Semi fsa4480 driver
-Message-ID: <YmZgw7TnJmy9db2W@kuha.fi.intel.com>
-References: <20220422222351.1297276-1-bjorn.andersson@linaro.org>
- <20220422222351.1297276-8-bjorn.andersson@linaro.org>
+        Mon, 25 Apr 2022 04:54:12 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D61E0E0DB
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:51:05 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KmzH83GVmz1JBG0;
+        Mon, 25 Apr 2022 16:50:12 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 25 Apr 2022 16:51:02 +0800
+Subject: Re: [PATCH v3 1/3] mm/swapfile: unuse_pte can map random data if swap
+ read fails
+To:     David Hildenbrand <david@redhat.com>,
+        "ying.huang@intel.com" <ying.huang@intel.com>
+CC:     <willy@infradead.org>, <vbabka@suse.cz>, <dhowells@redhat.com>,
+        <neilb@suse.de>, <apopple@nvidia.com>, <surenb@google.com>,
+        <minchan@kernel.org>, <peterx@redhat.com>, <sfr@canb.auug.org.au>,
+        <naoya.horiguchi@nec.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, Tim C Chen <tim.c.chen@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20220424091105.48374-1-linmiaohe@huawei.com>
+ <20220424091105.48374-2-linmiaohe@huawei.com>
+ <8aeebc2f0b2a251d3d70402cd0edf063ba911013.camel@intel.com>
+ <f88412b4-83db-e594-fc48-2f4b8b9f3be8@redhat.com>
+ <6c6694965fa3e6d85d78d56703090f227a55bb83.camel@intel.com>
+ <a64b1987-1f98-db78-c0e4-189690d7a45d@redhat.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <63c96d54-f16b-4a39-a665-227cc194cf96@huawei.com>
+Date:   Mon, 25 Apr 2022 16:51:02 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422222351.1297276-8-bjorn.andersson@linaro.org>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <a64b1987-1f98-db78-c0e4-189690d7a45d@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 03:23:51PM -0700, Bjorn Andersson wrote:
-> The ON Semiconductor FSA4480 is a USB Type-C port multimedia switch with
-> support for analog audio headsets. It allows sharing a common USB Type-C
-> port to pass USB2.0 signal, analog audio, sideband use wires and analog
-> microphone signal.
+On 2022/4/25 16:01, David Hildenbrand wrote:
+> On 25.04.22 09:55, ying.huang@intel.com wrote:
+>> On Mon, 2022-04-25 at 09:49 +0200, David Hildenbrand wrote:
+>>> On 25.04.22 09:41, ying.huang@intel.com wrote:
+>>>> Hi, Miaohe,
+>>>>
+>>>> On Sun, 2022-04-24 at 17:11 +0800, Miaohe Lin wrote:
+>>>>> There is a bug in unuse_pte(): when swap page happens to be unreadable,
+>>>>> page filled with random data is mapped into user address space.  In case
+>>>>> of error, a special swap entry indicating swap read fails is set to the
+>>>>> page table.  So the swapcache page can be freed and the user won't end up
+>>>>> with a permanently mounted swap because a sector is bad.  And if the page
+>>>>> is accessed later, the user process will be killed so that corrupted data
+>>>>> is never consumed.  On the other hand, if the page is never accessed, the
+>>>>> user won't even notice it.
+>>>>>
+>>>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>>>>> Acked-by: David Hildenbrand <david@redhat.com>
+>>>>> ---
+>>>>>  include/linux/swap.h    |  7 ++++++-
+>>>>>  include/linux/swapops.h | 10 ++++++++++
+>>>>>  mm/memory.c             |  5 ++++-
+>>>>>  mm/swapfile.c           | 11 +++++++++++
+>>>>>  4 files changed, 31 insertions(+), 2 deletions(-)
+>>>>>
+>>>>> diff --git a/include/linux/swap.h b/include/linux/swap.h
+>>>>> index 5553189d0215..b82c196d8867 100644
+>>>>> --- a/include/linux/swap.h
+>>>>> +++ b/include/linux/swap.h
+>>>>> @@ -55,6 +55,10 @@ static inline int current_is_kswapd(void)
+>>>>>   * actions on faults.
+>>>>>   */
+>>>>>
+>>>>> +#define SWP_SWAPIN_ERROR_NUM 1
+>>>>> +#define SWP_SWAPIN_ERROR     (MAX_SWAPFILES + SWP_HWPOISON_NUM + \
+>>>>> +			     SWP_MIGRATION_NUM + SWP_DEVICE_NUM + \
+>>>>> +			     SWP_PTE_MARKER_NUM)
+>>>>>
+>>>>>
+>>>>
+>>>> It appears wasteful to use another swap device number. 
+>>>
+>>> Do we really care?
+>>>
+>>> We currently use 5 bits for swap types, so we have a total of 32.
+>>>
+>>> SWP_HWPOISON_NUM -> 1
+>>> SWP_MIGRATION_NUM -> 3
+>>> SWP_PTE_MARKER_NUM -> 1
+>>> SWP_DEVICE_NUM -> 4
+>>> SWP_SWAPIN_ERROR_NUM -> 1
+>>>
+>>> Which would leave us with 32 - 10 = 22 swap devices. IMHO that's plenty
+>>> for real life scenarios.
+>>
+>> Creating multiple swap partitions on one disk can improve the
+>> scalability of swap subsystem, although we usually don't have so many
+>> disks for swap. 
 > 
-> Due to lacking upstream audio support for testing, the audio muxing is
-> left untouched, but implementation of muxing the SBU lines is provided
-> as a pair of Type-C mux and switch devices. This provides the necessary
-> support for enabling the DisplayPort altmode on devices with this
-> circuit.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Exactly, and IMHO if we have 22 or 23 doesn't make a real difference
+> here ...
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+I tend to agree with David. Thanks both!
 
-> ---
 > 
-> Changes since v4:
-> - Disable locking of the regmap
-> - Use dev_fwnode() instead of explicit dereference
-> 
->  drivers/usb/typec/mux/Kconfig   |  10 ++
->  drivers/usb/typec/mux/Makefile  |   1 +
->  drivers/usb/typec/mux/fsa4480.c | 218 ++++++++++++++++++++++++++++++++
->  3 files changed, 229 insertions(+)
->  create mode 100644 drivers/usb/typec/mux/fsa4480.c
-> 
-> diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
-> index edead555835e..5eb2c17d72c1 100644
-> --- a/drivers/usb/typec/mux/Kconfig
-> +++ b/drivers/usb/typec/mux/Kconfig
-> @@ -2,6 +2,16 @@
->  
->  menu "USB Type-C Multiplexer/DeMultiplexer Switch support"
->  
-> +config TYPEC_MUX_FSA4480
-> +	tristate "ON Semi FSA4480 Analog Audio Switch driver"
-> +	depends on I2C
-> +	select REGMAP_I2C
-> +	help
-> +	  Driver for the ON Semiconductor FSA4480 Analog Audio Switch, which
-> +	  provides support for muxing analog audio and sideband signals on a
-> +	  common USB Type-C connector.
-> +	  If compiled as a module, the module will be named fsa4480.
-> +
->  config TYPEC_MUX_PI3USB30532
->  	tristate "Pericom PI3USB30532 Type-C cross switch driver"
->  	depends on I2C
-> diff --git a/drivers/usb/typec/mux/Makefile b/drivers/usb/typec/mux/Makefile
-> index 280a6f553115..e52a56c16bfb 100644
-> --- a/drivers/usb/typec/mux/Makefile
-> +++ b/drivers/usb/typec/mux/Makefile
-> @@ -1,4 +1,5 @@
->  # SPDX-License-Identifier: GPL-2.0
->  
-> +obj-$(CONFIG_TYPEC_MUX_FSA4480)		+= fsa4480.o
->  obj-$(CONFIG_TYPEC_MUX_PI3USB30532)	+= pi3usb30532.o
->  obj-$(CONFIG_TYPEC_MUX_INTEL_PMC)	+= intel_pmc_mux.o
-> diff --git a/drivers/usb/typec/mux/fsa4480.c b/drivers/usb/typec/mux/fsa4480.c
-> new file mode 100644
-> index 000000000000..6184f5367190
-> --- /dev/null
-> +++ b/drivers/usb/typec/mux/fsa4480.c
-> @@ -0,0 +1,218 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2021-2022 Linaro Ltd.
-> + * Copyright (C) 2018-2020 The Linux Foundation
-> + */
-> +
-> +#include <linux/bits.h>
-> +#include <linux/i2c.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/regmap.h>
-> +#include <linux/usb/typec_dp.h>
-> +#include <linux/usb/typec_mux.h>
-> +
-> +#define FSA4480_SWITCH_ENABLE	0x04
-> +#define FSA4480_SWITCH_SELECT	0x05
-> +#define FSA4480_SWITCH_STATUS1	0x07
-> +#define FSA4480_SLOW_L		0x08
-> +#define FSA4480_SLOW_R		0x09
-> +#define FSA4480_SLOW_MIC	0x0a
-> +#define FSA4480_SLOW_SENSE	0x0b
-> +#define FSA4480_SLOW_GND	0x0c
-> +#define FSA4480_DELAY_L_R	0x0d
-> +#define FSA4480_DELAY_L_MIC	0x0e
-> +#define FSA4480_DELAY_L_SENSE	0x0f
-> +#define FSA4480_DELAY_L_AGND	0x10
-> +#define FSA4480_RESET		0x1e
-> +#define FSA4480_MAX_REGISTER	0x1f
-> +
-> +#define FSA4480_ENABLE_DEVICE	BIT(7)
-> +#define FSA4480_ENABLE_SBU	GENMASK(6, 5)
-> +#define FSA4480_ENABLE_USB	GENMASK(4, 3)
-> +
-> +#define FSA4480_SEL_SBU_REVERSE	GENMASK(6, 5)
-> +#define FSA4480_SEL_USB		GENMASK(4, 3)
-> +
-> +struct fsa4480 {
-> +	struct i2c_client *client;
-> +
-> +	/* used to serialize concurrent change requests */
-> +	struct mutex lock;
-> +
-> +	struct typec_switch_dev *sw;
-> +	struct typec_mux_dev *mux;
-> +
-> +	struct regmap *regmap;
-> +
-> +	u8 cur_enable;
-> +	u8 cur_select;
-> +};
-> +
-> +static const struct regmap_config fsa4480_regmap_config = {
-> +	.reg_bits = 8,
-> +	.val_bits = 8,
-> +	.max_register = FSA4480_MAX_REGISTER,
-> +	/* Accesses only done under fsa4480->lock */
-> +	.disable_locking = true,
-> +};
-> +
-> +static int fsa4480_switch_set(struct typec_switch_dev *sw,
-> +			      enum typec_orientation orientation)
-> +{
-> +	struct fsa4480 *fsa = typec_switch_get_drvdata(sw);
-> +	u8 new_sel;
-> +
-> +	mutex_lock(&fsa->lock);
-> +	new_sel = FSA4480_SEL_USB;
-> +	if (orientation == TYPEC_ORIENTATION_REVERSE)
-> +		new_sel |= FSA4480_SEL_SBU_REVERSE;
-> +
-> +	if (new_sel == fsa->cur_select)
-> +		goto out_unlock;
-> +
-> +	if (fsa->cur_enable & FSA4480_ENABLE_SBU) {
-> +		/* Disable SBU output while re-configuring the switch */
-> +		regmap_write(fsa->regmap, FSA4480_SWITCH_ENABLE,
-> +			     fsa->cur_enable & ~FSA4480_ENABLE_SBU);
-> +
-> +		/* 35us to allow the SBU switch to turn off */
-> +		usleep_range(35, 1000);
-> +	}
-> +
-> +	regmap_write(fsa->regmap, FSA4480_SWITCH_SELECT, new_sel);
-> +	fsa->cur_select = new_sel;
-> +
-> +	if (fsa->cur_enable & FSA4480_ENABLE_SBU) {
-> +		regmap_write(fsa->regmap, FSA4480_SWITCH_ENABLE, fsa->cur_enable);
-> +
-> +		/* 15us to allow the SBU switch to turn on again */
-> +		usleep_range(15, 1000);
-> +	}
-> +
-> +out_unlock:
-> +	mutex_unlock(&fsa->lock);
-> +
-> +	return 0;
-> +}
-> +
-> +static int fsa4480_mux_set(struct typec_mux_dev *mux, struct typec_mux_state *state)
-> +{
-> +	struct fsa4480 *fsa = typec_mux_get_drvdata(mux);
-> +	u8 new_enable;
-> +
-> +	mutex_lock(&fsa->lock);
-> +
-> +	new_enable = FSA4480_ENABLE_DEVICE | FSA4480_ENABLE_USB;
-> +	if (state->mode >= TYPEC_DP_STATE_A)
-> +		new_enable |= FSA4480_ENABLE_SBU;
-> +
-> +	if (new_enable == fsa->cur_enable)
-> +		goto out_unlock;
-> +
-> +	regmap_write(fsa->regmap, FSA4480_SWITCH_ENABLE, new_enable);
-> +	fsa->cur_enable = new_enable;
-> +
-> +	if (new_enable & FSA4480_ENABLE_SBU) {
-> +		/* 15us to allow the SBU switch to turn off */
-> +		usleep_range(15, 1000);
-> +	}
-> +
-> +out_unlock:
-> +	mutex_unlock(&fsa->lock);
-> +
-> +	return 0;
-> +}
-> +
-> +static int fsa4480_probe(struct i2c_client *client)
-> +{
-> +	struct device *dev = &client->dev;
-> +	struct typec_switch_desc sw_desc = { };
-> +	struct typec_mux_desc mux_desc = { };
-> +	struct fsa4480 *fsa;
-> +
-> +	fsa = devm_kzalloc(dev, sizeof(*fsa), GFP_KERNEL);
-> +	if (!fsa)
-> +		return -ENOMEM;
-> +
-> +	fsa->client = client;
-> +	mutex_init(&fsa->lock);
-> +
-> +	fsa->regmap = devm_regmap_init_i2c(client, &fsa4480_regmap_config);
-> +	if (IS_ERR(fsa->regmap))
-> +		return dev_err_probe(dev, PTR_ERR(fsa->regmap), "failed to initialize regmap\n");
-> +
-> +	fsa->cur_enable = FSA4480_ENABLE_DEVICE | FSA4480_ENABLE_USB;
-> +	fsa->cur_select = FSA4480_SEL_USB;
-> +
-> +	/* set default settings */
-> +	regmap_write(fsa->regmap, FSA4480_SLOW_L, 0x00);
-> +	regmap_write(fsa->regmap, FSA4480_SLOW_R, 0x00);
-> +	regmap_write(fsa->regmap, FSA4480_SLOW_MIC, 0x00);
-> +	regmap_write(fsa->regmap, FSA4480_SLOW_SENSE, 0x00);
-> +	regmap_write(fsa->regmap, FSA4480_SLOW_GND, 0x00);
-> +	regmap_write(fsa->regmap, FSA4480_DELAY_L_R, 0x00);
-> +	regmap_write(fsa->regmap, FSA4480_DELAY_L_MIC, 0x00);
-> +	regmap_write(fsa->regmap, FSA4480_DELAY_L_SENSE, 0x00);
-> +	regmap_write(fsa->regmap, FSA4480_DELAY_L_AGND, 0x09);
-> +	regmap_write(fsa->regmap, FSA4480_SWITCH_SELECT, fsa->cur_select);
-> +	regmap_write(fsa->regmap, FSA4480_SWITCH_ENABLE, fsa->cur_enable);
-> +
-> +	sw_desc.drvdata = fsa;
-> +	sw_desc.fwnode = dev_fwnode(dev);
-> +	sw_desc.set = fsa4480_switch_set;
-> +
-> +	fsa->sw = typec_switch_register(dev, &sw_desc);
-> +	if (IS_ERR(fsa->sw))
-> +		return dev_err_probe(dev, PTR_ERR(fsa->sw), "failed to register typec switch\n");
-> +
-> +	mux_desc.drvdata = fsa;
-> +	mux_desc.fwnode = dev_fwnode(dev);
-> +	mux_desc.set = fsa4480_mux_set;
-> +
-> +	fsa->mux = typec_mux_register(dev, &mux_desc);
-> +	if (IS_ERR(fsa->mux)) {
-> +		typec_switch_unregister(fsa->sw);
-> +		return dev_err_probe(dev, PTR_ERR(fsa->mux), "failed to register typec mux\n");
-> +	}
-> +
-> +	i2c_set_clientdata(client, fsa);
-> +	return 0;
-> +}
-> +
-> +static int fsa4480_remove(struct i2c_client *client)
-> +{
-> +	struct fsa4480 *fsa = i2c_get_clientdata(client);
-> +
-> +	typec_mux_unregister(fsa->mux);
-> +	typec_switch_unregister(fsa->sw);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct i2c_device_id fsa4480_table[] = {
-> +	{ "fsa4480" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(i2c, fsa4480_table);
-> +
-> +static const struct of_device_id fsa4480_of_table[] = {
-> +	{ .compatible = "fcs,fsa4480" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, fsa4480_of_table);
-> +
-> +static struct i2c_driver fsa4480_driver = {
-> +	.driver = {
-> +		.name = "fsa4480",
-> +		.of_match_table = fsa4480_of_table,
-> +	},
-> +	.probe_new	= fsa4480_probe,
-> +	.remove		= fsa4480_remove,
-> +	.id_table	= fsa4480_table,
-> +};
-> +module_i2c_driver(fsa4480_driver);
-> +
-> +MODULE_DESCRIPTION("ON Semiconductor FSA4480 driver");
-> +MODULE_LICENSE("GPL v2");
-> -- 
-> 2.35.1
 
--- 
-heikki

@@ -2,167 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD6A50D765
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 05:11:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5866850D768
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 05:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239572AbiDYDOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 23:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44944 "EHLO
+        id S240558AbiDYDOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 23:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240568AbiDYDN2 (ORCPT
+        with ESMTP id S233642AbiDYDOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 23:13:28 -0400
-Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0368B1C92D;
-        Sun, 24 Apr 2022 20:10:19 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [10.15.192.164])
-        by mail-app3 (Coremail) with SMTP id cC_KCgB31fALEWZi3VruAg--.23940S2;
-        Mon, 25 Apr 2022 11:10:07 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     krzysztof.kozlowski@linaro.org, linux-kernel@vger.kernel.org
-Cc:     netdev@vger.kernel.org, broonie@kernel.org,
-        akpm@linux-foundation.org, alexander.deucher@amd.com,
-        gregkh@linuxfoundation.org, davem@davemloft.net, linma@zju.edu.cn,
-        Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH] drivers: nfc: nfcmrvl: reorder destructive operations in nfcmrvl_nci_unregister_dev to avoid bugs
-Date:   Mon, 25 Apr 2022 11:10:02 +0800
-Message-Id: <20220425031002.56254-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cC_KCgB31fALEWZi3VruAg--.23940S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxAFW5Xw43WrWUAw17ZFy7Wrg_yoWrXw17pF
-        4YgFy5CF1DKr4FqF45tF4qqFyfuFZ3GFW5Cry7tr93Aws0yFWvyw1qyay5ZFnruryUJFWY
-        ka43A3s8GF4vyF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvv1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW0oVCq3wA2z4x0Y4vEx4A2
-        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52
-        x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWU
-        XwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
-        8JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY
-        0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r4fKr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
-        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
-        14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
-        IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E
-        87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
-        IFyTuYvjfUF9a9DUUUU
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgMLAVZdtZYtGwABsU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 24 Apr 2022 23:14:02 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD62051339
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 20:10:55 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KmqlQ4ZhbzhYgt;
+        Mon, 25 Apr 2022 11:10:42 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 25 Apr 2022 11:10:52 +0800
+Subject: Re: [PATCH v3 1/3] mm/swapfile: unuse_pte can map random data if swap
+ read fails
+To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>
+CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "neilb@suse.de" <neilb@suse.de>,
+        "david@redhat.com" <david@redhat.com>,
+        "apopple@nvidia.com" <apopple@nvidia.com>,
+        "surenb@google.com" <surenb@google.com>,
+        "minchan@kernel.org" <minchan@kernel.org>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220424091105.48374-1-linmiaohe@huawei.com>
+ <20220424091105.48374-2-linmiaohe@huawei.com>
+ <20220425010804.GA3746096@hori.linux.bs1.fc.nec.co.jp>
+ <159b4ea1-7f39-0486-8e2e-2843e1ebbe2a@huawei.com>
+ <20220425025117.GA3752903@hori.linux.bs1.fc.nec.co.jp>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <76b28d03-2315-061b-60e1-c35fd0e524ba@huawei.com>
+Date:   Mon, 25 Apr 2022 11:10:52 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
+MIME-Version: 1.0
+In-Reply-To: <20220425025117.GA3752903@hori.linux.bs1.fc.nec.co.jp>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are destructive operations such as nfcmrvl_fw_dnld_abort and
-gpio_free in nfcmrvl_nci_unregister_dev. The resources such as firmware,
-gpio and so on could be destructed while the upper layer functions such as
-nfcmrvl_fw_dnld_start and nfcmrvl_nci_recv_frame is executing, which leads
-to double-free, use-after-free and null-ptr-deref bugs.
+On 2022/4/25 10:51, HORIGUCHI NAOYA(堀口 直也) wrote:
+> On Mon, Apr 25, 2022 at 10:20:23AM +0800, Miaohe Lin wrote:
+>> On 2022/4/25 9:08, HORIGUCHI NAOYA(堀口 直也) wrote:
+>>> On Sun, Apr 24, 2022 at 05:11:03PM +0800, Miaohe Lin wrote:
+>>>> There is a bug in unuse_pte(): when swap page happens to be unreadable,
+>>>> page filled with random data is mapped into user address space.  In case
+>>>> of error, a special swap entry indicating swap read fails is set to the
+>>>> page table.  So the swapcache page can be freed and the user won't end up
+>>>> with a permanently mounted swap because a sector is bad.  And if the page
+>>>> is accessed later, the user process will be killed so that corrupted data
+>>>> is never consumed.  On the other hand, if the page is never accessed, the
+>>>> user won't even notice it.
+>>>>
+>>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>>>> Acked-by: David Hildenbrand <david@redhat.com>
+>>>
+>>> Hi Miaohe,
+>>>
+>>> This bug sounds relatively serious to me, and it seems old, so is it worth
+>>> sending to -stable?
+>>
+>> This bug is really old but it's never seen yet because swapoff is supposed only to
+>> be done before rebooting the system. But swapoff can happen anytime. Poor guys might
+>> come across it and get wrong data. So I think it's worth sending to -stable.
+>>
+>> BTW: This patch should be revised in order to go to the stable version.
+> 
+> I sometimes have the same wonder, but I'm not sure about the rule.  If you
+> choose to send another version, could you update subject line (subject line
 
-There are three situations that could lead to double-free bugs.
+What I mean is that SWP_PTE_MARKER is newly added and it will conflict with the stable version.
+So this patch might need to be revised for specified stable version in order to fix the possible
+conflict beforehand. Or that should be done when it goes to the stable ?
 
-The first situation is shown below:
+> is supposed to show what the patch does rather than what the problem is).
 
-   (Thread 1)                 |      (Thread 2)
-nfcmrvl_fw_dnld_start         |
- ...                          |  nfcmrvl_nci_unregister_dev
- release_firmware()           |   nfcmrvl_fw_dnld_abort
-  kfree(fw) //(1)             |    fw_dnld_over
-                              |     release_firmware
-  ...                         |      kfree(fw) //(2)
-                              |     ...
+If a specified version for stable is required, I will do this.
 
-The second situation is shown below:
+Thanks!
 
-   (Thread 1)                 |      (Thread 2)
-nfcmrvl_fw_dnld_start         |
- ...                          |
- mod_timer                    |
- (wait a time)                |
- fw_dnld_timeout              |  nfcmrvl_nci_unregister_dev
-   fw_dnld_over               |   nfcmrvl_fw_dnld_abort
-    release_firmware          |    fw_dnld_over
-     kfree(fw) //(1)          |     release_firmware
-     ...                      |      kfree(fw) //(2)
-
-The third situation is shown below:
-
-       (Thread 1)               |       (Thread 2)
-nfcmrvl_nci_recv_frame          |
- if(..->fw_download_in_progress)|
-  nfcmrvl_fw_dnld_recv_frame    |
-   queue_work                   |
-                                |
-fw_dnld_rx_work                 | nfcmrvl_nci_unregister_dev
- fw_dnld_over                   |  nfcmrvl_fw_dnld_abort
-  release_firmware              |   fw_dnld_over
-   kfree(fw) //(1)              |    release_firmware
-                                |     kfree(fw) //(2)
-
-The firmware struct is deallocated in position (1) and deallocated
-in position (2) again.
-
-The crash trace triggered by POC is like below:
-
-[  122.640457] BUG: KASAN: double-free or invalid-free in fw_dnld_over+0x28/0xf0
-[  122.640457] Call Trace:
-[  122.640457]  <TASK>
-[  122.640457]  kfree+0xb0/0x330
-[  122.640457]  fw_dnld_over+0x28/0xf0
-[  122.640457]  nfcmrvl_nci_unregister_dev+0x61/0x70
-[  122.640457]  nci_uart_tty_close+0x87/0xd0
-[  122.640457]  tty_ldisc_kill+0x3e/0x80
-[  122.640457]  tty_ldisc_hangup+0x1b2/0x2c0
-[  122.640457]  __tty_hangup.part.0+0x316/0x520
-[  122.640457]  tty_release+0x200/0x670
-[  122.640457]  __fput+0x110/0x410
-[  122.640457]  task_work_run+0x86/0xd0
-[  122.640457]  exit_to_user_mode_prepare+0x1aa/0x1b0
-[  122.640457]  syscall_exit_to_user_mode+0x19/0x50
-[  122.640457]  do_syscall_64+0x48/0x90
-[  122.640457]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[  122.640457] RIP: 0033:0x7f68433f6beb
-
-What's more, there are also use-after-free and null-ptr-deref bugs
-in nfcmrvl_fw_dnld_start. If we deallocate firmware struct, gpio or
-set null to the members of priv->fw_dnld in nfcmrvl_nci_unregister_dev,
-then, we dereference firmware, gpio or the members of priv->fw_dnld in
-nfcmrvl_fw_dnld_start, the UAF or NPD bugs will happen.
-
-This patch reorders destructive operations after nci_unregister_device
-to avoid the double-free, UAF and NPD bugs, as nci_unregister_device
-is well synchronized and won't return if there is a running routine.
-This was mentioned in commit 3e3b5dfcd16a ("NFC: reorder the logic in
-nfc_{un,}register_device").
-
-Fixes: 3194c6870158 ("NFC: nfcmrvl: add firmware download support")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Reviewed-by: Lin Ma <linma@zju.edu.cn>
----
- drivers/nfc/nfcmrvl/main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/nfc/nfcmrvl/main.c b/drivers/nfc/nfcmrvl/main.c
-index 2fcf545012b..1a5284de434 100644
---- a/drivers/nfc/nfcmrvl/main.c
-+++ b/drivers/nfc/nfcmrvl/main.c
-@@ -183,6 +183,7 @@ void nfcmrvl_nci_unregister_dev(struct nfcmrvl_private *priv)
- {
- 	struct nci_dev *ndev = priv->ndev;
- 
-+	nci_unregister_device(ndev);
- 	if (priv->ndev->nfc_dev->fw_download_in_progress)
- 		nfcmrvl_fw_dnld_abort(priv);
- 
-@@ -191,7 +192,6 @@ void nfcmrvl_nci_unregister_dev(struct nfcmrvl_private *priv)
- 	if (gpio_is_valid(priv->config.reset_n_io))
- 		gpio_free(priv->config.reset_n_io);
- 
--	nci_unregister_device(ndev);
- 	nci_free_device(ndev);
- 	kfree(priv);
- }
--- 
-2.17.1
+> 
+> Thanks,
+> Naoya Horiguchi
+> 
 

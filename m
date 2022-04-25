@@ -2,321 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A0350E257
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:51:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF5AA50E25D
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234822AbiDYNxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 09:53:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38434 "EHLO
+        id S240365AbiDYNyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 09:54:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242340AbiDYNw6 (ORCPT
+        with ESMTP id S236292AbiDYNyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 09:52:58 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB2D4A3EC
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 06:49:53 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1niz5z-0005OC-Ou; Mon, 25 Apr 2022 15:49:43 +0200
-Received: from pengutronix.de (2a03-f580-87bc-d400-c4ac-ed33-309c-93a8.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:c4ac:ed33:309c:93a8])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D301B6D38D;
-        Mon, 25 Apr 2022 13:49:41 +0000 (UTC)
-Date:   Mon, 25 Apr 2022 15:49:41 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        =?utf-8?B?SsOpcsO0bWU=?= Pouiller <jerome.pouiller@silabs.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH v3 4/4] ARM: dts: stm32: add support for Protonic PRTT1x
- boards
-Message-ID: <20220425134941.ja32c4o4gmz2og7v@pengutronix.de>
-References: <20220425132844.866743-1-o.rempel@pengutronix.de>
- <20220425132844.866743-5-o.rempel@pengutronix.de>
+        Mon, 25 Apr 2022 09:54:16 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F2452B11
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 06:51:11 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id m20so9023119ejj.10
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 06:51:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=lvDYSVLEz6MX8jn1qsRIcUfd4zctL5et+HotZrSw3M0=;
+        b=EhmAHgaqMcUtOkQCWSIa5Xd116fTJXJndx2rktXEooY6DDZmZpg7Wm/a/CMfNnHfuV
+         Z+z9qYDHosYITfbwuKxdfe5XgZlwBDhaR7+95loiPp7A9j6tqNNaF6t7VnYZW2/Ttnlw
+         MGoYu+x6mWvpe6Jr0iMXRPdPvLGLy/1G+ISxkzCGajaiqLRWlSTQgXrflJBbBMUlZOD6
+         MEH79Ike6ZF/10okvCRs9raLPrRzqiGyRrj0lMkHXHrNUhRMSs8Qm21HN7Dq0C2hbcni
+         BtFyM8efGtf3wPGvdUdVtST0SxurCv9fsuqmpt/aMxXur2LcNV8VoF+ISazBucKV5Lql
+         kg3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=lvDYSVLEz6MX8jn1qsRIcUfd4zctL5et+HotZrSw3M0=;
+        b=EBbEbdEbiB3RYpZh4mwGeiulFGm32F69der9ni/eJld4yr4l9Xbv+1X6HcEHEoOGiy
+         M8KZm644D0Kp1CBN24rPJssiD01O+zSq105iX5HUagKi8MOBjj+0EM+Qv5xBQme5tfIs
+         s1QWDbquu6UyXhmI56OhZf0vztxw2S4wSn82zgkQZY+jIP68Uh+pDLQIimGi6WQ5+EBj
+         l4jEKY5SDN28c2m9tZOBQBtRekvbPeuCp8/mF/femo0wEj8+RgZbAzuRhDZ0SOHEFvtW
+         Da4ZqU8wbYkqnRDFMHyuLVXWbvZkKIKkqdPBb5HN+Clfvz5SpkA50/Tt6AlBIdIKOKHb
+         k4Jg==
+X-Gm-Message-State: AOAM533ua+q+mAOeXFH6c/CtvpwyQYaVCmYXxiuNV5vCp4fxjc9QCwxa
+        gE3CzOgSxn8FpKlUqYJsP2PG/Q==
+X-Google-Smtp-Source: ABdhPJydFSs44O2Kkt0lcMAdPRY7IBSg6911ApfPUGfksHn2Esd3ULG1Yvmxdqz9S8NKIffTCKFwqA==
+X-Received: by 2002:a17:906:4cd8:b0:6db:372:c4ba with SMTP id q24-20020a1709064cd800b006db0372c4bamr16160386ejt.57.1650894669737;
+        Mon, 25 Apr 2022 06:51:09 -0700 (PDT)
+Received: from [192.168.0.243] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id v20-20020a056402349400b00425a5ea1bb7sm4755800edc.57.2022.04.25.06.51.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Apr 2022 06:51:09 -0700 (PDT)
+Message-ID: <6f72be3c-c907-bc7a-6b64-6becfc76934e@linaro.org>
+Date:   Mon, 25 Apr 2022 15:51:08 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="u2ozjthum5titsva"
-Content-Disposition: inline
-In-Reply-To: <20220425132844.866743-5-o.rempel@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 1/2] dt-bindings: mailbox: qcom-ipcc: add missing
+ compatible for SM8450
+Content-Language: en-US
+To:     David Heidelberg <david@ixit.cz>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20220425134717.55418-1-david@ixit.cz>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220425134717.55418-1-david@ixit.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 25/04/2022 15:47, David Heidelberg wrote:
+> Adds forgotten compatible and update SPDX header.
 
---u2ozjthum5titsva
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+You need to explain what is this "forgotten compatible". It's to vague.
 
-On 25.04.2022 15:28:44, Oleksij Rempel wrote:
-> This boards are based on STM32MP151AAD3 and use 10BaseT1L for communicati=
-on.
->=20
-> - PRTT1C - 10BaseT1L switch
-> - PRTT1S - 10BaseT1L CO2 sensor board
-> - PRTT1A - 10BaseT1L multi functional controller
->=20
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->  arch/arm/boot/dts/Makefile                |   3 +
->  arch/arm/boot/dts/stm32mp151a-prtt1a.dts  |  52 ++++
->  arch/arm/boot/dts/stm32mp151a-prtt1c.dts  | 304 ++++++++++++++++++++++
->  arch/arm/boot/dts/stm32mp151a-prtt1l.dtsi | 229 ++++++++++++++++
->  arch/arm/boot/dts/stm32mp151a-prtt1s.dts  |  63 +++++
->  5 files changed, 651 insertions(+)
->  create mode 100644 arch/arm/boot/dts/stm32mp151a-prtt1a.dts
->  create mode 100644 arch/arm/boot/dts/stm32mp151a-prtt1c.dts
->  create mode 100644 arch/arm/boot/dts/stm32mp151a-prtt1l.dtsi
->  create mode 100644 arch/arm/boot/dts/stm32mp151a-prtt1s.dts
+The SPDX update lacks answer to "why". There is no reason to do it, so
+please explain why it is needed.
 
-[...]
 
-> diff --git a/arch/arm/boot/dts/stm32mp151a-prtt1c.dts b/arch/arm/boot/dts=
-/stm32mp151a-prtt1c.dts
-> new file mode 100644
-> index 000000000000..0d542c8ff2c7
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/stm32mp151a-prtt1c.dts
-> @@ -0,0 +1,304 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
-> +/*
-> + * Copyright (C) Protonic Holland
-> + * Author: David Jander <david@protonic.nl>
-> + */
-> +/dts-v1/;
-> +
-> +#include "stm32mp151a-prtt1l.dtsi"
-> +
-> +/ {
-> +	model =3D "Protonic PRTT1C";
-> +	compatible =3D "prt,prtt1c", "st,stm32mp151";
-> +
-> +	clock_ksz9031: clock-ksz9031 {
-> +		compatible =3D "fixed-clock";
-> +		#clock-cells =3D <0>;
-> +		clock-frequency =3D <25000000>;
-> +	};
-> +
-> +	clock_sja1105: clock-sja1105 {
-> +		compatible =3D "fixed-clock";
-> +		#clock-cells =3D <0>;
-> +		clock-frequency =3D <25000000>;
-> +	};
-> +
-> +	mdio0: mdio {
-> +		compatible =3D "virtual,mdio-gpio";
-> +		#address-cells =3D <1>;
-> +		#size-cells =3D <0>;
-> +		gpios =3D <&gpioc 1 GPIO_ACTIVE_HIGH
-> +			 &gpioa 2 GPIO_ACTIVE_HIGH>;
-> +
-> +	};
-> +
-> +	wifi_pwrseq: wifi-pwrseq {
-> +		compatible =3D "mmc-pwrseq-simple";
-> +		reset-gpios =3D <&gpiod 8 GPIO_ACTIVE_LOW>;
-> +	};
-> +};
-> +
-> +&ethernet0 {
-> +	fixed-link {
-> +		speed =3D <100>;
-> +		full-duplex;
-> +	};
-> +};
-> +
-> +&gpioa {
-> +	gpio-line-names =3D
-> +		"", "", "", "PHY0_nRESET", "PHY0_nINT", "", "", "",
-> +		"", "", "", "", "", "", "", "SPI1_nSS";
-> +};
-> +
-> +&gpiod {
-> +	gpio-line-names =3D
-> +		"", "", "", "", "", "", "", "",
-> +		"WFM_RESET", "", "", "", "", "", "", "";
-> +};
-> +
-> +&gpioe {
-> +	gpio-line-names =3D
-> +		"SDMMC2_nRESET", "", "", "", "", "", "SPI1_nRESET", "",
-> +		"", "", "", "", "WFM_nIRQ", "", "", "";
-> +};
-> +
-> +&gpiog {
-> +	gpio-line-names =3D
-> +		"", "", "", "", "", "", "", "PHY3_nINT",
-> +		"PHY1_nINT", "PHY3_nRESET", "PHY2_nINT", "PHY2_nRESET",
-> +		"PHY1_nRESET", "SPE1_PWR", "SPE0_PWR", "";
-> +};
-> +
-> +&mdio0 {
-> +	/* All this DP83TD510E PHYs can't be probed before switch@0 is
-> +	 * probed so we need to use compatible with PHYid
-> +	 */
-> +	/* TI DP83TD510E */
-> +	t1l0_phy: ethernet-phy@6 {
-> +		compatible =3D "ethernet-phy-id2000.0181";
-> +		reg =3D <6>;
-> +		interrupts-extended =3D <&gpioa 4 IRQ_TYPE_LEVEL_LOW>;
-> +		reset-gpios =3D <&gpioa 3 GPIO_ACTIVE_LOW>;
-> +		reset-assert-us =3D <10>;
-> +		reset-deassert-us =3D <35>;
-> +	};
-> +
-> +	/* TI DP83TD510E */
-> +	t1l1_phy: ethernet-phy@7 {
-> +		compatible =3D "ethernet-phy-id2000.0181";
-> +		reg =3D <7>;
-> +		interrupts-extended =3D <&gpiog 8 IRQ_TYPE_LEVEL_LOW>;
-> +		reset-gpios =3D <&gpiog 12 GPIO_ACTIVE_LOW>;
-> +		reset-assert-us =3D <10>;
-> +		reset-deassert-us =3D <35>;
-> +	};
-> +
-> +	/* TI DP83TD510E */
-> +	t1l2_phy: ethernet-phy@10 {
-> +		compatible =3D "ethernet-phy-id2000.0181";
-> +		reg =3D <10>;
-> +		interrupts-extended =3D <&gpiog 10 IRQ_TYPE_LEVEL_LOW>;
-> +		reset-gpios =3D <&gpiog 11 GPIO_ACTIVE_LOW>;
-> +		reset-assert-us =3D <10>;
-> +		reset-deassert-us =3D <35>;
-> +	};
-> +
-> +	/* Micrel KSZ9031 */
-> +	rj45_phy: ethernet-phy@2 {
-> +		reg =3D <2>;
-> +		interrupts-extended =3D <&gpiog 7 IRQ_TYPE_LEVEL_LOW>;
-> +		reset-gpios =3D <&gpiog 9 GPIO_ACTIVE_LOW>;
-> +		reset-assert-us =3D <10000>;
-> +		reset-deassert-us =3D <1000>;
-> +
-> +		clocks =3D <&clock_ksz9031>;
-> +	};
-> +};
-> +
-> +&qspi {
-> +	status =3D "disabled";
-> +};
-> +
-> +&sdmmc2 {
-> +	pinctrl-names =3D "default", "opendrain", "sleep";
-> +	pinctrl-0 =3D <&sdmmc2_b4_pins_a &sdmmc2_d47_pins_a>;
-> +	pinctrl-1 =3D <&sdmmc2_b4_od_pins_a &sdmmc2_d47_pins_a>;
-> +	pinctrl-2 =3D <&sdmmc2_b4_sleep_pins_a &sdmmc2_d47_sleep_pins_a>;
-> +	non-removable;
-> +	no-sd;
-> +	no-sdio;
-> +	no-1-8-v;
-> +	st,neg-edge;
-> +	bus-width =3D <8>;
-> +	vmmc-supply =3D <&reg_3v3>;
-> +	vqmmc-supply =3D <&reg_3v3>;
-> +	status =3D "okay";
-> +};
-> +
-> +&sdmmc2_b4_od_pins_a {
-> +	pins1 {
-> +		pinmux =3D <STM32_PINMUX('B', 14, AF9)>, /* SDMMC2_D0 */
-> +			 <STM32_PINMUX('B', 7, AF10)>, /* SDMMC2_D1 */
-> +			 <STM32_PINMUX('B', 3, AF9)>, /* SDMMC2_D2 */
-> +			 <STM32_PINMUX('B', 4, AF9)>; /* SDMMC2_D3 */
-> +	};
-> +};
-> +
-> +&sdmmc2_b4_pins_a {
-> +	pins1 {
-> +		pinmux =3D <STM32_PINMUX('B', 14, AF9)>, /* SDMMC2_D0 */
-> +			 <STM32_PINMUX('B', 7, AF10)>, /* SDMMC2_D1 */
-> +			 <STM32_PINMUX('B', 3, AF9)>, /* SDMMC2_D2 */
-> +			 <STM32_PINMUX('B', 4, AF9)>, /* SDMMC2_D3 */
-> +			 <STM32_PINMUX('G', 6, AF10)>; /* SDMMC2_CMD */
-> +	};
-> +};
-> +
-> +&sdmmc2_b4_sleep_pins_a {
-> +	pins {
-> +		pinmux =3D <STM32_PINMUX('B', 14, ANALOG)>, /* SDMMC2_D0 */
-> +			 <STM32_PINMUX('B', 7, ANALOG)>, /* SDMMC2_D1 */
-> +			 <STM32_PINMUX('B', 3, ANALOG)>, /* SDMMC2_D2 */
-> +			 <STM32_PINMUX('B', 4, ANALOG)>, /* SDMMC2_D3 */
-> +			 <STM32_PINMUX('E', 3, ANALOG)>, /* SDMMC2_CK */
-> +			 <STM32_PINMUX('G', 6, ANALOG)>; /* SDMMC2_CMD */
-> +	};
-> +};
-> +
-> +&sdmmc2_d47_pins_a {
-> +	pins {
-> +		pinmux =3D <STM32_PINMUX('A', 8, AF9)>, /* SDMMC2_D4 */
-> +			 <STM32_PINMUX('A', 9, AF10)>, /* SDMMC2_D5 */
-> +			 <STM32_PINMUX('C', 6, AF10)>, /* SDMMC2_D6 */
-> +			 <STM32_PINMUX('C', 7, AF10)>; /* SDMMC2_D7 */
-> +	};
-> +};
-> +
-> +&sdmmc2_d47_sleep_pins_a {
-> +	pins {
-> +		pinmux =3D <STM32_PINMUX('A', 8, ANALOG)>, /* SDMMC2_D4 */
-> +			 <STM32_PINMUX('A', 9, ANALOG)>, /* SDMMC2_D5 */
-> +			 <STM32_PINMUX('C', 6, ANALOG)>, /* SDMMC2_D6 */
-> +			 <STM32_PINMUX('D', 3, ANALOG)>; /* SDMMC2_D7 */
-> +	};
-> +};
-> +
-> +&sdmmc3 {
-> +	pinctrl-names =3D "default", "opendrain", "sleep";
-> +	pinctrl-0 =3D <&sdmmc3_b4_pins_b>;
-> +	pinctrl-1 =3D <&sdmmc3_b4_od_pins_b>;
-> +	pinctrl-2 =3D <&sdmmc3_b4_sleep_pins_b>;
-> +	non-removable;
-> +	no-1-8-v;
-> +	st,neg-edge;
-> +	bus-width =3D <4>;
-> +	vmmc-supply =3D <&reg_3v3>;
-> +	vqmmc-supply =3D <&reg_3v3>;
-> +        mmc-pwrseq =3D <&wifi_pwrseq>;
-
-nitpick: use tabs here, too
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---u2ozjthum5titsva
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJmpvIACgkQrX5LkNig
-010KJQf/QmHN00LnSjAnQ1qKZEmZkOIIlSRfbKPVZATT0Ce5Hjio0CJPML5rU9uk
-+dooDHku2jtKLmjbltsnaHhr2Vf9U3TOo4gFmYU/hXL8SGreVmzXx7gXOoQ6AsVk
-sVi5JYK8BS2Ii36NZxz/ht96gYwGRt82MmXQ7pgc+uku1KK5mFFpKdqNUe/aXSld
-7G55b0AdxMNmHHlEnyOYxmoKCXgMBWzz8wNvG6SdRnFjeKys2WVvU0q4Jw4ylQ+s
-XHfMGa4oYSgE3kIkN/E6zVmli8XoLoNUtDdGhwc3SG9Kj2sr7OOajh2j4jCA/kz3
-tzL6ZAMc2bL2foqhK/UZNVNM0+LEIA==
-=7/gx
------END PGP SIGNATURE-----
-
---u2ozjthum5titsva--
+Best regards,
+Krzysztof

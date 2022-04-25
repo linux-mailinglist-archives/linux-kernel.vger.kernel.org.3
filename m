@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99A5650DE8C
+	by mail.lfdr.de (Postfix) with ESMTP id 08C8150DE8A
 	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 13:13:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237632AbiDYLQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 07:16:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43494 "EHLO
+        id S231582AbiDYLQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 07:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241572AbiDYLPm (ORCPT
+        with ESMTP id S241713AbiDYLPm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 25 Apr 2022 07:15:42 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30EDB2A737
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3171C2A73C
         for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 04:12:13 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Kn2Q01JDsz1JBfc;
-        Mon, 25 Apr 2022 19:11:20 +0800 (CST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Kn2Qm48YmzhYkj;
+        Mon, 25 Apr 2022 19:12:00 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 25 Apr
@@ -27,9 +27,9 @@ To:     <akpm@linux-foundation.org>
 CC:     <ying.huang@intel.com>, <iamjoonsoo.kim@lge.com>, <hch@lst.de>,
         <osalvador@suse.de>, <linux-mm@kvack.org>,
         <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
-Subject: [PATCH v3 5/6] mm/vmscan: remove obsolete comment in kswapd_run
-Date:   Mon, 25 Apr 2022 19:12:31 +0800
-Message-ID: <20220425111232.23182-6-linmiaohe@huawei.com>
+Subject: [PATCH v3 6/6] mm/vmscan: use helper folio_is_file_lru()
+Date:   Mon, 25 Apr 2022 19:12:32 +0800
+Message-ID: <20220425111232.23182-7-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220425111232.23182-1-linmiaohe@huawei.com>
 References: <20220425111232.23182-1-linmiaohe@huawei.com>
@@ -48,27 +48,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 6b700b5b3c59 ("mm/vmscan.c: remove cpu online notification
-for now"), cpu online notification is removed. So kswapd won't move to
-proper cpus if cpus are hot-added. Remove this obsolete comment.
+Use helper folio_is_file_lru() to check whether folio is file lru. Minor
+readability improvement.
 
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- mm/vmscan.c | 1 -
- 1 file changed, 1 deletion(-)
+ mm/vmscan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 10ba16fdd748..db3500bd5c7d 100644
+index db3500bd5c7d..a2752e8fc879 100644
 --- a/mm/vmscan.c
 +++ b/mm/vmscan.c
-@@ -4572,7 +4572,6 @@ unsigned long shrink_all_memory(unsigned long nr_to_reclaim)
+@@ -1424,7 +1424,7 @@ static enum page_references folio_check_references(struct folio *folio,
+ 	}
  
- /*
-  * This kswapd start function will be called by init and node-hot-add.
-- * On node-hot-add, kswapd will moved to proper cpus if cpus are hot-added.
-  */
- void kswapd_run(int nid)
- {
+ 	/* Reclaim if clean, defer dirty folios to writeback */
+-	if (referenced_folio && !folio_test_swapbacked(folio))
++	if (referenced_folio && folio_is_file_lru(folio))
+ 		return PAGEREF_RECLAIM_CLEAN;
+ 
+ 	return PAGEREF_RECLAIM;
 -- 
 2.23.0
 

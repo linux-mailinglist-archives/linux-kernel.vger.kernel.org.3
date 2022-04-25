@@ -2,273 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06A9350E483
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:35:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B00E750E488
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242893AbiDYPiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 11:38:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41126 "EHLO
+        id S242884AbiDYPkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 11:40:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242892AbiDYPiJ (ORCPT
+        with ESMTP id S239039AbiDYPkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 11:38:09 -0400
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823AC4705F
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 08:35:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=2BAVYOzHyLn6mrUTsnozcnawOl0hxdkWwXi8fyQF4Ik=;
-  b=LbaA6wKuIm3B3fXzADjns8BtJVZsRwYNKdhnolZfvhz3lF127+ipZpoM
-   yr+P61xyB7QYhdNgJOGf6TzE9Q8/eU5hniKcHFWqNiI3av3jnsb6sTpEv
-   miliijm9jLUO0TLCtzgB/hGEwEr1YdVJdkTbpsPBj5C/hSVtM25LMyVFg
-   4=;
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.90,288,1643670000"; 
-   d="scan'208";a="12375271"
-Received: from ip-214.net-89-2-7.rev.numericable.fr (HELO hadrien) ([89.2.7.214])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 17:35:00 +0200
-Date:   Mon, 25 Apr 2022 17:34:59 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Ira Weiny <ira.weiny@intel.com>
-cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>,
-        outreachy@lists.linux.dev, boris.ostrovsky@oracle.com,
-        jgross@suse.com, sstabellini@kernel.org,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] xen:  Convert kmap() to kmap_local_page()
-In-Reply-To: <Yma9zvvuZGyAeRBG@iweiny-desk3>
-Message-ID: <alpine.DEB.2.22.394.2204251733420.2718@hadrien>
-References: <20220419234328.10346-1-eng.alaamohamedsoliman.am@gmail.com> <3990312.6PsWsQAL7t@leap> <alpine.DEB.2.22.394.2204201556330.2937@hadrien> <2538961.9Mp67QZiUf@leap> <Yma9zvvuZGyAeRBG@iweiny-desk3>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Mon, 25 Apr 2022 11:40:12 -0400
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5FE1C118;
+        Mon, 25 Apr 2022 08:37:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
+        MIME-Version:Date:Message-ID:content-disposition;
+        bh=WSBP0lL4ZxsD/S52QMFKfvBtMxzOVM8DW0FzyMIL2N0=; b=ZPT8mymtViz6khblRWZPsoAZ+S
+        fhl9v5tQMg2oGPBmwHYwb6DMdkGEUop1DTvDlWqi/gcFT/LPsRehwEQqAa7SfhL323lqGqfzdwu3B
+        eAEG5qVNNoqVe2XtCeAUE0tX7FWIdqoj0ZsGk6EYDJLzCX7WxOb9oyAjWSGxypylFtrIW1JL7bzQG
+        5lJCdXPr5zSzcbYjvjdRf0LUA5ed2ELD9qJ53KaFzFr4LU4B4wOOcn9R4qBmQii48tn/YDMLuX1y6
+        W1mLjctHrX82SxLkw5hPcVrxWC5TPqvmCUbtp9JZ93gLDf2JJQlyWxThkmOLP63bAmRGK2fac89a/
+        BGAjLgLQ==;
+Received: from guinness.priv.deltatee.com ([172.16.1.162])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1nj0lr-00GHEE-H9; Mon, 25 Apr 2022 09:37:04 -0600
+Message-ID: <7d69497a-cd2a-bf4e-c185-ebdba70e9937@deltatee.com>
+Date:   Mon, 25 Apr 2022 09:37:00 -0600
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1172987651-1650900900=:2718"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-CA
+To:     Guoqing Jiang <guoqing.jiang@linux.dev>,
+        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        Song Liu <song@kernel.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Stephen Bates <sbates@raithlin.com>,
+        Martin Oliveira <Martin.Oliveira@eideticom.com>,
+        David Sloan <David.Sloan@eideticom.com>
+References: <20220420195425.34911-1-logang@deltatee.com>
+ <243b3e7f-1fa1-700c-a850-caaf45d95cde@linux.dev>
+From:   Logan Gunthorpe <logang@deltatee.com>
+In-Reply-To: <243b3e7f-1fa1-700c-a850-caaf45d95cde@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 172.16.1.162
+X-SA-Exim-Rcpt-To: guoqing.jiang@linux.dev, linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org, song@kernel.org, hch@infradead.org, sbates@raithlin.com, Martin.Oliveira@eideticom.com, David.Sloan@eideticom.com
+X-SA-Exim-Mail-From: logang@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 00/12] Improve Raid5 Lock Contention
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1172987651-1650900900=:2718
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
 
 
+On 2022-04-24 01:53, Guoqing Jiang wrote:
+> 
+> 
+> On 4/21/22 3:54 AM, Logan Gunthorpe wrote:
+>> Hi,
+>>
+>> This is v2 of this series which addresses Christoph's feedback and
+>> fixes some bugs. The first posting is at [1]. A git branch is
+>> available at [2].
+>>
+>> --
+>>
+>> I've been doing some work trying to improve the bulk write performance
+>> of raid5 on large systems with fast NVMe drives. The bottleneck appears
+>> largely to be lock contention on the hash_lock and device_lock. This
+>> series improves the situation slightly by addressing a couple of low
+>> hanging fruit ways to take the lock fewer times in the request path.
+>>
+>> Patch 9 adjusts how batching works by keeping a reference to the
+>> previous stripe_head in raid5_make_request(). Under most situtations,
+>> this removes the need to take the hash_lock in stripe_add_to_batch_list()
+>> which should reduce the number of times the lock is taken by a factor of
+>> about 2.
+>>
+>> Patch 12 pivots the way raid5_make_request() works. Before the patch, the
+>> code must find the stripe_head for every 4KB page in the request, so each
+>> stripe head must be found once for every data disk. The patch changes this
+>> so that all the data disks can be added to a stripe_head at once and the
+>> number of times the stripe_head must be found (and thus the number of
+>> times the hash_lock is taken) should be reduced by a factor roughly equal
+>> to the number of data disks.
+>>
+>> The remaining patches are just cleanup and prep patches for those two
+>> patches.
+>>
+>> Doing apples to apples testing this series on a small VM with 5 ram
+>> disks, I saw a bandwidth increase of roughly 14% and lock contentions
+>> on the hash_lock (as reported by lock stat) reduced by more than a factor
+>> of 5 (though it is still significantly contended).
+>>
+>> Testing on larger systems with NVMe drives saw similar small bandwidth
+>> increases from 3% to 20% depending on the parameters. Oddly small arrays
+>> had larger gains, likely due to them having lower starting bandwidths; I
+>> would have expected larger gains with larger arrays (seeing there
+>> should have been even fewer locks taken in raid5_make_request()).
+>>
+>> Logan
+>>
+>> [1] https://lkml.kernel.org/r/20220407164511.8472-1-logang@deltatee.com
+>> [2] https://github.com/sbates130272/linux-p2pmem raid5_lock_cont_v2
+>>
+>> --
+>>
+>> Changes since v1:
+>>    - Rebased on current md-next branch (190a901246c69d79)
+>>    - Added patch to create a helper for checking if a sector
+>>      is ahead of the reshape (per Christoph)
+>>    - Reworked the __find_stripe() patch to create a find_get_stripe()
+>>      helper (per Christoph)
+>>    - Added more patches to further refactor raid5_make_request() and
+>>      pull most of the loop body into a helper function (per Christoph)
+>>    - A few other minor cleanups (boolean return, droping casting when
+>>      printing sectors, commit message grammar) as suggested by Christoph.
+>>    - Fixed two uncommon but bad data corruption bugs in that were found.
+>>
+>> --
+>>
+>> Logan Gunthorpe (12):
+>>    md/raid5: Factor out ahead_of_reshape() function
+>>    md/raid5: Refactor raid5_make_request loop
+>>    md/raid5: Move stripe_add_to_batch_list() call out of add_stripe_bio()
+>>    md/raid5: Move common stripe count increment code into __find_stripe()
+>>    md/raid5: Factor out helper from raid5_make_request() loop
+>>    md/raid5: Drop the do_prepare flag in raid5_make_request()
+>>    md/raid5: Move read_seqcount_begin() into make_stripe_request()
+>>    md/raid5: Refactor for loop in raid5_make_request() into while loop
+>>    md/raid5: Keep a reference to last stripe_head for batch
+>>    md/raid5: Refactor add_stripe_bio()
+>>    md/raid5: Check all disks in a stripe_head for reshape progress
+>>    md/raid5: Pivot raid5_make_request()
+> 
+> Generally, I don't object the cleanup patches since the code looks more 
+> cleaner.
+> But my concern is that since some additional function calls are added to 
+> hot path
+> (raid5_make_request), could the performance be affected?
 
-On Mon, 25 Apr 2022, Ira Weiny wrote:
+There's a bit of logic added to the raid5_make_requests but it is all
+local and should be fast, and it reduces the amount of calls to the slow
+contended locks.
 
-> On Wed, Apr 20, 2022 at 04:07:36PM +0200, Fabio M. De Francesco wrote:
-> > On mercoledì 20 aprile 2022 15:57:14 CEST Julia Lawall wrote:
-> > >
-> > > On Wed, 20 Apr 2022, Fabio M. De Francesco wrote:
-> > >
-> > > > On mercoledì 20 aprile 2022 15:40:10 CEST Julia Lawall wrote:
-> > > > >
-> > > > > On Wed, 20 Apr 2022, Fabio M. De Francesco wrote:
-> > > > >
-> > > > > > On mercoledì 20 aprile 2022 08:03:05 CEST Julia Lawall wrote:
-> > > > > > >
-> > > > > > > On Wed, 20 Apr 2022, Alaa Mohamed wrote:
-> > > > > > >
-> > > > > > > > kmap() is being deprecated and these usages are all local to
-> > the
-> > > > thread
-> > > > > > > > so there is no reason kmap_local_page() can't be used.
-> > > > > > > >
-> > > > > > > > Replace kmap() calls with kmap_local_page().
-> > > > > > >
-> > > > > > > OK, so from a Coccinelle point of view, could we do
-> > > > > > >
-> > > > > > > @@
-> > > > > > > expression e1,e2,x,f;
-> > > > > > > @@
-> > > > > > >
-> > > > > > > e1 =
-> > > > > > > - kmap
-> > > > > > > + kmap_local_page
-> > > > > > >     (e2)
-> > > > > > > ... when != x = e1 // not stored in any location and not passed
-> > to
-> > > > > > another function
-> > > > > > >     when != f(...,e1,...)
-> > > > > > >     when != x = e2
-> > > > > > >     when != f(...,e2,...)
-> > > > > > > -kunmap(e2)
-> > > > > > > +kunmap_local(e1)
-> > > > > > >
-> > > > > > > julia
-> > > > > > >
-> > > > > >
-> > > > > > I've never spent sufficient time to understand properly the syntax
-> > and
-> > > > > > semantics of expressions of Coccinelle. However, thanks Julia, this
-> > > > code
-> > > > > > looks good and can be very helpful.
-> > > > > >
-> > > > > > Only a minor objection... it doesn't tell when 'e2' has been
-> > allocated
-> > > > > > within the same function where the kmap() call is.
-> > > > > >
-> > > > > > In the particular case that I cite above, I'd prefer to remove the
-> > > > > > allocation of the page (say with alloc_page()) and convert kmap() /
-> > > > kunmap()
-> > > > > > to use kmalloc() / kfree().
-> > > > > >
-> > > > > > Fox example, this is done in the following patch:
-> > > > > >
-> > > > > > commit 633b0616cfe0 ("x86/sgx: Remove unnecessary kmap() from
-> > > > > > sgx_ioc_enclave_init()") from Ira Weiny.
-> > > > > >
-> > > > > > Can Coccinelle catch also those special cases where a page that is
-> > > > passed
-> > > > > > to kmap() is allocated within that same function (vs. being passed
-> > as
-> > > > > > argument to this function) and, if so, propose a replacement with
-> > > > > > kmalloc()?
-> > > > >
-> > > > > It looks complex in this case, because the allocation is in another
-> > > > > function, and it is passed to another function.
-> > > >
-> > > > This is not the special case I was talking about. In this case your
-> > code
-> > > > for Coccinelle tells the right proposal and it is exactly what Alaa did
-> > in
-> > > > her patch (which is good!).
-> > > >
-> > > > I'm talking about other special cases like the one I pointed to with
-> > the
-> > > > link I provided. I'm sorry if my bad English made you think that Alaa's
-> > > > patch was one of those cases where the page is allocated within the
-> > same
-> > > > function where kmap() is.
-> > > >
-> > > > I hope that now I've been clearer :)
-> > >
-> > > Ah, sorry for the misunderstanding.  If you have an example, I can take a
-> > > look and propose something for this special case.
-> > >
-> > > julia
-> >
-> > Yes, I have the example that you are asking for. It's that commit
-> > 633b0616cfe0 from Ira Weiny.
-> >
-> > Let me copy and paste it here for your convenience...
-> >
-> > diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/
-> > ioctl.c
-> > index 90a5caf76939..2e10367ea66c 100644
-> > --- a/arch/x86/kernel/cpu/sgx/ioctl.c
-> > +++ b/arch/x86/kernel/cpu/sgx/ioctl.c
-> > @@ -604,7 +604,6 @@ static long sgx_ioc_enclave_init(struct sgx_encl *encl,
-> > void __user *arg)
-> >  {
-> >         struct sgx_sigstruct *sigstruct;
-> >         struct sgx_enclave_init init_arg;
-> > -       struct page *initp_page;
-> >         void *token;
-> >         int ret;
-> >
-> > @@ -615,11 +614,15 @@ static long sgx_ioc_enclave_init(struct sgx_encl
-> > *encl, void __user *arg)
-> >         if (copy_from_user(&init_arg, arg, sizeof(init_arg)))
-> >                 return -EFAULT;
-> >
-> > -       initp_page = alloc_page(GFP_KERNEL);
-> > -       if (!initp_page)
-> > +       /*
-> > +        * 'sigstruct' must be on a page boundary and 'token' on a 512 byte
-> > +        * boundary.  kmalloc() will give this alignment when allocating
-> > +        * PAGE_SIZE bytes.
-> > +        */
-> > +       sigstruct = kmalloc(PAGE_SIZE, GFP_KERNEL);
-> > +       if (!sigstruct)
-> >                 return -ENOMEM;
-> >
-> > -       sigstruct = kmap(initp_page);
-> >         token = (void *)((unsigned long)sigstruct + PAGE_SIZE / 2);
-> >         memset(token, 0, SGX_LAUNCH_TOKEN_SIZE);
-> >
-> > @@ -645,8 +648,7 @@ static long sgx_ioc_enclave_init(struct sgx_encl *encl,
-> > void __user *arg)
-> >         ret = sgx_encl_init(encl, sigstruct, token);
-> >
-> >  out:
-> > -       kunmap(initp_page);
-> > -       __free_page(initp_page);
-> > +       kfree(sigstruct);
-> >         return ret;
-> >  }
-> >
-> > I think that Coccinelle might understand that "initp_page" is allocated in
-> > the same function where later it is kmap()'ed. But I'm not able to write a
-> > Coccinelle check to find out these kinds of special cases. In these cases
-> > the correct solution is not to use kmap_local_page(). Instead delete the
-> > alloc_page() and use kmalloc().
-> >
->
-> Sorry about missing this thread last week...
->
-> I've lost the Coccinelle scripts I wrote before but the ones which helped were
-> documented in patches I submitted when Coccinelle was used.
->
-> I think Coccinelle can help a lot.  And probably a lot more than I know since
-> I'm not an expert in the language either.
->
-> However, In addition to the example Fabio shows above here are a few other
-> things to look out for when writing Coccinelle scripts.
->
-> 1) The addition of mem*_page() functions means sometimes the entire kmap/kunmap
->    can be removed.  Check out the Coccinelle script for that.[1]
->
-> 2) kunmap_local() has ordering rules which often requires some manual
->    review.[2]
->
-> 3) kmap/kunmap is often wrapped in other subsystem helper functions.  I was not
->    sure how to deal with that in Coccinelle.  Julia is this easy in
->    Coccinelle?[3]
+> And I think patch 9 and patch 12 are helpful for performance 
+> improvement,Â  did
+> you measure the performance without those cleanup patches?
 
+Yes, I compared performance with and without this entire series.
 
-Thanks for the pointers.
-
-[3] would depend on how much risk you are willing to take.  The arguments
-are the same, except for the array index, for example.  But one may prefer
-to be sure that nothing complex happens between the two calls.
-
-julia
-
->
->
-> Ira
->
->
-> [1]
-> https://lore.kernel.org/lkml/20210205232304.1670522-3-ira.weiny@intel.com/
-> https://lore.kernel.org/lkml/20210205232304.1670522-5-ira.weiny@intel.com/
->
-> [2]
-> https://lore.kernel.org/lkml/20210217024826.3466046-3-ira.weiny@intel.com/
-> https://lore.kernel.org/lkml/20210217024826.3466046-4-ira.weiny@intel.com/
->
-> [3]
-> https://lore.kernel.org/lkml/20210217024826.3466046-5-ira.weiny@intel.com/
->
-> >
-> > Thanks,
-> >
-> > Fabio
-> >
-> >
-> >
->
->
---8323329-1172987651-1650900900=:2718--
+Logan

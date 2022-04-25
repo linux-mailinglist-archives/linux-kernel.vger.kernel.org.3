@@ -2,110 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB5950E990
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 21:35:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E7650E998
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 21:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234918AbiDYTiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 15:38:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38686 "EHLO
+        id S244975AbiDYTkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 15:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237034AbiDYTiX (ORCPT
+        with ESMTP id S236023AbiDYTks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 15:38:23 -0400
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49754111151;
-        Mon, 25 Apr 2022 12:35:17 -0700 (PDT)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 5A17883B2F;
-        Mon, 25 Apr 2022 21:35:14 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1650915315;
-        bh=FsZzdOsTx0wA9ngioPmnOF9El9tJsq70UI32iV/2VXU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=sBsXJ88X5iuiGoySi565D7ly4Q7lCcbnwUGgDkCE5k1JCrpc9r+7wPCUXHUrPfw2k
-         BJSgL6Hyib7axRTZlS2GdN/S3GzTcPdc/idG62EKbWHb5HTiubwXqyEHrEvxFVc8G6
-         rdiv/jRW2oU06M9nR5JNODNYpG38Ga0Guwk/8GbfY68OPugdR9xabNgFOdvmQCnaFW
-         Ao9s7pKy5jpoG58+rVARny6ZtMqdhg8qHsHfIQUDmbhmXQvBz7cSmJfiUhHo1bgL8a
-         xK4hi3B4Pjqbo+uPXOHkPBdtBSjaa6J//HoZtY1OguVgxCbC4fzPtoex1HMzvyIT6X
-         +zksEbCtiLjJQ==
-Message-ID: <a6fa8050-1860-fffb-e7eb-6603d2e0eec4@denx.de>
-Date:   Mon, 25 Apr 2022 21:35:13 +0200
+        Mon, 25 Apr 2022 15:40:48 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A8B111153
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 12:37:43 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1650915462;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kmfq8fzVoEHC3SLS8iOyzMnfjBRDrka13gMWgVL1LSo=;
+        b=XHzJHtJAhv5AM/TDaBJdYPi+iUnnHuIlPazyyRW5+P1oAN/MIgmHiVO9Vy/b2yK43im1o3
+        3w0/mq/K3uvDuVs2pIkUWkgA1puDPY1xDejfLrgZy73KVOvgrF3YyDstlp+b0S/aYRi7VI
+        4vH3MFFG7hKP05o2fwwM5NMXRS5yVEOGNgI/aIteuNwsI0Z7xLGATgf106+Y72E9YbqMs+
+        RmgUPcrCn0p2vF53qg3+ZjsLRS1SN1SwFaI13x+/bvF4FMU6wbcyPl6tiI2FWiD46WTYQv
+        3OQ6r/58Wt3lSlrDOT0y0sJEbxGY/BHhjvjkfUMj0gEtTIsTMjy5Y5Wzm+Q5Bg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1650915462;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kmfq8fzVoEHC3SLS8iOyzMnfjBRDrka13gMWgVL1LSo=;
+        b=lh5hgOI59S4pn6X/KYSmqpxbOYHkPq0C7iK5XCXqJ6CuvBZm07XAQzRDWVxwVq4UHf0FBa
+        nLrieppdwqWn0eCg==
+To:     Johannes Berg <johannes@sipsolutions.net>,
+        Mukesh Ojha <quic_mojha@quicinc.com>,
+        linux-kernel@vger.kernel.org
+Cc:     sboyd@kernel.org, rafael@kernel.org, gregkh@linuxfoundation.org,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH v2 ] devcoredump : Serialize devcd_del work
+In-Reply-To: <8186de033c87f0cdec296ae272a72c5b9a2880a3.camel@sipsolutions.net>
+References: <87levt14kn.ffs@tglx>
+ <8186de033c87f0cdec296ae272a72c5b9a2880a3.camel@sipsolutions.net>
+Date:   Mon, 25 Apr 2022 21:37:41 +0200
+Message-ID: <878rrt0xa2.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 2/8] dt-bindings: clock: stm32mp1: describes clocks if
- "st,stm32mp1-rcc-secure"
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>, arnd@arndb.de,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>, soc@kernel.org,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-kernel@vger.kernel.org,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>, etienne.carriere@st.com
-References: <20220422150952.20587-1-alexandre.torgue@foss.st.com>
- <20220422150952.20587-3-alexandre.torgue@foss.st.com>
- <dd48a7b5-ce08-5fb2-8236-8802ac91d827@denx.de>
- <YmbyUc5uTXoTD/nt@robh.at.kernel.org>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <YmbyUc5uTXoTD/nt@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.5 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/25/22 21:11, Rob Herring wrote:
-> On Fri, Apr 22, 2022 at 06:31:25PM +0200, Marek Vasut wrote:
->> On 4/22/22 17:09, Alexandre Torgue wrote:
->>> In case of "st,stm32mp1-rcc-secure" (stm32mp1 clock driver with RCC
->>> security support hardened), "clocks" and "clock-names" describe oscillators
->>> and are required.
->>>
->>> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
->>>
->>> diff --git a/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml b/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
->>> index 7a251264582d..bb0e0b92e907 100644
->>> --- a/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
->>> +++ b/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
->>> @@ -58,14 +58,8 @@ properties:
->>>              - st,stm32mp1-rcc-secure
->>>              - st,stm32mp1-rcc
->>>          - const: syscon
->>> -
->>> -  clocks:
->>> -    description:
->>> -      Specifies the external RX clock for ethernet MAC.
->>> -    maxItems: 1
->>> -
->>> -  clock-names:
->>> -    const: ETH_RX_CLK/ETH_REF_CLK
->>> +  clocks: true
->>> +  clock-names: true
->>
->> It looks like this should rather be a property than a compatible string --
->> the compatible string is used by the OS to determine which hardware is
->> represented by a node, but here it is the same hardware in either case,
->> "st,stm32mp1-rcc" and "st,stm32mp1-rcc-secure", it is still the same
->> STM32MP1 RCC block, just configured differently by some bootloader stage.
->>
->> So why not just add one-liner property of the RCC block like ?
->> st,rcc-in-secure-configuration
-> 
-> Because using compatible was already decided.
+Cc+: Kees
 
-I see ... may I ask why compatible is OK in this case even though this 
-is encoding a policy (secure/non-secure configuration of the same clock 
-IP) into DT ?
+On Mon, Apr 25 2022 at 19:19, Johannes Berg wrote:
+> On Mon, 2022-04-25 at 19:00 +0200, Thomas Gleixner wrote:
+>> 
+>> Johannes, can you please explain whether this immediate flush in
+>> disabled_store() is really required and if so, why?
+>> 
+> I don't really know, as I remember that requirement (or maybe even code,
+> not sure) came from Kees, who needed the lockdown.
+>
+> Given the use case (ChromeOS?) I'm not sure I see a need to flush all of
+> them, since I guess a typical system would set the lockdown early in
+> boot and hopefully not have a crash-dump around already.
+>
+> That said, I don't think the diagram you made works - fn() during the
+> iteration is guaranteed to be invoked with a reference of its own, so
+> the put_device() there can't be the last reference, only as fn() returns
+> you'd put the last reference *there*, freeing it.
+
+Bah, you are right, it's magically protected by the klist ref, which
+prevents devcd from going away. Damned obvious.
+
+This really needs comments why this all can magically "work".
+
+Thanks,
+
+        tglx
+
+
+
+

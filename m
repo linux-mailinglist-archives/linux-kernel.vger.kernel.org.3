@@ -2,74 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AA8A50E4C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9487B50E4CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243024AbiDYPyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 11:54:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48506 "EHLO
+        id S243031AbiDYPzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 11:55:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241638AbiDYPyW (ORCPT
+        with ESMTP id S240915AbiDYPz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 11:54:22 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D653A5CB
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 08:51:18 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id q22so16319017iod.2
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 08:51:18 -0700 (PDT)
+        Mon, 25 Apr 2022 11:55:28 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C17D3A5CC
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 08:52:23 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id p12so21414582lfs.5
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 08:52:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=KRYSOrgaeJ2D4S/Wx7GywXi3KDyCDXqWNNYrYsjMpyU=;
-        b=a6Tudt/FF4aceLEyf67ZDqeMl/oD+rorEIh9wu4NaBa+KN9uq7+ipS69p9kzfR/otj
-         yThrGkkFG+OzNwE6bjcMjkTgPe6X65RjUzbfj5jsh/xq7SprTpJYlyJ/P+eZSSzGlA+R
-         3rEQpLJx9dIrpizhRymVDP1HswnMdVjv8WuJI=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=pZLWDFS8RgdNHPorQYwwXOayoTTe55X/Bje9P63wXrs=;
+        b=U4q32/rfGq9w+bSl++Voj3jErOzHopqHFSCG1ZCNHrA8sXi5P0MvRB9cLQeFTzLNlO
+         wy7A1A91Kn/3ZBD9EtSQ7dKkdAIVbQ3VlPScpWJPPib8NE8VvqjD2X+MRIt6/t6gjGQr
+         DC6QlO0VcQnkoZgItRZRAtIL6cMvP3N2YPOGsHMoaQHHEy8HuftwXSRkFszrid32rdkO
+         z7tRS0YevWvzb51xWq56bZuiHu6g4pmr5Any+GjRGaf2omKMKyiwhAxnF0Owe/BfZO8B
+         1Jy1ojfzHEZ49DNTdaGIByA9E11eO76Y/3GaWeEGSZy5IHjFHiR+z73q+8F7Ft0LBznV
+         VK6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=KRYSOrgaeJ2D4S/Wx7GywXi3KDyCDXqWNNYrYsjMpyU=;
-        b=0OGXdsmQvM/Lg6FzANs5p5Lv9ZTdoTogyiU48td+hHreDMLxUEk3Iss8Fw9w0ZMVyN
-         LWv+fhu8b4BCsJjzXIg29VDwmKrSFol+LotlucWSsY8cYqWLhycJAZlJtidu9l0s0fMs
-         RqHKZGj7C+XUQmWugH/YSRS0Q6zjHrhgLKg3G1lnZY9wX/6sRO/wqrc/3cmdw4tOJKfJ
-         Gra1ucYFYg355iYM3A4sooidUvR+tihn3s7YzZNPmV4G8cwHQAz2BoAVNo+cUukuaf9Q
-         rT3K8eR3Xey2EYA9TvQHYWoMa0WvjiKbDTxlP7VOsLqQzYXisl6UwcoN4FLFU26jSA/s
-         /SUQ==
-X-Gm-Message-State: AOAM5308zOHpZaAqHBOUbPofHKDu+PqKQUd1XKKz/Sxgto+xpnlZmMvf
-        eSiTbXNpg4RJqnsnR7rFxVSL0w==
-X-Google-Smtp-Source: ABdhPJyJq9cXy0E5jrK4OxRObAqzGlCYjTa42Sbs2Sfq9yDNZHOJz2BGh5L/eAtEME6MySvniXiqTw==
-X-Received: by 2002:a5d:9318:0:b0:649:a18:dab8 with SMTP id l24-20020a5d9318000000b006490a18dab8mr7829255ion.96.1650901877580;
-        Mon, 25 Apr 2022 08:51:17 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id j12-20020a6b310c000000b0065744ce0180sm7683070ioa.8.2022.04.25.08.51.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 08:51:17 -0700 (PDT)
-Subject: Re: [PATCH] selftests/resctrl: Fix null pointer dereference on open
- failed
-To:     Colin Ian King <colin.i.king@gmail.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>, Babu Moger <babu.moger@amd.com>,
-        Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>,
-        linux-kselftest@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220424211536.1373878-1-colin.i.king@gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <04a35a47-d83a-67a1-5ed4-ba314c6e1ecf@linuxfoundation.org>
-Date:   Mon, 25 Apr 2022 09:51:16 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=pZLWDFS8RgdNHPorQYwwXOayoTTe55X/Bje9P63wXrs=;
+        b=caJsbZEXRXZs8wkH36TBMX3mfgBKonzsdgTjmdct4flL3fmaCRXpCGIhqw5EezGMcY
+         qGKRDeWh8+fqwB69QfH0sKFgNNAQJyYhSVwfD+RRH2lrJqtY7R9NFtBx7uopvGntgsLQ
+         YA+0TO8QbMxXblmNpa6CXsEuWwR1ol1mf02DzOZccTbsnSnfyzQM5CAY8l1iCYbR3s0a
+         uz4mrIjdpAW/jA9KOWTJR4xvJ8stK/EKjbnvLHaive1XE4PR4YtfaBufO4m6r1gWIsWq
+         9kDV21HHKKjtt3vhGQxBs4/yu/VrPCY15Xu5wHgCaDSIJghNjOnbyd6IRhO/ziJ1mt3C
+         ga/Q==
+X-Gm-Message-State: AOAM531BiLnd7HvJ+Ntteei+HmN3Qt4hufKHHTxNkOjFDQSZf1qWHlVP
+        74xB2qVQ6we+is/pIlcXSR02s2bjP0G9jFrSlLgpTg==
+X-Google-Smtp-Source: ABdhPJw6D+cinT5TVs9fSgHUkfhth9VTb4/6bYC9e61q4d/XxB7DdILo1eyJ+M0NR49dzQJCyWVeMjfgQvoc6MTKYlQ=
+X-Received: by 2002:a19:f00f:0:b0:471:b497:8583 with SMTP id
+ p15-20020a19f00f000000b00471b4978583mr14125238lfc.502.1650901941658; Mon, 25
+ Apr 2022 08:52:21 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220424211536.1373878-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220423102421.16869-1-fmdefrancesco@gmail.com>
+ <20220423102421.16869-4-fmdefrancesco@gmail.com> <fad918d3-6923-5bec-7830-5cddf7a725d6@wanadoo.fr>
+ <2583087.X9hSmTKtgW@leap>
+In-Reply-To: <2583087.X9hSmTKtgW@leap>
+From:   Todd Kjos <tkjos@google.com>
+Date:   Mon, 25 Apr 2022 08:52:09 -0700
+Message-ID: <CAHRSSEwvPB27SJNtzq-5ZoMW=VDbVpv-2BmACT+hzQYUXJWO4A@mail.gmail.com>
+Subject: Re: [PATCH 3/3] binder: Use kmap_local_page() in binder_alloc_get_page()
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Todd Kjos <tkjos@android.com>, linux-kernel@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Ira Weiny <ira.weiny@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,39 +78,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/24/22 3:15 PM, Colin Ian King wrote:
-> Currently if opening /dev/null fails to open then file pointer fp
-> is null and further access to fp via fprintf will cause a null
-> pointer dereference. Fix this by returning a negative error value
-> when a null fp is detected.
-> 
+On Sun, Apr 24, 2022 at 2:40 AM Fabio M. De Francesco
+<fmdefrancesco@gmail.com> wrote:
+>
+> On sabato 23 aprile 2022 18:02:48 CEST Christophe JAILLET wrote:
+> > Hi,
+> >
+> > Le 23/04/2022 =C3=A0 12:24, Fabio M. De Francesco a =C3=A9crit :
+> > > The use of kmap_atomic() is being deprecated in favor of
+> kmap_local_page()
+> > > where it is feasible. Each call of kmap_atomic() in the kernel create=
+s
+> > > a non-preemptible section and disable pagefaults. This could be a
+> source
+> > > of unwanted latency, so it should be only used if it is absolutely
+> > > required, otherwise kmap_local_page() should be preferred.
+> > >
+> > > With kmap_local_page(), the mapping is per thread, CPU local and not
+> > > globally visible. Furthermore, the mapping can be acquired from any
+> context
+> > > (including interrupts).
+> > >
+> > > Therefore, use kmap_local_page() / kunmap_local() in place of
+> > > kmap_atomic() / kunmap_atomic().
+> > >
+> > > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> > > ---
+> > >   drivers/android/binder_alloc.c | 6 +++---
+> > >   1 file changed, 3 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/drivers/android/binder_alloc.c b/drivers/android/
+> binder_alloc.c
+> > > index 0875c463c002..058595cc7ff0 100644
+> > > --- a/drivers/android/binder_alloc.c
+> > > +++ b/drivers/android/binder_alloc.c
+> > > @@ -1250,17 +1250,17 @@ static int binder_alloc_do_buffer_copy(struct
+> binder_alloc *alloc,
+> > >             page =3D binder_alloc_get_page(alloc, buffer,
+> > >                                          buffer_offset,
+> &pgoff);
+> > >             size =3D min_t(size_t, bytes, PAGE_SIZE - pgoff);
+> > > -           base_ptr =3D kmap_atomic(page);
+> > > +           base_ptr =3D kmap_local_page(page);
+> > >             tmpptr =3D base_ptr + pgoff;
+> > >             if (to_buffer)
+> > >                     memcpy(tmpptr, ptr, size);
+> > >             else
+> > >                     memcpy(ptr, tmpptr, size);
+> >
+> > in the same spirit as patch 1/3, memcpy_to_page() and memcpy_from_page(=
+)
+> > looks good candidate to avoid code duplication.
+>
+> Hello Christophe, Todd,
+>
+> I had thought to use memcpy_to_page() and memcpy_from_page() (exactly as =
+I
+> did in other conversions I have been working on during the latest couple =
+of
+> weeks).
+>
+> However, I decided to avoid to use them for I should also have deleted th=
+e
+> comment which is before "kunmap_local(base_ptr);".
+>
+> I don't know how much Maintainers think it is necessary to make readers
+> notice that "kunmap_local() takes care of flushing the cache []" (exactly
+> as kunmap_atomic() does). Actually I'd delete that comment that looks
+> redundant and unnecessary to me, but I cannot know if Todd wants it to
+> remain there.
+>
+> @Todd: Can you please say what you think about this topic? Should I leave
+> the patch as-is or I should use memcpy_{to,from}_page() and delete that
+> comment?
 
-How did you find this problem and how can it be reproduced? Is there
-a case where test fails to open "/dev/null"?
+I'm fine with using memcpy_{to,from}_page() and removing the comment.
 
-> Fixes: a2561b12fe39 ("selftests/resctrl: Add built in benchmark")
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->   tools/testing/selftests/resctrl/fill_buf.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/resctrl/fill_buf.c b/tools/testing/selftests/resctrl/fill_buf.c
-> index 51e5cf22632f..56ccbeae0638 100644
-> --- a/tools/testing/selftests/resctrl/fill_buf.c
-> +++ b/tools/testing/selftests/resctrl/fill_buf.c
-> @@ -121,8 +121,10 @@ static int fill_cache_read(unsigned char *start_ptr, unsigned char *end_ptr,
->   
->   	/* Consume read result so that reading memory is not optimized out. */
->   	fp = fopen("/dev/null", "w");
-> -	if (!fp)
-> +	if (!fp) {
->   		perror("Unable to write to /dev/null");
-> +		return -1;
-> +	}
->   	fprintf(fp, "Sum: %d ", ret);
->   	fclose(fp);
->   
-> 
-
-thanks,
--- Shuah
+>
+> I won't send any v2 unless I have your confirmation.
+>
+> Thanks,
+>
+> Fabio
+>
+> >
+> > Not checked in details, but looks mostly the same.
+> >
+> > Just my 2c.
+> >
+> > CJ
+> >
+> > >             /*
+> > > -            * kunmap_atomic() takes care of flushing the cache
+> > > +            * kunmap_local() takes care of flushing the cache
+> > >              * if this device has VIVT cache arch
+> > >              */
+> > > -           kunmap_atomic(base_ptr);
+> > > +           kunmap_local(base_ptr);
+> > >             bytes -=3D size;
+> > >             pgoff =3D 0;
+> > >             ptr =3D ptr + size;
+> >
+> >
+>
+>
+>
+>

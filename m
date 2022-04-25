@@ -2,56 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3112950E989
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 21:33:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB5950E990
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 21:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244962AbiDYTgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 15:36:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
+        id S234918AbiDYTiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 15:38:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242465AbiDYTgA (ORCPT
+        with ESMTP id S237034AbiDYTiX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 15:36:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB5F11114B;
-        Mon, 25 Apr 2022 12:32:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 25 Apr 2022 15:38:23 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49754111151;
+        Mon, 25 Apr 2022 12:35:17 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 64A68B81A2B;
-        Mon, 25 Apr 2022 19:32:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06828C385A4;
-        Mon, 25 Apr 2022 19:32:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650915173;
-        bh=+Ldmjo2nOkdw5AcH6ZzgLglBh0fhTCqRCzAYPRBrJ2k=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=dn8bgOUj9DkwKFWUn6Rk8A0RTJrf8u4iAM9vb9E4FSVQEb57hveL2yyjljPehhFHP
-         pGdEZ9pEvyE23cnIrKcY5PxUmkoRdoRZvYMZBhrawVkDL8i0T32y1YinycXywWddh8
-         g47bGhux2twSn7n4+lk864+gxJiOizDVPU7fu+o8VtvC3XWwGViGJTsmgp26eWqOPi
-         AFgXl9hZP6Rg/nXCQx3G0A6UMVOMyqW66BceiGY3Aofm3Yj8lyYI72sKzfhrUwef8L
-         49kvuox9ef5ytd1V8d6ngt0pudXu1qbGFSm5c4DoKkmRIZzWgw/M62VF9BGtmSoPEB
-         oxExbf8gd61WA==
-Content-Type: text/plain; charset="utf-8"
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 5A17883B2F;
+        Mon, 25 Apr 2022 21:35:14 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1650915315;
+        bh=FsZzdOsTx0wA9ngioPmnOF9El9tJsq70UI32iV/2VXU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=sBsXJ88X5iuiGoySi565D7ly4Q7lCcbnwUGgDkCE5k1JCrpc9r+7wPCUXHUrPfw2k
+         BJSgL6Hyib7axRTZlS2GdN/S3GzTcPdc/idG62EKbWHb5HTiubwXqyEHrEvxFVc8G6
+         rdiv/jRW2oU06M9nR5JNODNYpG38Ga0Guwk/8GbfY68OPugdR9xabNgFOdvmQCnaFW
+         Ao9s7pKy5jpoG58+rVARny6ZtMqdhg8qHsHfIQUDmbhmXQvBz7cSmJfiUhHo1bgL8a
+         xK4hi3B4Pjqbo+uPXOHkPBdtBSjaa6J//HoZtY1OguVgxCbC4fzPtoex1HMzvyIT6X
+         +zksEbCtiLjJQ==
+Message-ID: <a6fa8050-1860-fffb-e7eb-6603d2e0eec4@denx.de>
+Date:   Mon, 25 Apr 2022 21:35:13 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220425133527.3723233-1-robh@kernel.org>
-References: <20220425133527.3723233-1-robh@kernel.org>
-Subject: Re: [PATCH] dt-bindings: clock: qcom,gcc-apq8064: Fix typo in compatible string
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh@kernel.org>, Taniya Das <tdas@codeaurora.org>
-Date:   Mon, 25 Apr 2022 12:32:51 -0700
-User-Agent: alot/0.10
-Message-Id: <20220425193253.06828C385A4@smtp.kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 2/8] dt-bindings: clock: stm32mp1: describes clocks if
+ "st,stm32mp1-rcc-secure"
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>, arnd@arndb.de,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>, soc@kernel.org,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-kernel@vger.kernel.org,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>, etienne.carriere@st.com
+References: <20220422150952.20587-1-alexandre.torgue@foss.st.com>
+ <20220422150952.20587-3-alexandre.torgue@foss.st.com>
+ <dd48a7b5-ce08-5fb2-8236-8802ac91d827@denx.de>
+ <YmbyUc5uTXoTD/nt@robh.at.kernel.org>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <YmbyUc5uTXoTD/nt@robh.at.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.5 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,31 +67,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Rob Herring (2022-04-25 06:35:27)
-> The compatible string should be 'qcom,gcc-apq8064', not
-> 'qcom,gcc-apq8084'. Found by enabling undocumented compatible checks.
->=20
-> Cc: Ansuel Smith <ansuelsmth@gmail.com>
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yam=
-l b/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
-> index 97936411b6b4..9910a3e033bb 100644
-> --- a/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
-> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
-> @@ -25,7 +25,7 @@ description: |
-> =20
->  properties:
->    compatible:
-> -    const: qcom,gcc-apq8084
-> +    const: qcom,gcc-apq8064
+On 4/25/22 21:11, Rob Herring wrote:
+> On Fri, Apr 22, 2022 at 06:31:25PM +0200, Marek Vasut wrote:
+>> On 4/22/22 17:09, Alexandre Torgue wrote:
+>>> In case of "st,stm32mp1-rcc-secure" (stm32mp1 clock driver with RCC
+>>> security support hardened), "clocks" and "clock-names" describe oscillators
+>>> and are required.
+>>>
+>>> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml b/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
+>>> index 7a251264582d..bb0e0b92e907 100644
+>>> --- a/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
+>>> +++ b/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
+>>> @@ -58,14 +58,8 @@ properties:
+>>>              - st,stm32mp1-rcc-secure
+>>>              - st,stm32mp1-rcc
+>>>          - const: syscon
+>>> -
+>>> -  clocks:
+>>> -    description:
+>>> -      Specifies the external RX clock for ethernet MAC.
+>>> -    maxItems: 1
+>>> -
+>>> -  clock-names:
+>>> -    const: ETH_RX_CLK/ETH_REF_CLK
+>>> +  clocks: true
+>>> +  clock-names: true
+>>
+>> It looks like this should rather be a property than a compatible string --
+>> the compatible string is used by the OS to determine which hardware is
+>> represented by a node, but here it is the same hardware in either case,
+>> "st,stm32mp1-rcc" and "st,stm32mp1-rcc-secure", it is still the same
+>> STM32MP1 RCC block, just configured differently by some bootloader stage.
+>>
+>> So why not just add one-liner property of the RCC block like ?
+>> st,rcc-in-secure-configuration
+> 
+> Because using compatible was already decided.
 
-This file has dt-bindings/clock/qcom,gcc-apq8084.h referenced. Should
-that be removed? It looks like commit a469bf89a009 ("dt-bindings: clock:
-simplify qcom,gcc-apq8064 Documentation") took the more than just the
-compatible for apq8084 from qcom,gcc-other.yaml and put it in here while
-removing gcc-apq8064. Probably the apq8084 part needs to be a copy of
-the apq8064 file with the single compatible changed.
+I see ... may I ask why compatible is OK in this case even though this 
+is encoding a policy (secure/non-secure configuration of the same clock 
+IP) into DT ?

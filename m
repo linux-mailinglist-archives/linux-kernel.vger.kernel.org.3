@@ -2,148 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E41350DAF4
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:17:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8095050DB14
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:25:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234221AbiDYITw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 04:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41324 "EHLO
+        id S234516AbiDYI0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 04:26:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234606AbiDYITY (ORCPT
+        with ESMTP id S231207AbiDYIZr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 04:19:24 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD9665D64D
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:16:19 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id p65so25598832ybp.9
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:16:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GvlUCJWkTnh5l62OzSLwcVwwIZnTQuRAwqmMP5qNiQI=;
-        b=BTqz5xSnKN3FngdlGeXXOw/BMiUg1U8P3+QOKjn1KlBx/FS3glaq3yUW8qh/y1pCxk
-         meH5JNw7HEhR8Z0BBtXzsRUSvCzYlgj3kr9yOROOkBrRODs0+nWpgh2ZcKbZpY4MeDc0
-         O1OahTH89kEcdRiCGzLXZ2K+W65id0DDp4mSxGpmGISmNb9Rj80z8SW1e9NZuSaQpTME
-         6Z/Viea+Gted9vqIzb742TMmqkKoOKhWM625d+FrpuaoHKa8DnSHlYs9TCfrWYLmmk8l
-         hSoGOuYhLnlxHzeYiwwEw5g2wslNMwZKj45QiaqWtLi1XyurS7Lh59oEHpPpsFcRJkBA
-         ym5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GvlUCJWkTnh5l62OzSLwcVwwIZnTQuRAwqmMP5qNiQI=;
-        b=s7+sjcD1jNEZU8S+FH2iYFM0/ezPYWCNA937VzAMFjieI+B6ZLAcsdB8za32YXxuhc
-         CtWR+4V6IQNm55MfpFM5Pk2bNBcgRLPnPFarA0fFzoxsWDKN3MXg6PUY1woRWQuOoEQt
-         Ay77nqeExcn7VQATJ/GXFTIUS6bXexsHv5vcl1/BFViZA7RKdOAvTebMJEFNYpUEgNng
-         sdPeRxojhW7wCVgaJgFvfJTFxDFHmgMWPKwlc4WHv14pajAI4Ka1bhsjzvRite0hkMsN
-         IhGvmxuvRvShiBTrL+s7pBKFkdP6dP3a3kVa589bjVPTKjpIiOLViJh/atJkDzzAX1q2
-         Lb4A==
-X-Gm-Message-State: AOAM5329Ha9F7N61bEHhTxnIRxwRuxE3zPOEgglbwc0qlamT953XaPf2
-        DbPeeEyFwot9pubmLsibAWbmj2MEMT0XPj+POn/71A==
-X-Google-Smtp-Source: ABdhPJzrV4xDmIK6JSyrgmTEvKn1apowsdLUQITQN1TkjlgTxrowrrlE6LP+mtgQMdcEMz4DFucxLnvd6qgt9KjyZg8=
-X-Received: by 2002:a25:9b89:0:b0:63d:20e4:13e7 with SMTP id
- v9-20020a259b89000000b0063d20e413e7mr15601411ybo.168.1650874578954; Mon, 25
- Apr 2022 01:16:18 -0700 (PDT)
+        Mon, 25 Apr 2022 04:25:47 -0400
+Received: from first.geanix.com (first.geanix.com [116.203.34.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B46E13DE0;
+        Mon, 25 Apr 2022 01:22:37 -0700 (PDT)
+Received: from Seans-MBP.hinnerup (unknown [185.17.218.86])
+        by first.geanix.com (Postfix) with ESMTPSA id A74DA1243266;
+        Mon, 25 Apr 2022 08:16:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
+        t=1650874561; bh=zpyIMFNzUI8cZ+GpAKZh9PezH2X29eaTTMBolZ0ekmo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=IyXwGtRcBN7z0f8/jUgpgxTNma7fzj8RFmPhtigWEMwB77RqfxEcgvXnzOqrubUXI
+         Yny419lcf2Qw1B7+RNwAuIQTx5v4Q/pt/N7gBnbcXX7wa4aWo5DxB7XDo1Eo5KMpJc
+         yimxrmc7SmRpigT1yh/d4bxBwGG2+XU3g/52W58ym5/Ih0MpN0k4YPHtN5lTyHwlcn
+         ffKIUzccfics3BXXQg+yiLy7CqFQbL1DEivhYyWw3C/R7SIB5v6E4Y+n9C6wmCmg6D
+         DkELNwxssXOrhSXSYG51Xggq0kzpFdq+NavBxtEL76mp+grpapGqsyc0Dz4lBO6yO/
+         6V0ESEr5ZvTEA==
+Date:   Mon, 25 Apr 2022 10:16:01 +0200
+From:   Sean Nyekjaer <sean@geanix.com>
+To:     Peter Rosin <peda@axentia.se>
+Cc:     linux-kernel@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/2] iio: dac: ti-dac5571: add support for ti,dac121c081
+Message-ID: <20220425081601.cs42eujnghzxnxgt@Seans-MBP.hinnerup>
+References: <b657ebf9-e2e3-6d3f-e7e9-c660e860e54c@axentia.se>
+ <6e63f598-ff54-6cb6-8c7d-83e9d6231af0@axentia.se>
 MIME-Version: 1.0
-References: <20220424105949.50016-1-huangshaobo6@huawei.com> <20220425022456.44300-1-huangshaobo6@huawei.com>
-In-Reply-To: <20220425022456.44300-1-huangshaobo6@huawei.com>
-From:   Marco Elver <elver@google.com>
-Date:   Mon, 25 Apr 2022 10:15:43 +0200
-Message-ID: <CANpmjNO=Qo_wnZ2CH=GqPzyUwQ3jGq_Z9FNQt+Sc_=1ZMV2PfQ@mail.gmail.com>
-Subject: Re: [PATCH v3] kfence: enable check kfence canary on panic via boot param
-To:     Shaobo Huang <huangshaobo6@huawei.com>
-Cc:     glider@google.com, dvyukov@google.com, akpm@linux-foundation.org,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, young.liuyang@huawei.com,
-        zengweilin@huawei.com, chenzefeng2@huawei.com,
-        nixiaoming@huawei.com, wangbing6@huawei.com,
-        wangfangpeng1@huawei.com, zhongjubin@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <6e63f598-ff54-6cb6-8c7d-83e9d6231af0@axentia.se>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 25 Apr 2022 at 04:25, 'Shaobo Huang' via kasan-dev
-<kasan-dev@googlegroups.com> wrote:
->
-> From: huangshaobo <huangshaobo6@huawei.com>
->
-> Out-of-bounds accesses that aren't caught by a guard page will result
-> in corruption of canary memory. In pathological cases, where an object
-> has certain alignment requirements, an out-of-bounds access might
-> never be caught by the guard page. Such corruptions, however, are only
-> detected on kfree() normally. If the bug causes the kernel to panic
-> before kfree(), KFENCE has no opportunity to report the issue. Such
-> corruptions may also indicate failing memory or other faults.
->
-> To provide some more information in such cases, add the option to
-> check canary bytes on panic. This might help narrow the search for the
-> panic cause; but, due to only having the allocation stack trace, such
-> reports are difficult to use to diagnose an issue alone. In most
-> cases, such reports are inactionable, and is therefore an opt-in
-> feature (disabled by default).
->
-> Suggested-by: chenzefeng <chenzefeng2@huawei.com>
-> Signed-off-by: huangshaobo <huangshaobo6@huawei.com>
-
-I missed one minor issue below (__read_mostly for param), but with
-that in place:
-
-Reviewed-by: Marco Elver <elver@google.com>
-
+On Mon, Apr 25, 2022 at 08:02:34AM +0200, Peter Rosin wrote:
+> It fits right in as a single 12-bit DAC.
+> 
+> Signed-off-by: Peter Rosin <peda@axentia.se>
+Reviewed-by: Sean Nyekjaer <sean@geanix.com>
 > ---
-> v3:
-> - use Marco's description replace the commit message
-> - keep these includes sorted alphabetically
-> - "in panic" replaced with "on panic" in title and comments
-> - Blank line between /* === ... */ and function.
-> v2:
-> - it is only detected in panic.
-> - it is disabled by default.
-> - can only be enabled via boot parameter.
-> - the code is moved to the specified partition.
->   https://lore.kernel.org/all/20220424105949.50016-1-huangshaobo6@huawei.com/
-> v1:
->   https://lore.kernel.org/all/20220420104927.59056-1-huangshaobo6@huawei.com/
-> Thanks again Marco for the suggestion.
-> ---
->  mm/kfence/core.c | 34 ++++++++++++++++++++++++++++++++++
->  1 file changed, 34 insertions(+)
->
-> diff --git a/mm/kfence/core.c b/mm/kfence/core.c
-> index 9b2b5f56f4ae..06232d51e021 100644
-> --- a/mm/kfence/core.c
-> +++ b/mm/kfence/core.c
-> @@ -21,6 +21,8 @@
->  #include <linux/log2.h>
->  #include <linux/memblock.h>
->  #include <linux/moduleparam.h>
-> +#include <linux/notifier.h>
-> +#include <linux/panic_notifier.h>
->  #include <linux/random.h>
->  #include <linux/rcupdate.h>
->  #include <linux/sched/clock.h>
-> @@ -99,6 +101,10 @@ module_param_named(skip_covered_thresh, kfence_skip_covered_thresh, ulong, 0644)
->  static bool kfence_deferrable __read_mostly = IS_ENABLED(CONFIG_KFENCE_DEFERRABLE);
->  module_param_named(deferrable, kfence_deferrable, bool, 0444);
->
-> +/* If true, check all canary bytes on panic. */
-> +static bool kfence_check_on_panic;
-
-This should be __read_mostly, like the other params.
-
-Sorry for noticing this late.
-
-> +module_param_named(check_on_panic, kfence_check_on_panic, bool, 0444);
-> +
-
-Thanks,
--- Marco
+>  drivers/iio/dac/Kconfig      | 2 +-
+>  drivers/iio/dac/ti-dac5571.c | 3 +++
+>  2 files changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iio/dac/Kconfig b/drivers/iio/dac/Kconfig
+> index c0bf0d84197f..d6248b188645 100644
+> --- a/drivers/iio/dac/Kconfig
+> +++ b/drivers/iio/dac/Kconfig
+> @@ -417,7 +417,7 @@ config TI_DAC5571
+>  	help
+>  	  Driver for the Texas Instruments
+>  	  DAC5571, DAC6571, DAC7571, DAC5574, DAC6574, DAC7574, DAC5573,
+> -	  DAC6573, DAC7573, DAC8571, DAC8574.
+> +	  DAC6573, DAC7573, DAC8571, DAC8574, DAC121C081.
+>  	  If compiled as a module, it will be called ti-dac5571.
+> diff --git a/drivers/iio/dac/ti-dac5571.c b/drivers/iio/dac/ti-dac5571.c
+> index 4a3b8d875518..ce542bd8b69e 100644
+> --- a/drivers/iio/dac/ti-dac5571.c
+> +++ b/drivers/iio/dac/ti-dac5571.c
+> @@ -13,6 +13,7 @@
+>   * https://www.ti.com/lit/ds/symlink/dac5573.pdf
+>   * https://www.ti.com/lit/ds/symlink/dac6573.pdf
+>   * https://www.ti.com/lit/ds/symlink/dac7573.pdf
+> + * https://www.ti.com/lit/ds/symlink/dac121c081.pdf
+>   */
+>  #include <linux/iio/iio.h>
+> @@ -394,6 +395,7 @@ static const struct of_device_id dac5571_of_id[] = {
+>  	{.compatible = "ti,dac5573"},
+>  	{.compatible = "ti,dac6573"},
+>  	{.compatible = "ti,dac7573"},
+> +	{.compatible = "ti,dac121c081"},
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(of, dac5571_of_id);
+> @@ -408,6 +410,7 @@ static const struct i2c_device_id dac5571_id[] = {
+>  	{"dac5573", quad_8bit},
+>  	{"dac6573", quad_10bit},
+>  	{"dac7573", quad_12bit},
+> +	{"dac121c081", single_12bit},
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(i2c, dac5571_id);
+> -- 
+> 2.20.1
+> 

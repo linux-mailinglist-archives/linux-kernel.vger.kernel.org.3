@@ -2,177 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2BA450E3CC
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 074F450E3CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242622AbiDYO65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 10:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60584 "EHLO
+        id S238844AbiDYO6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 10:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237989AbiDYO6q (ORCPT
+        with ESMTP id S229941AbiDYO6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 10:58:46 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C151F37A2D
+        Mon, 25 Apr 2022 10:58:44 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D5B63F4
         for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 07:55:39 -0700 (PDT)
-Received: from mail-wr1-f43.google.com ([209.85.221.43]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MwQKr-1nzhfA4937-00sJlc for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022
- 16:55:38 +0200
-Received: by mail-wr1-f43.google.com with SMTP id t6so17816901wra.4
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 07:55:37 -0700 (PDT)
-X-Gm-Message-State: AOAM531jlykXCI2DhIgUPBTmaZjlj85zzciECToGvbPyIRQeGV2B4VKZ
-        WK6qxjicDQH9i6jdITYotK7Lzxgxv++9X3yKNOQ=
-X-Google-Smtp-Source: ABdhPJxSd8ZyeTGZOPj78oBvP1GNKfn3p7PKESBi6v+jirKzSqx8kjeZVILhIHWlMlqwIEzjVbMrltfWr1Bdo16OtJM=
-X-Received: by 2002:a5d:64a3:0:b0:20a:7931:5b84 with SMTP id
- m3-20020a5d64a3000000b0020a79315b84mr15049037wrp.407.1650898537609; Mon, 25
- Apr 2022 07:55:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <YmX7z+BirkA3VAfW@zx2c4.com> <CAK8P3a3Af5FBx-OnedHPrf28ikX4DZK1d0ERLsV+oKyBHyCXiw@mail.gmail.com>
- <YmaJUvg6hmekvkXE@zx2c4.com>
-In-Reply-To: <YmaJUvg6hmekvkXE@zx2c4.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 25 Apr 2022 16:55:20 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3FZeXzBJKyTEvmvw_DaHGQFf5rQKs=_wBW=GZ2+=rJ_Q@mail.gmail.com>
-Message-ID: <CAK8P3a3FZeXzBJKyTEvmvw_DaHGQFf5rQKs=_wBW=GZ2+=rJ_Q@mail.gmail.com>
-Subject: Re: odd endianness toolchains for crosstool
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:CThKNepJfnCLrWKWwSbgW6DUwvwCzaM1rGdoR0hVZiED2gwiEbJ
- UXUuLyxSRW0SEv15GCSprkO7dkQuHyMnHATL+DRqpNLrOaCO6Y4rC+DXns/kjx6nQhk8AyR
- vt61Qz4NldyFrXTG3IOH/y5Z2k4lDNoToJ6SKM1s4tjcYftvxqmVFqTxVQPk1wP255k+Pio
- gOVPlsjWy/IakSZG5ZKJw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:PiutwLZZgXI=:YDCFMKB/RO+hmpTDlYPeoS
- XCf/cj0cDveQAwDkXhpMIhxfee4OmPUwQnk4WhjO+G70MNookU60dk6RtfpCW++P6o+E5JrAG
- vsQqB+uYV+kE/+OpvNlGavLteH/rU0IsNZKkzon3HnpHZAV7aEVA1tJSSI0qiDUyuyRHHDIch
- Orehy3J4tD9/c2HY4ZCFZASaVWE9ypDpZ5UNpw/MSQtBOrBbuCe7u+2+KfnsLP6yaZVKKVIkQ
- 9RW0YUh6QTQKzb9P4dm71hAWtdix307jqBD8Vp17L2wRB/aLafe5qisFAZ8J6tEouZ0RZ67Xw
- DL+tOBz8YNG0gc43NZLwW6DIY539D/eUBbLpjeIm37ZMyc0B0Iggx8NTAc8rcknkMUv6nXXxF
- nWzAXd+sxa3eDqxkXyyTunr+W0yxfZR3bCffwx2ipkSy3XU1vvLjIyaMbdiYjY/jeyh/jL2N9
- CC5KUKVf3MaB366F8s3SgnXGS3OtHKgyE7itfwmAGLtIQ7ucLerrVljLQ3Au36MNlkHU/sXlA
- KN+OvIPB3F5psF2/y9wLUcpKDbaAk3qG/nl01t+0CdPCvWAKOu21ePPomiaD1SB8FjQmAEp4p
- V0ZshMHxGmreCp4KDDZ6SOKFguqOsg897hKgW+hbY5FMv6qA8JFUBjrNSBpZlesO1H5OhriTP
- g7lBB/i/JxZX1qQLW+0hFvpWJyRuCKDkXES+OuRDQdQqwCnUPNFHTy8HYTjmjUsTYfBtN/yBP
- llcADMWzZfBY7Xprl+QrOPZRFsai94VZPj5Bzg==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by mail-pl1-x62a.google.com with SMTP id n18so27435355plg.5
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 07:55:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Irud/fjEDwtKGSTM/fX98kdcWDeez0fxLuYrA6kD/Io=;
+        b=pt1oE5D/nTEMphPF9Jesa4CreIWYUDt98zEimS+bPB2HqmM+w2iDjYbS9+nfLigt4z
+         Vby4H9KCMY1L1V0YNt90Wj9kdCPeN/6pnsOlcQekyw2kux35RQTNFQf3e/QQ/3IPgioc
+         ZRzAv4EVKFXtBUbjUpIacROemdBTgIhH6vtMNSmCls8cCiWmWCBteg5UMr/5xrhsLTCd
+         LQNPjGjHkMB2xaHd90FwRvVwGaw4ItSQ/oF5hWV9EtLiOYjwnZRuHVl7mOopuZp/e9DU
+         sseYqtArUasGUT9jv0nvF8yuuZTF9aGTDzz5vqjJOuyr8/4KRp8Tz+Bh60JMam7zmk1l
+         9wgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=Irud/fjEDwtKGSTM/fX98kdcWDeez0fxLuYrA6kD/Io=;
+        b=m4RyPYAoUCqY9W9vqSzuox8F61CKIDi/NNGLgC0GSYzxwDlHsXfR/vJx6/zH74BVYg
+         /bv0MqoXj9DaswumRdSgH4+hfJ78JCRehCFrFwNwGEfb8kTwptupqg+WCF4X6dQwHDMM
+         zhfOjzzR7MQmZl6nHa/nJetMPN5o5Qmqu1aYycVCERurvNWtR6l0NikYsDuC/VkmOGXE
+         S6lP5OUHVKPHf5phE4zl9bS6iNR1B9KhWOX0zh58DRX/xck8b8SFBDdPtFBC5oyGM5Us
+         Ha0e5V9s8EYfac6IGfF3DJKGBtDjm49P5ZUkPxG64PGl8vRVf2yPKgiIgH1KGHlzsCk1
+         hKWA==
+X-Gm-Message-State: AOAM531hUk6THuwn8ETAzXIcu7B2zXwe8a9ZUT+PazXB2rR/b4i5w42B
+        G/unDMZuyu4WlVKLE6N5SKLzY6f+DJW6tQ==
+X-Google-Smtp-Source: ABdhPJxti0iMF/R5gN1kkmkWl7/kAH49jyNvreI6n/Axh2Unj9WVGxFWcE12SV6PDI9nAfgOOd2jxA==
+X-Received: by 2002:a17:90a:a385:b0:1cb:bfa8:ae01 with SMTP id x5-20020a17090aa38500b001cbbfa8ae01mr20974567pjp.116.1650898538174;
+        Mon, 25 Apr 2022 07:55:38 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id w137-20020a62828f000000b0050d2f9c3409sm6325133pfd.199.2022.04.25.07.55.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 07:55:37 -0700 (PDT)
+Date:   Mon, 25 Apr 2022 07:55:37 -0700 (PDT)
+X-Google-Original-Date: Mon, 25 Apr 2022 07:55:33 PDT (-0700)
+Subject:     Re: [PATCH v6 08/17] riscv: use fallback for random_get_entropy() instead of zero
+In-Reply-To: <20220423212623.1957011-9-Jason@zx2c4.com>
+CC:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        tglx@linutronix.de, Arnd Bergmann <arnd@arndb.de>, Jason@zx2c4.com,
+        Paul Walmsley <paul.walmsley@sifive.com>
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     Jason@zx2c4.com
+Message-ID: <mhng-57e67f41-bbc5-437c-b4cd-c6f5f9924a67@palmer-mbp2014>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 1:43 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> On Mon, Apr 25, 2022 at 10:46:45AM +0200, Arnd Bergmann wrote:
-> > The situation on my end is that I'm planning to migrate my main workstation
-> > (which I'm building the compilers on) to an arm64 machine soon, and
-> > will then need to set it all up again. I don't really want to change much before
-> > then to avoid changing things twice.
+On Sat, 23 Apr 2022 14:26:14 PDT (-0700), Jason@zx2c4.com wrote:
+> In the event that random_get_entropy() can't access a cycle counter or
+> similar, falling back to returning 0 is really not the best we can do.
+> Instead, at least calling random_get_entropy_fallback() would be
+> preferable, because that always needs to return _something_, even
+> falling back to jiffies eventually. It's not as though
+> random_get_entropy_fallback() is super high precision or guaranteed to
+> be entropic, but basically anything that's not zero all the time is
+> better than returning zero all the time.
+
+Makes sense: we had an architecturally-mandated timer at the time, but 
+we don't any more.  Every real implementation has a timer right now, but 
+that may change in the future so it doesn't hurt to fix it before it's 
+broken.
+
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+>  arch/riscv/include/asm/timex.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> Ahh, okay, so probably crosstool won't be viable for me for a while. Are
-> your existing scripts fairly reproducible and easy? I suppose I could
-> just build my own if I can't find another project supplying light
-> compilers.
+> diff --git a/arch/riscv/include/asm/timex.h b/arch/riscv/include/asm/timex.h
+> index 507cae273bc6..d6a7428f6248 100644
+> --- a/arch/riscv/include/asm/timex.h
+> +++ b/arch/riscv/include/asm/timex.h
+> @@ -41,7 +41,7 @@ static inline u32 get_cycles_hi(void)
+>  static inline unsigned long random_get_entropy(void)
+>  {
+>  	if (unlikely(clint_time_val == NULL))
+> -		return 0;
+> +		return random_get_entropy_fallback();
+>  	return get_cycles();
+>  }
+>  #define random_get_entropy()	random_get_entropy()
 
-The scripts are fairly solid, but the original git tree is no longer available
-and my version has a couple of local changes with a bit of a dirty history
-from adding support for cross-compiling the compilers themselves to
-do the canadian-cross arm64 and ppc64le hosted ones.
+Fine for me if this goes in via some other tree, but also happy to take 
+it via the RISC-V tree if you'd like.  IMO we could just call this a 
+fix, maybe
 
-There is another fork of the same tree on
-https://github.com/nathanchance/buildall
+Fixes: aa9887608e77 ("RISC-V: Check clint_time_val before use")
 
-The main issue with building distributable binaries is to actually build
-them on an older rootfs to avoid linking against a newer glibc, and
-to ensure the dependencies for gcc are statically linked. Without that,
-the output is too distro specific.
+(but that just brought this back, so there's likely older kernels broken 
+too).  Shouldn't be breaking any real hardware, though, so no rush on my 
+end.
 
-> > I've added Nick to Cc, as he's experimenting with a clang based toolchain
-> > that we can put on kernel.org along with the gcc toolchains, and that
-> > would probably include a musl based sysroot roughly the same set of
-> > architectures that you are testing on already. Possibly we could reuse the
-> > same user space between clang and gcc.
->
-> I personally have no use for compilers with user spaces. My test harness
-> builds musl as part of it. It's really the quickest part of the entire
-> harness to build. I also probably won't switch things over to clang;
-> Google has the resources to do that themselves. Basically all I need is
-> the boring nolibc compilers for a few extra platforms, and for the ppc
-> one to build with the mentioned flags.
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-I suppose the only thing you are missing is libgcc (or libcompiler-rt)
-for those platforms. I had a closer look into what is or can be included
-here, and I see that my builds include multiple versions on some of
-the  architectures, but not on others:
-
-aarch64-linux/lib/gcc/aarch64-linux/11.1.0/libgcc.a
-alpha-linux/lib/gcc/alpha-linux/11.1.0/libgcc.a
-arc-linux/lib/gcc/arc-linux/11.1.0/libgcc.a
-arc-linux/lib/gcc/arc-linux/11.1.0/hs/libgcc.a
-arc-linux/lib/gcc/arc-linux/11.1.0/archs/libgcc.a
-arc-linux/lib/gcc/arc-linux/11.1.0/hs38/libgcc.a
-arc-linux/lib/gcc/arc-linux/11.1.0/hs38_linux/libgcc.a
-arc-linux/lib/gcc/arc-linux/11.1.0/arc700/libgcc.a
-arc-linux/lib/gcc/arc-linux/11.1.0/nps400/libgcc.a
-arm-linux-gnueabi/lib/gcc/arm-linux-gnueabi/11.1.0/libgcc.a
-...
-powerpc-linux/lib/gcc/powerpc-linux/11.1.0/libgcc.a
-powerpc-linux/lib/gcc/powerpc-linux/11.1.0/64/libgcc.a
-powerpc-linux/lib/gcc/powerpc-linux/11.1.0/64/le/libgcc.a
-powerpc-linux/lib/gcc/powerpc-linux/11.1.0/le/libgcc.a
-powerpc-linux/lib/gcc/powerpc-linux/11.1.0/32/le/libgcc.a
-powerpc64-linux/lib/gcc/powerpc64-linux/11.1.0/libgcc.a
-powerpc64-linux/lib/gcc/powerpc64-linux/11.1.0/32/libgcc.a
-powerpc64-linux/lib/gcc/powerpc64-linux/11.1.0/32/le/libgcc.a
-powerpc64-linux/lib/gcc/powerpc64-linux/11.1.0/le/libgcc.a
-powerpc64-linux/lib/gcc/powerpc64-linux/11.1.0/64/le/libgcc.a
-mips-linux/lib/gcc/mips-linux/11.1.0/libgcc.a
-mips-linux/lib/gcc/mips-linux/11.1.0/n32/libgcc.a
-mips-linux/lib/gcc/mips-linux/11.1.0/64/libgcc.a
-mips64-linux/lib/gcc/mips64-linux/11.1.0/libgcc.a
-mips64-linux/lib/gcc/mips64-linux/11.1.0/32/libgcc.a
-mips64-linux/lib/gcc/mips64-linux/11.1.0/64/libgcc.a
-
-So on powerpc, there are already both big-endian and
-little-endian binaries, but arm and mips only have one of the
-two. I asked our local compiler experts, and they suggested
-that one can add further multiarch-configs like the one
-in gcc/config/arm/t-aprofile to allow building for a different
-subset of the hundreds of possible configurations.
-
-the t-aprofile builds libgcc for a couple of combinations of
-cpu architecture level and FPU ABIs, but they are all the
-same endianess. gcc/config/rs6000/t-linux64lebe is the
-corresponding file for powerpc that enables all combinations
-of 32/64 and be/le.
-
-> > I've also looked at other projects that do qemu based testing, everyone
-> > seems to be missing one or two architectures out of a common set,
-> > https://tinyurl.com/linux-architectures is where I keep my data.
->
-> If the compilers are there, and they can build a working musl, and QEMU
-> will boot it, and I can work out a minimal kernel .config that doesn't
-> take a long time to compile, then it'll get included in the CI. So in
-> theory, I should be able to expand the portfolio of architectures I'm
-> using.
-
-Adding riscv and s390 should indeed be fairly simple to add,
-and you can probably just take a look at what ktest does for them.
-
-You have a good point about the minimal kernel config, which makes
-sense for testing a single thing, but of course others generally want
-to test a 'defconfig' build that is closer to what users would actually
-run.
-
-> > building and running the most common subset of these in one place
-> > in the kernel tree where at least wireguard, kunit and tuxrun can
-> > share the setup for qemu.
->
-> I have little interest in that kind of abstraction unfortunately.
-
-Ok, fair enough.
-
-      Arnd
+Thanks!

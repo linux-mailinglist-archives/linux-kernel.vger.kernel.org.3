@@ -2,160 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6552D50E86F
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:41:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC7C350E871
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244482AbiDYSoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 14:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53948 "EHLO
+        id S238070AbiDYSoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 14:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233045AbiDYSoT (ORCPT
+        with ESMTP id S244490AbiDYSoc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 14:44:19 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147729FEB
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:41:15 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 17so18996547lji.1
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:41:14 -0700 (PDT)
+        Mon, 25 Apr 2022 14:44:32 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F97A23149
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:41:26 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id dk23so8038558ejb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:41:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=29vIgpHiMOT/QpCjFKyRzAyZ0bZDOTDhP1A0AtWid/Y=;
-        b=CE4MeQJtaQKXHSTUH4lVceaOQWzd2LYTzFdGFke7eiMWUtnF1/YUhzARcQKJwO890h
-         0JjYjVXo3IA6jOL4JeXtr4RoRAOB3Aenb8yynDIgUrO8QWYAZNLQjdewaz+3b5yU2b9Y
-         l91UoPZh+RklZV+8rZCR1jasqZHfzFGfJi0AbNdD1+vauDtcUtAoM+BaIOIWx8/9pvFw
-         d1jbu++lX1kcc3xpVmwu0sLHNN3xNUkpGsnQYzyEvbIWIh/YAlUyslhewhBx+Qjuuwvv
-         1s1Bix8HgORmWctPGndPjVg13XJhCDGuaLQAU0u7IaaecEJDcAjV+q7/z99/Ur9u236O
-         h+Jg==
+        bh=Mya3nkIwUh+TIu4djYFcQK6BbUW1zaOYt4akasWqvFg=;
+        b=B9KKXsLTpzuVV8sBlKnNNvWObeafflqmJvR/smeZgdhpHe7uFZ496oEr1jZfzXMymA
+         pVVpZlQzDspkhMyYyU2BEn3cLLzy+4K1AJIP8KNuHHK2F4+OXzHT0Lx4MAnyADwSC2fz
+         C3xXlkkJaCxNbA2z0qwrIsYi0VRxXQVfQNb4GKBP2wWkiow6GzhhujMirqo82yf2GMd/
+         sS9eWHmKe84vW/wgDaguhMBHbRRg6rKcnOyzyk/LMSi+TOaBqwwqq8KAdCli/3p2a2Tp
+         LEvpc51OZYXOjxQlQEjLMcq9Lpjbv+8TlCYiyAzWWCKDPD+dZI8GzuCtdxJwpd8joV6j
+         Wcaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=29vIgpHiMOT/QpCjFKyRzAyZ0bZDOTDhP1A0AtWid/Y=;
-        b=5bE0PvW3WyK06NOVnr9rL0sGMhqtJ8dJHeTn2O3Ths9CPjQVPscQTGuKxtZXLsoy4J
-         viypIc/W052nKemejJbiPurBARWMOaW1c+f9+YHx+hBUXfs13jsCRoKwMow2curtIvbC
-         0smIE7hMuYfZIvXlQMmoIK7+6yySHsaYNrcO1cyuL9XIvNIAghq3XZR77+AdO1aKz7y2
-         fKLd6jbvN1d3qegiDbcNj7ShhYwYmnXunC2M9TfP25KErawW4PrZJVsNELcT5jLVHZsv
-         cjj2vzJBx3Lu6r/taINOgC20n7PD87P4IgCwmrchVGLK764cGIQDnlQWHRCC9vvi+6yR
-         0rlA==
-X-Gm-Message-State: AOAM530KtBlYtACCO+xg1ieaLz8rl65WtnpUlpBAwobR0nNMmV2fie7m
-        WYWaoEEwBE0w02ho8BPBdacJJxZe0KeXortuXdWRdqTVSCNhKA==
-X-Google-Smtp-Source: ABdhPJzAiO3F27TOYkUMvHm6r/ME45xfOreTX/BpgTFPczggJjakzPgxXMFJACNi9mnfx58/N95zvPR4TiZ3z2TVf2M=
-X-Received: by 2002:a05:651c:1507:b0:24e:e69e:9b6e with SMTP id
- e7-20020a05651c150700b0024ee69e9b6emr11769543ljf.468.1650912073156; Mon, 25
- Apr 2022 11:41:13 -0700 (PDT)
+        bh=Mya3nkIwUh+TIu4djYFcQK6BbUW1zaOYt4akasWqvFg=;
+        b=LUtQDQ4vHBpH2azmyz2CqvJtNGOB6PzKpO99scd7ve55BzWfEq3RijVB77V6aJu8G0
+         /p05UyPcAsKq037jQbAsVJExPn0OzjjDgbICP+M9kryNPYCWnhC5kBpr4VyE3gxEJhq9
+         oBDTuNJofj7GRW2uSo9Qoo1/WKG7KMIEtYzJaX3vVsGRf4YMFGtSlf9uUPrqr8PCrlwN
+         2pzGIkpN/AY5u24pyW14M+NI6H/BLsFGTl6P6BWOLgX+8pPiOoJvNi+yt0Bnd5l2HZuc
+         7tlxQ10t/bWsun/rQIjpBeOAQqmIDbeSYBz9KHOz13XsEiAtYrcnB/jiTYjBDf/cCqTG
+         3laQ==
+X-Gm-Message-State: AOAM530nYl5GLSeTl5VYxiwVWiE8E3pC5DIR5jyZYdUjmYYgFsiSJi0y
+        fgPJ1LOPhw0lCeifaIaXwERrj8HJtpDCOUNO48qqkA==
+X-Google-Smtp-Source: ABdhPJxxi69r7JPs9NcrUSZVx/mya0DVWjV7GHPAed3DI2n08j+lZIdXYcnh6dMilSxNEph0K4PXbEgKFunxQP6p+cs=
+X-Received: by 2002:a17:907:6d94:b0:6e8:c309:9923 with SMTP id
+ sb20-20020a1709076d9400b006e8c3099923mr17335243ejc.101.1650912084719; Mon, 25
+ Apr 2022 11:41:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220424190811.1678416-1-masahiroy@kernel.org> <20220424190811.1678416-10-masahiroy@kernel.org>
-In-Reply-To: <20220424190811.1678416-10-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 25 Apr 2022 11:41:01 -0700
-Message-ID: <CAKwvOdkac4Bk+u=v2dwSD=X0kZo2y4UxRUNHJdYiTLTPSp7=kQ@mail.gmail.com>
-Subject: Re: [PATCH 09/27] modpost: add sym_add_unresolved() helper
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>
+References: <20220422131452.20757-1-mario.limonciello@amd.com>
+In-Reply-To: <20220422131452.20757-1-mario.limonciello@amd.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 25 Apr 2022 20:41:14 +0200
+Message-ID: <CAMRc=Mf7FVN4QeAEdap_JzKmTy6i0A=BbcCZtCCQhzocg4PDfg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/1] Fix regression in 5.18 for GPIO
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
+        Gong Richard <Richard.Gong@amd.com>,
+        regressions@lists.linux.dev,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        stable <stable@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 24, 2022 at 12:09 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+On Fri, Apr 22, 2022 at 3:15 PM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
 >
-> Add a small helper, sym_add_unresolved() to ease the further
-> refactoring.
+> Linus,
 >
-> Remove the 'weak' argument from alloc_symbol() because it is sensible
-> only for unresolved symbols.
+> This patch is being sent directly to you because there has been
+> a regression in 5.18 that I identified and sent a fix up that has been
+> reviewed/tested/acked for nearly a week but the current subsystem
+> maintainer (Bartosz) hasn't picked it up to send to you.
+>
 
-I did not yet read the rest of the series to see how else your newly
-added helper `sym_add_unresolved` is used.
-Perhaps the callers of `alloc_symbol` should just set the symbol's
-weak member to true if needed, and alloc_symbol can default to setting
-it false (as the memset currently does)?
+Hi Mario!
 
-Then, you don't need the helper, and just `handle_symbol` needs the
-assignment when `ELF_ST_BIND(sym->st_info) == STB_WEAK`?
+I don't have any previous submission in my inbox. Are you sure to have
+used my current address (brgl@bgdev.pl)?
 
+Bart
+
+> It's a severe problem; anyone who hits it:
+> 1) Power button doesn't work anymore
+> 2) Can't resume their laptop from S3 or s2idle
 >
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
+> Because the original patch was cc stable@, it landed in stable releases
+> and has been breaking people left and right as distros track the stable
+> channels.  The patch is well tested. Would you please consider to pick
+> this up directly to fix that regression?
 >
->  scripts/mod/modpost.c | 19 +++++++++++--------
->  1 file changed, 11 insertions(+), 8 deletions(-)
+> Thanks,
 >
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 86416e4af626..1c7d2831e89d 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -230,14 +230,12 @@ static inline unsigned int tdb_hash(const char *name)
->   * Allocate a new symbols for use in the hash of exported symbols or
->   * the list of unresolved symbols per module
->   **/
-> -static struct symbol *alloc_symbol(const char *name, bool weak,
-> -                                  struct symbol *next)
-> +static struct symbol *alloc_symbol(const char *name, struct symbol *next)
->  {
->         struct symbol *s = NOFAIL(malloc(sizeof(*s) + strlen(name) + 1));
+> Mario Limonciello (1):
+>   gpio: Request interrupts after IRQ is initialized
 >
->         memset(s, 0, sizeof(*s));
->         strcpy(s->name, name);
-> -       s->weak = weak;
->         s->next = next;
->         s->is_static = true;
->         return s;
-> @@ -250,11 +248,17 @@ static struct symbol *new_symbol(const char *name, struct module *module,
->         unsigned int hash;
+>  drivers/gpio/gpiolib.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
->         hash = tdb_hash(name) % SYMBOL_HASH_SIZE;
-> -       symbolhash[hash] = alloc_symbol(name, false, symbolhash[hash]);
-> +       symbolhash[hash] = alloc_symbol(name, symbolhash[hash]);
->
->         return symbolhash[hash];
->  }
->
-> +static void sym_add_unresolved(const char *name, struct module *mod, bool weak)
-> +{
-> +       mod->unres = alloc_symbol(name, mod->unres);
-> +       mod->unres->weak = weak;
-> +}
-> +
->  static struct symbol *find_symbol(const char *name)
->  {
->         struct symbol *s;
-> @@ -701,9 +705,8 @@ static void handle_symbol(struct module *mod, struct elf_info *info,
->                         }
->                 }
->
-> -               mod->unres = alloc_symbol(symname,
-> -                                         ELF_ST_BIND(sym->st_info) == STB_WEAK,
-> -                                         mod->unres);
-> +               sym_add_unresolved(symname, mod,
-> +                                  ELF_ST_BIND(sym->st_info) == STB_WEAK);
->                 break;
->         default:
->                 /* All exported symbols */
-> @@ -2073,7 +2076,7 @@ static void read_symbols(const char *modname)
->          * the automatic versioning doesn't pick it up, but it's really
->          * important anyhow */
->         if (modversions)
-> -               mod->unres = alloc_symbol("module_layout", false, mod->unres);
-> +               sym_add_unresolved("module_layout", mod, false);
->  }
->
->  static void read_symbols_from_files(const char *filename)
 > --
-> 2.32.0
+> 2.34.1
 >
-
-
--- 
-Thanks,
-~Nick Desaulniers

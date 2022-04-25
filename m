@@ -2,138 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CCD050E751
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 19:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 089E250E757
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 19:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243580AbiDYRcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 13:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37674 "EHLO
+        id S243991AbiDYRec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 13:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244035AbiDYRcb (ORCPT
+        with ESMTP id S238514AbiDYReb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 13:32:31 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA48C13;
-        Mon, 25 Apr 2022 10:29:26 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23PEi3wm010252;
-        Mon, 25 Apr 2022 17:29:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=N0FdWIrseGzC8YyI83oVDNXfI2pKptqK1F8lrNfRxC8=;
- b=eVLgFZgy5ODeXwQi/DvL9VEkt9tmujPkq6f8T+itF2W3fuMfg393We6Nz8mYTanWBu4Y
- Z+8qPBNZ8X329UOMSFDAtjwcEsxNyu9IWFgsrxGPnMXB49aE7t9mD9pVifZYaJyLxs4R
- /5wHOCYMtO+0ToYIcxdZTqGBUSRS/62Nf9EbNI69+REEog/X7S37vp+DYQUwzhiDJvkU
- NlgW7Fd7P76oo+CW9wCeaFVOlMTNuOmvP2vENdm0dt8VC7ijQnaYO2AbgEr1nW4Py1i4
- jIJqJOlgY8KgmbzqiPC5BGgLF6o2TMoj8xYbGa35xH0boVKgmGa+19zpWqhWm2zPvyYp xQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fnwng3yjj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Apr 2022 17:29:23 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23PGqWLb019269;
-        Mon, 25 Apr 2022 17:29:23 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fnwng3yhv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Apr 2022 17:29:22 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23PHTDqp027136;
-        Mon, 25 Apr 2022 17:29:21 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3fm938tqnp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Apr 2022 17:29:20 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23PHTUuk12452370
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 25 Apr 2022 17:29:30 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B6A45AE045;
-        Mon, 25 Apr 2022 17:29:17 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2ACB4AE04D;
-        Mon, 25 Apr 2022 17:29:17 +0000 (GMT)
-Received: from [9.171.38.55] (unknown [9.171.38.55])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 25 Apr 2022 17:29:17 +0000 (GMT)
-Message-ID: <13d0d706-abc4-3e4d-88c3-6447636fd1fd@linux.ibm.com>
-Date:   Mon, 25 Apr 2022 19:29:16 +0200
+        Mon, 25 Apr 2022 13:34:31 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4121583A2;
+        Mon, 25 Apr 2022 10:31:24 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id w16so9751600ejb.13;
+        Mon, 25 Apr 2022 10:31:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Lx7n01ak613wao/PeGm56R/NraVbxP43cN5ZMlrScAY=;
+        b=AWomtSHBSdpy50i/AiQTF1zEO67p6sM2bAacCXCIrE1EI3drNnFByVmoCM0R/JmKoO
+         9gRqHx/Jriy3h41XZP3C0mqTsYL8gZMgJtK5YGBcBAM13cfn2MrAbHZu+63WnkD3pA0M
+         DlNSX4/BDpYDhYNLxlybbm4UpTRPqmYx6mc07No5+cFKexLhyMCE/gp0T9Y5ncFf9UlH
+         4t+iuhsW2AwBCXq8A0RuQ0hp4vsOhB/eDpAaHSKVH5lGxCZa6y2yaOCbBcLTm58dwi5j
+         2mokqtKMGMcjlCu7ZnzTM9o/NOIptNtADfUmrdCmKHoADrK3HZRdkAov3SEu1yD6nH7F
+         2pNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Lx7n01ak613wao/PeGm56R/NraVbxP43cN5ZMlrScAY=;
+        b=yWaRFSJ4t1V7Q49cde4pYMMv83Ld2nWxCRXiwgtdeRmlRF2wUnNS7CsJ2q3tOrfAqK
+         8ZfO85p+EuhzFYnTSpB2HAqVtQfVhRCphB0OhnjX/CUycBvYU10wZU9WSYhMBwuVbVaH
+         xbu3eQyNvmHSticVzD5ZRNsgC3eIET0s1BaS89Fiya7BPMzrXu0hfwz6mZQB+zu2Vd8p
+         aYZZ6YetqoA0BbdylwKaUlHVzkUe0/d7ToTV1ha+pLD1uC/4C2Np4QT8PEnYDfmuRg0J
+         XoGYsKDbEXjyGGO0whsQ00vGuCWHSLwHUhUzGlqcQiZ056FsQhxxDLajlunr8QlYfLcp
+         ahFg==
+X-Gm-Message-State: AOAM532W6UEKmkjKrz4Ls9t4DiZf1NCfJ00SBXNyT1PHD0v9zkeLnNR6
+        6hJ4tqpi2zzJXOZ7K30cV2c=
+X-Google-Smtp-Source: ABdhPJxvwSr3XtyRkaaNJxbkUJVkHfpHdLP+s0Vc1yhmamJDJWKzG5omORC7vSs528rfOCd348xwnw==
+X-Received: by 2002:a17:907:6289:b0:6e0:eb0c:8ee7 with SMTP id nd9-20020a170907628900b006e0eb0c8ee7mr16442680ejc.245.1650907883149;
+        Mon, 25 Apr 2022 10:31:23 -0700 (PDT)
+Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
+        by smtp.gmail.com with ESMTPSA id r19-20020a17090638d300b006d6e4fc047bsm3884297ejd.11.2022.04.25.10.31.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 10:31:22 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Chen-Yu Tsai <wens@csie.org>, Mark Brown <broonie@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: Re: [PATCH] bus: sunxi-rsb: Fix the return value of sunxi_rsb_device_create()
+Date:   Mon, 25 Apr 2022 19:31:21 +0200
+Message-ID: <2699804.BEx9A2HvPv@kista>
+In-Reply-To: <ff0ae741-efc4-ba6f-d869-4cb8fb7149ad@sholland.org>
+References: <ef2b9576350bba4c8e05e669e9535e9e2a415763.1650551719.git.christophe.jaillet@wanadoo.fr> <ff0ae741-efc4-ba6f-d869-4cb8fb7149ad@sholland.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 0/2] Dirtying, failing memop: don't indicate
- suppression
-Content-Language: en-US
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-References: <20220425100147.1755340-1-scgl@linux.ibm.com>
- <8095d0de-dd99-0388-b1d4-e59b01dc4be0@linux.ibm.com>
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-In-Reply-To: <8095d0de-dd99-0388-b1d4-e59b01dc4be0@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ZkwzIZly1vuuNPivtdv1igWVwga-Mhr3
-X-Proofpoint-ORIG-GUID: 7Fiwm8QBpGHHlEky2A7xZEoSpjPTUcbd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-25_09,2022-04-25_03,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 adultscore=0 mlxlogscore=962 suspectscore=0 malwarescore=0
- spamscore=0 phishscore=0 priorityscore=1501 clxscore=1015 mlxscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204250076
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/25/22 18:30, Christian Borntraeger wrote:
-> Am 25.04.22 um 12:01 schrieb Janis Schoetterl-Glausch:
->> If a memop fails due to key checked protection, after already having
->> written to the guest, don't indicate suppression to the guest, as that
->> would imply that memory wasn't modified.
->>
->> This could be considered a fix to the code introducing storage key
->> support, however this is a bug in KVM only if we emulate an
->> instructions writing to an operand spanning multiple pages, which I
->> don't believe we do.
->>
+Dne sobota, 23. april 2022 ob 21:39:45 CEST je Samuel Holland napisal(a):
+> On 4/21/22 9:35 AM, Christophe JAILLET wrote:
+> > This code is really spurious.
+> > It always returns an ERR_PTR, even when err is known to be 0 and calls
+> > put_device() after a successful device_register() call.
+> > 
+> > It is likely that the return statement in the normal path is missing.
+> > Add 'return rdev;' to fix it.
 > 
-> Thanks applied. I think it makes sense for 5.18 nevertheless.
+> Thanks for the patch. This definitely looks to be the case.
+> 
+> > Fixes: d787dcdb9c8f ("bus: sunxi-rsb: Add driver for Allwinner Reduced 
+Serial Bus")
+> > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> 
+> Reviewed-by: Samuel Holland <samuel@sholland.org>
+> Tested-by: Samuel Holland <samuel@sholland.org>
+> 
 
-Janosch had some concerns because the protection code being 000 implies
-that the effective address in the TEID is unpredictable.
-Let's see if he chimes in.
+Applied to sunxi/fixes-for-5.18, thanks!
 
-> 
->> v1 -> v2
->>   * Reword commit message of patch 1
->>
->> Janis Schoetterl-Glausch (2):
->>    KVM: s390: Don't indicate suppression on dirtying, failing memop
->>    KVM: s390: selftest: Test suppression indication on key prot exception
->>
->>   arch/s390/kvm/gaccess.c                   | 47 ++++++++++++++---------
->>   tools/testing/selftests/kvm/s390x/memop.c | 43 ++++++++++++++++++++-
->>   2 files changed, 70 insertions(+), 20 deletions(-)
->>
->>
->> base-commit: af2d861d4cd2a4da5137f795ee3509e6f944a25b
-> 
+Best regards,
+Jernej
+
 

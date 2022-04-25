@@ -2,120 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 350E450DB5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:38:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A92950DB58
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:38:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231470AbiDYIl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 04:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39586 "EHLO
+        id S236393AbiDYIle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 04:41:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231609AbiDYIlO (ORCPT
+        with ESMTP id S236284AbiDYIlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 04:41:14 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7D76C971
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:38:11 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id gh6so4117002ejb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:38:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VYj7gb2p+tfnsZdvnMq4DRXvqIJLzOEZPdR6J7EgYds=;
-        b=jykvH8iYFyvyl0kpb3iWILAI/i44LQ5Xzw/dWEOXZwrptNnmkltE0jH88XVk/5aRoC
-         sGT0DDavqPJNeLrcqn0exgkkNM2SWlGCOwFeX1SjESUEbasnm2oEoeoXN7AKlj/I4BOf
-         yBdCVUj5q/U3yNmNZagHaBC5HRWisFOW1kw0o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VYj7gb2p+tfnsZdvnMq4DRXvqIJLzOEZPdR6J7EgYds=;
-        b=2GeO9sSBJtUsXC5pxyBo6JzKpRQG+8FQ7fJudCqpoYWjSQSq7Nzdiht5Al16jxCnEh
-         bqSAlX8H2+qiU7HVb1JwRRCUC9r1MLUQPdRAVrTrk9/t1ZRYYjPoDTrsCDNecS3oAI9W
-         Xta62QsbYdWkvpFZH4zgQM7NYfT1Ir3a5Ky4yimuIWBN3tirXcBMa3c+N3sRi/2p1xlj
-         w0Jn0/hO4nG85iC4f0L3VauKLTl1846qqeRSopJH8q5nY0zk744cZzhkbkXpAf+HVQ+a
-         ip5Es1L63wq1GZ6aEb9jpiMrsxLbixqotSNmnJtuF0mbbrAAitD1OIqLL8LBU3ZiDba+
-         xOUA==
-X-Gm-Message-State: AOAM531RrfG20TEJc8aD1Cg0QoI/qrux8EJ+H36UuaFOpgGkHpFoRQwy
-        ic+UD0LZ64ZCix63rGZy1a8aDcox2pfDNv6xPfsopQ==
-X-Google-Smtp-Source: ABdhPJw5rzOA+Kvs5RQzl860wnNgugg/lvSgKBm2FCDCh1P4AnmqJxo3aTfj8Ri9bagdo1YtzjbrJcR6O/p6tPijugQ=
-X-Received: by 2002:a17:907:1c11:b0:6f0:d63:69b3 with SMTP id
- nc17-20020a1709071c1100b006f00d6369b3mr15338656ejc.691.1650875889690; Mon, 25
- Apr 2022 01:38:09 -0700 (PDT)
+        Mon, 25 Apr 2022 04:41:23 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3F06D4D5;
+        Mon, 25 Apr 2022 01:38:20 -0700 (PDT)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23P7M6cE002305;
+        Mon, 25 Apr 2022 08:38:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=mXQw9yJibjU1LOUw/Nwttj2XAYMW9xCb91lhW+5mnS4=;
+ b=oQgDq8GPdYWc8jve/dB+rDxuDx3g93Me/f8JEDVKRHF59pYJcfomFzladwjw9pnhedWH
+ 7/kLqHqudTPKwh4LZWQCv5TUsEsnUJzWIxVoNHXp64FdtZdk+BEI/+Tvuo2tLjjh9FOg
+ CwsteKrNZcQPnyimMXPQ6+BHV1IZJ1SFMbwG4fAujh83xuDL4daWiiEOCiCkDM79AL97
+ 7hJz1BQa8D3lbwo+N1dZJivRoEsQd0g2HSHinkAb9aTB65TatzFrbVqAyTeng4hIdPt/
+ ZurnEMm6l2Bx+CuHmYJ8eCuUvPdvgIsBnnhv40I7VcZKAd49dOKfWbJryG32UuPdT1N9 6Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fmu3k44c7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Apr 2022 08:38:19 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23P8NmgZ005178;
+        Mon, 25 Apr 2022 08:38:19 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fmu3k44b7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Apr 2022 08:38:18 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23P8ZLEC019335;
+        Mon, 25 Apr 2022 08:38:17 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma01fra.de.ibm.com with ESMTP id 3fm938sp74-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Apr 2022 08:38:16 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23P8cQXv6881846
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 25 Apr 2022 08:38:26 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D43FB52050;
+        Mon, 25 Apr 2022 08:38:13 +0000 (GMT)
+Received: from [9.145.148.76] (unknown [9.145.148.76])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 6067F5204E;
+        Mon, 25 Apr 2022 08:38:13 +0000 (GMT)
+Message-ID: <3572a765-17b4-b2df-e3d5-0d30485c4c67@linux.ibm.com>
+Date:   Mon, 25 Apr 2022 10:38:12 +0200
 MIME-Version: 1.0
-References: <6ba14287-336d-cdcd-0d39-680f288ca776@ddn.com> <CAJfpegt=KZJKExpxPgGXoBEzWpzepL9cyaqS=dwW5AN6y2up_Q@mail.gmail.com>
- <d1955ffb-77ce-97a6-fcf2-b25960d389aa@fastmail.fm>
-In-Reply-To: <d1955ffb-77ce-97a6-fcf2-b25960d389aa@fastmail.fm>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Mon, 25 Apr 2022 10:37:58 +0200
-Message-ID: <CAJfpegsr3fqcFuNekLwf69v3mpNJyze741=L5KUJjvH758eE6g@mail.gmail.com>
-Subject: Re: RFC fuse waitq latency
-To:     Bernd Schubert <bernd.schubert@fastmail.fm>
-Cc:     Bernd Schubert <bschubert@ddn.com>,
-        Linux-FSDevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        Dharmendra Singh <dsingh@ddn.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.1
+Subject: Re: ctcm: rename READ/WRITE defines to avoid redefinitions
+Content-Language: en-US
+To:     "Colin King (gmail)" <colin.i.king@gmail.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        linux-s390@vger.kernel.org,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <ae612043-0252-e8c3-0773-912f116421c1@gmail.com>
+From:   Alexandra Winter <wintera@linux.ibm.com>
+In-Reply-To: <ae612043-0252-e8c3-0773-912f116421c1@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: O7aAhaJNIP8QJHWu4prMcZkegVRX_kXl
+X-Proofpoint-ORIG-GUID: 3gGAMDN6DFtdax5lFiLGFEYQqHxfsrmG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-25_02,2022-04-22_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 malwarescore=0 mlxscore=0 phishscore=0 adultscore=0
+ bulkscore=0 impostorscore=0 clxscore=1011 mlxlogscore=999 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204250036
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Apr 2022 at 17:46, Bernd Schubert <bernd.schubert@fastmail.fm> wrote:
->
-> [I removed the failing netapp/zufs CCs]
->
-> On 4/22/22 14:25, Miklos Szeredi wrote:
-> > On Mon, 28 Mar 2022 at 15:21, Bernd Schubert <bschubert@ddn.com> wrote:
-> >>
-> >> I would like to discuss the user thread wake up latency in
-> >> fuse_dev_do_read(). Profiling fuse shows there is room for improvement
-> >> regarding memory copies and splice. The basic profiling with flame graphs
-> >> didn't reveal, though, why fuse is so much
-> >> slower (with an overlay file system) than just accessing the underlying
-> >> file system directly and also didn't reveal why a single threaded fuse
-> >> uses less than 100% cpu, with the application on top of use also using
-> >> less than 100% cpu (simple bonnie++ runs with 1B files).
-> >> So I started to suspect the wait queues and indeed, keeping the thread
-> >> that reads the fuse device for work running for some time gives quite
-> >> some improvements.
-> >
-> > Might be related: I experimented with wake_up_sync() that didn't meet
-> > my expectations.  See this thread:
-> >
-> > https://lore.kernel.org/all/1638780405-38026-1-git-send-email-quic_pragalla@quicinc.com/#r
-> >
-> > Possibly fuse needs some wake up tweaks due to its special scheduling
-> > requirements.
->
-> Thanks I will look at that as well. I have a patch with spinning and
-> avoid of thread wake  that is almost complete and in my (still limited)
-> testing almost does not take more CPU and improves meta data / bonnie
-> performance in between factor ~1.9 and 3, depending on in which
-> performance mode the cpu is.
->
-> https://github.com/aakefbs/linux/commits/v5.17-fuse-scheduling3
->
-> Missing is just another option for wake-queue-size trigger and handling
-> of signals. Should be ready once I'm done with my other work.
 
-Trying to understand what is being optimized here...  does the
-following correctly describe your use case?
 
-- an I/O thread is submitting synchronous requests (direct I/O?)
+On 24.04.22 20:58, Colin King (gmail) wrote:
+> Hi,
+> 
+> static analysis with cppcheck detected a potential null pointer deference with the following commit:
+> 
+> commit 3c09e2647b5e1f1f9fd383971468823c2505e1b0
+> Author: Ursula Braun <ursula.braun@de.ibm.com>
+> Date:   Thu Aug 12 01:58:28 2010 +0000
+> 
+>     ctcm: rename READ/WRITE defines to avoid redefinitions
+> 
+> 
+> The analysis is as follows:
+> 
+> drivers/s390/net/ctcm_sysfs.c:43:8: note: Assuming that condition 'priv' is not redundant
+>  if (!(priv && priv->channel[CTCM_READ] && ndev)) {
+>        ^
+> drivers/s390/net/ctcm_sysfs.c:42:9: note: Null pointer dereference
+>  ndev = priv->channel[CTCM_READ]->netdev;
+> 
+> The code in question is as follows:
+> 
+>         ndev = priv->channel[CTCM_READ]->netdev;
+> 
+>         ^^ priv may be null, as per check below but it is being dereferenced when assigning ndev
+> 
+>         if (!(priv && priv->channel[CTCM_READ] && ndev)) {
+>                 CTCM_DBF_TEXT(SETUP, CTC_DBF_ERROR, "bfnondev");
+>                 return -ENODEV;
+>         }
+> 
+> Colin
 
-- the fuse thread always goes to sleep, because the request queue is
-empty (there's always a single request on the queue)
+Thank you very much for reporting this, we will provide a patch.
 
-- with this change the fuse thread spins for a jiffy before going to
-sleep, and by that time the I/O thread will submit a new sync request.
+Do you have any special requests for the Reported-by flag? Or is
+Reported-by: Colin King (gmail) <colin.i.king@gmail.com>
+fine with you?
 
-- the I/O thread does not spin while the the fuse thread is processing
-the request, so it still goes to sleep.
-
-Thanks,
-Miklos
+Kind regards
+Alexandra

@@ -2,133 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E56E50DABB
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 09:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 227DB50DABE
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 09:59:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231728AbiDYIAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 04:00:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41178 "EHLO
+        id S236188AbiDYIAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 04:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234298AbiDYH7M (ORCPT
+        with ESMTP id S234359AbiDYH7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 25 Apr 2022 03:59:12 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390AFCD2
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28ACCE2
         for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 00:55:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1650873359; x=1682409359;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=n+/wbTwudVU2aA3nzC/xFgJqQskv98VvTFPXw2JV4mQ=;
-  b=UBtBpH0K/GUlICOaqLI+e74cpEsRkf6NGMzvCjs9gsyGj6joRUQrH8vc
-   h4xD9FinqA3D3Yz4LAH6gLIv0CQidNA/gEEwuxqLE+IpyHjf2bDgYP2OV
-   7yvPPKJUUNamlx6j5aMnacBz1745G1ASnSeSn02MzuPvLDXYfIyFIYVVC
-   Rc21vSbsohC7LgO2f77g6+KWaDQ1r4Ijck3nWjl6NO44l8KOYp0Cxa+Pm
-   8aV+r8a/H+mqrVqOEpEDpGQzwuBdpito0j9qgApHYJZMb7q/xORDPACdf
-   wa/7xu/loEJiNgBOC2CBJg/l330B8E/rgTtNTyiCoIWLuMwB40cUUrhsS
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="351622192"
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XQv8wyBFruRQaLwD5UI6qiGXru0gitI+QJEBT5NMidw=;
+  b=Tqdlu3nuVTEnNpl8BTYZy6aQr9Qa0HOYJB5BxkRQFOSOTh5yt1RURySQ
+   daTjIFYjWEsphHYXQrJeOaRZxrhgG+oWM84C16d/ojaxXzVCvfgsX0Ebd
+   /G8XzjL8mvPrcn1ItyHXppxzK8Y+RuCqIJye1gBf45hAMMn0IMXPE7FPN
+   JKD9ga1VJj2EjdnVCLWC9Zigb6F1s+VTEEFmgOe3YEJwnhq9GbhxJOcZQ
+   5Bg90rczVFcYk2nupfTqAXTwimz+E1qEg86bGate/VfV0Op2Y6rgCGxem
+   xn5xu4xs67cJAT8noA8j82jAMgwhg6mVxf6GfwMjj5HScnAt3ej+gkA4A
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="264025372"
 X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
-   d="scan'208";a="351622192"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 00:55:58 -0700
+   d="scan'208";a="264025372"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 00:55:59 -0700
 X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
-   d="scan'208";a="579152268"
-Received: from wupeng-mobl.ccr.corp.intel.com ([10.254.215.115])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 00:55:54 -0700
-Message-ID: <6c6694965fa3e6d85d78d56703090f227a55bb83.camel@intel.com>
-Subject: Re: [PATCH v3 1/3] mm/swapfile: unuse_pte can map random data if
- swap read fails
-From:   "ying.huang@intel.com" <ying.huang@intel.com>
-To:     David Hildenbrand <david@redhat.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
-Cc:     willy@infradead.org, vbabka@suse.cz, dhowells@redhat.com,
-        neilb@suse.de, apopple@nvidia.com, surenb@google.com,
-        minchan@kernel.org, peterx@redhat.com, sfr@canb.auug.org.au,
-        naoya.horiguchi@nec.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Tim C Chen <tim.c.chen@intel.com>
-Date:   Mon, 25 Apr 2022 15:55:51 +0800
-In-Reply-To: <f88412b4-83db-e594-fc48-2f4b8b9f3be8@redhat.com>
-References: <20220424091105.48374-1-linmiaohe@huawei.com>
-         <20220424091105.48374-2-linmiaohe@huawei.com>
-         <8aeebc2f0b2a251d3d70402cd0edf063ba911013.camel@intel.com>
-         <f88412b4-83db-e594-fc48-2f4b8b9f3be8@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+   d="scan'208";a="660037713"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 00:55:55 -0700
+Received: by lahna (sSMTP sendmail emulation); Mon, 25 Apr 2022 10:55:52 +0300
+Date:   Mon, 25 Apr 2022 10:55:52 +0300
+From:   "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>
+To:     "Oleksandr Ocheretnyi -X (oocheret - GLOBALLOGIC INC at Cisco)" 
+        <oocheret@cisco.com>
+Cc:     "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
+        "tudor.ambarus@microchip.com" <tudor.ambarus@microchip.com>,
+        "p.yadav@ti.com" <p.yadav@ti.com>,
+        "michael@walle.cc" <michael@walle.cc>,
+        "richard@nod.at" <richard@nod.at>,
+        "vigneshr@ti.com" <vigneshr@ti.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "mauro.lima@eclypsium.com" <mauro.lima@eclypsium.com>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "xe-linux-external(mailer list)" <xe-linux-external@cisco.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: mtd: spi-nor: fatal issue during the mtd_erase() calls
+Message-ID: <YmZUCIE/ND82BlNh@lahna>
+References: <BYAPR11MB27570C5DC510D0F37FC106E4CDF69@BYAPR11MB2757.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR11MB27570C5DC510D0F37FC106E4CDF69@BYAPR11MB2757.namprd11.prod.outlook.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-04-25 at 09:49 +0200, David Hildenbrand wrote:
-> On 25.04.22 09:41, ying.huang@intel.com wrote:
-> > Hi, Miaohe,
-> > 
-> > On Sun, 2022-04-24 at 17:11 +0800, Miaohe Lin wrote:
-> > > There is a bug in unuse_pte(): when swap page happens to be unreadable,
-> > > page filled with random data is mapped into user address space.  In case
-> > > of error, a special swap entry indicating swap read fails is set to the
-> > > page table.  So the swapcache page can be freed and the user won't end up
-> > > with a permanently mounted swap because a sector is bad.  And if the page
-> > > is accessed later, the user process will be killed so that corrupted data
-> > > is never consumed.  On the other hand, if the page is never accessed, the
-> > > user won't even notice it.
-> > > 
-> > > Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> > > Acked-by: David Hildenbrand <david@redhat.com>
-> > > ---
-> > >  include/linux/swap.h    |  7 ++++++-
-> > >  include/linux/swapops.h | 10 ++++++++++
-> > >  mm/memory.c             |  5 ++++-
-> > >  mm/swapfile.c           | 11 +++++++++++
-> > >  4 files changed, 31 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/include/linux/swap.h b/include/linux/swap.h
-> > > index 5553189d0215..b82c196d8867 100644
-> > > --- a/include/linux/swap.h
-> > > +++ b/include/linux/swap.h
-> > > @@ -55,6 +55,10 @@ static inline int current_is_kswapd(void)
-> > >   * actions on faults.
-> > >   */
-> > > 
-> > > +#define SWP_SWAPIN_ERROR_NUM 1
-> > > +#define SWP_SWAPIN_ERROR     (MAX_SWAPFILES + SWP_HWPOISON_NUM + \
-> > > +			     SWP_MIGRATION_NUM + SWP_DEVICE_NUM + \
-> > > +			     SWP_PTE_MARKER_NUM)
-> > > 
-> > > 
-> > 
-> > It appears wasteful to use another swap device number. 
+Hi,
+
+On Sat, Apr 23, 2022 at 10:32:28PM +0000, Oleksandr Ocheretnyi -X (oocheret - GLOBALLOGIC INC at Cisco) wrote:
+>    Hello guys,
 > 
-> Do we really care?
+>    recently I've faced the fatal issue "mtdblock: erase of region ... on
+>    ... failed"
 > 
-> We currently use 5 bits for swap types, so we have a total of 32.
+>    working with MTD device (Micron n25q128a13) on recent kernels with
+>    version
 > 
-> SWP_HWPOISON_NUM -> 1
-> SWP_MIGRATION_NUM -> 3
-> SWP_PTE_MARKER_NUM -> 1
-> SWP_DEVICE_NUM -> 4
-> SWP_SWAPIN_ERROR_NUM -> 1
+>    5.15.x and newer.
 > 
-> Which would leave us with 32 - 10 = 22 swap devices. IMHO that's plenty
-> for real life scenarios.
+>    Commit 094d3b9 ("mtd: spi-nor: Add USE_FSR flag for n25q* entries")
+>    adds
+> 
+>    SPINOR_OP_RDFSR opcode handling ability, however controller driver's
+>    side
+> 
+>    (i.e. intel-spi) cannot handle it properly in the intel_spi_hw_cycle()
+>    what causes
+> 
+>    a failures in the the spi_nor_fsr_ready() call what breaks some mtd
+>    callbacks.
+> 
+>    Are there any plans to implement this SPINOR_OP_RDFSR opcode handling
+> 
+>    on the intel controller side? Is there acceptable way to provide
+>    ENOTSUPP
+> 
+>    case response from controller driver side to spi-nor driver?
 
-Creating multiple swap partitions on one disk can improve the
-scalability of swap subsystem, although we usually don't have so many
-disks for swap. 
+I think the Intel controller does support this internally but it does
+not expose this to the software. I wonder if in this case we can, like
+you suggest, return -ENOTSUPP and make micron_st_nor_ready() to handle
+that case?
 
-> I'd prefer reworking this when we really run into trouble (and we could
-> think about using more bits for applicable architectures then, for
-> select 64bit architectures it might be fairly easily possible).
-
-Best Regards,
-Huang, Ying
-
-
+SPI-NOR folks, what you do think?

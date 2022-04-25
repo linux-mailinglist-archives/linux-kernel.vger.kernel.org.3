@@ -2,81 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CA3F50DBD0
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:57:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C737950DBD1
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:59:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240154AbiDYJAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 05:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59688 "EHLO
+        id S240244AbiDYJB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 05:01:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230087AbiDYJAP (ORCPT
+        with ESMTP id S230087AbiDYJBy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 05:00:15 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBACC63D8;
-        Mon, 25 Apr 2022 01:57:07 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 396B13200E79;
-        Mon, 25 Apr 2022 04:57:03 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Mon, 25 Apr 2022 04:57:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1650877022; x=1650963422; bh=jjab8bGcXC
-        tNVAOVMvXLVzO2xI8lhzCj4Yq0VclOquo=; b=lGr9po7cUVaHSjl7HwN/6wVH9e
-        L7sgZzoWcLsRs2HzCQzhVruD8giJJgAEhYm0bqe/l3F2tpqFXksw/VdPOiSXFkVc
-        F1bRiNMbMEi1XV+qP915FDoBbBvjZMEaGDd+2QqyNmt9jmPzpnV7YCicVoZJmDyn
-        8jRhQcMlKFIQuTx0yp04XFZs69tC5Mp2HTQNXepOicVUtnpLHyZq4yj7ak9ao/J6
-        T4dEaeUz+C2YlnHjqknBMKYibPg2mqqVFhLHQCgZhKVMQdYuIarRKvDNRuMIX129
-        f9jsbJvXW+TJqq3kIf2EQlkrysmcz/yt9FhnQbw5vqAePqGqLtVbF5gG494Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1650877022; x=
-        1650963422; bh=jjab8bGcXCtNVAOVMvXLVzO2xI8lhzCj4Yq0VclOquo=; b=l
-        LcpYECNCjrDzsL0CbPv+qi+rW1LX2CnBc1fKIHVh2VURCus8BeUfrQ/ILBbbdpcF
-        MtB+6NMc7ZdOudAGj12rEJ8VDnDFghXXTu11SVPWW8VaA2vO0BlMoyEo27n5OTEu
-        FuMGJrzGQUOcCC5D+ydo6aIs9fl8f+mRynBRC2FqtDPjnkzezqa1jVXeKWXTfoqN
-        4qx9qdPSv6jyEwTRgVC0BHVdbCRxjDxL3EyxH1Y1hBGIuH83h6ldZwWgIRsD6vTs
-        O82KGK7PKSw3Kl8XC3Xz/RoyK88CMTXP91Dlm/1HyWBpVnTrt2edgSq/9Jn93SFc
-        npKPWcEd+PjjhuKU5VDwg==
-X-ME-Sender: <xms:XmJmYlHeUZu3LGPPmk40s5RLcoZ7W7IajN0ohWLklNe6zIXKiajhuQ>
-    <xme:XmJmYqWKOii65KNE4vg_yI-_3CjtB4g3_J7--r_WFrYo59ZbPcuXx4wZID2HHrp5O
-    wOBB2SSeV0Luw>
-X-ME-Received: <xmr:XmJmYnKe-ZaiLG54i4xxDlLQO0N3On5zvmv_1k-aLMCRwZn9vfPAj8flDDs_Ax_w8okhC5Azwtxvw1pIbo6N_ev_XrhtrF9S>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddugddtkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvve
-    dvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
-    drtghomh
-X-ME-Proxy: <xmx:XmJmYrFOnr64ORQ5FTauihsRBkrKmy-qQjRBbfu5g1U36wRSTXqCDA>
-    <xmx:XmJmYrVLiqmAJzPm_ij1lQ3X8w4Ed702Ec-ZFiZSOP-ZKU4ke-PZaw>
-    <xmx:XmJmYmN2qbG8WTpyai_Y4vKUCIlp5XuCUp5eBcGolMDdNCnzI_JBLA>
-    <xmx:XmJmYvkmg_ZQbVQhY95LS2OzroLOwwlnxDDGn7ot_hXOxNK-J10xeA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 25 Apr 2022 04:57:01 -0400 (EDT)
-Date:   Mon, 25 Apr 2022 10:56:59 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Akilesh Kailash <akailash@google.com>
-Cc:     stable@vger.kernel.org, Jiazi Li <lijiazi@xiaomi.com>,
-        kernel-team@android.com, Jiazi Li <jqqlijiazi@gmail.com>,
-        Mike Snitzer <snitzer@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>, dm-devel@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dm: fix mempool NULL pointer race when completing IO
-Message-ID: <YmZiW0TUSjxrEGGZ@kroah.com>
-References: <20220425082812.780445-1-akailash@google.com>
+        Mon, 25 Apr 2022 05:01:54 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391B513DCE;
+        Mon, 25 Apr 2022 01:58:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1650877131; x=1682413131;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/LMMZBwH6tN0t1Z2BqS7eB4GESXopgySii1X8NSdGyk=;
+  b=b7IWoB4kBBhkk9jD6uJZ3sb9228iQx4NjF8BOLHgffkxcH/8+ZsTIbJr
+   YhtipDj06g0rwjx93Uu03P5rv96Mr++Wp+qFODAqcv6rFsaTypgg0OkO7
+   ys4bQ/puZh6OnX5OEuBfBFSxjIH5wVniJLKMlePg/Pp4uzTZt7acxyR03
+   8=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 25 Apr 2022 01:58:50 -0700
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 01:58:50 -0700
+Received: from mingxue-gv.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 25 Apr 2022 01:58:48 -0700
+Date:   Mon, 25 Apr 2022 16:58:44 +0800
+From:   Minghao Xue <quic_mingxue@quicinc.com>
+To:     <mst@redhat.com>
+CC:     "Michael S. Tsirkin" <mst@redhat.com>, <jasowang@redhat.com>,
+        <robh+dt@kernel.org>, <jean-philippe@linaro.org>,
+        <virtualization@lists.linux-foundation.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ztu@quicinc.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: virtio: mmio: add optional
+ wakeup-source property
+Message-ID: <20220425085844.GA7652@mingxue-gv.qualcomm.com>
+References: <20220325015945.GA17578@mingxue-gv.qualcomm.com>
+ <20220328164228-mutt-send-email-mst@kernel.org>
+ <20220329074610.GA20342@mingxue-gv.qualcomm.com>
+ <a35529be-d9cb-9913-76aa-653faed87b54@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220425082812.780445-1-akailash@google.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+In-Reply-To: <a35529be-d9cb-9913-76aa-653faed87b54@linaro.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,13 +66,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 08:28:12AM +0000, Akilesh Kailash wrote:
-> From: Jiazi Li <jqqlijiazi@gmail.com>
+On Tue, Mar 29, 2022 at 09:59:31AM +0200, Krzysztof Kozlowski wrote:
+> On 29/03/2022 09:46, Minghao Xue wrote:
+> > On Mon, Mar 28, 2022 at 04:42:59PM -0400, Michael S. Tsirkin wrote:
+> >> On Fri, Mar 25, 2022 at 09:59:45AM +0800, Minghao Xue wrote:
+> >>> Some systems want to set the interrupt of virtio_mmio device
+> >>> as a wakeup source. On such systems, we'll use the existence
+> >>> of the "wakeup-source" property as a signal of requirement.
+> >>>
+> >>> Signed-off-by: Minghao Xue <quic_mingxue@quicinc.com>
+> >>
+> >> I don't have enough of a clue about dt to review this.
+> >> Pls get some acks from people with DT expertise.
+> >>
+> > Hi Michael,
+> > I had a discussion with Krzysztof on the first version of patch. And we've
+> > got aligned. 
+> > 
 > 
-> commit d208b89401e073de986dc891037c5a668f5d5d95 upstream.
+> I thought I reviewed this and provided an ack, but apparently I did not.
+> Sorry for late response.
 > 
-> This is a backport of the upstream patch to 5.10.y stable branch.
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+Hi Michael,
+I'm writting email to ask will you help upstream these two patches? And
+how's the progress?
 
-Now queued up, thanks.
-
-greg k-h
+Thanks,
+Minghao

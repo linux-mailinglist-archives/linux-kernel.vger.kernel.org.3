@@ -2,154 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FBD950DD24
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 11:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D335C50DD2E
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 11:51:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240360AbiDYJw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 05:52:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42664 "EHLO
+        id S235889AbiDYJxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 05:53:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239886AbiDYJwE (ORCPT
+        with ESMTP id S240288AbiDYJwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 05:52:04 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C413EA9B;
-        Mon, 25 Apr 2022 02:49:00 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id C7AA221123;
-        Mon, 25 Apr 2022 09:48:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1650880138; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Mon, 25 Apr 2022 05:52:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B6AA23F330
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 02:49:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650880158;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=n215KfJqkHmi9Mmq49cvfsGZ/OiTnyFPqnXnfcZ0qHY=;
-        b=O/h/zQi9hrK066WJ3e/N9k1cERZXJmAywDnFMxEiP/8Ak03zf50M/34yUDFj/yA9dnVuBk
-        nL7KAymiXMDyRs7i50snJXCrvxf+/6Tk/J1Xq/httxDAlHAA4cNdV1CANpR6A8yi9VgEvZ
-        giGifkoxTEp0tgjkAc2mhyTZCLBW9d8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1650880138;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=n215KfJqkHmi9Mmq49cvfsGZ/OiTnyFPqnXnfcZ0qHY=;
-        b=KMXPa11Mj9t2r011fFWDg6Gvp9XR7amRkx+PRp8NltpciOjYcX8dTBsaT6kfNYVav2Axfh
-        4o0CKWG1qJ+KOaCQ==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id AAFA72C172;
-        Mon, 25 Apr 2022 09:48:58 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 87D48A0620; Mon, 25 Apr 2022 11:48:56 +0200 (CEST)
-Date:   Mon, 25 Apr 2022 11:48:56 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Yu Kuai <yukuai3@huawei.com>
-Cc:     jack@suse.cz, paolo.valente@linaro.org, axboe@kernel.dk,
-        tj@kernel.org, linux-block@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH -next v2 2/5] block, bfq: add fake weight_counter for
- weight-raised queue
-Message-ID: <20220425094856.qgkhba2klguduxot@quack3.lan>
-References: <20220416093753.3054696-1-yukuai3@huawei.com>
- <20220416093753.3054696-3-yukuai3@huawei.com>
+        bh=kKNwuusliPtIsiMP1NCPfSy6f0NI8bGmv/mZPssyDJg=;
+        b=g6B/a6BRVF57tmm2hir8zrvHsWbyLwu1KKchwYdwykD0UAMuv7vTsQ66ZTho3OH4p73CNh
+        ZDKyzjc35XcTHl92cVoSDTOR/bQN6U8clqze2DLLFKv6onuOCiTjUMfvQ1dz1JlFDv7GC1
+        GPacwf6y/fdTolmrgdpanY08qIQ0tZ4=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-456-YB74clg7OzykA0DDQx86zA-1; Mon, 25 Apr 2022 05:49:17 -0400
+X-MC-Unique: YB74clg7OzykA0DDQx86zA-1
+Received: by mail-wm1-f70.google.com with SMTP id bh11-20020a05600c3d0b00b003928fe7ba07so6951155wmb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 02:49:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kKNwuusliPtIsiMP1NCPfSy6f0NI8bGmv/mZPssyDJg=;
+        b=DYVbP+oOlIGCOoWmahntAjYgE4MMY3S/uT9po+Z3pzMqic0r7JktNB2BVXuMcjO2RX
+         pIfs5ThEUXA/Y4sIbO9Bwg5607bzy3b9jXrD9UVvS+0vgnv2Y+ptmY0A+MEQX8W9vfj9
+         EExXkjZTon+Wq8dgyJFCMRegLA/IGsn8abOUDs+a59VUK1hD8JyynESi1U9xNoe4hM0D
+         oTu/8ZwgBL8sdUh1lDkODHuaQ8GPp+HARbtM7TkJcvxCDGJqVLfjkSlie2l9YDOhFpaI
+         yXnGqc13/CdFWclRFp9dNkJnzBjce7wQ0gpELoHOnEwf5t4da0pdsfD9zq0NeHHtAgGk
+         HGUw==
+X-Gm-Message-State: AOAM533JABYt4+o6tGnsOcD6k5oDp1PlqsC7F0Gj1IlYk+qWiNSkro1q
+        I8BIUHcXkVkNlLE1TmoH2XJ1R3MA2+i2hQfMRhhwgrxZAmhjKYhRyMSBPqLcj39O4t77kzO6D5s
+        vBMMTGwELNasX5KPy90NK3fTt
+X-Received: by 2002:adf:e40f:0:b0:20a:d221:b00c with SMTP id g15-20020adfe40f000000b0020ad221b00cmr8504136wrm.11.1650880155731;
+        Mon, 25 Apr 2022 02:49:15 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwkqXyEZhA+tMfcWcXkFaRjZ8uyIBBykE5B3d3nfqlK8Sdk4xdSLTeSK5orNTzGtexB97eLjA==
+X-Received: by 2002:adf:e40f:0:b0:20a:d221:b00c with SMTP id g15-20020adfe40f000000b0020ad221b00cmr8504119wrm.11.1650880155484;
+        Mon, 25 Apr 2022 02:49:15 -0700 (PDT)
+Received: from [192.168.1.129] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id q16-20020adff950000000b00205aa05fa03sm8286883wrr.58.2022.04.25.02.49.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Apr 2022 02:49:15 -0700 (PDT)
+Message-ID: <220929be-91c4-d19c-b04f-312c5f7e9e40@redhat.com>
+Date:   Mon, 25 Apr 2022 11:49:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220416093753.3054696-3-yukuai3@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3 0/5] Fix some race conditions that exists between fbmem
+ and sysfb
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Borislav Petkov <bp@suse.de>,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Helge Deller <deller@gmx.de>, Johan Hovold <johan@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Peter Jones <pjones@redhat.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Yizhuo Zhai <yzhai003@ucr.edu>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        linux-doc@vger.kernel.org, linux-fbdev@vger.kernel.org
+References: <20220420085303.100654-1-javierm@redhat.com>
+ <535ebbe4-605c-daf5-1afb-f5225e4bb3a8@suse.de>
+ <093d742f-4c87-2ff3-e9fe-153cd734f8e4@suse.de>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <093d742f-4c87-2ff3-e9fe-153cd734f8e4@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat 16-04-22 17:37:50, Yu Kuai wrote:
-> Weight-raised queue is not inserted to weights_tree, which makes it
-> impossible to track how many queues have pending requests through
-> weights_tree insertion and removel. This patch add fake weight_counter
-> for weight-raised queue to do that.
+Hello Thomas,
+
+Thanks for the feedback. It was very useful.
+
+On 4/25/22 11:15, Thomas Zimmermann wrote:
+> Hi
 > 
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> Am 25.04.22 um 10:54 schrieb Thomas Zimmermann:
+>> Hi
+>>
+>> Am 20.04.22 um 10:52 schrieb Javier Martinez Canillas:
+>>> Hello,
+>>>
+>>> The patches in this series are mostly changes suggested by Daniel Vetter
+>>> to fix some race conditions that exists between the fbdev core (fbmem)
+>>> and sysfb with regard to device registration and removal.
+>>>
+>>> For example, it is currently possible for sysfb to register a platform
+>>> device after a real DRM driver was registered and requested to remove the
+>>> conflicting framebuffers.
+>>>
+>>> A symptom of this issue, was worked around with by commit fb561bf9abde
+>>> ("fbdev: Prevent probing generic drivers if a FB is already registered")
+>>> but that's really a hack and should be reverted.
+>>
+>> As I mentioned on IRC, I think this series should be merged for the 
+>> reasons I give in the other comments.
+>>
 
-This is a bit hacky. I was looking into a better place where to hook to
-count entities in a bfq_group with requests and I think bfq_add_bfqq_busy()
-and bfq_del_bfqq_busy() are ideal for this. It also makes better sense
-conceptually than hooking into weights tree handling.
+You meant that should *not* get merged, as we discussed over IRC.
 
-Other than this the rest of the series looks fine to me.
+>>>
+>>> This series attempt to fix it more properly and revert the mentioned 
+>>> hack.
+>>> That will also unblock a pending patch to not make the num_registered_fb
+>>> variable visible to drivers anymore, since that's internal to fbdev core.
+>>
+>> Here's as far as I understand the problem:
+>>
+>>   1) build DRM/fbdev and sysfb code into the kernel
+>>   2) during boot, load the DRM/fbdev modules and have them acquire I/O 
+>> ranges
+>>   3) afterwards load sysfb and have it register platform devices for the 
+>> generic framebuffers
+>>   4) these devices now conflict with the already-registered DRM/fbdev 
+>> devices
+>>
 
-								Honza
+That's correct, yes.
 
-> ---
->  block/bfq-iosched.c | 11 +++++++++++
->  block/bfq-wf2q.c    |  5 ++---
->  2 files changed, 13 insertions(+), 3 deletions(-)
+>> If that is the problem here, let's simply set a sysfb_disable flag in 
+>> sysfb code when the first DRM/fbdev driver first loads. With the flag 
+>> set, sysfb won't create any platform devices. We assume that there are 
+>> now DRM/fbdev drivers for the framebuffers and sysfb won't be needed.
+>>
+>> We can set the flag internally from drm_aperture_detach_drivers() [1] 
+>> and do_remove_conflicting_framebuffers() [2].
 > 
-> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-> index 2deea2d07a1f..a2977c938c70 100644
-> --- a/block/bfq-iosched.c
-> +++ b/block/bfq-iosched.c
-> @@ -134,6 +134,8 @@
->  #include "bfq-iosched.h"
->  #include "blk-wbt.h"
->  
-> +#define BFQ_FAKE_WEIGHT_COUNTER ((void *) POISON_INUSE)
-> +
->  #define BFQ_BFQQ_FNS(name)						\
->  void bfq_mark_bfqq_##name(struct bfq_queue *bfqq)			\
->  {									\
-> @@ -884,6 +886,12 @@ void bfq_weights_tree_add(struct bfq_data *bfqd, struct bfq_queue *bfqq)
->  	if (bfqq->weight_counter)
->  		return;
->  
-> +	if (bfqq->wr_coeff != 1) {
-> +		bfqq->weight_counter = BFQ_FAKE_WEIGHT_COUNTER;
-> +		bfqq->ref++;
-> +		return;
-> +	}
-> +
->  	while (*new) {
->  		struct bfq_weight_counter *__counter = container_of(*new,
->  						struct bfq_weight_counter,
-> @@ -943,6 +951,9 @@ void __bfq_weights_tree_remove(struct bfq_data *bfqd, struct bfq_queue *bfqq)
->  	if (!bfqq->weight_counter)
->  		return;
->  
-> +	if (bfqq->weight_counter == BFQ_FAKE_WEIGHT_COUNTER)
-> +		goto reset_entity_pointer;
-> +
->  	root = &bfqd->queue_weights_tree;
->  	bfqq->weight_counter->num_active--;
->  	if (bfqq->weight_counter->num_active > 0)
-> diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
-> index a1296058c1ec..ae12c6b2c525 100644
-> --- a/block/bfq-wf2q.c
-> +++ b/block/bfq-wf2q.c
-> @@ -776,7 +776,7 @@ __bfq_entity_update_weight_prio(struct bfq_service_tree *old_st,
->  		 * Add the entity, if it is not a weight-raised queue,
->  		 * to the counter associated with its new weight.
->  		 */
-> -		if (prev_weight != new_weight && bfqq && bfqq->wr_coeff == 1)
-> +		if (prev_weight != new_weight && bfqq)
->  			bfq_weights_tree_add(bfqd, bfqq);
->  
->  		new_st->wsum += entity->weight;
-> @@ -1680,8 +1680,7 @@ void bfq_add_bfqq_busy(struct bfq_data *bfqd, struct bfq_queue *bfqq)
->  	bfqd->busy_queues[bfqq->ioprio_class - 1]++;
->  
->  	if (!bfqq->dispatched)
-> -		if (bfqq->wr_coeff == 1)
-> -			bfq_weights_tree_add(bfqd, bfqq);
-> +		bfq_weights_tree_add(bfqd, bfqq);
->  
->  	if (bfqq->wr_coeff > 1)
->  		bfqd->wr_busy_queues++;
-> -- 
-> 2.31.1
-> 
+> And further thinking about it, it would be better to set such a flag 
+> after successfully registering a DRM/fbdev device.  So we know that 
+> there's at least one working display in the system. We don't have to 
+> rely on generic framebuffers after that.
+>
+
+Exactly, should be done when the device is registered rather than when
+the driver is registered or a call is made to remove the conflicting FB.
+
+I'll rework this series with only the bits for sysfb_disable() and drop
+the rest. We can go back to the discussion of the remaining parts later
+if that makes sense (I still think that patch 3/5 is a better approach,
+but let's defer that for a different series).
+
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
+

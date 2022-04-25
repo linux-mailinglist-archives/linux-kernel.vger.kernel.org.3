@@ -2,340 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 443B950DAE1
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:10:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1AB250DAE4
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233773AbiDYINX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 04:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51920 "EHLO
+        id S234162AbiDYINl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 04:13:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235417AbiDYIMp (ORCPT
+        with ESMTP id S231827AbiDYINj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 04:12:45 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D39E186F0
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:09:41 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23P7f1ti022343;
-        Mon, 25 Apr 2022 08:09:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=etbi5Su50HM4NVH58sIaAmUnp56BcRqknkWsyYigCRw=;
- b=IZSjQeD3pRz3QLZLUQZ40S6vIX7kWeOHNUUGp9vrkwLNf0rE0gvtYUvgdnSccoqjSVyc
- 2LA66AdpazryfGhW31qWGdjweMJDmLTWcV22VfmLI/D0PsG+P/hP0lPi8Yb9Z57Mhm+N
- 4c4wV+mU1QvHzJbFzzV30VCJxSHCyswFQxELtGdxP6C20sa1a10IV7NHwLRBJH+ikgH1
- 8gqiwCXRF147qOBZrpT8hK6+q41r9A/vjJOUeQR+pobVZqiw3Hhh5BUXdgxayPwppUNB
- mgVR7F89L/5R7SLxYQg3am5JGWlgKPH0hVAgdmQZ0gJ8zC+kbIm28jnR0JJMseucqX1n Fw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fnq3ngwfr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Apr 2022 08:09:30 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23P7fAl2022840;
-        Mon, 25 Apr 2022 08:09:30 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fnq3ngwfa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Apr 2022 08:09:29 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23P83MVD014835;
-        Mon, 25 Apr 2022 08:09:28 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03fra.de.ibm.com with ESMTP id 3fm938snfb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Apr 2022 08:09:27 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23P89PFV50266600
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 25 Apr 2022 08:09:25 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8AC84A405B;
-        Mon, 25 Apr 2022 08:09:25 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1C095A4054;
-        Mon, 25 Apr 2022 08:09:21 +0000 (GMT)
-Received: from [9.43.95.32] (unknown [9.43.95.32])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 25 Apr 2022 08:09:20 +0000 (GMT)
-Message-ID: <c576a992-5a50-5dd3-644c-a45d4338fc85@linux.ibm.com>
-Date:   Mon, 25 Apr 2022 13:39:19 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2 0/5] mm: demotion: Introduce new node state
- N_DEMOTION_TARGETS
-Content-Language: en-US
-To:     "ying.huang@intel.com" <ying.huang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Greg Thelen <gthelen@google.com>,
-        MichalHocko <mhocko@kernel.org>,
-        Brice Goglin <brice.goglin@gmail.com>
-References: <CAAPL-u_pSWD6U0yQ8Ws+_Yfb_3ZEmNXJsYcRJjAFBkyDk=nq8g@mail.gmail.com>
- <ea73f6fda9cafdd0cb6ba8351139e6f4b47354a8.camel@intel.com>
- <CAAPL-u-aeceXFUNdok_GYb2aLhZa0zBBuSqHxFznQob3PbJt7Q@mail.gmail.com>
- <a80647053bba44623094995730e061f0e6129677.camel@intel.com>
- <CAAPL-u89Jxutu1VH0LnO5VGdMbkLvc2M9eapuwP-y9oG9QSsrA@mail.gmail.com>
- <610ccaad03f168440ce765ae5570634f3b77555e.camel@intel.com>
- <CAAPL-u9ktM82zAW_OVwqTmQsr-XC8XOPmAsjoiCLo18cxUWA=A@mail.gmail.com>
- <8e31c744a7712bb05dbf7ceb2accf1a35e60306a.camel@intel.com>
- <CAAPL-u9uP+FUh7Yn0ByOECo+EP32ZABnCvNPKQB9JCA68VHEqQ@mail.gmail.com>
- <78b5f4cfd86efda14c61d515e4db9424e811c5be.camel@intel.com>
- <YmKKwXa2XI/nwac0@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
- <200e95cf36c1642512d99431014db8943fed715d.camel@intel.com>
- <8735i1zurt.fsf@linux.ibm.com>
- <ea9d01e16de655af85c0041c96964d83f59fb6d2.camel@intel.com>
-From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-In-Reply-To: <ea9d01e16de655af85c0041c96964d83f59fb6d2.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: aBT-CIPUb9xYxHisj_soYqjnehqNrYSL
-X-Proofpoint-GUID: ymcA-N3v7zGcLaV_EHf6tLj1_TC8spg_
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 25 Apr 2022 04:13:39 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7145032ED5
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:10:35 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-2f7c57ee6feso45006967b3.2
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:10:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=7sxESoBMIprVPsske9LbaPlBbuPs3+wrxg6dMd1r+hA=;
+        b=H9vTEgnJ6gwdWb9SONb+eVVI1x5Fg1wJbWIU/qEau2sxgvVGeIETFNZTRcom3KBq/z
+         f4XJ2WrXBMMgYYtQUWNY2s4OhiRP3Qj6JwNwEhrWEpG5AeZjLEQ0tKPN2z1PGK3z8bHF
+         ivFK0HH0pcjyzqWxHvXYIER1yC2C6fukc21VmVJgiGHzwfpWSo08Xnup0kMUzBAKNnTr
+         UzvFq5zO+EJ+NsLleTZmhF6HOq7MY6uFb8gPQpwihlyODXXXqY/ER5aTT6hsaM/bU1Wc
+         W62z681UIMGU+gnWZuGxEk6j4/l7hRUHVxEXKbL/L0bH4NrrAdLZjXdNykLnMBABUb9/
+         /Q8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=7sxESoBMIprVPsske9LbaPlBbuPs3+wrxg6dMd1r+hA=;
+        b=m0bp1Rw9Icd9GlRy2R/RuGgd8x0eZeggZIkBINCznt8JqItC4m8nl6YDLkycS11TEm
+         8NTGAjwpT+Mf6x5/r6qJ6/kpLtnhE+bhIFV//KycJeHf7NQkyFUIsYAHeIhA0d3y33s7
+         7i7l1e9aTrRtWGGdAnnz4aGU/i5ESNkdqqBL/nvpgn7eQM8ARoYNqqYHkV0iWRVu97D9
+         vQaWPAAUl6yiydy7nPW5Of9xqxU3LruSonblDsdNcjRij7CGEiH68a79bg4eocB5ecoq
+         sVMBVx6v+XBcy3McWDFPUbCI2NYthdc8FhsIyfArW6wuzR6Er0niM16qs4jk/dnp0eIW
+         wxYQ==
+X-Gm-Message-State: AOAM5305rVyx8SEpGSaxg20EwPW3i+Kk+f0yLxp/lDsMrfizjOzD5hzi
+        3uKQCZCXHHH1wRuXNGxJUoxt8YTVBhqsw+ITs89Rpw==
+X-Google-Smtp-Source: ABdhPJwSSJnrlAzsV2jt4uCWD6qcDAizD+TNItTwqDfRwCeO5v+KDCnfqAGa4BvUy1vklgAyg43wTmS6E8vlsISO/7Y=
+X-Received: by 2002:a81:1b55:0:b0:2f7:cefd:9b51 with SMTP id
+ b82-20020a811b55000000b002f7cefd9b51mr7129871ywb.120.1650874234577; Mon, 25
+ Apr 2022 01:10:34 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-25_02,2022-04-22_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 spamscore=0 suspectscore=0 malwarescore=0 clxscore=1015
- adultscore=0 impostorscore=0 mlxscore=0 mlxlogscore=999 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204250036
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 25 Apr 2022 13:40:23 +0530
+Message-ID: <CA+G9fYscb1y4a17Sf5G_Aibt+WuSf-ks_Qjw9tYFy=A4sjCEug@mail.gmail.com>
+Subject: page_alloc.c:(.init.text+0xa7c): undefined reference to `vmalloc_huge'
+To:     linux-mm <linux-mm@kvack.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     Song Liu <song@kernel.org>, Muchun Song <songmuchun@bytedance.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Rik van Riel <riel@surriel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/25/22 11:40 AM, ying.huang@intel.com wrote:
-> On Mon, 2022-04-25 at 09:20 +0530, Aneesh Kumar K.V wrote:
->> "ying.huang@intel.com" <ying.huang@intel.com> writes:
->>
->>> Hi, All,
->>>
->>> On Fri, 2022-04-22 at 16:30 +0530, Jagdish Gediya wrote:
->>>
->>> [snip]
->>>
->>>> I think it is necessary to either have per node demotion targets
->>>> configuration or the user space interface supported by this patch
->>>> series. As we don't have clear consensus on how the user interface
->>>> should look like, we can defer the per node demotion target set
->>>> interface to future until the real need arises.
->>>>
->>>> Current patch series sets N_DEMOTION_TARGET from dax device kmem
->>>> driver, it may be possible that some memory node desired as demotion
->>>> target is not detected in the system from dax-device kmem probe path.
->>>>
->>>> It is also possible that some of the dax-devices are not preferred as
->>>> demotion target e.g. HBM, for such devices, node shouldn't be set to
->>>> N_DEMOTION_TARGETS. In future, Support should be added to distinguish
->>>> such dax-devices and not mark them as N_DEMOTION_TARGETS from the
->>>> kernel, but for now this user space interface will be useful to avoid
->>>> such devices as demotion targets.
->>>>
->>>> We can add read only interface to view per node demotion targets
->>>> from /sys/devices/system/node/nodeX/demotion_targets, remove
->>>> duplicated /sys/kernel/mm/numa/demotion_target interface and instead
->>>> make /sys/devices/system/node/demotion_targets writable.
->>>>
->>>> Huang, Wei, Yang,
->>>> What do you suggest?
->>>
->>> We cannot remove a kernel ABI in practice.  So we need to make it right
->>> at the first time.  Let's try to collect some information for the kernel
->>> ABI definitation.
->>>
->>> The below is just a starting point, please add your requirements.
->>>
->>> 1. Jagdish has some machines with DRAM only NUMA nodes, but they don't
->>> want to use that as the demotion targets.  But I don't think this is a
->>> issue in practice for now, because demote-in-reclaim is disabled by
->>> default.
->>
->> It is not just that the demotion can be disabled. We should be able to
->> use demotion on a system where we can find DRAM only NUMA nodes. That
->> cannot be achieved by /sys/kernel/mm/numa/demotion_enabled. It needs
->> something similar to to N_DEMOTION_TARGETS
->>
-> 
-> Can you show NUMA information of your machines with DRAM-only nodes and
-> PMEM nodes?  We can try to find the proper demotion order for the
-> system.  If you can not show it, we can defer N_DEMOTION_TARGETS until
-> the machine is available.
+Linux mainline arm architecture tinyconfig and allnoconfig builds failed.
+These builds have config mmu not set.
+
+# CONFIG_MMU is not set
 
 
-Sure will find one such config. As you might have noticed this is very 
-easy to have in a virtualization setup because the hypervisor can assign 
-memory to a guest VM from a numa node that doesn't have CPU assigned to 
-the same guest. This depends on the other guest VM instance config 
-running on the system. So on any virtualization config that has got 
-persistent memory attached, this can become an easy config to end up with.
+Regressions found on arm:
+
+   - arm-clang-14-tinyconfig
+   - arm-clang-nightly-tinyconfig
+   - arm-gcc-11-tinyconfig
+   - arm-clang-13-tinyconfig
+   - arm-gcc-11-allnoconfig
+   - arm-clang-14-allnoconfig
+   - arm-clang-nightly-allnoconfig
+   - arm-gcc-8-allnoconfig
+   - arm-clang-11-allnoconfig
+   - arm-clang-11-tinyconfig
+   - arm-gcc-9-allnoconfig
+   - arm-gcc-9-tinyconfig
+   - arm-gcc-10-allnoconfig
+   - arm-gcc-8-tinyconfig
+   - arm-gcc-10-tinyconfig
+   - arm-clang-12-allnoconfig
+   - arm-clang-12-tinyconfig
+   - arm-clang-13-allnoconfig
 
 
->>> 2. For machines with PMEM installed in only 1 of 2 sockets, for example,
->>>
->>> Node 0 & 2 are cpu + dram nodes and node 1 are slow
->>> memory node near node 0,
->>>
->>> available: 3 nodes (0-2)
->>> node 0 cpus: 0 1
->>> node 0 size: n MB
->>> node 0 free: n MB
->>> node 1 cpus:
->>> node 1 size: n MB
->>> node 1 free: n MB
->>> node 2 cpus: 2 3
->>> node 2 size: n MB
->>> node 2 free: n MB
->>> node distances:
->>> node   0   1   2
->>>    0:  10  40  20
->>>    1:  40  10  80
->>>    2:  20  80  10
->>>
->>> We have 2 choices,
->>>
->>> a)
->>> node	demotion targets
->>> 0	1
->>> 2	1
->>
->> This is achieved by
->>
->> [PATCH v2 1/5] mm: demotion: Set demotion list differently
->>
->>>
->>> b)
->>> node	demotion targets
->>> 0	1
->>> 2	X
->>
->>
->>>
->>> a) is good to take advantage of PMEM.  b) is good to reduce cross-socket
->>> traffic.  Both are OK as defualt configuration.  But some users may
->>> prefer the other one.  So we need a user space ABI to override the
->>> default configuration.
->>>
->>> 3. For machines with HBM (High Bandwidth Memory), as in
->>>
->>> https://lore.kernel.org/lkml/39cbe02a-d309-443d-54c9-678a0799342d@gmail.com/
->>>
->>>> [1] local DDR = 10, remote DDR = 20, local HBM = 31, remote HBM = 41
->>>
->>> Although HBM has better performance than DDR, in ACPI SLIT, their
->>> distance to CPU is longer.  We need to provide a way to fix this.  The
->>> user space ABI is one way.  The desired result will be to use local DDR
->>> as demotion targets of local HBM.
->>
->>
->> IMHO the above (2b and 3) can be done using per node demotion targets. Below is
->> what I think we could do with a single slow memory NUMA node 4.
-> 
-> If we can use writable per-node demotion targets as ABI, then we don't
-> need N_DEMOTION_TARGETS.
+Build error:
+------------
+arm-linux-gnueabihf-ld: mm/page_alloc.o: in function `alloc_large_system_hash':
+page_alloc.c:(.init.text+0xa7c): undefined reference to `vmalloc_huge'
+make[1]: *** [Makefile:1158: vmlinux] Error 1
 
 
-Not sure I understand that. Yes, once you have a writeable per node 
-demotion target it is easy to build any demotion order. But that doesn't 
-mean we should not improve the default unless you have reason to say 
-that using N_DEMOTTION_TARGETS breaks any existing config.
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
 
-> 
->> /sys/devices/system/node# cat node[0-4]/demotion_targets
->> 4
->> 4
->> 4
->> 4
->>
->> /sys/devices/system/node# echo 1 > node1/demotion_targets
->> bash: echo: write error: Invalid argument
->> /sys/devices/system/node# cat node[0-4]/demotion_targets
->> 4
->> 4
->> 4
->> 4
->>
->> /sys/devices/system/node# echo 0 > node1/demotion_targets
->> /sys/devices/system/node# cat node[0-4]/demotion_targets
->> 4
->> 0
->> 4
->> 4
->>
->> /sys/devices/system/node# echo 1 > node0/demotion_targets
->> bash: echo: write error: Invalid argument
->> /sys/devices/system/node# cat node[0-4]/demotion_targets
->> 4
->> 0
->> 4
->> 4
->>
->> Disable demotion for a specific node.
->> /sys/devices/system/node# echo > node1/demotion_targets
->> /sys/devices/system/node# cat node[0-4]/demotion_targets
->> 4
->>
->> 4
->> 4
->>
->> Reset demotion to default
->> /sys/devices/system/node# echo -1 > node1/demotion_targets
->> /sys/devices/system/node# cat node[0-4]/demotion_targets
->> 4
->> 4
->> 4
->> 4
->>
->> When a specific device/NUMA node is used for demotion target via the user interface, it is taken
->> out of other NUMA node targets.
-> 
-> IMHO, we should be careful about interaction between auto-generated and
-> overridden demotion order.
-> 
-
-yes, we should avoid loop between that. But if you agree for the above 
-ABI we could go ahead and share the implementation code.
+tuxmake --runtime podman --target-arch arm --toolchain gcc-11
+--kconfig tinyconfig
 
 
-> Best Regards,
-> Huang, Ying
-> 
->> root@ubuntu-guest:/sys/devices/system/node# cat node[0-4]/demotion_targets
->> 4
->> 4
->> 4
->> 4
->>
->> /sys/devices/system/node# echo 4 > node1/demotion_targets
->> /sys/devices/system/node# cat node[0-4]/demotion_targets
->>
->> 4
->>
->>
->>
->> If more than one node requies the same demotion target
->> /sys/devices/system/node# echo 4 > node0/demotion_targets
->> /sys/devices/system/node# cat node[0-4]/demotion_targets
->> 4
->> 4
->>
->>
->>
->> -aneesh
-> 
-> 
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
--aneesh
+
+--
+Linaro LKFT
+https://lkft.linaro.org
+
+[1] https://builds.tuxbuild.com/28GNGapkjXsbIbRSnHoGILqmaFp/

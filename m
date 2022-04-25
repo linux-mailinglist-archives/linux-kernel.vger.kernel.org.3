@@ -2,222 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A966750E38F
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:45:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0406450E39B
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:48:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242561AbiDYOsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 10:48:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48918 "EHLO
+        id S242575AbiDYOvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 10:51:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235491AbiDYOs3 (ORCPT
+        with ESMTP id S242408AbiDYOvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 10:48:29 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C86F24F1B
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 07:45:25 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23PEOZs6003291;
-        Mon, 25 Apr 2022 14:45:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=6RZB3SkZ8ke/vLyXgfSZPU0lBqdMbSp7Hx+Db351wmw=;
- b=HlMgRmypBleW/pM+kmD+YoKk7+l7SVTSBnIiyV837xy7fxJ4SOW3/YYmXsZ+axZ0kTvo
- bQpNwu+LuYi91fqaUewd/LQTw6/BolblMcZfs2vmY5GnScvjv2YoTylWJrhquXQM8L7n
- DLroSePqN9zupBclxvFKxFaYX1og8yLRkkCbNv0A4Ys4mw6NoLrBOxiZzvvY7KHEqX/a
- 3CYHbvvQBrrMwmfVzcWuKY1bQ1+EyKR8wJN8yS5Fz1bdK1sDlRyu0uuAOnO6uayY+oHX
- JmWpsDVzK/DqnmHD2eeGx8mdEoxWJ22JCfjAcO9KQQI2zZc0TPKfrydpNAn3C9vryL2W Mw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fnwcr8h1a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Apr 2022 14:45:08 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23PEPPVG005629;
-        Mon, 25 Apr 2022 14:45:07 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fnwcr8h0h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Apr 2022 14:45:07 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23PEceTk030721;
-        Mon, 25 Apr 2022 14:45:05 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04ams.nl.ibm.com with ESMTP id 3fm938tja7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Apr 2022 14:45:05 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23PEj3DN32178640
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 25 Apr 2022 14:45:03 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5BCE6AE053;
-        Mon, 25 Apr 2022 14:45:03 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 47648AE045;
-        Mon, 25 Apr 2022 14:45:00 +0000 (GMT)
-Received: from [9.43.106.14] (unknown [9.43.106.14])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 25 Apr 2022 14:45:00 +0000 (GMT)
-Message-ID: <8a8d14ca-0976-41cc-02cb-dd1680fa37ef@linux.ibm.com>
-Date:   Mon, 25 Apr 2022 20:14:58 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v3 0/7] mm: demotion: Introduce new node state
- N_DEMOTION_TARGETS
-Content-Language: en-US
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>
-Cc:     "ying.huang@intel.com" <ying.huang@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        baolin.wang@linux.alibaba.com, dave.hansen@linux.intel.com,
-        shy828301@gmail.com, weixugc@google.com, gthelen@google.com,
-        dan.j.williams@intel.com
-References: <20220422195516.10769-1-jvgediya@linux.ibm.com>
- <4b986b46afb2fe888c127d8758221d0f0d3ec55f.camel@intel.com>
- <YmaC2jw6WaQ4X+8W@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
- <20220425145735.000007ca@Huawei.com>
-From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-In-Reply-To: <20220425145735.000007ca@Huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 5qGB7tJTjro-EnV4AaDGZBI9VtizgOMk
-X-Proofpoint-GUID: K2g8UW15wnnpCWUT6v5itZ7i61JugLhs
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 25 Apr 2022 10:51:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE73DCF;
+        Mon, 25 Apr 2022 07:48:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7CBB8B8180B;
+        Mon, 25 Apr 2022 14:48:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A24F6C385A7;
+        Mon, 25 Apr 2022 14:48:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650898083;
+        bh=ww5pXTnymTyko+JhDt/z+sYzyuvKFpPMDqKA6sywXRM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oI3h28Wc5sKb8BlpRXgCiExH+YOd9S2re+XAD+p7/QMsMZRNn+xCfQ/hk8uQOVsag
+         OY8/yPDJYe9ie7+n4BBybRg0Ro+JKXuNmSZefFKDzhKYSBqeGaBZw1agmrcKGk11cs
+         xrLGy4K8XkDS988aeCd+l0ZaFJwzRgDTP3VyNucU=
+Date:   Mon, 25 Apr 2022 16:48:00 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Shile Zhang <shile.zhang@linux.alibaba.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        stable@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] drm/cirrus: fix a NULL vs IS_ERR() checks
+Message-ID: <Yma0oHqbznOilrCS@kroah.com>
+References: <20220425141043.214024-1-shile.zhang@linux.alibaba.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-25_08,2022-04-25_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 spamscore=0 suspectscore=0 malwarescore=0 impostorscore=0
- adultscore=0 clxscore=1011 phishscore=0 lowpriorityscore=0 mlxscore=0
- mlxlogscore=703 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204250063
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220425141043.214024-1-shile.zhang@linux.alibaba.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/25/22 7:27 PM, Jonathan Cameron wrote:
-> On Mon, 25 Apr 2022 16:45:38 +0530
-> Jagdish Gediya <jvgediya@linux.ibm.com> wrote:
+On Mon, Apr 25, 2022 at 10:10:43PM +0800, Shile Zhang wrote:
+> The function drm_gem_shmem_vmap can returns error pointers as well,
+> which could cause following kernel crash:
 > 
->> On Sun, Apr 24, 2022 at 11:19:53AM +0800, ying.huang@intel.com wrote:
->>> On Sat, 2022-04-23 at 01:25 +0530, Jagdish Gediya wrote:
->>>> Some systems(e.g. PowerVM) can have both DRAM(fast memory) only
->>>> NUMA node which are N_MEMORY and slow memory(persistent memory)
->>>> only NUMA node which are also N_MEMORY. As the current demotion
->>>> target finding algorithm works based on N_MEMORY and best distance,
->>>> it will choose DRAM only NUMA node as demotion target instead of
->>>> persistent memory node on such systems. If DRAM only NUMA node is
->>>> filled with demoted pages then at some point new allocations can
->>>> start falling to persistent memory, so basically cold pages are in
->>>> fast memor (due to demotion) and new pages are in slow memory, this
->>>> is why persistent memory nodes should be utilized for demotion and
->>>> dram node should be avoided for demotion so that they can be used
->>>> for new allocations.
->>>>
->>>> Current implementation can work fine on the system where the memory
->>>> only numa nodes are possible only for persistent/slow memory but it
->>>> is not suitable for the like of systems mentioned above.
->>>
->>> Can you share the NUMA topology information of your machine?  And the
->>> demotion order before and after your change?
->>>
->>> Whether it's good to use the PMEM nodes as the demotion targets of the
->>> DRAM-only node too?
->>
->> $ numactl -H
->> available: 2 nodes (0-1)
->> node 0 cpus: 0 1 2 3 4 5 6 7
->> node 0 size: 14272 MB
->> node 0 free: 13392 MB
->> node 1 cpus:
->> node 1 size: 2028 MB
->> node 1 free: 1971 MB
->> node distances:
->> node   0   1
->>    0:  10  40
->>    1:  40  10
->>
->> 1) without N_DEMOTION_TARGETS patch series, 1 is demotion target
->>     for 0 even when 1 is DRAM node and there is no demotion targets for 1.
+> BUG: unable to handle page fault for address: fffffffffffffffc
+> PGD 1426a12067 P4D 1426a12067 PUD 1426a14067 PMD 0
+> Oops: 0000 [#1] SMP NOPTI
+> CPU: 12 PID: 3598532 Comm: stress-ng Kdump: loaded Not tainted 5.10.50.x86_64 #1
+> ...
+> RIP: 0010:memcpy_toio+0x23/0x50
+> Code: 00 00 00 00 0f 1f 00 0f 1f 44 00 00 48 85 d2 74 28 40 f6 c7 01 75 2b 48 83 fa 01 76 06 40 f6 c7 02 75 17 48 89 d1 48 c1 e9 02 <f3> a5 f6 c2 02 74 02 66 a5 f6 c2 01 74 01 a4 c3 66 a5 48 83 ea 02
+> RSP: 0018:ffffafbf8a203c68 EFLAGS: 00010216
+> RAX: 0000000000000000 RBX: fffffffffffffffc RCX: 0000000000000200
+> RDX: 0000000000000800 RSI: fffffffffffffffc RDI: ffffafbf82000000
+> RBP: ffffafbf82000000 R08: 0000000000000002 R09: 0000000000000000
+> R10: 00000000000002b5 R11: 0000000000000000 R12: 0000000000000800
+> R13: ffff8a6801099300 R14: 0000000000000001 R15: 0000000000000300
+> FS:  00007f4a6bc5f740(0000) GS:ffff8a8641900000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: fffffffffffffffc CR3: 00000016d3874001 CR4: 00000000003606e0
+> Call Trace:
+>  drm_fb_memcpy_dstclip+0x5e/0x80 [drm_kms_helper]
+>  cirrus_fb_blit_rect.isra.0+0xb7/0xe0 [cirrus]
+>  cirrus_pipe_update+0x9f/0xa8 [cirrus]
+>  drm_atomic_helper_commit_planes+0xb8/0x220 [drm_kms_helper]
+>  drm_atomic_helper_commit_tail+0x42/0x80 [drm_kms_helper]
+>  commit_tail+0xce/0x130 [drm_kms_helper]
+>  drm_atomic_helper_commit+0x113/0x140 [drm_kms_helper]
+>  drm_client_modeset_commit_atomic+0x1c4/0x200 [drm]
+>  drm_client_modeset_commit_locked+0x53/0x80 [drm]
+>  drm_client_modeset_commit+0x24/0x40 [drm]
+>  drm_fbdev_client_restore+0x48/0x85 [drm_kms_helper]
+>  drm_client_dev_restore+0x64/0xb0 [drm]
+>  drm_release+0xf2/0x110 [drm]
+>  __fput+0x96/0x240
+>  task_work_run+0x5c/0x90
+>  exit_to_user_mode_loop+0xce/0xd0
+>  exit_to_user_mode_prepare+0x6a/0x70
+>  syscall_exit_to_user_mode+0x12/0x40
+>  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> RIP: 0033:0x7f4a6bd82c2b
 > 
-> I'm not convinced the distinction between DRAM and persistent memory is
-> valid. There will definitely be systems with a large pool
-> of remote DRAM (and potentially no NV memory) where the right choice
-> is to demote to that DRAM pool.
+> Fixes: ab3e023b1b4c9 ("drm/cirrus: rewrite and modernize driver.")
 > 
-> Basing the decision on whether the memory is from kmem or
-> normal DRAM doesn't provide sufficient information to make the decision.
-> 
+> Signed-off-by: Shile Zhang <shile.zhang@linux.alibaba.com>
 
-Hence the suggestion for the ability to override this from userspace. 
-Now, for example, we could build a system with memory from the remote 
-machine (memory inception in case of power which will mostly be plugged 
-in as regular hotpluggable memory ) and a slow CXL memory or OpenCAPI 
-memory.
+No blank line between those please.
 
-In the former case, we won't consider that for demotion with this series 
-because that is not instantiated via dax kmem. So yes definitely we 
-would need the ability to override this from userspace so that we could 
-put these remote memory NUMA nodes as demotion targets if we want.
+And you need to really really really document why this can not use a
+commit that is currently upstream.  And what commit upstream did solve
+this and how.  Otherwise we can not take this change, sorry.
 
->>
->> $ cat /sys/bus/nd/devices/dax0.0/target_node
->> 2
->> $
->> # cd /sys/bus/dax/drivers/
->> :/sys/bus/dax/drivers# ls
->> device_dax  kmem
->> :/sys/bus/dax/drivers# cd device_dax/
->> :/sys/bus/dax/drivers/device_dax# echo dax0.0 > unbind
->> :/sys/bus/dax/drivers/device_dax# echo dax0.0 >  ../kmem/new_id
->> :/sys/bus/dax/drivers/device_dax# numactl -H
->> available: 3 nodes (0-2)
->> node 0 cpus: 0 1 2 3 4 5 6 7
->> node 0 size: 14272 MB
->> node 0 free: 13380 MB
->> node 1 cpus:
->> node 1 size: 2028 MB
->> node 1 free: 1961 MB
->> node 2 cpus:
->> node 2 size: 0 MB
->> node 2 free: 0 MB
->> node distances:
->> node   0   1   2
->>    0:  10  40  80
->>    1:  40  10  80
->>    2:  80  80  10
->>
->> 2) Once this new node brought online,  without N_DEMOTION_TARGETS
->> patch series, 1 is demotion target for 0 and 2 is demotion target
->> for 1.
->>
->> With this patch series applied,
->> 1) No demotion target for either 0 or 1 before dax device is online
-> 
-> I'd argue that is wrong.  At this state you have a tiered memory system
-> be it one with just DRAM.  Using it as such is correct behavior that
-> we should not be preventing.  Sure some usecases wouldn't want that
-> arrangement but some do want it.
-> 
-> For your case we could add a heuristic along the lines of the demotion
-> target should be at least as big as the starting point but that would
-> be a bit hacky.
-> 
-
-Hence the proposal to do a per node demotion target override with the 
-semantics that i explained here
-
-
-https://lore.kernel.org/linux-mm/8735i1zurt.fsf@linux.ibm.com/
-
-Let me know if that interface would be good to handle all the possible 
-demotion target configs we would want to have.
-
--aneesh
+greg k-h

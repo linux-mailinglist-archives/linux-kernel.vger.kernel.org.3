@@ -2,118 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A29E350E5CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:28:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A48A50E5C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:27:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239080AbiDYQat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 12:30:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40658 "EHLO
+        id S243623AbiDYQak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 12:30:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243567AbiDYQaa (ORCPT
+        with ESMTP id S243633AbiDYQad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 12:30:30 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC5A8A315;
-        Mon, 25 Apr 2022 09:26:10 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 9FD96210E4;
-        Mon, 25 Apr 2022 16:26:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1650903968; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VUB+heCNyeRFdPDI1DhMrxZcGuxVYUwZDE80GwpHJU8=;
-        b=pdXu4C9WWm9PwhxJ4kncFBH/N6LpW+See8N92WAtqIGuzAwMFB2MW2lwZkGZStmGNMJT/S
-        Oql8ZjWpYrf8ogzL8VQ3cIPkfW8AWk8h4BuJHKGZWzp0ignZcWNfNucjWTl9vFEEoDD+tN
-        dJo8wa5/oF7v9fgW10I9mAzX1xSkm/g=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1650903968;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VUB+heCNyeRFdPDI1DhMrxZcGuxVYUwZDE80GwpHJU8=;
-        b=kj1ovTZoxRmdmq25y5rwYeLhZBg+ACRAbP3a30Yt/bDVvCkDIQOoWuoBrgv7Mip8r98v41
-        2lUqmZqKseXVKkDg==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 8E7412C141;
-        Mon, 25 Apr 2022 16:26:08 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 3825DA0620; Mon, 25 Apr 2022 18:26:08 +0200 (CEST)
-Date:   Mon, 25 Apr 2022 18:26:08 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     "yukuai (C)" <yukuai3@huawei.com>
-Cc:     Jan Kara <jack@suse.cz>, paolo.valente@linaro.org, axboe@kernel.dk,
-        tj@kernel.org, linux-block@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH -next v2 2/5] block, bfq: add fake weight_counter for
- weight-raised queue
-Message-ID: <20220425162608.feya66a5amdnsr4e@quack3.lan>
-References: <20220416093753.3054696-1-yukuai3@huawei.com>
- <20220416093753.3054696-3-yukuai3@huawei.com>
- <20220425094856.qgkhba2klguduxot@quack3.lan>
- <a27b8c79-867f-9253-84db-1d39c964b3ed@huawei.com>
- <4048cc0c-adc8-8097-4a40-762137c4c282@huawei.com>
+        Mon, 25 Apr 2022 12:30:33 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBE7193C6
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 09:26:21 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id m13so2858262iob.4
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 09:26:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HU3UDCc+mIqj0/fp/LE7q8+k94zCe9E1Hd4WYWfxitY=;
+        b=jgVuez9s1TQ+m/thsk1SoF2n6jLIvdnsC+TSdm3h/UY7rFdEYPJpCUNBVO2xL/L8jG
+         aB7dtnOWSlvzIAOeliZvm4CWNAi6M63Vf9FjYAtC07CvNJ1CgJbByEgsttFCt4oufUTR
+         CSQaLZMqVA9o2+L7pmQW/PpRncduTaBQ5lGRc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HU3UDCc+mIqj0/fp/LE7q8+k94zCe9E1Hd4WYWfxitY=;
+        b=1bTn+cU9Xp75oEeULW2uKRKwYuVtkzmDtYdoxy0HBR+iaIsMehum68kRHaDgfmyHtt
+         d/UuJTo9edzTN4z2jqIqfAuasRZXoK7OuPaOZmYM90qjBuexuEiNh7gJWd1Z86OBYAoI
+         jiA9aZdSewk7fr+M30M5LAaHvT7s2nBsLb7sRb39yvetq4Yoh3ORam+CDrZdmp58Q9zl
+         JNjk/P/KLHeUdXBMuaZGp5oPfk1tadoItH+8CSLJrCn3nli7UQOh2spvCCxsE1mJBd80
+         MBJiGJ4/Zfn8oEH8FQo5ulVdJG/A9NNExcyNH/ggc0eex6+mFMvkRI41CqhPP1GXbiN4
+         4Srg==
+X-Gm-Message-State: AOAM5319FqsM/51ghgFHIC/AYwkcqS7AMOxcu0f42YUrs/QwsZMoSAym
+        X1qeZtV2UALb0DXelJ3SAiSv0TPMFQ3PedNUcmPVSg==
+X-Google-Smtp-Source: ABdhPJwXZUZ5zyqAqVlx/rPhR9eSgerc+CnpehGwUvzudCRMcUQFGT1nRMwSQGb1+5GWDsBJTK8fhG1CWTqwn2ATAYU=
+X-Received: by 2002:a05:6638:617:b0:32a:de4f:7772 with SMTP id
+ g23-20020a056638061700b0032ade4f7772mr4070395jar.155.1650903981260; Mon, 25
+ Apr 2022 09:26:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4048cc0c-adc8-8097-4a40-762137c4c282@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220425021442.1.I650b809482e1af8d0156ed88b5dc2677a0711d46@changeid>
+ <87czh5k7ua.fsf@kernel.org>
+In-Reply-To: <87czh5k7ua.fsf@kernel.org>
+From:   Abhishek Kumar <kuabhs@chromium.org>
+Date:   Mon, 25 Apr 2022 09:26:09 -0700
+Message-ID: <CACTWRwvqtDW_91-JGvH4bNRRo4EqEZZQCJHy7ms0QNwrz=f-oA@mail.gmail.com>
+Subject: Re: [PATCH] ath10k: skip ath10k_halt during suspend for driver state RESTARTING
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        briannorris@chromium.org, ath10k@lists.infradead.org,
+        netdev@vger.kernel.org, Wen Gong <quic_wgong@quicinc.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 25-04-22 21:55:46, yukuai (C) wrote:
-> 在 2022/04/25 21:34, yukuai (C) 写道:
-> > 在 2022/04/25 17:48, Jan Kara 写道:
-> > > On Sat 16-04-22 17:37:50, Yu Kuai wrote:
-> > > > Weight-raised queue is not inserted to weights_tree, which makes it
-> > > > impossible to track how many queues have pending requests through
-> > > > weights_tree insertion and removel. This patch add fake weight_counter
-> > > > for weight-raised queue to do that.
-> > > > 
-> > > > Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> > > 
-> > > This is a bit hacky. I was looking into a better place where to hook to
-> > > count entities in a bfq_group with requests and I think
-> > > bfq_add_bfqq_busy()
-> > > and bfq_del_bfqq_busy() are ideal for this. It also makes better sense
-> > > conceptually than hooking into weights tree handling.
-> > > 
-> > Hi,
-> > 
-> > bfq_del_bfqq_busy() will be called when all the reqs in the bfqq are
-> > dispatched, however there might still some reqs are't completed yet.
-> > 
-> > Here what we want to track is how many bfqqs have pending reqs,
-> > specifically if the bfqq have reqs are't complted.
-> > 
-> > Thus I think bfq_del_bfqq_busy() is not the right place to do that.
-> 
-> BTW, there is a counter 'dispatched' in bfqq, how about we rename it
-> to 'inflight', and inc when adding req to bfqq, dec the same as
-> 'dispatched' ?
-> 
-> This way we can count bfqq when adding 'inflight' from 0 to 1, and
-> stop when decreasing 'inflight' from 1 to 0.
+Thanks Kalle for having a look and adding this on behalf of me.
+Here is the Tested-on tag,
+Tested-on: QCA6174 hw3.2 PCI WLAN.RM.4.4.1-00288-QCARMSWPZ-1
 
-Well, but 'dispatched' is used in quite a few places and it would require
-quite some thinking to decide which impact using 'inflight' has there...
-But we also have 'bfqq->entity.allocated' which is number of requests in
-some state associated with bfqq and we could use that. But as I wrote in my
-previous email, I'm not convinced it is really necessary...
+Thanks
+Abhishek
 
-								Honza
-
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+On Sun, Apr 24, 2022 at 11:14 PM Kalle Valo <kvalo@kernel.org> wrote:
+>
+> Abhishek Kumar <kuabhs@chromium.org> writes:
+>
+> > Double free crash is observed when FW recovery(caused by wmi
+> > timeout/crash) is followed by immediate suspend event. The FW recovery
+> > is triggered by ath10k_core_restart() which calls driver clean up via
+> > ath10k_halt(). When the suspend event occurs between the FW recovery,
+> > the restart worker thread is put into frozen state until suspend completes.
+> > The suspend event triggers ath10k_stop() which again triggers ath10k_halt()
+> > The double invocation of ath10k_halt() causes ath10k_htt_rx_free() to be
+> > called twice(Note: ath10k_htt_rx_alloc was not called by restart worker
+> > thread because of its frozen state), causing the crash.
+> >
+> > To fix this, during the suspend flow, skip call to ath10k_halt() in
+> > ath10k_stop() when the current driver state is ATH10K_STATE_RESTARTING.
+> > Also, for driver state ATH10K_STATE_RESTARTING, call
+> > ath10k_wait_for_suspend() in ath10k_stop(). This is because call to
+> > ath10k_wait_for_suspend() is skipped later in
+> > [ath10k_halt() > ath10k_core_stop()] for the driver state
+> > ATH10K_STATE_RESTARTING.
+> >
+> > The frozen restart worker thread will be cancelled during resume when the
+> > device comes out of suspend.
+> >
+> > Below is the crash stack for reference:
+> >
+> > [  428.469167] ------------[ cut here ]------------
+> > [  428.469180] kernel BUG at mm/slub.c:4150!
+> > [  428.469193] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+> > [  428.469219] Workqueue: events_unbound async_run_entry_fn
+> > [  428.469230] RIP: 0010:kfree+0x319/0x31b
+> > [  428.469241] RSP: 0018:ffffa1fac015fc30 EFLAGS: 00010246
+> > [  428.469247] RAX: ffffedb10419d108 RBX: ffff8c05262b0000
+> > [  428.469252] RDX: ffff8c04a8c07000 RSI: 0000000000000000
+> > [  428.469256] RBP: ffffa1fac015fc78 R08: 0000000000000000
+> > [  428.469276] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > [  428.469285] Call Trace:
+> > [  428.469295]  ? dma_free_attrs+0x5f/0x7d
+> > [  428.469320]  ath10k_core_stop+0x5b/0x6f
+> > [  428.469336]  ath10k_halt+0x126/0x177
+> > [  428.469352]  ath10k_stop+0x41/0x7e
+> > [  428.469387]  drv_stop+0x88/0x10e
+> > [  428.469410]  __ieee80211_suspend+0x297/0x411
+> > [  428.469441]  rdev_suspend+0x6e/0xd0
+> > [  428.469462]  wiphy_suspend+0xb1/0x105
+> > [  428.469483]  ? name_show+0x2d/0x2d
+> > [  428.469490]  dpm_run_callback+0x8c/0x126
+> > [  428.469511]  ? name_show+0x2d/0x2d
+> > [  428.469517]  __device_suspend+0x2e7/0x41b
+> > [  428.469523]  async_suspend+0x1f/0x93
+> > [  428.469529]  async_run_entry_fn+0x3d/0xd1
+> > [  428.469535]  process_one_work+0x1b1/0x329
+> > [  428.469541]  worker_thread+0x213/0x372
+> > [  428.469547]  kthread+0x150/0x15f
+> > [  428.469552]  ? pr_cont_work+0x58/0x58
+> > [  428.469558]  ? kthread_blkcg+0x31/0x31
+> >
+> > Signed-off-by: Abhishek Kumar <kuabhs@chromium.org>
+> > Co-developed-by: Wen Gong <quic_wgong@quicinc.com>
+> > Signed-off-by: Wen Gong <quic_wgong@quicinc.com>
+>
+> Tested-on tag missing, but I can add it if you provide it.
+>
+> https://wireless.wiki.kernel.org/en/users/drivers/ath10k/submittingpatches#tested-on_tag
+>
+> --
+> https://patchwork.kernel.org/project/linux-wireless/list/
+>
+> https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

@@ -2,120 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE6550E43E
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBF6450E44C
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:23:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242754AbiDYPXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 11:23:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42372 "EHLO
+        id S242772AbiDYP0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 11:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiDYPXm (ORCPT
+        with ESMTP id S233952AbiDYP0J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 11:23:42 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43425BF32A;
-        Mon, 25 Apr 2022 08:20:38 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id k27so3655567edk.4;
-        Mon, 25 Apr 2022 08:20:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fbFo0WfowGPP9sPESJqw4Wjx6QEMuAVeUZmPdLIEBDc=;
-        b=X+1gub6Wv0mDmrdLwSu3+rRVhrEPi9qz9oFTepTKw8ILEPJsa37Jo3TuUHudV6ufJY
-         UGysEIZUwx0H1HmlcGOfzeB8e17g40U5fJpnU/Ud2rRjeg+vztspRgjQwvMa/y33MrF9
-         5KhB9t5/+NIBlbsK64BsSqMtZB4u/NRFF8UQntJJWvgPZzRymEZU/tNDlbnz1e97OG7M
-         5Y79WXLCsMyUxhrTmzPEEya+BvW6fApqAfV82T2HAxWI5VYU+okS6q14gu9QbjT9dBP8
-         NnjB/e5Q7s+eyA3DQxU/cdTVAMB6Ukujo03IenjhsjGFKu6mtEVTbQ7ivY3aR8X/kToG
-         cSsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fbFo0WfowGPP9sPESJqw4Wjx6QEMuAVeUZmPdLIEBDc=;
-        b=VPBmPCEZZoDXa2CN/o9IyzdHm0AZDCJpZBiCAZPT7CDspp+s7dj7ofMICupy1vc5Mp
-         FtCJbcEIFeT6aeHmY1+0DTyKalr3eouTnNn91I0CaNa6JA2OV9Mv5bONP9kbU/yI4GrP
-         kAaeRYzvCHjWY5bqC7PheaxftzysUWUfetz4rYYbRJrL3wQh2vtXp7o3l84wqw4rcCgJ
-         BB6Ja3Hu1woe3Ql5bpMH/ZDhY0moNpwfTBKu4wZmuNG0IKCifb+hWaev/St9rL98Ls/l
-         5qrf1Y4sZ9tmjpJhn847idVLYN3pbBTMPIOZejtVbfvRqCdiAlBcSjBy6tvRugIctbQR
-         djqw==
-X-Gm-Message-State: AOAM532gKqHI6Jet/Fq4A6yVSb86+ufjuQNK4gasKmxkIFujkArtvjgG
-        wqAUzdVkp/GL0d/VnsE5JRX+9tlplus=
-X-Google-Smtp-Source: ABdhPJwnjNAACi3/RaJ/oigSRsvntTMGmnyYT17JnY2mZjztEGiMH7PmI1yuCwG7JSmqjxyrcu5wXg==
-X-Received: by 2002:a05:6402:42d4:b0:412:c26b:789 with SMTP id i20-20020a05640242d400b00412c26b0789mr19842837edc.232.1650900036465;
-        Mon, 25 Apr 2022 08:20:36 -0700 (PDT)
-Received: from localhost.localdomain (dynamic-2a01-0c23-b81b-0800-f22f-74ff-fe21-0725.c23.pool.telefonica.de. [2a01:c23:b81b:800:f22f:74ff:fe21:725])
-        by smtp.googlemail.com with ESMTPSA id l17-20020a056402231100b0041d98ed7ad8sm4802863eda.46.2022.04.25.08.20.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 08:20:35 -0700 (PDT)
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-To:     netdev@vger.kernel.org
-Cc:     hauke@hauke-m.de, linux-kernel@vger.kernel.org, andrew@lunn.ch,
-        vivien.didelot@gmail.com, olteanv@gmail.com, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        stable@vger.kernel.org, Jan Hoffmann <jan@3e8.eu>
-Subject: [PATCH net] net: dsa: lantiq_gswip: Don't set GSWIP_MII_CFG_RMII_CLK
-Date:   Mon, 25 Apr 2022 17:20:27 +0200
-Message-Id: <20220425152027.2220750-1-martin.blumenstingl@googlemail.com>
-X-Mailer: git-send-email 2.36.0
+        Mon, 25 Apr 2022 11:26:09 -0400
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5B3E1245;
+        Mon, 25 Apr 2022 08:23:04 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 88251DF69E;
+        Mon, 25 Apr 2022 08:22:34 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ykxmL21nwvSi; Mon, 25 Apr 2022 08:22:33 -0700 (PDT)
+Message-ID: <d6c5c5663f8ae904d409240063295cf516e17dd1.camel@puri.sm>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
+        t=1650900153; bh=PoAhs4rC8s2VNE3r6xYLUglE7+vVgjEdcfrBZL7HIYw=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=TwWQx10+OrU5+LF4ic3BCkWUrj/bBD5KMY098Yi8iUApqrklehSe05vVv8EPRVqUb
+         RWUi3fVqmTLK9uO7dolTzkIjwbG6BY4TCw7U0y/nzutY6qdNqZ+LK+qS5xZnCEkJEL
+         AefHq+1F6sbK5QHuHFKO3j4SgtDT2hD6HNDFjIwUmdL29WqGUcKVF3OQtCIYWBxmKT
+         +q4h9vT0Eay/TRIzdS6xvcFgzoN3UNppXHLBC/YZnD7gH0dxOsXVS6bPM/L1UMG6Jx
+         yZonZuU3caMCSVPm+4QLnTH7SpYampk4ZgzpjFalBtPyZiB5K9+LtRJfKH/wtdDw9o
+         QJHtNAjnwXevA==
+Subject: Re: [PATCH V4 07/11] arm64: dts: imx8mq: Enable both G1 and G2
+ VPU's with vpu-blk-ctrl
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     Adam Ford <aford173@gmail.com>, linux-media@vger.kernel.org
+Cc:     aford@beaconembedded.com, cphealy@gmail.com,
+        kernel test robot <lkp@intel.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Date:   Mon, 25 Apr 2022 17:22:24 +0200
+In-Reply-To: <20220125171129.472775-8-aford173@gmail.com>
+References: <20220125171129.472775-1-aford173@gmail.com>
+         <20220125171129.472775-8-aford173@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 4b5923249b8fa4 ("net: dsa: lantiq_gswip: Configure all remaining
-GSWIP_MII_CFG bits") added all known bits in the GSWIP_MII_CFGp
-register. It helped bring this register into a well-defined state so the
-driver has to rely less on the bootloader to do things right.
-Unfortunately it also sets the GSWIP_MII_CFG_RMII_CLK bit without any
-possibility to configure it. Upon further testing it turns out that all
-boards which are supported by the GSWIP driver in OpenWrt which use an
-RMII PHY have a dedicated oscillator on the board which provides the
-50MHz RMII reference clock.
+Am Dienstag, dem 25.01.2022 um 11:11 -0600 schrieb Adam Ford:
+> With the Hantro G1 and G2 now setup to run independently, update
+> the device tree to allow both to operate.  This requires the
+> vpu-blk-ctrl node to be configured.  Since vpu-blk-ctrl needs
+> certain clock enabled to handle the gating of the G1 and G2
+> fuses, the clock-parents and clock-rates for the various VPU's
+> to be moved into the pgc_vpu because they cannot get re-parented
+> once enabled, and the pgc_vpu is the highest in the chain.
+> 
+> Signed-off-by: Adam Ford <aford173@gmail.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
+> b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
+> index 2df2510d0118..549b2440f55d 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
+> @@ -737,7 +737,21 @@ pgc_gpu: power-domain@5 {
+>                                         pgc_vpu: power-domain@6 {
+>                                                 #power-domain-cells =
+> <0>;
+>                                                 reg =
+> <IMX8M_POWER_DOMAIN_VPU>;
+> -                                               clocks = <&clk
+> IMX8MQ_CLK_VPU_DEC_ROOT>;
+> +                                               clocks = <&clk
+> IMX8MQ_CLK_VPU_DEC_ROOT>,
+> +                                                        <&clk
+> IMX8MQ_CLK_VPU_G1_ROOT>,
+> +                                                        <&clk
+> IMX8MQ_CLK_VPU_G2_ROOT>;
+> +                                               assigned-clocks =
+> <&clk IMX8MQ_CLK_VPU_G1>,
+> +                                                                
+> <&clk IMX8MQ_CLK_VPU_G2>,
+> +                                                                
+> <&clk IMX8MQ_CLK_VPU_BUS>,
+> +                                                                
+> <&clk IMX8MQ_VPU_PLL_BYPASS>;
+> +                                               assigned-clock-
+> parents = <&clk IMX8MQ_VPU_PLL_OUT>,
+> +                                                                    
+>     <&clk IMX8MQ_VPU_PLL_OUT>,
+> +                                                                    
+>     <&clk IMX8MQ_SYS1_PLL_800M>,
+> +                                                                    
+>     <&clk IMX8MQ_VPU_PLL>;
+> +                                               assigned-clock-rates
+> = <600000000>,
+> +                                                                    
+>   <600000000>,
+> +                                                                    
+>   <800000000>,
+> +                                                                    
+>   <0>;
+>                                         };
+>  
+>                                         pgc_disp: power-domain@7 {
+> @@ -1457,30 +1471,31 @@ usb3_phy1: usb-phy@382f0040 {
+>                         status = "disabled";
+>                 };
+>  
+> -               vpu: video-codec@38300000 {
+> -                       compatible = "nxp,imx8mq-vpu";
+> -                       reg = <0x38300000 0x10000>,
+> -                             <0x38310000 0x10000>,
+> -                             <0x38320000 0x10000>;
+> -                       reg-names = "g1", "g2", "ctrl";
+> -                       interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
+> -                       interrupt-names = "g1", "g2";
+> +               vpu_g1: video-codec@38300000 {
+> +                       compatible = "nxp,imx8mq-vpu-g1";
+> +                       reg = <0x38300000 0x10000>;
+> +                       interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
+> +                       clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>;
+> +                       power-domains = <&vpu_blk_ctrl
+> IMX8MQ_VPUBLK_PD_G1>;
+> +               };
+> +
+> +               vpu_g2: video-codec@38310000 {
+> +                       compatible = "nxp,imx8mq-vpu-g2";
+> +                       reg = <0x38310000 0x10000>;
+> +                       interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
+> +                       clocks = <&clk IMX8MQ_CLK_VPU_G2_ROOT>;
+> +                       power-domains = <&vpu_blk_ctrl
+> IMX8MQ_VPUBLK_PD_G2>;
+> +               };
+> +
+> +               vpu_blk_ctrl: blk-ctrl@38320000 {
+> +                       compatible = "fsl,imx8mq-vpu-blk-ctrl";
+> +                       reg = <0x38320000 0x100>;
+> +                       power-domains = <&pgc_vpu>, <&pgc_vpu>,
+> <&pgc_vpu>;
+> +                       power-domain-names = "bus", "g1", "g2";
+>                         clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>,
+> -                                <&clk IMX8MQ_CLK_VPU_G2_ROOT>,
+> -                                <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
+> -                       clock-names = "g1", "g2", "bus";
+> -                       assigned-clocks = <&clk IMX8MQ_CLK_VPU_G1>,
+> -                                         <&clk IMX8MQ_CLK_VPU_G2>,
+> -                                         <&clk IMX8MQ_CLK_VPU_BUS>,
+> -                                         <&clk
+> IMX8MQ_VPU_PLL_BYPASS>;
+> -                       assigned-clock-parents = <&clk
+> IMX8MQ_VPU_PLL_OUT>,
+> -                                                <&clk
+> IMX8MQ_VPU_PLL_OUT>,
+> -                                                <&clk
+> IMX8MQ_SYS1_PLL_800M>,
+> -                                                <&clk
+> IMX8MQ_VPU_PLL>;
+> -                       assigned-clock-rates = <600000000>,
+> <600000000>,
+> -                                              <800000000>, <0>;
+> -                       power-domains = <&pgc_vpu>;
+> +                                <&clk IMX8MQ_CLK_VPU_G2_ROOT>;
+> +                       clock-names = "g1", "g2";
+> +                       #power-domain-cells = <1>;
+>                 };
+>  
+>                 pcie0: pcie@33800000 {
 
-Don't set the GSWIP_MII_CFG_RMII_CLK bit (but keep the code which always
-clears it) to fix support for the Fritz!Box 7362 SL in OpenWrt. This is
-a board with two Atheros AR8030 RMII PHYs. With the "RMII clock" bit set
-the MAC also generates the RMII reference clock whose signal then
-conflicts with the signal from the oscillator on the board. This results
-in a constant cycle of the PHY detecting link up/down (and as a result
-of that: the two ports using the AR8030 PHYs are not working).
+With this update, when testing suspend to ram on imx8mq, I get:
 
-At the time of writing this patch there's no known board where the MAC
-(GSWIP) has to generate the RMII reference clock. If needed this can be
-implemented in future by providing a device-tree flag so the
-GSWIP_MII_CFG_RMII_CLK bit can be toggled per port.
+buck4: failed to disable: -ETIMEDOUT
 
-Fixes: 4b5923249b8fa4 ("net: dsa: lantiq_gswip: Configure all remaining GSWIP_MII_CFG bits")
-Cc: stable@vger.kernel.org
-Tested-by: Jan Hoffmann <jan@3e8.eu>
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
----
- drivers/net/dsa/lantiq_gswip.c | 3 ---
- 1 file changed, 3 deletions(-)
+where buck4 is power-supply of pgc_vpu. And thus the transition to
+suspend (and resuming) fails.
 
-diff --git a/drivers/net/dsa/lantiq_gswip.c b/drivers/net/dsa/lantiq_gswip.c
-index a416240d001b..12c15da55664 100644
---- a/drivers/net/dsa/lantiq_gswip.c
-+++ b/drivers/net/dsa/lantiq_gswip.c
-@@ -1681,9 +1681,6 @@ static void gswip_phylink_mac_config(struct dsa_switch *ds, int port,
- 		break;
- 	case PHY_INTERFACE_MODE_RMII:
- 		miicfg |= GSWIP_MII_CFG_MODE_RMIIM;
--
--		/* Configure the RMII clock as output: */
--		miicfg |= GSWIP_MII_CFG_RMII_CLK;
- 		break;
- 	case PHY_INTERFACE_MODE_RGMII:
- 	case PHY_INTERFACE_MODE_RGMII_ID:
--- 
-2.36.0
+Have you tested system suspend after the imx8m-blk-ctrl update on
+imx8mq?
+
+thank you,
+
+                                 martin
 

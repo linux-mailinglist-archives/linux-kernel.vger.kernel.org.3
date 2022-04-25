@@ -2,94 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F407D50E3C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45DA750E3C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233664AbiDYO6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 10:58:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57276 "EHLO
+        id S242683AbiDYO57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 10:57:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242675AbiDYO5y (ORCPT
+        with ESMTP id S242605AbiDYO54 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 10:57:54 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A3D36319;
+        Mon, 25 Apr 2022 10:57:56 -0400
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7FB36319
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 07:54:51 -0700 (PDT)
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id E5B484C131F;
+        Mon, 25 Apr 2022 14:54:50 +0000 (UTC)
+Received: from pdx1-sub0-mail-a217.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 3A4F04C14EF;
+        Mon, 25 Apr 2022 14:54:50 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1650898490; a=rsa-sha256;
+        cv=none;
+        b=Qv5pdPBXIhhxPP0diy3cv44dDzGzcdi1DtgvFfn9fDpc+hBu0+5kjUsAZ2DZSsYGofm8K9
+        gSwX54wG7e84VxuQV3omoyt/Ccw4Eca5Fv0+ynrOeBInDPoeJhxZVuf/9axO20DEtMPC51
+        pUjfrlVznpXK1I7WsrFFrGvh3FVLr+TfziiNyOdt1kvW/tffyydM4oFvmHAtQdJSEcsHA5
+        GCwKN4S3ldoOOmmCNBnO3fneIGrEfL/dEF2AVlFMal0KHnvLhOSn9cpzDj+iuxrbdo5CIn
+        vmfLYI4iPZvGtYvsIYWslWdYF3pll7wVKqklu5KBp6FDzWr0Y3ztxA65qZd9lw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1650898490;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:dkim-signature;
+        bh=E7RdCTV7+3DP95M5GJ/3bHKwcDL1cFUtBMaATWIA/jQ=;
+        b=NNWXZ+aeIDDnfaN+xPtaep3ed8788+AR0D3Ywcw7vraURpVau6quoiljynN0vCClFtAdIR
+        i30CXEnLR0AiHiTHeb6at0J3xkY4LrZiDx8Z4yaZ70+Kgkpd1nShENzuJ0iMHUimv03AzU
+        mroTXfgsAysWFYKLbrRDRwlMc2ztTbBV/g7JF5GGMKM5VvdKYIlL4ZmQkgd56gLjE0Nsh4
+        7aNqE1swOSPyiiIE/wolfi7abyFxSPV+rdY/YbdbueTYUbp9YBgSbMBxqlZTvgjuIerA9V
+        BgmjWEdtCu8H69/ozcliqV+i+KC5qYCJCBfoVqGiCyfCLi9pcDCk+ago0m60QQ==
+ARC-Authentication-Results: i=1;
+        rspamd-67b64f579b-xzh56;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=ian@linux.cowan.aero
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|ian@linux.cowan.aero
+X-MailChannels-Auth-Id: dreamhost
+X-Spicy-Little: 6516efa239c93994_1650898490701_992106049
+X-MC-Loop-Signature: 1650898490700:3349046989
+X-MC-Ingress-Time: 1650898490700
+Received: from pdx1-sub0-mail-a217.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.96.96.30 (trex/6.7.1);
+        Mon, 25 Apr 2022 14:54:50 +0000
+Received: from localhost.localdomain (unknown [69.12.38.97])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: ian@linux.cowan.aero)
+        by pdx1-sub0-mail-a217.dreamhost.com (Postfix) with ESMTPSA id 4Kn7Ms1GtWznb;
         Mon, 25 Apr 2022 07:54:49 -0700 (PDT)
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nj06y-000DXg-1G; Mon, 25 Apr 2022 16:54:48 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nj06x-000K3I-NO; Mon, 25 Apr 2022 16:54:47 +0200
-Subject: Re: [PATCH bpf-next] bpftoo: Support user defined vmlinux path
-To:     Jianlin Lv <iecedge@gmail.com>, bpf@vger.kernel.org
-Cc:     ast@kernel.org, andrii@kernel.org, kafai@fb.com,
-        quentin@isovalent.com, jean-philippe@linaro.org,
-        mauricio@kinvolk.io, ytcoode@gmail.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        jianlv@ebay.com
-References: <20220425075724.48540-1-jianlv@ebay.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <873eaf55-6e9d-7f19-232c-6d55e1d33d89@iogearbox.net>
-Date:   Mon, 25 Apr 2022 16:54:16 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.cowan.aero;
+        s=dreamhost; t=1650898489;
+        bh=E7RdCTV7+3DP95M5GJ/3bHKwcDL1cFUtBMaATWIA/jQ=;
+        h=From:To:Cc:Subject:Date:Content-Transfer-Encoding;
+        b=b4KQS662s+1BjaJB2DzHSw7988VHh4EMJnvXH3HNOxUpkZo5ft9qVRx7cUHB3EoPt
+         0DX6pItMkxYOP3COUU/xZFYlqsjTc6/aZvkiVdGhDu+1SqMh2moZXqGuxKmOiy9wZb
+         CgIQr/rr4WHv6GZDlo8Hci63Hkg/Wzd1M8Zcsb2NSYHYrnZJQ/Mh1TwVtJbH1zoEdS
+         Yyc7j8oAnwdJIeg66EtdFPjncU4oI0DTvMHIs28Rbwx0lRqnuUhnQtBbzL884PKuhP
+         4IWbLf2PxG9bU6YnKK3MDta9ovBM2gVmtKfjzVMKidA2V89ZNWSgLkp/wlyfglDsPQ
+         vBZgyLnxpTQqw==
+From:   Ian Cowan <ian@linux.cowan.aero>
+To:     Sven Van Asbroeck <TheSven73@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Ian Cowan <ian@linux.cowan.aero>
+Subject: [PATCH] staging: fieldbus: remove unnecessary double negation
+Date:   Mon, 25 Apr 2022 10:54:40 -0400
+Message-Id: <20220425145440.146891-1-ian@linux.cowan.aero>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-In-Reply-To: <20220425075724.48540-1-jianlv@ebay.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.5/26523/Mon Apr 25 10:20:35 2022)
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/25/22 9:57 AM, Jianlin Lv wrote:
-> From: Jianlin Lv <iecedge@gmail.com>
-> 
-> Add EXTERNAL_PATH variable that define unconventional vmlinux path
-> 
-> Signed-off-by: Jianlin Lv <iecedge@gmail.com>
-> ---
-> When building Ubuntu-5.15.0 kernel, '../../../vmlinux' cannot locate
-> compiled vmlinux image. Incorrect vmlinux generated vmlinux.h missing some
-> structure definitions that broken compiling pipe.
+Remove the double negation (!!) from the code since this does nothing
+and may create confusion on whether or not those values are negated.
 
-You should already be able to define custom VMLINUX_BTF_PATHS, no?
+Signed-off-by: Ian Cowan <ian@linux.cowan.aero>
+---
+ drivers/staging/fieldbus/dev_core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-See commit :
-
-commit ec23eb705620234421fd48fc2382490fcfbafc37
-Author: Andrii Nakryiko <andriin@fb.com>
-Date:   Mon Jun 29 17:47:58 2020 -0700
-
-     tools/bpftool: Allow substituting custom vmlinux.h for the build
-
-> ---
->   tools/bpf/bpftool/Makefile | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-> index c6d2c77d0252..fefa3b763eb7 100644
-> --- a/tools/bpf/bpftool/Makefile
-> +++ b/tools/bpf/bpftool/Makefile
-> @@ -160,6 +160,7 @@ $(OBJS): $(LIBBPF) $(LIBBPF_INTERNAL_HDRS)
->   VMLINUX_BTF_PATHS ?= $(if $(O),$(O)/vmlinux)				\
->   		     $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux)	\
->   		     ../../../vmlinux					\
-> +		     $(if $(EXTERNAL_PATH),$(EXTERNAL_PATH)/vmlinux)	\
->   		     /sys/kernel/btf/vmlinux				\
->   		     /boot/vmlinux-$(shell uname -r)
->   VMLINUX_BTF ?= $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS))))
-> 
+diff --git a/drivers/staging/fieldbus/dev_core.c b/drivers/staging/fieldbus/dev_core.c
+index 5aab734606ea..6766b2b13482 100644
+--- a/drivers/staging/fieldbus/dev_core.c
++++ b/drivers/staging/fieldbus/dev_core.c
+@@ -28,7 +28,7 @@ static ssize_t online_show(struct device *dev, struct device_attribute *attr,
+ {
+ 	struct fieldbus_dev *fb = dev_get_drvdata(dev);
+ 
+-	return sprintf(buf, "%d\n", !!fb->online);
++	return sprintf(buf, "%d\n", fb->online);
+ }
+ static DEVICE_ATTR_RO(online);
+ 
+@@ -39,7 +39,7 @@ static ssize_t enabled_show(struct device *dev, struct device_attribute *attr,
+ 
+ 	if (!fb->enable_get)
+ 		return -EINVAL;
+-	return sprintf(buf, "%d\n", !!fb->enable_get(fb));
++	return sprintf(buf, "%d\n", fb->enable_get(fb));
+ }
+ 
+ static ssize_t enabled_store(struct device *dev, struct device_attribute *attr,
+-- 
+2.35.1
 

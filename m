@@ -2,77 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBAFD50DDDB
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 12:28:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 505D650DDE6
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 12:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239486AbiDYKb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 06:31:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50370 "EHLO
+        id S241484AbiDYKdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 06:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238811AbiDYKbZ (ORCPT
+        with ESMTP id S238598AbiDYKdQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 06:31:25 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9DB1C63ED
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 03:28:17 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3CD641FB;
-        Mon, 25 Apr 2022 03:28:17 -0700 (PDT)
-Received: from [10.163.40.250] (unknown [10.163.40.250])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6A8713F73B;
-        Mon, 25 Apr 2022 03:28:12 -0700 (PDT)
-Message-ID: <f9e48ed2-0e90-1a2d-c62e-739c33c4cc53@arm.com>
-Date:   Mon, 25 Apr 2022 15:59:02 +0530
+        Mon, 25 Apr 2022 06:33:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D88FC13;
+        Mon, 25 Apr 2022 03:30:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C2A560EC8;
+        Mon, 25 Apr 2022 10:30:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7C8B1C385AE;
+        Mon, 25 Apr 2022 10:30:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650882612;
+        bh=kMSI7jYM56shSMbM4ufkb7PWdB8PwotuJ9mxtYzPqSg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=b7q+a271nra3bDS2ncH4iyVSDSN1JWY+xbWh4Kql9JCSN8qGwFuXS98TxK2SOUOk+
+         uZg4+AxYPqtEhAzGq5iKwTsgCG61De2sYSlQU/K+Gt6t54bW3Om0Pg8VzZhYkcFwgg
+         2/o7iKPqvsSRWWs7fPs1eAZZkTOXQW8Ev66r87YTUjc1+ICzqJ8w3kdzzTxkepCduc
+         nQEFZ4hceirJlQQlwIdewQKphvDKTfQtvILGJk/GvPODA8B0nJGak/PzTFhG+Y0zJc
+         pmcF8i+IxNwGn0sMh89Ei/wH05vkCXCPS9AAF42StwlSSzowI9ZagVRPALcywQrQq2
+         g6/bQgh5lSENg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 66BBEEAC09C;
+        Mon, 25 Apr 2022 10:30:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] mm: use pgprot_val to get value of pgprot
-Content-Language: en-US
-To:     liusongtang <liusongtang@huawei.com>, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        nixiaoming@huawei.com, young.liuyang@huawei.com, trivial@kernel.org
-References: <20220425081736.249130-1-liusongtang@huawei.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20220425081736.249130-1-liusongtang@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] net: ipa: compute proper aggregation limit
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165088261241.604.18011066317491406409.git-patchwork-notify@kernel.org>
+Date:   Mon, 25 Apr 2022 10:30:12 +0000
+References: <20220421185333.1371632-1-elder@linaro.org>
+In-Reply-To: <20220421185333.1371632-1-elder@linaro.org>
+To:     Alex Elder <elder@linaro.org>
+Cc:     davem@davemloft.net, kuba@kernel.org, mka@chromium.org,
+        evgreen@chromium.org, bjorn.andersson@linaro.org,
+        cpratapa@codeaurora.org, avuyyuru@codeaurora.org,
+        jponduru@codeaurora.org, subashab@codeaurora.org, elder@kernel.org,
+        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Should have added 'memory_hotplug' in the subject line. Otherwise
-this does not specify where the change is (neither does the commit
-message below).
+Hello:
 
-mm/memory_hotplug: use pgprot_val to get value of pgprot
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-On 4/25/22 13:47, liusongtang wrote:
-> pgprot.pgprot is a non-portable code, it should be replaced by
-> portable macro pgprot_val.
+On Thu, 21 Apr 2022 13:53:33 -0500 you wrote:
+> The aggregation byte limit for an endpoint is currently computed
+> based on the endpoint's receive buffer size.
 > 
-> Signed-off-by: liusongtang <liusongtang@huawei.com>
-> ---
->  mm/memory_hotplug.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> However, some bytes at the front of each receive buffer are reserved
+> on the assumption that--as with SKBs--it might be useful to insert
+> data (such as headers) before what lands in the buffer.
 > 
-> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-> index 416b38c..bf7d181 100644
-> --- a/mm/memory_hotplug.c
-> +++ b/mm/memory_hotplug.c
-> @@ -303,7 +303,7 @@ int __ref __add_pages(int nid, unsigned long pfn, unsigned long nr_pages,
->  	int err;
->  	struct vmem_altmap *altmap = params->altmap;
->  
-> -	if (WARN_ON_ONCE(!params->pgprot.pgprot))
-> +	if (WARN_ON_ONCE(!pgprot_val(params->pgprot)))
->  		return -EINVAL;
->  
->  	VM_BUG_ON(!mhp_range_allowed(PFN_PHYS(pfn), nr_pages * PAGE_SIZE, false));
-Otherwise LGTM.
+> [...]
 
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+Here is the summary with links:
+  - [net-next] net: ipa: compute proper aggregation limit
+    https://git.kernel.org/netdev/net-next/c/c5794097b269
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

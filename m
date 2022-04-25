@@ -2,203 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30E6850E4A8
+	by mail.lfdr.de (Postfix) with ESMTP id 9D26150E4A9
 	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236590AbiDYPso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 11:48:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52526 "EHLO
+        id S242982AbiDYPsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 11:48:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234607AbiDYPsj (ORCPT
+        with ESMTP id S242922AbiDYPst (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 11:48:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1321EE097;
-        Mon, 25 Apr 2022 08:45:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 96E1861193;
-        Mon, 25 Apr 2022 15:45:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F030DC385A4;
-        Mon, 25 Apr 2022 15:45:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650901534;
-        bh=kEg9Ej+RVwE10sPW8R1T8nYIpOqUg2eB7gujP8uczO4=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=pCftuB9E269d9NR9dr4LmxSuKMQSaU/x7e4yP561h/x+35/Pistz2MhOtWIOtAoph
-         hYWmyJ0vdTLAVYHV7Jbh+YEHcFZkOmEmwVFZa3V1EJZyrOzgFHDde/6JLFu4GzTwEC
-         PEEAjC8PWJNLJrClxAF3oUiohgXXXAa0KcCnUl1GXX+iGMyHbvw2GIksoXVrLPecfi
-         kAoZDVuBJlm14Dar+h+Ouf3cMM1iYF3M78nJhw1iSuEqsH5NZKvoOXgDmRjSUiCbmp
-         +92iKvjHjchI4SIOoR6o0u4u8PXMBFf8aUuCNbRzLSAMk2V/HL9wDM3ka6JlcOiYb8
-         cSmTu3m6SZcoA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 95FC45C042D; Mon, 25 Apr 2022 08:45:33 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 08:45:33 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Zqiang <qiang1.zhang@intel.com>
-Cc:     frederic@kernel.org, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] rcu: Dump all rcuc kthreads status for CPUs that not
- report quiescent state
-Message-ID: <20220425154533.GT4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220425010404.3249118-1-qiang1.zhang@intel.com>
+        Mon, 25 Apr 2022 11:48:49 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE7E38DA8;
+        Mon, 25 Apr 2022 08:45:45 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1650901543;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aNGctTg/goq7Sq7mhvnKDj6DW5mQC3xi+xtGEu902nA=;
+        b=4xclg1i0WuE8vnC7DCY7BDKUs0sa9ICOfob622p9cPKMqYo82Q+LT0u3zRDY1fN5eQmqpN
+        PHyf9DbhGeTFbOjdXV/2jgPJvuJGITk74JvaK3LEd7Xfmq+ry9w4bEMkwt911F05SeQIDr
+        5+ojkalAzhgfFjtLJ+LYPV6/BCwtxEt81mgEsze8moUjbItQEXCsCaloJODdA6AGm16YCF
+        GpYcPf7OuIcXTH2onSMRtlasOEAlUVX67kn6WzlH7ngXsBJTf1M0Y4/SPZt5K+4JeusTQv
+        VLiBXEjmlsKuzYJaByi8ZHSEOqbPoYeKrMomPenDjMViVLVytvjvI5ljN/ebdA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1650901543;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aNGctTg/goq7Sq7mhvnKDj6DW5mQC3xi+xtGEu902nA=;
+        b=0pVlce+Q0osyO+0+0QOLt0JFlGwYK41Pr49WOEDLlNVNHac4paS0C7dge9bywRCmYoneCP
+        RLdUK+tUk8BxS5AQ==
+To:     Doug Smythies <dsmythies@telus.net>,
+        "'Rafael J. Wysocki'" <rafael@kernel.org>
+Cc:     'the arch/x86 maintainers' <x86@kernel.org>,
+        "'Rafael J. Wysocki'" <rafael@kernel.org>,
+        'Linux PM' <linux-pm@vger.kernel.org>,
+        'Eric Dumazet' <edumazet@google.com>,
+        "'Paul E. McKenney'" <paulmck@kernel.org>,
+        'LKML' <linux-kernel@vger.kernel.org>,
+        Doug Smythies <dsmythies@telus.net>
+Subject: RE: [patch 00/10] x86/cpu: Consolidate APERF/MPERF code
+In-Reply-To: <005501d85503$3b00ca40$b1025ec0$@telus.net>
+References: <20220415133356.179706384@linutronix.de>
+ <005001d85413$75e5dce0$61b196a0$@telus.net>
+ <CAJZ5v0jf-NGa4-xaNaxehkLGPVqwhZrUhLXw2cJ1avtjgT5yPA@mail.gmail.com>
+ <87bkwwvkwa.ffs@tglx> <005501d85503$3b00ca40$b1025ec0$@telus.net>
+Date:   Mon, 25 Apr 2022 17:45:42 +0200
+Message-ID: <87pml5180p.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220425010404.3249118-1-qiang1.zhang@intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 09:04:04AM +0800, Zqiang wrote:
-> If the rcutree.use_softirq is configured, when RCU Stall event
-> happened, dump status of all rcuc kthreads who due to starvation
-> prevented grace period ends on CPUs that not report quiescent
-> state.
-> 
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> ---
->  v1->v2:
->  rework rcuc_kthread_dump function
->  v2->v3:
->  merge this rcuc-stalled information into print_cpu_stall_info()
->  v3->v4:
->  print rcuc info only when rcuc kthread is starved
-> 
->  kernel/rcu/tree_stall.h | 49 ++++++++++++++++++-----------------------
->  1 file changed, 21 insertions(+), 28 deletions(-)
+On Wed, Apr 20 2022 at 15:08, Doug Smythies wrote:
+> On 2022.04.19 14:11 Thomas Gleixner wrote:
+>>> That's because after the changes in this series scaling_cur_freq
+>>> returns 0 if the given CPU is idle.
+>>
+>> Which is sensible IMO as there is really no point in waking an idle CPU
+>> just to read those MSRs, then wait 20ms wake it up again to read those
+>> MSRs again.
+>
+> I totally agree.
+> It is the inconsistency for what is displayed as a function of driver/governor
+> that is my concern.
 
-I have queued this for testing and further review, thank you!
+Raphael suggested to move the show_cpuinfo() logic into the a/mperf
+code. See below.
 
-I did the usual wordsmithing, plus I got rid of a couple of space
-characters that are extraneous in the common case (one of yours and one
-pre-existing instance).
+Thanks,
 
-Could you please generate an actual stall of this type?  You might
-need to add a delay to the rcuc code, but other than that, please see
-the rcutorture blog series [1] and in particular the post on forcing
-stall warnings [2].
+        tglx
+---
+Subject: x86/aperfmperf: Integrate the fallback code from show_cpuinfo()
+From: Thomas Gleixner <tglx@linutronix.de>
+Date: Mon, 25 Apr 2022 15:19:29 +0200
 
-							Thanx, Paul
+Due to the avoidance of IPIs to idle CPUs arch_freq_get_on_cpu() can return
+0 when the last sample was too long ago.
 
-[1] https://paulmck.livejournal.com/61432.html
-[2] https://paulmck.livejournal.com/58077.html
+show_cpuinfo() has a fallback to cpufreq_quick_get() and if that fails to
+return cpu_khz, but the readout code for the per CPU scaling frequency in
+sysfs does not.
 
-------------------------------------------------------------------------
+Move that fallback into arch_freq_get_on_cpu() so the behaviour is the same
+when reading /proc/cpuinfo and /sys/..../cur_scaling_freq.
 
-commit 66226e2acda8b31b60137b1ae71244df68541a01
-Author: Zqiang <qiang1.zhang@intel.com>
-Date:   Mon Apr 25 09:04:04 2022 +0800
+Suggested-by: "Rafael J. Wysocki" <rafael@kernel.org>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+---
+ arch/x86/kernel/cpu/aperfmperf.c |   10 +++++++---
+ arch/x86/kernel/cpu/proc.c       |    7 +------
+ 2 files changed, 8 insertions(+), 9 deletions(-)
 
-    rcu: Dump all rcuc kthreads status for CPUs that not report quiescent state
-    
-    If the rcutree.use_softirq kernel boot parameter is disabled, then it is
-    possible that a RCU CPU stall is due to the rcuc kthreads being starved of
-    CPU time.  There is currently no easy way to infer this from the RCU CPU
-    stall warning output.  This commit therefore adds a string of the form "
-    rcuc=%ld jiffies(starved)" to a given CPU's output if the corresponding
-    rcuc kthread has been starved for more than two seconds.
-    
-    [ paulmck: Eliminate extraneous space characters. ]
-    
-    Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-
-diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
-index d7956c03edbd4..0a25a4ea6eef8 100644
---- a/kernel/rcu/tree_stall.h
-+++ b/kernel/rcu/tree_stall.h
-@@ -407,7 +407,19 @@ static bool rcu_is_gp_kthread_starving(unsigned long *jp)
- 
- static bool rcu_is_rcuc_kthread_starving(struct rcu_data *rdp, unsigned long *jp)
+--- a/arch/x86/kernel/cpu/aperfmperf.c
++++ b/arch/x86/kernel/cpu/aperfmperf.c
+@@ -405,12 +405,12 @@ void arch_scale_freq_tick(void)
+ unsigned int arch_freq_get_on_cpu(int cpu)
  {
--	unsigned long j = jiffies - READ_ONCE(rdp->rcuc_activity);
-+	int cpu;
-+	struct task_struct *rcuc;
-+	unsigned long j;
-+
-+	rcuc = rdp->rcu_cpu_kthread_task;
-+	if (!rcuc)
-+		return false;
-+
-+	cpu = task_cpu(rcuc);
-+	if (cpu_is_offline(cpu) || idle_cpu(cpu))
-+		return false;
-+
-+	j = jiffies - READ_ONCE(rdp->rcuc_activity);
+ 	struct aperfmperf *s = per_cpu_ptr(&cpu_samples, cpu);
++	unsigned int seq, freq;
+ 	unsigned long last;
+-	unsigned int seq;
+ 	u64 acnt, mcnt;
  
- 	if (jp)
- 		*jp = j;
-@@ -432,6 +444,9 @@ static void print_cpu_stall_info(int cpu)
- 	struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
- 	char *ticks_title;
- 	unsigned long ticks_value;
-+	bool rcuc_starved;
-+	unsigned long j;
-+	char buf[32];
+ 	if (!cpu_feature_enabled(X86_FEATURE_APERFMPERF))
+-		return 0;
++		goto fallback;
  
- 	/*
- 	 * We could be printing a lot while holding a spinlock.  Avoid
-@@ -449,7 +464,10 @@ static void print_cpu_stall_info(int cpu)
- 	delta = rcu_seq_ctr(rdp->mynode->gp_seq - rdp->rcu_iw_gp_seq);
- 	falsepositive = rcu_is_gp_kthread_starving(NULL) &&
- 			rcu_dynticks_in_eqs(rcu_dynticks_snap(rdp));
--	pr_err("\t%d-%c%c%c%c: (%lu %s) idle=%03x/%ld/%#lx softirq=%u/%u fqs=%ld %s\n",
-+	rcuc_starved = rcu_is_rcuc_kthread_starving(rdp, &j);
-+	if (rcuc_starved)
-+		sprintf(buf, " rcuc=%ld jiffies(starved)", j);
-+	pr_err("\t%d-%c%c%c%c: (%lu %s) idle=%03x/%ld/%#lx softirq=%u/%u fqs=%ld%s%s\n",
- 	       cpu,
- 	       "O."[!!cpu_online(cpu)],
- 	       "o."[!!(rdp->grpmask & rdp->mynode->qsmaskinit)],
-@@ -462,32 +480,10 @@ static void print_cpu_stall_info(int cpu)
- 	       rdp->dynticks_nesting, rdp->dynticks_nmi_nesting,
- 	       rdp->softirq_snap, kstat_softirqs_cpu(RCU_SOFTIRQ, cpu),
- 	       data_race(rcu_state.n_force_qs) - rcu_state.n_force_qs_gpstart,
-+	       rcuc_starved ? buf : "",
- 	       falsepositive ? " (false positive?)" : "");
+ 	do {
+ 		seq = raw_read_seqcount_begin(&s->seq);
+@@ -424,9 +424,13 @@ unsigned int arch_freq_get_on_cpu(int cp
+ 	 * which covers idle and NOHZ full CPUs.
+ 	 */
+ 	if (!mcnt || (jiffies - last) > MAX_SAMPLE_AGE)
+-		return 0;
++		goto fallback;
+ 
+ 	return div64_u64((cpu_khz * acnt), mcnt);
++
++fallback:
++	freq = cpufreq_quick_get(cpu);
++	return freq ? freq : cpu_khz;
  }
  
--static void rcuc_kthread_dump(struct rcu_data *rdp)
--{
--	int cpu;
--	unsigned long j;
--	struct task_struct *rcuc;
--
--	rcuc = rdp->rcu_cpu_kthread_task;
--	if (!rcuc)
--		return;
--
--	cpu = task_cpu(rcuc);
--	if (cpu_is_offline(cpu) || idle_cpu(cpu))
--		return;
--
--	if (!rcu_is_rcuc_kthread_starving(rdp, &j))
--		return;
--
--	pr_err("%s kthread starved for %ld jiffies\n", rcuc->comm, j);
--	sched_show_task(rcuc);
--	if (!trigger_single_cpu_backtrace(cpu))
--		dump_cpu_task(cpu);
--}
--
- /* Complain about starvation of grace-period kthread.  */
- static void rcu_check_gp_kthread_starvation(void)
- {
-@@ -659,9 +655,6 @@ static void print_cpu_stall(unsigned long gps)
- 	rcu_check_gp_kthread_expired_fqs_timer();
- 	rcu_check_gp_kthread_starvation();
+ static int __init bp_init_aperfmperf(void)
+--- a/arch/x86/kernel/cpu/proc.c
++++ b/arch/x86/kernel/cpu/proc.c
+@@ -86,12 +86,7 @@ static int show_cpuinfo(struct seq_file
+ 	if (cpu_has(c, X86_FEATURE_TSC)) {
+ 		unsigned int freq = arch_freq_get_on_cpu(cpu);
  
--	if (!use_softirq)
--		rcuc_kthread_dump(rdp);
--
- 	rcu_dump_cpu_stacks();
+-		if (!freq)
+-			freq = cpufreq_quick_get(cpu);
+-		if (!freq)
+-			freq = cpu_khz;
+-		seq_printf(m, "cpu MHz\t\t: %u.%03u\n",
+-			   freq / 1000, (freq % 1000));
++		seq_printf(m, "cpu MHz\t\t: %u.%03u\n", freq / 1000, (freq % 1000));
+ 	}
  
- 	raw_spin_lock_irqsave_rcu_node(rnp, flags);
+ 	/* Cache size */

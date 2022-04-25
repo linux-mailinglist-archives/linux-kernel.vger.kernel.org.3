@@ -2,92 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4E7350E7A8
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A0D50E7AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240981AbiDYSCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 14:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38030 "EHLO
+        id S244184AbiDYSC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 14:02:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiDYSCp (ORCPT
+        with ESMTP id S244167AbiDYSC4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 14:02:45 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D6D2458D;
-        Mon, 25 Apr 2022 10:59:40 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id bv19so31152397ejb.6;
-        Mon, 25 Apr 2022 10:59:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=TtgZ9hhhM4u37jsTuLZNpiEojGjDtunmh77jaqRuyTQ=;
-        b=Z4guqvZ1DmvBpFabB1XWYbAjbioMhUlKBS9dG6i3rc6ljtSqq1aV39L5YsbAbrMIqU
-         dVigS191k+K5O711V4uWIdpI6CB/75y22CLZml6p4Hfv0TKF1Ga8tsaXt7fVglHSgtr7
-         dM6gVArOUOlZk6VDrG9RL3cmF/AcVTflft/tnR4Mrr7uBPOGL8zBF+S9yIlWy04nR9hE
-         2EymrYGUwA+2DYX3iegcO1njjYDVm7to9pnz5eq7jMaYxadCux9aKQnVi6PgTmjvLYvr
-         I/9sEt39ou7PEEjajbQtGkEyDAppODxySeUDq5l2B5mflpUp62/5T78j2ha4CXy4wHiD
-         GrVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=TtgZ9hhhM4u37jsTuLZNpiEojGjDtunmh77jaqRuyTQ=;
-        b=iGiv/EPHPQOn5wy48px2pEk2wOJa18u/sx9J7FALgIWd8AuEjbEFg9/D163SU71g6Y
-         Wb4KMeUw7jIvgXwpwYy42T1qUwV1/tY89sxdB7dxSASfJcHlmkNxgzbJV6uBILQoSxzU
-         eukC7S52bWA/oK2XMbt+Hp0tVfLcuv+NCLIzBMpIQXXi7S2WzeAHYzzrwO9dXd0K8/lV
-         u3nUKgkYMpWemP67znTXftoN9PS4DtdI1W6MCLvnvp0e5vBVhXb0+YttVl48J+P52YWK
-         DgUCFBnfD8T40Th5uYYxlL5SYQIW4ndrQsKqVcHoxDS1dKWOm5t4VNOMsNnIxd4Nwvcq
-         2Pag==
-X-Gm-Message-State: AOAM533Kb8OH8XvQpQ2HKQwetmdruxkzh/6F2DvSRypACgBQs4Y8w3mE
-        YyE4mNDcHP6fBe3DbaEfN+k=
-X-Google-Smtp-Source: ABdhPJzYYWBWzPgmXZIuANGBFazqlekbk38HKp1EanXlXkro9F+u0aIvfoRGlTvJnkHEgdkYjebayw==
-X-Received: by 2002:a17:907:3e1d:b0:6d7:1031:7e0 with SMTP id hp29-20020a1709073e1d00b006d7103107e0mr17169875ejc.580.1650909579477;
-        Mon, 25 Apr 2022 10:59:39 -0700 (PDT)
-Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
-        by smtp.gmail.com with ESMTPSA id u18-20020a17090626d200b006efdd9b95c8sm3867949ejc.47.2022.04.25.10.59.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 10:59:39 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        Samuel Holland <samuel@sholland.org>
-Cc:     wens@csie.org, maxime@cerno.tech
-Subject: Re: Re: [PATCH] clk: sunxi: sun9i-mmc: check return value after calling platform_get_resource()
-Date:   Mon, 25 Apr 2022 19:59:37 +0200
-Message-ID: <2976854.CbtlEUcBR6@kista>
-In-Reply-To: <9ebabc53-72de-bbec-895c-fa3760ed5374@sholland.org>
-References: <20220421134308.2885094-1-yangyingliang@huawei.com> <9ebabc53-72de-bbec-895c-fa3760ed5374@sholland.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 25 Apr 2022 14:02:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B7610772E
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 10:59:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E78261628
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 17:59:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D3042C385A4;
+        Mon, 25 Apr 2022 17:59:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650909589;
+        bh=CMsi/XNPu5s69QtgKwOQHpzQ+ml8kfcgdzDF2vVjX+k=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=GNX11SRn9NE+uGSn6prin2vKZlR7tNap1d7PfxBFhXzubyJs9z8CMvqg9MYbnt/Y3
+         /lOefT0rQPFo2NMMGGXoKemLBemsLIuVwYqyGtmEPcKyX/O1W/Oox/YYkabP5jMQyD
+         E9+FF2p3OYkq0RSKnLPMHZP/PTxoDG7PbRQFFSgkL7pbLatHpfuoJ0YazPyB63yaBA
+         CJbhFZpq3ua0Eyj/kS/vOro9jV8JT5zEGJr/QqyFEi+AMUFumr7Ja/5um3103/etLk
+         sBepqhU0wtUJIFG5GJkFkzTs6+BYgGY61rTDPYBuG2oZz7AYfJlqgQW/N9jBE6iuJZ
+         remoG4mnfGihQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B98BCE6D402;
+        Mon, 25 Apr 2022 17:59:49 +0000 (UTC)
+Subject: Re: [GIT PULL] f2fs fix for 5.18
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YmbSOkjjP5ekfcGk@google.com>
+References: <YmbSOkjjP5ekfcGk@google.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YmbSOkjjP5ekfcGk@google.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git tags/f2fs-fix-5.18
+X-PR-Tracked-Commit-Id: 4d8ec91208196e0e19195f1e7d6be9de5873f242
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: d615b5416f8a1afeb82d13b238f8152c572d59c0
+Message-Id: <165090958975.5171.9135856472795292094.pr-tracker-bot@kernel.org>
+Date:   Mon, 25 Apr 2022 17:59:49 +0000
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux F2FS Dev Mailing List 
+        <linux-f2fs-devel@lists.sourceforge.net>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne sobota, 23. april 2022 ob 21:45:05 CEST je Samuel Holland napisal(a):
-> On 4/21/22 8:43 AM, Yang Yingliang wrote:
-> > It will cause null-ptr-deref if platform_get_resource() returns NULL,
-> > we need check the return value.
-> > 
-> > Fixes: 7a6fca879f59 ("clk: sunxi: Add driver for A80 MMC config clocks/
-resets")
-> > Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> 
-> Reviewed-by: Samuel Holland <samuel@sholland.org>
-> 
-> 
+The pull request you sent on Mon, 25 Apr 2022 09:54:18 -0700:
 
-Applied to sunxi/clk-fixes-for-5.18, thanks!
+> git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git tags/f2fs-fix-5.18
 
-Best regards,
-Jernej
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/d615b5416f8a1afeb82d13b238f8152c572d59c0
 
+Thank you!
 
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

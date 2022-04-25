@@ -2,147 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1077250E108
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:03:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCBB50E120
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239973AbiDYNGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 09:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54320 "EHLO
+        id S241362AbiDYNIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 09:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbiDYNGT (ORCPT
+        with ESMTP id S241741AbiDYNIB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 09:06:19 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52E913D76;
-        Mon, 25 Apr 2022 06:03:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1650891796; x=1682427796;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TCbxBJKDjx/pXpEyqjCCZTPX37Sf1AfCI5Sa6rwvQV8=;
-  b=frjy5xJ9toS//lrdEWlSAFXRKfwE35+roBJiBjyecfB4BpgkfOkJP6zX
-   j9hMBjY0MFRKIyZwRef4Y49EW1SIMavemxx3YTWoxdDG68+93JZ3dfvQf
-   6d4Nvdzou1x1tDrdTSJQFZmk/AJaB7O0/AOHj0aIP1PFTSsPaCrGe8Tdp
-   8=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 25 Apr 2022 06:03:15 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 06:03:14 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 25 Apr 2022 06:03:14 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 25 Apr 2022 06:03:07 -0700
-Date:   Mon, 25 Apr 2022 18:33:03 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Matthias Kaehlcke <mka@chromium.org>
-CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Len Brown <len.brown@intel.com>, "Pavel Machek" <pavel@ucw.cz>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
-        <quic_kriskura@quicinc.com>, <quic_vpulyala@quicinc.com>
-Subject: Re: [PATCH v14 2/7] PM / wakeup: Add device_children_wakeup_capable()
-Message-ID: <20220425130303.GA16319@hu-pkondeti-hyd.qualcomm.com>
-References: <1650395470-31333-1-git-send-email-quic_c_sanm@quicinc.com>
- <1650395470-31333-3-git-send-email-quic_c_sanm@quicinc.com>
- <CAJZ5v0h2ZKPN6SERPnASPywZfeOWXWncJgNZ1WZa80+=M4DCiQ@mail.gmail.com>
- <YmL3lMaR79wPMEfY@google.com>
+        Mon, 25 Apr 2022 09:08:01 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E72317A8C;
+        Mon, 25 Apr 2022 06:04:56 -0700 (PDT)
+Received: from fraeml736-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Kn4rT6BqDz67PFg;
+        Mon, 25 Apr 2022 21:00:57 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml736-chm.china.huawei.com (10.206.15.217) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 25 Apr 2022 15:04:54 +0200
+Received: from [10.47.92.213] (10.47.92.213) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.24; Mon, 25 Apr
+ 2022 14:04:53 +0100
+Message-ID: <1bb53912-c5c3-7690-e82f-cf356ca87404@huawei.com>
+Date:   Mon, 25 Apr 2022 14:04:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YmL3lMaR79wPMEfY@google.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 1/4] scsi: core: constify pointer to scsi_host_template
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Christoph Hellwig <hch@infradead.org>
+CC:     "Ewan D. Milne" <emilne@redhat.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Alim Akhtar" <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "Doug Gilbert" <dgilbert@interlog.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <james.smart@broadcom.com>
+References: <20220408103027.311624-1-krzysztof.kozlowski@linaro.org>
+ <2a88a992-641a-b3ff-fe39-7a61fff87cb6@huawei.com>
+ <4c3be5b6-50ef-9e9a-6cee-9642df943342@linaro.org>
+ <7b3885e3-dbae-ff0b-21dc-c28d635d950b@huawei.com>
+ <c121430b1b5c8f5816b2b42b9178d00889260c90.camel@redhat.com>
+ <b6af3fe8-db9a-b5dc-199f-21c05d7664a2@huawei.com>
+ <Yl+wJ7xSHzWmR+bR@infradead.org>
+ <d09faf74-a52e-8d93-cf26-08b43b12c564@huawei.com>
+ <24bfb681-faec-3567-3089-9cd5ee182710@linaro.org>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <24bfb681-faec-3567-3089-9cd5ee182710@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.92.213]
+X-ClientProxiedBy: lhreml702-chm.china.huawei.com (10.201.108.51) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matthias,
-
-On Fri, Apr 22, 2022 at 11:44:36AM -0700, Matthias Kaehlcke wrote:
-> On Fri, Apr 22, 2022 at 01:57:17PM +0200, Rafael J. Wysocki wrote:
-> > On Tue, Apr 19, 2022 at 9:11 PM Sandeep Maheswaram
-> > <quic_c_sanm@quicinc.com> wrote:
-> > >
-> > > From: Matthias Kaehlcke <mka@chromium.org>
-> > >
-> > > Add device_children_wakeup_capable() which checks whether the device itself
-> > > or one if its descendants is wakeup capable.
-> > 
-> > device_wakeup_path() exists for a very similar purpose.
-> > 
-> > Is it not usable for whatever you need the new function introduced here?
+On 25/04/2022 10:22, Krzysztof Kozlowski wrote:
+> On 25/04/2022 10:58, John Garry wrote:
+>> On 20/04/2022 08:03, Christoph Hellwig wrote:
+>>>> The standard flow is:
+>>>>
+>>>> shost = scsi_host_alloc(sht, )
+>>>>
+>>>> // modify shost, like
+>>>> shost->cmd_per_lun = 5;
+>>>>
+>>>> scsi_add_host(shost)
+>>>>
+>>>> Is there some reason for which those two drivers can't follow that?
+>>> I think they should.  Method tables should not be mutable data.
+>>> .
+>>
+>> Hi Krzysztof,
+>>
+>> Do you have any interest in going further with your work and trying to
+>> change all SCSI driver instances of scsi_host_template to be const? I am
+>> not sure if it has been attempted before...
 > 
-> I wasn't aware of it's function, there are no doc comments and the
-> name isn't really self explanatory.
+> I can work on this, but what about the SCSI core modifying the template?
+
+I hope that this isn't a can of worms...
+
+> For example scsi_proc_hostdir_rm(): 'present' and 'proc_dir' members.
+> Where should they be stored? Should they be moved to the Scsi_Host?
 > 
-> In a quick test device_wakeup_path() returned inconsistent values for the
-> root hub, sometimes true, others false when a wakeup capable USB device was
-> connected.
 
-We will also test the same to double confirm the behavior of
-device_wakeup_path(). I am assuming that you checked device_wakeup_path()
-only during system suspend path.
+I don't think scsi_Host is appropriate as this is per-scsi host 
+template, unless you see a way to do it that way. Alternatively we could 
+keep a separate list of registered sht, like this:
 
-Here is what I understood by looking at __device_suspend(). Please share
-your thoughts on this.
+struct sht_proc_dir {
+	int cnt;
+	struct list_head list;
+	struct proc_dir_entry *proc_dir;
+	struct scsi_host_template *sht;
+};
+static LIST_HEAD(sht_proc_dir_list);
 
-power.wakeup_path is set to true for the parent *after* a wakeup capable
-device is suspended. This means when the root hub(s) is suspended, it is
-propagated to xhci-plat and when xhci-plat is suspended, it is propagated
-to dwc3. bottom up propgation during system suspend.
+void scsi_proc_hostdir_add(struct scsi_host_template *sht)
+{
+	struct sht_proc_dir *dir;
 
-I believe we can directly check something like this in the dwc3 driver
-instead of having another wrapper like device_children_wakeup_capable().
+	if (!sht->show_info)
+		return;
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 1170b80..a783257 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1878,8 +1878,14 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
- 		break;
- 	case DWC3_GCTL_PRTCAP_HOST:
- 		if (!PMSG_IS_AUTO(msg)) {
-+			/*
-+			 * Don't kill the host when dwc3 is wakeup capable and
-+			 * its children needs wakeup.
-+			 */
-+			if (device_may_wakeup(dwc->dev) && device_wakeup_path(dwc->dev))
-+				handle_it();
-+		} else {
- 			dwc3_core_exit(dwc);
--			break;
- 		}
- 
- 		/* Let controller to suspend HSPHY before PHY driver suspends */
+	mutex_lock(&global_host_template_mutex);
+	list_for_each_entry(dir, &sht_proc_dir_list, list) {
+		if (dir->sht == sht) {
+			dir->cnt++;
+			goto out;
+		}
+	}
+	dir = kzalloc(sizeof(*dir), GFP_KERNEL);
+	if (!dir)
+		goto out;
+
+	dir->proc_dir = proc_mkdir(sht->proc_name, proc_scsi);
+	if (!dir->proc_dir) {
+		printk(KERN_ERR "%s: proc_mkdir failed for %s\n",
+			       __func__, sht->proc_name);
+		kfree(dir);
+		goto out;
+	}
+
+	dir->cnt++;
+	list_add_tail(&dir->list, &sht_proc_dir_list);
+out:
+	mutex_unlock(&global_host_template_mutex);
+}
+
+and so on..
+
+--->8---
 
 Thanks,
-Pavan
+John

@@ -2,122 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C152750EC16
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 00:29:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C1B50EC2E
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 00:35:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236085AbiDYWcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 18:32:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42614 "EHLO
+        id S234205AbiDYWh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 18:37:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiDYWbi (ORCPT
+        with ESMTP id S230484AbiDYWhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 18:31:38 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68BD346B12
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 15:25:43 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id x33so28770464lfu.1
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 15:25:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=wt4SKBmA6dd3dzu1mZ1RfRyaYtR/x/4FZ2KdRLDFj/w=;
-        b=QPsZgMq9SXue2UQ1itdFFnFRHTYz99R6bWiozqdCJ1DjeRHUBuaeHMoDWqMeLVq3qC
-         6zn3z5PRQidDkoT5ynr71CckobSDuaaYq6OEtKwyqGFFWOuUpp0roRbuW0r0jNMuiB/2
-         WtLhur6/V+llbtlNayllEvd44XCctKoZNqefEgr2AYQ76gJT14Jt4QcFT05ek0xV0L+t
-         xvgxVSOC+uM0CVYFs83z6R4NRGJsdwzw/1KJyEx3Av94fRbvbrh7dlLzKPUHCsTvRvw6
-         Qu315gYD31FKrwGn9K31G/7i2o80qfMeKYMH6ksad9qF9sFX5yIjEaCog8xX+b4c55OZ
-         0BMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wt4SKBmA6dd3dzu1mZ1RfRyaYtR/x/4FZ2KdRLDFj/w=;
-        b=ZmSgsO5oXviiEzKj2nu3pesDWHVpfv5MyVp/FwExBOzqED7nEvobHfCOmf+/Q+fT0D
-         cHsvmaadkBh1OwBEQ+sesGNxLRD0PQniBAB4xe8OF9KwGRDutSjgSJ6va1xdofKB1z2i
-         /tfOHfEm6b4xKJ30zeuWUcLrb4NaYiuYA5v8fQRMzg90K895ekbJWdqMTk9IrDN0ajy9
-         ZRGUuTLmJtc4uUwNB5MpbB2R1FQ9bxXV3FmCtZZ4vBbbxY8R5/n2pWgXBe6Y9W03KFYT
-         OXWXTZZs95rZhZmB3Vt/vdqWJj2Avzec0vSmzCZZ1IhnuKEcNDy3xClIrIrJYsePHdCW
-         VYzw==
-X-Gm-Message-State: AOAM532tqNGN8moDeaut4MuXWgtWrIJsD+QGrk9JVUSEuqvL4ZRzfEHQ
-        LyhhkfXUqjxN8dkpnveoNFNOQQ==
-X-Google-Smtp-Source: ABdhPJw0tFjZFuKCNqAzwmsqgFMUo+ArHGFhefQtAIvPI+U/f87C4DgCN1sMXpUvxSaY12lfIIyQ0A==
-X-Received: by 2002:ac2:5601:0:b0:472:11a6:8287 with SMTP id v1-20020ac25601000000b0047211a68287mr1724721lfd.440.1650925541873;
-        Mon, 25 Apr 2022 15:25:41 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id s30-20020a195e1e000000b00471fa87b819sm1041159lfb.271.2022.04.25.15.25.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 15:25:41 -0700 (PDT)
-Message-ID: <53d24218-c04f-7157-bd62-997b7a970a5d@linaro.org>
-Date:   Tue, 26 Apr 2022 01:25:40 +0300
+        Mon, 25 Apr 2022 18:37:53 -0400
+Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AEAD110946
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 15:34:47 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|ian@linux.cowan.aero
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id A28286C12D5;
+        Mon, 25 Apr 2022 22:26:10 +0000 (UTC)
+Received: from pdx1-sub0-mail-a217.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 149F46C1146;
+        Mon, 25 Apr 2022 22:26:10 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1650925570; a=rsa-sha256;
+        cv=none;
+        b=cNLdxrQFNCSzX0Kh8+qvgkdkGWRH2IG+0cYwyy9n2jsBJO4ZMx/8Iv8HTr7nbwNyaya85A
+        r1yuBa9pkBI1Pr8Ge+EBgkNWelHu+CuqIDchB/BJMczL/GdYlhUUn9iBVkBtME9wFGU2tZ
+        VRWNV1Iw9lvWVR/Xp96J3Yk2Rn+Ot6J3KhZIT7LXCd/dNN6hW6bKZSsPFlytLA/TEg4qR7
+        KIhGdm2b0mUUYQ9kbsf9nnlZqMcmGxQH/wqnpZKLE9O4BsdcaycF8pZN5TKk/ySHXKa2P2
+        lzC52vwWVq4FzJmgz1mGNpZnduIXtnjfjacOxOifvLrNcgysRFgLGCYHhB0ToQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1650925570;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=wLXv5J7QE2DrW/YnW3muD7xmI1tr1cHpAtIZou57L/A=;
+        b=00VaPip4zr6cBBRZfismsvG7iySApppSjavoCvGcJKFtu+YnLwULboHzXT5KrZ8oRm13tE
+        yIEn918MCTBBO93Ufe50vsg2u0nPnlKceSSfnC88m3Ad2LSZUSjlJta5mb6xnV++bfDAMc
+        qNQYwBYMaBgGYranDpxqT6hHFSF+bxYOwYTxQ2VoiPnr0uMKnb/AyzPMZQ5/026HGxQPvr
+        v0FbrzX4ZR0ISOjOAaZCdHwCMD7v/hS8jlOsZ2dDhgnyGelH1ZeBl5Z+lk6V9nTxfRLkj4
+        iZdFs85u0cgESNQIohWSW1f1c7rOKGhpCDCR5q21uFStTJ6gsXV1xoUa5hr0XQ==
+ARC-Authentication-Results: i=1;
+        rspamd-67b64f579b-fszmn;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=ian@linux.cowan.aero
+X-Sender-Id: dreamhost|x-authsender|ian@linux.cowan.aero
+Received: from pdx1-sub0-mail-a217.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.112.55.219 (trex/6.7.1);
+        Mon, 25 Apr 2022 22:26:10 +0000
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|ian@linux.cowan.aero
+X-MailChannels-Auth-Id: dreamhost
+X-Blushing-Slimy: 4af154266df1c3d9_1650925570373_3279931380
+X-MC-Loop-Signature: 1650925570373:1445528839
+X-MC-Ingress-Time: 1650925570372
+Received: from fedora (unknown [69.12.38.97])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: ian@linux.cowan.aero)
+        by pdx1-sub0-mail-a217.dreamhost.com (Postfix) with ESMTPSA id 4KnKNd3Z9xz1SW;
+        Mon, 25 Apr 2022 15:26:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.cowan.aero;
+        s=dreamhost; t=1650925569;
+        bh=wLXv5J7QE2DrW/YnW3muD7xmI1tr1cHpAtIZou57L/A=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=JqtrkpyseQ2u9cXuD2WJGgD1PtfOCn9JH3a4J5jvi/vqXQdvm3cJQwea8MDneR2ah
+         NPF6vRfnyXLI5BKMRhM/Rx3XC2Ji3u+JzFyABa10048woq7hWYkcREtZtbPf9fqjub
+         et1P+fVSK9dAGP8+RbWCLJwf0tAzE19MGwco5n8CEiWgGUlF7DQv3xPmpDAGEGIWhm
+         Q1+3QXzDqCl2rVvEkEYey8pOCWPPM2TuMKg93aYKrnEb0+YBXzvGPWGLOj6aBmi74H
+         +79gNE3iqJC+QikTquIyPAoXJ7SxZpN6RdbzXzEcgou/2Ut9Tw8L6QsAXXCk2KRJZZ
+         9TsuePDCEwq+Q==
+Date:   Mon, 25 Apr 2022 18:26:07 -0400
+From:   Ian Cowan <ian@linux.cowan.aero>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Sven Van Asbroeck <TheSven73@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: fieldbus: remove unnecessary double negation
+Message-ID: <Ymcf/0H0puiWjoxR@fedora>
+References: <20220425145440.146891-1-ian@linux.cowan.aero>
+ <YmbClxXo5lwgHYxo@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2] drm/msm/dp: fix error check return value of
- irq_of_parse_and_map()
-Content-Language: en-GB
-To:     cgel.zte@gmail.com
-Cc:     airlied@linux.ie, bjorn.andersson@linaro.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux@roeck-us.net, lv.ruyi@zte.com.cn, quic_abhinavk@quicinc.com,
-        quic_khsieh@quicinc.com, robdclark@gmail.com, sean@poorly.run,
-        swboyd@chromium.org, Zeal Robot <zealci@zte.com.cn>
-References: <0e6028f6-3fc1-2a27-0a45-0e024c632248@linaro.org>
- <20220424032418.3173632-1-lv.ruyi@zte.com.cn>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220424032418.3173632-1-lv.ruyi@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmbClxXo5lwgHYxo@kroah.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/04/2022 06:24, cgel.zte@gmail.com wrote:
-> From: Lv Ruyi <lv.ruyi@zte.com.cn>
+On Mon, Apr 25, 2022 at 05:47:35PM +0200, Greg Kroah-Hartman wrote:
+> This is a common pattern to turn any value into a boolean (0/1).  The
+> fact that this is a boolean to start with makes this change not affect
+> anything.  So you should say that in the changelog, the values are
+> obviously not negated.
 > 
-> The irq_of_parse_and_map() function returns 0 on failure, and does not
-> return an negative value.
-> 
-> Fixes: 8ede2ecc3e5e ("drm/msm/dp: Add DP compliance tests on Snapdragon Chipsets")
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+I just resubmitted with that change.
 
-> ---
-> v2: don't print rc, and return -EINVAL rather than 0
-> ---
->   drivers/gpu/drm/msm/dp/dp_display.c | 7 +++----
->   1 file changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> index a42732b67349..c3566e6564b1 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> @@ -1239,10 +1239,9 @@ int dp_display_request_irq(struct msm_dp *dp_display)
->   	dp = container_of(dp_display, struct dp_display_private, dp_display);
->   
->   	dp->irq = irq_of_parse_and_map(dp->pdev->dev.of_node, 0);
-> -	if (dp->irq < 0) {
-> -		rc = dp->irq;
-> -		DRM_ERROR("failed to get irq: %d\n", rc);
-> -		return rc;
-> +	if (!dp->irq) {
-> +		DRM_ERROR("failed to get irq\n");
-> +		return -EINVAL;
->   	}
->   
->   	rc = devm_request_irq(&dp->pdev->dev, dp->irq,
-
-
--- 
-With best wishes
-Dmitry
+Thanks!
+Ian

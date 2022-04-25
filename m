@@ -2,229 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE87D50DBC3
+	by mail.lfdr.de (Postfix) with ESMTP id 2E3E650DBC1
 	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:55:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239855AbiDYI6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 04:58:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54192 "EHLO
+        id S235278AbiDYI6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 04:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240033AbiDYI5n (ORCPT
+        with ESMTP id S239953AbiDYI5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 04:57:43 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE6CB860
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:54:34 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23P7WthB002630;
-        Mon, 25 Apr 2022 08:54:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=dCVPKYv5VNMsz/Nqd9o08lQyf9PDUaiErrxL1ARkM5c=;
- b=X5J+3Wd1J1/pI+ccqjVVy6ZH/MDhAWXFJO31Xv+d4Mv2i8DPWGm+TNDdRNamStr0ncTd
- izsHlPeF+8oKef5gC82si3dZw1MQ6H+4C6TPhkb3nWdKpe0HxEKRg9WBeugK/I1sxjqv
- yj2JwuR4LollCe5qWrHo06GE2z+Zf++uSGCb3h5dvPoHq+AYbB18WKXsnc60P52nC2l2
- eadpefUTsYw9klr7deRz2pJ/LP26sKKv3gU871DG1CFXaH1Rxu0lJFL7WatDEpsJy+HU
- lvhQYZyZHuSl6lo+oKVRSNvz85Avs7bTNm6Y0uTAbDEsSTBDp2YTir6eZFKURhbk3VaI 1w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fnqbrhkmx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Apr 2022 08:54:27 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23P8ldrr003350;
-        Mon, 25 Apr 2022 08:54:26 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fnqbrhkm5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Apr 2022 08:54:26 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23P8nSs5032381;
-        Mon, 25 Apr 2022 08:54:24 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma01fra.de.ibm.com with ESMTP id 3fm938spq9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Apr 2022 08:54:23 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23P8sLDg52625850
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 25 Apr 2022 08:54:21 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A2E2BA405B;
-        Mon, 25 Apr 2022 08:54:21 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 41539A4054;
-        Mon, 25 Apr 2022 08:54:17 +0000 (GMT)
-Received: from [9.43.95.32] (unknown [9.43.95.32])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 25 Apr 2022 08:54:16 +0000 (GMT)
-Message-ID: <2f716f45-f8c6-a078-6cfc-b4fb5ef74cd5@linux.ibm.com>
-Date:   Mon, 25 Apr 2022 14:24:15 +0530
+        Mon, 25 Apr 2022 04:57:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A6EECF5
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:54:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650876869;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Q7eIeWS47Em435MDdVzeQsQsPcR5jLBoUJYfnOUHKBU=;
+        b=MG8j2Sb12nlEsDzTA4mpbtN1NsWNpl+JDi5VbKajyf6yj2dl0gVKphWjg/iKDWKRmV7nwH
+        SpkCUh1xo5aOhbpPWlZ1SvdpxUUNQyiY7iDo56C6LO8D+j2VlDSumtinp2QWC/Oe7ShQI0
+        kG+YMXVpMgXCdae77xgjwo+lUXPdq/I=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-625-OxcRZ2GINRaOhAtSpaFdkw-1; Mon, 25 Apr 2022 04:54:26 -0400
+X-MC-Unique: OxcRZ2GINRaOhAtSpaFdkw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E7999811E7A;
+        Mon, 25 Apr 2022 08:54:25 +0000 (UTC)
+Received: from localhost (unknown [10.39.192.116])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9EAC51402427;
+        Mon, 25 Apr 2022 08:54:25 +0000 (UTC)
+From:   Cornelia Huck <cohuck@redhat.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, sgarzare@redhat.com,
+        eperezma@redhat.com, lulu@redhat.com, tglx@linutronix.de,
+        peterz@infradead.org, paulmck@kernel.org, maz@kernel.org,
+        pasic@linux.ibm.com
+Subject: Re: [PATCH V3 6/9] virtio-ccw: implement synchronize_cbs()
+In-Reply-To: <20220425040512-mutt-send-email-mst@kernel.org>
+Organization: Red Hat GmbH
+References: <20220425024418.8415-1-jasowang@redhat.com>
+ <20220425024418.8415-7-jasowang@redhat.com>
+ <20220425040512-mutt-send-email-mst@kernel.org>
+User-Agent: Notmuch/0.34 (https://notmuchmail.org)
+Date:   Mon, 25 Apr 2022 10:54:24 +0200
+Message-ID: <87a6c98rwf.fsf@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2 0/5] mm: demotion: Introduce new node state
- N_DEMOTION_TARGETS
-Content-Language: en-US
-From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-To:     "ying.huang@intel.com" <ying.huang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Greg Thelen <gthelen@google.com>,
-        MichalHocko <mhocko@kernel.org>,
-        Brice Goglin <brice.goglin@gmail.com>
-References: <CAAPL-u_pSWD6U0yQ8Ws+_Yfb_3ZEmNXJsYcRJjAFBkyDk=nq8g@mail.gmail.com>
- <ea73f6fda9cafdd0cb6ba8351139e6f4b47354a8.camel@intel.com>
- <CAAPL-u-aeceXFUNdok_GYb2aLhZa0zBBuSqHxFznQob3PbJt7Q@mail.gmail.com>
- <a80647053bba44623094995730e061f0e6129677.camel@intel.com>
- <CAAPL-u89Jxutu1VH0LnO5VGdMbkLvc2M9eapuwP-y9oG9QSsrA@mail.gmail.com>
- <610ccaad03f168440ce765ae5570634f3b77555e.camel@intel.com>
- <CAAPL-u9ktM82zAW_OVwqTmQsr-XC8XOPmAsjoiCLo18cxUWA=A@mail.gmail.com>
- <8e31c744a7712bb05dbf7ceb2accf1a35e60306a.camel@intel.com>
- <CAAPL-u9uP+FUh7Yn0ByOECo+EP32ZABnCvNPKQB9JCA68VHEqQ@mail.gmail.com>
- <78b5f4cfd86efda14c61d515e4db9424e811c5be.camel@intel.com>
- <YmKKwXa2XI/nwac0@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
- <200e95cf36c1642512d99431014db8943fed715d.camel@intel.com>
- <8735i1zurt.fsf@linux.ibm.com>
- <ea9d01e16de655af85c0041c96964d83f59fb6d2.camel@intel.com>
- <c576a992-5a50-5dd3-644c-a45d4338fc85@linux.ibm.com>
-In-Reply-To: <c576a992-5a50-5dd3-644c-a45d4338fc85@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: UDs4WcZScv8QbXAcsoc__p8Qhwe0gbe8
-X-Proofpoint-GUID: QSYIHtWzkuqkKtx8Or5MBtdIJfmM3UPw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-25_05,2022-04-22_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=999 mlxscore=0 bulkscore=0 priorityscore=1501
- lowpriorityscore=0 suspectscore=0 impostorscore=0 phishscore=0
- clxscore=1015 adultscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2202240000 definitions=main-2204250038
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/25/22 1:39 PM, Aneesh Kumar K V wrote:
-> On 4/25/22 11:40 AM, ying.huang@intel.com wrote:
->> On Mon, 2022-04-25 at 09:20 +0530, Aneesh Kumar K.V wrote:
->>> "ying.huang@intel.com" <ying.huang@intel.com> writes:
->>>
->>>> Hi, All,
->>>>
->>>> On Fri, 2022-04-22 at 16:30 +0530, Jagdish Gediya wrote:
->>>>
->>>> [snip]
->>>>
->>>>> I think it is necessary to either have per node demotion targets
->>>>> configuration or the user space interface supported by this patch
->>>>> series. As we don't have clear consensus on how the user interface
->>>>> should look like, we can defer the per node demotion target set
->>>>> interface to future until the real need arises.
->>>>>
->>>>> Current patch series sets N_DEMOTION_TARGET from dax device kmem
->>>>> driver, it may be possible that some memory node desired as demotion
->>>>> target is not detected in the system from dax-device kmem probe path.
->>>>>
->>>>> It is also possible that some of the dax-devices are not preferred as
->>>>> demotion target e.g. HBM, for such devices, node shouldn't be set to
->>>>> N_DEMOTION_TARGETS. In future, Support should be added to distinguish
->>>>> such dax-devices and not mark them as N_DEMOTION_TARGETS from the
->>>>> kernel, but for now this user space interface will be useful to avoid
->>>>> such devices as demotion targets.
->>>>>
->>>>> We can add read only interface to view per node demotion targets
->>>>> from /sys/devices/system/node/nodeX/demotion_targets, remove
->>>>> duplicated /sys/kernel/mm/numa/demotion_target interface and instead
->>>>> make /sys/devices/system/node/demotion_targets writable.
->>>>>
->>>>> Huang, Wei, Yang,
->>>>> What do you suggest?
->>>>
->>>> We cannot remove a kernel ABI in practice.  So we need to make it right
->>>> at the first time.  Let's try to collect some information for the 
->>>> kernel
->>>> ABI definitation.
->>>>
->>>> The below is just a starting point, please add your requirements.
->>>>
->>>> 1. Jagdish has some machines with DRAM only NUMA nodes, but they don't
->>>> want to use that as the demotion targets.  But I don't think this is a
->>>> issue in practice for now, because demote-in-reclaim is disabled by
->>>> default.
->>>
->>> It is not just that the demotion can be disabled. We should be able to
->>> use demotion on a system where we can find DRAM only NUMA nodes. That
->>> cannot be achieved by /sys/kernel/mm/numa/demotion_enabled. It needs
->>> something similar to to N_DEMOTION_TARGETS
->>>
->>
->> Can you show NUMA information of your machines with DRAM-only nodes and
->> PMEM nodes?  We can try to find the proper demotion order for the
->> system.  If you can not show it, we can defer N_DEMOTION_TARGETS until
->> the machine is available.
-> 
-> 
-> Sure will find one such config. As you might have noticed this is very 
-> easy to have in a virtualization setup because the hypervisor can assign 
-> memory to a guest VM from a numa node that doesn't have CPU assigned to 
-> the same guest. This depends on the other guest VM instance config 
-> running on the system. So on any virtualization config that has got 
-> persistent memory attached, this can become an easy config to end up with.
-> 
-> 
+On Mon, Apr 25 2022, "Michael S. Tsirkin" <mst@redhat.com> wrote:
 
-something like this
+> On Mon, Apr 25, 2022 at 10:44:15AM +0800, Jason Wang wrote:
+>> This patch tries to implement the synchronize_cbs() for ccw. For the
+>> vring_interrupt() that is called via virtio_airq_handler(), the
+>> synchronization is simply done via the airq_info's lock. For the
+>> vring_interrupt() that is called via virtio_ccw_int_handler(), a per
+>> device spinlock for irq is introduced ans used in the synchronization
+>> method.
+>> 
+>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>> Cc: Peter Zijlstra <peterz@infradead.org>
+>> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+>> Cc: Marc Zyngier <maz@kernel.org>
+>> Cc: Halil Pasic <pasic@linux.ibm.com>
+>> Cc: Cornelia Huck <cohuck@redhat.com>
+>> Signed-off-by: Jason Wang <jasowang@redhat.com>
+>
+>
+> This is the only one that is giving me pause. Halil, Cornelia,
+> should we be concerned about the performance impact here?
+> Any chance it can be tested?
 
-$ numactl -H
-available: 2 nodes (0-1)
-node 0 cpus: 0 1 2 3 4 5 6 7
-node 0 size: 14272 MB
-node 0 free: 13392 MB
-node 1 cpus:
-node 1 size: 2028 MB
-node 1 free: 1971 MB
-node distances:
-node   0   1
-   0:  10  40
-   1:  40  10
-$ cat /sys/bus/nd/devices/dax0.0/target_node
-2
-$
-# cd /sys/bus/dax/drivers/
-:/sys/bus/dax/drivers# ls
-device_dax  kmem
-:/sys/bus/dax/drivers# cd device_dax/
-:/sys/bus/dax/drivers/device_dax# echo dax0.0 > unbind
-:/sys/bus/dax/drivers/device_dax# echo dax0.0 >  ../kmem/new_id
-:/sys/bus/dax/drivers/device_dax# numactl -H
-available: 3 nodes (0-2)
-node 0 cpus: 0 1 2 3 4 5 6 7
-node 0 size: 14272 MB
-node 0 free: 13380 MB
-node 1 cpus:
-node 1 size: 2028 MB
-node 1 free: 1961 MB
-node 2 cpus:
-node 2 size: 0 MB
-node 2 free: 0 MB
-node distances:
-node   0   1   2
-   0:  10  40  80
-   1:  40  10  80
-   2:  80  80  10
-:/sys/bus/dax/drivers/device_dax#
+We can have a bunch of devices using the same airq structure, and the
+sync cb creates a choke point, same as registering/unregistering. If
+invoking the sync cb is a rare operation (same as (un)registering), it
+should not affect interrupt processing for other devices too much, but
+it really should be rare.
+
+For testing, you would probably want to use a setup with many devices
+that share the same airq area (you can fit a lot of devices if they have
+few queues), generate traffic on the queues, and then do something that
+triggers the callback (adding/removing a new device in a loop?)
+
+I currently don't have such a setup handy; Halil, would you be able to
+test that?
+
+>
+>> ---
+>>  drivers/s390/virtio/virtio_ccw.c | 27 +++++++++++++++++++++++++++
+>>  1 file changed, 27 insertions(+)
+>> 
+>> diff --git a/drivers/s390/virtio/virtio_ccw.c b/drivers/s390/virtio/virtio_ccw.c
+>> index d35e7a3f7067..c19f07a82d62 100644
+>> --- a/drivers/s390/virtio/virtio_ccw.c
+>> +++ b/drivers/s390/virtio/virtio_ccw.c
+>> @@ -62,6 +62,7 @@ struct virtio_ccw_device {
+>>  	unsigned int revision; /* Transport revision */
+>>  	wait_queue_head_t wait_q;
+>>  	spinlock_t lock;
+>> +	spinlock_t irq_lock;
+>>  	struct mutex io_lock; /* Serializes I/O requests */
+>>  	struct list_head virtqueues;
+>>  	bool is_thinint;
+>> @@ -984,6 +985,27 @@ static const char *virtio_ccw_bus_name(struct virtio_device *vdev)
+>>  	return dev_name(&vcdev->cdev->dev);
+>>  }
+>>  
+>> +static void virtio_ccw_synchronize_cbs(struct virtio_device *vdev)
+>> +{
+>> +	struct virtio_ccw_device *vcdev = to_vc_device(vdev);
+>> +	struct airq_info *info = vcdev->airq_info;
+>> +
+>> +	/*
+>> +	 * Synchronize with the vring_interrupt() called by
+>> +	 * virtio_ccw_int_handler().
+>> +	 */
+>> +	spin_lock(&vcdev->irq_lock);
+>> +	spin_unlock(&vcdev->irq_lock);
+>> +
+>> +	if (info) {
+>> +		/*
+>> +		 * Synchronize with the vring_interrupt() with airq indicator
+>> +		 */
+>> +		write_lock(&info->lock);
+>> +		write_unlock(&info->lock);
+>> +	}
+
+I think we can make this an either/or operation (devices will either use
+classic interrupts or adapter interrupts)?
+
+>> +}
+>> +
+>>  static const struct virtio_config_ops virtio_ccw_config_ops = {
+>>  	.get_features = virtio_ccw_get_features,
+>>  	.finalize_features = virtio_ccw_finalize_features,
 

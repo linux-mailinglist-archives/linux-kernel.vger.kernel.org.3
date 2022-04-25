@@ -2,118 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EE8A50D94D
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 08:17:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 118A950D957
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 08:20:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231467AbiDYGUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 02:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37322 "EHLO
+        id S241361AbiDYGWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 02:22:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230169AbiDYGUo (ORCPT
+        with ESMTP id S236974AbiDYGWY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 02:20:44 -0400
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FB528989
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 23:17:40 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id r189so25215270ybr.6
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 23:17:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PCtKQYSTps0VrLDUq04agqNEXmphYahJ7hA7Tsk3PTM=;
-        b=y87zLxXLd7YWRCsK5HoU9vnzAOjFhAz4Uu2o+I3q65DqAb6PYR97pM/VYKPZQdZH9m
-         t6HqzuAVlEtKaDPX08wNGQRjc9aM+h+FIIFZL75IFD+R5u7ly6t0yTchtwIabrQtMi94
-         MfLDqq8xC2lyjorgn8wF7yPfp4LXEXF6OvVCe4ZrZidf45eJ6m6d55OggzH6qpcRsWhD
-         +GPSiY8OKR9YhmDFT2m44DTNVEYaTlHmgX5ZhSFRyri/JxJ4mAkBPbalTKdhDUxN2Z+f
-         +gJC7CWEZmqrC1fx2gLpSqSgqPH7GrzGavmHQY0b9Ot2PmqSLuQ4d05wUQ9ANTUxGVVV
-         yqVw==
-X-Gm-Message-State: AOAM530UdEhESrDvRzTbsty/ZsPXmbgtnG0PugBKJdC3250qOJ83qOdA
-        ZkBsL9HZ670IK7U3m93w5qcJjxeat+nS03LMyvs=
-X-Google-Smtp-Source: ABdhPJwZwQAaQ5egYyYjlBDWprpUmMiY8C08pHkGK7L97GUxtWa3ijJqZPpDBUDSxZiWSdAjFcDdwIhK2lar/ppEDE0=
-X-Received: by 2002:a25:76c6:0:b0:648:5616:ca50 with SMTP id
- r189-20020a2576c6000000b006485616ca50mr4091431ybc.423.1650867460065; Sun, 24
- Apr 2022 23:17:40 -0700 (PDT)
+        Mon, 25 Apr 2022 02:22:24 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB8B2DCA;
+        Sun, 24 Apr 2022 23:19:15 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23P6J6iU111789;
+        Mon, 25 Apr 2022 01:19:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1650867546;
+        bh=F7ADQn60kfgRVAW03faSTjsksmw9WV/uDuMtxixSUJ4=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=dIEQFQ8lJ3L0w3zKvk6cVqq/wF20GbK8Z3T8/TL1z3ZFjjxGszl2mWGCMBQZrCewb
+         xdgaeMoOV6BpI+CaR534CkyEcCNtB34Ne8I0LRQ1bkCm+qokHSq7uAG3OFjLEfHNS0
+         KpncBRyNnxeu/JFgZb8Q8H7ZrsnMk6u9DM7AT1X0=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23P6J6AF088268
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 25 Apr 2022 01:19:06 -0500
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 25
+ Apr 2022 01:19:06 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 25 Apr 2022 01:19:06 -0500
+Received: from [10.24.69.236] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23P6J2Uu069099;
+        Mon, 25 Apr 2022 01:19:03 -0500
+Message-ID: <9da52dd4-9162-3a23-05e6-b2b524ef4d4d@ti.com>
+Date:   Mon, 25 Apr 2022 11:49:02 +0530
 MIME-Version: 1.0
-References: <20220422151725.1336997-1-mailhol.vincent@wanadoo.fr> <YmXMiTXEvFXZ/swU@dev-arch.thelio-3990X>
-In-Reply-To: <YmXMiTXEvFXZ/swU@dev-arch.thelio-3990X>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Mon, 25 Apr 2022 15:17:29 +0900
-Message-ID: <CAMZ6Rq+3XOze01dZZRTe+V44N2uo5J_=rtd9bKH7d7Fq9sNxVw@mail.gmail.com>
-Subject: Re: [PATCH] checksyscalls: ignore -Wunused-macros
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/2] dt-bindings: mmc: sdhci-am654: Add flag to force
+ setting to TESTCD bit
+Content-Language: en-US
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220418102040.4993-1-a-govindraju@ti.com>
+ <20220418102040.4993-2-a-govindraju@ti.com>
+ <CAPDyKFrHi3-7FMfwRP5rtjSbTOnw73FvU5ZAz=eC8-XqQZYpsg@mail.gmail.com>
+From:   Aswath Govindraju <a-govindraju@ti.com>
+In-Reply-To: <CAPDyKFrHi3-7FMfwRP5rtjSbTOnw73FvU5ZAz=eC8-XqQZYpsg@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nathan,
+Hi Uffe,
 
-Thanks for the comments!
+On 21/04/22 17:40, Ulf Hansson wrote:
+> On Mon, 18 Apr 2022 at 12:21, Aswath Govindraju <a-govindraju@ti.com> wrote:
+>>
+>> The ARASAN MMC controller on Keystone 3 class of devices needs the SDCD
+>> line to be connected for proper functioning. Similar to the issue pointed
+>> out in sdhci-of-arasan.c driver, commit 3794c542641f ("mmc:
+>> sdhci-of-arasan: Set controller to test mode when no CD bit").
+>>
+>> In cases where SDCD line is not connected, driver support has been added to
+>> force the controller into test mode and set the TESTCD bit. In order to
+>> implement this quirk the driver uses "ti,fails-without-test-cd" flag from
+>> the device tree node. Therefore, update the bindings to document the above.
+> 
+> Would you mind rephrasing this a bit. DT bindings is about describing
+> the HW, not about what the software should do.
+> 
 
-On Mon. 25 Apr 2022 at 07:17, Nathan Chancellor <nathan@kernel.org> wrote:
-> Hi Vincent,
->
-> On Sat, Apr 23, 2022 at 12:17:25AM +0900, Vincent Mailhol wrote:
-> > The macros defined in this file are for testing only and are purposely
-> > not used. When compiled with W=2, both gcc and clang yield some
-> > -Wunused-macros warnings. Ignore them.
-> >
-> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
->
-> The change itself looks fine but a couple of comments:
->
-> 1. Nick and I do not pick up patches, we rely on others to do so.
->    Additionally, this is not really something within our domain, despite
->    what get_maintainer.pl might say. This change should be sent to
->    either
->
->    Masahiro Yamada <masahiroy@kernel.org>
->    linux-kbuild@vger.kernel.org
->
->    or
->
->    Andrew Morton <akpm@linux-foundation.org>
->
->    so that it can be applied by one of them.
+Sure, will rephrase it in the respin to remove the aspects that indicate
+the sw support added.
 
-Ack. As you pointed out, I indeed just followed get_maintainer.pl.
-I will resend a v2 to the people you pointed out (and exclude you).
+> Otherwise, this looks good to me.
+> 
 
-> 2. I am not sure that silencing warnings from W=2 is that useful, as
->    they are unlikely to be real issues. Not to discourage you by any
->    means but it might be more useful to focus on cleaning up warnings
->    from W=1 and getting those promoted to regular build warnings.
+Thank you for the review.
 
-Normally I agree, but there is one reason to fix this W=2: this
-warning appears when building other files.
+Regards,
+Aswath
 
-Example:
-| $ make W=2 drivers/net/dummy.o
-|   CALL    scripts/checksyscalls.sh
-| <stdin>:21: warning: macro "__IGNORE_stat64" is not used [-Wunused-macros]
-| <stdin>:22: warning: macro "__IGNORE_lstat64" is not used [-Wunused-macros]
-| <stdin>:75: warning: macro "__IGNORE_llseek" is not used [-Wunused-macros]
-| <stdin>:159: warning: macro "__IGNORE_madvise1" is not used [-Wunused-macros]
-(rest of the output redacted).
-
-When I run W=2, I want to only see the warnings of the file I am
-working on. So I find it useful to fix the W=2 warnings which
-show up when building other files to not get spammed by
-irrelevant issues and to simplify the triage.
-
-My initial message lacked the rationale. I will add additional
-explanations in the v2 of this patch.
-
-
-Yours sincerely,
-Vincent Mailhol
+> Kind regards
+> Uffe
+> 
+>>
+>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+>> ---
+>>  Documentation/devicetree/bindings/mmc/sdhci-am654.yaml | 7 +++++++
+>>  1 file changed, 7 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/mmc/sdhci-am654.yaml b/Documentation/devicetree/bindings/mmc/sdhci-am654.yaml
+>> index 0566493c4def..0ab07759b472 100644
+>> --- a/Documentation/devicetree/bindings/mmc/sdhci-am654.yaml
+>> +++ b/Documentation/devicetree/bindings/mmc/sdhci-am654.yaml
+>> @@ -186,6 +186,13 @@ properties:
+>>      description: Clock Delay Buffer Select
+>>      $ref: "/schemas/types.yaml#/definitions/uint32"
+>>
+>> +  ti,fails-without-test-cd:
+>> +    $ref: /schemas/types.yaml#/definitions/flag
+>> +    description:
+>> +      When present, indicates that the CD line is not connected
+>> +      and the controller is required to be forced into Test mode
+>> +      to set the TESTCD bit.
+>> +
+>>  required:
+>>    - compatible
+>>    - reg
+>> --
+>> 2.17.1
+>>

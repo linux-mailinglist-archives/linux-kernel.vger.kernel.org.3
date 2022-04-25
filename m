@@ -2,100 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6EC950E277
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:55:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5489850E27A
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:56:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239108AbiDYN6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 09:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59204 "EHLO
+        id S242292AbiDYN7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 09:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235351AbiDYN6m (ORCPT
+        with ESMTP id S242294AbiDYN67 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 09:58:42 -0400
-Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2EB2018A;
-        Mon, 25 Apr 2022 06:55:35 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1650894932; bh=Mp3nuT0PzmWhzqqEzvPIZpiHN6vPDTUyd5pO9HIeeQE=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To;
-        b=ZhKh5Zpv/e7gcY9lFUXrmj4qBfrN5wGHNLlS0qLvcK7ucxitGfOZj2+edVgt61Qkv
-         QtJC2BWkOb6nJy2iL8Bg5jwW1Nx9Xvawuw8/NMFuVNbeSuANWERn39FQoX1v4xTRTv
-         PQGWAj7ofOlRGmNiePsij2NrYN+2qIs5TGD91Vgg=
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [RFC PATCH 3/5] HACK: ASoC: Tolerate N-cpus-to-M-codecs links
-From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik@cutebit.org>
-In-Reply-To: <YmamSZKNtNai7KyM@sirena.org.uk>
-Date:   Mon, 25 Apr 2022 15:55:32 +0200
-Cc:     =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <5C42BB2F-EED6-4F6E-A29E-B43768760244@cutebit.org>
-References: <20220331000449.41062-1-povik+lin@cutebit.org>
- <20220331000449.41062-4-povik+lin@cutebit.org>
- <YkrkbBNYULLgeS5w@sirena.org.uk>
- <904EB8A1-5561-4555-8030-B85703E24F2E@cutebit.org>
- <YmaTHTKWAfM7FCcY@sirena.org.uk>
- <9F8BCBA8-5EE3-4F87-9518-91CB7AB4E077@cutebit.org>
- <YmaaPa8A03rWV7HE@sirena.org.uk>
- <4CF6B0A7-F218-4798-BB21-18D563309D5C@cutebit.org>
- <YmamSZKNtNai7KyM@sirena.org.uk>
-To:     Mark Brown <broonie@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_FAIL,SPF_HELO_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+        Mon, 25 Apr 2022 09:58:59 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1FA114023;
+        Mon, 25 Apr 2022 06:55:50 -0700 (PDT)
+Received: from kwepemi500020.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Kn62m4CwNzfbCv;
+        Mon, 25 Apr 2022 21:54:56 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi500020.china.huawei.com (7.221.188.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 25 Apr 2022 21:55:48 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 25 Apr 2022 21:55:47 +0800
+Subject: Re: [PATCH -next v2 2/5] block, bfq: add fake weight_counter for
+ weight-raised queue
+From:   "yukuai (C)" <yukuai3@huawei.com>
+To:     Jan Kara <jack@suse.cz>
+CC:     <paolo.valente@linaro.org>, <axboe@kernel.dk>, <tj@kernel.org>,
+        <linux-block@vger.kernel.org>, <cgroups@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
+References: <20220416093753.3054696-1-yukuai3@huawei.com>
+ <20220416093753.3054696-3-yukuai3@huawei.com>
+ <20220425094856.qgkhba2klguduxot@quack3.lan>
+ <a27b8c79-867f-9253-84db-1d39c964b3ed@huawei.com>
+Message-ID: <4048cc0c-adc8-8097-4a40-762137c4c282@huawei.com>
+Date:   Mon, 25 Apr 2022 21:55:46 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <a27b8c79-867f-9253-84db-1d39c964b3ed@huawei.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+在 2022/04/25 21:34, yukuai (C) 写道:
+> 在 2022/04/25 17:48, Jan Kara 写道:
+>> On Sat 16-04-22 17:37:50, Yu Kuai wrote:
+>>> Weight-raised queue is not inserted to weights_tree, which makes it
+>>> impossible to track how many queues have pending requests through
+>>> weights_tree insertion and removel. This patch add fake weight_counter
+>>> for weight-raised queue to do that.
+>>>
+>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>>
+>> This is a bit hacky. I was looking into a better place where to hook to
+>> count entities in a bfq_group with requests and I think 
+>> bfq_add_bfqq_busy()
+>> and bfq_del_bfqq_busy() are ideal for this. It also makes better sense
+>> conceptually than hooking into weights tree handling.
+>>
+> Hi,
+> 
+> bfq_del_bfqq_busy() will be called when all the reqs in the bfqq are
+> dispatched, however there might still some reqs are't completed yet.
+> 
+> Here what we want to track is how many bfqqs have pending reqs,
+> specifically if the bfqq have reqs are't complted.
+> 
+> Thus I think bfq_del_bfqq_busy() is not the right place to do that.
 
-> On 25. 4. 2022, at 15:46, Mark Brown <broonie@kernel.org> wrote:
->=20
-> On Mon, Apr 25, 2022 at 03:11:14PM +0200, Martin Povi=C5=A1er wrote:
->>> On 25. 4. 2022, at 14:55, Mark Brown <broonie@kernel.org> wrote:
->=20
->>> I am surprised that doesn't otherwise explode TBH - at the very =
-least
->>> I'd expect it to show two PCMs to userspace which if I'm =
-understanding
->>> your description correctly isn't really what's going on.
->=20
->> I fill in a single snd_soc_dai_link, it exposes a single PCM and =
-works
->> like a charm. That is as long as I patch the playback/capture check =
-in
->> question.
->=20
->> I read that to be the clear intention of ASoC code: a DAI link =
-becomes
->> one snd_soc_pcm_runtime.
->=20
-> Yes, so long as you boil it down to a single link it works fine but =
-the
-> bit on top of the binding where you tie the two CPU DAIs to what is
-> actually exposed is all in code.  The reason this stuff isn't filled =
-in
-> is that connecting the thing that applications see to the physical =
-links
-> isn't at all obvious and needs at least some driver sitting in the
-> middle to make the links - I'd imagine there's a DSP sitting there =
-which
-> probably has quite a bit of flexability about how the various hardware
-> components available are actually related.  This makes figuring out =
-what
-> to do with the relationship between the multiple CPU DAIs hard.
+BTW, there is a counter 'dispatched' in bfqq, how about we rename it
+to 'inflight', and inc when adding req to bfqq, dec the same as
+'dispatched' ?
 
-I get the gist. Anyway unless you tell me otherwise I will assume I need
-to move to DPCM with the platform/machine driver.
+This way we can count bfqq when adding 'inflight' from 0 to 1, and
+stop when decreasing 'inflight' from 1 to 0.
 

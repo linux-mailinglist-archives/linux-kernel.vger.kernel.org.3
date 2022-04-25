@@ -2,94 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C70850E4E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:57:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9368450E4E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243094AbiDYP7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 11:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39622 "EHLO
+        id S243105AbiDYP7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 11:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243052AbiDYP7L (ORCPT
+        with ESMTP id S243103AbiDYP7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 11:59:11 -0400
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533083F31D;
-        Mon, 25 Apr 2022 08:56:07 -0700 (PDT)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-e93ff05b23so3390699fac.9;
-        Mon, 25 Apr 2022 08:56:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WzWHzJwvI1YDOjifiK5zK9xLEEWNcPatflkVwV3CNuo=;
-        b=5bcLOFvpgJIbHkTPGUjTriBCtBJt9Sas59xoqTuqw7NPl7WxK3ZL8vPr/U/WRMnsV4
-         g9YEVFrX/EWdFoYlcYUM0ZiSuwLMkBxPiFLXAmZSUSPCAe4GLC/1Zp8ND+3+zZz5GnU3
-         AG893nalRydA2yys+QIP7UX3HMuWAves+W/AICuGlWPdFF4VR4DwFxxIlfi9wBaRppOQ
-         apfG2XZWbFKX6KMxwOIuo4WRAbcp0s0UzqMegvkui/rbvHHIWcOSrFOmVuH5EiBL9v9Y
-         kKvkc6zwVmSGaSp7Ab3D6ZCB/agu+oYIWsboaSW3OH2cGOME3dgGyi4qaLd0QbHf/iIu
-         QVPA==
-X-Gm-Message-State: AOAM532kYsNYsdQ7wBq5/71+XjzIHy1B39N0HwNE2j/hap1Xnc15e37j
-        5+XYrCleA9U8/jrKkBtglg==
-X-Google-Smtp-Source: ABdhPJyPQ8/QljI2VNCdMD5ZCs9UmxeOXcXs7325MEcBQ5fMSfUVDwchl6dRhxjgfuxnOxX9p2s6EA==
-X-Received: by 2002:a05:6870:961b:b0:e2:ffb9:f526 with SMTP id d27-20020a056870961b00b000e2ffb9f526mr11477742oaq.146.1650902166630;
-        Mon, 25 Apr 2022 08:56:06 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id lc23-20020a056871419700b000e70c74e060sm3330025oab.8.2022.04.25.08.56.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 08:56:06 -0700 (PDT)
-Received: (nullmailer pid 3956143 invoked by uid 1000);
-        Mon, 25 Apr 2022 15:56:04 -0000
-Date:   Mon, 25 Apr 2022 10:56:04 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     frowand.list@gmail.com
-Cc:     linux-kernel@vger.kernel.org, Jan Kiszka <jan.kiszka@siemens.com>,
-        Slawomir Stepien <slawomir.stepien@nokia.com>,
-        devicetree@vger.kernel.org, Slawomir Stepien <sst@poczta.fm>,
-        Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        pantelis.antoniou@konsulko.com
-Subject: Re: [PATCH v4 1/2] of: overlay: rename variables to be consistent
-Message-ID: <YmbElDC2GBUNY1E+@robh.at.kernel.org>
-References: <20220420222505.928492-1-frowand.list@gmail.com>
- <20220420222505.928492-2-frowand.list@gmail.com>
+        Mon, 25 Apr 2022 11:59:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DA83FBE5
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 08:56:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45AAAB81864
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 15:56:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0018C385A9;
+        Mon, 25 Apr 2022 15:56:08 +0000 (UTC)
+Date:   Mon, 25 Apr 2022 16:56:05 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Peter Collingbourne <pcc@google.com>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        vbabka@suse.cz, penberg@kernel.org, roman.gushchin@linux.dev,
+        iamjoonsoo.kim@lge.com, rientjes@google.com,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH v3] mm: make minimum slab alignment a runtime property
+Message-ID: <YmbElapU5VRsCuTv@arm.com>
+References: <20220422201830.288018-1-pcc@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220420222505.928492-2-frowand.list@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220422201830.288018-1-pcc@google.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 20 Apr 2022 17:25:04 -0500, frowand.list@gmail.com wrote:
-> From: Frank Rowand <frank.rowand@sony.com>
+On Fri, Apr 22, 2022 at 01:18:30PM -0700, Peter Collingbourne wrote:
+> When CONFIG_KASAN_HW_TAGS is enabled we currently increase the minimum
+> slab alignment to 16. This happens even if MTE is not supported in
+> hardware or disabled via kasan=off, which creates an unnecessary
+> memory overhead in those cases. Eliminate this overhead by making
+> the minimum slab alignment a runtime property and only aligning to
+> 16 if KASAN is enabled at runtime.
 > 
-> Variables change name across function calls when there is not a good
-> reason to do so.  Fix by changing "fdt" to "new_fdt" and "tree" to
-> "overlay_root".
+> On a DragonBoard 845c (non-MTE hardware) with a kernel built with
+> CONFIG_KASAN_HW_TAGS, waiting for quiescence after a full Android
+> boot I see the following Slab measurements in /proc/meminfo (median
+> of 3 reboots):
 > 
-> The name disparity was confusing when creating the following commit.
-> The name changes are in this separate commit to make review of the
-> following commmit less complex.
+> Before: 169020 kB
+> After:  167304 kB
 > 
-> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
-> 
-> ---
-> Changes since v3:
->    - none
-> 
-> Changes since v2:
->    - use new variable name "overlay_root" instead of new variable
->      new "overlay_tree"
-> 
->  drivers/of/overlay.c | 94 ++++++++++++++++++++++----------------------
->  1 file changed, 47 insertions(+), 47 deletions(-)
-> 
+> Link: https://linux-review.googlesource.com/id/I752e725179b43b144153f4b6f584ceb646473ead
+> Signed-off-by: Peter Collingbourne <pcc@google.com>
+> Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
 
-Applied, thanks!
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>

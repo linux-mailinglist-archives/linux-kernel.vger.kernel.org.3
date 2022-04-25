@@ -2,184 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02B8650E452
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:25:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C42150E456
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242932AbiDYP1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 11:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58366 "EHLO
+        id S242937AbiDYP2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 11:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242889AbiDYP1m (ORCPT
+        with ESMTP id S242933AbiDYP2C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 11:27:42 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B8FE0AF8;
-        Mon, 25 Apr 2022 08:24:37 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2a02:3030:e:60d7:2277:ba57:a2c0:3])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sebastianfricke)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id F064C1F4133D;
-        Mon, 25 Apr 2022 16:24:35 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650900276;
-        bh=BtjtvOnpAvYAPAeBJbzghlo4LmKVCPSB1JGlZrSgdRc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c9Ki3/029OjA4uG5se4/3sGjKyGEmBLxVyPPkgaXuPO5RNM9qDcMLKMoGXQG8B9La
-         RPcpFDCgGBo1iJByMFjpM4ehNhOJWQUT7gS78aXAzVzc/1Z4HYEqKR/EpTLxTOURbE
-         pTa44NF7Nl1SkcGiwR/VZiA71cjR82urKe6jlqKcsImzVG/EoD3WueH50gtnWdTyPC
-         YKAIOhe3+xNqdTU5D4rC8cOgbL3jpog6PO5br3YO95Ua/evG4A2gKxhZ84C4DjUs8r
-         I237o5YWCggpD54xHAXwAuybepAHjcJiLTheQe2PW7gV7oArh5rX50qGrUXXVL7Q9h
-         mCt9nwfc1799g==
-Date:   Mon, 25 Apr 2022 17:24:32 +0200
-From:   Sebastian Fricke <sebastian.fricke@collabora.com>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     mchehab@kernel.org, hverkuil@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, mripard@kernel.org,
-        paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        nicolas.dufresne@collabora.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v5 07/17] media: uapi: HEVC: Add SEI pic struct flags
-Message-ID: <20220425152432.d5bxnpo5wkhw3syt@basti-XPS-13-9310>
-References: <20220407152940.738159-1-benjamin.gaignard@collabora.com>
- <20220407152940.738159-8-benjamin.gaignard@collabora.com>
+        Mon, 25 Apr 2022 11:28:02 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0890EE1CD7;
+        Mon, 25 Apr 2022 08:24:57 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id m11so6681538oib.11;
+        Mon, 25 Apr 2022 08:24:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=HlA2P5BWRWn9hkwakxCdZMtiE0l4ySDlpjLRIi/llRo=;
+        b=QlA0T1cs4nFfilxv0dlBZKar6zmilFCddvi70J39T2EfHSBjI2Je1RSE6z0jbMqCmq
+         em58sN0W2O57akqWSs8wtB+ncZ+Uae8LzeFjqUSktdXxMnj9cQCFwfgd2BU5s9xJ85z0
+         kzQMkW+lbnhnoWAyAXbdPNYqU5Ed6m6wGIZkRLSHZe20Hs73yymFAj1yLY2t5/OUpf3T
+         Ke+fEKTrVwVUM6aue7cHBbuDh0lhfMIe6i+c4KsL10E7R57/8yHmh9tRUblw1R6+3UGA
+         YWGwAzQQYzHP5cSDRgoHkufb22S7DaCjmg/yHtJ+/qaAAspbCeCbkr9854HdeAlCSs08
+         EEuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=HlA2P5BWRWn9hkwakxCdZMtiE0l4ySDlpjLRIi/llRo=;
+        b=bRwfHFkTW6YxnplmjCcPOqb5FSppY5voVT7M2RpUwlBCLQV81aII1xYGAfrHE9bRpW
+         U+nXjHWoRMkJ7FkG3Q3zHTB71+iY5sEEBavIZNLsaOTVGqouBgq9MTi3wE1I/JleZjAs
+         2l2k4eoEmAsWL07mBS2LnsLUE1IfzxJyFGcW2xzJwV4LcHe6oJEJ4tLsgVSIuwGJXHCX
+         IlHhRQ18K5N/mDF55zdY3KIKmcblEj7qESE1C6L13TaQZlI1uMO/Ew5w4HwzokLtWIlA
+         31o7rCABJs5FcayqD4N3n8QKmzfni8Hmp7XqBYcsgEj8dDtv1Ve5TTkEq2yyGaVc0k1M
+         UkTw==
+X-Gm-Message-State: AOAM53384KR9ppGCoO6Fd1Gp5VfUv4EKGh3kCVOh32BmBjdwHCEdOGj4
+        mJZHTD96ZjKQUmifoO8MMEg=
+X-Google-Smtp-Source: ABdhPJxKDk7xpkbepDWFgElAjkEPtEeTgll3N7aydUR7QtcYNBdcBTcqhVHo9xwRv960Bt/zB/uizw==
+X-Received: by 2002:a05:6808:190d:b0:323:2813:57e7 with SMTP id bf13-20020a056808190d00b00323281357e7mr8161144oib.169.1650900296360;
+        Mon, 25 Apr 2022 08:24:56 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b14-20020a056870160e00b000e67f5bd9b9sm3470763oae.45.2022.04.25.08.24.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 08:24:54 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 25 Apr 2022 08:24:53 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Renze Nicolai <renze@rnplus.nl>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/6] hwmon: (nct6775) Convert register access to
+ regmap API
+Message-ID: <20220425152453.GA4166687@roeck-us.net>
+References: <20220309005047.5107-1-zev@bewilderbeest.net>
+ <20220309005047.5107-3-zev@bewilderbeest.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220407152940.738159-8-benjamin.gaignard@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220309005047.5107-3-zev@bewilderbeest.net>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Benjamin,
+On Tue, Mar 08, 2022 at 04:50:43PM -0800, Zev Weiss wrote:
+> This replaces the nct6775_data->{read,write}_value function pointers
+> with a regmap.
+> 
+> The major difference is that the regmap access functions may fail, and
+> hence require checking at each call site.  While the existing WMI
+> register-access code had potential failure paths, they were masked by
+> the fact that the read_value() function returned the register value
+> directly, and hence squashed errors undetectably by simply returning
+> zero, and while the write_value() functions were capable of reporting
+> errors, all callers ignored them.
+> 
+> This improves the robustness of the existing code, and also prepares
+> the driver for an i2c version to be added soon, for which register
+> accesses are much more likely to actually fail.
+> 
+> The conversion of the register-access call sites is largely mechanical
+> (reading a register now returns the value via an out-param pointer,
+> and returned errors must be checked for and propagated to callers),
+> though the nct6775_write_fan_div() function is refactored slightly to
+> avoid duplicating nearly identical (and now lengthier) code in each
+> switch case.
+> 
+> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+> ---
+>  drivers/hwmon/nct6775.c | 977 +++++++++++++++++++++++++++-------------
 
-On 07.04.2022 17:29, Benjamin Gaignard wrote:
->The possible values for field_pic field in v4l2_hevc_dpb_entry
+Needs "select REGMAP" in Kconfig.
 
-s/field_pic/the field_pic/
-s/v4l2_hevc_dpb_entry/the v4l2_hevc_dpb_entry/
-
->structure are defined table D.2 in HEVC specification section D.3.3.
-
-s/defined table/defined in the table/
-
-Greetings,
-Sebastian
-
->Add flags and documentation for each of them.
->
->Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->---
-> .../media/v4l/ext-ctrls-codec.rst             | 54 +++++++++++++++++++
-> include/media/hevc-ctrls.h                    | 14 +++++
-> 2 files changed, 68 insertions(+)
->
->diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->index c679b17b4426..b44ea85c6f0e 100644
->--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->@@ -3193,6 +3193,7 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->     * - __u8
->       - ``field_pic``
->       - Whether the reference is a field picture or a frame.
->+        See :ref:`HEVC dpb field pic Flags <hevc_dpb_field_pic_flags>`
->     * - __u16
->       - ``pic_order_cnt[2]``
->       - The picture order count of the reference. Only the first element of the
->@@ -3206,6 +3207,59 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->
->     \normalsize
->
->+.. _hevc_dpb_field_pic_flags:
->+
->+``HEVC dpb field pic Flags``
->+
->+.. raw:: latex
->+
->+    \scriptsize
->+
->+.. flat-table::
->+    :header-rows:  0
->+    :stub-columns: 0
->+    :widths:       1 1 2
->+
->+    * - ``V4L2_HEVC_SEI_PIC_STRUCT_FRAME``
->+      - 0
->+      - (progressive) Frame
->+    * - ``V4L2_HEVC_SEI_PIC_STRUCT_TOP_FIELD``
->+      - 1
->+      - Top field
->+    * - ``V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_FIELD``
->+      - 2
->+      - Bottom field
->+    * - ``V4L2_HEVC_SEI_PIC_STRUCT_TOP_BOTTOM``
->+      - 3
->+      - Top field, bottom field, in that order
->+    * - ``V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_TOP``
->+      - 4
->+      - Bottom field, top field, in that order
->+    * - ``V4L2_HEVC_SEI_PIC_STRUCT_TOP_BOTTOM_TOP``
->+      - 5
->+      - Top field, bottom field, top field repeated, in that order
->+    * - ``V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_TOP_BOTTOM``
->+      - 6
->+      - Bottom field, top field, bottom field repeated, in that order
->+    * - ``V4L2_HEVC_SEI_PIC_STRUCT_FRAME_DOUBLING``
->+      - 7
->+      - Frame doubling
->+    * - ``V4L2_HEVC_SEI_PIC_STRUCT_FRAME_TRIPLING``
->+      - 8
->+      - Frame tripling
->+    * - ``V4L2_HEVC_SEI_PIC_STRUCT_TOP_PAIRED_PREVIOUS_BOTTOM``
->+      - 9
->+      - Top field paired with previous bottom field in output order
->+    * - ``V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_PAIRED_PREVIOUS_TOP``
->+      - 10
->+      - Bottom field paired with previous top field in output order
->+    * - ``V4L2_HEVC_SEI_PIC_STRUCT_TOP_PAIRED_NEXT_BOTTOM``
->+      - 11
->+      - Top field paired with next bottom field in output order
->+    * - ``V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_PAIRED_NEXT_TOP``
->+      - 12
->+      - Bottom field paired with next top field in output order
->+
-> .. c:type:: v4l2_hevc_pred_weight_table
->
-> .. raw:: latex
->diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
->index 2812778b41f4..e76a23e22a35 100644
->--- a/include/media/hevc-ctrls.h
->+++ b/include/media/hevc-ctrls.h
->@@ -132,6 +132,20 @@ struct v4l2_ctrl_hevc_pps {
->
-> #define V4L2_HEVC_DPB_ENTRY_LONG_TERM_REFERENCE	0x01
->
->+#define V4L2_HEVC_SEI_PIC_STRUCT_FRAME				0
->+#define V4L2_HEVC_SEI_PIC_STRUCT_TOP_FIELD			1
->+#define V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_FIELD			2
->+#define V4L2_HEVC_SEI_PIC_STRUCT_TOP_BOTTOM			3
->+#define V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_TOP			4
->+#define V4L2_HEVC_SEI_PIC_STRUCT_TOP_BOTTOM_TOP			5
->+#define V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_TOP_BOTTOM		6
->+#define V4L2_HEVC_SEI_PIC_STRUCT_FRAME_DOUBLING			7
->+#define V4L2_HEVC_SEI_PIC_STRUCT_FRAME_TRIPLING			8
->+#define V4L2_HEVC_SEI_PIC_STRUCT_TOP_PAIRED_PREVIOUS_BOTTOM	9
->+#define V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_PAIRED_PREVIOUS_TOP	10
->+#define V4L2_HEVC_SEI_PIC_STRUCT_TOP_PAIRED_NEXT_BOTTOM		11
->+#define V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_PAIRED_NEXT_TOP		12
->+
-> #define V4L2_HEVC_DPB_ENTRIES_NUM_MAX		16
->
-> struct v4l2_hevc_dpb_entry {
->-- 
->2.32.0
->
+Guenter

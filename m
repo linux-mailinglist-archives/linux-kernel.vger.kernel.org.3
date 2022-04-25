@@ -2,104 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2646C50D6BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 03:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E1FB50D6C6
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 04:00:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240255AbiDYB52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 21:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38822 "EHLO
+        id S240304AbiDYCDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 22:03:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234324AbiDYB5W (ORCPT
+        with ESMTP id S240276AbiDYCCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 21:57:22 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E536140A32;
-        Sun, 24 Apr 2022 18:54:15 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id i3-20020a056830010300b00605468119c3so9831493otp.11;
-        Sun, 24 Apr 2022 18:54:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=igNMWVB0BCCRkPYfikUJYnBxF9vywzLMTQ38+RboaBU=;
-        b=eGKOKm7arB3Mkck5UGNAVGH1J+LW9yasn1IK/T07ZIbbSGNYF5qegU0+OrvbQAwafz
-         JNdWdyLj/T74zZe5iMRtOwYZSEWqnePyVCDuwzx7ebcF4DTsq9eMSXWzpX/NjFC8u3Fa
-         0sbT6fZdcWjxAPpxGoehybf1M8SXzWaxKb2YC9jzvbtM9A7yhBgF3/DFmnoeaipNXLjV
-         JQhlDMB3SsWnyUdKZOYZjqoxvQ0rjUCwZu8M05px9rxWQRTstKx/CzBj/MBJhU/aXiUU
-         t4ffQDIhzUmvd0nU4+vU/EayqrGotXZr/ih6L/obEZHUhcWjcK+5qy2heREUFCPnrK9a
-         Us7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=igNMWVB0BCCRkPYfikUJYnBxF9vywzLMTQ38+RboaBU=;
-        b=57llMSg5QAxSxn4DYrzA9PTd6lDOKUu3X3YeiOXwhQ3iys7jlmg+OMpY+OYW1oURRh
-         DiU8wWmTl6KPo+0jMUkFkXvD95VGfqeF9COfVv1hfEEJqs89/1YZRJ+EhxHFIppCPR/9
-         3Hnnf5HVWi9wPgUa1QW2IwOGUMz+c+krsOHzxcPxnm957QRqcEPqupXAEUAewAWzSVH+
-         bQTQwEIC1AijA1Y8MX7l0rbl7SPM8Jxg3/TO20SxLzu1pFDTyw9kOtffvVblYg5yJ0ga
-         dxR7P1zEb/GDK/uJdaVDTz96EtwwIyievLn6jxkdIwcwlTEfagK3o7SK/B/zXafPXTt5
-         AfrA==
-X-Gm-Message-State: AOAM531z+8JYT0DZLhjfjrmv87bYQx8pIpBmnXP2hathOSRcc0Sb5xG5
-        XiLSJWMH5EyogJOL34YVXX4=
-X-Google-Smtp-Source: ABdhPJydeC4xOzNedxnPid3fIWvDUhntKJuRxEUcVA9wj+uWTuCsq7BzKnYP+Eccbkl8lfeC8tg0/g==
-X-Received: by 2002:a9d:2f29:0:b0:605:4290:ec9a with SMTP id h38-20020a9d2f29000000b006054290ec9amr5432881otb.344.1650851655199;
-        Sun, 24 Apr 2022 18:54:15 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d3-20020a9d2903000000b005cda765f578sm3281005otb.0.2022.04.24.18.54.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 24 Apr 2022 18:54:14 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8c27dfab-db37-651e-2828-78309755cb87@roeck-us.net>
-Date:   Sun, 24 Apr 2022 18:54:10 -0700
+        Sun, 24 Apr 2022 22:02:43 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A8C5DE67
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 18:59:40 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kmp6R2ShVzGpFF;
+        Mon, 25 Apr 2022 09:57:03 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 25 Apr 2022 09:59:37 +0800
+Subject: Re: [PATCH v3 3/3] mm/madvise: free hwpoison and swapin error entry
+ in madvise_free_pte_range
+To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>
+CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "neilb@suse.de" <neilb@suse.de>,
+        "david@redhat.com" <david@redhat.com>,
+        "apopple@nvidia.com" <apopple@nvidia.com>,
+        "surenb@google.com" <surenb@google.com>,
+        "minchan@kernel.org" <minchan@kernel.org>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220424091105.48374-1-linmiaohe@huawei.com>
+ <20220424091105.48374-4-linmiaohe@huawei.com>
+ <20220424234128.GA3740950@hori.linux.bs1.fc.nec.co.jp>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <66a3d738-9dcb-76d6-6507-abbb13569709@huawei.com>
+Date:   Mon, 25 Apr 2022 09:59:36 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v1] random: block in /dev/urandom
+In-Reply-To: <20220424234128.GA3740950@hori.linux.bs1.fc.nec.co.jp>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Nick Hu <nickhu@andestech.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Michal Simek <monstr@monstr.eu>,
-        Borislav Petkov <bp@alien8.de>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Joshua Kinard <kumba@gentoo.org>,
-        David Laight <David.Laight@aculab.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Theodore Ts'o <tytso@mit.edu>
-References: <20220217162848.303601-1-Jason@zx2c4.com>
- <20220322155820.GA1745955@roeck-us.net> <YjoC5kQMqyC/3L5Y@zx2c4.com>
- <d5c23f68-30ba-a5eb-6bea-501736e79c88@roeck-us.net>
- <CAHmME9rmeQAD2DwG=APTmDxuVxFDH=6GXoKpgPrU9rc9oXrmxQ@mail.gmail.com>
- <20220423135631.GB3958174@roeck-us.net> <YmRrUYfsXkF3XZ5S@zx2c4.com>
- <5dfb14f4-23c6-1aa9-9ab3-bd5373ceaa64@roeck-us.net>
- <YmXncURQMUHOS0IQ@zx2c4.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <YmXncURQMUHOS0IQ@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -107,24 +65,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/24/22 17:12, Jason A. Donenfeld wrote:
-> Hi Guenter,
+On 2022/4/25 7:41, HORIGUCHI NAOYA(堀口 直也) wrote:
+> On Sun, Apr 24, 2022 at 05:11:05PM +0800, Miaohe Lin wrote:
+>> Once the MADV_FREE operation has succeeded, callers can expect they might
+>> get zero-fill pages if accessing the memory again. Therefore it should be
+>> safe to delete the hwpoison entry and swapin error entry. There is no
+>> reason to kill the process if it has called MADV_FREE on the range.
+>>
+>> Suggested-by: Alistair Popple <apopple@nvidia.com>
+>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>> Acked-by: David Hildenbrand <david@redhat.com>
 > 
-> On Sat, Apr 23, 2022 at 07:04:26PM -0700, Guenter Roeck wrote:
->> I'll run another test tonight.
+> I confirmed that hwpoison entry is properly removed with madvise(MADV_FREE)
+> with this patch. This provides applications with the ability to recover from
+> memory errors in simpler way (applications don't have to munmap then mmap again
+> the error address). That's a good small improvement. Thank you.
 > 
-> Super, thanks. Looking forward to learning what transpires. Hopefully
-> all pass this time through...
+> Reviewed-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+
+Many thanks for your testing and review! :)
+
 > 
-
-Build results:
-	total: 147 pass: 146 fail: 1
-Failed builds:
-	m68k:allmodconfig
-Qemu test results:
-	total: 489 pass: 489 fail: 0
-
-The failure is inherited from mainline, so all looks good.
-
-Guenter
+>> ---
+>>  mm/madvise.c | 13 ++++++++-----
+>>  1 file changed, 8 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/mm/madvise.c b/mm/madvise.c
+>> index 4d6592488b51..5f4537511532 100644
+>> --- a/mm/madvise.c
+>> +++ b/mm/madvise.c
+>> @@ -624,11 +624,14 @@ static int madvise_free_pte_range(pmd_t *pmd, unsigned long addr,
+>>  			swp_entry_t entry;
+>>  
+>>  			entry = pte_to_swp_entry(ptent);
+>> -			if (non_swap_entry(entry))
+>> -				continue;
+>> -			nr_swap--;
+>> -			free_swap_and_cache(entry);
+>> -			pte_clear_not_present_full(mm, addr, pte, tlb->fullmm);
+>> +			if (!non_swap_entry(entry)) {
+>> +				nr_swap--;
+>> +				free_swap_and_cache(entry);
+>> +				pte_clear_not_present_full(mm, addr, pte, tlb->fullmm);
+>> +			} else if (is_hwpoison_entry(entry) ||
+>> +				   is_swapin_error_entry(entry)) {
+>> +				pte_clear_not_present_full(mm, addr, pte, tlb->fullmm);
+>> +			}
+>>  			continue;
+>>  		}
+>>  
+>> -- 
+>> 2.23.0
 

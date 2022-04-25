@@ -2,183 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 753CD50E040
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 14:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD8650E043
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 14:28:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242055AbiDYM2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 08:28:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34270 "EHLO
+        id S229623AbiDYMah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 08:30:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241806AbiDYMZ1 (ORCPT
+        with ESMTP id S241971AbiDYM2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 08:25:27 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A022560D8A;
-        Mon, 25 Apr 2022 05:22:23 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0VBG8mn5_1650889338;
-Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VBG8mn5_1650889338)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 25 Apr 2022 20:22:19 +0800
-From:   Jeffle Xu <jefflexu@linux.alibaba.com>
-To:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org
-Cc:     torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        willy@infradead.org, linux-fsdevel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
-        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
-        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
-        fannaihao@baidu.com, zhangjiachen.jaycee@bytedance.com,
-        zhujia.zj@bytedance.com
-Subject: [PATCH v10 21/21] erofs: add 'fsid' mount option
-Date:   Mon, 25 Apr 2022 20:21:43 +0800
-Message-Id: <20220425122143.56815-22-jefflexu@linux.alibaba.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220425122143.56815-1-jefflexu@linux.alibaba.com>
-References: <20220425122143.56815-1-jefflexu@linux.alibaba.com>
-MIME-Version: 1.0
+        Mon, 25 Apr 2022 08:28:09 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2107.outbound.protection.outlook.com [40.107.255.107])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810F064BD1;
+        Mon, 25 Apr 2022 05:22:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N5pYIzW44HQtYPvPfwZiuA1oSblgGVJDj+iQu3AVOrylaNbdL085+TeTTpLdq/0Veo91UBgxpNEc5pd9rO0ii2NdB7WIwrKSPExOf6gAcGmz3ZNv7PlkjT91dKQJsJqtNTQvVnHK9xmtMyTCWR9FzbP/vJGND/TMe85cUTD0IDa4pT1HKTe4CVFanaesvJO+4mjgCPUS4OaOK3rpfwXYnIWbaac5e4mp/IER5/7Fl6HJwaPxw8pX1onTsISSlHnxwCT7biDD2SWm2hKf2+lPe6109CSKaZ5UYJr5BEDsrrUOTw1b4V7BWs8jP+KTPvjIkQ9Tr+uaqAbR0VamjAk1Nw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oSSTaCRoFuoFRjyZ4RqHKYwxgulUdtKd1/oEIFavEiQ=;
+ b=VAMFP8LEuQccp3In+2PvH5py5nwBVgs8C4DTDj8/ahODq6S6zkaBg7Lu8HVHSFjuK2YTPNHSyWbZoC8hPlgSEU25c8VhMoYgP0C4G/ivaF7QXy4420PiL8yzHklYHaxIxbr1+F0A3ZNn/VYwq2ASVlkULnDoGEdg5pEaGEKwC0BHP/gf2hfQ/wchiDpydiAHydAPZdStso76FhXOMCjShvqV5KddpQtLoMaP3tPkaqI/U4l/yNV4vPiHacK29zqMp+W9082g43UGpu0jAcbjshdmlBA3WTBD1ADvs3wcZiqKVDf104CjOUrRODcLYknnmVBb+NpR2uBVemhvBtH/xw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oSSTaCRoFuoFRjyZ4RqHKYwxgulUdtKd1/oEIFavEiQ=;
+ b=SzWyiYfqr+v2dvhW0awhu1dKAcOPyysIuRGDNJ9V12Zyl8MTCyFhk/ZBYQbdhFYyEtVkpsutONLsnEgMDP7dn9IFVgaqsbMZylOOaW/QVU/QO7H+4hJiqrmgpvwOhtVcObyfvyps+wplTFIo0Zc3bdBLw+ogpbo/iGj9qKiTxZw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from HK2PR06MB3492.apcprd06.prod.outlook.com (2603:1096:202:2f::10)
+ by SG2PR06MB2508.apcprd06.prod.outlook.com (2603:1096:4:5f::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Mon, 25 Apr
+ 2022 12:22:47 +0000
+Received: from HK2PR06MB3492.apcprd06.prod.outlook.com
+ ([fe80::88e1:dc04:6851:ad08]) by HK2PR06MB3492.apcprd06.prod.outlook.com
+ ([fe80::88e1:dc04:6851:ad08%7]) with mapi id 15.20.5186.021; Mon, 25 Apr 2022
+ 12:22:47 +0000
+From:   Guo Zhengkui <guozhengkui@vivo.com>
+To:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        David Heidelberg <david@ixit.cz>,
+        Lyude Paul <lyude@redhat.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Guo Zhengkui <guozhengkui@vivo.com>,
+        Xu Wang <vulab@iscas.ac.cn>,
+        linux-arm-msm@vger.kernel.org (open list:DRM DRIVER FOR MSM ADRENO GPU),
+        dri-devel@lists.freedesktop.org (open list:DRM DRIVER FOR MSM ADRENO
+        GPU),
+        freedreno@lists.freedesktop.org (open list:DRM DRIVER FOR MSM ADRENO
+        GPU), linux-kernel@vger.kernel.org (open list)
+Cc:     zhengkui_guo@outlook.com
+Subject: [PATCH] drm/msm: fix returnvar.cocci warning
+Date:   Mon, 25 Apr 2022 20:22:21 +0800
+Message-Id: <20220425122223.7415-1-guozhengkui@vivo.com>
+X-Mailer: git-send-email 2.20.1
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: HK2PR0401CA0009.apcprd04.prod.outlook.com
+ (2603:1096:202:2::19) To HK2PR06MB3492.apcprd06.prod.outlook.com
+ (2603:1096:202:2f::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7c74186e-fabd-4770-80e8-08da26b64e71
+X-MS-TrafficTypeDiagnostic: SG2PR06MB2508:EE_
+X-Microsoft-Antispam-PRVS: <SG2PR06MB2508FC744C357606C71F43E9C7F89@SG2PR06MB2508.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sUOE3h7tWc84LkADNVzWgieXHKYf8Nmy1fOLieQtQXtl7v6iL/Hq0ZfVCKLApxVGArNtJpmIugLvIieGSxmj2IN/lOqnh+FczW+akuAnH2ZlF2B8ez+lx3XHYwLVKfPcNENKMRi6ZJVzQLZLH2EvTvBOoLtFjdznqi/RqP2LaVtJYkWtcsOrfubJ+GIS7aRFl/T+Jvn3CQJ9+acx5BbQKHkziChc6/DVUbqo9XqCWK+VvB8lhOFH+QJEjnftHId1OoCnKZMh+V6v2gTsQzyCdmaRhPglrC3rwYXFX7nQ+U1Gc/AwQ5TY1AtBun1xwOJjWsrwYo/ZafF6qMcfGYAjzrohNH9JK7Npg19Irk/XX7CsEr1Ob8S9GyuwoujVbHBEeqr1gaoBeA9S9HNXpZKgc4Nn9B3RwFUkoFFdhMSMDgnV43rtFIUhQyvHnGR+XkX62WyTOfn+QGlGEnbb98mZQ0/+Z9/tDVatUff797IMUmfKxzssYV337LldzLRJaMjOI3zqZlEtRTA2twwWdNUa9XXYnqkOC9YgJJNoXaBZ1UxvLhst7kPYGbWya2pSSLVaOIXeboqK6D3sHexR7jHYZM6vhMP47BflON8razJPFV92cBX21Y8yUPUdDtkslH8KbUmQpWqPwGeZLXJVAwK6qSx1VQ8fFJUxhWCHUEJobFpQiGeCu/VqN53Hx15u7eIdQGd4a1jcjtRrHKIutMVNGmbetUNO9I5obWq15xIe75c=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK2PR06MB3492.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(6666004)(36756003)(6512007)(921005)(6506007)(508600001)(6486002)(83380400001)(52116002)(1076003)(2616005)(316002)(186003)(86362001)(4744005)(2906002)(8936002)(7416002)(5660300002)(4326008)(8676002)(66556008)(66946007)(66476007)(38100700002)(38350700002)(110136005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?X/0vhP7D0AqawylAbBWJ0wlhSIQKr61NvtyWcy3AT17VOP8hn0oXcxl6z7Pl?=
+ =?us-ascii?Q?C63eaYRIJ2fgR9iYZzsp58fFAMy5JLlSVuQDWx6MUBpswzD6VwSC0A4bcbOo?=
+ =?us-ascii?Q?cAeroWVlvLJGG/eSAeNzDniNNAf8rElvRYHWQ80YEE4SgfqkyqTNmBldo+Az?=
+ =?us-ascii?Q?MUQtJ1lzZphSJx+JJBLcgHxslzaqmDy/RLrYwli7uV82kj6UN/4/BwUjA/KX?=
+ =?us-ascii?Q?qq1zcnJv3SMOLI8sD0qT1FcP5NhtFLYY/r0yr1nztA9DNQSYn3ODStluzqD6?=
+ =?us-ascii?Q?1YDK4okVtDxPRHL+p34bmj+5+M1cd5NtVvGrs7FMPYlQrh0kSVnK1bwe4xPk?=
+ =?us-ascii?Q?SXfHYHhKsEYCYdPpgEcpXpx57HMSkPV7tdqy2hyJzHJYFCza9J0S4E9S2C9n?=
+ =?us-ascii?Q?2i8aSMMUFbiZjbzbb4LTQBfrfWUrv0y9Xx3dEfryQXxOoWYkhc9UHGiaJ/wD?=
+ =?us-ascii?Q?Iuh5AqBI7fQhDWo9in5d8k1RFhS9L2vhDsSppSFku7zbgKkp2X+kUSGLGesh?=
+ =?us-ascii?Q?cgJbC7auBZqlGin0TUObutzeEi4S0eTkvE079aE0f6jVE816Z4tC0ADzgGtn?=
+ =?us-ascii?Q?WePZDuH4uXccoWEfAkn/eW52G/G4XdI2sU7gBuGh/ahKU8Fk+vNKPY6UEvvu?=
+ =?us-ascii?Q?90G2LmF8CSj05oXj7zufcnP/6RiYvOdJaKfb+7rDnHh+PSCle5SMh8u+ZKAy?=
+ =?us-ascii?Q?90jf122FysBG61vlnbOhi0G2EWCquLLGbVbRyTikCc2TgauIyw3CCkUh0zUf?=
+ =?us-ascii?Q?7vJ1plFFLbcYTVXahH3wfOsXz5vEZc2+HwHW2w2YzXD1uvmkayr5r/9zizKD?=
+ =?us-ascii?Q?/Ax9IIlazUH94lGevHv21Dn+jPqqIuoI7BOZmHBx38S3vxv8HICchP+V7UvG?=
+ =?us-ascii?Q?i5ZuMV4th3WkRL6B8PX6uhInukn5mXPwWK7RQqd2coo99Fp/gKkwV0YZYEOo?=
+ =?us-ascii?Q?i42zTsAmBESqGes2krTIMis5rbrOsVl0PfdnwLGlZPppsttJWq/GiYpWtF4w?=
+ =?us-ascii?Q?l1E3xukohaD/hTWgr3Emqi2caLpHcTgok4e6x9hXXaieGuD7Zn2HmP59Pqnl?=
+ =?us-ascii?Q?UO6Qi0pbpZUl/AuJn0MBruhKM5mVsnoUhprO6dDK+RwdZB0Q7pmkGvC55G2t?=
+ =?us-ascii?Q?Ezs83/fPmIlZBPUXMvDGc4a+AdOA+n32Y7RMDWErjmE4WvykOU3+LF2aG5H7?=
+ =?us-ascii?Q?V1uv6CCYlHMoWeh/F/9rw9rb8iOKQgpQ6Mtl5Y2pIeKpoXo107CR4GAaUus+?=
+ =?us-ascii?Q?8jEl9tPIx5gfd8MF/u8IEJZPRV6vVeWlG5uJiyNeZdfwjcKGn1imzoaeUGFr?=
+ =?us-ascii?Q?syzc+WDU2NavoobKYFL0Ub4EVcd37JZV/elStLroUF58ByardPy8QqRw5MKH?=
+ =?us-ascii?Q?z43nh8PzbROTCVmn6FpZlFOkbkw5UXLhD9w//RDXiQy4Qz+9RUFwS8kG/TfZ?=
+ =?us-ascii?Q?xcoj2ud+RV9keYq0GuEtbDSahjt36MHB+uQbiBPQmlTQ00rH9Cf+oee6YsqH?=
+ =?us-ascii?Q?//Nkf35mnE4YTrt5hvbe9KfYNy3h56BPQSJ9ga0IRQ+Pstzac7REw0v6WCxY?=
+ =?us-ascii?Q?2ZAm0+Z3R+pgcC6CxpguvWfBxDdlQgwkX7SAez54qdA133R3buYdtpYYmZll?=
+ =?us-ascii?Q?z8v6eZiNhY+/sDwepsG8INEHxx9OB2mOw2iZ90YaLxzg0E3GROv5W3orhnQI?=
+ =?us-ascii?Q?4n0/sWO7cikfr+14n8bGLN+PMpNgC4TWw8fplVqOl7tBjvyrsjOgTPzV4Yjd?=
+ =?us-ascii?Q?3ZNkLftRFQ=3D=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7c74186e-fabd-4770-80e8-08da26b64e71
+X-MS-Exchange-CrossTenant-AuthSource: HK2PR06MB3492.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2022 12:22:46.9717
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YYyuXrqdKmWUPbBVfcudchVQODM3BqNcdIcNNPNqMalB1fM4i+onfU3xDCMkv/Q81sCdiMk020beibI89uNwag==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB2508
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce 'fsid' mount option to enable on-demand read sementics, in
-which case, erofs will be mounted from data blobs. Users could specify
-the name of primary data blob by this mount option.
+Fix the following coccicheck warning:
+drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.c:24:5-8: Unneeded variable:
+"ret". Return "0" on line 75.
 
-Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
-Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
 ---
- fs/erofs/super.c | 31 ++++++++++++++++++++++++++++++-
- fs/erofs/sysfs.c |  4 ++--
- 2 files changed, 32 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/fs/erofs/super.c b/fs/erofs/super.c
-index f68ba929100d..4a623630e1c4 100644
---- a/fs/erofs/super.c
-+++ b/fs/erofs/super.c
-@@ -371,6 +371,8 @@ static int erofs_read_superblock(struct super_block *sb)
+diff --git a/drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.c b/drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.c
+index 3cf476c55158..8ae66facc095 100644
+--- a/drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.c
++++ b/drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.c
+@@ -21,7 +21,6 @@ static int mdp4_hw_init(struct msm_kms *kms)
+ 	struct drm_device *dev = mdp4_kms->dev;
+ 	u32 dmap_cfg, vg_cfg;
+ 	unsigned long clk;
+-	int ret = 0;
  
- 	if (erofs_sb_has_ztailpacking(sbi))
- 		erofs_info(sb, "EXPERIMENTAL compressed inline data feature in use. Use at your own risk!");
-+	if (erofs_is_fscache_mode(sb))
-+		erofs_info(sb, "EXPERIMENTAL fscache-based on-demand read feature in use. Use at your own risk!");
- out:
- 	erofs_put_metabuf(&buf);
- 	return ret;
-@@ -399,6 +401,7 @@ enum {
- 	Opt_dax,
- 	Opt_dax_enum,
- 	Opt_device,
-+	Opt_fsid,
- 	Opt_err
- };
+ 	pm_runtime_get_sync(dev->dev);
  
-@@ -423,6 +426,7 @@ static const struct fs_parameter_spec erofs_fs_parameters[] = {
- 	fsparam_flag("dax",             Opt_dax),
- 	fsparam_enum("dax",		Opt_dax_enum, erofs_dax_param_enums),
- 	fsparam_string("device",	Opt_device),
-+	fsparam_string("fsid",		Opt_fsid),
- 	{}
- };
+@@ -72,7 +71,7 @@ static int mdp4_hw_init(struct msm_kms *kms)
  
-@@ -518,6 +522,16 @@ static int erofs_fc_parse_param(struct fs_context *fc,
- 		}
- 		++ctx->devs->extra_devices;
- 		break;
-+	case Opt_fsid:
-+#ifdef CONFIG_EROFS_FS_ONDEMAND
-+		kfree(ctx->opt.fsid);
-+		ctx->opt.fsid = kstrdup(param->string, GFP_KERNEL);
-+		if (!ctx->opt.fsid)
-+			return -ENOMEM;
-+#else
-+		errorfc(fc, "fsid option not supported");
-+#endif
-+		break;
- 	default:
- 		return -ENOPARAM;
- 	}
-@@ -604,6 +618,7 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
+ 	pm_runtime_put_sync(dev->dev);
  
- 	sb->s_fs_info = sbi;
- 	sbi->opt = ctx->opt;
-+	ctx->opt.fsid = NULL;
- 	sbi->devs = ctx->devs;
- 	ctx->devs = NULL;
- 
-@@ -690,6 +705,11 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
- 
- static int erofs_fc_get_tree(struct fs_context *fc)
- {
-+	struct erofs_fs_context *ctx = fc->fs_private;
-+
-+	if (IS_ENABLED(CONFIG_EROFS_FS_ONDEMAND) && ctx->opt.fsid)
-+		return get_tree_nodev(fc, erofs_fc_fill_super);
-+
- 	return get_tree_bdev(fc, erofs_fc_fill_super);
+-	return ret;
++	return 0;
  }
  
-@@ -739,6 +759,7 @@ static void erofs_fc_free(struct fs_context *fc)
- 	struct erofs_fs_context *ctx = fc->fs_private;
- 
- 	erofs_free_dev_context(ctx->devs);
-+	kfree(ctx->opt.fsid);
- 	kfree(ctx);
- }
- 
-@@ -779,7 +800,10 @@ static void erofs_kill_sb(struct super_block *sb)
- 
- 	WARN_ON(sb->s_magic != EROFS_SUPER_MAGIC);
- 
--	kill_block_super(sb);
-+	if (erofs_is_fscache_mode(sb))
-+		generic_shutdown_super(sb);
-+	else
-+		kill_block_super(sb);
- 
- 	sbi = EROFS_SB(sb);
- 	if (!sbi)
-@@ -789,6 +813,7 @@ static void erofs_kill_sb(struct super_block *sb)
- 	fs_put_dax(sbi->dax_dev);
- 	erofs_fscache_unregister_cookie(&sbi->s_fscache);
- 	erofs_fscache_unregister_fs(sb);
-+	kfree(sbi->opt.fsid);
- 	kfree(sbi);
- 	sb->s_fs_info = NULL;
- }
-@@ -938,6 +963,10 @@ static int erofs_show_options(struct seq_file *seq, struct dentry *root)
- 		seq_puts(seq, ",dax=always");
- 	if (test_opt(opt, DAX_NEVER))
- 		seq_puts(seq, ",dax=never");
-+#ifdef CONFIG_EROFS_FS_ONDEMAND
-+	if (opt->fsid)
-+		seq_printf(seq, ",fsid=%s", opt->fsid);
-+#endif
- 	return 0;
- }
- 
-diff --git a/fs/erofs/sysfs.c b/fs/erofs/sysfs.c
-index f3babf1e6608..c1383e508bbe 100644
---- a/fs/erofs/sysfs.c
-+++ b/fs/erofs/sysfs.c
-@@ -205,8 +205,8 @@ int erofs_register_sysfs(struct super_block *sb)
- 
- 	sbi->s_kobj.kset = &erofs_root;
- 	init_completion(&sbi->s_kobj_unregister);
--	err = kobject_init_and_add(&sbi->s_kobj, &erofs_sb_ktype, NULL,
--				   "%s", sb->s_id);
-+	err = kobject_init_and_add(&sbi->s_kobj, &erofs_sb_ktype, NULL, "%s",
-+			erofs_is_fscache_mode(sb) ? sbi->opt.fsid : sb->s_id);
- 	if (err)
- 		goto put_sb_kobj;
- 	return 0;
+ static void mdp4_enable_commit(struct msm_kms *kms)
 -- 
-2.27.0
+2.20.1
 

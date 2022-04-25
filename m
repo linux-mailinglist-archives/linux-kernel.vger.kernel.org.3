@@ -2,106 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E65F050EB91
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 00:21:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51C6D50EBF0
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 00:25:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232090AbiDYWYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 18:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50690 "EHLO
+        id S235891AbiDYW03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 18:26:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343589AbiDYVm2 (ORCPT
+        with ESMTP id S1343614AbiDYVp7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 17:42:28 -0400
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D290812862D;
-        Mon, 25 Apr 2022 14:39:21 -0700 (PDT)
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-e93bbb54f9so4804735fac.12;
-        Mon, 25 Apr 2022 14:39:21 -0700 (PDT)
+        Mon, 25 Apr 2022 17:45:59 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9546210C88A
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 14:42:53 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id q14so19520824ljc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 14:42:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=J0ON/l2oodv3sNlP+eHVo6ZPpiqCxnVVyYN++iumNjA=;
+        b=Fbz20CF4Jj2RaIdFgpKFZNrAzaKTxj2Uv1lUdUtavR82B8XjNHdJlqKRYFj8J5sYnH
+         2a+cy65W/7lJaACwuKUGno6crPpRa3JpDQ/3evU6c5XeZIM8JF/489oyyF9AR5CR/faW
+         UkPxO4Xj9bmhWF8R8j+SJ7JRENzCLryJSbSxQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=M3R043itbLpaOlNutqBsUrB9rfl8TA7O8rvFQFaCgW0=;
-        b=YGomX+gDZsUz0aV8H2oeclZGUzW+LXBRKYEPDf2G6d+g5Yb0l80UyvFwyxXiwm3zcd
-         UP1YPzR2etRXQk4IUaavZewVmZtSUzNpC0av8wbe38dlb2CabyXh1AK7f22XQtqaGHHg
-         kn+Rh9/+hIFLeX0zQXdjScuqOEJPCUEcOM13PDBRXuCxXws4L+fbJALV8lrxZyeUMk0b
-         fOndJUX2w6yd1sWQvNMrU/RmNG1MAVoO/kCYfqqDW6ZIKDN8o1Qwm/tg6xvaNxDb+H+R
-         wswI3bcci6unQC/eM5syQZwE35NDEtwjULPVLdA4arX1UWfM/Nkjs1XTfQ4hbgEgVIzd
-         nHOg==
-X-Gm-Message-State: AOAM5328xGLSzYmcMJVx29GcfaFAKznoQe1V/xjqLDoMzbRwjfDtIj6p
-        FBNhcnUsAbf98WUktno+jw==
-X-Google-Smtp-Source: ABdhPJx95JVH34JzFNbcrxkClorcgvSIy6VQetgVvlAGfeInSVtMGuS9SDe47ls3sAPTDW45mGk2tA==
-X-Received: by 2002:a05:6870:618e:b0:e5:c2f3:e009 with SMTP id a14-20020a056870618e00b000e5c2f3e009mr8008861oah.10.1650922761186;
-        Mon, 25 Apr 2022 14:39:21 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r8-20020a05683001c800b006059d4bc39dsm2893087ota.6.2022.04.25.14.39.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 14:39:20 -0700 (PDT)
-Received: (nullmailer pid 334467 invoked by uid 1000);
-        Mon, 25 Apr 2022 21:39:19 -0000
-Date:   Mon, 25 Apr 2022 16:39:19 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Quan Nguyen <quan@os.amperecomputing.com>
-Cc:     Corey Minyard <minyard@acm.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-i2c@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, devicetree@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>,
-        Open Source Submission <patches@amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        linux-arm-kernel@lists.infradead.org,
-        Phong Vo <phong@os.amperecomputing.com>,
-        openipmi-developer@lists.sourceforge.net
-Subject: Re: [PATCH v7 2/3] bindings: ipmi: Add binding for SSIF BMC driver
-Message-ID: <YmcVB/9lB6xkw4d2@robh.at.kernel.org>
-References: <20220422040803.2524940-1-quan@os.amperecomputing.com>
- <20220422040803.2524940-3-quan@os.amperecomputing.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=J0ON/l2oodv3sNlP+eHVo6ZPpiqCxnVVyYN++iumNjA=;
+        b=orlZYkrgB5brEsd5JkCWNGwlkEc6xTkR+RWP2sc/sF9hzdM8Fjor8xtNplzDB6yymJ
+         UfbGq66ls+mZzi35gXWJFbXFjiNHPyXUtD46vHjW4VD+xgoPPca8ksBa1yBDW9dwpFij
+         Pb7tsPwzthu0OO2qqgn9wcrqD77x1uBeUZpAhl9aV4A0ZV18WpBpDRChlbvgs4YBjpon
+         +QApG+yOPbFwQsCho1NM+dq6nkvYGxkbJlL79LjDJztpe+nmD06CxivnMh0uug9rLDXL
+         WC7acHWq0FwB3M62T/1JMev27zS5z9N4Ycad21mQ+KLrbx2RMXsmuwGSO+uxkFq4lV3B
+         gCUA==
+X-Gm-Message-State: AOAM532Fa7maIL4cSdnVRXv/IAkk1Jpb7GZl2xbnXN4i5+zN7DazY/Vo
+        CWXCIU/EIcGPVu8oQLQG54dkZaBUjWOsv9eF
+X-Google-Smtp-Source: ABdhPJzxqfSAE6HmSSWAytMBB+E4dsOvzwhDlC3V98AFQUrCuWuVaancY7eyB7SdQlb1VBryduC77w==
+X-Received: by 2002:a2e:5c81:0:b0:24b:7d:6ae7 with SMTP id q123-20020a2e5c81000000b0024b007d6ae7mr12727284ljb.76.1650922971566;
+        Mon, 25 Apr 2022 14:42:51 -0700 (PDT)
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com. [209.85.208.176])
+        by smtp.gmail.com with ESMTPSA id d6-20020a056512320600b0047196449b7fsm1530932lfe.92.2022.04.25.14.42.50
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Apr 2022 14:42:50 -0700 (PDT)
+Received: by mail-lj1-f176.google.com with SMTP id c15so19511744ljr.9
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 14:42:50 -0700 (PDT)
+X-Received: by 2002:a2e:8245:0:b0:24b:48b1:a1ab with SMTP id
+ j5-20020a2e8245000000b0024b48b1a1abmr12172414ljh.152.1650922970684; Mon, 25
+ Apr 2022 14:42:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422040803.2524940-3-quan@os.amperecomputing.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <CAHk-=whmtHMzjaVUF9bS+7vE_rrRctcCTvsAeB8fuLYcyYLN-g@mail.gmail.com>
+ <YmZvAUakbWnyQEqa@debian> <20220425142706.23e6bea1d5bfdd944e33bc96@linux-foundation.org>
+In-Reply-To: <20220425142706.23e6bea1d5bfdd944e33bc96@linux-foundation.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 25 Apr 2022 14:42:34 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiR+dTAw7qRGRQ80B4oUZEithHd2J4ZfNjc5eGqY1mWwA@mail.gmail.com>
+Message-ID: <CAHk-=wiR+dTAw7qRGRQ80B4oUZEithHd2J4ZfNjc5eGqY1mWwA@mail.gmail.com>
+Subject: Re: Linux 5.18-rc4
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, Song Liu <song@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Apr 2022 11:08:02 +0700, Quan Nguyen wrote:
-> Add device tree binding document for the SSIF BMC driver.
-> 
-> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
-> ---
-> v7:
->   + Change compatible string from "ampere,ssif-bmc" to "ssif-bmc"  [Jae]
-> 
-> v6:
->   + None
-> 
-> v5:
->   + None
-> 
-> v4:
->   + Fix warning with dt_binding_check [Rob]
->   + Change aspeed-ssif-bmc.yaml to ssif-bmc.yaml [Quan]
-> 
-> v3:
->   + Switched to use DT schema format [Rob]
-> 
-> v2:
->   + None
-> 
->  .../devicetree/bindings/ipmi/ssif-bmc.yaml    | 38 +++++++++++++++++++
->  1 file changed, 38 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/ipmi/ssif-bmc.yaml
-> 
+On Mon, Apr 25, 2022 at 2:27 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> From: Andrew Morton <akpm@linux-foundation.org>
+> Subject: mm/nommu.c: provide vmalloc_huge() for CONFIG_MMU=n
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Note, should already be fixed differently (with an alias) by
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0fc74d820a012550be006ba82dd8f1e3fe6fa9f7
+
+although when I looked at the random collection of vmalloc things it
+did make me go "hmm".
+
+It might be a better long-term idea to only implement the very generic
+low-level function in mm/vmalloc.c and mm/nommu.c (ie the
+__vmalloc_node_range() function) and then move all the random wrapper
+functions into mm/util.c.
+
+Because right now we effectively duplicate all those wrapper
+functions, which is kind of ugly.
+
+             Linus

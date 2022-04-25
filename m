@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 798C350E50F
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC5B50E509
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243154AbiDYQEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 12:04:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60118 "EHLO
+        id S235820AbiDYQEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 12:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243174AbiDYQEY (ORCPT
+        with ESMTP id S243162AbiDYQEZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 12:04:24 -0400
+        Mon, 25 Apr 2022 12:04:25 -0400
 Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540DF10FF0;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C2410FF6;
         Mon, 25 Apr 2022 09:01:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1650902480; x=1682438480;
+  t=1650902481; x=1682438481;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=hrOoewtJhmgZVFNviaA6Slr7SEW6ryGKzcMbCayfMvQ=;
-  b=SH5mEo74mVFqeJ31MMb08/e59lVFWtXtXJHnCFW9OUhtzm9zv5Fkc7VY
-   lolUmP54HLQ/FuJeQBIxKVPHOomteycbF6YzAAv4xKsWJxYp66oLK0UnK
-   LgtZqG1OCqHnkE/4kob6pXAxPDrjUYEtgEolaEPn3jtUe9va2eLHBhT3G
-   o=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  bh=JppRMw7VzTNcFr6TWQib8GtwFbi4LrTykY6ZE6u94MQ=;
+  b=DVvX+Ap+2lgq9k13ldHadbJ9iOI5taqq3v5rJHQ6qNRuVt11vBdTrfP7
+   am58Sq/KcsiydlttF25qnqU0u8qD0VuQpfuWiz3IUst8V2GxMAZamgR1i
+   Y6W/j29bImvop93a7kGjWALUSrICy/76MLXe3AyS63trinBUNqdkVHjBV
+   s=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
   by alexa-out.qualcomm.com with ESMTP; 25 Apr 2022 09:01:20 -0700
 X-QCInternal: smtphost
 Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 25 Apr 2022 09:01:19 -0700
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 25 Apr 2022 09:01:18 -0700
 X-QCInternal: smtphost
 Received: from c-sbhanu-linux.qualcomm.com ([10.242.50.201])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 25 Apr 2022 21:30:48 +0530
+  by ironmsg02-blr.qualcomm.com with ESMTP; 25 Apr 2022 21:30:49 +0530
 Received: by c-sbhanu-linux.qualcomm.com (Postfix, from userid 2344807)
-        id 673B4B8E; Mon, 25 Apr 2022 21:30:47 +0530 (IST)
+        id 85FACBC8; Mon, 25 Apr 2022 21:30:48 +0530 (IST)
 From:   Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
 To:     adrian.hunter@intel.com, ulf.hansson@linaro.org,
         wsa+renesas@sang-engineering.com, yoshihiro.shimoda.uh@renesas.com,
@@ -47,9 +47,9 @@ Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
         Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>,
         Liangliang Lu <quic_luliang@quicinc.com>,
         "Bao D . Nguyen" <quic_nguyenb@quicinc.com>
-Subject: [PATCH V5 1/5] mmc: core: Capture eMMC and SD card errors
-Date:   Mon, 25 Apr 2022 21:30:39 +0530
-Message-Id: <1650902443-26357-2-git-send-email-quic_c_sbhanu@quicinc.com>
+Subject: [PATCH V5 2/5] mmc: sdhci: Capture eMMC and SD card errors
+Date:   Mon, 25 Apr 2022 21:30:40 +0530
+Message-Id: <1650902443-26357-3-git-send-email-quic_c_sbhanu@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1650902443-26357-1-git-send-email-quic_c_sbhanu@quicinc.com>
 References: <1650902443-26357-1-git-send-email-quic_c_sbhanu@quicinc.com>
@@ -69,81 +69,222 @@ This is useful for debug and testing.
 Signed-off-by: Liangliang Lu <quic_luliang@quicinc.com>
 Signed-off-by: Sayali Lokhande <quic_sayalil@quicinc.com>
 Signed-off-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
-Signed-off-by: Ram Prakash Gupta <quic_rampraka@quicinc.com>
 Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
 ---
- drivers/mmc/core/core.c  |  6 ++++++
- include/linux/mmc/host.h | 26 ++++++++++++++++++++++++++
- 2 files changed, 32 insertions(+)
+ drivers/mmc/host/sdhci.c | 54 ++++++++++++++++++++++++++++++++++++------------
+ drivers/mmc/host/sdhci.h |  3 +++
+ include/linux/mmc/mmc.h  |  6 ++++++
+ 3 files changed, 50 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/mmc/core/core.c b/drivers/mmc/core/core.c
-index 8cc2b74..6d086e9 100644
---- a/drivers/mmc/core/core.c
-+++ b/drivers/mmc/core/core.c
-@@ -2247,6 +2247,12 @@ void mmc_rescan(struct work_struct *work)
- 		if (freqs[i] <= host->f_min)
- 			break;
+diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
+index 2215202..1cda28ba 100644
+--- a/drivers/mmc/host/sdhci.c
++++ b/drivers/mmc/host/sdhci.c
+@@ -224,6 +224,7 @@ void sdhci_reset(struct sdhci_host *host, u8 mask)
+ 		if (timedout) {
+ 			pr_err("%s: Reset 0x%x never completed.\n",
+ 				mmc_hostname(host->mmc), (int)mask);
++			sdhci_err_stats_inc(host, CTRL_TIMEOUT);
+ 			sdhci_dumpregs(host);
+ 			return;
+ 		}
+@@ -1716,6 +1717,7 @@ static bool sdhci_send_command_retry(struct sdhci_host *host,
+ 		if (!timeout--) {
+ 			pr_err("%s: Controller never released inhibit bit(s).\n",
+ 			       mmc_hostname(host->mmc));
++			sdhci_err_stats_inc(host, CTRL_TIMEOUT);
+ 			sdhci_dumpregs(host);
+ 			cmd->error = -EIO;
+ 			return false;
+@@ -1965,6 +1967,7 @@ void sdhci_enable_clk(struct sdhci_host *host, u16 clk)
+ 		if (timedout) {
+ 			pr_err("%s: Internal clock never stabilised.\n",
+ 			       mmc_hostname(host->mmc));
++			sdhci_err_stats_inc(host, CTRL_TIMEOUT);
+ 			sdhci_dumpregs(host);
+ 			return;
+ 		}
+@@ -1987,6 +1990,7 @@ void sdhci_enable_clk(struct sdhci_host *host, u16 clk)
+ 			if (timedout) {
+ 				pr_err("%s: PLL clock never stabilised.\n",
+ 				       mmc_hostname(host->mmc));
++				sdhci_err_stats_inc(host, CTRL_TIMEOUT);
+ 				sdhci_dumpregs(host);
+ 				return;
+ 			}
+@@ -3161,6 +3165,7 @@ static void sdhci_timeout_timer(struct timer_list *t)
+ 	if (host->cmd && !sdhci_data_line_cmd(host->cmd)) {
+ 		pr_err("%s: Timeout waiting for hardware cmd interrupt.\n",
+ 		       mmc_hostname(host->mmc));
++		sdhci_err_stats_inc(host, REQ_TIMEOUT);
+ 		sdhci_dumpregs(host);
+ 
+ 		host->cmd->error = -ETIMEDOUT;
+@@ -3183,6 +3188,7 @@ static void sdhci_timeout_data_timer(struct timer_list *t)
+ 	    (host->cmd && sdhci_data_line_cmd(host->cmd))) {
+ 		pr_err("%s: Timeout waiting for hardware interrupt.\n",
+ 		       mmc_hostname(host->mmc));
++		sdhci_err_stats_inc(host, REQ_TIMEOUT);
+ 		sdhci_dumpregs(host);
+ 
+ 		if (host->data) {
+@@ -3234,17 +3240,21 @@ static void sdhci_cmd_irq(struct sdhci_host *host, u32 intmask, u32 *intmask_p)
+ 			return;
+ 		pr_err("%s: Got command interrupt 0x%08x even though no command operation was in progress.\n",
+ 		       mmc_hostname(host->mmc), (unsigned)intmask);
++		sdhci_err_stats_inc(host, UNEXPECTED_IRQ);
+ 		sdhci_dumpregs(host);
+ 		return;
  	}
+ 
+ 	if (intmask & (SDHCI_INT_TIMEOUT | SDHCI_INT_CRC |
+ 		       SDHCI_INT_END_BIT | SDHCI_INT_INDEX)) {
+-		if (intmask & SDHCI_INT_TIMEOUT)
++		if (intmask & SDHCI_INT_TIMEOUT) {
+ 			host->cmd->error = -ETIMEDOUT;
+-		else
++			sdhci_err_stats_inc(host, CMD_TIMEOUT);
++		} else {
+ 			host->cmd->error = -EILSEQ;
+-
++			if (!mmc_op_tuning(host->cmd->opcode))
++				sdhci_err_stats_inc(host, CMD_CRC);
++		}
+ 		/* Treat data command CRC error the same as data CRC error */
+ 		if (host->cmd->data &&
+ 		    (intmask & (SDHCI_INT_CRC | SDHCI_INT_TIMEOUT)) ==
+@@ -3266,6 +3276,8 @@ static void sdhci_cmd_irq(struct sdhci_host *host, u32 intmask, u32 *intmask_p)
+ 			  -ETIMEDOUT :
+ 			  -EILSEQ;
+ 
++		sdhci_err_stats_inc(host, AUTO_CMD);
 +
-+	/*
-+	 * Ignore the command timeout errors observed during
-+	 * the card init as those are excepted.
-+	 */
-+	host->err_stats[MMC_ERR_CMD_TIMEOUT] = 0;
- 	mmc_release_host(host);
+ 		if (sdhci_auto_cmd23(host, mrq)) {
+ 			mrq->sbc->error = err;
+ 			__sdhci_finish_mrq(host, mrq);
+@@ -3342,6 +3354,7 @@ static void sdhci_data_irq(struct sdhci_host *host, u32 intmask)
+ 			if (intmask & SDHCI_INT_DATA_TIMEOUT) {
+ 				host->data_cmd = NULL;
+ 				data_cmd->error = -ETIMEDOUT;
++				sdhci_err_stats_inc(host, CMD_TIMEOUT);
+ 				__sdhci_finish_mrq(host, data_cmd->mrq);
+ 				return;
+ 			}
+@@ -3370,23 +3383,29 @@ static void sdhci_data_irq(struct sdhci_host *host, u32 intmask)
  
-  out:
-diff --git a/include/linux/mmc/host.h b/include/linux/mmc/host.h
-index c193c50..eb8bc5b 100644
---- a/include/linux/mmc/host.h
-+++ b/include/linux/mmc/host.h
-@@ -93,6 +93,25 @@ struct mmc_clk_phase_map {
+ 		pr_err("%s: Got data interrupt 0x%08x even though no data operation was in progress.\n",
+ 		       mmc_hostname(host->mmc), (unsigned)intmask);
++		sdhci_err_stats_inc(host, UNEXPECTED_IRQ);
+ 		sdhci_dumpregs(host);
  
- struct mmc_host;
+ 		return;
+ 	}
  
-+enum mmc_err_stat {
-+	MMC_ERR_CMD_TIMEOUT,
-+	MMC_ERR_CMD_CRC,
-+	MMC_ERR_DAT_TIMEOUT,
-+	MMC_ERR_DAT_CRC,
-+	MMC_ERR_AUTO_CMD,
-+	MMC_ERR_ADMA,
-+	MMC_ERR_TUNING,
-+	MMC_ERR_CMDQ_RED,
-+	MMC_ERR_CMDQ_GCE,
-+	MMC_ERR_CMDQ_ICCE,
-+	MMC_ERR_REQ_TIMEOUT,
-+	MMC_ERR_CMDQ_REQ_TIMEOUT,
-+	MMC_ERR_ICE_CFG,
-+	MMC_ERR_CTRL_TIMEOUT,
-+	MMC_ERR_UNEXPECTED_IRQ,
-+	MMC_ERR_MAX,
-+};
+-	if (intmask & SDHCI_INT_DATA_TIMEOUT)
++	if (intmask & SDHCI_INT_DATA_TIMEOUT) {
+ 		host->data->error = -ETIMEDOUT;
+-	else if (intmask & SDHCI_INT_DATA_END_BIT)
++		sdhci_err_stats_inc(host, DAT_TIMEOUT);
++	} else if (intmask & SDHCI_INT_DATA_END_BIT)
+ 		host->data->error = -EILSEQ;
+ 	else if ((intmask & SDHCI_INT_DATA_CRC) &&
+ 		SDHCI_GET_CMD(sdhci_readw(host, SDHCI_COMMAND))
+-			!= MMC_BUS_TEST_R)
++			!= MMC_BUS_TEST_R) {
+ 		host->data->error = -EILSEQ;
++		if (!mmc_op_tuning(host->cmd->opcode))
++			sdhci_err_stats_inc(host, DAT_CRC);
++	}
+ 	else if (intmask & SDHCI_INT_ADMA_ERROR) {
+ 		pr_err("%s: ADMA error: 0x%08x\n", mmc_hostname(host->mmc),
+ 		       intmask);
+ 		sdhci_adma_show_error(host);
++		sdhci_err_stats_inc(host, ADMA);
+ 		host->data->error = -EIO;
+ 		if (host->ops->adma_workaround)
+ 			host->ops->adma_workaround(host, intmask);
+@@ -3584,6 +3603,7 @@ static irqreturn_t sdhci_irq(int irq, void *dev_id)
+ 	if (unexpected) {
+ 		pr_err("%s: Unexpected interrupt 0x%08x.\n",
+ 			   mmc_hostname(host->mmc), unexpected);
++		sdhci_err_stats_inc(host, UNEXPECTED_IRQ);
+ 		sdhci_dumpregs(host);
+ 	}
+ 
+@@ -3905,20 +3925,27 @@ bool sdhci_cqe_irq(struct sdhci_host *host, u32 intmask, int *cmd_error,
+ 	if (!host->cqe_on)
+ 		return false;
+ 
+-	if (intmask & (SDHCI_INT_INDEX | SDHCI_INT_END_BIT | SDHCI_INT_CRC))
++	if (intmask & (SDHCI_INT_INDEX | SDHCI_INT_END_BIT | SDHCI_INT_CRC)) {
+ 		*cmd_error = -EILSEQ;
+-	else if (intmask & SDHCI_INT_TIMEOUT)
++		if (!mmc_op_tuning(host->cmd->opcode))
++			sdhci_err_stats_inc(host, CMD_CRC);
++	} else if (intmask & SDHCI_INT_TIMEOUT) {
+ 		*cmd_error = -ETIMEDOUT;
+-	else
++		sdhci_err_stats_inc(host, CMD_TIMEOUT);
++	} else
+ 		*cmd_error = 0;
+ 
+-	if (intmask & (SDHCI_INT_DATA_END_BIT | SDHCI_INT_DATA_CRC))
++	if (intmask & (SDHCI_INT_DATA_END_BIT | SDHCI_INT_DATA_CRC)) {
+ 		*data_error = -EILSEQ;
+-	else if (intmask & SDHCI_INT_DATA_TIMEOUT)
++		if (!mmc_op_tuning(host->cmd->opcode))
++			sdhci_err_stats_inc(host, DAT_CRC);
++	} else if (intmask & SDHCI_INT_DATA_TIMEOUT) {
+ 		*data_error = -ETIMEDOUT;
+-	else if (intmask & SDHCI_INT_ADMA_ERROR)
++		sdhci_err_stats_inc(host, DAT_TIMEOUT);
++	} else if (intmask & SDHCI_INT_ADMA_ERROR) {
+ 		*data_error = -EIO;
+-	else
++		sdhci_err_stats_inc(host, ADMA);
++	} else
+ 		*data_error = 0;
+ 
+ 	/* Clear selected interrupts. */
+@@ -3934,6 +3961,7 @@ bool sdhci_cqe_irq(struct sdhci_host *host, u32 intmask, int *cmd_error,
+ 		sdhci_writel(host, intmask, SDHCI_INT_STATUS);
+ 		pr_err("%s: CQE: Unexpected interrupt 0x%08x.\n",
+ 		       mmc_hostname(host->mmc), intmask);
++		sdhci_err_stats_inc(host, UNEXPECTED_IRQ);
+ 		sdhci_dumpregs(host);
+ 	}
+ 
+diff --git a/drivers/mmc/host/sdhci.h b/drivers/mmc/host/sdhci.h
+index d7929d7..95a08f0 100644
+--- a/drivers/mmc/host/sdhci.h
++++ b/drivers/mmc/host/sdhci.h
+@@ -356,6 +356,9 @@ struct sdhci_adma2_64_desc {
+  */
+ #define MMC_CMD_TRANSFER_TIME	(10 * NSEC_PER_MSEC) /* max 10 ms */
+ 
++#define sdhci_err_stats_inc(host, err_name) \
++	mmc_debugfs_err_stats_inc((host)->mmc, MMC_ERR_##err_name)
 +
- struct mmc_host_ops {
- 	/*
- 	 * It is optional for the host to implement pre_req and post_req in
-@@ -501,6 +520,7 @@ struct mmc_host {
- 	/* Host Software Queue support */
- 	bool			hsq_enabled;
- 
-+	u32			err_stats[MMC_ERR_MAX];
- 	unsigned long		private[] ____cacheline_aligned;
- };
- 
-@@ -635,6 +655,12 @@ static inline enum dma_data_direction mmc_get_dma_dir(struct mmc_data *data)
- 	return data->flags & MMC_DATA_WRITE ? DMA_TO_DEVICE : DMA_FROM_DEVICE;
+ enum sdhci_cookie {
+ 	COOKIE_UNMAPPED,
+ 	COOKIE_PRE_MAPPED,	/* mapped by sdhci_pre_req() */
+diff --git a/include/linux/mmc/mmc.h b/include/linux/mmc/mmc.h
+index d9a65c6..9c50bc4 100644
+--- a/include/linux/mmc/mmc.h
++++ b/include/linux/mmc/mmc.h
+@@ -99,6 +99,12 @@ static inline bool mmc_op_multi(u32 opcode)
+ 	       opcode == MMC_READ_MULTIPLE_BLOCK;
  }
  
-+static inline void mmc_debugfs_err_stats_inc(struct mmc_host *host,
-+					     enum mmc_err_stat stat)
++static inline bool mmc_op_tuning(u32 opcode)
 +{
-+	host->err_stats[stat] += 1;
++	return opcode == MMC_SEND_TUNING_BLOCK ||
++			opcode == MMC_SEND_TUNING_BLOCK_HS200;
 +}
 +
- int mmc_send_tuning(struct mmc_host *host, u32 opcode, int *cmd_error);
- int mmc_send_abort_tuning(struct mmc_host *host, u32 opcode);
- int mmc_get_ext_csd(struct mmc_card *card, u8 **new_ext_csd);
+ /*
+  * MMC_SWITCH argument format:
+  *
 -- 
 QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
 of Code Aurora Forum, hosted by The Linux Foundation

@@ -2,107 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F9D50DD7A
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 12:02:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34EC650DDC2
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 12:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235681AbiDYKEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 06:04:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37500 "EHLO
+        id S240102AbiDYKXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 06:23:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240866AbiDYKEG (ORCPT
+        with ESMTP id S241507AbiDYKWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 06:04:06 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 212E5766B
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 03:01:02 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id q8so2680660plx.3
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 03:01:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=PApZnh3qRXman8Ophw4OOA7A/2sG8ifMcY3MbuoLa18=;
-        b=pcQbwIzZ8x74dXgdi7OBlsMWpxbq8EDM9028htUhVGWemcyFCvsSP1XLm4Wn9i+oum
-         LYJgF3S0BjrgnyvGmCAXpd7yTc86lesWt8fXZETMqA4vNYgT4yopSZROF+Y5hTMHNUlO
-         RpIVMVboBu8c4OUzgtL0HRmXSjqwwr/rek3H978V1531j83iVL3NH+6i0rqcIP3rvzrq
-         LhvLHDu5PFV8vdQZ645/tcvXcnIKr/zZW69GPJfX4z4ZUTBu7pxPkJPog+0edRvuJDyh
-         HJ9DzKY80rW+SPmGRxKuPilEu+gGfhj0caRZb+YfR/vWhRwZeNH/3OROVsQ1sUOwe2uS
-         10rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=PApZnh3qRXman8Ophw4OOA7A/2sG8ifMcY3MbuoLa18=;
-        b=eDWh6p3dMoIXczYj9KY7Mgt/V8/8Fh1i5nXzJL7TcquIUkHY+E5jAkkvW0kOQvyuXR
-         bWfrl/oOn+LnrHzTHVtkXXiOm2f3ElskdXhmTuhbiG7vKzbB7bHRL/495jRvQwrqJj2g
-         to0e6QaOtUmmQ7oE4rNmF+ZJ2jaEz4jTPDHJkynGImx2a74KOrexD+Pyz/yPD7BUjZlA
-         C73nMNkmwseh3XylF27euw3fRTqaq4gmWW327yq/YxdsKv0vIFeHRuNXORq5unlsGHBb
-         vRfWc2hW7gk7QUuDXiBg5bo9gNJrYQ8K0Det7MjTldXJESIdVrdREq1FshiRs7JX1oJy
-         HThw==
-X-Gm-Message-State: AOAM532YrLNbkr1rRwTICZXnlDJ+wQY9je8uqNU4rRL6epeSfMye5LGU
-        N2AFD/HsGhZMU3xNect66fr+vg==
-X-Google-Smtp-Source: ABdhPJzQojLiY848HqAktLkmWjk+9Gu/+RD85Df6pBBCgMUEKyHRB6p3bOCBqDrMilhn2Wj8891rlw==
-X-Received: by 2002:a17:902:b586:b0:159:684:c522 with SMTP id a6-20020a170902b58600b001590684c522mr17046705pls.39.1650880861518;
-        Mon, 25 Apr 2022 03:01:01 -0700 (PDT)
-Received: from localhost ([122.171.250.232])
-        by smtp.gmail.com with ESMTPSA id bh3-20020a056a02020300b00378b62df320sm9207671pgb.73.2022.04.25.03.01.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 03:01:01 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 15:30:58 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
-Cc:     rafael@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
-        roger.lu@mediatek.com, hsinyi@google.com, khilman@baylibre.com,
-        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH V4 07/14] cpufreq: mediatek: Add .get function
-Message-ID: <20220425100058.4kbvmpi63ygni6k5@vireshk-i7>
-References: <20220422075239.16437-1-rex-bc.chen@mediatek.com>
- <20220422075239.16437-8-rex-bc.chen@mediatek.com>
- <20220425053548.72w2jh2g6lpzgz6g@vireshk-i7>
- <64c690e8edf493ec0a4a14e0fdaad2d8e88e6da7.camel@mediatek.com>
+        Mon, 25 Apr 2022 06:22:55 -0400
+X-Greylist: delayed 1616 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 25 Apr 2022 03:19:50 PDT
+Received: from margared.com (margared.com [67.207.81.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0074BBBA;
+        Mon, 25 Apr 2022 03:19:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=margared.com; s=mail; h=Message-ID:Reply-To:Subject:To:From:Date:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:Sender:Cc:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=myigy0V621liyXgDglQKeYEADXupsv1PoWpM1wCwa28=; b=KDv5UHaidJWrkxZdCaCsbnxPoH
+        jzDMz7JJEnQN0jhP/2Z7noFCw9SBaT8aXK8jglAFeavA3OjJ8q7YSGON89rV24qNOZMFOjznEK99U
+        4krGXIryNoeI2FVTaIwyQoVL2AbOAJ/DnW40IBw4gvMnrvqIpKFqX5CiwqqDeFu/Pd9E=;
+Received: from localhost ([127.0.0.1] helo=margared.com)
+        by margared.com with esmtpa (Exim 4.90_1)
+        (envelope-from <info@margared.com>)
+        id 1niuhG-0001WC-KO; Mon, 25 Apr 2022 09:07:54 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <64c690e8edf493ec0a4a14e0fdaad2d8e88e6da7.camel@mediatek.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 25 Apr 2022 04:07:54 -0500
+From:   Maria Ramos <info@margared.com>
+To:     undisclosed-recipients:;
+Subject: Hi
+Reply-To: 98233422r@gmail.com
+Mail-Reply-To: 98233422r@gmail.com
+Message-ID: <fa56fe3c83f5bb09f16989949fbe6a49@margared.com>
+X-Sender: info@margared.com
+User-Agent: Roundcube Webmail/1.3.6
+X-Spam-Status: Yes, score=6.4 required=5.0 tests=BAYES_60,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        ODD_FREEM_REPTO,SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
+        *      [score: 0.6995]
+        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  3.0 ODD_FREEM_REPTO Has unusual reply-to header
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25-04-22, 17:34, Rex-BC Chen wrote:
-> We found that the pulses of cpu voltage could be observed when
-> frequency is fixed (scaling_max_freq == scaling_min_freq) if using
-> cpufreq_generic_get as '.get' callback in MT8186.
-> cpufreq framework will constantly (~ 1 sec) call 'update' if the policy
+Hello, am very concerned and I feel ignored because both emails I sent 
+to you, am yet to hear from you. What could be the reason?
 
-Which function gets called here in that case ? I would expect
-cpufreq_driver_target() to not make a call to MTK driver in that case, after it
-finds that new and old frequency are same (it will check the corresponding freq
-from cpufreq table).
 
-> frequency is NOT equal to hardware frequency in
-> cpufreq_verify_current_freq.
-> The problem is that there might be a tiny difference between the policy
-> frequency and the hardware frequency even they are very close.
-> e.g. policy frequency is 500,000,000 Hz however, hardware frequency is
-> 499,999,726 Hz for MT8186 opp15.
-> 
-> To prevent the voltage pulses, we currently use the software cached
-> values as you pointed out.
-> I wonder is it possible to add a tolerence for checking difference
-> between policy frequency and hardware frequency in cpufreq framework so
-> that we can use cpufreq_generic_get as callback without pulse issue.
-> Or any suggestion would be appreciated.
+Regards,
 
--- 
-viresh
+
+Maria Ramos..

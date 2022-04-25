@@ -2,67 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A64C50D7ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 06:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB07F50D7F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 06:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240860AbiDYEDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 00:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45150 "EHLO
+        id S240830AbiDYEFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 00:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240812AbiDYECc (ORCPT
+        with ESMTP id S238046AbiDYEFD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 00:02:32 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE2835DEC;
-        Sun, 24 Apr 2022 20:59:27 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id j8so24172372pll.11;
-        Sun, 24 Apr 2022 20:59:27 -0700 (PDT)
+        Mon, 25 Apr 2022 00:05:03 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5B65FB6;
+        Sun, 24 Apr 2022 21:02:00 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id q12so12338687pgj.13;
+        Sun, 24 Apr 2022 21:02:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=560ZyjDjMjw/eukwNXu0xmzkhr36IsOK1UcMliQ6ixc=;
-        b=prb9unJJzjMB0mP9+M1FA3lUC7YakIWgMe7cz6wtisEGlAZ4W/UuGfIR/krAV0qFCo
-         efB88t2a18IQSEgzl2Fq0IF31F5wCiRqsBJ3v4zGnqN1ZCxucEFdqjR+l58YQw+VmFw9
-         fdqVgbyQIhBYe6/oQSpS3qVFtMnQpBXouJbZJ/77qHalJUupcRNzhG7HsocUZY0Dntem
-         g+EdHc+F64NmfgCc9cPHHrc/SO8U45jmIOPqzYx5/kCAKIl3o1a4sWM0GtMEcT5P6bXc
-         lIHe/c3u1YeWpxNhYikhEsnG5wHSiqAVTArFzjH4RYEHQ+MBh4xWWIe30D7o4L85I6sR
-         QdPg==
+        bh=XpqXUKQnBMu16RDI3lug4RWsduF9+QynmSZQ3BCqjAg=;
+        b=dRi+fDayDSsY4PNuZojPnc78erUng+iTE61/if5JtS9deSN5Kue2wbhrHWwIRwJsw0
+         uRKEZZq2d0oQzKHVnCMa+BOIAhpyczU4b1XENcA2or9LBLCAtYiCZYYq11m9+wW1Xih0
+         verUXesH6xwXZ5u2pAD6egcZgQusy+7jzrSrE7OoiMcDDzSwFe8aMcoRWHp4fjNmTRmA
+         IKNo5CcXN7Ns1IIHoBFMPFPtkda9PFAsAnyKWLvDR6Sf2qaRswCR4XdyNaJFEehVfSPE
+         TKsXlCXUT4IcnDYXQGMWIITz1O+Mz2yFdi7ymEn16nHtPjZf9g17a2rf4RX2LI777YXb
+         JXGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=560ZyjDjMjw/eukwNXu0xmzkhr36IsOK1UcMliQ6ixc=;
-        b=JQpF8WugbT41B1sdNdyhBA/qAyxw4pZo2Mi4ESxA99mc11vTYYdJQQqL6aVFYW/8kq
-         doUFAKR0v3DS2xDxUhLspUqDlWf3OQjuOD1XnkhA+REYgHfd5Z3leSZszDALo4YkcjLO
-         BapcE5ge63vs7lPWmNZkLKQ6mE/3lhRrzpH+fWaucokcyAwHfw6dvRvlu8Dci6ibKKWq
-         97Y//yIROxB+RAk2Aw2P8v1BYgvSJxLGxllg00iNW7Zgv3oJVI6ldYEIUbYIwD9Pxh/3
-         empPuWPBPDxx+JZUsOP0pQUQaQE1uTMMm0TZEz+rYFaGIJJ5Pr86zHcDSbkNAA9hACTW
-         1c3g==
-X-Gm-Message-State: AOAM5315w4yl8XzNwJczEmoEDPTYi1XIuBY+5SJlUgHHSsUE0iDOlFnw
-        P3nbKkwzxyXAPMseYHJ9NbA=
-X-Google-Smtp-Source: ABdhPJxymPMSMsVhlIAj5Ciak9kOFIqoLkksDgND3qhOb2ScEzBn83mdGxCMXvRU32+KSGX0rgDmNw==
-X-Received: by 2002:a17:902:7009:b0:158:3bcf:b774 with SMTP id y9-20020a170902700900b001583bcfb774mr15946121plk.103.1650859167020;
-        Sun, 24 Apr 2022 20:59:27 -0700 (PDT)
+        bh=XpqXUKQnBMu16RDI3lug4RWsduF9+QynmSZQ3BCqjAg=;
+        b=jSLjktOInhWA8BIUUV+5c6yJTdXqk3ijeaBNqjcpYElMbTKYOQSDgHlVoEYoR+HA9J
+         VpFcKgpoJ7RuBNvmU83/aowj0BvlxTIsrpmDexWCDSZeBhMq+m4LHqu+9dZeeEfihcSm
+         B0rtj2l1U5by1ZT9oKsnQBH1XUWBlpilvMGxdtBPjpYEq7kFJUz11KfuxXbuNkGoc7mq
+         TSgJV0xAP0yp1kSplJyvoLkeaqzu8lPdAfiKov4lghn+gMIQUFcbvCcrNBt5OgFVhDMT
+         jcEDaRKIqBc1wrXWhDDX8AIVNjadx+UOrz1HqNf54wck8vGynfieDedeuVit+qicKmWj
+         iy2w==
+X-Gm-Message-State: AOAM531Aw72xHpMK5C/s3A9UwkgDXq5jshGstG+9pNyB7+hkuD0dEua1
+        n6tDrxKkEC1szHHSZlgk574=
+X-Google-Smtp-Source: ABdhPJx3mcsUbCjgVIlR76wYqJ8xMmU4F0udievDmHkC2+5Ct4NkT4XlJe7M5Vsc+lyReFF2m1CQvA==
+X-Received: by 2002:a63:fc18:0:b0:39c:f431:8310 with SMTP id j24-20020a63fc18000000b0039cf4318310mr13368460pgi.433.1650859319693;
+        Sun, 24 Apr 2022 21:01:59 -0700 (PDT)
 Received: from google.com ([2620:15c:202:201:282a:d50e:e0fc:c145])
-        by smtp.gmail.com with ESMTPSA id c2-20020aa781c2000000b0050a7ff01d2bsm9431985pfn.30.2022.04.24.20.59.25
+        by smtp.gmail.com with ESMTPSA id g14-20020a63200e000000b0039d9816238fsm8004385pgg.81.2022.04.24.21.01.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 20:59:25 -0700 (PDT)
-Date:   Sun, 24 Apr 2022 20:59:23 -0700
+        Sun, 24 Apr 2022 21:01:58 -0700 (PDT)
+Date:   Sun, 24 Apr 2022 21:01:56 -0700
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>, Ondrej Jirman <x@xff.cz>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v5] Input: sun4i-lradc-keys - Add wakeup support
-Message-ID: <YmYcm3usaDNCi30s@google.com>
-References: <20220424161328.61103-1-samuel@sholland.org>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     linux-input@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] Input: aiptek - remove redundant assignment to variable
+ ret
+Message-ID: <YmYdNLCRKZtuZG6D@google.com>
+References: <20220418142457.84708-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220424161328.61103-1-samuel@sholland.org>
+In-Reply-To: <20220418142457.84708-1-colin.i.king@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -73,91 +71,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 24, 2022 at 11:13:27AM -0500, Samuel Holland wrote:
-> From: Ondrej Jirman <x@xff.cz>
+On Mon, Apr 18, 2022 at 03:24:57PM +0100, Colin Ian King wrote:
+> Variable ret is being assigned a value that is never read, it is
+> being re-assigned again in either path of the if statement. The
+> assignment is redundant and can be removed.
 > 
-> Allow the driver to wake the system on key press if the "wakeup-source"
-> property is provided in the device tree. Using the LRADC as a wakeup
-> source requires keeping the AVCC domain active during sleep. Since this
-> has a nontrivial impact on power consumption (sometimes doubling it),
-> disable the LRADC wakeup source by default.
+> Cleans up clang scan build warning:
+> Although the value stored to 'ret' is used in the enclosing expression,
+> the value is never actually read from 'ret' [deadcode.DeadStores]
 > 
-> Signed-off-by: Ondrej Jirman <x@xff.cz>
-> Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
-> 
-> Changes in v5:
->   - Fix typo in commit subject
->   - Update Ondrej's e-mail address per his request
-> 
-> Changes in v4:
->   - Only mark device as wakeup capable if setting the wakeirq succeeds
->   - An entirely different, but equivalent, DT binding patch was merged,
->     so there is only one patch left
-> 
-> Changes in v3:
->   - Dropped unnecessary pr_err in platform_get_irq() error path
->   - Dropped patch 3 (DT update) as it was merged
->   - Added Acked-by/Reviewed-by tags
-> 
-> Changes in v2:
->   - Add requisite DT binding change
->   - Only add wakeup capability if "wakeup-source" is present
->   - Warn but do not error out if setting the wake IRQ fails
->   - Add "wakeup-source" property to PinePhone device tree
-> 
->  drivers/input/keyboard/sun4i-lradc-keys.c | 20 ++++++++++++++++----
->  1 file changed, 16 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/input/keyboard/sun4i-lradc-keys.c b/drivers/input/keyboard/sun4i-lradc-keys.c
-> index 4a796bed48ac..781f9b053115 100644
-> --- a/drivers/input/keyboard/sun4i-lradc-keys.c
-> +++ b/drivers/input/keyboard/sun4i-lradc-keys.c
-> @@ -22,6 +22,8 @@
->  #include <linux/module.h>
->  #include <linux/of_platform.h>
->  #include <linux/platform_device.h>
-> +#include <linux/pm_wakeirq.h>
-> +#include <linux/pm_wakeup.h>
->  #include <linux/regulator/consumer.h>
->  #include <linux/slab.h>
->  
-> @@ -226,8 +228,7 @@ static int sun4i_lradc_probe(struct platform_device *pdev)
->  {
->  	struct sun4i_lradc_data *lradc;
->  	struct device *dev = &pdev->dev;
-> -	int i;
-> -	int error;
-> +	int error, i, irq;
->  
->  	lradc = devm_kzalloc(dev, sizeof(struct sun4i_lradc_data), GFP_KERNEL);
->  	if (!lradc)
-> @@ -272,8 +273,11 @@ static int sun4i_lradc_probe(struct platform_device *pdev)
->  	if (IS_ERR(lradc->base))
->  		return PTR_ERR(lradc->base);
->  
-> -	error = devm_request_irq(dev, platform_get_irq(pdev, 0),
-> -				 sun4i_lradc_irq, 0,
-> +	irq = platform_get_irq(pdev, 0);
-> +	if (irq < 0)
-> +		return irq;
-> +
-> +	error = devm_request_irq(dev, irq, sun4i_lradc_irq, 0,
->  				 "sun4i-a10-lradc-keys", lradc);
->  	if (error)
->  		return error;
-> @@ -282,6 +286,14 @@ static int sun4i_lradc_probe(struct platform_device *pdev)
->  	if (error)
->  		return error;
->  
-> +	if (device_property_read_bool(dev, "wakeup-source")) {
-> +		error = dev_pm_set_wake_irq(dev, irq);
-> +		if (error)
-> +			dev_warn(dev, "Failed to set wake IRQ\n");
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-I extended the warning message with irq number and error code and
-applied, thank you.
+Applied, thank you.
 
 -- 
 Dmitry

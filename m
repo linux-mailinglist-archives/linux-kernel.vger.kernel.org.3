@@ -2,119 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1AB250DAE4
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA66A50DAEA
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234162AbiDYINl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 04:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54278 "EHLO
+        id S234441AbiDYIOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 04:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231827AbiDYINj (ORCPT
+        with ESMTP id S232187AbiDYIOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 04:13:39 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7145032ED5
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:10:35 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-2f7c57ee6feso45006967b3.2
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:10:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=7sxESoBMIprVPsske9LbaPlBbuPs3+wrxg6dMd1r+hA=;
-        b=H9vTEgnJ6gwdWb9SONb+eVVI1x5Fg1wJbWIU/qEau2sxgvVGeIETFNZTRcom3KBq/z
-         f4XJ2WrXBMMgYYtQUWNY2s4OhiRP3Qj6JwNwEhrWEpG5AeZjLEQ0tKPN2z1PGK3z8bHF
-         ivFK0HH0pcjyzqWxHvXYIER1yC2C6fukc21VmVJgiGHzwfpWSo08Xnup0kMUzBAKNnTr
-         UzvFq5zO+EJ+NsLleTZmhF6HOq7MY6uFb8gPQpwihlyODXXXqY/ER5aTT6hsaM/bU1Wc
-         W62z681UIMGU+gnWZuGxEk6j4/l7hRUHVxEXKbL/L0bH4NrrAdLZjXdNykLnMBABUb9/
-         /Q8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=7sxESoBMIprVPsske9LbaPlBbuPs3+wrxg6dMd1r+hA=;
-        b=m0bp1Rw9Icd9GlRy2R/RuGgd8x0eZeggZIkBINCznt8JqItC4m8nl6YDLkycS11TEm
-         8NTGAjwpT+Mf6x5/r6qJ6/kpLtnhE+bhIFV//KycJeHf7NQkyFUIsYAHeIhA0d3y33s7
-         7i7l1e9aTrRtWGGdAnnz4aGU/i5ESNkdqqBL/nvpgn7eQM8ARoYNqqYHkV0iWRVu97D9
-         vQaWPAAUl6yiydy7nPW5Of9xqxU3LruSonblDsdNcjRij7CGEiH68a79bg4eocB5ecoq
-         sVMBVx6v+XBcy3McWDFPUbCI2NYthdc8FhsIyfArW6wuzR6Er0niM16qs4jk/dnp0eIW
-         wxYQ==
-X-Gm-Message-State: AOAM5305rVyx8SEpGSaxg20EwPW3i+Kk+f0yLxp/lDsMrfizjOzD5hzi
-        3uKQCZCXHHH1wRuXNGxJUoxt8YTVBhqsw+ITs89Rpw==
-X-Google-Smtp-Source: ABdhPJwSSJnrlAzsV2jt4uCWD6qcDAizD+TNItTwqDfRwCeO5v+KDCnfqAGa4BvUy1vklgAyg43wTmS6E8vlsISO/7Y=
-X-Received: by 2002:a81:1b55:0:b0:2f7:cefd:9b51 with SMTP id
- b82-20020a811b55000000b002f7cefd9b51mr7129871ywb.120.1650874234577; Mon, 25
- Apr 2022 01:10:34 -0700 (PDT)
+        Mon, 25 Apr 2022 04:14:20 -0400
+Received: from mailgw.felk.cvut.cz (mailgw.felk.cvut.cz [147.32.82.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA4237A37;
+        Mon, 25 Apr 2022 01:11:13 -0700 (PDT)
+Received: from mailgw.felk.cvut.cz (localhost.localdomain [127.0.0.1])
+        by mailgw.felk.cvut.cz (Proxmox) with ESMTP id C71AA30ADE61;
+        Mon, 25 Apr 2022 10:10:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        cmp.felk.cvut.cz; h=cc:cc:content-transfer-encoding:content-type
+        :content-type:date:from:from:in-reply-to:message-id:mime-version
+        :references:reply-to:subject:subject:to:to; s=felkmail; bh=acF+R
+        CFmkPfEAHQABcQxj/zPJMa//hEphvOtcoMLl24=; b=JatjlyMzKOW7PiLokLasn
+        a/MLvBd5Q0nNkMiVgZ6eyxOeZKELbk7m5A+0sR7+xJHcamCwBMZAHKNsksCt+mWc
+        TTgdb/nYKtpy5grtQ5VS4YewvSVicdkCXk/AecIGQj2hjeqamjhYZk9wVIXR/Yoo
+        4F5+qhcDRVyZUH5zSITYwJINkSabc/joWsHfQUW2UWLZDkyk+PW7X151GO41mISo
+        DbzBBdMExuTy7eCuXpu/5VAWf7ncDbrGC/IuvQqCPUDHfhO+mXckgwrXfbBTC1NO
+        zv0JXAV0m8JCyd51EHxoWqMXtkPiBWubz5RiQlgUe14MX4VF1GMYlZ/rYWbBj0zJ
+        g==
+Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
+        by mailgw.felk.cvut.cz (Proxmox) with ESMTPS id 0AAB530ADE4B;
+        Mon, 25 Apr 2022 10:10:40 +0200 (CEST)
+Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
+        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 23P8AdcV012813;
+        Mon, 25 Apr 2022 10:10:39 +0200
+Received: (from pisa@localhost)
+        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 23P8AdZg012811;
+        Mon, 25 Apr 2022 10:10:39 +0200
+X-Authentication-Warning: haar.felk.cvut.cz: pisa set sender to pisa@cmp.felk.cvut.cz using -f
+From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
+To:     Vincent Mailhol <vincent.mailhol@gmail.com>,
+        linux-can@vger.kernel.org,
+        "Marc Kleine-Budde" <mkl@pengutronix.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: Re: [PATCH v1 1/4] can: ctucanfd: remove PCI module debug parameters and core debug statements
+Date:   Mon, 25 Apr 2022 10:10:38 +0200
+User-Agent: KMail/1.9.10
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Marin Jerabek <martin.jerabek01@gmail.com>,
+        Ondrej Ille <ondrej.ille@gmail.com>,
+        Jiri Novak <jnovak@fel.cvut.cz>,
+        Jaroslav Beran <jara.beran@gmail.com>,
+        Petr Porazil <porazil@pikron.com>, Pavel Machek <pavel@ucw.cz>,
+        Carsten Emde <c.emde@osadl.org>,
+        Drew Fustini <pdp7pdp7@gmail.com>,
+        Matej Vasilevski <matej.vasilevski@gmail.com>
+References: <cover.1650816929.git.pisa@cmp.felk.cvut.cz> <1fd684bcf5ddb0346aad234072f54e976a5210fb.1650816929.git.pisa@cmp.felk.cvut.cz> <CAMZ6RqJ1ROr-pLsJqKE=dK=cVD+-KGxSj1wPEZY-AXH9_d4xyQ@mail.gmail.com>
+In-Reply-To: <CAMZ6RqJ1ROr-pLsJqKE=dK=cVD+-KGxSj1wPEZY-AXH9_d4xyQ@mail.gmail.com>
+X-KMail-QuotePrefix: > 
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 25 Apr 2022 13:40:23 +0530
-Message-ID: <CA+G9fYscb1y4a17Sf5G_Aibt+WuSf-ks_Qjw9tYFy=A4sjCEug@mail.gmail.com>
-Subject: page_alloc.c:(.init.text+0xa7c): undefined reference to `vmalloc_huge'
-To:     linux-mm <linux-mm@kvack.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     Song Liu <song@kernel.org>, Muchun Song <songmuchun@bytedance.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Rik van Riel <riel@surriel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: Text/Plain;
+  charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Message-Id: <202204251010.39032.pisa@cmp.felk.cvut.cz>
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linux mainline arm architecture tinyconfig and allnoconfig builds failed.
-These builds have config mmu not set.
+Hello Vincent,
 
-# CONFIG_MMU is not set
+On Monday 25 of April 2022 09:48:51 Vincent Mailhol wrote:
+> On Mon. 25 Apr. 2022 at 14:11, Pavel Pisa <pisa@cmp.felk.cvut.cz> wrote:
+> > This and remove of inline keyword from the local static functions
+> > should make happy all checks in actual versions of the both checkpatch.pl
+> > and patchwork tools.
+>
+> The title and the description say two different things.
+>
+> When looking at the code, it just seemed that you squashed
+> together two different patches: one to remove the inlines and one
+> to remove the debug. I guess you should split it again.
 
+if you or somebody else confirms that the three lines change
+worth separate patch I regenerate the series.
+The changes are not based on third party patches but only
+on indications reported by static analysis tools.
+Remove of inline in the local static functions probably
+does not even change code generation by current compiler
+generation. Removed debug outputs are under local ifdef
+disabled by default, so only real change is step down from
+option to use module parameter to check for possible
+broken MSI causing the problems on PCIe CTU CAN FD integration.
+So I thought that single relatively small cleanup patch is
+less load to maintainers.
 
-Regressions found on arm:
+But I have no strong preference there and will do as confirmed.
 
-   - arm-clang-14-tinyconfig
-   - arm-clang-nightly-tinyconfig
-   - arm-gcc-11-tinyconfig
-   - arm-clang-13-tinyconfig
-   - arm-gcc-11-allnoconfig
-   - arm-clang-14-allnoconfig
-   - arm-clang-nightly-allnoconfig
-   - arm-gcc-8-allnoconfig
-   - arm-clang-11-allnoconfig
-   - arm-clang-11-tinyconfig
-   - arm-gcc-9-allnoconfig
-   - arm-gcc-9-tinyconfig
-   - arm-gcc-10-allnoconfig
-   - arm-gcc-8-tinyconfig
-   - arm-gcc-10-tinyconfig
-   - arm-clang-12-allnoconfig
-   - arm-clang-12-tinyconfig
-   - arm-clang-13-allnoconfig
+By the way, what is preference for CC, should the series
+be sent to  linux-kernel and netdev or it is preferred for these
+local changes to send it only to linux-can to not load others?
+Same for CC to David Miller.
 
+Best wishes,
 
-Build error:
-------------
-arm-linux-gnueabihf-ld: mm/page_alloc.o: in function `alloc_large_system_hash':
-page_alloc.c:(.init.text+0xa7c): undefined reference to `vmalloc_huge'
-make[1]: *** [Makefile:1158: vmlinux] Error 1
+                Pavel
+-- 
+                Pavel Pisa
+    phone:      +420 603531357
+    e-mail:     pisa@cmp.felk.cvut.cz
+    Department of Control Engineering FEE CVUT
+    Karlovo namesti 13, 121 35, Prague 2
+    university: http://control.fel.cvut.cz/
+    personal:   http://cmp.felk.cvut.cz/~pisa
+    projects:   https://www.openhub.net/accounts/ppisa
+    CAN related:http://canbus.pages.fel.cvut.cz/
+    Open Technologies Research Education and Exchange Services
+    https://gitlab.fel.cvut.cz/otrees/org/-/wikis/home
 
-
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-
-tuxmake --runtime podman --target-arch arm --toolchain gcc-11
---kconfig tinyconfig
-
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
-
-[1] https://builds.tuxbuild.com/28GNGapkjXsbIbRSnHoGILqmaFp/

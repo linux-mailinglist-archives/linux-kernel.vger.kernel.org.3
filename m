@@ -2,87 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01C2750DB7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:43:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46FA950DB7F
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:45:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236519AbiDYIqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 04:46:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53028 "EHLO
+        id S232937AbiDYIrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 04:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232124AbiDYIqQ (ORCPT
+        with ESMTP id S229717AbiDYIrt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 04:46:16 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E147183022;
-        Mon, 25 Apr 2022 01:43:12 -0700 (PDT)
-Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Kmz3y2955z67yLV;
-        Mon, 25 Apr 2022 16:40:30 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 25 Apr 2022 10:43:10 +0200
-Received: from [10.47.92.213] (10.47.92.213) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.24; Mon, 25 Apr
- 2022 09:43:09 +0100
-Message-ID: <380af884-94f2-231b-040b-2d89a544b8ed@huawei.com>
-Date:   Mon, 25 Apr 2022 09:43:08 +0100
+        Mon, 25 Apr 2022 04:47:49 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEC3B860
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:44:46 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id g28so6388551ybj.10
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:44:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qUyI57LrGA1YA09T5eg+o1crNTDbhxTBWfLQ6Nua+xI=;
+        b=Hix8O6BrK3yWCpg8o7QTHgII/QCkA9OQK13YrqkUQW+9EqOCH5d2NNrM8SiPkIXDly
+         LMVnkCXu3ea2/0/1qTvgRl0QMX4uLIVMDN58uD2CiYzqIpXm00N6GGCR2lTUnzronqs2
+         W8bT0BBRPtUlgwBq/JZ6BvnMkflNn1488nZPeI1DqTuxsnjovFKtN//WmHhBcvKaXBBo
+         UevWwE6LEclP1dGJ8/wJzxNTnmDC3q0aYpr8XtzVZf8mHA/QkRxSYTu2NKBnt19zU8z6
+         ydoh3Fj0i4cZ9pvezYrNKjESVqbEQx8f4V7LkDeyFfcPQC8LYAYgPY99IPVGVzooa3Qn
+         Ko1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qUyI57LrGA1YA09T5eg+o1crNTDbhxTBWfLQ6Nua+xI=;
+        b=AAkb45wXShzu50zFRFZpGcPFTOl3IuFHEEJRcQaFg2fTp/sCi3JWpq7lLORJ2mZogq
+         /K/YHY6yeQnDWHLgo2edpd3xY10FStjjLbwct1pwd7HzDg6B+dfcOcK6PEr2OnVxXxpd
+         1dBtzP/sAuaVv0tx37phJkYBhAVxiZB1Fkgjh1+EDimlR5dirIWiKPaWR/RYlqPW6C9L
+         LQRgZ3xPJiMDg4KxlDPoek93nrXIBnB3pNSZWK6EjvXPOkDtS5CrsYpaxeAmN9nn+j7c
+         d/E0PNIl0utL10taDhfdcn/281YaCOrofd9/MdPPFYU0IKo5Vaubq/AhxOhaFU/vd3g6
+         EogA==
+X-Gm-Message-State: AOAM5329hvmB0XBCtC3v19ipjEE+duOMAB8m8gXPr4TwkSzrjOSSiV3J
+        0UtOdNCjiSgNxJi8pY6AIHs9WOhy7RDCljqYbDX3og==
+X-Google-Smtp-Source: ABdhPJzuBFYllAhHDrnxbJCVb0PLWgz1spQb6b8Ab502TF0Js4CjUglBcd8kxDyroRaRj7ZSXirQqNAJMAaPVcbRPjw=
+X-Received: by 2002:a25:6652:0:b0:645:d4c1:eb7 with SMTP id
+ z18-20020a256652000000b00645d4c10eb7mr12717144ybm.412.1650876285603; Mon, 25
+ Apr 2022 01:44:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 4/4] scsi: hisi_sas: Use libsas internal abort support
-To:     Hannes Reinecke <hare@suse.de>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <jinpu.wang@cloud.ionos.com>,
-        <damien.lemoal@opensource.wdc.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <Ajish.Koshy@microchip.com>, <linuxarm@huawei.com>,
-        <Viswas.G@microchip.com>, <hch@lst.de>, <liuqi115@huawei.com>,
-        <chenxiang66@hisilicon.com>
-References: <1646309930-138960-1-git-send-email-john.garry@huawei.com>
- <1646309930-138960-5-git-send-email-john.garry@huawei.com>
- <ce7c8535-a3dd-5549-1319-a3af1d0cee0b@suse.de>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <ce7c8535-a3dd-5549-1319-a3af1d0cee0b@suse.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.92.213]
-X-ClientProxiedBy: lhreml702-chm.china.huawei.com (10.201.108.51) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CA+G9fYscb1y4a17Sf5G_Aibt+WuSf-ks_Qjw9tYFy=A4sjCEug@mail.gmail.com>
+ <CAHk-=wgZ9H_Cama8RNyqNbPB5ydFy4P319JUcz9E27GyZ1xqdw@mail.gmail.com>
+In-Reply-To: <CAHk-=wgZ9H_Cama8RNyqNbPB5ydFy4P319JUcz9E27GyZ1xqdw@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 25 Apr 2022 14:14:34 +0530
+Message-ID: <CA+G9fYtDBfQsKL2kdeaB-R7h0wYY7VTVJ-BP_sOhnu_-5d+oSw@mail.gmail.com>
+Subject: Re: page_alloc.c:(.init.text+0xa7c): undefined reference to `vmalloc_huge'
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-mm <linux-mm@kvack.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Song Liu <song@kernel.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Rik van Riel <riel@surriel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/04/2022 13:29, Hannes Reinecke wrote:
-> On 3/3/22 13:18, John Garry wrote:
->> Use the common libsas internal abort functionality.
->>
->> In addition, this driver has special handling for internal abort 
->> timeouts -
->> specifically whether to reset the controller in that instance, so extend
->> the API for that.
->>
-> Huh? Is there a reason _not_ to reset the controller once abort times out?
+Hi Linus,
 
-There's a bug in v2 HW where the internal abort may timeout due to HW 
-bug but it is not fatal, i.e. the HW state is not totally buggered, so 
-can continue without a reset.
+On Mon, 25 Apr 2022 at 13:58, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Mon, Apr 25, 2022 at 1:10 AM Naresh Kamboju
+> <naresh.kamboju@linaro.org> wrote:
+> >
+> > # CONFIG_MMU is not set
+>
+> I just sent the stupid and straightforward patch in
+>
+>   https://lore.kernel.org/all/CAHk-=wi5DYKbFE4j-jC2HGsKVuf1RpZbEiYt4tSXuxGKiN9oJg@mail.gmail.com/
+>
+> but then I thought maybe the alias patch is as simple as the attached.
+>
+> So does either (or both) of these patches work?
 
-> And why isn't that delegated to SCSI EH?
+Yes.
+I have tested these two patches and both the way the build passes.
 
-For sure, SCSI EH will reset the host if all else fails. However, it may 
-take some time to get to the point of deciding to reset - including lots 
-of timeouts. To accelerate this, we set a host flag to say that we have 
-a HW fault, and don't bother with nexus reset, LU reset, etc. once the 
-initial task abort fails due to HW fault and fail straight away. Maybe 
-the core code could do something similar but it seems messy/hard to 
-generalise.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Thanks,
-John
+- Naresh
+>
+>                   Linus

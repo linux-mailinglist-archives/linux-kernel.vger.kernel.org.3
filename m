@@ -2,106 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 510BB50EB0B
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 23:08:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B83A650EB17
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 23:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245536AbiDYVLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 17:11:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54022 "EHLO
+        id S245693AbiDYVMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 17:12:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiDYVLc (ORCPT
+        with ESMTP id S240879AbiDYVMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 17:11:32 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F7C66D3B5
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 14:08:26 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id g19so28493881lfv.2
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 14:08:25 -0700 (PDT)
+        Mon, 25 Apr 2022 17:12:15 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B9B26FA2E;
+        Mon, 25 Apr 2022 14:09:10 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id l9-20020a056830268900b006054381dd35so11699735otu.4;
+        Mon, 25 Apr 2022 14:09:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=HeAipw4zYNeia12j7XYVHYU9J94Bm4xqgnpreAQ+Qzk=;
-        b=bJuLeSOBykWi8VGrKRwylfeefE2eR9q7qefiHN/24sOZYASDOB9zymZS0eZbwAsheU
-         Gn4212dpt17MZcEosVxxHQ1QU71XN3nv/dW+3Sgz+L/ZmBsC+H8kYSSCGKgVux/H0RZJ
-         OlHI/3SxclyA+rX2bf47Vrd+l8jqMnjmfHjFL8evdEp77DNfVFCA6pbb7dQy/DGPXKYD
-         nwXorNKIEOk5/vOMCoxziHmqaFKWA8YpmSxLjZ6iywDpExXO33x6Yq1p/nXkMzvdwhtS
-         +Gf4v9krns0rCYdVYEaZ+LAnv+gS0yE48Kitf0Icp0BbyPAXL+1aXCkrteqcXE8WlyRA
-         ZNWw==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=g17J6sFTPMUFOZrO9IXMP8Nx+aSWZ2iq9i8H5lFtblY=;
+        b=Bwjd3J9JaGkkW3IkvJP5kiokTgjlGRJif9MGnM46DuWr3AKs0ni3QAWukxjMxhaZoM
+         uaycti6CQpazIJMl4fyTWExYmX5kHNj4FG/e78U/SkK+pu9NfcH+cpynODX5hRjwO7pK
+         NN9PfeiNBCi/7xdqRWjMJ5ozemm0vXRsj7gBL+5RP8OXHnOrNqtOjWCKh1LQuCQ05UcE
+         avGLU9rKB+BoR4tYkXFVJEj7qtIm2Hpf/3mcUAJZ9BbUDopmb6t1uY9sJVc4B3py8KSm
+         MQxywQNBgkeWoP5nCb6GJsReOp/WXPgufYAYdv6FWXWUjKrXldqU1R8P83x1kAzuN7XA
+         GhDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=HeAipw4zYNeia12j7XYVHYU9J94Bm4xqgnpreAQ+Qzk=;
-        b=y4nVdUDZb4T845x3A2+nrq5158xYApzCjJ5xnOGc3Mydg91f92kwV2SLuysmzd79Lx
-         oEbjiDjxod8L1DfFE9Kl7SYF3ch++Z/EDl/+GEr1JuDaLidfuPE0T4p3YvzPZLvik6ko
-         NlKn/cqfIYCGFhj2xLmed+ra5Iao+i+hpVzA4kIxutj+dlh/u/IFRwDADKAsCTmEjlKv
-         fl3vZhEvjrORkXRmqGinTL7EOlrMb6e2Js3nfDcQDCSAHwCLwX6/7Uu5Ey+FGW58q07c
-         Lobl1kJIiWPApk5+cHhMap6q0nKAt83Q4tsVwpkMlyCugAEySGYJ2HtvHm8pKM8XQM0B
-         oKgA==
-X-Gm-Message-State: AOAM533k6CgMFa3DNVs54C5PLsy07CbFmYZsiuE0MIR662s+mZQk4XXt
-        aBYnVO8cG7S5TYRne5/FIK9n+w==
-X-Google-Smtp-Source: ABdhPJwa4PWVY0l1RBVql9YpM5TgtmLWxVWf1CxtDSxCxju9pLQGfESguxQXkIRMvWAE98kugzeAgw==
-X-Received: by 2002:a05:6512:239c:b0:472:3d5:7e77 with SMTP id c28-20020a056512239c00b0047203d57e77mr5600455lfv.448.1650920904365;
-        Mon, 25 Apr 2022 14:08:24 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id q3-20020a19f203000000b0044aef0e60d5sm1528696lfh.210.2022.04.25.14.08.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 14:08:23 -0700 (PDT)
-Message-ID: <517db2b8-6be0-2f2b-f98e-ca5ca27d0603@linaro.org>
-Date:   Tue, 26 Apr 2022 00:08:18 +0300
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=g17J6sFTPMUFOZrO9IXMP8Nx+aSWZ2iq9i8H5lFtblY=;
+        b=CfjCB4bZXkaTX2BLI0KuOa18ceN/lStFiUz0cq0GxRlAHIEh+EXVJ7+x0UEQprAGxm
+         dT5lxDRdCeVUrxEKUraathoH/h7kPD8QjNApamKyMcM/xJY3P0OXgf6xGT5ix1Fepx8i
+         JIEvOvRdktkukN291hDq8sG3SQyRH0boVxejD2FSAYTjb5ZbzZfXhP7fWrwe9ShT6gXn
+         C0VmwsD6btrNzm1FlJoavHUZBrekBX9ZAppcvMbzt4K77ZdGeX17wYJSIGMVAeIlY6FI
+         3MG6fN5ZQ77148x9tJ4jZKEowKeDtiq3tjlieOkay1QdRjtjGFa2SGJXWo3luCiAHTjf
+         8uCQ==
+X-Gm-Message-State: AOAM533vDrLFVyqdqjJ7qbf9nuA1n23+932CTZ8Tta1cITDEC/bmu9t/
+        oyvPubfnpR1BKYeqX5hrcE4=
+X-Google-Smtp-Source: ABdhPJwiV0xUrnMDRE+FrYkXQ1iC1m4yTl6zBe9e3+YwEcqnzuUw4Q6+8texda10+SXyWGaXAIy66A==
+X-Received: by 2002:a05:6830:4b6:b0:605:47ba:2310 with SMTP id l22-20020a05683004b600b0060547ba2310mr7199480otd.301.1650920949900;
+        Mon, 25 Apr 2022 14:09:09 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n3-20020a056870a44300b000e9436ea03fsm134545oal.36.2022.04.25.14.09.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 14:09:08 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 25 Apr 2022 14:09:07 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Peter Rosin <peda@axentia.se>
+Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add Atmel AT30TS74
+Message-ID: <20220425210907.GA4184243@roeck-us.net>
+References: <ea4cd16b-4a04-8857-d08a-53be58b00d28@axentia.se>
+ <9c01b1b5-871a-2b34-9f98-766d043e0759@axentia.se>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] drm/msm/dpu: fix error check return value of
- irq_of_parse_and_map()
-Content-Language: en-GB
-To:     Stephen Boyd <swboyd@chromium.org>, cgel.zte@gmail.com,
-        robdclark@gmail.com, sean@poorly.run
-Cc:     quic_abhinavk@quicinc.com, airlied@linux.ie, daniel@ffwll.ch,
-        bjorn.andersson@linaro.org,
-        angelogioacchino.delregno@somainline.org, tiny.windzz@gmail.com,
-        architt@codeaurora.org, jsanka@codeaurora.org,
-        skolluku@codeaurora.org, ryadav@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
-References: <20220425090947.3498897-1-lv.ruyi@zte.com.cn>
- <CAE-0n50fs1fFQcwMCq_x_UG8ZJKprjcYKwcy1+1ckD--XE28+g@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <CAE-0n50fs1fFQcwMCq_x_UG8ZJKprjcYKwcy1+1ckD--XE28+g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9c01b1b5-871a-2b34-9f98-766d043e0759@axentia.se>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/04/2022 23:10, Stephen Boyd wrote:
-> Quoting cgel.zte@gmail.com (2022-04-25 02:09:47)
->> From: Lv Ruyi <lv.ruyi@zte.com.cn>
->>
->> The irq_of_parse_and_map() function returns 0 on failure, and does not
->> return a negative value anyhow, so never enter this conditional branch.
->>
->> Fixes: 25fdd5933e4c ("drm/msm: Add SDM845 DPU support")
->> Reported-by: Zeal Robot <zealci@zte.com.cn>
->> Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
->> ---
+On Mon, Apr 25, 2022 at 10:35:41PM +0200, Peter Rosin wrote:
+> Document the Atmel (now Microchip) AT30TS74 which is an LM75 based
+> temperature sensor.
 > 
-> Question still stands why we can't use platform device APIs.
+> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Peter Rosin <peda@axentia.se>
 
-Let's do a separate pass and replace all of functions with platform 
-device API.
+Applied to hmon-next.
 
-> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Thanks,
+Guenter
 
-
--- 
-With best wishes
-Dmitry
+> ---
+>  Documentation/devicetree/bindings/hwmon/lm75.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/lm75.yaml b/Documentation/devicetree/bindings/hwmon/lm75.yaml
+> index 72980d083c21..8226e3b5d028 100644
+> --- a/Documentation/devicetree/bindings/hwmon/lm75.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/lm75.yaml
+> @@ -14,6 +14,7 @@ properties:
+>    compatible:
+>      enum:
+>        - adi,adt75
+> +      - atmel,at30ts74
+>        - dallas,ds1775
+>        - dallas,ds75
+>        - dallas,ds7505

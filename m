@@ -2,112 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86F2450D8E5
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 07:37:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A2C50D8E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 07:41:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241314AbiDYFkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 01:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52028 "EHLO
+        id S229484AbiDYFoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 01:44:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241298AbiDYFkE (ORCPT
+        with ESMTP id S232594AbiDYFoH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 01:40:04 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28EEA13F16
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 22:37:01 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id p12so2116699pfn.0
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 22:37:01 -0700 (PDT)
+        Mon, 25 Apr 2022 01:44:07 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B35BCB7;
+        Sun, 24 Apr 2022 22:41:04 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id b12so9796334plg.4;
+        Sun, 24 Apr 2022 22:41:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=jSOMoXepvL9Jzmn0TgEVp6Q/+RDInO3nOjN9P+fEr5U=;
-        b=MjrOo6gnvWQ0KiRdrU6Nh/2NVJzRw7ov8XS4hxBysvBl6cNws1WvQM19tTZ4KGLDck
-         bSRc+8Es5GlXRKZ80j3BtWAp1dm1HyRgQdgJTdavSkUykNna9Wu3bQlxejouzBrqe5E7
-         2B9WhnPpRlXvfVWse2iTfmXK2BLMrIor4hEXRR//DaBgm18j/4U2GF5EYC8CXSzfekTo
-         1IN8TMnhO7O9zgaBwHfJZxIRAG8nqWyEGy1pCZvMlQoteovNcplc+6Dm1gArbznmvX0/
-         tU4qrPzbYmnP1FVBS8syW/MHI1iBGpTvPpLd03tXML7uUYc3EgdBsgE0evs1mo23f7lC
-         gjzA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=JxYkM6W+dvTeexYmxSuaWBeHj74cng1RGH8kRqDlTvg=;
+        b=p3XZOmKAdm8qtiJ6755OBSjAUxfX3a5ZWWVA0b9Y+PGOU4xNxPEFMLS91AxfurvoUc
+         JGaA/xYkPEg+JR9ure0hw/htAMzZFEkaondVTyoZZy24HgL9trHATQ62Bf17bF8ItFgf
+         E9fhfZufV4h+XhNzq0ZaTMEPocJcYJAP6DINhjmXZysjXVwuDuoGFxHXKGIOMJvZlZ+J
+         bDaK5Nj5GNP7G7MDz/X1sxcsX9B+UHgk8OZrV8Sj/vp1sfVa7oxQ9ct4outXCpHDRw7e
+         kEGtG6RYwJbH3h6qeROkrcVZLn9i2wKDmplZ61PqeJOLU7Dp5Ztm7nvqIwPFkoSIWX6u
+         /wMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=jSOMoXepvL9Jzmn0TgEVp6Q/+RDInO3nOjN9P+fEr5U=;
-        b=xBXdoSeOeXrJj3fszULigjCKaXMEBUgaWhM7nwQSzHLcYUKbvgIXuCA2c5UvSBaRAf
-         IcYcwqGYzeocXMe09irzPfCT4LLv27pHDkDaU8SwyAItCzCwMthncCVXo/3nro0myOe1
-         fTrwniSOYzpPfbBwJFYmzdAd5InaWXAgj2yu2F2zcEFt/5stKeHbJKXEPOyf5NKbrsAY
-         UzGUEp9Dm4aJG0m4BbGChtKicoTYJ9S8UsqQ/AAKuonEDx9ZMvwnC+HfzT1WJPCUmC6v
-         TSA44Y9PiM4nTCx1oFQ4nXqeeSgTMtGk01Doq/uKP5jr+Rh3CyciiLPuQR+qW9p6iNLu
-         LC9Q==
-X-Gm-Message-State: AOAM532cmxUbTA9EfFTxfe5voiK947eVlLGNHcM2XbolWChQNj74yhwk
-        Hd+h7rJ2inE9HpJ2F7itt1Cm0A==
-X-Google-Smtp-Source: ABdhPJwyXdNuPFQBy486nkbr3dpvv19PJ2dYyl94Bx5xB85QCCgV+xHeMfE33UI5nisSl/FYAy4fIQ==
-X-Received: by 2002:a05:6a00:228b:b0:50d:3c82:911a with SMTP id f11-20020a056a00228b00b0050d3c82911amr4417789pfe.16.1650865020707;
-        Sun, 24 Apr 2022 22:37:00 -0700 (PDT)
-Received: from localhost ([122.171.250.232])
-        by smtp.gmail.com with ESMTPSA id f14-20020a63380e000000b0038253c4d5casm8393549pga.36.2022.04.24.22.36.59
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=JxYkM6W+dvTeexYmxSuaWBeHj74cng1RGH8kRqDlTvg=;
+        b=R3LWDj9h0koWk5uRYAbJzb6yCiv0rSfHY9//K4zYS/rHctgqUxyMlu8lFBzOfcLlvL
+         t/wUSSvLOuQa5znsRv/wWbh9uk0/4j3hpL7wXFdyxavQ4/xhH/ejGOD7YgfxUJf3XfOd
+         lKRoqxuYMLtNYkbTOiB7uM2mikJwx6fFsH6BnUMZHY2JGY9EAg+AnJF+2tzFbrm8klaT
+         iNwRqQIvhzjLD12JcDHAhDgI8ZDzoxaNCE3O9mCPHPJvvMFZSkBV/aK9FtPol1DF1kr1
+         nCXQ32CeCx9+/tlWPlGhw/vc9MEihyYpssYzRWxvL60YWd+FITS5XN/HaWMWjFA8gIGt
+         m3JA==
+X-Gm-Message-State: AOAM533px/ofvXcVOpi/b++rDylVJozVP+5sMbZEOwHPl2d9LZgNscXQ
+        iy8kbUwJcFpn0eEFf2u5WOc=
+X-Google-Smtp-Source: ABdhPJzV/LwlXdEOgRy4/tlj9gigIiBYQIoPSqJUWAkABHmK588wtf87KiGY++Y08CLCdrElXsGeBQ==
+X-Received: by 2002:a17:902:768a:b0:159:71e:971e with SMTP id m10-20020a170902768a00b00159071e971emr16382183pll.163.1650865263682;
+        Sun, 24 Apr 2022 22:41:03 -0700 (PDT)
+Received: from ethan-Latitude-7280.localdomain (125-228-239-174.hinet-ip.hinet.net. [125.228.239.174])
+        by smtp.googlemail.com with ESMTPSA id j127-20020a62c585000000b0050d45a85080sm825440pfg.215.2022.04.24.22.41.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 22:37:00 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 11:06:58 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
-Cc:     rafael@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
-        roger.lu@mediatek.com, hsinyi@google.com, khilman@baylibre.com,
-        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH V4 08/14] cpufreq: mediatek: Make sram regulator optional
-Message-ID: <20220425053658.4by4i5hex4buxjza@vireshk-i7>
-References: <20220422075239.16437-1-rex-bc.chen@mediatek.com>
- <20220422075239.16437-9-rex-bc.chen@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422075239.16437-9-rex-bc.chen@mediatek.com>
-User-Agent: NeoMutt/20180716-391-311a52
+        Sun, 24 Apr 2022 22:41:03 -0700 (PDT)
+From:   ipis.yang@gmail.com
+X-Google-Original-From: etyang@sierrawireless.com
+To:     bjorn@mork.no, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     gchiang@sierrawireless.com, ipis.yang@gmail.com,
+        Ethan Yang <etyang@sierrawireless.com>
+Subject: [PATCH v2] net: usb: qmi_wwan: add support for Sierra Wireless EM7590
+Date:   Mon, 25 Apr 2022 13:40:28 +0800
+Message-Id: <20220425054028.5444-1-etyang@sierrawireless.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <87bkwpkayv.fsf@miraculix.mork.no>
+References: <87bkwpkayv.fsf@miraculix.mork.no>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-04-22, 15:52, Rex-BC Chen wrote:
-> From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> 
-> For some MediaTek SoCs, like MT8186, it's possible that the sram regulator
-> is shared between CPU and CCI.
-> We hope regulator framework can return error for error handling rather
-> than a dummy handler from regulator_get api.
-> Therefore, we choose to use regulator_get_optional.
-> 
-> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  drivers/cpufreq/mediatek-cpufreq.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
-> index 0b2ca0c8eddc..97ce96421241 100644
-> --- a/drivers/cpufreq/mediatek-cpufreq.c
-> +++ b/drivers/cpufreq/mediatek-cpufreq.c
-> @@ -438,7 +438,7 @@ static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
->  	}
->  
->  	/* Both presence and absence of sram regulator are valid cases. */
-> -	info->sram_reg = regulator_get_exclusive(cpu_dev, "sram");
-> +	info->sram_reg = regulator_get_optional(cpu_dev, "sram");
->  	if (IS_ERR(info->sram_reg))
->  		info->sram_reg = NULL;
->  	else {
+From: Ethan Yang <etyang@sierrawireless.com>
 
-Applied. Thanks.
+add support for Sierra Wireless EM7590 0xc081 composition.
 
+Signed-off-by: Ethan Yang <etyang@sierrawireless.com>
+---
+ drivers/net/usb/qmi_wwan.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 3353e761016d..fa220a13edb6 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1351,6 +1351,7 @@ static const struct usb_device_id products[] = {
+ 	{QMI_QUIRK_SET_DTR(0x1199, 0x907b, 8)},	/* Sierra Wireless EM74xx */
+ 	{QMI_QUIRK_SET_DTR(0x1199, 0x907b, 10)},/* Sierra Wireless EM74xx */
+ 	{QMI_QUIRK_SET_DTR(0x1199, 0x9091, 8)},	/* Sierra Wireless EM7565 */
++	{QMI_QUIRK_SET_DTR(0x1199, 0xc081, 8)},	/* Sierra Wireless EM7590 */
+ 	{QMI_FIXED_INTF(0x1bbb, 0x011e, 4)},	/* Telekom Speedstick LTE II (Alcatel One Touch L100V LTE) */
+ 	{QMI_FIXED_INTF(0x1bbb, 0x0203, 2)},	/* Alcatel L800MA */
+ 	{QMI_FIXED_INTF(0x2357, 0x0201, 4)},	/* TP-LINK HSUPA Modem MA180 */
 -- 
-viresh
+2.17.1
+

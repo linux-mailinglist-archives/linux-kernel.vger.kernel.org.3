@@ -2,196 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4D1D50E634
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2822250E635
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:53:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243620AbiDYQyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 12:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53816 "EHLO
+        id S241080AbiDYQzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 12:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238170AbiDYQyp (ORCPT
+        with ESMTP id S241922AbiDYQzO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 12:54:45 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C6E461A042;
-        Mon, 25 Apr 2022 09:51:40 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 942261FB;
-        Mon, 25 Apr 2022 09:51:40 -0700 (PDT)
-Received: from lpieralisi (unknown [10.57.13.157])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D0CFB3F5A1;
-        Mon, 25 Apr 2022 09:51:37 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 17:51:34 +0100
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
-Cc:     KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Wei Hu <weh@microsoft.com>, Rob Herring <robh@kernel.org>,
-        Krzysztof Wilczynski <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 6/6] PCI: hv: Fix synchronization between channel
- callback and hv_compose_msi_msg()
-Message-ID: <20220425165134.GB17718@lpieralisi>
-References: <20220419122325.10078-1-parri.andrea@gmail.com>
- <20220419122325.10078-7-parri.andrea@gmail.com>
+        Mon, 25 Apr 2022 12:55:14 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD60D1A064
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 09:52:08 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2ec42eae76bso154890477b3.10
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 09:52:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zFVXbK88HMZ7irS1EV3QbO6i92VJWq/msMeGHj6PNxc=;
+        b=bUVEaQ2wIuKybo7kKQmoFYoEvIZ5UirP/KvquexNzuYtWoi/ArniVP0TSRhp/xPvF4
+         pjO88yRVQp/fFable34gX1YDVyJpMA9C9G2vEf8Kz486GPzw+RzufdXY/0jM7gTVCCsg
+         PidMDRcF1CNXJn+3SjKJOWvA3RIB/cb9JqrhsFBu+iWytoAeilSrA/RMTgGjycGiMs+r
+         5N3rDehjoLGsJNyxZeUrYK3zFPcD2g2ZEbJpTAcnk8wQD7D/F/BZsTof8SScGzFdqDS7
+         6k9Kc58dLAu+v9oHuXu7fYVxWXbc48epu/owuKJq0cWH+V02p84jlw6M/HppCcWvNYzi
+         MMOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zFVXbK88HMZ7irS1EV3QbO6i92VJWq/msMeGHj6PNxc=;
+        b=J1hhXiN7VSxLzMGO6qR51mRURvKqG6Ctg93kRJN3Xfu1d1eubA+/Y+1jLayfPYm6FP
+         nv4xEgGc107hEH5/x/lLccwL1OqhBgyWjcdjPY0X3LWrEOCwL4qvtBf1drbSwW4LozZ2
+         4VWI7GD7PMk5hZ/yPYdCUGXkQL5EjCgjMjGstUCtykQpnK9clyHEf9Dant9wqvwVlzQJ
+         1ZAxu1Z6symp/RWEARkdklvx6ATMTXj8cc5ThcYGPsTdR2QrHWJjfwSKzmkEd4WQ0bIE
+         OfbnT1h0ajJW/9yC7Cv7WyHI0b1pl31OX6kWdx+NqFPzanCsgbCZZbSDGHiFEgdgSh1G
+         /QqA==
+X-Gm-Message-State: AOAM531GW5CY5zmYiiD7dN5PplzYUNJsvrwoWQqbiogxr0IcGl3i4b3o
+        vVX7/xsQu1yMVdoU2fllTCHS7pw83KJB5QyyIUvQlQ==
+X-Google-Smtp-Source: ABdhPJxTfEfeqBKHmxyw2CtMbyEAYltfx7GpPViRfckEPW8IinZNEjDVmPt5S7rAbMebL6fc8qUZBmNt0weWMmdOubU=
+X-Received: by 2002:a0d:f007:0:b0:2f4:ce96:514b with SMTP id
+ z7-20020a0df007000000b002f4ce96514bmr17915775ywe.148.1650905527631; Mon, 25
+ Apr 2022 09:52:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220419122325.10078-7-parri.andrea@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220423000328.2103733-1-rananta@google.com> <20220423000328.2103733-5-rananta@google.com>
+ <CAAeT=Fyc3=uoOdeXrLKfYxKtL3PFV0U_Bwj_g+bca_Em63wGhw@mail.gmail.com>
+In-Reply-To: <CAAeT=Fyc3=uoOdeXrLKfYxKtL3PFV0U_Bwj_g+bca_Em63wGhw@mail.gmail.com>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Mon, 25 Apr 2022 09:51:56 -0700
+Message-ID: <CAJHc60zR4Pa=y-Y4Dp27FoAvqpBrONCN727KbnhSoxNGRiBGuA@mail.gmail.com>
+Subject: Re: [PATCH v6 4/9] KVM: arm64: Add vendor hypervisor firmware register
+To:     Reiji Watanabe <reijiw@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 02:23:25PM +0200, Andrea Parri (Microsoft) wrote:
-> Dexuan wrote:
-> 
->   "[...]  when we disable AccelNet, the host PCI VSP driver sends a
->    PCI_EJECT message first, and the channel callback may set
->    hpdev->state to hv_pcichild_ejecting on a different CPU.  This can
->    cause hv_compose_msi_msg() to exit from the loop and 'return', and
->    the on-stack variable 'ctxt' is invalid.  Now, if the response
->    message from the host arrives, the channel callback will try to
->    access the invalid 'ctxt' variable, and this may cause a crash."
-> 
-> Schematically:
-> 
->   Hyper-V sends PCI_EJECT msg
->     hv_pci_onchannelcallback()
->       state = hv_pcichild_ejecting
->                                        hv_compose_msi_msg()
->                                          alloc and init comp_pkt
->                                          state == hv_pcichild_ejecting
->   Hyper-V sends VM_PKT_COMP msg
->     hv_pci_onchannelcallback()
->       retrieve address of comp_pkt
->                                          'free' comp_pkt and return
->       comp_pkt->completion_func()
-> 
-> Dexuan also showed how the crash can be triggered after introducing
-> suitable delays in the driver code, thus validating the 'assumption'
-> that the host can still normally respond to the guest's compose_msi
-> request after the host has started to eject the PCI device.
-> 
-> Fix the synchronization by leveraging the requestor lock as follows:
-> 
->   - Before 'return'-ing in hv_compose_msi_msg(), remove the ID (while
->     holding the requestor lock) associated to the completion packet.
-> 
->   - Retrieve the address *and call ->completion_func() within a same
->     (requestor) critical section in hv_pci_onchannelcallback().
-> 
-> Reported-by: Wei Hu <weh@microsoft.com>
-> Reported-by: Dexuan Cui <decui@microsoft.com>
-> Suggested-by: Michael Kelley <mikelley@microsoft.com>
-> Signed-off-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
-> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-> ---
-> v1 included:
-> 
-> Fixes: de0aa7b2f97d3 ("PCI: hv: Fix 2 hang issues in hv_compose_msi_msg()")
-> 
-> as a reference, but not a reference for the stable-kernel bots.
-> The back-port would depend on the entire series which, in turn,
-> shouldn't be backported to commits preceding bf5fd8cae3c8f.
-> 
->  drivers/pci/controller/pci-hyperv.c | 33 +++++++++++++++++++++++------
->  1 file changed, 27 insertions(+), 6 deletions(-)
+Hi Reiji,
 
-Acked-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+On Sun, Apr 24, 2022 at 11:22 PM Reiji Watanabe <reijiw@google.com> wrote:
+>
+> Hi Raghu,
+>
+> On Fri, Apr 22, 2022 at 5:03 PM Raghavendra Rao Ananta
+> <rananta@google.com> wrote:
+> >
+> > Introduce the firmware register to hold the vendor specific
+> > hypervisor service calls (owner value 6) as a bitmap. The
+> > bitmap represents the features that'll be enabled for the
+> > guest, as configured by the user-space. Currently, this
+> > includes support for KVM-vendor features along with
+> > reading the UID, represented by bit-0, and Precision Time
+> > Protocol (PTP), represented by bit-1.
+> >
+> > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> > ---
+> >  arch/arm64/include/asm/kvm_host.h |  2 ++
+> >  arch/arm64/include/uapi/asm/kvm.h |  4 ++++
+> >  arch/arm64/kvm/hypercalls.c       | 23 ++++++++++++++++++-----
+> >  include/kvm/arm_hypercalls.h      |  2 ++
+> >  4 files changed, 26 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> > index 27d4b2a7970e..a025c2ba012a 100644
+> > --- a/arch/arm64/include/asm/kvm_host.h
+> > +++ b/arch/arm64/include/asm/kvm_host.h
+> > @@ -106,10 +106,12 @@ struct kvm_arch_memory_slot {
+> >   *
+> >   * @std_bmap: Bitmap of standard secure service calls
+> >   * @std_hyp_bmap: Bitmap of standard hypervisor service calls
+> > + * @vendor_hyp_bmap: Bitmap of vendor specific hypervisor service calls
+> >   */
+> >  struct kvm_smccc_features {
+> >         unsigned long std_bmap;
+> >         unsigned long std_hyp_bmap;
+> > +       unsigned long vendor_hyp_bmap;
+> >  };
+> >
+> >  struct kvm_arch {
+> > diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
+> > index 9eecc7ee8c14..e7d5ae222684 100644
+> > --- a/arch/arm64/include/uapi/asm/kvm.h
+> > +++ b/arch/arm64/include/uapi/asm/kvm.h
+> > @@ -344,6 +344,10 @@ struct kvm_arm_copy_mte_tags {
+> >  #define KVM_REG_ARM_STD_HYP_BMAP               KVM_REG_ARM_FW_FEAT_BMAP_REG(1)
+> >  #define KVM_REG_ARM_STD_HYP_BIT_PV_TIME                0
+> >
+> > +#define KVM_REG_ARM_VENDOR_HYP_BMAP            KVM_REG_ARM_FW_FEAT_BMAP_REG(2)
+> > +#define KVM_REG_ARM_VENDOR_HYP_BIT_FUNC_FEAT   0
+> > +#define KVM_REG_ARM_VENDOR_HYP_BIT_PTP         1
+> > +
+> >  /* Device Control API: ARM VGIC */
+> >  #define KVM_DEV_ARM_VGIC_GRP_ADDR      0
+> >  #define KVM_DEV_ARM_VGIC_GRP_DIST_REGS 1
+> > diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
+> > index f097bebdad39..76e626d0e699 100644
+> > --- a/arch/arm64/kvm/hypercalls.c
+> > +++ b/arch/arm64/kvm/hypercalls.c
+> > @@ -72,9 +72,6 @@ static bool kvm_hvc_call_default_allowed(struct kvm_vcpu *vcpu, u32 func_id)
+> >          */
+> >         case ARM_SMCCC_VERSION_FUNC_ID:
+> >         case ARM_SMCCC_ARCH_FEATURES_FUNC_ID:
+> > -       case ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID:
+> > -       case ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID:
+> > -       case ARM_SMCCC_VENDOR_HYP_KVM_PTP_FUNC_ID:
+> >                 return true;
+> >         default:
+> >                 return kvm_psci_func_id_is_valid(vcpu, func_id);
+> > @@ -97,6 +94,13 @@ static bool kvm_hvc_call_allowed(struct kvm_vcpu *vcpu, u32 func_id)
+> >         case ARM_SMCCC_HV_PV_TIME_ST:
+> >                 return kvm_arm_fw_reg_feat_enabled(&smccc_feat->std_hyp_bmap,
+> >                                         KVM_REG_ARM_STD_HYP_BIT_PV_TIME);
+> > +       case ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID:
+> > +       case ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID:
+> > +               return kvm_arm_fw_reg_feat_enabled(&smccc_feat->vendor_hyp_bmap,
+> > +                                       KVM_REG_ARM_VENDOR_HYP_BIT_FUNC_FEAT);
+> > +       case ARM_SMCCC_VENDOR_HYP_KVM_PTP_FUNC_ID:
+> > +               return kvm_arm_fw_reg_feat_enabled(&smccc_feat->vendor_hyp_bmap,
+> > +                                       KVM_REG_ARM_VENDOR_HYP_BIT_PTP);
+> >         default:
+> >                 return kvm_hvc_call_default_allowed(vcpu, func_id);
+> >         }
+> > @@ -189,8 +193,7 @@ int kvm_hvc_call_handler(struct kvm_vcpu *vcpu)
+> >                 val[3] = ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_3;
+> >                 break;
+> >         case ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID:
+> > -               val[0] = BIT(ARM_SMCCC_KVM_FUNC_FEATURES);
+> > -               val[0] |= BIT(ARM_SMCCC_KVM_FUNC_PTP);
+> > +               val[0] = smccc_feat->vendor_hyp_bmap;
+> >                 break;
+> >         case ARM_SMCCC_VENDOR_HYP_KVM_PTP_FUNC_ID:
+> >                 kvm_ptp_get_time(vcpu, val);
+> > @@ -217,6 +220,7 @@ static const u64 kvm_arm_fw_reg_ids[] = {
+> >         KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3,
+> >         KVM_REG_ARM_STD_BMAP,
+> >         KVM_REG_ARM_STD_HYP_BMAP,
+> > +       KVM_REG_ARM_VENDOR_HYP_BMAP,
+> >  };
+> >
+> >  void kvm_arm_init_hypercalls(struct kvm *kvm)
+> > @@ -225,6 +229,7 @@ void kvm_arm_init_hypercalls(struct kvm *kvm)
+> >
+> >         smccc_feat->std_bmap = KVM_ARM_SMCCC_STD_FEATURES;
+> >         smccc_feat->std_hyp_bmap = KVM_ARM_SMCCC_STD_HYP_FEATURES;
+> > +       smccc_feat->vendor_hyp_bmap = KVM_ARM_SMCCC_VENDOR_HYP_FEATURES;
+> >  }
+> >
+> >  int kvm_arm_get_fw_num_regs(struct kvm_vcpu *vcpu)
+> > @@ -317,6 +322,9 @@ int kvm_arm_get_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+> >         case KVM_REG_ARM_STD_HYP_BMAP:
+> >                 val = READ_ONCE(smccc_feat->std_hyp_bmap);
+> >                 break;
+> > +       case KVM_REG_ARM_VENDOR_HYP_BMAP:
+> > +               val = READ_ONCE(smccc_feat->vendor_hyp_bmap);
+> > +               break;
+> >         default:
+> >                 return -ENOENT;
+> >         }
+> > @@ -343,6 +351,10 @@ static int kvm_arm_set_fw_reg_bmap(struct kvm_vcpu *vcpu, u64 reg_id, u64 val)
+> >                 fw_reg_bmap = &smccc_feat->std_hyp_bmap;
+> >                 fw_reg_features = KVM_ARM_SMCCC_STD_HYP_FEATURES;
+> >                 break;
+> > +       case KVM_REG_ARM_VENDOR_HYP_BMAP:
+> > +               fw_reg_bmap = &smccc_feat->vendor_hyp_bmap;
+> > +               fw_reg_features = KVM_ARM_SMCCC_VENDOR_HYP_FEATURES;
+> > +               break;
+> >         default:
+> >                 return -ENOENT;
+> >         }
+> > @@ -445,6 +457,7 @@ int kvm_arm_set_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+> >                 return 0;
+> >         case KVM_REG_ARM_STD_BMAP:
+> >         case KVM_REG_ARM_STD_HYP_BMAP:
+> > +       case KVM_REG_ARM_VENDOR_HYP_BMAP:
+> >                 return kvm_arm_set_fw_reg_bmap(vcpu, reg->id, val);
+> >         default:
+> >                 return -ENOENT;
+> > diff --git a/include/kvm/arm_hypercalls.h b/include/kvm/arm_hypercalls.h
+> > index aadd6ae3ab72..4ebfdd26e486 100644
+> > --- a/include/kvm/arm_hypercalls.h
+> > +++ b/include/kvm/arm_hypercalls.h
+> > @@ -9,9 +9,11 @@
+> >  /* Last valid bits of the bitmapped firmware registers */
+> >  #define KVM_REG_ARM_STD_BMAP_BIT_MAX           0
+> >  #define KVM_REG_ARM_STD_HYP_BMAP_BIT_MAX       0
+> > +#define KVM_REG_ARM_VENDOR_HYP_BMAP_BIT_MAX    1
+>
+> Nit: IMHO perhaps it might be more convenient to define the MAX macro
+> in arch/arm64/include/uapi/asm/kvm.h like below for maintenance ?
+> (The same comments are applied to other KVM_REG_ARM_*_BMAP_BIT_MAX)
+>
+> #define KVM_REG_ARM_VENDOR_HYP_BIT_MAX KVM_REG_ARM_VENDOR_HYP_BIT_PTP
+>
+We have been going back and forth on this :)
+It made sense for me to keep it in uapi as well, but I took Oliver's
+suggestion of keeping it outside of uapi since this is something that
+could be constantly changing [1].
 
-> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
-> index 0252b4bbc8d15..59f0197b94c78 100644
-> --- a/drivers/pci/controller/pci-hyperv.c
-> +++ b/drivers/pci/controller/pci-hyperv.c
-> @@ -1695,7 +1695,7 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
->  			struct pci_create_interrupt3 v3;
->  		} int_pkts;
->  	} __packed ctxt;
-> -
-> +	u64 trans_id;
->  	u32 size;
->  	int ret;
->  
-> @@ -1757,10 +1757,10 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
->  		goto free_int_desc;
->  	}
->  
-> -	ret = vmbus_sendpacket(hpdev->hbus->hdev->channel, &ctxt.int_pkts,
-> -			       size, (unsigned long)&ctxt.pci_pkt,
-> -			       VM_PKT_DATA_INBAND,
-> -			       VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED);
-> +	ret = vmbus_sendpacket_getid(hpdev->hbus->hdev->channel, &ctxt.int_pkts,
-> +				     size, (unsigned long)&ctxt.pci_pkt,
-> +				     &trans_id, VM_PKT_DATA_INBAND,
-> +				     VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED);
->  	if (ret) {
->  		dev_err(&hbus->hdev->device,
->  			"Sending request for interrupt failed: 0x%x",
-> @@ -1839,6 +1839,15 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
->  
->  enable_tasklet:
->  	tasklet_enable(&channel->callback_event);
-> +	/*
-> +	 * The completion packet on the stack becomes invalid after 'return';
-> +	 * remove the ID from the VMbus requestor if the identifier is still
-> +	 * mapped to/associated with the packet.  (The identifier could have
-> +	 * been 're-used', i.e., already removed and (re-)mapped.)
-> +	 *
-> +	 * Cf. hv_pci_onchannelcallback().
-> +	 */
-> +	vmbus_request_addr_match(channel, trans_id, (unsigned long)&ctxt.pci_pkt);
->  free_int_desc:
->  	kfree(int_desc);
->  drop_reference:
-> @@ -2717,6 +2726,7 @@ static void hv_pci_onchannelcallback(void *context)
->  	struct pci_dev_inval_block *inval;
->  	struct pci_dev_incoming *dev_message;
->  	struct hv_pci_dev *hpdev;
-> +	unsigned long flags;
->  
->  	buffer = kmalloc(bufferlen, GFP_ATOMIC);
->  	if (!buffer)
-> @@ -2751,8 +2761,11 @@ static void hv_pci_onchannelcallback(void *context)
->  		switch (desc->type) {
->  		case VM_PKT_COMP:
->  
-> -			req_addr = chan->request_addr_callback(chan, req_id);
-> +			lock_requestor(chan, flags);
-> +			req_addr = __vmbus_request_addr_match(chan, req_id,
-> +							      VMBUS_RQST_ADDR_ANY);
->  			if (req_addr == VMBUS_RQST_ERROR) {
-> +				unlock_requestor(chan, flags);
->  				dev_err(&hbus->hdev->device,
->  					"Invalid transaction ID %llx\n",
->  					req_id);
-> @@ -2760,9 +2773,17 @@ static void hv_pci_onchannelcallback(void *context)
->  			}
->  			comp_packet = (struct pci_packet *)req_addr;
->  			response = (struct pci_response *)buffer;
-> +			/*
-> +			 * Call ->completion_func() within the critical section to make
-> +			 * sure that the packet pointer is still valid during the call:
-> +			 * here 'valid' means that there's a task still waiting for the
-> +			 * completion, and that the packet data is still on the waiting
-> +			 * task's stack.  Cf. hv_compose_msi_msg().
-> +			 */
->  			comp_packet->completion_func(comp_packet->compl_ctxt,
->  						     response,
->  						     bytes_recvd);
-> +			unlock_requestor(chan, flags);
->  			break;
->  
->  		case VM_PKT_DATA_INBAND:
-> -- 
-> 2.25.1
-> 
+Thank you.
+Raghavendra
+
+[1]: https://lore.kernel.org/lkml/CAJHc60wz5WsZWTn66i41+G4-dsjCFuFkthXU_Vf6QeXHkgzrZg@mail.gmail.com/
+
+> Thanks,
+> Reiji
+>
+>
+> >
+> >  #define KVM_ARM_SMCCC_STD_FEATURES             GENMASK(KVM_REG_ARM_STD_BMAP_BIT_MAX, 0)
+> >  #define KVM_ARM_SMCCC_STD_HYP_FEATURES         GENMASK(KVM_REG_ARM_STD_HYP_BMAP_BIT_MAX, 0)
+> > +#define KVM_ARM_SMCCC_VENDOR_HYP_FEATURES      GENMASK(KVM_REG_ARM_VENDOR_HYP_BMAP_BIT_MAX, 0)
+> >
+> >  int kvm_hvc_call_handler(struct kvm_vcpu *vcpu);
+> >
+> > --
+> > 2.36.0.rc2.479.g8af0fa9b8e-goog
+> >

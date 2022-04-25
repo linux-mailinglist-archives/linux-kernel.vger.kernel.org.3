@@ -2,281 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2D6650D944
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 08:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B4550D945
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 08:14:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236147AbiDYGP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 02:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51090 "EHLO
+        id S235819AbiDYGRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 02:17:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234505AbiDYGPg (ORCPT
+        with ESMTP id S232051AbiDYGRb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 02:15:36 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B443AA6B;
-        Sun, 24 Apr 2022 23:12:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=/BxesiWLX23HptYaPhomru56PL86zJU1uAC0FyjsfIw=;
-  b=IAa7FT3P+9wE6dfRzZtDu0dhzOQW3OOcLz/o9DF4CNetwZTYgMz5dzLH
-   yUr7DOd8nVDHeUPFKUUq5vhpiqnzHwILpYrW3xzX10/brVpo6wQwoyoSx
-   p1oTCN8ySrmt3CdX/ppZcUjGmRSKs1Gq1KhBd6nS0NyAlhRvhDqV4o0La
-   Y=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.90,287,1643670000"; 
-   d="scan'208";a="33083267"
-Received: from ip-214.net-89-2-7.rev.numericable.fr (HELO hadrien) ([89.2.7.214])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 08:12:28 +0200
-Date:   Mon, 25 Apr 2022 08:12:28 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-cc:     Nikolay Aleksandrov <razor@blackwall.org>, netdev@vger.kernel.org,
-        outreachy@lists.linux.dev, roopa@nvidia.com, jdenham@redhat.com,
-        sbrivio@redhat.com, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
-        alexandre.belloni@bootlin.com, shshaikh@marvell.com,
-        manishc@marvell.com, intel-wired-lan@lists.osuosl.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
-        GR-Linux-NIC-Dev@marvell.com, bridge@lists.linux-foundation.org
-Subject: Re: [PATCH net-next v3 1/2] rtnetlink: add extack support in fdb
- del handlers
-In-Reply-To: <d89eefc2-664f-8537-d10e-6fdfbb6823ed@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2204250811480.2759@hadrien>
-References: <cover.1650800975.git.eng.alaamohamedsoliman.am@gmail.com> <c3a882e4fb6f9228f704ebe3c1fcace14ee6cdf2.1650800975.git.eng.alaamohamedsoliman.am@gmail.com> <7c8367b6-95c7-ea39-fafe-72495f343625@blackwall.org>
- <d89eefc2-664f-8537-d10e-6fdfbb6823ed@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Mon, 25 Apr 2022 02:17:31 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB3C11169;
+        Sun, 24 Apr 2022 23:14:26 -0700 (PDT)
+Received: from kwepemi100004.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KmvpP4YWkz1JBZC;
+        Mon, 25 Apr 2022 14:13:33 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100004.china.huawei.com (7.221.188.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 25 Apr 2022 14:14:24 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 25 Apr 2022 14:14:23 +0800
+Subject: Re: [PATCH -next RFC v3 0/8] improve tag allocation under heavy load
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        <axboe@kernel.dk>, <bvanassche@acm.org>,
+        <andriy.shevchenko@linux.intel.com>, <john.garry@huawei.com>,
+        <ming.lei@redhat.com>, <qiulaibin@huawei.com>
+CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>
+References: <20220415101053.554495-1-yukuai3@huawei.com>
+ <dc800086-43c6-1ff2-659e-258cb75649dd@huawei.com>
+ <3fbadd9f-11dd-9043-11cf-f0839dcf30e1@opensource.wdc.com>
+From:   "yukuai (C)" <yukuai3@huawei.com>
+Message-ID: <63e84f2a-2487-a0c3-cab2-7d2011bc2db4@huawei.com>
+Date:   Mon, 25 Apr 2022 14:14:23 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-513187066-1650867148=:2759"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <3fbadd9f-11dd-9043-11cf-f0839dcf30e1@opensource.wdc.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+在 2022/04/25 11:24, Damien Le Moal 写道:
+> On 4/24/22 11:43, yukuai (C) wrote:
+>> friendly ping ...
+>>
+>> 在 2022/04/15 18:10, Yu Kuai 写道:
+>>> Changes in v3:
+>>>    - update 'waiters_cnt' before 'ws_active' in sbitmap_prepare_to_wait()
+>>>    in patch 1, in case __sbq_wake_up() see 'ws_active > 0' while
+>>>    'waiters_cnt' are all 0, which will cause deap loop.
+>>>    - don't add 'wait_index' during each loop in patch 2
+>>>    - fix that 'wake_index' might mismatch in the first wake up in patch 3,
+>>>    also improving coding for the patch.
+>>>    - add a detection in patch 4 in case io hung is triggered in corner
+>>>    cases.
+>>>    - make the detection, free tags are sufficient, more flexible.
+>>>    - fix a race in patch 8.
+>>>    - fix some words and add some comments.
+>>>
+>>> Changes in v2:
+>>>    - use a new title
+>>>    - add patches to fix waitqueues' unfairness - path 1-3
+>>>    - delete patch to add queue flag
+>>>    - delete patch to split big io thoroughly
+>>>
+>>> In this patchset:
+>>>    - patch 1-3 fix waitqueues' unfairness.
+>>>    - patch 4,5 disable tag preemption on heavy load.
+>>>    - patch 6 forces tag preemption for split bios.
+>>>    - patch 7,8 improve large random io for HDD. We do meet the problem and
+>>>    I'm trying to fix it at very low cost. However, if anyone still thinks
+>>>    this is not a common case and not worth to optimize, I'll drop them.
+>>>
+>>> There is a defect for blk-mq compare to blk-sq, specifically split io
+>>> will end up discontinuous if the device is under high io pressure, while
+>>> split io will still be continuous in sq, this is because:
+>>>
+>>> 1) new io can preempt tag even if there are lots of threads waiting.
+>>> 2) split bio is issued one by one, if one bio can't get tag, it will go
+>>> to wail.
+>>> 3) each time 8(or wake batch) requests is done, 8 waiters will be woken up.
+>>> Thus if a thread is woken up, it will unlikey to get multiple tags.
+>>>
+>>> The problem was first found by upgrading kernel from v3.10 to v4.18,
+>>> test device is HDD with 256 'max_sectors_kb', and test case is issuing 1m
+>>> ios with high concurrency.
+>>>
+>>> Noted that there is a precondition for such performance problem:
+>>> There is a certain gap between bandwidth for single io with
+>>> bs=max_sectors_kb and disk upper limit.
+>>>
+>>> During the test, I found that waitqueues can be extremly unbalanced on
+>>> heavy load. This is because 'wake_index' is not set properly in
+>>> __sbq_wake_up(), see details in patch 3.
+>>>
+>>> Test environment:
+>>> arm64, 96 core with 200 BogoMIPS, test device is HDD. The default
+>>> 'max_sectors_kb' is 1280(Sorry that I was unable to test on the machine
+>>> where 'max_sectors_kb' is 256).>>
+>>> The single io performance(randwrite):
+>>>
+>>> | bs       | 128k | 256k | 512k | 1m   | 1280k | 2m   | 4m   |
+>>> | -------- | ---- | ---- | ---- | ---- | ----- | ---- | ---- |
+>>> | bw MiB/s | 20.1 | 33.4 | 51.8 | 67.1 | 74.7  | 82.9 | 82.9 |
+> 
+> These results are extremely strange, unless you are running with the
+> device write cache disabled ? If you have the device write cache enabled,
+> the problem you mention above would be most likely completely invisible,
+> which I guess is why nobody really noticed any issue until now.
+> 
+> Similarly, with reads, the device side read-ahead may hide the problem,
+> albeit that depends on how "intelligent" the drive is at identifying
+> sequential accesses.
+> 
+>>>
+>>> It can be seen that 1280k io is already close to upper limit, and it'll
+>>> be hard to see differences with the default value, thus I set
+>>> 'max_sectors_kb' to 128 in the following test.
+>>>
+>>> Test cmd:
+>>>           fio \
+>>>           -filename=/dev/$dev \
+>>>           -name=test \
+>>>           -ioengine=psync \
+>>>           -allow_mounted_write=0 \
+>>>           -group_reporting \
+>>>           -direct=1 \
+>>>           -offset_increment=1g \
+>>>           -rw=randwrite \
+>>>           -bs=1024k \
+>>>           -numjobs={1,2,4,8,16,32,64,128,256,512} \
+>>>           -runtime=110 \
+>>>           -ramp_time=10
+>>>
+>>> Test result: MiB/s
+>>>
+>>> | numjobs | v5.18-rc1 | v5.18-rc1-patched |
+>>> | ------- | --------- | ----------------- |
+>>> | 1       | 67.7      | 67.7              |
+>>> | 2       | 67.7      | 67.7              |
+>>> | 4       | 67.7      | 67.7              |
+>>> | 8       | 67.7      | 67.7              |
+>>> | 16      | 64.8      | 65.6              |
+>>> | 32      | 59.8      | 63.8              |
+>>> | 64      | 54.9      | 59.4              |
+>>> | 128     | 49        | 56.9              |
+>>> | 256     | 37.7      | 58.3              |
+>>> | 512     | 31.8      | 57.9              |
+> 
+> Device write cache disabled ?
+> 
+> Also, what is the max QD of this disk ?
+> 
+> E.g., if it is SATA, it is 32, so you will only get at most 64 scheduler
+> tags. So for any of your tests with more than 64 threads, many of the
+> threads will be waiting for a scheduler tag for the BIO before the
+> bio_split problem you explain triggers. Given that the numbers you show
+> are the same for before-after patch with a number of threads <= 64, I am
+> tempted to think that the problem is not really BIO splitting...
+> 
+> What about random read workloads ? What kind of results do you see ?
 
---8323329-513187066-1650867148=:2759
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Hi,
 
+Sorry about the misleading of this test case.
 
+This testcase is high concurrency huge randwrite, it's just for the
+problem that split bios won't be issued continuously, which is the
+root cause of the performance degradation as the numjobs increases.
 
-On Sun, 24 Apr 2022, Alaa Mohamed wrote:
+queue_depth is 32, and numjobs is 64, thus when numjobs is not greater
+than 8, performance is fine, because the ratio of sequential io should
+be 7/8. However, as numjobs increases, performance is worse because
+the ratio is lower. For example, when numjobs is 512, the ratio of
+sequential io is about 20%.
 
->
-> On ٢٤/٤/٢٠٢٢ ٢١:٠٢, Nikolay Aleksandrov wrote:
-> > On 24/04/2022 15:09, Alaa Mohamed wrote:
-> > > Add extack support to .ndo_fdb_del in netdevice.h and
-> > > all related methods.
-> > >
-> > > Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-> > > ---
-> > > changes in V3:
-> > >          fix errors reported by checkpatch.pl
-> > > ---
-> > >   drivers/net/ethernet/intel/ice/ice_main.c        | 4 ++--
-> > >   drivers/net/ethernet/mscc/ocelot_net.c           | 4 ++--
-> > >   drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c | 2 +-
-> > >   drivers/net/macvlan.c                            | 2 +-
-> > >   drivers/net/vxlan/vxlan_core.c                   | 2 +-
-> > >   include/linux/netdevice.h                        | 2 +-
-> > >   net/bridge/br_fdb.c                              | 2 +-
-> > >   net/bridge/br_private.h                          | 2 +-
-> > >   net/core/rtnetlink.c                             | 4 ++--
-> > >   9 files changed, 12 insertions(+), 12 deletions(-)
-> > >
-> > > diff --git a/drivers/net/ethernet/intel/ice/ice_main.c
-> > > b/drivers/net/ethernet/intel/ice/ice_main.c
-> > > index d768925785ca..7b55d8d94803 100644
-> > > --- a/drivers/net/ethernet/intel/ice/ice_main.c
-> > > +++ b/drivers/net/ethernet/intel/ice/ice_main.c
-> > > @@ -5678,10 +5678,10 @@ ice_fdb_add(struct ndmsg *ndm, struct nlattr
-> > > __always_unused *tb[],
-> > >   static int
-> > >   ice_fdb_del(struct ndmsg *ndm, __always_unused struct nlattr *tb[],
-> > >   	    struct net_device *dev, const unsigned char *addr,
-> > > -	    __always_unused u16 vid)
-> > > +	    __always_unused u16 vid, struct netlink_ext_ack *extack)
-> > >   {
-> > >   	int err;
-> > > -
-> > > +
-> > What's changed here?
->
-> In the previous version, I removed the blank line after "int err;" and you
-> said I shouldn't so I added blank line.
+patch 6-8 will let split bios still be issued continuously under high
+pressure.
 
-This answer doesn't make sense.  You should make a patch against the code
-as it is in the kernel, not against your previous proposal.
+Thanks,
+Kuai
 
-julia
-
->
-> >
-> > >   	if (ndm->ndm_state & NUD_PERMANENT) {
-> > >   		netdev_err(dev, "FDB only supports static addresses\n");
-> > >   		return -EINVAL;
-> > > diff --git a/drivers/net/ethernet/mscc/ocelot_net.c
-> > > b/drivers/net/ethernet/mscc/ocelot_net.c
-> > > index 247bc105bdd2..e07c64e3159c 100644
-> > > --- a/drivers/net/ethernet/mscc/ocelot_net.c
-> > > +++ b/drivers/net/ethernet/mscc/ocelot_net.c
-> > > @@ -774,14 +774,14 @@ static int ocelot_port_fdb_add(struct ndmsg *ndm,
-> > > struct nlattr *tb[],
-> > >
-> > >   static int ocelot_port_fdb_del(struct ndmsg *ndm, struct nlattr *tb[],
-> > >   			       struct net_device *dev,
-> > > -			       const unsigned char *addr, u16 vid)
-> > > +			       const unsigned char *addr, u16 vid, struct
-> > > netlink_ext_ack *extack)
-> > >   {
-> > >   	struct ocelot_port_private *priv = netdev_priv(dev);
-> > >   	struct ocelot_port *ocelot_port = &priv->port;
-> > >   	struct ocelot *ocelot = ocelot_port->ocelot;
-> > >   	int port = priv->chip_port;
-> > >
-> > > -	return ocelot_fdb_del(ocelot, port, addr, vid, ocelot_port->bridge);
-> > > +	return ocelot_fdb_del(ocelot, port, addr, vid, ocelot_port->bridge,
-> > > extack);
-> > >   }
-> > >
-> > >   static int ocelot_port_fdb_dump(struct sk_buff *skb,
-> > > diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c
-> > > b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c
-> > > index d320567b2cca..51fa23418f6a 100644
-> > > --- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c
-> > > +++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c
-> > > @@ -368,7 +368,7 @@ static int qlcnic_set_mac(struct net_device *netdev,
-> > > void *p)
-> > >
-> > >   static int qlcnic_fdb_del(struct ndmsg *ndm, struct nlattr *tb[],
-> > >   			struct net_device *netdev,
-> > > -			const unsigned char *addr, u16 vid)
-> > > +			const unsigned char *addr, u16 vid, struct
-> > > netlink_ext_ack *extack)
-> > >   {
-> > >   	struct qlcnic_adapter *adapter = netdev_priv(netdev);
-> > >   	int err = -EOPNOTSUPP;
-> > > diff --git a/drivers/net/macvlan.c b/drivers/net/macvlan.c
-> > > index 069e8824c264..ffd34d9f7049 100644
-> > > --- a/drivers/net/macvlan.c
-> > > +++ b/drivers/net/macvlan.c
-> > > @@ -1017,7 +1017,7 @@ static int macvlan_fdb_add(struct ndmsg *ndm, struct
-> > > nlattr *tb[],
-> > >
-> > >   static int macvlan_fdb_del(struct ndmsg *ndm, struct nlattr *tb[],
-> > >   			   struct net_device *dev,
-> > > -			   const unsigned char *addr, u16 vid)
-> > > +			   const unsigned char *addr, u16 vid, struct
-> > > netlink_ext_ack *extack)
-> > >   {
-> > >   	struct macvlan_dev *vlan = netdev_priv(dev);
-> > >   	int err = -EINVAL;
-> > > diff --git a/drivers/net/vxlan/vxlan_core.c
-> > > b/drivers/net/vxlan/vxlan_core.c
-> > > index de97ff98d36e..cf2f60037340 100644
-> > > --- a/drivers/net/vxlan/vxlan_core.c
-> > > +++ b/drivers/net/vxlan/vxlan_core.c
-> > > @@ -1280,7 +1280,7 @@ int __vxlan_fdb_delete(struct vxlan_dev *vxlan,
-> > >   /* Delete entry (via netlink) */
-> > >   static int vxlan_fdb_delete(struct ndmsg *ndm, struct nlattr *tb[],
-> > >   			    struct net_device *dev,
-> > > -			    const unsigned char *addr, u16 vid)
-> > > +			    const unsigned char *addr, u16 vid, struct
-> > > netlink_ext_ack *extack)
-> > >   {
-> > >   	struct vxlan_dev *vxlan = netdev_priv(dev);
-> > >   	union vxlan_addr ip;
-> > > diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-> > > index 28ea4f8269d4..d0d2a8f33c73 100644
-> > > --- a/include/linux/netdevice.h
-> > > +++ b/include/linux/netdevice.h
-> > > @@ -1509,7 +1509,7 @@ struct net_device_ops {
-> > >   					       struct nlattr *tb[],
-> > >   					       struct net_device *dev,
-> > >   					       const unsigned char *addr,
-> > > -					       u16 vid);
-> > > +					       u16 vid, struct netlink_ext_ack
-> > > *extack);
-> > >   	int			(*ndo_fdb_dump)(struct sk_buff *skb,
-> > >   						struct netlink_callback *cb,
-> > >   						struct net_device *dev,
-> > > diff --git a/net/bridge/br_fdb.c b/net/bridge/br_fdb.c
-> > > index 6ccda68bd473..5bfce2e9a553 100644
-> > > --- a/net/bridge/br_fdb.c
-> > > +++ b/net/bridge/br_fdb.c
-> > > @@ -1110,7 +1110,7 @@ static int __br_fdb_delete(struct net_bridge *br,
-> > >   /* Remove neighbor entry with RTM_DELNEIGH */
-> > >   int br_fdb_delete(struct ndmsg *ndm, struct nlattr *tb[],
-> > >   		  struct net_device *dev,
-> > > -		  const unsigned char *addr, u16 vid)
-> > > +		  const unsigned char *addr, u16 vid, struct netlink_ext_ack
-> > > *extack)
-> > >   {
-> > >   	struct net_bridge_vlan_group *vg;
-> > >   	struct net_bridge_port *p = NULL;
-> > > diff --git a/net/bridge/br_private.h b/net/bridge/br_private.h
-> > > index 18ccc3d5d296..95348c1c9ce5 100644
-> > > --- a/net/bridge/br_private.h
-> > > +++ b/net/bridge/br_private.h
-> > > @@ -780,7 +780,7 @@ void br_fdb_update(struct net_bridge *br, struct
-> > > net_bridge_port *source,
-> > >   		   const unsigned char *addr, u16 vid, unsigned long flags);
-> > >
-> > >   int br_fdb_delete(struct ndmsg *ndm, struct nlattr *tb[],
-> > > -		  struct net_device *dev, const unsigned char *addr, u16 vid);
-> > > +		  struct net_device *dev, const unsigned char *addr, u16 vid,
-> > > struct netlink_ext_ack *extack);
-> > This is way too long (111 chars) and checkpatch should've complained about
-> > it.
-> > WARNING: line length of 111 exceeds 100 columns
-> > #234: FILE: net/bridge/br_private.h:782:
-> > +		  struct net_device *dev, const unsigned char *addr, u16 vid,
-> > struct netlink_ext_ack *extack);
->
-> I will fix it.
->
-> >
-> > >   int br_fdb_add(struct ndmsg *nlh, struct nlattr *tb[], struct net_device
-> > > *dev,
-> > >   	       const unsigned char *addr, u16 vid, u16 nlh_flags,
-> > >   	       struct netlink_ext_ack *extack);
-> > > diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
-> > > index 4041b3e2e8ec..99b30ae58a47 100644
-> > > --- a/net/core/rtnetlink.c
-> > > +++ b/net/core/rtnetlink.c
-> > > @@ -4223,7 +4223,7 @@ static int rtnl_fdb_del(struct sk_buff *skb, struct
-> > > nlmsghdr *nlh,
-> > >   		const struct net_device_ops *ops = br_dev->netdev_ops;
-> > >
-> > >   		if (ops->ndo_fdb_del)
-> > > -			err = ops->ndo_fdb_del(ndm, tb, dev, addr, vid);
-> > > +			err = ops->ndo_fdb_del(ndm, tb, dev, addr, vid,
-> > > extack);
-> > >
-> > >   		if (err)
-> > >   			goto out;
-> > > @@ -4235,7 +4235,7 @@ static int rtnl_fdb_del(struct sk_buff *skb, struct
-> > > nlmsghdr *nlh,
-> > >   	if (ndm->ndm_flags & NTF_SELF) {
-> > >   		if (dev->netdev_ops->ndo_fdb_del)
-> > >   			err = dev->netdev_ops->ndo_fdb_del(ndm, tb, dev, addr,
-> > > -							   vid);
-> > > +							   vid, extack);
-> > >   		else
-> > >   			err = ndo_dflt_fdb_del(ndm, tb, dev, addr, vid);
-> > >
-> > > --
-> > > 2.36.0
-> > >
->
->
---8323329-513187066-1650867148=:2759--

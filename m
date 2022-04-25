@@ -2,101 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61A8650DA47
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 09:38:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D582F50DA44
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 09:38:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239680AbiDYHlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 03:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46058 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238869AbiDYHlT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S238211AbiDYHlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 25 Apr 2022 03:41:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 85DF212ACE
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 00:38:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650872295;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=D4+EWp9YScvG0/opJ/baqbMoZiCpKGj3I6/h6CC0ZAI=;
-        b=QwKT+GN3wCRoZHpAz4fJNodwCQig0Qb2WES9Q4dCrL925MYg2vp/N/8OV0ZRa9Ag1caUX2
-        jSTRS8pQ70o+n69OVK8mDNQRWFbo/dQXatqcbgGOeGnKcVD7qzpcAlNjzTSXB3I4bRVtU3
-        6QzGHKzAto2+NpNUfEgMqIHvCVi8P18=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-473-sWGJKalkPl6wkzxmadEVYg-1; Mon, 25 Apr 2022 03:38:14 -0400
-X-MC-Unique: sWGJKalkPl6wkzxmadEVYg-1
-Received: by mail-wm1-f70.google.com with SMTP id c125-20020a1c3583000000b0038e3f6e871aso6406788wma.8
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 00:38:13 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232011AbiDYHlR (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 25 Apr 2022 03:41:17 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D69C012AE3
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 00:38:10 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id r13so27924158ejd.5
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 00:38:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9fsgNEjpNoYMmfQvb9peCMkx3uLXtH/RETf0fq38iDY=;
+        b=IQRJVVQ4cUCgFprCDj8PrbLxIBblEhucXMHvx9dN7Wy7nHHmon9c1dzK9NufC/qMdj
+         Rn7ec4oSFwafEV7TYki+o8Nj6yMVzEWt3pGVbZOalDdbX1KDVpE/9lqD/D6G429HuiXx
+         90gmmSMw8c4JUebDxS735ZUbSx7fZXb25nEv0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=D4+EWp9YScvG0/opJ/baqbMoZiCpKGj3I6/h6CC0ZAI=;
-        b=Qm6d1+rt3hqBMXKbfI4X28kqlg0mP6/9+7APWoIcMKYXqQ/lyiMT/CLq6jJPS8dJ9M
-         zIMSOorxwCwSgYLw0uCk8DuUYBYQk0XODGXy9GQEUGcJ/o0Kpg4uWzhoKFkqgyVkTMct
-         hdDhTi04jnwMPMaSn0x99f6FPvO3UksK57FkvNtb3WRBUyIODC6MsjXq9aMY1RbYTwdC
-         f6XLW1yUYUPBgor8sICCjUCZlqTZv3+NMPdrYCTPREd9yPrjUVFZXa48zpcK5mJ+/Tme
-         MLC2D79JzVsGOUC6WfygfBU26anUaS/3FMvUrLPY14DFkTr9WPY4r3TA20F8rq0w2Vcu
-         Tj9g==
-X-Gm-Message-State: AOAM531/ZtdWOXkftLjD6m4OauAkuhtgHm5dB7HWV1ea9ct5PMxnlSOd
-        EzfktyxJltyGwfqdz07PmTmNH0pr9vCieRVMS0/21NyLm2TMCHxiNgvjWPYpcNfYl0zyoJXlgtc
-        iEp3ln5M6HJ8tGNSUuU5E1hOS
-X-Received: by 2002:a05:600c:1c90:b0:393:e5b9:b567 with SMTP id k16-20020a05600c1c9000b00393e5b9b567mr8792579wms.27.1650872292386;
-        Mon, 25 Apr 2022 00:38:12 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyGrMqdIG1qplpHlWo0bNbUMWHaIb+N0Tidl5Idj4Oc/xX/CaDQW7fkXG1PkG7Hd/M5o1cGWw==
-X-Received: by 2002:a05:600c:1c90:b0:393:e5b9:b567 with SMTP id k16-20020a05600c1c9000b00393e5b9b567mr8792555wms.27.1650872292152;
-        Mon, 25 Apr 2022 00:38:12 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c700:fc00:490d:ed6a:8b22:223a? (p200300cbc700fc00490ded6a8b22223a.dip0.t-ipconnect.de. [2003:cb:c700:fc00:490d:ed6a:8b22:223a])
-        by smtp.gmail.com with ESMTPSA id y6-20020a056000168600b0020a96d2cf8fsm9498136wrd.60.2022.04.25.00.37.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 00:38:09 -0700 (PDT)
-Message-ID: <f8ee624f-d1f0-342e-227b-8ffa9d133ba1@redhat.com>
-Date:   Mon, 25 Apr 2022 09:37:52 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9fsgNEjpNoYMmfQvb9peCMkx3uLXtH/RETf0fq38iDY=;
+        b=wWs8AKoWkLE1ZrMO43GRQFVIGQPZHKMcbYKC3IrWH24Yy6cIF8xwXGYemgO5ylZzcN
+         BH9lG65XUoDjukqLq1C8jWA/BEYTGRZh/q1Y4b2OLwsiMpveW8q9pi9HtAbZyIDTNIQJ
+         0WV3T6SGa6hRg1HhcLriR2aIx2X0c9zrdddbKY/VMG2zYhAoq4sR0w/y4SL95Ty3x4fT
+         ZgLdBrfSa/3ZVfGjtO5bN4GYzHi9sj8JWKtvwGLlohfYnZBF1pKRCE0GltfTd70LIW/E
+         5mqYOgbLAYaPIpTUE1Fa4W8ihUklI//LjhSzNDbTQMnkAOytpnA3ifGh0rPqYA/v3KMe
+         +s7g==
+X-Gm-Message-State: AOAM532/UhlYX/uajMMObd//HVQPK6o6lv0dVED1bO3GflwNqpwBi1q6
+        ZuRNA2S02goqZ6JVJhS4TfSH/FJFBPOuyP4ZPWiARQ==
+X-Google-Smtp-Source: ABdhPJzk6ikjS/u8XAFvzYYfuwBO1lXtPfgTUzBG2ikP6+kqSM+UWZWkQTnCEGerxhAYKMgQxGVDg0kJXlyuDOsACs4=
+X-Received: by 2002:a17:907:1c11:b0:6f0:d63:69b3 with SMTP id
+ nc17-20020a1709071c1100b006f00d6369b3mr15162745ejc.691.1650872289459; Mon, 25
+ Apr 2022 00:38:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCHv5 01/12] x86/boot/: Centralize __pa()/__va() definitions
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Mike Rapoport <rppt@kernel.org>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
- <20220425033934.68551-2-kirill.shutemov@linux.intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220425033934.68551-2-kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <20220322115148.3870-1-dharamhans87@gmail.com> <20220322115148.3870-2-dharamhans87@gmail.com>
+ <CAJfpegtunCe5hV1b9cKJgPk44B2SQgtK3RG5r2is8V5VrMYeNg@mail.gmail.com> <CACUYsyGmab57_efkXRXD8XvO6Stn4JbJM8+NfBHNKQ+FLcA7nA@mail.gmail.com>
+In-Reply-To: <CACUYsyGmab57_efkXRXD8XvO6Stn4JbJM8+NfBHNKQ+FLcA7nA@mail.gmail.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Mon, 25 Apr 2022 09:37:58 +0200
+Message-ID: <CAJfpegt5qWE4UepoDj9QBuT--ysT6+7E-6ZQvNeZ+bODRHHCvg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] FUSE: Implement atomic lookup + open
+To:     Dharmendra Hans <dharamhans87@gmail.com>
+Cc:     linux-fsdevel@vger.kernel.org,
+        fuse-devel <fuse-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org, Dharmendra Singh <dsingh@ddn.com>,
+        Bernd Schubert <bschubert@ddn.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,18 +65,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.04.22 05:39, Kirill A. Shutemov wrote:
-> Replace multiple __pa()/__va() definitions with a single one in misc.h.
-> 
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> ---
+On Mon, 25 Apr 2022 at 07:26, Dharmendra Hans <dharamhans87@gmail.com> wrote:
 >
+> On Fri, Apr 22, 2022 at 8:59 PM Miklos Szeredi <miklos@szeredi.hu> wrote:
+> >
+> > On Tue, 22 Mar 2022 at 12:52, Dharmendra Singh <dharamhans87@gmail.com> wrote:
+> > >
+> > > From: Dharmendra Singh <dsingh@ddn.com>
+> > >
+> > > There are couple of places in FUSE where we do agressive
+> > > lookup.
+> > > 1) When we go for creating a file (O_CREAT), we do lookup
+> > > for non-existent file. It is very much likely that file
+> > > does not exists yet as O_CREAT is passed to open(). This
+> > > lookup can be avoided and can be performed  as part of
+> > > open call into libfuse.
+> > >
+> > > 2) When there is normal open for file/dir (dentry is
+> > > new/negative). In this case since we are anyway going to open
+> > > the file/dir with USER space, avoid this separate lookup call
+> > > into libfuse and combine it with open.
+> > >
+> > > This lookup + open in single call to libfuse and finally to
+> > > USER space has been named as atomic open. It is expected
+> > > that USER space open the file and fills in the attributes
+> > > which are then used to make inode stand/revalidate in the
+> > > kernel cache.
+> > >
+> > > Signed-off-by: Dharmendra Singh <dsingh@ddn.com>
+> > > ---
+> > > v2 patch includes:
+> > > - disabled o-create atomicity when the user space file system
+> > >   does not have an atomic_open implemented. In principle lookups
+> > >   for O_CREATE also could be optimized out, but there is a risk
+> > >   to break existing fuse file systems. Those file system might
+> > >   not expect open O_CREATE calls for exiting files, as these calls
+> > >   had been so far avoided as lookup was done first.
+> >
+> > So we enabling atomic lookup+create only if FUSE_DO_ATOMIC_OPEN is
+> > set.  This logic is a bit confusing as CREATE is unrelated to
+> > ATOMIC_OPEN.   It would be cleaner to have a separate flag for atomic
+> > lookup+create.  And in fact FUSE_DO_ATOMIC_OPEN could be dropped and
+> > the usual logic of setting fc->no_atomic_open if ENOSYS is returned
+> > could be used instead.
+>
+> I am aware that ATOMIC_OPEN is not directly related to CREATE. But
+> This is more of feature enabling by using the flag. If we do not
+> FUSE_DO_ATOMIC_OPEN, CREATE calls would not know that it need to
+> optimize lookup calls otherwise as we know only from open call that
+> atomic open is implemented.
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+Right.  So because the atomic lookup+crteate would need a new flag to
+return whether the file was created or not, this is probably better
+implemented as a completely new request type (FUSE_ATOMIC_CREATE?)
 
+No new INIT flags needed at all, since we can use the ENOSYS mechanism
+to determine whether the filesystem has atomic open/create ops or not.
 
--- 
 Thanks,
-
-David / dhildenb
-
+Miklos

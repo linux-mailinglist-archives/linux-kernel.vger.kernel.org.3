@@ -2,75 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E0250E586
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:23:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E10050E58D
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:23:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243363AbiDYQZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 12:25:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58326 "EHLO
+        id S243372AbiDYQ0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 12:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243350AbiDYQZt (ORCPT
+        with ESMTP id S243288AbiDYQ0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 12:25:49 -0400
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE02F74DD4;
-        Mon, 25 Apr 2022 09:22:44 -0700 (PDT)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-e656032735so15329653fac.0;
-        Mon, 25 Apr 2022 09:22:44 -0700 (PDT)
+        Mon, 25 Apr 2022 12:26:11 -0400
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006A878FE6;
+        Mon, 25 Apr 2022 09:23:07 -0700 (PDT)
+Received: by mail-oi1-f173.google.com with SMTP id 12so17627481oix.12;
+        Mon, 25 Apr 2022 09:23:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=NJJ4MlQDWGdcucY/n+jk42HsIAR7AmzGGwh/ZWVfw90=;
-        b=H/CIOYgzAe/DdnaRgjdzfUDCOAHLHHkdNkBsdxTl0jy8+ITa/I+BEeXlRZsUn6wP/T
-         9YXuxBaj/OiKReVdnOvaRCRPOuc6ij5poue4KWZG0xn1PwAsESEj84AYHzDBpSdUaagR
-         WEBMxG7TsvMGT6u/VF+7+R2eCpcpIzL9foQCTwKLyRjIDEMPdwYAqQQkEy4jYGnNGg7Y
-         gx5+PdfX4U1sU/QLsF77KLpX4176wx4OvYSfe+JIOU+JR436mBe2n2b2MI6HjaCsbjEa
-         i6VUvPdobXZdnT6YpVAgs3aDwROGqnUtVmlMxeleZlmxkKUUXgcLqq1/mFcj8CEgwEqJ
-         qTvA==
-X-Gm-Message-State: AOAM533cmBb5l6+mLtHPpuse4ovOLzvh+QVUTFFk6erqPSNnzHV5katX
-        P0Cu1v+/xzbC8b9gtBhyJA==
-X-Google-Smtp-Source: ABdhPJz2Q8h6HJWppCeHvd5QUxPsDsw4tdPTaqARl3xywCV2yPWTYjUrsfGofEGxgbwQJXmVyZ8RPg==
-X-Received: by 2002:a05:6870:538e:b0:e6:7957:31ab with SMTP id h14-20020a056870538e00b000e6795731abmr8435293oan.89.1650903764148;
-        Mon, 25 Apr 2022 09:22:44 -0700 (PDT)
+        bh=lDcl2sN0B3cO0WiThw5+H3UGuxXX8o6v8eDh0eQ4Ajs=;
+        b=vKaRgmxxmVAHv3+DyNz16k6rkKz7otfpDM7zQVHdF4L3ziqTFZ/Rrke43Mz5Mmjfmz
+         6hSxLy1Zq3S/9qBsspD/U62s0aQzD8qiY1zYTQAhPD6LaAHfMDi9OZwQgYrJ0hqVbrI3
+         f7y0GE5jVLU3gjMVGzylubvV/qU3XBJyDquv5HCW6bSB4p8bcIxfYwamu3afpNcuFprm
+         OeC0zwPzt0Bz938cU2Z7IN7MeXKnRCCnjqoNTHoyIq7ESLgC9mj68U8NMFdRmwwoiYSr
+         Gd5pNcVGc/t2I+hxnGNhkhYAn65ZnSv4f+YylcyLtbm7fFrjlY3sCOJglbnC8wvnWzo6
+         Ux3w==
+X-Gm-Message-State: AOAM5321vJy2ZVcRAQ05BTj+5SVaTxwuAMdnIXFzTkuBghlyyI4D1tpJ
+        FSwIVi7OTiCsjK6YK6R1GgT+dSZtFw==
+X-Google-Smtp-Source: ABdhPJwJd2i2Q5DYrFdQU9C1yznqID18RyIZswfIlgeuRnWOJhp70Mxhw7j3awEePV0b/SsVIw8ZRQ==
+X-Received: by 2002:a05:6808:1b1f:b0:322:fb7a:8dbf with SMTP id bx31-20020a0568081b1f00b00322fb7a8dbfmr8405493oib.79.1650903787320;
+        Mon, 25 Apr 2022 09:23:07 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n62-20020acaef41000000b002ef646e6690sm3922328oih.53.2022.04.25.09.22.43
+        by smtp.gmail.com with ESMTPSA id bn41-20020a056808232900b003222f6e2ae8sm3751142oib.29.2022.04.25.09.23.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 09:22:43 -0700 (PDT)
-Received: (nullmailer pid 4000023 invoked by uid 1000);
-        Mon, 25 Apr 2022 16:22:42 -0000
-Date:   Mon, 25 Apr 2022 11:22:42 -0500
+        Mon, 25 Apr 2022 09:23:06 -0700 (PDT)
+Received: (nullmailer pid 4000741 invoked by uid 1000);
+        Mon, 25 Apr 2022 16:23:06 -0000
+Date:   Mon, 25 Apr 2022 11:23:06 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Peter Rosin <peda@axentia.se>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Lars-Peter Clausen <lars@metafoo.de>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-hwmon@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Add Atmel AT30TS74
-Message-ID: <YmbK0vQBGjiJIVZC@robh.at.kernel.org>
-References: <abe35ea9-1929-941a-6391-2ce1bc047161@axentia.se>
+        devicetree@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
+        Sean Nyekjaer <sean@geanix.com>, linux-iio@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: iio: ti-dac5571: Add ti,dac121c081
+Message-ID: <YmbK6nxoUuJAGfRE@robh.at.kernel.org>
+References: <90204a08-0c88-6c21-1492-6a5330184096@axentia.se>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <abe35ea9-1929-941a-6391-2ce1bc047161@axentia.se>
+In-Reply-To: <90204a08-0c88-6c21-1492-6a5330184096@axentia.se>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 25 Apr 2022 07:59:12 +0200, Peter Rosin wrote:
-> Document the Atmel (now Microchip) AT30TS74 which is an LM75 based
-> temperature sensor.
+On Mon, 25 Apr 2022 08:02:25 +0200, Peter Rosin wrote:
+> It works much the same as ti,dac7571, so it fits in the "family" even
+> if the name is a little bit different.
 > 
 > Signed-off-by: Peter Rosin <peda@axentia.se>
 > ---
->   Documentation/devicetree/bindings/hwmon/lm75.yaml | 1 +
+>   Documentation/devicetree/bindings/iio/dac/ti,dac5571.yaml | 1 +
 >   1 file changed, 1 insertion(+)
 > 
 

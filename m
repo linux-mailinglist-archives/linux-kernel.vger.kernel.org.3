@@ -2,135 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F03ED50E427
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:16:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1CC250E432
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242766AbiDYPTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 11:19:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52814 "EHLO
+        id S242804AbiDYPUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 11:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234730AbiDYPTV (ORCPT
+        with ESMTP id S242873AbiDYPUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 11:19:21 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8849F388
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 08:16:16 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2f4d9e92a0aso98811717b3.9
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 08:16:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=VgCwJNrSWLamwr26sf8FxhD/HG4cXOd5kOE1NHtb3Lc=;
-        b=n+3K4I/06qyEIawpbSiGFoxmIG2WckzHJniuNA3IrWYHIDmrQJPps1fZCv8oZNwSmM
-         djRwqb8qKIJdhL5flEOwoWrVf3bgw6r6rtBL6CiLjfJjgVeHt9rbRyZvi2iSQtcSgL0m
-         65ns45Ge3Iq2HNetZYhGnHOJBhbwo86ueRNoo7CPPkWaqJ5XyjXrA6fYqELFFEZSjet5
-         0OWyA1mggzBwOWq2YcP+eq1e9fceZkTFP0kFcxB7g7bqxE3NHOKo/3QkDrmhQK19CILR
-         xTvPRmKD1wfvVAMuwJG6R7P9g1gkSn/gsfhl21Nj9xXHYQ1wxqgQ0MMJhY0uXSFekZE/
-         Z5QQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=VgCwJNrSWLamwr26sf8FxhD/HG4cXOd5kOE1NHtb3Lc=;
-        b=DV+ak4Fd3O6PIQRMtScKSCnpmIyX71xIgsvPY8mA3hk7dxIFWqHqLlwV7tyn7OUEZ9
-         JKI+B8x38LHiGLkCfJkb2HPoBZ58OAlm7OFHVYtFsXmzUv4La0cKOpBQ+SrPzM9MD7J5
-         p8ipGrc72g9XlOML5QGghk+VFfQiNTHG7uQ8DTWTPkooyHJGO1/2dE9S0uCLbLd7/RtJ
-         2+f1JrfHX/trsxVDzwRHnv57EnLcZzepTc+AwAlJj1kgEYd0cAwz7RYGrnFt9yLVtpre
-         gCqud9HE7ei1VYFMiWUEqcAdAkjQnCqpGIavVTzuia+ZC168GHStpY92oqYF6ezjDLxu
-         dGqw==
-X-Gm-Message-State: AOAM533/kdobFn70p5CQLZJnqBlPqvDBvMZE0P1IbhcY8Gzip/jZW8Pg
-        jfrOw5dFYbaBqWObT3pyyibTLeLxRwIpgA==
-X-Google-Smtp-Source: ABdhPJwU4K+YuD6yyf2aAdrpYnOWuj48hDCtiv+bO71qwNSDnOZ34f4eBzdf+Yw8LRMOIjCH7Y8ILNnSfkLjmA==
-X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:28b])
- (user=shakeelb job=sendgmr) by 2002:a81:a4e:0:b0:2f7:d86c:e565 with SMTP id
- 75-20020a810a4e000000b002f7d86ce565mr6895908ywk.374.1650899775751; Mon, 25
- Apr 2022 08:16:15 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 15:16:12 +0000
-In-Reply-To: <CAJD7tkbhjJDNXcAmiAkGT8RCvBSz=SAfh7JR3AJysSz29hcEgw@mail.gmail.com>
-Message-Id: <20220425151612.izmxhkgugq6isyz3@google.com>
-Mime-Version: 1.0
-References: <20220421234426.3494842-1-yosryahmed@google.com>
- <20220421234426.3494842-5-yosryahmed@google.com> <20220423142801.gnvd42cdcsz4hpon@google.com>
- <CAJD7tkbhjJDNXcAmiAkGT8RCvBSz=SAfh7JR3AJysSz29hcEgw@mail.gmail.com>
-Subject: Re: [PATCH v4 4/4] selftests: cgroup: add a selftest for memory.reclaim
-From:   Shakeel Butt <shakeelb@google.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Chen Wandun <chenwandun@huawei.com>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>,
-        "Michal =?utf-8?Q?Koutn=C3=BD?=" <mkoutny@suse.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Dan Schatzberg <schatzberg.dan@gmail.com>,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Mon, 25 Apr 2022 11:20:15 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF996BABA4;
+        Mon, 25 Apr 2022 08:17:00 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2a02:3030:e:60d7:2277:ba57:a2c0:3])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sebastianfricke)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 114AF1F431C4;
+        Mon, 25 Apr 2022 16:16:59 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1650899819;
+        bh=UmvIinIkuSWeMLIsxuIACv1w2HkCY+hYynbPsEzqCY8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VrWg80IjgoqHrYPMdAIK4XgC7ycga10CVgMzJSwUh6/MpAlc7ThUdiaTXJHmypMcs
+         b3HRPJfCvhSVl+Ys8lOD/D8kxYV6nooBiZrscn1TC1J5mH/gikDYaHruqMPoSbNLs1
+         sU2DBsc5RVJdSw/98MRJfCYvTqz3pXhtBXYHK4OZYg2bCbLHIgjfbbZFpmI7QCyyRI
+         aVr4eIz5CHYFfYtvLiMNZo4gBsPPv0g7lTA3VHV2Slc9fCwAZ5aq8foJxORMaIJ/yp
+         rF9kwHq4HYbOnABwHmNRLBNemitd8/rBqYhJfFH7HKdOyGNzJ7TXL7kTL7kAoE6DUC
+         Aktb2kdzr77WA==
+Date:   Mon, 25 Apr 2022 17:16:56 +0200
+From:   Sebastian Fricke <sebastian.fricke@collabora.com>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     mchehab@kernel.org, hverkuil@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        nicolas.dufresne@collabora.com, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v5 06/17] media: uapi: HEVC: Change pic_order_cnt
+ definition in v4l2_hevc_dpb_entry
+Message-ID: <20220425151656.pphta4u6qa5kymoa@basti-XPS-13-9310>
+References: <20220407152940.738159-1-benjamin.gaignard@collabora.com>
+ <20220407152940.738159-7-benjamin.gaignard@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220407152940.738159-7-benjamin.gaignard@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 23, 2022 at 02:43:13PM -0700, Yosry Ahmed wrote:
-[...]
-> > > +     cg_run_nowait(memcg, alloc_pagecache_50M_noexit, (void *)(long)fd);
-> > > +     sleep(1);
-> >
-> > These sleep(1)s do not seem robust. Since kernel keeps the page cache
-> > around, you can convert anon to use tmpfs and use simple cg_run to
-> > trigger the allocations of anon (tmpfs) and file which will remain in
-> > memory even after return from cg_run.
-> 
-> Other tests in the file are also using sleep approach (see
-> test_memcg_min, although it retries for multiple times until
-> memory.current reaches an expected amount). In my experience it hasn't
-> been flaky running for multiple times on different machines, but I
-> agree it can be flaky (false negative).
-> 
+Hey Benjamin,
 
-If other tests are doing the same then ignore this comment for now.
-There should be a separate effort to move towards more deterministic
-approach for the tests instead of sleep().
+On 07.04.2022 17:29, Benjamin Gaignard wrote:
+>HEVC specifications say that:
 
-> I am not sure about the allocating file pages with cg_run, is it
-> guaranteed that the page cache will remain in memory until the test
-> ends? If it doesn't, it can also flake, but it would produce false
-> positives (the test could pass because the kernel drained page cache
-> for some other reason although the interface is not working
-> correctly).
-> 
-> In my personal opinion, false negative flakes are better than false
-> positives. At least currently the test explicitly and clearly fails if
-> the allocations are not successful. If we rely on the page cache
-> remaining until the test finishes then it could silently pass if the
-> interface is not working correctly.
-> 
-> There are a few ways we can go forward with this:
-> 1) Keep everything as-is, but print a message if the test fails due to
-> memory.current not reaching 100MB to make it clear that it didn't fail
-> due to a problem with the interface.
-> 2) Add a sleep/retry loop similar to test_memcg_min instead of sleeping once.
-> 3) Send a signal from forked children when they are done with the
-> allocation, and wait to receive this signal in the test to make sure
-> the allocation is completed.
-> 
-> In my opinion we should do (1) (and maybe (2)) for now as (3) could be
-> an overkill if the test is normal passing. Maybe add a comment about
-> (3) being an option in the future if the test flakes. Let me know what
-> you think?
+s/HEVC specifications say that:/
+   The HEVC specification describes the following:/
 
-I am ok with (1).
+Greetings,
+Sebastian
+
+>"PicOrderCntVal is derived as follows:
+>PicOrderCntVal = PicOrderCntMsb + slice_pic_order_cnt_lsb
+>The value of PicOrderCntVal shall be in the range of −231 to 231 − 1, inclusive."
+>
+>To match with these definitions change __u16 pic_order_cnt[2]
+>into __s32 pic_order_cnt_val.
+>
+>Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>---
+>version 5:
+>- change __u16 pic_order_cnt[2] into __s32 pic_order_cnt_val
+> drivers/staging/media/hantro/hantro_g2_hevc_dec.c | 4 ++--
+> drivers/staging/media/hantro/hantro_hevc.c        | 2 +-
+> drivers/staging/media/hantro/hantro_hw.h          | 4 ++--
+> drivers/staging/media/sunxi/cedrus/cedrus_h265.c  | 4 ++--
+> include/media/hevc-ctrls.h                        | 2 +-
+> 5 files changed, 8 insertions(+), 8 deletions(-)
+>
+>diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+>index c524af41baf5..6f3c774aa3d9 100644
+>--- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+>+++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+>@@ -386,7 +386,7 @@ static int set_ref(struct hantro_ctx *ctx)
+> 	 * pic_order_cnt[0] and ignore pic_order_cnt[1] used in field-coding.
+> 	 */
+> 	for (i = 0; i < decode_params->num_active_dpb_entries && i < ARRAY_SIZE(cur_poc); i++) {
+>-		char poc_diff = decode_params->pic_order_cnt_val - dpb[i].pic_order_cnt[0];
+>+		char poc_diff = decode_params->pic_order_cnt_val - dpb[i].pic_order_cnt_val;
+>
+> 		hantro_reg_write(vpu, &cur_poc[i], poc_diff);
+> 	}
+>@@ -413,7 +413,7 @@ static int set_ref(struct hantro_ctx *ctx)
+> 	dpb_longterm_e = 0;
+> 	for (i = 0; i < decode_params->num_active_dpb_entries &&
+> 	     i < (V4L2_HEVC_DPB_ENTRIES_NUM_MAX - 1); i++) {
+>-		luma_addr = hantro_hevc_get_ref_buf(ctx, dpb[i].pic_order_cnt[0]);
+>+		luma_addr = hantro_hevc_get_ref_buf(ctx, dpb[i].pic_order_cnt_val);
+> 		if (!luma_addr)
+> 			return -ENOMEM;
+>
+>diff --git a/drivers/staging/media/hantro/hantro_hevc.c b/drivers/staging/media/hantro/hantro_hevc.c
+>index b6ec86d03d91..fadd40768579 100644
+>--- a/drivers/staging/media/hantro/hantro_hevc.c
+>+++ b/drivers/staging/media/hantro/hantro_hevc.c
+>@@ -54,7 +54,7 @@ static void hantro_hevc_ref_init(struct hantro_ctx *ctx)
+> }
+>
+> dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx,
+>-				   int poc)
+>+				   s32 poc)
+> {
+> 	struct hantro_hevc_dec_hw_ctx *hevc_dec = &ctx->hevc_dec;
+> 	int i;
+>diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
+>index ed018e293ba0..a648c529662b 100644
+>--- a/drivers/staging/media/hantro/hantro_hw.h
+>+++ b/drivers/staging/media/hantro/hantro_hw.h
+>@@ -131,7 +131,7 @@ struct hantro_hevc_dec_hw_ctx {
+> 	struct hantro_aux_buf tile_bsd;
+> 	struct hantro_aux_buf ref_bufs[NUM_REF_PICTURES];
+> 	struct hantro_aux_buf scaling_lists;
+>-	int ref_bufs_poc[NUM_REF_PICTURES];
+>+	s32 ref_bufs_poc[NUM_REF_PICTURES];
+> 	u32 ref_bufs_used;
+> 	struct hantro_hevc_dec_ctrls ctrls;
+> 	unsigned int num_tile_cols_allocated;
+>@@ -337,7 +337,7 @@ int hantro_hevc_dec_init(struct hantro_ctx *ctx);
+> void hantro_hevc_dec_exit(struct hantro_ctx *ctx);
+> int hantro_g2_hevc_dec_run(struct hantro_ctx *ctx);
+> int hantro_hevc_dec_prepare_run(struct hantro_ctx *ctx);
+>-dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx, int poc);
+>+dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx, s32 poc);
+> int hantro_hevc_add_ref_buf(struct hantro_ctx *ctx, int poc, dma_addr_t addr);
+> void hantro_hevc_ref_remove_unused(struct hantro_ctx *ctx);
+> size_t hantro_hevc_chroma_offset(const struct v4l2_ctrl_hevc_sps *sps);
+>diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+>index 44f385be9f6c..d04521ffd920 100644
+>--- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+>+++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+>@@ -143,8 +143,8 @@ static void cedrus_h265_frame_info_write_dpb(struct cedrus_ctx *ctx,
+> 	for (i = 0; i < num_active_dpb_entries; i++) {
+> 		int buffer_index = vb2_find_timestamp(vq, dpb[i].timestamp, 0);
+> 		u32 pic_order_cnt[2] = {
+>-			dpb[i].pic_order_cnt[0],
+>-			dpb[i].pic_order_cnt[1]
+>+			dpb[i].pic_order_cnt_val & 0xffff,
+>+			(dpb[i].pic_order_cnt_val >> 16) & 0xffff
+> 		};
+>
+> 		cedrus_h265_frame_info_write_single(ctx, i, dpb[i].field_pic,
+>diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
+>index b3540167df9e..2812778b41f4 100644
+>--- a/include/media/hevc-ctrls.h
+>+++ b/include/media/hevc-ctrls.h
+>@@ -138,7 +138,7 @@ struct v4l2_hevc_dpb_entry {
+> 	__u64	timestamp;
+> 	__u8	flags;
+> 	__u8	field_pic;
+>-	__u16	pic_order_cnt[2];
+>+	__s32	pic_order_cnt_val;
+> 	__u8	padding[2];
+> };
+>
+>-- 
+>2.32.0
+>

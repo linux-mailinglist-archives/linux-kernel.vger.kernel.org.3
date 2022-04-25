@@ -2,46 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BEB450E54C
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:12:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 332DD50E553
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243253AbiDYQPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 12:15:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46676 "EHLO
+        id S238305AbiDYQQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 12:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240524AbiDYQP3 (ORCPT
+        with ESMTP id S237393AbiDYQQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 12:15:29 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A712119EC1
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 09:12:24 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E5EF31FB;
-        Mon, 25 Apr 2022 09:12:23 -0700 (PDT)
-Received: from airbuntu (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5AD7B3F774;
-        Mon, 25 Apr 2022 09:12:22 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 17:12:09 +0100
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Xuewen Yan <xuewen.yan94@gmail.com>
-Cc:     Xuewen Yan <xuewen.yan@unisoc.com>, dietmar.eggemann@arm.com,
-        lukasz.luba@arm.com, rafael@kernel.org, viresh.kumar@linaro.org,
-        mingo@redhat.com, peterz@infradead.org, vincent.guittot@linaro.org,
-        rostedt@goodmis.org, linux-kernel@vger.kernel.org,
-        di.shen@unisoc.com
-Subject: Re: [PATCH] sched: Take thermal pressure into account when determine
- rt fits capacity
-Message-ID: <20220425161209.ydugtrs3b7gyy3kk@airbuntu>
-References: <20220407051932.4071-1-xuewen.yan@unisoc.com>
- <20220420135127.o7ttm5tddwvwrp2a@airbuntu>
- <CAB8ipk-tWjkeAbV=BDhNy04Yq6rdLf80x_7twuLV=HqT4nc1+w@mail.gmail.com>
- <20220421161509.asz25zmh25eurgrk@airbuntu>
- <CAB8ipk_rZnwDrMaY-zJxR3pByYWD1XOP2waCgU9DZzQNpCN2zA@mail.gmail.com>
+        Mon, 25 Apr 2022 12:16:35 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C907411C987
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 09:13:30 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id w16so9332067ejb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 09:13:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GlOlAhS+OLlgHOZ0Skxe6Lfb/bGYsvoHqLs8XtmumJU=;
+        b=SnnXtcb27udbuQaeffIv6evHq0/Gn57swPViAVrmSy/us95OXTrnJeAdcz7cFH4lBn
+         TfMg85bpUIf4t++h8FJ3BksIiqxjMZFojsl8fkcKxQ6WqAyWi2H1osm+qjhhpXSb2xSf
+         eGF8nCIh46iZUcoBnjalnAO3SXG9fhhn9QHxIOlRVxW4dnR4jxmPJLxIE+j8zd6f4rKb
+         KPJsQnt+MO8GsbvO2lz2d38G/P6GoNlXVYP9nBMiq3hbc+DGbRPnaid66Rz8+r5lW0PP
+         CtK1dh/9TmhksmpMA05tGRcT7xyomeNpdbObbYJoQWBGHVcNESCVfCwLTUPm27eKa9OC
+         yPoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GlOlAhS+OLlgHOZ0Skxe6Lfb/bGYsvoHqLs8XtmumJU=;
+        b=T3C9xpRQF0ibV+VR1ryDtwsXy4wNZzdYdZL1pfylvzOWnN7Sl2rdQcLGIZ49JRuRm/
+         gYXX7dHJ/L+QbrzA0ubcGjUxOSG6eAzP2E9zRJM2eeZoOZpNJNKP6uXEaaKYR78a0cHv
+         RRzyX1iwUN2s+2makhhdbgxbIkmY/7Y5EQDa583A2pUPS8KZSZWLZUeNxGlO3RADQkd3
+         RuNT/IpK8Q3GpULBQIMJ3Kg6vC9jalYS+dgevHaI1ogFZyYZyH0khKfWHLSPCpQjirbN
+         Ylr/tDIERfwuxgVy6eLMk+pHCp+XAegbCCdNAZTtoIEHvt39etlNzGUiaZMuNL2jEOQv
+         5dkg==
+X-Gm-Message-State: AOAM530QQk6SYENLiKHGANBvSxkvPhJl+LuOZ7ogS7ibt/7HBYmDDyQ4
+        HHXvUr9/fr2uwYBYWZoIVchIJQ==
+X-Google-Smtp-Source: ABdhPJyOGh9q3n9fkZwfv1B3DW38Srr0+LaLCQTU7rtck/9ORV637dA3G4znxrSrihaNj4rdwot81w==
+X-Received: by 2002:a17:907:2da8:b0:6f3:75e1:f9b1 with SMTP id gt40-20020a1709072da800b006f375e1f9b1mr10916437ejc.139.1650903209383;
+        Mon, 25 Apr 2022 09:13:29 -0700 (PDT)
+Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id o22-20020a170906289600b006e44a0c1105sm3763114ejd.46.2022.04.25.09.13.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 09:13:28 -0700 (PDT)
+Date:   Mon, 25 Apr 2022 17:13:02 +0100
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>, robin.murphy@arm.com,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86 <x86@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        iommu <iommu@lists.linux-foundation.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>, zhangfei.gao@linaro.org,
+        Thomas Gleixner <tglx@linutronix.de>, will@kernel.org
+Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
+ allocation and free it on mm exit
+Message-ID: <YmbIjnHtibY7n4Wb@myrica>
+References: <tencent_76E043C4D1B6A21A5253579A61034107EB06@qq.com>
+ <tencent_7477100F8A445C6CAFA8F13601A55134480A@qq.com>
+ <YmJ/WA6KAQU/xJjA@myrica>
+ <tencent_A4E83BA6071B2204B6F5D4E69A50D21C1A09@qq.com>
+ <YmLOznyBF0f7COYT@myrica>
+ <tencent_2922DAB6F3D5789A1CD3A21A843B4007ED09@qq.com>
+ <Yman5hLomw9/c+bi@myrica>
+ <76ec6342-0d7c-7c7b-c132-2892e4048fa1@intel.com>
+ <YmavoKkVu+hd+x0M@myrica>
+ <20220425083444.00af5674@jacob-builder>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAB8ipk_rZnwDrMaY-zJxR3pByYWD1XOP2waCgU9DZzQNpCN2zA@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220425083444.00af5674@jacob-builder>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,150 +91,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/25/22 09:31, Xuewen Yan wrote:
-> On Fri, Apr 22, 2022 at 12:15 AM Qais Yousef <qais.yousef@arm.com> wrote:
-> > Is it okay to share what the capacities of the littles, mediums and bigs on
-> > your system? And how they change under worst case scenario thermal pressure?
-> > Only IF you have these numbers handy :-)
+Hi Jacob,
+
+On Mon, Apr 25, 2022 at 08:34:44AM -0700, Jacob Pan wrote:
+> Hi Jean-Philippe,
 > 
-> Okay, the little/mid/big cpu scale capacity is 350/930/1024, but the
-> cpu frequency point is discrete, the big core's high freq point may is
-> just a few more than the mid core's highest.
-> In this case, once the thermal decrease the scaling_max_freq, the
-> maximum frequency of the large core is easily lower than that of the
-> medium core.
-> Of course, the corner case is due to the frequency design of the soc
-> and  our thermal algorithm.
-
-Okay, thanks for the info!
-
+> On Mon, 25 Apr 2022 15:26:40 +0100, Jean-Philippe Brucker
+> <jean-philippe@linaro.org> wrote:
 > 
-> >
-> > Is it actually an indication of a potential other problem if you swing into
-> > capacity inversion in the bigs that often? I've seen a lot of systems where the
-> > difference between the meds and bigs is small. But frequent inversion could be
-> > suspicious still.
-> >
-> > Do the littles and the mediums experience any significant thermal pressure too?
-> 
-> In our platform, it's not.
+> > On Mon, Apr 25, 2022 at 07:18:36AM -0700, Dave Hansen wrote:
+> > > On 4/25/22 06:53, Jean-Philippe Brucker wrote:  
+> > > > On Sat, Apr 23, 2022 at 07:13:39PM +0800, zhangfei.gao@foxmail.com
+> > > > wrote:  
+> > > >>>> On 5.17
+> > > >>>> fops_release is called automatically, as well as
+> > > >>>> iommu_sva_unbind_device. On 5.18-rc1.
+> > > >>>> fops_release is not called, have to manually call close(fd)  
+> > > >>> Right that's weird  
+> > > >> Looks it is caused by the fix patch, via mmget, which may add
+> > > >> refcount of fd.  
+> > > > Yes indirectly I think: when the process mmaps the queue,
+> > > > mmap_region() takes a reference to the uacce fd. That reference is
+> > > > released either by explicit close() or munmap(), or by exit_mmap()
+> > > > (which is triggered by mmput()). Since there is an mm->fd dependency,
+> > > > we cannot add a fd->mm dependency, so no mmget()/mmput() in
+> > > > bind()/unbind().
+> > > > 
+> > > > I guess we should go back to refcounted PASIDs instead, to avoid
+> > > > freeing them until unbind().  
+> > > 
+> > > Yeah, this is a bit gnarly for -rc4.  Let's just make sure there's
+> > > nothing else simple we can do.
+> > > 
+> > > How does the IOMMU hardware know that all activity to a given PASID is
+> > > finished?  That activity should, today, be independent of an mm or a
+> > > fd's lifetime.  
+> > 
+> > In the case of uacce, it's tied to the fd lifetime: opening an accelerator
+> > queue calls iommu_sva_bind_device(), which sets up the PASID context in
+> > the IOMMU. Closing the queue calls iommu_sva_unbind_device() which
+> > destroys the PASID context (after the device driver stopped all DMA for
+> > this PASID).
+> > 
+> For VT-d, it is essentially the same flow except managed by the individual
+> drivers such as DSA.
+> If free() happens before unbind(), we deactivate the PASIDs and suppress
+> faults from the device. When the unbind finally comes, we finalize the
+> PASID teardown. It seems we have a need for an intermediate state where
+> PASID is "pending free"?
 
-Good.
+Yes we do have that state, though I'm not sure we need to make it explicit
+in the ioasid allocator.
 
-> > It doesn't seem it'll cause a significant error, but still it seems to me this
-> > function wants the original capacity passed to it.
-> >
-> > There are similar questions to be asked since you modify sg_cpu->max. Every
-> > user needs to be audited if they're fine with this change or not.
-> >
-> > I'm not sure still what we are achieving here. You want to force schedutil not
-> > to request higher frequencies if thermal pressure is high? Should schedutil
-> > actually care? Shouldn't the cpufreq driver reject this request and pick the
-> > next best thing if it can't satisfy it? I could be missing something, I haven't
-> > looked that hard tbh :-)
-> 
-> I changed this just want to make it more responsive to the real
-> capacity of the cpu, if it will cause other problems, maybe it would
-> be better not to change it.:)
+Could we move mm_pasid_drop() to __mmdrop() instead of __mmput()?  For Arm
+we do need to hold the mm_count until unbind(), and mmgrab()/mmdrop() is
+also part of Lu's rework [1].
 
-There are others who can give you a better opinion. But AFAICS we're not fixing
-anything but risking breaking other things. So I vote for not to change it :)
+Thanks,
+Jean
 
-> > It depends on the severity of the problem. The simplest thing I can suggest is
-> > to check if the cpu is in capacity inversion state, and if it is, then make
-> > rt_task_fits_capacity() return false always.
-> >
-> > If we need a generic solution to handle thermal pressure omitting OPPs, then
-> > the search needs to become more complex. The proposal in this patch is not
-> > adequate because tasks that want to run at capacity_orig_of(cpu) will wrongly
-> > omit some cpus because of any tiny thermal pressure. For example if the
-> > capacity_orig_of(medium_cpu) = 700, and uclamp_min for RT is set to 700, then
-> > any small thermal pressure on mediums will cause these tasks to run on big cpus
-> > only, which is not what we want. Especially if these big cpus can end up in
-> > capacity inversion later ;-)
-> >
-> > So if we want to handle this case, then we need to ensure the search returns
-> > false only if
-> >
-> >         1. Thermal pressure results in real OPP to be omitted.
-> >         2. Another CPU that can provide this performance level is available.
-> >
-> > Otherwise we should still fit it on this CPU because it'll give us the closest
-> > thing to what was requested.
-> >
-> > I can think of 2 ways to implement this, but none of them seem particularly
-> > pretty :-/
-> 
-> Maybe as Lukasz Luba said:
-> 
-> https://lore.kernel.org/all/ae98a861-8945-e630-8d4c-8112723d1007@arm.com/
-> 
-> > Let's meet in the middle:
-> > 1) use the thermal PELT signal in RT:
-> > capacity = capacity_orig_of(cpu) - thermal_load_avg(cpu_rq(cpu))
-> > 2) introduce a more configurable thermal_pressure shifter instead
-> > 'sched_thermal_decay_shift', which would allow not only to make the
-> > decaying longer, but also shorter when the platform already might do
-> > that, to not cause too much traffic.
-> 
-> But even if this is changed, there will still be the same problem, I
-> look forward to Lukasz's patch:)
-
-This will not address my concern unless I missed something.
-
-The best (simplest) way forward IMHO is to introduce a new function
-
-	bool cpu_in_capacity_inversion(int cpu);
-
-(feel free to pick another name) which will detect the scenario you're in. You
-can use this function then in rt_task_fits_capacity()
-
-	diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-	index a32c46889af8..d48811a7e956 100644
-	--- a/kernel/sched/rt.c
-	+++ b/kernel/sched/rt.c
-	@@ -462,6 +462,9 @@ static inline bool rt_task_fits_capacity(struct task_struct *p, int cpu)
-		if (!static_branch_unlikely(&sched_asym_cpucapacity))
-			return true;
-
-	+       if (cpu_in_capacity_inversion(cpu))
-	+               return false;
-	+
-		min_cap = uclamp_eff_value(p, UCLAMP_MIN);
-		max_cap = uclamp_eff_value(p, UCLAMP_MAX);
-
-You'll probably need to do something similar in dl_task_fits_capacity().
-
-This might be a bit aggressive though as we'll steer away all RT tasks from
-this CPU (as long as there's another CPU that can fit it). I need to think more
-about it. But we could do something like this too
-
-	diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-	index a32c46889af8..f2a34946a7ab 100644
-	--- a/kernel/sched/rt.c
-	+++ b/kernel/sched/rt.c
-	@@ -462,11 +462,14 @@ static inline bool rt_task_fits_capacity(struct task_struct *p, int cpu)
-		if (!static_branch_unlikely(&sched_asym_cpucapacity))
-			return true;
-	 
-	+       cpu_cap = capacity_orig_of(cpu);
-	+
-	+       if (cpu_in_capacity_inversion(cpu))
-	+               cpu_cap -= thermal_load_avg(cpu_rq(cpu));
-	+
-		min_cap = uclamp_eff_value(p, UCLAMP_MIN);
-		max_cap = uclamp_eff_value(p, UCLAMP_MAX);
-	 
-	-       cpu_cap = capacity_orig_of(cpu);
-	-
-		return cpu_cap >= min(min_cap, max_cap);
-	 }
-	 #else
-
-Thoughts?
-
-
-Thanks!
-
---
-Qais Yousef
+[1] https://lore.kernel.org/linux-iommu/20220421052121.3464100-9-baolu.lu@linux.intel.com/

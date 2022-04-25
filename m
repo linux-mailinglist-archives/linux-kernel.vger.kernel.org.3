@@ -2,76 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5937050E57E
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5212150E582
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243333AbiDYQYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 12:24:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53314 "EHLO
+        id S243343AbiDYQZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 12:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243332AbiDYQYe (ORCPT
+        with ESMTP id S240823AbiDYQZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 12:24:34 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A406D1B6
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 09:21:30 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id z19so11802940iof.12
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 09:21:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=m8zyZFhgZtJWBx1ewY9EOqVFGvVP4XffFDuTR4TMpZg=;
-        b=MQGT7rHPHJlegzzdydwoJhuaK1pG/0OJnThzowwuLn6x+cXtb77D9y87kJTDstyih4
-         YK/CNOa++pAeVSwwTe6cUUrtkx09oMp5w3WBMvA1GfvwY0vxBhcovOYOaasRLYY1ARbM
-         OngZjpYsSL2SXEYYNa/u687tdECwchngQQkWc=
+        Mon, 25 Apr 2022 12:25:27 -0400
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671BB71A25;
+        Mon, 25 Apr 2022 09:22:22 -0700 (PDT)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-e2442907a1so16580715fac.8;
+        Mon, 25 Apr 2022 09:22:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=m8zyZFhgZtJWBx1ewY9EOqVFGvVP4XffFDuTR4TMpZg=;
-        b=z7u8AKq9V4EOT4MJXXrZmIRIVfSo9qUoiWGdqdvHpfT7wrobqYIzrgDapeL0L5fgDJ
-         eXFdnLewNrDWVJFP2SNwlhwjwlpkCDq6TnVeE44p9UShSvLw2lWAH5Fd3tdbalwRhxsA
-         3lAiVWGv22Qs9fUh26J36FkxHx/KWr+YilykBl/Z9Mv3aduJ0VsWZYzX6dqvKyFQTNht
-         HGlijnWpIiha60Y7f8ITkii7qqvwGw0xW8YibvtVBaKKvd14fXLggmysXYJKuAqoKc/h
-         OianOKMIs4rRrEfdXmAF5FcTmraaX2iPrujd6b/qdOFkNVwgtGK8O4wRP69iM0PvyZOe
-         Za1w==
-X-Gm-Message-State: AOAM5331rJEbOLlJ8W0EA9jlcq2THLN/eyHEk1tPRBfy1cyAr/18uVBE
-        1MxyPQ11mgZpFVkF6zoJQOoP7w==
-X-Google-Smtp-Source: ABdhPJyMkwLOWnY1zix4ts8sFxUiiA+CSi4WCWiBdfUop6aOA7TnBZaYztTUMenPZ4hB53BjOvzegw==
-X-Received: by 2002:a05:6638:41a0:b0:32a:90ae:f7a1 with SMTP id az32-20020a05663841a000b0032a90aef7a1mr7963693jab.101.1650903690100;
-        Mon, 25 Apr 2022 09:21:30 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id m8-20020a92cac8000000b002ca9d826c3fsm6495170ilq.34.2022.04.25.09.21.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 09:21:29 -0700 (PDT)
-Subject: Re: [PATCH] selftests/resctrl: Fix null pointer dereference on open
- failed
-To:     "Colin King (gmail)" <colin.i.king@gmail.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>, Babu Moger <babu.moger@amd.com>,
-        Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>,
-        linux-kselftest@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220424211536.1373878-1-colin.i.king@gmail.com>
- <04a35a47-d83a-67a1-5ed4-ba314c6e1ecf@linuxfoundation.org>
- <604ea061-c566-e032-67cf-9bc622aa76ae@gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <a238cdbb-e5fd-64f1-ea18-8ef2e7481d33@linuxfoundation.org>
-Date:   Mon, 25 Apr 2022 10:21:29 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4CENEZKLdazSfBwTXd/Wd5rug0RnZCb0GE0cZM8DZsw=;
+        b=IdR/kSsBa2TuG8roUhmM4ijt85cZP2kVzQgEM4YpqdxA44Qcuo4q6IleFXGbDCzdX3
+         8d/fSRMiH6EEWD/q+31ScR5fDILWJuSWEYf/e+ZW0B1mMwUNGm6Y5Sk1XOCKy+oIzA+j
+         bIIC8a15VKLNfIA36840ch1iaoKCEuHzlwubvSwkBasoIyKCV3sOnS/d+foiwz98hnm3
+         RGYEZCjuPWmaKJMT2LUjMv6rHKTfFdIzwXnNj6y1UsY6FVnoJ+qqjZD1iGp8Gf+ZYYEY
+         HeFYa3S+VWpwA+Z/dHuqYvD9pTICCelpH/dMpD0XyBrg/ndDp8osEmnRfXt/QsZslWDd
+         l4gA==
+X-Gm-Message-State: AOAM533gqysl+HFiBhgLj0/kkCF8vHfuxJEloBMegFyNNgEJIQCV36hy
+        Cv+KwMx9vZ5AJo/Fagp1+g==
+X-Google-Smtp-Source: ABdhPJyI/nEGtLPHWlc0Symt/VRUWTe4lUKlOBu98Q75GPEnylf//TQhRgBUI583eoUOFky3f9Ezxw==
+X-Received: by 2002:a05:6870:ac06:b0:e9:cba:68cc with SMTP id kw6-20020a056870ac0600b000e90cba68ccmr5631933oab.144.1650903741623;
+        Mon, 25 Apr 2022 09:22:21 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p17-20020a4a3651000000b0035d9b838f21sm4534439ooe.10.2022.04.25.09.22.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 09:22:21 -0700 (PDT)
+Received: (nullmailer pid 3999297 invoked by uid 1000);
+        Mon, 25 Apr 2022 16:22:20 -0000
+Date:   Mon, 25 Apr 2022 11:22:20 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Drew Fustini <dfustini@baylibre.com>
+Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Dave Gerlach <d-gerlach@ti.com>,
+        Tony Lindgren <tony@atomide.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Keerthy <j-keerthy@ti.com>
+Subject: Re: [PATCH 1/2] dt-bindings: wkup-m3-ipc: Add ti,scale-data-fw
+ property
+Message-ID: <YmbKvN00F6vGawpE@robh.at.kernel.org>
+References: <20220425052806.484590-1-dfustini@baylibre.com>
+ <20220425052806.484590-2-dfustini@baylibre.com>
 MIME-Version: 1.0
-In-Reply-To: <604ea061-c566-e032-67cf-9bc622aa76ae@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220425052806.484590-2-dfustini@baylibre.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,25 +69,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/25/22 10:06 AM, Colin King (gmail) wrote:
-> On 25/04/2022 16:51, Shuah Khan wrote:
->> On 4/24/22 3:15 PM, Colin Ian King wrote:
->>> Currently if opening /dev/null fails to open then file pointer fp
->>> is null and further access to fp via fprintf will cause a null
->>> pointer dereference. Fix this by returning a negative error value
->>> when a null fp is detected.
->>>
->>
->> How did you find this problem and how can it be reproduced? Is there
->> a case where test fails to open "/dev/null"?
+On Sun, Apr 24, 2022 at 10:28:05PM -0700, Drew Fustini wrote:
+> From: Dave Gerlach <d-gerlach@ti.com>
 > 
-> Found with static analysis, cppcheck. Open on /dev/null is unlikely to fail, but it's good to fail reliably rather than have a SIGSEGV :-)
+> Add documentation for ti,scale-data-fw property to enable I2C PMIC
+> voltage scaling during deep sleep. The property contains the name of a
+> binary file for the CM3 firmware to load.
 > 
+> Based on previous work by Russ Dill.
+> 
+> Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
+> Signed-off-by: Keerthy <j-keerthy@ti.com>
+> [dfustini: split from driver patch and convert to json-schema]
+> Signed-off-by: Drew Fustini <dfustini@baylibre.com>
+> ---
+>  .../devicetree/bindings/soc/ti/wkup-m3-ipc.yaml       | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/ti/wkup-m3-ipc.yaml b/Documentation/devicetree/bindings/soc/ti/wkup-m3-ipc.yaml
+> index 88d690de050c..d2c248d82384 100644
+> --- a/Documentation/devicetree/bindings/soc/ti/wkup-m3-ipc.yaml
+> +++ b/Documentation/devicetree/bindings/soc/ti/wkup-m3-ipc.yaml
+> @@ -40,6 +40,12 @@ description: |+
+>    override the pin's existing bias (pull-up/pull-down) and value (high/low) when
+>    IO isolation is active.
+>  
+> +  Support for I2C PMIC Voltage Scaling
+> +  ====================================
+> +  It is possible to pass the name of a binary file to load into the CM3 memory.
+> +  The binary data is the I2C sequences for the CM3 to send out to the PMIC
+> +  during low power mode entry.
+> +
+>  properties:
+>    compatible:
+>      enum:
+> @@ -67,6 +73,11 @@ properties:
+>        mbox_wkupm3 child node.
+>      maxItems: 1
+>  
+> +  ti,scale-data-fw:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    description:
+> +      Name of the firmware binary in /lib/firmware to copy to CM3 aux data
 
-I don't see how /dev/null open could fail here in this test.
-However, I will take this fix. Please add information how
-you found it and include the cppheck log in the commit log
-and send me v2.
+The location of firmware files is up to the OS.
 
-thanks,
--- Shuah
+Is there other firmware? If not, 'firmware-name' is the somewhat 
+standard property for this.
+
+What's the default name?
+
+> +
+>    ti,vtt-gpio-pin:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+>      description: GPIO pin connected to enable pin on VTT regulator
+> -- 
+> 2.32.0
+> 
+> 

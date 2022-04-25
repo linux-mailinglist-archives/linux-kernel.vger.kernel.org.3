@@ -2,128 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A76450E4F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:00:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 105C950E4FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:01:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243067AbiDYQDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 12:03:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55666 "EHLO
+        id S235955AbiDYQDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 12:03:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiDYQDL (ORCPT
+        with ESMTP id S243138AbiDYQDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 12:03:11 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC39A2FFC2;
-        Mon, 25 Apr 2022 09:00:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=tRaJqis/SWifEwnFIxuNq9dKtN4ay+SViNUuz6JWxmk=; b=ThIeBmQ7cVrq3qfftbtHsbnhFH
-        MiYIVhIeiwQ/zC36tF3MmFeJIOhZ44Dqen2123Qt3MHtjiUMCvgzTZMe09t+7P6rXQhYvtNg5n3CZ
-        bFJfNCoHoel9E7T0uxFlETsFL7flcOd06A9jeEvnoaiSxTpfA1B9vekbC8viaq2dZQ8Y=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nj17m-00HQ8g-4S; Mon, 25 Apr 2022 17:59:42 +0200
-Date:   Mon, 25 Apr 2022 17:59:42 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Marcel Ziswiler <marcel.ziswiler@toradex.com>
-Cc:     "linux-imx@nxp.com" <linux-imx@nxp.com>,
-        "peppe.cavallaro@st.com" <peppe.cavallaro@st.com>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "joabreu@synopsys.com" <joabreu@synopsys.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
-        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "festevam@gmail.com" <festevam@gmail.com>
-Subject: Re: net: stmmac: dwmac-imx: half duplex crash
-Message-ID: <YmbFblFCrGFND+h/@lunn.ch>
-References: <36ba455aad3e57c0c1f75cce4ee0f3da69e139a1.camel@toradex.com>
- <YmXIo6q8vVkL6zLp@lunn.ch>
- <5e51e11bbbf6ecd0ee23b4fd2edec98e6e7fbaa8.camel@toradex.com>
+        Mon, 25 Apr 2022 12:03:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05247DEEF
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 09:00:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0E857B8185C
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 16:00:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DC4CC385A4;
+        Mon, 25 Apr 2022 16:00:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650902420;
+        bh=sg3XtHPLSczY3NZ40BxP/EE3YmODP2FdrdZxozyy11c=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=Zsw+eJFOfD/PqY8ZV5Z5rIUxhV5Eb0R1Kk4OYj3xzAxB0hoMWjdvUVHPWKska8/OG
+         ZfNmYneTEbjO61WnAiGDKkS96/Et08nkWaexnVdjE/wRY6fS24uqOrRXyc8wGTUBNX
+         pOiPTjS5+E/kSCrQyDba18B4ejKn0dxZFjq4l/d8Eme1A++jqLjvYav/hfj/1FBaa3
+         nHHOrsMBPYM33dhRVpR+EZdoNyumyxzhmCD/mGGD3RtaagJ+o7r4ihuQE1xKONvFwE
+         KQB5bPLp9qWTCLxOkrs6FtZtya9n817UxKZfUCb4Zd7mw+mpvb+GQSm94q09fX0Fzp
+         2ciKp6qIFv7Jw==
+From:   Mark Brown <broonie@kernel.org>
+To:     codrin.ciubotariu@microchip.com, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org
+Cc:     tiwai@suse.com, sha@pengutronix.de, perex@perex.cz,
+        alexandre.belloni@bootlin.com
+In-Reply-To: <20220421125403.2180824-1-codrin.ciubotariu@microchip.com>
+References: <20220421125403.2180824-1-codrin.ciubotariu@microchip.com>
+Subject: Re: [PATCH 1/2] Revert "ASoC: dmaengine: do not use a NULL prepare_slave_config() callback"
+Message-Id: <165090241813.345430.3503254961552314811.b4-ty@kernel.org>
+Date:   Mon, 25 Apr 2022 17:00:18 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5e51e11bbbf6ecd0ee23b4fd2edec98e6e7fbaa8.camel@toradex.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Good point. I was blinded by NXP downstream which, while listing all incl. 10baseT/Half and 100baseT/Half as
-> supported link modes, also does not work. However, upstream indeed shows only full-duplex modes as supported:
+On Thu, 21 Apr 2022 15:54:02 +0300, Codrin Ciubotariu wrote:
+> This reverts commit 9a1e13440a4f2e7566fd4c5eae6a53e6400e08a4.
 > 
-> root@verdin-imx8mp-07106916:~# ethtool eth1
-> Settings for eth1:
->         Supported ports: [ TP MII ]
->         Supported link modes:   10baseT/Full 
->                                 100baseT/Full 
->                                 1000baseT/Full 
-
-So maybe we actually want ethtool to report -EINVAL when asked to do
-something which is not supported! Humm:
-
-https://elixir.bootlin.com/linux/latest/source/drivers/net/phy/phy.c#L783
-
-
-	/* We make sure that we don't pass unsupported values in to the PHY */
-	linkmode_and(advertising, advertising, phydev->supported);
-
-So maybe the unsupported mode got removed, and the PHY was asked to
-advertise nothing!
-
-Anyway, this is roughly there the check should go.
-
-> ...
+> As pointed out by Sascha Hauer, this patch changes:
+> if (pmc->config && !pcm->config->prepare_slave_config)
+>         <do nothing>
+> to:
+> if (pmc->config && !pcm->config->prepare_slave_config)
+>         snd_dmaengine_pcm_prepare_slave_config()
 > 
-> Once I remove them queues being setup via device tree it shows all modes as supported again:
-> 
-> root@verdin-imx8mp-07106916:~# ethtool eth1
-> Settings for eth1:
->         Supported ports: [ TP MII ]
->         Supported link modes:   10baseT/Half 10baseT/Full 
->                                 100baseT/Half 100baseT/Full 
->                                 1000baseT/Full 
-> ...
-> 
-> However, 10baseT/Half, while no longer just crashing, still does not seem to work right. Looking at wireshark
-> traces it does send packets but seems not to ever get neither ARP nor DHCP answers (as well as any other packet
-> for that matter).
+> [...]
 
-So the answers are on the wire, just not received? 
+Applied to
 
-> Looks like the same actually applies to 10baseT/Full as well. While 100baseT/Half and
-> 100baseT/Full work fine now.
-> 
-> Any idea what else could still be going wrong with them 10baseT modes?
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-I would use mii-tool to check the status of the PHY. Make sure it
-really has negotiated 10/Half mode. After that, it is very likely to
-be a MAC problem, and i don't think i can help you.
+Thanks!
 
-> On a side note, besides modifying the device tree for such single-queue setup being half-duplex capable, is
-> there any easier way? Much nicer would, of course, be if it justworkedTM (e.g. advertise all modes but once a
-> half-duplex mode is chosen revert to such single-queue operation). Then, on the other hand, who still uses
-> half-duplex communication in this day and age (;-p).
+[1/2] Revert "ASoC: dmaengine: do not use a NULL prepare_slave_config() callback"
+      commit: 660564fc9a92a893a14f255be434f7ea0b967901
+[2/2] ASoC: atmel: mchp-pdmc: set prepare_slave_config
+      commit: 2bde1985e39173d8cb64005dad6f34e9bee4c750
 
-You seem to need it for some reason!
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Anyway, it is just code. You have all the needed information in the
-adjust_link callback, so you could implement it.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-	    Andrew
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

@@ -2,130 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77C6550E06F
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 14:35:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C470650E073
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 14:36:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238480AbiDYMiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 08:38:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49788 "EHLO
+        id S236695AbiDYMiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 08:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241901AbiDYMhr (ORCPT
+        with ESMTP id S233066AbiDYMip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 08:37:47 -0400
-Received: from hutie.ust.cz (hutie.ust.cz [185.8.165.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C83AD115;
-        Mon, 25 Apr 2022 05:34:37 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1650890074; bh=sn38mP3GRcYFS204SS01F9po0IjaiD5EuJVQTsfix0c=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To;
-        b=qzxfZ3Vnf6IGzTPAEIKZUigZLKF+DgDhUpHC6GbPhg8VP+3Se4CCdtWbiDqK5s2Xm
-         K29Pj7BPaWZedmssU+FSgBeA5FqUPAlItY4SuEb+MGyi4q8mz/gn0A9Uz2NKw1Q39n
-         6v8X9tfBGgqVMS2EswXnoy7z992EBMZFhoG8EZB8=
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [RFC PATCH 3/5] HACK: ASoC: Tolerate N-cpus-to-M-codecs links
-From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik@cutebit.org>
-In-Reply-To: <YmaTHTKWAfM7FCcY@sirena.org.uk>
-Date:   Mon, 25 Apr 2022 14:34:33 +0200
-Cc:     =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <9F8BCBA8-5EE3-4F87-9518-91CB7AB4E077@cutebit.org>
-References: <20220331000449.41062-1-povik+lin@cutebit.org>
- <20220331000449.41062-4-povik+lin@cutebit.org>
- <YkrkbBNYULLgeS5w@sirena.org.uk>
- <904EB8A1-5561-4555-8030-B85703E24F2E@cutebit.org>
- <YmaTHTKWAfM7FCcY@sirena.org.uk>
-To:     Mark Brown <broonie@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 25 Apr 2022 08:38:45 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E147523A;
+        Mon, 25 Apr 2022 05:35:41 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1650890139;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/vQEOmjYp5zP3gjuT7wBOaXzYSIrBxAEj5YMTlb1R/I=;
+        b=o8c/8ctOn3hRtpFuQcOaom9ezcvPGYpfBCedt3LDDBiWCdrikhwQMmQok9kmSWJgMm9e2p
+        adq4gdCZSy/rh4tiGFbyD6TOOe9Z84qMVEm+Q1dYVHWaJhNoAF5PhrDyqWS20kmAdXZ+J4
+        p1PdeN6p5K2/KGjdVIfvt6WDK13l9hoPjdzNDIz5QY3NkKYFJJCsneTL3GpscfecvEgTjn
+        nKmZahwLJcGkBQhsJuoBt9KcC10LQC+PB1sDMSwMfUIJ805xYM+n7r6AlJRtJwAMyVWcKz
+        UnK/OvszVnCVg3XFOS2aoQ5CPwWr0HhMtfpON3D9HGGdaxb1nj9wEdjTw8ZzVw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1650890139;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/vQEOmjYp5zP3gjuT7wBOaXzYSIrBxAEj5YMTlb1R/I=;
+        b=cS3qPcRZ0So1KrcHk5gzjNJs+ZNm2h/e8l2sD2C8LPM3215wPbDQwTJECbmyTA+CBR0vZN
+        224jNe/Xnz5WRXCg==
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        arnd@arndb.de
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org
+Subject: Re: [PATCH v6 13/17] x86: use fallback for random_get_entropy()
+ instead of zero
+In-Reply-To: <20220423212623.1957011-14-Jason@zx2c4.com>
+References: <20220423212623.1957011-1-Jason@zx2c4.com>
+ <20220423212623.1957011-14-Jason@zx2c4.com>
+Date:   Mon, 25 Apr 2022 14:35:39 +0200
+Message-ID: <871qxl2vdw.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Apr 23 2022 at 23:26, Jason A. Donenfeld wrote:
 
-> On 25. 4. 2022, at 14:25, Mark Brown <broonie@kernel.org> wrote:
->=20
-> On Fri, Apr 22, 2022 at 04:06:06PM +0200, Martin Povi=C5=A1er wrote:
->>> On 4. 4. 2022, at 14:28, Mark Brown <broonie@kernel.org> wrote:
->=20
->>> We need to figure out an interface for describing which CODEC/CPU
->>> combinations are connected to each other.  I'm not seeing a great =
-way to
->>> do that right now, probably some side data table is going to be =
-needed,
->>> or perhaps the CPU DAI drivers can be persuaded to only have one DAI
->>> actually register and claim to support more channels?  I'm not sure =
-how
->>> a configuraiton like this is going to work at userspace level if the
->>> multiple CPU DAIs end up being visible...
->=20
->> To understand the issue better: How could the multiple CPU DAIs be
->> visible from userspace?
->=20
-> If you register two separate DAIs (well, links) with the API without
-> doing anything else the API will just expose them to userspace as two
-> separate things with no indication that they're related.
+Please follow the guidelines of the tip maintainers when touching x86
+code. https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#patch-subject
 
-Sure, but what I am addressing here is a single DAI link with multiple
-CPU DAIs, invoked in DT like this:
+> In the event that random_get_entropy() can't access a cycle counter or
+> similar, falling back to returning 0 is really not the best we can do.
+> Instead, at least calling random_get_entropy_fallback() would be
+> preferable, because that always needs to return _something_, even
+> falling back to jiffies eventually. It's not as though
+> random_get_entropy_fallback() is super high precision or guaranteed to
+> be entropic, but basically anything that's not zero all the time is
+> better than returning zero all the time.
+>
+> If CONFIG_X86_TSC=n, then it's possible that we're running on a 486
+> with no RDTSC, so we only need the fallback code for that case.
 
-	dai-link@0 {
-		link-name =3D "Speakers";
-		mclk-fs =3D <256>;
+There are also 586 CPUs which lack TSC.
 
-		cpu {
-			sound-dai =3D <&mca 0>, <&mca 1>;
-		};
-		codec {
-			sound-dai =3D <&speaker_left_woof1>,
-				<&speaker_right_woof1>,
-				<&speaker_left_tweet>,
-				<&speaker_right_tweet>,
-				<&speaker_left_woof2>,
-				<&speaker_right_woof2>;
-		};
-	};
+> While we're at it, fix up both the new function and the get_cycles()
+> function from which its derived to use cpu_feature_enabled() rather
+> than boot_cpu_has().
 
->> What about this interim solution: In case of N-to-M links we put in
->> the most restrictive condition for checking capture/playback stream
->> validity: we check all of the CPU DAIs. Whatever ends up being the
->> proper solution later can only be less restrictive than this.
->=20
-> That's not the issue here?
+Lot's of 'we' here. We are not doing anything.
 
-Well to me it looks like it is. Because if I invoke the DAI link like
-I quoted above, and the platform driver supports it, the =
-playback/capture
-stream validity check is the only place it breaks down. Notwithstanding
-this may be the wrong API as you wrote.
+https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#changelog
 
->> As a reminder what happens on the Macs: the platform driver drives
->> all the CPU-side I2S ports that belong to the link with the same =
-data,
->> so the particular CPU/CODEC wiring doesn=E2=80=99t matter.
->=20
-> Oh, that's not something I was aware of.  In that case this is the =
-wrong
-> API - you should be using DPCM to map one front end onto multiple back
-> ends (Kirkwood does something similar IIRC, there will be other =
-examples
-> but that's probably the simplest).  The back ends probably don't =
-really
-> need to know that they're on the same physical bus (if indeed they =
-are).
+> +static inline unsigned long random_get_entropy(void)
+> +{
+> +#ifndef CONFIG_X86_TSC
+> +	if (!cpu_feature_enabled(X86_FEATURE_TSC))
+> +		return random_get_entropy_fallback();
+> +#endif
 
-I guess I need to look into that.
+Please get rid of this ifdeffery. While you are right, that anything
+with CONFIG_X86_TSC=y should have a TSC, there is virt ....
 
+cpu_feature_enabled() is runtime patched and only evaluated before
+alternative patching, so the win of this ifdef is marginally, if even
+noticable.
+
+We surely can think about making TSC mandatory, but not selectively in a
+particalur context.
+
+Thanks,
+
+        tglx

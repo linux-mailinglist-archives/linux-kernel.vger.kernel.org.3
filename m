@@ -2,212 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A1A50D66C
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 03:00:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CA8750D670
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 03:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240063AbiDYBC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 21:02:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48222 "EHLO
+        id S235292AbiDYBEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 21:04:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235292AbiDYBCx (ORCPT
+        with ESMTP id S240068AbiDYBEs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 21:02:53 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE0B6D4C7;
-        Sun, 24 Apr 2022 17:59:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650848389; x=1682384389;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5Cq1Fl9CMgifsT97lU21ZUbbD/AKhEGdsuclScV7Qss=;
-  b=XKRyf/xFL1MntLe6WMw3hcGQdre+DyK0y+E8CbSO9WX9pbs0ChUrMVO4
-   mwSa+fPYp29RJrBwXZbLaDVo32Mn/9P5gRLUxew8zIr7A/8o/J5Fbojbr
-   j29E/fM5RARJlCfyaZt8ORnYgEXJbF1UzsrLGq5RuFnVUmhku+j5C9soK
-   u1lDLabNWbzFmUfcu1A+QZ89mXeeepqq5T6EL39jLHxJqPJQ7FCGQDI05
-   KoFbVuS3m5sGKDO7L1lQDSaP2mV7uV5woQzZDDhpHa7AoA9Pm2admjfKX
-   H7h4E1hz1WLV2RJN3sOsj+IanJ7H0tDCtjMRZI5iLUKpffWYrfx7JcujT
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="351553645"
-X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
-   d="scan'208";a="351553645"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 17:59:49 -0700
-X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
-   d="scan'208";a="675966787"
-Received: from hungyuan-mobl.amr.corp.intel.com (HELO localhost) ([10.212.88.155])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 17:59:48 -0700
-Date:   Sun, 24 Apr 2022 17:59:48 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, outreachy@lists.linux.dev,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH 4/4] Documentation/vm: Rework "Temporary Virtual Mappings"
-Message-ID: <YmXyhH7wAJo274WB@iweiny-desk3>
-References: <20220421180200.16901-1-fmdefrancesco@gmail.com>
- <20220421180200.16901-5-fmdefrancesco@gmail.com>
+        Sun, 24 Apr 2022 21:04:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8290F4B853
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 18:01:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650848504;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5murYanTtEXbPZyarPU70weW32pWscxaeP6vQe3sXWI=;
+        b=Nk8vKt9NxPLVeEFiEA7vFl0oTSwH5ZwQccvGwo1DHDeCyPH0TRKhslpYTflv/KGEuHGdAV
+        fmCK2Ny/JcTmrx6lnxQibDqu1ZVbdKaKTaKpw4KkZaWGuOFWEwx11Cmvvd6EM0fO7tB8Gp
+        SidHHmOc0aAudZZI5YOdFT4yVuYlIdk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-587-Cnei6zKlNruIH1kVOzyOwg-1; Sun, 24 Apr 2022 21:01:40 -0400
+X-MC-Unique: Cnei6zKlNruIH1kVOzyOwg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1EA4A1E18D44;
+        Mon, 25 Apr 2022 01:01:40 +0000 (UTC)
+Received: from [10.22.8.132] (unknown [10.22.8.132])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7A437145B96B;
+        Mon, 25 Apr 2022 01:01:39 +0000 (UTC)
+Message-ID: <cd0b2d8c-1bbb-1da5-89f5-51abf5a8a6ce@redhat.com>
+Date:   Sun, 24 Apr 2022 21:01:39 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220421180200.16901-5-fmdefrancesco@gmail.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] mm/memcg: Free percpu stats memory of dying memcg's
+Content-Language: en-US
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+References: <20220421145845.1044652-1-longman@redhat.com>
+ <YmGHYNuAp8957ouq@carbon> <112a4d7f-bc53-6e59-7bb8-6fecb65d045d@redhat.com>
+ <YmGbmrH/Hg1VJlUc@carbon> <58c41f14-356e-88dd-54aa-dc6873bf80ff@redhat.com>
+ <YmITEEdEbaKCK3BN@FVFYT0MHHV2J.usts.net>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <YmITEEdEbaKCK3BN@FVFYT0MHHV2J.usts.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 08:02:00PM +0200, Fabio M. De Francesco wrote:
-> Extend and rework the "Temporary Virtual Mappings" section of the highmem.rst
-> documentation.
-> 
-> Despite the local kmaps were introduced by Thomas Gleixner in October 2020,
-> documentation was still missing information about them. These additions rely
-> largely on Gleixner's patches, Jonathan Corbet's LWN articles, comments by
-> Ira Weiny and Matthew Wilcox, and in-code comments from
-> ./include/linux/highmem.h.
-> 
-> 1) Add a paragraph to document kmap_local_page().
-> 2) Reorder the list of functions by decreasing order of preference of
-> use.
-> 3) Rework part of the kmap() entry in list.
-> 
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ira Weiny <ira.weiny@intel.com>
-> Cc: Matthew Wilcox <willy@infradead.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> ---
->  Documentation/vm/highmem.rst | 71 ++++++++++++++++++++++++++++++------
->  1 file changed, 60 insertions(+), 11 deletions(-)
-> 
-> diff --git a/Documentation/vm/highmem.rst b/Documentation/vm/highmem.rst
-> index e05bf5524174..960f61e7a552 100644
-> --- a/Documentation/vm/highmem.rst
-> +++ b/Documentation/vm/highmem.rst
-> @@ -50,26 +50,75 @@ space when they use mm context tags.
->  Temporary Virtual Mappings
->  ==========================
->  
-> -The kernel contains several ways of creating temporary mappings:
-> +The kernel contains several ways of creating temporary mappings. The following
-> +list shows them in order of preference of use.
->  
-> -* vmap().  This can be used to make a long duration mapping of multiple
-> -  physical pages into a contiguous virtual space.  It needs global
-> -  synchronization to unmap.
-> +* kmap_local_page().  This function is used to require short term mappings.
-> +  It can be invoked from any context (including interrupts) but the mappings
-> +  can only be used in the context which acquired them.
-> +
-> +  This function should be preferred, where feasible, over all the others.
->  
-> -* kmap().  This permits a short duration mapping of a single page.  It needs
-> -  global synchronization, but is amortized somewhat.  It is also prone to
-> -  deadlocks when using in a nested fashion, and so it is not recommended for
-> -  new code.
-> +  These mappings are per thread, CPU local (i.e., migration from one CPU to
-> +  another is disabled - this is why they are called "local"), but they don't
-> +  disable preemption. It's valid to take pagefaults in a local kmap region,
-> +  unless the context in which the local mapping is acquired does not allow
-> +  it for other reasons.
-> +
-> +  It is assumed that kmap_local_page() always returns the virtual address
+On 4/21/22 22:29, Muchun Song wrote:
+> On Thu, Apr 21, 2022 at 02:46:00PM -0400, Waiman Long wrote:
+>> On 4/21/22 13:59, Roman Gushchin wrote:
+>>> On Thu, Apr 21, 2022 at 01:28:20PM -0400, Waiman Long wrote:
+>>>> On 4/21/22 12:33, Roman Gushchin wrote:
+>>>>> On Thu, Apr 21, 2022 at 10:58:45AM -0400, Waiman Long wrote:
+>>>>>> For systems with large number of CPUs, the majority of the memory
+>>>>>> consumed by the mem_cgroup structure is actually the percpu stats
+>>>>>> memory. When a large number of memory cgroups are continuously created
+>>>>>> and destroyed (like in a container host), it is possible that more
+>>>>>> and more mem_cgroup structures remained in the dying state holding up
+>>>>>> increasing amount of percpu memory.
+>>>>>>
+>>>>>> We can't free up the memory of the dying mem_cgroup structure due to
+>>>>>> active references in some other places. However, the percpu stats memory
+>>>>>> allocated to that mem_cgroup is a different story.
+>>>>>>
+>>>>>> This patch adds a new percpu_stats_disabled variable to keep track of
+>>>>>> the state of the percpu stats memory. If the variable is set, percpu
+>>>>>> stats update will be disabled for that particular memcg. All the stats
+>>>>>> update will be forward to its parent instead. Reading of the its percpu
+>>>>>> stats will return 0.
+>>>>>>
+>>>>>> The flushing and freeing of the percpu stats memory is a multi-step
+>>>>>> process. The percpu_stats_disabled variable is set when the memcg is
+>>>>>> being set to offline state. After a grace period with the help of RCU,
+>>>>>> the percpu stats data are flushed and then freed.
+>>>>>>
+>>>>>> This will greatly reduce the amount of memory held up by dying memory
+>>>>>> cgroups.
+>>>>>>
+>>>>>> By running a simple management tool for container 2000 times per test
+>>>>>> run, below are the results of increases of percpu memory (as reported
+>>>>>> in /proc/meminfo) and nr_dying_descendants in root's cgroup.stat.
+>>>>> Hi Waiman!
+>>>>>
+>>>>> I've been proposing the same idea some time ago:
+>>>>> https://lore.kernel.org/all/20190312223404.28665-7-guro@fb.com/T/ .
+>>>>>
+>>>>> However I dropped it with the thinking that with many other fixes
+>>>>> preventing the accumulation of the dying cgroups it's not worth the added
+>>>>> complexity and a potential cpu overhead.
+>>>>>
+>>>>> I think it ultimately comes to the number of dying cgroups. If it's low,
+>>>>> memory savings are not worth the cpu overhead. If it's high, they are.
+>>>>> I hope long-term to drive it down significantly (with lru-pages reparenting
+>>>>> being the first major milestone), but it might take a while.
+>>>>>
+>>>>> I don't have a strong opinion either way, just want to dump my thoughts
+>>>>> on this.
+>>>> I have quite a number of customer cases complaining about increasing percpu
+>>>> memory usages. The number of dying memcg's can go to tens of thousands. From
+>>>> my own investigation, I believe that those dying memcg's are not freed
+>>>> because they are pinned down by references in the page structure. I am aware
+>>>> that we support the use of objcg in the page structure which will allow easy
+>>>> reparenting, but most pages don't do that and it is not easy to do this
+>>>> conversion and it may take quite a while to do that.
+>>> The big question is whether there is a memory pressure on those systems.
+>>> If yes, and the number of dying cgroups is growing, it's worth investigating.
+>>> It might be due to the sharing of pagecache pages and this will be ultimately
+>>> fixed with implementing of the pagecache reparenting. But it also might be due
+>>> to other bugs, which are fixable, so it would be great to understand.
+>>
+>> Pagecache reparenting will probably fix the problem that I have seen. Is
+>> someone working on this?
+>>
+> We also encountered dying cgroup issue on our servers for a long time.
+> I have worked on this for a while and proposed a resolution [1] based
+> on obj_cgroup APIs to charge the LRU pages.
+>
+> [1] https://lore.kernel.org/all/20220216115132.52602-1-songmuchun@bytedance.com/
 
-kmap_local_page() does return a kernel virtual address.  Why 'assume' this?
+Thanks for the pointer. I am interested in this patch series. Please cc 
+me if you need to generate a new revision.
 
-Do you mean it returns an address in the direct map?
+Cheers,
+Longman
 
-> +  of the mapping, therefore they won't ever fail.
-
-I don't think that returning a virtual address has anything to do with the
-assumption they will not fail.
-
-Why do you say this?
-
-> +
-> +  If a task holding local kmaps is preempted, the maps are removed on context
-> +  switch and restored when the task comes back on the CPU. As the maps are
-> +  strictly CPU local, it is guaranteed that the task stays on the CPU and
-> +  that the CPU cannot be unplugged until the local kmaps are released.
-> +
-> +  Nesting kmap_local_page() and kmap_atomic() mappings is allowed to a certain
-> +  extent (up to KMAP_TYPE_NR) but their invocations have to be strictly ordered
-> +  because the map implementation is stack based.
-
-I think I would reference the kmap_local_page() for more details on the
-ordering because there have been some conversions I've done which were
-complicated by this.
-
->  
->  * kmap_atomic().  This permits a very short duration mapping of a single
->    page.  Since the mapping is restricted to the CPU that issued it, it
->    performs well, but the issuing task is therefore required to stay on that
->    CPU until it has finished, lest some other task displace its mappings.
->  
-> -  kmap_atomic() may also be used by interrupt contexts, since it is does not
-> -  sleep and the caller may not sleep until after kunmap_atomic() is called.
-> +  kmap_atomic() may also be used by interrupt contexts, since it does not
-> +  sleep and the callers too may not sleep until after kunmap_atomic() is
-> +  called.
-> +
-> +  Each call of kmap_atomic() in the kernel creates a non-preemptible section
-> +  and disable pagefaults. This could be a source of unwanted latency, so it
-> +  should be only used if it is absolutely required, otherwise kmap_local_page()
-> +  should be used where it is feasible.
->  
-> -  It may be assumed that k[un]map_atomic() won't fail.
-> +  It is assumed that k[un]map_atomic() won't fail.
-> +
-> +* kmap().  This should be used to make short duration mapping of a single
-> +  page with no restrictions on preemption or migration. It comes with an
-> +  overhead as mapping space is restricted and protected by a global lock
-> +  for synchronization. When mapping is no more needed, the address that
-                                         ^^^^^^^^
-					 no longer
-
-> +  the page was mapped to must be released with kunmap().
-> +
-> +  Mapping changes must be propagated across all the CPUs. kmap() also
-> +  requires global TLB invalidation when the kmap's pool wraps and it might
-> +  block when the mapping space is fully utilized until a slot becomes
-> +  available. Therefore, kmap() is only callable from preemptible context.
-> +
-> +  All the above work is necessary if a mapping must last for a relatively
-> +  long time but the bulk of high-memory mappings in the kernel are
-> +  short-lived and only used in one place. This means that the cost of
-> +  kmap() is mostly wasted in such cases. kmap() was not intended for long
-> +  term mappings but it has morphed in that direction and its use is
-> +  strongly discouraged in newer code and the set of the preceding functions
-> +  should be preferred.
-
-Nice!
-
-Ira
-
-> +
-> +  On 64-bit systems, calls to kmap_local_page(), kmap_atomic() and kmap() have
-> +  no real work to do because a 64-bit address space is more than sufficient to
-> +  address all the physical memory whose pages are permanently mapped.
-> +
-> +* vmap().  This can be used to make a long duration mapping of multiple
-> +  physical pages into a contiguous virtual space.  It needs global
-> +  synchronization to unmap.
->  
->  
->  Cost of Temporary Mappings
-> -- 
-> 2.34.1
-> 

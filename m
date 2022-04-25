@@ -2,96 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BDCB50DD32
+	by mail.lfdr.de (Postfix) with ESMTP id BC1D850DD34
 	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 11:51:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236335AbiDYJy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 05:54:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45334 "EHLO
+        id S237490AbiDYJyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 05:54:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237519AbiDYJyG (ORCPT
+        with ESMTP id S236185AbiDYJy3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 05:54:06 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAAEF3FDA7
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 02:51:01 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id u3so20017342wrg.3
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 02:51:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JVRowZf7Y6lrQhVcOg9o/xME5QnsN42CZSfKjMBpsVY=;
-        b=AWblNvq5Vx8bJ2t3TobVYKoX3WPueHB8vpiAy+dfkpcOkIQTNoUMsRUaV3dE+EzTyp
-         1iUFBD5joI4TL1RPx1QYh0IaM+lWrrBAcM7glXzAdYGZ9LYm3eL4/ECGObXO4fiLYCUu
-         VkiNOmsHAAtqx+4hS+4DU6/4mk5y5VU04mVtfybkGAasaSSiP2SgrMXgNnUo8k++4cj7
-         S8SQJ1goIJTzkjpWexFH4JeyZFz8JX5zMcWdx22m9s+6gL8wE4FLjAMQXdbYSRZhueEr
-         SDrRHp1j5XfaeT6nbX1v/L47wWP/Uxip6iM+SBQ8EZMZEDJ/vsTMccNu/xQTRzbX6di4
-         SMhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JVRowZf7Y6lrQhVcOg9o/xME5QnsN42CZSfKjMBpsVY=;
-        b=mnREsw2HmlyppCTVoidRoc4/e+xIUBryZTuNkpsirdRHMTQ6J9ZGbnpV562/+32JtN
-         OPl7sHItRooeYCERfZVOQsUXyM390WwVjg8dwUdZoSmuW/PHD8CSMhKc+oIA1J8tWot0
-         4EAiGw6Nupo6q1Fofam0SX1GXATYu7p/KtoJ88X/c/R2rrFb4tYZ14Qa6xnR+RxvtUkl
-         govE+27+ZZhITnQqbPdBAmPeGAQa1oL0FbL1b10S4STn4iih40CGp6p2ogI83meadqq7
-         +2xf4shvwNcwmnqKJ5NmcR+E6MvGOJhupTgj7UeLyvN9BolRjV+4EgFiHNUEp3plP2Uj
-         BjEQ==
-X-Gm-Message-State: AOAM532k7J8KcBmJPLR+DDl4zcElLINYwtdDJqP8ILh+9MMCwNt0S75v
-        jKPVatLcWqXMCL30hRamFYA=
-X-Google-Smtp-Source: ABdhPJxmm/Mx+A7bBbPnwj5NepOH7XAXLalTSTTHWEpgUPro0+lSCgHw5J65b7YjaQSme3tO+vXj/Q==
-X-Received: by 2002:adf:d0d2:0:b0:20a:d81e:cb23 with SMTP id z18-20020adfd0d2000000b0020ad81ecb23mr5531373wrh.656.1650880260196;
-        Mon, 25 Apr 2022 02:51:00 -0700 (PDT)
-Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
-        by smtp.gmail.com with ESMTPSA id p6-20020a05600c358600b00393eaf94077sm3394482wmq.8.2022.04.25.02.50.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 02:50:59 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 10:50:57 +0100
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
-Subject: Re: Linux 5.18-rc4
-Message-ID: <YmZvAUakbWnyQEqa@debian>
-References: <CAHk-=whmtHMzjaVUF9bS+7vE_rrRctcCTvsAeB8fuLYcyYLN-g@mail.gmail.com>
+        Mon, 25 Apr 2022 05:54:29 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DFD30DF07
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 02:51:24 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A341E1FB;
+        Mon, 25 Apr 2022 02:51:24 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.74.208])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 622713F73B;
+        Mon, 25 Apr 2022 02:51:22 -0700 (PDT)
+Date:   Mon, 25 Apr 2022 10:51:19 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Chengming Zhou <zhouchengming@bytedance.com>, rostedt@goodmis.org
+Cc:     mingo@redhat.com, catalin.marinas@arm.com, will@kernel.org,
+        tglx@linutronix.de, dave.hansen@linux.intel.com,
+        broonie@kernel.org, ardb@kernel.org, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com, songmuchun@bytedance.com,
+        zhengqi.arch@bytedance.com
+Subject: Re: [PATCH v5 1/2] ftrace: cleanup ftrace_graph_caller enable and
+ disable
+Message-ID: <YmZvF9jXQ6jRCkQn@FVFF77S0Q05N>
+References: <20220420160006.17880-1-zhouchengming@bytedance.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=whmtHMzjaVUF9bS+7vE_rrRctcCTvsAeB8fuLYcyYLN-g@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220420160006.17880-1-zhouchengming@bytedance.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
-
-On Sun, Apr 24, 2022 at 03:22:59PM -0700, Linus Torvalds wrote:
-> Fairly slow and calm week - which makes me just suspect that the other
-> shoe will drop at some point.
+On Thu, Apr 21, 2022 at 12:00:05AM +0800, Chengming Zhou wrote:
+> The ftrace_[enable,disable]_ftrace_graph_caller() are used to do
+> special hooks for graph tracer, which are not needed on some ARCHs
+> that use graph_ops:func function to install return_hooker.
 > 
-> But maybe things are just going really well this release. It's bound
-> to happen _occasionally_, after all.
+> So introduce the weak version in ftrace core code to cleanup
+> in x86.
+> 
+> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
 
-My last night's mainline build failed for arm.
-Build was with af2d861d4cd2 ("Linux 5.18-rc4").
+FWIW:
 
-imxrt_defconfig -> failed
-lpc18xx_defconfig -> failed
-mps2_defconfig -> failed
-stm32_defconfig -> failed
-vf610m4_defconfig -> failed
+Acked-by: Mark Rutland <mark.rutland@arm.com>
 
-arm-linux-gnueabi-ld: mm/page_alloc.o: in function `alloc_large_system_hash':
-page_alloc.c:(.init.text+0xe7c): undefined reference to `vmalloc_huge'
+Steve, are you happy if this goes via the arm64 tree along with patch 2?
 
+Thanks,
+Mark.
 
---
-Regards
-Sudip
+> v4:
+>  - put weak ftrace_enable,disable_ftrace_graph_caller() in
+>    fgraph.c instead of ftrace.c as suggested by Steve.
+> 
+> v3:
+>  - consolidate two #if into a single #if, suggested by Steve. Thanks.
+> ---
+>  arch/x86/kernel/ftrace.c | 17 ++---------------
+>  kernel/trace/fgraph.c    | 18 ++++++++++++++++++
+>  2 files changed, 20 insertions(+), 15 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+> index 1e31c7d21597..b09d73c2ba89 100644
+> --- a/arch/x86/kernel/ftrace.c
+> +++ b/arch/x86/kernel/ftrace.c
+> @@ -579,9 +579,7 @@ void arch_ftrace_trampoline_free(struct ftrace_ops *ops)
+>  
+>  #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+>  
+> -#ifdef CONFIG_DYNAMIC_FTRACE
+> -
+> -#ifndef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
+> +#if defined(CONFIG_DYNAMIC_FTRACE) && !defined(CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS)
+>  extern void ftrace_graph_call(void);
+>  static const char *ftrace_jmp_replace(unsigned long ip, unsigned long addr)
+>  {
+> @@ -610,18 +608,7 @@ int ftrace_disable_ftrace_graph_caller(void)
+>  
+>  	return ftrace_mod_jmp(ip, &ftrace_stub);
+>  }
+> -#else /* !CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS */
+> -int ftrace_enable_ftrace_graph_caller(void)
+> -{
+> -	return 0;
+> -}
+> -
+> -int ftrace_disable_ftrace_graph_caller(void)
+> -{
+> -	return 0;
+> -}
+> -#endif /* CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS */
+> -#endif /* !CONFIG_DYNAMIC_FTRACE */
+> +#endif /* CONFIG_DYNAMIC_FTRACE && !CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS */
+>  
+>  /*
+>   * Hook the return address and push it in the stack of return addrs
+> diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
+> index 8f4fb328133a..289311680c29 100644
+> --- a/kernel/trace/fgraph.c
+> +++ b/kernel/trace/fgraph.c
+> @@ -30,6 +30,24 @@ int ftrace_graph_active;
+>  /* Both enabled by default (can be cleared by function_graph tracer flags */
+>  static bool fgraph_sleep_time = true;
+>  
+> +/*
+> + * archs can override this function if they must do something
+> + * to enable hook for graph tracer.
+> + */
+> +int __weak ftrace_enable_ftrace_graph_caller(void)
+> +{
+> +	return 0;
+> +}
+> +
+> +/*
+> + * archs can override this function if they must do something
+> + * to disable hook for graph tracer.
+> + */
+> +int __weak ftrace_disable_ftrace_graph_caller(void)
+> +{
+> +	return 0;
+> +}
+> +
+>  /**
+>   * ftrace_graph_stop - set to permanently disable function graph tracing
+>   *
+> -- 
+> 2.35.2
+> 

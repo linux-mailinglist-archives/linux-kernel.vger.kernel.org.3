@@ -2,97 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F4750E5B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:25:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A29E350E5CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:28:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232947AbiDYQ3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 12:29:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38828 "EHLO
+        id S239080AbiDYQat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 12:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243527AbiDYQ1x (ORCPT
+        with ESMTP id S243567AbiDYQaa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 12:27:53 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F9311F95D
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 09:24:49 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id a11so4030163pff.1
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 09:24:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Fy4scNdR+gQe8khm9Rf8E41vItskGz3mg6jdYBjtzmk=;
-        b=MAjwXVtS0TOSth3fYjCdTEttJJ5Dk25IYowuZJb4odyaSAWH+UPiIuqbb9ufRknlu3
-         KbXXbzOG5/8YVBro2WrgjiRxZ1707r9gW13Jr6pxpFmEPVoo6nomoygPlXyEwCnF2KAA
-         a813mlSQSL0uJ+Q33IarwNSLZm2mcPaeQfhavx7/bj5+eOhuuTx8m2MLaBkZRaQ+uEF1
-         /Y6IzkWpvj9pXwUmT1X2C3rZUu+YKuu06hlk1Fj1IbgBDYzAhGK0rEqh2buOuUKDhKTS
-         kc5H4g8dCAaCzwiM4MlE+o7aEdByk7yNeVleJj9LVZ0tJvFYiLx+PH7RNz5K06wbhHgR
-         +DvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Fy4scNdR+gQe8khm9Rf8E41vItskGz3mg6jdYBjtzmk=;
-        b=AEaaByHAyP3aoU7mo3ZvmGBM7uikOULQS8UDBNB4YjAzJWjwaXlY4SHqaDizMdKGy5
-         oqHN3tJUDkj8B/pjOLkK9qeN+HD5VrMMq+fgDZuDlaiYYBaKYY4U8Nl5cytBj+R6/gx/
-         OgceYmIl85RqjjnLoSWzbJdUyLN4yqIAiFw93sa/t7tSJUF0waBd5SJgPcDewbA/7cLe
-         CvuGMWss+Fa6Q0NYcr9PrN8LmNXjjsp0YPz8JbwnVUUHe04jvMIHsTdxmfBaPqTg+c7z
-         ABpz/BTQH3HPgtZKabM8RF/M+woNVm7RLrnWJ3Fl4g7HfBnQEMDd+uD0e6h0ZvgjyGvE
-         AP5w==
-X-Gm-Message-State: AOAM533hilH4h2T9vSsHX1C0rNmdkHGORatWEQMtL6NFX5Ox+bJbeQ6/
-        GDQde/naJz7hb43UhWwK5Kq7tQ==
-X-Google-Smtp-Source: ABdhPJy3+eXGqclAEFMNVelhhNbF0vgEqU5TGB4C+yC8sRaVH5zFyeHk8OdGfj3X4QNhjN1GPpxDCw==
-X-Received: by 2002:a63:a61:0:b0:39c:b654:b753 with SMTP id z33-20020a630a61000000b0039cb654b753mr15440285pgk.117.1650903889024;
-        Mon, 25 Apr 2022 09:24:49 -0700 (PDT)
-Received: from hermes.local (204-195-112-199.wavecable.com. [204.195.112.199])
-        by smtp.gmail.com with ESMTPSA id u2-20020a62d442000000b0050d404f837fsm3822645pfl.156.2022.04.25.09.24.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 09:24:48 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 09:24:46 -0700
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     Wells Lu <wellslutw@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, robh+dt@kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
-        pabeni@redhat.com, krzk+dt@kernel.org, roopa@nvidia.com,
-        andrew@lunn.ch, edumazet@google.com, wells.lu@sunplus.com
-Subject: Re: [PATCH net-next v9 2/2] net: ethernet: Add driver for Sunplus
- SP7021
-Message-ID: <20220425092446.477bd8f5@hermes.local>
-In-Reply-To: <1650882640-7106-3-git-send-email-wellslutw@gmail.com>
-References: <1650882640-7106-1-git-send-email-wellslutw@gmail.com>
-        <1650882640-7106-3-git-send-email-wellslutw@gmail.com>
+        Mon, 25 Apr 2022 12:30:30 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC5A8A315;
+        Mon, 25 Apr 2022 09:26:10 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 9FD96210E4;
+        Mon, 25 Apr 2022 16:26:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1650903968; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VUB+heCNyeRFdPDI1DhMrxZcGuxVYUwZDE80GwpHJU8=;
+        b=pdXu4C9WWm9PwhxJ4kncFBH/N6LpW+See8N92WAtqIGuzAwMFB2MW2lwZkGZStmGNMJT/S
+        Oql8ZjWpYrf8ogzL8VQ3cIPkfW8AWk8h4BuJHKGZWzp0ignZcWNfNucjWTl9vFEEoDD+tN
+        dJo8wa5/oF7v9fgW10I9mAzX1xSkm/g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1650903968;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VUB+heCNyeRFdPDI1DhMrxZcGuxVYUwZDE80GwpHJU8=;
+        b=kj1ovTZoxRmdmq25y5rwYeLhZBg+ACRAbP3a30Yt/bDVvCkDIQOoWuoBrgv7Mip8r98v41
+        2lUqmZqKseXVKkDg==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 8E7412C141;
+        Mon, 25 Apr 2022 16:26:08 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 3825DA0620; Mon, 25 Apr 2022 18:26:08 +0200 (CEST)
+Date:   Mon, 25 Apr 2022 18:26:08 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     "yukuai (C)" <yukuai3@huawei.com>
+Cc:     Jan Kara <jack@suse.cz>, paolo.valente@linaro.org, axboe@kernel.dk,
+        tj@kernel.org, linux-block@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH -next v2 2/5] block, bfq: add fake weight_counter for
+ weight-raised queue
+Message-ID: <20220425162608.feya66a5amdnsr4e@quack3.lan>
+References: <20220416093753.3054696-1-yukuai3@huawei.com>
+ <20220416093753.3054696-3-yukuai3@huawei.com>
+ <20220425094856.qgkhba2klguduxot@quack3.lan>
+ <a27b8c79-867f-9253-84db-1d39c964b3ed@huawei.com>
+ <4048cc0c-adc8-8097-4a40-762137c4c282@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4048cc0c-adc8-8097-4a40-762137c4c282@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 25 Apr 2022 18:30:40 +0800
-Wells Lu <wellslutw@gmail.com> wrote:
+On Mon 25-04-22 21:55:46, yukuai (C) wrote:
+> 在 2022/04/25 21:34, yukuai (C) 写道:
+> > 在 2022/04/25 17:48, Jan Kara 写道:
+> > > On Sat 16-04-22 17:37:50, Yu Kuai wrote:
+> > > > Weight-raised queue is not inserted to weights_tree, which makes it
+> > > > impossible to track how many queues have pending requests through
+> > > > weights_tree insertion and removel. This patch add fake weight_counter
+> > > > for weight-raised queue to do that.
+> > > > 
+> > > > Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> > > 
+> > > This is a bit hacky. I was looking into a better place where to hook to
+> > > count entities in a bfq_group with requests and I think
+> > > bfq_add_bfqq_busy()
+> > > and bfq_del_bfqq_busy() are ideal for this. It also makes better sense
+> > > conceptually than hooking into weights tree handling.
+> > > 
+> > Hi,
+> > 
+> > bfq_del_bfqq_busy() will be called when all the reqs in the bfqq are
+> > dispatched, however there might still some reqs are't completed yet.
+> > 
+> > Here what we want to track is how many bfqqs have pending reqs,
+> > specifically if the bfqq have reqs are't complted.
+> > 
+> > Thus I think bfq_del_bfqq_busy() is not the right place to do that.
+> 
+> BTW, there is a counter 'dispatched' in bfqq, how about we rename it
+> to 'inflight', and inc when adding req to bfqq, dec the same as
+> 'dispatched' ?
+> 
+> This way we can count bfqq when adding 'inflight' from 0 to 1, and
+> stop when decreasing 'inflight' from 1 to 0.
 
-> diff --git a/drivers/net/ethernet/sunplus/spl2sw_driver.h b/drivers/net/ethernet/sunplus/spl2sw_driver.h
-> new file mode 100644
-> index 000000000..5f177b3af
-> --- /dev/null
-> +++ b/drivers/net/ethernet/sunplus/spl2sw_driver.h
-> @@ -0,0 +1,12 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/* Copyright Sunplus Technology Co., Ltd.
-> + *       All rights reserved.
-> + */
-> +
-> +#ifndef __SPL2SW_DRIVER_H__
-> +#define __SPL2SW_DRIVER_H__
-> +
-> +#define SPL2SW_RX_NAPI_WEIGHT	16
-> +#define SPL2SW_TX_NAPI_WEIGHT	16
+Well, but 'dispatched' is used in quite a few places and it would require
+quite some thinking to decide which impact using 'inflight' has there...
+But we also have 'bfqq->entity.allocated' which is number of requests in
+some state associated with bfqq and we could use that. But as I wrote in my
+previous email, I'm not convinced it is really necessary...
 
-Why define your own? there is NAPI_POLL_WEIGHT already
-defined in netdevice.h
+								Honza
+
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

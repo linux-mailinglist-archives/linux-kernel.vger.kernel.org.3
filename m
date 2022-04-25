@@ -2,159 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A8450E9DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 22:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBCDE50E9F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 22:11:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245090AbiDYUFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 16:05:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51882 "EHLO
+        id S245137AbiDYUO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 16:14:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245074AbiDYUFH (ORCPT
+        with ESMTP id S233598AbiDYUOW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 16:05:07 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77AD6B0A52;
-        Mon, 25 Apr 2022 13:02:02 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id g6so8938530ejw.1;
-        Mon, 25 Apr 2022 13:02:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=Fmjs2qdPk3eUOBZHdhQG4JdB4/lCcC7aZeX3SYv+IQM=;
-        b=iSuKs2xrmd8iz5XESYCu2x1iYM3Rw3bmLCrVrR87JboXSJwZMsBDYmnrbC55MqXllw
-         LzlQP/jE//VPBJ8y3DG3wd7LUWZAoyad8tnokzf4/ehHqzqr5WRalsOH003OTr5nbkdZ
-         NWul1h1DZxEs+nkpe7yIKVMAXCBiFIJk5dVQLERACRWRpSmIHebRc6psouBc5QTUin6a
-         g4rulWV34hhDjvnQxmIH1mAfDkaEVKbLV+xRWAjtodbtdkeaucXKkneh/edxHLdShaQD
-         rx9ArWveSZ3aNJQhLePuJg5Yoy/TKqkwVkz9JjGWoH8HyWcjc/nPp1QclkSSlzk99xit
-         cfkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=Fmjs2qdPk3eUOBZHdhQG4JdB4/lCcC7aZeX3SYv+IQM=;
-        b=E+WlqTkPXg/d8yvOeaofkSxmB2ufzRcW0IfJ/LKNYQNwEq9AfM5POVEoLv4FVMT/0U
-         6Yfze/gi4jlg3IEIKMXCQOXx/Hpb+AqqO9cfLNjnbMmqqR3+xqz2GNA4Ub46kRJCp9b3
-         XFIPKoOsGZQbKoynz9gn3kIFljqw7UyFJxO0Md+lj1RyDj67xbyjsdSvTkr8Oct0iNNP
-         3y/i2J6RoMQuQpR7LXvDBT59k+T3qhNHkeeEWA55HiOQwxLSmDWm+yql9J2OntXHeLMa
-         YUEl5BE1h7WFtrSRqpqKjp+gSDXWIlaQfX4O/LxxDgWIHDsgJLtqVnAwZ3TmwxETkHSB
-         flag==
-X-Gm-Message-State: AOAM530GoAgZBEnGXLkau+T2B7g75h0yPSvA7cBV6rrDxZRWit/cp3E0
-        i9d10wFeOHDAA00TBafx2lcRRRIoC8tYHA==
-X-Google-Smtp-Source: ABdhPJzosQC/YjZvx2sjBZa0vexS/EYotPB9tax638U/Wlv4HVYKILUzHyIDDoAi0uroTYvvAK0btQ==
-X-Received: by 2002:a17:906:c1c1:b0:6ef:7bd7:a508 with SMTP id bw1-20020a170906c1c100b006ef7bd7a508mr17806427ejb.614.1650916920876;
-        Mon, 25 Apr 2022 13:02:00 -0700 (PDT)
-Received: from [192.168.3.2] (p5dd1ed70.dip0.t-ipconnect.de. [93.209.237.112])
-        by smtp.googlemail.com with ESMTPSA id 27-20020a17090600db00b006df6b34d9b8sm3899371eji.211.2022.04.25.13.01.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 13:01:59 -0700 (PDT)
-Message-ID: <89845bec6c827d7012cda916ee50b16c8eb08755.camel@gmail.com>
-Subject: Re: [PATCH v1 2/2] mmc: core: Allows to override the timeout value
- for ioctl() path
-From:   Bean Huo <huobean@gmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     ulf.hansson@linaro.org, adrian.hunter@intel.com,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        beanhuo@micron.com, stable <stable@vger.kernel.org>
-Date:   Mon, 25 Apr 2022 22:01:59 +0200
-In-Reply-To: <CACRpkdahf5QhUJ-vG6Qs7i0VYbSS02zBrQOtN8EVFu9SyHZA1Q@mail.gmail.com>
-References: <20220423221623.1074556-1-huobean@gmail.com>
-         <20220423221623.1074556-3-huobean@gmail.com>
-         <CACRpkdahf5QhUJ-vG6Qs7i0VYbSS02zBrQOtN8EVFu9SyHZA1Q@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.0-1 
+        Mon, 25 Apr 2022 16:14:22 -0400
+X-Greylist: delayed 1470 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 25 Apr 2022 13:11:17 PDT
+Received: from gateway20.websitewelcome.com (gateway20.websitewelcome.com [192.185.66.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2ABEB158
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 13:11:17 -0700 (PDT)
+Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
+        by gateway20.websitewelcome.com (Postfix) with ESMTP id 144B6400D1072
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 14:46:43 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id j4fTnXLkRdx86j4fTnAKh8; Mon, 25 Apr 2022 14:46:43 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=gAUg/R/cVeWAnFANt9sHBSNVGqmO70rdsDy45wJTsaU=; b=nXjSnH2+B4oYCJA///AAVW2NW8
+        r4dPkUjzzfe5pFyYIsoCRBMLDuIqZiFDdS5xObDi78AZXva1lu/ggOV88cwZXwl66sIiTkHrbz3LO
+        eDzD1RJniTpUTwGwp2cJmllIRyoHCREO3oWmuIVVHcTMBzSatuT+r1cBj746FvoVFii8NNk+WQlZN
+        ErkF4Rmdr3IEqIs8jHPDKMeMmW7T9VwpVWrAvsezIR9lOql2dA87aUs5yYE+l5BKxZVHAV1GzK4qR
+        TLo3ytG37WxNYuGZtJLlxTQ2SoYZ+61vCIPZu5OdQTZYe2UoIfU86IO00ok+fB2ohDRXoo87J9Udq
+        nesJsk1A==;
+Received: from 187-162-31-110.static.axtel.net ([187.162.31.110]:43822 helo=[192.168.15.9])
+        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1nj4fQ-001AN9-N1; Mon, 25 Apr 2022 14:46:40 -0500
+Message-ID: <3ee366a7-e61f-e513-aa2f-12e8d5316f3c@embeddedor.com>
+Date:   Mon, 25 Apr 2022 14:55:22 -0500
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC 1/1] drivers/dma/*: replace tasklets with workqueue
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Allen Pais <apais@linux.microsoft.com>,
+        olivier.dautricourt@orolia.com, sr@denx.de, vkoul@kernel.org
+Cc:     keescook@chromium.org, linux-hardening@vger.kernel.org,
+        ludovic.desroches@microchip.com, tudor.ambarus@microchip.com,
+        f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, nsaenz@kernel.org,
+        paul@crapouillou.net, Eugeniy.Paltsev@synopsys.com,
+        gustavo.pimentel@synopsys.com, vireshk@kernel.org,
+        andriy.shevchenko@linux.intel.com, leoyang.li@nxp.com,
+        zw@zh-kernel.org, wangzhou1@hisilicon.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, sean.wang@mediatek.com,
+        matthias.bgg@gmail.com, afaerber@suse.de, mani@kernel.org,
+        logang@deltatee.com, sanju.mehta@amd.com, daniel@zonque.org,
+        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        krzysztof.kozlowski@linaro.org, green.wan@sifive.com,
+        orsonzhai@gmail.com, baolin.wang7@gmail.com, zhang.lyra@gmail.com,
+        patrice.chotard@foss.st.com, linus.walleij@linaro.org,
+        wens@csie.org, jernej.skrabec@gmail.com, samuel@sholland.org,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220419211658.11403-1-apais@linux.microsoft.com>
+ <20220419211658.11403-2-apais@linux.microsoft.com>
+ <353023ba-d506-5d45-be68-df2025074ed6@kernel.org>
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <353023ba-d506-5d45-be68-df2025074ed6@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.162.31.110
+X-Source-L: No
+X-Exim-ID: 1nj4fQ-001AN9-N1
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 187-162-31-110.static.axtel.net ([192.168.15.9]) [187.162.31.110]:43822
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 1
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-04-24 at 15:29 +0200, Linus Walleij wrote:
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (idata->rpmb || (cm=
-d.flags & MMC_RSP_R1B) =3D=3D
-> > MMC_RSP_R1B) {
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 * Ensure RPMB/R1B command has completed by polling
-> > CMD13
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 * "Send Status".
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 * Ensure RPMB/R1B command has completed by polling
-> > CMD13 "Send Status". Here we
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 * allow to override the default timeout value if a
-> > custom timeout is specified.
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 err =3D mmc_poll_for_busy(card, MMC_BLK_TIMEOUT_MS,
-> > false,
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 MMC_BUSY_IO);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 err =3D mmc_poll_for_busy(card, idata-
-> > >ic.cmd_timeout_ms ? : MMC_BLK_TIMEOUT_MS,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 false, MMC_BUSY_IO);
->=20
-> I suppose it's OK (albeit dubious) that we have a userspace interface
-> setting
-> a hardware-specific thing such as a timeout.
->=20
-> However: is MMC_BLK_TIMEOUT_MS even reasonable here? If you guys
-> know a better timeout for RPMB operations (from your experience)
-> what about defining MMC_RPMB_TIMEOUT_MS to something more
-> reasonable (and I suppose longer) and use that as fallback instead
-> of MMC_BLK_TIMEOUT_MS?
->=20
-> This knowledge (that RPMB commands can have long timeouts) is not
-> something that should be hidden in userspace.
->=20
-
-Hi Linus,
 
 
-understand what you mean. I must say, it's hard to come up with a
-uniform timeout value that works for all commands but also for all
-vendors. Meanwhile, the MMC_BLK_TIMEOUT_MS here is not only for RPMB
-commands but also for all commands (with R1B responses) issued by the
-ioctl() system call. The current 10s timeout can cover almost 99% of
-the scenarios. There are very few special cases that take more than
-10s.
+On 4/25/22 10:56, Krzysztof Kozlowski wrote:
+> On 19/04/2022 23:16, Allen Pais wrote:
+>> The tasklet is an old API which will be deprecated, workqueue API
+>> cab be used instead of them.
+>>
+> 
+> Thank you for your patch. There is something to discuss/improve.
+> 
+>> This patch replaces the tasklet usage in drivers/dma/* with a
+>> simple work.
+> 
+> Minor nits:
+> 
+> 1. Don't use "this patch".
+> https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+> 2. Use subject prefix matching subsystem (git log --oneline)
+> 
+>>
+>> Github: https://github.com/KSPP/linux/issues/94
+> 
+> 3. No external references to some issue management systems, change-ids
+> etc. Lore link could work, but it's not relevant here, I guess.
 
-I think the current solution is the most flexible way, if the customer
-wants to override the kernel default timeout, they know how to initiate
-the correct timeout value in ioctl() based on their specific
-hardware/software system. I don't know how to convince every maintainer
-and reviewer if we don't want to give this permission or want to
-maintain a unified timeout value in the kernel driver. Given that we
-already have eMMC ioctl() support, and we've opened the door to allow
-users to specify specific cmd_timeout_ms in struct mmc_ioc_cmd{},
-please consider my change.
+I think the link to the KSPP issue tracker should stay. If something,
+just changing 'Github:' to 'Link:'
 
-struct mmc_ioc_cmd {
-      ...
-        /*
-         *Override driver-computed timeouts.  Note the difference in
-units!
-         */
-        unsigned int data_timeout_ns;
-        unsigned int cmd_timeout_ms;
-...}
+The KSPP has been an active _upstream_ project for about 7 years now,
+and the issue tracker is publicly available. :) So it's not like a random
+link to a random project. This also help us to automatically keep track
+of the patches sent out to address a particular issue that we want to
+have resolved upstream. So please, keep the link in the changelog text,
+it's useful. :)
 
-
-
-Kind regards,
-Bean
+Thanks
+--
+Gustavo

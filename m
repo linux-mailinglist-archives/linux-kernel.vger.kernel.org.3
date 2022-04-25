@@ -2,112 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3073B50E0B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 14:49:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E945E50E0B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 14:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234126AbiDYMws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 08:52:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40642 "EHLO
+        id S235832AbiDYMwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 08:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233926AbiDYMwa (ORCPT
+        with ESMTP id S234797AbiDYMwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 08:52:30 -0400
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29E2BC0F;
-        Mon, 25 Apr 2022 05:49:26 -0700 (PDT)
-Received: by mail-qk1-f173.google.com with SMTP id e128so10631075qkd.7;
-        Mon, 25 Apr 2022 05:49:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NPorSfLzynlTTFLcIqwhfwbS6R4JDxHEiU+bfxItonI=;
-        b=ew61U+SbG4M6uq31+iG2W40+tE5/fOOF3O9jude92R40tV4JFekVTqOI6qs/F21GW7
-         736WZq8TEwrxI3XD4Aw678MJBuIsUNZx2KfFCkEuVGqcqvU6ZGR7RIG6x81Nejn1FImr
-         Hf5sxDKFbyxJsn6BtlfNO+Xeso8XzVkDWJUiutYAE0CzllknoPCfCq3jYcyscHSfYBx/
-         hKBnANTxpV0DBF9hm3f12ZAFvVmpVbDH4hpwq29LZQxFCeaXBrR0HGtuYD1gvcIpq5sf
-         7ErLtz17MvvxRc5o/y2xJTPe+8zdQfDR89+JQGiDBDBxqyziIo5so6JEvLtG2TGk0GQC
-         NZ3g==
-X-Gm-Message-State: AOAM532icnQOw2P/vpCEeSRxqttIv8NKJ+3FwIwTfGD0xpewvRloeoiX
-        vRvXogZfaYohNZgHcpLgn0D5N7tDJxzxcA==
-X-Google-Smtp-Source: ABdhPJyVoVZ4MbalF6jLAYP3M1LzuKx0Wmp8oF0R6/sNDgSq3hwkPqMCV26FFEsOJGMcc8fxNp460g==
-X-Received: by 2002:a05:620a:7eb:b0:69c:7933:b405 with SMTP id k11-20020a05620a07eb00b0069c7933b405mr9828582qkk.602.1650890965493;
-        Mon, 25 Apr 2022 05:49:25 -0700 (PDT)
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
-        by smtp.gmail.com with ESMTPSA id x24-20020ac87318000000b002f1fc5fcaedsm5774780qto.68.2022.04.25.05.49.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 05:49:24 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id v59so13909280ybi.12;
-        Mon, 25 Apr 2022 05:49:24 -0700 (PDT)
-X-Received: by 2002:a25:8087:0:b0:641:dd06:577d with SMTP id
- n7-20020a258087000000b00641dd06577dmr15589591ybk.207.1650890964362; Mon, 25
- Apr 2022 05:49:24 -0700 (PDT)
+        Mon, 25 Apr 2022 08:52:53 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62976FB3A8;
+        Mon, 25 Apr 2022 05:49:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650890989; x=1682426989;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=IQAaH6AfCWrFMKcxYIvjsJFZxL3TSSAFCIkxYVb1JK0=;
+  b=Fw2uT0xNLT2Yff/dyxoYTzybs14CLR/oIxqsL0HHhrRWO6n6k73wMVVN
+   6yasPlXVzndj/KGCgsnqYXvYE0yiAmnTeSCYgWdcJKq/Hxlum5EOPqtQR
+   ct7HRiX95rTkf+MfGzhOEKpyEUCBQoVMgBObabcMVnB7BUe1QucsAnmsy
+   h18RF9f4DNfiNYWZorlftieD4F8VHaET6720auZl6DHTy4/lYy9GmIGSf
+   dIX/Lw/C1PYxNNtdKoGlWhhC1F2nEcHsdxPw0MAsO5F5xi4kncmTnsSNj
+   EvZymFKFOQDz4RRqstwz/uQReA8dIxFz2lf+agZ05HX5VZEp5pfoncDWV
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="264086893"
+X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
+   d="scan'208,217";a="264086893"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 05:49:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
+   d="scan'208,217";a="704544204"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 25 Apr 2022 05:49:46 -0700
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        Jameson Thies <jthies@google.com>,
+        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Won Chung <wonchung@google.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/3] usb: typec: Separate USB PD from USB Type-C
+Date:   Mon, 25 Apr 2022 15:49:43 +0300
+Message-Id: <20220425124946.13064-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220421203555.29011-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220421203555.29011-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220421203555.29011-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 25 Apr 2022 14:49:12 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdX4_PKsGGRj6yGhDGfaRD-6PqiJeCnKq0yUicfMutOP4g@mail.gmail.com>
-Message-ID: <CAMuHMdX4_PKsGGRj6yGhDGfaRD-6PqiJeCnKq0yUicfMutOP4g@mail.gmail.com>
-Subject: Re: [PATCH 1/3] ASoC: sh: rz-ssi: Drop unused macros
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Pavel Machek <pavel@denx.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+Hi,
 
-On Fri, Apr 22, 2022 at 7:32 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Drop unused macros SSIFSR_TDC and SSIFSR_RDC.
->
-> Reported-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Now everything is a device. There are now other changes.
 
-Thanks for your patch!
 
-What does this fix?
-Is the real issue that there are 32 FIFO entries, and the TDC and RDC
-fields are 6 bits wide, while the mask uses 0x1f instead of 0x3f?
+v2 cover letter:
 
-> --- a/sound/soc/sh/rz-ssi.c
-> +++ b/sound/soc/sh/rz-ssi.c
-> @@ -59,9 +59,7 @@
->  #define SSIFSR_RDC_MASK                0x3f
->  #define SSIFSR_RDC_SHIFT       8
->
-> -#define SSIFSR_TDC(x)          (((x) & 0x1f) << 24)
->  #define SSIFSR_TDE             BIT(16)
-> -#define SSIFSR_RDC(x)          (((x) & 0x1f) << 8)
->  #define SSIFSR_RDF             BIT(0)
->
->  #define SSIOFR_LRCONT          BIT(8)
+In this version the USB Power Delivery support is now completely
+separated into its own little subsystem. The USB Power Delivery
+objects are not devices, but they are also no longer tied to any
+device by default. This change makes it possible to share the USB PD
+objects between multiple devices on top of being able to select the
+objects that we want the device to use.
 
-Gr{oetje,eeting}s,
+The USB Power Delivery objects are now placed under
+/sys/kernel/usb_power_delivery directory. As an example:
 
-                        Geert
+        /sys/kernel/usb_power_delivery/pd0
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+So now that pd0 can be linked to a device, or devices, that want (or
+can) use it to negotiate the USB PD contract with. An example where
+two devices share the PD:
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+        /sys/class/typec/port0/usb_power_delivery -> ../../../../../../../kernel/usb_power_delivery/pd0
+        /sys/class/typec/port1/usb_power_delivery -> ../../../../../../../kernel/usb_power_delivery/pd0
+
+I did not change the directory hierarchy at all, because I'm assuming
+that it is not a problem anymore:
+
+        pd0/<message>/<object>/<field>
+
+On top of that change, I also switched to tcpm.c from ucsi.c as
+the first user of this thing.
+
+
+v1 cover letter:
+
+Ideally after this there should be no need to add any new USB Power
+Delivery specific attribute files directly to the USB Type-C devices
+in sysfs. They now have their own directory.
+
+The idea of the series is that any device (so not just USB Type-C
+connectors and the partners attached to them) that supports USB Power
+Delivery can have this separate sub-directory "usb_power_delivery" in
+sysfs, and that sub-directory will have all the USB Power Delivery
+objects and all the other USB Power Delivery details.
+
+There are already ways that allow us to read the USB Power Delivery
+capabilities from potentially any USB PD capable USB device attached
+to the bus - one way is defined in the USB Type-C Bridge
+Specification.
+
+Initially the Capability Messages (i.e. PDOs) are exposed.
+
+This is an example (tree view) of the capabilities that the ports on a
+normal x86 system advertise to the partner. First you have the message
+directory (source_capabilities and sink_capabilities), and that will
+have a sub-directory for each PDO that capability message has. The PDO
+sub-directories are named by their type. The number in front of the
+name is the object position of the PDO:
+
+/sys/class/typec/port0/usb_power_delivery
+|-- revision
+|-- sink_capabilities/
+|   |-- 1:fixed_supply/
+|   |   |-- dual_role_data
+|   |   |-- dual_role_power
+|   |   |-- fast_role_swap_current
+|   |   |-- operational_current
+|   |   |-- unchunked_extended_messages_supported
+|   |   |-- unconstrained_power
+|   |   |-- usb_communication_capable
+|   |   |-- usb_suspend_supported
+|   |   `-- voltage
+|   |-- 2:variable_supply/
+|   |   |-- maximum_voltage
+|   |   |-- minimum_voltage
+|   |   `-- operational_current
+|   `-- 3:battery/
+|       |-- maximum_voltage
+|       |-- minimum_voltage
+|       `-- operational_power
+`-- source_capabilities/
+    `-- 1:fixed_supply/
+        |-- dual_role_data
+        |-- dual_role_power
+        |-- maximum_current
+        |-- unchunked_extended_messages_supported
+        |-- unconstrained_power
+        |-- usb_communication_capable
+        |-- usb_suspend_supported
+        `-- voltage
+
+And these are the capabilities of my Thunderbolt3 dock:
+
+/sys/class/typec/port0-partner/usb_power_delivery
+|-- revision
+|-- sink_capabilities/
+|   `-- 1:fixed_supply/
+|       |-- dual_role_data
+|       |-- dual_role_power
+|       |-- fast_role_swap_current
+|       |-- operational_current
+|       |-- unchunked_extended_messages_supported
+|       |-- unconstrained_power
+|       |-- usb_communication_capable
+|       |-- usb_suspend_supported
+|       `-- voltage
+`-- source_capabilities/
+    |-- 1:fixed_supply/
+    |   |-- dual_role_data
+    |   |-- dual_role_power
+    |   |-- maximum_current
+    |   |-- unchunked_extended_messages_supported
+    |   |-- unconstrained_power
+    |   |-- usb_communication_capable
+    |   |-- usb_suspend_supported
+    |   `-- voltage
+    |-- 2:fixed_supply/
+    |   |-- maximum_current
+    |   `-- voltage
+    |-- 3:fixed_supply/
+    |   |-- maximum_current
+    |   `-- voltage
+    |-- 4:fixed_supply/
+    |   |-- maximum_current
+    |   `-- voltage
+    `-- 5:fixed_supply/
+        |-- maximum_current
+        `-- voltage
+
+
+Heikki Krogerus (3):
+  usb: typec: Separate USB Power Delivery from USB Type-C
+  usb: typec: USB Power Deliver helpers for ports and partners
+  usb: typec: tcpm: Register USB Power Delivery Capabilities
+
+ Documentation/ABI/testing/sysfs-class-typec   |   8 +
+ .../testing/sysfs-class-usb_power_delivery    | 240 ++++++
+ drivers/usb/typec/Makefile                    |   2 +-
+ drivers/usb/typec/class.c                     | 148 ++++
+ drivers/usb/typec/class.h                     |   4 +
+ drivers/usb/typec/pd.c                        | 721 ++++++++++++++++++
+ drivers/usb/typec/pd.h                        |  30 +
+ drivers/usb/typec/tcpm/tcpm.c                 | 142 +++-
+ include/linux/usb/pd.h                        |  35 +
+ include/linux/usb/typec.h                     |  22 +
+ 10 files changed, 1350 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-usb_power_delivery
+ create mode 100644 drivers/usb/typec/pd.c
+ create mode 100644 drivers/usb/typec/pd.h
+
+-- 
+2.35.1
+

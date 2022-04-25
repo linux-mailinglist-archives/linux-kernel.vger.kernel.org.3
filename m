@@ -2,50 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39A0850EBFD
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 00:25:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A33850EBEF
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 00:25:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232650AbiDYW1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 18:27:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34416 "EHLO
+        id S235650AbiDYWZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 18:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343513AbiDYVaN (ORCPT
+        with ESMTP id S1343562AbiDYVdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 17:30:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7699E23BE5
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 14:27:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 066D361479
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 21:27:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37757C385A7;
-        Mon, 25 Apr 2022 21:27:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1650922027;
-        bh=kqDjvm3xpzh6Yg4Lxl+rXD0rB2PmW1SLX1gSac7OA38=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SH8ca7bwli2JGengyW3Aaj2tn4GzTs25gN4kDLQXD31vIMD4zAdYYXe4RV1Hf+h5r
-         4uR7mFW6X/K2RZYuiuWmQo0DmBjI1GKuQNjTirwy0dumX98LE6YPvbvSHserq1ONbL
-         7NIYKtsUlaTtN2risNvZjBpIHyzz6tu8hL6EL+cg=
-Date:   Mon, 25 Apr 2022 14:27:06 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mm@kvack.org, Song Liu <song@kernel.org>
-Subject: Re: Linux 5.18-rc4
-Message-Id: <20220425142706.23e6bea1d5bfdd944e33bc96@linux-foundation.org>
-In-Reply-To: <YmZvAUakbWnyQEqa@debian>
-References: <CAHk-=whmtHMzjaVUF9bS+7vE_rrRctcCTvsAeB8fuLYcyYLN-g@mail.gmail.com>
-        <YmZvAUakbWnyQEqa@debian>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        Mon, 25 Apr 2022 17:33:25 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 369EE27153
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 14:30:20 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id m20so11435450ejj.10
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 14:30:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HHqpbgvhGzfWr0EyYRxzA6HfxhKAhFMAtOp9U0tnQsw=;
+        b=WWZIB1XrA4aY5urSbazaVEZIdf9VBxbccf2WK0voRgvR+yD07WDMYB/1jukoVIx2RX
+         H585UqT/CMzahEyJLmbRcPezjMaxqwAK5Nemldbkf3GwKcYSgGEojTcbLIogTmY5th+m
+         3flocOyBRkyw8jkmcSKEauCW7738RYVZOxvA0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HHqpbgvhGzfWr0EyYRxzA6HfxhKAhFMAtOp9U0tnQsw=;
+        b=ECvzyRj1VEhq2KhrY37xmfd1TrMmwZsXGNIfA8XpWtNbkmew0qHARFPMmDXWLbviF3
+         v2Ylu4x4KMtzJBPFq2RCWxJC8xenjDA3V2WAT6VuTP1FJgYqjhMPxbtntorg+8vSiY/D
+         gxFnsh53epmFl+i6o98U7mYecTwDHeZZ83oOeNHUaFODUturvrvh2nl4iKxjN68/IUsc
+         FiLN7Ob4PuU5eOp7cxhJwDBkTpX9GZei8HEqkWleIOhlehkgyooVfLQSVek+FDUTZDGN
+         lX/27QeNb3CzfSIc2xvgoXpc/O/XdISAqoGnfvElAVFmueirTBk1HOSFJ2Ylx7/cJTNG
+         s8qw==
+X-Gm-Message-State: AOAM532CeCLeNosYNyghlzTMrBHwOnWGsVfz9lNg+GJoufoTh/PU4W2P
+        R782EYq6FIEKZocnCtPNw9+tCoXEG1HJXowL
+X-Google-Smtp-Source: ABdhPJzGM/mSyGm9dNfjPK4EFO2SRDG8o2AyfxbSE56NzP5Ke7EBPikuGxxk9TPClKrwY7A61IyDLg==
+X-Received: by 2002:a17:907:62a9:b0:6da:7953:4df0 with SMTP id nd41-20020a17090762a900b006da79534df0mr18431236ejc.316.1650922218473;
+        Mon, 25 Apr 2022 14:30:18 -0700 (PDT)
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
+        by smtp.gmail.com with ESMTPSA id g21-20020a056402115500b00413c824e422sm5035875edw.72.2022.04.25.14.30.17
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Apr 2022 14:30:17 -0700 (PDT)
+Received: by mail-wr1-f45.google.com with SMTP id e24so2822607wrc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 14:30:17 -0700 (PDT)
+X-Received: by 2002:a05:6000:1acb:b0:20a:a4b0:dbc8 with SMTP id
+ i11-20020a0560001acb00b0020aa4b0dbc8mr15378477wry.513.1650922217012; Mon, 25
+ Apr 2022 14:30:17 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220425210726.3813477-1-swboyd@chromium.org>
+In-Reply-To: <20220425210726.3813477-1-swboyd@chromium.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 25 Apr 2022 14:30:04 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WT+=qMJxNiAniTrX+qonXDgESzUi00+QfN4NW=3rdp+Q@mail.gmail.com>
+Message-ID: <CAD=FV=WT+=qMJxNiAniTrX+qonXDgESzUi00+QfN4NW=3rdp+Q@mail.gmail.com>
+Subject: Re: [PATCH v2] Input: cros-ec-keyb: Only register keyboard if
+ rows/columns exist
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,62 +76,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 25 Apr 2022 10:50:57 +0100 Sudip Mukherjee <sudipm.mukherjee@gmail.com> wrote:
+Hi,
 
-> Hi Linus,
-> 
-> On Sun, Apr 24, 2022 at 03:22:59PM -0700, Linus Torvalds wrote:
-> > Fairly slow and calm week - which makes me just suspect that the other
-> > shoe will drop at some point.
-> > 
-> > But maybe things are just going really well this release. It's bound
-> > to happen _occasionally_, after all.
-> 
-> My last night's mainline build failed for arm.
-> Build was with af2d861d4cd2 ("Linux 5.18-rc4").
-> 
-> imxrt_defconfig -> failed
-> lpc18xx_defconfig -> failed
-> mps2_defconfig -> failed
-> stm32_defconfig -> failed
-> vf610m4_defconfig -> failed
-> 
-> arm-linux-gnueabi-ld: mm/page_alloc.o: in function `alloc_large_system_hash':
-> page_alloc.c:(.init.text+0xe7c): undefined reference to `vmalloc_huge'
+On Mon, Apr 25, 2022 at 2:07 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> If the device is a detachable, we may still probe this device because
+> there are some button switches, e.g. volume buttons and power buttons,
+> registered by this driver. Let's allow the device node to be missing row
+> and column device properties to indicate that the keyboard matrix
+> shouldn't be registered. This removes an input device on Trogdor devices
+> such as Wormdingler that don't have a matrix keyboard, but still have
+> power and volume buttons. That helps userspace understand there isn't
+> a keyboard present when the detachable keyboard is disconnected.
+>
+> Cc: Benson Leung <bleung@chromium.org>
+> Cc: Guenter Roeck <groeck@chromium.org>
+> Cc: Douglas Anderson <dianders@chromium.org>
+> Cc: Hsin-Yi Wang <hsinyi@chromium.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>
+> Changes from v1 (https://lore.kernel.org/r/20220413033334.1514008-1-swboyd@chromium.org):
+>  * Use device_property_present
+>
+>  drivers/input/keyboard/cros_ec_keyb.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 
-Thanks.  oops.  We broke nommu.
-
-From: Andrew Morton <akpm@linux-foundation.org>
-Subject: mm/nommu.c: provide vmalloc_huge() for CONFIG_MMU=n
-
-Fixes: f2edd118d02dd ("page_alloc: use vmalloc_huge for large system hash")
-Reported-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc: Song Liu <song@kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
----
-
- mm/nommu.c |    6 ++++++
- 1 file changed, 6 insertions(+)
-
---- a/mm/nommu.c~a
-+++ a/mm/nommu.c
-@@ -226,6 +226,12 @@ void *vmalloc(unsigned long size)
- }
- EXPORT_SYMBOL(vmalloc);
- 
-+void *vmalloc_huge(unsigned long size, gfp_t gfp_mask)
-+{
-+	return vmalloc(size);
-+}
-+EXPORT_SYMBOL(vmalloc_huge);
-+
- /*
-  *	vzalloc - allocate virtually contiguous memory with zero fill
-  *
-_
-
-
-I don't see any point in copy-n-pasting the kerneldoc over.  Perhaps we
-should just delete all the copy-n-paste kerneldoc from nommu.c and say
-"go look at the MMU version of this function".
-
+Reviewed-by: Douglas Anderson <dianders@chromium.org>

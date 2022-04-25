@@ -2,177 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6111450D75C
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 05:07:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A9B350D75F
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 05:09:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240533AbiDYDKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Apr 2022 23:10:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37958 "EHLO
+        id S240502AbiDYDMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Apr 2022 23:12:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbiDYDKc (ORCPT
+        with ESMTP id S240474AbiDYDMH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Apr 2022 23:10:32 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DF41A382
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 20:07:29 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id l15-20020a056e0212ef00b002cd8f1a8cffso248849iln.13
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Apr 2022 20:07:29 -0700 (PDT)
+        Sun, 24 Apr 2022 23:12:07 -0400
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4C64E385;
+        Sun, 24 Apr 2022 20:09:04 -0700 (PDT)
+Received: by mail-pf1-f172.google.com with SMTP id i24so13579084pfa.7;
+        Sun, 24 Apr 2022 20:09:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=5M9dPHoval3Wy6UB/Gd+urugmgoizrKVcq67CoExOE0=;
-        b=695Tfgyw8BDjJWtvs5TQOUpTHY6rsKvRAq5oQwiE2ttqjNFvKpn9gY4oxS3yBJKcHA
-         3IZCcNawIZqXpGbaAwa4ThImAPuj01LZm/jf6AjX396NFTvTLGDFYemS4+o4TE+tCN0p
-         CMoZJG2y0VlGh8PXjA2AMIKVz1gbbrhp2TBksf40InaOGL66Xl1tUwZEBiodcEdpNzXf
-         rrxIEKK4CtG/aIBojQ+f+D8OzsDyU7UwezkyP1Can+uAHRJQDvvO9zqV093yIqX7dyWh
-         QJIqpaWo9cmF4qdAkr8mWkZROtq8rqSOsM0LSpta9yswmqBJRGog+v0WOR5ScKSJV+8F
-         qfOg==
-X-Gm-Message-State: AOAM533VTU1qP3HB71rBhR3025krULO5LYBTe3fuCn6IcohkaDYvs0Em
-        be/hlFxFKK5TyKWedKhL5PvI+5ievYwqRXXhH6DBH/EuKJG1
-X-Google-Smtp-Source: ABdhPJw9GqJ9giy8XNcygVT8n+KE+/7AxbKKKhmlLzzHusOzGPc5RjtXFKH6MRetm1IlB6aaI/uWD+hNiJ2J+k6fGTS0iB/VNfaA
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tsGZFIEixUEnJNolXV8dfGKJqfTCfEpZ3B2cSrfx1vM=;
+        b=eWbthMyR5pl1rFlPdMKr3HSLFSx73sk+wZ1uL96OKuPPahT/UJrpXsIkRtJRNAuCPN
+         SZxKyWI70mcH+164+Um+v1onym4X4h+w11oNv0UkFLZvD10Gc/gidP138PHMOlE066iA
+         Qs7Y2SWaimJBdX2sa6G7tZ6NDzzEv810ic0NC/KxYmZlphJ1ijHTLT7Q5ZmbEcRbC48f
+         Pa6aBeDNFJ5hOpXcOqG0QDLUSTtDap6VAnSEWgf7/j04nJMpqcK5LSUuP3PJAGBcKSzY
+         XugPnCCRPHSpHKZ0GLup7sgjpM5+1PY5L5d7S1PWxgMsaN0vyo8w9XBCu728UsefeJ8b
+         qbeg==
+X-Gm-Message-State: AOAM532k9noiUdzKMgIkVI2hTf86GQdehfXvov2VyY5HY/AKD7f39DBX
+        OqdSuLVZnlO2DxeAuuEyusgRhrcCfyc=
+X-Google-Smtp-Source: ABdhPJzOQj9ikbTemWkl0X4L6g7+gJVC6zzs6svuR4Q/oiKun077BKe3V8PtBTFA63SVbSHmMXRfuw==
+X-Received: by 2002:a05:6a00:2d0:b0:4f4:1f34:e39d with SMTP id b16-20020a056a0002d000b004f41f34e39dmr16617024pft.14.1650856143804;
+        Sun, 24 Apr 2022 20:09:03 -0700 (PDT)
+Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
+        by smtp.gmail.com with ESMTPSA id t2-20020a17090a448200b001cd4989ff40sm9147432pjg.7.2022.04.24.20.09.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 24 Apr 2022 20:09:02 -0700 (PDT)
+Message-ID: <450b5ab6-fb82-06dc-2a11-e0b464901c74@acm.org>
+Date:   Sun, 24 Apr 2022 20:09:01 -0700
 MIME-Version: 1.0
-X-Received: by 2002:a02:878b:0:b0:326:8050:4706 with SMTP id
- t11-20020a02878b000000b0032680504706mr6902470jai.311.1650856048655; Sun, 24
- Apr 2022 20:07:28 -0700 (PDT)
-Date:   Sun, 24 Apr 2022 20:07:28 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005b04fa05dd71e0e0@google.com>
-Subject: [syzbot] KASAN: out-of-bounds Write in end_buffer_read_sync
-From:   syzbot <syzbot+3f7f291a3d327486073c@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH -next RFC v3 0/8] improve tag allocation under heavy load
+Content-Language: en-US
+To:     Yu Kuai <yukuai3@huawei.com>, axboe@kernel.dk,
+        andriy.shevchenko@linux.intel.com, john.garry@huawei.com,
+        ming.lei@redhat.com, qiulaibin@huawei.com
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+References: <20220415101053.554495-1-yukuai3@huawei.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220415101053.554495-1-yukuai3@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 4/15/22 03:10, Yu Kuai wrote:
+> The single io performance(randwrite):
+> 
+> | bs       | 128k | 256k | 512k | 1m   | 1280k | 2m   | 4m   |
+> | -------- | ---- | ---- | ---- | ---- | ----- | ---- | ---- |
+> | bw MiB/s | 20.1 | 33.4 | 51.8 | 67.1 | 74.7  | 82.9 | 82.9 |
 
-syzbot found the following issue on:
+Although the above data is interesting, it is not sufficient. The above 
+data comes from a setup with a single hard disk. There are many other 
+configurations that are relevant (hard disk array, high speed NVMe, QD=1 
+USB stick, ...) but for which no conclusions can be drawn from the above 
+data.
 
-HEAD commit:    22da5264abf4 Merge tag '5.18-rc3-ksmbd-fixes' of git://git..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1230fd64f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6bc13fa21dd76a9b
-dashboard link: https://syzkaller.appspot.com/bug?extid=3f7f291a3d327486073c
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Another question is whether the approach of this patch series is the 
+right approach? I would expect that round-robin wakeup of waiters would 
+be ideal from a fairness point of view. However, there are patches in 
+this patch series that guarantee that wakeup of tag waiters won't happen 
+in a round robin fashion.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Thanks,
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+3f7f291a3d327486073c@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: out-of-bounds in instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
-BUG: KASAN: out-of-bounds in atomic_dec include/linux/atomic/atomic-instrumented.h:257 [inline]
-BUG: KASAN: out-of-bounds in put_bh include/linux/buffer_head.h:284 [inline]
-BUG: KASAN: out-of-bounds in end_buffer_read_sync+0x24/0x30 fs/buffer.c:160
-Write of size 4 at addr ffffc9000302f9d8 by task ksoftirqd/2/28
-
-CPU: 2 PID: 28 Comm: ksoftirqd/2 Not tainted 5.18.0-rc3-syzkaller-00235-g22da5264abf4 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0xf/0x467 mm/kasan/report.c:313
- print_report mm/kasan/report.c:429 [inline]
- kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
- instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
- atomic_dec include/linux/atomic/atomic-instrumented.h:257 [inline]
- put_bh include/linux/buffer_head.h:284 [inline]
- end_buffer_read_sync+0x24/0x30 fs/buffer.c:160
- end_bio_bh_io_sync+0xda/0x130 fs/buffer.c:2999
- bio_endio+0x5fe/0x780 block/bio.c:1541
- req_bio_endio block/blk-mq.c:686 [inline]
- blk_update_request+0x401/0x1310 block/blk-mq.c:815
- blk_mq_end_request+0x4b/0x80 block/blk-mq.c:941
- lo_complete_rq+0x1c2/0x280 drivers/block/loop.c:369
- blk_complete_reqs+0xad/0xe0 block/blk-mq.c:1012
- __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
- run_ksoftirqd kernel/softirq.c:921 [inline]
- run_ksoftirqd+0x2d/0x60 kernel/softirq.c:913
- smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
- </TASK>
-
-The buggy address belongs to the virtual mapping at
- [ffffc90003028000, ffffc90003031000) created by:
- kernel_clone+0xe7/0xab0 kernel/fork.c:2639
-
-------------[ cut here ]------------
-kernel BUG at mm/vmalloc.c:660!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 2 PID: 28 Comm: ksoftirqd/2 Not tainted 5.18.0-rc3-syzkaller-00235-g22da5264abf4 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-RIP: 0010:vmalloc_to_page+0x46e/0x4f0 mm/vmalloc.c:660
-Code: c1 ff 4d 31 fc 4d 21 f4 49 c1 ec 0c 4c 01 e3 49 bc 00 00 00 00 00 ea ff ff 48 c1 e3 06 49 01 dc e9 35 ff ff ff e8 c2 d5 c1 ff <0f> 0b e8 bb d5 c1 ff 0f 0b 45 31 e4 e9 1f ff ff ff e8 ac d5 c1 ff
-RSP: 0018:ffffc90000777be8 EFLAGS: 00010046
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000100
-RDX: ffff888011aac0c0 RSI: ffffffff81b68f6e RDI: 0000000000000003
-RBP: ffffffff8ba8e000 R08: 00001ffffffffffe R09: 0000000000000001
-R10: ffffffff81b68b86 R11: 0000000000000000 R12: 0000370000000000
-R13: 0000000000000000 R14: ffff888011aac0c0 R15: ffff888022c8f688
-FS:  0000000000000000(0000) GS:ffff88802cc00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffbb1d08922 CR3: 000000006e266000 CR4: 0000000000150ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- print_address_description.constprop.0.cold+0x2ce/0x467 mm/kasan/report.c:350
- print_report mm/kasan/report.c:429 [inline]
- kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
- instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
- atomic_dec include/linux/atomic/atomic-instrumented.h:257 [inline]
- put_bh include/linux/buffer_head.h:284 [inline]
- end_buffer_read_sync+0x24/0x30 fs/buffer.c:160
- end_bio_bh_io_sync+0xda/0x130 fs/buffer.c:2999
- bio_endio+0x5fe/0x780 block/bio.c:1541
- req_bio_endio block/blk-mq.c:686 [inline]
- blk_update_request+0x401/0x1310 block/blk-mq.c:815
- blk_mq_end_request+0x4b/0x80 block/blk-mq.c:941
- lo_complete_rq+0x1c2/0x280 drivers/block/loop.c:369
- blk_complete_reqs+0xad/0xe0 block/blk-mq.c:1012
- __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
- run_ksoftirqd kernel/softirq.c:921 [inline]
- run_ksoftirqd+0x2d/0x60 kernel/softirq.c:913
- smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:vmalloc_to_page+0x46e/0x4f0 mm/vmalloc.c:660
-Code: c1 ff 4d 31 fc 4d 21 f4 49 c1 ec 0c 4c 01 e3 49 bc 00 00 00 00 00 ea ff ff 48 c1 e3 06 49 01 dc e9 35 ff ff ff e8 c2 d5 c1 ff <0f> 0b e8 bb d5 c1 ff 0f 0b 45 31 e4 e9 1f ff ff ff e8 ac d5 c1 ff
-RSP: 0018:ffffc90000777be8 EFLAGS: 00010046
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000100
-RDX: ffff888011aac0c0 RSI: ffffffff81b68f6e RDI: 0000000000000003
-RBP: ffffffff8ba8e000 R08: 00001ffffffffffe R09: 0000000000000001
-R10: ffffffff81b68b86 R11: 0000000000000000 R12: 0000370000000000
-R13: 0000000000000000 R14: ffff888011aac0c0 R15: ffff888022c8f688
-FS:  0000000000000000(0000) GS:ffff88802cc00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffbb1d08922 CR3: 000000006e266000 CR4: 0000000000150ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Bart.

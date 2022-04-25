@@ -2,81 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4EB550DF5D
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 13:50:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CAF250DF61
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 13:51:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240175AbiDYLvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 07:51:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37562 "EHLO
+        id S234317AbiDYLyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 07:54:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241859AbiDYLvZ (ORCPT
+        with ESMTP id S229779AbiDYLyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 07:51:25 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA70419BA;
-        Mon, 25 Apr 2022 04:47:28 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id i5so1385357wrc.13;
-        Mon, 25 Apr 2022 04:47:28 -0700 (PDT)
+        Mon, 25 Apr 2022 07:54:15 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59EFD1BA;
+        Mon, 25 Apr 2022 04:51:07 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id q23so7575158wra.1;
+        Mon, 25 Apr 2022 04:51:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zL3zAyFVSY3b9tOnPyfU+7HZbn2fwn34DVHclMTOxIM=;
-        b=LrsaqLT1q3SQ0uASZlNpLZwn2OT10CWeUnsTzofQWIG4W4bfOEmT13Q91UpjOLMq7s
-         lrpBPBf94SI7EbFNxbrX+Z/FunV8lwcQwOa8PswQHuORAvup4TEAo9xf7hVSakwwOPnA
-         GuyV9BEc3s+TJiupOCo9LTsOKC9C6/h//ZfyR20aJ+FFVWNNnmWzPtf364WCXaoPaiM5
-         lJvrTGrUjdYY83vBcra2zXLR6P5SmQ0YLe3A8WGIcfxftiwix3egfw7A3/HPPdM1/fDx
-         ZBTN1+CxT+TbhNO/G/yP80ZMrIydOgwnA8vEQlWD/vnscKXAi3LFneb72yKNQ2XFhKBZ
-         2N3g==
+        bh=9EscMvNq76GeUom/FtzlsqDl8sdOCj3rZo00CWoiuwA=;
+        b=F7CeinsqS7wotCIbiDe0PSdED/m/nEhij5VdSZwAPlpQo/wUAA6kvkSFvCh1Sj7DoG
+         I+Y/7wtJdsRBk/txmwJv+E+Jmm+RvsNoCjLEWMfZ6zj7g4L1DW0nQMZlFOK+vH9eE3zq
+         PJP4gOEJ5i2+IuFKrf6eIJZTX0yRiYqn7rfAjkQF58tv3+sA2KEIRxqACfhrn5gXjgc2
+         k3zdEaAuqNa2jxuwV3XYiLwM97lJ50Y6uUEYvTs+v/RjlVbOxHs3ND35GqFby9PFQU9g
+         qNUJJ7URS8t+02Dh+OAf2PxXIXKq/oNOlq+B29sD6fa37eTGVJTR9pDnIw+Cl1yXMVRd
+         lbMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=zL3zAyFVSY3b9tOnPyfU+7HZbn2fwn34DVHclMTOxIM=;
-        b=XGOdm79+Txkp8Bm/ZtNaosl/Th6ULIPA+uOXtBvEcqXujxtMttB+uF2PGmkjrRnWd3
-         Jtz4rYhDiMM9LOj/WD3J3QkPamMjTkIXU+5wakZJFx/LASxkw8NZSgKk96JwadMGQvYa
-         Ic+OOqJ5u7d0miG/9+Kpd2afIJs4N48QnRfkh18Q8bdymJls+YjmK18RunWTmNbPnjEH
-         NkaAuK7zFZKQzED/+wcKLOuO221n49MGudmNNah8U0wELzITNXpmsFLoXYByx7YfXmku
-         JrQXD9ewklh3AXVeJIyqaocMq/qWx3szQJBHzEVBfGC6spSqsefs/caFRwaR9Nl6cVco
-         vmaw==
-X-Gm-Message-State: AOAM5320HPqZ17xZt35+8Iriaw1hg2HT15EvybCshFwsVui3xrjIlw9X
-        gaG+zL3Q1O2LG/OIe3U8Pdw=
-X-Google-Smtp-Source: ABdhPJyszTsPH0cgFDvwgEGg3ulNmRSFpWw0T28e1SHB0fW84CGCOgMtYS/1BwvzpMIoRdQ6c5PcsA==
-X-Received: by 2002:a5d:5228:0:b0:20a:d7e9:7ed8 with SMTP id i8-20020a5d5228000000b0020ad7e97ed8mr5654205wra.687.1650887247334;
-        Mon, 25 Apr 2022 04:47:27 -0700 (PDT)
-Received: from [192.168.1.5] ([41.42.183.233])
-        by smtp.gmail.com with ESMTPSA id f4-20020a7bc8c4000000b0038ebbe10c5esm11185583wml.25.2022.04.25.04.47.24
+        bh=9EscMvNq76GeUom/FtzlsqDl8sdOCj3rZo00CWoiuwA=;
+        b=Yd9Pj8S6jzE+SY1y1fWhMUj2rbmKMU9W9HycXt7OjtU7d5dlV5Y9DSfmN1UI3uq31t
+         fC8M0jcoxVIsZXMwSEjB+n0zoyT1YLcqGTrF7wDy4h1caU76eXZQ3M8HiHPW1f+UHen5
+         /e1vSrzkYUEcShL9vJzJwbdh4YMOk3T7Vm7evVB8mNDuUbHeXEYzGLIm6hhNhIOeeKkQ
+         yauXNZFGcvnIUZmmxAZn9Hdn3SuZ5l6lo+9ipNxPDRjCXdCzArMEmJ9TQnTkkN5BM9pd
+         A8d+BzxK7LolkUM7eUsYiqOII7sIwn2FyokX8Xz2qI560cbki+laHa4Jxt6NNWCgFOaG
+         /bng==
+X-Gm-Message-State: AOAM533e16/Dn7T2HAmX8l80WP5NxKpTcd1LVymryqeQhRWsaJOWjPIL
+        tNtNubAh7zDGoyWitGalgXw=
+X-Google-Smtp-Source: ABdhPJx5UVMEI7qk+X/GYHCw8s1oJwyJxDKu2qUGV9WU7GKqAoeY+izqW35kJFgowSEYipjDWNs+cA==
+X-Received: by 2002:a5d:4a0a:0:b0:20a:c899:cb7b with SMTP id m10-20020a5d4a0a000000b0020ac899cb7bmr13446037wrq.618.1650887465776;
+        Mon, 25 Apr 2022 04:51:05 -0700 (PDT)
+Received: from [192.168.0.43] (static-35-180-85-188.ipcom.comunitel.net. [188.85.180.35])
+        by smtp.gmail.com with ESMTPSA id p125-20020a1c2983000000b0038e5ca446bcsm11573603wmp.5.2022.04.25.04.51.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 04:47:26 -0700 (PDT)
-Message-ID: <1efd4c00-4c78-2330-cfb3-fe81493e7e68@gmail.com>
-Date:   Mon, 25 Apr 2022 13:47:21 +0200
+        Mon, 25 Apr 2022 04:51:05 -0700 (PDT)
+Message-ID: <20650a35-5392-43fa-8b70-902eea860d92@gmail.com>
+Date:   Mon, 25 Apr 2022 13:51:04 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH net-next v3 1/2] rtnetlink: add extack support in fdb del
- handlers
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v10 3/6] ARM: dts: add clock support for Airoha EN7523
 Content-Language: en-US
-To:     Nikolay Aleksandrov <razor@blackwall.org>, netdev@vger.kernel.org
-Cc:     outreachy@lists.linux.dev, roopa@nvidia.com, jdenham@redhat.com,
-        sbrivio@redhat.com, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
-        alexandre.belloni@bootlin.com, shshaikh@marvell.com,
-        manishc@marvell.com, intel-wired-lan@lists.osuosl.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
-        GR-Linux-NIC-Dev@marvell.com, bridge@lists.linux-foundation.org
-References: <cover.1650800975.git.eng.alaamohamedsoliman.am@gmail.com>
- <c3a882e4fb6f9228f704ebe3c1fcace14ee6cdf2.1650800975.git.eng.alaamohamedsoliman.am@gmail.com>
- <7c8367b6-95c7-ea39-fafe-72495f343625@blackwall.org>
- <d89eefc2-664f-8537-d10e-6fdfbb6823ed@gmail.com>
- <4bf69eef-7444-1238-0f4a-fb0fccda080c@blackwall.org>
- <3bcb2d3d-8b8b-8a8f-1285-7277394b4e6b@gmail.com>
- <0f1e1250-920a-c7d1-900c-98ef3e0456d8@blackwall.org>
-From:   Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-In-Reply-To: <0f1e1250-920a-c7d1-900c-98ef3e0456d8@blackwall.org>
+To:     Felix Fietkau <nbd@nbd.name>, soc@kernel.org,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220314084409.84394-1-nbd@nbd.name>
+ <20220314084409.84394-4-nbd@nbd.name>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220314084409.84394-4-nbd@nbd.name>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -88,69 +78,43 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On ٢٤‏/٤‏/٢٠٢٢ ٢٣:٥٢, Nikolay Aleksandrov wrote:
-> On 4/25/22 00:09, Alaa Mohamed wrote:
->>
->> On ٢٤‏/٤‏/٢٠٢٢ ٢١:٥٥, Nikolay Aleksandrov wrote:
->>> On 24/04/2022 22:49, Alaa Mohamed wrote:
->>>> On ٢٤‏/٤‏/٢٠٢٢ ٢١:٠٢, Nikolay Aleksandrov wrote:
->>>>> On 24/04/2022 15:09, Alaa Mohamed wrote:
->>>>>> Add extack support to .ndo_fdb_del in netdevice.h and
->>>>>> all related methods.
->>>>>>
->>>>>> Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
->>>>>> ---
->>>>>> changes in V3:
->>>>>>           fix errors reported by checkpatch.pl
->>>>>> ---
->>>>>>    drivers/net/ethernet/intel/ice/ice_main.c        | 4 ++--
->>>>>>    drivers/net/ethernet/mscc/ocelot_net.c           | 4 ++--
->>>>>>    drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c | 2 +-
->>>>>>    drivers/net/macvlan.c                            | 2 +-
->>>>>>    drivers/net/vxlan/vxlan_core.c                   | 2 +-
->>>>>>    include/linux/netdevice.h                        | 2 +-
->>>>>>    net/bridge/br_fdb.c                              | 2 +-
->>>>>>    net/bridge/br_private.h                          | 2 +-
->>>>>>    net/core/rtnetlink.c                             | 4 ++--
->>>>>>    9 files changed, 12 insertions(+), 12 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/net/ethernet/intel/ice/ice_main.c 
->>>>>> b/drivers/net/ethernet/intel/ice/ice_main.c
->>>>>> index d768925785ca..7b55d8d94803 100644
->>>>>> --- a/drivers/net/ethernet/intel/ice/ice_main.c
->>>>>> +++ b/drivers/net/ethernet/intel/ice/ice_main.c
->>>>>> @@ -5678,10 +5678,10 @@ ice_fdb_add(struct ndmsg *ndm, struct 
->>>>>> nlattr __always_unused *tb[],
->>>>>>    static int
->>>>>>    ice_fdb_del(struct ndmsg *ndm, __always_unused struct nlattr 
->>>>>> *tb[],
->>>>>>            struct net_device *dev, const unsigned char *addr,
->>>>>> -        __always_unused u16 vid)
->>>>>> +        __always_unused u16 vid, struct netlink_ext_ack *extack)
->>>>>>    {
->>>>>>        int err;
->>>>>> -
->>>>>> +
->>>>> What's changed here?
->>>> In the previous version, I removed the blank line after "int err;" 
->>>> and you said I shouldn't so I added blank line.
->>>>
->>> Yeah, my question is are you fixing a dos ending or something else?
->>> The blank line is already there, what's wrong with it?
->> No, I didn't.
->>>
->>> The point is it's not nice to mix style fixes and other changes, 
->>> more so
->>> if nothing is mentioned in the commit message.
->> Got it, So, what should I do to fix it?
->
-> Don't change that line? I mean I'm even surprised this made it in the 
-> patch. As I mentioned above, there is already a new line there so I'm 
-> not sure how you're removing it and adding it again. :)
->
-> Cheers,
->  Nik
 
+On 14/03/2022 09:44, Felix Fietkau wrote:
+> This driver only registers fixed rate clocks, since the clocks are fully
+> initialized by the boot loader and should not be changed later, according
+> to Airoha.
+> 
+> Signed-off-by: Felix Fietkau <nbd@nbd.name>
 
-Thanks Nik, I will fix this.
+Applied, thanks!
 
+> ---
+>   arch/arm/boot/dts/en7523.dtsi | 8 ++++++++
+>   1 file changed, 8 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/en7523.dtsi b/arch/arm/boot/dts/en7523.dtsi
+> index 36597f587f46..2e705b87b6c1 100644
+> --- a/arch/arm/boot/dts/en7523.dtsi
+> +++ b/arch/arm/boot/dts/en7523.dtsi
+> @@ -3,6 +3,7 @@
+>   #include <dt-bindings/interrupt-controller/irq.h>
+>   #include <dt-bindings/interrupt-controller/arm-gic.h>
+>   #include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/clock/en7523-clk.h>
+>   
+>   / {
+>   	interrupt-parent = <&gic>;
+> @@ -83,6 +84,13 @@ L2_0: l2-cache0 {
+>   		};
+>   	};
+>   
+> +	scu: system-controller@1fa20000 {
+> +		compatible = "airoha,en7523-scu";
+> +		reg = <0x1fa20000 0x400>,
+> +		      <0x1fb00000 0x1000>;
+> +		#clock-cells = <1>;
+> +	};
+> +
+>   	gic: interrupt-controller@9000000 {
+>   		compatible = "arm,gic-v3";
+>   		interrupt-controller;

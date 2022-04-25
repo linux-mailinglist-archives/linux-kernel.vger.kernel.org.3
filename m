@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0406450E39B
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:48:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F61C50E39A
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242575AbiDYOvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 10:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58742 "EHLO
+        id S242566AbiDYOvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 10:51:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242408AbiDYOvK (ORCPT
+        with ESMTP id S229526AbiDYOvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 25 Apr 2022 10:51:10 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE73DCF;
-        Mon, 25 Apr 2022 07:48:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC39FE0C
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 07:48:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7CBB8B8180B;
-        Mon, 25 Apr 2022 14:48:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A24F6C385A7;
-        Mon, 25 Apr 2022 14:48:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650898083;
-        bh=ww5pXTnymTyko+JhDt/z+sYzyuvKFpPMDqKA6sywXRM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oI3h28Wc5sKb8BlpRXgCiExH+YOd9S2re+XAD+p7/QMsMZRNn+xCfQ/hk8uQOVsag
-         OY8/yPDJYe9ie7+n4BBybRg0Ro+JKXuNmSZefFKDzhKYSBqeGaBZw1agmrcKGk11cs
-         xrLGy4K8XkDS988aeCd+l0ZaFJwzRgDTP3VyNucU=
-Date:   Mon, 25 Apr 2022 16:48:00 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Shile Zhang <shile.zhang@linux.alibaba.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        stable@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9FD56B8185E
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 14:48:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3DADC385A4;
+        Mon, 25 Apr 2022 14:48:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650898083;
+        bh=SAN7WwrgtUPViCdr3PCmoQam3W0Ucu5f9PJ6opty1hI=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=hmBTjMirsCxtGBA3PGdIBg6q4BOUfD10/bJyrssZ1CfVpUumYRgQaeFSgSdWHbLdB
+         p0X2h4nDUBXahClezIPnIGadNFr5ssTG42EweOjl6J0fkcpKETxq0aWEJJLBwDf2JC
+         dY9MlogRFtpeG5wLdy5Qko+ICEzZMV4StzQ7B26dM8dIkAYSg1MtuK9GCxER3/XvK/
+         Vfno0OHlrwutTC+6F9EP1/ZYs88RFWk4K1W37S2u0pbkxEFD9OkZIDf8bSliFGHyK2
+         LQE68ip525FnMQL9p49bfjWRB48KeWUloeRQPerKZJY+OoKjHrbDweyf7xFQ6IBePN
+         CG25FYKLk/mSQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     jtp.park@samsung.com
+Cc:     jeongtae.park@gmail.com, dp@opensource.wolfsonmicro.com,
+        gregkh@linuxfoundation.org, rafael@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] drm/cirrus: fix a NULL vs IS_ERR() checks
-Message-ID: <Yma0oHqbznOilrCS@kroah.com>
-References: <20220425141043.214024-1-shile.zhang@linux.alibaba.com>
+In-Reply-To: <20220425114613.15934-1-jtp.park@samsung.com>
+References: <CGME20220425114955epcas2p331be3ef61616c06974e3e9c6448e6394@epcas2p3.samsung.com> <20220425114613.15934-1-jtp.park@samsung.com>
+Subject: Re: [PATCH] regmap: cache: set max_register with reg_stride
+Message-Id: <165089808170.183945.10265494062208936278.b4-ty@kernel.org>
+Date:   Mon, 25 Apr 2022 15:48:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220425141043.214024-1-shile.zhang@linux.alibaba.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -51,56 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 10:10:43PM +0800, Shile Zhang wrote:
-> The function drm_gem_shmem_vmap can returns error pointers as well,
-> which could cause following kernel crash:
+On Mon, 25 Apr 2022 20:46:11 +0900, Jeongtae Park wrote:
+> Current logic does not consider multi-stride cases,
+> the max_register have to calculate with reg_stride
+> because it is a kind of address range.
 > 
-> BUG: unable to handle page fault for address: fffffffffffffffc
-> PGD 1426a12067 P4D 1426a12067 PUD 1426a14067 PMD 0
-> Oops: 0000 [#1] SMP NOPTI
-> CPU: 12 PID: 3598532 Comm: stress-ng Kdump: loaded Not tainted 5.10.50.x86_64 #1
-> ...
-> RIP: 0010:memcpy_toio+0x23/0x50
-> Code: 00 00 00 00 0f 1f 00 0f 1f 44 00 00 48 85 d2 74 28 40 f6 c7 01 75 2b 48 83 fa 01 76 06 40 f6 c7 02 75 17 48 89 d1 48 c1 e9 02 <f3> a5 f6 c2 02 74 02 66 a5 f6 c2 01 74 01 a4 c3 66 a5 48 83 ea 02
-> RSP: 0018:ffffafbf8a203c68 EFLAGS: 00010216
-> RAX: 0000000000000000 RBX: fffffffffffffffc RCX: 0000000000000200
-> RDX: 0000000000000800 RSI: fffffffffffffffc RDI: ffffafbf82000000
-> RBP: ffffafbf82000000 R08: 0000000000000002 R09: 0000000000000000
-> R10: 00000000000002b5 R11: 0000000000000000 R12: 0000000000000800
-> R13: ffff8a6801099300 R14: 0000000000000001 R15: 0000000000000300
-> FS:  00007f4a6bc5f740(0000) GS:ffff8a8641900000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: fffffffffffffffc CR3: 00000016d3874001 CR4: 00000000003606e0
-> Call Trace:
->  drm_fb_memcpy_dstclip+0x5e/0x80 [drm_kms_helper]
->  cirrus_fb_blit_rect.isra.0+0xb7/0xe0 [cirrus]
->  cirrus_pipe_update+0x9f/0xa8 [cirrus]
->  drm_atomic_helper_commit_planes+0xb8/0x220 [drm_kms_helper]
->  drm_atomic_helper_commit_tail+0x42/0x80 [drm_kms_helper]
->  commit_tail+0xce/0x130 [drm_kms_helper]
->  drm_atomic_helper_commit+0x113/0x140 [drm_kms_helper]
->  drm_client_modeset_commit_atomic+0x1c4/0x200 [drm]
->  drm_client_modeset_commit_locked+0x53/0x80 [drm]
->  drm_client_modeset_commit+0x24/0x40 [drm]
->  drm_fbdev_client_restore+0x48/0x85 [drm_kms_helper]
->  drm_client_dev_restore+0x64/0xb0 [drm]
->  drm_release+0xf2/0x110 [drm]
->  __fput+0x96/0x240
->  task_work_run+0x5c/0x90
->  exit_to_user_mode_loop+0xce/0xd0
->  exit_to_user_mode_prepare+0x6a/0x70
->  syscall_exit_to_user_mode+0x12/0x40
->  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-> RIP: 0033:0x7f4a6bd82c2b
 > 
-> Fixes: ab3e023b1b4c9 ("drm/cirrus: rewrite and modernize driver.")
-> 
-> Signed-off-by: Shile Zhang <shile.zhang@linux.alibaba.com>
 
-No blank line between those please.
+Applied to
 
-And you need to really really really document why this can not use a
-commit that is currently upstream.  And what commit upstream did solve
-this and how.  Otherwise we can not take this change, sorry.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
 
-greg k-h
+Thanks!
+
+[1/1] regmap: cache: set max_register with reg_stride
+      commit: d640947562cea6158df13fe021b0e117865ba8b3
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

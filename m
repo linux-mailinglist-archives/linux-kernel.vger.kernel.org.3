@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A333E50E962
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 21:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C822D50E96C
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 21:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244908AbiDYTVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 15:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
+        id S244913AbiDYTYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 15:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238212AbiDYTVh (ORCPT
+        with ESMTP id S235743AbiDYTYQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 15:21:37 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 717CD1002D0
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 12:18:29 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id l11-20020a17090a49cb00b001d923a9ca99so289534pjm.1
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 12:18:29 -0700 (PDT)
+        Mon, 25 Apr 2022 15:24:16 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1821102A7
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 12:21:11 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id z16so15725009pfh.3
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 12:21:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:from:to:cc:subject:in-reply-to:message-id:references
          :mime-version;
-        bh=EGrHpQVhbDy5vwZTzhNYK8llc1wnwOLu4wV+jMnBYL4=;
-        b=CaYfhw1w1zCr1TOBWVJ1EiBOGCE0EIxtakImw+XtoEW5vt84RvGptzaYqbrW+innlW
-         +Ku88xj7fg/qsjLAFb4N18ZNeray/Se5SHppUK9OjBl0eB9PHNzoDM2LRPg44ycpi2SJ
-         bjNRJBVIyxkZFe/hZdtOD8UmyZHIiFgfVHm/j3HrJhsuwLJY0Ai5lzZzWklY6oXEwfoZ
-         X7ZFQXszl2q6IOU7xV6dHIkOdnvDUSnutDtxLMhn9QduayUHVDPPQG/uD1X4QAkQnYHM
-         EQ8yY7q6UexyNDJjNR/gFIP/T28r2m2aPkka5RBsU4xqbdHtPNIkvuAc9lKgiFIULCS0
-         BWcQ==
+        bh=EFTgBEagFmmR6U52RrsmJyFD9yVowcStiIMc2bUDapY=;
+        b=s6195XWETsb6HUd7XIYfd+aHSTXLySbeqIstQZ7ENlOt0PPlWQyDgbZ9COFCiAyAKc
+         Q151crBFWVCD43gsDQDwAUFRwSreTwwCC10Z+KVQufEFhNcJCLx1dzi19yeK6JlbA099
+         FSZXM4DmqpyY5IWjLmZwPAAWufIZsB9qKLxyLLCknVBSjHREAjIzjw67XLWULUs8TEAu
+         eEHvwUfUHV/isVdOZmaVCsr48fzvEWkCvu2MO02pyT6ED6PbZ4EqCz/TDMUjSRW+a0oU
+         XE9npOj+CyL5GbXgQ1rnJKE53PedmKLmk15elLhmajNbzqfsuukD806Y+AihCB4hq/M2
+         /FGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
          :references:mime-version;
-        bh=EGrHpQVhbDy5vwZTzhNYK8llc1wnwOLu4wV+jMnBYL4=;
-        b=lINP1PP/PE//QdrvaGEA77g1WZMtiY5wF+xSp/GX/iQfO0BCcSzYQWi/oH5zzFLUbu
-         4IrXr9Tdb/pbUxICQJA978vjilGMSV0m6d7VPXu5S+p3gjHqnrPXbn1u3OsshWMLQIoR
-         lUUwM1Hp6Wgldy3H6AWZgM924uM5EIXD65kxSnCVgoRBAFKHLz/Jd9ruAyb5W2tAPTvv
-         4mPvkdHOYw4GkJuQbwd4U86QEHCRO4gMgl6aNASrOjKDs21dcX4GzS0kWWkDmlcImoSr
-         Klx+ZUD/WDk7NEMX38QyaT2UtBha8jGVOfjPdW0FeVayQ/bJQR4fFRNxGIMF7cqfPyXp
-         tBqA==
-X-Gm-Message-State: AOAM532qRQ1FKjlHGSNrWRV5M3Feb/vQplN1CMxQ/slsqoC5KEb/K6+Y
-        e9rgHDHy54cPP6Tjb5Jwbi5TUg==
-X-Google-Smtp-Source: ABdhPJxe80YjpMyc42uGIuBN4k1cDxK/sBI8c3/84Wz3/UZEwe35L5kGW2HFgSQ97+l0cr2C45Zhpw==
-X-Received: by 2002:a17:902:7244:b0:158:41d3:b79b with SMTP id c4-20020a170902724400b0015841d3b79bmr19870661pll.50.1650914309214;
-        Mon, 25 Apr 2022 12:18:29 -0700 (PDT)
+        bh=EFTgBEagFmmR6U52RrsmJyFD9yVowcStiIMc2bUDapY=;
+        b=Cnlo3H4C/hiXhGccSiXgTIndm5nUYSOgSSu1i8UIbhIYIFdDXgBfxvomjZ63zOI27a
+         3FqsA9cLePyLLQNb/8zL+ZkjHFTQ1O/4s5idSBzvn1qzjoFw7EoHmXr2mG3/dyYG04NH
+         tdxsZAn8dl0E70+vHE0t8E61O59sig1sIWa2dU6hXQ5zYUvy+FHKN49w9YRjk76zbltJ
+         vSKvf51terx6xODWgjPgOZJBo9iJvo54WD/602ApxkiJwm3GCfrvdF4XX6Jd3bX+fJev
+         I9lv0LpEVQHHuzvxmDjluw8l48GtbSmLZB4C0wXAmdDlVpyMaHz0roYo0tf05dDvSAcF
+         q8cQ==
+X-Gm-Message-State: AOAM530GSD2/oZDFOoNPQx0tCfWnQgV8BmMsJNET4rUHUYJ5T/8Bz22Q
+        NUUXF5jY23dC25qPDqM5T3/Aig==
+X-Google-Smtp-Source: ABdhPJy/nP2vmcqU+4mCsp+zxrEEpTTuLTZEPc4nt8yUYWG8kkVKy7tWntoPERABjCyjJlt27TlgYA==
+X-Received: by 2002:a63:8a41:0:b0:3ab:358a:e70 with SMTP id y62-20020a638a41000000b003ab358a0e70mr6065999pgd.559.1650914470908;
+        Mon, 25 Apr 2022 12:21:10 -0700 (PDT)
 Received: from [2620:15c:29:204:185b:8dcc:84d4:fb71] ([2620:15c:29:204:185b:8dcc:84d4:fb71])
-        by smtp.gmail.com with ESMTPSA id x1-20020a17090a970100b001cd4989ff41sm97989pjo.8.2022.04.25.12.18.28
+        by smtp.gmail.com with ESMTPSA id k15-20020a63ab4f000000b00381eef69bfbsm10440939pgp.3.2022.04.25.12.21.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 12:18:28 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 12:18:28 -0700 (PDT)
+        Mon, 25 Apr 2022 12:21:10 -0700 (PDT)
+Date:   Mon, 25 Apr 2022 12:21:09 -0700 (PDT)
 From:   David Rientjes <rientjes@google.com>
 To:     Yosry Ahmed <yosryahmed@google.com>
 cc:     Johannes Weiner <hannes@cmpxchg.org>,
@@ -67,11 +67,11 @@ cc:     Johannes Weiner <hannes@cmpxchg.org>,
         Tim Chen <tim.c.chen@linux.intel.com>, cgroups@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 3/4] selftests: cgroup: fix alloc_anon_noexit()
- instantly freeing memory
-In-Reply-To: <20220425190040.2475377-4-yosryahmed@google.com>
-Message-ID: <f4aee758-c3b6-5ecb-a6e-10854a6490c4@google.com>
-References: <20220425190040.2475377-1-yosryahmed@google.com> <20220425190040.2475377-4-yosryahmed@google.com>
+Subject: Re: [PATCH v5 4/4] selftests: cgroup: add a selftest for
+ memory.reclaim
+In-Reply-To: <20220425190040.2475377-5-yosryahmed@google.com>
+Message-ID: <935cf8de-c089-a212-f419-fd8434936b5@google.com>
+References: <20220425190040.2475377-1-yosryahmed@google.com> <20220425190040.2475377-5-yosryahmed@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
@@ -87,15 +87,10 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Mon, 25 Apr 2022, Yosry Ahmed wrote:
 
-> Currently, alloc_anon_noexit() calls alloc_anon() which instantly frees
-> the allocated memory. alloc_anon_noexit() is usually used with
-> cg_run_nowait() to run a process in the background that allocates
-> memory. It makes sense for the background process to keep the memory
-> allocated and not instantly free it (otherwise there is no point of
-> running it in the background).
+> Add a new test for memory.reclaim that verifies that the interface
+> correctly reclaims memory as intended, from both anon and file pages.
 > 
 > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 > Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
-> Acked-by: Shakeel Butt <shakeelb@google.com>
 
 Acked-by: David Rientjes <rientjes@google.com>

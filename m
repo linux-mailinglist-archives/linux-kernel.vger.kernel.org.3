@@ -2,223 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 270A250DB1E
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:26:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A0750DB1C
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235954AbiDYI3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 04:29:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36320 "EHLO
+        id S235710AbiDYI3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 04:29:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234904AbiDYI2Z (ORCPT
+        with ESMTP id S240736AbiDYI2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 04:28:25 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63071CB39
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:25:21 -0700 (PDT)
-X-UUID: 80ba59ffa7af4c7581137d686469fae7-20220425
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:081ee2f8-c059-4f03-a6c9-b84ff32a7470,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:-20
-X-CID-META: VersionHash:faefae9,CLOUDID:ae0f02f0-06b0-4305-bfbf-554bfc9d151a,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 80ba59ffa7af4c7581137d686469fae7-20220425
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1274526290; Mon, 25 Apr 2022 16:25:15 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 25 Apr 2022 16:24:55 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 25 Apr
- 2022 16:24:54 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 25 Apr 2022 16:24:54 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        "Will Deacon" <will@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-CC:     Miles Chen <miles.chen@mediatek.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        <iommu@lists.linux-foundation.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] iommu/mediatek: fix NULL pointer dereference when printing dev_name
-Date:   Mon, 25 Apr 2022 16:24:48 +0800
-Message-ID: <20220425082449.1821-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Mon, 25 Apr 2022 04:28:06 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79155DF07
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:25:02 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2f7b815ac06so63970857b3.3
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:25:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6PKUUhwBuA+ch0Uuq1T1DwshtjMaHDXX/uf2rDKBNDQ=;
+        b=LfPW9WXgTpr+8/iVd5AE2JI65Goo9Kb2vfmKqdAD7xilZMOadB4Hs7hyaEuHJcebSq
+         Jb6OAXCefLv+Q4wDL3KmNpjmMTgKBGfeHRrT+Wa1UxLqcTruKd81ztbl6lCMZFjlmDC4
+         g9lfIGc9u5ZZt7MRgeKrf6IK7WUXWAptRCM0o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6PKUUhwBuA+ch0Uuq1T1DwshtjMaHDXX/uf2rDKBNDQ=;
+        b=WTHR5e6rVADX2mHyvYaGWeyT1lbJaIDHxOKFsLEgOMlfRTDJUZsT5J+ZvHnaj+2Apy
+         RvXM7l9VEedwzDRym64ODnBOKUNZsPk07x7GVhwcQVJfanlVDNdjw9aEEF2XuTjtL3MJ
+         oRwQsT1wEVVb4SzP0o5J+mcueuCr0WLzw1Pf1UouJUUKdlw3y7C4p8N58Wr5ow3afY5U
+         0Xv0AY7ooiagYJEm2ahWdhtOn4Es/dR52Y0bwxOsUBFeCcETcx0GRwFtNAdLERS2BuzS
+         x2VaIetHKn8CAtP374wc4ZtYGAE3m+8miI6VxVB26JgLaaY0L65fQSAF7U0lvJnd/EMv
+         L6RQ==
+X-Gm-Message-State: AOAM531P7UcEd3cN85ojMwlw6Jl3JxWsEckHEEbs31PXiu8F7q71EzHa
+        P+9nIiph01KO3lJz6nvHqQi94gLTYw3XlqSgcL+Ohg==
+X-Google-Smtp-Source: ABdhPJxbt5i4+hFeo1dGmq14YTb4HSm9CGzOHMOg7ZYoAkkPlsj1JpB9JC+WReAMlPR0hNsAbsVPwv+zgr881d/xQJs=
+X-Received: by 2002:a81:b044:0:b0:2d6:bd1f:5d8b with SMTP id
+ x4-20020a81b044000000b002d6bd1f5d8bmr15448618ywk.27.1650875101688; Mon, 25
+ Apr 2022 01:25:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220422084720.959271-1-xji@analogixsemi.com> <20220422084720.959271-4-xji@analogixsemi.com>
+ <CAG3jFytWGSUM9mevHewdmEe-hq3JgB74s7_f0fsEQqkXr9VUHg@mail.gmail.com> <CAG3jFyvEYbwkdGtiNR-6vFEXTLjcyT_viqp9qeVxFTu0PrJEVA@mail.gmail.com>
+In-Reply-To: <CAG3jFyvEYbwkdGtiNR-6vFEXTLjcyT_viqp9qeVxFTu0PrJEVA@mail.gmail.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Mon, 25 Apr 2022 16:24:50 +0800
+Message-ID: <CAGXv+5E1cCNWD98fMDjC38y2UztZd=PNQ+=G=wrBYfoXkswvHA@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] drm/bridge: anx7625: Use DPI bus type
+To:     Robert Foss <robert.foss@linaro.org>, Xin Ji <xji@analogixsemi.com>
+Cc:     dri-devel@lists.freedesktop.org, Jonas Karlman <jonas@kwiboo.se>,
+        David Airlie <airlied@linux.ie>, qwen@analogixsemi.com,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-kernel@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        bliang@analogixsemi.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When larbdev is NULL (in the case I hit, the node is incorrectly set
-iommus = <&iommu NUM>), it will cause device_link_add() fail and
-kernel crashes when we try to print dev_name(larbdev).
+On Fri, Apr 22, 2022 at 10:13 PM Robert Foss <robert.foss@linaro.org> wrote:
+>
+> On Fri, 22 Apr 2022 at 16:01, Robert Foss <robert.foss@linaro.org> wrote:
+> >
+> > On Fri, 22 Apr 2022 at 10:49, Xin Ji <xji@analogixsemi.com> wrote:
+> > >
+> > > As V4L2_FWNODE_BUS_TYPE_PARALLEL not properly descript for DPI
+> > > interface, this patch use new defined V4L2_FWNODE_BUS_TYPE_DPI for it.
+> > >
+> > > Fixes: fd0310b6fe7d ("drm/bridge: anx7625: add MIPI DPI input feature")
+> > > Signed-off-by: Xin Ji <xji@analogixsemi.com>
+> > > ---
+> > >  drivers/gpu/drm/bridge/analogix/anx7625.c | 8 ++++----
+> > >  1 file changed, 4 insertions(+), 4 deletions(-)
+> > >
+> > > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > > index 376da01243a3..71df977e8f53 100644
+> > > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > > @@ -1623,14 +1623,14 @@ static int anx7625_parse_dt(struct device *dev,
+> > >
+> > >         anx7625_get_swing_setting(dev, pdata);
+> > >
+> > > -       pdata->is_dpi = 1; /* default dpi mode */
+> > > +       pdata->is_dpi = 0; /* default dsi mode */
+> > >         pdata->mipi_host_node = of_graph_get_remote_node(np, 0, 0);
+> > >         if (!pdata->mipi_host_node) {
+> > >                 DRM_DEV_ERROR(dev, "fail to get internal panel.\n");
+> > >                 return -ENODEV;
+> > >         }
+> > >
+> > > -       bus_type = V4L2_FWNODE_BUS_TYPE_PARALLEL;
+> > > +       bus_type = 0;
+> > >         mipi_lanes = MAX_LANES_SUPPORT;
+> > >         ep0 = of_graph_get_endpoint_by_regs(np, 0, 0);
+> > >         if (ep0) {
+> > > @@ -1640,8 +1640,8 @@ static int anx7625_parse_dt(struct device *dev,
+> > >                 mipi_lanes = of_property_count_u32_elems(ep0, "data-lanes");
+> > >         }
+> > >
+> > > -       if (bus_type == V4L2_FWNODE_BUS_TYPE_PARALLEL) /* bus type is Parallel(DSI) */
+> > > -               pdata->is_dpi = 0;
+> > > +       if (bus_type == V4L2_FWNODE_BUS_TYPE_DPI) /* bus type is DPI */
+> > > +               pdata->is_dpi = 1;
+> > >
+> > >         pdata->mipi_lanes = mipi_lanes;
+> > >         if (pdata->mipi_lanes > MAX_LANES_SUPPORT || pdata->mipi_lanes <= 0)
+> >
+> > Reviewed-by: Robert Foss <robert.foss@linaro.org>
+>
+> Acked-by: Robert Foss <robert.foss@linaro.org>
 
-Fix it by adding a NULL pointer check before
-device_link_add/device_link_remove.
+Tested-by: Chen-Yu Tsai <wenst@chromium.org>
 
-It should work for normal correct setting and avoid the crash caused
-by my incorrect setting.
+Confirmed this fixes the display on Juniper (Acer Chromebook Spin 311) on
+mainline (next-20220422).
 
-Error log:
-[   18.189042][  T301] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000050
-[   18.190247][  T301] Mem abort info:
-[   18.190255][  T301]   ESR = 0x96000005
-[   18.190263][  T301]   EC = 0x25: DABT (current EL), IL = 32 bits
-[   18.192142][  T301]   SET = 0, FnV = 0
-[   18.192151][  T301]   EA = 0, S1PTW = 0
-[   18.194710][  T301]   FSC = 0x05: level 1 translation fault
-[   18.195424][  T301] Data abort info:
-[   18.195888][  T301]   ISV = 0, ISS = 0x00000005
-[   18.196500][  T301]   CM = 0, WnR = 0
-[   18.196977][  T301] user pgtable: 4k pages, 39-bit VAs, pgdp=0000000104f9e000
-[   18.197889][  T301] [0000000000000050] pgd=0000000000000000, p4d=0000000000000000, pud=0000000000000000
-[   18.199220][  T301] Internal error: Oops: 96000005 [#1] PREEMPT SMP
-[   18.343152][  T301] Kernel Offset: 0x1444080000 from 0xffffffc008000000
-[   18.343988][  T301] PHYS_OFFSET: 0x40000000
-[   18.344519][  T301] pstate: a0400005 (NzCv daif +PAN -UAO)
-[   18.345213][  T301] pc : mtk_iommu_probe_device+0xf8/0x118 [mtk_iommu]
-[   18.346050][  T301] lr : mtk_iommu_probe_device+0xd0/0x118 [mtk_iommu]
-[   18.346884][  T301] sp : ffffffc00a5635e0
-[   18.347392][  T301] x29: ffffffc00a5635e0 x28: ffffffd44a46c1d8
-[   18.348156][  T301] x27: ffffff80c39a8000 x26: ffffffd44a80cc38
-[   18.348917][  T301] x25: 0000000000000000 x24: ffffffd44a80cc38
-[   18.349677][  T301] x23: ffffffd44e4da4c6 x22: ffffffd44a80cc38
-[   18.350438][  T301] x21: ffffff80cecd1880 x20: 0000000000000000
-[   18.351198][  T301] x19: ffffff80c439f010 x18: ffffffc00a50d0c0
-[   18.351959][  T301] x17: ffffffffffffffff x16: 0000000000000004
-[   18.352719][  T301] x15: 0000000000000004 x14: ffffffd44eb5d420
-[   18.353480][  T301] x13: 0000000000000ad2 x12: 0000000000000003
-[   18.354241][  T301] x11: 00000000fffffad2 x10: c0000000fffffad2
-[   18.355003][  T301] x9 : a0d288d8d7142d00 x8 : a0d288d8d7142d00
-[   18.355763][  T301] x7 : ffffffd44c2bc640 x6 : 0000000000000000
-[   18.356524][  T301] x5 : 0000000000000080 x4 : 0000000000000001
-[   18.357284][  T301] x3 : 0000000000000000 x2 : 0000000000000005
-[   18.358045][  T301] x1 : 0000000000000000 x0 : 0000000000000000
-[   18.360208][  T301] Hardware name: MT6873 (DT)
-[   18.360771][  T301] Call trace:
-[   18.361168][  T301]  dump_backtrace+0xf8/0x1f0
-[   18.361737][  T301]  dump_stack_lvl+0xa8/0x11c
-[   18.362305][  T301]  dump_stack+0x1c/0x2c
-[   18.362816][  T301]  mrdump_common_die+0x184/0x40c [mrdump]
-[   18.363575][  T301]  ipanic_die+0x24/0x38 [mrdump]
-[   18.364230][  T301]  atomic_notifier_call_chain+0x128/0x2b8
-[   18.364937][  T301]  die+0x16c/0x568
-[   18.365394][  T301]  __do_kernel_fault+0x1e8/0x214
-[   18.365402][  T301]  do_page_fault+0xb8/0x678
-[   18.366934][  T301]  do_translation_fault+0x48/0x64
-[   18.368645][  T301]  do_mem_abort+0x68/0x148
-[   18.368652][  T301]  el1_abort+0x40/0x64
-[   18.368660][  T301]  el1h_64_sync_handler+0x54/0x88
-[   18.368668][  T301]  el1h_64_sync+0x68/0x6c
-[   18.368673][  T301]  mtk_iommu_probe_device+0xf8/0x118 [mtk_iommu]
-[   18.369840][  T301]  __iommu_probe_device+0x12c/0x358
-[   18.370880][  T301]  iommu_probe_device+0x3c/0x31c
-[   18.372026][  T301]  of_iommu_configure+0x200/0x274
-[   18.373587][  T301]  of_dma_configure_id+0x1b8/0x230
-[   18.375200][  T301]  platform_dma_configure+0x24/0x3c
-[   18.376456][  T301]  really_probe+0x110/0x504
-[   18.376464][  T301]  __driver_probe_device+0xb4/0x188
-[   18.376472][  T301]  driver_probe_device+0x5c/0x2b8
-[   18.376481][  T301]  __driver_attach+0x338/0x42c
-[   18.377992][  T301]  bus_add_driver+0x218/0x4c8
-[   18.379389][  T301]  driver_register+0x84/0x17c
-[   18.380580][  T301]  __platform_driver_register+0x28/0x38
-...
+Xin, in the future, please send the whole series to all recipients of
+all patches listed by get_maintainers.pl, not just the recipients of
+each patch. In the case of this series, they should have been sent
+to all of the mailing lists (media, devicetree, dri-devel) so that
+everyone has the same, full view of the patches.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: 635319a4a744 ("media: iommu/mediatek: Add device_link between the consumer and the larb devices")
-Signed-off-by: Miles Chen <miles.chen@mediatek.com>
-
----
-
-Change since v1
-fix a build warning reported by kernel test robot
-https://lore.kernel.org/lkml/202204231446.IYKdZ674-lkp@intel.com/
-
----
- drivers/iommu/mtk_iommu.c    | 13 ++++++++-----
- drivers/iommu/mtk_iommu_v1.c | 13 ++++++++-----
- 2 files changed, 16 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index 6fd75a60abd6..03e0133f346a 100644
---- a/drivers/iommu/mtk_iommu.c
-+++ b/drivers/iommu/mtk_iommu.c
-@@ -581,10 +581,12 @@ static struct iommu_device *mtk_iommu_probe_device(struct device *dev)
- 		}
- 	}
- 	larbdev = data->larb_imu[larbid].dev;
--	link = device_link_add(dev, larbdev,
--			       DL_FLAG_PM_RUNTIME | DL_FLAG_STATELESS);
--	if (!link)
--		dev_err(dev, "Unable to link %s\n", dev_name(larbdev));
-+	if (larbdev) {
-+		link = device_link_add(dev, larbdev,
-+				       DL_FLAG_PM_RUNTIME | DL_FLAG_STATELESS);
-+		if (!link)
-+			dev_err(dev, "Unable to link %s\n", dev_name(larbdev));
-+	}
- 	return &data->iommu;
- }
- 
-@@ -601,7 +603,8 @@ static void mtk_iommu_release_device(struct device *dev)
- 	data = dev_iommu_priv_get(dev);
- 	larbid = MTK_M4U_TO_LARB(fwspec->ids[0]);
- 	larbdev = data->larb_imu[larbid].dev;
--	device_link_remove(dev, larbdev);
-+	if (larbdev)
-+		device_link_remove(dev, larbdev);
- 
- 	iommu_fwspec_free(dev);
- }
-diff --git a/drivers/iommu/mtk_iommu_v1.c b/drivers/iommu/mtk_iommu_v1.c
-index ecff800656e6..18365c73eeb2 100644
---- a/drivers/iommu/mtk_iommu_v1.c
-+++ b/drivers/iommu/mtk_iommu_v1.c
-@@ -467,10 +467,12 @@ static struct iommu_device *mtk_iommu_probe_device(struct device *dev)
- 	}
- 
- 	larbdev = data->larb_imu[larbid].dev;
--	link = device_link_add(dev, larbdev,
--			       DL_FLAG_PM_RUNTIME | DL_FLAG_STATELESS);
--	if (!link)
--		dev_err(dev, "Unable to link %s\n", dev_name(larbdev));
-+	if (larbdev) {
-+		link = device_link_add(dev, larbdev,
-+				       DL_FLAG_PM_RUNTIME | DL_FLAG_STATELESS);
-+		if (!link)
-+			dev_err(dev, "Unable to link %s\n", dev_name(larbdev));
-+	}
- 
- 	return &data->iommu;
- }
-@@ -502,7 +504,8 @@ static void mtk_iommu_release_device(struct device *dev)
- 	data = dev_iommu_priv_get(dev);
- 	larbid = mt2701_m4u_to_larb(fwspec->ids[0]);
- 	larbdev = data->larb_imu[larbid].dev;
--	device_link_remove(dev, larbdev);
-+	if (larbdev)
-+		device_link_remove(dev, larbdev);
- 
- 	iommu_fwspec_free(dev);
- }
--- 
-2.18.0
-
+ChenYu

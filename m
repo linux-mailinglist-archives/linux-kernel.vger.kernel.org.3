@@ -2,81 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1962E50E472
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06A9350E483
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 17:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232786AbiDYPeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 11:34:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53818 "EHLO
+        id S242893AbiDYPiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 11:38:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233191AbiDYPeP (ORCPT
+        with ESMTP id S242892AbiDYPiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 11:34:15 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63BAF21E10
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 08:31:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650900671; x=1682436671;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=QmBvHFEL8jCRZp/04JCJNkoj3kFPY6FDP8vzsw7y6UI=;
-  b=nEFkiNRGu6R/J+fU6DJzljwldao92uHfDZvnSuUkUcAsGFt5o+IE6upm
-   bsXjlqRUMEe0SxyXKgH31TG/kCffDxRUBUP3OWRl5EBvcBpUaxrUnnrdf
-   x6vz5BRfZdqWGLgomlrF0LXUMLU8fZjd+I1fv8+536f1/HOg2Fu+IiMJN
-   tDuc++1cBxN+V7kNOg16DNl3mIvZjVYJATHq3Mbqv+W/5Pql2xx6E6zwV
-   WaxYd7Hga2vCXpjw/frhl2AvN3iDR6IEXOw6dI/O3ti6fitR1kYaVx2t6
-   jO5J7tujm7qGr6Gmpr4MDhMIqOeg6fk+wz6avjmS7FRJ/tZmT9Os/FU/t
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="247208240"
-X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
-   d="scan'208";a="247208240"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 08:31:07 -0700
-X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
-   d="scan'208";a="579340231"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 08:31:06 -0700
-Date:   Mon, 25 Apr 2022 08:34:44 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>, robin.murphy@arm.com,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86 <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        iommu <iommu@lists.linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>, zhangfei.gao@linaro.org,
-        Thomas Gleixner <tglx@linutronix.de>, will@kernel.org,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
- allocation and free it on mm exit
-Message-ID: <20220425083444.00af5674@jacob-builder>
-In-Reply-To: <YmavoKkVu+hd+x0M@myrica>
-References: <YllADL6uMoLllzQo@fyu1.sc.intel.com>
-        <YmA4pbgevqln/jSO@myrica>
-        <tencent_76E043C4D1B6A21A5253579A61034107EB06@qq.com>
-        <tencent_7477100F8A445C6CAFA8F13601A55134480A@qq.com>
-        <YmJ/WA6KAQU/xJjA@myrica>
-        <tencent_A4E83BA6071B2204B6F5D4E69A50D21C1A09@qq.com>
-        <YmLOznyBF0f7COYT@myrica>
-        <tencent_2922DAB6F3D5789A1CD3A21A843B4007ED09@qq.com>
-        <Yman5hLomw9/c+bi@myrica>
-        <76ec6342-0d7c-7c7b-c132-2892e4048fa1@intel.com>
-        <YmavoKkVu+hd+x0M@myrica>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Mon, 25 Apr 2022 11:38:09 -0400
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823AC4705F
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 08:35:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=2BAVYOzHyLn6mrUTsnozcnawOl0hxdkWwXi8fyQF4Ik=;
+  b=LbaA6wKuIm3B3fXzADjns8BtJVZsRwYNKdhnolZfvhz3lF127+ipZpoM
+   yr+P61xyB7QYhdNgJOGf6TzE9Q8/eU5hniKcHFWqNiI3av3jnsb6sTpEv
+   miliijm9jLUO0TLCtzgB/hGEwEr1YdVJdkTbpsPBj5C/hSVtM25LMyVFg
+   4=;
+Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.90,288,1643670000"; 
+   d="scan'208";a="12375271"
+Received: from ip-214.net-89-2-7.rev.numericable.fr (HELO hadrien) ([89.2.7.214])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 17:35:00 +0200
+Date:   Mon, 25 Apr 2022 17:34:59 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Ira Weiny <ira.weiny@intel.com>
+cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>,
+        outreachy@lists.linux.dev, boris.ostrovsky@oracle.com,
+        jgross@suse.com, sstabellini@kernel.org,
+        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] xen:  Convert kmap() to kmap_local_page()
+In-Reply-To: <Yma9zvvuZGyAeRBG@iweiny-desk3>
+Message-ID: <alpine.DEB.2.22.394.2204251733420.2718@hadrien>
+References: <20220419234328.10346-1-eng.alaamohamedsoliman.am@gmail.com> <3990312.6PsWsQAL7t@leap> <alpine.DEB.2.22.394.2204201556330.2937@hadrien> <2538961.9Mp67QZiUf@leap> <Yma9zvvuZGyAeRBG@iweiny-desk3>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+Content-Type: multipart/mixed; boundary="8323329-1172987651-1650900900=:2718"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,60 +56,219 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jean-Philippe,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-On Mon, 25 Apr 2022 15:26:40 +0100, Jean-Philippe Brucker
-<jean-philippe@linaro.org> wrote:
-
-> On Mon, Apr 25, 2022 at 07:18:36AM -0700, Dave Hansen wrote:
-> > On 4/25/22 06:53, Jean-Philippe Brucker wrote:  
-> > > On Sat, Apr 23, 2022 at 07:13:39PM +0800, zhangfei.gao@foxmail.com
-> > > wrote:  
-> > >>>> On 5.17
-> > >>>> fops_release is called automatically, as well as
-> > >>>> iommu_sva_unbind_device. On 5.18-rc1.
-> > >>>> fops_release is not called, have to manually call close(fd)  
-> > >>> Right that's weird  
-> > >> Looks it is caused by the fix patch, via mmget, which may add
-> > >> refcount of fd.  
-> > > Yes indirectly I think: when the process mmaps the queue,
-> > > mmap_region() takes a reference to the uacce fd. That reference is
-> > > released either by explicit close() or munmap(), or by exit_mmap()
-> > > (which is triggered by mmput()). Since there is an mm->fd dependency,
-> > > we cannot add a fd->mm dependency, so no mmget()/mmput() in
-> > > bind()/unbind().
-> > > 
-> > > I guess we should go back to refcounted PASIDs instead, to avoid
-> > > freeing them until unbind().  
-> > 
-> > Yeah, this is a bit gnarly for -rc4.  Let's just make sure there's
-> > nothing else simple we can do.
-> > 
-> > How does the IOMMU hardware know that all activity to a given PASID is
-> > finished?  That activity should, today, be independent of an mm or a
-> > fd's lifetime.  
-> 
-> In the case of uacce, it's tied to the fd lifetime: opening an accelerator
-> queue calls iommu_sva_bind_device(), which sets up the PASID context in
-> the IOMMU. Closing the queue calls iommu_sva_unbind_device() which
-> destroys the PASID context (after the device driver stopped all DMA for
-> this PASID).
-> 
-For VT-d, it is essentially the same flow except managed by the individual
-drivers such as DSA.
-If free() happens before unbind(), we deactivate the PASIDs and suppress
-faults from the device. When the unbind finally comes, we finalize the
-PASID teardown. It seems we have a need for an intermediate state where
-PASID is "pending free"?
-
-> Thanks,
-> Jean
-> _______________________________________________
-> iommu mailing list
-> iommu@lists.linux-foundation.org
-> https://lists.linuxfoundation.org/mailman/listinfo/iommu
+--8323329-1172987651-1650900900=:2718
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
 
 
-Thanks,
 
-Jacob
+On Mon, 25 Apr 2022, Ira Weiny wrote:
+
+> On Wed, Apr 20, 2022 at 04:07:36PM +0200, Fabio M. De Francesco wrote:
+> > On mercoledì 20 aprile 2022 15:57:14 CEST Julia Lawall wrote:
+> > >
+> > > On Wed, 20 Apr 2022, Fabio M. De Francesco wrote:
+> > >
+> > > > On mercoledì 20 aprile 2022 15:40:10 CEST Julia Lawall wrote:
+> > > > >
+> > > > > On Wed, 20 Apr 2022, Fabio M. De Francesco wrote:
+> > > > >
+> > > > > > On mercoledì 20 aprile 2022 08:03:05 CEST Julia Lawall wrote:
+> > > > > > >
+> > > > > > > On Wed, 20 Apr 2022, Alaa Mohamed wrote:
+> > > > > > >
+> > > > > > > > kmap() is being deprecated and these usages are all local to
+> > the
+> > > > thread
+> > > > > > > > so there is no reason kmap_local_page() can't be used.
+> > > > > > > >
+> > > > > > > > Replace kmap() calls with kmap_local_page().
+> > > > > > >
+> > > > > > > OK, so from a Coccinelle point of view, could we do
+> > > > > > >
+> > > > > > > @@
+> > > > > > > expression e1,e2,x,f;
+> > > > > > > @@
+> > > > > > >
+> > > > > > > e1 =
+> > > > > > > - kmap
+> > > > > > > + kmap_local_page
+> > > > > > >     (e2)
+> > > > > > > ... when != x = e1 // not stored in any location and not passed
+> > to
+> > > > > > another function
+> > > > > > >     when != f(...,e1,...)
+> > > > > > >     when != x = e2
+> > > > > > >     when != f(...,e2,...)
+> > > > > > > -kunmap(e2)
+> > > > > > > +kunmap_local(e1)
+> > > > > > >
+> > > > > > > julia
+> > > > > > >
+> > > > > >
+> > > > > > I've never spent sufficient time to understand properly the syntax
+> > and
+> > > > > > semantics of expressions of Coccinelle. However, thanks Julia, this
+> > > > code
+> > > > > > looks good and can be very helpful.
+> > > > > >
+> > > > > > Only a minor objection... it doesn't tell when 'e2' has been
+> > allocated
+> > > > > > within the same function where the kmap() call is.
+> > > > > >
+> > > > > > In the particular case that I cite above, I'd prefer to remove the
+> > > > > > allocation of the page (say with alloc_page()) and convert kmap() /
+> > > > kunmap()
+> > > > > > to use kmalloc() / kfree().
+> > > > > >
+> > > > > > Fox example, this is done in the following patch:
+> > > > > >
+> > > > > > commit 633b0616cfe0 ("x86/sgx: Remove unnecessary kmap() from
+> > > > > > sgx_ioc_enclave_init()") from Ira Weiny.
+> > > > > >
+> > > > > > Can Coccinelle catch also those special cases where a page that is
+> > > > passed
+> > > > > > to kmap() is allocated within that same function (vs. being passed
+> > as
+> > > > > > argument to this function) and, if so, propose a replacement with
+> > > > > > kmalloc()?
+> > > > >
+> > > > > It looks complex in this case, because the allocation is in another
+> > > > > function, and it is passed to another function.
+> > > >
+> > > > This is not the special case I was talking about. In this case your
+> > code
+> > > > for Coccinelle tells the right proposal and it is exactly what Alaa did
+> > in
+> > > > her patch (which is good!).
+> > > >
+> > > > I'm talking about other special cases like the one I pointed to with
+> > the
+> > > > link I provided. I'm sorry if my bad English made you think that Alaa's
+> > > > patch was one of those cases where the page is allocated within the
+> > same
+> > > > function where kmap() is.
+> > > >
+> > > > I hope that now I've been clearer :)
+> > >
+> > > Ah, sorry for the misunderstanding.  If you have an example, I can take a
+> > > look and propose something for this special case.
+> > >
+> > > julia
+> >
+> > Yes, I have the example that you are asking for. It's that commit
+> > 633b0616cfe0 from Ira Weiny.
+> >
+> > Let me copy and paste it here for your convenience...
+> >
+> > diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/
+> > ioctl.c
+> > index 90a5caf76939..2e10367ea66c 100644
+> > --- a/arch/x86/kernel/cpu/sgx/ioctl.c
+> > +++ b/arch/x86/kernel/cpu/sgx/ioctl.c
+> > @@ -604,7 +604,6 @@ static long sgx_ioc_enclave_init(struct sgx_encl *encl,
+> > void __user *arg)
+> >  {
+> >         struct sgx_sigstruct *sigstruct;
+> >         struct sgx_enclave_init init_arg;
+> > -       struct page *initp_page;
+> >         void *token;
+> >         int ret;
+> >
+> > @@ -615,11 +614,15 @@ static long sgx_ioc_enclave_init(struct sgx_encl
+> > *encl, void __user *arg)
+> >         if (copy_from_user(&init_arg, arg, sizeof(init_arg)))
+> >                 return -EFAULT;
+> >
+> > -       initp_page = alloc_page(GFP_KERNEL);
+> > -       if (!initp_page)
+> > +       /*
+> > +        * 'sigstruct' must be on a page boundary and 'token' on a 512 byte
+> > +        * boundary.  kmalloc() will give this alignment when allocating
+> > +        * PAGE_SIZE bytes.
+> > +        */
+> > +       sigstruct = kmalloc(PAGE_SIZE, GFP_KERNEL);
+> > +       if (!sigstruct)
+> >                 return -ENOMEM;
+> >
+> > -       sigstruct = kmap(initp_page);
+> >         token = (void *)((unsigned long)sigstruct + PAGE_SIZE / 2);
+> >         memset(token, 0, SGX_LAUNCH_TOKEN_SIZE);
+> >
+> > @@ -645,8 +648,7 @@ static long sgx_ioc_enclave_init(struct sgx_encl *encl,
+> > void __user *arg)
+> >         ret = sgx_encl_init(encl, sigstruct, token);
+> >
+> >  out:
+> > -       kunmap(initp_page);
+> > -       __free_page(initp_page);
+> > +       kfree(sigstruct);
+> >         return ret;
+> >  }
+> >
+> > I think that Coccinelle might understand that "initp_page" is allocated in
+> > the same function where later it is kmap()'ed. But I'm not able to write a
+> > Coccinelle check to find out these kinds of special cases. In these cases
+> > the correct solution is not to use kmap_local_page(). Instead delete the
+> > alloc_page() and use kmalloc().
+> >
+>
+> Sorry about missing this thread last week...
+>
+> I've lost the Coccinelle scripts I wrote before but the ones which helped were
+> documented in patches I submitted when Coccinelle was used.
+>
+> I think Coccinelle can help a lot.  And probably a lot more than I know since
+> I'm not an expert in the language either.
+>
+> However, In addition to the example Fabio shows above here are a few other
+> things to look out for when writing Coccinelle scripts.
+>
+> 1) The addition of mem*_page() functions means sometimes the entire kmap/kunmap
+>    can be removed.  Check out the Coccinelle script for that.[1]
+>
+> 2) kunmap_local() has ordering rules which often requires some manual
+>    review.[2]
+>
+> 3) kmap/kunmap is often wrapped in other subsystem helper functions.  I was not
+>    sure how to deal with that in Coccinelle.  Julia is this easy in
+>    Coccinelle?[3]
+
+
+Thanks for the pointers.
+
+[3] would depend on how much risk you are willing to take.  The arguments
+are the same, except for the array index, for example.  But one may prefer
+to be sure that nothing complex happens between the two calls.
+
+julia
+
+>
+>
+> Ira
+>
+>
+> [1]
+> https://lore.kernel.org/lkml/20210205232304.1670522-3-ira.weiny@intel.com/
+> https://lore.kernel.org/lkml/20210205232304.1670522-5-ira.weiny@intel.com/
+>
+> [2]
+> https://lore.kernel.org/lkml/20210217024826.3466046-3-ira.weiny@intel.com/
+> https://lore.kernel.org/lkml/20210217024826.3466046-4-ira.weiny@intel.com/
+>
+> [3]
+> https://lore.kernel.org/lkml/20210217024826.3466046-5-ira.weiny@intel.com/
+>
+> >
+> > Thanks,
+> >
+> > Fabio
+> >
+> >
+> >
+>
+>
+--8323329-1172987651-1650900900=:2718--

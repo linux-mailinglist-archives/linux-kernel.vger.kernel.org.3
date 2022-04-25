@@ -2,112 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B039A50E661
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 19:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B7CD50E665
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 19:02:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243704AbiDYREv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 13:04:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38202 "EHLO
+        id S243710AbiDYRFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 13:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243634AbiDYREu (ORCPT
+        with ESMTP id S243336AbiDYRFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 13:04:50 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A8C1C113;
-        Mon, 25 Apr 2022 10:01:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650906105; x=1682442105;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=dBjDeKCBG8dDb3+fTvZJG04zxqSAzT9opUo1LLEgCAE=;
-  b=jXwFriTyHgwnkFMhzLTyB23yoA3pIh98TYKewEkz8ctgUffiAEjsdTVh
-   kwiRcYOK82YKGXnaDQGnivHjy4+lMuaSkx3548giQm9640aGOE/dSwnxT
-   CL/UrpFSz3YHgomTf6kdCWBHj052E9bhoPM1h51d6xK3W9rZ8OVwPFHVK
-   n3azDazajNwMb0f/UWOf1AzIvQXwQnOODU75Fa+fFyr6IgH3jgauAH8NM
-   lF0ld0eIY26BxCffww5+J8jgQ+YF5oVCWnl5o4RB0SzWigvRzko16CC0c
-   Gz6BmUm6a9ExTs/6EOD3ChovIJhkDp3ky4chdIT2MjzbspeZnaBHLfGp7
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="325795022"
-X-IronPort-AV: E=Sophos;i="5.90,289,1643702400"; 
-   d="scan'208";a="325795022"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 10:01:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,289,1643702400"; 
-   d="scan'208";a="564169148"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga007.fm.intel.com with ESMTP; 25 Apr 2022 10:01:44 -0700
-Received: from [10.209.9.159] (kliang2-MOBL.ccr.corp.intel.com [10.209.9.159])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Mon, 25 Apr 2022 13:05:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C2D1C11F
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 10:02:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id DEF1A5809EB;
-        Mon, 25 Apr 2022 10:01:41 -0700 (PDT)
-Message-ID: <b4aaf1ed-124d-1339-3e99-a120f6cc4d28@linux.intel.com>
-Date:   Mon, 25 Apr 2022 13:01:40 -0400
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DB9F614F9
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 17:02:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BDDFC385A7;
+        Mon, 25 Apr 2022 17:02:05 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="BjcCxH1g"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1650906122;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3bT9S+VY2i3onixTKTaTwovdaV7rvNqFw7jUDNK3p/o=;
+        b=BjcCxH1gRx+XRu/oEPKS12iawQoa7VkVfSZYS/6iYyY8vZEaWIS2w+yUHhqPYhNIPFCA2q
+        224GimbDT7u0I8jZbx0tCBLASmPOQeOaH53zbJZEFyYByqiX1d4hdDtL8vq7yar3VrxjgV
+        /XuavYSenfNrBYFbhOy2DWSk0X4vB5o=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 36a3af82 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Mon, 25 Apr 2022 17:02:02 +0000 (UTC)
+Date:   Mon, 25 Apr 2022 19:01:57 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: odd endianness toolchains for crosstool
+Message-ID: <YmbUBZg/nGV7gLyy@zx2c4.com>
+References: <YmX7z+BirkA3VAfW@zx2c4.com>
+ <CAK8P3a3Af5FBx-OnedHPrf28ikX4DZK1d0ERLsV+oKyBHyCXiw@mail.gmail.com>
+ <YmaJUvg6hmekvkXE@zx2c4.com>
+ <CAK8P3a3FZeXzBJKyTEvmvw_DaHGQFf5rQKs=_wBW=GZ2+=rJ_Q@mail.gmail.com>
+ <Yma8OQ3zY3PzY87T@zx2c4.com>
+ <CAK8P3a0Y3BFCkg8e-o5i6xPfb9WVQzOQOACXtrH1VmQJkSriDQ@mail.gmail.com>
+ <YmbD/oPIUBvJ/YjQ@zx2c4.com>
+ <CAK8P3a1kRXQrmNg4eQw0-P+Fzz_AvFooLg3=nQNQKMRwvL9DWQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v5 2/5] perf: Add SNOOP_PEER flag to perf mem data struct
-Content-Language: en-US
-To:     Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>
-Cc:     Ali Saidi <alisaidi@amazon.com>, Nick.Forrington@arm.com,
-        acme@kernel.org, alexander.shishkin@linux.intel.com,
-        andrew.kilroy@arm.com, benh@kernel.crashing.org,
-        german.gomez@arm.com, james.clark@arm.com, john.garry@huawei.com,
-        jolsa@kernel.org, kjain@linux.ibm.com, lihuafei1@huawei.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
-        mathieu.poirier@linaro.org, mingo@redhat.com, namhyung@kernel.org,
-        peterz@infradead.org, will@kernel.org
-References: <c17dedde-6ba8-db9b-4827-32477f039764@linux.intel.com>
- <20220422212249.22463-1-alisaidi@amazon.com>
- <20220423063805.GA559531@leoy-ThinkPad-X240s>
- <8e09af67-a416-4ead-b406-6c8b998de344@linux.intel.com>
- <20220424114302.GB978927@leoy-ThinkPad-X240s>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20220424114302.GB978927@leoy-ThinkPad-X240s>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a1kRXQrmNg4eQw0-P+Fzz_AvFooLg3=nQNQKMRwvL9DWQ@mail.gmail.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Arnd,
 
+On Mon, Apr 25, 2022 at 06:15:07PM +0200, Arnd Bergmann wrote:
+> On Mon, Apr 25, 2022 at 5:53 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> >
+> > Hi Arnd,
+> >
+> > On Mon, Apr 25, 2022 at 05:39:34PM +0200, Arnd Bergmann wrote:
+> > > I can probably do that before migrating to the new machine, but I can't
+> > > promise how quickly I find time to start.
+> >
+> > Oh awesome. Will keep my eye out for it.
+> >
+> > > > (And also, build ppc32 with --enable-secureplt --with-long-double-64.)
+> > >
+> > > Can you explain what those are about? Is this related to the ELFv1
+> > > vs ELFv2 difference or something else? Is this needed in both the
+> > > ppc32 and ppc64 compilers that each come with both targets?
+> >
+> > For 32-bit, it is required. From
+> > <https://wiki.musl-libc.org/supported-platforms.html>:
+> >
+> >     powerpc (needs gcc built with --enable-secureplt
+> >     --with-long-double-64, and -Wl,--secure-plt to link dynamic
+> >     binaries.)
+> >
+> > And from the INSTALL file it says:
+> >
+> >     * PowerPC
+> >         * Compiler toolchain must provide 64-bit long double, not IBM
+> >           double-double or IEEE quad
+> >         * For dynamic linking, compiler toolchain must be configured for
+> >           "secure PLT" variant
+> >
+> > For 64-bit, I'm not sure, but I know that at least -mabi=elfv2 is required,
+> > and I think --with-long-double-64 too, according to documentation:
+> >
+> >     * PowerPC64
+> >         * Both little and big endian variants are supported
+> >         * Compiler toolchain must provide 64-bit long double, not IBM
+> >           double-double or IEEE quad
+> >         * Compiler toolchain must use the new (ELFv2) ABI regardless of
+> >           whether it is for little or big endian
+> 
+> Ok, I see. For all I can tell, the toolchain I built already uses both
+> --with-long-double-64
+> and --enable-secureplt, as those seemt to be the default for Linux.
 
-On 4/24/2022 7:43 AM, Leo Yan wrote:
-> On Sat, Apr 23, 2022 at 05:53:28AM -0700, Andi Kleen wrote:
->>
->>> Except SNOOPX_FWD means a no modified cache snooping, it also means it's
->>> a cache conherency from *remote* socket.  This is quite different from we
->>> define SNOOPX_PEER, which only snoop from peer CPU or clusters.
->>>
+For ppc32? I'm unable to produce working executables with the toolchain.
+And looking at the target info, -msecure-plt is missing, while
+-mlong-double-64 is there:
 
-The FWD doesn't have to be *remote*. The definition you quoted is just 
-for the "L3 Miss", which is indeed a remote forward. But we still have 
-cross-core FWD. See Table 19-101.
+$ ./powerpc-linux-gcc -Q --help=target | grep long-double
+  -mlong-double-                        64
+$ ./powerpc-linux-gcc -Q --help=target | grep msecure-plt
+  -msecure-plt                          [disabled]
 
-Actually, X86 uses the PERF_MEM_REMOTE_REMOTE + PERF_MEM_SNOOPX_FWD to 
-indicate the remote FWD, not just SNOOPX_FWD.
+For ppc64, I see the same. I'll try to look into it more though.
 
->>> If no objection, I prefer we could keep the new snoop type SNOOPX_PEER,
->>> this would be easier for us to distinguish the semantics and support the
->>> statistics for SNOOPX_FWD and SNOOPX_PEER separately.
->>>
->>> I overlooked the flag SNOOPX_FWD, thanks a lot for Kan's reminding.
->>
->> Yes seems better to keep using a separate flag if they don't exactly match.
->>
+> Regarding the the ELF ABI, I'm not sure how to check, but I think it
+> only does ELFv1, which is the default for big-endian glibc.
 
-Yes, I agree with Andi. If you still think the existing flag combination 
-doesn't match your requirement, a new separate flag should be 
-introduced. I'm not familiar with ARM. I think I will leave it to you 
-and the maintainer to decide.
+Yes, it only is doing ELFv1 right now. musl checks this in
+<https://git.musl-libc.org/cgit/musl/tree/configure#n689> with this:
 
-Thanks,
-Kan
+    trycppif "_CALL_ELF == 2" "$t" || fail "$0: error: unsupported powerpc64 ABI"
+
+Jason

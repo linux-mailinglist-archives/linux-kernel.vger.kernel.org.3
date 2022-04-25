@@ -2,122 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99B9A50EBF1
+	by mail.lfdr.de (Postfix) with ESMTP id E0FB850EBF2
 	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 00:25:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234996AbiDYW1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 18:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46818 "EHLO
+        id S234901AbiDYWZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 18:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343692AbiDYWNm (ORCPT
+        with ESMTP id S1343694AbiDYWOV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 18:13:42 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC1515FF8
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 15:10:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650924637; x=1682460637;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=E5/ldu6UrbcdaF8SLoOV8zocI5w41Xum+8+2cvuW2gk=;
-  b=iysh/ndVYO25ZdT/VIXLMoQfOy2dp1btK35xl2wL7AUUPyXJwRQQK9TZ
-   JGncSaavwqiFhqHHhlxgtCvtqDln/O0Fl1D2Ht8u0BvkdbndTVX7cHpDE
-   r0mG14dEuhuE8++oJmwLVZBPjfIOkhkPqzsNl0aMGCaPk/RiSsgMOieYe
-   CKpHsbQOSItC5ZQF0/5lbE6oZ+5/v4QXra0LqZmVUPKA7YSakvtv4P/bp
-   H3WWJ99vOdYu/7POylFQHX4nn33bWTVwImsbi1ZofYCw3TVv9vQ7BiH3y
-   84Ns8xR/PQe1W0X5aBsDKhLZH3TcJy/axfM6O8YBFI8tojBQzKAgQ9We0
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="290516792"
-X-IronPort-AV: E=Sophos;i="5.90,289,1643702400"; 
-   d="scan'208";a="290516792"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 15:10:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,289,1643702400"; 
-   d="scan'208";a="649885598"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 25 Apr 2022 15:10:35 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nj6ug-0002vU-M1;
-        Mon, 25 Apr 2022 22:10:34 +0000
-Date:   Tue, 26 Apr 2022 06:09:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Janne Grunau <j@jannau.net>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:pr/22 74/189]
- drivers/hid/spi-hid/spi-hid-apple-core.c:259:22: warning: no previous
- prototype for 'spihid_get_data'
-Message-ID: <202204260603.NDqCgsMa-lkp@intel.com>
+        Mon, 25 Apr 2022 18:14:21 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EF1186FA;
+        Mon, 25 Apr 2022 15:11:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1650924677; x=1682460677;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=9DAkFREVAmGElI/xnJeeAibkaRmM8W0pRbwuuQ9OtNY=;
+  b=tx6hPExAUD+vrkfSXYKqM3UcjJDRemRTRBM1pURi0gFgyjXFffCxnEzs
+   2yx7QptOS2ODRwRjU/yKeqZvGehKt9drMrWVla3wr5YGiIMWouKoJGD7B
+   /nke8KhXvYv8TGnDYAgqVWEENbbAhE8pHHNtWaqnBpWkjZ8rsfuhBEvVA
+   g=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 25 Apr 2022 15:11:17 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 15:11:16 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 25 Apr 2022 15:11:15 -0700
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 25 Apr 2022 15:11:15 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <vkoul@kernel.org>,
+        <daniel@ffwll.ch>, <airlied@linux.ie>, <agross@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v1 0/2]  fix DP phy compliance test
+Date:   Mon, 25 Apr 2022 15:11:01 -0700
+Message-ID: <1650924663-24892-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux pr/22
-head:   7ee315306d1a3b0da8cf2a53e7f55889d0e7f034
-commit: e1c721ad4fcedb51a74c3833f5ede7ae10e42e0f [74/189] WIP: HID: transport: spi: add Apple SPI transport
-config: arm64-randconfig-r012-20220425 (https://download.01.org/0day-ci/archive/20220426/202204260603.NDqCgsMa-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/e1c721ad4fcedb51a74c3833f5ede7ae10e42e0f
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux pr/22
-        git checkout e1c721ad4fcedb51a74c3833f5ede7ae10e42e0f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+Current DP phy compliance test failed due to test pattern generation was
+terminated premature.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Kuogee Hsieh (2):
+  drm/msm/dp: reset DP controller before transmit phy test pattern
+  drm/msm/dp: do not stop transmitting phy test pattern during DP phy
+    compliance test
 
-All warnings (new ones prefixed by >>):
-
->> drivers/hid/spi-hid/spi-hid-apple-core.c:259:22: warning: no previous prototype for 'spihid_get_data' [-Wmissing-prototypes]
-     259 | struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
-         |                      ^~~~~~~~~~~~~~~
---
->> drivers/hid/spi-hid/spi-hid-apple-of.c:24:5: warning: no previous prototype for 'spihid_apple_of_power_on' [-Wmissing-prototypes]
-      24 | int spihid_apple_of_power_on(struct spihid_apple_ops *ops)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/hid/spi-hid/spi-hid-apple-of.c:40:5: warning: no previous prototype for 'spihid_apple_of_power_off' [-Wmissing-prototypes]
-      40 | int spihid_apple_of_power_off(struct spihid_apple_ops *ops)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/hid/spi-hid/spi-hid-apple-of.c:50:5: warning: no previous prototype for 'spihid_apple_of_enable_irq' [-Wmissing-prototypes]
-      50 | int spihid_apple_of_enable_irq(struct spihid_apple_ops *ops)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/hid/spi-hid/spi-hid-apple-of.c:59:5: warning: no previous prototype for 'spihid_apple_of_disable_irq' [-Wmissing-prototypes]
-      59 | int spihid_apple_of_disable_irq(struct spihid_apple_ops *ops)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/spihid_get_data +259 drivers/hid/spi-hid/spi-hid-apple-core.c
-
-   258	
- > 259	struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
-   260	{
-   261		switch (idev->id) {
-   262		case SPIHID_DEVICE_ID_KBD:
-   263			return container_of(idev, struct spihid_apple, kbd);
-   264		case SPIHID_DEVICE_ID_TP:
-   265			return container_of(idev, struct spihid_apple, tp);
-   266		default:
-   267			return NULL;
-   268		}
-   269	}
-   270	
+ drivers/gpu/drm/msm/dp/dp_ctrl.c | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+

@@ -2,89 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B88DC50DBD2
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B785150DBDE
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 11:00:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240317AbiDYJCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 05:02:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35982 "EHLO
+        id S240727AbiDYJDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 05:03:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232056AbiDYJCE (ORCPT
+        with ESMTP id S240612AbiDYJDE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 05:02:04 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF0513E20;
-        Mon, 25 Apr 2022 01:59:01 -0700 (PDT)
-Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KmzQB4MQmz6801v;
-        Mon, 25 Apr 2022 16:56:18 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Mon, 25 Apr 2022 10:58:58 +0200
-Received: from [10.47.92.213] (10.47.92.213) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.24; Mon, 25 Apr
- 2022 09:58:57 +0100
-Message-ID: <d09faf74-a52e-8d93-cf26-08b43b12c564@huawei.com>
-Date:   Mon, 25 Apr 2022 09:58:56 +0100
+        Mon, 25 Apr 2022 05:03:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0510C13EB7
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 02:00:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650877200;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QoTWwUG44ZKREs24srdlBz4+nuuWL7M2R9CG+RWwjCM=;
+        b=AvHd2uJQ/ns7geJALpoa5nSM9lBckk3XaOX0uE6cKBflPEWm7rqvg22AWjbjwAe4qp6hPZ
+        SrJ6TnoQR+2xQNfPUaEayPOQRvouBr5opuWpUtapRThoPiotDnPoWm47ULvoXBIwpzU51S
+        kJv6PW2kfqS2pxO4edIFrd8/s1MSW8w=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-144-ZW4VoTtXPRqxTBJ6KJtlRw-1; Mon, 25 Apr 2022 04:59:58 -0400
+X-MC-Unique: ZW4VoTtXPRqxTBJ6KJtlRw-1
+Received: by mail-lf1-f72.google.com with SMTP id bt27-20020a056512261b00b004720e026d4dso379196lfb.16
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:59:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QoTWwUG44ZKREs24srdlBz4+nuuWL7M2R9CG+RWwjCM=;
+        b=p7ahE8Is0O/AI44fbBGBCzlF8fRaD6tWszP3aHxiUqxslMYRXu2XROVoK/1HxDB+YX
+         qZMme6n/+iKOnlVgASOkxKAZS/rTr1ZrbarAGzevLw21HbEcEP/jX2C7fuUIZzrc7PWc
+         hVGAVcuQmhbjls/Q1o8Ezo/1DXaolPgQAIxrLo2xdxpzc+9D2AY/ZYyBjXRRcZO5C7Wm
+         WeS1PMrfIvBVC9btkHpt659WuTtLT/7Zdc2nxouyDWJ7x5NM9v3JvOSH0+ygft4nEvyN
+         SAyccIHOVRn26hakXdrhLcO7xVreMXHENcWbgF6W3FHz1YPoZluxxcSOnjGIP8MuYFMi
+         TnCw==
+X-Gm-Message-State: AOAM530vvarpDRcltp7EKp4qer0LNlIJCFNOIvtGyZ5j+5dIsXi7+rD9
+        OFKdRl1rhiDx5NHZwuukzRDlzgiRXXVLnIz3fn2p4paQkbx+7trUovBt/G1HFtriymuj7ZUH1UJ
+        ZJVWhknH2rRs8VDFkNTQMz+xiHCMjTOjt3xwvAWXS
+X-Received: by 2002:a19:ca50:0:b0:471:f556:92b with SMTP id h16-20020a19ca50000000b00471f556092bmr8263989lfj.587.1650877196646;
+        Mon, 25 Apr 2022 01:59:56 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwlYpVuOzIkIA+vc2xFy0TnS5ZsUxhcqSLHkTFpvCIBbhfh/tNsQlp8CDlTy9fsTg2OmIpnYGAbNnBRZJXk/LI=
+X-Received: by 2002:a19:ca50:0:b0:471:f556:92b with SMTP id
+ h16-20020a19ca50000000b00471f556092bmr8263984lfj.587.1650877196461; Mon, 25
+ Apr 2022 01:59:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 1/4] scsi: core: constify pointer to scsi_host_template
-To:     Christoph Hellwig <hch@infradead.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     "Ewan D. Milne" <emilne@redhat.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Alim Akhtar" <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "Doug Gilbert" <dgilbert@interlog.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <james.smart@broadcom.com>
-References: <20220408103027.311624-1-krzysztof.kozlowski@linaro.org>
- <2a88a992-641a-b3ff-fe39-7a61fff87cb6@huawei.com>
- <4c3be5b6-50ef-9e9a-6cee-9642df943342@linaro.org>
- <7b3885e3-dbae-ff0b-21dc-c28d635d950b@huawei.com>
- <c121430b1b5c8f5816b2b42b9178d00889260c90.camel@redhat.com>
- <b6af3fe8-db9a-b5dc-199f-21c05d7664a2@huawei.com>
- <Yl+wJ7xSHzWmR+bR@infradead.org>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <Yl+wJ7xSHzWmR+bR@infradead.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.92.213]
-X-ClientProxiedBy: lhreml702-chm.china.huawei.com (10.201.108.51) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220425062735.172576-1-lulu@redhat.com>
+In-Reply-To: <20220425062735.172576-1-lulu@redhat.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Mon, 25 Apr 2022 16:59:45 +0800
+Message-ID: <CACGkMEuMZJRw1TBfY5pTkSAD5MnGvUCu5Eqi=bWD5yc1-hc9YQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] vdpa: add the check for id_table in struct vdpa_mgmt_dev
+To:     Cindy Lu <lulu@redhat.com>
+Cc:     mst <mst@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/04/2022 08:03, Christoph Hellwig wrote:
->> The standard flow is:
->>
->> shost = scsi_host_alloc(sht, )
->>
->> // modify shost, like
->> shost->cmd_per_lun = 5;
->>
->> scsi_add_host(shost)
->>
->> Is there some reason for which those two drivers can't follow that?
-> I think they should.  Method tables should not be mutable data.
-> .
+On Mon, Apr 25, 2022 at 2:27 PM Cindy Lu <lulu@redhat.com> wrote:
+>
+> To support the dynamic ids in vp_vdpa, we need to add the check for
+> id table. If the id table is NULL, will not set the device type
+>
+> Signed-off-by: Cindy Lu <lulu@redhat.com>
+> ---
+>  drivers/vdpa/vdpa.c | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
+> index 1ea525433a5c..09edd92cede0 100644
+> --- a/drivers/vdpa/vdpa.c
+> +++ b/drivers/vdpa/vdpa.c
+> @@ -492,10 +492,13 @@ static int vdpa_mgmtdev_fill(const struct vdpa_mgmt_dev *mdev, struct sk_buff *m
+>         if (err)
+>                 goto msg_err;
+>
+> -       while (mdev->id_table[i].device) {
+> -               if (mdev->id_table[i].device <= 63)
+> -                       supported_classes |= BIT_ULL(mdev->id_table[i].device);
+> -               i++;
+> +       if (mdev->id_table != NULL) {
+> +               while (mdev->id_table[i].device) {
+> +                       if (mdev->id_table[i].device <= 63)
+> +                               supported_classes |=
+> +                                       BIT_ULL(mdev->id_table[i].device);
+> +                       i++;
+> +               }
+>         }
 
-Hi Krzysztof,
+This will cause 0 to be advertised as the supported classes.
 
-Do you have any interest in going further with your work and trying to 
-change all SCSI driver instances of scsi_host_template to be const? I am 
-not sure if it has been attempted before...
+I wonder if we can simply use VIRTIO_DEV_ANY_ID here (and need to
+export it to via uAPI probably).
 
-Thanks,
-John
+Thanks
+
+>
+>         if (nla_put_u64_64bit(msg, VDPA_ATTR_MGMTDEV_SUPPORTED_CLASSES,
+> --
+> 2.34.1
+>
+

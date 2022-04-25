@@ -2,104 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0094A50E2BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB1B50E2BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 16:11:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbiDYONp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 10:13:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54392 "EHLO
+        id S235592AbiDYOOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 10:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232506AbiDYONd (ORCPT
+        with ESMTP id S234697AbiDYOOA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 10:13:33 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473C51135;
-        Mon, 25 Apr 2022 07:10:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650895829; x=1682431829;
-  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=I6pbNh7Vvjp6206TEWobvDHIwjXcGBl7BZL/qhyjK3o=;
-  b=KVQJZcffmZr/BVgpl73cx7FLmQUhXCbEK9ka8RHzq/zz/WLyv989Wqck
-   j5HEjTrc6bOU3CJmgAI4CF+b+4ncHxgj7CgAOrXWiTTvCNadwIG33YraI
-   ery7CWr1+mdSFUssM8WkcfRUi227ggQd9LlbH+FHtr7PUSXyZKOma6PE9
-   OgSpkE9ohKAm/x4ofPHjCjf/BKLsBePaKKiG6ICMsJhSTEqKdhAE8mwOB
-   D1TyqlIjNz3H4ObFWm/l21ltAL9JhOO8efVxmZrmBVdVc9QpXXdA5So/7
-   V48sfDRgaFtEusUANwZReMCcsk0VpbJH5tw76uhxNj0whf54rrO88Lglw
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="290394809"
-X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
-   d="scan'208";a="290394809"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 07:10:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
-   d="scan'208";a="537556753"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga002.jf.intel.com with ESMTP; 25 Apr 2022 07:10:28 -0700
-Received: from jiunhong-mobl.amr.corp.intel.com (jiunhong-mobl.amr.corp.intel.com [10.209.83.58])
-        by linux.intel.com (Postfix) with ESMTP id 930CC5809EB;
-        Mon, 25 Apr 2022 07:10:28 -0700 (PDT)
-Message-ID: <ccc214492fb66bfec88a9aec516e4cbeff80eb99.camel@linux.intel.com>
-Subject: Re: [PATCH] platform/x86/intel: pmc/core: change pmc_lpm_modes to
- static
-From:   "David E. Box" <david.e.box@linux.intel.com>
-Reply-To: david.e.box@linux.intel.com
-To:     Tom Rix <trix@redhat.com>, irenic.rajneesh@gmail.com,
-        david.e.box@intel.com, hdegoede@redhat.com, markgross@kernel.org
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 25 Apr 2022 07:10:28 -0700
-In-Reply-To: <20220423123048.591405-1-trix@redhat.com>
-References: <20220423123048.591405-1-trix@redhat.com>
-Organization: David E. Box
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Mon, 25 Apr 2022 10:14:00 -0400
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B17BDD;
+        Mon, 25 Apr 2022 07:10:55 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R451e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=shile.zhang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VBH0a0i_1650895845;
+Received: from e18g09479.et15sqa.tbsite.net(mailfrom:shile.zhang@linux.alibaba.com fp:SMTPD_---0VBH0a0i_1650895845)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 25 Apr 2022 22:10:52 +0800
+From:   Shile Zhang <shile.zhang@linux.alibaba.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     stable@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        Shile Zhang <shile.zhang@linux.alibaba.com>
+Subject: [PATCH v2] drm/cirrus: fix a NULL vs IS_ERR() checks
+Date:   Mon, 25 Apr 2022 22:10:43 +0800
+Message-Id: <20220425141043.214024-1-shile.zhang@linux.alibaba.com>
+X-Mailer: git-send-email 2.33.0.rc2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-04-23 at 08:30 -0400, Tom Rix wrote:
-> Sparse reports this issue
-> core.c: note: in included file:
-> core.h:239:12: warning: symbol 'pmc_lpm_modes' was not declared. Should it be
-> static?
-> 
-> Global variables should not be defined in headers.  This only works
-> because core.h is only included by core.c. Single file use
-> variables should be static, so change its storage-class specifier
-> to static.
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
+The function drm_gem_shmem_vmap can returns error pointers as well,
+which could cause following kernel crash:
 
-Reviewed-by: David E. Box <david.e.box@linux.intel.com>
+BUG: unable to handle page fault for address: fffffffffffffffc
+PGD 1426a12067 P4D 1426a12067 PUD 1426a14067 PMD 0
+Oops: 0000 [#1] SMP NOPTI
+CPU: 12 PID: 3598532 Comm: stress-ng Kdump: loaded Not tainted 5.10.50.x86_64 #1
+...
+RIP: 0010:memcpy_toio+0x23/0x50
+Code: 00 00 00 00 0f 1f 00 0f 1f 44 00 00 48 85 d2 74 28 40 f6 c7 01 75 2b 48 83 fa 01 76 06 40 f6 c7 02 75 17 48 89 d1 48 c1 e9 02 <f3> a5 f6 c2 02 74 02 66 a5 f6 c2 01 74 01 a4 c3 66 a5 48 83 ea 02
+RSP: 0018:ffffafbf8a203c68 EFLAGS: 00010216
+RAX: 0000000000000000 RBX: fffffffffffffffc RCX: 0000000000000200
+RDX: 0000000000000800 RSI: fffffffffffffffc RDI: ffffafbf82000000
+RBP: ffffafbf82000000 R08: 0000000000000002 R09: 0000000000000000
+R10: 00000000000002b5 R11: 0000000000000000 R12: 0000000000000800
+R13: ffff8a6801099300 R14: 0000000000000001 R15: 0000000000000300
+FS:  00007f4a6bc5f740(0000) GS:ffff8a8641900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: fffffffffffffffc CR3: 00000016d3874001 CR4: 00000000003606e0
+Call Trace:
+ drm_fb_memcpy_dstclip+0x5e/0x80 [drm_kms_helper]
+ cirrus_fb_blit_rect.isra.0+0xb7/0xe0 [cirrus]
+ cirrus_pipe_update+0x9f/0xa8 [cirrus]
+ drm_atomic_helper_commit_planes+0xb8/0x220 [drm_kms_helper]
+ drm_atomic_helper_commit_tail+0x42/0x80 [drm_kms_helper]
+ commit_tail+0xce/0x130 [drm_kms_helper]
+ drm_atomic_helper_commit+0x113/0x140 [drm_kms_helper]
+ drm_client_modeset_commit_atomic+0x1c4/0x200 [drm]
+ drm_client_modeset_commit_locked+0x53/0x80 [drm]
+ drm_client_modeset_commit+0x24/0x40 [drm]
+ drm_fbdev_client_restore+0x48/0x85 [drm_kms_helper]
+ drm_client_dev_restore+0x64/0xb0 [drm]
+ drm_release+0xf2/0x110 [drm]
+ __fput+0x96/0x240
+ task_work_run+0x5c/0x90
+ exit_to_user_mode_loop+0xce/0xd0
+ exit_to_user_mode_prepare+0x6a/0x70
+ syscall_exit_to_user_mode+0x12/0x40
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x7f4a6bd82c2b
 
-Thanks
+Fixes: ab3e023b1b4c9 ("drm/cirrus: rewrite and modernize driver.")
 
-> ---
->  drivers/platform/x86/intel/pmc/core.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/platform/x86/intel/pmc/core.h
-> b/drivers/platform/x86/intel/pmc/core.h
-> index a46d3b53bf61..7a059e02c265 100644
-> --- a/drivers/platform/x86/intel/pmc/core.h
-> +++ b/drivers/platform/x86/intel/pmc/core.h
-> @@ -236,7 +236,7 @@ enum ppfear_regs {
->  #define ADL_LPM_STATUS_LATCH_EN_OFFSET		0x1704
->  #define ADL_LPM_LIVE_STATUS_OFFSET		0x1764
->  
-> -const char *pmc_lpm_modes[] = {
-> +static const char *pmc_lpm_modes[] = {
->  	"S0i2.0",
->  	"S0i2.1",
->  	"S0i2.2",
+Signed-off-by: Shile Zhang <shile.zhang@linux.alibaba.com>
+---
+v2: rebase to latest stable linux-5.10.y branch.
+v1: https://lore.kernel.org/lkml/550e9439-adf6-3df8-41a0-9a7ee5447907@linux.alibaba.com/
+---
+ drivers/gpu/drm/tiny/cirrus.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/tiny/cirrus.c b/drivers/gpu/drm/tiny/cirrus.c
+index 744a8e337e41e..d64f6bb767eeb 100644
+--- a/drivers/gpu/drm/tiny/cirrus.c
++++ b/drivers/gpu/drm/tiny/cirrus.c
+@@ -323,7 +323,7 @@ static int cirrus_fb_blit_rect(struct drm_framebuffer *fb,
+ 
+ 	ret = -ENOMEM;
+ 	vmap = drm_gem_shmem_vmap(fb->obj[0]);
+-	if (!vmap)
++	if (IS_ERR_OR_NULL(vmap))
+ 		goto out_dev_exit;
+ 
+ 	if (cirrus->cpp == fb->format->cpp[0])
+-- 
+2.33.0.rc2
 

@@ -2,200 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E81B50E20F
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:41:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C4850E230
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 15:45:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242029AbiDYNoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 09:44:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58528 "EHLO
+        id S242205AbiDYNrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 09:47:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236348AbiDYNn5 (ORCPT
+        with ESMTP id S242230AbiDYNrc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 09:43:57 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60574926F;
-        Mon, 25 Apr 2022 06:40:52 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 2ADF25C0193;
-        Mon, 25 Apr 2022 09:40:49 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Mon, 25 Apr 2022 09:40:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1650894049; x=
-        1650980449; bh=2nn2zqCEpHBXhjVLysWsPIDVph3o6ucuHdfZc6bQZOA=; b=U
-        5uXUoEihluXC0I2wYVBW2QH/01k5ZcB58KsO9Ta2TQfOqh8qDJfZvCAvKUq4Xdbr
-        mhRQENUXqsT2biDI46VQ5Iz0OTBq63xoFUa70FsnKl/Fk4gI8qhwhOFy5fcgufLv
-        IbKo19jpF2BzTqKnSdU6idK2SMEyFL9STfyZZHY3/gTzOe+yReoYMXRF1jYiH/RG
-        qDWMTBMf5wT6HiKqIY1d0nES84oIvFN0B3/31InKYZB2d8kF3oJQf2oePriFPFVY
-        +h9nT3y+xZNrW1Gi3rFjnWiSgTpS74mPm9x6p0Ti001x09Onv3497PJV/erWwGz8
-        Tn7S44gdN1NAJvQs5sVQA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1650894049; x=1650980449; bh=2nn2zqCEpHBXh
-        jVLysWsPIDVph3o6ucuHdfZc6bQZOA=; b=l6rrplDG3ZzlR3ohQ0f5YvlRX30fU
-        xa47F4+1TDWKudtTnP/kevd+q9UuMBwZ3R27x/GvmGFYUqBmcijXf/gWDX4v4P5g
-        OGr5VcQevoTv0L8XC4mS6wjSX9VX7QUJlEowgvQadLfKdKm1zT6jMRf9SFxrN/nO
-        fR8wFh/PqDWDKt9wG5XoU+O08AQQyziqA+wCItFGbRyxwmf+TA8VNzNdYjnydREE
-        KQxvymWb8nwctsEM1uVXviB2o3slsdAeqBQ2DP54AZZ6XTE7liCt5uEnKWhJB5VA
-        6ix9gVe0DA6Fdj+xGDL+Eiwm9AGw65Q1tnoCooANi3E4O4GpWFNs6W0Mw==
-X-ME-Sender: <xms:4KRmYrsBEyli04JEkheQcS8JKqGIaErI0zrWqdZzDV24bMiXA5zYfg>
-    <xme:4KRmYsfa_5r2vnmp2EYaRrHRdndpxooh4TlO8_hbJn_BqToZY2E06sPfXUQlm7KzE
-    hx6zlf5llzKKq5eVQ>
-X-ME-Received: <xmr:4KRmYuxIUxafzbh7j1-Se95uFE7DCMaEbpwyDVImN96vU3qC20Rcupygc5eh6D-Jiq8w56wF0falLw_sJZhrlspZQOzfFAtRtQNDv7sljBOwFOxk9wZcWsKvig>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddugdeihecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefuvfevfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepffdtveekvdegkeeuueetgfetffeileevudekuefhheelvdfhiedt
-    heduhfduhefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:4KRmYqOAbXv_2O2IZzhdJAlf8Q4heBTdY9ZleQi4oVAn5DjvnIQxmA>
-    <xmx:4KRmYr_7uRt3Oy0hEnrnFJftUAaJiqGaW9NSHdTu0_T8S-jbO9RIHg>
-    <xmx:4KRmYqVmWB3JW7V8t6jwSls_cbGxGiDdzmlFVBK9AMhC0Tcv-FFqVA>
-    <xmx:4aRmYs37IsFYIFCv3hOS6dQwLLJb2ig1qGo2OZvmS2KmOtPrC3OeTg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 25 Apr 2022 09:40:47 -0400 (EDT)
-Subject: Re: [PATCH] mmc: sunxi-mmc: Correct the maximum segment size
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>, linux-mmc@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Chen-Yu Tsai <wens@csie.org>,
-        Chris Ball <chris@printf.net>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Mike Turquette <mturquette@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-References: <20220424230640.31735-1-samuel@sholland.org>
- <dcc1b028-7e53-cb94-9a66-41890393f2ed@redhat.com>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <31a12028-8593-c558-0f21-044d69f97e6f@sholland.org>
-Date:   Mon, 25 Apr 2022 08:40:46 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Mon, 25 Apr 2022 09:47:32 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA174969E;
+        Mon, 25 Apr 2022 06:44:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650894268; x=1682430268;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=11l8nWOAh8jVYp4pTM08c8ajsmoXROtLceTxJ8NiSMU=;
+  b=JR8Ute/GJoN07izCCk5Zc7OxBCMey/J59svcRudy72t4VzM309/Aw6PH
+   b/ZHjjIihKYyKpfM8+XOo1aiwT9+JD5evTwPYtHVbZpOMMUspu7dfP2Qz
+   xHJ59bXkoWawJr77n/TAShrgT6z7DsIyDd0KRJeHGQD4YTHq79TEuEZWL
+   cihD4uIu1nnZ2+tI0H3LJvH6botetkQ42mxukQY4FaloFsWV+E0wT32+3
+   ZTGCGEmIk5hWwJIyqlTZEKzlC6M9ZaiiqAlW8gyBHs+2QuuOAjvlFDSQc
+   5KWCAW+vAOHaTFNEpOTv9vwOpPmMR4efSl4tnzFzA+Z1BGA5psG2o5g/q
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="325738297"
+X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
+   d="scan'208";a="325738297"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 06:44:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
+   d="scan'208";a="704562650"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by fmsmga001.fm.intel.com with ESMTP; 25 Apr 2022 06:44:19 -0700
+Date:   Mon, 25 Apr 2022 21:40:51 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Steven Price <steven.price@arm.com>,
+        kvm list <kvm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v5 00/13] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Message-ID: <20220425134051.GA175928@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <80aad2f9-9612-4e87-a27a-755d3fa97c92@www.fastmail.com>
+ <YkcTTY4YjQs5BRhE@google.com>
+ <83fd55f8-cd42-4588-9bf6-199cbce70f33@www.fastmail.com>
+ <YksIQYdG41v3KWkr@google.com>
+ <Ykslo2eo2eRXrpFR@google.com>
+ <eefc3c74-acca-419c-8947-726ce2458446@www.fastmail.com>
+ <Ykwbqv90C7+8K+Ao@google.com>
+ <YkyEaYiL0BrDYcZv@google.com>
+ <20220422105612.GB61987@chaop.bj.intel.com>
+ <3b99f157-0f30-4b30-8399-dd659250ab8d@www.fastmail.com>
 MIME-Version: 1.0
-In-Reply-To: <dcc1b028-7e53-cb94-9a66-41890393f2ed@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3b99f157-0f30-4b30-8399-dd659250ab8d@www.fastmail.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/25/22 5:40 AM, Hans de Goede wrote:
-> Hi Samuel,
+On Sun, Apr 24, 2022 at 09:59:37AM -0700, Andy Lutomirski wrote:
 > 
-> On 4/25/22 01:06, Samuel Holland wrote:
->> According to the DMA descriptor documentation, the lowest two bits of
->> the size field are ignored, so the size must be rounded up to a multiple
->> of 4 bytes. Furthermore, 0 is not a valid buffer size; setting the size
->> to 0 will cause that DMA descriptor to be ignored.
->>
->> Together, these restrictions limit the maximum DMA segment size to 4
->> less than the power-of-two width of the size field.
 > 
-> I assume that you were seeing some problems where things where not working
-> which caused you to investigate this; and that this patch fixes those
-> problems?   If yes then it would be good to also mention the problems +
-> investigative process in the commit message.
+> On Fri, Apr 22, 2022, at 3:56 AM, Chao Peng wrote:
+> > On Tue, Apr 05, 2022 at 06:03:21PM +0000, Sean Christopherson wrote:
+> >> On Tue, Apr 05, 2022, Quentin Perret wrote:
+> >> > On Monday 04 Apr 2022 at 15:04:17 (-0700), Andy Lutomirski wrote:
+> >     Only when the register succeeds, the fd is
+> >     converted into a private fd, before that, the fd is just a normal (shared)
+> >     one. During this conversion, the previous data is preserved so you can put
+> >     some initial data in guest pages (whether the architecture allows this is
+> >     architecture-specific and out of the scope of this patch).
+> 
+> I think this can be made to work, but it will be awkward.  On TDX, for example, what exactly are the semantics supposed to be?  An error code if the memory isn't all zero?  An error code if it has ever been written?
+> 
+> Fundamentally, I think this is because your proposed lifecycle for these memfiles results in a lightweight API but is awkward for the intended use cases.  You're proposing, roughly:
+> 
+> 1. Create a memfile. 
+> 
+> Now it's in a shared state with an unknown virt technology.  It can be read and written.  Let's call this state BRAND_NEW.
+> 
+> 2. Bind to a VM.
+> 
+> Now it's an a bound state.  For TDX, for example, let's call the new state BOUND_TDX.  In this state, the TDX rules are followed (private memory can't be converted, etc).
+> 
+> The problem here is that the BOUND_NEW state allows things that are nonsensical in TDX, and the binding step needs to invent some kind of semantics for what happens when binding a nonempty memfile.
+> 
+> 
+> So I would propose a somewhat different order:
+> 
+> 1. Create a memfile.  It's in the UNBOUND state and no operations whatsoever are allowed except binding or closing.
 
-No, this is just based on reading the manual. I was investigating some problems
-when I originally wrote this patch, but they turned out to be unrelated, and
-reverting this patch doesn't cause any obvious regression.
+OK, so we need invent new user API to indicate UNBOUND state. For memfd
+based, it can be a new feature-neutral flag at creation time.
 
-> I'm no longer involved in sunxi development, but still I wonder if the
-> subtraction of 4 from the max_seg_size is really necessary? This seems
-> to be based on the notion that as you say "0 is not a valid buffer size"
-> where as the code so far has been operating under the assumption that
-> putting 0 in sunxi_idma_des.buf_size means maximum buf-size.
 > 
-> I'm pretty sure that 0 meaning maximum buf-size is correct for at least
-> the older chips where idma_des_size_bits equals 13, which means that
-> only 2 4K pages fit in a single desc, so we almost certainly have been
-> hitting this code path ?
+> 2. Bind the memfile to a VM (or at least to a VM technology).  Now it's in the initial state appropriate for that VM.
 > 
-> Although: drivers/mmc/host/dw_mmc.c which seems to be for similar
-> hw suggests that on designs where idma_des_size_bits == 13 only
-> 4k can be used, which sorta matches what you are doing here except
-> that you limit things to 8k - 4 instead of to just 4k.
-> 
-> Anyways I was just wondering about all this...
+> For TDX, this completely bypasses the cases where the data is prepopulated and TDX can't handle it cleanly.  For SEV, it bypasses a situation in which data might be written to the memory before we find out whether that data will be unreclaimable or unmovable.
 
-It probably deserves someone testing this specific scenario, so we can either
-verify the fix is needed, or add a comment explaining that the documentation is
-wrong.
+This sounds a more strict rule to avoid semantics unclear.
 
-Regards,
-Samuel
+So userspace needs to know what excatly happens for a 'bind' operation.
+This is different when binds to different technologies. E.g. for SEV, it
+may imply after this call, the memfile can be accessed (through mmap or
+what ever) from userspace, while for current TDX this should be not allowed.
 
-> Regards,
-> 
-> Hans
-> 
-> 
-> 
->>
->> Fixes: 3cbcb16095f9 ("mmc: sunxi: Add driver for SD/MMC hosts found on Allwinner sunxi SoCs")
->> Signed-off-by: Samuel Holland <samuel@sholland.org>
->> ---
->>
->>  drivers/mmc/host/sunxi-mmc.c | 14 ++++++++------
->>  1 file changed, 8 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/mmc/host/sunxi-mmc.c b/drivers/mmc/host/sunxi-mmc.c
->> index c62afd212692..4bd5f37b1036 100644
->> --- a/drivers/mmc/host/sunxi-mmc.c
->> +++ b/drivers/mmc/host/sunxi-mmc.c
->> @@ -214,6 +214,9 @@
->>  #define SDXC_IDMAC_DES0_CES	BIT(30) /* card error summary */
->>  #define SDXC_IDMAC_DES0_OWN	BIT(31) /* 1-idma owns it, 0-host owns it */
->>  
->> +/* Buffer size must be a multiple of 4 bytes. */
->> +#define SDXC_IDMAC_SIZE_ALIGN	4
->> +
->>  #define SDXC_CLK_400K		0
->>  #define SDXC_CLK_25M		1
->>  #define SDXC_CLK_50M		2
->> @@ -361,17 +364,15 @@ static void sunxi_mmc_init_idma_des(struct sunxi_mmc_host *host,
->>  {
->>  	struct sunxi_idma_des *pdes = (struct sunxi_idma_des *)host->sg_cpu;
->>  	dma_addr_t next_desc = host->sg_dma;
->> -	int i, max_len = (1 << host->cfg->idma_des_size_bits);
->> +	int i;
->>  
->>  	for (i = 0; i < data->sg_len; i++) {
->>  		pdes[i].config = cpu_to_le32(SDXC_IDMAC_DES0_CH |
->>  					     SDXC_IDMAC_DES0_OWN |
->>  					     SDXC_IDMAC_DES0_DIC);
->>  
->> -		if (data->sg[i].length == max_len)
->> -			pdes[i].buf_size = 0; /* 0 == max_len */
->> -		else
->> -			pdes[i].buf_size = cpu_to_le32(data->sg[i].length);
->> +		pdes[i].buf_size = cpu_to_le32(ALIGN(data->sg[i].length,
->> +						     SDXC_IDMAC_SIZE_ALIGN));
->>  
->>  		next_desc += sizeof(struct sunxi_idma_des);
->>  		pdes[i].buf_addr_ptr1 =
->> @@ -1420,7 +1421,8 @@ static int sunxi_mmc_probe(struct platform_device *pdev)
->>  	mmc->max_blk_count	= 8192;
->>  	mmc->max_blk_size	= 4096;
->>  	mmc->max_segs		= PAGE_SIZE / sizeof(struct sunxi_idma_des);
->> -	mmc->max_seg_size	= (1 << host->cfg->idma_des_size_bits);
->> +	mmc->max_seg_size	= (1 << host->cfg->idma_des_size_bits) -
->> +				  SDXC_IDMAC_SIZE_ALIGN;
->>  	mmc->max_req_size	= mmc->max_seg_size * mmc->max_segs;
->>  	/* 400kHz ~ 52MHz */
->>  	mmc->f_min		=   400000;
-> 
+And I feel we still need a third flow/operation to indicate the
+completion of the initialization on the memfile before the guest's 
+first-time launch. SEV needs to check previous mmap-ed areas are munmap-ed
+and prevent future userspace access. After this point, then the memfile
+becomes truely private fd.
 
+> 
+> 
+> ----------------------------------------------
+> 
+> Now I have a question, since I don't think anyone has really answered it: how does this all work with SEV- or pKVM-like technologies in which private and shared pages share the same address space?  I sounds like you're proposing to have a big memfile that contains private and shared pages and to use that same memfile as pages are converted back and forth.  IO and even real physical DMA could be done on that memfile.  Am I understanding correctly?
+
+For TDX case, and probably SEV as well, this memfile contains private memory
+only. But this design at least makes it possible for usage cases like
+pKVM which wants both private/shared memory in the same memfile and rely
+on other ways like mmap/munmap or mprotect to toggle private/shared instead
+of fallocate/hole punching.
+
+> 
+> If so, I think this makes sense, but I'm wondering if the actual memslot setup should be different.  For TDX, private memory lives in a logically separate memslot space.  For SEV and pKVM, it doesn't.  I assume the API can reflect this straightforwardly.
+
+I believe so. The flow should be similar but we do need pass different
+flags during the 'bind' to the backing store for different usages. That
+should be some new flags for pKVM but the callbacks (API here) between
+memfile_notifile and its consumers can be reused.
+
+> 
+> And the corresponding TDX question: is the intent still that shared pages aren't allowed at all in a TDX memfile?  If so, that would be the most direct mapping to what the hardware actually does.
+
+Exactly. TDX will still use fallocate/hole punching to turn on/off the
+private page. Once off, the traditional shared page will become
+effective in KVM.
+
+Chao
+> 
+> --Andy

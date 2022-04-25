@@ -2,314 +2,323 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E89E450E62D
+	by mail.lfdr.de (Postfix) with ESMTP id 59D9550E62B
 	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 18:51:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243611AbiDYQyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 12:54:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51774 "EHLO
+        id S243617AbiDYQyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 12:54:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232888AbiDYQyO (ORCPT
+        with ESMTP id S243606AbiDYQyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 12:54:14 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF0015FF7;
-        Mon, 25 Apr 2022 09:51:08 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id u15so30731040ejf.11;
-        Mon, 25 Apr 2022 09:51:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jheCLNNChkLj/HYsztoOjTLG6HSbS6rrP6TOZ0/SX0M=;
-        b=Otmrq5iRxqNp8bQzmw7rjrOpdQCDTXHkYxDC3LYmZK7aJGjOdDnNtQy1/jX/zQsiQj
-         TzsfxrDA22sG1nr4BCdPIHmlexc9lkmR2FMWRg2C1eMhE0Vz0/7+3u1NSKLa8kY2D/vh
-         E3xnW2ki4RYI6X2+fuTMdnCLazuuofqRnzGm6MecVOjUZlaoG9kvtad5yD0f1NzbcCCq
-         1TAIOijdyWW17d95PwPT17wyhB+jzK6pG5eNpl+Wqic2QECfMHidb29YGUwtLtua8Ffh
-         LCQTVbWUSJJuiKd19n/njcsaqzDQwDIsTTwbDJyjkDwVorDEP13/a0aPKPwnRWbTT9u8
-         pxFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jheCLNNChkLj/HYsztoOjTLG6HSbS6rrP6TOZ0/SX0M=;
-        b=GlC21HehRuKNN5V3o4OkpMnoPl8el0ZU5HZi87YkGziQF/CnwZ5kuQwIHNHT504cNM
-         PTlz8EoG4CBc3emPXWyX3DecoZPeM6tnXmz4rjmfeN+fCUM0NLVyWys35K8Xu2KxTrl5
-         GRD5d1Q6eERoddbEKw6XR1Ffmc3LoHZB4xFWf+PGsCeNmA1Z/Rn5DATk2WJWHH7sIT0Y
-         8Oe6y1JYAjSq2uf0COTwmVWP5cu3K630hpYZBax4XSNwtSi6p2O/I5bP//BQyxyuPpMf
-         HljeTu6vqO1hxPzbBcf6bR4sXeRnz1R1ty2fSQK0E0pu7S96qkbg/Hsi94ufKCMi49bO
-         OFrA==
-X-Gm-Message-State: AOAM531PlPgYUuqiHhzI/Q9UMnG0W6UlyMmFcpXgjGaaUvaFeHGDCSlE
-        pgZZ1IT9TDqJOpmR1W7HQWdZv/9t7jRqOgX6zk8=
-X-Google-Smtp-Source: ABdhPJxl0FrQNEBTwssJQEzPm6bDLlJn4uMc9tlz8EkZAfyKeLQ5pJpJ76UzNDtip8B0sFiDU0SGHwZLbeKAJZtUPjs=
-X-Received: by 2002:a17:907:1c13:b0:6f0:106f:6c90 with SMTP id
- nc19-20020a1709071c1300b006f0106f6c90mr17729486ejc.504.1650905467250; Mon, 25
- Apr 2022 09:51:07 -0700 (PDT)
+        Mon, 25 Apr 2022 12:54:17 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE08A1A042;
+        Mon, 25 Apr 2022 09:51:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650905472; x=1682441472;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=sNT4x+GZpx5jtw0CJ7/oLIIw/S8KoYk0ZT6jquEq14Q=;
+  b=mDk/QCs5kOr4Sub3BlOs4mfbxZfxivm+6grZykV9yrF4vAz99y/Q6nlR
+   xvaaNqVyforYioxCh3BWDdW2vWSWQg1KuwC5DG3WXmZm6U5zFgffnYVnw
+   70C8MP2c0Uw5ZBas0lMewUJ4RK8ENbCIHDAsrihAqnxh61Jk5m6f48gpG
+   nd/Gyuder5n+YYIBo02cxUONsD+dugJ9b6l8gzjI5/88wNcjs+Xsdyj2Z
+   3FOivgVTgojdMMi/7S6OFGV6h2GrKMI9puCYfUkm4i178Sd48cW6NKGcE
+   v6Al50rOExGg37br6TE5V5hSlrJuWY9bdI3yRLklaffbl/58sZkw5b/bA
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="351749907"
+X-IronPort-AV: E=Sophos;i="5.90,289,1643702400"; 
+   d="scan'208";a="351749907"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 09:51:12 -0700
+X-IronPort-AV: E=Sophos;i="5.90,289,1643702400"; 
+   d="scan'208";a="579375156"
+Received: from kruparel-mobl1.amr.corp.intel.com (HELO localhost) ([10.213.188.223])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 09:51:11 -0700
+Date:   Mon, 25 Apr 2022 09:51:10 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, outreachy@lists.linux.dev,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH 4/4] Documentation/vm: Rework "Temporary Virtual Mappings"
+Message-ID: <YmbRfjGi12P4eX5F@iweiny-desk3>
+References: <20220421180200.16901-1-fmdefrancesco@gmail.com>
+ <20220421180200.16901-5-fmdefrancesco@gmail.com>
+ <YmXyhH7wAJo274WB@iweiny-desk3>
+ <1894872.PYKUYFuaPT@leap>
 MIME-Version: 1.0
-References: <20220412135534.2796158-1-aford173@gmail.com> <20220412135534.2796158-2-aford173@gmail.com>
- <CAPY8ntCKxRMFX023BsM70bA0UbPApzOzLbg+2X0SU93_GABKiA@mail.gmail.com>
-In-Reply-To: <CAPY8ntCKxRMFX023BsM70bA0UbPApzOzLbg+2X0SU93_GABKiA@mail.gmail.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Mon, 25 Apr 2022 11:50:56 -0500
-Message-ID: <CAHCN7xK_y6XhyksrPdcgCH24T0n46kJDNtvk2awoDCouWrDsMg@mail.gmail.com>
-Subject: Re: [PATCH 1/4] media: i2c: imx219: Split common registers from mode tables
-To:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        cstevens@beaconembedded.com,
-        Adam Ford-BE <aford@beaconembedded.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1894872.PYKUYFuaPT@leap>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 11:20 AM Dave Stevenson
-<dave.stevenson@raspberrypi.com> wrote:
->
-> Hi Adam
->
-> On Tue, 12 Apr 2022 at 14:55, Adam Ford <aford173@gmail.com> wrote:
-> >
-> > There are four modes, and each mode has a table of registers.
-> > Some of the registers are common to all modes, so create new
-> > tables for these common registers to reduce duplicate code.
-> >
-> > Signed-off-by: Adam Ford <aford173@gmail.com>
-> > ---
-> >  drivers/media/i2c/imx219.c | 103 ++++++++++++++-----------------------
-> >  1 file changed, 39 insertions(+), 64 deletions(-)
-> >
-> > diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-> > index e10af3f74b38..b7cc36b16547 100644
-> > --- a/drivers/media/i2c/imx219.c
-> > +++ b/drivers/media/i2c/imx219.c
-> > @@ -145,19 +145,36 @@ struct imx219_mode {
-> >         struct imx219_reg_list reg_list;
-> >  };
-> >
-> > -/*
-> > - * Register sets lifted off the i2C interface from the Raspberry Pi firmware
-> > - * driver.
-> > - * 3280x2464 = mode 2, 1920x1080 = mode 1, 1640x1232 = mode 4, 640x480 = mode 7.
-> > - */
-> > -static const struct imx219_reg mode_3280x2464_regs[] = {
-> > -       {0x0100, 0x00},
-> > +/* To Access Addresses 3000-5fff, send the following commands */
-> > +static const struct imx219_reg mfg_specific_reg[] = {
-> > +       {0x0100, 0x00}, /* Mode Select */
-> >         {0x30eb, 0x0c},
-> >         {0x30eb, 0x05},
-> >         {0x300a, 0xff},
-> >         {0x300b, 0xff},
-> >         {0x30eb, 0x05},
-> >         {0x30eb, 0x09},
-> > +};
-> > +
-> > +static const struct imx219_reg pll_clk_table[] = {
-> > +
-> > +       {0x0301, 0x05}, /* VTPXCK_DIV */
-> > +       {0x0303, 0x01}, /* VTSYSCK_DIV */
-> > +       {0x0304, 0x03}, /* PREPLLCK_VT_DIV 0x03 = AUTO set */
-> > +       {0x0305, 0x03}, /* PREPLLCK_OP_DIV 0x03 = AUTO set */
-> > +       {0x0306, 0x00}, /* PLL_VT_MPY */
-> > +       {0x0307, 0x39},
-> > +       {0x030b, 0x01}, /* OP_SYS_CLK_DIV */
-> > +       {0x030c, 0x00}, /* PLL_OP_MPY */
-> > +       {0x030d, 0x72},
-> > +};
->
-> (I've come back to this patch last as my first reading was happy with it)
-> Is there a good reason for making these two tables instead of one with
-> comments as to what the registers are doing?
+On Mon, Apr 25, 2022 at 03:42:46AM +0200, Fabio M. De Francesco wrote:
+> On lunedì 25 aprile 2022 02:59:48 CEST Ira Weiny wrote:
+> > On Thu, Apr 21, 2022 at 08:02:00PM +0200, Fabio M. De Francesco wrote:
+> > > Extend and rework the "Temporary Virtual Mappings" section of the 
+> highmem.rst
+> > > documentation.
+> > > 
+> > > Despite the local kmaps were introduced by Thomas Gleixner in October 
+> 2020,
+> > > documentation was still missing information about them. These additions 
+> rely
+> > > largely on Gleixner's patches, Jonathan Corbet's LWN articles, comments 
+> by
+> > > Ira Weiny and Matthew Wilcox, and in-code comments from
+> > > ./include/linux/highmem.h.
+> > > 
+> > > 1) Add a paragraph to document kmap_local_page().
+> > > 2) Reorder the list of functions by decreasing order of preference of
+> > > use.
+> > > 3) Rework part of the kmap() entry in list.
+> > > 
+> > > Cc: Jonathan Corbet <corbet@lwn.net>
+> > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > > Cc: Ira Weiny <ira.weiny@intel.com>
+> > > Cc: Matthew Wilcox <willy@infradead.org>
+> > > Cc: Peter Zijlstra <peterz@infradead.org>
+> > > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> > > ---
+> > >  Documentation/vm/highmem.rst | 71 ++++++++++++++++++++++++++++++------
+> > >  1 file changed, 60 insertions(+), 11 deletions(-)
+> > > 
+> > > diff --git a/Documentation/vm/highmem.rst b/Documentation/vm/
+> highmem.rst
+> > > index e05bf5524174..960f61e7a552 100644
+> > > --- a/Documentation/vm/highmem.rst
+> > > +++ b/Documentation/vm/highmem.rst
+> > > @@ -50,26 +50,75 @@ space when they use mm context tags.
+> > >  Temporary Virtual Mappings
+> > >  ==========================
+> > >  
+> > > -The kernel contains several ways of creating temporary mappings:
+> > > +The kernel contains several ways of creating temporary mappings. The 
+> following
+> > > +list shows them in order of preference of use.
+> > >  
+> > > -* vmap().  This can be used to make a long duration mapping of 
+> multiple
+> > > -  physical pages into a contiguous virtual space.  It needs global
+> > > -  synchronization to unmap.
+> > > +* kmap_local_page().  This function is used to require short term 
+> mappings.
+> > > +  It can be invoked from any context (including interrupts) but the 
+> mappings
+> > > +  can only be used in the context which acquired them.
+> > > +
+> > > +  This function should be preferred, where feasible, over all the 
+> others.
+> > >  
+> > > -* kmap().  This permits a short duration mapping of a single page.  It 
+> needs
+> > > -  global synchronization, but is amortized somewhat.  It is also prone 
+> to
+> > > -  deadlocks when using in a nested fashion, and so it is not 
+> recommended for
+> > > -  new code.
+> > > +  These mappings are per thread, CPU local (i.e., migration from one 
+> CPU to
+> > > +  another is disabled - this is why they are called "local"), but they 
+> don't
+> > > +  disable preemption. It's valid to take pagefaults in a local kmap 
+> region,
+> > > +  unless the context in which the local mapping is acquired does not 
+> allow
+> > > +  it for other reasons.
+> > > +
+> > > +  It is assumed that kmap_local_page() always returns the virtual 
+> address
+> > 
+> > kmap_local_page() does return a kernel virtual address.  Why 'assume' 
+> this?
+> > 
+> > Do you mean it returns an address in the direct map?
+> > 
+> > > +  of the mapping, therefore they won't ever fail.
+> > 
+> > I don't think that returning a virtual address has anything to do with 
+> the
+> > assumption they will not fail.
+> > 
+> > Why do you say this?
+> 
+> Oh, sorry! I didn't mean to say this. What I wrote is _not_ what I meant. 
+> My intention was to say the same that you may read below about 
+> k[un]map_atomic().
+> 
+> This sentence should have been:
+> 
+> + It always returns a valid virtual address. It is assumed that
+> + k[un]map_local() won't ever fail.
+> 
+> Is this rewording correct?
+> 
+> It's not my first time I make these kinds of silly mistakes when copy-
+> pasting lines and then rework or merge with other text that was already 
+> there. Recently I've made a couple of these kinds of mistakes.
+> 
+> I'd better read twice (maybe thrice) what I write before sending :(
 
-The pll_clk tables were written after the resolution settings before I
-split them.  I was concerned about having all the common tables in one
-place, because registers would be set in a different order than they
-were originally.  I wasn't sure if the pll clock tables needed to be
-set after the resolution or not.  It seemed possible to me that it
-wouldn't necessarily know how to set the clocks without knowing the
-desired resolution.  I can certainly merge them together and run some
-tests to see if there are regressions.  If there are none, I can keep
-them in a common block.
+NP  That is part of the reason we have reviews.
 
-I can certainly add comments to indicate what's being done.  I had
-thought about it.
->
-> As per my comment on patch 4, one table of registers setting these,
-> the DPHY register, and registers
->     {0x455e, 0x00},
->     {0x471e, 0x4b},
->     {0x4767, 0x0f},
->     {0x4750, 0x14},
->     {0x4540, 0x00},
->     {0x47b4, 0x14},
->     {0x4713, 0x30},
->     {0x478b, 0x10},
->     {0x478f, 0x10},
->     {0x4793, 0x10},
->     {0x4797, 0x0e},
->     {0x479b, 0x0e},
->     {0x0162, 0x0d},
->     {0x0163, 0x78},
-> would remove the duplication, reduce the code size, and be slightly
-> more readable.
->
->   Dave
->
-> > +/*
-> > + * Register sets lifted off the i2C interface from the Raspberry Pi firmware
-> > + * driver.
-> > + * 3280x2464 = mode 2, 1920x1080 = mode 1, 1640x1232 = mode 4, 640x480 = mode 7.
-> > + */
-> > +static const struct imx219_reg mode_3280x2464_regs[] = {
-> >         {0x0114, 0x01},
-> >         {0x0128, 0x00},
-> >         {0x012a, 0x18},
-> > @@ -178,15 +195,6 @@ static const struct imx219_reg mode_3280x2464_regs[] = {
-> >         {0x0171, 0x01},
-> >         {0x0174, 0x00},
-> >         {0x0175, 0x00},
-> > -       {0x0301, 0x05},
-> > -       {0x0303, 0x01},
-> > -       {0x0304, 0x03},
-> > -       {0x0305, 0x03},
-> > -       {0x0306, 0x00},
-> > -       {0x0307, 0x39},
-> > -       {0x030b, 0x01},
-> > -       {0x030c, 0x00},
-> > -       {0x030d, 0x72},
-> >         {0x0624, 0x0c},
-> >         {0x0625, 0xd0},
-> >         {0x0626, 0x09},
-> > @@ -208,13 +216,6 @@ static const struct imx219_reg mode_3280x2464_regs[] = {
-> >  };
-> >
-> >  static const struct imx219_reg mode_1920_1080_regs[] = {
-> > -       {0x0100, 0x00},
-> > -       {0x30eb, 0x05},
-> > -       {0x30eb, 0x0c},
-> > -       {0x300a, 0xff},
-> > -       {0x300b, 0xff},
-> > -       {0x30eb, 0x05},
-> > -       {0x30eb, 0x09},
-> >         {0x0114, 0x01},
-> >         {0x0128, 0x00},
-> >         {0x012a, 0x18},
-> > @@ -237,15 +238,6 @@ static const struct imx219_reg mode_1920_1080_regs[] = {
-> >         {0x0171, 0x01},
-> >         {0x0174, 0x00},
-> >         {0x0175, 0x00},
-> > -       {0x0301, 0x05},
-> > -       {0x0303, 0x01},
-> > -       {0x0304, 0x03},
-> > -       {0x0305, 0x03},
-> > -       {0x0306, 0x00},
-> > -       {0x0307, 0x39},
-> > -       {0x030b, 0x01},
-> > -       {0x030c, 0x00},
-> > -       {0x030d, 0x72},
-> >         {0x0624, 0x07},
-> >         {0x0625, 0x80},
-> >         {0x0626, 0x04},
-> > @@ -265,13 +257,6 @@ static const struct imx219_reg mode_1920_1080_regs[] = {
-> >  };
-> >
-> >  static const struct imx219_reg mode_1640_1232_regs[] = {
-> > -       {0x0100, 0x00},
-> > -       {0x30eb, 0x0c},
-> > -       {0x30eb, 0x05},
-> > -       {0x300a, 0xff},
-> > -       {0x300b, 0xff},
-> > -       {0x30eb, 0x05},
-> > -       {0x30eb, 0x09},
-> >         {0x0114, 0x01},
-> >         {0x0128, 0x00},
-> >         {0x012a, 0x18},
-> > @@ -292,15 +277,6 @@ static const struct imx219_reg mode_1640_1232_regs[] = {
-> >         {0x0171, 0x01},
-> >         {0x0174, 0x01},
-> >         {0x0175, 0x01},
-> > -       {0x0301, 0x05},
-> > -       {0x0303, 0x01},
-> > -       {0x0304, 0x03},
-> > -       {0x0305, 0x03},
-> > -       {0x0306, 0x00},
-> > -       {0x0307, 0x39},
-> > -       {0x030b, 0x01},
-> > -       {0x030c, 0x00},
-> > -       {0x030d, 0x72},
-> >         {0x0624, 0x06},
-> >         {0x0625, 0x68},
-> >         {0x0626, 0x04},
-> > @@ -322,13 +298,6 @@ static const struct imx219_reg mode_1640_1232_regs[] = {
-> >  };
-> >
-> >  static const struct imx219_reg mode_640_480_regs[] = {
-> > -       {0x0100, 0x00},
-> > -       {0x30eb, 0x05},
-> > -       {0x30eb, 0x0c},
-> > -       {0x300a, 0xff},
-> > -       {0x300b, 0xff},
-> > -       {0x30eb, 0x05},
-> > -       {0x30eb, 0x09},
-> >         {0x0114, 0x01},
-> >         {0x0128, 0x00},
-> >         {0x012a, 0x18},
-> > @@ -351,15 +320,6 @@ static const struct imx219_reg mode_640_480_regs[] = {
-> >         {0x0171, 0x01},
-> >         {0x0174, 0x03},
-> >         {0x0175, 0x03},
-> > -       {0x0301, 0x05},
-> > -       {0x0303, 0x01},
-> > -       {0x0304, 0x03},
-> > -       {0x0305, 0x03},
-> > -       {0x0306, 0x00},
-> > -       {0x0307, 0x39},
-> > -       {0x030b, 0x01},
-> > -       {0x030c, 0x00},
-> > -       {0x030d, 0x72},
-> >         {0x0624, 0x06},
-> >         {0x0625, 0x68},
-> >         {0x0626, 0x04},
-> > @@ -1041,6 +1001,13 @@ static int imx219_start_streaming(struct imx219 *imx219)
-> >         if (ret < 0)
-> >                 return ret;
-> >
-> > +       /* Send the Manufacturing Header common to all modes */
-> > +       ret = imx219_write_regs(imx219, mfg_specific_reg, ARRAY_SIZE(mfg_specific_reg));
-> > +       if (ret) {
-> > +               dev_err(&client->dev, "%s failed to send mfg header\n", __func__);
-> > +               goto err_rpm_put;
-> > +       }
-> > +
-> >         /* Apply default values of current mode */
-> >         reg_list = &imx219->mode->reg_list;
-> >         ret = imx219_write_regs(imx219, reg_list->regs, reg_list->num_of_regs);
-> > @@ -1056,6 +1023,14 @@ static int imx219_start_streaming(struct imx219 *imx219)
-> >                 goto err_rpm_put;
-> >         }
-> >
-> > +       /* Configure the PLL clocks */
-> > +       ret = imx219_write_regs(imx219, pll_clk_table, ARRAY_SIZE(pll_clk_table));
-> > +       if (ret) {
-> > +               dev_err(&client->dev, "%s failed to sent PLL clocks\n", __func__);
-> > +               goto err_rpm_put;
-> > +       }
-> > +
-> > +
-> >         /* Apply customized values from user */
-> >         ret =  __v4l2_ctrl_handler_setup(imx219->sd.ctrl_handler);
-> >         if (ret)
-> > --
-> > 2.34.1
-> >
+> 
+> > 
+> > > +
+> > > +  If a task holding local kmaps is preempted, the maps are removed on 
+> context
+> > > +  switch and restored when the task comes back on the CPU. As the maps 
+> are
+> > > +  strictly CPU local, it is guaranteed that the task stays on the CPU 
+> and
+> > > +  that the CPU cannot be unplugged until the local kmaps are released.
+> > > +
+> > > +  Nesting kmap_local_page() and kmap_atomic() mappings is allowed to a 
+> certain
+> > > +  extent (up to KMAP_TYPE_NR) but their invocations have to be 
+> strictly ordered
+> > > +  because the map implementation is stack based.
+> > 
+> > I think I would reference the kmap_local_page()
+> 
+> I suppose you are talking about the kdocs comments in code. If so, please 
+> remember that the kmap_local_page() kdocs have already been included in  
+> highmem.rst.
+
+Yes exactly.
+
+> 
+> Am I misunderstanding what you write?
+
+I was just suggesting that the above could add.
+
+'See kmal_local_page() kdoc for ordering details.'
+
+To make sure that people understand those details and you don't have to rewrite
+the kdoc stuff here.
+
+> 
+> > for more details on the
+> > ordering because there have been some conversions I've done which were
+> > complicated by this.
+> > 
+> > >  
+> > >  * kmap_atomic().  This permits a very short duration mapping of a 
+> single
+> > >    page.  Since the mapping is restricted to the CPU that issued it, it
+> > >    performs well, but the issuing task is therefore required to stay on 
+> that
+> > >    CPU until it has finished, lest some other task displace its 
+> mappings.
+> > >  
+> > > -  kmap_atomic() may also be used by interrupt contexts, since it is 
+> does not
+> > > -  sleep and the caller may not sleep until after kunmap_atomic() is 
+> called.
+> > > +  kmap_atomic() may also be used by interrupt contexts, since it does 
+> not
+> > > +  sleep and the callers too may not sleep until after kunmap_atomic() 
+> is
+> > > +  called.
+> > > +
+> > > +  Each call of kmap_atomic() in the kernel creates a non-preemptible 
+> section
+> > > +  and disable pagefaults. This could be a source of unwanted latency, 
+> so it
+> > > +  should be only used if it is absolutely required, otherwise 
+> kmap_local_page()
+> > > +  should be used where it is feasible.
+> > >  
+> > > -  It may be assumed that k[un]map_atomic() won't fail.
+> > > +  It is assumed that k[un]map_atomic() won't fail.
+> > > +
+> > > +* kmap().  This should be used to make short duration mapping of a 
+> single
+> > > +  page with no restrictions on preemption or migration. It comes with 
+> an
+> > > +  overhead as mapping space is restricted and protected by a global 
+> lock
+> > > +  for synchronization. When mapping is no more needed, the address 
+> that
+> >                                          ^^^^^^^^
+> > 					 no longer
+> 
+> Yes, correct. I'll fix it.
+> 
+> > > +  the page was mapped to must be released with kunmap().
+> > > +
+> > > +  Mapping changes must be propagated across all the CPUs. kmap() also
+> > > +  requires global TLB invalidation when the kmap's pool wraps and it 
+> might
+> > > +  block when the mapping space is fully utilized until a slot becomes
+> > > +  available. Therefore, kmap() is only callable from preemptible 
+> context.
+> > > +
+> > > +  All the above work is necessary if a mapping must last for a 
+> relatively
+> > > +  long time but the bulk of high-memory mappings in the kernel are
+> > > +  short-lived and only used in one place. This means that the cost of
+> > > +  kmap() is mostly wasted in such cases. kmap() was not intended for 
+> long
+> > > +  term mappings but it has morphed in that direction and its use is
+> > > +  strongly discouraged in newer code and the set of the preceding 
+> functions
+> > > +  should be preferred.
+> > 
+> > Nice!
+> 
+> Now that I have your reviews for all the four patches of this series I'll 
+> send next version on Monday.
+> 
+> Thanks you so much,
+
+Thank you!
+Ira
+
+> 
+> Fabio
+> 
+> > 
+> > Ira
+> > 
+> > > +
+> > > +  On 64-bit systems, calls to kmap_local_page(), kmap_atomic() and 
+> kmap() have
+> > > +  no real work to do because a 64-bit address space is more than 
+> sufficient to
+> > > +  address all the physical memory whose pages are permanently mapped.
+> > > +
+> > > +* vmap().  This can be used to make a long duration mapping of 
+> multiple
+> > > +  physical pages into a contiguous virtual space.  It needs global
+> > > +  synchronization to unmap.
+> > >  
+> > >  
+> > >  Cost of Temporary Mappings
+> > > -- 
+> > > 2.34.1
+> > > 
+> > 
+> 
+> 
+> 
+> 

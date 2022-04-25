@@ -2,75 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA7C50DAD6
+	by mail.lfdr.de (Postfix) with ESMTP id 0461D50DAD5
 	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:03:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234103AbiDYIFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 04:05:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59828 "EHLO
+        id S233444AbiDYIF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 04:05:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236360AbiDYIF1 (ORCPT
+        with ESMTP id S234352AbiDYIFd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 04:05:27 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480416422
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:02:23 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id CD0361F37D;
-        Mon, 25 Apr 2022 08:02:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1650873741; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=w5Tk4oDFEanymODdq96eWOFTX3QvPF5TUrMk/o4N45Q=;
-        b=g4nHKPDAkhLvkjXM4pdWMiQsK2suLUPfdXpvl1Jw8oRtRyenhbQi9rKtMw/OS2WcEi1t9g
-        tdD5KZgYKVTUe04zCpouJctpYK1eTyt5zsZiTRGaNSCX9j8ftW/dqVjV8oiuO+hwlghjci
-        lO+BZACO1z9d9o07ZAcoaDL7sMfrIhA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1650873741;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=w5Tk4oDFEanymODdq96eWOFTX3QvPF5TUrMk/o4N45Q=;
-        b=goixNxvVmoPUYuf6KSnxv9IRh8uXsBDfEv6m8OKISwxdwycx2D3cCTgwhD97aie3pkZyBn
-        WgSMaYAdq/RFzUBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A295813AED;
-        Mon, 25 Apr 2022 08:02:21 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ++jLJo1VZmKbcAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 25 Apr 2022 08:02:21 +0000
-Message-ID: <586da154-5494-aaab-aa07-30f77daebbc2@suse.de>
-Date:   Mon, 25 Apr 2022 10:02:20 +0200
+        Mon, 25 Apr 2022 04:05:33 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D32FD1139;
+        Mon, 25 Apr 2022 01:02:27 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D5C501FB;
+        Mon, 25 Apr 2022 01:02:26 -0700 (PDT)
+Received: from a077893.arm.com (unknown [10.163.40.250])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0A9293F73B;
+        Mon, 25 Apr 2022 01:02:21 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-mm@kvack.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] mm/memory-failure: Add new memory failure message MF_MSG_HUGE_ZERO
+Date:   Mon, 25 Apr 2022 13:33:06 +0530
+Message-Id: <20220425080306.1771480-1-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v3 1/5] firmware: sysfb: Make sysfb_create_simplefb()
- return a pdev pointer
-Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Miaoqian Lin <linmq006@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        dri-devel@lists.freedesktop.org, Johan Hovold <johan@kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Borislav Petkov <bp@suse.de>
-References: <20220420085303.100654-1-javierm@redhat.com>
- <20220420085303.100654-2-javierm@redhat.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220420085303.100654-2-javierm@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------p9b3lgGX5M0ZNMnk3qxrzvXd"
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,137 +43,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------p9b3lgGX5M0ZNMnk3qxrzvXd
-Content-Type: multipart/mixed; boundary="------------cvHUVJ0gd3HRdWMecaNGN0D2";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>,
- linux-kernel@vger.kernel.org
-Cc: Miaoqian Lin <linmq006@gmail.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- dri-devel@lists.freedesktop.org, Johan Hovold <johan@kernel.org>,
- Daniel Vetter <daniel.vetter@ffwll.ch>, Borislav Petkov <bp@suse.de>
-Message-ID: <586da154-5494-aaab-aa07-30f77daebbc2@suse.de>
-Subject: Re: [PATCH v3 1/5] firmware: sysfb: Make sysfb_create_simplefb()
- return a pdev pointer
-References: <20220420085303.100654-1-javierm@redhat.com>
- <20220420085303.100654-2-javierm@redhat.com>
-In-Reply-To: <20220420085303.100654-2-javierm@redhat.com>
+Memory failure just gets ignored for global huge_zero_page even without a
+split attempt. But corresponding memory failure message MF_MSG_UNSPLIT_THP
+is misleading as if the THP page could not be split during memory failure
+handling. This adds a new message MF_MSG_HUGE_ZERO indicating that memory
+got ignored for being a huge zero page.
 
---------------cvHUVJ0gd3HRdWMecaNGN0D2
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Tony Luck <tony.luck@intel.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Cc: linux-mm@kvack.org
+Cc: linux-edac@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+---
+This applies on v5.18-rc4
 
-DQoNCkFtIDIwLjA0LjIyIHVtIDEwOjUyIHNjaHJpZWIgSmF2aWVyIE1hcnRpbmV6IENhbmls
-bGFzOg0KPiBUaGlzIGZ1bmN0aW9uIGp1c3QgcmV0dXJuZWQgMCBvbiBzdWNjZXNzIG9yIGFu
-IGVycm5vIGNvZGUgb24gZXJyb3IsIGJ1dCBpdA0KPiBjb3VsZCBiZSB1c2VmdWwgZm9yIHN5
-c2ZiX2luaXQoKSBjYWxsZXJzIHRvIGhhdmUgYSBwb2ludGVyIHRvIHRoZSBkZXZpY2UuDQo+
-IA0KPiBTaWduZWQtb2ZmLWJ5OiBKYXZpZXIgTWFydGluZXogQ2FuaWxsYXMgPGphdmllcm1A
-cmVkaGF0LmNvbT4NCj4gUmV2aWV3ZWQtYnk6IERhbmllbCBWZXR0ZXIgPGRhbmllbC52ZXR0
-ZXJAZmZ3bGwuY2g+DQoNClJldmlld2VkLWJ5OiBUaG9tYXMgWmltbWVybWFubiA8dHppbW1l
-cm1hbm5Ac3VzZS5kZT4NCg0KPiAtLS0NCj4gDQo+IChubyBjaGFuZ2VzIHNpbmNlIHYyKQ0K
-PiANCj4gQ2hhbmdlcyBpbiB2MjoNCj4gLSBSZWJhc2Ugb24gdG9wIG9mIGxhdGVzdCBkcm0t
-bWlzYy1uZXh0IGFuZCBmaXggY29uZmxpY3RzIChEYW5pZWwgVmV0dGVyKS4NCj4gDQo+ICAg
-ZHJpdmVycy9maXJtd2FyZS9zeXNmYi5jICAgICAgICAgIHwgIDQgKystLQ0KPiAgIGRyaXZl
-cnMvZmlybXdhcmUvc3lzZmJfc2ltcGxlZmIuYyB8IDE2ICsrKysrKysrLS0tLS0tLS0NCj4g
-ICBpbmNsdWRlL2xpbnV4L3N5c2ZiLmggICAgICAgICAgICAgfCAxMCArKysrKy0tLS0tDQo+
-ICAgMyBmaWxlcyBjaGFuZ2VkLCAxNSBpbnNlcnRpb25zKCspLCAxNSBkZWxldGlvbnMoLSkN
-Cj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2Zpcm13YXJlL3N5c2ZiLmMgYi9kcml2ZXJz
-L2Zpcm13YXJlL3N5c2ZiLmMNCj4gaW5kZXggMmJmYmIwNWY3ZDg5Li5iMDMyZjQwYTkyZGUg
-MTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZmlybXdhcmUvc3lzZmIuYw0KPiArKysgYi9kcml2
-ZXJzL2Zpcm13YXJlL3N5c2ZiLmMNCj4gQEAgLTQ2LDggKzQ2LDggQEAgc3RhdGljIF9faW5p
-dCBpbnQgc3lzZmJfaW5pdCh2b2lkKQ0KPiAgIAkvKiB0cnkgdG8gY3JlYXRlIGEgc2ltcGxl
-LWZyYW1lYnVmZmVyIGRldmljZSAqLw0KPiAgIAljb21wYXRpYmxlID0gc3lzZmJfcGFyc2Vf
-bW9kZShzaSwgJm1vZGUpOw0KPiAgIAlpZiAoY29tcGF0aWJsZSkgew0KPiAtCQlyZXQgPSBz
-eXNmYl9jcmVhdGVfc2ltcGxlZmIoc2ksICZtb2RlKTsNCj4gLQkJaWYgKCFyZXQpDQo+ICsJ
-CXBkID0gc3lzZmJfY3JlYXRlX3NpbXBsZWZiKHNpLCAmbW9kZSk7DQo+ICsJCWlmICghSVNf
-RVJSKHBkKSkNCj4gICAJCQlyZXR1cm4gMDsNCj4gICAJfQ0KPiAgIA0KPiBkaWZmIC0tZ2l0
-IGEvZHJpdmVycy9maXJtd2FyZS9zeXNmYl9zaW1wbGVmYi5jIGIvZHJpdmVycy9maXJtd2Fy
-ZS9zeXNmYl9zaW1wbGVmYi5jDQo+IGluZGV4IGJkYTg3MTJiZmQ4Yy4uYTM1M2UyN2Y4M2Y1
-IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2Zpcm13YXJlL3N5c2ZiX3NpbXBsZWZiLmMNCj4g
-KysrIGIvZHJpdmVycy9maXJtd2FyZS9zeXNmYl9zaW1wbGVmYi5jDQo+IEBAIC01Nyw4ICs1
-Nyw4IEBAIF9faW5pdCBib29sIHN5c2ZiX3BhcnNlX21vZGUoY29uc3Qgc3RydWN0IHNjcmVl
-bl9pbmZvICpzaSwNCj4gICAJcmV0dXJuIGZhbHNlOw0KPiAgIH0NCj4gICANCj4gLV9faW5p
-dCBpbnQgc3lzZmJfY3JlYXRlX3NpbXBsZWZiKGNvbnN0IHN0cnVjdCBzY3JlZW5faW5mbyAq
-c2ksDQo+IC0JCQkJIGNvbnN0IHN0cnVjdCBzaW1wbGVmYl9wbGF0Zm9ybV9kYXRhICptb2Rl
-KQ0KPiArX19pbml0IHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnN5c2ZiX2NyZWF0ZV9zaW1w
-bGVmYihjb25zdCBzdHJ1Y3Qgc2NyZWVuX2luZm8gKnNpLA0KPiArCQkJCQkJICAgICBjb25z
-dCBzdHJ1Y3Qgc2ltcGxlZmJfcGxhdGZvcm1fZGF0YSAqbW9kZSkNCj4gICB7DQo+ICAgCXN0
-cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkOw0KPiAgIAlzdHJ1Y3QgcmVzb3VyY2UgcmVzOw0K
-PiBAQCAtNzYsNyArNzYsNyBAQCBfX2luaXQgaW50IHN5c2ZiX2NyZWF0ZV9zaW1wbGVmYihj
-b25zdCBzdHJ1Y3Qgc2NyZWVuX2luZm8gKnNpLA0KPiAgIAkJYmFzZSB8PSAodTY0KXNpLT5l
-eHRfbGZiX2Jhc2UgPDwgMzI7DQo+ICAgCWlmICghYmFzZSB8fCAodTY0KShyZXNvdXJjZV9z
-aXplX3QpYmFzZSAhPSBiYXNlKSB7DQo+ICAgCQlwcmludGsoS0VSTl9ERUJVRyAic3lzZmI6
-IGluYWNjZXNzaWJsZSBWUkFNIGJhc2VcbiIpOw0KPiAtCQlyZXR1cm4gLUVJTlZBTDsNCj4g
-KwkJcmV0dXJuIEVSUl9QVFIoLUVJTlZBTCk7DQo+ICAgCX0NCj4gICANCj4gICAJLyoNCj4g
-QEAgLTkzLDcgKzkzLDcgQEAgX19pbml0IGludCBzeXNmYl9jcmVhdGVfc2ltcGxlZmIoY29u
-c3Qgc3RydWN0IHNjcmVlbl9pbmZvICpzaSwNCj4gICAJbGVuZ3RoID0gbW9kZS0+aGVpZ2h0
-ICogbW9kZS0+c3RyaWRlOw0KPiAgIAlpZiAobGVuZ3RoID4gc2l6ZSkgew0KPiAgIAkJcHJp
-bnRrKEtFUk5fV0FSTklORyAic3lzZmI6IFZSQU0gc21hbGxlciB0aGFuIGFkdmVydGlzZWRc
-biIpOw0KPiAtCQlyZXR1cm4gLUVJTlZBTDsNCj4gKwkJcmV0dXJuIEVSUl9QVFIoLUVJTlZB
-TCk7DQo+ICAgCX0NCj4gICAJbGVuZ3RoID0gUEFHRV9BTElHTihsZW5ndGgpOw0KPiAgIA0K
-PiBAQCAtMTA0LDExICsxMDQsMTEgQEAgX19pbml0IGludCBzeXNmYl9jcmVhdGVfc2ltcGxl
-ZmIoY29uc3Qgc3RydWN0IHNjcmVlbl9pbmZvICpzaSwNCj4gICAJcmVzLnN0YXJ0ID0gYmFz
-ZTsNCj4gICAJcmVzLmVuZCA9IHJlcy5zdGFydCArIGxlbmd0aCAtIDE7DQo+ICAgCWlmIChy
-ZXMuZW5kIDw9IHJlcy5zdGFydCkNCj4gLQkJcmV0dXJuIC1FSU5WQUw7DQo+ICsJCXJldHVy
-biBFUlJfUFRSKC1FSU5WQUwpOw0KPiAgIA0KPiAgIAlwZCA9IHBsYXRmb3JtX2RldmljZV9h
-bGxvYygic2ltcGxlLWZyYW1lYnVmZmVyIiwgMCk7DQo+ICAgCWlmICghcGQpDQo+IC0JCXJl
-dHVybiAtRU5PTUVNOw0KPiArCQlyZXR1cm4gRVJSX1BUUigtRU5PTUVNKTsNCj4gICANCj4g
-ICAJc3lzZmJfYXBwbHlfZWZpX3F1aXJrcyhwZCk7DQo+ICAgDQo+IEBAIC0xMjQsMTAgKzEy
-NCwxMCBAQCBfX2luaXQgaW50IHN5c2ZiX2NyZWF0ZV9zaW1wbGVmYihjb25zdCBzdHJ1Y3Qg
-c2NyZWVuX2luZm8gKnNpLA0KPiAgIAlpZiAocmV0KQ0KPiAgIAkJZ290byBlcnJfcHV0X2Rl
-dmljZTsNCj4gICANCj4gLQlyZXR1cm4gMDsNCj4gKwlyZXR1cm4gcGQ7DQo+ICAgDQo+ICAg
-ZXJyX3B1dF9kZXZpY2U6DQo+ICAgCXBsYXRmb3JtX2RldmljZV9wdXQocGQpOw0KPiAgIA0K
-PiAtCXJldHVybiByZXQ7DQo+ICsJcmV0dXJuIEVSUl9QVFIocmV0KTsNCj4gICB9DQo+IGRp
-ZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L3N5c2ZiLmggYi9pbmNsdWRlL2xpbnV4L3N5c2Zi
-LmgNCj4gaW5kZXggYjBkY2ZhMjZkMDdiLi43MDgxNTJlOTAzN2IgMTAwNjQ0DQo+IC0tLSBh
-L2luY2x1ZGUvbGludXgvc3lzZmIuaA0KPiArKysgYi9pbmNsdWRlL2xpbnV4L3N5c2ZiLmgN
-Cj4gQEAgLTcyLDggKzcyLDggQEAgc3RhdGljIGlubGluZSB2b2lkIHN5c2ZiX2FwcGx5X2Vm
-aV9xdWlya3Moc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGQpDQo+ICAgDQo+ICAgYm9vbCBz
-eXNmYl9wYXJzZV9tb2RlKGNvbnN0IHN0cnVjdCBzY3JlZW5faW5mbyAqc2ksDQo+ICAgCQkg
-ICAgICBzdHJ1Y3Qgc2ltcGxlZmJfcGxhdGZvcm1fZGF0YSAqbW9kZSk7DQo+IC1pbnQgc3lz
-ZmJfY3JlYXRlX3NpbXBsZWZiKGNvbnN0IHN0cnVjdCBzY3JlZW5faW5mbyAqc2ksDQo+IC0J
-CQkgIGNvbnN0IHN0cnVjdCBzaW1wbGVmYl9wbGF0Zm9ybV9kYXRhICptb2RlKTsNCj4gK3N0
-cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnN5c2ZiX2NyZWF0ZV9zaW1wbGVmYihjb25zdCBzdHJ1
-Y3Qgc2NyZWVuX2luZm8gKnNpLA0KPiArCQkJCQkgICAgICBjb25zdCBzdHJ1Y3Qgc2ltcGxl
-ZmJfcGxhdGZvcm1fZGF0YSAqbW9kZSk7DQo+ICAgDQo+ICAgI2Vsc2UgLyogQ09ORklHX1NZ
-U0ZCX1NJTVBMRSAqLw0KPiAgIA0KPiBAQCAtODMsMTAgKzgzLDEwIEBAIHN0YXRpYyBpbmxp
-bmUgYm9vbCBzeXNmYl9wYXJzZV9tb2RlKGNvbnN0IHN0cnVjdCBzY3JlZW5faW5mbyAqc2ks
-DQo+ICAgCXJldHVybiBmYWxzZTsNCj4gICB9DQo+ICAgDQo+IC1zdGF0aWMgaW5saW5lIGlu
-dCBzeXNmYl9jcmVhdGVfc2ltcGxlZmIoY29uc3Qgc3RydWN0IHNjcmVlbl9pbmZvICpzaSwN
-Cj4gLQkJCQkJIGNvbnN0IHN0cnVjdCBzaW1wbGVmYl9wbGF0Zm9ybV9kYXRhICptb2RlKQ0K
-PiArc3RhdGljIGlubGluZSBzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpzeXNmYl9jcmVhdGVf
-c2ltcGxlZmIoY29uc3Qgc3RydWN0IHNjcmVlbl9pbmZvICpzaSwNCj4gKwkJCQkJCQkgICAg
-Y29uc3Qgc3RydWN0IHNpbXBsZWZiX3BsYXRmb3JtX2RhdGEgKm1vZGUpDQo+ICAgew0KPiAt
-CXJldHVybiAtRUlOVkFMOw0KPiArCXJldHVybiBFUlJfUFRSKC1FSU5WQUwpOw0KPiAgIH0N
-Cj4gICANCj4gICAjZW5kaWYgLyogQ09ORklHX1NZU0ZCX1NJTVBMRSAqLw0KDQotLSANClRo
-b21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3
-YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJu
-YmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bD
-vGhyZXI6IEl2byBUb3Rldg0K
+ include/linux/mm.h      | 1 +
+ include/ras/ras_event.h | 1 +
+ mm/memory-failure.c     | 3 ++-
+ 3 files changed, 4 insertions(+), 1 deletion(-)
 
---------------cvHUVJ0gd3HRdWMecaNGN0D2--
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 9f44254af8ce..a947d87b1ada 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -3236,6 +3236,7 @@ enum mf_action_page_type {
+ 	MF_MSG_SLAB,
+ 	MF_MSG_DIFFERENT_COMPOUND,
+ 	MF_MSG_HUGE,
++	MF_MSG_HUGE_ZERO,
+ 	MF_MSG_FREE_HUGE,
+ 	MF_MSG_NON_PMD_HUGE,
+ 	MF_MSG_UNMAP_FAILED,
+diff --git a/include/ras/ras_event.h b/include/ras/ras_event.h
+index 1e694fd239b9..feb9eafee966 100644
+--- a/include/ras/ras_event.h
++++ b/include/ras/ras_event.h
+@@ -359,6 +359,7 @@ TRACE_EVENT(aer_event,
+ 	EM ( MF_MSG_SLAB, "kernel slab page" )				\
+ 	EM ( MF_MSG_DIFFERENT_COMPOUND, "different compound page after locking" ) \
+ 	EM ( MF_MSG_HUGE, "huge page" )					\
++	EM ( MF_MSG_HUGE_ZERO, "huge zero page" )			\
+ 	EM ( MF_MSG_FREE_HUGE, "free huge page" )			\
+ 	EM ( MF_MSG_NON_PMD_HUGE, "non-pmd-sized huge page" )		\
+ 	EM ( MF_MSG_UNMAP_FAILED, "unmapping failed page" )		\
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index 27760c19bad7..efe99e8afb73 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -718,6 +718,7 @@ static const char * const action_page_types[] = {
+ 	[MF_MSG_SLAB]			= "kernel slab page",
+ 	[MF_MSG_DIFFERENT_COMPOUND]	= "different compound page after locking",
+ 	[MF_MSG_HUGE]			= "huge page",
++	[MF_MSG_HUGE_ZERO]		= "huge zero page",
+ 	[MF_MSG_FREE_HUGE]		= "free huge page",
+ 	[MF_MSG_NON_PMD_HUGE]		= "non-pmd-sized huge page",
+ 	[MF_MSG_UNMAP_FAILED]		= "unmapping failed page",
+@@ -1868,7 +1869,7 @@ int memory_failure(unsigned long pfn, int flags)
+ 		 * TODO: Handle memory failure of huge_zero_page thoroughly.
+ 		 */
+ 		if (is_huge_zero_page(hpage)) {
+-			action_result(pfn, MF_MSG_UNSPLIT_THP, MF_IGNORED);
++			action_result(pfn, MF_MSG_HUGE_ZERO, MF_IGNORED);
+ 			res = -EBUSY;
+ 			goto unlock_mutex;
+ 		}
+-- 
+2.20.1
 
---------------p9b3lgGX5M0ZNMnk3qxrzvXd
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJmVYwFAwAAAAAACgkQlh/E3EQov+Cc
-/w//ZfRJyzKtRKxpw3PkyBZ75t5j3UTedgePeW78iL2lRBza5KzCVrAJgZ0rTtg4arZdlSekw3Um
-HhjTo4WOiCkT/G2Jnf8XuDekLbouskdDq16Vunm5/dzJBMg2DpcThMSHHO0K8fDGq/7dtDw/TA4u
-hmuB/Xa5skFPk/b4LVk9djrwbsYY6E6BPXsrR0qfhId5IfnBjOzOnwva4zq9D8ZpqMnKhoC4sQkI
-8F7uZRErf5EntMUWztlEwT1zH4KP6F7Cv6B7m7lVUVsZdqW1tFlPcguoHJ5GrmpUa8Cnt1rRAg2X
-/hOOsqrjwIP3bZRySh7/WSpEWs8Hpi7pC5H9TjWo9+oxoeUXGwWxbeD1A2EBJ/F1s6HDuVqULGds
-vARxU0Y2zWvoeHNtUAF3ayu0ciuyCW1mIyjCmt/GtGbd5CupEOT6qwMhxsHdcZ5IbZp1RMkK9DFc
-2n4AqzpSlQOUT4H72bPqFO0ba8AVjBS+dFReqIUmGa4WlaEoQfMxpu0MWZ2IAxz2GNCkQoMXYZv4
-E+hM14LBnLNxMzu0lgn8HG73xneVZSQOI7SdrJa6lvfaclb/UJaczppOjvncWwn3Vkt5VAqpSZdb
-kkmeIGIgqF7FB5Ph6ulrpviFkxkYGpic+Nv7dATHtL+JNnctfZu4E055+VmwuLVmAD3vJWPArqHD
-kQQ=
-=L3B5
------END PGP SIGNATURE-----
-
---------------p9b3lgGX5M0ZNMnk3qxrzvXd--

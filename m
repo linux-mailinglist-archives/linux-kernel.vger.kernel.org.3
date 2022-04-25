@@ -2,56 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0D3850DB2F
+	by mail.lfdr.de (Postfix) with ESMTP id 42C3450DB2E
 	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 10:30:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231574AbiDYIbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 04:31:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40354 "EHLO
+        id S234786AbiDYIby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 04:31:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232784AbiDYIbB (ORCPT
+        with ESMTP id S235451AbiDYIb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 04:31:01 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABA6186F3;
-        Mon, 25 Apr 2022 01:27:56 -0700 (PDT)
-Received: from fraeml742-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KmykX5Mhzz67y8F;
-        Mon, 25 Apr 2022 16:25:24 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml742-chm.china.huawei.com (10.206.15.223) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 25 Apr 2022 10:27:54 +0200
-Received: from [10.47.92.213] (10.47.92.213) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.24; Mon, 25 Apr
- 2022 09:27:53 +0100
-Message-ID: <83328d95-5d5e-f311-952c-ce627cb035ea@huawei.com>
-Date:   Mon, 25 Apr 2022 09:27:54 +0100
+        Mon, 25 Apr 2022 04:31:27 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EE5DF91
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:28:21 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id bu29so24891877lfb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:28:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+jwOMe0PYx7m3rTeqaWcpjbZkR+dZWgzgcwhEumSydo=;
+        b=bWixug3Y4hVwOtAhfB47bgvZ8eP8IeA5kMCtmIlTL31LalsQbbNK+U9/17OYg1T/8Z
+         Tp+yRPQGuw3a5QHcaX8eMs3HaudIkxOR8KHQQhaR4FUBTySPHjEM7n4Sa1BMw2S5Foki
+         Gede7EwfU9IpLZWmT2v5pa74fzXl+BvSAjJ1s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+jwOMe0PYx7m3rTeqaWcpjbZkR+dZWgzgcwhEumSydo=;
+        b=hZ8/J33HIcoJ0p8QAuAi3U/LvIBp3QgztaQse4GR76qu5MjlkXZHBAQjsl7gM2dlwN
+         1crRAnyfed+thFlq5DhbS0YQMAQJ2y3YwPvRPyjwVnK7W6A7yJo31x6Evyst626ENLLL
+         ymmWqVIBjIkJTyWwJSNZ+x8JX0vG+R2n6rd6f9y2jQARiAaNOxKomZkVs7hjy3oYMHXp
+         tN4SjIbRzfpovnyIQaksxWEc+9v7OJlvzedsYg3jHexqxuQ3/phSjjo0rYj+ryIkAUdv
+         HDZOCXeqZvNZDSY0m8m6Vnwk0LzI9+WE9RIoE1zY9hip0065h/UkYox2FjdNVtpI9HCJ
+         Lolg==
+X-Gm-Message-State: AOAM533Aig53CuCBqrNY+YdSrHKZdoCB2rhJDc/4tUatICAZu/A7eY5O
+        nS52oTGGDAPNA7PedMKY3pzOWtTFHbrnk/WBxGY=
+X-Google-Smtp-Source: ABdhPJyoqhNp7z0w1WA/Fm1sPkVklUIGpiAbHN+ZEv6gfFggorejaquusOx4cJ2j6TjWZzYWicIbYw==
+X-Received: by 2002:a05:6512:e8f:b0:44a:bf22:89c8 with SMTP id bi15-20020a0565120e8f00b0044abf2289c8mr12304818lfb.323.1650875299198;
+        Mon, 25 Apr 2022 01:28:19 -0700 (PDT)
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com. [209.85.167.46])
+        by smtp.gmail.com with ESMTPSA id u29-20020ac25bdd000000b004720c866dd0sm171500lfn.87.2022.04.25.01.28.17
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Apr 2022 01:28:18 -0700 (PDT)
+Received: by mail-lf1-f46.google.com with SMTP id p12so19276087lfs.5
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 01:28:17 -0700 (PDT)
+X-Received: by 2002:a05:6512:3c93:b0:44b:4ba:c334 with SMTP id
+ h19-20020a0565123c9300b0044b04bac334mr12311172lfv.27.1650875297704; Mon, 25
+ Apr 2022 01:28:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 1/4] scsi: libsas: Add sas_execute_internal_abort_single()
-To:     Hannes Reinecke <hare@suse.de>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <jinpu.wang@cloud.ionos.com>,
-        <damien.lemoal@opensource.wdc.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <Ajish.Koshy@microchip.com>, <linuxarm@huawei.com>,
-        <Viswas.G@microchip.com>, <hch@lst.de>, <liuqi115@huawei.com>,
-        <chenxiang66@hisilicon.com>
-References: <1646309930-138960-1-git-send-email-john.garry@huawei.com>
- <1646309930-138960-2-git-send-email-john.garry@huawei.com>
- <929aede0-9e58-9c3d-5951-6151a3281edd@suse.de>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <929aede0-9e58-9c3d-5951-6151a3281edd@suse.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.47.92.213]
-X-ClientProxiedBy: lhreml702-chm.china.huawei.com (10.201.108.51) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <CA+G9fYscb1y4a17Sf5G_Aibt+WuSf-ks_Qjw9tYFy=A4sjCEug@mail.gmail.com>
+In-Reply-To: <CA+G9fYscb1y4a17Sf5G_Aibt+WuSf-ks_Qjw9tYFy=A4sjCEug@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 25 Apr 2022 01:28:01 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgZ9H_Cama8RNyqNbPB5ydFy4P319JUcz9E27GyZ1xqdw@mail.gmail.com>
+Message-ID: <CAHk-=wgZ9H_Cama8RNyqNbPB5ydFy4P319JUcz9E27GyZ1xqdw@mail.gmail.com>
+Subject: Re: page_alloc.c:(.init.text+0xa7c): undefined reference to `vmalloc_huge'
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     linux-mm <linux-mm@kvack.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Song Liu <song@kernel.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Rik van Riel <riel@surriel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: multipart/mixed; boundary="000000000000b05d1505dd765b4f"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,33 +81,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/04/2022 13:21, Hannes Reinecke wrote:
->>   int sas_execute_tmf(struct domain_device *device, void *parameter,
->>               int para_len, int force_phy_id,
->>               struct sas_tmf_task *tmf)
->> diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
->> index df2c8fc43429..2d30d57916e5 100644
->> --- a/include/scsi/libsas.h
->> +++ b/include/scsi/libsas.h
->> @@ -557,6 +557,16 @@ struct sas_ata_task {
->>       int    force_phy_id;
->>   };
->> +/* LLDDs rely on these values */
->> +enum sas_internal_abort {
->> +    SAS_INTERNAL_ABORT_SINGLE    = 0,
->> +};
->> +
-> 
-> Why don't you use the existing TMF_XXX values here?
-> Your 'single' method pretty much _is_ a TMF_ABORT_TASK, and the 'device' 
-> method _is_ a TMF_ABORT_TASK_SET, no?
+--000000000000b05d1505dd765b4f
+Content-Type: text/plain; charset="UTF-8"
 
-Sure, they are doing the same as TMFs and there is equivalence in the 
-'single' and 'device' methods, as you say.
+On Mon, Apr 25, 2022 at 1:10 AM Naresh Kamboju
+<naresh.kamboju@linaro.org> wrote:
+>
+> # CONFIG_MMU is not set
 
-However, as mentioned in the comment, the LLDDs rely on the values in 
-enum sas_internal_abort, which do not match the values in 
-TMF_ABORT{_TASK, _TASK_SET}.
+I just sent the stupid and straightforward patch in
 
-Thanks,
-John
+  https://lore.kernel.org/all/CAHk-=wi5DYKbFE4j-jC2HGsKVuf1RpZbEiYt4tSXuxGKiN9oJg@mail.gmail.com/
+
+but then I thought maybe the alias patch is as simple as the attached.
+
+So does either (or both) of these patches work?
+
+                  Linus
+
+--000000000000b05d1505dd765b4f
+Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
+Content-Disposition: attachment; filename="patch.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l2egiimz0>
+X-Attachment-Id: f_l2egiimz0
+
+IG1tL25vbW11LmMgfCAyICsrCiAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspCgpkaWZm
+IC0tZ2l0IGEvbW0vbm9tbXUuYyBiL21tL25vbW11LmMKaW5kZXggNTVhOWU0OGE3YTAyLi45ZDdh
+ZmMyZDk1OWUgMTAwNjQ0Ci0tLSBhL21tL25vbW11LmMKKysrIGIvbW0vbm9tbXUuYwpAQCAtMjI2
+LDYgKzIyNiw4IEBAIHZvaWQgKnZtYWxsb2ModW5zaWduZWQgbG9uZyBzaXplKQogfQogRVhQT1JU
+X1NZTUJPTCh2bWFsbG9jKTsKIAordm9pZCAqdm1hbGxvY19odWdlKHVuc2lnbmVkIGxvbmcgc2l6
+ZSwgZ2ZwX3QgZ2ZwX21hc2spIF9fd2VhayBfX2FsaWFzKF9fdm1hbGxvYyk7CisKIC8qCiAgKgl2
+emFsbG9jIC0gYWxsb2NhdGUgdmlydHVhbGx5IGNvbnRpZ3VvdXMgbWVtb3J5IHdpdGggemVybyBm
+aWxsCiAgKgo=
+--000000000000b05d1505dd765b4f--

@@ -2,66 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B45A50E868
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:39:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6552D50E86F
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 20:41:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244472AbiDYSmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 14:42:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48988 "EHLO
+        id S244482AbiDYSoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 14:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234489AbiDYSmW (ORCPT
+        with ESMTP id S233045AbiDYSoT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 14:42:22 -0400
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EBA47AC3;
-        Mon, 25 Apr 2022 11:39:18 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-2f7d19cac0bso51559667b3.13;
-        Mon, 25 Apr 2022 11:39:17 -0700 (PDT)
+        Mon, 25 Apr 2022 14:44:19 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147729FEB
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:41:15 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 17so18996547lji.1
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 11:41:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=29vIgpHiMOT/QpCjFKyRzAyZ0bZDOTDhP1A0AtWid/Y=;
+        b=CE4MeQJtaQKXHSTUH4lVceaOQWzd2LYTzFdGFke7eiMWUtnF1/YUhzARcQKJwO890h
+         0JjYjVXo3IA6jOL4JeXtr4RoRAOB3Aenb8yynDIgUrO8QWYAZNLQjdewaz+3b5yU2b9Y
+         l91UoPZh+RklZV+8rZCR1jasqZHfzFGfJi0AbNdD1+vauDtcUtAoM+BaIOIWx8/9pvFw
+         d1jbu++lX1kcc3xpVmwu0sLHNN3xNUkpGsnQYzyEvbIWIh/YAlUyslhewhBx+Qjuuwvv
+         1s1Bix8HgORmWctPGndPjVg13XJhCDGuaLQAU0u7IaaecEJDcAjV+q7/z99/Ur9u236O
+         h+Jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=qK8e2AVrSefevGs2imvyVDDkPKL0eZ2yImHKmj2kieU=;
-        b=hiIh9yliRYgIIqZdaqIq91nhnKPeMl6dnP+7PltevRma+jXQ10CJpo8IIiAz57Tkll
-         sJhzZY54q+Y56Z4XGA3ZyR17whxkUbrjP519rv/UsU2T1RVPRWDJc2cpb7Qji5/p92Iv
-         C7IuMr0VSuT/zsDI4qRE3RcuhhmfFJKckci7O4doM+1STycvO4pQP0Czu0WcNbmR7V/6
-         qGhcjl91XHoJ+QkbQW/Yzh/2hX89w0DT8sPibuykEWIIRTD3Rj3y2ricg65IzF5E3v/J
-         kAreLplkGv0kgBdim6Ij6NFi0llv8FhHTzFDMf9xJO1At4f5pRpp+ICYNIM/iI6beObA
-         BZ0Q==
-X-Gm-Message-State: AOAM5339X2GHeZTNqnAW3eYApG60w6mQDuBvthxvbthzyQXVpBVevaDI
-        R8TPVagWlhKKAap/jAzuMyCV639G7Wy4+iKSmgY=
-X-Google-Smtp-Source: ABdhPJyX2wtgcldMFdGQD6xuBRzIvUcLOck00Bh9QMuV5obcAZBrDOa4Dhb+1z3doxcjU9Q/k7OQjfZ8azxMw1ZuAQc=
-X-Received: by 2002:a81:36cf:0:b0:2e5:2597:a026 with SMTP id
- d198-20020a8136cf000000b002e52597a026mr18178120ywa.301.1650911956879; Mon, 25
- Apr 2022 11:39:16 -0700 (PDT)
+        bh=29vIgpHiMOT/QpCjFKyRzAyZ0bZDOTDhP1A0AtWid/Y=;
+        b=5bE0PvW3WyK06NOVnr9rL0sGMhqtJ8dJHeTn2O3Ths9CPjQVPscQTGuKxtZXLsoy4J
+         viypIc/W052nKemejJbiPurBARWMOaW1c+f9+YHx+hBUXfs13jsCRoKwMow2curtIvbC
+         0smIE7hMuYfZIvXlQMmoIK7+6yySHsaYNrcO1cyuL9XIvNIAghq3XZR77+AdO1aKz7y2
+         fKLd6jbvN1d3qegiDbcNj7ShhYwYmnXunC2M9TfP25KErawW4PrZJVsNELcT5jLVHZsv
+         cjj2vzJBx3Lu6r/taINOgC20n7PD87P4IgCwmrchVGLK764cGIQDnlQWHRCC9vvi+6yR
+         0rlA==
+X-Gm-Message-State: AOAM530KtBlYtACCO+xg1ieaLz8rl65WtnpUlpBAwobR0nNMmV2fie7m
+        WYWaoEEwBE0w02ho8BPBdacJJxZe0KeXortuXdWRdqTVSCNhKA==
+X-Google-Smtp-Source: ABdhPJzAiO3F27TOYkUMvHm6r/ME45xfOreTX/BpgTFPczggJjakzPgxXMFJACNi9mnfx58/N95zvPR4TiZ3z2TVf2M=
+X-Received: by 2002:a05:651c:1507:b0:24e:e69e:9b6e with SMTP id
+ e7-20020a05651c150700b0024ee69e9b6emr11769543ljf.468.1650912073156; Mon, 25
+ Apr 2022 11:41:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220423150132.GA1552054@bhelgaas> <44ebf450aa3300e02aba6ec009d8bea20c0fc535.camel@linux.intel.com>
-In-Reply-To: <44ebf450aa3300e02aba6ec009d8bea20c0fc535.camel@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 25 Apr 2022 20:39:05 +0200
-Message-ID: <CAJZ5v0hs1HPaJNZticZfxz+CeAVuq-Rrw7J50-wv6-wWn5L_2Q@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
-To:     David Box <david.e.box@linux.intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Jingar, Rajvi" <rajvi.jingar@intel.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-        "koba.ko@canonical.com" <koba.ko@canonical.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Russell Currey <ruscur@russell.cc>,
-        "Oliver O'Halloran" <oohall@gmail.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+References: <20220424190811.1678416-1-masahiroy@kernel.org> <20220424190811.1678416-10-masahiroy@kernel.org>
+In-Reply-To: <20220424190811.1678416-10-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 25 Apr 2022 11:41:01 -0700
+Message-ID: <CAKwvOdkac4Bk+u=v2dwSD=X0kZo2y4UxRUNHJdYiTLTPSp7=kQ@mail.gmail.com>
+Subject: Re: [PATCH 09/27] modpost: add sym_add_unresolved() helper
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,100 +67,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 8:33 PM David E. Box
-<david.e.box@linux.intel.com> wrote:
+On Sun, Apr 24, 2022 at 12:09 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
-> On Sat, 2022-04-23 at 10:01 -0500, Bjorn Helgaas wrote:
-> > On Sat, Apr 23, 2022 at 12:43:14AM +0000, Jingar, Rajvi wrote:
-> > > > -----Original Message-----
-> > > > From: Bjorn Helgaas <helgaas@kernel.org>
-> > > > On Thu, Apr 14, 2022 at 07:54:02PM +0200, Rafael J. Wysocki wrote:
-> > > > > On 3/25/2022 8:50 PM, Rajvi Jingar wrote:
-> > > > > > For the PCIe devices (like nvme) that do not go into D3 state still
-> > > > > > need to
-> > > > > > disable PTM on PCIe root ports to allow the port to enter a lower-
-> > > > > > power PM
-> > > > > > state and the SoC to reach a lower-power idle state as a whole. Move
-> > > > > > the
-> > > > > > pci_disable_ptm() out of pci_prepare_to_sleep() as this code path is
-> > > > > > not
-> > > > > > followed for devices that do not go into D3. This patch fixes the
-> > > > > > issue
-> > > > > > seen on Dell XPS 9300 with Ice Lake CPU and Dell Precision 5530 with
-> > > > > > Coffee
-> > > > > > Lake CPU platforms to get improved residency in low power idle states.
-> > > > > >
-> > > > > > Fixes: a697f072f5da ("PCI: Disable PTM during suspend to save power")
-> > > > > > Signed-off-by: Rajvi Jingar <rajvi.jingar@intel.com>
-> > > > > > Suggested-by: David E. Box <david.e.box@linux.intel.com>
-> > > > > > ---
-> > > > > >   drivers/pci/pci-driver.c | 10 ++++++++++
-> > > > > >   drivers/pci/pci.c        | 10 ----------
-> > > > > >   2 files changed, 10 insertions(+), 10 deletions(-)
-> > > > > >
-> > > > > > diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
-> > > > > > index 8b55a90126a2..ab733374a260 100644
-> > > > > > --- a/drivers/pci/pci-driver.c
-> > > > > > +++ b/drivers/pci/pci-driver.c
-> > > > > > @@ -847,6 +847,16 @@ static int pci_pm_suspend_noirq(struct device
-> > > > > > *dev)
-> > > > > >       if (!pci_dev->state_saved) {
-> > > > > >               pci_save_state(pci_dev);
-> > > > > > +             /*
-> > > > > > +              * There are systems (for example, Intel mobile chips
-> > > > > > since
-> > > > Coffee
-> > > > > > +              * Lake) where the power drawn while suspended can be
-> > > > significantly
-> > > > > > +              * reduced by disabling PTM on PCIe root ports as this
-> > > > > > allows the
-> > > > > > +              * port to enter a lower-power PM state and the SoC to
-> > > > > > reach a
-> > > > > > +              * lower-power idle state as a whole.
-> > > > > > +              */
-> > > > > > +             if (pci_pcie_type(pci_dev) == PCI_EXP_TYPE_ROOT_PORT)
-> > > > > > +                     pci_disable_ptm(pci_dev);
-> > > >
-> > > > Why is disabling PTM dependent on pci_dev->state_saved?  The point of
-> > > > this is to change the behavior of the device, and it seems like we
-> > > > want to do that regardless of whether the driver has used
-> > > > pci_save_state().
-> > >
-> > > Because we use the saved state to restore PTM on the root port.
-> > > And it's under this condition that the root port state gets saved.
-> >
-> > Yes, I understand that pci_restore_ptm_state() depends on a previous
-> > call to pci_save_ptm_state().
-> >
-> > The point I'm trying to make is that pci_disable_ptm() changes the
-> > state of the device, and that state change should not depend on
-> > whether the driver has used pci_save_state().
+> Add a small helper, sym_add_unresolved() to ease the further
+> refactoring.
 >
-> We do it here because D3 depends on whether the device state was saved by the
-> driver.
->
->         if (!pci_dev->state_saved) {
->                 pci_save_state(pci_dev);
->
->                 /* disable PTM here */
->
->                 if (pci_power_manageable(pci_dev))
->                         pci_prepare_to_sleep(pci_dev);
->         }
->
->
-> If we disable PTM before the check, we will have saved "PTM disabled" as the
-> restore state. And we can't do it after the check as the device will be in D3.
->
-> As to disabling PTM on all devices, I see no problem with this, but the
-> reasoning is different. We disabled the root port PTM for power savings.
+> Remove the 'weak' argument from alloc_symbol() because it is sensible
+> only for unresolved symbols.
 
-Right.  As per the comment explaining why it is disabled.
+I did not yet read the rest of the series to see how else your newly
+added helper `sym_add_unresolved` is used.
+Perhaps the callers of `alloc_symbol` should just set the symbol's
+weak member to true if needed, and alloc_symbol can default to setting
+it false (as the memset currently does)?
 
-> >
-> > When we're putting a device into a low-power state, I think we want to
-> > disable PTM *always*, no matter what the driver did.  And I think we
-> > want to do it for all devices, not just Root Ports.
-> >
-> > Bjorn
+Then, you don't need the helper, and just `handle_symbol` needs the
+assignment when `ELF_ST_BIND(sym->st_info) == STB_WEAK`?
+
 >
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>
+>  scripts/mod/modpost.c | 19 +++++++++++--------
+>  1 file changed, 11 insertions(+), 8 deletions(-)
+>
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index 86416e4af626..1c7d2831e89d 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -230,14 +230,12 @@ static inline unsigned int tdb_hash(const char *name)
+>   * Allocate a new symbols for use in the hash of exported symbols or
+>   * the list of unresolved symbols per module
+>   **/
+> -static struct symbol *alloc_symbol(const char *name, bool weak,
+> -                                  struct symbol *next)
+> +static struct symbol *alloc_symbol(const char *name, struct symbol *next)
+>  {
+>         struct symbol *s = NOFAIL(malloc(sizeof(*s) + strlen(name) + 1));
+>
+>         memset(s, 0, sizeof(*s));
+>         strcpy(s->name, name);
+> -       s->weak = weak;
+>         s->next = next;
+>         s->is_static = true;
+>         return s;
+> @@ -250,11 +248,17 @@ static struct symbol *new_symbol(const char *name, struct module *module,
+>         unsigned int hash;
+>
+>         hash = tdb_hash(name) % SYMBOL_HASH_SIZE;
+> -       symbolhash[hash] = alloc_symbol(name, false, symbolhash[hash]);
+> +       symbolhash[hash] = alloc_symbol(name, symbolhash[hash]);
+>
+>         return symbolhash[hash];
+>  }
+>
+> +static void sym_add_unresolved(const char *name, struct module *mod, bool weak)
+> +{
+> +       mod->unres = alloc_symbol(name, mod->unres);
+> +       mod->unres->weak = weak;
+> +}
+> +
+>  static struct symbol *find_symbol(const char *name)
+>  {
+>         struct symbol *s;
+> @@ -701,9 +705,8 @@ static void handle_symbol(struct module *mod, struct elf_info *info,
+>                         }
+>                 }
+>
+> -               mod->unres = alloc_symbol(symname,
+> -                                         ELF_ST_BIND(sym->st_info) == STB_WEAK,
+> -                                         mod->unres);
+> +               sym_add_unresolved(symname, mod,
+> +                                  ELF_ST_BIND(sym->st_info) == STB_WEAK);
+>                 break;
+>         default:
+>                 /* All exported symbols */
+> @@ -2073,7 +2076,7 @@ static void read_symbols(const char *modname)
+>          * the automatic versioning doesn't pick it up, but it's really
+>          * important anyhow */
+>         if (modversions)
+> -               mod->unres = alloc_symbol("module_layout", false, mod->unres);
+> +               sym_add_unresolved("module_layout", mod, false);
+>  }
+>
+>  static void read_symbols_from_files(const char *filename)
+> --
+> 2.32.0
+>
+
+
+-- 
+Thanks,
+~Nick Desaulniers

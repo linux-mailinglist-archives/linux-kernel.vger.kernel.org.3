@@ -2,110 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CBA850DEFE
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 13:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5635750DF03
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Apr 2022 13:40:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238806AbiDYLmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 07:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40996 "EHLO
+        id S241783AbiDYLnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 07:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbiDYLmU (ORCPT
+        with ESMTP id S241737AbiDYLmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 07:42:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 66713369CC
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 04:39:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650886755;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dWekVSPYd8xYAt3O60VkUDiNCfHG1joVEXBu5UZWkrw=;
-        b=YN8m6mLLkfgMgH7PdaccLvnQQedjuNmnWN95k97ZHgIzlbVK3y0QzwTv1JtBxlBhOWORPg
-        WEoeeD+4isws/fxVlYl7ZxCxDng51iqykZYew/Mah2A6QZ3wFruHaAC801gNWzN6FGZT2K
-        BZ1q9iUXNb5isWi86jZwQzuzy5YXMkg=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-439-3DvIA_TDN1CriXLlWdL43Q-1; Mon, 25 Apr 2022 07:39:14 -0400
-X-MC-Unique: 3DvIA_TDN1CriXLlWdL43Q-1
-Received: by mail-wm1-f70.google.com with SMTP id az19-20020a05600c601300b003914ac8efb8so7062448wmb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 04:39:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dWekVSPYd8xYAt3O60VkUDiNCfHG1joVEXBu5UZWkrw=;
-        b=vMd66DMc9gmk77Sk8y/9Zg+p579yWvp9dHTIGgp7r8qKIMU4cQZFLD6VAOqHpZ6zRn
-         tO/4ZuyANyxrkw2NB4tIjwoZrWAX3RZuIu2umrMjiZ1GU8XK3cmlIsGXw4dnW1IctoSE
-         SDWB3CCKhlx09LQSUC4oQCXjjA7/vWzoCdWxZnQAThnzhSi8ufU2O6OvG2zJRt1tDJp5
-         7OeDVO6NLefxLRaG+F9bw5Q8v4U8VDvcqM6cZgcwpaiHDsy1r2cxMVNH4oqFN6Wp0WGu
-         Im+eRPPxFHGnSv9DFlDeIkvk43I6TPftbSwa3NVCBQCITzQeW6xp3Ztd9IImJjVXtCTL
-         r6MQ==
-X-Gm-Message-State: AOAM5320TlDhmp7N6OU9yqbDmlIUclwLmdK/yWAnRxy2ZSKh2ascMngI
-        5UZ3timrjOyiwjvhnCrpMd4of9BPCLAhmYYhxUwmADgSQ3jaWsDz3rmQx6kZReBIa0mMbQdCEV2
-        GgzXIzi/3T/Zx39/mzi/br3c=
-X-Received: by 2002:adf:f710:0:b0:20a:e189:9983 with SMTP id r16-20020adff710000000b0020ae1899983mr133525wrp.24.1650886753274;
-        Mon, 25 Apr 2022 04:39:13 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwq4QRElPhL8bLGVswnlIMjcwsK192ldTpRUzZ0gIm2L1nYcCNVDuB8lSD6IXZRABNNdhtiOQ==
-X-Received: by 2002:adf:f710:0:b0:20a:e189:9983 with SMTP id r16-20020adff710000000b0020ae1899983mr133512wrp.24.1650886753070;
-        Mon, 25 Apr 2022 04:39:13 -0700 (PDT)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id j39-20020a05600c1c2700b00393ee3deaf1sm1758378wms.9.2022.04.25.04.39.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 04:39:12 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 12:39:09 +0100
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     Christoph Lameter <cl@gentwo.de>
-Cc:     frederic@kernel.org, mtosatti@redhat.com, tglx@linutronix.de,
-        mingo@kernel.org, peterz@infradead.org, pauld@redhat.com,
-        neelx@redhat.com, oleksandr@natalenko.name,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [RFC PATCH v3] tick/sched: Ensure quiet_vmstat() is called when
- the idle tick was stopped too
-Message-ID: <20220425113909.u3smtztp66svlw4o@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
-References: <20220422193647.3808657-1-atomlin@redhat.com>
- <alpine.DEB.2.22.394.2204250919400.2367@gentwo.de>
+        Mon, 25 Apr 2022 07:42:53 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04242F3A5;
+        Mon, 25 Apr 2022 04:39:48 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23PBMUKW009006;
+        Mon, 25 Apr 2022 11:39:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=MDTOIXJfavf+w5wx+LCRBdmnS44P7vHM3YGFPJBKp3U=;
+ b=g1VPIS/Tj+9N0cfPKpibiFf+5D88TsH6n0YKVImsyIUCBz3cHJ67K9BjSInY8bPBPv2B
+ IEsIG3wurBTEuFy7RXGGkU4NdrodJ0KUh9T4X9E5sc1YH8MU5VgMK5TkH/L+v1awiOrN
+ 04g/wLnHqacbRVWY17G0Pfpj9OppDu5ir95O6zfhtYiFugkuJhlrLnoP5kUiZ9cSpr9l
+ n1RKRru5blzjfJ0Xmdyrnm09JLy/gCwI81B573ZXp97JCmEKBlRcI66nvpWWyeVphVBe
+ 0OY2xeCCZiflhj3bYy1ExG6yKCK9sTct4Oc4uP3EshXcTcB+yuaSo+T9HmtZO0s7I/QA xg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fnqha4sgr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Apr 2022 11:39:46 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23PB14HE039798;
+        Mon, 25 Apr 2022 11:39:45 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fnqha4sgb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Apr 2022 11:39:45 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23PBZqjj029159;
+        Mon, 25 Apr 2022 11:39:43 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04fra.de.ibm.com with ESMTP id 3fm938swd3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Apr 2022 11:39:43 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23PBdeSR58065224
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 25 Apr 2022 11:39:40 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8F02F11C050;
+        Mon, 25 Apr 2022 11:39:40 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 375E911C04C;
+        Mon, 25 Apr 2022 11:39:40 +0000 (GMT)
+Received: from osiris (unknown [9.145.60.82])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Mon, 25 Apr 2022 11:39:40 +0000 (GMT)
+Date:   Mon, 25 Apr 2022 13:39:38 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Pingfan Liu <kernelfans@gmail.com>
+Cc:     linux-s390@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2] s390/irq: utilize RCU instead of irq_lock_sparse() in
+ show_msi_interrupt()
+Message-ID: <YmaIeqtLzPegsgZP@osiris>
+References: <20220420140521.45361-5-kernelfans@gmail.com>
+ <20220422100212.22666-1-kernelfans@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2204250919400.2367@gentwo.de>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220422100212.22666-1-kernelfans@gmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: qmAiJy-Ss_F-r1XjzhmlayPSYJVhQgvu
+X-Proofpoint-GUID: RlXP01ILsTZ-IHF9oL2yZ50U3NAkJZPH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-25_06,2022-04-25_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 malwarescore=0 bulkscore=0 adultscore=0 impostorscore=0
+ mlxlogscore=646 lowpriorityscore=0 phishscore=0 spamscore=0 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204250049
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-04-25 09:23 +0200, Christoph Lameter wrote:
-> On Fri, 22 Apr 2022, Aaron Tomlin wrote:
+On Fri, Apr 22, 2022 at 06:02:12PM +0800, Pingfan Liu wrote:
+> As demonstrated by commit 74bdf7815dfb ("genirq: Speedup show_interrupts()"),
+> irq_desc can be accessed safely in RCU read section.
 > 
-> > A customer provided some evidence which indicates that the idle tick was
-> > stopped; albeit, CPU-specific vmstat counters still remained populated.
-> > Thus one can only assume quiet_vmstat() was not invoked on return to the
-> > idle loop.
+> Hence here resorting to rcu read lock to get rid of irq_lock_sparse().
 > 
-> Could we *always* fold the vmstat counters when entering idle mode? That
-> would make the logic less complicated. There is nothing else to do since
-> we are entering an idle state and if there are any counter deltas then we
-> have the time to process them. This may also decrease the time that
-> deltas exist significantly and an idle system will have accurate vmstat
-> counters.
+> Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
+> Cc: Heiko Carstens <hca@linux.ibm.com>
+> Cc: Vasily Gorbik <gor@linux.ibm.com>
+> Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+> Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
+> Cc: Sven Schnelle <svens@linux.ibm.com>
+> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Cc: linux-kernel@vger.kernel.org
+> To: linux-s390@vger.kernel.org
+> 
+> ---
+>  arch/s390/kernel/irq.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Hi Christoph,
-
-Thank you for your feedback.
-
-Yes, in the context of nohz, this patch should ensure it, if required, when
-the idle tick is to be stopped.
-
-
-Kind regards,
-
--- 
-Aaron Tomlin
-
+Applied, thanks!

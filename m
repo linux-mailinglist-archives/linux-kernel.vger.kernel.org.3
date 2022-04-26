@@ -2,216 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7785D50FA16
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 12:17:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42A0750FA01
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 12:17:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348416AbiDZKUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 06:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54932 "EHLO
+        id S1343564AbiDZKUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 06:20:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349328AbiDZKTv (ORCPT
+        with ESMTP id S1348687AbiDZKSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 06:19:51 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3FBF14F5FD
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 02:45:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650966319; x=1682502319;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rpRq7F+eCG2d02z+AGMyDOmcLcf53HLO2zTvnZ9BGHo=;
-  b=KMPMuITGMdMT177w8NU0p72mzPQXiIFRfgqs5sel+GfsP1k+QX1ELBkf
-   +tl3v0ogKnRIRMPoHH11wWeQoH53IOqLI/lF1sGYMzCNSHUIrCvUmnQX6
-   EK7QD/5+brx3VBIFfsKZ7u4+HkN5KCCGRH9IWU9onYzflNf6EAQ+u82zu
-   9HyvfXbBDXWaMpsdnq1V9V0OvZw+B9kBRRGAct7lj7db4N7aln1YChNgm
-   zg7bLNSMlrfUAxrXreZnWTUxiej5vHDspytd+lD87mO/UZ5bDxO3shQhr
-   yF7D622W+1UqNRWMDNCsRj7BQyxxyTnenancYugLEgNfazghdy+BxzpXU
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="326010477"
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="326010477"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 02:42:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="874248812"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 26 Apr 2022 02:42:52 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1njHid-0003OI-RJ;
-        Tue, 26 Apr 2022 09:42:51 +0000
-Date:   Tue, 26 Apr 2022 17:42:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexander Lobakin <alobakin@pm.me>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: drivers/net/dsa/ocelot/seville_vsc9953.c:1255:34: warning: unused
- variable 'seville_of_match'
-Message-ID: <202204261706.ah6KplS9-lkp@intel.com>
+        Tue, 26 Apr 2022 06:18:45 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B4214DE92;
+        Tue, 26 Apr 2022 02:42:11 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id A73BB5C006E;
+        Tue, 26 Apr 2022 05:42:10 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Tue, 26 Apr 2022 05:42:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1650966130; x=1651052530; bh=ZXIFxQmM8x
+        nC3dx69+7lQNWkGy08x70TLQHlCMHjAQo=; b=EKkTH73OKNUaepKXuBocm2gAex
+        vK5DVg5upcYAUfHb2FHMVZ8Bhq4VLxeGFZGM0rDMfPMXo/sH51PbiewkvgHhHLPk
+        lEpjxSB/wNdvW7s4kRvAv76+5bj1Qd1O1y3MoAp3ctRDhSvxegYcMIectk8eDYru
+        N289LqzLMELjuSl74Qh5kcxmaSsil/jc9oSYzP29QZsYrTV5XyCK3VlBHj8NNrVv
+        4SX1MaiLLE2jeHPJDZGxpMIwBNBq7PUV1AiMm1qaIyTDXl1GCq3HOAIA1HOp+8qD
+        t03GZz50dANfPMnvpT9U9P+IAoEpOA+Jd6cPkPqn84H1MkFX9f/uevlq0mhw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1650966130; x=
+        1651052530; bh=ZXIFxQmM8xnC3dx69+7lQNWkGy08x70TLQHlCMHjAQo=; b=R
+        Zi9/fXFQqx4jsAIJVC78UaJEJRpo4TQNJRufNCe476BQUHsHUC5w1ZOIM7qNd9X0
+        zGt43tOPWVGMCncbJw2f4kij632qRo5+/l73FepTPp+TE9G5TyOMGWwGZhqXbhZi
+        GwUw+7SRszYPyrWnOcBmv7e83dzTqIphTeD6QoAQh/eTEhWZ76hf3TANN7IXB5MB
+        x6ljZb6EITyg6t0jB4Pag8LQemEwZO6gBTbzoseHFggcwbmCZQNnotJJUgaifv/C
+        GdUcjPpaJj+wYJqxQKg9Z1Ftxqc3DMwUe96ZyK0K6L+mu3EFFhWNuZQxz+QcAVxf
+        tLZrbUDS7U0I0UxTgjglg==
+X-ME-Sender: <xms:cr5nYtDfIUS6p9gwkF7pZ-uecpgLMyIevtfd1-Dtz4l4pKtNNOuxWw>
+    <xme:cr5nYrhHN21xFoN2DRFXTdupEqNT7RIyIaakv4DQHCpoL4NXHjXPT2yljlTcKC128
+    OIIMvBBWJZUWg>
+X-ME-Received: <xmr:cr5nYokx-c_hmQr3GnE3vG37vH3__3kU0fs3EM5JeHLYhgyS3ZKRYlRTiTsdZgoWC-uWi-B822bxEY7hla9NAcXUq_eMk2Ju>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefgdduiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvve
+    dvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
+    drtghomh
+X-ME-Proxy: <xmx:cr5nYnyZyizuxEXmc0eL6pCM4dKBDVX5XYLBH2MTJuaMDebW0dfRpg>
+    <xmx:cr5nYiSGvFo9kWhc_CW_JCBnH5HqEQoxfAsF0pN8hxATIon5O09-VA>
+    <xmx:cr5nYqYR4GQS1UqITdg2eYwznp667hKG6bFuEs_j9zkUSjB1vqoTQQ>
+    <xmx:cr5nYnLpoFuTKwYv1ZQbjaA2r8vN6lSOqLZ4SJL77U2dwNGjAlgEbg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 26 Apr 2022 05:42:09 -0400 (EDT)
+Date:   Tue, 26 Apr 2022 11:42:08 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the extcon tree with the usb tree
+Message-ID: <Yme+cFpA19sWT2+g@kroah.com>
+References: <20220426152739.62f6836e@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220426152739.62f6836e@canb.auug.org.au>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexander,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   d615b5416f8a1afeb82d13b238f8152c572d59c0
-commit: 227d72063fccb2d19b30fb4197fba478514f7d83 dsa: simplify Kconfig symbols and dependencies
-date:   1 year, 1 month ago
-config: s390-randconfig-r023-20220426 (https://download.01.org/0day-ci/archive/20220426/202204261706.ah6KplS9-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=227d72063fccb2d19b30fb4197fba478514f7d83
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 227d72063fccb2d19b30fb4197fba478514f7d83
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/dsa/ocelot/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/net/dsa/ocelot/seville_vsc9953.c:6:
-   In file included from include/soc/mscc/ocelot_vcap.h:9:
-   In file included from include/soc/mscc/ocelot.h:10:
-   In file included from include/linux/if_vlan.h:10:
-   In file included from include/linux/netdevice.h:37:
-   In file included from include/net/net_namespace.h:39:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:21:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x00ff0000UL) >>  8) |            \
-                     ^
-   In file included from drivers/net/dsa/ocelot/seville_vsc9953.c:6:
-   In file included from include/soc/mscc/ocelot_vcap.h:9:
-   In file included from include/soc/mscc/ocelot.h:10:
-   In file included from include/linux/if_vlan.h:10:
-   In file included from include/linux/netdevice.h:37:
-   In file included from include/net/net_namespace.h:39:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:22:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0xff000000UL) >> 24)))
-                     ^
-   In file included from drivers/net/dsa/ocelot/seville_vsc9953.c:6:
-   In file included from include/soc/mscc/ocelot_vcap.h:9:
-   In file included from include/soc/mscc/ocelot.h:10:
-   In file included from include/linux/if_vlan.h:10:
-   In file included from include/linux/netdevice.h:37:
-   In file included from include/net/net_namespace.h:39:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
-           __fswab32(x))
-                     ^
-   In file included from drivers/net/dsa/ocelot/seville_vsc9953.c:6:
-   In file included from include/soc/mscc/ocelot_vcap.h:9:
-   In file included from include/soc/mscc/ocelot.h:10:
-   In file included from include/linux/if_vlan.h:10:
-   In file included from include/linux/netdevice.h:37:
-   In file included from include/net/net_namespace.h:39:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/net/dsa/ocelot/seville_vsc9953.c:1255:34: warning: unused variable 'seville_of_match' [-Wunused-const-variable]
-   static const struct of_device_id seville_of_match[] = {
-                                    ^
-   21 warnings generated.
+On Tue, Apr 26, 2022 at 03:27:39PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the extcon tree got a conflict in:
+> 
+>   drivers/usb/dwc3/drd.c
+> 
+> between commit:
+> 
+>   0f0101719138 ("usb: dwc3: Don't switch OTG -> peripheral if extcon is present")
+> 
+> from the usb tree and commit:
+> 
+>   88490c7f43c4 ("extcon: Fix extcon_get_extcon_dev() error handling")
+> 
+> from the extcon tree.
+> 
+> I fixed it up (the former moved the code modified by the latter, so I
+> used the former version of this files and added the following merge fix
+> patch) and can carry the fix as necessary. This is now fixed as far as
+> linux-next is concerned, but any non trivial conflicts should be
+> mentioned to your upstream maintainer when your tree is submitted for
+> merging.  You may also want to consider cooperating with the maintainer
+> of the conflicting tree to minimise any particularly complex conflicts.
+> 
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Tue, 26 Apr 2022 15:24:04 +1000
+> Subject: [PATCH] fixup for "usb: dwc3: Don't switch OTG -> peripheral if extcon is present"
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  drivers/usb/dwc3/core.c | 9 ++-------
+>  1 file changed, 2 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 2345a54b848b..950e238c65bf 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -1649,13 +1649,8 @@ static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
+>  	 * This device property is for kernel internal use only and
+>  	 * is expected to be set by the glue code.
+>  	 */
+> -	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
+> -		edev = extcon_get_extcon_dev(name);
+> -		if (!edev)
+> -			return ERR_PTR(-EPROBE_DEFER);
+> -
+> -		return edev;
+> -	}
+> +	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0)
+> +		return extcon_get_extcon_dev(name);
+>  
+>  	/*
+>  	 * Try to get an extcon device from the USB PHY controller's "port"
+> -- 
+> 2.35.1
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
 
 
-vim +/seville_of_match +1255 drivers/net/dsa/ocelot/seville_vsc9953.c
 
-84705fc165526e Maxim Kochetkov 2020-07-13  1254  
-84705fc165526e Maxim Kochetkov 2020-07-13 @1255  static const struct of_device_id seville_of_match[] = {
-84705fc165526e Maxim Kochetkov 2020-07-13  1256  	{ .compatible = "mscc,vsc9953-switch" },
-84705fc165526e Maxim Kochetkov 2020-07-13  1257  	{ },
-84705fc165526e Maxim Kochetkov 2020-07-13  1258  };
-84705fc165526e Maxim Kochetkov 2020-07-13  1259  MODULE_DEVICE_TABLE(of, seville_of_match);
-84705fc165526e Maxim Kochetkov 2020-07-13  1260  
+Resolution looks good to me, thanks!
 
-:::::: The code at line 1255 was first introduced by commit
-:::::: 84705fc165526e8e55d208b2b10a48cc720a106a net: dsa: felix: introduce support for Seville VSC9953 switch
-
-:::::: TO: Maxim Kochetkov <fido_max@inbox.ru>
-:::::: CC: David S. Miller <davem@davemloft.net>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+greg k-h

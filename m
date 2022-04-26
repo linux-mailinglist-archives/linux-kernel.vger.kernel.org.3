@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CF8050F60A
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:55:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0C7350F907
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245701AbiDZIzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
+        id S1347539AbiDZJc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345516AbiDZIl5 (ORCPT
+        with ESMTP id S1347670AbiDZJGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:41:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB64158F84;
-        Tue, 26 Apr 2022 01:33:07 -0700 (PDT)
+        Tue, 26 Apr 2022 05:06:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BDDA15C3A7;
+        Tue, 26 Apr 2022 01:45:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D7766185D;
-        Tue, 26 Apr 2022 08:33:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E370C385A0;
-        Tue, 26 Apr 2022 08:33:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E214AB81CF0;
+        Tue, 26 Apr 2022 08:45:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50856C385AC;
+        Tue, 26 Apr 2022 08:45:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961986;
-        bh=EGbn0DdCYwtJ3+c4oJdDYP5vjRTc9aYEwtto72wo0VU=;
+        s=korg; t=1650962715;
+        bh=zqYE2dBiFpRl4OeuEjvjF+2WlsvVq3M+PLNfL0rUOW0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Rzp1M/9YPMg/Jw3VrV530uL3STcRG6QwJ7PEe7H0lIVNNDcIwsQvJfYzmR3AUxjq9
-         qp/TZA2lNTN+iM9GD86qpSmybw6Ii4HvTZvGQg9kPaM4nUQpANrgQ7GJKUIg9d+Dg3
-         SKmeAci1fZyxPFuOMAsE9dgb/xJxbnhu+yFTx3nI=
+        b=0Qcw77QJ89XaQBUmHN54RgYBTS/UnhnkJSj77M3TMO5i8hDqS/BvmyNN6dfp7PXjq
+         tg0B+75xxnGxHT8jxOgibCHVt63lYoIQ6TYUYTNz+ZCqPXpth+6kSCKLqioPMhGaw6
+         hJsLUxlUfdlOF2CKXFH1loyUESyaLKouYBYV++VI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Qian Cai <quic_qiancai@quicinc.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 33/86] arm64: mm: fix p?d_leaf()
+        stable@vger.kernel.org, Oliver Upton <oupton@google.com>,
+        Marc Zyngier <maz@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 066/146] selftests: KVM: Free the GIC FD when cleaning up in arch_timer
 Date:   Tue, 26 Apr 2022 10:21:01 +0200
-Message-Id: <20220426081742.162293381@linuxfoundation.org>
+Message-Id: <20220426081751.920361986@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
-References: <20220426081741.202366502@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,47 +53,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Muchun Song <songmuchun@bytedance.com>
+From: Oliver Upton <oupton@google.com>
 
-[ Upstream commit 23bc8f69f0eceecbb87c3801d2e48827d2dca92b ]
+[ Upstream commit 21db83846683d3987666505a3ec38f367708199a ]
 
-The pmd_leaf() is used to test a leaf mapped PMD, however, it misses
-the PROT_NONE mapped PMD on arm64.  Fix it.  A real world issue [1]
-caused by this was reported by Qian Cai. Also fix pud_leaf().
+In order to correctly destroy a VM, all references to the VM must be
+freed. The arch_timer selftest creates a VGIC for the guest, which
+itself holds a reference to the VM.
 
-Link: https://patchwork.kernel.org/comment/24798260/ [1]
-Fixes: 8aa82df3c123 ("arm64: mm: add p?d_leaf() definitions")
-Reported-by: Qian Cai <quic_qiancai@quicinc.com>
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-Link: https://lore.kernel.org/r/20220422060033.48711-1-songmuchun@bytedance.com
-Signed-off-by: Will Deacon <will@kernel.org>
+Close the GIC FD when cleaning up a VM.
+
+Signed-off-by: Oliver Upton <oupton@google.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220406235615.1447180-4-oupton@google.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/include/asm/pgtable.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/kvm/aarch64/arch_timer.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-index 9cf8e304bb56..3f74db7b0a31 100644
---- a/arch/arm64/include/asm/pgtable.h
-+++ b/arch/arm64/include/asm/pgtable.h
-@@ -516,7 +516,7 @@ extern pgprot_t phys_mem_access_prot(struct file *file, unsigned long pfn,
- 				 PMD_TYPE_TABLE)
- #define pmd_sect(pmd)		((pmd_val(pmd) & PMD_TYPE_MASK) == \
- 				 PMD_TYPE_SECT)
--#define pmd_leaf(pmd)		pmd_sect(pmd)
-+#define pmd_leaf(pmd)		(pmd_present(pmd) && !pmd_table(pmd))
- #define pmd_bad(pmd)		(!pmd_table(pmd))
+diff --git a/tools/testing/selftests/kvm/aarch64/arch_timer.c b/tools/testing/selftests/kvm/aarch64/arch_timer.c
+index b08d30bf71c5..3b940a101bc0 100644
+--- a/tools/testing/selftests/kvm/aarch64/arch_timer.c
++++ b/tools/testing/selftests/kvm/aarch64/arch_timer.c
+@@ -362,11 +362,12 @@ static void test_init_timer_irq(struct kvm_vm *vm)
+ 	pr_debug("ptimer_irq: %d; vtimer_irq: %d\n", ptimer_irq, vtimer_irq);
+ }
  
- #if defined(CONFIG_ARM64_64K_PAGES) || CONFIG_PGTABLE_LEVELS < 3
-@@ -603,7 +603,7 @@ static inline unsigned long pmd_page_vaddr(pmd_t pmd)
- #define pud_none(pud)		(!pud_val(pud))
- #define pud_bad(pud)		(!pud_table(pud))
- #define pud_present(pud)	pte_present(pud_pte(pud))
--#define pud_leaf(pud)		pud_sect(pud)
-+#define pud_leaf(pud)		(pud_present(pud) && !pud_table(pud))
- #define pud_valid(pud)		pte_valid(pud_pte(pud))
++static int gic_fd;
++
+ static struct kvm_vm *test_vm_create(void)
+ {
+ 	struct kvm_vm *vm;
+ 	unsigned int i;
+-	int ret;
+ 	int nr_vcpus = test_args.nr_vcpus;
  
- static inline void set_pud(pud_t *pudp, pud_t pud)
+ 	vm = vm_create_default_with_vcpus(nr_vcpus, 0, 0, guest_code, NULL);
+@@ -383,8 +384,8 @@ static struct kvm_vm *test_vm_create(void)
+ 
+ 	ucall_init(vm, NULL);
+ 	test_init_timer_irq(vm);
+-	ret = vgic_v3_setup(vm, nr_vcpus, 64, GICD_BASE_GPA, GICR_BASE_GPA);
+-	if (ret < 0) {
++	gic_fd = vgic_v3_setup(vm, nr_vcpus, 64, GICD_BASE_GPA, GICR_BASE_GPA);
++	if (gic_fd < 0) {
+ 		print_skip("Failed to create vgic-v3");
+ 		exit(KSFT_SKIP);
+ 	}
+@@ -395,6 +396,12 @@ static struct kvm_vm *test_vm_create(void)
+ 	return vm;
+ }
+ 
++static void test_vm_cleanup(struct kvm_vm *vm)
++{
++	close(gic_fd);
++	kvm_vm_free(vm);
++}
++
+ static void test_print_help(char *name)
+ {
+ 	pr_info("Usage: %s [-h] [-n nr_vcpus] [-i iterations] [-p timer_period_ms]\n",
+@@ -478,7 +485,7 @@ int main(int argc, char *argv[])
+ 
+ 	vm = test_vm_create();
+ 	test_run(vm);
+-	kvm_vm_free(vm);
++	test_vm_cleanup(vm);
+ 
+ 	return 0;
+ }
 -- 
 2.35.1
 

@@ -2,119 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD68850FB13
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 12:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 668B650FB26
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 12:40:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349175AbiDZKl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 06:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55270 "EHLO
+        id S1344376AbiDZKnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 06:43:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349078AbiDZKkz (ORCPT
+        with ESMTP id S1349269AbiDZKmQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 06:40:55 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF2B4132C;
-        Tue, 26 Apr 2022 03:31:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id ACF18CE1C05;
-        Tue, 26 Apr 2022 10:31:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A002CC385AF;
-        Tue, 26 Apr 2022 10:31:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650969097;
-        bh=G2ZTitD/EVuSTT3gVi8lMCMvmV58yHmWi/5BPeES7+k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X1WQLUkMilXrPy39ia/9XBYPW9CMsQjHGtM0E5Dj0GyRNEsSqjxH31Ue7zn7yrS1e
-         IeOgXhppFmG97EkS1zzuSWuzgvW0iJ2M85P8r2n68hv0ek8p2kdeJ1N2TeejcSf4Dk
-         GjOjLGtCxMZlmp2E3hK9Wodh0VOiVuorh1SYmiAw=
-Date:   Tue, 26 Apr 2022 12:31:33 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jung Daehwan <dh10.jung@samsung.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Howard Yen <howardyen@google.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Puma Hsu <pumahsu@google.com>,
-        "J . Avila" <elavila@google.com>, sc.suh@samsung.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: Re: [PATCH v4 1/5] usb: host: export symbols for xhci-exynos to use
- xhci hooks
-Message-ID: <YmfKBX2m+vOznq5h@kroah.com>
-References: <1650964728-175347-1-git-send-email-dh10.jung@samsung.com>
- <CGME20220426092021epcas2p4071f2b7621558a015579131990486a3c@epcas2p4.samsung.com>
- <1650964728-175347-2-git-send-email-dh10.jung@samsung.com>
- <YmfBSLDiZGkvu3sG@kroah.com>
- <20220426102709.GA175152@ubuntu>
+        Tue, 26 Apr 2022 06:42:16 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D730A46148;
+        Tue, 26 Apr 2022 03:32:17 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id v4so9212388ljd.10;
+        Tue, 26 Apr 2022 03:32:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XP7qNcE96rh3aiNPjgVaxIOFTXHJAqHcEpaQTLvanoI=;
+        b=Y59N8y17Vbl4NhX0BsB33EV/X+rvpk/NNSugoP5njpF5uQjXhsNgWY2harTHY/tMF2
+         P3//Fpb1MgAh50xD3+IMALsfMW+Ky/5LlY8BECBihqaEwCAlaSyflzhjEmX3fkZv8oPj
+         9ske0pePjn1aqsTsT5WoThPOte7PJV5/1e6ZduSFQ082vSJQumCE8Y64Gvf6qh0nyrL1
+         bNLV+7fz1rehudTTXcmoT6SLHkNyumQbmsJAxJPmER8Ssnyhu+nnH8r1QRbjGeoOzhU5
+         wEtBLdeqHLaphKK+CoqKMrBJ56bUhfv9R7GUnFjXPeUhZlkx6ToVusAaGb+RIfB/YKZm
+         fAqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XP7qNcE96rh3aiNPjgVaxIOFTXHJAqHcEpaQTLvanoI=;
+        b=sx1chbvDx/gVV2AQc+0HN1i4itN0DgP1P+qYGvVQeGMEStCtk+oYxb/ZWEj19W/Iqb
+         7DaapZSyXKR54lSmWXVD2eYhGkSWG79ooMX0nvm4+0ZJm3Q/bIDifmgpSkEnmzsucTQj
+         cenuZjJktZjUlMjv+gOvBxAU9llyNJUP5rUc4XIAzBK8Ur+KNtnqmrIFpCvdkWOkPPn9
+         8s+ulbs5j/UNPzQqWLTUjOiNZY+SDRZvQ1NxmMN4/g/prC6Lpb6ZjkKfFLXLYzjDDDVu
+         o+22P9vHQswirX3Kc2Y2gcaGTJAnnCSihVvZcpRYHo+Jw0+ry8O8Wd7QXv0N7Ns2DlH8
+         EPIA==
+X-Gm-Message-State: AOAM5324zp0BWC/4QG+csw3BnMhsUm9dMQvBYs8veqVo+oUWu1nOmk21
+        7kegcp8euNcy5yRwoGp5kB77y0P6QeV9/IigHbcotaoW
+X-Google-Smtp-Source: ABdhPJzc+weA3nqtPRODDnqfI0mQewWDwH5gcmcewkNJO2LGeK46hVKvJ71mJbsWACMlww+puXyaBk2U5lSFDPvyO1U=
+X-Received: by 2002:a05:651c:889:b0:24f:2336:1b95 with SMTP id
+ d9-20020a05651c088900b0024f23361b95mr728186ljq.345.1650969135974; Tue, 26 Apr
+ 2022 03:32:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220426102709.GA175152@ubuntu>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220423102844.1371595-1-patrick.wang.shcn@gmail.com> <20220425105600.722b1345@gandalf.local.home>
+In-Reply-To: <20220425105600.722b1345@gandalf.local.home>
+From:   patrick wang <patrick.wang.shcn@gmail.com>
+Date:   Tue, 26 Apr 2022 18:32:04 +0800
+Message-ID: <CAGcnep_L0EFaRwEXN-wdt5pGDrFK2Vi3j42GCJscUtLcXXFa7Q@mail.gmail.com>
+Subject: Re: [PATCH v2] rcu: ftrace: avoid tracing a few functions executed in
+ stop machine
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
+        jiangshanlai@gmail.com, joel@joelfernandes.org,
+        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 07:27:09PM +0900, Jung Daehwan wrote:
-> On Tue, Apr 26, 2022 at 11:54:16AM +0200, Greg Kroah-Hartman wrote:
-> > On Tue, Apr 26, 2022 at 06:18:44PM +0900, Daehwan Jung wrote:
-> > > Export symbols for xhci hooks usage:
-> > >     xhci_get_slot_ctx
-> > >     xhci_get_endpoint_address
-> > >     - Allow xhci hook to get ep_ctx from the xhci_container_ctx for
-> > >       getting the ep_ctx information to know which ep is offloading and
-> > >       comparing the context in remote subsystem memory if needed.
-> > > 
-> > >     xhci_ring_alloc
-> > >     - Allow xhci hook to allocate vendor specific ring. Vendors could
-> > >       alloc additional event ring.
-> > > 
-> > >     xhci_trb_virt_to_dma
-> > >     - Used to retrieve the DMA address of vendor specific ring. Vendors
-> > >       could get dequeue address of event ring.
-> > > 
-> > >     xhci_segment_free
-> > >     xhci_link_segments
-> > >     - Allow xhci hook to handle vendor specific segment. Vendors could
-> > >       directly free or link segments of vendor specific ring.
-> > > 
-> > >     xhci_initialize_ring_info
-> > >     - Allow xhci hook to initialize vendor specific ring.
-> > > 
-> > >     xhci_check_trb_in_td_math
-> > >     - Allow xhci hook to Check TRB math for validation. Vendors could
-> > >       check trb when allocating vendor specific ring.
-> > > 
-> > >     xhci_address_device
-> > >     - Allow override to give configuration info to Co-processor.
-> > > 
-> > >     xhci_bus_suspend
-> > >     xhci_bus_resume
-> > >     - Allow override of suspend and resume for power scenario.
-> > > 
-> > >     xhci_remove_stream_mapping
-> > >     - Allow to xhci hook to remove stream mapping. Vendors need to do it
-> > >       when free-ing vendor specific ring if it's stream type.
-> > > 
-> > 
-> > For the static functions that you are now exporting, they need to have
-> > their functions declared in a .h file.  If not, you now get warnings
-> > when you run sparse after applying this commit, right?
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> > 
-> 
-> I didn't get warnings in my environment. I tested to build default config +
-> xhci_exynos by make command. Is there compile option to check it?
+On Mon, Apr 25, 2022 at 10:56 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Sat, 23 Apr 2022 18:28:44 +0800
+> Patrick Wang <patrick.wang.shcn@gmail.com> wrote:
+>
+> > Signed-off-by: Patrick Wang <patrick.wang.shcn@gmail.com>
+> > ---
+> > v1->v2:
+> >  - Modify log message.
+> >
+> >  kernel/rcu/tree_plugin.h | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
+> > index c8ba0fe17267..971bb6a00ede 100644
+> > --- a/kernel/rcu/tree_plugin.h
+> > +++ b/kernel/rcu/tree_plugin.h
+> > @@ -460,7 +460,7 @@ static bool rcu_preempt_has_tasks(struct rcu_node *rnp)
+> >   * be quite short, for example, in the case of the call from
+> >   * rcu_read_unlock_special().
+> >   */
+> > -static void
+> > +notrace static void
+>
+> I'm fine with the change, but to be consistent with the rest of the kernel,
+> static needs to come before notrace.
+>
+> Either:
+>
+>  static notrace void
+>
+> or even (some places have):
+>
+>   static void notrace
+>
+> but "static" should always be first.
+>
 
-make "C=1"
+Thank you for the detailed advice. I will move "notrace" to behind "static".
 
+Thanks,
+Patrick
 
+>
+>
+> >  rcu_preempt_deferred_qs_irqrestore(struct task_struct *t, unsigned long flags)
+> >  {
+> >       bool empty_exp;
+> > @@ -581,7 +581,7 @@ rcu_preempt_deferred_qs_irqrestore(struct task_struct *t, unsigned long flags)
+> >   * is disabled.  This function cannot be expected to understand these
+> >   * nuances, so the caller must handle them.
+> >   */
+> > -static bool rcu_preempt_need_deferred_qs(struct task_struct *t)
+> > +notrace static bool rcu_preempt_need_deferred_qs(struct task_struct *t)
+> >  {
+> >       return (__this_cpu_read(rcu_data.cpu_no_qs.b.exp) ||
+> >               READ_ONCE(t->rcu_read_unlock_special.s)) &&
+> > @@ -595,7 +595,7 @@ static bool rcu_preempt_need_deferred_qs(struct task_struct *t)
+> >   * evaluate safety in terms of interrupt, softirq, and preemption
+> >   * disabling.
+> >   */
+> > -static void rcu_preempt_deferred_qs(struct task_struct *t)
+> > +notrace static void rcu_preempt_deferred_qs(struct task_struct *t)
+> >  {
+> >       unsigned long flags;
+> >
+>

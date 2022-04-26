@@ -2,134 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AC6B50ED22
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 02:05:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF44A50ED26
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 02:06:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239086AbiDZAIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 20:08:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53566 "EHLO
+        id S239428AbiDZAJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 20:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234498AbiDZAIh (ORCPT
+        with ESMTP id S239256AbiDZAJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 20:08:37 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7603835857;
-        Mon, 25 Apr 2022 17:05:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650931531; x=1682467531;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=JiKB+A2uaXqkRjPBW7uR78DBY0vfODCV29cJBCN4srM=;
-  b=dsS4DZ8ch0kQ5JrrDXvfNPqzqZH8tz8UChbjqdnE9hbQQ9q+2Hi4M2h4
-   uAYH3fZ92n0guhIcQu5C4UBuY3TnOQh0Ke18LUtkHXyjiOYJxJqmPpPW2
-   sDL9smOYrdoRDd6zCo6QVwxIMTbyII7TYEdftjr25mvIF/oIa0CdFZfna
-   TdgWS2H77kHXazV71OC5b0XVyH6hL0Yf4M70xLPyOTdawY2oyqFHdhHUv
-   Pgiva8d3VNAZJKnng69gvNV2rjADFGy63iGv00kaRYxGfqBBwqSU1pZyO
-   bmnvUn2IvFfwLfUT5MhK0rkRcqLmmpcifqqCkST2/gh/lCl3mm6JFllXK
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="325886296"
-X-IronPort-AV: E=Sophos;i="5.90,289,1643702400"; 
-   d="scan'208";a="325886296"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 17:05:30 -0700
-X-IronPort-AV: E=Sophos;i="5.90,289,1643702400"; 
-   d="scan'208";a="616739283"
-Received: from begriffi-mobl2.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.0.169])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 17:05:26 -0700
-Message-ID: <7887db8b5108b8dc9bd35868db561badca060b51.camel@intel.com>
-Subject: Re: [PATCH v3 09/21] x86/virt/tdx: Get information about TDX module
- and convertible memory
-From:   Kai Huang <kai.huang@intel.com>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, dave.hansen@intel.com,
-        len.brown@intel.com, tony.luck@intel.com,
-        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
-        dan.j.williams@intel.com, peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com, isaku.yamahata@intel.com
-Date:   Tue, 26 Apr 2022 12:05:23 +1200
-In-Reply-To: <8972b2ac-c786-8ff5-74fc-040cd4d81c86@linux.intel.com>
-References: <cover.1649219184.git.kai.huang@intel.com>
-         <145620795852bf24ba2124a3f8234fd4aaac19d4.1649219184.git.kai.huang@intel.com>
-         <8972b2ac-c786-8ff5-74fc-040cd4d81c86@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Mon, 25 Apr 2022 20:09:01 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D077113C89
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 17:05:55 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id w19so29058673lfu.11
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 17:05:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=I4wZrpcqpY23HjGTdRVWpcxvWKlwdsGGFL/N6W8CJ2U=;
+        b=UO9vEjaKrcoqWvgG7eshOb470xBd9TV7qtKJw9FOm3/SsdEthQOUpHamqL+aYO+9ty
+         IauEV7r0129/CyoX1opTQjt6dCvpH/kHVkSLujjNFZvGTSfDKq6+ZcpTIrlGkwY4Oa/w
+         Uyr7PvS0/G73+PbJ3XC2NQzVVnaugewgJCzXEFSgixQ58rTnCIS/aNW89FSpMnEKTvgk
+         YLOJDNigCxYBL9z8aXKazwUJngwZFtTAObfGNGh1fP61Td4/5uEh/HYZOxmpDJ1FPZpi
+         nbb4rJ0lJv5y97IQK25pFg/pi06CFse1clI5VloNTRlNQqH1GfSwdRM8Dg7VXQ3m62FW
+         8N9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=I4wZrpcqpY23HjGTdRVWpcxvWKlwdsGGFL/N6W8CJ2U=;
+        b=twBJFn4sQf4gME9S44rC0A3+GwAgXa0DARSczdT3EW+GkE2OUhtS1nWroCxdyVT2fe
+         pSTvOkJA7QOacqCDkuJyPCOHxGrdgjodRBkvvgGALjhOheUgXPmzL36vMToWPxSxjEtu
+         tHyaUjNVNjxYRflS0Sa6wzen4t6MBo9AOTaS9FC8Fi8Y32xiw5Qal4+zMUyTkbkFHdji
+         KH8bcJ4iObX1wiNUryOSB/4NIdp3v53BzZVbYr2cTOHrqd3ALF0WEe/MYug617NiHHj5
+         AjgQVb8ypCKTHtTFPMo9iF6qkTloRaUSvTjMz380+zfFINOTq8XZK+MZAkdDS1KGGPQW
+         zl2w==
+X-Gm-Message-State: AOAM530+Bp2dJfTt4eLr8bXtK7dWvwJLYOjaU4genvbuz6AeXBHCYhtk
+        tBmrTt8G+JbbcFZG0el7fJnpBw==
+X-Google-Smtp-Source: ABdhPJy7QiuGL02pBXE/dt8cSME5KdzlIgZ/vty8ZsP14pDWE/qTuFuSxDNKp6DRPFZBoGZySvRwNw==
+X-Received: by 2002:a19:ad46:0:b0:46b:b1a4:ffd5 with SMTP id s6-20020a19ad46000000b0046bb1a4ffd5mr14627769lfd.103.1650931553470;
+        Mon, 25 Apr 2022 17:05:53 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id f22-20020a2e6a16000000b0024f0cf6fdb0sm736179ljc.138.2022.04.25.17.05.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Apr 2022 17:05:53 -0700 (PDT)
+Message-ID: <36150c01-9146-cebf-bd86-8e096135cbcd@linaro.org>
+Date:   Tue, 26 Apr 2022 03:05:51 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] drm/msm/disp/dpu1: set vbif hw config to NULL to avoid
+ use after memory free during pm runtime resume
+Content-Language: en-GB
+To:     Vinod Polimera <quic_vpolimer@quicinc.com>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, robdclark@gmail.com,
+        dianders@chromium.org, quic_kalyant@quicinc.com
+References: <1650857213-30075-1-git-send-email-quic_vpolimer@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1650857213-30075-1-git-send-email-quic_vpolimer@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 25/04/2022 06:26, Vinod Polimera wrote:
+> BUG: Unable to handle kernel paging request at virtual address 006b6b6b6b6b6be3
 > 
-> > +}
-> > +
-> > +static int sanitize_cmrs(struct cmr_info *cmr_array, int cmr_num)
+> Call trace:
+>    dpu_vbif_init_memtypes+0x40/0xb8
+>    dpu_runtime_resume+0xcc/0x1c0
+>    pm_generic_runtime_resume+0x30/0x44
+>    __genpd_runtime_resume+0x68/0x7c
+>    genpd_runtime_resume+0x134/0x258
+>    __rpm_callback+0x98/0x138
+>    rpm_callback+0x30/0x88
+>    rpm_resume+0x36c/0x49c
+>    __pm_runtime_resume+0x80/0xb0
+>    dpu_core_irq_uninstall+0x30/0xb0
+>    dpu_irq_uninstall+0x18/0x24
+>    msm_drm_uninit+0xd8/0x16c
 > 
-> Since this function only deals with tdx_cmr_array, why pass it
-> as argument?
+> Fixes: 25fdd5933e4 ("drm/msm: Add SDM845 DPU support")
+> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
 
-I received comments to use cmr_num as argument and pass tdx_cmr_num to
-sanitize_cmrs() and finalize it at the end of this function.  In this case I
-think it's better to pass tdx_cmr_array as argument.  It also saves some typing
-(tdx_cmr_array vs cmr_array) in sanitize_cmrs().
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-> 
-> > +{
-> > +	int i, j;
-> > +
-> > +	/*
-> > +	 * Intel TDX module spec, 20.7.3 CMR_INFO:
-> > +	 *
-> > +	 *   TDH.SYS.INFO leaf function returns a MAX_CMRS (32) entry
-> > +	 *   array of CMR_INFO entries. The CMRs are sorted from the
-> > +	 *   lowest base address to the highest base address, and they
-> > +	 *   are non-overlapping.
-> > +	 *
-> > +	 * This implies that BIOS may generate invalid empty entries
-> > +	 * if total CMRs are less than 32.  Skip them manually.
-> > +	 */
-> > +	for (i = 0; i < cmr_num; i++) {
-> > +		struct cmr_info *cmr = &cmr_array[i];
-> > +		struct cmr_info *prev_cmr = NULL;
-> 
-> Why not keep declarations together at the top of the function?
+Let's merge this fix now. However I think that a proper solution would 
+be to disable pm_runtime once we are in the uninit path.
 
-Why? They are only used in this for-loop.
-
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> > +
-> > +		/* Skip further invalid CMRs */
-> > +		if (!cmr_valid(cmr))
-> > +			break;
-> > +
-> > +		if (i > 0)
-> > +			prev_cmr = &cmr_array[i - 1];
-> > +
-> > +		/*
-> > +		 * It is a TDX firmware bug if CMRs are not
-> > +		 * in address ascending order.
-> > +		 */
-> > +		if (prev_cmr && ((prev_cmr->base + prev_cmr->size) >
-> > +					cmr->base)) {
-> > +			pr_err("Firmware bug: CMRs not in address ascending order.\n");
-> > +			return -EFAULT;
-> > +		}
-> 
-> Since above condition is only true for i > 0 case, why not combine them
-> together if (i > 0) {...}
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> index 9c346ce..59982d3 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> @@ -793,8 +793,10 @@ static void _dpu_kms_hw_destroy(struct dpu_kms *dpu_kms)
+>   		for (i = 0; i < dpu_kms->catalog->vbif_count; i++) {
+>   			u32 vbif_idx = dpu_kms->catalog->vbif[i].id;
+>   
+> -			if ((vbif_idx < VBIF_MAX) && dpu_kms->hw_vbif[vbif_idx])
+> +			if ((vbif_idx < VBIF_MAX) && dpu_kms->hw_vbif[vbif_idx]) {
+>   				dpu_hw_vbif_destroy(dpu_kms->hw_vbif[vbif_idx]);
+> +				dpu_kms->hw_vbif[vbif_idx] = NULL;
+> +			}
+>   		}
+>   	}
+>   
 
-It will make an additional ident for the above if() {} to check prev_cmr and
-cmr.  I don't see it is better?
 
 -- 
-Thanks,
--Kai
-
-
+With best wishes
+Dmitry

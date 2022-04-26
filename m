@@ -2,69 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 571C2510B9D
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 23:58:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1169510BA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 23:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355590AbiDZWBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 18:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35418 "EHLO
+        id S1355621AbiDZWCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 18:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355605AbiDZWBt (ORCPT
+        with ESMTP id S1346480AbiDZWCo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 18:01:49 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA2B18CE6E
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 14:58:40 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id t11-20020a17090ad50b00b001d95bf21996so3363482pju.2
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 14:58:40 -0700 (PDT)
+        Tue, 26 Apr 2022 18:02:44 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E6418CDAA
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 14:59:35 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id y76so163538ybe.1
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 14:59:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rpQ1dsqqK28Ak/taS1DzRmgf5kkbOUv2DkzvrHVSPGQ=;
-        b=Rj/+ILa4I5+Lis3mLuWq/x9u4uAIopLMvs4grbk/GQtvVEJi398eCbNwgMorwZoD4t
-         GPuGuYYS37+ioZJ1l0u9xV/KIJ+i+jDS884IQRoWJFNclH4O/5yzO5hM5TgffN5jyoVO
-         gOZVHIz26c7vKU625IaUQDifTzIs/ZTmTM/bo=
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3bpxs3BwsRsNVGR8rV+H1S/A34takD9t6PW/tK7Nuns=;
+        b=rQrWMCWuHFbF3fA9np1al/NM6sLB/JVBaqI3xHXuG6+nPXC8BDAdkBeT6D19OTXrq0
+         NSc/OxVS+gT1SCyw5YAOZDlwIrOtbf+Q78CkXJB7hF2B/2A4eFvhie2pcoQPpLxVW4ib
+         mhKgvVfOJ+UgrJcHisKxEQPTZ9v0Lwt3NB6/N4O9I1U+0rQiESSjJaGx5Iu+TKa2E1Fg
+         9VCX+hWONIn782AUxluTfo/LPp+PeiLA3NSBA6uCSNzwyvaVLuTV3BMHNjzqpcBAi1nn
+         rB0cH1p4qIaWAd7LAyMJhfbKrmYqRx6e4wgzQgHXqFrN5zibWycWzHr0OFUsWplKJ7zh
+         4bpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rpQ1dsqqK28Ak/taS1DzRmgf5kkbOUv2DkzvrHVSPGQ=;
-        b=jNE92kZIZQ7SXpT+5j+1V6mwgPevSVNBt+P35UYpwHTjxon3wrWx8YAB9a+Y/hknBa
-         F2dFef7zD7ciyJQRMSeVls4u+wgO6J1naDpQ8LI4PUIKJPA5WpEZpcakof/U24aI8+sb
-         m6vhINfFNFy5wNNHET6nSFrUuLlWWWVIGEa60obR5+GyI2VguOEy/9pF7d2cYSOCxRGr
-         npcOe+FLuU3RAk8TbbQVDjgvPQc0TBX2EAfbiUz6100F/shQoYR9RagVhOW9p6VrNMqS
-         wZpnXLCYtLKfoIgxzsk1qeiYCG0K4P9J01zLHTf4NaX5GvF69LKiS16NKe1gO4CTkpyk
-         HWWg==
-X-Gm-Message-State: AOAM530ndU0hHXhV+dNUfo8mn5ZOy0qbbHM1YwSGh8iWAiOwUrqYLmLg
-        LLejru7i9RUbS1SP1xQkbD2nBg==
-X-Google-Smtp-Source: ABdhPJyLd7Rwoiox3jQ1EVNx9gNewTckGJBm+F8Gq6TqzaDW1+q2W1pXNBAgLxIN3mbPFu0PvIOPlg==
-X-Received: by 2002:a17:902:8547:b0:156:7efe:477a with SMTP id d7-20020a170902854700b001567efe477amr25589371plo.47.1651010320085;
-        Tue, 26 Apr 2022 14:58:40 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:eb63:4211:eb5d:f6b])
-        by smtp.gmail.com with UTF8SMTPSA id c17-20020a056a00249100b00508389d6a7csm17069215pfv.39.2022.04.26.14.58.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 14:58:39 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 14:58:38 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com,
-        srinivas.kandagatla@linaro.org, dianders@chromium.org,
-        swboyd@chromium.org, judyhsiao@chromium.org,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Subject: Re: [PATCH v11 2/4] arm64: dts: qcom: sc7280: Add MI2S pinmux
- specifications for CRD 3.0/3.1
-Message-ID: <YmhrDvBGhqtdQVQ1@google.com>
-References: <1650957666-6266-1-git-send-email-quic_srivasam@quicinc.com>
- <1650957666-6266-3-git-send-email-quic_srivasam@quicinc.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3bpxs3BwsRsNVGR8rV+H1S/A34takD9t6PW/tK7Nuns=;
+        b=7Sfknd5msurjEOQ/Y+VFWpFDGHQknLaIxvnJ0Gcn5vEKSymAZNyEjC7OT4bFbbNCuX
+         DSOy2zsHGqSMT5+uTaj4IhPY2DXy4F67uJi9x92b4+SIRDzGWfqTcxVnkRokiL0jAWx4
+         Hbtq2OcMKCW/Mudq4h0ygkeFmeBoBG0PjmBgmm+LG9WlkUAODzrWz5oiqEaHvKI5toud
+         ZhZDZ4bNVqlwLBZYKXDO1LpZpjk9Xvx1OK0UGy3eZ0yaeEmZHvZO9gT6m80yk/kKLUyJ
+         001ip6L9XAT9ZntrpcWKW2yjnaEcodcWtUqOePlK0qPVPd0Q+24PVMZqEiUjX/HBT1fE
+         ggTg==
+X-Gm-Message-State: AOAM532mfJAilAjq6bpkqaGdOEPHAGIRrkPFhbCJnNwbTxbibJTkB6Tg
+        jkfSMSL4r+53G3KrO55BgTlPGeWpGV/JxSk6BuCD4w==
+X-Google-Smtp-Source: ABdhPJxmNWf2WAOTBOGYlwqgY2kNnoEeFKfKMFvD28pKOaD0KFUI3oAtcgVaqXsBmJf+wSb/F3TYdyLteg2ZEsK/pP4=
+X-Received: by 2002:a25:a12a:0:b0:644:e94e:5844 with SMTP id
+ z39-20020a25a12a000000b00644e94e5844mr22727605ybh.492.1651010374328; Tue, 26
+ Apr 2022 14:59:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1650957666-6266-3-git-send-email-quic_srivasam@quicinc.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20220419141846.598305-1-maz@kernel.org> <CACRpkda3L_itpqcnPq6xDoJtNHt8NuvE1MZk1bCNR+u2KKUpBA@mail.gmail.com>
+ <874k2kccse.wl-maz@kernel.org> <CAHp75VcKNurETpNtrZM7SN2XEtLM6ZYFrS-gKr6r55Lc37gKQQ@mail.gmail.com>
+In-Reply-To: <CAHp75VcKNurETpNtrZM7SN2XEtLM6ZYFrS-gKr6r55Lc37gKQQ@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 26 Apr 2022 23:59:22 +0200
+Message-ID: <CACRpkdaO+KTb+jJQ0qY59TP8f7gyY2mTUtNEt5+KUHNQAYU1bA@mail.gmail.com>
+Subject: Re: [PATCH v3 00/10] gpiolib: Handle immutable irq_chip structures
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm@vger.kernel.org,
+        Android Kernel Team <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,21 +84,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 12:51:04PM +0530, Srinivasa Rao Mandadapu wrote:
+On Tue, Apr 26, 2022 at 12:25 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+> On Sat, Apr 23, 2022 at 12:30 PM Marc Zyngier <maz@kernel.org> wrote:
 
-> Subject: arm64: dts: qcom: sc7280: Add MI2S pinmux specifications for CRD 3.0/3.1 
->
-> Add drive strength property for primary and secondary MI2S on
-> sc7280 based platforms of rev5+ (aka CRD 3.0/3.1) boards.
+> > You can pick it up from:
+> >
+> > https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=irq/gpio-immutable
+> >
+> > but I can also drop it from the irqchip tree.
+> >
+> > Just let me know.
 
-The subject and the commit message are misleading. What this
-change does is to configure these setting for all herobrine
-based boards, not only the CRD rev5+.
+Pulling that looks good to me.
 
-That doesn't seem correct. The setting may be similar across
-boards, but they aren't necessarily the same, especially for
-the drive strength. One could argue that mi2s0 and the wcd9385
-are on the qcard and hence the config should be in
-sc7280-qcard.dtsi, however not all qcard based boards use the
-wcd9385, so the config shouldn't be shared across all of them.
-Please move it to sc7280-herobrine-crd.dts
+If Bartosz pulls this to the GPIO tree I will also pull it to pin control,
+I just want him to decide, because the impact is biggest on GPIO.
+
+> I would prefer it if it goes as is now and every stakeholder can just
+> pull it. As far as my drivers are concerned I also want to convert
+> them sooner than later, meaning I want to pull this into my little
+> tree as well. Bart, Linus, would it be also preferable for you?
+
+I'd say let's all three pull this branch, Bart?
+
+Yours,
+Linus Walleij

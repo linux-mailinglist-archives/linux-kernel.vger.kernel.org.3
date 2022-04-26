@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F65350F3D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE71B50F63C
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344811AbiDZI2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:28:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36076 "EHLO
+        id S234934AbiDZIsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:48:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344708AbiDZI1g (ORCPT
+        with ESMTP id S1345266AbiDZIhp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:27:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFAF53AA5F;
-        Tue, 26 Apr 2022 01:23:40 -0700 (PDT)
+        Tue, 26 Apr 2022 04:37:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655BE8CDAD;
+        Tue, 26 Apr 2022 01:29:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48A6F617EA;
-        Tue, 26 Apr 2022 08:23:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57982C385A4;
-        Tue, 26 Apr 2022 08:23:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1D6B6B81CF9;
+        Tue, 26 Apr 2022 08:29:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CA39C385AE;
+        Tue, 26 Apr 2022 08:29:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961419;
-        bh=b28C6sxV5/ySAeFce2tzdxxxiRiKxVIZJhblxl+HbkY=;
+        s=korg; t=1650961761;
+        bh=PfEQfKi3N0slKS7sruzQYrtgatSEteVIU2KP1w37ENY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nQ+IXZbFKJP4+XV9rGKSlDFrOI4gnHe1yD7EItJhE1NEDuGC82KnZXDSp7PKxeflm
-         c3UNO60kaiQ6ypjqDtIGaZMn2waOUQMtEM1kknh25pw3ViO1QycWdCD1MuuSMqMiPD
-         Q7BmkXoRak22xFz0MRma8hEqGI5cEQ9dSn9Mxpc8=
+        b=kjUrmQg1+dYGJS72uc2fjPTwpBmL8E+2mA071mCwXVXOgEMiUj32R+McAU+huXWdk
+         z6tz2Hi/TaGxqyzayON0L8b/CtFVJ4goZdgTgFxUloQp5M5nxzTT17PsK2p/0XHwE+
+         9GLdSwqWd8pOFP/ArIVwr3eWcHOlEAINctwz6Qac=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,19 +36,20 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         syzbot <syzkaller@googlegroups.com>,
         Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 07/24] netlink: reset network and mac headers in netlink_dump()
+Subject: [PATCH 5.4 21/62] netlink: reset network and mac headers in netlink_dump()
 Date:   Tue, 26 Apr 2022 10:21:01 +0200
-Message-Id: <20220426081731.588949864@linuxfoundation.org>
+Message-Id: <20220426081737.835695832@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081731.370823950@linuxfoundation.org>
-References: <20220426081731.370823950@linuxfoundation.org>
+In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
+References: <20220426081737.209637816@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -166,10 +167,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 7 insertions(+)
 
 diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-index 8aef475fef31..a8674e9ff37b 100644
+index fb28969899af..8aefc52542a0 100644
 --- a/net/netlink/af_netlink.c
 +++ b/net/netlink/af_netlink.c
-@@ -2194,6 +2194,13 @@ static int netlink_dump(struct sock *sk)
+@@ -2253,6 +2253,13 @@ static int netlink_dump(struct sock *sk)
  	 * single netdev. The outcome is MSG_TRUNC error.
  	 */
  	skb_reserve(skb, skb_tailroom(skb) - alloc_size);
@@ -182,7 +183,7 @@ index 8aef475fef31..a8674e9ff37b 100644
 +
  	netlink_skb_set_owner_r(skb, sk);
  
- 	if (nlk->dump_done_errno > 0)
+ 	if (nlk->dump_done_errno > 0) {
 -- 
 2.35.1
 

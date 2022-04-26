@@ -2,130 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6664F50F2FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD6B50F2FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:49:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233747AbiDZHwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 03:52:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46340 "EHLO
+        id S1344287AbiDZHwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 03:52:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344282AbiDZHvw (ORCPT
+        with ESMTP id S1344308AbiDZHwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 03:51:52 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3661A3A4;
-        Tue, 26 Apr 2022 00:48:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650959325; x=1682495325;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=Y3MQhCXobnzYH8jvj04XHW91HYwyje2IP6fIr/XFnpQ=;
-  b=gFtCcTDkv5cy+UBKzg9fFu8cr55yq79acsUt7jviszRulIir3rNgg1HO
-   H9Yqq27eD0eolje3zcanFihCv0kdOappZyEV7vPFqjwQLYt81sUJ1u0WB
-   qwM8pPrYhdX75RmPPHEjVToC4QOsMudkVDSeX7tmCd8rf6a5eVtmIFkFN
-   PAr4wsktgX9aLzube7wSKBi16oTT5OLttsvm0iQJSVlZvxVjZch+MKaCO
-   4Po9erawKktOHeNIna/TEVhPVDxmypbnBkwJRdwWwuPcxjdpy8UQkT/02
-   yJni2qVisgjJI+cHqU865YXNYfwqDf7X8Ctcjn6UO/zTFGqByOppSM0MR
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="247420048"
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="247420048"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 00:48:45 -0700
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="579745009"
-Received: from mmilkovx-mobl.amr.corp.intel.com ([10.249.47.245])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 00:48:42 -0700
-Date:   Tue, 26 Apr 2022 10:48:40 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-cc:     linux-serial <linux-serial@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Gilles Buloz <gilles.buloz@kontron.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: Re: [PATCH v3 3/5] tty: Add lookahead param to receive_buf
-In-Reply-To: <d496d544-fe59-5fa7-5d21-ab6ad025fa75@linux.intel.com>
-Message-ID: <769b1be-87c3-e1c1-b1f9-d56a74ff549@linux.intel.com>
-References: <20220411094859.10894-1-ilpo.jarvinen@linux.intel.com> <20220411094859.10894-4-ilpo.jarvinen@linux.intel.com> <YmK83NfVqEvGg8DW@kroah.com> <d496d544-fe59-5fa7-5d21-ab6ad025fa75@linux.intel.com>
+        Tue, 26 Apr 2022 03:52:24 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F5F1A824
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:49:16 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id g6so11493915ejw.1
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:49:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=tkdbdbYIojPDmAwAZfQ+/1PtTpdhxbxhefzw8NVXbmI=;
+        b=lsoAHvuLO5ZBJ4I/wuHwichXMdTcoJfnk3G3OoqzyCNh8rOUA8VOLNYg+dQMzb2K7j
+         4ueimla2x0izZUtnUG6xK37caGlNxFlhCZcW1yj2ex7hbTnAIaW+i11NCReKt383VldV
+         Prq2GGKPcADkiCEghOz0MkHKBz8Rrptkt0eP8DwSOv37J2BOh+9X1y3M/uDfs+QMEVES
+         z74SrKfVEHZsvbNPjnH93krRO7evsEDJ/Eyuu4+8PImgT2Ws94RKgp0rTCl/YzO4vRlW
+         Q97zO4DaFE7g85EOiF3v/IbdYcRIGFON33PATzH0nui+MMLzE8MTUIIr2RiZhTq8GsUV
+         zCew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=tkdbdbYIojPDmAwAZfQ+/1PtTpdhxbxhefzw8NVXbmI=;
+        b=FNYTvtUnOBWW+AgHOcn//G1pHoholsL/bIWY60jpE3168UM1UXvsKyEJVl+o0N5t4K
+         8qxKDtaFBuIJD3PSrOToo4imhBeWkDX7Z3mq2rt3EvZCuQgtp1kQ89XcijdDBp1FPB0w
+         IkSq0czRaWd2xqMPag2ZPiqCMnMOnbRlss3PpwQeK9RUCRvPpUNAaUbzbCg7q7zF5XAm
+         1E+R+D3J1vpsCddG3bNsXMJSbjBMyZmWJOEFAnX5om274bl+VKo/ebWqD9RtymdXjVr4
+         +ZluwLaTehZ3qROGh7h0EXAtIK5MOrRhcaH6dQt5CQsZ6JNGwUCr0RAVkD0YqtUbJqHS
+         oHUA==
+X-Gm-Message-State: AOAM533SvuBELRGeBWgBLEnOj2dT5suQcxdWkySuUtyDFSDWD9YJoZXH
+        z4Q3C7fjSXuTKivZV1R//Nwiiw==
+X-Google-Smtp-Source: ABdhPJxTyGPlzI2jDh7Y3jEnEkPP0vlIb+Ra5+WjH8jUqaMY60F9ggg2IAVzuebLAJBqHUQCnWhTWg==
+X-Received: by 2002:a17:906:9f27:b0:6ef:af55:6fb with SMTP id fy39-20020a1709069f2700b006efaf5506fbmr19774809ejc.185.1650959355101;
+        Tue, 26 Apr 2022 00:49:15 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id a94-20020a509ee7000000b00425e7035c4bsm2609198edf.61.2022.04.26.00.49.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 00:49:14 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/7] memory: da8xx-ddrctl: simplify platform_get_resource()
+Date:   Tue, 26 Apr 2022 09:49:12 +0200
+Message-Id: <165095934975.35085.8323122039661278218.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220419142859.380566-1-krzysztof.kozlowski@linaro.org>
+References: <20220419142859.380566-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-1967645119-1650900405=:1634"
-Content-ID: <d1c0cb3a-7189-c235-6a83-e663903cadf@linux.intel.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1967645119-1650900405=:1634
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-Content-ID: <31544f8e-b7f-c1f-9613-4f7778a13b49@linux.intel.com>
-
-On Fri, 22 Apr 2022, Ilpo Järvinen wrote:
-
-> On Fri, 22 Apr 2022, Greg KH wrote:
+On Tue, 19 Apr 2022 16:28:53 +0200, Krzysztof Kozlowski wrote:
+> Use devm_platform_get_and_ioremap_resource() instead of
+> platform_get_resource() and devm_ioremap_resource().
 > 
-> > >  /* Returns true if c is consumed as flow-control character */
-> > > -static bool n_tty_receive_char_flow_ctrl(struct tty_struct *tty, unsigned char c)
-> > > +static bool n_tty_receive_char_flow_ctrl(struct tty_struct *tty, unsigned char c,
-> > > +					 bool lookahead_done)
-> > >  {
-> > >  	if (!n_tty_is_char_flow_ctrl(tty, c))
-> > >  		return false;
-> > >  
-> > > +	if (lookahead_done)
-> > > +		return true;
-> > 
-> > Why would this function be called if this option was true?
 > 
-> Agreed, it makes sense to move the check before call (and then I also 
-> don't need to reorganize this function anymore).
 
-I think I want to renege on this. The reason is that on flow control char, 
-two things must occur:
-  a) it must not be treated as normal char
-  b) if not yet processed, flow control actions need to be taken
+Applied, thanks!
 
-When the check is inside, return value of n_tty_receive_char_flow_ctrl 
-decides a), and b) is kept internal to n_tty_receive_char_flow_ctrl().
+[1/7] memory: da8xx-ddrctl: simplify platform_get_resource()
+      commit: 933713f5f49b816aa13a6441e41d98febef84dbe
+[2/7] memory: emif: simplify platform_get_resource()
+      commit: 734058b14de27682a176331ddd49fbdacdac1f46
+[3/7] memory: ti-emif: simplify platform_get_resource()
+      commit: 083008defd83cb1ab6f9efaef6396bf4534ac6eb
+[4/7] memory: ti-emif-pm: simplify platform_get_resource()
+      commit: 8e6a257a173378d0fb42d64865545286f1f84ef6
+[5/7] memory: tegra: mc: simplify platform_get_resource()
+      commit: dab022f22e3769260ef803eb7b70ec59df796a5a
+[6/7] memory: brcmstb_dpfe: simplify platform_get_resource_byname()
+      commit: ef231fefa47f9c694a8a5bbe16cb43b5db62d6d6
+[7/7] memory: renesas-rpc-if: simplify platform_get_resource_byname()
+      commit: 2ca47b33a7794ce92ae881d6d62affea953814cd
 
-If I more that lookahead_done check into the caller domain, things get 
-IMHO a lot more messy. Effectively, I have three options for the calling 
-domain to chose from:
-
-	if (I_IXON(tty)) {
-		if (!lookahead_done) {
-			if (n_tty_receive_char_flow_ctrl(tty, c))
-				return;
-		} else if (n_tty_is_char_flow_ctrl(tty, c)) {
-			return;
-		}
-	}
-
-or
-
-	if (I_IXON(tty)) {
-		if ((!lookahead_done && n_tty_receive_char_flow_ctrl(tty, c)) ||
-		    (lookahead_done && n_tty_is_char_flow_ctrl(tty, c))) {
-			return;
-	}
-
-vs
-
-        if (I_IXON(tty) && n_tty_receive_char_flow_ctrl(tty, c, lookahead_done))
-                return;
-
-I heavily prefer that last option.
-
+Best regards,
 -- 
- i.
---8323329-1967645119-1650900405=:1634--
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>

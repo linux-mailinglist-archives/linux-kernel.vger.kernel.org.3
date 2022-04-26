@@ -2,66 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35C7051062E
+	by mail.lfdr.de (Postfix) with ESMTP id 918DD51062F
 	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 20:02:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349792AbiDZSEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 14:04:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52138 "EHLO
+        id S1349771AbiDZSEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 14:04:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351468AbiDZSEf (ORCPT
+        with ESMTP id S1351377AbiDZSEh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 14:04:35 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D326927B18
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 11:01:26 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id y38so2920023pfa.6
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 11:01:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XRsu/ussswt/LIrflZJyacP4e2z+gM39yV+1fzyWCuw=;
-        b=XLPvEl+krom+vUGXLLaM9U5FMvMXJDtCpmsgMIMmsaMdInWzeTqMzVZIuAysv57Ob+
-         4X5WXx9T58lNI5xuusGfrtE38Ta1uE2xmgiTdklo/jLzQ8BLnvsyWxZ3lcudjHrGsSIC
-         937A84Dat2VCWHdClpkuzhwjGY51zChKfOIig=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XRsu/ussswt/LIrflZJyacP4e2z+gM39yV+1fzyWCuw=;
-        b=Re+LC8nQsebzgmSZA70u5aeZr0SrRNdlMYj1LLgs+egSNWME88owEHQdWKwKNEWQ71
-         FeF4EcRLw7WGd0GAZnQXBYALJuMoCwiNC1oJ9vVeern862s2B7o/numlRzu/EW3j+/fZ
-         F1Hq4eYTULklOLWZ+XztYDdyLZsMhmVvd+ulgolJGcTu7aSvOIgbwcx3nA3YaB+wtn1/
-         TNry60jp59gRjPRFteqQDHNRhn/TGWwsgiSwo1WhXzFxjGezHDp6fgnuaEhiHL1Xmf6I
-         u6r21NzHypZD3qYDHFvwyycqFiCWg7USFMx6fmb2uxxXnJtmzx7Sxlk97EiJ6/CLRHhw
-         5c2g==
-X-Gm-Message-State: AOAM533RzWMsZZgJPtXLK6yikQmyO01YCUBrM+NvAHJpXdrqtwQns36L
-        XlmNXa0Ozcn/f5xkwOjO4IzXVg==
-X-Google-Smtp-Source: ABdhPJx+8k6RshbL4Qs3shYsjvDuW5rotWD+JQBa6tZTy5QcrmBBIBGpOAXKkMDhNkmcjxy8bxm28w==
-X-Received: by 2002:a05:6a02:10d:b0:381:f4c8:ad26 with SMTP id bg13-20020a056a02010d00b00381f4c8ad26mr20497541pgb.135.1650996085751;
-        Tue, 26 Apr 2022 11:01:25 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y2-20020a17090a784200b001cd4989ff42sm3408312pjl.9.2022.04.26.11.01.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 11:01:25 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 11:01:24 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        akpm@linux-foundation.org, alex.popov@linux.com,
-        catalin.marinas@arm.com, luto@kernel.org, will@kernel.org
-Subject: Re: [PATCH 0/8] stackleak: fixes and rework
-Message-ID: <202204261101.D3DC3333@keescook>
-References: <20220425115603.781311-1-mark.rutland@arm.com>
- <202204251551.0CFE01DF4@keescook>
- <YmgXVwaYQ1Kn5+b0@lakrids>
+        Tue, 26 Apr 2022 14:04:37 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C7326552
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 11:01:29 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 713D1210EB;
+        Tue, 26 Apr 2022 18:01:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1650996088; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kTSORWGz8J6dnEZvGImyN3IE4KOw6ycpeMrWZ/JcCCg=;
+        b=SzWNWpSlz0P/AZL437kbv/wvBsjXV8zfBmUCUwU/aeZfdyKbfygez9tkUtfhoVmKUpKrET
+        qQcLkoVSPf6lVU2Oj5pj8zycXPmh2ZVOS5DFcZNZKibWG4ZX1EEO4E5po3PytPqQc4O869
+        KmJ6QgsDhm6j+G4QNhEmhHBNx7cWKuA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1650996088;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kTSORWGz8J6dnEZvGImyN3IE4KOw6ycpeMrWZ/JcCCg=;
+        b=3ywhU3yqUIV9CESUJD11SCSgzaU0QootSDHl2EeCEYASLxda5aS3/YVl9bMmSc/GdbW6Mn
+        Uwao4S972zuhuCDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4711913AD5;
+        Tue, 26 Apr 2022 18:01:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 3V+/EHgzaGJkJgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 26 Apr 2022 18:01:28 +0000
+Message-ID: <228411f0-96b9-60b4-b734-444ea39a354b@suse.cz>
+Date:   Tue, 26 Apr 2022 20:01:27 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YmgXVwaYQ1Kn5+b0@lakrids>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Marco Elver <elver@google.com>,
+        Matthew WilCox <willy@infradead.org>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20220414085727.643099-1-42.hyeyoo@gmail.com>
+ <20220414085727.643099-11-42.hyeyoo@gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v2 10/23] mm/slab_common: cleanup
+ kmem_cache_alloc{,node,lru}
+In-Reply-To: <20220414085727.643099-11-42.hyeyoo@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,20 +82,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 05:01:27PM +0100, Mark Rutland wrote:
-> On Mon, Apr 25, 2022 at 03:54:00PM -0700, Kees Cook wrote:
-> > On Mon, Apr 25, 2022 at 12:55:55PM +0100, Mark Rutland wrote:
-> > > This series reworks the stackleak code. The first patch fixes some
-> > > latent issues on arm64, and the subsequent patches improve the code to
-> > > improve clarity and permit better code generation.
-> > 
-> > This looks nice; thanks! I'll put this through build testing and get it
-> > applied shortly...
+On 4/14/22 10:57, Hyeonggon Yoo wrote:
+> Implement only __kmem_cache_alloc_node() in slab allocators and make
+> kmem_cache_alloc{,node,lru} wrapper of it.
 > 
-> FWIW, looking at testing I've spotted a fencepost error, so I'll spin a
-> v2 with that fixed (and with updates to the LKDTM test).
+> Now that kmem_cache_alloc{,node,lru} is inline function, we should
+> use _THIS_IP_ instead of _RET_IP_ for consistency.
 
-Ah! Oops, ok, I'll unpush the series, I missed this. :)
+Hm yeah looks like this actually fixes some damage of obscured actual
+__RET_IP_ by the recent addition and wrapping of __kmem_cache_alloc_lru().
 
--- 
-Kees Cook
+> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+
+Some nits:
+
+> ---
+>  include/linux/slab.h | 52 ++++++++++++++++++++++++++++++++-----
+>  mm/slab.c            | 61 +++++---------------------------------------
+>  mm/slob.c            | 27 ++++++--------------
+>  mm/slub.c            | 35 +++++--------------------
+>  4 files changed, 67 insertions(+), 108 deletions(-)
+> 
+> diff --git a/include/linux/slab.h b/include/linux/slab.h
+> index 143830f57a7f..1b5bdcb0fd31 100644
+> --- a/include/linux/slab.h
+> +++ b/include/linux/slab.h
+> @@ -429,9 +429,52 @@ void *__kmalloc(size_t size, gfp_t flags)
+>  	return __kmalloc_node(size, flags, NUMA_NO_NODE);
+>  }
+>  
+> -void *kmem_cache_alloc(struct kmem_cache *s, gfp_t flags) __assume_slab_alignment __malloc;
+> -void *kmem_cache_alloc_lru(struct kmem_cache *s, struct list_lru *lru,
+> -			   gfp_t gfpflags) __assume_slab_alignment __malloc;
+> +
+> +void *__kmem_cache_alloc_node(struct kmem_cache *s, struct list_lru *lru,
+> +			   gfp_t gfpflags, int node, unsigned long caller __maybe_unused)
+> +			    __assume_slab_alignment __malloc;
+
+I don't think caller needs to be __maybe_unused in the declaration nor any
+of the implementations of __kmem_cache_alloc_node(), all actually pass it on?

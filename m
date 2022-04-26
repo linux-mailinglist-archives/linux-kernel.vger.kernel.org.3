@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C5E950F769
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7778450F578
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:54:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347301AbiDZJK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52764 "EHLO
+        id S241965AbiDZIzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:55:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346718AbiDZIuR (ORCPT
+        with ESMTP id S1345478AbiDZIll (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:50:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623CE16FE23;
-        Tue, 26 Apr 2022 01:38:46 -0700 (PDT)
+        Tue, 26 Apr 2022 04:41:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67943158F6C;
+        Tue, 26 Apr 2022 01:33:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 67F4860A67;
-        Tue, 26 Apr 2022 08:38:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71562C385A0;
-        Tue, 26 Apr 2022 08:38:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB890B81A2F;
+        Tue, 26 Apr 2022 08:33:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 233F4C385A4;
+        Tue, 26 Apr 2022 08:33:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962324;
-        bh=T1EzDUfwjggOELHvvCTAYsHts3WIZamAMmLGdfdkNLA=;
+        s=korg; t=1650961983;
+        bh=DMCYpmbUYHI9Ux/XT1Qs2k/p3ox5E4gI9mXm9J3vDx4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DLtPytgUrjsAdV1fvqDNqoOHDj/386YsDhJunlF+dgsf6XeHP7cSUUuHmyHRW2DOk
-         W0E7/tqgt8au41YwZvxS5M3HdVEOIoqUKU8Cj8ZQ/nBEQb6XNM7wMrnarr3EqRaQE2
-         Arf5cftSqui/FvC9UsN7MGf3xFApOwNBv2I7Xh5A=
+        b=w/qwzGownsQFF3RK5jEirW7E0RkgNIlxq8AUsN9d0UctDmw41fvaLwaLP9vYjTPK6
+         haSKpx+jHL88KYboFplWvyS5dF2d1L5tYUBD/OHruk3GavtxbOs2eAopkgRo5qwtwK
+         dkfiLWoQIVb1kNluHm5FJe3xUC/S3TbBll+A/AIc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaoke Wang <xkernel.wang@foxmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Rob Clark <robdclark@chromium.org>,
+        stable@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 058/124] drm/msm/disp: check the return value of kzalloc()
-Date:   Tue, 26 Apr 2022 10:20:59 +0200
-Message-Id: <20220426081748.950560919@linuxfoundation.org>
+Subject: [PATCH 5.10 32/86] arm64/mm: Remove [PUD|PMD]_TABLE_BIT from [pud|pmd]_bad()
+Date:   Tue, 26 Apr 2022 10:21:00 +0200
+Message-Id: <20220426081742.134773645@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
-References: <20220426081747.286685339@linuxfoundation.org>
+In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
+References: <20220426081741.202366502@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +57,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+From: Anshuman Khandual <anshuman.khandual@arm.com>
 
-[ Upstream commit f75e582b0c3ee8f0bddc2248cc8b9175f29c5937 ]
+[ Upstream commit e377ab82311af95c99648c6424a6b888a0ccb102 ]
 
-kzalloc() is a memory allocation function which can return NULL when
-some internal memory errors happen. So it is better to check it to
-prevent potential wrong memory access.
+Semantics wise, [pud|pmd]_bad() have always implied that a given [PUD|PMD]
+entry does not have a pointer to the next level page table. This had been
+made clear in the commit a1c76574f345 ("arm64: mm: use *_sect to check for
+section maps"). Hence explicitly check for a table entry rather than just
+testing a single bit. This basically redefines [pud|pmd]_bad() in terms of
+[pud|pmd]_table() making the semantics clear.
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-Link: https://lore.kernel.org/r/tencent_B3E19486FF39415098B572B7397C2936C309@qq.com
-Signed-off-by: Rob Clark <robdclark@chromium.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+Link: https://lore.kernel.org/r/1620644871-26280-1-git-send-email-anshuman.khandual@arm.com
+Signed-off-by: Will Deacon <will@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/disp/msm_disp_snapshot_util.c | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm64/include/asm/pgtable.h | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/msm_disp_snapshot_util.c b/drivers/gpu/drm/msm/disp/msm_disp_snapshot_util.c
-index cabe15190ec1..369e57f73a47 100644
---- a/drivers/gpu/drm/msm/disp/msm_disp_snapshot_util.c
-+++ b/drivers/gpu/drm/msm/disp/msm_disp_snapshot_util.c
-@@ -169,6 +169,8 @@ void msm_disp_snapshot_add_block(struct msm_disp_state *disp_state, u32 len,
- 	va_list va;
+diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+index f3a70dc7c594..9cf8e304bb56 100644
+--- a/arch/arm64/include/asm/pgtable.h
++++ b/arch/arm64/include/asm/pgtable.h
+@@ -512,13 +512,12 @@ extern pgprot_t phys_mem_access_prot(struct file *file, unsigned long pfn,
  
- 	new_blk = kzalloc(sizeof(struct msm_disp_state_block), GFP_KERNEL);
-+	if (!new_blk)
-+		return;
+ #define pmd_none(pmd)		(!pmd_val(pmd))
  
- 	va_start(va, fmt);
+-#define pmd_bad(pmd)		(!(pmd_val(pmd) & PMD_TABLE_BIT))
+-
+ #define pmd_table(pmd)		((pmd_val(pmd) & PMD_TYPE_MASK) == \
+ 				 PMD_TYPE_TABLE)
+ #define pmd_sect(pmd)		((pmd_val(pmd) & PMD_TYPE_MASK) == \
+ 				 PMD_TYPE_SECT)
+ #define pmd_leaf(pmd)		pmd_sect(pmd)
++#define pmd_bad(pmd)		(!pmd_table(pmd))
  
+ #if defined(CONFIG_ARM64_64K_PAGES) || CONFIG_PGTABLE_LEVELS < 3
+ static inline bool pud_sect(pud_t pud) { return false; }
+@@ -602,7 +601,7 @@ static inline unsigned long pmd_page_vaddr(pmd_t pmd)
+ 	pr_err("%s:%d: bad pmd %016llx.\n", __FILE__, __LINE__, pmd_val(e))
+ 
+ #define pud_none(pud)		(!pud_val(pud))
+-#define pud_bad(pud)		(!(pud_val(pud) & PUD_TABLE_BIT))
++#define pud_bad(pud)		(!pud_table(pud))
+ #define pud_present(pud)	pte_present(pud_pte(pud))
+ #define pud_leaf(pud)		pud_sect(pud)
+ #define pud_valid(pud)		pte_valid(pud_pte(pud))
 -- 
 2.35.1
 

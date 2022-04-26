@@ -2,167 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD36D510B8C
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 23:53:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 227AA510B8E
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 23:54:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355567AbiDZV4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 17:56:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43508 "EHLO
+        id S1355573AbiDZV54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 17:57:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237427AbiDZV4x (ORCPT
+        with ESMTP id S236877AbiDZV5y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 17:56:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24D4EE4DF;
-        Tue, 26 Apr 2022 14:53:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 82B05B82169;
-        Tue, 26 Apr 2022 21:53:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51CA7C385AD;
-        Tue, 26 Apr 2022 21:53:40 +0000 (UTC)
-Date:   Tue, 26 Apr 2022 17:53:38 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Kurt Kanzenbach <kurt@linutronix.de>
-Cc:     John Stultz <john.stultz@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Richard Cochran <richardcochran@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] timekeeping: Introduce fast accessor to clock
- tai
-Message-ID: <20220426175338.3807ca4f@gandalf.local.home>
-In-Reply-To: <20220414091805.89667-2-kurt@linutronix.de>
-References: <20220414091805.89667-1-kurt@linutronix.de>
-        <20220414091805.89667-2-kurt@linutronix.de>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 26 Apr 2022 17:57:54 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CAD4131CED;
+        Tue, 26 Apr 2022 14:54:46 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id l18so12095315ejc.7;
+        Tue, 26 Apr 2022 14:54:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :content-transfer-encoding:user-agent:mime-version;
+        bh=Dhakw0e5ZSPa2dy8bzzfO97Ps8/UGe5wd7QSGn6HCIY=;
+        b=gJItSOS0nTNbKHQU4XxgReQTh/kj3eAdTGIZa9w3MrS5NEpYCZMBFFTdCvHBEsj6sP
+         S83WMM+kpLxopmIBCl9yqJo3JVyKxTbEttoqfmM2qbRgGOerQPp5KCt74yNpc4HixsJm
+         +1Z1pywC68sjhdoyLVi23Vp6ZiunQ//XUQTbRSo5TSVC5gU4OsfnyAD2QonCta3P870I
+         qVxUI/LeF8jifIEPi2AfNLC0UJlkFLJ3txxKRzuiNSCAS4bfAPGBvILiesvGNcYS6ECi
+         Is78Qv9CUc57PEI3NFYNasCiv+dzy+j/dJbxi7JI4dpxAwwZ+0QTEcZNPsDCDciCKqnP
+         Ln9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:content-transfer-encoding:user-agent:mime-version;
+        bh=Dhakw0e5ZSPa2dy8bzzfO97Ps8/UGe5wd7QSGn6HCIY=;
+        b=I39h9ko3ZeeQJPnMVIEgEnUcpPumAw81tXQ1cM9xzpWreyrT280q3F1rQ0RTg6VgkJ
+         ikpTGueK9futm7TwMMOr1SeSRWxUoxlF1AT2kzWuIL7KVb0cgf2qn1TSozPvPGOW3f6j
+         ktQPnlouvipUYonVustYhGjwnJJOtKJlu17T0TDiQkuigTy9NH4JtwCj1b50u4g6UWoA
+         okb62koh17ejBr3ZOQz9xPV78rUQuNFWT25bf+5oPp97aXlkgMh+/8L0SaOI+M6m9mX9
+         9xqEAMOESxyMIUK6nMlk/5eNvO5hxQa1dEr1E0ItfGcTe3/awaVTcG809vUrhSNz/ufC
+         mgKA==
+X-Gm-Message-State: AOAM530K7mqTH+EYCUDp2ulFXoCFDjIN+A3y0ggGEJdDDLYamPcwnJXO
+        UmxjW0NIbFdweEgRISwVnss=
+X-Google-Smtp-Source: ABdhPJzwF+HfRP7B8GgzbotjOCS1lC0d1TCWMzpZsk90rO8q1zat42mj87yp/LggtF+L0L9D2wWW/Q==
+X-Received: by 2002:a17:907:9628:b0:6f3:5fbe:c28 with SMTP id gb40-20020a170907962800b006f35fbe0c28mr21508181ejc.754.1651010084934;
+        Tue, 26 Apr 2022 14:54:44 -0700 (PDT)
+Received: from [192.168.3.2] (p5dd1ed70.dip0.t-ipconnect.de. [93.209.237.112])
+        by smtp.googlemail.com with ESMTPSA id ia5-20020a170907a06500b006f392df973bsm3139305ejc.107.2022.04.26.14.54.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 14:54:44 -0700 (PDT)
+Message-ID: <e422b442c3d56074a11c122dacc9328b1c74fd76.camel@gmail.com>
+Subject: Re: [PATCH v3 5/6] scsi: ufshpb: Add handing of device reset HPB
+ regions Infos in HPB device mode
+From:   Bean Huo <huobean@gmail.com>
+To:     Avri Altman <Avri.Altman@wdc.com>,
+        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
+        "daejun7.park@samsung.com" <daejun7.park@samsung.com>,
+        "keosung.park@samsung.com" <keosung.park@samsung.com>,
+        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
+        "powen.kao@mediatek.com" <powen.kao@mediatek.com>
+Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        keosung.park@samsung.com
+Date:   Tue, 26 Apr 2022 23:54:43 +0200
+In-Reply-To: <DM6PR04MB6575DE756EE25ECA7DF17669FCF89@DM6PR04MB6575.namprd04.prod.outlook.com>
+References: <20220424220713.1253049-1-huobean@gmail.com>
+         <20220424220713.1253049-6-huobean@gmail.com>
+         <DM6PR04MB6575DE756EE25ECA7DF17669FCF89@DM6PR04MB6575.namprd04.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.0-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Apr 2022 11:18:03 +0200
-Kurt Kanzenbach <kurt@linutronix.de> wrote:
+On Mon, 2022-04-25 at 06:43 +0000, Avri Altman wrote:
+> >=20
+> > Therefore, for HPB device control mode, if the UFS device is reset
+> > via the
+> > RST_N
+> > pin, the active region information in the device will be reset. If
+> > the host side
+> > receives this notification from the device side, it is recommended
+> > to inactivate
+> > all active regions in the host's HPB cache.
+> While it makes sense to me, this interpretation of the spec takes
+> extreme action,
+> Compared to what it is today, and you probably need to get an ack
+> from Daejun.=20
+>=20
 
-I finally ran this series through my tests, and it has some issues.
+Yes, but it seems he is quiet. Keoseong Park is on the email list and
+he has looked at the patch. If you have concerns, I can ping Keoseong
+Park to sync with Daejun.
 
-> Introduce fast/NMI safe accessor to clock tai for tracing. The Linux kernel
-> tracing infrastructure has support for using different clocks to generate
-> timestamps for trace events. Especially in TSN networks it's useful to have TAI
-> as trace clock, because the application scheduling is done in accordance to the
-> network time, which is based on TAI. With a tai trace_clock in place, it becomes
-> very convenient to correlate network activity with Linux kernel application
-> traces.
-> 
-> Use the same implementation as ktime_get_boot_fast_ns() does by reading the
-> monotonic time and adding the TAI offset. The same limitations as for the fast
-> boot implementation apply. The TAI offset may change at run time e.g., by
-> setting the time or using adjtimex() with an offset. However, these kind of
-> offset changes are rare events. Nevertheless, the user has to be aware and deal
-> with it in post processing.
-> 
-> An alternative approach would be to use the same implementation as
-> ktime_get_real_fast_ns() does. However, this requires to add an additional u64
-> member to the tk_read_base struct. This struct together with a seqcount is
-> designed to fit into a single cache line on 64 bit architectures. Adding a new
-> member would violate this constraint.
-> 
-> Signed-off-by: Kurt Kanzenbach <kurt@linutronix.de>
-> ---
->  Documentation/core-api/timekeeping.rst |  1 +
->  include/linux/timekeeping.h            |  1 +
->  kernel/time/timekeeping.c              | 17 +++++++++++++++++
->  3 files changed, 19 insertions(+)
-> 
-> diff --git a/Documentation/core-api/timekeeping.rst b/Documentation/core-api/timekeeping.rst
-> index 729e24864fe7..22ec68f24421 100644
-> --- a/Documentation/core-api/timekeeping.rst
-> +++ b/Documentation/core-api/timekeeping.rst
-> @@ -132,6 +132,7 @@ Some additional variants exist for more specialized cases:
->  .. c:function:: u64 ktime_get_mono_fast_ns( void )
->  		u64 ktime_get_raw_fast_ns( void )
->  		u64 ktime_get_boot_fast_ns( void )
-> +		u64 ktime_get_tai_fast_ns( void )
->  		u64 ktime_get_real_fast_ns( void )
->  
->  	These variants are safe to call from any context, including from
-> diff --git a/include/linux/timekeeping.h b/include/linux/timekeeping.h
-> index 78a98bdff76d..fe1e467ba046 100644
-> --- a/include/linux/timekeeping.h
-> +++ b/include/linux/timekeeping.h
-> @@ -177,6 +177,7 @@ static inline u64 ktime_get_raw_ns(void)
->  extern u64 ktime_get_mono_fast_ns(void);
->  extern u64 ktime_get_raw_fast_ns(void);
->  extern u64 ktime_get_boot_fast_ns(void);
-> +extern u64 ktime_get_tai_fast_ns(void);
->  extern u64 ktime_get_real_fast_ns(void);
->  
->  /*
-> diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c
-> index dcdcb85121e4..2c22023fbf5f 100644
-> --- a/kernel/time/timekeeping.c
-> +++ b/kernel/time/timekeeping.c
-> @@ -532,6 +532,23 @@ u64 notrace ktime_get_boot_fast_ns(void)
->  }
->  EXPORT_SYMBOL_GPL(ktime_get_boot_fast_ns);
->  
-> +/**
-> + * ktime_get_tai_fast_ns - NMI safe and fast access to tai clock.
-> + *
-> + * The same limitations as described for ktime_get_boot_fast_ns() apply. The
-> + * mono time and the TAI offset are not read atomically which may yield wrong
-> + * readouts. However, an update of the TAI offset is an rare event e.g., caused
-> + * by settime or adjtimex with an offset. The user of this function has to deal
-> + * with the possibility of wrong timestamps in post processing.
-> + */
-> +u64 notrace ktime_get_tai_fast_ns(void)
-> +{
-> +	struct timekeeper *tk = &tk_core.timekeeper;
-> +
-> +	return (ktime_get_mono_fast_ns() + ktime_to_ns(data_race(tk->offs_tai)));
+> If we are entering a zone in which each vendor is applying a
+> different logic -=20
+> I think you need to facilitate that - maybe in a different patch set.
+>=20
 
-As you are using this for tracing, can you open code the
-ktime_get_mono_fast_ns(), otherwise we need to mark that function as
-notrace. Not to mention, this is a fast path and using the noinline of
-__ktime_get_fast_ns() should be less overhead.
-
-That said, I hit this too:
-
-            less-5071    [000] d.h2. 498087876.351330: do_raw_spin_trylock <-_raw_spin_lock
-            less-5071    [000] d.h4. 498087876.351334: ktime_get_mono_fast_ns <-ktime_get_tai_fast_ns
-            less-5071    [000] d.h5. 498087876.351334: ktime_get_mono_fast_ns <-ktime_get_tai_fast_ns
-            less-5071    [000] d.h3. 498087876.351334: rcu_read_lock_sched_held <-lock_acquired
-            less-5071    [000] d.h5. 498087876.351337: ktime_get_mono_fast_ns <-ktime_get_tai_fast_ns
-    kworker/u8:1-45      [003] d.h7. 1651009380.982749: ktime_get_mono_fast_ns <-ktime_get_tai_fast_ns
-    kworker/u8:1-45      [003] d.h7. 1651009380.982749: ktime_get_mono_fast_ns <-ktime_get_tai_fast_ns
-    kworker/u8:1-45      [003] d.h5. 1651009380.982749: rcu_read_lock_held_common <-rcu_read_lock_sched_held
-    kworker/u8:1-45      [003] d.h7. 498087876.375905: ktime_get_mono_fast_ns <-ktime_get_tai_fast_ns
-    kworker/u8:1-45      [003] d.h7. 498087876.375905: ktime_get_mono_fast_ns <-ktime_get_tai_fast_ns
-    kworker/u8:1-45      [003] d.h5. 498087876.375905: update_cfs_group <-task_tick_fair
-    kworker/u8:1-45      [003] d.h7. 498087876.375909: ktime_get_mono_fast_ns <-ktime_get_tai_fast_ns
-
-The clock seems to be toggling between 1651009380 and 498087876 causing the
-ftrace ring buffer to shutdown (it doesn't allow for time to go backwards).
-
-This is running on a 32 bit x86.
-
--- Steve
+Yes, it should be a different patch. I must say that this patch is
+based on the HPB Spec, say, if the device loses HPB info. The host side
+should also reset its HPB information, Otherwise, performance will
+degrade. Of course, it depends on the specific implementation of the
+vendor. If they don't report 02:HPB operations, this patch still
+doesn't change the original behavior.
 
 
-> +}
-> +EXPORT_SYMBOL_GPL(ktime_get_tai_fast_ns);
-> +
->  static __always_inline u64 __ktime_get_real_fast(struct tk_fast *tkf, u64 *mono)
->  {
->  	struct tk_read_base *tkr;
+Kind regards,
+Bean
 

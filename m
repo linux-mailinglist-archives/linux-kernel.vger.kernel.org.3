@@ -2,143 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76E465108F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 21:27:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F3D8510902
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 21:31:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354117AbiDZTac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 15:30:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53998 "EHLO
+        id S1354210AbiDZTfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 15:35:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352273AbiDZTa3 (ORCPT
+        with ESMTP id S1354270AbiDZTen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 15:30:29 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF676E4F7
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 12:27:19 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id a15so18849486pfv.11
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 12:27:19 -0700 (PDT)
+        Tue, 26 Apr 2022 15:34:43 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F7DEDB52
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 12:30:44 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id l18so11472278ejc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 12:30:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=YrNAxfDrxxD766OcfeCfCclqIZpQa0twyturIx4zcDA=;
-        b=lFpfuszm5sYEet8AFcmzLa4ajQqoQ28Y0ReAuZHGIDsHkytcZgVXGcB2HZzslryqop
-         KuAHYH0lOOzehRzsz/JNBPOdO0QuUNhTGm2JIAXfwTsO7RK1dG6NtZdU2wcGETwnHgT7
-         ERJZiZc94CGVpzdmoJXxJ6y/5gtpV9ksDeveb6drlh6e0+jqXTBo8hcp5Nw9TzKxleFI
-         LDHft1G55yQmOC7+qC0MNvo/CLNnvOeWQrUfQq6tkotBoY0TfSqWyXdMY+2OlEECxnse
-         vJ9KiPmxDEJDHRaqrzgw+O23TQleBL8JpBtCPJVrPaFM6wZ05Z6a2yKizbldHKlBgCmp
-         NcdA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ank2mYd3nSanKxmSKtm5nAH75fQy/ZfiLRmnMjWOP70=;
+        b=hljtTzJZV5Vpzx7ZO/4Vrk6T9shB81K8wF8W8pjg9AeZnKBiAosysk/4y7WsUSm7jL
+         NhuUJP/F5a40XCHB0ORRdbWVXxqgyjYecHAIbRUs0jCCijSxny6QSWOq1nmneLfK9ryT
+         CYhnjcQHYMNTyk8is9BShruZMqmowZ4HIExB6MJpj7HUARret27yD62Yoz51eqjnZvYv
+         5+xIJDzT0QLc9ANImAuavrFXO/MIrTz/1kKXuD0vnJVWLqLk5dR+oih+rc/9MUTEXpvs
+         D+WBExvgsYwQjxIeya5YU3GQ1ZPgie/W4N6GysfgPmWi96RLsxVoBFKQUNUWSFzQokyE
+         +t4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YrNAxfDrxxD766OcfeCfCclqIZpQa0twyturIx4zcDA=;
-        b=5F7Rr4NLt3qkjQKTdhO7PRPx2LcpdoY7Gp3hh64iffSFV1uzyVFJ//QDW4MF2DGEHN
-         dlytxSTXwcyFPaWy+o0VrXGJykEiQ9T0wDpNtXvpLJTatBSJASnfuHJq07l8sq5mnzJ3
-         A6hrRDosBStw1IMPGXQztqpEgK8xHMyXd0dB9M27hYWmnpgMl/ex3a9vLugZdPsoqLcn
-         hMjt7qLEu23OY+p9SeSEmtoKzLQDKoXvkxdradXCp6kK939WiQ80npiqiEhT/YqF2vJd
-         qiLRw+tskGRjoDIt7MiqjEEEAG/mgYa1EAorfaWqyLqnRSnMFVV8vHSaZ9YroR+lw7wj
-         wKmw==
-X-Gm-Message-State: AOAM533B1V84BMPvacqUUoQr5eLTvEAS6gGQZULO//WbRr1vEemojTKR
-        OqSvW+sDcNgmt3YVznAPoXr0/A==
-X-Google-Smtp-Source: ABdhPJwsYXdbHr7lCZriH0/82+iIj0K6xR6VWQSP6+pPkBdDyb7ogFEs1NlZGQpGAY7kGVDfBzcLyQ==
-X-Received: by 2002:a63:df0f:0:b0:3aa:436f:8784 with SMTP id u15-20020a63df0f000000b003aa436f8784mr20938313pgg.514.1651001239114;
-        Tue, 26 Apr 2022 12:27:19 -0700 (PDT)
-Received: from x1 ([2601:1c2:1001:7090:9bcd:e060:b370:70d8])
-        by smtp.gmail.com with ESMTPSA id o2-20020a62f902000000b0050cfb6994e2sm13327322pfh.130.2022.04.26.12.27.18
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ank2mYd3nSanKxmSKtm5nAH75fQy/ZfiLRmnMjWOP70=;
+        b=t5y32su3wIc49ReluBWOfy7LjKR5lngxE+m8nwNA2jbZVmyqdtsybFYegxD5Ew33TA
+         HyCEJs1+eQ7d9z07JrbJYJIbBTr1EFoKHZaKeC3GcCQYf2+ks8sedkbrKKxfHQcbgXu0
+         X/UIwDxfpfMRJaDY1Gy1G7hS6jJr0gWGgPsRVJe+E6Yyn4AHFUYohRi+z9cHhCwnLysX
+         oKaEwY9OoPjAAcXCH7CvPaKHsuonHKHaNYZ/rYYTSV39Jx7D6P3p15wbqjYGJG4zmVaA
+         3uwM/oEykMKpkmLb0tuGGkKn4wc4kl+qU1UFalnHb6toraRp3OvzexfbaVvkY0FU1ARX
+         iC8w==
+X-Gm-Message-State: AOAM5308zZhbIRTflit1VVbqw3/Ta7dDjMMkNZ/DItiRdz0tBHaFcEm3
+        AfpHcV8YT2CRtRSBUZBnCys=
+X-Google-Smtp-Source: ABdhPJyGAKs/1fi8OP0JmZVoAeRo5gj73FlEUM++3oj7p/D5a1GiB7hWfafMbvunvxZ9VCI3cStydw==
+X-Received: by 2002:a17:907:2d24:b0:6f3:91fd:db8f with SMTP id gs36-20020a1709072d2400b006f391fddb8fmr11905250ejc.150.1651001424316;
+        Tue, 26 Apr 2022 12:30:24 -0700 (PDT)
+Received: from localhost.localdomain (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
+        by smtp.gmail.com with ESMTPSA id s2-20020a1709066c8200b006e4e1b1f875sm5406140ejr.199.2022.04.26.12.30.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 12:27:18 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 12:28:18 -0700
-From:   Drew Fustini <dfustini@baylibre.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Nishanth Menon <nm@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Dave Gerlach <d-gerlach@ti.com>,
-        Tony Lindgren <tony@atomide.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Keerthy <j-keerthy@ti.com>
-Subject: Re: [PATCH 1/2] dt-bindings: wkup-m3-ipc: Add ti,scale-data-fw
- property
-Message-ID: <YmhH0gFFSfJmZkDX@x1>
-References: <20220425052806.484590-1-dfustini@baylibre.com>
- <20220425052806.484590-2-dfustini@baylibre.com>
- <YmbKvN00F6vGawpE@robh.at.kernel.org>
+        Tue, 26 Apr 2022 12:30:23 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Peter Collingbourne <pcc@google.com>,
+        linux-kernel@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Subject: [PATCH] mm/highmem: VM_BUG_ON() if offset + len > PAGE_SIZE
+Date:   Tue, 26 Apr 2022 21:30:20 +0200
+Message-Id: <20220426193020.8710-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YmbKvN00F6vGawpE@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 11:22:20AM -0500, Rob Herring wrote:
-> On Sun, Apr 24, 2022 at 10:28:05PM -0700, Drew Fustini wrote:
-> > From: Dave Gerlach <d-gerlach@ti.com>
-> > 
-> > Add documentation for ti,scale-data-fw property to enable I2C PMIC
-> > voltage scaling during deep sleep. The property contains the name of a
-> > binary file for the CM3 firmware to load.
-> > 
-> > Based on previous work by Russ Dill.
-> > 
-> > Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
-> > Signed-off-by: Keerthy <j-keerthy@ti.com>
-> > [dfustini: split from driver patch and convert to json-schema]
-> > Signed-off-by: Drew Fustini <dfustini@baylibre.com>
-> > ---
-> >  .../devicetree/bindings/soc/ti/wkup-m3-ipc.yaml       | 11 +++++++++++
-> >  1 file changed, 11 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/soc/ti/wkup-m3-ipc.yaml b/Documentation/devicetree/bindings/soc/ti/wkup-m3-ipc.yaml
-> > index 88d690de050c..d2c248d82384 100644
-> > --- a/Documentation/devicetree/bindings/soc/ti/wkup-m3-ipc.yaml
-> > +++ b/Documentation/devicetree/bindings/soc/ti/wkup-m3-ipc.yaml
-> > @@ -40,6 +40,12 @@ description: |+
-> >    override the pin's existing bias (pull-up/pull-down) and value (high/low) when
-> >    IO isolation is active.
-> >  
-> > +  Support for I2C PMIC Voltage Scaling
-> > +  ====================================
-> > +  It is possible to pass the name of a binary file to load into the CM3 memory.
-> > +  The binary data is the I2C sequences for the CM3 to send out to the PMIC
-> > +  during low power mode entry.
-> > +
-> >  properties:
-> >    compatible:
-> >      enum:
-> > @@ -67,6 +73,11 @@ properties:
-> >        mbox_wkupm3 child node.
-> >      maxItems: 1
-> >  
-> > +  ti,scale-data-fw:
-> > +    $ref: /schemas/types.yaml#/definitions/string
-> > +    description:
-> > +      Name of the firmware binary in /lib/firmware to copy to CM3 aux data
-> 
-> The location of firmware files is up to the OS.
-> 
-> Is there other firmware? If not, 'firmware-name' is the somewhat 
-> standard property for this.
-> 
-> What's the default name?
+Add VM_BUG_ON() bounds checking to make sure that, if "offset + len>
+PAGE_SIZE", memset() does not corrupt data in adjacent pages.
 
-Thank you for the suggestion.  I will change it to firmware-name as
-this is the only type of firmware that this driver will need to load.
+Cc: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
+ include/linux/highmem.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-There is no default name for the firmware. The name depends on the board
-being used. The current [1] possibilites are:
+diff --git a/include/linux/highmem.h b/include/linux/highmem.h
+index 6b2d59e025c5..d54dbaae9a5e 100644
+--- a/include/linux/highmem.h
++++ b/include/linux/highmem.h
+@@ -380,6 +380,8 @@ static inline void memcpy_to_page(struct page *page, size_t offset,
+ static inline void memzero_page(struct page *page, size_t offset, size_t len)
+ {
+ 	char *addr = kmap_local_page(page);
++
++	VM_BUG_ON(offset + len > PAGE_SIZE);
+ 	memset(addr + offset, 0, len);
+ 	flush_dcache_page(page);
+ 	kunmap_local(addr);
+-- 
+2.34.1
 
-am43x-evm-scale-data.bin
-am335x-bone-scale-data.bin
-am335x-evm-scale-data.bin
-
-Thank you,
-Drew
-
-[1] https://git.ti.com/cgit/processor-firmware/ti-amx3-cm3-pm-firmware/tree/bin?h=08.02.00.006

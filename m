@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52AA850F8B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3663F50F554
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:53:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348504AbiDZJj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:39:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41962 "EHLO
+        id S1346397AbiDZIyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:54:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347911AbiDZJGW (ORCPT
+        with ESMTP id S1345456AbiDZIlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:06:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85710B6D2A;
-        Tue, 26 Apr 2022 01:47:09 -0700 (PDT)
+        Tue, 26 Apr 2022 04:41:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB3D157DE4;
+        Tue, 26 Apr 2022 01:33:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 40E43B81CFA;
-        Tue, 26 Apr 2022 08:47:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E103C385A0;
-        Tue, 26 Apr 2022 08:47:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DFAE6B81CAF;
+        Tue, 26 Apr 2022 08:32:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42721C385A4;
+        Tue, 26 Apr 2022 08:32:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962827;
-        bh=Uqzo4aS6TNprJWj68XNn/CE1eaZRoWCWRUpdM3puHN4=;
+        s=korg; t=1650961977;
+        bh=XC/PxJ890NE8IKU5ycw5MBJnxf3y3mMFkwqlK2hnpFw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j3IHA2KaT2Nloqd9fMdYUsfvCf2jI9Q8vWPDx5naVp2rGxSpaEksB5/0m6X09Ialg
-         pnrYH+r+lsYfXOmGj9ede8kwE8BMH50m5aQZR5tBxVCGspQ5l258HbTADdccYkCaSB
-         vn9RRfXbErHsm1PqXjM1OmIeMYYR+KHEw5Pit7Us=
+        b=cL4mWgRStF5NsVgwdFFOqOKA7Gk+mDtduePrqWoeDOZefJ30rV3GSXF7DfGGOj6Ww
+         /I/SjtwxUiEJhwHblEL4aJZS3ebJfAiXZZqRv0u25gsNMG1vPGuastlMAGXQY7lKvv
+         4DUaqfyWsQcfGJzIIezlZSEPOqU0PBIt8utDhKSY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 063/146] platform/x86: samsung-laptop: Fix an unsigned comparison which can never be negative
+        stable@vger.kernel.org, Bernice Zhang <bernice.zhang@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 30/86] dmaengine: idxd: add RO check for wq max_transfer_size write
 Date:   Tue, 26 Apr 2022 10:20:58 +0200
-Message-Id: <20220426081751.836722859@linuxfoundation.org>
+Message-Id: <20220426081742.078041062@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
-References: <20220426081750.051179617@linuxfoundation.org>
+In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
+References: <20220426081741.202366502@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+From: Dave Jiang <dave.jiang@intel.com>
 
-[ Upstream commit 0284d4d1be753f648f28b77bdfbe6a959212af5c ]
+[ Upstream commit 505a2d1032ae656b0a8c736be110255503941cde ]
 
-Eliminate the follow smatch warnings:
+Block wq_max_transfer_size_store() when the device is configured as
+read-only and not configurable.
 
-drivers/platform/x86/samsung-laptop.c:1124 kbd_led_set() warn: unsigned
-'value' is never less than zero.
-
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Link: https://lore.kernel.org/r/20220322061830.105579-1-jiapeng.chong@linux.alibaba.com
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Fixes: d7aad5550eca ("dmaengine: idxd: add support for configurable max wq xfer size")
+Reported-by: Bernice Zhang <bernice.zhang@intel.com>
+Tested-by: Bernice Zhang <bernice.zhang@intel.com>
+Signed-off-by: Dave Jiang <dave.jiang@intel.com>
+Link: https://lore.kernel.org/r/164971488154.2200913.10706665404118545941.stgit@djiang5-desk3.ch.intel.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/platform/x86/samsung-laptop.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/dma/idxd/sysfs.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/platform/x86/samsung-laptop.c b/drivers/platform/x86/samsung-laptop.c
-index c1d9ed9b7b67..19f6b456234f 100644
---- a/drivers/platform/x86/samsung-laptop.c
-+++ b/drivers/platform/x86/samsung-laptop.c
-@@ -1121,8 +1121,6 @@ static void kbd_led_set(struct led_classdev *led_cdev,
+diff --git a/drivers/dma/idxd/sysfs.c b/drivers/dma/idxd/sysfs.c
+index 5bf4b4be64e4..51af0dfc3c63 100644
+--- a/drivers/dma/idxd/sysfs.c
++++ b/drivers/dma/idxd/sysfs.c
+@@ -1098,6 +1098,9 @@ static ssize_t wq_max_transfer_size_store(struct device *dev, struct device_attr
+ 	u64 xfer_size;
+ 	int rc;
  
- 	if (value > samsung->kbd_led.max_brightness)
- 		value = samsung->kbd_led.max_brightness;
--	else if (value < 0)
--		value = 0;
++	if (!test_bit(IDXD_FLAG_CONFIGURABLE, &idxd->flags))
++		return -EPERM;
++
+ 	if (wq->state != IDXD_WQ_DISABLED)
+ 		return -EPERM;
  
- 	samsung->kbd_led_wk = value;
- 	queue_work(samsung->led_workqueue, &samsung->kbd_led_work);
 -- 
 2.35.1
 

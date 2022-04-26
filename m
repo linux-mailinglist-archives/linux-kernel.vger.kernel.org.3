@@ -2,147 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64501510CE3
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 01:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5D83510CE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 01:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356227AbiDZX6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 19:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42188 "EHLO
+        id S1356232AbiDZX7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 19:59:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356224AbiDZX6i (ORCPT
+        with ESMTP id S242437AbiDZX7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 19:58:38 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3260513D43;
-        Tue, 26 Apr 2022 16:55:28 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id f4so761057iov.2;
-        Tue, 26 Apr 2022 16:55:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qfwjPLjHy0b+oJYbdqU408UT5vznIVKG78yOHQHkEGc=;
-        b=RNKx0HULjvM3tKDODOUDRyzTfZI3BekYtYdnI8r/uKPOQGni5wp+LnDXXynTOxk8DK
-         OEWgAD31/oNFFZqkJQ1ZwGnoP/jnG+3UvBfuhkHMBRiI/euPg6tAR8Zx36xZEGo6Voi+
-         DuLZddf3osnx2XiJeS/C3TLm8/48JOHs5xDZ7SjxyJtwVu2cPGuUpHZ0Jy47PkPT+qIf
-         yOfOo6JjbwQYecuAl2MORPj9jGta/n9Nzqgp5pdrQL5FiQUvJ0u47gHvs0HQdEFRTav+
-         J5jLJg4srAftX62Mjm7XjNIwALsozhT0GWA2jhtmppZ+HpHVBv8JQK4qr3Qd2nUz0qlx
-         WozA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qfwjPLjHy0b+oJYbdqU408UT5vznIVKG78yOHQHkEGc=;
-        b=5RpkEQ6xF4lJkBbE07EoIGD/K0TrBZnwb2awYl3VTMt6H6ohpFUAH8/xS2dVXvQY9F
-         u6sGF4tACcD6lAPlRDx6YE5ili5777uqeUq/YndokX4nGefNJlvK8Q2lPkn728x14FRe
-         aaSn5kA3OlVEINcOKRd43o6SFEzVpiToSmrf/D7uTzQqe11WDbkYRf3UdP8Bkmnzk3Od
-         lWY5br8ICosY5q0pq05nhyJkOFdfJGkxWIbiMBXzKKSYkLfpfgwdO6BK4jIq3yYbslG2
-         gmx/JN9Xv0fQco21FzoEqX7KSxBB0wyXDzJ0bScrGvEYfF/4ncSnhZkK4y9QWm+1YcHo
-         M+zA==
-X-Gm-Message-State: AOAM532YI8zVnTFnmomqKXvOtMUygV1bUaVqDkR/21/HMiaAKNv71Ynx
-        YvKCPxutPQc0OiWgK+bgwIowCowlmSSLsJ3daRg=
-X-Google-Smtp-Source: ABdhPJw4jaZ2UFHjp4+f2LkW1E50CEuPZDtkYFZtYWIlVerHsOnhyyP7yIoJmjSjZMnH33UWPwUcMultjAX9QiMenXs=
-X-Received: by 2002:a05:6638:3393:b0:32a:93cd:7e48 with SMTP id
- h19-20020a056638339300b0032a93cd7e48mr11034554jav.93.1651017328145; Tue, 26
- Apr 2022 16:55:28 -0700 (PDT)
+        Tue, 26 Apr 2022 19:59:41 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB1544750
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 16:56:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651017392; x=1682553392;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=eIHvaM/jF1FT9l+KeJTLO1Jd1NhIocqtHenQEupdkBw=;
+  b=K/mT2yM9sH9GdjD4qpne5XIYA69BYzKUIJbZF6zgdbrtOxs9Jc5PRs/c
+   tM7Of4Sb+6nIy9LootlPYfx7peCg6FYyCqQ/UsyUiJ4CHO4iMnPQXywEq
+   fR7H8ncQJ2b8aFKb4tLdPvQ0nDaldu2Wy6aUnFbeYEsNmQorYPP5gl4nJ
+   oxLUX6KvmTv83ZsQlJ65pd0sgmK0u+2oGtSyernLIZzhrnzSUXwGE6Dhh
+   8OugX4I9VIG/GTSMU839JZ3xPyLYy6bt1ygXuOJjrWf7eJVNJuJp20JPv
+   ubAf6rGKUKzlf89ckr4DiPbIEPKIhuK7AQ0G/ofkNcJ8L+Mlaplx8R6HK
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="245682865"
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="245682865"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 16:56:31 -0700
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="730515003"
+Received: from htamura-mobl2.gar.corp.intel.com (HELO bard-pc.domain.name) ([10.252.185.30])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 16:56:29 -0700
+From:   Bard Liao <yung-chuan.liao@linux.intel.com>
+To:     alsa-devel@alsa-project.org, vkoul@kernel.org
+Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, srinivas.kandagatla@linaro.org,
+        pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
+        bard.liao@intel.com
+Subject: [PATCH 0/5] soundwire: use pm_runtime_resume_and_get()
+Date:   Wed, 27 Apr 2022 07:56:18 +0800
+Message-Id: <20220426235623.4253-1-yung-chuan.liao@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220422150507.222488-1-namhyung@kernel.org> <20220422150507.222488-5-namhyung@kernel.org>
-In-Reply-To: <20220422150507.222488-5-namhyung@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 26 Apr 2022 16:55:17 -0700
-Message-ID: <CAEf4Bzbdh-wbQQLzoXGGKkqqE=+qz19C4tCq4Ynb-_PXzRYM1w@mail.gmail.com>
-Subject: Re: [PATCH 4/4] perf record: Handle argument change in sched_switch
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
-        bpf <bpf@vger.kernel.org>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        Blake Jones <blakejones@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 3:49 PM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> Recently sched_switch tracepoint added a new argument for prev_state,
-> but it's hard to handle the change in a BPF program.  Instead, we can
-> check the function prototype in BTF before loading the program.
->
-> Thus I make two copies of the tracepoint handler and select one based
-> on the BTF info.
->
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> ---
->  tools/perf/util/bpf_off_cpu.c          | 32 +++++++++++++++
->  tools/perf/util/bpf_skel/off_cpu.bpf.c | 55 ++++++++++++++++++++------
->  2 files changed, 76 insertions(+), 11 deletions(-)
->
+Use pm_runtime_resume_and_get() to replace the pm_runtime_get_sync() and
+pm_runtime_put_noidle() pattern.
 
-[...]
+Pierre-Louis Bossart (5):
+  soundwire: qcom: return error when pm_runtime_get_sync fails
+  soundwire: bus: use pm_runtime_resume_and_get()
+  soundwire: cadence: use pm_runtime_resume_and_get()
+  soundwire: intel: use pm_runtime_resume_and_get()
+  soundwire: qcom: use pm_runtime_resume_and_get()
 
->
-> +SEC("tp_btf/sched_switch")
-> +int on_switch3(u64 *ctx)
-> +{
-> +       struct task_struct *prev, *next;
-> +       int state;
-> +
-> +       if (!enabled)
-> +               return 0;
-> +
-> +       /*
-> +        * TP_PROTO(bool preempt, struct task_struct *prev,
-> +        *          struct task_struct *next)
-> +        */
-> +       prev = (struct task_struct *)ctx[1];
-> +       next = (struct task_struct *)ctx[2];
+ drivers/soundwire/bus.c            | 15 +++++----------
+ drivers/soundwire/cadence_master.c |  5 ++---
+ drivers/soundwire/intel.c          |  5 ++---
+ drivers/soundwire/qcom.c           | 17 ++++++++---------
+ 4 files changed, 17 insertions(+), 25 deletions(-)
 
+-- 
+2.25.1
 
-you don't have to have two BPF programs for this, you can use
-read-only variable to make this choice.
-
-On BPF side
-
-const volatile bool has_prev_state = false;
-
-...
-
-if (has_prev_state) {
-    prev = (struct task_struct *)ctx[2];
-    next = (struct task_struct *)ctx[3];
-} else {
-    prev = (struct task_struct *)ctx[1];
-    next = (struct task_struct *)ctx[2];
-}
-
-
-And from user-space side you do your detection and before skeleton is loaded:
-
-skel->rodata->has_prev_state = <whatever you detected>
-
-But I'm still hoping that this prev_state argument can be moved to the
-end ([0]) to make all this unnecessary.
-
-  [0] https://lore.kernel.org/lkml/93a20759600c05b6d9e4359a1517c88e06b44834.camel@fb.com/
-
-
-> +
-> +       state = get_task_state(prev);
-> +
-> +       return on_switch(ctx, prev, next, state);
-> +}
-> +
-
-[...]

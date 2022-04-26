@@ -2,380 +2,450 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 780FB50FA1E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 12:20:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 414DF50FA2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 12:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348921AbiDZKVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 06:21:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54338 "EHLO
+        id S1348640AbiDZKVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 06:21:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348920AbiDZKVX (ORCPT
+        with ESMTP id S245268AbiDZKVQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 06:21:23 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5DB2314E
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 02:47:45 -0700 (PDT)
+        Tue, 26 Apr 2022 06:21:16 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E074A15709
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 02:47:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650966465; x=1682502465;
+  t=1650966432; x=1682502432;
   h=message-id:subject:from:to:cc:date:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=aRiNs49uXSuPV6IrUNQoGhKmdSG+oBCyK142TQ4rYxE=;
-  b=O+IulcvnSKqaS18ODcb9Zw2KHwZxBYkF3qjTzq8eFb18GORarbad4PE4
-   L1jghUpmLEPw5wotx8Pwk/R6W1Dq/dMwnMcGXB3nvI352qrd2Uo/st04j
-   LzV+Br+7vTJV+AAkDvTpfpSO4DdlMk5WXNeYLO9dGEYe8p0atE9XuYhRx
-   DhujRhOmxFcVYAkmbtqtpvMhyQqM0RwpGIY8YnWz8wQVV+B+nBGp4MVVu
-   ZK8Lr9jd2eJ4Ww9Xo0eu7HkRQmyzi0/4hLWsbVQ5FoOt41MI8I56jeYRS
-   tPoEcNPngSz/TcCXQgPUZADqFWRydh7s78R/nQvaLanVp+I5CnwJ82lBJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="245445607"
+  bh=/QVSnHEfasMkiULkC+nBIO20NmASDZmcOioM6biUzv8=;
+  b=RXirk2a8n4AnCGl8FN5XHIvf9nUisVYRdopKwqb0mfdld1N9Bcw77x3A
+   0o6ek6PNA18AV1OReDNsutUigLDWyGcZuvQVGzPdNXc5PTIrHwsvrgP+l
+   xHPM9PboegXPjkudJvdkflHmErLC02tFOGFZ1Ts8G/jt+Bo029Qw7JNie
+   RJSFwhG6XJv8qQ+CRXDcU/Qrnw1ypos50ZWhciJkQhCoFRx+D4Np7Pvth
+   O1WaQBSXnV2GlmKm4n541+6ie1pdTXL2cA6rW1rzuZ5damvdKyLQl6DGI
+   Pv/tAKraBSv//HDtloyQISbI6zZwMMi1IRb3K0kinkHzYgKOwsugPncnJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="252899163"
 X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="245445607"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 02:45:02 -0700
+   d="scan'208";a="252899163"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 02:47:12 -0700
 X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="579800829"
-Received: from yyu16-mobl.ccr.corp.intel.com ([10.254.212.128])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 02:44:58 -0700
-Message-ID: <391a797396b84c323ac350c8b1014fd4a5cca1ac.camel@intel.com>
-Subject: Re: [PATCH v2 0/5] mm: demotion: Introduce new node state
- N_DEMOTION_TARGETS
-From:   "ying.huang@intel.com" <ying.huang@intel.com>
-To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Greg Thelen <gthelen@google.com>,
-        MichalHocko <mhocko@kernel.org>,
-        Brice Goglin <brice.goglin@gmail.com>
-Date:   Tue, 26 Apr 2022 17:44:55 +0800
-In-Reply-To: <038e0e5f-2ac7-8afe-fae0-6974be68c7e3@linux.ibm.com>
-References: <CAAPL-u_pSWD6U0yQ8Ws+_Yfb_3ZEmNXJsYcRJjAFBkyDk=nq8g@mail.gmail.com>
-         <ea73f6fda9cafdd0cb6ba8351139e6f4b47354a8.camel@intel.com>
-         <CAAPL-u-aeceXFUNdok_GYb2aLhZa0zBBuSqHxFznQob3PbJt7Q@mail.gmail.com>
-         <a80647053bba44623094995730e061f0e6129677.camel@intel.com>
-         <CAAPL-u89Jxutu1VH0LnO5VGdMbkLvc2M9eapuwP-y9oG9QSsrA@mail.gmail.com>
-         <610ccaad03f168440ce765ae5570634f3b77555e.camel@intel.com>
-         <CAAPL-u9ktM82zAW_OVwqTmQsr-XC8XOPmAsjoiCLo18cxUWA=A@mail.gmail.com>
-         <8e31c744a7712bb05dbf7ceb2accf1a35e60306a.camel@intel.com>
-         <CAAPL-u9uP+FUh7Yn0ByOECo+EP32ZABnCvNPKQB9JCA68VHEqQ@mail.gmail.com>
-         <78b5f4cfd86efda14c61d515e4db9424e811c5be.camel@intel.com>
-         <YmKKwXa2XI/nwac0@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
-         <200e95cf36c1642512d99431014db8943fed715d.camel@intel.com>
-         <8735i1zurt.fsf@linux.ibm.com>
-         <ea9d01e16de655af85c0041c96964d83f59fb6d2.camel@intel.com>
-         <c576a992-5a50-5dd3-644c-a45d4338fc85@linux.ibm.com>
-         <9a0fe756ae3af78f2612dcf2df9673053a7ebab2.camel@intel.com>
-         <038e0e5f-2ac7-8afe-fae0-6974be68c7e3@linux.ibm.com>
+   d="scan'208";a="730173773"
+Received: from kculcasi-mobl2.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.59.214])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 02:47:09 -0700
+Message-ID: <5dabb285563c3eb06cf4a06ad264556c11ffc928.camel@intel.com>
+Subject: Re: [PATCH v4 3/3] x86/tdx: Add Quote generation support
+From:   Kai Huang <kai.huang@intel.com>
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org
+Date:   Tue, 26 Apr 2022 21:47:06 +1200
+In-Reply-To: <20220422233418.1203092-4-sathyanarayanan.kuppuswamy@linux.intel.com>
+References: <20220422233418.1203092-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <20220422233418.1203092-4-sathyanarayanan.kuppuswamy@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-26 at 14:32 +0530, Aneesh Kumar K V wrote:
-> On 4/26/22 2:12 PM, ying.huang@intel.com wrote:
-> > On Mon, 2022-04-25 at 13:39 +0530, Aneesh Kumar K V wrote:
-> > > On 4/25/22 11:40 AM, ying.huang@intel.com wrote:
-> > > > On Mon, 2022-04-25 at 09:20 +0530, Aneesh Kumar K.V wrote:
-> > > > > "ying.huang@intel.com" <ying.huang@intel.com> writes:
-> > > > > 
-> > > > > > Hi, All,
-> > > > > > 
-> > > > > > On Fri, 2022-04-22 at 16:30 +0530, Jagdish Gediya wrote:
-> > > > > > 
-> > > > > > [snip]
-> > > > > > 
-> > > > > > > I think it is necessary to either have per node demotion targets
-> > > > > > > configuration or the user space interface supported by this patch
-> > > > > > > series. As we don't have clear consensus on how the user interface
-> > > > > > > should look like, we can defer the per node demotion target set
-> > > > > > > interface to future until the real need arises.
-> > > > > > > 
-> > > > > > > Current patch series sets N_DEMOTION_TARGET from dax device kmem
-> > > > > > > driver, it may be possible that some memory node desired as demotion
-> > > > > > > target is not detected in the system from dax-device kmem probe path.
-> > > > > > > 
-> > > > > > > It is also possible that some of the dax-devices are not preferred as
-> > > > > > > demotion target e.g. HBM, for such devices, node shouldn't be set to
-> > > > > > > N_DEMOTION_TARGETS. In future, Support should be added to distinguish
-> > > > > > > such dax-devices and not mark them as N_DEMOTION_TARGETS from the
-> > > > > > > kernel, but for now this user space interface will be useful to avoid
-> > > > > > > such devices as demotion targets.
-> > > > > > > 
-> > > > > > > We can add read only interface to view per node demotion targets
-> > > > > > > from /sys/devices/system/node/nodeX/demotion_targets, remove
-> > > > > > > duplicated /sys/kernel/mm/numa/demotion_target interface and instead
-> > > > > > > make /sys/devices/system/node/demotion_targets writable.
-> > > > > > > 
-> > > > > > > Huang, Wei, Yang,
-> > > > > > > What do you suggest?
-> > > > > > 
-> > > > > > We cannot remove a kernel ABI in practice.  So we need to make it right
-> > > > > > at the first time.  Let's try to collect some information for the kernel
-> > > > > > ABI definitation.
-> > > > > > 
-> > > > > > The below is just a starting point, please add your requirements.
-> > > > > > 
-> > > > > > 1. Jagdish has some machines with DRAM only NUMA nodes, but they don't
-> > > > > > want to use that as the demotion targets.  But I don't think this is a
-> > > > > > issue in practice for now, because demote-in-reclaim is disabled by
-> > > > > > default.
-> > > > > 
-> > > > > It is not just that the demotion can be disabled. We should be able to
-> > > > > use demotion on a system where we can find DRAM only NUMA nodes. That
-> > > > > cannot be achieved by /sys/kernel/mm/numa/demotion_enabled. It needs
-> > > > > something similar to to N_DEMOTION_TARGETS
-> > > > > 
-> > > > 
-> > > > Can you show NUMA information of your machines with DRAM-only nodes and
-> > > > PMEM nodes?  We can try to find the proper demotion order for the
-> > > > system.  If you can not show it, we can defer N_DEMOTION_TARGETS until
-> > > > the machine is available.
-> > > 
-> > > 
-> > > Sure will find one such config. As you might have noticed this is very
-> > > easy to have in a virtualization setup because the hypervisor can assign
-> > > memory to a guest VM from a numa node that doesn't have CPU assigned to
-> > > the same guest. This depends on the other guest VM instance config
-> > > running on the system. So on any virtualization config that has got
-> > > persistent memory attached, this can become an easy config to end up with.
-> > > 
-> > 
-> > Why they want to do that?  I am looking forward to a real issue, not
-> > theoritical possibility.
-> > 
+On Fri, 2022-04-22 at 16:34 -0700, Kuppuswamy Sathyanarayanan wrote:
+> In TDX guest, the second stage in attestation process is quote
+> generation and signing. GetQuote hypercall can be used by the TD guest
+> to request VMM facilitate the quote generation via a Quoting Enclave
+> (QE). More details about GetQuote hypercall can be found in TDX
+> Guest-Host Communication Interface (GHCI) for Intel TDX 1.0, section
+> titled "TDG.VP.VMCALL<GetQuote>.
 > 
+> Since GetQuote is an asynchronous request hypercall, it will not block
+> till the quote is generated. So VMM uses callback interrupt vector
+> configured by SetupEventNotifyInterrupt hypercall to notify the guest
+> about quote generation completion or failure. Upon receiving the
+> completion notification, status can be found in the Quote data header.
 > 
-> Can you elaborate this more? That is a real config.
+> Add tdx_hcall_get_quote() helper function to implement the GetQuote
+> hypercall and add TDX_CMD_GEN_QUOTE IOCTL support to allow the user
+> agent request for quote generation.
 > 
+> When a user agent requests for quote generation, it is expected that
+> the user agent knows about the Quoting Enclave response time, and sets
+> a valid timeout value for the quote generation completion. Timeout
+> support is added to make sure the kernel does not wait for the
+> quote completion indefinitely.
 > 
-> > > 
-> > > > > > 2. For machines with PMEM installed in only 1 of 2 sockets, for example,
-> > > > > > 
-> > > > > > Node 0 & 2 are cpu + dram nodes and node 1 are slow
-> > > > > > memory node near node 0,
-> > > > > > 
-> > > > > > available: 3 nodes (0-2)
-> > > > > > node 0 cpus: 0 1
-> > > > > > node 0 size: n MB
-> > > > > > node 0 free: n MB
-> > > > > > node 1 cpus:
-> > > > > > node 1 size: n MB
-> > > > > > node 1 free: n MB
-> > > > > > node 2 cpus: 2 3
-> > > > > > node 2 size: n MB
-> > > > > > node 2 free: n MB
-> > > > > > node distances:
-> > > > > > node   0   1   2
-> > > > > >     0:  10  40  20
-> > > > > >     1:  40  10  80
-> > > > > >     2:  20  80  10
-> > > > > > 
-> > > > > > We have 2 choices,
-> > > > > > 
-> > > > > > a)
-> > > > > > node	demotion targets
-> > > > > > 0	1
-> > > > > > 2	1
-> > > > > 
-> > > > > This is achieved by
-> > > > > 
-> > > > > [PATCH v2 1/5] mm: demotion: Set demotion list differently
-> > > > > 
-> > > > > > 
-> > > > > > b)
-> > > > > > node	demotion targets
-> > > > > > 0	1
-> > > > > > 2	X
-> > > > > 
-> > > > > 
-> > > > > > 
-> > > > > > a) is good to take advantage of PMEM.  b) is good to reduce cross-socket
-> > > > > > traffic.  Both are OK as defualt configuration.  But some users may
-> > > > > > prefer the other one.  So we need a user space ABI to override the
-> > > > > > default configuration.
-> > > > > > 
-> > > > > > 3. For machines with HBM (High Bandwidth Memory), as in
-> > > > > > 
-> > > > > > https://lore.kernel.org/lkml/39cbe02a-d309-443d-54c9-678a0799342d@gmail.com/
-> > > > > > 
-> > > > > > > [1] local DDR = 10, remote DDR = 20, local HBM = 31, remote HBM = 41
-> > > > > > 
-> > > > > > Although HBM has better performance than DDR, in ACPI SLIT, their
-> > > > > > distance to CPU is longer.  We need to provide a way to fix this.  The
-> > > > > > user space ABI is one way.  The desired result will be to use local DDR
-> > > > > > as demotion targets of local HBM.
-> > > > > 
-> > > > > 
-> > > > > IMHO the above (2b and 3) can be done using per node demotion targets. Below is
-> > > > > what I think we could do with a single slow memory NUMA node 4.
-> > > > 
-> > > > If we can use writable per-node demotion targets as ABI, then we don't
-> > > > need N_DEMOTION_TARGETS.
-> > > 
-> > > 
-> > > Not sure I understand that. Yes, once you have a writeable per node
-> > > demotion target it is easy to build any demotion order.
-> > 
-> > Yes.
-> > 
-> > > But that doesn't
-> > > mean we should not improve the default unless you have reason to say
-> > > that using N_DEMOTTION_TARGETS breaks any existing config.
-> > > 
-> > 
-> > Becuase N_DEMOTTION_TARGETS is a new kernel ABI to override the default,
-> > not the default itself.  [1/5] of this patchset improve the default
-> > behavior itself, and I think that's good.
-> > 
+> Although GHCI specification does not restrict parallel GetQuote
+> requests, since quote generation is not in performance critical path
+> and the frequency of attestation requests are expected to be low, only
+> support serialized quote generation requests. Serialization support is
+> added via a mutex lock (attest_lock). Parallel quote request support
+> can be added once demand arises.
 > 
-> we are improving the default by using N_DEMOTION_TARGETS because the 
-> current default breaks configs which can get you memory only NUMA nodes. 
-> I would not consider it an override.
+> Reviewed-by: Tony Luck <tony.luck@intel.com>
+> Reviewed-by: Andi Kleen <ak@linux.intel.com>
+> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> ---
+>  arch/x86/coco/tdx/attest.c      | 118 +++++++++++++++++++++++++++++++-
+>  arch/x86/coco/tdx/tdx.c         |  37 ++++++++++
+>  arch/x86/include/asm/tdx.h      |   2 +
+>  arch/x86/include/uapi/asm/tdx.h |  36 ++++++++++
+>  4 files changed, 191 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/coco/tdx/attest.c b/arch/x86/coco/tdx/attest.c
+> index b776e81f6c20..d485163d3222 100644
+> --- a/arch/x86/coco/tdx/attest.c
+> +++ b/arch/x86/coco/tdx/attest.c
+> @@ -32,6 +32,11 @@
+>  static struct platform_device *pdev;
+>  static struct miscdevice miscdev;
+>  
+> +/* Completion object to track GetQuote completion status */
+> +static DECLARE_COMPLETION(req_compl);
+> +/* Mutex to serialize GetQuote requests */
+> +static DEFINE_MUTEX(quote_lock);
+> +
+>  static long tdx_get_tdreport(void __user *argp)
+>  {
+>  	void *report_buf = NULL, *tdreport_buf = NULL;
+> @@ -79,6 +84,95 @@ static long tdx_get_tdreport(void __user *argp)
+>  	return ret;
+>  }
+>  
+> +static long tdx_get_tdquote(void __user *argp)
+> +{
+> +	struct tdx_quote_hdr *quote_hdr;
+> +	struct tdx_quote_req quote_req;
+> +	void *quote_buf = NULL;
+> +	dma_addr_t handle;
+> +	long ret = 0, err;
+> +	u64 quote_buf_len;
+> +
+> +	mutex_lock(&quote_lock);
+> +
+> +	reinit_completion(&req_compl);
+> +
+> +	/* Copy Quote request struct from user buffer */
+> +	if (copy_from_user(&quote_req, argp, sizeof(struct tdx_quote_req)))
+> +		return -EFAULT;
+> +
+> +	/* Make sure the length & timeout is valid */
+> +	if (quote_req.len <= 0 || quote_req.timeout <= 0)
+> +		return -EINVAL;
+> +
+> +	/* Align with page size to meet 4K alignment */
+> +	quote_buf_len = PAGE_ALIGN(quote_req.len);
+> +
+> +	/*
+> +	 * Allocate DMA buffer to get TDQUOTE data from the VMM.
+> +	 * dma_alloc_coherent() API internally marks allocated
+> +	 * memory as shared with VMM. So explicit shared mapping is
+> +	 * not required.
+> +	 */
+> +	quote_buf = dma_alloc_coherent(&pdev->dev, quote_buf_len, &handle,
+> +					GFP_KERNEL | __GFP_ZERO);
+> +	if (!quote_buf) {
+> +		ret = -ENOMEM;
+> +		goto quote_failed;
+> +	}
+> +
+> +	/* Copy TDREPORT from user Quote data buffer to kernel Quote buffer */
+> +	if (copy_from_user(quote_buf, (void __user *)quote_req.buf, quote_req.len)) {
+> +		ret = -EFAULT;
+> +		goto quote_failed;
+> +	}
+
+So if I read correctly, you are depending on userspace to prepare the
+tdx_quote_hdr, right? 
+
+If so, should the driver check the correctness of the hdr? For instance, whether
+hdr.version == 1, etc?
+
+> +
+> +	/* Submit GetQuote Request */
+> +	err = tdx_hcall_get_quote(quote_buf, quote_buf_len);
+> +	if (err) {
+> +		/* if failed, copy hypercall error code to user buffer */
+> +		ret = put_user(err, (long __user *)argp);
+> +		ret = -EIO;
+> +		goto quote_failed;
+> +	}
+
+Similar to getting TDREPORT, is there any particular case that needs to pass
+TDVMCALL error code back to userspace?
+
+> +
+> +	/* Wait for attestation completion */
+> +	ret = wait_for_completion_interruptible_timeout(
+> +			&req_compl,
+> +			msecs_to_jiffies(quote_req.timeout));
+> +	if (ret <= 0) {
+> +		ret = -EIO;
+> +		goto quote_failed;
+> +	}
+> +
+> +	/* Copy generated Quote data back to user buffer */
+> +	if (copy_to_user((void __user *)quote_req.buf, quote_buf, quote_buf_len)) {
+> +		ret = -EFAULT;
+> +		goto quote_failed;
+> +	}
+> +
+> +	quote_hdr = (struct tdx_quote_hdr *)quote_buf;
+> +
+> +	/* Make sure quote generation is successful */
+> +	if (!quote_hdr->status)
+> +		ret = 0;
+> +	else
+> +		ret = -EIO;
+> +
+> +quote_failed:
+> +	if (quote_buf)
+> +		dma_free_coherent(&pdev->dev, quote_buf_len, quote_buf, handle);
+
+Will dma_free_coherent() convert the shared buffer back to private (using
+MapGPA)?
+
+If so, since it's possible to timeout, if the buffer still have IN_FLIGHT flag
+set (VMM is still using it), can we do it?
+
+Isaku, what will happen if guest uses MapGPA to convert a buffer back to private
+while it still has IN_FLIGHT set?
+
+> +
+> +	mutex_unlock(&quote_lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static void attestation_callback_handler(void)
+> +{
+> +	complete(&req_compl);
+> +}
+> +
+>  static long tdx_attest_ioctl(struct file *file, unsigned int cmd,
+>  			     unsigned long arg)
+>  {
+> @@ -89,6 +183,9 @@ static long tdx_attest_ioctl(struct file *file, unsigned int cmd,
+>  	case TDX_CMD_GET_TDREPORT:
+>  		ret = tdx_get_tdreport(argp);
+>  		break;
+> +	case TDX_CMD_GEN_QUOTE:
+> +		ret = tdx_get_tdquote(argp);
+> +		break;
+>  	default:
+>  		pr_err("cmd %d not supported\n", cmd);
+>  		break;
+> @@ -103,6 +200,14 @@ static const struct file_operations tdx_attest_fops = {
+>  	.llseek		= no_llseek,
+>  };
+>  
+> +/* Helper function to cleanup attestation related allocations */
+> +static void _tdx_attest_remove(void)
+> +{
+> +	misc_deregister(&miscdev);
+> +
+> +	tdx_remove_ev_notify_handler();
+> +}
+> +
+>  static int tdx_attest_probe(struct platform_device *attest_pdev)
+>  {
+>  	struct device *dev = &attest_pdev->dev;
+> @@ -114,6 +219,15 @@ static int tdx_attest_probe(struct platform_device *attest_pdev)
+>  
+>  	pdev = attest_pdev;
+>  
+> +	ret = dma_set_coherent_mask(dev, DMA_BIT_MASK(64));
+> +	if (ret) {
+> +		pr_err("dma set coherent mask failed\n");
+> +		goto failed;
+> +	}
+> +
+> +	/* Register attestation event notify handler */
+> +	tdx_setup_ev_notify_handler(attestation_callback_handler);
+> +
+>  	miscdev.name = DRIVER_NAME;
+>  	miscdev.minor = MISC_DYNAMIC_MINOR;
+>  	miscdev.fops = &tdx_attest_fops;
+> @@ -130,7 +244,7 @@ static int tdx_attest_probe(struct platform_device *attest_pdev)
+>  	return 0;
+>  
+>  failed:
+> -	misc_deregister(&miscdev);
+> +	_tdx_attest_remove();
+>  
+>  	pr_debug("module initialization failed\n");
+>  
+> @@ -139,7 +253,7 @@ static int tdx_attest_probe(struct platform_device *attest_pdev)
+>  
+>  static int tdx_attest_remove(struct platform_device *attest_pdev)
+>  {
+> -	misc_deregister(&miscdev);
+> +	_tdx_attest_remove();
+>  	pr_debug("module is successfully removed\n");
+>  	return 0;
+>  }
+> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+> index d0c62b94a1f6..cba22a8d4084 100644
+> --- a/arch/x86/coco/tdx/tdx.c
+> +++ b/arch/x86/coco/tdx/tdx.c
+> @@ -25,6 +25,7 @@
+>  
+>  /* TDX hypercall Leaf IDs */
+>  #define TDVMCALL_MAP_GPA		0x10001
+> +#define TDVMCALL_GET_QUOTE		0x10002
+>  #define TDVMCALL_SETUP_NOTIFY_INTR	0x10004
+>  
+>  /* MMIO direction */
+> @@ -214,6 +215,42 @@ static long tdx_hcall_set_notify_intr(u8 vector)
+>  	return 0;
+>  }
+>  
+> +/*
+> + * tdx_hcall_get_quote() - Request for TDQUOTE using TDREPORT.
+> + *
+> + * @data        : Address of 4KB aligned GPA memory which contains
+> + *                TDREPORT_STRUCT.
+> + * @len		: Length of the GPA in bytes.
+> + *
+> + * return 0 on success or failure error number.
+> + */
+> +long tdx_hcall_get_quote(void *data, u64 len)
+
+Rename data/len to something meaningful, i.e. quote_buf, quote_len ?
+
+> +{
+> +	u64 ret;
+> +
+> +	/*
+> +	 * Use confidential guest TDX check to ensure this API is only
+> +	 * used by TDX guest platforms.
+> +	 */
+> +	if (!data || !cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
+> +		return -EINVAL;
+
+The same comment to tdx_mcall_get_tdreport().  You can have a single check of
+X86_FEATURE_TDX_GUEST during driver initialization and refuse to initialize the
+driver if it's not.
+
+> +
+> +	/*
+> +	 * Pass the physical address of tdreport data to the VMM
+> +	 * and trigger the TDQUOTE generation. It is not a blocking
+
+I see there is inconsistency regarding to how to spell TD Quote.  I have seen
+TDQUOTE, TD QUOTE, quote, and Quote.  I guess we can have a unified way for
+this.  How about: Quote, or TD Quote (when you want to highlight TD)?
+
+> +	 * call, hence completion of this request will be notified to
+> +	 * the TD guest via a callback interrupt. More info about ABI
+> +	 * can be found in TDX Guest-Host-Communication Interface
+> +	 * (GHCI), sec titled "TDG.VP.VMCALL<GetQuote>".
+> +	 */
+> +	ret = _tdx_hypercall(TDVMCALL_GET_QUOTE, cc_mkdec(virt_to_phys(data)),
+> +			     len, 0, 0);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+>  static u64 get_cc_mask(void)
+>  {
+>  	struct tdx_module_output out;
+> diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
+> index 89ed09809c13..90c2a5f6c40c 100644
+> --- a/arch/x86/include/asm/tdx.h
+> +++ b/arch/x86/include/asm/tdx.h
+> @@ -73,6 +73,8 @@ void tdx_setup_ev_notify_handler(void (*handler)(void));
+>  
+>  void tdx_remove_ev_notify_handler(void);
+>  
+> +long tdx_hcall_get_quote(void *data, u64 len);
+> +
+>  #else
+>  
+>  static inline void tdx_early_init(void) { };
+> diff --git a/arch/x86/include/uapi/asm/tdx.h b/arch/x86/include/uapi/asm/tdx.h
+> index c21f9d6fe88b..69259b7841a9 100644
+> --- a/arch/x86/include/uapi/asm/tdx.h
+> +++ b/arch/x86/include/uapi/asm/tdx.h
+> @@ -20,4 +20,40 @@
+>   */
+>  #define TDX_CMD_GET_TDREPORT		_IOWR('T', 0x01, __u64)
+>  
+> +/*
+> + * TDX_CMD_GEN_QUOTE IOCTL is used to request TD QUOTE from the VMM. User
+
+Replace "TD QUOTE" to some consistent name.
+
+> + * should pass TD report data of size TDX_TDREPORT_LEN bytes via user input
+> + * buffer of quote size. 
 > 
 
-OK.  I guess that there is some misunderstanding here.  I thought that
-you refer to N_DEMOTION_TARGETS overriden via make the following file
-writable,
+This is not correct.  The data userspace put into the buffer is transparent to
+driver.  It's between userspace attestation agent and QE/QGS.  In fact, Intel's
+implementation has an additional header besides TDREPORT, and the whole data is
+encoded in proto2 format.
 
-  /sys/devices/system/node/demotion_targets
+> Once IOCTL is successful quote data is copied back to
+> + * the user buffer. On failure, TDCALL error code is copied back to the user
+> + * buffer.
 
-Now, I think you are referring to setting N_DEMOTION_TARGETS in kmem
-driver by default.  Sorry if I misunderstood you.
+The output data may be more than the Quote, the same as above.
 
-So, to be clear.  I am OK to restrict default demotion targets via kmem
-driver (we can improve this in the future with more source).  But I
-don't think it's good to make
+> + */
+> +#define TDX_CMD_GEN_QUOTE		_IOR('T', 0x02, __u64)
+> +
+> +struct tdx_quote_req {
+> +	/* Buffer address to store Quote data */
+> +	__u64 buf;
+> +	/* Length of the Quote buffer */
+> +	__u64 len;
+> +	/* Quote generation timeout value in ms */
+> +	__u32 timeout;
+> +};
+> +
+> +/*
+> + * Format of quote data header. More details can be found in
+> + * TDX Guest-Host Communication Interface (GHCI) for Intel TDX
+> + * 1.0, section titled "TDG.VP.VMCALL<GetQuote>"
+> + */
+> +struct tdx_quote_hdr {
+> +	/* Quote version, filled by TD */
+> +	__u64 version;
+> +	/* Status code of Quote request, filled by VMM */
+> +	__u64 status;
+> +	/* Length of TDREPORT, filled by TD */
+> +	__u32 in_len;
+> +	/* Length of Quote, filled by VMM */
+> +	__u32 out_len;
+> +	/* Actual Quote data */
+> +	__u64 data;
+> +};
 
-  /sys/devices/system/node/demotion_targets
-
-writable.  Instead, I think it's better to make
-
-  /sys/devices/system/node/nodeX/demotion_targets
-
-writable.
-
-> > Because we must maintain the kernel ABI almost for ever, we need to be
-> > careful about adding new ABI and add less if possible.  If writable per-
-> > node demotion targets can address your issue.  Then it's unnecessary to
-> > add another redundant kernel ABI for that.
-> 
-> This means on platform like powerpc, we would always need to have a 
-> userspace managed demotion because we can end up with memory only numa 
-> nodes for them. Why force that?
-
-Please take a look at the above.
+Needs to be '__u64 data[0]'.  The first 8B data isn't header.
 
 
-> > 
-> > > > > /sys/devices/system/node# cat node[0-4]/demotion_targets
-> > > > > 4
-> > > > > 4
-> > > > > 4
-> > > > > 4
-> > > > > 
-> > > > > /sys/devices/system/node# echo 1 > node1/demotion_targets
-> > > > > bash: echo: write error: Invalid argument
-> > > > > /sys/devices/system/node# cat node[0-4]/demotion_targets
-> > > > > 4
-> > > > > 4
-> > > > > 4
-> > > > > 4
-> > > > > 
-> > > > > /sys/devices/system/node# echo 0 > node1/demotion_targets
-> > > > > /sys/devices/system/node# cat node[0-4]/demotion_targets
-> > > > > 4
-> > > > > 0
-> > > > > 4
-> > > > > 4
-> > > > > 
-> > > > > /sys/devices/system/node# echo 1 > node0/demotion_targets
-> > > > > bash: echo: write error: Invalid argument
-> > > > > /sys/devices/system/node# cat node[0-4]/demotion_targets
-> > > > > 4
-> > > > > 0
-> > > > > 4
-> > > > > 4
-> > > > > 
-> > > > > Disable demotion for a specific node.
-> > > > > /sys/devices/system/node# echo > node1/demotion_targets
-> > > > > /sys/devices/system/node# cat node[0-4]/demotion_targets
-> > > > > 4
-> > > > > 
-> > > > > 4
-> > > > > 4
-> > > > > 
-> > > > > Reset demotion to default
-> > > > > /sys/devices/system/node# echo -1 > node1/demotion_targets
-> > > > > /sys/devices/system/node# cat node[0-4]/demotion_targets
-> > > > > 4
-> > > > > 4
-> > > > > 4
-> > > > > 4
-> > > > > 
-> > > > > When a specific device/NUMA node is used for demotion target via the user interface, it is taken
-> > > > > out of other NUMA node targets.
-> > > > 
-> > > > IMHO, we should be careful about interaction between auto-generated and
-> > > > overridden demotion order.
-> > > > 
-> > > 
-> > > yes, we should avoid loop between that.
-> > 
-> > In addition to that, we need to get same result after hot-remove then
-> > hot-add the same node.  That is, the result should be stable after NOOP.
-> > I guess we can just always,
-> > 
-> > - Generate the default demotion order automatically without any
-> > overriding.
-> > 
-> > - Apply the overriding, after removing the invalid targets, etc.
-> > 
-> > > But if you agree for the above
-> > > ABI we could go ahead and share the implementation code.
-> > 
-> > I think we need to add a way to distinguish auto-generated and overriden
-> > demotion targets in the output of nodeX/demotion_targets.  Otherwise it
-> > looks good to me.
-> > 
-> 
-> 
-> something like:
-> 
-> /sys/devices/system/node# echo 4 > node1/demotion_targets
-> /sys/devices/system/node# cat node[0-4]/demotion_targets
-> -
-> 4 (userspace override)
-> -
-> -
-> -
-> 
 
-Or
-
-/sys/devices/system/node# echo 4 > node1/demotion_targets
-/sys/devices/system/node# cat node[0-4]/demotion_targets
--
-*4
--
--
--
-
-Best Regards,
-Huang, Ying
+-- 
+Thanks,
+-Kai
 
 

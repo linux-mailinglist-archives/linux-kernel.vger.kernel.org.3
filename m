@@ -2,402 +2,473 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B5A25103D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64EA851042C
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:47:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353092AbiDZQqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 12:46:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35794 "EHLO
+        id S1353245AbiDZQtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 12:49:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235613AbiDZQqv (ORCPT
+        with ESMTP id S1353197AbiDZQs2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 12:46:51 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C4347058;
-        Tue, 26 Apr 2022 09:43:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650991422; x=1682527422;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=74prdzNGj3JnjJUS0sO17DGbGa0TVADKS42cC0+9fsE=;
-  b=f/EJCh2m7C3hjhwNlZtLKlSc3DKoQcgimbs+kNeIGd5ypM/vJ965ggK1
-   421Om5acnj5l7jH52nz/oid/cTPIDzUGekVo0sBGYAfdAwcUAtZB5TiSP
-   ueryDteaUTSBdNOFlNuyFu7ZRlyJj+fy5R59uSoXkJch6gSpx+a4Fe1ye
-   KQA1rvf1dL7+U8FCzBi2wbSfV/MqQEAyhGbToma31Exxia2PoN7BYXXdj
-   c4qA/p3vHNS26rengRu2ksLtyXQkFsWOxuBAz0hJHgLQyPMRhy11wyz6v
-   ovQ/IzukApS5jTkzKnw/2EzwG+IB2Mh8KXxfDh18vK2XOocUBRfvhjGiS
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="352088884"
-X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="352088884"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 09:40:54 -0700
-X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="513243859"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 09:40:54 -0700
-Date:   Tue, 26 Apr 2022 09:44:32 -0700
-From:   Jacob Pan <jacob.jun.pan@intel.com>
-To:     Alex Deucher <alexander.deucher@amd.com>
-Cc:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <corbet@lwn.net>, <hpa@zytor.com>, <x86@kernel.org>,
-        <dave.hansen@linux.intel.com>, <bp@alien8.de>, <mingo@redhat.com>,
-        <tglx@linutronix.de>, <joro@8bytes.org>,
-        <Suravee.Suthikulpanit@amd.com>, <will@kernel.org>,
-        <iommu@lists.linux-foundation.org>, <robin.murphy@arm.com>,
-        <Vasant.Hegde@amd.com>, jacob.jun.pan@intel.com,
-        "Lu, Baolu" <baolu.lu@intel.com>
-Subject: Re: [PATCH] Documentation: x86: rework IOMMU documentation
-Message-ID: <20220426094432.2970966f@jacob-builder>
-In-Reply-To: <20220422200607.627754-1-alexander.deucher@amd.com>
-References: <20220422200607.627754-1-alexander.deucher@amd.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Tue, 26 Apr 2022 12:48:28 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF56B1971D3
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:44:53 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2f7b815ac06so112752247b3.3
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:44:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5YolzdQ/RaN8zb0z3UYC2BCPtKKY0DsygYzdEZGVsM0=;
+        b=qu3w9Lv2oWpOlpIS2xz0KvlAo7E5o1egJykT9lEmP91l+7c7eNPiBayrSE4JldqRXk
+         nseiaMmX1ADDvf7UqworHmjxLdYLC1nio33HJwAHLVqWq0KXQHtsko+se8VsmvKRCW6y
+         6xqkGZCp0ykwvdZEho43RBuZzpqswp1SK9l8uhTOVS/jGgxWzoqCtIas2fULzckaP951
+         x4m2Ac7KWIK9e/wW4JFNN312PtTAvllgLzE2cWPFhQbFQqFiuBxBWJWU+Naeth1P8Ygy
+         QbegkZq+iqzT/TYYEGoS5Je2Tx79qoU230sQRbhBqQ9r0S0kdcGLrdPLoz8m0RViMJJA
+         YEZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5YolzdQ/RaN8zb0z3UYC2BCPtKKY0DsygYzdEZGVsM0=;
+        b=7Mjn3BfVsdbaJXWE3QQ56nHkYZhQTwpb0LC1MlvZrzw8eyULdmfqtMizlMEfSqtePZ
+         J5JVO05kP16S+3gUzJqzSp3BvAz5aT9C8e5k+iV6WITW+f046oR/uXluj7AoVQgnXuZk
+         fBKwI2XXjiBu8MM4+Rw/BqZkDZTrkVd1N35uI/BhKtkOkSZjyBykZlG8WdfJ+DWTFnTn
+         owGmYxEeqrlZ7bQ7q4LgKpdxNE2C/4tzCh8GuIbdfwh0qPEvbaAMRgh1KwVZsZDASGK8
+         LlXyLY1q12MA2XE9bTsd3AzkBXHuCr+rsIp546Mo0AIs9t8TkoWbqA+dPMmkNIL1Q2nr
+         b44g==
+X-Gm-Message-State: AOAM530zp33VlHwEUaU3phu4VbrjUEJnkbm825TsAufticdZgzoW0n1H
+        sNM+Z4LB7TMJ3CAAn73lIePJOi1UXnd4vmvPuyJVyv42J/o=
+X-Google-Smtp-Source: ABdhPJz6BMs3qL8FDXmrDnMspHrNQaTNpkNxjAWAvdmrAI5sNxKMjMbbC2HHYX6VSjRctHs6oHrQwLCemyMjKC53sZA=
+X-Received: by 2002:a81:af59:0:b0:2f4:d869:b5df with SMTP id
+ x25-20020a81af59000000b002f4d869b5dfmr23414994ywj.367.1650991492557; Tue, 26
+ Apr 2022 09:44:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220423000328.2103733-1-rananta@google.com> <20220423000328.2103733-3-rananta@google.com>
+ <bbaf7dcf-e776-49df-7a12-04b45e4af881@redhat.com>
+In-Reply-To: <bbaf7dcf-e776-49df-7a12-04b45e4af881@redhat.com>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Tue, 26 Apr 2022 09:44:41 -0700
+Message-ID: <CAJHc60w6YngA7iz=mUfjAEjQdwjG_pj2T9Cpd21xzU1Y_APCwQ@mail.gmail.com>
+Subject: Re: [PATCH v6 2/9] KVM: arm64: Setup a framework for hypercall bitmap
+ firmware registers
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        kvm@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+        Peter Shier <pshier@google.com>, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Will Deacon <will@kernel.org>, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alex,
+Hi Gavin,
 
-Thanks for doing this, really helps to catch up the current state. Please
-see my comments inline.
+On Mon, Apr 25, 2022 at 11:34 PM Gavin Shan <gshan@redhat.com> wrote:
+>
+> Hi Raghavendra,
+>
+> On 4/23/22 8:03 AM, Raghavendra Rao Ananta wrote:
+> > KVM regularly introduces new hypercall services to the guests without
+> > any consent from the userspace. This means, the guests can observe
+> > hypercall services in and out as they migrate across various host
+> > kernel versions. This could be a major problem if the guest
+> > discovered a hypercall, started using it, and after getting migrated
+> > to an older kernel realizes that it's no longer available. Depending
+> > on how the guest handles the change, there's a potential chance that
+> > the guest would just panic.
+> >
+> > As a result, there's a need for the userspace to elect the services
+> > that it wishes the guest to discover. It can elect these services
+> > based on the kernels spread across its (migration) fleet. To remedy
+> > this, extend the existing firmware pseudo-registers, such as
+> > KVM_REG_ARM_PSCI_VERSION, but by creating a new COPROC register space
+> > for all the hypercall services available.
+> >
+> > These firmware registers are categorized based on the service call
+> > owners, but unlike the existing firmware pseudo-registers, they hold
+> > the features supported in the form of a bitmap.
+> >
+> > During the VM initialization, the registers are set to upper-limit of
+> > the features supported by the corresponding registers. It's expected
+> > that the VMMs discover the features provided by each register via
+> > GET_ONE_REG, and write back the desired values using SET_ONE_REG.
+> > KVM allows this modification only until the VM has started.
+> >
+> > Some of the standard features are not mapped to any bits of the
+> > registers. But since they can recreate the original problem of
+> > making it available without userspace's consent, they need to
+> > be explicitly added to the case-list in
+> > kvm_hvc_call_default_allowed(). Any function-id that's not enabled
+> > via the bitmap, or not listed in kvm_hvc_call_default_allowed, will
+> > be returned as SMCCC_RET_NOT_SUPPORTED to the guest.
+> >
+> > Older userspace code can simply ignore the feature and the
+> > hypercall services will be exposed unconditionally to the guests,
+> > thus ensuring backward compatibility.
+> >
+> > In this patch, the framework adds the register only for ARM's standard
+> > secure services (owner value 4). Currently, this includes support only
+> > for ARM True Random Number Generator (TRNG) service, with bit-0 of the
+> > register representing mandatory features of v1.0. Other services are
+> > momentarily added in the upcoming patches.
+> >
+> > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> > ---
+> >   arch/arm64/include/asm/kvm_host.h | 12 ++++
+> >   arch/arm64/include/uapi/asm/kvm.h |  9 +++
+> >   arch/arm64/kvm/arm.c              |  1 +
+> >   arch/arm64/kvm/guest.c            |  8 ++-
+> >   arch/arm64/kvm/hypercalls.c       | 94 +++++++++++++++++++++++++++++++
+> >   arch/arm64/kvm/psci.c             | 13 +++++
+> >   include/kvm/arm_hypercalls.h      |  6 ++
+> >   include/kvm/arm_psci.h            |  2 +-
+> >   8 files changed, 142 insertions(+), 3 deletions(-)
+> >
+>
+> Some nits as below, please consider to improve if you need another
+> respin.
+>
+> Reviewed-by: Gavin Shan <gshan@redhat.com>
+>
+> > diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> > index 94a27a7520f4..df07f4c10197 100644
+> > --- a/arch/arm64/include/asm/kvm_host.h
+> > +++ b/arch/arm64/include/asm/kvm_host.h
+> > @@ -101,6 +101,15 @@ struct kvm_s2_mmu {
+> >   struct kvm_arch_memory_slot {
+> >   };
+> >
+> > +/**
+> > + * struct kvm_smccc_features: Descriptor the hypercall services exposed to the guests
+> > + *
+> > + * @std_bmap: Bitmap of standard secure service calls
+> > + */
+> > +struct kvm_smccc_features {
+> > +     unsigned long std_bmap;
+> > +};
+> > +
+>
+> s/Descriptor/Descriptor of
+>
+Nice catch!
 
-On Fri, 22 Apr 2022 16:06:07 -0400, Alex Deucher
-<alexander.deucher@amd.com> wrote:
+> >   struct kvm_arch {
+> >       struct kvm_s2_mmu mmu;
+> >
+> > @@ -150,6 +159,9 @@ struct kvm_arch {
+> >
+> >       u8 pfr0_csv2;
+> >       u8 pfr0_csv3;
+> > +
+> > +     /* Hypercall features firmware registers' descriptor */
+> > +     struct kvm_smccc_features smccc_feat;
+> >   };
+> >
+> >   struct kvm_vcpu_fault_info {
+> > diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
+> > index c1b6ddc02d2f..0b79d2dc6ffd 100644
+> > --- a/arch/arm64/include/uapi/asm/kvm.h
+> > +++ b/arch/arm64/include/uapi/asm/kvm.h
+> > @@ -332,6 +332,15 @@ struct kvm_arm_copy_mte_tags {
+> >   #define KVM_ARM64_SVE_VLS_WORDS     \
+> >       ((KVM_ARM64_SVE_VQ_MAX - KVM_ARM64_SVE_VQ_MIN) / 64 + 1)
+> >
+> > +/* Bitmap feature firmware registers */
+> > +#define KVM_REG_ARM_FW_FEAT_BMAP             (0x0016 << KVM_REG_ARM_COPROC_SHIFT)
+> > +#define KVM_REG_ARM_FW_FEAT_BMAP_REG(r)              (KVM_REG_ARM64 | KVM_REG_SIZE_U64 | \
+> > +                                             KVM_REG_ARM_FW_FEAT_BMAP |      \
+> > +                                             ((r) & 0xffff))
+> > +
+> > +#define KVM_REG_ARM_STD_BMAP                 KVM_REG_ARM_FW_FEAT_BMAP_REG(0)
+> > +#define KVM_REG_ARM_STD_BIT_TRNG_V1_0                0
+> > +
+> >   /* Device Control API: ARM VGIC */
+> >   #define KVM_DEV_ARM_VGIC_GRP_ADDR   0
+> >   #define KVM_DEV_ARM_VGIC_GRP_DIST_REGS      1
+> > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> > index 523bc934fe2f..a37fadbd617e 100644
+> > --- a/arch/arm64/kvm/arm.c
+> > +++ b/arch/arm64/kvm/arm.c
+> > @@ -156,6 +156,7 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
+> >       kvm->arch.max_vcpus = kvm_arm_default_max_vcpus();
+> >
+> >       set_default_spectre(kvm);
+> > +     kvm_arm_init_hypercalls(kvm);
+> >
+> >       return ret;
+> >   out_free_stage2_pgd:
+> > diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
+> > index 0d5cca56cbda..8c607199cad1 100644
+> > --- a/arch/arm64/kvm/guest.c
+> > +++ b/arch/arm64/kvm/guest.c
+> > @@ -756,7 +756,9 @@ int kvm_arm_get_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+> >
+> >       switch (reg->id & KVM_REG_ARM_COPROC_MASK) {
+> >       case KVM_REG_ARM_CORE:  return get_core_reg(vcpu, reg);
+> > -     case KVM_REG_ARM_FW:    return kvm_arm_get_fw_reg(vcpu, reg);
+> > +     case KVM_REG_ARM_FW:
+> > +     case KVM_REG_ARM_FW_FEAT_BMAP:
+> > +             return kvm_arm_get_fw_reg(vcpu, reg);
+> >       case KVM_REG_ARM64_SVE: return get_sve_reg(vcpu, reg);
+> >       }
+> >
+> > @@ -774,7 +776,9 @@ int kvm_arm_set_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+> >
+> >       switch (reg->id & KVM_REG_ARM_COPROC_MASK) {
+> >       case KVM_REG_ARM_CORE:  return set_core_reg(vcpu, reg);
+> > -     case KVM_REG_ARM_FW:    return kvm_arm_set_fw_reg(vcpu, reg);
+> > +     case KVM_REG_ARM_FW:
+> > +     case KVM_REG_ARM_FW_FEAT_BMAP:
+> > +             return kvm_arm_set_fw_reg(vcpu, reg);
+> >       case KVM_REG_ARM64_SVE: return set_sve_reg(vcpu, reg);
+> >       }
+> >
+> > diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
+> > index fa6d9378d8e7..df55a04d2fe8 100644
+> > --- a/arch/arm64/kvm/hypercalls.c
+> > +++ b/arch/arm64/kvm/hypercalls.c
+> > @@ -58,6 +58,48 @@ static void kvm_ptp_get_time(struct kvm_vcpu *vcpu, u64 *val)
+> >       val[3] = lower_32_bits(cycles);
+> >   }
+> >
+> > +static bool kvm_arm_fw_reg_feat_enabled(unsigned long *reg_bmap, unsigned long feat_bit)
+> > +{
+> > +     return test_bit(feat_bit, reg_bmap);
+> > +}
+> > +
+>
+> Might be worhty to be 'inline'. This function would be called
+> frequently.
+>
+I was hoping the compiler would optimize it for us as needed.
 
-> Add preliminary documentation for AMD IOMMU and combine
-> with the existing Intel IOMMU documentation and clean
-> up and modernize some of the existing documentation to
-> align with the current state of the kernel.
-> 
-> Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-> ---
-> 
-> V2: Incorporate feedback from Robin to clarify IOMMU vs DMA engine (e.g.,
->     a device) and document proper DMA API.  Also correct the fact that
->     the AMD IOMMU is not limited to managing PCI devices.
-> v3: Fix spelling and rework text as suggested by Vasant
-> v4: Combine Intel and AMD documents into a single document as suggested
->     by Dave Hansen
-> v5: Clarify that keywords are related to ACPI, grammatical fixes
-> v6: Make more stuff common based on feedback from Robin
-> 
->  Documentation/x86/index.rst       |   2 +-
->  Documentation/x86/intel-iommu.rst | 115 ------------------------
->  Documentation/x86/iommu.rst       | 143 ++++++++++++++++++++++++++++++
->  3 files changed, 144 insertions(+), 116 deletions(-)
->  delete mode 100644 Documentation/x86/intel-iommu.rst
->  create mode 100644 Documentation/x86/iommu.rst
-> 
-> diff --git a/Documentation/x86/index.rst b/Documentation/x86/index.rst
-> index f498f1d36cd3..6f8409fe0674 100644
-> --- a/Documentation/x86/index.rst
-> +++ b/Documentation/x86/index.rst
-> @@ -21,7 +21,7 @@ x86-specific Documentation
->     tlb
->     mtrr
->     pat
-> -   intel-iommu
-> +   iommu
->     intel_txt
->     amd-memory-encryption
->     pti
-> diff --git a/Documentation/x86/intel-iommu.rst
-> b/Documentation/x86/intel-iommu.rst deleted file mode 100644
-> index 099f13d51d5f..000000000000
-> --- a/Documentation/x86/intel-iommu.rst
-> +++ /dev/null
-> @@ -1,115 +0,0 @@
-> -===================
-> -Linux IOMMU Support
-> -===================
-> -
-> -The architecture spec can be obtained from the below location.
-> -
-> -http://www.intel.com/content/dam/www/public/us/en/documents/product-specifications/vt-directed-io-spec.pdf
-> -
-> -This guide gives a quick cheat sheet for some basic understanding.
-> -
-> -Some Keywords
-> -
-> -- DMAR - DMA remapping
-> -- DRHD - DMA Remapping Hardware Unit Definition
-> -- RMRR - Reserved memory Region Reporting Structure
-> -- ZLR  - Zero length reads from PCI devices
-> -- IOVA - IO Virtual address.
-> -
-I feel this combined document only focus on IOVA and DMA APIs, it is
-considered as legacy DMA after scalable mode is introduced by Intel to
-support DMA with PASID, shared virtual addressing (SVA).
-Perhaps, we can also combine ./Documentation/x86/sva.rst
+> > +static bool kvm_hvc_call_default_allowed(struct kvm_vcpu *vcpu, u32 func_id)
+> > +{
+> > +     switch (func_id) {
+> > +     /*
+> > +      * List of function-ids that are not gated with the bitmapped feature
+> > +      * firmware registers, and are to be allowed for servicing the call by default.
+> > +      */
+> > +     case ARM_SMCCC_VERSION_FUNC_ID:
+> > +     case ARM_SMCCC_ARCH_FEATURES_FUNC_ID:
+> > +     case ARM_SMCCC_HV_PV_TIME_FEATURES:
+> > +     case ARM_SMCCC_HV_PV_TIME_ST:
+> > +     case ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID:
+> > +     case ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID:
+> > +     case ARM_SMCCC_VENDOR_HYP_KVM_PTP_FUNC_ID:
+> > +             return true;
+> > +     default:
+> > +             return kvm_psci_func_id_is_valid(vcpu, func_id);
+> > +     }
+> > +}
+> > +
+> > +static bool kvm_hvc_call_allowed(struct kvm_vcpu *vcpu, u32 func_id)
+> > +{
+> > +     struct kvm_smccc_features *smccc_feat = &vcpu->kvm->arch.smccc_feat;
+> > +
+> > +     switch (func_id) {
+> > +     case ARM_SMCCC_TRNG_VERSION:
+> > +     case ARM_SMCCC_TRNG_FEATURES:
+> > +     case ARM_SMCCC_TRNG_GET_UUID:
+> > +     case ARM_SMCCC_TRNG_RND32:
+> > +     case ARM_SMCCC_TRNG_RND64:
+> > +             return kvm_arm_fw_reg_feat_enabled(&smccc_feat->std_bmap,
+> > +                                             KVM_REG_ARM_STD_BIT_TRNG_V1_0);
+> > +     default:
+> > +             return kvm_hvc_call_default_allowed(vcpu, func_id);
+> > +     }
+> > +}
+> > +
+> >   int kvm_hvc_call_handler(struct kvm_vcpu *vcpu)
+> >   {
+> >       u32 func_id = smccc_get_function(vcpu);
+> > @@ -65,6 +107,9 @@ int kvm_hvc_call_handler(struct kvm_vcpu *vcpu)
+> >       u32 feature;
+> >       gpa_t gpa;
+> >
+> > +     if (!kvm_hvc_call_allowed(vcpu, func_id))
+> > +             goto out;
+> > +
+> >       switch (func_id) {
+> >       case ARM_SMCCC_VERSION_FUNC_ID:
+> >               val[0] = ARM_SMCCC_VERSION_1_1;
+> > @@ -155,6 +200,7 @@ int kvm_hvc_call_handler(struct kvm_vcpu *vcpu)
+> >               return kvm_psci_call(vcpu);
+> >       }
+> >
+> > +out:
+> >       smccc_set_retval(vcpu, val[0], val[1], val[2], val[3]);
+> >       return 1;
+> >   }
+> > @@ -164,8 +210,16 @@ static const u64 kvm_arm_fw_reg_ids[] = {
+> >       KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1,
+> >       KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2,
+> >       KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3,
+> > +     KVM_REG_ARM_STD_BMAP,
+> >   };
+> >
+> > +void kvm_arm_init_hypercalls(struct kvm *kvm)
+> > +{
+> > +     struct kvm_smccc_features *smccc_feat = &kvm->arch.smccc_feat;
+> > +
+> > +     smccc_feat->std_bmap = KVM_ARM_SMCCC_STD_FEATURES;
+> > +}
+> > +
+> >   int kvm_arm_get_fw_num_regs(struct kvm_vcpu *vcpu)
+> >   {
+> >       return ARRAY_SIZE(kvm_arm_fw_reg_ids);
+> > @@ -237,6 +291,7 @@ static int get_kernel_wa_level(u64 regid)
+> >
+> >   int kvm_arm_get_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+> >   {
+> > +     struct kvm_smccc_features *smccc_feat = &vcpu->kvm->arch.smccc_feat;
+> >       void __user *uaddr = (void __user *)(long)reg->addr;
+> >       u64 val;
+> >
+> > @@ -249,6 +304,9 @@ int kvm_arm_get_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+> >       case KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3:
+> >               val = get_kernel_wa_level(reg->id) & KVM_REG_FEATURE_LEVEL_MASK;
+> >               break;
+> > +     case KVM_REG_ARM_STD_BMAP:
+> > +             val = READ_ONCE(smccc_feat->std_bmap);
+> > +             break;
+> >       default:
+> >               return -ENOENT;
+> >       }
+> > @@ -259,6 +317,40 @@ int kvm_arm_get_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+> >       return 0;
+> >   }
+> >
+> > +static int kvm_arm_set_fw_reg_bmap(struct kvm_vcpu *vcpu, u64 reg_id, u64 val)
+> > +{
+> > +     int ret = 0;
+> > +     struct kvm *kvm = vcpu->kvm;
+> > +     struct kvm_smccc_features *smccc_feat = &kvm->arch.smccc_feat;
+> > +     unsigned long *fw_reg_bmap, fw_reg_features;
+> > +
+> > +     switch (reg_id) {
+> > +     case KVM_REG_ARM_STD_BMAP:
+> > +             fw_reg_bmap = &smccc_feat->std_bmap;
+> > +             fw_reg_features = KVM_ARM_SMCCC_STD_FEATURES;
+> > +             break;
+> > +     default:
+> > +             return -ENOENT;
+> > +     }
+> > +
+> > +     /* Check for unsupported bit */
+> > +     if (val & ~fw_reg_features)
+> > +             return -EINVAL;
+> > +
+> > +     mutex_lock(&kvm->lock);
+> > +
+> > +     /* Return -EBUSY if the VM (any vCPU) has already started running. */
+> > +     if (test_bit(KVM_ARCH_FLAG_HAS_RAN_ONCE, &kvm->arch.flags)) {
+> > +             ret = -EBUSY;
+> > +             goto out;
+> > +     }
+> > +
+> > +     WRITE_ONCE(*fw_reg_bmap, val);
+> > +out:
+> > +     mutex_unlock(&kvm->lock);
+> > +     return ret;
+> > +}
+> > +
+> >   int kvm_arm_set_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+> >   {
+> >       void __user *uaddr = (void __user *)(long)reg->addr;
+> > @@ -337,6 +429,8 @@ int kvm_arm_set_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+> >                       return -EINVAL;
+> >
+> >               return 0;
+> > +     case KVM_REG_ARM_STD_BMAP:
+> > +             return kvm_arm_set_fw_reg_bmap(vcpu, reg->id, val);
+> >       default:
+> >               return -ENOENT;
+> >       }
+> > diff --git a/arch/arm64/kvm/psci.c b/arch/arm64/kvm/psci.c
+> > index 346535169faa..67d1273e8086 100644
+> > --- a/arch/arm64/kvm/psci.c
+> > +++ b/arch/arm64/kvm/psci.c
+> > @@ -436,3 +436,16 @@ int kvm_psci_call(struct kvm_vcpu *vcpu)
+> >               return -EINVAL;
+> >       }
+> >   }
+> > +
+> > +bool kvm_psci_func_id_is_valid(struct kvm_vcpu *vcpu, u32 func_id)
+> > +{
+> > +     /* PSCI 0.1 doesn't comply with the standard SMCCC */
+> > +     if (kvm_psci_version(vcpu) == KVM_ARM_PSCI_0_1)
+> > +             return (func_id == KVM_PSCI_FN_CPU_OFF || func_id == KVM_PSCI_FN_CPU_ON);
+> > +
+> > +     if (ARM_SMCCC_OWNER_NUM(func_id) == ARM_SMCCC_OWNER_STANDARD &&
+> > +             ARM_SMCCC_FUNC_NUM(func_id) >= 0 && ARM_SMCCC_FUNC_NUM(func_id) <= 0x1f)
+> > +             return true;
+> > +
+> > +     return false;
+> > +}
+> > diff --git a/include/kvm/arm_hypercalls.h b/include/kvm/arm_hypercalls.h
+> > index 5d38628a8d04..499b45b607b6 100644
+> > --- a/include/kvm/arm_hypercalls.h
+> > +++ b/include/kvm/arm_hypercalls.h
+> > @@ -6,6 +6,11 @@
+> >
+> >   #include <asm/kvm_emulate.h>
+> >
+> > +/* Last valid bits of the bitmapped firmware registers */
+> > +#define KVM_REG_ARM_STD_BMAP_BIT_MAX         0
+> > +
+> > +#define KVM_ARM_SMCCC_STD_FEATURES           GENMASK(KVM_REG_ARM_STD_BMAP_BIT_MAX, 0)
+> > +
+>
+> s/bits of/bit of
+>
+Great catch again!
 
-With scalable mode, it affects boot messages, fault reporting, etc. I am
-not saying no to this document, just suggesting. I don't know where AMD is
-at in terms of PASID support but there are lots of things in common between
-VT-d and ARM's SMMU in terms of PASID/SVA. Should we broaden the purpose of
-this document even further?
+> >   int kvm_hvc_call_handler(struct kvm_vcpu *vcpu);
+> >
+> >   static inline u32 smccc_get_function(struct kvm_vcpu *vcpu)
+> > @@ -42,6 +47,7 @@ static inline void smccc_set_retval(struct kvm_vcpu *vcpu,
+> >
+> >   struct kvm_one_reg;
+> >
+> > +void kvm_arm_init_hypercalls(struct kvm *kvm);
+> >   int kvm_arm_get_fw_num_regs(struct kvm_vcpu *vcpu);
+> >   int kvm_arm_copy_fw_reg_indices(struct kvm_vcpu *vcpu, u64 __user *uindices);
+> >   int kvm_arm_get_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg);
+> > diff --git a/include/kvm/arm_psci.h b/include/kvm/arm_psci.h
+> > index 6e55b9283789..c47be3e26965 100644
+> > --- a/include/kvm/arm_psci.h
+> > +++ b/include/kvm/arm_psci.h
+> > @@ -36,7 +36,7 @@ static inline int kvm_psci_version(struct kvm_vcpu *vcpu)
+> >       return KVM_ARM_PSCI_0_1;
+> >   }
+> >
+> > -
+> >   int kvm_psci_call(struct kvm_vcpu *vcpu);
+> > +bool kvm_psci_func_id_is_valid(struct kvm_vcpu *vcpu, u32 func_id);
+> >
+> >   #endif /* __KVM_ARM_PSCI_H__ */
+> >
+>
+> Thanks,
+> Gavin
+>
 
-> -Basic stuff
-> ------------
-> -
-> -ACPI enumerates and lists the different DMA engines in the platform, and
-> -device scope relationships between PCI devices and which DMA engine
-> controls -them.
-> -
-> -What is RMRR?
-> --------------
-> -
-> -There are some devices the BIOS controls, for e.g USB devices to perform
-> -PS2 emulation. The regions of memory used for these devices are marked
-> -reserved in the e820 map. When we turn on DMA translation, DMA to those
-> -regions will fail. Hence BIOS uses RMRR to specify these regions along
-> with -devices that need to access these regions. OS is expected to setup
-> -unity mappings for these regions for these devices to access these
-> regions. -
-> -How is IOVA generated?
-> -----------------------
-> -
-> -Well behaved drivers call pci_map_*() calls before sending command to
-> device -that needs to perform DMA. Once DMA is completed and mapping is
-> no longer -required, device performs a pci_unmap_*() calls to unmap the
-> region. -
-> -The Intel IOMMU driver allocates a virtual address per domain. Each PCIE
-> -device has its own domain (hence protection). Devices under p2p bridges
-> -share the virtual address with all devices under the p2p bridge due to
-> -transaction id aliasing for p2p bridges.
-> -
-> -IOVA generation is pretty generic. We used the same technique as
-> vmalloc() -but these are not global address spaces, but separate for each
-> domain. -Different DMA engines may support different number of domains.
-> -
-> -We also allocate guard pages with each mapping, so we can attempt to
-> catch -any overflow that might happen.
-> -
-> -
-> -Graphics Problems?
-> -------------------
-> -If you encounter issues with graphics devices, you can try adding
-> -option intel_iommu=igfx_off to turn off the integrated graphics engine.
-> -If this fixes anything, please ensure you file a bug reporting the
-> problem. -
-> -Some exceptions to IOVA
-> ------------------------
-> -Interrupt ranges are not address translated, (0xfee00000 - 0xfeefffff).
-> -The same is true for peer to peer transactions. Hence we reserve the
-> -address from PCI MMIO ranges so they are not allocated for IOVA
-> addresses. -
-> -
-> -Fault reporting
-> ----------------
-> -When errors are reported, the DMA engine signals via an interrupt. The
-> fault -reason and device that caused it with fault reason is printed on
-> console. -
-> -See below for sample.
-> -
-> -
-> -Boot Message Sample
-> --------------------
-> -
-> -Something like this gets printed indicating presence of DMAR tables
-> -in ACPI.
-> -
-> -ACPI: DMAR (v001 A M I  OEMDMAR  0x00000001 MSFT 0x00000097) @
-> 0x000000007f5b5ef0 -
-> -When DMAR is being processed and initialized by ACPI, prints DMAR
-> locations -and any RMRR's processed::
-> -
-> -	ACPI DMAR:Host address width 36
-> -	ACPI DMAR:DRHD (flags: 0x00000000)base: 0x00000000fed90000
-> -	ACPI DMAR:DRHD (flags: 0x00000000)base: 0x00000000fed91000
-> -	ACPI DMAR:DRHD (flags: 0x00000001)base: 0x00000000fed93000
-> -	ACPI DMAR:RMRR base: 0x00000000000ed000 end: 0x00000000000effff
-> -	ACPI DMAR:RMRR base: 0x000000007f600000 end: 0x000000007fffffff
-> -
-> -When DMAR is enabled for use, you will notice..
-> -
-> -PCI-DMA: Using DMAR IOMMU
-> --------------------------
-> -
-> -Fault reporting
-> -^^^^^^^^^^^^^^^
-> -
-> -::
-> -
-> -	DMAR:[DMA Write] Request device [00:02.0] fault addr 6df084000
-> -	DMAR:[fault reason 05] PTE Write access is not set
-> -	DMAR:[DMA Write] Request device [00:02.0] fault addr 6df084000
-> -	DMAR:[fault reason 05] PTE Write access is not set
-> -
-> -TBD
-> -----
-> -
-> -- For compatibility testing, could use unity map domain for all devices,
-> just
-> -  provide a 1-1 for all useful memory under a single domain for all
-> devices. -- API for paravirt ops for abstracting functionality for VMM
-> folks. diff --git a/Documentation/x86/iommu.rst
-> b/Documentation/x86/iommu.rst new file mode 100644
-> index 000000000000..ed87d76a38d5
-> --- /dev/null
-> +++ b/Documentation/x86/iommu.rst
-> @@ -0,0 +1,143 @@
-> +=================
-> +x86 IOMMU Support
-> +=================
-> +
-> +The architecture specs can be obtained from the below locations.
-> +
-> +- Intel:
-> http://www.intel.com/content/dam/www/public/us/en/documents/product-specifications/vt-directed-io-spec.pdf
-> +- AMD: https://www.amd.com/system/files/TechDocs/48882_IOMMU.pdf +
-> +This guide gives a quick cheat sheet for some basic understanding.
-> +
-> +Basic stuff
-> +-----------
-> +
-> +ACPI enumerates and lists the different IOMMUs on the platform, and
-> +device scope relationships between devices and which IOMMU controls
-> +them.
-> +
-> +Some ACPI Keywords:
-> +
-> +- DMAR - Intel DMA Remapping table
-> +- DRHD - Intel DMA Remapping Hardware Unit Definition
-> +- RMRR - Intel Reserved Memory Region Reporting Structure
-> +- IVRS - AMD I/O Virtualization Reporting Structure
-> +- IVDB - AMD I/O Virtualization Definition Block
-> +- IVHD - AMD I/O Virtualization Hardware Definition
-> +
-> +What is Intel RMRR?
-> +^^^^^^^^^^^^^^^^^^^
-> +
-> +There are some devices the BIOS controls, for e.g USB devices to perform
-> +PS2 emulation. The regions of memory used for these devices are marked
-> +reserved in the e820 map. When we turn on DMA translation, DMA to those
-> +regions will fail. Hence BIOS uses RMRR to specify these regions along
-> with +devices that need to access these regions. OS is expected to setup
-> +unity mappings for these regions for these devices to access these
-> regions. +
-> +What is AMD IVRS?
-> +^^^^^^^^^^^^^^^^^
-> +
-> +The architecture defines an ACPI-compatible data structure called an I/O
-> +Virtualization Reporting Structure (IVRS) that is used to convey
-> information +related to I/O virtualization to system software.  The IVRS
-> describes the +configuration and capabilities of the IOMMUs contained in
-> the platform as +well as information about the devices that each IOMMU
-> virtualizes. +
-> +The IVRS provides information about the following:
-> +
-> +- IOMMUs present in the platform including their capabilities and proper
-> configuration +- System I/O topology relevant to each IOMMU
-> +- Peripheral devices that cannot be otherwise enumerated
-> +- Memory regions used by SMI/SMM, platform firmware, and platform
-> hardware. These are generally exclusion ranges to be configured by system
-> software. + +How is an I/O Virtual Address (IOVA) generated?
-> +-----------------------------------------------
-> +
-> +Well behaved drivers call dma_map_*() calls before sending command to
-> device +that needs to perform DMA. Once DMA is completed and mapping is
-> no longer +required, driver performs dma_unmap_*() calls to unmap the
-> region. +
-> +Some exceptions to IOVAs
-> +------------------------
-> +
-> +Interrupt ranges are not address translated, (0xfee00000 - 0xfeefffff).
-> +The same is true for peer to peer transactions. Hence we reserve the
-> +address from PCI MMIO ranges so they are not allocated for IOVA
-> addresses. +
-> +Graphics Problems?
-> +------------------
-> +
-> +If you encounter issues with integrated graphics devices, you can try
-> +adding the option "iommu.passthrough=1", or the equivalent "iommu=pt",
-> +to the kernel command line to use a 1:1 mapping for the IOMMU in
-> +general.  On Intel you can also try "intel_iommu=igfx_off" to turn off
-> +translation specifically for the integrated graphics engine only.  If
-> +this fixes anything, please ensure you file a bug reporting the problem.
-> +
-> +Fault reporting
-> +---------------
-> +When errors are reported, the IOMMU signals via an interrupt. The fault
-> +reason and device that caused it is printed on the console.
-> +
-> +
-> +Kernel Log Samples
-> +------------------
-> +
-> +Intel Boot Messages
-> +^^^^^^^^^^^^^^^^^^^
-> +
-> +Something like this gets printed indicating presence of DMAR tables
-> +in ACPI:
-> +
-> +::
-> +
-> +	ACPI: DMAR (v001 A M I  OEMDMAR  0x00000001 MSFT 0x00000097) @
-> 0x000000007f5b5ef0 +
-> +When DMAR is being processed and initialized by ACPI, prints DMAR
-> locations +and any RMRR's processed:
-> +
-> +::
-> +
-> +	ACPI DMAR:Host address width 36
-> +	ACPI DMAR:DRHD (flags: 0x00000000)base: 0x00000000fed90000
-> +	ACPI DMAR:DRHD (flags: 0x00000000)base: 0x00000000fed91000
-> +	ACPI DMAR:DRHD (flags: 0x00000001)base: 0x00000000fed93000
-> +	ACPI DMAR:RMRR base: 0x00000000000ed000 end: 0x00000000000effff
-> +	ACPI DMAR:RMRR base: 0x000000007f600000 end: 0x000000007fffffff
-> +
-> +When DMAR is enabled for use, you will notice:
-> +
-> +::
-> +
-> +	PCI-DMA: Using DMAR IOMMU
-> +
-> +Intel Fault reporting
-> +^^^^^^^^^^^^^^^^^^^^^
-> +
-> +::
-> +
-> +	DMAR:[DMA Write] Request device [00:02.0] fault addr 6df084000
-> +	DMAR:[fault reason 05] PTE Write access is not set
-> +	DMAR:[DMA Write] Request device [00:02.0] fault addr 6df084000
-> +	DMAR:[fault reason 05] PTE Write access is not set
-> +
-> +AMD Boot Messages
-> +^^^^^^^^^^^^^^^^^
-> +
-> +Something like this gets printed indicating presence of the IOMMU:
-> +
-> +::
-> +
-> +	AMD-Vi: Found IOMMU cap 0x40
-> +	AMD-Vi: Extended features (0x4f77ef22294ada): PPR NX GT IA GA PC
-> GA_vAPIC
-> +	AMD-Vi: Interrupt remapping enabled
-> +	AMD-Vi: Virtual APIC enabled
-> +
-> +AMD Fault reporting
-> +^^^^^^^^^^^^^^^^^^^
-> +
-> +::
-> +
-> +	AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0007
-> address=0xffffc02000 flags=0x0000]
-> +	AMD-Vi: Event logged [IO_PAGE_FAULT device=07:00.0 domain=0x0007
-> address=0xffffc02000 flags=0x0000]
+Thanks for the review, Gavin.
 
-
-Thanks,
-
-Jacob
+- Raghavendra

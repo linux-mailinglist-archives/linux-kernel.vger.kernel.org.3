@@ -2,113 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E55D50F30E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C0B050F30C
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344344AbiDZHxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 03:53:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50182 "EHLO
+        id S1344392AbiDZHxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 03:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344317AbiDZHxP (ORCPT
+        with ESMTP id S243960AbiDZHx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 03:53:15 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915BF15FFF
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:50:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650959403; x=1682495403;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=/CZPGtt/BXkrqb2w/EStBwMjAhHp0yQPncOMjjc4i/E=;
-  b=dE7IbvCj9cX1MC1n+wdkHyfmp1FJCL2IaJS/+j6Rh/E2f4f0OUDdWTeE
-   vNirhSaYTWig6Tk+kXgHb42ex4cmfVfMZgZPz1mir7J0BCYFcWHheW+yu
-   5pFBSbqKd1CQQ5FFA2qvoH1PKrpLiOpE05g1vLJlYCdpvT31m1KJjdkyY
-   wxYXSQbkdYmYs300Lu96NuelhsOu9oqgCMTUfynL83dvcYKWD/N+UgsqQ
-   pFWFB8OItSlt1LRFUOwG8o4PEG+aG7GENc8LiFM/X9zeyumFX3VmFdWxF
-   /0tQn9xIUp+4K0+vxv5V6fZczwqPLl5VoCliXvw5u7ELNpbpo7DmyDDKT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="245411738"
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="245411738"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 00:50:03 -0700
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="579745484"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.31.89]) ([10.255.31.89])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 00:50:01 -0700
-Subject: Re: [broonie-sound:for-5.19 88/98] sound/soc/soc-acpi.c:58:36:
- warning: initialization of 'struct acpi_device *' from 'int' makes pointer
- from integer without a cast
-To:     =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>,
-        kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Cezary Rojewski <cezary.rojewski@intel.com>
-References: <202204261004.8OOIWobj-lkp@intel.com>
- <62af4093-a4ff-62b1-10db-585235c06747@linux.intel.com>
-From:   "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <a7f8091f-0afe-aba4-0888-a17e7175d2d1@intel.com>
-Date:   Tue, 26 Apr 2022 15:49:59 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+        Tue, 26 Apr 2022 03:53:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128E9E0A8;
+        Tue, 26 Apr 2022 00:50:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4559AB81AD0;
+        Tue, 26 Apr 2022 07:50:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0A045C385A4;
+        Tue, 26 Apr 2022 07:50:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650959411;
+        bh=SyM96kAlZhvwbA5ou/RttRY98K2MFlzaVkmgUbGsriI=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=rFBZM+yBP5iVW67WiVrjwydPVcZvUybbWUcInrLiw1+tr2CE1Ze9R1j7nvJxwIDkd
+         ZoNBIWeP8XJSwdYx+gj+n8pe5rIZbGTE9aLZCD2T7VSkzGQzw7uYTPJwCU64nfI82N
+         vfIDNoxRSES/7X5uSZsFvFjv2QDCRa5kEq+a4jGlc7CdNQ1ENm2jxeYeTLSKaXXqex
+         lgFcpNJvaFZzv3qroZTdfQ/8218NUSzUZQIjsbT5ebjqSCBZGyZPJJwR0LXi+E44XN
+         RlEC576i1TtjXbpftHX0EmtmOi7jANbAwzonpu9VcPFYIwWD0z98lY5qrtouq2CSEe
+         tXNiYXt9DqaMg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DE1B5E6D402;
+        Tue, 26 Apr 2022 07:50:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <62af4093-a4ff-62b1-10db-585235c06747@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v0] mctp: defer the kfree of object mdev->addrs
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165095941090.3686.1103250887116949143.git-patchwork-notify@kernel.org>
+Date:   Tue, 26 Apr 2022 07:50:10 +0000
+References: <20220422114340.32346-1-linma@zju.edu.cn>
+In-Reply-To: <20220422114340.32346-1-linma@zju.edu.cn>
+To:     Lin Ma <linma@zju.edu.cn>
+Cc:     jk@codeconstruct.com.au, matt@codeconstruct.com.au,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
+This patch was applied to netdev/net.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-On 4/26/2022 3:25 PM, Amadeusz Sławiński wrote:
-> On 4/26/2022 4:54 AM, kernel test robot wrote:
->> COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 
->> O=build_dir ARCH=arc SHELL=/bin/bash sound/soc/
+On Fri, 22 Apr 2022 19:43:40 +0800 you wrote:
+> The function mctp_unregister() reclaims the device's relevant resource
+> when a netcard detaches. However, a running routine may be unaware of
+> this and cause the use-after-free of the mdev->addrs object.
 > 
-> /home/xxxxxxxx/0day/gcc-11.3.0-nolibc/arceb-elf/bin/arceb-elf-gcc: 
-> /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.32' not found 
-> (required by 
-> /home/xxxxxxxx/0day/gcc-11.3.0-nolibc/arceb-elf/bin/arceb-elf-gcc)
-> /home/xxxxxxxx/0day/gcc-11.3.0-nolibc/arceb-elf/bin/arceb-elf-gcc: 
-> /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found 
-> (required by 
-> /home/xxxxxxxx/0day/gcc-11.3.0-nolibc/arceb-elf/bin/arceb-elf-gcc)
->    SYNC    include/config/auto.conf.cmd
->    GEN     Makefile
-> /home/xxxxxxxx/0day/gcc-11.3.0-nolibc/arceb-elf/bin/arceb-elf-gcc: 
-> unknown compiler
-> scripts/Kconfig.include:44: Sorry, this compiler is not supported.
+> The race condition can be demonstrated below
 > 
-> Having a "nolibc" in compiler path I find it confusing that it seems to 
-> require glibc...?
-
-Hi Amadeusz,
-
-Yes, the arceb-elf-gcc depends on a few libraries include libc6,
-
-         linux-vdso.so.1 (0x00007ffd4a1f7000)
-         libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f4c4f36e000)
-         /lib64/ld-linux-x86-64.so.2 (0x00007f4c4f554000)
-
-and the below version is used in 0day-CI:
-
-ii  libc6:amd64                        2.33-7 
-  amd64        GNU C Library: Shared libraries
-
-Best Regards,
-Rong Chen
-
+>  cleanup thread               another thread
+>                           |
+> unregister_netdev()       |  mctp_sendmsg()
+> ...                       |    ...
+>   mctp_unregister()       |    rt = mctp_route_lookup()
+>     ...                   |    mctl_local_output()
+>     kfree(mdev->addrs)    |      ...
+>                           |      saddr = rt->dev->addrs[0];
+>                           |
 > 
-> I guess I will be able to figure what's going on without reproduction, 
-> but would be probably easier with reproducer ;) .
-> 
+> [...]
+
+Here is the summary with links:
+  - [v0] mctp: defer the kfree of object mdev->addrs
+    https://git.kernel.org/netdev/net/c/b561275d633b
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

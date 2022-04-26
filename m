@@ -2,113 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AD4051056A
+	by mail.lfdr.de (Postfix) with ESMTP id C320451056B
 	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 19:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344011AbiDZRbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 13:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36642 "EHLO
+        id S234231AbiDZRbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 13:31:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238782AbiDZRbT (ORCPT
+        with ESMTP id S242618AbiDZRbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 13:31:19 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A7E6F499;
-        Tue, 26 Apr 2022 10:28:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1650994054;
-        bh=Ji+YlFlgCJoaZr9s7YJfnFKefy+/b9Uqn2Dl6qplgqs=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=PvlYceu8Uw36m7FLf8OmUfJ0plYzd9gG4Vk1xj7VhqKa7DiQ6hYZaAaT9vt1Ac4jQ
-         MkAhYUu6CK2oXBB2uAW/jFJZW+IFXkCdTm1RqzMwWKUw+Ib4cdGWeAhk3h2lU/oQkK
-         mc4+eIpkQbEQXmNYd/H6M0lEEq5Fshz0mt1/ucnc=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [80.245.77.37] ([80.245.77.37]) by web-mail.gmx.net
- (3c-app-gmx-bs69.server.lan [172.19.170.214]) (via HTTP); Tue, 26 Apr 2022
- 19:27:34 +0200
+        Tue, 26 Apr 2022 13:31:15 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDEC16EB32;
+        Tue, 26 Apr 2022 10:28:07 -0700 (PDT)
+Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6A2C71EC04F9;
+        Tue, 26 Apr 2022 19:28:02 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1650994082;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WAOGG0OkpdT6SFUFkDwSRCJIK2b9iJROhZINeRXHsyQ=;
+        b=TZENyvqdhyawlUAK9vwmhZucaAdPMq8m7nHO78qFioNOuw664oY33uTH5tXWyfhB+mkA7d
+        3PG+BxTIQxlkjlNkUdy7OEeWwJlvrZgHk231FeeXbSY7YgTBf9qWQDH4SElg4yh6oagqrq
+        c/+lRxdH/edHObAUi/zQRiY3s2W09GI=
+Date:   Tue, 26 Apr 2022 19:27:59 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Chen Yu <yu.c.chen@intel.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] x86/pm: fix false positive kmemleak report in
+ msr_build_context()
+Message-ID: <Ymgrn03YqecDlPOB@zn.tnic>
+References: <20220423182410.1841114-1-matthieu.baerts@tessares.net>
+ <YmgOP1FFmidS9ecJ@zn.tnic>
+ <CAJZ5v0gzvOagiYsMxznksrjmtZFV873DaLAiOo4YHkoUq5qTTA@mail.gmail.com>
 MIME-Version: 1.0
-Message-ID: <trinity-645b0d5b-4366-492c-9cdb-71d9e8664d31-1650994054170@3c-app-gmx-bs69>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        linux-rockchip@lists.infradead.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org
-Subject: Aw: Re: [RFC/RFT v2 09/11] dt-bindings: pci: add lane-map to
- rockchip PCIe binding
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 26 Apr 2022 19:27:34 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <20220426160409.GA1731042@bhelgaas>
-References: <20220426132139.26761-10-linux@fw-web.de>
- <20220426160409.GA1731042@bhelgaas>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:1rhhhhwJUPynO1hGrbADbceOZiAPFPYXAkcyO4s521P1UX6wtPdRfIHJy4WiMKxdAl9Ga
- GZ036BRlqUZgnEmkKqpDYX10GXbjs7L7gj77aheAhHIJ4WhJQAEKJqna8qKGVMGnDu9UDoumdOQT
- jjis+uJsD/gDlM3RfgRLoo6M+sFc8wmx0Gvy2QV84L4tYdvHno4qokH1GLC1vMM0XIJka0HR8wlS
- 7+fTOSkAPhiU4QTyr4LuIZmXLg0SIlDvdIe5iqorZl41D5rOBZTYkdzBbAAWoSSyOFfjDiqtaMwq
- jY=
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ojw4Vv6ZXVk=:EcxcpbnZ5B5Qr+pY1IynEG
- HH4mjHal3oseLf72R3WAZEcL/SuJ/yx8lZpb86KWRYFS9a5rxZVjLU6LKBqVGv5ox2CIn1f01
- zdpazMYqLhnAWqlezZj9eyhc2THUi1xpIZ3UNgg8tIlSGA8WVYjfzTyq6FbElu5nDhN+OQR2T
- lNoCp4oy5jb7QKDtcjL4b2RKbHkzw0di4mzCalljbLq41w3xuANAd9s+bjd4mXsjCRYywZKke
- ZXdQ2MAbfdRZubwuqVgBCE+gIeTMZZmFGZhVHuZtorufufPF1mOjsVCpYuBvezvy9eEUR1z5r
- gDJofj9bBKvlK9VKZCDgYyZwBQ3Q14wdEF4SLcl6kxZIpNtQN/ZlCgqqlwhxN+94HtB8X3QyN
- ZQKTVn3FxCGyKY7tt8AY2PSvtNxL0FWSOY7z9INBhnaTIy3Ul0o2F0YgH+dxhcpAnLr8qEmET
- rnp1BV762m7kZJhzPyJl35gWC+bmHTEZhOE83O2a30DBmt64E/RS9dUbg/9QE4VJxbXEBVi9q
- Be1w1LHwPJwJgKGxYsaLQRQt1J8zz84p0IuGU0vzkLcINXeytxDsA1cmQXeBahH/CdosgylEw
- OLia6Xzw52zK+uwGm4Ri3/3Lbt5N4s8w6b5h0mm902JHSj1F6jrTUfdK3wQZrCno/H2AyP2R4
- //pXv6VwHSLc0Nr0h8n3OscVtmrTC+wrCx/jffY5fv+b/DMRB/3BQ7o4zawD2qlTAAqKrONLh
- sgACckEnTD4Mcjdn+2UoLcdYbC+S8aoaHUtbjJL11j5Sh5L5g1VK/yNdez9R9F7sT34Kz+STn
- KI/Arl9
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0gzvOagiYsMxznksrjmtZFV873DaLAiOo4YHkoUq5qTTA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Apr 26, 2022 at 06:24:04PM +0200, Rafael J. Wysocki wrote:
+> So can the comment be dropped entirely?
 
-> Gesendet: Dienstag, 26. April 2022 um 18:04 Uhr
-> Von: "Bjorn Helgaas" <helgaas@kernel.org>
+Looks like it to me. All the accesses in wakeup_64.S are done through
+those offsets which are computed at build-time so they should always be
+valid.
 
-> > -  bifurcation: true
-> > -
->
-> Why are you adding "bifurcation" earlier in the series, then
-> immediately removing it?  Why not just add "lane-map" directly and
-> never mention "bifurcation" in the DT at all?
+OTOH, I wouldn't mind having there some text making any future person
+touching this, aware of where to look when making changes.
 
-The original driver used the bifurcation property with vendor prefix which=
- i have dropped.
+Some changes like removing a struct member are nicely caught, ofc,
+see below. But for something else which is a lot more subtle having a
+comment say "hey, have a look at where this is used in wakeup_64.S and
+make sure everything is still kosher" is better than having no comment
+at all. IMHO.
 
-In v1 there was an Idea to replace this bifurcation setting by something m=
-ore
-generic supporting more that just true/false. So i added lane-map to start
-discussion if this is the right way or if i should leave the bifurcation p=
-roperty.
+Thx.
 
-if the lane-map is right, i squash the commits before the commits should l=
-and in linux...
-this is one cause i tagged the series as RFC.
+In file included from arch/x86/kernel/asm-offsets.c:14:
+arch/x86/kernel/asm-offsets_64.c: In function ‘main’:
+./include/linux/stddef.h:16:33: error: ‘struct saved_context’ has no member named ‘gdt_desc’
+   16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
+      |                                 ^~~~~~~~~~~~~~~~~~
+./include/linux/kbuild.h:6:69: note: in definition of macro ‘DEFINE’
+    6 |         asm volatile("\n.ascii \"->" #sym " %0 " #val "\"" : : "i" (val))
+      |                                                                     ^~~
+./include/linux/kbuild.h:11:21: note: in expansion of macro ‘offsetof’
+   11 |         DEFINE(sym, offsetof(struct str, mem))
+      |
 
-regards Frank
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

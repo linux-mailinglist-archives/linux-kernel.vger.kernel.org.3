@@ -2,179 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4257F510AD3
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:57:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF053510ADE
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 23:00:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355190AbiDZVAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 17:00:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47290 "EHLO
+        id S1355219AbiDZVDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 17:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354172AbiDZU77 (ORCPT
+        with ESMTP id S1349114AbiDZVDV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:59:59 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995363EABB;
-        Tue, 26 Apr 2022 13:56:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651006610; x=1682542610;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Y0ulhIQqzBKXGy12E1sQmGLQd0l893bCe6cbVpbAvyQ=;
-  b=LWJzByo2JNnwo3XpCKOvdwLvPUj4Y5ywzF3swDN8vYSxz6+hVokWI428
-   cmdSHbwOdV7Qe40KgXOAZuo7JwF5EnxMzHvJ+TnGs3fbrjp1PobMNAuNM
-   LHBcbAA/ggLKttOhawqyUdIEVXxTt63fCy+1kNPZQVy7j1FFE9P+E2pS9
-   YFcmIVnzbVDx51/5f0kFKcixqHfrEZc/91lg+D2T7FIlyTiDPfITzQEWJ
-   THFu5b9jOoqQd4mC+IUfg75lscMzMqYlZa7ZmCM1qU7+ZoSNSowYHQtiF
-   cBxwqpF/l+curpmkNuAaKy71j7L1b74kxjYBMW4k72o+GWImjUYlmoF+V
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="265243134"
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="265243134"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 13:56:50 -0700
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="580153799"
-Received: from dsocek-mobl2.amr.corp.intel.com (HELO [10.212.69.119]) ([10.212.69.119])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 13:56:48 -0700
-Message-ID: <b3c81b7f-3016-8f4e-3ac5-bff1fc52a879@intel.com>
-Date:   Tue, 26 Apr 2022 13:59:37 -0700
+        Tue, 26 Apr 2022 17:03:21 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D1B5BC11;
+        Tue, 26 Apr 2022 14:00:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A794DCE2193;
+        Tue, 26 Apr 2022 21:00:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C432DC385A0;
+        Tue, 26 Apr 2022 21:00:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651006808;
+        bh=QxPQiDVyvyboQhb7hQg8egZCDBIE9qPfnk2lOel1mkA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hHfywpbDKaiIA+fVMnwKtNcMVk1eg8P8ocioCAYf46wZZ6qFH46Nr4JMwaMpjxbhI
+         59zSmCUibSb6RUX46rByC1vS5y147UwUI9gtevvehdbPKze2VpZJTnpu1yEunlWzr8
+         uMJlquUantp3QdT6iaRubNfhDNaOJgpkdI2DvYEI9B762H8XmbZZPU+kBkiR6Gcg44
+         7h/CRMLmpP1EUIzXExSw0A7OB0mggP/e5NMvEp7yGkVIFXtjXX+V5p/B6NLSVam9sk
+         gXPzTX+EZ3x3ooShAyIzTqU8Koo5mSbB9su7vgkZL4aT1iWdp5N6k4hmkw0TvI77Np
+         iyPC0Regq0J2A==
+Date:   Tue, 26 Apr 2022 15:00:04 -0600
+From:   Keith Busch <kbusch@kernel.org>
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Hector Martin <marcan@marcan.st>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Marc Zyngier <maz@kernel.org>,
+        Janne Grunau <j@jannau.net>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org
+Subject: Re: [PATCH v3 6/6] nvme-apple: Add initial Apple SoC NVMe driver
+Message-ID: <YmhdVJgd6DGRHPXd@kbusch-mbp.dhcp.thefacebook.com>
+References: <20220426201539.12829-1-sven@svenpeter.dev>
+ <20220426201539.12829-7-sven@svenpeter.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 06/21] x86/virt/tdx: Shut down TDX module in case of
- error
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, dan.j.williams@intel.com,
-        peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-References: <cover.1649219184.git.kai.huang@intel.com>
- <3f19ac995d184e52107e7117a82376cb7ecb35e7.1649219184.git.kai.huang@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <3f19ac995d184e52107e7117a82376cb7ecb35e7.1649219184.git.kai.huang@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220426201539.12829-7-sven@svenpeter.dev>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/5/22 21:49, Kai Huang wrote:
-> TDX supports shutting down the TDX module at any time during its
-> lifetime.  After TDX module is shut down, no further SEAMCALL can be
-> made on any logical cpu.
-
-Is this strictly true?
-
-I thought SEAMCALLs were used for the P-SEAMLDR too.
-
-> Shut down the TDX module in case of any error happened during the
-> initialization process.  It's pointless to leave the TDX module in some
-> middle state.
-> 
-> Shutting down the TDX module requires calling TDH.SYS.LP.SHUTDOWN on all
-> BIOS-enabled cpus, and the SEMACALL can run concurrently on different
-> cpus.  Implement a mechanism to run SEAMCALL concurrently on all online
-> cpus.  Logical-cpu scope initialization will use it too.
-> 
-> Signed-off-by: Kai Huang <kai.huang@intel.com>
-> ---
->  arch/x86/virt/vmx/tdx/tdx.c | 40 ++++++++++++++++++++++++++++++++++++-
->  arch/x86/virt/vmx/tdx/tdx.h |  5 +++++
->  2 files changed, 44 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
-> index 674867bccc14..faf8355965a5 100644
-> --- a/arch/x86/virt/vmx/tdx/tdx.c
-> +++ b/arch/x86/virt/vmx/tdx/tdx.c
-> @@ -11,6 +11,8 @@
->  #include <linux/cpumask.h>
->  #include <linux/mutex.h>
->  #include <linux/cpu.h>
-> +#include <linux/smp.h>
-> +#include <linux/atomic.h>
->  #include <asm/msr-index.h>
->  #include <asm/msr.h>
->  #include <asm/cpufeature.h>
-> @@ -328,6 +330,39 @@ static int seamcall(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
->  	return 0;
->  }
->  
-> +/* Data structure to make SEAMCALL on multiple CPUs concurrently */
-> +struct seamcall_ctx {
-> +	u64 fn;
-> +	u64 rcx;
-> +	u64 rdx;
-> +	u64 r8;
-> +	u64 r9;
-> +	atomic_t err;
-> +	u64 seamcall_ret;
-> +	struct tdx_module_output out;
-> +};
-> +
-> +static void seamcall_smp_call_function(void *data)
+On Tue, Apr 26, 2022 at 10:15:39PM +0200, Sven Peter wrote:
+> +static enum blk_eh_timer_return apple_nvme_timeout(struct request *req,
+> +						   bool reserved)
 > +{
-> +	struct seamcall_ctx *sc = data;
-> +	int ret;
+> +	struct apple_nvme_iod *iod = blk_mq_rq_to_pdu(req);
+> +	struct apple_nvme_queue *q = iod->q;
+> +	struct apple_nvme *anv = queue_to_apple_nvme(q);
+> +	unsigned long flags;
+> +	u32 csts = readl(anv->mmio_nvme + NVME_REG_CSTS);
 > +
-> +	ret = seamcall(sc->fn, sc->rcx, sc->rdx, sc->r8, sc->r9,
-> +			&sc->seamcall_ret, &sc->out);
-> +	if (ret)
-> +		atomic_set(&sc->err, ret);
-> +}
-> +
-> +/*
-> + * Call the SEAMCALL on all online cpus concurrently.
-> + * Return error if SEAMCALL fails on any cpu.
-> + */
-> +static int seamcall_on_each_cpu(struct seamcall_ctx *sc)
-> +{
-> +	on_each_cpu(seamcall_smp_call_function, sc, true);
-> +	return atomic_read(&sc->err);
-> +}
+> +	if (anv->ctrl.state != NVME_CTRL_LIVE) {
+> +		/*
+> +		 * From rdma.c:
+> +		 * If we are resetting, connecting or deleting we should
+> +		 * complete immediately because we may block controller
+> +		 * teardown or setup sequence
+> +		 * - ctrl disable/shutdown fabrics requests
+> +		 * - connect requests
+> +		 * - initialization admin requests
+> +		 * - I/O requests that entered after unquiescing and
+> +		 *   the controller stopped responding
+> +		 *
+> +		 * All other requests should be cancelled by the error
+> +		 * recovery work, so it's fine that we fail it here.
+> +		 */
+> +		dev_warn(anv->dev,
+> +			 "I/O %d(aq:%d) timeout while not in live state\n",
+> +			 req->tag, q->is_adminq);
+> +		if (blk_mq_request_started(req) &&
+> +		    !blk_mq_request_completed(req)) {
+> +			nvme_req(req)->status = NVME_SC_HOST_ABORTED_CMD;
+> +			blk_mq_complete_request(req);
 
-Why bother returning something that's not read?
+I think you need a 'nvme_req(req)->flags |= NVME_REQ_CANCELLED' here to get the
+expected -EINTR for any admin command timeouts during a reset. Without it, the
+resetting task is going to think it got a real response from the controller.
 
->  static inline bool p_seamldr_ready(void)
->  {
->  	return !!p_seamldr_info.p_seamldr_ready;
-> @@ -437,7 +472,10 @@ static int init_tdx_module(void)
->  
->  static void shutdown_tdx_module(void)
->  {
-> -	/* TODO: Shut down the TDX module */
-> +	struct seamcall_ctx sc = { .fn = TDH_SYS_LP_SHUTDOWN };
-> +
-> +	seamcall_on_each_cpu(&sc);
-> +
->  	tdx_module_status = TDX_MODULE_SHUTDOWN;
->  }
->  
-> diff --git a/arch/x86/virt/vmx/tdx/tdx.h b/arch/x86/virt/vmx/tdx/tdx.h
-> index 6990c93198b3..dcc1f6dfe378 100644
-> --- a/arch/x86/virt/vmx/tdx/tdx.h
-> +++ b/arch/x86/virt/vmx/tdx/tdx.h
-> @@ -35,6 +35,11 @@ struct p_seamldr_info {
->  #define P_SEAMLDR_SEAMCALL_BASE		BIT_ULL(63)
->  #define P_SEAMCALL_SEAMLDR_INFO		(P_SEAMLDR_SEAMCALL_BASE | 0x0)
->  
-> +/*
-> + * TDX module SEAMCALL leaf functions
-> + */
-> +#define TDH_SYS_LP_SHUTDOWN	44
-> +
->  struct tdx_module_output;
->  u64 __seamcall(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
->  	       struct tdx_module_output *out);
-
+Other than that, this looks good.

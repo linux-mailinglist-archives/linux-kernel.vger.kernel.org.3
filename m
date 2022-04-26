@@ -2,97 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DF3C50EF89
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 06:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 018B750EF8C
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 06:07:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239593AbiDZEKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 00:10:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52146 "EHLO
+        id S243717AbiDZEKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 00:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234740AbiDZEJ7 (ORCPT
+        with ESMTP id S234740AbiDZEKY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 00:09:59 -0400
-Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7BB167C1;
-        Mon, 25 Apr 2022 21:06:51 -0700 (PDT)
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id 23Q46Rwf023756;
-        Tue, 26 Apr 2022 13:06:28 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 23Q46Rwf023756
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1650945988;
-        bh=qrC2TpoXIDlISRP2dGG4wJWdMAz97YSJGHJvZ6HNt9g=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Opfe1I/bMtYc/WViUbkQdbx9GVBCBasltY/tw5U7VxW6ImO0/H4/hCwe1BtuCQp4w
-         2Fbway0sj7oWD3SjXpDSFjzgk6bp7oAIDN8QxcZuyFd8d1xvZmGfyDJPekwMBV/zmQ
-         4gJuvIjgshbmPNgkPWLigTCu53W5ZbAKj52Z2hXxJ1J/YsUGaaknCC29evBWT0/d7B
-         4eoAfFJUg5BOdcDz6J+vvka0SmLSy/LlFbmaeKHOSbq043Jh1KOiTG7STSbEYFvynW
-         zDNiD1Iw75jICs2KbOOx1JPuVqOMjReoRQaGr0hDl6319oqVxJqNfFI6RoZZtBHc8v
-         jgV5fN+RqEBEQ==
-X-Nifty-SrcIP: [209.85.214.182]
-Received: by mail-pl1-f182.google.com with SMTP id d15so29060356pll.10;
-        Mon, 25 Apr 2022 21:06:28 -0700 (PDT)
-X-Gm-Message-State: AOAM530gp4Pj+tJsxjDJ3wBchl2Qe6XoNIsyxj/WdkLEeRgo8thMxPOy
-        r09a1OjPO8+CD0XP2Y/Hh7F+whnqON+CaWeyhBo=
-X-Google-Smtp-Source: ABdhPJwB3we02kFZ9CfPBVaj6tbWqZdcj5GHulST85Pa2lDSH7iho/KxZaUk3SMsns4qIcnmJsbDMdKxR1VrxJXaCh8=
-X-Received: by 2002:a17:90a:8405:b0:1bc:d521:b2c9 with SMTP id
- j5-20020a17090a840500b001bcd521b2c9mr35376310pjn.119.1650945987044; Mon, 25
- Apr 2022 21:06:27 -0700 (PDT)
+        Tue, 26 Apr 2022 00:10:24 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48691167D8;
+        Mon, 25 Apr 2022 21:07:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1650946038; x=1682482038;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=tOHbeZBGT8tRo6n3zZKz5vZDMV5TOn0970pcif6b0Dg=;
+  b=pHA6NqxkvJRPW5N4bfvs60wZxS30CdX4b5+LKyTyvUz8nrfdJufUk3jV
+   7npIf1Xm1fQa3fuKPtCsJM3On0KL41luggCLR4w4yeab76sQuxX1hljrp
+   MOizgC5wmPyyImCWyeSIUXg9TJYQ+4shyCIczuQ1YEzBVEV1hAJlqB6cK
+   s=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 25 Apr 2022 21:07:18 -0700
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 21:07:17 -0700
+Received: from [10.253.37.230] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 25 Apr
+ 2022 21:07:16 -0700
+Message-ID: <1b1dab82-eddc-2fa9-8b9b-59237cf6ce97@quicinc.com>
+Date:   Tue, 26 Apr 2022 12:06:56 +0800
 MIME-Version: 1.0
-References: <20220424190811.1678416-1-masahiroy@kernel.org>
- <20220424190811.1678416-8-masahiroy@kernel.org> <CAKwvOd=2pYsUZkvK-d97xC749mCs1QUUc68BfZdTR1diz52Hww@mail.gmail.com>
-In-Reply-To: <CAKwvOd=2pYsUZkvK-d97xC749mCs1QUUc68BfZdTR1diz52Hww@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 26 Apr 2022 13:05:50 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATOuNJFNS_EFYXYkp73sJ4gWt0w7eaR9fDL+EhTThkNBA@mail.gmail.com>
-Message-ID: <CAK7LNATOuNJFNS_EFYXYkp73sJ4gWt0w7eaR9fDL+EhTThkNBA@mail.gmail.com>
-Subject: Re: [PATCH 07/27] modpost: import include/linux/list.h
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2] Bluetooth: btusb: add support for Qualcomm WCN785x
+Content-Language: en-US
+To:     Marcel Holtmann <marcel@holtmann.org>
+CC:     Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <linux-bluetooth@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>
+References: <1650017516-28912-1-git-send-email-quic_zijuhu@quicinc.com>
+ <7EF2E4E4-2DC5-450C-8840-314B9D210521@holtmann.org>
+From:   quic_zijuhu <quic_zijuhu@quicinc.com>
+In-Reply-To: <7EF2E4E4-2DC5-450C-8840-314B9D210521@holtmann.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 3:42 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Sun, Apr 24, 2022 at 12:09 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > Import include/linux/list.h to use convenient list macros in modpost.
-> >
-> > I dropped kernel-space code such as {WRITE,READ}_ONCE etc. and unneeded
-> > macros.
-> >
-> > I also imported container_of() from include/linux/container_of.h and
-> > type definitions from include/linux/types.h.
->
-> Is there a better way to just use the kernel headers?
+On 4/22/2022 5:16 PM, Marcel Holtmann wrote:
+> Hi Zijun,
+> 
+>> Qualcomm WCN785x has PID/VID 0cf3/e700 as shown by
+>> /sys/kernel/debug/usb/devices:
+>>
+>> T:  Bus=02 Lev=02 Prnt=02 Port=01 Cnt=02 Dev#=  8 Spd=12   MxCh= 0
+>> D:  Ver= 1.10 Cls=e0(wlcon) Sub=01 Prot=01 MxPS=64 #Cfgs=  1
+>> P:  Vendor=0cf3 ProdID=e700 Rev= 0.01
+>> C:* #Ifs= 2 Cfg#= 1 Atr=e0 MxPwr=100mA
+>> I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+>> E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=1ms
+>> E:  Ad=82(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+>> E:  Ad=02(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+>> I:* If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+>> E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+>> E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+>> I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+>> E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+>> E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+>> I:  If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+>> E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+>> E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+>> I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+>> E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+>> E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+>> I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+>> E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+>> E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+>> I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+>> E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+>> E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+>> I:  If#= 1 Alt= 6 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+>> E:  Ad=83(I) Atr=01(Isoc) MxPS=  63 Ivl=1ms
+>> E:  Ad=03(O) Atr=01(Isoc) MxPS=  63 Ivl=1ms
+>> I:  If#= 1 Alt= 7 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+>> E:  Ad=83(I) Atr=01(Isoc) MxPS=  65 Ivl=1ms
+>> E:  Ad=03(O) Atr=01(Isoc) MxPS=  65 Ivl=1ms
+>>
+>> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
+>> ---
+>> drivers/bluetooth/btusb.c | 10 ++++++++--
+>> 1 file changed, 8 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+>> index 06a854a2507e..67a6a84a6f61 100644
+>> --- a/drivers/bluetooth/btusb.c
+>> +++ b/drivers/bluetooth/btusb.c
+>> @@ -317,6 +317,11 @@ static const struct usb_device_id blacklist_table[] = {
+>> 						     BTUSB_WIDEBAND_SPEECH |
+>> 						     BTUSB_VALID_LE_STATES },
+>>
+>> +	/* QCA WCN785x chipset */
+>> +	{ USB_DEVICE(0x0cf3, 0xe700), .driver_info = BTUSB_QCA_WCN6855 |
+>> +						     BTUSB_WIDEBAND_SPEECH |
+>> +						     BTUSB_VALID_LE_STATES },
+>> +
+>> 	/* Broadcom BCM2035 */
+>> 	{ USB_DEVICE(0x0a5c, 0x2009), .driver_info = BTUSB_BCM92035 },
+>> 	{ USB_DEVICE(0x0a5c, 0x200a), .driver_info = BTUSB_WRONG_SCO_MTU },
+>> @@ -3037,6 +3042,7 @@ static const struct qca_device_info qca_devices_table[] = {
+>> 	{ 0x00130100, 40, 4, 16 }, /* WCN6855 1.0 */
+>> 	{ 0x00130200, 40, 4, 16 }, /* WCN6855 2.0 */
+>> 	{ 0x00130201, 40, 4, 16 }, /* WCN6855 2.1 */
+>> +	{ 0x00190200, 40, 4, 16 }, /* WCN785x 2.0 */
+>> };
+>>
+>> static int btusb_qca_send_vendor_req(struct usb_device *udev, u8 request,
+>> @@ -3327,11 +3333,11 @@ static int btusb_setup_qca(struct hci_dev *hdev)
+>> 		if (err < 0)
+>> 			return err;
+>>
+>> -		/* WCN6855 2.1 will reset to apply firmware downloaded here, so
+>> +		/* WCN6855 2.1 and later will reset to apply firmware downloaded here, so
+>> 		 * wait ~100ms for reset Done then go ahead, otherwise, it maybe
+>> 		 * cause potential enable failure.
+>> 		 */
+>> -		if (info->rom_version == 0x00130201)
+>> +		if ((info->rom_version == 0x00130201) || (info->rom_version == 0x00190200))
+>> 			msleep(QCA_BT_RESET_WAIT_MS);
+> 
+> I think it is better to start using a switch statement here.
+> 
+i have changed this condition as (info->rom_version >= 0x00130201) within v3 patch and mailed it.
+> Regards
+> 
+> Marcel
+> 
 
-Presumably no.
-include/linux/list.h includes more.
-
-Adding so many #ifdef __KERNEL__ stubs
-would be really ugly.
-
-
-> I kind of hate
-> copy+paste since the in tree duplication will diverge over time.
-
-I only cherry-picked some macros from include/linux/kernel.h
-
-No need to resync.
-
-
-
-
--- 
-Best Regards
-Masahiro Yamada

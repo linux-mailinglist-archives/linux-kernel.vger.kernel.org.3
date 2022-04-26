@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E3550F5A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5625D50F7E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347467AbiDZIvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:51:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33634 "EHLO
+        id S1347825AbiDZJgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:36:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345781AbiDZIja (ORCPT
+        with ESMTP id S1345995AbiDZJGm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:39:30 -0400
+        Tue, 26 Apr 2022 05:06:42 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C3A3BBD2;
-        Tue, 26 Apr 2022 01:31:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167F2149292;
+        Tue, 26 Apr 2022 01:47:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A6A40B81CFA;
-        Tue, 26 Apr 2022 08:30:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A4EDC385A0;
-        Tue, 26 Apr 2022 08:30:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C61D4B81CB3;
+        Tue, 26 Apr 2022 08:47:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0FD9C385AC;
+        Tue, 26 Apr 2022 08:47:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961858;
-        bh=uKEYDWt3OoW+HTLnKcurD0UcjrAlNyV6usIFyO9hi1U=;
+        s=korg; t=1650962873;
+        bh=GWcUtf3UQVYWNlTxcZ+Z1ItyTx0lhByWckaw0QEi8uk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jRISU99I43/9NJDnhbw2ClHwCaSzDF3BPfTzQ21JrnZRnDgkYq4sblAAjp2Y08p5+
-         TiT94c8Fg0GAUESHdHpFSYO567op0cq4UmrJjhISTZIP5cBfpXJxfeBVlqjtXIDRxG
-         EnzDSwW7TArzPyDUDm86LULvBpZws8zutzyIl6Vk=
+        b=Qxwa4gNDNknbrQJiVHwvQzV8ALQRTxEnEgj450Gfec/AByqkGfTa0TcZF3zqastLd
+         8vko0pvDtN0Fl0tV22LbeAoVUAbs2oeyssbsUWJ/0I+GRDBzAaK/TaFvryrqzOzrk5
+         uhYJZoVpSBuN0DWWm45XMb3Jb1lQfdB1VfzclbvI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wang Jianjian <wangjianjian3@huawei.com>,
-        Theodore Tso <tytso@mit.edu>, stable@kernel.org
-Subject: [PATCH 5.4 55/62] ext4, doc: fix incorrect h_reserved size
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 100/146] Input: omap4-keypad - fix pm_runtime_get_sync() error checking
 Date:   Tue, 26 Apr 2022 10:21:35 +0200
-Message-Id: <20220426081738.799063237@linuxfoundation.org>
+Message-Id: <20220426081752.870570114@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
-References: <20220426081737.209637816@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,32 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: wangjianjian (C) <wangjianjian3@huawei.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit 7102ffe4c166ca0f5e35137e9f9de83768c2d27d upstream.
+[ Upstream commit 81022a170462d38ea10612cb67e8e2c529d58abe ]
 
-According to document and code, ext4_xattr_header's size is 32 bytes, so
-h_reserved size should be 3.
+If the device is already in a runtime PM enabled state
+pm_runtime_get_sync() will return 1, so a test for negative
+value should be used to check for errors.
 
-Signed-off-by: Wang Jianjian <wangjianjian3@huawei.com>
-Link: https://lore.kernel.org/r/92fcc3a6-7d77-8c09-4126-377fcb4c46a5@huawei.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Cc: stable@kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: f77621cc640a ("Input: omap-keypad - dynamically handle register offsets")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220412070131.19848-1-linmq006@gmail.com
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/filesystems/ext4/attributes.rst |    2 +-
+ drivers/input/keyboard/omap4-keypad.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/Documentation/filesystems/ext4/attributes.rst
-+++ b/Documentation/filesystems/ext4/attributes.rst
-@@ -76,7 +76,7 @@ The beginning of an extended attribute b
-      - Checksum of the extended attribute block.
-    * - 0x14
-      - \_\_u32
--     - h\_reserved[2]
-+     - h\_reserved[3]
-      - Zero.
- 
- The checksum is calculated against the FS UUID, the 64-bit block number
+diff --git a/drivers/input/keyboard/omap4-keypad.c b/drivers/input/keyboard/omap4-keypad.c
+index 43375b38ee59..8a7ce41b8c56 100644
+--- a/drivers/input/keyboard/omap4-keypad.c
++++ b/drivers/input/keyboard/omap4-keypad.c
+@@ -393,7 +393,7 @@ static int omap4_keypad_probe(struct platform_device *pdev)
+ 	 * revision register.
+ 	 */
+ 	error = pm_runtime_get_sync(dev);
+-	if (error) {
++	if (error < 0) {
+ 		dev_err(dev, "pm_runtime_get_sync() failed\n");
+ 		pm_runtime_put_noidle(dev);
+ 		return error;
+-- 
+2.35.1
+
 
 

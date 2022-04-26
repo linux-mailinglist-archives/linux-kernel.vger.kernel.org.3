@@ -2,148 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D417F50FB23
+	by mail.lfdr.de (Postfix) with ESMTP id 8CA4750FB22
 	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 12:39:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349290AbiDZKky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 06:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49708 "EHLO
+        id S1349417AbiDZKlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 06:41:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349365AbiDZKiv (ORCPT
+        with ESMTP id S1349763AbiDZKji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 06:38:51 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC49E63;
-        Tue, 26 Apr 2022 03:25:12 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id dk23so11775161ejb.8;
-        Tue, 26 Apr 2022 03:25:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=E3GiU4VgA4X0FVG9Q0HUFWR78xcN+9K+AQZgrStd20Q=;
-        b=CqFomzrJcPjoOLCpk2zbMHsv8s4gpt3ktEOcbqKM6d/FBoOtD162g1SitcHKd5PByk
-         suRxgZLOxEcLtTnne2ZL5e33i5js7iU4Usk44bOXl9eMekMOjP4BBExt+1l94b+4ZW1x
-         3KbOzjNgjZHgZk9PIe8VNP4PcKpVxPsMiCv9L7rNy9JCscKBN7X7YgF3t4VDA4abwdTH
-         wJMBKu5z5Swresr5lB1ZQTWORt1kt5ewc+QqNpXpMnEuZ5OY2BWsL2UfeB9h/oHySeAe
-         9VM8P6oOc/aSpYDNuFbu5UHHt0oFmrU6l5Rpe+LsVYVIAgKMvTxlt9BzjZ4G2j66QbCA
-         8now==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=E3GiU4VgA4X0FVG9Q0HUFWR78xcN+9K+AQZgrStd20Q=;
-        b=HlIwJNlqNsjAOvbvQw9L/jYZIAiu8MGiN9cYvvHm8tgouiiLq9DPB/pyMLmBHNQtkJ
-         F2dvtrQ7aYypFxgv/aCJCyx2R46yhqoKG93wMY93gi2fovbvJEz4oGkpYMRFTTJU2BlW
-         mvNjD4H6BKh4JBoqAYGJOyTKXrLwvZL317mxKMFk5Qav1ggWeBWU8SX01dCRF/on6uBM
-         fdbP4LpzP3J1o4QJt9QBxNIApaEwgzsqH6na1RyjBE6MOikOkqzzpflfiZPYD1HfeOzh
-         zUbGiDc3pnD7h1aRr7kLWjt7WPwVrRQ5oPV3+6/9PEum7F8enNvCUU30GCWwwOJqcoND
-         HjYQ==
-X-Gm-Message-State: AOAM530ZhnhU28zeGXHYQDoi5N85MnWw6/3OxQE/ggf++og7yo84f5m6
-        jDMJb7C6vP0C1BeUQ16/z9CxRvEoWrFawtE9p2g=
-X-Google-Smtp-Source: ABdhPJz8BmGLAmH9fEGi0KuLOTUtQRadgcrFFvw87vyemx36ybgw9064Ch2gGNh59MOiJlvtRR/goPKKu8WsaV94ZpM=
-X-Received: by 2002:a17:907:7d8c:b0:6f2:476d:fde4 with SMTP id
- oz12-20020a1709077d8c00b006f2476dfde4mr19555140ejc.497.1650968710844; Tue, 26
- Apr 2022 03:25:10 -0700 (PDT)
+        Tue, 26 Apr 2022 06:39:38 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389D126AC3
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 03:28:46 -0700 (PDT)
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220426102844epoutp0297fc4c898f3e798670eda44008097efa~pa31j_o9W2147521475epoutp02M
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 10:28:44 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220426102844epoutp0297fc4c898f3e798670eda44008097efa~pa31j_o9W2147521475epoutp02M
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1650968924;
+        bh=slfFrq6nRcUqQc5I3UtotE7GYa2j2v4WbRizaECVYmY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=QkNEz4HpPBtNKSu7V97s32JED8rFH0I1wPythazfDxQjeebj2bm2mXolX6qtK7mPV
+         cjhWn++qmXnPj0o75yc4fZBkIThpD0snkp9lbiV1bRHI+badAhikt+6GEBGOmCfV9Z
+         Pc2DXCwZCiDHcn/AgkWPG85JkjGOz9Wg5jqJhF+k=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20220426102843epcas2p1895572de54cc338805db4cbb216a5fc0~pa30034VX0522805228epcas2p12;
+        Tue, 26 Apr 2022 10:28:43 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.102]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4KndQK2L60z4x9Q6; Tue, 26 Apr
+        2022 10:28:41 +0000 (GMT)
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        FC.43.10028.959C7626; Tue, 26 Apr 2022 19:28:41 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220426102840epcas2p44a3622bac0d91e8dfba39f014ec62cc9~pa3xcBbWh3173431734epcas2p4X;
+        Tue, 26 Apr 2022 10:28:40 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220426102840epsmtrp20378ac0d2233955e1dd0036bc7711a96~pa3xaHBqa1951619516epsmtrp2x;
+        Tue, 26 Apr 2022 10:28:40 +0000 (GMT)
+X-AuditID: b6c32a47-589ff7000000272c-3d-6267c959eed7
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        09.5B.08924.859C7626; Tue, 26 Apr 2022 19:28:40 +0900 (KST)
+Received: from ubuntu (unknown [10.229.95.128]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220426102840epsmtip1a4d52c5567c75abe2e9daa1a36c47602~pa3xOLUnU1314813148epsmtip1m;
+        Tue, 26 Apr 2022 10:28:40 +0000 (GMT)
+Date:   Tue, 26 Apr 2022 19:27:09 +0900
+From:   Jung Daehwan <dh10.jung@samsung.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>, sc.suh@samsung.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: Re: [PATCH v4 1/5] usb: host: export symbols for xhci-exynos to use
+ xhci hooks
+Message-ID: <20220426102709.GA175152@ubuntu>
 MIME-Version: 1.0
-References: <20220419141846.598305-1-maz@kernel.org> <CACRpkda3L_itpqcnPq6xDoJtNHt8NuvE1MZk1bCNR+u2KKUpBA@mail.gmail.com>
- <874k2kccse.wl-maz@kernel.org>
-In-Reply-To: <874k2kccse.wl-maz@kernel.org>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 26 Apr 2022 12:24:31 +0200
-Message-ID: <CAHp75VcKNurETpNtrZM7SN2XEtLM6ZYFrS-gKr6r55Lc37gKQQ@mail.gmail.com>
-Subject: Re: [PATCH v3 00/10] gpiolib: Handle immutable irq_chip structures
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm@vger.kernel.org,
-        Android Kernel Team <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YmfBSLDiZGkvu3sG@kroah.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrLJsWRmVeSWpSXmKPExsWy7bCmuW7kyfQkg29rBSyeHFnEbtG8eD2b
+        xfU/7xkt2p9fYLPY+PYHk8XlXXPYLBYta2W2aN40hdVi5lpli667NxgduDxmNfSyeVzu62Xy
+        WLCp1GPxnpdMHvvnrmH36NuyitHj8ya5APaobJuM1MSU1CKF1Lzk/JTMvHRbJe/geOd4UzMD
+        Q11DSwtzJYW8xNxUWyUXnwBdt8wcoOuUFMoSc0qBQgGJxcVK+nY2RfmlJakKGfnFJbZKqQUp
+        OQXmBXrFibnFpXnpenmpJVaGBgZGpkCFCdkZ39qXMxZ8EKronbOGpYFxG18XIyeHhICJxKct
+        b1m7GLk4hAR2MEpc27WVCcL5xChx++VCFgjnM6PEgYcNbDAtV972s0EkdjFK/L64A8p5wijR
+        /G4SO0gVi4CqxMKXN5lBbDYBLYl7P06A2SICxhL9Z2exgzQwC7xkkmi/NQHI4eAQFoiU2NBv
+        AVLDK6AjcWTjLFYIW1Di5MwnLCA2p4CmxI8du9lAykUFVCReHayHOGguh8SEX8UQtovEmjOb
+        GSFsYYlXx7ewQ9hSEp/f7YV6oFhi16dWsDclBBoYJRofQNwmAXTbrGftYM3MAhkSnx61MYPs
+        khBQljhyiwUizCfRcfgvO0SYV6KjTQiiU1li+uUJrBC2pMTB1+egOj0kts0QhITON0aJT/O2
+        ME9glJ+F5LFZSJZB2DoSC3Z/YpsF1M4sIC2x/B8HhKkpsX6X/gJG1lWMYqkFxbnpqcVGBcbw
+        uE7Oz93ECE63Wu47GGe8/aB3iJGJg/EQowQHs5II71TVtCQh3pTEyqrUovz4otKc1OJDjKbA
+        WJrILCWanA9M+Hkl8YYmlgYmZmaG5kamBuZK4rxeKRsShQTSE0tSs1NTC1KLYPqYODilGphW
+        7ejZ4Zp357jadeYJTwxbP111PJi4/urk8iTB7fsDVjOGCh/q48xrMev7/vrz7s0LjxipTpj/
+        uz5LXNUhMM7s47MptdNnvN76ytBwjsPGlOe/DxbO3jJdhVnJsEH29L2ngb81Iw51zSleVLAr
+        Y0cXx32Tl4/KX7r1T5zanPRDfPWOj4Z3Bf1beu+uzZridbHcqLKYS5xV2S0q6s6qipve0zau
+        brTP9LqZnh2nbiyusnoN748aSzG+04ZSj04rC7PWxSh9Ytd3Lkl5Kh/+1JTreHNi35aSHW/v
+        9+Tc4hYX3xYb+cFp6VZhvUNR26W1fsevi5dek3WzVd/+2JGHvOwdjRL7Y1l6uc++Dd3g81iJ
+        pTgj0VCLuag4EQBBm80KQAQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrCLMWRmVeSWpSXmKPExsWy7bCSnG7EyfQkg2U3OSyeHFnEbtG8eD2b
+        xfU/7xkt2p9fYLPY+PYHk8XlXXPYLBYta2W2aN40hdVi5lpli667NxgduDxmNfSyeVzu62Xy
+        WLCp1GPxnpdMHvvnrmH36NuyitHj8ya5APYoLpuU1JzMstQifbsEroxX7feZCjYIVCzo/s3Y
+        wNjP08XIySEhYCJx5W0/WxcjF4eQwA5GiT2L3zJDJCQlls69wQ5hC0vcbznCClH0iFGi7cAO
+        NpAEi4CqxMKXN8Ea2AS0JO79OAFmiwgYS/SfncUO0sAs8JZJYtOUD0xdjBwcwgKREhv6LUBq
+        eAV0JI5snAU19BujxNTvv1ggEoISJ2c+AbOZgYbe+PcSrJdZQFpi+T8OkDCngKbEjx272UDC
+        ogIqEq8O1k9gFJyFpHkWkuZZCM0LGJlXMUqmFhTnpucWGxYY5aWW6xUn5haX5qXrJefnbmIE
+        R4yW1g7GPas+6B1iZOJgPMQowcGsJMI7VTUtSYg3JbGyKrUoP76oNCe1+BCjNAeLkjjvha6T
+        8UIC6YklqdmpqQWpRTBZJg5OqQYmo0JWFfafnOxPl8gmV/NVlLOa8S85oNixyohJa75k4S63
+        4EsLD1gUXZoet6Y0NkvxppuouFduq8/ekExduUcFQbNaxDaHrLI86d89LaZAedMEhUdPghTO
+        3n5yp6ytyytXuiFg4XQx1ajgTx+nttgv1Wwtz4r3eRm69FhJ9ZoGx0NnssMVf3zc+HBp8nyv
+        hHdrNrRe0We4wv9d6nL3kjDWuZ8uLtW1nfTuF/OPjdHdnHx8j9T/TDL+sPSL2cs1yZPNTzCe
+        MzR+b/nbI7L9x3tO+fNBm16+nMfvP6+Q/ZG+Q5r0x8wQ7kefl81q/KcU9ETYOlTgwrXqlsNH
+        VLdE2v04yeSqEs+/+6zP+ydsU5YrsRRnJBpqMRcVJwIAkJ0V0gcDAAA=
+X-CMS-MailID: 20220426102840epcas2p44a3622bac0d91e8dfba39f014ec62cc9
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+        boundary="----hGW09vigct5GtelhzIuvqVc_4Oej0kyi.rk8YCr72wPxMaPi=_19fa2_"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220426092021epcas2p4071f2b7621558a015579131990486a3c
+References: <1650964728-175347-1-git-send-email-dh10.jung@samsung.com>
+        <CGME20220426092021epcas2p4071f2b7621558a015579131990486a3c@epcas2p4.samsung.com>
+        <1650964728-175347-2-git-send-email-dh10.jung@samsung.com>
+        <YmfBSLDiZGkvu3sG@kroah.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 23, 2022 at 12:30 PM Marc Zyngier <maz@kernel.org> wrote:
->
-> On Fri, 22 Apr 2022 22:24:22 +0100,
-> Linus Walleij <linus.walleij@linaro.org> wrote:
-> >
-> > On Tue, Apr 19, 2022 at 4:19 PM Marc Zyngier <maz@kernel.org> wrote:
-> >
-> > > This is a followup from [2].
-> > >
-> > > I recently realised that the gpiolib play ugly tricks on the
-> > > unsuspecting irq_chip structures by patching the callbacks.
-> > >
-> > > Not only this breaks when an irq_chip structure is made const (which
-> > > really should be the default case), but it also forces this structure
-> > > to be copied at nauseam for each instance of the GPIO block, which is
-> > > a waste of memory.
-> > >
-> > > My current approach is to add a new irq_chip flag (IRQCHIP_IMMUTABLE)
-> > > which does what it says on the tin: don't you dare writing to them.
-> > > Gpiolib is further updated not to install its own callbacks, and it
-> > > becomes the responsibility of the driver to call into the gpiolib when
-> > > required. This is similar to what we do for other subsystems such as
-> > > PCI-MSI.
-> > >
-> > > 5 drivers are updated to this new model: M1, QC, Tegra, pl061 and AMD
-> > > (as I actively use them) keeping a single irq_chip structure, marking
-> > > it const, and exposing the new flag.
-> > >
-> > > Nothing breaks, the volume of change is small, the memory usage goes
-> > > down and we have fewer callbacks that can be used as attack vectors.
-> > > What's not to love?
-> > >
-> > > Since there wasn't any objection in the previous round of review, I'm
-> > > going to take this series into -next to see if anything breaks at
-> > > scale.
-> >
-> > The series:
-> > Acked-by: Linus Walleij <linus.walleij@linaro.org>
-> >
-> > Bartosz: if you're happy with this can you apply it to an immutable branch
-> > from v5.18-rc1 and merge that into the GPIO for-next and then I can also
-> > pull that into pinctrl?
->
-> For what it is worth, I've pushed this branch into irqchip-next.
->
-> You can pick it up from:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=irq/gpio-immutable
->
-> but I can also drop it from the irqchip tree.
->
-> Just let me know.
+------hGW09vigct5GtelhzIuvqVc_4Oej0kyi.rk8YCr72wPxMaPi=_19fa2_
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
 
-I would prefer it if it goes as is now and every stakeholder can just
-pull it. As far as my drivers are concerned I also want to convert
-them sooner than later, meaning I want to pull this into my little
-tree as well. Bart, Linus, would it be also preferable for you?
+On Tue, Apr 26, 2022 at 11:54:16AM +0200, Greg Kroah-Hartman wrote:
+> On Tue, Apr 26, 2022 at 06:18:44PM +0900, Daehwan Jung wrote:
+> > Export symbols for xhci hooks usage:
+> >     xhci_get_slot_ctx
+> >     xhci_get_endpoint_address
+> >     - Allow xhci hook to get ep_ctx from the xhci_container_ctx for
+> >       getting the ep_ctx information to know which ep is offloading and
+> >       comparing the context in remote subsystem memory if needed.
+> > 
+> >     xhci_ring_alloc
+> >     - Allow xhci hook to allocate vendor specific ring. Vendors could
+> >       alloc additional event ring.
+> > 
+> >     xhci_trb_virt_to_dma
+> >     - Used to retrieve the DMA address of vendor specific ring. Vendors
+> >       could get dequeue address of event ring.
+> > 
+> >     xhci_segment_free
+> >     xhci_link_segments
+> >     - Allow xhci hook to handle vendor specific segment. Vendors could
+> >       directly free or link segments of vendor specific ring.
+> > 
+> >     xhci_initialize_ring_info
+> >     - Allow xhci hook to initialize vendor specific ring.
+> > 
+> >     xhci_check_trb_in_td_math
+> >     - Allow xhci hook to Check TRB math for validation. Vendors could
+> >       check trb when allocating vendor specific ring.
+> > 
+> >     xhci_address_device
+> >     - Allow override to give configuration info to Co-processor.
+> > 
+> >     xhci_bus_suspend
+> >     xhci_bus_resume
+> >     - Allow override of suspend and resume for power scenario.
+> > 
+> >     xhci_remove_stream_mapping
+> >     - Allow to xhci hook to remove stream mapping. Vendors need to do it
+> >       when free-ing vendor specific ring if it's stream type.
+> > 
+> 
+> For the static functions that you are now exporting, they need to have
+> their functions declared in a .h file.  If not, you now get warnings
+> when you run sparse after applying this commit, right?
+> 
+> thanks,
+> 
+> greg k-h
+> 
+
+I didn't get warnings in my environment. I tested to build default config +
+xhci_exynos by make command. Is there compile option to check it?
+
+Best Regards,
+Jung Daehwan
+
+------hGW09vigct5GtelhzIuvqVc_4Oej0kyi.rk8YCr72wPxMaPi=_19fa2_
+Content-Type: text/plain; charset="utf-8"
 
 
--- 
-With Best Regards,
-Andy Shevchenko
+------hGW09vigct5GtelhzIuvqVc_4Oej0kyi.rk8YCr72wPxMaPi=_19fa2_--

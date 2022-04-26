@@ -2,79 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03650510656
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 20:11:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 712D9510659
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 20:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350167AbiDZSOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 14:14:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59186 "EHLO
+        id S1350182AbiDZSOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 14:14:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350011AbiDZSNo (ORCPT
+        with ESMTP id S1343490AbiDZSOi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 14:13:44 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B045193F1
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 11:10:36 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id k4so19398388plk.7
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 11:10:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ZORZySDLTvyCNgdBbwRFHcwEwqBwbIWR7Tx5QzVSWGE=;
-        b=nRy4uP+UnJR573Ccvvv+00rjQe9yzjfcSZHjF6ZszjZVwJ+74kxeqicdddSwA4AySW
-         QiywMnfiRKQJoYAbe0818PihuTCRLZtC+AakP9TZ/odgItW0iwIoPnJet0E4LfDuO1tI
-         djolKaBODkElc4KwCm0uph7QM0Sjw27czOW+yCf5h1wnQ8eq6IbfBsyNahmzZWuhzzGJ
-         emnegDKSQVWpWX+0+abP7/v5Pt/8zbnapHuOi0skQR61t5b+29DMTJNr9TJR+gP3HD1Y
-         g0zEaJP2/vShGBxGQFhkh39e6R7xzBJ3CyihXHS2qhGTgL511vBLiaRDHHrr2lnTAltK
-         ORcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZORZySDLTvyCNgdBbwRFHcwEwqBwbIWR7Tx5QzVSWGE=;
-        b=gRXzdTyCSOcZdQGqh3qPr+5k6KH7+MsLXs4Ydda9+iqHj5y4epxlsL34k1MqMb56yH
-         CFiew1+D2moB/dhtiYQDznkhD9vKGsW19imQGI+7wh3q0XK3Npo7mf48VutcYDekYZIX
-         BBNHHRvYNMVuxJlgHJj5XrMp9h2LI1btXpu3j8jUoeKuPH6jzl2wbYWl0hXf+eGeOUE6
-         xHK/fdZYmSCZaJWmzcYX/abU/p28ro7gmM67iINfQjoXiGHsBeW2zmdJ24D1QSOzzAdc
-         SjCuvB7qKOPIN1iYSBqDU/3tIJ66WZhuaPIzFdtUDfaX4954+OFhBwrBvUJsuUCM/mXw
-         1aeQ==
-X-Gm-Message-State: AOAM533IdIrSTS1lLXTtKwd8ZN7f2+AbNsC0SX87fBovOAzrsEfdJLkU
-        LeKF9PLalcQvSoVEmxRny8xhbQ==
-X-Google-Smtp-Source: ABdhPJyQti4UDb8SIgvOehAYVOKly99ZaS3C26oABwMp0uyd+LenHASMj2b+khqcefb52xC3qwJLpg==
-X-Received: by 2002:a17:902:a981:b0:156:52b2:40d6 with SMTP id bh1-20020a170902a98100b0015652b240d6mr24856860plb.34.1650996635603;
-        Tue, 26 Apr 2022 11:10:35 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id f8-20020a17090aa78800b001d9781de67fsm3552353pjq.31.2022.04.26.11.10.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 11:10:35 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 18:10:31 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Mingwei Zhang <mizhang@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>
-Subject: Re: [PATCH] KVM: x86/mmu: add lockdep check before
- lookup_address_in_mm()
-Message-ID: <Ymg1lzsYAd6v/vGw@google.com>
-References: <20220327205803.739336-1-mizhang@google.com>
- <YkHRYY6x1Ewez/g4@google.com>
- <CAL715WL7ejOBjzXy9vbS_M2LmvXcC-CxmNr+oQtCZW0kciozHA@mail.gmail.com>
- <YkH7KZbamhKpCidK@google.com>
- <7597fe2c-ce04-0e21-bd6c-4051d7d5101d@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7597fe2c-ce04-0e21-bd6c-4051d7d5101d@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        Tue, 26 Apr 2022 14:14:38 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386AF68983;
+        Tue, 26 Apr 2022 11:11:30 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23QH7MKQ032458;
+        Tue, 26 Apr 2022 18:11:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=3s1FybCxQafy+xH7pLCDd52lXS+4Wq7/6kJL7T1SaU8=;
+ b=Fztw6XKSpN1GADC5gEpWggaH2jkxgvEzyPtQUk2LBbJcuoxpHXKS2AmcgvU9iQsrGZiC
+ LR7gNY248ZZMKUB1KyP40rBoXZSga0FvFv+u4/zHlFPwFB7+6t+EUfqclCi9hNT1Gj3Y
+ m/KEKG/2R2uD40uSb6P37rBrvNtu7x25NQ85cr3W1je6hjs2G71p5YxtHgeAVVRsxdKd
+ BZ6Z8n/97zXZvkQO5v3XdCPzf5sTEbaBv3F1zHqTgD9c/fJPrBWSM/PdneIqUt1KYGD7
+ sxMlIKn20Jf39wR4pDKH/jcjxUlAKDc1PG3/boBZNXAcHQQfKr+/o/Y4Wkkxtox5iPb+ og== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fpg490gtp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Apr 2022 18:11:05 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23QI1ZVZ028476;
+        Tue, 26 Apr 2022 18:11:04 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fpg490gt2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Apr 2022 18:11:04 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23QI2TWZ014140;
+        Tue, 26 Apr 2022 18:11:02 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3fm938vsfj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Apr 2022 18:11:02 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23QIBDBQ29229432
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 26 Apr 2022 18:11:13 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 760C0A4051;
+        Tue, 26 Apr 2022 18:11:00 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BA10AA4040;
+        Tue, 26 Apr 2022 18:10:58 +0000 (GMT)
+Received: from sig-9-65-87-209.ibm.com (unknown [9.65.87.209])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 26 Apr 2022 18:10:58 +0000 (GMT)
+Message-ID: <06a1242830ddb84c52cd77e548c71d40a0eb5e63.camel@linux.ibm.com>
+Subject: Re: [PATCH] Carry forward IMA measurement log on kexec on x86_64
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Jonathan McDowell <noodles@fb.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Date:   Tue, 26 Apr 2022 14:10:58 -0400
+In-Reply-To: <YmgiWpHWH6K1feyt@noodles-fedora-PC23Y6EG>
+References: <YmKyvlF3my1yWTvK@noodles-fedora-PC23Y6EG>
+         <12108732c287a85a417927de37cb027cefae6e06.camel@linux.ibm.com>
+         <YmfgyyUs6TgM/Czx@noodles-fedora-PC23Y6EG>
+         <41f9d261a7750e576460360c512a8e4c1492efa3.camel@linux.ibm.com>
+         <YmgiWpHWH6K1feyt@noodles-fedora-PC23Y6EG>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: lRuNid9m0EcvG7oZVP8qqgQph9gJskXS
+X-Proofpoint-ORIG-GUID: CfqGdPCTt12tBUw8_yHt7AREDuaeSHvd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-26_05,2022-04-26_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ adultscore=0 phishscore=0 impostorscore=0 mlxscore=0 suspectscore=0
+ bulkscore=0 priorityscore=1501 clxscore=1015 lowpriorityscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204260115
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,47 +105,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022, Paolo Bonzini wrote:
-> On 3/28/22 20:15, Sean Christopherson wrote:
-> > > lookup_address_in_mm() walks the host page table as if it is a
-> > > sequence of_static_  memory chunks. This is clearly dangerous.
-> > Yeah, it's broken.  The proper fix is do something like what perf uses, or maybe
-> > just genericize and reuse the code from commit 8af26be06272
-> > ("perf/core: Fix arch_perf_get_page_size()).
+On Tue, 2022-04-26 at 16:48 +0000, Jonathan McDowell wrote:
+> On Tue, Apr 26, 2022 at 09:49:53AM -0400, Mimi Zohar wrote:
+> > On Tue, 2022-04-26 at 12:08 +0000, Jonathan McDowell wrote:
+> > > On Mon, Apr 25, 2022 at 12:29:17PM -0400, Mimi Zohar wrote:
+> > > > Hi Jonathan,
+> > > > 
+> > > > On Fri, 2022-04-22 at 13:50 +0000, Jonathan McDowell wrote:
+> > > > > On kexec file load Integrity Measurement Architecture (IMA) subsystem
+> > > > > may verify the IMA signature of the kernel and initramfs, and measure
+> > > > > it. The command line parameters passed to the kernel in the kexec call
+> > > > > may also be measured by IMA. A remote attestation service can verify
+> > > > > a TPM quote based on the TPM event log, the IMA measurement list, and
+> > > > > the TPM PCR data. This can be achieved only if the IMA measurement log
+> > > > > is carried over from the current kernel to the next kernel across
+> > > > > the kexec call.
+> > > > > 
+> > > > > powerpc and ARM64 both achieve this using device tree with a
+> > > > > "linux,ima-kexec-buffer" node. x86 platforms generally don't make use of
+> > > > > device tree, so the IMA infrastructure is extended to allow non device
+> > > > > tree platforms to provide a log buffer. x86 then passes the IMA buffer
+> > > > > to the new kernel via the setup_data mechanism.
+> > > > > 
+> > > > > Signed-off-by: Jonathan McDowell <noodles@fb.com>
+> > > > 
+> > > > FYI, after applying, building, and booting a kernel with this patch,
+> > > > "kexec -s -l /boot/vmlinuz-5.18.0-rc4+ --reuse-cmdline --
+> > > > initrd=/boot/initramfs-5.18.0-rc4+.img" properly loads the kernel, but
+> > > > "kexec -s -e" fails to reboot, at least on a test laptop even with only
+> > > > the "boot_aggregate" measurement record.
+> > > > 
+> > > > Without enabling CONFIG_IMA_KEXEC, kexec boots properly.
+> > > 
+> > > Thanks for giving it a try. At a guess your laptop is booting with
+> > > EFI, whereas for my testing I was using qemu with legacy BIOS. I've
+> > > managed to reproduce the issue with qemu+OVMF and isolated the mistake
+> > > in the setup data calculation I made when EFI is involved. If you have
+> > > time can you try with the below on top of the original patch?
 > > 
+> > Thank you!  With the change, as expected there are two "boot_aggregate"
+> > records in the measurement list.  With a custom policy, the measurement
+> > list verifies.
 > 
-> Indeed, KVM could use perf_get_pgtable_size().  The conversion from the
-> result of *_leaf_size() to level is basically (ctz(size) - 12) / 9.
+> Excellent, thanks for verifying. I'll get the fixed v2 out.
 > 
-> Alternatively, there are the three difference between perf_get_page_size()
-> and lookup_address_in_pgd():
+> ...
+> > FYI, the builtin "ima_policy=tcb" results in measurement violations.  
+> > Normally, the measurement list can still be verified using the evmctl
+> > "--ignore-violations" option.   For some reason with the "tcb" policy, 
+> > the measurement list doesn't verify even with the "--ignore-violations" 
+> > option after kexec.  I assume this is a result of additional
+> > measurements being added after the kexec load, which aren't being
+> > carried across kexec.
 > 
-> * the *_offset_lockless() macros, which are unnecessary on x86
+> I believe with "tcb" things like the subsequent exec of kexec to
+> actually do the reboot will end up measured, and as the kexec buffer is
+> static it won't include that.
 > 
-> * READ_ONCE, which is important but in practice unlikely to make a
-> difference
+> Also there's an issue about the fact that we measure the kexec pieces
+> even if we don't actually do the kexec; there's no marker that confirms
+> the kexec took place. It's separate to this patch (in that it affects
+> the device tree kexec infrastructure too) but it's conceivable that an
+> attacker could measure in the new kernel details and not actually do the
+> kexec, and that's not distinguishable from the kexec happening.
+> 
+> One approach might be to add a marker in the kexec ima buffer such that
+> if it's not present we know the kexec hasn't happened, but I need to
+> think through that a bit more.
 
-It can make a difference for this specific case.  I can't find the bug/patch, but
-a year or two back there was a bug in a similar mm/ path where lack of READ_ONCE()
-led to deferencing garbage due re-reading an upper level entry.  IIRC, it was a
-page promotion (to huge page) case, where the p*d_large() check came back false
-(saw the old value) and then p*d_offset() walked into the weeds because it used
-the new value (huge page offset).
+I'm not quite sure what you mean by "we measure the kexec pieces".  The
+kexec file load syscall calls kernel_read_file_from_fd() to read the
+kernel image into a buffer.  The measurement record included in the IMA
+measurement list a hash of the buffer data, which is exactly the same
+as the hash of the kernel image.
 
-> * local_irq_{save,restore} around the walk
-> 
-> 
-> The last is the important one and it should be added to
-> lookup_address_in_pgd().
+The kernel kexec self tests only do the kexec load, not the execute. 
+For each kexec execute you'll see an additional "boot_aggregate" record
+in the IMA measurement list.  At least for the moment I don't see a
+need for additional marker.
 
-I don't think so.  The issue is that, similar to adding a lockdep here, simply
-disabling IRQs is not sufficient to ensure the resolved pfn is valid.  And again,
-like this case, disabling IRQs is not actually required when sufficient protections
-are in place, e.g. in KVM's page fault case, the mmu_notifier invalidate_start
-event must occur before the primary MMUs modifies its PTEs.
+thanks,
 
-In other words, disabling IRQs is both unnecessary and gives a false sense of security.
+Mimi
 
-I completely agree that lookup_address() and friends are unnecessarily fragile,
-but I think that attempting to harden them to fix this KVM bug will open a can
-of worms and end up delaying getting KVM fixed.

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 219E050F799
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F377950F757
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232327AbiDZJWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:22:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46074 "EHLO
+        id S1344605AbiDZJiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345706AbiDZI5o (ORCPT
+        with ESMTP id S1346280AbiDZJH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:57:44 -0400
+        Tue, 26 Apr 2022 05:07:29 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587A662F2;
-        Tue, 26 Apr 2022 01:42:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F9ACA0D7;
+        Tue, 26 Apr 2022 01:48:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 10297B81D09;
-        Tue, 26 Apr 2022 08:42:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F762C385A0;
-        Tue, 26 Apr 2022 08:42:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B14F5B81D0A;
+        Tue, 26 Apr 2022 08:48:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDB37C385A0;
+        Tue, 26 Apr 2022 08:48:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962535;
-        bh=8lOvhLAFxd8QUqgv//ER/ADXQbcIfcssIo0AaOmgPks=;
+        s=korg; t=1650962912;
+        bh=dTrkoAicnKNbR8OoKD9QRqhGbzc5PwsgGK9Ouyr9B7M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KoACSR9++M/Q0kobqXhQDtfeXhqu0PuzxJWNHTe/n8xG09X3ZbSmWqZyTiIrmIzGf
-         qFjiyR7vfIPk8ekGLjY+xyrzycORaAI3AW5dKmKmJXBcNSmpa9+ZcmrjuNr8auBTPp
-         d4GHTEqR/0A9EppxFF7I/s7IfdIm6qD3NBhkRdbU=
+        b=wALMeqXus2Z04YUG1AhB9X/AGLzp18hM5tVNhD8GYAyJlqEGHStxb0xfR8uEPbdpc
+         P53UcnmQPhyclO2+xYXhgtrTCfXd3bRQnTuqI8WNcAkjM4HtJDN1M8MPShwBoGiteB
+         Sy0kED6HcevFT/bKP/Rod8oXiaT2wI9Qh7wkKVv4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.15 122/124] spi: atmel-quadspi: Fix the buswidth adjustment between spi-mem and controller
-Date:   Tue, 26 Apr 2022 10:22:03 +0200
-Message-Id: <20220426081750.757259643@linuxfoundation.org>
+        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.17 129/146] KVM: x86: Dont re-acquire SRCU lock in complete_emulated_io()
+Date:   Tue, 26 Apr 2022 10:22:04 +0200
+Message-Id: <20220426081753.688082335@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
-References: <20220426081747.286685339@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,34 +54,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tudor Ambarus <tudor.ambarus@microchip.com>
+From: Sean Christopherson <seanjc@google.com>
 
-commit 8c235cc25087495c4288d94f547e9d3061004991 upstream.
+commit 2d08935682ac5f6bfb70f7e6844ec27d4a245fa4 upstream.
 
-Use the spi_mem_default_supports_op() core helper in order to take into
-account the buswidth specified by the user in device tree.
+Don't re-acquire SRCU in complete_emulated_io() now that KVM acquires the
+lock in kvm_arch_vcpu_ioctl_run().  More importantly, don't overwrite
+vcpu->srcu_idx.  If the index acquired by complete_emulated_io() differs
+from the one acquired by kvm_arch_vcpu_ioctl_run(), KVM will effectively
+leak a lock and hang if/when synchronize_srcu() is invoked for the
+relevant grace period.
 
-Cc: <stable@vger.kernel.org>
-Fixes: 0e6aae08e9ae ("spi: Add QuadSPI driver for Atmel SAMA5D2")
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-Link: https://lore.kernel.org/r/20220406133604.455356-1-tudor.ambarus@microchip.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 8d25b7beca7e ("KVM: x86: pull kvm->srcu read-side to kvm_arch_vcpu_ioctl_run")
+Cc: stable@vger.kernel.org
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+Message-Id: <20220415004343.2203171-2-seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/spi/atmel-quadspi.c |    3 +++
- 1 file changed, 3 insertions(+)
+ arch/x86/kvm/x86.c |    7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
---- a/drivers/spi/atmel-quadspi.c
-+++ b/drivers/spi/atmel-quadspi.c
-@@ -277,6 +277,9 @@ static int atmel_qspi_find_mode(const st
- static bool atmel_qspi_supports_op(struct spi_mem *mem,
- 				   const struct spi_mem_op *op)
- {
-+	if (!spi_mem_default_supports_op(mem, op))
-+		return false;
-+
- 	if (atmel_qspi_find_mode(op) < 0)
- 		return false;
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -10296,12 +10296,7 @@ static int vcpu_run(struct kvm_vcpu *vcp
  
+ static inline int complete_emulated_io(struct kvm_vcpu *vcpu)
+ {
+-	int r;
+-
+-	vcpu->srcu_idx = srcu_read_lock(&vcpu->kvm->srcu);
+-	r = kvm_emulate_instruction(vcpu, EMULTYPE_NO_DECODE);
+-	srcu_read_unlock(&vcpu->kvm->srcu, vcpu->srcu_idx);
+-	return r;
++	return kvm_emulate_instruction(vcpu, EMULTYPE_NO_DECODE);
+ }
+ 
+ static int complete_emulated_pio(struct kvm_vcpu *vcpu)
 
 

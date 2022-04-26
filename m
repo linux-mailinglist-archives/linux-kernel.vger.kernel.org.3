@@ -2,186 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DA8050F1FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:15:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B949850F1FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:16:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343750AbiDZHSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 03:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45014 "EHLO
+        id S1343775AbiDZHTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 03:19:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231898AbiDZHSt (ORCPT
+        with ESMTP id S1343778AbiDZHS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 03:18:49 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD35275239
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:15:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650957342; x=1682493342;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ItNzdlfCk7S+sJYmdgTzS0c+88ZBqChdC+Q/hQ4C5/E=;
-  b=bh+DSOsrgiog4m2fgMRa28JHkwqZ0v+i2ROuigS1vC/S5J5PgWBVOrGz
-   zJGzN5gbBqgxdRBtbWLjTBgqY9i4IPId1odHAg63bY8p+XR9hUCrPjyiQ
-   OWApkCU5ic9WliOnkXWNJKEu/ihSwipgkLIXFsVCgmyhLwTx0H4QFPDoT
-   CXuWZwH5JxtZ/XjFPz4eBrUx42M7cSuHaBLvZ1KjXXzyEmCilveIkLm4s
-   ZZxo52eUvmCVRUIKBWKUbt1oIcN2beENwe0X0GYE/LAdtZVOgDOIYEo91
-   hS5k6atOcciUenFONqbPxiBCveuxoZ3fQiSjjnyLLsmxMsbKzgnyGYk0K
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="328422424"
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="328422424"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 00:15:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="678274663"
-Received: from shbuild999.sh.intel.com ([10.239.146.138])
-  by orsmga004.jf.intel.com with ESMTP; 26 Apr 2022 00:15:23 -0700
-From:   Feng Tang <feng.tang@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Denys Vlasenko <dvlasenk@redhat.com>, lkp@intel.com,
-        Feng Tang <feng.tang@intel.com>
-Subject: [PATCH v3] x86, vmlinux.lds: Add debug option to force all data sections aligned
-Date:   Tue, 26 Apr 2022 15:15:23 +0800
-Message-Id: <20220426071523.71923-1-feng.tang@intel.com>
-X-Mailer: git-send-email 2.27.0
+        Tue, 26 Apr 2022 03:18:58 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F35762A1
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:15:51 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2ebf4b91212so172575687b3.8
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:15:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=W48mPmCEODAeKCo4cYR/TrFD4JfPLTSWRwhqTfeCiJA=;
+        b=gb90e2Jc05v2CZzab1gHuWlQZ7mOLM72uzZFGtD2dQ9ITduk47VqRyMZSqLQBpMOdA
+         nFLeuRNpSqERdwglV+kmc4yo4Q1h4a/lvVcQQQimgkzRm1zMQHkM/eHTlmBATFoWbcYf
+         yi57ZBCATFUH0Z7H/An1LTnNVoGM6AkOemwmY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=W48mPmCEODAeKCo4cYR/TrFD4JfPLTSWRwhqTfeCiJA=;
+        b=X4PbrSyQ8TOCidh9+yENmIHT2rWXDuV1q5hbz9Cl8CBhrry1LpKgHA7nWaKtNnl+eh
+         lvmuhjaahA8oOd3ygJz59rI4ae2DnRZpH9/NTqc2X1KOhgLh56vTbczE1c3zyLrihChd
+         NDlIpypVGVA6Ax9xmI3z2HgE96XnWitjjENEhMOz/ajo+87jKtnMJa6Suhd1E5RZ9/hB
+         NMzJQFzkJJEdzJ76PLwRelkSws8fjOxVUIxirQLOagGyItRozdQ+qOJOzIiqHXF5jPPF
+         0NakKc3EG+52fMwZSxWlTKWhOIVjIfXi3luXl8n2jxFQmIwohfpx7wMugBQRnFPB0PFr
+         70zQ==
+X-Gm-Message-State: AOAM531QpgY0x4GwzwCiVYh7z7SNuVmFvysNMwfh+uwDwq6cdScUY/wL
+        rCO578zDv/QAe8OXlGF560c//kVk87uCv8TcJwMNBg==
+X-Google-Smtp-Source: ABdhPJz7mWph1YxLYcWICwibet7gNS3uzR3x+TVoftrHCaq7u1jn0mZA1c/96IclyLrgvQXvXMO9rZu6QlzK9rbUOSE=
+X-Received: by 2002:a81:ad1f:0:b0:2f4:da5b:5133 with SMTP id
+ l31-20020a81ad1f000000b002f4da5b5133mr20961896ywh.105.1650957350928; Tue, 26
+ Apr 2022 00:15:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220420102044.10832-1-roger.lu@mediatek.com> <7hczhbe3wn.fsf@baylibre.com>
+ <3d463c8b099fdb1c9a0df9e615a8ca1d8a034120.camel@mediatek.com>
+ <7hsfq6ql4v.fsf@baylibre.com> <d67d5f4f2ec96ade2398e7c0897dbb16bf5fb145.camel@mediatek.com>
+ <ca127f7f-0620-1c03-4f39-206945b0e612@gmail.com>
+In-Reply-To: <ca127f7f-0620-1c03-4f39-206945b0e612@gmail.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 26 Apr 2022 15:15:39 +0800
+Message-ID: <CAGXv+5HtMVCUdV=kNfOTCp3-1gEzTWtZ1xapgw=L-C2nTC0yag@mail.gmail.com>
+Subject: Re: [PATCH v24 0/7] soc: mediatek: SVS: introduce MTK SVS
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Roger Lu <roger.lu@mediatek.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        =?UTF-8?B?UmV4LUJDIENoZW4gKOmZs+afj+i+sCk=?= 
+        <rex-bc.chen@mediatek.com>
+Cc:     Enric Balletbo Serra <eballetbo@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jia-wei Chang <jia-wei.chang@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-0Day has reported many strange performance changes (regression or
-improvement), in which there was no obvious relation between the culprit
-commit and the benchmark at the first look, and it causes people to doubt
-the test itself is wrong.
+On Fri, Apr 22, 2022 at 11:38 PM Matthias Brugger
+<matthias.bgg@gmail.com> wrote:
+>
+>
+>
+> On 22/04/2022 04:24, Roger Lu wrote:
+> > Hi Kevin,
+> >
+> > On Thu, 2022-04-21 at 12:41 -0700, Kevin Hilman wrote:
+> >> Hi Roger,
+> >>
+> >> Roger Lu <roger.lu@mediatek.com> writes:
+> >>
+> >>> On Wed, 2022-04-20 at 16:22 -0700, Kevin Hilman wrote:
+> >>
+> >> [...]
+> >>
+> >>>> That being said, it would be really nice to see an integration tree
+> >>>> where this was all tested on mainline (e.g. v5.17, or v5.18-rc)
+> >>>>
+> >>>> For example, I can apply this to v5.18-rc2 and boot on my mt8183-pumpkin
+> >>>> board, it fails to probe[1] because there is no CCI node in the upstream
+> >>>> mt8183.dtsi.
+> >>>>
+> >>>> I'm assuming this series is also not very useful without the CPUfreq
+> >>>> series from Rex, so being able to test this, CCI and CPUfreq together on
+> >>>> MT8183 on a mainline kernel would be very helpful.
+> >>>>
+> >>>> Kevin
+> >>>>
+> >>>> [1]
+> >>>> [    0.573332] mtk-svs 1100b000.svs: cannot find cci node
+> >>>> [    0.574061] mtk-svs 1100b000.svs: error -ENODEV: svs platform probe
+> >>>> fail
+> >>>
+> >>> Just share. I've tested this series on below two platforms and it works as
+> >>> expected.
+> >>> - mt8183-Krane (kernel-v5.10)
+> >>> - mt8192-Hayato (kernel-v5.4)
+> >>
+> >> Unfortunately testing on v5.4 and v5.10 with lots of other additional
+> >> out-of-tree patches does not give much confidence that this series works
+> >> with upstream, especially when I've given a few reasons why it will not
+> >> work uptream.
+> >>
+> >> The examples I gave above for CCI and CPUs/cluster disable are good
+> >> examples, but another one I forgot to mention is the dependency on Mali.
+> >> The SVS driver will never probe because it also depens on a "mali" node,
+> >> which doesn't exist upstream either (but panfrost does, and acutually
+> >> loads/probes fine on v5.17/v5.18) so this should be fixed to work with
+> >> upstream panfrost.
+> >>
+> >> IMO, in order for this to be merged upstream, it should at least have
+> >> some basic validation with upstream, and so far I have not even been
+> >> able to make it successfuly probe.  To do that, you will need to either
+> >> provide a list of the dependencies for testing this with mainline
+> >> (e.g. CCI series, CPUfreq series, any DT changes), or even better, an
+> >> integration tree based on recent mainline (e.g. v5.17 stable, or
+> >> v5.18-rc) which shows all the patches (in addition to this series) used
+> >> to validate this on mainline.
+> >
+> > No problem. We'll find a machine that can be run correctly with recent mainline
+> > (e.g. v5.17 stable, or v5.18-rc) and add patches (CCI series + CPUfreq series +
+> > any DT changes) to test this SVS series. Thanks very much.
+> >
+>
+> Thanks Roger. I'll wait until this got tested with upstream Linux, before I will
+> apply all the patches.
 
-Upon further check, many of these cases are caused by the change to the
-alignment of kernel text or data, as whole text/data of kernel are linked
-together compactly, change in one domain can affect alignments of other
-domains linked after it.
+Hi everyone,
 
-To help quickly identifying if the strange performance change is caused
-by _data_ alignment, add a debug option to force the data sections from
-all .o files aligned on PAGE_SIZE, so that change in one domain won't
-affect other modules' data alignment.
+I've put together an integration test branch:
 
-We have used this option to check some strange kernel changes [1][2][3],
-and those performance changes were gone after enabling it, which proved
-they are data alignment related. Besides these publicly reported cases,
-recently there are other similar cases found by 0Day, and this option
-has been actively used by 0Day for analyzing strange performance changes,
-and filter some from reporting out.
+https://github.com/wens/linux/commits/mt8183-cpufreq-cci-svs-test
 
-With the debug option on, the vmlinux is around 0.73% larger:
+This branch is based on next-20220422 and includes the following series:
 
-$ls -l vmlinux*
-  805891208 Apr 24 19:31 vmlinux.data-4k-align
-  799599752 Apr 24 19:28 vmlinux.raw
+- ANX7625 DPI support v2
+  https://lore.kernel.org/all/20220422084720.959271-1-xji@analogixsemi.com/
+- MTK SVS v24
+  https://lore.kernel.org/all/20220420102044.10832-1-roger.lu@mediatek.com/
+- MTK cpufreq v4
+  https://lore.kernel.org/all/20220422075239.16437-1-rex-bc.chen@mediatek.com/
+- PM / devfreq core patches from
+  http://git.kernel.org/chanwoo/h/devfreq-testing
+  PM / devfreq: Export devfreq_get_freq_range symbol within devfreq
+  PM / devfreq: Add cpu based scaling support to passive governor
+  PM / devfreq: passive: Reduce duplicate code when passive_devfreq case
+  PM / devfreq: passive: Update frequency when start governor
+- CCI devfreq v2
+  https://lore.kernel.org/all/20220408052150.22536-1-johnson.wang@mediatek.com/
 
-$size vmlinux*
-  text    data     bss     dec     hex filename
-  17849671        22654886        4702208 45206765        2b1cced vmlinux.data-4k-align
-  17849671        14784294        6275072 38909037        251b46d vmlinux.raw
+And some patches of my own to fix some errors. See the last handful of
+patches including and after the fixup! one.
 
-Similarly, there is another kernel debug option to check text alignment
-related performance changes: CONFIG_DEBUG_FORCE_FUNCTION_ALIGN_64B,
-which forces all function's start address to be 64 bytes alinged.
+This was tested on Juniper (Acer Chromebook Spin 311) that has MT8183.
+Looking at the mcu_*_sel clocks from /sys/kernel/debug/clk/clk_summary ,
+it does seem like things are happening, though I'm not sure how to
+thoroughly test this, especially SVS.
 
-This option depends on CONFIG_DYNAMIC_DEBUG==n, as '__dyndbg' subsection
-of .data has a hard requirement of ALIGN(8), shown in the 'vmlinux.lds':
+Hope this unblocks things for everyone involved.
 
-"
-. = ALIGN(8); __start___dyndbg = .; KEEP(*(__dyndbg)) __stop___dyndbg = .;
-"
 
-It contains all pointers to 'struct _ddebug', and dynamic_debug_init()
-will "pointer++" to loop accessing these pointers, which will be broken
-with this option enabled.
-
-[1]. https://lore.kernel.org/lkml/20200205123216.GO12867@shao2-debian/
-[2]. https://lore.kernel.org/lkml/20200305062138.GI5972@shao2-debian/
-[3]. https://lore.kernel.org/lkml/20201112140625.GA21612@xsang-OptiPlex-9020/
-
-Signed-off-by: Feng Tang <feng.tang@intel.com>
----
-Changelog:
-  
-  sicne v2
-    * correct some typos about THRED_SIZE/PAGE_SIZE, as pointed out
-      by Peter Zijlstra
-    
-  since v1
-    * reduce the alignment from THREAD_SIZE to PAGE_SIZE
-    * refine the commit log with size change data, and code comments
-
-  since RFC (https://lore.kernel.org/lkml/1627456900-42743-1-git-send-email-feng.tang@intel.com/)
-    * rebase against 5.17-rc1
-    * modify the changelog adding more recent info
-
- arch/x86/Kconfig.debug        | 13 +++++++++++++
- arch/x86/kernel/vmlinux.lds.S | 12 +++++++++++-
- 2 files changed, 24 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/Kconfig.debug b/arch/x86/Kconfig.debug
-index d3a6f74a94bd..d8edf546f372 100644
---- a/arch/x86/Kconfig.debug
-+++ b/arch/x86/Kconfig.debug
-@@ -225,6 +225,19 @@ config PUNIT_ATOM_DEBUG
- 	  The current power state can be read from
- 	  /sys/kernel/debug/punit_atom/dev_power_state
- 
-+config DEBUG_FORCE_DATA_SECTION_ALIGNED
-+	bool "Force all data sections to be PAGE_SIZE aligned"
-+	depends on EXPERT && !DYNAMIC_DEBUG
-+	help
-+	  There are cases that a commit from one kernel domain changes
-+	  data sections' alignment of other domains, as they are all
-+	  linked together compactly, and cause magic performance bump
-+	  (regression or improvement), which is hard to debug. Enable
-+	  this option will help to verify if the bump is caused by
-+	  data alignment changes.
-+
-+	  It is mainly for debug and performance tuning use.
-+
- choice
- 	prompt "Choose kernel unwinder"
- 	default UNWINDER_ORC if X86_64
-diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
-index 7fda7f27e762..0919872602f1 100644
---- a/arch/x86/kernel/vmlinux.lds.S
-+++ b/arch/x86/kernel/vmlinux.lds.S
-@@ -155,7 +155,17 @@ SECTIONS
- 	X86_ALIGN_RODATA_END
- 
- 	/* Data */
--	.data : AT(ADDR(.data) - LOAD_OFFSET) {
-+	.data : AT(ADDR(.data) - LOAD_OFFSET)
-+#ifdef CONFIG_DEBUG_FORCE_DATA_SECTION_ALIGNED
-+	/*
-+	 * In theory, THREAD_SIZE as the biggest alignment of below sections
-+	 * should be picked, but since upper 'X86_ALIGN_RODATA_END' can
-+	 * guarantee the alignment of 'INIT_TASK_DATA', PAGE_SIZE is picked
-+	 * instead to reduce size of kernel binary
-+	 */
-+	SUBALIGN(PAGE_SIZE)
-+#endif
-+	{
- 		/* Start of data section */
- 		_sdata = .;
- 
--- 
-2.27.0
-
+Regards
+ChenYu

@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA24950F83D
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5452350F52B
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348263AbiDZJjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:39:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51366 "EHLO
+        id S1347250AbiDZIvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:51:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346561AbiDZJIY (ORCPT
+        with ESMTP id S1345790AbiDZIjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:08:24 -0400
+        Tue, 26 Apr 2022 04:39:31 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329C6D17F3;
-        Tue, 26 Apr 2022 01:49:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8CB939CD;
+        Tue, 26 Apr 2022 01:31:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4CC0BB81CFE;
-        Tue, 26 Apr 2022 08:49:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D9D5C385A4;
-        Tue, 26 Apr 2022 08:49:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 826F3B81CFA;
+        Tue, 26 Apr 2022 08:31:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5938C385A0;
+        Tue, 26 Apr 2022 08:31:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962954;
-        bh=1VoSaBJwo6TdKIU4fRmW1G6i+TLa8PraiX9ok07uIxI=;
+        s=korg; t=1650961870;
+        bh=I8jUk6UlJme96tx2y02LVwef7dIYYkmsMzlL41Kj7dw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A5JcI0bib7Idy9W3aquIyxduNE0g8rcgQ3t6QGsWbOFkj6a2AuYMNAg8AeiYIm6nY
-         qcnjzVw2QJM7tC/cRzDjFKQ5WZx+PGtadGYmvm12Fw2PLws+qOWq979JPMNdQY58JG
-         TOQr2sG36CR1lCJb1jMJwRxzBK4xl81GU7jUSq+c=
+        b=OTLVBlW6JiOku/3ryoC7C8qpv9FEYqxuSpJUVLRiNJJ3b8W72t4jpB3iaaRxZNWp6
+         C6or+H/NAAfnn5Mt+9jkycjmUdPoSUd7luVew+2rI2JGbtZHUF6yE+UO3AAtI8RSUA
+         SJnkKv8c/BS6iaNbSC763JtLbjreWs7tOHpCplNg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 104/146] drm/panel/raspberrypi-touchscreen: Avoid NULL deref if not initialised
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.4 59/62] spi: atmel-quadspi: Fix the buswidth adjustment between spi-mem and controller
 Date:   Tue, 26 Apr 2022 10:21:39 +0200
-Message-Id: <20220426081752.981600318@linuxfoundation.org>
+Message-Id: <20220426081738.914423153@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
-References: <20220426081750.051179617@linuxfoundation.org>
+In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
+References: <20220426081737.209637816@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,42 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+From: Tudor Ambarus <tudor.ambarus@microchip.com>
 
-[ Upstream commit f92055ae0acb035891e988ce345d6b81a0316423 ]
+commit 8c235cc25087495c4288d94f547e9d3061004991 upstream.
 
-If a call to rpi_touchscreen_i2c_write from rpi_touchscreen_probe
-fails before mipi_dsi_device_register_full is called, then
-in trying to log the error message if uses ts->dsi->dev when
-it is still NULL.
+Use the spi_mem_default_supports_op() core helper in order to take into
+account the buswidth specified by the user in device tree.
 
-Use ts->i2c->dev instead, which is initialised earlier in probe.
-
-Fixes: 2f733d6194bd ("drm/panel: Add support for the Raspberry Pi 7" Touchscreen.")
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220415162513.42190-2-stefan.wahren@i2se.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: <stable@vger.kernel.org>
+Fixes: 0e6aae08e9ae ("spi: Add QuadSPI driver for Atmel SAMA5D2")
+Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+Link: https://lore.kernel.org/r/20220406133604.455356-1-tudor.ambarus@microchip.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/atmel-quadspi.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c b/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c
-index 46029c5610c8..1f805eb8fdb5 100644
---- a/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c
-+++ b/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c
-@@ -229,7 +229,7 @@ static void rpi_touchscreen_i2c_write(struct rpi_touchscreen *ts,
+--- a/drivers/spi/atmel-quadspi.c
++++ b/drivers/spi/atmel-quadspi.c
+@@ -202,6 +202,9 @@ static int atmel_qspi_find_mode(const st
+ static bool atmel_qspi_supports_op(struct spi_mem *mem,
+ 				   const struct spi_mem_op *op)
+ {
++	if (!spi_mem_default_supports_op(mem, op))
++		return false;
++
+ 	if (atmel_qspi_find_mode(op) < 0)
+ 		return false;
  
- 	ret = i2c_smbus_write_byte_data(ts->i2c, reg, val);
- 	if (ret)
--		dev_err(&ts->dsi->dev, "I2C write failed: %d\n", ret);
-+		dev_err(&ts->i2c->dev, "I2C write failed: %d\n", ret);
- }
- 
- static int rpi_touchscreen_write(struct rpi_touchscreen *ts, u16 reg, u32 val)
--- 
-2.35.1
-
 
 

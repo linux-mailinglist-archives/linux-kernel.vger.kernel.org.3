@@ -2,70 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E449E510A0F
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:14:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA660510A14
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:14:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241221AbiDZURT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 16:17:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47924 "EHLO
+        id S243395AbiDZURZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 16:17:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235912AbiDZURP (ORCPT
+        with ESMTP id S1354755AbiDZURR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:17:15 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7451869C8
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:14:03 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id r8so21962891oib.5
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:14:02 -0700 (PDT)
+        Tue, 26 Apr 2022 16:17:17 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94795198C68
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:14:08 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id 79so21809210iou.7
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:14:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LOF/swU7ri17HNXlnT7ndFuNSzBTT2l6UmX2G8t0fao=;
-        b=EpcCQfcX8t4tCHTkCeCt7XTlaO4cJlPlfOe5Yq7QXrx+iwdOvURAOX3BenP9I9NxTg
-         dxO/zHL+D8q3dmjsHi87Pdtco459mLR9p9OL/vn5z9V87y+JLthD7h+5QS7o/Ev9QVb6
-         Ent0ow9LRg9IIvmt7SzKVKoGIGHxpuYarl32h1juJi82dBm9lDtLlurW2ZR6Ba6RD9Ue
-         LIfoQyWAteLcdB3NIj/h/kUle8V3gcyyKJaw7xydnZ2151CuDvqL8JiNl7pYO2eFhPbk
-         bchpvdCVkot+QjLIVBwUzcjYYoR9aQn16BHusvPq4TDN+eCmTdoZRFyeXXuWeCl9J6DY
-         NBIg==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=abgy5fRKq9r2YU6bCVGzHdkj9O0LUE9XrxLObfY5iAA=;
+        b=T7zk67gE5JfB4KU5fLOxaF1QFOpanhJnC77V1pFGFIu8Jlw4RxTUXWsgS4TLeSZmYJ
+         hI7Wl0Vr71BzR2oJMkL6rhlcPCDs+rh/ODxrQrXSUPsWuZ0Nq1Fmc1wYHfDXONIdKpAn
+         OSMgUk+xXTphdoEfvEZuOO81YuTdWg7++eZOw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=LOF/swU7ri17HNXlnT7ndFuNSzBTT2l6UmX2G8t0fao=;
-        b=v2I+LIE14u3ZzgSqD8YPO6yNgdOAbG20PfmLcprpKbrq2dG4VZw1MH/OI34LNy347B
-         pf1/9PjaC2LDApwDEZH7wo/qBAWdl4XEj4PwTd5yfLZJCd3CVN7KMwvij0N0NbA8VT7C
-         Kkg2IG1LTxCnyKXB8TZ2PZujir8recwh/piouX3R1tRy2bdAqGS7thhZejTmDZ0gL38W
-         ae9Mtma3cD3KIZIsPaSsGNFonlqHSYhuVlvS9pRcdvXfuVkApPrYG6yBPYyGAgq+lSKk
-         s0QHi7aTT9eE1fgq/9hBA7cg3vTLlMw2o/qlilcUxnRf87lwLNJWfDRATIjowXX7dzXT
-         NVcA==
-X-Gm-Message-State: AOAM532x7g+HDYL+keWXK+g8iN8VSKUxvi8ev0vRF6EoypkJpC2iQRxH
-        KWX5IJy4ljTHWG63Cjg15NU=
-X-Google-Smtp-Source: ABdhPJz7ZBRrPySGNSDh4uQ3vrQ+SI3TKBgjip8c1iucs6eTt4im6RhPCVdr+b7FmdPmTtUdABULTg==
-X-Received: by 2002:a05:6808:118f:b0:2d9:a01a:48be with SMTP id j15-20020a056808118f00b002d9a01a48bemr15280519oil.265.1651004042074;
-        Tue, 26 Apr 2022 13:14:02 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l96-20020a9d1b69000000b00605db61f2f4sm62293otl.49.2022.04.26.13.14.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 13:14:01 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 26 Apr 2022 13:13:59 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Brian Norris <briannorris@chromium.org>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Arnd Bergmann <arnd@arndb.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] soc: rockchip: Clean up Kconfig whitespace
-Message-ID: <20220426201359.GH4093517@roeck-us.net>
-References: <20220426014545.628100-1-briannorris@chromium.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=abgy5fRKq9r2YU6bCVGzHdkj9O0LUE9XrxLObfY5iAA=;
+        b=Abfz6HdUPGepUX2pvX1420PjIDpQx6BrYmg9VMcJHDETTt4+UHNAzuMtA/1VdYsSQv
+         DAZSEQuUx246ZmVxpiNSjyZZdSjxDXR5QeKBAaJwujCtfnsGRx5oyGMccCEj3XHmlPbu
+         GOI4QItZSenHKIkkE14XL3ahBzslxM4YXXfttUg9sZVmmZ1nqn3dsB3kGiANucYDmQvm
+         IH0SyqhkK20wYh4ADlFm1X309AZWc8jfcpKzGRdsNEPyjDCfSzBrgFaYvePJfcyGhZ2Y
+         PlaoZKruBeoobatKWdzZHwoUPd8LeWQn2YGDsM73FMcUQtOr4EJbcjqXolJAKh+PUmds
+         IhxQ==
+X-Gm-Message-State: AOAM5325JFtQzwxiBa4b2Tt401x1jCLOUUMj1+4Y1OmO3ieyptYUe/ir
+        J3+UToJsaRmCbKSLojGW2YjfpA==
+X-Google-Smtp-Source: ABdhPJwJQZkvDEw68T5ZCUeqXK7jL07nM0ghfdZ5wIyBNXZabgm3oDJ9ZJfM6o5B+Ltrnp73wsr7yg==
+X-Received: by 2002:a05:6638:2195:b0:31a:8815:f0c0 with SMTP id s21-20020a056638219500b0031a8815f0c0mr10530093jaj.301.1651004047624;
+        Tue, 26 Apr 2022 13:14:07 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id b11-20020a6be70b000000b00654b3a46b5esm9811498ioh.53.2022.04.26.13.14.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Apr 2022 13:14:07 -0700 (PDT)
+Subject: Re: [PATCH 5.15 000/124] 5.15.36-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220426081747.286685339@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <2f8a0edc-01b4-3ea8-eabd-9646ca73ad18@linuxfoundation.org>
+Date:   Tue, 26 Apr 2022 14:14:06 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220426014545.628100-1-briannorris@chromium.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,63 +76,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 06:45:42PM -0700, Brian Norris wrote:
-> There are spaces instead of tabs, and other inconsistent indentation.
+On 4/26/22 2:20 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.36 release.
+> There are 124 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Signed-off-by: Brian Norris <briannorris@chromium.org>
+> Responses should be made by Thu, 28 Apr 2022 08:17:22 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.36-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Compiled and booted on my test system. No dmesg regressions.
 
-> ---
-> 
-> (no changes since v2)
-> 
-> Changes in v2:
->  * New patch
-> 
->  drivers/soc/rockchip/Kconfig | 24 ++++++++++++------------
->  1 file changed, 12 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/soc/rockchip/Kconfig b/drivers/soc/rockchip/Kconfig
-> index 156ac0e0c8fe..aff2f7e95237 100644
-> --- a/drivers/soc/rockchip/Kconfig
-> +++ b/drivers/soc/rockchip/Kconfig
-> @@ -23,23 +23,23 @@ config ROCKCHIP_IODOMAIN
->  	  voltage supplied by the regulators.
->  
->  config ROCKCHIP_PM_DOMAINS
-> -        bool "Rockchip generic power domain"
-> -        depends on PM
-> -        select PM_GENERIC_DOMAINS
-> -        help
-> -          Say y here to enable power domain support.
-> -          In order to meet high performance and low power requirements, a power
-> -          management unit is designed or saving power when RK3288 in low power
-> -          mode. The RK3288 PMU is dedicated for managing the power of the whole chip.
-> +	bool "Rockchip generic power domain"
-> +	depends on PM
-> +	select PM_GENERIC_DOMAINS
-> +	help
-> +	  Say y here to enable power domain support.
-> +	  In order to meet high performance and low power requirements, a power
-> +	  management unit is designed or saving power when RK3288 in low power
-> +	  mode. The RK3288 PMU is dedicated for managing the power of the whole chip.
->  
-> -          If unsure, say N.
-> +	  If unsure, say N.
->  
->  config ROCKCHIP_DTPM
->  	tristate "Rockchip DTPM hierarchy"
->  	depends on DTPM && m
->  	help
-> -	 Describe the hierarchy for the Dynamic Thermal Power
-> -	 Management tree on this platform. That will create all the
-> -	 power capping capable devices.
-> +	  Describe the hierarchy for the Dynamic Thermal Power Management tree
-> +	  on this platform. That will create all the power capping capable
-> +	  devices.
->  
->  endif
-> -- 
-> 2.36.0.rc2.479.g8af0fa9b8e-goog
-> 
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah

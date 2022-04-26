@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F9A150F722
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:39:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9858350F4B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:37:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345848AbiDZJVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:21:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53740 "EHLO
+        id S1346093AbiDZIj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343871AbiDZI5l (ORCPT
+        with ESMTP id S1345675AbiDZIe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:57:41 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2BCE98;
-        Tue, 26 Apr 2022 01:42:10 -0700 (PDT)
+        Tue, 26 Apr 2022 04:34:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98BE7A9BD;
+        Tue, 26 Apr 2022 01:28:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 78149CE1BC9;
-        Tue, 26 Apr 2022 08:42:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A672C385A4;
-        Tue, 26 Apr 2022 08:42:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5A6BAB81CAF;
+        Tue, 26 Apr 2022 08:28:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDD61C385A4;
+        Tue, 26 Apr 2022 08:28:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962526;
-        bh=Q/NB08VUd3vxv4x7BsltP3dVqaSoPQUEhqVzMWg51P8=;
+        s=korg; t=1650961681;
+        bh=RUvmbQXRPebHo8224VQKMTezWYzBBTmR1kWFAlwCiA4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cHox6g8qUbPSs2toTNfp0qRyhXxP0+3OL85qATCiSx+8sfydZjxhKUuV4BOmu79/Q
-         LjiJ7LeMOnyBZ8gfrnupSyKuCwMzMdp5YKI3GBzyRT6nybglVfRCxGl/dnWXBiNDSE
-         Au0COdKDfOxhvQhVIfbzaPOSWFmoEyLH6otmpULs=
+        b=J5CpA9P0N57aoK02auBdPZrHv12Kem77ePFDTxthkIMzsE6cpMNstRFdiCCkvVsjM
+         ff8hS0VnmalsqstcT2TNrXqvgMKtyQag0YYAfXXbIA7crUK9IfXWKItYihNMAm54fV
+         m8DgeB9Tzb6QSTIN7MVH9MGjvzELQpNqg+NUv1TM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, koo5 <kolman.jindrich@gmail.com>,
-        Manuel Ullmann <labre@posteo.de>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 086/124] net: atlantic: invert deep par in pm functions, preventing null derefs
-Date:   Tue, 26 Apr 2022 10:21:27 +0200
-Message-Id: <20220426081749.745559934@linuxfoundation.org>
+        Thomas Osterried <thomas@osterried.de>,
+        Duoming Zhou <duoming@zju.edu.cn>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ovidiu Panait <ovidiu.panait@windriver.com>
+Subject: [PATCH 4.19 48/53] ax25: Fix refcount leaks caused by ax25_cb_del()
+Date:   Tue, 26 Apr 2022 10:21:28 +0200
+Message-Id: <20220426081737.060499628@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
-References: <20220426081747.286685339@linuxfoundation.org>
+In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
+References: <20220426081735.651926456@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,95 +55,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Manuel Ullmann <labre@posteo.de>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-commit cbe6c3a8f8f4315b96e46e1a1c70393c06d95a4c upstream.
+commit 9fd75b66b8f68498454d685dc4ba13192ae069b0 upstream.
 
-This will reset deeply on freeze and thaw instead of suspend and
-resume and prevent null pointer dereferences of the uninitialized ring
-0 buffer while thawing.
+The previous commit d01ffb9eee4a ("ax25: add refcount in ax25_dev to
+avoid UAF bugs") and commit feef318c855a ("ax25: fix UAF bugs of
+net_device caused by rebinding operation") increase the refcounts of
+ax25_dev and net_device in ax25_bind() and decrease the matching refcounts
+in ax25_kill_by_device() in order to prevent UAF bugs, but there are
+reference count leaks.
 
-The impact is an indefinitely hanging kernel. You can't switch
-consoles after this and the only possible user interaction is SysRq.
+The root cause of refcount leaks is shown below:
 
-BUG: kernel NULL pointer dereference
-RIP: 0010:aq_ring_rx_fill+0xcf/0x210 [atlantic]
-aq_vec_init+0x85/0xe0 [atlantic]
-aq_nic_init+0xf7/0x1d0 [atlantic]
-atl_resume_common+0x4f/0x100 [atlantic]
-pci_pm_thaw+0x42/0xa0
+     (Thread 1)                      |      (Thread 2)
+ax25_bind()                          |
+ ...                                 |
+ ax25_addr_ax25dev()                 |
+  ax25_dev_hold()   //(1)            |
+  ...                                |
+ dev_hold_track()   //(2)            |
+ ...                                 | ax25_destroy_socket()
+                                     |  ax25_cb_del()
+                                     |   ...
+                                     |   hlist_del_init() //(3)
+                                     |
+                                     |
+     (Thread 3)                      |
+ax25_kill_by_device()                |
+ ...                                 |
+ ax25_for_each(s, &ax25_list) {      |
+  if (s->ax25_dev == ax25_dev) //(4) |
+   ...                               |
 
-resolves in aq_ring.o to
+Firstly, we use ax25_bind() to increase the refcount of ax25_dev in
+position (1) and increase the refcount of net_device in position (2).
+Then, we use ax25_cb_del() invoked by ax25_destroy_socket() to delete
+ax25_cb in hlist in position (3) before calling ax25_kill_by_device().
+Finally, the decrements of refcounts in ax25_kill_by_device() will not
+be executed, because no s->ax25_dev equals to ax25_dev in position (4).
 
-```
-0000000000000ae0 <aq_ring_rx_fill>:
-{
-/* ... */
- baf:	48 8b 43 08          	mov    0x8(%rbx),%rax
- 		buff->flags = 0U; /* buff is NULL */
-```
+This patch adds decrements of refcounts in ax25_release() and use
+lock_sock() to do synchronization. If refcounts decrease in ax25_release(),
+the decrements of refcounts in ax25_kill_by_device() will not be
+executed and vice versa.
 
-The bug has been present since the introduction of the new pm code in
-8aaa112a57c1 ("net: atlantic: refactoring pm logic") and was hidden
-until 8ce84271697a ("net: atlantic: changes for multi-TC support"),
-which refactored the aq_vec_{free,alloc} functions into
-aq_vec_{,ring}_{free,alloc}, but is technically not wrong. The
-original functions just always reinitialized the buffers on S3/S4. If
-the interface is down before freezing, the bug does not occur. It does
-not matter, whether the initrd contains and loads the module before
-thawing.
-
-So the fix is to invert the boolean parameter deep in all pm function
-calls, which was clearly intended to be set like that.
-
-First report was on Github [1], which you have to guess from the
-resume logs in the posted dmesg snippet. Recently I posted one on
-Bugzilla [2], since I did not have an AQC device so far.
-
-#regzbot introduced: 8ce84271697a
-#regzbot from: koo5 <kolman.jindrich@gmail.com>
-#regzbot monitor: https://github.com/Aquantia/AQtion/issues/32
-
-Fixes: 8aaa112a57c1 ("net: atlantic: refactoring pm logic")
-Link: https://github.com/Aquantia/AQtion/issues/32 [1]
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215798 [2]
-Cc: stable@vger.kernel.org
-Reported-by: koo5 <kolman.jindrich@gmail.com>
-Signed-off-by: Manuel Ullmann <labre@posteo.de>
+Fixes: d01ffb9eee4a ("ax25: add refcount in ax25_dev to avoid UAF bugs")
+Fixes: 87563a043cef ("ax25: fix reference count leaks of ax25_dev")
+Fixes: feef318c855a ("ax25: fix UAF bugs of net_device caused by rebinding operation")
+Reported-by: Thomas Osterried <thomas@osterried.de>
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
 Signed-off-by: David S. Miller <davem@davemloft.net>
+[OP: backport to 4.19: adjust dev_put_track()->dev_put()]
+Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ net/ax25/af_ax25.c |   14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
---- a/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
-+++ b/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
-@@ -444,22 +444,22 @@ err_exit:
- 
- static int aq_pm_freeze(struct device *dev)
+--- a/net/ax25/af_ax25.c
++++ b/net/ax25/af_ax25.c
+@@ -101,8 +101,10 @@ again:
+ 			spin_unlock_bh(&ax25_list_lock);
+ 			lock_sock(sk);
+ 			s->ax25_dev = NULL;
+-			dev_put(ax25_dev->dev);
+-			ax25_dev_put(ax25_dev);
++			if (sk->sk_socket) {
++				dev_put(ax25_dev->dev);
++				ax25_dev_put(ax25_dev);
++			}
+ 			release_sock(sk);
+ 			ax25_disconnect(s, ENETUNREACH);
+ 			spin_lock_bh(&ax25_list_lock);
+@@ -981,14 +983,20 @@ static int ax25_release(struct socket *s
  {
--	return aq_suspend_common(dev, false);
-+	return aq_suspend_common(dev, true);
- }
+ 	struct sock *sk = sock->sk;
+ 	ax25_cb *ax25;
++	ax25_dev *ax25_dev;
  
- static int aq_pm_suspend_poweroff(struct device *dev)
- {
--	return aq_suspend_common(dev, true);
-+	return aq_suspend_common(dev, false);
- }
+ 	if (sk == NULL)
+ 		return 0;
  
- static int aq_pm_thaw(struct device *dev)
- {
--	return atl_resume_common(dev, false);
-+	return atl_resume_common(dev, true);
- }
+ 	sock_hold(sk);
+-	sock_orphan(sk);
+ 	lock_sock(sk);
++	sock_orphan(sk);
+ 	ax25 = sk_to_ax25(sk);
++	ax25_dev = ax25->ax25_dev;
++	if (ax25_dev) {
++		dev_put(ax25_dev->dev);
++		ax25_dev_put(ax25_dev);
++	}
  
- static int aq_pm_resume_restore(struct device *dev)
- {
--	return atl_resume_common(dev, true);
-+	return atl_resume_common(dev, false);
- }
- 
- static const struct dev_pm_ops aq_pm_ops = {
+ 	if (sk->sk_type == SOCK_SEQPACKET) {
+ 		switch (ax25->state) {
 
 

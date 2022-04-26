@@ -2,109 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 750F35104B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 376C45104BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:56:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353439AbiDZQ73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 12:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53394 "EHLO
+        id S1353556AbiDZQ7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 12:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348677AbiDZQ7Z (ORCPT
+        with ESMTP id S1346075AbiDZQ7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 12:59:25 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE41165BF
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:56:17 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id j8-20020a17090a060800b001cd4fb60dccso3063419pjj.2
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:56:17 -0700 (PDT)
+        Tue, 26 Apr 2022 12:59:50 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC91694A8
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:56:42 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id e15so2782034iob.3
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:56:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9/wPbaS/ygwe2xLBOnnhPg4uqAnSA4Ct48vVffLTDVk=;
-        b=hZPxikBFzuALeYibUcgzooE8Ee5esUOwPQJ6q0UuvlqDLESH8Z2e5tYT7/MyW3I5WX
-         FRVk5Xm+BS3Qw7A7pfpPUzEYfffDbpRSVZnu07KOVIQBbDaVSp9OngGzLHpSkokmmklp
-         kHRKtJVKraTQQ6moUg7xXW4ACY74gjxeqQN0Oyt3OWwGV45aISYmcVIkazDA/u0xG2hC
-         IqZnCGqdylLWMkBESaGoaRgF2bGiZuQcgE5vxUIlczQQFXW66SPlWB8bylT3qaeAAahY
-         ys7mm5qYG8TP1OkGlW6slaZpRBSRsS8p1HbrZVqL459ksU1VxgL6ZvPOMaEKJ8zULgFm
-         /iuA==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=5MAOTSTL0j+UcFq0k0W+NNQYDSwGOqBSru0X+peZ2tA=;
+        b=iA2K3qO8Mlk9Ua5NjrBg7SmrDhCgy+pnsrScAgZU37nA18Dm8vLoa9Dp2FRpO9sKY0
+         T9kvBZ2a/hRsCYUaB2kLLZIZ79LiJ0YL3cDg79Mghbe9aioh/H9FbzsScRypM4iG9Y/d
+         dbhCai6A7UI6fc4WVd3kl50Wber7nSoR9Lvps=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9/wPbaS/ygwe2xLBOnnhPg4uqAnSA4Ct48vVffLTDVk=;
-        b=CcDqq196++qlnSW8kfTEsENmvztLJGhi4O5rfTkOSO+fMZP/sIWzB1fRhRs/jsk7x5
-         gx2fS3qv8IfPxeXspyXrOxa5KUER+ipO7YqmdyJJEogCiwZJb9oTzcXOeNAQvCkylGpY
-         4PNs5e8VQh49qjISjAAkZ8BA3Zme9pViL2YUgMZ9cZ189UsrvHHEV0XHKxjdfwPlgnAP
-         ZkCGwD+LDIhoINTf6QfT+hdISFYnr2P9ZUfnFh02CmTbJG0h0TDK6NiplUD5m5A8xuGe
-         q+VtZw3J0oK3diCrSB3MsRkVmvLKMsdp7LYELNM2X1cfPXEmdCfd0VQ9HlZ7IIRl0Jvb
-         CCPA==
-X-Gm-Message-State: AOAM532n/NYfcRiAKhUlkfRPT0Fxybv8FwTyXgCMG6bzA44LTy9y7hXE
-        AvUxK87ahyp2FF5xgMCiE6/n6Q==
-X-Google-Smtp-Source: ABdhPJzReXLu8whTnXO3okAQP1g2oztP+w1K6RI4bZECU5UzqUuJkBgUHXuvsNEMPtVPgC27uVfczQ==
-X-Received: by 2002:a17:90a:9109:b0:1cb:a814:8947 with SMTP id k9-20020a17090a910900b001cba8148947mr38074528pjo.52.1650992176468;
-        Tue, 26 Apr 2022 09:56:16 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id d18-20020a056a0010d200b004fa2e13ce80sm17074509pfu.76.2022.04.26.09.56.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 09:56:15 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 10:56:13 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Hangyu Hua <hbh25y@gmail.com>
-Cc:     bjorn.andersson@linaro.org, arnaud.pouliquen@foss.st.com,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] rpmsg: virtio: Fix the unregistration of the
- device rpmsg_ctrl
-Message-ID: <20220426165613.GA2007637@p14s>
-References: <20220426060536.15594-1-hbh25y@gmail.com>
- <20220426060536.15594-4-hbh25y@gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=5MAOTSTL0j+UcFq0k0W+NNQYDSwGOqBSru0X+peZ2tA=;
+        b=LN7jnF6dEl7FfU09OEEL3s+8IKa4DJ3Rv5g3WBSp2//HJYySS1s+HFO5NfQ3mA9WIA
+         HalM32oF/GE0oBfTOpxH65+jW/RI1KEiPfv3b4OK32LaROKYVXobdhsWxFFYJbhDfw2o
+         HmfKglkjlRAO4t6Xv8OICvqrCjlj5C644SOOAILuxAHtl/QbCyK80woTsYfT3U9EzTQh
+         aCQp7YCt99xpE8iConTpJxrCWJG9YbWSm1TH5W/GaTd/SKsVOAasNrQWApnCOLGmrWW3
+         tLg+4WpCNEvQzd2qrtDQYzz6JDAo30qaW+8KGQooOWGFW6E8gnutxIAYw3JjgXpkb0I8
+         70HA==
+X-Gm-Message-State: AOAM532l/Z79QLk3PjaC7irKpGkPpA2RhLSwQBsoEKvvu7yI0YGKNQi9
+        bVN4WgPskezXN738KFvgW6cyoQ==
+X-Google-Smtp-Source: ABdhPJw+4LWQEWNEpInmZrszTqCnuD5qjkIzY/NRqRzX9Ur1stkAuK0Wq5fbUx1+HQ2belv6VdSIkw==
+X-Received: by 2002:a05:6638:358b:b0:326:4717:90d4 with SMTP id v11-20020a056638358b00b00326471790d4mr10891855jal.136.1650992199826;
+        Tue, 26 Apr 2022 09:56:39 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id y21-20020a6bc415000000b00648da092c8esm9737462ioa.14.2022.04.26.09.56.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Apr 2022 09:56:39 -0700 (PDT)
+Subject: Re: [PATCH v2 5/6] userfaultfd: selftests: make /dev/userfaultfd
+ testing configurable
+To:     Axel Rasmussen <axelrasmussen@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Charan Teja Reddy <charante@codeaurora.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Dmitry V . Levin" <ldv@altlinux.org>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>, zhangyi <yi.zhang@huawei.com>
+Cc:     linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220422212945.2227722-1-axelrasmussen@google.com>
+ <20220422212945.2227722-6-axelrasmussen@google.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <bceb4b77-24fa-7654-0c59-fc858bea096a@linuxfoundation.org>
+Date:   Tue, 26 Apr 2022 10:56:38 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220426060536.15594-4-hbh25y@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220422212945.2227722-6-axelrasmussen@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 02:05:36PM +0800, Hangyu Hua wrote:
-> Unregister the rpmsg_ctrl device instead of just freeing the
-> the virtio_rpmsg_channel structure.
-> This will properly unregister the device and call
-> virtio_rpmsg_release_device() that frees the structure.
+On 4/22/22 3:29 PM, Axel Rasmussen wrote:
+> Instead of always testing both userfaultfd(2) and /dev/userfaultfd,
+> let the user choose which to test.
 > 
-> Fixes: c486682ae1e2 ("rpmsg: virtio: Register the rpmsg_char device")
-> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-> Cc: Hangyu Hua <hbh25y@gmail.com>
-> Reviewed-by: Hangyu Hua <hbh25y@gmail.com>
+> As with other test features, change the behavior based on a new
+> command line flag. Introduce the idea of "test mods", which are
+> generic (not specific to a test type) modifications to the behavior of
+> the test. This is sort of borrowed from this RFC patch series [1], but
+> simplified a bit.
+> 
+> The benefit is, in "typical" configurations this test is somewhat slow
+> (say, 30sec or something). Testing both clearly doubles it, so it may
+> not always be desirable, as users are likely to use one or the other,
+> but never both, in the "real world".
+> 
+> [1]: https://patchwork.kernel.org/project/linux-mm/patch/20201129004548.1619714-14-namit@vmware.com/
+> 
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 > ---
->  drivers/rpmsg/virtio_rpmsg_bus.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>   tools/testing/selftests/vm/userfaultfd.c | 41 +++++++++++++++++-------
+>   1 file changed, 30 insertions(+), 11 deletions(-)
 > 
-> diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
-> index 291fc1cfab7f..485e95f506df 100644
-> --- a/drivers/rpmsg/virtio_rpmsg_bus.c
-> +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
-> @@ -862,7 +862,7 @@ static void rpmsg_virtio_del_ctrl_dev(struct rpmsg_device *rpdev_ctrl)
->  {
->  	if (!rpdev_ctrl)
->  		return;
-> -	kfree(to_virtio_rpmsg_channel(rpdev_ctrl));
-> +	device_unregister(&rpdev_ctrl->dev);
+> diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+> index 12ae742a9981..274522704e40 100644
+> --- a/tools/testing/selftests/vm/userfaultfd.c
+> +++ b/tools/testing/selftests/vm/userfaultfd.c
+> @@ -142,8 +142,17 @@ static void usage(void)
+>   {
+>   	fprintf(stderr, "\nUsage: ./userfaultfd <test type> <MiB> <bounces> "
+>   		"[hugetlbfs_file]\n\n");
+> +
 
-The author of this patch should have been Arnaud, something I have fixed before
-applying this set.
+Remove the extra blank line here.
 
-Thanks,
-Mathieu
+>   	fprintf(stderr, "Supported <test type>: anon, hugetlb, "
+>   		"hugetlb_shared, shmem\n\n");
+> +
 
->  }
->  
->  static int rpmsg_probe(struct virtio_device *vdev)
-> -- 
-> 2.25.1
+Remove the extra blank line here.
+
+> +	fprintf(stderr, "'Test mods' can be joined to the test type string with a ':'. "
+> +		"Supported mods:\n");
+> +	fprintf(stderr, "\tdev - Use /dev/userfaultfd instead of userfaultfd(2)\n");
+> +	fprintf(stderr, "\nExample test mod usage:\n");
+> +	fprintf(stderr, "# Run anonymous memory test with /dev/userfaultfd:\n");
+> +	fprintf(stderr, "./userfaultfd anon:dev 100 99999\n\n");
+> +
+>   	fprintf(stderr, "Examples:\n\n");
+>   	fprintf(stderr, "%s", examples);
+
+Update examples above with new test cases if any.
+
+>   	exit(1);
+> @@ -1610,8 +1619,6 @@ unsigned long default_huge_page_size(void)
+>   
+>   static void set_test_type(const char *type)
+>   {
+> -	uint64_t features = UFFD_API_FEATURES;
+> -
+>   	if (!strcmp(type, "anon")) {
+>   		test_type = TEST_ANON;
+>   		uffd_test_ops = &anon_uffd_test_ops;
+> @@ -1631,10 +1638,28 @@ static void set_test_type(const char *type)
+>   		test_type = TEST_SHMEM;
+>   		uffd_test_ops = &shmem_uffd_test_ops;
+>   		test_uffdio_minor = true;
+> -	} else {
+> -		err("Unknown test type: %s", type);
+> +	}
+
+At this point, it might make it so much easier and maintainable if
+we were to use getopt instead of parsing options.
+
+> +}
+> +
+> +static void parse_test_type_arg(const char *raw_type)
+> +{
+> +	char *buf = strdup(raw_type);
+> +	uint64_t features = UFFD_API_FEATURES;
+> +
+> +	while (buf) {
+> +		const char *token = strsep(&buf, ":");
+> +
+> +		if (!test_type)
+> +			set_test_type(token);
+> +		else if (!strcmp(token, "dev"))
+> +			test_dev_userfaultfd = true;
+> +		else
+> +			err("unrecognized test mod '%s'", token);
+>   	}
+>   
+> +	if (!test_type)
+> +		err("failed to parse test type argument: '%s'", raw_type);
+> +
+>   	if (test_type == TEST_HUGETLB)
+>   		page_size = default_huge_page_size();
+>   	else
+> @@ -1681,7 +1706,7 @@ int main(int argc, char **argv)
+>   		err("failed to arm SIGALRM");
+>   	alarm(ALARM_INTERVAL_SECS);
+>   
+> -	set_test_type(argv[1]);
+> +	parse_test_type_arg(argv[1]);
+>   
+>   	nr_cpus = sysconf(_SC_NPROCESSORS_ONLN);
+>   	nr_pages_per_cpu = atol(argv[2]) * 1024*1024 / page_size /
+> @@ -1719,12 +1744,6 @@ int main(int argc, char **argv)
+>   	}
+>   	printf("nr_pages: %lu, nr_pages_per_cpu: %lu\n",
+>   	       nr_pages, nr_pages_per_cpu);
+> -
+> -	test_dev_userfaultfd = false;
+> -	if (userfaultfd_stress())
+> -		return 1;
+> -
+> -	test_dev_userfaultfd = true;
+>   	return userfaultfd_stress();
+>   }
+>   
 > 
+
+Same comments as before on fail vs. skip conditions to watch out
+for and report them correctly.
+
+thanks,
+-- Shuah
+

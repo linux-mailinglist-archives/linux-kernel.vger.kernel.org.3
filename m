@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E12D050F8AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30CAE50F6A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348181AbiDZJes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:34:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36888 "EHLO
+        id S1345912AbiDZI5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347892AbiDZJGV (ORCPT
+        with ESMTP id S1346290AbiDZIos (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:06:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59FA916A5D8;
-        Tue, 26 Apr 2022 01:46:48 -0700 (PDT)
+        Tue, 26 Apr 2022 04:44:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226AA83B23;
+        Tue, 26 Apr 2022 01:34:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1146DB81A2F;
-        Tue, 26 Apr 2022 08:46:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A974C385A0;
-        Tue, 26 Apr 2022 08:46:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C5832B81CF2;
+        Tue, 26 Apr 2022 08:34:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B33BC385A0;
+        Tue, 26 Apr 2022 08:34:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962805;
-        bh=h4jumOqexBZV5LmBJ3rbAZfoyF9KiI4UT45OEVDa5uM=;
+        s=korg; t=1650962071;
+        bh=0o+/bcfWUb8QZLbrnONbvy8GeqdlyK3Z3oJkehZ0ZEw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZOTaKBgZk4pER4vn5WJJZ7FSRH2OaA6GktW6ybZiwH1TOCx4gjEADUNQ17UPDksCZ
-         p6FK3LMDhrXWBMce0Uf0tUPcdEGrQxPCRCgEp5R1oimM1oeymPCWUYKYCQmnVpT6PR
-         GgiSqNcIlOLd8HG9OPajcnsSv/UIaFjqxh0B0abo=
+        b=HcmoZpAEANpvSqZYdF2Mg34lT1uNz7K27X/c1cYSHdiFpT1zzR+Y3cGKu5DjSaHKF
+         6NRgGPrMHRtcNVUfYLnJ1upuB/9JC/K+gEOr/fh8dAOKGKV5crRiRdDGIt/XbMZQT6
+         Yy8BDgpG7liTnTn5UB/lHGO3vKo5MM9ZNYZLG4ZU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: [PATCH 5.17 094/146] ata: pata_marvell: Check the bmdma_addr beforing reading
-Date:   Tue, 26 Apr 2022 10:21:29 +0200
-Message-Id: <20220426081752.701054072@linuxfoundation.org>
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.10 62/86] ASoC: soc-dapm: fix two incorrect uses of list iterator
+Date:   Tue, 26 Apr 2022 10:21:30 +0200
+Message-Id: <20220426081742.997392899@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
-References: <20220426081750.051179617@linuxfoundation.org>
+In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
+References: <20220426081741.202366502@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,40 +53,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheyu Ma <zheyuma97@gmail.com>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-commit aafa9f958342db36c17ac2a7f1b841032c96feb4 upstream.
+commit f730a46b931d894816af34a0ff8e4ad51565b39f upstream.
 
-Before detecting the cable type on the dma bar, the driver should check
-whether the 'bmdma_addr' is zero, which means the adapter does not
-support DMA, otherwise we will get the following error:
+These two bug are here:
+	list_for_each_entry_safe_continue(w, n, list,
+					power_list);
+	list_for_each_entry_safe_continue(w, n, list,
+					power_list);
 
-[    5.146634] Bad IO access at port 0x1 (return inb(port))
-[    5.147206] WARNING: CPU: 2 PID: 303 at lib/iomap.c:44 ioread8+0x4a/0x60
-[    5.150856] RIP: 0010:ioread8+0x4a/0x60
-[    5.160238] Call Trace:
-[    5.160470]  <TASK>
-[    5.160674]  marvell_cable_detect+0x6e/0xc0 [pata_marvell]
-[    5.161728]  ata_eh_recover+0x3520/0x6cc0
-[    5.168075]  ata_do_eh+0x49/0x3c0
+After the list_for_each_entry_safe_continue() exits, the list iterator
+will always be a bogus pointer which point to an invalid struct objdect
+containing HEAD member. The funciton poniter 'w->event' will be a
+invalid value which can lead to a control-flow hijack if the 'w' can be
+controlled.
 
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+The original intention was to continue the outer list_for_each_entry_safe()
+loop with the same entry if w->event is NULL, but misunderstanding the
+meaning of list_for_each_entry_safe_continue().
+
+So just add a 'continue;' to fix the bug.
+
+Cc: stable@vger.kernel.org
+Fixes: 163cac061c973 ("ASoC: Factor out DAPM sequence execution")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Link: https://lore.kernel.org/r/20220329012134.9375-1-xiam0nd.tong@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/ata/pata_marvell.c |    2 ++
- 1 file changed, 2 insertions(+)
+ sound/soc/soc-dapm.c |    6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
---- a/drivers/ata/pata_marvell.c
-+++ b/drivers/ata/pata_marvell.c
-@@ -77,6 +77,8 @@ static int marvell_cable_detect(struct a
- 	switch(ap->port_no)
- 	{
- 	case 0:
-+		if (!ap->ioaddr.bmdma_addr)
-+			return ATA_CBL_PATA_UNK;
- 		if (ioread8(ap->ioaddr.bmdma_addr + 1) & 1)
- 			return ATA_CBL_PATA40;
- 		return ATA_CBL_PATA80;
+--- a/sound/soc/soc-dapm.c
++++ b/sound/soc/soc-dapm.c
+@@ -1683,8 +1683,7 @@ static void dapm_seq_run(struct snd_soc_
+ 		switch (w->id) {
+ 		case snd_soc_dapm_pre:
+ 			if (!w->event)
+-				list_for_each_entry_safe_continue(w, n, list,
+-								  power_list);
++				continue;
+ 
+ 			if (event == SND_SOC_DAPM_STREAM_START)
+ 				ret = w->event(w,
+@@ -1696,8 +1695,7 @@ static void dapm_seq_run(struct snd_soc_
+ 
+ 		case snd_soc_dapm_post:
+ 			if (!w->event)
+-				list_for_each_entry_safe_continue(w, n, list,
+-								  power_list);
++				continue;
+ 
+ 			if (event == SND_SOC_DAPM_STREAM_START)
+ 				ret = w->event(w,
 
 

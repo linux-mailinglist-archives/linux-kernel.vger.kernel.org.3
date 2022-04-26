@@ -2,111 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1169510BA1
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 23:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E14E510CF8
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 02:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355621AbiDZWCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 18:02:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37094 "EHLO
+        id S1356267AbiD0ADv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 20:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346480AbiDZWCo (ORCPT
+        with ESMTP id S231330AbiD0ADu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 18:02:44 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E6418CDAA
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 14:59:35 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id y76so163538ybe.1
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 14:59:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3bpxs3BwsRsNVGR8rV+H1S/A34takD9t6PW/tK7Nuns=;
-        b=rQrWMCWuHFbF3fA9np1al/NM6sLB/JVBaqI3xHXuG6+nPXC8BDAdkBeT6D19OTXrq0
-         NSc/OxVS+gT1SCyw5YAOZDlwIrOtbf+Q78CkXJB7hF2B/2A4eFvhie2pcoQPpLxVW4ib
-         mhKgvVfOJ+UgrJcHisKxEQPTZ9v0Lwt3NB6/N4O9I1U+0rQiESSjJaGx5Iu+TKa2E1Fg
-         9VCX+hWONIn782AUxluTfo/LPp+PeiLA3NSBA6uCSNzwyvaVLuTV3BMHNjzqpcBAi1nn
-         rB0cH1p4qIaWAd7LAyMJhfbKrmYqRx6e4wgzQgHXqFrN5zibWycWzHr0OFUsWplKJ7zh
-         4bpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3bpxs3BwsRsNVGR8rV+H1S/A34takD9t6PW/tK7Nuns=;
-        b=7Sfknd5msurjEOQ/Y+VFWpFDGHQknLaIxvnJ0Gcn5vEKSymAZNyEjC7OT4bFbbNCuX
-         DSOy2zsHGqSMT5+uTaj4IhPY2DXy4F67uJi9x92b4+SIRDzGWfqTcxVnkRokiL0jAWx4
-         Hbtq2OcMKCW/Mudq4h0ygkeFmeBoBG0PjmBgmm+LG9WlkUAODzrWz5oiqEaHvKI5toud
-         ZhZDZ4bNVqlwLBZYKXDO1LpZpjk9Xvx1OK0UGy3eZ0yaeEmZHvZO9gT6m80yk/kKLUyJ
-         001ip6L9XAT9ZntrpcWKW2yjnaEcodcWtUqOePlK0qPVPd0Q+24PVMZqEiUjX/HBT1fE
-         ggTg==
-X-Gm-Message-State: AOAM532mfJAilAjq6bpkqaGdOEPHAGIRrkPFhbCJnNwbTxbibJTkB6Tg
-        jkfSMSL4r+53G3KrO55BgTlPGeWpGV/JxSk6BuCD4w==
-X-Google-Smtp-Source: ABdhPJxmNWf2WAOTBOGYlwqgY2kNnoEeFKfKMFvD28pKOaD0KFUI3oAtcgVaqXsBmJf+wSb/F3TYdyLteg2ZEsK/pP4=
-X-Received: by 2002:a25:a12a:0:b0:644:e94e:5844 with SMTP id
- z39-20020a25a12a000000b00644e94e5844mr22727605ybh.492.1651010374328; Tue, 26
- Apr 2022 14:59:34 -0700 (PDT)
+        Tue, 26 Apr 2022 20:03:50 -0400
+Received: from nksmu.kylinos.cn (mailgw.kylinos.cn [123.150.8.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA9527B01
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 17:00:40 -0700 (PDT)
+X-UUID: b233d3033cc143dca46f30c318016835-20220426
+X-CPASD-INFO: ec2a26a938a1483594dfecc6402256a9@rrNsgV9rj2lfWKN9g3t-b1lkkIa0pZ1
+        WZF5iXlWLs4V6Ul9sWVWEfWxUXWleZWFNe3dzVF1lYGFcWHZ5lHKPVGBeYIJUdJOAp51SkWBm
+X-CLOUD-ID: ec2a26a938a1483594dfecc6402256a9
+X-CPASD-SUMMARY: SIP:-1,APTIP:-5.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:-5.0
+        ,ESV:-5.0,ECOM:-5.0,ML:-5.0,FD:-5.0,CUTS:-5.0,IP:-5.0,MAL:-5.0,PHF:-5.0,PHC:-
+        5.0,SPF:4.0,EDMS:-5,IPLABEL:-5.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-5
+        ,AUF:3,DUF:38531,ACD:266,DCD:368,SL:0,EISP:0,AG:0,CFC:-5.0,CFSR:-5.0,UAT:0,RA
+        F:0,IMG:-5.0,DFA:0,DTA:0,IBL:-5,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,EAF
+        :0,CID:-5.0,VERSION:2.3.17
+X-CPASD-ID: b233d3033cc143dca46f30c318016835-20220426
+X-CPASD-BLOCK: 0
+X-CPASD-STAGE: 4
+X-UUID: b233d3033cc143dca46f30c318016835-20220426
+X-User: sunliming@kylinos.cn
+Received: from localhost.localdomain [(116.128.244.169)] by nksmu.kylinos.cn
+        (envelope-from <sunliming@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 1719923242; Tue, 26 Apr 2022 20:08:36 +0800
+From:   sunliming <sunliming@kylinos.cn>
+To:     mingo@redhat.com, rostedt@goodmis.org, tglx@linutronix.de,
+        bp@alien8.de, dave.hansen@linux.intel.com
+Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        x86@kernel.org, sunliming <sunliming@kylinos.cn>
+Subject: [PATCH v2] x86,trace: Remove unused headers
+Date:   Tue, 26 Apr 2022 20:09:50 +0800
+Message-Id: <20220426120950.495950-1-sunliming@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220419141846.598305-1-maz@kernel.org> <CACRpkda3L_itpqcnPq6xDoJtNHt8NuvE1MZk1bCNR+u2KKUpBA@mail.gmail.com>
- <874k2kccse.wl-maz@kernel.org> <CAHp75VcKNurETpNtrZM7SN2XEtLM6ZYFrS-gKr6r55Lc37gKQQ@mail.gmail.com>
-In-Reply-To: <CAHp75VcKNurETpNtrZM7SN2XEtLM6ZYFrS-gKr6r55Lc37gKQQ@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 26 Apr 2022 23:59:22 +0200
-Message-ID: <CACRpkdaO+KTb+jJQ0qY59TP8f7gyY2mTUtNEt5+KUHNQAYU1bA@mail.gmail.com>
-Subject: Re: [PATCH v3 00/10] gpiolib: Handle immutable irq_chip structures
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm@vger.kernel.org,
-        Android Kernel Team <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 12:25 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Sat, Apr 23, 2022 at 12:30 PM Marc Zyngier <maz@kernel.org> wrote:
+Commit 4b9a8dca0e58 ("x86/idt: Remove the tracing IDT completely")
+removed the tracing IDT from the file arch/x86/kernel/tracepoint.c,
+but left the related headers unused, remove it.
 
-> > You can pick it up from:
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=irq/gpio-immutable
-> >
-> > but I can also drop it from the irqchip tree.
-> >
-> > Just let me know.
+Signed-off-by: sunliming <sunliming@kylinos.cn>
+---
+ arch/x86/kernel/tracepoint.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Pulling that looks good to me.
+diff --git a/arch/x86/kernel/tracepoint.c b/arch/x86/kernel/tracepoint.c
+index fcfc077afe2d..f39aad69fb64 100644
+--- a/arch/x86/kernel/tracepoint.c
++++ b/arch/x86/kernel/tracepoint.c
+@@ -8,10 +8,7 @@
+ #include <linux/jump_label.h>
+ #include <linux/atomic.h>
+ 
+-#include <asm/hw_irq.h>
+-#include <asm/desc.h>
+ #include <asm/trace/exceptions.h>
+-#include <asm/trace/irq_vectors.h>
+ 
+ DEFINE_STATIC_KEY_FALSE(trace_pagefault_key);
+ 
+-- 
+2.25.1
 
-If Bartosz pulls this to the GPIO tree I will also pull it to pin control,
-I just want him to decide, because the impact is biggest on GPIO.
 
-> I would prefer it if it goes as is now and every stakeholder can just
-> pull it. As far as my drivers are concerned I also want to convert
-> them sooner than later, meaning I want to pull this into my little
-> tree as well. Bart, Linus, would it be also preferable for you?
-
-I'd say let's all three pull this branch, Bart?
-
-Yours,
-Linus Walleij
+No virus found
+		Checked by Hillstone Network AntiVirus

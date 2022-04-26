@@ -2,51 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 006F6510AA8
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8944E510AAE
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:40:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355096AbiDZUmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 16:42:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39022 "EHLO
+        id S1354661AbiDZUnr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 26 Apr 2022 16:43:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355076AbiDZUmF (ORCPT
+        with ESMTP id S231740AbiDZUnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:42:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B177C159
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:38:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D7C3C61460
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 20:38:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1F68C385C1;
-        Tue, 26 Apr 2022 20:38:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651005536;
-        bh=EJTLlpRlUCkEhKFM6MungmBPQeFMLPhClXDK/efWxik=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GRwDexlP/87pblyKCM6WAN/LSZPIQ/UBs4lFHVo6lWOaQssnenqG8+L1+WbOTXozY
-         3SAtRV65+WGruiUFbP62mEBDmt8wqPgSR2kZIIKZ0kfn/Kx05DdtfdMW9Uem3rDTAu
-         wwZtAbLSrzZhQWYR3u1pFlIwKp7wu56aJlmzWRntcdo3D9x72CsjGYlXDbAwfe1HiS
-         lcOm0YeRxKvsJ9a0VsdyXn9aQpDbru6GZ00oZBP3iDtkn6UNqyF2FCy1l5+xj7PKG/
-         yv5+W0UfjF5halkZSnDOYu1zIQulZCwM9slHj3vT9D64tDiol3YfDrt4j3YVUZgzYM
-         bllirWCyIpNzg==
-From:   sj@kernel.org
-To:     akpm@linux-foundation.org
-Cc:     linux-damon@amazon.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: [PATCH 4/4] Docs/{ABI,admin-guide}/damon: document 'avail_operations' sysfs file
-Date:   Tue, 26 Apr 2022 20:38:43 +0000
-Message-Id: <20220426203843.45238-5-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220426203843.45238-1-sj@kernel.org>
-References: <20220426203843.45238-1-sj@kernel.org>
+        Tue, 26 Apr 2022 16:43:45 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8453139B91
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:40:35 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-215-Rl5h__tWMV6h7ynZt8pZJg-1; Tue, 26 Apr 2022 21:40:32 +0100
+X-MC-Unique: Rl5h__tWMV6h7ynZt8pZJg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Tue, 26 Apr 2022 21:40:31 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Tue, 26 Apr 2022 21:40:31 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Matthew Wilcox' <willy@infradead.org>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "ying.huang@intel.com" <ying.huang@intel.com>,
+        "dave.hansen@intel.com" <dave.hansen@intel.com>,
+        "Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
+        "adobriyan@gmail.com" <adobriyan@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "rf@opensource.cirrus.com" <rf@opensource.cirrus.com>,
+        "pmladek@suse.com" <pmladek@suse.com>
+Subject: RE: [PATCH v3 1/2] lib/kstrtox.c: Add "false"/"true" support to
+ kstrtobool()
+Thread-Topic: [PATCH v3 1/2] lib/kstrtox.c: Add "false"/"true" support to
+ kstrtobool()
+Thread-Index: AQHYWaQPIReaMXdvC0yn2siMv2N/Ya0Cp+Iw
+Date:   Tue, 26 Apr 2022 20:40:31 +0000
+Message-ID: <09211d4bba86400bbc27fa3a2d38cd76@AcuMS.aculab.com>
+References: <20220426180203.70782-1-jvgediya@linux.ibm.com>
+ <YmhEqCCfUvYYPmci@casper.infradead.org>
+In-Reply-To: <YmhEqCCfUvYYPmci@casper.infradead.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,87 +71,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: SeongJae Park <sj@kernel.org>
+From: Matthew Wilcox
+> Sent: 26 April 2022 20:15
+ ()
+> 
+> On Tue, Apr 26, 2022 at 11:32:02PM +0530, Jagdish Gediya wrote:
+> > Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
+> > Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> 
+> HEY!  You still have the buggy IFF -> IF change.  FIX IT.
+> My R-b was very clearly conditional on you fixing it.
+> 
+> > - * This routine returns 0 iff the first character is one of 'Yy1Nn0', or
+> > + * This routine returns 0 if the first character is one of 'YyTt1NnFf0', or
 
-This commit updates the DAMON ABI and usage documents for the new sysfs
-file, 'avail_operations'.
+my 2c
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- .../ABI/testing/sysfs-kernel-mm-damon          | 10 +++++++++-
- Documentation/admin-guide/mm/damon/usage.rst   | 18 ++++++++++++------
- 2 files changed, 21 insertions(+), 7 deletions(-)
+Iff doesn't really go with an 'or' clause.
+(With a maths degree I know what it means!)
 
-diff --git a/Documentation/ABI/testing/sysfs-kernel-mm-damon b/Documentation/ABI/testing/sysfs-kernel-mm-damon
-index 9e282065cbcf..d724b8a12228 100644
---- a/Documentation/ABI/testing/sysfs-kernel-mm-damon
-+++ b/Documentation/ABI/testing/sysfs-kernel-mm-damon
-@@ -40,6 +40,12 @@ Description:	Writing a number 'N' to this file creates the number of
- 		directories for controlling each DAMON context named '0' to
- 		'N-1' under the contexts/ directory.
- 
-+What:		/sys/kernel/mm/damon/admin/kdamonds/<K>/contexts/<C>/avail_operations
-+Date:		Apr 2022
-+Contact:	SeongJae Park <sj@kernel.org>
-+Description:	Reading this file returns the available monitoring operations
-+		sets on the currently running kernel.
-+
- What:		/sys/kernel/mm/damon/admin/kdamonds/<K>/contexts/<C>/operations
- Date:		Mar 2022
- Contact:	SeongJae Park <sj@kernel.org>
-@@ -47,7 +53,9 @@ Description:	Writing a keyword for a monitoring operations set ('vaddr' for
- 		virtual address spaces monitoring, and 'paddr' for the physical
- 		address space monitoring) to this file makes the context to use
- 		the operations set.  Reading the file returns the keyword for
--		the operations set the context is set to use.
-+		the operations set the context is set to use.  Note that only
-+		the operations sets that listed in 'avail_operations' file are
-+		valid inputs.
- 
- What:		/sys/kernel/mm/damon/admin/kdamonds/<K>/contexts/<C>/monitoring_attrs/intervals/sample_us
- Date:		Mar 2022
-diff --git a/Documentation/admin-guide/mm/damon/usage.rst b/Documentation/admin-guide/mm/damon/usage.rst
-index 592ea9a50881..af6ffaea567b 100644
---- a/Documentation/admin-guide/mm/damon/usage.rst
-+++ b/Documentation/admin-guide/mm/damon/usage.rst
-@@ -68,7 +68,7 @@ comma (","). ::
-     │ kdamonds/nr_kdamonds
-     │ │ 0/state,pid
-     │ │ │ contexts/nr_contexts
--    │ │ │ │ 0/operations
-+    │ │ │ │ 0/avail_operations,operations
-     │ │ │ │ │ monitoring_attrs/
-     │ │ │ │ │ │ intervals/sample_us,aggr_us,update_us
-     │ │ │ │ │ │ nr_regions/min,max
-@@ -143,17 +143,23 @@ be written to the file.
- contexts/<N>/
- -------------
- 
--In each context directory, one file (``operations``) and three directories
--(``monitoring_attrs``, ``targets``, and ``schemes``) exist.
-+In each context directory, two files (``avail_operations`` and ``operations``)
-+and three directories (``monitoring_attrs``, ``targets``, and ``schemes``)
-+exist.
- 
- DAMON supports multiple types of monitoring operations, including those for
--virtual address space and the physical address space.  You can set and get what
--type of monitoring operations DAMON will use for the context by writing one of
--below keywords to, and reading from the file.
-+virtual address space and the physical address space.  You can get the list of
-+available monitoring operations set on the currently running kernel by reading
-+``avail_operations`` file.  Based on the kernel configuration, the file will
-+list some or all of below keywords.
- 
-  - vaddr: Monitor virtual address spaces of specific processes
-  - paddr: Monitor the physical address space of the system
- 
-+You can set and get what type of monitoring operations DAMON will use for the
-+context by writing one of the keywords listed in ``avail_operations`` file and
-+reading from the ``operations`` file.
-+
- contexts/<N>/monitoring_attrs/
- ------------------------------
- 
--- 
-2.25.1
+so it probably reads better as 'if'.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 

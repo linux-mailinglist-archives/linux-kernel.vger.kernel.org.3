@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D60F850F764
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:39:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFDC750F8E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:44:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348432AbiDZJjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:39:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54166 "EHLO
+        id S1348520AbiDZJkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:40:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346065AbiDZJGo (ORCPT
+        with ESMTP id S1346103AbiDZJGp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:06:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0DE8170E0B;
-        Tue, 26 Apr 2022 01:48:07 -0700 (PDT)
+        Tue, 26 Apr 2022 05:06:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A3C1725D7;
+        Tue, 26 Apr 2022 01:48:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 861EEB81CFE;
-        Tue, 26 Apr 2022 08:48:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB03AC385A0;
-        Tue, 26 Apr 2022 08:48:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5E5C6B81A2F;
+        Tue, 26 Apr 2022 08:48:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF2D4C385A0;
+        Tue, 26 Apr 2022 08:48:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962885;
-        bh=h9nekDnZjVNRaibYw2Ab9HItxmQykDgvxLK3hX4+T2w=;
+        s=korg; t=1650962888;
+        bh=bIfzGYBIqeeKpYwQ1scAh406vQ8IUBMdWs3kvctj9c0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HIUxtZGhe4quKZ872Ie9eg6U5fJmSJIuEQS1vNt5z3REG1BHNmdpdZlYF5K6LWtIO
-         XkXlEfVm8h34q79TF3/28x0OAYNSkirUoQ3rGvfTBTydjMjPqEVdMt5a6EyhyHYDbC
-         H4GFZjN9nR5j4zvi+9N71RcWzYPRCjJllFfG7hfo=
+        b=lQyrba4KH/nOmjrKXyJlImON4uE8lkdii7FjQ8XQFr9DWD7C3G3uwjXG0ZWKYak9S
+         9aaZazDtRewsKaJuvu7isUFHvO8PD8AsIwu0NKPY/zqOY0Bq/NUfFsAHK4ShjXfa6U
+         efltEFrftHxv+mZd+1VmpgzVyWHiTHCA3KzmMdKQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.17 121/146] ASoC: rt5682: fix an incorrect NULL check on list iterator
-Date:   Tue, 26 Apr 2022 10:21:56 +0200
-Message-Id: <20220426081753.458183153@linuxfoundation.org>
+Subject: [PATCH 5.17 122/146] ASoC: soc-dapm: fix two incorrect uses of list iterator
+Date:   Tue, 26 Apr 2022 10:21:57 +0200
+Message-Id: <20220426081753.486113876@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
 References: <20220426081750.051179617@linuxfoundation.org>
@@ -55,53 +55,57 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-commit c8618d65007ba68d7891130642d73e89372101e8 upstream.
+commit f730a46b931d894816af34a0ff8e4ad51565b39f upstream.
 
-The bug is here:
-	if (!dai) {
+These two bug are here:
+	list_for_each_entry_safe_continue(w, n, list,
+					power_list);
+	list_for_each_entry_safe_continue(w, n, list,
+					power_list);
 
-The list iterator value 'dai' will *always* be set and non-NULL
-by for_each_component_dais(), so it is incorrect to assume that
-the iterator value will be NULL if the list is empty or no element
-is found (In fact, it will be a bogus pointer to an invalid struct
-object containing the HEAD). Otherwise it will bypass the check
-'if (!dai) {' (never call dev_err() and never return -ENODEV;)
-and lead to invalid memory access lately when calling
-'rt5682_set_bclk1_ratio(dai, factor);'.
+After the list_for_each_entry_safe_continue() exits, the list iterator
+will always be a bogus pointer which point to an invalid struct objdect
+containing HEAD member. The funciton poniter 'w->event' will be a
+invalid value which can lead to a control-flow hijack if the 'w' can be
+controlled.
 
-To fix the bug, just return rt5682_set_bclk1_ratio(dai, factor);
-when found the 'dai', otherwise dev_err() and return -ENODEV;
+The original intention was to continue the outer list_for_each_entry_safe()
+loop with the same entry if w->event is NULL, but misunderstanding the
+meaning of list_for_each_entry_safe_continue().
+
+So just add a 'continue;' to fix the bug.
 
 Cc: stable@vger.kernel.org
-Fixes: ebbfabc16d23d ("ASoC: rt5682: Add CCF usage for providing I2S clks")
+Fixes: 163cac061c973 ("ASoC: Factor out DAPM sequence execution")
 Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Link: https://lore.kernel.org/r/20220327081002.12684-1-xiam0nd.tong@gmail.com
+Link: https://lore.kernel.org/r/20220329012134.9375-1-xiam0nd.tong@gmail.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/rt5682.c |   11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+ sound/soc/soc-dapm.c |    6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
---- a/sound/soc/codecs/rt5682.c
-+++ b/sound/soc/codecs/rt5682.c
-@@ -2822,14 +2822,11 @@ static int rt5682_bclk_set_rate(struct c
+--- a/sound/soc/soc-dapm.c
++++ b/sound/soc/soc-dapm.c
+@@ -1687,8 +1687,7 @@ static void dapm_seq_run(struct snd_soc_
+ 		switch (w->id) {
+ 		case snd_soc_dapm_pre:
+ 			if (!w->event)
+-				list_for_each_entry_safe_continue(w, n, list,
+-								  power_list);
++				continue;
  
- 	for_each_component_dais(component, dai)
- 		if (dai->id == RT5682_AIF1)
--			break;
--	if (!dai) {
--		dev_err(rt5682->i2c_dev, "dai %d not found in component\n",
--			RT5682_AIF1);
--		return -ENODEV;
--	}
-+			return rt5682_set_bclk1_ratio(dai, factor);
+ 			if (event == SND_SOC_DAPM_STREAM_START)
+ 				ret = w->event(w,
+@@ -1700,8 +1699,7 @@ static void dapm_seq_run(struct snd_soc_
  
--	return rt5682_set_bclk1_ratio(dai, factor);
-+	dev_err(rt5682->i2c_dev, "dai %d not found in component\n",
-+		RT5682_AIF1);
-+	return -ENODEV;
- }
+ 		case snd_soc_dapm_post:
+ 			if (!w->event)
+-				list_for_each_entry_safe_continue(w, n, list,
+-								  power_list);
++				continue;
  
- static const struct clk_ops rt5682_dai_clk_ops[RT5682_DAI_NUM_CLKS] = {
+ 			if (event == SND_SOC_DAPM_STREAM_START)
+ 				ret = w->event(w,
 
 

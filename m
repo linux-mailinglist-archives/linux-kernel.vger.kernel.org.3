@@ -2,247 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1499A50F321
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:53:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1A2C50F328
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:55:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241442AbiDZH4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 03:56:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59652 "EHLO
+        id S239202AbiDZH5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 03:57:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344508AbiDZHzr (ORCPT
+        with ESMTP id S1343582AbiDZH44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 03:55:47 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EDE76479;
-        Tue, 26 Apr 2022 00:52:40 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2a02:3030:3:7d2:2277:ba57:a2c0:3])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sebastianfricke)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id C0BDA1F4303D;
-        Tue, 26 Apr 2022 08:52:38 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650959559;
-        bh=VRkHoSHCz52DTaL/qaCteKvrAnpJI0RuwyC1ISlouJ0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WAJLm96S2y2alDNhtlVBzVYe2YB/5EVq1ztnOv76XGDfc7rYOHIWci6n4s6rf0L4t
-         epUN9lCjqVxsKya6qEFd+P3RDZBHDe/irdU3NJVarqxbNBX1cUdczH0WfLTQVxNcws
-         QxCPZVV5TuG+EzPweuhFC9GuL75alRy9/Or6dZcojhdX9+oLpkx39Vd2G/z3uKuwH1
-         wMQw1x11DZ76Np9rormwiFemVT+AGqOi6ph2A/Eu4sHjI8mPeDjIN1sw8UIbAGJfDS
-         UO43scq2lWfoLksxlby9bZXh5SBH2I3IJ3/LS+74uDNsQsvVuObeK3ijrh0jEapcoA
-         XrB8fzFpOEKgg==
-Date:   Tue, 26 Apr 2022 09:52:34 +0200
-From:   Sebastian Fricke <sebastian.fricke@collabora.com>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     mchehab@kernel.org, hverkuil@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, mripard@kernel.org,
-        paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        nicolas.dufresne@collabora.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v5 04/17] media: uapi: HEVC: Add missing fields in HEVC
- controls
-Message-ID: <20220426075234.6gk72hzf2bgaxwqw@basti-XPS-13-9310>
-References: <20220407152940.738159-1-benjamin.gaignard@collabora.com>
- <20220407152940.738159-5-benjamin.gaignard@collabora.com>
- <20220425135449.oapsrqqyq34s2ii3@basti-XPS-13-9310>
- <d1ba4e57-2f13-ab3b-f79a-dc812cd4c2bf@collabora.com>
+        Tue, 26 Apr 2022 03:56:56 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94251132D5
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:53:35 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id g20so21279173edw.6
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:53:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=PKj9VZlz+AF0K6JftzV4xbwDLiquD/QBKxhzqnv4Ff0=;
+        b=NGxAKj6s7aebO/0U7Pd48rc1TNzzmZdRw3TonawDq2937wPb9wkBAgNvmics7f7BMe
+         4eLBr91bnVk8HakLRiCV7EkiAoNV1bscLmWNySym6w8LZ3bozjbW174N+7edjLdmZphW
+         tmXt/VqVyMAWa8y6xx+5k574gX+UuCTgCmar677kSgc8VuUCKu4i5AqEaCgM8r+VRg04
+         qC01eN9IwF0szYWIk3Kc+BYF9poOK079x2S/p0VUsDMNceiJYW5fLiDhokYzxdvOC5em
+         TznPDAXTPcKSbPB9i/yWHXThCys1G6uWMIIaXnSwMYf/bBFCUcO+8ywO5aMDppJkb0En
+         ybtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=PKj9VZlz+AF0K6JftzV4xbwDLiquD/QBKxhzqnv4Ff0=;
+        b=zXlGE8T+5WkSG5IZ2ExyBhFuf6JRje1vaHA04Lt0NUZx0vShYp0WQpXfFO1yYwNO6i
+         EhwLK0TOvstHthjBMdlhYafmxehxrWMZkG3czEgq9kcqGqD/yuj3+OjLjpgbi2TdH+C1
+         iuTR0y7h5LEYi0U6Hg1ysFMCXZVDu3/wUiJDW2njv41Tu4pA6jrlcFwImsg8YfXrN37M
+         2nITuTMVoZfV8VjllVAb5LpsZRc3runF3T+OkXLqa/UlSEjah6bM7oiggkXBPAeA5DH/
+         sdHwkvI90pZJnCnAQRFsBrFOIN4DTOoDoS81WMFhwNkLOdlMddc4hOiOdH10C6nnFdPC
+         rGQA==
+X-Gm-Message-State: AOAM533nmaAHNY/wgjjgkCldAYXm1A+qh3M4bsJjJ8IF8GTsbVE9BV5S
+        DGq/QfTYn0IlVSvyntvCLXvlWg==
+X-Google-Smtp-Source: ABdhPJxYaJZLHrMQjNCNIJfKmbEHJjkyAxu5VhPrvFy/d9Ii5GCTjzTtqd7dDPISmzCigYAHJMWeOA==
+X-Received: by 2002:a05:6402:d0a:b0:425:d455:452 with SMTP id eb10-20020a0564020d0a00b00425d4550452mr15490565edb.259.1650959614307;
+        Tue, 26 Apr 2022 00:53:34 -0700 (PDT)
+Received: from [192.168.0.244] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id lb26-20020a170907785a00b006ea4d2928e5sm4437809ejc.218.2022.04.26.00.53.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Apr 2022 00:53:33 -0700 (PDT)
+Message-ID: <f822fc7a-7c47-d8f9-8ef9-fda2c7832926@linaro.org>
+Date:   Tue, 26 Apr 2022 09:53:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d1ba4e57-2f13-ab3b-f79a-dc812cd4c2bf@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] riscv: dts: fu540-c000: fix duplicated dma compatible
+Content-Language: en-US
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Zong Li <zong.li@sifive.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Bin Meng <bmeng.cn@gmail.com>, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220421065401.9303-1-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220421065401.9303-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Benjamin,
+On 21/04/2022 08:54, Krzysztof Kozlowski wrote:
+> Remove duplicated compatible to fix error:
+> 
+>   u540-c000.dtsi:171.4-42: ERROR (duplicate_property_names): /soc/dma@3000000:compatible: Duplicate property name
+> 
+> Fixes: 7eba954a8de8 ("riscv: dts: Add dma-channels property and modify compatible")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-On 25.04.2022 18:16, Benjamin Gaignard wrote:
->
->Le 25/04/2022 à 15:54, Sebastian Fricke a écrit :
->>On 07.04.2022 17:29, Benjamin Gaignard wrote:
->>>Complete the HEVC controls with missing fields from H.265 
->>>specifications.
->>>Even if these fields aren't used by the current mainlined drivers
->>>they will be need for (at least) rkvdec driver.
->>
->>s/be need/be required/
->>or
->>s/be need/be needed/
->>
->>s/rkvdec/the rkvdec/
->>
->>>
->>>Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->>>---
->>>.../media/v4l/ext-ctrls-codec.rst             | 19 +++++++++++++++++++
->>>include/media/hevc-ctrls.h                    |  6 +++++-
->>>2 files changed, 24 insertions(+), 1 deletion(-)
->>>
->>>diff --git 
->>>a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst 
->>>b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->>>index 4cd7c541fc30..dbb08603217b 100644
->>>--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->>>+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->>>@@ -2661,6 +2661,16 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->>>    :stub-columns: 0
->>>    :widths:       1 1 2
->>>
->>>+    * - __u8
->>>+      - ``video_parameter_set_id``
->>>+      - Specifies the value of the vps_video_parameter_set_id of 
->>>the active VPS
->>>+        as descibed in section "7.4.3.2.1 General sequence 
->>>parameter set RBSP semantics"
->>>+        of H.265 specifications.
->>>+    * - __u8
->>>+      - ``seq_parameter_set_id``
->>>+      - Provides an identifier for the SPS for reference by other 
->>>syntax elements
->>>+        as descibed in section "7.4.3.2.1 General sequence 
->>>parameter set RBSP semantics"
->>>+        of H.265 specifications.
->>>    * - __u16
->>>      - ``pic_width_in_luma_samples``
->>>      -
->>>@@ -2800,6 +2810,9 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->>>    :stub-columns: 0
->>>    :widths:       1 1 2
->>>
->>>+    * - __u8
->>>+      - ``pic_parameter_set_id``
->>>+      - Identifies the PPS for reference by other syntax elements.
->>>    * - __u8
->>>      - ``num_extra_slice_header_bits``
->>>      -
->>>@@ -3026,6 +3039,12 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->>>    * - __u8
->>>      - ``ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
->>>      - The list of L1 reference elements as indices in the DPB.
->>>+    * - __u16
->>>+      - ``short_term_ref_pic_set_size``
->>>+      - Specifies the size of short-term reference pictures set 
->>>included in the SPS.
->>
->>s/size of/size of the/
->>
->>Section 7.4.8 depicts that the st_ref_pic_set syntax
->>structure can be part of the SPS or the slice header.
->>
->>I think we should mention that we talk about the size of the 
->>st_ref_pic_set
->>syntax structure from section 7.4.8 of the specification.
->>>+    * - __u16
->>>+      - ``long_term_ref_pic_set_size``
->>>+      - Specifies the size of long-term reference pictures set 
->>>include in the SPS.
->>
->>s/size of/size of the/
->>
->>Can we make this a bit more helpful? The specification doesn't contain
->>a similar structure to `st_ref_pic_set` for long term pictures. So, as a
->>programmer this leaves me guessing:
->>- Which syntax structure's size are we talking about?
->>- Does this correlate to any of the existing sections of the
->>specification?
->>Because in the end, I feel like this documentation should be able to
->>help a programmer to provide the correct data for the uABI.
->
->I will reword it like that:
->
->  * - __u16
->    - ``short_term_ref_pic_set_size``
->    - Specifies the size, in bits, of the short-term reference pictures set, described as st_ref_pic_set()
+Hi everyone,
 
-Just ...
+This is an error which causes compilation to fail. Such patches should
+be picked up faster than later, because it breaks various builds.
 
-s/reference pictures set/reference picture set/
+I'll take it via my tree.
 
->      in the specification, included in the slice header (section 7.3.6.1).
-
-s/slice header/slice header or SPS/
-
-
->
-> * - __u16
->   - ``long_term_ref_pic_set_size``
->   - Specifies the size, in bits, of the long-term reference pictures set include in the slice header.
-
-s/reference pictures set/reference picture set/
-
-Looking at the documentation it looks like: s/slice header/slice header or SPS/
-(For example in section 7.3.6.1:
-```
-if( long_term_ref_pics_present_flag ) {
-   if( num_long_term_ref_pics_sps > 0 )
-     num_long_term_sps
-   num_long_term_pics
-   for( i = 0; i < num_long_term_sps + num_long_term_pics; i++ ) {
-     ...
-```
-)
-
-... and then it looks very good!
-
-Greetings,
-Sebastian
-
->     It is the number of bits in the conditional block if( long_term_ref_pics_present_flag ) {...}
->     in section 7.3.6.1 of the specification.
->
->Benjamin
->
->
->>
->>Greetings,
->>Sebastian
->>
->>>    * - __u8
->>>      - ``padding``
->>>      - Applications and drivers must set this to zero.
->>>diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
->>>index 01ccda48d8c5..a329e086a89a 100644
->>>--- a/include/media/hevc-ctrls.h
->>>+++ b/include/media/hevc-ctrls.h
->>>@@ -58,6 +58,8 @@ enum v4l2_mpeg_video_hevc_start_code {
->>>/* The controls are not stable at the moment and will likely be 
->>>reworked. */
->>>struct v4l2_ctrl_hevc_sps {
->>>    /* ISO/IEC 23008-2, ITU-T Rec. H.265: Sequence parameter set */
->>>+    __u8    video_parameter_set_id;
->>>+    __u8    seq_parameter_set_id;
->>>    __u16    pic_width_in_luma_samples;
->>>    __u16    pic_height_in_luma_samples;
->>>    __u8    bit_depth_luma_minus8;
->>>@@ -108,6 +110,7 @@ struct v4l2_ctrl_hevc_sps {
->>>
->>>struct v4l2_ctrl_hevc_pps {
->>>    /* ISO/IEC 23008-2, ITU-T Rec. H.265: Picture parameter set */
->>>+    __u8    pic_parameter_set_id;
->>>    __u8    num_extra_slice_header_bits;
->>>    __u8    num_ref_idx_l0_default_active_minus1;
->>>    __u8    num_ref_idx_l1_default_active_minus1;
->>>@@ -199,7 +202,8 @@ struct v4l2_ctrl_hevc_slice_params {
->>>    __u32    slice_segment_addr;
->>>    __u8    ref_idx_l0[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
->>>    __u8    ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
->>>-
->>>+    __u16    short_term_ref_pic_set_size;
->>>+    __u16    long_term_ref_pic_set_size;
->>>    __u8    padding;
->>>
->>>    /* ISO/IEC 23008-2, ITU-T Rec. H.265: Weighted prediction 
->>>parameter */
->>>-- 
->>>2.32.0
->>>
+Best regards,
+Krzysztof

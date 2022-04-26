@@ -2,187 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EC115108FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 21:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E465108F5
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 21:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238080AbiDZTcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 15:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59844 "EHLO
+        id S1354117AbiDZTac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 15:30:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346703AbiDZTcG (ORCPT
+        with ESMTP id S1352273AbiDZTa3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 15:32:06 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E65FAC04F
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 12:28:42 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id q20so11864733wmq.1
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 12:28:42 -0700 (PDT)
+        Tue, 26 Apr 2022 15:30:29 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF676E4F7
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 12:27:19 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id a15so18849486pfv.11
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 12:27:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iQFCk4jvRcDNbkwKt80r8M9Ev1zqOHCdGqGh5NtELGk=;
-        b=kXX2A5pPeYzQ7cMHjUay8+MRco1JY+qcFRaRS08NAVmtfBRdvFVDmNjStpeUWkd6Zl
-         vQU5f0FWDf6xsz3RbldyIy9/g5QXdZSQZuDeQifodlFGCf1YGsKpdQYyR2g9y7Y6oB7V
-         /fsu0vO21DVFRug79wN6ff9wbCwuMNbpj0fPxn9wyJ+3cQTLW9PimSQ9f6xgnaxtH2fO
-         AlrXyAXCzlK49e6n1Ju/HDLsl9jTbgxFH3GdBJYGeSidfswDSkOpdP8/KDLnQJLtqZUp
-         IpGuwUWRrQLmAANIliRHGcWrJVnvTEjLAdmNwn2651HlpB30PBm/qWLfwGYSI3Qrg/mB
-         i7nw==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=YrNAxfDrxxD766OcfeCfCclqIZpQa0twyturIx4zcDA=;
+        b=lFpfuszm5sYEet8AFcmzLa4ajQqoQ28Y0ReAuZHGIDsHkytcZgVXGcB2HZzslryqop
+         KuAHYH0lOOzehRzsz/JNBPOdO0QuUNhTGm2JIAXfwTsO7RK1dG6NtZdU2wcGETwnHgT7
+         ERJZiZc94CGVpzdmoJXxJ6y/5gtpV9ksDeveb6drlh6e0+jqXTBo8hcp5Nw9TzKxleFI
+         LDHft1G55yQmOC7+qC0MNvo/CLNnvOeWQrUfQq6tkotBoY0TfSqWyXdMY+2OlEECxnse
+         vJ9KiPmxDEJDHRaqrzgw+O23TQleBL8JpBtCPJVrPaFM6wZ05Z6a2yKizbldHKlBgCmp
+         NcdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iQFCk4jvRcDNbkwKt80r8M9Ev1zqOHCdGqGh5NtELGk=;
-        b=WvljTzucjF0uhGH2Np1aZkTR4AGgHmRV6ti0rrXkyHDI1xfIoaGsquqlMYdPXEyyy+
-         m5+BpfTBqFvfi5pMJ2Q8lAolqVr8ahsVbrZhZG+/YgotDJw71S+WzZd74H5OQvFowTwS
-         xuX4w5CoUvXvtWZ8e/8+ZxCr84G4uGEAsrbzK+o3p/zeo3Db4qvbsMYpKuE3Qa2aOfWQ
-         VBWR5ZDd9nMsQupPYhp5DPy+L9SJn2NPd2xUHZoFTOyhoTh2QwITw5hzCttNyKdb6NTL
-         PjO4MkrPtqLmt1zLXvIKPQtd63NbUuJuH12UThVbno+NBmZ+NhbDjM/V/FGxVQsWUvUh
-         +kpw==
-X-Gm-Message-State: AOAM531t0GhjCWcsAqKPokIU/3iua1sYjj3P1qDudVAlLpg5IwyfLNyi
-        Ua9bAQrafXlYDEr6D0Rq+ZD0DXS986sI53NeWebW+Q==
-X-Google-Smtp-Source: ABdhPJxE4uF7k63kUhII0yfWNs5hqWLsW6+10S6JtH7VxMkI6vG6IvE9QqtG19aVEP77InoCW4FL0NJd1Gr2ps0f3PU=
-X-Received: by 2002:a05:600c:1c90:b0:393:e5b9:b567 with SMTP id
- k16-20020a05600c1c9000b00393e5b9b567mr16137822wms.27.1651001314470; Tue, 26
- Apr 2022 12:28:34 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YrNAxfDrxxD766OcfeCfCclqIZpQa0twyturIx4zcDA=;
+        b=5F7Rr4NLt3qkjQKTdhO7PRPx2LcpdoY7Gp3hh64iffSFV1uzyVFJ//QDW4MF2DGEHN
+         dlytxSTXwcyFPaWy+o0VrXGJykEiQ9T0wDpNtXvpLJTatBSJASnfuHJq07l8sq5mnzJ3
+         A6hrRDosBStw1IMPGXQztqpEgK8xHMyXd0dB9M27hYWmnpgMl/ex3a9vLugZdPsoqLcn
+         hMjt7qLEu23OY+p9SeSEmtoKzLQDKoXvkxdradXCp6kK939WiQ80npiqiEhT/YqF2vJd
+         qiLRw+tskGRjoDIt7MiqjEEEAG/mgYa1EAorfaWqyLqnRSnMFVV8vHSaZ9YroR+lw7wj
+         wKmw==
+X-Gm-Message-State: AOAM533B1V84BMPvacqUUoQr5eLTvEAS6gGQZULO//WbRr1vEemojTKR
+        OqSvW+sDcNgmt3YVznAPoXr0/A==
+X-Google-Smtp-Source: ABdhPJwsYXdbHr7lCZriH0/82+iIj0K6xR6VWQSP6+pPkBdDyb7ogFEs1NlZGQpGAY7kGVDfBzcLyQ==
+X-Received: by 2002:a63:df0f:0:b0:3aa:436f:8784 with SMTP id u15-20020a63df0f000000b003aa436f8784mr20938313pgg.514.1651001239114;
+        Tue, 26 Apr 2022 12:27:19 -0700 (PDT)
+Received: from x1 ([2601:1c2:1001:7090:9bcd:e060:b370:70d8])
+        by smtp.gmail.com with ESMTPSA id o2-20020a62f902000000b0050cfb6994e2sm13327322pfh.130.2022.04.26.12.27.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 12:27:18 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 12:28:18 -0700
+From:   Drew Fustini <dfustini@baylibre.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Dave Gerlach <d-gerlach@ti.com>,
+        Tony Lindgren <tony@atomide.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Keerthy <j-keerthy@ti.com>
+Subject: Re: [PATCH 1/2] dt-bindings: wkup-m3-ipc: Add ti,scale-data-fw
+ property
+Message-ID: <YmhH0gFFSfJmZkDX@x1>
+References: <20220425052806.484590-1-dfustini@baylibre.com>
+ <20220425052806.484590-2-dfustini@baylibre.com>
+ <YmbKvN00F6vGawpE@robh.at.kernel.org>
 MIME-Version: 1.0
-References: <20220426053904.3684293-1-yosryahmed@google.com>
- <20220426053904.3684293-5-yosryahmed@google.com> <YmegoB/fBkfwaE5z@google.com>
-In-Reply-To: <YmegoB/fBkfwaE5z@google.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Tue, 26 Apr 2022 12:27:57 -0700
-Message-ID: <CAJD7tkY-WZKcyer=TbWF0dVfOhvZO7hqPN=AYCDZe1f+2HA-QQ@mail.gmail.com>
-Subject: Re: [PATCH v3 4/6] KVM: arm64/mmu: count KVM page table pages in
- pagetable stats
-To:     Oliver Upton <oupton@google.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        James Morse <james.morse@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
-        cgroups@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.cs.columbia.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmbKvN00F6vGawpE@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Oliver,
-Thanks so much for taking the time to take a look at this!
-
-On Tue, Apr 26, 2022 at 12:35 AM Oliver Upton <oupton@google.com> wrote:
->
-> Hi Yosry,
->
-> On Tue, Apr 26, 2022 at 05:39:02AM +0000, Yosry Ahmed wrote:
-> > Count the pages used by KVM in arm64 for page tables in pagetable stats.
-> >
-> > Account pages allocated for PTEs in pgtable init functions and
-> > kvm_set_table_pte().
-> >
-> > Since most page table pages are freed using put_page(), add a helper
-> > function put_pte_page() that checks if this is the last ref for a pte
-> > page before putting it, and unaccounts stats accordingly.
-> >
-> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+On Mon, Apr 25, 2022 at 11:22:20AM -0500, Rob Herring wrote:
+> On Sun, Apr 24, 2022 at 10:28:05PM -0700, Drew Fustini wrote:
+> > From: Dave Gerlach <d-gerlach@ti.com>
+> > 
+> > Add documentation for ti,scale-data-fw property to enable I2C PMIC
+> > voltage scaling during deep sleep. The property contains the name of a
+> > binary file for the CM3 firmware to load.
+> > 
+> > Based on previous work by Russ Dill.
+> > 
+> > Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
+> > Signed-off-by: Keerthy <j-keerthy@ti.com>
+> > [dfustini: split from driver patch and convert to json-schema]
+> > Signed-off-by: Drew Fustini <dfustini@baylibre.com>
 > > ---
-> >  arch/arm64/kernel/image-vars.h |  3 ++
-> >  arch/arm64/kvm/hyp/pgtable.c   | 50 +++++++++++++++++++++-------------
-> >  2 files changed, 34 insertions(+), 19 deletions(-)
-> >
-> > diff --git a/arch/arm64/kernel/image-vars.h b/arch/arm64/kernel/image-vars.h
-> > index 241c86b67d01..25bf058714f6 100644
-> > --- a/arch/arm64/kernel/image-vars.h
-> > +++ b/arch/arm64/kernel/image-vars.h
-> > @@ -143,6 +143,9 @@ KVM_NVHE_ALIAS(__hyp_rodata_end);
-> >  /* pKVM static key */
-> >  KVM_NVHE_ALIAS(kvm_protected_mode_initialized);
-> >
-> > +/* Called by kvm_account_pgtable_pages() to update pagetable stats */
-> > +KVM_NVHE_ALIAS(__mod_lruvec_page_state);
+> >  .../devicetree/bindings/soc/ti/wkup-m3-ipc.yaml       | 11 +++++++++++
+> >  1 file changed, 11 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/soc/ti/wkup-m3-ipc.yaml b/Documentation/devicetree/bindings/soc/ti/wkup-m3-ipc.yaml
+> > index 88d690de050c..d2c248d82384 100644
+> > --- a/Documentation/devicetree/bindings/soc/ti/wkup-m3-ipc.yaml
+> > +++ b/Documentation/devicetree/bindings/soc/ti/wkup-m3-ipc.yaml
+> > @@ -40,6 +40,12 @@ description: |+
+> >    override the pin's existing bias (pull-up/pull-down) and value (high/low) when
+> >    IO isolation is active.
+> >  
+> > +  Support for I2C PMIC Voltage Scaling
+> > +  ====================================
+> > +  It is possible to pass the name of a binary file to load into the CM3 memory.
+> > +  The binary data is the I2C sequences for the CM3 to send out to the PMIC
+> > +  during low power mode entry.
 > > +
-> >  #endif /* CONFIG_KVM */
-> >
-> >  #endif /* __ARM64_KERNEL_IMAGE_VARS_H */
-> > diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
-> > index 2cb3867eb7c2..53e13c3313e9 100644
-> > --- a/arch/arm64/kvm/hyp/pgtable.c
-> > +++ b/arch/arm64/kvm/hyp/pgtable.c
-> > @@ -152,6 +152,7 @@ static void kvm_set_table_pte(kvm_pte_t *ptep, kvm_pte_t *childp,
-> >
-> >       WARN_ON(kvm_pte_valid(old));
-> >       smp_store_release(ptep, pte);
-> > +     kvm_account_pgtable_pages((void *)childp, +1);
->
-> What page tables do we want to account? KVM on ARM manages several page
-> tables.
->
-> For regular KVM, the host kernel manages allocations for the hyp stage 1
-> tables in addition to the stage 2 tables used for a particular VM. The
-> former is system overhead whereas the latter could be attributed to a
-> guest VM.
+> >  properties:
+> >    compatible:
+> >      enum:
+> > @@ -67,6 +73,11 @@ properties:
+> >        mbox_wkupm3 child node.
+> >      maxItems: 1
+> >  
+> > +  ti,scale-data-fw:
+> > +    $ref: /schemas/types.yaml#/definitions/string
+> > +    description:
+> > +      Name of the firmware binary in /lib/firmware to copy to CM3 aux data
+> 
+> The location of firmware files is up to the OS.
+> 
+> Is there other firmware? If not, 'firmware-name' is the somewhat 
+> standard property for this.
+> 
+> What's the default name?
 
-Honestly I would love to get your input on this. The main motivation
-here is to give users insights on the kernel memory usage on their
-system (or in a cgroup). We currently have NR_PAGETABLE stats for
-normal kernel page tables (allocated using
-__pte_alloc_one()/pte_free()), this shows up in /proc/meminfo,
-/path/to/cgroup/memory.stat, and node stats. The idea is to add
-NR_SECONDARY_PAGETABLE that should include the memory used for kvm
-pagetables, which should be a separate category (no overlap). What
-gets included or not depends on the semantics of KVM and what exactly
-falls under the category of secondary pagetables from the user's pov.
+Thank you for the suggestion.  I will change it to firmware-name as
+this is the only type of firmware that this driver will need to load.
 
-Currently it looks like s2 page table allocations get accounted to
-kmem of memory control groups (GFP_KERNEL_ACCOUNT), while hyp page
-table allocations do not (GFP_KERNEL). So we could either follow this
-and only account s2 page table allocations in the stats, or make hyp
-allocations use GFP_KERNEL_ACCOUNT as well and add them to the stats.
-Let me know what you think.
+There is no default name for the firmware. The name depends on the board
+being used. The current [1] possibilites are:
 
->
-> I imagine protected KVM is out of scope, since it actually manages its
-> own allocations outside of the host kernel.
->
-> Given this, I would recommend adding the accounting hooks to mmu.c as
-> that is where we alloc/free table pages and it is in the host address
-> space. kvm_s2_mm_ops and kvm_hyp_mm_ops point to all the relevant
-> functions, though the latter is only relevant if we want to count system
-> page tables too.
+am43x-evm-scale-data.bin
+am335x-bone-scale-data.bin
+am335x-evm-scale-data.bin
 
-Yeah moving the accounting hooks to mmu.c is much cleaner, I will do
-this in the next version. The only reason I did not do this is that I
-found other kvm_pgtable_mm_ops structs (such as pkvm_pgtable_mm_ops),
-but it looks like these may be irrelevant here.
+Thank you,
+Drew
 
->
-> --
-> Thanks,
-> Oliver
+[1] https://git.ti.com/cgit/processor-firmware/ti-amx3-cm3-pm-firmware/tree/bin?h=08.02.00.006

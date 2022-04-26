@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D14AA50F752
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:39:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01B5950F780
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346438AbiDZJIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:08:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56584 "EHLO
+        id S244866AbiDZJMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346227AbiDZIoo (ORCPT
+        with ESMTP id S1347343AbiDZIvU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:44:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1170B163D1E;
-        Tue, 26 Apr 2022 01:34:26 -0700 (PDT)
+        Tue, 26 Apr 2022 04:51:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D8DD0A80;
+        Tue, 26 Apr 2022 01:40:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DEAF61899;
-        Tue, 26 Apr 2022 08:34:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3579FC385A4;
-        Tue, 26 Apr 2022 08:34:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B4F776104A;
+        Tue, 26 Apr 2022 08:40:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4291C385B0;
+        Tue, 26 Apr 2022 08:40:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962065;
-        bh=nQ2HJD5nf4oTxFG5OTLGaKQFzVChDheTQyaznQhlggM=;
+        s=korg; t=1650962411;
+        bh=QWLitrRvFmVyVyJOX1rFDP8ZYjWDXNK6XBXYNABfqg0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G7U8Ul3X1LbDmEXuGfi6qCSX9pM/BLKlDskfwTGQ9q3PuN3701HtccLxBn8C56fTf
-         Ts0ZtDes/oazQP+YftWXCA7Oi2tzi1ecRmPYm5BRTY2nETJjnybtZB6hU+4QHDyaC4
-         +xLRnPMBithbyh1HvjUYe3JLhUMJXyEhRv29YEW8=
+        b=XiXaC0KUNB1O3jxleJlZFZKueqJY3c2oleBs2Is6VvJypdYjeaP+zESH/P0TBg2Pd
+         3FwbepJyzbiLw3gabea7bT1PZjEKKJiT5o+ypJDYpFnKQEF82UE8pxvCGjWIL0ZCcP
+         Btya+hW8kHPuMKkhD4g9mUtPugBvVg2B5kCyeGVY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paolo Valerio <pvalerio@redhat.com>,
-        Eelco Chaudron <echaudro@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.10 60/86] openvswitch: fix OOB access in reserve_sfa_size()
-Date:   Tue, 26 Apr 2022 10:21:28 +0200
-Message-Id: <20220426081742.938388458@linuxfoundation.org>
+        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Tom Rix <trix@redhat.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 088/124] scsi: sr: Do not leak information in ioctl
+Date:   Tue, 26 Apr 2022 10:21:29 +0200
+Message-Id: <20220426081749.801857443@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
-References: <20220426081741.202366502@linuxfoundation.org>
+In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
+References: <20220426081747.286685339@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,83 +55,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paolo Valerio <pvalerio@redhat.com>
+From: Tom Rix <trix@redhat.com>
 
-commit cefa91b2332d7009bc0be5d951d6cbbf349f90f8 upstream.
+[ Upstream commit faad6cebded8e0fd902b672f220449b93db479eb ]
 
-Given a sufficiently large number of actions, while copying and
-reserving memory for a new action of a new flow, if next_offset is
-greater than MAX_ACTIONS_BUFSIZE, the function reserve_sfa_size() does
-not return -EMSGSIZE as expected, but it allocates MAX_ACTIONS_BUFSIZE
-bytes increasing actions_len by req_size. This can then lead to an OOB
-write access, especially when further actions need to be copied.
+sr_ioctl.c uses this pattern:
 
-Fix it by rearranging the flow action size check.
+  result = sr_do_ioctl(cd, &cgc);
+  to-user = buffer[];
+  kfree(buffer);
+  return result;
 
-KASAN splat below:
+Use of a buffer without checking leaks information. Check result and jump
+over the use of buffer if there is an error.
 
-==================================================================
-BUG: KASAN: slab-out-of-bounds in reserve_sfa_size+0x1ba/0x380 [openvswitch]
-Write of size 65360 at addr ffff888147e4001c by task handler15/836
+  result = sr_do_ioctl(cd, &cgc);
+  if (result)
+    goto err;
+  to-user = buffer[];
+err:
+  kfree(buffer);
+  return result;
 
-CPU: 1 PID: 836 Comm: handler15 Not tainted 5.18.0-rc1+ #27
-...
-Call Trace:
- <TASK>
- dump_stack_lvl+0x45/0x5a
- print_report.cold+0x5e/0x5db
- ? __lock_text_start+0x8/0x8
- ? reserve_sfa_size+0x1ba/0x380 [openvswitch]
- kasan_report+0xb5/0x130
- ? reserve_sfa_size+0x1ba/0x380 [openvswitch]
- kasan_check_range+0xf5/0x1d0
- memcpy+0x39/0x60
- reserve_sfa_size+0x1ba/0x380 [openvswitch]
- __add_action+0x24/0x120 [openvswitch]
- ovs_nla_add_action+0xe/0x20 [openvswitch]
- ovs_ct_copy_action+0x29d/0x1130 [openvswitch]
- ? __kernel_text_address+0xe/0x30
- ? unwind_get_return_address+0x56/0xa0
- ? create_prof_cpu_mask+0x20/0x20
- ? ovs_ct_verify+0xf0/0xf0 [openvswitch]
- ? prep_compound_page+0x198/0x2a0
- ? __kasan_check_byte+0x10/0x40
- ? kasan_unpoison+0x40/0x70
- ? ksize+0x44/0x60
- ? reserve_sfa_size+0x75/0x380 [openvswitch]
- __ovs_nla_copy_actions+0xc26/0x2070 [openvswitch]
- ? __zone_watermark_ok+0x420/0x420
- ? validate_set.constprop.0+0xc90/0xc90 [openvswitch]
- ? __alloc_pages+0x1a9/0x3e0
- ? __alloc_pages_slowpath.constprop.0+0x1da0/0x1da0
- ? unwind_next_frame+0x991/0x1e40
- ? __mod_node_page_state+0x99/0x120
- ? __mod_lruvec_page_state+0x2e3/0x470
- ? __kasan_kmalloc_large+0x90/0xe0
- ovs_nla_copy_actions+0x1b4/0x2c0 [openvswitch]
- ovs_flow_cmd_new+0x3cd/0xb10 [openvswitch]
- ...
+Additionally, initialize the buffer to zero.
 
-Cc: stable@vger.kernel.org
-Fixes: f28cd2af22a0 ("openvswitch: fix flow actions reallocation")
-Signed-off-by: Paolo Valerio <pvalerio@redhat.com>
-Acked-by: Eelco Chaudron <echaudro@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This problem can be seen in the 2.4.0 kernel.
+
+Link: https://lore.kernel.org/r/20220411174756.2418435-1-trix@redhat.com
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Tom Rix <trix@redhat.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/openvswitch/flow_netlink.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/sr_ioctl.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
---- a/net/openvswitch/flow_netlink.c
-+++ b/net/openvswitch/flow_netlink.c
-@@ -2436,7 +2436,7 @@ static struct nlattr *reserve_sfa_size(s
- 	new_acts_size = max(next_offset + req_size, ksize(*sfa) * 2);
+diff --git a/drivers/scsi/sr_ioctl.c b/drivers/scsi/sr_ioctl.c
+index ddd00efc4882..fbdb5124d7f7 100644
+--- a/drivers/scsi/sr_ioctl.c
++++ b/drivers/scsi/sr_ioctl.c
+@@ -41,7 +41,7 @@ static int sr_read_tochdr(struct cdrom_device_info *cdi,
+ 	int result;
+ 	unsigned char *buffer;
  
- 	if (new_acts_size > MAX_ACTIONS_BUFSIZE) {
--		if ((MAX_ACTIONS_BUFSIZE - next_offset) < req_size) {
-+		if ((next_offset + req_size) > MAX_ACTIONS_BUFSIZE) {
- 			OVS_NLERR(log, "Flow action size exceeds max %u",
- 				  MAX_ACTIONS_BUFSIZE);
- 			return ERR_PTR(-EMSGSIZE);
+-	buffer = kmalloc(32, GFP_KERNEL);
++	buffer = kzalloc(32, GFP_KERNEL);
+ 	if (!buffer)
+ 		return -ENOMEM;
+ 
+@@ -55,10 +55,13 @@ static int sr_read_tochdr(struct cdrom_device_info *cdi,
+ 	cgc.data_direction = DMA_FROM_DEVICE;
+ 
+ 	result = sr_do_ioctl(cd, &cgc);
++	if (result)
++		goto err;
+ 
+ 	tochdr->cdth_trk0 = buffer[2];
+ 	tochdr->cdth_trk1 = buffer[3];
+ 
++err:
+ 	kfree(buffer);
+ 	return result;
+ }
+@@ -71,7 +74,7 @@ static int sr_read_tocentry(struct cdrom_device_info *cdi,
+ 	int result;
+ 	unsigned char *buffer;
+ 
+-	buffer = kmalloc(32, GFP_KERNEL);
++	buffer = kzalloc(32, GFP_KERNEL);
+ 	if (!buffer)
+ 		return -ENOMEM;
+ 
+@@ -86,6 +89,8 @@ static int sr_read_tocentry(struct cdrom_device_info *cdi,
+ 	cgc.data_direction = DMA_FROM_DEVICE;
+ 
+ 	result = sr_do_ioctl(cd, &cgc);
++	if (result)
++		goto err;
+ 
+ 	tocentry->cdte_ctrl = buffer[5] & 0xf;
+ 	tocentry->cdte_adr = buffer[5] >> 4;
+@@ -98,6 +103,7 @@ static int sr_read_tocentry(struct cdrom_device_info *cdi,
+ 		tocentry->cdte_addr.lba = (((((buffer[8] << 8) + buffer[9]) << 8)
+ 			+ buffer[10]) << 8) + buffer[11];
+ 
++err:
+ 	kfree(buffer);
+ 	return result;
+ }
+@@ -384,7 +390,7 @@ int sr_get_mcn(struct cdrom_device_info *cdi, struct cdrom_mcn *mcn)
+ {
+ 	Scsi_CD *cd = cdi->handle;
+ 	struct packet_command cgc;
+-	char *buffer = kmalloc(32, GFP_KERNEL);
++	char *buffer = kzalloc(32, GFP_KERNEL);
+ 	int result;
+ 
+ 	if (!buffer)
+@@ -400,10 +406,13 @@ int sr_get_mcn(struct cdrom_device_info *cdi, struct cdrom_mcn *mcn)
+ 	cgc.data_direction = DMA_FROM_DEVICE;
+ 	cgc.timeout = IOCTL_TIMEOUT;
+ 	result = sr_do_ioctl(cd, &cgc);
++	if (result)
++		goto err;
+ 
+ 	memcpy(mcn->medium_catalog_number, buffer + 9, 13);
+ 	mcn->medium_catalog_number[13] = 0;
+ 
++err:
+ 	kfree(buffer);
+ 	return result;
+ }
+-- 
+2.35.1
+
 
 

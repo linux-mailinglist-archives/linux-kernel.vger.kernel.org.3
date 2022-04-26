@@ -2,224 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD9EE510A9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:35:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4BD4510AA5
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:38:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355026AbiDZUiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 16:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51456 "EHLO
+        id S1355043AbiDZUlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 16:41:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245092AbiDZUiB (ORCPT
+        with ESMTP id S229782AbiDZUll (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:38:01 -0400
+        Tue, 26 Apr 2022 16:41:41 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5295D1A8C2B;
-        Tue, 26 Apr 2022 13:34:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706E76E4CF
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:38:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651005293; x=1682541293;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=seRKhyyQxbjAWS3pD/CGNEKp3GJzRdg9ieuOFomteK0=;
-  b=IkZyTv2vy73rVbPEfwvdS2V37TbGGa+dD0eDZy/yYD+AkjmRkliL/YD4
-   BN1nuNOJPttvJZKWZFmHTsvBx/6Cs03V6isQaCq0Cmkd2kCvvt7ixIhrE
-   GdP2pF5sR1mrmnEv0V0USifHkOZpSRSztWs3YEmGfHDGQgq2RF2XP5LAl
-   aP5yAORKCpaQJEzUenNspe9jJgzGmnYWH5an/SrV9LGrb+POKMYi+0oGM
-   qgei5KiF4jU9l8JfFKd5HHHyK2n55LQcq6gUrfR9SjSTYTfz3qzQ6pUeO
-   +zfE4ES90HpZq/3pGBRbASUOuFIokSD4FNOchWaYSrozC+FbnKybvkech
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="263306861"
+  t=1651005512; x=1682541512;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qh+uGKxXeeI6qvvTw6mz04btbKD2n7pIfIveGNz4wqo=;
+  b=KJz65jfmSl1SdQIIzeZbM3qsAwlcVbz4MRtjNgb23UmhANkbOjgw6VgO
+   N3RwlbddQ2AFJyfeht0yBpiWAQhHthXo+5OqRoXwOLW2kc+MlhZ4X0flB
+   JjKNmBXPkkxHWqsXUvf+eEX18OEWRQxIsKqzCaFPotjXi+xwxwhHb2KxA
+   TKb5EynxWLTmt8XqzMVW6uTZDRw8ryWjITBC9w+ty/dIwRjmR9TTecP0o
+   Zv4zQUwYKt11QkfjCqjtuO0MzDPeXC0qK7BJP/4sTZ4qJZxEgiTxMnxhy
+   r2wuMo7TabPgvFptoiO/B8GvsqNhyvTjeRZeMWwR6S64otuzvXkKD14Ct
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="263307504"
 X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="263306861"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 13:34:53 -0700
+   d="scan'208";a="263307504"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 13:38:32 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="580144930"
-Received: from dsocek-mobl2.amr.corp.intel.com (HELO [10.212.69.119]) ([10.212.69.119])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 13:34:51 -0700
-Message-ID: <56f368c6-4a60-ea78-2cc7-cd2d57823e3a@intel.com>
-Date:   Tue, 26 Apr 2022 13:37:39 -0700
+   d="scan'208";a="679187536"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 26 Apr 2022 13:38:30 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1njRx7-0003xw-8f;
+        Tue, 26 Apr 2022 20:38:29 +0000
+Date:   Wed, 27 Apr 2022 04:37:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Watson Chow <watson.chow@avnet.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: drivers/regulator/max20086-regulator.c:288:34: warning: unused
+ variable 'max20086_dt_ids'
+Message-ID: <202204270439.GkdfXdmL-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 03/21] x86/virt/tdx: Implement the SEAMCALL base
- function
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, dan.j.williams@intel.com,
-        peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-References: <cover.1649219184.git.kai.huang@intel.com>
- <1c3f555934c73301a9cbf10232500f3d15efe3cc.1649219184.git.kai.huang@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <1c3f555934c73301a9cbf10232500f3d15efe3cc.1649219184.git.kai.huang@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/5/22 21:49, Kai Huang wrote:
-> Secure Arbitration Mode (SEAM) is an extension of VMX architecture.  It
-> defines a new VMX root operation (SEAM VMX root) and a new VMX non-root
-> operation (SEAM VMX non-root) which are isolated from legacy VMX root
-> and VMX non-root mode.
+Hi Watson,
 
-I feel like this is too much detail for an opening paragraph.
+FYI, the error/warning still remains.
 
-> A CPU-attested software module (called the 'TDX module') runs in SEAM
-> VMX root to manage the crypto-protected VMs running in SEAM VMX non-root.
-> SEAM VMX root is also used to host another CPU-attested software module
-> (called the 'P-SEAMLDR') to load and update the TDX module.
->> Host kernel transits to either the P-SEAMLDR or the TDX module via the
-> new SEAMCALL instruction.  SEAMCALL leaf functions are host-side
-> interface functions defined by the P-SEAMLDR and the TDX module around
-> the new SEAMCALL instruction.  They are similar to a hypercall, except
-> they are made by host kernel to the SEAM software.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d615b5416f8a1afeb82d13b238f8152c572d59c0
+commit: bfff546aae50ae68ed395bf0e0848188d27b0ba3 regulator: Add MAX20086-MAX20089 driver
+date:   4 months ago
+config: arm-randconfig-c002-20220425 (https://download.01.org/0day-ci/archive/20220427/202204270439.GkdfXdmL-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bfff546aae50ae68ed395bf0e0848188d27b0ba3
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout bfff546aae50ae68ed395bf0e0848188d27b0ba3
+        # save the config file
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross 
 
-I think you can get rid of about half of this changelog so farand make
-it more clear in the process with this:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-	TDX introduces a new CPU mode: Secure Arbitration Mode (SEAM).
-	This mode runs only the TDX module itself or other code needed
-	to load the TDX module.
+All warnings (new ones prefixed by >>):
 
-	The host kernel communicates with SEAM software via a new
-	SEAMCALL instruction.  This is conceptually similar to
-	a guest->host hypercall, except it is made from the host to SEAM
-	software instead.
+>> drivers/regulator/max20086-regulator.c:288:34: warning: unused variable 'max20086_dt_ids' [-Wunused-const-variable]
+   static const struct of_device_id max20086_dt_ids[] = {
+                                    ^
+   1 warning generated.
 
-This is a technical document, but you're writing too technically for my
-taste and focusing on the low-level details rather than the high-level
-concepts.  What do I care that SEAM is two modes and what their names
-are at this juncture?  Are those details necesarry to get me to
-understand what a SEAMCALL is or what this patch implements?
 
-> SEAMCALL leaf functions use an ABI different from the x86-64 system-v
-> ABI.  Instead, they share the same ABI with the TDCALL leaf functions.
-> %rax is used to carry both the SEAMCALL leaf function number (input) and
-> the completion status code (output).  Additional GPRs (%rcx, %rdx,
-> %r8->%r11) may be further used as both input and output operands in
-> individual leaf functions.
-> 
-> Implement a C function __seamcall()
+vim +/max20086_dt_ids +288 drivers/regulator/max20086-regulator.c
 
-Your "C function" looks a bit like assembly to me.
+   287	
+ > 288	static const struct of_device_id max20086_dt_ids[] = {
+   289		{
+   290			.compatible = "maxim,max20086",
+   291			.data = &(const struct max20086_chip_info) {
+   292				.id = MAX20086_DEVICE_ID_MAX20086,
+   293				.num_outputs = 4,
+   294			}
+   295		}, {
+   296			.compatible = "maxim,max20087",
+   297			.data = &(const struct max20086_chip_info) {
+   298				.id = MAX20086_DEVICE_ID_MAX20087,
+   299				.num_outputs = 4,
+   300			}
+   301		}, {
+   302			.compatible = "maxim,max20088",
+   303			.data = &(const struct max20086_chip_info) {
+   304				.id = MAX20086_DEVICE_ID_MAX20088,
+   305				.num_outputs = 2,
+   306			}
+   307		}, {
+   308			.compatible = "maxim,max20089",
+   309			.data = &(const struct max20086_chip_info) {
+   310				.id = MAX20086_DEVICE_ID_MAX20089,
+   311				.num_outputs = 2,
+   312			}
+   313		},
+   314		{ /* Sentinel */ },
+   315	};
+   316	
 
-> to do SEAMCALL leaf functions using
-> the assembly macro used by __tdx_module_call() (the implementation of
-> TDCALL leaf functions).  The only exception not covered here is TDENTER
-> leaf function which takes all GPRs and XMM0-XMM15 as both input and
-> output.  The caller of TDENTER should implement its own logic to call
-> TDENTER directly instead of using this function.
-
-I have no idea why this paragraph is here or what it is trying to tell me.
-
-> SEAMCALL instruction is essentially a VMExit from VMX root to SEAM VMX
-> root, and it can fail with VMfailInvalid, for instance, when the SEAM
-> software module is not loaded.  The C function __seamcall() returns
-> TDX_SEAMCALL_VMFAILINVALID, which doesn't conflict with any actual error
-> code of SEAMCALLs, to uniquely represent this case.
-
-Again, I'm lost.  Why is this detail here?  I don't even see
-TDX_SEAMCALL_VMFAILINVALID in the patch.
-
-> diff --git a/arch/x86/virt/vmx/tdx/Makefile b/arch/x86/virt/vmx/tdx/Makefile
-> index 1bd688684716..fd577619620e 100644
-> --- a/arch/x86/virt/vmx/tdx/Makefile
-> +++ b/arch/x86/virt/vmx/tdx/Makefile
-> @@ -1,2 +1,2 @@
->  # SPDX-License-Identifier: GPL-2.0-only
-> -obj-$(CONFIG_INTEL_TDX_HOST)	+= tdx.o
-> +obj-$(CONFIG_INTEL_TDX_HOST)	+= tdx.o seamcall.o
-> diff --git a/arch/x86/virt/vmx/tdx/seamcall.S b/arch/x86/virt/vmx/tdx/seamcall.S
-> new file mode 100644
-> index 000000000000..327961b2dd5a
-> --- /dev/null
-> +++ b/arch/x86/virt/vmx/tdx/seamcall.S
-> @@ -0,0 +1,52 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#include <linux/linkage.h>
-> +#include <asm/frame.h>
-> +
-> +#include "tdxcall.S"
-> +
-> +/*
-> + * __seamcall()  - Host-side interface functions to SEAM software module
-> + *		   (the P-SEAMLDR or the TDX module)
-> + *
-> + * Transform function call register arguments into the SEAMCALL register
-> + * ABI.  Return TDX_SEAMCALL_VMFAILINVALID, or the completion status of
-> + * the SEAMCALL.  Additional output operands are saved in @out (if it is
-> + * provided by caller).
-
-This needs to say:
-
-	Returns TDX_SEAMCALL_VMFAILINVALID if the SEAMCALL itself fails.
-
-> + *-------------------------------------------------------------------------
-> + * SEAMCALL ABI:
-> + *-------------------------------------------------------------------------
-> + * Input Registers:
-> + *
-> + * RAX                 - SEAMCALL Leaf number.
-> + * RCX,RDX,R8-R9       - SEAMCALL Leaf specific input registers.
-> + *
-> + * Output Registers:
-> + *
-> + * RAX                 - SEAMCALL completion status code.
-> + * RCX,RDX,R8-R11      - SEAMCALL Leaf specific output registers.
-> + *
-> + *-------------------------------------------------------------------------
-> + *
-> + * __seamcall() function ABI:
-> + *
-> + * @fn  (RDI)          - SEAMCALL Leaf number, moved to RAX
-> + * @rcx (RSI)          - Input parameter 1, moved to RCX
-> + * @rdx (RDX)          - Input parameter 2, moved to RDX
-> + * @r8  (RCX)          - Input parameter 3, moved to R8
-> + * @r9  (R8)           - Input parameter 4, moved to R9
-> + *
-> + * @out (R9)           - struct tdx_module_output pointer
-> + *			 stored temporarily in R12 (not
-> + *			 used by the P-SEAMLDR or the TDX
-> + *			 module). It can be NULL.
-> + *
-> + * Return (via RAX) the completion status of the SEAMCALL, or
-> + * TDX_SEAMCALL_VMFAILINVALID.
-> + */
-> +SYM_FUNC_START(__seamcall)
-> +	FRAME_BEGIN
-> +	TDX_MODULE_CALL host=1
-> +	FRAME_END
-> +	ret
-> +SYM_FUNC_END(__seamcall)
-> diff --git a/arch/x86/virt/vmx/tdx/tdx.h b/arch/x86/virt/vmx/tdx/tdx.h
-> new file mode 100644
-> index 000000000000..9d5b6f554c20
-> --- /dev/null
-> +++ b/arch/x86/virt/vmx/tdx/tdx.h
-> @@ -0,0 +1,11 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _X86_VIRT_TDX_H
-> +#define _X86_VIRT_TDX_H
-> +
-> +#include <linux/types.h>
-> +
-> +struct tdx_module_output;
-> +u64 __seamcall(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
-> +	       struct tdx_module_output *out);
-> +
-> +#endif
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

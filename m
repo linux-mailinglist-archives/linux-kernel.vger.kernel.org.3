@@ -2,137 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 668B650FB26
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 12:40:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC2F650FB2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 12:42:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344376AbiDZKnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 06:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55308 "EHLO
+        id S1349266AbiDZKpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 06:45:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349269AbiDZKmQ (ORCPT
+        with ESMTP id S1349268AbiDZKpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 06:42:16 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D730A46148;
-        Tue, 26 Apr 2022 03:32:17 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id v4so9212388ljd.10;
-        Tue, 26 Apr 2022 03:32:17 -0700 (PDT)
+        Tue, 26 Apr 2022 06:45:06 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4484C35272
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 03:35:02 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id i19so3455880eja.11
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 03:35:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XP7qNcE96rh3aiNPjgVaxIOFTXHJAqHcEpaQTLvanoI=;
-        b=Y59N8y17Vbl4NhX0BsB33EV/X+rvpk/NNSugoP5njpF5uQjXhsNgWY2harTHY/tMF2
-         P3//Fpb1MgAh50xD3+IMALsfMW+Ky/5LlY8BECBihqaEwCAlaSyflzhjEmX3fkZv8oPj
-         9ske0pePjn1aqsTsT5WoThPOte7PJV5/1e6ZduSFQ082vSJQumCE8Y64Gvf6qh0nyrL1
-         bNLV+7fz1rehudTTXcmoT6SLHkNyumQbmsJAxJPmER8Ssnyhu+nnH8r1QRbjGeoOzhU5
-         wEtBLdeqHLaphKK+CoqKMrBJ56bUhfv9R7GUnFjXPeUhZlkx6ToVusAaGb+RIfB/YKZm
-         fAqA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=LHOLjPb0Gd87HYrejyxO3Dkz7va58yAZPFUDJ9tFmx4=;
+        b=JuyytUXtIijlMjojBPasSxCObLn+H2rVGhEM7P2YbYAupd9seWkHRymgjkwYAxLdrE
+         3uiTl1rDAmGb799ZARMjyPe3iTEVogLZxPzVsD69MJ69y1tQ6qHaah5EjZpPCe+GRDZT
+         Vn0EJvA5Q1tUxX6tMqgamhVveIa0k1oUWn0o9rTFAIdnB0xyDwZJvre13s3OKhwCbD7y
+         sOfX/tn+bMjtDzsozFrThShtXHZbO4gGFaN/7H7db2mGKhBUT8ma/xrU8SXqw110HY05
+         7IGYsP+GYfW2LblJpM2DMXAO953d9a05DbWd4qYoEmvbhxL3VK7ApnS0DGYOrWR7fhis
+         KzgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XP7qNcE96rh3aiNPjgVaxIOFTXHJAqHcEpaQTLvanoI=;
-        b=sx1chbvDx/gVV2AQc+0HN1i4itN0DgP1P+qYGvVQeGMEStCtk+oYxb/ZWEj19W/Iqb
-         7DaapZSyXKR54lSmWXVD2eYhGkSWG79ooMX0nvm4+0ZJm3Q/bIDifmgpSkEnmzsucTQj
-         cenuZjJktZjUlMjv+gOvBxAU9llyNJUP5rUc4XIAzBK8Ur+KNtnqmrIFpCvdkWOkPPn9
-         8s+ulbs5j/UNPzQqWLTUjOiNZY+SDRZvQ1NxmMN4/g/prC6Lpb6ZjkKfFLXLYzjDDDVu
-         o+22P9vHQswirX3Kc2Y2gcaGTJAnnCSihVvZcpRYHo+Jw0+ry8O8Wd7QXv0N7Ns2DlH8
-         EPIA==
-X-Gm-Message-State: AOAM5324zp0BWC/4QG+csw3BnMhsUm9dMQvBYs8veqVo+oUWu1nOmk21
-        7kegcp8euNcy5yRwoGp5kB77y0P6QeV9/IigHbcotaoW
-X-Google-Smtp-Source: ABdhPJzc+weA3nqtPRODDnqfI0mQewWDwH5gcmcewkNJO2LGeK46hVKvJ71mJbsWACMlww+puXyaBk2U5lSFDPvyO1U=
-X-Received: by 2002:a05:651c:889:b0:24f:2336:1b95 with SMTP id
- d9-20020a05651c088900b0024f23361b95mr728186ljq.345.1650969135974; Tue, 26 Apr
- 2022 03:32:15 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LHOLjPb0Gd87HYrejyxO3Dkz7va58yAZPFUDJ9tFmx4=;
+        b=DiUV7G7F/BKaszI4lbK9dKLK9QF8kmyPqqvjDP6KzYoPYGy9dYpuCTIsYU4n15AdXo
+         b1ONkycep4vlGF+Lt6fs09eLMT2pMW4yerQ+SB5E43RT7DAyg3IefaswZs59NrLN/tqC
+         1AruPKz2Zv9qUagYoqUFBdX1IOUXLoesdXQv4S1i++MFbEW6jhKSZt9xY3jyh+Yb31KJ
+         sQuCjJ+Xi3QhQ6MZrAv15HdPN7TAZw6ITNsZ8i3vBb5s5WpoSsCZk4uPuatMMThKLanJ
+         wqh9Mx9LJcFG6ojWU7a9nKK2/mQE6O1pjWQZln0sftRZ0li8mNI0HjNArm4wvWd5uWAC
+         gepw==
+X-Gm-Message-State: AOAM531LvCG0oXwqwEFV0ggmTrhuTOWiKbmG9s642bPF6ahsrvD2eOaG
+        gmAr9+4BglcWHk7v4rCuGn8SQA==
+X-Google-Smtp-Source: ABdhPJxw2pK4EmRfd/xR78vgBtt0JVfot3Kjrzt69s/MPOpmCUNpD31PPUksf+4+gVizgrZES5dl4A==
+X-Received: by 2002:a17:906:b0c5:b0:6f3:bb5e:54a8 with SMTP id bk5-20020a170906b0c500b006f3bb5e54a8mr477383ejb.534.1650969300701;
+        Tue, 26 Apr 2022 03:35:00 -0700 (PDT)
+Received: from [192.168.0.249] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id x19-20020a05640226d300b004228faf83desm6338221edd.12.2022.04.26.03.34.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Apr 2022 03:34:59 -0700 (PDT)
+Message-ID: <0f522c24-36b5-67f1-e282-2d6f5b81645d@linaro.org>
+Date:   Tue, 26 Apr 2022 12:34:58 +0200
 MIME-Version: 1.0
-References: <20220423102844.1371595-1-patrick.wang.shcn@gmail.com> <20220425105600.722b1345@gandalf.local.home>
-In-Reply-To: <20220425105600.722b1345@gandalf.local.home>
-From:   patrick wang <patrick.wang.shcn@gmail.com>
-Date:   Tue, 26 Apr 2022 18:32:04 +0800
-Message-ID: <CAGcnep_L0EFaRwEXN-wdt5pGDrFK2Vi3j42GCJscUtLcXXFa7Q@mail.gmail.com>
-Subject: Re: [PATCH v2] rcu: ftrace: avoid tracing a few functions executed in
- stop machine
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
-        jiangshanlai@gmail.com, joel@joelfernandes.org,
-        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4 2/2] dt-bindings: mailbox: qcom-ipcc: add missing
+ properties into example
+Content-Language: en-US
+To:     David Heidelberg <david@ixit.cz>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20220426101837.16201-1-david@ixit.cz>
+ <20220426101837.16201-2-david@ixit.cz>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220426101837.16201-2-david@ixit.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 10:56 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Sat, 23 Apr 2022 18:28:44 +0800
-> Patrick Wang <patrick.wang.shcn@gmail.com> wrote:
->
-> > Signed-off-by: Patrick Wang <patrick.wang.shcn@gmail.com>
-> > ---
-> > v1->v2:
-> >  - Modify log message.
-> >
-> >  kernel/rcu/tree_plugin.h | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
-> > index c8ba0fe17267..971bb6a00ede 100644
-> > --- a/kernel/rcu/tree_plugin.h
-> > +++ b/kernel/rcu/tree_plugin.h
-> > @@ -460,7 +460,7 @@ static bool rcu_preempt_has_tasks(struct rcu_node *rnp)
-> >   * be quite short, for example, in the case of the call from
-> >   * rcu_read_unlock_special().
-> >   */
-> > -static void
-> > +notrace static void
->
-> I'm fine with the change, but to be consistent with the rest of the kernel,
-> static needs to come before notrace.
->
-> Either:
->
->  static notrace void
->
-> or even (some places have):
->
->   static void notrace
->
-> but "static" should always be first.
->
+On 26/04/2022 12:18, David Heidelberg wrote:
+> These missing required properties are needed for
+> smp2p binding reference checks.
+> 
+> Also includes cosmetic change to the example formatting.
+> 
 
-Thank you for the detailed advice. I will move "notrace" to behind "static".
+Missing reported-by:
+Reported-by: Rob Herring <robh@kernel.org>
 
-Thanks,
-Patrick
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: David Heidelberg <david@ixit.cz>
+> ---
+> v3:
+>  - add Krzysztof R-b
 
->
->
-> >  rcu_preempt_deferred_qs_irqrestore(struct task_struct *t, unsigned long flags)
-> >  {
-> >       bool empty_exp;
-> > @@ -581,7 +581,7 @@ rcu_preempt_deferred_qs_irqrestore(struct task_struct *t, unsigned long flags)
-> >   * is disabled.  This function cannot be expected to understand these
-> >   * nuances, so the caller must handle them.
-> >   */
-> > -static bool rcu_preempt_need_deferred_qs(struct task_struct *t)
-> > +notrace static bool rcu_preempt_need_deferred_qs(struct task_struct *t)
-> >  {
-> >       return (__this_cpu_read(rcu_data.cpu_no_qs.b.exp) ||
-> >               READ_ONCE(t->rcu_read_unlock_special.s)) &&
-> > @@ -595,7 +595,7 @@ static bool rcu_preempt_need_deferred_qs(struct task_struct *t)
-> >   * evaluate safety in terms of interrupt, softirq, and preemption
-> >   * disabling.
-> >   */
-> > -static void rcu_preempt_deferred_qs(struct task_struct *t)
-> > +notrace static void rcu_preempt_deferred_qs(struct task_struct *t)
-> >  {
-> >       unsigned long flags;
-> >
->
+BTW, this patch confuses me a bit... You sent it some time after I sent
+a fix:
+https://lore.kernel.org/all/20220402155551.16509-1-krzysztof.kozlowski@linaro.org/
+
+
+Best regards,
+Krzysztof

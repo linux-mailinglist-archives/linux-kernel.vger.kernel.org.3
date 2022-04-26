@@ -2,59 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFFC550EE37
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 03:46:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 517EF50EE38
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 03:46:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238711AbiDZBtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 21:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55366 "EHLO
+        id S241293AbiDZBtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 21:49:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbiDZBtB (ORCPT
+        with ESMTP id S238484AbiDZBtC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 21:49:01 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4774431DF9
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 18:45:55 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id q12so14790750pgj.13
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 18:45:55 -0700 (PDT)
+        Mon, 25 Apr 2022 21:49:02 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2124D32073
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 18:45:57 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id b15so16531490pfm.5
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 18:45:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fs39rG0hSjZgIyHtZoCrNmwLvEpFlExf0UyCmWSPVJU=;
-        b=EJ6EB8ibaSZ7fpoRT+N+rrv7FqwPDOGoqJWhG7TlJm2BZJfXXBSW+5+xKU/fNtZAcY
-         D0dr7hKl7tUDVHhHdA4Hfub20Gq76UFcTova6j8bYKkmHOrgYLwXle7gcsP34ma9uhfo
-         EpzKbBD7GU+1tF63uKQl3J+8PjBqDb3uDJW6I=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=3d3BRK+rsV0H1MEivwe2mn7frrdSPcB90v4KWuBBaQM=;
+        b=ej1HcqsW5KLOqLNaCI4dLiEgQGM6O8Sfb90ZyxBBlRzwTORd8VmkMrjWYneM4Mc/X0
+         6BgPOZ3i7s2PP3A12OBzv+lLyJJGIhm+pJtczgpiXmD2gQA6tnidUruHBfeY9f0iM3aS
+         S/exhv1wqe+HQQjOWOak11BEW/weBv32YC2ws=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fs39rG0hSjZgIyHtZoCrNmwLvEpFlExf0UyCmWSPVJU=;
-        b=YF3/bYwnt1mYym6QG/fc4Lal5JYl6Q4k7nJIH8ZgtA+pMccHrO3OyjyuPTvX5uxhX7
-         9KSawFETRi4tgaQ+WgFCHmErb8okvUD95KMF6m/RSVZYQ9J+gAej/Q+307i1f7zUhepU
-         MXwqnyW0HigW3NEIOvto6l8PDOv84jtmhjmrTVLep+MtDHggqsjeHCwDw3ptpcRTfIb8
-         i45TJ24s1GtmoRoaeN8bFRUFupRrsC5skgWKrDeL1PtHxwuF5YKGmPCgHixijRDrdI4W
-         PzG1Mvps/gnCKuDrUtCfJQVO8jA8n7Lx7OJS+C/Bwvk4kGLRYt0mSHvMvhejQeWySzfr
-         lVGw==
-X-Gm-Message-State: AOAM531OTTANKu23cquWAG988HkfLO/eeLCJqhd27vmtmY4zPUWIyNDS
-        YUvI7w7F2G5/zK1YkJuAtUnF1w==
-X-Google-Smtp-Source: ABdhPJwdR5XizZKoGXDfQ7ukYvyvVepyzL47uugvCgpFGVfG+bCqh1tu06W/3af5zp4pxeMahoOX/Q==
-X-Received: by 2002:a63:c1b:0:b0:39d:93f7:4b7b with SMTP id b27-20020a630c1b000000b0039d93f74b7bmr17628068pgl.595.1650937554798;
-        Mon, 25 Apr 2022 18:45:54 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=3d3BRK+rsV0H1MEivwe2mn7frrdSPcB90v4KWuBBaQM=;
+        b=0MkZ8CuTYPv8NSSVtu3TPAIcnKi+OqcELalfKTcKwAf1oKcWxQ+bhY+qe5fybDN9i4
+         0t1OUv9LKNCeiRBTmgOLNDIiR2OOP1xxBoGxLP8mbvSM+XTznHQnmJqcB+1dogtyWMqE
+         MR1Q2G7yblWMdD0KKeiLVi9H2vne9vCwFR5hfr6GDYp7VJutDPHA3HfeUmIVa/recsGe
+         XgRgm4wCxemKTjKfJjjU8DoqXf3OFZxU88hy8I4HcNHauOVH+G+RLUxvLyP/Gj/2xvmR
+         wwy5VsZqsEsi2F6DvzFO1rn1OHfL/gPoM40/xfQZ95irAD2kESBt63wmWxo2BB5Ec39g
+         zFzQ==
+X-Gm-Message-State: AOAM531tblCe4e6+CzN9WTTvx+dO1AVGHd794mCfLdn28tO0fVlmPQOq
+        6Zh8a72pMRZMx6Edd9vSzqsZpw==
+X-Google-Smtp-Source: ABdhPJw/aUTO4Volur0lD5eMJniKHG/Naw8BdeIAI9Zc5hYF0pNjW/rmonH1Z7xjPgDTBUflvk6nlg==
+X-Received: by 2002:a05:6a00:138e:b0:50a:9503:44a7 with SMTP id t14-20020a056a00138e00b0050a950344a7mr22021953pfg.75.1650937556699;
+        Mon, 25 Apr 2022 18:45:56 -0700 (PDT)
 Received: from localhost ([2620:15c:202:201:84c6:2d6d:c16:1a1b])
-        by smtp.gmail.com with UTF8SMTPSA id n20-20020a634d54000000b0039d18bf7864sm10908937pgl.20.2022.04.25.18.45.53
+        by smtp.gmail.com with UTF8SMTPSA id i11-20020a654d0b000000b0039d82c3e68csm11169010pgt.55.2022.04.25.18.45.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 18:45:54 -0700 (PDT)
+        Mon, 25 Apr 2022 18:45:56 -0700 (PDT)
 From:   Brian Norris <briannorris@chromium.org>
 To:     Heiko Stuebner <heiko@sntech.de>, Arnd Bergmann <arnd@arndb.de>
 Cc:     Robin Murphy <robin.murphy@arm.com>,
         linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
         Guenter Roeck <linux@roeck-us.net>,
         Brian Norris <briannorris@chromium.org>
-Subject: [PATCH v3 1/3] soc: rockchip: Clean up Kconfig whitespace
-Date:   Mon, 25 Apr 2022 18:45:42 -0700
-Message-Id: <20220426014545.628100-1-briannorris@chromium.org>
+Subject: [PATCH v3 2/3] soc: rockchip: power-domain: Replace dsb() with smb()
+Date:   Mon, 25 Apr 2022 18:45:43 -0700
+Message-Id: <20220426014545.628100-2-briannorris@chromium.org>
 X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
+In-Reply-To: <20220426014545.628100-1-briannorris@chromium.org>
+References: <20220426014545.628100-1-briannorris@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -66,59 +68,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are spaces instead of tabs, and other inconsistent indentation.
+It's unclear if these are really needed at all, but seemingly their
+purpose is only as a write barrier. Use the general macro instead of the
+ARM-specific one.
+
+This driver is partially marked for COMPILE_TEST'ing, but it doesn't
+build under non-ARM architectures. Fix this up before *really* enabling
+it for COMPILE_TEST.
 
 Signed-off-by: Brian Norris <briannorris@chromium.org>
 ---
 
-(no changes since v2)
+Changes in v3:
+ * New in v3
 
-Changes in v2:
- * New patch
+ drivers/soc/rockchip/pm_domains.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- drivers/soc/rockchip/Kconfig | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/soc/rockchip/Kconfig b/drivers/soc/rockchip/Kconfig
-index 156ac0e0c8fe..aff2f7e95237 100644
---- a/drivers/soc/rockchip/Kconfig
-+++ b/drivers/soc/rockchip/Kconfig
-@@ -23,23 +23,23 @@ config ROCKCHIP_IODOMAIN
- 	  voltage supplied by the regulators.
+diff --git a/drivers/soc/rockchip/pm_domains.c b/drivers/soc/rockchip/pm_domains.c
+index 1b029e494274..cf16ff9b73b3 100644
+--- a/drivers/soc/rockchip/pm_domains.c
++++ b/drivers/soc/rockchip/pm_domains.c
+@@ -178,7 +178,7 @@ static int rockchip_pmu_set_idle_request(struct rockchip_pm_domain *pd,
+ 		regmap_update_bits(pmu->regmap, pmu->info->req_offset,
+ 				   pd_info->req_mask, idle ? -1U : 0);
  
- config ROCKCHIP_PM_DOMAINS
--        bool "Rockchip generic power domain"
--        depends on PM
--        select PM_GENERIC_DOMAINS
--        help
--          Say y here to enable power domain support.
--          In order to meet high performance and low power requirements, a power
--          management unit is designed or saving power when RK3288 in low power
--          mode. The RK3288 PMU is dedicated for managing the power of the whole chip.
-+	bool "Rockchip generic power domain"
-+	depends on PM
-+	select PM_GENERIC_DOMAINS
-+	help
-+	  Say y here to enable power domain support.
-+	  In order to meet high performance and low power requirements, a power
-+	  management unit is designed or saving power when RK3288 in low power
-+	  mode. The RK3288 PMU is dedicated for managing the power of the whole chip.
+-	dsb(sy);
++	wmb();
  
--          If unsure, say N.
-+	  If unsure, say N.
+ 	/* Wait util idle_ack = 1 */
+ 	target_ack = idle ? pd_info->ack_mask : 0;
+@@ -285,7 +285,7 @@ static void rockchip_do_pmu_set_power_domain(struct rockchip_pm_domain *pd,
+ 		regmap_update_bits(pmu->regmap, pmu->info->pwr_offset,
+ 				   pd->info->pwr_mask, on ? 0 : -1U);
  
- config ROCKCHIP_DTPM
- 	tristate "Rockchip DTPM hierarchy"
- 	depends on DTPM && m
- 	help
--	 Describe the hierarchy for the Dynamic Thermal Power
--	 Management tree on this platform. That will create all the
--	 power capping capable devices.
-+	  Describe the hierarchy for the Dynamic Thermal Power Management tree
-+	  on this platform. That will create all the power capping capable
-+	  devices.
+-	dsb(sy);
++	wmb();
  
- endif
+ 	if (readx_poll_timeout_atomic(rockchip_pmu_domain_is_on, pd, is_on,
+ 				      is_on == on, 0, 10000)) {
 -- 
 2.36.0.rc2.479.g8af0fa9b8e-goog
 

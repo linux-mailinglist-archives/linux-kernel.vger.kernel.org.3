@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E7A950F3CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:26:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F4FF50F56D
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344752AbiDZI2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38134 "EHLO
+        id S1345856AbiDZIoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:44:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344794AbiDZI13 (ORCPT
+        with ESMTP id S1345241AbiDZIhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:27:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C88C6D39C;
-        Tue, 26 Apr 2022 01:23:32 -0700 (PDT)
+        Tue, 26 Apr 2022 04:37:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E445889CC2;
+        Tue, 26 Apr 2022 01:29:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 727C9617F3;
-        Tue, 26 Apr 2022 08:23:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83965C385A4;
-        Tue, 26 Apr 2022 08:23:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 735C2B81CFA;
+        Tue, 26 Apr 2022 08:29:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1EB7C385BA;
+        Tue, 26 Apr 2022 08:29:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961410;
-        bh=rv/GX7icARfrLpZuyE33Cr4F/qHjUe73i7Nfj25q3AY=;
+        s=korg; t=1650961750;
+        bh=ufe3XXIcnualJH+O2NTLc5JOijDBsJnOr9dxfRX5pj0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1XQtaHAGQKMeDRkZF+0CfA/fdxsj8O63U421uMlAnCX3u66GU5gX7w3bdbr+F+T8Y
-         DylIdch8L4WzfhSu1Z36kPyKElzDsSlS2wAP5G829+Zt+BgmbODiBl++nszt66+O/k
-         uvXi9ctEvh3lN6NdPPtNwZRQ+Twqn8C4FTWEjZck=
+        b=uj/1Kj3NCTuzFcL/JJwXn3BRwVOFkZBieVk2fbgHKcSeMAuTmAX/zg8+gEh5r1HEN
+         2E27PDqWv4GoKmtqMUtledTvYYMZjXc51kN3KUU7mD+UScTXGs2B0kUAHmPEzx158d
+         d/YMpU9VijFjBFReStM9n6szSNuyacg0lka2Wd8U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+70e777a39907d6d5fd0a@syzkaller.appspotmail.com,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.9 04/24] ALSA: usb-audio: Clear MIDI port active flag after draining
+        stable@vger.kernel.org, Flavio Leitner <fbl@redhat.com>,
+        Hangbin Liu <liuhangbin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 18/62] net/packet: fix packet_sock xmit return value checking
 Date:   Tue, 26 Apr 2022 10:20:58 +0200
-Message-Id: <20220426081731.503169674@linuxfoundation.org>
+Message-Id: <20220426081737.749339656@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081731.370823950@linuxfoundation.org>
-References: <20220426081731.370823950@linuxfoundation.org>
+In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
+References: <20220426081737.209637816@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,41 +55,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Hangbin Liu <liuhangbin@gmail.com>
 
-commit 0665886ad1392e6b5bae85d7a6ccbed48dca1522 upstream.
+[ Upstream commit 29e8e659f984be00d75ec5fef4e37c88def72712 ]
 
-When a rawmidi output stream is closed, it calls the drain at first,
-then does trigger-off only when the drain returns -ERESTARTSYS as a
-fallback.  It implies that each driver should turn off the stream
-properly after the drain.  Meanwhile, USB-audio MIDI interface didn't
-change the port->active flag after the drain.  This may leave the
-output work picking up the port that is closed right now, which
-eventually leads to a use-after-free for the already released rawmidi
-object.
+packet_sock xmit could be dev_queue_xmit, which also returns negative
+errors. So only checking positive errors is not enough, or userspace
+sendmsg may return success while packet is not send out.
 
-This patch fixes the bug by properly clearing the port->active flag
-after the output drain.
+Move the net_xmit_errno() assignment in the braces as checkpatch.pl said
+do not use assignment in if condition.
 
-Reported-by: syzbot+70e777a39907d6d5fd0a@syzkaller.appspotmail.com
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/00000000000011555605dceaff03@google.com
-Link: https://lore.kernel.org/r/20220420130247.22062-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Reported-by: Flavio Leitner <fbl@redhat.com>
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/usb/midi.c |    1 +
- 1 file changed, 1 insertion(+)
+ net/packet/af_packet.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
---- a/sound/usb/midi.c
-+++ b/sound/usb/midi.c
-@@ -1210,6 +1210,7 @@ static void snd_usbmidi_output_drain(str
- 		} while (drain_urbs && timeout);
- 		finish_wait(&ep->drain_wait, &wait);
- 	}
-+	port->active = 0;
- 	spin_unlock_irq(&ep->buffer_lock);
- }
+diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
+index 70c102359bfe..a2696acbcd9d 100644
+--- a/net/packet/af_packet.c
++++ b/net/packet/af_packet.c
+@@ -2791,8 +2791,9 @@ static int tpacket_snd(struct packet_sock *po, struct msghdr *msg)
  
+ 		status = TP_STATUS_SEND_REQUEST;
+ 		err = po->xmit(skb);
+-		if (unlikely(err > 0)) {
+-			err = net_xmit_errno(err);
++		if (unlikely(err != 0)) {
++			if (err > 0)
++				err = net_xmit_errno(err);
+ 			if (err && __packet_get_status(po, ph) ==
+ 				   TP_STATUS_AVAILABLE) {
+ 				/* skb was destructed already */
+@@ -2993,8 +2994,12 @@ static int packet_snd(struct socket *sock, struct msghdr *msg, size_t len)
+ 		skb->no_fcs = 1;
+ 
+ 	err = po->xmit(skb);
+-	if (err > 0 && (err = net_xmit_errno(err)) != 0)
+-		goto out_unlock;
++	if (unlikely(err != 0)) {
++		if (err > 0)
++			err = net_xmit_errno(err);
++		if (err)
++			goto out_unlock;
++	}
+ 
+ 	dev_put(dev);
+ 
+-- 
+2.35.1
+
 
 

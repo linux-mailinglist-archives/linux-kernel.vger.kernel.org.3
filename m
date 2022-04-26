@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5798350F5BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:54:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CF8050F60A
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345310AbiDZIlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:41:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39894 "EHLO
+        id S245701AbiDZIzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345239AbiDZIe0 (ORCPT
+        with ESMTP id S1345516AbiDZIl5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:34:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C2572462;
-        Tue, 26 Apr 2022 01:26:42 -0700 (PDT)
+        Tue, 26 Apr 2022 04:41:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB64158F84;
+        Tue, 26 Apr 2022 01:33:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F116617D2;
-        Tue, 26 Apr 2022 08:26:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AF50C385A0;
-        Tue, 26 Apr 2022 08:26:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D7766185D;
+        Tue, 26 Apr 2022 08:33:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E370C385A0;
+        Tue, 26 Apr 2022 08:33:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961601;
-        bh=H+7J76yVJjZsQhiXj0f3cOOgJ06vpupY1VOdh3C30xc=;
+        s=korg; t=1650961986;
+        bh=EGbn0DdCYwtJ3+c4oJdDYP5vjRTc9aYEwtto72wo0VU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QQMkRwkKR+NQkrfApnQNv5gJSBjmnLu0AwvWbkx7nlpnW2MRGEpyN3vv1ePzsj7q4
-         HK5g+8FjWWwttkql7kFLgPuBz7+kocZ3Jg7L+Pm4vo8jujuYYDYIAo1v14jF8KjLs1
-         zFA+z+fMP4liCTkJhCOvVtBk5brTeG1XLWmBxmkA=
+        b=Rzp1M/9YPMg/Jw3VrV530uL3STcRG6QwJ7PEe7H0lIVNNDcIwsQvJfYzmR3AUxjq9
+         qp/TZA2lNTN+iM9GD86qpSmybw6Ii4HvTZvGQg9kPaM4nUQpANrgQ7GJKUIg9d+Dg3
+         SKmeAci1fZyxPFuOMAsE9dgb/xJxbnhu+yFTx3nI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hongbin Wang <wh_bin@126.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 21/53] vxlan: fix error return code in vxlan_fdb_append
+        stable@vger.kernel.org, Qian Cai <quic_qiancai@quicinc.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 33/86] arm64: mm: fix p?d_leaf()
 Date:   Tue, 26 Apr 2022 10:21:01 +0200
-Message-Id: <20220426081736.270904630@linuxfoundation.org>
+Message-Id: <20220426081742.162293381@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
-References: <20220426081735.651926456@linuxfoundation.org>
+In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
+References: <20220426081741.202366502@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,38 +54,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hongbin Wang <wh_bin@126.com>
+From: Muchun Song <songmuchun@bytedance.com>
 
-[ Upstream commit 7cea5560bf656b84f9ed01c0cc829d4eecd0640b ]
+[ Upstream commit 23bc8f69f0eceecbb87c3801d2e48827d2dca92b ]
 
-When kmalloc and dst_cache_init failed,
-should return ENOMEM rather than ENOBUFS.
+The pmd_leaf() is used to test a leaf mapped PMD, however, it misses
+the PROT_NONE mapped PMD on arm64.  Fix it.  A real world issue [1]
+caused by this was reported by Qian Cai. Also fix pud_leaf().
 
-Signed-off-by: Hongbin Wang <wh_bin@126.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Link: https://patchwork.kernel.org/comment/24798260/ [1]
+Fixes: 8aa82df3c123 ("arm64: mm: add p?d_leaf() definitions")
+Reported-by: Qian Cai <quic_qiancai@quicinc.com>
+Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+Link: https://lore.kernel.org/r/20220422060033.48711-1-songmuchun@bytedance.com
+Signed-off-by: Will Deacon <will@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/vxlan.c | 4 ++--
+ arch/arm64/include/asm/pgtable.h | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/vxlan.c b/drivers/net/vxlan.c
-index eacc1e32d547..1b98a888a168 100644
---- a/drivers/net/vxlan.c
-+++ b/drivers/net/vxlan.c
-@@ -524,11 +524,11 @@ static int vxlan_fdb_append(struct vxlan_fdb *f,
+diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+index 9cf8e304bb56..3f74db7b0a31 100644
+--- a/arch/arm64/include/asm/pgtable.h
++++ b/arch/arm64/include/asm/pgtable.h
+@@ -516,7 +516,7 @@ extern pgprot_t phys_mem_access_prot(struct file *file, unsigned long pfn,
+ 				 PMD_TYPE_TABLE)
+ #define pmd_sect(pmd)		((pmd_val(pmd) & PMD_TYPE_MASK) == \
+ 				 PMD_TYPE_SECT)
+-#define pmd_leaf(pmd)		pmd_sect(pmd)
++#define pmd_leaf(pmd)		(pmd_present(pmd) && !pmd_table(pmd))
+ #define pmd_bad(pmd)		(!pmd_table(pmd))
  
- 	rd = kmalloc(sizeof(*rd), GFP_ATOMIC);
- 	if (rd == NULL)
--		return -ENOBUFS;
-+		return -ENOMEM;
+ #if defined(CONFIG_ARM64_64K_PAGES) || CONFIG_PGTABLE_LEVELS < 3
+@@ -603,7 +603,7 @@ static inline unsigned long pmd_page_vaddr(pmd_t pmd)
+ #define pud_none(pud)		(!pud_val(pud))
+ #define pud_bad(pud)		(!pud_table(pud))
+ #define pud_present(pud)	pte_present(pud_pte(pud))
+-#define pud_leaf(pud)		pud_sect(pud)
++#define pud_leaf(pud)		(pud_present(pud) && !pud_table(pud))
+ #define pud_valid(pud)		pte_valid(pud_pte(pud))
  
- 	if (dst_cache_init(&rd->dst_cache, GFP_ATOMIC)) {
- 		kfree(rd);
--		return -ENOBUFS;
-+		return -ENOMEM;
- 	}
- 
- 	rd->remote_ip = *ip;
+ static inline void set_pud(pud_t *pudp, pud_t pud)
 -- 
 2.35.1
 

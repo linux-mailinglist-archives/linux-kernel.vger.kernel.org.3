@@ -2,102 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1834F510CBB
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 01:33:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B0A2510CBD
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 01:34:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356161AbiDZXgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 19:36:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46714 "EHLO
+        id S1356164AbiDZXhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 19:37:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356149AbiDZXgs (ORCPT
+        with ESMTP id S229469AbiDZXhb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 19:36:48 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5BBC4C438;
-        Tue, 26 Apr 2022 16:33:37 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id bv19so108884ejb.6;
-        Tue, 26 Apr 2022 16:33:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6g4o+wEfKL9+T8sQSTcxefCBo4KDuhC1uhCrtK54UWo=;
-        b=RZublxYNfQ7ngoScyoD6qTgaa97/w7pVGTUyLZhdE0TbXzm6oFZt1wzzdGxgoB+FOp
-         ZURXwDkCEXvHnAFv8Qg7/HFrHMVTKXQoL74HkkAplLob98VWlB+9Q+cEJ1hNOOSOSXII
-         t1AIQmJg8BTbun+5r7wh8s9RJ6EhtfHg5P6gBvE7vklc6IgSkphXHRc6NrmHWSBVM3RF
-         22/DppMe/W6wtg/i8IPus0fmKZoF4YFiaHF6CT8c10rBNMuJrP0EG1DFiEvM3XxRLDVU
-         tf5d59s4jmV7/sJdbMAgJSGbuLa/PaetUFZ3cWHDmN3qlp1YiNjbvZ0rRppM7T1oIzek
-         7v/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6g4o+wEfKL9+T8sQSTcxefCBo4KDuhC1uhCrtK54UWo=;
-        b=L3pVqOVtksF6RYyDxH0yeKYak1OlmdSZRrHTkKoPCznJjgRQ44ntSmNug5OFIP5xv+
-         y2+AK0VZP5Gc+R0eQlCdBh1Y9K57yRLNL6fYfyCz8dMBDsbROcv2idaRy62xJZ2uoIw7
-         86YIL0RQy37G+kxbkhjLrfq4wApTvp6bYwKxU2EvAWowqCROpOSDoTmgF1RUwhPxTmw9
-         hq7ogP3OYStWhu84vW29pWM8H4zxwe+91kk2IkSll7utzp/NY8f2/vZuvn3rDHIm3KBD
-         Yn+eEWfmWs954xBeLotR2XT59nBIAezMUNWLNUAjrg3FC65W0cGKzRcIJ2Is6L6/NKaw
-         VLqg==
-X-Gm-Message-State: AOAM532+Bv6jr9wn00m9Kicq8qw07dUwk2sMYtnDudO25zLuXlVuCl1b
-        j34TGgsApJwIK/GjUo2ql1iXD93GKdc7PxAvU+c=
-X-Google-Smtp-Source: ABdhPJzoP1IGO9WxJhw+OnKRq3I9DjJUIfZg1Ycf6YGL83bTUk5OATfKVWfg65XwnlWyuqHbdlWsXk2Om0KInnUzcTo=
-X-Received: by 2002:a17:906:7c96:b0:6f3:b6c4:7b2 with SMTP id
- w22-20020a1709067c9600b006f3b6c407b2mr4426898ejo.676.1651016015646; Tue, 26
- Apr 2022 16:33:35 -0700 (PDT)
+        Tue, 26 Apr 2022 19:37:31 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D5069CC8;
+        Tue, 26 Apr 2022 16:34:19 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:60524)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1njUhF-00Fyzz-QA; Tue, 26 Apr 2022 17:34:17 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:35778 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1njUhE-004IXg-Hq; Tue, 26 Apr 2022 17:34:17 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     rjw@rjwysocki.net, oleg@redhat.com, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        tj@kernel.org, linux-pm@vger.kernel.org
+References: <20220421150248.667412396@infradead.org>
+        <20220421150654.757693825@infradead.org>
+Date:   Tue, 26 Apr 2022 18:34:09 -0500
+In-Reply-To: <20220421150654.757693825@infradead.org> (Peter Zijlstra's
+        message of "Thu, 21 Apr 2022 17:02:49 +0200")
+Message-ID: <87fslzfmha.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org> <20220426225211.308418-4-ebiederm@xmission.com>
-In-Reply-To: <20220426225211.308418-4-ebiederm@xmission.com>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Tue, 26 Apr 2022 16:33:24 -0700
-Message-ID: <CAMo8BfJdDJ2tWPp0vNZ0SF2HkRGsytoVhnsnRMDcbSmGByH8zA@mail.gmail.com>
-Subject: Re: [PATCH 4/9] ptrace/xtensa: Replace PT_SINGLESTEP with TIF_SINGLESTEP
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, rjw@rjwysocki.net,
-        Oleg Nesterov <oleg@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        dietmar.eggemann@arm.com, Steven Rostedt <rostedt@goodmis.org>,
-        mgorman@suse.de, Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Will Deacon <will@kernel.org>, Tejun Heo <tj@kernel.org>,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        inux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1njUhE-004IXg-Hq;;;mid=<87fslzfmha.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1/1sUzsaQCZiIJrvnL7foDQ7cpTq/um60w=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        T_FILL_THIS_FORM_SHORT,T_SPF_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ****;Peter Zijlstra <peterz@infradead.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 566 ms - load_scoreonly_sql: 0.09 (0.0%),
+        signal_user_changed: 13 (2.3%), b_tie_ro: 11 (1.9%), parse: 1.43
+        (0.3%), extract_message_metadata: 15 (2.6%), get_uri_detail_list: 2.2
+        (0.4%), tests_pri_-1000: 11 (1.9%), tests_pri_-950: 1.33 (0.2%),
+        tests_pri_-900: 1.13 (0.2%), tests_pri_-90: 197 (34.8%), check_bayes:
+        190 (33.6%), b_tokenize: 9 (1.5%), b_tok_get_all: 8 (1.5%),
+        b_comp_prob: 2.8 (0.5%), b_tok_touch_all: 166 (29.3%), b_finish: 1.19
+        (0.2%), tests_pri_0: 312 (55.2%), check_dkim_signature: 0.62 (0.1%),
+        check_dkim_adsp: 3.6 (0.6%), poll_dns_idle: 0.43 (0.1%), tests_pri_10:
+        2.1 (0.4%), tests_pri_500: 8 (1.5%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v2 1/5] sched,signal,ptrace: Rework TASK_TRACED,
+ TASK_STOPPED state
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 3:52 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
->
-> xtensa is the last user of the PT_SINGLESTEP flag.  Changing tsk->ptrace in
-> user_enable_single_step and user_disable_single_step without locking could
-> potentiallly cause problems.
->
-> So use a thread info flag instead of a flag in tsk->ptrace.  Use TIF_SINGLESTEP
-> that xtensa already had defined but unused.
->
-> Remove the definitions of PT_SINGLESTEP and PT_BLOCKSTEP as they have no more users.
->
-> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-> ---
->  arch/xtensa/kernel/ptrace.c | 4 ++--
->  arch/xtensa/kernel/signal.c | 4 ++--
->  include/linux/ptrace.h      | 6 ------
->  3 files changed, 4 insertions(+), 10 deletions(-)
+Peter Zijlstra <peterz@infradead.org> writes:
 
-Acked-by: Max Filippov <jcmvbkbc@gmail.com>
+> Currently ptrace_stop() / do_signal_stop() rely on the special states
+> TASK_TRACED and TASK_STOPPED resp. to keep unique state. That is, this
+> state exists only in task->__state and nowhere else.
+>
+> There's two spots of bother with this:
+>
+>  - PREEMPT_RT has task->saved_state which complicates matters,
+>    meaning task_is_{traced,stopped}() needs to check an additional
+>    variable.
+>
+>  - An alternative freezer implementation that itself relies on a
+>    special TASK state would loose TASK_TRACED/TASK_STOPPED and will
+>    result in misbehaviour.
+>
+> As such, add additional state to task->jobctl to track this state
+> outside of task->__state.
+>
+> NOTE: this doesn't actually fix anything yet, just adds extra state.
+>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
--- 
-Thanks.
--- Max
+> --- a/kernel/signal.c
+> +++ b/kernel/signal.c
+> @@ -770,7 +773,9 @@ void signal_wake_up_state(struct task_st
+>  	 * By using wake_up_state, we ensure the process will wake up and
+>  	 * handle its death signal.
+>  	 */
+> -	if (!wake_up_state(t, state | TASK_INTERRUPTIBLE))
+> +	if (wake_up_state(t, state | TASK_INTERRUPTIBLE))
+> +		t->jobctl &= ~(JOBCTL_STOPPED | JOBCTL_TRACED);
+> +	else
+>  		kick_process(t);
+>  }
+
+This hunk is subtle and I don't think it is actually what we want if the
+code is going to be robust against tsk->__state becoming TASK_FROZEN.
+
+I think we want the clearing of JOBCTL_STOPPED and JOBCTL_TRACED
+to be independent of what tsk->__state and tsk->saved_state are.
+
+Something like:
+
+static inline void signal_wake_up(struct task_struct *t, bool resume)
+{
+	unsigned int state = 0;
+	if (resume && !(t->jobctl & JOBCTL_DELAY_WAKEKILL)) {
+		t->jobctl &= ~(JOBCTL_STOPPED | JOBCTL_TRACED);
+		state = TASK_WAKEKILL;
+	}
+	signal_wake_up_state(t, state);
+}
+
+static inline void ptrace_signal_wake_up(struct task_struct *t, bool resume)
+{
+	unsigned int state = 0;
+	if (resume) {
+		t->jobctl &= ~JOBCTL_TRACED;
+		state = __TASK_TRACED;
+	}
+	signal_wake_up_state(t, state);
+}
+
+That would allow __set_task_special in the final patch to look like:
+
+/*
+ * The special task states (TASK_STOPPED, TASK_TRACED) keep their canonical
+ * state in p->jobctl. If either of them got a wakeup that was missed because
+ * TASK_FROZEN, then their canonical state reflects that and the below will
+ * refuse to restore the special state and instead issue the wakeup.
+ */
+static int __set_task_special(struct task_struct *p, void *arg)
+{
+        unsigned int state = 0;
+
+	if (p->jobctl & JOBCTL_TRACED)
+        	state = TASK_TRACED;
+
+	else if (p->jobctl & JOBCTL_STOPPED)
+		state = TASK_STOPPED;
+
+	if (state)
+		WRITE_ONCE(p->__state, state);
+
+	return state;
+}
+
+
+With no need to figure out if a wake_up was dropped and reverse engineer
+what the wakeup was.
+
+Eric
+

@@ -2,198 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87557510CB6
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 01:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1834F510CBB
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 01:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356156AbiDZXgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 19:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45698 "EHLO
+        id S1356161AbiDZXgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 19:36:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356144AbiDZXgc (ORCPT
+        with ESMTP id S1356149AbiDZXgs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 19:36:32 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2E0B37000
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 16:33:22 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id y19so487867ljd.4
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 16:33:22 -0700 (PDT)
+        Tue, 26 Apr 2022 19:36:48 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5BBC4C438;
+        Tue, 26 Apr 2022 16:33:37 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id bv19so108884ejb.6;
+        Tue, 26 Apr 2022 16:33:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=YVvIQh6F4l539Ju82FbPOXOwgPIjKwZXSPtA68ehILI=;
-        b=bQ7chrN+CgDUyPpEzhWRxIbKhfeo+K9pDNSblFNsuyxAaM+EiF79z2/X2jr7SR/nlg
-         MdaJKcmBZJQD/VoJfWZsy7qLTPyT3zkjCh9r7ws+STzLLUbolOMzidAD48MeqSUm3YVc
-         G4tDLURnElsWyzf98HA0nIt6sMdJYpfTLyFYE=
+        bh=6g4o+wEfKL9+T8sQSTcxefCBo4KDuhC1uhCrtK54UWo=;
+        b=RZublxYNfQ7ngoScyoD6qTgaa97/w7pVGTUyLZhdE0TbXzm6oFZt1wzzdGxgoB+FOp
+         ZURXwDkCEXvHnAFv8Qg7/HFrHMVTKXQoL74HkkAplLob98VWlB+9Q+cEJ1hNOOSOSXII
+         t1AIQmJg8BTbun+5r7wh8s9RJ6EhtfHg5P6gBvE7vklc6IgSkphXHRc6NrmHWSBVM3RF
+         22/DppMe/W6wtg/i8IPus0fmKZoF4YFiaHF6CT8c10rBNMuJrP0EG1DFiEvM3XxRLDVU
+         tf5d59s4jmV7/sJdbMAgJSGbuLa/PaetUFZ3cWHDmN3qlp1YiNjbvZ0rRppM7T1oIzek
+         7v/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=YVvIQh6F4l539Ju82FbPOXOwgPIjKwZXSPtA68ehILI=;
-        b=tMDy4YBqS5sZCxa0LRdcvcXaZsQrNm1B0VEZUrPdx5lhq01YKmZdSiWsW+U1+9SAXf
-         fEPqTlClE7MjBC5ghQYpkZho/esf9gkfWn7yzzqT+P+Pct+UmFHj3GsJ/EStWgvzTarP
-         2uhJJP7S4/XZZb4ljMRILINy4Vm4W5XndM8Q0f5UnzFfwQu5vu/WnvCS7fW4WVkQ0sHL
-         lWRGItwACdvQ/YNaUOsKca6ARkTrZfqlpvGHAKFYNy6arPjAe/zH2X8FutFEoxHLW6/R
-         NbzykU6u/gXr+VWF+TKYHgCVWS6nBaQSmbNaPnI8SuBXa5xy4wve1fXkQswVDDzdYXmW
-         4tgg==
-X-Gm-Message-State: AOAM53067VTlIBq85zwgF6WwQwP+qSmCB3dTVnKqBIzxl389g11hsFHR
-        tS4q1cAZ2zoNKk4o5JsQVg+bE2JfiCPEEMyM
-X-Google-Smtp-Source: ABdhPJwa2exffenMIx3sng8vr0YFz2WGn6rmlz/4M8ZUp7/l1TQT4XAKPR2Uk00fBA0jjFqZLBqbVw==
-X-Received: by 2002:a2e:9101:0:b0:24b:554b:1203 with SMTP id m1-20020a2e9101000000b0024b554b1203mr16068289ljg.508.1651016000801;
-        Tue, 26 Apr 2022 16:33:20 -0700 (PDT)
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com. [209.85.208.180])
-        by smtp.gmail.com with ESMTPSA id p8-20020a056512328800b0047205ddcf7csm938612lfe.35.2022.04.26.16.33.19
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 16:33:19 -0700 (PDT)
-Received: by mail-lj1-f180.google.com with SMTP id m23so464016ljb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 16:33:19 -0700 (PDT)
-X-Received: by 2002:a2e:8789:0:b0:24f:124c:864a with SMTP id
- n9-20020a2e8789000000b0024f124c864amr7581754lji.164.1651015999161; Tue, 26
- Apr 2022 16:33:19 -0700 (PDT)
+        bh=6g4o+wEfKL9+T8sQSTcxefCBo4KDuhC1uhCrtK54UWo=;
+        b=L3pVqOVtksF6RYyDxH0yeKYak1OlmdSZRrHTkKoPCznJjgRQ44ntSmNug5OFIP5xv+
+         y2+AK0VZP5Gc+R0eQlCdBh1Y9K57yRLNL6fYfyCz8dMBDsbROcv2idaRy62xJZ2uoIw7
+         86YIL0RQy37G+kxbkhjLrfq4wApTvp6bYwKxU2EvAWowqCROpOSDoTmgF1RUwhPxTmw9
+         hq7ogP3OYStWhu84vW29pWM8H4zxwe+91kk2IkSll7utzp/NY8f2/vZuvn3rDHIm3KBD
+         Yn+eEWfmWs954xBeLotR2XT59nBIAezMUNWLNUAjrg3FC65W0cGKzRcIJ2Is6L6/NKaw
+         VLqg==
+X-Gm-Message-State: AOAM532+Bv6jr9wn00m9Kicq8qw07dUwk2sMYtnDudO25zLuXlVuCl1b
+        j34TGgsApJwIK/GjUo2ql1iXD93GKdc7PxAvU+c=
+X-Google-Smtp-Source: ABdhPJzoP1IGO9WxJhw+OnKRq3I9DjJUIfZg1Ycf6YGL83bTUk5OATfKVWfg65XwnlWyuqHbdlWsXk2Om0KInnUzcTo=
+X-Received: by 2002:a17:906:7c96:b0:6f3:b6c4:7b2 with SMTP id
+ w22-20020a1709067c9600b006f3b6c407b2mr4426898ejo.676.1651016015646; Tue, 26
+ Apr 2022 16:33:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220426145445.2282274-1-agruenba@redhat.com> <CAHk-=wi7o+fHYBTuCQQdHD112YHQtO21Y3+wxNYypjdo8feKFg@mail.gmail.com>
- <CAHc6FU48681X8aUK+g7UUN7q5b6rkVBzTP7h_zbE4XqZYAiw3g@mail.gmail.com>
-In-Reply-To: <CAHc6FU48681X8aUK+g7UUN7q5b6rkVBzTP7h_zbE4XqZYAiw3g@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 26 Apr 2022 16:33:02 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjMB1-xCOCBtsSMmQuFV9G+vNyCY1O_LsoqOd=0QS4yYg@mail.gmail.com>
-Message-ID: <CAHk-=wjMB1-xCOCBtsSMmQuFV9G+vNyCY1O_LsoqOd=0QS4yYg@mail.gmail.com>
-Subject: Re: [GIT PULL] gfs2 fix
-To:     Andreas Gruenbacher <agruenba@redhat.com>
-Cc:     cluster-devel <cluster-devel@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org> <20220426225211.308418-4-ebiederm@xmission.com>
+In-Reply-To: <20220426225211.308418-4-ebiederm@xmission.com>
+From:   Max Filippov <jcmvbkbc@gmail.com>
+Date:   Tue, 26 Apr 2022 16:33:24 -0700
+Message-ID: <CAMo8BfJdDJ2tWPp0vNZ0SF2HkRGsytoVhnsnRMDcbSmGByH8zA@mail.gmail.com>
+Subject: Re: [PATCH 4/9] ptrace/xtensa: Replace PT_SINGLESTEP with TIF_SINGLESTEP
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, rjw@rjwysocki.net,
+        Oleg Nesterov <oleg@redhat.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        dietmar.eggemann@arm.com, Steven Rostedt <rostedt@goodmis.org>,
+        mgorman@suse.de, Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Will Deacon <will@kernel.org>, Tejun Heo <tj@kernel.org>,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        inux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 2:28 PM Andreas Gruenbacher <agruenba@redhat.com> wrote:
+On Tue, Apr 26, 2022 at 3:52 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
 >
-> Btrfs has a comment in that place that reads:
+> xtensa is the last user of the PT_SINGLESTEP flag.  Changing tsk->ptrace in
+> user_enable_single_step and user_disable_single_step without locking could
+> potentiallly cause problems.
 >
->     /* No increment (+=) because iomap returns a cumulative value. */
-
-What a truly horrid interface. But you are triggering repressed
-childhood memories:
-
-> That's so that we can complete the tail of an asynchronous write
-> asynchronously after a failed page fault and subsequent fault-in.
-
-yeah, that makes me go "I remember something like that".
-
-> That would be great, but applications don't seem to be able to cope
-> with short direct writes, so we must turn partial failure into total
-> failure here. There's at least one xfstest that checks for that as
-> well.
-
-What a complete crock. You're telling me that you did some writes, but
-then you can't tell user space that writes happened because that would
-confuse things.
-
-Direct-IO is some truly hot disgusting garbage.
-
-Happily it's only used for things like databases that nobody sane
-would care about anyway.
-
-Anyway, none of that makes any sense, since you do this:
-
-                ret = gfs2_file_direct_write(iocb, from, &gh);
-                if (ret < 0 || !iov_iter_count(from))
-                        goto out_unlock;
-
-                iocb->ki_flags |= IOCB_DSYNC;
-                buffered = gfs2_file_buffered_write(iocb, from, &gh);
-
-so you're saying that the direct write will never partially succeed,
-but then in gfs2_file_write_iter() it very much looks like it's
-falling back to buffered writes for that case.
-
-Hmm. Very odd.
-
-I assume this is all due to that
-
-        /* Silently fall back to buffered I/O when writing beyond EOF */
-        if (iocb->ki_pos + iov_iter_count(from) > i_size_read(&ip->i_inode))
-
-thing, so this all makes some perverse kind of sense, but it still
-looks like this code just needs some serious serious commentary.
-
-So you *can* have a partial write if you hit the end of the file, and
-then you'll continue that partial write with the buffered code.
-
-But an actual _failure_ will not do that, and instead return an error
-even if the write was partially done.
-
-But then *some* failures aren't failures at all, and without any
-comments do this
-
-        if (ret == -ENOTBLK)
-                ret = 0;
-
-
-And remind me again - this all is meant for applications that
-supposedly care about consistency on disk?
-
-And the xfs tests actually have a *test* for that case, to make sure
-that nobody can sanely *really* know how much of the write succeeded
-if it was a DIO write?
-
-Gotcha.
-
-> > The reason I think I'm full of sh*t is that you say that the problem
-> > occurs in gfs2_file_buffered_write(), not in that
-> > gfs2_file_direct_write() case.
+> So use a thread info flag instead of a flag in tsk->ptrace.  Use TIF_SINGLESTEP
+> that xtensa already had defined but unused.
 >
-> Right, we're having that issue with buffered writes.
+> Remove the definitions of PT_SINGLESTEP and PT_BLOCKSTEP as they have no more users.
+>
+> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+> ---
+>  arch/xtensa/kernel/ptrace.c | 4 ++--
+>  arch/xtensa/kernel/signal.c | 4 ++--
+>  include/linux/ptrace.h      | 6 ------
+>  3 files changed, 4 insertions(+), 10 deletions(-)
 
-I have to say, compared to all the crazy things I see in the DIO path,
-the buffered write path actually looks almost entirely sane.
+Acked-by: Max Filippov <jcmvbkbc@gmail.com>
 
-Of course, gfs2_file_read_iter() counts how many bytes it has read in
-a variable called 'written', and gfs2_file_buffered_write() counts the
-bytes it has written in a variable called 'read', so "entirely sane"
-is all very very relative.
-
-I'm sure there's some good reason (job security?) for all this insanity.
-
-But I now have to go dig my eyes out with a rusty spoon.
-
-But before I do that, I have one more question (I'm going to regret
-this, aren't I?):
-
-In gfs2_file_buffered_write(), when it has done that
-fault_in_iov_iter_readable(), and it decides that that succeeded, it
-does
-
-                        if (gfs2_holder_queued(gh))
-                                goto retry_under_glock;
-                        if (read && !(iocb->ki_flags & IOCB_DIRECT))
-                                goto out_uninit;
-                        goto retry;
-
-so if it still has that lock (if I understand correctly), it will always retry.
-
-But if it *lost* the lock, it will retry only if was a direct write,
-and return a partial success for a regular write() rather than
-continue the write.
-
-Whaa? I'm assuming that this is more of that "direct writes have to
-succeed fully or not at all", but according to POSIX *regular* writes
-should also succeed fully, unless some error happens.
-
-Losing the lock doesn't sound like an error to me.
-
-And there are a lot of applications that do assume "write to a regular
-file didn't complete fully means that the disk is full" etc. Because
-that's the traditional meaning.
-
-This doesn't seem to be related to any data corruption issue, but it does smell.
-
-             Linus
+-- 
+Thanks.
+-- Max

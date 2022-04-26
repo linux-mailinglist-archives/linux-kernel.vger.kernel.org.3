@@ -2,140 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86F1B50F380
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DE7E50F381
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:16:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344235AbiDZIS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59622 "EHLO
+        id S1344536AbiDZITW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241511AbiDZISX (ORCPT
+        with ESMTP id S237082AbiDZITU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:18:23 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2115E17060;
-        Tue, 26 Apr 2022 01:15:16 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2a02:3030:3:7d2:2277:ba57:a2c0:3])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sebastianfricke)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id A0ADA1F43043;
-        Tue, 26 Apr 2022 09:15:14 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650960914;
-        bh=WikNeAiMUuFevJFNxJ9ZvKK3TNnSjJXOJ0Tm9TNw6dw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nfUscDjbkgZ9S/6KekwrdIL3o6nzuly/WFrdCBENr4uWH8i+IRxUUe1ThlLm3jRzV
-         TXiom6WORSOf+tLUFA2p0XCr7A12RbXml5f8Yhb1NXkQDzJHzS+pqgLlR+hXjqgOuD
-         Eh2tVyU7WOl+xK/imJ4mLATjjKh/jB32FjiF8XX3L/qw44tSMsu497RLFihOd736MJ
-         98sX/HtyR879R4btw3lOpbqB0G57WWyxZmV98/qqD2rrrt/qLlQ0/E6n8cbYBst9wT
-         n23ZBU7HwjQoYnf4a+7La41DaCa9AviD3v/ajgGThUjjxUgx24zzq5hHJEaAv5JskQ
-         GfEEqHIjVnfRw==
-Date:   Tue, 26 Apr 2022 10:15:11 +0200
-From:   Sebastian Fricke <sebastian.fricke@collabora.com>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     mchehab@kernel.org, hverkuil@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, mripard@kernel.org,
-        paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        nicolas.dufresne@collabora.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v5 16/17] media: uapi: Change data_bit_offset definition
-Message-ID: <20220426081511.etk5blic75sygjny@basti-XPS-13-9310>
-References: <20220407152940.738159-1-benjamin.gaignard@collabora.com>
- <20220407152940.738159-17-benjamin.gaignard@collabora.com>
+        Tue, 26 Apr 2022 04:19:20 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4DC37A32;
+        Tue, 26 Apr 2022 01:16:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=J7OvwflG+WFWryD1TbXk5Co3mjsn4aqXPw6H+ddoUm8=; b=KaidGjr788oUFlpZH7GAsV59Dp
+        IcqDnnGcjh7cjqZI8HNHzAtePNTptwzt/5VwzQ1/fJde7I/BWyNvjMceVBgMM9XNgJ6xgEH6OBauq
+        ZT1/BT/PxMIMcw9lFVZgl10nslxlnXg/sO/9qGywg+YWgBX08bBGaQSUvPPC5Td2KhIh77j3UxAUv
+        Y0Wna0S0jdfLX1FuEfJ7MvX9KJ8BGgWg0kDHHoytYZURvsX9+D8jz01NxO5djMSaECNvYkd7yZZ9N
+        KmAOxc0bZFR39+hQr274Jmov58SWd5etAWXIFhY10J9SlGJG/eYmN7+hgkFfZHXW4HGOVwHOHQpIH
+        RLM5rrGA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1njGMS-008keo-Dm; Tue, 26 Apr 2022 08:15:52 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id BF0E39816EC; Tue, 26 Apr 2022 10:15:50 +0200 (CEST)
+Date:   Tue, 26 Apr 2022 10:15:50 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sandipan Das <sandipan.das@amd.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        x86@kernel.org, bp@alien8.de, dave.hansen@linux.intel.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, namhyung@kernel.org,
+        jolsa@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        pbonzini@redhat.com, jmattson@google.com, like.xu.linux@gmail.com,
+        eranian@google.com, ananth.narayan@amd.com, ravi.bangoria@amd.com,
+        santosh.shukla@amd.com
+Subject: Re: [PATCH v2 7/7] kvm: x86/cpuid: Fix CPUID leaf 0xA
+Message-ID: <20220426081550.GO2731@worktop.programming.kicks-ass.net>
+References: <cover.1650515382.git.sandipan.das@amd.com>
+ <54bc7fe4cadf6bdef823bab1fba43d4891d2e1a9.1650515382.git.sandipan.das@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220407152940.738159-17-benjamin.gaignard@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <54bc7fe4cadf6bdef823bab1fba43d4891d2e1a9.1650515382.git.sandipan.das@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.04.2022 17:29, Benjamin Gaignard wrote:
->'F.7.3.6.1 General slice segment header syntax' section of HEVC
->specification describes that a slice header always end byte aligned,
+On Thu, Apr 21, 2022 at 11:16:59AM +0530, Sandipan Das wrote:
+> On some x86 processors, CPUID leaf 0xA provides information
+> on Architectural Performance Monitoring features. It
+> advertises a PMU version which Qemu uses to determine the
+> availability of additional MSRs to manage the PMCs.
+> 
+> Upon receiving a KVM_GET_SUPPORTED_CPUID ioctl request for
+> the same, the kernel constructs return values based on the
+> x86_pmu_capability irrespective of the vendor.
+> 
+> This leaf and the additional MSRs are not supported on AMD
+> processors. If PerfMonV2 is detected, the PMU version is
+> set to 2 and guest startup breaks because of an attempt to
+> access a non-existent MSR. Return zeros to avoid this.
+> 
+> Fixes: a6c06ed1a60a ("KVM: Expose the architectural performance monitoring CPUID leaf")
+> Reported-by: Vasant Hegde <vasant.hegde@amd.com>
+> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+> ---
+>  arch/x86/kvm/cpuid.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index 4b62d80bb22f..6bd65cad75ef 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -872,6 +872,11 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+>  		union cpuid10_eax eax;
+>  		union cpuid10_edx edx;
+>  
+> +		if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD) {
 
-s/always end byte aligned/always aligns on the end-byte/
-or
-s/always end byte aligned/always aligns on the last byte/
-?
+This is the obligatory question about HYGON; should they be included
+here?
 
->therefore we only need to provide the data offset in byte.
+x86 is getting a number of me-too patches from both sides, where
+behaviour has diverged for no raisin and then needs to be fixed up
+again.
 
-s/byte/bytes/
-
-Greetings,
-Sebastian
-
->
->Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->---
->version 5:
->- Fix numbers of bits computation in cedrus_h265_skip_bits() parameters
-> Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 4 ++--
-> drivers/staging/media/sunxi/cedrus/cedrus_h265.c          | 2 +-
-> include/media/hevc-ctrls.h                                | 4 ++--
-> 3 files changed, 5 insertions(+), 5 deletions(-)
->
->diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->index a3b1a063deba..48b3f533bc17 100644
->--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->@@ -2986,8 +2986,8 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->       - ``bit_size``
->       - Size (in bits) of the current slice data.
->     * - __u32
->-      - ``data_bit_offset``
->-      - Offset (in bits) to the video data in the current slice data.
->+      - ``data_byte_offset``
->+      - Offset (in bytes) to the video data in the current slice data.
->     * - __u32
->       - ``num_entry_point_offsets``
->       - Specifies the number of entry point offset syntax elements in the slice header.
->diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
->index d04521ffd920..4f31f2f3b745 100644
->--- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
->+++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
->@@ -405,7 +405,7 @@ static void cedrus_h265_setup(struct cedrus_ctx *ctx,
-> 	/* Initialize bitstream access. */
-> 	cedrus_write(dev, VE_DEC_H265_TRIGGER, VE_DEC_H265_TRIGGER_INIT_SWDEC);
->
->-	cedrus_h265_skip_bits(dev, slice_params->data_bit_offset);
->+	cedrus_h265_skip_bits(dev, slice_params->data_byte_offset * 8);
->
-> 	/* Bitstream parameters. */
->
->diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
->index e6cdd122726c..1834072c0a43 100644
->--- a/include/media/hevc-ctrls.h
->+++ b/include/media/hevc-ctrls.h
->@@ -310,7 +310,7 @@ struct v4l2_hevc_pred_weight_table {
->  * V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag must be set when using it.
->  *
->  * @bit_size: size (in bits) of the current slice data
->- * @data_bit_offset: offset (in bits) to the video data in the current slice data
->+ * @data_byte_offset: offset (in bytes) to the video data in the current slice data
->  * @num_entry_point_offsets: specifies the number of entry point offset syntax
->  *			     elements in the slice header.
->  * @nal_unit_type: specifies the coding type of the slice (B, P or I)
->@@ -354,7 +354,7 @@ struct v4l2_hevc_pred_weight_table {
->  */
-> struct v4l2_ctrl_hevc_slice_params {
-> 	__u32	bit_size;
->-	__u32	data_bit_offset;
->+	__u32	data_byte_offset;
-> 	__u32	num_entry_point_offsets;
-> 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: NAL unit header */
-> 	__u8	nal_unit_type;
->-- 
->2.32.0
->
+> +			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
+> +			break;
+> +		}
+> +
+>  		perf_get_x86_pmu_capability(&cap);
+>  
+>  		/*
+> -- 
+> 2.32.0
+> 

@@ -2,82 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC5F51179D
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A235E511AAE
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:57:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234179AbiD0Mgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 08:36:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
+        id S234995AbiD0MyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 08:54:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234201AbiD0MgZ (ORCPT
+        with ESMTP id S235034AbiD0MyC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 08:36:25 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3CB4CD40;
-        Wed, 27 Apr 2022 05:33:13 -0700 (PDT)
-Received: from kwepemi100002.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KpJ2H1m2xzCs1M;
-        Wed, 27 Apr 2022 20:28:39 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100002.china.huawei.com (7.221.188.188) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 27 Apr 2022 20:33:11 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
- (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 27 Apr
- 2022 20:33:11 +0800
-From:   Yu Kuai <yukuai3@huawei.com>
-To:     <jack@suse.cz>, <tj@kernel.org>, <axboe@kernel.dk>,
-        <paolo.valente@linaro.org>
-CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
-        <yi.zhang@huawei.com>
-Subject: [PATCH -next v3 3/3] block, bfq: do not idle if only one group is activated
-Date:   Wed, 27 Apr 2022 20:47:22 +0800
-Message-ID: <20220427124722.48465-4-yukuai3@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220427124722.48465-1-yukuai3@huawei.com>
-References: <20220427124722.48465-1-yukuai3@huawei.com>
+        Wed, 27 Apr 2022 08:54:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6971BA79F;
+        Wed, 27 Apr 2022 05:50:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E20DA61B41;
+        Wed, 27 Apr 2022 12:50:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E0D2C385A9;
+        Wed, 27 Apr 2022 12:50:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651063850;
+        bh=l6Uv1aghVwRUkGWE9Fea1FBCo3Be8k7dY9Jva4qOpe8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=aNEhdpxQS99prDfh72nIUYHNrqoiN1aK5jb9lW6gWbnc9L5LSTyP7sOfIttEHHPwF
+         kRPdd9I0pSfnM5//n4z0758Kfdu+ueWjNqpCUL8nS1aCGiGlXwSuCWnM5UbJZTWiQ4
+         ALuEx6n4IiPXSZP1CZEFAHV03D2Pj53sdswcYkZrMijV2vMpmL5Hk0xkSijtfDbKuX
+         17aB7vr3VWGRzP+5g/MLal4vWGWJ0bJWJ3DXD7gGQ+TasQcwjs/NeXf91AARFwTLHa
+         0Rbw2reBnut8MISQanW19xpgZhVLxnwiCMG4Skyi7ud32fbLWpPZwJ/kpopOashCAi
+         3ndOdBiRirH4A==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
+        stable@vger.kernel.org, Ming Yan <yanming@tju.edu.cn>,
+        Chao Yu <chao.yu@oppo.com>
+Subject: [PATCH] f2fs: fix to avoid f2fs_bug_on() in dec_valid_node_count()
+Date:   Wed, 27 Apr 2022 01:06:02 +0800
+Message-Id: <20220426170602.7431-1-chao@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that root group is counted into 'num_groups_with_busy_queues',
-'num_groups_with_busy_queues > 0' is always true in
-bfq_asymmetric_scenario(). Thus change the condition to '> 1'.
+As Yanming reported in bugzilla:
 
-On the other hand, this change can enable concurrent sync io if only
-one group is activated.
+https://bugzilla.kernel.org/show_bug.cgi?id=215897
 
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+I have encountered a bug in F2FS file system in kernel v5.17.
+
+The kernel should enable CONFIG_KASAN=y and CONFIG_KASAN_INLINE=y. You can
+reproduce the bug by running the following commands:
+
+The kernel message is shown below:
+
+kernel BUG at fs/f2fs/f2fs.h:2511!
+Call Trace:
+ f2fs_remove_inode_page+0x2a2/0x830
+ f2fs_evict_inode+0x9b7/0x1510
+ evict+0x282/0x4e0
+ do_unlinkat+0x33a/0x540
+ __x64_sys_unlinkat+0x8e/0xd0
+ do_syscall_64+0x3b/0x90
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+The root cause is: .total_valid_block_count or .total_valid_node_count
+could fuzzed to zero, then once dec_valid_node_count() was called, it
+will cause BUG_ON(), this patch fixes to print warning info and set
+SBI_NEED_FSCK into CP instead of panic.
+
+Cc: stable@vger.kernel.org
+Reported-by: Ming Yan <yanming@tju.edu.cn>
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
 ---
- block/bfq-iosched.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/f2fs/f2fs.h | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index 609b4e894684..aeba9001da0b 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -844,7 +844,7 @@ static bool bfq_asymmetric_scenario(struct bfq_data *bfqd,
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index f3eda4f13646..56adc3b68e14 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -2605,11 +2605,17 @@ static inline void dec_valid_node_count(struct f2fs_sb_info *sbi,
+ {
+ 	spin_lock(&sbi->stat_lock);
  
- 	return varied_queue_weights || multiple_classes_busy
- #ifdef CONFIG_BFQ_GROUP_IOSCHED
--	       || bfqd->num_groups_with_busy_queues > 0
-+	       || bfqd->num_groups_with_busy_queues > 1
- #endif
- 		;
- }
+-	f2fs_bug_on(sbi, !sbi->total_valid_block_count);
+-	f2fs_bug_on(sbi, !sbi->total_valid_node_count);
++	if (unlikely(!sbi->total_valid_block_count ||
++			!sbi->total_valid_node_count)) {
++		f2fs_warn(sbi, "dec_valid_node_count: inconsistent block counts, total_valid_block:%u, total_valid_node:%u",
++			  sbi->total_valid_block_count,
++			  sbi->total_valid_node_count);
++		set_sbi_flag(sbi, SBI_NEED_FSCK);
++	} else {
++		sbi->total_valid_block_count--;
++		sbi->total_valid_node_count--;
++	}
+ 
+-	sbi->total_valid_node_count--;
+-	sbi->total_valid_block_count--;
+ 	if (sbi->reserved_blocks &&
+ 		sbi->current_reserved_blocks < sbi->reserved_blocks)
+ 		sbi->current_reserved_blocks++;
 -- 
-2.31.1
+2.32.0
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C998B50F794
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:40:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9692350F40C
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244513AbiDZJRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:17:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50432 "EHLO
+        id S1344859AbiDZIcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346347AbiDZIuB (ORCPT
+        with ESMTP id S242879AbiDZIaF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:50:01 -0400
+        Tue, 26 Apr 2022 04:30:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B49CC90C3;
-        Tue, 26 Apr 2022 01:38:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D97441387D8;
+        Tue, 26 Apr 2022 01:24:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 718036090C;
-        Tue, 26 Apr 2022 08:38:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77142C385A0;
-        Tue, 26 Apr 2022 08:38:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FD096183B;
+        Tue, 26 Apr 2022 08:24:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C73D0C385A4;
+        Tue, 26 Apr 2022 08:24:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962287;
-        bh=1OWTHQQH1jcO8sBBchXhD6ZyJQdD/B6PmUizs65gAqU=;
+        s=korg; t=1650961495;
+        bh=38EtxUTv9KFbIZ+ilmEKeTJXq/tbDGVdDcHLtwfx5ns=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1S55xpgUGNP+j5OvUz2ON9E5LZZsm09oJH9uUZ0ITM/7N9PM8NRrq737iceWeQwSp
-         +tjBIH0J9xou8UpbaQ/KpaYWzebMypI5klYNtzXnTKS4yLF3YgVlqoWytn/orUnqLa
-         /r2GVNroBiwAD7+KNR4wtTgO9GpO661FBYJJSkV0=
+        b=0mUqVgbQjQcpowahlvpw4K6TfqckeTGE8Q9CvUGAv3JFPwxT+RD+g74QurwfFr3as
+         gb8TercMA4wJFxWLh1WVMxzwU2Qhtjp6Vc3s6+oSa0DGZFrYYSvTkkoSa/5LSoh4GW
+         EK1JstJhdjOFDZ+GraiqtjMDwKYq/+MjB8M3NCRA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kevin Hao <haokexin@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 047/124] net: stmmac: Use readl_poll_timeout_atomic() in atomic state
+        stable@vger.kernel.org,
+        syzbot+c6fd14145e2f62ca0784@syzkaller.appspotmail.com,
+        Bob Peterson <rpeterso@redhat.com>,
+        Andreas Gruenbacher <agruenba@redhat.com>
+Subject: [PATCH 4.14 06/43] gfs2: assign rgrp glock before compute_bitstructs
 Date:   Tue, 26 Apr 2022 10:20:48 +0200
-Message-Id: <20220426081748.638899495@linuxfoundation.org>
+Message-Id: <20220426081734.703005426@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
-References: <20220426081747.286685339@linuxfoundation.org>
+In-Reply-To: <20220426081734.509314186@linuxfoundation.org>
+References: <20220426081734.509314186@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,74 +55,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kevin Hao <haokexin@gmail.com>
+From: Bob Peterson <rpeterso@redhat.com>
 
-[ Upstream commit 234901de2bc6847eaa0aeb4aba62c31ffb8d3ad6 ]
+commit 428f651cb80b227af47fc302e4931791f2fb4741 upstream.
 
-The init_systime() may be invoked in atomic state. We have observed the
-following call trace when running "phc_ctl /dev/ptp0 set" on a Intel
-Agilex board.
-  BUG: sleeping function called from invalid context at drivers/net/ethernet/stmicro/stmmac/stmmac_hwtstamp.c:74
-  in_atomic(): 1, irqs_disabled(): 128, non_block: 0, pid: 381, name: phc_ctl
-  preempt_count: 1, expected: 0
-  RCU nest depth: 0, expected: 0
-  Preemption disabled at:
-  [<ffff80000892ef78>] stmmac_set_time+0x34/0x8c
-  CPU: 2 PID: 381 Comm: phc_ctl Not tainted 5.18.0-rc2-next-20220414-yocto-standard+ #567
-  Hardware name: SoCFPGA Agilex SoCDK (DT)
-  Call trace:
-   dump_backtrace.part.0+0xc4/0xd0
-   show_stack+0x24/0x40
-   dump_stack_lvl+0x7c/0xa0
-   dump_stack+0x18/0x34
-   __might_resched+0x154/0x1c0
-   __might_sleep+0x58/0x90
-   init_systime+0x78/0x120
-   stmmac_set_time+0x64/0x8c
-   ptp_clock_settime+0x60/0x9c
-   pc_clock_settime+0x6c/0xc0
-   __arm64_sys_clock_settime+0x88/0xf0
-   invoke_syscall+0x5c/0x130
-   el0_svc_common.constprop.0+0x4c/0x100
-   do_el0_svc+0x7c/0xa0
-   el0_svc+0x58/0xcc
-   el0t_64_sync_handler+0xa4/0x130
-   el0t_64_sync+0x18c/0x190
+Before this patch, function read_rindex_entry called compute_bitstructs
+before it allocated a glock for the rgrp. But if compute_bitstructs found
+a problem with the rgrp, it called gfs2_consist_rgrpd, and that called
+gfs2_dump_glock for rgd->rd_gl which had not yet been assigned.
 
-So we should use readl_poll_timeout_atomic() here instead of
-readl_poll_timeout().
+read_rindex_entry
+   compute_bitstructs
+      gfs2_consist_rgrpd
+         gfs2_dump_glock <---------rgd->rd_gl was not set.
 
-Also adjust the delay time to 10us to fix a "__bad_udelay" build error
-reported by "kernel test robot <lkp@intel.com>". I have tested this on
-Intel Agilex and NXP S32G boards, there is no delay needed at all.
-So the 10us delay should be long enough for most cases.
+This patch changes read_rindex_entry so it assigns an rgrp glock before
+calling compute_bitstructs so gfs2_dump_glock does not reference an
+unassigned pointer. If an error is discovered, the glock must also be
+put, so a new goto and label were added.
 
-Fixes: ff8ed737860e ("net: stmmac: use readl_poll_timeout() function in init_systime()")
-Signed-off-by: Kevin Hao <haokexin@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: syzbot+c6fd14145e2f62ca0784@syzkaller.appspotmail.com
+Signed-off-by: Bob Peterson <rpeterso@redhat.com>
+Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/stmicro/stmmac/stmmac_hwtstamp.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/gfs2/rgrp.c |    9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_hwtstamp.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_hwtstamp.c
-index a7ec9f4d46ce..d68ef72dcdde 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_hwtstamp.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_hwtstamp.c
-@@ -71,9 +71,9 @@ static int init_systime(void __iomem *ioaddr, u32 sec, u32 nsec)
- 	writel(value, ioaddr + PTP_TCR);
+--- a/fs/gfs2/rgrp.c
++++ b/fs/gfs2/rgrp.c
+@@ -907,15 +907,15 @@ static int read_rindex_entry(struct gfs2
+ 	rgd->rd_bitbytes = be32_to_cpu(buf.ri_bitbytes);
+ 	spin_lock_init(&rgd->rd_rsspin);
  
- 	/* wait for present system time initialize to complete */
--	return readl_poll_timeout(ioaddr + PTP_TCR, value,
-+	return readl_poll_timeout_atomic(ioaddr + PTP_TCR, value,
- 				 !(value & PTP_TCR_TSINIT),
--				 10000, 100000);
-+				 10, 100000);
- }
+-	error = compute_bitstructs(rgd);
+-	if (error)
+-		goto fail;
+-
+ 	error = gfs2_glock_get(sdp, rgd->rd_addr,
+ 			       &gfs2_rgrp_glops, CREATE, &rgd->rd_gl);
+ 	if (error)
+ 		goto fail;
  
- static int config_addend(void __iomem *ioaddr, u32 addend)
--- 
-2.35.1
-
++	error = compute_bitstructs(rgd);
++	if (error)
++		goto fail_glock;
++
+ 	rgd->rd_rgl = (struct gfs2_rgrp_lvb *)rgd->rd_gl->gl_lksb.sb_lvbptr;
+ 	rgd->rd_flags &= ~(GFS2_RDF_UPTODATE | GFS2_RDF_PREFERRED);
+ 	if (rgd->rd_data > sdp->sd_max_rg_data)
+@@ -932,6 +932,7 @@ static int read_rindex_entry(struct gfs2
+ 	}
+ 
+ 	error = 0; /* someone else read in the rgrp; free it and ignore it */
++fail_glock:
+ 	gfs2_glock_put(rgd->rd_gl);
+ 
+ fail:
 
 

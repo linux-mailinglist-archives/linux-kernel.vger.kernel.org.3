@@ -2,40 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7744C50FE00
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 14:59:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 921A950FE18
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 14:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350335AbiDZNBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 09:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45192 "EHLO
+        id S1350346AbiDZNBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 09:01:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349620AbiDZNBJ (ORCPT
+        with ESMTP id S1350315AbiDZNBO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 09:01:09 -0400
+        Tue, 26 Apr 2022 09:01:14 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDEAE177D42;
-        Tue, 26 Apr 2022 05:58:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E38417E21D;
+        Tue, 26 Apr 2022 05:58:03 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: nicolas)
-        with ESMTPSA id E17851F4398D
+        with ESMTPSA id 357771F4398F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650977880;
-        bh=9s/jwY2vdLbXyetN/42aw11t+0XH2cY1iw+Tw9pwgjM=;
+        s=mail; t=1650977882;
+        bh=CR0Uld+xP65yR8nRZHFwyooNDEbFE3R+SnqsqiS63yI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SD2dBeBEPnw4SkKggKXX/LgBYHxa0D6QIbxvHQ8/1wQl/7UOkD6cR0nng3rxHTK4G
-         n7TTUOrZIfzBJtD567KrT5hA1/ysn1AD9ftnij4IGMB74FEfkJY628zjIOAiPXvc2r
-         SP4xE6HTr9ibOgOhPGCaXkm79eH2w5A7+VjhJOwzZB8TcsGE5juocOfezPv1eOHO4o
-         fR2Cs1deoXfdrCXcPkP86lfYe1L0gy82ntgKY65xgtPKF/ZgNRkQmxg5rlU13xEBOx
-         KeUDK5Qba1zszzOL2QfBobU9Ah45QbrHelGSBaTW4W672qEaMl2ELZOvSxr8oKFXNC
-         Xl/rppY7ZHQDA==
+        b=YfUx0XBD1y7yy1+Nfm9IpGmZ9onovXxyqFs5+/7/NUnbcF92hMSndIS3Bw49UATy3
+         MiDj9S6OLVmUMPZOmD5YMFCChSuuDUnaV3nOtlmdrptn6WlGZMQUXCGVcnxi1a0QYx
+         TjdKAhI5PkBqat5/wCZfnKT3vvvYNYMpxCnDeuKOfBldx7Djsyo1ulZybWEU4NLt1N
+         KMMQUrp55POy6wnaFDscb7yiMUJYe6Ny68u/rDSv3qhUZIVYpPZg4jNVvQEkXv/z/a
+         eI3NGaO5BK+yf4XWoaErYP+zpvEbtmZcjYmCoIsbCBIkd+sZdbtVBre7WihsX0yYAh
+         wjaaZAMkzOxPA==
 From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     nicolas@ndufresne.ca, linux-media@vger.kernel.org,
         Sebastian Fricke <sebastian.fricke@collabora.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 01/24] media: doc: Document dual use of H.264 pic_num/frame_num
-Date:   Tue, 26 Apr 2022 08:57:27 -0400
-Message-Id: <20220426125751.108293-2-nicolas.dufresne@collabora.com>
+Subject: [PATCH v4 02/24] media: v4l2-mem2mem: Trace on implicit un-hold
+Date:   Tue, 26 Apr 2022 08:57:28 -0400
+Message-Id: <20220426125751.108293-3-nicolas.dufresne@collabora.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220426125751.108293-1-nicolas.dufresne@collabora.com>
 References: <20220426125751.108293-1-nicolas.dufresne@collabora.com>
@@ -50,40 +51,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These two fields need documentation as they have dual meaning. It is also
-confusing since pic_num is a derived value from frame_num, so this should
-help application developers. If we ever need to make a V2 of this API, I
-would suggest to remove pic_num entirely.
+If the timestamp of the src buffer differs from the timestamp of a held
+dst buffer, the held buffer is implicitly removed and marked as done.
+Add a trace to help debugging if someone hits that case.
 
 Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 ---
- .../media/v4l/ext-ctrls-codec-stateless.rst            | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ drivers/media/v4l2-core/v4l2-mem2mem.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
-index 6541e4c32b26..bee73065e993 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
-@@ -649,10 +649,16 @@ Stateless Codec Control ID
-         :c:type:`timeval` in struct :c:type:`v4l2_buffer` to a __u64.
-     * - __u32
-       - ``pic_num``
--      -
-+      - For short term references, this must match the derived value PicNum
-+	(8-28) and for long term references it must match the derived value
-+	LongTermPicNum (8-29). When decoding frames (as opposed to fields)
-+	pic_num is the same as FrameNumWrap.
-     * - __u16
-       - ``frame_num``
--      -
-+      - For short term references, this must match the frame_num value from
-+	the slice header syntax (the driver will wrap the value if needed). For
-+	long term references, this must be set to the value of
-+	long_term_frame_idx described in the dec_ref_pic_marking() syntax.
-     * - __u8
-       - ``fields``
-       - Specifies how the DPB entry is referenced. See :ref:`Reference Fields <h264_ref_fields>`
+diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
+index 675e22895ebe..d1d29d6ab024 100644
+--- a/drivers/media/v4l2-core/v4l2-mem2mem.c
++++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
+@@ -336,6 +336,7 @@ static void __v4l2_m2m_try_queue(struct v4l2_m2m_dev *m2m_dev,
+ 	if (src && dst && dst->is_held &&
+ 	    dst->vb2_buf.copied_timestamp &&
+ 	    dst->vb2_buf.timestamp != src->vb2_buf.timestamp) {
++		dprintk("Timestamp mismatch, returning held capture buffer\n");
+ 		dst->is_held = false;
+ 		v4l2_m2m_dst_buf_remove(m2m_ctx);
+ 		v4l2_m2m_buf_done(dst, VB2_BUF_STATE_DONE);
 -- 
 2.34.1
 

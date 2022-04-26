@@ -2,149 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77E0350F1E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A177C50F1D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:11:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343753AbiDZHOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 03:14:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52150 "EHLO
+        id S1343679AbiDZHNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 03:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343730AbiDZHOD (ORCPT
+        with ESMTP id S236684AbiDZHNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 03:14:03 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2133.outbound.protection.outlook.com [40.107.255.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D854B17AA0
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:10:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T8iV42Pmg9r5PRH+WrPJDbtOc/nofreJjzEIdzYdJO1QSWcTjCPs6/Cdv48IclXsOJbroWVIS5msYfctUNjPOpQRxFM6s0Oop817SKjW9ZQejWLltfYRFKs7oZre8LQFLgVGcr5Asq7DxlSNBeoVOqi0vpOONZtyGfKvJ3tn6Fj1LOOwWlpmOIhRmWARR+wq+Wm1rwdNZ3e+meo63dUyrsz/s7umvVPYD0nfSLtaBfkNAIci6vvR7pBIWhSWFcpQtaDaCMjdp4i/NdrHRFLlYnzxAB2T1zLUkaMoVZQ2PmzDgVTcDEYKkDnPXF4+15zyxcyQ/YS1QDt72XdUhhGm/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sp65PRQE267iMfi7EDA01FxloPtoP5FBLM9GC4orIUs=;
- b=P9nZzZWARu9d/+Ane7p1G5HRol1TQiscdvoT/DoMwizZmPSr4h+P3xHolq6AGvHHlXpkQ+YFURCCgM0+5JSC64JksBP1suoTcO6+ocraaB2VIJTSn506f60RdrFheBUv1443nmgtmq7mFn3C3JjxR3iK1k/9FBLLaexaaadAGOU5ykjEKzKh67NjeYL7+WoNftAD+oPf/xu02QssGNkduu9x9P34VI4G7UhlMSHcHzsx9bwLN/fm61mMq2PeHSmczYx2th07ZsZVyMNlHANsOEpjGaC3N4eqv2IIJDunGMHu2txtDdugF35bZsJ29HfdoHge8f83w+6HgeozJB+18g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sp65PRQE267iMfi7EDA01FxloPtoP5FBLM9GC4orIUs=;
- b=pi2Wz4C0FkRTtQVu7nA5JSW2i9QrjMeC55u61b9Ksx65kHYbkTXUfOW8VXDE6PB7WGFJkxzGUgzQMsrnjWG2VP1zIkCBv4pWuPQFvPv6VIdAh8AookyKdedb1ldW4TVDGA7QOfzxxYvb5d4Qwe874jYLl9QB2GTuYrL9gWOV7fM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
- PS2PR06MB3477.apcprd06.prod.outlook.com (2603:1096:300:6b::18) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5186.14; Tue, 26 Apr 2022 07:10:52 +0000
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::4591:4f3e:f951:6c8c]) by SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::4591:4f3e:f951:6c8c%7]) with mapi id 15.20.5186.021; Tue, 26 Apr 2022
- 07:10:52 +0000
-From:   Wan Jiabing <wanjiabing@vivo.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Cc:     kael_w@yeah.net, Wan Jiabing <wanjiabing@vivo.com>
-Subject: [PATCH v2] tty/hvc_opal: simplify if-if to if-else
-Date:   Tue, 26 Apr 2022 15:10:41 +0800
-Message-Id: <20220426071041.168282-1-wanjiabing@vivo.com>
-X-Mailer: git-send-email 2.35.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR02CA0193.apcprd02.prod.outlook.com
- (2603:1096:201:21::29) To SG2PR06MB3367.apcprd06.prod.outlook.com
- (2603:1096:4:78::19)
+        Tue, 26 Apr 2022 03:13:43 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 458151403F;
+        Tue, 26 Apr 2022 00:10:37 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D5E3723A;
+        Tue, 26 Apr 2022 00:10:36 -0700 (PDT)
+Received: from [192.168.1.11] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9F3BF3F73B;
+        Tue, 26 Apr 2022 00:10:32 -0700 (PDT)
+Message-ID: <6765104a-761c-4586-502c-2b98ee6016a1@arm.com>
+Date:   Tue, 26 Apr 2022 09:10:56 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 84e7db3e-70d2-4021-a09b-08da2753e5cf
-X-MS-TrafficTypeDiagnostic: PS2PR06MB3477:EE_
-X-Microsoft-Antispam-PRVS: <PS2PR06MB347746B94AD620192426C0ACABFB9@PS2PR06MB3477.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CCqt8K5P7yDW1CFUhGTfskPVaRvp7DzCN3Um9PsSJk3ZmeSkrpKg75yNvceBqJj9YpaUZZkRFAEKyAO+EJKHtyGazs2A2D5phoVKgUHzGEMIVS6o1jpf/gW6TTTRKrfap3yPbJcVHHXK/6DbCdjV8nxupn1AsQIwIszSAQ4DER5XTpA52yOD3r1D2HZnLkUkQeZR6hX3CLpSpKEf67p9h/NtmRqo0fzoosxyLxzsOl3cYOTAgxzpA5I2TU30MDzHJnceGPju6wqG9nsltBUHyrYUqAuT9nx/y6juTzV2l8R2YYnqpDgQ6b8T+bOLkub90jh1+gPzXeCPjSufmjp+MiKbQlJGm7PITha9R6n75YL3MdfuVVUELELc3BuVlqVgicszFOAjWUoQHdAnBW2yPQhU6jnkDjPZFT5SgSdl3JiikiBPXMHsOmyJn0Lb2KiWDhgYjRvZRRe/JHZ/YFEsrmPRIFC6zj1JBPTnxxubLic+5i6N+GZtKMR4h0UQ9348ZBIBKk1cyUpmlAIAcvfraxespNjUakfw8a7oE/i5nR8JNLxFHaE8doztDj1BkX5gzoPFegPU/kT8J771EcN8vis4Gf8pQ+q7MGwReRiDtuRVfsQADHP8uL7GsIsuuLx1C0wy1zjDDHjH6eX1+I5Oe2kNrnZwEjfiQCMgX8asGc+C2hSxz32SNXLoLLWJjABxFI6uezw5cx1XIe3mBd/VuA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66946007)(508600001)(316002)(36756003)(8936002)(66476007)(8676002)(1076003)(66556008)(110136005)(107886003)(186003)(5660300002)(6512007)(4744005)(38100700002)(38350700002)(86362001)(4326008)(2616005)(6486002)(2906002)(83380400001)(26005)(6506007)(6666004)(52116002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VLRtUaZcJrGLTm8Ap0R3tOk7NUwPHzirXi/o/RrSra2sQncIF78PQd+I1Vdx?=
- =?us-ascii?Q?ibFa1wDCN5oMyLAcJOt5qP33MHZrY4zv7RggpicSCe3SI5a5VY6OzjJoWV1K?=
- =?us-ascii?Q?D/a6jh3yo9PrpIppVMshYwP8JtH9/8DN0itais4nqeksp2yKDAmipvuuSg31?=
- =?us-ascii?Q?kmgrg3Fho3vHmxq3f5rbWH7sWletNcfVGSV7c/sVSa2HJ9qzYQwpyN2tucS2?=
- =?us-ascii?Q?ool5aeGTWwRkPyaFAPeesBxESZ/ICOpxxlbz/LZzWlyDiW6nHK8QqBcGSV6A?=
- =?us-ascii?Q?YAjyy4NysyrP/ANi11H0RsMLQd5MKhDIlGjdYHnnwqRsKQPQOY1VN2z1nEqf?=
- =?us-ascii?Q?oFCOLFf11csQnxLOhSXwRRD1auWWWN31kg8/P4VpX0zX15BPwHtJaShNcn3x?=
- =?us-ascii?Q?1kiIuKWkPTxxg9HnfC7BGypOKG1mzr8LJJYVNSiA85pVQAyBcSjZTDvmTPkT?=
- =?us-ascii?Q?bGKi/MHrFnilxZmNkKtQRFWbm4cs+WyiKQGAX6QkyYJfO6ZsM33xbbDSF4ao?=
- =?us-ascii?Q?CH26bUSQH2ivLFOMJoKBcis09hYwhVvYMLqI9JRxqEP0mWDE54z8NYNg+8w9?=
- =?us-ascii?Q?7hsTwXDR1Xa51JKrxnmV4je36X7SvE6yhJtMlcJhWFRv77k43AqGYT3P8SXW?=
- =?us-ascii?Q?W1jJ8hRmkMDaW6pEuhY2fk+OKJJgKT+8HVpMzf6BhJR2GQI9L/OZt7qhGRLN?=
- =?us-ascii?Q?Bkfcl1jb/lEQdlpzKyn6I4by97ek3LncJtXqPBt1svs0g1O3JH8Z0BiNSyFH?=
- =?us-ascii?Q?otoYi+XFdwPSAKuEhhOAiSNjLdL/EdCH421+tL+FncTS+Fw0HyJWLlfiNMpN?=
- =?us-ascii?Q?Enf+1+N/hZOahcChO6xOgF6lpYH1LDtHijmbsFsH+B8UKkML49jiTcPDPd/Z?=
- =?us-ascii?Q?6dl0BdJsGwxY1d1npHH/MjB17yhmTGeQl/bCQUuNCThNnmdYVAPhf2+EIGtJ?=
- =?us-ascii?Q?GT12NExCdtb3oKkBe7AmqAA5GnyUL9tN3+chG9yqXFBACvRzd9WvlQcE9FTN?=
- =?us-ascii?Q?61S8BGjxxZAoRezUTvdy1lAZPfOQNngSSYbSEOscTaUMuJyStlf916eIuDWP?=
- =?us-ascii?Q?qHFGL9mFM8IVbNYdXZERqjHdgyBVBa3zpYzzzYJNF9rudk6231/A7JfspOIa?=
- =?us-ascii?Q?pnglhw3uXIcX31Asz2pheWIiB6HQLqxnZqv7sYII1ZFzg6WAdbjXxTyESDdd?=
- =?us-ascii?Q?Ul2rd7hmQprnrwEstxtbAlacSgCROh2FeHkjeG4o97BcpfRYqtYvNY6oxmr6?=
- =?us-ascii?Q?yCzF9fqbbgREudolbAPyE6tEm1Rs0Bj+mYs3WSHpExMefir/DRPkpDf/bxAz?=
- =?us-ascii?Q?orBWTEyZ7Ezdtde2tnpl+VNr9bS2hTes4qhTTQyvA25UyY/ULdU+mwiF60Ot?=
- =?us-ascii?Q?NezeMj3h76OTnpsfZZpY65hnvni04v8j9bpxTGtNr3LBVPvPyuRYaVTe7sTV?=
- =?us-ascii?Q?9blWNfIQe2vFvR3uFpsoGJ0pZPej38ZQPmw8XIF2stsP3QXZR8YJ7rXGk9Nq?=
- =?us-ascii?Q?clhC2JwLn1TwzisbN7O89ax1Dj9MssP8JPDVXecFjw1pWmafBZ5J2QZ69BYK?=
- =?us-ascii?Q?LPTNCPG2DPflUfkqILg9LpUKobNhFSSz1Zdt9F1r1vd1kzSuIZDyFhraNuvq?=
- =?us-ascii?Q?s+EY+PA77RovpHUt9NYrmAf1Ow7tpHt6ZcbEzQ3LopmS7paoHu7ira7gIgQp?=
- =?us-ascii?Q?j0m/xHc/p7iAfpSIJ1coWWz9ke1/7nZw6EEX98gUSnORrZThR1QaTVGMpXwW?=
- =?us-ascii?Q?M7Yp0+3f0g=3D=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 84e7db3e-70d2-4021-a09b-08da2753e5cf
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2022 07:10:52.0048
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: V3UOW26yKt4xKIE0RZU1aRUbIc/u9Ffe2X5lH/EiRKmPjuqdBmyBq+MljTKJY569NjBwHIk3E8mdDToEdOi6VA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PS2PR06MB3477
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 0/2] Enable EAS for CPPC/ACPI based systems
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, Ionela.Voinescu@arm.com,
+        Lukasz.Luba@arm.com, Morten.Rasmussen@arm.com,
+        Dietmar.Eggemann@arm.com, maz@kernel.org,
+        daniel.lezcano@linaro.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Fuad Tabba <tabba@google.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+References: <20220425123819.137735-1-pierre.gondois@arm.com>
+ <20220426030810.wj7mdhjhzs2s6y7h@vireshk-i7>
+ <20220426063739.6ljxtr6hpz7tber5@vireshk-i7>
+From:   Pierre Gondois <pierre.gondois@arm.com>
+In-Reply-To: <20220426063739.6ljxtr6hpz7tber5@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use if and else instead of if(A) and if (!A).
+Hello Viresh,
+The 2 patches are relying on Lukasz' patch-set at:
+https://lkml.org/lkml/2022/3/21/282
+The serie was accepted by Rafael (cf. https://lkml.org/lkml/2022/4/13/701) and
+is currently in linux-next. More specifically, the missing patch causing the
+build failure is: 'PM: EM: Add .get_cost() callback'
 
-Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
----
-Change log:
-v2:
-- add braces to the if block.
----
- drivers/tty/hvc/hvc_opal.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ From what I see, the branch cpufreq/arm/linux-next (from your repo) that was
+used in the CI is based on v5.18-rc1 and doesn't have Lukasz' patches. Should
+we wait for the patches to be in a rc version, or is there a process for this
+kind of case ?
 
-diff --git a/drivers/tty/hvc/hvc_opal.c b/drivers/tty/hvc/hvc_opal.c
-index 84776bc641e6..794c7b18aa06 100644
---- a/drivers/tty/hvc/hvc_opal.c
-+++ b/drivers/tty/hvc/hvc_opal.c
-@@ -342,9 +342,9 @@ void __init hvc_opal_init_early(void)
- 		 * path, so we hard wire it
- 		 */
- 		opal = of_find_node_by_path("/ibm,opal/consoles");
--		if (opal)
-+		if (opal) {
- 			pr_devel("hvc_opal: Found consoles in new location\n");
--		if (!opal) {
-+		} else {
- 			opal = of_find_node_by_path("/ibm,opal");
- 			if (opal)
- 				pr_devel("hvc_opal: "
--- 
-2.35.1
+Regards,
+Pierre
 
+
+
+On 4/26/22 08:37, Viresh Kumar wrote:
+> On 26-04-22, 08:38, Viresh Kumar wrote:
+>> On 25-04-22, 14:38, Pierre Gondois wrote:
+>>> v3:
+>>> - Remove efficiency_class_populated variable. [Viresh]
+>>> - Remove patch "cpufreq: CPPC: Add cppc_cpufreq_search_cpu_data"
+>>>    and access cpu_data through policy->driver_data. [Viresh]
+>>> - arm64 code only acked by Catalin [Catalin]
+>>
+>> Applied. Thanks.
+> 
+> Removed, build failures:
+> 
+> https://gitlab.com/vireshk/pmko/-/jobs/2375905218
+> 
+> Log: https://builds.tuxbuild.com/28Jos1GBXfT5Cl3HoBKKwmM8Ddk/build.log
+> 
+> /builds/linux/drivers/cpufreq/cppc_cpufreq.c: In function 'cppc_cpufreq_register_em':
+> 368/builds/linux/drivers/cpufreq/cppc_cpufreq.c:593:3: error: implicit declaration of function 'EM_ADV_DATA_CB'; did you mean 'EM_DATA_CB'? [-Werror=implicit-function-declaration]
+> 369  593 |   EM_ADV_DATA_CB(cppc_get_cpu_power, cppc_get_cpu_cost);
+> 370      |   ^~~~~~~~~~~~~~
+> 371      |   EM_DATA_CB
+> 372/builds/linux/drivers/cpufreq/cppc_cpufreq.c:593:3: error: invalid initializer
+> 373cc1: some warnings being treated as errors
+> 374
+> 

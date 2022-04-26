@@ -2,123 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A355A50F34D
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B18DE50F312
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344441AbiDZIFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:05:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37440 "EHLO
+        id S234929AbiDZHzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 03:55:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344533AbiDZIE5 (ORCPT
+        with ESMTP id S243960AbiDZHzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:04:57 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD872D1DA;
-        Tue, 26 Apr 2022 01:01:41 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-d39f741ba0so18585496fac.13;
-        Tue, 26 Apr 2022 01:01:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+k/vWst8QqDFSt1ZAyLvE8FjMbyoQWQixLDB5Dm7QsI=;
-        b=Hp59PvT0XPuyWuOddkSu4ENmY7GjFtNdCn58WSscz4g6VOtKytsOrlOe4h52c5RNS8
-         ow0Y3exeppIMyqoJFD2g3KJDJp76xjq4JIQUVt1ub24NAp2Shv57E9JEMMo2Ddzfi1OF
-         cPiX/Znj4n9UVliSAqaSIGna/ikGAYmdyCVSNgfwiciN+0vXwSCPkfz/YcloqW+/r8QR
-         CEDJUfwdHjuk8onzLFDZWDkpiBYvUQhMr1lZZ51718rMSBjDePDeUeAvf+el0mOpdIcm
-         K1pYEyDAhC92GL7PcOsODs82FAYS14JqlY+HW8rXjVi0CyaSY3VkNWZWo+qkbzQLWuSk
-         V9GQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+k/vWst8QqDFSt1ZAyLvE8FjMbyoQWQixLDB5Dm7QsI=;
-        b=MomEbXAJGPk83gxzNLfr4eiaWyH608RsPczmUm4JhqRLy6DNsAVmUk6isgZh/huaLb
-         VUEMGoZ7Qe6JgmjjZ3bNLsQWKyeD4htJ3bFhvJL1Kzm3Y4iwalZs5nJaBns6LBrjM6te
-         oRbYC3upSeQFTOppP30N9nJzmHcTNzJ2UcEdJ1Hun1Lfd1VrV8QTDZMTDCpuu2cU6XGZ
-         4ws4tbjqqFJG14b5gfP3+JFnTa4yNKrvMUg2UHLzPPhYDKJTiV+Qd7QyWmfZASJrpVUS
-         BJa5sFNk2l7jyvZld6v/3RiMK4kn60Ki88h/UyrJbGgIHQZkxe5Q19WBwz68AtaPzU1y
-         /HfA==
-X-Gm-Message-State: AOAM532mfr5NcfLII1Xi6GEN75I3omNX8WEGwU/7liYORF88ajjD+LY3
-        26Rv+zY5iarEqe8qUbVptiG3/knfIvc=
-X-Google-Smtp-Source: ABdhPJyoj3KDX/uI0OjjYkVYttauPzLMsRpHV5Z3cGKt4H+TmaK3IiYsvbcxeMYpyYoJbIs+eyoqdw==
-X-Received: by 2002:a05:6870:4341:b0:d3:1412:8ecb with SMTP id x1-20020a056870434100b000d314128ecbmr8848810oah.36.1650960100917;
-        Tue, 26 Apr 2022 01:01:40 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z5-20020a0568301da500b006054fd8c847sm4698847oti.11.2022.04.26.01.01.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 01:01:39 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9f991b4d-8f02-6c07-a8b6-2861837a0224@roeck-us.net>
-Date:   Tue, 26 Apr 2022 01:01:37 -0700
+        Tue, 26 Apr 2022 03:55:09 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB6B6479
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:52:01 -0700 (PDT)
+Received: from kwepemi500020.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KnYxG5z5HzhYs7;
+        Tue, 26 Apr 2022 15:51:46 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
+ kwepemi500020.china.huawei.com (7.221.188.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 26 Apr 2022 15:51:59 +0800
+Received: from localhost.localdomain (10.175.112.125) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 26 Apr 2022 15:51:57 +0800
+From:   Tong Tiangen <tongtiangen@huawei.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+CC:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-riscv@lists.infradead.org>,
+        Tong Tiangen <tongtiangen@huawei.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Guohanjun <guohanjun@huawei.com>
+Subject: [PATCH -next v6 0/6]mm: page_table_check: add support on arm64 and riscv 
+Date:   Tue, 26 Apr 2022 08:10:30 +0000
+Message-ID: <20220426081036.1374452-1-tongtiangen@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v4 4/4] watchdog: iTCO_wdg: Make code more clearly with
- macro definition
-Content-Language: en-US
-To:     Liu Xinpeng <liuxp11@chinatelecom.cn>, wim@linux-watchdog.org,
-        tzungbi@kernel.org
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1650957029-910-1-git-send-email-liuxp11@chinatelecom.cn>
- <1650957029-910-5-git-send-email-liuxp11@chinatelecom.cn>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <1650957029-910-5-git-send-email-liuxp11@chinatelecom.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/26/22 00:10, Liu Xinpeng wrote:
-> Using SET_NOIRQ_SYSTEM_SLEEP_PM_OPS reduces redundant code.
-> 
-> Signed-off-by: Liu Xinpeng <liuxp11@chinatelecom.cn>
-> Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
-> ---
->   drivers/watchdog/iTCO_wdt.c | 12 ++++--------
->   1 file changed, 4 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
-> index 3f2f4343644f..8d24cf4f4ca3 100644
-> --- a/drivers/watchdog/iTCO_wdt.c
-> +++ b/drivers/watchdog/iTCO_wdt.c
-> @@ -635,22 +635,18 @@ static int iTCO_wdt_resume_noirq(struct device *dev)
->   
->   	return 0;
->   }
-> +#endif /* CONFIG_PM_SLEEP */
->   
->   static const struct dev_pm_ops iTCO_wdt_pm = {
-> -	.suspend_noirq = iTCO_wdt_suspend_noirq,
-> -	.resume_noirq = iTCO_wdt_resume_noirq,
-> +	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(iTCO_wdt_suspend_noirq,
-> +				      iTCO_wdt_resume_noirq)
->   };
->   
-> -#define ITCO_WDT_PM_OPS	(&iTCO_wdt_pm)
-> -#else
-> -#define ITCO_WDT_PM_OPS	NULL
-> -#endif /* CONFIG_PM_SLEEP */
-> -
->   static struct platform_driver iTCO_wdt_driver = {
->   	.probe          = iTCO_wdt_probe,
->   	.driver         = {
->   		.name   = DRV_NAME,
-> -		.pm     = ITCO_WDT_PM_OPS,
-> +		.pm     = &iTCO_wdt_pm,
->   	},
->   };
->   
-Sorry, I fail to see how this is an improvement.
+Page table check performs extra verifications at the time when new
+pages become accessible from the userspace by getting their page
+table entries (PTEs PMDs etc.) added into the table. It is supported
+on X86[1].
 
-Guenter
+This patchset made some simple changes and make it easier to support
+new architecture, then we support this feature on ARM64 and RISCV.
+
+[1]https://lore.kernel.org/lkml/20211123214814.3756047-1-pasha.tatashin@soleen.com/
+
+v5 -> v6:
+ According to Anshuman's suggestion, optimized partial implementation and
+ commit message:
+ 1. Remove redundant IS_ENABLED() in ptep_clear().
+ 2. Remove redundant __HAVE_ARCH_PTEP_CLEAR usage in pgtable.h.
+ 3. Remove redundant __ptep_get_and_clear() on arm64 and riscv.
+
+v4 -> v5:
+ According to Anshuman's suggestion, using PxD_SIZE instead of
+ PxD_PAGE_SIZE in mm/page_table_check.c and it is checked by Pasha.
+
+v3 -> v4:
+ Adapt to next-20220414
+
+v2 -> v3:
+ Modify ptep_clear() in include/linux/pgtable.h, using IS_ENABLED according
+ to the suggestions of Pasha.
+
+v1 -> v2:
+ 1. Fix arm64's pte/pmd/pud_user_accessible_page() according to the
+    suggestions of Catalin.
+ 2. Also fix riscv's pte_pmd_pud_user_accessible_page().
+
+Kefeng Wang (2):
+  mm: page_table_check: move pxx_user_accessible_page into x86
+  arm64/mm: Enable ARCH_SUPPORTS_PAGE_TABLE_CHECK
+
+Tong Tiangen (4):
+  mm: page_table_check: using PxD_SIZE instead of PxD_PAGE_SIZE
+  mm: page_table_check: add hooks to public helpers
+  mm: remove __HAVE_ARCH_PTEP_CLEAR in pgtable.h
+  riscv/mm: Enable ARCH_SUPPORTS_PAGE_TABLE_CHECK
+
+ arch/arm64/Kconfig               |  1 +
+ arch/arm64/include/asm/pgtable.h | 59 +++++++++++++++++++++++---
+ arch/riscv/Kconfig               |  1 +
+ arch/riscv/include/asm/pgtable.h | 71 +++++++++++++++++++++++++++++---
+ arch/x86/include/asm/pgtable.h   | 27 +++++++-----
+ include/linux/pgtable.h          | 21 ++++++----
+ mm/page_table_check.c            | 25 ++---------
+ 7 files changed, 155 insertions(+), 50 deletions(-)
+
+-- 
+2.25.1
+

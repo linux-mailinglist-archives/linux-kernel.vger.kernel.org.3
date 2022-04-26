@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5779F50F80B
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46B6450F7CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346048AbiDZJHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56258 "EHLO
+        id S1346583AbiDZJIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:08:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345710AbiDZIrP (ORCPT
+        with ESMTP id S1345764AbiDZIra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:47:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711A892D19;
-        Tue, 26 Apr 2022 01:37:41 -0700 (PDT)
+        Tue, 26 Apr 2022 04:47:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271E6A76FB;
+        Tue, 26 Apr 2022 01:37:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F0409B81D0B;
-        Tue, 26 Apr 2022 08:37:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D00CC385AC;
-        Tue, 26 Apr 2022 08:37:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE3C3B81CFA;
+        Tue, 26 Apr 2022 08:37:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B769C385A0;
+        Tue, 26 Apr 2022 08:37:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962258;
-        bh=bvhqsEbkDYaKpMcE1ev3Jt21CwVF4ZE9B9Viij96CTo=;
+        s=korg; t=1650962261;
+        bh=jFm8Koe9x0fNpJvJozkZL3Fjf/sZ/Xq/QG5v5NdJk2U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QQbZW3KMO+wQTC9LYZYsqtYfhoIBzx7ZeoYo3Tn4L87lRO5+QUJde7s9a4HQwiGgS
-         OEl6uavVCAJ8RcyGCUKIBMD+xxIibF6tHl/tglHSjDrELZSNzPY4sKCHES/jYuNd+Y
-         eVXK34xsojJPT++IAbxKygubRbILnKm9isRKslCw=
+        b=NiVnhdl66aFSCoTogcV1sAhXCMyXdu8DQ7cU95KdE9zeJej5T9huth6otwgd4/jM5
+         6UfhGYps6FNIxSPfaGlzgWAoHfqpoRUN0jaImKmMB0nOIM2pmsBiSfY1cLAHs/RaU3
+         hM6hZWuIGt1TZIp1695JUKCxawPD58akJK2Tlp7U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Darrick J. Wong" <djwong@kernel.org>,
-        Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
-        Christian Brauner <brauner@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 005/124] xfs: return errors in xfs_fs_sync_fs
-Date:   Tue, 26 Apr 2022 10:20:06 +0200
-Message-Id: <20220426081747.446618645@linuxfoundation.org>
+        stable@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        David Hildenbrand <david@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Georgi Djakov <quic_c_gdjako@quicinc.com>
+Subject: [PATCH 5.15 006/124] dma-mapping: remove bogus test for pfn_valid from dma_map_resource
+Date:   Tue, 26 Apr 2022 10:20:07 +0200
+Message-Id: <20220426081747.474819433@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
 References: <20220426081747.286685339@linuxfoundation.org>
@@ -55,43 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Darrick J. Wong <djwong@kernel.org>
+From: Mike Rapoport <rppt@linux.ibm.com>
 
-[ Upstream commit 2d86293c70750e4331e9616aded33ab6b47c299d ]
+commit a9c38c5d267cb94871dfa2de5539c92025c855d7 upstream.
 
-Now that the VFS will do something with the return values from
-->sync_fs, make ours pass on error codes.
+dma_map_resource() uses pfn_valid() to ensure the range is not RAM.
+However, pfn_valid() only checks for availability of the memory map for a
+PFN but it does not ensure that the PFN is actually backed by RAM.
 
-Signed-off-by: Darrick J. Wong <djwong@kernel.org>
-Reviewed-by: Jan Kara <jack@suse.cz>
+As dma_map_resource() is the only method in DMA mapping APIs that has this
+check, simply drop the pfn_valid() test from dma_map_resource().
+
+Link: https://lore.kernel.org/all/20210824173741.GC623@arm.com/
+Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
-Acked-by: Christian Brauner <brauner@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Acked-by: David Hildenbrand <david@redhat.com>
+Link: https://lore.kernel.org/r/20210930013039.11260-2-rppt@kernel.org
+Signed-off-by: Will Deacon <will@kernel.org>
+Fixes: 859a85ddf90e ("mm: remove pfn_valid_within() and CONFIG_HOLES_IN_ZONE")
+Link: https://lore.kernel.org/r/Yl0IZWT2nsiYtqBT@linux.ibm.com
+Signed-off-by: Georgi Djakov <quic_c_gdjako@quicinc.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/xfs/xfs_super.c |    6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ kernel/dma/mapping.c |    4 ----
+ 1 file changed, 4 deletions(-)
 
---- a/fs/xfs/xfs_super.c
-+++ b/fs/xfs/xfs_super.c
-@@ -729,6 +729,7 @@ xfs_fs_sync_fs(
- 	int			wait)
- {
- 	struct xfs_mount	*mp = XFS_M(sb);
-+	int			error;
+--- a/kernel/dma/mapping.c
++++ b/kernel/dma/mapping.c
+@@ -296,10 +296,6 @@ dma_addr_t dma_map_resource(struct devic
+ 	if (WARN_ON_ONCE(!dev->dma_mask))
+ 		return DMA_MAPPING_ERROR;
  
- 	trace_xfs_fs_sync_fs(mp, __return_address);
- 
-@@ -738,7 +739,10 @@ xfs_fs_sync_fs(
- 	if (!wait)
- 		return 0;
- 
--	xfs_log_force(mp, XFS_LOG_SYNC);
-+	error = xfs_log_force(mp, XFS_LOG_SYNC);
-+	if (error)
-+		return error;
-+
- 	if (laptop_mode) {
- 		/*
- 		 * The disk must be active because we're syncing.
+-	/* Don't allow RAM to be mapped */
+-	if (WARN_ON_ONCE(pfn_valid(PHYS_PFN(phys_addr))))
+-		return DMA_MAPPING_ERROR;
+-
+ 	if (dma_map_direct(dev, ops))
+ 		addr = dma_direct_map_resource(dev, phys_addr, size, dir, attrs);
+ 	else if (ops->map_resource)
 
 

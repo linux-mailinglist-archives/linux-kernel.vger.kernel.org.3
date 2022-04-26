@@ -2,113 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15102510A55
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:22:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 904A6510A43
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354975AbiDZUZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 16:25:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52972 "EHLO
+        id S1354915AbiDZUVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 16:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355046AbiDZUY7 (ORCPT
+        with ESMTP id S1354904AbiDZUVx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:24:59 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543AA2657B
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:21:50 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id iq10so6127533pjb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:21:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2PC82LstV6tocxMGUgC+f9s/KheVTFFbt3d61yAZ2go=;
-        b=kTSO+u0oPyCgqiOMOit0gAUCMZRNZxANk+X/wb8YJ7K82r0PKU60PVtTM8yJOlTVI2
-         tQA12jy2wCF8duMMzy++AdPcptLc7XN5vhaE+zINVCTQzuObUq8Wn6KcAXnaYuxvXlUF
-         F9idAg4n+2jPJzP/RL1PE2pxV3+gzUC68C5PI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2PC82LstV6tocxMGUgC+f9s/KheVTFFbt3d61yAZ2go=;
-        b=UjDQuCgNVpfWHiYhN/7Ybh4r7UVtuLH4zKvIKSePuyp04hrJZpCCfuYguD6khOyCe/
-         lYte1jOCVnTIw6/BvGf0QACLMxrj3Zs4SLQj3/HJ3qo00QgisgYxKfyl/TSL3EvcuCxZ
-         b7IEeVPWr0VUBi1aU/dCkT1WOGmH9EXFjNq+3XcNDNsFuh6TsnNARnxMxh5YmgppBNDl
-         Onb8w3s5Qp8F2UZrT6EtXbiNlVzDschC0bQ6kFgOK0ILHkdA4B46NKhPGFk96vNzKLMs
-         NWml58OlHao23o1o8iwz0h8iNLtDgcmwFzNo055mthyw4+zeeQpGJWdjBObP6szE6gFk
-         WRug==
-X-Gm-Message-State: AOAM532VPleKzRVqUmZ3aQKRIQkMFE6OvVUc3irb2zCdYwZsT+Dnl1LR
-        vOgXbZHyu4qRlU0+WlscC8Iw/Q==
-X-Google-Smtp-Source: ABdhPJzNq1iE5QQhWz5FHSE6fbIuvdm3ZiwM9Z8WYDwJn0e17SMpLk/f5RFeGQ7Yc2aCs/MGDJFQ/Q==
-X-Received: by 2002:a17:902:dac1:b0:15d:356:887c with SMTP id q1-20020a170902dac100b0015d0356887cmr14441943plx.78.1651004509863;
-        Tue, 26 Apr 2022 13:21:49 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:8e92:9f42:eda6:c0ee])
-        by smtp.gmail.com with ESMTPSA id h195-20020a6283cc000000b0050d2c0729b0sm11285215pfe.18.2022.04.26.13.21.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 13:21:49 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     dri-devel@lists.freedesktop.org
-Cc:     robdclark@gmail.com, linux-arm-msm@vger.kernel.org,
-        quic_abhinavk@quicinc.com, quic_khsieh@quicinc.com,
-        quic_aravindh@quicinc.com, swboyd@chromium.org,
-        dmitry.baryshkov@linaro.org, quic_sbillaka@quicinc.com,
-        Douglas Anderson <dianders@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH] drm/edid: drm_add_modes_noedid() should set lowest resolution as preferred
-Date:   Tue, 26 Apr 2022 13:21:26 -0700
-Message-Id: <20220426132121.RFC.1.I31ec454f8d4ffce51a7708a8092f8a6f9c929092@changeid>
-X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
+        Tue, 26 Apr 2022 16:21:53 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116521A4315;
+        Tue, 26 Apr 2022 13:18:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651004325; x=1682540325;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ZDF3hFy0BWL791La2UQ13qzXZCvp2fj56KNm9NYlwqg=;
+  b=ZAGzK+dQAROhcgCc0Bgq51/+3UIs93n0dv9hH0zBrgC4yI9BlFNSWdNh
+   SOwToozEC8wTMy+ZSKuzON9p5k0xHp0BIBOsfv9k1RWbnXWTNvLKVQy5j
+   G7uoPHpNj1gtrXuqq3c7jwuBEkop+sw+XjplkiEt2jnNgikDqWKJl8tgB
+   g/aYyTlXwstCtDbCDSil2LVx/OZar7V5/3FDgIAmP5AopZZjAHJvLYUUf
+   klZA3/ptOxNhANNnC+A63v+pjy1/nHY9i1Eyb5p9vrfC8IHz1TrX4U0lP
+   MibiV+RteojZ/aRlXh5IU69I+29jsItNl6Twq2PdPGElhb/sEilp1ofCx
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="245633473"
+X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
+   d="scan'208";a="245633473"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 13:18:44 -0700
+X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
+   d="scan'208";a="580136420"
+Received: from dsocek-mobl2.amr.corp.intel.com (HELO [10.212.69.119]) ([10.212.69.119])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 13:18:43 -0700
+Message-ID: <334c4b90-52c4-cffc-f3e2-4bd6a987eb69@intel.com>
+Date:   Tue, 26 Apr 2022 13:21:30 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 01/21] x86/virt/tdx: Detect SEAM
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+References: <cover.1649219184.git.kai.huang@intel.com>
+ <ab118fb9bd39b200feb843660a9b10421943aa70.1649219184.git.kai.huang@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <ab118fb9bd39b200feb843660a9b10421943aa70.1649219184.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If we're unable to read the EDID for a display because it's corrupt /
-bogus / invalid then we'll add a set of standard modes for the
-display. When userspace looks at these modes it doesn't really have a
-good concept for which mode to pick and it'll likely pick the highest
-resolution one by default. That's probably not ideal because the modes
-were purely guesses on the part of the Linux kernel.
+> +config INTEL_TDX_HOST
+> +	bool "Intel Trust Domain Extensions (TDX) host support"
+> +	default n
+> +	depends on CPU_SUP_INTEL
+> +	depends on X86_64
+> +	help
+> +	  Intel Trust Domain Extensions (TDX) protects guest VMs from malicious
+> +	  host and certain physical attacks.  This option enables necessary TDX
+> +	  support in host kernel to run protected VMs.
+> +
+> +	  If unsure, say N.
 
-Let's instead set 640x480 as the "preferred" mode when we have no EDID.
+Nothing about KVM?
 
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
+...
+> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
+> new file mode 100644
+> index 000000000000..03f35c75f439
+> --- /dev/null
+> +++ b/arch/x86/virt/vmx/tdx/tdx.c
+> @@ -0,0 +1,102 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright(c) 2022 Intel Corporation.
+> + *
+> + * Intel Trusted Domain Extensions (TDX) support
+> + */
+> +
+> +#define pr_fmt(fmt)	"tdx: " fmt
+> +
+> +#include <linux/types.h>
+> +#include <linux/cpumask.h>
+> +#include <asm/msr-index.h>
+> +#include <asm/msr.h>
+> +#include <asm/cpufeature.h>
+> +#include <asm/cpufeatures.h>
+> +#include <asm/tdx.h>
+> +
+> +/* Support Intel Secure Arbitration Mode Range Registers (SEAMRR) */
+> +#define MTRR_CAP_SEAMRR			BIT(15)
+> +
+> +/* Core-scope Intel SEAMRR base and mask registers. */
+> +#define MSR_IA32_SEAMRR_PHYS_BASE	0x00001400
+> +#define MSR_IA32_SEAMRR_PHYS_MASK	0x00001401
+> +
+> +#define SEAMRR_PHYS_BASE_CONFIGURED	BIT_ULL(3)
+> +#define SEAMRR_PHYS_MASK_ENABLED	BIT_ULL(11)
+> +#define SEAMRR_PHYS_MASK_LOCKED		BIT_ULL(10)
+> +
+> +#define SEAMRR_ENABLED_BITS	\
+> +	(SEAMRR_PHYS_MASK_ENABLED | SEAMRR_PHYS_MASK_LOCKED)
+> +
+> +/* BIOS must configure SEAMRR registers for all cores consistently */
+> +static u64 seamrr_base, seamrr_mask;
+> +
+> +static bool __seamrr_enabled(void)
+> +{
+> +	return (seamrr_mask & SEAMRR_ENABLED_BITS) == SEAMRR_ENABLED_BITS;
+> +}
 
- drivers/gpu/drm/drm_edid.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+But there's no case where seamrr_mask is non-zero and where
+_seamrr_enabled().  Why bother checking the SEAMRR_ENABLED_BITS?
 
-diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
-index 7a8482b75071..64ccfff4167e 100644
---- a/drivers/gpu/drm/drm_edid.c
-+++ b/drivers/gpu/drm/drm_edid.c
-@@ -5839,6 +5839,15 @@ int drm_add_modes_noedid(struct drm_connector *connector,
- 			continue;
- 		mode = drm_mode_duplicate(dev, ptr);
- 		if (mode) {
-+			/*
-+			 * The drm_dmt_modes array is sorted so that lower
-+			 * resolutions come first. We'll set the lowest
-+			 * resolution mode as preferred. We have no EDID so
-+			 * we should prefer the lowest resolution mode as
-+			 * the safest one.
-+			 */
-+			if (num_modes == 0)
-+				mode->type |= DRM_MODE_TYPE_PREFERRED;
- 			drm_mode_probed_add(connector, mode);
- 			num_modes++;
- 		}
--- 
-2.36.0.rc2.479.g8af0fa9b8e-goog
+> +static void detect_seam_bsp(struct cpuinfo_x86 *c)
+> +{
+> +	u64 mtrrcap, base, mask;
+> +
+> +	/* SEAMRR is reported via MTRRcap */
+> +	if (!boot_cpu_has(X86_FEATURE_MTRR))
+> +		return;
+> +
+> +	rdmsrl(MSR_MTRRcap, mtrrcap);
+> +	if (!(mtrrcap & MTRR_CAP_SEAMRR))
+> +		return;
+> +
+> +	rdmsrl(MSR_IA32_SEAMRR_PHYS_BASE, base);
+> +	if (!(base & SEAMRR_PHYS_BASE_CONFIGURED)) {
+> +		pr_info("SEAMRR base is not configured by BIOS\n");
+> +		return;
+> +	}
+> +
+> +	rdmsrl(MSR_IA32_SEAMRR_PHYS_MASK, mask);
+> +	if ((mask & SEAMRR_ENABLED_BITS) != SEAMRR_ENABLED_BITS) {
+> +		pr_info("SEAMRR is not enabled by BIOS\n");
+> +		return;
+> +	}
+> +
+> +	seamrr_base = base;
+> +	seamrr_mask = mask;
+> +}
 
+Comment, please.
+
+	/*
+	 * Stash the boot CPU's MSR values so that AP values
+	 * can can be checked for consistency.
+	 */
+
+
+> +static void detect_seam_ap(struct cpuinfo_x86 *c)
+> +{
+> +	u64 base, mask;
+> +
+> +	/*
+> +	 * Don't bother to detect this AP if SEAMRR is not
+> +	 * enabled after earlier detections.
+> +	 */
+> +	if (!__seamrr_enabled())
+> +		return;
+> +
+> +	rdmsrl(MSR_IA32_SEAMRR_PHYS_BASE, base);
+> +	rdmsrl(MSR_IA32_SEAMRR_PHYS_MASK, mask);
+> +
+
+This is the place for a comment about why the values have to be equal.
+
+> +	if (base == seamrr_base && mask == seamrr_mask)
+> +		return;
+> +
+> +	pr_err("Inconsistent SEAMRR configuration by BIOS\n");
+> +	/* Mark SEAMRR as disabled. */
+> +	seamrr_base = 0;
+> +	seamrr_mask = 0;
+> +}
+> +
+> +static void detect_seam(struct cpuinfo_x86 *c)
+> +{
+> +	if (c == &boot_cpu_data)
+> +		detect_seam_bsp(c);
+> +	else
+> +		detect_seam_ap(c);
+> +}
+> +
+> +void tdx_detect_cpu(struct cpuinfo_x86 *c)
+> +{
+> +	detect_seam(c);
+> +}
+
+The extra function looks a bit silly here now.  Maybe this gets filled
+out later, but it's goofy-looking here.

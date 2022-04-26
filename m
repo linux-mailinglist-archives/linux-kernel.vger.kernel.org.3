@@ -2,79 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3458250F530
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:52:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 150ED50F498
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345474AbiDZIm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37116 "EHLO
+        id S1345417AbiDZIjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:39:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345499AbiDZIek (ORCPT
+        with ESMTP id S1345601AbiDZIeq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:34:40 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6281078933;
-        Tue, 26 Apr 2022 01:27:31 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-e93ff05b23so5549026fac.9;
-        Tue, 26 Apr 2022 01:27:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=JyWiIRUPQ2EQSPq1mXaopILM4bH8C27NOUyoSKH0Kx0=;
-        b=GnmfzeNbJetLPcgOVIDW167P97CHVrHZEtM+M2S9wFPQjOUEmoHfTfmzpCm2EjZM0K
-         whuvCP9KJpqrXXQUmXikaAC0v8o2lDEi0kjrpgfsFM3y98aKviiAn+MXpe1N3OdOLlRG
-         xl2/UNLA28EBEjDv7j1N04M6Lt+6ZzTPZc265ucTjKj83saennVZrRWbCx5e8sLGMeVx
-         ygCiGroytXMSHv5y6S0AgYw5vDoXwxPkQA4ow2axQs7VAndznkVgZEmwZpgpfWs6aUQR
-         JpArsopYmKPWSPsnzCHLU1XfQePgiqgCJbV3ZMQU1Qw+qjqnQsUghQM+vF4LFb02MSSr
-         4QYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=JyWiIRUPQ2EQSPq1mXaopILM4bH8C27NOUyoSKH0Kx0=;
-        b=SN9wRxAJAO89dU1lPsl1tsqJLkGIoBzbtlKR7C1XwD7eTb4SxFbhJUd1ZjJRvqRDZh
-         3AxfzV8kcmFqcSZlcVIZJzqFpqYlClPulAPGkF+j36pjRuvEZIDBnRsT4H+Nr7lfZai1
-         TvShU8w8+Thwj98I4BYnLsfwFkPZo3wBFCI6PK4ztHNQfgbOx+dPqzMSobF4wQoTuMBr
-         GBg3Y460hdmcQ/1t9jjsjdrJlSY0GlYbDmph0GSOruC/sXO9y7NSm/76qb8tfCPo5ggF
-         Q1EiWBdMoBELRsDdAWvgTYrFiS/DcTp4ZAgsBXU+m7mFhUQVI0lglItqNmZRkOI/eVzT
-         Wqyg==
-X-Gm-Message-State: AOAM533Mc7McIkChWqLPZYlWcSm/9k4pux+E+C+ifj4wiVGcxx1lgewD
-        cC0ncf2SdwSB7NECy5dZ6EC+lWFrWAQ=
-X-Google-Smtp-Source: ABdhPJxI6qYl36Xp+qPV11OmVb8RL5z0QIOZJOtq0tjrrNmAI9DxIvRi55kIn0SC5Jq7y7Xi1v4n/w==
-X-Received: by 2002:a05:6870:5a5:b0:e2:896a:80c with SMTP id m37-20020a05687005a500b000e2896a080cmr8381464oap.131.1650961651221;
-        Tue, 26 Apr 2022 01:27:31 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j9-20020a056808056900b0032252797ea4sm4718739oig.6.2022.04.26.01.27.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 01:27:30 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <aaccd71a-64f7-7d8f-f5a7-41164ad80f1e@roeck-us.net>
-Date:   Tue, 26 Apr 2022 01:27:28 -0700
+        Tue, 26 Apr 2022 04:34:46 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B657486B;
+        Tue, 26 Apr 2022 01:27:49 -0700 (PDT)
+Received: from kwepemi100024.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KnZdc2yhfzCsMj;
+        Tue, 26 Apr 2022 16:23:16 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100024.china.huawei.com (7.221.188.87) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 26 Apr 2022 16:27:47 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 26 Apr 2022 16:27:47 +0800
+Subject: Re: [PATCH -next v2 2/5] block, bfq: add fake weight_counter for
+ weight-raised queue
+To:     Jan Kara <jack@suse.cz>
+CC:     <paolo.valente@linaro.org>, <axboe@kernel.dk>, <tj@kernel.org>,
+        <linux-block@vger.kernel.org>, <cgroups@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
+References: <20220416093753.3054696-1-yukuai3@huawei.com>
+ <20220416093753.3054696-3-yukuai3@huawei.com>
+ <20220425094856.qgkhba2klguduxot@quack3.lan>
+ <a27b8c79-867f-9253-84db-1d39c964b3ed@huawei.com>
+ <20220425161650.xzyijgkb5yzviea3@quack3.lan>
+ <4591d02d-1f14-c928-1c50-6e434dfbb7b2@huawei.com>
+ <20220426074023.5y4gwvjsjzem3vgp@quack3.lan>
+From:   "yukuai (C)" <yukuai3@huawei.com>
+Message-ID: <77b4c06c-f813-bcac-ea26-107e52f46d0a@huawei.com>
+Date:   Tue, 26 Apr 2022 16:27:46 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v4 4/4] watchdog: iTCO_wdg: Make code more clearly with
- macro definition
-Content-Language: en-US
-To:     "liuxp11@chinatelecom.cn" <liuxp11@chinatelecom.cn>,
-        wim <wim@linux-watchdog.org>, Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     linux-watchdog <linux-watchdog@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <1650957029-910-1-git-send-email-liuxp11@chinatelecom.cn>
- <1650957029-910-5-git-send-email-liuxp11@chinatelecom.cn>
- <9f991b4d-8f02-6c07-a8b6-2861837a0224@roeck-us.net>
- <2022042616173226700718@chinatelecom.cn>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <2022042616173226700718@chinatelecom.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20220426074023.5y4gwvjsjzem3vgp@quack3.lan>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,72 +61,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/26/22 01:17, liuxp11@chinatelecom.cn wrote:
->     On 4/26/22 00:10, Liu Xinpeng wrote:
->      > Using SET_NOIRQ_SYSTEM_SLEEP_PM_OPS reduces redundant code.
->      >
->      > Signed-off-by: Liu Xinpeng <liuxp11@chinatelecom.cn>
->      > Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
->      > ---
->      >   drivers/watchdog/iTCO_wdt.c | 12 ++++--------
->      >   1 file changed, 4 insertions(+), 8 deletions(-)
->      >
->      > diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
->      > index 3f2f4343644f..8d24cf4f4ca3 100644
->      > --- a/drivers/watchdog/iTCO_wdt.c
->      > +++ b/drivers/watchdog/iTCO_wdt.c
->      > @@ -635,22 +635,18 @@ static int iTCO_wdt_resume_noirq(struct device *dev)
->      >
->      >   return 0;
->      >   }
->      > +#endif /* CONFIG_PM_SLEEP */
->      >
->      >   static const struct dev_pm_ops iTCO_wdt_pm = {
->      > - .suspend_noirq = iTCO_wdt_suspend_noirq,
->      > - .resume_noirq = iTCO_wdt_resume_noirq,
->      > + SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(iTCO_wdt_suspend_noirq,
->      > +       iTCO_wdt_resume_noirq)
->      >   };
->      >
->      > -#define ITCO_WDT_PM_OPS (&iTCO_wdt_pm)
->      > -#else
->      > -#define ITCO_WDT_PM_OPS NULL
->      > -#endif /* CONFIG_PM_SLEEP */
->      > -
->      >   static struct platform_driver iTCO_wdt_driver = {
->      >   .probe          = iTCO_wdt_probe,
->      >   .driver         = {
->      >   .name   = DRV_NAME,
->      > - .pm     = ITCO_WDT_PM_OPS,
->      > + .pm     = &iTCO_wdt_pm,
->      >   },
->      >   };
->      >
->     Sorry, I fail to see how this is an improvement.
+在 2022/04/26 15:40, Jan Kara 写道:
+> On Tue 26-04-22 09:49:04, yukuai (C) wrote:
+>> 在 2022/04/26 0:16, Jan Kara 写道:
+>>> Hello!
+>>>
+>>> On Mon 25-04-22 21:34:16, yukuai (C) wrote:
+>>>> 在 2022/04/25 17:48, Jan Kara 写道:
+>>>>> On Sat 16-04-22 17:37:50, Yu Kuai wrote:
+>>>>>> Weight-raised queue is not inserted to weights_tree, which makes it
+>>>>>> impossible to track how many queues have pending requests through
+>>>>>> weights_tree insertion and removel. This patch add fake weight_counter
+>>>>>> for weight-raised queue to do that.
+>>>>>>
+>>>>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>>>>>
+>>>>> This is a bit hacky. I was looking into a better place where to hook to
+>>>>> count entities in a bfq_group with requests and I think bfq_add_bfqq_busy()
+>>>>> and bfq_del_bfqq_busy() are ideal for this. It also makes better sense
+>>>>> conceptually than hooking into weights tree handling.
+>>>>
+>>>> bfq_del_bfqq_busy() will be called when all the reqs in the bfqq are
+>>>> dispatched, however there might still some reqs are't completed yet.
+>>>>
+>>>> Here what we want to track is how many bfqqs have pending reqs,
+>>>> specifically if the bfqq have reqs are't complted.
+>>>>
+>>>> Thus I think bfq_del_bfqq_busy() is not the right place to do that.
+>>>
+>>> Yes, I'm aware there will be a difference. But note that bfqq can stay busy
+>>> with only dispatched requests because the logic in __bfq_bfqq_expire() will
+>>> not call bfq_del_bfqq_busy() if idling is needed for service guarantees. So
+>>> I think using bfq_add/del_bfqq_busy() would work OK.
+>> Hi,
+>>
+>> I didn't think of that before. If bfqq stay busy after dispathing all
+>> the requests, there are two other places that bfqq can clear busy:
+>>
+>> 1) bfq_remove_request(), bfqq has to insert a new req while it's not in
+>> service.
 > 
->     Guenter
->     --->
->     #define NOIRQ_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
->              .suspend_noirq = pm_sleep_ptr(suspend_fn), \
->              .resume_noirq = pm_sleep_ptr(resume_fn), \
->              .freeze_noirq = pm_sleep_ptr(suspend_fn), \
->              .thaw_noirq = pm_sleep_ptr(resume_fn), \
->              .poweroff_noirq = pm_sleep_ptr(suspend_fn), \
->              .restore_noirq = pm_sleep_ptr(resume_fn),
+> Yes and the request then would have to be dispatched or merged. Which
+> generally means another bfqq from the same bfqg is currently active and
+> thus this should have no impact on service guarantees we are interested in.
 > 
->     NOIRQ_SYSTEM_SLEEP_PM_OPS, defined for CONFIG_PM_SLEEP, will
->       point ->suspend_noirq, ->freeze_noirq and ->poweroff_noirq to the same
->       function. Vice versa happens for ->resume_noirq, ->thaw_noirq and ->restore_noirq.
->       (commit 020af89a41c41fd2c92d0da524968dfaba6269f0)
+>> 2) bfq_release_process_ref(), user thread is gone / moved, or old bfqq
+>> is gone due to merge / ioprio change.
 > 
->     Some power management occasion needs freeze_noirq/thaw_noirq /poweroff_noirq /restore_noirq.
+> Yes, here there's no new IO for the bfqq so no point in maintaining any
+> service guarantees to it.
 > 
+>> I wonder, will bfq_del_bfqq_busy() be called immediately when requests
+>> are completed? (It seems not to me...). For example, a user thread
+>> issue a sync io just once, and it keep running without issuing new io,
+>> then when does the bfqq clears the busy state?
+> 
+> No, when bfqq is kept busy, it will get scheduled as in-service queue in
+> the future. Then what happens depends on whether it will get more requests
+> or not. But generally its busy state will get cleared once it is expired
+> for other reason than preemption.
 
-That isn't what the commit description and subject say. Change description
-and subject to describe what is actually done, use __maybe_unused instead
-of #ifdef as suggested, and do not invent Reviewed-by: tags.
+Thanks for your explanation.
 
-Also, this is an independent change, and should not be sent together
-with the other patches.
+I think in normal case using bfq_add/del_bfqq_busy() if fine.
 
-Guenter
+There is one last situation that I'm worried: If some disk are very
+slow that the dispatched reqs are not completed when the bfqq is
+rescheduled as in-service queue, and thus busy state can be cleared
+while reqs are not completed.
+
+Using bfq_del_bfqq_busy() will change behaviour in this specail case,
+do you think service guarantees will be broken?
+
+Thanks,
+Kuai

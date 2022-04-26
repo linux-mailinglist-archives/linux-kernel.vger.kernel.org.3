@@ -2,149 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1358650FB62
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 12:48:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E01BB50FB68
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 12:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349450AbiDZKuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 06:50:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33148 "EHLO
+        id S1349148AbiDZKuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 06:50:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346242AbiDZKtb (ORCPT
+        with ESMTP id S1349824AbiDZKt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 06:49:31 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2135.outbound.protection.outlook.com [40.107.215.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FBA2AC5E;
-        Tue, 26 Apr 2022 03:45:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L9fxgtbx2G5rjJKEAAJ4HXzd0go+kIpoYAzKqLswSEtGbxvTejM8iN2ZdoMFzsE6cvDUWoSAtc6jFnArlLoHVncLjsa5eG64yhBPBEp/TfnlJzIX/nmVaptsZ/7J/rGiaTOazrc7hLsiLVwpNa6fv/rHOEydE6uGSA7H9qHoIH31ix3sn/aaXr/ZWMh1/2p31ZpXEzFZE6PjuUJ1tAi1ALm4vzCPpdCGDDV1rWpie5bTsLKfe5h0JWiY8ozGvrC6G8BRoz1swe+Lc7++c3zf6X+ftbMq/XS8SlaSWZIWnox5MCMm07nkZadn7PJ9gn0e1aAHzahEpcQQOEXqXYHJkg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=L9utICEedl47QlQv5XGMQWa9ymmCMkG4s9q0nw9Ruc0=;
- b=WEVJWYOOyWuCKgeAkmybSmtQ224WGBq+7ZSJIa4NnsQjFZsuYVYXw7KwNojy6axVXTIaNYHD6pJpiPqp+PIP9fsFRHAnPtijAW5VGMn4kPJYoKDZwNlmvfJcvvQq++YIVMoxzUcEYH06w9deDpqDZHgB4RpD9UpxP59cUeRZkQ5NAOrsXAAkEX0bzc2pXVb2iRJ+l2TpptCdkWQdrxG9i80C1XDPSbfCS4Zt8Um53CB44G8Q5fGoIBC2q/vmybPegRwKt1uOQsFKjWysVWxYeaQtor94ei9zQphIspbybVwc7Ue/Wnht33U8TPRuQYMsQuq+nhul0Mo5N/KZxm4Hyw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=L9utICEedl47QlQv5XGMQWa9ymmCMkG4s9q0nw9Ruc0=;
- b=NPNcqnfkN2H4Bb277X2QcSvOVm2T6yljz9hQ6WF8alhsxfhCRlBsUZLwKArcBeWsMRAPcpnwI+KW19m+ox1YiWoqAEqtjZmLLwL0Ovptm6Cf70+ofYO8GaAGzC9i7zVgqouJ0XS6WWnGnZhF8mRinfC3hiBSTbZTrsja5+xN4rg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
- PU1PR06MB2200.apcprd06.prod.outlook.com (2603:1096:803:2c::18) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5186.18; Tue, 26 Apr 2022 10:45:28 +0000
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::4591:4f3e:f951:6c8c]) by SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::4591:4f3e:f951:6c8c%7]) with mapi id 15.20.5186.021; Tue, 26 Apr 2022
- 10:45:28 +0000
-From:   Wan Jiabing <wanjiabing@vivo.com>
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Bean Huo <beanhuo@micron.com>,
-        Daejun Park <daejun7.park@samsung.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Can Guo <cang@codeaurora.org>,
-        Asutosh Das <asutoshd@codeaurora.org>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Wan Jiabing <wanjiabing@vivo.com>
-Subject: [PATCH] scsi: ufs: Remove duplicate include in ufshcd
-Date:   Tue, 26 Apr 2022 18:45:07 +0800
-Message-Id: <20220426104509.621394-1-wanjiabing@vivo.com>
-X-Mailer: git-send-email 2.35.3
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: HK2P15301CA0012.APCP153.PROD.OUTLOOK.COM
- (2603:1096:202:1::22) To SG2PR06MB3367.apcprd06.prod.outlook.com
- (2603:1096:4:78::19)
+        Tue, 26 Apr 2022 06:49:26 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354A8E0C0;
+        Tue, 26 Apr 2022 03:45:16 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id gh6so11134861ejb.0;
+        Tue, 26 Apr 2022 03:45:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=yT6MeZr7lrp+pl5JuXM90CrfagSL5tvHFlanqgPjJyY=;
+        b=Eh6AA+i4KyqffI3eRab/pWanLJ7aZW9oDevFcQw82RRV2PPvtunCBBil6y0k9ESIcu
+         SA1DCF4MrUk6nsGxk2OXzp0oQF2Ai+FRR7sDAka3wb/4Vc3v0OLicXbm3+//s2BlQlG0
+         VL7F+GIShYom/wVK6kTpH18/FuspHEebkCzPFvjGDRgmpQMkukDIAm0p61iKs3c6Oc83
+         thOfmaOrKTsudYzWs2LrTbcF/t1P+Yei6gM+d39nVfXxZaz6lDRh0Y6JSbiGK5p9gD5+
+         XAdhGwYjvEdBQ+GeaPN/EOeUWbPV5peKdS2y/+b+qBkV3VX/DKJhGHsrNMJFBpQ/O3y5
+         YI3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=yT6MeZr7lrp+pl5JuXM90CrfagSL5tvHFlanqgPjJyY=;
+        b=x07PmAYKw/wwK6Hp473Fx5iCS8fyccZhltbc9pvGN72LK4k8rlLf6F1dTQ3LmzcJb3
+         0V4HHWy3B1IjB7uOhwpB0CmKmxvr2NRiJ0lte21sJyMriSBEVofD03Ib+x82s5kX9kRb
+         bMJMwfDAS2LruKqg5HW6xYq4Is1uA7Nb8V7GCw6Pp1IQl6M8143Mjygo6BJeL6VpBQvY
+         E/IeN8mYoAkl1Lk9g84UzLIFoml2R/H52nWwY/4uWt9VtuyN7vs8OlRZP5zyIYsy2tgi
+         7quFcECXBBkcxLdmegcVtSYMlH6DFKynqjOZK4YAffVBw8DizNfDNN9zqBhpVsjAc9cc
+         nz5w==
+X-Gm-Message-State: AOAM531Cqr/uhf+n2BCfkX/+jQIs6D0X9K8ryFDHrf1o0dmz34Vzukj4
+        PNa5bfd+U6LyrQ9oXbL03WM=
+X-Google-Smtp-Source: ABdhPJzA5ggTUsN9zCEkiGOvUxl5pVGQ+/cozLKTUfXtLV4X6wR9Kub9ICs5sVUhAX4HWJ/vMNNE4w==
+X-Received: by 2002:a17:907:7da2:b0:6f3:a802:d52d with SMTP id oz34-20020a1709077da200b006f3a802d52dmr4684546ejc.706.1650969914613;
+        Tue, 26 Apr 2022 03:45:14 -0700 (PDT)
+Received: from leap.localnet (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
+        by smtp.gmail.com with ESMTPSA id b16-20020a170906709000b006f3a8aac0eesm1091139ejk.0.2022.04.26.03.45.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 03:45:13 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        outreachy@lists.linux.dev, Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v2 4/4] Documentation/vm: Rework "Temporary Virtual Mappings" section
+Date:   Tue, 26 Apr 2022 12:45:12 +0200
+Message-ID: <3610796.MHq7AAxBmi@leap>
+In-Reply-To: <YmecctAD9XXYG8CR@linutronix.de>
+References: <20220425162400.11334-1-fmdefrancesco@gmail.com> <20220425162400.11334-5-fmdefrancesco@gmail.com> <YmecctAD9XXYG8CR@linutronix.de>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 82c51568-2648-4cf7-49d0-08da2771e0e9
-X-MS-TrafficTypeDiagnostic: PU1PR06MB2200:EE_
-X-Microsoft-Antispam-PRVS: <PU1PR06MB22001D03BFF83F84A7B5CB01ABFB9@PU1PR06MB2200.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6N8Dxqd45TKgFlb2rMiNrfFHB5Y3+VDNLTWY99dmOK048Jc5WSEGKqJeepJ45WhKosqIj1jx2FabFn8nkbOyj2w1Y9H5IQRBWeJuFKtEmMo0+62ZQVuLmctURfajpUwRnWW1iI2xFy1uvf8ZsE4NCc7D7kTTPwmG2rLKqh9yhAyV318bOR/XgiD0Dh7CM6qXROdHa+Tw9rSZPAc0mBksgxfBlSsvs8ZM7ZHbo1p/DnHdjGv9kVDQiXYpeQX0ESdSXSweRgl3XW/lxe9nNhjExjl1Ef3c5sbMu36bTDj2UeuALFbVBFnfsOgYZSNxfslri0+pxEXhBcDTQxswapW7qp+m7DUXkCiiip+33Zh+5xCNYC4YpKX80BAe6I+Rj66fl2bn1YIlF4n8QoeYdyKGYfDaLfA8s3U4Rg8+2rTSoU/tOJVkbyywtdibQPCrjXf6fpMfN9jO1zueaXSVYsSDg6v2xlb2guTFi/+0GI3cNPl1b1K4a/XG5SAY7qepo9r/picOzzIy3PuhkJABDuxjenIO7tKJAHUH9q5GN+VX713dtmcjjcjQet/msqUt1WE6R1w+XjVj2YUjm8edTgtDlcAX0BNpMQ0Lv85TIF6kl/E8NBNhM933gJkhzvjBPx0spC1ottKyfrLOuW0Z0slH4U7Fm7U1el+we5mi5UHtWS7R9VktMdH381IeYsxcVeyuQh5Sbz1B1zGLTooquYXQxO0N1+b5YELFPcgGeRHIXLI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38350700002)(2906002)(6506007)(83380400001)(36756003)(38100700002)(52116002)(107886003)(2616005)(1076003)(921005)(8936002)(186003)(6666004)(7416002)(5660300002)(6512007)(26005)(4744005)(508600001)(110136005)(86362001)(66946007)(6486002)(66556008)(66476007)(316002)(4326008)(8676002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QAPlz+9Dmo/vTKCLMPKBXWPDiZuzmfMh9sziS+nLgbajXGEJaY9AJmkNIyD5?=
- =?us-ascii?Q?6mJzL8iDbiyVXiOUFisMvGkVD61K0/FTNaGcJBVldkGkcekfW9W08MWbkiCq?=
- =?us-ascii?Q?1gtYp2ntRYFlwwfXWl7Rt5dKEDuk0YE+kgFQIKunUMTjBk4E+SstVCtnMlom?=
- =?us-ascii?Q?/HDJ0+Hma20fdTYVsDNjjT2MH9L8zPiBMEBByc/1UODPPporsolt3Bb+WWOk?=
- =?us-ascii?Q?1mSCh3Hu/LpGbO6er7FwdKxPc4AFVdjwhi6KntoDYY8HGyhaW/ML4PjoOkbT?=
- =?us-ascii?Q?unyYn4lt3+7rhbFlodaDump5aAd7ATMovbnBEpnCoQikv/59KZ5nNsBiTfcU?=
- =?us-ascii?Q?dnPziGjDboOQJSXve8vMNMt5Z7RyoSoifi+yrrTWkCUL2ffOVxi3FZtBL86j?=
- =?us-ascii?Q?HQEdUpdxN+oeojeCHW0J2QOi46KzxMrBm+JS8P7OS6Q5ZZIJGIylrC4EE3ty?=
- =?us-ascii?Q?gIzl55Vfxb/tVUhXOZ3N+1xSngOyp4Xcprqew4xaBggI3AYpqD+hnwe3Poql?=
- =?us-ascii?Q?+zrRdKaHwvdyVwpXDCvUorfnVEk8+AEobJxy8aLRwiqO9drkKvKnd3vuZ+E7?=
- =?us-ascii?Q?jtodBeM+YmdGYAZY7T7CPC6l+C+I6KQYkYhUm0OyBSYsBEbQ6rAa/7ZuUaI1?=
- =?us-ascii?Q?mIYpDxAN/k6EPBOhfWMSVTxmywZNKFBGBK7dxThNGsce/qBTQ1MK8tOjalEo?=
- =?us-ascii?Q?IE7RLZkoXHlJ72vEDxuRoZ9UBKQWR9aevapUxIn1+86ADJfZBtpxhytqSzRN?=
- =?us-ascii?Q?KcQmzl40y298LY93WyhhJv+BvnTKLO3aUlKavEKXHlYLaou+iw0Cx03Yt83o?=
- =?us-ascii?Q?epGx695Me5n1lAFbEG+l/U/RpApW7waut/gjlSFxmUsnfjrbj8RiMPbIGyCY?=
- =?us-ascii?Q?GzLpaOqMVjcFc+ueW8p8xnsuJKvrITXOtlP1wQSU1Mef6mhXwGQGfOVcv8wT?=
- =?us-ascii?Q?kRU7z0qhATS3E4hsszHPaIhlr57MotQxjrgABGTiNF4jG4joofQkhUMFGaFq?=
- =?us-ascii?Q?q3al/HSigk+zRGevrrSWBUzRD8gEaQWtjp6xLJ9sRx8UPvGCHqoD7ZtONMZG?=
- =?us-ascii?Q?oYc2f7zVgMTL3uPAMfqWM6UMV9A+Hufw2kFBOAdlEn9U2ZJYuGl9BQM8XkuS?=
- =?us-ascii?Q?ma/yfvXsr8GSRI29G1BjoQNlLGzZHQ/BrF2upep5UpWau2dwy+KgMiqWGx+i?=
- =?us-ascii?Q?KYDii8ubE6N4ahSo/11E+XoAW5Zg8jLbWnKrFutIqp/nT2uikeoikerkRLle?=
- =?us-ascii?Q?anDsxplkeTD2OJm96CZDEk38GixyBsjbxyQbEXopPxChWwukK9LCcmttaX5p?=
- =?us-ascii?Q?l+TppqZuXroB64DkhGjm4m3gyleexAHBjZZbZjEMoYa67333PuCMfnaGXxL6?=
- =?us-ascii?Q?+/QruLaGCD7eO7F0ptKgfrqHdYGGTHnUsVqRGLF+2BgjF2/km/LuvQcT7qKO?=
- =?us-ascii?Q?l6rVg/0Eru0Bv5yuFPm3wrvRCb3ZOe84/erqHtztUngHjOqZHB95w7MHj3Op?=
- =?us-ascii?Q?NArCDgTdkY95bxyqvxsDNF3jUUzzNlXfG+MG4AXacKSJOHcORlBIIy6SVAyh?=
- =?us-ascii?Q?oV2+/40h/2WIThUUcv7mVGexYr8TItyG+IiM2ZEtsVyc+5v75l7lzC/JZql5?=
- =?us-ascii?Q?7i47wRbTg+rgIt700q9tYqhd9y33wvt1UMcWf0SIebXS6UB4ARAbIO+3AaQ+?=
- =?us-ascii?Q?zUtcalUD1YkpCzQxzAUVSkK9AipwtMGgYcQNCliXmWr+pbEwpU9VPgMSdzdq?=
- =?us-ascii?Q?ArfakiNUVQ=3D=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 82c51568-2648-4cf7-49d0-08da2771e0e9
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2022 10:45:28.7800
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UDgL57ko6To1oz1ACYiRlJZcmhTy/OKqxM2I0HMo9nmxrCR+cITgInMNT3rNWq18pcXa8yhgKuKCgo+2KSXbAA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PU1PR06MB2200
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix following checkincludes warning:
-drivers/scsi/ufs/ufshcd.c: linux/nls.h is included more than once.
+On marted=C3=AC 26 aprile 2022 09:17:06 CEST Sebastian Andrzej Siewior wrot=
+e:
+> On 2022-04-25 18:24:00 [+0200], Fabio M. De Francesco wrote:
+> > index e05bf5524174..b09f1f9a81f2 100644
+> > --- a/Documentation/vm/highmem.rst
+> > +++ b/Documentation/vm/highmem.rst
+> > @@ -50,26 +50,77 @@ space when they use mm context tags.
+> >  Temporary Virtual Mappings
+> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+> > =20
+> > -The kernel contains several ways of creating temporary mappings:
+> > +The kernel contains several ways of creating temporary mappings. The=20
+following
+> > +list shows them in order of preference of use.
+> > =20
+> > -* vmap().  This can be used to make a long duration mapping of=20
+multiple
+> > -  physical pages into a contiguous virtual space.  It needs global
+> > -  synchronization to unmap.
+> > +* kmap_local_page().  This function is used to require short term=20
+mappings.
+> > +  It can be invoked from any context (including interrupts) but the=20
+mappings
+> > +  can only be used in the context which acquired them.
+> > +
+> > +  This function should be preferred, where feasible, over all the=20
+others.
+>=20
+> feasible? It should always be used.=20
 
-The include is in line 14. Remove the duplicated here.
+No, it cannot always be used. Please read again few lines above this that=20
+"The mapping can only be used in the context which acquired them". We=20
+cannot do blind s/kmap/kmap_local_page/.
 
-Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
----
- drivers/scsi/ufs/ufshcd.c | 1 -
- 1 file changed, 1 deletion(-)
+> I don't see a reason why using
+> kmap_local_page() would not be feasible.
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 1b87f26b5193..73b3dfffabaa 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -20,7 +20,6 @@
- #include <linux/delay.h>
- #include <linux/interrupt.h>
- #include <linux/module.h>
--#include <linux/nls.h>
- #include <linux/regulator/consumer.h>
- #include <scsi/scsi_cmnd.h>
- #include <scsi/scsi_dbg.h>
--- 
-2.35.3
+Ditto.
+
+> > -* kmap().  This permits a short duration mapping of a single page.  It=
+=20
+needs
+> > -  global synchronization, but is amortized somewhat.  It is also prone=
+=20
+to
+> > -  deadlocks when using in a nested fashion, and so it is not=20
+recommended for
+> > -  new code.
+> > +  These mappings are per thread, CPU local (i.e., migration from one=20
+CPU to
+> > +  another is disabled - this is why they are called "local"), but they=
+=20
+don't
+> > +  disable preemption. It's valid to take pagefaults in a local kmap=20
+region,
+> > +  unless the context in which the local mapping is acquired does not=20
+allow
+> > +  it for other reasons.
+> > +
+> > +  kmap_local_page() always returns a valid virtual address and it is=20
+assumed
+> > +  that kunmap_local() will never fail.
+> > +
+> > +  If a task holding local kmaps is preempted, the maps are removed on=
+=20
+context
+> > +  switch and restored when the task comes back on the CPU. As the maps=
+=20
+are
+> > +  strictly CPU local, it is guaranteed that the task stays on the CPU=
+=20
+and
+>=20
+> Maybe "thread local" instead CPU local? Another thread on the same CPU
+> can not use this mapping.
+>=20
+
+Hmm, I might add "thread local" to convey that the local mappings should=20
+stay in the same context that acquired them.=20
+
+However, kmap_local_page() also disable migration. This is how Thomas=20
+Gleixner talks about kmap_local_page() in his patch where it introduced=20
+this function:=20
+
+"The kmap_local.*() functions can be invoked from both preemptible and
+atomic context. kmap local sections disable migration to keep the resulting
+virtual mapping address correct, but disable neither pagefaults nor
+preemption.".
+
+Therefore, if it "disable migration" it is "CPU local". I mean that I might=
+=20
+also add "thread local" but I think (at least at this moment) that I won't=
+=20
+remove "CPU local".
+
+@Ira: what about this proposal?
+
+> > +  that the CPU cannot be unplugged until the local kmaps are released.
+> > +
+> > +  Nesting kmap_local_page() and kmap_atomic() mappings is allowed to a=
+=20
+certain
+> > +  extent (up to KMAP_TYPE_NR) but their invocations have to be=20
+strictly ordered
+> > +  because the map implementation is stack based. See kmap_local_page=20
+() kdocs
+>                                                                        ^
+> > +  (included in the "Functions" section) for details on how to manage=20
+nested
+> > +  mappings.
+>=20
+> While they can be nested I wouldn't encourage that.
+
+I'm not encouraging this kinds of usages. I'm only saying that "it is=20
+allowed to a certain extent".
+
+> >  * kmap_atomic().  This permits a very short duration mapping of a=20
+single
+> >    page.  Since the mapping is restricted to the CPU that issued it, it
+> >    performs well, but the issuing task is therefore required to stay on=
+=20
+that
+> >    CPU until it has finished, lest some other task displace its=20
+mappings.
+> > =20
+> > -  kmap_atomic() may also be used by interrupt contexts, since it is=20
+does not
+> > -  sleep and the caller may not sleep until after kunmap_atomic() is=20
+called.
+> > +  kmap_atomic() may also be used by interrupt contexts, since it does=
+=20
+not
+> > +  sleep and the callers too may not sleep until after kunmap_atomic()=
+=20
+is
+> > +  called.
+> > +
+> > +  Each call of kmap_atomic() in the kernel creates a non-preemptible=20
+section
+> > +  and disable pagefaults. This could be a source of unwanted latency,=
+=20
+so it
+> > +  should be only used if it is absolutely required, otherwise=20
+kmap_local_page()
+> > +  should be used where it is feasible.
+>=20
+> Please add a note this function is deprecated and must not be used in
+> new code.
+
+I have already responded (in my other reply for 1/4) about the possible=20
+addition of a notice of deprecation. But, as said, I also need to take into=
+=20
+account what other people think about it.
+
+However, I agree that, since we have that "deprecated!" in the kdocs of =20
+kmap_atomic(), I should be consistent everywhere.
+
+Please let me wait for more reviews before making further changes.
+
+Thanks,
+
+=46abio
+
+>=20
+> Sebastian
+>=20
+
+
+
 

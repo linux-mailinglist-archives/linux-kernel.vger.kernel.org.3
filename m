@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2855E50F878
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D3250F3B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:26:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346505AbiDZJEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:04:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56574 "EHLO
+        id S1344750AbiDZI1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346793AbiDZIpW (ORCPT
+        with ESMTP id S1344703AbiDZI0m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:45:22 -0400
+        Tue, 26 Apr 2022 04:26:42 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0013B3E8;
-        Tue, 26 Apr 2022 01:35:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033393B00E;
+        Tue, 26 Apr 2022 01:23:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1882F61899;
-        Tue, 26 Apr 2022 08:35:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 094F6C385A4;
-        Tue, 26 Apr 2022 08:35:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D1C3617EB;
+        Tue, 26 Apr 2022 08:23:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C082C385A0;
+        Tue, 26 Apr 2022 08:23:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962139;
-        bh=904Yeuvzqm23g7s+sAX4Ms24/YBBVjFmcCiyB/hFFGA=;
+        s=korg; t=1650961387;
+        bh=MW5lMW83cKFuQ+PDyPpfF+4pUD4lBgubfgXNxkDATPk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RvzUGZVsoN8NML6JTYW5UEoe9K4wHXWNhvo+Z8TSc4/PdkeXzA4F5cP7AjYWPxPHA
-         /IjNy4cujGZbjU2N4rgGF7+Pnvc6sHbpOqm1Ioyc5uUBKW1v09q0m/nH68w8/5AmNZ
-         I+QzxucziwzwcLswqWrW2zAxuCEvjNmmq52uMpEk=
+        b=A74IZsOLAVx/bbb/zohFrb8fTVkmFnveSjgn3vM27/pKbzzn8j8fNSklGW7Fd0CfI
+         UhloUkixKaSOu1aWoPbcGizU75tjAvLerbdYJmmfqoxsyNrfqrAUT7bP+3rDm7xUXp
+         SkUlU9mdq1QDJbTTPuUzvegjCMelSDUS6ADGImLk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaoke Wang <xkernel.wang@foxmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 45/86] drm/msm/mdp5: check the return of kzalloc()
+        stable@vger.kernel.org,
+        James Hutchinson <jahutchinson99@googlemail.com>,
+        Dima Ruinskiy <dima.ruinskiy@intel.com>,
+        Sasha Neftin <sasha.neftin@intel.com>,
+        Naama Meir <naamax.meir@linux.intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: [PATCH 4.9 19/24] e1000e: Fix possible overflow in LTR decoding
 Date:   Tue, 26 Apr 2022 10:21:13 +0200
-Message-Id: <20220426081742.505980767@linuxfoundation.org>
+Message-Id: <20220426081731.940521770@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
-References: <20220426081741.202366502@linuxfoundation.org>
+In-Reply-To: <20220426081731.370823950@linuxfoundation.org>
+References: <20220426081731.370823950@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +57,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+From: Sasha Neftin <sasha.neftin@intel.com>
 
-[ Upstream commit 047ae665577776b7feb11bd4f81f46627cff95e7 ]
+commit 04ebaa1cfddae5f240cc7404f009133bb0389a47 upstream.
 
-kzalloc() is a memory allocation function which can return NULL when
-some internal memory errors happen. So it is better to check it to
-prevent potential wrong memory access.
+When we decode the latency and the max_latency, u16 value may not fit
+the required size and could lead to the wrong LTR representation.
 
-Besides, since mdp5_plane_reset() is void type, so we should better
-set `plane-state` to NULL after releasing it.
+Scaling is represented as:
+scale 0 - 1         (2^(5*0)) = 2^0
+scale 1 - 32        (2^(5 *1))= 2^5
+scale 2 - 1024      (2^(5 *2)) =2^10
+scale 3 - 32768     (2^(5 *3)) =2^15
+scale 4 - 1048576   (2^(5 *4)) = 2^20
+scale 5 - 33554432  (2^(5 *4)) = 2^25
+scale 4 and scale 5 required 20 and 25 bits respectively.
+scale 6 reserved.
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Patchwork: https://patchwork.freedesktop.org/patch/481055/
-Link: https://lore.kernel.org/r/tencent_8E2A1C78140EE1784AB2FF4B2088CC0AB908@qq.com
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Rob Clark <robdclark@chromium.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Replace the u16 type with the u32 type and allow corrected LTR
+representation.
+
+Cc: stable@vger.kernel.org
+Fixes: 44a13a5d99c7 ("e1000e: Fix the max snoop/no-snoop latency for 10M")
+Reported-by: James Hutchinson <jahutchinson99@googlemail.com>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215689
+Suggested-by: Dima Ruinskiy <dima.ruinskiy@intel.com>
+Signed-off-by: Sasha Neftin <sasha.neftin@intel.com>
+Tested-by: Naama Meir <naamax.meir@linux.intel.com>
+Tested-by: James Hutchinson <jahutchinson99@googlemail.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/ethernet/intel/e1000e/ich8lan.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c b/drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c
-index 83423092de2f..da0799333970 100644
---- a/drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c
-+++ b/drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c
-@@ -179,7 +179,10 @@ static void mdp5_plane_reset(struct drm_plane *plane)
- 		drm_framebuffer_put(plane->state->fb);
+--- a/drivers/net/ethernet/intel/e1000e/ich8lan.c
++++ b/drivers/net/ethernet/intel/e1000e/ich8lan.c
+@@ -1010,8 +1010,8 @@ static s32 e1000_platform_pm_pch_lpt(str
+ {
+ 	u32 reg = link << (E1000_LTRV_REQ_SHIFT + E1000_LTRV_NOSNOOP_SHIFT) |
+ 	    link << E1000_LTRV_REQ_SHIFT | E1000_LTRV_SEND;
+-	u16 max_ltr_enc_d = 0;	/* maximum LTR decoded by platform */
+-	u16 lat_enc_d = 0;	/* latency decoded */
++	u32 max_ltr_enc_d = 0;	/* maximum LTR decoded by platform */
++	u32 lat_enc_d = 0;	/* latency decoded */
+ 	u16 lat_enc = 0;	/* latency encoded */
  
- 	kfree(to_mdp5_plane_state(plane->state));
-+	plane->state = NULL;
- 	mdp5_state = kzalloc(sizeof(*mdp5_state), GFP_KERNEL);
-+	if (!mdp5_state)
-+		return;
- 
- 	/* assign default blend parameters */
- 	mdp5_state->alpha = 255;
--- 
-2.35.1
-
+ 	if (link) {
 
 

@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E896850F543
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78C5950F83F
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345754AbiDZIoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37016 "EHLO
+        id S1347655AbiDZJdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345009AbiDZIgN (ORCPT
+        with ESMTP id S1347856AbiDZJGQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:36:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C96E86E04;
-        Tue, 26 Apr 2022 01:28:59 -0700 (PDT)
+        Tue, 26 Apr 2022 05:06:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0396F167F1E;
+        Tue, 26 Apr 2022 01:46:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 929ED617D2;
-        Tue, 26 Apr 2022 08:28:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3EAEC385AC;
-        Tue, 26 Apr 2022 08:28:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A75E1604F5;
+        Tue, 26 Apr 2022 08:46:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97777C385A4;
+        Tue, 26 Apr 2022 08:46:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961738;
-        bh=1E4YVsX4sfzbfahEXFBQWmZddIkEUtBXiE74i1htdqs=;
+        s=korg; t=1650962778;
+        bh=HHSBzrlIipK0nujA927z1nFCcxi1J+e1mhmEtz+5L5w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F9RlLq27+LvT/tTacCn/oI6cmC8N3YJFJDE9gjboaFsw1knoCSjmlmze7mytDbkic
-         g0ixYMK9aZH3kslAj5MVcOUvLICgz5IIec/sumjWCO/HZvene7fBuHTyjG5rIVLrXy
-         /JZXL61Rry/DZm6FGWGWCEUXobXEsqD92dlVITSU=
+        b=cauXoI3ZmrqtyU8cdJO+L7m7yPyHXwoi+TY8SZpmuUsJwGP+DNIgYh2jOjzryYU42
+         9l0BBUwM4/g0KqITrGwNQsfOYu/CjT9TWA58cMlVYcNuWueKtWmX74gJGK+9JkeaK+
+         p7EaZWyZDnonLlDynN5bQe4DoT5oDzx9gpbuCNEw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dima Ruinskiy <dima.ruinskiy@intel.com>,
-        Sasha Neftin <sasha.neftin@intel.com>,
-        Naama Meir <naamax.meir@linux.intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        stable@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 14/62] igc: Fix infinite loop in release_swfw_sync
+Subject: [PATCH 5.17 059/146] drm/msm/gpu: Remove mutex from wait_event condition
 Date:   Tue, 26 Apr 2022 10:20:54 +0200
-Message-Id: <20220426081737.635922091@linuxfoundation.org>
+Message-Id: <20220426081751.726569557@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
-References: <20220426081737.209637816@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,47 +53,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sasha Neftin <sasha.neftin@intel.com>
+From: Rob Clark <robdclark@chromium.org>
 
-[ Upstream commit 907862e9aef75bf89e2b265efcc58870be06081e ]
+[ Upstream commit 7242795d520d3fb48e005e3c96ba54bb59639d6e ]
 
-An infinite loop may occur if we fail to acquire the HW semaphore,
-which is needed for resource release.
-This will typically happen if the hardware is surprise-removed.
-At this stage there is nothing to do, except log an error and quit.
+The mutex wasn't really protecting anything before.  Before the previous
+patch we could still be racing with the scheduler's kthread, as that is
+not necessarily frozen yet.  Now that we've parked the sched threads,
+the only race is with jobs retiring, and that is harmless, ie.
 
-Fixes: c0071c7aa5fe ("igc: Add HW initialization code")
-Suggested-by: Dima Ruinskiy <dima.ruinskiy@intel.com>
-Signed-off-by: Sasha Neftin <sasha.neftin@intel.com>
-Tested-by: Naama Meir <naamax.meir@linux.intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+Link: https://lore.kernel.org/r/20220310234611.424743-4-robdclark@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/igc/igc_i225.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/msm/adreno/adreno_device.c | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/igc/igc_i225.c b/drivers/net/ethernet/intel/igc/igc_i225.c
-index ed5d09c11c38..79252ca9e213 100644
---- a/drivers/net/ethernet/intel/igc/igc_i225.c
-+++ b/drivers/net/ethernet/intel/igc/igc_i225.c
-@@ -156,8 +156,15 @@ void igc_release_swfw_sync_i225(struct igc_hw *hw, u16 mask)
+diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
+index b93de79000e1..e8a8240a6868 100644
+--- a/drivers/gpu/drm/msm/adreno/adreno_device.c
++++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
+@@ -608,22 +608,13 @@ static int adreno_runtime_resume(struct device *dev)
+ 	return gpu->funcs->pm_resume(gpu);
+ }
+ 
+-static int active_submits(struct msm_gpu *gpu)
+-{
+-	int active_submits;
+-	mutex_lock(&gpu->active_lock);
+-	active_submits = gpu->active_submits;
+-	mutex_unlock(&gpu->active_lock);
+-	return active_submits;
+-}
+-
+ static int adreno_runtime_suspend(struct device *dev)
  {
- 	u32 swfw_sync;
+ 	struct msm_gpu *gpu = dev_to_gpu(dev);
+ 	int remaining;
  
--	while (igc_get_hw_semaphore_i225(hw))
--		; /* Empty */
-+	/* Releasing the resource requires first getting the HW semaphore.
-+	 * If we fail to get the semaphore, there is nothing we can do,
-+	 * except log an error and quit. We are not allowed to hang here
-+	 * indefinitely, as it may cause denial of service or system crash.
-+	 */
-+	if (igc_get_hw_semaphore_i225(hw)) {
-+		hw_dbg("Failed to release SW_FW_SYNC.\n");
-+		return;
-+	}
- 
- 	swfw_sync = rd32(IGC_SW_FW_SYNC);
- 	swfw_sync &= ~mask;
+ 	remaining = wait_event_timeout(gpu->retire_event,
+-				       active_submits(gpu) == 0,
++				       gpu->active_submits == 0,
+ 				       msecs_to_jiffies(1000));
+ 	if (remaining == 0) {
+ 		dev_err(dev, "Timeout waiting for GPU to suspend\n");
 -- 
 2.35.1
 

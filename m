@@ -2,66 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C05A55106C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 20:23:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2BC5106CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 20:24:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351134AbiDZS0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 14:26:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54326 "EHLO
+        id S1351205AbiDZS1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 14:27:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243582AbiDZS0P (ORCPT
+        with ESMTP id S243844AbiDZS1q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 14:26:15 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A5414A530
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 11:23:06 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id a15so18702827pfv.11
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 11:23:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=DquimjI7WBuJalAU6LAJx471lCu4EEpIqSRlDhHHfPk=;
-        b=ksL5p3RigFZPhFG5oJwg4nU6THP3LTCHRX8Zhod9tzl8bRCpVgUwGSb3NKpnBJidXJ
-         cl7poYpk4vYTCJBoBb8jogM71gpJeVk1wFXGmFNqDRX8Ae8CFHNWUFjlLD0p7RwVTpc4
-         RYogqvF1zA7oTpJ6/hr0xgXIBjwfkby0JjKFUOXkjHaZgczJEBpX1EpyEzXmoBqlYmb2
-         DPWgnPFEoeFSKXzCdUxbG1sjapyz/P1M9U+0XW+HdR6ZqRNtn/yfgXMruWJVLYkjSp1U
-         vvPF3dshkj87x6ZlgecYqTO9/J5pC8JiStHsIU0AuO34/i8s5/X4olMU7IakGfFl3rA/
-         tFkw==
+        Tue, 26 Apr 2022 14:27:46 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC9D15A42D;
+        Tue, 26 Apr 2022 11:24:38 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-e2fa360f6dso20280927fac.2;
+        Tue, 26 Apr 2022 11:24:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=DquimjI7WBuJalAU6LAJx471lCu4EEpIqSRlDhHHfPk=;
-        b=wKAwe1Xo9WhsQnZ1+I+6j4pp6QcLmLgZHOggtpDlL8GusMQDP3CLR2D89znp5VzZYj
-         rKTNu8B/OnA7/7HYpMaWP7v/tc51KF1Ul9Re6w6HsjhMdehSTyTrHboKJgP355sGAfCV
-         Atp4qHHVdvTfGDv/NIuwOvmQ0hXgcxC2uYjySw0b1S624fiL05nGeSWepMiIwmFsGu3a
-         vjjrQVtB9Z389ucHsqL9MhjHsdppaV0Qj0qZ4LOsy4lYw55Hvw28eiDulWCKmjE2V6S6
-         +3D4FT5rn2/2s2EnWUi8mvzEIQbpVz1KhjsTSwbTMwFg/NBMAtEC6pw3tXcM97WiJ18H
-         F+2Q==
-X-Gm-Message-State: AOAM533nRKQjBE7n6KwFhJkXzqL5pPryOfNjoKNKf/AOBevGtu+un3vZ
-        TEOUXN5sDrR2beKtDh0vbJkWvbN+TvaUzVvmXF5X7NoUaqnfZg==
-X-Google-Smtp-Source: ABdhPJzlxLx6CVU9e5P9X9+6Dk1okldpaPNZtYs2ldyopx2xJvWGYKzTtkg4w1ivaFWYsO7uYj0paT4IXcYIOwM7baw=
-X-Received: by 2002:a63:1117:0:b0:399:2df0:7fb9 with SMTP id
- g23-20020a631117000000b003992df07fb9mr21133502pgl.40.1650997386125; Tue, 26
- Apr 2022 11:23:06 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CvMUDbRmBMULaPrSvy29y8lkb941E3y96qWPYQTdY/Q=;
+        b=Vd2GKGuigIDYqeSthr1XHlGrWmE8278vq0hSC1l9niX2p46MO//wGYhttHa2/tZF2h
+         1GNBAFuJatlePjjOMFIoZaXjMGEdDa2jJGz6idgNO5xfQCF0kvZ7Ql7jKUYzeiGjUvgg
+         5IIQsGpegiT8cauecWPsZCt5fr/rWahKzmZyF0AcAfvHfsH78J8wYH1vLp5XwdrpWonH
+         zdJ2Z2N4X5aV1Zj30sGsDE2DgTeajmCX1uWxCE6K7Sk7rK9AdEpB8F7Jks/pAJtWObr5
+         58TC+5RI8H5VE50BndjjRwR/AT0xta+vBpp7MTXlRB9Niq5GdTt+9CWhx/9hOojvw2eb
+         FGvw==
+X-Gm-Message-State: AOAM531IF5HzSqdMCQVZepCxnygbwl7Skz8PyHZDANJolTZe789xTpdl
+        JDraSFSSHAW4WRVZ4NEKpw==
+X-Google-Smtp-Source: ABdhPJzKDpE4dIDRP2/fyRgrEUEF3RYpW6ouwQg5y1NvFIfAwEReF5gm9xUP3qw/cFdBm6ItJeP73w==
+X-Received: by 2002:a05:6870:51cc:b0:e1:e6ee:448f with SMTP id b12-20020a05687051cc00b000e1e6ee448fmr9706297oaj.136.1650997478038;
+        Tue, 26 Apr 2022 11:24:38 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id d10-20020a9d51ca000000b00605522f0739sm5225378oth.41.2022.04.26.11.24.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 11:24:37 -0700 (PDT)
+Received: (nullmailer pid 2303384 invoked by uid 1000);
+        Tue, 26 Apr 2022 18:24:36 -0000
+Date:   Tue, 26 Apr 2022 13:24:36 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Cc:     hsinyi@chromium.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Ryder Lee <ryder.lee@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        linux-mediatek@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v5 1/2] dt-bindings: arm: Add compatible for Mediatek
+ MT8186
+Message-ID: <Ymg45G1QkKY9KkqQ@robh.at.kernel.org>
+References: <20220426125046.17311-1-allen-kh.cheng@mediatek.com>
+ <20220426125046.17311-2-allen-kh.cheng@mediatek.com>
 MIME-Version: 1.0
-References: <20220426123839.GF163591@kunlun.suse.cz> <CAPcyv4j66HAE_x-eAHQR71pNyR0mk5b463S6OfeokLzZHq5ezw@mail.gmail.com>
- <20220426161435.GH163591@kunlun.suse.cz> <CAPcyv4iG4L3rA3eX-H=6nVkwhO2FGqDCbQHB2Lv_gLb+jy3+bw@mail.gmail.com>
- <20220426163834.GI163591@kunlun.suse.cz> <CAPcyv4jUj3v+4Sf=1i5EjxTeX9Ur65Smib-vkuaBdKYjUrh7yA@mail.gmail.com>
- <20220426180958.GJ163591@kunlun.suse.cz>
-In-Reply-To: <20220426180958.GJ163591@kunlun.suse.cz>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Tue, 26 Apr 2022 11:22:55 -0700
-Message-ID: <CAPcyv4hr1LDaAXCOrfub1eys=OcQXAPYv2dHGzwbY7pt=_fKZQ@mail.gmail.com>
-Subject: Re: ndctl tests usable?
-To:     =?UTF-8?Q?Michal_Such=C3=A1nek?= <msuchanek@suse.de>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220426125046.17311-2-allen-kh.cheng@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,68 +71,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 11:10 AM Michal Such=C3=A1nek <msuchanek@suse.de> w=
-rote:
->
-> On Tue, Apr 26, 2022 at 09:47:19AM -0700, Dan Williams wrote:
-> > On Tue, Apr 26, 2022 at 9:43 AM Michal Such=C3=A1nek <msuchanek@suse.de=
-> wrote:
-> > >
-> > > On Tue, Apr 26, 2022 at 09:32:24AM -0700, Dan Williams wrote:
-> > > > On Tue, Apr 26, 2022 at 9:15 AM Michal Such=C3=A1nek <msuchanek@sus=
-e.de> wrote:
-> > > > >
-> > > > > On Tue, Apr 26, 2022 at 08:51:25AM -0700, Dan Williams wrote:
-> > > > > > On Tue, Apr 26, 2022 at 5:39 AM Michal Such=C3=A1nek <msuchanek=
-@suse.de> wrote:
-> > > > > > >
-> ...
-> > > >
-> > > > The modinfo just tells you what modules are available, but it does =
-not
-> > > > necessarily indicate which modules are actively loaded in the syste=
-m
-> > > > which is what ndctl_test_init() validates.
-> > >
-> > > Isn't what modinfo lists also what modrobe loads?
-> >
-> > It shows what modprobe would load on the next invocation, but
-> > sometimes when nfit_test fails it's because the initramfs or something
-> > else loaded the modules without respecting the extra/ (or updates/ in
-> > your case) override modules.
-> >
-> > > There isn't any pmem so I don't see why production modules would be
-> > > loaded before the test modules are installed. Unloading the modules
-> > > first does not really make any difference.
-> >
-> > Ok, my first guess was wrong... would need more debug to see what
-> > those other skip tests are complaining about.
->
-> There was also missing parted and hostname command.
->
-> However, the nfit.ko is detected as production even when I remove all
-> the production modules just in case. lsmod confirms that the nvdimm
-> modules are not loaded before the test.
->
-> Maybe something goes wrong with the test module build?
->
-> It is very fragile and requires complete kernel source for each
-> configuration built. See below for the package
->
-> https://build.opensuse.org/package/show/home:michals/nfit_test
->
-> Attaching the log of test run which does not report any missing tools,
-> only complains about nfit.ko being production.
+On Tue, 26 Apr 2022 20:50:45 +0800, Allen-KH Cheng wrote:
+> This commit adds dt-binding documentation for the Mediatek MT8186
+> reference board.
+> 
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> ---
+>  Documentation/devicetree/bindings/arm/mediatek.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
 
-Oh... something silly, ndctl_test_init() assumes that the out-of-tree
-module directory is always "/lib/modules/$(uname -r)/extra"
-
-                if (!strstr(path, "/extra/")) {
-                        log_err(&log_ctx, "%s.ko: appears to be
-production version: %s\n",
-                                        name, path);
-                        break;
-                }
-
-Looks like a build configuration variable is needed there to allow for
-"updates/".
+Acked-by: Rob Herring <robh@kernel.org>

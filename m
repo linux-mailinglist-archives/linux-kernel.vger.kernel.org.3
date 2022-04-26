@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC3450F6CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:59:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13DD550F8C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346395AbiDZJAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56568 "EHLO
+        id S1347548AbiDZJYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:24:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346907AbiDZIp3 (ORCPT
+        with ESMTP id S1346482AbiDZJAl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:45:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F4012AEC;
-        Tue, 26 Apr 2022 01:36:35 -0700 (PDT)
+        Tue, 26 Apr 2022 05:00:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852553EF20;
+        Tue, 26 Apr 2022 01:43:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 54995B81CFE;
-        Tue, 26 Apr 2022 08:36:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 596C0C385A0;
-        Tue, 26 Apr 2022 08:36:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 02D8760EC7;
+        Tue, 26 Apr 2022 08:43:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6A72C385A4;
+        Tue, 26 Apr 2022 08:43:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962193;
-        bh=Zg0RKzNVnX/cBhF2uFK+M+gvp7hkVVGk/9ryYNxE078=;
+        s=korg; t=1650962591;
+        bh=GNFNL3ZhbkhaIyz+MakpSwSz+Tb6bvaV12l8xr0FWJU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vjx8WOHBqKF/+j3yE2Np1JMshPG1ZuyD7H9EqitDepG8XZmRWTrPqQ+PIQNnTfAfv
-         SjintrtjbY7oowKbd2elZM2kYdlCCdIjl8oNcOJ976r+24YGGjrHa9xANJ1ZBYzLCs
-         U0OID5RJ49Op3WQMbrOkRLB9GqMAoZG2jvs9l724=
+        b=ddJN76vKk6nD2zbeHmBRcpZU5YSQwxIm0ZhotNujTc/79KPLwIjurINsVUbzuka7G
+         LKunG4I6kRC3EPygIZdW0MzxLxOKMXJl5nW3mcQsYIwlGXMQ0QBugsPoZAyOPoNmae
+         /M6WAP73UcChqwSflVHcHTbYUHf+viPlF6AjnJYo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        stable@vger.kernel.org, Dima Ruinskiy <dima.ruinskiy@intel.com>,
+        Sasha Neftin <sasha.neftin@intel.com>,
+        Naama Meir <naamax.meir@linux.intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 017/124] ASoC: atmel: Remove system clock tree configuration for at91sam9g20ek
-Date:   Tue, 26 Apr 2022 10:20:18 +0200
-Message-Id: <20220426081747.792797472@linuxfoundation.org>
+Subject: [PATCH 5.17 024/146] igc: Fix infinite loop in release_swfw_sync
+Date:   Tue, 26 Apr 2022 10:20:19 +0200
+Message-Id: <20220426081750.746074555@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
-References: <20220426081747.286685339@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,140 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Sasha Neftin <sasha.neftin@intel.com>
 
-[ Upstream commit c775cbf62ed4911e4f0f23880f01815753123690 ]
+[ Upstream commit 907862e9aef75bf89e2b265efcc58870be06081e ]
 
-The MCLK of the WM8731 on the AT91SAM9G20-EK board is connected to the
-PCK0 output of the SoC, intended in the reference software to be supplied
-using PLLB and programmed to 12MHz. As originally written for use with a
-board file the audio driver was responsible for configuring the entire tree
-but in the conversion to the common clock framework the registration of
-the named pck0 and pllb clocks was removed so the driver has failed to
-instantiate ever since.
+An infinite loop may occur if we fail to acquire the HW semaphore,
+which is needed for resource release.
+This will typically happen if the hardware is surprise-removed.
+At this stage there is nothing to do, except log an error and quit.
 
-Since the WM8731 driver has had support for managing a MCLK provided via
-the common clock framework for some time we can simply drop all the clock
-management code from the machine driver other than configuration of the
-sysclk rate, the CODEC driver still respects that configuration from the
-machine driver.
-
-Fixes: ff78a189b0ae55f ("ARM: at91: remove old at91-specific clock driver")
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Reviewed-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-Link: https://lore.kernel.org/r/20220325154241.1600757-2-broonie@kernel.org
+Fixes: c0071c7aa5fe ("igc: Add HW initialization code")
+Suggested-by: Dima Ruinskiy <dima.ruinskiy@intel.com>
+Signed-off-by: Sasha Neftin <sasha.neftin@intel.com>
+Tested-by: Naama Meir <naamax.meir@linux.intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/atmel/sam9g20_wm8731.c | 61 --------------------------------
- 1 file changed, 61 deletions(-)
+ drivers/net/ethernet/intel/igc/igc_i225.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/atmel/sam9g20_wm8731.c b/sound/soc/atmel/sam9g20_wm8731.c
-index 8a55d59a6c2a..d243de5f23dc 100644
---- a/sound/soc/atmel/sam9g20_wm8731.c
-+++ b/sound/soc/atmel/sam9g20_wm8731.c
-@@ -46,35 +46,6 @@
-  */
- #undef ENABLE_MIC_INPUT
- 
--static struct clk *mclk;
--
--static int at91sam9g20ek_set_bias_level(struct snd_soc_card *card,
--					struct snd_soc_dapm_context *dapm,
--					enum snd_soc_bias_level level)
--{
--	static int mclk_on;
--	int ret = 0;
--
--	switch (level) {
--	case SND_SOC_BIAS_ON:
--	case SND_SOC_BIAS_PREPARE:
--		if (!mclk_on)
--			ret = clk_enable(mclk);
--		if (ret == 0)
--			mclk_on = 1;
--		break;
--
--	case SND_SOC_BIAS_OFF:
--	case SND_SOC_BIAS_STANDBY:
--		if (mclk_on)
--			clk_disable(mclk);
--		mclk_on = 0;
--		break;
--	}
--
--	return ret;
--}
--
- static const struct snd_soc_dapm_widget at91sam9g20ek_dapm_widgets[] = {
- 	SND_SOC_DAPM_MIC("Int Mic", NULL),
- 	SND_SOC_DAPM_SPK("Ext Spk", NULL),
-@@ -135,7 +106,6 @@ static struct snd_soc_card snd_soc_at91sam9g20ek = {
- 	.owner = THIS_MODULE,
- 	.dai_link = &at91sam9g20ek_dai,
- 	.num_links = 1,
--	.set_bias_level = at91sam9g20ek_set_bias_level,
- 
- 	.dapm_widgets = at91sam9g20ek_dapm_widgets,
- 	.num_dapm_widgets = ARRAY_SIZE(at91sam9g20ek_dapm_widgets),
-@@ -148,7 +118,6 @@ static int at91sam9g20ek_audio_probe(struct platform_device *pdev)
+diff --git a/drivers/net/ethernet/intel/igc/igc_i225.c b/drivers/net/ethernet/intel/igc/igc_i225.c
+index 66ea566488d1..59d5c467ea6e 100644
+--- a/drivers/net/ethernet/intel/igc/igc_i225.c
++++ b/drivers/net/ethernet/intel/igc/igc_i225.c
+@@ -156,8 +156,15 @@ void igc_release_swfw_sync_i225(struct igc_hw *hw, u16 mask)
  {
- 	struct device_node *np = pdev->dev.of_node;
- 	struct device_node *codec_np, *cpu_np;
--	struct clk *pllb;
- 	struct snd_soc_card *card = &snd_soc_at91sam9g20ek;
- 	int ret;
+ 	u32 swfw_sync;
  
-@@ -162,31 +131,6 @@ static int at91sam9g20ek_audio_probe(struct platform_device *pdev)
- 		return -EINVAL;
- 	}
+-	while (igc_get_hw_semaphore_i225(hw))
+-		; /* Empty */
++	/* Releasing the resource requires first getting the HW semaphore.
++	 * If we fail to get the semaphore, there is nothing we can do,
++	 * except log an error and quit. We are not allowed to hang here
++	 * indefinitely, as it may cause denial of service or system crash.
++	 */
++	if (igc_get_hw_semaphore_i225(hw)) {
++		hw_dbg("Failed to release SW_FW_SYNC.\n");
++		return;
++	}
  
--	/*
--	 * Codec MCLK is supplied by PCK0 - set it up.
--	 */
--	mclk = clk_get(NULL, "pck0");
--	if (IS_ERR(mclk)) {
--		dev_err(&pdev->dev, "Failed to get MCLK\n");
--		ret = PTR_ERR(mclk);
--		goto err;
--	}
--
--	pllb = clk_get(NULL, "pllb");
--	if (IS_ERR(pllb)) {
--		dev_err(&pdev->dev, "Failed to get PLLB\n");
--		ret = PTR_ERR(pllb);
--		goto err_mclk;
--	}
--	ret = clk_set_parent(mclk, pllb);
--	clk_put(pllb);
--	if (ret != 0) {
--		dev_err(&pdev->dev, "Failed to set MCLK parent\n");
--		goto err_mclk;
--	}
--
--	clk_set_rate(mclk, MCLK_RATE);
--
- 	card->dev = &pdev->dev;
- 
- 	/* Parse device node info */
-@@ -230,9 +174,6 @@ static int at91sam9g20ek_audio_probe(struct platform_device *pdev)
- 
- 	return ret;
- 
--err_mclk:
--	clk_put(mclk);
--	mclk = NULL;
- err:
- 	atmel_ssc_put_audio(0);
- 	return ret;
-@@ -242,8 +183,6 @@ static int at91sam9g20ek_audio_remove(struct platform_device *pdev)
- {
- 	struct snd_soc_card *card = platform_get_drvdata(pdev);
- 
--	clk_disable(mclk);
--	mclk = NULL;
- 	snd_soc_unregister_card(card);
- 	atmel_ssc_put_audio(0);
- 
+ 	swfw_sync = rd32(IGC_SW_FW_SYNC);
+ 	swfw_sync &= ~mask;
 -- 
 2.35.1
 

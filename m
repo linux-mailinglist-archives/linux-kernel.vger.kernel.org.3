@@ -2,91 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D616510058
+	by mail.lfdr.de (Postfix) with ESMTP id EBFB451005A
 	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 16:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351577AbiDZO0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 10:26:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47298 "EHLO
+        id S1351595AbiDZO0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 10:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347196AbiDZO0E (ORCPT
+        with ESMTP id S1351588AbiDZO00 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 10:26:04 -0400
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B1E18E18;
-        Tue, 26 Apr 2022 07:22:57 -0700 (PDT)
-Received: by mail-oi1-f170.google.com with SMTP id z8so20829165oix.3;
-        Tue, 26 Apr 2022 07:22:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xvzda8Pfpd3wwPcLRsSY8ulA8iZIYiMmmNvBbB50ZBo=;
-        b=eMtzTu+9uo5RpoE29cwdTplDs7/1J23yJE9Pfj9OMPuzbbx+2yLtEYyr2oi2JWlcwK
-         JnF1dVf0VvgaeP9vlxr/bRvjQWsOJEJmffgAcFlsRagXKFtaC4gYAQfWOXV5zFRcql4a
-         mS5DBqzkUxcV/eE1nRqIqtTQy2JLhO5fwkFrok57mckE6EnqUxV+mm2Q3u+vGsivyN5C
-         IMkF9R+jw25h4Zdy8RRp/A5jz6dRgGOEXuspMC49uHQ3AVlX33wJ7TMdAchfHSrjYqA6
-         xjArKKbB7uO1DlCn5Xlk+isirOxoN6j5U5GytQJrZGB52YbIT7nHAQsMqZPSTvBnlA7H
-         eSwA==
-X-Gm-Message-State: AOAM531qEZiePkPLLikWNob41Mv/KZ2XXKph6xyNORB+/3wiC+IS+8Kr
-        xLTU3NJ9OqZRoLfs2g0jJmPoCn70dg==
-X-Google-Smtp-Source: ABdhPJxhcjFhGIM6Fai/2gb+tvQSLuzGNZLP5mUuf7pSQ1nmqeeR538p3fZzoZhebGXVBtICKYmQTw==
-X-Received: by 2002:a54:4f04:0:b0:325:3659:ee90 with SMTP id e4-20020a544f04000000b003253659ee90mr4880405oiy.199.1650982976502;
-        Tue, 26 Apr 2022 07:22:56 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s6-20020a4ae546000000b0032480834193sm5599150oot.46.2022.04.26.07.22.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 07:22:56 -0700 (PDT)
-Received: (nullmailer pid 1917494 invoked by uid 1000);
-        Tue, 26 Apr 2022 14:22:55 -0000
-Date:   Tue, 26 Apr 2022 09:22:55 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: eeprom/at24: Add samsung,s524ad0xd1
- compatible
-Message-ID: <YmgAP5yrHWJESq8N@robh.at.kernel.org>
-References: <20220422192355.2597523-1-robh@kernel.org>
- <469d7ac0-7cf6-af91-7e24-1d9df88c9221@linaro.org>
+        Tue, 26 Apr 2022 10:26:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052B847AED
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 07:23:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9A265B82047
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 14:23:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E0EEC385AA;
+        Tue, 26 Apr 2022 14:23:14 +0000 (UTC)
+Date:   Tue, 26 Apr 2022 10:23:12 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Jakob Koschel <jakobkoschel@gmail.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@kernel.org>,
+        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Subject: Re: [PATCH v2 2/4] tracing: Remove usage of list iterator variable
+ after the loop
+Message-ID: <20220426102312.70319297@gandalf.local.home>
+In-Reply-To: <20220402103341.1763932-3-jakobkoschel@gmail.com>
+References: <20220402103341.1763932-1-jakobkoschel@gmail.com>
+        <20220402103341.1763932-3-jakobkoschel@gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <469d7ac0-7cf6-af91-7e24-1d9df88c9221@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 23, 2022 at 08:44:21PM +0200, Krzysztof Kozlowski wrote:
-> On 22/04/2022 21:23, Rob Herring wrote:
-> > The samsung,s524ad0xd1 compatible is in use, but not documented. According
-> > to arch/arm/mach-s3c/mach-smdk6410.c, the samsung,s524ad0xd1 is compatible
-> > with the 24c128.
-> > 
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > ---
-> >  Documentation/devicetree/bindings/eeprom/at24.yaml | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > 
-> 
-> The compatible - without 24c128 fallback - is used also in
-> arch/arm/boot/dts/exynos5250-smdk5250.dts and
-> Documentation/devicetree/bindings/i2c/samsung,s3c2410-i2c.yaml, so these
-> files should be fixed as well.
+On Sat,  2 Apr 2022 12:33:39 +0200
+Jakob Koschel <jakobkoschel@gmail.com> wrote:
 
-The dts file I was aware of and I leave that to the Exynos 
-maintainers/users. :)
+This patch crashed in my testing.
 
-For some reason samsung,s3c2410-i2c.yaml is not getting a warning. I'll 
-have to investigate.
+> @@ -1734,14 +1734,16 @@ static int subsystem_open(struct inode *inode, struct file *filp)
+>  	/* Make sure the system still exists */
+>  	mutex_lock(&event_mutex);
+>  	mutex_lock(&trace_types_lock);
+> -	list_for_each_entry(tr, &ftrace_trace_arrays, list) {
+> -		list_for_each_entry(dir, &tr->systems, list) {
+> -			if (dir == inode->i_private) {
+> +	list_for_each_entry(iter_tr, &ftrace_trace_arrays, list) {
+> +		list_for_each_entry(iter_dir, &iter_tr->systems, list) {
+> +			if (iter_dir == inode->i_private) {
+>  				/* Don't open systems with no events */
+> -				if (dir->nr_events) {
+> +				if (iter_dir->nr_events) {
+>  					__get_system_dir(dir);
+>  					system = dir->subsystem;
 
-Rob
+					system = NULL->subsystem
+
+
+>  				}
+> +				tr = iter_tr;
+> +				dir = iter_dir;
+
+But do not change that dir, move the setting above it. That is:
+
+				tr = iter_tr;
+				dir = iter_dir;
+				if (iter_dir->nr_events) {
+ 					__get_system_dir(dir);
+ 					system = dir->subsystem;
+				}
+
+-- Steve
+
+				
+>  				goto exit_loop;
+>  			}
+>  		}

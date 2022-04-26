@@ -2,100 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B95450FEAF
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:16:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4090A50FEB2
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:17:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350129AbiDZNTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 09:19:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33836 "EHLO
+        id S1350807AbiDZNVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 09:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347403AbiDZNTV (ORCPT
+        with ESMTP id S1350836AbiDZNU4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 09:19:21 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E889232A;
-        Tue, 26 Apr 2022 06:16:09 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id e2so19152286wrh.7;
-        Tue, 26 Apr 2022 06:16:09 -0700 (PDT)
+        Tue, 26 Apr 2022 09:20:56 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F6EE1CD5
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 06:17:49 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id k27so7118940edk.4
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 06:17:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BRODyzlBTk01xvrOEks740Gzbq9VjDsaK05Mtw4QOdU=;
-        b=LkeeL3FcpVQHWGI4HG20tlBjq2GniD6HYqV+WWnn/V1HI7fUuchcwZqYj9rSfIBGyw
-         8Rzu/oxzUwMhZeGuG/B//W9XeA4L4Iw23ar+pBMj22HqAws5J0z9AT4UvTFyLyel+lbt
-         WvCU5G8IqHv9RP8mCuperVGqWyRjCu0r+Vx/pBIC0WPc9sTuQkvppcdDA/9LrPDE+BLj
-         eqkfdCHIgrtLJww7kJHM2nAjMVYxH2+oYxSQIyp/vAZVhnH+5WqWNzz3FDQOS7zTipx4
-         3YNQ+X5zEsUafrlVLZ96beo7D4sFAUfBgtTQrgL9cidnD0bBksiZnQD8Yzz33fRy8oDg
-         A9Pg==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=6+CtorLBJcBw4FcYALJrOP7eOH4S6+CQQohbvLBDoho=;
+        b=Kv/kGnJI+LuGvE3p+VXDR+AmVcS29lMEQRMbR83w5yuX72RUfZUQfNjlHoPJyPUfPT
+         8tri4gDOfFBwCXzjKDoEUxGZuxjNxqeAz8Up0j4TMJRt1eGbDPTLa+VB7mXh3SQW1yKh
+         GrZUFxOP+oxGCSBP+Efy7AMPxCG9kutFVv4TQuLGbhMWC/uFsVzuCRWEVtaq73Itf3bX
+         NGXsqU6HqMLACF1O8xLDK2E6HXGTdFhsaVJAsjzBN/svoX+IFt/nnqFRKZFkuOnT9R4b
+         t7zPzkIvVKspVFB82IwNGoOYQ+Ad1uinmnawJZ1eqc4Bx9bIO/aKzurz1WI3DKks16Gx
+         humg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BRODyzlBTk01xvrOEks740Gzbq9VjDsaK05Mtw4QOdU=;
-        b=DUPjwu4FuLqSR01mZWymiuTrsgaQkKVbpMyw5J4O4z/YrGTZX1klqLi15vPIJgoytq
-         sNvxOAuVL0N5UXw/ocbQzzaOAWRxaQ33Yh/E7y/7A+wSl7/iN+8JK9yajD4ra/qNx76g
-         v3cQrb8tgyuYWygj5X2ZoFgt3DOWkhWsj15OAQaCDq33lq/tAjzxzA+MGYuRPBEKmTG2
-         UGH6RZLcbTozuf1xVv/TZiFAcuZdkeU5AtPAtVjBNUUlA6IOKzRk2CywsXmCHv6TXY2u
-         1RBmNXfxJxp9ql5hPv7EoGs8D64ORD2xu6WosEksfh9clyz8A9NWt/0TOWgRrsxBUQVr
-         oepQ==
-X-Gm-Message-State: AOAM533T09nk5SvPwC2aRnIUtMxModfpQHTvNudXkV6i137gTTr1nnzM
-        ANW+MEwxUVk8VGb1T5Hc+L74lNkxZ2Ceiw==
-X-Google-Smtp-Source: ABdhPJyb+06Sy+02im/xCvRnlgxLNVxjDn0E6dnwv0XselqjlFHkvP5mN41L7ogSN49wEZx7yHgQtw==
-X-Received: by 2002:a05:6000:86:b0:20a:d7be:e09b with SMTP id m6-20020a056000008600b0020ad7bee09bmr10430910wrx.398.1650978968341;
-        Tue, 26 Apr 2022 06:16:08 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id bg20-20020a05600c3c9400b0037fa5c422c8sm14723968wmb.48.2022.04.26.06.16.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 06:16:07 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Len Brown <lenb@kernel.org>, Chen Yu <yu.c.chen@intel.com>,
-        linux-pm@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] tools/power turbostat: Fix file pointer leak
-Date:   Tue, 26 Apr 2022 14:16:07 +0100
-Message-Id: <20220426131607.1520483-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=6+CtorLBJcBw4FcYALJrOP7eOH4S6+CQQohbvLBDoho=;
+        b=Tbv+PlcGS5YYUZI1xCl6+b4bhT1KiPGFdG0/smKBsJzb3mkEzfTQAsCk4euBez4EYV
+         +AjqOl8hJ3N2iVcqQ6WpWtSnjhP9nQNc1l2cwkofHDahTkzgrx6EJHOaXFpb2qev/wYW
+         f4xrpLg/kJRFf2WbOjdf8yrJ4Dcp4Jmm3U5nujk2U2AmD8oopRSCTxy0YI6ulvDpPkmR
+         qnpWjsnU9aTwXZu/i/yQOx7T/bpwPdlG06en6mXSaZTgEBBafLQl/kuZlFxePJSaR3/4
+         s11ONZOY6aQKcbSiUT477UQb9yrwBjCS60yuzg0hjPYWGVMk75SwOCUQmyctnY4qa9Ov
+         2pfQ==
+X-Gm-Message-State: AOAM531DxoM2zGd/R9jGsroSBvL2+MwQmXNGOx81j+WWwSXfSDNmoylh
+        Cv4ktQXo/jX/gY826CNcdRFtGqKTTwhlooq4FwQ=
+X-Google-Smtp-Source: ABdhPJwohow9WYkrnlI1/sfWITINs49EqJoS1E0MC9z7HMJPQgr+rTLYIklUzj8JZS/ae04IrG9J+3bVN4/klnMZcsQ=
+X-Received: by 2002:a05:6402:1813:b0:425:adb9:4abd with SMTP id
+ g19-20020a056402181300b00425adb94abdmr24935375edy.278.1650979067622; Tue, 26
+ Apr 2022 06:17:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Received: by 2002:a17:907:7b99:b0:6f3:6a35:ee4f with HTTP; Tue, 26 Apr 2022
+ 06:17:46 -0700 (PDT)
+Reply-To: adriannurse12@yahoo.com
+From:   "Barr.Adrian Nurse" <offce2022@gmail.com>
+Date:   Tue, 26 Apr 2022 13:17:46 +0000
+Message-ID: <CAEu=3H+LWJXV+-ztgurtb0v5nbcH633+Ue-A3NJdrc-t0WSANw@mail.gmail.com>
+Subject: Re:
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5007]
+        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:52a listed in]
+        [list.dnswl.org]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [offce2022[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [adriannurse12[at]yahoo.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [offce2022[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently if a fscanf fails then an early return leaks an open
-file pointer. Fix this by fclosing the file before the return.
-Detected using static analysis with cppcheck:
+Greetings Dear Friend,
 
-tools/power/x86/turbostat/turbostat.c:2039:3: error: Resource leak: fp [resourceLeak]
+How are you doing and how is family? i mail to know if we can make a
+transact together on a mutual business that we both can benefit in it?
 
-Fixes: eae97e053fe3 ("tools/power turbostat: Support thermal throttle count print")
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- tools/power/x86/turbostat/turbostat.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Please do kindly revert back to me for more and better communication regard
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index e6779f599a8e..db431b31c4df 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -2035,9 +2035,9 @@ int get_core_throt_cnt(int cpu, unsigned long long *cnt)
- 	if (!fp)
- 		return -1;
- 	ret = fscanf(fp, "%lld", &tmp);
-+	fclose(fp);
- 	if (ret != 1)
- 		return -1;
--	fclose(fp);
- 	*cnt = tmp;
- 
- 	return 0;
--- 
-2.35.1
+I'll wait to read from you upon receipt of this message
 
+Thanks
+
+adriannurse12@yahoo.com
+
+Barr.Adrian Nurse

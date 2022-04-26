@@ -2,104 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D48275100F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 16:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96822510106
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 16:54:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351743AbiDZOyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 10:54:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40556 "EHLO
+        id S1351760AbiDZO5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 10:57:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243885AbiDZOyK (ORCPT
+        with ESMTP id S1347212AbiDZO45 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 10:54:10 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA2B3C4AB
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 07:51:02 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id 88-20020a9d0ee1000000b005d0ae4e126fso13205165otj.5
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 07:51:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mjUtCSyBnFk8A3kTILIrriQceuNIreHcu/IG7ob7Yjw=;
-        b=eEihIfAYOPixN4pXa9pV6rApPJ/mm+Ff36ssgjFVVtp6lXlr8xUkUFSXFY2R5btYUh
-         e0bPxX4RJNBOBvjBM5mH0kDJOuNImtnNAUiqKNLl1ts5txepBbOJS0W+CxxJ7IqBj5VY
-         mWVQN8+pTokpaJ8lG7CWp+dPeEyOulLirq4omYYkDQxB24tGSJmjVU40upQrW4VZcu2s
-         ij4AqBttsogwiH4XU2M2l9Dw6xVQLoAc4G5knFHo3/TNUKhJTJgABL5kngE/mPK9Nnw9
-         TlL2svtdIEJAh7kW/Xseb/5gzLETsWfkAL0LcBCzi8v1JEEc8rtYynsAuItgiOfC+3gl
-         7vYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mjUtCSyBnFk8A3kTILIrriQceuNIreHcu/IG7ob7Yjw=;
-        b=giCdh29eur5zp3bi68KIkFb2i3p2rP1zG8Co7gwT2pT1JRFGiwvxq4yi+xO4V0jLvl
-         xXpVk3YUV1Zdy4fsUIb5JEUATA5D8LMoDXVn4jFBG4/hfNk+0fpUvKLv2BKZ5TP42r1W
-         MwtBcumRA947Gd/6QPBXSaAOt29idjUeg6ZQTG1nm1hy6xkCARcDBcY29+kilaX8IhuN
-         KRZ2Hd5hh4/jAwFMyDA43Rt4XgQCs8RZc4hOQKnH35LXJvwqFQRswEUEQcN1BIhd60bz
-         9d3x97L/nngDOV6DOQp380WkTnmgmpBpQDK3qkF9REiYGKCcYaDupMkJQHHVx1Rh5Vl5
-         cdJg==
-X-Gm-Message-State: AOAM5301VYMm4ZmaaiYd0pYLzHNi6s5FN2ZClWc2k32A5I0Kmo8s3RE4
-        vpmqPGTsGiYYQdTCDOR3XrkrA2R1AEkcoz916DvW2fsy
-X-Google-Smtp-Source: ABdhPJwQWZyiDHzcPHPthMVbpOd+wMn9jPepqdWib/QYV5CmxlYnXLUwO6hhH6jHp7CQeRHWTBjQ9784pbyYkooY4Hg=
-X-Received: by 2002:a9d:110:0:b0:605:a618:4a68 with SMTP id
- 16-20020a9d0110000000b00605a6184a68mr4761422otu.357.1650984661559; Tue, 26
- Apr 2022 07:51:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220426100616.1411209-1-oushixiong@kylinos.cn>
-In-Reply-To: <20220426100616.1411209-1-oushixiong@kylinos.cn>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 26 Apr 2022 10:50:50 -0400
-Message-ID: <CADnq5_NC+LckMSBYXHGDohyTB6PbELwtYqAknBgRvR3q7N_LYw@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd: Fix spelling typo in comment
-To:     oushixiong <oushixiong@kylinos.cn>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        Jiawei Gu <Jiawei.Gu@amd.com>, David Airlie <airlied@linux.ie>,
-        xinhui pan <Xinhui.Pan@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        Fangzhi Zuo <Jerry.Zuo@amd.com>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>, Daniel Vetter <daniel@ffwll.ch>,
-        John Clements <john.clements@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 26 Apr 2022 10:56:57 -0400
+Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8ADC262111;
+        Tue, 26 Apr 2022 07:53:44 -0700 (PDT)
+HMM_SOURCE_IP: 172.18.0.48:49914.31750849
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-202.80.192.38 (unknown [172.18.0.48])
+        by chinatelecom.cn (HERMES) with SMTP id B7D8F28008B;
+        Tue, 26 Apr 2022 22:53:37 +0800 (CST)
+X-189-SAVE-TO-SEND: +liuxp11@chinatelecom.cn
+Received: from  ([172.18.0.48])
+        by app0024 with ESMTP id 2f49a4b11dc54529ab945bd273b1aea4 for wim@linux-watchdog.org;
+        Tue, 26 Apr 2022 22:53:39 CST
+X-Transaction-ID: 2f49a4b11dc54529ab945bd273b1aea4
+X-Real-From: liuxp11@chinatelecom.cn
+X-Receive-IP: 172.18.0.48
+X-MEDUSA-Status: 0
+Sender: liuxp11@chinatelecom.cn
+From:   Liu Xinpeng <liuxp11@chinatelecom.cn>
+To:     wim@linux-watchdog.org, linux@roeck-us.net, tzungbi@kernel.org
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Liu Xinpeng <liuxp11@chinatelecom.cn>
+Subject: [PATCH v8 0/3] Some impovements about acpi hardware watchdog
+Date:   Tue, 26 Apr 2022 22:53:27 +0800
+Message-Id: <1650984810-6247-1-git-send-email-liuxp11@chinatelecom.cn>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks.
+Changelog:
+v1->v2 Update the commit messages
 
-Alex
+v2->v3 - Add the context about why using watchdog_timeout_invalid.
+       - Using SET_NOIRQ_SYSTEM_SLEEP_PM_OPS reduces redundant code for
+       iTCO watchdog.
 
-On Tue, Apr 26, 2022 at 8:56 AM oushixiong <oushixiong@kylinos.cn> wrote:
->
-> Signed-off-by: oushixiong <oushixiong@kylinos.cn>
-> ---
->  drivers/gpu/drm/amd/include/atomfirmware.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/amd/include/atomfirmware.h b/drivers/gpu/drm/amd/include/atomfirmware.h
-> index 7bd763361d6e..b7a1e2116e7e 100644
-> --- a/drivers/gpu/drm/amd/include/atomfirmware.h
-> +++ b/drivers/gpu/drm/amd/include/atomfirmware.h
-> @@ -3,7 +3,7 @@
->  *  File Name      atomfirmware.h
->  *  Project        This is an interface header file between atombios and OS GPU drivers for SoC15 products
->  *
-> -*  Description    header file of general definitions for OS nd pre-OS video drivers
-> +*  Description    header file of general definitions for OS and pre-OS video drivers
->  *
->  *  Copyright 2014 Advanced Micro Devices, Inc.
->  *
-> --
-> 2.25.1
->
+v3->v4 - For patch 1, update commit message, rename WDAT_TIMEOUT_MIN
+       to WDAT_MIN_TIMEOUT, keeps consistent with WDAT_DEFAULT_TIMEOUT.
+       - For patch 4, iTCO_wdt_suspend_noirq and iTCO_wdt_resume_noirq
+       are possible unused, so keep "ifdef CONFIG_PM_SLEEP ... #endif".
+
+v4->v5 Split iTCO_wdt's commit from this patchset.
+
+v5->v6 For patch 1, drop "Context: " and to change "existed" in the
+       subject to "existing".
+
+v6->v7 Rename "watchdog: wdat_wdg" in subject to "watchdog: wdat_wdt".
+
+v7->v8 Set min_timeout to 1 without using a define.
+
+Liu Xinpeng (3):
+  watchdog: wdat_wdt: Using the existing function to check parameter
+    timeout
+  watchdog: wdat_wdt: Stop watchdog when rebooting the system
+  watchdog: wdat_wdt: Stop watchdog when uninstalling module
+
+ drivers/watchdog/wdat_wdt.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+-- 
+2.23.0
+

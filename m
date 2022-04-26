@@ -2,164 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E11451023B
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 17:53:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B20E2510242
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 17:53:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352637AbiDZPz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 11:55:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35442 "EHLO
+        id S1352641AbiDZP4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 11:56:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352633AbiDZPzz (ORCPT
+        with ESMTP id S1352629AbiDZP4b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 11:55:55 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B68474DED;
-        Tue, 26 Apr 2022 08:52:47 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id b12so15844769plg.4;
-        Tue, 26 Apr 2022 08:52:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GC7DL53ai6k3NGlh2GS+CUKAHaq0iiM5lF16d5uI1v8=;
-        b=HjsRLxrVtAKkoXCItST1hFzeyRKLJdMwwGTDD1KhKkHSp9U9y5kpKCLSfd7wMxX0Wy
-         gPeOc0mTaTm5Wgz786M7UZjpZTkjdVxM+UA2cC/eAoZLDIAABa3MJVe1rm/kpv85TtgD
-         3oZfZ331K0YC8NS26H6THAeZKI/bq0FmOIuMAWtQOQs1ZTUm2a2PqBsD/TDYLB0Sxvoa
-         tLH13vv7DUIUcg5Tg+EPNKgtfxR4bIu28DcVgPUi7BuNd0vwHa57NFwbeOZNUtMjCDEN
-         AssUR8EWhtheGo9umFo7IiAMRrQztNiXtorp/cTgg6QiCcak3zOC5t8e7yz6FLJTkUrp
-         t6Gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=GC7DL53ai6k3NGlh2GS+CUKAHaq0iiM5lF16d5uI1v8=;
-        b=z32zwswefSS/qE2NAqIcbqnaVzNH2Jzdi6YMEk+g/VzarrfLhcEWd4WjrB3s8cbBwN
-         WKenbNXgULY+zevf3doA0c/dxY4r9+kh+bIGt2AemaBm2auGZlSPGBTJP2ANIV/BvOIq
-         fnFfroLO8aKsgt8dbIn58IIDtV2myYuVF92UiVqKc3UynPGNrw4CFGIu5IGbHEgDpg6I
-         KKd/NobAzo0aNIUBV/Ra+ywORBo5MF01CM4p3FCrp5XRNeVvCKPUWD+patlo69nmhpPq
-         DdJdqH/nVVmD5YHunDsdt17uBhdl2zHooiRzOw/65Ku6ZcIxw1eoPiMvBBduMOGWcC4i
-         P0fg==
-X-Gm-Message-State: AOAM532ILt+iazsKAq6fqMBKK8TucdMybPWbY8Gk7cs9rpEeFdFk1exj
-        lgoD8LREgIOq3qiJ44+1PxI=
-X-Google-Smtp-Source: ABdhPJx1srVR9TBBVXc+NkJTALo2Bg9NrDLgeyjKGSuPMtZpd7O2FF5aF1WXzRnW91TsfavQDbZ3uw==
-X-Received: by 2002:a17:903:1248:b0:151:9708:d586 with SMTP id u8-20020a170903124800b001519708d586mr24057168plh.15.1650988366668;
-        Tue, 26 Apr 2022 08:52:46 -0700 (PDT)
-Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id g10-20020a17090ace8a00b001cd4989ff64sm3515376pju.43.2022.04.26.08.52.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 08:52:45 -0700 (PDT)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [RFC PATCH] kbuild: call checksyscalls.sh and check-atomics.sh only if prerequisites change
-Date:   Wed, 27 Apr 2022 00:52:29 +0900
-Message-Id: <20220426155229.436681-1-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.35.1
+        Tue, 26 Apr 2022 11:56:31 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2084.outbound.protection.outlook.com [40.107.243.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B245A43EE9
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 08:53:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jw1Ua0bFwVtsmkQTE7hR47zwAHck+Yfz4lDtWjQ6NMc4uqv0qNDWk9gCiRTi1W7zTi43KFdA0h/xiKnew7C5RZ5fZ1OAypFVaeAgTh9AFOggBZ+x/XW3qNZECIJ7P3tQEdM1GiacYietRpoo7d1MC7GEeG4cK1vOmlwHtZj052h3db+rAcAVjed1Y2Vi1mZZRXmhXCGUPa+4NMUAy7mcPRkdJASn/UX2jvjB58n1KkJgRzQ3+PpMJszEeqcSVRc5pW8fOu040NkKB8SFFbl0rpfaSYG81y5PG0/5ebuatJak2C5Ijmi8Z9mDR81fnknj5mYu3YCZwrcwVPd1CuGyQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QQ7hmyRiHpg4VDNCoOFwMwr+0vKk8CsINM5rn5jVenk=;
+ b=cSSCr05GFzBGeHDeZGHXcQPQGW26kGcTPNUqOfN5Ad2rW2txv2yExqiikQpmgxkRT+gShDcZ0XlxYpZK2c2KsDnnBmj7SrXlUOmsxk4IInkJcQf+TuAiuR/AwUo8CdI1NLsmCzwD/qTaIHaQ+QBym8l32vncLuLOTr5oui/N/7/6IqaQMsMRoQtsnpcuzoM2V8HCbDXK37vnlLWAOgwkCXTx+f0PbaBM+P48qo3h0T4M+mWrtSLIIMtKVfRS5f5YepFQ0ETTmu/vnxpRCBYdjhCaZrKAYxC9i89UpTuSTRbovJ439LQvvRkll8bR8SbeO4ysu5a6JM3brm0ECd3FNw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QQ7hmyRiHpg4VDNCoOFwMwr+0vKk8CsINM5rn5jVenk=;
+ b=ghBeNaTFQVELSNkpbdh6TiYZB9MYuOfgKDAbF2XnEdoTg6Sr4dIPDtwyWBhgWJ5jO6KzJc29vf0GtAVmGG4ngMQ6wZ7HHZa8mHW6+rDr5m81gN1j9AaYbvnaS3RWEwV4P5BfwZnVavlvaE4VG6ECuSZcZNNjtLAXdPFuHCmhyygHFG1dhkTfO6C03bfgST3pXg8WBsdShAPal1WudI2UGBqAyN7D20m7QZzDYrOVn2h0wOtFSJgjrEu3rGYYwaav7hRBsGhqU+0Nem97glnWGW6+jI9tu/dyqJxjHBc5DT2iPRjhpPvlH+e8o2JGNP9ZLmHzZPIS7fOsasZJImertQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by SJ1PR12MB6292.namprd12.prod.outlook.com (2603:10b6:a03:455::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Tue, 26 Apr
+ 2022 15:53:19 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ec2d:9167:1b47:2db2]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ec2d:9167:1b47:2db2%6]) with mapi id 15.20.5186.021; Tue, 26 Apr 2022
+ 15:53:19 +0000
+Date:   Tue, 26 Apr 2022 12:53:18 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     "Wang, Zhi A" <zhi.a.wang@intel.com>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
+Subject: Re: [PULL] gvt-next
+Message-ID: <20220426155318.GQ2125828@nvidia.com>
+References: <c5cf6773-e7a2-8ba8-4cde-0bb14007bc6b@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c5cf6773-e7a2-8ba8-4cde-0bb14007bc6b@intel.com>
+X-ClientProxiedBy: BL1PR13CA0271.namprd13.prod.outlook.com
+ (2603:10b6:208:2bc::6) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 80e45027-ea87-44b7-1ff7-08da279ce277
+X-MS-TrafficTypeDiagnostic: SJ1PR12MB6292:EE_
+X-Microsoft-Antispam-PRVS: <SJ1PR12MB6292E70D092864DF1480F89FC2FB9@SJ1PR12MB6292.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CfkYfP3nIqq3pCCdiiF1NhRFbQ3K8qxuK32nUtPCPaGXeLpHqcaU3NAKhmcVlteNHMJ2OmwHAWRNwmOcCufSmeP0cLl6IPAYZ7Kb4F5SIlr34fQDvwVGASpRyOVtgBF9igL5GzRfEUa6OwKelIW42GvszySDqszBee0nRd2sxA0KVedO8vIvmkjOwfNArNAgo+Vwz98DjMuTfEDq8wH4k9onw+GrASjJ9MK3nRs92/4ox8wJ7uvsp/Oj6KjQEvTuEy89EG0scOaS3r5iPJVmumg5DhkybRW1v5ak1TM1EYNXQS5GNnyRjI+wIo5r0KSBac6GDFqNek18VnaozbTqQHd9ys6rgw+6RfLoHYQMcL3efpDLmTeEEQh7KgrFUTlpuGXdG8+BHQ4aNEnWBn0uqe6a1tuzwGAZrxPpv5U/JlgBUF6vNICVhh1uEa2cPH8v/W3CwV4Ptc4Tnx1zPWDdyKFq8bWp5IwW8vKg2wTxvW6qd9RL5GmV8WnSIlTZ3GdVkEE9WCA6fW5m3IBRt26x9ZgsbeeFRp4Rp+vp5Dqq+fUecF0KisTok2B25W2u+hkrcw+be4/4RL87/e5se3MC9j/S6wwgvABozRRUYMTH1a4xEOQG5OzaLcLtcXoCdSkqGss0rCEH4b7RR/SpojyjHW9SnczO2jLne9HeZnwlGjPrvZTUkw76cqDfbdYDuK5JIYbnfFOYrqfSYT+34ZBL1878hjqmnZZdqzd+Vgbk9Hw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2616005)(2906002)(33656002)(1076003)(26005)(8936002)(6506007)(6486002)(966005)(86362001)(508600001)(186003)(6512007)(7416002)(5660300002)(316002)(38100700002)(6916009)(4326008)(54906003)(8676002)(36756003)(66476007)(66556008)(66946007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bxqqY8w+h1y6yoHLli5Z6lmChgVpQE4+RZal09Jds+crNyboh7MCoV6YbaBs?=
+ =?us-ascii?Q?4FEYHxEVqiDzxwiNtrKqZ0hU11SRZz6EVpZf+6vr3OwjOtOfQ50oikFE+jo4?=
+ =?us-ascii?Q?jWC5A34ipEHq/mIZoiMb2JbjqvGvALny49+0nv4ZReR25rKzOzQ8YewaQi/z?=
+ =?us-ascii?Q?Vd0IjnXUkEO3/3V9IJCVObUMY2O30mxXXweyEBysoUBotkEptRrgqdYNgHXf?=
+ =?us-ascii?Q?BzXgE2zvDhlIyedqQo+W65/Q//j8+h/u8Z1TY/itRBp+DzJBCWG1QmOOvYyL?=
+ =?us-ascii?Q?slPlUjSFSNuwxQCj4gvU38scHGwRWjkqh0trw+/+JFueR5ezxtYl2C+EMoCK?=
+ =?us-ascii?Q?YrKk0N/4V6BhoFSZrHl+PYv/z8X64KRn1837b2nNq/rv9ioJaG5A15Tssx8D?=
+ =?us-ascii?Q?bU5SjPoy2L66GRah6E/dn+srJ2ffBQH/kqNZnhctgtisv4vjN21Hn3ZskAqg?=
+ =?us-ascii?Q?7ekZbpQ/OqQRFnAjdFb16NvAWPCOgCDIGCkJ/g2R8eiEMKN1Yan0NwShQMWA?=
+ =?us-ascii?Q?pbQQH+/qa6ypbh9cUxSyFTqQqS+s8rHdTiV/u/LO07P6o6LB8V4TV8upGI/2?=
+ =?us-ascii?Q?tmB+Lr0iZr0Y7KMVhyL4fjq2QcfyZ6JoTT/zyRYIDcu45UyESbLDfSMQrqqk?=
+ =?us-ascii?Q?llWtDAqYdNEGQHA9LtBDLgML5zDQ6naeEz+4UtsCdDCy8vDtrUkZHkd/7oVS?=
+ =?us-ascii?Q?GIXGckLP9q60qMgZztK+0Hdd5rMWuUS2NIsmTJi2rlrUayEnycO+ZcKpW/XM?=
+ =?us-ascii?Q?3tOwgcKksQPGvwSwR7bcyjN+d0AT34/DJ3qJQNhlpiFyVtcg0nQPvfegaY6w?=
+ =?us-ascii?Q?JHJX9GdU0KdVg+g0zGPHy4vMdIA3ar10+pI9cpmXrfMjF9EymMh5a85cwQLg?=
+ =?us-ascii?Q?Wu30Q/lot9sglG0Mrwz2t3bhBZQKouCUK4bcbg6Kp1XHs0CsWUjoL6JfoH/x?=
+ =?us-ascii?Q?Pa4K0HtkAcXNGWOmFGzhkDQwElW3TlNi2CUJADAA0ZzFeEjh9tILHQZPlEYi?=
+ =?us-ascii?Q?ZqPwgz6IKSieBpf1R4WJlajgqdlaQD64HlVpJv5XW/SIbIXdfEin7qtVXdYh?=
+ =?us-ascii?Q?faJdaujk/cn/Me4/ZJBIoyIM0Y6CSDG2DY3M0qLfq/FKaKlrId73SHxgSsMf?=
+ =?us-ascii?Q?+wuDlrltC8xMKVNpOTBJMMYNkkQEJ/otrcjidpxu8NkKpCpzikO6tJxkUKPI?=
+ =?us-ascii?Q?IGW4fFSQqB68QCbKbm8iTkx0R92BhUV1gO+Ma3ulFr+o8pY5VikC98W+cYm0?=
+ =?us-ascii?Q?kTb7bg5d4Wg79UoDrnuqFlXM41/7Q0XDQd+CMjRmVcxldLQtHjFUxjJyLEoR?=
+ =?us-ascii?Q?tMZSjXYssxs7TDUGAimqnYsIJmL/EA7M0HXMznIlwEepyLqwQg4kYopWP39D?=
+ =?us-ascii?Q?lKT57VLwHqqYi9dA6+2+QZojQfQ6L+vxB6YAIhdh/r7WAVTqx9Eg3CdQrvrJ?=
+ =?us-ascii?Q?vKI+5V/BDfdQy4BkxvaJl3OEUIIrBDfjZIe2wAIOepL0D3lyBxWpsubdlD4k?=
+ =?us-ascii?Q?DXTmk2C1Z73T/uuAGWOCc7J3RKaYz/QDbEe2U9NaN5gaPGBKkXf/YghqUacn?=
+ =?us-ascii?Q?KY6sk+sWE4zVnOdBgIBTm79zdvgFkv9ErCu3PHuxaqzOjmno8EYqmJ1H6vfe?=
+ =?us-ascii?Q?01MeRS0U15aYSD/mVFbEi53qn2qWZW8arcOw84jN1E9z963PcWQxNRggwuk8?=
+ =?us-ascii?Q?2VtljqEJdvQCeXtGTN4wFzON21q4u7gDQjZ8xgKItwuPxZz22jusqbOqOSA3?=
+ =?us-ascii?Q?+bYxQV/vaQ=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 80e45027-ea87-44b7-1ff7-08da279ce277
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2022 15:53:19.7791
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7BLCQ00Sa8Nazr1NwL6j7Sb0LvexgOpP1vNrnLPmymsLpaVjcybOcOfZu1K24+RM
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6292
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, checksyscalls.sh and check-atomics.sh are executed
-unconditionally. Most developers will not modify the files being
-checked by those scripts and thus do not need to execute these again
-for each iterative make. Change Kbuild target so that those two
-scripts get executed only if the prerequisite are modified.
+On Tue, Apr 26, 2022 at 07:58:59AM +0000, Wang, Zhi A wrote:
+> Hi folks:
+> 
+> Here is the pull of gvt-next which fixs the compilation error when i915 debug
+> is open after the GVT-g refactor patches.
+> 
+> Thanks so much for the efforts.
+> 
+> Thanks,
+> Zhi.
+> 
+> The following changes since commit 2917f53113be3b7a0f374e02cebe6d6b749366b5:
+> 
+>   vfio/mdev: Remove mdev drvdata (2022-04-21 07:36:56 -0400)
+> 
+> are available in the Git repository at:
+> 
+>   https://github.com/intel/gvt-linux tags/gvt-next-2022-04-26
+> 
+> for you to fetch changes up to 2da299cee780ea797b3f72558687868072cf5eb5:
+> 
+>   drm/i915/gvt: Add missing export of symbols. (2022-04-25 18:03:04 -0400)
+> 
+> gvt-next-2022-04-26
+> 
+> - Add two missing exports of symbols when i915 debug is enabled.
+> 
+> Zhi Wang (1):
+>       drm/i915/gvt: Add missing export of symbols.
+> 
+>  drivers/gpu/drm/i915/intel_gvt.c | 2 ++
+>  1 file changed, 2 insertions(+)
 
-In order to implement this we:
+This still has another compile problem:
 
-  1. use the if_change macro instead of cmd. c.f. [1]
+ERROR: modpost: "intel_runtime_pm_put" [vmlinux] is a static EXPORT_SYMBOL_GPL
 
-  2. create two dot files: scripts/.checksyscalls and
-  scripts/atomic/.check-atomics to keep track of whether the script
-  were already executed or not. Otherwise, the prerequisite would
-  always be considered as newer than the target (c.f. output "due to
-  target missing" of make V=2).
+Because:
 
-  3. modify the CLEAN_FILES target of the root Makefile to removed the
-  two temporary dot files created in 2.
+#if IS_ENABLED(CONFIG_DRM_I915_DEBUG_RUNTIME_PM)
+void intel_runtime_pm_put(struct intel_runtime_pm *rpm, intel_wakeref_t wref);
+#else
+static inline void
+intel_runtime_pm_put(struct intel_runtime_pm *rpm, intel_wakeref_t wref)
+{
+        intel_runtime_pm_put_unchecked(rpm);
+}
+#endif
 
-We also added an additional dependency to include/linux/atomic/* for
-check-atomics.sh to make sure that the script gets executed again if
-the header are modified. check-atomics.sh already has a dependency
-toward include/generated/asm-offsets.h and so no additional
-dependencies were added.
+Looks like it happens if CONFIG_DRM_I915_DEBUG_RUNTIME_PM=n
 
-[1] https://www.kernel.org/doc/html/latest/kbuild/makefiles.html#command-change-detection
+I think you probably want to #ifdef the export in the same way:
 
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
-Sending this as RFC because I am not an expert of Kbuild. The use of
-the dot files was my best shot at tackling this issue. Maybe there is
-a smarter way which I just missed?
+--- a/drivers/gpu/drm/i915/intel_gvt.c
++++ b/drivers/gpu/drm/i915/intel_gvt.c
+@@ -309,7 +309,9 @@ EXPORT_SYMBOL_NS_GPL(__intel_context_do_pin, I915_GVT);
+ EXPORT_SYMBOL_NS_GPL(__intel_context_do_unpin, I915_GVT);
+ EXPORT_SYMBOL_NS_GPL(intel_ring_begin, I915_GVT);
+ EXPORT_SYMBOL_NS_GPL(intel_runtime_pm_get, I915_GVT);
++#if IS_ENABLED(CONFIG_DRM_I915_DEBUG_RUNTIME_PM)
+ EXPORT_SYMBOL_NS_GPL(intel_runtime_pm_put, I915_GVT);
++#endif
+ EXPORT_SYMBOL_NS_GPL(intel_runtime_pm_put_unchecked, I915_GVT);
+ EXPORT_SYMBOL_NS_GPL(intel_uncore_forcewake_for_reg, I915_GVT);
+ EXPORT_SYMBOL_NS_GPL(intel_uncore_forcewake_get, I915_GVT);
 
-If I receive no comments for the next two weeks, I will resend this
-patch without the RFC tag.
----
- Kbuild   | 14 ++++++++------
- Makefile |  3 ++-
- 2 files changed, 10 insertions(+), 7 deletions(-)
-
-diff --git a/Kbuild b/Kbuild
-index fa441b98c9f6..d579f4971aa3 100644
---- a/Kbuild
-+++ b/Kbuild
-@@ -39,21 +39,23 @@ $(offsets-file): arch/$(SRCARCH)/kernel/asm-offsets.s FORCE
- #####
- # Check for missing system calls
- 
--always-y += missing-syscalls
-+always-y += scripts/.missing-syscalls
- 
- quiet_cmd_syscalls = CALL    $<
-       cmd_syscalls = $(CONFIG_SHELL) $< $(CC) $(c_flags) $(missing_syscalls_flags)
- 
--missing-syscalls: scripts/checksyscalls.sh $(offsets-file) FORCE
--	$(call cmd,syscalls)
-+scripts/.missing-syscalls: scripts/checksyscalls.sh $(offsets-file) FORCE
-+	$(call if_changed,syscalls)
-+	@touch $@
- 
- #####
- # Check atomic headers are up-to-date
- 
--always-y += old-atomics
-+always-y += scripts/atomic/.old-atomics
- 
- quiet_cmd_atomics = CALL    $<
-       cmd_atomics = $(CONFIG_SHELL) $<
- 
--old-atomics: scripts/atomic/check-atomics.sh FORCE
--	$(call cmd,atomics)
-+scripts/atomic/.old-atomics: scripts/atomic/check-atomics.sh $(wildcard include/linux/atomic/*) FORCE
-+	$(call if_changed,atomics)
-+	@touch $@
-diff --git a/Makefile b/Makefile
-index fa5112a0ec1b..b18af9d4248a 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1483,7 +1483,8 @@ endif # CONFIG_MODULES
- # Directories & files removed with 'make clean'
- CLEAN_FILES += include/ksym vmlinux.symvers modules-only.symvers \
- 	       modules.builtin modules.builtin.modinfo modules.nsdeps \
--	       compile_commands.json .thinlto-cache
-+	       compile_commands.json .thinlto-cache \
-+	       scripts/.missing-syscalls scripts/atomic/.old-atomics
- 
- # Directories & files removed with 'make mrproper'
- MRPROPER_FILES += include/config include/generated          \
--- 
-2.35.1
-
+Jason

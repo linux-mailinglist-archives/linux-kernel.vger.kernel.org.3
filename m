@@ -2,73 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA660510A14
+	by mail.lfdr.de (Postfix) with ESMTP id 0EFA9510A12
 	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:14:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243395AbiDZURZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 16:17:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48250 "EHLO
+        id S1354287AbiDZURj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 16:17:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354755AbiDZURR (ORCPT
+        with ESMTP id S1354815AbiDZURf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:17:17 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94795198C68
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:14:08 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id 79so21809210iou.7
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:14:08 -0700 (PDT)
+        Tue, 26 Apr 2022 16:17:35 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31E018807A
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:14:20 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-deb9295679so20580538fac.6
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:14:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=abgy5fRKq9r2YU6bCVGzHdkj9O0LUE9XrxLObfY5iAA=;
-        b=T7zk67gE5JfB4KU5fLOxaF1QFOpanhJnC77V1pFGFIu8Jlw4RxTUXWsgS4TLeSZmYJ
-         hI7Wl0Vr71BzR2oJMkL6rhlcPCDs+rh/ODxrQrXSUPsWuZ0Nq1Fmc1wYHfDXONIdKpAn
-         OSMgUk+xXTphdoEfvEZuOO81YuTdWg7++eZOw=
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=eEFl4B1FbvWCN+VcPB75wKYhR64TSlqT3NDBP8YMG6w=;
+        b=pvQykELPdAYRIv4n3PF2TsQ0zl3cWJBZFPdpWAvODxpyPvY0m8eq9jfCqlyvYeD4yU
+         fJO2Kj0707/bgK0QRNynPZcxMgxbiVtImKpWUG1TJN9ZvqnQWnYVFydmcCQH8rBdDyA0
+         djLWVhC5EtDPU1qCrvoV0Gny4+uBED4ZOTDNPdJE0xcKzbLs6bdvqbiBhxzA+hCwPI86
+         sDooyuCIr2JOdt+bDBI6hWALksoGSGQH/oNyn/kKLf4Ne3EgBezKvYCfI5mQm3y8HIWv
+         5GF36UvMNNEfcL+sRyfrXLE27TzxLJRMuRJ2p0VcRdbUya3paTwwe0le8ag8EEO1/wsH
+         2Nxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=abgy5fRKq9r2YU6bCVGzHdkj9O0LUE9XrxLObfY5iAA=;
-        b=Abfz6HdUPGepUX2pvX1420PjIDpQx6BrYmg9VMcJHDETTt4+UHNAzuMtA/1VdYsSQv
-         DAZSEQuUx246ZmVxpiNSjyZZdSjxDXR5QeKBAaJwujCtfnsGRx5oyGMccCEj3XHmlPbu
-         GOI4QItZSenHKIkkE14XL3ahBzslxM4YXXfttUg9sZVmmZ1nqn3dsB3kGiANucYDmQvm
-         IH0SyqhkK20wYh4ADlFm1X309AZWc8jfcpKzGRdsNEPyjDCfSzBrgFaYvePJfcyGhZ2Y
-         PlaoZKruBeoobatKWdzZHwoUPd8LeWQn2YGDsM73FMcUQtOr4EJbcjqXolJAKh+PUmds
-         IhxQ==
-X-Gm-Message-State: AOAM5325JFtQzwxiBa4b2Tt401x1jCLOUUMj1+4Y1OmO3ieyptYUe/ir
-        J3+UToJsaRmCbKSLojGW2YjfpA==
-X-Google-Smtp-Source: ABdhPJwJQZkvDEw68T5ZCUeqXK7jL07nM0ghfdZ5wIyBNXZabgm3oDJ9ZJfM6o5B+Ltrnp73wsr7yg==
-X-Received: by 2002:a05:6638:2195:b0:31a:8815:f0c0 with SMTP id s21-20020a056638219500b0031a8815f0c0mr10530093jaj.301.1651004047624;
-        Tue, 26 Apr 2022 13:14:07 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id b11-20020a6be70b000000b00654b3a46b5esm9811498ioh.53.2022.04.26.13.14.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 13:14:07 -0700 (PDT)
-Subject: Re: [PATCH 5.15 000/124] 5.15.36-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220426081747.286685339@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <2f8a0edc-01b4-3ea8-eabd-9646ca73ad18@linuxfoundation.org>
-Date:   Tue, 26 Apr 2022 14:14:06 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=eEFl4B1FbvWCN+VcPB75wKYhR64TSlqT3NDBP8YMG6w=;
+        b=mvpc+0QKkOEbA2l93F9Ove9po9ZobiikeJSmNPVkPkILOHObqGiOmQFE6HXXsJckHi
+         DUewncdkvwez2d2SbLybWL4sJBRw5v7tcuEXKseqheGJPMed9OUXELTU3OVi5E3oP9bD
+         X49f4Dg81/ftUnrTVFcWcvDsAXCoOP/eCUoxuxeD1atjZNty2pd8mqNTJc8UJke7yNa2
+         BchRpesRSh3fyNT8UXYe8qaJrfbR/+Ax6xa5Qg3dp5TJMHPgGLx+cQKZqeMRyFelUpkr
+         M/E/mFdfsY+h54BCqJveB9ESxQLrDOkaOd7nTyELkwAIT8jsVkJ3zJV1kkTQ5lAVQIaL
+         uFRQ==
+X-Gm-Message-State: AOAM530/yc96BlnhHuAd6T2XNRnH6KVHcE46boJ3FyfsdshLWdkFCgEC
+        aDKCF120jtEP/HIH+wjTCIE=
+X-Google-Smtp-Source: ABdhPJyEF26vNitwwhdzPEF5PDBAWD8n5cbVdb9adbklFjpzJS6fIM6S9OxFvJuSXIVZPIFkuAS/Bw==
+X-Received: by 2002:a05:6870:5896:b0:e6:6c21:3584 with SMTP id be22-20020a056870589600b000e66c213584mr9849841oab.220.1651004060310;
+        Tue, 26 Apr 2022 13:14:20 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r23-20020a056830237700b005b2610517c8sm5410175oth.56.2022.04.26.13.14.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 13:14:19 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 26 Apr 2022 13:14:18 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Arnd Bergmann <arnd@arndb.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] soc: rockchip: power-domain: Replace dsb() with
+ smb()
+Message-ID: <20220426201418.GI4093517@roeck-us.net>
+References: <20220426014545.628100-1-briannorris@chromium.org>
+ <20220426014545.628100-2-briannorris@chromium.org>
 MIME-Version: 1.0
-In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220426014545.628100-2-briannorris@chromium.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,29 +75,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/26/22 2:20 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.36 release.
-> There are 124 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Mon, Apr 25, 2022 at 06:45:43PM -0700, Brian Norris wrote:
+> It's unclear if these are really needed at all, but seemingly their
+> purpose is only as a write barrier. Use the general macro instead of the
+> ARM-specific one.
 > 
-> Responses should be made by Thu, 28 Apr 2022 08:17:22 +0000.
-> Anything received after that time might be too late.
+> This driver is partially marked for COMPILE_TEST'ing, but it doesn't
+> build under non-ARM architectures. Fix this up before *really* enabling
+> it for COMPILE_TEST.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.36-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
 
-Compiled and booted on my test system. No dmesg regressions.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
+> ---
+> 
+> Changes in v3:
+>  * New in v3
+> 
+>  drivers/soc/rockchip/pm_domains.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/soc/rockchip/pm_domains.c b/drivers/soc/rockchip/pm_domains.c
+> index 1b029e494274..cf16ff9b73b3 100644
+> --- a/drivers/soc/rockchip/pm_domains.c
+> +++ b/drivers/soc/rockchip/pm_domains.c
+> @@ -178,7 +178,7 @@ static int rockchip_pmu_set_idle_request(struct rockchip_pm_domain *pd,
+>  		regmap_update_bits(pmu->regmap, pmu->info->req_offset,
+>  				   pd_info->req_mask, idle ? -1U : 0);
+>  
+> -	dsb(sy);
+> +	wmb();
+>  
+>  	/* Wait util idle_ack = 1 */
+>  	target_ack = idle ? pd_info->ack_mask : 0;
+> @@ -285,7 +285,7 @@ static void rockchip_do_pmu_set_power_domain(struct rockchip_pm_domain *pd,
+>  		regmap_update_bits(pmu->regmap, pmu->info->pwr_offset,
+>  				   pd->info->pwr_mask, on ? 0 : -1U);
+>  
+> -	dsb(sy);
+> +	wmb();
+>  
+>  	if (readx_poll_timeout_atomic(rockchip_pmu_domain_is_on, pd, is_on,
+>  				      is_on == on, 0, 10000)) {
+> -- 
+> 2.36.0.rc2.479.g8af0fa9b8e-goog
+> 

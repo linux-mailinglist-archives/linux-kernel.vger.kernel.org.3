@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB4E450FD74
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 14:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E1C350FD79
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 14:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350144AbiDZMpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 08:45:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37446 "EHLO
+        id S1350131AbiDZMpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 08:45:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350096AbiDZMpB (ORCPT
+        with ESMTP id S1350102AbiDZMpF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 08:45:01 -0400
+        Tue, 26 Apr 2022 08:45:05 -0400
 Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A58178592;
-        Tue, 26 Apr 2022 05:41:53 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id C1EDB5C0181;
-        Tue, 26 Apr 2022 08:41:52 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 26 Apr 2022 08:41:52 -0400
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46903178595;
+        Tue, 26 Apr 2022 05:41:55 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id ABB085C0180;
+        Tue, 26 Apr 2022 08:41:54 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Tue, 26 Apr 2022 08:41:54 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
         :cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1650976912; x=
-        1651063312; bh=oRWZWBSDnSSkUoo07sboRF+kzsesUviO3asAK3ko1d4=; b=W
-        u4rxTt/ucwRvMpRlQghB2CzuYUdchC9bNiLl6k9mTJ+te8N+4eDFKgnHEkcek+gS
-        shQunxx01zdB25HS7v8aphLGzYSkSDET1dxt/1YFEAUz6NLtms2R/CRxmizWyXoC
-        aB37AsKbKnb74TuKITTezlPnnLJR2YOvl4Jw/MtWuG78kVhWcdaU39IaNq/w6f1v
-        2jBQtX5bBR9R9XYQfzhf5WstskcEwnnLR/9mmoLOSfGzRKsgdLQJahEoMjWMPbNX
-        uQxQX0GpMZLewYpMey8Z5oKTUoro57VNSxTVlApzTtZS8f7jf7dqBPAAqcWTSKQ2
-        0cyjkbIzB0zs4MT8gEOmg==
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1650976914; x=
+        1651063314; bh=EohkGW+s5DM+g0bYFYs5ug5rXQ/TPMVSBiu5Ouq782M=; b=t
+        kYd44xkDQs/lqUO/VoOAYISLB5l95/OZVh0A4aNdmTd/Kl3clQhylCEf1UIE9qZm
+        mk+NHx0Zrf/KE/ua4P3Eprc5db29oZPq/hapetiz/KzhiBE0udVPX+pRwbyn9Gmq
+        if1b1ub5uxQIqdEQandgarfSyUgtkuMry2ElZWBQ4LWKOs8hyU19N+4Ken5HcYZe
+        z9y1unsINI/kl/nwYrI4W2l8eyZ0BVANZD+W/v2Af062N2sH+/6YhH15Ecfp4SAX
+        XdzsQit2ZZf3/liXJA8phAnSn+ZMhwqQkCD5qQ0wvnCNkYy0Q5x3EXRClZ4qRhYU
+        fr6HrX+UzA74Gws9Ms87g==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1650976912; x=1651063312; bh=oRWZWBSDnSSkU
-        oo07sboRF+kzsesUviO3asAK3ko1d4=; b=qD72JznDaPnl6zQAntQ5fkM5nSOGm
-        rBb3Q+cFDGRyZgReKG1GWgLPpt9Eu10hurPGC7FV/ploPGWahehxIvPbKOlttBUg
-        efkNFpxhTlH/aCpSzthwZeiBuNNqpVlwCYrG14u9EZgu7mRRTktxo9qWEjiWWf8P
-        AGS6f4e0uesdT1VS09OrRsit/LqH13/rliS78e2Eq+PfEBChj1aK596V470k4qBe
-        9x1kPyE8M4azLAMrpOgQ9OqS83PbmadvlGFNjr5GZQZYfl0Qfbqm9cYICwwsM1lC
-        MFpk/KTnsfabmXwIN2Wcj4SJa88LILjpO0HcFpmEkhIKomWAyyxiEStfA==
-X-ME-Sender: <xms:kOhnYktS2KxYpcMgLL9aadE-2PVLurVgXSJSk_dA_n5d-oapsUEVug>
-    <xme:kOhnYheIJCHM691StZ2Ane-ymET0S_co-WwCWY-40rZyUxHv-jkLsjMj9wag8wMfl
-    ftTcILWFFiKRbpehh8>
-X-ME-Received: <xmr:kOhnYvzzZk339wOkMMy2UghhW6dsSc2YKSPIdlr32OQzsM1U4dGw6HRxe7nMtPtmNM2ECk0qrzW4N6h6pb4whkswz_iaykMyUMP5cWI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefgdehudcutefuodetggdotefrodftvf
+        :x-sasl-enc; s=fm1; t=1650976914; x=1651063314; bh=EohkGW+s5DM+g
+        0bYFYs5ug5rXQ/TPMVSBiu5Ouq782M=; b=Ght8b1ESZXb8CwjPP00VKMP47VpSm
+        7NoEtkrwfbaOnlokx9p9KvstWDfJxZWrvs9ezpn7M8QP7rxdzDc6EqRVFpsWYa4p
+        gyA5PfHMpuKNPTgqNwSnH/rQ5/j2/Q8Ve3ABfvFq+g9sgWYSOV7gil+E8bzifDbz
+        kPygZ3qLMDpurbc4yeuLkGblvCEZEBZVT9k6LLf9iz3vrhuqZhaGg71fkLqjSczG
+        CNbJw+rbmrsguZ1y4etXVOXgy2tnDNJEXCLPofokZ5GxZk39l0BNp4bRXbBnxtgJ
+        tXOh05F18EV8ughn7wKEwQNfLbuLO+KBlXiwEXw0AvnQFHJCQR0RqFeYg==
+X-ME-Sender: <xms:kuhnYqCMGK0dhcFDBgl2yLnZj4f0vuwqIQNofn64lltBZ8r4v6eygA>
+    <xme:kuhnYki8QW0wrO5JZPa9_2PJwEFqi1djrDFRa7IrscOHD3xHskPKCvuWcebZS4bmq
+    DZ6omXnWuF8XKLpsRg>
+X-ME-Received: <xmr:kuhnYtky5o12unyhFk2w_oiUQqe_IG3AGn9qUt_lJOp-1B8kKebAq1frER5SZZMHDe5bQU7TZPPYGyJnlMWdY7PuP5t7MCZybRcF2Sk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefgdehvdcutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
     fjughrpefhvfevufffkffojghfgggtgfesthekredtredtjeenucfhrhhomhepofgrgihi
     mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
     htthgvrhhnpeeuieeggffhffffieefheduieeuvdetgeeufeffvefgtedvffehheekffev
-    udefieenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    udefieenucevlhhushhtvghrufhiiigvpedvnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
     hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:kOhnYnO2PS0Ey3hsclGX9QwbpdlxSTUpZj3tEhMI8RETIC8xmY05ew>
-    <xmx:kOhnYk_Fed0CrAEC3QEfYfS-LoUvvUSoUBsGWN-Y0X48fb6m5EbiSQ>
-    <xmx:kOhnYvWY2JsxnJP5sKTfDgkKnOHQajX-jvN3QGTQzZqVyafNofTyXw>
-    <xmx:kOhnYvVzilgTphkkE1te8YnYHIDKuz_GQhAMlK-yRyBaMFyIqB7ZVA>
+X-ME-Proxy: <xmx:kuhnYowIoo_wOF3qa5bLxtQ9Fr6Vtsybil0ktVn-sYB4ynTF6DEypw>
+    <xmx:kuhnYvQv_0BuAa7jeMub1HH98x9WNkJFTAlIQ5I-qEdZ-OCztISGJg>
+    <xmx:kuhnYjY_kz8AvJlG-gQc3jhWo93ujbN1d4eLWiva-qe_J4bn2mg-ww>
+    <xmx:kuhnYuLo3NOfuvrCDteCMubPEz1pwusGNgEfhJ_1oPyTdptw3ybOQQ>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 26 Apr 2022 08:41:52 -0400 (EDT)
+ 26 Apr 2022 08:41:54 -0400 (EDT)
 From:   Maxime Ripard <maxime@cerno.tech>
 To:     Chen-Yu Tsai <wens@csie.org>, Maxime Ripard <mripard@kernel.org>,
         Samuel Holland <samuel@sholland.org>,
@@ -71,12 +71,12 @@ Cc:     Maxime Ripard <maxime@cerno.tech>, David Airlie <airlied@linux.ie>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
         dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
         Daniel Vetter <daniel@ffwll.ch>
-Subject: Re: (subset) [PATCH v3 05/14] drm/sun4i: Allow building the driver on RISC-V
-Date:   Tue, 26 Apr 2022 14:41:34 +0200
-Message-Id: <165097689885.514433.10051703759938429783.b4-ty@cerno.tech>
+Subject: Re: (subset) [PATCH v3 06/14] sun4i/drm: engine: Add mode_set callback
+Date:   Tue, 26 Apr 2022 14:41:35 +0200
+Message-Id: <165097689885.514433.4928280366164245605.b4-ty@cerno.tech>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220424162633.12369-6-samuel@sholland.org>
-References: <20220424162633.12369-1-samuel@sholland.org> <20220424162633.12369-6-samuel@sholland.org>
+In-Reply-To: <20220424162633.12369-7-samuel@sholland.org>
+References: <20220424162633.12369-1-samuel@sholland.org> <20220424162633.12369-7-samuel@sholland.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -90,12 +90,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 24 Apr 2022 11:26:23 -0500, Samuel Holland wrote:
-> Allwinner D1 is a RISC-V SoC which contains a DE 2.0 engine. Let's
-> remove the dependency on a specific CPU architecture, so the driver can
-> be built wherever ARCH_SUNXI is selected.
+On Sun, 24 Apr 2022 11:26:24 -0500, Samuel Holland wrote:
+> From: Jernej Skrabec <jernej.skrabec@gmail.com>
 > 
+> This optional callback is useful for setting properties which depends
+> only on current mode. Such properties are width, height and interlaced
+> output.
 > 
+> These properties are currently set in update layer callback for primary
+> plane which is less than ideal. More about that in follow up patches,
+> which will migrate that code to this newly defined callback.
+> 
+> [...]
 
 Applied to drm/drm-misc (drm-misc-next).
 

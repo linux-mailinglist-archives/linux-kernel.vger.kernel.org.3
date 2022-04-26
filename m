@@ -2,103 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1D5550F2EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B71D50F2EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343895AbiDZHtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 03:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36578 "EHLO
+        id S1344269AbiDZHuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 03:50:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343874AbiDZHto (ORCPT
+        with ESMTP id S1343874AbiDZHuH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 03:49:44 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C651929D
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:46:37 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id l18so7682391ejc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:46:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=ezxJuL1TpZoaBmP6iCyLpD7vPvVZKAVuVG915ZT25Ws=;
-        b=lS6TkHfh9FtrzI9J2kmQCv8AkGGhN56OT3UPhhiiIxqrD+5vKMTakURwAbi3fk9EbM
-         H758YL8lFt/hHuXtJWMVGqy/D6haABwshBsTctrMBT9hHhueGyfv/tFiZ6SGhPNpSgPK
-         IcUtunAtEwGrI1slOb18kSk1H0qmXqXOhd/ntrye7E21wJZkuJ75MrwupUpvNLuW5lsL
-         fCkbdG5cjgcxdrSZBHDykpK5q5rXlPFeHUxbF/UXDwI1S3knJ0jbmipGs2TUJAGHgf/f
-         y69IKsvRL55ka9NzsED9XneTV1rczSFpqVMT+ayH66veplxiClL9OsdXz6Opr+DJmQje
-         9ecg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ezxJuL1TpZoaBmP6iCyLpD7vPvVZKAVuVG915ZT25Ws=;
-        b=yTGkHjhsqcx4b7MX8qOJG6+droaA3dQMgkKlbMnlnltNDZdUUIMM0yJQJQsD9tWDrr
-         O/e7LWmp8D3+52zrAEp37AltnEHib/Th6eMgYc5bD4YftaZzH6/hmFfSRG/D+jTKgE3o
-         CwQHYXVZuXHp3p5KVgaUqGI2hvBp6eQUUBIuWqe350pIuvvrj8KxNR1xuE96YXoGBReJ
-         74GOgVsxfHrms81VKpN1mn+g7NhiInRovXxtopejGG58+wTJ/EqYCcvAwbbZZ+9FY0zg
-         8z8ZKkDOUyBNbPuwnoAYrKQ/zG5av5GF0umeVLXGU6lmY7GSiai/9C9ALfJXbJDbgABR
-         myyQ==
-X-Gm-Message-State: AOAM530DnxgCuIcYxqLYaAy5avVwmjg2Uc9NdXkGKgkAc/xtWrIdhPRb
-        oD7jvw+ScAqWWyRbPkOJ/0DzOg==
-X-Google-Smtp-Source: ABdhPJwyp+ZjbOklEGjVs751JofkT6sqkmEF/aEvP0lIBBfvcjqzl170va0NRjxD4Sf6JSmSEHbxrA==
-X-Received: by 2002:a17:907:7ea4:b0:6f0:1205:fea9 with SMTP id qb36-20020a1709077ea400b006f01205fea9mr20196265ejc.534.1650959195200;
-        Tue, 26 Apr 2022 00:46:35 -0700 (PDT)
-Received: from [192.168.0.244] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id z21-20020a170906435500b006e8669fae36sm4476781ejm.189.2022.04.26.00.46.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 00:46:34 -0700 (PDT)
-Message-ID: <249f6136-6dd6-0c03-df86-7da02a1b17f0@linaro.org>
-Date:   Tue, 26 Apr 2022 09:46:33 +0200
+        Tue, 26 Apr 2022 03:50:07 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70F95193F4;
+        Tue, 26 Apr 2022 00:47:00 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3AC2C23A;
+        Tue, 26 Apr 2022 00:47:00 -0700 (PDT)
+Received: from [10.57.12.108] (unknown [10.57.12.108])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AC2743F73B;
+        Tue, 26 Apr 2022 00:46:58 -0700 (PDT)
+Message-ID: <f6bb20c6-38a0-57d6-8979-d14e445da623@arm.com>
+Date:   Tue, 26 Apr 2022 08:46:57 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH] MIPS: dts: align SPI NOR node name with dtschema
+Subject: Re: [RFC PATCH v3 0/5] Introduce Cpufreq Active Stats
 Content-Language: en-US
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220407143328.295762-1-krzysztof.kozlowski@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220407143328.295762-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com, amit.kachhap@gmail.com,
+        linux-pm@vger.kernel.org
+References: <20220406220809.22555-1-lukasz.luba@arm.com>
+ <20220426031125.ozaxwecwvuby6wo3@vireshk-i7>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20220426031125.ozaxwecwvuby6wo3@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/04/2022 16:33, Krzysztof Kozlowski wrote:
-> The node names should be generic and SPI NOR dtschema expects "flash".
+
+
+On 4/26/22 04:11, Viresh Kumar wrote:
+> On 06-04-22, 23:08, Lukasz Luba wrote:
+>> Hi all,
+>>
+>> This is the 3rd version of patch set which tries to address issues which are
+>> due to missing proper information about CPU performance in time.
+>>
+>> The issue description:
+>> 1. "Cpufreq statistics cover the time when CPUs are in idle states, so they
+>>     are not suitable for certain purposes, like thermal control." Rafael [2]
+>> 2. Thermal governor Intelligent Power Allocation (IPA) has to estimate power,
+>>     for the last period, e.g. 100ms, for each CPU in the Cluster, to grant new
+>>     power and set max possible frequency. Currently in some cases it gets big
+>>     error, when the frequency of CPU changed in the middle. It is due to the
+>>     fact that IPA reads the current frequency for the CPU, not aware of all
+>>     other frequencies which were actively (not in idle) used in the last 100ms.
+>>
+>> This code focuses on tracking the events of idle entry/exit for each CPU
+>> and combine them with the frequency tracked statistics inside internal
+>> statistics arrays (per-CPU). In the old cpufreq stats we have one shared
+>> statistics array for the policy (all CPUs) and not take into account
+>> periods when each CPU was in idle.
+>>
+>> Sometimes the IPA error between old estimation signal and reality is quite
+>> big (>50%).
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  arch/mips/boot/dts/brcm/bcm97358svmb.dts                   | 2 +-
->  arch/mips/boot/dts/brcm/bcm97360svmb.dts                   | 2 +-
->  arch/mips/boot/dts/brcm/bcm97425svmb.dts                   | 2 +-
->  arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts | 2 +-
->  arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts         | 2 +-
->  arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts         | 2 +-
->  6 files changed, 6 insertions(+), 6 deletions(-)
+> It would have been useful to show how the stats hierarchy looks in userspace
+> now.
+> 
 
-Hi all,
-
-Anyone from MIPS folks willing to take it? I got three acks, so maybe
-that means I should handle it?
-
-
-Best regards,
-Krzysztof
+I haven't modify your current cpufreq stats, they are still counting
+total time (idle + running) for the given frequency. I think this is
+still useful for some userspace tools. These new proposed stats don't
+have such sysfs interface to read them. I don't know if userspace would
+be interested in this information (the running only time). IIRC Android
+uses bpf mechanisms to get this information to the userspace.

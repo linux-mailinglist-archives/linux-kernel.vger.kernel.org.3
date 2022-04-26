@@ -2,223 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08BF2510540
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 19:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02FB9510547
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 19:21:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346045AbiDZRY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 13:24:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36596 "EHLO
+        id S1349026AbiDZRYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 13:24:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232258AbiDZRXz (ORCPT
+        with ESMTP id S1346855AbiDZRYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 13:23:55 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0313D38187
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 10:20:47 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id z26so2714173iot.8
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 10:20:46 -0700 (PDT)
+        Tue, 26 Apr 2022 13:24:20 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C75D33BA74
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 10:21:11 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id x33so33152052lfu.1
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 10:21:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=2xt2bp7x87CoZowz/+tBHRcsZ+XY0BlT50TGFgS7h/w=;
-        b=gxmHxPn7Dnw01zE08iDHw8bZRVqwGe4ygKYL0Se9OrUFYZ5iNeCJn462eOg/lu2+pP
-         Y/t5JIKwQ5s1as6hEseYYolITNW45/TWsHDkoLBryBQWOaQjP8Jfudwh+Mji5W060Rnj
-         3J72fIn4ofNg/fUPRWth3Jm+hSTV7DOio/5M0=
+         :cc;
+        bh=vY6n+jio0gwvbbRftwZVfFCV+8S6O4vtPz4jG39i3+s=;
+        b=TWgNkRLLNcjl/XaddvkQE1EterU2lrL5fehRf6oIDjTGVr97VNKpW0uo3KsGV3D18N
+         HnGn/22GaBBZj3uDR7VLh6dk9maG7nV1HxvquyIXqhfXVAORSOyRhrOBwOGWlmWqx7CZ
+         YAFBhI4mT+hhYOcbEIg8podME13jpUF1xd9+2iORyI3MPGLFURtymQEiszOrhzRqq78/
+         8w5RIseWywi/QHWQT+CI9z9PF6SWES4MpGMWFqI0Qy4ROgyjRyxKWQwEwZiJeWJ2qaUt
+         3RLVAStRE/oiOk0nisyZFuUCyXiZiiT46Oy94aqcE60akyN6oADQpk5NlS03rRBYzayI
+         kowQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=2xt2bp7x87CoZowz/+tBHRcsZ+XY0BlT50TGFgS7h/w=;
-        b=JChJZvV7h/4vKslNuLsuvz5dBrsDEJ/pvBjY1jKA+uejYChJHow2K8dCFv0717Msr1
-         tqcv/80B35tCgiWB+RDqN2waIldb8G/u7iL+56vSuuqXG56DzW4DFFyZ1c6Ya49tqOSM
-         ELZocmpDx2c25YsBkGFLMzAH4XvUKIGo1uUX8PuFmo7nBbCw6nRPv2Ec5AgVWJ3ocoz6
-         0ehk3++eFhI0kvI+fHxk7h7EQMncSw/r9BpPNeFepvnuXSp7KRZ1l0qk0KMzCcfsz/Mp
-         SsE3geRE1ATJKc/njKNT27K7egqxMrCiCau0wntvt5kGohIeX3vgDjMTEw10xnHdVRWs
-         TjCQ==
-X-Gm-Message-State: AOAM530seyymlEMASlCOWWitC3H2z1LoUp054FZD91lXnxp0S/cRm32L
-        +OdaWTjMvUOhBJ0tANROTlw/Z1ewhoWzsk3FutG4qg==
-X-Google-Smtp-Source: ABdhPJzYtrBwwIY+ZQ3w19qLj2iDwJPTNb8XnvRMTDIdR5OR5ZXdNBv6tcNrZDkwYKk98HmYG9ELvr1Z+mAZQgL/8Uw=
-X-Received: by 2002:a05:6602:1406:b0:649:d35b:4bbb with SMTP id
- t6-20020a056602140600b00649d35b4bbbmr10101251iov.23.1650993646158; Tue, 26
- Apr 2022 10:20:46 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=vY6n+jio0gwvbbRftwZVfFCV+8S6O4vtPz4jG39i3+s=;
+        b=18VpPX1nA3R0f7zBCuGfQwxKZtZl+THSQxCADXMk7IJQi3mEkXC4fwMpuLqxYjU8/6
+         dSqJJbuVssYHuhow3Xt33lkzGJuY/sgI1ApC/ITI76Odo/jQM1BV/81YgpwcIQ2Adhj2
+         OhzreQcXjrotkD71PJDY/HYU+5Wuxv20Z7eDFQdtp6eWlaM2MEYqPf8PP+/BGvwkdGg/
+         xnNEOcpL9Ci0Y9rsgUJGYtXodSgr5P1yFbGfxXZGpawtWK/fmgpUueQd3xNo6goLnzKA
+         xIROlvlLiMWsn7SaxPap1HXg7/Lii57LABRC2udXX+0lJubee/2k4XT9Ban05JsA+1bl
+         lSQQ==
+X-Gm-Message-State: AOAM532HE/duUSDXImNpBdBb55ucGUB3gPCSUGWMuHJV7pxMHVKdMD4N
+        yGBtW1n/dLjuFL3DD+u8v1B2l2k6TELGS0oAWuJ5YQ==
+X-Google-Smtp-Source: ABdhPJyhWp+J5ybWMVXvAk8ooMs7uPcSI9Sm8SIIWGzIh31BZvVfqbRuznmM+sw9qijUdRJPxFo3eCsyVhjuM8uWQu0=
+X-Received: by 2002:ac2:5223:0:b0:448:5100:e427 with SMTP id
+ i3-20020ac25223000000b004485100e427mr17402224lfl.87.1650993669901; Tue, 26
+ Apr 2022 10:21:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220418231746.2464800-1-grundler@chromium.org>
- <CANEJEGtaFCRhVBaVtHrQiJvwsuBk3f_4RNTg87CWERHt+453KA@mail.gmail.com> <23cbe4be-7ced-62da-8fdb-366b726fe10f@marvell.com>
-In-Reply-To: <23cbe4be-7ced-62da-8fdb-366b726fe10f@marvell.com>
-From:   Grant Grundler <grundler@chromium.org>
-Date:   Tue, 26 Apr 2022 10:20:35 -0700
-Message-ID: <CANEJEGtVFE8awJz3j9j7T2BseJ5qMd_7er7WbdPQNgrdz9F5dg@mail.gmail.com>
-Subject: Re: [EXT] Re: [PATCH 0/5] net: atlantic: more fuzzing fixes
-To:     Igor Russkikh <irusskikh@marvell.com>
-Cc:     Grant Grundler <grundler@chromium.org>,
-        Dmitry Bezrukov <dbezrukov@marvell.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Aashay Shringarpure <aashay@google.com>,
-        Yi Chou <yich@google.com>,
-        Shervin Oloumi <enlightened@google.com>
+References: <20220424190811.1678416-1-masahiroy@kernel.org> <20220424190811.1678416-14-masahiroy@kernel.org>
+In-Reply-To: <20220424190811.1678416-14-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 26 Apr 2022 10:20:58 -0700
+Message-ID: <CAKwvOd=SsRq8YJ7V6XQmFLhOYvvFk0B+Rfftpc_=uEEUfSq6ug@mail.gmail.com>
+Subject: Re: [PATCH 13/27] modpost: traverse the namespace_list in order
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[reply-all again since I forgot to tell gmail to post this as "plain
-text"...grrh... so much for AI figuring this stuff out.]
-
-
-On Tue, Apr 26, 2022 at 9:00 AM Igor Russkikh <irusskikh@marvell.com> wrote=
-:
+On Sun, Apr 24, 2022 at 12:09 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
-> Hi Grant,
->
-> Sorry for the delay, I was on vacation.
-> Thanks for working on this.
+> Use the doubly linked list to traverse the list in the added order.
+> This makes the code more consistent.
 
-Hi Igor!
-Very welcome! And yes, I was starting to wonder... but I'm now glad
-that you didn't review them before you got back. These patches are no
-reason to ruin a perfectly good vacation. :)
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-> I'm adding here Dmitrii, to help me review the patches.
-> Dmitrii, here is a full series:
->
-> https://patchwork.kernel.org/project/netdevbpf/cover/20220418231746.24648=
-00-1-grundler@chromium.org/
->
-> Grant, I've reviewed and also quite OK with patches 1-4.
-
-Excellent! \o/
-
-
-> For patch 5 - why do you think we need these extra comparisons with softw=
-are head/tail?
-
-The ChromeOS security team (CC'd) believes the driver needs to verify
-"expected behavior". In other words, the driver expects the device to
-provide new values of tail index which are between [tail,head)
-("available to fill").
-
-Your question makes me chuckle because I asked exactly the same
-question. :D Everyone agrees it is a minimum requirement to verify the
-index was "in bounds". And I agree it's prudent to verify the device
-is "well behaved" where we can. I haven't looked at the code enough to
-know what could go wrong if, for example, the tail index is
-decremented instead of incremented or a "next fragment" index falls in
-the "available to fill" range.
-
-However, I didn't run the fuzzer and, for now, I'm taking the ChromeOS
-security team's word that this check is needed. If you (or Dmitrii)
-feel strongly the driver can handle malicious or firmware bugs in
-other ways, I'm not offended if you decline this patch. However, I
-would be curious what those other mechanisms are.
-
-> From what I see in logic, only the size limiting check is enough there..
->
-> Other extra checks are tricky and non intuitive..
-
-Yes, somewhat tricky in the code but conceptually simple: For the RX
-buffer ring, IIUC, [head,tail) is "CPU to process" and [tail, head) is
-"available to fill". New tail values should always be in the latter
-range.
-
-The trickiness comes in because this is a ring buffer and [tail, head)
-it is equally likely that head =3D< tail  or head > tail numerically.
-
-If you like, feel free to add comments explaining the ring behavior or
-ask me to add such a comment (and repost #5). I'm a big fan of
-documenting non-intuitive things in the code. That way the next person
-to look at the code can verify the code and the IO device do what the
-comment claims.
-
-On the RX buffer ring, I'm also wondering if there is a race condition
-such that the driver uses stale values of the tail pointer when
-walking the RX fragment lists and validating index values. Aashay
-assures me this race condition is not possible and I am convinced this
-is true for the TX buffer ring where the driver is the "producer"
-(tells the device what is in the TX ring). I still have to review the
-RX buffer handling code more and will continue the conversation with
-him until we agree.
-
-cheers,
-grant
-
->
-> Regards,
->   Igor
->
-> On 4/21/2022 9:53 PM, Grant Grundler wrote:
-> > External Email
-> >
-> > ----------------------------------------------------------------------
-> > Igor,
-> > Will you have a chance to comment on this in the near future?
-> > Should someone else review/integrate these patches?
-> >
-> > I'm asking since I've seen no comments in the past three days.
-> >
-> > cheers,
-> > grant
-> >
-> >
-> > On Mon, Apr 18, 2022 at 4:17 PM Grant Grundler <grundler@chromium.org>
-> > wrote:
-> >>
-> >> The Chrome OS fuzzing team posted a "Fuzzing" report for atlantic driv=
-er
-> >> in Q4 2021 using Chrome OS v5.4 kernel and "Cable Matters
-> >> Thunderbolt 3 to 10 Gb Ethernet" (b0 version):
-> >>
-> >> https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__docs.google.com=
-_document_d_e_2PACX-2D1vT4oCGNhhy-5FAuUqpu6NGnW0N9HF-5Fjxf2kS7raOpOlNRqJNiT=
-HAtjiHRthXYSeXIRTgfeVvsEt0qK9qK_pub&d=3DDwIBaQ&c=3DnKjWec2b6R0mOyPaz7xtfQ&r=
-=3D3kUjVPjrPMvlbd3rzgP63W0eewvCq4D-kzQRqaXHOqU&m=3DQoxR8WoQQ-hpWu_tThQydP3-=
-6zkRWACvRmj_7aY1qo2FG6DdPdI86vAYrfKQFMHX&s=3D620jqeSvQrGg6aotI35cWwQpjaL94s=
-7TFeFh2cYSyvA&e=3D
-> >>
-> >> It essentially describes four problems:
-> >> 1) validate rxd_wb->next_desc_ptr before populating buff->next
-> >> 2) "frag[0] not initialized" case in aq_ring_rx_clean()
-> >> 3) limit iterations handling fragments in aq_ring_rx_clean()
-> >> 4) validate hw_head_ in hw_atl_b0_hw_ring_tx_head_update()
-> >>
-> >> I've added one "clean up" contribution:
-> >>     "net: atlantic: reduce scope of is_rsc_complete"
-> >>
-> >> I tested the "original" patches using chromeos-v5.4 kernel branch:
-> >>
-> >> https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__chromium-2Drevi=
-ew.googlesource.com_q_hashtag-3Apcinet-2Datlantic-2D2022q1-2B-28status-3Aop=
-en-2520OR-2520status-3Amerged-29&d=3DDwIBaQ&c=3DnKjWec2b6R0mOyPaz7xtfQ&r=3D=
-3kUjVPjrPMvlbd3rzgP63W0eewvCq4D-kzQRqaXHOqU&m=3DQoxR8WoQQ-hpWu_tThQydP3-6zk=
-RWACvRmj_7aY1qo2FG6DdPdI86vAYrfKQFMHX&s=3D1a1YwJqrY-be2oDgGAG5oOyZDnqIok_2p=
-5G-N8djo2I&e=3D
-> >>
-> >> The fuzzing team will retest using the chromeos-v5.4 patches and the b=
-0
-> >> HW.
-> >>
-> >> I've forward ported those patches to 5.18-rc2 and compiled them but am
-> >> currently unable to test them on 5.18-rc2 kernel (logistics problems).
-> >>
-> >> I'm confident in all but the last patch:
-> >>    "net: atlantic: verify hw_head_ is reasonable"
-> >>
-> >> Please verify I'm not confusing how ring->sw_head and ring->sw_tail
-> >> are used in hw_atl_b0_hw_ring_tx_head_update().
-> >>
-> >> Credit largely goes to Chrome OS Fuzzing team members:
-> >>     Aashay Shringarpure, Yi Chou, Shervin Oloumi
-> >>
-> >> cheers,
-> >> grant
+-- 
+Thanks,
+~Nick Desaulniers

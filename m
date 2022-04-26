@@ -2,118 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 143BD50F397
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C2950F8C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344592AbiDZIZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
+        id S1344731AbiDZJU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:20:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344591AbiDZIZX (ORCPT
+        with ESMTP id S1345848AbiDZI5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:25:23 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF903A5C3;
-        Tue, 26 Apr 2022 01:22:16 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id bx5so8040613pjb.3;
-        Tue, 26 Apr 2022 01:22:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ry61oQOw1TxefJWFjV86DTJxbbTM3u3aRIyja+cc07w=;
-        b=hYJberNWpJnZgnTf9pcAYGQU8G2uGwQ2H/D/mBrao6r6L3a1I5qEFJkqTZs4lJea0q
-         ctvAk6eqcD2ijFAs7BGRcE0NXBVDrJsP5Ff2/ZUetBi7VGCIMp/dr+E++nYuYJQ6Jlh9
-         gp5hFY/7219vQgRGSf5PglWn/eBG4mcEu+hNp/JWpOviLN4sPKKOVq8/SzswSPVvMLHM
-         APUJGGc246PwSz7zG0VxqC2cETjCATQuy/z3U5uJn7sCQlBNhhMzS2IkHTH6euQ6H/Kw
-         Hj0x+4nk/QT4/kzlUQAuwXJjB3vjImdFqxox0NBReIszeeZNyysFeZKCwUO/DOlKYyEx
-         s5pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ry61oQOw1TxefJWFjV86DTJxbbTM3u3aRIyja+cc07w=;
-        b=miiCMD2tsr/YmB+jQkQXDk2/oR5y0tKJihe8whwCnVkKY060X7mvbBU0cQ2I/vkIX0
-         bOhxeulxbKhuJfCg2xTfrzk7UaWLijm4pVVfacHcq+c/yILJ3gO2Xlun8NKS5zRcgbqG
-         55CQtzIpms4FzQybpm7aH25nEC7RogOY+OQ1M40ohX5cwC8/YzWJ8VJY6QqxkKXJPspP
-         Z+Vt+w6HbmH6jV8ZlLXvBpN0gjc+d9wL8IRmfmamYln6copYez+WPEGmmwpyvIfYZEhH
-         /TmCBgFYzmucrzOpCekJhr70h+OtVlnaakJworPWRM58uHsZ+1P1GHs44wrdsmq7ANsS
-         cq+g==
-X-Gm-Message-State: AOAM531nd6bN63Ktv12vyWZp9ue0gBr/a7KcH7dFhQ6PUphyiUo3f7i+
-        xw+d+nVsdHNgiGwwQly4HlA=
-X-Google-Smtp-Source: ABdhPJxNiF8zanUQKYJ607EC0HUpOomtgJ/TOStVYGUmh9XKjhgzkTyZdlRXyDGwNaSRPD1rBszaCA==
-X-Received: by 2002:a17:90b:304:b0:1d9:752b:437f with SMTP id ay4-20020a17090b030400b001d9752b437fmr10486148pjb.242.1650961336347;
-        Tue, 26 Apr 2022 01:22:16 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.111])
-        by smtp.gmail.com with ESMTPSA id s61-20020a17090a69c300b001cd4c118b07sm1879143pjj.16.2022.04.26.01.22.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 01:22:15 -0700 (PDT)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     arnd@arndb.de
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Menglong Dong <imagedong@tencent.com>,
-        Mengen Sun <mengensun@tencent.com>
-Subject: [PATCH] bitops: remove unnecessary assignment in fls()
-Date:   Tue, 26 Apr 2022 16:21:55 +0800
-Message-Id: <20220426082155.10571-1-imagedong@tencent.com>
+        Tue, 26 Apr 2022 04:57:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F71D82D28;
+        Tue, 26 Apr 2022 01:41:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0452EB81CF0;
+        Tue, 26 Apr 2022 08:41:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43529C385A0;
+        Tue, 26 Apr 2022 08:41:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650962495;
+        bh=sIE4U5sE+hEE75msEzj31tYLgvGjfk9whkhrozyQSo0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=FyKcytsf2QBmERB7fyi7oRTYeWhk6WDjCSu8fnmE3+bcprDrfj2Nd6a6/ZRRA6nSb
+         dPoK+58Ayawe9skSEsxq+J4rIDc8vAln2WnGCLkiWx+tZcC27mgxOq9LjC8/B5r7tK
+         tNxmaAUdAD9dVKWhWc2gl/t7y8OptCYMQ3keBCQk=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Ye Bin <yebin10@huawei.com>,
+        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>,
+        stable@kernel.org
+Subject: [PATCH 5.15 115/124] ext4: fix use-after-free in ext4_search_dir
+Date:   Tue, 26 Apr 2022 10:21:56 +0200
+Message-Id: <20220426081750.560571833@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
+In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
+References: <20220426081747.286685339@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+From: Ye Bin <yebin10@huawei.com>
 
-The last bits left move for the various 'x' in fls() is unnecessary,
-and remove it.
+commit c186f0887fe7061a35cebef024550ec33ef8fbd8 upstream.
 
-Signed-off-by: Mengen Sun <mengensun@tencent.com>
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
+We got issue as follows:
+EXT4-fs (loop0): mounted filesystem without journal. Opts: ,errors=continue
+==================================================================
+BUG: KASAN: use-after-free in ext4_search_dir fs/ext4/namei.c:1394 [inline]
+BUG: KASAN: use-after-free in search_dirblock fs/ext4/namei.c:1199 [inline]
+BUG: KASAN: use-after-free in __ext4_find_entry+0xdca/0x1210 fs/ext4/namei.c:1553
+Read of size 1 at addr ffff8881317c3005 by task syz-executor117/2331
+
+CPU: 1 PID: 2331 Comm: syz-executor117 Not tainted 5.10.0+ #1
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
+Call Trace:
+ __dump_stack lib/dump_stack.c:83 [inline]
+ dump_stack+0x144/0x187 lib/dump_stack.c:124
+ print_address_description+0x7d/0x630 mm/kasan/report.c:387
+ __kasan_report+0x132/0x190 mm/kasan/report.c:547
+ kasan_report+0x47/0x60 mm/kasan/report.c:564
+ ext4_search_dir fs/ext4/namei.c:1394 [inline]
+ search_dirblock fs/ext4/namei.c:1199 [inline]
+ __ext4_find_entry+0xdca/0x1210 fs/ext4/namei.c:1553
+ ext4_lookup_entry fs/ext4/namei.c:1622 [inline]
+ ext4_lookup+0xb8/0x3a0 fs/ext4/namei.c:1690
+ __lookup_hash+0xc5/0x190 fs/namei.c:1451
+ do_rmdir+0x19e/0x310 fs/namei.c:3760
+ do_syscall_64+0x33/0x40 arch/x86/entry/common.c:46
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x445e59
+Code: 4d c7 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 1b c7 fb ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007fff2277fac8 EFLAGS: 00000246 ORIG_RAX: 0000000000000054
+RAX: ffffffffffffffda RBX: 0000000000400280 RCX: 0000000000445e59
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00000000200000c0
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000002
+R10: 00007fff2277f990 R11: 0000000000000246 R12: 0000000000000000
+R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
+
+The buggy address belongs to the page:
+page:0000000048cd3304 refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x1317c3
+flags: 0x200000000000000()
+raw: 0200000000000000 ffffea0004526588 ffffea0004528088 0000000000000000
+raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ ffff8881317c2f00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff8881317c2f80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffff8881317c3000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+                   ^
+ ffff8881317c3080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff8881317c3100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+==================================================================
+
+ext4_search_dir:
+  ...
+  de = (struct ext4_dir_entry_2 *)search_buf;
+  dlimit = search_buf + buf_size;
+  while ((char *) de < dlimit) {
+  ...
+    if ((char *) de + de->name_len <= dlimit &&
+	 ext4_match(dir, fname, de)) {
+	    ...
+    }
+  ...
+    de_len = ext4_rec_len_from_disk(de->rec_len, dir->i_sb->s_blocksize);
+    if (de_len <= 0)
+      return -1;
+    offset += de_len;
+    de = (struct ext4_dir_entry_2 *) ((char *) de + de_len);
+  }
+
+Assume:
+de=0xffff8881317c2fff
+dlimit=0x0xffff8881317c3000
+
+If read 'de->name_len' which address is 0xffff8881317c3005, obviously is
+out of range, then will trigger use-after-free.
+To solve this issue, 'dlimit' must reserve 8 bytes, as we will read
+'de->name_len' to judge if '(char *) de + de->name_len' out of range.
+
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/20220324064816.1209985-1-yebin10@huawei.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Cc: stable@kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/asm-generic/bitops/fls.h       | 4 +---
- tools/include/asm-generic/bitops/fls.h | 4 +---
- 2 files changed, 2 insertions(+), 6 deletions(-)
+ fs/ext4/ext4.h  |    4 ++++
+ fs/ext4/namei.c |    4 ++--
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/include/asm-generic/bitops/fls.h b/include/asm-generic/bitops/fls.h
-index b168bb10e1be..07e5cdfc3b98 100644
---- a/include/asm-generic/bitops/fls.h
-+++ b/include/asm-generic/bitops/fls.h
-@@ -32,10 +32,8 @@ static __always_inline int fls(unsigned int x)
- 		x <<= 2;
- 		r -= 2;
- 	}
--	if (!(x & 0x80000000u)) {
--		x <<= 1;
-+	if (!(x & 0x80000000u))
- 		r -= 1;
--	}
- 	return r;
- }
+--- a/fs/ext4/ext4.h
++++ b/fs/ext4/ext4.h
+@@ -2267,6 +2267,10 @@ static inline int ext4_forced_shutdown(s
+  * Structure of a directory entry
+  */
+ #define EXT4_NAME_LEN 255
++/*
++ * Base length of the ext4 directory entry excluding the name length
++ */
++#define EXT4_BASE_DIR_LEN (sizeof(struct ext4_dir_entry_2) - EXT4_NAME_LEN)
  
-diff --git a/tools/include/asm-generic/bitops/fls.h b/tools/include/asm-generic/bitops/fls.h
-index b168bb10e1be..07e5cdfc3b98 100644
---- a/tools/include/asm-generic/bitops/fls.h
-+++ b/tools/include/asm-generic/bitops/fls.h
-@@ -32,10 +32,8 @@ static __always_inline int fls(unsigned int x)
- 		x <<= 2;
- 		r -= 2;
- 	}
--	if (!(x & 0x80000000u)) {
--		x <<= 1;
-+	if (!(x & 0x80000000u))
- 		r -= 1;
--	}
- 	return r;
- }
+ struct ext4_dir_entry {
+ 	__le32	inode;			/* Inode number */
+--- a/fs/ext4/namei.c
++++ b/fs/ext4/namei.c
+@@ -1466,10 +1466,10 @@ int ext4_search_dir(struct buffer_head *
  
--- 
-2.36.0
+ 	de = (struct ext4_dir_entry_2 *)search_buf;
+ 	dlimit = search_buf + buf_size;
+-	while ((char *) de < dlimit) {
++	while ((char *) de < dlimit - EXT4_BASE_DIR_LEN) {
+ 		/* this code is executed quadratically often */
+ 		/* do minimal checking `by hand' */
+-		if ((char *) de + de->name_len <= dlimit &&
++		if (de->name + de->name_len <= dlimit &&
+ 		    ext4_match(dir, fname, de)) {
+ 			/* found a match - just to be sure, do
+ 			 * a full check */
+
 

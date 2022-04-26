@@ -2,123 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 393DC50F09B
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:05:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 292DF50F09D
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:06:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244386AbiDZGIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 02:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60050 "EHLO
+        id S244479AbiDZGJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 02:09:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232676AbiDZGIo (ORCPT
+        with ESMTP id S244492AbiDZGJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 02:08:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9597D3B3E2
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:05:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650953136;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2egRURZGc3X1zsm5gAB76hti2IuqB4ZG8M3lASWWXA4=;
-        b=hm3vrFqaWA0JAxNzMccEPIzjHmzB5KeH1ZRwIJ3z8ChqhUkaSj+sGI/OGeyZVgRt1P16w8
-        f91ajGObVFgye/qjh3SPttlivIM2hHgmVx+Du9egEnqG0xbV4rvtyH86Mnd5NsLgBpnfqF
-        lcXYtiJJVEIKbvBZTp32q0/BGvKvt4Q=
-Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
- [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-257-MFTJKrmjOZeb-eX5jduekQ-1; Tue, 26 Apr 2022 02:05:35 -0400
-X-MC-Unique: MFTJKrmjOZeb-eX5jduekQ-1
-Received: by mail-lj1-f198.google.com with SMTP id 20-20020a05651c009400b002462f08f8d2so4219778ljq.2
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:05:34 -0700 (PDT)
+        Tue, 26 Apr 2022 02:09:04 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E543B3E0;
+        Mon, 25 Apr 2022 23:05:58 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id z5-20020a17090a468500b001d2bc2743c4so1632779pjf.0;
+        Mon, 25 Apr 2022 23:05:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sveTZihqbtASgG45RmpuX6/+/JP5p6aKyndPd2dvzrk=;
+        b=lipHBQT5QDm2zvtDEj95wCCFW/LVcbOVRDa8bm+NF6/vTb7U8h0po5u7vP+FbjaLNb
+         fSTO2akyIrAAU8seVxDglthX8/vS5bpBc6P4WZuAYV+MF1yYKdZRBqOo5kUNOBk0scTW
+         Ss6dHjTc2sBC6wJCqMH4LW+P2UM/axZTqo+B7ZepZCiB4rHLj8OBu5jABzC/iajaUTZq
+         L/oXhaTfwOQ0GAdNpPrgsQV3/J53iatnJgTTEGTGILDdAFvdIjW3FV6VAqh0jVvx0KXm
+         qngpJAbXWrP6bbpk0pTsRTBbEEJf36j6CqL1WbXl4YwfEl4cRiGkUE6XwJBJ4jEnSyP5
+         VtbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2egRURZGc3X1zsm5gAB76hti2IuqB4ZG8M3lASWWXA4=;
-        b=JZ6+f0obm+EeABl1mJyzY5NEzvEgQsOlcIaz+SL70GU38/IZ1JVVwla9XD6rEsmpx4
-         ZTopCBmKXeH3Wl8hgQ3xT/U7mrpJ9xq3c8jnlW50la44JJnPuxjD3FDPNhQoW9Jz7h96
-         CMjTHUp8SOR3+yxUDCq0ifJnbAo7ZBIn2QEqYHCfDE/VJugFYZQLZwcrGkVu2VElW5bR
-         df3wlnbk5a03M6+lAsiq+Fe2wLT1AxBsPaTJSsnetV6Xw27QzG3csLKERq2PMf3/5c2F
-         /vmTVAxCgaD5B/PTlmsKByJRdVbTBj4/TlDRaFQIJMS1nEbzenO7O4oE20LMy5U4PQJ/
-         f97g==
-X-Gm-Message-State: AOAM5323O4G8MYyJUHjRaqqH2GZi70nPShIKalEUF9FXGYfivIaPDHNL
-        U5ut3v37mqfFUIlC+4FsCuenWd8d4D3TsReY2S/EO1q/QKS3nt0bl88JSRTbaF8vFdhlEhYOI9y
-        6Wh+15rlTJrOVMSh9Fl0OPMjXtMKhXzARtwIp2DjT
-X-Received: by 2002:a2e:534a:0:b0:24a:f64f:a1d6 with SMTP id t10-20020a2e534a000000b0024af64fa1d6mr13647211ljd.315.1650953133055;
-        Mon, 25 Apr 2022 23:05:33 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwvqk67sw4EDGv0ATnZE0rdxm7etQKm8KtJCuN+NgM20B0XOe9lQOGILQ7TAJClGDrxsUb8Af50QocRPtJgc+k=
-X-Received: by 2002:a2e:534a:0:b0:24a:f64f:a1d6 with SMTP id
- t10-20020a2e534a000000b0024af64fa1d6mr13647200ljd.315.1650953132889; Mon, 25
- Apr 2022 23:05:32 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sveTZihqbtASgG45RmpuX6/+/JP5p6aKyndPd2dvzrk=;
+        b=Q5uILKPElSlZ036s/CozqIt7PaR0uODTnsqUEptASul2pSt7toBIs4K6NhzJql6MR5
+         qkBM9hRdDx31X4o0mOmrWUinKp2l4MVS4wQ7geMX3kR4gloFsul2Tu3jeat6NNpJ68ZE
+         DSY3+AEA+Csvd1v1/2GAR8qA5CwW3eiuhDlJInoQIrbFiA/JkdsjQWZIfKhqs7M6D2KX
+         XkkKiIsuV0B1DVSUPJ0B7XalyjYgBfU0wINQHl9B7y+ZBLDFhSquidZ7JTSo5XbcACXt
+         i0JB3n6wT+TtOzkCVnuGvlrmMPwWOGYAGkgZ7GG14OADSFwxNJfdDl2sCUzpxK2d+4AV
+         odsw==
+X-Gm-Message-State: AOAM533Y0mifInTiRP9AGMli8aDxaakJbSA4iWKDafoNJNXqUi9fH91v
+        SJ54C2AePDQTP4MpgLu7jiqEXhg8p6Mh5w==
+X-Google-Smtp-Source: ABdhPJx5QtIfmQP8yirGnkQjosr/AQEnKycMr6tP8xcGosUgyInpFNgrJ6eAZwfUGz99HIWGjVHWkw==
+X-Received: by 2002:a17:902:9887:b0:151:6e1c:7082 with SMTP id s7-20020a170902988700b001516e1c7082mr21292705plp.162.1650953157585;
+        Mon, 25 Apr 2022 23:05:57 -0700 (PDT)
+Received: from localhost.localdomain ([103.84.139.165])
+        by smtp.gmail.com with ESMTPSA id k13-20020a056a00134d00b0050a5867dd73sm13969135pfu.157.2022.04.25.23.05.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 23:05:57 -0700 (PDT)
+From:   Hangyu Hua <hbh25y@gmail.com>
+To:     bjorn.andersson@linaro.org, mathieu.poirier@linaro.org,
+        arnaud.pouliquen@foss.st.com
+Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH v2 0/3] rpmsg: virtio: fix posseble double free
+Date:   Tue, 26 Apr 2022 14:05:33 +0800
+Message-Id: <20220426060536.15594-1-hbh25y@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220425062735.172576-2-lulu@redhat.com>
-In-Reply-To: <20220425062735.172576-2-lulu@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 26 Apr 2022 14:05:21 +0800
-Message-ID: <CACGkMEtGZqoei6i=LmVrTgNfWM4SpxjQH-8j7BP=EoFO=iqeYw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] vdpa/vp_vdpa : add vdpa tool support in vp_vdpa
-To:     Cindy Lu <lulu@redhat.com>
-Cc:     mst <mst@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 2:27 PM Cindy Lu <lulu@redhat.com> wrote:
->
-> this patch is to add the support for vdpa tool in vp_vdpa
-> here is the example steps
->
-> modprobe vp_vdpa
-> modprobe vhost_vdpa
-> echo 0000:00:06.0>/sys/bus/pci/drivers/virtio-pci/unbind
-> echo 1af4 1041 > /sys/bus/pci/drivers/vp-vdpa/new_id
->
-> vdpa dev add name vdpa1 mgmtdev pci/0000:00:06.0
->
-> Signed-off-by: Cindy Lu <lulu@redhat.com>
-> ---
->  drivers/vdpa/virtio_pci/vp_vdpa.c | 138 +++++++++++++++++++++++-------
->  1 file changed, 106 insertions(+), 32 deletions(-)
->
-> diff --git a/drivers/vdpa/virtio_pci/vp_vdpa.c b/drivers/vdpa/virtio_pci/vp_vdpa.c
-> index cce101e6a940..873402977543 100644
-> --- a/drivers/vdpa/virtio_pci/vp_vdpa.c
-> +++ b/drivers/vdpa/virtio_pci/vp_vdpa.c
-> @@ -32,7 +32,8 @@ struct vp_vring {
->
->  struct vp_vdpa {
->         struct vdpa_device vdpa;
-> -       struct virtio_pci_modern_device mdev;
-> +       /* this is an pointer point to the mdev in vp_vdpa_mgmtdev*/
-> +       struct virtio_pci_modern_device *mdev;
+There are double free in rpmsg_probe() and rpmsg_virtio_add_ctrl_dev().
+In addition, rpmsg_virtio_del_ctrl_dev() didn't use correct function
+to free the object.
 
-The code can explain itself, so the comment is redundant.
+v2:
+Use a cover letter to integrate the three patches.
+Add comments in rpmsg_probe() and rpmsg_virtio_add_ctrl_dev().
 
->         struct vp_vring *vring;
->         struct vdpa_callback config_cb;
->         char msix_name[VP_VDPA_NAME_SIZE];
-> @@ -41,6 +42,12 @@ struct vp_vdpa {
->         int vectors;
->  };
->
-> +struct vp_vdpa_mgmtdev {
-> +       struct vdpa_mgmt_dev mgtdev;
-> +       struct virtio_pci_modern_device mdev;
 
-I think coupling it with mgmt device is probably not good, any reason
-we can't allocate it independently?
+Hangyu Hua (2):
+  rpmsg: virtio: fix possible double free in rpmsg_probe()
+  rpmsg: virtio: fix possible double free in rpmsg_virtio_add_ctrl_dev()
+Arnaud Pouliquen (1):
+  rpmsg: virtio: Fix the unregistration of the device rpmsg_ctrl
 
-Thanks
+ drivers/rpmsg/virtio_rpmsg_bus.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-> +       struct vp_vdpa *vp_vdpa;
-> +};
+-- 
+2.25.1
 

@@ -2,87 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B71D50F2EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C500A50F2FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:48:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344269AbiDZHuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 03:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38090 "EHLO
+        id S1344273AbiDZHvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 03:51:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343874AbiDZHuH (ORCPT
+        with ESMTP id S242452AbiDZHvp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 03:50:07 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70F95193F4;
-        Tue, 26 Apr 2022 00:47:00 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3AC2C23A;
-        Tue, 26 Apr 2022 00:47:00 -0700 (PDT)
-Received: from [10.57.12.108] (unknown [10.57.12.108])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AC2743F73B;
-        Tue, 26 Apr 2022 00:46:58 -0700 (PDT)
-Message-ID: <f6bb20c6-38a0-57d6-8979-d14e445da623@arm.com>
-Date:   Tue, 26 Apr 2022 08:46:57 +0100
+        Tue, 26 Apr 2022 03:51:45 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00741A040;
+        Tue, 26 Apr 2022 00:48:37 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id h1so17219580pfv.12;
+        Tue, 26 Apr 2022 00:48:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f3CunhxLC3mb3e6UNr+xNX95pgRojNIa+JUKiN4OUms=;
+        b=TljaTwoD8SLvOhWYTxOMKfYY4caoHsVCypcKaTpr1fj0K9eavwC4WSrr8G2XGElv8x
+         TV9kj4OpypB/7rTo+tSov6Fhh50nCp6quQer1GYUvmSyAxLUzyGDQwX6SW4ddDzFDIOx
+         6NB1aq9idon2IZZRJdp8SP825iqygYG2wCZap9YmIKbCh1GtDzbZSPKq6e1EU+rYfu3Q
+         DysNrV27KbaIKIkDTDBGraC+yTWaPMQGx3+ki4BKfk4HizU8csvTp0Ol0uCs3egEEEzh
+         S0HZdkVei0DhgK4TtYnkwmcRYoRjDjQH2Ho5T6mcxx2QupLuE1DZthyiYYsEEzAdy8aq
+         DKfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f3CunhxLC3mb3e6UNr+xNX95pgRojNIa+JUKiN4OUms=;
+        b=4yZQCA26rgytSVQg66+gNMaq5dwTDEuljoYzkpJhW547TMDWlso3xheFlGFvgcgCKT
+         tAPSljbENDe/EmRdTOFciCO+VXPqcMtFvtYcYmnN27Fi9LVRs7C4hfyNWcE5ayKUf3Bc
+         5puG8JGgYoGzu+9k0OmzE5Im13xveuA5tuspsAUecUXtbpXY+gbCzytc6HoKah7T3Seu
+         xODILt1EgNYg7PwHXuN1IOrdcAsulECVMRlQYEDwalUIWXbyNh1qj5y/4is8DUtexsEJ
+         hpRCHEU06xEuYCGHUPyApcoQisHGCvJHleTFkEbgw8oIb+0FVSO+YsSb2p6t7+OM0Gb7
+         FuLQ==
+X-Gm-Message-State: AOAM531mF+vsF/RsoM9IwpmJmweqx2nDBsZ9pXVLANRVWlnVnR42/flT
+        A2aDZAeb5tQARb6DgxYGZPCD0hKsCaQ=
+X-Google-Smtp-Source: ABdhPJzbS6CSlbSiL3g2XpFHPHeAZCURvdyStjTGUIx8QfAcYIPh4pe5nzI/LP307yAagUaH8Nk2Bg==
+X-Received: by 2002:a63:3115:0:b0:3ab:2131:5f12 with SMTP id x21-20020a633115000000b003ab21315f12mr9658991pgx.0.1650959316856;
+        Tue, 26 Apr 2022 00:48:36 -0700 (PDT)
+Received: from debian.me (subs32-116-206-28-30.three.co.id. [116.206.28.30])
+        by smtp.gmail.com with ESMTPSA id n12-20020a17090ade8c00b001d25dfb9d39sm1845467pjv.14.2022.04.26.00.48.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 00:48:35 -0700 (PDT)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     linux-doc@vger.kernel.org
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        kernel test robot <lkp@intel.com>,
+        Suresh Warrier <warrier@linux.vnet.ibm.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Alexey Kardashevskiy <aik@ozlabs.ru>,
+        linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: powerpc: remove extraneous asterisk from rm_host_ipi_action comment
+Date:   Tue, 26 Apr 2022 14:47:51 +0700
+Message-Id: <20220426074750.71251-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v3 0/5] Introduce Cpufreq Active Stats
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com, amit.kachhap@gmail.com,
-        linux-pm@vger.kernel.org
-References: <20220406220809.22555-1-lukasz.luba@arm.com>
- <20220426031125.ozaxwecwvuby6wo3@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20220426031125.ozaxwecwvuby6wo3@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+kernel test robot reported kernel-doc warning for rm_host_ipi_action():
 
+arch/powerpc/kvm/book3s_hv_rm_xics.c:887: warning: This comment
+starts with '/**', but isn't a kernel-doc comment. Refer
+Documentation/doc-guide/kernel-doc.rst
 
-On 4/26/22 04:11, Viresh Kumar wrote:
-> On 06-04-22, 23:08, Lukasz Luba wrote:
->> Hi all,
->>
->> This is the 3rd version of patch set which tries to address issues which are
->> due to missing proper information about CPU performance in time.
->>
->> The issue description:
->> 1. "Cpufreq statistics cover the time when CPUs are in idle states, so they
->>     are not suitable for certain purposes, like thermal control." Rafael [2]
->> 2. Thermal governor Intelligent Power Allocation (IPA) has to estimate power,
->>     for the last period, e.g. 100ms, for each CPU in the Cluster, to grant new
->>     power and set max possible frequency. Currently in some cases it gets big
->>     error, when the frequency of CPU changed in the middle. It is due to the
->>     fact that IPA reads the current frequency for the CPU, not aware of all
->>     other frequencies which were actively (not in idle) used in the last 100ms.
->>
->> This code focuses on tracking the events of idle entry/exit for each CPU
->> and combine them with the frequency tracked statistics inside internal
->> statistics arrays (per-CPU). In the old cpufreq stats we have one shared
->> statistics array for the policy (all CPUs) and not take into account
->> periods when each CPU was in idle.
->>
->> Sometimes the IPA error between old estimation signal and reality is quite
->> big (>50%).
-> 
-> It would have been useful to show how the stats hierarchy looks in userspace
-> now.
-> 
+Since the function is static, remove the extraneous (second) asterisk at
+the head of function comment.
 
-I haven't modify your current cpufreq stats, they are still counting
-total time (idle + running) for the given frequency. I think this is
-still useful for some userspace tools. These new proposed stats don't
-have such sysfs interface to read them. I don't know if userspace would
-be interested in this information (the running only time). IIRC Android
-uses bpf mechanisms to get this information to the userspace.
+Link: https://lore.kernel.org/linux-doc/202204252334.Cd2IsiII-lkp@intel.com/
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Suresh Warrier <warrier@linux.vnet.ibm.com>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: Anders Roxell <anders.roxell@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Segher Boessenkool <segher@kernel.crashing.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: Fabiano Rosas <farosas@linux.ibm.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Alexey Kardashevskiy <aik@ozlabs.ru>
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: kvm@vger.kernel.org
+Cc: stable@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ arch/powerpc/kvm/book3s_hv_rm_xics.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/powerpc/kvm/book3s_hv_rm_xics.c b/arch/powerpc/kvm/book3s_hv_rm_xics.c
+index 587c33fc45640f..6e16bd751c8423 100644
+--- a/arch/powerpc/kvm/book3s_hv_rm_xics.c
++++ b/arch/powerpc/kvm/book3s_hv_rm_xics.c
+@@ -883,7 +883,7 @@ long kvmppc_deliver_irq_passthru(struct kvm_vcpu *vcpu,
+ 
+ /*  --- Non-real mode XICS-related built-in routines ---  */
+ 
+-/**
++/*
+  * Host Operations poked by RM KVM
+  */
+ static void rm_host_ipi_action(int action, void *data)
+
+base-commit: d615b5416f8a1afeb82d13b238f8152c572d59c0
+-- 
+An old man doll... just what I always wanted! - Clara
+

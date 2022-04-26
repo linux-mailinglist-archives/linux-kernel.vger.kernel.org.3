@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ADAC50F893
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E46C550F6F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:00:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346707AbiDZJ1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43432 "EHLO
+        id S245738AbiDZJCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346816AbiDZJFF (ORCPT
+        with ESMTP id S1347127AbiDZIpv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:05:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6CC8EA1D9;
-        Tue, 26 Apr 2022 01:43:55 -0700 (PDT)
+        Tue, 26 Apr 2022 04:45:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA3C5793B5;
+        Tue, 26 Apr 2022 01:37:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0ADAEB81CF2;
-        Tue, 26 Apr 2022 08:43:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CEE5C385AC;
-        Tue, 26 Apr 2022 08:43:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BFC7603E0;
+        Tue, 26 Apr 2022 08:37:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31E9CC385A0;
+        Tue, 26 Apr 2022 08:37:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962632;
-        bh=PTHyB/JAPnr23g96J2lvylkfzjNZfe7Uuy9eBoGUcoc=;
+        s=korg; t=1650962243;
+        bh=WX/DtGNbHwolQ0XWCUvkRTjty4uMyDFVP57ojyvmgJ4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pUBpH7kkvGTW/xKqeOGNq/Uiqx9Uyf/jeIVHE/EoSThvshZrNGLSq0qNb1nnQDtwu
-         gUFLSXMpt0Uon82/bvGbqdxzXYekQDkEecIG8ckUxsBXoX9ym90FH3fOVkAa8A/c8c
-         i7aPAEfCBAVSqxZHWGa7xR2WnB5xHk55HkN/Dq6s=
+        b=O/m9gHQ4zbG/9VPNA0jnl+Dqe6FP6KeJCbkZg6yChFshWUv6/OxrPqQQlhCz9dw3H
+         xXFQYkvFFzLOiA86N3chniDtHq7BoU1UkYuEANS4OK42ngWtrsMwaFZVcRuM5MB5xQ
+         TxNovMJxEUSvwMaAL4Wsp9VY3TgNn8+j4OW/4dOc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Naama Meir <naamax.meir@linux.intel.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 037/146] net/sched: cls_u32: fix possible leak in u32_init_knode()
+Subject: [PATCH 5.15 031/124] igc: Fix suspending when PTM is active
 Date:   Tue, 26 Apr 2022 10:20:32 +0200
-Message-Id: <20220426081751.112036028@linuxfoundation.org>
+Message-Id: <20220426081748.188785492@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
-References: <20220426081750.051179617@linuxfoundation.org>
+In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
+References: <20220426081747.286685339@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,55 +57,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Vinicius Costa Gomes <vinicius.gomes@intel.com>
 
-[ Upstream commit ec5b0f605b105457f257f2870acad4a5d463984b ]
+[ Upstream commit 822f52e7efdc88fccffb9fbf6250a4b7666a0b0f ]
 
-While investigating a related syzbot report,
-I found that whenever call to tcf_exts_init()
-from u32_init_knode() is failing, we end up
-with an elevated refcount on ht->refcnt
+Some mainboard/CPU combinations, in particular, Alder Lake-S with a
+W680 mainboard, have shown problems (system hangs usually, no kernel
+logs) with suspend/resume when PCIe PTM is enabled and active. In some
+cases, it could be reproduced when removing the igc module.
 
-To avoid that, only increase the refcount after
-all possible errors have been evaluated.
+The best we can do is to stop PTM dialogs from the downstream/device
+side before the interface is brought down. PCIe PTM will be re-enabled
+when the interface is being brought up.
 
-Fixes: b9a24bb76bf6 ("net_sched: properly handle failure case of tcf_exts_init()")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Cong Wang <xiyou.wangcong@gmail.com>
-Cc: Jiri Pirko <jiri@resnulli.us>
-Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: a90ec8483732 ("igc: Add support for PTP getcrosststamp()")
+Signed-off-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
+Tested-by: Naama Meir <naamax.meir@linux.intel.com>
+Acked-by: Paul Menzel <pmenzel@molgen.mpg.de>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sched/cls_u32.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/intel/igc/igc_ptp.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/net/sched/cls_u32.c b/net/sched/cls_u32.c
-index fcba6c43ba50..4d27300c287c 100644
---- a/net/sched/cls_u32.c
-+++ b/net/sched/cls_u32.c
-@@ -815,10 +815,6 @@ static struct tc_u_knode *u32_init_knode(struct net *net, struct tcf_proto *tp,
- 	new->flags = n->flags;
- 	RCU_INIT_POINTER(new->ht_down, ht);
- 
--	/* bump reference count as long as we hold pointer to structure */
--	if (ht)
--		ht->refcnt++;
--
- #ifdef CONFIG_CLS_U32_PERF
- 	/* Statistics may be incremented by readers during update
- 	 * so we must keep them in tact. When the node is later destroyed
-@@ -840,6 +836,10 @@ static struct tc_u_knode *u32_init_knode(struct net *net, struct tcf_proto *tp,
- 		return NULL;
- 	}
- 
-+	/* bump reference count as long as we hold pointer to structure */
-+	if (ht)
-+		ht->refcnt++;
-+
- 	return new;
+diff --git a/drivers/net/ethernet/intel/igc/igc_ptp.c b/drivers/net/ethernet/intel/igc/igc_ptp.c
+index 4f9245aa79a1..8e521f99b80a 100644
+--- a/drivers/net/ethernet/intel/igc/igc_ptp.c
++++ b/drivers/net/ethernet/intel/igc/igc_ptp.c
+@@ -996,6 +996,17 @@ static void igc_ptp_time_restore(struct igc_adapter *adapter)
+ 	igc_ptp_write_i225(adapter, &ts);
  }
  
++static void igc_ptm_stop(struct igc_adapter *adapter)
++{
++	struct igc_hw *hw = &adapter->hw;
++	u32 ctrl;
++
++	ctrl = rd32(IGC_PTM_CTRL);
++	ctrl &= ~IGC_PTM_CTRL_EN;
++
++	wr32(IGC_PTM_CTRL, ctrl);
++}
++
+ /**
+  * igc_ptp_suspend - Disable PTP work items and prepare for suspend
+  * @adapter: Board private structure
+@@ -1013,8 +1024,10 @@ void igc_ptp_suspend(struct igc_adapter *adapter)
+ 	adapter->ptp_tx_skb = NULL;
+ 	clear_bit_unlock(__IGC_PTP_TX_IN_PROGRESS, &adapter->state);
+ 
+-	if (pci_device_is_present(adapter->pdev))
++	if (pci_device_is_present(adapter->pdev)) {
+ 		igc_ptp_time_save(adapter);
++		igc_ptm_stop(adapter);
++	}
+ }
+ 
+ /**
 -- 
 2.35.1
 

@@ -2,158 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02C7B5104FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 19:12:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3A9B510507
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 19:14:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbiDZRMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 13:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44518 "EHLO
+        id S1353972AbiDZRQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 13:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354037AbiDZRMD (ORCPT
+        with ESMTP id S1353841AbiDZRNC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 13:12:03 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1096338BF
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 10:08:39 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id w1so33061355lfa.4
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 10:08:39 -0700 (PDT)
+        Tue, 26 Apr 2022 13:13:02 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCDB115248E
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 10:09:41 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id u7so15472892plg.13
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 10:09:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mj5YNIpqKili4njrI75f0/IFkDmlnuz7/vAcRFXF5qo=;
-        b=io1nLFMc9+ErVeKm4EDDchVdVYXWmUQ8SmiWSUDjaMpSsm6oWXpCfZj4wr5zNa+Qqv
-         OMlIIEMk6xiz9WnGxyRzQRmb0+VqnuRlAVBJnP+j1MDdagAmzm6iDrPvMufpbyIFcoxk
-         v7x09EqIb7DCKz+eQmrKau4OihA3TSQGvVoZM794wf+uvE75uZVZQ9S9+h5Ax3gsvDqp
-         TfR+sM4zKjIsIQazg+gsigCLkHC8E9Y3PG54FqBIFQBfEXzNkwtLYlGIkUEIRPOKz30e
-         6IfpDWoXlE1BAgwdlCLu1nA1P/tJh27jDlXuB04EGVzlsNYIIaQBZ3HVG6+j+XeKXIj0
-         qnTQ==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=3pRtFB0OyQWIloF6gVvfP70/y+ZKfPUHmGKRZFCdpzo=;
+        b=JdywYSebpgqCQp5y9FZgv57z+A7W8Eo1jzjvEsSt6memkwrAmjIt5BN3J0vvkEFjLQ
+         CilG4xKw1gD6YlXJbKWcId/C0g08ICrJmYp+U0c5gJ0T/WFa06NeyDxZPijIy0k/esRA
+         kMPwEpjXPj2SruWZQ54bdvAgOdDC03eHVRj3agVSEwPiixeOT394a0v0EXXgvER6+ghL
+         /ps/RyeJ5BAbbWHUXWym2H3TX3UwVgxmZVsVJxZqx2cWM8xwiHsFG+F0nMUAdllVsmP/
+         VYUh3rgcjD/tknCPummvhBUkfu9Sl4CKW0IyYkTZjYyxbsjra/UF8vdGw9Od5U26EpSg
+         2Wqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mj5YNIpqKili4njrI75f0/IFkDmlnuz7/vAcRFXF5qo=;
-        b=mV684w1K3X5perfx2K08c7rfmqRF4g4hHxI7yUidDXz9rsrtO8tCR1JudWbzVlDeaa
-         BCdsBCsO7NIykMDZYE9WEOWJasJOnByngyheKWJiWy5CTc/cm5z0Pb5Ww/UfhmIiU6E9
-         adcofoqeBxOswK3sGiTFeLEAgkVOMYfp0EAuqdGezMVdGxmbSSdnUgWcCJgfdy6NqZ4V
-         ZJ0t5LiFN31IHP6Fh5yy1NdJrHphPe4INsYP9Qe26BOsDGuSffEole72qCRwZWq10tpE
-         Eqc27rTyfoGg3e0vct0K5PBaqrRe1lyITv5QTFoYcrBPJtGzvWpEQLEhM854PtpQApjn
-         ICLw==
-X-Gm-Message-State: AOAM5332r8JoR0BUnj6rdN1/QyQAbMsNO+vRXd1lqjwP2iX3V3cOgVWb
-        EsorpE95kZUIu5AVAiAG7Ko1VTtDeL8ib0fXME77o6MHjIE=
-X-Google-Smtp-Source: ABdhPJya8Phm79PF7Y31/YZmxkplUDt9LDWp86dvQxAFGd8ZFGIj4Jv0kqJTc68ZS1a4NQqtlQM/NuM719rjq4AgJVo=
-X-Received: by 2002:a05:6512:1d1:b0:471:f63a:b182 with SMTP id
- f17-20020a05651201d100b00471f63ab182mr13215378lfp.392.1650992917897; Tue, 26
- Apr 2022 10:08:37 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=3pRtFB0OyQWIloF6gVvfP70/y+ZKfPUHmGKRZFCdpzo=;
+        b=QkHoMeXMhfdAiQL5p3XtKPMjj0AkRRRsBrh+sWoncQik8x8adjQtGUwxbiyUC1YXm0
+         3ZPt0Nj5j6syYL431SsVts2tUlXQdb3HHRa9VdJFmdBvnZT39pc6pStQXoQXe2fbKW5Z
+         L15PVcyzZT26n6d4FAjlWUlxACFJ+uKVirUB2L5Ty7cjvxiPck2btf6U+UFcGjIVIEV8
+         L0hsDmGh/SH9jUePCWPCVuxh0oh6qQbNLTRQgPj3mofQApyWhb3M1xXMdnFLw7EFOH5J
+         nuEbGRUkCW3QQ37ctHSTc27LUg4UqBy7RvOcoQxzV/aIXWvVIeQdTPmL+X0cNDg9d1Ne
+         AC0A==
+X-Gm-Message-State: AOAM530eTNVzjgwIrJK8N7QQUZxiHAodxe8gn1ScBnb/iQ/CGoU3ZU53
+        UhP9w6e5r3ronjeUzZVQLMU=
+X-Google-Smtp-Source: ABdhPJxJkedSaboL6wP3INkBD/Gyh5Gw4Jxkq/TBnmVzgAaoyuEgyilnXqr2KGFt56efnHgstZK7Pg==
+X-Received: by 2002:a17:902:7e06:b0:159:6c1:ea2b with SMTP id b6-20020a1709027e0600b0015906c1ea2bmr24043348plm.105.1650992960672;
+        Tue, 26 Apr 2022 10:09:20 -0700 (PDT)
+Received: from [172.30.1.9] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id d18-20020a056a0010d200b004fa2e13ce80sm17099742pfu.76.2022.04.26.10.09.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Apr 2022 10:09:20 -0700 (PDT)
+Message-ID: <6f07e65b-339a-1ff7-1959-9ea4758d5244@gmail.com>
+Date:   Wed, 27 Apr 2022 02:09:16 +0900
 MIME-Version: 1.0
-References: <20220424190811.1678416-1-masahiroy@kernel.org> <20220424190811.1678416-11-masahiroy@kernel.org>
-In-Reply-To: <20220424190811.1678416-11-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 26 Apr 2022 10:08:25 -0700
-Message-ID: <CAKwvOdnysRX_qp1KYSd331G7K863iH-Xiw3UOwKRSQm65u9i-Q@mail.gmail.com>
-Subject: Re: [PATCH 10/27] modpost: traverse unresolved symbols in order
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] extcon: modify extcon device to be created after driver
+ data is set
+Content-Language: en-US
+To:     bumwoo lee <bw365.lee@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        linux-kernel@vger.kernel.org
+References: <CGME20220331030336epcas1p3b8bf7b1841d4b246030b57b668312169@epcas1p3.samsung.com>
+ <20220331030324.42621-1-bw365.lee@samsung.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+In-Reply-To: <20220331030324.42621-1-bw365.lee@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 24, 2022 at 12:09 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> Currently, modpost manages unresolved in a singly liked list; it adds
+Hi Bumwoo,
 
-s/liked/linked/
+Firstly, I'm sorry for late replay.
 
-> a new node to the head, and traverses the list from new to old.
->
-> Use a doubly linked list to keep the order in the symbol table in the
-> ELF file.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+On 22. 3. 31. 12:03, bumwoo lee wrote:
+> Currently, someone can invoke the sysfs such as state_show()
+> intermittently before set_drvdata() is done.
+> And it can be a cause of kernel Oops because of edev is Null at that time.
+> So modified the driver registration to after setting drviver data.
+> 
+> - Oops's backtrace.
+> 
+> Backtrace:
+> [<c067865c>] (state_show) from [<c05222e8>] (dev_attr_show)
+> [<c05222c0>] (dev_attr_show) from [<c02c66e0>] (sysfs_kf_seq_show)
+> [<c02c6648>] (sysfs_kf_seq_show) from [<c02c496c>] (kernfs_seq_show)
+> [<c02c4938>] (kernfs_seq_show) from [<c025e2a0>] (seq_read)
+> [<c025e11c>] (seq_read) from [<c02c50a0>] (kernfs_fop_read)
+> [<c02c5064>] (kernfs_fop_read) from [<c0231cac>] (__vfs_read)
+> [<c0231c5c>] (__vfs_read) from [<c0231ee0>] (vfs_read)
+> [<c0231e34>] (vfs_read) from [<c0232464>] (ksys_read)
+> [<c02323f0>] (ksys_read) from [<c02324fc>] (sys_read)
+> [<c02324e4>] (sys_read) from [<c00091d0>] (__sys_trace_return)
+> 
+> Signed-off-by: bumwoo lee <bw365.lee@samsung.com>
 > ---
->
->  scripts/mod/modpost.c | 20 ++++++++++++++------
->  scripts/mod/modpost.h |  2 +-
->  2 files changed, 15 insertions(+), 7 deletions(-)
->
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 1c7d2831e89d..e1eb188d6282 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -185,6 +185,8 @@ static struct module *new_module(const char *modname)
->         mod = NOFAIL(malloc(sizeof(*mod) + strlen(modname) + 1));
->         memset(mod, 0, sizeof(*mod));
->
-> +       INIT_LIST_HEAD(&mod->unresolved_symbols);
+>   drivers/extcon/extcon.c | 12 ++++++------
+>   1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
+> index d27cd9f88f86..74fee04bd764 100644
+> --- a/drivers/extcon/extcon.c
+> +++ b/drivers/extcon/extcon.c
+> @@ -1224,18 +1224,13 @@ int extcon_dev_register(struct extcon_dev *edev)
+>   		edev->dev.type = &edev->extcon_dev_type;
+>   	}
+>   
+> -	ret = device_register(&edev->dev);
+> -	if (ret) {
+> -		put_device(&edev->dev);
+> -		goto err_dev;
+> -	}
+> +	device_initialize(&edev->dev);
+>   
+>   	spin_lock_init(&edev->lock);
+>   	edev->nh = devm_kcalloc(&edev->dev, edev->max_supported,
+>   				sizeof(*edev->nh), GFP_KERNEL);
+
+Actually, I'm not sure that it is proper to use 'edev->dev'
+by devm_kcalloc before device_add. When error happen
+between device_initialize and device_add, I think that
+it is not properly handled such as free the allocated memory
+automatically.
+
+>   	if (!edev->nh) {
+>   		ret = -ENOMEM;
+> -		device_unregister(&edev->dev);
+>   		goto err_dev;
+>   	}
+>   
+> @@ -1251,9 +1246,14 @@ int extcon_dev_register(struct extcon_dev *edev)
+>   	list_add(&edev->entry, &extcon_dev_list);
+>   	mutex_unlock(&extcon_dev_list_lock);
+>   
+> +	ret = device_add(&edev->dev);
+> +	if (ret)
+> +		goto err_dev;
+
+On this case, need to delete entry from extcon_dev_list
+by using list_del.
+
 > +
->         strcpy(mod->name, modname);
->         mod->is_vmlinux = (strcmp(modname, "vmlinux") == 0);
->         mod->gpl_compatible = true;
-> @@ -201,6 +203,7 @@ static struct module *new_module(const char *modname)
->
->  struct symbol {
->         struct symbol *next;
-> +       struct list_head list;
+>   	return 0;
+>   
+>   err_dev:
+> +	put_device(&edev->dev);
+>   	if (edev->max_supported)
+>   		kfree(edev->extcon_dev_type.groups);
+>   err_alloc_groups:
 
-Isn't `list` meant to replace `next`?
 
->         struct module *module;
->         unsigned int crc;
->         bool crc_valid;
-> @@ -255,8 +258,12 @@ static struct symbol *new_symbol(const char *name, struct module *module,
->
->  static void sym_add_unresolved(const char *name, struct module *mod, bool weak)
->  {
-> -       mod->unres = alloc_symbol(name, mod->unres);
-> -       mod->unres->weak = weak;
-> +       struct symbol *sym;
-> +
-> +       sym = alloc_symbol(name, NULL);
-> +       sym->weak = weak;
-> +
-> +       list_add_tail(&sym->list, &mod->unresolved_symbols);
+I recommend that move device_register() position after dev_set_drvdata.
+And then use kcalloc instead of devm_kcalloc as following:
 
-Because I was curious here why NULL was passed, rather than remove the
-assignment to struct symbol's next member in alloc_symbol.
 
-I get why you replace the `unres` member of struct module. I guess I'm
-curious then why yet another list is added to struct symbol, rather
-than replace the next member.
+diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
+index d27cd9f88f86..80e5bfec1131 100644
+--- a/drivers/extcon/extcon.c
++++ b/drivers/extcon/extcon.c
+@@ -1224,19 +1224,11 @@ int extcon_dev_register(struct extcon_dev *edev)
+                 edev->dev.type = &edev->extcon_dev_type;
+         }
 
-Also, does adding a struct list_head member really not specify the
-_type_ of the next element?  I guess when I look at the definition of
-struct module, at the member unresolved symbols, I don't know whether
-it's a list of struct module* or a list of struct symbol*.
+-       ret = device_register(&edev->dev);
+-       if (ret) {
+-               put_device(&edev->dev);
+-               goto err_dev;
+-       }
+-
+         spin_lock_init(&edev->lock);
+-       edev->nh = devm_kcalloc(&edev->dev, edev->max_supported,
+-                               sizeof(*edev->nh), GFP_KERNEL);
++       edev->nh = kcalloc(edev->max_supported, sizeof(*edev->nh), 
+GFP_KERNEL);
+         if (!edev->nh) {
+                 ret = -ENOMEM;
+-               device_unregister(&edev->dev);
+-               goto err_dev;
++               goto err_alloc_nh;
+         }
 
-<snip>
+         for (index = 0; index < edev->max_supported; index++)
+@@ -1247,6 +1239,12 @@ int extcon_dev_register(struct extcon_dev *edev)
+         dev_set_drvdata(&edev->dev, edev);
+         edev->state = 0;
 
-> diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
-> index c3b5d2f0e2bb..6a90bfc08458 100644
-> --- a/scripts/mod/modpost.h
-> +++ b/scripts/mod/modpost.h
-> @@ -117,7 +117,7 @@ struct namespace_list {
->  struct module {
->         struct list_head list;
->         int gpl_compatible;
-> -       struct symbol *unres;
-> +       struct list_head unresolved_symbols;
->         bool from_dump;         /* true if module was loaded from *.symvers */
->         bool is_vmlinux;
->         bool seen;
-> --
-> 2.32.0
->
++       ret = device_register(&edev->dev);
++       if (ret) {
++               put_device(&edev->dev);
++               goto err_dev;
++       }
++
+         mutex_lock(&extcon_dev_list_lock);
+         list_add(&edev->entry, &extcon_dev_list);
+         mutex_unlock(&extcon_dev_list_lock);
+@@ -1254,6 +1252,9 @@ int extcon_dev_register(struct extcon_dev *edev)
+         return 0;
+
+  err_dev:
++       if (edev->max_supported)
++               kfree(edev->nh);
++err_alloc_nh:
+         if (edev->max_supported)
+                 kfree(edev->extcon_dev_type.groups);
+  err_alloc_groups:
+@@ -1314,6 +1315,7 @@ void extcon_dev_unregister(struct extcon_dev *edev)
+         if (edev->max_supported) {
+                 kfree(edev->extcon_dev_type.groups);
+                 kfree(edev->cables);
++               kfree(edev->nh);
+         }
+
+         put_device(&edev->dev);
+
 
 
 -- 
-Thanks,
-~Nick Desaulniers
+Best Regards,
+Samsung Electronics
+Chanwoo Choi

@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6C0750F5B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:54:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC5B50F58C
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:54:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346848AbiDZIuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:50:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58492 "EHLO
+        id S1346072AbiDZIjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:39:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345814AbiDZIje (ORCPT
+        with ESMTP id S1345676AbiDZIe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:39:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D9A76293;
-        Tue, 26 Apr 2022 01:31:36 -0700 (PDT)
+        Tue, 26 Apr 2022 04:34:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38EE7B13E;
+        Tue, 26 Apr 2022 01:28:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 76BA4B81CF3;
-        Tue, 26 Apr 2022 08:31:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDAADC385A0;
-        Tue, 26 Apr 2022 08:31:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EEDC6185C;
+        Tue, 26 Apr 2022 08:28:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85B3DC385A0;
+        Tue, 26 Apr 2022 08:28:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961894;
-        bh=5T3eTfQO08G5FmqikWHLKnbCUxqKl/QAJjfaLnqdXfE=;
+        s=korg; t=1650961683;
+        bh=E+8EVVtblN1qeO36f48MGdHo2JYSkCiA/9t20WgLgEo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Lor8HovSYpCupsAKpoNvLwgEjct/lfADAIBhqEG18IinOIqKe4mmMY7wtxGeco/zH
-         JJ7Yw31t6dKPky4MAvSjBqwSDNEG6fQqnU1O45FZ5XZnOtCx+gZWuRRHlqPyCBospy
-         DQQAuXpK38xHgS/nfXVCRu+mKnAbUlDUmIxH32X0=
+        b=mO1mG6KfSZUjiGIK7xkfVXSDWC/UNanygIYy2de6/GFO555VxQjWQT56N6PCN6rSG
+         EhjFfEukSQwdm8fclP9szWS3jqPmfrILzIz7kU9eQxzYbuXgIjy0bnqCjX+B4+9fG5
+         OwshILBv2c1WXUtLTVXVIUSi4/n5aEdh1dciuo4U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        James Hutchinson <jahutchinson99@googlemail.com>,
-        Dima Ruinskiy <dima.ruinskiy@intel.com>,
-        Sasha Neftin <sasha.neftin@intel.com>,
-        Naama Meir <naamax.meir@linux.intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: [PATCH 5.4 49/62] e1000e: Fix possible overflow in LTR decoding
+        Duoming Zhou <duoming@zju.edu.cn>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ovidiu Panait <ovidiu.panait@windriver.com>
+Subject: [PATCH 4.19 49/53] ax25: fix UAF bug in ax25_send_control()
 Date:   Tue, 26 Apr 2022 10:21:29 +0200
-Message-Id: <20220426081738.628092897@linuxfoundation.org>
+Message-Id: <20220426081737.090471368@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
-References: <20220426081737.209637816@linuxfoundation.org>
+In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
+References: <20220426081735.651926456@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,52 +54,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sasha Neftin <sasha.neftin@intel.com>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-commit 04ebaa1cfddae5f240cc7404f009133bb0389a47 upstream.
+commit 5352a761308397a0e6250fdc629bb3f615b94747 upstream.
 
-When we decode the latency and the max_latency, u16 value may not fit
-the required size and could lead to the wrong LTR representation.
+There are UAF bugs in ax25_send_control(), when we call ax25_release()
+to deallocate ax25_dev. The possible race condition is shown below:
 
-Scaling is represented as:
-scale 0 - 1         (2^(5*0)) = 2^0
-scale 1 - 32        (2^(5 *1))= 2^5
-scale 2 - 1024      (2^(5 *2)) =2^10
-scale 3 - 32768     (2^(5 *3)) =2^15
-scale 4 - 1048576   (2^(5 *4)) = 2^20
-scale 5 - 33554432  (2^(5 *4)) = 2^25
-scale 4 and scale 5 required 20 and 25 bits respectively.
-scale 6 reserved.
+      (Thread 1)              |     (Thread 2)
+ax25_dev_device_up() //(1)    |
+                              | ax25_kill_by_device()
+ax25_bind()          //(2)    |
+ax25_connect()                | ...
+ ax25->state = AX25_STATE_1   |
+ ...                          | ax25_dev_device_down() //(3)
 
-Replace the u16 type with the u32 type and allow corrected LTR
-representation.
+      (Thread 3)
+ax25_release()                |
+ ax25_dev_put()  //(4) FREE   |
+ case AX25_STATE_1:           |
+  ax25_send_control()         |
+   alloc_skb()       //USE    |
 
-Cc: stable@vger.kernel.org
-Fixes: 44a13a5d99c7 ("e1000e: Fix the max snoop/no-snoop latency for 10M")
-Reported-by: James Hutchinson <jahutchinson99@googlemail.com>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215689
-Suggested-by: Dima Ruinskiy <dima.ruinskiy@intel.com>
-Signed-off-by: Sasha Neftin <sasha.neftin@intel.com>
-Tested-by: Naama Meir <naamax.meir@linux.intel.com>
-Tested-by: James Hutchinson <jahutchinson99@googlemail.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+The refcount of ax25_dev increases in position (1) and (2), and
+decreases in position (3) and (4). The ax25_dev will be freed
+before dereference sites in ax25_send_control().
+
+The following is part of the report:
+
+[  102.297448] BUG: KASAN: use-after-free in ax25_send_control+0x33/0x210
+[  102.297448] Read of size 8 at addr ffff888009e6e408 by task ax25_close/602
+[  102.297448] Call Trace:
+[  102.303751]  ax25_send_control+0x33/0x210
+[  102.303751]  ax25_release+0x356/0x450
+[  102.305431]  __sock_release+0x6d/0x120
+[  102.305431]  sock_close+0xf/0x20
+[  102.305431]  __fput+0x11f/0x420
+[  102.305431]  task_work_run+0x86/0xd0
+[  102.307130]  get_signal+0x1075/0x1220
+[  102.308253]  arch_do_signal_or_restart+0x1df/0xc00
+[  102.308253]  exit_to_user_mode_prepare+0x150/0x1e0
+[  102.308253]  syscall_exit_to_user_mode+0x19/0x50
+[  102.308253]  do_syscall_64+0x48/0x90
+[  102.308253]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[  102.308253] RIP: 0033:0x405ae7
+
+This patch defers the free operation of ax25_dev and net_device after
+all corresponding dereference sites in ax25_release() to avoid UAF.
+
+Fixes: 9fd75b66b8f6 ("ax25: Fix refcount leaks caused by ax25_cb_del()")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+[OP: backport to 4.19: adjust dev_put_track()->dev_put()]
+Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/e1000e/ich8lan.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/ax25/af_ax25.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/drivers/net/ethernet/intel/e1000e/ich8lan.c
-+++ b/drivers/net/ethernet/intel/e1000e/ich8lan.c
-@@ -995,8 +995,8 @@ static s32 e1000_platform_pm_pch_lpt(str
- {
- 	u32 reg = link << (E1000_LTRV_REQ_SHIFT + E1000_LTRV_NOSNOOP_SHIFT) |
- 	    link << E1000_LTRV_REQ_SHIFT | E1000_LTRV_SEND;
--	u16 max_ltr_enc_d = 0;	/* maximum LTR decoded by platform */
--	u16 lat_enc_d = 0;	/* latency decoded */
-+	u32 max_ltr_enc_d = 0;	/* maximum LTR decoded by platform */
-+	u32 lat_enc_d = 0;	/* latency decoded */
- 	u16 lat_enc = 0;	/* latency encoded */
+--- a/net/ax25/af_ax25.c
++++ b/net/ax25/af_ax25.c
+@@ -993,10 +993,6 @@ static int ax25_release(struct socket *s
+ 	sock_orphan(sk);
+ 	ax25 = sk_to_ax25(sk);
+ 	ax25_dev = ax25->ax25_dev;
+-	if (ax25_dev) {
+-		dev_put(ax25_dev->dev);
+-		ax25_dev_put(ax25_dev);
+-	}
  
- 	if (link) {
+ 	if (sk->sk_type == SOCK_SEQPACKET) {
+ 		switch (ax25->state) {
+@@ -1058,6 +1054,10 @@ static int ax25_release(struct socket *s
+ 		sk->sk_state_change(sk);
+ 		ax25_destroy_socket(ax25);
+ 	}
++	if (ax25_dev) {
++		dev_put(ax25_dev->dev);
++		ax25_dev_put(ax25_dev);
++	}
+ 
+ 	sock->sk   = NULL;
+ 	release_sock(sk);
 
 

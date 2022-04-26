@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88E8950F7A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:40:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1537850F841
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347021AbiDZJNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:13:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55626 "EHLO
+        id S1347329AbiDZJOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:14:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347531AbiDZIvm (ORCPT
+        with ESMTP id S1347644AbiDZIvt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:51:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196C71402C;
-        Tue, 26 Apr 2022 01:40:34 -0700 (PDT)
+        Tue, 26 Apr 2022 04:51:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8422DD1CFD;
+        Tue, 26 Apr 2022 01:40:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7A6C4B81D1A;
-        Tue, 26 Apr 2022 08:40:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD4B8C385A0;
-        Tue, 26 Apr 2022 08:40:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F52F6090C;
+        Tue, 26 Apr 2022 08:40:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2F94C385A4;
+        Tue, 26 Apr 2022 08:40:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962431;
-        bh=6BWfZPAJuPEtXnQFvxAC3x0F9LeiCMCnFIwNDSglij4=;
+        s=korg; t=1650962434;
+        bh=zSDmJ6fUt5MMEw2xJrfGFiI+Dx6P8QzmJvl3KZzetKk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LOaLTrshbapj2/Fx+dyyayWIoT7GQigcn8R//ttdklq4XThZFjbhom509Vi6Q92Gw
-         D/2ovNugStBY2UtBL/Lkh4C0IE+/Wwi6hoDataRNB+0SmBQ7y/b0LViJXrfIAbTMAE
-         DKneEAKEju+DQr1BqWeEmElsgsD9LFMCBelCCxU8=
+        b=dF1ficWfjAtWfUaQbaA6+kyBPFUMgMEXhcB3FMHnuwRYYxrIQHa01zzKnJb69bgWq
+         0EjyYsdEpv02lnqpzSbtYc4IGZdgjk1CMYns4Z5sZE6Fa/fWkt5N4lfteDP+UO3o0n
+         hCAGhnviVsJKpEkL0XWkkmLSka/EV6J94FLwiTBM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,9 +37,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Madhavan Srinivasan <maddy@linux.vnet.ibm.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 095/124] powerpc/perf: Fix power9 event alternatives
-Date:   Tue, 26 Apr 2022 10:21:36 +0200
-Message-Id: <20220426081749.999848649@linuxfoundation.org>
+Subject: [PATCH 5.15 096/124] powerpc/perf: Fix power10 event alternatives
+Date:   Tue, 26 Apr 2022 10:21:37 +0200
+Message-Id: <20220426081750.029063718@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
 References: <20220426081747.286685339@linuxfoundation.org>
@@ -58,7 +58,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
 
-[ Upstream commit 0dcad700bb2776e3886fe0a645a4bf13b1e747cd ]
+[ Upstream commit c6cc9a852f123301d5271f1484df8e961b2b64f1 ]
 
 When scheduling a group of events, there are constraint checks done to
 make sure all events can go in a group. Example, one of the criteria is
@@ -71,73 +71,81 @@ By current design, the array of alternatives events in PMU code is
 expected to be sorted by column 0. This is because in
 find_alternative() the return criteria is based on event code
 comparison. ie. "event < ev_alt[i][0])". This optimisation is there
-since find_alternative() can be called multiple times. In power9 PMU
+since find_alternative() can be called multiple times. In power10 PMU
 code, the alternative event array is not sorted properly and hence there
-is breakage in finding alternative events.
+is breakage in finding alternative event.
 
 To work with existing logic, fix the alternative event array to be
-sorted by column 0 for power9-pmu.c
+sorted by column 0 for power10-pmu.c
 
 Results:
 
-With alternative events, multiplexing can be avoided. That is, for
-example, in power9 PM_LD_MISS_L1 (0x3e054) has alternative event,
-PM_LD_MISS_L1_ALT (0x400f0). This is an identical event which can be
-programmed in a different PMC.
+In case where an alternative event is not chosen when we could, events
+will be multiplexed. ie, time sliced where it could actually run
+concurrently.
+
+Example, in power10 PM_INST_CMPL_ALT(0x00002) has alternative event,
+PM_INST_CMPL(0x500fa). Without the fix, if a group of events with PMC1
+to PMC4 is used along with PM_INST_CMPL_ALT, it will be time sliced
+since all programmable PMC's are consumed already. But with the fix,
+when it picks alternative event on PMC5, all events will run
+concurrently.
 
 Before:
 
- # perf stat -e r3e054,r300fc
+ # perf stat -e r00002,r100fc,r200fa,r300fc,r400fc
 
  Performance counter stats for 'system wide':
 
-           1057860      r3e054              (50.21%)
-               379      r300fc              (49.79%)
+         328668935      r00002               (79.94%)
+          56501024      r100fc               (79.95%)
+          49564238      r200fa               (79.95%)
+               376      r300fc               (80.19%)
+               660      r400fc               (79.97%)
 
-       0.944329741 seconds time elapsed
+       4.039150522 seconds time elapsed
 
-Since both the events are using PMC3 in this case, they are
-multiplexed here.
+With the fix, since alternative event is chosen to run on PMC6, events
+will be run concurrently.
 
 After:
 
- # perf stat -e r3e054,r300fc
+ # perf stat -e r00002,r100fc,r200fa,r300fc,r400fc
 
  Performance counter stats for 'system wide':
 
-           1006948      r3e054
-               182      r300fc
+          23596607      r00002
+           4907738      r100fc
+           2283608      r200fa
+               135      r300fc
+               248      r400fc
 
-Fixes: 91e0bd1e6251 ("powerpc/perf: Add PM_LD_MISS_L1 and PM_BR_2PATH to power9 event list")
+       1.664671390 seconds time elapsed
+
+Fixes: a64e697cef23 ("powerpc/perf: power10 Performance Monitoring support")
 Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
 Reviewed-by: Madhavan Srinivasan <maddy@linux.vnet.ibm.com>
 Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220419114828.89843-1-atrajeev@linux.vnet.ibm.com
+Link: https://lore.kernel.org/r/20220419114828.89843-2-atrajeev@linux.vnet.ibm.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/perf/power9-pmu.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/powerpc/perf/power10-pmu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/perf/power9-pmu.c b/arch/powerpc/perf/power9-pmu.c
-index ff3382140d7e..cbdd074ee2a7 100644
---- a/arch/powerpc/perf/power9-pmu.c
-+++ b/arch/powerpc/perf/power9-pmu.c
-@@ -133,11 +133,11 @@ int p9_dd22_bl_ev[] = {
+diff --git a/arch/powerpc/perf/power10-pmu.c b/arch/powerpc/perf/power10-pmu.c
+index 9dd75f385837..07ca62d084d9 100644
+--- a/arch/powerpc/perf/power10-pmu.c
++++ b/arch/powerpc/perf/power10-pmu.c
+@@ -91,8 +91,8 @@ extern u64 PERF_REG_EXTENDED_MASK;
  
  /* Table of alternatives, sorted by column 0 */
- static const unsigned int power9_event_alternatives[][MAX_ALT] = {
--	{ PM_INST_DISP,			PM_INST_DISP_ALT },
--	{ PM_RUN_CYC_ALT,		PM_RUN_CYC },
--	{ PM_RUN_INST_CMPL_ALT,		PM_RUN_INST_CMPL },
--	{ PM_LD_MISS_L1,		PM_LD_MISS_L1_ALT },
- 	{ PM_BR_2PATH,			PM_BR_2PATH_ALT },
-+	{ PM_INST_DISP,			PM_INST_DISP_ALT },
-+	{ PM_RUN_CYC_ALT,               PM_RUN_CYC },
-+	{ PM_LD_MISS_L1,                PM_LD_MISS_L1_ALT },
-+	{ PM_RUN_INST_CMPL_ALT,         PM_RUN_INST_CMPL },
+ static const unsigned int power10_event_alternatives[][MAX_ALT] = {
+-	{ PM_CYC_ALT,			PM_CYC },
+ 	{ PM_INST_CMPL_ALT,		PM_INST_CMPL },
++	{ PM_CYC_ALT,			PM_CYC },
  };
  
- static int power9_get_alternatives(u64 event, unsigned int flags, u64 alt[])
+ static int power10_get_alternatives(u64 event, unsigned int flags, u64 alt[])
 -- 
 2.35.1
 

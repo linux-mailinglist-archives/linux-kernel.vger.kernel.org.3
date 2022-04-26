@@ -2,103 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7DDB50F269
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:30:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B603750F273
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:31:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343962AbiDZHdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 03:33:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51742 "EHLO
+        id S1343981AbiDZHdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 03:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236910AbiDZHdC (ORCPT
+        with ESMTP id S1343982AbiDZHdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 03:33:02 -0400
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D50BDF493
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:29:55 -0700 (PDT)
-Received: by mail-ed1-f51.google.com with SMTP id p18so16030182edr.7
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:29:55 -0700 (PDT)
+        Tue, 26 Apr 2022 03:33:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD52CEA1F8
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:30:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650958229;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gHXF4QaDGcOXB/S7uwPxJmz0c5c4hQxFUEr9w0RrqmM=;
+        b=Y+LB7B+upaIweKcvw77MTNWngE3UNJ/cdEgEW0OesY9ERPhz+3u6FokXalvVMeXoLBN6u8
+        nn5nlCe+SmV+YZufRcJZksvj7DIZ21pStgvEtvaa08/k6t+nLCPEDj4tHCo+qv/MVcvJti
+        uzIfZ9nZTPtzK+ijAqKAw5MI+QYGBnA=
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
+ [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-261-SdUiVSSWOpS-YmFbItwLDg-1; Tue, 26 Apr 2022 03:30:25 -0400
+X-MC-Unique: SdUiVSSWOpS-YmFbItwLDg-1
+Received: by mail-pj1-f69.google.com with SMTP id q91-20020a17090a756400b001d951f4846cso1042560pjk.8
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:30:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hOlzS7teepghKhHO3I5ZYfaNXKKQM3quot1pS5vaaSA=;
-        b=pxC8l347puOLWyO6G1ZGyd+C/Nz//nCN/6cIsiH++0mvA5dNwhwPzdcRlT765RoY9p
-         QrFZE9BaeQw/fuVUn7GHPhZh6oGtalAhytz84V9CHjQ4x7tAlmXwGY3pge9/vbI25DgA
-         XZfASJpK/+QEiZy4a2KJDMmru+YRyLgLRVbeVVgNFsFP0WZBgvNsV+3booyLzmAPat3N
-         Pk6p1AMJcR9UcwoLzdlQOSYULiFvxMwwXKofT1EpqLZfzsrGU//yITs8Q3rGw+MivfLq
-         MaEYIXHEdnYMnj6rmYTkZp6we9gDav1GjZmSNvaMWx8k3I8pMxOZ8TZa2l3qkzSynP6q
-         mwrg==
-X-Gm-Message-State: AOAM53220vHJHDN+340OlpFwAbOq3QJ1Gv3n4wkTXQWjJQPTUF7ThlOL
-        Ixt7ogZGIyizeAd3VZgf4ko=
-X-Google-Smtp-Source: ABdhPJwdtxQjyz2PID87gQkYXoDXvRITcke2EmvtcsG/Izql7n9Ce8e7NkkGkhbJN8TWTPJqnM2HvQ==
-X-Received: by 2002:a05:6402:42d4:b0:416:5cac:a9a0 with SMTP id i20-20020a05640242d400b004165caca9a0mr23253479edc.86.1650958194022;
-        Tue, 26 Apr 2022 00:29:54 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id n10-20020a170906700a00b006efdb748e8dsm4433107ejj.88.2022.04.26.00.29.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 00:29:53 -0700 (PDT)
-Message-ID: <47accf18-ca39-8b36-100e-a6dbfd8705fe@kernel.org>
-Date:   Tue, 26 Apr 2022 09:29:52 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gHXF4QaDGcOXB/S7uwPxJmz0c5c4hQxFUEr9w0RrqmM=;
+        b=YIkc9ziNo+Syezhu0zXF9ajCMokbdN2zghtmruEpcRbdxtH8bLnnP/sfV2vucoGRsA
+         0PfL5fO/VjoQ+LaoKsnbA4rkNNZ22VkKec4Iy1Scc/7e9TfcEzXQngk23wv4pmcwC/Ep
+         JyW7YT4YH48Lz55qiQE6Z9XVto44BSBRX3fVeUWCC2E3thPDL5Ha1s5qQbBQruY1pd7I
+         Y7UDeKcyNnDcMIouiaQWZnv/kHw1zVE09gXGoIPClG4XZuqxb4Jv2Zgbho8TE7Vc9F+j
+         A42yplapNQ3+bpw/WauU0Xf5gxMhdjAqZ8yze4ZAKIxHe2X5WPT/pSWIo4sexLiLXwDA
+         BFzw==
+X-Gm-Message-State: AOAM533PBB5c+k7jzXUd7F18RyrYtj58U2bGW9uDlZ9XAQQ5yGrJNADw
+        lAnp0ERoYYUC9J3j1HKI6RzCnaPALpL+ZX/WAiZdaObG+bHD6OA7Op+bSfEuv5K4HqNIGA0I/XT
+        Ih4FmP2dLDpMgbMDF6Bbw0IJjuqQQx4eCLBGBlHsK
+X-Received: by 2002:a17:902:e012:b0:15d:53:61ff with SMTP id o18-20020a170902e01200b0015d005361ffmr11461242plo.73.1650958224399;
+        Tue, 26 Apr 2022 00:30:24 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyWn5nCD28JyrZSYHjX8tshObmRtL//Rgoy/VpRl6+9rb+MfTi905fSZ19Do0wwj2z45Y8tRrFxMD7FAo+8xuk=
+X-Received: by 2002:a17:902:e012:b0:15d:53:61ff with SMTP id
+ o18-20020a170902e01200b0015d005361ffmr11461227plo.73.1650958224127; Tue, 26
+ Apr 2022 00:30:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] tty/hvc_opal: simplify if-if to if-else
-Content-Language: en-US
-To:     Wan Jiabing <wanjiabing@vivo.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Cc:     kael_w@yeah.net
-References: <20220426071041.168282-1-wanjiabing@vivo.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220426071041.168282-1-wanjiabing@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220421140740.459558-1-benjamin.tissoires@redhat.com>
+ <20220421140740.459558-3-benjamin.tissoires@redhat.com> <20220426040851.q3ovelrlcldvwhv5@MBP-98dd607d3435.dhcp.thefacebook.com>
+In-Reply-To: <20220426040851.q3ovelrlcldvwhv5@MBP-98dd607d3435.dhcp.thefacebook.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Tue, 26 Apr 2022 09:30:13 +0200
+Message-ID: <CAO-hwJ+0w9-bX2LMJU1z7SGeGUbX1t-iMtfkrK=4M5HcfyjFCw@mail.gmail.com>
+Subject: Re: [RFC bpf-next v4 2/7] bpf/verifier: allow kfunc to return an
+ allocated mem
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26. 04. 22, 9:10, Wan Jiabing wrote:
-> Use if and else instead of if(A) and if (!A).
+On Tue, Apr 26, 2022 at 6:09 AM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Thu, Apr 21, 2022 at 04:07:35PM +0200, Benjamin Tissoires wrote:
+> > When a kfunc is not returning a pointer to a struct but to a plain type,
+> > check if one of the arguments is called __sz and is a const from the
+> > caller, and use this as the size of the allocated memory.
+> >
+> > For tracing programs, we consider the provided memory to be read only
+> > unless the program is BPF_MODIFY_RETURN.
+> >
+> > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> >
+> > ---
+> >
+> > new in v4
+> > ---
+> >  include/linux/btf.h   |  6 ++++
+> >  kernel/bpf/btf.c      | 31 ++++++++++++++++----
+> >  kernel/bpf/verifier.c | 66 +++++++++++++++++++++++++++++++++----------
+> >  3 files changed, 83 insertions(+), 20 deletions(-)
+> >
+> > diff --git a/include/linux/btf.h b/include/linux/btf.h
+> > index 36bc09b8e890..76a3ff48ae2a 100644
+> > --- a/include/linux/btf.h
+> > +++ b/include/linux/btf.h
+> > @@ -332,6 +332,12 @@ static inline struct btf_param *btf_params(const struct btf_type *t)
+> >       return (struct btf_param *)(t + 1);
+> >  }
+> >
+> > +struct bpf_reg_state;
+> > +
+> > +bool btf_is_kfunc_arg_mem_size(const struct btf *btf,
+> > +                            const struct btf_param *arg,
+> > +                            const struct bpf_reg_state *reg);
+> > +
+> >  #ifdef CONFIG_BPF_SYSCALL
+> >  struct bpf_prog;
+> >
+> > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> > index 76318a4c2d0e..22e6e3cdc7ee 100644
+> > --- a/kernel/bpf/btf.c
+> > +++ b/kernel/bpf/btf.c
+> > @@ -5851,9 +5851,9 @@ static bool __btf_type_is_scalar_struct(struct bpf_verifier_log *log,
+> >       return true;
+> >  }
+> >
+> > -static bool is_kfunc_arg_mem_size(const struct btf *btf,
+> > -                               const struct btf_param *arg,
+> > -                               const struct bpf_reg_state *reg)
+> > +bool btf_is_kfunc_arg_mem_size(const struct btf *btf,
+> > +                            const struct btf_param *arg,
+> > +                            const struct bpf_reg_state *reg)
+> >  {
+> >       int len, sfx_len = sizeof("__sz") - 1;
+> >       const struct btf_type *t;
+> > @@ -5976,7 +5976,7 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+> >                               reg_btf = reg->btf;
+> >                               reg_ref_id = reg->btf_id;
+> >                               /* Ensure only one argument is referenced
+> > -                              * PTR_TO_BTF_ID, check_func_arg_reg_off relies
+> > +                              * PTR_TO_BTF_ID or PTR_TO_MEM, check_func_arg_reg_off relies
+> >                                * on only one referenced register being allowed
+> >                                * for kfuncs.
+> >                                */
+> > @@ -6012,7 +6012,10 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+> >                       u32 type_size;
+> >
+> >                       if (is_kfunc) {
+> > -                             bool arg_mem_size = i + 1 < nargs && is_kfunc_arg_mem_size(btf, &args[i + 1], &regs[regno + 1]);
+> > +                             bool arg_mem_size = i + 1 < nargs &&
+> > +                                                 btf_is_kfunc_arg_mem_size(btf,
+> > +                                                                           &args[i + 1],
+> > +                                                                           &regs[regno + 1]);
+>
+> bpf allows ~100 chars. No need to break the line so much.
+>
+> >
+> >                               /* Permit pointer to mem, but only when argument
+> >                                * type is pointer to scalar, or struct composed
+> > @@ -6039,6 +6042,24 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+> >                                       i++;
+> >                                       continue;
+> >                               }
+> > +
+> > +                             if (rel && reg->ref_obj_id) {
+> > +                                     /* Ensure only one argument is referenced
+> > +                                      * PTR_TO_BTF_ID or PTR_TO_MEM, check_func_arg_reg_off
+> > +                                      * relies on only one referenced register being allowed
+> > +                                      * for kfuncs.
+> > +                                      */
+> > +                                     if (ref_obj_id) {
+> > +                                             bpf_log(log,
+> > +                                                     "verifier internal error: more than one arg with ref_obj_id R%d %u %u\n",
+> > +                                                     regno,
+> > +                                                     reg->ref_obj_id,
+> > +                                                     ref_obj_id);
+> > +                                             return -EFAULT;
+> > +                                     }
+> > +                                     ref_regno = regno;
+> > +                                     ref_obj_id = reg->ref_obj_id;
+> > +                             }
+> >                       }
+> >
+> >                       resolve_ret = btf_resolve_size(btf, ref_t, &type_size);
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 71827d14724a..0f339f9058f3 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -6974,7 +6974,9 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+> >       int err, insn_idx = *insn_idx_p;
+> >       const struct btf_param *args;
+> >       struct btf *desc_btf;
+> > +     enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
+> >       bool acq;
+> > +     size_t reg_size = 0;
+> >
+> >       /* skip for now, but return error when we find this in fixup_kfunc_call */
+> >       if (!insn->imm)
+> > @@ -7015,8 +7017,8 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+> >               }
+> >       }
+> >
+> > -     for (i = 0; i < CALLER_SAVED_REGS; i++)
+> > -             mark_reg_not_init(env, regs, caller_saved[i]);
+> > +     /* reset REG_0 */
+> > +     mark_reg_not_init(env, regs, BPF_REG_0);
+> >
+> >       /* Check return type */
+> >       t = btf_type_skip_modifiers(desc_btf, func_proto->type, NULL);
+> > @@ -7026,6 +7028,9 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+> >               return -EINVAL;
+> >       }
+> >
+> > +     nargs = btf_type_vlen(func_proto);
+> > +     args = btf_params(func_proto);
+> > +
+> >       if (btf_type_is_scalar(t)) {
+> >               mark_reg_unknown(env, regs, BPF_REG_0);
+> >               mark_btf_func_reg_size(env, BPF_REG_0, t->size);
+> > @@ -7033,24 +7038,54 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+> >               ptr_type = btf_type_skip_modifiers(desc_btf, t->type,
+> >                                                  &ptr_type_id);
+> >               if (!btf_type_is_struct(ptr_type)) {
+> > -                     ptr_type_name = btf_name_by_offset(desc_btf,
+> > -                                                        ptr_type->name_off);
+> > -                     verbose(env, "kernel function %s returns pointer type %s %s is not supported\n",
+> > -                             func_name, btf_type_str(ptr_type),
+> > -                             ptr_type_name);
+> > -                     return -EINVAL;
+> > +                     /* if we have an array, we must have a const argument named "__sz" */
+> > +                     for (i = 0; i < nargs; i++) {
+> > +                             u32 regno = i + BPF_REG_1;
+> > +                             struct bpf_reg_state *reg = &regs[regno];
+> > +
+> > +                             /* look for any const scalar parameter of name "__sz" */
+> > +                             if (!check_reg_arg(env, regno, SRC_OP) &&
+> > +                                 tnum_is_const(regs[regno].var_off) &&
+> > +                                 btf_is_kfunc_arg_mem_size(desc_btf, &args[i], reg))
+> > +                                     reg_size = regs[regno].var_off.value;
+> > +                     }
+> > +
+> > +                     if (!reg_size) {
+> > +                             ptr_type_name = btf_name_by_offset(desc_btf,
+> > +                                                                ptr_type->name_off);
+> > +                             verbose(env,
+> > +                                     "kernel function %s returns pointer type %s %s is not supported\n",
+> > +                                     func_name,
+> > +                                     btf_type_str(ptr_type),
+> > +                                     ptr_type_name);
+> > +                             return -EINVAL;
+> > +                     }
+> > +
+> > +                     mark_reg_known_zero(env, regs, BPF_REG_0);
+> > +                     regs[BPF_REG_0].type = PTR_TO_MEM;
+> > +                     regs[BPF_REG_0].mem_size = reg_size;
+> > +
+> > +                     /* in case of tracing, only allow write access to
+> > +                      * BPF_MODIFY_RETURN programs
+> > +                      */
+> > +                     if (prog_type == BPF_PROG_TYPE_TRACING &&
+> > +                         env->prog->expected_attach_type != BPF_MODIFY_RETURN)
+> > +                             regs[BPF_REG_0].type |= MEM_RDONLY;
+>
+> MOD_RET restriction looks artificial.
+> We can distinguish readonly vs writeable PTR_TO_MEM based on
+> another naming convention.
+> Currently arg_name__sz applies to the previous argument.
+> Matching suffix made sense there.
 
-Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+Oh, I missed the point of the "__sz". I did not realize it was
+supposed to be a suffix.
 
-> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
-> ---
-> Change log:
-> v2:
-> - add braces to the if block.
-> ---
->   drivers/tty/hvc/hvc_opal.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/tty/hvc/hvc_opal.c b/drivers/tty/hvc/hvc_opal.c
-> index 84776bc641e6..794c7b18aa06 100644
-> --- a/drivers/tty/hvc/hvc_opal.c
-> +++ b/drivers/tty/hvc/hvc_opal.c
-> @@ -342,9 +342,9 @@ void __init hvc_opal_init_early(void)
->   		 * path, so we hard wire it
->   		 */
->   		opal = of_find_node_by_path("/ibm,opal/consoles");
-> -		if (opal)
-> +		if (opal) {
->   			pr_devel("hvc_opal: Found consoles in new location\n");
-> -		if (!opal) {
-> +		} else {
->   			opal = of_find_node_by_path("/ibm,opal");
->   			if (opal)
->   				pr_devel("hvc_opal: "
+> Reusing the same suffix matching for a different purpose could be confusing.
+> For this use case we may reserve a full argument name.
+> Like "rdonly_buf_size" and "rdwr_buf_size" ?
+>
 
+I like the idea but I have 2 problems here:
+1. I do not really want to have 2 separate kfuncs for read only and
+write operations
+2. How can I restrict the write operation to fmod_ret?
 
--- 
-js
-suse labs
+For 1, my guess is that the read-only operation will not be used
+unless we solve 2.
+For 2, the rationale is that I think tracing functions are not
+supposed to change the behavior. This was said on the thread about
+priorities for BPF programs. And it somehow makes sense that fentry
+should be used for tracing only. OTOH, fmod_ret is clearly affecting
+the behavior of the program, so I see it more "natural" that it can
+change the context too.
+
+Cheers,
+Benjamin
+

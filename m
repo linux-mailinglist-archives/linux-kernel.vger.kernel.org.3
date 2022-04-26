@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACA3550F602
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:55:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7DDE50F811
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232457AbiDZIsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58646 "EHLO
+        id S1346868AbiDZJJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:09:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345891AbiDZIjl (ORCPT
+        with ESMTP id S1346315AbiDZIuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:39:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8D17B138;
-        Tue, 26 Apr 2022 01:32:16 -0700 (PDT)
+        Tue, 26 Apr 2022 04:50:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7960FC8BCE;
+        Tue, 26 Apr 2022 01:38:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4095561896;
-        Tue, 26 Apr 2022 08:32:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FDD5C385A0;
-        Tue, 26 Apr 2022 08:32:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 33F1DB81CFA;
+        Tue, 26 Apr 2022 08:38:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 823F7C385A4;
+        Tue, 26 Apr 2022 08:38:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961935;
-        bh=0Gjmb8bSJi484acvjTXIK1ezXso4TeB6gDzWM3yh/h0=;
+        s=korg; t=1650962284;
+        bh=mtv+VgBzDjnbTuKpFHhkxzk0FgNmf/fS99cTFIUNMfs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1nhzNVybLs6GJ6X/wWgUTswgM/Vftm07qyjOKqYfotoYk3/9aS52HqjMfqPAZvExU
-         mB1uXdMjwwbZvJaSmDB3PavBAlu246sbDw+wjcO/QDx9rxvAd298tM8d68JMaYeE+c
-         PoDg+ewlNJMZ0/t1GDxpoCErhBFf094xibkGA4Q0=
+        b=1M5N9kg+GFgS6J2J7GpZKC3lqfbXjU8nwojMQHm6sW53X0b+4d8bFW5j6sebYc40V
+         M3iZdA8VTwzQDLXK088mCfbMJeiv0onNCyChdaiReiLFLdXqGYhaTtsmXAJUE+K0Fj
+         jc4SLx25MmBoV45ny+RV9+TXarctddxxmAQEI/+o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Corinna Vinschen <vinschen@redhat.com>,
-        Dima Ruinskiy <dima.ruinskiy@intel.com>,
-        Sasha Neftin <sasha.neftin@intel.com>,
-        Naama Meir <naamax.meir@linux.intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Jouni=20H=C3=B6gander?= <jouni.hogander@intel.com>,
+        =?UTF-8?q?Jos=C3=A9=20Roberto=20de=20Souza?= <jose.souza@intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 18/86] igc: Fix BUG: scheduling while atomic
-Date:   Tue, 26 Apr 2022 10:20:46 +0200
-Message-Id: <20220426081741.732459795@linuxfoundation.org>
+Subject: [PATCH 5.15 046/124] drm/i915/display/psr: Unset enable_psr2_sel_fetch if other checks in intel_psr2_config_valid() fails
+Date:   Tue, 26 Apr 2022 10:20:47 +0200
+Message-Id: <20220426081748.611187531@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
-References: <20220426081741.202366502@linuxfoundation.org>
+In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
+References: <20220426081747.286685339@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,116 +56,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sasha Neftin <sasha.neftin@intel.com>
+From: José Roberto de Souza <jose.souza@intel.com>
 
-[ Upstream commit c80a29f0fe9b6f5457e0788e27d1110577eba99b ]
+[ Upstream commit bb02330408a7bde33b5f46aa14fd5d7bfe6093b7 ]
 
-Replace usleep_range() method with udelay() method to allow atomic contexts
-in low-level MDIO access functions.
+If any of the PSR2 checks after intel_psr2_sel_fetch_config_valid()
+fails, enable_psr2_sel_fetch will be kept enabled causing problems
+in the functions that only checks for it and not for has_psr2.
 
-The following issue can be seen by doing the following:
-$ modprobe -r bonding
-$ modprobe -v bonding max_bonds=1 mode=1 miimon=100 use_carrier=0
-$ ip link set bond0 up
-$ ifenslave bond0 eth0 eth1
+So here moving the check that do not depend on enable_psr2_sel_fetch
+and for the remaning ones jumping to a section that unset
+enable_psr2_sel_fetch in case of failure to support PSR2.
 
-[  982.357308] BUG: scheduling while atomic: kworker/u64:0/9/0x00000002
-[  982.364431] INFO: lockdep is turned off.
-[  982.368824] Modules linked in: bonding sctp ip6_udp_tunnel udp_tunnel mlx4_ib ib_uverbs ib_core mlx4_en mlx4_core nfp tls sunrpc intel_rapl_msr iTCO_wdt iTCO_vendor_support mxm_wmi dcdbas intel_rapl_common sb_edac x86_pkg_temp_thermal intel_powerclamp coretemp kvm_intel kvm irqbypass crct10dif_pclmul crc32_pclmul ghash_clmulni_intel rapl intel_cstate intel_uncore pcspkr lpc_ich mei_me ipmi_ssif mei ipmi_si ipmi_devintf ipmi_msghandler wmi acpi_power_meter xfs libcrc32c sr_mod cdrom sd_mod t10_pi sg mgag200 drm_kms_helper syscopyarea sysfillrect sysimgblt fb_sys_fops drm ahci libahci crc32c_intel libata i2c_algo_bit tg3 megaraid_sas igc dm_mirror dm_region_hash dm_log dm_mod [last unloaded: bonding]
-[  982.437941] CPU: 25 PID: 9 Comm: kworker/u64:0 Kdump: loaded Tainted: G        W        --------- -  - 4.18.0-348.el8.x86_64+debug #1
-[  982.451333] Hardware name: Dell Inc. PowerEdge R730/0H21J3, BIOS 2.7.0 12/005/2017
-[  982.459791] Workqueue: bond0 bond_mii_monitor [bonding]
-[  982.465622] Call Trace:
-[  982.468355]  dump_stack+0x8e/0xd0
-[  982.472056]  __schedule_bug.cold.60+0x3a/0x60
-[  982.476919]  __schedule+0x147b/0x1bc0
-[  982.481007]  ? firmware_map_remove+0x16b/0x16b
-[  982.485967]  ? hrtimer_fixup_init+0x40/0x40
-[  982.490625]  schedule+0xd9/0x250
-[  982.494227]  schedule_hrtimeout_range_clock+0x10d/0x2c0
-[  982.500058]  ? hrtimer_nanosleep_restart+0x130/0x130
-[  982.505598]  ? hrtimer_init_sleeper_on_stack+0x90/0x90
-[  982.511332]  ? usleep_range+0x88/0x130
-[  982.515514]  ? recalibrate_cpu_khz+0x10/0x10
-[  982.520279]  ? ktime_get+0xab/0x1c0
-[  982.524175]  ? usleep_range+0x88/0x130
-[  982.528355]  usleep_range+0xdd/0x130
-[  982.532344]  ? console_conditional_schedule+0x30/0x30
-[  982.537987]  ? igc_put_hw_semaphore+0x17/0x60 [igc]
-[  982.543432]  igc_read_phy_reg_gpy+0x111/0x2b0 [igc]
-[  982.548887]  igc_phy_has_link+0xfa/0x260 [igc]
-[  982.553847]  ? igc_get_phy_id+0x210/0x210 [igc]
-[  982.558894]  ? lock_acquire+0x34d/0x890
-[  982.563187]  ? lock_downgrade+0x710/0x710
-[  982.567659]  ? rcu_read_unlock+0x50/0x50
-[  982.572039]  igc_check_for_copper_link+0x106/0x210 [igc]
-[  982.577970]  ? igc_config_fc_after_link_up+0x840/0x840 [igc]
-[  982.584286]  ? rcu_read_unlock+0x50/0x50
-[  982.588661]  ? lock_release+0x591/0xb80
-[  982.592939]  ? lock_release+0x591/0xb80
-[  982.597220]  igc_has_link+0x113/0x330 [igc]
-[  982.601887]  ? lock_downgrade+0x710/0x710
-[  982.606362]  igc_ethtool_get_link+0x6d/0x90 [igc]
-[  982.611614]  bond_check_dev_link+0x131/0x2c0 [bonding]
-[  982.617350]  ? bond_time_in_interval+0xd0/0xd0 [bonding]
-[  982.623277]  ? rcu_read_lock_held+0x62/0xc0
-[  982.627944]  ? rcu_read_lock_sched_held+0xe0/0xe0
-[  982.633198]  bond_mii_monitor+0x314/0x2500 [bonding]
-[  982.638738]  ? lock_contended+0x880/0x880
-[  982.643214]  ? bond_miimon_link_change+0xa0/0xa0 [bonding]
-[  982.649336]  ? lock_acquire+0x34d/0x890
-[  982.653615]  ? lock_downgrade+0x710/0x710
-[  982.658089]  ? debug_object_deactivate+0x221/0x340
-[  982.663436]  ? rcu_read_unlock+0x50/0x50
-[  982.667811]  ? debug_print_object+0x2b0/0x2b0
-[  982.672672]  ? __switch_to_asm+0x41/0x70
-[  982.677049]  ? __switch_to_asm+0x35/0x70
-[  982.681426]  ? _raw_spin_unlock_irq+0x24/0x40
-[  982.686288]  ? trace_hardirqs_on+0x20/0x195
-[  982.690956]  ? _raw_spin_unlock_irq+0x24/0x40
-[  982.695818]  process_one_work+0x8f0/0x1770
-[  982.700390]  ? pwq_dec_nr_in_flight+0x320/0x320
-[  982.705443]  ? debug_show_held_locks+0x50/0x50
-[  982.710403]  worker_thread+0x87/0xb40
-[  982.714489]  ? process_one_work+0x1770/0x1770
-[  982.719349]  kthread+0x344/0x410
-[  982.722950]  ? kthread_insert_work_sanity_check+0xd0/0xd0
-[  982.728975]  ret_from_fork+0x3a/0x50
-
-Fixes: 5586838fe9ce ("igc: Add code for PHY support")
-Reported-by: Corinna Vinschen <vinschen@redhat.com>
-Suggested-by: Dima Ruinskiy <dima.ruinskiy@intel.com>
-Signed-off-by: Sasha Neftin <sasha.neftin@intel.com>
-Tested-by: Corinna Vinschen <vinschen@redhat.com>
-Tested-by: Naama Meir <naamax.meir@linux.intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Fixes: 6e43e276b8c9 ("drm/i915: Initial implementation of PSR2 selective fetch")
+Cc: Jouni Högander <jouni.hogander@intel.com>
+Reviewed-by: Jouni Högander <jouni.hogander@intel.com>
+Signed-off-by: José Roberto de Souza <jose.souza@intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220414151118.21980-1-jose.souza@intel.com
+(cherry picked from commit 554ae8dce1268789e72767a67f0635cb743b3cea)
+Signed-off-by: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/igc/igc_phy.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/i915/display/intel_psr.c | 38 +++++++++++++-----------
+ 1 file changed, 21 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/igc/igc_phy.c b/drivers/net/ethernet/intel/igc/igc_phy.c
-index e380b7a3ea63..8de4de2e5636 100644
---- a/drivers/net/ethernet/intel/igc/igc_phy.c
-+++ b/drivers/net/ethernet/intel/igc/igc_phy.c
-@@ -583,7 +583,7 @@ static s32 igc_read_phy_reg_mdic(struct igc_hw *hw, u32 offset, u16 *data)
- 	 * the lower time out
- 	 */
- 	for (i = 0; i < IGC_GEN_POLL_TIMEOUT; i++) {
--		usleep_range(500, 1000);
-+		udelay(50);
- 		mdic = rd32(IGC_MDIC);
- 		if (mdic & IGC_MDIC_READY)
- 			break;
-@@ -640,7 +640,7 @@ static s32 igc_write_phy_reg_mdic(struct igc_hw *hw, u32 offset, u16 data)
- 	 * the lower time out
- 	 */
- 	for (i = 0; i < IGC_GEN_POLL_TIMEOUT; i++) {
--		usleep_range(500, 1000);
-+		udelay(50);
- 		mdic = rd32(IGC_MDIC);
- 		if (mdic & IGC_MDIC_READY)
- 			break;
+diff --git a/drivers/gpu/drm/i915/display/intel_psr.c b/drivers/gpu/drm/i915/display/intel_psr.c
+index 1b0daf649e82..a3d0c57ec0f0 100644
+--- a/drivers/gpu/drm/i915/display/intel_psr.c
++++ b/drivers/gpu/drm/i915/display/intel_psr.c
+@@ -936,6 +936,20 @@ static bool intel_psr2_config_valid(struct intel_dp *intel_dp,
+ 		return false;
+ 	}
+ 
++	/* Wa_16011303918:adl-p */
++	if (crtc_state->vrr.enable &&
++	    IS_ADLP_DISPLAY_STEP(dev_priv, STEP_A0, STEP_B0)) {
++		drm_dbg_kms(&dev_priv->drm,
++			    "PSR2 not enabled, not compatible with HW stepping + VRR\n");
++		return false;
++	}
++
++	if (!_compute_psr2_sdp_prior_scanline_indication(intel_dp, crtc_state)) {
++		drm_dbg_kms(&dev_priv->drm,
++			    "PSR2 not enabled, PSR2 SDP indication do not fit in hblank\n");
++		return false;
++	}
++
+ 	if (HAS_PSR2_SEL_FETCH(dev_priv)) {
+ 		if (!intel_psr2_sel_fetch_config_valid(intel_dp, crtc_state) &&
+ 		    !HAS_PSR_HW_TRACKING(dev_priv)) {
+@@ -949,12 +963,12 @@ static bool intel_psr2_config_valid(struct intel_dp *intel_dp,
+ 	if (!crtc_state->enable_psr2_sel_fetch &&
+ 	    IS_TGL_DISPLAY_STEP(dev_priv, STEP_A0, STEP_C0)) {
+ 		drm_dbg_kms(&dev_priv->drm, "PSR2 HW tracking is not supported this Display stepping\n");
+-		return false;
++		goto unsupported;
+ 	}
+ 
+ 	if (!psr2_granularity_check(intel_dp, crtc_state)) {
+ 		drm_dbg_kms(&dev_priv->drm, "PSR2 not enabled, SU granularity not compatible\n");
+-		return false;
++		goto unsupported;
+ 	}
+ 
+ 	if (!crtc_state->enable_psr2_sel_fetch &&
+@@ -963,25 +977,15 @@ static bool intel_psr2_config_valid(struct intel_dp *intel_dp,
+ 			    "PSR2 not enabled, resolution %dx%d > max supported %dx%d\n",
+ 			    crtc_hdisplay, crtc_vdisplay,
+ 			    psr_max_h, psr_max_v);
+-		return false;
+-	}
+-
+-	if (!_compute_psr2_sdp_prior_scanline_indication(intel_dp, crtc_state)) {
+-		drm_dbg_kms(&dev_priv->drm,
+-			    "PSR2 not enabled, PSR2 SDP indication do not fit in hblank\n");
+-		return false;
+-	}
+-
+-	/* Wa_16011303918:adl-p */
+-	if (crtc_state->vrr.enable &&
+-	    IS_ADLP_DISPLAY_STEP(dev_priv, STEP_A0, STEP_B0)) {
+-		drm_dbg_kms(&dev_priv->drm,
+-			    "PSR2 not enabled, not compatible with HW stepping + VRR\n");
+-		return false;
++		goto unsupported;
+ 	}
+ 
+ 	tgl_dc3co_exitline_compute_config(intel_dp, crtc_state);
+ 	return true;
++
++unsupported:
++	crtc_state->enable_psr2_sel_fetch = false;
++	return false;
+ }
+ 
+ void intel_psr_compute_config(struct intel_dp *intel_dp,
 -- 
 2.35.1
 

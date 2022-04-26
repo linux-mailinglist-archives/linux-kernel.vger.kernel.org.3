@@ -2,338 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B35850F924
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CFA150F92E
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:58:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347744AbiDZJuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41036 "EHLO
+        id S235732AbiDZJua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348770AbiDZJti (ORCPT
+        with ESMTP id S1348996AbiDZJt4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:49:38 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445DD559B;
-        Tue, 26 Apr 2022 02:05:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1650963904; x=1682499904;
-  h=from:to:cc:subject:date:message-id;
-  bh=7KB1mY/ZPltwoWdk1EE4etbSQeuQjO4pGlCbzmCABGo=;
-  b=maqaNwHpG7xQaStitqdRwa9+iuQrYe4J1g3zjXV/EnegLnqOzWlBPR53
-   YLNqoFB3b3Fv8FhseJUqt3hATz76Zs5UzErZmS94Hlv6mo2EjpxrS2zjP
-   1a2fqPGPzG+QySy4nvvELaJnR0AWeaZ57VHMYltlwqux39hxDHHvoy9S8
-   w=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 26 Apr 2022 02:04:35 -0700
-X-QCInternal: smtphost
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 26 Apr 2022 02:04:33 -0700
-X-QCInternal: smtphost
-Received: from hu-c-spathi-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.108.59])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 26 Apr 2022 14:34:15 +0530
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 212714)
-        id 2FC083AE1; Tue, 26 Apr 2022 14:34:14 +0530 (+0530)
-From:   Srinivasarao Pathipati <quic_spathi@quicinc.com>
-To:     ulf.hansson@linaro.org, avri.altman@wdc.com,
-        linus.walleij@linaro.org, shawn.lin@rock-chips.com,
-        merez@codeaurora.org, s.shtylyov@omp.ru, huijin.park@samsung.com,
-        briannorris@chromium.org, digetx@gmail.com,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Veerabhadrarao Badiganti <vbadigan@codeaurora.org>,
-        Shaik Sajida Bhanu <sbhanu@codeaurora.org>,
-        kamasali <quic_kamasali@quicinc.com>,
-        Srinivasarao Pathipati <quic_spathi@quicinc.com>
-Subject: [PATCH V1] mmc: core: Add partial initialization support
-Date:   Tue, 26 Apr 2022 14:34:12 +0530
-Message-Id: <1650963852-4173-1-git-send-email-quic_spathi@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+        Tue, 26 Apr 2022 05:49:56 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CB11AD3F5;
+        Tue, 26 Apr 2022 02:05:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650963935; x=1682499935;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7rLDl2p4/VTZazRPC6IkxodREfnunclbnMNaItgAgxA=;
+  b=jPSxzXaL+vnJqsyjQo7m5JyNxqrIxD8y/7xL9TNXLNZ1LpIVOfIO8BKp
+   YiVuPxTPQg/kb8su/jmyzUBEW68KDhxhR+gOdJeRVdoi+7cLB4CgsAEIQ
+   eaCv/6dRf/nv74R7MGaSc0H5guU51O9r++VNq03JW1sDDnd7lQq0r2TQY
+   c2gMWRvM6mMJ+ZKvIS3bi6u/RLGs9Gt55YIrwXjv9lkX4gVtHbRI53tzq
+   LELXQvhtoHiKA8a3M6KBWuGW8VizlMZlXSB29dRpnKXcj+Uj77xpN81MV
+   19fWLtxoK5iT1kkEyeYDtrEMHXQSYuaXlPChOlOrePefpbS8jrJXqmoeu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="247440661"
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="247440661"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 02:05:08 -0700
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="558203556"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.58.98])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 02:05:04 -0700
+Message-ID: <ddedd476-eb78-229a-e028-eabb046bf22a@intel.com>
+Date:   Tue, 26 Apr 2022 12:05:00 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: Re: [PATCH V1] sdhci-msm: Add err_stat's in CQE path
+Content-Language: en-US
+To:     Srinivasarao Pathipati <quic_spathi@quicinc.com>,
+        ulf.hansson@linaro.org, riteshh@codeaurora.org,
+        asutoshd@codeaurora.org, colyli@suse.de, axboe@kernel.dk,
+        kch@nvidia.com, cw9316.lee@samsung.com, sbhanu@codeaurora.org,
+        joel@jms.id.au, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     kamasali <quic_kamasali@quicinc.com>
+References: <1650963481-11139-1-git-send-email-quic_spathi@quicinc.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <1650963481-11139-1-git-send-email-quic_spathi@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maya Erez <merez@codeaurora.org>
+On 26/04/22 11:58, Srinivasarao Pathipati wrote:
+> From: Shaik Sajida Bhanu <sbhanu@codeaurora.org>
+> 
+> Add err_stat's in CQE path for eMMC.
+> 
+> Signed-off-by: Shaik Sajida Bhanu <sbhanu@codeaurora.org>
+> Signed-off-by: kamasali <quic_kamasali@quicinc.com>
+> Signed-off-by: Srinivasarao Pathipati <quic_spathi@quicinc.com>
 
-This change adds the ability to partially initialize
-the MMC card by using card Sleep/Awake sequence (CMD5).
-Card will be sent to Sleep state during runtime/system suspend
-and will be woken up during runtime/system resume.
-By using this sequence the card doesn't need full initialization
-which gives time reduction in system/runtime resume path.
+How does this relate to the V5 patches:
 
-Signed-off-by: Maya Erez <merez@codeaurora.org>
-Signed-off-by: Veerabhadrarao Badiganti <vbadigan@codeaurora.org>
-Signed-off-by: Shaik Sajida Bhanu <sbhanu@codeaurora.org>
-Signed-off-by: kamasali <quic_kamasali@quicinc.com>
-Signed-off-by: Srinivasarao Pathipati <quic_spathi@quicinc.com>
----
- drivers/mmc/core/mmc.c   | 149 ++++++++++++++++++++++++++++++++++++++++++++---
- include/linux/mmc/card.h |   4 ++
- include/linux/mmc/host.h |   2 +
- 3 files changed, 146 insertions(+), 9 deletions(-)
+	https://lore.kernel.org/linux-mmc/1650902443-26357-1-git-send-email-quic_c_sbhanu@quicinc.com/T/#u
 
-diff --git a/drivers/mmc/core/mmc.c b/drivers/mmc/core/mmc.c
-index 9ab915b..8691c00 100644
---- a/drivers/mmc/core/mmc.c
-+++ b/drivers/mmc/core/mmc.c
-@@ -1942,7 +1942,14 @@ static int mmc_sleep_busy_cb(void *cb_data, bool *busy)
- 	return 0;
- }
- 
--static int mmc_sleep(struct mmc_host *host)
-+static int mmc_can_sleepawake(struct mmc_host *host)
-+{
-+	return host && (host->caps2 & MMC_CAP2_SLEEP_AWAKE) && host->card &&
-+		(host->card->ext_csd.rev >= 3);
-+
-+}
-+
-+static int mmc_sleepawake(struct mmc_host *host, bool sleep)
- {
- 	struct mmc_command cmd = {};
- 	struct mmc_card *card = host->card;
-@@ -1953,14 +1960,17 @@ static int mmc_sleep(struct mmc_host *host)
- 	/* Re-tuning can't be done once the card is deselected */
- 	mmc_retune_hold(host);
- 
--	err = mmc_deselect_cards(host);
--	if (err)
--		goto out_release;
-+	if (sleep) {
-+		err = mmc_deselect_cards(host);
-+		if (err)
-+			goto out_release;
-+	}
- 
- 	cmd.opcode = MMC_SLEEP_AWAKE;
- 	cmd.arg = card->rca << 16;
--	cmd.arg |= 1 << 15;
- 	use_r1b_resp = mmc_prepare_busy_cmd(host, &cmd, timeout_ms);
-+	if (sleep)
-+		cmd.arg |= 1 << 15;
- 
- 	err = mmc_wait_for_cmd(host, &cmd, 0);
- 	if (err)
-@@ -1982,6 +1992,9 @@ static int mmc_sleep(struct mmc_host *host)
- 
- 	err = __mmc_poll_for_busy(host, 0, timeout_ms, &mmc_sleep_busy_cb, host);
- 
-+	if (!sleep)
-+		err = mmc_select_card(card);
-+
- out_release:
- 	mmc_retune_release(host);
- 	return err;
-@@ -2080,6 +2093,66 @@ static int _mmc_flush_cache(struct mmc_host *host)
- 			pr_err("%s: cache flush error %d\n",
- 			       mmc_hostname(host), err);
- 	}
-+	return err;
-+}
-+
-+static int mmc_cache_card_ext_csd(struct mmc_host *host)
-+{
-+	int err;
-+	u8 *ext_csd;
-+	struct mmc_card *card = host->card;
-+
-+	err = mmc_get_ext_csd(card, &ext_csd);
-+	if (err || !ext_csd) {
-+		pr_err("%s: %s: mmc_get_ext_csd failed (%d)\n",
-+			mmc_hostname(host), __func__, err);
-+		return err;
-+	}
-+	/* only cache read/write fields that the sw changes */
-+	card->ext_csd.raw_ext_csd_cmdq = ext_csd[EXT_CSD_CMDQ_MODE_EN];
-+	card->ext_csd.raw_ext_csd_cache_ctrl = ext_csd[EXT_CSD_CACHE_CTRL];
-+	card->ext_csd.raw_ext_csd_bus_width = ext_csd[EXT_CSD_BUS_WIDTH];
-+	card->ext_csd.raw_ext_csd_hs_timing = ext_csd[EXT_CSD_HS_TIMING];
-+
-+	kfree(ext_csd);
-+
-+	return 0;
-+}
-+
-+static int mmc_test_awake_ext_csd(struct mmc_host *host)
-+{
-+	int err;
-+	u8 *ext_csd;
-+	struct mmc_card *card = host->card;
-+
-+	err = mmc_get_ext_csd(card, &ext_csd);
-+	if (err) {
-+		pr_err("%s: %s: mmc_get_ext_csd failed (%d)\n",
-+			mmc_hostname(host), __func__, err);
-+		return err;
-+	}
-+
-+	/* only compare read/write fields that the sw changes */
-+	pr_debug("%s: %s: type(cached:current) cmdq(%d:%d) cache_ctrl(%d:%d) bus_width (%d:%d) timing(%d:%d)\n",
-+		mmc_hostname(host), __func__,
-+		card->ext_csd.raw_ext_csd_cmdq,
-+		ext_csd[EXT_CSD_CMDQ_MODE_EN],
-+		card->ext_csd.raw_ext_csd_cache_ctrl,
-+		ext_csd[EXT_CSD_CACHE_CTRL],
-+		card->ext_csd.raw_ext_csd_bus_width,
-+		ext_csd[EXT_CSD_BUS_WIDTH],
-+		card->ext_csd.raw_ext_csd_hs_timing,
-+		ext_csd[EXT_CSD_HS_TIMING]);
-+	err = !((card->ext_csd.raw_ext_csd_cmdq ==
-+			ext_csd[EXT_CSD_CMDQ_MODE_EN]) &&
-+		(card->ext_csd.raw_ext_csd_cache_ctrl ==
-+			ext_csd[EXT_CSD_CACHE_CTRL]) &&
-+		(card->ext_csd.raw_ext_csd_bus_width ==
-+			ext_csd[EXT_CSD_BUS_WIDTH]) &&
-+		(card->ext_csd.raw_ext_csd_hs_timing ==
-+			ext_csd[EXT_CSD_HS_TIMING]));
-+
-+	kfree(ext_csd);
- 
- 	return err;
- }
-@@ -2103,8 +2176,12 @@ static int _mmc_suspend(struct mmc_host *host, bool is_suspend)
- 	    ((host->caps2 & MMC_CAP2_FULL_PWR_CYCLE) || !is_suspend ||
- 	     (host->caps2 & MMC_CAP2_FULL_PWR_CYCLE_IN_SUSPEND)))
- 		err = mmc_poweroff_notify(host->card, notify_type);
--	else if (mmc_can_sleep(host->card))
--		err = mmc_sleep(host);
-+	if (mmc_can_sleepawake(host)) {
-+		memcpy(&host->cached_ios, &host->ios, sizeof(host->cached_ios));
-+		 mmc_cache_card_ext_csd(host);
-+	}
-+	if (mmc_can_sleep(host->card))
-+		err = mmc_sleepawake(host, true);
- 	else if (!mmc_host_is_spi(host))
- 		err = mmc_deselect_cards(host);
- 
-@@ -2117,6 +2194,48 @@ static int _mmc_suspend(struct mmc_host *host, bool is_suspend)
- 	return err;
- }
- 
-+static int mmc_partial_init(struct mmc_host *host)
-+{
-+	int err = 0;
-+	struct mmc_card *card = host->card;
-+
-+	mmc_set_bus_width(host, host->cached_ios.bus_width);
-+	mmc_set_timing(host, host->cached_ios.timing);
-+	if (host->cached_ios.enhanced_strobe) {
-+		host->ios.enhanced_strobe = true;
-+		if (host->ops->hs400_enhanced_strobe)
-+			host->ops->hs400_enhanced_strobe(host, &host->ios);
-+	}
-+	mmc_set_clock(host, host->cached_ios.clock);
-+	mmc_set_bus_mode(host, host->cached_ios.bus_mode);
-+
-+	if (!mmc_card_hs400es(card) &&
-+			(mmc_card_hs200(card) || mmc_card_hs400(card))) {
-+		err = mmc_execute_tuning(card);
-+		if (err) {
-+			pr_err("%s: %s: Tuning failed (%d)\n",
-+				mmc_hostname(host), __func__, err);
-+			goto out;
-+		}
-+	}
-+	/*
-+	 * The ext_csd is read to make sure the card did not went through
-+	 * Power-failure during sleep period.
-+	 * A subset of the W/E_P, W/C_P register will be tested. In case
-+	 * these registers values are different from the values that were
-+	 * cached during suspend, we will conclude that a Power-failure occurred
-+	 * and will do full initialization sequence.
-+	 */
-+	err = mmc_test_awake_ext_csd(host);
-+	if (err) {
-+		pr_debug("%s: %s: fail on ext_csd read (%d)\n",
-+			mmc_hostname(host), __func__, err);
-+		goto out;
-+	}
-+out:
-+	return err;
-+}
-+
- /*
-  * Suspend callback
-  */
-@@ -2139,7 +2258,7 @@ static int mmc_suspend(struct mmc_host *host)
-  */
- static int _mmc_resume(struct mmc_host *host)
- {
--	int err = 0;
-+	int err = -EINVAL;
- 
- 	mmc_claim_host(host);
- 
-@@ -2147,7 +2266,19 @@ static int _mmc_resume(struct mmc_host *host)
- 		goto out;
- 
- 	mmc_power_up(host, host->card->ocr);
--	err = mmc_init_card(host, host->card->ocr, host->card);
-+
-+	if (mmc_can_sleepawake(host)) {
-+		err = mmc_sleepawake(host, false);
-+		if (!err)
-+			err = mmc_partial_init(host);
-+		else
-+			pr_err("%s: %s: awake failed (%d), fallback to full init\n",
-+				mmc_hostname(host), __func__, err);
-+	}
-+
-+	if (err)
-+		err = mmc_init_card(host, host->card->ocr, host->card);
-+
- 	mmc_card_clr_suspended(host->card);
- 
- out:
-diff --git a/include/linux/mmc/card.h b/include/linux/mmc/card.h
-index 37f9758..ed7f6f7 100644
---- a/include/linux/mmc/card.h
-+++ b/include/linux/mmc/card.h
-@@ -86,6 +86,8 @@ struct mmc_ext_csd {
- 	unsigned int            data_tag_unit_size;     /* DATA TAG UNIT size */
- 	unsigned int		boot_ro_lock;		/* ro lock support */
- 	bool			boot_ro_lockable;
-+	u8			raw_ext_csd_cmdq;	/* 15 */
-+	u8			raw_ext_csd_cache_ctrl;	/* 33 */
- 	bool			ffu_capable;	/* Firmware upgrade support */
- 	bool			cmdq_en;	/* Command Queue enabled */
- 	bool			cmdq_support;	/* Command Queue supported */
-@@ -96,7 +98,9 @@ struct mmc_ext_csd {
- 	u8			raw_partition_support;	/* 160 */
- 	u8			raw_rpmb_size_mult;	/* 168 */
- 	u8			raw_erased_mem_count;	/* 181 */
-+	u8			raw_ext_csd_bus_width;	/* 183 */
- 	u8			strobe_support;		/* 184 */
-+	u8			raw_ext_csd_hs_timing;	/* 185 */
- 	u8			raw_ext_csd_structure;	/* 194 */
- 	u8			raw_card_type;		/* 196 */
- 	u8			raw_driver_strength;	/* 197 */
-diff --git a/include/linux/mmc/host.h b/include/linux/mmc/host.h
-index c38072e..a9ddf7a 100644
---- a/include/linux/mmc/host.h
-+++ b/include/linux/mmc/host.h
-@@ -422,6 +422,7 @@ struct mmc_host {
- #else
- #define MMC_CAP2_CRYPTO		0
- #endif
-+#define MMC_CAP2_SLEEP_AWAKE	(1 << 29)	/* Use Sleep/Awake (CMD5) */
- #define MMC_CAP2_ALT_GPT_TEGRA	(1 << 28)	/* Host with eMMC that has GPT entry at a non-standard location */
- 
- 	int			fixed_drv_type;	/* fixed driver type for non-removable media */
-@@ -441,6 +442,7 @@ struct mmc_host {
- 	spinlock_t		lock;		/* lock for claim and bus ops */
- 
- 	struct mmc_ios		ios;		/* current io bus settings */
-+	struct mmc_ios		cached_ios;
- 
- 	/* group bitfields together to minimize padding */
- 	unsigned int		use_spi_crc:1;
--- 
-2.7.4
+
+> ---
+>  drivers/mmc/core/queue.c      |  4 ++++
+>  drivers/mmc/host/cqhci-core.c |  7 +++++++
+>  drivers/mmc/host/sdhci.c      | 21 ++++++++++++++-------
+>  include/linux/mmc/host.h      | 22 ++++++++++++++++++++++
+>  4 files changed, 47 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/mmc/core/queue.c b/drivers/mmc/core/queue.c
+> index a3d4460..7b07520 100644
+> --- a/drivers/mmc/core/queue.c
+> +++ b/drivers/mmc/core/queue.c
+> @@ -100,6 +100,10 @@ static enum blk_eh_timer_return mmc_cqe_timed_out(struct request *req)
+>  	enum mmc_issue_type issue_type = mmc_issue_type(mq, req);
+>  	bool recovery_needed = false;
+>  
+> +	host->err_stats[MMC_ERR_CMDQ_REQ_TIMEOUT]++;
+> +	mmc_log_string(host,
+> +	"Request timed out! Active reqs: %d Req: %p Tag: %d\n",
+> +	mmc_cqe_qcnt(mq), req, req->tag);
+>  	switch (issue_type) {
+>  	case MMC_ISSUE_ASYNC:
+>  	case MMC_ISSUE_DCMD:
+> diff --git a/drivers/mmc/host/cqhci-core.c b/drivers/mmc/host/cqhci-core.c
+> index 311b510..03d4064 100644
+> --- a/drivers/mmc/host/cqhci-core.c
+> +++ b/drivers/mmc/host/cqhci-core.c
+> @@ -825,6 +825,13 @@ irqreturn_t cqhci_irq(struct mmc_host *mmc, u32 intmask, int cmd_error,
+>  	if ((status & (CQHCI_IS_RED | CQHCI_IS_GCE | CQHCI_IS_ICCE)) ||
+>  	    cmd_error || data_error || ice_err){
+>  		mmc->need_hw_reset = true;
+> +		if (status & CQHCI_IS_RED)
+> +			mmc->err_stats[MMC_ERR_CMDQ_RED]++;
+> +		if (status & CQHCI_IS_GCE)
+> +			mmc->err_stats[MMC_ERR_CMDQ_GCE]++;
+> +		if (status & CQHCI_IS_ICCE)
+> +			mmc->err_stats[MMC_ERR_CMDQ_ICCE]++;
+> +
+>  		cqhci_error_irq(mmc, status, cmd_error, data_error);
+>  	}
+>  
+> diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
+> index 2215202..a76c514 100644
+> --- a/drivers/mmc/host/sdhci.c
+> +++ b/drivers/mmc/host/sdhci.c
+> @@ -3905,20 +3905,27 @@ bool sdhci_cqe_irq(struct sdhci_host *host, u32 intmask, int *cmd_error,
+>  	if (!host->cqe_on)
+>  		return false;
+>  
+> -	if (intmask & (SDHCI_INT_INDEX | SDHCI_INT_END_BIT | SDHCI_INT_CRC))
+> +	if (intmask & (SDHCI_INT_INDEX | SDHCI_INT_END_BIT | SDHCI_INT_CRC)) {
+>  		*cmd_error = -EILSEQ;
+> -	else if (intmask & SDHCI_INT_TIMEOUT)
+> +		if (intmask & SDHCI_INT_CRC)
+> +			host->mmc->err_stats[MMC_ERR_CMD_CRC]++;
+> +	} else if (intmask & SDHCI_INT_TIMEOUT) {
+>  		*cmd_error = -ETIMEDOUT;
+> -	else
+> +		host->mmc->err_stats[MMC_ERR_CMD_TIMEOUT]++;
+> +	} else
+>  		*cmd_error = 0;
+>  
+> -	if (intmask & (SDHCI_INT_DATA_END_BIT | SDHCI_INT_DATA_CRC))
+> +	if (intmask & (SDHCI_INT_DATA_END_BIT | SDHCI_INT_DATA_CRC)) {
+>  		*data_error = -EILSEQ;
+> -	else if (intmask & SDHCI_INT_DATA_TIMEOUT)
+> +		if (intmask & SDHCI_INT_DATA_CRC)
+> +			host->mmc->err_stats[MMC_ERR_DAT_CRC]++;
+> +	} else if (intmask & SDHCI_INT_DATA_TIMEOUT) {
+>  		*data_error = -ETIMEDOUT;
+> -	else if (intmask & SDHCI_INT_ADMA_ERROR)
+> +		host->mmc->err_stats[MMC_ERR_DAT_TIMEOUT]++;
+> +	} else if (intmask & SDHCI_INT_ADMA_ERROR) {
+>  		*data_error = -EIO;
+> -	else
+> +		host->mmc->err_stats[MMC_ERR_ADMA]++;
+> +	} else
+>  		*data_error = 0;
+>  
+>  	/* Clear selected interrupts. */
+> diff --git a/include/linux/mmc/host.h b/include/linux/mmc/host.h
+> index 3d00bcf..c38072e 100644
+> --- a/include/linux/mmc/host.h
+> +++ b/include/linux/mmc/host.h
+> @@ -80,6 +80,9 @@ struct mmc_ios {
+>  	bool enhanced_strobe;			/* hs400es selection */
+>  };
+>  
+> +#define NUM_LOG_PAGES           10
+> +#define mmc_log_string(mmc_host, fmt, ...)      do { } while (0)
+> +
+>  struct mmc_clk_phase {
+>  	bool valid;
+>  	u16 in_deg;
+> @@ -93,6 +96,24 @@ struct mmc_clk_phase_map {
+>  
+>  struct mmc_host;
+>  
+> +enum {
+> +	MMC_ERR_CMD_TIMEOUT,
+> +	MMC_ERR_CMD_CRC,
+> +	MMC_ERR_DAT_TIMEOUT,
+> +	MMC_ERR_DAT_CRC,
+> +	MMC_ERR_AUTO_CMD,
+> +	MMC_ERR_ADMA,
+> +	MMC_ERR_TUNING,
+> +	MMC_ERR_CMDQ_RED,
+> +	MMC_ERR_CMDQ_GCE,
+> +	MMC_ERR_CMDQ_ICCE,
+> +	MMC_ERR_REQ_TIMEOUT,
+> +	MMC_ERR_CMDQ_REQ_TIMEOUT,
+> +	MMC_ERR_ICE_CFG,
+> +	MMC_ERR_MAX,
+> +};
+> +
+> +
+>  struct mmc_host_ops {
+>  	/*
+>  	 * It is optional for the host to implement pre_req and post_req in
+> @@ -471,6 +492,7 @@ struct mmc_host {
+>  	struct mmc_supply	supply;
+>  
+>  	struct dentry		*debugfs_root;
+> +	u32                     err_stats[MMC_ERR_MAX];
+>  
+>  	/* Ongoing data transfer that allows commands during transfer */
+>  	struct mmc_request	*ongoing_mrq;
 

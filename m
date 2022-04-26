@@ -2,49 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5859650F574
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:54:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01F5450F3D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346281AbiDZIor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58644 "EHLO
+        id S238062AbiDZI2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345296AbiDZIhs (ORCPT
+        with ESMTP id S1344768AbiDZI1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:37:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF3C9137B;
-        Tue, 26 Apr 2022 01:29:29 -0700 (PDT)
+        Tue, 26 Apr 2022 04:27:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4663612C8C8;
+        Tue, 26 Apr 2022 01:23:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7639E617E1;
-        Tue, 26 Apr 2022 08:29:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83966C385A0;
-        Tue, 26 Apr 2022 08:29:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A9CE961806;
+        Tue, 26 Apr 2022 08:23:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB678C385A0;
+        Tue, 26 Apr 2022 08:23:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961767;
-        bh=y4FzcMqIYjP6yJMMswEni40ksnSonHHl5KEbQHYCCgw=;
+        s=korg; t=1650961426;
+        bh=XO+htxcasVjIz8LtHd+6NBfz45Ayc74nohNSB2FcCHY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hZCEePbLwTskMA3u36MCYGY5Pna+DKIXaIkOolQwlZW8DIJmoZVF2Byioog9Vw4I8
-         2jmd2tmdQ9B9OP5EvMEVVr+pO0BN0WevnnPWDQ9dcz02euQYMgozH07Mn6uYczEbmV
-         e9LtSn0Miez7MyC33RE8d1KJWkZjyEqsdoNVK1zk=
+        b=Pod5LRnMUePi1qEHRA14UCWdd2GVEuHsTyuNFt1ojhaHirdFHQOs4PhBwwaXWf+jW
+         M+BdlIGS+NTTA4WNMuOry52FosAH/lj7UdV5Z+22CovCao/kC7KTxYZ9mFiENBk1xo
+         JhELfZWKaqyiOWcA1PiWOC9i7mDf0LrYTLcr0Taw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Kees Cook <keescook@chromium.org>,
+        stable@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Hans de Goede <hdegoede@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 23/62] ARM: vexpress/spc: Avoid negative array index when !SMP
+Subject: [PATCH 4.9 09/24] platform/x86: samsung-laptop: Fix an unsigned comparison which can never be negative
 Date:   Tue, 26 Apr 2022 10:21:03 +0200
-Message-Id: <20220426081737.892454125@linuxfoundation.org>
+Message-Id: <20220426081731.647075021@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
-References: <20220426081737.209637816@linuxfoundation.org>
+In-Reply-To: <20220426081731.370823950@linuxfoundation.org>
+References: <20220426081731.370823950@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,56 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+From: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
-[ Upstream commit b3f1dd52c991d79118f35e6d1bf4d7cb09882e38 ]
+[ Upstream commit 0284d4d1be753f648f28b77bdfbe6a959212af5c ]
 
-When building multi_v7_defconfig+CONFIG_SMP=n, -Warray-bounds exposes
-a couple negative array index accesses:
+Eliminate the follow smatch warnings:
 
-arch/arm/mach-vexpress/spc.c: In function 've_spc_clk_init':
-arch/arm/mach-vexpress/spc.c:583:21: warning: array subscript -1 is below array bounds of 'bool[2]' {aka '_Bool[2]'} [-Warray-bounds]
-  583 |   if (init_opp_table[cluster])
-      |       ~~~~~~~~~~~~~~^~~~~~~~~
-arch/arm/mach-vexpress/spc.c:556:7: note: while referencing 'init_opp_table'
-  556 |  bool init_opp_table[MAX_CLUSTERS] = { false };
-      |       ^~~~~~~~~~~~~~
-arch/arm/mach-vexpress/spc.c:592:18: warning: array subscript -1 is below array bounds of 'bool[2]' {aka '_Bool[2]'} [-Warray-bounds]
-  592 |    init_opp_table[cluster] = true;
-      |    ~~~~~~~~~~~~~~^~~~~~~~~
-arch/arm/mach-vexpress/spc.c:556:7: note: while referencing 'init_opp_table'
-  556 |  bool init_opp_table[MAX_CLUSTERS] = { false };
-      |       ^~~~~~~~~~~~~~
+drivers/platform/x86/samsung-laptop.c:1124 kbd_led_set() warn: unsigned
+'value' is never less than zero.
 
-Skip this logic when built !SMP.
-
-Link: https://lore.kernel.org/r/20220331190443.851661-1-keescook@chromium.org
-Cc: Liviu Dudau <liviu.dudau@arm.com>
-Cc: Sudeep Holla <sudeep.holla@arm.com>
-Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: linux-arm-kernel@lists.infradead.org
-Acked-by: Liviu Dudau <liviu.dudau@arm.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Link: https://lore.kernel.org/r/20220322061830.105579-1-jiapeng.chong@linux.alibaba.com
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/mach-vexpress/spc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/platform/x86/samsung-laptop.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/arch/arm/mach-vexpress/spc.c b/arch/arm/mach-vexpress/spc.c
-index 1da11bdb1dfb..1c6500c4e6a1 100644
---- a/arch/arm/mach-vexpress/spc.c
-+++ b/arch/arm/mach-vexpress/spc.c
-@@ -580,7 +580,7 @@ static int __init ve_spc_clk_init(void)
- 		}
+diff --git a/drivers/platform/x86/samsung-laptop.c b/drivers/platform/x86/samsung-laptop.c
+index 8c146e2b6727..4664d3e191c8 100644
+--- a/drivers/platform/x86/samsung-laptop.c
++++ b/drivers/platform/x86/samsung-laptop.c
+@@ -1125,8 +1125,6 @@ static void kbd_led_set(struct led_classdev *led_cdev,
  
- 		cluster = topology_physical_package_id(cpu_dev->id);
--		if (init_opp_table[cluster])
-+		if (cluster < 0 || init_opp_table[cluster])
- 			continue;
+ 	if (value > samsung->kbd_led.max_brightness)
+ 		value = samsung->kbd_led.max_brightness;
+-	else if (value < 0)
+-		value = 0;
  
- 		if (ve_init_opp_table(cpu_dev))
+ 	samsung->kbd_led_wk = value;
+ 	queue_work(samsung->led_workqueue, &samsung->kbd_led_work);
 -- 
 2.35.1
 

@@ -2,105 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D6750FC7C
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 14:05:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2C6850FC7E
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 14:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346343AbiDZMIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 08:08:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56160 "EHLO
+        id S1349759AbiDZMJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 08:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346373AbiDZMIq (ORCPT
+        with ESMTP id S1349792AbiDZMJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 08:08:46 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E66EB16C;
-        Tue, 26 Apr 2022 05:05:35 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="351996298"
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="351996298"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 05:05:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="538655307"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga002.jf.intel.com with ESMTP; 26 Apr 2022 05:05:35 -0700
-Received: from abityuts-desk1.fi.intel.com (abityuts-desk1.fi.intel.com [10.237.72.79])
-        by linux.intel.com (Postfix) with ESMTP id 9635558090D;
-        Tue, 26 Apr 2022 05:05:32 -0700 (PDT)
-Message-ID: <97e7e3f5110702fab727b4df7d53511aef5c60b1.camel@gmail.com>
-Subject: Re: [RFC PATCH v3 2/5] cpuidle: Add Cpufreq Active Stats calls
- tracking idle entry/exit
-From:   Artem Bityutskiy <dedekind1@gmail.com>
-To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org
-Cc:     dietmar.eggemann@arm.com, viresh.kumar@linaro.org,
-        rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com, amit.kachhap@gmail.com,
-        linux-pm@vger.kernel.org
-Date:   Tue, 26 Apr 2022 15:05:31 +0300
-In-Reply-To: <20220406220809.22555-3-lukasz.luba@arm.com>
-References: <20220406220809.22555-1-lukasz.luba@arm.com>
-         <20220406220809.22555-3-lukasz.luba@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+        Tue, 26 Apr 2022 08:09:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BED52FA40E
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 05:06:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650974759;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=dRKiCK7YkDXuEi8UT1lBCyoBeoI9sdfI9zFpeIfYSjc=;
+        b=eNxmfRoLHA24WaGXMldertx1rCM2YWOzC4CoZg2qgMNA114snyMSS9tMXEiqAb+rSZSkbt
+        i7z8hgfOIPKbcXAnd/w8yo+OXMVeB7ihr3H2ATfoBZZVVG8zuhdMoFoC+RP+0AXXX9jfar
+        tnmLK7twhw/WlhHvBYFipK4YyaQlykY=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-150-QiIOYpHcPcKt9x4ZhVVYmQ-1; Tue, 26 Apr 2022 08:05:58 -0400
+X-MC-Unique: QiIOYpHcPcKt9x4ZhVVYmQ-1
+Received: by mail-qt1-f200.google.com with SMTP id j9-20020ac85c49000000b002f37e06e8ffso546562qtj.1
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 05:05:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dRKiCK7YkDXuEi8UT1lBCyoBeoI9sdfI9zFpeIfYSjc=;
+        b=bxZ3pGLL77FGAylKEf+sWiGOGspkRfkHtBkqc/AHyEQtsFsbNFDTHRBwRWN3CvqfC5
+         EkUbQtXcQBWXTqMCT6rqGaDalTnAuhKe5BpZffU/2/pNu38Qbqk8788SbPAGJgkLq/PM
+         9ZXTdpGIbpqoJ4HNJODiCm7ynX+SdXzWu0xi0YbVOdkG3l/89XpxEgJsjDMZMJQps4Ix
+         AgGh9Z6eOsl3xofMqUjY1jb6BnAqUr05tcAd9EyJgbWVR08KXc/WmTHkZH3q+EN0FLuw
+         lmw+xs3+4yuKWf69X80kQs9KbOiR4XGgV+QTR5Rji5A7RMdZBMEocYekgXIo0n4uVlGv
+         V2pw==
+X-Gm-Message-State: AOAM533HLcf2noXAnzrsG8ZHquMYZuGNvIKNStl0QfHLZqP+RFffqte8
+        ibGni/1XGMgbK1qx3T48ZNy7Ut0boUcieTRsMiJg3CEJwVSMCXTCdeNyg+GA+R/Awpk5OAMEric
+        kRWn1tjxXBRIojRcNO65tSRr2
+X-Received: by 2002:ac8:4e86:0:b0:2f3:6a2f:ef75 with SMTP id 6-20020ac84e86000000b002f36a2fef75mr5637989qtp.588.1650974757569;
+        Tue, 26 Apr 2022 05:05:57 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzQG6Om7R3FEtSeKU6XTcpFbpghZNVbhF6P6lTL6zIz8c560p8Bgs4whB0ZkzC0XtJogWcGpw==
+X-Received: by 2002:ac8:4e86:0:b0:2f3:6a2f:ef75 with SMTP id 6-20020ac84e86000000b002f36a2fef75mr5637972qtp.588.1650974757361;
+        Tue, 26 Apr 2022 05:05:57 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id i19-20020a05620a249300b0069f805534d3sm454101qkn.89.2022.04.26.05.05.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 05:05:56 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        nathan@kernel.org, ndesaulniers@google.com
+Cc:     linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] tty: n_gsm: return -EINVAL when adaption is not supported
+Date:   Tue, 26 Apr 2022 08:05:54 -0400
+Message-Id: <20220426120554.1120585-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_SOFTFAIL
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lukasz,
+The clang build fails with
+n_gsm.c:940:13: error: variable 'size' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+        } else if (dlci->adaption == 2) {
+                   ^~~~~~~~~~~~~~~~~~~
 
-On Wed, 2022-04-06 at 23:08 +0100, Lukasz Luba wrote:
-> @@ -231,6 +232,8 @@ int cpuidle_enter_state(struct cpuidle_device *dev, struct
-> cpuidle_driver *drv,
->         trace_cpu_idle(index, dev->cpu);
->         time_start = ns_to_ktime(local_clock());
->  
-> +       cpufreq_active_stats_cpu_idle_enter(time_start);
-> +
->         stop_critical_timings();
->         if (!(target_state->flags & CPUIDLE_FLAG_RCU_IDLE))
->                 rcu_idle_enter();
-> @@ -243,6 +246,8 @@ int cpuidle_enter_state(struct cpuidle_device *dev, struct
-> cpuidle_driver *drv,
->         time_end = ns_to_ktime(local_clock());
->         trace_cpu_idle(PWR_EVENT_EXIT, dev->cpu);
->  
-> +       cpufreq_active_stats_cpu_idle_exit(time_end);
-> +
+The else should return an error, so return -EINVAL.
 
-At this point the interrupts are still disabled, and they get enabled later. So
-the more code you add here and the longer it executes, the longer you delay the
-interrupts. Therefore, you are effectively increasing IRQ latency from idle by
-adding more code here.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/tty/n_gsm.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-How much? I do not know, depends on how much code you need to execute. But the
-amount of code in functions like this tends to increase over time.
-
-So the risk is that we'll keep making 'cpufreq_active_stats_cpu_idle_exit()',
-and (may be unintentionally) increase idle interrupt latency.
-
-This is not ideal.
-
-We use the 'wult' tool (https://github.com/intel/wult) to measure C-states
-latency and interrupt latency on Intel platforms, and for fast C-states like
-Intel C1, we can see that even the current code between C-state exit and
-interrupt re-enabled adds measurable overhead.
-
-I am worried about adding more stuff here.
-
-Please, consider getting the stats after interrupts are re-enabled. You may lose
-some "precision" because of that, but it is probably overall better that adding
-to idle interrupt latency.
-
->         /* The cpu is no longer idle or about to enter idle. */
->         sched_idle_set_state(NULL);
-
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index b0762d2fa8d6..3b8c65f66d64 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -944,6 +944,7 @@ static int gsm_dlci_modem_output(struct gsm_mux *gsm, struct gsm_dlci *dlci,
+ 	} else {
+ 		pr_err("%s: unsupported adaption %d\n", __func__,
+ 		       dlci->adaption);
++		return -EINVAL;
+ 	}
+ 
+ 	msg = gsm_data_alloc(gsm, dlci->addr, size, gsm->ftype);
+-- 
+2.27.0
 

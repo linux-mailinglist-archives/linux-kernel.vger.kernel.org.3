@@ -2,87 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F11350FF8C
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:51:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B06B650FF8F
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:51:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345044AbiDZNyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 09:54:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60488 "EHLO
+        id S1351174AbiDZNyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 09:54:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351179AbiDZNxw (ORCPT
+        with ESMTP id S1351147AbiDZNyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 09:53:52 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BD4E0E9;
-        Tue, 26 Apr 2022 06:50:44 -0700 (PDT)
-Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:8ccc:428d:6d90:c434])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id D48CF1F43AFF;
-        Tue, 26 Apr 2022 14:50:42 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650981043;
-        bh=CCDHj7pQZvESZdZWN4cCNttODXVw+AkYBsGRVPKNBSI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=g5sJ06ErarEfsR+65HFsTR/u0T8G7iZ8X0qaQ8rwAjfugnHDiQPv3OGLnQ89gF1Uw
-         Z/FZL4XZvK+vlQW2B+VBHyaq3nn6SvPofdyGl8W9P7xGDJXAUDSzf/SbeIy02IX0KE
-         XGJpgaulJImaaLHQwnHXMFs6CFOT63MlzvVbiS/q1Rb8v0uukUuL/QE839madZ+k3X
-         eS3B0Rfy3vAX4Y84P6vAL8rByNpZeg+tj8m2gTk3dBzJ0QzY4avPpHAKHWmp3vEltm
-         aniSFOqb/zvsOOmY/50QjHRIDX2o2O5Dw5Z+4ikidntoTcBriOEJK3YWGiEMiZVaYk
-         RhPvk0FcLViRg==
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        mchehab@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        jon@nanocrew.net, aford173@gmail.com, kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v2] media: hantro: HEVC: unconditionnaly set pps_{cb/cr}_qp_offset values
-Date:   Tue, 26 Apr 2022 15:50:34 +0200
-Message-Id: <20220426135034.694655-1-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.32.0
+        Tue, 26 Apr 2022 09:54:16 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9986E8D4
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 06:51:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650981066; x=1682517066;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=1V0/3lCFUFvYH380s9fH3oZRP3EJgrr3lCquxLUB5Gk=;
+  b=Ebu1hRDzfCo5ziMPg73shOezXYw1Qr2q3kYwUtgZPCcYYKhk6hUS8B/U
+   UrUCVHRFJWkhQyGAfeBA4DPXpIU/7qpWNtLhuEmnZ/1Ztw3VXa69/xmNZ
+   srszgZV7//mzwHL400OZPP39f13lkbeH6jydluE8FEo4YS53dBRaoV5vy
+   +X5fFTy8VSTRLYyrZVA0fNU053M+9IqREpcJTCaytI1Q03pJAn2yk6gd2
+   SfxhDYsYv3nagPzpvjx9fup6oiKi1YEQJKa3gHseohv9TrHiw7UlfJR5k
+   utUw605pPSENJK9cqk+RM9EcW2k4wpbPdEE8z9w3icFTgfUSAJz4CpviR
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="264426966"
+X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
+   d="scan'208";a="264426966"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 06:51:05 -0700
+X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
+   d="scan'208";a="558317960"
+Received: from liuyujie-mobl.ccr.corp.intel.com ([10.249.168.137])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 06:51:02 -0700
+From:   Yujie Liu <yujie.liu@intel.com>
+To:     Philip Li <philip.li@intel.com>
+Cc:     lkp-devops@eclists.intel.com, Yujie Liu <yujie.liu@intel.com>,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH lkp-cloud] spec/kbuild_bisect_queue: update kismet error id format and reproduce command
+Date:   Tue, 26 Apr 2022 21:51:00 +0800
+Message-Id: <20220426135100.2831-1-yujie.liu@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Always set pps_cb_qp_offset and pps_cr_qp_offset values in Hantro/G2
-register whatever is V4L2_HEVC_PPS_FLAG_PPS_SLICE_CHROMA_QP_OFFSETS_PRESENT
-flag value.
-This fix CAINIT_G_SHARP_3 test in fluster.
+$ rake spec-slow spec=3Dkbuild_bisect_kismet debug=3D1 code=3D1 C_ROOT=3D/h=
+ome/jenkins/rake-spec-test/kernel-tests
+start spec
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+/usr/bin/ruby2.5 -I/var/lib/gems/2.5.0/gems/rspec-support-3.11.0/lib:/var/l=
+ib/gems/2.5.0/gems/rspec-core-3.11.0/lib /var/lib/gems/2.5.0/gems/rspec-cor=
+e-3.11.0/exe/rspec --pattern spec/\*\*\{,/\*/\*\*\}/kbuild_bisect_kismet_sp=
+ec.rb --tag speed:slow
+Run options: include {:speed=3D>"slow"}
+/tmp/qa-20220426-21054-w5d450
+latest: Pulling from kbuild
+Digest: sha256:c1bc7056e6b210b81791496bf7987b64edfd12b4d300252edda8f54446c5=
+7334
+Status: Image is up to date for lkp-server:5000/kbuild:latest
+lkp-server:5000/kbuild:latest
+.
+
+Finished in 57 minutes 34 seconds (files took 1.12 seconds to load)
+1 example, 0 failures
+
+the final content of report mail is:
+
+CC: kbuild-all@lists.01.org
+BCC: lkp@intel.com
+CC: linux-kernel@vger.kernel.org
+TO: Artur Rojek <contact@artur-rojek.eu>
+CC: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git =
+master
+head:   d615b5416f8a1afeb82d13b238f8152c572d59c0
+commit: 2c2b364fddd551f0da98953618e264c098dfa140 Input: joystick - add ADC =
+attached joystick driver.
+date:   1 year, 7 months ago
+:::::: branch date: 18 hours ago
+:::::: commit date: 1 year, 7 months ago
+reproduce:
+  download attached .config.gz and extract .config to linux source tree
+  run "make ARCH=3Dx86_64 olddefconfig"
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+kismet warnings: (new ones prefixed by >>)
+>> WARNING: unmet direct dependencies detected, selectee: CONFIG_IIO_BUFFER=
+_CB, selector: CONFIG_JOYSTICK_ADC
+
+   WARNING: unmet direct dependencies detected for IIO_BUFFER_CB
+     Depends on [n]: IIO [=3Dy] && IIO_BUFFER [=3Dn]
+     Selected by [y]:
+     - JOYSTICK_ADC [=3Dy] && !UML && INPUT [=3Dy] && INPUT_JOYSTICK [=3Dy]=
+ && IIO [=3Dy]
+
+--
+0-DAY CI Kernel Test Service
+https://01.org/lkp
+
+--RWj8+mpoThLpL0oB
+Content-Type: application/gzip
+Content-Disposition: attachment; filename=3D".config.gz"
+Content-Transfer-Encoding: base64
+...
+
+Link: https://jira.devtools.intel.com/browse/ZDAYCI-15410
+Signed-off-by: Yujie Liu <yujie.liu@intel.com>
 ---
- drivers/staging/media/hantro/hantro_g2_hevc_dec.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ ...d-selectee:CONFIG_IIO_BUFFER_CB-selector:CONFIG_JOYSTICK_ADC | 1 +
+ ...-udd-x86_64-CONFIG_IIO_BUFFER_CB-CONFIG_JOYSTICK_ADC-.config | 1 -
+ spec/kbuild_bisect_queue/kbuild_bisect_kismet_spec.rb           | 2 +-
+ 3 files changed, 2 insertions(+), 2 deletions(-)
+ create mode 100644 spec/kbuild_bisect_queue/kbuild/bisect-queue/2c2b364fdd=
+d551f0da98953618e264c098dfa140:gcc-11:x86_64-allnoconfig/.reduce_errors/WAR=
+NING:unmet-direct-dependencies-detected-selectee:CONFIG_IIO_BUFFER_CB-selec=
+tor:CONFIG_JOYSTICK_ADC
+ delete mode 100644 spec/kbuild_bisect_queue/kbuild/bisect-queue/2c2b364fdd=
+d551f0da98953618e264c098dfa140:gcc-11:x86_64-allnoconfig/.reduce_errors/x86=
+_64-CONFIG_IIO_BUFFER_CB-CONFIG_JOYSTICK_ADC-UNMET_ALARM-True-kismet-test-c=
+ases-udd-x86_64-CONFIG_IIO_BUFFER_CB-CONFIG_JOYSTICK_ADC-.config
 
-diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-index 6deb31b7b993..503f4b028bc5 100644
---- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-+++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-@@ -194,13 +194,8 @@ static void set_params(struct hantro_ctx *ctx)
- 		hantro_reg_write(vpu, &g2_max_cu_qpd_depth, 0);
- 	}
- 
--	if (pps->flags & V4L2_HEVC_PPS_FLAG_PPS_SLICE_CHROMA_QP_OFFSETS_PRESENT) {
--		hantro_reg_write(vpu, &g2_cb_qp_offset, pps->pps_cb_qp_offset);
--		hantro_reg_write(vpu, &g2_cr_qp_offset, pps->pps_cr_qp_offset);
--	} else {
--		hantro_reg_write(vpu, &g2_cb_qp_offset, 0);
--		hantro_reg_write(vpu, &g2_cr_qp_offset, 0);
--	}
-+	hantro_reg_write(vpu, &g2_cb_qp_offset, pps->pps_cb_qp_offset);
-+	hantro_reg_write(vpu, &g2_cr_qp_offset, pps->pps_cr_qp_offset);
- 
- 	hantro_reg_write(vpu, &g2_filt_offset_beta, pps->pps_beta_offset_div2);
- 	hantro_reg_write(vpu, &g2_filt_offset_tc, pps->pps_tc_offset_div2);
--- 
-2.32.0
+diff --git a/spec/kbuild_bisect_queue/kbuild/bisect-queue/2c2b364fddd551f0d=
+a98953618e264c098dfa140:gcc-11:x86_64-allnoconfig/.reduce_errors/WARNING:un=
+met-direct-dependencies-detected-selectee:CONFIG_IIO_BUFFER_CB-selector:CON=
+FIG_JOYSTICK_ADC b/spec/kbuild_bisect_queue/kbuild/bisect-queue/2c2b364fddd=
+551f0da98953618e264c098dfa140:gcc-11:x86_64-allnoconfig/.reduce_errors/WARN=
+ING:unmet-direct-dependencies-detected-selectee:CONFIG_IIO_BUFFER_CB-select=
+or:CONFIG_JOYSTICK_ADC
+new file mode 100644
+index 0000000..64e3ea7
+--- /dev/null
++++ b/spec/kbuild_bisect_queue/kbuild/bisect-queue/2c2b364fddd551f0da989536=
+18e264c098dfa140:gcc-11:x86_64-allnoconfig/.reduce_errors/WARNING:unmet-dir=
+ect-dependencies-detected-selectee:CONFIG_IIO_BUFFER_CB-selector:CONFIG_JOY=
+STICK_ADC
+@@ -0,0 +1 @@
++WARNING: unmet direct dependencies detected, selectee: CONFIG_IIO_BUFFER_C=
+B, selector: CONFIG_JOYSTICK_ADC
+diff --git a/spec/kbuild_bisect_queue/kbuild/bisect-queue/2c2b364fddd551f0d=
+a98953618e264c098dfa140:gcc-11:x86_64-allnoconfig/.reduce_errors/x86_64-CON=
+FIG_IIO_BUFFER_CB-CONFIG_JOYSTICK_ADC-UNMET_ALARM-True-kismet-test-cases-ud=
+d-x86_64-CONFIG_IIO_BUFFER_CB-CONFIG_JOYSTICK_ADC-.config b/spec/kbuild_bis=
+ect_queue/kbuild/bisect-queue/2c2b364fddd551f0da98953618e264c098dfa140:gcc-=
+11:x86_64-allnoconfig/.reduce_errors/x86_64-CONFIG_IIO_BUFFER_CB-CONFIG_JOY=
+STICK_ADC-UNMET_ALARM-True-kismet-test-cases-udd-x86_64-CONFIG_IIO_BUFFER_C=
+B-CONFIG_JOYSTICK_ADC-.config
+deleted file mode 100644
+index ec7df3e..0000000
+--- a/spec/kbuild_bisect_queue/kbuild/bisect-queue/2c2b364fddd551f0da989536=
+18e264c098dfa140:gcc-11:x86_64-allnoconfig/.reduce_errors/x86_64-CONFIG_IIO=
+_BUFFER_CB-CONFIG_JOYSTICK_ADC-UNMET_ALARM-True-kismet-test-cases-udd-x86_6=
+4-CONFIG_IIO_BUFFER_CB-CONFIG_JOYSTICK_ADC-.config
++++ /dev/null
+@@ -1 +0,0 @@
+-x86_64,CONFIG_IIO_BUFFER_CB,CONFIG_JOYSTICK_ADC,0,0,UNMET_ALARM,True,kisme=
+t-test-cases/udd-x86_64-CONFIG_IIO_BUFFER_CB-CONFIG_JOYSTICK_ADC-0-0.config=
+=0D
+diff --git a/spec/kbuild_bisect_queue/kbuild_bisect_kismet_spec.rb b/spec/k=
+build_bisect_queue/kbuild_bisect_kismet_spec.rb
+index 000233b..736bfc6 100644
+--- a/spec/kbuild_bisect_queue/kbuild_bisect_kismet_spec.rb
++++ b/spec/kbuild_bisect_queue/kbuild_bisect_kismet_spec.rb
+@@ -7,7 +7,7 @@ describe 'kbuild_worker', speed: 'slow' do
+                     commit: '2c2b364fddd551f0da98953618e264c098dfa140',
+                     first_bad_branch: 'linus/master',
+                     first_bad_commit: '2c2b364fddd551f0da98953618e264c098d=
+fa140',
+-                    reproduce_command: 'kismet --linux-ksrc=3Dlinux -a=3Dx=
+86_64' }]
++                    reproduce_command: 'make ARCH=3Dx86_64 olddefconfig' }]
+=20
+   define_kbuild_bisect_queue_spec('bisect_kismet', 'kbuild_bisect_queue', =
+test_options)
+ end
+--=20
+2.25.1
 

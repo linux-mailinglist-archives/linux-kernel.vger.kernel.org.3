@@ -2,80 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF06150F8F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:44:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2A1B50F7EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347047AbiDZJmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59946 "EHLO
+        id S1345097AbiDZJmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:42:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239643AbiDZJap (ORCPT
+        with ESMTP id S1347753AbiDZJeD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:30:45 -0400
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9253CFC0;
-        Tue, 26 Apr 2022 01:57:44 -0700 (PDT)
-Received: by mail-oo1-xc2c.google.com with SMTP id n22-20020a4ae1d6000000b0033a6eedbc7bso3259893oot.11;
-        Tue, 26 Apr 2022 01:57:44 -0700 (PDT)
+        Tue, 26 Apr 2022 05:34:03 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E492C3F326;
+        Tue, 26 Apr 2022 01:58:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=UhT8tbPEkvpYFqLjaGAxMfzwEgHtH4F74036X794IMc=;
-        b=i6xnJ2DMMW5xtgdWwyfkVNppLp7Qcw1O39CirGWCOyUS/UTO546uWtkw6u9wd7aiOr
-         Xo79ZtF7BKawklxyG3vn3MFV5K8id0J4iylYdd/AWDEA8ho06Lau8KiUR0laVoUoUedT
-         4jdoGiOx9e8GYzF4EbX3NLsRLvxTeaVRt4mKb22Da4jN71VUMZzNTfUflI4t4E3oIaOe
-         J1nfEoTjVaGb+U5Jim46ZnFABEXrtxHW8zkcjAy7Sg+id8nO748hVI9fggJ6n9Ju8n6R
-         JaB6LFS1cgdXGVtZ6n/eyWfIJ2oIAzf/UEy58vD7L5fxm+97bh5JjkQqqI0qkt8/SSUZ
-         /VxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=UhT8tbPEkvpYFqLjaGAxMfzwEgHtH4F74036X794IMc=;
-        b=fgjSMp8LDJetYVKFYWUrT3WrFzP9ZFgP2TdeeaSD8fCVirC9w+XHobVfmpkRTUp+Wn
-         e4MbmTeCkX1Wh5QEOqTCDRFCgoafRvSUE5z+klLfFm12O+1/K5UQvxyaNPLtV5AI133O
-         +tgvtcfo9pAFiZeSXC7KMZBqGaXv/lLKoUjp2z8rtH9WONLieSASIFt5oBp5LrN6jz9p
-         fGDEceNJ421eZKV7YUlXUeRCP0Q5uiiYLawN4Yee3ipNnoSNP0q+jsXmAKjW3DXufUH8
-         kmhD1gkBAuoMu7/uQdqS6I2qo3PjokBFtC0MBbbmm2HUG3jyEqlpvSZ/2EzH378zxjmY
-         Kyag==
-X-Gm-Message-State: AOAM533opOGpn7eeCORqbsYYlsGD0gmnX2QWLjF1TD2Wo4j1jaK9wPPv
-        jPZtRLrAJhgjaokGofAV/FWzGNPBtQg=
-X-Google-Smtp-Source: ABdhPJzdTEhc0aJvJhe8wZhMn2rau21VcIihwBPtigdjEX8ZOZx1tVt/1+Fnk/B7NmWKDI/nDq55dA==
-X-Received: by 2002:a4a:e82b:0:b0:330:cee9:4a8a with SMTP id d11-20020a4ae82b000000b00330cee94a8amr7806331ood.31.1650963463816;
-        Tue, 26 Apr 2022 01:57:43 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p1-20020a05683003c100b005c927b6e645sm4662921otc.20.2022.04.26.01.57.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 01:57:42 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <dd522f49-89b6-14b2-c402-9cfc93b51d4b@roeck-us.net>
-Date:   Tue, 26 Apr 2022 01:57:40 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     Zev Weiss <zev@bewilderbeest.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Cc:     Renze Nicolai <renze@rnplus.nl>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org, webmaster@kernel.org
-References: <20220426071848.11619-1-zev@bewilderbeest.net>
- <YmetYjSKFs+WWwYz@hatter.bewilderbeest.net>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v3 0/6] hwmon: (nct6775) Convert to regmap, add i2c
- support
-In-Reply-To: <YmetYjSKFs+WWwYz@hatter.bewilderbeest.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1650963508; x=1682499508;
+  h=from:to:cc:subject:date:message-id;
+  bh=Q251io/kJJuj8uHbuLecwGWxnXivBjY2LaiYPZX3vSQ=;
+  b=Dm+ISPdfrvz4+wBcHt8bX5lwUSop6MKOM4Tc0P72GlAdu1KEf1sulqsc
+   FM1KqSqROIgf2fueCxGkCPtGqlW8NAgM4xbPCzmAKx28juvQINUGDakUm
+   1xHJnUOCciHSaFvohjiCLv9wvunZeG+m/xoW8zTGJgKM7/C2rlbyL9dbB
+   Y=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 26 Apr 2022 01:58:28 -0700
+X-QCInternal: smtphost
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 26 Apr 2022 01:58:26 -0700
+X-QCInternal: smtphost
+Received: from hu-c-spathi-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.108.59])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 26 Apr 2022 14:28:09 +0530
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 212714)
+        id 621D63085; Tue, 26 Apr 2022 14:28:08 +0530 (+0530)
+From:   Srinivasarao Pathipati <quic_spathi@quicinc.com>
+To:     ulf.hansson@linaro.org, adrian.hunter@intel.com,
+        riteshh@codeaurora.org, asutoshd@codeaurora.org, colyli@suse.de,
+        axboe@kernel.dk, kch@nvidia.com, cw9316.lee@samsung.com,
+        sbhanu@codeaurora.org, joel@jms.id.au, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     kamasali <quic_kamasali@quicinc.com>,
+        Srinivasarao Pathipati <quic_spathi@quicinc.com>
+Subject: [PATCH V1] sdhci-msm: Add err_stat's in CQE path
+Date:   Tue, 26 Apr 2022 14:28:01 +0530
+Message-Id: <1650963481-11139-1-git-send-email-quic_spathi@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,44 +56,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/26/22 01:29, Zev Weiss wrote:
-> [Adding korg webmaster re: list infrastructure]
-> 
-> On Tue, Apr 26, 2022 at 12:18:42AM PDT, Zev Weiss wrote:
->> Hello,
->>
->> This is v3 of my effort to add i2c support to the nct6775 hwmon
->> driver.
->>
->> Changes since v2 [0]:
->> ...
->> - Renamed drivers and Kconfig symbols to keep existing platform
->>   driver as "nct6775" (SENSORS_NCT6775) and the core module as
->>   "nct6775-core" (SENSORS_NCT6775_CORE) [Guenter]
-> 
-> Unfortunately while this was a simple enough change to make (a few 'git mv' commands and a handful of actual text changes), it ballooned the size of the diff for patch 5 to the point that vger bounced it for exceeding the 100K message-size limit.  As far as I can tell it looks like it went through elsewhere, but does leave a bit of a gap in the public list archives -- please let me know if there's anything I should try in terms of re-sending it.  (The only combination of 'git format-patch' flags I've been able to find that gets it back down to approximately its previous size is '-B -D', which isn't so useful for actually applying.)
-> 
-> I'm not sure how critical a limit that 100K is, or if it's something we might consider raising a bit?
-> 
+From: Shaik Sajida Bhanu <sbhanu@codeaurora.org>
 
-You could split it up further. For example, you could introduce
-the include file first. Also, please run checkpatch --strict on
-your patches. I don't care about commenting the mutex, but there
-should be no double empty lines. Also, while you are at it,
-it would be great if you can add another patch to fix the
+Add err_stat's in CQE path for eMMC.
 
-WARNING: Symbolic permissions 'S_IWUSR | S_IRUGO' are not preferred. Consider using octal permissions '0644'.
+Signed-off-by: Shaik Sajida Bhanu <sbhanu@codeaurora.org>
+Signed-off-by: kamasali <quic_kamasali@quicinc.com>
+Signed-off-by: Srinivasarao Pathipati <quic_spathi@quicinc.com>
+---
+ drivers/mmc/core/queue.c      |  4 ++++
+ drivers/mmc/host/cqhci-core.c |  7 +++++++
+ drivers/mmc/host/sdhci.c      | 21 ++++++++++++++-------
+ include/linux/mmc/host.h      | 22 ++++++++++++++++++++++
+ 4 files changed, 47 insertions(+), 7 deletions(-)
 
-warnings.
+diff --git a/drivers/mmc/core/queue.c b/drivers/mmc/core/queue.c
+index a3d4460..7b07520 100644
+--- a/drivers/mmc/core/queue.c
++++ b/drivers/mmc/core/queue.c
+@@ -100,6 +100,10 @@ static enum blk_eh_timer_return mmc_cqe_timed_out(struct request *req)
+ 	enum mmc_issue_type issue_type = mmc_issue_type(mq, req);
+ 	bool recovery_needed = false;
+ 
++	host->err_stats[MMC_ERR_CMDQ_REQ_TIMEOUT]++;
++	mmc_log_string(host,
++	"Request timed out! Active reqs: %d Req: %p Tag: %d\n",
++	mmc_cqe_qcnt(mq), req, req->tag);
+ 	switch (issue_type) {
+ 	case MMC_ISSUE_ASYNC:
+ 	case MMC_ISSUE_DCMD:
+diff --git a/drivers/mmc/host/cqhci-core.c b/drivers/mmc/host/cqhci-core.c
+index 311b510..03d4064 100644
+--- a/drivers/mmc/host/cqhci-core.c
++++ b/drivers/mmc/host/cqhci-core.c
+@@ -825,6 +825,13 @@ irqreturn_t cqhci_irq(struct mmc_host *mmc, u32 intmask, int cmd_error,
+ 	if ((status & (CQHCI_IS_RED | CQHCI_IS_GCE | CQHCI_IS_ICCE)) ||
+ 	    cmd_error || data_error || ice_err){
+ 		mmc->need_hw_reset = true;
++		if (status & CQHCI_IS_RED)
++			mmc->err_stats[MMC_ERR_CMDQ_RED]++;
++		if (status & CQHCI_IS_GCE)
++			mmc->err_stats[MMC_ERR_CMDQ_GCE]++;
++		if (status & CQHCI_IS_ICCE)
++			mmc->err_stats[MMC_ERR_CMDQ_ICCE]++;
++
+ 		cqhci_error_irq(mmc, status, cmd_error, data_error);
+ 	}
+ 
+diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
+index 2215202..a76c514 100644
+--- a/drivers/mmc/host/sdhci.c
++++ b/drivers/mmc/host/sdhci.c
+@@ -3905,20 +3905,27 @@ bool sdhci_cqe_irq(struct sdhci_host *host, u32 intmask, int *cmd_error,
+ 	if (!host->cqe_on)
+ 		return false;
+ 
+-	if (intmask & (SDHCI_INT_INDEX | SDHCI_INT_END_BIT | SDHCI_INT_CRC))
++	if (intmask & (SDHCI_INT_INDEX | SDHCI_INT_END_BIT | SDHCI_INT_CRC)) {
+ 		*cmd_error = -EILSEQ;
+-	else if (intmask & SDHCI_INT_TIMEOUT)
++		if (intmask & SDHCI_INT_CRC)
++			host->mmc->err_stats[MMC_ERR_CMD_CRC]++;
++	} else if (intmask & SDHCI_INT_TIMEOUT) {
+ 		*cmd_error = -ETIMEDOUT;
+-	else
++		host->mmc->err_stats[MMC_ERR_CMD_TIMEOUT]++;
++	} else
+ 		*cmd_error = 0;
+ 
+-	if (intmask & (SDHCI_INT_DATA_END_BIT | SDHCI_INT_DATA_CRC))
++	if (intmask & (SDHCI_INT_DATA_END_BIT | SDHCI_INT_DATA_CRC)) {
+ 		*data_error = -EILSEQ;
+-	else if (intmask & SDHCI_INT_DATA_TIMEOUT)
++		if (intmask & SDHCI_INT_DATA_CRC)
++			host->mmc->err_stats[MMC_ERR_DAT_CRC]++;
++	} else if (intmask & SDHCI_INT_DATA_TIMEOUT) {
+ 		*data_error = -ETIMEDOUT;
+-	else if (intmask & SDHCI_INT_ADMA_ERROR)
++		host->mmc->err_stats[MMC_ERR_DAT_TIMEOUT]++;
++	} else if (intmask & SDHCI_INT_ADMA_ERROR) {
+ 		*data_error = -EIO;
+-	else
++		host->mmc->err_stats[MMC_ERR_ADMA]++;
++	} else
+ 		*data_error = 0;
+ 
+ 	/* Clear selected interrupts. */
+diff --git a/include/linux/mmc/host.h b/include/linux/mmc/host.h
+index 3d00bcf..c38072e 100644
+--- a/include/linux/mmc/host.h
++++ b/include/linux/mmc/host.h
+@@ -80,6 +80,9 @@ struct mmc_ios {
+ 	bool enhanced_strobe;			/* hs400es selection */
+ };
+ 
++#define NUM_LOG_PAGES           10
++#define mmc_log_string(mmc_host, fmt, ...)      do { } while (0)
++
+ struct mmc_clk_phase {
+ 	bool valid;
+ 	u16 in_deg;
+@@ -93,6 +96,24 @@ struct mmc_clk_phase_map {
+ 
+ struct mmc_host;
+ 
++enum {
++	MMC_ERR_CMD_TIMEOUT,
++	MMC_ERR_CMD_CRC,
++	MMC_ERR_DAT_TIMEOUT,
++	MMC_ERR_DAT_CRC,
++	MMC_ERR_AUTO_CMD,
++	MMC_ERR_ADMA,
++	MMC_ERR_TUNING,
++	MMC_ERR_CMDQ_RED,
++	MMC_ERR_CMDQ_GCE,
++	MMC_ERR_CMDQ_ICCE,
++	MMC_ERR_REQ_TIMEOUT,
++	MMC_ERR_CMDQ_REQ_TIMEOUT,
++	MMC_ERR_ICE_CFG,
++	MMC_ERR_MAX,
++};
++
++
+ struct mmc_host_ops {
+ 	/*
+ 	 * It is optional for the host to implement pre_req and post_req in
+@@ -471,6 +492,7 @@ struct mmc_host {
+ 	struct mmc_supply	supply;
+ 
+ 	struct dentry		*debugfs_root;
++	u32                     err_stats[MMC_ERR_MAX];
+ 
+ 	/* Ongoing data transfer that allows commands during transfer */
+ 	struct mmc_request	*ongoing_mrq;
+-- 
+2.7.4
 
-Anyway, I wondered what changed... oh, I see. You didn't rename
-nct6775.c. I didn't suggest that. The new file name was fine.
-I only asked you to change the Kconfig symbols, not the file names.
-It is ok and actually desirable to change the file names.
-The platform driver module can and should still be named nct6775;
-that can be handled in the Makefile with something like
-
-nct6775-objs := nct6775-platform.o
-obj-$(CONFIG_SENSORS_NCT6775)  += nct6775.o
-
-Guenter

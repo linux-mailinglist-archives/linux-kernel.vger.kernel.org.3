@@ -2,112 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 192D9510C0E
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 00:26:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC6FE510C10
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 00:29:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355844AbiDZW36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 18:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55926 "EHLO
+        id S1355847AbiDZWcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 18:32:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355813AbiDZW34 (ORCPT
+        with ESMTP id S241713AbiDZWcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 18:29:56 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475777DE11
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 15:26:47 -0700 (PDT)
-Received: from mail-yw1-f177.google.com ([209.85.128.177]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MXXdn-1nN66M1Ct5-00YyZH for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022
- 00:26:45 +0200
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-2ef5380669cso198016107b3.9
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 15:26:45 -0700 (PDT)
-X-Gm-Message-State: AOAM532DDSvd+pArRptjLpf+1PWfhxKZcxEk/EYnli7N/6GP2Z/vOw6V
-        qGxok+MjMOWuWvQ98bzsBkJaLid4tPFIeVCUdkk=
-X-Google-Smtp-Source: ABdhPJyC0LoJVNwBAD4ynQWDeVjHEA5B8GtrMZ9XSvaUD6FA2vbbZNGwJPehjny6QhUEkNHAItWM3zedUmoHsTkgLY8=
-X-Received: by 2002:a81:2305:0:b0:2f7:dadb:2162 with SMTP id
- j5-20020a812305000000b002f7dadb2162mr13216162ywj.42.1651012004174; Tue, 26
- Apr 2022 15:26:44 -0700 (PDT)
+        Tue, 26 Apr 2022 18:32:18 -0400
+Received: from alt-proxy28.mail.unifiedlayer.com (alt-proxy28.mail.unifiedlayer.com [74.220.216.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37540811BC
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 15:29:10 -0700 (PDT)
+Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
+        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id 0469C1003FA32
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 22:29:09 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id jTgCnpM9453CXjTgCnWlTR; Tue, 26 Apr 2022 22:29:09 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=OPfiYQWB c=1 sm=1 tr=0 ts=62687235
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=z0gMJWrwH1QA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=SVN_c6MdWGthp28QxcgA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=/Rp5JcowqbercpMnejn0KXXZ7Dd61U1MssBPSMRyV+g=; b=Kl63dDgR3urjsU27Ldi1WayfM+
+        Ap2/OhcjXsdeoRheS8zZG43gKm0u1E2I6/vGNtJHItheVjgKoutHCzPV1xGkPKb2xL0v0VritCb6i
+        ELhQCZiA1pMaz74o/l4ODQP4zrifTIB71fMgcLc9h76roqux0am8vzPlOTUWcmrzb4vFxkoxyEPyB
+        LQDFdUYRJnEavhBnvNEbWCVw0mwHIyFK/mu5dLs1O0Jr/8nGsKUxCLOKId4Cc6UMlbMUWEbmsRBiJ
+        2mZ78vktTFN/z8IaZClBO1SkIGOrS1PIOQJjZPr2jIsgSZ88DyDAvhdMRkMzLoklLxZslDA2OnB5p
+        Mjf35AHA==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:48778 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1njTgB-002ry4-Ig; Tue, 26 Apr 2022 16:29:07 -0600
+Subject: Re: [PATCH 5.17 000/146] 5.17.5-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220426081750.051179617@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <18b0792e-642f-0435-1f22-e693de7ccfea@w6rz.net>
+Date:   Tue, 26 Apr 2022 15:29:05 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20220421192132.109954-1-nick.hawkins@hpe.com> <20220421192132.109954-5-nick.hawkins@hpe.com>
- <CAK8P3a0nQ1BrtfBJ7sUSaLkA=pbVwx83bEUpZczvLOSOHDR=dw@mail.gmail.com>
- <CACRpkdbJ1N7VOgoBzGS+cOaErFcYiOVDeWRmhPyHA7=9W0CGhA@mail.gmail.com>
- <CAK8P3a2ie8kFYstCYr6FO6+yFw7VxyJjWYyy9b+rUHu_u0YXPg@mail.gmail.com>
- <YmhmXl5IWHmKzAyG@robh.at.kernel.org> <CAK8P3a3+TGSJgJ2-mgj+NjT3k8uuUpesLErwqZ2M_dkNqbMXXQ@mail.gmail.com>
- <CAL_JsqKqB+Fas1NOmAq+ocG8KY6ugOiZ_o6e9=5unzf5-ku5Ag@mail.gmail.com>
-In-Reply-To: <CAL_JsqKqB+Fas1NOmAq+ocG8KY6ugOiZ_o6e9=5unzf5-ku5Ag@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 27 Apr 2022 00:26:28 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a15eWvt9hWx66iR-qtxYOrYHNJhpvnfqh=j+nLOfOSE8Q@mail.gmail.com>
-Message-ID: <CAK8P3a15eWvt9hWx66iR-qtxYOrYHNJhpvnfqh=j+nLOfOSE8Q@mail.gmail.com>
-Subject: Re: [PATCH v5 04/11] clocksource/drivers: Add HPE GXP timer
-To:     Rob Herring <robh@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Hawkins, Nick" <nick.hawkins@hpe.com>,
-        "Verdun, Jean-Marie" <verdun@hpe.com>,
-        Joel Stanley <joel@jms.id.au>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:rUf6Z4Z/hx/hOzQin44sweuaJ/d4jnBc6uCunziubD4b3wkJ2bj
- RaCfD7y1YF/BsjrpNi224FhtS6EuYslcHcexoj7ThaG1WdW4nvvFTBvSq+hdv7jxhZPqV9b
- FUBvMHYegddMxhSpdsz4fSknFb2QOAMzBWG4DPrFXDM+tx62k8ZsCN6HlglD9Mw7/jFqXyk
- XvcZtkv3I8pO3Ne0hfUyg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:hXiK/uJ26P8=:VY+GRjYmbta64TGdOj8zuo
- CyBiUW+KxB/Fi2vldtyHITECw4NLaqxuJJTwQTb0VBwVhMFZcc0ANRw3wcXMCtcZSdm3+Qf3C
- ii/i4U3QaOfFZ53Spamn2A7yX1y1Z52ftRLBMzrsHqfczV3ZY4nK/JN9d+n+rkdYoy15lClV1
- yVpnS1PS3MUnuQXRt2J4urJB0/2txfIlT4RdCQhAXUk2y8y666fECUST5qv/jUvu/UGT+Y7Gd
- 3Lb42XuaZ+l5vX9exHYdDKI1EimYgk+hDiXoyapbWDB65YHV5Wj3aGG5fN7woXDZAh5Ng4Hrv
- ZTuS10ntjDJjTTxwLRanrk4yVV9QARubrFvcCxwUq3x0jWoQLQqUo6nLcHbuncAcSE02VigBZ
- yiTFYw1wwVEr7LVMUxuJMMA+xZKKjgWn4BPzUS43GVOPxNBsaRtN8KI7LEVZOxs6vUJTAaAhB
- ZJuElLfkDQgxo5Lzttt64gc5JZZLIZ1AqdsU880MEFLlq6+RoEgAUOXgYaoDpxX2b/BnqHjAl
- 5ws3+Mx5432Yfp6aTvh+ss+rd28OWKQkiHjM+uqQ2gzBMMhX3IQE2lzvfjUIraP3eBYoQl7Hx
- uDqxRLVunLfOqiIr5hI4rfij9TH8GUzlOMfSWJei9YLoslEl5Xj5uLyZF2ueg22QfFUBpwz4b
- 3ui8W/MLZ2jb2eNf1rKV8hkuipWbhspfOPsKcPbijoM0HH69pQg8V8Xd0fvkk1vAfVExIyrEX
- MK0vL4QJ79iLpBW9G1xJNJ3dLLPOtOMX6Sgjol/sRfnfYTXaoUL11n/J8+Ym9NoXL+ZAhAueF
- vm4kkcgSLKfPLZIZE3Jpkf/Bh0RGpuOQS5Zlcyatpt+vdzA7qU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1njTgB-002ry4-Ig
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:48778
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 12:04 AM Rob Herring <robh@kernel.org> wrote:
+On 4/26/22 1:19 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.17.5 release.
+> There are 146 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> On Tue, Apr 26, 2022 at 4:55 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > On Tue, Apr 26, 2022 at 11:38 PM Rob Herring <robh@kernel.org> wrote:
-> > > On Tue, Apr 26, 2022 at 08:00:20AM +0200, Arnd Bergmann wrote:
-> > > > On Mon, Apr 25, 2022 at 10:38 PM Linus Walleij <linus.walleij@linaro.org> wrote:
-> >
-> > > > There are multiple ways of doing this that we already discussed
-> > > > in the thread. The easiest is probably to have a child node without
-> > > > custom registers in the DT and then use the DT helpers to
-> > > > populate the linux devices with the correct data.
-> > >
-> > > I think that's what the wdt binding is doing, but I don't like that.
-> > > Maybe it's not a child node, I can't tell.
-> > >
-> > > Bindings should not be decided on the *current* driver split on one
-> > > particular OS. This looks like 1 block, so 1 node.
-> >
-> > Fair enough.
-> >
-> > > If that doesn't work well or easy for Linux, then we should fix Linux.
-> >
-> > Doing a simple platform_device_create_pdata() should work fine here,
-> > the only problem that might exist is if the wdt driver needs access to
-> > DT properties, as we can't have both devices refer to the same of_node
-> > pointer,
+> Responses should be made by Thu, 28 Apr 2022 08:17:22 +0000.
+> Anything received after that time might be too late.
 >
-> Why not? There's even a struct device flag for that.
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.5-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Ah, I forgot about ->of_node_reused, that should work then if
-it needs access to properties.
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-        Arnd
+Tested-by: Ron Economos <re@w6rz.net>
+

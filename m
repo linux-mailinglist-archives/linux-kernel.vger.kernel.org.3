@@ -2,191 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2262E50F156
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:43:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 218DE50F15C
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245695AbiDZGqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 02:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58512 "EHLO
+        id S1343491AbiDZGqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 02:46:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245658AbiDZGp6 (ORCPT
+        with ESMTP id S1343493AbiDZGp7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 02:45:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276B213E1A;
-        Mon, 25 Apr 2022 23:42:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C630DB81C58;
-        Tue, 26 Apr 2022 06:42:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60CB6C385A0;
-        Tue, 26 Apr 2022 06:42:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650955360;
-        bh=Qj1iBgDmQNO80MoLSfQRprtZnwXJZ3zOv82xv0l0JOk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Nyia3qPWjSPOI+GpHMP1BShry0rDvyRrd+RsE8vQ4OOFPjybgraCtD/fqtcN6yOCV
-         iqV9edZMMR5kNTVGkliDraRWGpYShEGd2G/s1oG6z+Oo3rirv+UjwI2TSwUeVc1xeX
-         5QIWFlKOad1wTwqb9Dp6X5yvz3LX/Vuv94P0Sb3VwIk/SHovMVa/qRGG3GQlRRwDqO
-         7i2xC5b4+jWfRwHo3hCC4wPeyxaDRVOp70wRXvbc8kwFeLb0USLzAfXknK03R7WTS0
-         TtkaGeKOi1FTVQD8AfonZD17tzZVqAtd/hrPDoBgvERjJI5CoaxrgOnd21BBucm6kw
-         0GGKivNxOCnCA==
-Message-ID: <89f7d69a-4fc8-33cc-d9ca-5c50dc5381ab@kernel.org>
-Date:   Tue, 26 Apr 2022 09:42:31 +0300
+        Tue, 26 Apr 2022 02:45:59 -0400
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF6A12C8D4
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:42:51 -0700 (PDT)
+Received: by mail-il1-x12f.google.com with SMTP id y11so10814097ilp.4
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:42:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KZXWw+mQ5SzKYx4pfHPUdeVXw0Lw7Zqv4OHZg6/bECE=;
+        b=OKJwseg1BeqVGbbzLWqwmGv8I2ybhlAXs0ZZiquP8s51TudFvCYmyB/NFxUejLaeFQ
+         8YURQdOA78Loxv1i/wvBL8VaG+Sub/jxhqrSmKlyLsKQKgMupTsdUNHzVYeRVj81Ggg8
+         1T3lKGQ0zuv/y700/wT44FGJuCuomHnhlUHA8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KZXWw+mQ5SzKYx4pfHPUdeVXw0Lw7Zqv4OHZg6/bECE=;
+        b=yqJLuA8JVD3Vud7a4hpxawn9yQzrxDMq1Ar/yePyvJw2UNgSrybOqhrDLTahj99igL
+         xLmv/Iy9mm2qlNk+HmpJaZokeK4E61h7cslJpOQCJOrHJJ+gNlQGrJusBwwWBebTsBZ/
+         XThWKFUk/FC65ViBysHieD+StqFGOAgOT75ghK7djM9HSlgDNK1ECrZ5n6xNoJ76OUOx
+         iHQ8zpXBGTnCsyVhwlMJhBKXs3KVCg0QyDg5xWnM9P3luh9sl9tJGKfzpBtNeOhg4K42
+         KBq0iegdWD2s4SsPpqmEpSmXChikPeJgBA4sU4pNKwqh7cJzqwQNShHbSiWucNiKRHQa
+         fTeQ==
+X-Gm-Message-State: AOAM533XVlavbZnjmut+WdJKN5jzbh5t78yE14CsQ2HbLZnyVoTCbr5+
+        xvs+X7Foowz8ZT3ysqb0PSrfHbQd5zEzVK7ekE9qZg==
+X-Google-Smtp-Source: ABdhPJxH9n+PwfsCKTqGm/BpdLMkKverpXfcsHBbklasMzhpv4vrvXWAKTyAnSm2FEo0e4Wj/1yceplZhDz1BC7+DfU=
+X-Received: by 2002:a05:6e02:1c04:b0:2cc:183f:b8cc with SMTP id
+ l4-20020a056e021c0400b002cc183fb8ccmr8436041ilh.51.1650955371082; Mon, 25 Apr
+ 2022 23:42:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/2] dt-bindings: usb: tps6598x: Make the interrupts
- property optional
-Content-Language: en-US
-To:     Aswath Govindraju <a-govindraju@ti.com>,
-        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>
-Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Hector Martin <marcan@marcan.st>,
-        Martin Kepplinger <martink@posteo.de>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220414083120.22535-1-a-govindraju@ti.com>
- <20220414083120.22535-2-a-govindraju@ti.com>
- <be8ab691-98f1-5fb9-fec8-7213a2288d07@kernel.org>
- <56c72151-af5f-366b-b17f-24b9fb6264da@ti.com>
- <ae54dbb1-2b02-cba2-5de2-cf3d9a4e35f5@kernel.org>
- <c1de4293-a058-5e25-9be2-b61ac39f43a3@ti.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <c1de4293-a058-5e25-9be2-b61ac39f43a3@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220425021442.1.I650b809482e1af8d0156ed88b5dc2677a0711d46@changeid>
+ <YmcqsFyCMqcWAEMM@google.com> <YmcrBFZ0CB/7abzW@google.com>
+In-Reply-To: <YmcrBFZ0CB/7abzW@google.com>
+From:   Abhishek Kumar <kuabhs@chromium.org>
+Date:   Mon, 25 Apr 2022 23:42:39 -0700
+Message-ID: <CACTWRwtXsAyudCvNJ1Cuo+Ow3tYN_uaes7QNWzOzHhTjOKzxVA@mail.gmail.com>
+Subject: Re: [PATCH] ath10k: skip ath10k_halt during suspend for driver state RESTARTING
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     kvalo@kernel.org, linux-kernel@vger.kernel.org,
+        linux-wireless@vger.kernel.org, ath10k@lists.infradead.org,
+        netdev@vger.kernel.org, Wen Gong <quic_wgong@quicinc.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Apr 25, 2022 at 4:13 PM Brian Norris <briannorris@chromium.org> wrote:
+>
+> On Mon, Apr 25, 2022 at 04:11:44PM -0700, Brian Norris wrote:
+> > On Mon, Apr 25, 2022 at 02:15:20AM +0000, Abhishek Kumar wrote:
+> > > --- a/drivers/net/wireless/ath/ath10k/mac.c
+> > > +++ b/drivers/net/wireless/ath/ath10k/mac.c
+> > > @@ -5345,8 +5345,22 @@ static void ath10k_stop(struct ieee80211_hw *hw)
+> ...
+> > > +                   /* If the current driver state is RESTARTING but not yet
+> > > +                    * fully RESTARTED because of incoming suspend event,
+> > > +                    * then ath11k_halt is already called via
+> >
+> > s/ath11k/ath10k/
+> >
+> > I know ath11k is the hot new thing, but this is ath10k ;)
+> >
+> > > +                    * ath10k_core_restart and should not be called here.
+> >
+> > s/ath10k/ath11k/
+>
+> Oh boy, I got *that* backwards! Should be this, obviously:
+>
+> s/ath11k/ath10k/
+>
+> > > +                    */
+> > > +                   if (ar->state != ATH10K_STATE_RESTARTING)
+> > > +                           ath10k_halt(ar);
+> > > +                   else
+> > > +                           /* Suspending here, because when in RESTARTING
+> > > +                            * state, ath11k_core_stop skips
+> >
+> > s/ath10k/ath11k/
+>
+> Same.
+Oh!, lately working on ath11k mostly and the muscle memory kicked in
+... sorry about this, will fix in next revision. Kale whenever you get
+time, let me know if the logic looks good to you and if ath11k/ath10k
+typo fix is the only comment.
 
-On 22/04/2022 08:07, Aswath Govindraju wrote:
-> Hi Roger,
-> 
-> On 21/04/22 00:46, Roger Quadros wrote:
->> Hi,
->>
->> On 18/04/2022 08:19, Aswath Govindraju wrote:
->>> Hi Roger,
->>>
->>> On 14/04/22 23:40, Roger Quadros wrote:
->>>> Hi,
->>>>
->>>> On 14/04/2022 11:31, Aswath Govindraju wrote:
->>>>> Support for polling has been added in the driver, which will be used by
->>>>> default if interrupts property is not populated. Therefore, remove
->>>>> interrupts and interrupt-names from the required properties and add a note
->>>>> under interrupts property describing the above support in driver.
->>>>>
->>>>> Suggested-by: Roger Quadros <rogerq@kernel.org>
->>>>
->>>> I did not suggest to make interrupts optional by default.
->>>>
->>>> What I suggested was that if a DT property exists to explicitly
->>>> indicate polling mode then interrupts are not required.
->>>>
->>>
->>> ohh okay, got it. However, may I know if adding a dt property to
->>> indicate polling for aiding the driver, is the correct approach to model it?
->>>
->>> In terms of modelling hardware, as interrupts are not connected we are
->>> not populating the interrupts property. Shouldn't that be all. If we are
->>> adding a property explicitly to indicate polling that can be used by
->>> driver, wouldn't that be a software aid being added in the device tree?
->>
->> The hardware (tps6598x chip) has an interrupt pin and is expected to be used
->> in normal case.
->>
->> Some buggy boards might have forgot to connect it. We are adding polling mode only for these buggy boards. ;)
->> So polling mode is an exception.
->>
-> 
-> Yes as you mentioned the interrupt line is expected to connected but
-> there could be cases where there are not enough pins on the SoC and
-> polling is used intentionally. In these cases this would be a feature
-> rather than a bug.
-
-I do not agree that this is a feature but a board defect. You can always use
-a GPIO expander to add more GPIOs than the SoC can provide.
-
-Type-C events are asynchronous and polling is a waste of CPU time.
-What will you do if system suspends and you need to wake up on Type-C
-status change?
-So polling mode is just an exception for the defective boards or could
-be used for debugging.
-
-> 
-> Also, I feel like not adding interrupts property in the dt nodes will
-> indicate polling. My question is why are we adding an extra property
-> (which is being used only as an aid in the driver) when this feature can
-> be modeled by making interrupts property optional.
-
-Because interrupt property was not originally optional for this driver.
-
-I would like to hear what Heikki has to say about this.
-
-Any thoughts Heikki?
-
-cheers,
--roger
-
-> 
-> Thanks,
-> Aswath
-> 
->> cheers,
->> -roger
->>
->>>
->>> Thanks,
->>> Aswath
->>>
->>>>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
->>>>> ---
->>>>>  Documentation/devicetree/bindings/usb/ti,tps6598x.yaml | 4 ++--
->>>>>  1 file changed, 2 insertions(+), 2 deletions(-)
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
->>>>> index a4c53b1f1af3..1c4b8c6233e5 100644
->>>>> --- a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
->>>>> +++ b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
->>>>> @@ -25,6 +25,8 @@ properties:
->>>>>  
->>>>>    interrupts:
->>>>>      maxItems: 1
->>>>> +    description:
->>>>> +      If interrupts are not populated then by default polling will be used.
->>>>>  
->>>>>    interrupt-names:
->>>>>      items:
->>>>> @@ -33,8 +35,6 @@ properties:
->>>>>  required:
->>>>>    - compatible
->>>>>    - reg
->>>>> -  - interrupts
->>>>> -  - interrupt-names
->>>>>  
->>>>>  additionalProperties: true
->>>>>  
->>>>
->>>> cheers,
->>>> -roger
-> 
-> 
+Thanks
+Abhishek
+>
+> Brian

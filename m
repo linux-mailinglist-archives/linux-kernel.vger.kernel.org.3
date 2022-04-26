@@ -2,81 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79952510AA7
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13114510AAB
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:39:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355064AbiDZUmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 16:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38506 "EHLO
+        id S1355106AbiDZUmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 16:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbiDZUl7 (ORCPT
+        with ESMTP id S1355032AbiDZUmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:41:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A848B7484C
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:38:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 42C3F61159
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 20:38:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 105F8C385A4;
-        Tue, 26 Apr 2022 20:38:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651005529;
-        bh=7FM2Cl7AYC/kifHZh+3Yf++v1gAZu2HGgYiMvm091PM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=NazlHfNpSvgyX+SbULKpToTFyGeXYPFyIMsGsOw0k4k5foImoKxEh/1s+kyiY/TQ3
-         lcC0ZW7RJn6eBepwpRHydi2VOANXlAyAm0zvUWh5mngliAz+jqKcZtIee5VmRINhaf
-         T4IK7klTBVVzp9Pl7P6TZ03Klu8iZmCmr54zGZfUTpWH9lSvMpjZqUf32Kld3oFZRL
-         xoMnCxhm7dm8ASpLW/7QhI2cH/LT8h5h2KYQYHnR9PYsuQ0CG6LqENNBnFGZUY1xrO
-         zkjbzHVe5O0d41z/xTqP8kGC0yhF6CRdRcBjO3Fw/Vsp2spdP/T28oVu7A0gw9ZBkH
-         hP65n/n7Bp54g==
-From:   sj@kernel.org
-To:     akpm@linux-foundation.org
-Cc:     linux-damon@amazon.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: [PATCH 0/4] mm/damon: allow users know which monitoring ops are available
-Date:   Tue, 26 Apr 2022 20:38:39 +0000
-Message-Id: <20220426203843.45238-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Tue, 26 Apr 2022 16:42:04 -0400
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4B9793AC
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:38:53 -0700 (PDT)
+Received: by mail-vs1-xe33.google.com with SMTP id q2so4759226vsr.5
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:38:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wfJd9A+0QWj9RbTol5Rw0Pj2t6CVgO2Un6yqTZKi1SM=;
+        b=qqHQRi4aq2NvDCTC+RiF4zAZv3IsuwZr1Iaa5zU57qyOcygb47zXA8qkTO21xszuU0
+         DUyEcSl3HgZsFVc1dLZFm1kLBdjg6kekUw12ZE6YIh/t17+vu6g1JZe0ktZkHO4Rh5M5
+         PSe8TMaQyukTdBYuRJ2voBBujTxxWS5utDDRGMzn3W8WgKv6Pyz0nJgn82WLrsNCgATT
+         5QRrBsy/aqRYINdJ/40KJiqjR4E7emxXpqnmJ6bgPsVw2I4n47Y7NOUuurA4paMU65oz
+         BNfA5DOykIeCvJRIbfU+5/PozOjpomLmkyppl9SUBFcH8fG9lMgN+5Iu2vmJYnQlzRHV
+         3KYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wfJd9A+0QWj9RbTol5Rw0Pj2t6CVgO2Un6yqTZKi1SM=;
+        b=rg/zp522oKNtigkTdkSXNL4wenpo3hqgyzuhM2rEFhrtyiN0SP8rAd37qe0hsDDbh5
+         yA70of1Mti5ECHQAuvXxLpEtk4P8aRIBbyKvAuaXGDXOS5P8AIsD3GU53iKkR9iCWR9q
+         exECIrRsU7YWSNDdBgXYMe09+6L62gVc53Mv9OxrOGRz5Gkx/Efh/C5C33oKT/82t90W
+         nFJloKx+XPhjkMoDsDzDTiah7d/wVMqTb7Apq4WzsZE/ENRIF4AtGOpd979l8L3PxZ6u
+         9HcKVIEeSXvxJbrm4+myJQnMyJEj/RgYNaztcEjZQis1IayJIMoARy458XGkbdkakm28
+         /1nA==
+X-Gm-Message-State: AOAM531ci+sqWgkcyWTdGYo9tOhjRx/8fb8ZrXpX+sDCbm5bB8iT1yV9
+        glgndRnK+1g7dT4uK3pXwOlhusgDIzTB2taJxKit
+X-Google-Smtp-Source: ABdhPJwQkHaUU9ii+vNTdfepYExsOc2JJHBLTd8X+78D6DqxnogbZcYYM3kPozNJ7Yj9xC1ycRgHRnkSP4GdagdGExg=
+X-Received: by 2002:a67:eb86:0:b0:32c:2036:17fe with SMTP id
+ e6-20020a67eb86000000b0032c203617femr8013131vso.47.1651005532543; Tue, 26 Apr
+ 2022 13:38:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <alpine.DEB.2.21.2204211556270.9383@angie.orcam.me.uk> <alpine.DEB.2.21.2204240055590.9383@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2204240055590.9383@angie.orcam.me.uk>
+From:   John Stultz <jstultz@google.com>
+Date:   Tue, 26 Apr 2022 13:38:40 -0700
+Message-ID: <CANDhNCrQQ5cUYzSr8pTdfbpvRrwJxWtTZxqvkGGdZiPXkfvr1Q@mail.gmail.com>
+Subject: Re: [PATCH 1/3] sched_clock: Round the frequency reported to nearest
+ rather than down
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: SeongJae Park <sj@kernel.org>
+On Sun, Apr 24, 2022 at 4:47 AM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
+>
+> We currently round the frequency reported for clock sources down, which
+> gives misleading figures, e.g.:
+>
+> I/O ASIC clock frequency 24999480Hz
+> clocksource: dec-ioasic: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 76452008078 ns
+> sched_clock: 32 bits at 24MHz, resolution 40ns, wraps every 85901132779ns
+> MIPS counter frequency 59998512Hz
+> clocksource: MIPS: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 31855130776 ns
+> sched_clock: 32 bits at 59MHz, resolution 16ns, wraps every 35792281591ns
+>
+> Rounding to nearest seems more adequate:
+>
+> I/O ASIC clock frequency 24999664Hz
+> clocksource: dec-ioasic: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 76451445358 ns
+> sched_clock: 32 bits at 25MHz, resolution 40ns, wraps every 85900499947ns
+> MIPS counter frequency 59999728Hz
+> clocksource: MIPS: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 31854485176 ns
+> sched_clock: 32 bits at 60MHz, resolution 16ns, wraps every 35791556599ns
+>
+> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+> Fixes: 112f38a4a316 ("ARM: sched_clock: provide common infrastructure for sched_clock()")
+> ---
 
-DAMON users can configure it for vaious address spaces including virtual
-address spaces and the physical address space by setting its monitoring
-operations set with appropriate one for their purpose.  However, there
-is no celan and simple way to know exactly which monitoring operations
-sets are available on the currently running kernel.  This patchset adds
-functions for the purpose on DAMON's kernel API
-('damon_is_registered_ops()') and sysfs interface ('avail_operations'
-file under each context directory).
+This seems sane to me.
 
-SeongJae Park (4):
-  mm/damon/core: add a function for damon_operations registration checks
-  mm/damon/sysfs: add a file for listing available monitoring ops
-  selftets/damon/sysfs: test existence and permission of
-    avail_operations
-  Docs/{ABI,admin-guide}/damon: document 'avail_operations' sysfs file
+Acked-by: John Stultz <jstultz@google.com>
 
- .../ABI/testing/sysfs-kernel-mm-damon         | 10 +++++++-
- Documentation/admin-guide/mm/damon/usage.rst  | 18 +++++++++-----
- include/linux/damon.h                         |  1 +
- mm/damon/core.c                               | 24 ++++++++++++++++---
- mm/damon/sysfs.c                              | 19 +++++++++++++++
- tools/testing/selftests/damon/sysfs.sh        |  1 +
- 6 files changed, 63 insertions(+), 10 deletions(-)
-
--- 
-2.25.1
-
+thanks
+-john

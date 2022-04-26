@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 065F050F7E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E0A50F80E
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347118AbiDZJKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:10:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55624 "EHLO
+        id S1344761AbiDZJa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:30:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346533AbiDZIuJ (ORCPT
+        with ESMTP id S1347782AbiDZJGK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:50:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720D514C3F0;
-        Tue, 26 Apr 2022 01:38:24 -0700 (PDT)
+        Tue, 26 Apr 2022 05:06:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390A419290;
+        Tue, 26 Apr 2022 01:45:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AA3160C4A;
-        Tue, 26 Apr 2022 08:38:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A023AC385A4;
-        Tue, 26 Apr 2022 08:38:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BF29060A56;
+        Tue, 26 Apr 2022 08:45:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD409C385A0;
+        Tue, 26 Apr 2022 08:45:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962303;
-        bh=FJrOSWDpdzwdtuPtPjQ59biReYwoyVznx2mr8ink2CE=;
+        s=korg; t=1650962745;
+        bh=6JIV9bAl3AlhOIFiWtU+aC2MWdNmcLlPqJm+dbFnVFU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RSejPBqGC5hcrnzIYv/vrzlOXnZdREzYEzC2EUuCUSbBr75XoIPlX9714qBV/JSKp
-         oiSZj4JddVEAlqi3VKu8kszrukCx6DPbbjAMaQb6Bf7yLGwVh8AQtUbFLiC2P5q30I
-         a5WCPkF8K2q7Vpb+jrirh7wc0PL5DZTptGu+2KZ0=
+        b=GtjE06vTMbP5TGqXnBNEbuz4n7TDPWe3zYZYc2B+Fr7ITDFHJx7yMYi+mndlYaHrx
+         6n1y2PAF1jX+k3DX3MD13Bbzd/MDhpe/u3McXjXQu1QqO0XpQlD1kwFjX8wt5ZR45l
+         Qqj3V0EMpBAtiUJyc3A+7X8XBQqlPQjG7wtmMbrA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Qian Cai <quic_qiancai@quicinc.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 052/124] arm64: mm: fix p?d_leaf()
+        stable@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 058/146] drm/msm/gpu: Rename runtime suspend/resume functions
 Date:   Tue, 26 Apr 2022 10:20:53 +0200
-Message-Id: <20220426081748.781082477@linuxfoundation.org>
+Message-Id: <20220426081751.698990532@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
-References: <20220426081747.286685339@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,47 +53,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Muchun Song <songmuchun@bytedance.com>
+From: Rob Clark <robdclark@chromium.org>
 
-[ Upstream commit 23bc8f69f0eceecbb87c3801d2e48827d2dca92b ]
+[ Upstream commit f7eab1ddb9f8bc99206e3efa8d34ca1d2faca209 ]
 
-The pmd_leaf() is used to test a leaf mapped PMD, however, it misses
-the PROT_NONE mapped PMD on arm64.  Fix it.  A real world issue [1]
-caused by this was reported by Qian Cai. Also fix pud_leaf().
-
-Link: https://patchwork.kernel.org/comment/24798260/ [1]
-Fixes: 8aa82df3c123 ("arm64: mm: add p?d_leaf() definitions")
-Reported-by: Qian Cai <quic_qiancai@quicinc.com>
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-Link: https://lore.kernel.org/r/20220422060033.48711-1-songmuchun@bytedance.com
-Signed-off-by: Will Deacon <will@kernel.org>
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+Link: https://lore.kernel.org/r/20220310234611.424743-2-robdclark@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/include/asm/pgtable.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/msm/adreno/adreno_device.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-index 08363d3cc1da..ed57717cd004 100644
---- a/arch/arm64/include/asm/pgtable.h
-+++ b/arch/arm64/include/asm/pgtable.h
-@@ -535,7 +535,7 @@ extern pgprot_t phys_mem_access_prot(struct file *file, unsigned long pfn,
- 				 PMD_TYPE_TABLE)
- #define pmd_sect(pmd)		((pmd_val(pmd) & PMD_TYPE_MASK) == \
- 				 PMD_TYPE_SECT)
--#define pmd_leaf(pmd)		pmd_sect(pmd)
-+#define pmd_leaf(pmd)		(pmd_present(pmd) && !pmd_table(pmd))
- #define pmd_bad(pmd)		(!pmd_table(pmd))
+diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
+index fb261930ad1c..b93de79000e1 100644
+--- a/drivers/gpu/drm/msm/adreno/adreno_device.c
++++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
+@@ -601,7 +601,7 @@ static const struct of_device_id dt_match[] = {
+ };
  
- #define pmd_leaf_size(pmd)	(pmd_cont(pmd) ? CONT_PMD_SIZE : PMD_SIZE)
-@@ -625,7 +625,7 @@ static inline unsigned long pmd_page_vaddr(pmd_t pmd)
- #define pud_none(pud)		(!pud_val(pud))
- #define pud_bad(pud)		(!pud_table(pud))
- #define pud_present(pud)	pte_present(pud_pte(pud))
--#define pud_leaf(pud)		pud_sect(pud)
-+#define pud_leaf(pud)		(pud_present(pud) && !pud_table(pud))
- #define pud_valid(pud)		pte_valid(pud_pte(pud))
+ #ifdef CONFIG_PM
+-static int adreno_resume(struct device *dev)
++static int adreno_runtime_resume(struct device *dev)
+ {
+ 	struct msm_gpu *gpu = dev_to_gpu(dev);
  
- static inline void set_pud(pud_t *pudp, pud_t pud)
+@@ -617,7 +617,7 @@ static int active_submits(struct msm_gpu *gpu)
+ 	return active_submits;
+ }
+ 
+-static int adreno_suspend(struct device *dev)
++static int adreno_runtime_suspend(struct device *dev)
+ {
+ 	struct msm_gpu *gpu = dev_to_gpu(dev);
+ 	int remaining;
+@@ -636,7 +636,7 @@ static int adreno_suspend(struct device *dev)
+ 
+ static const struct dev_pm_ops adreno_pm_ops = {
+ 	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend, pm_runtime_force_resume)
+-	SET_RUNTIME_PM_OPS(adreno_suspend, adreno_resume, NULL)
++	SET_RUNTIME_PM_OPS(adreno_runtime_suspend, adreno_runtime_resume, NULL)
+ };
+ 
+ static struct platform_driver adreno_driver = {
 -- 
 2.35.1
 

@@ -2,95 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F17A4510A08
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E1C510A0C
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245167AbiDZUQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 16:16:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44778 "EHLO
+        id S1354730AbiDZUQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 16:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354749AbiDZUQc (ORCPT
+        with ESMTP id S240294AbiDZUQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:16:32 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60E3186BF6;
-        Tue, 26 Apr 2022 13:13:20 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id l9-20020a056830268900b006054381dd35so13837845otu.4;
-        Tue, 26 Apr 2022 13:13:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gilA20turI7rRz9XtlJVLN0DtonmByVLEDNDaKGjRl0=;
-        b=U/tTb9QG+E96Ff1MoQ/pQ3fYInJpTBKvvJ5xE113hMgMbMGCW+6Di6V1Jnfr8TL7W5
-         RrPcRzP0T52x8UQaAROiTfGOzuynSTya4h0BfXQ5MSEv5CaGJ+TrP2t16nbLBDkEPIKf
-         kyKIS3pCBd+r8KwI1GO2aamg3R2Iy4/f+L4RwnfzB4QUPQ6X/xDabblwLK+scpHutv9B
-         2bxpl8WQzbYo6zz0ntyQYB/5lWCN2kzBBDaD/7ShysP83cT7ZpEMgpQ8cF+IibaZ6tTr
-         ZtA5O7CKAtvgBxm7FLU8a+T1Evk7M/psFVgVR68QB5Fx/IChywh79Ah8xIC8kjP34qhT
-         l7gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=gilA20turI7rRz9XtlJVLN0DtonmByVLEDNDaKGjRl0=;
-        b=U2Ee931WeZueo915xg734AvFshRZfGjMRx1ASIB5yKTGaqii0oo8LpYx6OA+HK7OSD
-         hcmdo58Cy68E75wcsY5pa7exkapp+zwUlcR0WjeGE7khT+eq+aDu3WEdrTCobZ5l32TR
-         U/KjX3ytJr8/+LFqsQI2oX/UZQxPgq97qL6iUDR/sxHTdLab/VZiX6UJuwf+797KpkFG
-         EsLtQkLcxVObrLMxXlbS8kscSPT+SgW01soy/+duKdTsLWAX5WatbvtsA0d4O25OocsU
-         BM9agL2OVbGlS7n93oDDtxyWyQwOrX/ImBrvjgfocx+REYifQL0ex98yAN8DGrU8CRzh
-         4KhA==
-X-Gm-Message-State: AOAM5336EccUknH84pvok49F1fWRe32Fq/OsZRZaUAkogIe/AfWbeajx
-        je5rNeibrLbLiAK9oFnRImA=
-X-Google-Smtp-Source: ABdhPJz/0eIjddkNiosIgDO4YmIlVnADKopoq76cVZeBQi77GKwGrfnoZ+FrVDbakS7id0fP3YcK9A==
-X-Received: by 2002:a9d:3609:0:b0:605:d53b:1d50 with SMTP id w9-20020a9d3609000000b00605d53b1d50mr1087506otb.253.1651004000234;
-        Tue, 26 Apr 2022 13:13:20 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y20-20020a056830071400b0060578d19d8esm5245482ots.19.2022.04.26.13.13.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 13:13:19 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 26 Apr 2022 13:13:18 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 000/124] 5.15.36-rc1 review
-Message-ID: <20220426201318.GF4093517@roeck-us.net>
-References: <20220426081747.286685339@linuxfoundation.org>
+        Tue, 26 Apr 2022 16:16:40 -0400
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D0C187B61
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:13:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Wma5qGl6m0DLICkK7OP23+WAeNsi/jPPc46lYaJH56Y=; b=G5EWZFxZSPo4mQMq7QaYAzdmC8
+        RhHw7VC1l7yUY3zXOEKxOwoQDqH8g1TvbqsY09BAkgsZYSI1jlxPocy7JD1lcBF4/NSMKi5KvmYpp
+        Afvz70JD3iLIUY8Ec2Fi3Pe5RaQ2Q2TQByQhbW4e1vhu/by4GeaF34lFhFPyJeJy5ARXOW5wuDHDr
+        MtvDUZa1MZXs+vB726qNbXGIVjUt2dVAbfcP1Gs0XzWSj2wLxtbOWnR6hh8U8hSV+BLtOh15rYiWZ
+        LyAPRUKOoylPrB3G6XU9LZksz2b+yQM8YSH91axQvmbVntcNTwz72Jx9XOW3IYKP3qZNy4su9mpph
+        CI/2dDLQ==;
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1njRYo-009iwL-6x; Tue, 26 Apr 2022 20:13:22 +0000
+Date:   Tue, 26 Apr 2022 20:13:22 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Imran Khan <imran.f.khan@oracle.com>, gregkh@linuxfoundation.org,
+        ebiederm@xmission.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 01/10] kernfs: Remove reference counting for
+ kernfs_open_node.
+Message-ID: <YmhSYkXp0KBXOyFc@zeniv-ca.linux.org.uk>
+References: <20220410023719.1752460-1-imran.f.khan@oracle.com>
+ <20220410023719.1752460-2-imran.f.khan@oracle.com>
+ <YmLRxWUnF/zflEO2@slm.duckdns.org>
+ <e30f95c3-ab55-bb1b-75c1-8bd2f91787b5@oracle.com>
+ <Ymg6AazfnwdZXkXx@slm.duckdns.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Ymg6AazfnwdZXkXx@slm.duckdns.org>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 10:20:01AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.36 release.
-> There are 124 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Tue, Apr 26, 2022 at 08:29:21AM -1000, Tejun Heo wrote:
+
+> The code is just wrong. You can end up:
 > 
-> Responses should be made by Thu, 28 Apr 2022 08:17:22 +0000.
-> Anything received after that time might be too late.
+>         on = kn->attr.open;
+>         if (!on)
+>                 return;
 > 
+>         // we get preempted here and someone else puts @on and then
+>         // recreates it
 
-Build results:
-	total: 156 pass: 156 fail: 0
-Qemu test results:
-	total: 488 pass: 488 fail: 0
+Can't happen - the caller has guaranteed that no new openers will be
+coming.  Look at the call chain of kernfs_drain_open_files()...
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-Guenter
+Al, back to life and staring at the pile of mail to sift through...

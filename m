@@ -2,302 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1D9510594
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 19:38:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F92B510593
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 19:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352222AbiDZRlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 13:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46666 "EHLO
+        id S1351687AbiDZRlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 13:41:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351401AbiDZRlB (ORCPT
+        with ESMTP id S232694AbiDZRlA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 13:41:01 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5927131CC4;
-        Tue, 26 Apr 2022 10:37:52 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23QF2ZgF012956;
-        Tue, 26 Apr 2022 17:37:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : from : to : cc
- : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=pp1; bh=DhX6L3JYUhq0DpkE25UzEZAE/pyarg0zpQOaLuVMA2s=;
- b=qNsZ6LP0LfdECxei5x2r77gEwujkzXp081fFWsasK2xcagY2AI9I6+aWS5aalwmv/vgw
- nqrf8A34HoCr9j01sEA/7S8ggKP257SlvG673egwh74hNZqen1dNU1YAVVjxhcrR3J7z
- Q9HIYteLFRnPzRysK+ezJ/q8HMKeE8i28IWawLohzBqeHWRUz2JtHX4/H2W2fkiYuJv/
- XE5j7OM+6XSadPeV179xW5THWaJrgiG0E90g6KZYKXhEyaDhdrBwBdhHnm8YNkwXgX3S
- +jvoepcHV/HPpYpwf/bjoDOurEmEsTh0JolwI1BteMX9py7NXV+iNg4GAPnYjOgmZ0/S gg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fpk1fu55u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 17:37:48 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23QHb7Rr014946;
-        Tue, 26 Apr 2022 17:37:47 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fpk1fu55c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 17:37:47 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23QHYb7D015215;
-        Tue, 26 Apr 2022 17:37:45 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03fra.de.ibm.com with ESMTP id 3fm938urdc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 17:37:45 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23QHbgPO43516342
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 26 Apr 2022 17:37:42 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3F65211C04C;
-        Tue, 26 Apr 2022 17:37:42 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4EE0F11C050;
-        Tue, 26 Apr 2022 17:37:40 +0000 (GMT)
-Received: from [192.168.0.48] (unknown [9.43.51.231])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 26 Apr 2022 17:37:40 +0000 (GMT)
-Subject: [PATCH v6] PCI hotplug: rpaphp: Error out on busy status from
- get-sensor-state
-From:   Mahesh Salgaonkar <mahesh@linux.ibm.com>
-To:     linuxppc-dev <linuxppc-dev@ozlabs.org>
-Cc:     Tyrel Datwyler <tyreld@linux.ibm.com>,
-        Nathan Lynch <nathanl@linux.ibm.com>,
-        "Oliver O'Halloran" <oohall@gmail.com>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Linux Kernel <linux-kernel@vger.kernel.org>
-Date:   Tue, 26 Apr 2022 23:07:39 +0530
-Message-ID: <165099464934.1658371.1526973220374528897.stgit@jupiter>
-User-Agent: StGit/0.23
-Content-Type: text/plain; charset="utf-8"
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 9Ojhx2tX-sNYrm596iLsUuNRE2x5qbz5
-X-Proofpoint-ORIG-GUID: doKWPWBLN1sLZ5ZmBtdqkJDqOe5VNpQO
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 26 Apr 2022 13:41:00 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6FD12D95D
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 10:37:50 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id d12so15059043ybc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 10:37:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=eclypsium.com; s=google;
+        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
+         :cc;
+        bh=tH/YgBif6d6yzwmumvRLfWV+AljH646yqRcC2C5Xmag=;
+        b=El35gwLQGL+3kGJERF8gp0inRfDgb8jqvTTV/IGHhywPc7DF/bR5K5hk5LRBmn1uqL
+         vGL5Go4qrIdBIKDY8qV3+z0bU1A1YLWT/DGoTiV8/NEKbUTdllXwl4YUrLR5cDoSNiix
+         5BzO3+o/yqTvkpGlQY7PjxOnAsG7WJJcl0Gcbc1k0C4vcro8NNETJPFo+773PN0ej84I
+         tAcTq/yj0TWaXXih9rfMtTD+Cza2WtiLwjJjP25UximL75DGVuC/RNDWBH753+8WnBvl
+         Ed7gzIkSgtuYjGN5NS5T+PNWhUGjiUbr2uPDA3lVTxp+/SiawFEhTZJTa5VOUnz4toOV
+         yGpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
+         :message-id:subject:to:cc;
+        bh=tH/YgBif6d6yzwmumvRLfWV+AljH646yqRcC2C5Xmag=;
+        b=X7zLYSAZT/EWjar5F7vHkh0PQNWor2PadgrhsxRwZrk7DViT6N0hNT1PGx2bSV3+KC
+         hF1yiElziM6uvwudj7uw9NbuLOvNmcnhYKI0YOdjaK46mUXgVQkO4+EwnvzQPqOWmiR+
+         0p/qXaDJMeph878wrAInClqjHVJSYKbmNhgUl7LZymr19f5KC98fFL3mOgypCNYDHAgz
+         7UdXZ6NbfDQaJSN+a/UzUbguU1LzItCgPN1n/5pyOQKa1VbHJ+nNfKwK6969ggRhGtdZ
+         C1kn5NtdJelqhLVgoSpFO+hpe9MAKbgt7RRJlYU3qtbr1dqT0Gfb6DTddiFK9HdhFa3Y
+         5AWw==
+X-Gm-Message-State: AOAM531UpEh0NL0a69etk5S/i/ibNs9iADwGgeVvy+w/SS8ZjXqdisnZ
+        7DwvdgNvjn1N8TFlhvKstANYw1YrVLGrx7GT1shZOA==
+X-Google-Smtp-Source: ABdhPJz1HJ1Wqfc/OMXGlEWodjJTdhl+j6KWkOff8Bx0FMZco18xRQS2BiQyyC+zw/RofYtnfxABe28XP3iE3H3aNyo=
+X-Received: by 2002:a05:6902:150c:b0:648:94be:2c7e with SMTP id
+ q12-20020a056902150c00b0064894be2c7emr7100545ybu.601.1650994670167; Tue, 26
+ Apr 2022 10:37:50 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-26_05,2022-04-26_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
- spamscore=0 lowpriorityscore=0 clxscore=1011 bulkscore=0 phishscore=0
- suspectscore=0 impostorscore=0 malwarescore=0 priorityscore=1501
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204260111
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a81:10a:0:0:0:0:0 with HTTP; Tue, 26 Apr 2022 10:37:49 -0700 (PDT)
+In-Reply-To: <a02186b9-b72c-1484-2973-c59272ae0a7e@intel.com>
+References: <20220425171526.44925-1-martin.fernandez@eclypsium.com>
+ <20220425171526.44925-6-martin.fernandez@eclypsium.com> <a02186b9-b72c-1484-2973-c59272ae0a7e@intel.com>
+From:   Martin Fernandez <martin.fernandez@eclypsium.com>
+Date:   Tue, 26 Apr 2022 14:37:49 -0300
+Message-ID: <CAKgze5Y1bKUAqPHEY71y_puTmuV2K02qjt0qzwO-KA3SYio0Tw@mail.gmail.com>
+Subject: Re: [PATCH v7 5/8] x86/e820: Refactor e820__range_remove
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
+        gregkh@linuxfoundation.org, rafael@kernel.org, rppt@kernel.org,
+        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
+        hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
+        alison.schofield@intel.com, keescook@chromium.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When certain PHB HW failure causes phyp to recover PHB, it marks the PE
-state as temporarily unavailable until recovery is complete. This also
-triggers an EEH handler in Linux which needs to notify drivers, and perform
-recovery. But before notifying the driver about the PCI error it uses
-get_adapter_state()->get-sensor-state() operation of the hotplug_slot to
-determine if the slot contains a device or not. if the slot is empty, the
-recovery is skipped entirely.
+On 4/26/22, Dave Hansen <dave.hansen@intel.com> wrote:
+> On 4/25/22 10:15, Martin Fernandez wrote:
+>> +/**
+>> + * e820__range_remove() - Remove an address range from e820_table.
+>> + * @start: Start of the address range.
+>> + * @size: Size of the address range.
+>> + * @old_type: Type of the entries that we want to remove.
+>> + * @check_type: Bool to decide if ignore @old_type or not.
+>> + *
+>> + * Remove [@start, @start + @size) from e820_table. If @check_type is
+>> + * true remove only entries with type @old_type.
+>> + *
+>> + * Return: The size removed.
+>> + */
+>
+> The refactoring looks promising.  But, there's a *LOT* of kerneldoc
+> noise, like:
+>
+>> + * @table: Target e820_table.
+>> + * @start: Start of the range.
+>> + * @size: Size of the range.
+>
+> and this:
+>
+>> + * struct e820_type_updater_data - Helper type for
+>> + * __e820__range_update().
+>> + * @old_type: old_type parameter of __e820__range_update().
+>> + * @new_type: new_type parameter of __e820__range_update().
+>
+> Those are just a pure waste of bytes.  I suspect some more judicious
+> function comments would also make the diffstat look more palatable.
+>
 
-However on certain PHB failures, the rtas call get-sensor-state() returns
-extended busy error (9902) until PHB is recovered by phyp. Once PHB is
-recovered, the get-sensor-state() returns success with correct presence
-status. The RTAS call interface rtas_get_sensor() loops over the rtas call
-on extended delay return code (9902) until the return value is either
-success (0) or error (-1). This causes the EEH handler to get stuck for ~6
-seconds before it could notify that the pci error has been detected and
-stop any active operations. Hence with running I/O traffic, during this 6
-seconds, the network driver continues its operation and hits a timeout
-(netdev watchdog). On timeouts, network driver go into ffdc capture mode
-and reset path assuming the PCI device is in fatal condition. This
-sometimes causes EEH recovery to fail. This impacts the ssh connection and
-leads to the system being inaccessible.
+I can get rid off of the kerneldocs and just put normal comments for some
+functions that really need them.
 
-------------
-[52732.244731] DEBUG: ibm_read_slot_reset_state2()
-[52732.244762] DEBUG: ret = 0, rets[0]=5, rets[1]=1, rets[2]=4000, rets[3]=>
-[52732.244798] DEBUG: in eeh_slot_presence_check
-[52732.244804] DEBUG: error state check
-[52732.244807] DEBUG: Is slot hotpluggable
-[52732.244810] DEBUG: hotpluggable ops ?
-[52732.244953] DEBUG: Calling ops->get_adapter_status
-[52732.244958] DEBUG: calling rpaphp_get_sensor_state
-[52736.564262] ------------[ cut here ]------------
-[52736.564299] NETDEV WATCHDOG: enP64p1s0f3 (tg3): transmit queue 0 timed o>
-[52736.564324] WARNING: CPU: 1442 PID: 0 at net/sched/sch_generic.c:478 dev>
-[...]
-[52736.564505] NIP [c000000000c32368] dev_watchdog+0x438/0x440
-[52736.564513] LR [c000000000c32364] dev_watchdog+0x434/0x440
-------------
+> Also, in general, the naming is a bit verbose.  You might want to trim
+> some of those names down, like:
+>
+>> +static bool __init crypto_updater__should_update(const struct e820_entry
+>> *entry,
+>> +						 const void *data)
+>> +{
+>> +	const struct e820_crypto_updater_data *crypto_updater_data =
+>> +		(const struct e820_crypto_updater_data *)data;
+>
 
-To avoid this issue, fix the pci hotplug driver (rpaphp) to return an error
-if the slot presence state can not be detected immediately while PE is in
-EEH recovery state. Current implementation uses rtas_get_sensor() API which
-blocks the slot check state until rtas call returns success. Change
-rpaphp_get_sensor_state() to invoke rtas_call(get-sensor-state) directly
-only if the respective pe is in EEH recovery state, and take actions based
-on rtas return status.
+Yes I agree on this. Do you have any suggestions for these kind of
+functions? I want to explicitly state that these functions are in some of
+namespace and are different of the other ones.
 
-In normal cases (non-EEH case) rpaphp_get_sensor_state() will continue to
-invoke rtas_get_sensor() as it was earlier with no change in existing
-behavior.
+In the end I don't think this is very harmful since these functions are one-time
+used (in a single place), is not the case that you have to use them everywhere..
 
-Signed-off-by: Mahesh Salgaonkar <mahesh@linux.ibm.com>
-Reviewed-by: Nathan Lynch <nathanl@linux.ibm.com>
----
-Change in v6:
-- Fixed typo's in the patch description as per review comments.
+> Those are just some high-level comments.  This also needs some really
+> careful review of the refactoring to make sure that it doesn't break any
+> of the existing e820 users.
+>
 
-Change in v5:
-- Fixup #define macros with parentheses around the values.
-
-Change in V4:
-- Error out on sensor busy only if pe is going through EEH recovery instead
-  of always error out.
-
-Change in V3:
-- Invoke rtas_call(get-sensor-state) directly from
-  rpaphp_get_sensor_state() directly and do special handling.
-- See v2 at
-  https://lists.ozlabs.org/pipermail/linuxppc-dev/2021-November/237336.html
-
-Change in V2:
-- Alternate approach to fix the EEH issue instead of delaying slot presence
-  check proposed at
-  https://lists.ozlabs.org/pipermail/linuxppc-dev/2021-November/236956.html
-
-Also refer:
-https://lists.ozlabs.org/pipermail/linuxppc-dev/2021-November/237027.html
----
- drivers/pci/hotplug/rpaphp_pci.c |  100 +++++++++++++++++++++++++++++++++++++-
- 1 file changed, 97 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/pci/hotplug/rpaphp_pci.c b/drivers/pci/hotplug/rpaphp_pci.c
-index c380bdacd1466..e463e915a052a 100644
---- a/drivers/pci/hotplug/rpaphp_pci.c
-+++ b/drivers/pci/hotplug/rpaphp_pci.c
-@@ -18,12 +18,107 @@
- #include "../pci.h"		/* for pci_add_new_bus */
- #include "rpaphp.h"
- 
-+/*
-+ * RTAS call get-sensor-state(DR_ENTITY_SENSE) return values as per PAPR:
-+ *    -1: Hardware Error
-+ *    -2: RTAS_BUSY
-+ *    -3: Invalid sensor. RTAS Parameter Error.
-+ * -9000: Need DR entity to be powered up and unisolated before RTAS call
-+ * -9001: Need DR entity to be powered up, but not unisolated, before RTAS call
-+ * -9002: DR entity unusable
-+ *  990x: Extended delay - where x is a number in the range of 0-5
-+ */
-+#define RTAS_HARDWARE_ERROR	(-1)
-+#define RTAS_INVALID_SENSOR	(-3)
-+#define SLOT_UNISOLATED		(-9000)
-+#define SLOT_NOT_UNISOLATED	(-9001)
-+#define SLOT_NOT_USABLE		(-9002)
-+
-+static int rtas_to_errno(int rtas_rc)
-+{
-+	int rc;
-+
-+	switch (rtas_rc) {
-+	case RTAS_HARDWARE_ERROR:
-+		rc = -EIO;
-+		break;
-+	case RTAS_INVALID_SENSOR:
-+		rc = -EINVAL;
-+		break;
-+	case SLOT_UNISOLATED:
-+	case SLOT_NOT_UNISOLATED:
-+		rc = -EFAULT;
-+		break;
-+	case SLOT_NOT_USABLE:
-+		rc = -ENODEV;
-+		break;
-+	case RTAS_BUSY:
-+	case RTAS_EXTENDED_DELAY_MIN...RTAS_EXTENDED_DELAY_MAX:
-+		rc = -EBUSY;
-+		break;
-+	default:
-+		err("%s: unexpected RTAS error %d\n", __func__, rtas_rc);
-+		rc = -ERANGE;
-+		break;
-+	}
-+	return rc;
-+}
-+
-+/*
-+ * get_adapter_status() can be called by the EEH handler during EEH recovery.
-+ * On certain PHB failures, the rtas call get-sensor-state() returns extended
-+ * busy error (9902) until PHB is recovered by phyp. The rtas call interface
-+ * rtas_get_sensor() loops over the rtas call on extended delay return code
-+ * (9902) until the return value is either success (0) or error (-1). This
-+ * causes the EEH handler to get stuck for ~6 seconds before it could notify
-+ * that the pci error has been detected and stop any active operations. This
-+ * sometimes causes EEH recovery to fail. To avoid this issue, invoke
-+ * rtas_call(get-sensor-state) directly if the respective pe is in EEH recovery
-+ * state and return -EBUSY error based on rtas return status. This will help
-+ * the EEH handler to notify the driver about the pci error immediately and
-+ * successfully proceed with EEH recovery steps.
-+ */
-+static int __rpaphp_get_sensor_state(struct slot *slot, int *state)
-+{
-+	int rc;
-+#ifdef CONFIG_EEH
-+	int token = rtas_token("get-sensor-state");
-+	struct pci_dn *pdn;
-+	struct eeh_pe *pe;
-+	struct pci_controller *phb = PCI_DN(slot->dn)->phb;
-+
-+	if (token == RTAS_UNKNOWN_SERVICE)
-+		return -ENOENT;
-+
-+	/*
-+	 * Fallback to existing method for empty slot or pe isn't in EEH
-+	 * recovery.
-+	 */
-+	if (list_empty(&PCI_DN(phb->dn)->child_list))
-+		goto fallback;
-+
-+	pdn = list_first_entry(&PCI_DN(phb->dn)->child_list,
-+			       struct pci_dn, list);
-+	pe = eeh_dev_to_pe(pdn->edev);
-+	if (pe && (pe->state & EEH_PE_RECOVERING)) {
-+		rc = rtas_call(token, 2, 2, state, DR_ENTITY_SENSE,
-+			       slot->index);
-+		if (rc)
-+			rc = rtas_to_errno(rc);
-+		return rc;
-+	}
-+fallback:
-+#endif
-+	rc = rtas_get_sensor(DR_ENTITY_SENSE, slot->index, state);
-+	return rc;
-+}
-+
- int rpaphp_get_sensor_state(struct slot *slot, int *state)
- {
- 	int rc;
- 	int setlevel;
- 
--	rc = rtas_get_sensor(DR_ENTITY_SENSE, slot->index, state);
-+	rc = __rpaphp_get_sensor_state(slot, state);
- 
- 	if (rc < 0) {
- 		if (rc == -EFAULT || rc == -EEXIST) {
-@@ -39,8 +134,7 @@ int rpaphp_get_sensor_state(struct slot *slot, int *state)
- 				dbg("%s: power on slot[%s] failed rc=%d.\n",
- 				    __func__, slot->name, rc);
- 			} else {
--				rc = rtas_get_sensor(DR_ENTITY_SENSE,
--						     slot->index, state);
-+				rc = __rpaphp_get_sensor_state(slot, state);
- 			}
- 		} else if (rc == -ENODEV)
- 			info("%s: slot is unusable\n", __func__);
-
-
+I'm glad to hear more people's thoughts on this. Thanks for the feedback.

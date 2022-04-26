@@ -2,135 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4593450F0CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E7E850F0D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245047AbiDZGTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 02:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48806 "EHLO
+        id S241606AbiDZGUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 02:20:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244795AbiDZGT1 (ORCPT
+        with ESMTP id S232042AbiDZGUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 02:19:27 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10BE7DFA0;
-        Mon, 25 Apr 2022 23:16:20 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 26 Apr 2022 02:20:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07BD7101FC;
+        Mon, 25 Apr 2022 23:17:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KnWq556BKz4xLb;
-        Tue, 26 Apr 2022 16:16:17 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1650953779;
-        bh=Rz7R1qcyRB/h7ziJSljHEn9CO+x/cgNygE/+4YeJmAg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=cTji6UeS2v073elvvX37udVMF5efKJJC7pqoBaFpeih3CeuZuGB4aB+lolS/22Brg
-         GXmsuYQ7oCErbO+7DhYHaLeqvqMnvCNPgyanqLJxl56MdmKM58Pst+Ywr+yU8oCeCc
-         iXKC287S0aIvxtX1NcKM7ZMCXFRU7dDEsLzUM7qK5WhRWUPu4hCKsxgHXZ+WlTfPfJ
-         u+RxQdeJ2g3Fu4uC5LNEPeh6zJz4/XtmGzVbsOvD4BzMjcyL8A4y5+iO9abNU6St2g
-         cbQD8KwtrNc+63RlP7zpWBr4MSW6rPf50h4pkKwMKM89DFHl5Y+sKOz9rdULTCiJ1W
-         vRE3ZV7+EcQSA==
-Date:   Tue, 26 Apr 2022 16:16:16 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Borislav Petkov <bp@suse.de>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Subject: linux-next: manual merge of the efi tree with the tip tree
-Message-ID: <20220426161616.798cf1f2@canb.auug.org.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B5C0B81B3A;
+        Tue, 26 Apr 2022 06:17:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7B91C385A0;
+        Tue, 26 Apr 2022 06:16:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650953819;
+        bh=ANH3UTZLZ+hrLRQUGigFumQFldVbaQC5gsVuGlcgcGc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lWgfMDM+ZJ60+fK3LlOiWlrEb0jOc3QwdWyzxmKvqG2Qstz4rqSTKh/b5UVRorkvr
+         rdo5xaJI7jflFyoYq1LYu1ds9aY9rpiEr6XtxisLN+Tbeq4A4ReBcJlixUNFKOtCVA
+         Cg4bgDpHANgPWx9q9PECu8I0tSOwwbtuQ0KK7AuPKlmCEFmX1VAi8KPLs4W1t4DNtO
+         a19ZR22jmqTtZ+a1FPq499wlc1vDaUqawRFizxC0ImwB3Aerlr5Jg6b2GstX66J9JL
+         UOynuNg+6YXYNG/XGKs1rl6UpJs7w1AGIWxr2+WndT28AZ91UHh0nzhonGdw3a1jN0
+         2SIyHBB1zSLZQ==
+Date:   Tue, 26 Apr 2022 09:16:48 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Martin Fernandez <martin.fernandez@eclypsium.com>
+Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
+        gregkh@linuxfoundation.org, rafael@kernel.org,
+        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
+        hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
+        alison.schofield@intel.com, keescook@chromium.org
+Subject: Re: [PATCH v7 2/8] mm/mmzone: Tag pg_data_t with crypto capabilities
+Message-ID: <YmeOUEyGIp6HPCM4@kernel.org>
+References: <20220425171526.44925-1-martin.fernandez@eclypsium.com>
+ <20220425171526.44925-3-martin.fernandez@eclypsium.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/t4oeLJikwLUO0H4lJCq9nSO";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220425171526.44925-3-martin.fernandez@eclypsium.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/t4oeLJikwLUO0H4lJCq9nSO
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Apr 25, 2022 at 02:15:20PM -0300, Martin Fernandez wrote:
+> Add a new member in the pg_data_t struct to tell whether the node
+> corresponding to that pg_data_t is able to do hardware memory
+> encryption.
+> 
+> This will be read from sysfs.
+> 
+> Signed-off-by: Martin Fernandez <martin.fernandez@eclypsium.com>
 
-Hi all,
+Reviewed-by: Mike Rapoport <rppt@linux.ibm.com>
 
-Today's linux-next merge of the efi tree got conflicts in:
+> ---
+>  include/linux/mmzone.h | 3 +++
+>  mm/page_alloc.c        | 1 +
+>  2 files changed, 4 insertions(+)
+> 
+> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+> index 46ffab808f03..89054af9e599 100644
+> --- a/include/linux/mmzone.h
+> +++ b/include/linux/mmzone.h
+> @@ -886,6 +886,9 @@ typedef struct pglist_data {
+>  	struct task_struct *kcompactd;
+>  	bool proactive_compact_trigger;
+>  #endif
+> +
+> +	bool crypto_capable;
+> +
+>  	/*
+>  	 * This is a per-node reserve of pages that are not available
+>  	 * to userspace allocations.
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 0e42038382c1..a244151045b4 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -7699,6 +7699,7 @@ static void __init free_area_init_node(int nid)
+>  	pgdat->node_id = nid;
+>  	pgdat->node_start_pfn = start_pfn;
+>  	pgdat->per_cpu_nodestats = NULL;
+> +	pgdat->crypto_capable = memblock_node_is_crypto_capable(nid);
+>  
+>  	if (start_pfn != end_pfn) {
+>  		pr_info("Initmem setup node %d [mem %#018Lx-%#018Lx]\n", nid,
+> -- 
+> 2.30.2
+> 
+> 
 
-  drivers/virt/Kconfig
-  drivers/virt/Makefile
-
-between commits:
-
-  fce96cf04430 ("virt: Add SEV-SNP guest driver")
-  9617f2f48310 ("virt: sevguest: Rename the sevguest dir and files to sev-g=
-uest")
-
-from the tip tree and commit:
-
-  cbabf03c3ef3 ("virt: Add efi_secret module to expose confidential computi=
-ng secrets")
-
-from the efi tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/virt/Kconfig
-index 0c1bba7c5c66,c877da072d4d..000000000000
---- a/drivers/virt/Kconfig
-+++ b/drivers/virt/Kconfig
-@@@ -48,6 -48,6 +48,8 @@@ source "drivers/virt/nitro_enclaves/Kco
- =20
-  source "drivers/virt/acrn/Kconfig"
- =20
- +source "drivers/virt/coco/sev-guest/Kconfig"
- +
-+ source "drivers/virt/coco/efi_secret/Kconfig"
-+=20
-  endif
-diff --cc drivers/virt/Makefile
-index b2e6e864ebbe,067b5427f40f..000000000000
---- a/drivers/virt/Makefile
-+++ b/drivers/virt/Makefile
-@@@ -9,4 -9,4 +9,5 @@@ obj-y				+=3D vboxguest
- =20
-  obj-$(CONFIG_NITRO_ENCLAVES)	+=3D nitro_enclaves/
-  obj-$(CONFIG_ACRN_HSM)		+=3D acrn/
- +obj-$(CONFIG_SEV_GUEST)		+=3D coco/sev-guest/
-+ obj-$(CONFIG_EFI_SECRET)	+=3D coco/efi_secret/
-
---Sig_/t4oeLJikwLUO0H4lJCq9nSO
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJnjjAACgkQAVBC80lX
-0GwtqQf9HPq5y/eYfvrTvd5/685bvFK2DEGd61OkthwypVVxPcy9NpUo030oxyqg
-smy4RST/wCm9OfK8Xq5/uU47IfHZv4fL0jR0M/VbUegl0YDL/iuLLt8vbFiWsB+t
-ldw40tS82WLYVLVSj2kREppOXYC376tStn2KW34MPpHuEspCjfyZ0eNsK706b8J5
-ECnzpLg0R/TyDM2NxYBgRtV4obbPqJ6AP7W7Mmg0/V4UzPRNnz+5u84I2BW+8vAR
-9jmymeRCjMhS7vhYW7evzqOXJqPjDATrQMQds6Q/H8Md/VePzTsqXKPzom6xaSsu
-mWzGsQ7uzc410KoxyAa/WDOlDCzwdA==
-=YQeW
------END PGP SIGNATURE-----
-
---Sig_/t4oeLJikwLUO0H4lJCq9nSO--
+-- 
+Sincerely yours,
+Mike.

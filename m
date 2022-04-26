@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB47750F870
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C1950F6C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346828AbiDZJSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:18:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55742 "EHLO
+        id S1346252AbiDZI7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:59:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346358AbiDZIyo (ORCPT
+        with ESMTP id S1346823AbiDZIpY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:54:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47178DAFCA;
-        Tue, 26 Apr 2022 01:41:10 -0700 (PDT)
+        Tue, 26 Apr 2022 04:45:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E043A90CF1;
+        Tue, 26 Apr 2022 01:35:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D11F5B81CED;
-        Tue, 26 Apr 2022 08:41:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4114EC385AC;
-        Tue, 26 Apr 2022 08:41:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 99298B81CFE;
+        Tue, 26 Apr 2022 08:35:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB3BEC385A4;
+        Tue, 26 Apr 2022 08:35:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962468;
-        bh=ZxgTw4UzvfWbr0evmQdbxSaSvx3FVMuFHEdvOCmww5A=;
+        s=korg; t=1650962148;
+        bh=3aLdmpvxaChLzyHcYZwWLEm72qRpXWXyd7TlPmtCnCM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cmIlqoCw8pOdIN/uFdLTjF/fRtPK8h/jviOq8ITy4p7Kjkg5rBlrg7TvVtppQHpKo
-         JMD77Vnzgt/nr/4kOoBbdwDuTjA+K+0THbHok7eEpc2dCVDnUBVTzAZAcCLYN+28E0
-         ttuhCCc4fRJzbrGH8BrlVPUG98Dm3pJGz0mY6DsI=
+        b=R0Dwtz/GFhSrIU5JxHSaVxx1zwPOrtb4MQFfxLv7EmXSwrtZWS12iH4MezHhdL/L0
+         h4e2Jo2qqBchjxGB1Z6h43QAA3nlDy1yaq+W/jnak6kVYhpux46xozP2ZX74e28KtP
+         AAjw7b8ahrpqop/G7DDCukGLnLP3etJOFj9Pt1Cc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dongli Cao <caodongli@kingsoft.com>,
-        Like Xu <likexu@tencent.com>,
-        Yanan Wang <wangyanan55@huawei.com>,
-        Jim Mattson <jmattson@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.15 107/124] KVM: x86/pmu: Update AMD PMC sample period to fix guest NMI-watchdog
-Date:   Tue, 26 Apr 2022 10:21:48 +0200
-Message-Id: <20220426081750.337095129@linuxfoundation.org>
+        stable@vger.kernel.org,
+        syzbot+2339c27f5c66c652843e@syzkaller.appspotmail.com,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 5.10 81/86] can: isotp: stop timeout monitoring when no first frame was sent
+Date:   Tue, 26 Apr 2022 10:21:49 +0200
+Message-Id: <20220426081743.553084500@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
-References: <20220426081747.286685339@linuxfoundation.org>
+In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
+References: <20220426081741.202366502@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,87 +55,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+From: Oliver Hartkopp <socketcan@hartkopp.net>
 
-commit 75189d1de1b377e580ebd2d2c55914631eac9c64 upstream.
+commit d73497081710c876c3c61444445512989e102152 upstream.
 
-NMI-watchdog is one of the favorite features of kernel developers,
-but it does not work in AMD guest even with vPMU enabled and worse,
-the system misrepresents this capability via /proc.
+The first attempt to fix a the 'impossible' WARN_ON_ONCE(1) in
+isotp_tx_timer_handler() focussed on the identical CAN IDs created by
+the syzbot reproducer and lead to upstream fix/commit 3ea566422cbd
+("can: isotp: sanitize CAN ID checks in isotp_bind()"). But this did
+not catch the root cause of the wrong tx.state in the tx_timer handler.
 
-This is a PMC emulation error. KVM does not pass the latest valid
-value to perf_event in time when guest NMI-watchdog is running, thus
-the perf_event corresponding to the watchdog counter will enter the
-old state at some point after the first guest NMI injection, forcing
-the hardware register PMC0 to be constantly written to 0x800000000001.
+In the isotp 'first frame' case a timeout monitoring needs to be started
+before the 'first frame' is send. But when this sending failed the timeout
+monitoring for this specific frame has to be disabled too.
 
-Meanwhile, the running counter should accurately reflect its new value
-based on the latest coordinated pmc->counter (from vPMC's point of view)
-rather than the value written directly by the guest.
+Otherwise the tx_timer is fired with the 'warn me' tx.state of ISOTP_IDLE.
 
-Fixes: 168d918f2643 ("KVM: x86: Adjust counter sample period after a wrmsr")
-Reported-by: Dongli Cao <caodongli@kingsoft.com>
-Signed-off-by: Like Xu <likexu@tencent.com>
-Reviewed-by: Yanan Wang <wangyanan55@huawei.com>
-Tested-by: Yanan Wang <wangyanan55@huawei.com>
-Reviewed-by: Jim Mattson <jmattson@google.com>
-Message-Id: <20220409015226.38619-1-likexu@tencent.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
+Link: https://lore.kernel.org/all/20220405175112.2682-1-socketcan@hartkopp.net
+Reported-by: syzbot+2339c27f5c66c652843e@syzkaller.appspotmail.com
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/pmu.h           |    9 +++++++++
- arch/x86/kvm/svm/pmu.c       |    1 +
- arch/x86/kvm/vmx/pmu_intel.c |    8 ++------
- 3 files changed, 12 insertions(+), 6 deletions(-)
+ net/can/isotp.c |   10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
---- a/arch/x86/kvm/pmu.h
-+++ b/arch/x86/kvm/pmu.h
-@@ -141,6 +141,15 @@ static inline u64 get_sample_period(stru
- 	return sample_period;
- }
+--- a/net/can/isotp.c
++++ b/net/can/isotp.c
+@@ -864,6 +864,7 @@ static int isotp_sendmsg(struct socket *
+ 	struct canfd_frame *cf;
+ 	int ae = (so->opt.flags & CAN_ISOTP_EXTEND_ADDR) ? 1 : 0;
+ 	int wait_tx_done = (so->opt.flags & CAN_ISOTP_WAIT_TX_DONE) ? 1 : 0;
++	s64 hrtimer_sec = 0;
+ 	int off;
+ 	int err;
  
-+static inline void pmc_update_sample_period(struct kvm_pmc *pmc)
-+{
-+	if (!pmc->perf_event || pmc->is_paused)
-+		return;
-+
-+	perf_event_period(pmc->perf_event,
-+			  get_sample_period(pmc, pmc->counter));
-+}
-+
- void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel);
- void reprogram_fixed_counter(struct kvm_pmc *pmc, u8 ctrl, int fixed_idx);
- void reprogram_counter(struct kvm_pmu *pmu, int pmc_idx);
---- a/arch/x86/kvm/svm/pmu.c
-+++ b/arch/x86/kvm/svm/pmu.c
-@@ -256,6 +256,7 @@ static int amd_pmu_set_msr(struct kvm_vc
- 	pmc = get_gp_pmc_amd(pmu, msr, PMU_TYPE_COUNTER);
- 	if (pmc) {
- 		pmc->counter += data - pmc_read_counter(pmc);
-+		pmc_update_sample_period(pmc);
- 		return 0;
+@@ -962,7 +963,9 @@ static int isotp_sendmsg(struct socket *
+ 		isotp_create_fframe(cf, so, ae);
+ 
+ 		/* start timeout for FC */
+-		hrtimer_start(&so->txtimer, ktime_set(1, 0), HRTIMER_MODE_REL_SOFT);
++		hrtimer_sec = 1;
++		hrtimer_start(&so->txtimer, ktime_set(hrtimer_sec, 0),
++			      HRTIMER_MODE_REL_SOFT);
  	}
- 	/* MSR_EVNTSELn */
---- a/arch/x86/kvm/vmx/pmu_intel.c
-+++ b/arch/x86/kvm/vmx/pmu_intel.c
-@@ -439,15 +439,11 @@ static int intel_pmu_set_msr(struct kvm_
- 			    !(msr & MSR_PMC_FULL_WIDTH_BIT))
- 				data = (s64)(s32)data;
- 			pmc->counter += data - pmc_read_counter(pmc);
--			if (pmc->perf_event && !pmc->is_paused)
--				perf_event_period(pmc->perf_event,
--						  get_sample_period(pmc, data));
-+			pmc_update_sample_period(pmc);
- 			return 0;
- 		} else if ((pmc = get_fixed_pmc(pmu, msr))) {
- 			pmc->counter += data - pmc_read_counter(pmc);
--			if (pmc->perf_event && !pmc->is_paused)
--				perf_event_period(pmc->perf_event,
--						  get_sample_period(pmc, data));
-+			pmc_update_sample_period(pmc);
- 			return 0;
- 		} else if ((pmc = get_gp_pmc(pmu, msr, MSR_P6_EVNTSEL0))) {
- 			if (data == pmc->eventsel)
+ 
+ 	/* send the first or only CAN frame */
+@@ -975,6 +978,11 @@ static int isotp_sendmsg(struct socket *
+ 	if (err) {
+ 		pr_notice_once("can-isotp: %s: can_send_ret %d\n",
+ 			       __func__, err);
++
++		/* no transmission -> no timeout monitoring */
++		if (hrtimer_sec)
++			hrtimer_cancel(&so->txtimer);
++
+ 		goto err_out_drop;
+ 	}
+ 
 
 

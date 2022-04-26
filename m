@@ -2,69 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F91D50EF28
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 05:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A2B650EF2B
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 05:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242020AbiDZDZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 23:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52088 "EHLO
+        id S243001AbiDZD0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 23:26:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243294AbiDZDXf (ORCPT
+        with ESMTP id S235959AbiDZD0r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 23:23:35 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4A5C2E;
-        Mon, 25 Apr 2022 20:20:23 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id p6so1720982pjm.1;
-        Mon, 25 Apr 2022 20:20:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vZCPCkNI/7Si5Odq1S7dwZOGeQzdpNIUvjGR2/U9O6k=;
-        b=EyziaLk8OVei83W5M78PKIhU/PuJ7eWuZgXv9ndgkj+28nTsRvYu4mH/cg2+hnc1Zm
-         DYNTRPt1jDPhTKdZaUK4ZBOSRlYlEuLLJpqW6q1qnxjNtxRDhonELX5T0TXfKCS1hdlY
-         Jk5RoDwLAOBzf8DxcXt/auBQyKDjG4upu5zMi5AZN+AcvcR90CbYu6l95a5q0mmVM4DG
-         3hU/CgnDqCzyw2G0U78esXLeY2B4EnfVcsubdxLAW4kkKyo4bGPLcEj4N38Ju+HNP7QW
-         D1VlYGRaOycj4dyiuKk6e0PZCCbA/qSdxA1NSWKAIHQ64AyKQlOp+/s3RSsMRz+v/NFq
-         LMdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vZCPCkNI/7Si5Odq1S7dwZOGeQzdpNIUvjGR2/U9O6k=;
-        b=PCj478KZKwKHlBqVEyIXwYAdsx378E0RxdebAzGF9561EbCjZWM2Kyw1cRwwnltuiF
-         4mAd2lA1QHxPxHVvSxDvi7laN6RfrOADe3J3XyEa0jq5ME2owfpeItdhWqORy+wf+Z8x
-         QN8bB7lt9hzWoMzB10mQpHST2rr9DDZYrUEYDXH3xFFN6vKB7VtbPDUeEl71kciG2YOh
-         Jpabwvz+o/yVEwGoU8mHkUwO3BDnsEi3sQBTaU7WGU272Sgb1KKaJYMcL/t1yvpOc6kF
-         Q28yygPpGdi5cCZxFzAddW5viM3lHwUte+SjhjEPNkYiTR7GQN1AGwrIXIeP2FTnm3Pf
-         JHyg==
-X-Gm-Message-State: AOAM530V0mPL54o/Ij/vtUPQM3v5naghAhig6H97QNPDCl2clNSKPn0n
-        lASkTR+Sahe3s6UMyXWfg2E=
-X-Google-Smtp-Source: ABdhPJy9YujCptf6I2+wmYcnwU5YO1zX3cvcZOqdocY3xrI9olbP2K8JXKu22uUVTGX8Xeek4wrgZA==
-X-Received: by 2002:a17:902:a501:b0:153:f956:29f0 with SMTP id s1-20020a170902a50100b00153f95629f0mr21347301plq.120.1650943223130;
-        Mon, 25 Apr 2022 20:20:23 -0700 (PDT)
-Received: from localhost.localdomain ([103.197.71.140])
-        by smtp.gmail.com with ESMTPSA id bo3-20020a17090b090300b001cd4989fecesm790354pjb.26.2022.04.25.20.20.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 20:20:22 -0700 (PDT)
-From:   Stephen Zhang <starzhangzsd@gmail.com>
-To:     arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org
-Cc:     hpa@zytor.com, peterz@infradead.org, laijs@linux.alibaba.com,
-        lihuafei1@huawei.com, fenghua.yu@intel.com,
-        chang.seok.bae@intel.com, zhangshida@kylinos.cn,
-        starzhangzsd@gmail.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] bug: make __warn unconditionally defined
-Date:   Tue, 26 Apr 2022 11:20:07 +0800
-Message-Id: <20220426032007.510245-1-starzhangzsd@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 25 Apr 2022 23:26:47 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE59AC6152;
+        Mon, 25 Apr 2022 20:23:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650943421; x=1682479421;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MIZ9NnOqirQrvhaRVQ8rsuasqFgvVqtc65THhom/L0w=;
+  b=Ca+uNgPHuQDkjgv7MSPDTywLgxBzC/iyQTU2CnojwnDVXz59+n8WeXQD
+   acpcL9Hq0q+tUxYYnlu2X5sBcIOT3lt92a2Xs56Mf0i6IvwIRD3A2euUW
+   ipk0ZJu2KQI0qtHn2qH/5XYI3e7lbCYwvseqcMm3TPdbl0J40Nham8MQ0
+   k1jQF0gUxzUCXfU284nYDMDOFcLiQdT59xRUoMtcQEC+h2o2z9auIVE9w
+   +qaotL8F7U8cqeMMeh3UtPKO5/mRdJcsxKjXkoTm+R00DElB2gCyoeXEH
+   Jl+vrFUm0Aes9t0Uiz+36vI5k30MMU9Tc5OPFXj2XQd7UQDkr9Mn2HrwX
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="351878222"
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="351878222"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 20:23:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="579644855"
+Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.138])
+  by orsmga008.jf.intel.com with ESMTP; 25 Apr 2022 20:23:37 -0700
+Date:   Tue, 26 Apr 2022 11:23:37 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>, ying.huang@intel.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2] cgroup/cpuset: Remove cpus_allowed/mems_allowed setup
+ in cpuset_init_smp()
+Message-ID: <20220426032337.GA84190@shbuild999.sh.intel.com>
+References: <20220425155505.1292896-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220425155505.1292896-1-longman@redhat.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,TVD_SUBJ_WIPE_DEBT autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,49 +66,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shida Zhang <zhangshida@kylinos.cn>
+Hi Waiman,
 
-__warn() was defined when CONFIG_BUG gets defined originally, but
-it was used unconditonally by traps.c. So the idea is to have the
-__warn unconditional.
+On Mon, Apr 25, 2022 at 11:55:05AM -0400, Waiman Long wrote:
+> There are 3 places where the cpu and node masks of the top cpuset can
+> be initialized in the order they are executed:
+>  1) start_kernel -> cpuset_init()
+>  2) start_kernel -> cgroup_init() -> cpuset_bind()
+>  3) kernel_init_freeable() -> do_basic_setup() -> cpuset_init_smp()
+> 
+> The first cpuset_init() function just sets all the bits in the masks.
+> The last one executed is cpuset_init_smp() which sets up cpu and node
+> masks suitable for v1, but not v2.  cpuset_bind() does the right setup
+> for both v1 and v2.
+> 
+> For systems with cgroup v2 setup, cpuset_bind() is called once. For
+> systems with cgroup v1 setup, cpuset_bind() is called twice. It is
+> first called before cpuset_init_smp() in cgroup v2 mode.  Then it is
+> called again when cgroup v1 filesystem is mounted in v1 mode after
+> cpuset_init_smp().
+> 
+>   [    2.609781] cpuset_bind() called - v2 = 1
+>   [    3.079473] cpuset_init_smp() called
+>   [    7.103710] cpuset_bind() called - v2 = 0
 
-Signed-off-by: Shida Zhang <zhangshida@kylinos.cn>
----
- Changelog in v1 -> v2:
- - To have the __warn() unconditional instead.
+I run some test, on a server with centOS, this did happen that
+cpuset_bind() is called twice, first as v2 during kernel boot,
+and then as v1 post-boot. 
 
- include/asm-generic/bug.h | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+However on a QEMU running with a basic debian rootfs image,
+the second  call of cpuset_bind() didn't happen. 
 
-diff --git a/include/asm-generic/bug.h b/include/asm-generic/bug.h
-index edb0e2a602a8..ba1f860af38b 100644
---- a/include/asm-generic/bug.h
-+++ b/include/asm-generic/bug.h
-@@ -21,6 +21,12 @@
- #include <linux/panic.h>
- #include <linux/printk.h>
- 
-+struct warn_args;
-+struct pt_regs;
-+
-+void __warn(const char *file, int line, void *caller, unsigned taint,
-+	    struct pt_regs *regs, struct warn_args *args);
-+
- #ifdef CONFIG_BUG
- 
- #ifdef CONFIG_GENERIC_BUG
-@@ -110,11 +116,6 @@ extern __printf(1, 2) void __warn_printk(const char *fmt, ...);
- #endif
- 
- /* used internally by panic.c */
--struct warn_args;
--struct pt_regs;
--
--void __warn(const char *file, int line, void *caller, unsigned taint,
--	    struct pt_regs *regs, struct warn_args *args);
- 
- #ifndef WARN_ON
- #define WARN_ON(condition) ({						\
--- 
-2.30.2
+> As a result, cpu and memory node hot add may fail to update the cpu and
+> node masks of the top cpuset to include the newly added cpu or node in
+> a cgroup v2 environment.
+> 
+> smp_init() is called after the first two init functions.  So we don't
+> have a complete list of active cpus and memory nodes until later in
+> cpuset_init_smp() which is the right time to set up effective_cpus
+> and effective_mems.
+> 
+> To fix this problem, the potentially incorrect cpus_allowed &
+> mems_allowed setup in cpuset_init_smp() are removed.  For cgroup v2
+> systems, the initial cpuset_bind() call will set them up correctly.
+> For cgroup v1 systems, the second call to cpuset_bind() will do the
+> right setup.
+> 
+> cc: stable@vger.kernel.org
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  kernel/cgroup/cpuset.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 9390bfd9f1cd..6bd8f5ef40fe 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -3390,8 +3390,9 @@ static struct notifier_block cpuset_track_online_nodes_nb = {
+>   */
+>  void __init cpuset_init_smp(void)
+>  {
+> -	cpumask_copy(top_cpuset.cpus_allowed, cpu_active_mask);
+> -	top_cpuset.mems_allowed = node_states[N_MEMORY];
 
+So can we keep line
+  cpumask_copy(top_cpuset.cpus_allowed, cpu_active_mask);
+
+and only remove line 
+       top_cpuset.mems_allowed = node_states[N_MEMORY];
+?
+
+Thanks,
+Feng

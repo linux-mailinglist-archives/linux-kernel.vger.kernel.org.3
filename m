@@ -2,236 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A52DA50EDFC
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 03:12:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 291B050EDFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 03:14:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240655AbiDZBPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 21:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45518 "EHLO
+        id S240689AbiDZBRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 21:17:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbiDZBPi (ORCPT
+        with ESMTP id S229662AbiDZBRy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 21:15:38 -0400
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.87.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66586E4F9;
-        Mon, 25 Apr 2022 18:12:32 -0700 (PDT)
-Received: from mailhost.synopsys.com (badc-mailhost4.synopsys.com [10.192.0.82])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id AB1B8C0C7A;
-        Tue, 26 Apr 2022 01:12:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1650935552; bh=0zwmHCjWqGqiM6l/mjeXggBdyLoWCTsECWzzcxhCjTw=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=Ic2r+E9so/tyCPmbl/bE6f1q3OyVE+EZmJ56aVK4USePHIsZ1S7xhA4bysDFtlHlg
-         5fLhxeKXHQ7fSi7uiJ9iRGg+s7BONHIxQgy+hykzfgjm2yb0uGY4Tnfjbp2N4a0okS
-         4eXvY/y09pC8pVS3X6x3jT1iZ9q0zJAptP4GterVhstdWkUyU02gtXRSRDEgsNLgc3
-         I0AG3ep0iflI3sMq2UYDjjiQY7ZoBFk+pdGV76GQidr64ovx8+IcTFvhEYw28U/2sd
-         pRmhRoE+JoqVsTJgt2VtE1c/DgjkWzleC6vqU2jeWnXIPKyka8W9lnL856nSyJ1tfk
-         x1dMcTW9nAblA==
-Received: from o365relay-in.synopsys.com (us03-o365relay3.synopsys.com [10.4.161.139])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
-        by mailhost.synopsys.com (Postfix) with ESMTPS id 73C37A005C;
-        Tue, 26 Apr 2022 01:12:28 +0000 (UTC)
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2106.outbound.protection.outlook.com [104.47.70.106])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
-        by o365relay-in.synopsys.com (Postfix) with ESMTPS id E896F8012D;
-        Tue, 26 Apr 2022 01:12:25 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=thinhn@synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="uyakpzLR";
-        dkim-atps=neutral
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZnaQBg7DzPOjR8/59mXE37UUAK8TjvULifeJNxY5VnNZGHXKCFLAKQqitLjjPqfGyoS6x9/XQ9hooYnDLxofZHM0rh5cHt7XCek+fCcdGHtlqicjelJhMIDKCMFrfnU4LkiE4U8D6FkqpYaBpoV+Nk+ora8ITifERsSDeLNp1aiqrRsC/iHHWVULWu/xM0Bs4T/EIP3S2wEyJ2q9bkmlmUdb2MsXzVmkBO5bz7egoH5h4rhol9OXBP1+Xgl1xT/6N/CWXj7GxYcoY0grgSaRm0bgsxuPPovMNy9fn828gKQ1h00XW5yvw8Uk6EbCbW2t/cAFa8MRYfZX5hgs3DJq1A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0zwmHCjWqGqiM6l/mjeXggBdyLoWCTsECWzzcxhCjTw=;
- b=g+75kMyHSKYLEXMkcuceH3Ebe2pWcx4I/U2G3o0QZvc2GcJVwG8vfrJZX/A3Fzhv75IfOKSv2vcgCRMO0QgZW7VDVFf7la+nrzc3t/0z3svLj8yt+a9BWMAdL+sL/HOf9O23DxxG3OAXsSDEpgNolMLJAuJL49FS62pguJPl1ciJZ5/2tiFao1E09x7iSupXh37+AkgPs1QO8Vi8xdlZP1V+Wl7T85jAqOmA18+2zQGjqViAs3zSxIbPMxB1+MNkLeUz53QiG/0Do+GFxfto0XfzLVUbhXFsVR7tvlfyXOfYSA4SARJR8yEL0ou/oktFcczgyfy3I69RRw/+p/Ewow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0zwmHCjWqGqiM6l/mjeXggBdyLoWCTsECWzzcxhCjTw=;
- b=uyakpzLRthHIMqRweItuKyI8TB68Ns71o8kGf3snMxNT4Uxs2tvuLoUThHgnl/o2aosZzwKwP9Igx4TO2LGPIXapZC1O0qO2vNM61UiJoTGmO3xmlsyYg1mt/22sMo86MNpxio4kWb2NfgpKSnRmX0axo4KFSPYOmswj/dwuPoY=
-Received: from BYAPR12MB4791.namprd12.prod.outlook.com (2603:10b6:a03:10a::12)
- by PH0PR12MB5607.namprd12.prod.outlook.com (2603:10b6:510:142::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.20; Tue, 26 Apr
- 2022 01:12:17 +0000
-Received: from BYAPR12MB4791.namprd12.prod.outlook.com
- ([fe80::d7:f2c8:c731:bdba]) by BYAPR12MB4791.namprd12.prod.outlook.com
- ([fe80::d7:f2c8:c731:bdba%5]) with mapi id 15.20.5186.021; Tue, 26 Apr 2022
- 01:12:17 +0000
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
-        "quic_kriskura@quicinc.com" <quic_kriskura@quicinc.com>,
-        "quic_vpulyala@quicinc.com" <quic_vpulyala@quicinc.com>
-Subject: Re: [PATCH v4 0/3] Skip phy initialization for DWC3 USB Controllers
-Thread-Topic: [PATCH v4 0/3] Skip phy initialization for DWC3 USB Controllers
-Thread-Index: AQHYVTzp+nheqTmOxEObuTjVewbkqaz/84sAgAF3UoA=
-Date:   Tue, 26 Apr 2022 01:12:17 +0000
-Message-ID: <1287c649-de62-c7d8-1c1d-a30ede7505c9@synopsys.com>
-References: <1650517255-4871-1-git-send-email-quic_c_sanm@quicinc.com>
- <20220425024858.GA7052@hu-pkondeti-hyd.qualcomm.com>
-In-Reply-To: <20220425024858.GA7052@hu-pkondeti-hyd.qualcomm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=synopsys.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 19c68d48-20a5-489e-024e-08da2721ce61
-x-ms-traffictypediagnostic: PH0PR12MB5607:EE_
-x-microsoft-antispam-prvs: <PH0PR12MB56076BAFA0BD792D828C9438AAFB9@PH0PR12MB5607.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: t8s6D3OkUu0D6aCIxD6EAx+42M4LDZ6rz86wcM9el/ypZ/BdD8eVZ4AiLzzbUOoyqqc+YdqfZ28AtUD1VJunjbza9GqOwIZEYluvPbftuUXp1iSEL3GzSiSarvHj4lew+bbV5Kl8wD9oYEkXIe//JSuC8zvLhwGTgmIGuB1yjs53LenAf6JWu8pmwb0bXctGdASE/tR6prY/5DQ3wWDADP+TlvFcqdTRqFH8I067oDgpGOEpg81SuyV/HrVgAir7TD2XxFMMVN1W7F7gdnktwgP9oZmjT/5rceCZbcP2tQfsY0cVlWp7FLglEkeS5bHpvSBipw/xXREcq7ORPOFiVBZsSmYoZ6qIE4NjAW+wy2+5vzLVrydHQaD2cA3DpbFjf76nKl8Ux46deX5YoCkm7S7QPMwSBfJ2vcDVI0E61A1ytTHvGCDo1QngxFNxa+vUroodOMsKZMKiKre20WWNwVuk8g/YQ5O6hJi7oc/i0+5afg1snSuzNRB/wNp3obwUlVl9B4916Q2gIULj0uLf/b8zJ5EII1XNPYEuYCkM3AHxlydoIdHbWCKEd6v3h7e5YXEZAEFb3ayGQmtbcUzMu91jybuMKJM77CaS/VJ7nDdfGZAG5bUnGnO6sAmSfEFQZNzZE2WtyeOtxkdPJrOYeZkHL55SS0QfsuTRELgU0LnNwkZHl623ON2IEve7o4R6yyix54OZyw0xO343M8cjap3Cmo7q/esjwoRjoUXjoRJ+dqT0d17m3DdQOSbR7Vhm3eXJ6gwYuR66O65PJjwHgBYGA7vWXN7qpNuZRPwPr8oMGlMYQPolbLRfY1UrD8tLU/nIiQujrbB9jiWRzHf7JSMKNc9TKhudZ+YeA/hoQHE=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4791.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(71200400001)(86362001)(36756003)(38100700002)(38070700005)(83380400001)(66946007)(76116006)(54906003)(110136005)(66446008)(66556008)(64756008)(8676002)(6506007)(8936002)(4326008)(2906002)(31696002)(31686004)(316002)(186003)(2616005)(7416002)(122000001)(5660300002)(6486002)(966005)(26005)(6512007)(66476007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Vm1EcWRKT2JCUlo0ZzBPRGsvdDFnQXlqU2pkek9GazRMMDF5N3NZQ1l2UlRl?=
- =?utf-8?B?cTVrTnlsblk5L2FLaTFjN0pVT2RYNC9zdzVJMStuRzg4aGs2VU5QVGVoSVVP?=
- =?utf-8?B?dmV5czJ3M2lxcVJiclpDRndtYkZtOGxkWVh4NHJ0dEdVdlNMSlh5Um5nVTcx?=
- =?utf-8?B?V2tVdzJTazhDVm12TmdrT2JneXpzKzlYeW9zS2FGOWthekNPSk5XU1NjeFgx?=
- =?utf-8?B?Z0JJOTlINnIrTGhlUURxRXd2M0FyOUlpS0JJSE43blRPZHVpQUZGTXpENnJF?=
- =?utf-8?B?QkxZcVNqOXVVeXdzeEQycTVzK1o4VmJuWlUzUFdZYjBkM3o3SUNhMDhtZXdk?=
- =?utf-8?B?SW5RNVBPSmlWTUlLQ1A3QWtNR3V6dmNHNmdoWFdJUlJiVGR5UVFYcXFONGFZ?=
- =?utf-8?B?ZUczSGV4TGJmZ3EvdHpRTkdMNC92UEZHNlZjYzA4K3d0Tjg1N0V6UG1tbVBv?=
- =?utf-8?B?b1JwQW5QKzZQVVZERHdtdGMyanVmU1FlVVQybzFJT0l0c2hKQWx4S0JCT3Vt?=
- =?utf-8?B?eE5tVGhVRXg2SFdnd3hoMmRRRU1HZU1mTFRFQ2F0RFRUVDZmSExjTUJTN0Za?=
- =?utf-8?B?SEZQTG15TWRUL2JFaXg5cHFUQ3dDYUxpTy9vQzYrOEgrTmhvU3FyT2hmaXky?=
- =?utf-8?B?UjB1dC9pSVM3ZkVwRzdjZXdVQ2ZXNEFvbFRleS9laWhBZmV1YmZQWVpXVnRv?=
- =?utf-8?B?a0d3bnppNDhjbStpemFLV2hLNUREV1VlSFkraDB6UVEvdVZ1Z0RGaHlVekdt?=
- =?utf-8?B?VmNGV0RiZklqMVN4V0ppYUZYbTVMMHBvNTZCb3hUa1RiT2t4ZC9LczQ3SkNk?=
- =?utf-8?B?SDdoOGgyNjd3TVhZSVdZT3F1bklXL1RUKzI5U3dpWXZPVHF6THZVRmZlYVIv?=
- =?utf-8?B?S1NSdmlBemFyRVhxbEwwVEdEb3d3MjF6NVF0bGxocFpONmFSbVZMaUNKOXVu?=
- =?utf-8?B?RFJJdmM3czdJYUFwMWE2Y3M1dTBtSjJJQllqSnZPSG00cFRFWXB2SXVVdGRo?=
- =?utf-8?B?UDhmSnBUaEdIVUJLZWoyam9nYWF5MVEycHh6alh5WFoyWDdnMmczMUo4dHRa?=
- =?utf-8?B?YjgvUENFS3J4Rkk1RHlWV2tFVmE4TnJxTnFkZC8zVDBHN3lFaUYzMDZnazlV?=
- =?utf-8?B?eFgzSDNONjBNNm41eVQ5UEhoOXJwSHBmNlNKME81endlZkpsMjhqSDJHT1N5?=
- =?utf-8?B?SnhPSERubWdBTjVNdUp3TitUVWR5citxSW4zNkIrYkNxZE1hTy9WMDNwNzVz?=
- =?utf-8?B?cStyM1lxdjQxVksvRGZpN2VzSVNVZ29rZEFmKzJkaUdRaFNmUUlpRC8zbnZ6?=
- =?utf-8?B?MWN6ZFVqaWhLbTVUMG1vUmRiazU1Ym5WSFRFN1JycmYvaXNudUFlQUJmbjc0?=
- =?utf-8?B?eXlOTkZtMXpPeFdaM3lSb1RVVkpRWkNpa1l4RmIrdnlDdXd2YXFJQzZqUUNu?=
- =?utf-8?B?bXo4OTlyaTQvYmFrVlZhOXVqcVQrbldsdWJrb2pCT2pwRlJSbUxmMVVSbXA3?=
- =?utf-8?B?YTRmZkQ5MDltSnlZZmE3VmZXT2dGUS9EcGJ1a2N0c2djN3VXR1prRHNhWkZq?=
- =?utf-8?B?VkN6eU1XTU95ODlYdHgyK2xieGZLbkVtUjV2U0F0clpiNlZqemszMTlPSk50?=
- =?utf-8?B?em9YY01BbGdXMlB2SEhIYktPamhiMWhXVjdxWGp4VFVQMytJa2IwMC9uWjBk?=
- =?utf-8?B?Ync1d1picmt1aGYyaWVvNml6SVk4dlBmQXA1OGoxUC8xdUV0YVdKaU53d1l5?=
- =?utf-8?B?OWRDU2dwS3Urem1iY09teXljM2lYOWthTVMzaFFCRy9adWJjUGdOa291UnBy?=
- =?utf-8?B?U281UUU0LzEvck10YnNKRWVZTWdXdnR0VlE4Uk9pblVnSjEzcUo2SlVmTTBX?=
- =?utf-8?B?RHJBbE1WdERoSHgzZ25McS9DMHYrbXlySEdZeHZPQlFaQ001TEZjUXV1Snhp?=
- =?utf-8?B?UTNKQ0Z6bVhhOWZqcTdlTjBWb05NQnFCVmN2Yzc3TW5YTFZ5R1hjNzVDMDNi?=
- =?utf-8?B?czloN1BwTGN6T0d5K1pLdlNFOXNpK0VtZzFoL1VLNnhIU2M4WmtReHFreUNU?=
- =?utf-8?B?N05hamFrbi91bFI4OEM5c25VVG5LSGo5UmVHTTNBQ1pEYnhIQURmSGgwdDRH?=
- =?utf-8?B?bWFiWW1DQ3dYajdhNklqdmVsU0pQblFRcWNxWjd0T0VMNkh3Q0VFbnhWWWJ1?=
- =?utf-8?B?dnMwdWs0QmRYRit1N2N1WUZGMjVkS2g3a2RUNzVzSGxxWDlIOUlxaGJtQnNB?=
- =?utf-8?B?eWl3NVMreWVqZ2dnb3FzZzlGcEtnZ2tUR1RIQlE4TUJPRnVUZngvR1FmRk50?=
- =?utf-8?B?Y1R5WEJRbHJTTDIvRTdObTRCbTJPM1I5VG9CVGVUcFNvWG1mQmUzUT09?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <B41EAAB30E4D0145BCFB82F94048A3AE@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 25 Apr 2022 21:17:54 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE36AF2A23;
+        Mon, 25 Apr 2022 18:14:46 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id i24so16456040pfa.7;
+        Mon, 25 Apr 2022 18:14:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=fCWvB464odNBf/ShDLHlbpM456OS0PdmNMNwSmxnbdw=;
+        b=S6lWrfiVnptzHmrsPXaktkm95tMgzaRZNIZ/Y4RlTu4Sjaq1pJ4nOW8YMp7thRXm6M
+         /rLpCZZEltPBuVURpXOcgsRUHnPYpEgRiqMZzWLcvCVWQyum04dIzeCbqlQLtOl2TPZA
+         K9BbsPgSVceIanf68eYdRAzug+nU3T/5H8VSasHOcw5PdCIARdLZzbmj1oFPqCtaoj8V
+         jwmE9YTclhmOjX9HKEC+KfRfifqA9eXfz0D8iePJtsG66RdCmK7rKFO63D9vTI17wt+t
+         r1TdNpiSyvcOorAZyr6fUernQuyJQTt+3ma8E8bx0cOcnL7PugcrESFeeAZl9pjH4c8B
+         kK9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fCWvB464odNBf/ShDLHlbpM456OS0PdmNMNwSmxnbdw=;
+        b=IGT9I8oGSP4+WV/NwJBnZbQ6VpnBByAPcodROBEWETPKK6fhCPK1SQa8rr9xlQ70B4
+         S3mwHuoNPTu8E662TRuxb9ohwVAe8pampv3uqj7p1QUH6PQC4DJbvoUiJEt89buB0Fv9
+         sDvLIJv6WXCa7rf+8UfYhBm39vdcIdwejfMq1dAPZRLtq8dDkDgcoKmX300eGQEOVDFY
+         hagdDA/I0r6fNdst9BUkA/J3GxTM+1Tv+eJkwS83ULRfyuFrw5+RUA7O9TwkuNn89wFh
+         vzqAsagMrT/noZR7qqV4kikHAXn2cjbenKKY5aALPKNpOet+F9PbFSUwz9rZKEAc5xf9
+         zCVQ==
+X-Gm-Message-State: AOAM531PoHY1wsc6u8uu0b2t3PEapldIaLOV8sR86VMvBXZojDQPrr0q
+        OOl5TmzaQfjtbUrr/mR89r5m2CnFMuEzxg==
+X-Google-Smtp-Source: ABdhPJzMjo07FOU0xjwNR73clW5nEaFT1TPwWTYOK1ieJREH3tInCaoMKpFnhyNYV8746Nj/aoJfnA==
+X-Received: by 2002:a05:6a00:24cc:b0:50d:58bf:5104 with SMTP id d12-20020a056a0024cc00b0050d58bf5104mr791982pfv.36.1650935686298;
+        Mon, 25 Apr 2022 18:14:46 -0700 (PDT)
+Received: from [172.20.119.1] ([61.16.102.74])
+        by smtp.gmail.com with ESMTPSA id y126-20020a62ce84000000b0050d223013b6sm9244057pfg.11.2022.04.25.18.14.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Apr 2022 18:14:45 -0700 (PDT)
+Message-ID: <fd886bf6-3fd8-d786-5211-423d465603ef@gmail.com>
+Date:   Tue, 26 Apr 2022 09:14:42 +0800
 MIME-Version: 1.0
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4791.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 19c68d48-20a5-489e-024e-08da2721ce61
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Apr 2022 01:12:17.5589
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: IlpBImFAU85F49yPVwu3Nv8j1C2ilb95h4U0Pwrww1XuK1IDMA6YpPCuWm/K3i4RrYdeDG4xtOkIWWFtPr/wLA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5607
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.0
+Subject: Re: [PATCH] xfs: fix the ABBA deadlock around agf and inode
+Content-Language: en-US
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220425070620.19986-1-jianchao.wan9@gmail.com>
+ <d2ecf0b8-3bd9-e992-f723-178aae58a0a4@gmail.com>
+ <20220425161650.GE17025@magnolia>
+From:   Wang Jianchao <jianchao.wan9@gmail.com>
+In-Reply-To: <20220425161650.GE17025@magnolia>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGksDQoNClBhdmFuIEtvbmRldGkgd3JvdGU6DQo+IEhpIE1hdGhpYXMsDQo+IA0KPiBPbiBUaHUs
-IEFwciAyMSwgMjAyMiBhdCAxMDozMDo1MkFNICswNTMwLCBTYW5kZWVwIE1haGVzd2FyYW0gd3Jv
-dGU6DQo+PiBSdW50aW1lIHN1c3BlbmQgb2YgcGh5IGRyaXZlcnMgd2FzIGZhaWxpbmcgZnJvbSBE
-V0MzIGRyaXZlciBhcw0KPj4gcnVudGltZSB1c2FnZSB2YWx1ZSBpcyAyIGJlY2F1c2UgdGhlIHBo
-eSBpcyBpbml0aWFsaXplZCBmcm9tDQo+PiBEV0MzIGNvcmUgYW5kIEhDRCBjb3JlLg0KPj4gU29t
-ZSBjb250cm9sbGVycyBsaWtlIERXQzMgYW5kIENETlMzIG1hbmFnZSBwaHkgaW4gdGhlaXIgY29y
-ZSBkcml2ZXJzLg0KPj4gVGhpcyBwcm9wZXJ0eSBjYW4gYmUgc2V0IHRvIGF2b2lkIHBoeSBpbml0
-aWFsaXphdGlvbiBpbiBIQ0QgY29yZS4NCj4+DQo+PiB2NDoNCj4+IEFkZGVkIHRoZSBkZXZpY2Ug
-dHJlZSBiaW5kaW5nIHBhdGNoIGluIHRoZSBzZXJpZXMuDQo+Pg0KPj4gdjM6DQo+PiBDb21pbmcg
-YmFjayB0byB0aGlzIHNlcmllcyBiYXNlZCBvbiBkaXNjdXNzaW9uIGF0IGJlbG93IHRocmVhZA0K
-Pj4gaHR0cHM6Ly91cmxkZWZlbnNlLmNvbS92My9fX2h0dHBzOi8vcGF0Y2h3b3JrLmtlcm5lbC5v
-cmcvcHJvamVjdC9saW51eC1hcm0tbXNtL3BhdGNoLzE2NDgxMDM4MzEtMTIzNDctNC1naXQtc2Vu
-ZC1lbWFpbC1xdWljX2Nfc2FubUBxdWljaW5jLmNvbS9fXzshIUE0RjJSOUdfcGchZnlrVE5UQnVL
-azljaTZ6S2RjdVFOYnVaUWRWaV9IZWtVM2pldHp1ZC1QUVZoYlJhVmhoWkhLejBrX0xmRzBjZ3dh
-WDRiUU01YkxJMGVwNnRZeWlrZ3ZZSzdiNVNkQSQgDQo+PiBEcm9wcGVkIHRoZSBkdCBiaW5kaW5n
-cyBQQVRDSCAxLzMgaW4gdjINCj4+IGh0dHBzOi8vdXJsZGVmZW5zZS5jb20vdjMvX19odHRwczov
-L3BhdGNod29yay5rZXJuZWwub3JnL3Byb2plY3QvbGludXgtYXJtLW1zbS9jb3Zlci8xNjM2MzUz
-NzEwLTI1NTgyLTEtZ2l0LXNlbmQtZW1haWwtcXVpY19jX3Nhbm1AcXVpY2luYy5jb20vX187ISFB
-NEYyUjlHX3BnIWZ5a1ROVEJ1S2s5Y2k2ektkY3VRTmJ1WlFkVmlfSGVrVTNqZXR6dWQtUFFWaGJS
-YVZoaFpIS3owa19MZkcwY2d3YVg0YlFNNWJMSTBlcDZ0WXlpa2d2YTJWWGFoT1EkICANCj4+DQo+
-PiB2MjoNCj4+IFVwZGF0ZWQgdGhlIGNvbW1pdCBkZXNjcmlwdGlvbnMuDQo+PiBDaGFuZ2VkIHN1
-YmplY3QgcHJlZml4IGZyb20gZHdjIHRvIGR3YzMuDQo+PiBJbmNyZWFzZWQgcHJvcHMgYXJyYXkg
-c2l6ZS4NCj4+DQo+Pg0KPj4gU2FuZGVlcCBNYWhlc3dhcmFtICgzKToNCj4+ICAgZHQtYmluZGlu
-Z3M6IHVzYjogdXNiLXhoY2k6IEFkZCBiaW5kaW5ncyBmb3IgdXNiLXNraXAtcGh5LWluaXQNCj4+
-ICAgICBwcm9wZXJ0eQ0KPj4gICB1c2I6IGhvc3Q6IHhoY2ktcGxhdDogQWRkIGRldmljZSBwcm9w
-ZXJ0eSB0byBzZXQgWEhDSV9TS0lQX1BIWV9JTklUDQo+PiAgICAgcXVpcmsNCj4+ICAgdXNiOiBk
-d2MzOiBob3N0OiBTZXQgdGhlIHByb3BlcnR5IHVzYi1za2lwLXBoeS1pbml0DQo+Pg0KPj4gIERv
-Y3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvdXNiLXhoY2kueWFtbCB8IDQgKysr
-Kw0KPj4gIGRyaXZlcnMvdXNiL2R3YzMvaG9zdC5jICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICB8IDQgKysrLQ0KPj4gIGRyaXZlcnMvdXNiL2hvc3QveGhjaS1wbGF0LmMgICAgICAgICAgICAg
-ICAgICAgICAgICB8IDMgKysrDQo+PiAgMyBmaWxlcyBjaGFuZ2VkLCAxMCBpbnNlcnRpb25zKCsp
-LCAxIGRlbGV0aW9uKC0pDQo+Pg0KPiANCj4gVGhpcyBpcyB0aGUgbGF0ZXN0IHNlcmllcyB3aXRo
-IGJpbmRpbmdzIGFkZGVkIGFzIHBlciBHcmVnJ3MgY29tbWVudC4gQ2FuIHlvdQ0KPiBwbGVhc2Ug
-cGljayB1cCB0aGlzIHNlcmllcyBpZiB5b3UgZG9uJ3QgaGF2ZSBhbnkgZnVydGhlciBjb21tZW50
-cy4NCj4gDQoNCldlJ3ZlIGhhZCB0aGlzIGNvbnZlcnNhdGlvbiBnb2luZyBvbiBmb3IgYSB3aGls
-ZS4gU2VlbXMgdGhlcmUncyBubyBnb29kDQpvbmUgc29sdXRpb24gd2l0aCBldmVyeW9uZSBmdWxs
-eSBnZXR0aW5nIG9uLWJvYXJkLg0KDQpJJ3ZlIHRyaWVkIHRvIGdldCBzb21lIG9mIHRoZSBxdWly
-a3Mgb3V0IGJlZm9yZSBhbHNvLCBidXQgcmFuIGludG8gdGhlDQpzYW1lIHByb2JsZW0uIFsxXQ0K
-DQpBcyBNYXRoaWFzIG5vdGVkIFsyXSBiZWZvcmUsIG1heWJlIHdlIGNhbiBjcmVhdGUgYSBuZXcg
-eGhjaS1zbnBzDQpwbGF0Zm9ybSBnbHVlIGRyaXZlci4NCg0KVGhlIHByb2JsZW0gd2l0aCB0aGUg
-Y3VycmVudCBpbXBsZW1lbnRhdGlvbiBpcyBwYXNzaW5nIGR3YzMncyByZWxhdGVkDQppbmZvIHRv
-IHhoY2ktcGxhdCBnZW5lcmljIGRyaXZlciBpcyB2ZXJ5IGNsdW5reS4gV2UgY2FuIHRlYWNoIHRo
-ZSBuZXcNCmdsdWUgZHJpdmVyIHdpdGggYWxsIHRoZSBpbmZvIG5lY2Vzc2FyeSB0byBkcml2ZSB0
-aGUgY29udHJvbGxlci4NCg0KV2UgY2FuIGp1c3QgcGFzcyB0aGUgY29udHJvbGxlcidzIHZlcnNp
-b24gKGFuZCBzdWJ2ZXJzaW9uKSBhcyBhIHByb3BlcnR5DQpmb3IgcGxhdGZvcm0gZGV2aWNlLiBU
-aGlzIHdheSwgd2UgY2FuOg0KDQoxKSBTZXBhcmF0ZSB0aGUgcXVpcmtzIGZyb20geGhjaS1wbGF0
-IGdsdWUuIE1vc3QgY29tbW9uIHF1aXJrcyBjYW4gYmUNCmRldGVjdGVkIGp1c3QgYmFzZSBvbiB0
-aGUgY29udHJvbGxlcidzIHZlcnNpb24NCg0KMikgQXZvaWQgaGF2aW5nIHRvIGNyZWF0ZSBkdXBs
-aWNhdGUgInNucHMsKiIgcHJvcGVydGllcw0KDQozKSBHZXQgYWNjZXNzIHRvIHRoZSBjb21tb24g
-eGhjaSBxdWlyayBmbGFncyB3aGlsZSBtYWludGFpbiBhYnN0cmFjdGlvbg0KDQo0KSBQb3RlbnRp
-YWxseSBhZGQgY29tcGF0aWJpbGl0eSBzdHJpbmcgYXMgcGFydCBvZiB0aGUgY29udHJvbGxlcidz
-DQp2ZXJzaW9uIGFuZCBsZXQgdGhlIGdsdWUgZHJpdmVyIGhhbmRsZSB0aGUgcmVzdA0KDQo1KSBS
-ZWR1Y2UgaW50cm9kdWNpbmcgbmV3ICJxdWlya3MiIGluIHRoZSBmdXR1cmUNCg0KSSBjYW4gZ2V0
-IHN0YXJ0ZWQgd2l0aCB0aGlzLiBMZXQgbWUga25vdyBpZiB5b3UgaGF2ZSBhbnkgY29tbWVudC4N
-Cg0KVGhhbmtzLA0KVGhpbmgNCg0KWzFdIGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4LXVz
-Yi8wZmIxNzliOTc3Y2QxODdmMDAzYWUxOGFkZjAxYmNjZjA5ZDc0MDkyLjE2MTgwMTQyNzkuZ2l0
-LlRoaW5oLk5ndXllbkBzeW5vcHN5cy5jb20vVC8jbWE1ZjdiZGYyOWNmODRiNWEwMDc3YTRhMDg1
-N2NlYjVkZmUwYzg1NjQNClsyXSBodHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eC11c2IvNzZl
-Y2VmZDctZDI5NC00ODVhLTFlMmItZTVlNTU2ZTJhM2Y3QGxpbnV4LmludGVsLmNvbS8jUg0K
+
+
+On 2022/4/26 12:16 上午, Darrick J. Wong wrote:
+> On Mon, Apr 25, 2022 at 03:10:02PM +0800, Wang Jianchao wrote:
+>> The deadlock context is as following,
+>> hold inode, try to require agf
+>>
+>> inode buf xfs_buf.b_log_item ffff9ca7491eb2c0
+>>
+>> PID: 82240  TASK: ffff9ca4cd633d80  CPU: 88  COMMAND: ""
+>>  #0 [ffffb696ad7f7410] __schedule at ffffffffa0067073
+>>  #1 [ffffb696ad7f74b0] schedule at ffffffffa0067678
+>>  #2 [ffffb696ad7f74b8] schedule_timeout at ffffffffa006b88d
+>>  #3 [ffffb696ad7f7558] __down at ffffffffa0069dcb
+>>  #4 [ffffb696ad7f75b8] down at ffffffff9f90890b
+>>  #5 [ffffb696ad7f75d0] xfs_buf_lock at ffffffffc6cb1133 [xfs]
+>>  #6 [ffffb696ad7f75f0] xfs_buf_find at ffffffffc6cb15fa [xfs]
+>>  #7 [ffffb696ad7f7688] xfs_buf_get_map at ffffffffc6cb18e0 [xfs]
+>>  #8 [ffffb696ad7f76d0] xfs_buf_read_map at ffffffffc6cb20e8 [xfs]
+>>  #9 [ffffb696ad7f7710] xfs_trans_read_buf_map at ffffffffc6ce6796 [xfs]
+>> #10 [ffffb696ad7f7750] xfs_read_agf at ffffffffc6c66fde [xfs]
+>> #11 [ffffb696ad7f77b8] xfs_alloc_read_agf at ffffffffc6c670ae [xfs]
+>> #12 [ffffb696ad7f77f0] xfs_alloc_fix_freelist at ffffffffc6c675dc [xfs]
+>> #13 [ffffb696ad7f7900] xfs_alloc_vextent at ffffffffc6c6796b [xfs]
+>> #14 [ffffb696ad7f7940] __xfs_inobt_alloc_block at ffffffffc6c972f0 [xfs]
+>> #15 [ffffb696ad7f79f8] __xfs_btree_split at ffffffffc6c7ee5d [xfs]
+>> #16 [ffffb696ad7f7ab8] xfs_btree_split at ffffffffc6c7f34b [xfs]
+>> #17 [ffffb696ad7f7b68] xfs_btree_make_block_unfull at ffffffffc6c80882 [xfs]
+>> #18 [ffffb696ad7f7bc8] xfs_btree_insrec at ffffffffc6c80ccd [xfs]
+>> #19 [ffffb696ad7f7ca0] xfs_btree_insert at ffffffffc6c80e3b [xfs]
+>> #20 [ffffb696ad7f7d60] xfs_difree_finobt at ffffffffc6c94859 [xfs]
+>> #21 [ffffb696ad7f7db8] xfs_difree at ffffffffc6c9634e [xfs]
+>> #22 [ffffb696ad7f7e08] xfs_ifree at ffffffffc6cc63d2 [xfs]
+>> #23 [ffffb696ad7f7e58] xfs_inactive_ifree at ffffffffc6cc6551 [xfs]
+>> #24 [ffffb696ad7f7e88] xfs_inactive at ffffffffc6cc66fe [xfs]
+>> #25 [ffffb696ad7f7ea0] xfs_fs_destroy_inode at ffffffffc6ccfdb8 [xfs]
+>> #26 [ffffb696ad7f7ec0] do_unlinkat at ffffffff9face066
+>> #27 [ffffb696ad7f7f38] do_syscall_64 at ffffffff9f8041cb
+>> #28 [ffffb696ad7f7f50] entry_SYSCALL_64_after_hwframe at ffffffffa02000ad
+>>     RIP: 00007f5e27b64e57  RSP: 00007f5e0d1f9a98  RFLAGS: 00000202
+>>     RAX: ffffffffffffffda  RBX: 00007f578b4011a0  RCX: 00007f5e27b64e57
+>>     RDX: 00007f5b1684e680  RSI: 0000000000000070  RDI: 00007f5b1684e680
+>>     RBP: 00007f578b4011c0   R8: 00000000000002e8   R9: 0000000000000007
+>>     R10: 00007f5e0d1fae20  R11: 0000000000000202  R12: 00007f5e0d1f9c00
+>>     R13: 00007f5d191e2118  R14: 00007f5d191e22d0  R15: 00007f5e0d1f9b50
+>>     ORIG_RAX: 0000000000000057  CS: 0033  SS: 002b
+>>
+>>
+>> The task hold agf, try to require inode
+>>
+>>
+>> PID: 1653499  TASK: ffff9c9f5490bd80  CPU: 66  COMMAND: "kworker/u209:2"
+>>  #0 [ffffb696ccdff270] __schedule at ffffffffa0067073
+>>  #1 [ffffb696ccdff310] schedule at ffffffffa0067678
+>>  #2 [ffffb696ccdff318] schedule_timeout at ffffffffa006b88d
+>>  #3 [ffffb696ccdff3b8] __down at ffffffffa0069dcb
+>>  #4 [ffffb696ccdff410] down at ffffffff9f90890b
+>>  #5 [ffffb696ccdff428] xfs_buf_lock at ffffffffc6cb1133 [xfs]
+>>  #6 [ffffb696ccdff448] xfs_buf_find at ffffffffc6cb15fa [xfs]
+>>  #7 [ffffb696ccdff4e0] xfs_buf_get_map at ffffffffc6cb18e0 [xfs]
+>>  #8 [ffffb696ccdff528] xfs_buf_read_map at ffffffffc6cb20e8 [xfs]
+>>  #9 [ffffb696ccdff568] xfs_trans_read_buf_map at ffffffffc6ce6796 [xfs]
+>> #10 [ffffb696ccdff5a8] xfs_imap_to_bp at ffffffffc6c9a3e7 [xfs]
+>> #11 [ffffb696ccdff608] xfs_trans_log_inode at ffffffffc6ce757e [xfs]
+>> #12 [ffffb696ccdff658] xfs_bmap_btalloc at ffffffffc6c75ccc [xfs]
+>> #13 [ffffb696ccdff750] xfs_bmapi_write at ffffffffc6c77ca0 [xfs]
+>> #14 [ffffb696ccdff8a8] xfs_bmapi_convert_delalloc at ffffffffc6c782a4 [xfs]
+>> #15 [ffffb696ccdff8d0] xfs_iomap_write_allocate at ffffffffc6cc11a7 [xfs]
+>> #16 [ffffb696ccdff940] xfs_map_blocks at ffffffffc6ca9f97 [xfs]
+>> #17 [ffffb696ccdff9d0] xfs_do_writepage at ffffffffc6caa911 [xfs]
+>> #18 [ffffb696ccdffa48] write_cache_pages at ffffffff9fa20675
+>> #19 [ffffb696ccdffb40] xfs_vm_writepages at ffffffffc6caa3e4 [xfs]
+>> #20 [ffffb696ccdffba8] do_writepages at ffffffff9fa217c1
+>> #21 [ffffb696ccdffc10] __writeback_single_inode at ffffffff9faec1bd
+>> #22 [ffffb696ccdffc58] writeback_sb_inodes at ffffffff9faec953
+>> #23 [ffffb696ccdffd38] __writeback_inodes_wb at ffffffff9faecc1d
+>> #24 [ffffb696ccdffd78] wb_writeback at ffffffff9faecf9f
+>> #25 [ffffb696ccdffe08] wb_workfn at ffffffff9faed8a2
+>> #26 [ffffb696ccdffe98] process_one_work at ffffffff9f8cd9f7
+>> #27 [ffffb696ccdffed8] worker_thread at ffffffff9f8ce0fa
+>> #28 [ffffb696ccdfff10] kthread at ffffffff9f8d3802
+>> #29 [ffffb696ccdfff50] ret_from_fork at ffffffffa020023f
+> 
+> Does this solve the same problem as[1]?
+> 
+> [1]
+> https://lore.kernel.org/linux-xfs/20220404232204.GT1544202@dread.disaster.area/
+
+Yes, it is !
+
+Thanks so much
+Jianchao
+
+> 
+> --D
+> 
+>>
+>>
+>> Thanks
+>> Jianchao
+>>
+>> On 2022/4/25 3:06 下午, Wang Jianchao (Kuaishou) wrote:
+>>> Recently, we encounter a deadlock case where there are many tasks
+>>> hung on agi and agf xfs_buf. It end up with a deadlock between
+>>> agf and inode xfs_buf as following,
+>>>
+>>> xfs_ifree()             xfs_bmap_btalloc()
+>>> xfs_iunlink_remove()    xfs_alloc_vextent()
+>>>   hold inode bp           hold agf
+>>> xfs_difree()            xfs_trans_log_inode()
+>>>   require agf             require inode bp
+>>>
+>>> The task requires inode bp with agf held block other tasks which
+>>> want to require agf with agi held. Then the whole filesystem
+>>> looks like a agi/agf deadlock. To fix this issue, get agf in
+>>> xfs_iunlink_remove() after it get agi and before get indoe bp.
+>>>
+>>> Signed-off-by: Wang Jianchao (Kuaishou) <jianchao.wan9@gmail.com>
+>>> ---
+>>>  fs/xfs/xfs_inode.c | 10 ++++++++++
+>>>  1 file changed, 10 insertions(+)
+>>>
+>>> diff --git a/fs/xfs/xfs_inode.c b/fs/xfs/xfs_inode.c
+>>> index 9de6205fe134..c0a29fd00b0e 100644
+>>> --- a/fs/xfs/xfs_inode.c
+>>> +++ b/fs/xfs/xfs_inode.c
+>>> @@ -36,6 +36,7 @@
+>>>  #include "xfs_reflink.h"
+>>>  #include "xfs_ag.h"
+>>>  #include "xfs_log_priv.h"
+>>> +#include "xfs_alloc.h"
+>>>  
+>>>  struct kmem_cache *xfs_inode_cache;
+>>>  
+>>> @@ -2337,6 +2338,7 @@ xfs_iunlink_remove(
+>>>  {
+>>>  	struct xfs_mount	*mp = tp->t_mountp;
+>>>  	struct xfs_agi		*agi;
+>>> +	struct xfs_buf		*agfbp;
+>>>  	struct xfs_buf		*agibp;
+>>>  	struct xfs_buf		*last_ibp;
+>>>  	struct xfs_dinode	*last_dip = NULL;
+>>> @@ -2352,6 +2354,14 @@ xfs_iunlink_remove(
+>>>  	error = xfs_read_agi(mp, tp, pag->pag_agno, &agibp);
+>>>  	if (error)
+>>>  		return error;
+>>> +
+>>> +	/*
+>>> +	 * Get the agf buffer first to ensure the lock ordering against inode bp
+>>> +	 */
+>>> +	error = xfs_read_agf(mp, tp, pag->pag_agno, 0, &agfbp);
+>>> +	if (error)
+>>> +		return error;
+>>> +
+>>>  	agi = agibp->b_addr;
+>>>  
+>>>  	/*

@@ -2,767 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9B7750F2A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3D5B50F2B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344094AbiDZHjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 03:39:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45664 "EHLO
+        id S1344103AbiDZHjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 03:39:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344096AbiDZHiq (ORCPT
+        with ESMTP id S1344221AbiDZHjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 03:38:46 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A709C5F49
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:35:28 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1njFjB-00056v-0L; Tue, 26 Apr 2022 09:35:17 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1njFj8-005Inc-Sg; Tue, 26 Apr 2022 09:35:13 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1njFj5-004rp8-VI; Tue, 26 Apr 2022 09:35:11 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= 
-        <jerome.pouiller@silabs.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v4 4/4] ARM: dts: stm32: add support for Protonic PRTT1x boards
-Date:   Tue, 26 Apr 2022 09:35:11 +0200
-Message-Id: <20220426073511.1160119-5-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220426073511.1160119-1-o.rempel@pengutronix.de>
-References: <20220426073511.1160119-1-o.rempel@pengutronix.de>
+        Tue, 26 Apr 2022 03:39:14 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C1CB1D1;
+        Tue, 26 Apr 2022 00:36:06 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KnYTw3jHmzCsQV;
+        Tue, 26 Apr 2022 15:31:32 +0800 (CST)
+Received: from [10.67.111.192] (10.67.111.192) by
+ kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 26 Apr 2022 15:36:02 +0800
+Message-ID: <79fe5bb5-c55c-7ddc-640f-50bf8bea7f0b@huawei.com>
+Date:   Tue, 26 Apr 2022 15:36:02 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH bpf-next v3 2/7] ftrace: Fix deadloop caused by direct
+ call in ftrace selftest
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>
+CC:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Mark Brown <broonie@kernel.org>,
+        Delyan Kratunov <delyank@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+References: <20220424154028.1698685-1-xukuohai@huawei.com>
+ <20220424154028.1698685-3-xukuohai@huawei.com>
+ <20220425110512.538ce0bf@gandalf.local.home>
+From:   Xu Kuohai <xukuohai@huawei.com>
+In-Reply-To: <20220425110512.538ce0bf@gandalf.local.home>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.192]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This boards are based on STM32MP151AAD3 and use 10BaseT1L for communication.
+On 4/25/2022 11:05 PM, Steven Rostedt wrote:
+> On Sun, 24 Apr 2022 11:40:23 -0400
+> Xu Kuohai <xukuohai@huawei.com> wrote:
+> 
+>> diff --git a/kernel/trace/trace_selftest.c b/kernel/trace/trace_selftest.c
+>> index abcadbe933bb..d2eff2b1d743 100644
+>> --- a/kernel/trace/trace_selftest.c
+>> +++ b/kernel/trace/trace_selftest.c
+>> @@ -785,8 +785,24 @@ static struct fgraph_ops fgraph_ops __initdata  = {
+>>  };
+>>  
+>>  #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+>> +#ifdef CONFIG_ARM64
+> 
+> Please find a way to add this in arm specific code. Do not add architecture
+> defines in generic code.
+> 
+> You could add:
+> 
+> #ifndef ARCH_HAVE_FTRACE_DIRECT_TEST_FUNC
+> noinline __noclone static void trace_direct_tramp(void) { }
+> #endif
+> 
+> here, and in arch/arm64/include/ftrace.h
+> 
+> #define ARCH_HAVE_FTRACE_DIRECT_TEST_FUNC
+> 
+> and define your test function in the arm64 specific code.
+> 
+> -- Steve
+> 
+> 
 
-- PRTT1C - 10BaseT1L switch
-- PRTT1S - 10BaseT1L CO2 sensor board
-- PRTT1A - 10BaseT1L multi functional controller
+will move this to arch/arm64/ in v4, thanks.
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- arch/arm/boot/dts/Makefile                |   3 +
- arch/arm/boot/dts/stm32mp151a-prtt1a.dts  |  52 ++++
- arch/arm/boot/dts/stm32mp151a-prtt1c.dts  | 304 ++++++++++++++++++++++
- arch/arm/boot/dts/stm32mp151a-prtt1l.dtsi | 229 ++++++++++++++++
- arch/arm/boot/dts/stm32mp151a-prtt1s.dts  |  63 +++++
- 5 files changed, 651 insertions(+)
- create mode 100644 arch/arm/boot/dts/stm32mp151a-prtt1a.dts
- create mode 100644 arch/arm/boot/dts/stm32mp151a-prtt1c.dts
- create mode 100644 arch/arm/boot/dts/stm32mp151a-prtt1l.dtsi
- create mode 100644 arch/arm/boot/dts/stm32mp151a-prtt1s.dts
-
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 7c16f8a2b738..2585ba8e1293 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1156,6 +1156,9 @@ dtb-$(CONFIG_ARCH_STM32) += \
- 	stm32h743i-disco.dtb \
- 	stm32h750i-art-pi.dtb \
- 	stm32mp135f-dk.dtb \
-+	stm32mp151a-prtt1a.dtb \
-+	stm32mp151a-prtt1c.dtb \
-+	stm32mp151a-prtt1s.dtb \
- 	stm32mp153c-dhcom-drc02.dtb \
- 	stm32mp157a-avenger96.dtb \
- 	stm32mp157a-dhcor-avenger96.dtb \
-diff --git a/arch/arm/boot/dts/stm32mp151a-prtt1a.dts b/arch/arm/boot/dts/stm32mp151a-prtt1a.dts
-new file mode 100644
-index 000000000000..75874eafde11
---- /dev/null
-+++ b/arch/arm/boot/dts/stm32mp151a-prtt1a.dts
-@@ -0,0 +1,52 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
-+/*
-+ * Copyright (C) Protonic Holland
-+ * Author: David Jander <david@protonic.nl>
-+ */
-+/dts-v1/;
-+
-+#include "stm32mp151a-prtt1l.dtsi"
-+
-+/ {
-+	model = "Protonic PRTT1A";
-+	compatible = "prt,prtt1a", "st,stm32mp151";
-+};
-+
-+&ethernet0 {
-+	phy-handle = <&phy0>;
-+};
-+
-+&mdio0 {
-+	/* TI DP83TD510E */
-+	phy0: ethernet-phy@0 {
-+		compatible = "ethernet-phy-id2000.0181";
-+		reg = <0>;
-+		interrupts-extended = <&gpioa 4 IRQ_TYPE_LEVEL_LOW>;
-+		reset-gpios = <&gpioa 3 GPIO_ACTIVE_LOW>;
-+		reset-assert-us = <10>;
-+		reset-deassert-us = <35>;
-+	};
-+};
-+
-+&pwm5_pins_a {
-+	pins {
-+		pinmux = <STM32_PINMUX('A', 0, AF2)>; /* TIM5_CH1 */
-+	};
-+};
-+
-+&pwm5_sleep_pins_a {
-+	pins {
-+		pinmux = <STM32_PINMUX('A', 0, ANALOG)>; /* TIM5_CH1 */
-+	};
-+};
-+
-+&timers5 {
-+	status = "okay";
-+
-+	pwm {
-+		pinctrl-0 = <&pwm5_pins_a>;
-+		pinctrl-1 = <&pwm5_sleep_pins_a>;
-+		pinctrl-names = "default", "sleep";
-+		status = "okay";
-+	};
-+};
-diff --git a/arch/arm/boot/dts/stm32mp151a-prtt1c.dts b/arch/arm/boot/dts/stm32mp151a-prtt1c.dts
-new file mode 100644
-index 000000000000..7ecf31263abc
---- /dev/null
-+++ b/arch/arm/boot/dts/stm32mp151a-prtt1c.dts
-@@ -0,0 +1,304 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
-+/*
-+ * Copyright (C) Protonic Holland
-+ * Author: David Jander <david@protonic.nl>
-+ */
-+/dts-v1/;
-+
-+#include "stm32mp151a-prtt1l.dtsi"
-+
-+/ {
-+	model = "Protonic PRTT1C";
-+	compatible = "prt,prtt1c", "st,stm32mp151";
-+
-+	clock_ksz9031: clock-ksz9031 {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <25000000>;
-+	};
-+
-+	clock_sja1105: clock-sja1105 {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <25000000>;
-+	};
-+
-+	mdio0: mdio {
-+		compatible = "virtual,mdio-gpio";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		gpios = <&gpioc 1 GPIO_ACTIVE_HIGH
-+			 &gpioa 2 GPIO_ACTIVE_HIGH>;
-+
-+	};
-+
-+	wifi_pwrseq: wifi-pwrseq {
-+		compatible = "mmc-pwrseq-simple";
-+		reset-gpios = <&gpiod 8 GPIO_ACTIVE_LOW>;
-+	};
-+};
-+
-+&ethernet0 {
-+	fixed-link {
-+		speed = <100>;
-+		full-duplex;
-+	};
-+};
-+
-+&gpioa {
-+	gpio-line-names =
-+		"", "", "", "PHY0_nRESET", "PHY0_nINT", "", "", "",
-+		"", "", "", "", "", "", "", "SPI1_nSS";
-+};
-+
-+&gpiod {
-+	gpio-line-names =
-+		"", "", "", "", "", "", "", "",
-+		"WFM_RESET", "", "", "", "", "", "", "";
-+};
-+
-+&gpioe {
-+	gpio-line-names =
-+		"SDMMC2_nRESET", "", "", "", "", "", "SPI1_nRESET", "",
-+		"", "", "", "", "WFM_nIRQ", "", "", "";
-+};
-+
-+&gpiog {
-+	gpio-line-names =
-+		"", "", "", "", "", "", "", "PHY3_nINT",
-+		"PHY1_nINT", "PHY3_nRESET", "PHY2_nINT", "PHY2_nRESET",
-+		"PHY1_nRESET", "SPE1_PWR", "SPE0_PWR", "";
-+};
-+
-+&mdio0 {
-+	/* All this DP83TD510E PHYs can't be probed before switch@0 is
-+	 * probed so we need to use compatible with PHYid
-+	 */
-+	/* TI DP83TD510E */
-+	t1l0_phy: ethernet-phy@6 {
-+		compatible = "ethernet-phy-id2000.0181";
-+		reg = <6>;
-+		interrupts-extended = <&gpioa 4 IRQ_TYPE_LEVEL_LOW>;
-+		reset-gpios = <&gpioa 3 GPIO_ACTIVE_LOW>;
-+		reset-assert-us = <10>;
-+		reset-deassert-us = <35>;
-+	};
-+
-+	/* TI DP83TD510E */
-+	t1l1_phy: ethernet-phy@7 {
-+		compatible = "ethernet-phy-id2000.0181";
-+		reg = <7>;
-+		interrupts-extended = <&gpiog 8 IRQ_TYPE_LEVEL_LOW>;
-+		reset-gpios = <&gpiog 12 GPIO_ACTIVE_LOW>;
-+		reset-assert-us = <10>;
-+		reset-deassert-us = <35>;
-+	};
-+
-+	/* TI DP83TD510E */
-+	t1l2_phy: ethernet-phy@10 {
-+		compatible = "ethernet-phy-id2000.0181";
-+		reg = <10>;
-+		interrupts-extended = <&gpiog 10 IRQ_TYPE_LEVEL_LOW>;
-+		reset-gpios = <&gpiog 11 GPIO_ACTIVE_LOW>;
-+		reset-assert-us = <10>;
-+		reset-deassert-us = <35>;
-+	};
-+
-+	/* Micrel KSZ9031 */
-+	rj45_phy: ethernet-phy@2 {
-+		reg = <2>;
-+		interrupts-extended = <&gpiog 7 IRQ_TYPE_LEVEL_LOW>;
-+		reset-gpios = <&gpiog 9 GPIO_ACTIVE_LOW>;
-+		reset-assert-us = <10000>;
-+		reset-deassert-us = <1000>;
-+
-+		clocks = <&clock_ksz9031>;
-+	};
-+};
-+
-+&qspi {
-+	status = "disabled";
-+};
-+
-+&sdmmc2 {
-+	pinctrl-names = "default", "opendrain", "sleep";
-+	pinctrl-0 = <&sdmmc2_b4_pins_a &sdmmc2_d47_pins_a>;
-+	pinctrl-1 = <&sdmmc2_b4_od_pins_a &sdmmc2_d47_pins_a>;
-+	pinctrl-2 = <&sdmmc2_b4_sleep_pins_a &sdmmc2_d47_sleep_pins_a>;
-+	non-removable;
-+	no-sd;
-+	no-sdio;
-+	no-1-8-v;
-+	st,neg-edge;
-+	bus-width = <8>;
-+	vmmc-supply = <&reg_3v3>;
-+	vqmmc-supply = <&reg_3v3>;
-+	status = "okay";
-+};
-+
-+&sdmmc2_b4_od_pins_a {
-+	pins1 {
-+		pinmux = <STM32_PINMUX('B', 14, AF9)>, /* SDMMC2_D0 */
-+			 <STM32_PINMUX('B', 7, AF10)>, /* SDMMC2_D1 */
-+			 <STM32_PINMUX('B', 3, AF9)>, /* SDMMC2_D2 */
-+			 <STM32_PINMUX('B', 4, AF9)>; /* SDMMC2_D3 */
-+	};
-+};
-+
-+&sdmmc2_b4_pins_a {
-+	pins1 {
-+		pinmux = <STM32_PINMUX('B', 14, AF9)>, /* SDMMC2_D0 */
-+			 <STM32_PINMUX('B', 7, AF10)>, /* SDMMC2_D1 */
-+			 <STM32_PINMUX('B', 3, AF9)>, /* SDMMC2_D2 */
-+			 <STM32_PINMUX('B', 4, AF9)>, /* SDMMC2_D3 */
-+			 <STM32_PINMUX('G', 6, AF10)>; /* SDMMC2_CMD */
-+	};
-+};
-+
-+&sdmmc2_b4_sleep_pins_a {
-+	pins {
-+		pinmux = <STM32_PINMUX('B', 14, ANALOG)>, /* SDMMC2_D0 */
-+			 <STM32_PINMUX('B', 7, ANALOG)>, /* SDMMC2_D1 */
-+			 <STM32_PINMUX('B', 3, ANALOG)>, /* SDMMC2_D2 */
-+			 <STM32_PINMUX('B', 4, ANALOG)>, /* SDMMC2_D3 */
-+			 <STM32_PINMUX('E', 3, ANALOG)>, /* SDMMC2_CK */
-+			 <STM32_PINMUX('G', 6, ANALOG)>; /* SDMMC2_CMD */
-+	};
-+};
-+
-+&sdmmc2_d47_pins_a {
-+	pins {
-+		pinmux = <STM32_PINMUX('A', 8, AF9)>, /* SDMMC2_D4 */
-+			 <STM32_PINMUX('A', 9, AF10)>, /* SDMMC2_D5 */
-+			 <STM32_PINMUX('C', 6, AF10)>, /* SDMMC2_D6 */
-+			 <STM32_PINMUX('C', 7, AF10)>; /* SDMMC2_D7 */
-+	};
-+};
-+
-+&sdmmc2_d47_sleep_pins_a {
-+	pins {
-+		pinmux = <STM32_PINMUX('A', 8, ANALOG)>, /* SDMMC2_D4 */
-+			 <STM32_PINMUX('A', 9, ANALOG)>, /* SDMMC2_D5 */
-+			 <STM32_PINMUX('C', 6, ANALOG)>, /* SDMMC2_D6 */
-+			 <STM32_PINMUX('D', 3, ANALOG)>; /* SDMMC2_D7 */
-+	};
-+};
-+
-+&sdmmc3 {
-+	pinctrl-names = "default", "opendrain", "sleep";
-+	pinctrl-0 = <&sdmmc3_b4_pins_b>;
-+	pinctrl-1 = <&sdmmc3_b4_od_pins_b>;
-+	pinctrl-2 = <&sdmmc3_b4_sleep_pins_b>;
-+	non-removable;
-+	no-1-8-v;
-+	st,neg-edge;
-+	bus-width = <4>;
-+	vmmc-supply = <&reg_3v3>;
-+	vqmmc-supply = <&reg_3v3>;
-+	mmc-pwrseq = <&wifi_pwrseq>;
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	status = "okay";
-+
-+	mmc@1 {
-+		compatible = "prt,prtt1c-wfm200", "silabs,wf200";
-+		reg = <1>;
-+	};
-+};
-+
-+&sdmmc3_b4_od_pins_b {
-+	pins1 {
-+		pinmux = <STM32_PINMUX('D', 1, AF10)>, /* SDMMC3_D0 */
-+			 <STM32_PINMUX('D', 4, AF10)>, /* SDMMC3_D1 */
-+			 <STM32_PINMUX('D', 5, AF10)>, /* SDMMC3_D2 */
-+			 <STM32_PINMUX('D', 7, AF10)>; /* SDMMC3_D3 */
-+	};
-+};
-+
-+&sdmmc3_b4_pins_b {
-+	pins1 {
-+		pinmux = <STM32_PINMUX('D', 1, AF10)>, /* SDMMC3_D0 */
-+			 <STM32_PINMUX('D', 4, AF10)>, /* SDMMC3_D1 */
-+			 <STM32_PINMUX('D', 5, AF10)>, /* SDMMC3_D2 */
-+			 <STM32_PINMUX('D', 7, AF10)>, /* SDMMC3_D3 */
-+			 <STM32_PINMUX('D', 0, AF10)>; /* SDMMC3_CMD */
-+	};
-+};
-+
-+&sdmmc3_b4_sleep_pins_b {
-+	pins {
-+		pinmux = <STM32_PINMUX('D', 1, ANALOG)>, /* SDMMC3_D0 */
-+			 <STM32_PINMUX('D', 4, ANALOG)>, /* SDMMC3_D1 */
-+			 <STM32_PINMUX('D', 5, ANALOG)>, /* SDMMC3_D2 */
-+			 <STM32_PINMUX('D', 7, ANALOG)>, /* SDMMC3_D3 */
-+			 <STM32_PINMUX('G', 15, ANALOG)>, /* SDMMC3_CK */
-+			 <STM32_PINMUX('D', 0, ANALOG)>; /* SDMMC3_CMD */
-+	};
-+};
-+
-+&spi1 {
-+	pinctrl-0 = <&spi1_pins_b>;
-+	pinctrl-names = "default";
-+	cs-gpios = <&gpioa 15 GPIO_ACTIVE_LOW>;
-+	/delete-property/dmas;
-+	/delete-property/dma-names;
-+	status = "okay";
-+
-+	switch@0 {
-+		compatible = "nxp,sja1105q";
-+		reg = <0>;
-+		spi-max-frequency = <4000000>;
-+		spi-rx-delay-us = <1>;
-+		spi-tx-delay-us = <1>;
-+		spi-cpha;
-+
-+		reset-gpios = <&gpioe 6 GPIO_ACTIVE_LOW>;
-+
-+		clocks = <&clock_sja1105>;
-+
-+		ports {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			port@0 {
-+				reg = <0>;
-+				label = "t1l0";
-+				phy-mode = "rmii";
-+				phy-handle = <&t1l0_phy>;
-+			};
-+
-+			port@1 {
-+				reg = <1>;
-+				label = "t1l1";
-+				phy-mode = "rmii";
-+				phy-handle = <&t1l1_phy>;
-+			};
-+
-+			port@2 {
-+				reg = <2>;
-+				label = "t1l2";
-+				phy-mode = "rmii";
-+				phy-handle = <&t1l2_phy>;
-+			};
-+
-+			port@3 {
-+				reg = <3>;
-+				label = "rj45";
-+				phy-handle = <&rj45_phy>;
-+				phy-mode = "rgmii-id";
-+			};
-+
-+			port@4 {
-+				reg = <4>;
-+				label = "cpu";
-+				ethernet = <&ethernet0>;
-+				phy-mode = "rmii";
-+
-+				fixed-link {
-+					speed = <100>;
-+					full-duplex;
-+				};
-+			};
-+		};
-+	};
-+};
-diff --git a/arch/arm/boot/dts/stm32mp151a-prtt1l.dtsi b/arch/arm/boot/dts/stm32mp151a-prtt1l.dtsi
-new file mode 100644
-index 000000000000..d865ab5d866b
---- /dev/null
-+++ b/arch/arm/boot/dts/stm32mp151a-prtt1l.dtsi
-@@ -0,0 +1,229 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
-+/*
-+ * Copyright (C) Protonic Holland
-+ * Author: David Jander <david@protonic.nl>
-+ */
-+/dts-v1/;
-+
-+#include "stm32mp151.dtsi"
-+#include "stm32mp15-pinctrl.dtsi"
-+#include "stm32mp15xxad-pinctrl.dtsi"
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/leds/common.h>
-+
-+/ {
-+	aliases {
-+		ethernet0 = &ethernet0;
-+		mdio-gpio0 = &mdio0;
-+		serial0 = &uart4;
-+	};
-+
-+	led-controller-0 {
-+		compatible = "gpio-leds";
-+
-+		led-0 {
-+			color = <LED_COLOR_ID_RED>;
-+			function = LED_FUNCTION_INDICATOR;
-+			gpios = <&gpioa 13 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		led-1 {
-+			color = <LED_COLOR_ID_GREEN>;
-+			function = LED_FUNCTION_INDICATOR;
-+			gpios = <&gpioa 14 GPIO_ACTIVE_LOW>;
-+			linux,default-trigger = "heartbeat";
-+		};
-+	};
-+
-+
-+	/* DP83TD510E PHYs have max MDC rate of 1.75MHz. Since we can't reduce
-+	 * stmmac MDC clock without reducing system bus rate, we need to use
-+	 * gpio based MDIO bus.
-+	 */
-+	mdio0: mdio {
-+		compatible = "virtual,mdio-gpio";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		gpios = <&gpioc 1 GPIO_ACTIVE_HIGH
-+			 &gpioa 2 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	reg_3v3: regulator-3v3 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "3v3";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+};
-+
-+&dts {
-+	status = "okay";
-+};
-+
-+&ethernet0 {
-+	pinctrl-0 = <&ethernet0_rmii_pins_a>;
-+	pinctrl-1 = <&ethernet0_rmii_sleep_pins_a>;
-+	pinctrl-names = "default", "sleep";
-+	phy-mode = "rmii";
-+	status = "okay";
-+};
-+
-+&ethernet0_rmii_pins_a {
-+	pins1 {
-+		pinmux = <STM32_PINMUX('B', 12, AF11)>, /* ETH1_RMII_TXD0 */
-+			 <STM32_PINMUX('B', 13, AF11)>, /* ETH1_RMII_TXD1 */
-+			 <STM32_PINMUX('B', 11, AF11)>; /* ETH1_RMII_TX_EN */
-+	};
-+	pins2 {
-+		pinmux = <STM32_PINMUX('C', 4, AF11)>,  /* ETH1_RMII_RXD0 */
-+			 <STM32_PINMUX('C', 5, AF11)>,  /* ETH1_RMII_RXD1 */
-+			 <STM32_PINMUX('A', 1, AF11)>,  /* ETH1_RMII_REF_CLK input */
-+			 <STM32_PINMUX('A', 7, AF11)>;  /* ETH1_RMII_CRS_DV */
-+	};
-+};
-+
-+&ethernet0_rmii_sleep_pins_a {
-+	pins1 {
-+		pinmux = <STM32_PINMUX('B', 12, ANALOG)>, /* ETH1_RMII_TXD0 */
-+			 <STM32_PINMUX('B', 13, ANALOG)>, /* ETH1_RMII_TXD1 */
-+			 <STM32_PINMUX('B', 11, ANALOG)>, /* ETH1_RMII_TX_EN */
-+			 <STM32_PINMUX('C', 4, ANALOG)>,  /* ETH1_RMII_RXD0 */
-+			 <STM32_PINMUX('C', 5, ANALOG)>,  /* ETH1_RMII_RXD1 */
-+			 <STM32_PINMUX('A', 1, ANALOG)>,  /* ETH1_RMII_REF_CLK */
-+			 <STM32_PINMUX('A', 7, ANALOG)>;  /* ETH1_RMII_CRS_DV */
-+	};
-+};
-+
-+&iwdg2 {
-+	status = "okay";
-+};
-+
-+&qspi {
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&qspi_clk_pins_a &qspi_bk1_pins_a>;
-+	pinctrl-1 = <&qspi_clk_sleep_pins_a &qspi_bk1_sleep_pins_a>;
-+	reg = <0x58003000 0x1000>, <0x70000000 0x4000000>;
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	status = "okay";
-+
-+	flash@0 {
-+		compatible = "spi-nand";
-+		reg = <0>;
-+		spi-rx-bus-width = <4>;
-+		spi-max-frequency = <104000000>;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+	};
-+};
-+
-+&qspi_bk1_pins_a {
-+	pins1 {
-+		bias-pull-up;
-+		drive-push-pull;
-+		slew-rate = <1>;
-+	};
-+};
-+
-+&rng1 {
-+	status = "okay";
-+};
-+
-+&sdmmc1 {
-+	pinctrl-names = "default", "opendrain", "sleep";
-+	pinctrl-0 = <&sdmmc1_b4_pins_a>;
-+	pinctrl-1 = <&sdmmc1_b4_od_pins_a>;
-+	pinctrl-2 = <&sdmmc1_b4_sleep_pins_a>;
-+	broken-cd;
-+	st,neg-edge;
-+	bus-width = <4>;
-+	vmmc-supply = <&reg_3v3>;
-+	vqmmc-supply = <&reg_3v3>;
-+	status = "okay";
-+};
-+
-+&sdmmc1_b4_od_pins_a {
-+	pins1 {
-+		bias-pull-up;
-+	};
-+	pins2 {
-+		bias-pull-up;
-+	};
-+};
-+
-+&sdmmc1_b4_pins_a {
-+	pins1 {
-+		bias-pull-up;
-+	};
-+	pins2 {
-+		bias-pull-up;
-+	};
-+};
-+
-+&uart4 {
-+	pinctrl-names = "default", "sleep", "idle";
-+	pinctrl-0 = <&uart4_pins_a>;
-+	pinctrl-1 = <&uart4_sleep_pins_a>;
-+	pinctrl-2 = <&uart4_idle_pins_a>;
-+	/delete-property/dmas;
-+	/delete-property/dma-names;
-+	status = "okay";
-+};
-+
-+&uart4_idle_pins_a {
-+	pins1 {
-+		pinmux = <STM32_PINMUX('B', 9, ANALOG)>; /* UART4_TX */
-+	};
-+	pins2 {
-+		pinmux = <STM32_PINMUX('B', 2, AF8)>; /* UART4_RX */
-+		bias-pull-up;
-+	};
-+};
-+
-+&uart4_pins_a {
-+	pins1 {
-+		pinmux = <STM32_PINMUX('B', 9, AF8)>; /* UART4_TX */
-+		bias-disable;
-+		drive-push-pull;
-+		slew-rate = <0>;
-+	};
-+	pins2 {
-+		pinmux = <STM32_PINMUX('B', 2, AF8)>; /* UART4_RX */
-+		bias-pull-up;
-+	};
-+};
-+
-+&uart4_sleep_pins_a {
-+	pins {
-+		pinmux = <STM32_PINMUX('B', 9, ANALOG)>, /* UART4_TX */
-+			<STM32_PINMUX('B', 2, ANALOG)>; /* UART4_RX */
-+	};
-+};
-+
-+&usbh_ehci {
-+	phys = <&usbphyc_port0>;
-+	phy-names = "usb";
-+	status = "okay";
-+};
-+
-+&usbotg_hs {
-+	dr_mode = "host";
-+	pinctrl-0 = <&usbotg_hs_pins_a>;
-+	pinctrl-names = "default";
-+	phys = <&usbphyc_port1 0>;
-+	phy-names = "usb2-phy";
-+	status = "okay";
-+};
-+
-+&usbphyc {
-+	status = "okay";
-+};
-+
-+&usbphyc_port0 {
-+	phy-supply = <&reg_3v3>;
-+};
-+
-+&usbphyc_port1 {
-+	phy-supply = <&reg_3v3>;
-+};
-diff --git a/arch/arm/boot/dts/stm32mp151a-prtt1s.dts b/arch/arm/boot/dts/stm32mp151a-prtt1s.dts
-new file mode 100644
-index 000000000000..ad25929e64e6
---- /dev/null
-+++ b/arch/arm/boot/dts/stm32mp151a-prtt1s.dts
-@@ -0,0 +1,63 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
-+/*
-+ * Copyright (C) Protonic Holland
-+ * Author: David Jander <david@protonic.nl>
-+ */
-+/dts-v1/;
-+
-+#include "stm32mp151a-prtt1l.dtsi"
-+
-+/ {
-+	model = "Protonic PRTT1S";
-+	compatible = "prt,prtt1s", "st,stm32mp151";
-+};
-+
-+&ethernet0 {
-+	phy-handle = <&phy0>;
-+};
-+
-+&i2c1 {
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&i2c1_pins_a>;
-+	pinctrl-1 = <&i2c1_sleep_pins_a>;
-+	clock-frequency = <100000>;
-+	/delete-property/dmas;
-+	/delete-property/dma-names;
-+	status = "okay";
-+
-+	humidity-sensor@40 {
-+		compatible = "ti,hdc1080";
-+		reg = <0x40>;
-+	};
-+
-+	co2-sensor@62 {
-+		compatible = "sensirion,scd41";
-+		reg = <0x62>;
-+	};
-+};
-+
-+&i2c1_pins_a {
-+	pins {
-+		pinmux = <STM32_PINMUX('D', 12, AF5)>, /* I2C1_SCL */
-+			 <STM32_PINMUX('D', 13, AF5)>; /* I2C1_SDA */
-+	};
-+};
-+
-+&i2c1_sleep_pins_a {
-+	pins {
-+		pinmux = <STM32_PINMUX('D', 12, ANALOG)>, /* I2C1_SCL */
-+			 <STM32_PINMUX('D', 13, ANALOG)>; /* I2C1_SDA */
-+	};
-+};
-+
-+&mdio0 {
-+	/* TI DP83TD510E */
-+	phy0: ethernet-phy@0 {
-+		compatible = "ethernet-phy-id2000.0181";
-+		reg = <0>;
-+		interrupts-extended = <&gpioa 4 IRQ_TYPE_LEVEL_LOW>;
-+		reset-gpios = <&gpioa 3 GPIO_ACTIVE_LOW>;
-+		reset-assert-us = <10>;
-+		reset-deassert-us = <35>;
-+	};
-+};
--- 
-2.30.2
+> 
+> 
+>> +extern void trace_direct_tramp(void);
+>> +
+>> +asm (
+>> +"	.pushsection	.text, \"ax\", @progbits\n"
+>> +"	.type		trace_direct_tramp, %function\n"
+>> +"	.global		trace_direct_tramp\n"
+>> +"trace_direct_tramp:"
+>> +"	mov	x10, x30\n"
+>> +"	mov	x30, x9\n"
+>> +"	ret	x10\n"
+>> +"	.size		trace_direct_tramp, .-trace_direct_tramp\n"
+>> +"	.popsection\n"
+>> +);
+>> +#else
+>>  noinline __noclone static void trace_direct_tramp(void) { }
+>>  #endif
+>> +#endif
+>>  
+>>  /*
+>>   * Pretty much the same than for the function tracer from which the selftest
+> 
+> .
 

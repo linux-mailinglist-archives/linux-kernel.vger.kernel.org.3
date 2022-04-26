@@ -2,105 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FBD751013B
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 16:59:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69665510134
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 16:58:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351870AbiDZPBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 11:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40438 "EHLO
+        id S1347794AbiDZPBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 11:01:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351834AbiDZPBo (ORCPT
+        with ESMTP id S242873AbiDZPBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 11:01:44 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DCA5B1A9B;
-        Tue, 26 Apr 2022 07:58:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1650985071;
-        bh=KLCjLhfQTgA0oKxUS8a8HV/nxwOxtsyC4o79WkTfje8=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=IIcY48H9YK8/QDBNpiRiNIjM5ijvX9dPgdmCPggiTIq7XwNedhwHy18OxeYmKHEoF
-         aTWxmr4FQ9c9f1+BSP3KA3mTvOPXFvrXnR56rwSg8opVpkVDmlW5t7ss7YGXvUhPii
-         MK5BlLt3w1SEQLCrqBWvI62kQpytjOvDD7ZZPMaA=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [80.245.77.37] ([80.245.77.37]) by web-mail.gmx.net
- (3c-app-gmx-bs69.server.lan [172.19.170.214]) (via HTTP); Tue, 26 Apr 2022
- 16:57:50 +0200
+        Tue, 26 Apr 2022 11:01:34 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB3D3B1A85;
+        Tue, 26 Apr 2022 07:58:24 -0700 (PDT)
+Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CCDC91EC04A6;
+        Tue, 26 Apr 2022 16:58:18 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1650985098;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=huE9l2xeCAZTTmW3YvsVXEyz0aYX0tkv096G9fcKNMs=;
+        b=kZ9cgchnykOJBP/Zraue/GbX4prLLK6JNadhlLnybF3BCGEnF1Lyv139yO2WqIULBsUVBu
+        nE9boKRV3r1d8b52vIqgI43dG/xJ9DU9KmGt2hXxLH7sgnMbvULzkhP47l4+0/yFRY3QBw
+        usaHAgyb9fNDhU43KDmJaoV8b10Ia9I=
+Date:   Tue, 26 Apr 2022 16:58:16 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Sherry Sun <sherry.sun@nxp.com>
+Cc:     "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
+        "Shubhrajyoti.datta@xilinx.com" <Shubhrajyoti.datta@xilinx.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "rric@kernel.org" <rric@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH V2 2/2] EDAC: synopsys: re-enable the interrupts in
+ intr_handler for V3.X Synopsys EDAC DDR
+Message-ID: <YmgIiPzvgO3CdlqF@zn.tnic>
+References: <20220421015313.5747-1-sherry.sun@nxp.com>
+ <20220421015313.5747-3-sherry.sun@nxp.com>
+ <YmEerhSXM0L8cUuj@zn.tnic>
+ <AS8PR04MB8404243437B78FA6B1E46F3092F69@AS8PR04MB8404.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Message-ID: <trinity-8ceec42c-8705-4808-b37b-9e9849ba774e-1650985070928@3c-app-gmx-bs69>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Frank Wunderlich <linux@fw-web.de>
-Cc:     linux-mediatek@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Aw: [RFC v1 3/3] arm64: dts: rockchip: Add mt7531 dsa node to
- BPI-R2-Pro board
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 26 Apr 2022 16:57:50 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <20220426134924.30372-4-linux@fw-web.de>
-References: <20220426134924.30372-1-linux@fw-web.de>
- <20220426134924.30372-4-linux@fw-web.de>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:wBW5QJYpMHdq3PrMhGinR1AdioQG5dT+v1AUhYrsDygj5o2ETBmB7lzitdogghO9fUJ34
- 7C+S+3eGXblSF48OoeX01rSKkoLZx+5zlIPitqd/reCb/PRwuR3znVtcbV6WiXGQw9fKCED9pXjl
- Yqa7X5QsU8EBNE1dsh3kVNkMGRtDKOoHGLkrRf7GTn8z0SY+JQ6juNUXpn1GZl+laWiX/FtsqqgA
- Ye27fCi0B2ZSew4gY/X1gzmzAfDOgUNCH3qY9mTUMWRxlDCIDxa1Wg084wN8Bg56b4e0IO/LVl4D
- Qc=
-X-UI-Out-Filterresults: notjunk:1;V03:K0:41kc6tKK5sg=:EDOaU6bOsIT1ZaYJ+7rZT4
- ul8RUcVdFNTJTPhR0EmciMDWP/g6o5NGLfUZmDgSUNOU8LhvXxvfMQVPT8xvM5No8QyQIbn8p
- WMKpXo9jDASBQp5oAj0e+GrzTnpb5vgLTshGaXlYY3HoKQ8wAfMaejoi/1ZxTv84/iGtHUGSY
- /G6B35z0oyXoPDsU1l56EIMFgjGcCm183owIWmaTlTRBwLA0GVTzC4JsHMyxRP1gfzIxj22B8
- O/D50GXl1IFfPc01KMVhe04uv3tzA6QtQQVgtRFqxnXtllj2fRbmUos/0Fm/ann/0wlOpOAtZ
- EqUzTxAlRXhQdKgIpYjjYkzfiMcAbUs+oIVACxTJcUBBzzCygQQPs5nhdvhf0E7TZaOjV7oTG
- RXa/eCwTZCoXO/XYcyAZC86TrMQ2sfzX2WRS0uiiEMEUzJt8xYokLe4p79IjT8zZa87WinMsl
- QyFLU1u8cGd1nm5XZ/St9Ujq5DnuhwN67mNGTj+ieasHZSPWubsLPAHfmFtAwIG37FKgvckQn
- KkRLuySR8bhQ99HM8D1hiPo3RvV3NsbQxWxb311FPu0Eh6OSNrZbUE3bxgTHx+HKnDxcV3f35
- tVlt1abs3yLoH4Z3CbvTXV8g8mzJCPirOCEwhH0yv/EtSa+8tmhEsUTZ6TyZaKWp7E8j4+dFv
- CABs6rKSUkmCf6VeZozZk0q83zD29Nep3MjfI1n60J2xSBoq0WVp0ATaLKsXCgso9g5LsjY0a
- z251OrYA/UMD62CBfDskbdcjm/W52tCy/N+3PGEqj/65yPZIeG6Xj8rVvf9/LFDVKHFIN0y5l
- wmiNiYq
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <AS8PR04MB8404243437B78FA6B1E46F3092F69@AS8PR04MB8404.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Gesendet: Dienstag, 26. April 2022 um 15:49 Uhr
-> Von: "Frank Wunderlich" <linux@fw-web.de>
+On Sat, Apr 23, 2022 at 07:03:45AM +0000, Sherry Sun wrote:
+> My fix patches are based on Dinh's patch: f7824ded4149
+> ("EDAC/synopsys: Add support for version 3 of the Synopsys EDAC DDR"),
+> as this patch was introduced since L5.17, it's quite new, so I think
+> we don't need to backport them to the stable kernels.
 
-> +&mdio0 {
-> +	#address-cells = <1>;
-> +	#size-cells = <0>;
-> +
-> +	switch@0 {
-> +		compatible = "mediatek,mt7531";
-> +		reg = <0>;
-> +		status = "disabled";
+What do you mean, quite new?
 
-seems i had missed to delete this, but it looks like it was ignored as switch was probed
+There are 5.17.x stable releases so they will need those fixes too.
 
-> +		ports {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
+-- 
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

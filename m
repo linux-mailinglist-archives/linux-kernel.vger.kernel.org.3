@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EED350F49D
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:37:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84BE950F3FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345136AbiDZIgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:36:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60612 "EHLO
+        id S1344867AbiDZIb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345160AbiDZIeK (ORCPT
+        with ESMTP id S1344726AbiDZI2C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:34:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78E23A5E0;
-        Tue, 26 Apr 2022 01:26:18 -0700 (PDT)
+        Tue, 26 Apr 2022 04:28:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E7F3FDA2;
+        Tue, 26 Apr 2022 01:24:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 445F1617AE;
-        Tue, 26 Apr 2022 08:26:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B942C385AC;
-        Tue, 26 Apr 2022 08:26:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 18E26B81CFA;
+        Tue, 26 Apr 2022 08:24:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68BE0C385A0;
+        Tue, 26 Apr 2022 08:24:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961577;
-        bh=LeWPxh0IAzIoGKsay5d2EsBqNSqXGDoQrwxNNt9kzI8=;
+        s=korg; t=1650961440;
+        bh=JKmZmAN5R0MfQNj4C0xAtR2z1CUI0EyJ0bpP6FuTIQI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z6dbo6i3EkhM8uFWCUYvRBY2/TCF97me3BJF566yr+AYP9LgS5+btv+0FCUqiJ7Fi
-         9nsm5EXmnhBn4iP+qF8GQOo6bIAmOrHxWIszpFKWe402nWF8zGJHmQnIGqm/IQFteD
-         Jo3TS50Z7cVfQSkAgV6Ym6asDhmshltfn5PSGzwE=
+        b=IX3XQODMO5hT/mukCSuht+40kHtBf6XqgELiBI4CKVEHEcnw0VtX1nK2saIU5oaCg
+         eFEbtPzTjgIhlilNmAdhn1IQeE/ZqNOIXMHsmAeWUuvySG9+tABKyDYnpVtNtuOeNI
+         Vj9UKSIpbjeoqiMB3zkMc84lGLChwPaQdkhKuPCc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Flavio Leitner <fbl@redhat.com>,
-        Hangbin Liu <liuhangbin@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        syzbot <syzkaller@googlegroups.com>,
+        Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 14/53] net/packet: fix packet_sock xmit return value checking
+Subject: [PATCH 4.14 12/43] netlink: reset network and mac headers in netlink_dump()
 Date:   Tue, 26 Apr 2022 10:20:54 +0200
-Message-Id: <20220426081736.072486186@linuxfoundation.org>
+Message-Id: <20220426081734.881465190@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
-References: <20220426081735.651926456@linuxfoundation.org>
+In-Reply-To: <20220426081734.509314186@linuxfoundation.org>
+References: <20220426081734.509314186@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,57 +55,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangbin Liu <liuhangbin@gmail.com>
+From: Eric Dumazet <edumazet@google.com>
 
-[ Upstream commit 29e8e659f984be00d75ec5fef4e37c88def72712 ]
+[ Upstream commit 99c07327ae11e24886d552dddbe4537bfca2765d ]
 
-packet_sock xmit could be dev_queue_xmit, which also returns negative
-errors. So only checking positive errors is not enough, or userspace
-sendmsg may return success while packet is not send out.
+netlink_dump() is allocating an skb, reserves space in it
+but forgets to reset network header.
 
-Move the net_xmit_errno() assignment in the braces as checkpatch.pl said
-do not use assignment in if condition.
+This allows a BPF program, invoked later from sk_filter()
+to access uninitialized kernel memory from the reserved
+space.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Reported-by: Flavio Leitner <fbl@redhat.com>
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Theorically mac header reset could be omitted, because
+it is set to a special initial value.
+bpf_internal_load_pointer_neg_helper calls skb_mac_header()
+without checking skb_mac_header_was_set().
+Relying on skb->len not being too big seems fragile.
+We also could add a sanity check in bpf_internal_load_pointer_neg_helper()
+to avoid surprises in the future.
+
+syzbot report was:
+
+BUG: KMSAN: uninit-value in ___bpf_prog_run+0xa22b/0xb420 kernel/bpf/core.c:1637
+ ___bpf_prog_run+0xa22b/0xb420 kernel/bpf/core.c:1637
+ __bpf_prog_run32+0x121/0x180 kernel/bpf/core.c:1796
+ bpf_dispatcher_nop_func include/linux/bpf.h:784 [inline]
+ __bpf_prog_run include/linux/filter.h:626 [inline]
+ bpf_prog_run include/linux/filter.h:633 [inline]
+ __bpf_prog_run_save_cb+0x168/0x580 include/linux/filter.h:756
+ bpf_prog_run_save_cb include/linux/filter.h:770 [inline]
+ sk_filter_trim_cap+0x3bc/0x8c0 net/core/filter.c:150
+ sk_filter include/linux/filter.h:905 [inline]
+ netlink_dump+0xe0c/0x16c0 net/netlink/af_netlink.c:2276
+ netlink_recvmsg+0x1129/0x1c80 net/netlink/af_netlink.c:2002
+ sock_recvmsg_nosec net/socket.c:948 [inline]
+ sock_recvmsg net/socket.c:966 [inline]
+ sock_read_iter+0x5a9/0x630 net/socket.c:1039
+ do_iter_readv_writev+0xa7f/0xc70
+ do_iter_read+0x52c/0x14c0 fs/read_write.c:786
+ vfs_readv fs/read_write.c:906 [inline]
+ do_readv+0x432/0x800 fs/read_write.c:943
+ __do_sys_readv fs/read_write.c:1034 [inline]
+ __se_sys_readv fs/read_write.c:1031 [inline]
+ __x64_sys_readv+0xe5/0x120 fs/read_write.c:1031
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:81
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Uninit was stored to memory at:
+ ___bpf_prog_run+0x96c/0xb420 kernel/bpf/core.c:1558
+ __bpf_prog_run32+0x121/0x180 kernel/bpf/core.c:1796
+ bpf_dispatcher_nop_func include/linux/bpf.h:784 [inline]
+ __bpf_prog_run include/linux/filter.h:626 [inline]
+ bpf_prog_run include/linux/filter.h:633 [inline]
+ __bpf_prog_run_save_cb+0x168/0x580 include/linux/filter.h:756
+ bpf_prog_run_save_cb include/linux/filter.h:770 [inline]
+ sk_filter_trim_cap+0x3bc/0x8c0 net/core/filter.c:150
+ sk_filter include/linux/filter.h:905 [inline]
+ netlink_dump+0xe0c/0x16c0 net/netlink/af_netlink.c:2276
+ netlink_recvmsg+0x1129/0x1c80 net/netlink/af_netlink.c:2002
+ sock_recvmsg_nosec net/socket.c:948 [inline]
+ sock_recvmsg net/socket.c:966 [inline]
+ sock_read_iter+0x5a9/0x630 net/socket.c:1039
+ do_iter_readv_writev+0xa7f/0xc70
+ do_iter_read+0x52c/0x14c0 fs/read_write.c:786
+ vfs_readv fs/read_write.c:906 [inline]
+ do_readv+0x432/0x800 fs/read_write.c:943
+ __do_sys_readv fs/read_write.c:1034 [inline]
+ __se_sys_readv fs/read_write.c:1031 [inline]
+ __x64_sys_readv+0xe5/0x120 fs/read_write.c:1031
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:81
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Uninit was created at:
+ slab_post_alloc_hook mm/slab.h:737 [inline]
+ slab_alloc_node mm/slub.c:3244 [inline]
+ __kmalloc_node_track_caller+0xde3/0x14f0 mm/slub.c:4972
+ kmalloc_reserve net/core/skbuff.c:354 [inline]
+ __alloc_skb+0x545/0xf90 net/core/skbuff.c:426
+ alloc_skb include/linux/skbuff.h:1158 [inline]
+ netlink_dump+0x30f/0x16c0 net/netlink/af_netlink.c:2242
+ netlink_recvmsg+0x1129/0x1c80 net/netlink/af_netlink.c:2002
+ sock_recvmsg_nosec net/socket.c:948 [inline]
+ sock_recvmsg net/socket.c:966 [inline]
+ sock_read_iter+0x5a9/0x630 net/socket.c:1039
+ do_iter_readv_writev+0xa7f/0xc70
+ do_iter_read+0x52c/0x14c0 fs/read_write.c:786
+ vfs_readv fs/read_write.c:906 [inline]
+ do_readv+0x432/0x800 fs/read_write.c:943
+ __do_sys_readv fs/read_write.c:1034 [inline]
+ __se_sys_readv fs/read_write.c:1031 [inline]
+ __x64_sys_readv+0xe5/0x120 fs/read_write.c:1031
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:81
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+CPU: 0 PID: 3470 Comm: syz-executor751 Not tainted 5.17.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+
+Fixes: db65a3aaf29e ("netlink: Trim skb to alloc size to avoid MSG_TRUNC")
+Fixes: 9063e21fb026 ("netlink: autosize skb lengthes")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Link: https://lore.kernel.org/r/20220415181442.551228-1-eric.dumazet@gmail.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/packet/af_packet.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ net/netlink/af_netlink.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
-index b951f411dded..f654f79e3310 100644
---- a/net/packet/af_packet.c
-+++ b/net/packet/af_packet.c
-@@ -2791,8 +2791,9 @@ static int tpacket_snd(struct packet_sock *po, struct msghdr *msg)
+diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
+index 24e8ac2b724e..979cd7dff40a 100644
+--- a/net/netlink/af_netlink.c
++++ b/net/netlink/af_netlink.c
+@@ -2212,6 +2212,13 @@ static int netlink_dump(struct sock *sk)
+ 	 * single netdev. The outcome is MSG_TRUNC error.
+ 	 */
+ 	skb_reserve(skb, skb_tailroom(skb) - alloc_size);
++
++	/* Make sure malicious BPF programs can not read unitialized memory
++	 * from skb->head -> skb->data
++	 */
++	skb_reset_network_header(skb);
++	skb_reset_mac_header(skb);
++
+ 	netlink_skb_set_owner_r(skb, sk);
  
- 		status = TP_STATUS_SEND_REQUEST;
- 		err = po->xmit(skb);
--		if (unlikely(err > 0)) {
--			err = net_xmit_errno(err);
-+		if (unlikely(err != 0)) {
-+			if (err > 0)
-+				err = net_xmit_errno(err);
- 			if (err && __packet_get_status(po, ph) ==
- 				   TP_STATUS_AVAILABLE) {
- 				/* skb was destructed already */
-@@ -2993,8 +2994,12 @@ static int packet_snd(struct socket *sock, struct msghdr *msg, size_t len)
- 		skb->no_fcs = 1;
- 
- 	err = po->xmit(skb);
--	if (err > 0 && (err = net_xmit_errno(err)) != 0)
--		goto out_unlock;
-+	if (unlikely(err != 0)) {
-+		if (err > 0)
-+			err = net_xmit_errno(err);
-+		if (err)
-+			goto out_unlock;
-+	}
- 
- 	dev_put(dev);
- 
+ 	if (nlk->dump_done_errno > 0)
 -- 
 2.35.1
 

@@ -2,117 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 549FE50F90E
+	by mail.lfdr.de (Postfix) with ESMTP id 0C17550F90D
 	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345007AbiDZJmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33082 "EHLO
+        id S1346277AbiDZJm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346502AbiDZJkz (ORCPT
+        with ESMTP id S1346103AbiDZJky (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:40:55 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E58213DE6
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 02:00:24 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4FED123A;
-        Tue, 26 Apr 2022 02:00:15 -0700 (PDT)
-Received: from [10.57.12.108] (unknown [10.57.12.108])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DE2623F73B;
-        Tue, 26 Apr 2022 02:00:13 -0700 (PDT)
-Message-ID: <2b2d6ac0-c8c5-0d06-e88d-0f6b8d82b381@arm.com>
-Date:   Tue, 26 Apr 2022 10:00:12 +0100
+        Tue, 26 Apr 2022 05:40:54 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E839BE0A6;
+        Tue, 26 Apr 2022 02:00:20 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2a02:3030:3:7d2:2277:ba57:a2c0:3])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sebastianfricke)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id CD9761F43333;
+        Tue, 26 Apr 2022 10:00:18 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1650963619;
+        bh=JWzHHqsDVjvzoXUfBDOneFZ7mx/VURCmp50B/NxeSuk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DA6X1vGhsm/i5dePTZBlxAzPpOGb8RFbxkY5iUrfjy/GVu165ZCYB6UqN+/DZALcj
+         qfWCX1YP5ZauWR9gBNmqk3yY8yQYbKlV1Fh6Fk1qsAnZU8aoYLWsq5c7LClWv2pITK
+         yH4R1dnsaxoupMljqNHGvAxBCYnl/CpuCoKHkEASYpCon1ObdxdmTDR4+8qdYzzkd6
+         u8MOlm0V1xWv+kCddo1LDh/rEHk6L5diAJI1AcrInPX4FOiw4+kfx082w2S/mqr6aI
+         O74ujZWhMbzgz43hJ5XHbFxxMHCUZtyktJNgW57+6wp/Xwf10F7DIyhmbOikWNIeFs
+         O8yYN7cQ2spNQ==
+Date:   Tue, 26 Apr 2022 11:00:15 +0200
+From:   Sebastian Fricke <sebastian.fricke@collabora.com>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     mchehab@kernel.org, hverkuil@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        nicolas.dufresne@collabora.com, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v5 04/17] media: uapi: HEVC: Add missing fields in HEVC
+ controls
+Message-ID: <20220426090015.4xhl5ubkptnvqjr2@basti-XPS-13-9310>
+References: <20220407152940.738159-1-benjamin.gaignard@collabora.com>
+ <20220407152940.738159-5-benjamin.gaignard@collabora.com>
+ <20220425135449.oapsrqqyq34s2ii3@basti-XPS-13-9310>
+ <d1ba4e57-2f13-ab3b-f79a-dc812cd4c2bf@collabora.com>
+ <20220426075234.6gk72hzf2bgaxwqw@basti-XPS-13-9310>
+ <8e6977ac-53bb-53f0-3fdc-75aa2643cb77@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] arch_topology: Trace the update thermal pressure
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, sudeep.holla@arm.com,
-        dietmar.eggemann@arm.com, vincent.guittot@linaro.org,
-        rafael@kernel.org, rostedt@goodmis.org, mingo@redhat.com
-References: <20220425135317.5880-1-lukasz.luba@arm.com>
- <YmasYv5xHH7EbXXn@kroah.com> <61483e12-c2a2-059a-c157-aea23b8a2f4e@arm.com>
- <Ymeph6GLO3TgSNpY@kroah.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <Ymeph6GLO3TgSNpY@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8e6977ac-53bb-53f0-3fdc-75aa2643cb77@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/26/22 09:12, Greg KH wrote:
-> On Tue, Apr 26, 2022 at 08:26:40AM +0100, Lukasz Luba wrote:
+On 26.04.2022 10:50, Benjamin Gaignard wrote:
+>
+>Le 26/04/2022 à 09:52, Sebastian Fricke a écrit :
+>>Hey Benjamin,
 >>
->>
->> On 4/25/22 15:12, Greg KH wrote:
->>> On Mon, Apr 25, 2022 at 02:53:17PM +0100, Lukasz Luba wrote:
->>>> Add trace event to capture the moment of the call for updating the thermal
->>>> pressure value. It's helpful to investigate how often those events occurs
->>>> in a system dealing with throttling. This trace event is needed since the
->>>> old 'cdev_update' might not be used by some drivers. Also, the new trace
->>>> event shows capacity value, not a cooling state.
+>>On 25.04.2022 18:16, Benjamin Gaignard wrote:
 >>>
->>> Wait, why are thermal events not going through the thermal system so
->>> that thermal_cdev_update() would catch them?  Don't work around broken
->>> systems, force them to use the correct apis.
+>>>Le 25/04/2022 à 15:54, Sebastian Fricke a écrit :
+>>>>On 07.04.2022 17:29, Benjamin Gaignard wrote:
+>>>>>Complete the HEVC controls with missing fields from H.265 
+>>>>>specifications.
+>>>>>Even if these fields aren't used by the current mainlined drivers
+>>>>>they will be need for (at least) rkvdec driver.
+>>>>
+>>>>s/be need/be required/
+>>>>or
+>>>>s/be need/be needed/
+>>>>
+>>>>s/rkvdec/the rkvdec/
+>>>>
+>>>>>
+>>>>>Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>>>>>---
+>>>>>.../media/v4l/ext-ctrls-codec.rst             | 19 +++++++++++++++++++
+>>>>>include/media/hevc-ctrls.h                    |  6 +++++-
+>>>>>2 files changed, 24 insertions(+), 1 deletion(-)
+>>>>>
+>>>>>diff --git 
+>>>>>a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst 
+>>>>>b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>>>>>index 4cd7c541fc30..dbb08603217b 100644
+>>>>>--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>>>>>+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>>>>>@@ -2661,6 +2661,16 @@ enum 
+>>>>>v4l2_mpeg_video_hevc_size_of_length_field -
+>>>>>    :stub-columns: 0
+>>>>>    :widths:       1 1 2
+>>>>>
+>>>>>+    * - __u8
+>>>>>+      - ``video_parameter_set_id``
+>>>>>+      - Specifies the value of the vps_video_parameter_set_id 
+>>>>>of the active VPS
+>>>>>+        as descibed in section "7.4.3.2.1 General sequence 
+>>>>>parameter set RBSP semantics"
+>>>>>+        of H.265 specifications.
+>>>>>+    * - __u8
+>>>>>+      - ``seq_parameter_set_id``
+>>>>>+      - Provides an identifier for the SPS for reference by 
+>>>>>other syntax elements
+>>>>>+        as descibed in section "7.4.3.2.1 General sequence 
+>>>>>parameter set RBSP semantics"
+>>>>>+        of H.265 specifications.
+>>>>>    * - __u16
+>>>>>      - ``pic_width_in_luma_samples``
+>>>>>      -
+>>>>>@@ -2800,6 +2810,9 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>>>>>    :stub-columns: 0
+>>>>>    :widths:       1 1 2
+>>>>>
+>>>>>+    * - __u8
+>>>>>+      - ``pic_parameter_set_id``
+>>>>>+      - Identifies the PPS for reference by other syntax elements.
+>>>>>    * - __u8
+>>>>>      - ``num_extra_slice_header_bits``
+>>>>>      -
+>>>>>@@ -3026,6 +3039,12 @@ enum 
+>>>>>v4l2_mpeg_video_hevc_size_of_length_field -
+>>>>>    * - __u8
+>>>>>      - ``ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
+>>>>>      - The list of L1 reference elements as indices in the DPB.
+>>>>>+    * - __u16
+>>>>>+      - ``short_term_ref_pic_set_size``
+>>>>>+      - Specifies the size of short-term reference pictures 
+>>>>>set included in the SPS.
+>>>>
+>>>>s/size of/size of the/
+>>>>
+>>>>Section 7.4.8 depicts that the st_ref_pic_set syntax
+>>>>structure can be part of the SPS or the slice header.
+>>>>
+>>>>I think we should mention that we talk about the size of the 
+>>>>st_ref_pic_set
+>>>>syntax structure from section 7.4.8 of the specification.
+>>>>>+    * - __u16
+>>>>>+      - ``long_term_ref_pic_set_size``
+>>>>>+      - Specifies the size of long-term reference pictures 
+>>>>>set include in the SPS.
+>>>>
+>>>>s/size of/size of the/
+>>>>
+>>>>Can we make this a bit more helpful? The specification doesn't contain
+>>>>a similar structure to `st_ref_pic_set` for long term pictures. 
+>>>>So, as a
+>>>>programmer this leaves me guessing:
+>>>>- Which syntax structure's size are we talking about?
+>>>>- Does this correlate to any of the existing sections of the
+>>>>specification?
+>>>>Because in the end, I feel like this documentation should be able to
+>>>>help a programmer to provide the correct data for the uABI.
+>>>
+>>>I will reword it like that:
+>>>
+>>>  * - __u16
+>>>    - ``short_term_ref_pic_set_size``
+>>>    - Specifies the size, in bits, of the short-term reference 
+>>>pictures set, described as st_ref_pic_set()
 >>
->> In some platforms the thermal is controlled in FW. In Arm we have
->> recently implemented a logic of our Intelligent Power Allocation
->> (kernel governor gov_power_allocator.c) (and a bit more) in our
->> reference FW [1]. So kernel would not controlling thermal.
->> There is another platform which does similar [2]. As you can see
->> in that driver, there is no cooling device created, it just handles
->> the notification about reduced frequency as an IRQ. Then it
->> populates this information to the task scheduler using thermal
->> pressure mechanism. Thanks to that the scheduler can avoid mistakes
->> in the tasks placement and not put more that that CPU real capacity.
+>>Just ...
 >>
->> For Arm FW thermal, I can make it, since we don't have it yet.
->> We are in the middle of internal design of this FW/kernel glue and I
->> haven't sent the kernel patches yet. I will follow your recommendation.
+>>s/reference pictures set/reference picture set/
 >>
->> For the driver [2] I have no device, so I cannot change it and prove the
->> new works safely.
+>>>     in the specification, included in the slice header (section 
+>>>7.3.6.1).
 >>
->> But we need this trace event to discuss the design for RT task scheduler
->> and impact of thermal pressure decaying delays. We have Android systems
->> which suffer the RT issues known for years (like audio apps) and we
->> started to tackle them. That was the motivation for this new trace
->> event - a helper which everyone can 'just use' in their current code
->> state and provide measurements.
+>>s/slice header/slice header or SPS/
 >>
->> We can ask maintainers of that driver [2] to follow your guidance and
->> fix that cpufreq driver. That might require a split of the logic in
->> there and a new thermal driver which would handle the part of thermal
->> updates. If that is feasible, since I have heard that some platforms
->> can cause a huge noise 'KHz' of those interrupt...
->> If that is true, I might see the reason why someone goes lightweight way
->> update-thermal-pressure-only and not via thermal cooling complexity.
 >>
->> IMO this trace event doesn't harm the design and brings also benefit
->> comparing to the 'cdev_update' trace event which only provides a state
->> value: [0, n]. That state value then needs additional tools to translate
->> it: state -> freq -> capacity -> thermal pressure. As you can see
->> this new event just stores proper value in the trace buffer, no need
->> to hassle, just 'cat' the trace file. If anyone would like to help
->> us and share it's trace output, we would have everything we need.
-> 
-> Ok, can you put this type of explaination in the changelog to make it
-> more obvious for us all going forward?
+>>>
+>>>* - __u16
+>>>   - ``long_term_ref_pic_set_size``
+>>>   - Specifies the size, in bits, of the long-term reference 
+>>>pictures set include in the slice header.
+>>
+>>s/reference pictures set/reference picture set/
+>>
+>>Looking at the documentation it looks like: s/slice header/slice 
+>>header or SPS/
+>>(For example in section 7.3.6.1:
+>>```
+>>if( long_term_ref_pics_present_flag ) {
+>>  if( num_long_term_ref_pics_sps > 0 )
+>>    num_long_term_sps
+>>  num_long_term_pics
+>>  for( i = 0; i < num_long_term_sps + num_long_term_pics; i++ ) {
+>>    ...
+>>```
+>>)
+>>
+>>... and then it looks very good!
+>
+>I don't know the syntax to insert this kind of comment inside an array in the documentation
+>so it will remain as before :-)
 
-Yes, I will update that and send v3. Thank you for sharing your opinion
-and guidance for this stuff for future platforms. I'll point Morten
-and other Arm folks this thread.
+Ah, no I didn't mean the pseudo code, I only gave that as an *example*
+why just `slice header` seems incorrect to me.
+The changes I suggest for that line are only:
 
-Regards,
-Lukasz
+s/reference pictures set/reference picture set/ (grammatical error)
+s/slice header/slice header or SPS/ (correct statement)
+
+>
+>Benjamin
+
+Greetings,
+Sebastian
+
+>
+>>
+>>Greetings,
+>>Sebastian
+>>
+>>>     It is the number of bits in the conditional block if( 
+>>>long_term_ref_pics_present_flag ) {...}
+>>>     in section 7.3.6.1 of the specification.
+>>>
+>>>Benjamin
+>>>
+>>>
+>>>>
+>>>>Greetings,
+>>>>Sebastian
+>>>>
+>>>>>    * - __u8
+>>>>>      - ``padding``
+>>>>>      - Applications and drivers must set this to zero.
+>>>>>diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
+>>>>>index 01ccda48d8c5..a329e086a89a 100644
+>>>>>--- a/include/media/hevc-ctrls.h
+>>>>>+++ b/include/media/hevc-ctrls.h
+>>>>>@@ -58,6 +58,8 @@ enum v4l2_mpeg_video_hevc_start_code {
+>>>>>/* The controls are not stable at the moment and will likely 
+>>>>>be reworked. */
+>>>>>struct v4l2_ctrl_hevc_sps {
+>>>>>    /* ISO/IEC 23008-2, ITU-T Rec. H.265: Sequence parameter set */
+>>>>>+    __u8    video_parameter_set_id;
+>>>>>+    __u8    seq_parameter_set_id;
+>>>>>    __u16    pic_width_in_luma_samples;
+>>>>>    __u16    pic_height_in_luma_samples;
+>>>>>    __u8    bit_depth_luma_minus8;
+>>>>>@@ -108,6 +110,7 @@ struct v4l2_ctrl_hevc_sps {
+>>>>>
+>>>>>struct v4l2_ctrl_hevc_pps {
+>>>>>    /* ISO/IEC 23008-2, ITU-T Rec. H.265: Picture parameter set */
+>>>>>+    __u8    pic_parameter_set_id;
+>>>>>    __u8    num_extra_slice_header_bits;
+>>>>>    __u8    num_ref_idx_l0_default_active_minus1;
+>>>>>    __u8    num_ref_idx_l1_default_active_minus1;
+>>>>>@@ -199,7 +202,8 @@ struct v4l2_ctrl_hevc_slice_params {
+>>>>>    __u32    slice_segment_addr;
+>>>>>    __u8    ref_idx_l0[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+>>>>>    __u8    ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+>>>>>-
+>>>>>+    __u16    short_term_ref_pic_set_size;
+>>>>>+    __u16    long_term_ref_pic_set_size;
+>>>>>    __u8    padding;
+>>>>>
+>>>>>    /* ISO/IEC 23008-2, ITU-T Rec. H.265: Weighted prediction 
+>>>>>parameter */
+>>>>>-- 
+>>>>>2.32.0
+>>>>>

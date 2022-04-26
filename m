@@ -2,157 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DC2B50FA4C
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 12:23:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5335450FA53
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 12:23:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348735AbiDZK0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 06:26:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41872 "EHLO
+        id S1348776AbiDZK0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 06:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349081AbiDZKYX (ORCPT
+        with ESMTP id S1348798AbiDZKYa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 06:24:23 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFCB5403C5;
-        Tue, 26 Apr 2022 02:55:50 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2f7b90e8b37so98475657b3.6;
-        Tue, 26 Apr 2022 02:55:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=weWPZwTpqiHPHgcVzIIdA7nRDKZOshuGpKa1VF6LHgo=;
-        b=Zidjjk277gxvzedd4edYCSb6Cn9K1V3dPeUgbbEb5gLCI8VtvCKz20lBep7DWHtcRQ
-         64pJZ8eGC6Q6OP3at/hwyq6ZC82wuELOUdPHx3yLbrMLPYWy3gnKv2HM/+O6/dDwIUgp
-         GZc2Y1OoyA47jGPhH2xOV+QqvHguE8F8s7D0CSsTHN8J2VzPWFw2dQVF09lEs2/elM+T
-         8y2FFNzKmND94cAR5JpEGVj5911tNu77MIztnM07yFoWADZmH8Dv007sz5BA3dY85iG9
-         iH2UqWKuoLVdHr4ugmGiaWErZBjTBujwCDGi9XVP75OAvlAbfqlMBG7dQyByGGAsQqRi
-         TD0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=weWPZwTpqiHPHgcVzIIdA7nRDKZOshuGpKa1VF6LHgo=;
-        b=0styUv2P83iTdagi2F3/9uBADsiW2UlYeJuaA10TEaHSRMI59HVcfavZgqwt4cTanG
-         UGdK5dR127Yj61zbRIldeEqFNuDv7fojysMY0TwpQVsIBJitfOglbBM+BjDJxX06AAqq
-         BEf1NcXXe8J/s09WyLQolmYcUkv/I8Rof7NXr4s59qnCfZmbaohlFC0H+lw+eggR3rX3
-         4PaAHnuBghdpTvVIkEhLwsU3SYe1dT0eucV+Na6V2wE3WR3ekTDYbywhCqmH6Jf63SKk
-         FCYk6jX7EdP0oaJAwGcY0SOiejjA6kaA//f/0TcO93WJjtIVRVwXV/T0IdM/E7LGfDta
-         qIzw==
-X-Gm-Message-State: AOAM532Q4RXoDSEvIPs63pu+UW5ivPcGTB9zXDqztsRJcvpkqzJVnuhk
-        KvPqfL7hsPPBBqi88gHvKdIoj5TGGdVn0FNW49c=
-X-Google-Smtp-Source: ABdhPJwsCSuWCB3O/ko1vmdn3uUKURlpkvVP2MmwfwdioZMUvlxGbUz6V84fLJ5dZFEpB90VPoxTbMU7pwxUCojYksU=
-X-Received: by 2002:a0d:dd16:0:b0:2f4:dc1e:e0d8 with SMTP id
- g22-20020a0ddd16000000b002f4dc1ee0d8mr21532262ywe.413.1650966949989; Tue, 26
- Apr 2022 02:55:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220426074922.13319-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220426074922.13319-3-prabhakar.mahadev-lad.rj@bp.renesas.com> <5bb82736-50bc-eafd-7d68-df1ed966d572@omp.ru>
-In-Reply-To: <5bb82736-50bc-eafd-7d68-df1ed966d572@omp.ru>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Tue, 26 Apr 2022 10:55:23 +0100
-Message-ID: <CA+V-a8s=7nDHEE=kcdqcyM5SurY9KwteNwnc7PZ4xiqGQFvY=g@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] ASoC: sh: rz-ssi: Propagate error codes returned
- from platform_get_irq_byname()
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        alsa-devel <alsa-devel@alsa-project.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Pavel Machek <pavel@denx.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
+        Tue, 26 Apr 2022 06:24:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DAAFEE90
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 02:57:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650967030;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nH/kzPacu74Tb0AxBpbIarW9EtUKtoQceiXEHD0vRjc=;
+        b=Ae82UKHe18zxbQmZlPwoCXlPIwrx3lPSROOhkHAuhMX1upUMaDySm9o54a+0ty4otvM4gw
+        3lRjNXxQOQNS+c6vyi6mXdhyp5nErk62p2KBc4mLUULtvOxEUaWJVMOUtpnXDC9AXHPJE/
+        sRORDcOdasXKEva0jXolbMzO8iVsYwk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-45-0Pha0KxRPpu1hqTG0h6Cbg-1; Tue, 26 Apr 2022 05:57:02 -0400
+X-MC-Unique: 0Pha0KxRPpu1hqTG0h6Cbg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8C49618019E7;
+        Tue, 26 Apr 2022 09:57:01 +0000 (UTC)
+Received: from starship (unknown [10.40.192.41])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9890340D282C;
+        Tue, 26 Apr 2022 09:56:58 +0000 (UTC)
+Message-ID: <41b1e63ad6e45be019bbedc93bd18cfcb9475b06.camel@redhat.com>
+Subject: Re: [PATCH v2 11/12] KVM: SVM: Do not inhibit APICv when x2APIC is
+ present
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
+        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
+Date:   Tue, 26 Apr 2022 12:56:56 +0300
+In-Reply-To: <b9ee5f62e904a690d7e2d8837ade8ece7e24a359.camel@redhat.com>
+References: <20220412115822.14351-1-suravee.suthikulpanit@amd.com>
+         <20220412115822.14351-12-suravee.suthikulpanit@amd.com>
+         <3fd0aabb6288a5703760da854fd6b09a485a2d69.camel@redhat.com>
+         <01460b72-1189-fef1-9718-816f2f658d42@amd.com>
+         <b9ee5f62e904a690d7e2d8837ade8ece7e24a359.camel@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sergey,
+On Tue, 2022-04-26 at 10:06 +0300, Maxim Levitsky wrote:
+> On Tue, 2022-04-26 at 09:25 +0700, Suravee Suthikulpanit wrote:
+> > Hi Maim,
+> > 
+> > On 4/19/22 8:29 PM, Maxim Levitsky wrote:
+> > > On Tue, 2022-04-12 at 06:58 -0500, Suravee Suthikulpanit wrote:
+> > > 
+> > > Hi!
+> > > 
+> > > 
+> > > I just got an idea, while writing a kvm selftest that would use AVIC,
+> > > and finding out that selftest code uploads the '-host' cpuid right away
+> > > which has x2apic enabled and that inhibits AVIC, and later clearing x2apic
+> > > in the cpuid doesn't un-inhibit it.
+> > >   
+> > > That can be fixed in few ways but that got me thinking:
+> > >   
+> > > Why do we inhibit AVIC when the guest uses x2apic, even without X2AVIC?
+> > > I think that if we didn't it would just work, and even work faster than
+> > > pure software x2apic.
+> > >   
+> > > My thinking is:
+> > >   
+> > > - when a vcpu itself uses its x2apic, even if its avic is not inhibited,
+> > > the guest will write x2apic msrs which kvm intercepts and will correctly emulate a proper x2apic.
+> > >   
+> > > - vcpu peers will also use x2apic msrs and again it will work correctly
+> > > (even when there are more than 256 vcpus).
+> > >   
+> > > - and the host + iommu will still be able to use AVIC's doorbell to send interrupts to the guest
+> > > and that doesn't need apic ids or anything, it should work just fine.
+> > > 
+> > > Also AVIC should have no issues scanning IRR and injecting interrupts on VM entry,
+> > > x2apic mode doesn't matter for that.
+> > >   
+> > > AVIC mmio can still be though discovered by the guest which is technically against x86 spec
+> > > (in x2apic mode, mmio supposed to not work) but that can be fixed easily by disabing
+> > > the AVIC memslot if any of the vCPUs are in x2apic mode, or this can be ignored since
+> > > it should not cause any issues.
+> > > We seem to have a quirk for that KVM_X86_QUIRK_LAPIC_MMIO_HOLE.
+> > >   
+> > > On top of all this, removing this inhibit will also allow to test AVIC with guest
+> > > which does have x2apic in the CPUID but doesn't use it (e.g kvm unit test, or
+> > > linux booted with nox2apic, which is also nice IMHO)
+> > >   
+> > > What do you think?
+> > 
+> > This is actually a good idea!!! Let's call it hybrid-x2AVIC :)
+> > 
+> > I am working on prototype and test out the support for this, which will be introduced in V3.
+> 
+> Thanks! 
+> 
+> Best regards,
+> 	Maxim Levitsky
+> 
+> > Regards,
+> > Suravee
+> > 
 
-Thank you for the review.
+BTW, can I ask you to check something on the AMD side of things of AVIC?
 
-On Tue, Apr 26, 2022 at 10:47 AM Sergey Shtylyov <s.shtylyov@omp.ru> wrote:
->
-> Hello!
->
-> On 4/26/22 10:49 AM, Lad Prabhakar wrote:
->
-> > Propagate error codes returned from platform_get_irq_byname() instead of
-> > returning -ENODEV. platform_get_irq_byname() may return -EPROBE_DEFER, to
-> > handle such cases propagate the error codes.
-> >
-> > While at it drop the dev_err_probe() messages as platform_get_irq_byname()
-> > already does this for us in case of error.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> > v1->v2
-> > * No change
-> > ---
-> >  sound/soc/sh/rz-ssi.c | 9 +++------
-> >  1 file changed, 3 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/sound/soc/sh/rz-ssi.c b/sound/soc/sh/rz-ssi.c
-> > index cec458b8c507..d9a684e71ec3 100644
-> > --- a/sound/soc/sh/rz-ssi.c
-> > +++ b/sound/soc/sh/rz-ssi.c
-> > @@ -977,8 +977,7 @@ static int rz_ssi_probe(struct platform_device *pdev)
-> >       /* Error Interrupt */
-> >       ssi->irq_int = platform_get_irq_byname(pdev, "int_req");
-> >       if (ssi->irq_int < 0)
-> > -             return dev_err_probe(&pdev->dev, -ENODEV,
-> > -                                  "Unable to get SSI int_req IRQ\n");
-> > +             return ssi->irq_int;
->
->    Why not:
->
->                 return dev_err_probe(&pdev->dev, ssi->irq_int,
->                                      "Unable to get SSI int_req IRQ\n");
->
-That is because platform_get_irq_byname() already does this for us [0]
-(also mentioned in the commit message). In case I keep the
-dev_err_probe() I'll get two prints for each error.
+I noticed that AMD's manual states that:
 
-[0] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/base/platform.c?h=v5.18-rc4#n471
+"Multiprocessor VM requirements. When running a VM which has multiple virtual CPUs, and the
+VMM runs a virtual CPU on a core which had last run a different virtual CPU from the same VM,
+regardless of the respective ASID values, care must be taken to flush the TLB on the VMRUN using a
+TLB_CONTROL value of 3h. Failure to do so may result in stale mappings misdirecting virtual APIC
+accesses to the previous virtual CPU's APIC backing page."
 
-Cheers,
-Prabhakar
+It it relevant to KVM? I don't fully understand why it was mentioned that ASID doesn't matter,
+what makes it special about 'virtual CPU from the same VM' if ASID doesn't matter? 
 
-> [...]
-> > @@ -990,8 +989,7 @@ static int rz_ssi_probe(struct platform_device *pdev)
-> >               /* Tx and Rx interrupts (pio only) */
-> >               ssi->irq_tx = platform_get_irq_byname(pdev, "dma_tx");
-> >               if (ssi->irq_tx < 0)
-> > -                     return dev_err_probe(&pdev->dev, -ENODEV,
-> > -                                          "Unable to get SSI dma_tx IRQ\n");
-> > +                     return ssi->irq_tx;
->
->    Same here...
->
-> >
-> >               ret = devm_request_irq(&pdev->dev, ssi->irq_tx,
-> >                                      &rz_ssi_interrupt, 0,
-> > @@ -1002,8 +1000,7 @@ static int rz_ssi_probe(struct platform_device *pdev)
-> >
-> >               ssi->irq_rx = platform_get_irq_byname(pdev, "dma_rx");
-> >               if (ssi->irq_rx < 0)
-> > -                     return dev_err_probe(&pdev->dev, -ENODEV,
-> > -                                          "Unable to get SSI dma_rx IRQ\n");
-> > +                     return ssi->irq_rx;
->
->    And here...
->
-> [...]
->
-> MBR, Sergey
+Also, is this still relevant on modern AMD cpus, or was a workaround for some old CPU bug?
+
+Best regards,
+	Maxim Levitsky
+

@@ -2,128 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B431D510C58
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 00:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0ADA510C5A
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 00:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355938AbiDZXBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 19:01:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57484 "EHLO
+        id S1355963AbiDZXB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 19:01:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353328AbiDZXA7 (ORCPT
+        with ESMTP id S244571AbiDZXBz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 19:00:59 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4420931340
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 15:57:50 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id j8-20020a17090a060800b001cd4fb60dccso288366pjj.2
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 15:57:50 -0700 (PDT)
+        Tue, 26 Apr 2022 19:01:55 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACFCB67D36
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 15:58:46 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-2f16645872fso649167b3.4
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 15:58:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Z9pldSbABWlALe30nll+EqJHPLENAkssKS7uwEiOKks=;
-        b=VtVIjWUvoftyfpavtyYQnP8Il2FpVnrZ6jfoy68vndksr7US7LwN29KqB+VoEMerqN
-         Vrz3+YkOue35YVPShw9eN1AcFa9B63+jx3sIt+nIPfIwCWr2TydEZEkdT4BUeIyvV9Iq
-         DDDde0ZsTmCaE905KYapsFMZIaGZYTlNEkxqA=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=L4eqHWSN42ueWZ89KsFRMnxsq+gg1YBjDPu+hpKQi3A=;
+        b=mvx4yW7S0NUOQCD9L2yGJOy9tKusa3h5GHrRZ0OExjnpg1PH+Wlsh4dxjojG7q43zT
+         EABQ+Av3CJ/9HnJFry9Y3iZl0h7GGIc6GqlELDC3mXdLpEapGlb3RlCsc7zBDBVEAtO7
+         6yFi6IGWA5rzL09NkX+GiT19A2OeHKq4p0TAKcPNd5WxPOA8p9dG2rVUcj9tJrpoNhjr
+         3D9hSXSK2CPFTQWQkvQlgFDQx6bl/GD/YlZXLt4mL5D16cceSy0wYeINzZQrIgfaxWJh
+         GVz/dAjTVacyio2J6cy02tPjnzJFGU2oSoxm5kOA8cLP7Vi8kTa29zd77IyhPiROpFgd
+         yy1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Z9pldSbABWlALe30nll+EqJHPLENAkssKS7uwEiOKks=;
-        b=HP+FNqMbGia2erWoFhrag5Q7sz92e+w7dbEiyF6AN72lzdl15yluWMjD0rpu0G/yKI
-         YWHfuzZG7Gyi2f2jREsQwDmT6lE3Bag9meBjW0s8uhdrCwqJYYhvSMbzGOubAwnH2IHA
-         +Dh6vZ2cYq/SZ4wsWDrDt2Lett7tsyGBFdsJeMbecwekuPapPBmpAVS7QYE8bFGK++7W
-         Ka6LNGDWhqtr+cK7J9fvqx74IuXLWPD1xElWBitkSXnBlEdNO/DZ6hCe3keXlESrMd9E
-         HMIl2FFSBptgWOFH6hcnEAWhTNLD/xmFxGroy9w9kAuXN6UMYM45s7tqZcZkwEk+iIUj
-         ZmPA==
-X-Gm-Message-State: AOAM531ZMVTDrq5EIaoI1jCWjDIYAi+J3tdX/uGoJefFoMBS9zTJo0kz
-        7thRs6Nv1Y8Z0NOzQdGvCYMyLw==
-X-Google-Smtp-Source: ABdhPJxRQWaWCgVT2ZIYdnD1s8zBw6rQYK2b3848WTPzlp5QMCboNsrd+HqF5c6T+VO+13AwAytvUw==
-X-Received: by 2002:a17:902:8304:b0:155:d594:5c04 with SMTP id bd4-20020a170902830400b00155d5945c04mr25289971plb.105.1651013869766;
-        Tue, 26 Apr 2022 15:57:49 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:202:201:bb92:4a51:f085:243c])
-        by smtp.gmail.com with ESMTPSA id j1-20020a17090adc8100b001d9424e49c1sm4201329pjv.44.2022.04.26.15.57.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 15:57:49 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        "Joseph S. Barrera III" <joebar@chromium.org>
-Subject: [PATCH] arm64: dts: qcom: sc7180-trogdor: Remove cros-ec keyboard from detachables
-Date:   Tue, 26 Apr 2022 15:57:47 -0700
-Message-Id: <20220426225748.324759-1-swboyd@chromium.org>
-X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=L4eqHWSN42ueWZ89KsFRMnxsq+gg1YBjDPu+hpKQi3A=;
+        b=5CUsHFHnNmSRrAfy7jwaD3A6H8YQMFCec0Wdvrz9NsVYILMbIVR6QgUd0WDzIDhkCy
+         BhyH/F5W3xI9xz+69jZSS7s8V8oXdgjEzTF1up+ohwH3FzJwHVOlzYxjkrQBpAGnyDrV
+         8nHuB4rTlSWPoYdHCx7cHofEI5hejzzNtXbAl3g4+QDbh4HspW1iHKnn1xxfVgJZ0Ilp
+         5XKqI4ZTTHHIDqbzB3YGNuV8qrzJS44tlAvvGvEVUn65k9lLiQNXIUtCeg3EYZKbLAzj
+         yqrNEJetEExTi73fLz7uRCXtY3MSPWcQVaaR9vLaO9Y9Ln9sOFATqiv101qS9rrpC/ds
+         OyGQ==
+X-Gm-Message-State: AOAM5321L6fGGYBgrA15rLJCZYCpHTaMtF9rORdSd/WrKaoQEUf/1k59
+        qDdgb8yqlqIC0dVHDAVClHDyjm7SRz/QoCEGCK+4
+X-Google-Smtp-Source: ABdhPJxcB8JiZrX3abrVoRVZptJtZb+xka4JrPXoQU9HvLnqTul9wm0iSxbDZDgm23+xs5WBvnb7TrWAwgDIYXas1f0=
+X-Received: by 2002:a81:1a4a:0:b0:2f7:da21:ec5c with SMTP id
+ a71-20020a811a4a000000b002f7da21ec5cmr13587990ywa.312.1651013925644; Tue, 26
+ Apr 2022 15:58:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <8E281DF1-248F-4861-A3C0-2573A5EFEE61@fb.com> <20220426065917.3123488-1-bartoschek@google.com>
+ <20220426140919.GD4285@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20220426140919.GD4285@paulmck-ThinkPad-P17-Gen-1>
+From:   Christoph Bartoschek <bartoschek@google.com>
+Date:   Wed, 27 Apr 2022 00:58:34 +0200
+Message-ID: <CAAQBG5jnvSxcjwr+L5nuxwh87bv=D=tzU325W2Zp3DVpn-VmcQ@mail.gmail.com>
+Subject: Re: [PATCH RFC fs/namespace] Make kern_unmount() use synchronize_rcu_expedited()
+To:     paulmck@kernel.org
+Cc:     Chris Mason <clm@fb.com>, Giuseppe Scrivano <gscrivan@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        "riel@surriel.com" <riel@surriel.com>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Trogdor devices that have a detachable keyboard still have a
-non-detachable keyboard input device present because we include the
-cros-ec-keyboard.dtsi snippet in the top-level sc7180-trogdor.dtsi file
-that every variant board includes. We do this because the
-keyboard-controller node also provides some buttons like the power
-button and volume buttons. Unfortunately, this means we register a
-keyboard input device that doesn't do anything on boards with a
-detachable keyboard. Let's delete the rows/columns properties of the
-device node to indicate that there isn't a matrix keyboard on these
-boards.
+> 3. https://lore.kernel.org/lkml/20220218183114.2867528-1-riel@surriel.com/
+>         Refined queue_rcu_work() approach.
+>
+> #1 should work, but the resulting IPIs are not going to make the real-time
+> guys happy.  #2 and #3 have been subject to reasonably heavy testing
+> and did fix a very similar issue to the one that you are reporting,
+> but last I knew there were doubts about the concurrency consequences.
+>
+> Could you please give at least #3 a shot and see if it helps you?
+>
 
-Cc: Benson Leung <bleung@chromium.org>
-Cc: Guenter Roeck <groeck@chromium.org>
-Cc: Douglas Anderson <dianders@chromium.org>
-Cc: Hsin-Yi Wang <hsinyi@chromium.org>
-Cc: "Joseph S. Barrera III" <joebar@chromium.org>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
- arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi   | 5 +++++
- arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi | 5 +++++
- 2 files changed, 10 insertions(+)
+I have tried #3 and it works well with my testcases as far as I can see it.
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
-index c81805ef2250..4173623cc241 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
-@@ -119,6 +119,11 @@ &i2c9 {
- 	status = "disabled";
- };
- 
-+&keyboard_controller {
-+	/delete-property/keypad,num-rows;
-+	/delete-property/keypad,num-columns;
-+};
-+
- &panel {
- 	compatible = "boe,nv110wtm-n61";
- };
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
-index bff2b556cc75..7205062e88b4 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
-@@ -121,6 +121,11 @@ &camcc {
- 	status = "okay";
- };
- 
-+&keyboard_controller {
-+	/delete-property/keypad,num-rows;
-+	/delete-property/keypad,num-columns;
-+};
-+
- &panel {
- 	compatible = "samsung,atna33xc20";
- 	enable-gpios = <&tlmm 12 GPIO_ACTIVE_HIGH>;
--- 
-https://chromeos.dev
-
+Christoph

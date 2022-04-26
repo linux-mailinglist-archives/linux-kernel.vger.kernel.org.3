@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E47451065E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 20:13:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E1E510668
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 20:13:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350281AbiDZSQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 14:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40084 "EHLO
+        id S1350425AbiDZSQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 14:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243018AbiDZSP6 (ORCPT
+        with ESMTP id S1350505AbiDZSQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 14:15:58 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8CFC6C95A;
-        Tue, 26 Apr 2022 11:12:49 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 412CF3200921;
-        Tue, 26 Apr 2022 14:12:47 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Tue, 26 Apr 2022 14:12:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1650996766; x=1651083166; bh=FoXxjU8nj5OyQ
-        ZTDi0+cMPk2c57q/JulhiAlrYHMtqQ=; b=YtrIn+InMSf7ZfLfQIXqVvCmz99l2
-        dAEx9S7XdopkNOpWJWx9XzZL0OpCM+/qkZqDjL3ixzkMsajbUC1LHXq17UK6kDDg
-        D3uPGyTi/9xDZEh7Vu2ZLf4KUaJ56fLcEZORQl0dtWsSZHF+HNvVFnHjXF+mNd9Z
-        /JNQPbsWhJrDJ3VlhmMrtgLYOf5gFqOzEOH+IxtOTXoGBGzY1HSkbv1rz9Jo2oay
-        OOt2Y6HfgHPfcvgpFGS5qC9K0L16RgTGcJDQ6WDCRPdKSH9E1me5nCycIhYrdoCa
-        yR5vOBuv3/w+e2BKMgKs945yCOPLy/sCHE+YWPU8flc/WWTwbKFuUKGBg==
-X-ME-Sender: <xms:HjZoYj4VK49vIvGJsPZ65a_62cWDHcs9m9VdvdPivudcE0dCzUDV0w>
-    <xme:HjZoYo7bi0t2_WITtT65QUucC0J8PxuGIpQqCPAEnkZqgCYt4W4BdI85UzprNXi7G
-    nmGNyeRFVXt8rQ>
-X-ME-Received: <xmr:HjZoYqdnFlQwQp5vwMolQubfcGXF2HqKMIuXIeQY-CukMnJ5xBF3bERdyaWW>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefgdduudekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkgggtugesghdtreertddtjeenucfhrhhomhepffgvmhhiucfo
-    rghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhnghhslh
-    grsgdrtghomheqnecuggftrfgrthhtvghrnhepueevleffkeefueelieeuveehfeeigfff
-    gefgudeiueejveevheffgfdthfeijefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
-    hrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhslhgr
-    sgdrtghomh
-X-ME-Proxy: <xmx:HjZoYkKYgZODmpoYPL1FpToobZ-fD6JK236k2PsR2gU9gZIlPfNB1A>
-    <xmx:HjZoYnLkFBKwRsM7-4unnKssZSjqXwkbuoUOEZQPVt2NNRe9wYCa3Q>
-    <xmx:HjZoYtxMIm7KLVFtos1PrwaISxGpcwdLX2AFN-EGoULXczDj2pbsCA>
-    <xmx:HjZoYtipJpzYO0rbcrbGPzu1A1DPN-gZQaqaQguSt2egPvE1A1xaZg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 26 Apr 2022 14:12:46 -0400 (EDT)
-Date:   Tue, 26 Apr 2022 14:12:22 -0400
-From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Block Mailing List <linux-block@vger.kernel.org>,
-        Linux Filesystem Mailing List <linux-fsdevel@vger.kernel.org>
-Subject: Race-free block device opening
-Message-ID: <Ymg2HIc8NGraPNbM@itl-email>
+        Tue, 26 Apr 2022 14:16:15 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9884D6D182
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 11:12:56 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id b19so26569835wrh.11
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 11:12:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=V8eK/38S7nXsJDHDuFBJHT2DHw6X25gLGYO4O8kog9s=;
+        b=u35R0UN3dU32TrIh0qvJzhptZTfQg3iXdiYRwFzb6PgosVUkEoBsHIY3z64LRyagQs
+         BBxFEKx9Qx7FIuNXcc3PTKV05MXUWxximDOybDKGH1D3+pSEiYhpphRYDUsQ7rq9yYkL
+         ORs9z4rn0E9uCIrRqFHH4Ecg0UfhSLZLQryYuRJObs/A8QBmVoz293wKJH7ilzbiHeRY
+         chyixo48s9kXy3GAKZnGE2dgQe0YrpeHmYYeDnlRGurYd6Y8GYhfOW/N5o7nyK94G3uC
+         Gxcw572F44belh9kBNq/e1DOLzvZi5jXnRnWR4uUEb1sVHTcAF8OIkrcCafbePYC/1aK
+         ZcEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=V8eK/38S7nXsJDHDuFBJHT2DHw6X25gLGYO4O8kog9s=;
+        b=E3GQJzMmfVjurLAtsVUQffl/Mg4cDLz1SNtfc7G7mQZKhzQp68rT7RENLUVPc0ipR9
+         vWbs6Y5AM/NNuX57psy4omdyf8ccLOrbUB2A7vYbV/qDkh6m/7Tr81dCly9VSSsqiEDM
+         nGZid8oD6DCo//l7I3zPLtN4OwDE0auIeLOeVS1/s9hFkPv1ITc6HkWWd4UteY0dKVbC
+         TGnSZJJIYDxZUlPLyG1va5cIhK0hXho5j1aZWmMWGANpnu9wCly8cT8hx5OOnFn4dJbD
+         +iVjegzyhFb+Y/DakDlWjrmC6plsEpLhjK+QmCzhj2Fo8Blr0+vcwvMGVZInvKKNMjE4
+         5LNA==
+X-Gm-Message-State: AOAM532KB8ucrQ6/D7RmeVd4hwC76GEqwDPDxqmzo0P/XFSdsLFTAAmo
+        OFvrGKQYzMfrAad+KQPDbijOdZkMON4EGLAmc4gX
+X-Google-Smtp-Source: ABdhPJzC/aok+/X4UxTlSHwTZ9c3xGE41Q/Yz8+L76+xsOb0WAkCx3IdYAHkix0GlibQRLeng1JBWcVxp7TyiTMh2h8=
+X-Received: by 2002:a5d:6c6d:0:b0:20a:7614:bf77 with SMTP id
+ r13-20020a5d6c6d000000b0020a7614bf77mr19585388wrz.662.1650996774977; Tue, 26
+ Apr 2022 11:12:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Ay6JliYvyxonDHXL"
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE autolearn=ham
+References: <20220418145945.38797-1-casey@schaufler-ca.com>
+ <20220418145945.38797-26-casey@schaufler-ca.com> <81c9f88f-7e8f-0ca6-56b8-049571af6809@canonical.com>
+In-Reply-To: <81c9f88f-7e8f-0ca6-56b8-049571af6809@canonical.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 26 Apr 2022 14:12:44 -0400
+Message-ID: <CAHC9VhRX+VSw+-PsCwhHceQ9MpE4E-D-OnaO0CGqar44xc3a1w@mail.gmail.com>
+Subject: Re: [PATCH v35 25/29] Audit: Allow multiple records in an audit_buffer
+To:     John Johansen <john.johansen@canonical.com>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        casey.schaufler@intel.com, jmorris@namei.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-audit@redhat.com, keescook@chromium.org,
+        penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,66 +70,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 25, 2022 at 9:06 PM John Johansen
+<john.johansen@canonical.com> wrote:
+> On 4/18/22 07:59, Casey Schaufler wrote:
+> > Replace the single skb pointer in an audit_buffer with
+> > a list of skb pointers. Add the audit_stamp information
+> > to the audit_buffer as there's no guarantee that there
+> > will be an audit_context containing the stamp associated
+> > with the event. At audit_log_end() time create auxiliary
+> > records (none are currently defined) as have been added
+> > to the list.
+> >
+> > Suggested-by: Paul Moore <paul@paul-moore.com>
+> > Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+>
+> I agree with Paul that audit_buffer_aux_new() and
+> audit_buffer_aux_end() belong in this patch
+>
+>
+> > ---
+> >  kernel/audit.c | 62 +++++++++++++++++++++++++++++++-------------------
+> >  1 file changed, 39 insertions(+), 23 deletions(-)
+> >
+> > diff --git a/kernel/audit.c b/kernel/audit.c
+> > index 6b6c089512f7..4d44c05053b0 100644
+> > --- a/kernel/audit.c
+> > +++ b/kernel/audit.c
+> > @@ -197,8 +197,10 @@ static struct audit_ctl_mutex {
+> >   * to place it on a transmit queue.  Multiple audit_buffers can be in
+> >   * use simultaneously. */
+> >  struct audit_buffer {
+> > -     struct sk_buff       *skb;      /* formatted skb ready to send */
+> > +     struct sk_buff       *skb;      /* the skb for audit_log functions */
+> > +     struct sk_buff_head  skb_list;  /* formatted skbs, ready to send */
+> >       struct audit_context *ctx;      /* NULL or associated context */
+> > +     struct audit_stamp   stamp;     /* audit stamp for these records */
+> >       gfp_t                gfp_mask;
+> >  };
+> >
+> > @@ -1765,10 +1767,13 @@ __setup("audit_backlog_limit=", audit_backlog_limit_set);
+> >
+> >  static void audit_buffer_free(struct audit_buffer *ab)
+> >  {
+> > +     struct sk_buff *skb;
+> > +
+> >       if (!ab)
+> >               return;
+> >
+> > -     kfree_skb(ab->skb);
+> > +     while((skb = skb_dequeue(&ab->skb_list)))
+> > +             kfree_skb(skb);
+>
+> we still have and ab->skb can we have a debug check that its freed by walking the queue?
 
---Ay6JliYvyxonDHXL
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 26 Apr 2022 14:12:22 -0400
-From: Demi Marie Obenour <demi@invisiblethingslab.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Block Mailing List <linux-block@vger.kernel.org>,
-	Linux Filesystem Mailing List <linux-fsdevel@vger.kernel.org>
-Subject: Race-free block device opening
+By definition ab->skb is always going to point at something on the
+list, if it doesn't we are likely to have failures elsewhere.  The
+structure definition is private to kernel/audit.c and the
+allocation/creation is handled by an allocator function which always
+adds the new skb to the list so I think we're okay.
 
-Right now, opening block devices in a race-free way is incredibly hard.
-The only reasonable approach I know of is sd_device_new_from_path() +
-sd_device_open(), and is only available in systemd git main.  It also
-requires waiting on systemd-udev to have processed udev rules, which can
-be a bottleneck.  There are better approaches in various special cases,
-such as using device-mapper ioctls to check that the device one has
-opened still has the name and/or UUID one expects.  However, none of
-them works for a plain call to open(2).
+We could add additional checks, but with audit performance already a
+hot topic I would prefer to draw the debug-check line at input coming
+from outside the audit subsystem.
 
-A much better approach would be for udev to point its symlinks at
-"/dev/disk/by-diskseq/$DISKSEQ" for non-partition disk devices, or at
-"/dev/disk/by-diskseq/${DISKSEQ}p${PARTITION}" for partitions.  A
-filesystem would then be mounted at "/dev/disk/by-diskseq" that provides
-for race-free opening of these paths.  This could be implemented in
-userspace using FUSE, either with difficulty using the current kernel
-API, or easily and efficiently using a new kernel API for opening a
-block device by diskseq + partition.  However, I think this should be
-handled by the Linux kernel itself.
-
-What would be necessary to get this into the kernel?  I would like to
-implement this, but I don=E2=80=99t have the time to do so anytime soon.  Is
-anyone else interested in taking this on?  I suspect the kernel code
-needed to implement this would be quite a bit smaller than the FUSE
-implementation.
---=20
-Sincerely,
-Demi Marie Obenour (she/her/hers)
-Invisible Things Lab
-
---Ay6JliYvyxonDHXL
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmJoNhsACgkQsoi1X/+c
-IsFsBhAAxFDevKdVqxQVy7pmHR3w9W+Mtd8P8n7g9gfgJMzABZFPhByB8WVofZ+6
-BaCJbpVQ4YSPW0izihmc0TB8mLrXt5/mojCwsJSprpjJANy5GVYJ1s2HVa+rWN2u
-6gj0ozaPlLXk8iCHy8PLZ/b/4egr/6T+Jh1ASPLyyFmqZF9SEBnJQNVhl9HRbLxs
-LC4Y6+IKWcG7S/V6V9uHE7lR1VoBLEzMai/a9CJRnxicRvILUNeYzB+NsR0cvSLv
-v0VTlmkge9Kmgxsyt21nGSlTak3rjUmoHO0QRRRDVYyIlVrNbFY8/Z+OGEtlIOKi
-2JRIkiYI1uJRsNAh4AZtX8Slygwpys9UC8Un3uPCE6nOCEUL1qyS3NFjGqnhPtRA
-wESfa/AAPoBXTwR8oRqSQNccfpmcw2WP4qP9Bu7EWT0pE7hJh3Sn/19ertOjB8P1
-HF/MCSEt43UY/Wa00Fs7dtrnRfSEX27+jAFC31Arvd19xjdV1J6C+KUsl8Gor906
-0dsC0aQj4PMhKBP5eWlw0I2q9QszVRoxKp49a8STKvYQL27Kkkzhqv9k+qsGnoho
-BidUJBjQwcMPGQ7La32I/CQTn+57JGSNRqSU+dNQONDDulfoNLcxGD+U8mjGVk3l
-lmgL43ksh+9ZpkTXspByeHrvOuOSh8fTGflhZjyhp7xO5jjMy/A=
-=OUC7
------END PGP SIGNATURE-----
-
---Ay6JliYvyxonDHXL--
+-- 
+paul-moore.com

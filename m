@@ -2,112 +2,327 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 891C450F932
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F6DA50F959
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:58:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348505AbiDZJyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36218 "EHLO
+        id S244230AbiDZJz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347569AbiDZJxi (ORCPT
+        with ESMTP id S1348055AbiDZJyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:53:38 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B72672981A;
-        Tue, 26 Apr 2022 02:10:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1650964242; x=1682500242;
-  h=from:to:cc:subject:date:message-id;
-  bh=+p40Cvh2hhSxVfAPCJZpYYJuBDaizdr/QFl0LujIiyQ=;
-  b=y1OMGka4EBLJIHT6oDWaoQuh1qamXXwi234qTk3eLdV9AldtHw5OuLsV
-   yL7Pni4OYSLMgsUsFkFVWZCR8e/dAKv0H57S8bcHgFEWzaPvxU1fv4N1c
-   R/ihdMUEgf/B1XGyORS6x720HNeFoXNVm9DgPg7y6t6K1TFjtnYYGKn28
-   Q=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 26 Apr 2022 02:10:42 -0700
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 26 Apr 2022 02:10:40 -0700
-X-QCInternal: smtphost
-Received: from hu-c-spathi-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.108.59])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 26 Apr 2022 14:40:28 +0530
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 212714)
-        id B262D3AE1; Tue, 26 Apr 2022 14:40:27 +0530 (+0530)
-From:   Srinivasarao Pathipati <quic_spathi@quicinc.com>
-To:     ulf.hansson@linaro.org, u.kleine-koenig@pengutronix.de,
-        YehezkelShB@gmail.com, rmk+kernel@armlinux.org.uk,
-        t.scherer@eckelmann.de, s.shtylyov@omp.ru, sensor1010@163.com,
-        sartgarg@codeaurora.org, hns@goldelico.com,
-        uic_kamasali@quicinc.com, quic_spathi@quicinc.com,
-        tiantao6@hisilicon.com, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     kamasali <quic_kamasali@quicinc.com>
-Subject: [PATCH V1] mmc: sdhci-msm: Add wakeup functionality support for sdio cards
-Date:   Tue, 26 Apr 2022 14:40:25 +0530
-Message-Id: <1650964225-6705-1-git-send-email-quic_spathi@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+        Tue, 26 Apr 2022 05:54:40 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930762CE32;
+        Tue, 26 Apr 2022 02:12:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1650964376; x=1682500376;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=0zAif9jBzXvmrx/7G2WQmmHMwGXtNNnCbJ311LDlrkw=;
+  b=kyd7gRPMuK7KO+OBAp/vjvk5cG7h9x789PSBTkT5hwRltIsv0kLhMuFD
+   BEfKQ1PUKqsPRQOoB+2dDklfXvTfAD5A7shTtd10BRG21wO86a9NiI4LE
+   Qz0mjPkzQCN9F+t8QvHc6T/laqG5aKCv4ff/vUIt9D8RnXCFACbGnVdDS
+   Kr5TmyMpnWIQYEuerUEQH4W7JtQ7G6Su7H4ANI9bUSWmZp+Ge+SgW7OPL
+   /Hxqx7TwJTzf15S00EdiYgvcMJbydXGMHpDzo1atg1ukRznced9WPmqxM
+   uj4ulNVu1VEpHghdSFb3FtR9EABgdcA4O9QbAgPPqBMiFhhqPVmOlw/1m
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.90,290,1643698800"; 
+   d="scan'208";a="153832120"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 Apr 2022 02:12:54 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 26 Apr 2022 02:12:53 -0700
+Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Tue, 26 Apr 2022 02:12:49 -0700
+From:   Arun Ramadoss <arun.ramadoss@microchip.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, <UNGLinuxDriver@microchip.com>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: [Patch net-next] net: dsa: ksz9477: move get_stats64 to ksz_common.c
+Date:   Tue, 26 Apr 2022 14:40:48 +0530
+Message-ID: <20220426091048.9311-1-arun.ramadoss@microchip.com>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sarthak Garg <sartgarg@codeaurora.org>
+The mib counters for the ksz9477 is same for the ksz9477 switch and
+LAN937x switch. Hence moving it to ksz_common.c file in order to have it
+generic function. The DSA hook get_stats64 now can call ksz_get_stats64.
 
-This adds external GPIO wakeup support to sdhci-msm driver
-for sdio cards.
-
-Also enables clk gating only in system Suspend/Resume for SDIO card.
-
-Also add the below fixes from 4.9 kernel :
-
-c363224b: Fix wakeup functionality for SDIO
-61fc5bf6: Remove flag MMC_PM_WAKE_SDIO_IRQ in mmc_resume_host
-a7a2a82e: Set sdio_pending_processing default state to false.
-
-Signed-off-by: Sarthak Garg <sartgarg@codeaurora.org>
-Signed-off-by: kamasali <quic_kamasali@quicinc.com>
-Signed-off-by: Srinivasarao Pathipati <quic_spathi@quicinc.com>
+Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+Reviewed-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- drivers/mmc/core/bus.c  | 7 +++++++
- drivers/mmc/core/sdio.c | 1 +
- 2 files changed, 8 insertions(+)
+ drivers/net/dsa/microchip/ksz9477.c    | 98 +-------------------------
+ drivers/net/dsa/microchip/ksz_common.c | 96 +++++++++++++++++++++++++
+ drivers/net/dsa/microchip/ksz_common.h |  3 +
+ 3 files changed, 101 insertions(+), 96 deletions(-)
 
-diff --git a/drivers/mmc/core/bus.c b/drivers/mmc/core/bus.c
-index 58a60af..a475fe1 100644
---- a/drivers/mmc/core/bus.c
-+++ b/drivers/mmc/core/bus.c
-@@ -364,6 +364,13 @@ int mmc_add_card(struct mmc_card *card)
- #endif
- 	card->dev.of_node = mmc_of_find_child_device(card->host, 0);
+diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
+index 4f617fee9a4e..48c90e4cda30 100644
+--- a/drivers/net/dsa/microchip/ksz9477.c
++++ b/drivers/net/dsa/microchip/ksz9477.c
+@@ -65,100 +65,6 @@ static const struct {
+ 	{ 0x83, "tx_discards" },
+ };
  
-+	if (mmc_card_sdio(card)) {
-+		ret = device_init_wakeup(&card->dev, true);
-+		if (ret)
-+			pr_err("%s: %s: failed to init wakeup: %d\n",
-+				mmc_hostname(card->host), __func__, ret);
-+	}
+-struct ksz9477_stats_raw {
+-	u64 rx_hi;
+-	u64 rx_undersize;
+-	u64 rx_fragments;
+-	u64 rx_oversize;
+-	u64 rx_jabbers;
+-	u64 rx_symbol_err;
+-	u64 rx_crc_err;
+-	u64 rx_align_err;
+-	u64 rx_mac_ctrl;
+-	u64 rx_pause;
+-	u64 rx_bcast;
+-	u64 rx_mcast;
+-	u64 rx_ucast;
+-	u64 rx_64_or_less;
+-	u64 rx_65_127;
+-	u64 rx_128_255;
+-	u64 rx_256_511;
+-	u64 rx_512_1023;
+-	u64 rx_1024_1522;
+-	u64 rx_1523_2000;
+-	u64 rx_2001;
+-	u64 tx_hi;
+-	u64 tx_late_col;
+-	u64 tx_pause;
+-	u64 tx_bcast;
+-	u64 tx_mcast;
+-	u64 tx_ucast;
+-	u64 tx_deferred;
+-	u64 tx_total_col;
+-	u64 tx_exc_col;
+-	u64 tx_single_col;
+-	u64 tx_mult_col;
+-	u64 rx_total;
+-	u64 tx_total;
+-	u64 rx_discards;
+-	u64 tx_discards;
+-};
+-
+-static void ksz9477_r_mib_stats64(struct ksz_device *dev, int port)
+-{
+-	struct rtnl_link_stats64 *stats;
+-	struct ksz9477_stats_raw *raw;
+-	struct ksz_port_mib *mib;
+-
+-	mib = &dev->ports[port].mib;
+-	stats = &mib->stats64;
+-	raw = (struct ksz9477_stats_raw *)mib->counters;
+-
+-	spin_lock(&mib->stats64_lock);
+-
+-	stats->rx_packets = raw->rx_bcast + raw->rx_mcast + raw->rx_ucast;
+-	stats->tx_packets = raw->tx_bcast + raw->tx_mcast + raw->tx_ucast;
+-
+-	/* HW counters are counting bytes + FCS which is not acceptable
+-	 * for rtnl_link_stats64 interface
+-	 */
+-	stats->rx_bytes = raw->rx_total - stats->rx_packets * ETH_FCS_LEN;
+-	stats->tx_bytes = raw->tx_total - stats->tx_packets * ETH_FCS_LEN;
+-
+-	stats->rx_length_errors = raw->rx_undersize + raw->rx_fragments +
+-		raw->rx_oversize;
+-
+-	stats->rx_crc_errors = raw->rx_crc_err;
+-	stats->rx_frame_errors = raw->rx_align_err;
+-	stats->rx_dropped = raw->rx_discards;
+-	stats->rx_errors = stats->rx_length_errors + stats->rx_crc_errors +
+-		stats->rx_frame_errors  + stats->rx_dropped;
+-
+-	stats->tx_window_errors = raw->tx_late_col;
+-	stats->tx_fifo_errors = raw->tx_discards;
+-	stats->tx_aborted_errors = raw->tx_exc_col;
+-	stats->tx_errors = stats->tx_window_errors + stats->tx_fifo_errors +
+-		stats->tx_aborted_errors;
+-
+-	stats->multicast = raw->rx_mcast;
+-	stats->collisions = raw->tx_total_col;
+-
+-	spin_unlock(&mib->stats64_lock);
+-}
+-
+-static void ksz9477_get_stats64(struct dsa_switch *ds, int port,
+-			       struct rtnl_link_stats64 *s)
+-{
+-	struct ksz_device *dev = ds->priv;
+-	struct ksz_port_mib *mib;
+-
+-	mib = &dev->ports[port].mib;
+-
+-	spin_lock(&mib->stats64_lock);
+-	memcpy(s, &mib->stats64, sizeof(*s));
+-	spin_unlock(&mib->stats64_lock);
+-}
+-
+ static void ksz_cfg(struct ksz_device *dev, u32 addr, u8 bits, bool set)
+ {
+ 	regmap_update_bits(dev->regmap[0], addr, bits, set ? bits : 0);
+@@ -1462,7 +1368,7 @@ static const struct dsa_switch_ops ksz9477_switch_ops = {
+ 	.port_mdb_del           = ksz9477_port_mdb_del,
+ 	.port_mirror_add	= ksz9477_port_mirror_add,
+ 	.port_mirror_del	= ksz9477_port_mirror_del,
+-	.get_stats64		= ksz9477_get_stats64,
++	.get_stats64		= ksz_get_stats64,
+ 	.port_change_mtu	= ksz9477_change_mtu,
+ 	.port_max_mtu		= ksz9477_max_mtu,
+ };
+@@ -1653,7 +1559,7 @@ static const struct ksz_dev_ops ksz9477_dev_ops = {
+ 	.port_setup = ksz9477_port_setup,
+ 	.r_mib_cnt = ksz9477_r_mib_cnt,
+ 	.r_mib_pkt = ksz9477_r_mib_pkt,
+-	.r_mib_stat64 = ksz9477_r_mib_stats64,
++	.r_mib_stat64 = ksz_r_mib_stats64,
+ 	.freeze_mib = ksz9477_freeze_mib,
+ 	.port_init_cnt = ksz9477_port_init_cnt,
+ 	.shutdown = ksz9477_reset_switch,
+diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
+index 9b9f570ebb0b..10f127b09e58 100644
+--- a/drivers/net/dsa/microchip/ksz_common.c
++++ b/drivers/net/dsa/microchip/ksz_common.c
+@@ -20,6 +20,102 @@
+ 
+ #include "ksz_common.h"
+ 
++struct ksz_stats_raw {
++	u64 rx_hi;
++	u64 rx_undersize;
++	u64 rx_fragments;
++	u64 rx_oversize;
++	u64 rx_jabbers;
++	u64 rx_symbol_err;
++	u64 rx_crc_err;
++	u64 rx_align_err;
++	u64 rx_mac_ctrl;
++	u64 rx_pause;
++	u64 rx_bcast;
++	u64 rx_mcast;
++	u64 rx_ucast;
++	u64 rx_64_or_less;
++	u64 rx_65_127;
++	u64 rx_128_255;
++	u64 rx_256_511;
++	u64 rx_512_1023;
++	u64 rx_1024_1522;
++	u64 rx_1523_2000;
++	u64 rx_2001;
++	u64 tx_hi;
++	u64 tx_late_col;
++	u64 tx_pause;
++	u64 tx_bcast;
++	u64 tx_mcast;
++	u64 tx_ucast;
++	u64 tx_deferred;
++	u64 tx_total_col;
++	u64 tx_exc_col;
++	u64 tx_single_col;
++	u64 tx_mult_col;
++	u64 rx_total;
++	u64 tx_total;
++	u64 rx_discards;
++	u64 tx_discards;
++};
 +
- 	device_enable_async_suspend(&card->dev);
++void ksz_r_mib_stats64(struct ksz_device *dev, int port)
++{
++	struct rtnl_link_stats64 *stats;
++	struct ksz_stats_raw *raw;
++	struct ksz_port_mib *mib;
++
++	mib = &dev->ports[port].mib;
++	stats = &mib->stats64;
++	raw = (struct ksz_stats_raw *)mib->counters;
++
++	spin_lock(&mib->stats64_lock);
++
++	stats->rx_packets = raw->rx_bcast + raw->rx_mcast + raw->rx_ucast;
++	stats->tx_packets = raw->tx_bcast + raw->tx_mcast + raw->tx_ucast;
++
++	/* HW counters are counting bytes + FCS which is not acceptable
++	 * for rtnl_link_stats64 interface
++	 */
++	stats->rx_bytes = raw->rx_total - stats->rx_packets * ETH_FCS_LEN;
++	stats->tx_bytes = raw->tx_total - stats->tx_packets * ETH_FCS_LEN;
++
++	stats->rx_length_errors = raw->rx_undersize + raw->rx_fragments +
++		raw->rx_oversize;
++
++	stats->rx_crc_errors = raw->rx_crc_err;
++	stats->rx_frame_errors = raw->rx_align_err;
++	stats->rx_dropped = raw->rx_discards;
++	stats->rx_errors = stats->rx_length_errors + stats->rx_crc_errors +
++		stats->rx_frame_errors  + stats->rx_dropped;
++
++	stats->tx_window_errors = raw->tx_late_col;
++	stats->tx_fifo_errors = raw->tx_discards;
++	stats->tx_aborted_errors = raw->tx_exc_col;
++	stats->tx_errors = stats->tx_window_errors + stats->tx_fifo_errors +
++		stats->tx_aborted_errors;
++
++	stats->multicast = raw->rx_mcast;
++	stats->collisions = raw->tx_total_col;
++
++	spin_unlock(&mib->stats64_lock);
++}
++EXPORT_SYMBOL_GPL(ksz_r_mib_stats64);
++
++void ksz_get_stats64(struct dsa_switch *ds, int port,
++		     struct rtnl_link_stats64 *s)
++{
++	struct ksz_device *dev = ds->priv;
++	struct ksz_port_mib *mib;
++
++	mib = &dev->ports[port].mib;
++
++	spin_lock(&mib->stats64_lock);
++	memcpy(s, &mib->stats64, sizeof(*s));
++	spin_unlock(&mib->stats64_lock);
++}
++EXPORT_SYMBOL_GPL(ksz_get_stats64);
++
+ void ksz_update_port_member(struct ksz_device *dev, int port)
+ {
+ 	struct ksz_port *p = &dev->ports[port];
+diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
+index 4d978832c448..28cda79b090f 100644
+--- a/drivers/net/dsa/microchip/ksz_common.h
++++ b/drivers/net/dsa/microchip/ksz_common.h
+@@ -151,6 +151,9 @@ int ksz9477_switch_register(struct ksz_device *dev);
  
- 	ret = device_add(&card->dev);
-diff --git a/drivers/mmc/core/sdio.c b/drivers/mmc/core/sdio.c
-index 25799ac..9502318 100644
---- a/drivers/mmc/core/sdio.c
-+++ b/drivers/mmc/core/sdio.c
-@@ -1096,6 +1096,7 @@ static int mmc_sdio_resume(struct mmc_host *host)
- 	mmc_release_host(host);
+ void ksz_update_port_member(struct ksz_device *dev, int port);
+ void ksz_init_mib_timer(struct ksz_device *dev);
++void ksz_r_mib_stats64(struct ksz_device *dev, int port);
++void ksz_get_stats64(struct dsa_switch *ds, int port,
++		     struct rtnl_link_stats64 *s);
  
- 	host->pm_flags &= ~MMC_PM_KEEP_POWER;
-+	host->pm_flags &= ~MMC_PM_WAKE_SDIO_IRQ;
- 	return err;
- }
+ /* Common DSA access functions */
  
+
+base-commit: de6dd626d7082eda383ec77a5e06093c82122d10
 -- 
-2.7.4
+2.33.0
 

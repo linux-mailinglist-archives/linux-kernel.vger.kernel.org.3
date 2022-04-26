@@ -2,119 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8418350FB70
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 12:49:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF79F50FB75
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 12:51:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345774AbiDZKwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 06:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48962 "EHLO
+        id S244421AbiDZKyU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 26 Apr 2022 06:54:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233760AbiDZKwf (ORCPT
+        with ESMTP id S230488AbiDZKyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 06:52:35 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D3A66AC4;
-        Tue, 26 Apr 2022 03:49:27 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KndtG0zFHz4xLS;
-        Tue, 26 Apr 2022 20:49:25 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1650970166;
-        bh=DMH3ySr9iYba3uZ+6v+2cv3OUMkWXAYZ8BqhGvxLsw4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=B7BFrB8rj4bZPsuN/XuBfRipy+U0EU2TColA84cuQEZV7pb10732mph46ExKdfA76
-         22gTFCfUrQwn70pA9PBoRbPdr0sSJodmW/iJVoQf9Ypl17Tw04wFJuSWrXuqvBZpf8
-         tg+uKBT2c7wXzuTYAUNWSkCRAUVruNVQgjCsdh5vKvDNlcHmJd1/qf1f7DpEkiWpja
-         Wyl2HYv/F4ZvMoDuAXZeXl679/Th3bxbi530dreLG7qKJvkYJHxRBW53ohHiq/H0TD
-         qd3pgBhp4eqwV9HqCfztUsn1wEsRDWqJDMml0Hk4Dd8/wQKqgOW8ZVc47XcMUv5r45
-         +D76VLWnXFHcw==
-Date:   Tue, 26 Apr 2022 20:49:24 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Amadeusz =?UTF-8?B?U8WCYXdpxYRza2k=?= 
-        <amadeuszx.slawinski@linux.intel.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the sound-asoc tree
-Message-ID: <20220426204924.173c3f65@canb.auug.org.au>
-In-Reply-To: <9a1299a4-873c-b3f8-c7c7-6f3fcfee0d5f@linux.intel.com>
-References: <20220426183048.5f1cb899@canb.auug.org.au>
-        <9a1299a4-873c-b3f8-c7c7-6f3fcfee0d5f@linux.intel.com>
+        Tue, 26 Apr 2022 06:54:17 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48EE57DE0A;
+        Tue, 26 Apr 2022 03:51:10 -0700 (PDT)
+Received: from mail-wr1-f50.google.com ([209.85.221.50]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1Mq2za-1oDSfp2LEA-00nAzi; Tue, 26 Apr 2022 12:51:07 +0200
+Received: by mail-wr1-f50.google.com with SMTP id s21so10180213wrb.8;
+        Tue, 26 Apr 2022 03:51:07 -0700 (PDT)
+X-Gm-Message-State: AOAM530T8QT25UCgZSYY/Y2aXBOZ8NCFajEiUHhxct3hxFrnZMPYKM/6
+        dsdZaFSu/EIl+xTTFcHIViFmSLpXA5sfRRt/6dY=
+X-Google-Smtp-Source: ABdhPJwv3pFB8WncbOOxlmqz6E+LrLV4NkQu/Q5kzsoMl03tzrGAbxuUPuNyuSoi1V3F1hRSCNe/pbMUxDHw00bd99I=
+X-Received: by 2002:a5d:64a3:0:b0:20a:7931:5b84 with SMTP id
+ m3-20020a5d64a3000000b0020a79315b84mr18372018wrp.407.1650970267164; Tue, 26
+ Apr 2022 03:51:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NrfTiBqVu3EJNw25ARI_x4z";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220426060808.78225-1-cai.huoqing@linux.dev> <20220426060808.78225-5-cai.huoqing@linux.dev>
+ <618a4f53-0998-1e6b-e32b-8bf2d3057cec@amd.com>
+In-Reply-To: <618a4f53-0998-1e6b-e32b-8bf2d3057cec@amd.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 26 Apr 2022 12:50:50 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2w1t7Sk897u0ndD66Lwp5a4DuOqqQLN4yHSg=JmrpOHQ@mail.gmail.com>
+Message-ID: <CAK8P3a2w1t7Sk897u0ndD66Lwp5a4DuOqqQLN4yHSg=JmrpOHQ@mail.gmail.com>
+Subject: Re: [Linaro-mm-sig] Re: [PATCH v2 4/4] drm/nvdla/uapi: Add UAPI of
+ NVDLA driver
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     Cai Huoqing <cai.huoqing@linux.dev>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linaro-mm-sig@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:F1aOHJMTWTP9+Ce3tVRQ0URCj8anZnnEPNCduDHWetCrI69M4+Q
+ /aqR7959J8Ty3AInm9ic1+3WPJWwprJwEcbAQ/ka4U6UPJevUz7BqzE3lt6vAANEPu/zZ1+
+ oQGVH0YgpLiDBofOUGeNaqaPHr00cC6uQjTK2wLDnBEaWmcxxCuKQ+zQxptjlToUBVD/ga1
+ tQ3aa/wEwSUPaqdhSXhVA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:YPtrxqFtPlQ=:DezQpGGO/FpbKEbzxerP3n
+ +aY69poODMMiTe/knwXn3jECUpM4FV/9DstFxKQpOpfoxyLAqv5LDjf653h7FO47jW6G5G/tn
+ CGkDebY+fPUJMBHHKnywviLoA+1EyZsARMxK/5VicIqc4UznvupgdcVaSbjzcMAnEM9KBXQBz
+ qYTwGYhI4bH7WKhV7wT+8Vd9A1sP2n07kypJ2QEDN9ahqvlsYaalR9cxnAlLmMfLxmDo2HZ0h
+ 4elBK69wE+Vk92dCp1Dg54AjLOij0VHhIJEfjfKgxw4hYgagX4jFU2AXAZE7ZyCrNlvSjQsh8
+ wF6Gk0rUN8dc0Cnh914Xlf8XB0QK6Ig9U59dqsmhKMS0T6Xte2Nh/ELqD+bxjnTmS4MoHj6HZ
+ 3DSuC0ox2VheihuuQ0MTJ004yfZaUvRfoO5/j4Jid2a6P5XkTSvUWkc3AA7vUE+Vn1RJ2KZES
+ 0NRzdihrFywrhHPDLd+fxNRuhC16i4Ffv/ouLHZwylF4u59XRjVb7ww8nlSf1VFZc5n6tgTxi
+ 1OKA6S3x3CFqeDKp709JgGO8hja5EqRNhWJJnIzj/0JELuh1MINdvGteATHdRyMHsnf+9wtTk
+ OvoaokXZx7vUg7LW5IQhVmxCaaEor1FSrSERIOX7JStGIW3J2w3u/y/+2WtgNf4LL4zDWQfG6
+ k4ybBdRM1GrdApK/zOX5aLPjj0Ad2CMZclvq02x6D538K0+5pmO+tG+OKfo4MgBrC4H0=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/NrfTiBqVu3EJNw25ARI_x4z
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+On Tue, Apr 26, 2022 at 8:31 AM Christian König
+<christian.koenig@amd.com> wrote:
+> Am 26.04.22 um 08:08 schrieb Cai Huoqing:
+> > The NVIDIA Deep Learning Accelerator (NVDLA) is an open source IP
+> > which is integrated into NVIDIA Jetson AGX Xavier,
+> > so add UAPI of this driver.
+> >
+> > Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
 
-Hi Amadeusz,
+I saw the reply but no the original mail, so I'll comment here.
 
-On Tue, 26 Apr 2022 11:01:18 +0200 Amadeusz S=C5=82awi=C5=84ski         <am=
-adeuszx.slawinski@linux.intel.com> wrote:
+> > +
+> > +#if !defined(__KERNEL__)
+> > +#define __user
+> > +#endif
+
+This is done in the 'make headers_install' step, no need to define it
+separately.
+
+> > +#define NVDLA_NO_TIMEOUT    (0xffffffff)
+> > +     __u32 timeout;
 >
-> > I have applied the following patch for today:
-> >=20
-> > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Date: Tue, 26 Apr 2022 17:49:37 +1000
-> > Subject: [PATCH] fixup for "ASoC: Intel: avs: Configure modules accordi=
-ng to their type"
-> >=20
-> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > ---
-> >   sound/soc/intel/avs/path.c | 1 +
-> >   1 file changed, 1 insertion(+)
-> >=20
-> > diff --git a/sound/soc/intel/avs/path.c b/sound/soc/intel/avs/path.c
-> > index 3d46dd5e5bc4..6f47ac44de87 100644
-> > --- a/sound/soc/intel/avs/path.c
-> > +++ b/sound/soc/intel/avs/path.c
-> > @@ -9,6 +9,7 @@
-> >   #include <sound/intel-nhlt.h>
-> >   #include <sound/pcm_params.h>
-> >   #include <sound/soc.h>
-> > +#include <sound/intel-nhlt.h> =20
->=20
-> This fix seems weird, as same include is 3 lines earlier?
+> What format does that timeout value have?
+>
+> In general it is best practice to have absolute 64bit nanosecond
+> timeouts (to be used with ktime inside the kernel) so that restarting
+> interrupted IOCTLs works smooth.
 
-Right.  I applied this at the same time as the previous fix which
-probably stopped this file from being built.  The real problem is that
-the structure is not defined for !CONFIG_ACPI.
+When using absolute values, one also needs to decide whether this should be
+realtime, monotonic or boottime and document the decision.
 
-So this fix is not needed.
 
-Sorry for the noise.
---=20
-Cheers,
-Stephen Rothwell
+> > + * struct nvdla_submit_args structure for task submit
+> > + *
+> > + * @tasks            pointer to array of struct nvdla_ioctl_submit_task
+> > + * @num_tasks                number of entries in tasks
+> > + * @flags            flags for task submit, no flags defined yet
+> > + * @version          version of task structure
+> > + *
+> > + */
+> > +struct nvdla_submit_args {
+> > +     __u64 tasks;
+> > +     __u16 num_tasks;
+> > +#define NVDLA_MAX_TASKS_PER_SUBMIT   24
+> > +#define NVDLA_SUBMIT_FLAGS_ATOMIC    (1 << 0)
+>
+> Well that "no flags defined yet" from the comment above is probably
+> outdated :)
 
---Sig_/NrfTiBqVu3EJNw25ARI_x4z
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+> > +     __u16 flags;
+> > +     __u32 version;
+> > +};
 
------BEGIN PGP SIGNATURE-----
+Versioned interfaces are usually a bad idea. If you introduce an ioctl command,
+it should generally keep working. If you ever need to change the interface, just
+use a new command number for the new version.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJnzjUACgkQAVBC80lX
-0GxPOwf+Lt+DwgO/MQW/6p3nZMvoGr6V9DecsGKZc6JeBa2Z5Db6v+AauaKY2mzX
-3Bwa+6AYHz9oMs99J1OI2ABKjK7Ye4E6nRQe32tcdS8wD63HlN89A6L/G6pqtN8w
-/ZxE6AyFo/pVAz8abrkIyJir0002Xmm78qAKHSnuiCF7vf81rlkEcuAqW8SS3od+
-5SPXdTYls7qbG0SMOm7YEdZeM1w/PcPBaPWGCbnPi10uC0qcka6gvBXRst1M03Be
-x4ChLunuzUKhSWtfDSVBUXbiHGxOC1s8zxlbNciMHS3QrNtlNdmPX1QEoqEzMgtA
-3gbL2OQw9VfTDVcSvk0K68FaPWGRmQ==
-=TVa1
------END PGP SIGNATURE-----
+> > +/**
+> > + * struct nvdla_gem_create_args for allocating DMA buffer through GEM
+> > + *
+> > + * @handle           handle updated by kernel after allocation
+> > + * @flags            implementation specific flags
+> > + * @size             size of buffer to allocate
+> > + */
+> > +struct nvdla_gem_create_args {
+> > +     __u32 handle;
+> > +     __u32 flags;
+> > +     __u64 size;
+> > +};
+> > +
+> > +/**
+> > + * struct nvdla_gem_map_offset_args for mapping DMA buffer
+> > + *
+> > + * @handle           handle of the buffer
+> > + * @reserved         reserved for padding
+> > + * @offset           offset updated by kernel after mapping
+> > + */
+> > +struct nvdla_gem_map_offset_args {
+> > +     __u32 handle;
+> > +     __u32 reserved;
+> > +     __u64 offset;
+> > +};
+> > +
+> > +#define DRM_NVDLA_SUBMIT             0x00
+> > +#define DRM_NVDLA_GEM_CREATE 0x01
+> > +#define DRM_NVDLA_GEM_MMAP           0x02
 
---Sig_/NrfTiBqVu3EJNw25ARI_x4z--
+Is this an actual mmap() call, or something that needs to be done before the
+mmap()? Is the 'handle' a file descriptor or some internal number?
+
+      Arnd

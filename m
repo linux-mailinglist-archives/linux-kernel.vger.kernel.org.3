@@ -2,78 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B8A9510212
+	by mail.lfdr.de (Postfix) with ESMTP id 93C0A510213
 	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 17:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352400AbiDZPmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 11:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38538 "EHLO
+        id S1352453AbiDZPm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 11:42:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352020AbiDZPmp (ORCPT
+        with ESMTP id S1352020AbiDZPmz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 11:42:45 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC5C1633AE
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 08:39:36 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso1797128wma.0
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 08:39:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cvlSVuXcRiw+6iepFL0TlfUcx282zkxl1raumY/nhds=;
-        b=XqyHlWpjPB7Q+meLftRFxAA4/vut+Zg/jblwEOYeN2/9RrUClE1oRIa+itbJO86UsN
-         a/n3w1u6tZNLdrTQKcX30CsQWV+uRP/bfIDP2Nzs4MMJ9O3fCY5WTKSkD5mr++zKzldA
-         M7An9v2x8D0X+m5zpI4/PxRUTmUiS/whp8Zh45lPgfFzBciVnG3D1Eea1yphdR7qCecI
-         OXVNjQC5tLvhjSNVWhfN9utIcUjqxlJBL7OSuxsvNDZDNhE05RZrQkTFEoLqtpsWXwmQ
-         qwaHAihO0TV2QTholfA58F4rw/C0eOYG5IO/es/V3m7Bc854LxC7I1WKT4QRKeXFuj44
-         3SKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cvlSVuXcRiw+6iepFL0TlfUcx282zkxl1raumY/nhds=;
-        b=5a5Fnv2KUwwy54D6IRnq0NTarHHbKLajhOj3INEX0ZLEKKxPHxT3u3EZe0IEzg+PKk
-         pdrfhu4kbkddBOOyG+AnhVywNhHsjd6OwSM5JwQKIFG//qtcqfkxkTQTgS9CPxMEdOJz
-         dgVGtYpN5OVD8F6qeJrh7GICCmc/Y0ILIYbxBsoHSoNMBmLJ757alvyVnpgFW2YI0D4K
-         9V1qhO4sWZiPWAYvwGHL8gIXg2VfHW6Tx3yW6HsmyDlXgwp6d2GbmI164vVg5c41o631
-         6loK3Iz4v5nKznV3xcEzRpTNRMqwebo6i+Jr0uJlfsQbCJ27m9100IjyY8kJR1P82eAx
-         gzRA==
-X-Gm-Message-State: AOAM532FGTr6FjYhm736xY06EDBV3UJqgUFBUTmZAiFKOIK4neRZuqZQ
-        bDr6QeJwGS3I3Yat+Itzwv3zYw==
-X-Google-Smtp-Source: ABdhPJywdCr6tJ5pk7SryEdp3Tc08AQNoOkOAPLmI9COo8quqNDluSbMKyvMb7C29oOOOAKqNMrH4g==
-X-Received: by 2002:a05:600c:3c86:b0:392:990b:ae29 with SMTP id bg6-20020a05600c3c8600b00392990bae29mr30830958wmb.105.1650987575370;
-        Tue, 26 Apr 2022 08:39:35 -0700 (PDT)
-Received: from radium ([88.160.162.107])
-        by smtp.gmail.com with ESMTPSA id 204-20020a1c02d5000000b003928c42d02asm13873467wmc.23.2022.04.26.08.39.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 08:39:34 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 17:39:31 +0200
-From:   Fabien Parent <fparent@baylibre.com>
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Hermes Wu <hermes.wu@ite.com.tw>,
-        Allen Chen <allen.chen@ite.com.tw>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/bridge: ite-it6505: add missing Kconfig option select
-Message-ID: <20220426153931.suiuc7o53dt6s2es@radium>
-References: <20220426141536.274727-1-fparent@baylibre.com>
- <fd02a183-bcaa-86a8-8a13-52a9ddb374d5@baylibre.com>
+        Tue, 26 Apr 2022 11:42:55 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5AD65408
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 08:39:47 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KnmD16VlrzCs4Z;
+        Tue, 26 Apr 2022 23:35:13 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 26 Apr 2022 23:39:45 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 26 Apr 2022 23:39:45 +0800
+Message-ID: <fc736a39-2c21-70ac-4244-4c5b24ba7974@huawei.com>
+Date:   Tue, 26 Apr 2022 23:39:44 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="273566twpnhexmyw"
-Content-Disposition: inline
-In-Reply-To: <fd02a183-bcaa-86a8-8a13-52a9ddb374d5@baylibre.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] arm64: kcsan: Fix kcsan test_barrier fail and panic
+Content-Language: en-US
+To:     Mark Rutland <mark.rutland@arm.com>
+CC:     <elver@google.com>, <catalin.marinas@arm.com>, <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220426081700.1376542-1-wangkefeng.wang@huawei.com>
+ <Ymfot/Le95Enuxqb@lakrids>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <Ymfot/Le95Enuxqb@lakrids>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,79 +57,56 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---273566twpnhexmyw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 2022/4/26 20:42, Mark Rutland wrote:
+> Hi,
+>
+> On Tue, Apr 26, 2022 at 08:17:00AM +0000, Kefeng Wang wrote:
+>> As "kcsan: Support detecting a subset of missing memory barriers"
+>> introduced KCSAN_STRICT which make kcsan detects more missing memory
+>> barrier, but arm64 don't have KCSAN instrumentation for barriers, so
+>> the new selftest test_barrier() will fail, then panic.
+>>
+>> Let's prefix all barriers with __ on arm64, as asm-generic/barriers.h
+>> defined the final instrumented version of these barriers, which will
+>> fix the above issues.
+>>
+>> Fixes: dd03762ab608 ("arm64: Enable KCSAN")
+>> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> I don't think the Fixes tag is necessary given this is a new feature
+> which depends upon EXPERT, and I'm worried it encourages backporting
+> this into a kernel where it would be broken, so I'd prefer we drop that
+> tag.
+>
+> IIUC when we originially looked at this the instrumentation wasn't safe
+> and would violate noinstr requirements. Looking at linux/kcsan-checks.h,
+> the comments block for __KCSAN_BARRIER_TO_SIGNAL_FENCE() say that it
+> will respect __nokcsan, so it looks like that might be safe now.
+>
+> It looks like that's the case as of commit:
+>    
+>    bd3d5bd1a0ad3864 ("kcsan: Support WEAK_MEMORY with Clang where no objtool support exists")
+>
+> ... which requires clang 14.0.0+.
+>
+> That looks to have gone in concurrently with dd03762ab608, but is
+> clearly a prerequisite, so as above I'd strongly prefer we drop the
+> Fixes tag.
 
-On Tue, Apr 26, 2022 at 05:29:31PM +0200, Neil Armstrong wrote:
-> On 26/04/2022 16:15, Fabien Parent wrote:
-> > The IT6505 is using functions provided by the DRM_DP_HELPER driver.
-> > In order to avoid having the bridge enabled but the helper disabled,
-> > let's add a select in order to be sure that the DP helper functions are
-> > always available.
-> >=20
-> > Fixes: b5c84a9edcd4 ("drm/bridge: add it6505 driver")
-> > Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> > ---
-> >   drivers/gpu/drm/bridge/Kconfig | 1 +
-> >   1 file changed, 1 insertion(+)
-> >=20
-> > diff --git a/drivers/gpu/drm/bridge/Kconfig b/drivers/gpu/drm/bridge/Kc=
-onfig
-> > index 007e5a282f67..2145b08f9534 100644
-> > --- a/drivers/gpu/drm/bridge/Kconfig
-> > +++ b/drivers/gpu/drm/bridge/Kconfig
-> > @@ -78,6 +78,7 @@ config DRM_ITE_IT6505
-> >           tristate "ITE IT6505 DisplayPort bridge"
-> >           depends on OF
-> >           select DRM_KMS_HELPER
-> > +        select DRM_DP_HELPER
-> >           select EXTCON
-> >           help
-> >             ITE IT6505 DisplayPort bridge chip driver.
->=20
-> http://lore.kernel.org/r/20220403151637.15546-1-rdunlap@infradead.org als=
-o select DRM_DP_AUX_BUS,
-> can you check if this is really neaded ?
+Sure, the "kcsan: Support detecting a subset of missing memory 
+barriers"[1] and
 
-Oops, I didn't notice that patch.
+dd03762ab608 "arm64: Enable KCSAN" are both merged in v5.17.  I will 
+drop the Fixes tag.
 
-Anyway I can successfully link with the following config:
-CONFIG_DRM_ITE_IT6505=3Dy
-CONFIG_DRM_DP_AUX_BUS=3Dm
-CONFIG_DRM_DP_HELPER=3Dy
+> It would be good if we could note that explicitly in the commit message.
+I will add some message into v2.
+>
+> Have you eyeballed the generated assembly to verify that this works as
+> expected for __no_kcsan ?
+Look good,  will recheck it.
+>
+> Thanks,
+> Mark.
+[1] 
+https://patchwork.kernel.org/project/linux-mm/cover/20211130114433.2580590-1-elver@google.com/ 
 
-But I cannot with the following config:
-CONFIG_DRM_ITE_IT6505=3Dy
-CONFIG_DRM_DP_AUX_BUS=3Dm
-CONFIG_DRM_DP_HELPER=3Dm
-
-This suggest that DRM_DP_AUX_BUS is not required for that driver.
-
-Fabien
-
->=20
-> Neil
-
---273566twpnhexmyw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEQyJHfU3UNW7IG61XVJKc6g3CeAAFAmJoEjIACgkQVJKc6g3C
-eABeHw/7Bt/VLgszCCzYH9pHOhqbs7jTipFBxg57jmdYMy+fhgNCwW6meNpvuZ5k
-IvAQNMY4CvdwV44bk8KWjGOKgQwu4Y5Ck30Qmy+IARf2h2VaIfmu17/viczdOmkr
-gbIRC99eX30uHQWRAXqyn4taRD2OR54eo7PgoqKx8AKD5rRWqlDUPUEDGXO8QE+Q
-RYl/DVfv1/SyZHkxuMrsYcJrWfalX7ZuSn5kVu3iOllaDL77XtbXglrc5+Udhc4b
-Q5JrgWsSfzQrdx7CYg+Jsg0YLfweE81QHqzztAYGzFg/v8BueApy8k4NKjqF2qTw
-nlUmoLTHQCyicwOrDwd+auZcurokQNAaLbiCA8hDkzd9bUNDjz/1wyG0xatxCB5W
-2rL1zyHIX1S+rugza5FwDQGCUHMDaF9gkNZ2gqVM9SOsnyK5J/kYHtSGoqtb8Afw
-CqHLJ7qd8GinTpUIV0IpjL032Dw9rBA+CblzE4mOJx/DCuMBw9HremiI7oNJxkls
-P4nFXS8CEo9mrKkYtG454ADgCYAmtJOBfIspG5LpaY2Z48sy1E0jM7W6HYa8sdBt
-7aq1Ly0oNT3Il3k1qZrMsQDpSzKFI3cxeFH8eaaJiZ/YYklyFCa/cuk7QGw1HoBY
-kgmyzgcEXck4nrxLD1ic3bcqWOg4acME1mp9UvuUB0Ify+1WOvA=
-=FNMT
------END PGP SIGNATURE-----
-
---273566twpnhexmyw--

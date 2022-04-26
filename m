@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A9A50F4A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:37:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC4050F542
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:53:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345145AbiDZIiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:38:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60538 "EHLO
+        id S1345855AbiDZIxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345441AbiDZIeg (ORCPT
+        with ESMTP id S1345976AbiDZIjp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:34:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C24C762A3;
-        Tue, 26 Apr 2022 01:27:22 -0700 (PDT)
+        Tue, 26 Apr 2022 04:39:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12DB1444DC;
+        Tue, 26 Apr 2022 01:32:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C66E5B81A2F;
-        Tue, 26 Apr 2022 08:27:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 332C5C385A0;
-        Tue, 26 Apr 2022 08:27:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C8D3A618A9;
+        Tue, 26 Apr 2022 08:32:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D13ACC385A0;
+        Tue, 26 Apr 2022 08:32:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961639;
-        bh=5YPDfAhomNlt0eUBFfkfpKCsc9XR+v/V3HPTkkSACSE=;
+        s=korg; t=1650961948;
+        bh=Pov5fX4/aJrSq5Sr5Vwm/jyvxMZP/jyZlPbpUOr4yC0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JJx4frOfkNyxZjQ8kmQ67bY/AvfJbLnvwrxjokyftC8NYf/BL74dmPuiAEOQcevE4
-         giLC48gF+t1V4fvLdIfNSelxPHe3sJVwksbkvjmuxsYi6CkPpYUgzlqLsS+3jC5lSv
-         ZXjOsoNhXz6LEWu8oeoGFQwI25iK1LXrc5TCAZOI=
+        b=M/XXpH2/NHRHg1CW8vw1q8WzPxY7ppivUOul4bYbeG8dHkmDp14zKb0FFM+RmJXJ2
+         XCzA7USQox4J0VBjKYoAMjfs7ynPdFtxgdfaEOMsWTcUoE1IRNRZIASXN6M5h2zKiL
+         COaRZ3K1xv5ncsZPWA7nuzm7dPUttiT0pHZkBtJw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ricardo Dias <rdias@singlestore.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Benjamin Herrenschmidt <benh@amazon.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.19 09/53] tcp: Fix potential use-after-free due to double kfree()
+        stable@vger.kernel.org, Flavio Leitner <fbl@redhat.com>,
+        Hangbin Liu <liuhangbin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 21/86] net/packet: fix packet_sock xmit return value checking
 Date:   Tue, 26 Apr 2022 10:20:49 +0200
-Message-Id: <20220426081735.929404558@linuxfoundation.org>
+Message-Id: <20220426081741.823703703@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
-References: <20220426081735.651926456@linuxfoundation.org>
+In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
+References: <20220426081741.202366502@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,76 +55,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+From: Hangbin Liu <liuhangbin@gmail.com>
 
-commit c89dffc70b340780e5b933832d8c3e045ef3791e upstream.
+[ Upstream commit 29e8e659f984be00d75ec5fef4e37c88def72712 ]
 
-Receiving ACK with a valid SYN cookie, cookie_v4_check() allocates struct
-request_sock and then can allocate inet_rsk(req)->ireq_opt. After that,
-tcp_v4_syn_recv_sock() allocates struct sock and copies ireq_opt to
-inet_sk(sk)->inet_opt. Normally, tcp_v4_syn_recv_sock() inserts the full
-socket into ehash and sets NULL to ireq_opt. Otherwise,
-tcp_v4_syn_recv_sock() has to reset inet_opt by NULL and free the full
-socket.
+packet_sock xmit could be dev_queue_xmit, which also returns negative
+errors. So only checking positive errors is not enough, or userspace
+sendmsg may return success while packet is not send out.
 
-The commit 01770a1661657 ("tcp: fix race condition when creating child
-sockets from syncookies") added a new path, in which more than one cores
-create full sockets for the same SYN cookie. Currently, the core which
-loses the race frees the full socket without resetting inet_opt, resulting
-in that both sock_put() and reqsk_put() call kfree() for the same memory:
+Move the net_xmit_errno() assignment in the braces as checkpatch.pl said
+do not use assignment in if condition.
 
-  sock_put
-    sk_free
-      __sk_free
-        sk_destruct
-          __sk_destruct
-            sk->sk_destruct/inet_sock_destruct
-              kfree(rcu_dereference_protected(inet->inet_opt, 1));
-
-  reqsk_put
-    reqsk_free
-      __reqsk_free
-        req->rsk_ops->destructor/tcp_v4_reqsk_destructor
-          kfree(rcu_dereference_protected(inet_rsk(req)->ireq_opt, 1));
-
-Calling kmalloc() between the double kfree() can lead to use-after-free, so
-this patch fixes it by setting NULL to inet_opt before sock_put().
-
-As a side note, this kind of issue does not happen for IPv6. This is
-because tcp_v6_syn_recv_sock() clones both ipv6_opt and pktopts which
-correspond to ireq_opt in IPv4.
-
-Fixes: 01770a166165 ("tcp: fix race condition when creating child sockets from syncookies")
-CC: Ricardo Dias <rdias@singlestore.com>
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-Reviewed-by: Benjamin Herrenschmidt <benh@amazon.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Link: https://lore.kernel.org/r/20210118055920.82516-1-kuniyu@amazon.co.jp
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Reported-by: Flavio Leitner <fbl@redhat.com>
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/tcp_ipv4.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/packet/af_packet.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
---- a/net/ipv4/tcp_ipv4.c
-+++ b/net/ipv4/tcp_ipv4.c
-@@ -1492,6 +1492,8 @@ struct sock *tcp_v4_syn_recv_sock(const
- 		tcp_move_syn(newtp, req);
- 		ireq->ireq_opt = NULL;
- 	} else {
-+		newinet->inet_opt = NULL;
-+
- 		if (!req_unhash && found_dup_sk) {
- 			/* This code path should only be executed in the
- 			 * syncookie case only
-@@ -1499,8 +1501,6 @@ struct sock *tcp_v4_syn_recv_sock(const
- 			bh_unlock_sock(newsk);
- 			sock_put(newsk);
- 			newsk = NULL;
--		} else {
--			newinet->inet_opt = NULL;
- 		}
- 	}
- 	return newsk;
+diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
+index d0c95d7dd292..5ee600d108a0 100644
+--- a/net/packet/af_packet.c
++++ b/net/packet/af_packet.c
+@@ -2817,8 +2817,9 @@ static int tpacket_snd(struct packet_sock *po, struct msghdr *msg)
+ 
+ 		status = TP_STATUS_SEND_REQUEST;
+ 		err = po->xmit(skb);
+-		if (unlikely(err > 0)) {
+-			err = net_xmit_errno(err);
++		if (unlikely(err != 0)) {
++			if (err > 0)
++				err = net_xmit_errno(err);
+ 			if (err && __packet_get_status(po, ph) ==
+ 				   TP_STATUS_AVAILABLE) {
+ 				/* skb was destructed already */
+@@ -3019,8 +3020,12 @@ static int packet_snd(struct socket *sock, struct msghdr *msg, size_t len)
+ 		skb->no_fcs = 1;
+ 
+ 	err = po->xmit(skb);
+-	if (err > 0 && (err = net_xmit_errno(err)) != 0)
+-		goto out_unlock;
++	if (unlikely(err != 0)) {
++		if (err > 0)
++			err = net_xmit_errno(err);
++		if (err)
++			goto out_unlock;
++	}
+ 
+ 	dev_put(dev);
+ 
+-- 
+2.35.1
+
 
 

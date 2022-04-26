@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6477250F83C
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B7F550F3D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:26:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346572AbiDZJLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55566 "EHLO
+        id S1344723AbiDZI1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:27:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347215AbiDZIvO (ORCPT
+        with ESMTP id S1344709AbiDZI1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:51:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE4C175328;
-        Tue, 26 Apr 2022 01:39:44 -0700 (PDT)
+        Tue, 26 Apr 2022 04:27:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8957E3DA67;
+        Tue, 26 Apr 2022 01:23:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 495C5B81CED;
-        Tue, 26 Apr 2022 08:39:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B954C385A0;
-        Tue, 26 Apr 2022 08:39:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E773E6179E;
+        Tue, 26 Apr 2022 08:23:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC605C385A4;
+        Tue, 26 Apr 2022 08:23:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962382;
-        bh=blG1BoqgDz4cY3SBTCFsQD2tkAE2zYDC7RKtOQpGP2s=;
+        s=korg; t=1650961399;
+        bh=0XxiZn4mWg4KSzNOvpLn5V0WlMZAF0KIEYiJ+q4stq8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E4YGKBM1vdSBv3dsILBgFeCbdkjuDU8SDAuEWR5Lu3jQvHLZgH7n3A8a5H6sFLuxO
-         YarFR3/3PLQb0UNNp8A462S+NOZwP+NtQaHU5De00OKukFlh86adBrM/2Bfbs6W61k
-         antUvKFZt4w/lcDTf2IfuzS+3Tm54aiAuwUvctUI=
+        b=zRMFlzuhXkI9xzasZco843Kw1LIF1x2HV4m1k8K+OjlLWZ+//gGkYrLzdGDHmttUZ
+         9zrQyZb+SJw6EssIrxmTYd97YZauGEN5o2Yd1KkM2CRalUbiLEclsBopwOerKQxi1b
+         B6ZPE2sc15so6akjKvmCeeM2Yo2D29ID72g0BV8o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?=E9=87=91=E9=9F=AC?= <me@kingtous.cn>,
-        Christoph Hellwig <hch@lst.de>,
-        Keith Busch <kbusch@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 075/124] nvme-pci: disable namespace identifiers for the MAXIO MAP1002/1202
+        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
+        stable@kernel.org
+Subject: [PATCH 4.9 22/24] ext4: fix overhead calculation to account for the reserved gdt blocks
 Date:   Tue, 26 Apr 2022 10:21:16 +0200
-Message-Id: <20220426081749.433897361@linuxfoundation.org>
+Message-Id: <20220426081732.028630377@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
-References: <20220426081747.286685339@linuxfoundation.org>
+In-Reply-To: <20220426081731.370823950@linuxfoundation.org>
+References: <20220426081731.370823950@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,40 +53,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+From: Theodore Ts'o <tytso@mit.edu>
 
-[ Upstream commit a98a945b80f8684121d477ae68ebc01da953da1f ]
+commit 10b01ee92df52c8d7200afead4d5e5f55a5c58b1 upstream.
 
-The MAXIO MAP1002/1202 controllers reports completely bogus Namespace
-identifiers that even change after suspend cycles.  Disable using
-the Identifiers entirely.
+The kernel calculation was underestimating the overhead by not taking
+into account the reserved gdt blocks.  With this change, the overhead
+calculated by the kernel matches the overhead calculation in mke2fs.
 
-Reported-by: 金韬 <me@kingtous.cn>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Keith Busch <kbusch@kernel.org>
-Tested-by: 金韬 <me@kingtous.cn>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Cc: stable@kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/nvme/host/pci.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ fs/ext4/super.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-index b925a5f4afc3..61f01f5afdc1 100644
---- a/drivers/nvme/host/pci.c
-+++ b/drivers/nvme/host/pci.c
-@@ -3352,6 +3352,10 @@ static const struct pci_device_id nvme_id_table[] = {
- 		.driver_data = NVME_QUIRK_NO_DEEPEST_PS, },
- 	{ PCI_DEVICE(0x2646, 0x2263),   /* KINGSTON A2000 NVMe SSD  */
- 		.driver_data = NVME_QUIRK_NO_DEEPEST_PS, },
-+	{ PCI_DEVICE(0x1e4B, 0x1002),   /* MAXIO MAP1002 */
-+		.driver_data = NVME_QUIRK_BOGUS_NID, },
-+	{ PCI_DEVICE(0x1e4B, 0x1202),   /* MAXIO MAP1202 */
-+		.driver_data = NVME_QUIRK_BOGUS_NID, },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMAZON, 0x0061),
- 		.driver_data = NVME_QUIRK_DMA_ADDRESS_BITS_48, },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMAZON, 0x0065),
--- 
-2.35.1
-
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -3241,9 +3241,11 @@ static int count_overhead(struct super_b
+ 	ext4_fsblk_t		first_block, last_block, b;
+ 	ext4_group_t		i, ngroups = ext4_get_groups_count(sb);
+ 	int			s, j, count = 0;
++	int			has_super = ext4_bg_has_super(sb, grp);
+ 
+ 	if (!ext4_has_feature_bigalloc(sb))
+-		return (ext4_bg_has_super(sb, grp) + ext4_bg_num_gdb(sb, grp) +
++		return (has_super + ext4_bg_num_gdb(sb, grp) +
++			(has_super ? le16_to_cpu(sbi->s_es->s_reserved_gdt_blocks) : 0) +
+ 			sbi->s_itb_per_group + 2);
+ 
+ 	first_block = le32_to_cpu(sbi->s_es->s_first_data_block) +
 
 

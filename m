@@ -2,191 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D146510BDF
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 00:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECEC1510BF7
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 00:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355854AbiDZWT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 18:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40726 "EHLO
+        id S1353684AbiDZWXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 18:23:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355713AbiDZWTe (ORCPT
+        with ESMTP id S1345638AbiDZWXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 18:19:34 -0400
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B2D443CE
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 15:16:05 -0700 (PDT)
-Received: by mail-vs1-xe2d.google.com with SMTP id j16so139148vsv.2
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 15:16:05 -0700 (PDT)
+        Tue, 26 Apr 2022 18:23:38 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3F01DA78
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 15:20:29 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id s137so17164pgs.5
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 15:20:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6zGXmfev2fZGrOwPRRRskiATCBJI4+jYm998S3ATC8Q=;
-        b=SspT/Gc1YeBYxd3CDjgccU2KIlthHvbpi3ELpC1/z6AtxsRSGcDqwaIGXTajqWv35R
-         U60ZsfoDh1/7M4TIEPZB6asL2txtS5ml4OIggIpTnfg+6k72xgPyg8qlqtC3uIn63Sc/
-         4YzjlF0Z54wBRglXo5yjakB8gPaoRQFvWL76oA5kdOQJ+eVZg2eGyFwCrwCvW2yJZD1b
-         IPYK9K59RGTw+qyLe8gQvRFAcHt47psGBWruCznn4BB9YGpIVHNQ886qej50GZAN/4Ly
-         na8F3eaEjgkDsk2VBWT/Oggkhho04df+tjjUZCswqQ/sqs0022L0tNQmX8FdAAINcDF+
-         Yhrg==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JVRFURdG76Dl9sspocpqmwwFtBArwWcQWqjE+72v8EI=;
+        b=d1V64UADOytbZfDzDvJ3VfAxmezyXbcsGjfZlN6KFb9k94Y8qkdpcxCILHBfHoIv9Z
+         2p2c4EuBMpr1yUDRGvvafKoyb2R1/Xd1I2D+0IbIL92O+pMDCjQ+1HkUZusQ8tws7BOb
+         31dCkpLYVicv+Ok4o8bMN5GU/tu4pwAvuS3Cc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6zGXmfev2fZGrOwPRRRskiATCBJI4+jYm998S3ATC8Q=;
-        b=b7XJLq39BhOaFBzOVdvGXC4Ve3UgIYettfz7N196Abso7xCTX+LkUUnbpj2BwyzbuO
-         mYX+nbWhCdR5kc6hiy9/5HJBEBcDItn0yv5AthkyPFMYAXNxqqtGd16FKgd0aIb+lGOY
-         XbpHeGeYF4vfjoN4V4EQMta7ENxqomcxSE/hWkPgmAuUDWICP5jjJg7YDzO/cBYsMRpB
-         VArg1+VNQ6u1s39RbZnqngG39DNLxAnKTkvyJ2Vs+eAfg5yVoEa0naSF9B6iPCGte6Cn
-         KN6yevMrpYDaRM91Zka9GPhZMPruBWZm6EPy6byHenAKcFL29W0XLt8Usc/ziLYDMLXE
-         chvA==
-X-Gm-Message-State: AOAM531y7RKEBTrHE1usCUhX6nssQto17/YjFP/IXT3UiIp7KyR040/+
-        kUElzHBJWaVhBvr36K3kyqRmzgYX64AkRCTvbpJpxQ==
-X-Google-Smtp-Source: ABdhPJwtXIjGlv7qMVkp8DMl5ITZo9rPEtcBPeYIWRka13ZludUdH/JfX3XZPzMGGhjISchzL8DHf+KslyvYgkO1+v8=
-X-Received: by 2002:a67:cfc5:0:b0:32c:d143:d8e9 with SMTP id
- h5-20020a67cfc5000000b0032cd143d8e9mr3404761vsm.22.1651011363983; Tue, 26 Apr
- 2022 15:16:03 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JVRFURdG76Dl9sspocpqmwwFtBArwWcQWqjE+72v8EI=;
+        b=A1QI8YBC99wryX04OlYxRoOMLAK6Te0ILSwCSBt+MYhKwhSTyTe72b5hOLSfb/Ofsl
+         8DRyvxZLvJMBmxL+3QfJvJNJ9kkBhMRUTiVp2SQ3JUpBAAY7Cqjo4O1G8tq46Wni7MlN
+         vxIPhCuEXfKUrMvGmR6A5mIMt0QNQ9c0xegwFK9dAFk7RrmsiuYd9n/F0higbBOLo8x0
+         pQEl2Ri1b2JIwjI6pXFCUqF7VWb0fDmf2Hgf+/eOb5YbojKiMMRtp6OsC0FivuWBAFdf
+         XgHh5LD+VSoMano34mAWm7B+dPqSCV76hrn0YkUP8b8tE8VkT6qa7csaDgRBDUf+Y2Wv
+         g+iA==
+X-Gm-Message-State: AOAM530Kx7WNd+b/bqxtYkI5ehkLqoN4oETE5I+Jy3b8etI6d54BQrvr
+        i+6YgFBFbHPWLrn8hqFDDdl6yg==
+X-Google-Smtp-Source: ABdhPJzHnDPpa/XWh62VMiNx0ZNq8fNu0fcxeXXhNFJA5lFTWuZ6hQZaUyNDQQ3ibJy4N+tQ1Y+u/g==
+X-Received: by 2002:aa7:8096:0:b0:50c:e24a:3bf8 with SMTP id v22-20020aa78096000000b0050ce24a3bf8mr26662983pff.29.1651011628708;
+        Tue, 26 Apr 2022 15:20:28 -0700 (PDT)
+Received: from kuabhs-cdev.c.googlers.com.com (240.111.247.35.bc.googleusercontent.com. [35.247.111.240])
+        by smtp.gmail.com with ESMTPSA id u2-20020a62d442000000b0050d404f837fsm8029107pfl.156.2022.04.26.15.20.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 15:20:27 -0700 (PDT)
+From:   Abhishek Kumar <kuabhs@chromium.org>
+To:     kvalo@kernel.org
+Cc:     quic_wgong@quicinc.com, kuabhs@chromium.org,
+        briannorris@chromium.org, linux-kernel@vger.kernel.org,
+        linux-wireless@vger.kernel.org, ath10k@lists.infradead.org,
+        netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH v2] ath10k: skip ath10k_halt during suspend for driver state RESTARTING
+Date:   Tue, 26 Apr 2022 22:19:55 +0000
+Message-Id: <20220426221859.v2.1.I650b809482e1af8d0156ed88b5dc2677a0711d46@changeid>
+X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
 MIME-Version: 1.0
-References: <20220407031525.2368067-1-yuzhao@google.com> <20220407031525.2368067-13-yuzhao@google.com>
- <20220411191634.674554d3de2ba37b3db40ca2@linux-foundation.org>
- <CAOUHufYhhCPFqoRbtn+=OFxZxNWS9yxW9Re_s-2TYGqCEaMXVw@mail.gmail.com>
- <20220415212024.c682ac000e3e91572d8d6d2b@linux-foundation.org>
- <CAOUHufa60CVZcXJ937=P4GVtV_Cn76mYCWwcyBNjMAADmyWEwQ@mail.gmail.com> <20220426143034.f520c062830f9e3405c890d0@linux-foundation.org>
-In-Reply-To: <20220426143034.f520c062830f9e3405c890d0@linux-foundation.org>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Tue, 26 Apr 2022 16:15:26 -0600
-Message-ID: <CAOUHufY1FmZGnAvpRYtTvXQ2cYTisxUauD0MzSXDesQ-T6GvQg@mail.gmail.com>
-Subject: Re: [PATCH v10 12/14] mm: multi-gen LRU: debugfs interface
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Stephen Rothwell <sfr@rothwell.id.au>,
-        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Barry Song <21cnbao@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 3:30 PM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Tue, 26 Apr 2022 00:59:37 -0600 Yu Zhao <yuzhao@google.com> wrote:
->
-> > On Fri, Apr 15, 2022 at 10:20 PM Andrew Morton
-> > <akpm@linux-foundation.org> wrote:
-> > >
-> > > On Fri, 15 Apr 2022 18:03:16 -0600 Yu Zhao <yuzhao@google.com> wrote:
-> > >
-> > > > > Presumably sysfs is the place.  Fully documented and with usage
-> > > > > examples in the changelog so we can carefully review the proposed
-> > > > > extensions to Linux's ABI.  Extensions which must be maintained
-> > > > > unchanged for all time.
-> > > >
-> > > > Eventually, yes. There still is a long way to go. Rest assured, this
-> > > > is something Google will keep investing resources on.
-> > >
-> > > So.  The plan is to put these interfaces in debugfs for now, with a
-> > > view to migrating stabilized interfaces into sysfs (or procfs or
-> > > whatever) once end-user requirements and use cases are better
-> > > understood?
-> >
-> > The requirements are well understood and the use cases are proven,
-> > e.g., Google [1], Meta [2] and Alibaba [3].
-> >
-> > [1] https://dl.acm.org/doi/10.1145/3297858.3304053
-> > [2] https://dl.acm.org/doi/10.1145/3503222.3507731
-> > [3] https://gitee.com/anolis/cloud-kernel/blob/release-5.10/mm/kidled.c
->
-> So will these interfaces be moved into sysfs?
+Double free crash is observed when FW recovery(caused by wmi
+timeout/crash) is followed by immediate suspend event. The FW recovery
+is triggered by ath10k_core_restart() which calls driver clean up via
+ath10k_halt(). When the suspend event occurs between the FW recovery,
+the restart worker thread is put into frozen state until suspend completes.
+The suspend event triggers ath10k_stop() which again triggers ath10k_halt()
+The double invocation of ath10k_halt() causes ath10k_htt_rx_free() to be
+called twice(Note: ath10k_htt_rx_alloc was not called by restart worker
+thread because of its frozen state), causing the crash.
 
-So the debugfs interface from this patch provides:
-1. proactive reclaim,
-2. working set estimation.
+To fix this, during the suspend flow, skip call to ath10k_halt() in
+ath10k_stop() when the current driver state is ATH10K_STATE_RESTARTING.
+Also, for driver state ATH10K_STATE_RESTARTING, call
+ath10k_wait_for_suspend() in ath10k_stop(). This is because call to
+ath10k_wait_for_suspend() is skipped later in
+[ath10k_halt() > ath10k_core_stop()] for the driver state
+ATH10K_STATE_RESTARTING.
 
-The sysfs interface for item 1 is being finalized by [4], and it's a
-subset of this debugfs interface because we want it to be more
-general. The sysfs interface for item 2 will be eventually proposed as
-well, with the same approach. It will look like a histogram in which
-the active/inactive LRU has two bins whereas MGLRU has more bins. Bins
-contain pages and multiple bins represent different hotness/coldness.
-Since [4] took about two years, I'd say this histogram-like interface
-would take no less than a couple of years as well.
+The frozen restart worker thread will be cancelled during resume when the
+device comes out of suspend.
 
-This debugfs interface stays even after that, and it will serve its
-true purpose (debugging), not a substitute for the sysfs interfaces.
+Below is the crash stack for reference:
 
-> > > If so, that sounds totally great to me.  But it should have been in
-> > > the darn changelog!  This is the sort of thing which we care about most
-> > > keenly.
-> > >
-> > > It would be helpful for reviewers to understand the proposed timeline
-> > > for this process, because the entire feature isn't really real until
-> > > this is completed, is it?  I do think we should get this nailed down
-> > > relatively rapidly, otherwise people will be reluctant to invest much
-> > > into a moving target.
-> > >
-> > > And I must say, I see dissonance between the overall maturity of the
-> > > feature as described in these emails versus the immaturity of these
-> > > userspace control interfaces.  What's happening there?
-> >
-> > Very observant. To answer both of the questions above: each iteration
-> > of the entire stack is a multi-year effort.
-> >
-> > Given its ROI, companies I know of constantly pour money into this
-> > area. Given its scale, this debugfs is the least of their concerns. A
-> > good example is the proactive reclaim sysfs interface [4]. It's been
-> > used at Google for many years and at Meta for a few years. We only
-> > started finalizing it recently.
-> >
-> > [4] https://lore.kernel.org/r/20220425190040.2475377-1-yosryahmed@google.com/
->
-> Sure, if one organization is involved in both the userspace code and
-> the kernel interfaces then the alteration of kernel interfaces can be
-> handled in a coordinated fashion.
->
-> But releasing interfaces to the whole world is a different deal.  It's
-> acceptable to say "this is in debugfs for now because it's a work
-> in progress" but it sounds like mglru's interfaces are beyond that
-> stage?
+[  428.469167] ------------[ cut here ]------------
+[  428.469180] kernel BUG at mm/slub.c:4150!
+[  428.469193] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+[  428.469219] Workqueue: events_unbound async_run_entry_fn
+[  428.469230] RIP: 0010:kfree+0x319/0x31b
+[  428.469241] RSP: 0018:ffffa1fac015fc30 EFLAGS: 00010246
+[  428.469247] RAX: ffffedb10419d108 RBX: ffff8c05262b0000
+[  428.469252] RDX: ffff8c04a8c07000 RSI: 0000000000000000
+[  428.469256] RBP: ffffa1fac015fc78 R08: 0000000000000000
+[  428.469276] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  428.469285] Call Trace:
+[  428.469295]  ? dma_free_attrs+0x5f/0x7d
+[  428.469320]  ath10k_core_stop+0x5b/0x6f
+[  428.469336]  ath10k_halt+0x126/0x177
+[  428.469352]  ath10k_stop+0x41/0x7e
+[  428.469387]  drv_stop+0x88/0x10e
+[  428.469410]  __ieee80211_suspend+0x297/0x411
+[  428.469441]  rdev_suspend+0x6e/0xd0
+[  428.469462]  wiphy_suspend+0xb1/0x105
+[  428.469483]  ? name_show+0x2d/0x2d
+[  428.469490]  dpm_run_callback+0x8c/0x126
+[  428.469511]  ? name_show+0x2d/0x2d
+[  428.469517]  __device_suspend+0x2e7/0x41b
+[  428.469523]  async_suspend+0x1f/0x93
+[  428.469529]  async_run_entry_fn+0x3d/0xd1
+[  428.469535]  process_one_work+0x1b1/0x329
+[  428.469541]  worker_thread+0x213/0x372
+[  428.469547]  kthread+0x150/0x15f
+[  428.469552]  ? pr_cont_work+0x58/0x58
+[  428.469558]  ? kthread_blkcg+0x31/0x31
 
-Correct. It's a WIP in the sense of "know what needs to be done but
-can't get it done immediately", not "don't know what's next; try this
-for now".
+Tested-on: QCA6174 hw3.2 PCI WLAN.RM.4.4.1-00288-QCARMSWPZ-1
+Co-developed-by: Wen Gong <quic_wgong@quicinc.com>
+Signed-off-by: Wen Gong <quic_wgong@quicinc.com>
+Signed-off-by: Abhishek Kumar <kuabhs@chromium.org>
+---
+
+Changes in v2:
+- Fixed typo, replaced ath11k by ath10k in the comments.
+- Adjusted the position of my S-O-B tag.
+- Added the Tested-on tag.
+
+ drivers/net/wireless/ath/ath10k/mac.c | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/wireless/ath/ath10k/mac.c b/drivers/net/wireless/ath/ath10k/mac.c
+index d804e19a742a..e9c1f11fef0a 100644
+--- a/drivers/net/wireless/ath/ath10k/mac.c
++++ b/drivers/net/wireless/ath/ath10k/mac.c
+@@ -5345,8 +5345,22 @@ static void ath10k_stop(struct ieee80211_hw *hw)
+ 
+ 	mutex_lock(&ar->conf_mutex);
+ 	if (ar->state != ATH10K_STATE_OFF) {
+-		if (!ar->hw_rfkill_on)
+-			ath10k_halt(ar);
++		if (!ar->hw_rfkill_on) {
++			/* If the current driver state is RESTARTING but not yet
++			 * fully RESTARTED because of incoming suspend event,
++			 * then ath10k_halt is already called via
++			 * ath10k_core_restart and should not be called here.
++			 */
++			if (ar->state != ATH10K_STATE_RESTARTING)
++				ath10k_halt(ar);
++			else
++				/* Suspending here, because when in RESTARTING
++				 * state, ath10k_core_stop skips
++				 * ath10k_wait_for_suspend.
++				 */
++				ath10k_wait_for_suspend(ar,
++							WMI_PDEV_SUSPEND_AND_DISABLE_INTR);
++		}
+ 		ar->state = ATH10K_STATE_OFF;
+ 	}
+ 	mutex_unlock(&ar->conf_mutex);
+-- 
+2.36.0.464.gb9c8b46e94-goog
+

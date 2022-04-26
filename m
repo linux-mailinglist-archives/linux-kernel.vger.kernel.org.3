@@ -2,172 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ECEC5105F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 19:54:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A77BE51060D
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 19:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344888AbiDZR52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 13:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53768 "EHLO
+        id S1349464AbiDZR7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 13:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbiDZR50 (ORCPT
+        with ESMTP id S1353643AbiDZR7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 13:57:26 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8ED2E0B4;
-        Tue, 26 Apr 2022 10:54:18 -0700 (PDT)
+        Tue, 26 Apr 2022 13:59:33 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D333DDC6
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 10:56:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650995658; x=1682531658;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=jJ8eOB3830gC2jPBb90aQ/vhfais5CAB8rdWnLYRFYY=;
-  b=M7i+9q89g7zePOq+KqnwT4UlbAUUbuJWaEFkjDL3yhZdM8cz/9cjcVcx
-   +NihKV7BG/JaCnGD3dNZOFPpcMUMDV/RVeGHUvTIv5XZbu+Zyl8R00fCk
-   hwQhxSc/78k7w+aOTsJoAuvOyhQx1GeUNXIbQqGMlYH2oQbube1WpD4TV
-   ThMSKiXJMTkdabAXb67dMz+9KfylcjZ4Eic6PrqXEbe5NpysSO6FIflvF
-   +yRieNMs2wpcvwwC0XaRZUle1fT8wp8OE/qXY5CzrnxYdZJhRraSAPlwO
-   QxeljiiIBB5+n0XgNTp7DLCiPC57hKJ428w1726hU1E3KBybX0MdgrhSC
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="352112929"
+  t=1650995760; x=1682531760;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=N2x2LXk+r++AMqXB9ywRqVW7milvAS5JXMJ3BbkKtTg=;
+  b=W1/0EVplnP3br3UlyuiuvNNXTekJN3spwY+F59pTUWoaKQ1s0F+BomH/
+   ZckF8FVDT8g7FkXg9twbm/95bZP1SL2mWNMd7pUq2WnMcezL9XWy4YUCx
+   X+91LHeuZYRs/x23Kymi/drDO8OkJEfdc7/HibkMfXB423T+atuvsFnf1
+   NlA5pJ10dJPVqL7Ix7FavFXe6yjlXp0I3ymQpaShldcrBcZtmTPmQtK/X
+   YumbvH2lHLV/nys5P0TPd+so24tYf+W+50iiUvo+eliWXIx4X7nShsbhT
+   4H+K2WPSkY7Nt9C7YMXEDU8YNwg6ffgujM3+de/sALrzRA+V2pbPHbcnG
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="263266406"
 X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="352112929"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 10:54:18 -0700
+   d="scan'208";a="263266406"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 10:55:59 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="513280383"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 10:54:18 -0700
-Date:   Tue, 26 Apr 2022 10:54:10 -0700 (PDT)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     "Wu, Hao" <hao.wu@intel.com>
-cc:     "Zhang, Tianfei" <tianfei.zhang@intel.com>,
-        "trix@redhat.com" <trix@redhat.com>,
-        "mdf@kernel.org" <mdf@kernel.org>,
-        "Xu, Yilun" <yilun.xu@intel.com>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] uio: dfl: add HSSI feature id
-In-Reply-To: <DM6PR11MB38197992351E559308C8F58185FB9@DM6PR11MB3819.namprd11.prod.outlook.com>
-Message-ID: <alpine.DEB.2.22.394.2204261051330.3491640@rhweight-WRK1>
-References: <20220412062353.53984-1-tianfei.zhang@intel.com> <DM6PR11MB38190E6EEF6DE3EB900290C585F39@DM6PR11MB3819.namprd11.prod.outlook.com> <BN9PR11MB548330FAA7EF6B9DAC2F0E76E3F29@BN9PR11MB5483.namprd11.prod.outlook.com> <alpine.DEB.2.22.394.2204191048300.5866@rhweight-WRK1>
- <DM6PR11MB38197992351E559308C8F58185FB9@DM6PR11MB3819.namprd11.prod.outlook.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+   d="scan'208";a="617116800"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 26 Apr 2022 10:55:57 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1njPPo-0003sC-GI;
+        Tue, 26 Apr 2022 17:55:56 +0000
+Date:   Wed, 27 Apr 2022 01:55:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Bristot de Oliveira <bristot@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+Subject: kernel/trace/trace_osnoise.c:101:1: sparse: sparse: symbol
+ '__pcpu_scope_per_cpu_osnoise_var' was not declared. Should it be static?
+Message-ID: <202204270146.IRxXM4hU-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d615b5416f8a1afeb82d13b238f8152c572d59c0
+commit: bce29ac9ce0bb0b0b146b687ab978378c21e9078 trace: Add osnoise tracer
+date:   10 months ago
+config: parisc-randconfig-s031-20220425 (https://download.01.org/0day-ci/archive/20220427/202204270146.IRxXM4hU-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bce29ac9ce0bb0b0b146b687ab978378c21e9078
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout bce29ac9ce0bb0b0b146b687ab978378c21e9078
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=parisc SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
 
-On Tue, 26 Apr 2022, Wu, Hao wrote:
+sparse warnings: (new ones prefixed by >>)
+>> kernel/trace/trace_osnoise.c:101:1: sparse: sparse: symbol '__pcpu_scope_per_cpu_osnoise_var' was not declared. Should it be static?
+   kernel/trace/trace_osnoise.c:160:14: sparse: sparse: symbol 'interface_lock' was not declared. Should it be static?
+   kernel/trace/trace_osnoise.c:438:6: sparse: sparse: symbol 'osnoise_trace_irq_entry' was not declared. Should it be static?
+   kernel/trace/trace_osnoise.c:461:6: sparse: sparse: symbol 'osnoise_trace_irq_exit' was not declared. Should it be static?
+   kernel/trace/trace_osnoise.c:520:5: sparse: sparse: symbol 'hook_irq_events' was not declared. Should it be static?
+   kernel/trace/trace_osnoise.c:552:6: sparse: sparse: symbol 'unhook_irq_events' was not declared. Should it be static?
+   kernel/trace/trace_osnoise.c:569:6: sparse: sparse: symbol 'trace_softirq_entry_callback' was not declared. Should it be static?
+   kernel/trace/trace_osnoise.c:592:6: sparse: sparse: symbol 'trace_softirq_exit_callback' was not declared. Should it be static?
+   kernel/trace/trace_osnoise.c:706:1: sparse: sparse: symbol 'trace_sched_switch_callback' was not declared. Should it be static?
+   kernel/trace/trace_osnoise.c:724:5: sparse: sparse: symbol 'hook_thread_events' was not declared. Should it be static?
+   kernel/trace/trace_osnoise.c:741:6: sparse: sparse: symbol 'unhook_thread_events' was not declared. Should it be static?
+   kernel/trace/trace_osnoise.c:753:6: sparse: sparse: symbol 'save_osn_sample_stats' was not declared. Should it be static?
+   kernel/trace/trace_osnoise.c:768:6: sparse: sparse: symbol 'diff_osn_sample_stats' was not declared. Should it be static?
+   kernel/trace/trace_osnoise.c:966:17: sparse: sparse: incompatible types in comparison expression (different signedness):
+   kernel/trace/trace_osnoise.c:966:17: sparse:    signed long long *
+   kernel/trace/trace_osnoise.c:966:17: sparse:    unsigned long long [usertype] *
 
->>>>> -----Original Message-----
->>>>> From: Zhang, Tianfei <tianfei.zhang@intel.com>
->>>>> Sent: Tuesday, April 12, 2022 2:24 PM
->>>>> To: Wu, Hao <hao.wu@intel.com>; trix@redhat.com; mdf@kernel.org; Xu,
->>>>> Yilun <yilun.xu@intel.com>; linux-fpga@vger.kernel.org;
->>>>> gregkh@linuxfoundation.org
->>>>> Cc: linux-kernel@vger.kernel.org; Matthew Gerlach
->>>>> <matthew.gerlach@linux.intel.com>; Zhang, Tianfei
->>>>> <tianfei.zhang@intel.com>
->>>>> Subject: [PATCH v2] uio: dfl: add HSSI feature id
->>>>>
->>>>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>>>>
->>>>> Add the feature id of the OFS HSSI (High Speed Serial Interface)
->>>>
->>>> We still don't see any description on what OFS is here, or will OFS be added to
->>>> title as well? we don't expect another submission with the same title but for
->> XXX
->>>> HSSI again.
->>>
->>> This name of HSSI module in dfl feature id table is : OFS HSSI subsystem.
->>>
->>> How about this tile:
->>> uio: dfl: add OFS HSSI device id
->>>
->>> Add OFS HSSI (Open FPGA Stack High Speed Serial Interface) device ID in
->> uio_dfl driver for Intel PAC N6000 Card.
->>
->> Hi Tianfei,
->>
->> In the Platform Designer tool, this IP block is referred to as the HSSI
->> Subsystem.  I think we should use the same name here.  Additionally, this
->> subsystem is already in use in multiple cards; so I suggest dropping
->> any reference to a particular card.
->
-> The only concern is that there are 4 HSSI in the feature id table.
-> Without any prefix, it may confuse people.
-> https://github.com/OPAE/dfl-feature-id
+vim +/__pcpu_scope_per_cpu_osnoise_var +101 kernel/trace/trace_osnoise.c
 
-Hi Hao,
+    85	
+    86	/*
+    87	 * osnoise_register_instance - register a new trace instance
+    88	 *
+    89	 * Register a trace_array *tr in the list of instances running
+    90	 * osnoise/timerlat tracers.
+    91	 */
+    92	static int osnoise_register_instance(struct trace_array *tr)
+    93	{
+    94		struct osnoise_instance *inst;
+    95	
+    96		/*
+    97		 * register/unregister serialization is provided by trace's
+    98		 * trace_types_lock.
+    99		 */
+   100		lockdep_assert_held(&trace_types_lock);
+ > 101	
+   102		inst = kmalloc(sizeof(*inst), GFP_KERNEL);
+   103		if (!inst)
+   104			return -ENOMEM;
+   105	
+   106		INIT_LIST_HEAD_RCU(&inst->list);
+   107		inst->tr = tr;
+   108		list_add_tail_rcu(&inst->list, &osnoise_instances);
+   109	
+   110		return 0;
+   111	}
+   112	
 
-Good point about the possible confusion of 4 HSSI implementations 
-mentioned in the table.  I have submitted a pull request adding clarity to 
-the table:
-
-https://github.com/OPAE/dfl-feature-id/pull/1
-
-Matthew
-
->
->>
->> Matthew
->>
->>>
->>>>
->>>>> subsystem to table of ids supported by the uio_dfl driver. HSSI
->>>>> subsystem consists of harden/soft Ethernet MAC to support various
->>>>> ethernet usages and PCS/FEC/PMA direct modes for non-ethernet usages.
->>>>>
->>>>> We leverage the uio_dfl driver to access the HSSI subsystem on user
->>>>> space, because the HSSI subsystem was designed for specific purposes
->>>>> and does not fit into the standard MAC and net kernel subsystems.
->>>>>
->>>>> The Feature ID table of DFL can be found:
->>>>> https://github.com/OPAE/dfl-feature-id
->>>>
->>>> Why you put it here? even this link there is no more descriptions to
->> understand
->>>> what it is. Or can be removed here.
->>>
->>> Yes, I agree, I will remove it.
->>>>
->>>>>
->>>>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>>>> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
->>>>> ---
->>>>> v2: add HSSI introduction and the git repo of Feature ID table.
->>>>> ---
->>>>>  drivers/uio/uio_dfl.c | 2 ++
->>>>>  1 file changed, 2 insertions(+)
->>>>>
->>>>> diff --git a/drivers/uio/uio_dfl.c b/drivers/uio/uio_dfl.c index
->>>>> 89c0fc7b0cbc..660e1d0bf6b9 100644
->>>>> --- a/drivers/uio/uio_dfl.c
->>>>> +++ b/drivers/uio/uio_dfl.c
->>>>> @@ -45,9 +45,11 @@ static int uio_dfl_probe(struct dfl_device *ddev)
->>>>> }
->>>>>
->>>>>  #define FME_FEATURE_ID_ETH_GROUP	0x10
->>>>> +#define FME_FEATURE_ID_OFS_HSSI		0x15
->>>>>
->>>>>  static const struct dfl_device_id uio_dfl_ids[] = {
->>>>>  	{ FME_ID, FME_FEATURE_ID_ETH_GROUP },
->>>>> +	{ FME_ID, FME_FEATURE_ID_OFS_HSSI },
->>>>>  	{ }
->>>>>  };
->>>>>  MODULE_DEVICE_TABLE(dfl, uio_dfl_ids);
->>>>> --
->>>>> 2.26.2
->>>
->>>
->
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

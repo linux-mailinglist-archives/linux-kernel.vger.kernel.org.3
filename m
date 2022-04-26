@@ -2,114 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27089510639
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 20:03:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DFE351063E
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 20:03:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353593AbiDZSGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 14:06:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59480 "EHLO
+        id S1353656AbiDZSG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 14:06:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353590AbiDZSGQ (ORCPT
+        with ESMTP id S1353590AbiDZSGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 14:06:16 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0630427CF6
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 11:03:08 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id l9-20020a056830268900b006054381dd35so13598671otu.4
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 11:03:07 -0700 (PDT)
+        Tue, 26 Apr 2022 14:06:23 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066C827CE6
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 11:03:15 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id v12so19750521wrv.10
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 11:03:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=gtLzLFLewrXQHTJbVImCCDYJrynuyEbueRUS2ATV0U0=;
-        b=AjrbAV8MeBG1TftKOze/fLl/wHpmQ8Rhq7SRWYnnk6QRX7wdha+JlYrp5O7tTdMzUy
-         WqrpM6F+WjaAZwYZpZ2mDTaX4XSFH+e3nzwvRyoi/VCGEQvOsNrYC0eoZTvSLoRw7PaA
-         6QSCdsZtqCQElCl5khit+DPERPtXiRGy1ElHY=
+        bh=+onuqX07NQLVnhG5hcq84PDJSKTGZ1KYCLEC+GQraSM=;
+        b=g9bTjXUuVtqu1ley+eg3MvLbTvaYERrW5DcPicHR1kWNztwsyfpkcmbfZfHxABsFEg
+         BVECFAUSQ9C//qUwXLRfuDlS0cyxk5b4cUZjKfeJ+Ficd/SCYht0Z5/7Qjw5F92uETD4
+         W6PK89d0AnfnmFotKNSOfuyhYT3FTq2C9k5suv0XrHigSwB2KhAz3T+lcqNyl81W1NMk
+         0F/9/3+MN7KCB3ETbGL1FeZbFzTTc70LjoPM8DwCwaPx+q+akt57kCMz6ivxKwRExdPG
+         TxmSUhaNMXlfVjkeyaQHPVs/8m60zXsizWZsE/3vt/c/CXm23lSqE4zdSxOczOEOth03
+         1gpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=gtLzLFLewrXQHTJbVImCCDYJrynuyEbueRUS2ATV0U0=;
-        b=mxIXcJ/ZkJ2V+LO5v7rjzWda/IAIiis4e/tPtzDxTy27b49gJIq40ekHqxvlEOf4mV
-         dQvkHiRjp/z9QlW4lsUdPTtQ4mw9ncZo0UJKsCXHzSU2pok2TUfgoSpyfwDkAYxYdAcV
-         +3r6VFKB4DT2xxkKmmIYK/6pEyEZ5hveg4U4FLmFBQOAFRbTQr+2WDKE2GarCrj/4CMR
-         NKbrp1GQqZP5/zLCecCx0iMPoKbF8cexl96fppPF6wkwofC8XUS/rM35BiaFFlO5y85U
-         L7+NDY1i9+tfV0cQFhtZb/GlpkCM4hun0XadJKzk+vFK6O+2oTwRGT10xE8yua4dsixy
-         mWtg==
-X-Gm-Message-State: AOAM530s/y47Csp5FBZiYXyg3OBhH1rTMOpCq52Dgl2NtnQmr9iFwWan
-        AsBR7pojW3s4UdyZV9IjlZBeGZH94Fc+pQ==
-X-Google-Smtp-Source: ABdhPJy83NMN7nOzhxCWnef7CUTp6YJ8Z3hAH75BE4DKR87rV/78cvj30amXCEorIvhpquOQk8Oh9A==
-X-Received: by 2002:a9d:384:0:b0:604:a8b6:eb85 with SMTP id f4-20020a9d0384000000b00604a8b6eb85mr8488259otf.140.1650996186537;
-        Tue, 26 Apr 2022 11:03:06 -0700 (PDT)
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com. [209.85.161.46])
-        by smtp.gmail.com with ESMTPSA id d21-20020a4a3c15000000b0033364bde9besm5934109ooa.32.2022.04.26.11.03.04
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 11:03:04 -0700 (PDT)
-Received: by mail-oo1-f46.google.com with SMTP id m22-20020a056820051600b0033a41079257so3531974ooj.4
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 11:03:04 -0700 (PDT)
-X-Received: by 2002:a4a:141:0:b0:353:d3c1:8aa with SMTP id 62-20020a4a0141000000b00353d3c108aamr8682441oor.64.1650996184119;
- Tue, 26 Apr 2022 11:03:04 -0700 (PDT)
+        bh=+onuqX07NQLVnhG5hcq84PDJSKTGZ1KYCLEC+GQraSM=;
+        b=G+XTvzH2jf05L9MzWeetLa0Yun0O/V7tGBRuAE303P23YUfhMZdxAQs6ZpnCSt72cW
+         XikDnARxvF7uwW9pIM1LJNwf3365rYBcT4f6kQ6Xkz17P3ho36NNQKTse3ZyJ2GscO/+
+         bAmDP2mEtAy5ftuEK3M0Dh8SLX6a3To4BlRqYWnTmvmPXEApp6atl1Wb9UloX3rPwVgK
+         jUgPYYKltNpDKqGqQ4OzLNkEqi32IcJqs2qzvavFkeM0PSzu0Mcqesm5BSizfqEb/YyX
+         LN5V5cc6HKp6ECj7jNqf7KwQS9lwBv5FxHZNZtRDbDdN0bLDZ3o0MYVw4cs5xRIMOBfs
+         5NQA==
+X-Gm-Message-State: AOAM533WmiRewxhvhKGYBRWEtnZayAACSy9O0wkBrnIJdDSm3GEdB5F7
+        wjnNElXbcwpOgCj4RbMnngGe+9cQNlH+sWT/6cFN
+X-Google-Smtp-Source: ABdhPJzvaHhm+gDkGIU/mLn3si/S7ZnD78mhxMStriKTtPLrrYOnHwrB/NGl572b3NM4JieS55hPLJOhkmHdpCMJq1E=
+X-Received: by 2002:a5d:590d:0:b0:20a:c3eb:2584 with SMTP id
+ v13-20020a5d590d000000b0020ac3eb2584mr18627797wrd.18.1650996193497; Tue, 26
+ Apr 2022 11:03:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <1650964532-9379-1-git-send-email-quic_spathi@quicinc.com>
-In-Reply-To: <1650964532-9379-1-git-send-email-quic_spathi@quicinc.com>
-From:   Brian Norris <briannorris@chromium.org>
-Date:   Tue, 26 Apr 2022 11:02:52 -0700
-X-Gmail-Original-Message-ID: <CA+ASDXMkzrqkDdb=y4DpK5Ot=XFtj6aAv7-mSBoGP5rDJZanpA@mail.gmail.com>
-Message-ID: <CA+ASDXMkzrqkDdb=y4DpK5Ot=XFtj6aAv7-mSBoGP5rDJZanpA@mail.gmail.com>
-Subject: Re: [PATCH V1] mmc: core: Select HS mode in device first and then in
- the host
-To:     Srinivasarao Pathipati <quic_spathi@quicinc.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>, avri.altman@wdc.com,
-        Linus Walleij <linus.walleij@linaro.org>,
-        vbadigan@codeaurora.org, Shawn Lin <shawn.lin@rock-chips.com>,
-        s.shtylyov@omp.ru, merez@codeaurora.org,
-        wsa+renesas@sang-engineering.com, sayalil@codeaurora.org,
-        linux-mmc@vger.kernel.org,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        Kishor Krishna Bhat <quic_kishkris@quicinc.com>,
-        kamasali <quic_kamasali@quicinc.com>
+References: <20220418145945.38797-1-casey@schaufler-ca.com>
+ <20220418145945.38797-24-casey@schaufler-ca.com> <a1702622-5980-1eb4-1cf8-b6fc6cd98b25@canonical.com>
+In-Reply-To: <a1702622-5980-1eb4-1cf8-b6fc6cd98b25@canonical.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 26 Apr 2022 14:03:02 -0400
+Message-ID: <CAHC9VhRzJKAARW1rnUMu0Y6RVo_uq=i=Jzh4LmA9grtQ1W2C1Q@mail.gmail.com>
+Subject: Re: [PATCH v35 23/29] Audit: Create audit_stamp structure
+To:     John Johansen <john.johansen@canonical.com>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        casey.schaufler@intel.com, jmorris@namei.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-audit@redhat.com, keescook@chromium.org,
+        penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Apr 25, 2022 at 7:31 PM John Johansen
+<john.johansen@canonical.com> wrote:
+> On 4/18/22 07:59, Casey Schaufler wrote:
+> > Replace the timestamp and serial number pair used in audit records
+> > with a structure containing the two elements.
+> >
+> > Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> > Acked-by: Paul Moore <paul@paul-moore.com>
+> > ---
+> >  kernel/audit.c   | 17 +++++++++--------
+> >  kernel/audit.h   | 12 +++++++++---
+> >  kernel/auditsc.c | 22 +++++++++-------------
+> >  3 files changed, 27 insertions(+), 24 deletions(-)
 
-On Tue, Apr 26, 2022 at 2:16 AM Srinivasarao Pathipati
-<quic_spathi@quicinc.com> wrote:
+...
+
+> > diff --git a/kernel/audit.h b/kernel/audit.h
+> > index 4af63e7dde17..260dab6e0e15 100644
+> > --- a/kernel/audit.h
+> > +++ b/kernel/audit.h
+> > @@ -108,10 +114,10 @@ struct audit_context {
+> >               AUDIT_CTX_URING,        /* in use by io_uring */
+> >       } context;
+> >       enum audit_state    state, current_state;
+> > +     struct audit_stamp  stamp;      /* event identifier */
+> >       unsigned int        serial;     /* serial number for record */
 >
-> From: Sayali Lokhande <sayalil@codeaurora.org>
->
-> While switching from hs400 to hs200 mode, high speed mode
-> timing should be selected in the device before changing the
-> clock frequency in the host. But current implementation,
-> (mmc_hs400_to_hs200) first updates the frequency in the host
-> and then updates mode in the device. This is a spec violation.
-> Hence update the sequence to comply with the spec.
+> shouldn't we be dropping serial from the audit_context, since we have
+> moved it into the audit_stamp?
 
-I'm a bit new to interpreting eMMC specs, but are you sure this is a
-violation? In JESD84-B51, I see:
+Unless we make some significant changes to audit_log_start() we still
+need to preserve a timestamp in the audit_context so that regularly
+associated audit records can share a common timestamp (which is what
+groups multiple records into a single "event").
 
-"The bus frequency can be changed at any time (under the restrictions
-of maximum data transfer frequency, defined by the Device, and the
-identification frequency defined by the standard document)."
+FWIW, I'm working on some patches which will make a lot of this better
+in the future, but they aren't ready yet and would almost surely land
+after the stacking patches.  Audit will get better at some point in
+the future, I promise :)
 
-I think that suggests we can lower the host clock first, and then
-lower the device timing. And (according to my limited knowledge) that
-makes sense too: the device timing is a "maximum" (to some extent) and
-we're free to run the host bus somewhat slower.
-
-And on the flip side: it sounds like you may be _introducing_ a spec
-violation (that we'll be running the host faster than the device
-timing, briefly)?
-
-Apologies if I'm off base. But you did CC me ;)
-
-Regards,
-Brian
+--
+paul-moore.com

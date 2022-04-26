@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D99850F73B
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:39:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD0550F426
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:32:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347117AbiDZJT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57810 "EHLO
+        id S1344813AbiDZIfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:35:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346040AbiDZIoe (ORCPT
+        with ESMTP id S1344996AbiDZIdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:44:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2601606BF;
-        Tue, 26 Apr 2022 01:34:07 -0700 (PDT)
+        Tue, 26 Apr 2022 04:33:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3503B3D9;
+        Tue, 26 Apr 2022 01:25:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D2FC4B81D0B;
-        Tue, 26 Apr 2022 08:34:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43817C385AF;
-        Tue, 26 Apr 2022 08:34:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2AE161846;
+        Tue, 26 Apr 2022 08:25:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFDF1C385A0;
+        Tue, 26 Apr 2022 08:25:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962044;
-        bh=MloYW9hWeVoGLvgwUKtBkfZ0MZsDwu3/pbcTqCOAJVw=;
+        s=korg; t=1650961525;
+        bh=Vh1DE9IsVkjPyP8EGE2selCjM3sQ8mh3y6EYE3TjMyo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y0RjSi8+qBJwVM1gDY6yFh/v8z8zfLorNfd3qkgkKgd5ihbZUmpwbFj0vP3DuuO1+
-         QXOhryNWb1Qq7j6o5E6oSVairOHLWX2hNbFjuHuUdcmNdnC0DUrR1LAuLKnq1G3CkN
-         PhEpdTQWLI+JNe2uXwUHmFjciHGURDlaL+o6Sr7o=
+        b=I3IPcjDvCKgI/b7aPTsSoshCFzpX1N8CkV7ADHxqy2s3Xbgatw29y4hLVKxKLYf5C
+         SFHpchCDsjSEYTpfnSGnh51ckHNJcFsqyQu+ffdz7Drxrro6X0urVb8X3GOWPGxKvU
+         yVZ2xMjWA/4rXG95SJAOPZPhQYWXAHKLZqn70o0o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alistair Popple <apopple@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.10 54/86] mm/mmu_notifier.c: fix race in mmu_interval_notifier_remove()
+        Duoming Zhou <duoming@zju.edu.cn>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ovidiu Panait <ovidiu.panait@windriver.com>
+Subject: [PATCH 4.14 40/43] ax25: fix NPD bug in ax25_disconnect
 Date:   Tue, 26 Apr 2022 10:21:22 +0200
-Message-Id: <20220426081742.764495905@linuxfoundation.org>
+Message-Id: <20220426081735.702609878@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
-References: <20220426081741.202366502@linuxfoundation.org>
+In-Reply-To: <20220426081734.509314186@linuxfoundation.org>
+References: <20220426081734.509314186@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,81 +54,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alistair Popple <apopple@nvidia.com>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-commit 319561669a59d8e9206ab311ae5433ef92fd79d1 upstream.
+commit 7ec02f5ac8a5be5a3f20611731243dc5e1d9ba10 upstream.
 
-In some cases it is possible for mmu_interval_notifier_remove() to race
-with mn_tree_inv_end() allowing it to return while the notifier data
-structure is still in use.  Consider the following sequence:
+The ax25_disconnect() in ax25_kill_by_device() is not
+protected by any locks, thus there is a race condition
+between ax25_disconnect() and ax25_destroy_socket().
+when ax25->sk is assigned as NULL by ax25_destroy_socket(),
+a NULL pointer dereference bug will occur if site (1) or (2)
+dereferences ax25->sk.
 
-  CPU0 - mn_tree_inv_end()            CPU1 - mmu_interval_notifier_remove()
-  ----------------------------------- ------------------------------------
-                                      spin_lock(subscriptions->lock);
-                                      seq = subscriptions->invalidate_seq;
-  spin_lock(subscriptions->lock);     spin_unlock(subscriptions->lock);
-  subscriptions->invalidate_seq++;
-                                      wait_event(invalidate_seq != seq);
-                                      return;
-  interval_tree_remove(interval_sub); kfree(interval_sub);
-  spin_unlock(subscriptions->lock);
-  wake_up_all();
+ax25_kill_by_device()                | ax25_release()
+  ax25_disconnect()                  |   ax25_destroy_socket()
+    ...                              |
+    if(ax25->sk != NULL)             |     ...
+      ...                            |     ax25->sk = NULL;
+      bh_lock_sock(ax25->sk); //(1)  |     ...
+      ...                            |
+      bh_unlock_sock(ax25->sk); //(2)|
 
-As the wait_event() condition is true it will return immediately.  This
-can lead to use-after-free type errors if the caller frees the data
-structure containing the interval notifier subscription while it is
-still on a deferred list.  Fix this by taking the appropriate lock when
-reading invalidate_seq to ensure proper synchronisation.
+This patch moves ax25_disconnect() into lock_sock(), which can
+synchronize with ax25_destroy_socket() in ax25_release().
 
-I observed this whilst running stress testing during some development.
-You do have to be pretty unlucky, but it leads to the usual problems of
-use-after-free (memory corruption, kernel crash, difficult to diagnose
-WARN_ON, etc).
+Fail log:
+===============================================================
+BUG: kernel NULL pointer dereference, address: 0000000000000088
+...
+RIP: 0010:_raw_spin_lock+0x7e/0xd0
+...
+Call Trace:
+ax25_disconnect+0xf6/0x220
+ax25_device_event+0x187/0x250
+raw_notifier_call_chain+0x5e/0x70
+dev_close_many+0x17d/0x230
+rollback_registered_many+0x1f1/0x950
+unregister_netdevice_queue+0x133/0x200
+unregister_netdev+0x13/0x20
+...
 
-Link: https://lkml.kernel.org/r/20220420043734.476348-1-apopple@nvidia.com
-Fixes: 99cb252f5e68 ("mm/mmu_notifier: add an interval tree notifier")
-Signed-off-by: Alistair Popple <apopple@nvidia.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Christian König <christian.koenig@amd.com>
-Cc: John Hubbard <jhubbard@nvidia.com>
-Cc: Ralph Campbell <rcampbell@nvidia.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+[OP: backport to 4.14: adjust context]
+Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/mmu_notifier.c |   14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+ net/ax25/af_ax25.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/mm/mmu_notifier.c
-+++ b/mm/mmu_notifier.c
-@@ -1043,6 +1043,18 @@ int mmu_interval_notifier_insert_locked(
- }
- EXPORT_SYMBOL_GPL(mmu_interval_notifier_insert_locked);
- 
-+static bool
-+mmu_interval_seq_released(struct mmu_notifier_subscriptions *subscriptions,
-+			  unsigned long seq)
-+{
-+	bool ret;
-+
-+	spin_lock(&subscriptions->lock);
-+	ret = subscriptions->invalidate_seq != seq;
-+	spin_unlock(&subscriptions->lock);
-+	return ret;
-+}
-+
- /**
-  * mmu_interval_notifier_remove - Remove a interval notifier
-  * @interval_sub: Interval subscription to unregister
-@@ -1090,7 +1102,7 @@ void mmu_interval_notifier_remove(struct
- 	lock_map_release(&__mmu_notifier_invalidate_range_start_map);
- 	if (seq)
- 		wait_event(subscriptions->wq,
--			   READ_ONCE(subscriptions->invalidate_seq) != seq);
-+			   mmu_interval_seq_released(subscriptions, seq));
- 
- 	/* pairs with mmgrab in mmu_interval_notifier_insert() */
- 	mmdrop(mm);
+--- a/net/ax25/af_ax25.c
++++ b/net/ax25/af_ax25.c
+@@ -105,8 +105,8 @@ again:
+ 				dev_put(ax25_dev->dev);
+ 				ax25_dev_put(ax25_dev);
+ 			}
+-			release_sock(sk);
+ 			ax25_disconnect(s, ENETUNREACH);
++			release_sock(sk);
+ 			spin_lock_bh(&ax25_list_lock);
+ 			sock_put(sk);
+ 			/* The entry could have been deleted from the
 
 

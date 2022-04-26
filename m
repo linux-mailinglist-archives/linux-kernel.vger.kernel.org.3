@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C32C150F53B
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FCDB50F7FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233688AbiDZIq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34184 "EHLO
+        id S1347866AbiDZJhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345776AbiDZIja (ORCPT
+        with ESMTP id S1347922AbiDZJGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:39:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E03C43ACC;
-        Tue, 26 Apr 2022 01:30:58 -0700 (PDT)
+        Tue, 26 Apr 2022 05:06:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80ED1B7C62;
+        Tue, 26 Apr 2022 01:47:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C45F3B81CFE;
-        Tue, 26 Apr 2022 08:30:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C932C385A4;
-        Tue, 26 Apr 2022 08:30:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 11D4860C42;
+        Tue, 26 Apr 2022 08:47:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D299C385A4;
+        Tue, 26 Apr 2022 08:47:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961855;
-        bh=xKcfEQLZP4ng3tKkmzffDxMLQagT/P/DUqC3xhoJ16E=;
+        s=korg; t=1650962839;
+        bh=eU63M2Csqic/VCKHXYjcooxY2JHvdkP4DRhbEDkReXA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hfQzVU90T2o2SUUKa06+9ZFm1nnd2Lmq2x81Kw64TgGLoJq5Tie5ipneKkLkYE72P
-         7OOLM3X8TRCjr198lNFk1zxmb183qUfingkGn1StrBxHgda7Ti/guJYkKuGCFlL/zM
-         34b6T+lIRdijeewxe4jUY0BFHwl7eTONN0EsFxR0=
+        b=oni03q3bRQ7nKMcCOJU6YZkBYJM4FwrQEsMmHFRYk+dP2BFEWpX16Lmq63Jwuosw0
+         Ao4SesoHEYQ/P+pB8UhmltuNFY1F9X8m2YG/LNqHhDmTZovA9VuNnW2cazUDtZfvJg
+         X6iCaw/XKb+8TgSDZsRSfZMKjbKmxNzIKqlxJWgs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        syzbot+7a806094edd5d07ba029@syzkaller.appspotmail.com,
-        Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Theodore Tso <tytso@mit.edu>, stable@kernel.org
-Subject: [PATCH 5.4 54/62] ext4: limit length to bitmap_maxbytes - blocksize in punch_hole
+        syzbot+96b43810dfe9c3bb95ed@syzkaller.appspotmail.com,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 099/146] io_uring: free iovec if file assignment fails
 Date:   Tue, 26 Apr 2022 10:21:34 +0200
-Message-Id: <20220426081738.770345294@linuxfoundation.org>
+Message-Id: <20220426081752.842825330@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
-References: <20220426081737.209637816@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,60 +54,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tadeusz Struk <tadeusz.struk@linaro.org>
+From: Jens Axboe <axboe@kernel.dk>
 
-commit 2da376228a2427501feb9d15815a45dbdbdd753e upstream.
+[ Upstream commit 323b190ba2debbcc03c01d2edaf1ec6b43e6ae43 ]
 
-Syzbot found an issue [1] in ext4_fallocate().
-The C reproducer [2] calls fallocate(), passing size 0xffeffeff000ul,
-and offset 0x1000000ul, which, when added together exceed the
-bitmap_maxbytes for the inode. This triggers a BUG in
-ext4_ind_remove_space(). According to the comments in this function
-the 'end' parameter needs to be one block after the last block to be
-removed. In the case when the BUG is triggered it points to the last
-block. Modify the ext4_punch_hole() function and add constraint that
-caps the length to satisfy the one before laster block requirement.
+We just return failure in this case, but we need to release the iovec
+first. If we're doing IO with more than FAST_IOV segments, then the
+iovec is allocated and must be freed.
 
-LINK: [1] https://syzkaller.appspot.com/bug?id=b80bd9cf348aac724a4f4dff251800106d721331
-LINK: [2] https://syzkaller.appspot.com/text?tag=ReproC&x=14ba0238700000
-
-Fixes: a4bb6b64e39a ("ext4: enable "punch hole" functionality")
-Reported-by: syzbot+7a806094edd5d07ba029@syzkaller.appspotmail.com
-Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
-Link: https://lore.kernel.org/r/20220331200515.153214-1-tadeusz.struk@linaro.org
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Cc: stable@kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: syzbot+96b43810dfe9c3bb95ed@syzkaller.appspotmail.com
+Fixes: 584b0180f0f4 ("io_uring: move read/write file prep state into actual opcode handler")
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/inode.c |   11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ fs/io_uring.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -4311,7 +4311,8 @@ int ext4_punch_hole(struct inode *inode,
- 	struct super_block *sb = inode->i_sb;
- 	ext4_lblk_t first_block, stop_block;
- 	struct address_space *mapping = inode->i_mapping;
--	loff_t first_block_offset, last_block_offset;
-+	loff_t first_block_offset, last_block_offset, max_length;
-+	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
- 	handle_t *handle;
- 	unsigned int credits;
- 	int ret = 0;
-@@ -4357,6 +4358,14 @@ int ext4_punch_hole(struct inode *inode,
- 		   offset;
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 619c67fd456d..9349d7e0754f 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -3622,8 +3622,10 @@ static int io_read(struct io_kiocb *req, unsigned int issue_flags)
+ 		iovec = NULL;
  	}
+ 	ret = io_rw_init_file(req, FMODE_READ);
+-	if (unlikely(ret))
++	if (unlikely(ret)) {
++		kfree(iovec);
+ 		return ret;
++	}
+ 	req->result = iov_iter_count(&s->iter);
  
-+	/*
-+	 * For punch hole the length + offset needs to be within one block
-+	 * before last range. Adjust the length if it goes beyond that limit.
-+	 */
-+	max_length = sbi->s_bitmap_maxbytes - inode->i_sb->s_blocksize;
-+	if (offset + length > max_length)
-+		length = max_length - offset;
-+
- 	if (offset & (sb->s_blocksize - 1) ||
- 	    (offset + length) & (sb->s_blocksize - 1)) {
- 		/*
+ 	if (force_nonblock) {
+@@ -3742,8 +3744,10 @@ static int io_write(struct io_kiocb *req, unsigned int issue_flags)
+ 		iovec = NULL;
+ 	}
+ 	ret = io_rw_init_file(req, FMODE_WRITE);
+-	if (unlikely(ret))
++	if (unlikely(ret)) {
++		kfree(iovec);
+ 		return ret;
++	}
+ 	req->result = iov_iter_count(&s->iter);
+ 
+ 	if (force_nonblock) {
+-- 
+2.35.1
+
 
 

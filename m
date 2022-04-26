@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598A850F76B
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:40:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1991E50F4B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:37:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347576AbiDZJUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:20:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44656 "EHLO
+        id S1345374AbiDZIiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:38:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345581AbiDZI5Q (ORCPT
+        with ESMTP id S1345555AbiDZIen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:57:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B1B83B15;
-        Tue, 26 Apr 2022 01:41:48 -0700 (PDT)
+        Tue, 26 Apr 2022 04:34:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C63A79390;
+        Tue, 26 Apr 2022 01:27:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 762CAB81CF0;
-        Tue, 26 Apr 2022 08:41:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B76EC385A4;
-        Tue, 26 Apr 2022 08:41:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0763D617AE;
+        Tue, 26 Apr 2022 08:27:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12013C385A0;
+        Tue, 26 Apr 2022 08:27:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962506;
-        bh=UQHtrv06tWWNq/VuBscRZKo9WCfY+hF9zl3LNoY7nQY=;
+        s=korg; t=1650961663;
+        bh=2ky58ZqsPOERE4WIyFZo9GgN20b/64m7+5qjVQ2WsHs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=et+jP9IPuEjbAzuebZ2VlKM8vyq4VLi9aBrTXhxTx/DxEI8INsDgbQ80+hrseaP0m
-         bai7Io9S/3v57XsJwaKO+S79iDM4VBw7rejWlDE6qNuiWSDU6+pqoccOyO84SNK4Jm
-         m7J39e56MxnQAe/uh7iVzTKd+yXte2rxswryvw78=
+        b=hFuHk6swhMcmsM5scU5/UAXRTMAqU8R2z8U/Mfgk/L2Ek7b4sTayS/pWcWhzGYGFn
+         mXdFFAWp3ZhFXM0Ygy4a2W4M7fBJl9UO1vn+wBeK20y4izmzd3/asy8TwC4DPddsAH
+         1Kx+3gyb1x1vJ+YVhzlWjDZlX8u+8AvYQy0pLu0k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, lee.jones@linaro.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alistair Popple <apopple@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.15 082/124] mm/mmu_notifier.c: fix race in mmu_interval_notifier_remove()
+        stable@vger.kernel.org,
+        "stable@vger.kernel.org, Dan Carpenter" <dan.carpenter@oracle.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: [PATCH 4.19 43/53] staging: ion: Prevent incorrect reference counting behavour
 Date:   Tue, 26 Apr 2022 10:21:23 +0200
-Message-Id: <20220426081749.632977756@linuxfoundation.org>
+Message-Id: <20220426081736.910195602@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
-References: <20220426081747.286685339@linuxfoundation.org>
+In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
+References: <20220426081735.651926456@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,81 +54,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alistair Popple <apopple@nvidia.com>
 
-commit 319561669a59d8e9206ab311ae5433ef92fd79d1 upstream.
+Supply additional check in order to prevent unexpected results.
 
-In some cases it is possible for mmu_interval_notifier_remove() to race
-with mn_tree_inv_end() allowing it to return while the notifier data
-structure is still in use.  Consider the following sequence:
-
-  CPU0 - mn_tree_inv_end()            CPU1 - mmu_interval_notifier_remove()
-  ----------------------------------- ------------------------------------
-                                      spin_lock(subscriptions->lock);
-                                      seq = subscriptions->invalidate_seq;
-  spin_lock(subscriptions->lock);     spin_unlock(subscriptions->lock);
-  subscriptions->invalidate_seq++;
-                                      wait_event(invalidate_seq != seq);
-                                      return;
-  interval_tree_remove(interval_sub); kfree(interval_sub);
-  spin_unlock(subscriptions->lock);
-  wake_up_all();
-
-As the wait_event() condition is true it will return immediately.  This
-can lead to use-after-free type errors if the caller frees the data
-structure containing the interval notifier subscription while it is
-still on a deferred list.  Fix this by taking the appropriate lock when
-reading invalidate_seq to ensure proper synchronisation.
-
-I observed this whilst running stress testing during some development.
-You do have to be pretty unlucky, but it leads to the usual problems of
-use-after-free (memory corruption, kernel crash, difficult to diagnose
-WARN_ON, etc).
-
-Link: https://lkml.kernel.org/r/20220420043734.476348-1-apopple@nvidia.com
-Fixes: 99cb252f5e68 ("mm/mmu_notifier: add an interval tree notifier")
-Signed-off-by: Alistair Popple <apopple@nvidia.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Christian König <christian.koenig@amd.com>
-Cc: John Hubbard <jhubbard@nvidia.com>
-Cc: Ralph Campbell <rcampbell@nvidia.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: b892bf75b2034 ("ion: Switch ion to use dma-buf")
+Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/mmu_notifier.c |   14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+ drivers/staging/android/ion/ion.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/mm/mmu_notifier.c
-+++ b/mm/mmu_notifier.c
-@@ -1036,6 +1036,18 @@ int mmu_interval_notifier_insert_locked(
- }
- EXPORT_SYMBOL_GPL(mmu_interval_notifier_insert_locked);
+--- a/drivers/staging/android/ion/ion.c
++++ b/drivers/staging/android/ion/ion.c
+@@ -140,6 +140,9 @@ static void *ion_buffer_kmap_get(struct
+ 	void *vaddr;
  
-+static bool
-+mmu_interval_seq_released(struct mmu_notifier_subscriptions *subscriptions,
-+			  unsigned long seq)
-+{
-+	bool ret;
+ 	if (buffer->kmap_cnt) {
++		if (buffer->kmap_cnt == INT_MAX)
++			return ERR_PTR(-EOVERFLOW);
 +
-+	spin_lock(&subscriptions->lock);
-+	ret = subscriptions->invalidate_seq != seq;
-+	spin_unlock(&subscriptions->lock);
-+	return ret;
-+}
-+
- /**
-  * mmu_interval_notifier_remove - Remove a interval notifier
-  * @interval_sub: Interval subscription to unregister
-@@ -1083,7 +1095,7 @@ void mmu_interval_notifier_remove(struct
- 	lock_map_release(&__mmu_notifier_invalidate_range_start_map);
- 	if (seq)
- 		wait_event(subscriptions->wq,
--			   READ_ONCE(subscriptions->invalidate_seq) != seq);
-+			   mmu_interval_seq_released(subscriptions, seq));
- 
- 	/* pairs with mmgrab in mmu_interval_notifier_insert() */
- 	mmdrop(mm);
+ 		buffer->kmap_cnt++;
+ 		return buffer->vaddr;
+ 	}
 
 

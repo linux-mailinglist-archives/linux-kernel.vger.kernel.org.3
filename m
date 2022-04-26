@@ -2,107 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C73DA50F418
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B7B450F571
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243412AbiDZIdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:33:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60612 "EHLO
+        id S1345459AbiDZImU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:42:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344788AbiDZIbu (ORCPT
+        with ESMTP id S1345463AbiDZIei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:31:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0AD7E5B5;
-        Tue, 26 Apr 2022 01:25:11 -0700 (PDT)
+        Tue, 26 Apr 2022 04:34:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB90C762BC;
+        Tue, 26 Apr 2022 01:27:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EA50E617F3;
-        Tue, 26 Apr 2022 08:25:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07E16C385A0;
-        Tue, 26 Apr 2022 08:25:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 08D31617AE;
+        Tue, 26 Apr 2022 08:27:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1591EC385A4;
+        Tue, 26 Apr 2022 08:27:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961510;
-        bh=zejl2CLiYB6AvKs1xN/daWvrnd0yr3qXQWhJR0zIA3I=;
+        s=korg; t=1650961645;
+        bh=yx8av04Y5xxLJJnNv+WtjSdUDUvPluHDdTSScXGxX4s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dP3LhjeRImh3a0oGXmVEnV38bgTPUPbH8PkwywN3/+Bisk6seSKCcvgATm1lu8w+9
-         QXXMdnoIUp5kcq0Dv0CYIQJeLe1D4IuPhDZPHHOFHxpdeuuvWPAqLR2nRssc2vSMS8
-         waYaW9fBKxYlyjItZRM0hwyinFOA8Wfftqxo81EI=
+        b=DpQErN2DhSeYA6wcJ6KvCvBZiR4SFgjy2gLUn22zwV+uxYOrKeMEZe8tYxrXQaNlk
+         Exow5PpkFamT+kX0LtN18+LxRzUwjGhTeydH1t+akvvmyKYIELgPUFCjtScfJrVNF9
+         zCD158MiESEYvgRJZx2lDUsjwLe99ITPRR1NMNcQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        James Hutchinson <jahutchinson99@googlemail.com>,
-        Dima Ruinskiy <dima.ruinskiy@intel.com>,
-        Sasha Neftin <sasha.neftin@intel.com>,
-        Naama Meir <naamax.meir@linux.intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: [PATCH 4.14 27/43] e1000e: Fix possible overflow in LTR decoding
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: [PATCH 4.19 29/53] ata: pata_marvell: Check the bmdma_addr beforing reading
 Date:   Tue, 26 Apr 2022 10:21:09 +0200
-Message-Id: <20220426081735.319536603@linuxfoundation.org>
+Message-Id: <20220426081736.502980807@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081734.509314186@linuxfoundation.org>
-References: <20220426081734.509314186@linuxfoundation.org>
+In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
+References: <20220426081735.651926456@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sasha Neftin <sasha.neftin@intel.com>
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-commit 04ebaa1cfddae5f240cc7404f009133bb0389a47 upstream.
+commit aafa9f958342db36c17ac2a7f1b841032c96feb4 upstream.
 
-When we decode the latency and the max_latency, u16 value may not fit
-the required size and could lead to the wrong LTR representation.
+Before detecting the cable type on the dma bar, the driver should check
+whether the 'bmdma_addr' is zero, which means the adapter does not
+support DMA, otherwise we will get the following error:
 
-Scaling is represented as:
-scale 0 - 1         (2^(5*0)) = 2^0
-scale 1 - 32        (2^(5 *1))= 2^5
-scale 2 - 1024      (2^(5 *2)) =2^10
-scale 3 - 32768     (2^(5 *3)) =2^15
-scale 4 - 1048576   (2^(5 *4)) = 2^20
-scale 5 - 33554432  (2^(5 *4)) = 2^25
-scale 4 and scale 5 required 20 and 25 bits respectively.
-scale 6 reserved.
+[    5.146634] Bad IO access at port 0x1 (return inb(port))
+[    5.147206] WARNING: CPU: 2 PID: 303 at lib/iomap.c:44 ioread8+0x4a/0x60
+[    5.150856] RIP: 0010:ioread8+0x4a/0x60
+[    5.160238] Call Trace:
+[    5.160470]  <TASK>
+[    5.160674]  marvell_cable_detect+0x6e/0xc0 [pata_marvell]
+[    5.161728]  ata_eh_recover+0x3520/0x6cc0
+[    5.168075]  ata_do_eh+0x49/0x3c0
 
-Replace the u16 type with the u32 type and allow corrected LTR
-representation.
-
-Cc: stable@vger.kernel.org
-Fixes: 44a13a5d99c7 ("e1000e: Fix the max snoop/no-snoop latency for 10M")
-Reported-by: James Hutchinson <jahutchinson99@googlemail.com>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215689
-Suggested-by: Dima Ruinskiy <dima.ruinskiy@intel.com>
-Signed-off-by: Sasha Neftin <sasha.neftin@intel.com>
-Tested-by: Naama Meir <naamax.meir@linux.intel.com>
-Tested-by: James Hutchinson <jahutchinson99@googlemail.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/e1000e/ich8lan.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/ata/pata_marvell.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/net/ethernet/intel/e1000e/ich8lan.c
-+++ b/drivers/net/ethernet/intel/e1000e/ich8lan.c
-@@ -1013,8 +1013,8 @@ static s32 e1000_platform_pm_pch_lpt(str
- {
- 	u32 reg = link << (E1000_LTRV_REQ_SHIFT + E1000_LTRV_NOSNOOP_SHIFT) |
- 	    link << E1000_LTRV_REQ_SHIFT | E1000_LTRV_SEND;
--	u16 max_ltr_enc_d = 0;	/* maximum LTR decoded by platform */
--	u16 lat_enc_d = 0;	/* latency decoded */
-+	u32 max_ltr_enc_d = 0;	/* maximum LTR decoded by platform */
-+	u32 lat_enc_d = 0;	/* latency decoded */
- 	u16 lat_enc = 0;	/* latency encoded */
- 
- 	if (link) {
+--- a/drivers/ata/pata_marvell.c
++++ b/drivers/ata/pata_marvell.c
+@@ -82,6 +82,8 @@ static int marvell_cable_detect(struct a
+ 	switch(ap->port_no)
+ 	{
+ 	case 0:
++		if (!ap->ioaddr.bmdma_addr)
++			return ATA_CBL_PATA_UNK;
+ 		if (ioread8(ap->ioaddr.bmdma_addr + 1) & 1)
+ 			return ATA_CBL_PATA40;
+ 		return ATA_CBL_PATA80;
 
 

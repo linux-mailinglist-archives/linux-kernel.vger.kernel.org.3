@@ -2,173 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86E5D50F36E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:10:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DEF850F375
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:11:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344466AbiDZINU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:13:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41226 "EHLO
+        id S1344437AbiDZIOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245263AbiDZINM (ORCPT
+        with ESMTP id S245263AbiDZINu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:13:12 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71558111;
-        Tue, 26 Apr 2022 01:10:03 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2a02:3030:3:7d2:2277:ba57:a2c0:3])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sebastianfricke)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 893721F40485;
-        Tue, 26 Apr 2022 09:10:01 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650960601;
-        bh=i+FUcR1yvMR0JAh3EWthKUWKQAVviGQ0EBgzu83bkeE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YEX8AtMHUqkK901YYtQWvEpja2AB+QNqVrVNoaxRSY54EhLsIfsUyrx7nj/0okXOU
-         tomUaws7UWBWilioZnaoECwy/eu4DqogNNLiJyISvrSCYy2AgeSiKBd/muMm4RgxGt
-         rzaFis0dGPtJstQm4G0HNcQG6Nggh8HMiIzG+R1G2RO/JtCeTOpkXQsOoyOB4PTtZo
-         8uZ0gcTlNaeTWqxbQPNfxWn4AtSJFB3XVMahtqaRKvSEH/nnCoehkdGqF09rHHTo7A
-         p5l/yIltwyCkYF1Dp/Mw+dqYdMrukinXju7PhGvXp3GvNZ01/JafOgLUURhfNcC8vw
-         qo1YhxRKwqxhg==
-Date:   Tue, 26 Apr 2022 10:09:57 +0200
-From:   Sebastian Fricke <sebastian.fricke@collabora.com>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     mchehab@kernel.org, hverkuil@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, mripard@kernel.org,
-        paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        nicolas.dufresne@collabora.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v5 11/17] media: uapi: Add
- V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS control
-Message-ID: <20220426080957.2x3ci4tx6bsaiuwc@basti-XPS-13-9310>
-References: <20220407152940.738159-1-benjamin.gaignard@collabora.com>
- <20220407152940.738159-12-benjamin.gaignard@collabora.com>
+        Tue, 26 Apr 2022 04:13:50 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70EC85F8E6
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 01:10:43 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id j6so573314ejc.13
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 01:10:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nRArT/+HlPHZEaZpdvLJTxIQv1TzHF3bvOW7nBlL+EY=;
+        b=cUYA7IL0HDqyYDejIukEKVYEwZ57pTZSJnfsTQz/JDYrIBAfglh3eIP0BQxwj4H09p
+         DjEGG74rfqXBfGHefdt/sCbRGNBuMBSONvAwWKxGR1HxEtG60phAE36XvW7aPK/6mjNJ
+         HQ29TjZ0NFl6x/UIzhSLw8CTdscfM4EAVK/RI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nRArT/+HlPHZEaZpdvLJTxIQv1TzHF3bvOW7nBlL+EY=;
+        b=X+yN5MXaIsk33FSyw58ckyATwVZphxNfkrScTHIONLk9drh2OLEXj8fv0eNGQNBeQ6
+         4t7yPVMtlpUP7ZcgVD7NpmxkZNnMXsfXwCW2EKKARITedPiNKlVBFz4zsrDe7xpJNqm0
+         a4DYHzLNnMTM95z/yKpcU17s6ljVoSSvYqZqesHthRynWVWyWB83RbaSDrWlUrMxm2vl
+         pnFhLCzKJP/4CUs9F2QD68Va4tNXPQmJSh6vYnaSNCR2WgAQ2kz6rHnUs+rVt245AU0H
+         EElE5iC0L3upRq61FHG/oWsxQ1Qe75uFghGR0i8MCfxAo5Vdj/Gpg8UUt6mN09LmSYdG
+         mSrg==
+X-Gm-Message-State: AOAM530XcGNaYWtE4N1t/e1FPOZFr5p4Xs+2KJTBwEKv0ZKEkyoTwKxw
+        H+s34pOjGYQj3RSnY28v15SgfjdYP3P6Ri/J+MsKBw==
+X-Google-Smtp-Source: ABdhPJyev1jUqnm0Te3/JU59WbWhM9U+N2eYGYCS0OM1yz4jtK3nhD8ZwQfaytDXk26eSkZ+kYlLddAfzcv1AqcopCw=
+X-Received: by 2002:a17:906:1315:b0:6ef:5903:c5d1 with SMTP id
+ w21-20020a170906131500b006ef5903c5d1mr19913139ejb.537.1650960641955; Tue, 26
+ Apr 2022 01:10:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220407152940.738159-12-benjamin.gaignard@collabora.com>
+References: <20220420231230.58499-1-bjorn.andersson@linaro.org>
+ <20220420231230.58499-2-bjorn.andersson@linaro.org> <CAMty3ZAw7DUSnBePC05qC8Gn6ESKiu+FHw4a-HPPc05VX1hqhg@mail.gmail.com>
+ <20220421082358.ivpmtak3ednvddrc@houat> <YmEdAVwZuA7Wo1Ch@aptenodytes> <YmelPCcWCCjALtRU@aptenodytes>
+In-Reply-To: <YmelPCcWCCjALtRU@aptenodytes>
+From:   Jagan Teki <jagan@amarulasolutions.com>
+Date:   Tue, 26 Apr 2022 13:40:31 +0530
+Message-ID: <CAMty3ZBwguzvC8A9xA5c0enfoFRGS=4wWCzpfakTUXrsRS9GyA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] Revert "drm: of: Lookup if child node has panel or bridge"
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     Maxime Ripard <maxime@cerno.tech>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Rob Clark <robdclark@gmail.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Robert Foss <robert.foss@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Benjamin,
+On Tue, Apr 26, 2022 at 1:24 PM Paul Kocialkowski
+<paul.kocialkowski@bootlin.com> wrote:
+>
+> Hi,
+>
+> On Thu 21 Apr 22, 10:59, Paul Kocialkowski wrote:
+> > Hi Maxime,
+> >
+> > On Thu 21 Apr 22, 10:23, Maxime Ripard wrote:
+> > > On Thu, Apr 21, 2022 at 01:15:54PM +0530, Jagan Teki wrote:
+> > > > + Linus
+> > > > + Marek
+> > > > + Laurent
+> > > > + Robert
+> > > >
+> > > > On Thu, Apr 21, 2022 at 4:40 AM Bjorn Andersson
+> > > > <bjorn.andersson@linaro.org> wrote:
+> > > > >
+> > > > > Commit '80253168dbfd ("drm: of: Lookup if child node has panel or
+> > > > > bridge")' attempted to simplify the case of expressing a simple panel
+> > > > > under a DSI controller, by assuming that the first non-graph child node
+> > > > > was a panel or bridge.
+> > > > >
+> > > > > Unfortunately for non-trivial cases the first child node might not be a
+> > > > > panel or bridge.  Examples of this can be a aux-bus in the case of
+> > > > > DisplayPort, or an opp-table represented before the panel node.
+> > > > >
+> > > > > In these cases the reverted commit prevents the caller from ever finding
+> > > > > a reference to the panel.
+> > > > >
+> > > > > This reverts commit '80253168dbfd ("drm: of: Lookup if child node has
+> > > > > panel or bridge")', in favor of using an explicit graph reference to the
+> > > > > panel in the trivial case as well.
+> > > >
+> > > > This eventually breaks many child-based devm_drm_of_get_bridge
+> > > > switched drivers.  Do you have any suggestions on how to proceed to
+> > > > succeed in those use cases as well?
+> > >
+> > > I guess we could create a new helper for those, like
+> > > devm_drm_of_get_bridge_with_panel, or something.
+> >
+> > Oh wow I feel stupid for not thinking about that.
+> >
+> > Yeah I agree that it seems like the best option.
+>
+> Should I prepare a patch with such a new helper?
+>
+> The idea would be to keep drm_of_find_panel_or_bridge only for the of graph
+> case and add one for the child node case, maybe:
+> drm_of_find_child_panel_or_bridge.
+>
+> I really don't have a clear idea of which driver would need to be switched
+> over though. Could someone (Jagan?) let me know where it would be needed?
 
-On 07.04.2022 17:29, Benjamin Gaignard wrote:
->The number of 'entry point offset' could be very variable.
+sun6i_mipi_dsi, exynos_drm_dsi, mcde_dsi (as of now)
 
-s/could be/can be/
+>
+> Are there cases where we could both expect of graph and child node?
+> (i.e. does the new helper also need to try via of graph?)
 
->Rather than use a large static array define a v4l2 dynamic array
+One finding so far from my side would be if the check iterates the
+child and identify the panel or bridge child irrespective of the
+position it has and untouched non-trivial child-like dp, opp-table can
+help to use same change what we have it before. Still working on
+getting a proper check.
 
-s/Rather than use/Instead of using/
-
-Greetings,
-Sebastian
-
->of U32 (V4L2_CTRL_TYPE_U32).
->The number of entry point offsets is reported by the elems field
->and in struct v4l2_ctrl_hevc_slice_params.num_entry_point_offsets
->field.
->
->Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->---
-> .../userspace-api/media/v4l/ext-ctrls-codec.rst       | 11 +++++++++++
-> drivers/media/v4l2-core/v4l2-ctrls-defs.c             |  5 +++++
-> include/media/hevc-ctrls.h                            |  5 ++++-
-> 3 files changed, 20 insertions(+), 1 deletion(-)
->
->diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->index 1aaf3b84b584..a604dedce17c 100644
->--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->@@ -2988,6 +2988,9 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->     * - __u32
->       - ``data_bit_offset``
->       - Offset (in bits) to the video data in the current slice data.
->+    * - __u32
->+      - ``num_entry_point_offsets``
->+      - Specifies the number of entry point offset syntax elements in the slice header.
->     * - __u8
->       - ``nal_unit_type``
->       - Specifies the coding type of the slice (B, P or I).
->@@ -3125,6 +3128,14 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->
->     \normalsize
->
->+``V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS (integer)``
->+    Specifies entry point offsets in bytes.
->+    This control is a dynamically sized array. The number of entry point
->+    offsets is reported by the ``elems`` field.
->+    This bitstream parameter is defined according to :ref:`hevc`.
->+    They are described in section 7.4.7.1 "General slice segment header
->+    semantics" of the specification.
->+
-> ``V4L2_CID_STATELESS_HEVC_SCALING_MATRIX (struct)``
->     Specifies the HEVC scaling matrix parameters used for the scaling process
->     for transform coefficients.
->diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
->index 4b68cbe23309..48d385b776b1 100644
->--- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
->+++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
->@@ -1180,6 +1180,7 @@ const char *v4l2_ctrl_get_name(u32 id)
-> 	case V4L2_CID_STATELESS_HEVC_DECODE_PARAMS:		return "HEVC Decode Parameters";
-> 	case V4L2_CID_STATELESS_HEVC_DECODE_MODE:		return "HEVC Decode Mode";
-> 	case V4L2_CID_STATELESS_HEVC_START_CODE:		return "HEVC Start Code";
->+	case V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS:	return "HEVC Entry Point Offsets";
->
-> 	/* Colorimetry controls */
-> 	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
->@@ -1508,6 +1509,10 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
-> 	case V4L2_CID_STATELESS_HEVC_DECODE_PARAMS:
-> 		*type = V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS;
-> 		break;
->+	case V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS:
->+		*type = V4L2_CTRL_TYPE_U32;
->+		*flags |= V4L2_CTRL_FLAG_DYNAMIC_ARRAY;
->+		break;
-> 	case V4L2_CID_STATELESS_VP9_COMPRESSED_HDR:
-> 		*type = V4L2_CTRL_TYPE_VP9_COMPRESSED_HDR;
-> 		break;
->diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
->index 00abbf930235..97e049ccb966 100644
->--- a/include/media/hevc-ctrls.h
->+++ b/include/media/hevc-ctrls.h
->@@ -20,6 +20,7 @@
-> #define V4L2_CID_STATELESS_HEVC_DECODE_PARAMS	(V4L2_CID_CODEC_BASE + 1012)
-> #define V4L2_CID_STATELESS_HEVC_DECODE_MODE	(V4L2_CID_CODEC_BASE + 1015)
-> #define V4L2_CID_STATELESS_HEVC_START_CODE	(V4L2_CID_CODEC_BASE + 1016)
->+#define V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS (V4L2_CID_CODEC_BASE + 1017)
->
-> /* enum v4l2_ctrl_type type values */
-> #define V4L2_CTRL_TYPE_HEVC_SPS 0x0120
->@@ -316,6 +317,8 @@ struct v4l2_hevc_pred_weight_table {
->  *
->  * @bit_size: size (in bits) of the current slice data
->  * @data_bit_offset: offset (in bits) to the video data in the current slice data
->+ * @num_entry_point_offsets: specifies the number of entry point offset syntax
->+ *			     elements in the slice header.
->  * @nal_unit_type: specifies the coding type of the slice (B, P or I)
->  * @nuh_temporal_id_plus1: minus 1 specifies a temporal identifier for the NAL unit
->  * @slice_type: see V4L2_HEVC_SLICE_TYPE_{}
->@@ -358,7 +361,7 @@ struct v4l2_hevc_pred_weight_table {
-> struct v4l2_ctrl_hevc_slice_params {
-> 	__u32	bit_size;
-> 	__u32	data_bit_offset;
->-
->+	__u32	num_entry_point_offsets;
-> 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: NAL unit header */
-> 	__u8	nal_unit_type;
-> 	__u8	nuh_temporal_id_plus1;
->-- 
->2.32.0
->
+Thanks,
+Jagan.

@@ -2,120 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EB95510252
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 17:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 349EC510256
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 17:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240525AbiDZP7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 11:59:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49242 "EHLO
+        id S1352687AbiDZQBE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 26 Apr 2022 12:01:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352653AbiDZP70 (ORCPT
+        with ESMTP id S1347456AbiDZQAx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 11:59:26 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27AA31923;
-        Tue, 26 Apr 2022 08:56:18 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id p6so2732632plf.9;
-        Tue, 26 Apr 2022 08:56:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=gKqBWnCkDhPa/9nmFO0gA+P1ct06PRzyrAfrgkwdtZQ=;
-        b=cdtB0ZKQh5fHXEtqwKZRdRpRpNlc2FA7fzabvWnVsZEh471IpBAHTzhJ0Hmz6aKWju
-         iGjJYFQtjxcn2O+CnbAXLs21Io7RfvyAqUieYCysQE9eqKrhLrmTs6IgnPQ05LEoKoSa
-         mGb/AaJ1wjDcALrwlcoyeqSGW0PSQBfyDAaV1hi6bDju+mYxVqgE6lxoKN62zd+fJ9O4
-         iPU8jjQWHVocjekVmqX3dSl1+stabdTaARusTK8LuCUIxqsZKdGbEIM3iIEtAtkwquPR
-         jtRMz31oDlntY4KAFFP2KyW7KzMcwE3W55d28blpe24GvF4APEchTykTMObnsJMELQls
-         A2bQ==
+        Tue, 26 Apr 2022 12:00:53 -0400
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D029D387A0;
+        Tue, 26 Apr 2022 08:57:45 -0700 (PDT)
+Received: by mail-yb1-f181.google.com with SMTP id v59so20855303ybi.12;
+        Tue, 26 Apr 2022 08:57:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gKqBWnCkDhPa/9nmFO0gA+P1ct06PRzyrAfrgkwdtZQ=;
-        b=qZj1ifVy0FsD1vYvhdqHtKsrdZ5SuWmt1ip2Octc+2GCWLQamdvjaH0V5N6/qhhslo
-         r3m7MVf8iOd99VwXtEGNYDOjdVsOfPy96OYl4d1JwgDQ67jrqGJO5FKRgq1CgBIaSo3Z
-         JuFo9YUdUpDhNjkCJjZxhx2p1UD5r0k7UenX6gny9GlreRKICCBAWauATFEEbesDkhvu
-         HuQ4JQqtfmzWuRk+5mpl3vzHfbMPUANzHByao5wyn+YEOFGUGQHKBReXxZbbqYHE6Ld2
-         booYhHmnB0FZ4y2J1TtbzsliJujkVIk6oanwh5lcUQbJkydajikAYpwLMMs86du5Nui2
-         nbBw==
-X-Gm-Message-State: AOAM532rPcpED6pwSg2fqIly9p6Sm8spHHaoiZddnSI/GLFFv7dkKE4o
-        cg+dluXXv6NlwVofBgY6bhI=
-X-Google-Smtp-Source: ABdhPJyqc/8SuGr06eAq/HSXJtEMhzP9i+HVQg66AphhwWBy205v6vp9EPzuIdT3+m0E5GQumrVzcQ==
-X-Received: by 2002:a17:90b:1251:b0:1d7:f7ae:9f1 with SMTP id gx17-20020a17090b125100b001d7f7ae09f1mr26323671pjb.65.1650988578270;
-        Tue, 26 Apr 2022 08:56:18 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id v18-20020a62c312000000b0050d56ae29d4sm3246368pfg.29.2022.04.26.08.56.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 08:56:17 -0700 (PDT)
-Message-ID: <944ffc2f-9f5a-a008-95b8-6812d5895b6d@gmail.com>
-Date:   Tue, 26 Apr 2022 08:56:15 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=5UMIziwn3GcEpZ2EHO6PLtQUiahYmzZMqohaqW8D0IA=;
+        b=cs/MShqilxyWrHAOk/6Kz5tTAlV7K4w8g4BSaNkIR+mFAJwlBTBPrui9zFJPm85DMH
+         XxuaVku0rADvOqS4Ou5DV9jxa85u0Ry86uqSiUAHQQSuJ0oRDWpECyvUnpf5Pz8yIugR
+         Ev3LGtuax6+2Se2pFAhCu7FrwxnIp8vrJ9a9GtkLTF3dSDMnH27shm8/cCW2G84b2iBe
+         vM1isLxuXFNch+YRc55La1/RnxRxzuGf2aFMn+iHl/UlaX75xSw9GJrEIXMzIfZgDcDc
+         18yNKm4LNtkWdwtBsgaYudXp29R8wKdQvyGcRghtjcWYoPv9Xd5rUT0LdqY16Vm85fPO
+         6x/A==
+X-Gm-Message-State: AOAM531oTbMdDZiC5k1jbZKhtbUOI7c+AV3ai36baVk1OkTRQBjq29kS
+        /KE5p6wf55ZCWh6OsZ8gMRF9MK9eMDSlIfTYogo=
+X-Google-Smtp-Source: ABdhPJxUaYxafCpZusev8ZL1gpQ6NzaKd7sZu4xO9qFeyZLl82Jn/WlTJdeHg/oFQ7v/wA5nSL29dF8pnpK+e/vn1Og=
+X-Received: by 2002:a25:9f8a:0:b0:628:b9f3:6d2f with SMTP id
+ u10-20020a259f8a000000b00628b9f36d2fmr21206839ybq.151.1650988664926; Tue, 26
+ Apr 2022 08:57:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: Aw: Re: [RFC v1 2/3] net: dsa: mt753x: make CPU-Port dynamic
-Content-Language: en-US
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20220426134924.30372-1-linux@fw-web.de>
- <20220426134924.30372-3-linux@fw-web.de>
- <046a334b-d972-6ab9-5127-f845cef72751@gmail.com>
- <trinity-5fd6da8c-15f6-488d-a332-0ce7625f41e0-1650988498781@3c-app-gmx-bs69>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <trinity-5fd6da8c-15f6-488d-a332-0ce7625f41e0-1650988498781@3c-app-gmx-bs69>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220422151725.1336997-1-mailhol.vincent@wanadoo.fr>
+ <YmXMiTXEvFXZ/swU@dev-arch.thelio-3990X> <CAMZ6Rq+3XOze01dZZRTe+V44N2uo5J_=rtd9bKH7d7Fq9sNxVw@mail.gmail.com>
+ <CAK8P3a31WAyh_vLqNwvv2GMcZ8SQp7gC=OV8c=Nc9pBtOSR8-g@mail.gmail.com>
+ <CAMZ6RqL8G4uVn--Y5pBC+_c9Ex3Sjf8OJuVRwkVFFPwWd_ezLQ@mail.gmail.com> <CAK8P3a1_XoyjOPQ0ghku_QUjUL5V6BK9kSNUXoQj2RYaA=JxFg@mail.gmail.com>
+In-Reply-To: <CAK8P3a1_XoyjOPQ0ghku_QUjUL5V6BK9kSNUXoQj2RYaA=JxFg@mail.gmail.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Wed, 27 Apr 2022 00:57:33 +0900
+Message-ID: <CAMZ6RqKxog4xS+E_HLQ1jE_s7oK8XfpT++8go6GZ0qS-utOejQ@mail.gmail.com>
+Subject: Re: [PATCH] checksyscalls: ignore -Wunused-macros
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Linux API <linux-api@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/26/22 08:54, Frank Wunderlich wrote:
-> Hi
-> 
-> thanks for fast review.
-> 
->> Gesendet: Dienstag, 26. April 2022 um 17:45 Uhr
->> Von: "Florian Fainelli" <f.fainelli@gmail.com>
->> On 4/26/22 06:49, Frank Wunderlich wrote:
->>> From: Frank Wunderlich <frank-w@public-files.de>
-> 
->>> @@ -1190,8 +1191,8 @@ mt7530_port_bridge_join(struct dsa_switch *ds, int port,
->>>    			struct netlink_ext_ack *extack)
->>>    {
->>>    	struct dsa_port *dp = dsa_to_port(ds, port), *other_dp;
->>> -	u32 port_bitmap = BIT(MT7530_CPU_PORT);
->>>    	struct mt7530_priv *priv = ds->priv;
->>> +	u32 port_bitmap = BIT(priv->cpu_port);
->>
->> No need to re-order these two lines.
-> 
-> imho it is needed as i now access priv-struct now ;) which is not available at the "old" position
+On Mon. 25 Apr 2022 at 17:49, Arnd Bergmann <arnd@arndb.de> wrote:
+> On Mon, Apr 25, 2022 at 9:42 AM Vincent MAILHOL
+> <mailhol.vincent@wanadoo.fr> wrote:
+> > On Mon. 25 Apr 2022 at 15:50, Arnd Bergmann <arnd@arndb.de> wrote:
+> > > On Mon, Apr 25, 2022 at 8:17 AM Vincent MAILHOL> <mailhol.vincent@wanadoo.fr> wrote:
+> > > > When I run W=2, I want to only see the warnings of the file I am
+> > > > working on. So I find it useful to fix the W=2 warnings which
+> > > > show up when building other files to not get spammed by
+> > > > irrelevant issues and to simplify the triage.
+> > > >
+> > > > My initial message lacked the rationale. I will add additional
+> > > > explanations in the v2 of this patch.
+> > >
+> > > I agree this is worth fixing if we want to make W=2 have any meaning at all.
+> > >
+> > > Your approach is probably fine. We could try to improve this by comparing
+> > > against the list from include/uapi/asm-generic/unistd.h instead of the i386
+> > > list. I suppose that would involve rewriting the script into a simpler one,
+> > > but I'm not sure if anyone has an interest in working on this.
+> >
+> > If someone wants to do it, great, but I do not have the
+> > confidence to do it myself so I hope you will forgive me for
+> > taking a pass here.
+>
+> Sure, no worries.
+>
+> > Another alternative I considered was to only call
+> > checksyscalls.sh when doing a 'make all'. This way, we keep the
+> > warning but people won’t be spammed when building sub projects
+> > because the script would not be executed.
+>
+> Right, I like that as well, one less thing to be done for every
+> iterative make as well. The syscall table really doesn't change
+> all that much that this needs to be run by most developers.
 
-My bad, yes, I was concerned with preserving the reserve christmas tree 
-style, never mind.
--- 
-Florian
+I send a patch in a new thread to only call the script once:
+https://lore.kernel.org/lkml/20220426155229.436681-1-mailhol.vincent@wanadoo.fr/T/#u
+
+If this new patch gets rejected, then I will go back to the
+-Wno-unused-macros approach.
+
+
+Yours sincerely,
+Vincent Mailhol

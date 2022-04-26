@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B948550F44F
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:32:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 556D750F882
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343626AbiDZIdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:33:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60506 "EHLO
+        id S1347642AbiDZJdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:33:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344973AbiDZIct (ORCPT
+        with ESMTP id S1347853AbiDZJGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:32:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF8363BA49;
-        Tue, 26 Apr 2022 01:25:19 -0700 (PDT)
+        Tue, 26 Apr 2022 05:06:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46026167F15;
+        Tue, 26 Apr 2022 01:46:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 60641B81CF5;
-        Tue, 26 Apr 2022 08:25:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3B58C385A0;
-        Tue, 26 Apr 2022 08:25:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4B6C4B81D0B;
+        Tue, 26 Apr 2022 08:46:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA1EDC385A0;
+        Tue, 26 Apr 2022 08:46:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961517;
-        bh=JUshGMI/abP8kj6/OlahffOc0YFPLXutXE/WlMFStqs=;
+        s=korg; t=1650962772;
+        bh=vzuoswBEu+mRl+KX28BgumYGMcE+hVAphztABp/H15Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BlzszmPxdsQrEen24pyDnPgWcddJPhYOh0r/8rJuy9/PeMdP3aUH5CB9PBJmetfEe
-         LJNSxt6B4SXlqyNF9blLeA4tqez/Jf/6z2QOozTdDkW2G3KwBb02z6Z36Iu5/72sPQ
-         9ADmF2zeYRFCnbkkg3IU5idaaqpPJLmgq30MoKGw=
+        b=MMQDlt8rv3T55ADKf5NF6CMGC7Zm8rjZfRbrNUxT5oMKeOkSCEx4ZRO/vn9ITso/s
+         5BrEBQHwsL6r2DmiZNHOrEbQrKZf3xiQRHkfrq5YwnqodOlnGViGo42MTuCRclrxL+
+         a/VTgd2NGfJ4vBMFDL8/D7i333SwSTeYQStI4JjM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Duoming Zhou <duoming@zju.edu.cn>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ovidiu Panait <ovidiu.panait@windriver.com>
-Subject: [PATCH 4.14 37/43] ax25: fix UAF bugs of net_device caused by rebinding operation
+        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Keith Busch <kbusch@kernel.org>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 084/146] nvme: add a quirk to disable namespace identifiers
 Date:   Tue, 26 Apr 2022 10:21:19 +0200
-Message-Id: <20220426081735.611569090@linuxfoundation.org>
+Message-Id: <20220426081752.422791862@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081734.509314186@linuxfoundation.org>
-References: <20220426081734.509314186@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,99 +56,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Christoph Hellwig <hch@lst.de>
 
-commit feef318c855a361a1eccd880f33e88c460eb63b4 upstream.
+[ Upstream commit 00ff400e6deee00f7b15e200205b2708b63b8cf6 ]
 
-The ax25_kill_by_device() will set s->ax25_dev = NULL and
-call ax25_disconnect() to change states of ax25_cb and
-sock, if we call ax25_bind() before ax25_kill_by_device().
+Add a quirk to disable using and exporting namespace identifiers for
+controllers where they are broken beyond repair.
 
-However, if we call ax25_bind() again between the window of
-ax25_kill_by_device() and ax25_dev_device_down(), the values
-and states changed by ax25_kill_by_device() will be reassigned.
+The most directly visible problem with non-unique namespace identifiers
+is that they break the /dev/disk/by-id/ links, with the link for a
+supposedly unique identifier now pointing to one of multiple possible
+namespaces that share the same ID, and a somewhat random selection of
+which one actually shows up.
 
-Finally, ax25_dev_device_down() will deallocate net_device.
-If we dereference net_device in syscall functions such as
-ax25_release(), ax25_sendmsg(), ax25_getsockopt(), ax25_getname()
-and ax25_info_show(), a UAF bug will occur.
-
-One of the possible race conditions is shown below:
-
-      (USE)                   |      (FREE)
-ax25_bind()                   |
-                              |  ax25_kill_by_device()
-ax25_bind()                   |
-ax25_connect()                |    ...
-                              |  ax25_dev_device_down()
-                              |    ...
-                              |    dev_put_track(dev, ...) //FREE
-ax25_release()                |    ...
-  ax25_send_control()         |
-    alloc_skb()      //USE    |
-
-the corresponding fail log is shown below:
-===============================================================
-BUG: KASAN: use-after-free in ax25_send_control+0x43/0x210
-...
-Call Trace:
-  ...
-  ax25_send_control+0x43/0x210
-  ax25_release+0x2db/0x3b0
-  __sock_release+0x6d/0x120
-  sock_close+0xf/0x20
-  __fput+0x11f/0x420
-  ...
-Allocated by task 1283:
-  ...
-  __kasan_kmalloc+0x81/0xa0
-  alloc_netdev_mqs+0x5a/0x680
-  mkiss_open+0x6c/0x380
-  tty_ldisc_open+0x55/0x90
-  ...
-Freed by task 1969:
-  ...
-  kfree+0xa3/0x2c0
-  device_release+0x54/0xe0
-  kobject_put+0xa5/0x120
-  tty_ldisc_kill+0x3e/0x80
-  ...
-
-In order to fix these UAF bugs caused by rebinding operation,
-this patch adds dev_hold_track() into ax25_bind() and
-corresponding dev_put_track() into ax25_kill_by_device().
-
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-[OP: backport to 4.14: adjust dev_put_track()->dev_put() and
-dev_hold_track()->dev_hold()]
-Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Keith Busch <kbusch@kernel.org>
+Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
+Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ax25/af_ax25.c |    5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/nvme/host/core.c | 24 ++++++++++++++++++------
+ drivers/nvme/host/nvme.h |  5 +++++
+ 2 files changed, 23 insertions(+), 6 deletions(-)
 
---- a/net/ax25/af_ax25.c
-+++ b/net/ax25/af_ax25.c
-@@ -101,6 +101,7 @@ again:
- 			spin_unlock_bh(&ax25_list_lock);
- 			lock_sock(sk);
- 			s->ax25_dev = NULL;
-+			dev_put(ax25_dev->dev);
- 			ax25_dev_put(ax25_dev);
- 			release_sock(sk);
- 			ax25_disconnect(s, ENETUNREACH);
-@@ -1126,8 +1127,10 @@ static int ax25_bind(struct socket *sock
+diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+index 6215d50ed3e7..10f7c79caac2 100644
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -1363,6 +1363,8 @@ static int nvme_process_ns_desc(struct nvme_ctrl *ctrl, struct nvme_ns_ids *ids,
+ 				 warn_str, cur->nidl);
+ 			return -1;
  		}
- 	}
++		if (ctrl->quirks & NVME_QUIRK_BOGUS_NID)
++			return NVME_NIDT_EUI64_LEN;
+ 		memcpy(ids->eui64, data + sizeof(*cur), NVME_NIDT_EUI64_LEN);
+ 		return NVME_NIDT_EUI64_LEN;
+ 	case NVME_NIDT_NGUID:
+@@ -1371,6 +1373,8 @@ static int nvme_process_ns_desc(struct nvme_ctrl *ctrl, struct nvme_ns_ids *ids,
+ 				 warn_str, cur->nidl);
+ 			return -1;
+ 		}
++		if (ctrl->quirks & NVME_QUIRK_BOGUS_NID)
++			return NVME_NIDT_NGUID_LEN;
+ 		memcpy(ids->nguid, data + sizeof(*cur), NVME_NIDT_NGUID_LEN);
+ 		return NVME_NIDT_NGUID_LEN;
+ 	case NVME_NIDT_UUID:
+@@ -1379,6 +1383,8 @@ static int nvme_process_ns_desc(struct nvme_ctrl *ctrl, struct nvme_ns_ids *ids,
+ 				 warn_str, cur->nidl);
+ 			return -1;
+ 		}
++		if (ctrl->quirks & NVME_QUIRK_BOGUS_NID)
++			return NVME_NIDT_UUID_LEN;
+ 		uuid_copy(&ids->uuid, data + sizeof(*cur));
+ 		return NVME_NIDT_UUID_LEN;
+ 	case NVME_NIDT_CSI:
+@@ -1475,12 +1481,18 @@ static int nvme_identify_ns(struct nvme_ctrl *ctrl, unsigned nsid,
+ 	if ((*id)->ncap == 0) /* namespace not allocated or attached */
+ 		goto out_free_id;
  
--	if (ax25_dev != NULL)
-+	if (ax25_dev) {
- 		ax25_fillin_cb(ax25, ax25_dev);
-+		dev_hold(ax25_dev->dev);
+-	if (ctrl->vs >= NVME_VS(1, 1, 0) &&
+-	    !memchr_inv(ids->eui64, 0, sizeof(ids->eui64)))
+-		memcpy(ids->eui64, (*id)->eui64, sizeof(ids->eui64));
+-	if (ctrl->vs >= NVME_VS(1, 2, 0) &&
+-	    !memchr_inv(ids->nguid, 0, sizeof(ids->nguid)))
+-		memcpy(ids->nguid, (*id)->nguid, sizeof(ids->nguid));
++
++	if (ctrl->quirks & NVME_QUIRK_BOGUS_NID) {
++		dev_info(ctrl->device,
++			 "Ignoring bogus Namespace Identifiers\n");
++	} else {
++		if (ctrl->vs >= NVME_VS(1, 1, 0) &&
++		    !memchr_inv(ids->eui64, 0, sizeof(ids->eui64)))
++			memcpy(ids->eui64, (*id)->eui64, sizeof(ids->eui64));
++		if (ctrl->vs >= NVME_VS(1, 2, 0) &&
++		    !memchr_inv(ids->nguid, 0, sizeof(ids->nguid)))
++			memcpy(ids->nguid, (*id)->nguid, sizeof(ids->nguid));
 +	}
  
- done:
- 	ax25_cb_add(ax25);
+ 	return 0;
+ 
+diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
+index 730cc80d84ff..68c42e831117 100644
+--- a/drivers/nvme/host/nvme.h
++++ b/drivers/nvme/host/nvme.h
+@@ -144,6 +144,11 @@ enum nvme_quirks {
+ 	 * encoding the generation sequence number.
+ 	 */
+ 	NVME_QUIRK_SKIP_CID_GEN			= (1 << 17),
++
++	/*
++	 * Reports garbage in the namespace identifiers (eui64, nguid, uuid).
++	 */
++	NVME_QUIRK_BOGUS_NID			= (1 << 18),
+ };
+ 
+ /*
+-- 
+2.35.1
+
 
 

@@ -2,114 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4058F50EF9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 06:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A6250EF97
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 06:09:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241515AbiDZEN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 00:13:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36204 "EHLO
+        id S243900AbiDZEMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 00:12:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243948AbiDZENW (ORCPT
+        with ESMTP id S243903AbiDZEMH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 00:13:22 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18761080;
-        Mon, 25 Apr 2022 21:10:15 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KnT1P2SRFzhYqg;
-        Tue, 26 Apr 2022 12:10:01 +0800 (CST)
-Received: from [10.67.110.173] (10.67.110.173) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Apr 2022 12:10:13 +0800
-Message-ID: <853635d6-9e74-c3dc-f6dc-d4166616c8e5@huawei.com>
-Date:   Tue, 26 Apr 2022 12:10:13 +0800
+        Tue, 26 Apr 2022 00:12:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B0F17E13;
+        Mon, 25 Apr 2022 21:09:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F020FB81C0E;
+        Tue, 26 Apr 2022 04:08:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 026BCC385A4;
+        Tue, 26 Apr 2022 04:08:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650946138;
+        bh=UF2W6wDrcxlNMtRIim34cJfK+miQaqNxs0sRQs93kdc=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=oZK/Bkylyrvwtb+97S1FgyI27WMH/0/jf1Ljzxr1W0Esd1vpY82/bUpt3K8vAW0IW
+         +nU/QMWo9MVCzGZZrv4D/s6okRjDpRl3yeNyeHonZKxKkrrDn00D9PgaWnC2KDk7mt
+         WgongvnOf6/tnitnawdiKFslUj8LG4+sg8fqrs5Rqn1/y6CAok5SbNaEniLUvzhrnl
+         RYyBuqdooZ4fb1v8QvlAhVQzTo00S54sGt4afhR3iUgwrpNjLKcTBqYNJrxMB9t77P
+         C0/iW8yA+HcI5CLutsdjR6tVJXqXu/GpmgmqIPuHIA8pmSaS9f/j7Vp02fxU36+84I
+         pcgxnlKSgaWfw==
+Message-ID: <16d4ad77b5f306e14c089d56c60b160d1d23be52.camel@kernel.org>
+Subject: Re: [PATCH V4 00/31] x86/sgx and selftests/sgx: Support SGX2
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>,
+        "Dhanraj, Vijay" <vijay.dhanraj@intel.com>
+Cc:     "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Shanahan, Mark" <mark.shanahan@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "Zhang, Cathy" <cathy.zhang@intel.com>,
+        "Xing, Cedric" <cedric.xing@intel.com>,
+        "Huang, Haitao" <haitao.huang@intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Tue, 26 Apr 2022 07:10:26 +0300
+In-Reply-To: <d8aceb1e-c6ef-1ca0-f11e-e7e83e634854@intel.com>
+References: <cover.1649878359.git.reinette.chatre@intel.com>
+         <2f4338f37943c2b067db16ae65c9af665d3b51d9.camel@kernel.org>
+         <9fbf26c8-5808-20c5-8653-d4f36bf398a4@intel.com>
+         <42a52a6018e8dadb4c3eebefaae4dab31c0d5721.camel@kernel.org>
+         <DM8PR11MB5591BBA189BC4EA5CFE2C7EAF6EF9@DM8PR11MB5591.namprd11.prod.outlook.com>
+         <54f053d8bb6b72725b2351fc2016d20b65cebbf1.camel@kernel.org>
+         <DM8PR11MB559180D1BA05B0E77D354467F6F49@DM8PR11MB5591.namprd11.prod.outlook.com>
+         <a94e4098-f5c1-f9ff-fab0-c2e5210cf188@intel.com>
+         <YmJyYwp9UHRLWaTw@kernel.org>
+         <DM8PR11MB5591CACC6757FE71B3E19FC3F6F89@DM8PR11MB5591.namprd11.prod.outlook.com>
+         <d8aceb1e-c6ef-1ca0-f11e-e7e83e634854@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: How to list keys used for kexec
-Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-References: <20220414175930.GM163591@kunlun.suse.cz>
-From:   "Guozihua (Scott)" <guozihua@huawei.com>
-In-Reply-To: <20220414175930.GM163591@kunlun.suse.cz>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.173]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500024.china.huawei.com (7.185.36.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/15 1:59, Michal Suchánek wrote:
-> Hello,
-> 
-> apparently modules are verified by keys from 'secondary' keyring on all
-> platforms.
-> 
-> If you happen to know that it's this particular keyring, and know how
-> to list keyrings recursively you can find the keys that are used for
-> verifying modules.
-> 
-> However, for kexec we have
-> 
->   - primary keyring on aarch64
->   - platform keyring on s390
->   - secondary AND platform keyring on x86
-> 
-> How is a user supposed to know which keys are used for kexec image
-> verification?
-> 
-> There is an implicit keyring that is ad-hoc constructed by the code that
-> does the kexec verification but there is no key list observable from
-> userspace that corresponds to this ad-hoc keyring only known to the kexec
-> code.
-> 
-> Can the kernel make the information which keys are used for what purpose
-> available to the user?
-> 
-> Thanks
-> 
-> Michal
-> 
-> .
+On Mon, 2022-04-25 at 16:56 -0700, Reinette Chatre wrote:
+> > [PATCH V4 16/31] x86/sgx: Support adding of pages to an initialized enc=
+lave
+> > [PATCH V4 15/31] x86/sgx: Support restricting of enclave page permissio=
+ns
+> > [PATCH V4 18/31] x86/sgx: Support modifying SGX page type
+> > [PATCH V4 19/31] x86/sgx: Support complete page removal
 
-Hi Michal
+You can add my tested-by to all of the four now [*].
 
-I'll try my best to understand and answer your question.
+[*] https://github.com/enarx/enarx/pull/1776
 
-First of all, the "key" you mentioned here is actually certificate. And 
-there are no way for the kernel to know "which certificate is used for 
-what purpose" but to get a hint from the certificate's extension, if 
-they exist. However, the extension only points out what this certificate 
-should be used for, but not exactly what it is actually used for.
-
-Secondly, the verification process requires the module (kernel image in 
-this question) to contain information on which certificate should be 
-used to verify itself. The signature provided by the module is in PKCS#7 
-format which contains a list of certificates for the verifier to 
-construct a "chain of trust". Each certificates contains information 
-pointing to the certificate of it's issuer, and eventually to one of the 
-certificate stored in one of the keyrings you mentioned.
-
-All in all, certificates in these keyrings you mentioned can be used for 
-various purpose, and it's the responsibility for the modules being 
-verified to provide information stating which certificate should be used 
-for verification. Thus, the best way to find out which key is used for 
-kexec is to look at key used to sign the kernel image.
-
--- 
-Best
-GUO Zihua
+BR, Jarkko

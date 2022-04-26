@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD4850F6D5
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:59:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9952F50F78F
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:40:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346835AbiDZJBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56526 "EHLO
+        id S236939AbiDZJdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346885AbiDZIp2 (ORCPT
+        with ESMTP id S1347478AbiDZJFw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:45:28 -0400
+        Tue, 26 Apr 2022 05:05:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89FE864C4;
-        Tue, 26 Apr 2022 01:36:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF70012EB57;
+        Tue, 26 Apr 2022 01:44:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 268D36185C;
-        Tue, 26 Apr 2022 08:36:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31A29C385AC;
-        Tue, 26 Apr 2022 08:36:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 25E506133B;
+        Tue, 26 Apr 2022 08:44:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30857C385A4;
+        Tue, 26 Apr 2022 08:44:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962171;
-        bh=v3d3wJ8d7he5GKQ/gI1Bji2FZeuuYgCu3YXM/O7M85o=;
+        s=korg; t=1650962683;
+        bh=dUgrE0Q2YjSUlSX2gm0emK+Zp2F+VoehNPHJ2f4rLFc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iZpMRm+XASXQLK8kknecqQh5UBTZv9hmoacSUtjMoDJ5Uy7vuCY6c29Lflsq+Uq5+
-         ORO/XkoHGXODm93GQLtcuS7hIXUSFItd59X4yIOm2Ae2Us1ySIxNFkNJrON+OTXMhY
-         L6J3w/RixkjbOwl2pp4g5dqKw0//668cdF8S8Pgk=
+        b=zZTBY5r7NygjDBbcGUrzayivRGNecJZz5bye9/9H923VR89T9kJnESWxfRGFFXLxg
+         eaIQ9ITCWi4LSBnM2T5lB2HXepC6JRJzBMZeOi0KwprP6lFTse9C9aZpWNBVdSu2D3
+         mkgAZ5anutknTy0OuhEuzNn2XxUViqtiynfzjRxQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 5.15 010/124] perf tools: Fix segfault accessing sample_id xyarray
-Date:   Tue, 26 Apr 2022 10:20:11 +0200
-Message-Id: <20220426081747.590453260@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 017/146] dmaengine: imx-sdma: Fix error checking in sdma_event_remap
+Date:   Tue, 26 Apr 2022 10:20:12 +0200
+Message-Id: <20220426081750.549561193@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
-References: <20220426081747.286685339@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,64 +53,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Adrian Hunter <adrian.hunter@intel.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit a668cc07f990d2ed19424d5c1a529521a9d1cee1 upstream.
+[ Upstream commit 7104b9cb35a33ad803a1adbbfa50569b008faf15 ]
 
-perf_evsel::sample_id is an xyarray which can cause a segfault when
-accessed beyond its size. e.g.
+of_parse_phandle() returns NULL on errors, rather than error
+pointers. Using NULL check on grp_np to fix this.
 
-  # perf record -e intel_pt// -C 1 sleep 1
-  Segmentation fault (core dumped)
-  #
-
-That is happening because a dummy event is opened to capture text poke
-events accross all CPUs, however the mmap logic is allocating according
-to the number of user_requested_cpus.
-
-In general, perf sometimes uses the evsel cpus to open events, and
-sometimes the evlist user_requested_cpus. However, it is not necessary
-to determine which case is which because the opened event file
-descriptors are also in an xyarray, the size of whch can be used
-to correctly allocate the size of the sample_id xyarray, because there
-is one ID per file descriptor.
-
-Note, in the affected code path, perf_evsel fd array is subsequently
-used to get the file descriptor for the mmap, so it makes sense for the
-xyarrays to be the same size there.
-
-Fixes: d1a177595b3a824c ("libperf: Adopt perf_evlist__mmap()/munmap() from tools/perf")
-Fixes: 246eba8e9041c477 ("perf tools: Add support for PERF_RECORD_TEXT_POKE")
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-Acked-by: Ian Rogers <irogers@google.com>
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: stable@vger.kernel.org # 5.5+
-Link: https://lore.kernel.org/r/20220413114232.26914-1-adrian.hunter@intel.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: d078cd1b4185 ("dmaengine: imx-sdma: Add imx6sx platform support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220308064952.15743-1-linmq006@gmail.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/lib/perf/evlist.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/dma/imx-sdma.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/tools/lib/perf/evlist.c
-+++ b/tools/lib/perf/evlist.c
-@@ -577,7 +577,6 @@ int perf_evlist__mmap_ops(struct perf_ev
- {
- 	struct perf_evsel *evsel;
- 	const struct perf_cpu_map *cpus = evlist->cpus;
--	const struct perf_thread_map *threads = evlist->threads;
+diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
+index 75ec0754d4ad..0be1171610af 100644
+--- a/drivers/dma/imx-sdma.c
++++ b/drivers/dma/imx-sdma.c
+@@ -1869,7 +1869,7 @@ static int sdma_event_remap(struct sdma_engine *sdma)
+ 	u32 reg, val, shift, num_map, i;
+ 	int ret = 0;
  
- 	if (!ops || !ops->get || !ops->mmap)
- 		return -EINVAL;
-@@ -589,7 +588,7 @@ int perf_evlist__mmap_ops(struct perf_ev
- 	perf_evlist__for_each_entry(evlist, evsel) {
- 		if ((evsel->attr.read_format & PERF_FORMAT_ID) &&
- 		    evsel->sample_id == NULL &&
--		    perf_evsel__alloc_id(evsel, perf_cpu_map__nr(cpus), threads->nr) < 0)
-+		    perf_evsel__alloc_id(evsel, evsel->fd->max_x, evsel->fd->max_y) < 0)
- 			return -ENOMEM;
+-	if (IS_ERR(np) || IS_ERR(gpr_np))
++	if (IS_ERR(np) || !gpr_np)
+ 		goto out;
+ 
+ 	event_remap = of_find_property(np, propname, NULL);
+@@ -1917,7 +1917,7 @@ static int sdma_event_remap(struct sdma_engine *sdma)
  	}
  
+ out:
+-	if (!IS_ERR(gpr_np))
++	if (gpr_np)
+ 		of_node_put(gpr_np);
+ 
+ 	return ret;
+-- 
+2.35.1
+
 
 

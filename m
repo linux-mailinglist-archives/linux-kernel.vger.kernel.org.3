@@ -2,113 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 214F6510A22
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 428BD510A33
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354433AbiDZUTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 16:19:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54178 "EHLO
+        id S1354820AbiDZUTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 16:19:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345458AbiDZUSt (ORCPT
+        with ESMTP id S1354895AbiDZUTB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:18:49 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6295920F65;
-        Tue, 26 Apr 2022 13:15:30 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id v65so17240439oig.10;
-        Tue, 26 Apr 2022 13:15:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WxppPzWLYNA+81VUjAnYWO9LgxHOLhASEpeHW0n+B1E=;
-        b=am0tRX8zv7sbt0cJT98VnkmSxAR2HSuYLlJyKm7/FwlRgdy9pMui6CIr5XcTVQjTU1
-         tLvNr4m26L201zwPArojxr+quk6vSF0rcRNLSieec8yQ3F6mMVJL9gmVea1xP9mvghgx
-         IVCspx8T8hfE5bmt6gFcyArX4xalgiBezKSGVr7FBr3v5gJ5VZl4Hk3sIa7g0KDh2siD
-         Cgnqfa9CSMondi292nzbLTXVflMsMFX7HTVpoiB4qV4CGgRU96/aLXmcibDA7THcZmIH
-         u9QBK7kcrRt48vXfT5hfhHHWKUpRdpCGm77nMzH4ra3pj+SB+KLqmXcjtf+uv+y/mOav
-         yFHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=WxppPzWLYNA+81VUjAnYWO9LgxHOLhASEpeHW0n+B1E=;
-        b=2YZ0YOPVdu9g8pUBmiwowhd7P+2vgwF1ZpfJoKPVjt9MidI2KKCES9PrU+eUOTH1/I
-         1kutdiqPbU6D+nMz+d9WPlL+ZTKrA+UBcXWVyNEpgvvx9PUywKPXeLCAjIpcAAbPEcs5
-         iAdjQkoud1AscePZ2hLn3ORL4ZDzmjr+Zla6ujpskP5IMvfd1me5Y6j4IqumK1XEh8Ip
-         0tYS2QR3QjrqOF8Yg3aKBpoYsUaaRImMcc3Wh/U4UXSvK6aKy4MiKcTX31sy8Lp9cezr
-         40NCtMv4ABoH9f4b1toTBd/F6tU5pugQwYl4nlRCb33tA7FNe/IVXA6ep4To9bHL8Rv3
-         Xthw==
-X-Gm-Message-State: AOAM530BGj8P6+kZbEFHTyiioG7JnAfxJG+GlpsR3yijgXPRVZCGx9oj
-        5Z0Ay+MRfHRA9EhjdkNM6i0=
-X-Google-Smtp-Source: ABdhPJxpxGL+eWpPlmKdNL9LiJxmuhemz/rq18UeA7KYeFJvnX6YyOnTTf4K9gKNmRdzXpPcNxmJPA==
-X-Received: by 2002:a05:6808:1201:b0:325:75e1:25a8 with SMTP id a1-20020a056808120100b0032575e125a8mr418635oil.18.1651004129790;
-        Tue, 26 Apr 2022 13:15:29 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bq4-20020a05680823c400b0032304581da9sm5396968oib.13.2022.04.26.13.15.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 13:15:28 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 26 Apr 2022 13:15:27 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Liu Xinpeng <liuxp11@chinatelecom.cn>
-Cc:     wim@linux-watchdog.org, tzungbi@kernel.org,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 2/3] watchdog: wdat_wdt: Stop watchdog when rebooting
- the system
-Message-ID: <20220426201527.GL4093517@roeck-us.net>
-References: <1650984810-6247-1-git-send-email-liuxp11@chinatelecom.cn>
- <1650984810-6247-3-git-send-email-liuxp11@chinatelecom.cn>
+        Tue, 26 Apr 2022 16:19:01 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C865F2637;
+        Tue, 26 Apr 2022 13:15:52 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 310595C0043;
+        Tue, 26 Apr 2022 16:15:50 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Tue, 26 Apr 2022 16:15:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-transfer-encoding:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1651004150; x=1651090550; bh=UvoCEZV2iN
+        YmrEf0Gl3v1FkuJK/y6NUl/vMG5P+QSfE=; b=ET0RQP18f8/Tic5fZOJ13JJKpg
+        1Cyoa9sdGbqgBmEA373pkCuMcwasDMwa9k1V5b042Sy5XtJND9bIMr/7ZmUWfZUy
+        s4mtzxDGf7ar7SYpOcs0e8tyBL9WTw04dYzi8ocIFd6nTFxAUBh1u2DzZ26MLU5T
+        v6gpyru/w/rlBrGC9fAbFhkTWsDyRKWaTWDJy2CZy7QfnsfvtEINf/OEDOaGkAmF
+        5ktOcUMOW+kzDC6YKQOOar5seiShNk+qHdjgUTpwSAI9qCcJII1yjlHDWiQebPys
+        V1L1bMY2a7T04Gsr7pauKZRYJiq7ysQjGzq/U5skqV3DTtaFtWxIvyyVdOlA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm1; t=1651004150; x=1651090550; bh=U
+        voCEZV2iNYmrEf0Gl3v1FkuJK/y6NUl/vMG5P+QSfE=; b=Gcfcf0Bbr7NmvtmK7
+        k8+TH0maJKfpxxqb3VJRkByIrcgMwhmdXnhMrtcnCmHflaiI9x7+sVahvUldWBoa
+        V98UoNXgqa5Cq2oVAwWEtOtJBOV5/o8LQGCGH1vPwuRGAxRotUqz3wzQfE/O87eB
+        vZ3akF3AmI7Pro3GqfH3VmHjogDedB7VAQXb+306lo4m3x4RXtgstPt1OfdmfdmR
+        wjTHeyB3Mr18IUB99BhHYcC09S1TWmiYRjAUxHc+diCcYyAA12TYIAWIP38VJ/1h
+        qXKksR2P4vMtFNFoc/7wnu3xANo196KCaA0eBDBt7BLRgPH+R2e6+hoHRJYigeJ+
+        BPEyQ==
+X-ME-Sender: <xms:9VJoYtrRpW4lYNgU6LzBAmvN79qHNsns6vXMhla5hOesXhF9YZOGXQ>
+    <xme:9VJoYvpREuD_WsTg0VyQsdFTWPnSgK9w1r-x1trEo1wNGE6stiYFG0Ot3KaGrC9Sc
+    bz-1iXj99aLrybLlI0>
+X-ME-Received: <xmr:9VJoYqPbSzP2D2JRPEVP4IRwzS3us41auUhWQPLJj4xF9Rhyz8sF69APGXQlMxvbeOvCmcoL8ScX46FFuOCxeekeX3VaeTB8RFC8ChYvA4lqJBN_cC51ZQ1k>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefgddugeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    hmihhsshhinhhgucfvqfcufhhivghlugculdeftddmnegoteeftdduqddtudculdduhedm
+    necujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufhvvghnuc
+    frvghtvghruceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrghtthgv
+    rhhnpefggeduffduleefueegtdejueegheeuffduveevgeevkedthfeuheeuueefleehve
+    enucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptden
+    ucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnsehsvhgvnhhpvghtvghrrdguvghv
+X-ME-Proxy: <xmx:9VJoYo5iyBfFydfXf-oO8QrlGYl5XR__7CLLpCF6pJPiO5Fdy2cdHw>
+    <xmx:9VJoYs5OCWRZ8-yDD8-Dj5u0r8ODQang3_DkLrF0MfmAbaJaYOWyDg>
+    <xmx:9VJoYgg-kr9bFl2wFinFz-7-SJcvjzpi2-YexdWB0w6Fr0BKofXAkA>
+    <xmx:9lJoYrTBWFznWQFHILKcD2RA-Uin9bPbXxXq_PDvDAXnL1PIdpALRg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 26 Apr 2022 16:15:47 -0400 (EDT)
+From:   Sven Peter <sven@svenpeter.dev>
+Cc:     Sven Peter <sven@svenpeter.dev>, Hector Martin <marcan@marcan.st>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Keith Busch <kbusch@kernel.org>,
+        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Marc Zyngier <maz@kernel.org>, Janne Grunau <j@jannau.net>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org
+Subject: [PATCH v3 0/6] Apple M1 (Pro/Max) NVMe driver
+Date:   Tue, 26 Apr 2022 22:15:33 +0200
+Message-Id: <20220426201539.12829-1-sven@svenpeter.dev>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1650984810-6247-3-git-send-email-liuxp11@chinatelecom.cn>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 10:53:29PM +0800, Liu Xinpeng wrote:
-> Executing reboot command several times on the machine "Dell
-> PowerEdge R740", UEFI security detection stopped machine
-> with the following prompt:
-> 
-> UEFI0082: The system was reset due to a timeout from the watchdog
-> timer. Check the System Event Log (SEL) or crash dumps from
-> Operating Sysstem to identify the source that triggered the
-> watchdog timer reset. Update the firmware or driver for the
-> identified device.
-> 
-> iDRAC has warning event: "The watchdog timer reset the system".
-> 
-> This patch fixes this issue by adding the reboot notifier.
-> 
-> Signed-off-by: Liu Xinpeng <liuxp11@chinatelecom.cn>
+Hi,
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+This series includes everything[*] required to get NVMe up and running on
+Apple's M1, M1 Pro and M1 Max SoCs.
 
-> ---
->  drivers/watchdog/wdat_wdt.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/watchdog/wdat_wdt.c b/drivers/watchdog/wdat_wdt.c
-> index df0865a61a70..6f36a653767b 100644
-> --- a/drivers/watchdog/wdat_wdt.c
-> +++ b/drivers/watchdog/wdat_wdt.c
-> @@ -462,6 +462,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
->  		return ret;
->  
->  	watchdog_set_nowayout(&wdat->wdd, nowayout);
-> +	watchdog_stop_on_reboot(&wdat->wdd);
->  	return devm_watchdog_register_device(dev, &wdat->wdd);
->  }
->  
-> -- 
-> 2.23.0
-> 
+v1: https://lore.kernel.org/linux-nvme/20220321165049.35985-1-sven@svenpeter.dev/T/
+v2: https://lore.kernel.org/linux-nvme/20220415142055.30873-1-sven@svenpeter.dev/T/
+
+Thanks everyone for the reviews of v2 again! There are just some minor
+changes since v2 listed in the individual commits again.
+
+Thanks,
+
+Sven
+
+[*] The only missing part in this series are the device tree updates
+    but since these will go through arm-soc anyway I haven't included
+    them here but will instead submit them once this series is in a shape
+    where it can be merged.
+
+Sven Peter (6):
+  dt-bindings: iommu: Add Apple SART DMA address filter
+  dt-bindings: nvme: Add Apple ANS NVMe
+  soc: apple: Always include Makefile
+  soc: apple: Add SART driver
+  soc: apple: Add RTKit IPC library
+  nvme-apple: Add initial Apple SoC NVMe driver
+
+ .../devicetree/bindings/iommu/apple,sart.yaml |   52 +
+ .../bindings/nvme/apple,nvme-ans.yaml         |  111 ++
+ MAINTAINERS                                   |    4 +
+ drivers/nvme/host/Kconfig                     |   13 +
+ drivers/nvme/host/Makefile                    |    3 +
+ drivers/nvme/host/apple.c                     | 1598 +++++++++++++++++
+ drivers/soc/Makefile                          |    2 +-
+ drivers/soc/apple/Kconfig                     |   24 +
+ drivers/soc/apple/Makefile                    |    6 +
+ drivers/soc/apple/rtkit-crashlog.c            |  154 ++
+ drivers/soc/apple/rtkit-internal.h            |   62 +
+ drivers/soc/apple/rtkit.c                     |  958 ++++++++++
+ drivers/soc/apple/sart.c                      |  328 ++++
+ include/linux/soc/apple/rtkit.h               |  159 ++
+ include/linux/soc/apple/sart.h                |   57 +
+ 15 files changed, 3530 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/iommu/apple,sart.yaml
+ create mode 100644 Documentation/devicetree/bindings/nvme/apple,nvme-ans.yaml
+ create mode 100644 drivers/nvme/host/apple.c
+ create mode 100644 drivers/soc/apple/rtkit-crashlog.c
+ create mode 100644 drivers/soc/apple/rtkit-internal.h
+ create mode 100644 drivers/soc/apple/rtkit.c
+ create mode 100644 drivers/soc/apple/sart.c
+ create mode 100644 include/linux/soc/apple/rtkit.h
+ create mode 100644 include/linux/soc/apple/sart.h
+
+-- 
+2.25.1
+

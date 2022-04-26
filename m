@@ -2,65 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0AE7510206
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 17:37:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCD3A510201
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 17:36:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352448AbiDZPjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 11:39:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49792 "EHLO
+        id S1352429AbiDZPja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 11:39:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352399AbiDZPit (ORCPT
+        with ESMTP id S1352407AbiDZPjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 11:38:49 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B9BFD25
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 08:35:42 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id i38so14636116ybj.13
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 08:35:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VQZiXIxdmiSHbCLJF1D/j7DSaBPKECeHRKKl9HR5UoM=;
-        b=gIVAOUhxi9y7Yo2xEP1k3yvfEjLLjCtl0ov47OXgb2YCXUDGXxTF49I30qX40KpVIm
-         PWJB2dxCEcNfr6k05ghawsu1qtRmlx9cTvrJrx+rnVihvgKCMR8vBZPwk9e0VEt8q+4U
-         NjXgq3Q2vrQYiUVZiAB7lOASwk5Zh83hQ9PxdcAVsBLhCV47LWDcuUvzbm7kXsdD1m3N
-         W1lajCBO/M0wsQhg0lxIM7FhiARI0aiGYKWoHDYAFXy4fhJn5JRqpCiCJdeG8u2kO8cO
-         cPEt+wBCbojy4fJI+skhC/N9MI11C5v1WHRb3WYHJ8jC8vP8TGcNI/J1Tbu79wD82rUH
-         YAdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VQZiXIxdmiSHbCLJF1D/j7DSaBPKECeHRKKl9HR5UoM=;
-        b=Y76oyG7ToUath5IpsUuxn/XPeMjxW9KsyiFDc4795l2jhrQjyFtYqG59mdTyalzKsA
-         5Ed6feLFtbairEhLr3CTmKo+yw7m8O9YCpmv5Mz++lZqTXWoBYjVdM6M+N5EwogMlFwp
-         sE8JK7YJCtkb2aK6CHSPRxwJL4WU44mWVjyxtLpFvZ9A23hAxasUG8Kf35cS7whr+bBl
-         KdgdLQPTKSESyynz5WpjB9sUZq+KdNM0Ys+DvT5IoccuoD4pTlzQ2bHNbQFSgHkFXdK0
-         Q38PhFSjV6JibNaRcdCxDCdTqoHtzaXN6xcDF69eAj/B4LrMFTNjgqps28BqJx/dC8lM
-         rUmw==
-X-Gm-Message-State: AOAM530hcmn7xXaXgwq1UD/KjIWNKeyb5UV7VqIO04sxylznyV5g65o8
-        sVT+pPhkHbw5N09C/Kpy3aTlpRdU4MQRwneW9eAqhw==
-X-Google-Smtp-Source: ABdhPJxfB1kY9NVGiRey7y5jAZNb0HTOXTxJRiyMxZf+112Opk8r9k1XvSYnyKCCkyl+dnyJaWo3Zer8qmQsHZmSOI4=
-X-Received: by 2002:a25:bcc3:0:b0:648:7360:8e75 with SMTP id
- l3-20020a25bcc3000000b0064873608e75mr8726230ybm.533.1650987341152; Tue, 26
- Apr 2022 08:35:41 -0700 (PDT)
+        Tue, 26 Apr 2022 11:39:23 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A4115703;
+        Tue, 26 Apr 2022 08:36:15 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23QFZwC4095154;
+        Tue, 26 Apr 2022 10:35:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1650987358;
+        bh=+wXVEK8JCV6awv2uh9nVMeADNZSkgBnA4Ju6ueZN+HA=;
+        h=From:To:CC:Subject:Date;
+        b=trVDvRK66edZUKXwpvoR7RfDwCgujhNAMjpxnr74PO0ZkqMmhAcXDjDT5O5N9H7kr
+         myuhDVQi52eRARJKHVJJF2ucWTI/1BJY5kKgCIiGv78jcmkCKcmNJtrz/pxuY1vbum
+         HQ4kFZ6WMIVqQ5jhJYAcG1dr31PLrzk2df4gUrdk=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23QFZvux090012
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 26 Apr 2022 10:35:58 -0500
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 26
+ Apr 2022 10:35:57 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 26 Apr 2022 10:35:57 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23QFZu57016778;
+        Tue, 26 Apr 2022 10:35:57 -0500
+From:   Rahul T R <r-ravikumar@ti.com>
+To:     <nm@ti.com>
+CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski@canonical.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <tomi.valkeinen@ideasonboard.com>,
+        <laurent.pinchart@ideasonboard.com>, <kishon@ti.com>,
+        <r-ravikumar@ti.com>
+Subject: [PATCH v4 0/2] DSS: Add support for DisplayPort
+Date:   Tue, 26 Apr 2022 21:05:51 +0530
+Message-ID: <20220426153553.18474-1-r-ravikumar@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20220423221623.1074556-1-huobean@gmail.com> <20220423221623.1074556-3-huobean@gmail.com>
- <CAPDyKFrksB_kgrnmcay+ub0nDfmPVZfw-zJihop5N8_6qUqrug@mail.gmail.com>
-In-Reply-To: <CAPDyKFrksB_kgrnmcay+ub0nDfmPVZfw-zJihop5N8_6qUqrug@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 26 Apr 2022 17:35:29 +0200
-Message-ID: <CACRpkdb-snMG8Aabq_oa43_UQx1CVccQteRa8_Ur6OHDKFAc2g@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] mmc: core: Allows to override the timeout value
- for ioctl() path
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Bean Huo <huobean@gmail.com>, adrian.hunter@intel.com,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        beanhuo@micron.com, stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,26 +65,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 3:55 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> On Sun, 24 Apr 2022 at 00:16, Bean Huo <huobean@gmail.com> wrote:
-> >
-> > From: Bean Huo <beanhuo@micron.com>
-> >
-> > Occasionally, user-land applications initiate longer timeout values for certain commands
-> > through ioctl() system call. But so far we are still using a fixed timeout of 10 seconds
-> > in mmc_poll_for_busy() on the ioctl() path, even if a custom timeout is specified in the
-> > userspace application. This patch allows custom timeout values to override this default
-> > timeout values on the ioctl path.
-> >
-> > Cc: stable <stable@vger.kernel.org>
-> > Signed-off-by: Bean Huo <beanhuo@micron.com>
->
-> Applied for next, thanks!
->
-> Linus, I interpreted your earlier reply as a reviewed-by tag, so I
-> have added that. Please tell me, if you want me to drop it.
+The following series of patches enables DisplayPort on
+j721e-evm
 
-That's fine, sorry for being unclear!
+v2:
+   - use phandle with a parameter to refer clocks insted of
+     sub nodes in serdes_wiz node
+   - move phy link node to board DTS file
 
-Yours,
-Linus Walleij
+v3:
+   - Fix the regulator node name as per the DT spec
+   - Use Macro for GPIO type
+
+v4:
+   - Move adding of phy link nodes from 2/2 to 1/2, to fix dtbs checks warnings
+   - Add leading zeros to align reg property addresses and sizes
+   - Add empty ports for mhdp node in dtsi file to fix dtbs checks warnings
+
+boot logs:
+   https://gist.githubusercontent.com/ravi-rahul/1bdbc3f77ab381e486c8394650c2e85d/raw/2327c9894c3236950a00f4511ae668ac4399b71e/j7_DP_upstream.log
+
+kernel patch verify report:
+   https://gist.githubusercontent.com/ravi-rahul/a982fef3fae03ec0dbdd5cb475a4cb25/raw/9ef482f96fa351cff7980e4340e9bcb8471ec3ab/report-kernel-patch-verify.txt
+
+Tomi Valkeinen (2):
+  arm64: dts: ti: k3-j721e-*: add DP & DP PHY
+  arm64: dts: ti: k3-j721e-common-proc-board: add DP to j7 evm
+
+ .../dts/ti/k3-j721e-common-proc-board.dts     | 77 ++++++++++++++++++-
+ arch/arm64/boot/dts/ti/k3-j721e-main.dtsi     | 75 +++++++++++++++++-
+ arch/arm64/boot/dts/ti/k3-j721e-sk.dts        | 16 ++++
+ 3 files changed, 162 insertions(+), 6 deletions(-)
+
+-- 
+2.17.1
+

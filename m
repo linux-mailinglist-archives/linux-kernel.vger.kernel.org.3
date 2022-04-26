@@ -2,111 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDB4550EE49
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 03:49:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D367C50EE4E
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 03:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241485AbiDZBwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 21:52:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
+        id S241516AbiDZBwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 21:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241577AbiDZBwQ (ORCPT
+        with ESMTP id S241566AbiDZBwi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 21:52:16 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB09124DAA;
-        Mon, 25 Apr 2022 18:49:07 -0700 (PDT)
-Received: from kwepemi100023.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KnPqp26QDzGpS3;
-        Tue, 26 Apr 2022 09:46:30 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100023.china.huawei.com (7.221.188.59) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Apr 2022 09:49:05 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Apr 2022 09:49:05 +0800
-Subject: Re: [PATCH -next v2 2/5] block, bfq: add fake weight_counter for
- weight-raised queue
-To:     Jan Kara <jack@suse.cz>
-CC:     <paolo.valente@linaro.org>, <axboe@kernel.dk>, <tj@kernel.org>,
-        <linux-block@vger.kernel.org>, <cgroups@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
-References: <20220416093753.3054696-1-yukuai3@huawei.com>
- <20220416093753.3054696-3-yukuai3@huawei.com>
- <20220425094856.qgkhba2klguduxot@quack3.lan>
- <a27b8c79-867f-9253-84db-1d39c964b3ed@huawei.com>
- <20220425161650.xzyijgkb5yzviea3@quack3.lan>
-From:   "yukuai (C)" <yukuai3@huawei.com>
-Message-ID: <4591d02d-1f14-c928-1c50-6e434dfbb7b2@huawei.com>
-Date:   Tue, 26 Apr 2022 09:49:04 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Mon, 25 Apr 2022 21:52:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FDEB120D04;
+        Mon, 25 Apr 2022 18:49:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D305461748;
+        Tue, 26 Apr 2022 01:49:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29014C385A7;
+        Tue, 26 Apr 2022 01:49:30 +0000 (UTC)
+Date:   Mon, 25 Apr 2022 21:49:28 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "markgross@kernel.org" <markgross@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "Joseph, Jithu" <jithu.joseph@intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
+Subject: Re: [PATCH v4 09/10] trace: platform/x86/intel/ifs: Add trace point
+ to track Intel IFS operations
+Message-ID: <20220425214928.2aac3391@gandalf.local.home>
+In-Reply-To: <1752057af33e4eb28bcea0fd75e44048@intel.com>
+References: <20220419163859.2228874-1-tony.luck@intel.com>
+        <20220422200219.2843823-1-tony.luck@intel.com>
+        <20220422200219.2843823-10-tony.luck@intel.com>
+        <20220425105251.3f5e8021@gandalf.local.home>
+        <1752057af33e4eb28bcea0fd75e44048@intel.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <20220425161650.xzyijgkb5yzviea3@quack3.lan>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/04/26 0:16, Jan Kara 写道:
-> Hello!
+On Mon, 25 Apr 2022 16:49:35 +0000
+"Luck, Tony" <tony.luck@intel.com> wrote:
+
+> I see two paths:
 > 
-> On Mon 25-04-22 21:34:16, yukuai (C) wrote:
->> 在 2022/04/25 17:48, Jan Kara 写道:
->>> On Sat 16-04-22 17:37:50, Yu Kuai wrote:
->>>> Weight-raised queue is not inserted to weights_tree, which makes it
->>>> impossible to track how many queues have pending requests through
->>>> weights_tree insertion and removel. This patch add fake weight_counter
->>>> for weight-raised queue to do that.
->>>>
->>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
->>>
->>> This is a bit hacky. I was looking into a better place where to hook to
->>> count entities in a bfq_group with requests and I think bfq_add_bfqq_busy()
->>> and bfq_del_bfqq_busy() are ideal for this. It also makes better sense
->>> conceptually than hooking into weights tree handling.
->>
->> bfq_del_bfqq_busy() will be called when all the reqs in the bfqq are
->> dispatched, however there might still some reqs are't completed yet.
->>
->> Here what we want to track is how many bfqqs have pending reqs,
->> specifically if the bfqq have reqs are't complted.
->>
->> Thus I think bfq_del_bfqq_busy() is not the right place to do that.
+> 1) Create a new user friendly trace point for each new scan mode.
+> 2) Just provide a generic one that dumps both the 64-bit WRMSR and RDMSR values.
 > 
-> Yes, I'm aware there will be a difference. But note that bfqq can stay busy
-> with only dispatched requests because the logic in __bfq_bfqq_expire() will
-> not call bfq_del_bfqq_busy() if idling is needed for service guarantees. So
-> I think using bfq_add/del_bfqq_busy() would work OK.
-Hi,
+> Q: Are trace points "expensive" in some way ... so better to just have one than three?
+>      Or are the cheap enough that decoding for the user is an OK thing?
 
-I didn't think of that before. If bfqq stay busy after dispathing all
-the requests, there are two other places that bfqq can clear busy:
+Yes, they are expensive as each TRACE_EVENT() can add a few KB of text and
+data. But you can add a DECLARE_EVENT_CLASS() and then add "printk"
+differences that are less memory heavy.
 
-1) bfq_remove_request(), bfqq has to insert a new req while it's not in
-service.
+See DEFINE_EVENT_PRINT().
 
-2) bfq_release_process_ref(), user thread is gone / moved, or old bfqq
-is gone due to merge / ioprio change.
+-- Steve
 
-I wonder, will bfq_del_bfqq_busy() be called immediately when requests
-are completed? (It seems not to me...). For example, a user thread
-issue a sync io just once, and it keep running without issuing new io,
-then when does the bfqq clears the busy state?
-
-Thanks,
-Kuai
-> 
-> 								Honza
-> 

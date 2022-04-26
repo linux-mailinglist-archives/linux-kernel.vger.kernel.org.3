@@ -2,123 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04F6750FC3C
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 13:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF18950FC39
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 13:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349664AbiDZLw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 07:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53488 "EHLO
+        id S1345787AbiDZLur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 07:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244202AbiDZLw0 (ORCPT
+        with ESMTP id S229585AbiDZLup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 07:52:26 -0400
-Received: from spam2.hygon.cn (unknown [110.188.70.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CFA38DB8
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 04:49:17 -0700 (PDT)
-Received: from MK-DB.hygon.cn ([172.23.18.60])
-        by spam2.hygon.cn with ESMTP id 23QBjhUM002405;
-        Tue, 26 Apr 2022 19:45:43 +0800 (GMT-8)
-        (envelope-from puwen@hygon.cn)
-Received: from cncheex01.Hygon.cn ([172.23.18.10])
-        by MK-DB.hygon.cn with ESMTP id 23QBjavX089615;
-        Tue, 26 Apr 2022 19:45:36 +0800 (GMT-8)
-        (envelope-from puwen@hygon.cn)
-Received: from cncheex01.Hygon.cn (172.23.18.10) by cncheex01.Hygon.cn
- (172.23.18.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 26 Apr
- 2022 19:45:32 +0800
-Received: from cncheex01.Hygon.cn ([172.23.18.10]) by cncheex01.Hygon.cn
- ([172.23.18.10]) with mapi id 15.01.2375.024; Tue, 26 Apr 2022 19:45:32 +0800
-From:   Wen Pu <puwen@hygon.cn>
-To:     Sandipan Das <sandipan.das@amd.com>,
+        Tue, 26 Apr 2022 07:50:45 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88C032EF1;
+        Tue, 26 Apr 2022 04:47:37 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 13:47:34 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1650973656;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qhTe3rXGVtUc76KewVm4yQpY7h0Bmtd3SNVKnbkCB3s=;
+        b=asVeung/CiSsVRuxtfEAm3It6XUCErzkC6VvkOvaQQ8fZCbx042HNYJvLrHVr20k/pp0MS
+        /azs8QxjNgHC3QrPkGV8iyIaI4cZBueBrvM5CzZXm/AFYecW39Bo+wdt1W8PPJOcbbJsIw
+        i4UI0ue9IdSR2YRvkzqKNMq7aYL5s4294DL5qPrkXXjYf1H5QwebXCyxGoYImg0NVHQU7V
+        oVj35Oet9xC1xPHIS0Mkd5ZmjGLWOA1482+1EsMyeAQexYCJqzchfO4+n4XYS1B6iqGxdc
+        0T8qsEUVBvIbX5lYJFWuA5WK46KLfad3MhJ8deKdohZ3YgYn/l/uysL28bvSyw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1650973656;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qhTe3rXGVtUc76KewVm4yQpY7h0Bmtd3SNVKnbkCB3s=;
+        b=Ks55If1juL3ARLDz2V4EPwsZyCTMB7miQuJvHrqgOUjIOunhxHzS7P1lpf+Ttaw5ZjDzJC
+        Dml4KxUUvc1L2RDw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        outreachy@lists.linux.dev, Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "acme@kernel.org" <acme@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "namhyung@kernel.org" <namhyung@kernel.org>,
-        "jolsa@kernel.org" <jolsa@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "like.xu.linux@gmail.com" <like.xu.linux@gmail.com>,
-        "eranian@google.com" <eranian@google.com>,
-        "ananth.narayan@amd.com" <ananth.narayan@amd.com>,
-        "ravi.bangoria@amd.com" <ravi.bangoria@amd.com>,
-        "santosh.shukla@amd.com" <santosh.shukla@amd.com>
-Subject: Re: [PATCH v2 7/7] kvm: x86/cpuid: Fix CPUID leaf 0xA
-Thread-Topic: [PATCH v2 7/7] kvm: x86/cpuid: Fix CPUID leaf 0xA
-Thread-Index: AQHYWHxbGifZsj53i0W4Cl6nd1FFc60BVJgAgAAG9ICAADOjAA==
-Date:   Tue, 26 Apr 2022 11:45:32 +0000
-Message-ID: <25e89d27-d7da-2dea-dd20-0a9d8dcdee83@hygon.cn>
-References: <cover.1650515382.git.sandipan.das@amd.com>
- <54bc7fe4cadf6bdef823bab1fba43d4891d2e1a9.1650515382.git.sandipan.das@amd.com>
- <20220426081550.GO2731@worktop.programming.kicks-ass.net>
- <9e6d14a0-a658-195c-c7a3-7d2687a61544@amd.com>
-In-Reply-To: <9e6d14a0-a658-195c-c7a3-7d2687a61544@amd.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.23.18.44]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <E3FFCC354D999045906CD0C0BD9713BF@Hygon.cn>
-Content-Transfer-Encoding: base64
+Subject: Re: [PATCH v2 4/4] Documentation/vm: Rework "Temporary Virtual
+ Mappings" section
+Message-ID: <Ymfb1saaHVuq4IUl@linutronix.de>
+References: <20220425162400.11334-1-fmdefrancesco@gmail.com>
+ <20220425162400.11334-5-fmdefrancesco@gmail.com>
+ <YmecctAD9XXYG8CR@linutronix.de>
+ <3610796.MHq7AAxBmi@leap>
 MIME-Version: 1.0
-X-MAIL: spam2.hygon.cn 23QBjhUM002405
-X-DNSRBL: 
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,T_SPF_PERMERROR autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <3610796.MHq7AAxBmi@leap>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMjAyMi80LzI2IDE2OjQwLCBTYW5kaXBhbiBEYXMgd3JvdGU6DQo+IEhpIFBldGVyLA0KPiAN
-Cj4gT24gNC8yNi8yMDIyIDE6NDUgUE0sIFBldGVyIFppamxzdHJhIHdyb3RlOg0KPj4gT24gVGh1
-LCBBcHIgMjEsIDIwMjIgYXQgMTE6MTY6NTlBTSArMDUzMCwgU2FuZGlwYW4gRGFzIHdyb3RlOg0K
-Pj4+IE9uIHNvbWUgeDg2IHByb2Nlc3NvcnMsIENQVUlEIGxlYWYgMHhBIHByb3ZpZGVzIGluZm9y
-bWF0aW9uDQo+Pj4gb24gQXJjaGl0ZWN0dXJhbCBQZXJmb3JtYW5jZSBNb25pdG9yaW5nIGZlYXR1
-cmVzLiBJdA0KPj4+IGFkdmVydGlzZXMgYSBQTVUgdmVyc2lvbiB3aGljaCBRZW11IHVzZXMgdG8g
-ZGV0ZXJtaW5lIHRoZQ0KPj4+IGF2YWlsYWJpbGl0eSBvZiBhZGRpdGlvbmFsIE1TUnMgdG8gbWFu
-YWdlIHRoZSBQTUNzLg0KPj4+DQo+Pj4gVXBvbiByZWNlaXZpbmcgYSBLVk1fR0VUX1NVUFBPUlRF
-RF9DUFVJRCBpb2N0bCByZXF1ZXN0IGZvcg0KPj4+IHRoZSBzYW1lLCB0aGUga2VybmVsIGNvbnN0
-cnVjdHMgcmV0dXJuIHZhbHVlcyBiYXNlZCBvbiB0aGUNCj4+PiB4ODZfcG11X2NhcGFiaWxpdHkg
-aXJyZXNwZWN0aXZlIG9mIHRoZSB2ZW5kb3IuDQo+Pj4NCj4+PiBUaGlzIGxlYWYgYW5kIHRoZSBh
-ZGRpdGlvbmFsIE1TUnMgYXJlIG5vdCBzdXBwb3J0ZWQgb24gQU1EDQo+Pj4gcHJvY2Vzc29ycy4g
-SWYgUGVyZk1vblYyIGlzIGRldGVjdGVkLCB0aGUgUE1VIHZlcnNpb24gaXMNCj4+PiBzZXQgdG8g
-MiBhbmQgZ3Vlc3Qgc3RhcnR1cCBicmVha3MgYmVjYXVzZSBvZiBhbiBhdHRlbXB0IHRvDQo+Pj4g
-YWNjZXNzIGEgbm9uLWV4aXN0ZW50IE1TUi4gUmV0dXJuIHplcm9zIHRvIGF2b2lkIHRoaXMuDQo+
-Pj4NCj4+PiBGaXhlczogYTZjMDZlZDFhNjBhICgiS1ZNOiBFeHBvc2UgdGhlIGFyY2hpdGVjdHVy
-YWwgcGVyZm9ybWFuY2UgbW9uaXRvcmluZyBDUFVJRCBsZWFmIikNCj4+PiBSZXBvcnRlZC1ieTog
-VmFzYW50IEhlZ2RlIDx2YXNhbnQuaGVnZGVAYW1kLmNvbT4NCj4+PiBTaWduZWQtb2ZmLWJ5OiBT
-YW5kaXBhbiBEYXMgPHNhbmRpcGFuLmRhc0BhbWQuY29tPg0KPj4+IC0tLQ0KPj4+ICAgYXJjaC94
-ODYva3ZtL2NwdWlkLmMgfCA1ICsrKysrDQo+Pj4gICAxIGZpbGUgY2hhbmdlZCwgNSBpbnNlcnRp
-b25zKCspDQo+Pj4NCj4+PiBkaWZmIC0tZ2l0IGEvYXJjaC94ODYva3ZtL2NwdWlkLmMgYi9hcmNo
-L3g4Ni9rdm0vY3B1aWQuYw0KPj4+IGluZGV4IDRiNjJkODBiYjIyZi4uNmJkNjVjYWQ3NWVmIDEw
-MDY0NA0KPj4+IC0tLSBhL2FyY2gveDg2L2t2bS9jcHVpZC5jDQo+Pj4gKysrIGIvYXJjaC94ODYv
-a3ZtL2NwdWlkLmMNCj4+PiBAQCAtODcyLDYgKzg3MiwxMSBAQCBzdGF0aWMgaW5saW5lIGludCBf
-X2RvX2NwdWlkX2Z1bmMoc3RydWN0IGt2bV9jcHVpZF9hcnJheSAqYXJyYXksIHUzMiBmdW5jdGlv
-bikNCj4+PiAgIAkJdW5pb24gY3B1aWQxMF9lYXggZWF4Ow0KPj4+ICAgCQl1bmlvbiBjcHVpZDEw
-X2VkeCBlZHg7DQo+Pj4gICANCj4+PiArCQlpZiAoYm9vdF9jcHVfZGF0YS54ODZfdmVuZG9yID09
-IFg4Nl9WRU5ET1JfQU1EKSB7DQo+Pg0KPj4gVGhpcyBpcyB0aGUgb2JsaWdhdG9yeSBxdWVzdGlv
-biBhYm91dCBIWUdPTjsgc2hvdWxkIHRoZXkgYmUgaW5jbHVkZWQNCj4+IGhlcmU/DQo+Pg0KPj4g
-eDg2IGlzIGdldHRpbmcgYSBudW1iZXIgb2YgbWUtdG9vIHBhdGNoZXMgZnJvbSBib3RoIHNpZGVz
-LCB3aGVyZQ0KPj4gYmVoYXZpb3VyIGhhcyBkaXZlcmdlZCBmb3Igbm8gcmFpc2luIGFuZCB0aGVu
-IG5lZWRzIHRvIGJlIGZpeGVkIHVwDQo+PiBhZ2Fpbi4NCj4+DQo+IA0KPiAgRnJvbSB3aGF0IEkg
-dW5kZXJzdGFuZCwgSHlnb24gcHJvY2Vzc29ycyBhbHNvIGRvIG5vdCBzdXBwb3J0IHRoaXMgbGVh
-Zi4NCj4gQ29weWluZyBQdSBXZW4gZm9yIGNvbmZpcm1hdGlvbi4NCg0KSGkgUGV0ZXIsIFNhbmRp
-cGFu77yaDQoNCkkgaGF2ZSBjb25maXJtZWQgdGhhdCBIeWdvbiBwcm9jZXNzb3JzIGRvIG5vdCBz
-dXBwb3J0IENQVUlEIGxlYWYgMHhBLg0KU2FuZGlwYW4sIGNvdWxkIHlvdSBwbGVhc2UgYWxzbyBh
-ZGQgWDg2X1ZFTkRPUl9IWUdPTiBpbiB0aGUgaWYNCmNvbmRpdGlvbmFsPw0KDQotLSANClJlZ2Fy
-ZHMsDQpQdSBXZW4NCg0KPiAtIFNhbmRpcGFuDQo+IA0KPj4+ICsJCQllbnRyeS0+ZWF4ID0gZW50
-cnktPmVieCA9IGVudHJ5LT5lY3ggPSBlbnRyeS0+ZWR4ID0gMDsNCj4+PiArCQkJYnJlYWs7DQo+
-Pj4gKwkJfQ0KPj4+ICsNCj4+PiAgIAkJcGVyZl9nZXRfeDg2X3BtdV9jYXBhYmlsaXR5KCZjYXAp
-Ow0KPj4+ICAgDQo+Pj4gICAJCS8qDQo+Pj4gLS0gDQo+Pj4gMi4zMi4wDQo+Pj4=
+On 2022-04-26 12:45:12 [+0200], Fabio M. De Francesco wrote:
+> > > +* kmap_local_page().  This function is used to require short term=20
+> mappings.
+> > > +  It can be invoked from any context (including interrupts) but the=
+=20
+> mappings
+> > > +  can only be used in the context which acquired them.
+> > > +
+> > > +  This function should be preferred, where feasible, over all the=20
+> others.
+> >=20
+> > feasible? It should always be used.=20
+>=20
+> No, it cannot always be used. Please read again few lines above this that=
+=20
+> "The mapping can only be used in the context which acquired them". We=20
+> cannot do blind s/kmap/kmap_local_page/.
+
+I'm sorry it seems I slipped while reading and replying.
+The kmap_atomic() part has "should be only used if it is absolutely
+required" =E2=80=A6 " otherwise kmap_local_page()". The kmap_atomic() shoul=
+d be
+used in new code. The alternative kmap() and kmap_local*() should be
+enough.
+
+> > Maybe "thread local" instead CPU local? Another thread on the same CPU
+> > can not use this mapping.
+> >=20
+>=20
+> Hmm, I might add "thread local" to convey that the local mappings should=
+=20
+> stay in the same context that acquired them.=20
+>=20
+> However, kmap_local_page() also disable migration. This is how Thomas=20
+> Gleixner talks about kmap_local_page() in his patch where it introduced=
+=20
+> this function:=20
+>=20
+> "The kmap_local.*() functions can be invoked from both preemptible and
+> atomic context. kmap local sections disable migration to keep the resulti=
+ng
+> virtual mapping address correct, but disable neither pagefaults nor
+> preemption.".
+>=20
+> Therefore, if it "disable migration" it is "CPU local". I mean that I mig=
+ht=20
+> also add "thread local" but I think (at least at this moment) that I won'=
+t=20
+> remove "CPU local".
+
+Hmm. It is thread-local in the end. There are slots 0 =E2=80=A6 KM_MAX_IDX =
+for
+the mappings. Slot 0 for task A can be different from slot 0 for task B
+while both run on CPU0. So the same address, that is returned from
+kmap_local(), will point to a different page for both tasks. Both tasks
+can't be migrated to another CPU while the mapping is active.
+"CPU local" sounds like something that is same to everyone on the same
+CPU which is what this_cpu_read() for instance does.
+
+> @Ira: what about this proposal?
+>=20
+> Thanks,
+>=20
+> Fabio
+
+Sebastian

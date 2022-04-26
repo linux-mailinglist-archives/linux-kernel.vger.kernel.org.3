@@ -2,45 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBC5B50F58C
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B18950F6A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:59:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346072AbiDZIjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:39:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37012 "EHLO
+        id S237937AbiDZI5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:57:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345676AbiDZIe5 (ORCPT
+        with ESMTP id S1346270AbiDZIor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:34:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38EE7B13E;
-        Tue, 26 Apr 2022 01:28:04 -0700 (PDT)
+        Tue, 26 Apr 2022 04:44:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01A083B28;
+        Tue, 26 Apr 2022 01:34:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EEDC6185C;
-        Tue, 26 Apr 2022 08:28:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85B3DC385A0;
-        Tue, 26 Apr 2022 08:28:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B1188B81CED;
+        Tue, 26 Apr 2022 08:34:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29545C385AC;
+        Tue, 26 Apr 2022 08:34:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961683;
-        bh=E+8EVVtblN1qeO36f48MGdHo2JYSkCiA/9t20WgLgEo=;
+        s=korg; t=1650962068;
+        bh=NbsUClvZy0wolQZaaxQ4Sw5keVUOpjaf+AR7ay8B04w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mO1mG6KfSZUjiGIK7xkfVXSDWC/UNanygIYy2de6/GFO555VxQjWQT56N6PCN6rSG
-         EhjFfEukSQwdm8fclP9szWS3jqPmfrILzIz7kU9eQxzYbuXgIjy0bnqCjX+B4+9fG5
-         OwshILBv2c1WXUtLTVXVIUSi4/n5aEdh1dciuo4U=
+        b=Abt+Wlqqtuw0SItjJDDt/E+JD69PrPYbfVP0aArsbHdClp40dfMfR88zPREqHSVnp
+         qt9z7WeggG+RiCdL8E8Qgs5/w5AAqZZ0PNjsON4+vBW6tEOUFjmvASh2RMNdZp3o1Q
+         UnqrrdFq0OAWzbpEqIb2NmgYo/wRl2s+QvvQAxUA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Duoming Zhou <duoming@zju.edu.cn>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ovidiu Panait <ovidiu.panait@windriver.com>
-Subject: [PATCH 4.19 49/53] ax25: fix UAF bug in ax25_send_control()
+        stable@vger.kernel.org,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        =?UTF-8?q?Samuel=20=C4=8Cavoj?= <samuel@cavoj.net>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        lukeluk498@gmail.com, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.10 61/86] gpio: Request interrupts after IRQ is initialized
 Date:   Tue, 26 Apr 2022 10:21:29 +0200
-Message-Id: <20220426081737.090471368@linuxfoundation.org>
+Message-Id: <20220426081742.967932943@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
-References: <20220426081735.651926456@linuxfoundation.org>
+In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
+References: <20220426081741.202366502@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,87 +59,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-commit 5352a761308397a0e6250fdc629bb3f615b94747 upstream.
+commit 06fb4ecfeac7e00d6704fa5ed19299f2fefb3cc9 upstream.
 
-There are UAF bugs in ax25_send_control(), when we call ax25_release()
-to deallocate ax25_dev. The possible race condition is shown below:
+Commit 5467801f1fcb ("gpio: Restrict usage of GPIO chip irq members
+before initialization") attempted to fix a race condition that lead to a
+NULL pointer, but in the process caused a regression for _AEI/_EVT
+declared GPIOs.
 
-      (Thread 1)              |     (Thread 2)
-ax25_dev_device_up() //(1)    |
-                              | ax25_kill_by_device()
-ax25_bind()          //(2)    |
-ax25_connect()                | ...
- ax25->state = AX25_STATE_1   |
- ...                          | ax25_dev_device_down() //(3)
+This manifests in messages showing deferred probing while trying to
+allocate IRQs like so:
 
-      (Thread 3)
-ax25_release()                |
- ax25_dev_put()  //(4) FREE   |
- case AX25_STATE_1:           |
-  ax25_send_control()         |
-   alloc_skb()       //USE    |
+  amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x0000 to IRQ, err -517
+  amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x002C to IRQ, err -517
+  amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x003D to IRQ, err -517
+  [ .. more of the same .. ]
 
-The refcount of ax25_dev increases in position (1) and (2), and
-decreases in position (3) and (4). The ax25_dev will be freed
-before dereference sites in ax25_send_control().
+The code for walking _AEI doesn't handle deferred probing and so this
+leads to non-functional GPIO interrupts.
 
-The following is part of the report:
+Fix this issue by moving the call to `acpi_gpiochip_request_interrupts`
+to occur after gc->irc.initialized is set.
 
-[  102.297448] BUG: KASAN: use-after-free in ax25_send_control+0x33/0x210
-[  102.297448] Read of size 8 at addr ffff888009e6e408 by task ax25_close/602
-[  102.297448] Call Trace:
-[  102.303751]  ax25_send_control+0x33/0x210
-[  102.303751]  ax25_release+0x356/0x450
-[  102.305431]  __sock_release+0x6d/0x120
-[  102.305431]  sock_close+0xf/0x20
-[  102.305431]  __fput+0x11f/0x420
-[  102.305431]  task_work_run+0x86/0xd0
-[  102.307130]  get_signal+0x1075/0x1220
-[  102.308253]  arch_do_signal_or_restart+0x1df/0xc00
-[  102.308253]  exit_to_user_mode_prepare+0x150/0x1e0
-[  102.308253]  syscall_exit_to_user_mode+0x19/0x50
-[  102.308253]  do_syscall_64+0x48/0x90
-[  102.308253]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[  102.308253] RIP: 0033:0x405ae7
-
-This patch defers the free operation of ax25_dev and net_device after
-all corresponding dereference sites in ax25_release() to avoid UAF.
-
-Fixes: 9fd75b66b8f6 ("ax25: Fix refcount leaks caused by ax25_cb_del()")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-[OP: backport to 4.19: adjust dev_put_track()->dev_put()]
-Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
+Fixes: 5467801f1fcb ("gpio: Restrict usage of GPIO chip irq members before initialization")
+Link: https://lore.kernel.org/linux-gpio/BL1PR12MB51577A77F000A008AA694675E2EF9@BL1PR12MB5157.namprd12.prod.outlook.com/
+Link: https://bugzilla.suse.com/show_bug.cgi?id=1198697
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215850
+Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1979
+Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1976
+Reported-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Reviewed-by: Shreeya Patel <shreeya.patel@collabora.com>
+Tested-By: Samuel Čavoj <samuel@cavoj.net>
+Tested-By: lukeluk498@gmail.com Link:
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Reviewed-and-tested-by: Takashi Iwai <tiwai@suse.de>
+Cc: Shreeya Patel <shreeya.patel@collabora.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ax25/af_ax25.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/gpio/gpiolib.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/net/ax25/af_ax25.c
-+++ b/net/ax25/af_ax25.c
-@@ -993,10 +993,6 @@ static int ax25_release(struct socket *s
- 	sock_orphan(sk);
- 	ax25 = sk_to_ax25(sk);
- 	ax25_dev = ax25->ax25_dev;
--	if (ax25_dev) {
--		dev_put(ax25_dev->dev);
--		ax25_dev_put(ax25_dev);
--	}
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -1612,8 +1612,6 @@ static int gpiochip_add_irqchip(struct g
  
- 	if (sk->sk_type == SOCK_SEQPACKET) {
- 		switch (ax25->state) {
-@@ -1058,6 +1054,10 @@ static int ax25_release(struct socket *s
- 		sk->sk_state_change(sk);
- 		ax25_destroy_socket(ax25);
- 	}
-+	if (ax25_dev) {
-+		dev_put(ax25_dev->dev);
-+		ax25_dev_put(ax25_dev);
-+	}
+ 	gpiochip_set_irq_hooks(gc);
  
- 	sock->sk   = NULL;
- 	release_sock(sk);
+-	acpi_gpiochip_request_interrupts(gc);
+-
+ 	/*
+ 	 * Using barrier() here to prevent compiler from reordering
+ 	 * gc->irq.initialized before initialization of above
+@@ -1623,6 +1621,8 @@ static int gpiochip_add_irqchip(struct g
+ 
+ 	gc->irq.initialized = true;
+ 
++	acpi_gpiochip_request_interrupts(gc);
++
+ 	return 0;
+ }
+ 
 
 

@@ -2,211 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42688510948
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 21:46:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6092251094C
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 21:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354255AbiDZTtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 15:49:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46952 "EHLO
+        id S1354274AbiDZTtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 15:49:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbiDZTtQ (ORCPT
+        with ESMTP id S229974AbiDZTtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 15:49:16 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7268429C87
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 12:46:07 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id k27so8451649edk.4
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 12:46:07 -0700 (PDT)
+        Tue, 26 Apr 2022 15:49:49 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C122C2DD6F;
+        Tue, 26 Apr 2022 12:46:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WshltLX0dXHz63rqVl8lSMP+GZQ87XkFUm2jOhui7ss=;
-        b=cUrxEaPc0G9XHwXYx21V56yEtHHlbZhQBGAPxA/pY/aydypp3xwMM1xidQb139luUt
-         0sUuiCtTvw/Jie0PBIecKbp4NayTszqz7V8SdNR2ufKyQ1S3wejJRJxHxgpu1GcYchhY
-         TOXAU7r1pBrIgVrGWz0+/8TWLV0l3kdzkzZ6I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WshltLX0dXHz63rqVl8lSMP+GZQ87XkFUm2jOhui7ss=;
-        b=PqVISEEDaInYw3mbMnVqlhlNB52E+XO/5cM/mVKbwoBCp4o2Njqw1PqjMuWApmb8xB
-         UghtjFx5Uu9KiKu19bvrMGQq2WhLJ9/f7HPX578dIf1SMj+okXbBFDqsYjg4fNdKdkQ+
-         yE3sZcZSV5Xgt7YzOsK/Sq0NGTX8dcwkLEviWqYPaoWR9OnI+gKq1JBdG/FB1sZCjfVH
-         RStkl6Czk+dCWU0zt3047kKu6fdA3Nk/zlnOJVHonLl6ByvZoFFqlOcVGVD4LemXh11F
-         H9T9ny9IwiheC7gKZLvGTxbX6BmOqSgtlgtjg5AGr2xpIhAnL96AYIZZG2WKoGb4z6of
-         fzwQ==
-X-Gm-Message-State: AOAM531MGQrGLcJhTG0l4DiiLkZxEwfXGjZ0DDOXwGig1wnCNbLyiWpV
-        t9vtGf/dnrbExROUdlgUSluFaiOy2iU+t0VuRh4=
-X-Google-Smtp-Source: ABdhPJxwVdUuiHboMDNBIBtFk5uhEBtNOxze15drENrmxNQv2k2qGeRaWzFQcZt54/hZNscsTsxuIw==
-X-Received: by 2002:a05:6402:43c4:b0:41d:9403:8dca with SMTP id p4-20020a05640243c400b0041d94038dcamr26262628edc.184.1651002365648;
-        Tue, 26 Apr 2022 12:46:05 -0700 (PDT)
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
-        by smtp.gmail.com with ESMTPSA id h7-20020a1709060f4700b006e8d0746969sm5320769ejj.222.2022.04.26.12.46.02
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 12:46:03 -0700 (PDT)
-Received: by mail-wm1-f53.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso2191720wma.0
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 12:46:02 -0700 (PDT)
-X-Received: by 2002:a05:600c:3d0e:b0:38f:f83b:e7dc with SMTP id
- bh14-20020a05600c3d0e00b0038ff83be7dcmr31342901wmb.29.1651002362259; Tue, 26
- Apr 2022 12:46:02 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651002400; x=1682538400;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=hwvV40yuftcbV3vyTi9JaXKPJEHRLNAffYIMHJpqEtw=;
+  b=mRtQV3vtwJlXgpawgx3qIUhiqVMI0bYnT4Xvc+wtG9pPgcW9IYfXONpy
+   5SZihLLYC/Mmfthtt18nwuudfUCSQ8pNrZ2PMMAtnBJcBzzUQ54g1zeAt
+   jN/TkkBet9Vrv7ICf0wpO6eF8JaBTVOoYSnWfrlJRtHmDyRmW/5JJU+1J
+   Y=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 26 Apr 2022 12:46:40 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 12:46:40 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 26 Apr 2022 12:46:39 -0700
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 26 Apr 2022 12:46:39 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <bjorn.andersson@linaro.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3] drm/msm/dp: remove fail safe mode related code
+Date:   Tue, 26 Apr 2022 12:46:30 -0700
+Message-ID: <1651002390-4926-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20220426114627.1.I2dd93486c6952bd52f2020904de0133970d11b29@changeid>
- <20220426114627.2.I4ac7f55aa446699f8c200a23c10463256f6f439f@changeid> <fa49384c-76a5-6686-7d4d-cf11f3e98c75@quicinc.com>
-In-Reply-To: <fa49384c-76a5-6686-7d4d-cf11f3e98c75@quicinc.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 26 Apr 2022 12:45:49 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=ViLSVpTso9PWyBO5fKPCNQoCCfzNwFePekv_mXJZWeiw@mail.gmail.com>
-Message-ID: <CAD=FV=ViLSVpTso9PWyBO5fKPCNQoCCfzNwFePekv_mXJZWeiw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] drm/probe-helper: For DP, add 640x480 if all other
- modes are bad
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Current DP driver implementation has adding safe mode done at
+dp_hpd_plug_handle() which is expected to be executed under event
+thread context.
 
-On Tue, Apr 26, 2022 at 12:16 PM Abhinav Kumar
-<quic_abhinavk@quicinc.com> wrote:
->
-> Hi Doug
->
-> One minor comment below.
->
-> But otherwise, looking at this change this should work for us acc to me.
->
-> We will test this out with our equipment and then provide R-b.
->
-> Thanks
->
-> Abhinav
-> On 4/26/2022 11:46 AM, Douglas Anderson wrote:
-> > As per Displayport spec section 5.2.1.2 ("Video Timing Format") says
-> > that all detachable sinks shall support 640x480 @60Hz as a fail safe
-> > mode.
-> >
-> > A DP compliance test expected us to utilize the above fact when all
-> > modes it presented to the DP source were not achievable. It presented
-> > only modes that would be achievable with more lanes and/or higher
-> > speeds than we had available and expected that when we couldn't do
-> > that then we'd fall back to 640x480 even though it didn't advertise
-> > this size.
-> >
-> > In order to pass the compliance test (and also support any users who
-> > might fall into a similar situation with their display), we need to
-> > add 640x480 into the list of modes. However, we don't want to add
-> > 640x480 all the time. Despite the fact that the DP spec says all sinks
-> > _shall support_ 640x480, they're not guaranteed to support it
-> > _well_. Continuing to read the spec you can see that the display is
-> > not required to really treat 640x480 equal to all the other modes. It
-> > doesn't need to scale or anything--just display the pixels somehow for
-> > failsafe purposes. It should also be noted that it's not hard to find
-> > a display hooked up via DisplayPort that _doesn't_ support 640x480 at
-> > all. The HP ZR30w screen I'm sitting in front of has a native DP port
-> > and doesn't work at 640x480. I also plugged in a tiny 800x480 HDMI
-> > display via a DP to HDMI adapter and that screen definitely doesn't
-> > support 640x480.
-> >
-> > As a compromise solution, let's only add the 640x480 mode if:
-> > * We're on DP.
-> > * All other modes have been pruned.
-> >
-> > This acknowledges that 640x480 might not be the best mode to use but,
-> > since sinks are _supposed_ to support it, we will at least fall back
-> > to it if there's nothing else.
-> >
-> > Note that we _don't_ add higher resolution modes like 1024x768 in this
-> > case. We only add those modes for a failed EDID read where we have no
-> > idea what's going on. In the case where we've pruned all modes then
-> > instead we only want 640x480 which is the only defined "Fail Safe"
-> > resolution.
-> >
-> > This patch originated in response to Kuogee Hsieh's patch [1].
-> >
-> > [1] https://lore.kernel.org/r/1650671124-14030-1-git-send-email-quic_khsieh@quicinc.com
-> >
-> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > ---
-> >
-> >   drivers/gpu/drm/drm_probe_helper.c | 26 +++++++++++++++++++++-----
-> >   1 file changed, 21 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/drm_probe_helper.c b/drivers/gpu/drm/drm_probe_helper.c
-> > index 819225629010..90cd46cbfec1 100644
-> > --- a/drivers/gpu/drm/drm_probe_helper.c
-> > +++ b/drivers/gpu/drm/drm_probe_helper.c
-> > @@ -476,7 +476,6 @@ int drm_helper_probe_single_connector_modes(struct drm_connector *connector,
-> >       const struct drm_connector_helper_funcs *connector_funcs =
-> >               connector->helper_private;
-> >       int count = 0, ret;
-> > -     bool verbose_prune = true;
-> >       enum drm_connector_status old_status;
-> >       struct drm_modeset_acquire_ctx ctx;
-> >
-> > @@ -556,8 +555,8 @@ int drm_helper_probe_single_connector_modes(struct drm_connector *connector,
-> >               DRM_DEBUG_KMS("[CONNECTOR:%d:%s] disconnected\n",
-> >                       connector->base.id, connector->name);
-> >               drm_connector_update_edid_property(connector, NULL);
-> > -             verbose_prune = false;
-> > -             goto prune;
-> > +             drm_mode_prune_invalid(dev, &connector->modes, false);
-> > +             goto exit;
-> >       }
-> >
-> >       count = (*connector_funcs->get_modes)(connector);
-> > @@ -580,9 +579,26 @@ int drm_helper_probe_single_connector_modes(struct drm_connector *connector,
-> >               }
-> >       }
-> >
-> > -prune:
-> > -     drm_mode_prune_invalid(dev, &connector->modes, verbose_prune);
-> > +     drm_mode_prune_invalid(dev, &connector->modes, true);
-> >
-> > +     /*
-> > +      * Displayport spec section 5.2.1.2 ("Video Timing Format") says that
-> > +      * all detachable sinks shall support 640x480 @60Hz as a fail safe
-> > +      * mode. If all modes were pruned, perhaps because they need more
-> > +      * lanes or a higher pixel clock than available, at least try to add
-> > +      * in 640x480.
-> > +      */
-> > +     if (list_empty(&connector->modes) &&
-> > +         connector->connector_type == DRM_MODE_CONNECTOR_DisplayPort) {
-> > +             count = drm_add_modes_noedid(connector, 640, 480);
-> > +             if (_drm_helper_update_and_validate(connector, maxX, maxY, &ctx)) {
-> > +                     drm_modeset_backoff(&ctx);
-> > +                     goto retry;
->
-> Do we need another retry here? This will again repeat everything from
-> get_modes().
-> The fact that we are hitting this code is because we have already tried
-> that and this is already a second-pass. So I think another retry isnt
-> needed?
+However there is possible circular locking happen (see blow stack trace)
+after edp driver call dp_hpd_plug_handle() from dp_bridge_enable() which
+is executed under drm_thread context.
 
-The retry is still needed. This gets into the whole wait-wound mutexes
-that DRM uses, right? Any time we detect deadlock we release all of
-our locks and start from scratch. That's still possible here.
+After review all possibilities methods and as discussed on
+https://patchwork.freedesktop.org/patch/483155/, supporting EDID
+compliance tests in the driver is quite hacky. As seen with other
+vendor drivers, supporting these will be much easier with IGT. Hence
+removing all the related fail safe code for it so that no possibility
+of circular lock will happen.
 
--Doug
+======================================================
+ WARNING: possible circular locking dependency detected
+ 5.15.35-lockdep #6 Tainted: G        W
+ ------------------------------------------------------
+ frecon/429 is trying to acquire lock:
+ ffffff808dc3c4e8 (&dev->mode_config.mutex){+.+.}-{3:3}, at:
+dp_panel_add_fail_safe_mode+0x4c/0xa0
+
+ but task is already holding lock:
+ ffffff808dc441e0 (&kms->commit_lock[i]){+.+.}-{3:3}, at: lock_crtcs+0xb4/0x124
+
+ which lock already depends on the new lock.
+
+ the existing dependency chain (in reverse order) is:
+
+ -> #3 (&kms->commit_lock[i]){+.+.}-{3:3}:
+        __mutex_lock_common+0x174/0x1a64
+        mutex_lock_nested+0x98/0xac
+        lock_crtcs+0xb4/0x124
+        msm_atomic_commit_tail+0x330/0x748
+        commit_tail+0x19c/0x278
+        drm_atomic_helper_commit+0x1dc/0x1f0
+        drm_atomic_commit+0xc0/0xd8
+        drm_atomic_helper_set_config+0xb4/0x134
+        drm_mode_setcrtc+0x688/0x1248
+        drm_ioctl_kernel+0x1e4/0x338
+        drm_ioctl+0x3a4/0x684
+        __arm64_sys_ioctl+0x118/0x154
+        invoke_syscall+0x78/0x224
+        el0_svc_common+0x178/0x200
+        do_el0_svc+0x94/0x13c
+        el0_svc+0x5c/0xec
+        el0t_64_sync_handler+0x78/0x108
+        el0t_64_sync+0x1a4/0x1a8
+
+ -> #2 (crtc_ww_class_mutex){+.+.}-{3:3}:
+        __mutex_lock_common+0x174/0x1a64
+        ww_mutex_lock+0xb8/0x278
+        modeset_lock+0x304/0x4ac
+        drm_modeset_lock+0x4c/0x7c
+        drmm_mode_config_init+0x4a8/0xc50
+        msm_drm_init+0x274/0xac0
+        msm_drm_bind+0x20/0x2c
+        try_to_bring_up_master+0x3dc/0x470
+        __component_add+0x18c/0x3c0
+        component_add+0x1c/0x28
+        dp_display_probe+0x954/0xa98
+        platform_probe+0x124/0x15c
+        really_probe+0x1b0/0x5f8
+        __driver_probe_device+0x174/0x20c
+        driver_probe_device+0x70/0x134
+        __device_attach_driver+0x130/0x1d0
+        bus_for_each_drv+0xfc/0x14c
+        __device_attach+0x1bc/0x2bc
+        device_initial_probe+0x1c/0x28
+        bus_probe_device+0x94/0x178
+        deferred_probe_work_func+0x1a4/0x1f0
+        process_one_work+0x5d4/0x9dc
+        worker_thread+0x898/0xccc
+        kthread+0x2d4/0x3d4
+        ret_from_fork+0x10/0x20
+
+ -> #1 (crtc_ww_class_acquire){+.+.}-{0:0}:
+        ww_acquire_init+0x1c4/0x2c8
+        drm_modeset_acquire_init+0x44/0xc8
+        drm_helper_probe_single_connector_modes+0xb0/0x12dc
+        drm_mode_getconnector+0x5dc/0xfe8
+        drm_ioctl_kernel+0x1e4/0x338
+        drm_ioctl+0x3a4/0x684
+        __arm64_sys_ioctl+0x118/0x154
+        invoke_syscall+0x78/0x224
+        el0_svc_common+0x178/0x200
+        do_el0_svc+0x94/0x13c
+        el0_svc+0x5c/0xec
+        el0t_64_sync_handler+0x78/0x108
+        el0t_64_sync+0x1a4/0x1a8
+
+ -> #0 (&dev->mode_config.mutex){+.+.}-{3:3}:
+        __lock_acquire+0x2650/0x672c
+        lock_acquire+0x1b4/0x4ac
+        __mutex_lock_common+0x174/0x1a64
+        mutex_lock_nested+0x98/0xac
+        dp_panel_add_fail_safe_mode+0x4c/0xa0
+        dp_hpd_plug_handle+0x1f0/0x280
+        dp_bridge_enable+0x94/0x2b8
+        drm_atomic_bridge_chain_enable+0x11c/0x168
+        drm_atomic_helper_commit_modeset_enables+0x500/0x740
+        msm_atomic_commit_tail+0x3e4/0x748
+        commit_tail+0x19c/0x278
+        drm_atomic_helper_commit+0x1dc/0x1f0
+        drm_atomic_commit+0xc0/0xd8
+        drm_atomic_helper_set_config+0xb4/0x134
+        drm_mode_setcrtc+0x688/0x1248
+        drm_ioctl_kernel+0x1e4/0x338
+        drm_ioctl+0x3a4/0x684
+        __arm64_sys_ioctl+0x118/0x154
+        invoke_syscall+0x78/0x224
+        el0_svc_common+0x178/0x200
+        do_el0_svc+0x94/0x13c
+        el0_svc+0x5c/0xec
+        el0t_64_sync_handler+0x78/0x108
+        el0t_64_sync+0x1a4/0x1a8
+
+Changes in v2:
+-- re text commit title
+-- remove all fail safe mode
+
+Changes in v3:
+-- remove dp_panel_add_fail_safe_mode() from dp_panel.h
+-- add Fixes
+
+Fixes: 8b2c181 ("drm/msm/dp: add fail safe mode outside of event_mutex context")
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+
+Fixes: f1b47e6a8df8 ("drm/msm/dp: remove fail safe mode related code")
+Reported-by: Douglas Anderson <dianders@chromium.org>
+---
+ drivers/gpu/drm/msm/dp/dp_panel.c | 11 -----------
+ 1 file changed, 11 deletions(-)
+
+diff --git a/drivers/gpu/drm/msm/dp/dp_panel.c b/drivers/gpu/drm/msm/dp/dp_panel.c
+index f141872..26f4b695 100644
+--- a/drivers/gpu/drm/msm/dp/dp_panel.c
++++ b/drivers/gpu/drm/msm/dp/dp_panel.c
+@@ -206,17 +206,6 @@ int dp_panel_read_sink_caps(struct dp_panel *dp_panel,
+ 			rc = -ETIMEDOUT;
+ 			goto end;
+ 		}
+-
+-		/* fail safe edid */
+-		mutex_lock(&connector->dev->mode_config.mutex);
+-		if (drm_add_modes_noedid(connector, 640, 480))
+-			drm_set_preferred_mode(connector, 640, 480);
+-		mutex_unlock(&connector->dev->mode_config.mutex);
+-	} else {
+-		/* always add fail-safe mode as backup mode */
+-		mutex_lock(&connector->dev->mode_config.mutex);
+-		drm_add_modes_noedid(connector, 640, 480);
+-		mutex_unlock(&connector->dev->mode_config.mutex);
+ 	}
+ 
+ 	if (panel->aux_cfg_update_done) {
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+

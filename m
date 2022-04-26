@@ -2,55 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EAF250FC51
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 13:53:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E5250FC53
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 13:54:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349705AbiDZL4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 07:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41508 "EHLO
+        id S1349715AbiDZL5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 07:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349696AbiDZL4r (ORCPT
+        with ESMTP id S1349707AbiDZL5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 07:56:47 -0400
-Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [IPv6:2001:4b7a:2000:18::167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3874E6D39A;
-        Tue, 26 Apr 2022 04:53:39 -0700 (PDT)
-Received: from [10.1.250.9] (riviera.nat.ds.pw.edu.pl [194.29.137.1])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id ACD823F6AE;
-        Tue, 26 Apr 2022 13:53:36 +0200 (CEST)
-Message-ID: <761b0b5d-8bc9-e45e-826d-e04a39c1239c@somainline.org>
-Date:   Tue, 26 Apr 2022 13:53:36 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.0
-Subject: Re: [PATCH v6 09/10] ARM: dts: msm: Add coresight components for
- SM8250
-To:     Mao Jinlong <quic_jinlmao@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc:     Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-References: <20220425040304.37487-1-quic_jinlmao@quicinc.com>
- <20220425040304.37487-10-quic_jinlmao@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20220425040304.37487-10-quic_jinlmao@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Tue, 26 Apr 2022 07:57:05 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2057.outbound.protection.outlook.com [40.107.93.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A950E71A3E;
+        Tue, 26 Apr 2022 04:53:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=E0ma7MQByHD5WRgJUCcL9iaMxL+38RBbjn/TCvM5vAwxwNOBesiFQFriybuAaAzGg9TvN0p42Q7L6Pev11l2RFJw34W9pU84zvC45jEp9Vz/mFKJ5ssfi5M99+odfUODqyCg8Tig3lG0Non3Rxath5t9JVe1hbRLwtITv8lvKluOzedYCtfAUcRRgWdIr9v4DbqtABAt0+DhU7NnO2H/PeYfTiKRB+aN73OajRSWVKVz+9Lt4LqClLgSmaYiSsNhSFKgM4clLPW1VlFuGRMEzFpTWJ4eeUfKmDj8wFgkd1EyZvcG36ObJTZvs02s7p2WRQCJLSCeKNU+mWN9TRXkGQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=28I+JFMP55pT7M4/SZoCZQ6qT/lOEt7VxR25MZezPD0=;
+ b=mVxPo8hSkeqaafW0OKUWd2pSxKalBqPq59aiytRdrMRwsM0xp/v62aNMs4DyJheOaAz18AvlGbaiyAfenXFC7+INUzsGhLBXFJv+mRCBVuYNrkrSkipdCtt0xnPU6OgWYI2ZNnCgN4N9nqTmvs/nziiec2SN/dfcfyV0A6C6wwWeLOY4G3o5fO46gB+AZNKpd0T2lGi5mz/oplMlAxDQARUdmlnYVZO/kYF5FUEUU9icoMQ+so9lI0IJvepDwltsoJ9iT8qAIf7w6bq5/zVKMTLQcWJFJESpWjYvLD0n63UYkwupIuwJ0GnB/uYMxF49nUMAHOui97KiniI2KAku7A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=28I+JFMP55pT7M4/SZoCZQ6qT/lOEt7VxR25MZezPD0=;
+ b=bjQooRxJsnYJhZR3PmfNqlYZX+m0M0CbrTR8aUkrATi2gXTN5dDZhC9Pk8pqkkPzqjGw/H2Sq97EpNNrmlCqAbXydJJ/Sr7HLeCs8PEFnviU9de/sVvRLiKsN6S3r9Oe0jnElNLBRnzPp11fyWtenL0JiHKFTZQf5B1FZOpzB9U=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN2PR12MB3053.namprd12.prod.outlook.com (2603:10b6:208:c7::24)
+ by MN2PR12MB3293.namprd12.prod.outlook.com (2603:10b6:208:106::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Tue, 26 Apr
+ 2022 11:53:56 +0000
+Received: from MN2PR12MB3053.namprd12.prod.outlook.com
+ ([fe80::6807:1261:8f60:2449]) by MN2PR12MB3053.namprd12.prod.outlook.com
+ ([fe80::6807:1261:8f60:2449%7]) with mapi id 15.20.5186.021; Tue, 26 Apr 2022
+ 11:53:56 +0000
+Message-ID: <5fbcc127-cad7-1f8e-31a8-bf71f6f17e13@amd.com>
+Date:   Tue, 26 Apr 2022 17:23:44 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH 4/6] perf/tool: Parse non-cpu pmu capabilities
+Content-Language: en-US
+To:     Robert Richter <rrichter@amd.com>
+Cc:     peterz@infradead.org, acme@kernel.org, mingo@redhat.com,
+        mark.rutland@arm.com, jolsa@kernel.org, namhyung@kernel.org,
+        tglx@linutronix.de, bp@alien8.de, irogers@google.com,
+        yao.jin@linux.intel.com, james.clark@arm.com, leo.yan@linaro.org,
+        kan.liang@linux.intel.com, ak@linux.intel.com, eranian@google.com,
+        like.xu.linux@gmail.com, x86@kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sandipan.das@amd.com, ananth.narayan@amd.com, kim.phillips@amd.com,
+        santosh.shukla@amd.com, Ravi Bangoria <ravi.bangoria@amd.com>
+References: <20220425044323.2830-1-ravi.bangoria@amd.com>
+ <20220425044323.2830-5-ravi.bangoria@amd.com>
+ <YmfLU/VMQI0g0Ck0@rric.localdomain>
+From:   Ravi Bangoria <ravi.bangoria@amd.com>
+In-Reply-To: <YmfLU/VMQI0g0Ck0@rric.localdomain>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: PN3PR01CA0014.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:95::23) To MN2PR12MB3053.namprd12.prod.outlook.com
+ (2603:10b6:208:c7::24)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 499b6b5a-271d-4682-5377-08da277b712b
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3293:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB32933C0C74F449DF684071D7E0FB9@MN2PR12MB3293.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: K4BaDCjspTsvk+iCp92uNgJaIMXR8wRixnRxwTZM1y9Q/Nt2XXnDXqAhxgkhQXTtu6dMfGDhjm57NRx7C/hQ5dJt35ilSCUW0I7R7zdHdFfk3pz++IzdTbC7SroAN3MuiDOl+zrRDEAIpQLvsJ0VROYTTXi5pCTLGNC4Okvq7ia9ebT+Ig810Q65I2fduxXsJHG2AVkEVrgce+3t5M9j8DVyum/RY/jUJGp77JrBybVBcOxmqJTcCHhsmlBnaLIz6S8YTnp/LHxhRxrvcM3W/4JIkOGNpraqlr87qmceqkuy2vuqUTooyCX9uyOGU064/oxGYaID/cOvdufgdKo33BEAFmnVYxPWVqqKflAk4xPBSK3v8UVK4k8S8PRna6fkI9lpy8lK6mX0GrQRu0nbj4sp/CHBKJy/MAburs00xuNg0qD90Z+iizTo+ux79VEOXyZynctlgVc7I6slets5w/IQcJMA27XZxcRZoQjDFLgwUAukSc88BUp2RCuoT8IjltJo7HFrC/ysMsoTO4gCegNF3gPHRInH23gI7Ok5U+PTVZyAv816NTRYf+3c6EykoIpie8Ri3LPvgWRkKxEKhP/paBACeXU+0LRwXbcSQUtDYw9S8q+3u6P8MVsCwy3TYQOLUvn9//gjE+AbRcpCcVQBjPKSFbSzOPxWqdsM8RYsuB0k3kD96nYuGTVIBPGUHCqWMmYMq7XFJsjmF9YQM1eUr/ZdzEYuKjO5H11O3ps=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3053.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6506007)(53546011)(508600001)(44832011)(8676002)(2906002)(66946007)(2616005)(66556008)(66476007)(31686004)(4326008)(36756003)(6512007)(6862004)(26005)(6666004)(38100700002)(316002)(7416002)(5660300002)(37006003)(6486002)(6636002)(31696002)(186003)(86362001)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TGlxZTR2YmVsazVNNjV0cHh2dDZRYllUb1YyZU9YUFhHalhjdTZIaDFhRXJ2?=
+ =?utf-8?B?c29SWmVoMnFld3QzRjhUa0tBcE5qQ3FFVU5SdmRCYml0dC9YRThFSVpkVW1o?=
+ =?utf-8?B?cWtwSVZkZE1PcktOUUgrb2RVL3J2NXNQS3VOTUFHL1BxUmRnVDFCTkd5YVRj?=
+ =?utf-8?B?RVVHQUd3eDUvdlNWOXVMd1F4Yk9sSWJOWm5pZXlNbENDM1VPRE1RUXhTLzFC?=
+ =?utf-8?B?SjNHMmppSUc5SnptQkRyWEJ4SjhERDJFTkRaQnYyangwMFpvUWhHS3RwNHQ5?=
+ =?utf-8?B?NEdhMitxZmIrOS8vVTJ4MjZLKzdYTDBpQnQyNmZlSk0zdEdVa3R0Qi9nbXRj?=
+ =?utf-8?B?MkxHeWlKUFFBaG0xOE0wSWt0ZUlscEdOZWJ0MXlWSTdOZXJtL0F6MVZVMEZJ?=
+ =?utf-8?B?ekVZRGg1bzA5bHBuQ1diU3RWbkxCTTVzRDZjdGtLdGhpWTg4R25lc2RYTGRT?=
+ =?utf-8?B?ekZtbTYzK3FtRXJ6SGp0VDNhc0xyRnBITXZ1ZjU3b0g5emZmVGxGdDY0a3hr?=
+ =?utf-8?B?QW5zYnRYbm9RTjVDVzlUc0Rva3V5ektOTlVMbWV2cFYrU25iN29JUUZmcjhJ?=
+ =?utf-8?B?QmtDTXNwUGxQRTRLRS9MSGc1bjNRR3h0S044RElQdXdsT29KYVo5R1QxUnFh?=
+ =?utf-8?B?cmpwOGNKc3BWdXlqZm5ZK3Q5TUZBY0dQYVJZRlRqNFVlSy9NbmJmeWpaeDlJ?=
+ =?utf-8?B?U0o0aXR0c01RT28xOUFCTUp3QmxxaVBHR0RuRGZsQ2tSamVkaituOVV5SGhk?=
+ =?utf-8?B?ZlRPWDdRSE1EcGZHMy9CamxCSTRnbHAzVmpMRnVmOFhZYnpuVVBJUUV0M05W?=
+ =?utf-8?B?RTRaVjkrVTRBSngzU1NKWkxFbXdjOFA2eFlJSkkyQzhuTXlsc01FN2wvTm5x?=
+ =?utf-8?B?UEN0QUMrVHVIakhINHlhTkdORU9zVTNhUCtDVHNiQmdocHpXR0hvMERVdUN3?=
+ =?utf-8?B?YlF6cVhtejM4bmpLUjBQMzFnUUJTalJPaERKekNXNlQxN3Rxbzg3anVkbEVz?=
+ =?utf-8?B?VS9lNEYrNTAzbURxaUZ4b3lTMGgxb1NjUlVpWFZtVEhKTTVwQjN0OERhZkd5?=
+ =?utf-8?B?eVlrNUxNMUZkVHFaTW1Db0tNQjU2b1AvV0ZJUUZpb3QrM240RWNGN2M5c3JL?=
+ =?utf-8?B?TklQMUJvaEpaTEl0b21zZnhjTDNITXRKUE1FMzg1ejFHQ040NkI3QUxJRmxU?=
+ =?utf-8?B?a200SkhtYkw0WGtzVFdhZFVBd05EMUc1VS9wNExMMkdJSjU2c29mWHljSG9N?=
+ =?utf-8?B?eGVQNEg2MGFXSW9CZkxuVjRuZ1g0M0l0cVRvYU5JOTRlTS9na25WaUVPRyth?=
+ =?utf-8?B?bk1EaWJ3ODl5NmcrYUc2Q2praUJESUpnQkREeFExZFdBcm1WRVhBcmFvckpC?=
+ =?utf-8?B?aitIRGRkSXMrL1UyYXFnWENXYlErZmsvc2JwM0Zid0RjRW5zS05KdFJPMk1R?=
+ =?utf-8?B?VlJqNDdkaUE4eElkQTR6VWtUb2p5aldIRVA0RVgwNllvK0ZjcTVYOHEyUlND?=
+ =?utf-8?B?Q1kwYWhWc0ZiQVdzSXY3Zmh1N2tRQWtYU0M1ZGpDRnExcFlHNisyVTRLUmpl?=
+ =?utf-8?B?Z09rS3BoVHJCVzlZdGpKMXRzLzl2YmM0b3RveVpHclc4dTF6b1ZGbnNpZkNs?=
+ =?utf-8?B?OU9JWm9iTGJkb0NvM0FXK3F3azNpMnZaUEYyWEpSMmlqeDVrNmJuSVNLSzFz?=
+ =?utf-8?B?MitKczVvMURpV2o5M1JmdHNsMjVCQm5VdFRXZmZDNkkrQzR4ckpqdlBiNVRQ?=
+ =?utf-8?B?Vzc1YW1ZWEdqVUMrT0FPcWxYNlg0Ykg0V3ZER3JIMXBhb01Gb0ZsOCtUbllT?=
+ =?utf-8?B?VzBCaFR3NGd1Ym1DaGlhK0hrNmFtZkQwcWpObVpDT2Q5YW10b1YyVkhuVWk2?=
+ =?utf-8?B?NHRibWYxaS9DSHVBdnZGTnBYcWxtd0I1V3NrV25ScEVLemkzVmxYZ0VtSzZD?=
+ =?utf-8?B?aE9TcisxbDNFRUd4MGhWbklaYTVXSENJbVd3R2VMeVhOQTdhL3FIckFCbjhY?=
+ =?utf-8?B?OVVmZVJhcVF0ZzRaRWdldXZJOFRXUSt6RFRidGI0OVBHZmgxNXlvdE12SkpM?=
+ =?utf-8?B?MmNPNHc3MDR5Z0dWaGxNYm0xS2c0OERDTTE0bWtpdTVSWFhMS1FlUVVqSnlp?=
+ =?utf-8?B?V2RRZ2dEbGp2OXUxMzh6TC9UTWRtc1c5QXVtWHJ5Y0k5OE4zcHI0WWhRUnF5?=
+ =?utf-8?B?THJ5ZTlGU0w2Y3gzdUs0YkxCUC9rbDVtQ2FpbjVCYzl0YnV4bDY1ZkxZc2hB?=
+ =?utf-8?B?YzE5L3ZTY3dEZEVoZ1FMR3lzcHBtdU5mdFNqdEtRRFBwSXlTSGJ6TmNJbnFI?=
+ =?utf-8?B?RVpJeFRUTjkxZXRQQ2lWbFVqUWRzalZvcUVkT3JiUlZxbG1aejBDdz09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 499b6b5a-271d-4682-5377-08da277b712b
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3053.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2022 11:53:56.4159
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fHgEE0e4cTw6qLfzgqTAXl7HlWdXVv4M9WXCBxR9IxomO2/eKrZSINfDSxnu4hOViUWtXx7WMAklzY4r6AnYcw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3293
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -58,525 +138,75 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 25/04/2022 06:03, Mao Jinlong wrote:
-> Add coresight components for sm8250. STM/ETM are added.
->
-> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
-> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
-> ---
->   arch/arm64/boot/dts/qcom/sm8250.dtsi | 488 +++++++++++++++++++++++++++
->   1 file changed, 488 insertions(+)
 
-Hi,
+On 26-Apr-22 4:07 PM, Robert Richter wrote:
+> On 25.04.22 10:13:21, Ravi Bangoria wrote:
+> 
+>> diff --git a/tools/perf/Documentation/perf.data-file-format.txt b/tools/perf/Documentation/perf.data-file-format.txt
+>> index f56d0e0fbff6..dea3acb36558 100644
+>> --- a/tools/perf/Documentation/perf.data-file-format.txt
+>> +++ b/tools/perf/Documentation/perf.data-file-format.txt
+>> @@ -435,6 +435,24 @@ struct {
+>>  	} [nr_pmu];
+>>  };
+>>  
+>> +	HEADER_PMU_CAPS = 32,
+>> +
+>> +	List of pmu capabilities (except cpu pmu which is already
+>> +	covered by HEADER_CPU_PMU_CAPS)
+>> +
+>> +struct {
+>> +	u32 nr_pmus;
+>> +	struct {
+>> +		u8 core_type;	/* For hybrid topology */
+>> +		char pmu_name[];
+>> +		u16 nr_caps;
+>> +		struct {
+>> +			char name[];
+>> +			char value[];
+>> +		} [nr_caps];
+>> +	} [nr_pmus];
+>> +};
+>> +
+> 
+> This looks quite a bit complex and special.
+> 
+> Why not just reusing struct nr_cpu_pmu_caps (id 28)? Rename it and
+> introduce macros for backwards compatability if needed.
 
-please fix the commit title to match the style used in the directory of 
-the files you're changing.
+No. HEADER_CPU_PMU_CAPS (id 28) is designed only for CPU pmu and can
+not save more than one pmu data. A designed proposed in this patch
+is generic and can be used to save capabilities of multiple pmus
+within single header. Something like:
 
->
-> diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> index af8f22636436..53ab2b457a2f 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> @@ -4685,6 +4685,494 @@
->   			interrupt-names = "dcvsh-irq-0", "dcvsh-irq-1", "dcvsh-irq-2";
->   			#freq-domain-cells = <1>;
->   		};
+struct {
+    nr_pmus=2,
 
-If I can see correctly, you're putting these nodes right under 
-cpufreq_hw, which has a unit address of 0x18591000, so this is not 
-sorted properly.
+    [0] = struct {
+          core_type = 0,
+          pmu_name = "ibs_fetch"
+          nr_caps = 2,
+          [0] = { .name = "cap1", .value = "value1" }
+          [1] = { .name = "cap2", .value = "value2" }
+    },
 
+    [1] = struct {
+          core_type = 0,
+          pmu_name = "ibs_op"
+          nr_caps = 3,
+          [0] = { .name = "cap1", .value = "value1" }
+          [1] = { .name = "cap2", .value = "value2" }
+          [2] = { .name = "cap3", .value = "value3" }
+    },
+}
 
-Konrad
+> 
+> pmu_name is already encoded in sysfs and core_type could be a caps
+> value?
 
-> +
-> +		stm@6002000 {
-> +			compatible = "arm,coresight-stm", "arm,primecell";
-> +			reg = <0 0x06002000 0 0x1000>, <0 0x16280000 0 0x180000>;
-> +			reg-names = "stm-base", "stm-stimulus-base";
-> +
-> +			clocks = <&aoss_qmp>;
-> +			clock-names = "apb_pclk";
-> +
-> +			out-ports {
-> +				port {
-> +					stm_out: endpoint {
-> +						remote-endpoint = <&funnel0_in7>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		funnel@6041000 {
-> +			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-> +			reg = <0 0x06041000 0 0x1000>;
-> +
-> +			clocks = <&aoss_qmp>;
-> +			clock-names = "apb_pclk";
-> +
-> +			out-ports {
-> +				port {
-> +					funnel0_out: endpoint {
-> +						remote-endpoint = <&merge_funnel_in0>;
-> +					};
-> +				};
-> +			};
-> +
-> +			in-ports {
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +
-> +				port@7 {
-> +					reg = <7>;
-> +					funnel0_in7: endpoint {
-> +						remote-endpoint = <&stm_out>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		funnel@6042000 {
-> +			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-> +			reg = <0 0x06042000 0 0x1000>;
-> +
-> +			clocks = <&aoss_qmp>;
-> +			clock-names = "apb_pclk";
-> +
-> +			out-ports {
-> +				port {
-> +					funnel2_out: endpoint {
-> +						remote-endpoint = <&merge_funnel_in2>;
-> +					};
-> +				};
-> +			};
-> +
-> +			in-ports {
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +
-> +				port@2 {
-> +					reg = <4>;
-> +					funnel2_in5: endpoint {
-> +						remote-endpoint = <&apss_merge_funnel_out>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		funnel@6045000 {
-> +			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-> +			reg = <0 0x06045000 0 0x1000>;
-> +
-> +			clocks = <&aoss_qmp>;
-> +			clock-names = "apb_pclk";
-> +
-> +			out-ports {
-> +				port {
-> +					funnel_merg_out_funnel_swao: endpoint {
-> +						remote-endpoint = <&funnel_swao_in_funnel_merg>;
-> +					};
-> +				};
-> +			};
-> +
-> +			in-ports {
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +
-> +				port@1 {
-> +					reg = <0>;
-> +					merge_funnel_in0: endpoint {
-> +						remote-endpoint = <&funnel0_out>;
-> +					};
-> +				};
-> +
-> +				port@2 {
-> +					reg = <1>;
-> +					merge_funnel_in2: endpoint {
-> +						remote-endpoint = <&funnel2_out>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		replicator@6046000 {
-> +			compatible = "arm,coresight-dynamic-replicator", "arm,primecell";
-> +			reg = <0 0x06046000 0 0x1000>;
-> +
-> +
-> +			clocks = <&aoss_qmp>;
-> +			clock-names = "apb_pclk";
-> +
-> +			out-ports {
-> +				port {
-> +					replicator_out: endpoint {
-> +						remote-endpoint = <&etr_in>;
-> +					};
-> +				};
-> +			};
-> +
-> +			in-ports {
-> +				port {
-> +					replicator_cx_in_swao_out: endpoint {
-> +						remote-endpoint = <&replicator_swao_out_cx_in>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		etr@6048000 {
-> +			compatible = "arm,coresight-tmc", "arm,primecell";
-> +			reg = <0 0x06048000 0 0x1000>;
-> +
-> +			clocks = <&aoss_qmp>;
-> +			clock-names = "apb_pclk";
-> +			arm,scatter-gather;
-> +
-> +			in-ports {
-> +				port {
-> +					etr_in: endpoint {
-> +						remote-endpoint = <&replicator_out>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		funnel@6b04000 {
-> +			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-> +			arm,primecell-periphid = <0x000bb908>;
-> +
-> +			reg = <0 0x06b04000 0 0x1000>;
-> +			reg-names = "funnel-base";
-> +
-> +			clocks = <&aoss_qmp>;
-> +			clock-names = "apb_pclk";
-> +
-> +			out-ports {
-> +				port {
-> +					merge_funnel_out: endpoint {
-> +						remote-endpoint = <&etf_in>;
-> +					};
-> +				};
-> +			};
-> +
-> +			in-ports {
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +
-> +				port@7 {
-> +					reg = <7>;
-> +					funnel_swao_in_funnel_merg: endpoint {
-> +						remote-endpoint= <&funnel_merg_out_funnel_swao>;
-> +					};
-> +				};
-> +			};
-> +
-> +		};
-> +
-> +		etf@6b05000 {
-> +			compatible = "arm,coresight-tmc", "arm,primecell";
-> +			reg = <0 0x06b05000 0 0x1000>;
-> +
-> +			clocks = <&aoss_qmp>;
-> +			clock-names = "apb_pclk";
-> +
-> +			out-ports {
-> +				port {
-> +					etf_out: endpoint {
-> +						remote-endpoint = <&replicator_in>;
-> +					};
-> +				};
-> +			};
-> +
-> +			in-ports {
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +
-> +				port@1 {
-> +					reg = <0>;
-> +					etf_in: endpoint {
-> +						remote-endpoint = <&merge_funnel_out>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		replicator@6b06000 {
-> +			compatible = "arm,coresight-dynamic-replicator", "arm,primecell";
-> +			reg = <0 0x06b06000 0 0x1000>;
-> +
-> +			clocks = <&aoss_qmp>;
-> +			clock-names = "apb_pclk";
-> +
-> +			out-ports {
-> +				port {
-> +					replicator_swao_out_cx_in: endpoint {
-> +						remote-endpoint = <&replicator_cx_in_swao_out>;
-> +					};
-> +				};
-> +			};
-> +
-> +			in-ports {
-> +				port {
-> +					replicator_in: endpoint {
-> +						remote-endpoint = <&etf_out>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		etm@7040000 {
-> +			compatible = "arm,coresight-etm4x", "arm,primecell";
-> +			reg = <0 0x07040000 0 0x1000>;
-> +
-> +			cpu = <&CPU0>;
-> +
-> +			clocks = <&aoss_qmp>;
-> +			clock-names = "apb_pclk";
-> +			arm,coresight-loses-context-with-cpu;
-> +
-> +			out-ports {
-> +				port {
-> +					etm0_out: endpoint {
-> +						remote-endpoint = <&apss_funnel_in0>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		etm@7140000 {
-> +			compatible = "arm,coresight-etm4x", "arm,primecell";
-> +			reg = <0 0x07140000 0 0x1000>;
-> +
-> +			cpu = <&CPU1>;
-> +
-> +			clocks = <&aoss_qmp>;
-> +			clock-names = "apb_pclk";
-> +			arm,coresight-loses-context-with-cpu;
-> +
-> +			out-ports {
-> +				port {
-> +					etm1_out: endpoint {
-> +						remote-endpoint = <&apss_funnel_in1>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		etm@7240000 {
-> +			compatible = "arm,coresight-etm4x", "arm,primecell";
-> +			reg = <0 0x07240000 0 0x1000>;
-> +
-> +			cpu = <&CPU2>;
-> +
-> +			clocks = <&aoss_qmp>;
-> +			clock-names = "apb_pclk";
-> +			arm,coresight-loses-context-with-cpu;
-> +
-> +			out-ports {
-> +				port {
-> +					etm2_out: endpoint {
-> +						remote-endpoint = <&apss_funnel_in2>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		etm@7340000 {
-> +			compatible = "arm,coresight-etm4x", "arm,primecell";
-> +			reg = <0 0x07340000 0 0x1000>;
-> +
-> +			cpu = <&CPU3>;
-> +
-> +			clocks = <&aoss_qmp>;
-> +			clock-names = "apb_pclk";
-> +			arm,coresight-loses-context-with-cpu;
-> +
-> +			out-ports {
-> +				port {
-> +					etm3_out: endpoint {
-> +						remote-endpoint = <&apss_funnel_in3>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		etm@7440000 {
-> +			compatible = "arm,coresight-etm4x", "arm,primecell";
-> +			reg = <0 0x07440000 0 0x1000>;
-> +
-> +			cpu = <&CPU4>;
-> +
-> +			clocks = <&aoss_qmp>;
-> +			clock-names = "apb_pclk";
-> +			arm,coresight-loses-context-with-cpu;
-> +
-> +			out-ports {
-> +				port {
-> +					etm4_out: endpoint {
-> +						remote-endpoint = <&apss_funnel_in4>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		etm@7540000 {
-> +			compatible = "arm,coresight-etm4x", "arm,primecell";
-> +			reg = <0 0x07540000 0 0x1000>;
-> +
-> +			cpu = <&CPU5>;
-> +
-> +			clocks = <&aoss_qmp>;
-> +			clock-names = "apb_pclk";
-> +			arm,coresight-loses-context-with-cpu;
-> +
-> +			out-ports {
-> +				port {
-> +					etm5_out: endpoint {
-> +						remote-endpoint = <&apss_funnel_in5>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		etm@7640000 {
-> +			compatible = "arm,coresight-etm4x", "arm,primecell";
-> +			reg = <0 0x07640000 0 0x1000>;
-> +
-> +			cpu = <&CPU6>;
-> +
-> +			clocks = <&aoss_qmp>;
-> +			clock-names = "apb_pclk";
-> +			arm,coresight-loses-context-with-cpu;
-> +
-> +			out-ports {
-> +				port {
-> +					etm6_out: endpoint {
-> +						remote-endpoint = <&apss_funnel_in6>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		etm@7740000 {
-> +			compatible = "arm,coresight-etm4x", "arm,primecell";
-> +			reg = <0 0x07740000 0 0x1000>;
-> +
-> +			cpu = <&CPU7>;
-> +
-> +			clocks = <&aoss_qmp>;
-> +			clock-names = "apb_pclk";
-> +			arm,coresight-loses-context-with-cpu;
-> +
-> +			out-ports {
-> +				port {
-> +					etm7_out: endpoint {
-> +						remote-endpoint = <&apss_funnel_in7>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		funnel@7800000 {
-> +			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-> +			reg = <0 0x07800000 0 0x1000>;
-> +
-> +			clocks = <&aoss_qmp>;
-> +			clock-names = "apb_pclk";
-> +
-> +			out-ports {
-> +				port {
-> +					apss_funnel_out: endpoint {
-> +						remote-endpoint = <&apss_merge_funnel_in>;
-> +					};
-> +				};
-> +			};
-> +
-> +			in-ports {
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +
-> +				port@0 {
-> +					reg = <0>;
-> +					apss_funnel_in0: endpoint {
-> +						remote-endpoint = <&etm0_out>;
-> +					};
-> +				};
-> +
-> +				port@1 {
-> +					reg = <1>;
-> +					apss_funnel_in1: endpoint {
-> +						remote-endpoint = <&etm1_out>;
-> +					};
-> +				};
-> +
-> +				port@2 {
-> +					reg = <2>;
-> +					apss_funnel_in2: endpoint {
-> +						remote-endpoint = <&etm2_out>;
-> +					};
-> +				};
-> +
-> +				port@3 {
-> +					reg = <3>;
-> +					apss_funnel_in3: endpoint {
-> +						remote-endpoint = <&etm3_out>;
-> +					};
-> +				};
-> +
-> +				port@4 {
-> +					reg = <4>;
-> +					apss_funnel_in4: endpoint {
-> +						remote-endpoint = <&etm4_out>;
-> +					};
-> +				};
-> +
-> +				port@5 {
-> +					reg = <5>;
-> +					apss_funnel_in5: endpoint {
-> +						remote-endpoint = <&etm5_out>;
-> +					};
-> +				};
-> +
-> +				port@6 {
-> +					reg = <6>;
-> +					apss_funnel_in6: endpoint {
-> +						remote-endpoint = <&etm6_out>;
-> +					};
-> +				};
-> +
-> +				port@7 {
-> +					reg = <7>;
-> +					apss_funnel_in7: endpoint {
-> +						remote-endpoint = <&etm7_out>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		funnel@7810000 {
-> +			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-> +			reg = <0 0x07810000 0 0x1000>;
-> +
-> +			clocks = <&aoss_qmp>;
-> +			clock-names = "apb_pclk";
-> +
-> +			out-ports {
-> +				port {
-> +					apss_merge_funnel_out: endpoint {
-> +						remote-endpoint = <&funnel2_in5>;
-> +					};
-> +				};
-> +			};
-> +
-> +			in-ports {
-> +				port@1 {
-> +					reg = <0>;
-> +					apss_merge_funnel_in: endpoint {
-> +						remote-endpoint = <&apss_funnel_out>;
-> +					};
-> +				};
-> +			};
-> +		};
->   	};
->   
->   	timer {
+pmu_name is needed to map capability with pmu. And core_type is needed
+when same pmu is supported by multiple core types (like P-core / E-core
+on Intel platform) but has different capabilities.
+
+Thanks,
+Ravi

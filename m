@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F2350F842
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD3D50F750
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:39:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346823AbiDZJFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:05:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56572 "EHLO
+        id S1347737AbiDZJYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:24:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347180AbiDZIpz (ORCPT
+        with ESMTP id S1345668AbiDZI5p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:45:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B280B7CB3E;
-        Tue, 26 Apr 2022 01:37:36 -0700 (PDT)
+        Tue, 26 Apr 2022 04:57:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6195F60;
+        Tue, 26 Apr 2022 01:42:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CB1460908;
-        Tue, 26 Apr 2022 08:37:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50BFAC385AC;
-        Tue, 26 Apr 2022 08:37:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5B80CB81CFA;
+        Tue, 26 Apr 2022 08:42:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C27E1C385A4;
+        Tue, 26 Apr 2022 08:42:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962255;
-        bh=uaEadmqpPE1CfD4AexJXHcnVRP9yzpsnk7DXbyJr8mA=;
+        s=korg; t=1650962553;
+        bh=NVOb1+z+z+tkeyXb0Ow7XL3idaCx8Ke0kAe6jaD9rbM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iFWOl0g6uPHX822R/sCWMX+3y0FGfTPhoIzyY78HBN5bszZTAVAwzWAQNgjseMrMH
-         FSy2Dnhj9yBa8cAP5VoAF8/PQxtWuB/PdIzPz9NQBseNmz5glPD9LUEvKdev3J/NXz
-         3N9NVWjgT7HVaGYYh0MI15Y0JAzNDZoZF8RDJxfQ=
+        b=DmJrsZPI5PR/heGWUHwA7+fACsAjHANZ98rvabIge85SLrVOE+n0BI2dWPMpK/kFB
+         P8vz8EqCisoViOwuLpvWYW8yNwBK8Heaq9YUBcbC7SGbIQGsCVIET82ZUpHyQpAwAy
+         oUAi0NMyvTnGAOGflmOB2xB6GRTxIYXwkAGrt69Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Darrick J. Wong" <djwong@kernel.org>,
-        Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
-        Christian Brauner <brauner@kernel.org>,
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 004/124] vfs: make sync_filesystem return errors from ->sync_fs
-Date:   Tue, 26 Apr 2022 10:20:05 +0200
-Message-Id: <20220426081747.417783842@linuxfoundation.org>
+Subject: [PATCH 5.17 011/146] ASoC: atmel: Remove system clock tree configuration for at91sam9g20ek
+Date:   Tue, 26 Apr 2022 10:20:06 +0200
+Message-Id: <20220426081750.381331669@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
-References: <20220426081747.286685339@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,63 +54,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Darrick J. Wong <djwong@kernel.org>
+From: Mark Brown <broonie@kernel.org>
 
-[ Upstream commit 5679897eb104cec9e99609c3f045a0c20603da4c ]
+[ Upstream commit c775cbf62ed4911e4f0f23880f01815753123690 ]
 
-Strangely, sync_filesystem ignores the return code from the ->sync_fs
-call, which means that syscalls like syncfs(2) never see the error.
-This doesn't seem right, so fix that.
+The MCLK of the WM8731 on the AT91SAM9G20-EK board is connected to the
+PCK0 output of the SoC, intended in the reference software to be supplied
+using PLLB and programmed to 12MHz. As originally written for use with a
+board file the audio driver was responsible for configuring the entire tree
+but in the conversion to the common clock framework the registration of
+the named pck0 and pllb clocks was removed so the driver has failed to
+instantiate ever since.
 
-Signed-off-by: Darrick J. Wong <djwong@kernel.org>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Acked-by: Christian Brauner <brauner@kernel.org>
+Since the WM8731 driver has had support for managing a MCLK provided via
+the common clock framework for some time we can simply drop all the clock
+management code from the machine driver other than configuration of the
+sysclk rate, the CODEC driver still respects that configuration from the
+machine driver.
+
+Fixes: ff78a189b0ae55f ("ARM: at91: remove old at91-specific clock driver")
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+Link: https://lore.kernel.org/r/20220325154241.1600757-2-broonie@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/sync.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ sound/soc/atmel/sam9g20_wm8731.c | 61 --------------------------------
+ 1 file changed, 61 deletions(-)
 
-diff --git a/fs/sync.c b/fs/sync.c
-index 3ce8e2137f31..c7690016453e 100644
---- a/fs/sync.c
-+++ b/fs/sync.c
-@@ -29,7 +29,7 @@
+diff --git a/sound/soc/atmel/sam9g20_wm8731.c b/sound/soc/atmel/sam9g20_wm8731.c
+index 33e43013ff77..0d639a33ad96 100644
+--- a/sound/soc/atmel/sam9g20_wm8731.c
++++ b/sound/soc/atmel/sam9g20_wm8731.c
+@@ -46,35 +46,6 @@
   */
- int sync_filesystem(struct super_block *sb)
+ #undef ENABLE_MIC_INPUT
+ 
+-static struct clk *mclk;
+-
+-static int at91sam9g20ek_set_bias_level(struct snd_soc_card *card,
+-					struct snd_soc_dapm_context *dapm,
+-					enum snd_soc_bias_level level)
+-{
+-	static int mclk_on;
+-	int ret = 0;
+-
+-	switch (level) {
+-	case SND_SOC_BIAS_ON:
+-	case SND_SOC_BIAS_PREPARE:
+-		if (!mclk_on)
+-			ret = clk_enable(mclk);
+-		if (ret == 0)
+-			mclk_on = 1;
+-		break;
+-
+-	case SND_SOC_BIAS_OFF:
+-	case SND_SOC_BIAS_STANDBY:
+-		if (mclk_on)
+-			clk_disable(mclk);
+-		mclk_on = 0;
+-		break;
+-	}
+-
+-	return ret;
+-}
+-
+ static const struct snd_soc_dapm_widget at91sam9g20ek_dapm_widgets[] = {
+ 	SND_SOC_DAPM_MIC("Int Mic", NULL),
+ 	SND_SOC_DAPM_SPK("Ext Spk", NULL),
+@@ -135,7 +106,6 @@ static struct snd_soc_card snd_soc_at91sam9g20ek = {
+ 	.owner = THIS_MODULE,
+ 	.dai_link = &at91sam9g20ek_dai,
+ 	.num_links = 1,
+-	.set_bias_level = at91sam9g20ek_set_bias_level,
+ 
+ 	.dapm_widgets = at91sam9g20ek_dapm_widgets,
+ 	.num_dapm_widgets = ARRAY_SIZE(at91sam9g20ek_dapm_widgets),
+@@ -148,7 +118,6 @@ static int at91sam9g20ek_audio_probe(struct platform_device *pdev)
  {
--	int ret;
-+	int ret = 0;
+ 	struct device_node *np = pdev->dev.of_node;
+ 	struct device_node *codec_np, *cpu_np;
+-	struct clk *pllb;
+ 	struct snd_soc_card *card = &snd_soc_at91sam9g20ek;
+ 	int ret;
  
- 	/*
- 	 * We need to be protected against the filesystem going from
-@@ -52,15 +52,21 @@ int sync_filesystem(struct super_block *sb)
- 	 * at a time.
- 	 */
- 	writeback_inodes_sb(sb, WB_REASON_SYNC);
--	if (sb->s_op->sync_fs)
--		sb->s_op->sync_fs(sb, 0);
-+	if (sb->s_op->sync_fs) {
-+		ret = sb->s_op->sync_fs(sb, 0);
-+		if (ret)
-+			return ret;
-+	}
- 	ret = sync_blockdev_nowait(sb->s_bdev);
--	if (ret < 0)
-+	if (ret)
- 		return ret;
+@@ -162,31 +131,6 @@ static int at91sam9g20ek_audio_probe(struct platform_device *pdev)
+ 		return -EINVAL;
+ 	}
  
- 	sync_inodes_sb(sb);
--	if (sb->s_op->sync_fs)
--		sb->s_op->sync_fs(sb, 1);
-+	if (sb->s_op->sync_fs) {
-+		ret = sb->s_op->sync_fs(sb, 1);
-+		if (ret)
-+			return ret;
-+	}
- 	return sync_blockdev(sb->s_bdev);
- }
- EXPORT_SYMBOL(sync_filesystem);
+-	/*
+-	 * Codec MCLK is supplied by PCK0 - set it up.
+-	 */
+-	mclk = clk_get(NULL, "pck0");
+-	if (IS_ERR(mclk)) {
+-		dev_err(&pdev->dev, "Failed to get MCLK\n");
+-		ret = PTR_ERR(mclk);
+-		goto err;
+-	}
+-
+-	pllb = clk_get(NULL, "pllb");
+-	if (IS_ERR(pllb)) {
+-		dev_err(&pdev->dev, "Failed to get PLLB\n");
+-		ret = PTR_ERR(pllb);
+-		goto err_mclk;
+-	}
+-	ret = clk_set_parent(mclk, pllb);
+-	clk_put(pllb);
+-	if (ret != 0) {
+-		dev_err(&pdev->dev, "Failed to set MCLK parent\n");
+-		goto err_mclk;
+-	}
+-
+-	clk_set_rate(mclk, MCLK_RATE);
+-
+ 	card->dev = &pdev->dev;
+ 
+ 	/* Parse device node info */
+@@ -230,9 +174,6 @@ static int at91sam9g20ek_audio_probe(struct platform_device *pdev)
+ 
+ 	return ret;
+ 
+-err_mclk:
+-	clk_put(mclk);
+-	mclk = NULL;
+ err:
+ 	atmel_ssc_put_audio(0);
+ 	return ret;
+@@ -242,8 +183,6 @@ static int at91sam9g20ek_audio_remove(struct platform_device *pdev)
+ {
+ 	struct snd_soc_card *card = platform_get_drvdata(pdev);
+ 
+-	clk_disable(mclk);
+-	mclk = NULL;
+ 	snd_soc_unregister_card(card);
+ 	atmel_ssc_put_audio(0);
+ 
 -- 
 2.35.1
 

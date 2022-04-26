@@ -2,65 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C35510293
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:07:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78DD9510294
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352834AbiDZQKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 12:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35678 "EHLO
+        id S1352822AbiDZQKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 12:10:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352823AbiDZQKN (ORCPT
+        with ESMTP id S1352823AbiDZQKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 12:10:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617496471F;
-        Tue, 26 Apr 2022 09:07:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 23501B82047;
-        Tue, 26 Apr 2022 16:07:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F804C385AA;
-        Tue, 26 Apr 2022 16:07:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650989222;
-        bh=SIWK/mgrwqvjb745XCumZL2zEALgs20U9FUZGDkZgPQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=bDD8Qpj/XMzt4mZm2S8D6NQD6THckGoxgByTgj3daSgFZVM4539iQYEwYMrK9dPlJ
-         VzzeBe2gPmT/q0hqRxKMxeJPpG5HsJFHEG0ETh8C+WVHjSGYThzXg12HdWQFbGpsSZ
-         r5j+rsaD2/QPUdXOcF5pTsoxNr9iJC72Nfv6cRtmBB+N9epJuH1TGMkD3Fia3caX03
-         12JNYyKQCSxnduaISxloJdlOLsUPJ4cTTTMCSwkq/DZPyerS49WLCDqOcHKaPzXG5N
-         /PjXCP/1yBHKGVD3GTwpLffVDYC7u/tVov1UaoyVaBRRqPO+AnPMgWk2mdAWv3WFGB
-         P+E8ag50dBtRw==
-Date:   Tue, 26 Apr 2022 11:07:00 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Frank Wunderlich <linux@fw-web.de>
-Cc:     linux-rockchip@lists.infradead.org,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org
-Subject: Re: [RFC/RFT v2 10/11] PCI: rockchip: add a lane-map to rockchip
- pcie driver
-Message-ID: <20220426160700.GA1731141@bhelgaas>
+        Tue, 26 Apr 2022 12:10:19 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BCE4C68F91
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:07:11 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 88BB323A;
+        Tue, 26 Apr 2022 09:07:11 -0700 (PDT)
+Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6A4EF3F73B;
+        Tue, 26 Apr 2022 09:07:10 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 17:07:08 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Alexander Popov <alex.popov@linux.com>
+Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, akpm@linux-foundation.org,
+        catalin.marinas@arm.com, luto@kernel.org, will@kernel.org
+Subject: Re: [PATCH 0/8] stackleak: fixes and rework
+Message-ID: <YmgYrFHC0o8O1WcX@lakrids>
+References: <20220425115603.781311-1-mark.rutland@arm.com>
+ <202204251551.0CFE01DF4@keescook>
+ <91238500-61a6-1e2e-1dc2-931c0a23cca8@linux.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220426132139.26761-11-linux@fw-web.de>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <91238500-61a6-1e2e-1dc2-931c0a23cca8@linux.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,95 +44,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The subject line should be "PCI: rockchip-dwc: Add ..." so there's no
-need to mention "rockchip" again.  No need to mention "pcie driver"
-either,  because that's obvious from the context, so just something
-like:
+On Tue, Apr 26, 2022 at 06:51:04PM +0300, Alexander Popov wrote:
+> On 26.04.2022 01:54, Kees Cook wrote:
+> > On Mon, Apr 25, 2022 at 12:55:55PM +0100, Mark Rutland wrote:
+> > > This series reworks the stackleak code. The first patch fixes some
+> > > latent issues on arm64, and the subsequent patches improve the code to
+> > > improve clarity and permit better code generation.
+> > 
+> > This looks nice; thanks! I'll put this through build testing and get it
+> > applied shortly...
+> > 
+> > > While the improvement is small, I think the improvement to clarity and
+> > > code generation is a win regardless.
+> > 
+> > Agreed. I also want to manually inspect the resulting memory just to
+> > make sure things didn't accidentally regress. There's also an LKDTM test
+> > for basic functionality.
+> 
+> Hi Mark and Kees!
+> 
+> Glad to see this patch series.
+> 
+> I've looked at it briefly. Mark, I see your questions in the patches that I
+> can answer.
+> 
+> Please give me some time, I'm going to work on your patch series next week.
+> I'll return with review and testing.
 
-  PCI: rockchip-dwc: Add lane-map support
+Sure thing, thanks!
 
-On Tue, Apr 26, 2022 at 03:21:38PM +0200, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
-> 
-> Add a basic lane-map to define which PCIe lanes should be
-> used with this controller.
-> 
-> Rockchip driver uses this for bifurcation (true/false) based
-> on lanes should be splitted across controllers or not.
-> 
-> On rk3568 there are 2 PCIe Controllers which share PCIe lanes.
-> 
-> pcie3x1: pcie@fe270000 //lane1 when using 1+1
-> pcie3x2: pcie@fe280000 //lane0 when using 1+1
-> 
-> This ends up in one Controller (pcie3x1) uses lane-map = <0 1>; and
-> the other lane-map = <1 0>; (pcie3x2)
-> 
-> This means there are 2 lanes (count of numbers), one (by position)
-> is mapped to the first controller, the other one is used on the other
-> controller.
-> 
-> In this driver the lane-map is simply converted to the bifurcation
-> bool instead of direct mapping a specific lane to a controller.
-> 
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> ---
-> v2:
-> - new patch
-> ---
->  drivers/pci/controller/dwc/pcie-dw-rockchip.c | 15 +++++++++++++--
->  1 file changed, 13 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-dw-rockchip.c b/drivers/pci/controller/dwc/pcie-dw-rockchip.c
-> index 79e909df241c..21cb697a5be1 100644
-> --- a/drivers/pci/controller/dwc/pcie-dw-rockchip.c
-> +++ b/drivers/pci/controller/dwc/pcie-dw-rockchip.c
-> @@ -60,6 +60,7 @@ struct rockchip_pcie {
->  	struct regulator                *vpcie3v3;
->  	struct irq_domain		*irq_domain;
->  	bool				bifurcation;
-> +	u32				lane_map[2];
->  };
->  
->  static int rockchip_pcie_readl_apb(struct rockchip_pcie *rockchip,
-> @@ -293,8 +294,10 @@ static int rockchip_pcie_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
->  	struct rockchip_pcie *rockchip;
-> +	unsigned int lanecnt = 0;
->  	struct pcie_port *pp;
->  	int ret;
-> +	int len;
->  
->  	rockchip = devm_kzalloc(dev, sizeof(*rockchip), GFP_KERNEL);
->  	if (!rockchip)
-> @@ -327,8 +330,16 @@ static int rockchip_pcie_probe(struct platform_device *pdev)
->  		}
->  	}
->  
-> -	if (device_property_read_bool(dev, "bifurcation"))
-> -		rockchip->bifurcation = true;
+FWIW, I spotted a couple of issues in my patches today while testing,
+and if you're happy I can post a v2 later this week with those fixed, so
+you don't need to waste time with those.
 
-Skip adding the "bifurcation" DT support completely if you can.
-
-> +	len = of_property_read_variable_u32_array(dev->of_node, "lane-map", rockchip->lane_map,
-> +						  2, ARRAY_SIZE(rockchip->lane_map));
-> +
-> +	for (int i = 0; i < len; i++)
-> +		if (rockchip->lane_map[i])
-> +			lanecnt++;
-> +
-> +	rockchip->bifurcation = ((lanecnt > 0) && (lanecnt != len));
-> +
-> +	dev_info(dev, "bifurcation: %s\n", rockchip->bifurcation ? "true" : "false");
->  
->  	ret = rockchip_pcie_phy_init(rockchip);
->  	if (ret)
-> -- 
-> 2.25.1
-> 
-> 
-> -- 
-> linux-phy mailing list
-> linux-phy@lists.infradead.org
-> https://lists.infradead.org/mailman/listinfo/linux-phy
+Thanks,
+Mark.

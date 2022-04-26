@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B5B050FDF6
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 14:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E5550FE1E
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:00:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348183AbiDZNC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 09:02:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45486 "EHLO
+        id S1350434AbiDZNB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 09:01:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350380AbiDZNBc (ORCPT
+        with ESMTP id S1349636AbiDZNBf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 09:01:32 -0400
+        Tue, 26 Apr 2022 09:01:35 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F0E17F11B;
-        Tue, 26 Apr 2022 05:58:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B49717FBCE;
+        Tue, 26 Apr 2022 05:58:23 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: nicolas)
-        with ESMTPSA id 61F8F1F43992
+        with ESMTPSA id 70C1F1F4398D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650977899;
-        bh=gu3hWa9l9RwIqYfPgXJTq2hXyJdb/X3UYi37Vl+bXOc=;
+        s=mail; t=1650977901;
+        bh=qqGKTdK+BoJvGXzu5rDFgeoUxEBT3Njqv5q7sTj6RAI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A9PPhaws+0UJKFGVd1hph8rKqPW0f16roDicNJFfCdGnt2qPN466cQ22WLaQfg4U5
-         +Jxnnc1YkNht2e50RoYOjFvb/wNAKG1eu+UGyCbR/EhBVNTOiBmGazcu+7DO0/G5ql
-         WnI0BtliPH3K5k0AyymLQZNm8otEZaMpTYQsCZo5HAI7ZBydI7UbBYsjEizKhU0c4c
-         JTiYZEDPyYpzkw2cpXNWb1S/C+OrHDHktRpzO2Or1om6MilkX5eHtIzxOxPweZ9ioC
-         WIyhM23PqBPJS0uf9kApXCI2runbW5D6iZ2Uyj/LxM4r2W/haPC6ILBcRTnprAIRMr
-         u0V8WQkrdXY/Q==
+        b=UWJo24Y3WFgGCpdd4zZo3nChuheimOm8+x1xB7rfBR4tcpQbgBd5XeyIgafDQP77Z
+         zswC30ioFQ2xggDqfWxE28q2BI4HwrlPX9L4ZTJdEzT5UmiLmjLKTlOtSmseXz6l/K
+         aabCPa3lyhyFNCAZHmeyenUAwEkbp5/ktJR1A7NlS1IpGmxxtfFTyyyM85grd9qBOD
+         q06Wul8cQjnx8TVI8wWUD350iIcI//IzY5t1vwZcKAGkgffWqsyxuv+GsFjBRDoVcn
+         2YtZat4CUTXCYVEmQP0idVgjZX/eEyp3qMCxNZSNtS2iKyoYw0HpXqnQo/NtblBbtm
+         btlZS7Eq962BA==
 From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
 To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Boris Brezillon <boris.brezillon@collabora.com>
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Cc:     nicolas@ndufresne.ca, linux-media@vger.kernel.org,
         Sebastian Fricke <sebastian.fricke@collabora.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 12/24] media: rkvdec: Stop overclocking the decoder
-Date:   Tue, 26 Apr 2022 08:57:38 -0400
-Message-Id: <20220426125751.108293-13-nicolas.dufresne@collabora.com>
+Subject: [PATCH v4 13/24] media: rkvdec: h264: Fix dpb_valid implementation
+Date:   Tue, 26 Apr 2022 08:57:39 -0400
+Message-Id: <20220426125751.108293-14-nicolas.dufresne@collabora.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220426125751.108293-1-nicolas.dufresne@collabora.com>
 References: <20220426125751.108293-1-nicolas.dufresne@collabora.com>
@@ -56,45 +56,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While this overclock hack seems to work on some implementations
-(some ChromeBooks, RockPi4) it also causes instability on other
-implementations (notably LibreComputer Renegade, but there were more
-reports in the LibreELEC project, where this has been removed). While
-performance is indeed affected (tested with GStreamer), 4K playback
-still works as long as you don't operate in lock step and keep at
-least 1 frame ahead of time in the decode queue.
-
-After discussion with ChromeOS members, it would seem that their
-implementation indeed used to synchronously decode each frame, so
-this hack was simply compensating for their code being less
-efficient. In my opinion, this hack should not have been included
-upstream.
+The ref builder only provided references that are marked as valid in the
+dpb. Thus the current implementation of dpb_valid would always set the
+flag to 1. This is not representing missing frames (this is called
+'non-existing' pictures in the spec). In some context, these non-existing
+pictures still need to occupy a slot in the reference list according to
+the spec.
 
 Fixes: cd33c830448ba ("media: rkvdec: Add the rkvdec driver")
 Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
 Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 ---
- drivers/staging/media/rkvdec/rkvdec.c | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/staging/media/rkvdec/rkvdec-h264.c | 33 ++++++++++++++++------
+ 1 file changed, 24 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
-index c0cf3488f970..2df8cf4883e2 100644
---- a/drivers/staging/media/rkvdec/rkvdec.c
-+++ b/drivers/staging/media/rkvdec/rkvdec.c
-@@ -1027,12 +1027,6 @@ static int rkvdec_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
+diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
+index dff89732ddd0..bcde37d72244 100644
+--- a/drivers/staging/media/rkvdec/rkvdec-h264.c
++++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
+@@ -112,6 +112,7 @@ struct rkvdec_h264_run {
+ 	const struct v4l2_ctrl_h264_sps *sps;
+ 	const struct v4l2_ctrl_h264_pps *pps;
+ 	const struct v4l2_ctrl_h264_scaling_matrix *scaling_matrix;
++	int ref_buf_idx[V4L2_H264_NUM_DPB_ENTRIES];
+ };
  
--	/*
--	 * Bump ACLK to max. possible freq. (500 MHz) to improve performance
--	 * When 4k video playback.
--	 */
--	clk_set_rate(rkvdec->clocks[0].clk, 500 * 1000 * 1000);
+ struct rkvdec_h264_ctx {
+@@ -725,6 +726,26 @@ static void assemble_hw_pps(struct rkvdec_ctx *ctx,
+ 	}
+ }
+ 
++static void lookup_ref_buf_idx(struct rkvdec_ctx *ctx,
++			       struct rkvdec_h264_run *run)
++{
++	const struct v4l2_ctrl_h264_decode_params *dec_params = run->decode_params;
++	u32 i;
++
++	for (i = 0; i < ARRAY_SIZE(dec_params->dpb); i++) {
++		struct v4l2_m2m_ctx *m2m_ctx = ctx->fh.m2m_ctx;
++		const struct v4l2_h264_dpb_entry *dpb = run->decode_params->dpb;
++		struct vb2_queue *cap_q = &m2m_ctx->cap_q_ctx.q;
++		int buf_idx = -1;
++
++		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)
++			buf_idx = vb2_find_timestamp(cap_q,
++						     dpb[i].reference_ts, 0);
++
++		run->ref_buf_idx[i] = buf_idx;
++	}
++}
++
+ static void assemble_hw_rps(struct rkvdec_ctx *ctx,
+ 			    struct rkvdec_h264_run *run)
+ {
+@@ -762,7 +783,7 @@ static void assemble_hw_rps(struct rkvdec_ctx *ctx,
+ 
+ 	for (j = 0; j < RKVDEC_NUM_REFLIST; j++) {
+ 		for (i = 0; i < h264_ctx->reflists.num_valid; i++) {
+-			u8 dpb_valid = 0;
++			bool dpb_valid = run->ref_buf_idx[i] >= 0;
+ 			u8 idx = 0;
+ 
+ 			switch (j) {
+@@ -779,8 +800,6 @@ static void assemble_hw_rps(struct rkvdec_ctx *ctx,
+ 
+ 			if (idx >= ARRAY_SIZE(dec_params->dpb))
+ 				continue;
+-			dpb_valid = !!(dpb[idx].flags &
+-				       V4L2_H264_DPB_ENTRY_FLAG_ACTIVE);
+ 
+ 			set_ps_field(hw_rps, DPB_INFO(i, j),
+ 				     idx | dpb_valid << 4);
+@@ -859,13 +878,8 @@ get_ref_buf(struct rkvdec_ctx *ctx, struct rkvdec_h264_run *run,
+ 	    unsigned int dpb_idx)
+ {
+ 	struct v4l2_m2m_ctx *m2m_ctx = ctx->fh.m2m_ctx;
+-	const struct v4l2_h264_dpb_entry *dpb = run->decode_params->dpb;
+ 	struct vb2_queue *cap_q = &m2m_ctx->cap_q_ctx.q;
+-	int buf_idx = -1;
 -
- 	rkvdec->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(rkvdec->regs))
- 		return PTR_ERR(rkvdec->regs);
+-	if (dpb[dpb_idx].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)
+-		buf_idx = vb2_find_timestamp(cap_q,
+-					     dpb[dpb_idx].reference_ts, 0);
++	int buf_idx = run->ref_buf_idx[dpb_idx];
+ 
+ 	/*
+ 	 * If a DPB entry is unused or invalid, address of current destination
+@@ -1102,6 +1116,7 @@ static int rkvdec_h264_run(struct rkvdec_ctx *ctx)
+ 
+ 	assemble_hw_scaling_list(ctx, &run);
+ 	assemble_hw_pps(ctx, &run);
++	lookup_ref_buf_idx(ctx, &run);
+ 	assemble_hw_rps(ctx, &run);
+ 	config_registers(ctx, &run);
+ 
 -- 
 2.34.1
 

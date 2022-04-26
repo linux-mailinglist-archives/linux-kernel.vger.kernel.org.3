@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A55C650F8FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:44:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B3450F6D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347636AbiDZJdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:33:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51480 "EHLO
+        id S233065AbiDZJBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:01:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347560AbiDZJF5 (ORCPT
+        with ESMTP id S1346898AbiDZIp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:05:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49617D6;
-        Tue, 26 Apr 2022 01:44:58 -0700 (PDT)
+        Tue, 26 Apr 2022 04:45:29 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8890BE0D;
+        Tue, 26 Apr 2022 01:36:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 74C5861344;
-        Tue, 26 Apr 2022 08:44:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80739C385A0;
-        Tue, 26 Apr 2022 08:44:57 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 352F7CE1BC3;
+        Tue, 26 Apr 2022 08:36:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D7EFC385A0;
+        Tue, 26 Apr 2022 08:36:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962697;
-        bh=Fu+nhyd4Ftx9wFwzYrhYVHcQbXFxR67KTnPhaztFH/o=;
+        s=korg; t=1650962183;
+        bh=gdWEnuOePIjta2VFltTH8sRyYJzN9BowZ41qdvqJYV4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T5krVWyUWsNw91QjtpY5qQ2B0EMhUES4YdvsSMNgbEGefMQxJArnsAFcazvjC0fhS
-         0d2K8dFxkCgRy6vp4eC1GyRRmRuttasKYi2ifh94eC25VGAV7ya/6YIqsygYHexX96
-         gkTtsFohREiNTW0WNNezQSDrFtf9LQ89sKBaI8go=
+        b=EeN6TaV4u07zTVAJWnatBFNZS2n67bpupaBGBeikXi/N9WT5S41wRq7AP2YQA92wd
+         cTQSZvtiJgwwc34W9TCCVkU52Pz3wdFnJOoFuOIDnu0J4NGRIH//DLoMu/EzzKI7c0
+         4zNxhuR2NEcTKZvfelZUYp00RaFrpORakL7+iBdg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Herve Codina <herve.codina@bootlin.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 019/146] dmaengine: dw-edma: Fix unaligned 64bit access
-Date:   Tue, 26 Apr 2022 10:20:14 +0200
-Message-Id: <20220426081750.605299587@linuxfoundation.org>
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        syzbot <syzkaller@googlegroups.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 014/124] net/sched: cls_u32: fix netns refcount changes in u32_change()
+Date:   Tue, 26 Apr 2022 10:20:15 +0200
+Message-Id: <20220426081747.705288704@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
-References: <20220426081750.051179617@linuxfoundation.org>
+In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
+References: <20220426081747.286685339@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,60 +57,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Herve Codina <herve.codina@bootlin.com>
+From: Eric Dumazet <edumazet@google.com>
 
-[ Upstream commit 8fc5133d6d4da65cad6b73152fc714ad3d7f91c1 ]
+commit 3db09e762dc79584a69c10d74a6b98f89a9979f8 upstream.
 
-On some arch (ie aarch64 iMX8MM) unaligned PCIe accesses are
-not allowed and lead to a kernel Oops.
-  [ 1911.668835] Unable to handle kernel paging request at virtual address ffff80001bc00a8c
-  [ 1911.668841] Mem abort info:
-  [ 1911.668844]   ESR = 0x96000061
-  [ 1911.668847]   EC = 0x25: DABT (current EL), IL = 32 bits
-  [ 1911.668850]   SET = 0, FnV = 0
-  [ 1911.668852]   EA = 0, S1PTW = 0
-  [ 1911.668853] Data abort info:
-  [ 1911.668855]   ISV = 0, ISS = 0x00000061
-  [ 1911.668857]   CM = 0, WnR = 1
-  [ 1911.668861] swapper pgtable: 4k pages, 48-bit VAs, pgdp=0000000040ff4000
-  [ 1911.668864] [ffff80001bc00a8c] pgd=00000000bffff003, pud=00000000bfffe003, pmd=0068000018400705
-  [ 1911.668872] Internal error: Oops: 96000061 [#1] PREEMPT SMP
-  ...
+We are now able to detect extra put_net() at the moment
+they happen, instead of much later in correct code paths.
 
-The llp register present in the channel group registers is not
-aligned on 64bit.
+u32_init_knode() / tcf_exts_init() populates the ->exts.net
+pointer, but as mentioned in tcf_exts_init(),
+the refcount on netns has not been elevated yet.
 
-Fix unaligned 64bit access using two 32bit accesses
+The refcount is taken only once tcf_exts_get_net()
+is called.
 
-Fixes: 04e0a39fc10f ("dmaengine: dw-edma: Add writeq() and readq() for 64 bits architectures")
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-Link: https://lore.kernel.org/r/20220225120252.309404-1-herve.codina@bootlin.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+So the two u32_destroy_key() calls from u32_change()
+are attempting to release an invalid reference on the netns.
+
+syzbot report:
+
+refcount_t: decrement hit 0; leaking memory.
+WARNING: CPU: 0 PID: 21708 at lib/refcount.c:31 refcount_warn_saturate+0xbf/0x1e0 lib/refcount.c:31
+Modules linked in:
+CPU: 0 PID: 21708 Comm: syz-executor.5 Not tainted 5.18.0-rc2-next-20220412-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:refcount_warn_saturate+0xbf/0x1e0 lib/refcount.c:31
+Code: 1d 14 b6 b2 09 31 ff 89 de e8 6d e9 89 fd 84 db 75 e0 e8 84 e5 89 fd 48 c7 c7 40 aa 26 8a c6 05 f4 b5 b2 09 01 e8 e5 81 2e 05 <0f> 0b eb c4 e8 68 e5 89 fd 0f b6 1d e3 b5 b2 09 31 ff 89 de e8 38
+RSP: 0018:ffffc900051af1b0 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000040000 RSI: ffffffff8160a0c8 RDI: fffff52000a35e28
+RBP: 0000000000000004 R08: 0000000000000000 R09: 0000000000000000
+R10: ffffffff81604a9e R11: 0000000000000000 R12: 1ffff92000a35e3b
+R13: 00000000ffffffef R14: ffff8880211a0194 R15: ffff8880577d0a00
+FS:  00007f25d183e700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f19c859c028 CR3: 0000000051009000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __refcount_dec include/linux/refcount.h:344 [inline]
+ refcount_dec include/linux/refcount.h:359 [inline]
+ ref_tracker_free+0x535/0x6b0 lib/ref_tracker.c:118
+ netns_tracker_free include/net/net_namespace.h:327 [inline]
+ put_net_track include/net/net_namespace.h:341 [inline]
+ tcf_exts_put_net include/net/pkt_cls.h:255 [inline]
+ u32_destroy_key.isra.0+0xa7/0x2b0 net/sched/cls_u32.c:394
+ u32_change+0xe01/0x3140 net/sched/cls_u32.c:909
+ tc_new_tfilter+0x98d/0x2200 net/sched/cls_api.c:2148
+ rtnetlink_rcv_msg+0x80d/0xb80 net/core/rtnetlink.c:6016
+ netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2495
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x904/0xe00 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:705 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:725
+ ____sys_sendmsg+0x6e2/0x800 net/socket.c:2413
+ ___sys_sendmsg+0xf3/0x170 net/socket.c:2467
+ __sys_sendmsg+0xe5/0x1b0 net/socket.c:2496
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f25d0689049
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f25d183e168 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00007f25d079c030 RCX: 00007f25d0689049
+RDX: 0000000000000000 RSI: 0000000020000340 RDI: 0000000000000005
+RBP: 00007f25d06e308d R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffd0b752e3f R14: 00007f25d183e300 R15: 0000000000022000
+ </TASK>
+
+Fixes: 35c55fc156d8 ("cls_u32: use tcf_exts_get_net() before call_rcu()")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Cc: Cong Wang <xiyou.wangcong@gmail.com>
+Cc: Jiri Pirko <jiri@resnulli.us>
+Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/dma/dw-edma/dw-edma-v0-core.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ net/sched/cls_u32.c |   16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/dma/dw-edma/dw-edma-v0-core.c b/drivers/dma/dw-edma/dw-edma-v0-core.c
-index 329fc2e57b70..b5b8f8181e77 100644
---- a/drivers/dma/dw-edma/dw-edma-v0-core.c
-+++ b/drivers/dma/dw-edma/dw-edma-v0-core.c
-@@ -415,8 +415,11 @@ void dw_edma_v0_core_start(struct dw_edma_chunk *chunk, bool first)
- 			  (DW_EDMA_V0_CCS | DW_EDMA_V0_LLE));
- 		/* Linked list */
- 		#ifdef CONFIG_64BIT
--			SET_CH_64(dw, chan->dir, chan->id, llp.reg,
--				  chunk->ll_region.paddr);
-+			/* llp is not aligned on 64bit -> keep 32bit accesses */
-+			SET_CH_32(dw, chan->dir, chan->id, llp.lsb,
-+				  lower_32_bits(chunk->ll_region.paddr));
-+			SET_CH_32(dw, chan->dir, chan->id, llp.msb,
-+				  upper_32_bits(chunk->ll_region.paddr));
- 		#else /* CONFIG_64BIT */
- 			SET_CH_32(dw, chan->dir, chan->id, llp.lsb,
- 				  lower_32_bits(chunk->ll_region.paddr));
--- 
-2.35.1
-
+--- a/net/sched/cls_u32.c
++++ b/net/sched/cls_u32.c
+@@ -386,14 +386,19 @@ static int u32_init(struct tcf_proto *tp
+ 	return 0;
+ }
+ 
+-static int u32_destroy_key(struct tc_u_knode *n, bool free_pf)
++static void __u32_destroy_key(struct tc_u_knode *n)
+ {
+ 	struct tc_u_hnode *ht = rtnl_dereference(n->ht_down);
+ 
+ 	tcf_exts_destroy(&n->exts);
+-	tcf_exts_put_net(&n->exts);
+ 	if (ht && --ht->refcnt == 0)
+ 		kfree(ht);
++	kfree(n);
++}
++
++static void u32_destroy_key(struct tc_u_knode *n, bool free_pf)
++{
++	tcf_exts_put_net(&n->exts);
+ #ifdef CONFIG_CLS_U32_PERF
+ 	if (free_pf)
+ 		free_percpu(n->pf);
+@@ -402,8 +407,7 @@ static int u32_destroy_key(struct tc_u_k
+ 	if (free_pf)
+ 		free_percpu(n->pcpu_success);
+ #endif
+-	kfree(n);
+-	return 0;
++	__u32_destroy_key(n);
+ }
+ 
+ /* u32_delete_key_rcu should be called when free'ing a copied
+@@ -898,13 +902,13 @@ static int u32_change(struct net *net, s
+ 				    tca[TCA_RATE], flags, extack);
+ 
+ 		if (err) {
+-			u32_destroy_key(new, false);
++			__u32_destroy_key(new);
+ 			return err;
+ 		}
+ 
+ 		err = u32_replace_hw_knode(tp, new, flags, extack);
+ 		if (err) {
+-			u32_destroy_key(new, false);
++			__u32_destroy_key(new);
+ 			return err;
+ 		}
+ 
 
 

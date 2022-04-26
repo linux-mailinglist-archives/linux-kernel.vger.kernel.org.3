@@ -2,81 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF3E50FF97
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C138150FFA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:54:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346539AbiDZNz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 09:55:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40572 "EHLO
+        id S1351219AbiDZN4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 09:56:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbiDZNzw (ORCPT
+        with ESMTP id S1351200AbiDZN4i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 09:55:52 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91FE12EB78;
-        Tue, 26 Apr 2022 06:52:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Transfer-Encoding
-        :Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=irD5TP5dvYOrrDctV6NZa3iVQyIsJ9/GKsDYgTCLneg=; b=GphFVrNB6afv2AYo22a/nMAAJY
-        m8+WnybGo7Wr5Dql3SNlVIYf4LwEpiSVbiZqM36tRxQrB7A4iO5cgzbTG2HZMbBNdoWwHCr8es3f6
-        fWLqL5IDYVkyvs5G9vpO+Q1ZQ41+Jrax07Fxju54ejsKuMo3CgoW2R6Qj3izCMjvdiJxc0h61ijAx
-        EfPl+WBbV2jY4q2HoQQEf+kl9iiuHlvtpzAmfRp6QR8oZ2jbSNmbnBFzg5R63RM3g/CzjnrbqRTog
-        HGYcSDvt8E74qPhlGWvsje5aOjuJhzmuTfEWVXTpNZcY37pk4eZBcz02YmqGGlDlwQM4PWuPIdDRL
-        2n05+acQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1njLcQ-00ElLb-N2; Tue, 26 Apr 2022 13:52:42 +0000
-Date:   Tue, 26 Apr 2022 06:52:42 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     linux-block@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Tom Rini <trini@konsulko.com>, Jens Axboe <axboe@kernel.dk>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [RFC PATCH 4/5] mtd_blkdevs: scan partitions on mtdblock if
- FIT_PARTITION is set
-Message-ID: <Ymf5KpEAGybW8W17@infradead.org>
-References: <Yma3ck/hygQ0badz@makrotopia.org>
+        Tue, 26 Apr 2022 09:56:38 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF15415CEC7
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 06:53:29 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id q23so12702978wra.1
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 06:53:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=NSPijaD+f/0zVFm+Yx4b1C0MDA0Gs9+IxO2aTwmm2dI=;
+        b=5sTu3reUZ/D7WVN5H8YcW9y6Y/Ke/a9s9ssXnYuXVl3+HJJLMSn76Sq9pGMUjZXNmG
+         FXkQZ692OnMwQdwxU5ROq2/KiIocmS/SOAiWtUn8/HhNl8y+lst/JLZky1DhheOp5iM4
+         68Sx6S1uNoljHsGtihJ509m2G25Z2c1nufEVMiDGuL0dAHkxC6C95HyPqvwywaAF7t8k
+         iI0OffFTm1qRTZhwPjkoIB+Fz3gJrk20veXfnZ137JCCc+pNSptpeTT0EHH05BAKP3WY
+         WQC/ZabeUhtJn9uMN73R+2Af7QWGFHXopGVnv5ctNDJT1P6n88ghPBU+bWyrl45oG1gX
+         zvdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=NSPijaD+f/0zVFm+Yx4b1C0MDA0Gs9+IxO2aTwmm2dI=;
+        b=IeAnW1OiIPhipYH9T3+0t013YUAYMJsevq1pQkfhLV+lgp07KSEddWFTGXSyCuklIt
+         i856wx3ICPAOWVWxqT9AHUgn+KzhRw/Qg8PeR69xbvrKXkkULOVqWdTBIfHllPOLbSBj
+         ckNCGy95FeL1B+wSwOXOsXPoZpFpnw/gEUNdk68lgUewb8FsUcu2mv8GWLarHEFJIfkJ
+         VVONvsU29avapCYW8niVqHAtNj2D4orUFADCkkrUZjm2fx9yh+1cccHFwJGiEAmxakiI
+         iJsqHCxGV0Lpb+7YiRmkG96kDxykH1ZYs8UuO0o7+GBZ29kOX3JoJm2/qSBsrZk43cKx
+         Qf3g==
+X-Gm-Message-State: AOAM530EVGhoTrf1ixH45vwneSJKcvIEJVd1L7/eZjZ+gbqdxTSirKOJ
+        zH7hN0PbqDDUgdm91kOAZuGT6A==
+X-Google-Smtp-Source: ABdhPJw0lMnT3QLeM/7DxRZav6cl/N5O7FfTfXNSrQ2Cx1+4fJUzX917Psb/7srV8MG9taEy0pDw1g==
+X-Received: by 2002:a05:6000:1ace:b0:20a:ad7f:d616 with SMTP id i14-20020a0560001ace00b0020aad7fd616mr18465795wry.327.1650981208364;
+        Tue, 26 Apr 2022 06:53:28 -0700 (PDT)
+Received: from localhost.localdomain ([88.160.162.107])
+        by smtp.gmail.com with ESMTPSA id m35-20020a05600c3b2300b00393ebe201a6sm5504775wms.44.2022.04.26.06.53.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 06:53:27 -0700 (PDT)
+From:   Fabien Parent <fparent@baylibre.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Fabien Parent <fparent@baylibre.com>, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/8] dt-bindings: input: mtk-pmic-keys: add MT6359 binding definition
+Date:   Tue, 26 Apr 2022 15:53:06 +0200
+Message-Id: <20220426135313.245466-2-fparent@baylibre.com>
+X-Mailer: git-send-email 2.36.0
+In-Reply-To: <20220426135313.245466-1-fparent@baylibre.com>
+References: <20220426135313.245466-1-fparent@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yma3ck/hygQ0badz@makrotopia.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 04:00:02PM +0100, Daniel Golle wrote:
-> Enable partition parsers on plain mtdblock devices in case of
-> CONFIG_FIT_PARTITION being selected.
-> 
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> ---
->  drivers/mtd/mtd_blkdevs.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/mtd/mtd_blkdevs.c b/drivers/mtd/mtd_blkdevs.c
-> index f7317211146550..e9759c4182f8d5 100644
-> --- a/drivers/mtd/mtd_blkdevs.c
-> +++ b/drivers/mtd/mtd_blkdevs.c
-> @@ -359,7 +359,9 @@ int add_mtd_blktrans_dev(struct mtd_blktrans_dev *new)
->  	} else {
->  		snprintf(gd->disk_name, sizeof(gd->disk_name),
->  			 "%s%d", tr->name, new->devnum);
-> +#ifndef CONFIG_FIT_PARTITION
->  		gd->flags |= GENHD_FL_NO_PART;
-> +#endif
+Add binding definition for the support of the MT6359 keyboard driver.
 
-This will just recreate the fixed regression, just with the extra
-twist of needіng a completely unrelted config option to trigger it.
+Signed-off-by: Fabien Parent <fparent@baylibre.com>
+---
+v2: no changes
+
+ Documentation/devicetree/bindings/input/mtk-pmic-keys.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/input/mtk-pmic-keys.txt b/Documentation/devicetree/bindings/input/mtk-pmic-keys.txt
+index 9d00f2a8e13a..afe9062a4dc7 100644
+--- a/Documentation/devicetree/bindings/input/mtk-pmic-keys.txt
++++ b/Documentation/devicetree/bindings/input/mtk-pmic-keys.txt
+@@ -13,6 +13,7 @@ Required properties:
+ 	- "mediatek,mt6397-keys"
+ 	- "mediatek,mt6323-keys"
+ 	- "mediatek,mt6358-keys"
++	- "mediatek,mt6359-keys"
+ - linux,keycodes: See Documentation/devicetree/bindings/input/input.yaml
+ 
+ Optional Properties:
+-- 
+2.36.0
+

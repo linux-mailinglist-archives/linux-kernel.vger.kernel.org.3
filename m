@@ -2,123 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 227AA510B8E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 23:54:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B58D6510B8F
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 23:55:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355573AbiDZV54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 17:57:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47356 "EHLO
+        id S1355587AbiDZV66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 17:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236877AbiDZV5y (ORCPT
+        with ESMTP id S1355575AbiDZV6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 17:57:54 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CAD4131CED;
-        Tue, 26 Apr 2022 14:54:46 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id l18so12095315ejc.7;
-        Tue, 26 Apr 2022 14:54:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=Dhakw0e5ZSPa2dy8bzzfO97Ps8/UGe5wd7QSGn6HCIY=;
-        b=gJItSOS0nTNbKHQU4XxgReQTh/kj3eAdTGIZa9w3MrS5NEpYCZMBFFTdCvHBEsj6sP
-         S83WMM+kpLxopmIBCl9yqJo3JVyKxTbEttoqfmM2qbRgGOerQPp5KCt74yNpc4HixsJm
-         +1Z1pywC68sjhdoyLVi23Vp6ZiunQ//XUQTbRSo5TSVC5gU4OsfnyAD2QonCta3P870I
-         qVxUI/LeF8jifIEPi2AfNLC0UJlkFLJ3txxKRzuiNSCAS4bfAPGBvILiesvGNcYS6ECi
-         Is78Qv9CUc57PEI3NFYNasCiv+dzy+j/dJbxi7JI4dpxAwwZ+0QTEcZNPsDCDciCKqnP
-         Ln9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=Dhakw0e5ZSPa2dy8bzzfO97Ps8/UGe5wd7QSGn6HCIY=;
-        b=I39h9ko3ZeeQJPnMVIEgEnUcpPumAw81tXQ1cM9xzpWreyrT280q3F1rQ0RTg6VgkJ
-         ikpTGueK9futm7TwMMOr1SeSRWxUoxlF1AT2kzWuIL7KVb0cgf2qn1TSozPvPGOW3f6j
-         ktQPnlouvipUYonVustYhGjwnJJOtKJlu17T0TDiQkuigTy9NH4JtwCj1b50u4g6UWoA
-         okb62koh17ejBr3ZOQz9xPV78rUQuNFWT25bf+5oPp97aXlkgMh+/8L0SaOI+M6m9mX9
-         9xqEAMOESxyMIUK6nMlk/5eNvO5hxQa1dEr1E0ItfGcTe3/awaVTcG809vUrhSNz/ufC
-         mgKA==
-X-Gm-Message-State: AOAM530K7mqTH+EYCUDp2ulFXoCFDjIN+A3y0ggGEJdDDLYamPcwnJXO
-        UmxjW0NIbFdweEgRISwVnss=
-X-Google-Smtp-Source: ABdhPJzwF+HfRP7B8GgzbotjOCS1lC0d1TCWMzpZsk90rO8q1zat42mj87yp/LggtF+L0L9D2wWW/Q==
-X-Received: by 2002:a17:907:9628:b0:6f3:5fbe:c28 with SMTP id gb40-20020a170907962800b006f35fbe0c28mr21508181ejc.754.1651010084934;
-        Tue, 26 Apr 2022 14:54:44 -0700 (PDT)
-Received: from [192.168.3.2] (p5dd1ed70.dip0.t-ipconnect.de. [93.209.237.112])
-        by smtp.googlemail.com with ESMTPSA id ia5-20020a170907a06500b006f392df973bsm3139305ejc.107.2022.04.26.14.54.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 14:54:44 -0700 (PDT)
-Message-ID: <e422b442c3d56074a11c122dacc9328b1c74fd76.camel@gmail.com>
-Subject: Re: [PATCH v3 5/6] scsi: ufshpb: Add handing of device reset HPB
- regions Infos in HPB device mode
-From:   Bean Huo <huobean@gmail.com>
-To:     Avri Altman <Avri.Altman@wdc.com>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
-        "daejun7.park@samsung.com" <daejun7.park@samsung.com>,
-        "keosung.park@samsung.com" <keosung.park@samsung.com>,
-        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
-        "powen.kao@mediatek.com" <powen.kao@mediatek.com>
-Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        keosung.park@samsung.com
-Date:   Tue, 26 Apr 2022 23:54:43 +0200
-In-Reply-To: <DM6PR04MB6575DE756EE25ECA7DF17669FCF89@DM6PR04MB6575.namprd04.prod.outlook.com>
-References: <20220424220713.1253049-1-huobean@gmail.com>
-         <20220424220713.1253049-6-huobean@gmail.com>
-         <DM6PR04MB6575DE756EE25ECA7DF17669FCF89@DM6PR04MB6575.namprd04.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.0-1 
+        Tue, 26 Apr 2022 17:58:54 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FAEF3E5DD
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 14:55:44 -0700 (PDT)
+Received: from mail-yw1-f171.google.com ([209.85.128.171]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1Mo73N-1oD0Hl2snL-00pbtm for <linux-kernel@vger.kernel.org>; Tue, 26 Apr
+ 2022 23:55:42 +0200
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2f7ca2ce255so97938347b3.7
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 14:55:42 -0700 (PDT)
+X-Gm-Message-State: AOAM533h707AcDM6gNoqKAaopHFQRvwPfHcVv9WJV3LqIZF1JgdYFVdR
+        wHEZzNahnVUMjD8dSw1QeTcvt/D2iiZ0wU+MC8A=
+X-Google-Smtp-Source: ABdhPJzeumDGKLqJzcKg47ARK8lAlqpYUoFrKMyKmxeuoEH8hFAe5PMV5ifJ7oJAZSTkd0LFQvHtD1zrKZjB2727L1E=
+X-Received: by 2002:a0d:d101:0:b0:2eb:4bd7:bcc1 with SMTP id
+ t1-20020a0dd101000000b002eb4bd7bcc1mr24608932ywd.495.1651010141538; Tue, 26
+ Apr 2022 14:55:41 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220421192132.109954-1-nick.hawkins@hpe.com> <20220421192132.109954-5-nick.hawkins@hpe.com>
+ <CAK8P3a0nQ1BrtfBJ7sUSaLkA=pbVwx83bEUpZczvLOSOHDR=dw@mail.gmail.com>
+ <CACRpkdbJ1N7VOgoBzGS+cOaErFcYiOVDeWRmhPyHA7=9W0CGhA@mail.gmail.com>
+ <CAK8P3a2ie8kFYstCYr6FO6+yFw7VxyJjWYyy9b+rUHu_u0YXPg@mail.gmail.com> <YmhmXl5IWHmKzAyG@robh.at.kernel.org>
+In-Reply-To: <YmhmXl5IWHmKzAyG@robh.at.kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 26 Apr 2022 23:55:25 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3+TGSJgJ2-mgj+NjT3k8uuUpesLErwqZ2M_dkNqbMXXQ@mail.gmail.com>
+Message-ID: <CAK8P3a3+TGSJgJ2-mgj+NjT3k8uuUpesLErwqZ2M_dkNqbMXXQ@mail.gmail.com>
+Subject: Re: [PATCH v5 04/11] clocksource/drivers: Add HPE GXP timer
+To:     Rob Herring <robh@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "Hawkins, Nick" <nick.hawkins@hpe.com>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        Joel Stanley <joel@jms.id.au>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:yLURDzudXHJMraciQUvSb24xVyKH/AGd/RIoLfkaAXFYNa8zyKr
+ ANzRc35ssf7MP6LoeSMCaiaT1xD3fXRDapXXsLB0j/IPVwgmEpePP7LoF2sgPs1xtXNCCRx
+ v/3+ZoLzYPtxZfi6tQAM6CzMnAGbvhAFYwz2hRH37/DOhE68igSWDsesDcW1TFbF7E7dPL+
+ Wjg1Av65AJCjrp7lovuQA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:a7nudyXYi74=:2uwlCm/+lN28AaDNq8ThKy
+ lxCit7SLxjkUvnx4rrZBTn1wgG1gtF3Kn3fN6S/tsMAViderK8KeEBA7YMhPJxMJPoYSbReiE
+ ZOVN11CMr2uSproi8QjnBIOkyIVwcD+p0gDcoSU629RsreCRHMkSX2lTpdyvSyOlU5YHyWtWo
+ t5T5IdK7RvSgINqU5XRKs0VpNYh8g2feh/NVlf3Ouru8IVEmiklEYOaQefucv1lLzPRdghtoP
+ a54JAwtXR/xyAkQOTaIK+xtBLUVJ14dhqGBkk2DtaI5YaBJ9+6R4TSsXM+7XUa4tr2O5pRRI4
+ XPPYSdEsWO+S4pGjsbrG32ZTUv1xbjGWLx57N42juentn/UquWJBzI/roCsPOhLx9bEoXDPYV
+ YkFz3Ym62hK4spwtdxStWucXzCOAYiNyLCfQlsT/n+M6zPBIisY9j7SxW8USCRTDa2wZbh69h
+ 7eO7fd/6n3RlBkHsnnKL7XFFeIh+WT4NQyvMPin6qNsRbpu5DZ/OnvPyFxI5YGFUCihEvKD/8
+ 3Qw8pxbBqUDlzHxEx+7Oh+YwjS+eEEmki6Oz37QNbpacrn4BRn11N/2tXX1mHF/ldWl81vSNe
+ kGbzHvVOtBjRpXJpgEbe6mjSSz7wRWPo3xtdImSEU/y9wFIZalCLw6kVRM0Gk97XctQczdgdX
+ TQ3+a8EM46m/xgD3PvSPPOdBIt95KIzTVk1quJdkL2n0DahDKD+if+sUbiPYZ2BcktHEZm0gA
+ HWw7as4dbiEcYrUkRR92wLEXZmLQ5pVMX/pUq5UOojErFxTYX6aOee5V9J86tegDEW4vAseo8
+ 7ob4gkUL0MlJ5KEwYV7IJVwwnbD0Apb0KPXD10F+PxuuUEyO8I=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-04-25 at 06:43 +0000, Avri Altman wrote:
-> >=20
-> > Therefore, for HPB device control mode, if the UFS device is reset
-> > via the
-> > RST_N
-> > pin, the active region information in the device will be reset. If
-> > the host side
-> > receives this notification from the device side, it is recommended
-> > to inactivate
-> > all active regions in the host's HPB cache.
-> While it makes sense to me, this interpretation of the spec takes
-> extreme action,
-> Compared to what it is today, and you probably need to get an ack
-> from Daejun.=20
->=20
+On Tue, Apr 26, 2022 at 11:38 PM Rob Herring <robh@kernel.org> wrote:
+> On Tue, Apr 26, 2022 at 08:00:20AM +0200, Arnd Bergmann wrote:
+> > On Mon, Apr 25, 2022 at 10:38 PM Linus Walleij <linus.walleij@linaro.org> wrote:
 
-Yes, but it seems he is quiet. Keoseong Park is on the email list and
-he has looked at the patch. If you have concerns, I can ping Keoseong
-Park to sync with Daejun.
+> > There are multiple ways of doing this that we already discussed
+> > in the thread. The easiest is probably to have a child node without
+> > custom registers in the DT and then use the DT helpers to
+> > populate the linux devices with the correct data.
+>
+> I think that's what the wdt binding is doing, but I don't like that.
+> Maybe it's not a child node, I can't tell.
+>
+> Bindings should not be decided on the *current* driver split on one
+> particular OS. This looks like 1 block, so 1 node.
 
-> If we are entering a zone in which each vendor is applying a
-> different logic -=20
-> I think you need to facilitate that - maybe in a different patch set.
->=20
+Fair enough.
 
-Yes, it should be a different patch. I must say that this patch is
-based on the HPB Spec, say, if the device loses HPB info. The host side
-should also reset its HPB information, Otherwise, performance will
-degrade. Of course, it depends on the specific implementation of the
-vendor. If they don't report 02:HPB operations, this patch still
-doesn't change the original behavior.
+> If that doesn't work well or easy for Linux, then we should fix Linux.
 
+Doing a simple platform_device_create_pdata() should work fine here,
+the only problem that might exist is if the wdt driver needs access to
+DT properties, as we can't have both devices refer to the same of_node
+pointer, which would cause them to be picked up by the timer driver
+again.
 
-Kind regards,
-Bean
-
+      Arnd

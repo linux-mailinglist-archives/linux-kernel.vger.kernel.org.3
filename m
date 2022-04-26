@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B39E50F57D
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:54:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB7C550F48B
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:37:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345600AbiDZIns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39908 "EHLO
+        id S1345070AbiDZIgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:36:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345231AbiDZIfW (ORCPT
+        with ESMTP id S1345133AbiDZIeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:35:22 -0400
+        Tue, 26 Apr 2022 04:34:06 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76A782313;
-        Tue, 26 Apr 2022 01:28:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C7A6E4DE;
+        Tue, 26 Apr 2022 01:26:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 43B42617EB;
-        Tue, 26 Apr 2022 08:28:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AD0AC385AC;
-        Tue, 26 Apr 2022 08:28:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A2B661842;
+        Tue, 26 Apr 2022 08:26:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60645C385A0;
+        Tue, 26 Apr 2022 08:26:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961729;
-        bh=sAv8qm0Z77pvWBsV0ej1topD7SZMzaglwU7qcAK61LY=;
+        s=korg; t=1650961568;
+        bh=yEBUQ3Oky58l2b8wmKhvmQEVbc+IegdlWMDvZjewPFk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r1jSVmjzV6B6EKuRfLeiaNv2RrNk55/v69txgIPSHFuw4kM72VdmqZn3EM9D2RvVr
-         ITf+aqwH2or/aAFQVP/p/jjW72StkvrijW1z8Lb3+lX2HUuWrprnbuuscR5R5Hp/mu
-         CJqVf+aZmC2i0g4UryMOEU8D2H7TWtH7M0bBJiIo=
+        b=Kyh/qpoG5wbPLPJCZNU1BBVTKijJxFdXn5ZrS8lqBcycz2Tn/5Cyp5QCCEmFX3CqG
+         wyMBGNefBlU/phvbtpBpea4kcg2vT6+tgDC0WMXR+ROC6ToKbVQAX8S3BtyblLl8FF
+         2ES+jFHt0ih4HVlYW6ZcLE7wLaOsyCq42pWlapY8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 11/62] ASoC: msm8916-wcd-digital: Check failure for devm_snd_soc_register_component
+Subject: [PATCH 4.19 11/53] ASoC: msm8916-wcd-digital: Check failure for devm_snd_soc_register_component
 Date:   Tue, 26 Apr 2022 10:20:51 +0200
-Message-Id: <20220426081737.550569415@linuxfoundation.org>
+Message-Id: <20220426081735.986492167@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
-References: <20220426081737.209637816@linuxfoundation.org>
+In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
+References: <20220426081735.651926456@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -71,10 +71,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/sound/soc/codecs/msm8916-wcd-digital.c b/sound/soc/codecs/msm8916-wcd-digital.c
-index d5269ab5f91c..e4cde214b7b2 100644
+index e6750bda542a..fa813ec32119 100644
 --- a/sound/soc/codecs/msm8916-wcd-digital.c
 +++ b/sound/soc/codecs/msm8916-wcd-digital.c
-@@ -1206,9 +1206,16 @@ static int msm8916_wcd_digital_probe(struct platform_device *pdev)
+@@ -923,9 +923,16 @@ static int msm8916_wcd_digital_probe(struct platform_device *pdev)
  
  	dev_set_drvdata(dev, priv);
  

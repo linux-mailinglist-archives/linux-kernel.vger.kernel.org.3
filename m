@@ -2,107 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39076510A95
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:33:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E66A8510A99
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355017AbiDZUgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 16:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43592 "EHLO
+        id S1355052AbiDZUhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 16:37:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355010AbiDZUg2 (ORCPT
+        with ESMTP id S1355030AbiDZUhK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:36:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A4C11AB8D5
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:33:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651005193;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Av2XJWYSmxJiVQjp5kZR1hfhT+pdVskMA4VQgdFQOaM=;
-        b=WK9VxpmjoLLrOX/Z94nx1NOwSqYuPD0Yy/ZDXQDXPjHYre1pneNPBH0Hauo0Y0QWpGvTMb
-        +K4zJNZYPIhpKXbzbgtxr2VRbkT9VR/kKBbD8wAeyRO3uTBOSr+R6v9VOtV+ttKZXF/l0E
-        10bXil0mPPSh/OJtaTuyPSU4bMqq85c=
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
- [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-660-HC9fj3zAOey-BED25hp_Vw-1; Tue, 26 Apr 2022 16:33:12 -0400
-X-MC-Unique: HC9fj3zAOey-BED25hp_Vw-1
-Received: by mail-io1-f71.google.com with SMTP id i19-20020a5d9353000000b006495ab76af6so81415ioo.0
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:33:12 -0700 (PDT)
+        Tue, 26 Apr 2022 16:37:10 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915431A8C22
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:34:01 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 17so35401lji.1
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:34:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aU1nfmW7ZgdT9Qa1tRExDdIJcvLzr/71e6MMUKD+f14=;
+        b=L+04/VSvu1o2iLCXuaCNLPQgteB9nxjsaUItY80e35KA07eJCca0YXvYS8yXsehgAp
+         gJwV1fDjZTTu27Nk2EVmh0GDdfERG/5DXk0qeuBgd2nFP0RDyeiTP1b0WfMuEAvcfEHQ
+         tNSJqHRlQoAbQ+NR67QcpnTTT87zUPLTpmtpq5HgLEtmx0wlgRbbTaHwoTamu+Pq5W4W
+         D27sEwR9kh+F0dh9lSZY4JSbb48iY4yOWiVIi/NMXsJh73r5t6XBQDJqfwbqLXCJk0Df
+         uO9Z362RUBuDni5ds34LO1tG4fWsrgPKCw55j+7XUDm1gmZr9P4WjsNLa10eqM/3ZJwp
+         vn7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Av2XJWYSmxJiVQjp5kZR1hfhT+pdVskMA4VQgdFQOaM=;
-        b=exrxsVQPDf0/xOcm34AkwgQ4WOlOk/TT6z8pweCeojWRFjhdGjgAyp+I+M1/i4QCRU
-         c//WRiHzilK+btXkUYOXhZSWORG1QqZUFDNRRLBUBP+SDt5PM54t8Pe4EAuJPmHOYtpW
-         YbC+EgaVS0BY7voP6xRSE49tF15vfyVoXxgqNcXsuugX5PSzWxQH4vvKsK3qHO7RVaab
-         xGLS0m3f+rgOCFvLgMJUUh2L4xARXX7OGDLk/EsXqBo4WhZ2N7tVXkoiQ2XlQCfr96d0
-         pcq+byXSgtmlls8Pv4of80WpZvXm8CS6YyALO0nOtbcsQISuLAF/ldMGgkyaWkQoSptb
-         WUDw==
-X-Gm-Message-State: AOAM533vHK1W1vvSs06NyU1slPK5BKNSGi/+xMlhGF+Ks1cb/tyVUoJv
-        27j12l7OSGQ3tBuSS04E21c+ZRz9k+I2PXPvgKZu294MhgDD5EjxaOMYbuyaRBEW+oCgm/zM3c0
-        XPE/56z7BWMrYbEdGKNyUx/SU
-X-Received: by 2002:a05:6638:272c:b0:32a:f95b:fc77 with SMTP id m44-20020a056638272c00b0032af95bfc77mr4011882jav.179.1651005191544;
-        Tue, 26 Apr 2022 13:33:11 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxd4CFNten6nl0jATzOU1yCBTY6Y58j8Espgob7sbvIFYcRfIXeg+IqFoDNsZPO7cKZaJ3nww==
-X-Received: by 2002:a05:6638:272c:b0:32a:f95b:fc77 with SMTP id m44-20020a056638272c00b0032af95bfc77mr4011865jav.179.1651005191365;
-        Tue, 26 Apr 2022 13:33:11 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id e18-20020a92d752000000b002cd6dae980fsm8497051ilq.13.2022.04.26.13.33.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 13:33:11 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 16:33:08 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Charan Teja Reddy <charante@codeaurora.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        zhangyi <yi.zhang@huawei.com>, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 1/6] selftests: vm: add hugetlb_shared userfaultfd
- test to run_vmtests.sh
-Message-ID: <YmhXBHFrXKT/Jqkd@xz-m1.local>
-References: <20220422212945.2227722-1-axelrasmussen@google.com>
- <20220422212945.2227722-2-axelrasmussen@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aU1nfmW7ZgdT9Qa1tRExDdIJcvLzr/71e6MMUKD+f14=;
+        b=8A1QsZJdp6V26RL+RKi2ZGzcI0VDobVMLzYjbJVnwPyPeA6JdGVu3cLQ6Twq5fd0RZ
+         BBjjyPVv3S1sDgHaJdi85KRxeYxA6sLdmAnpNAB/9aLvLhEPZF6+LfGF07DjwZY9/R5x
+         tg++sQhbRrLnxtu0zYs5WsaMZWfDnGOrP3nOxY0WyCHYXgeBixiAaI2BC/IgV6nd3y5w
+         syp20DDo27MRX0eKtO2xQ3bOXOxYqXECCH4a46SL5t6sexo87ZcLopA8h95VI8cXo+bY
+         nehqev33NLAu8rt8KR+1GuZsYEj6PAd1g5jHzZ1PPGS7HnvpxDtnyR+Vwuqm3o1sTID8
+         JtHQ==
+X-Gm-Message-State: AOAM532lskWcggTGkhG72jcbo7VtU+Q2xmURwesSc5YBoXu9RZ0+HIvj
+        cxkyynI8f48xZbvTMCQlUeb6GV7LFerKJZ0KwKfOdA==
+X-Google-Smtp-Source: ABdhPJx5KH4AYYyWahlSyUhGXyJBSiXHd1WrZoegFj2ZOcMkv0OyCYrGoJDFZHDu/w6tvACgKascP5gl/cHc/KfjvDQ=
+X-Received: by 2002:a2e:97c7:0:b0:24f:5a7:f398 with SMTP id
+ m7-20020a2e97c7000000b0024f05a7f398mr11417653ljj.231.1651005239369; Tue, 26
+ Apr 2022 13:33:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220422212945.2227722-2-axelrasmussen@google.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220325233125.413634-1-vipinsh@google.com> <CALzav=e6W2VSp=btmqTpQJ=3bH+Bw3D8sLApkTTvMMKAnw_LAw@mail.gmail.com>
+ <CAHVum0dOfJ5HuscNq0tA6BnUJK34v4CPCTkD4piHc7FObZOsng@mail.gmail.com>
+ <b754fa0a-4f9e-1ea5-6c77-f2410b7f8456@redhat.com> <CAHVum0d=WoqxZ4vUYY37jeQL1yLdiwbYjPSPFAa1meM5LUBDQQ@mail.gmail.com>
+ <CAHVum0eF=CmqXabrJS7rsVxhQLKA7v8iG1SjThcEJ=_zAUhRsg@mail.gmail.com>
+In-Reply-To: <CAHVum0eF=CmqXabrJS7rsVxhQLKA7v8iG1SjThcEJ=_zAUhRsg@mail.gmail.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Tue, 26 Apr 2022 13:33:23 -0700
+Message-ID: <CAHVum0dF8w6ang3gN2w4W3tg2M08TXNpNfWNcDER5RfaxPE3oQ@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86/mmu: Speed up slot_rmap_walk_next for sparsely
+ populated rmaps
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     David Matlack <dmatlack@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 02:29:40PM -0700, Axel Rasmussen wrote:
-> This not being included was just a simple oversight. There are certain
-> features (like minor fault support) which are only enabled on shared
-> mappings, so without including hugetlb_shared we actually lose a
-> significant amount of test coverage.
-> 
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+On Mon, Apr 18, 2022 at 9:29 AM Vipin Sharma <vipinsh@google.com> wrote:
+>
+> On Fri, Apr 8, 2022 at 12:31 PM Vipin Sharma <vipinsh@google.com> wrote:
+> >
+> > On Sun, Mar 27, 2022 at 3:41 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+> > >
+> > > On 3/26/22 01:31, Vipin Sharma wrote:
+> > > >>> -static void slot_rmap_walk_next(struct slot_rmap_walk_iterator *iterator)
+> > > >>> +static noinline void
+> > > >>
+> > > >> What is the reason to add noinline?
+> > > >
+> > > > My understanding is that since this method is called from
+> > > > __always_inline methods, noinline will avoid gcc inlining the
+> > > > slot_rmap_walk_next in those functions and generate smaller code.
+> > > >
+> > >
+> > > Iterators are written in such a way that it's way more beneficial to
+> > > inline them.  After inlining, compilers replace the aggregates (in this
+> > > case, struct slot_rmap_walk_iterator) with one variable per field and
+> > > that in turn enables a lot of optimizations, so the iterators should
+> > > actually be always_inline if anything.
+> > >
+> > > For the same reason I'd guess the effect on the generated code should be
+> > > small (next time please include the output of "size mmu.o"), but should
+> > > still be there.  I'll do a quick check of the generated code and apply
+> > > the patch.
+> > >
+> > > Paolo
+> > >
+> >
+> > Let me know if you are still planning to modify the current patch by
+> > removing "noinline" and merge or if you prefer a v2 without noinline.
+>
+> Hi Paolo,
+>
+> Any update on this patch?
+>
 
-Reviewed-by: Peter Xu <peterx@redhat.com>
+Hi Paolo,
 
--- 
-Peter Xu
+Still waiting for your response on this patch :)
+Please let me know if you prefer v2 (without noinline) or you will
+merge this patch without noinline from your side. If there is any
+concern or feedback which I can address please let me know.
 
+Thanks
+Vipin Sharma

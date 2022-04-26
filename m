@@ -2,109 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D418C50F339
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 509F850F34F
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:02:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244592AbiDZIBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:01:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54144 "EHLO
+        id S1344518AbiDZIFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:05:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233726AbiDZIBa (ORCPT
+        with ESMTP id S232960AbiDZIFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:01:30 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E11A245A7
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:58:23 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KnZ4X4m9vzhYmL;
-        Tue, 26 Apr 2022 15:58:04 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Apr 2022 15:58:21 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Apr 2022 15:58:20 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     <elver@google.com>, <catalin.marinas@arm.com>, <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <mark.rutland@arm.com>, Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH] arm64: kcsan: Fix kcsan test_barrier fail and panic
-Date:   Tue, 26 Apr 2022 08:17:00 +0000
-Message-ID: <20220426081700.1376542-1-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.27.0
+        Tue, 26 Apr 2022 04:05:19 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F4C2FFE2
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 01:02:12 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id q8so6325096plx.3
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 01:02:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=sY4O+RzpKnSGDKBPK1hz7c+s2+2s7DFvtQjl7kYI0kE=;
+        b=km6eMTt1CnWFml1Gs1AUXYBobJZVkLujTH/tO/pU5SLaZN0ICyJbWPIkkcnemP/QA1
+         uBGCV124HoS/Wh6KMj8Bu5BtDPoVSaPwQ7dogVw/boUrG5lzVOGygFntdpO43BdeWIgj
+         mxEaGybKihC0VtzCb6lYr93OCVqwOkho4lehtZ5VCebI10At9BdrvMWR+10mBHXGdSMu
+         eRb9Ee3pU0RYRT0AaKZxOsEo8wJSsATJiI14Dt8w0Tma082AQrxFKQp4EkHJa1kZV9J5
+         ulbznt8l8ertyQxeTNzl+cN3GzGbPl0x5KktVuuQ9FpUKMbsiDEBftTmcS5EaNPBpoa9
+         qCZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=sY4O+RzpKnSGDKBPK1hz7c+s2+2s7DFvtQjl7kYI0kE=;
+        b=P+DcmMQcG4cuv7GsHJaSkUAikLCQrJAIvBVo5w/OzM658cFyPSFbGTu0ODxNgH4pVI
+         LFaluJz2A9pSQy9/OPpTuPVdD7UWgrMb7f1le8A87JQfkRmx7xvXiE/zByFZNXohW0cp
+         mfEuaN8jxkR8AY/8LD5LCtwXp7bjVwNtAa311n5vFzcQ/q5dQV8py+jege4GozSWVtX3
+         PEkGAXXIM748gbRrhjO/sTmyKfW/aWWY26zRrzM9NHpa1fmC39xuITkcplzXjlNPkMiZ
+         62E6zLWTVWlS39Hi0DiMED4Vpxczo7LLOJBKF+7DxEprm5XY7mgpvTxxNvh7iqDrxuDk
+         9j9A==
+X-Gm-Message-State: AOAM531o7atb6LEiGX4DTSrPqeCAqjFb8EkoPViXCnVRkAoOUhy+kfFm
+        9xyvNu/MF9fFxAPO2YIXBFRI7X1QxSOSsw==
+X-Google-Smtp-Source: ABdhPJzmefDjeFZNT16cNedZlqvBpDb8CQECn14oYN1fVVbtSKAEykCNzNcCSTqTrif4lsSBsUKE4g==
+X-Received: by 2002:a17:903:1249:b0:154:c472:de6b with SMTP id u9-20020a170903124900b00154c472de6bmr22548931plh.38.1650960132296;
+        Tue, 26 Apr 2022 01:02:12 -0700 (PDT)
+Received: from localhost ([122.177.141.190])
+        by smtp.gmail.com with ESMTPSA id w123-20020a623081000000b005056a4d71e3sm14145005pfw.77.2022.04.26.01.02.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 01:02:11 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 13:32:10 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com, amit.kachhap@gmail.com,
+        linux-pm@vger.kernel.org
+Subject: Re: [RFC PATCH v3 0/5] Introduce Cpufreq Active Stats
+Message-ID: <20220426080210.hvzrsa4kmxesn6dv@vireshk-i7>
+References: <20220406220809.22555-1-lukasz.luba@arm.com>
+ <20220426031125.ozaxwecwvuby6wo3@vireshk-i7>
+ <f6bb20c6-38a0-57d6-8979-d14e445da623@arm.com>
+ <20220426075402.qjpato6sqy2kes4x@vireshk-i7>
+ <9eac86b6-0221-0f62-ac4f-f9e3b1613422@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9eac86b6-0221-0f62-ac4f-f9e3b1613422@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As "kcsan: Support detecting a subset of missing memory barriers"
-introduced KCSAN_STRICT which make kcsan detects more missing memory
-barrier, but arm64 don't have KCSAN instrumentation for barriers, so
-the new selftest test_barrier() will fail, then panic.
+On 26-04-22, 08:59, Lukasz Luba wrote:
+> :) but I didn't dare to make it sysfs. I don't know if anything in
+> user-space would be interested (apart from my test scripts).
 
-Let's prefix all barriers with __ on arm64, as asm-generic/barriers.h
-defined the final instrumented version of these barriers, which will
-fix the above issues.
+Sure, I was talking about hierarchy in debugfs only. Will be useful if
+you can show how it looks and what all data is exposed.
 
-Fixes: dd03762ab608 ("arm64: Enable KCSAN")
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
----
- arch/arm64/include/asm/barrier.h | 12 ++++++------
- include/asm-generic/barrier.h    |  4 ++++
- 2 files changed, 10 insertions(+), 6 deletions(-)
-
-diff --git a/arch/arm64/include/asm/barrier.h b/arch/arm64/include/asm/barrier.h
-index 62217be36217..9760a8d4ed0a 100644
---- a/arch/arm64/include/asm/barrier.h
-+++ b/arch/arm64/include/asm/barrier.h
-@@ -46,13 +46,13 @@
- #define pmr_sync()	do {} while (0)
- #endif
- 
--#define mb()		dsb(sy)
--#define rmb()		dsb(ld)
--#define wmb()		dsb(st)
-+#define __mb()		dsb(sy)
-+#define __rmb()		dsb(ld)
-+#define __wmb()		dsb(st)
- 
--#define dma_mb()	dmb(osh)
--#define dma_rmb()	dmb(oshld)
--#define dma_wmb()	dmb(oshst)
-+#define __dma_mb()	dmb(osh)
-+#define __dma_rmb()	dmb(oshld)
-+#define __dma_wmb()	dmb(oshst)
- 
- #define io_stop_wc()	dgh()
- 
-diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
-index fd7e8fbaeef1..18863c50e9ce 100644
---- a/include/asm-generic/barrier.h
-+++ b/include/asm-generic/barrier.h
-@@ -38,6 +38,10 @@
- #define wmb()	do { kcsan_wmb(); __wmb(); } while (0)
- #endif
- 
-+#ifdef __dma_mb
-+#define dma_mb()	do { kcsan_mb(); __dma_mb(); } while (0)
-+#endif
-+
- #ifdef __dma_rmb
- #define dma_rmb()	do { kcsan_rmb(); __dma_rmb(); } while (0)
- #endif
 -- 
-2.27.0
-
+viresh

@@ -2,185 +2,314 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 944EB50EEBC
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 04:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68A2350EEC0
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 04:27:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242347AbiDZC2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 22:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58822 "EHLO
+        id S241244AbiDZCah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 22:30:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240656AbiDZC2U (ORCPT
+        with ESMTP id S233387AbiDZCad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 22:28:20 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2085.outbound.protection.outlook.com [40.107.236.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7282B253;
-        Mon, 25 Apr 2022 19:25:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lW9CYn31Fqg+H4z8FLx+qQEXlbv48xKNKd4QUXTteJY6Eml3l5qOCxUlflTO18V5nypllVZeSZaCB0tQMmXAjLux6/sjKX6vZ3DRb13SLR7DEkTPXI4n9cwjCazBNRFKpI+EeI3LInhUwu3JtnM2W1pbH/kyaxoZKfhhLTF+Myuf9cAP23O2HJg5iA0W6fSax6SpvsHIjImNA+xZ+7rux7iPi86uoc0xj/fvBfXFUt+tw7Hr7cYcQKyQ6d3dtHfqjXzZhTmG0hNx+ZGc6OZ3EHcyFhQ9SYQvpLxF+RwwSQMohPNTvDXvf+xbJ5xRukIS68XZo8iLHk/4qtjyTBqzFg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dH6JV6B+0qR7V4+ferqg9nUMaQbIk2dcOjuWjki2i4E=;
- b=N/dxHNqo1uFDn+b14p1vEAcYaE9ZhQFXtUNT+EDKLIJ9WA9aDb78gbAYNWjZLg1CkY8D/PklH2si4q7YO9fUCPyQ2YGke7IsuK08jyEqkTp/PhT9fS5/qxDu/I56yk719rPZSocLCl7ySbqhXpOrMjOqzdFOe40hgD7jovkosj+FbzxtBYeYcxhtYS2eR67m/O54o+mpjEPuQgU30FI6FixXD5GggOXTxJ/vCg5uAeycT3g7S0Zf7TSXYK2OMiFE7DyiC3TEQpXCjzvQdEdaESb4ZywylukSnxbrqZ43MjP67lsHtCI6/yB58Z124mrBxGskQmUDtq/RfjoJiND84A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dH6JV6B+0qR7V4+ferqg9nUMaQbIk2dcOjuWjki2i4E=;
- b=m2b1ct5sTboJi31CGlZ3ZU579UWMdpAsCzMdVevflzcAypSGuwjIO8GhE583PNyyAFLXEiY2N4JmVKgq6UyvU2BrsmXG+EPUT7uffVbbQAf4Exaz1gHXaMkadPkQWy11UGRVOdoXKKF225eYSmeqVbCvE7gMiYiBugZg9vPXGcQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM8PR12MB5445.namprd12.prod.outlook.com (2603:10b6:8:24::7) by
- DM6PR12MB4339.namprd12.prod.outlook.com (2603:10b6:5:2af::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5186.13; Tue, 26 Apr 2022 02:25:11 +0000
-Received: from DM8PR12MB5445.namprd12.prod.outlook.com
- ([fe80::9894:c8:c612:ba6b]) by DM8PR12MB5445.namprd12.prod.outlook.com
- ([fe80::9894:c8:c612:ba6b%4]) with mapi id 15.20.5186.021; Tue, 26 Apr 2022
- 02:25:11 +0000
-Message-ID: <01460b72-1189-fef1-9718-816f2f658d42@amd.com>
-Date:   Tue, 26 Apr 2022 09:25:03 +0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.1
-Subject: Re: [PATCH v2 11/12] KVM: SVM: Do not inhibit APICv when x2APIC is
- present
-Content-Language: en-US
-To:     Maxim Levitsky <mlevitsk@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
-        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
-References: <20220412115822.14351-1-suravee.suthikulpanit@amd.com>
- <20220412115822.14351-12-suravee.suthikulpanit@amd.com>
- <3fd0aabb6288a5703760da854fd6b09a485a2d69.camel@redhat.com>
-From:   Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-In-Reply-To: <3fd0aabb6288a5703760da854fd6b09a485a2d69.camel@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: HK2P15301CA0011.APCP153.PROD.OUTLOOK.COM
- (2603:1096:202:1::21) To DM8PR12MB5445.namprd12.prod.outlook.com
- (2603:10b6:8:24::7)
+        Mon, 25 Apr 2022 22:30:33 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A7B113C8A
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 19:27:27 -0700 (PDT)
+Date:   Mon, 25 Apr 2022 19:27:18 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1650940045;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5X3YRS505UGWnRzUBLZxlHk07x0acRLlfRFWEGD7Meg=;
+        b=ZHUw+ZgGexAw4+OjCEPVMB6e0ecPTHWq4U3LCv9sPwim/GbkmpzRzDMaxDt7WxNlKEIXJA
+        AHDbYipMrhmKnz6dh1XAEhK8Ut5bbaF91FDnRKKKQQUW+nUxWqqJCHyqPyI3Qt4UT5rqqZ
+        78oaTodSyUOpiBpjdvN3nHY0gCDsPX4=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     cl@linux.com, penberg@kernel.org, rientjes@google.com,
+        iamjoonsoo.kim@lge.com, akpm@linux-foundation.org, vbabka@suse.cz,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org, smuchun@gmail.com
+Subject: Re: [PATCH] mm: slab: optimize memcg_slab_free_hook()
+Message-ID: <YmdYhs4nPrlNqB/Z@carbon>
+References: <20220425035406.9337-1-songmuchun@bytedance.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1fbcc07a-0ffa-4729-dae3-08da272bfd4a
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4339:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB4339FB0635337E8289923F56F3FB9@DM6PR12MB4339.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: La7Naw9A07M5PmNktGZJ5m0VFKTX/8ZaRBnLn7rBCc5LScWcRQAmD96MZWzT/pg5+9zeq1r+cm45zr/V+g6K0arSWwo+vMrIYsL0CG/IZdkzRGVwOjHfMDe6VX4YJS5HPtz5T+nZCYS8KIMmr+VYVhk1VVkNK7hyfYQaoUno6vxAad/q5UDjpSQWXj0Z6eT1AboEDAnbmPoO2k5UEudyX/WYvcx1Z1YwX8IIcl5NGOHCG9rH+MIb9U/6QNF5lWnhhMmVdky/TViggKi+Wcz/pQlCmY1DpHR+KpAgh4OKoR2TlrszzuT8Y9g0mI3DZyX3/lotlVUPbBronj3L6jsHUWiehANYAx2Y3U65CKAdE9qInBYLMQC+/zVR6gWwmzODoaalCWCdRlp0U4Bm0NWG08gNACzVDWWMP1DN/vbp12qCsONiGhK3epV8wYvVKsjtVfcHF8G+rO/tNO9j8WSHVQWAJUz6TAraOerUZ4xL1Op7Xu4eoNMdVJu1bekFHGGeRkwfNkPfkwUYC9zrfZRbiICgPpYUadd3d+IeJVywe8qTW1ZhFdv4z/HJX/JRsVNKQpm+8jxiCyybwVzEgy6m6OBNOUl3TcEMvYZrdV/hVxUG9TT8IRLVhW3lmduMw8IAmc9q2Xh+j9mBI5/yxIc6xNheRfkugANBO03Za6kk3vOK2V6jeAuF89pMh8DMvFP5PKYO1TAEWk5bTS6AJwvqAAs8ggnO1/Z1Rn5JhyHjE3Q=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5445.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(53546011)(186003)(6512007)(6506007)(31686004)(36756003)(2616005)(508600001)(6486002)(5660300002)(38100700002)(31696002)(86362001)(2906002)(316002)(6666004)(66556008)(8676002)(4326008)(8936002)(44832011)(66476007)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RmcrUHVETFFmUVZ4SGd2a2Zpd2h1SWpDZDJ6cEZ6RXZvRU93UEw0d0R5M0Z2?=
- =?utf-8?B?K0RqTU5HWnZhRi92TDhaZklPYlpBT2RXb1M1Y2Fjd1A2WFM5ZVVrMTNaMVM0?=
- =?utf-8?B?elphUVZzKy8yRjhRT0RHZSt3VXFaVXNhajNpY3VkQU9JaTcyaTFVdG5MZWF2?=
- =?utf-8?B?UDVJbVo2b3V6M2NENSthakVBZXgzdGlaMG1RaTF2UlRXUm1WQ3hqcG84Nmlw?=
- =?utf-8?B?T0ZUUWNWVDZyV3VKTGVXN3IwbWZQTTV2Tk1xbC9ONStvK2x2VW1hSVlUc0Rl?=
- =?utf-8?B?ZjZBeVdSd3JDQUFMYjJqblQ5WE50dGJsR3NLc2RhK3diaGlMMkNWTU1waTNM?=
- =?utf-8?B?dWk0WFRXOVdocVhlTGRDZ1RlbGN3K0lIdzBEWGl2UzlyZ3cwMVR0T1ZNYkJl?=
- =?utf-8?B?aGJ4TmFBQnBLbFd1dGIxRFZRUmNJZkN0VTZqdGJYc2ZKK1pLUFFkRlJhR3Qv?=
- =?utf-8?B?MHlYa25VT3lwU29uZUwzQ2NCMXo0UjZOa1BiakprdllOdkxhNzl2Ym92cURy?=
- =?utf-8?B?ZWZac21SMTJ6UVZ2RHh0TWx5NGJ2WEREQ3RnT3NKdWZmbU1lT2NhYWNydlc3?=
- =?utf-8?B?NlVLNm9WNXpRM0V2VkVXOEZ3L2Iyd3RjY3F1dnVzUHk4WjBWeEhxejF2VmVQ?=
- =?utf-8?B?Sm1ZR29DZXcvVXZIemNmZXVYaXptOHlFWEpKNkJ1Rjc2d1FyQlV2b0ZEeXZj?=
- =?utf-8?B?WmNDam95aHp5YkNLYjAxWm8vRjJsZHdnZ3piVnJRVjZrdGlEd3dNYjNFTXdB?=
- =?utf-8?B?ZGVRMkJDZHJoUkZVYlBibE05S3pHZmZjREFncG81VXk2WjVMN21ZL0l0SVNB?=
- =?utf-8?B?Nk9mK0xKbXgrZzhPakZHOFplQW9HaGpvYUFNTWlkREgvMHpreFU2eklCejNL?=
- =?utf-8?B?QUNkQ3VxRnpobjdKdnFRRFBYVVIwOE4xL3pQeFFjVkgzQWdhQVBpN3RiYzF0?=
- =?utf-8?B?UXd6cFdZamxKZWswMXo2K2dRU3R6TGljcExvSFdJYURqSVBtLzZ3clRKUFZ3?=
- =?utf-8?B?aWk3dTduR3FubWlSalpuV1YwOGNDYkEveFZuTkhTWXlzdnRwQ2ZYWklaTElT?=
- =?utf-8?B?VVBIekZrb2kvY1ZGd3hLVStra0pVdUV1RkJaakZpM2NlNlphQlZjMFJISjJr?=
- =?utf-8?B?R212TUNtV0RqYlYvdGZsVHc3MDNHc1k4T1B6RTdGRWNMeVBSckpyU1FCMVV6?=
- =?utf-8?B?Q2dVQzlPb3A4c3VjVG45ajEvRjVtdFM3bnFDdldjS0FybThlOEl6SHFaZ2VY?=
- =?utf-8?B?UTZtOWZLbThpNGtrUnFiY2dJM256MldWamIzSUppUGltc3BaZ3IyS1luOUlB?=
- =?utf-8?B?NForY1daM3VoVmRUem41bWNGd1pSckdLcDZncFJKek1Vd1BhTDNxZkluZ3lp?=
- =?utf-8?B?dHlrUkMrTFdZdUo4ZCsrb0NoUnZ4R2REQnk1S1NhRWF0OGN3SWN6Tm9PYlhm?=
- =?utf-8?B?U1VNakptamN0emF1OW9UdDJBYWxaaTdKQU4rUVJucmNTOWJIc1kzaFc1Z3Zp?=
- =?utf-8?B?ZlhYTkx6RUN0SzRxSHN0dU9qZGdESFNZdjdyTXRLTDZrTXVieEd6MXlpYmdq?=
- =?utf-8?B?L0ZKdFlNVnk3ZkkycmF1ZjBELy95MVJOM1FPL1pVUGYwWmZ2bzJCaEV5eVpp?=
- =?utf-8?B?UWF6RXdVVHRrUkZoQ3owSmlUNy9ySDhGaFFRbmF1RkdZcmtybVdmdFBtZnB4?=
- =?utf-8?B?RWhOL0RVUS9aa0NEUC82TzVRWnN0MjhXVkcyREtkN1g3Qi9uVHByYTd6LzVw?=
- =?utf-8?B?aUtpVUxGYmllMVA2bTgyWUZqazNvbHQ1Q3V3cHZ2NjRZTDZMRTRUZWQvcXJG?=
- =?utf-8?B?MWJtWmVuSGV1clRRdzJWRENDSWZ0by9TaXpxazdjMGd5S0JFc0VvQk1XdW5o?=
- =?utf-8?B?QTNUbnRQMi9XTXRKN3IxRXFOVGNYT3ZHdEtkaEZ4VE9KYjIzNTNBWFU1djhK?=
- =?utf-8?B?NnhxdGJEa3BucWJzQjRVbHJZMU44MjFNOW0wTm82QTRZbFkvanpFK0tLR2Qv?=
- =?utf-8?B?bG0rZ3BJMDNReDNFVkpKNXRXZXlpUFA1VU9uT3FCajF1RHlLTWZyUDh6eVZV?=
- =?utf-8?B?SEhIa1pveExWS3cvVlA4WlJBeEszdkMwbmNhNlhOY1ZqeERlRXF0ZXpzYmNo?=
- =?utf-8?B?aVBPRktJWldRdFhpS1NIK3RPVUlJUUtlTmZaVWVCZCt0YTBHK1N5cUgzZHc3?=
- =?utf-8?B?WUVkRStEWTFMdkdpaVdXQ3RDZFRtQit6SHhnNVM2Rlp5OVJlOTNjajdFZVRi?=
- =?utf-8?B?dVpRdG5nUHBLaEdRSnhLSFcrb2Z0UEo2NlZ0anA2ZzlBaU5FVE9IWWxLZHE2?=
- =?utf-8?B?Q2NQVXIrYk1BS3h0ZE90aFNTVDIxbkhOU0hOTkc2OGxDcjMrd0d4Z3RBQ215?=
- =?utf-8?Q?fZhVRsjQDcXejHaXw9DJ5jVANE6NRPOmnT9kXk6pBDUWi?=
-X-MS-Exchange-AntiSpam-MessageData-1: dpxBoE5Kmh6YOA==
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1fbcc07a-0ffa-4729-dae3-08da272bfd4a
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5445.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2022 02:25:11.6714
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qhlSmnYG/fdkSNFH9o2ozPpqrzKgKKLGpqnroTrAyGUSPczlSggmyazftWilkFfdDSvKu9xpI7vKfiglOG0C4A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4339
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220425035406.9337-1-songmuchun@bytedance.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maim,
-
-On 4/19/22 8:29 PM, Maxim Levitsky wrote:
-> On Tue, 2022-04-12 at 06:58 -0500, Suravee Suthikulpanit wrote:
+On Mon, Apr 25, 2022 at 11:54:06AM +0800, Muchun Song wrote:
+> Most callers of memcg_slab_free_hook() already know the slab,  which could
+> be passed to memcg_slab_free_hook() directly to reduce the overhead of an
+> another call of virt_to_slab().  For bulk freeing of objects, the call of
+> slab_objcgs() in the loop in memcg_slab_free_hook() is redundant as well.
+> Rework memcg_slab_free_hook() and build_detached_freelist() to reduce
+> those unnecessary overhead and make memcg_slab_free_hook() can handle bulk
+> freeing in slab_free().
 > 
-> Hi!
+> Move the calling site of memcg_slab_free_hook() from do_slab_free() to
+> slab_free() for slub to make the code clearer since the logic is weird
+> (e.g. the caller need to judge whether it needs to call
+> memcg_slab_free_hook()). It is easy to make mistakes like missing calling
+> of memcg_slab_free_hook() like fixes of:
 > 
+>   commit d1b2cf6cb84a ("mm: memcg/slab: uncharge during kmem_cache_free_bulk()")
+>   commit ae085d7f9365 ("mm: kfence: fix missing objcg housekeeping for SLAB")
 > 
-> I just got an idea, while writing a kvm selftest that would use AVIC,
-> and finding out that selftest code uploads the '-host' cpuid right away
-> which has x2apic enabled and that inhibits AVIC, and later clearing x2apic
-> in the cpuid doesn't un-inhibit it.
->   
-> That can be fixed in few ways but that got me thinking:
->   
-> Why do we inhibit AVIC when the guest uses x2apic, even without X2AVIC?
-> I think that if we didn't it would just work, and even work faster than
-> pure software x2apic.
->   
-> My thinking is:
->   
-> - when a vcpu itself uses its x2apic, even if its avic is not inhibited,
-> the guest will write x2apic msrs which kvm intercepts and will correctly emulate a proper x2apic.
->   
-> - vcpu peers will also use x2apic msrs and again it will work correctly
-> (even when there are more than 256 vcpus).
->   
-> - and the host + iommu will still be able to use AVIC's doorbell to send interrupts to the guest
-> and that doesn't need apic ids or anything, it should work just fine.
+> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> ---
+>  mm/slab.c |  4 ++--
+>  mm/slab.h | 30 ++++++++---------------------
+>  mm/slub.c | 66 +++++++++++++++++++++------------------------------------------
+>  3 files changed, 32 insertions(+), 68 deletions(-)
+
+Overall it looks like a really nice cleanup!
+
+One nit below.
+
 > 
-> Also AVIC should have no issues scanning IRR and injecting interrupts on VM entry,
-> x2apic mode doesn't matter for that.
->   
-> AVIC mmio can still be though discovered by the guest which is technically against x86 spec
-> (in x2apic mode, mmio supposed to not work) but that can be fixed easily by disabing
-> the AVIC memslot if any of the vCPUs are in x2apic mode, or this can be ignored since
-> it should not cause any issues.
-> We seem to have a quirk for that KVM_X86_QUIRK_LAPIC_MMIO_HOLE.
->   
-> On top of all this, removing this inhibit will also allow to test AVIC with guest
-> which does have x2apic in the CPUID but doesn't use it (e.g kvm unit test, or
-> linux booted with nox2apic, which is also nice IMHO)
->   
-> What do you think?
+> diff --git a/mm/slab.c b/mm/slab.c
+> index a301f266efd1..e868b4af4346 100644
+> --- a/mm/slab.c
+> +++ b/mm/slab.c
+> @@ -3407,9 +3407,10 @@ static __always_inline void __cache_free(struct kmem_cache *cachep, void *objp,
+>  {
+>  	bool init;
+>  
+> +	memcg_slab_free_hook(cachep, virt_to_slab(objp), &objp, 1);
+> +
+>  	if (is_kfence_address(objp)) {
+>  		kmemleak_free_recursive(objp, cachep->flags);
+> -		memcg_slab_free_hook(cachep, &objp, 1);
+>  		__kfence_free(objp);
+>  		return;
+>  	}
+> @@ -3442,7 +3443,6 @@ void ___cache_free(struct kmem_cache *cachep, void *objp,
+>  	check_irq_off();
+>  	kmemleak_free_recursive(objp, cachep->flags);
+>  	objp = cache_free_debugcheck(cachep, objp, caller);
+> -	memcg_slab_free_hook(cachep, &objp, 1);
+>  
+>  	/*
+>  	 * Skip calling cache_free_alien() when the platform is not numa.
+> diff --git a/mm/slab.h b/mm/slab.h
+> index db9fb5c8dae7..a8d5eb1c323f 100644
+> --- a/mm/slab.h
+> +++ b/mm/slab.h
+> @@ -547,36 +547,22 @@ static inline void memcg_slab_post_alloc_hook(struct kmem_cache *s,
+>  	obj_cgroup_put(objcg);
+>  }
+>  
+> -static inline void memcg_slab_free_hook(struct kmem_cache *s_orig,
+> +static inline void memcg_slab_free_hook(struct kmem_cache *s, struct slab *slab,
+>  					void **p, int objects)
+>  {
+> -	struct kmem_cache *s;
+>  	struct obj_cgroup **objcgs;
+> -	struct obj_cgroup *objcg;
+> -	struct slab *slab;
+> -	unsigned int off;
+>  	int i;
+>  
+>  	if (!memcg_kmem_enabled())
+>  		return;
+>  
+> -	for (i = 0; i < objects; i++) {
+> -		if (unlikely(!p[i]))
+> -			continue;
+> -
+> -		slab = virt_to_slab(p[i]);
+> -		/* we could be given a kmalloc_large() object, skip those */
+> -		if (!slab)
+> -			continue;
+> -
+> -		objcgs = slab_objcgs(slab);
+> -		if (!objcgs)
+> -			continue;
+> +	objcgs = slab_objcgs(slab);
+> +	if (!objcgs)
+> +		return;
+>  
+> -		if (!s_orig)
+> -			s = slab->slab_cache;
+> -		else
+> -			s = s_orig;
+> +	for (i = 0; i < objects; i++) {
+> +		struct obj_cgroup *objcg;
+> +		unsigned int off;
+>  
+>  		off = obj_to_index(s, slab, p[i]);
+>  		objcg = objcgs[off];
+> @@ -628,7 +614,7 @@ static inline void memcg_slab_post_alloc_hook(struct kmem_cache *s,
+>  {
+>  }
+>  
+> -static inline void memcg_slab_free_hook(struct kmem_cache *s,
+> +static inline void memcg_slab_free_hook(struct kmem_cache *s, struct slab *slab,
+>  					void **p, int objects)
+>  {
+>  }
+> diff --git a/mm/slub.c b/mm/slub.c
+> index 6dc703488d30..86c50eb6c670 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -3437,9 +3437,6 @@ static __always_inline void do_slab_free(struct kmem_cache *s,
+>  	struct kmem_cache_cpu *c;
+>  	unsigned long tid;
+>  
+> -	/* memcg_slab_free_hook() is already called for bulk free. */
+> -	if (!tail)
+> -		memcg_slab_free_hook(s, &head, 1);
+>  redo:
+>  	/*
+>  	 * Determine the currently cpus per cpu slab.
+> @@ -3499,9 +3496,10 @@ static __always_inline void do_slab_free(struct kmem_cache *s,
+>  }
+>  
+>  static __always_inline void slab_free(struct kmem_cache *s, struct slab *slab,
+> -				      void *head, void *tail, int cnt,
+> +				      void *head, void *tail, void **p, int cnt,
+>  				      unsigned long addr)
+>  {
+> +	memcg_slab_free_hook(s, slab, p, cnt);
+>  	/*
+>  	 * With KASAN enabled slab_free_freelist_hook modifies the freelist
+>  	 * to remove objects, whose reuse must be delayed.
+> @@ -3523,7 +3521,7 @@ void kmem_cache_free(struct kmem_cache *s, void *x)
+>  	if (!s)
+>  		return;
+>  	trace_kmem_cache_free(_RET_IP_, x, s->name);
+> -	slab_free(s, virt_to_slab(x), x, NULL, 1, _RET_IP_);
+> +	slab_free(s, virt_to_slab(x), x, NULL, &x, 1, _RET_IP_);
+>  }
+>  EXPORT_SYMBOL(kmem_cache_free);
+>  
+> @@ -3564,79 +3562,59 @@ static inline
+>  int build_detached_freelist(struct kmem_cache *s, size_t size,
+>  			    void **p, struct detached_freelist *df)
+>  {
+> -	size_t first_skipped_index = 0;
+>  	int lookahead = 3;
+>  	void *object;
+>  	struct folio *folio;
+> -	struct slab *slab;
+> -
+> -	/* Always re-init detached_freelist */
+> -	df->slab = NULL;
+> -
+> -	do {
+> -		object = p[--size];
+> -		/* Do we need !ZERO_OR_NULL_PTR(object) here? (for kfree) */
+> -	} while (!object && size);
+> -
+> -	if (!object)
+> -		return 0;
+> +	size_t same;
+>  
+> +	object = p[--size];
+>  	folio = virt_to_folio(object);
+>  	if (!s) {
+>  		/* Handle kalloc'ed objects */
+>  		if (unlikely(!folio_test_slab(folio))) {
+>  			free_large_kmalloc(folio, object);
+> -			p[size] = NULL; /* mark object processed */
+> +			df->slab = NULL;
+>  			return size;
+>  		}
+>  		/* Derive kmem_cache from object */
+> -		slab = folio_slab(folio);
+> -		df->s = slab->slab_cache;
+> +		df->slab = folio_slab(folio);
+> +		df->s = df->slab->slab_cache;
+>  	} else {
+> -		slab = folio_slab(folio);
+> +		df->slab = folio_slab(folio);
+>  		df->s = cache_from_obj(s, object); /* Support for memcg */
+>  	}
+>  
+> -	if (is_kfence_address(object)) {
+> -		slab_free_hook(df->s, object, false);
+> -		__kfence_free(object);
+> -		p[size] = NULL; /* mark object processed */
+> -		return size;
+> -	}
+> -
+>  	/* Start new detached freelist */
+> -	df->slab = slab;
+> -	set_freepointer(df->s, object, NULL);
+>  	df->tail = object;
+>  	df->freelist = object;
+> -	p[size] = NULL; /* mark object processed */
+>  	df->cnt = 1;
+>  
+> +	if (is_kfence_address(object))
+> +		return size;
+> +
+> +	set_freepointer(df->s, object, NULL);
+> +
+> +	same = size;
+>  	while (size) {
+>  		object = p[--size];
+> -		if (!object)
+> -			continue; /* Skip processed objects */
+> -
+>  		/* df->slab is always set at this point */
+>  		if (df->slab == virt_to_slab(object)) {
+>  			/* Opportunity build freelist */
+>  			set_freepointer(df->s, object, df->freelist);
+>  			df->freelist = object;
+>  			df->cnt++;
+> -			p[size] = NULL; /* mark object processed */
+> -
+> +			same--;
+> +			if (size != same)
+> +				swap(p[size], p[same]);
+>  			continue;
+>  		}
+>  
+>  		/* Limit look ahead search */
+>  		if (!--lookahead)
+>  			break;
+> -
+> -		if (!first_skipped_index)
+> -			first_skipped_index = size + 1;
+>  	}
+>  
+> -	return first_skipped_index;
+> +	return same;
+>  }
+>  
+>  /* Note that interrupts must be enabled when calling this function. */
+> @@ -3645,7 +3623,6 @@ void kmem_cache_free_bulk(struct kmem_cache *s, size_t size, void **p)
+>  	if (WARN_ON(!size))
+>  		return;
+>  
+> -	memcg_slab_free_hook(s, p, size);
+>  	do {
+>  		struct detached_freelist df;
+>  
+> @@ -3653,7 +3630,8 @@ void kmem_cache_free_bulk(struct kmem_cache *s, size_t size, void **p)
+>  		if (!df.slab)
+>  			continue;
+>  
+> -		slab_free(df.s, df.slab, df.freelist, df.tail, df.cnt, _RET_IP_);
+> +		slab_free(df.s, df.slab, df.freelist, df.tail, &p[size], df.cnt,
+> +			  _RET_IP_);
+>  	} while (likely(size));
 
-This is actually a good idea!!! Let's call it hybrid-x2AVIC :)
+As I understand, it might result in more memcg_slab_free_hook() calls, right?
+I guess you might want to include some benchmark results, which actually
+might look very good because of optimizations above.
 
-I am working on prototype and test out the support for this, which will be introduced in V3.
-
-Regards,
-Suravee
+Thanks!

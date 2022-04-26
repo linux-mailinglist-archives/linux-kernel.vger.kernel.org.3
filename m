@@ -2,51 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C51650F605
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C13F950F557
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:53:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347158AbiDZIpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:45:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58758 "EHLO
+        id S1345167AbiDZIzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345739AbiDZIj1 (ORCPT
+        with ESMTP id S1345526AbiDZIl6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:39:27 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050C3403CF;
-        Tue, 26 Apr 2022 01:30:50 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KnZpJ590lz4ySW;
-        Tue, 26 Apr 2022 18:30:48 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1650961849;
-        bh=czivHZ+lHH63w67c3ZACNKHQwiMOwH0QCqtUPgwwvkY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=O0ddEM8aWOARzU3HQ4thaICH0oW6pKC0o1Wx3m353ZeRhbk4GF520x/4x0+CblV7u
-         U5VQ09sni2bDzd4CCUzCX4aHTD7mt7hZIC1xsB9aTe3sDVqlyz2mydn0GrjFxREaVB
-         EZwS1avtkOEcfxCE9WHDT9NTBsILOVa2kbwhbRZaFZJCxXpZMtqEatWeis156gdTYQ
-         guzV2la6qSMbaTFZBz7uWLWlLBdtL3wHy8p4J78ax3pYhO5+rdn4WxIe/sQSb0JbVL
-         mpKpK5aBFpaYJpMRXNvnQCzbFk4/HU/taJLoXO+rSxG+zyvR0WopkAYGnuU12eQlRs
-         VFTsRznQpyabw==
-Date:   Tue, 26 Apr 2022 18:30:48 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Cc:     Amadeusz =?UTF-8?B?U8WCYXdpxYRza2k=?= 
-        <amadeuszx.slawinski@linux.intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the sound-asoc tree
-Message-ID: <20220426183048.5f1cb899@canb.auug.org.au>
+        Tue, 26 Apr 2022 04:41:58 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24CE158F85;
+        Tue, 26 Apr 2022 01:33:08 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id a11so6094040pff.1;
+        Tue, 26 Apr 2022 01:33:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XPCJZevhs8brMYhtAZr8BdWat46UoHpJViKaKdpMRuU=;
+        b=c7vbIQntGD0977Uznsb+oxAGZUTT0lMxHbhYk9ny8G4wzPWoOrh53GXQ7s4xzFZ01f
+         eV0kK1RejcGO0tYo7DEZ52ThTAGY9v/Rn7YkIOOjjb+l4n/m4yXBHk+i2OSF6CJOE05j
+         AP6sQcmEG+dNc5HAV+8T/fhQ04peAYAEmXUtGXR2sFsqht4dGf6d2hvFcP57oLDKrHtF
+         ypxCGEdR4zAJtJ2XsdqDsaxHSk8NB7yXLSvEXdabkat45dZjVGA7w3zbhnUhc0pAc/ue
+         3xOx5leNCKMNmR4tX0M/m9umZl8/caTns2y5uwlnCP8z6sBZhZcZ1cnrjoFBw7+tX/xJ
+         i3eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XPCJZevhs8brMYhtAZr8BdWat46UoHpJViKaKdpMRuU=;
+        b=5TPBfeZOtYn3Pa5rmID0KaDinKVJU0+LiDcqz0s9oWdPrLqNYcBBZ+uN/p4QIgvp/k
+         ryis3OzA7QC0Lzt8L51LBgm5kJy9gW0UGu72IdpSxLKBxlW+JPUpyOFTe3nfiHDFO0pw
+         +wFwi3/NUmkNLmfsV62BSDOsGEGOzFiV8SKgcz4v85dTTKy1SufD6M6i8rHCtmFvuEjs
+         88nSk9rVeSUrGc8AXkfwg/qQ+Vjih9cMISEgb25822dZmX7VSGxQzlvrD0rZnivGd2Ht
+         ezewvs5Ua0hl2AGRgRYtaaj5Be9FBNGYDcdg0XWK97vyNsIkLeXVKWQMExkB+AWFBH4p
+         T7PQ==
+X-Gm-Message-State: AOAM530v5y2M2gQN9HFwBHOl9uSeADMIkbPAKPu0MJ3iU6zXdGuCiTJi
+        +RFptWlvad6FP9AwkKu9o1E=
+X-Google-Smtp-Source: ABdhPJwD7n+yUCkn32g7caIxVGOr7/fDkuZD+briKdFO0oetqszHzCrrrJwMEBKW3GVoFDHbDd5kWw==
+X-Received: by 2002:a05:6a00:1687:b0:4e1:45d:3ded with SMTP id k7-20020a056a00168700b004e1045d3dedmr23359483pfc.0.1650961988373;
+        Tue, 26 Apr 2022 01:33:08 -0700 (PDT)
+Received: from localhost.localdomain ([103.197.71.140])
+        by smtp.gmail.com with ESMTPSA id f187-20020a6251c4000000b005058e59604csm14317884pfb.217.2022.04.26.01.33.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 01:33:07 -0700 (PDT)
+From:   Stephen Zhang <starzhangzsd@gmail.com>
+To:     tsbogend@alpha.franken.de, liam.howlett@oracle.com,
+        ebiederm@xmission.com, dbueso@suse.de, alobakin@pm.me,
+        f.fainelli@gmail.com
+Cc:     zhangshida@kylinos.cn, starzhangzsd@gmail.com,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: [PATCH] arch/mips/kernel/traps: add CONFIG_MIPS_FP_SUPPORT when using handle_fpe
+Date:   Tue, 26 Apr 2022 16:32:59 +0800
+Message-Id: <20220426083259.526685-1-starzhangzsd@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//xfg1wYZ3AWTI/N/W5SjHei";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,83 +70,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_//xfg1wYZ3AWTI/N/W5SjHei
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+From: Shida Zhang <zhangshida@kylinos.cn>
 
-Hi all,
+handle_fpe gets defined when CONFIG_MIPS_FP_SUPPORT is defined. So add
+CONFIG_MIPS_FP_SUPPORT when using handle_fpe.
 
-After merging the sound-asoc tree, today's linux-next build (powerpc
-allyesconfig) failed like this:
-
-sound/soc/intel/avs/path.c: In function 'avs_copier_create':
-sound/soc/intel/avs/path.c:186:31: error: invalid use of undefined type 'st=
-ruct nhlt_specific_cfg'
-  186 |                 data =3D ep_blob->caps;
-      |                               ^~
-sound/soc/intel/avs/path.c:187:36: error: invalid use of undefined type 'st=
-ruct nhlt_specific_cfg'
-  187 |                 data_size =3D ep_blob->size;
-      |                                    ^~
-sound/soc/intel/avs/path.c:210:31: error: invalid use of undefined type 'st=
-ruct nhlt_specific_cfg'
-  210 |                 data =3D ep_blob->caps;
-      |                               ^~
-sound/soc/intel/avs/path.c:211:36: error: invalid use of undefined type 'st=
-ruct nhlt_specific_cfg'
-  211 |                 data_size =3D ep_blob->size;
-      |                                    ^~
-
-Caused by commit
-
-  274d79e51875 ("ASoC: Intel: avs: Configure modules according to their typ=
-e")
-
-I have applied the following patch for today:
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 26 Apr 2022 17:49:37 +1000
-Subject: [PATCH] fixup for "ASoC: Intel: avs: Configure modules according t=
-o their type"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Shida Zhang <zhangshida@kylinos.cn>
 ---
- sound/soc/intel/avs/path.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/mips/kernel/traps.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/sound/soc/intel/avs/path.c b/sound/soc/intel/avs/path.c
-index 3d46dd5e5bc4..6f47ac44de87 100644
---- a/sound/soc/intel/avs/path.c
-+++ b/sound/soc/intel/avs/path.c
-@@ -9,6 +9,7 @@
- #include <sound/intel-nhlt.h>
- #include <sound/pcm_params.h>
- #include <sound/soc.h>
-+#include <sound/intel-nhlt.h>
- #include "avs.h"
- #include "path.h"
- #include "topology.h"
---=20
-2.35.1
+diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
+index 246c6a6b0261..ef9792261f91 100644
+--- a/arch/mips/kernel/traps.c
++++ b/arch/mips/kernel/traps.c
+@@ -90,7 +90,9 @@ extern asmlinkage void handle_cpu(void);
+ extern asmlinkage void handle_ov(void);
+ extern asmlinkage void handle_tr(void);
+ extern asmlinkage void handle_msa_fpe(void);
++#ifdef CONFIG_MIPS_FP_SUPPORT
+ extern asmlinkage void handle_fpe(void);
++#endif
+ extern asmlinkage void handle_ftlb(void);
+ extern asmlinkage void handle_gsexc(void);
+ extern asmlinkage void handle_msa(void);
+@@ -2489,8 +2491,10 @@ void __init trap_init(void)
+ 	if (board_nmi_handler_setup)
+ 		board_nmi_handler_setup();
+ 
++#ifdef CONFIG_MIPS_FP_SUPPORT
+ 	if (cpu_has_fpu && !cpu_has_nofpuex)
+ 		set_except_vector(EXCCODE_FPE, handle_fpe);
++#endif
+ 
+ 	if (cpu_has_ftlbparex)
+ 		set_except_vector(MIPS_EXCCODE_TLBPAR, handle_ftlb);
+-- 
+2.30.2
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_//xfg1wYZ3AWTI/N/W5SjHei
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJnrbgACgkQAVBC80lX
-0GwRlwgAhchvrLBL9nPU25RzDVnerN3LCUd0syA1/9xlw4aig7ZRj7V7+XuBKKr0
-oIbDDP6EjODXIz+LeypGGMDcBD5wzpaDtedCY6mdV8nrsGK7DYmnv1lLW4uPF4GC
-G1BWKzvyAavdjscXRLBLOPgebYUV/NI9SQyf2jhmr9yWolcFw5SfRK7kH0+ra92+
-7R5NH6IU1i//3fty567PSYauKeVTB2/5GCl7ISO/hsYiLvu8QPo9ssTwJ35M6cl6
-AlhmH5ZjaFsWxd+D7niu7Vxyyu2G6x7ZjEtHxR2soXrdclRpQazwVBPJvo/5kU+u
-matStPxcUJmx2AwqEsHGrf5tNF55fA==
-=zCsj
------END PGP SIGNATURE-----
-
---Sig_//xfg1wYZ3AWTI/N/W5SjHei--

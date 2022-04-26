@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F167750FE94
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:12:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3005A50FEA2
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:15:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350795AbiDZNPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 09:15:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43158 "EHLO
+        id S1350798AbiDZNQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 09:16:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350742AbiDZNOe (ORCPT
+        with ESMTP id S239300AbiDZNQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 09:14:34 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A3960AB4;
-        Tue, 26 Apr 2022 06:11:24 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id v64-20020a1cac43000000b0038cfd1b3a6dso1460282wme.5;
-        Tue, 26 Apr 2022 06:11:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=VbIqYrl/j/4f2JpJRwKTfog5CMhMNsgfur6sJmAAYyM=;
-        b=hXqzTTps2HVRXHQSYmBwN2XN1rYAupQNRApRyMp0zDmiOZ1aSMIAart17L/C3E5oUb
-         2cqHPJ65BoShl2+SSbrHxQTpiVHUFQVzc0G9WgtTgh6TR+8lrewvVjsOYXffalfAh1Lo
-         AhKGn/So5VWuhfINEeZlYKEZoYJ9R8k+1xxRfPjEKnylgVGNkOgwIrY1bpfu0aCreWYG
-         jXkW4Lq5VKZMsgThNJNyy6tLN+l+7PqVscCKFwWi+duJGWHH8ZBqMRvBsSG/fWkESXUg
-         5Bh68MZuWKh7nKJNXDILYPDfR7DTbYS5jfy6sbuTuExQ75Oo0EfqqYkd49X9Px5kfJ8f
-         ny3A==
+        Tue, 26 Apr 2022 09:16:16 -0400
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B638166FA2;
+        Tue, 26 Apr 2022 06:13:07 -0700 (PDT)
+Received: by mail-qv1-f54.google.com with SMTP id kj18so2498836qvb.6;
+        Tue, 26 Apr 2022 06:13:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=VbIqYrl/j/4f2JpJRwKTfog5CMhMNsgfur6sJmAAYyM=;
-        b=EyaQfLvim7GzkbXC4ry/d97Homs6CqkxfI2uZstGTObm36oka1eKwaF5cpDMP89V+M
-         wICpqfHXGoysRhehlBRF2qk0IADOagS9X/OaLggHp5Ha0o9G5pdzfk76+jqs0i3wbxs5
-         4iqsZOYuvS/JI9I1WvJxY5QwqiaspP2okB6xVU0aG/Qe2VQfqn81gy2cdMQBTwYTTKgd
-         sq+NxGPZfI1rvjdnrHWGjcF6Pu7nhuzRaXmLDVDndGqQxcMtE0ItngEyJbKT+DdWFHt0
-         LXmPXdJSYDLfJBPfmOW4AvLqNRYdbVo7uAiSHtIAn9+RZr4lnH5g8BReoPBlVXVh8hll
-         UhQA==
-X-Gm-Message-State: AOAM5334OqqjHXOiA6rj27zMzxnV8+pfxPFQxT50JQu7ZcsaVABKw/es
-        ZhkyR4YtZ5pvlsbdh301IrA=
-X-Google-Smtp-Source: ABdhPJyJx3p6eMl28pdya7q+rrOr3vzQaeqoVn0kIgN543h8VeoLjAyDSIjI3OLtkLU797eb8wrEHA==
-X-Received: by 2002:a05:600c:3b02:b0:393:e7d4:b660 with SMTP id m2-20020a05600c3b0200b00393e7d4b660mr12637839wms.183.1650978682527;
-        Tue, 26 Apr 2022 06:11:22 -0700 (PDT)
-Received: from poker.lan (static.2-229-210-222.ip198.fastwebnet.it. [2.229.210.222])
-        by smtp.gmail.com with ESMTPSA id h9-20020a05600c350900b00393f01c8f00sm3262910wmq.47.2022.04.26.06.11.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 06:11:22 -0700 (PDT)
-From:   Andrea Merello <andrea.merello@gmail.com>
-To:     jic23@kernel.org, mchehab+huawei@kernel.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     lars@metafoo.de, robh+dt@kernel.org, andy.shevchenko@gmail.com,
-        matt.ranostay@konsulko.com, ardeleanalex@gmail.com,
-        jacopo@jmondi.org, Andrea Merello <andrea.merello@iit.it>
-Subject: [v5 14/14] docs: iio: add documentation for BNO055 driver
-Date:   Tue, 26 Apr 2022 15:11:02 +0200
-Message-Id: <20220426131102.23966-15-andrea.merello@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220426131102.23966-1-andrea.merello@gmail.com>
-References: <20220426131102.23966-1-andrea.merello@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kAxWWuUjNDhLgbFiNEhS4lFEmjQmipfMjJSwxa6hGCU=;
+        b=VN75hqkXweoO1/VzAbOZHPX5Dks/XO/Im1i4C9umpgxMliy2nL/NPiKwwFQRvNclF5
+         0qfTEOyDXJSW7pbk5BPWXou7us49XqVKgTiB9KptweVQ0GHbf43zSTIfZElQPkrEy167
+         OwcYy4ebCF7NYYHhhzK4ziQxyNdf/21e9xmWyuELO8Yfjs5oZ93Mo4ZpmfYg11/20rZt
+         2uY4mEIEXOMWxssJ5PuAZXJ+9/LInYweko1HzPFFwwLDFLUxKs7d6ouoh+sMJieIUmIQ
+         CwdacccA4U6D/oqPC9n07X3Fli1xCVhDV7RJHuEgb+AwRWA2lu8flXJruByeOuy6EeK4
+         z1mw==
+X-Gm-Message-State: AOAM530U4E4AdSAPVNpwyi5FAMWW41qoPYzp9w7oM4uEciQ4eqOdLRm2
+        ZqolGy6S4qooZwlcugEn542u1T2zna9Gjg==
+X-Google-Smtp-Source: ABdhPJznDM24QZGT41uRbQ8XpKYSFHclcMwlhwU4B/312LJ/ANRgvLlvBN8fydNM2dfmAJI9n26HtQ==
+X-Received: by 2002:a05:6214:5009:b0:456:3bd6:f367 with SMTP id jo9-20020a056214500900b004563bd6f367mr5325651qvb.13.1650978786682;
+        Tue, 26 Apr 2022 06:13:06 -0700 (PDT)
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
+        by smtp.gmail.com with ESMTPSA id bp37-20020a05622a1ba500b002f1f9a0d79asm7622129qtb.11.2022.04.26.06.13.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Apr 2022 06:13:06 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-2f7c424c66cso89810397b3.1;
+        Tue, 26 Apr 2022 06:13:06 -0700 (PDT)
+X-Received: by 2002:a81:e10d:0:b0:2f7:bb2a:6529 with SMTP id
+ w13-20020a81e10d000000b002f7bb2a6529mr18317969ywh.62.1650978785952; Tue, 26
+ Apr 2022 06:13:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220426074922.13319-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220426074922.13319-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220426074922.13319-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 26 Apr 2022 15:12:54 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV6WbAt6rNedz2ex31BW7gk1qtW5U1c-uQDEm1Tcd9fdQ@mail.gmail.com>
+Message-ID: <CAMuHMdV6WbAt6rNedz2ex31BW7gk1qtW5U1c-uQDEm1Tcd9fdQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] ASoC: sh: rz-ssi: Drop SSIFSR_TDC and SSIFSR_RDC macros
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Pavel Machek <pavel@denx.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,84 +73,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrea Merello <andrea.merello@iit.it>
+On Tue, Apr 26, 2022 at 9:49 AM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> The mask values of SSIFSR_TDC and SSIFSR_RDC macros are incorrect and
+> they are unused in the file so just drop them.
+>
+> Reported-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> v1->v2
+> * Updated commit message
 
-The bno055 driver is rather complex and have some oddities and not-obvious
-things that worth to document (e.g. calibration files).
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Signed-off-by: Andrea Merello <andrea.merello@iit.it>
----
- Documentation/iio/bno055.rst | 50 ++++++++++++++++++++++++++++++++++++
- Documentation/iio/index.rst  |  2 ++
- 2 files changed, 52 insertions(+)
- create mode 100644 Documentation/iio/bno055.rst
+Gr{oetje,eeting}s,
 
-diff --git a/Documentation/iio/bno055.rst b/Documentation/iio/bno055.rst
-new file mode 100644
-index 000000000000..af21376d7a25
---- /dev/null
-+++ b/Documentation/iio/bno055.rst
-@@ -0,0 +1,50 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+==============================
-+BNO055 driver
-+==============================
-+
-+1. Overview
-+===========
-+
-+This driver supports Bosch BNO055 IMUs (on both serial and I2C busses).
-+
-+Accelerometer, magnetometer and gyroscope measures are always provided.
-+When "fusion_enable" sysfs attribute is set to 1, orientation (both Euler
-+angles and quaternion), linear velocity and gravity vector are also
-+provided, but some sensor settings (e.g. low pass filtering and range)
-+became locked (the IMU firmware controls them).
-+
-+This driver supports also IIO buffers.
-+
-+2. Calibration
-+==============
-+
-+The IMU continuously performs an autocalibration procedure if (and only if)
-+operating in fusion mode. The magnetometer autocalibration can however be
-+disabled writing 0 in the sysfs in_magn_calibration_fast_enable attribute.
-+
-+The driver provides access to autocalibration flags (i.e. you can known if
-+the IMU has successfully autocalibrated) and to the calibration data blob.
-+
-+The user can save this blob in a firmware file (i.e. in /lib/firmware) that
-+the driver looks for at probe time. If found, then the IMU is initialized
-+with this calibration data. This saves the user from performing the
-+calibration procedure every time (which consist of moving the IMU in
-+various way).
-+
-+The driver looks for calibration data file using two different names: first
-+a file whose name is suffixed with the IMU unique ID (exposed in sysfs as
-+serial_number) is searched for; this is useful when there is more than one
-+IMU instance. If this file is not found, then a "generic" calibration file
-+is searched for (which can be used when only one IMU is present, without
-+struggling with fancy names, that change on each device).
-+
-+Valid calibration file names would be e.g.
-+ bno055-caldata-0e7c26a33541515120204a35342b04ff.dat
-+ bno055-caldata.dat
-+
-+In non-fusion mode the IIO 'offset' attributes provide access to the
-+offsets from calibration data (if any), so that the user can apply them to
-+the accel, angvel and magn IIO attributes. In fusion mode they are not
-+needed (the IMU firmware internally applies those corrections) and they
-+read as zero.
-diff --git a/Documentation/iio/index.rst b/Documentation/iio/index.rst
-index 58b7a4ebac51..1b7292c58cd0 100644
---- a/Documentation/iio/index.rst
-+++ b/Documentation/iio/index.rst
-@@ -10,3 +10,5 @@ Industrial I/O
-    iio_configfs
- 
-    ep93xx_adc
-+
-+   bno055
--- 
-2.17.1
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

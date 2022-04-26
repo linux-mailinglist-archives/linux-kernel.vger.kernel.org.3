@@ -2,71 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DAC0510A39
+	by mail.lfdr.de (Postfix) with ESMTP id AE40D510A3B
 	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354855AbiDZUT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 16:19:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54534 "EHLO
+        id S1354792AbiDZUTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 16:19:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354853AbiDZUSz (ORCPT
+        with ESMTP id S1354861AbiDZUS4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:18:55 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9140F2729;
-        Tue, 26 Apr 2022 13:15:44 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id 88-20020a9d0ee1000000b005d0ae4e126fso13828690otj.5;
-        Tue, 26 Apr 2022 13:15:44 -0700 (PDT)
+        Tue, 26 Apr 2022 16:18:56 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B99A1D323
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:15:45 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id e15so3765922iob.3
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:15:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1nZK4LL1ygLY1Nj0F4n58Fq2vqu0dCliNETQaPqLm+c=;
-        b=JaIR2Rvou6MXvUbQKIrUi5yzrY7zLCiDR9R2PUNcMoMi7y/t4eFN6OHhJP7JkiC+q8
-         jucncSgW1oFuNuxjmzbZ76s6YlqHQdvpS/IQ7IrSgLaPJlAaCTHm4pckhL1HEj2tkwMV
-         nzTVRg3xJH1UwumLaY48pvUHv5VkoknqfV/dJxBZDeiGUSpENbfcLYJ5cjh5hH5Rvbnt
-         Xvz5Eps7RKqEVxj9CfJ1WrHbwKlyegQUQHvGIBceymC64lPhV3c8H+0PgzwmiH7D6pc4
-         F7RKD9P+IXghyu47vG66JIM6cA26kS07MuzrcgvBLfLA1efTHJmD5dOmmez2QtKmISFM
-         w51g==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=HLfBsULnxIHtTg2vaikfG3QQHyujaLrfdQn3O+y4ETI=;
+        b=K+QcZXo4BDYUlsPbgXhdk3qDu7qLz/0pZHUt2IEnBCVZKIycAZA/bn5Kc0czFEulAS
+         oGPBa00f1zJkrVHe++8dSEIPcfxhlnkwAeZF+baX+zb5MS+5yoVWBWW6G9hqGGEydkwm
+         G9SosRBRI55oHTWo/M36KYsCcBD9eotVtNWPM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=1nZK4LL1ygLY1Nj0F4n58Fq2vqu0dCliNETQaPqLm+c=;
-        b=QeCkQEBpM0GUBIFQWakvdeTpKUlJEUWtlk30p3d7Eggh+gZwSN+Cem3uwRv9Ld1+eu
-         f8IXPn1RQeeSkJD6fOgix8AXKhED1xjh7RDtvJxSP1DRsYDAVmWM91LPWbfkyCC1qwP5
-         nqn/Xe+k+ztkTvEFBkXzHjrdkJuHaRV/WOO+jlPhR1RjVdPnuPwsmqbF5gdYza//UKZC
-         EwUH+SoZVIrosN6UU0eLec8PCGEz67Rw0YGTm2W4vP58K47hPlOOuuYjspjnN1c+77JQ
-         s+KRLLPcjZYVpEOTlWXvrF8Dkx/Ka4Vofm+ADBCvmY61LBiqCQCmjeNL+AC5hlVieEJ7
-         joHQ==
-X-Gm-Message-State: AOAM531HRmPaqh3IXvLJU5qRAF21nOwDTsZhfPL4QSRs0PYeFqXmHf45
-        Sfd2wXXapgE+6eAuDIMsxzM=
-X-Google-Smtp-Source: ABdhPJwYSuHy435B9Z5a5PcfNeVmW0J3NH61zH/JkhPcaTpP4mFb21PM1DgwH6aGr7locf/VelqCJA==
-X-Received: by 2002:a9d:4796:0:b0:601:94e2:ce0b with SMTP id b22-20020a9d4796000000b0060194e2ce0bmr8834819otf.197.1651004143906;
-        Tue, 26 Apr 2022 13:15:43 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o6-20020a4a84c6000000b0035e5906bcc4sm4190958oog.4.2022.04.26.13.15.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 13:15:42 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 26 Apr 2022 13:15:41 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Liu Xinpeng <liuxp11@chinatelecom.cn>
-Cc:     wim@linux-watchdog.org, tzungbi@kernel.org,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 3/3] watchdog: wdat_wdt: Stop watchdog when
- uninstalling module
-Message-ID: <20220426201541.GM4093517@roeck-us.net>
-References: <1650984810-6247-1-git-send-email-liuxp11@chinatelecom.cn>
- <1650984810-6247-4-git-send-email-liuxp11@chinatelecom.cn>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=HLfBsULnxIHtTg2vaikfG3QQHyujaLrfdQn3O+y4ETI=;
+        b=XhiohiMjmaR1F0gNG9YkijQJQLTjLyzmmEbb3wCxnVoWy4rASzNhKJTy/fCZCU8bMO
+         HAP5s9G6evViVtBcIxgIjQ7A+TMi8fpD/Gkan9kNrIJ5xVyqRw9yy0yFlRRd3Feg2Ihq
+         9cE0M4tHWz4bHvReQM07hk9kJLg+YF1Aq8uUBi+Z2QEt4O0rwXUskQd5tdEqu/SUutHv
+         Gr5yW4o/i22xE8XIfad6Ipl4a7MkAT1CckHXcpJDk3qiYwAB5HyxhpKdiGKJlsEXr2SC
+         n6qwzc10X9H4T1c71OcsPtX0w2Kc4mQergm3u742XO7bLIUSNRAfcdIr34fvA2jh6JUM
+         7gtA==
+X-Gm-Message-State: AOAM530TMB29cEWRmF9jzDh6CFSLUvhtGb195u5ewXYueC0vaJH7JtPh
+        Yo3OTJeomwkehdrNgoLgR4FFwg==
+X-Google-Smtp-Source: ABdhPJwPzMOmHWAfV+Bu4oMaLQ30snKfKqCT/WHhMeSJMw1dHMtTe7qM6LLhSrQA61YA33tSsEU15A==
+X-Received: by 2002:a5d:860d:0:b0:649:be05:7b0b with SMTP id f13-20020a5d860d000000b00649be057b0bmr10349378iol.22.1651004145105;
+        Tue, 26 Apr 2022 13:15:45 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id y126-20020a6bc884000000b00657ae00d56bsm1153279iof.48.2022.04.26.13.15.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Apr 2022 13:15:44 -0700 (PDT)
+Subject: Re: [PATCH 4.19 00/53] 4.19.240-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220426081735.651926456@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <5337eb4a-73d3-881e-83a6-69919e812f34@linuxfoundation.org>
+Date:   Tue, 26 Apr 2022 14:15:42 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1650984810-6247-4-git-send-email-liuxp11@chinatelecom.cn>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,31 +76,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 10:53:30PM +0800, Liu Xinpeng wrote:
-> Test shows that wachdog still reboots machine after the module
-> is removed. Use watchdog_stop_on_unregister to stop the watchdog
-> on removing.
+On 4/26/22 2:20 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.240 release.
+> There are 53 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Signed-off-by: Liu Xinpeng <liuxp11@chinatelecom.cn>
+> Responses should be made by Thu, 28 Apr 2022 08:17:22 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.240-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Compiled and booted on my test system. No dmesg regressions.
 
-> ---
->  drivers/watchdog/wdat_wdt.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/watchdog/wdat_wdt.c b/drivers/watchdog/wdat_wdt.c
-> index 6f36a653767b..e6f95e99156d 100644
-> --- a/drivers/watchdog/wdat_wdt.c
-> +++ b/drivers/watchdog/wdat_wdt.c
-> @@ -463,6 +463,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
->  
->  	watchdog_set_nowayout(&wdat->wdd, nowayout);
->  	watchdog_stop_on_reboot(&wdat->wdd);
-> +	watchdog_stop_on_unregister(&wdat->wdd);
->  	return devm_watchdog_register_device(dev, &wdat->wdd);
->  }
->  
-> -- 
-> 2.23.0
-> 
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah

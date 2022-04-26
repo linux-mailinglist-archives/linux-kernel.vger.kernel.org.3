@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2438450F4E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 857CD50F79E
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:40:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345423AbiDZIk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:40:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37010 "EHLO
+        id S1346475AbiDZJE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242176AbiDZIfK (ORCPT
+        with ESMTP id S1346792AbiDZIpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:35:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C9B7EA31;
-        Tue, 26 Apr 2022 01:28:22 -0700 (PDT)
+        Tue, 26 Apr 2022 04:45:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244223AA5D;
+        Tue, 26 Apr 2022 01:35:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F44061862;
-        Tue, 26 Apr 2022 08:28:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C5AAC385A0;
-        Tue, 26 Apr 2022 08:28:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B3BB7B81D1C;
+        Tue, 26 Apr 2022 08:35:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2379AC385A4;
+        Tue, 26 Apr 2022 08:35:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961701;
-        bh=znNaN40pmY2AdXWEBtRGKYdnNAEJBnzE65uE1lh9RXE=;
+        s=korg; t=1650962136;
+        bh=l9uC7Jd/JtduUprt9DTiagtw6UvvCPakC11dX7OhYYk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fe7hvPLSxxMEmoTsC8Yf4r7eJZv+bB0MdyfLVI3NJQ6UKXqzUQho5o9iFUs9+u0DW
-         E+L03QiiyMVtpO3wkdwBqyK+FrECdfk/3PexIJu0DiuNLnX7yB9rn9MR8ynVI/NArR
-         dgZIULUMTE3CbhSOF9KSFONYZyr1hMWzeche/bqM=
+        b=owHLbfJC3++i22I0pKxzjPbNHh0Jrde6hIMovt9pmKpPAvqLiTKDVKxa+jUsIRO6m
+         V2dMbXEmN8SBx7ubjfg6eCtMapEZT3UEASbKpvQyJt/MhRV9oqRtMGDe9gR0H3bro2
+         Ks45rt+fYwbZahgq/wcEruUOaJmsFs46ge5qYI3g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Maxime Ripard <maxime@cerno.tech>,
+        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        Lv Ruyi <lv.ruyi@zte.com.cn>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 32/53] drm/panel/raspberrypi-touchscreen: Initialise the bridge in prepare
+Subject: [PATCH 5.10 44/86] dpaa_eth: Fix missing of_node_put in dpaa_get_ts_info()
 Date:   Tue, 26 Apr 2022 10:21:12 +0200
-Message-Id: <20220426081736.591376322@linuxfoundation.org>
+Message-Id: <20220426081742.478241645@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
-References: <20220426081735.651926456@linuxfoundation.org>
+In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
+References: <20220426081741.202366502@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,61 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-[ Upstream commit 5f18c0782b99e26121efa93d20b76c19e17aa1dd ]
+[ Upstream commit 1a7eb80d170c28be2928433702256fe2a0bd1e0f ]
 
-The panel has a prepare call which is before video starts, and an
-enable call which is after.
-The Toshiba bridge should be configured before video, so move
-the relevant power and initialisation calls to prepare.
+Both of of_get_parent() and of_parse_phandle() return node pointer with
+refcount incremented, use of_node_put() on it to decrease refcount
+when done.
 
-Fixes: 2f733d6194bd ("drm/panel: Add support for the Raspberry Pi 7" Touchscreen.")
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220415162513.42190-3-stefan.wahren@i2se.com
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c b/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c
-index 2073e0e43e2f..f57eec47ef6a 100644
---- a/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c
-+++ b/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c
-@@ -269,7 +269,7 @@ static int rpi_touchscreen_noop(struct drm_panel *panel)
- 	return 0;
- }
+diff --git a/drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c b/drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c
+index 1268996b7030..2f9075429c43 100644
+--- a/drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c
++++ b/drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c
+@@ -489,11 +489,15 @@ static int dpaa_get_ts_info(struct net_device *net_dev,
+ 	info->phc_index = -1;
  
--static int rpi_touchscreen_enable(struct drm_panel *panel)
-+static int rpi_touchscreen_prepare(struct drm_panel *panel)
- {
- 	struct rpi_touchscreen *ts = panel_to_ts(panel);
- 	int i;
-@@ -299,6 +299,13 @@ static int rpi_touchscreen_enable(struct drm_panel *panel)
- 	rpi_touchscreen_write(ts, DSI_STARTDSI, 0x01);
- 	msleep(100);
+ 	fman_node = of_get_parent(mac_node);
+-	if (fman_node)
++	if (fman_node) {
+ 		ptp_node = of_parse_phandle(fman_node, "ptimer-handle", 0);
++		of_node_put(fman_node);
++	}
  
-+	return 0;
-+}
-+
-+static int rpi_touchscreen_enable(struct drm_panel *panel)
-+{
-+	struct rpi_touchscreen *ts = panel_to_ts(panel);
-+
- 	/* Turn on the backlight. */
- 	rpi_touchscreen_i2c_write(ts, REG_PWM, 255);
+-	if (ptp_node)
++	if (ptp_node) {
+ 		ptp_dev = of_find_device_by_node(ptp_node);
++		of_node_put(ptp_node);
++	}
  
-@@ -353,7 +360,7 @@ static int rpi_touchscreen_get_modes(struct drm_panel *panel)
- static const struct drm_panel_funcs rpi_touchscreen_funcs = {
- 	.disable = rpi_touchscreen_disable,
- 	.unprepare = rpi_touchscreen_noop,
--	.prepare = rpi_touchscreen_noop,
-+	.prepare = rpi_touchscreen_prepare,
- 	.enable = rpi_touchscreen_enable,
- 	.get_modes = rpi_touchscreen_get_modes,
- };
+ 	if (ptp_dev)
+ 		ptp = platform_get_drvdata(ptp_dev);
 -- 
 2.35.1
 

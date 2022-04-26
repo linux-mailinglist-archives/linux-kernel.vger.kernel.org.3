@@ -2,69 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61F2351002E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 16:15:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AA70510030
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 16:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351506AbiDZOSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 10:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44444 "EHLO
+        id S1351522AbiDZOSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 10:18:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238550AbiDZOSF (ORCPT
+        with ESMTP id S1351504AbiDZOS1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 10:18:05 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869F718E3A
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 07:14:58 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id j15so12427319wrb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 07:14:58 -0700 (PDT)
+        Tue, 26 Apr 2022 10:18:27 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400C710FFA
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 07:15:19 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id g19so32214051lfv.2
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 07:15:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=YH+GE7ibZOz8nvgUaj8COsFNcJ+TqdF6V4nk1yzCsxw=;
-        b=ZL5cLQCqZYNS4CQLi0TWfPze2PRkgMiFgpQCIR5G7x9xisLoTRW1a8c7Ku9DjlEzsX
-         Tk/uuczf6Ky8A/j1sLSr8QiBp/JjZS3Kiq/cg0Ehk9VT3lxZXfxtyIzB/+qNMOnxjaaZ
-         ORPWowT9HtlBzS6XU2VHjzLWUsICQDB0huvZ1pYb6Wr2/S+ga5/cl00avyGqyxadrslA
-         0nHb1PT1zIA82mD2JEx/lLwmLeicLCkZPK0bay1jqK9lYAnXSs5KNCqZr+ejYhsUIX/6
-         GeRmf4PXE/gaIJYVLk0VNgvLfmCVYY6M+MOKlA2Sw+WMOPsjkPQGvGniSEsp2oFL1i1D
-         cnUQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5igpQ4+58x30NEuf8p3ZClVfpP7R6adkl+B0PO3RM+s=;
+        b=Sljc6axvqw0XWeN52OEIVzhwmuI3qvh3ELsWRZlLvIA8vnOSNGxgf5fZAxXE53/0Y/
+         mfToiz2g+Sf7MSAPO2zTiLDWlpityvGqwiNwjP2vCHz7DGL71NPXiSPr9Q/L0+LWmryq
+         NDVPI4XhtEv2XXuFeWDegT+ReEYDPq5U8VRAdpyB3ARRl5ZMCczzwuQQ0w+czWWXQXW7
+         UQS96kLxa2WrPco6ljBrU1L5npvysddvCkaO0SERMzSbjSNIPEOezeE1gsAk0QwY8lcc
+         LhNKFMyGlstDyUjEGCQLQCTEh2nADDXLroH5r0ZrSAVlaPdY2tZ++yCLr+mv72Ak4PuH
+         GnxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=YH+GE7ibZOz8nvgUaj8COsFNcJ+TqdF6V4nk1yzCsxw=;
-        b=aB+ekS7DpUvKgxjaX57DutlTW2AhnjnCltYaO8loUKdPTiElOWc59vG9NmnFB3ZgeB
-         ZFZhCoPm2Odwyf2JO50Vk8SEZi2nGaRIoJcOoxP/fQrtRvVHND0sjbNu2urWNvnnlpH1
-         TCmtdtYZOz5xM/rvZ2Z+Prg8HqOHFQ/lqOK4wE/uPmZ7lg2cnwUT9+QLU4XZW3q8Izy3
-         zJLPRazgRpP3McXxbdwnZ+Br5TJh3M9LkbTCrxVDZajhQtf8tyGD3Xya/1A7Mkc2wnyh
-         L9ypBgJaHOLHSDZV+P8DLXVgYAHD0aJQZdzpWYXMCT9/6QXgZxW4Hgfg6FIy2I+WPev7
-         SdYw==
-X-Gm-Message-State: AOAM5312haCcuovLdt/sRAF5EpAtfEQpDFk5eRuEbPGLe00W59jQKiqA
-        lzy8/4KoH7PIOcV02/NIKwQJNg==
-X-Google-Smtp-Source: ABdhPJx7hmR/kuTWZnYQXz7AudGSpe6GTBSsqt6Wp5WE7bP0xS0edDJhbuesOs65Rcdrp4zXq78k3w==
-X-Received: by 2002:adf:f946:0:b0:1f0:62c3:ea2e with SMTP id q6-20020adff946000000b001f062c3ea2emr18309739wrr.348.1650982496973;
-        Tue, 26 Apr 2022 07:14:56 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id d17-20020adfa351000000b0020adbfb586fsm6086115wrb.117.2022.04.26.07.14.56
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5igpQ4+58x30NEuf8p3ZClVfpP7R6adkl+B0PO3RM+s=;
+        b=SqLPfRmwFJYbCeYf3E2IDFT2qnnJ25TNmi3JthoKu76uqKxUZ9+JCh25XumagjNyPX
+         f0DRx+eHCWQk3QnLx7FZtiSM9xTi/7/Y0LbNZC3+o8HZKGpY+EhTD62GiFRRf/1gQKT6
+         y0OPOQ5BLT1qNCurqZv4ah/Pi2EonRkwDA4cayQ2S3hh7rW4AFJFvsnhpllrIaoxFkmh
+         kEPUzOtvSFsrOkfg9W+Fv7q8O6otNbsNBHPzpkPW+tWpNv2ZU0JS1qkOjtRZNvojH1ZC
+         5sz2GMzUBtmR1bYmTgBbrUKGl5pNXeWU50P8AgXJoJxgLuT382t5W0CwBIlf4ZbiWg4N
+         Qj5Q==
+X-Gm-Message-State: AOAM531d7c/n6jQppAszJlVBDFxeheakGuRuuSxwv2o6qFZF0JIOzHq8
+        cdei5pt5Qy2lbZb8m/ZsRDG9VA==
+X-Google-Smtp-Source: ABdhPJwU3oGW/UlwxXr4jTVGYymcQtQY/xV0FDxikSrsdZH710NyFU3C4/61bf8yyTBw5C2SuRrVHQ==
+X-Received: by 2002:a05:6512:1194:b0:471:b0dd:8755 with SMTP id g20-20020a056512119400b00471b0dd8755mr16062966lfr.212.1650982517515;
+        Tue, 26 Apr 2022 07:15:17 -0700 (PDT)
+Received: from localhost.localdomain (h-98-128-181-154.NA.cust.bahnhof.se. [98.128.181.154])
+        by smtp.gmail.com with ESMTPSA id g23-20020a2ea4b7000000b0024f096abebdsm1043360ljm.78.2022.04.26.07.15.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 07:14:56 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 15:14:54 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Fabien Parent <fparent@baylibre.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/7] mfd: mt6397-core: add resources for PMIC keys for
- MT6359
-Message-ID: <Ymf+XudxaqucHdAB@google.com>
-References: <20220415153629.1817202-1-fparent@baylibre.com>
- <20220415153629.1817202-4-fparent@baylibre.com>
+        Tue, 26 Apr 2022 07:15:14 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
+Cc:     Kevin Hilman <khilman@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] PM: domains: Some minor improvements for genpd_power_off()
+Date:   Tue, 26 Apr 2022 16:15:04 +0200
+Message-Id: <20220426141507.89868-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220415153629.1817202-4-fparent@baylibre.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -74,20 +71,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 15 Apr 2022, Fabien Parent wrote:
+This small series intends to improve some of the execution paths when powering
+off a genpd. More information is available in the commit messages.
 
-> Add the MFD resources in order to be able to probe and use the keyboard
-> driver for the MT6359 PMIC.
-> 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> ---
->  drivers/mfd/mt6397-core.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
+Ulf Hansson (3):
+  PM: domains: Add GENPD_FLAG_RPM_ALWAYS_ON for the always-on governor
+  PM: domains: Drop redundant code for genpd always-on governor
+  PM: domain: Don't check PM_QOS_FLAG_NO_POWER_OFF in genpd
 
-Applied, thanks.
+ drivers/base/power/domain.c          | 10 ++++------
+ drivers/base/power/domain_governor.c |  6 ------
+ 2 files changed, 4 insertions(+), 12 deletions(-)
 
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.25.1
+

@@ -2,285 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA2EA50EE5F
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 03:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46DD150EE61
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 03:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241633AbiDZCBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 22:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47186 "EHLO
+        id S241686AbiDZCBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 22:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbiDZCBn (ORCPT
+        with ESMTP id S231328AbiDZCBv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 22:01:43 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 635247F213;
-        Mon, 25 Apr 2022 18:58:32 -0700 (PDT)
-X-UUID: 9195ffa0bb584458bdb89e262764789c-20220426
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:65318cd4-b088-48af-9168-170ab149b110,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:faefae9,CLOUDID:7be916f0-06b0-4305-bfbf-554bfc9d151a,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 9195ffa0bb584458bdb89e262764789c-20220426
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1969511146; Tue, 26 Apr 2022 09:58:27 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Tue, 26 Apr 2022 09:58:26 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 26 Apr
- 2022 09:58:25 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 26 Apr 2022 09:58:24 +0800
-Message-ID: <a9e026c2018668057b8482c27eeae991667c46d3.camel@mediatek.com>
-Subject: Re: [PATCH v1, 1/1] drm/mediatek: add lut diff flag for new gamma
- hardware support
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Yongqiang Niu <yongqiang.niu@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>
-CC:     Yongqiang Niu <yongqiang.niu@mediatek.corp-partner.google.com>,
-        <devicetree@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        David Airlie <airlied@linux.ie>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        "Dennis YC Hsieh" <dennis-yc.hsieh@mediatek.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>
-Date:   Tue, 26 Apr 2022 09:58:24 +0800
-In-Reply-To: <20220420130617.814-2-yongqiang.niu@mediatek.com>
-References: <20220420130617.814-1-yongqiang.niu@mediatek.com>
-         <20220420130617.814-2-yongqiang.niu@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 25 Apr 2022 22:01:51 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5057685678;
+        Mon, 25 Apr 2022 18:58:45 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E2B46210E6;
+        Tue, 26 Apr 2022 01:58:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1650938323; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=W56qHWh5atZr7qX9LectLL9QyYdxoZqmGcchx2rNVB4=;
+        b=ogqpgOIm+QovqHgwGLsn9RVn9CyEzzokAjwoArjc0FitdWnkOX8V4EN9eIa5JXd1zom9/w
+        BKmc/0RNe4fQgG/geFApwuWx0c+ez1vhbzfb6Gl41N3OXAXS0rOg58JN+oTJLKnnwDm/RM
+        MlqqJbvANe/Nq9sY4aQCB9pAuWLHQ0o=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1650938323;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=W56qHWh5atZr7qX9LectLL9QyYdxoZqmGcchx2rNVB4=;
+        b=BuMEFM+hfm66Z/j3I5avfIiqZkmeyrUkcBGq3lyfGbZ51Qxqd0VwInnFDlXpWOuEdZuGgc
+        PtQcE7PMEG1QHFBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A75BD13A97;
+        Tue, 26 Apr 2022 01:58:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id VfdrGNFRZ2LhDgAAMHmgww
+        (envelope-from <neilb@suse.de>); Tue, 26 Apr 2022 01:58:41 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Miaohe Lin" <linmiaohe@huawei.com>
+Cc:     "Christoph Hellwig" <hch@infradead.org>,
+        "David Howells" <dhowells@redhat.com>, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        "Andrew Morton" <akpm@linux-foundation.org>
+Subject: Re: [PATCH 09/10] MM: submit multipage write for SWP_FS_OPS swap-space
+In-reply-to: <033ccf1a-c6b5-fd77-0ad0-4915ff07bc15@huawei.com>
+References: <164859751830.29473.5309689752169286816.stgit@noble.brown>,
+ <164859778128.29473.5191868522654408537.stgit@noble.brown>,
+ <033ccf1a-c6b5-fd77-0ad0-4915ff07bc15@huawei.com>
+Date:   Tue, 26 Apr 2022 11:58:37 +1000
+Message-id: <165093831774.1648.3187486020864614234@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Yongqiang:
+On Mon, 18 Apr 2022, Miaohe Lin wrote:
+> On 2022/3/30 7:49, NeilBrown wrote:
+> > swap_writepage() is given one page at a time, but may be called repeatedly
+> > in succession.
+> > For block-device swapspace, the blk_plug functionality allows the
+> > multiple pages to be combined together at lower layers.
+> > That cannot be used for SWP_FS_OPS as blk_plug may not exist - it is
+> > only active when CONFIG_BLOCK=3Dy.  Consequently all swap reads over NFS
+> > are single page reads.
+> >=20
+> > With this patch we pass a pointer-to-pointer via the wbc.
+> > swap_writepage can store state between calls - much like the pointer
+> > passed explicitly to swap_readpage.  After calling swap_writepage() some
+> > number of times, the state will be passed to swap_write_unplug() which
+> > can submit the combined request.
+> >=20
+> > Reviewed-by: Christoph Hellwig <hch@lst.de>
+> > Signed-off-by: NeilBrown <neilb@suse.de>
+> ...
+> > =20
+> >  static int swap_writepage_fs(struct page *page, struct writeback_control=
+ *wbc)
+> >  {
+> > -	struct swap_iocb *sio;
+> > +	struct swap_iocb *sio =3D NULL;
+> >  	struct swap_info_struct *sis =3D page_swap_info(page);
+> >  	struct file *swap_file =3D sis->swap_file;
+> > -	struct address_space *mapping =3D swap_file->f_mapping;
+> > -	struct iov_iter from;
+> > -	int ret;
+> > +	loff_t pos =3D page_file_offset(page);
+> > =20
+> >  	set_page_writeback(page);
+> >  	unlock_page(page);
+> > -	sio =3D mempool_alloc(sio_pool, GFP_NOIO);
+> > -	init_sync_kiocb(&sio->iocb, swap_file);
+> > -	sio->iocb.ki_complete =3D sio_write_complete;
+> > -	sio->iocb.ki_pos =3D page_file_offset(page);
+> > -	sio->bvec[0].bv_page =3D page;
+> > -	sio->bvec[0].bv_len =3D PAGE_SIZE;
+> > -	sio->bvec[0].bv_offset =3D 0;
+> > -	iov_iter_bvec(&from, WRITE, &sio->bvec[0], 1, PAGE_SIZE);
+> > -	ret =3D mapping->a_ops->swap_rw(&sio->iocb, &from);
+> > -	if (ret !=3D -EIOCBQUEUED)
+> > -		sio_write_complete(&sio->iocb, ret);
+> > -	return ret;
+> > +	if (wbc->swap_plug)
+> > +		sio =3D *wbc->swap_plug;
+> > +	if (sio) {
+> > +		if (sio->iocb.ki_filp !=3D swap_file ||
+> > +		    sio->iocb.ki_pos + sio->pages * PAGE_SIZE !=3D pos) {
+> > +			swap_write_unplug(sio);
+> > +			sio =3D NULL;
+> > +		}
+> > +	}
+> > +	if (!sio) {
+> > +		sio =3D mempool_alloc(sio_pool, GFP_NOIO);
+> > +		init_sync_kiocb(&sio->iocb, swap_file);
+> > +		sio->iocb.ki_complete =3D sio_write_complete;
+> > +		sio->iocb.ki_pos =3D pos;
+> > +		sio->pages =3D 0;
+> > +	}
+> > +	sio->bvec[sio->pages].bv_page =3D page;
+> > +	sio->bvec[sio->pages].bv_len =3D PAGE_SIZE;
+>=20
+> Many thanks for your patch. And sorry for late responding and newbie questi=
+on. Does swap_writepage_fs
+> support transhuge page now? We could come across transhuge page here. But b=
+v_len =3D=3D PAGE_SIZE and pages
+> =3D=3D 1 is assumed here. Do we need something like below:
+>=20
+> sio->bvec[sio->pages].bv_len =3D thp_size(page);
+> sio->pages +=3D thp_nr_pages(page);
 
-On Wed, 2022-04-20 at 21:06 +0800, Yongqiang Niu wrote:
-> From: Yongqiang Niu <yongqiang.niu@mediatek.corp-partner.google.com>
-> 
-> mt8183 gamma module usage is different with before soc,
-> gamma odd(index start from 0) lut value set to hardware
-> register should be
-> the difference of current lut value with last lut value.
-> 
-> gamma function support both increase and decrease lut.
+Yes, that probably makes sense.  I'll have a closer look and maybe
+resend later this week.
 
-How to set decrease lut?
+Thanks,
+NeilBrown
 
-Original lut:
-12 10 8 6 4 2
 
-Does diff lut look like this?
-12 [2] 8 [2] 4 [2]
-
-How does hardware know that this is increase lut or decrease lut?
-
-> chrome os app set increase lut normally.
-> 
-> for increase lut example, chrome os user space set lut
-> like this(only r chanel for example):
-> 2 4 6 8 10 12.
-> 1) mt8183 gamma driver should set the gamma lut to hardware
-> register like this:
-> 2 [2] 6 [8] 10 [2]
-
-2 [2] 6 [2] 10 [2]
-
-> the value with [] is the difference value
-> 2) gamma hardware will restore the lut when apply gamma
-> function to display
-
-I don't know why do you mention the 'restore', any modification is
-related to this?
-
-> 
-> Signed-off-by: Yongqiang Niu <
-> yongqiang.niu@mediatek.corp-partner.google.com>
-> ---
->  drivers/gpu/drm/mediatek/mtk_disp_aal.c   |  4 ++-
->  drivers/gpu/drm/mediatek/mtk_disp_drv.h   |  2 +-
->  drivers/gpu/drm/mediatek/mtk_disp_gamma.c | 34 +++++++++++++++++++
-> ----
->  3 files changed, 32 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_aal.c
-> b/drivers/gpu/drm/mediatek/mtk_disp_aal.c
-> index f46d4ab73d6a..e6378b074a17 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_disp_aal.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_disp_aal.c
-> @@ -23,6 +23,7 @@
->  
->  struct mtk_disp_aal_data {
->  	bool has_gamma;
-> +	bool lut_diff;
->  };
->  
->  /**
-> @@ -66,7 +67,7 @@ void mtk_aal_gamma_set(struct device *dev, struct
-> drm_crtc_state *state)
->  	struct mtk_disp_aal *aal = dev_get_drvdata(dev);
->  
->  	if (aal->data && aal->data->has_gamma)
-> -		mtk_gamma_set_common(aal->regs, state);
-> +		mtk_gamma_set_common(aal->regs, state, aal->data-
-> >lut_diff);
-
-gamma in aal does not support diff lut, so this would make things
-simple.
-
-mtk_gamma_set_common(aal->regs, state, false);
-
-Regards,
-CK
-
->  }
->  
->  void mtk_aal_start(struct device *dev)
-> @@ -148,6 +149,7 @@ static int mtk_disp_aal_remove(struct
-> platform_device *pdev)
->  
->  static const struct mtk_disp_aal_data mt8173_aal_driver_data = {
->  	.has_gamma = true,
-> +	.lut_diff = false,
->  };
->  
->  static const struct of_device_id mtk_disp_aal_driver_dt_match[] = {
-> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_drv.h
-> b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
-> index 86c3068894b1..3380651c6707 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_disp_drv.h
-> +++ b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
-> @@ -51,7 +51,7 @@ void mtk_gamma_config(struct device *dev, unsigned
-> int w,
->  		      unsigned int h, unsigned int vrefresh,
->  		      unsigned int bpc, struct cmdq_pkt *cmdq_pkt);
->  void mtk_gamma_set(struct device *dev, struct drm_crtc_state
-> *state);
-> -void mtk_gamma_set_common(void __iomem *regs, struct drm_crtc_state
-> *state);
-> +void mtk_gamma_set_common(void __iomem *regs, struct drm_crtc_state
-> *state, bool lut_diff);
->  void mtk_gamma_start(struct device *dev);
->  void mtk_gamma_stop(struct device *dev);
->  
-> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
-> b/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
-> index 3a5815ab4079..fec2e9a5b60d 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
-> @@ -27,6 +27,7 @@
->  
->  struct mtk_disp_gamma_data {
->  	bool has_dither;
-> +	bool lut_diff;
->  };
->  
->  /*
-> @@ -53,12 +54,13 @@ void mtk_gamma_clk_disable(struct device *dev)
->  	clk_disable_unprepare(gamma->clk);
->  }
->  
-> -void mtk_gamma_set_common(void __iomem *regs, struct drm_crtc_state
-> *state)
-> +void mtk_gamma_set_common(void __iomem *regs, struct drm_crtc_state
-> *state, bool lut_diff)
->  {
->  	unsigned int i, reg;
->  	struct drm_color_lut *lut;
->  	void __iomem *lut_base;
->  	u32 word;
-> +	u32 diff[3] = {0};
->  
->  	if (state->gamma_lut) {
->  		reg = readl(regs + DISP_GAMMA_CFG);
-> @@ -67,9 +69,20 @@ void mtk_gamma_set_common(void __iomem *regs,
-> struct drm_crtc_state *state)
->  		lut_base = regs + DISP_GAMMA_LUT;
->  		lut = (struct drm_color_lut *)state->gamma_lut->data;
->  		for (i = 0; i < MTK_LUT_SIZE; i++) {
-> -			word = (((lut[i].red >> 6) & LUT_10BIT_MASK) <<
-> 20) +
-> -				(((lut[i].green >> 6) & LUT_10BIT_MASK)
-> << 10) +
-> -				((lut[i].blue >> 6) & LUT_10BIT_MASK);
-> +
-> +			if (!lut_diff || (i % 2 == 0)) {
-> +				word = (((lut[i].red >> 6) &
-> LUT_10BIT_MASK) << 20) +
-> +					(((lut[i].green >> 6) &
-> LUT_10BIT_MASK) << 10) +
-> +					((lut[i].blue >> 6) &
-> LUT_10BIT_MASK);
-> +			} else {
-> +				diff[0] = abs((lut[i].red >> 6) -
-> (lut[i - 1].red >> 6));
-> +				diff[1] = abs((lut[i].green >> 6) -
-> (lut[i - 1].green >> 6));
-> +				diff[2] = abs((lut[i].blue >> 6) -
-> (lut[i - 1].blue >> 6));
-> +
-> +				word = ((diff[0] & LUT_10BIT_MASK) <<
-> 20) +
-> +					((diff[1] & LUT_10BIT_MASK) <<
-> 10) +
-> +					(diff[2] & LUT_10BIT_MASK);
-> +			}
->  			writel(word, (lut_base + i * 4));
->  		}
->  	}
-> @@ -78,8 +91,12 @@ void mtk_gamma_set_common(void __iomem *regs,
-> struct drm_crtc_state *state)
->  void mtk_gamma_set(struct device *dev, struct drm_crtc_state *state)
->  {
->  	struct mtk_disp_gamma *gamma = dev_get_drvdata(dev);
-> +	bool lut_diff = false;
-> +
-> +	if (gamma->data)
-> +		lut_diff = gamma->data->lut_diff;
->  
-> -	mtk_gamma_set_common(gamma->regs, state);
-> +	mtk_gamma_set_common(gamma->regs, state, lut_diff);
->  }
->  
->  void mtk_gamma_config(struct device *dev, unsigned int w,
-> @@ -176,10 +193,15 @@ static const struct mtk_disp_gamma_data
-> mt8173_gamma_driver_data = {
->  	.has_dither = true,
->  };
->  
-> +static const struct mtk_disp_gamma_data mt8183_gamma_driver_data = {
-> +	.lut_diff = true,
-> +};
-> +
->  static const struct of_device_id mtk_disp_gamma_driver_dt_match[] =
-> {
->  	{ .compatible = "mediatek,mt8173-disp-gamma",
->  	  .data = &mt8173_gamma_driver_data},
-> -	{ .compatible = "mediatek,mt8183-disp-gamma"},
-> +	{ .compatible = "mediatek,mt8183-disp-gamma",
-> +	  .data = &mt8183_gamma_driver_data},
->  	{},
->  };
->  MODULE_DEVICE_TABLE(of, mtk_disp_gamma_driver_dt_match);
-
+>=20
+> Thanks! :)
+>=20
+> > +	sio->bvec[sio->pages].bv_offset =3D 0;
+> ...
+> > .
+> >=20
+>=20
+>=20

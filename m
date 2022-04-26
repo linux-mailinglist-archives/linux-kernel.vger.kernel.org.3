@@ -2,122 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C36850FC04
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 13:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 165CA50FC0E
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 13:38:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349568AbiDZLgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 07:36:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49556 "EHLO
+        id S1346149AbiDZLlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 07:41:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238202AbiDZLgm (ORCPT
+        with ESMTP id S238202AbiDZLld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 07:36:42 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE91CCD679
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 04:33:34 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C71D3487;
-        Tue, 26 Apr 2022 13:33:31 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1650972812;
-        bh=x0u0Pc7FPhAWSn7VfEpmqZSQUGOs2PWVzeM3l1YkXN4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vHTox3YtR2pMYrN9xkkLGM6scoJ3J8KQlxC/pE11PRv2EBPvTFIZzdku9HEDl8X1l
-         nYAtBumbnoIs8/FmsTsUo3Yn54QqR7T1P2Iuhm+S8heezP8omNUoywsMhSsi8E15Nl
-         KD9qaROtYbqBUgZpdn401N/V+LQBc6MO9i9Iq764=
-Date:   Tue, 26 Apr 2022 14:33:31 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     Maxime Ripard <maxime@cerno.tech>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Rob Clark <robdclark@gmail.com>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robert Foss <robert.foss@linaro.org>
-Subject: Re: [PATCH 2/2] Revert "drm: of: Lookup if child node has panel or
- bridge"
-Message-ID: <YmfYi5G7hMKLAH3T@pendragon.ideasonboard.com>
-References: <20220420231230.58499-1-bjorn.andersson@linaro.org>
- <20220420231230.58499-2-bjorn.andersson@linaro.org>
- <CAMty3ZAw7DUSnBePC05qC8Gn6ESKiu+FHw4a-HPPc05VX1hqhg@mail.gmail.com>
- <20220421082358.ivpmtak3ednvddrc@houat>
- <YmEdAVwZuA7Wo1Ch@aptenodytes>
- <YmelPCcWCCjALtRU@aptenodytes>
+        Tue, 26 Apr 2022 07:41:33 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4355A1EEF5;
+        Tue, 26 Apr 2022 04:38:23 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id ay36-20020a05600c1e2400b0038ebc885115so953782wmb.1;
+        Tue, 26 Apr 2022 04:38:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=l7SZN+gn+w67vIMUfY98UKAbA7uOnpDqNzGrHL+gC5c=;
+        b=eoStLUnb7CeMxd9hbZy/U6QAaT5n5EugAremR3+IdPRp5H5amqgs/NWJ65/XbyxCiV
+         tA/Ghtpc2H3RiqPHoA155YmW+UXiIZtbvlw1Qn7HAk7cBCEY85vBckZprdXODtn72NX4
+         yFLxdwDX1l8JJnRUAroTga4EF3mIaMWj8lgpS9FEPmd6KtD+dFgOQ2khtMwoZ64h3mXr
+         ponXh4dwjbuGcQah0m5tJJK++QdejeORxZin/gto1x9Wsk0WTEOyaXZsO26r9WCErmcC
+         xy93F4s3SEn4/EJNvs//LAEHVpxT2SgHLGIv2xMV6+P5Cq+OsZfeDfHJbHkJtZ/rU+dF
+         zGmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=l7SZN+gn+w67vIMUfY98UKAbA7uOnpDqNzGrHL+gC5c=;
+        b=T8e1Ex1Ma2OazIOVWcznyUlRDADg/JyXHgEk2W3ne9ofSQ48Ok/Uv5oy6qJzv+/hR+
+         7/fgbs58hSLIvuHnI2ZPWyOCQRNtArqdx9alyuZs82wTyoWlrOXBauizBEj8eQ8eMiSl
+         HZw0OYDCOmvezPi8PdqCuxrj+kxGiyJJhbRcXjO37QG60PvvS2ktI3O07UJLrDZvuMvZ
+         CSCQuto61k1C5iCZl/yRsqAplsr6VG+XZ2fAgupiJVIvPLl8xV65mMZMgeG7z3Uwndlu
+         lImTpTUE6wVuUAVzrqahNz9S82BybG61NqLc/+kdhV0sGoPtj4gg3o+BfwEBcE71z4Sb
+         ykVQ==
+X-Gm-Message-State: AOAM533u6+PTvvKbleOJ4fg4O+5UKugIPGpXkPtj8zcu4kBfg423ZYR4
+        2ERbPmyodPfA1MFPAQIAeyo=
+X-Google-Smtp-Source: ABdhPJzlJ/ygsvmUV/0F3Ng+ZTbfSop588wEeRpKx1ZJ5wlB2aCBxL7+8NSqY0vDH3NutnV/DdmyJA==
+X-Received: by 2002:a1c:5401:0:b0:38e:bf1c:d25c with SMTP id i1-20020a1c5401000000b0038ebf1cd25cmr20730810wmb.119.1650973101751;
+        Tue, 26 Apr 2022 04:38:21 -0700 (PDT)
+Received: from [192.168.0.43] (static-35-180-85-188.ipcom.comunitel.net. [188.85.180.35])
+        by smtp.gmail.com with ESMTPSA id e17-20020adfa451000000b0020ada1a7c82sm5508369wra.11.2022.04.26.04.38.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Apr 2022 04:38:21 -0700 (PDT)
+Message-ID: <1e951bad-1f26-6de2-43be-b1b5dc384794@gmail.com>
+Date:   Tue, 26 Apr 2022 13:38:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YmelPCcWCCjALtRU@aptenodytes>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] cpufreq: mediatek: Fix NULL pointer dereference in
+ mediatek-cpufreq
+Content-Language: en-US
+To:     Wan Jiabing <wanjiabing@vivo.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220426111715.627609-1-wanjiabing@vivo.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220426111715.627609-1-wanjiabing@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 09:54:36AM +0200, Paul Kocialkowski wrote:
-> On Thu 21 Apr 22, 10:59, Paul Kocialkowski wrote:
-> > On Thu 21 Apr 22, 10:23, Maxime Ripard wrote:
-> > > On Thu, Apr 21, 2022 at 01:15:54PM +0530, Jagan Teki wrote:
-> > > > + Linus
-> > > > + Marek
-> > > > + Laurent
-> > > > + Robert
-> > > > 
-> > > > On Thu, Apr 21, 2022 at 4:40 AM Bjorn Andersson wrote:
-> > > > >
-> > > > > Commit '80253168dbfd ("drm: of: Lookup if child node has panel or
-> > > > > bridge")' attempted to simplify the case of expressing a simple panel
-> > > > > under a DSI controller, by assuming that the first non-graph child node
-> > > > > was a panel or bridge.
-> > > > >
-> > > > > Unfortunately for non-trivial cases the first child node might not be a
-> > > > > panel or bridge.  Examples of this can be a aux-bus in the case of
-> > > > > DisplayPort, or an opp-table represented before the panel node.
-> > > > >
-> > > > > In these cases the reverted commit prevents the caller from ever finding
-> > > > > a reference to the panel.
-> > > > >
-> > > > > This reverts commit '80253168dbfd ("drm: of: Lookup if child node has
-> > > > > panel or bridge")', in favor of using an explicit graph reference to the
-> > > > > panel in the trivial case as well.
-> > > > 
-> > > > This eventually breaks many child-based devm_drm_of_get_bridge
-> > > > switched drivers.  Do you have any suggestions on how to proceed to
-> > > > succeed in those use cases as well?
-> > > 
-> > > I guess we could create a new helper for those, like
-> > > devm_drm_of_get_bridge_with_panel, or something.
-> > 
-> > Oh wow I feel stupid for not thinking about that.
-> > 
-> > Yeah I agree that it seems like the best option.
-> 
-> Should I prepare a patch with such a new helper?
-> 
-> The idea would be to keep drm_of_find_panel_or_bridge only for the of graph
-> case and add one for the child node case, maybe:
-> drm_of_find_child_panel_or_bridge.
-> 
-> I really don't have a clear idea of which driver would need to be switched
-> over though. Could someone (Jagan?) let me know where it would be needed?
-> 
-> Are there cases where we could both expect of graph and child node?
-> (i.e. does the new helper also need to try via of graph?)
 
-I still think we should use OF graph uncondtionally, even in the DSI
-case. We need to ensure backward-compatibility, but I'd like new
-bindings (and thus new drivers) to always use OF graph.
 
--- 
-Regards,
+On 26/04/2022 13:17, Wan Jiabing wrote:
+> Fix following coccicheck error:
+> drivers/cpufreq/mediatek-cpufreq.c:464:16-23: ERROR: info is NULL but dereferenced.
+> 
+> Use pr_err instead of dev_err to avoid dereferring a NULL pointer.
+> 
+> Fixes: f52b16ba9fe4 ("cpufreq: mediatek: Use device print to show logs")
+> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
 
-Laurent Pinchart
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+
+> ---
+>   drivers/cpufreq/mediatek-cpufreq.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+> index bcabb3726a5b..901042e9a240 100644
+> --- a/drivers/cpufreq/mediatek-cpufreq.c
+> +++ b/drivers/cpufreq/mediatek-cpufreq.c
+> @@ -461,8 +461,8 @@ static int mtk_cpufreq_init(struct cpufreq_policy *policy)
+>   
+>   	info = mtk_cpu_dvfs_info_lookup(policy->cpu);
+>   	if (!info) {
+> -		dev_err(info->cpu_dev,
+> -			"dvfs info for cpu%d is not initialized.\n", policy->cpu);
+> +		pr_err("dvfs info for cpu%d is not initialized.\n",
+> +			policy->cpu);
+>   		return -EINVAL;
+>   	}
+>   

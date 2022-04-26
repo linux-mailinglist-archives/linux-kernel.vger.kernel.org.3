@@ -2,138 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82BBB50F494
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3458250F530
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:52:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345014AbiDZIhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36920 "EHLO
+        id S1345474AbiDZIm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345297AbiDZIe3 (ORCPT
+        with ESMTP id S1345499AbiDZIek (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:34:29 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1602774848;
-        Tue, 26 Apr 2022 01:27:00 -0700 (PDT)
-X-UUID: d252231955874f388ed19aaa27160fc0-20220426
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:12f92259-211b-468d-92b1-beb7f924bcc5,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-INFO: VERSION:1.1.4,REQID:12f92259-211b-468d-92b1-beb7f924bcc5,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:45
-X-CID-META: VersionHash:faefae9,CLOUDID:a5e6bb2e-6199-437e-8ab4-9920b4bc5b76,C
-        OID:IGNORED,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,File:ni
-        l,QS:0,BEC:nil
-X-UUID: d252231955874f388ed19aaa27160fc0-20220426
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 465555622; Tue, 26 Apr 2022 16:26:55 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Tue, 26 Apr 2022 16:26:54 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 26 Apr 2022 16:26:54 +0800
-Message-ID: <1ec1f18809a75faef249cf2303dd19d26c51afff.camel@mediatek.com>
-Subject: Re: [PATCH V4 01/14] dt-bindings: cpufreq: mediatek: Add MediaTek
- CCI property
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
-        <matthias.bgg@gmail.com>
-CC:     <jia-wei.chang@mediatek.com>, <roger.lu@mediatek.com>,
-        <hsinyi@google.com>, <khilman@baylibre.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 26 Apr 2022 16:26:54 +0800
-In-Reply-To: <9ff80bc2-d63b-14aa-5769-20bff6e3a21e@linaro.org>
-References: <20220422075239.16437-1-rex-bc.chen@mediatek.com>
-         <20220422075239.16437-2-rex-bc.chen@mediatek.com>
-         <f2e5a34b-ed02-91a1-bc7b-fecaa95e227e@linaro.org>
-         <811bf944-a230-ab9b-583a-840e57af8a1e@linaro.org>
-         <28f75ac2995b116af9b2accf760786d1d1798c93.camel@mediatek.com>
-         <7873f0fa-25c3-191f-5096-3ceb9afd50cc@linaro.org>
-         <c1b910098a0a5cbe06ec971c1bf745ac37986274.camel@mediatek.com>
-         <9ff80bc2-d63b-14aa-5769-20bff6e3a21e@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 26 Apr 2022 04:34:40 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6281078933;
+        Tue, 26 Apr 2022 01:27:31 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-e93ff05b23so5549026fac.9;
+        Tue, 26 Apr 2022 01:27:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=JyWiIRUPQ2EQSPq1mXaopILM4bH8C27NOUyoSKH0Kx0=;
+        b=GnmfzeNbJetLPcgOVIDW167P97CHVrHZEtM+M2S9wFPQjOUEmoHfTfmzpCm2EjZM0K
+         whuvCP9KJpqrXXQUmXikaAC0v8o2lDEi0kjrpgfsFM3y98aKviiAn+MXpe1N3OdOLlRG
+         xl2/UNLA28EBEjDv7j1N04M6Lt+6ZzTPZc265ucTjKj83saennVZrRWbCx5e8sLGMeVx
+         ygCiGroytXMSHv5y6S0AgYw5vDoXwxPkQA4ow2axQs7VAndznkVgZEmwZpgpfWs6aUQR
+         JpArsopYmKPWSPsnzCHLU1XfQePgiqgCJbV3ZMQU1Qw+qjqnQsUghQM+vF4LFb02MSSr
+         4QYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=JyWiIRUPQ2EQSPq1mXaopILM4bH8C27NOUyoSKH0Kx0=;
+        b=SN9wRxAJAO89dU1lPsl1tsqJLkGIoBzbtlKR7C1XwD7eTb4SxFbhJUd1ZjJRvqRDZh
+         3AxfzV8kcmFqcSZlcVIZJzqFpqYlClPulAPGkF+j36pjRuvEZIDBnRsT4H+Nr7lfZai1
+         TvShU8w8+Thwj98I4BYnLsfwFkPZo3wBFCI6PK4ztHNQfgbOx+dPqzMSobF4wQoTuMBr
+         GBg3Y460hdmcQ/1t9jjsjdrJlSY0GlYbDmph0GSOruC/sXO9y7NSm/76qb8tfCPo5ggF
+         Q1EiWBdMoBELRsDdAWvgTYrFiS/DcTp4ZAgsBXU+m7mFhUQVI0lglItqNmZRkOI/eVzT
+         Wqyg==
+X-Gm-Message-State: AOAM533Mc7McIkChWqLPZYlWcSm/9k4pux+E+C+ifj4wiVGcxx1lgewD
+        cC0ncf2SdwSB7NECy5dZ6EC+lWFrWAQ=
+X-Google-Smtp-Source: ABdhPJxI6qYl36Xp+qPV11OmVb8RL5z0QIOZJOtq0tjrrNmAI9DxIvRi55kIn0SC5Jq7y7Xi1v4n/w==
+X-Received: by 2002:a05:6870:5a5:b0:e2:896a:80c with SMTP id m37-20020a05687005a500b000e2896a080cmr8381464oap.131.1650961651221;
+        Tue, 26 Apr 2022 01:27:31 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j9-20020a056808056900b0032252797ea4sm4718739oig.6.2022.04.26.01.27.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Apr 2022 01:27:30 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <aaccd71a-64f7-7d8f-f5a7-41164ad80f1e@roeck-us.net>
+Date:   Tue, 26 Apr 2022 01:27:28 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4 4/4] watchdog: iTCO_wdg: Make code more clearly with
+ macro definition
+Content-Language: en-US
+To:     "liuxp11@chinatelecom.cn" <liuxp11@chinatelecom.cn>,
+        wim <wim@linux-watchdog.org>, Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     linux-watchdog <linux-watchdog@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <1650957029-910-1-git-send-email-liuxp11@chinatelecom.cn>
+ <1650957029-910-5-git-send-email-liuxp11@chinatelecom.cn>
+ <9f991b4d-8f02-6c07-a8b6-2861837a0224@roeck-us.net>
+ <2022042616173226700718@chinatelecom.cn>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <2022042616173226700718@chinatelecom.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-04-25 at 12:52 +0200, Krzysztof Kozlowski wrote:
-> On 25/04/2022 12:20, Rex-BC Chen wrote:
-> > > However I am not sure if you solved your problem... see below:
-> > > 
-> > > > For example:
-> > > > mediatek cci set 1.2V originally. When cpufreq want to adjust
-> > > > lower
-> > > > frequency adn set voltage to 1.0V.
-> > > > The framework will remain using 1.2V to prevent crash of
-> > > > mediatek
-> > > > cci.
-> > > 
-> > > No, regulator_set_voltage() for proc_reg says:
-> > > "NOTE: If the regulator is shared between several devices then
-> > > the
-> > > lowest
-> > >  request voltage that meets the system constraints will be used."
-> > > 
-> > > Not the highest. So when your devfreq and cpufreq boots, calling
-> > > regulator_set_voltage will still cause high frequency and low
-> > > voltage.
-> > > 
-> > 
-> > From the driver comment, I think it still needs to match "meets the
-> > system constraints".
-> > 
-> > From drivers, we can trace the driver and it finally to
-> > regulator_get_optimal_voltage().
-> > In [1], the framework will get max voltage while finding each
-> > device's
-> > voltage.
-> > 
-> > [1]: 
-> > 
-https://urldefense.com/v3/__https://elixir.bootlin.com/linux/latest/source/drivers/regulator/core.c*L3815__;Iw!!CTRNKA9wMg0ARbw!35L9ISPWDpbGPsLEc0935D2nWTLtaLSNfPipvteddPaxwO2i_KaN0wfWegpkyaPjjagW$
-> >  
+On 4/26/22 01:17, liuxp11@chinatelecom.cn wrote:
+>     On 4/26/22 00:10, Liu Xinpeng wrote:
+>      > Using SET_NOIRQ_SYSTEM_SLEEP_PM_OPS reduces redundant code.
+>      >
+>      > Signed-off-by: Liu Xinpeng <liuxp11@chinatelecom.cn>
+>      > Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
+>      > ---
+>      >   drivers/watchdog/iTCO_wdt.c | 12 ++++--------
+>      >   1 file changed, 4 insertions(+), 8 deletions(-)
+>      >
+>      > diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
+>      > index 3f2f4343644f..8d24cf4f4ca3 100644
+>      > --- a/drivers/watchdog/iTCO_wdt.c
+>      > +++ b/drivers/watchdog/iTCO_wdt.c
+>      > @@ -635,22 +635,18 @@ static int iTCO_wdt_resume_noirq(struct device *dev)
+>      >
+>      >   return 0;
+>      >   }
+>      > +#endif /* CONFIG_PM_SLEEP */
+>      >
+>      >   static const struct dev_pm_ops iTCO_wdt_pm = {
+>      > - .suspend_noirq = iTCO_wdt_suspend_noirq,
+>      > - .resume_noirq = iTCO_wdt_resume_noirq,
+>      > + SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(iTCO_wdt_suspend_noirq,
+>      > +       iTCO_wdt_resume_noirq)
+>      >   };
+>      >
+>      > -#define ITCO_WDT_PM_OPS (&iTCO_wdt_pm)
+>      > -#else
+>      > -#define ITCO_WDT_PM_OPS NULL
+>      > -#endif /* CONFIG_PM_SLEEP */
+>      > -
+>      >   static struct platform_driver iTCO_wdt_driver = {
+>      >   .probe          = iTCO_wdt_probe,
+>      >   .driver         = {
+>      >   .name   = DRV_NAME,
+>      > - .pm     = ITCO_WDT_PM_OPS,
+>      > + .pm     = &iTCO_wdt_pm,
+>      >   },
+>      >   };
+>      >
+>     Sorry, I fail to see how this is an improvement.
 > 
-> Right, actually in your case it's the regulator_check_consumers()
-> above
-> that line, because you
+>     Guenter
+>     --->
+>     #define NOIRQ_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+>              .suspend_noirq = pm_sleep_ptr(suspend_fn), \
+>              .resume_noirq = pm_sleep_ptr(resume_fn), \
+>              .freeze_noirq = pm_sleep_ptr(suspend_fn), \
+>              .thaw_noirq = pm_sleep_ptr(resume_fn), \
+>              .poweroff_noirq = pm_sleep_ptr(suspend_fn), \
+>              .restore_noirq = pm_sleep_ptr(resume_fn),
 > 
-> I think it's quite generic problem, so would be worth solving for
-> more
-> regulator consumers, but your approach is fine. At least I do not
-> have
-> anything smarter, at the moment.
+>     NOIRQ_SYSTEM_SLEEP_PM_OPS, defined for CONFIG_PM_SLEEP, will
+>       point ->suspend_noirq, ->freeze_noirq and ->poweroff_noirq to the same
+>       function. Vice versa happens for ->resume_noirq, ->thaw_noirq and ->restore_noirq.
+>       (commit 020af89a41c41fd2c92d0da524968dfaba6269f0)
 > 
-> Best regards,
-> Krzysztof
+>     Some power management occasion needs freeze_noirq/thaw_noirq /poweroff_noirq /restore_noirq.
+> 
 
-Hello Krzysztof,
+That isn't what the commit description and subject say. Change description
+and subject to describe what is actually done, use __maybe_unused instead
+of #ifdef as suggested, and do not invent Reviewed-by: tags.
 
-Thanks for your review!
-I will send next version to modify the description of mediatek,cci when
-the driver part is explained clear.
+Also, this is an independent change, and should not be sent together
+with the other patches.
 
-BRs,
-Rex
-
+Guenter

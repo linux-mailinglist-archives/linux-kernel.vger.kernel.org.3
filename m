@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD88D50F7C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE38550F56F
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343519AbiDZJ2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:28:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36994 "EHLO
+        id S1346655AbiDZIuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347395AbiDZJFd (ORCPT
+        with ESMTP id S1345874AbiDZIjk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:05:33 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F401114F9B;
-        Tue, 26 Apr 2022 01:44:35 -0700 (PDT)
+        Tue, 26 Apr 2022 04:39:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9450793A9;
+        Tue, 26 Apr 2022 01:32:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 68893CE1BC9;
-        Tue, 26 Apr 2022 08:44:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B25BC385B1;
-        Tue, 26 Apr 2022 08:44:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B6356186E;
+        Tue, 26 Apr 2022 08:32:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A881C385A0;
+        Tue, 26 Apr 2022 08:32:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962671;
-        bh=1XJ1Sf60yZQU4IASk4WLywESxjLgzcT8qGbx2geJLIg=;
+        s=korg; t=1650961932;
+        bh=avBp042OE31BMRDyzTLJ+AKx4VLhedoWFD+owDAlhws=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uPT7lObJB2Dho6jYke9Eoj6X84bCWj3Uy5vT/fREBl4+f4FMIctXHjIKBh68tGIib
-         REFEWr7cfscVI2Svs/mYavZi+pnMVPeY1uucplIjRGdL0/RbMuupP5auvIditxHtNX
-         kcxxGAsoeT/CTa413VfOAhLAjWyryQIv7/Cbi9U0=
+        b=UG0C0NrntO5mQyEsIh7nUGPs7OaqZ336c4Jr3sJiOWQVbE3n8OrizUxFkQZIwCoFn
+         I54mR/yXaruuK6DjtutzWmS5Zq1PLxWGqQyds7PSnTW7JrlKTP7pvLXH8PPTNG9l1g
+         ie6usWZPTXYcKEjRMJWsMsdIYiSyUmwNA0J0eJrQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dave Hansen <dave.hansen@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 049/146] dmaengine: idxd: fix retry value to be constant for duration of function call
-Date:   Tue, 26 Apr 2022 10:20:44 +0200
-Message-Id: <20220426081751.449551776@linuxfoundation.org>
+        stable@vger.kernel.org, Dima Ruinskiy <dima.ruinskiy@intel.com>,
+        Sasha Neftin <sasha.neftin@intel.com>,
+        Naama Meir <naamax.meir@linux.intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 17/86] igc: Fix infinite loop in release_swfw_sync
+Date:   Tue, 26 Apr 2022 10:20:45 +0200
+Message-Id: <20220426081741.703088248@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
-References: <20220426081750.051179617@linuxfoundation.org>
+In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
+References: <20220426081741.202366502@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,47 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Jiang <dave.jiang@intel.com>
+From: Sasha Neftin <sasha.neftin@intel.com>
 
-[ Upstream commit bc3452cdfc468a65965d0ac397c940acb787ea4d ]
+[ Upstream commit 907862e9aef75bf89e2b265efcc58870be06081e ]
 
-When retries is compared to wq->enqcmds_retries each loop of idxd_enqcmds(),
-wq->enqcmds_retries can potentially changed by user. Assign the value
-of retries to wq->enqcmds_retries during initialization so it is the
-original value set when entering the function.
+An infinite loop may occur if we fail to acquire the HW semaphore,
+which is needed for resource release.
+This will typically happen if the hardware is surprise-removed.
+At this stage there is nothing to do, except log an error and quit.
 
-Fixes: 7930d8553575 ("dmaengine: idxd: add knob for enqcmds retries")
-Suggested-by: Dave Hansen <dave.hansen@intel.com>
-Signed-off-by: Dave Jiang <dave.jiang@intel.com>
-Link: https://lore.kernel.org/r/165031760154.3658664.1983547716619266558.stgit@djiang5-desk3.ch.intel.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Fixes: c0071c7aa5fe ("igc: Add HW initialization code")
+Suggested-by: Dima Ruinskiy <dima.ruinskiy@intel.com>
+Signed-off-by: Sasha Neftin <sasha.neftin@intel.com>
+Tested-by: Naama Meir <naamax.meir@linux.intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma/idxd/submit.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/intel/igc/igc_i225.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/dma/idxd/submit.c b/drivers/dma/idxd/submit.c
-index 554b0602d2e9..c01db23e3333 100644
---- a/drivers/dma/idxd/submit.c
-+++ b/drivers/dma/idxd/submit.c
-@@ -150,7 +150,7 @@ static void llist_abort_desc(struct idxd_wq *wq, struct idxd_irq_entry *ie,
-  */
- int idxd_enqcmds(struct idxd_wq *wq, void __iomem *portal, const void *desc)
+diff --git a/drivers/net/ethernet/intel/igc/igc_i225.c b/drivers/net/ethernet/intel/igc/igc_i225.c
+index 553d6bc78e6b..624236a4202e 100644
+--- a/drivers/net/ethernet/intel/igc/igc_i225.c
++++ b/drivers/net/ethernet/intel/igc/igc_i225.c
+@@ -156,8 +156,15 @@ void igc_release_swfw_sync_i225(struct igc_hw *hw, u16 mask)
  {
--	unsigned int retries = 0;
-+	unsigned int retries = wq->enqcmds_retries;
- 	int rc;
+ 	u32 swfw_sync;
  
- 	do {
-@@ -158,7 +158,7 @@ int idxd_enqcmds(struct idxd_wq *wq, void __iomem *portal, const void *desc)
- 		if (rc == 0)
- 			break;
- 		cpu_relax();
--	} while (retries++ < wq->enqcmds_retries);
-+	} while (retries--);
+-	while (igc_get_hw_semaphore_i225(hw))
+-		; /* Empty */
++	/* Releasing the resource requires first getting the HW semaphore.
++	 * If we fail to get the semaphore, there is nothing we can do,
++	 * except log an error and quit. We are not allowed to hang here
++	 * indefinitely, as it may cause denial of service or system crash.
++	 */
++	if (igc_get_hw_semaphore_i225(hw)) {
++		hw_dbg("Failed to release SW_FW_SYNC.\n");
++		return;
++	}
  
- 	return rc;
- }
+ 	swfw_sync = rd32(IGC_SW_FW_SYNC);
+ 	swfw_sync &= ~mask;
 -- 
 2.35.1
 

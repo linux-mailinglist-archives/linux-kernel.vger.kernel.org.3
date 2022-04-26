@@ -2,155 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85CA7510A84
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:33:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FAA5510A8F
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:33:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354999AbiDZUgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 16:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42676 "EHLO
+        id S1355016AbiDZUgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 16:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354988AbiDZUgH (ORCPT
+        with ESMTP id S1355020AbiDZUgS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:36:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031641A816F;
-        Tue, 26 Apr 2022 13:32:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 68AB461230;
-        Tue, 26 Apr 2022 20:32:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF77FC385A0;
-        Tue, 26 Apr 2022 20:32:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651005174;
-        bh=y6FofLSikYDLr/NdPJbxqfXmtefk+7oqAIS6qhBPU7M=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=efmcIrvf0Nxe1a6Q7awgDa+Ms6glT2vUQSBlr12Ze71Jm838snVl4zWjmQ9ti6nm/
-         QvSUlF8zvLKZYKRWo2a1pXbBXgPLSmO0HUygeBo4h0Yj1cY1gv46xuiPTrLO3jD08q
-         Qn59SOyqfsbLsAuWT2PXAWdYv5sYgRgPgZNZQbiBEw2PaDZ/mox0kCzTDQNmnim4JG
-         KZBjQSKpwKWU0cAx+wF3KVvtUHy2PbX3yZO07Sx4t/+wf2kvF4Zj9xqMyS5bpjWLHg
-         3YSbB2OlwyvRH/qqmr4oqKJTNAygZzQ/RJHpBjzq3T9RXCD1B9xxi3Zmqvl9yKf0UZ
-         VMJQqjZSpqIdg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 6A1195C038F; Tue, 26 Apr 2022 13:32:54 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 13:32:54 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        llvm@lists.linux.dev, Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-        Soham Shakraborty <s.s.chakraborty@tudelft.nl>,
-        Martin Fink <martin.fink@in.tum.de>
-Subject: Re: Broken Address Dependency in mm/ksm.c::cmp_and_merge_page()
-Message-ID: <20220426203254.GJ4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <YmKE/XgmRnGKrBbB@Pauls-MacBook-Pro.local>
+        Tue, 26 Apr 2022 16:36:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EADC71A816F
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:33:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651005183;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qJupZ9EKBhCX8US4p7GIAW6BSuQyT3fJWSWGs492ld4=;
+        b=XRghbmOtv73zpJl3Ez76GQSI3MdzswbE96Ikcw+PZLeJFEW+OTQLjfX+KHoI2rI0Fng60W
+        6LX0D1rVpirqE8mj920zZkkO15/n9kaze6u8pc//D8bKwF1YdyYy8rgyaFbWQWGBhIuy06
+        gKWRYpQ2C1IaZ8YuZfGP1BksunWk314=
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
+ [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-609-aeMKZdY5PzaXP7wfjG-wBw-1; Tue, 26 Apr 2022 16:33:01 -0400
+X-MC-Unique: aeMKZdY5PzaXP7wfjG-wBw-1
+Received: by mail-io1-f71.google.com with SMTP id k20-20020a5e9314000000b00649d55ffa67so15322315iom.20
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:33:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qJupZ9EKBhCX8US4p7GIAW6BSuQyT3fJWSWGs492ld4=;
+        b=HVVjsaJPNGfZuDCBzXZuqugGf4fJC1KL1d2VleheMJarWnGEgkVYf+K5f9i7zAcEGT
+         4U45dwXGQ7avdbutMFbmovEKFLXJwj49c/RYq9QhC4BOgaMH2nixVQPkr9nhm5KTAPYl
+         sX2cLljfBL24FQKSDaLS82S8b3C7p3yiR2wKwDDpEuPJ+1zS/tjOlWUWcaWi2iCn2h6F
+         eduy2rhsyn5qm5B6J3priHsFrYeoI8wuJxpl8evZxlmUV9kfyqjSHrOT3PWbE71pqGW6
+         fC6KkKp8obYxgZxQqA8WrXE9760GNedDyI8z32Pm0IA6gteVWC4wvy7IMxmAbBpAN96h
+         JsKw==
+X-Gm-Message-State: AOAM532/3xwXibVa86yyE2wZIFFDG49/vuuMVny3BpiV8Jcu2y3BKAFZ
+        /4l6Is2gC2nm94OSc+B/oPX3ZRbsNQ5HgzhspbLZVkzRBC8EI34eKU5nmojOzlbFAkPJnIVSdK8
+        +FrOv/7MdFWL+UVCFYZ0vN7ND
+X-Received: by 2002:a05:6638:1487:b0:328:6e36:39e4 with SMTP id j7-20020a056638148700b003286e3639e4mr10263033jak.202.1651005181059;
+        Tue, 26 Apr 2022 13:33:01 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxv3DOWZkK6AhpbIXCeFJ2/lY2z7CXm1JNRmILCaRK5MqEyMqTOfcKl6cB6RwB1JoqOHBf6sQ==
+X-Received: by 2002:a05:6638:1487:b0:328:6e36:39e4 with SMTP id j7-20020a056638148700b003286e3639e4mr10263012jak.202.1651005180758;
+        Tue, 26 Apr 2022 13:33:00 -0700 (PDT)
+Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id x186-20020a6bc7c3000000b00648deae6630sm10449855iof.54.2022.04.26.13.32.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 13:33:00 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 16:32:58 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Charan Teja Reddy <charante@codeaurora.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Dmitry V . Levin" <ldv@altlinux.org>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        zhangyi <yi.zhang@huawei.com>, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 2/6] userfaultfd: add /dev/userfaultfd for fine
+ grained access control
+Message-ID: <YmhW+mOuQUWsByj4@xz-m1.local>
+References: <20220422212945.2227722-1-axelrasmussen@google.com>
+ <20220422212945.2227722-3-axelrasmussen@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YmKE/XgmRnGKrBbB@Pauls-MacBook-Pro.local>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220422212945.2227722-3-axelrasmussen@google.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 12:35:41PM +0200, Paul Heidekrüger wrote:
-> Hi all, 
-> 
-> My dependency checker is flagging yet another broken dependency. For
-> context, see [1].
-> 
-> Thankfully, it is fairly straight-forward to explain this time.
-> 
-> > stable_node = page_stable_node(page);
-> 
-> Line 2032 in mm/ksm.c::cmp_and_merge_page() sees the return value of a
-> call to "page_stable_node()", which can depend on a "READ_ONCE()", being
-> assigned to "stable_node".
-> 
-> > if (stable_node) {
-> >         if (stable_node->head != &migrate_nodes &&
-> >             get_kpfn_nid(READ_ONCE(stable_node->kpfn)) != 
-> >             NUMA(stable_node->nid)) {
-> >                 stable_node_dup_del(stable_node); ‣dup: stable_node
-> >                 stable_node->head = &migrate_nodes;
-> >                 list_add(&stable_node->list, stable_node->head);
-> 
-> The dependency chain then runs into the two following if's, through an
-> assignment of "migrate_nodes" to "stable_node->head" (line 2038) and
-> finally reaches a call to "list_add()" (line 2039) where
-> "stable_node->head" gets passed as the second function argument. 
+Axel,
 
-Huh.
+On Fri, Apr 22, 2022 at 02:29:41PM -0700, Axel Rasmussen wrote:
+> @@ -65,6 +66,8 @@ struct userfaultfd_ctx {
+>  	unsigned int flags;
+>  	/* features requested from the userspace */
+>  	unsigned int features;
+> +	/* whether or not to handle kernel faults */
+> +	bool handle_kernel_faults;
 
-But migrate_nodes is nothing more or less than a list_head structure.
-So one would expect that some other mechanism is protecting its ->prev
-and ->next pointers.
+Could you help explain why we need this bool?  I failed to figure out
+myself on the difference against "!(ctx->flags & UFFD_USER_MODE_ONLY)".
 
-> >         }
-> > }
-> > 
-> > static inline void list_add(struct list_head *new, struct list_head *head)
-> > {
-> >         __list_add(new, head, head->next);
-> > }
-> > 
-> > static inline void __list_add(struct list_head *new,
-> >                               struct list_head *prev,
-> >                               struct list_head *next)
-> > {
-> >         if (!__list_add_valid(new, prev, next))
-> >                 return;
-> > 
-> >         next->prev = new;
-> >         new->next = next;
-> >         new->prev = prev;
-> >         WRITE_ONCE(prev->next, new);
-> > }
-> 
-> By being passed into "list_add()" via "stable_node->head", the
-> dependency chain eventually reaches a "WRITE_ONCE()" in "__list_add()"
-> whose destination address, "stable_node->head->next", is part of the
-> dependency chain and therefore carries an address dependency. 
-> 
-> However, as a result of the assignment in line 2038, Clang knows that
-> "stable_node->head" is "migrate_nodes" and replaces it, thereby breaking
-> the dependency chain. 
-> 
-> What do you think?
+Thanks,
 
-Given that this is a non-atomic update, there had better be something
-protecting it.  This something might be a lock, a decremented-to-zero
-reference count, a rule about only one kthread being permitted to update
-that list, and so on.  In all such cases, the code would not be relying
-on the dependency, but rather on whatever was protecting that operation.
+-- 
+Peter Xu
 
-Or am I missing something here?
-
-							Thanx, Paul
-
-> Many thanks,
-> Paul
-> 
-> --
-> [1]: https://lore.kernel.org/all/Yk7%2FT8BJITwz+Og1@Pauls-MacBook-Pro.local/
-> 

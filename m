@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A21B850F302
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:50:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 864EF50F305
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:50:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344322AbiDZHxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 03:53:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49540 "EHLO
+        id S1344300AbiDZHxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 03:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233912AbiDZHxC (ORCPT
+        with ESMTP id S1344303AbiDZHxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 03:53:02 -0400
+        Tue, 26 Apr 2022 03:53:04 -0400
 Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5702A1ADB7;
-        Tue, 26 Apr 2022 00:49:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A21AE1CFCB;
+        Tue, 26 Apr 2022 00:49:57 -0700 (PDT)
 X-IronPort-AV: E=Sophos;i="5.90,290,1643641200"; 
-   d="scan'208";a="118016692"
+   d="scan'208";a="118016699"
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 26 Apr 2022 16:49:53 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 26 Apr 2022 16:49:57 +0900
 Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 350F04248B04;
-        Tue, 26 Apr 2022 16:49:48 +0900 (JST)
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 82EAF4248B19;
+        Tue, 26 Apr 2022 16:49:53 +0900 (JST)
 From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     Mark Brown <broonie@kernel.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
@@ -34,9 +34,9 @@ Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v2 1/3] ASoC: sh: rz-ssi: Drop SSIFSR_TDC and SSIFSR_RDC macros
-Date:   Tue, 26 Apr 2022 08:49:20 +0100
-Message-Id: <20220426074922.13319-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v2 2/3] ASoC: sh: rz-ssi: Propagate error codes returned from platform_get_irq_byname()
+Date:   Tue, 26 Apr 2022 08:49:21 +0100
+Message-Id: <20220426074922.13319-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220426074922.13319-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20220426074922.13319-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -48,32 +48,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The mask values of SSIFSR_TDC and SSIFSR_RDC macros are incorrect and
-they are unused in the file so just drop them.
+Propagate error codes returned from platform_get_irq_byname() instead of
+returning -ENODEV. platform_get_irq_byname() may return -EPROBE_DEFER, to
+handle such cases propagate the error codes.
 
-Reported-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+While at it drop the dev_err_probe() messages as platform_get_irq_byname()
+already does this for us in case of error.
+
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 ---
 v1->v2
-* Updated commit message
+* No change
 ---
- sound/soc/sh/rz-ssi.c | 2 --
- 1 file changed, 2 deletions(-)
+ sound/soc/sh/rz-ssi.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
 diff --git a/sound/soc/sh/rz-ssi.c b/sound/soc/sh/rz-ssi.c
-index e8edaed05d4c..cec458b8c507 100644
+index cec458b8c507..d9a684e71ec3 100644
 --- a/sound/soc/sh/rz-ssi.c
 +++ b/sound/soc/sh/rz-ssi.c
-@@ -59,9 +59,7 @@
- #define SSIFSR_RDC_MASK		0x3f
- #define SSIFSR_RDC_SHIFT	8
+@@ -977,8 +977,7 @@ static int rz_ssi_probe(struct platform_device *pdev)
+ 	/* Error Interrupt */
+ 	ssi->irq_int = platform_get_irq_byname(pdev, "int_req");
+ 	if (ssi->irq_int < 0)
+-		return dev_err_probe(&pdev->dev, -ENODEV,
+-				     "Unable to get SSI int_req IRQ\n");
++		return ssi->irq_int;
  
--#define SSIFSR_TDC(x)		(((x) & 0x1f) << 24)
- #define SSIFSR_TDE		BIT(16)
--#define SSIFSR_RDC(x)		(((x) & 0x1f) << 8)
- #define SSIFSR_RDF		BIT(0)
+ 	ret = devm_request_irq(&pdev->dev, ssi->irq_int, &rz_ssi_interrupt,
+ 			       0, dev_name(&pdev->dev), ssi);
+@@ -990,8 +989,7 @@ static int rz_ssi_probe(struct platform_device *pdev)
+ 		/* Tx and Rx interrupts (pio only) */
+ 		ssi->irq_tx = platform_get_irq_byname(pdev, "dma_tx");
+ 		if (ssi->irq_tx < 0)
+-			return dev_err_probe(&pdev->dev, -ENODEV,
+-					     "Unable to get SSI dma_tx IRQ\n");
++			return ssi->irq_tx;
  
- #define SSIOFR_LRCONT		BIT(8)
+ 		ret = devm_request_irq(&pdev->dev, ssi->irq_tx,
+ 				       &rz_ssi_interrupt, 0,
+@@ -1002,8 +1000,7 @@ static int rz_ssi_probe(struct platform_device *pdev)
+ 
+ 		ssi->irq_rx = platform_get_irq_byname(pdev, "dma_rx");
+ 		if (ssi->irq_rx < 0)
+-			return dev_err_probe(&pdev->dev, -ENODEV,
+-					     "Unable to get SSI dma_rx IRQ\n");
++			return ssi->irq_rx;
+ 
+ 		ret = devm_request_irq(&pdev->dev, ssi->irq_rx,
+ 				       &rz_ssi_interrupt, 0,
 -- 
 2.25.1
 

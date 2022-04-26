@@ -2,108 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4090A50FEB2
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:17:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B887650FEB3
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:18:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350807AbiDZNVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 09:21:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
+        id S1350817AbiDZNVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 09:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350836AbiDZNU4 (ORCPT
+        with ESMTP id S1350813AbiDZNVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 09:20:56 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F6EE1CD5
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 06:17:49 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id k27so7118940edk.4
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 06:17:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=6+CtorLBJcBw4FcYALJrOP7eOH4S6+CQQohbvLBDoho=;
-        b=Kv/kGnJI+LuGvE3p+VXDR+AmVcS29lMEQRMbR83w5yuX72RUfZUQfNjlHoPJyPUfPT
-         8tri4gDOfFBwCXzjKDoEUxGZuxjNxqeAz8Up0j4TMJRt1eGbDPTLa+VB7mXh3SQW1yKh
-         GrZUFxOP+oxGCSBP+Efy7AMPxCG9kutFVv4TQuLGbhMWC/uFsVzuCRWEVtaq73Itf3bX
-         NGXsqU6HqMLACF1O8xLDK2E6HXGTdFhsaVJAsjzBN/svoX+IFt/nnqFRKZFkuOnT9R4b
-         t7zPzkIvVKspVFB82IwNGoOYQ+Ad1uinmnawJZ1eqc4Bx9bIO/aKzurz1WI3DKks16Gx
-         humg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=6+CtorLBJcBw4FcYALJrOP7eOH4S6+CQQohbvLBDoho=;
-        b=Tbv+PlcGS5YYUZI1xCl6+b4bhT1KiPGFdG0/smKBsJzb3mkEzfTQAsCk4euBez4EYV
-         +AjqOl8hJ3N2iVcqQ6WpWtSnjhP9nQNc1l2cwkofHDahTkzgrx6EJHOaXFpb2qev/wYW
-         f4xrpLg/kJRFf2WbOjdf8yrJ4Dcp4Jmm3U5nujk2U2AmD8oopRSCTxy0YI6ulvDpPkmR
-         qnpWjsnU9aTwXZu/i/yQOx7T/bpwPdlG06en6mXSaZTgEBBafLQl/kuZlFxePJSaR3/4
-         s11ONZOY6aQKcbSiUT477UQb9yrwBjCS60yuzg0hjPYWGVMk75SwOCUQmyctnY4qa9Ov
-         2pfQ==
-X-Gm-Message-State: AOAM531DxoM2zGd/R9jGsroSBvL2+MwQmXNGOx81j+WWwSXfSDNmoylh
-        Cv4ktQXo/jX/gY826CNcdRFtGqKTTwhlooq4FwQ=
-X-Google-Smtp-Source: ABdhPJwohow9WYkrnlI1/sfWITINs49EqJoS1E0MC9z7HMJPQgr+rTLYIklUzj8JZS/ae04IrG9J+3bVN4/klnMZcsQ=
-X-Received: by 2002:a05:6402:1813:b0:425:adb9:4abd with SMTP id
- g19-20020a056402181300b00425adb94abdmr24935375edy.278.1650979067622; Tue, 26
- Apr 2022 06:17:47 -0700 (PDT)
+        Tue, 26 Apr 2022 09:21:17 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E94DCE3D
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 06:18:09 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="265380300"
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="265380300"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 06:18:09 -0700
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="595758011"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 06:18:07 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andy.shevchenko@gmail.com>)
+        id 1njL4u-008KxI-2Y;
+        Tue, 26 Apr 2022 16:18:04 +0300
+Date:   Tue, 26 Apr 2022 16:18:03 +0300
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Mikulas Patocka <mpatocka@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        device-mapper development <dm-devel@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mike Snitzer <msnitzer@redhat.com>,
+        Milan Broz <gmazyland@gmail.com>
+Subject: Re: [PATCH v2] hex2bin: fix access beyond string end
+Message-ID: <YmfxCxbneEcs44Ch@smile.fi.intel.com>
+References: <alpine.LRH.2.02.2204241643030.17244@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHp75VdHnvv6FH1BKcs8WgGF3nJpj77TsrmsQGBSpsAQU_S-bw@mail.gmail.com>
+ <alpine.LRH.2.02.2204260759540.2737@file01.intranet.prod.int.rdu2.redhat.com>
 MIME-Version: 1.0
-Received: by 2002:a17:907:7b99:b0:6f3:6a35:ee4f with HTTP; Tue, 26 Apr 2022
- 06:17:46 -0700 (PDT)
-Reply-To: adriannurse12@yahoo.com
-From:   "Barr.Adrian Nurse" <offce2022@gmail.com>
-Date:   Tue, 26 Apr 2022 13:17:46 +0000
-Message-ID: <CAEu=3H+LWJXV+-ztgurtb0v5nbcH633+Ue-A3NJdrc-t0WSANw@mail.gmail.com>
-Subject: Re:
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5007]
-        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:52a listed in]
-        [list.dnswl.org]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [offce2022[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [adriannurse12[at]yahoo.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [offce2022[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.LRH.2.02.2204260759540.2737@file01.intranet.prod.int.rdu2.redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings Dear Friend,
+On Tue, Apr 26, 2022 at 08:07:44AM -0400, Mikulas Patocka wrote:
+> On Tue, 26 Apr 2022, Andy Shevchenko wrote:
+> > On Sun, Apr 24, 2022 at 10:48 PM Mikulas Patocka <mpatocka@redhat.com> wrote:
+> > >
+> > > If we pass too short string to "hex2bin" (and the string size without the
+> > > terminating NUL character is even), "hex2bin" reads one byte after the
+> > > terminating NUL character. This patch fixes it.
+> > >
+> > > Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+> > > Cc: stable@vger.kernel.org
+> > 
+> > You need to provide a Fixes tag.
+> 
+> OK. Here I resend it with the "Fixes" tag.
+> 
+> > And on top of that it would be nice to understand if we need to
+> > support half-bytes, but in any case it's not a scope of the patch
+> > right now.
+> 
+> Do you think that there are any users who need this?
 
-How are you doing and how is family? i mail to know if we can make a
-transact together on a mutual business that we both can benefit in it?
+If my memory doesn't do any tricks with me, I have seen the patterns like
+hex2bin() + hex_to_bin() in some places in the kernel.
 
-Please do kindly revert back to me for more and better communication regard
+-- 
+With Best Regards,
+Andy Shevchenko
 
-I'll wait to read from you upon receipt of this message
 
-Thanks
-
-adriannurse12@yahoo.com
-
-Barr.Adrian Nurse

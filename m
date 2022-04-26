@@ -2,36 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC0D7510083
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 16:33:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71C8C510086
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 16:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351646AbiDZOgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 10:36:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56964 "EHLO
+        id S1351327AbiDZOgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 10:36:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242070AbiDZOgD (ORCPT
+        with ESMTP id S1351647AbiDZOgG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 10:36:03 -0400
+        Tue, 26 Apr 2022 10:36:06 -0400
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B1A3B7C4F;
-        Tue, 26 Apr 2022 07:32:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8DAB9B7C62;
+        Tue, 26 Apr 2022 07:32:58 -0700 (PDT)
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1njMFK-0004FF-04; Tue, 26 Apr 2022 16:32:54 +0200
+        id 1njMFK-0004FF-05; Tue, 26 Apr 2022 16:32:54 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 840B8C01C7; Tue, 26 Apr 2022 16:32:16 +0200 (CEST)
-Date:   Tue, 26 Apr 2022 16:32:16 +0200
+        id CDD39C01C7; Tue, 26 Apr 2022 16:32:45 +0200 (CEST)
+Date:   Tue, 26 Apr 2022 16:32:45 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH] MIPS: SGI-IP30: Free some unused memory
-Message-ID: <20220426143216.GE18291@alpha.franken.de>
-References: <f9475119cf8d7dc51f9f993ab6a4de40a2735ca1.1650720466.git.christophe.jaillet@wanadoo.fr>
+To:     Yuanjun Gong <ruc_gongyuanjun@163.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] mips: cpc: Fix refcount leak in
+ mips_cpc_default_phys_base
+Message-ID: <20220426143245.GF18291@alpha.franken.de>
+References: <20220407042657.28614-1-ruc_gongyuanjun@163.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f9475119cf8d7dc51f9f993ab6a4de40a2735ca1.1650720466.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220407042657.28614-1-ruc_gongyuanjun@163.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -41,39 +42,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 23, 2022 at 03:27:58PM +0200, Christophe JAILLET wrote:
-> platform_device_add_data() duplicates the memory it is passed. So we can
-> free some memory to save a few bytes that would remain unused otherwise.
+On Thu, Apr 07, 2022 at 12:26:57PM +0800, Yuanjun Gong wrote:
+> From: Gong Yuanjun <ruc_gongyuanjun@163.com>
 > 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Add the missing of_node_put() to release the refcount incremented
+> by of_find_compatible_node().
+> 
+> Signed-off-by: Gong Yuanjun <ruc_gongyuanjun@163.com>
 > ---
->  arch/mips/sgi-ip30/ip30-xtalk.c | 4 ++++
->  1 file changed, 4 insertions(+)
+>  arch/mips/kernel/mips-cpc.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/arch/mips/sgi-ip30/ip30-xtalk.c b/arch/mips/sgi-ip30/ip30-xtalk.c
-> index 8a2894645529..8129524421cb 100644
-> --- a/arch/mips/sgi-ip30/ip30-xtalk.c
-> +++ b/arch/mips/sgi-ip30/ip30-xtalk.c
-> @@ -63,6 +63,8 @@ static void bridge_platform_create(int widget, int masterwid)
+> diff --git a/arch/mips/kernel/mips-cpc.c b/arch/mips/kernel/mips-cpc.c
+> index 17aff13cd7ce..3e386f7e1545 100644
+> --- a/arch/mips/kernel/mips-cpc.c
+> +++ b/arch/mips/kernel/mips-cpc.c
+> @@ -28,6 +28,7 @@ phys_addr_t __weak mips_cpc_default_phys_base(void)
+>  	cpc_node = of_find_compatible_node(of_root, NULL, "mti,mips-cpc");
+>  	if (cpc_node) {
+>  		err = of_address_to_resource(cpc_node, 0, &res);
+> +		of_node_put(cpc_node);
+>  		if (!err)
+>  			return res.start;
 >  	}
->  	platform_device_add_resources(pdev, &w1_res, 1);
->  	platform_device_add_data(pdev, wd, sizeof(*wd));
-> +	/* platform_device_add_data() duplicates the data */
-> +	kfree(wd);
->  	platform_device_add(pdev);
->  
->  	bd = kzalloc(sizeof(*bd), GFP_KERNEL);
-> @@ -92,6 +94,8 @@ static void bridge_platform_create(int widget, int masterwid)
->  	bd->io_offset	= IP30_SWIN_BASE(widget);
->  
->  	platform_device_add_data(pdev, bd, sizeof(*bd));
-> +	/* platform_device_add_data() duplicates the data */
-> +	kfree(bd);
->  	platform_device_add(pdev);
->  	pr_info("xtalk:%x bridge widget\n", widget);
->  	return;
 > -- 
-> 2.32.0
+> 2.17.1
 
 applied to mips-next.
 

@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FB2850F7A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:40:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C5E950F769
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:40:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347876AbiDZJhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:37:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57264 "EHLO
+        id S1347301AbiDZJK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:10:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347915AbiDZJGW (ORCPT
+        with ESMTP id S1346718AbiDZIuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:06:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD25B6E6E;
-        Tue, 26 Apr 2022 01:47:12 -0700 (PDT)
+        Tue, 26 Apr 2022 04:50:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623CE16FE23;
+        Tue, 26 Apr 2022 01:38:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A1DFDB81CF2;
-        Tue, 26 Apr 2022 08:47:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E660DC385AC;
-        Tue, 26 Apr 2022 08:47:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 67F4860A67;
+        Tue, 26 Apr 2022 08:38:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71562C385A0;
+        Tue, 26 Apr 2022 08:38:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962830;
-        bh=Bzgv5WqWQfy17psL16EYWYKGoHPWRb79U3suFi4PhDg=;
+        s=korg; t=1650962324;
+        bh=T1EzDUfwjggOELHvvCTAYsHts3WIZamAMmLGdfdkNLA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hsaS9Hc4thL8tmkqd7F3/ZXCOsC/GgMTDbCipjBzx1phkoMT+imjWEWJ1tXazgDVk
-         WrS7rAB4nU4cuBxgUDYn7/cu/n/ntvY1hIDs/rDN0wKyp9GkjcjhsE0YrReOJKkPzx
-         Yw4NHVdEAb9btsnoPSGjA2Fgw8CIV6yd4YVRilyM=
+        b=DLtPytgUrjsAdV1fvqDNqoOHDj/386YsDhJunlF+dgsf6XeHP7cSUUuHmyHRW2DOk
+         W0E7/tqgt8au41YwZvxS5M3HdVEOIoqUKU8Cj8ZQ/nBEQb6XNM7wMrnarr3EqRaQE2
+         Arf5cftSqui/FvC9UsN7MGf3xFApOwNBv2I7Xh5A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Borislav Petkov <bp@suse.de>,
-        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 064/146] ALSA: usb-audio: Fix undefined behavior due to shift overflowing the constant
+        stable@vger.kernel.org, Xiaoke Wang <xkernel.wang@foxmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 058/124] drm/msm/disp: check the return value of kzalloc()
 Date:   Tue, 26 Apr 2022 10:20:59 +0200
-Message-Id: <20220426081751.864849229@linuxfoundation.org>
+Message-Id: <20220426081748.950560919@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
-References: <20220426081750.051179617@linuxfoundation.org>
+In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
+References: <20220426081747.286685339@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,42 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-[ Upstream commit 1ef8715975de8bd481abbd0839ed4f49d9e5b0ff ]
+[ Upstream commit f75e582b0c3ee8f0bddc2248cc8b9175f29c5937 ]
 
-Fix:
+kzalloc() is a memory allocation function which can return NULL when
+some internal memory errors happen. So it is better to check it to
+prevent potential wrong memory access.
 
-  sound/usb/midi.c: In function ‘snd_usbmidi_out_endpoint_create’:
-  sound/usb/midi.c:1389:2: error: case label does not reduce to an integer constant
-    case USB_ID(0xfc08, 0x0101): /* Unknown vendor Cable */
-    ^~~~
-
-See https://lore.kernel.org/r/YkwQ6%2BtIH8GQpuct@zn.tnic for the gory
-details as to why it triggers with older gccs only.
-
-[ A slight correction with parentheses around the argument by tiwai ]
-
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220405151517.29753-3-bp@alien8.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Link: https://lore.kernel.org/r/tencent_B3E19486FF39415098B572B7397C2936C309@qq.com
+Signed-off-by: Rob Clark <robdclark@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/usb/usbaudio.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/msm/disp/msm_disp_snapshot_util.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/sound/usb/usbaudio.h b/sound/usb/usbaudio.h
-index 167834133b9b..b8359a0aa008 100644
---- a/sound/usb/usbaudio.h
-+++ b/sound/usb/usbaudio.h
-@@ -8,7 +8,7 @@
-  */
+diff --git a/drivers/gpu/drm/msm/disp/msm_disp_snapshot_util.c b/drivers/gpu/drm/msm/disp/msm_disp_snapshot_util.c
+index cabe15190ec1..369e57f73a47 100644
+--- a/drivers/gpu/drm/msm/disp/msm_disp_snapshot_util.c
++++ b/drivers/gpu/drm/msm/disp/msm_disp_snapshot_util.c
+@@ -169,6 +169,8 @@ void msm_disp_snapshot_add_block(struct msm_disp_state *disp_state, u32 len,
+ 	va_list va;
  
- /* handling of USB vendor/product ID pairs as 32-bit numbers */
--#define USB_ID(vendor, product) (((vendor) << 16) | (product))
-+#define USB_ID(vendor, product) (((unsigned int)(vendor) << 16) | (product))
- #define USB_ID_VENDOR(id) ((id) >> 16)
- #define USB_ID_PRODUCT(id) ((u16)(id))
+ 	new_blk = kzalloc(sizeof(struct msm_disp_state_block), GFP_KERNEL);
++	if (!new_blk)
++		return;
+ 
+ 	va_start(va, fmt);
  
 -- 
 2.35.1

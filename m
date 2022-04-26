@@ -2,159 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 497AF510BFA
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 00:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5DB8510BFC
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 00:23:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355059AbiDZWZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 18:25:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39068 "EHLO
+        id S1355735AbiDZW0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 18:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347064AbiDZWZv (ORCPT
+        with ESMTP id S1355532AbiDZW0G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 18:25:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0601FA60;
-        Tue, 26 Apr 2022 15:22:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 884F5B8219D;
-        Tue, 26 Apr 2022 22:22:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2701C385A4;
-        Tue, 26 Apr 2022 22:22:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1651011759;
-        bh=lYfUppC7lZmr5zSo7kS0sPDNwx4JInbK68kqdDwnp4Y=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=2qNdPSDjZ1dr6qUYrlw2odyTjrXmCOrYFxnBkwScJqQRstVEbT4zCaOdUVfRgdo1U
-         GsaUofEarLA66SHZVJNMkOgTrGoiw7n6o7oKbmiYtSCaSAg/Lnjolb6loUTPDzExsv
-         XAv5D1nvf7laYuEyO2ulqHwlD07joJA861bR61CM=
-Date:   Tue, 26 Apr 2022 15:22:37 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, Stephen Rothwell <sfr@rothwell.id.au>,
-        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Barry Song <21cnbao@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        Holger =?ISO-8859-1?Q?Hoffst=E4tte?= 
-        <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Subject: Re: [PATCH v10 10/14] mm: multi-gen LRU: kill switch
-Message-Id: <20220426152237.21d3f173eded69c0f63911f0@linux-foundation.org>
-In-Reply-To: <CAOUHufbtFj0Hez7wkw3DHGDwo6wudCzCvACt2GfgrFcubW_DYg@mail.gmail.com>
-References: <20220407031525.2368067-1-yuzhao@google.com>
-        <20220407031525.2368067-11-yuzhao@google.com>
-        <20220411191627.629f21de83cd0a520ef4a142@linux-foundation.org>
-        <CAOUHufbtFj0Hez7wkw3DHGDwo6wudCzCvACt2GfgrFcubW_DYg@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 26 Apr 2022 18:26:06 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3F71FCCC
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 15:22:58 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 4so281547ljw.11
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 15:22:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bS50lQ+OCnAE3LR20TF2MlIX6nS7SmzMK5zhjqJwW1A=;
+        b=skNN1ENqxn48xeTenWLfDiuBIJ/QllraVvrOnfNSw5nT4HsnWSgzy+Kas89MKS9vmB
+         vlQD75x+lWvG7xZSxfl7T2xTPDEvlnexhx8AAj5zZ1amr1bS3kXFJoi+Llu/u1uePGLd
+         P86rj8yok9Wxid7PdtVwVQ4thku210YQ6nffO5h8KCyTwm+n4qZS0IkgcDAUhskGvLsi
+         vxVxXqg89iP0BH34xcKCs2guRPYAb/lBGejXo0yFyu4z5Dp3RZgVepaNpz2q6rvZXMVX
+         IcYLybKP+zgU15sAzrkCWyHdLTqfsOrfi/nFxEk4rcA1JiZ0A0/y+ldj+aVmeWhbYDpW
+         HTRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bS50lQ+OCnAE3LR20TF2MlIX6nS7SmzMK5zhjqJwW1A=;
+        b=pq0ASIYLwLcZir4UKRQLr+oHT5C9SjL6ReTthgwujSu6x6oRDnBwCaEi76uPMxSstX
+         3rShu/x78m6LqPr+bbJitPCFx6VTl9kbVwLpULSbIiwNOBM7NZJEXQzviVn5djTP/5d5
+         ah5Uhme+oCFQfxqVIAkRXNUpgWqazWGNw6T4JqsLraCDh6qB9yspXgkx3xcQfNUX2bn2
+         vmjFIsfds0QmV/ZnFt2zh9dRgc01BQYGVSxBez1ETrHj/f43yslbTWDak4T6R7qd3qbh
+         BbZjJhEIVSMgJON3kST35pb7qPrb5gvYuB2rVgiiny79tk8u91Cxumlbd2trptAgheLZ
+         kkOQ==
+X-Gm-Message-State: AOAM530IgL9/OK3Xdkvq1YfbIm2WYyGMpVGc/ddOhyBwEBTHERdSLtlS
+        TvHh8rxG+pxyKZtYbl2OeHuyKcZdL0pN58IO3DiNkw==
+X-Google-Smtp-Source: ABdhPJyGJ3ao0WCxHGbRsehAR+RqhO62U8fOTlSepU+SrB9lfZMJtcq2Y4TdkEKBv7B8Ifj5eOqDuP8e8p3ag6IrleU=
+X-Received: by 2002:a2e:9ec4:0:b0:24b:115c:aedb with SMTP id
+ h4-20020a2e9ec4000000b0024b115caedbmr15508080ljk.235.1651011776144; Tue, 26
+ Apr 2022 15:22:56 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220424190811.1678416-1-masahiroy@kernel.org> <20220424190811.1678416-15-masahiroy@kernel.org>
+In-Reply-To: <20220424190811.1678416-15-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 26 Apr 2022 15:22:44 -0700
+Message-ID: <CAKwvOdmH3pqf5WHtdv-6eJgQvWQOz1BTMA33QLL7t1wGzOxNnA@mail.gmail.com>
+Subject: Re: [PATCH 14/27] modpost: dump Module.symvers in the same order of modules.order
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Apr 2022 14:57:15 -0600 Yu Zhao <yuzhao@google.com> wrote:
+On Sun, Apr 24, 2022 at 12:09 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> modpost dumps the exported symbols into Module.symvers, but currently
+> in random order because it iterates in the hash table.
+>
+> Add a linked list of exported symbols in struct module, so we can
+> iterate on symbols per module.
+>
+> This commit makes Module.symvers much more readable; the outer loop in
+> write_dump() iterates over the modules in the order of modules.order,
+> and the inner loop dumps symbols in each module.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-> On Mon, Apr 11, 2022 at 8:16 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-> >
-> > On Wed,  6 Apr 2022 21:15:22 -0600 Yu Zhao <yuzhao@google.com> wrote:
-> >
-> > > Add /sys/kernel/mm/lru_gen/enabled as a kill switch. Components that
-> > > can be disabled include:
-> > >   0x0001: the multi-gen LRU core
-> > >   0x0002: walking page table, when arch_has_hw_pte_young() returns
-> > >           true
-> > >   0x0004: clearing the accessed bit in non-leaf PMD entries, when
-> > >           CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG=y
-> > >   [yYnN]: apply to all the components above
-> > > E.g.,
-> > >   echo y >/sys/kernel/mm/lru_gen/enabled
-> > >   cat /sys/kernel/mm/lru_gen/enabled
-> > >   0x0007
-> > >   echo 5 >/sys/kernel/mm/lru_gen/enabled
-> > >   cat /sys/kernel/mm/lru_gen/enabled
-> > >   0x0005
-> >
-> > I'm shocked that this actually works.  How does it work?  Existing
-> > pages & folios are drained over time or synchrnously?
-> 
-> Basically we have a double-throw way, and once flipped, new (isolated)
-> pages can only be added to the lists of the current implementation.
-> Existing pages on the lists of the previous implementation are
-> synchronously drained (isolated and then re-added), with
-> cond_resched() of course.
-> 
-> > Supporting
-> > structures remain allocated, available for reenablement?
-> 
-> Correct.
-> 
-> > Why is it thought necessary to have this?  Is it expected to be
-> > permanent?
-> 
-> This is almost a must for large scale deployments/experiments.
-> 
-> For deployments, we need to keep fix rollout (high priority) and
-> feature enabling (low priority) separate. Rolling out multiple
-> binaries works but will make the process slower and more painful. So
-> generally for each release, there is only one binary to roll out, and
-> unless it's impossible, new features are disabled by default. Once a
-> rollout completes, i.e., reaches enough population and remains stable,
-> new features are turned on gradually. If something goes wrong with a
-> new feature, we turn off that feature rather than roll back the
-> kernel.
-> 
-> Similarly, for A/B experiments, we don't want to use two binaries.
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Please let's spell out this sort of high-level thinking in the
-changelogging.
+> ---
+>
+>  scripts/mod/modpost.c | 27 ++++++++++++---------------
+>  scripts/mod/modpost.h |  1 +
+>  2 files changed, 13 insertions(+), 15 deletions(-)
+>
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index e23e416213bf..1793396e1323 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -185,6 +185,7 @@ static struct module *new_module(const char *modname)
+>         mod = NOFAIL(malloc(sizeof(*mod) + strlen(modname) + 1));
+>         memset(mod, 0, sizeof(*mod));
+>
+> +       INIT_LIST_HEAD(&mod->exported_symbols);
+>         INIT_LIST_HEAD(&mod->unresolved_symbols);
+>         INIT_LIST_HEAD(&mod->missing_namespaces);
+>         INIT_LIST_HEAD(&mod->imported_namespaces);
+> @@ -407,6 +408,7 @@ static struct symbol *sym_add_exported(const char *name, struct module *mod,
+>
+>         if (!s) {
+>                 s = new_symbol(name, mod, export);
+> +               list_add_tail(&s->list, &mod->exported_symbols);
+>         } else if (!external_module || s->module->is_vmlinux ||
+>                    s->module == mod) {
+>                 warn("%s: '%s' exported twice. Previous export was in %s%s\n",
+> @@ -2452,22 +2454,17 @@ static void read_dump(const char *fname)
+>  static void write_dump(const char *fname)
+>  {
+>         struct buffer buf = { };
+> -       struct symbol *symbol;
+> -       const char *namespace;
+> -       int n;
+> +       struct module *mod;
+> +       struct symbol *sym;
+>
+> -       for (n = 0; n < SYMBOL_HASH_SIZE ; n++) {
+> -               symbol = symbolhash[n];
+> -               while (symbol) {
+> -                       if (!symbol->module->from_dump) {
+> -                               namespace = symbol->namespace;
+> -                               buf_printf(&buf, "0x%08x\t%s\t%s\t%s\t%s\n",
+> -                                          symbol->crc, symbol->name,
+> -                                          symbol->module->name,
+> -                                          export_str(symbol->export),
+> -                                          namespace ? namespace : "");
+> -                       }
+> -                       symbol = symbol->next;
+> +       list_for_each_entry(mod, &modules, list) {
+> +               if (mod->from_dump)
+> +                       continue;
+> +               list_for_each_entry(sym, &mod->exported_symbols, list) {
+> +                       buf_printf(&buf, "0x%08x\t%s\t%s\t%s\t%s\n",
+> +                                  sym->crc, sym->name, mod->name,
+> +                                  export_str(sym->export),
+> +                                  sym->namespace ?: "");
+>                 }
+>         }
+>         write_buf(&buf, fname);
+> diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
+> index 4cb955dda83f..5922b0c39bb7 100644
+> --- a/scripts/mod/modpost.h
+> +++ b/scripts/mod/modpost.h
+> @@ -112,6 +112,7 @@ buf_write(struct buffer *buf, const char *s, int len);
+>  struct module {
+>         struct list_head list;
+>         int gpl_compatible;
+> +       struct list_head exported_symbols;
+>         struct list_head unresolved_symbols;
+>         bool from_dump;         /* true if module was loaded from *.symvers */
+>         bool is_vmlinux;
+> --
+> 2.32.0
+>
 
-From what you're saying, this is a transient thing.  It sounds that
-this enablement is only needed when mglru is at an early stage.  Once
-it has matured more then successive rollouts will have essentially the
-same mglru implementation and being able to disable mglru at runtime
-will no longer be required?
 
-I guess the capability is reasonable simple/small and is livable with,
-but does it have a long-term future?
-
-I mean, when organizations such as google start adopting the mglru
-implementation which is present in Linus's tree we're, what, a year or
-more into the future?  Will they still need a kill switch then?
+-- 
+Thanks,
+~Nick Desaulniers

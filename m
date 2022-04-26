@@ -2,97 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05EB5510235
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 17:51:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25746510238
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 17:51:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352619AbiDZPyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 11:54:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56280 "EHLO
+        id S1352618AbiDZPyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 11:54:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352538AbiDZPyS (ORCPT
+        with ESMTP id S242400AbiDZPyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 11:54:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A604E2BB15;
-        Tue, 26 Apr 2022 08:51:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61F52B820EA;
-        Tue, 26 Apr 2022 15:51:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6149C385A0;
-        Tue, 26 Apr 2022 15:51:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650988268;
-        bh=0op5gOSPyhcXlJpeXQJk2qphC7Q7xqa4KX+fJeEk5kQ=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=UUHpDsnMAyTkg2jZaUn2OzPGndeDCaRuDVChJFsFxjtwG/7O9W1qkQpL3IMM3OcZS
-         D903zhCbNxZIj5DX7G7TksVlZbc5T9fzRdwR2R736IbtCIvN6odwqKpupFM+jJB2NY
-         xYcygYP2pdUlLvQDg6aWL/q5dzqTfj4AxcIPNbQfzrf3XGIiOgaXIuAeVGvgOnXuo/
-         +YUwgjooJJIWJHe7gGPXGGHbMiXC11iTksNKi/nORoOjRaA71vR2QDDo+KbpN+eO2g
-         /XeTgXOe9yUDRb+4euIIqIJFbASwzaykIh/544Yn5z0oGq7XACs8cItStmGXzob/4G
-         KOJSJj05tb03Q==
-From:   Mark Brown <broonie@kernel.org>
-To:     markuss.broks@gmail.com, linux-kernel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        krzysztof.kozlowski+dt@linaro.org, lgirdwood@gmail.com,
-        devicetree@vger.kernel.org, phone-devel@vger.kernel.org,
-        robh+dt@kernel.org, myungjoo.ham@samsung.com,
-        cw00.choi@samsung.com, lee.jones@linaro.org,
-        mazziesaccount@gmail.com
-In-Reply-To: <20220423085319.483524-1-markuss.broks@gmail.com>
-References: <20220423085319.483524-1-markuss.broks@gmail.com>
-Subject: Re: (subset) [PATCH v5 0/5] Add support for Silicon Mitus SM5703 MFD
-Message-Id: <165098826550.1750312.1746077609633234428.b4-ty@kernel.org>
-Date:   Tue, 26 Apr 2022 16:51:05 +0100
+        Tue, 26 Apr 2022 11:54:45 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9AF23F31A
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 08:51:37 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id t13so4693594pfg.2
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 08:51:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=v8cU5bKFMqlUuUtYVrwHpXixHreHsdDZ5/tA68unRFg=;
+        b=z9jNRQOpE/Sy4KaGPIjyQ63hGbkDuUOcXGtvu36rlAtQoDqkL19FzzRktCC2+lj5qa
+         C7zd+6sVPjS6moGVds0Lad0bqu8BkMudsmN8g69TWBSHcMKHplQC9iSNgNkEgj68TuxD
+         Tuavedz3GccOYKxUiE3cGhs9AZFLHaqjcW2FvpmK0T/qaHKuxgqw0U95zdf4n+sphSz9
+         0b2yDXdlm0G92GZcQnLPlkKDk+jvOP1v3KDJHUwhA//rPV/9A9XQk0f/XRmbHDQ8PgeT
+         0quZywvXJ6nke6mC5W4YHL/IUuOGoIP/nCDplAiQZMKzbAgUighl8w8jrzogCpwEUHvf
+         YmQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=v8cU5bKFMqlUuUtYVrwHpXixHreHsdDZ5/tA68unRFg=;
+        b=28fTbdpAyk2nwCX7cVK7S9p4EMM9H+ehnhrTOPXCbWQlysEc+VL9WgAhk4SA1EuLkx
+         FZOJlhjBa2opiHfhNR2vKVUS+x/DysmnHc6VMpTL0uV/kKrsI70Gw58OP93XBMmfqsP0
+         h+RKc8xNb8raTBZqKHPFi9rwqz6nQmrD4PTGi+ltxy2Y5ORZxRfQtcbJfPu6jQoJ81Dm
+         8KZeN20apTWx/RlJRb3a/PmUJxH/dK43yxVsbn7we2/MghSniIgSl646DTp/9aiK6TOx
+         0aUvkR5eK80xsITfKfLhX2cl9Ae6JZ5mlpndsE9oiJJ4irzULLObX3GT0aVeu3VXkGt6
+         4nvw==
+X-Gm-Message-State: AOAM532T0tpRvmK0LKm4fpaWKGeZl6YLXVdmUd++YJJCycKEeAQLMq87
+        8uReCmsyIfsj78onDHSlAuEVKUlKLML9cb8/cvzoVQ==
+X-Google-Smtp-Source: ABdhPJyfaEQLDnkVKgh0MtbEZ4gvbRl+qUICHAWbhcZ3BgAHnuv4WbhYJEEIYUxjL70Qul6l8H8GJjGjD1eBVqdRwAE=
+X-Received: by 2002:a05:6a02:283:b0:342:703e:1434 with SMTP id
+ bk3-20020a056a02028300b00342703e1434mr20047391pgb.74.1650988297199; Tue, 26
+ Apr 2022 08:51:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220426123839.GF163591@kunlun.suse.cz>
+In-Reply-To: <20220426123839.GF163591@kunlun.suse.cz>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Tue, 26 Apr 2022 08:51:25 -0700
+Message-ID: <CAPcyv4j66HAE_x-eAHQR71pNyR0mk5b463S6OfeokLzZHq5ezw@mail.gmail.com>
+Subject: Re: ndctl tests usable?
+To:     =?UTF-8?Q?Michal_Such=C3=A1nek?= <msuchanek@suse.de>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 23 Apr 2022 11:53:13 +0300, Markuss Broks wrote:
-> This series adds support for Silicon Mitus SM5703 MFD and the
-> appropriate device-tree bindings. This only adds support for the
-> regulator module, leaving room for other modules implemented in
-> future (code for other modules is really not ready for submission
-> right now). Silicon Mitus SM5703 is used on various mobile phones,
-> mostly Samsung Galaxy (J5 (2015, 2016), On7, J7 (2015, 2016) ...).
-> 
-> [...]
+On Tue, Apr 26, 2022 at 5:39 AM Michal Such=C3=A1nek <msuchanek@suse.de> wr=
+ote:
+>
+> Hello,
+>
+> there is some testsuite included with ndctl, and when following the
+> instructions to build it most tests fail or are skipped:
+>
+> [   95s] Ok:                 3
+> [   95s] Expected Fail:      0
+> [   95s] Fail:               5
+> [   95s] Unexpected Pass:    0
+> [   95s] Skipped:            15
+> [   95s] Timeout:            0
+>
+> Is this the expected outcome or is this a problem with the ndctl build?
+>
+> Attaching test run log.
 
-Applied to
+I see a few missing prerequisites:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+[   78s] /usr/src/packages/BUILD/ndctl-73/test/pmem-errors.sh: line
+64: mkfs.ext4: command not found
+[   95s] /usr/src/packages/BUILD/ndctl-73/test/security.sh: line 25:
+jq: command not found
 
-Thanks!
+This report:
 
-[2/5] dt-bindings: regulator: Add bindings for Silicon Mitus SM5703 regulators
-      commit: d496d68d6ba6debcc135794edb5fdc5a5b4531f1
-[5/5] regulator: sm5703-regulator: Add regulators support for SM5703 MFD
-      commit: e8858ba89ca377064da130d09648c99683f8bd90
+[   51s]  1/23 ndctl:ndctl / libndctl               SKIP
+0.02s   exit status 77
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+...seems to indicate that the nfit_test modules did not appear to load
+correctly. I never expected that the nfit_test modules would be
+redistributable, so I was surprised to see them being installed by an
+actual package "nfit_test-kmp-default-0_k5.17.4_1-6.1". The reason
+they are not redistributable is because they require replacing the
+production build of the kernel provided modules libnvdimm.ko,
+nd_pmem.ko, etc... What I expect is happening is that the production
+version of libnvdimm.ko is already loaded (or is the only one on the
+system), and ndctl_test_init()
+(https://github.com/pmem/ndctl/blob/main/test/core.c#L110) detects
+that case and skips the tests.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+This is what I see with my setup that uses the sequence below to
+install nfit_test and friends:
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Test summary:
+Ok:                 35
+Expected Fail:      0
+Fail:               1
+Unexpected Pass:    0
+Skipped:            1
+Timeout:            0
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+Install procedure from a kernel build directory:
+        export INSTALL_MOD_PATH=3D$root
+        make INSTALL_HDR_PATH=3D$root/usr headers_install
+        make M=3Dtools/testing/nvdimm modules_install
+        make M=3Dtools/testing/cxl modules_install
+        make modules_install

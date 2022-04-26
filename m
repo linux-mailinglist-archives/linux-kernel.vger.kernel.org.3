@@ -2,73 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD1750EE5B
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 03:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24CED50EE64
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 03:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241602AbiDZB7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 21:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37818 "EHLO
+        id S241768AbiDZCCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 22:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbiDZB7X (ORCPT
+        with ESMTP id S241697AbiDZCCJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 21:59:23 -0400
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9C46FA0B;
-        Mon, 25 Apr 2022 18:56:17 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 18:56:08 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1650938176;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eknS5mZjx4pi0PW50DuACc81xMEJlhElzkFotI9xECI=;
-        b=Zy5KwFrskWKcY3bLKvYR+K/romXFvT8ubAkmxpL922s/9KYhDYlCYyxcYgBNWmO6yRbAyC
-        IFVV3DYFHNBmr/F90mhh7Pla2zpFxQqPYO7rgaZdV6JsTx9RICKkLRnpAIprEhvq78S2W5
-        GPndu/sXoZVZyLWfyONdz6s6ipZHESo=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     David Vernet <void@manifault.com>
-Cc:     akpm@linux-foundation.org, tj@kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, hannes@cmpxchg.org, mhocko@kernel.org,
-        shakeelb@google.com, kernel-team@fb.com
-Subject: Re: [PATCH v2 1/5] cgroups: Refactor children cgroups in memcg tests
-Message-ID: <YmdROKOEfiP1rk8q@carbon>
-References: <20220423155619.3669555-1-void@manifault.com>
- <20220423155619.3669555-2-void@manifault.com>
+        Mon, 25 Apr 2022 22:02:09 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B771B8AE7A
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 18:59:01 -0700 (PDT)
+Received: from kwepemi100020.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KnQ5v1kBJzQjBn;
+        Tue, 26 Apr 2022 09:58:43 +0800 (CST)
+Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
+ kwepemi100020.china.huawei.com (7.221.188.48) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 26 Apr 2022 09:58:59 +0800
+Received: from ubuntu1804.huawei.com (10.67.174.174) by
+ kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 26 Apr 2022 09:58:58 +0800
+From:   Li Huafei <lihuafei1@huawei.com>
+To:     <guoren@kernel.org>, <mhiramat@kernel.org>, <palmer@dabbelt.com>
+CC:     <rostedt@goodmis.org>, <mingo@redhat.com>,
+        <paul.walmsley@sifive.com>, <aou@eecs.berkeley.edu>,
+        <naveen.n.rao@linux.ibm.com>, <anil.s.keshavamurthy@intel.com>,
+        <davem@davemloft.net>, <jszhang@kernel.org>,
+        <peterz@infradead.org>, <liaochang1@huawei.com>, <me@packi.ch>,
+        <penberg@kernel.org>, <lihuafei1@huawei.com>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/2] riscv: ftrace: Fix the comments about the number of ftrace instruction
+Date:   Tue, 26 Apr 2022 09:57:50 +0800
+Message-ID: <20220426015751.88582-1-lihuafei1@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220423155619.3669555-2-void@manifault.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.174]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600010.china.huawei.com (7.193.23.86)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 23, 2022 at 08:56:17AM -0700, David Vernet wrote:
-> In test_memcg_min() and test_memcg_low(), there is an array of four sibling
-> cgroups. All but one of these sibling groups does a 50MB allocation, and
-> the group that does no allocation is the third of four in the array.  This
-> is not a problem per se, but makes it a bit tricky to do some assertions in
-> test_memcg_low(), as we want to make assertions on the siblings based on
-> whether or not they performed allocations. Having a static index before
-> which all groups have performed an allocation makes this cleaner.
-> 
-> This patch therefore reorders the sibling groups so that the group that
-> performs no allocations is the last in the array. A follow-on patch will
-> leverage this to fix a bug in the test that incorrectly asserts that a
-> sibling group that had performed an allocation, but only had protection
-> from its parent, will not observe any memory.events.low events during
-> reclaim.
-> 
-> Signed-off-by: David Vernet <void@manifault.com>
+When DYNAMIC_FTRACE is enabled, we put four instructions in front of the
+function for ftrace use, not five.
 
-Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+Signed-off-by: Li Huafei <lihuafei1@huawei.com>
+---
+ arch/riscv/kernel/ftrace.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks!
+diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
+index 4716f4cdc038..63f457650fa4 100644
+--- a/arch/riscv/kernel/ftrace.c
++++ b/arch/riscv/kernel/ftrace.c
+@@ -73,7 +73,7 @@ static int __ftrace_modify_call(unsigned long hook_pos, unsigned long target,
+ }
+ 
+ /*
+- * Put 5 instructions with 16 bytes at the front of function within
++ * Put 4 instructions with 16 bytes at the front of function within
+  * patchable function entry nops' area.
+  *
+  * 0: REG_S  ra, -SZREG(sp)
+-- 
+2.17.1
+

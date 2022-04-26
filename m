@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3694250F655
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:55:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2035650F884
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345415AbiDZImP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39300 "EHLO
+        id S1347292AbiDZJbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345498AbiDZIek (ORCPT
+        with ESMTP id S1347833AbiDZJGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:34:40 -0400
+        Tue, 26 Apr 2022 05:06:15 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13237762B1;
-        Tue, 26 Apr 2022 01:27:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C5B165EDC;
+        Tue, 26 Apr 2022 01:46:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4425E617F1;
-        Tue, 26 Apr 2022 08:27:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07E75C385A0;
-        Tue, 26 Apr 2022 08:27:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7657F60C42;
+        Tue, 26 Apr 2022 08:46:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61BB9C385A4;
+        Tue, 26 Apr 2022 08:46:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961648;
-        bh=uohlWFwBq9UC0CYbsoaezznRmsKwW5dkGs3AXvj3XO4=;
+        s=korg; t=1650962768;
+        bh=HOgeKlCf4sqtrj3ClAaRqNeqkJt/YPupukSLzHNogWA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NAjEYCoPu8Cg5Hx93RdZpGYeSyzt869XDG06BkDd7hNqHp8hq/4LC/zHAYdTOAzVD
-         JpxgiHvea1VV3TiLPhU8ie1464rksKOp20e3UTui8e/MO8GUHOTCbsU6/Th//PSogW
-         eTkAAITVc0utVWZYHL2sn2iR2Vsx8HRcHaBiDA9Q=
+        b=XA+AF2o2G1jI8uVf2XHl/cdyPIM+P+vPt3gW/PrjWx5bakfcEEMmNnOoS0q4SFqML
+         mcT0OOA1ssOyhSgU9rrUNnnoqWvQy7E99nBzhrOG7TJUwL+LA2i7zuUc8UciFs2pqE
+         SnjAKc2CHht1kCXiDnoGVdmyMPmqcBHMFm1P9lZk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Al Grant <al.grant@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH 4.19 38/53] arm_pmu: Validate single/group leader events
+        stable@vger.kernel.org, David Disseldorp <ddiss@suse.de>,
+        Jeff Layton <jlayton@kernel.org>, NeilBrown <neilb@suse.de>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 083/146] VFS: filename_create(): fix incorrect intent.
 Date:   Tue, 26 Apr 2022 10:21:18 +0200
-Message-Id: <20220426081736.765051355@linuxfoundation.org>
+Message-Id: <20220426081752.395819931@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
-References: <20220426081735.651926456@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,54 +56,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Herring <robh@kernel.org>
+From: NeilBrown <neilb@suse.de>
 
-commit e5c23779f93d45e39a52758ca593bd7e62e9b4be upstream.
+[ Upstream commit b3d4650d82c71b9c9a8184de9e8bb656012b289e ]
 
-In the case where there is only a cycle counter available (i.e.
-PMCR_EL0.N is 0) and an event other than CPU cycles is opened, the open
-should fail as the event can never possibly be scheduled. However, the
-event validation when an event is opened is skipped when the group
-leader is opened. Fix this by always validating the group leader events.
+When asked to create a path ending '/', but which is not to be a
+directory (LOOKUP_DIRECTORY not set), filename_create() will never try
+to create the file.  If it doesn't exist, -ENOENT is reported.
 
-Reported-by: Al Grant <al.grant@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Signed-off-by: Rob Herring <robh@kernel.org>
-Acked-by: Mark Rutland <mark.rutland@arm.com>
-Link: https://lore.kernel.org/r/20220408203330.4014015-1-robh@kernel.org
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Will Deacon <will@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+However, it still passes LOOKUP_CREATE|LOOKUP_EXCL to the filesystems
+->lookup() function, even though there is no intent to create.  This is
+misleading and can cause incorrect behaviour.
+
+If you try
+
+   ln -s foo /path/dir/
+
+where 'dir' is a directory on an NFS filesystem which is not currently
+known in the dcache, this will fail with ENOENT.
+
+But as the name is not in the dcache, nfs_lookup gets called with
+LOOKUP_CREATE|LOOKUP_EXCL and so it returns NULL without performing any
+lookup, with the expectation that a subsequent call to create the target
+will be made, and the lookup can be combined with the creation.  In the
+case with a trailing '/' and no LOOKUP_DIRECTORY, that call is never
+made.  Instead filename_create() sees that the dentry is not (yet)
+positive and returns -ENOENT - even though the directory actually
+exists.
+
+So only set LOOKUP_CREATE|LOOKUP_EXCL if there really is an intent to
+create, and use the absence of these flags to decide if -ENOENT should
+be returned.
+
+Note that filename_parentat() is only interested in LOOKUP_REVAL, so we
+split that out and store it in 'reval_flag'.  __lookup_hash() then gets
+reval_flag combined with whatever create flags were determined to be
+needed.
+
+Reviewed-by: David Disseldorp <ddiss@suse.de>
+Reviewed-by: Jeff Layton <jlayton@kernel.org>
+Signed-off-by: NeilBrown <neilb@suse.de>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/perf/arm_pmu.c |   10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ fs/namei.c | 22 ++++++++++------------
+ 1 file changed, 10 insertions(+), 12 deletions(-)
 
---- a/drivers/perf/arm_pmu.c
-+++ b/drivers/perf/arm_pmu.c
-@@ -321,6 +321,9 @@ validate_group(struct perf_event *event)
- 	if (!validate_event(event->pmu, &fake_pmu, leader))
- 		return -EINVAL;
+diff --git a/fs/namei.c b/fs/namei.c
+index 3f1829b3ab5b..509657fdf4f5 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -3673,18 +3673,14 @@ static struct dentry *filename_create(int dfd, struct filename *name,
+ {
+ 	struct dentry *dentry = ERR_PTR(-EEXIST);
+ 	struct qstr last;
++	bool want_dir = lookup_flags & LOOKUP_DIRECTORY;
++	unsigned int reval_flag = lookup_flags & LOOKUP_REVAL;
++	unsigned int create_flags = LOOKUP_CREATE | LOOKUP_EXCL;
+ 	int type;
+ 	int err2;
+ 	int error;
+-	bool is_dir = (lookup_flags & LOOKUP_DIRECTORY);
  
-+	if (event == leader)
-+		return 0;
-+
- 	for_each_sibling_event(sibling, leader) {
- 		if (!validate_event(event->pmu, &fake_pmu, sibling))
- 			return -EINVAL;
-@@ -418,12 +421,7 @@ __hw_perf_event_init(struct perf_event *
- 		local64_set(&hwc->period_left, hwc->sample_period);
- 	}
- 
--	if (event->group_leader != event) {
--		if (validate_group(event) != 0)
--			return -EINVAL;
--	}
+-	/*
+-	 * Note that only LOOKUP_REVAL and LOOKUP_DIRECTORY matter here. Any
+-	 * other flags passed in are ignored!
+-	 */
+-	lookup_flags &= LOOKUP_REVAL;
 -
--	return 0;
-+	return validate_group(event);
- }
+-	error = filename_parentat(dfd, name, lookup_flags, path, &last, &type);
++	error = filename_parentat(dfd, name, reval_flag, path, &last, &type);
+ 	if (error)
+ 		return ERR_PTR(error);
  
- static int armpmu_event_init(struct perf_event *event)
+@@ -3698,11 +3694,13 @@ static struct dentry *filename_create(int dfd, struct filename *name,
+ 	/* don't fail immediately if it's r/o, at least try to report other errors */
+ 	err2 = mnt_want_write(path->mnt);
+ 	/*
+-	 * Do the final lookup.
++	 * Do the final lookup.  Suppress 'create' if there is a trailing
++	 * '/', and a directory wasn't requested.
+ 	 */
+-	lookup_flags |= LOOKUP_CREATE | LOOKUP_EXCL;
++	if (last.name[last.len] && !want_dir)
++		create_flags = 0;
+ 	inode_lock_nested(path->dentry->d_inode, I_MUTEX_PARENT);
+-	dentry = __lookup_hash(&last, path->dentry, lookup_flags);
++	dentry = __lookup_hash(&last, path->dentry, reval_flag | create_flags);
+ 	if (IS_ERR(dentry))
+ 		goto unlock;
+ 
+@@ -3716,7 +3714,7 @@ static struct dentry *filename_create(int dfd, struct filename *name,
+ 	 * all is fine. Let's be bastards - you had / on the end, you've
+ 	 * been asking for (non-existent) directory. -ENOENT for you.
+ 	 */
+-	if (unlikely(!is_dir && last.name[last.len])) {
++	if (unlikely(!create_flags)) {
+ 		error = -ENOENT;
+ 		goto fail;
+ 	}
+-- 
+2.35.1
+
 
 

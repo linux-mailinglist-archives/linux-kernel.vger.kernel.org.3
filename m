@@ -2,121 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1915B5108D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 21:18:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F5525108DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 21:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353846AbiDZTVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 15:21:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48238 "EHLO
+        id S1353907AbiDZTWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 15:22:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347024AbiDZTVf (ORCPT
+        with ESMTP id S244566AbiDZTWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 15:21:35 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78905644F6
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 12:18:26 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id u3so26831883wrg.3
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 12:18:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=D51WhcFY/UMeRUO4RGgJqs3BnSIqLPLR50R7pSPgCJk=;
-        b=41hn5Zs+Qibe7XUS82jY/4Yq9kjs81xMeDW2Al5Wv4emYj7RXpxHg9m/a74sGulFA4
-         u7y1fTPot16F8zf/57piTeqrziJ+vUuuPyb5/ArPm07y0CptVtmUNy+cPC1+xb7/ZFg6
-         hJ+GeLntfyA7sCcy02UFG8KSwAVd49QPBMi0gGNIu/M/Sn6ha74BLytHSk5CuzBBUSdB
-         vGt0pDb7OsvHBuTS2jYecFd14v1eBEIRWVzLLoXNdSq6JxWX6Tal26NvfjJkZ0Gj9i+a
-         qv0KixQFvy4J/D9N+b5mlflsWKcS/uT4A4UBBU7+ZlGBMMDvcR672AWcOC+20JFsxnhA
-         UQeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=D51WhcFY/UMeRUO4RGgJqs3BnSIqLPLR50R7pSPgCJk=;
-        b=WL6lv/GZRlj1kI4sBmVcM6LPFnrDfYkI+RcyZDl90se9DzZClnYbWdX35PvhwuA2+j
-         IGm754NMX4bP3kb48IIvld3krgvzOR5J0LZgNxVI3TpwoogsAF9zvxa9S0UKks0rgh4U
-         ZxXg424Hia7cJ7dCLwrY4D4vVqIEo+l1tedhNzgc4uesVPLeFNsmivO2C6fmlmlBoMJh
-         LGAz8dnzfRylYdwTrGrXLNTmNuZewJoiQhF54QwLySrh0wV/l1tLubqCGBkuwUYwl+rD
-         QCg8VmHVPv3jL+8nYNwEI8uSabJOVxnKNa/0+9hwe+QXaYj6h5YN9NVZ6isvmiJwfY/o
-         7rFg==
-X-Gm-Message-State: AOAM530lgXxwtJ1H0SobENkUcUEkJAjb54SK9MKeS2VGJNVzeHRWQ93A
-        VrovjxR6rpM57A5SUVnXoMQOx3GsB/85hSOPsPfl
-X-Google-Smtp-Source: ABdhPJyN5wrn3K+iI2j26/cBIbWY3KxJyXj68+WgqqkU4W4HlKBXb8XI2ye1xUXf6KEOe8QcVbMtcJEumNqu4jkWPrM=
-X-Received: by 2002:a5d:590d:0:b0:20a:c3eb:2584 with SMTP id
- v13-20020a5d590d000000b0020ac3eb2584mr18829655wrd.18.1651000705042; Tue, 26
- Apr 2022 12:18:25 -0700 (PDT)
+        Tue, 26 Apr 2022 15:22:47 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F1A64707
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 12:19:38 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: bbeckett)
+        with ESMTPSA id 107061F41A32
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1651000777;
+        bh=MAjmFdqWA+Hrdq60ZeCd3OrHWgUw+ka1jffl+aLkF04=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=U4W2g9y7THG9R7VpouQpRZ1L82hltGgjoux1qoqVpBWDvEKw5qIoSP2j+H1YBzZhO
+         ajW6m+pKYyUK5uiuxPYKz0kDo37QsSYOOJWi3EFXYrWLChEvM0nf/qSL+UtYcDmuOJ
+         wlPd5Ug6Rz8EAjED5i4Q/JYdJshiM4/jxmJXIxKQlM7jfIq8pnSPOIs4b8aTAr9gZG
+         Uzd5vqUAw1Q3dxHbDVHnsOiVRxrXva/iLl63V3hAlfXaZfixLYs22KPDys3kYej46X
+         ZvX5cUqrh08vjhCXLT2q0VOVVNGlEBPtpzmD9bVGp6jY3b3Bt6ynrakUp6liIoZ8lj
+         omDh51dXTmefA==
+Message-ID: <780fa818-292c-a313-6006-0af0730c2743@collabora.com>
+Date:   Tue, 26 Apr 2022 20:19:33 +0100
 MIME-Version: 1.0
-References: <20220418145945.38797-1-casey@schaufler-ca.com>
- <20220418145945.38797-24-casey@schaufler-ca.com> <a1702622-5980-1eb4-1cf8-b6fc6cd98b25@canonical.com>
- <CAHC9VhRzJKAARW1rnUMu0Y6RVo_uq=i=Jzh4LmA9grtQ1W2C1Q@mail.gmail.com> <26eca0aa-111a-9473-8925-e4b12cadbd79@canonical.com>
-In-Reply-To: <26eca0aa-111a-9473-8925-e4b12cadbd79@canonical.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 26 Apr 2022 15:18:13 -0400
-Message-ID: <CAHC9VhQQysL8aEt8w5G-nemJzapY-Q4pYKn0TCdnVjpuiTKqhw@mail.gmail.com>
-Subject: Re: [PATCH v35 23/29] Audit: Create audit_stamp structure
-To:     John Johansen <john.johansen@canonical.com>
-Cc:     Casey Schaufler <casey@schaufler-ca.com>,
-        casey.schaufler@intel.com, jmorris@namei.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-audit@redhat.com, keescook@chromium.org,
-        penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [Intel-gfx] [PULL] gvt-next
+Content-Language: en-US
+To:     "Wang, Zhi A" <zhi.a.wang@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Cc:     "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        Christoph Hellwig <hch@lst.de>
+References: <c5cf6773-e7a2-8ba8-4cde-0bb14007bc6b@intel.com>
+ <20220426155318.GQ2125828@nvidia.com>
+ <e245c195-fdb0-32c4-dcfb-8ff49bc3a63c@intel.com>
+From:   Robert Beckett <bob.beckett@collabora.com>
+In-Reply-To: <e245c195-fdb0-32c4-dcfb-8ff49bc3a63c@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 2:58 PM John Johansen
-<john.johansen@canonical.com> wrote:
-> On 4/26/22 11:03, Paul Moore wrote:
-> > On Mon, Apr 25, 2022 at 7:31 PM John Johansen
-> > <john.johansen@canonical.com> wrote:
-> >> On 4/18/22 07:59, Casey Schaufler wrote:
-> >>> Replace the timestamp and serial number pair used in audit records
-> >>> with a structure containing the two elements.
-> >>>
-> >>> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-> >>> Acked-by: Paul Moore <paul@paul-moore.com>
-> >>> ---
-> >>>  kernel/audit.c   | 17 +++++++++--------
-> >>>  kernel/audit.h   | 12 +++++++++---
-> >>>  kernel/auditsc.c | 22 +++++++++-------------
-> >>>  3 files changed, 27 insertions(+), 24 deletions(-)
-> >
-> > ...
-> >
-> >>> diff --git a/kernel/audit.h b/kernel/audit.h
-> >>> index 4af63e7dde17..260dab6e0e15 100644
-> >>> --- a/kernel/audit.h
-> >>> +++ b/kernel/audit.h
-> >>> @@ -108,10 +114,10 @@ struct audit_context {
-> >>>               AUDIT_CTX_URING,        /* in use by io_uring */
-> >>>       } context;
-> >>>       enum audit_state    state, current_state;
-> >>> +     struct audit_stamp  stamp;      /* event identifier */
-> >>>       unsigned int        serial;     /* serial number for record */
-> >>
-> >> shouldn't we be dropping serial from the audit_context, since we have
-> >> moved it into the audit_stamp?
-> >
-> > Unless we make some significant changes to audit_log_start() we still
-> > need to preserve a timestamp in the audit_context so that regularly
-> > associated audit records can share a common timestamp (which is what
-> > groups multiple records into a single "event").
-> >
-> sure, but the patch changes things to use ctx->stamp.serial instead of
-> ctx->serial ...
 
-My apologies, I read your original comment wrong; I was thinking you
-were suggesting removing the timestamp info from audit_context in
-favor of using the timestamp info contained in the audit_buffer.
 
-Yes, audit_context:serial is no longer needed with audit_context:stamp.
+On 26/04/2022 17:58, Wang, Zhi A wrote:
+> On 4/26/22 3:53 PM, Jason Gunthorpe wrote:
+>> On Tue, Apr 26, 2022 at 07:58:59AM +0000, Wang, Zhi A wrote:
+>>> Hi folks:
+>>>
+>>> Here is the pull of gvt-next which fixs the compilation error when i915 debug
+>>> is open after the GVT-g refactor patches.
+>>>
+>>> Thanks so much for the efforts.
+>>>
+>>> Thanks,
+>>> Zhi.
+>>>
+>>> The following changes since commit 2917f53113be3b7a0f374e02cebe6d6b749366b5:
+>>>
+>>>    vfio/mdev: Remove mdev drvdata (2022-04-21 07:36:56 -0400)
+>>>
+>>> are available in the Git repository at:
+>>>
+>>>    https://github.com/intel/gvt-linux tags/gvt-next-2022-04-26
+>>>
+>>> for you to fetch changes up to 2da299cee780ea797b3f72558687868072cf5eb5:
+>>>
+>>>    drm/i915/gvt: Add missing export of symbols. (2022-04-25 18:03:04 -0400)
+>>>
+>>> gvt-next-2022-04-26
+>>>
+>>> - Add two missing exports of symbols when i915 debug is enabled.
+>>>
+>>> Zhi Wang (1):
+>>>        drm/i915/gvt: Add missing export of symbols.
+>>>
+>>>   drivers/gpu/drm/i915/intel_gvt.c | 2 ++
+>>>   1 file changed, 2 insertions(+)
+>>
+>> This still has another compile problem:
+>>
+>> ERROR: modpost: "intel_runtime_pm_put" [vmlinux] is a static EXPORT_SYMBOL_GPL
+>>
+>> Because:
+>>
+>> #if IS_ENABLED(CONFIG_DRM_I915_DEBUG_RUNTIME_PM)
+>> void intel_runtime_pm_put(struct intel_runtime_pm *rpm, intel_wakeref_t wref);
+>> #else
+>> static inline void
+>> intel_runtime_pm_put(struct intel_runtime_pm *rpm, intel_wakeref_t wref)
+>> {
+>>          intel_runtime_pm_put_unchecked(rpm);
+>> }
+>> #endif
+>>
+>> Looks like it happens if CONFIG_DRM_I915_DEBUG_RUNTIME_PM=n
+>>
+>> I think you probably want to #ifdef the export in the same way:
+>>
+>> --- a/drivers/gpu/drm/i915/intel_gvt.c
+>> +++ b/drivers/gpu/drm/i915/intel_gvt.c
+>> @@ -309,7 +309,9 @@ EXPORT_SYMBOL_NS_GPL(__intel_context_do_pin, I915_GVT);
+>>   EXPORT_SYMBOL_NS_GPL(__intel_context_do_unpin, I915_GVT);
+>>   EXPORT_SYMBOL_NS_GPL(intel_ring_begin, I915_GVT);
+>>   EXPORT_SYMBOL_NS_GPL(intel_runtime_pm_get, I915_GVT);
+>> +#if IS_ENABLED(CONFIG_DRM_I915_DEBUG_RUNTIME_PM)
+>>   EXPORT_SYMBOL_NS_GPL(intel_runtime_pm_put, I915_GVT);
+>> +#endif
+> Sigh. That's tricky. Let me prepare another one.
 
--- 
-paul-moore.com
+Also the following compile error:
+
+drivers/gpu/drm/i915/gvt/handlers.c:75:6: error: no previous prototype 
+for ‘intel_gvt_match_device’ [-Werror=missing-prototypes]
+
+    75 | bool intel_gvt_match_device(struct intel_gvt *gvt,
+
+       |      ^~~~~~~~~~~~~~~~~~~~~~
+
+
+it was removed from a header. The implementation should now be made static
+
+>>   EXPORT_SYMBOL_NS_GPL(intel_runtime_pm_put_unchecked, I915_GVT);
+>>   EXPORT_SYMBOL_NS_GPL(intel_uncore_forcewake_for_reg, I915_GVT);
+>>   EXPORT_SYMBOL_NS_GPL(intel_uncore_forcewake_get, I915_GVT);
+>>
+>> Jason
+>>
+> 

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F14B50F3F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:26:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67EC750F56E
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344707AbiDZI3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:29:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36356 "EHLO
+        id S1346303AbiDZIyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:54:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344774AbiDZI21 (ORCPT
+        with ESMTP id S1345409AbiDZIky (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:28:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29009133E78;
-        Tue, 26 Apr 2022 01:24:11 -0700 (PDT)
+        Tue, 26 Apr 2022 04:40:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84579156E19;
+        Tue, 26 Apr 2022 01:32:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B8DAB6179E;
-        Tue, 26 Apr 2022 08:24:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4D85C385A4;
-        Tue, 26 Apr 2022 08:24:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 36017B81CF9;
+        Tue, 26 Apr 2022 08:32:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F59BC385A4;
+        Tue, 26 Apr 2022 08:32:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961450;
-        bh=j0gl3vwHeaKb2MMhrqnV3OYaEofGRoT5zWN/DeGK2dI=;
+        s=korg; t=1650961971;
+        bh=FNUxyha6533HUnq5rVuZcQa26iropGAM7TaqeG2OOHw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lpqVUqD7O0pZUnvsVJlyUEwhKtKbKepzhGHOUY5x5AHvY1xF8CGvMSLRA6zYWDcKQ
-         cZPXxg0UoDgh9rSCPvXk2Zh22AqFhR2+6xkjagqWHgrsHo2pymX429N6jr1sV/q40N
-         eQssQQbydWZP8APmpxCBi3KNPlX9byIt1eq/TBHY=
+        b=lr4CSqfKlOabWHoGcyZCQjHTGPscPT1MbZ9ody/vn8QJUzF9Z2lqZ/iwdTt1ToGbe
+         13zzgLhZMiwEET6nbBmrf2UtNfyu+UvY2O1JIzw/UcW67YQVBGAiOgAnb2TQ+SLVIQ
+         fIaAIMZ6UG3CjuxkJHZs5PVVikuJ0fAAu5rGd1XY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Borislav Petkov <bp@suse.de>,
-        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 15/43] ALSA: usb-audio: Fix undefined behavior due to shift overflowing the constant
+        stable@vger.kernel.org, Bernice Zhang <bernice.zhang@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 29/86] dmaengine: idxd: add RO check for wq max_batch_size write
 Date:   Tue, 26 Apr 2022 10:20:57 +0200
-Message-Id: <20220426081734.968707855@linuxfoundation.org>
+Message-Id: <20220426081742.049499318@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081734.509314186@linuxfoundation.org>
-References: <20220426081734.509314186@linuxfoundation.org>
+In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
+References: <20220426081741.202366502@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,42 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+From: Dave Jiang <dave.jiang@intel.com>
 
-[ Upstream commit 1ef8715975de8bd481abbd0839ed4f49d9e5b0ff ]
+[ Upstream commit 66903461ffed0b66fc3e0200082d4e09365aacdc ]
 
-Fix:
+Block wq_max_batch_size_store() when the device is configured as read-only
+and not configurable.
 
-  sound/usb/midi.c: In function ‘snd_usbmidi_out_endpoint_create’:
-  sound/usb/midi.c:1389:2: error: case label does not reduce to an integer constant
-    case USB_ID(0xfc08, 0x0101): /* Unknown vendor Cable */
-    ^~~~
-
-See https://lore.kernel.org/r/YkwQ6%2BtIH8GQpuct@zn.tnic for the gory
-details as to why it triggers with older gccs only.
-
-[ A slight correction with parentheses around the argument by tiwai ]
-
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220405151517.29753-3-bp@alien8.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Fixes: e7184b159dd3 ("dmaengine: idxd: add support for configurable max wq batch size")
+Reported-by: Bernice Zhang <bernice.zhang@intel.com>
+Tested-by: Bernice Zhang <bernice.zhang@intel.com>
+Signed-off-by: Dave Jiang <dave.jiang@intel.com>
+Link: https://lore.kernel.org/r/164971493551.2201159.1942042593642155209.stgit@djiang5-desk3.ch.intel.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/usb/usbaudio.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/dma/idxd/sysfs.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/sound/usb/usbaudio.h b/sound/usb/usbaudio.h
-index 62456a806bb4..4b8f1c46420d 100644
---- a/sound/usb/usbaudio.h
-+++ b/sound/usb/usbaudio.h
-@@ -22,7 +22,7 @@
-  */
+diff --git a/drivers/dma/idxd/sysfs.c b/drivers/dma/idxd/sysfs.c
+index 7b41cdff1a2c..5bf4b4be64e4 100644
+--- a/drivers/dma/idxd/sysfs.c
++++ b/drivers/dma/idxd/sysfs.c
+@@ -1132,6 +1132,9 @@ static ssize_t wq_max_batch_size_store(struct device *dev, struct device_attribu
+ 	u64 batch_size;
+ 	int rc;
  
- /* handling of USB vendor/product ID pairs as 32-bit numbers */
--#define USB_ID(vendor, product) (((vendor) << 16) | (product))
-+#define USB_ID(vendor, product) (((unsigned int)(vendor) << 16) | (product))
- #define USB_ID_VENDOR(id) ((id) >> 16)
- #define USB_ID_PRODUCT(id) ((u16)(id))
++	if (!test_bit(IDXD_FLAG_CONFIGURABLE, &idxd->flags))
++		return -EPERM;
++
+ 	if (wq->state != IDXD_WQ_DISABLED)
+ 		return -EPERM;
  
 -- 
 2.35.1

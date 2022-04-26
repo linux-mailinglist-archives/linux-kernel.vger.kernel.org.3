@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7858250F6D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:59:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6C3E50F798
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346609AbiDZJA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:00:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56548 "EHLO
+        id S1347913AbiDZJht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346525AbiDZIpH (ORCPT
+        with ESMTP id S1346264AbiDZJH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:45:07 -0400
+        Tue, 26 Apr 2022 05:07:29 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D94169429;
-        Tue, 26 Apr 2022 01:34:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA4F21759E3;
+        Tue, 26 Apr 2022 01:48:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B405DB81CF2;
-        Tue, 26 Apr 2022 08:34:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FF81C385B0;
-        Tue, 26 Apr 2022 08:34:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 701FFB81CF2;
+        Tue, 26 Apr 2022 08:48:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7C1BC385A4;
+        Tue, 26 Apr 2022 08:48:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962092;
-        bh=dbYAWSh4EZVbvWQb33QdDvnB5dTTw2cTTKNqUf7AllA=;
+        s=korg; t=1650962906;
+        bh=QWLitrRvFmVyVyJOX1rFDP8ZYjWDXNK6XBXYNABfqg0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bdbQfV7UgSIStzOy+jtQoIsVBpwyYbKtTuLxNReCYvZH1jZtGr5VGVqAHE6DR2mSr
-         FYH1Ij3I2s+BvwpipxVyKT3AfhtXJpb1fPU4/nbQ0pWi0rXsrX9JyySVcF/hReiSEJ
-         ekN8Hcear4DDEnlUeM+y+Bp+czXoGavzJ1aczv8w=
+        b=TmA/nFRBJn6Wh63Jlifh/fQm+DfBrRM/pKveMPIuqfJmkK8OrdNA4dkRg9pPgQ5Zl
+         AfjTfPLf8zkZsJZVojmsnxDTK0JVEDFj1wvL+X0YAanaevbqD97GJ0WL0eKfaxPsVz
+         N+eugwqTF4GX+aqVmuIDn2t36tyYcS3fOM0sFUlU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Maxime Ripard <maxime@cerno.tech>,
+        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Tom Rix <trix@redhat.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 68/86] drm/panel/raspberrypi-touchscreen: Avoid NULL deref if not initialised
+Subject: [PATCH 5.17 101/146] scsi: sr: Do not leak information in ioctl
 Date:   Tue, 26 Apr 2022 10:21:36 +0200
-Message-Id: <20220426081743.170776638@linuxfoundation.org>
+Message-Id: <20220426081752.898257078@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
-References: <20220426081741.202366502@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,40 +55,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+From: Tom Rix <trix@redhat.com>
 
-[ Upstream commit f92055ae0acb035891e988ce345d6b81a0316423 ]
+[ Upstream commit faad6cebded8e0fd902b672f220449b93db479eb ]
 
-If a call to rpi_touchscreen_i2c_write from rpi_touchscreen_probe
-fails before mipi_dsi_device_register_full is called, then
-in trying to log the error message if uses ts->dsi->dev when
-it is still NULL.
+sr_ioctl.c uses this pattern:
 
-Use ts->i2c->dev instead, which is initialised earlier in probe.
+  result = sr_do_ioctl(cd, &cgc);
+  to-user = buffer[];
+  kfree(buffer);
+  return result;
 
-Fixes: 2f733d6194bd ("drm/panel: Add support for the Raspberry Pi 7" Touchscreen.")
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220415162513.42190-2-stefan.wahren@i2se.com
+Use of a buffer without checking leaks information. Check result and jump
+over the use of buffer if there is an error.
+
+  result = sr_do_ioctl(cd, &cgc);
+  if (result)
+    goto err;
+  to-user = buffer[];
+err:
+  kfree(buffer);
+  return result;
+
+Additionally, initialize the buffer to zero.
+
+This problem can be seen in the 2.4.0 kernel.
+
+Link: https://lore.kernel.org/r/20220411174756.2418435-1-trix@redhat.com
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Tom Rix <trix@redhat.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/sr_ioctl.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c b/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c
-index bbdd086be7f5..90487df62480 100644
---- a/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c
-+++ b/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c
-@@ -229,7 +229,7 @@ static void rpi_touchscreen_i2c_write(struct rpi_touchscreen *ts,
+diff --git a/drivers/scsi/sr_ioctl.c b/drivers/scsi/sr_ioctl.c
+index ddd00efc4882..fbdb5124d7f7 100644
+--- a/drivers/scsi/sr_ioctl.c
++++ b/drivers/scsi/sr_ioctl.c
+@@ -41,7 +41,7 @@ static int sr_read_tochdr(struct cdrom_device_info *cdi,
+ 	int result;
+ 	unsigned char *buffer;
  
- 	ret = i2c_smbus_write_byte_data(ts->i2c, reg, val);
- 	if (ret)
--		dev_err(&ts->dsi->dev, "I2C write failed: %d\n", ret);
-+		dev_err(&ts->i2c->dev, "I2C write failed: %d\n", ret);
+-	buffer = kmalloc(32, GFP_KERNEL);
++	buffer = kzalloc(32, GFP_KERNEL);
+ 	if (!buffer)
+ 		return -ENOMEM;
+ 
+@@ -55,10 +55,13 @@ static int sr_read_tochdr(struct cdrom_device_info *cdi,
+ 	cgc.data_direction = DMA_FROM_DEVICE;
+ 
+ 	result = sr_do_ioctl(cd, &cgc);
++	if (result)
++		goto err;
+ 
+ 	tochdr->cdth_trk0 = buffer[2];
+ 	tochdr->cdth_trk1 = buffer[3];
+ 
++err:
+ 	kfree(buffer);
+ 	return result;
  }
+@@ -71,7 +74,7 @@ static int sr_read_tocentry(struct cdrom_device_info *cdi,
+ 	int result;
+ 	unsigned char *buffer;
  
- static int rpi_touchscreen_write(struct rpi_touchscreen *ts, u16 reg, u32 val)
+-	buffer = kmalloc(32, GFP_KERNEL);
++	buffer = kzalloc(32, GFP_KERNEL);
+ 	if (!buffer)
+ 		return -ENOMEM;
+ 
+@@ -86,6 +89,8 @@ static int sr_read_tocentry(struct cdrom_device_info *cdi,
+ 	cgc.data_direction = DMA_FROM_DEVICE;
+ 
+ 	result = sr_do_ioctl(cd, &cgc);
++	if (result)
++		goto err;
+ 
+ 	tocentry->cdte_ctrl = buffer[5] & 0xf;
+ 	tocentry->cdte_adr = buffer[5] >> 4;
+@@ -98,6 +103,7 @@ static int sr_read_tocentry(struct cdrom_device_info *cdi,
+ 		tocentry->cdte_addr.lba = (((((buffer[8] << 8) + buffer[9]) << 8)
+ 			+ buffer[10]) << 8) + buffer[11];
+ 
++err:
+ 	kfree(buffer);
+ 	return result;
+ }
+@@ -384,7 +390,7 @@ int sr_get_mcn(struct cdrom_device_info *cdi, struct cdrom_mcn *mcn)
+ {
+ 	Scsi_CD *cd = cdi->handle;
+ 	struct packet_command cgc;
+-	char *buffer = kmalloc(32, GFP_KERNEL);
++	char *buffer = kzalloc(32, GFP_KERNEL);
+ 	int result;
+ 
+ 	if (!buffer)
+@@ -400,10 +406,13 @@ int sr_get_mcn(struct cdrom_device_info *cdi, struct cdrom_mcn *mcn)
+ 	cgc.data_direction = DMA_FROM_DEVICE;
+ 	cgc.timeout = IOCTL_TIMEOUT;
+ 	result = sr_do_ioctl(cd, &cgc);
++	if (result)
++		goto err;
+ 
+ 	memcpy(mcn->medium_catalog_number, buffer + 9, 13);
+ 	mcn->medium_catalog_number[13] = 0;
+ 
++err:
+ 	kfree(buffer);
+ 	return result;
+ }
 -- 
 2.35.1
 

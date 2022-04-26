@@ -2,72 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BB0450FCCB
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 14:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C8F50FCCE
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 14:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349916AbiDZMVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 08:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43576 "EHLO
+        id S1349891AbiDZMWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 08:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349947AbiDZMVo (ORCPT
+        with ESMTP id S243957AbiDZMWB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 08:21:44 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F53C2D1FB;
-        Tue, 26 Apr 2022 05:17:39 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id j2so32669328ybu.0;
-        Tue, 26 Apr 2022 05:17:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=D8bMngWVr0tdDN5yiWTr4GCLxeSgF3V3y+tGLoxVCwE=;
-        b=PRM6gHAykZCXpCQH5Wk8cGO282pG77Ww8omQDxG+iNICtf6Y583Iv1oDHwR5jgWxlv
-         hAiVerTzW/WBglfZmwOJeATGGNFIGUeSBqNrcr1+yyGzL+Piy9ke9uKErf72U57iZpfB
-         ajJOW7YzJzLMQxtZiYmfusltKmmh23XSC/j6g0WP7/Xh7aIB6BHo6cqwSSnGcoOO1y+D
-         rjxcH30lURrv6o3dnfN8aydhCKNWBXPMjlg4Kjk+r59/we0DKUZGfhBqhOBpL62mLNDZ
-         VcE0iElzzWysREq918Ia6i8+mbxC9Vc36Lo72l1Q51v6XPgU/C/fZjbh78GsiSqTgAls
-         i+qQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=D8bMngWVr0tdDN5yiWTr4GCLxeSgF3V3y+tGLoxVCwE=;
-        b=Epzf7ddvFQ8bmt0gkaZsuPYNWgmaoTFY7vnKNZfgr5TDfgsMGsdKPcGKeIgNJ49Ocm
-         /1WlpnJHXuL0Cw6Me1iWQQcgnvF5dbj+g8lpUM16QrgU2nhbqmzJDVv/BPUpj09Nr69n
-         Ns9j2nxt7/ODq5QCFAwLn0Kxip+YAJt1VEyKOZ256NM231ESAOERnmHOlAlIB3RUZg3H
-         3FjpxPQ7k1ozqxBMrw262F/tAO29rtki7SVlCpYOt42UePPD4eB2d+YYrxgKimZghSBS
-         0f+20cyVq1kEKSw6joUkLMH3+fK9arVW7Rq/vREakhlQ7MrSD5ve0VS7w2vN14UphAvl
-         IBiQ==
-X-Gm-Message-State: AOAM530ybCMvcf6q+BlsGD2iU1G0Jamr5Bj2CVDIrTB5YZHs9wNrHlco
-        NS9nfySUlJih/9OOKDsQm5S4wKSCiawIoUU9Lso=
-X-Google-Smtp-Source: ABdhPJx0rpcQBG6rCBtHajN61Ati9nYNIN0fnUTzxWuvy/zu9z0hhhANAao1ToRixhOUAakqrY5Nme82QpTApzdY0j0=
-X-Received: by 2002:a05:6902:143:b0:628:7cf1:f2a9 with SMTP id
- p3-20020a056902014300b006287cf1f2a9mr19922108ybh.51.1650975458538; Tue, 26
- Apr 2022 05:17:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220423152403.1681222-1-pgwipeout@gmail.com> <20220423152403.1681222-3-pgwipeout@gmail.com>
- <25fbf4763c28af4c73162dec254af6111e05461b.camel@pengutronix.de>
-In-Reply-To: <25fbf4763c28af4c73162dec254af6111e05461b.camel@pengutronix.de>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Tue, 26 Apr 2022 08:17:26 -0400
-Message-ID: <CAMdYzYpw-vUFTM=pmnASNrWvi0X4mM0hFKX7TRLHhJyehfuHkw@mail.gmail.com>
-Subject: Re: [PATCH v8 2/5] PCI: dwc: rockchip: reset core at driver probe
-To:     Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Marc Zyngier <maz@kernel.org>, PCI <linux-pci@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        Tue, 26 Apr 2022 08:22:01 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69CF81110
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 05:18:33 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23QC0ddm005455;
+        Tue, 26 Apr 2022 12:18:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=/9ndkcDfO8Lqxw/f7KbY/x0vThJhHsZ/6ZzRJOU8r2A=;
+ b=obE8YqKM31eRCOTr9/D3uN6eIva+uLbdkwZYt1sAdALvNhOMgh2k7vKc04mnrxtcVgGr
+ 38hNc2VGRYJ7odL8hRbMK18GLLpb1rtGwQc9xhxAuML/GaHq+dwuuHNp5nhIS64uuvIA
+ 4FOOKWXLDK/pgZHI6x80s8D4f8UXxlk+W7yBQfY7wLek7d/OBOzimPbbQ7O/9ZSoOeGT
+ soZ9hJRvvDqrkAg2y/3ELljztbkJlGdr83pLCK/bbffLdU5VCg9Rf2aIx/zU5lVEdtMa
+ J3gDwmTzEkpnO9QAQy+Vx8xPON3aV3CfEc6GrTmgMDe6NoPfUQy/4E5OjNicKE6IBJ16 vQ== 
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fpbrbe7qe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Apr 2022 12:18:31 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23QCCk7Q019210;
+        Tue, 26 Apr 2022 12:18:30 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04fra.de.ibm.com with ESMTP id 3fm938uds0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Apr 2022 12:18:29 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23QCIQxA51708396
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 26 Apr 2022 12:18:26 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C398B52052;
+        Tue, 26 Apr 2022 12:18:26 +0000 (GMT)
+Received: from osiris (unknown [9.145.90.170])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 7B75E5204F;
+        Tue, 26 Apr 2022 12:18:26 +0000 (GMT)
+Date:   Tue, 26 Apr 2022 14:18:25 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Sven Schnelle <svens@linux.ibm.com>
+Cc:     Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Subject: Re: [PATCH v2] s390: disable -Warray-bounds
+Message-ID: <YmfjEeUqYoWS2rL2@osiris>
+References: <20220425121742.3222133-1-svens@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220425121742.3222133-1-svens@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 5tlhAAZOwVaz2tLbTf9Ll4uYGey5aYDK
+X-Proofpoint-ORIG-GUID: 5tlhAAZOwVaz2tLbTf9Ll4uYGey5aYDK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-26_02,2022-04-26_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=469
+ priorityscore=1501 bulkscore=0 phishscore=0 lowpriorityscore=0
+ adultscore=0 suspectscore=0 impostorscore=0 clxscore=1015 spamscore=0
+ malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204260078
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,48 +82,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 5:20 AM Philipp Zabel <p.zabel@pengutronix.de> wrote:
->
-> Hi Peter,
->
-> On Sa, 2022-04-23 at 11:24 -0400, Peter Geis wrote:
-> > The PCIe controller is in an unknown state at driver probe. This can
-> > lead to undesireable effects when the driver attempts to configure the
-> > controller.
-> >
-> > Prevent issues in the future by resetting the core during probe.
-> >
-> > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-> > ---
-> >  drivers/pci/controller/dwc/pcie-dw-rockchip.c | 22 +++++++------------
-> >  1 file changed, 8 insertions(+), 14 deletions(-)
-> >
-> > diff --git a/drivers/pci/controller/dwc/pcie-dw-rockchip.c b/drivers/pci/controller/dwc/pcie-dw-rockchip.c
-> > index c9b341e55cbb..d67ed811e752 100644
-> > --- a/drivers/pci/controller/dwc/pcie-dw-rockchip.c
-> > +++ b/drivers/pci/controller/dwc/pcie-dw-rockchip.c
-> > @@ -152,7 +152,13 @@ static int rockchip_pcie_resource_get(struct platform_device *pdev,
-> >       if (IS_ERR(rockchip->rst_gpio))
-> >               return PTR_ERR(rockchip->rst_gpio);
-> >
-> > -     return 0;
-> > +     rockchip->rst = devm_reset_control_array_get_exclusive(&pdev->dev);
-> > +     if (IS_ERR(rockchip->rst))
-> > +             return dev_err_probe(&pdev->dev, PTR_ERR(rockchip->rst),
-> > +                                  "failed to get reset lines\n");
-> > +
-> > +     return reset_control_assert(rockchip->rst);
->
-> This makes "rockchip_pcie_resource_get" a bit of a misnomer, maybe move
-> this out into rockchip_pcie_probe()?
+On Mon, Apr 25, 2022 at 02:17:42PM +0200, Sven Schnelle wrote:
+> gcc-12 shows a lot of array bound warnings on s390. This is caused
+> by our S390_lowcore macro:
+> 
+> which uses an hardcoded address of 0. Wrapping that with
+> absolute_pointer() works, but gcc no longer knows that a 12 bit
+> instruction is sufficient to access lowcore. So it emits instructions
+> like 'lghi %r1,0; l %rx,xxx(%r1)' instead of a single load/store
+> instruction. As s390 stores variables often read/written in lowcore,
+> this is considered problematic. Therefore disable -Warray-bounds on
+> s390 when gcc-12 is used until there is a better real solution.
+> 
+> Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
+> ---
+> Changes in v2:
+> - only remove -Warray-bounds for gcc-12
+> 
+>  arch/s390/Makefile | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 
-Ah, yes that does make sense, thanks.
-
->
-> > +
->
-> Superfluous whitespace.
->
-> regards
-> Philipp
->
+Applied, thanks!

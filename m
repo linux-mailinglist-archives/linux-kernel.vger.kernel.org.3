@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A15650F224
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:20:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6DE250F223
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244470AbiDZHWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 03:22:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32800 "EHLO
+        id S1343842AbiDZHWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 03:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343815AbiDZHWL (ORCPT
+        with ESMTP id S242892AbiDZHWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 26 Apr 2022 03:22:11 -0400
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C589A992
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:19:04 -0700 (PDT)
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99859AE43;
+        Tue, 26 Apr 2022 00:19:04 -0700 (PDT)
 Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id F11BDB0E;
-        Tue, 26 Apr 2022 00:19:03 -0700 (PDT)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 43216B44;
+        Tue, 26 Apr 2022 00:19:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
         s=thorn; t=1650957544;
-        bh=FA4MmoATvPJU0ZrDLHWEJxf6ycY9o/mXxIHIO/8VmNA=;
+        bh=fJHPJh1OsLNhRdMDn1eIvyO/QR9oSSnNoP/y2auYsEQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OIdFzH9duyMhgfekL2914Tl/oQ/vnuNUwPObOiXNrkKdHfSxMlbLzJv5mcR+7X9sX
-         VgNtqC3cbUHu6RiJ9IG2GOqrToOBjLCrEH8SDvu5eN7l4BZh2ovqGkpn4Uquc5QIp0
-         +BATML/8jZ20TAVcymRjZCeKMsunOgPUHLIUdMxY=
+        b=KFxvEVpOMGJvnTEx7z4yHKJLsfhFK0pEvkf5yDvc08p+uRj1t6cFfm9p0v4Kb+oS+
+         EuLWBtRYDv6PXs40ud1eEdOtRSS+rFrqEY13VSE3txrhenIxYi7FZeXHTicCVTyA3Z
+         Dg9ZSTuOcf2zNXvhih8F88txbtSf80gxXr5yfE+g=
 From:   Zev Weiss <zev@bewilderbeest.net>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
 Cc:     Zev Weiss <zev@bewilderbeest.net>, Renze Nicolai <renze@rnplus.nl>,
         Oleksandr Natalenko <oleksandr@natalenko.name>,
         openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/6] hwmon: (nct6775) Rearrange attr-group initialization
-Date:   Tue, 26 Apr 2022 00:18:45 -0700
-Message-Id: <20220426071848.11619-4-zev@bewilderbeest.net>
+Subject: [PATCH v3 4/6] hwmon: (nct6775) Add read-only mode
+Date:   Tue, 26 Apr 2022 00:18:46 -0700
+Message-Id: <20220426071848.11619-5-zev@bewilderbeest.net>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220426071848.11619-1-zev@bewilderbeest.net>
 References: <20220426071848.11619-1-zev@bewilderbeest.net>
@@ -52,177 +52,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We now track the number of attribute groups in nct6775_data, as a
-measure to simplify handling differences in the set of enabled
-attribute groups between nct6775 drivers (platform & i2c).  As a side
-effect, we also reduce the amount of IS_ERR()/PTR_ERR() boilerplate a
-bit.
+When enabled, all write bits are removed from the modes of all sysfs
+attribute files.  This provides a bit of infrastructure for the
+upcoming i2c version of this driver, which should generally avoid
+writes to device registers so as not to interfere with simultaneous
+use of the device via the LPC interface.
 
 Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
 ---
- drivers/hwmon/nct6775.c | 84 ++++++++++++++++++++---------------------
- 1 file changed, 42 insertions(+), 42 deletions(-)
+ drivers/hwmon/nct6775.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-index 04e4d30c8540..5d880db2da41 100644
+index 5d880db2da41..5dafe3d24e07 100644
 --- a/drivers/hwmon/nct6775.c
 +++ b/drivers/hwmon/nct6775.c
-@@ -1199,6 +1199,7 @@ struct nct6775_data {
- 	const char *name;
+@@ -1348,6 +1348,7 @@ struct nct6775_data {
+ 	u8 sio_reg_enable;
  
- 	const struct attribute_group *groups[7];
-+	u8 num_groups;
+ 	struct regmap *regmap;
++	bool read_only;
+ };
  
- 	u16 reg_temp[5][NUM_TEMP]; /* 0=temp, 1=temp_over, 2=temp_hyst,
- 				    * 3=temp_crit, 4=temp_lcrit
-@@ -1404,10 +1405,18 @@ struct sensor_template_group {
+ struct sensor_device_template {
+@@ -1405,6 +1406,11 @@ struct sensor_template_group {
  	int base;
  };
  
--static struct attribute_group *
--nct6775_create_attr_group(struct device *dev,
--			  const struct sensor_template_group *tg,
--			  int repeat)
-+static int nct6775_add_attr_group(struct nct6775_data *data, const struct attribute_group *group)
++static inline umode_t nct6775_attr_mode(struct nct6775_data *data, struct attribute *attr)
 +{
-+	/* Need to leave a NULL terminator at the end of data->groups */
-+	if (data->num_groups == ARRAY_SIZE(data->groups) - 1)
-+		return -ENOBUFS;
-+
-+	data->groups[data->num_groups++] = group;
-+	return 0;
++	return data->read_only ? (attr->mode & ~0222) : attr->mode;
 +}
 +
-+static int nct6775_add_template_attr_group(struct device *dev, struct nct6775_data *data,
-+					   const struct sensor_template_group *tg, int repeat)
+ static int nct6775_add_attr_group(struct nct6775_data *data, const struct attribute_group *group)
  {
- 	struct attribute_group *group;
- 	struct sensor_device_attr_u *su;
-@@ -1418,28 +1427,28 @@ nct6775_create_attr_group(struct device *dev,
- 	int i, count;
+ 	/* Need to leave a NULL terminator at the end of data->groups */
+@@ -2371,7 +2377,7 @@ static umode_t nct6775_in_is_visible(struct kobject *kobj,
+ 	if (!(data->have_in & BIT(in)))
+ 		return 0;
  
- 	if (repeat <= 0)
--		return ERR_PTR(-EINVAL);
-+		return -EINVAL;
- 
- 	t = tg->templates;
- 	for (count = 0; *t; t++, count++)
- 		;
- 
- 	if (count == 0)
--		return ERR_PTR(-EINVAL);
-+		return -EINVAL;
- 
- 	group = devm_kzalloc(dev, sizeof(*group), GFP_KERNEL);
- 	if (group == NULL)
--		return ERR_PTR(-ENOMEM);
-+		return -ENOMEM;
- 
- 	attrs = devm_kcalloc(dev, repeat * count + 1, sizeof(*attrs),
- 			     GFP_KERNEL);
- 	if (attrs == NULL)
--		return ERR_PTR(-ENOMEM);
-+		return -ENOMEM;
- 
- 	su = devm_kzalloc(dev, array3_size(repeat, count, sizeof(*su)),
- 			       GFP_KERNEL);
- 	if (su == NULL)
--		return ERR_PTR(-ENOMEM);
-+		return -ENOMEM;
- 
- 	group->attrs = attrs;
- 	group->is_visible = tg->is_visible;
-@@ -1477,7 +1486,7 @@ nct6775_create_attr_group(struct device *dev,
- 		}
- 	}
- 
--	return group;
-+	return nct6775_add_attr_group(data, group);
+-	return attr->mode;
++	return nct6775_attr_mode(data, attr);
  }
  
- static bool is_word_sized(struct nct6775_data *data, u16 reg)
-@@ -4316,11 +4325,9 @@ static int nct6775_probe(struct platform_device *pdev)
- 	const u16 *reg_temp_crit_l = NULL, *reg_temp_crit_h = NULL;
- 	int num_reg_temp, num_reg_temp_mon, num_reg_tsi_temp;
- 	u8 cr2a;
--	struct attribute_group *group;
- 	struct device *hwmon_dev;
- 	struct sensor_template_group tsi_temp_tg;
- 	const struct regmap_config *regmapcfg;
--	int num_attr_groups = 0;
+ SENSOR_TEMPLATE_2(in_input, "in%d_input", S_IRUGO, show_in_reg, NULL, 0, 0);
+@@ -2607,7 +2613,7 @@ static umode_t nct6775_fan_is_visible(struct kobject *kobj,
+ 	if (nr == 5 && data->kind != nct6775)
+ 		return 0;
  
- 	if (sio_data->access == access_direct) {
- 		res = platform_get_resource(pdev, IORESOURCE_IO, 0);
-@@ -5165,46 +5172,39 @@ static int nct6775_probe(struct platform_device *pdev)
- 		return err;
+-	return attr->mode;
++	return nct6775_attr_mode(data, attr);
+ }
  
- 	/* Register sysfs hooks */
--	group = nct6775_create_attr_group(dev, &nct6775_pwm_template_group,
--					  data->pwm_num);
--	if (IS_ERR(group))
--		return PTR_ERR(group);
--
--	data->groups[num_attr_groups++] = group;
--
--	group = nct6775_create_attr_group(dev, &nct6775_in_template_group,
--					  fls(data->have_in));
--	if (IS_ERR(group))
--		return PTR_ERR(group);
--
--	data->groups[num_attr_groups++] = group;
--
--	group = nct6775_create_attr_group(dev, &nct6775_fan_template_group,
--					  fls(data->has_fan));
--	if (IS_ERR(group))
--		return PTR_ERR(group);
-+	err = nct6775_add_template_attr_group(dev, data, &nct6775_pwm_template_group,
-+					      data->pwm_num);
-+	if (err)
-+		return err;
+ SENSOR_TEMPLATE(fan_input, "fan%d_input", S_IRUGO, show_fan, NULL, 0);
+@@ -2834,7 +2840,7 @@ static umode_t nct6775_temp_is_visible(struct kobject *kobj,
+ 	if (nr > 7 && !(data->have_temp_fixed & BIT(temp)))
+ 		return 0;
  
--	data->groups[num_attr_groups++] = group;
-+	err = nct6775_add_template_attr_group(dev, data, &nct6775_in_template_group,
-+					      fls(data->have_in));
-+	if (err)
-+		return err;
+-	return attr->mode;
++	return nct6775_attr_mode(data, attr);
+ }
  
--	group = nct6775_create_attr_group(dev, &nct6775_temp_template_group,
--					  fls(data->have_temp));
--	if (IS_ERR(group))
--		return PTR_ERR(group);
-+	err = nct6775_add_template_attr_group(dev, data, &nct6775_fan_template_group,
-+					      fls(data->has_fan));
-+	if (err)
-+		return err;
+ SENSOR_TEMPLATE_2(temp_input, "temp%d_input", S_IRUGO, show_temp, NULL, 0, 0);
+@@ -2908,7 +2914,7 @@ static umode_t nct6775_tsi_temp_is_visible(struct kobject *kobj, struct attribut
+ 	struct nct6775_data *data = dev_get_drvdata(dev);
+ 	int temp = index / 2;
  
--	data->groups[num_attr_groups++] = group;
-+	err = nct6775_add_template_attr_group(dev, data, &nct6775_temp_template_group,
-+					      fls(data->have_temp));
-+	if (err)
-+		return err;
+-	return (data->have_tsi_temp & BIT(temp)) ? attr->mode : 0;
++	return (data->have_tsi_temp & BIT(temp)) ? nct6775_attr_mode(data, attr) : 0;
+ }
  
- 	if (data->have_tsi_temp) {
- 		tsi_temp_tg.templates = nct6775_tsi_temp_template;
- 		tsi_temp_tg.is_visible = nct6775_tsi_temp_is_visible;
- 		tsi_temp_tg.base = fls(data->have_temp) + 1;
--		group = nct6775_create_attr_group(dev, &tsi_temp_tg, fls(data->have_tsi_temp));
--		if (IS_ERR(group))
--			return PTR_ERR(group);
--
--		data->groups[num_attr_groups++] = group;
-+		err = nct6775_add_template_attr_group(dev, data, &tsi_temp_tg,
-+						      fls(data->have_tsi_temp));
-+		if (err)
-+			return err;
+ /*
+@@ -3766,7 +3772,7 @@ static umode_t nct6775_pwm_is_visible(struct kobject *kobj,
+ 		if (api > data->auto_pwm_num)
+ 			return 0;
+ 	}
+-	return attr->mode;
++	return nct6775_attr_mode(data, attr);
+ }
+ 
+ SENSOR_TEMPLATE_2(pwm_stop_time, "pwm%d_stop_time", S_IWUSR | S_IRUGO,
+@@ -3961,7 +3967,7 @@ static umode_t nct6775_other_is_visible(struct kobject *kobj,
+ 			return 0;
  	}
  
--	data->groups[num_attr_groups++] = &nct6775_group_other;
-+	err = nct6775_add_attr_group(data, &nct6775_group_other);
-+	if (err)
-+		return err;
+-	return attr->mode;
++	return nct6775_attr_mode(data, attr);
+ }
  
- 	hwmon_dev = devm_hwmon_device_register_with_groups(dev, data->name,
- 							   data, data->groups);
+ /*
 -- 
 2.36.0
 

@@ -2,178 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1303150F092
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09C0850F097
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:02:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244336AbiDZGEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 02:04:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41964 "EHLO
+        id S242741AbiDZGFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 02:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243283AbiDZGE0 (ORCPT
+        with ESMTP id S235519AbiDZGFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 02:04:26 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFEAC483A4;
-        Mon, 25 Apr 2022 23:01:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4832BCE1A7D;
-        Tue, 26 Apr 2022 06:01:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C2D9C385A4;
-        Tue, 26 Apr 2022 06:01:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650952876;
-        bh=stLEuDXX75MDqjxXONL4N5v+IrSw0sqB7MdOVePbc1Y=;
-        h=From:To:Cc:Subject:Date:From;
-        b=NRl338cF79FV/h0d5uo38dZiCwHYSURL2dseO3EvJ1RGeZlZ+Sz+1rDkgmFTSv+HQ
-         atl6PKDjE4OrFYTugXkSQVdqYDA0kLkMmm6jvE4XOwbvAO/Jib0YUqDJzMoPnSG8P7
-         uQFGW5aQJjDhwZqxaz3pm/8DYjLwGvIwQUsPlAgHa2Y5RBqNTsh9MVoIt5zBGJ404M
-         auFA3I/Y/msuS3jKE/J9L0f6R+nEfYs0PLEcoKC8hRt8jfHR+3caoJdyi6nSI7oa8R
-         XsMbeEPiBiyEKVcbexBYqlsn71ar48pSKWyQ1wO0Ff+8lxoP+ai/CEoge4lDjCS7qg
-         Bs2aqvr/RnzIw==
-From:   Mike Rapoport <rppt@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guillaume Tucker <gtucker@collabora.com>,
-        Mark Brown <broonie@kernel.org>,
-        Mark-PK Tsai <mark-pk.tsai@mediatek.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Tony Lindgren <tony@atomide.com>,
-        Will Deacon <will@kernel.org>, bot@kernelci.org,
-        kernelci-results@groups.io, linux-arm-kernel@lists.infradead.org,
-        stable@vger.kernel.org
-Subject: [PATCH v2] arm[64]/memremap: don't abuse pfn_valid() to ensure presence of linear map
-Date:   Tue, 26 Apr 2022 09:01:07 +0300
-Message-Id: <20220426060107.7618-1-rppt@kernel.org>
-X-Mailer: git-send-email 2.28.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 26 Apr 2022 02:05:37 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF6876295;
+        Mon, 25 Apr 2022 23:02:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1650952951; x=1682488951;
+  h=from:to:cc:subject:date:message-id;
+  bh=amARuMpJBWtf7g90334aANQiHnLqYqTFsIkho2bxSdw=;
+  b=lgtg5CPrApKwxqMXF37qbcewbUbMq+OJtzGEVH4kU3n4VeHWANqOfs7M
+   Ei0ly4HbEldb2DV3hhwBtdQXScLdKU0VotCvI5HhHxQIwLyK5t3YKXCce
+   Ecw3hgMj5BkaAc8Pi7ooDzY9P+Uqc0mTTEzhXsislQqLhkIJIa5s6S0NS
+   M=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 25 Apr 2022 23:02:30 -0700
+X-QCInternal: smtphost
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 25 Apr 2022 23:02:27 -0700
+X-QCInternal: smtphost
+Received: from vpolimer-linux.qualcomm.com ([10.204.67.235])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 26 Apr 2022 11:32:14 +0530
+Received: by vpolimer-linux.qualcomm.com (Postfix, from userid 463814)
+        id 91B9D55F7; Tue, 26 Apr 2022 11:32:13 +0530 (IST)
+From:   Vinod Polimera <quic_vpolimer@quicinc.com>
+To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Cc:     Vinod Polimera <quic_vpolimer@quicinc.com>,
+        linux-kernel@vger.kernel.org, robdclark@gmail.com,
+        dmitry.baryshkov@linaro.org, dianders@chromium.org,
+        quic_kalyant@quicinc.com
+Subject: [PATCH] drm/msm/disp/dpu1: avoid clearing hw interrupts if hw_intr is null during drm uninit
+Date:   Tue, 26 Apr 2022 11:32:11 +0530
+Message-Id: <1650952931-31988-1-git-send-email-quic_vpolimer@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Rapoport <rppt@linux.ibm.com>
+Avoid clearing irqs and derefernce hw_intr when hw_intr is null.
 
-The semantics of pfn_valid() is to check presence of the memory map for a
-PFN and not whether a PFN is covered by the linear map. The memory map may
-be present for NOMAP memory regions, but they won't be mapped in the linear
-mapping.  Accessing such regions via __va() when they are memremap()'ed
-will cause a crash.
+BUG: Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
 
-On v5.4.y the crash happens on qemu-arm with UEFI [1]:
+Call trace:
+ dpu_core_irq_uninstall+0x50/0xb0
+ dpu_irq_uninstall+0x18/0x24
+ msm_drm_uninit+0xd8/0x16c
+ msm_drm_bind+0x580/0x5fc
+ try_to_bring_up_master+0x168/0x1c0
+ __component_add+0xb4/0x178
+ component_add+0x1c/0x28
+ dp_display_probe+0x38c/0x400
+ platform_probe+0xb0/0xd0
+ really_probe+0xcc/0x2c8
+ __driver_probe_device+0xbc/0xe8
+ driver_probe_device+0x48/0xf0
+ __device_attach_driver+0xa0/0xc8
+ bus_for_each_drv+0x8c/0xd8
+ __device_attach+0xc4/0x150
+ device_initial_probe+0x1c/0x28
 
-<1>[    0.084476] 8<--- cut here ---
-<1>[    0.084595] Unable to handle kernel paging request at virtual address dfb76000
-<1>[    0.084938] pgd = (ptrval)
-<1>[    0.085038] [dfb76000] *pgd=5f7fe801, *pte=00000000, *ppte=00000000
-
-...
-
-<4>[    0.093923] [<c0ed6ce8>] (memcpy) from [<c16a06f8>] (dmi_setup+0x60/0x418)
-<4>[    0.094204] [<c16a06f8>] (dmi_setup) from [<c16a38d4>] (arm_dmi_init+0x8/0x10)
-<4>[    0.094408] [<c16a38d4>] (arm_dmi_init) from [<c0302e9c>] (do_one_initcall+0x50/0x228)
-<4>[    0.094619] [<c0302e9c>] (do_one_initcall) from [<c16011e4>] (kernel_init_freeable+0x15c/0x1f8)
-<4>[    0.094841] [<c16011e4>] (kernel_init_freeable) from [<c0f028cc>] (kernel_init+0x8/0x10c)
-<4>[    0.095057] [<c0f028cc>] (kernel_init) from [<c03010e8>] (ret_from_fork+0x14/0x2c)
-
-On kernels v5.10.y and newer the same crash won't reproduce on ARM because
-commit b10d6bca8720 ("arch, drivers: replace for_each_membock() with
-for_each_mem_range()") changed the way memory regions are registered in the
-resource tree, but that merely covers up the problem.
-
-On ARM64 memory resources registered in yet another way and there the
-issue of wrong usage of pfn_valid() to ensure availability of the linear
-map is also covered.
-
-Implement arch_memremap_can_ram_remap() on ARM and ARM64 to prevent access
-to NOMAP regions via the linear mapping in memremap().
-
-Link: https://lore.kernel.org/all/Yl65zxGgFzF1Okac@sirena.org.uk
-Reported-by: "kernelci.org bot" <bot@kernelci.org>
-Tested-by: Mark Brown <broonie@kernel.org>
-Cc: stable@vger.kernel.org	# 5.4+
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+Fixes: a73033619ea ("drm/msm/dpu: squash dpu_core_irq into dpu_hw_interrupts")
+Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
 ---
-v2: don't remove pfn_valid() from try_ram_remap(), per Ard
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
- arch/arm/include/asm/io.h   | 3 +++
- arch/arm/mm/ioremap.c       | 8 ++++++++
- arch/arm64/include/asm/io.h | 4 ++++
- arch/arm64/mm/ioremap.c     | 8 ++++++++
- 4 files changed, 23 insertions(+)
-
-diff --git a/arch/arm/include/asm/io.h b/arch/arm/include/asm/io.h
-index 0c70eb688a00..2a0739a2350b 100644
---- a/arch/arm/include/asm/io.h
-+++ b/arch/arm/include/asm/io.h
-@@ -440,6 +440,9 @@ extern void pci_iounmap(struct pci_dev *dev, void __iomem *addr);
- #define ARCH_HAS_VALID_PHYS_ADDR_RANGE
- extern int valid_phys_addr_range(phys_addr_t addr, size_t size);
- extern int valid_mmap_phys_addr_range(unsigned long pfn, size_t size);
-+extern bool arch_memremap_can_ram_remap(resource_size_t offset, size_t size,
-+					unsigned long flags);
-+#define arch_memremap_can_ram_remap arch_memremap_can_ram_remap
- #endif
- 
- /*
-diff --git a/arch/arm/mm/ioremap.c b/arch/arm/mm/ioremap.c
-index aa08bcb72db9..290702328a33 100644
---- a/arch/arm/mm/ioremap.c
-+++ b/arch/arm/mm/ioremap.c
-@@ -493,3 +493,11 @@ void __init early_ioremap_init(void)
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
+index c515b7c..ab28577 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
+@@ -599,6 +599,9 @@ void dpu_core_irq_uninstall(struct dpu_kms *dpu_kms)
  {
- 	early_ioremap_setup();
- }
-+
-+bool arch_memremap_can_ram_remap(resource_size_t offset, size_t size,
-+				 unsigned long flags)
-+{
-+	unsigned long pfn = PHYS_PFN(offset);
-+
-+	return memblock_is_map_memory(pfn);
-+}
-diff --git a/arch/arm64/include/asm/io.h b/arch/arm64/include/asm/io.h
-index 7fd836bea7eb..3995652daf81 100644
---- a/arch/arm64/include/asm/io.h
-+++ b/arch/arm64/include/asm/io.h
-@@ -192,4 +192,8 @@ extern void __iomem *ioremap_cache(phys_addr_t phys_addr, size_t size);
- extern int valid_phys_addr_range(phys_addr_t addr, size_t size);
- extern int valid_mmap_phys_addr_range(unsigned long pfn, size_t size);
+ 	int i;
  
-+extern bool arch_memremap_can_ram_remap(resource_size_t offset, size_t size,
-+					unsigned long flags);
-+#define arch_memremap_can_ram_remap arch_memremap_can_ram_remap
++	if (!dpu_kms->hw_intr)
++		return;
 +
- #endif	/* __ASM_IO_H */
-diff --git a/arch/arm64/mm/ioremap.c b/arch/arm64/mm/ioremap.c
-index b7c81dacabf0..b21f91cd830d 100644
---- a/arch/arm64/mm/ioremap.c
-+++ b/arch/arm64/mm/ioremap.c
-@@ -99,3 +99,11 @@ void __init early_ioremap_init(void)
- {
- 	early_ioremap_setup();
- }
-+
-+bool arch_memremap_can_ram_remap(resource_size_t offset, size_t size,
-+				 unsigned long flags)
-+{
-+	unsigned long pfn = PHYS_PFN(offset);
-+
-+	return pfn_is_map_memory(pfn);
-+}
-
-base-commit: b2d229d4ddb17db541098b83524d901257e93845
+ 	pm_runtime_get_sync(&dpu_kms->pdev->dev);
+ 	for (i = 0; i < dpu_kms->hw_intr->total_irqs; i++)
+ 		if (!list_empty(&dpu_kms->hw_intr->irq_cb_tbl[i]))
 -- 
-2.28.0
+2.7.4
 

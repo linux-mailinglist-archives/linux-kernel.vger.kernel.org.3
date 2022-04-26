@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2129950F6C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:59:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE51850F7DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346187AbiDZI7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:59:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54922 "EHLO
+        id S231845AbiDZJgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:36:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346833AbiDZIpZ (ORCPT
+        with ESMTP id S1345944AbiDZJG3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:45:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA59FB1887;
-        Tue, 26 Apr 2022 01:35:54 -0700 (PDT)
+        Tue, 26 Apr 2022 05:06:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F4F13566A;
+        Tue, 26 Apr 2022 01:47:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7817561805;
-        Tue, 26 Apr 2022 08:35:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8597BC385A0;
-        Tue, 26 Apr 2022 08:35:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D1DE60C42;
+        Tue, 26 Apr 2022 08:47:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1CB2C385A0;
+        Tue, 26 Apr 2022 08:47:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962153;
-        bh=8lOvhLAFxd8QUqgv//ER/ADXQbcIfcssIo0AaOmgPks=;
+        s=korg; t=1650962867;
+        bh=QGISIWt0xAu7CrLpvK0e1CfLL9c0uHmU/rChXAc3JGI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=w2r0Ie936Yp/J3JMtCzYfRUSlPghHLWG3rHElUGE9Pc2AyqhKx8nn+VXZNryR8EVz
-         NJFtMbjF3o2rdJcoKSaUL0kJJyx69x3xxdF5nv26RmPpctvfvBMD6CUW0pDY/C4BZS
-         RqZzt86hP8Cfz2cWnfWnGQ7oqROmnCWGQCL4gQAc=
+        b=EmbJx3ArBMhbtv8GYHAe+SpRR3D4cYaq+8qE90oKNMxrsq1PbbY5aclUDtB/zZP/W
+         0ZgDq5VvNTPI03G33Os/vdi9chXUgr95p75XrrQm2GCnEYf340x2b8iCf6BVG3SAu0
+         jZ8QCpwgSBaGjpWRF+wTPw9uwl9GtITLkYWzjza8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.10 83/86] spi: atmel-quadspi: Fix the buswidth adjustment between spi-mem and controller
+        stable@vger.kernel.org, "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Steve French <stfrench@microsoft.com>
+Subject: [PATCH 5.17 116/146] cifs: use correct lock type in cifs_reconnect()
 Date:   Tue, 26 Apr 2022 10:21:51 +0200
-Message-Id: <20220426081743.610999702@linuxfoundation.org>
+Message-Id: <20220426081753.317688313@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
-References: <20220426081741.202366502@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,34 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tudor Ambarus <tudor.ambarus@microchip.com>
+From: Paulo Alcantara <pc@cjr.nz>
 
-commit 8c235cc25087495c4288d94f547e9d3061004991 upstream.
+commit cd70a3e8988a999c42d307d2616a5e7b6a33c7c8 upstream.
 
-Use the spi_mem_default_supports_op() core helper in order to take into
-account the buswidth specified by the user in device tree.
+TCP_Server_Info::origin_fullpath and TCP_Server_Info::leaf_fullpath
+are protected by refpath_lock mutex and not cifs_tcp_ses_lock
+spinlock.
 
-Cc: <stable@vger.kernel.org>
-Fixes: 0e6aae08e9ae ("spi: Add QuadSPI driver for Atmel SAMA5D2")
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-Link: https://lore.kernel.org/r/20220406133604.455356-1-tudor.ambarus@microchip.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+Cc: stable@vger.kernel.org
+Reviewed-by: Ronnie Sahlberg <lsahlber@redhat.com>
+Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/spi/atmel-quadspi.c |    3 +++
- 1 file changed, 3 insertions(+)
+ fs/cifs/connect.c |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
---- a/drivers/spi/atmel-quadspi.c
-+++ b/drivers/spi/atmel-quadspi.c
-@@ -277,6 +277,9 @@ static int atmel_qspi_find_mode(const st
- static bool atmel_qspi_supports_op(struct spi_mem *mem,
- 				   const struct spi_mem_op *op)
+--- a/fs/cifs/connect.c
++++ b/fs/cifs/connect.c
+@@ -534,12 +534,19 @@ int cifs_reconnect(struct TCP_Server_Inf
  {
-+	if (!spi_mem_default_supports_op(mem, op))
-+		return false;
-+
- 	if (atmel_qspi_find_mode(op) < 0)
- 		return false;
+ 	/* If tcp session is not an dfs connection, then reconnect to last target server */
+ 	spin_lock(&cifs_tcp_ses_lock);
+-	if (!server->is_dfs_conn || !server->origin_fullpath || !server->leaf_fullpath) {
++	if (!server->is_dfs_conn) {
+ 		spin_unlock(&cifs_tcp_ses_lock);
+ 		return __cifs_reconnect(server, mark_smb_session);
+ 	}
+ 	spin_unlock(&cifs_tcp_ses_lock);
  
++	mutex_lock(&server->refpath_lock);
++	if (!server->origin_fullpath || !server->leaf_fullpath) {
++		mutex_unlock(&server->refpath_lock);
++		return __cifs_reconnect(server, mark_smb_session);
++	}
++	mutex_unlock(&server->refpath_lock);
++
+ 	return reconnect_dfs_server(server);
+ }
+ #else
 
 

@@ -2,46 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F0450F457
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 237D950F86C
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242374AbiDZIdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60498 "EHLO
+        id S1346834AbiDZJMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344974AbiDZIct (ORCPT
+        with ESMTP id S1347311AbiDZIvS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:32:49 -0400
+        Tue, 26 Apr 2022 04:51:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFBCA3BA4F;
-        Tue, 26 Apr 2022 01:25:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5413263DA;
+        Tue, 26 Apr 2022 01:40:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53E2261722;
-        Tue, 26 Apr 2022 08:25:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6624AC385AE;
-        Tue, 26 Apr 2022 08:25:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C689260EC3;
+        Tue, 26 Apr 2022 08:40:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4D9EC385A0;
+        Tue, 26 Apr 2022 08:40:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961519;
-        bh=aBRbv+1Tz+Eu6abnTREsUCxKbGJaAkQqCf3lh/zj5kU=;
+        s=korg; t=1650962408;
+        bh=C+Emsd2dvUZs4sS+uJikxoTnvtK6V3iRkCJ7myLYyI4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i8yz89wK/RoW52MbW+kBt9aDTAWMH3McI8qktFlA78PxClph8YmjlrlfECV1JXpqN
-         D6USsGG5lPJ6qSIIr4oRso9H91ZKIAyNfy9MQ7Hnogyn3efdMXHY9r15LGDvna5le+
-         Wa7p9iIOjXErvXb/bsC00csF3frm5wBx8NPa0iGI=
+        b=RDUttGCxQCtc2DUIfYhTDL4YlzQ7U7PaT8piZ5prXDb+VVkqZgzvlxDbEKZXNFwyZ
+         xFW/PQYvGxoGuF70RZu2c/TAxUWTaqFHtBRG4p6uHgaGhCFa44O/dCUDj+SXIzVRes
+         fb/SfJHvfFY2Izz4nvHeqsRdG16AHvMbjyYNs9Og=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Osterried <thomas@osterried.de>,
-        Duoming Zhou <duoming@zju.edu.cn>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ovidiu Panait <ovidiu.panait@windriver.com>
-Subject: [PATCH 4.14 38/43] ax25: Fix refcount leaks caused by ax25_cb_del()
+        stable@vger.kernel.org, Shakeel Butt <shakeelb@google.com>,
+        Daniel Dao <dqminh@cloudflare.com>,
+        Ivan Babrou <ivan@cloudflare.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+        Frank Hofmann <fhofmann@cloudflare.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.15 079/124] memcg: sync flush only if periodic flush is delayed
 Date:   Tue, 26 Apr 2022 10:21:20 +0200
-Message-Id: <20220426081735.640993366@linuxfoundation.org>
+Message-Id: <20220426081749.546421968@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081734.509314186@linuxfoundation.org>
-References: <20220426081734.509314186@linuxfoundation.org>
+In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
+References: <20220426081747.286685339@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,100 +61,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Shakeel Butt <shakeelb@google.com>
 
-commit 9fd75b66b8f68498454d685dc4ba13192ae069b0 upstream.
+commit 9b3016154c913b2e7ec5ae5c9a42eb9e732d86aa upstream.
 
-The previous commit d01ffb9eee4a ("ax25: add refcount in ax25_dev to
-avoid UAF bugs") and commit feef318c855a ("ax25: fix UAF bugs of
-net_device caused by rebinding operation") increase the refcounts of
-ax25_dev and net_device in ax25_bind() and decrease the matching refcounts
-in ax25_kill_by_device() in order to prevent UAF bugs, but there are
-reference count leaks.
+Daniel Dao has reported [1] a regression on workloads that may trigger a
+lot of refaults (anon and file).  The underlying issue is that flushing
+rstat is expensive.  Although rstat flush are batched with (nr_cpus *
+MEMCG_BATCH) stat updates, it seems like there are workloads which
+genuinely do stat updates larger than batch value within short amount of
+time.  Since the rstat flush can happen in the performance critical
+codepaths like page faults, such workload can suffer greatly.
 
-The root cause of refcount leaks is shown below:
+This patch fixes this regression by making the rstat flushing
+conditional in the performance critical codepaths.  More specifically,
+the kernel relies on the async periodic rstat flusher to flush the stats
+and only if the periodic flusher is delayed by more than twice the
+amount of its normal time window then the kernel allows rstat flushing
+from the performance critical codepaths.
 
-     (Thread 1)                      |      (Thread 2)
-ax25_bind()                          |
- ...                                 |
- ax25_addr_ax25dev()                 |
-  ax25_dev_hold()   //(1)            |
-  ...                                |
- dev_hold_track()   //(2)            |
- ...                                 | ax25_destroy_socket()
-                                     |  ax25_cb_del()
-                                     |   ...
-                                     |   hlist_del_init() //(3)
-                                     |
-                                     |
-     (Thread 3)                      |
-ax25_kill_by_device()                |
- ...                                 |
- ax25_for_each(s, &ax25_list) {      |
-  if (s->ax25_dev == ax25_dev) //(4) |
-   ...                               |
+Now the question: what are the side-effects of this change? The worst
+that can happen is the refault codepath will see 4sec old lruvec stats
+and may cause false (or missed) activations of the refaulted page which
+may under-or-overestimate the workingset size.  Though that is not very
+concerning as the kernel can already miss or do false activations.
 
-Firstly, we use ax25_bind() to increase the refcount of ax25_dev in
-position (1) and increase the refcount of net_device in position (2).
-Then, we use ax25_cb_del() invoked by ax25_destroy_socket() to delete
-ax25_cb in hlist in position (3) before calling ax25_kill_by_device().
-Finally, the decrements of refcounts in ax25_kill_by_device() will not
-be executed, because no s->ax25_dev equals to ax25_dev in position (4).
+There are two more codepaths whose flushing behavior is not changed by
+this patch and we may need to come to them in future.  One is the
+writeback stats used by dirty throttling and second is the deactivation
+heuristic in the reclaim.  For now keeping an eye on them and if there
+is report of regression due to these codepaths, we will reevaluate then.
 
-This patch adds decrements of refcounts in ax25_release() and use
-lock_sock() to do synchronization. If refcounts decrease in ax25_release(),
-the decrements of refcounts in ax25_kill_by_device() will not be
-executed and vice versa.
-
-Fixes: d01ffb9eee4a ("ax25: add refcount in ax25_dev to avoid UAF bugs")
-Fixes: 87563a043cef ("ax25: fix reference count leaks of ax25_dev")
-Fixes: feef318c855a ("ax25: fix UAF bugs of net_device caused by rebinding operation")
-Reported-by: Thomas Osterried <thomas@osterried.de>
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-[OP: backport to 4.14: adjust dev_put_track()->dev_put()]
-Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
+Link: https://lore.kernel.org/all/CA+wXwBSyO87ZX5PVwdHm-=dBjZYECGmfnydUicUyrQqndgX2MQ@mail.gmail.com [1]
+Link: https://lkml.kernel.org/r/20220304184040.1304781-1-shakeelb@google.com
+Fixes: 1f828223b799 ("memcg: flush lruvec stats in the refault")
+Signed-off-by: Shakeel Butt <shakeelb@google.com>
+Reported-by: Daniel Dao <dqminh@cloudflare.com>
+Tested-by: Ivan Babrou <ivan@cloudflare.com>
+Cc: Michal Hocko <mhocko@suse.com>
+Cc: Roman Gushchin <roman.gushchin@linux.dev>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Michal Koutný <mkoutny@suse.com>
+Cc: Frank Hofmann <fhofmann@cloudflare.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ax25/af_ax25.c |   14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ include/linux/memcontrol.h |    5 +++++
+ mm/memcontrol.c            |   12 +++++++++++-
+ mm/workingset.c            |    2 +-
+ 3 files changed, 17 insertions(+), 2 deletions(-)
 
---- a/net/ax25/af_ax25.c
-+++ b/net/ax25/af_ax25.c
-@@ -101,8 +101,10 @@ again:
- 			spin_unlock_bh(&ax25_list_lock);
- 			lock_sock(sk);
- 			s->ax25_dev = NULL;
--			dev_put(ax25_dev->dev);
--			ax25_dev_put(ax25_dev);
-+			if (sk->sk_socket) {
-+				dev_put(ax25_dev->dev);
-+				ax25_dev_put(ax25_dev);
-+			}
- 			release_sock(sk);
- 			ax25_disconnect(s, ENETUNREACH);
- 			spin_lock_bh(&ax25_list_lock);
-@@ -982,14 +984,20 @@ static int ax25_release(struct socket *s
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -1002,6 +1002,7 @@ static inline unsigned long lruvec_page_
+ }
+ 
+ void mem_cgroup_flush_stats(void);
++void mem_cgroup_flush_stats_delayed(void);
+ 
+ void __mod_memcg_lruvec_state(struct lruvec *lruvec, enum node_stat_item idx,
+ 			      int val);
+@@ -1422,6 +1423,10 @@ static inline void mem_cgroup_flush_stat
  {
- 	struct sock *sk = sock->sk;
- 	ax25_cb *ax25;
-+	ax25_dev *ax25_dev;
+ }
  
- 	if (sk == NULL)
- 		return 0;
++static inline void mem_cgroup_flush_stats_delayed(void)
++{
++}
++
+ static inline void __mod_memcg_lruvec_state(struct lruvec *lruvec,
+ 					    enum node_stat_item idx, int val)
+ {
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -650,6 +650,9 @@ static DECLARE_DEFERRABLE_WORK(stats_flu
+ static DEFINE_SPINLOCK(stats_flush_lock);
+ static DEFINE_PER_CPU(unsigned int, stats_updates);
+ static atomic_t stats_flush_threshold = ATOMIC_INIT(0);
++static u64 flush_next_time;
++
++#define FLUSH_TIME (2UL*HZ)
  
- 	sock_hold(sk);
--	sock_orphan(sk);
- 	lock_sock(sk);
-+	sock_orphan(sk);
- 	ax25 = sk_to_ax25(sk);
-+	ax25_dev = ax25->ax25_dev;
-+	if (ax25_dev) {
-+		dev_put(ax25_dev->dev);
-+		ax25_dev_put(ax25_dev);
-+	}
+ static inline void memcg_rstat_updated(struct mem_cgroup *memcg, int val)
+ {
+@@ -671,6 +674,7 @@ static void __mem_cgroup_flush_stats(voi
+ 	if (!spin_trylock_irqsave(&stats_flush_lock, flag))
+ 		return;
  
- 	if (sk->sk_type == SOCK_SEQPACKET) {
- 		switch (ax25->state) {
++	flush_next_time = jiffies_64 + 2*FLUSH_TIME;
+ 	cgroup_rstat_flush_irqsafe(root_mem_cgroup->css.cgroup);
+ 	atomic_set(&stats_flush_threshold, 0);
+ 	spin_unlock_irqrestore(&stats_flush_lock, flag);
+@@ -682,10 +686,16 @@ void mem_cgroup_flush_stats(void)
+ 		__mem_cgroup_flush_stats();
+ }
+ 
++void mem_cgroup_flush_stats_delayed(void)
++{
++	if (time_after64(jiffies_64, flush_next_time))
++		mem_cgroup_flush_stats();
++}
++
+ static void flush_memcg_stats_dwork(struct work_struct *w)
+ {
+ 	__mem_cgroup_flush_stats();
+-	queue_delayed_work(system_unbound_wq, &stats_flush_dwork, 2UL*HZ);
++	queue_delayed_work(system_unbound_wq, &stats_flush_dwork, FLUSH_TIME);
+ }
+ 
+ /**
+--- a/mm/workingset.c
++++ b/mm/workingset.c
+@@ -352,7 +352,7 @@ void workingset_refault(struct page *pag
+ 
+ 	inc_lruvec_state(lruvec, WORKINGSET_REFAULT_BASE + file);
+ 
+-	mem_cgroup_flush_stats();
++	mem_cgroup_flush_stats_delayed();
+ 	/*
+ 	 * Compare the distance to the existing workingset size. We
+ 	 * don't activate pages that couldn't stay resident even if
 
 

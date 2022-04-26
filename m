@@ -2,111 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4073350FF02
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DC5F50FF06
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348197AbiDZNaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 09:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49582 "EHLO
+        id S1350972AbiDZNay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 09:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348045AbiDZNaP (ORCPT
+        with ESMTP id S238485AbiDZNaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 09:30:15 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0339418D6A7
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 06:27:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650979627; x=1682515627;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=d7bkgmZnJMhnPyUymkC1XeAvQ2myhgXmgRziaJNPH8Q=;
-  b=Ml+u2YCluVgC4w8yiaPN+AcoHeGxMKQw9cMtLr7l3jiepUmgtZ2xVKfI
-   ZEMIQklhvrTecYkt2e8DCcRL2SvFCEfIrRKWo1dw9mXWm6VwfasBtF6aF
-   GkXdFv3iGGE4VkeVY70CjM5zhvthBxdrm/nnAwFrSM0cGBz678FgHZF+P
-   nPzjfMyBMfPajZo4zeMiXZIyujuoSrWCS/x45X4c6A5l1jJS/BELK9CVw
-   dCGCzQYW889PgMoNO5EfAhWDvQSJ49W/bSCugjk2uTVR3+6YZZYuRckkX
-   zY/MktgQLhLCHTX35GJmhhQKLpSoX8Y738+908s5GLUOMixYswKbtGCTy
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="264421122"
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="264421122"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 06:27:07 -0700
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="730248354"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 06:27:05 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1njLDa-008L8S-7M;
-        Tue, 26 Apr 2022 16:27:02 +0300
-Date:   Tue, 26 Apr 2022 16:27:01 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jagdish Gediya <jvgediya@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        ying.huang@intel.com, dave.hansen@intel.com,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Petr Mladek <pmladek@suse.com>
-Subject: Re: [PATCH v2] lib/kstrtox.c: Add "false"/"true" support to
- kstrtobool
-Message-ID: <YmfzJVPng1U8X+jV@smile.fi.intel.com>
-References: <20220426064001.14241-1-jvgediya@linux.ibm.com>
+        Tue, 26 Apr 2022 09:30:52 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A275118D6A3
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 06:27:44 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 70818ED1;
+        Tue, 26 Apr 2022 06:27:44 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E4F5D3F774;
+        Tue, 26 Apr 2022 06:27:42 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 14:27:40 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     =?utf-8?B?546L5pOO?= <wangqing@vivo.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+        "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
+        Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Subject: Re: [PATCH V2 0/2] Add complex scheduler level for arm64
+Message-ID: <20220426132740.yhthgoazoolvlven@bogus>
+References: <1650628289-67716-1-git-send-email-wangqing@vivo.com>
+ <20220425141926.00004d2e@Huawei.com>
+ <SL2PR06MB3082D393ADEC823426DEE7DFBDFB9@SL2PR06MB3082.apcprd06.prod.outlook.com>
+ <SL2PR06MB30828131C046AB979BE75BD6BDFB9@SL2PR06MB3082.apcprd06.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220426064001.14241-1-jvgediya@linux.ibm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <SL2PR06MB30828131C046AB979BE75BD6BDFB9@SL2PR06MB3082.apcprd06.prod.outlook.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 12:10:01PM +0530, Jagdish Gediya wrote:
-> At many places in kernel, It is necessary to convert sysfs input
-> to corrosponding bool value e.g. "false" or "0" need to be converted
-> to bool false, "true" or "1" need to be converted to bool true,
-> places where such conversion is needed currently check the input
-> string manually, kstrtobool can be utilized at such places but
+On Tue, Apr 26, 2022 at 07:05:15AM +0000, 王擎 wrote:
+> 
+> Hi Sudeep:
+> 
+> I am thinking if it is possible to add a complex level cpu topology
+> between cluster and SMT?
+> 
+> We can describe it directly in “cpu-map”, instead of parsing it through
+> the cache info.
+> 
 
-kstrtobool()
-
-> currently kstrtobool doesn't have support to "false"/"true".
-
-
-Ditto.
-
-> Add "false"/"true" support to kstrtobool while string conversion
-
-Ditto.
-
-> to bool. Modify existing manual sysfs conversions to use kstrtobool().
-
-> This patch doesn't have any functionality change.
-
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Richard Fitzgerald <rf@opensource.cirrus.com>
-> Cc: Petr Mladek <pmladek@suse.com>
-
-You may use --cc parameter to `git send-email`.
-
-...
-
->  lib/kstrtox.c   | 7 +++++++
->  mm/migrate.c    | 6 +-----
->  mm/swap_state.c | 6 +-----
-
-Please, split to two.
-Also Documentation update is missed.
+I don't know or understand what you mean by that. Do you have a proposal
+for DT bindings ? Please post the patch with details on the motivation for
+the change to help us understand your proposal. I can't comment much without
+seeing or understanding your proposal at this moment.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Regards,
+Sudeep

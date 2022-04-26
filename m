@@ -2,128 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6BC351034B
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:26:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A614351034E
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352981AbiDZQ2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 12:28:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52096 "EHLO
+        id S1352983AbiDZQaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 12:30:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352977AbiDZQ2p (ORCPT
+        with ESMTP id S1348348AbiDZQaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 12:28:45 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5DD90169417
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:25:36 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1E12B23A;
-        Tue, 26 Apr 2022 09:25:36 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D78D63F73B;
-        Tue, 26 Apr 2022 09:25:34 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 17:25:28 +0100
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        james.quinlan@broadcom.com, Jonathan.Cameron@huawei.com,
-        f.fainelli@gmail.com, etienne.carriere@linaro.org,
-        vincent.guittot@linaro.org, souvik.chakravarty@arm.com
-Subject: Re: [PATCH 02/22] firmware: arm_scmi: Make protocols init fail on
- basic errors
-Message-ID: <Ymgc+AkuWiVCuCHw@e120937-lin>
-References: <20220330150551.2573938-1-cristian.marussi@arm.com>
- <20220330150551.2573938-3-cristian.marussi@arm.com>
- <20220426153528.bhskpchq2huhjtjk@bogus>
+        Tue, 26 Apr 2022 12:30:07 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6723169E44;
+        Tue, 26 Apr 2022 09:26:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=SlW7TrC7DpfmsqTmG1ehzyWxMybC0gyBrodqZVKNujo=; b=AL1nXEYrFs3sWPyCj/BCpaR8kl
+        ORzLikysN23cOFeKWVaMfhCPhQwr0167C/Z6ZuzSInr+zIqYu5uM2bRMvPRBO/YBdL+HsWhpy+jjZ
+        +i0yl6L3xA4KeC18M1HXRkMtLrDYfE0ny1w0aByZ2Ph/KKrcKfyuTc5cBpZm4cH0lKLIV1c/QjRRw
+        TQD+Q4lq6VA90F7dxtWT3vET0VrXdSrhuKzYUUbTq52MUJBvQSRxCQY/FH3iRimn80NrDHKyBX4WP
+        +QUWBMduVW8iDeVF0Dv277SfX+9PTSlOUMKgbwkEk0O5rAOTGYKJbuESATH/+sXmCZl8WfEWFQBnY
+        2htSVmfA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1njO1g-00FLId-M1; Tue, 26 Apr 2022 16:26:56 +0000
+Date:   Tue, 26 Apr 2022 09:26:56 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Lecopzer Chen <lecopzer.chen@mediatek.com>, atomlin@redhat.com
+Cc:     linux-kernel@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-modules@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        yj.chiang@mediatek.com
+Subject: Re: [PATCH] module: show disallowed symbol name for inherit_taint()
+Message-ID: <YmgdUKmfym1/XnhP@bombadil.infradead.org>
+References: <20220426042120.9686-1-lecopzer.chen@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220426153528.bhskpchq2huhjtjk@bogus>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220426042120.9686-1-lecopzer.chen@mediatek.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 04:35:28PM +0100, Sudeep Holla wrote:
-> On Wed, Mar 30, 2022 at 04:05:31PM +0100, Cristian Marussi wrote:
-> > Bail out of protocol initialization routine early when basic information
-> > about protocol version and attributes could not be retrieved: failing to
-> > act this way can lead to a successfully initialized SCMI protocol which
-> > is in fact not fully functional.
-> >
-> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> > ---
-> >  drivers/firmware/arm_scmi/base.c    |  5 ++++-
-> >  drivers/firmware/arm_scmi/clock.c   |  8 ++++++--
-> >  drivers/firmware/arm_scmi/perf.c    | 10 +++++++---
-> >  drivers/firmware/arm_scmi/power.c   | 10 +++++++---
-> >  drivers/firmware/arm_scmi/reset.c   | 10 +++++++---
-> >  drivers/firmware/arm_scmi/sensors.c |  4 +++-
-> >  drivers/firmware/arm_scmi/system.c  |  5 ++++-
-> >  7 files changed, 38 insertions(+), 14 deletions(-)
-> >
+Can you base your changes on modules-next [0] and resend and Cc
+atomlin@redhat.com?
 
-Hi Sudeep,
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=modules-next
 
-thanks for the review first of all...
+  Luis
 
-> > @@ -370,7 +372,9 @@ static int scmi_clock_protocol_init(const struct scmi_protocol_handle *ph)
-> >  	if (!cinfo)
-> >  		return -ENOMEM;
-> >
-> > -	scmi_clock_protocol_attributes_get(ph, cinfo);
-> > +	ret = scmi_clock_protocol_attributes_get(ph, cinfo);
-> > +	if (ret)
-> > +		return ret;
+On Tue, Apr 26, 2022 at 12:21:20PM +0800, Lecopzer Chen wrote:
+> The error log for inherit_taint() doesn't really help to find the symbols
+> which violate GPL rules.
 > 
-> Does this result in removal of scmi_dev associated with devm_* calls ?
-> Otherwise we may need to free the allocated buffers ? I am not sure
-> if the dev here is individual scmi_dev or the platform scmi device.
-> I assume latter and it is unlikely to be removed/freed with the error in
-> the above path.
+> For example,
+> if a module has 50 disallowed symbols, the log only shows the content below
+> and is duplicated with 50 lines.
+>     AAA: module using GPL-only symbols uses symbols from proprietary module BBB.
+>     AAA: module using GPL-only symbols uses symbols from proprietary module BBB.
+>     ...
 > 
-> Similarly in couple of other instances/protocols.
-
-So, ph->dev used in the above devm_ is indeed the arm_scmi platform device
-and I was *almost* gonna tell you 'Good catch', BUT then, rereading my own
-code (O_o), I saw/remembered that when a protocol instance is initialized on
-it first usage, there is indeed a devres_group internally managed by
-the SCMI core, so that:
-
-scmi_get_protocol_instance()
-
-	@first_protocol_usage (refcount pi->users):
-
-	--> scmi_get_protocol() // just in case was LKM proto
-	--> scmi_alloc_init_protocol_instance()
-		gid = devres_open_group(handle->dev, NULL, GFP_KERNEL);
-
-  		ret = pi->proto->instance_init(&pi->ph);
-		  ====>>> i.e. scmi_clock_protocol_init(ph)
-		if (ret)
-			goto clean;
-	.....
-
-	   clean:
-	   	devres_release_group(handle->dev, gid);
-
-
-So basically all that happens at initialization time in scmi_clock_protocol_init,
-BUT also everything that happens implicitly inside scmi_alloc_init_protocol_instance
-during that protocol initialization (like the events registration) is undone on
-failure transparently by the SCMI core init/free management functions
-(via devres_ groups...)
-
-All of the above is because each protocol is initialized only once on
-its first usage, no matter how many SCMI driver users (and scmi_devs) are
-using it...only in case (unsupported) we have multiple SCMI instances
-(platforms) there will be one instance of protocol initialized per SCMI
-server.
-
-... having said that, now I'll go and double check (test) this behaviour since I
-even had forgot about having implemented this kind of design :P
-
-Thanks,
-Cristian
+> This patch add symbol name to tell the offending symbols explicitly.
+> 
+> To-be:
+>     AAA: module using GPL-only symbols uses symbols SS1 from proprietary module BBB.
+>     AAA: module using GPL-only symbols uses symbols SS2 from proprietary module BBB.
+>     ...
+> 
+> Signed-off-by: Lecopzer Chen <lecopzer.chen@mediatek.com>
+> ---
+>  kernel/module.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/kernel/module.c b/kernel/module.c
+> index 6cea788fd965..30973f0d2b7c 100644
+> --- a/kernel/module.c
+> +++ b/kernel/module.c
+> @@ -1372,20 +1372,20 @@ static int verify_namespace_is_imported(const struct load_info *info,
+>  	return 0;
+>  }
+>  
+> -static bool inherit_taint(struct module *mod, struct module *owner)
+> +static bool inherit_taint(struct module *mod, struct module *owner, const char *name)
+>  {
+>  	if (!owner || !test_bit(TAINT_PROPRIETARY_MODULE, &owner->taints))
+>  		return true;
+>  
+>  	if (mod->using_gplonly_symbols) {
+> -		pr_err("%s: module using GPL-only symbols uses symbols from proprietary module %s.\n",
+> -			mod->name, owner->name);
+> +		pr_err("%s: module using GPL-only symbols uses symbols %s from proprietary module %s.\n",
+> +			mod->name, name, owner->name);
+>  		return false;
+>  	}
+>  
+>  	if (!test_bit(TAINT_PROPRIETARY_MODULE, &mod->taints)) {
+> -		pr_warn("%s: module uses symbols from proprietary module %s, inheriting taint.\n",
+> -			mod->name, owner->name);
+> +		pr_warn("%s: module uses symbols %s from proprietary module %s, inheriting taint.\n",
+> +			mod->name, name, owner->name);
+>  		set_bit(TAINT_PROPRIETARY_MODULE, &mod->taints);
+>  	}
+>  	return true;
+> @@ -1417,7 +1417,7 @@ static const struct kernel_symbol *resolve_symbol(struct module *mod,
+>  	if (fsa.license == GPL_ONLY)
+>  		mod->using_gplonly_symbols = true;
+>  
+> -	if (!inherit_taint(mod, fsa.owner)) {
+> +	if (!inherit_taint(mod, fsa.owner, name)) {
+>  		fsa.sym = NULL;
+>  		goto getname;
+>  	}
+> -- 
+> 2.18.0
+> 

@@ -2,103 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0B49510571
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 19:30:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD2A510575
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 19:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345630AbiDZRde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 13:33:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46058 "EHLO
+        id S1347242AbiDZRee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 13:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244815AbiDZRdb (ORCPT
+        with ESMTP id S244815AbiDZRe1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 13:33:31 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC38C2C65F;
-        Tue, 26 Apr 2022 10:30:22 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id n18so30905362plg.5;
-        Tue, 26 Apr 2022 10:30:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=bjJluOSvyEn5IIXDLb4yRtBrE/4kW0WHbTzjbx0F7/o=;
-        b=APB8LtTGIwHemO16knetKjVKno19p39+igRhlUzPh9b9O/1twhItBlsp4WX4QCKlyD
-         GpT0IkrgyR2UzERAlV5oqWflG7q64i/gEqe+e6gNv0e1t54HjpYBrtdX2I5Xv2MzRdX1
-         7eQcTSznVM9sU6qON5jjPxPN8EVQEP9IpNqDxD0cZja4vza4oi+P5siUVyEnY788rIvl
-         gaTlD27QEcMmxU75SWQjd4Qsz9oQBNYYYYVwoNPe9ySuIxJ6MR1Ig8BhzvLEh6CWdI6U
-         O7v/IcksMRDlBcTGeluzdLr53BO0wYwMiyb13V5tESsR6Ttx7Nbb6ZX1V6sH5AeEargE
-         EajA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=bjJluOSvyEn5IIXDLb4yRtBrE/4kW0WHbTzjbx0F7/o=;
-        b=wfgFkaqOHfMOL0TsqG7EgBfyHbLvyvwfp5WHsGFEvbnYJUi5LbQO8EcGBY5jy/NygV
-         nbXh+qUYuJWWfvh26dYtjEcx+nvL7dJ/nqDqrAzAfzwra5JQX9gqioKNsJ1770Bq3Zzq
-         HzkQrRYii2q2gF1aAMwYvGSXwAVoFc9gn/O0nWv47VkEg1uHWzesUbbS9uvF1NMe9jgE
-         wiurG5whcsJOgwot8ZW54XJwfvQHyIynCPM+iCY39zM6IbEDVbTlc3qd2ZDtdxl8rTIR
-         G+gesq1eMNnKIggfzD477rAzLn/nynIK97Llh3MrjNbidIrU6cWZHGR4biXkxu6xl6HL
-         plvw==
-X-Gm-Message-State: AOAM533QmqO2atN6CeNVKlrx+u+zEJQ4GmyIvmKUTwbSgHwMny4l1RjA
-        52/Oh77pK9Sq2Ou/JuH/id8=
-X-Google-Smtp-Source: ABdhPJyuduaYFnRA8deM9G5ToM2CuHgGQXF18xtJPwzdZjNrKnjMuQdo+cEUwskS8bp9GVvfjSOuFQ==
-X-Received: by 2002:a17:90a:9308:b0:1cb:a048:c140 with SMTP id p8-20020a17090a930800b001cba048c140mr28345981pjo.221.1650994221726;
-        Tue, 26 Apr 2022 10:30:21 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id y3-20020a056a00190300b004fa2411bb92sm17419535pfi.93.2022.04.26.10.30.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 10:30:20 -0700 (PDT)
-Message-ID: <4340f4cd-7c3b-a294-5fac-9b08fbbac70e@gmail.com>
-Date:   Tue, 26 Apr 2022 10:30:17 -0700
+        Tue, 26 Apr 2022 13:34:27 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F171FA4A;
+        Tue, 26 Apr 2022 10:31:19 -0700 (PDT)
+Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1A39F1EC04F9;
+        Tue, 26 Apr 2022 19:31:14 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1650994274;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=+xYV1ChaydvSUgBTfjtQMIuLFvZBBr5YN11vYi9Ld+E=;
+        b=mHHpxddAp1KGl7iVSXBqP485BzzHfEiDLirauISvPiHFQA4pKujjt94hu/0G5btJIrAYXs
+        AgKOhoTfGuODLk8Pcj96q5/sA/QKxxyESUH1NMiE/NrrGBlMujDp4LDHT+JRqWlnAGsJrc
+        IP179lVA+WstNQvMGVBAYBDzybKjVJY=
+Date:   Tue, 26 Apr 2022 19:31:14 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-arch@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-hyperv@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Oleksandr Tyshchenko <olekstysh@gmail.com>
+Subject: Re: [PATCH 1/2] kernel: add platform_has() infrastructure
+Message-ID: <YmgsYvWQchxub8cW@zn.tnic>
+References: <20220426134021.11210-1-jgross@suse.com>
+ <20220426134021.11210-2-jgross@suse.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 5.15 000/124] 5.15.36-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220426081747.286685339@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220426134021.11210-2-jgross@suse.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/26/22 01:20, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.36 release.
-> There are 124 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 28 Apr 2022 08:17:22 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.36-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Tue, Apr 26, 2022 at 03:40:20PM +0200, Juergen Gross wrote:
+> diff --git a/kernel/platform-feature.c b/kernel/platform-feature.c
+> new file mode 100644
+> index 000000000000..2d52f8442cd5
+> --- /dev/null
+> +++ b/kernel/platform-feature.c
+> @@ -0,0 +1,7 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <linux/cache.h>
+> +#include <linux/platform-feature.h>
+> +
+> +unsigned long __read_mostly platform_features[PLATFORM_FEAT_ARRAY_SZ];
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+Probably __ro_after_init.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+> +EXPORT_SYMBOL_GPL(platform_features);
+
+You probably should make that thing static and use only accessors to
+modify it in case you wanna change the underlying data structure in the
+future.
+
 -- 
-Florian
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDFE050F898
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 079AF50F68A
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347401AbiDZJ1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:27:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57326 "EHLO
+        id S243051AbiDZI40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:56:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347115AbiDZJFP (ORCPT
+        with ESMTP id S1345659AbiDZIn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:05:15 -0400
+        Tue, 26 Apr 2022 04:43:29 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82AB0FAD9D;
-        Tue, 26 Apr 2022 01:44:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BEC15B97B;
+        Tue, 26 Apr 2022 01:33:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B87BFB81D1C;
-        Tue, 26 Apr 2022 08:44:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28FAFC385A0;
-        Tue, 26 Apr 2022 08:44:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 71F43B81A2F;
+        Tue, 26 Apr 2022 08:33:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D24ADC385AC;
+        Tue, 26 Apr 2022 08:33:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962645;
-        bh=c4tV8qVMiEPhY0Aru+SR6B5J65uqhDU1LrLy5WMOB+A=;
+        s=korg; t=1650962008;
+        bh=gbJgUQw3wOIE+nkT347SF6zGSxWGB6uTZ9JEhFR66zI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qK/Xf17KdKuqOibmMix55OlrU7MDrDHr1Uo5xwX5i51xYgWwDnKP36ct/8J8/KZY6
-         eJufuM6Hv/uVnQYzNHEoHsPC0YiN5nQ2WBNkV0PS/iQK29/JgGW5SfItvX3UlQaIXE
-         GNomokC63/sV/hszCAD6ElHjUDsTvUm/3Hz8lZzI=
+        b=PLLzHyOdrFLJWiZzvccVnbbtfvh2DF0McwlHUxMLMVbTqbQg4t3baSk/VWZ9pplDy
+         ImMuWrhQDkDmpHHS1OCQesuIEmz3CbQrt6h4b5EggzF2o3ka7pjIN1kGWlcp5KL3wR
+         nuqWYb3yD1jP9R2jjB/TvgBs0OKxea+AxstgrSZw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kurt Kanzenbach <kurt@linutronix.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 041/146] net: dsa: hellcreek: Calculate checksums in tagger
+        stable@vger.kernel.org, Tim Crawford <tcrawford@system76.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.10 08/86] ALSA: hda/realtek: Add quirk for Clevo NP70PNP
 Date:   Tue, 26 Apr 2022 10:20:36 +0200
-Message-Id: <20220426081751.223955523@linuxfoundation.org>
+Message-Id: <20220426081741.448626441@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
-References: <20220426081750.051179617@linuxfoundation.org>
+In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
+References: <20220426081741.202366502@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,49 +53,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kurt Kanzenbach <kurt@linutronix.de>
+From: Tim Crawford <tcrawford@system76.com>
 
-[ Upstream commit 0763120b090418a5257402754e22a34227ae5f12 ]
+commit 86222af07abf1f5f07a5873cc399c29ab8a9b8b8 upstream.
 
-In case the checksum calculation is offloaded to the DSA master network
-interface, it will include the switch trailing tag. As soon as the switch strips
-that tag on egress, the calculated checksum is wrong.
+Fixes headset detection on Clevo NP70PNP.
 
-Therefore, add the checksum calculation to the tagger (if required) before
-adding the switch tag. This way, the hellcreek code works with all DSA master
-interfaces regardless of their declared feature set.
-
-Fixes: 01ef09caad66 ("net: dsa: Add tag handling for Hirschmann Hellcreek switches")
-Signed-off-by: Kurt Kanzenbach <kurt@linutronix.de>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-Link: https://lore.kernel.org/r/20220415103320.90657-1-kurt@linutronix.de
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Tim Crawford <tcrawford@system76.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220421170412.3697-1-tcrawford@system76.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/dsa/tag_hellcreek.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ sound/pci/hda/patch_realtek.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/dsa/tag_hellcreek.c b/net/dsa/tag_hellcreek.c
-index f64b805303cd..eb204ad36eee 100644
---- a/net/dsa/tag_hellcreek.c
-+++ b/net/dsa/tag_hellcreek.c
-@@ -21,6 +21,14 @@ static struct sk_buff *hellcreek_xmit(struct sk_buff *skb,
- 	struct dsa_port *dp = dsa_slave_to_port(dev);
- 	u8 *tag;
- 
-+	/* Calculate checksums (if required) before adding the trailer tag to
-+	 * avoid including it in calculations. That would lead to wrong
-+	 * checksums after the switch strips the tag.
-+	 */
-+	if (skb->ip_summed == CHECKSUM_PARTIAL &&
-+	    skb_checksum_help(skb))
-+		return NULL;
-+
- 	/* Tag encoding */
- 	tag  = skb_put(skb, HELLCREEK_TAG_LEN);
- 	*tag = BIT(dp->index);
--- 
-2.35.1
-
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -8897,6 +8897,7 @@ static const struct snd_pci_quirk alc269
+ 	SND_PCI_QUIRK(0x1558, 0x8562, "Clevo NH[5|7][0-9]RZ[Q]", ALC269_FIXUP_DMIC),
+ 	SND_PCI_QUIRK(0x1558, 0x8668, "Clevo NP50B[BE]", ALC293_FIXUP_SYSTEM76_MIC_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x1558, 0x866d, "Clevo NP5[05]PN[HJK]", ALC256_FIXUP_SYSTEM76_MIC_NO_PRESENCE),
++	SND_PCI_QUIRK(0x1558, 0x867c, "Clevo NP7[01]PNP", ALC256_FIXUP_SYSTEM76_MIC_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x1558, 0x867d, "Clevo NP7[01]PN[HJK]", ALC256_FIXUP_SYSTEM76_MIC_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x1558, 0x8680, "Clevo NJ50LU", ALC293_FIXUP_SYSTEM76_MIC_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x1558, 0x8686, "Clevo NH50[CZ]U", ALC256_FIXUP_MIC_NO_PRESENCE_AND_RESUME),
 
 

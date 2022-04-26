@@ -2,86 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64715510498
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:52:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0083951049A
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353418AbiDZQxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 12:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44232 "EHLO
+        id S1353457AbiDZQxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 12:53:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353251AbiDZQv3 (ORCPT
+        with ESMTP id S1353434AbiDZQvd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 12:51:29 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54FFB4ECE6
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:46:55 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id m13so7225366iob.4
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:46:55 -0700 (PDT)
+        Tue, 26 Apr 2022 12:51:33 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59B1506D5
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:47:30 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id i24so18466181pfa.7
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:47:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=nGoQA4PseSMoDB9HLCqlZ/CtlZ9MNnC5N8+D59h5w8o=;
-        b=QnD/GAUE7CCosj6Br3twZxRnNYr08rmMRUz4OvX6q9jQkOBisUBMikIxBXEke6gIxl
-         HDdrX0BRG0q0xgvMNTMpX+sEHvqA54rAFblk/g6oJw6KfoQVAtYNWdoWWuoAgU2e8wvP
-         b1JNpyVhx3OhWzMDxCKoDnl7Ib0SKcaHb2rf8=
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=fZ70D0cVnnPXPK9Ej6Zn6n9gKcidZRyOEp+MolYSflo=;
+        b=ntgDgHv/lSQpRZFmn+4MX9RayrJeGNGq4yCFYzNqgnmwtVFv2aJRd4ProEqNgs6dgW
+         1KVM1HcTg/y5YnxlAoSwqJJhugcj8nf0rI6143nSvZeaWSeyBurvUFNA3Gz5x0Q9y+jn
+         HMJ8k5rudB7CuL2+RGTf/Cv0nWQagFCzTOmOjDH9NWI+3pOrHgFqYr//mUDuVoYHmywz
+         NhHGrk9iYlRs4OAIS/AMowc13fbjVz0QTkX4ItEKzncaYQTf99jUMebqeo4wmA9nrhFB
+         0EwVn3aH9D5l9zoeGIPZHcqMBQHuX7HdzgJAR0xNDaj1TTL3jnR+6HM89/am8WO5ojaK
+         M1kQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=nGoQA4PseSMoDB9HLCqlZ/CtlZ9MNnC5N8+D59h5w8o=;
-        b=yMll3VJqLxGfqIm1d9lanOaug/1I+m1NECVvgifAfkoJQm1b4RkiGz2R4+PT/EbbyQ
-         HrD34gRwNZRVJVRnn0Hon8E/FFCwLZMAnB9Qdf7PGcHekCxsS2zg0lcmkZC37GBo48lL
-         HGXcHCsDXbE/LPYeOCC4jD739xmbRgP/90qVd+BDbcRMoG1a9Jx6wz3Bu7aA2CGy45P2
-         OaMSZ/wf7jZuTVA6XIYrAG2bVfniAcru5mQfM2YfYM/WOrIBRgJefSvCl+IJsFKbU+Da
-         z+x2qH2oyDgxoBTEAfdGZMmtTEhlIdS676RPzr999WgoTXGq+8d9vDgWF+qV92ltcDDN
-         VOfg==
-X-Gm-Message-State: AOAM530vZiAn6TWvQE6tUNiu9AwMU1+65CVuKrobMQTv3PBwqhE5qYRN
-        MFKQAu6JVzyTz2zWXQoRr6znPw==
-X-Google-Smtp-Source: ABdhPJwPUPDVAA6bhrjdmMl4qGGItt/zCCVnRl2EYeNJyvy+lZ5cwh07B5Ma0VIQ8LppwKw6p06/RQ==
-X-Received: by 2002:a05:6638:2182:b0:323:a610:3eaf with SMTP id s2-20020a056638218200b00323a6103eafmr10541408jaj.204.1650991614619;
-        Tue, 26 Apr 2022 09:46:54 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id u12-20020a056e02170c00b002cc27d7fe26sm8832029ill.22.2022.04.26.09.46.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 09:46:54 -0700 (PDT)
-Subject: Re: [PATCH v2 4/6] userfaultfd: update documentation to describe
- /dev/userfaultfd
-To:     Axel Rasmussen <axelrasmussen@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Charan Teja Reddy <charante@codeaurora.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, zhangyi <yi.zhang@huawei.com>
-Cc:     linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220422212945.2227722-1-axelrasmussen@google.com>
- <20220422212945.2227722-5-axelrasmussen@google.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <fc320218-bef1-c373-e6a6-afa2f6c4b56c@linuxfoundation.org>
-Date:   Tue, 26 Apr 2022 10:46:52 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=fZ70D0cVnnPXPK9Ej6Zn6n9gKcidZRyOEp+MolYSflo=;
+        b=r55kYTbcTA99+UI3D+ZxmHVv3ITnHc7auWZ7m4C2XKDB39VCgyuV5/e++glLF9hapV
+         b+MM8J9mFznFzA3grrpXQp9f4OhQKX0g5wJ1mjdZSJnjWfRloFFzzPDjxkGN9okYpq7q
+         c1HCeBwFoaZytIjMtemlEMB1l6GHiXcjvjd/ItxiOTmHLCIk0BuAInlgMIG5Euf4UwdW
+         ZbHX8werC5GmQIKvwlI/zutzQpS3FiHWJApL6ckfXg1UFZ830YHUPZekk4FNKU9RScv2
+         oztcj1O5i2MkvKPt+WfNnmkb0W/BKw5AOP2DTOoCw3ZU4ej9e0wqa8fHU0EEQzXnYd1T
+         7buw==
+X-Gm-Message-State: AOAM531tGYcD3kyhDFrE1rRJCVGXlOUCH3dfiNemkZ95fv2bv2xTHcch
+        nQSwhSQKqvpTPirOywTboAWqUhstIjdH6RYGw/wStCcSAfw=
+X-Google-Smtp-Source: ABdhPJwODo10rc9TudmxpFOyBKYK0ZSg4IZZv0WokXo0HVbHZUWNTR3RlkWi98PRm2q7WmO/8sh8Ujc6PEnE21cDh6A=
+X-Received: by 2002:a63:1117:0:b0:399:2df0:7fb9 with SMTP id
+ g23-20020a631117000000b003992df07fb9mr20802671pgl.40.1650991650440; Tue, 26
+ Apr 2022 09:47:30 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220422212945.2227722-5-axelrasmussen@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+References: <20220426123839.GF163591@kunlun.suse.cz> <CAPcyv4j66HAE_x-eAHQR71pNyR0mk5b463S6OfeokLzZHq5ezw@mail.gmail.com>
+ <20220426161435.GH163591@kunlun.suse.cz> <CAPcyv4iG4L3rA3eX-H=6nVkwhO2FGqDCbQHB2Lv_gLb+jy3+bw@mail.gmail.com>
+ <20220426163834.GI163591@kunlun.suse.cz>
+In-Reply-To: <20220426163834.GI163591@kunlun.suse.cz>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Tue, 26 Apr 2022 09:47:19 -0700
+Message-ID: <CAPcyv4jUj3v+4Sf=1i5EjxTeX9Ur65Smib-vkuaBdKYjUrh7yA@mail.gmail.com>
+Subject: Re: ndctl tests usable?
+To:     =?UTF-8?Q?Michal_Such=C3=A1nek?= <msuchanek@suse.de>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,111 +68,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/22/22 3:29 PM, Axel Rasmussen wrote:
-> Explain the different ways to create a new userfaultfd, and how access
-> control works for each way.
-> 
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-> ---
->   Documentation/admin-guide/mm/userfaultfd.rst | 38 ++++++++++++++++++--
->   Documentation/admin-guide/sysctl/vm.rst      |  3 ++
->   2 files changed, 39 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/admin-guide/mm/userfaultfd.rst b/Documentation/admin-guide/mm/userfaultfd.rst
-> index 6528036093e1..4c079b5377d4 100644
-> --- a/Documentation/admin-guide/mm/userfaultfd.rst
-> +++ b/Documentation/admin-guide/mm/userfaultfd.rst
-> @@ -17,7 +17,10 @@ of the ``PROT_NONE+SIGSEGV`` trick.
->   Design
->   ======
->   
-> -Userfaults are delivered and resolved through the ``userfaultfd`` syscall.
+On Tue, Apr 26, 2022 at 9:43 AM Michal Such=C3=A1nek <msuchanek@suse.de> wr=
+ote:
+>
+> On Tue, Apr 26, 2022 at 09:32:24AM -0700, Dan Williams wrote:
+> > On Tue, Apr 26, 2022 at 9:15 AM Michal Such=C3=A1nek <msuchanek@suse.de=
+> wrote:
+> > >
+> > > On Tue, Apr 26, 2022 at 08:51:25AM -0700, Dan Williams wrote:
+> > > > On Tue, Apr 26, 2022 at 5:39 AM Michal Such=C3=A1nek <msuchanek@sus=
+e.de> wrote:
+> > > > >
+> > > > > Hello,
+> > > > >
+> > > > > there is some testsuite included with ndctl, and when following t=
+he
+> > > > > instructions to build it most tests fail or are skipped:
+> > > > >
+> > > > > [   95s] Ok:                 3
+> > > > > [   95s] Expected Fail:      0
+> > > > > [   95s] Fail:               5
+> > > > > [   95s] Unexpected Pass:    0
+> > > > > [   95s] Skipped:            15
+> > > > > [   95s] Timeout:            0
+> > > > >
+> > > > > Is this the expected outcome or is this a problem with the ndctl =
+build?
+> > > > >
+> > > > > Attaching test run log.
+> > > >
+> > > > I see a few missing prerequisites:
+> > > >
+> > > > [   78s] /usr/src/packages/BUILD/ndctl-73/test/pmem-errors.sh: line
+> > > > 64: mkfs.ext4: command not found
+> > > > [   95s] /usr/src/packages/BUILD/ndctl-73/test/security.sh: line 25=
+:
+> > > > jq: command not found
+> > >
+> > > Indeed, with those installed I get much more tests passing:
+> > >
+> > > [  148s] Ok:                 13
+> > > [  148s] Expected Fail:      0
+> > > [  148s] Fail:               4
+> > > [  148s] Unexpected Pass:    0
+> > > [  148s] Skipped:            6
+> > > [  148s] Timeout:            0
+> > >
+> > > >
+> > > > This report:
+> > > >
+> > > > [   51s]  1/23 ndctl:ndctl / libndctl               SKIP
+> > > > 0.02s   exit status 77
+> > > >
+> > > > ...seems to indicate that the nfit_test modules did not appear to l=
+oad
+> > > > correctly. I never expected that the nfit_test modules would be
+> > > > redistributable, so I was surprised to see them being installed by =
+an
+> > > > actual package "nfit_test-kmp-default-0_k5.17.4_1-6.1". The reason
+> > > > they are not redistributable is because they require replacing the
+> > > > production build of the kernel provided modules libnvdimm.ko,
+> > > > nd_pmem.ko, etc... What I expect is happening is that the productio=
+n
+> > > > version of libnvdimm.ko is already loaded (or is the only one on th=
+e
+> > >
+> > > AFAICT neither is the case, that's why I dump the module information =
+in
+> > > the log.
+> >
+> > The modinfo just tells you what modules are available, but it does not
+> > necessarily indicate which modules are actively loaded in the system
+> > which is what ndctl_test_init() validates.
+>
+> Isn't what modinfo lists also what modrobe loads?
 
-Please keep this sentence in there and rephrase it to indicate how it was
-done in the past.
+It shows what modprobe would load on the next invocation, but
+sometimes when nfit_test fails it's because the initramfs or something
+else loaded the modules without respecting the extra/ (or updates/ in
+your case) override modules.
 
-Also explain here why this new approach is better than the syscall approach
-before getting into the below details.
+> There isn't any pmem so I don't see why production modules would be
+> loaded before the test modules are installed. Unloading the modules
+> first does not really make any difference.
 
-> +Userspace creates a new userfaultfd, initializes it, and registers one or more
-> +regions of virtual memory with it. Then, any page faults which occur within the
-> +region(s) result in a message being delivered to the userfaultfd, notifying
-> +userspace of the fault.
->   
->   The ``userfaultfd`` (aside from registering and unregistering virtual
->   memory ranges) provides two primary functionalities:
-> @@ -39,7 +42,7 @@ Vmas are not suitable for page- (or hugepage) granular fault tracking
->   when dealing with virtual address spaces that could span
->   Terabytes. Too many vmas would be needed for that.>   
-> -The ``userfaultfd`` once opened by invoking the syscall, can also be
-> +The ``userfaultfd``, once created, can also be
-
-This is sentence is too short and would look odd. Combine the sentences
-so it renders well in the generated doc.
-
->   passed using unix domain sockets to a manager process, so the same
->   manager process could handle the userfaults of a multitude of
->   different processes without them being aware about what is going on
-> @@ -50,6 +53,37 @@ is a corner case that would currently return ``-EBUSY``).
->   API
->   ===
->   
-> +Creating a userfaultfd
-> +----------------------
-> +
-> +There are two mechanisms to create a userfaultfd. There are various ways to
-> +restrict this too, since userfaultfds which handle kernel page faults have
-> +historically been a useful tool for exploiting the kernel.
-> +
-> +The first is the userfaultfd(2) syscall. Access to this is controlled in several
-> +ways:
-> +
-> +- By default, the userfaultfd will be able to handle kernel page faults. This
-> +  can be disabled by passing in UFFD_USER_MODE_ONLY.
-> +
-> +- If vm.unprivileged_userfaultfd is 0, then the caller must *either* have
-> +  CAP_SYS_PTRACE, or pass in UFFD_USER_MODE_ONLY.
-> +
-> +- If vm.unprivileged_userfaultfd is 1, then no particular privilege is needed to
-> +  use this syscall, even if UFFD_USER_MODE_ONLY is *not* set.
-> +
-> +Alternatively, userfaultfds can be created by opening /dev/userfaultfd, and
-> +issuing a USERFAULTFD_IOC_NEW ioctl to this device. Access to this device is
-
-New ioctl? I thought we are moving away from using ioctls?
-
-> +controlled via normal filesystem permissions (user/group/mode for example) - no
-> +additional permission (capability/sysctl) is needed to be able to handle kernel
-> +faults this way. This is useful because it allows e.g. a specific user or group
-> +to be able to create kernel-fault-handling userfaultfds, without allowing it
-> +more broadly, or granting more privileges in addition to that particular ability
-> +(CAP_SYS_PTRACE). In other words, it allows permissions to be minimized.
-> +
-> +Initializing up a userfaultfd
-> +------------------------
-> +
-
-This will generate doc warn very likley - extend the dashes to the
-entire length of the subtitle.
-
->   When first opened the ``userfaultfd`` must be enabled invoking the
->   ``UFFDIO_API`` ioctl specifying a ``uffdio_api.api`` value set to ``UFFD_API`` (or
->   a later API version) which will specify the ``read/POLLIN`` protocol
-> diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
-> index f4804ce37c58..8682d5fbc8ea 100644
-> --- a/Documentation/admin-guide/sysctl/vm.rst
-> +++ b/Documentation/admin-guide/sysctl/vm.rst
-> @@ -880,6 +880,9 @@ calls without any restrictions.
->   
->   The default value is 0.
->   
-> +An alternative to this sysctl / the userfaultfd(2) syscall is to create
-> +userfaultfds via /dev/userfaultfd. See
-> +Documentation/admin-guide/mm/userfaultfd.rst.
->   
->   user_reserve_kbytes
->   ===================
-> 
-
-thanks,
--- Shuah
+Ok, my first guess was wrong... would need more debug to see what
+those other skip tests are complaining about.

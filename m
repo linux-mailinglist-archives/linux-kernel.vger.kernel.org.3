@@ -2,163 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AB3750EF6E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 05:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD73350EF71
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 05:59:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243601AbiDZD6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 23:58:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
+        id S241837AbiDZEC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 00:02:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232879AbiDZD6Z (ORCPT
+        with ESMTP id S229825AbiDZECx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 23:58:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B21B411143
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 20:55:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650945316;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=k8DCgpThd7pILyojCaMETysh65rozf6ZoyV6RveS5yk=;
-        b=EIqZucAHjCt/I2g/c1uGRO6CdI4GDv4sKjJ+JQzf6rnWc9axwpehLvNLqm31FVKIZr7ptu
-        a97ejVktVJ3VRe95MKNdQatZf21y0NyaY2jOcBFOjOWQZDE3bbQ3EIXuz+j/JyOOhnmmRW
-        aw5Zlu5NqI/6ghoVtXaBTGW5Prc1J/c=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-173-XvzZh-U6P2GlMavG-YKRkA-1; Mon, 25 Apr 2022 23:55:15 -0400
-X-MC-Unique: XvzZh-U6P2GlMavG-YKRkA-1
-Received: by mail-wr1-f69.google.com with SMTP id k20-20020adfc714000000b001e305cd1597so3995388wrg.19
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 20:55:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=k8DCgpThd7pILyojCaMETysh65rozf6ZoyV6RveS5yk=;
-        b=gI+vWRNXxDWhuSihLYEjt+ZrOR0LA8PRE9DH9yruTtxm5VtkB9DDtVLlkY6XoLByU+
-         J+VWlY31v0oKuKbznYlfTXzOuwj5acqph9MMbiE6tPKrUJ1knfrbNEbGGNIxYOKMx0dj
-         /Ouv73ZkYZG2QXGaXJeR1fAHBC/73s9l2schweAQgI1liMr0S/fkaIFC9zn6u75Dy3ca
-         awl9zrfaLmx/Cp+27cA1uNvSUx/LJvqiyTj6yWZslVMkPKtvcWfDvdudkCo37BSsRFd4
-         zBfUqZwbGWEEksm3UUoBsk8I4iIGniHoHzr53J4kKJcaP4j6lwbPI4gbta78+UkOJ5am
-         xS7Q==
-X-Gm-Message-State: AOAM533q+o4y8IDdGLLxG/fEASXqGogyjsi5KETWMjbFmv2j+FKUFLpP
-        3vVqw3IoZLSVGqT79oWzcukwyAswL4C2u9bNgZ6NcW+cPDqIkuiYXqEwLPlf+veLJhIwwveS6gB
-        xRk6nRtC4HyjcNmHz+dWlmYCa
-X-Received: by 2002:a7b:cb83:0:b0:37e:bc50:3c6b with SMTP id m3-20020a7bcb83000000b0037ebc503c6bmr28978710wmi.67.1650945314219;
-        Mon, 25 Apr 2022 20:55:14 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxUZ0sdWxGZIAvoc1Bigfd+lXNXJtNCcFHGVd5kuF2nbZVjYpDciBMefaxxcg5uKysfxdjG4w==
-X-Received: by 2002:a7b:cb83:0:b0:37e:bc50:3c6b with SMTP id m3-20020a7bcb83000000b0037ebc503c6bmr28978700wmi.67.1650945314032;
-        Mon, 25 Apr 2022 20:55:14 -0700 (PDT)
-Received: from redhat.com ([2.53.22.137])
-        by smtp.gmail.com with ESMTPSA id q128-20020a1c4386000000b003915e19d47asm12952833wma.32.2022.04.25.20.55.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 20:55:13 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 23:55:09 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Halil Pasic <pasic@linux.ibm.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, sgarzare@redhat.com,
-        eperezma@redhat.com, lulu@redhat.com, tglx@linutronix.de,
-        peterz@infradead.org, paulmck@kernel.org, maz@kernel.org
-Subject: Re: [PATCH V3 6/9] virtio-ccw: implement synchronize_cbs()
-Message-ID: <20220425235415-mutt-send-email-mst@kernel.org>
-References: <20220425024418.8415-1-jasowang@redhat.com>
- <20220425024418.8415-7-jasowang@redhat.com>
- <20220425040512-mutt-send-email-mst@kernel.org>
- <87a6c98rwf.fsf@redhat.com>
- <20220425095742-mutt-send-email-mst@kernel.org>
- <20220426042911.544477f9.pasic@linux.ibm.com>
- <20220425233434-mutt-send-email-mst@kernel.org>
- <20220425233604-mutt-send-email-mst@kernel.org>
- <ba0c3977-c471-3275-2327-c5910cdd506a@redhat.com>
- <20220425235134-mutt-send-email-mst@kernel.org>
+        Tue, 26 Apr 2022 00:02:53 -0400
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078DDB1CD;
+        Mon, 25 Apr 2022 20:59:45 -0700 (PDT)
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 23Q3xTgm025076;
+        Tue, 26 Apr 2022 12:59:29 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 23Q3xTgm025076
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1650945570;
+        bh=cYiWrPdBFDd0mrnYn09H4oEnjv6RyMZ7n64U8ua0gOY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NPc1Z9EKm+Rim2o91JcqsiLludqXKEAFP0jMbD9oWluY0aTNEsRAS85T/sIQb5jD4
+         cLI5+i0orrkt/lP/wYa8fJ34H8M3aTBh6f9brzF22m0HTh6Ctqhov49wwRHE3FDcVY
+         tVuv6z6KUWejd3TYiM15bSgBsbp35zpkH4TjQ6pAfY27tl/T0oQjbUVy31gUQ/BpLD
+         JJVEOiEdj/ILRuCF0PtA769j2pHvSRwHP4338w8lEe/n099W7vq306HdLdnnk5wD4p
+         LhSHhEmRQkqbOshaztKCGiefx1uiD+x16KdFUWVfnFshwcwQ8iOzS+nWTeOWU/6rH1
+         HB6jEZ6ontGVA==
+X-Nifty-SrcIP: [209.85.216.53]
+Received: by mail-pj1-f53.google.com with SMTP id l11-20020a17090a49cb00b001d923a9ca99so1350828pjm.1;
+        Mon, 25 Apr 2022 20:59:29 -0700 (PDT)
+X-Gm-Message-State: AOAM530jXRszM248JzQk8E7nBRRn3iFgUjpvF4sXdQHcdemJ7sikTmsM
+        YPj2vLMqiA44VPZ6JiwXndAuIAcn6bwtLnhd0dQ=
+X-Google-Smtp-Source: ABdhPJxqNW2U2AUQwKH629EZ5PUs/ObxZN3krYGMVvx8LRvzNllnHHp1ZqbXQstTuE9vvjtHKkJERoqF9RBgvrl1Sak=
+X-Received: by 2002:a17:902:9887:b0:151:6e1c:7082 with SMTP id
+ s7-20020a170902988700b001516e1c7082mr20907060plp.162.1650945568944; Mon, 25
+ Apr 2022 20:59:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220425235134-mutt-send-email-mst@kernel.org>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220424190811.1678416-1-masahiroy@kernel.org>
+ <20220424190811.1678416-10-masahiroy@kernel.org> <CAKwvOdkac4Bk+u=v2dwSD=X0kZo2y4UxRUNHJdYiTLTPSp7=kQ@mail.gmail.com>
+In-Reply-To: <CAKwvOdkac4Bk+u=v2dwSD=X0kZo2y4UxRUNHJdYiTLTPSp7=kQ@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 26 Apr 2022 12:58:52 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAR4N_OAUJJnCoZWA3OKWPFJHgOTLmsgY+DHaXRJFwGsGQ@mail.gmail.com>
+Message-ID: <CAK7LNAR4N_OAUJJnCoZWA3OKWPFJHgOTLmsgY+DHaXRJFwGsGQ@mail.gmail.com>
+Subject: Re: [PATCH 09/27] modpost: add sym_add_unresolved() helper
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 11:53:24PM -0400, Michael S. Tsirkin wrote:
-> On Tue, Apr 26, 2022 at 11:42:45AM +0800, Jason Wang wrote:
-> > 
-> > 在 2022/4/26 11:38, Michael S. Tsirkin 写道:
-> > > On Mon, Apr 25, 2022 at 11:35:41PM -0400, Michael S. Tsirkin wrote:
-> > > > On Tue, Apr 26, 2022 at 04:29:11AM +0200, Halil Pasic wrote:
-> > > > > On Mon, 25 Apr 2022 09:59:55 -0400
-> > > > > "Michael S. Tsirkin" <mst@redhat.com> wrote:
-> > > > > 
-> > > > > > On Mon, Apr 25, 2022 at 10:54:24AM +0200, Cornelia Huck wrote:
-> > > > > > > On Mon, Apr 25 2022, "Michael S. Tsirkin" <mst@redhat.com> wrote:
-> > > > > > > > On Mon, Apr 25, 2022 at 10:44:15AM +0800, Jason Wang wrote:
-> > > > > > > > > This patch tries to implement the synchronize_cbs() for ccw. For the
-> > > > > > > > > vring_interrupt() that is called via virtio_airq_handler(), the
-> > > > > > > > > synchronization is simply done via the airq_info's lock. For the
-> > > > > > > > > vring_interrupt() that is called via virtio_ccw_int_handler(), a per
-> > > > > > > > > device spinlock for irq is introduced ans used in the synchronization
-> > > > > > > > > method.
-> > > > > > > > > 
-> > > > > > > > > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > > > > > > > > Cc: Peter Zijlstra <peterz@infradead.org>
-> > > > > > > > > Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> > > > > > > > > Cc: Marc Zyngier <maz@kernel.org>
-> > > > > > > > > Cc: Halil Pasic <pasic@linux.ibm.com>
-> > > > > > > > > Cc: Cornelia Huck <cohuck@redhat.com>
-> > > > > > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > > > > > > > 
-> > > > > > > > This is the only one that is giving me pause. Halil, Cornelia,
-> > > > > > > > should we be concerned about the performance impact here?
-> > > > > > > > Any chance it can be tested?
-> > > > > > > We can have a bunch of devices using the same airq structure, and the
-> > > > > > > sync cb creates a choke point, same as registering/unregistering.
-> > > > > > BTW can callbacks for multiple VQs run on multiple CPUs at the moment?
-> > > > > I'm not sure I understand the question.
-> > > > > 
-> > > > > I do think we can have multiple CPUs that are executing some portion of
-> > > > > virtio_ccw_int_handler(). So I guess the answer is yes. Connie what do you think?
-> > > > > 
-> > > > > On the other hand we could also end up serializing synchronize_cbs()
-> > > > > calls for different devices if they happen to use the same airq_info. But
-> > > > > this probably was not your question
-> > > > 
-> > > > I am less concerned about  synchronize_cbs being slow and more about
-> > > > the slowdown in interrupt processing itself.
-> > > > 
-> > > > > > this patch serializes them on a spinlock.
-> > > > > > 
-> > > > > Those could then pile up on the newly introduced spinlock.
-> > > > > 
-> > > > > Regards,
-> > > > > Halil
-> > > > Hmm yea ... not good.
-> > > Is there any other way to synchronize with all callbacks?
-> > 
-> > 
-> > Maybe using rwlock as airq handler?
-> > 
-> > Thanks
-> > 
-> 
-> rwlock is still a shared cacheline bouncing between CPUs and
-> a bunch of ordering instructions.
-> Maybe something per-cpu + some IPIs to run things on all CPUs instead?
+On Tue, Apr 26, 2022 at 3:41 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Sun, Apr 24, 2022 at 12:09 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > Add a small helper, sym_add_unresolved() to ease the further
+> > refactoring.
+> >
+> > Remove the 'weak' argument from alloc_symbol() because it is sensible
+> > only for unresolved symbols.
+>
+> I did not yet read the rest of the series to see how else your newly
+> added helper `sym_add_unresolved` is used.
+> Perhaps the callers of `alloc_symbol` should just set the symbol's
+> weak member to true if needed, and alloc_symbol can default to setting
+> it false (as the memset currently does)?
+>
+> Then, you don't need the helper, and just `handle_symbol` needs the
+> assignment when `ELF_ST_BIND(sym->st_info) == STB_WEAK`?
 
-... and I think classic and device interrupts are different enough
-here ...
 
-> > > 
-> > > > -- 
-> > > > MST
+I will change this in the later commit:
+https://patchwork.kernel.org/project/linux-kbuild/patch/20220424190811.1678416-11-masahiroy@kernel.org/
 
+I think this is a good case for a new helper.
+
+If you look at the entire series,
+"allocate a new symbol and connect it to the proper linked list or hash_table"
+is consistently done in a helper function.
+
+
+Also, I chose the function name as they look symmetrical.
+
+ sym_add_unresolved()
+ sym_add_exported()
+ sym_add_crc()
+
+
+
+
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
+> >
+> >  scripts/mod/modpost.c | 19 +++++++++++--------
+> >  1 file changed, 11 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> > index 86416e4af626..1c7d2831e89d 100644
+> > --- a/scripts/mod/modpost.c
+> > +++ b/scripts/mod/modpost.c
+> > @@ -230,14 +230,12 @@ static inline unsigned int tdb_hash(const char *name)
+> >   * Allocate a new symbols for use in the hash of exported symbols or
+> >   * the list of unresolved symbols per module
+> >   **/
+> > -static struct symbol *alloc_symbol(const char *name, bool weak,
+> > -                                  struct symbol *next)
+> > +static struct symbol *alloc_symbol(const char *name, struct symbol *next)
+> >  {
+> >         struct symbol *s = NOFAIL(malloc(sizeof(*s) + strlen(name) + 1));
+> >
+> >         memset(s, 0, sizeof(*s));
+> >         strcpy(s->name, name);
+> > -       s->weak = weak;
+> >         s->next = next;
+> >         s->is_static = true;
+> >         return s;
+> > @@ -250,11 +248,17 @@ static struct symbol *new_symbol(const char *name, struct module *module,
+> >         unsigned int hash;
+> >
+> >         hash = tdb_hash(name) % SYMBOL_HASH_SIZE;
+> > -       symbolhash[hash] = alloc_symbol(name, false, symbolhash[hash]);
+> > +       symbolhash[hash] = alloc_symbol(name, symbolhash[hash]);
+> >
+> >         return symbolhash[hash];
+> >  }
+> >
+> > +static void sym_add_unresolved(const char *name, struct module *mod, bool weak)
+> > +{
+> > +       mod->unres = alloc_symbol(name, mod->unres);
+> > +       mod->unres->weak = weak;
+> > +}
+> > +
+> >  static struct symbol *find_symbol(const char *name)
+> >  {
+> >         struct symbol *s;
+> > @@ -701,9 +705,8 @@ static void handle_symbol(struct module *mod, struct elf_info *info,
+> >                         }
+> >                 }
+> >
+> > -               mod->unres = alloc_symbol(symname,
+> > -                                         ELF_ST_BIND(sym->st_info) == STB_WEAK,
+> > -                                         mod->unres);
+> > +               sym_add_unresolved(symname, mod,
+> > +                                  ELF_ST_BIND(sym->st_info) == STB_WEAK);
+> >                 break;
+> >         default:
+> >                 /* All exported symbols */
+> > @@ -2073,7 +2076,7 @@ static void read_symbols(const char *modname)
+> >          * the automatic versioning doesn't pick it up, but it's really
+> >          * important anyhow */
+> >         if (modversions)
+> > -               mod->unres = alloc_symbol("module_layout", false, mod->unres);
+> > +               sym_add_unresolved("module_layout", mod, false);
+> >  }
+> >
+> >  static void read_symbols_from_files(const char *filename)
+> > --
+> > 2.32.0
+> >
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
+
+
+
+-- 
+Best Regards
+Masahiro Yamada

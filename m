@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67BE850F82B
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3B4850F5A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:54:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347877AbiDZJO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:14:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52176 "EHLO
+        id S1346697AbiDZIpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:45:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347167AbiDZIvL (ORCPT
+        with ESMTP id S1345524AbiDZIjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:51:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B89174F56;
-        Tue, 26 Apr 2022 01:39:36 -0700 (PDT)
+        Tue, 26 Apr 2022 04:39:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EAEF3BA5A;
+        Tue, 26 Apr 2022 01:30:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 00B83B81D18;
-        Tue, 26 Apr 2022 08:39:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E9CEC385A0;
-        Tue, 26 Apr 2022 08:39:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 89AFEB81D00;
+        Tue, 26 Apr 2022 08:30:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C72F4C385A0;
+        Tue, 26 Apr 2022 08:30:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962373;
-        bh=NTFmc6yUB3G/+inTJha6H7dnjf/aU7LUIJdiD7wZZfk=;
+        s=korg; t=1650961803;
+        bh=uSSkIVYOuP/g4qLAj/5GkoeQyuRefnLqGfXgcPqwu9w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1Wha1JePcisWwDcSf3RWyFjQOfr3IxvjuF5nD5wK/ysW3ma2Ve3nGseoY51TVDgX6
-         C+aNzXMj334g0SwEQSbFip5tYgcYhkOHqPhR05569Kfha62uqoeZj91NMKoCAh8au9
-         HB1/2irR3v9ZmiRq1CWthZIORInWPBEF9dW/5QEI=
+        b=f0GlX/jehreBI7TR8fZhbPO6Bt0zu0aOZWUVuMTsVNtBJPPI1QvyyI895uOEIiCTW
+         +rZJfyBsPRr5G1zUnaZYWyHLPlj7FuLfZivzSuxmvgLg9HmDhmzOpLkda0qiEwdc6H
+         r/h6bT1kfduxqtozM6yjMHVUCxaLz2fZQfbSTMWk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Disseldorp <ddiss@suse.de>,
-        Jeff Layton <jlayton@kernel.org>, NeilBrown <neilb@suse.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        stable@vger.kernel.org, Manish Rangankar <mrangankar@marvell.com>,
+        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 073/124] VFS: filename_create(): fix incorrect intent.
+Subject: [PATCH 5.4 34/62] scsi: qedi: Fix failed disconnect handling
 Date:   Tue, 26 Apr 2022 10:21:14 +0200
-Message-Id: <20220426081749.377215935@linuxfoundation.org>
+Message-Id: <20220426081738.202673792@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
-References: <20220426081747.286685339@linuxfoundation.org>
+In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
+References: <20220426081737.209637816@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,106 +56,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: NeilBrown <neilb@suse.de>
+From: Mike Christie <michael.christie@oracle.com>
 
-[ Upstream commit b3d4650d82c71b9c9a8184de9e8bb656012b289e ]
+[ Upstream commit 857b06527f707f5df634b854898a191b5c1d0272 ]
 
-When asked to create a path ending '/', but which is not to be a
-directory (LOOKUP_DIRECTORY not set), filename_create() will never try
-to create the file.  If it doesn't exist, -ENOENT is reported.
+We set the qedi_ep state to EP_STATE_OFLDCONN_START when the ep is
+created. Then in qedi_set_path we kick off the offload work. If userspace
+times out the connection and calls ep_disconnect, qedi will only flush the
+offload work if the qedi_ep state has transitioned away from
+EP_STATE_OFLDCONN_START. If we can't connect we will not have transitioned
+state and will leave the offload work running, and we will free the qedi_ep
+from under it.
 
-However, it still passes LOOKUP_CREATE|LOOKUP_EXCL to the filesystems
-->lookup() function, even though there is no intent to create.  This is
-misleading and can cause incorrect behaviour.
+This patch just has us init the work when we create the ep, then always
+flush it.
 
-If you try
-
-   ln -s foo /path/dir/
-
-where 'dir' is a directory on an NFS filesystem which is not currently
-known in the dcache, this will fail with ENOENT.
-
-But as the name is not in the dcache, nfs_lookup gets called with
-LOOKUP_CREATE|LOOKUP_EXCL and so it returns NULL without performing any
-lookup, with the expectation that a subsequent call to create the target
-will be made, and the lookup can be combined with the creation.  In the
-case with a trailing '/' and no LOOKUP_DIRECTORY, that call is never
-made.  Instead filename_create() sees that the dentry is not (yet)
-positive and returns -ENOENT - even though the directory actually
-exists.
-
-So only set LOOKUP_CREATE|LOOKUP_EXCL if there really is an intent to
-create, and use the absence of these flags to decide if -ENOENT should
-be returned.
-
-Note that filename_parentat() is only interested in LOOKUP_REVAL, so we
-split that out and store it in 'reval_flag'.  __lookup_hash() then gets
-reval_flag combined with whatever create flags were determined to be
-needed.
-
-Reviewed-by: David Disseldorp <ddiss@suse.de>
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
-Signed-off-by: NeilBrown <neilb@suse.de>
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Link: https://lore.kernel.org/r/20220408001314.5014-10-michael.christie@oracle.com
+Tested-by: Manish Rangankar <mrangankar@marvell.com>
+Reviewed-by: Lee Duncan <lduncan@suse.com>
+Reviewed-by: Chris Leech <cleech@redhat.com>
+Acked-by: Manish Rangankar <mrangankar@marvell.com>
+Signed-off-by: Mike Christie <michael.christie@oracle.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/namei.c | 22 ++++++++++------------
- 1 file changed, 10 insertions(+), 12 deletions(-)
+ drivers/scsi/qedi/qedi_iscsi.c | 69 +++++++++++++++++-----------------
+ 1 file changed, 34 insertions(+), 35 deletions(-)
 
-diff --git a/fs/namei.c b/fs/namei.c
-index 3bb65f48fe1d..8882a70dc119 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -3625,18 +3625,14 @@ static struct dentry *filename_create(int dfd, struct filename *name,
- {
- 	struct dentry *dentry = ERR_PTR(-EEXIST);
- 	struct qstr last;
-+	bool want_dir = lookup_flags & LOOKUP_DIRECTORY;
-+	unsigned int reval_flag = lookup_flags & LOOKUP_REVAL;
-+	unsigned int create_flags = LOOKUP_CREATE | LOOKUP_EXCL;
- 	int type;
- 	int err2;
- 	int error;
--	bool is_dir = (lookup_flags & LOOKUP_DIRECTORY);
+diff --git a/drivers/scsi/qedi/qedi_iscsi.c b/drivers/scsi/qedi/qedi_iscsi.c
+index 755f66b1ff9c..f05fb4ddeaff 100644
+--- a/drivers/scsi/qedi/qedi_iscsi.c
++++ b/drivers/scsi/qedi/qedi_iscsi.c
+@@ -797,6 +797,37 @@ static int qedi_task_xmit(struct iscsi_task *task)
+ 	return qedi_iscsi_send_ioreq(task);
+ }
  
--	/*
--	 * Note that only LOOKUP_REVAL and LOOKUP_DIRECTORY matter here. Any
--	 * other flags passed in are ignored!
--	 */
--	lookup_flags &= LOOKUP_REVAL;
--
--	error = filename_parentat(dfd, name, lookup_flags, path, &last, &type);
-+	error = filename_parentat(dfd, name, reval_flag, path, &last, &type);
- 	if (error)
- 		return ERR_PTR(error);
- 
-@@ -3650,11 +3646,13 @@ static struct dentry *filename_create(int dfd, struct filename *name,
- 	/* don't fail immediately if it's r/o, at least try to report other errors */
- 	err2 = mnt_want_write(path->mnt);
- 	/*
--	 * Do the final lookup.
-+	 * Do the final lookup.  Suppress 'create' if there is a trailing
-+	 * '/', and a directory wasn't requested.
- 	 */
--	lookup_flags |= LOOKUP_CREATE | LOOKUP_EXCL;
-+	if (last.name[last.len] && !want_dir)
-+		create_flags = 0;
- 	inode_lock_nested(path->dentry->d_inode, I_MUTEX_PARENT);
--	dentry = __lookup_hash(&last, path->dentry, lookup_flags);
-+	dentry = __lookup_hash(&last, path->dentry, reval_flag | create_flags);
- 	if (IS_ERR(dentry))
- 		goto unlock;
- 
-@@ -3668,7 +3666,7 @@ static struct dentry *filename_create(int dfd, struct filename *name,
- 	 * all is fine. Let's be bastards - you had / on the end, you've
- 	 * been asking for (non-existent) directory. -ENOENT for you.
- 	 */
--	if (unlikely(!is_dir && last.name[last.len])) {
-+	if (unlikely(!create_flags)) {
- 		error = -ENOENT;
- 		goto fail;
++static void qedi_offload_work(struct work_struct *work)
++{
++	struct qedi_endpoint *qedi_ep =
++		container_of(work, struct qedi_endpoint, offload_work);
++	struct qedi_ctx *qedi;
++	int wait_delay = 5 * HZ;
++	int ret;
++
++	qedi = qedi_ep->qedi;
++
++	ret = qedi_iscsi_offload_conn(qedi_ep);
++	if (ret) {
++		QEDI_ERR(&qedi->dbg_ctx,
++			 "offload error: iscsi_cid=%u, qedi_ep=%p, ret=%d\n",
++			 qedi_ep->iscsi_cid, qedi_ep, ret);
++		qedi_ep->state = EP_STATE_OFLDCONN_FAILED;
++		return;
++	}
++
++	ret = wait_event_interruptible_timeout(qedi_ep->tcp_ofld_wait,
++					       (qedi_ep->state ==
++					       EP_STATE_OFLDCONN_COMPL),
++					       wait_delay);
++	if (ret <= 0 || qedi_ep->state != EP_STATE_OFLDCONN_COMPL) {
++		qedi_ep->state = EP_STATE_OFLDCONN_FAILED;
++		QEDI_ERR(&qedi->dbg_ctx,
++			 "Offload conn TIMEOUT iscsi_cid=%u, qedi_ep=%p\n",
++			 qedi_ep->iscsi_cid, qedi_ep);
++	}
++}
++
+ static struct iscsi_endpoint *
+ qedi_ep_connect(struct Scsi_Host *shost, struct sockaddr *dst_addr,
+ 		int non_blocking)
+@@ -840,6 +871,7 @@ qedi_ep_connect(struct Scsi_Host *shost, struct sockaddr *dst_addr,
  	}
+ 	qedi_ep = ep->dd_data;
+ 	memset(qedi_ep, 0, sizeof(struct qedi_endpoint));
++	INIT_WORK(&qedi_ep->offload_work, qedi_offload_work);
+ 	qedi_ep->state = EP_STATE_IDLE;
+ 	qedi_ep->iscsi_cid = (u32)-1;
+ 	qedi_ep->qedi = qedi;
+@@ -996,12 +1028,11 @@ static void qedi_ep_disconnect(struct iscsi_endpoint *ep)
+ 	qedi_ep = ep->dd_data;
+ 	qedi = qedi_ep->qedi;
+ 
++	flush_work(&qedi_ep->offload_work);
++
+ 	if (qedi_ep->state == EP_STATE_OFLDCONN_START)
+ 		goto ep_exit_recover;
+ 
+-	if (qedi_ep->state != EP_STATE_OFLDCONN_NONE)
+-		flush_work(&qedi_ep->offload_work);
+-
+ 	if (qedi_ep->conn) {
+ 		qedi_conn = qedi_ep->conn;
+ 		conn = qedi_conn->cls_conn->dd_data;
+@@ -1161,37 +1192,6 @@ static int qedi_data_avail(struct qedi_ctx *qedi, u16 vlanid)
+ 	return rc;
+ }
+ 
+-static void qedi_offload_work(struct work_struct *work)
+-{
+-	struct qedi_endpoint *qedi_ep =
+-		container_of(work, struct qedi_endpoint, offload_work);
+-	struct qedi_ctx *qedi;
+-	int wait_delay = 5 * HZ;
+-	int ret;
+-
+-	qedi = qedi_ep->qedi;
+-
+-	ret = qedi_iscsi_offload_conn(qedi_ep);
+-	if (ret) {
+-		QEDI_ERR(&qedi->dbg_ctx,
+-			 "offload error: iscsi_cid=%u, qedi_ep=%p, ret=%d\n",
+-			 qedi_ep->iscsi_cid, qedi_ep, ret);
+-		qedi_ep->state = EP_STATE_OFLDCONN_FAILED;
+-		return;
+-	}
+-
+-	ret = wait_event_interruptible_timeout(qedi_ep->tcp_ofld_wait,
+-					       (qedi_ep->state ==
+-					       EP_STATE_OFLDCONN_COMPL),
+-					       wait_delay);
+-	if ((ret <= 0) || (qedi_ep->state != EP_STATE_OFLDCONN_COMPL)) {
+-		qedi_ep->state = EP_STATE_OFLDCONN_FAILED;
+-		QEDI_ERR(&qedi->dbg_ctx,
+-			 "Offload conn TIMEOUT iscsi_cid=%u, qedi_ep=%p\n",
+-			 qedi_ep->iscsi_cid, qedi_ep);
+-	}
+-}
+-
+ static int qedi_set_path(struct Scsi_Host *shost, struct iscsi_path *path_data)
+ {
+ 	struct qedi_ctx *qedi;
+@@ -1307,7 +1307,6 @@ static int qedi_set_path(struct Scsi_Host *shost, struct iscsi_path *path_data)
+ 			  qedi_ep->dst_addr, qedi_ep->dst_port);
+ 	}
+ 
+-	INIT_WORK(&qedi_ep->offload_work, qedi_offload_work);
+ 	queue_work(qedi->offload_thread, &qedi_ep->offload_work);
+ 
+ 	ret = 0;
 -- 
 2.35.1
 

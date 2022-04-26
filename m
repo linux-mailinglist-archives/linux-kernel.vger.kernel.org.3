@@ -2,50 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0BD550F553
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:53:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD8250F6F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:00:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346892AbiDZIuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:50:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58728 "EHLO
+        id S238883AbiDZJCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:02:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345823AbiDZIje (ORCPT
+        with ESMTP id S1347039AbiDZIpo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:39:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5AC178FF3;
-        Tue, 26 Apr 2022 01:31:49 -0700 (PDT)
+        Tue, 26 Apr 2022 04:45:44 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98473FBFB;
+        Tue, 26 Apr 2022 01:37:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 81FE2618A0;
-        Tue, 26 Apr 2022 08:31:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91D09C385AC;
-        Tue, 26 Apr 2022 08:31:48 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9F0D2CE1BC3;
+        Tue, 26 Apr 2022 08:37:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E2FAC385A0;
+        Tue, 26 Apr 2022 08:37:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961908;
-        bh=kulICPpZkaG7KXC0Zq/7qmjdwSorCIwP4RaDDU/n3t4=;
+        s=korg; t=1650962230;
+        bh=Er9JeDduHx3NE8tk+2GPgX+U68ot1zkwu8WUINdW/4M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2KwYN0CJqtu/3iIwD9tN3CDQ0ejaXRfVRqiooXava+W1aocpsd8Ca7rz1fNmhi25l
-         nzxe+p5y6elqZ5zf3OCavABB1zk6r97dMBgkj0tH9q5XMqzUzvDeL8lTKGcxFzk/Tv
-         qe+4yII+inSWDmNL8x/QSbnbUp6bgoF8CHMP7cR8=
+        b=lfKt8Z1mRwnLvV7uUtD5yXdOo3pXFtn7Hr5CXt7q66Ge8lcKRymY/mWuDgbuLYbRY
+         o+fpNdTqfwIV6JfZ0XAs5RuNgF/qdLSJhXyZvrUkJKBVCB80s2PTWMf5PNKx4kWJNH
+         tbxIGao339YPM+29cKrZXUR99cseeLdOAOxxZx60=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        Kees Cook <keescook@chromium.org>,
-        Khem Raj <raj.khem@gmail.com>
-Subject: [PATCH 5.10 01/86] etherdevice: Adjust ether_addr* prototypes to silence -Wstringop-overead
+        stable@vger.kernel.org,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 028/124] spi: cadence-quadspi: fix incorrect supports_op() return value
 Date:   Tue, 26 Apr 2022 10:20:29 +0200
-Message-Id: <20220426081741.247427711@linuxfoundation.org>
+Message-Id: <20220426081748.104548213@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
-References: <20220426081741.202366502@linuxfoundation.org>
+In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
+References: <20220426081747.286685339@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -58,59 +55,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
 
-commit 2618a0dae09ef37728dab89ff60418cbe25ae6bd upstream.
+[ Upstream commit f1d388f216aeb41a5df518815ae559d14a6d438e ]
 
-With GCC 12, -Wstringop-overread was warning about an implicit cast from
-char[6] to char[8]. However, the extra 2 bytes are always thrown away,
-alignment doesn't matter, and the risk of hitting the edge of unallocated
-memory has been accepted, so this prototype can just be converted to a
-regular char *. Silences:
+Since the conversion to spi-mem, the driver advertised support for
+various operations that cqspi_set_protocol() was never expected to handle
+correctly - in particuar all non-DTR operations with command or address
+buswidth > 1. For DTR, all operations except for 8-8-8 would fail, as
+cqspi_set_protocol() returns -EINVAL.
 
-net/core/dev.c: In function ‘bpf_prog_run_generic_xdp’: net/core/dev.c:4618:21: warning: ‘ether_addr_equal_64bits’ reading 8 bytes from a region of size 6 [-Wstringop-overread]
- 4618 |         orig_host = ether_addr_equal_64bits(eth->h_dest, > skb->dev->dev_addr);
-      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-net/core/dev.c:4618:21: note: referencing argument 1 of type ‘const u8[8]’ {aka ‘const unsigned char[8]’}
-net/core/dev.c:4618:21: note: referencing argument 2 of type ‘const u8[8]’ {aka ‘const unsigned char[8]’}
-In file included from net/core/dev.c:91: include/linux/etherdevice.h:375:20: note: in a call to function ‘ether_addr_equal_64bits’
-  375 | static inline bool ether_addr_equal_64bits(const u8 addr1[6+2],
-      |                    ^~~~~~~~~~~~~~~~~~~~~~~
+In non-DTR mode, this resulted in data corruption for SPI-NOR flashes that
+support such operations. As a minimal fix that can be backported to stable
+kernels, simply disallow the unsupported operations again to avoid this
+issue.
 
-Reported-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Tested-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Link: https://lore.kernel.org/netdev/20220212090811.uuzk6d76agw2vv73@pengutronix.de
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: netdev@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Cc: Khem Raj <raj.khem@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: a314f6367787 ("mtd: spi-nor: Convert cadence-quadspi to use spi-mem framework")
+Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Link: https://lore.kernel.org/r/20220406132832.199777-1-matthias.schiffer@ew.tq-group.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/etherdevice.h |    5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/spi/spi-cadence-quadspi.c | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
 
---- a/include/linux/etherdevice.h
-+++ b/include/linux/etherdevice.h
-@@ -127,7 +127,7 @@ static inline bool is_multicast_ether_ad
- #endif
- }
+diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+index 1a6294a06e72..75680eecd2f7 100644
+--- a/drivers/spi/spi-cadence-quadspi.c
++++ b/drivers/spi/spi-cadence-quadspi.c
+@@ -1226,9 +1226,24 @@ static bool cqspi_supports_mem_op(struct spi_mem *mem,
+ 	all_false = !op->cmd.dtr && !op->addr.dtr && !op->dummy.dtr &&
+ 		    !op->data.dtr;
  
--static inline bool is_multicast_ether_addr_64bits(const u8 addr[6+2])
-+static inline bool is_multicast_ether_addr_64bits(const u8 *addr)
- {
- #if defined(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) && BITS_PER_LONG == 64
- #ifdef __BIG_ENDIAN
-@@ -352,8 +352,7 @@ static inline bool ether_addr_equal(cons
-  * Please note that alignment of addr1 & addr2 are only guaranteed to be 16 bits.
-  */
+-	/* Mixed DTR modes not supported. */
+-	if (!(all_true || all_false))
++	if (all_true) {
++		/* Right now we only support 8-8-8 DTR mode. */
++		if (op->cmd.nbytes && op->cmd.buswidth != 8)
++			return false;
++		if (op->addr.nbytes && op->addr.buswidth != 8)
++			return false;
++		if (op->data.nbytes && op->data.buswidth != 8)
++			return false;
++	} else if (all_false) {
++		/* Only 1-1-X ops are supported without DTR */
++		if (op->cmd.nbytes && op->cmd.buswidth > 1)
++			return false;
++		if (op->addr.nbytes && op->addr.buswidth > 1)
++			return false;
++	} else {
++		/* Mixed DTR modes are not supported. */
+ 		return false;
++	}
  
--static inline bool ether_addr_equal_64bits(const u8 addr1[6+2],
--					   const u8 addr2[6+2])
-+static inline bool ether_addr_equal_64bits(const u8 *addr1, const u8 *addr2)
- {
- #if defined(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) && BITS_PER_LONG == 64
- 	u64 fold = (*(const u64 *)addr1) ^ (*(const u64 *)addr2);
+ 	if (all_true)
+ 		return spi_mem_dtr_supports_op(mem, op);
+-- 
+2.35.1
+
 
 

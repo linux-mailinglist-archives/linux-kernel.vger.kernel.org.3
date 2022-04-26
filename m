@@ -2,60 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 923D050F267
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:28:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7DDB50F269
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:30:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343918AbiDZHbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 03:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45218 "EHLO
+        id S1343962AbiDZHdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 03:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343917AbiDZHbh (ORCPT
+        with ESMTP id S236910AbiDZHdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 03:31:37 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02FD8C9B72;
-        Tue, 26 Apr 2022 00:28:30 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id B6E0A2223A;
-        Tue, 26 Apr 2022 09:28:27 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1650958108;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mzzsrtLgDhH/mUpZ95LPe7yFWgFVICtJRss1dScu0l4=;
-        b=WLsMfwV0KL/FIMULQI396eMh2JgmUNPuLtROTi2Uf6+MI9kKJWGfdOy3upRieZ36tH/mnF
-        UaB7LffD+miuwmjsCrhJXFO1MhRqJ9Gm1Uq82AvQIUUNm09Avl31g13lar3POnut6X7d8L
-        yJx48P/MaJpQ/trOFQcS6gGsy9TIAJo=
+        Tue, 26 Apr 2022 03:33:02 -0400
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D50BDF493
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:29:55 -0700 (PDT)
+Received: by mail-ed1-f51.google.com with SMTP id p18so16030182edr.7
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:29:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hOlzS7teepghKhHO3I5ZYfaNXKKQM3quot1pS5vaaSA=;
+        b=pxC8l347puOLWyO6G1ZGyd+C/Nz//nCN/6cIsiH++0mvA5dNwhwPzdcRlT765RoY9p
+         QrFZE9BaeQw/fuVUn7GHPhZh6oGtalAhytz84V9CHjQ4x7tAlmXwGY3pge9/vbI25DgA
+         XZfASJpK/+QEiZy4a2KJDMmru+YRyLgLRVbeVVgNFsFP0WZBgvNsV+3booyLzmAPat3N
+         Pk6p1AMJcR9UcwoLzdlQOSYULiFvxMwwXKofT1EpqLZfzsrGU//yITs8Q3rGw+MivfLq
+         MaEYIXHEdnYMnj6rmYTkZp6we9gDav1GjZmSNvaMWx8k3I8pMxOZ8TZa2l3qkzSynP6q
+         mwrg==
+X-Gm-Message-State: AOAM53220vHJHDN+340OlpFwAbOq3QJ1Gv3n4wkTXQWjJQPTUF7ThlOL
+        Ixt7ogZGIyizeAd3VZgf4ko=
+X-Google-Smtp-Source: ABdhPJwdtxQjyz2PID87gQkYXoDXvRITcke2EmvtcsG/Izql7n9Ce8e7NkkGkhbJN8TWTPJqnM2HvQ==
+X-Received: by 2002:a05:6402:42d4:b0:416:5cac:a9a0 with SMTP id i20-20020a05640242d400b004165caca9a0mr23253479edc.86.1650958194022;
+        Tue, 26 Apr 2022 00:29:54 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id n10-20020a170906700a00b006efdb748e8dsm4433107ejj.88.2022.04.26.00.29.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Apr 2022 00:29:53 -0700 (PDT)
+Message-ID: <47accf18-ca39-8b36-100e-a6dbfd8705fe@kernel.org>
+Date:   Tue, 26 Apr 2022 09:29:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2] tty/hvc_opal: simplify if-if to if-else
+Content-Language: en-US
+To:     Wan Jiabing <wanjiabing@vivo.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Cc:     kael_w@yeah.net
+References: <20220426071041.168282-1-wanjiabing@vivo.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220426071041.168282-1-wanjiabing@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Date:   Tue, 26 Apr 2022 09:28:27 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Li Yang <leoyang.li@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: interrupt-controller: fsl,ls-extirq:
- convert to YAML
-In-Reply-To: <c324eec7-79b1-33da-c38e-4a480fe23126@linaro.org>
-References: <20220425140214.32448-1-michael@walle.cc>
- <658851ed-33fd-8e2b-7db7-ef1ca9e31c33@linaro.org>
- <83b596d0570c779c61c3c37c6f512679@walle.cc>
- <c324eec7-79b1-33da-c38e-4a480fe23126@linaro.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <6fec63c911c88a375fc024f6ca0e946d@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,55 +67,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-04-26 08:53, schrieb Krzysztof Kozlowski:
-> On 25/04/2022 23:58, Michael Walle wrote:
->>>> +  reg:
->>>> +    maxItems: 1
->>>> +    description:
->>>> +      Specifies the Interrupt Polarity Control Register (INTPCR) in
->>>> the
->>>> +      SCFG or the External Interrupt Control Register (IRQCR) in 
->>>> the
->>>> ISC.
->>>> +
->>>> +  interrupt-map:
->> 
->> btw.
->> 
->> minItems: 12
->> maxItems: 12
->> 
->> Isn't working here, is that expected? The validator seem to get the
->> count
->> of the elements of one tuple wrong.
->> 
->> I.e.
->> arch/arm64/boot/dts/freescale/fsl-ls2080a-rdb.dtb:
->> interrupt-controller@14: interrupt-map: [[0, 0, 1, 0, 0, 4, 1, 0], [1,
->> 0, 1, 4, 2, 0, 1, 0], [2, 4, 3, 0, 1, 0, 3, 4], [4, 0, 1, 0, 4, 4, 5,
->> 0], [1, 0, 5, 4, 6, 0, 1, 0], [6, 4, 7, 0, 1, 0, 7, 4], [8, 0, 1, 0, 
->> 8,
->> 4, 9, 0], [1, 0, 9, 4, 10, 0, 1, 0], [10, 4, 11, 0, 1, 0, 11, 4]] is 
->> too
->> short
+On 26. 04. 22, 9:10, Wan Jiabing wrote:
+> Use if and else instead of if(A) and if (!A).
+
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+
+> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+> ---
+> Change log:
+> v2:
+> - add braces to the if block.
+> ---
+>   drivers/tty/hvc/hvc_opal.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> 
-> Works for me (in different schema)... maybe update your dtschema?
+> diff --git a/drivers/tty/hvc/hvc_opal.c b/drivers/tty/hvc/hvc_opal.c
+> index 84776bc641e6..794c7b18aa06 100644
+> --- a/drivers/tty/hvc/hvc_opal.c
+> +++ b/drivers/tty/hvc/hvc_opal.c
+> @@ -342,9 +342,9 @@ void __init hvc_opal_init_early(void)
+>   		 * path, so we hard wire it
+>   		 */
+>   		opal = of_find_node_by_path("/ibm,opal/consoles");
+> -		if (opal)
+> +		if (opal) {
+>   			pr_devel("hvc_opal: Found consoles in new location\n");
+> -		if (!opal) {
+> +		} else {
+>   			opal = of_find_node_by_path("/ibm,opal");
+>   			if (opal)
+>   				pr_devel("hvc_opal: "
 
-Just updated to the latest one. But I'm still getting the same errors.
 
-$ dt-validate -V
-2022.4
-
-/home/mwalle/repos/b-linux-arm64/arch/arm64/boot/dts/freescale/fsl-ls1088a-qds.dtb: 
-interrupt-controller@14: interrupt-map: [[0, 0, 1, 0, 0, 4, 1, 0], [1, 
-0, 1, 4, 2, 0, 1, 0], [2, 4, 3, 0, 1, 0, 3, 4], [4, 0, 1, 0, 4, 4, 5, 
-0], [1, 0, 5, 4, 6, 0, 1, 0], [6, 4, 7, 0, 1, 0, 7, 4], [8, 0, 1, 0, 8, 
-4, 9, 0], [1, 0, 9, 4, 10, 0, 1, 0], [10, 4, 11, 0, 1, 0, 11, 4]] is too 
-short
-	From schema: 
-/home/mwalle/repos/linux-mw/Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.yaml
-
-How is the length of one entry calculated?
-
--michael
+-- 
+js
+suse labs

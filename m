@@ -2,69 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4927510AA4
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD9EE510A9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:35:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355035AbiDZUkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 16:40:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59988 "EHLO
+        id S1355026AbiDZUiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 16:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350728AbiDZUkR (ORCPT
+        with ESMTP id S245092AbiDZUiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:40:17 -0400
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932CE31208;
-        Tue, 26 Apr 2022 13:37:09 -0700 (PDT)
-Received: by mail-ot1-f51.google.com with SMTP id w27-20020a056830061b00b00604cde931a0so13879181oti.2;
-        Tue, 26 Apr 2022 13:37:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8Ua/QldL7pC5LZXWxffOFe8RnQhvpw8c3zNSB5ycwY8=;
-        b=laD/A1Y9qM3A0QFtpeYgmWXfcJPEnX/53nM4pGL/+soqTQvjubrjkK3cs/Y8ZcrCx5
-         O6iWzLWcLdynMR0qPHnlvPGEXRuFMSBsZFhG/OJ6pO4L1iAR341bR+2dwzZJkZqPRWWF
-         eggx+Q5XsbXgcroz7t6civ9aG+sWYIRVd72lPalhYuOCK/GowhpdUQ9/ug0qwXSVx5js
-         f+5/jdeZzQhJhmYDaBPtQFV8iYus8m4YcPW6Vz2vYlnQOXVtZ2FsBd5qbAJSMyN0vEug
-         pqvKb2eEtY54DtFFCurGd8TRBKE+etRsI4uKfBjWtcsf37qPL0H7SHPrMYXrYTSo9nye
-         FyBw==
-X-Gm-Message-State: AOAM5317+w6BNNfzQp3uKRrlHig12xfMtyh47HVqGFp5/4tBnmlfSSDF
-        Q5MrrHmz1MeRz+yBrGa//w==
-X-Google-Smtp-Source: ABdhPJzV94dg7hlsrdCIRh48Q/JHhKt1BGntT/HsErX1a5fw7wvJMn0OMxu04NvUD/iPdux9O8sz9w==
-X-Received: by 2002:a9d:4e8d:0:b0:605:4f04:4863 with SMTP id v13-20020a9d4e8d000000b006054f044863mr9009729otk.204.1651005428916;
-        Tue, 26 Apr 2022 13:37:08 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q4-20020a4a3004000000b0035e974ec923sm282663oof.2.2022.04.26.13.37.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 13:37:08 -0700 (PDT)
-Received: (nullmailer pid 2493275 invoked by uid 1000);
-        Tue, 26 Apr 2022 20:37:07 -0000
-Date:   Tue, 26 Apr 2022 15:37:07 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Irui Wang <irui.wang@mediatek.com>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Maoguang Meng <maoguang.meng@mediatek.com>,
-        Longfei Wang <longfei.wang@mediatek.com>,
-        allen-kh.cheng@mediatek.com, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, srv_heupstream@mediatek.com,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH] dt-bindings: media: mtk-vcodec: Adds encoder power
- domain property
-Message-ID: <YmhX89nQjkwt5qb3@robh.at.kernel.org>
-References: <20220420073440.31649-1-irui.wang@mediatek.com>
+        Tue, 26 Apr 2022 16:38:01 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5295D1A8C2B;
+        Tue, 26 Apr 2022 13:34:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651005293; x=1682541293;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=seRKhyyQxbjAWS3pD/CGNEKp3GJzRdg9ieuOFomteK0=;
+  b=IkZyTv2vy73rVbPEfwvdS2V37TbGGa+dD0eDZy/yYD+AkjmRkliL/YD4
+   BN1nuNOJPttvJZKWZFmHTsvBx/6Cs03V6isQaCq0Cmkd2kCvvt7ixIhrE
+   GdP2pF5sR1mrmnEv0V0USifHkOZpSRSztWs3YEmGfHDGQgq2RF2XP5LAl
+   aP5yAORKCpaQJEzUenNspe9jJgzGmnYWH5an/SrV9LGrb+POKMYi+0oGM
+   qgei5KiF4jU9l8JfFKd5HHHyK2n55LQcq6gUrfR9SjSTYTfz3qzQ6pUeO
+   +zfE4ES90HpZq/3pGBRbASUOuFIokSD4FNOchWaYSrozC+FbnKybvkech
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="263306861"
+X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
+   d="scan'208";a="263306861"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 13:34:53 -0700
+X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
+   d="scan'208";a="580144930"
+Received: from dsocek-mobl2.amr.corp.intel.com (HELO [10.212.69.119]) ([10.212.69.119])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 13:34:51 -0700
+Message-ID: <56f368c6-4a60-ea78-2cc7-cd2d57823e3a@intel.com>
+Date:   Tue, 26 Apr 2022 13:37:39 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220420073440.31649-1-irui.wang@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 03/21] x86/virt/tdx: Implement the SEAMCALL base
+ function
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+References: <cover.1649219184.git.kai.huang@intel.com>
+ <1c3f555934c73301a9cbf10232500f3d15efe3cc.1649219184.git.kai.huang@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <1c3f555934c73301a9cbf10232500f3d15efe3cc.1649219184.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,63 +70,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 03:34:39PM +0800, Irui Wang wrote:
-> Adds encoder power domain property
+On 4/5/22 21:49, Kai Huang wrote:
+> Secure Arbitration Mode (SEAM) is an extension of VMX architecture.  It
+> defines a new VMX root operation (SEAM VMX root) and a new VMX non-root
+> operation (SEAM VMX non-root) which are isolated from legacy VMX root
+> and VMX non-root mode.
 
-Why? You can't add new, required properties as that breaks compatibility 
-with existing DTs.
+I feel like this is too much detail for an opening paragraph.
 
+> A CPU-attested software module (called the 'TDX module') runs in SEAM
+> VMX root to manage the crypto-protected VMs running in SEAM VMX non-root.
+> SEAM VMX root is also used to host another CPU-attested software module
+> (called the 'P-SEAMLDR') to load and update the TDX module.
+>> Host kernel transits to either the P-SEAMLDR or the TDX module via the
+> new SEAMCALL instruction.  SEAMCALL leaf functions are host-side
+> interface functions defined by the P-SEAMLDR and the TDX module around
+> the new SEAMCALL instruction.  They are similar to a hypercall, except
+> they are made by host kernel to the SEAM software.
+
+I think you can get rid of about half of this changelog so farand make
+it more clear in the process with this:
+
+	TDX introduces a new CPU mode: Secure Arbitration Mode (SEAM).
+	This mode runs only the TDX module itself or other code needed
+	to load the TDX module.
+
+	The host kernel communicates with SEAM software via a new
+	SEAMCALL instruction.  This is conceptually similar to
+	a guest->host hypercall, except it is made from the host to SEAM
+	software instead.
+
+This is a technical document, but you're writing too technically for my
+taste and focusing on the low-level details rather than the high-level
+concepts.  What do I care that SEAM is two modes and what their names
+are at this juncture?  Are those details necesarry to get me to
+understand what a SEAMCALL is or what this patch implements?
+
+> SEAMCALL leaf functions use an ABI different from the x86-64 system-v
+> ABI.  Instead, they share the same ABI with the TDCALL leaf functions.
+> %rax is used to carry both the SEAMCALL leaf function number (input) and
+> the completion status code (output).  Additional GPRs (%rcx, %rdx,
+> %r8->%r11) may be further used as both input and output operands in
+> individual leaf functions.
 > 
-> Signed-off-by: Irui Wang <irui.wang@mediatek.com>
-> ---
->  .../devicetree/bindings/media/mediatek,vcodec-encoder.yaml | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
-> index deb5b657a2d5..3c069c965992 100644
-> --- a/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
-> +++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
-> @@ -41,6 +41,9 @@ properties:
->  
->    assigned-clock-parents: true
->  
-> +  power-domains:
-> +    maxItems: 1
+> Implement a C function __seamcall()
+
+Your "C function" looks a bit like assembly to me.
+
+> to do SEAMCALL leaf functions using
+> the assembly macro used by __tdx_module_call() (the implementation of
+> TDCALL leaf functions).  The only exception not covered here is TDENTER
+> leaf function which takes all GPRs and XMM0-XMM15 as both input and
+> output.  The caller of TDENTER should implement its own logic to call
+> TDENTER directly instead of using this function.
+
+I have no idea why this paragraph is here or what it is trying to tell me.
+
+> SEAMCALL instruction is essentially a VMExit from VMX root to SEAM VMX
+> root, and it can fail with VMfailInvalid, for instance, when the SEAM
+> software module is not loaded.  The C function __seamcall() returns
+> TDX_SEAMCALL_VMFAILINVALID, which doesn't conflict with any actual error
+> code of SEAMCALLs, to uniquely represent this case.
+
+Again, I'm lost.  Why is this detail here?  I don't even see
+TDX_SEAMCALL_VMFAILINVALID in the patch.
+
+> diff --git a/arch/x86/virt/vmx/tdx/Makefile b/arch/x86/virt/vmx/tdx/Makefile
+> index 1bd688684716..fd577619620e 100644
+> --- a/arch/x86/virt/vmx/tdx/Makefile
+> +++ b/arch/x86/virt/vmx/tdx/Makefile
+> @@ -1,2 +1,2 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+> -obj-$(CONFIG_INTEL_TDX_HOST)	+= tdx.o
+> +obj-$(CONFIG_INTEL_TDX_HOST)	+= tdx.o seamcall.o
+> diff --git a/arch/x86/virt/vmx/tdx/seamcall.S b/arch/x86/virt/vmx/tdx/seamcall.S
+> new file mode 100644
+> index 000000000000..327961b2dd5a
+> --- /dev/null
+> +++ b/arch/x86/virt/vmx/tdx/seamcall.S
+> @@ -0,0 +1,52 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#include <linux/linkage.h>
+> +#include <asm/frame.h>
 > +
->    iommus:
->      minItems: 1
->      maxItems: 32
-> @@ -72,6 +75,7 @@ required:
->    - iommus
->    - assigned-clocks
->    - assigned-clock-parents
-> +  - power-domains
->  
->  allOf:
->    - if:
-> @@ -132,6 +136,7 @@ examples:
->      #include <dt-bindings/clock/mt8173-clk.h>
->      #include <dt-bindings/memory/mt8173-larb-port.h>
->      #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/power/mt8173-power.h>
->  
->      vcodec_enc_avc: vcodec@18002000 {
->        compatible = "mediatek,mt8173-vcodec-enc";
-> @@ -153,6 +158,7 @@ examples:
->        clock-names = "venc_sel";
->        assigned-clocks = <&topckgen CLK_TOP_VENC_SEL>;
->        assigned-clock-parents = <&topckgen CLK_TOP_VCODECPLL>;
-> +      power-domains = <&scpsys MT8173_POWER_DOMAIN_VENC>;
->      };
->  
->      vcodec_enc_vp8: vcodec@19002000 {
-> @@ -173,4 +179,5 @@ examples:
->        clock-names = "venc_lt_sel";
->        assigned-clocks = <&topckgen CLK_TOP_VENC_LT_SEL>;
->        assigned-clock-parents = <&topckgen CLK_TOP_VCODECPLL_370P5>;
-> +      power-domains = <&scpsys MT8173_POWER_DOMAIN_VENC_LT>;
->      };
-> -- 
-> 2.18.0
-> 
-> 
+> +#include "tdxcall.S"
+> +
+> +/*
+> + * __seamcall()  - Host-side interface functions to SEAM software module
+> + *		   (the P-SEAMLDR or the TDX module)
+> + *
+> + * Transform function call register arguments into the SEAMCALL register
+> + * ABI.  Return TDX_SEAMCALL_VMFAILINVALID, or the completion status of
+> + * the SEAMCALL.  Additional output operands are saved in @out (if it is
+> + * provided by caller).
+
+This needs to say:
+
+	Returns TDX_SEAMCALL_VMFAILINVALID if the SEAMCALL itself fails.
+
+> + *-------------------------------------------------------------------------
+> + * SEAMCALL ABI:
+> + *-------------------------------------------------------------------------
+> + * Input Registers:
+> + *
+> + * RAX                 - SEAMCALL Leaf number.
+> + * RCX,RDX,R8-R9       - SEAMCALL Leaf specific input registers.
+> + *
+> + * Output Registers:
+> + *
+> + * RAX                 - SEAMCALL completion status code.
+> + * RCX,RDX,R8-R11      - SEAMCALL Leaf specific output registers.
+> + *
+> + *-------------------------------------------------------------------------
+> + *
+> + * __seamcall() function ABI:
+> + *
+> + * @fn  (RDI)          - SEAMCALL Leaf number, moved to RAX
+> + * @rcx (RSI)          - Input parameter 1, moved to RCX
+> + * @rdx (RDX)          - Input parameter 2, moved to RDX
+> + * @r8  (RCX)          - Input parameter 3, moved to R8
+> + * @r9  (R8)           - Input parameter 4, moved to R9
+> + *
+> + * @out (R9)           - struct tdx_module_output pointer
+> + *			 stored temporarily in R12 (not
+> + *			 used by the P-SEAMLDR or the TDX
+> + *			 module). It can be NULL.
+> + *
+> + * Return (via RAX) the completion status of the SEAMCALL, or
+> + * TDX_SEAMCALL_VMFAILINVALID.
+> + */
+> +SYM_FUNC_START(__seamcall)
+> +	FRAME_BEGIN
+> +	TDX_MODULE_CALL host=1
+> +	FRAME_END
+> +	ret
+> +SYM_FUNC_END(__seamcall)
+> diff --git a/arch/x86/virt/vmx/tdx/tdx.h b/arch/x86/virt/vmx/tdx/tdx.h
+> new file mode 100644
+> index 000000000000..9d5b6f554c20
+> --- /dev/null
+> +++ b/arch/x86/virt/vmx/tdx/tdx.h
+> @@ -0,0 +1,11 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _X86_VIRT_TDX_H
+> +#define _X86_VIRT_TDX_H
+> +
+> +#include <linux/types.h>
+> +
+> +struct tdx_module_output;
+> +u64 __seamcall(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
+> +	       struct tdx_module_output *out);
+> +
+> +#endif
+

@@ -2,167 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D73A50F13F
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:40:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8F3350F13E
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:40:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245472AbiDZGnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 02:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47970 "EHLO
+        id S245399AbiDZGnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 02:43:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245469AbiDZGnj (ORCPT
+        with ESMTP id S245306AbiDZGnU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 02:43:39 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B953F65BC
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:40:32 -0700 (PDT)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23Q5ix1N020783;
-        Tue, 26 Apr 2022 06:40:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=NWqmAoCx25RXlrFYj/b2cYqlm2/7aRzSFJoALrjpqAQ=;
- b=lz9UW2IatHOjDEPS5xXcidEw1oUPa/ZKJIY3soZFj5rOu25T2ddyNWsO803oVcVuUZbt
- n2BMY7I7TjEYl0YKPf5i7hFIgXHNHRja/OTNmfifSYaFQe/O5pNwZGIjE/qT81CGXojG
- M9BPxtsQOx3W3loQlZpUSf5gHL6PrmO102Faw3vY6IVq477kYfU9aj5m0bQp9fC1NQuY
- CdnjZnkJ5+aW6YjT4WDG2ZUNdsIPZSWUmPNAJugdbjl12yT32DFPYHGe0jdTdQeEqVfS
- b/nYVg3iIjmI6aGd4+joR40Pd+EdL9OVMhSaWzVvEf9Vb/zLAFfBQ7JiVqXTdRX7/9YW CQ== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fpav30xbc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 06:40:23 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23Q6cOZB011563;
-        Tue, 26 Apr 2022 06:40:21 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma06ams.nl.ibm.com with ESMTP id 3fm8qj3rbr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 06:40:20 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23Q6eIMU44368148
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 26 Apr 2022 06:40:18 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 991A0AE04D;
-        Tue, 26 Apr 2022 06:40:18 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9FE66AE045;
-        Tue, 26 Apr 2022 06:40:15 +0000 (GMT)
-Received: from li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com.com (unknown [9.43.82.112])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 26 Apr 2022 06:40:15 +0000 (GMT)
-From:   Jagdish Gediya <jvgediya@linux.ibm.com>
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     ying.huang@intel.com, dave.hansen@intel.com,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v2] lib/kstrtox.c: Add "false"/"true" support to kstrtobool
-Date:   Tue, 26 Apr 2022 12:10:01 +0530
-Message-Id: <20220426064001.14241-1-jvgediya@linux.ibm.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 26 Apr 2022 02:43:20 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6445632E
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:40:12 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id kq17so10860647ejb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:40:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=YQBirjcHw1XssjMgenO6HRfRZsWWatGT2BxMsOHFYCE=;
+        b=IBjeDJUQPPgNrNiqtJATmu07ecSQmbmK+jJQ9Qkqm68KYBT2mZNkWUVJVPy5PP28iC
+         ZZ5YiSPdZxmlFb9F21Hv6A+edHNDWn1wc2SnbnTRFUMJQVRVZYnI6etGe9iHNhOZg5fG
+         RMKKEG/rXDg2iKI6iDxzFMiZH+w+BxAN7X+a15HLRXcrIZBPXGDDzgfbFlnhh5Mo+Xwc
+         5QLsw9I2ampq1hTraxXnKTLSoGq6LkPZCV7WBSQhuah3W2lWXHHgu1iftsIPNLV/YbGG
+         MGepN8bjr7Iauo5KoUBkHqk4ReN7oFG+cfLmxYq0peiDALMtxKCbbfG3TQ89HGsNxOcy
+         k0qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=YQBirjcHw1XssjMgenO6HRfRZsWWatGT2BxMsOHFYCE=;
+        b=7z1er0LzYsYhNW6T+14gPew36568KLAPSBH7fPBkk8PbWsLg44TEQ7tBeHrTNFl/J2
+         IWuRqzLhZijSm+z5EhAwn1ZiA0gaEzEWS5B/4iKb8QpCXx5wMFaOpvB0e+/i8TW5aqp/
+         vIRHgxh4JQ/vM8h99c614OPD888Yyhxnd3FDBVda32k9zhEkObJOcZs4qGbp7hXDdPJ9
+         IH/vkN8NrQkt2oQgsy0JttLHcea5ZwetFwACiojVkj0vsUDuTk6MTVGg1CBcL+Bb8phA
+         N/NDl5cTNe0r5PtakDnVj83kpR99c1cYdRZ8JjYr5Rq/DU/pXnzO8AbbLxD7ze+hRrhs
+         0J/Q==
+X-Gm-Message-State: AOAM532Je1WVAAsafgXUEI4Fuqr9nk4J3v02C3yxRgYq2jBAgHVVChgD
+        dU6S6sTguz7LPwHa3MzR/LowkQ==
+X-Google-Smtp-Source: ABdhPJxZhXFQhcEzCB8B5dlgOiWdecKG+rf6v1oIMQ4/m9NvZbzVShnAUy6VkZ6totD6LEgaHzmIYQ==
+X-Received: by 2002:a17:907:8a0d:b0:6f3:a595:6136 with SMTP id sc13-20020a1709078a0d00b006f3a5956136mr4544804ejc.54.1650955211482;
+        Mon, 25 Apr 2022 23:40:11 -0700 (PDT)
+Received: from [192.168.0.244] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id r13-20020a508d8d000000b00425d3555fc6sm4309024edh.30.2022.04.25.23.40.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Apr 2022 23:40:11 -0700 (PDT)
+Message-ID: <8498c0b4-ed1f-b4a0-d53c-a7addf75ea66@linaro.org>
+Date:   Tue, 26 Apr 2022 08:40:09 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: YVc7XaHVGxqbkxg8V64KbB2WpeNm2Y3e
-X-Proofpoint-GUID: YVc7XaHVGxqbkxg8V64KbB2WpeNm2Y3e
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-26_02,2022-04-25_03,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
- clxscore=1011 adultscore=0 impostorscore=0 mlxlogscore=999 suspectscore=0
- bulkscore=0 lowpriorityscore=0 phishscore=0 priorityscore=1501
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204260042
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] dt-bindings: clock: qcom,gcc-apq8064: Fix typo in
+ compatible and split apq8084
+Content-Language: en-US
+To:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
+        Ansuel Smith <ansuelsmth@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Rob Herring <robh@kernel.org>
+References: <20220425204001.710238-1-krzysztof.kozlowski@linaro.org>
+ <20220425224000.CB7F3C385A4@smtp.kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220425224000.CB7F3C385A4@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At many places in kernel, It is necessary to convert sysfs input
-to corrosponding bool value e.g. "false" or "0" need to be converted
-to bool false, "true" or "1" need to be converted to bool true,
-places where such conversion is needed currently check the input
-string manually, kstrtobool can be utilized at such places but
-currently kstrtobool doesn't have support to "false"/"true".
+On 26/04/2022 00:39, Stephen Boyd wrote:
+> Quoting Krzysztof Kozlowski (2022-04-25 13:40:01)
+>> The qcom,gcc-apq8064.yaml was meant to describe only APQ8064 and APQ8084
+>> should have slightly different bindings (without Qualcomm thermal sensor
+>> device).
+>>
+>> Fixes: a469bf89a009 ("dt-bindings: clock: simplify qcom,gcc-apq8064 Documentation")
+>> Reported-by: Rob Herring <robh@kernel.org>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  .../bindings/clock/qcom,gcc-apq8064.yaml      |  4 +-
+>>  .../bindings/clock/qcom,gcc-apq8084.yaml      | 42 +++++++++++++++++++
+>>  2 files changed, 43 insertions(+), 3 deletions(-)
+>>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-apq8084.yaml
+> 
+> If it's generated with 'format-patch -C -M' does it detect the copy?
 
-Add "false"/"true" support to kstrtobool while string conversion
-to bool. Modify existing manual sysfs conversions to use kstrtobool().
+Nope, and I think these are default. The files are not that similar,
+because while copying I cleaned it up.
 
-This patch doesn't have any functionality change.
+format-patch -C20% -M20% also does not detect it. Only `git format-patch
+-1 -C20% -M20% --find-copies-harder` detects a copy. I will use it, but
+you won't see nice copy-patch.
 
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc: Petr Mladek <pmladek@suse.com>
-Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
----
-change in v2:
-Modified kstrtobool to handle "false"/"true". Removed
-new function sysfs_strbool introduced in v1.
+> 
+>>
+>> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-apq8084.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-apq8084.yaml
+>> new file mode 100644
+>> index 000000000000..63d08e82b3d8
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc-apq8084.yaml
+>> @@ -0,0 +1,42 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/clock/qcom,gcc-apq8084.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Qualcomm Global Clock & Reset Controller Binding for APQ8084
+>> +
+>> +maintainers:
+>> +  - Stephen Boyd <sboyd@kernel.org>
+>> +  - Taniya Das <tdas@codeaurora.org>
+> 
+> Please fix Taniya's email quic_tdas@quicinc.com
 
- lib/kstrtox.c   | 7 +++++++
- mm/migrate.c    | 6 +-----
- mm/swap_state.c | 6 +-----
- 3 files changed, 9 insertions(+), 10 deletions(-)
+I wished Codeaurora/QUIC folks updated their emails all over the tree
+because otherwise it looks like they do not want or cannot maintain
+these files.
 
-diff --git a/lib/kstrtox.c b/lib/kstrtox.c
-index 886510d248e5..3a5e29557838 100644
---- a/lib/kstrtox.c
-+++ b/lib/kstrtox.c
-@@ -377,6 +377,13 @@ int kstrtobool(const char *s, bool *res)
- 		}
- 		break;
- 	default:
-+		if (!strncmp(s, "true", 4)) {
-+			*res = true;
-+			return 0;
-+		} else if (!strncmp(s, "false", 5)) {
-+			*res = false;
-+			return 0;
-+		}
- 		break;
- 	}
- 
-diff --git a/mm/migrate.c b/mm/migrate.c
-index 6c31ee1e1c9b..1de39bbfd6f9 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -2523,11 +2523,7 @@ static ssize_t numa_demotion_enabled_store(struct kobject *kobj,
- 					   struct kobj_attribute *attr,
- 					   const char *buf, size_t count)
- {
--	if (!strncmp(buf, "true", 4) || !strncmp(buf, "1", 1))
--		numa_demotion_enabled = true;
--	else if (!strncmp(buf, "false", 5) || !strncmp(buf, "0", 1))
--		numa_demotion_enabled = false;
--	else
-+	if (kstrtobool(buf, &numa_demotion_enabled))
- 		return -EINVAL;
- 
- 	return count;
-diff --git a/mm/swap_state.c b/mm/swap_state.c
-index 013856004825..dba10045a825 100644
---- a/mm/swap_state.c
-+++ b/mm/swap_state.c
-@@ -865,11 +865,7 @@ static ssize_t vma_ra_enabled_store(struct kobject *kobj,
- 				      struct kobj_attribute *attr,
- 				      const char *buf, size_t count)
- {
--	if (!strncmp(buf, "true", 4) || !strncmp(buf, "1", 1))
--		enable_vma_readahead = true;
--	else if (!strncmp(buf, "false", 5) || !strncmp(buf, "0", 1))
--		enable_vma_readahead = false;
--	else
-+	if (kstrtobool(buf, &enable_vma_readahead))
- 		return -EINVAL;
- 
- 	return count;
--- 
-2.35.1
-
+Best regards,
+Krzysztof

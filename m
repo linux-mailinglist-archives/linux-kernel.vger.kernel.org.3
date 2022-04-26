@@ -2,231 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23A6650FDDC
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 14:56:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8BA550FDEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 14:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345067AbiDZM7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 08:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35744 "EHLO
+        id S1346637AbiDZNAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 09:00:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350247AbiDZM6z (ORCPT
+        with ESMTP id S235113AbiDZNAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 08:58:55 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C821FA67
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 05:55:47 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id BD53C5C0118;
-        Tue, 26 Apr 2022 08:55:46 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Tue, 26 Apr 2022 08:55:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1650977746; x=1651064146; bh=VyZAdGl8C8
-        i715U0d6sExgdmQCSXB0Of5dCmp0HBEBk=; b=a9jyohDAiaE0mNa5tsnZCrSbcd
-        Kx14nTwUxia30K6c33g9UkMtbME7bvlGLpy4Ut1T0oRoniVKv6HAybyGXY1XETIk
-        ptLjzKE1Hox56/J6/m4HU62I12925l75i8NZsiXOX4IEHOjhNdxGGpCZ+ljVWlOt
-        xpspmeb13PdLVc3P1Mxb80IB7rjzf2EfzewbhINNS30EmWpB3OmpabQ9vY3gXVSo
-        09vHYYjbQieA6oAmZmVWG4MrChUg+zT5w3d07LYMcWu1FmCntAW6jEHJfRkrT6HB
-        ncV3/bRPwth+qK+yaFicuYxntecsLTjmVC7uLtav8sH8vQ8YJLF38yzqeQMQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1650977746; x=
-        1651064146; bh=VyZAdGl8C8i715U0d6sExgdmQCSXB0Of5dCmp0HBEBk=; b=Z
-        yl0j64TdFRHKgRljeGqQSxmcS8vB10l9vr4jWhFAJPqH2RGzG+bPQn7ou/rvXkEC
-        nLbanxLbgOPwSv0L2KTIw770n61Hzmhn9vRQQBZs+ozRMszW82qgsQKHaurwo9vg
-        qQhe2tSYcIUpH2c5sf3mGi0StpfVA+hpudIWAReI7+ijK4MMD9/HrDHb6M05ishu
-        FkOE/BfYHIAfkecCH/cDsS4HD/AJ+gP31jHhw9v1ttOwmy+8yZeybYTX2X/oefQb
-        aDXyoOrMUGRxDWw8ctY6Vt+ZKKmYfcPfee4FnOfTc2uwZlAQWxYaqn/I58QTQPqU
-        Nom5qYv4PRLM6kMcjjS1w==
-X-ME-Sender: <xms:0utnYmLXLoKzekZqpRw5eoR_yqfB2ibTz_YNLxU36bSWmRHtzrZwyA>
-    <xme:0utnYuLcwVU_eX-teFKzc9DJruvKAiF5RZnpAmuJQkuvmpZN7DBqfkCQkOza1HGGi
-    m6wErAiVOK6PgIoI6Q>
-X-ME-Received: <xmr:0utnYmtwtkO_o6KDp4ctE2-hEK5FFFlK8swU8wofo80jqQJIw-r21Pw5cyeXI2felU-ibHxz3XxlZBy6Gt-6gYeazOduCNq1XNPoYT4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefgdehgecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
-    vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:0utnYrZrNW_G5F9RiSmJhqUWDshSISMjixUlCw6eSfqw6ew85Kdhzg>
-    <xmx:0utnYtYkkLSCWFbiXqujgV82_UKEOXGuUWkDdWgZYP3-GJzvT1fNyw>
-    <xmx:0utnYnCPpmz7eKOYDa_2TFrgGaQnmlJc_l0zpHHvXWZoQPQBz1fluw>
-    <xmx:0utnYhpiPAiekXwpx5OKGyL2IDIRB5GfBX9eaLo6XP9d4TP43HXVvw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 26 Apr 2022 08:55:45 -0400 (EDT)
-Date:   Tue, 26 Apr 2022 14:55:44 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Rob Clark <robdclark@gmail.com>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robert Foss <robert.foss@linaro.org>
-Subject: Re: [PATCH 2/2] Revert "drm: of: Lookup if child node has panel or
- bridge"
-Message-ID: <20220426125544.mroteu3hvyvlyb6g@houat>
-References: <20220420231230.58499-1-bjorn.andersson@linaro.org>
- <20220420231230.58499-2-bjorn.andersson@linaro.org>
- <CAMty3ZAw7DUSnBePC05qC8Gn6ESKiu+FHw4a-HPPc05VX1hqhg@mail.gmail.com>
- <20220421082358.ivpmtak3ednvddrc@houat>
- <YmEdAVwZuA7Wo1Ch@aptenodytes>
- <YmelPCcWCCjALtRU@aptenodytes>
- <YmfYi5G7hMKLAH3T@pendragon.ideasonboard.com>
- <YmfoiD0r8MD/kr1N@aptenodytes>
- <20220426125401.yyrhg6aeafdjw4ad@houat>
+        Tue, 26 Apr 2022 09:00:34 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F36F24969
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 05:57:25 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id s21so10655333wrb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 05:57:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DfCMVq1S6gm4GOhj5i7iFzEdFjObyfzkJ5gxl6qupp8=;
+        b=jvjMZ+opru9KXy8+E0R/AUv6yAKn2a6A8ERvBEy4gjlspmyMOP82VUGT9SgtvM0dRA
+         yCMsYJ3hJTCtbciObQMMZdpRJTfoGaVUmOAZH+qp66HwShj4HodftvtBJrS35fwgo5Z0
+         ofo1Xz1LSE69ov+X8QgzHhN6hha8dSVku5omWRFuiksopusuc2xlcuietBGK7DqDVfLp
+         DiYjDPxN7Nuh5suHupTei82DjWsr98EtbbAeeT2IAyTKYOm7iCjoyV+O5ec1dADkSU9E
+         QIvlGnKlCJR+5etlc6oi9J5xT34mzVIOw8UrupkH56BOHYcZubZ9XEWWKLfB1xeUeklB
+         NSeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DfCMVq1S6gm4GOhj5i7iFzEdFjObyfzkJ5gxl6qupp8=;
+        b=0hlhN1abGD963cRR5S0OHssc4Pj4IN54VmOURR3DYTX//O43V6G65h7byzfFCdUKKn
+         zNHE0/Ji9ckI6Tv2Loyff9k7MOJj73ECoxHlu5YvpQ9k+k3dqT8xe6yKYkjaK4OoxUeU
+         tkqnso1w/2MPifZKHht3umY1eGtGvBqp67iuajwhbp5KQWE488Mh3qV8Av2qOuYHlUas
+         Co5gjwPYZpXx0ki9DPWbUwCqb3sfX5/EJ1DAPBYVy/kq8jFRpvu+Rvj4rvhUtKWX7seD
+         bp0qZ7KjdZTZOONzMSoiSN0XyG56u+sGoYDnuNy2/R2pO1FISJZiiHNRckMAQkxwaxiV
+         iJvA==
+X-Gm-Message-State: AOAM532bJTWKeRfjcuDKZR/y0ScJMlXAhDgzRvf1fHNy6Nh774JJs0rS
+        959P5DpQ5Pz47KjrWH6NfTUcDg==
+X-Google-Smtp-Source: ABdhPJwZgVn/PbNaQMdyC0fSdHiJ/8dQDWK+MoRT9HtNWAky3m1A7R0Z6zQxbTNn2Ffhv4OI6EmneQ==
+X-Received: by 2002:a05:6000:1a8b:b0:20a:aaf7:75e8 with SMTP id f11-20020a0560001a8b00b0020aaaf775e8mr17692637wry.66.1650977843929;
+        Tue, 26 Apr 2022 05:57:23 -0700 (PDT)
+Received: from groot.home ([2a01:cb19:85e6:1900:3df2:df58:a205:f150])
+        by smtp.gmail.com with ESMTPSA id h9-20020a05600c350900b00393f01c8f00sm3235261wmq.47.2022.04.26.05.57.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 05:57:23 -0700 (PDT)
+From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
+To:     Sean Wang <sean.wang@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Kevin Hilman <khilman@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        linux-gpio@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        Youngmin Han <Youngmin.Han@geappliances.com>
+Subject: [PATCH] pinctrl: mediatek: mt8365: fix IES control pins
+Date:   Tue, 26 Apr 2022 14:57:14 +0200
+Message-Id: <20220426125714.298907-1-mkorpershoek@baylibre.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="f3ucqbymt5myqdco"
-Content-Disposition: inline
-In-Reply-To: <20220426125401.yyrhg6aeafdjw4ad@houat>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+IES26 (BIT 16 of IES1_CFG_ADDR) controls the following pads:
 
---f3ucqbymt5myqdco
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+- PAD_I2S_DATA_IN (GPIO114)
+- PAD_I2S_LRCK (GPIO115)
+- PAD_I2S_BCK (GPIO116)
 
-On Tue, Apr 26, 2022 at 02:54:01PM +0200, Maxime Ripard wrote:
-> On Tue, Apr 26, 2022 at 02:41:44PM +0200, Paul Kocialkowski wrote:
-> > On Tue 26 Apr 22, 14:33, Laurent Pinchart wrote:
-> > > On Tue, Apr 26, 2022 at 09:54:36AM +0200, Paul Kocialkowski wrote:
-> > > > On Thu 21 Apr 22, 10:59, Paul Kocialkowski wrote:
-> > > > > On Thu 21 Apr 22, 10:23, Maxime Ripard wrote:
-> > > > > > On Thu, Apr 21, 2022 at 01:15:54PM +0530, Jagan Teki wrote:
-> > > > > > > + Linus
-> > > > > > > + Marek
-> > > > > > > + Laurent
-> > > > > > > + Robert
-> > > > > > >=20
-> > > > > > > On Thu, Apr 21, 2022 at 4:40 AM Bjorn Andersson wrote:
-> > > > > > > >
-> > > > > > > > Commit '80253168dbfd ("drm: of: Lookup if child node has pa=
-nel or
-> > > > > > > > bridge")' attempted to simplify the case of expressing a si=
-mple panel
-> > > > > > > > under a DSI controller, by assuming that the first non-grap=
-h child node
-> > > > > > > > was a panel or bridge.
-> > > > > > > >
-> > > > > > > > Unfortunately for non-trivial cases the first child node mi=
-ght not be a
-> > > > > > > > panel or bridge.  Examples of this can be a aux-bus in the =
-case of
-> > > > > > > > DisplayPort, or an opp-table represented before the panel n=
-ode.
-> > > > > > > >
-> > > > > > > > In these cases the reverted commit prevents the caller from=
- ever finding
-> > > > > > > > a reference to the panel.
-> > > > > > > >
-> > > > > > > > This reverts commit '80253168dbfd ("drm: of: Lookup if chil=
-d node has
-> > > > > > > > panel or bridge")', in favor of using an explicit graph ref=
-erence to the
-> > > > > > > > panel in the trivial case as well.
-> > > > > > >=20
-> > > > > > > This eventually breaks many child-based devm_drm_of_get_bridge
-> > > > > > > switched drivers.  Do you have any suggestions on how to proc=
-eed to
-> > > > > > > succeed in those use cases as well?
-> > > > > >=20
-> > > > > > I guess we could create a new helper for those, like
-> > > > > > devm_drm_of_get_bridge_with_panel, or something.
-> > > > >=20
-> > > > > Oh wow I feel stupid for not thinking about that.
-> > > > >=20
-> > > > > Yeah I agree that it seems like the best option.
-> > > >=20
-> > > > Should I prepare a patch with such a new helper?
-> > > >=20
-> > > > The idea would be to keep drm_of_find_panel_or_bridge only for the =
-of graph
-> > > > case and add one for the child node case, maybe:
-> > > > drm_of_find_child_panel_or_bridge.
-> > > >=20
-> > > > I really don't have a clear idea of which driver would need to be s=
-witched
-> > > > over though. Could someone (Jagan?) let me know where it would be n=
-eeded?
-> > > >=20
-> > > > Are there cases where we could both expect of graph and child node?
-> > > > (i.e. does the new helper also need to try via of graph?)
-> > >=20
-> > > I still think we should use OF graph uncondtionally, even in the DSI
-> > > case. We need to ensure backward-compatibility, but I'd like new
-> > > bindings (and thus new drivers) to always use OF graph.
-> >=20
-> > I just went over the thread on "drm: of: Improve error handling in brid=
-ge/panel
-> > detection" again and I'm no longer sure there's actually still an issue=
- that
-> > stands, with the fix that allows returning -ENODEV when possible.
-> >=20
-> > The remaining issue that was brought up was with a connector node, but =
-it should
-> > be up to the driver to detect that and avoid calling drm_of_find_panel_=
-or_bridge
-> > in such situations.
-> >=20
-> > So with that in mind it feels like the child node approach can be viable
-> > (and integrated in the same helper).
-> >=20
-> > We might still want to favor an explicit OF graph approach, but note th=
-at
-> > dsi-controller.yaml also specifies extra properties that are specific to
-> > MIPI DSI and I'm not sure there are equivalent definitions for the OF g=
-raph
-> > approach.
-> >=20
-> > What do you think?
->=20
-> I don't think Laurent's point was to move the child node away from its
-> DSI controller, that part doesn't make much sense. The panel or bridge
-> is still accessed through the DSI bus, so it very much belongs there.
->=20
-> What he meant I think was that we mandate the OF graph for all panels,
-> so for panels/bridges controlled through DCS, you would still list the
-> output through the graph.
+The pinctrl table is wrong since it lists pins 114 to 112.
 
-Also, we're already in a bit of a mess right now. I don't think rushing
-that kind of patches in a (late) rc is making much sense, but as I said,
-if you want to start working on this, then I'll take a revert for the
-next rc, and then we can work calmly on this.
+Update the table with the correct values.
 
-Maxime
+Fixes: e94d8b6fb83a ("pinctrl: mediatek: add support for mt8365 SoC")
+Reported-by: Youngmin Han <Youngmin.Han@geappliances.com>
+Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+---
+ drivers/pinctrl/mediatek/pinctrl-mt8365.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---f3ucqbymt5myqdco
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/drivers/pinctrl/mediatek/pinctrl-mt8365.c b/drivers/pinctrl/mediatek/pinctrl-mt8365.c
+index 727c65221aef..57f37a294063 100644
+--- a/drivers/pinctrl/mediatek/pinctrl-mt8365.c
++++ b/drivers/pinctrl/mediatek/pinctrl-mt8365.c
+@@ -259,7 +259,7 @@ static const struct mtk_pin_ies_smt_set mt8365_ies_set[] = {
+ 	MTK_PIN_IES_SMT_SPEC(104, 104, 0x420, 13),
+ 	MTK_PIN_IES_SMT_SPEC(105, 109, 0x420, 14),
+ 	MTK_PIN_IES_SMT_SPEC(110, 113, 0x420, 15),
+-	MTK_PIN_IES_SMT_SPEC(114, 112, 0x420, 16),
++	MTK_PIN_IES_SMT_SPEC(114, 116, 0x420, 16),
+ 	MTK_PIN_IES_SMT_SPEC(117, 119, 0x420, 17),
+ 	MTK_PIN_IES_SMT_SPEC(120, 122, 0x420, 18),
+ 	MTK_PIN_IES_SMT_SPEC(123, 125, 0x420, 19),
+-- 
+2.32.0
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYmfr0AAKCRDj7w1vZxhR
-xbUmAP4tSJlyOhHnj4lT5D2bTAsRwi9EitxuW/l4CeXST2l+oQEAyXWYMaL9Brk1
-ry6z8FHTykQJVq8rXR4AIswrqw/slAw=
-=eYQz
------END PGP SIGNATURE-----
-
---f3ucqbymt5myqdco--

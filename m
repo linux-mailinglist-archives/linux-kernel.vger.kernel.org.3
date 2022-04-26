@@ -2,140 +2,382 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B0850F0F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:30:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 571B450F0F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:30:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245227AbiDZGdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 02:33:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37780 "EHLO
+        id S245223AbiDZGdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 02:33:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245102AbiDZGdW (ORCPT
+        with ESMTP id S245182AbiDZGd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 02:33:22 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED702617F
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:30:15 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id y76so1892151ybe.1
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:30:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Xk1fRrXwMY49fkEklzghzXkAbwf3cL6niuJY5FykJaY=;
-        b=XKpip720WjbGzHfP5YW9gSB8hFdf4hNkRtU+Adgc2GptypWuimrKfm4d/jTk1AJN2S
-         wvD9Q6Sle0BhWy7kUbqvV8S9J14hP2H7Xf0KqXsQ5ogF+LBDqfcEYPCdNRdqYphLhYst
-         22mhzSuTfN0lo3t2tx9A3sGF+U1uEyp9clr9Xx3jpUbJiTz+16DdaivMegtOh6JHgpou
-         X1AELsmWoTmVvYVEFo3ay4KIKBVJs94KXqylK86UsUPhaTfWV1lgeshVI4fyRf3mURus
-         SOGA0Snj1/dFaXKuZs3n2+NlRmHfLxPyes/tTiY6eQBGZM5hOAjIUScfKhZrHCgCDqiq
-         8mHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Xk1fRrXwMY49fkEklzghzXkAbwf3cL6niuJY5FykJaY=;
-        b=prOERVXfwZFreAtj4zwtsTZumAQievtT0IW3iwOLU1XQ5ENn/9LBbqpXwbiiDeVqnr
-         Wr6OROL8G1nmVD/wkpnvQEIYT8ioZ8PkgoDDQuyxftIsNIwQqBU3Jw0LWZHBddKxiMGg
-         m36o4SDc4aNIgX53pVFa0XgbhV7PjIRKbG2KZgHONXNe9NYROfpFc9aomRE63awq1Sx+
-         g9wkhdjZpV4kCCt6uK3bSnWYEmTwRUC4Rh1jsPD54AIy3dRydc51ZPmhsJDLMz9+jdcu
-         UnqV1JmdCjOkwFwLjzuRLGH5sJB4/1jGeCLiMxGP5mN7LpcCd3kwG3/JlBPULh0Ri/I0
-         Ue2A==
-X-Gm-Message-State: AOAM531cy/tuo+KnCr9Bj6S2wGw89J4KeG6h4gAKBMXEfEYcjVO+4Qgo
-        odow2vbc+6VanjisN7PYig1WhGO2fgi1pQSqzHi8mexjTnViog==
-X-Google-Smtp-Source: ABdhPJxb4B+LcT0jivCZF2yrHw8bSTLtmXMFcK6VBuul7ICiYr9UHhwQS8Dhk2Q4vrNahhA+41kQRQ5ZuNsamNIR9Ec=
-X-Received: by 2002:a05:6902:1242:b0:644:c30c:cfcc with SMTP id
- t2-20020a056902124200b00644c30ccfccmr18900379ybu.509.1650954614961; Mon, 25
- Apr 2022 23:30:14 -0700 (PDT)
+        Tue, 26 Apr 2022 02:33:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A84140AD;
+        Mon, 25 Apr 2022 23:30:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 19B5F61356;
+        Tue, 26 Apr 2022 06:30:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B2A5C385A0;
+        Tue, 26 Apr 2022 06:30:15 +0000 (UTC)
+Message-ID: <075dc19b-d7f5-3939-f736-766ed0aaad84@xs4all.nl>
+Date:   Tue, 26 Apr 2022 08:30:13 +0200
 MIME-Version: 1.0
-References: <20220420095906.27349-1-mgorman@techsingularity.net> <CAJuCfpH=U9E-46wZgKEYQZVKjw=2qq_KXDRF=tqDBvqpR+BBbg@mail.gmail.com>
-In-Reply-To: <CAJuCfpH=U9E-46wZgKEYQZVKjw=2qq_KXDRF=tqDBvqpR+BBbg@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Mon, 25 Apr 2022 23:30:03 -0700
-Message-ID: <CAJuCfpG6fU-AfB+_RfRHwq8-i3=H4RF5UmHeuH+70xz8m61k9g@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/6] Drain remote per-cpu directly
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v7 0/6] staging: media: wave5: add wave5 codec driver
+Content-Language: en-US
+To:     Nas Chung <nas.chung@chipsnmedia.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
+        open list <linux-kernel@vger.kernel.org>,
+        "laurent.pinchart@ideasonboard.com" 
+        <laurent.pinchart@ideasonboard.com>,
+        "kernel@collabora.com" <kernel@collabora.com>,
+        "dafna3@gmail.com" <dafna3@gmail.com>,
+        "bob.beckett@collabora.com" <bob.beckett@collabora.com>,
+        "kiril.bicevski@collabora.com" <kiril.bicevski@collabora.com>,
+        "lafley.kim" <lafley.kim@chipsnmedia.com>,
+        Scott Woo <scott.woo@chipsnmedia.com>,
+        "olivier.crete@collabora.com" <olivier.crete@collabora.com>,
+        "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "daniel@0x0f.com" <daniel@0x0f.com>
+References: <SL2P216MB1246AED88587FF94698653D9FBF89@SL2P216MB1246.KORP216.PROD.OUTLOOK.COM>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <SL2P216MB1246AED88587FF94698653D9FBF89@SL2P216MB1246.KORP216.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 7:49 PM Suren Baghdasaryan <surenb@google.com> wrote:
->
-> On Wed, Apr 20, 2022 at 2:59 AM Mel Gorman <mgorman@techsingularity.net> wrote:
-> >
-> > This series has the same intent as Nicolas' series "mm/page_alloc: Remote
-> > per-cpu lists drain support" -- avoid interference of a high priority
-> > task due to a workqueue item draining per-cpu page lists. While many
-> > workloads can tolerate a brief interruption, it may be cause a real-time
-> > task runnning on a NOHZ_FULL CPU to miss a deadline and at minimum,
-> > the draining in non-deterministic.
-> >
-> > Currently an IRQ-safe local_lock protects the page allocator per-cpu lists.
-> > The local_lock on its own prevents migration and the IRQ disabling protects
-> > from corruption due to an interrupt arriving while a page allocation is
-> > in progress. The locking is inherently unsafe for remote access unless
-> > the CPU is hot-removed.
-> >
-> > This series adjusts the locking. A spin-lock is added to struct
-> > per_cpu_pages to protect the list contents while local_lock_irq continues
-> > to prevent migration and IRQ reentry. This allows a remote CPU to safely
-> > drain a remote per-cpu list.
-> >
-> > This series is a partial series. Follow-on work would allow the
-> > local_irq_save to be converted to a local_irq to avoid IRQs being
-> > disabled/enabled in most cases. However, there are enough corner cases
-> > that it deserves a series on its own separated by one kernel release and
-> > the priority right now is to avoid interference of high priority tasks.
-> >
-> > Patch 1 is a cosmetic patch to clarify when page->lru is storing buddy pages
-> >         and when it is storing per-cpu pages.
-> >
-> > Patch 2 shrinks per_cpu_pages to make room for a spin lock. Strictly speaking
-> >         this is not necessary but it avoids per_cpu_pages consuming another
-> >         cache line.
-> >
-> > Patch 3 is a preparation patch to avoid code duplication.
-> >
-> > Patch 4 is a simple micro-optimisation that improves code flow necessary for
-> >         a later patch to avoid code duplication.
-> >
-> > Patch 5 uses a spin_lock to protect the per_cpu_pages contents while still
-> >         relying on local_lock to prevent migration, stabilise the pcp
-> >         lookup and prevent IRQ reentrancy.
-> >
-> > Patch 6 remote drains per-cpu pages directly instead of using a workqueue.
->
-> This quite possibly solves the issue I was trying to fix in
-> https://lore.kernel.org/all/20220225012819.1807147-1-surenb@google.com.
-> I will give it a try and see how it looks.
+Hi Nas,
 
-My test shows sizable improvement for the worst case drain_all_pages
-duration. Before the change I caught cases when a drain_local_pages_wq
-in the workqueue was delayed by 100+ms (not even counting
-drain_local_pages_wq execution time itself). With this patchset the
-worst time I was able to record for drain_all_pages duration was 17ms.
+On 25/04/2022 12:16, Nas Chung wrote:
+> The wave5 codec is a stateful encoder/decoder.
+> It is found on the J721S2 SoC, JH7100 SoC, ssd202d SoC. Etc..
+> But current test report is based on J721S2 SoC.
+> 
+> The driver currently supports V4L2_PIX_FMT_HEVC, V4L2_PIX_FMT_H264.
+> 
+> This driver has so far been tested on J721S2 EVM board and pre-silicon FPGA.
+> 
+> Testing on J721S2 EVM board shows it working fine both decoder and encoder.
+> The driver is successfully working with gstreamer v4l2 good-plugin without any modification.
+> 
+> Testing on FPGA also shows it working fine, though the FPGA uses polled interrupts and copied buffers between the host and it's on board RAM.
+> 
+> The wave5 driver will be updated to support various EXT_CTRL encoder interface.
 
-> Thanks!
->
-> >
-> >  include/linux/mm_types.h |   5 +
-> >  include/linux/mmzone.h   |  12 +-
-> >  mm/page_alloc.c          | 333 ++++++++++++++++++++++++---------------
-> >  3 files changed, 222 insertions(+), 128 deletions(-)
-> >
-> > --
-> > 2.34.1
-> >
-> >
+Please note that for some unknown reason neither v6 nor v7 ever reached the
+linux-media mailinglist. Can you try to repost, this time just to the mailinglist
+and with a CC to me?
+
+I have seen this problem before but it was never clear why linux-media would
+reject it. If you have an alternative email address you can email from, then
+you can try that as well.
+
+> 
+> v4l2-compliance tests from J721S2:
+> 
+> # v4l2-compliance -d0
+> v4l2-compliance SHA: not available, 64 bits
+
+You must compile v4l2-compliance from the v4l-utils git repo. You can tell because
+the SHA will be shown. That way I can be certain you tested with the latest
+v4l2-compliance.
+
+> 
+> Compliance test for vpu-dec device /dev/video0:
+> 
+> Driver Info:
+>         Driver name      : vpu-dec
+>         Card type        : vpu-dec
+>         Bus info         : platform:vpu-dec
+>         Driver version   : 5.10.100
+
+5.10 is really quite old, is it possible to test with a newer kernel?
+
+Regards,
+
+	Hans
+
+>         Capabilities     : 0x84204000
+>                 Video Memory-to-Memory Multiplanar
+>                 Streaming
+>                 Extended Pix Format
+>                 Device Capabilities
+>         Device Caps      : 0x04204000
+>                 Video Memory-to-Memory Multiplanar
+>                 Streaming
+>                 Extended Pix Format
+>         Detected Stateful Decoder
+> 
+> Required ioctls:
+>         test VIDIOC_QUERYCAP: OK
+> 
+> Allow for multiple opens:
+>         test second /dev/video0 open: OK
+>         test VIDIOC_QUERYCAP: OK
+>         test VIDIOC_G/S_PRIORITY: OK
+>         test for unlimited opens: OK
+> 
+> Debug ioctls:
+>         test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+>         test VIDIOC_LOG_STATUS: OK (Not Supported)
+> 
+> Input ioctls:
+>         test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+>         test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+>         test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+>         test VIDIOC_ENUMAUDIO: OK (Not Supported)
+>         test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
+>         test VIDIOC_G/S_AUDIO: OK (Not Supported)
+>         Inputs: 0 Audio Inputs: 0 Tuners: 0
+> 
+> Output ioctls:
+>         test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+>         test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+>         test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+>         test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+>         test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+>         Outputs: 0 Audio Outputs: 0 Modulators: 0
+> 
+> Input/Output configuration ioctls:
+>         test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+>         test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+>         test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+>         test VIDIOC_G/S_EDID: OK (Not Supported)
+> 
+> Control ioctls:
+>         test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
+>         test VIDIOC_QUERYCTRL: OK
+>         test VIDIOC_G/S_CTRL: OK
+>         test VIDIOC_G/S/TRY_EXT_CTRLS: OK
+>         test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
+>         test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+>         Standard Controls: 2 Private Controls: 1
+> 
+> Format ioctls:
+>         test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+>         test VIDIOC_G/S_PARM: OK (Not Supported)
+>         test VIDIOC_G_FBUF: OK (Not Supported)
+>         test VIDIOC_G_FMT: OK
+>         test VIDIOC_TRY_FMT: OK
+>         test VIDIOC_S_FMT: OK
+>         test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+>         test Cropping: OK (Not Supported)
+>         test Composing: OK
+>         test Scaling: OK
+> 
+> Codec ioctls:
+>         test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
+>         test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+>         test VIDIOC_(TRY_)DECODER_CMD: OK
+> 
+> Buffer ioctls:
+>         test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+>         test VIDIOC_EXPBUF: OK
+>         test Requests: OK (Not Supported)
+> 
+> Total for vpu-dec device /dev/video0: 44, Succeeded: 44, Failed: 0, Warnings: 0
+> 
+> # v4l2-compliance -d1
+> v4l2-compliance SHA: not available, 64 bits
+> 
+> Compliance test for vpu-enc device /dev/video1:
+> 
+> Driver Info:
+>         Driver name      : vpu-enc
+>         Card type        : vpu-enc
+>         Bus info         : platform:vpu-enc
+>         Driver version   : 5.10.100
+>         Capabilities     : 0x84204000
+>                 Video Memory-to-Memory Multiplanar
+>                 Streaming
+>                 Extended Pix Format
+>                 Device Capabilities
+>         Device Caps      : 0x04204000
+>                 Video Memory-to-Memory Multiplanar
+>                 Streaming
+>                 Extended Pix Format
+>         Detected Stateful Encoder
+> 
+> Required ioctls:
+>         test VIDIOC_QUERYCAP: OK
+> 
+> Allow for multiple opens:
+>         test second /dev/video1 open: OK
+>         test VIDIOC_QUERYCAP: OK
+>         test VIDIOC_G/S_PRIORITY: OK
+>         test for unlimited opens: OK
+> 
+> Debug ioctls:
+>         test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+>         test VIDIOC_LOG_STATUS: OK (Not Supported)
+> 
+> Input ioctls:
+>         test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+>         test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+>         test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+>         test VIDIOC_ENUMAUDIO: OK (Not Supported)
+>         test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
+>         test VIDIOC_G/S_AUDIO: OK (Not Supported)
+>         Inputs: 0 Audio Inputs: 0 Tuners: 0
+> 
+> Output ioctls:
+>         test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+>         test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+>         test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+>         test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+>         test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+>         Outputs: 0 Audio Outputs: 0 Modulators: 0
+> 
+> Input/Output configuration ioctls:
+>         test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+>         test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+>         test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+>         test VIDIOC_G/S_EDID: OK (Not Supported)
+> 
+> Control ioctls:
+>         test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
+>         test VIDIOC_QUERYCTRL: OK
+>         test VIDIOC_G/S_CTRL: OK
+>         test VIDIOC_G/S/TRY_EXT_CTRLS: OK
+>         test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
+>         test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+>         Standard Controls: 15 Private Controls: 0
+> 
+> Format ioctls:
+>         test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+>                 warn: ../../../v4l-utils-1.18.1/utils/v4l2-compliance/v4l2-test-formats.cpp(1320): S_PARM is supported for buftype 2, but not for ENUM_FRAMEINTERVALS
+>                 warn: ../../../v4l-utils-1.18.1/utils/v4l2-compliance/v4l2-test-formats.cpp(1320): S_PARM is supported for buftype 10, but not for ENUM_FRAMEINTERVALS
+>         test VIDIOC_G/S_PARM: OK
+>         test VIDIOC_G_FBUF: OK (Not Supported)
+>         test VIDIOC_G_FMT: OK
+>         test VIDIOC_TRY_FMT: OK
+>         test VIDIOC_S_FMT: OK
+>         test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+>         test Cropping: OK
+>         test Composing: OK (Not Supported)
+>         test Scaling: OK
+> 
+> Codec ioctls:
+>         test VIDIOC_(TRY_)ENCODER_CMD: OK
+>         test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+>         test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
+> 
+> Buffer ioctls:
+>         test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+>         test VIDIOC_EXPBUF: OK
+>         test Requests: OK (Not Supported)
+> 
+> Total for vpu-enc device /dev/video1: 44, Succeeded: 44, Failed: 0, Warnings: 2
+> 
+> changes since v6:
+> 
+> * update TODO file
+> * get sram info from device tree
+> 
+> changes since v5:
+> 
+> * support NV12/NV21 pixelformat for encoder and decoder
+> * handle adnormal exit and EOS
+> 
+> changes since v4:
+> 
+> * refactor functions in wave5-hw and fix bug reported by Daniel Palmer
+> * rename functions and variables to better names
+> * change variable types such as replacing s32 with u32 and int with bool as appropriate
+> 
+> changes since v3:
+> 
+> * Fixing all issues commented by Dan Carpenter
+> * Change file names to have wave5- prefix
+> * In wave5_vpu_probe, enable the clocks before reading registers, as commented from Daniel Palmer
+> * Add more to the TODO list,
+> 
+> changes since v2:
+> 
+> Main fixes includes:
+> * change the yaml and dirver code to support up to 4 clks (instead of one)
+> * fix Kconfig format
+> * remove unneeded cast,
+> * change var types
+> * change var names, func names
+> * checkpatch fixes
+> 
+> changes since v1:
+> 
+> Fix chanes due to comments from Ezequiel and Dan Carpenter. Main fixes inclueds:
+> * move all files to one dir 'wave5'
+> * replace private error codes with standart error codes
+> * fix extra spaces
+> * various checkpatch fixes
+> * replace private 'DPRINTK' macro with standart 'dev_err/dbg ..'
+> * fix error handling
+> * add more possible fixes to the TODO file
+> 
+> 
+> Dafna Hirschfeld (1):
+>   staging: media: wave5: Add the vdi layer
+> 
+> Nas Chung (3):
+>   staging: media: wave5: Add vpuapi layer
+>   staging: media: wave5: Add the v4l2 layer
+>   staging: media: wave5: Add TODO file
+> 
+> Robert Beckett (2):
+>   dt-bindings: media: staging: wave5: add yaml devicetree bindings
+>   media: wave5: Add wave5 driver to maintainers file
+> 
+>  .../bindings/staging/media/cnm,wave.yaml      |   73 +
+>  MAINTAINERS                                   |    9 +
+>  drivers/staging/media/Kconfig                 |    2 +
+>  drivers/staging/media/Makefile                |    1 +
+>  drivers/staging/media/wave5/Kconfig           |   12 +
+>  drivers/staging/media/wave5/Makefile          |   10 +
+>  drivers/staging/media/wave5/TODO              |   34 +
+>  drivers/staging/media/wave5/wave5-hw.c        | 3405 +++++++++++++++++
+>  drivers/staging/media/wave5/wave5-regdefine.h |  655 ++++
+>  drivers/staging/media/wave5/wave5-vdi.c       |  260 ++
+>  drivers/staging/media/wave5/wave5-vdi.h       |   81 +
+>  drivers/staging/media/wave5/wave5-vpu-dec.c   | 1385 +++++++
+>  drivers/staging/media/wave5/wave5-vpu-enc.c   | 1532 ++++++++
+>  drivers/staging/media/wave5/wave5-vpu.c       |  381 ++
+>  drivers/staging/media/wave5/wave5-vpu.h       |   73 +
+>  drivers/staging/media/wave5/wave5-vpuapi.c    | 1049 +++++
+>  drivers/staging/media/wave5/wave5-vpuapi.h    | 1144 ++++++
+>  drivers/staging/media/wave5/wave5-vpuconfig.h |   91 +
+>  drivers/staging/media/wave5/wave5-vpuerror.h  |  455 +++
+>  drivers/staging/media/wave5/wave5.h           |   82 +
+>  20 files changed, 10734 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/staging/media/cnm,wave.yaml
+>  create mode 100644 drivers/staging/media/wave5/Kconfig
+>  create mode 100644 drivers/staging/media/wave5/Makefile
+>  create mode 100644 drivers/staging/media/wave5/TODO
+>  create mode 100644 drivers/staging/media/wave5/wave5-hw.c
+>  create mode 100644 drivers/staging/media/wave5/wave5-regdefine.h
+>  create mode 100644 drivers/staging/media/wave5/wave5-vdi.c
+>  create mode 100644 drivers/staging/media/wave5/wave5-vdi.h
+>  create mode 100644 drivers/staging/media/wave5/wave5-vpu-dec.c
+>  create mode 100644 drivers/staging/media/wave5/wave5-vpu-enc.c
+>  create mode 100644 drivers/staging/media/wave5/wave5-vpu.c
+>  create mode 100644 drivers/staging/media/wave5/wave5-vpu.h
+>  create mode 100644 drivers/staging/media/wave5/wave5-vpuapi.c
+>  create mode 100644 drivers/staging/media/wave5/wave5-vpuapi.h
+>  create mode 100644 drivers/staging/media/wave5/wave5-vpuconfig.h
+>  create mode 100644 drivers/staging/media/wave5/wave5-vpuerror.h
+>  create mode 100644 drivers/staging/media/wave5/wave5.h
+> 
+

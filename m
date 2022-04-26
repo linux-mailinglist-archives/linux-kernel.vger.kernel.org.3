@@ -2,96 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5479650F46D
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D27B50F79D
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:40:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345124AbiDZIgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39894 "EHLO
+        id S1346524AbiDZJNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:13:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345140AbiDZIeH (ORCPT
+        with ESMTP id S1346532AbiDZIuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:34:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C936E559;
-        Tue, 26 Apr 2022 01:26:14 -0700 (PDT)
+        Tue, 26 Apr 2022 04:50:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4AC145845;
+        Tue, 26 Apr 2022 01:38:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1D0CBB81A2F;
-        Tue, 26 Apr 2022 08:26:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 592C6C385A0;
-        Tue, 26 Apr 2022 08:26:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BFC146090C;
+        Tue, 26 Apr 2022 08:38:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFD83C385B1;
+        Tue, 26 Apr 2022 08:38:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961571;
-        bh=0vZXB5vHkSVgyeqeUig+TmgsDnocBTPVAPB5uaSY2XU=;
+        s=korg; t=1650962300;
+        bh=GwuxwJSY6TmdTZNREcQNOtDHNwXMuLUyUK+8yLIXuPA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xbV9rUjVNKznQTT4CYmGRzLNz6ZNh5vQLCv/6sgsHGV9i+qxVZ+Hac80TH3X6x0Pk
-         azxuNqJ0l7FANYb1oDWVmXjkKm7EeWuRjvrBRitTQaves94vLAB6sVp9EP50zzBSeN
-         hVVtJLEZ09yh/mxiIeLCD+tERfrXekPVVbrYo4r4=
+        b=eLWWUITk5MZQ+ABaE6V1E+RByk2bDIJ/Kf5GOAJbQFaDMFUW05fR9tJ/QbPLl2+Rl
+         GDRRUUyWJuZu+OkjaZMGBm9z0jpqzqZdyRYXMOFCnhm/AxWBCAtexY5o3eCsi2YG6j
+         +RIb6uSw1n4UNP07PvgsoURRlNdKJgqxYXfBXB5o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 12/53] dmaengine: imx-sdma: Fix error checking in sdma_event_remap
+        stable@vger.kernel.org, Ido Schimmel <idosch@nvidia.com>,
+        Amit Cohen <amcohen@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 051/124] selftests: mlxsw: vxlan_flooding: Prevent flooding of unwanted packets
 Date:   Tue, 26 Apr 2022 10:20:52 +0200
-Message-Id: <20220426081736.015572465@linuxfoundation.org>
+Message-Id: <20220426081748.752816049@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
-References: <20220426081735.651926456@linuxfoundation.org>
+In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
+References: <20220426081747.286685339@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Ido Schimmel <idosch@nvidia.com>
 
-[ Upstream commit 7104b9cb35a33ad803a1adbbfa50569b008faf15 ]
+[ Upstream commit 044011fdf162c5dd61c02841930c8f438a9adadb ]
 
-of_parse_phandle() returns NULL on errors, rather than error
-pointers. Using NULL check on grp_np to fix this.
+The test verifies that packets are correctly flooded by the bridge and
+the VXLAN device by matching on the encapsulated packets at the other
+end. However, if packets other than those generated by the test also
+ingress the bridge (e.g., MLD packets), they will be flooded as well and
+interfere with the expected count.
 
-Fixes: d078cd1b4185 ("dmaengine: imx-sdma: Add imx6sx platform support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220308064952.15743-1-linmq006@gmail.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Make the test more robust by making sure that only the packets generated
+by the test can ingress the bridge. Drop all the rest using tc filters
+on the egress of 'br0' and 'h1'.
+
+In the software data path, the problem can be solved by matching on the
+inner destination MAC or dropping unwanted packets at the egress of the
+VXLAN device, but this is not currently supported by mlxsw.
+
+Fixes: 94d302deae25 ("selftests: mlxsw: Add a test for VxLAN flooding")
+Signed-off-by: Ido Schimmel <idosch@nvidia.com>
+Reviewed-by: Amit Cohen <amcohen@nvidia.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma/imx-sdma.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../drivers/net/mlxsw/vxlan_flooding.sh         | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
-index eea89c3b54c1..709ead443fc5 100644
---- a/drivers/dma/imx-sdma.c
-+++ b/drivers/dma/imx-sdma.c
-@@ -1771,7 +1771,7 @@ static int sdma_event_remap(struct sdma_engine *sdma)
- 	u32 reg, val, shift, num_map, i;
- 	int ret = 0;
+diff --git a/tools/testing/selftests/drivers/net/mlxsw/vxlan_flooding.sh b/tools/testing/selftests/drivers/net/mlxsw/vxlan_flooding.sh
+index fedcb7b35af9..af5ea50ed5c0 100755
+--- a/tools/testing/selftests/drivers/net/mlxsw/vxlan_flooding.sh
++++ b/tools/testing/selftests/drivers/net/mlxsw/vxlan_flooding.sh
+@@ -172,6 +172,17 @@ flooding_filters_add()
+ 	local lsb
+ 	local i
  
--	if (IS_ERR(np) || IS_ERR(gpr_np))
-+	if (IS_ERR(np) || !gpr_np)
- 		goto out;
++	# Prevent unwanted packets from entering the bridge and interfering
++	# with the test.
++	tc qdisc add dev br0 clsact
++	tc filter add dev br0 egress protocol all pref 1 handle 1 \
++		matchall skip_hw action drop
++	tc qdisc add dev $h1 clsact
++	tc filter add dev $h1 egress protocol all pref 1 handle 1 \
++		flower skip_hw dst_mac de:ad:be:ef:13:37 action pass
++	tc filter add dev $h1 egress protocol all pref 2 handle 2 \
++		matchall skip_hw action drop
++
+ 	tc qdisc add dev $rp2 clsact
  
- 	event_remap = of_find_property(np, propname, NULL);
-@@ -1819,7 +1819,7 @@ static int sdma_event_remap(struct sdma_engine *sdma)
- 	}
+ 	for i in $(eval echo {1..$num_remotes}); do
+@@ -194,6 +205,12 @@ flooding_filters_del()
+ 	done
  
- out:
--	if (!IS_ERR(gpr_np))
-+	if (gpr_np)
- 		of_node_put(gpr_np);
+ 	tc qdisc del dev $rp2 clsact
++
++	tc filter del dev $h1 egress protocol all pref 2 handle 2 matchall
++	tc filter del dev $h1 egress protocol all pref 1 handle 1 flower
++	tc qdisc del dev $h1 clsact
++	tc filter del dev br0 egress protocol all pref 1 handle 1 matchall
++	tc qdisc del dev br0 clsact
+ }
  
- 	return ret;
+ flooding_check_packets()
 -- 
 2.35.1
 

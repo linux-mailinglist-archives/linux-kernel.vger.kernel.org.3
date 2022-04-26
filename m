@@ -2,135 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F3350F13E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:40:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B178B50F158
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:43:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245399AbiDZGnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 02:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46992 "EHLO
+        id S245461AbiDZGpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 02:45:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245306AbiDZGnU (ORCPT
+        with ESMTP id S1343498AbiDZGoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 02:43:20 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6445632E
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:40:12 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id kq17so10860647ejb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:40:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=YQBirjcHw1XssjMgenO6HRfRZsWWatGT2BxMsOHFYCE=;
-        b=IBjeDJUQPPgNrNiqtJATmu07ecSQmbmK+jJQ9Qkqm68KYBT2mZNkWUVJVPy5PP28iC
-         ZZ5YiSPdZxmlFb9F21Hv6A+edHNDWn1wc2SnbnTRFUMJQVRVZYnI6etGe9iHNhOZg5fG
-         RMKKEG/rXDg2iKI6iDxzFMiZH+w+BxAN7X+a15HLRXcrIZBPXGDDzgfbFlnhh5Mo+Xwc
-         5QLsw9I2ampq1hTraxXnKTLSoGq6LkPZCV7WBSQhuah3W2lWXHHgu1iftsIPNLV/YbGG
-         MGepN8bjr7Iauo5KoUBkHqk4ReN7oFG+cfLmxYq0peiDALMtxKCbbfG3TQ89HGsNxOcy
-         k0qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=YQBirjcHw1XssjMgenO6HRfRZsWWatGT2BxMsOHFYCE=;
-        b=7z1er0LzYsYhNW6T+14gPew36568KLAPSBH7fPBkk8PbWsLg44TEQ7tBeHrTNFl/J2
-         IWuRqzLhZijSm+z5EhAwn1ZiA0gaEzEWS5B/4iKb8QpCXx5wMFaOpvB0e+/i8TW5aqp/
-         vIRHgxh4JQ/vM8h99c614OPD888Yyhxnd3FDBVda32k9zhEkObJOcZs4qGbp7hXDdPJ9
-         IH/vkN8NrQkt2oQgsy0JttLHcea5ZwetFwACiojVkj0vsUDuTk6MTVGg1CBcL+Bb8phA
-         N/NDl5cTNe0r5PtakDnVj83kpR99c1cYdRZ8JjYr5Rq/DU/pXnzO8AbbLxD7ze+hRrhs
-         0J/Q==
-X-Gm-Message-State: AOAM532Je1WVAAsafgXUEI4Fuqr9nk4J3v02C3yxRgYq2jBAgHVVChgD
-        dU6S6sTguz7LPwHa3MzR/LowkQ==
-X-Google-Smtp-Source: ABdhPJxZhXFQhcEzCB8B5dlgOiWdecKG+rf6v1oIMQ4/m9NvZbzVShnAUy6VkZ6totD6LEgaHzmIYQ==
-X-Received: by 2002:a17:907:8a0d:b0:6f3:a595:6136 with SMTP id sc13-20020a1709078a0d00b006f3a5956136mr4544804ejc.54.1650955211482;
-        Mon, 25 Apr 2022 23:40:11 -0700 (PDT)
-Received: from [192.168.0.244] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id r13-20020a508d8d000000b00425d3555fc6sm4309024edh.30.2022.04.25.23.40.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 23:40:11 -0700 (PDT)
-Message-ID: <8498c0b4-ed1f-b4a0-d53c-a7addf75ea66@linaro.org>
-Date:   Tue, 26 Apr 2022 08:40:09 +0200
+        Tue, 26 Apr 2022 02:44:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8696011A07
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:41:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650955265;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PaxfFpiwJIOoU//KMEFt34Dr7h93sV4bGjReNBc2liQ=;
+        b=CH3pBbSEoMBH5T0KlhE0Iqt5nzd9J0qF5bmm1dFhUE5Vlczb/H9xib72KH8hglvLLdPwip
+        aS/78KcIBoDBfGZqITCOp4O+Yxa1QuDG5dup8sTFw1T7Sd211kYoqxIzDJgAb86DFucSQC
+        58OmPoXZFAOTtoiLgjCpY69hOEJN+OM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-227-j3eAS5owPFKpkX7Q1MXcXQ-1; Tue, 26 Apr 2022 02:41:01 -0400
+X-MC-Unique: j3eAS5owPFKpkX7Q1MXcXQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B0D42800882;
+        Tue, 26 Apr 2022 06:41:00 +0000 (UTC)
+Received: from [10.72.13.230] (ovpn-13-230.pek2.redhat.com [10.72.13.230])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 04500463EC1;
+        Tue, 26 Apr 2022 06:40:52 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v6 4/9] KVM: arm64: Add vendor hypervisor firmware
+ register
+To:     Raghavendra Rao Ananta <rananta@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     kvm@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+        Peter Shier <pshier@google.com>, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Will Deacon <will@kernel.org>, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel@lists.infradead.org
+References: <20220423000328.2103733-1-rananta@google.com>
+ <20220423000328.2103733-5-rananta@google.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <a5c43c41-8981-07f7-8bc7-6aabbaa05436@redhat.com>
+Date:   Tue, 26 Apr 2022 14:40:47 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] dt-bindings: clock: qcom,gcc-apq8064: Fix typo in
- compatible and split apq8084
+In-Reply-To: <20220423000328.2103733-5-rananta@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
-        Ansuel Smith <ansuelsmth@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Taniya Das <quic_tdas@quicinc.com>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh@kernel.org>
-References: <20220425204001.710238-1-krzysztof.kozlowski@linaro.org>
- <20220425224000.CB7F3C385A4@smtp.kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220425224000.CB7F3C385A4@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/04/2022 00:39, Stephen Boyd wrote:
-> Quoting Krzysztof Kozlowski (2022-04-25 13:40:01)
->> The qcom,gcc-apq8064.yaml was meant to describe only APQ8064 and APQ8084
->> should have slightly different bindings (without Qualcomm thermal sensor
->> device).
->>
->> Fixes: a469bf89a009 ("dt-bindings: clock: simplify qcom,gcc-apq8064 Documentation")
->> Reported-by: Rob Herring <robh@kernel.org>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>  .../bindings/clock/qcom,gcc-apq8064.yaml      |  4 +-
->>  .../bindings/clock/qcom,gcc-apq8084.yaml      | 42 +++++++++++++++++++
->>  2 files changed, 43 insertions(+), 3 deletions(-)
->>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-apq8084.yaml
+On 4/23/22 8:03 AM, Raghavendra Rao Ananta wrote:
+> Introduce the firmware register to hold the vendor specific
+> hypervisor service calls (owner value 6) as a bitmap. The
+> bitmap represents the features that'll be enabled for the
+> guest, as configured by the user-space. Currently, this
+> includes support for KVM-vendor features along with
+> reading the UID, represented by bit-0, and Precision Time
+> Protocol (PTP), represented by bit-1.
 > 
-> If it's generated with 'format-patch -C -M' does it detect the copy?
-
-Nope, and I think these are default. The files are not that similar,
-because while copying I cleaned it up.
-
-format-patch -C20% -M20% also does not detect it. Only `git format-patch
--1 -C20% -M20% --find-copies-harder` detects a copy. I will use it, but
-you won't see nice copy-patch.
-
+> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> ---
+>   arch/arm64/include/asm/kvm_host.h |  2 ++
+>   arch/arm64/include/uapi/asm/kvm.h |  4 ++++
+>   arch/arm64/kvm/hypercalls.c       | 23 ++++++++++++++++++-----
+>   include/kvm/arm_hypercalls.h      |  2 ++
+>   4 files changed, 26 insertions(+), 5 deletions(-)
 > 
->>
->> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-apq8084.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-apq8084.yaml
->> new file mode 100644
->> index 000000000000..63d08e82b3d8
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc-apq8084.yaml
->> @@ -0,0 +1,42 @@
->> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/clock/qcom,gcc-apq8084.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Qualcomm Global Clock & Reset Controller Binding for APQ8084
->> +
->> +maintainers:
->> +  - Stephen Boyd <sboyd@kernel.org>
->> +  - Taniya Das <tdas@codeaurora.org>
+
+Reviewed-by: Gavin Shan <gshan@redhat.com>
+
+> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> index 27d4b2a7970e..a025c2ba012a 100644
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -106,10 +106,12 @@ struct kvm_arch_memory_slot {
+>    *
+>    * @std_bmap: Bitmap of standard secure service calls
+>    * @std_hyp_bmap: Bitmap of standard hypervisor service calls
+> + * @vendor_hyp_bmap: Bitmap of vendor specific hypervisor service calls
+>    */
+>   struct kvm_smccc_features {
+>   	unsigned long std_bmap;
+>   	unsigned long std_hyp_bmap;
+> +	unsigned long vendor_hyp_bmap;
+>   };
+>   
+>   struct kvm_arch {
+> diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
+> index 9eecc7ee8c14..e7d5ae222684 100644
+> --- a/arch/arm64/include/uapi/asm/kvm.h
+> +++ b/arch/arm64/include/uapi/asm/kvm.h
+> @@ -344,6 +344,10 @@ struct kvm_arm_copy_mte_tags {
+>   #define KVM_REG_ARM_STD_HYP_BMAP		KVM_REG_ARM_FW_FEAT_BMAP_REG(1)
+>   #define KVM_REG_ARM_STD_HYP_BIT_PV_TIME		0
+>   
+> +#define KVM_REG_ARM_VENDOR_HYP_BMAP		KVM_REG_ARM_FW_FEAT_BMAP_REG(2)
+> +#define KVM_REG_ARM_VENDOR_HYP_BIT_FUNC_FEAT	0
+> +#define KVM_REG_ARM_VENDOR_HYP_BIT_PTP		1
+> +
+>   /* Device Control API: ARM VGIC */
+>   #define KVM_DEV_ARM_VGIC_GRP_ADDR	0
+>   #define KVM_DEV_ARM_VGIC_GRP_DIST_REGS	1
+> diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
+> index f097bebdad39..76e626d0e699 100644
+> --- a/arch/arm64/kvm/hypercalls.c
+> +++ b/arch/arm64/kvm/hypercalls.c
+> @@ -72,9 +72,6 @@ static bool kvm_hvc_call_default_allowed(struct kvm_vcpu *vcpu, u32 func_id)
+>   	 */
+>   	case ARM_SMCCC_VERSION_FUNC_ID:
+>   	case ARM_SMCCC_ARCH_FEATURES_FUNC_ID:
+> -	case ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID:
+> -	case ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID:
+> -	case ARM_SMCCC_VENDOR_HYP_KVM_PTP_FUNC_ID:
+>   		return true;
+>   	default:
+>   		return kvm_psci_func_id_is_valid(vcpu, func_id);
+> @@ -97,6 +94,13 @@ static bool kvm_hvc_call_allowed(struct kvm_vcpu *vcpu, u32 func_id)
+>   	case ARM_SMCCC_HV_PV_TIME_ST:
+>   		return kvm_arm_fw_reg_feat_enabled(&smccc_feat->std_hyp_bmap,
+>   					KVM_REG_ARM_STD_HYP_BIT_PV_TIME);
+> +	case ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID:
+> +	case ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID:
+> +		return kvm_arm_fw_reg_feat_enabled(&smccc_feat->vendor_hyp_bmap,
+> +					KVM_REG_ARM_VENDOR_HYP_BIT_FUNC_FEAT);
+> +	case ARM_SMCCC_VENDOR_HYP_KVM_PTP_FUNC_ID:
+> +		return kvm_arm_fw_reg_feat_enabled(&smccc_feat->vendor_hyp_bmap,
+> +					KVM_REG_ARM_VENDOR_HYP_BIT_PTP);
+>   	default:
+>   		return kvm_hvc_call_default_allowed(vcpu, func_id);
+>   	}
+> @@ -189,8 +193,7 @@ int kvm_hvc_call_handler(struct kvm_vcpu *vcpu)
+>   		val[3] = ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_3;
+>   		break;
+>   	case ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID:
+> -		val[0] = BIT(ARM_SMCCC_KVM_FUNC_FEATURES);
+> -		val[0] |= BIT(ARM_SMCCC_KVM_FUNC_PTP);
+> +		val[0] = smccc_feat->vendor_hyp_bmap;
+>   		break;
+>   	case ARM_SMCCC_VENDOR_HYP_KVM_PTP_FUNC_ID:
+>   		kvm_ptp_get_time(vcpu, val);
+> @@ -217,6 +220,7 @@ static const u64 kvm_arm_fw_reg_ids[] = {
+>   	KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3,
+>   	KVM_REG_ARM_STD_BMAP,
+>   	KVM_REG_ARM_STD_HYP_BMAP,
+> +	KVM_REG_ARM_VENDOR_HYP_BMAP,
+>   };
+>   
+>   void kvm_arm_init_hypercalls(struct kvm *kvm)
+> @@ -225,6 +229,7 @@ void kvm_arm_init_hypercalls(struct kvm *kvm)
+>   
+>   	smccc_feat->std_bmap = KVM_ARM_SMCCC_STD_FEATURES;
+>   	smccc_feat->std_hyp_bmap = KVM_ARM_SMCCC_STD_HYP_FEATURES;
+> +	smccc_feat->vendor_hyp_bmap = KVM_ARM_SMCCC_VENDOR_HYP_FEATURES;
+>   }
+>   
+>   int kvm_arm_get_fw_num_regs(struct kvm_vcpu *vcpu)
+> @@ -317,6 +322,9 @@ int kvm_arm_get_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+>   	case KVM_REG_ARM_STD_HYP_BMAP:
+>   		val = READ_ONCE(smccc_feat->std_hyp_bmap);
+>   		break;
+> +	case KVM_REG_ARM_VENDOR_HYP_BMAP:
+> +		val = READ_ONCE(smccc_feat->vendor_hyp_bmap);
+> +		break;
+>   	default:
+>   		return -ENOENT;
+>   	}
+> @@ -343,6 +351,10 @@ static int kvm_arm_set_fw_reg_bmap(struct kvm_vcpu *vcpu, u64 reg_id, u64 val)
+>   		fw_reg_bmap = &smccc_feat->std_hyp_bmap;
+>   		fw_reg_features = KVM_ARM_SMCCC_STD_HYP_FEATURES;
+>   		break;
+> +	case KVM_REG_ARM_VENDOR_HYP_BMAP:
+> +		fw_reg_bmap = &smccc_feat->vendor_hyp_bmap;
+> +		fw_reg_features = KVM_ARM_SMCCC_VENDOR_HYP_FEATURES;
+> +		break;
+>   	default:
+>   		return -ENOENT;
+>   	}
+> @@ -445,6 +457,7 @@ int kvm_arm_set_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+>   		return 0;
+>   	case KVM_REG_ARM_STD_BMAP:
+>   	case KVM_REG_ARM_STD_HYP_BMAP:
+> +	case KVM_REG_ARM_VENDOR_HYP_BMAP:
+>   		return kvm_arm_set_fw_reg_bmap(vcpu, reg->id, val);
+>   	default:
+>   		return -ENOENT;
+> diff --git a/include/kvm/arm_hypercalls.h b/include/kvm/arm_hypercalls.h
+> index aadd6ae3ab72..4ebfdd26e486 100644
+> --- a/include/kvm/arm_hypercalls.h
+> +++ b/include/kvm/arm_hypercalls.h
+> @@ -9,9 +9,11 @@
+>   /* Last valid bits of the bitmapped firmware registers */
+>   #define KVM_REG_ARM_STD_BMAP_BIT_MAX		0
+>   #define KVM_REG_ARM_STD_HYP_BMAP_BIT_MAX	0
+> +#define KVM_REG_ARM_VENDOR_HYP_BMAP_BIT_MAX	1
+>   
+>   #define KVM_ARM_SMCCC_STD_FEATURES		GENMASK(KVM_REG_ARM_STD_BMAP_BIT_MAX, 0)
+>   #define KVM_ARM_SMCCC_STD_HYP_FEATURES		GENMASK(KVM_REG_ARM_STD_HYP_BMAP_BIT_MAX, 0)
+> +#define KVM_ARM_SMCCC_VENDOR_HYP_FEATURES	GENMASK(KVM_REG_ARM_VENDOR_HYP_BMAP_BIT_MAX, 0)
+>   
+>   int kvm_hvc_call_handler(struct kvm_vcpu *vcpu);
+>   
 > 
-> Please fix Taniya's email quic_tdas@quicinc.com
 
-I wished Codeaurora/QUIC folks updated their emails all over the tree
-because otherwise it looks like they do not want or cannot maintain
-these files.
-
-Best regards,
-Krzysztof

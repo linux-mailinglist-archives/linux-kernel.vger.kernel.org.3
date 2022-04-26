@@ -2,67 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A96B50FCDA
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 14:26:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FF0450FCE3
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 14:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348832AbiDZM2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 08:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54110 "EHLO
+        id S1349892AbiDZMaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 08:30:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245146AbiDZM2m (ORCPT
+        with ESMTP id S1346338AbiDZMaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 08:28:42 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3596666AC9;
-        Tue, 26 Apr 2022 05:25:34 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id y21so11099303wmi.2;
-        Tue, 26 Apr 2022 05:25:34 -0700 (PDT)
+        Tue, 26 Apr 2022 08:30:15 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1602D69295;
+        Tue, 26 Apr 2022 05:27:08 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id a1so16475255edt.3;
+        Tue, 26 Apr 2022 05:27:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AEGDxEoZo4Owm1HQ+h+bYb/0LtcFO1Dwja4aXVPVeOE=;
-        b=iwLyqGtidwR4gF1oF0MSpetu/hE/KigWy9ZiBW3FhLFPnVcCGv7nc3W58WS+tCNgr8
-         2lnYmmkS0dBw4gjOBu67C02VFF5/Bv1ERcP5J+fMpSyJiT254cdKVNRluh2k4kluLVFz
-         RhYC6xO/O88/sb+H+8O38JTlfidJ3CmYuoTDhjv22cTaqK54t0iS7O15R6ixYzcHO3Lt
-         J9lttcMeLhP3iqgIAdvSJO3PrH7tBQ99lWsh7fCGFOpZhtPOaU1BsoxfwSekS36iyS7T
-         L+tvhg9ExbA88vmpERVYPoOWC2IM0AK/OzcP+1cThYZpNxCmhPuJu890lXZqqumjJH28
-         r1NQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tUQrxavB/ZORPEFYd+g4E581It2+tjHhQ0R1hZx9kac=;
+        b=ZnPrsRi62/v9HJsUi4Io169wkYw6Jp8qgNE3yXWsPNEEN5M9eq6mDaWoAwCjEk57an
+         i782RzuCMHROIBq0PmkvwV+YGs2buzhiKFjw23X2LvnUUwrdCBf/cBLFaUV3hOiGlZC6
+         VqjVpFP+Ee1Du4rVfPV0vkjq2JxdQf3Ah8AariZPWrmpyZFUsaHJro3PjKJea6Jd4SU+
+         o2+BvS/117XPWgc6zkOm04bYuYobvkK81T4sIIigD86ILimXZK4f1QsdIkT45rXC+3oP
+         6kl3XV79k/YRrh4i4KDhD9eKv8OzdfSMrxQE8N5k8LNUls55O/3JVBsTI9AnyM/hO4ZA
+         RuZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AEGDxEoZo4Owm1HQ+h+bYb/0LtcFO1Dwja4aXVPVeOE=;
-        b=EQ/jXWxeLN/+vx4Hkl6CiIbLTYK6/Q3YI5otIaavJDFnPQXIDbQ8h+0IQ0UuTKunPX
-         raELdtHj6PhGWSK71AaDeoJISmOfBci9C09BtOQfw+FUyGwYElsA/qq5JDR6G81auIEr
-         ECkg/u4NCrvaDHsVnP/FVV+mOnvYThGlxVzK+3opABh8h9DcH6BPjq9Hn6lSMTh5OClb
-         0we3OxASmgoFlI37qNFqiIoCgh7C0P4iQBUBd92YZ4P/MvGuZfXtzVx68oSUxDK4ZWja
-         qgngczgnUXxAwKBhy/fEUCE/Z49QY3uaB89P3hv9Ne3168VAYnhUaZzhcxbwnt9NMMXo
-         FHKA==
-X-Gm-Message-State: AOAM532sFb2bsGTipjSS8dlrAlRLTLmJKvwDb6mnLn4Rf1xzdYIGmqiK
-        vI1PiBUKOVqqCK8bTd2hZ/s=
-X-Google-Smtp-Source: ABdhPJwWzZt/8S2psE8et87L+MMPxiSEMyaRtYt7FZ21rmoYGjJxFMtbPsGM8oc2Rp1taF5F0mWt5w==
-X-Received: by 2002:a05:600c:3c86:b0:392:990b:ae29 with SMTP id bg6-20020a05600c3c8600b00392990bae29mr30016938wmb.105.1650975932670;
-        Tue, 26 Apr 2022 05:25:32 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id c13-20020adfa30d000000b0020adc82de11sm4848195wrb.26.2022.04.26.05.25.31
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tUQrxavB/ZORPEFYd+g4E581It2+tjHhQ0R1hZx9kac=;
+        b=LWt2JuprMXW9+YYtu7spVX6S3MLgqX58souXzUrl4ShOzEmZnaNzwId8fiXJYbxV0I
+         P5I2oRh2cUkqhEa2CPMUj1/BXDmDDSoZhtg9DxyqvcWNNJ1rpM+tPA0LA9qNjbdwEhLS
+         1rCv0fw1GAg9nrTvAmhXFMiUGFA9C6rnnpwGBQQX0a6W/ruqqZScPl8x2brNIz4etLa6
+         xV34dxgcStbqCGkKZwlvJmiiPZARZEj88/42kV3xt9TDxNHMW91XCCq94qUDDTkCaw07
+         BcLBTGmOmFWZhtunfZOSoNyLTtC0GmdJWCWlQmSJ4H7h5P3P8lriauGLYGLKcok7izo4
+         0z5A==
+X-Gm-Message-State: AOAM531L79vRkBXeBVu+4mdtsRnlp0FUOKTdfGWshpdhPqQdnVWksg26
+        HMk4WA13OpfYnztLpZHfhuE=
+X-Google-Smtp-Source: ABdhPJya0Jw62MjF+PG5dCtkf26KarZPuivNh7Vg8KYNoMVUS9wIwNXKm932IfOH8VJ4hUeS4w7CQQ==
+X-Received: by 2002:a05:6402:1d90:b0:425:dd36:447c with SMTP id dk16-20020a0564021d9000b00425dd36447cmr13616178edb.347.1650976026463;
+        Tue, 26 Apr 2022 05:27:06 -0700 (PDT)
+Received: from krava ([193.85.244.190])
+        by smtp.gmail.com with ESMTPSA id e26-20020a50a69a000000b00425c11446fasm5894150edc.3.2022.04.26.05.27.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 05:25:32 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>,
-        Babu Moger <babu.moger@amd.com>,
-        linux-kselftest@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][V2] selftests/resctrl: Fix null pointer dereference on open failed
-Date:   Tue, 26 Apr 2022 13:25:31 +0100
-Message-Id: <20220426122531.1506634-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 26 Apr 2022 05:27:05 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 14:27:04 +0200
+From:   Jiri Olsa <olsajiri@gmail.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Subject: Re: [PATCHv2 bpf-next 1/4] kallsyms: Add kallsyms_lookup_names
+ function
+Message-ID: <YmflGEbjkp8mynxK@krava>
+References: <20220418124834.829064-1-jolsa@kernel.org>
+ <20220418124834.829064-2-jolsa@kernel.org>
+ <20220418233546.dfe0a1be12193c26b05cdd93@kernel.org>
+ <Yl5yHVOJpCYr+T3r@krava>
+ <YmJPcU9dahEatb0f@krava>
+ <20220426190108.d9c76f5ccff52e27dbef21af@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220426190108.d9c76f5ccff52e27dbef21af@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -73,46 +82,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently if opening /dev/null fails to open then file pointer fp
-is null and further access to fp via fprintf will cause a null
-pointer dereference. Fix this by returning a negative error value
-when a null fp is detected.
+On Tue, Apr 26, 2022 at 07:01:08PM +0900, Masami Hiramatsu wrote:
+> Hi Jiri,
+> 
+> Sorry for replying late.
+> 
+> On Fri, 22 Apr 2022 08:47:13 +0200
+> Jiri Olsa <olsajiri@gmail.com> wrote:
+> 
+> > On Tue, Apr 19, 2022 at 10:26:05AM +0200, Jiri Olsa wrote:
+> > 
+> > SNIP
+> > 
+> > > > > +static int kallsyms_callback(void *data, const char *name,
+> > > > > +			     struct module *mod, unsigned long addr)
+> > > > > +{
+> > > > > +	struct kallsyms_data *args = data;
+> > > > > +
+> > > > > +	if (!bsearch(&name, args->syms, args->cnt, sizeof(*args->syms), symbols_cmp))
+> > > > > +		return 0;
+> > > > > +
+> > > > > +	addr = ftrace_location(addr);
+> > > > > +	if (!addr)
+> > > > > +		return 0;
+> > > > 
+> > > > Ooops, wait. Did you do this last version? I missed this point.
+> > > > This changes the meanings of the kernel function.
+> > > 
+> > > yes, it was there before ;-) and you're right.. so some archs can
+> > > return different address, I did not realize that
+> > > 
+> > > > 
+> > > > > +
+> > > > > +	args->addrs[args->found++] = addr;
+> > > > > +	return args->found == args->cnt ? 1 : 0;
+> > > > > +}
+> > > > > +
+> > > > > +/**
+> > > > > + * kallsyms_lookup_names - Lookup addresses for array of symbols
+> > > > 
+> > > > More correctly "Lookup 'ftraced' addresses for array of sorted symbols", right?
+> > > > 
+> > > > I'm not sure, we can call it as a 'kallsyms' API, since this is using
+> > > > kallsyms but doesn't return symbol address, but ftrace address.
+> > > > I think this name misleads user to expect returning symbol address.
+> > > > 
+> > > > > + *
+> > > > > + * @syms: array of symbols pointers symbols to resolve, must be
+> > > > > + * alphabetically sorted
+> > > > > + * @cnt: number of symbols/addresses in @syms/@addrs arrays
+> > > > > + * @addrs: array for storing resulting addresses
+> > > > > + *
+> > > > > + * This function looks up addresses for array of symbols provided in
+> > > > > + * @syms array (must be alphabetically sorted) and stores them in
+> > > > > + * @addrs array, which needs to be big enough to store at least @cnt
+> > > > > + * addresses.
+> > > > 
+> > > > Hmm, sorry I changed my mind. I rather like to expose kallsyms_on_each_symbol()
+> > > > and provide this API from fprobe or ftrace, because this returns ftrace address
+> > > > and thus this is only used from fprobe.
+> > > 
+> > > ok, so how about:
+> > > 
+> > >   int ftrace_lookup_symbols(const char **sorted_syms, size_t cnt, unsigned long *addrs);
+> > 
+> > quick question.. is it ok if it stays in kalsyms.c object?
+> 
+> I think if this is for the ftrace API, I think it should be in the ftrace.c, and
+> it can remove unneeded #ifdefs in C code.
+> 
+> > 
+> > so we don't need to expose kallsyms_on_each_symbol,
+> > and it stays in 'kalsyms' place
+> 
+> We don't need to expose it to modules, but just make it into a global scope.
+> I don't think that doesn't cause a problem.
 
-Detected using cppcheck static analysis:
-tools/testing/selftests/resctrl/fill_buf.c:124:6: note: Assuming
-that condition '!fp' is not redundant
- if (!fp)
-     ^
-tools/testing/selftests/resctrl/fill_buf.c:126:10: note: Null
-pointer dereference
- fprintf(fp, "Sum: %d ", ret);
+np, will move it to ftrace
 
-Fixes: a2561b12fe39 ("selftests/resctrl: Add built in benchmark")
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
-
-V2: Add cppcheck analysis information
-
----
- tools/testing/selftests/resctrl/fill_buf.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/resctrl/fill_buf.c b/tools/testing/selftests/resctrl/fill_buf.c
-index 51e5cf22632f..56ccbeae0638 100644
---- a/tools/testing/selftests/resctrl/fill_buf.c
-+++ b/tools/testing/selftests/resctrl/fill_buf.c
-@@ -121,8 +121,10 @@ static int fill_cache_read(unsigned char *start_ptr, unsigned char *end_ptr,
- 
- 	/* Consume read result so that reading memory is not optimized out. */
- 	fp = fopen("/dev/null", "w");
--	if (!fp)
-+	if (!fp) {
- 		perror("Unable to write to /dev/null");
-+		return -1;
-+	}
- 	fprintf(fp, "Sum: %d ", ret);
- 	fclose(fp);
- 
--- 
-2.35.1
-
+thanks,
+jirka

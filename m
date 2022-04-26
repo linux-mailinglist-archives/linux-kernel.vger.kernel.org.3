@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C534E50F7EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4336550F77C
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:40:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230495AbiDZJWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:22:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55792 "EHLO
+        id S1347956AbiDZJiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:38:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345713AbiDZI5o (ORCPT
+        with ESMTP id S1346270AbiDZJH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:57:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15456411;
-        Tue, 26 Apr 2022 01:42:25 -0700 (PDT)
+        Tue, 26 Apr 2022 05:07:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33382175F9C;
+        Tue, 26 Apr 2022 01:48:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D2E160A29;
-        Tue, 26 Apr 2022 08:42:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F21BC385A0;
-        Tue, 26 Apr 2022 08:42:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C488160C42;
+        Tue, 26 Apr 2022 08:48:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB1ECC385A0;
+        Tue, 26 Apr 2022 08:48:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962544;
-        bh=2/IZvJ+qVFTh6s3x4X3bG8Ze9HfhPuFDaBwbS1++4Yk=;
+        s=korg; t=1650962909;
+        bh=A56fKUb9QhTkuY0ANZnth/JLehVBCPkqJ2mcbTQY0F4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MBDUA6+a0bJUAsGJXW/9SaWap3u3uquEgk8MXWW92tEweyUCXy0rHkRZ48HtRioFx
-         pizPd/MrvRV76WId9Xcn1LOK6qcLqHGtzqmEV9yNlnSSaC1zpZKoY6t6ZeY+0yk48i
-         tMkYMev/AxWoveVglvKhF4jpBCCFITduM2Oxzt2w=
+        b=wrCououv+o3ZOuPDhwyfBWVqnnkooVj/ZEUKFogRHUdDSP4iZUmal0qMljkBILk7u
+         cSO/Kxbr7CWUk9P+mGMJ6cOLdS/BI1vACYNoSljgmIezr1IHu6VC1I7H9yI2ISp0Vu
+         VnhQOyY3Yb+IFQjgnWjQOGOZ43i6ib/LZoyp9W/E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ye Bin <yebin10@huawei.com>,
-        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 5.15 121/124] jbd2: fix a potential race while discarding reserved buffers after an abort
-Date:   Tue, 26 Apr 2022 10:22:02 +0200
-Message-Id: <20220426081750.729172673@linuxfoundation.org>
+        stable@vger.kernel.org, Dongli Cao <caodongli@kingsoft.com>,
+        Like Xu <likexu@tencent.com>,
+        Yanan Wang <wangyanan55@huawei.com>,
+        Jim Mattson <jmattson@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.17 128/146] KVM: x86/pmu: Update AMD PMC sample period to fix guest NMI-watchdog
+Date:   Tue, 26 Apr 2022 10:22:03 +0200
+Message-Id: <20220426081753.660138313@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
-References: <20220426081747.286685339@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,116 +56,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
+From: Like Xu <likexu@tencent.com>
 
-commit 23e3d7f7061f8682c751c46512718f47580ad8f0 upstream.
+commit 75189d1de1b377e580ebd2d2c55914631eac9c64 upstream.
 
-we got issue as follows:
-[   72.796117] EXT4-fs error (device sda): ext4_journal_check_start:83: comm fallocate: Detected aborted journal
-[   72.826847] EXT4-fs (sda): Remounting filesystem read-only
-fallocate: fallocate failed: Read-only file system
-[   74.791830] jbd2_journal_commit_transaction: jh=0xffff9cfefe725d90 bh=0x0000000000000000 end delay
-[   74.793597] ------------[ cut here ]------------
-[   74.794203] kernel BUG at fs/jbd2/transaction.c:2063!
-[   74.794886] invalid opcode: 0000 [#1] PREEMPT SMP PTI
-[   74.795533] CPU: 4 PID: 2260 Comm: jbd2/sda-8 Not tainted 5.17.0-rc8-next-20220315-dirty #150
-[   74.798327] RIP: 0010:__jbd2_journal_unfile_buffer+0x3e/0x60
-[   74.801971] RSP: 0018:ffffa828c24a3cb8 EFLAGS: 00010202
-[   74.802694] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-[   74.803601] RDX: 0000000000000001 RSI: ffff9cfefe725d90 RDI: ffff9cfefe725d90
-[   74.804554] RBP: ffff9cfefe725d90 R08: 0000000000000000 R09: ffffa828c24a3b20
-[   74.805471] R10: 0000000000000001 R11: 0000000000000001 R12: ffff9cfefe725d90
-[   74.806385] R13: ffff9cfefe725d98 R14: 0000000000000000 R15: ffff9cfe833a4d00
-[   74.807301] FS:  0000000000000000(0000) GS:ffff9d01afb00000(0000) knlGS:0000000000000000
-[   74.808338] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   74.809084] CR2: 00007f2b81bf4000 CR3: 0000000100056000 CR4: 00000000000006e0
-[   74.810047] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[   74.810981] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[   74.811897] Call Trace:
-[   74.812241]  <TASK>
-[   74.812566]  __jbd2_journal_refile_buffer+0x12f/0x180
-[   74.813246]  jbd2_journal_refile_buffer+0x4c/0xa0
-[   74.813869]  jbd2_journal_commit_transaction.cold+0xa1/0x148
-[   74.817550]  kjournald2+0xf8/0x3e0
-[   74.819056]  kthread+0x153/0x1c0
-[   74.819963]  ret_from_fork+0x22/0x30
+NMI-watchdog is one of the favorite features of kernel developers,
+but it does not work in AMD guest even with vPMU enabled and worse,
+the system misrepresents this capability via /proc.
 
-Above issue may happen as follows:
-        write                   truncate                   kjournald2
-generic_perform_write
- ext4_write_begin
-  ext4_walk_page_buffers
-   do_journal_get_write_access ->add BJ_Reserved list
- ext4_journalled_write_end
-  ext4_walk_page_buffers
-   write_end_fn
-    ext4_handle_dirty_metadata
-                ***************JBD2 ABORT**************
-     jbd2_journal_dirty_metadata
- -> return -EROFS, jh in reserved_list
-                                                   jbd2_journal_commit_transaction
-                                                    while (commit_transaction->t_reserved_list)
-                                                      jh = commit_transaction->t_reserved_list;
-                        truncate_pagecache_range
-                         do_invalidatepage
-			  ext4_journalled_invalidatepage
-			   jbd2_journal_invalidatepage
-			    journal_unmap_buffer
-			     __dispose_buffer
-			      __jbd2_journal_unfile_buffer
-			       jbd2_journal_put_journal_head ->put last ref_count
-			        __journal_remove_journal_head
-				 bh->b_private = NULL;
-				 jh->b_bh = NULL;
-				                      jbd2_journal_refile_buffer(journal, jh);
-							bh = jh2bh(jh);
-							->bh is NULL, later will trigger null-ptr-deref
-				 journal_free_journal_head(jh);
+This is a PMC emulation error. KVM does not pass the latest valid
+value to perf_event in time when guest NMI-watchdog is running, thus
+the perf_event corresponding to the watchdog counter will enter the
+old state at some point after the first guest NMI injection, forcing
+the hardware register PMC0 to be constantly written to 0x800000000001.
 
-After commit 96f1e0974575, we no longer hold the j_state_lock while
-iterating over the list of reserved handles in
-jbd2_journal_commit_transaction().  This potentially allows the
-journal_head to be freed by journal_unmap_buffer while the commit
-codepath is also trying to free the BJ_Reserved buffers.  Keeping
-j_state_lock held while trying extends hold time of the lock
-minimally, and solves this issue.
+Meanwhile, the running counter should accurately reflect its new value
+based on the latest coordinated pmc->counter (from vPMC's point of view)
+rather than the value written directly by the guest.
 
-Fixes: 96f1e0974575("jbd2: avoid long hold times of j_state_lock while committing a transaction")
-Signed-off-by: Ye Bin <yebin10@huawei.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220317142137.1821590-1-yebin10@huawei.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Fixes: 168d918f2643 ("KVM: x86: Adjust counter sample period after a wrmsr")
+Reported-by: Dongli Cao <caodongli@kingsoft.com>
+Signed-off-by: Like Xu <likexu@tencent.com>
+Reviewed-by: Yanan Wang <wangyanan55@huawei.com>
+Tested-by: Yanan Wang <wangyanan55@huawei.com>
+Reviewed-by: Jim Mattson <jmattson@google.com>
+Message-Id: <20220409015226.38619-1-likexu@tencent.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/jbd2/commit.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/x86/kvm/pmu.h           |    9 +++++++++
+ arch/x86/kvm/svm/pmu.c       |    1 +
+ arch/x86/kvm/vmx/pmu_intel.c |    8 ++------
+ 3 files changed, 12 insertions(+), 6 deletions(-)
 
---- a/fs/jbd2/commit.c
-+++ b/fs/jbd2/commit.c
-@@ -501,7 +501,6 @@ void jbd2_journal_commit_transaction(jou
- 	}
- 	spin_unlock(&commit_transaction->t_handle_lock);
- 	commit_transaction->t_state = T_SWITCH;
--	write_unlock(&journal->j_state_lock);
+--- a/arch/x86/kvm/pmu.h
++++ b/arch/x86/kvm/pmu.h
+@@ -140,6 +140,15 @@ static inline u64 get_sample_period(stru
+ 	return sample_period;
+ }
  
- 	J_ASSERT (atomic_read(&commit_transaction->t_outstanding_credits) <=
- 			journal->j_max_transaction_buffers);
-@@ -521,6 +520,8 @@ void jbd2_journal_commit_transaction(jou
- 	 * has reserved.  This is consistent with the existing behaviour
- 	 * that multiple jbd2_journal_get_write_access() calls to the same
- 	 * buffer are perfectly permissible.
-+	 * We use journal->j_state_lock here to serialize processing of
-+	 * t_reserved_list with eviction of buffers from journal_unmap_buffer().
- 	 */
- 	while (commit_transaction->t_reserved_list) {
- 		jh = commit_transaction->t_reserved_list;
-@@ -540,6 +541,7 @@ void jbd2_journal_commit_transaction(jou
- 		jbd2_journal_refile_buffer(journal, jh);
++static inline void pmc_update_sample_period(struct kvm_pmc *pmc)
++{
++	if (!pmc->perf_event || pmc->is_paused)
++		return;
++
++	perf_event_period(pmc->perf_event,
++			  get_sample_period(pmc, pmc->counter));
++}
++
+ void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel);
+ void reprogram_fixed_counter(struct kvm_pmc *pmc, u8 ctrl, int fixed_idx);
+ void reprogram_counter(struct kvm_pmu *pmu, int pmc_idx);
+--- a/arch/x86/kvm/svm/pmu.c
++++ b/arch/x86/kvm/svm/pmu.c
+@@ -257,6 +257,7 @@ static int amd_pmu_set_msr(struct kvm_vc
+ 	pmc = get_gp_pmc_amd(pmu, msr, PMU_TYPE_COUNTER);
+ 	if (pmc) {
+ 		pmc->counter += data - pmc_read_counter(pmc);
++		pmc_update_sample_period(pmc);
+ 		return 0;
  	}
- 
-+	write_unlock(&journal->j_state_lock);
- 	/*
- 	 * Now try to drop any written-back buffers from the journal's
- 	 * checkpoint lists.  We do this *before* commit because it potentially
+ 	/* MSR_EVNTSELn */
+--- a/arch/x86/kvm/vmx/pmu_intel.c
++++ b/arch/x86/kvm/vmx/pmu_intel.c
+@@ -431,15 +431,11 @@ static int intel_pmu_set_msr(struct kvm_
+ 			    !(msr & MSR_PMC_FULL_WIDTH_BIT))
+ 				data = (s64)(s32)data;
+ 			pmc->counter += data - pmc_read_counter(pmc);
+-			if (pmc->perf_event && !pmc->is_paused)
+-				perf_event_period(pmc->perf_event,
+-						  get_sample_period(pmc, data));
++			pmc_update_sample_period(pmc);
+ 			return 0;
+ 		} else if ((pmc = get_fixed_pmc(pmu, msr))) {
+ 			pmc->counter += data - pmc_read_counter(pmc);
+-			if (pmc->perf_event && !pmc->is_paused)
+-				perf_event_period(pmc->perf_event,
+-						  get_sample_period(pmc, data));
++			pmc_update_sample_period(pmc);
+ 			return 0;
+ 		} else if ((pmc = get_gp_pmc(pmu, msr, MSR_P6_EVNTSEL0))) {
+ 			if (data == pmc->eventsel)
 
 

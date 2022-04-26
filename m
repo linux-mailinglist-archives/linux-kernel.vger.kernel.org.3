@@ -2,179 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC30450FE30
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:02:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6739C50FE2B
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:02:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345720AbiDZNDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 09:03:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50810 "EHLO
+        id S1350627AbiDZND5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 09:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350486AbiDZNCR (ORCPT
+        with ESMTP id S1350641AbiDZNDo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 09:02:17 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C59C1815F6
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 05:59:05 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id w17so1207089ybh.9
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 05:59:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=eclypsium.com; s=google;
-        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
-         :cc;
-        bh=klvWna6aVMmD5xzd2dumZFpFxfWMKshDlMPwR9QCUhU=;
-        b=Snve9f0KfXixZ+c8vg5EYkQfEnS0VOwMlEfbjzSmmLeKl3CV3QY7OoAEGlUCMMiKpD
-         R3uI1qO6ciPKkLK5vtAtgpjFqwIkNnMkoTIIlq14jZ76GdxyOBwkxciG6k+P3CLvjiiz
-         d+oMOO+GBwo5DcLFG2CBUSHN7gROk7mk7kOsagRBNNw+0te+8pMeTBDhlZ8z6gI8V1nB
-         OwcO7pjnH+wqR7qbdlDmbAwik4TDeQZ2HGgpg4HMQ78iHj0vjE5dn+I5qeu85IiTJdFW
-         vB92ZbAXdrOk8XW/osb3yXoM0AJ/fCZoICH/8pvrXNcyr3lJ561gTCb3ThZOCTE8HCXH
-         NdAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
-         :message-id:subject:to:cc;
-        bh=klvWna6aVMmD5xzd2dumZFpFxfWMKshDlMPwR9QCUhU=;
-        b=GDX7DGHBaDuwD4ZPC82nDDL98nPc7s9EWEXQvfPfN3b8viTFnhgSdEwlOrwT2pad8R
-         AqpGiCZt1unmRYsyXe49wYlTSZUQuoXvhZGKbwz3jBDDXx4FTJx+5qTjG6qAuJJ591Nk
-         c3stg/vIP0FReLDM58iNiaBlWAa+T3/TlPWPE7m88Uy68BXTQRTmoXcFMVdyJbBD7+On
-         Cb0VelPSIWZjgRYrG4Ge8qjk7mYj4vxuno60cvhcKuOs/C1LvKuiGMBSoN27Mlzz2zWj
-         FlaNilop/1YQmvSqtAm6gjH/IrGt904n0w2wAtf6A6Id6rhxRkg3Vh3VcxAGaS0IKW8V
-         V6AQ==
-X-Gm-Message-State: AOAM530uHbPWS0yjvZ0fLJIH7IRGltGcJKMksrz4U7mXyLsosq2phNoz
-        E1KMkXgdth6XovOT2nki5QzL234YWLr5SkUqfENz0w==
-X-Google-Smtp-Source: ABdhPJySiRxTZpBhh3bZw12NdC/YImhj5Q/qK8XHR85blgIx7xY01atU3xGEYkhR1DoyFQ8iXTAaEH22Gry149h26oE=
-X-Received: by 2002:a25:8b03:0:b0:628:8cff:ed6c with SMTP id
- i3-20020a258b03000000b006288cffed6cmr21036112ybl.513.1650977944764; Tue, 26
- Apr 2022 05:59:04 -0700 (PDT)
+        Tue, 26 Apr 2022 09:03:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E26178F6B;
+        Tue, 26 Apr 2022 06:00:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED309B81F49;
+        Tue, 26 Apr 2022 13:00:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 611DCC385AA;
+        Tue, 26 Apr 2022 12:59:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650978002;
+        bh=STeOVJbFv0JAM+ZjVWQ3iAdUGzHt/rmNObKdTePC+ME=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=dAXHGNPCaUc4r5pI9MdXUehO2ZvpZkI6GhGX5vezp8eGr2UoCEc0bCH+9AXCGqWbb
+         neaOpOXtSg3rUTweJ7q/HMedbwbwBUQj4XNMVwak2CZLXXspxNlxH8jczgKSuAkUmm
+         9SZaARj7Fx2kNLuI71CO4AckeK/s39uwJCEhNPV1DzM82JTTDDvHehXrZGKoFtFJNK
+         UUSQIfteZfmRiiI2tkAlMd91iyL+UMviQAyG2sHqH7QjyEERD1gtIXsMVUtBEdAAZ/
+         bo/3q640ojKAipfL/DtbRwNaqvXVakHJaZZd0/qu8ESpqewv63X9ZAmZ/iWbgs8Yvn
+         7lh9IFW2RJBxQ==
+Message-ID: <a9438aef-78a3-e8ab-2b78-cc872447df08@kernel.org>
+Date:   Tue, 26 Apr 2022 14:59:57 +0200
 MIME-Version: 1.0
-Received: by 2002:a81:10a:0:0:0:0:0 with HTTP; Tue, 26 Apr 2022 05:59:04 -0700 (PDT)
-In-Reply-To: <YmeM5fklUssR/74e@kernel.org>
-References: <20220425171526.44925-1-martin.fernandez@eclypsium.com>
- <20220425171526.44925-2-martin.fernandez@eclypsium.com> <YmeM5fklUssR/74e@kernel.org>
-From:   Martin Fernandez <martin.fernandez@eclypsium.com>
-Date:   Tue, 26 Apr 2022 09:59:04 -0300
-Message-ID: <CAKgze5YwTD3neYjKNZzLz6DLWxpGPohGCDGT6oJn-KUdAxyCfg@mail.gmail.com>
-Subject: Re: [PATCH v7 1/8] mm/memblock: Tag memblocks with crypto capabilities
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
-        gregkh@linuxfoundation.org, rafael@kernel.org,
-        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
-        hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
-        alison.schofield@intel.com, keescook@chromium.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4 5/5] usb: host: add xhci-exynos driver
+Content-Language: en-US
+To:     Daehwan Jung <dh10.jung@samsung.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>, sc.suh@samsung.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+References: <1650964728-175347-1-git-send-email-dh10.jung@samsung.com>
+ <CGME20220426092023epcas2p32946c087135ca4b7e63b03915060c55d@epcas2p3.samsung.com>
+ <1650964728-175347-6-git-send-email-dh10.jung@samsung.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <1650964728-175347-6-git-send-email-dh10.jung@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/26/22, Mike Rapoport <rppt@kernel.org> wrote:
-> On Mon, Apr 25, 2022 at 02:15:19PM -0300, Martin Fernandez wrote:
->> Add the capability to mark regions of the memory memory_type able of
->> hardware memory encryption.
->>
->> Also add the capability to query if all regions of a memory node are
->> able to do hardware memory encryption to call it when initializing the
->> nodes. Warn the user if a node has both encryptable and
->> non-encryptable regions.
->>
->> Signed-off-by: Martin Fernandez <martin.fernandez@eclypsium.com>
->> ---
->>  include/linux/memblock.h |  5 ++++
->>  mm/memblock.c            | 62 ++++++++++++++++++++++++++++++++++++++++
->>  2 files changed, 67 insertions(+)
->>
->> diff --git a/include/linux/memblock.h b/include/linux/memblock.h
->> index 50ad19662a32..00c4f1a20335 100644
->> --- a/include/linux/memblock.h
->> +++ b/include/linux/memblock.h
->> @@ -40,6 +40,7 @@ extern unsigned long long max_possible_pfn;
->>   * via a driver, and never indicated in the firmware-provided memory map
->> as
->>   * system RAM. This corresponds to IORESOURCE_SYSRAM_DRIVER_MANAGED in
->> the
->>   * kernel resource tree.
->> + * @MEMBLOCK_CRYPTO_CAPABLE: capable of hardware encryption
->>   */
->>  enum memblock_flags {
->>  	MEMBLOCK_NONE		= 0x0,	/* No special request */
->> @@ -47,6 +48,7 @@ enum memblock_flags {
->>  	MEMBLOCK_MIRROR		= 0x2,	/* mirrored region */
->>  	MEMBLOCK_NOMAP		= 0x4,	/* don't add to kernel direct mapping */
->>  	MEMBLOCK_DRIVER_MANAGED = 0x8,	/* always detected via a driver */
->> +	MEMBLOCK_CRYPTO_CAPABLE = 0x10,	/* capable of hardware encryption */
->>  };
->>
->>  /**
->> @@ -120,6 +122,9 @@ int memblock_physmem_add(phys_addr_t base, phys_addr_t
->> size);
->>  void memblock_trim_memory(phys_addr_t align);
->>  bool memblock_overlaps_region(struct memblock_type *type,
->>  			      phys_addr_t base, phys_addr_t size);
->> +bool memblock_node_is_crypto_capable(int nid);
->> +int memblock_mark_crypto_capable(phys_addr_t base, phys_addr_t size);
->> +int memblock_clear_crypto_capable(phys_addr_t base, phys_addr_t size);
->>  int memblock_mark_hotplug(phys_addr_t base, phys_addr_t size);
->>  int memblock_clear_hotplug(phys_addr_t base, phys_addr_t size);
->>  int memblock_mark_mirror(phys_addr_t base, phys_addr_t size);
->> diff --git a/mm/memblock.c b/mm/memblock.c
->> index e4f03a6e8e56..fe62f81572e6 100644
->> --- a/mm/memblock.c
->> +++ b/mm/memblock.c
->> @@ -191,6 +191,40 @@ bool __init_memblock memblock_overlaps_region(struct
->> memblock_type *type,
->>  	return i < type->cnt;
->>  }
->>
->> +/**
->> + * memblock_node_is_crypto_capable - get if whole node is capable
->> + * of encryption
->> + * @nid: number of node
->> + *
->> + * Iterate over all memory memblock_type and find if all regions under
->> + * node @nid are capable of hardware encryption.
->> + *
->> + * Return:
->> + * true if every region in memory memblock_type is capable of
->
-> I'd s/in memory memblock_type/in @nid
->
+On 26/04/2022 11:18, Daehwan Jung wrote:
+> This driver is for Samsung Exynos xhci host conroller. It uses xhci-plat
+> driver mainly and extends some functions by xhci hooks and overrides.
+> 
+> It supports USB Audio offload with Co-processor. It only cares DCBAA,
+> Device Context, Transfer Ring, Event Ring, and ERST. They are allocated
+> on specific address with xhci hooks. Co-processor could use them directly
+> without xhci driver after then.
 
-Good, thanks.
+This does not look like developed in current Linux kernel, but something
+out-of-tree, with some other unknown modifications. This is not how the
+code should be developed. Please rebase on linux-next and drop any
+unrelated modifications (these which are not sent with this patchset).
 
->> + * encryption, false otherwise.
->> + */
->> +bool __init_memblock memblock_node_is_crypto_capable(int nid)
->> +{
->> +	struct memblock_region *region;
->> +	int crypto_capables = 0;
->> +	int not_crypto_capables = 0;
->> +
->> +	for_each_mem_region(region) {
->> +		if (memblock_get_region_node(region) == nid) {
->> +			if (region->flags & MEMBLOCK_CRYPTO_CAPABLE)
->> +				crypto_capables++;
->> +			else
->> +				not_crypto_capables++;
->> +		}
->> +	}
->> +
->> +	if (crypto_capables > 0 && not_crypto_capables > 0)
->> +		pr_warn("Node %d has %d regions that are encryptable and %d regions
->> that aren't",
->> +			nid, not_crypto_capables, crypto_capables);
->> +
->> +	return not_crypto_capables == 0;
->
-> This will return true for memoryless nodes as well. Do you mean to consider
-> them as capable of encryption?
->
+(...)
 
-Not really, I didn't think about that to be honest. I don't think it's
-a good idea to consider them as capable, right?
+> +
+> +static int xhci_exynos_suspend(struct device *dev)
+> +{
+> +	struct usb_hcd	*hcd = dev_get_drvdata(dev);
+> +	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
+> +
+> +	/* TODO: AP sleep scenario*/
+
+Shall the patchset be called RFC?
+
+> +
+> +	return xhci_suspend(xhci, device_may_wakeup(dev));
+> +}
+> +
+> +static int xhci_exynos_resume(struct device *dev)
+> +{
+> +	struct usb_hcd	*hcd = dev_get_drvdata(dev);
+> +	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
+> +	int ret;
+> +
+> +	/* TODO: AP resume scenario*/
+> +
+> +	ret = xhci_resume(xhci, 0);
+> +	if (ret)
+> +		return ret;
+> +
+> +	pm_runtime_disable(dev);
+> +	pm_runtime_set_active(dev);
+> +	pm_runtime_enable(dev);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct dev_pm_ops xhci_exynos_pm_ops = {
+> +	SET_SYSTEM_SLEEP_PM_OPS(xhci_exynos_suspend, xhci_exynos_resume)
+> +};
+> +
+> +MODULE_DESCRIPTION("xHCI Exynos Host Controller Driver");
+> +MODULE_LICENSE("GPL");
+
+You don't have list of compatibles (and missing bindings), driver
+definition, driver registration. Entire solution is not used - nothing
+calls xhci_exynos_vendor_init(), because nothign uses "ops".
+
+This does not work and it makes it impossible to test it. Please provide
+proper XHCI Exynos driver, assuming you need it and it is not part of
+regular Exynos XHCI drivers (DWC3 and so on).
+
+Best regards,
+Krzysztof

@@ -2,122 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 957B4510AE6
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 23:01:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C16F510AE9
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 23:02:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355237AbiDZVEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 17:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
+        id S1355242AbiDZVFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 17:05:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355231AbiDZVEH (ORCPT
+        with ESMTP id S241107AbiDZVFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 17:04:07 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD354968E
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 14:00:58 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id s27so110194ljd.2
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 14:00:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=XuA29aDgLO1+KlatFYGV6z7JwaPO2b4jY6TY2nJZayc=;
-        b=A4vDo7+4PxDGEjKjEIgn9s9IAsk/3BfZlgDtU7H4lDppEgDXVNFo1glxmQIT1WSWkp
-         frFMhLxsOXIEtjSJjhRZbw/Y3o8W5DALLAi1bjh+dTwbTJOUHmUCeLgnIjQGfU628BcB
-         VRJI4BFVCCRh9qX2klDBHj9j7wjIoxmkm3NzoCuAU0831agg6XbWo7uvX8S3Vav3aRel
-         s/xmSK8DsgNs4BU7dw6nyZ860qc36dj0mWqb4kCfH9OvHb4T+T60JjcczrWjzQNoMPqS
-         5eBXcQ/P099nKR0nN5mpwRsmmpG1j58jr4asTwejJfD3V5nGqt0SIBX9ZHnEJFyzyyu7
-         u3rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=XuA29aDgLO1+KlatFYGV6z7JwaPO2b4jY6TY2nJZayc=;
-        b=MIMzGUzEzh2/X6rc7viPjLJHRmDIFMVCnxOG/KTXeZU+wcAkLJd75LSgv9VBth2EdA
-         7cueYYd4Pwz/QDjs8i/VrWbbJUSGCP1k4o54LCegFnyNm8k3ceWLIwsmgpc6tZTqXe8M
-         ZR3Nc90deF9QdDfy4iTSXFlOA4tx5l95AQxe/Y1s/FYYIXkbJU2G5UoLd95666zJD0ZQ
-         NUOMubYWeQOHwvWg6loKiocdnen4bQUxIucwDxA1+EsrJjxZeMwwJToC3v02631/4zw3
-         3JfRtEZ87EQd5QINKI2K6Wb0TGVkKEcubCnjb04YWbqmfaXC+O4YJinYOu7Hjc1XXtLC
-         dQDg==
-X-Gm-Message-State: AOAM533MaXlvyyQFAnYnAXW7WihnSzy1sM5ZHH/Z6j/IKnNGBSU9Yl52
-        EgOZ9iCAzQHmOsC6WPu49JtKHw==
-X-Google-Smtp-Source: ABdhPJyp8jdHUf/FduZ5fKsJi96vZ13f6GkEyPMrryxQgCQ6ab/qw0G6hC4N5Z0Vj5iV4EqEBvuVAQ==
-X-Received: by 2002:a2e:b8d3:0:b0:24f:fa2:5493 with SMTP id s19-20020a2eb8d3000000b0024f0fa25493mr8447643ljp.448.1651006856329;
-        Tue, 26 Apr 2022 14:00:56 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id f14-20020a19dc4e000000b0047222c907f8sm195000lfj.33.2022.04.26.14.00.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 14:00:56 -0700 (PDT)
-Message-ID: <d46bd206-a2d3-cefb-c66a-6ed293d4d780@linaro.org>
-Date:   Wed, 27 Apr 2022 00:00:55 +0300
+        Tue, 26 Apr 2022 17:05:08 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C0649F02;
+        Tue, 26 Apr 2022 14:01:59 -0700 (PDT)
+Received: from mail-yw1-f169.google.com ([209.85.128.169]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MA7Om-1nZ2Cd3Jb0-00Bb4f; Tue, 26 Apr 2022 23:01:58 +0200
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-2ebf4b91212so196251937b3.8;
+        Tue, 26 Apr 2022 14:01:57 -0700 (PDT)
+X-Gm-Message-State: AOAM531Jmeb+wXxwTPybB2cgpXPepoLVRfxSs+7joNgFzGXF4h3ycNPo
+        rLFlIWRRGqZwYgeg2+XHIlkkYlRn3WsiKYh65F4=
+X-Google-Smtp-Source: ABdhPJy/86FV4KH1867Lm15JAmIgDQfnAK7NPGjdzs+ZuMReM3UPpqkZq2mfK0iy60GKZRpX6sFCtSy2EluixJ9sXoM=
+X-Received: by 2002:a0d:fc83:0:b0:2e5:b0f4:c125 with SMTP id
+ m125-20020a0dfc83000000b002e5b0f4c125mr24255532ywf.347.1651006916466; Tue, 26
+ Apr 2022 14:01:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v1 3/5] interconnect: qcom: icc-rpm: Change to use
- qcom_icc_xlate_extended()
-Content-Language: en-GB
-To:     Leo Yan <leo.yan@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
+References: <20220426201539.12829-1-sven@svenpeter.dev> <20220426201539.12829-6-sven@svenpeter.dev>
+In-Reply-To: <20220426201539.12829-6-sven@svenpeter.dev>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 26 Apr 2022 23:01:40 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2UEHfoDe-d=XEoTM=SS+7Lug7V1WQUa285LWdVLxjHYA@mail.gmail.com>
+Message-ID: <CAK8P3a2UEHfoDe-d=XEoTM=SS+7Lug7V1WQUa285LWdVLxjHYA@mail.gmail.com>
+Subject: Re: [PATCH v3 5/6] soc: apple: Add RTKit IPC library
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Hector Martin <marcan@marcan.st>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220416154013.1357444-1-leo.yan@linaro.org>
- <20220416154013.1357444-4-leo.yan@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220416154013.1357444-4-leo.yan@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Marc Zyngier <maz@kernel.org>, Janne Grunau <j@jannau.net>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-nvme@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:VFuEeW327at2nyzcIChUDGMSvIHITn2NnxbxqxgCaeMKNpJmsUO
+ jnlVBDQfKm+tf2Ujlx7tT9KVIRJtRKNIBOtuWIfvGLYMWMqEVNgj2AxpcHEJ3D67QeD/4xl
+ qmpcl3CipxYTvMYnrgkQsQDWR84sBfxIgYOUohin4Tx4JnqYj6h5K0IMoaP6LusNIbymNcR
+ KHoQ7UweTkKgRBrFCspOQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:8nUuzV/p2Ts=:OutXrVNzlQMqqtGLdguG+f
+ LHoaPt60bV0y4R8hbYReEFkiUPmFufZR6swS1GxW4JoRr652ky/QDPUMiY+wQ56nulzEWM4Ov
+ +lKb59Ne0CtN8jt/JT5qg/lNkGSRXtykbvVG8RbJ5/o2jvYz++2qoz7FUbtaBpHbci9Ce6+51
+ 8CooEFkvmXS6TFrDmeNYee/WDBS1BuTs1k3Dna6hiGftRk7DUbWd2J4IUE0ITOTNCXNmzNHKB
+ iPHWZoi2AlbAtZjLGcJYxjC9bl2tztiytrICUWMGAJG7TgdRjGGPyxNPfu9tWV73W9YaDk4AS
+ sdbZ0n3N3QxCbtywPlRwMm4g5k49IzbcTYN7wKlCA2GU/u5lc2pGTpEtYgYzVfuYeVKobOo4q
+ H7GS1JThs4QyI4njyXxmFAcZugEe+XENpkYK/hf+lHqd2LOW3OB7K6a0kT8a9RUTZc7RijHMa
+ O5LZm3GLlYNzS37hrU0s0v3ivK2OtQnW2nwsfEZ4V83kpEtvTjzSpCX+iY0grxX1b7Qqms46f
+ wJymGFPEr2RUxeWFU/+8soKHnpu9OTqIoLXAm8xIbkie3gfkFwgjVoFnhTpHXe8Nw+aOLO/j1
+ 7aq4LwbLzK0dfoXTy8Zb+XvC1ADcz7dEMD9+NlywHHWPf7ZE2kUr9z1k2Y4eo1PKLb/1fhshE
+ TfxziD8aba45hn00hWBvSiEhKlDLMNLKIOXcbobSMJqMC61G4R/rE0PeN08SRqKU1P3/UUpa9
+ sNbL+TiCrqyIkJOqBjTQQABGtk+mnTjcNu2oGQjW9Sbe5GMRilmzuIjd3t3OfDImUuszMyUn/
+ rYFtais8nMINdn/3SOv0/9ngrObOF0oj2DBj0iQH5U7HjO9yPU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/04/2022 18:40, Leo Yan wrote:
-> This commit changes to use callback qcom_icc_xlate_extended().  This
-> is a preparation for population path tags from the interconnect DT
-> binding, it doesn't introduce functionality change for the existed DT
-> binding without path tags.
-> 
-> Signed-off-by: Leo Yan <leo.yan@linaro.org>
+On Tue, Apr 26, 2022 at 10:15 PM Sven Peter <sven@svenpeter.dev> wrote:
+>
+> Apple SoCs such as the M1 come with multiple embedded co-processors
+> running proprietary firmware. Communication with those is established
+> over a simple mailbox using the RTKit IPC protocol.
+>
+> This cannot be implement inside the mailbox subsystem since on top
+> of communication over channels we also need support for starting,
+> hibernating and resetting these co-processors. We also need to
+> handle shared memory allocations differently depending on the
+> co-processor and don't want to split that across multiple drivers.
+>
+> Signed-off-by: Sven Peter <sven@svenpeter.dev>
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
-> ---
->   drivers/interconnect/qcom/icc-rpm.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-> index 45d23aaeabf6..2ffaf9ba08f9 100644
-> --- a/drivers/interconnect/qcom/icc-rpm.c
-> +++ b/drivers/interconnect/qcom/icc-rpm.c
-> @@ -16,6 +16,7 @@
->   #include <linux/slab.h>
->   
->   #include "smd-rpm.h"
-> +#include "icc-common.h"
->   #include "icc-rpm.h"
->   
->   /* QNOC QoS */
-> @@ -395,7 +396,7 @@ int qnoc_probe(struct platform_device *pdev)
->   	provider->dev = dev;
->   	provider->set = qcom_icc_set;
->   	provider->aggregate = icc_std_aggregate;
-> -	provider->xlate = of_icc_xlate_onecell;
-> +	provider->xlate_extended = qcom_icc_xlate_extended;
->   	provider->data = data;
->   
->   	ret = icc_provider_add(provider);
+> +bool apple_rtkit_is_running(struct apple_rtkit *rtk)
+> +{
+> +       if (rtk->crashed)
+> +               return false;
+> +       if ((rtk->iop_power_state & 0xff) != APPLE_RTKIT_PWR_STATE_ON)
+> +               return false;
+> +       if ((rtk->ap_power_state & 0xff) != APPLE_RTKIT_PWR_STATE_ON)
+> +               return false;
+> +       return true;
+> +}
+> +EXPORT_SYMBOL_GPL(apple_rtkit_is_running);
+> +
+> +bool apple_rtkit_is_crashed(struct apple_rtkit *rtk)
+> +{
+> +       return rtk->crashed;
+> +}
+> +EXPORT_SYMBOL_GPL(apple_rtkit_is_crashed);
+
+I noticed that you use EXPORT_SYMBOL_GPL() here, but a more permissive
+EXPORT_SYMBOL() in the SART driver. Is that intentional? I would have
+assumed that both are similarly private to the apple SoCs and would be the
+_GPL type, but this is something you get to pick as the author.
 
 
--- 
-With best wishes
-Dmitry
+> +
+> +#if IS_ENABLED(CONFIG_APPLE_RTKIT)
+> +
+
+Same comment about the #if as for the SART driver: I'd prefer it without the
+conditional compilation.
+
+       Arnd

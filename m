@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 739DB50F55C
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:53:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B7350F877
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347435AbiDZIv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59544 "EHLO
+        id S1348135AbiDZJjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:39:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345789AbiDZIjb (ORCPT
+        with ESMTP id S1346502AbiDZJIX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:39:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6A66D864;
-        Tue, 26 Apr 2022 01:31:08 -0700 (PDT)
+        Tue, 26 Apr 2022 05:08:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2ED13FB8;
+        Tue, 26 Apr 2022 01:49:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF66B6189A;
-        Tue, 26 Apr 2022 08:31:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B13DCC385A4;
-        Tue, 26 Apr 2022 08:31:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E1A65B81D09;
+        Tue, 26 Apr 2022 08:49:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42404C385BE;
+        Tue, 26 Apr 2022 08:49:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961867;
-        bh=cAHJHvv5OO7Wdml7C5cnVYBlU08Dp1ge/HrmNel2wYg=;
+        s=korg; t=1650962951;
+        bh=3cOjFrytvu+eMwtQ4tbOjqFmZep/na2RTLi1ivZ+4d4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XxgTQ157zKyXhXp75zzpFTek9Ude9VQzqxPFAOKm8ua55yu+XwbhdZpUubRoL4opt
-         HSCBm81QnS3+iDLRL/PUdhlfNIxCi4ysQR7x7KFKwxKoZLDEHPgKwqLBmQrDxHxVgh
-         yklgu9KxC1ODd2yxaeobxE5r1MJDHayields5nVM=
+        b=o5TEQ/jU720560Mnex5Ld1dO38H7ynSa0WZijPU6b4tnGV1cfbBxpAR9spWMqHBHP
+         qSsklAV1mAcfRziBZ7tjO3LJqUrZrQQzNxjj+xZXds0/PVsWlU+BFl25CyfuZFlrcn
+         oEfJVVI64NNAWcmXC6XozZM/blEME0cPUKSfQNYU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ye Bin <yebin10@huawei.com>,
-        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 5.4 58/62] jbd2: fix a potential race while discarding reserved buffers after an abort
+        stable@vger.kernel.org, Zhipeng Xie <xiezhipeng1@huawei.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 103/146] perf/core: Fix perf_mmap fail when CONFIG_PERF_USE_VMALLOC enabled
 Date:   Tue, 26 Apr 2022 10:21:38 +0200
-Message-Id: <20220426081738.884850289@linuxfoundation.org>
+Message-Id: <20220426081752.954011534@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
-References: <20220426081737.209637816@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,116 +54,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
+From: Zhipeng Xie <xiezhipeng1@huawei.com>
 
-commit 23e3d7f7061f8682c751c46512718f47580ad8f0 upstream.
+[ Upstream commit 60490e7966659b26d74bf1fa4aa8693d9a94ca88 ]
 
-we got issue as follows:
-[   72.796117] EXT4-fs error (device sda): ext4_journal_check_start:83: comm fallocate: Detected aborted journal
-[   72.826847] EXT4-fs (sda): Remounting filesystem read-only
-fallocate: fallocate failed: Read-only file system
-[   74.791830] jbd2_journal_commit_transaction: jh=0xffff9cfefe725d90 bh=0x0000000000000000 end delay
-[   74.793597] ------------[ cut here ]------------
-[   74.794203] kernel BUG at fs/jbd2/transaction.c:2063!
-[   74.794886] invalid opcode: 0000 [#1] PREEMPT SMP PTI
-[   74.795533] CPU: 4 PID: 2260 Comm: jbd2/sda-8 Not tainted 5.17.0-rc8-next-20220315-dirty #150
-[   74.798327] RIP: 0010:__jbd2_journal_unfile_buffer+0x3e/0x60
-[   74.801971] RSP: 0018:ffffa828c24a3cb8 EFLAGS: 00010202
-[   74.802694] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-[   74.803601] RDX: 0000000000000001 RSI: ffff9cfefe725d90 RDI: ffff9cfefe725d90
-[   74.804554] RBP: ffff9cfefe725d90 R08: 0000000000000000 R09: ffffa828c24a3b20
-[   74.805471] R10: 0000000000000001 R11: 0000000000000001 R12: ffff9cfefe725d90
-[   74.806385] R13: ffff9cfefe725d98 R14: 0000000000000000 R15: ffff9cfe833a4d00
-[   74.807301] FS:  0000000000000000(0000) GS:ffff9d01afb00000(0000) knlGS:0000000000000000
-[   74.808338] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   74.809084] CR2: 00007f2b81bf4000 CR3: 0000000100056000 CR4: 00000000000006e0
-[   74.810047] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[   74.810981] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[   74.811897] Call Trace:
-[   74.812241]  <TASK>
-[   74.812566]  __jbd2_journal_refile_buffer+0x12f/0x180
-[   74.813246]  jbd2_journal_refile_buffer+0x4c/0xa0
-[   74.813869]  jbd2_journal_commit_transaction.cold+0xa1/0x148
-[   74.817550]  kjournald2+0xf8/0x3e0
-[   74.819056]  kthread+0x153/0x1c0
-[   74.819963]  ret_from_fork+0x22/0x30
+This problem can be reproduced with CONFIG_PERF_USE_VMALLOC enabled on
+both x86_64 and aarch64 arch when using sysdig -B(using ebpf)[1].
+sysdig -B works fine after rebuilding the kernel with
+CONFIG_PERF_USE_VMALLOC disabled.
 
-Above issue may happen as follows:
-        write                   truncate                   kjournald2
-generic_perform_write
- ext4_write_begin
-  ext4_walk_page_buffers
-   do_journal_get_write_access ->add BJ_Reserved list
- ext4_journalled_write_end
-  ext4_walk_page_buffers
-   write_end_fn
-    ext4_handle_dirty_metadata
-                ***************JBD2 ABORT**************
-     jbd2_journal_dirty_metadata
- -> return -EROFS, jh in reserved_list
-                                                   jbd2_journal_commit_transaction
-                                                    while (commit_transaction->t_reserved_list)
-                                                      jh = commit_transaction->t_reserved_list;
-                        truncate_pagecache_range
-                         do_invalidatepage
-			  ext4_journalled_invalidatepage
-			   jbd2_journal_invalidatepage
-			    journal_unmap_buffer
-			     __dispose_buffer
-			      __jbd2_journal_unfile_buffer
-			       jbd2_journal_put_journal_head ->put last ref_count
-			        __journal_remove_journal_head
-				 bh->b_private = NULL;
-				 jh->b_bh = NULL;
-				                      jbd2_journal_refile_buffer(journal, jh);
-							bh = jh2bh(jh);
-							->bh is NULL, later will trigger null-ptr-deref
-				 journal_free_journal_head(jh);
+I tracked it down to the if condition event->rb->nr_pages != nr_pages
+in perf_mmap is true when CONFIG_PERF_USE_VMALLOC is enabled where
+event->rb->nr_pages = 1 and nr_pages = 2048 resulting perf_mmap to
+return -EINVAL. This is because when CONFIG_PERF_USE_VMALLOC is
+enabled, rb->nr_pages is always equal to 1.
 
-After commit 96f1e0974575, we no longer hold the j_state_lock while
-iterating over the list of reserved handles in
-jbd2_journal_commit_transaction().  This potentially allows the
-journal_head to be freed by journal_unmap_buffer while the commit
-codepath is also trying to free the BJ_Reserved buffers.  Keeping
-j_state_lock held while trying extends hold time of the lock
-minimally, and solves this issue.
+Arch with CONFIG_PERF_USE_VMALLOC enabled by default:
+	arc/arm/csky/mips/sh/sparc/xtensa
 
-Fixes: 96f1e0974575("jbd2: avoid long hold times of j_state_lock while committing a transaction")
-Signed-off-by: Ye Bin <yebin10@huawei.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220317142137.1821590-1-yebin10@huawei.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Arch with CONFIG_PERF_USE_VMALLOC disabled by default:
+	x86_64/aarch64/...
+
+Fix this problem by using data_page_nr()
+
+[1] https://github.com/draios/sysdig
+
+Fixes: 906010b2134e ("perf_event: Provide vmalloc() based mmap() backing")
+Signed-off-by: Zhipeng Xie <xiezhipeng1@huawei.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20220209145417.6495-1-xiezhipeng1@huawei.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/jbd2/commit.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ kernel/events/core.c        | 2 +-
+ kernel/events/internal.h    | 5 +++++
+ kernel/events/ring_buffer.c | 5 -----
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
---- a/fs/jbd2/commit.c
-+++ b/fs/jbd2/commit.c
-@@ -451,7 +451,6 @@ void jbd2_journal_commit_transaction(jou
- 	}
- 	spin_unlock(&commit_transaction->t_handle_lock);
- 	commit_transaction->t_state = T_SWITCH;
--	write_unlock(&journal->j_state_lock);
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 0ee9ffceb976..baa0fe350246 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -6352,7 +6352,7 @@ static int perf_mmap(struct file *file, struct vm_area_struct *vma)
+ again:
+ 	mutex_lock(&event->mmap_mutex);
+ 	if (event->rb) {
+-		if (event->rb->nr_pages != nr_pages) {
++		if (data_page_nr(event->rb) != nr_pages) {
+ 			ret = -EINVAL;
+ 			goto unlock;
+ 		}
+diff --git a/kernel/events/internal.h b/kernel/events/internal.h
+index 082832738c8f..5150d5f84c03 100644
+--- a/kernel/events/internal.h
++++ b/kernel/events/internal.h
+@@ -116,6 +116,11 @@ static inline int page_order(struct perf_buffer *rb)
+ }
+ #endif
  
- 	J_ASSERT (atomic_read(&commit_transaction->t_outstanding_credits) <=
- 			journal->j_max_transaction_buffers);
-@@ -471,6 +470,8 @@ void jbd2_journal_commit_transaction(jou
- 	 * has reserved.  This is consistent with the existing behaviour
- 	 * that multiple jbd2_journal_get_write_access() calls to the same
- 	 * buffer are perfectly permissible.
-+	 * We use journal->j_state_lock here to serialize processing of
-+	 * t_reserved_list with eviction of buffers from journal_unmap_buffer().
- 	 */
- 	while (commit_transaction->t_reserved_list) {
- 		jh = commit_transaction->t_reserved_list;
-@@ -490,6 +491,7 @@ void jbd2_journal_commit_transaction(jou
- 		jbd2_journal_refile_buffer(journal, jh);
- 	}
++static inline int data_page_nr(struct perf_buffer *rb)
++{
++	return rb->nr_pages << page_order(rb);
++}
++
+ static inline unsigned long perf_data_size(struct perf_buffer *rb)
+ {
+ 	return rb->nr_pages << (PAGE_SHIFT + page_order(rb));
+diff --git a/kernel/events/ring_buffer.c b/kernel/events/ring_buffer.c
+index 52868716ec35..fb35b926024c 100644
+--- a/kernel/events/ring_buffer.c
++++ b/kernel/events/ring_buffer.c
+@@ -859,11 +859,6 @@ void rb_free(struct perf_buffer *rb)
+ }
  
-+	write_unlock(&journal->j_state_lock);
- 	/*
- 	 * Now try to drop any written-back buffers from the journal's
- 	 * checkpoint lists.  We do this *before* commit because it potentially
+ #else
+-static int data_page_nr(struct perf_buffer *rb)
+-{
+-	return rb->nr_pages << page_order(rb);
+-}
+-
+ static struct page *
+ __perf_mmap_to_page(struct perf_buffer *rb, unsigned long pgoff)
+ {
+-- 
+2.35.1
+
 
 

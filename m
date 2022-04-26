@@ -2,121 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7755A510465
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:49:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B8AB5103D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:44:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353182AbiDZQwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 12:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45026 "EHLO
+        id S1353106AbiDZQrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 12:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353256AbiDZQv0 (ORCPT
+        with ESMTP id S235613AbiDZQqy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 12:51:26 -0400
-Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE0C48E6A
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:46:21 -0700 (PDT)
-Received: by mail-ed1-x54a.google.com with SMTP id b24-20020a50e798000000b0041631767675so10630518edn.23
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:46:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=XPVyte1DHdZzGVqIYLZisC9WWn/NV5PTOOmKGsNYVqI=;
-        b=tfexPWSj1PSjUb4y32u6HDb/QnE+2ju4Q3VQ+kF29tn7ADhoO3fHaJy9KBX3jTsEd8
-         BhBWx/VeORcURqli+p+9+1QH8obAqShcA6ErLkkeVUmnfCO3qJEDT5UirMbYVSK2rKI7
-         EHcv+GYbS6ck2ZGcmgknDsZroKT9WTKBy/bFVemoqQAXMDxG6HC+soFmb8T4ca/gXcrO
-         ftqfgIZ/fqbniMJnPu4e11czzALuk3B6wUJb7Az/LpjxMDJcInKVf5CafrOSxVa2JPzU
-         ++NO1MFfBz4ggnwPlPZhMJNmDFkkEcXO47/KdD9d+fQq4LH0V9JjN+pdxl1pwz5u4gCv
-         AAQg==
+        Tue, 26 Apr 2022 12:46:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09C7747058
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:43:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650991425;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AmBHiCcZSCU3IlknPjgefbwYr8sHQGYFZPAAiy3Pw/w=;
+        b=CO39FZ+riuJ7CdsmMSHizVyCgpAFYmiYBr9ZoENaZ9K5IYuc144d39GNsmUkzYHeL9mfp2
+        ysOguD+sOEku0jW1UiGhIsHNniu/tyVkByJnsvrvwTVu8G3dtd2cQmjiRhT7pz7qTKGbLy
+        RtUiSeL5ZO39BFrJz6BYBIFZadqEfkQ=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-593-nVqbNw8bOQOqMf_rBX8FTQ-1; Tue, 26 Apr 2022 12:43:43 -0400
+X-MC-Unique: nVqbNw8bOQOqMf_rBX8FTQ-1
+Received: by mail-wm1-f69.google.com with SMTP id g9-20020a1c4e09000000b0038f20d94f01so1477076wmh.8
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:43:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=XPVyte1DHdZzGVqIYLZisC9WWn/NV5PTOOmKGsNYVqI=;
-        b=YCMVk/4xsxqLcekq4UbfM/rjt7ecaFplueal5/IZMHKWCzgzu+31vPXeqdIXTMe8+j
-         qITpp1+KiFRxTOO5NvtOIfpqL58WcxwQxNso3t+zLK9oI2QZRETxFonHg6imifk98wxE
-         i+z0vTGLI7OIaADjI1QxaxgSYFzfp1gOCJIDRcLjNLSpAg5CVCse8j654xLoeBJRSKj5
-         zGhG9z2rn827Q9yJsln1V8gdrptnAeoUSjBdN7Qn40P1usbZGtloA30aUEaEIvs57Win
-         5TnRNkPowqWa+0Q6mhceEv+kWGxhJNSt0PG6cuaoZfY1feoO3ZHjjHZBlmIqJxsKezqW
-         tMAw==
-X-Gm-Message-State: AOAM530VDlqXHT1O8zLSv06F791pqP3P1TRI9FXEaCBIAi+H2UhqQfsN
-        kqDsjbu8S0mpkLzk5R12KG2IJ/i4mAg=
-X-Google-Smtp-Source: ABdhPJxd69pRVvXv3tLXpgiAhti/608pH1mq1OSHk1HEp8P9KBrw2Up9R6Lp+Ti78ee6VL9a6lRzmQRfcX0=
-X-Received: from glider.muc.corp.google.com ([2a00:79e0:15:13:d580:abeb:bf6d:5726])
- (user=glider job=sendgmr) by 2002:a17:906:478b:b0:6db:8b6e:d5de with SMTP id
- cw11-20020a170906478b00b006db8b6ed5demr22938586ejc.161.1650991579678; Tue, 26
- Apr 2022 09:46:19 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 18:43:15 +0200
-In-Reply-To: <20220426164315.625149-1-glider@google.com>
-Message-Id: <20220426164315.625149-47-glider@google.com>
-Mime-Version: 1.0
-References: <20220426164315.625149-1-glider@google.com>
-X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
-Subject: [PATCH v3 46/46] x86: kmsan: enable KMSAN builds for x86
-From:   Alexander Potapenko <glider@google.com>
-To:     glider@google.com
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=AmBHiCcZSCU3IlknPjgefbwYr8sHQGYFZPAAiy3Pw/w=;
+        b=UU0pTSTk1Ncs4mEYE55RWuo+Og6q92u2VIoWiZgNrAQkZ7hcwb95lv1s3+AI1jgpy5
+         PQlUbpdcToJDSOpy1mHDC6eDNvAZnZ1tU483oLjNkdslDe+bH/cXBC+U9zitPFL9XURg
+         SWNKAAaId0SK+sZYXEjNrvLRrYhVuItq+O6zCdvUtofI//DhpDk3/wZxmS+9fMg7I2cO
+         VPT4jUuMJtMaenY2frHfCQfp3iJA8+9boDQ70kKBzhz8mNQeuVmZOa2JRoneD/g+yeZR
+         myPp0R2LFWxJMtsphzNfaq/jYGp972t2ry9BnaKtkAGWU8R6ce8TvI4cpxHWDryZzr3e
+         rOYA==
+X-Gm-Message-State: AOAM532F2+uT23mnJBKTJKtD2joHl6omHNeYYkf5msrWR5PCPWtzTMga
+        OkO1DX5Vmnx+nTg5nr64QeZQndDiXfz1Pt8pUvuByb87YgoJnBrM9T/s+6AcObh6dL++umo8WlF
+        J+Ol/k3UhuMtHp0HhIayBaUiL
+X-Received: by 2002:a05:6000:1789:b0:20a:9f94:1620 with SMTP id e9-20020a056000178900b0020a9f941620mr19657174wrg.640.1650991422037;
+        Tue, 26 Apr 2022 09:43:42 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyfz8Pkmw51eFwJVdP+dK0w5CxNhoIuOiCngJvaJLdcwbMbc4dFPtCwPPtxxnWRU6Y78qqrvw==
+X-Received: by 2002:a05:6000:1789:b0:20a:9f94:1620 with SMTP id e9-20020a056000178900b0020a9f941620mr19657161wrg.640.1650991421834;
+        Tue, 26 Apr 2022 09:43:41 -0700 (PDT)
+Received: from redhat.com ([2.53.22.137])
+        by smtp.gmail.com with ESMTPSA id z6-20020a05600c0a0600b00393d831bf15sm10346194wmp.46.2022.04.26.09.43.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 09:43:41 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 12:43:36 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Cornelia Huck <cohuck@redhat.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, sgarzare@redhat.com,
+        eperezma@redhat.com, lulu@redhat.com, tglx@linutronix.de,
+        peterz@infradead.org, paulmck@kernel.org, maz@kernel.org
+Subject: Re: [PATCH V3 6/9] virtio-ccw: implement synchronize_cbs()
+Message-ID: <20220426124243-mutt-send-email-mst@kernel.org>
+References: <20220425040512-mutt-send-email-mst@kernel.org>
+ <87a6c98rwf.fsf@redhat.com>
+ <20220425095742-mutt-send-email-mst@kernel.org>
+ <20220426042911.544477f9.pasic@linux.ibm.com>
+ <20220425233434-mutt-send-email-mst@kernel.org>
+ <20220425233604-mutt-send-email-mst@kernel.org>
+ <ba0c3977-c471-3275-2327-c5910cdd506a@redhat.com>
+ <20220425235134-mutt-send-email-mst@kernel.org>
+ <20220425235415-mutt-send-email-mst@kernel.org>
+ <87o80n7soq.fsf@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87o80n7soq.fsf@redhat.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make KMSAN usable by adding the necessary Kconfig bits.
+On Tue, Apr 26, 2022 at 05:47:17PM +0200, Cornelia Huck wrote:
+> On Mon, Apr 25 2022, "Michael S. Tsirkin" <mst@redhat.com> wrote:
+> 
+> > On Mon, Apr 25, 2022 at 11:53:24PM -0400, Michael S. Tsirkin wrote:
+> >> On Tue, Apr 26, 2022 at 11:42:45AM +0800, Jason Wang wrote:
+> >> > 
+> >> > 在 2022/4/26 11:38, Michael S. Tsirkin 写道:
+> >> > > On Mon, Apr 25, 2022 at 11:35:41PM -0400, Michael S. Tsirkin wrote:
+> >> > > > On Tue, Apr 26, 2022 at 04:29:11AM +0200, Halil Pasic wrote:
+> >> > > > > On Mon, 25 Apr 2022 09:59:55 -0400
+> >> > > > > "Michael S. Tsirkin" <mst@redhat.com> wrote:
+> >> > > > > 
+> >> > > > > > On Mon, Apr 25, 2022 at 10:54:24AM +0200, Cornelia Huck wrote:
+> >> > > > > > > On Mon, Apr 25 2022, "Michael S. Tsirkin" <mst@redhat.com> wrote:
+> >> > > > > > > > On Mon, Apr 25, 2022 at 10:44:15AM +0800, Jason Wang wrote:
+> >> > > > > > > > > This patch tries to implement the synchronize_cbs() for ccw. For the
+> >> > > > > > > > > vring_interrupt() that is called via virtio_airq_handler(), the
+> >> > > > > > > > > synchronization is simply done via the airq_info's lock. For the
+> >> > > > > > > > > vring_interrupt() that is called via virtio_ccw_int_handler(), a per
+> >> > > > > > > > > device spinlock for irq is introduced ans used in the synchronization
+> >> > > > > > > > > method.
+> >> > > > > > > > > 
+> >> > > > > > > > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> >> > > > > > > > > Cc: Peter Zijlstra <peterz@infradead.org>
+> >> > > > > > > > > Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> >> > > > > > > > > Cc: Marc Zyngier <maz@kernel.org>
+> >> > > > > > > > > Cc: Halil Pasic <pasic@linux.ibm.com>
+> >> > > > > > > > > Cc: Cornelia Huck <cohuck@redhat.com>
+> >> > > > > > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> >> > > > > > > > 
+> >> > > > > > > > This is the only one that is giving me pause. Halil, Cornelia,
+> >> > > > > > > > should we be concerned about the performance impact here?
+> >> > > > > > > > Any chance it can be tested?
+> >> > > > > > > We can have a bunch of devices using the same airq structure, and the
+> >> > > > > > > sync cb creates a choke point, same as registering/unregistering.
+> >> > > > > > BTW can callbacks for multiple VQs run on multiple CPUs at the moment?
+> >> > > > > I'm not sure I understand the question.
+> >> > > > > 
+> >> > > > > I do think we can have multiple CPUs that are executing some portion of
+> >> > > > > virtio_ccw_int_handler(). So I guess the answer is yes. Connie what do you think?
+> >> > > > > 
+> >> > > > > On the other hand we could also end up serializing synchronize_cbs()
+> >> > > > > calls for different devices if they happen to use the same airq_info. But
+> >> > > > > this probably was not your question
+> >> > > > 
+> >> > > > I am less concerned about  synchronize_cbs being slow and more about
+> >> > > > the slowdown in interrupt processing itself.
+> >> > > > 
+> >> > > > > > this patch serializes them on a spinlock.
+> >> > > > > > 
+> >> > > > > Those could then pile up on the newly introduced spinlock.
+> 
+> How bad would that be in practice? IIUC, we hit on the spinlock when
+> - doing synchronize_cbs (should be rare)
+> - processing queue interrupts for devices using per-device indicators
+>   (which is the non-preferred path, which I would basically only expect
+>   when running on an ancient or non-standard hypervisor)
 
-Signed-off-by: Alexander Potapenko <glider@google.com>
----
-Link: https://linux-review.googlesource.com/id/I1d295ce8159ce15faa496d20089d953a919c125e
----
- arch/x86/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+this one is my concern. I am worried serializing everything on a single lock
+will drastically regress performance here.
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 3209073f96415..592f5ca2017c2 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -168,6 +168,7 @@ config X86
- 	select HAVE_ARCH_KASAN			if X86_64
- 	select HAVE_ARCH_KASAN_VMALLOC		if X86_64
- 	select HAVE_ARCH_KFENCE
-+	select HAVE_ARCH_KMSAN			if X86_64
- 	select HAVE_ARCH_KGDB
- 	select HAVE_ARCH_MMAP_RND_BITS		if MMU
- 	select HAVE_ARCH_MMAP_RND_COMPAT_BITS	if MMU && COMPAT
--- 
-2.36.0.rc2.479.g8af0fa9b8e-goog
+
+> - configuration change interrupts (should be rare)
+> - during setup, reset, etc. (should not be a concern)
+> 
+> >> > > > > 
+> >> > > > > Regards,
+> >> > > > > Halil
+> >> > > > Hmm yea ... not good.
+> >> > > Is there any other way to synchronize with all callbacks?
+> >> > 
+> >> > 
+> >> > Maybe using rwlock as airq handler?
+> >> > 
+> >> > Thanks
+> >> > 
+> >> 
+> >> rwlock is still a shared cacheline bouncing between CPUs and
+> >> a bunch of ordering instructions.
+> >> Maybe something per-cpu + some IPIs to run things on all CPUs instead?
+> >
+> > ... and I think classic and device interrupts are different enough
+> > here ...
+> 
+> You mean classic (per-device) and adapter interrupts, right?
 

@@ -2,97 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C4DD5101DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 17:24:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBA855101E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 17:28:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352259AbiDZP1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 11:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34500 "EHLO
+        id S1352269AbiDZPbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 11:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239155AbiDZP1r (ORCPT
+        with ESMTP id S234269AbiDZPbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 11:27:47 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E3F321E33
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 08:24:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650986679; x=1682522679;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=uHUL5BJ27oyqSRllLdSrhqSu1/tdYAnraNE1Llkso44=;
-  b=jc1eENzLC93X6YMWJcXoC66p3WfE7xLD7NwP99nCZ9cQcIM35sqGgROh
-   8y5PpVSTyOUmfoBz1D/YM07x5nCaACtvIG5eH6MxnK8FSRsWKNa+IVfXM
-   XC8fNWWH/e6aGeTgeygkA1t6b8LiRgjlaDVZFTXWC3DZU4TOXytTOwyhO
-   yHODt0xyZDkRI6Xx5ss/xKNOYCfnGz8zPyWFhM1dd1ylgvGZwCMOyhfZu
-   +ZFks/Hjygfa2vUKzI7/ztFAof3u9bobiEPacKtZg3ggL2x2KQf0+6qAW
-   lPrQY+t47l3rzI/OX/ZEltVx5wriCMfevkCXKohtTahrSrOhaX10U2kNg
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="265134782"
-X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="265134782"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 08:24:23 -0700
-X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="595808700"
-Received: from dsocek-mobl2.amr.corp.intel.com (HELO [10.212.69.119]) ([10.212.69.119])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 08:24:22 -0700
-Message-ID: <8c044e49-74bb-df56-8a60-663013c0910e@intel.com>
-Date:   Tue, 26 Apr 2022 08:27:00 -0700
+        Tue, 26 Apr 2022 11:31:16 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19B3B1E3
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 08:28:03 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id k2so5556498wrd.5
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 08:28:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=VvHeXPeRp+l0umkp3zLFpUL9QE8qvJf0yCKCEof3gxA=;
+        b=buq77vk5gnKXmPdRMlrIaECKUB6ReZFkK9jjEduILoQPFcZ4UqFbAXkY7sxvxnid+h
+         Yo15E1M9u8FN1jC0h1MkDs4Q0tljFZaq3Mz1yFOgLwDZZoa6Y1nZDCxZOZxGOZ9emRRl
+         tYKbeShhkMYMulIffkgOV2rF8qoWnjaUWGbftT8erqriq1GTfnH1SA7fdTKXpF4yLP7W
+         DBgROt1/xsnPuby2ARGWEinPTWYZfZhv1M4Lqaril+1XRNnFxNi2gQYmPl9jxwnjdEs/
+         B19jiHF/Rteq3osbm5IViD2jAJwIBy0iKAw5rJm55mKQrSmmOQiVc7DnBYCiMEHwXFj0
+         gw5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=VvHeXPeRp+l0umkp3zLFpUL9QE8qvJf0yCKCEof3gxA=;
+        b=VzRluADFiHj21gbThxg5QkDlAEOLmXjBLcqcDlv+44iQ3DxdkQPNrDZFWHraXSB1ki
+         +3aQoAaDB4oEpYxJd4NSwXakhfhZ0xLVpA4NCXW4FoOZeJS0xueQFG5HWGyeD+tEKz6p
+         Rz5+PWzUsF7ZgXlT6CMo23D36hsKDipUA7YEUZDIu4hvvDlmmZiUA6sK8ICqbYNGFpw6
+         WyDszaxvbpgjO3IiqiHQDwxnfKHREvS0b0pJ9lG+RkFJaD8q+UW9odiIN8HVgxDTa808
+         0BKaZW5GRosHxPMOShfezLy7MMUvLu/qQoNPOAMaQGOS+9QdcnC9T51ejX/YAFlO1Bnf
+         GYCw==
+X-Gm-Message-State: AOAM533sPo2BkOtU0Y/FwcBj6uzkjlp8dKjo2AxebJlHEPS9HGTAIx8/
+        5Ceorxi30cJ+PiSHRi0KpFCQeA==
+X-Google-Smtp-Source: ABdhPJx9Uc6kKSe37g5dNJxiEA3I/nHqSTMZYaXUAKy2tRG8l+KXOhNYXNfBScM2Vq6X5f/eKAx6BA==
+X-Received: by 2002:a5d:584e:0:b0:20a:9034:e312 with SMTP id i14-20020a5d584e000000b0020a9034e312mr19433566wrf.518.1650986881965;
+        Tue, 26 Apr 2022 08:28:01 -0700 (PDT)
+Received: from ?IPV6:2001:861:44c0:66c0:5959:ca32:2e01:b6fc? ([2001:861:44c0:66c0:5959:ca32:2e01:b6fc])
+        by smtp.gmail.com with ESMTPSA id a16-20020a056000051000b00207b5d9f51fsm11725738wrf.41.2022.04.26.08.27.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Apr 2022 08:28:00 -0700 (PDT)
+Message-ID: <f946068e-4f97-b6e2-1671-6580aa1a0105@baylibre.com>
+Date:   Tue, 26 Apr 2022 17:27:59 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
- allocation and free it on mm exit
+Subject: Re: [PATCH] drm/bridge: fix it6505 Kconfig terms
 Content-Language: en-US
-To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
-Cc:     "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86 <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        iommu <iommu@lists.linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>, will@kernel.org,
-        robin.murphy@arm.com, zhangfei.gao@linaro.org
-References: <tencent_76E043C4D1B6A21A5253579A61034107EB06@qq.com>
- <tencent_7477100F8A445C6CAFA8F13601A55134480A@qq.com>
- <YmJ/WA6KAQU/xJjA@myrica>
- <tencent_A4E83BA6071B2204B6F5D4E69A50D21C1A09@qq.com>
- <YmLOznyBF0f7COYT@myrica>
- <tencent_2922DAB6F3D5789A1CD3A21A843B4007ED09@qq.com>
- <Yman5hLomw9/c+bi@myrica> <76ec6342-0d7c-7c7b-c132-2892e4048fa1@intel.com>
- <YmavoKkVu+hd+x0M@myrica> <22b659c7-e972-7a56-2bd7-8df3b4820d4e@intel.com>
- <YmbO/l5IwfBCHrl8@myrica>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <YmbO/l5IwfBCHrl8@myrica>
-Content-Type: text/plain; charset=UTF-8
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     kernel test robot <lkp@intel.com>,
+        Allen Chen <allen.chen@ite.com.tw>,
+        Robert Foss <robert.foss@linaro.org>,
+        Hermes Wu <hermes.wu@ite.com.tw>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org
+References: <20220403151637.15546-1-rdunlap@infradead.org>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <20220403151637.15546-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/25/22 09:40, Jean-Philippe Brucker wrote:
-> The problem is that we'd have to request the device driver to stop DMA
-> before we can destroy the context and free the PASID. We did consider
-> doing this in the release() MMU notifier, but there were concerns about
-> blocking mmput() for too long (for example
-> https://lore.kernel.org/linux-iommu/4d68da96-0ad5-b412-5987-2f7a6aa796c3@amd.com/
-> though I think there was a more recent discussion). We also need to drain
-> the PRI and fault queues to get rid of all references to that PASID.
+Hi,
 
-Is the concern truly about blocking mmput() itself?  Or, is it about
-releasing the resources associated with the mm?
+On 03/04/2022 17:16, Randy Dunlap wrote:
+> Fix around 50 undefined references when DRM_ITE_IT6505=y while
+> DRM_DP_AUX_BUS=m and DRM_DP_HELPER=m.
+> 
+> Fixes: b5c84a9edcd4 ("drm/bridge: add it6505 driver")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: Allen Chen <allen.chen@ite.com.tw>
+> Cc: Robert Foss <robert.foss@linaro.org>
+> Cc: Hermes Wu <hermes.wu@ite.com.tw>
+> Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+> Cc: Neil Armstrong <narmstrong@baylibre.com>
+> Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+> Cc: Jonas Karlman <jonas@kwiboo.se>
+> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
+> Cc: David Airlie <airlied@linux.ie>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: dri-devel@lists.freedesktop.org
+> ---
+>   drivers/gpu/drm/bridge/Kconfig |    2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> --- linux-next-20220401.orig/drivers/gpu/drm/bridge/Kconfig
+> +++ linux-next-20220401/drivers/gpu/drm/bridge/Kconfig
+> @@ -78,6 +78,8 @@ config DRM_ITE_IT6505
+>           tristate "ITE IT6505 DisplayPort bridge"
+>           depends on OF
+>           select DRM_KMS_HELPER
+> +	select DRM_DP_AUX_BUS
+> +	select DRM_DP_HELPER
+
+The indentation is wrong here.
+
+>           select EXTCON
+>           help
+>             ITE IT6505 DisplayPort bridge chip driver.
+
+Neil

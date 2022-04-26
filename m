@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A306951044F
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7319510477
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:49:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353456AbiDZQvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 12:51:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45096 "EHLO
+        id S1353519AbiDZQwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 12:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346708AbiDZQuo (ORCPT
+        with ESMTP id S1353345AbiDZQup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 12:50:44 -0400
-Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2615348302
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:45:45 -0700 (PDT)
-Received: by mail-ed1-x54a.google.com with SMTP id l24-20020a056402231800b00410f19a3103so10612285eda.5
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:45:45 -0700 (PDT)
+        Tue, 26 Apr 2022 12:50:45 -0400
+Received: from mail-lj1-x24a.google.com (mail-lj1-x24a.google.com [IPv6:2a00:1450:4864:20::24a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4F748315
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:45:47 -0700 (PDT)
+Received: by mail-lj1-x24a.google.com with SMTP id 23-20020a05651c00d700b0024f12064717so1744783ljr.15
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:45:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=KgfdOYR2+eRzwy3N1nFbXjWhZjMyNN/8KPMy2HvUIiA=;
-        b=DiXJaiB8AJMG8+A1MDOZ3VuBShHUCaL1GlKQxcD6mV0R7Av/UajF571MXN7vKcH+xJ
-         B9d0v8KhVCzlQ+z94pkBBtVLTSnlc2yIkyIXP0B+bFCdaqtmHA9pe8/5NYuKcmD5Vy3L
-         fA34cdtJjSamNgh5dsmbUVd7b9zA7hnjKOjdt88/6jqxc/UG3ZHi4m5Nam5rWzqbzqPm
-         cd06DBJ3ACVxlq9XrgpCh+wVKQori1dj0NvbQ7HSZw0NjHsIf9jtgKdLkxo1euBXeZpk
-         ExnDMib7ea+byjuGF4JqXiPnkpgw3Zh2HRRI3cVSjxCjQ97crsBXKlz1IuJlZ96GONPP
-         Cgcw==
+        bh=GtiQESdTzDECedHCE4txXpUZH3/tDa3FQ07WXH5OYuQ=;
+        b=UW3AswRaq6F3AUzKmXnr7cPkQ0g2XLtpFenEmpgWjfvp2fOauRXzdotOTeUNyWSyYs
+         4tmhw8qwzpN9wiAWPxJUMCVxV1rWcYuXS49a+1tCMi0Oc5SG780CX3I+mnAa6/MfcB77
+         6+gdBv5jHg6AKYvKP7kA5u9scJwMLXdv1i19bLKNouK41RBdBrSMPPJuqKL61o2W1+Ho
+         pFIgSZPybW4jMIEebVa0EuG05Nils5rY1Bzl3+5j5IX62oqraNKPX3IyM6K8LuZYgWcI
+         qaxMdheHooD/KCw39MnxjCE+Vv1BhdJnZkIOIVorHWlt4oOjs2wI7s6rPQyDKu5idJkG
+         PQRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=KgfdOYR2+eRzwy3N1nFbXjWhZjMyNN/8KPMy2HvUIiA=;
-        b=BGou/RkgZRvdZWK5APnCgjMVwxJrQ0C2f6hhmhd91xVzoXAxo6a4toYA3/5jgUrgK4
-         15VHCK2Y6Mq+gs/YgaDZPrVqvvXjzWya0ofAqS7GPAeD5uz3MiEOnjS+ACrUweyBvVG3
-         wRUvxNBAF3CZmKesjiw2z67FJ8tYV1lEKhCRSJv6xR9Zj9y/JVaM377xDko3kVV541Ny
-         2Khl/8V74AqtRgTQrKGPDw4cDL/cQFL4H/2HrAzq6HXJ99LokU3Jl/exQQgKu06UigJY
-         S61dACCbvfigUUNtJmWV2muhDjKD6F6vS3+7OA9bHTtoeyHaDoCq/N07SOfGhxv+LEnL
-         /w/g==
-X-Gm-Message-State: AOAM532msI6eWpTZ3R3O7wHB5sQVdWSwMGmzZuDTO5ZTxY0GJbrEYh06
-        woA4h2mn1JpOivt4AxvZhvWolMXH6EQ=
-X-Google-Smtp-Source: ABdhPJzCT8fH32RoUVNaiZCyh2VQrj6uF5kLZlCQX+kBGFsZsTKhLxpnKoIswBSqwHZF0t1dzIj5uX6h2dU=
+        bh=GtiQESdTzDECedHCE4txXpUZH3/tDa3FQ07WXH5OYuQ=;
+        b=aZ7R5N0q+z0Kt4BIG8z/gVrIBbtsGsyzzAyKs8bPHkpX/ScXKjoJoRtyEfLNWxbuVR
+         c0XjUTZS/c2v82DzAnYdGlP1rymNZB0Xx1pSPhm9gT/8wVq658i7+JyJqixJU9BV/dxe
+         u/GLSk1mPUJVmcxSKfllSCh6xrkH03wkkqvJTZBr2LrxSjQgH7dLuHvNRwFayVeb5LeL
+         x6kXneO7DHm33gDBLhZpoYSWQK0Vqenp8GKshPbb8VOeqXzY0mMvWGVbTZo4OX9R0y6S
+         m5afapPq9Hx6Y08FITXVhOdvA8sO825Czhnj5+AsgctYQM6wypQ2PnuxULxCV7+K45tA
+         jTKw==
+X-Gm-Message-State: AOAM533lqKm+aHjc6FlxjP2y73osUEO/JvHU1oSQxCx1PGpBZzBnw+BG
+        IVKgyRZW7EITygJfrmpa2kt0PpaKqoM=
+X-Google-Smtp-Source: ABdhPJwozf4GfzZ3k/EMYH1LpIZPBrUltfR1bzZ40SvgirQ7Xof252RdKVFQ5zP9UN/h/78LotXJK8Dsdf0=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:15:13:d580:abeb:bf6d:5726])
- (user=glider job=sendgmr) by 2002:a05:6402:26c7:b0:423:e5d6:b6c6 with SMTP id
- x7-20020a05640226c700b00423e5d6b6c6mr25480700edd.61.1650991543391; Tue, 26
- Apr 2022 09:45:43 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 18:43:01 +0200
+ (user=glider job=sendgmr) by 2002:a05:6512:20c6:b0:471:fdba:1480 with SMTP id
+ u6-20020a05651220c600b00471fdba1480mr10896844lfr.425.1650991546042; Tue, 26
+ Apr 2022 09:45:46 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 18:43:02 +0200
 In-Reply-To: <20220426164315.625149-1-glider@google.com>
-Message-Id: <20220426164315.625149-33-glider@google.com>
+Message-Id: <20220426164315.625149-34-glider@google.com>
 Mime-Version: 1.0
 References: <20220426164315.625149-1-glider@google.com>
 X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
-Subject: [PATCH v3 32/46] kmsan: disable physical page merging in biovec
+Subject: [PATCH v3 33/46] kmsan: block: skip bio block merging logic for KMSAN
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -84,11 +84,11 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Vegard Nossum <vegard.nossum@oracle.com>,
         Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
         linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        linux-kernel@vger.kernel.org, Eric Biggers <ebiggers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,37 +96,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KMSAN metadata for adjacent physical pages may not be adjacent,
-therefore accessing such pages together may lead to metadata
-corruption.
-We disable merging pages in biovec to prevent such corruptions.
+KMSAN doesn't allow treating adjacent memory pages as such, if they were
+allocated by different alloc_pages() calls.
+The block layer however does so: adjacent pages end up being used
+together. To prevent this, make page_is_mergeable() return false under
+KMSAN.
 
+Suggested-by: Eric Biggers <ebiggers@google.com>
 Signed-off-by: Alexander Potapenko <glider@google.com>
+
 ---
 
-Link: https://linux-review.googlesource.com/id/Iece16041be5ee47904fbc98121b105e5be5fea5c
+Link: https://linux-review.googlesource.com/id/Ie29cc2464c70032347c32ab2a22e1e7a0b37b905
 ---
- block/blk.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+ block/bio.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/block/blk.h b/block/blk.h
-index 8ccbc6e076369..95815ac559743 100644
---- a/block/blk.h
-+++ b/block/blk.h
-@@ -93,6 +93,13 @@ static inline bool biovec_phys_mergeable(struct request_queue *q,
- 	phys_addr_t addr1 = page_to_phys(vec1->bv_page) + vec1->bv_offset;
- 	phys_addr_t addr2 = page_to_phys(vec2->bv_page) + vec2->bv_offset;
- 
-+	/*
-+	 * Merging adjacent physical pages may not work correctly under KMSAN
-+	 * if their metadata pages aren't adjacent. Just disable merging.
-+	 */
-+	if (IS_ENABLED(CONFIG_KMSAN))
-+		return false;
-+
- 	if (addr1 + vec1->bv_len != addr2)
+diff --git a/block/bio.c b/block/bio.c
+index 4259125e16ab2..db56090c00bae 100644
+--- a/block/bio.c
++++ b/block/bio.c
+@@ -836,6 +836,8 @@ static inline bool page_is_mergeable(const struct bio_vec *bv,
  		return false;
- 	if (xen_domain() && !xen_biovec_phys_mergeable(vec1, vec2->bv_page))
+ 
+ 	*same_page = ((vec_end_addr & PAGE_MASK) == page_addr);
++	if (!*same_page && IS_ENABLED(CONFIG_KMSAN))
++		return false;
+ 	if (*same_page)
+ 		return true;
+ 	return (bv->bv_page + bv_end / PAGE_SIZE) == (page + off / PAGE_SIZE);
 -- 
 2.36.0.rc2.479.g8af0fa9b8e-goog
 

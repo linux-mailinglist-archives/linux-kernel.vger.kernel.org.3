@@ -2,116 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC28350FFB2
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:54:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7900850FFA8
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:54:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351239AbiDZN46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 09:56:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43728 "EHLO
+        id S1351274AbiDZN5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 09:57:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351194AbiDZN4p (ORCPT
+        with ESMTP id S1351228AbiDZN4y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 09:56:45 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A7E15CF75
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 06:53:32 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id w4so25535378wrg.12
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 06:53:32 -0700 (PDT)
+        Tue, 26 Apr 2022 09:56:54 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A4C15CF61
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 06:53:46 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id y76so3819213ybe.1
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 06:53:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=IG33gJfmQ/EOz8na70kwRaCTRZKTSW8kT9nFppeB52c=;
-        b=7SFdF4zW4cjXauDzX5ndJqFVFTh7/DHREEin69o26mGqlPfl0nG84eROQy35s/D4im
-         jUG6HIxe07HEZE9T/vDxZK4ickju6ZQTM4GyRq+f5Ttwl+hKmyq6o9JY6CbSmHIFdPGi
-         h20VCnQFAVTNxCP8i45bIqn1AdJIIrODlI1sKI7aT9X1tNIUKfKJhdnDspUCWKePIeo5
-         2APk0x3U3rKX+g9oY14l1tZIrrsUIcFop1N7WymIWfz5V42gMJ4bCX70Qej1DSRhJZji
-         a23LjglTVJB9+wkW0cLPP+8q/J8iFntvk4wEvG236G1mLfb9GTL228BfptWygNayNnVQ
-         /SCw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ckCZvmbeyyn635mnaKqXxsF4H+ghoyHwVYsC+7BA0B0=;
+        b=igwGqJ1N3E7ODSLycDSaVr0WbIXpPlLVINt+CdifwDAJ4gIawXS0nViMwM0ZwMz3cM
+         Y4fR5DEtmjMEWumRDWtc4A2/YhCv7x7gKR5KpZZeUJycaCRjTGf9T1tDKw3HDHO92/Cq
+         WypqODghI7Sd8bMnc4Jr9OPbxjmKS+4p/vl2XRKZ7E/Xt51ZoyMaNx1ZCNVkqnPdYoIF
+         m5umgOdDFSMrF1FGHf8mhUZl+LrEInUPltAY8fuNVAAt5GTePYWc5uYbtvPG7igxz2SU
+         by93u6+dbEw46318P4HWU5ZgTv2R08XF+cESh81A43oG2yFIlMBgKK0J52dOiASLqyeC
+         tGjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=IG33gJfmQ/EOz8na70kwRaCTRZKTSW8kT9nFppeB52c=;
-        b=XRgkv0dr5s6qbseu6/mmDTPqUgiGy0BAByGPnL9AzkK2oW+gBtApGy2/vx+ybfLL1N
-         3qG+eQeuRglEO2hYhm8xEv1QmCPy5zJJTT94adn1FAEpTuHWi5c6dCSJS5UU0Bj0YuYF
-         EamsWnsi/Q8HLwjCrItxXaHtrHLpz2Sf0LOK2vfFkY47hjClkUTjD8u1NWNZbm5c+Bpj
-         Z84329SwETnB6Oontw1cO8dh6t74apXF3rIeMsmddLJo7YuTlYkIfi5hAoXIvmyZXlQP
-         4QAwjP/WoqF8xm9YFriqnO9xJaBUr4x+Qghzzn5rKj2d1PiCd0Fmiiq4e5J487HsTOEC
-         BGhw==
-X-Gm-Message-State: AOAM53280k1WMUYDHO4iEwRlzqtZHcmm4R8G+lTTe4ZxcWqbKFNk5fVB
-        5AY1+wVTp9qiH3BAggn63WxumA==
-X-Google-Smtp-Source: ABdhPJxoxTSsYvW2Te7nLeCmhF9o4bMlwjSRtCtf0E4uy+KjA6IngSDYs7AGW5znIkg5xhCcXc5Icg==
-X-Received: by 2002:a5d:59a9:0:b0:20a:9047:24ac with SMTP id p9-20020a5d59a9000000b0020a904724acmr19063965wrr.396.1650981211477;
-        Tue, 26 Apr 2022 06:53:31 -0700 (PDT)
-Received: from localhost.localdomain ([88.160.162.107])
-        by smtp.gmail.com with ESMTPSA id m35-20020a05600c3b2300b00393ebe201a6sm5504775wms.44.2022.04.26.06.53.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 06:53:31 -0700 (PDT)
-From:   Fabien Parent <fparent@baylibre.com>
-To:     Lee Jones <lee.jones@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Fabien Parent <fparent@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/8] mfd: mt6397-core: add resources for PMIC keys for MT6359
-Date:   Tue, 26 Apr 2022 15:53:08 +0200
-Message-Id: <20220426135313.245466-4-fparent@baylibre.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426135313.245466-1-fparent@baylibre.com>
-References: <20220426135313.245466-1-fparent@baylibre.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ckCZvmbeyyn635mnaKqXxsF4H+ghoyHwVYsC+7BA0B0=;
+        b=1xFS+MLTCM6YeErmA/LCgbbGagzJ85Lfv1yb9OVCqr3t8CPZUA98p5hWME6dB3Z9kV
+         28TGzmHItsN5KEDhnYx33pufG7hWl7kYMvF7JWP0bhBTf/CXKVdWcLQiJydoefRc571N
+         Y31hVCriIVrLbm3Y1H39s/ubp+jw9i/dDcOBhschhH78xVfLUkCko13sc1T8xwiGtMUB
+         otf0aItHzwWwbLzQmK+h3gYET7h60eYjN4K3rOC5PAWLOTZeCXYO9Plt8xkad1IOuNun
+         no/Dj4xQ+Hq42vAd6RGjOVG+AI3wDyA39GzT8deQff4QTSRvie2JMIrPKHOFJ1JyzYNR
+         GehA==
+X-Gm-Message-State: AOAM531RV3RHRGKFIgLsXLnqp1oYEoQWTIYfQSE4Fm0xnHloPH1fYSrs
+        3aPp20mV7pZvYRxKXLPtD2BFx3gLxzGTwBNBiZWA1g==
+X-Google-Smtp-Source: ABdhPJwF18W/ckSAQP+Lb7KRodHA2ZrpGoAfo3MnAwZd2GoH5aVP8IC0RDmP+BEupKkL+maFSkUIUbxWV/ny/0vfhno=
+X-Received: by 2002:a25:77c1:0:b0:648:3fb0:d5cf with SMTP id
+ s184-20020a2577c1000000b006483fb0d5cfmr13072913ybc.511.1650981225960; Tue, 26
+ Apr 2022 06:53:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220424090422.97070-1-wanjiabing@vivo.com>
+In-Reply-To: <20220424090422.97070-1-wanjiabing@vivo.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 26 Apr 2022 15:53:09 +0200
+Message-ID: <CAPDyKFreW44ou8O4R53XUf7iZTGBBMM+1jmrOeh9cyEOTU-r1Q@mail.gmail.com>
+Subject: Re: [PATCH] mmc: atmel-mci: simplify if-if to if-else
+To:     Wan Jiabing <wanjiabing@vivo.com>
+Cc:     Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kael_w@yeah.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the MFD resources in order to be able to probe and use the keyboard
-driver for the MT6359 PMIC.
+On Sun, 24 Apr 2022 at 11:04, Wan Jiabing <wanjiabing@vivo.com> wrote:
+>
+> Use if and else instead of if(A) and if (!A).
+>
+> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+> ---
+>  drivers/mmc/host/atmel-mci.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/drivers/mmc/host/atmel-mci.c b/drivers/mmc/host/atmel-mci.c
+> index 807177c953f3..98893ccad4bd 100644
+> --- a/drivers/mmc/host/atmel-mci.c
+> +++ b/drivers/mmc/host/atmel-mci.c
+> @@ -1125,8 +1125,7 @@ atmci_prepare_data_dma(struct atmel_mci *host, struct mmc_data *data)
+>         chan = host->dma.chan;
+>         if (chan)
+>                 host->data_chan = chan;
+> -
+> -       if (!chan)
+> +       else
+>                 return -ENODEV;
 
-Signed-off-by: Fabien Parent <fparent@baylibre.com>
----
-v2: no changes
+To make a slightly better improvement of the code, I suggest we add an
+early bail out point in the atmci_prepare_data_dma() function. Like
+below:
 
- drivers/mfd/mt6397-core.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+if (!host->dma.chan)
+     return -ENODEV;
 
-diff --git a/drivers/mfd/mt6397-core.c b/drivers/mfd/mt6397-core.c
-index bddb40054b9e..1a368ad08f58 100644
---- a/drivers/mfd/mt6397-core.c
-+++ b/drivers/mfd/mt6397-core.c
-@@ -54,6 +54,13 @@ static const struct resource mt6358_keys_resources[] = {
- 	DEFINE_RES_IRQ_NAMED(MT6358_IRQ_HOMEKEY_R, "homekey_r"),
- };
- 
-+static const struct resource mt6359_keys_resources[] = {
-+	DEFINE_RES_IRQ_NAMED(MT6359_IRQ_PWRKEY, "powerkey"),
-+	DEFINE_RES_IRQ_NAMED(MT6359_IRQ_HOMEKEY, "homekey"),
-+	DEFINE_RES_IRQ_NAMED(MT6359_IRQ_PWRKEY_R, "powerkey_r"),
-+	DEFINE_RES_IRQ_NAMED(MT6359_IRQ_HOMEKEY_R, "homekey_r"),
-+};
-+
- static const struct resource mt6323_keys_resources[] = {
- 	DEFINE_RES_IRQ_NAMED(MT6323_IRQ_STATUS_PWRKEY, "powerkey"),
- 	DEFINE_RES_IRQ_NAMED(MT6323_IRQ_STATUS_FCHRKEY, "homekey"),
-@@ -122,6 +129,12 @@ static const struct mfd_cell mt6359_devs[] = {
- 		.of_compatible = "mediatek,mt6358-rtc",
- 	},
- 	{ .name = "mt6359-sound", },
-+	{
-+		.name = "mtk-pmic-keys",
-+		.num_resources = ARRAY_SIZE(mt6359_keys_resources),
-+		.resources = mt6359_keys_resources,
-+		.of_compatible = "mediatek,mt6359-keys"
-+	},
- };
- 
- static const struct mfd_cell mt6397_devs[] = {
--- 
-2.36.0
+[...]
 
+Kind regards
+Uffe

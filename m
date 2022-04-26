@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B148A50F89D
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 333A050F3C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:26:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239119AbiDZJbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:31:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36994 "EHLO
+        id S1343838AbiDZI1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:27:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347818AbiDZJGN (ORCPT
+        with ESMTP id S1344677AbiDZI0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:06:13 -0400
+        Tue, 26 Apr 2022 04:26:44 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343B5161A40;
-        Tue, 26 Apr 2022 01:46:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F804249B;
+        Tue, 26 Apr 2022 01:23:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6008B81CF0;
-        Tue, 26 Apr 2022 08:46:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45463C385A4;
-        Tue, 26 Apr 2022 08:45:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 948C7B81CF3;
+        Tue, 26 Apr 2022 08:23:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10D3CC385A0;
+        Tue, 26 Apr 2022 08:23:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962759;
-        bh=mr2/bn7rC0Ek6PkiPueDBSA3Gm7unUsYP2KMsSeNKts=;
+        s=korg; t=1650961396;
+        bh=2ISxZrpT17ZWO7T7HiPFO4wRa/cI71OHRhKfqvSZPG8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ftIVDj7FJ8Ytq8jkkTd7mId3u9XP36kktTZ9bpUanKyaAnm6A8u45oh6eL1yPqSHV
-         irxyJXlsW2D0BLWbeJO3E7sVSLc0iY7W6m0bmAHEA5qj8RrdX2PDlmK1nhPcNqqwkP
-         w4MphvYoVJcMmMhoFqDDU9UwQXdfvEuXGH+AFhdA=
+        b=Eb5kiQV1AqMJZ+or2qY1J0SQ76q32SvbKl4R5xhb0NCKDv+ym1TQEQpIFKbLWpHgH
+         cgI01y/LRdxj+6r9sCAYS+Wy2P8wdzgIdvnO4IY4fgDN2JpS+bwzkhuShcyynCXlbH
+         vHO4Aag8x9BTUWkB+D2ZXincoCe41KJA+7j2yq64=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Manish Rangankar <mrangankar@marvell.com>,
-        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 080/146] scsi: iscsi: Fix NOP handling during conn recovery
+        stable@vger.kernel.org,
+        syzbot+7a806094edd5d07ba029@syzkaller.appspotmail.com,
+        Tadeusz Struk <tadeusz.struk@linaro.org>,
+        Theodore Tso <tytso@mit.edu>, stable@kernel.org
+Subject: [PATCH 4.9 21/24] ext4: limit length to bitmap_maxbytes - blocksize in punch_hole
 Date:   Tue, 26 Apr 2022 10:21:15 +0200
-Message-Id: <20220426081752.311421282@linuxfoundation.org>
+Message-Id: <20220426081731.998414820@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
-References: <20220426081750.051179617@linuxfoundation.org>
+In-Reply-To: <20220426081731.370823950@linuxfoundation.org>
+References: <20220426081731.370823950@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,73 +55,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Christie <michael.christie@oracle.com>
+From: Tadeusz Struk <tadeusz.struk@linaro.org>
 
-[ Upstream commit 44ac97109e42f87b1a34954704b81b6c8eca80c4 ]
+commit 2da376228a2427501feb9d15815a45dbdbdd753e upstream.
 
-If a offload driver doesn't use the xmit workqueue, then when we are doing
-ep_disconnect libiscsi can still inject PDUs to the driver. This adds a
-check for if the connection is bound before trying to inject PDUs.
+Syzbot found an issue [1] in ext4_fallocate().
+The C reproducer [2] calls fallocate(), passing size 0xffeffeff000ul,
+and offset 0x1000000ul, which, when added together exceed the
+bitmap_maxbytes for the inode. This triggers a BUG in
+ext4_ind_remove_space(). According to the comments in this function
+the 'end' parameter needs to be one block after the last block to be
+removed. In the case when the BUG is triggered it points to the last
+block. Modify the ext4_punch_hole() function and add constraint that
+caps the length to satisfy the one before laster block requirement.
 
-Link: https://lore.kernel.org/r/20220408001314.5014-9-michael.christie@oracle.com
-Tested-by: Manish Rangankar <mrangankar@marvell.com>
-Reviewed-by: Lee Duncan <lduncan@suse.com>
-Reviewed-by: Chris Leech <cleech@redhat.com>
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+LINK: [1] https://syzkaller.appspot.com/bug?id=b80bd9cf348aac724a4f4dff251800106d721331
+LINK: [2] https://syzkaller.appspot.com/text?tag=ReproC&x=14ba0238700000
+
+Fixes: a4bb6b64e39a ("ext4: enable "punch hole" functionality")
+Reported-by: syzbot+7a806094edd5d07ba029@syzkaller.appspotmail.com
+Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+Link: https://lore.kernel.org/r/20220331200515.153214-1-tadeusz.struk@linaro.org
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Cc: stable@kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/libiscsi.c | 7 ++++++-
- include/scsi/libiscsi.h | 2 +-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ fs/ext4/inode.c |   11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
-index 073c4db79094..f228d991038a 100644
---- a/drivers/scsi/libiscsi.c
-+++ b/drivers/scsi/libiscsi.c
-@@ -678,7 +678,8 @@ __iscsi_conn_send_pdu(struct iscsi_conn *conn, struct iscsi_hdr *hdr,
- 	struct iscsi_task *task;
- 	itt_t itt;
+--- a/fs/ext4/inode.c
++++ b/fs/ext4/inode.c
+@@ -3980,7 +3980,8 @@ int ext4_punch_hole(struct inode *inode,
+ 	struct super_block *sb = inode->i_sb;
+ 	ext4_lblk_t first_block, stop_block;
+ 	struct address_space *mapping = inode->i_mapping;
+-	loff_t first_block_offset, last_block_offset;
++	loff_t first_block_offset, last_block_offset, max_length;
++	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
+ 	handle_t *handle;
+ 	unsigned int credits;
+ 	int ret = 0;
+@@ -4026,6 +4027,14 @@ int ext4_punch_hole(struct inode *inode,
+ 		   offset;
+ 	}
  
--	if (session->state == ISCSI_STATE_TERMINATE)
-+	if (session->state == ISCSI_STATE_TERMINATE ||
-+	    !test_bit(ISCSI_CONN_FLAG_BOUND, &conn->flags))
- 		return NULL;
- 
- 	if (opcode == ISCSI_OP_LOGIN || opcode == ISCSI_OP_TEXT) {
-@@ -2214,6 +2215,8 @@ void iscsi_conn_unbind(struct iscsi_cls_conn *cls_conn, bool is_active)
- 	iscsi_suspend_tx(conn);
- 
- 	spin_lock_bh(&session->frwd_lock);
-+	clear_bit(ISCSI_CONN_FLAG_BOUND, &conn->flags);
++	/*
++	 * For punch hole the length + offset needs to be within one block
++	 * before last range. Adjust the length if it goes beyond that limit.
++	 */
++	max_length = sbi->s_bitmap_maxbytes - inode->i_sb->s_blocksize;
++	if (offset + length > max_length)
++		length = max_length - offset;
 +
- 	if (!is_active) {
+ 	if (offset & (sb->s_blocksize - 1) ||
+ 	    (offset + length) & (sb->s_blocksize - 1)) {
  		/*
- 		 * if logout timed out before userspace could even send a PDU
-@@ -3311,6 +3314,8 @@ int iscsi_conn_bind(struct iscsi_cls_session *cls_session,
- 	spin_lock_bh(&session->frwd_lock);
- 	if (is_leading)
- 		session->leadconn = conn;
-+
-+	set_bit(ISCSI_CONN_FLAG_BOUND, &conn->flags);
- 	spin_unlock_bh(&session->frwd_lock);
- 
- 	/*
-diff --git a/include/scsi/libiscsi.h b/include/scsi/libiscsi.h
-index bdb0ae11682d..d1e282f0d6f1 100644
---- a/include/scsi/libiscsi.h
-+++ b/include/scsi/libiscsi.h
-@@ -55,7 +55,7 @@ enum {
- /* Connection flags */
- #define ISCSI_CONN_FLAG_SUSPEND_TX	BIT(0)
- #define ISCSI_CONN_FLAG_SUSPEND_RX	BIT(1)
--
-+#define ISCSI_CONN_FLAG_BOUND		BIT(2)
- 
- #define ISCSI_ITT_MASK			0x1fff
- #define ISCSI_TOTAL_CMDS_MAX		4096
--- 
-2.35.1
-
 
 

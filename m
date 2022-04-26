@@ -2,218 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 323EB50FEFC
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:25:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 838E550FE9D
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:15:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350939AbiDZN2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 09:28:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42724 "EHLO
+        id S1344549AbiDZNRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 09:17:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347820AbiDZN23 (ORCPT
+        with ESMTP id S234803AbiDZNQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 09:28:29 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691AE1EAFF;
-        Tue, 26 Apr 2022 06:25:21 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23QCMnQD007300;
-        Tue, 26 Apr 2022 13:25:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=y/FQiD/GcebPEX7SS1oTYUVL3rQ7Svp69NhiEeikjyw=;
- b=rctrgqZRg/GEN0Hit/eRFScwpAHLllDRKljL/mBrCFyfj+Qr5SZFW7G+nLcOI7q9MxmG
- z3i3HqyiGjd52bg5FExtX1XgpOoC+qOlHhLjebdFYHNdrWIaiaKn2lrIXMQ+k6VZrMkp
- mV5VLigou5B/HGisEZQgdbY41A5Iim6mbhzFsa6iKpij6yJWz/awbMw65zKyRao88GZu
- o1CRk+FP+ZWw+we01MDd2gEqAPCtvw5u35nup30+n9nbOa+6HbH8EEh1bKpxSSntbZIq
- g4MOqZ8fjoGLVJirPla2WrkR1eznSfmq6ZytbWD3cYEI22h3P/YVV448/qntXQjTE48f 4w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fpbyh7jh7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 13:25:18 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23QDPHuc013555;
-        Tue, 26 Apr 2022 13:25:17 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fpbyh7jgf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 13:25:17 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23QDD6kS026252;
-        Tue, 26 Apr 2022 13:25:15 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06fra.de.ibm.com with ESMTP id 3fm8qhkfw3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 13:25:15 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23QDPC7n54067668
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 26 Apr 2022 13:25:12 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 36F89A405F;
-        Tue, 26 Apr 2022 13:25:12 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 876F7A405C;
-        Tue, 26 Apr 2022 13:25:11 +0000 (GMT)
-Received: from [9.171.92.107] (unknown [9.171.92.107])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 26 Apr 2022 13:25:11 +0000 (GMT)
-Message-ID: <1c2caf30-da84-b4ce-d2ac-4edb5ef60a79@linux.ibm.com>
-Date:   Tue, 26 Apr 2022 15:25:11 +0200
+        Tue, 26 Apr 2022 09:16:59 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE306D381
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 06:13:51 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Knj4X1RnfzhYlG;
+        Tue, 26 Apr 2022 21:13:32 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 26 Apr 2022 21:13:49 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 26 Apr
+ 2022 21:13:48 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <sound-open-firmware@alsa-project.org>
+CC:     <broonie@kernel.org>, <rander.wang@intel.com>,
+        <pierre-louis.bossart@linux.intel.com>,
+        <ranjani.sridharan@linux.intel.com>,
+        <peter.ujfalusi@linux.intel.com>, <yung-chuan.liao@linux.intel.com>
+Subject: [PATCH -next] ASoC: SOF: sof-pci-dev: fix missing pci_release_regions() on error in sof_pci_probe()
+Date:   Tue, 26 Apr 2022 21:25:39 +0800
+Message-ID: <20220426132539.416676-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/2] KVM: s390: Don't indicate suppression on dirtying,
- failing memop
-Content-Language: en-US
-To:     Janosch Frank <frankja@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-References: <20220425100147.1755340-1-scgl@linux.ibm.com>
- <20220425100147.1755340-2-scgl@linux.ibm.com>
- <2be2e47d-c1f5-18ac-264d-a1bde3b03c24@linux.ibm.com>
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-In-Reply-To: <2be2e47d-c1f5-18ac-264d-a1bde3b03c24@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: YLjkWhMDasuEcPrrkpUrpC3yWRQPeUfi
-X-Proofpoint-GUID: HNOOXhk0qSQludk9sB3t2M4z0SqA8SZJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-26_02,2022-04-26_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
- bulkscore=0 adultscore=0 mlxlogscore=999 lowpriorityscore=0 suspectscore=0
- priorityscore=1501 phishscore=0 mlxscore=0 malwarescore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204260083
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/26/22 09:18, Janosch Frank wrote:
-> On 4/25/22 12:01, Janis Schoetterl-Glausch wrote:
->> If user space uses a memop to emulate an instruction and that
->> memop fails, the execution of the instruction ends.
->> Instruction execution can end in different ways, one of which is
->> suppression, which requires that the instruction execute like a no-op.
-> 
-> 
-> 
->> A writing memop that spans multiple pages and fails due to key
->> protection can modified guest memory, as a result, the likely
->> correct ending is termination. Therefore do not indicate a
->> suppressing instruction ending in this case.
-> 
-> Check grammar.
-> 
->>
->> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
->> ---
->>   arch/s390/kvm/gaccess.c | 47 ++++++++++++++++++++++++-----------------
->>   1 file changed, 28 insertions(+), 19 deletions(-)
->>
->> diff --git a/arch/s390/kvm/gaccess.c b/arch/s390/kvm/gaccess.c
->> index d53a183c2005..3b1fbef82288 100644
->> --- a/arch/s390/kvm/gaccess.c
->> +++ b/arch/s390/kvm/gaccess.c
->> @@ -491,8 +491,8 @@ enum prot_type {
->>       PROT_TYPE_IEP  = 4,
->>   };
->>   -static int trans_exc(struct kvm_vcpu *vcpu, int code, unsigned long gva,
->> -             u8 ar, enum gacc_mode mode, enum prot_type prot)
->> +static int trans_exc_ending(struct kvm_vcpu *vcpu, int code, unsigned long gva, u8 ar,
->> +                enum gacc_mode mode, enum prot_type prot, bool suppress)
->>   {
->>       struct kvm_s390_pgm_info *pgm = &vcpu->arch.pgm;
->>       struct trans_exc_code_bits *tec;
->> @@ -503,22 +503,24 @@ static int trans_exc(struct kvm_vcpu *vcpu, int code, unsigned long gva,
->>         switch (code) {
->>       case PGM_PROTECTION:
->> -        switch (prot) {
->> -        case PROT_TYPE_IEP:
->> -            tec->b61 = 1;
->> -            fallthrough;
->> -        case PROT_TYPE_LA:
->> -            tec->b56 = 1;
->> -            break;
->> -        case PROT_TYPE_KEYC:
->> -            tec->b60 = 1;
->> -            break;
->> -        case PROT_TYPE_ALC:
->> -            tec->b60 = 1;
->> -            fallthrough;
->> -        case PROT_TYPE_DAT:
->> -            tec->b61 = 1;
->> -            break;
->> +        if (suppress) {
->> +            switch (prot) {
->> +            case PROT_TYPE_IEP:
->> +                tec->b61 = 1;
->> +                fallthrough;
->> +            case PROT_TYPE_LA:
->> +                tec->b56 = 1;
->> +                break;
->> +            case PROT_TYPE_KEYC:
->> +                tec->b60 = 1;
->> +                break;
->> +            case PROT_TYPE_ALC:
->> +                tec->b60 = 1;
->> +                fallthrough;
->> +            case PROT_TYPE_DAT:
->> +                tec->b61 = 1;
->> +                break;
->> +            }
->>           }
-> 
-> How about switching this around and masking those bits on termination.
+Fix the missing pci_release_regions() before return
+from sof_pci_probe() in the error handling case.
 
-I did initially have if (!terminate) { ... }, but it seemed more straight forward
-to me without the negation. Or are you suggesting explicitly resetting the
-bits to zero when terminating?
-> 
->>           fallthrough;
->>       case PGM_ASCE_TYPE:
->> @@ -552,6 +554,12 @@ static int trans_exc(struct kvm_vcpu *vcpu, int code, unsigned long gva,
->>       return code;
->>   }
->>   +static int trans_exc(struct kvm_vcpu *vcpu, int code, unsigned long gva, u8 ar,
->> +             enum gacc_mode mode, enum prot_type prot)
->> +{
->> +    return trans_exc_ending(vcpu, code, gva, ar, mode, prot, true);
->> +}
->> +
->>   static int get_vcpu_asce(struct kvm_vcpu *vcpu, union asce *asce,
->>                unsigned long ga, u8 ar, enum gacc_mode mode)
->>   {
->> @@ -1110,7 +1118,8 @@ int access_guest_with_key(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
->>           ga = kvm_s390_logical_to_effective(vcpu, ga + fragment_len);
->>       }
->>       if (rc > 0)
->> -        rc = trans_exc(vcpu, rc, ga, ar, mode, prot);
->> +        rc = trans_exc_ending(vcpu, rc, ga, ar, mode, prot,
->> +                      (mode != GACC_STORE) || (idx == 0));
-> 
-> Add a boolean variable named terminating, calculate the value before passing the boolean on.
+Fixes: 4bfbbb76e82e ("ASOC: SOF: pci: add ipc_type override for Intel IPC4 tests")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ sound/soc/sof/sof-pci-dev.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Ok. I'll scope it to the body of the if.
-> 
->>   out_unlock:
->>       if (need_ipte_lock)
->>           ipte_unlock(vcpu);
-> 
-> 
+diff --git a/sound/soc/sof/sof-pci-dev.c b/sound/soc/sof/sof-pci-dev.c
+index cd90da7c92c2..3b0978b02f9f 100644
+--- a/sound/soc/sof/sof-pci-dev.c
++++ b/sound/soc/sof/sof-pci-dev.c
+@@ -217,12 +217,14 @@ int sof_pci_probe(struct pci_dev *pci, const struct pci_device_id *pci_id)
+ 			 desc->ipc_default, sof_pci_ipc_type);
+ 		if (sof_pci_ipc_type >= SOF_IPC_TYPE_COUNT) {
+ 			dev_err(dev, "invalid request value %d\n", sof_pci_ipc_type);
+-			return -EINVAL;
++			ret = -EINVAL;
++			goto out;
+ 		}
+ 		if (!(BIT(sof_pci_ipc_type) & desc->ipc_supported_mask)) {
+ 			dev_err(dev, "invalid request value %d, supported mask is %#x\n",
+ 				sof_pci_ipc_type, desc->ipc_supported_mask);
+-			return -EINVAL;
++			ret = -EINVAL;
++			goto out;
+ 		}
+ 		sof_pdata->ipc_type = sof_pci_ipc_type;
+ 	}
+@@ -291,6 +293,8 @@ int sof_pci_probe(struct pci_dev *pci, const struct pci_device_id *pci_id)
+ 
+ 	/* call sof helper for DSP hardware probe */
+ 	ret = snd_sof_device_probe(dev, sof_pdata);
++
++out:
+ 	if (ret)
+ 		pci_release_regions(pci);
+ 
+-- 
+2.25.1
 

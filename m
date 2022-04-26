@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4232050F5EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9451250F8F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:44:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346061AbiDZIyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:54:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58756 "EHLO
+        id S236119AbiDZJ21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345830AbiDZIjg (ORCPT
+        with ESMTP id S1347348AbiDZJFa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:39:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B04793A0;
-        Tue, 26 Apr 2022 01:32:01 -0700 (PDT)
+        Tue, 26 Apr 2022 05:05:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDFF11096A;
+        Tue, 26 Apr 2022 01:44:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D78C617D2;
-        Tue, 26 Apr 2022 08:32:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36871C385A0;
-        Tue, 26 Apr 2022 08:32:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 25EF3B81C76;
+        Tue, 26 Apr 2022 08:44:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62271C385A4;
+        Tue, 26 Apr 2022 08:44:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961920;
-        bh=tRbye1fxfoP+AzMBZoQEW1nrxP5cNRSw6FqxdHBimmw=;
+        s=korg; t=1650962665;
+        bh=1OWTHQQH1jcO8sBBchXhD6ZyJQdD/B6PmUizs65gAqU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uKRfmjNWLtkW+bIHG2DYId9WGSB7mtQ1MiiKFhixiZJAa42GEf43ZgFVGnJij+47I
-         EeXd1nCEYuMA1eJfKteTn+W5H4xvRZzhQ9o2LL1hlk7SYSjWvXHh9Qmi9YrVcA1G+8
-         hjAFMYPQcKa+JkYU6q1AFUPzmBmRGj2tW7Pg/m9g=
+        b=h51o3B+bUFpDVWirLVqsdkGhQuLMCHK9XiG10FIxQo6lmY7dlQdAEEzS64szSc5PM
+         tbFzIVPSQOOevkSE5uXXMfib3LifNTMI81bLqLNBYzUwp7oQs5TH78ruXqGH/skDRz
+         mUG0j5+t/tNkVflL+P9Xs8bNtifNZX8JztgZFizY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 13/86] dmaengine: imx-sdma: Fix error checking in sdma_event_remap
-Date:   Tue, 26 Apr 2022 10:20:41 +0200
-Message-Id: <20220426081741.588957639@linuxfoundation.org>
+        stable@vger.kernel.org, Kevin Hao <haokexin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 047/146] net: stmmac: Use readl_poll_timeout_atomic() in atomic state
+Date:   Tue, 26 Apr 2022 10:20:42 +0200
+Message-Id: <20220426081751.394223497@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
-References: <20220426081741.202366502@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,44 +54,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Kevin Hao <haokexin@gmail.com>
 
-[ Upstream commit 7104b9cb35a33ad803a1adbbfa50569b008faf15 ]
+[ Upstream commit 234901de2bc6847eaa0aeb4aba62c31ffb8d3ad6 ]
 
-of_parse_phandle() returns NULL on errors, rather than error
-pointers. Using NULL check on grp_np to fix this.
+The init_systime() may be invoked in atomic state. We have observed the
+following call trace when running "phc_ctl /dev/ptp0 set" on a Intel
+Agilex board.
+  BUG: sleeping function called from invalid context at drivers/net/ethernet/stmicro/stmmac/stmmac_hwtstamp.c:74
+  in_atomic(): 1, irqs_disabled(): 128, non_block: 0, pid: 381, name: phc_ctl
+  preempt_count: 1, expected: 0
+  RCU nest depth: 0, expected: 0
+  Preemption disabled at:
+  [<ffff80000892ef78>] stmmac_set_time+0x34/0x8c
+  CPU: 2 PID: 381 Comm: phc_ctl Not tainted 5.18.0-rc2-next-20220414-yocto-standard+ #567
+  Hardware name: SoCFPGA Agilex SoCDK (DT)
+  Call trace:
+   dump_backtrace.part.0+0xc4/0xd0
+   show_stack+0x24/0x40
+   dump_stack_lvl+0x7c/0xa0
+   dump_stack+0x18/0x34
+   __might_resched+0x154/0x1c0
+   __might_sleep+0x58/0x90
+   init_systime+0x78/0x120
+   stmmac_set_time+0x64/0x8c
+   ptp_clock_settime+0x60/0x9c
+   pc_clock_settime+0x6c/0xc0
+   __arm64_sys_clock_settime+0x88/0xf0
+   invoke_syscall+0x5c/0x130
+   el0_svc_common.constprop.0+0x4c/0x100
+   do_el0_svc+0x7c/0xa0
+   el0_svc+0x58/0xcc
+   el0t_64_sync_handler+0xa4/0x130
+   el0t_64_sync+0x18c/0x190
 
-Fixes: d078cd1b4185 ("dmaengine: imx-sdma: Add imx6sx platform support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220308064952.15743-1-linmq006@gmail.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+So we should use readl_poll_timeout_atomic() here instead of
+readl_poll_timeout().
+
+Also adjust the delay time to 10us to fix a "__bad_udelay" build error
+reported by "kernel test robot <lkp@intel.com>". I have tested this on
+Intel Agilex and NXP S32G boards, there is no delay needed at all.
+So the 10us delay should be long enough for most cases.
+
+Fixes: ff8ed737860e ("net: stmmac: use readl_poll_timeout() function in init_systime()")
+Signed-off-by: Kevin Hao <haokexin@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma/imx-sdma.c | 4 ++--
+ drivers/net/ethernet/stmicro/stmmac/stmmac_hwtstamp.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
-index 306f93e4b26a..792c91cd1608 100644
---- a/drivers/dma/imx-sdma.c
-+++ b/drivers/dma/imx-sdma.c
-@@ -1789,7 +1789,7 @@ static int sdma_event_remap(struct sdma_engine *sdma)
- 	u32 reg, val, shift, num_map, i;
- 	int ret = 0;
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_hwtstamp.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_hwtstamp.c
+index a7ec9f4d46ce..d68ef72dcdde 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_hwtstamp.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_hwtstamp.c
+@@ -71,9 +71,9 @@ static int init_systime(void __iomem *ioaddr, u32 sec, u32 nsec)
+ 	writel(value, ioaddr + PTP_TCR);
  
--	if (IS_ERR(np) || IS_ERR(gpr_np))
-+	if (IS_ERR(np) || !gpr_np)
- 		goto out;
+ 	/* wait for present system time initialize to complete */
+-	return readl_poll_timeout(ioaddr + PTP_TCR, value,
++	return readl_poll_timeout_atomic(ioaddr + PTP_TCR, value,
+ 				 !(value & PTP_TCR_TSINIT),
+-				 10000, 100000);
++				 10, 100000);
+ }
  
- 	event_remap = of_find_property(np, propname, NULL);
-@@ -1837,7 +1837,7 @@ static int sdma_event_remap(struct sdma_engine *sdma)
- 	}
- 
- out:
--	if (!IS_ERR(gpr_np))
-+	if (gpr_np)
- 		of_node_put(gpr_np);
- 
- 	return ret;
+ static int config_addend(void __iomem *ioaddr, u32 addend)
 -- 
 2.35.1
 

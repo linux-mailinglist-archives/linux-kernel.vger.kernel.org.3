@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99EBF50F5B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDA5950F8FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:44:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345533AbiDZIn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:43:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60516 "EHLO
+        id S1348227AbiDZJe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:34:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345696AbiDZIfA (ORCPT
+        with ESMTP id S1347894AbiDZJGV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:35:00 -0400
+        Tue, 26 Apr 2022 05:06:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84B87B554;
-        Tue, 26 Apr 2022 01:28:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02617954BE;
+        Tue, 26 Apr 2022 01:46:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 79C6D61861;
-        Tue, 26 Apr 2022 08:28:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84A22C385A0;
-        Tue, 26 Apr 2022 08:28:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9828260C42;
+        Tue, 26 Apr 2022 08:46:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0ED1C385A0;
+        Tue, 26 Apr 2022 08:46:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961686;
-        bh=6Gyh6pHcC1BHzZyxNOnQ480YdvWAvjN2LeI3P34j8Eg=;
+        s=korg; t=1650962809;
+        bh=j1Tg1nLCK4PayqRk4fovyoejWs7owY0pBIUS6PJwmyI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Nnn6T8q67xeZTlB4Crvan+aToqc850cx/okUdk+FAsYtZ1oosaEV0zvb+RCzqgIZ9
-         3SIbEaO/jZQ3e/Q520enWHc8KQwvffygxOlLPcQIF2hQ0cg0LoisT6U4NJD2ljO78u
-         iZKUIS0Q6DX0+oDQE0SvnZ5vjp+NmHpej7jiFOH8=
+        b=lvb+iwY7QIacNQuZEB2ixr2LQaE3vwGYj/8m1c4dPdI5r33KZrbg7Q8LhygjwyJ0j
+         9p3GCUkmuABMQeu+5z/ST2icQ11EONrheqgNxdOmYtWjSP7NWmo8iGIYaIzPQz0UC/
+         O6lhZjWlDEzEsT+Y/1kRXNhQ5J3aL1oG+IPk/kfs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Duoming Zhou <duoming@zju.edu.cn>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ovidiu Panait <ovidiu.panait@windriver.com>
-Subject: [PATCH 4.19 50/53] ax25: fix NPD bug in ax25_disconnect
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 5.17 095/146] dma: at_xdmac: fix a missing check on list iterator
 Date:   Tue, 26 Apr 2022 10:21:30 +0200
-Message-Id: <20220426081737.119880374@linuxfoundation.org>
+Message-Id: <20220426081752.728998984@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
-References: <20220426081735.651926456@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,65 +53,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-commit 7ec02f5ac8a5be5a3f20611731243dc5e1d9ba10 upstream.
+commit 206680c4e46b62fd8909385e0874a36952595b85 upstream.
 
-The ax25_disconnect() in ax25_kill_by_device() is not
-protected by any locks, thus there is a race condition
-between ax25_disconnect() and ax25_destroy_socket().
-when ax25->sk is assigned as NULL by ax25_destroy_socket(),
-a NULL pointer dereference bug will occur if site (1) or (2)
-dereferences ax25->sk.
+The bug is here:
+	__func__, desc, &desc->tx_dma_desc.phys, ret, cookie, residue);
 
-ax25_kill_by_device()                | ax25_release()
-  ax25_disconnect()                  |   ax25_destroy_socket()
-    ...                              |
-    if(ax25->sk != NULL)             |     ...
-      ...                            |     ax25->sk = NULL;
-      bh_lock_sock(ax25->sk); //(1)  |     ...
-      ...                            |
-      bh_unlock_sock(ax25->sk); //(2)|
+The list iterator 'desc' will point to a bogus position containing
+HEAD if the list is empty or no element is found. To avoid dev_dbg()
+prints a invalid address, use a new variable 'iter' as the list
+iterator, while use the origin variable 'desc' as a dedicated
+pointer to point to the found element.
 
-This patch moves ax25_disconnect() into lock_sock(), which can
-synchronize with ax25_destroy_socket() in ax25_release().
-
-Fail log:
-===============================================================
-BUG: kernel NULL pointer dereference, address: 0000000000000088
-...
-RIP: 0010:_raw_spin_lock+0x7e/0xd0
-...
-Call Trace:
-ax25_disconnect+0xf6/0x220
-ax25_device_event+0x187/0x250
-raw_notifier_call_chain+0x5e/0x70
-dev_close_many+0x17d/0x230
-rollback_registered_many+0x1f1/0x950
-unregister_netdevice_queue+0x133/0x200
-unregister_netdev+0x13/0x20
-...
-
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-[OP: backport to 4.19: adjust context]
-Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
+Cc: stable@vger.kernel.org
+Fixes: 82e2424635f4c ("dmaengine: xdmac: fix print warning on dma_addr_t variable")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Link: https://lore.kernel.org/r/20220327061154.4867-1-xiam0nd.tong@gmail.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ax25/af_ax25.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/dma/at_xdmac.c |   12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
---- a/net/ax25/af_ax25.c
-+++ b/net/ax25/af_ax25.c
-@@ -105,8 +105,8 @@ again:
- 				dev_put(ax25_dev->dev);
- 				ax25_dev_put(ax25_dev);
- 			}
--			release_sock(sk);
- 			ax25_disconnect(s, ENETUNREACH);
-+			release_sock(sk);
- 			spin_lock_bh(&ax25_list_lock);
- 			sock_put(sk);
- 			/* The entry could have been deleted from the
+--- a/drivers/dma/at_xdmac.c
++++ b/drivers/dma/at_xdmac.c
+@@ -1453,7 +1453,7 @@ at_xdmac_tx_status(struct dma_chan *chan
+ {
+ 	struct at_xdmac_chan	*atchan = to_at_xdmac_chan(chan);
+ 	struct at_xdmac		*atxdmac = to_at_xdmac(atchan->chan.device);
+-	struct at_xdmac_desc	*desc, *_desc;
++	struct at_xdmac_desc	*desc, *_desc, *iter;
+ 	struct list_head	*descs_list;
+ 	enum dma_status		ret;
+ 	int			residue, retry;
+@@ -1568,11 +1568,13 @@ at_xdmac_tx_status(struct dma_chan *chan
+ 	 * microblock.
+ 	 */
+ 	descs_list = &desc->descs_list;
+-	list_for_each_entry_safe(desc, _desc, descs_list, desc_node) {
+-		dwidth = at_xdmac_get_dwidth(desc->lld.mbr_cfg);
+-		residue -= (desc->lld.mbr_ubc & 0xffffff) << dwidth;
+-		if ((desc->lld.mbr_nda & 0xfffffffc) == cur_nda)
++	list_for_each_entry_safe(iter, _desc, descs_list, desc_node) {
++		dwidth = at_xdmac_get_dwidth(iter->lld.mbr_cfg);
++		residue -= (iter->lld.mbr_ubc & 0xffffff) << dwidth;
++		if ((iter->lld.mbr_nda & 0xfffffffc) == cur_nda) {
++			desc = iter;
+ 			break;
++		}
+ 	}
+ 	residue += cur_ubc << dwidth;
+ 
 
 

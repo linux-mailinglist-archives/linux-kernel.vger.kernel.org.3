@@ -2,133 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97E5250F010
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 07:01:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA7E450F012
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 07:02:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238085AbiDZFEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 01:04:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57190 "EHLO
+        id S244252AbiDZFEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 01:04:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236477AbiDZFEb (ORCPT
+        with ESMTP id S244273AbiDZFEv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 01:04:31 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4C0CEE26
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 22:01:24 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id g15-20020a056e021a2f00b002cd868be1faso2033655ile.21
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 22:01:24 -0700 (PDT)
+        Tue, 26 Apr 2022 01:04:51 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D16FD17EC
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 22:01:42 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id y14so16123817pfe.10
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 22:01:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mkPRDXMojyzY4qLqBJMMJM+l3Q8ZwwRnxZtf0mTrZFA=;
+        b=aQPVZqzGp2TnCvBtslKJlyZIttR8ls8LDP9YYSF1m4fZ0pDc0bjVbIpmjp9rP+AZdn
+         U9iIGHdJKSUOoooVz5SIoCq+zUJubJbs87F+LOckuSXH2p+0MqKSUnQUkOgz7LeXobKH
+         t+2atMqnQMOuBnrccMg6G4LfbFwjBGZtr/WV7KujcJMqb5RTUfAb/gGyp6hofmOeHs6l
+         /HLIxmmQtX3Qa6bi67eXdp3qIVlFieMeE5itTr5u+xhRy5p2+EqhVBfa2AfvqPO7KIod
+         NwfH7Bt8ekZq3iR5QYId61qf3CDkgt6FF5MZCwQ92Nvqpl38F0yFZiCc7tyqFzcptexH
+         xtFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=LxqcV03nxtRQab3OQQ/+BgCz/sCQjRuCxAx9hrcj9yU=;
-        b=Hs6eETc0e6Yc/X4N1uRPV0wMtwPhjT3bJC2JVFat3gQIoP9DJxTZHow5umqi05EW/x
-         ZZ1XOUB9OqSAa3x6mXmBfUIAWsOanGhMOfWMZNmr5W+jWNOsQtSHYMtaYn1OTnqtmLWY
-         Aq3PyMEMT5t2KH5WLk4NGgqfxU5e1bwVXtyLIQIbQKUs3jBC0Lvrj+N/R6AfeuO9mt+1
-         agIF7rf84573yiKa3sUhcmCsOLCZvRagiiWqjcU8jCd9hbU72SHYxaG8Zk7IoLIsvi5J
-         rhTio9PNICvewP6ZdSbLAuBbWvcE/bnQYHlZG8snhL7C3/SkQpnff71OQM+ewluaS6fg
-         haeg==
-X-Gm-Message-State: AOAM532Wf7VyV2CSyoKEpCAIscgyfFHJWWNjFPAT607FQFBPV8OCWxG/
-        YnSJz9eOvjxUEl7bAxiZhZRq1Ba0+vJngEo2xc5fNTo/PLfS
-X-Google-Smtp-Source: ABdhPJxiNiWCZ6FKc0zZ4jjLFrau05T3E01K6CXGI3CqXHVUQYlYBO1cIkSLES0EaeP3983LcBM3BgoAitWToutKSknEs4qa1Pfm
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mkPRDXMojyzY4qLqBJMMJM+l3Q8ZwwRnxZtf0mTrZFA=;
+        b=YF26uv0uA9ajNPSoXce6dGeKakc8uz853R8RWI6ZlMtmpiZrBQJX3hx/3ilvPlUDIJ
+         qpFEUBRzqZ+CTR7teyHuT+7C1zGwRBUluSo8jRM7k39dyI90Hnim38ldS7gRh5glSJcD
+         5KcuDH3wVVWpbaFqUV2tfRkqjqu0G86kXAjed8FSf08IFcpWpEFZ3tToCEGPDPTg35iY
+         fCrsZd2gaju3UVDfEkE6VCc2Hw4VN4muZkDthHZw24QWm9ssnsCZ4wJsWkuCtDhhxLMr
+         D4R2LTMXlTh8Z7szrX+enh8XIb+3XF6EXWNn1Gnf1w3jG3CKap3V96uAY3g3CM5m7Vqo
+         PCIw==
+X-Gm-Message-State: AOAM5313ibQ5r/ma+d4O7WJag3rKECO6Idsvz/fpkN/qIoDGC+0xmsgd
+        ZuuDOhHSQxlobDRRkPalWtdBySLRXDBUkyqmC94rUZamnjo=
+X-Google-Smtp-Source: ABdhPJxzYXrzCZ2t/STABZZMXYFwavHW+XUOVpecyOzAXPgcgzH8fq3S7Pz9jPtglltjQh3lmGqj4iOm/BVUYT02Zoc=
+X-Received: by 2002:a05:6a00:e14:b0:4fe:3cdb:23f with SMTP id
+ bq20-20020a056a000e1400b004fe3cdb023fmr22462013pfb.86.1650949301268; Mon, 25
+ Apr 2022 22:01:41 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2cd2:b0:657:388f:b993 with SMTP id
- j18-20020a0566022cd200b00657388fb993mr8878699iow.54.1650949284109; Mon, 25
- Apr 2022 22:01:24 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 22:01:24 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009f1fa405dd87954f@google.com>
-Subject: [syzbot] WARNING: suspicious RCU usage in mac80211_hwsim_sta_rc_update
-From:   syzbot <syzbot+efb5967310cacc5ac63e@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, johannes@sipsolutions.net, kuba@kernel.org,
-        kvalo@kernel.org, linux-kernel@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+References: <20220424062655.3221152-1-ran.jianping@zte.com.cn>
+In-Reply-To: <20220424062655.3221152-1-ran.jianping@zte.com.cn>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Mon, 25 Apr 2022 22:01:30 -0700
+Message-ID: <CAPcyv4gKMM4A4MPo=xm0SP6E_7C-897K6Nfh7_wmdgY7c0gxdw@mail.gmail.com>
+Subject: Re: [PATCH] tools/testing/nvdimm: remove unneeded flush_workqueue
+To:     cgel.zte@gmail.com
+Cc:     Vishal L Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        "Weiny, Ira" <ira.weiny@intel.com>, ran.jianping@zte.com.cn,
+        Jane Chu <jane.chu@oracle.com>,
+        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Zeal Robot <zealci@zte.com.cn>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sat, Apr 23, 2022 at 11:27 PM <cgel.zte@gmail.com> wrote:
+>
+> From: ran jianping <ran.jianping@zte.com.cn>
+>
+> All work currently pending will be done first by calling destroy_workqueue,
+> so there is no need to flush it explicitly.
+>
 
-syzbot found the following issue on:
-
-HEAD commit:    59f0c2447e25 Merge tag 'net-5.18-rc4' of git://git.kernel...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=165262fcf00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=71bf5c8488a4e33a
-dashboard link: https://syzkaller.appspot.com/bug?extid=efb5967310cacc5ac63e
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+efb5967310cacc5ac63e@syzkaller.appspotmail.com
-
-wlan1: Created IBSS using preconfigured BSSID 50:50:50:50:50:50
-wlan1: Creating new IBSS network, BSSID 50:50:50:50:50:50
-=============================
-WARNING: suspicious RCU usage
-5.18.0-rc3-syzkaller-00060-g59f0c2447e25 #0 Not tainted
------------------------------
-drivers/net/wireless/mac80211_hwsim.c:2206 suspicious rcu_dereference_check() usage!
-
-other info that might help us debug this:
-
-
-rcu_scheduler_active = 2, debug_locks = 1
-4 locks held by kworker/u4:6/3738:
- #0: ffff8881488a1138 ((wq_completion)phy37){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff8881488a1138 ((wq_completion)phy37){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff8881488a1138 ((wq_completion)phy37){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
- #0: ffff8881488a1138 ((wq_completion)phy37){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:636 [inline]
- #0: ffff8881488a1138 ((wq_completion)phy37){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
- #0: ffff8881488a1138 ((wq_completion)phy37){+.+.}-{0:0}, at: process_one_work+0x87a/0x1610 kernel/workqueue.c:2260
- #1: ffffc90003fbfda8 ((work_completion)(&sdata->work)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610 kernel/workqueue.c:2264
- #2: ffff888080bf0dc0 (&wdev->mtx){+.+.}-{3:3}, at: sdata_lock net/mac80211/ieee80211_i.h:1039 [inline]
- #2: ffff888080bf0dc0 (&wdev->mtx){+.+.}-{3:3}, at: ieee80211_ibss_rx_queued_mgmt+0x101/0x33b0 net/mac80211/ibss.c:1628
- #3: ffff8880430e9870 (&local->sta_mtx){+.+.}-{3:3}, at: sta_info_insert_rcu+0xc1/0x2b50 net/mac80211/sta_info.c:726
-
-stack backtrace:
-CPU: 0 PID: 3738 Comm: kworker/u4:6 Not tainted 5.18.0-rc3-syzkaller-00060-g59f0c2447e25 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: phy37 ieee80211_iface_work
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- mac80211_hwsim_sta_rc_update+0x2b8/0x430 drivers/net/wireless/mac80211_hwsim.c:2206
- mac80211_hwsim_sta_add+0xba/0x170 drivers/net/wireless/mac80211_hwsim.c:2224
- drv_sta_add net/mac80211/driver-ops.h:465 [inline]
- drv_sta_state+0x5cf/0x1520 net/mac80211/driver-ops.c:127
- sta_info_insert_drv_state net/mac80211/sta_info.c:575 [inline]
- sta_info_insert_finish net/mac80211/sta_info.c:679 [inline]
- sta_info_insert_rcu+0x14ab/0x2b50 net/mac80211/sta_info.c:736
- ieee80211_ibss_finish_sta+0x212/0x390 net/mac80211/ibss.c:585
- ieee80211_ibss_add_sta+0x405/0x740 net/mac80211/ibss.c:643
- ieee80211_update_sta_info net/mac80211/ibss.c:1027 [inline]
- ieee80211_rx_bss_info net/mac80211/ibss.c:1117 [inline]
- ieee80211_rx_mgmt_probe_beacon net/mac80211/ibss.c:1610 [inline]
- ieee80211_ibss_rx_queued_mgmt+0x271d/0x33b0 net/mac80211/ibss.c:1639
- ieee80211_iface_process_skb net/mac80211/iface.c:1527 [inline]
- ieee80211_iface_work+0xa6f/0xd10 net/mac80211/iface.c:1581
- process_one_work+0x996/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Looks good, applied.

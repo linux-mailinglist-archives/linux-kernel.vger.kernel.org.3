@@ -2,97 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C0D950F120
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:35:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53AEB50F122
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:35:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239346AbiDZGiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 02:38:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56064 "EHLO
+        id S245212AbiDZGio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 02:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236217AbiDZGiP (ORCPT
+        with ESMTP id S236217AbiDZGik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 02:38:15 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F17270D
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:35:08 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id j8-20020a17090a060800b001cd4fb60dccso1648128pjj.2
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:35:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GsxxmMpYiSWcAhtj5+OuqmggGxrIXpA+UsxQ7ABN67M=;
-        b=j5TQZ2g999dmM/MQYRIDRQBOnysL/Nqn8YY63eeiuM3Gz+JXmrsfTqFQX+t55FCp5u
-         ic66KPy4x7erupcC7rRSEL4e+bc+HxVWJWZUQYl85JbdctXGYVTE61k1g9Y/Xv7tB2yj
-         THd4xnEvQVZK4bG0T9Y4bc/b8ucM8i5a/6b7t630upBJ+queuwDBbfmyk50nADPtYbry
-         ipa6jxu6Kb+5qIfXExWrgAirac+AJN45R9t+kx8GvnktP6GQtJ3+7Q6z281nJXl3KweR
-         +SspRygsMDXPROnKTOyZngUu4BmWDl0fJOyO/yG+kIauFmjAlSc9kp75a6y4yuQvSIce
-         6Cgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GsxxmMpYiSWcAhtj5+OuqmggGxrIXpA+UsxQ7ABN67M=;
-        b=xjluAVPGXmtfzIcD+4+PaYENKB3Tff8gVyTh5fuyiHdPDlx2COrWAqmuZioBrTzKYy
-         n5sN5i6wqjIB9Okohjszj58nEa1nN/GEN8rORDosXuTFtnZCe2AajMlkzCG0O3fLxwrG
-         cz/19318q05t4HXpVYCoEMIMZLImuK1Gtyqehz6aba3YL3btvtPNCc33N0x/D3mBDAiu
-         9+cD4FoILDWUQQpBKYNvDo4xHdD7QMdcBeC8r/YCW6V/+o1UwESqNLKHfqAfJ5tu1a43
-         2sia6EwcbXfsQuwlQHvVPKOU2WQgoxfNAEhgmb4ElMVFh4IIV4EDujZjMahsrvPBnE0V
-         Nx7A==
-X-Gm-Message-State: AOAM5338Ne8OzCZmWRoSPCBuPQFfDhYoGSjBO5Gqn1FPChwmx6VUDWmy
-        IiO7mCfGtY5W7j0TVpsoKgQ=
-X-Google-Smtp-Source: ABdhPJxG28FDzxvhJspsw/fE0f8/uq5XCOreBZRgn1TCqr3v3ji+DMbAHXZSvukj0phTIBCB19A71g==
-X-Received: by 2002:a17:90a:c402:b0:1d9:a003:3f8a with SMTP id i2-20020a17090ac40200b001d9a0033f8amr4738422pjt.18.1650954908058;
-        Mon, 25 Apr 2022 23:35:08 -0700 (PDT)
-Received: from localhost.localdomain ([103.197.71.140])
-        by smtp.gmail.com with ESMTPSA id m3-20020a17090a858300b001cd4989ff62sm1446257pjn.41.2022.04.25.23.35.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 23:35:07 -0700 (PDT)
-From:   Stephen Zhang <starzhangzsd@gmail.com>
-To:     linux@dominikbrodowski.net, Jonathan.Cameron@huawei.com,
-        broonie@kernel.org, arnd@arndb.de, lukas.bulwahn@gmail.com
-Cc:     zhangshida@kylinos.cn, starzhangzsd@gmail.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] pcmcia: add MIPS_DB1XXX dependence
-Date:   Tue, 26 Apr 2022 14:34:59 +0800
-Message-Id: <20220426063459.520478-1-starzhangzsd@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 26 Apr 2022 02:38:40 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC7011153
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:35:31 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1njEnC-0005De-IN; Tue, 26 Apr 2022 08:35:22 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1njEn7-0007vL-TY; Tue, 26 Apr 2022 08:35:17 +0200
+Date:   Tue, 26 Apr 2022 08:35:17 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        =?utf-8?B?SsOpcsO0bWU=?= Pouiller <jerome.pouiller@silabs.com>,
+        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 1/4] dt-bindings: arm: stm32: Add compatible strings
+ for Protonic T1L boards
+Message-ID: <20220426063517.GB3419@pengutronix.de>
+References: <20220425132844.866743-1-o.rempel@pengutronix.de>
+ <20220425132844.866743-2-o.rempel@pengutronix.de>
+ <35648611-cfa9-1df4-7130-7cd1bcf1a69e@linaro.org>
+ <5c6ce97d-e31a-6cf9-6da6-8d27f19a53cc@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <5c6ce97d-e31a-6cf9-6da6-8d27f19a53cc@linaro.org>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 08:33:08 up 26 days, 19:02, 55 users,  load average: 0.22, 0.13,
+ 0.14
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shida Zhang <zhangshida@kylinos.cn>
+On Mon, Apr 25, 2022 at 04:06:45PM +0200, Krzysztof Kozlowski wrote:
+> On 25/04/2022 15:53, Krzysztof Kozlowski wrote:
+> > On 25/04/2022 15:28, Oleksij Rempel wrote:
+> >> This boards are based on STM32MP151AAD3 and use 10BaseT1L for
+> >> communication.
+> >>
+> >> - PRTT1C - 10BaseT1L switch
+> >> - PRTT1S - 10BaseT1L CO2 sensor board
+> >> - PRTT1A - 10BaseT1L multi functional controller
+> >>
+> >> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> >> ---
+> > 
+> > 
+> > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> Although the order is still messed up. I through you will move the entry
+> just slightly up, not to the beginning, so maybe just rebase on top of:
+> https://lore.kernel.org/all/20220425140436.332467-1-krzysztof.kozlowski@linaro.org/
 
-drivers/pcmcia/db1xxx_ss.c uses the bcsr_read like function from
-arch/mips/alchemy/devboards/bcsr.c, which is controlled by
-MIPS_DB1XXX. So add MIPS_DB1XXX dependence.
+I put it according to the SoC version. st,stm32mp151 would be the first
+entry before stm32mp153. What order do you prefer, where should I put my
+boards?
 
-Signed-off-by: Shida Zhang <zhangshida@kylinos.cn>
----
- drivers/pcmcia/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/pcmcia/Kconfig b/drivers/pcmcia/Kconfig
-index 2ce261cfff8e..04b51cb67fbf 100644
---- a/drivers/pcmcia/Kconfig
-+++ b/drivers/pcmcia/Kconfig
-@@ -151,7 +151,7 @@ config TCIC
- 
- config PCMCIA_ALCHEMY_DEVBOARD
- 	tristate "Alchemy Db/Pb1xxx PCMCIA socket services"
--	depends on MIPS_ALCHEMY && PCMCIA
-+	depends on MIPS_ALCHEMY && MIPS_DB1XXX && PCMCIA
- 	help
- 	  Enable this driver of you want PCMCIA support on your Alchemy
- 	  Db1000, Db/Pb1100, Db/Pb1500, Db/Pb1550, Db/Pb1200, DB1300
+Regards,
+Oleksij
 -- 
-2.30.2
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

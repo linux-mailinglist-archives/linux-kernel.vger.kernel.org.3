@@ -2,127 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A0751028F
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86C35510293
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:07:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352818AbiDZQJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 12:09:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33954 "EHLO
+        id S1352834AbiDZQKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 12:10:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352810AbiDZQJr (ORCPT
+        with ESMTP id S1352823AbiDZQKN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 12:09:47 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D29347041
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:06:38 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id 125so20553689iov.10
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:06:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=48HTw/rBGTX9w0BVqolReo8yB9AAi0BaZFQxJTNNLy4=;
-        b=ZD1m7Y4nVS7PfQ4Kjhtcx2pWQRTgJwYNx2+YXbk1O2CUO2UxP5EWmPra4LFir6/Taw
-         RpW0It155qOW40r+x6bxxHSyaWqdAxyZPQbArFGFnVhID+wD8iVD1c4L/8kFEbTKgLUz
-         EJZN4+mqFAvk4fkU1MkgFX4lHN0a0xfTh0KQ0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=48HTw/rBGTX9w0BVqolReo8yB9AAi0BaZFQxJTNNLy4=;
-        b=PwfGAWbg9t6N4F2lnfyeHyAJRbBEteL3b81/dM3b4kTg5gfVumeDTmijOu6Q6I8O0J
-         XB2+pmQSNUso3gxctDOMfbLhAlv/oJHjGBkOtazOZrtNeUTN5CYiRgDu0c/3FVOkN2xQ
-         HVECv0JnwOx6Bq0+vBmftTyNSdXFlqkV7ZEfFRcGaLmv1iU0qKuDVkfISpAtoj5LP8Mm
-         Xs+wEclQr2zETL/eCEHHqYTEdYm0I62YRSuOhsDOKWt8uv96GPWlB5d5dn9I/OgG0ouc
-         5oAL6bN3p/hrP39ZJ+E0ldjxyoaxIfvAyLE25omlKSUKe20gwG8hkpqw492Clo5vP8wB
-         lCeA==
-X-Gm-Message-State: AOAM5312lDNuRFMQ/p6p612uK0A/otaqg6o/+8g94+iNtk3NtO70tkyo
-        ldwz99T+0N09O4unjU3Y+E01VQ==
-X-Google-Smtp-Source: ABdhPJxlhTF/uJw3gqLA3Hj0XRaHwykEJis0oX2P2Zrd5M2rhYKz2s635umapHwjfAZEV7w+j3mLVw==
-X-Received: by 2002:a05:6638:1652:b0:328:5357:7acb with SMTP id a18-20020a056638165200b0032853577acbmr11320817jat.71.1650989197839;
-        Tue, 26 Apr 2022 09:06:37 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id s21-20020a6bd315000000b006573987c4fcsm9786770iob.3.2022.04.26.09.06.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 09:06:37 -0700 (PDT)
-Subject: Re: [PATCH v2 1/6] selftests: vm: add hugetlb_shared userfaultfd test
- to run_vmtests.sh
-To:     Axel Rasmussen <axelrasmussen@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Charan Teja Reddy <charante@codeaurora.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, zhangyi <yi.zhang@huawei.com>
-Cc:     linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220422212945.2227722-1-axelrasmussen@google.com>
- <20220422212945.2227722-2-axelrasmussen@google.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <037ea7ee-5248-86a5-55a2-f1726567af81@linuxfoundation.org>
-Date:   Tue, 26 Apr 2022 10:06:36 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Tue, 26 Apr 2022 12:10:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617496471F;
+        Tue, 26 Apr 2022 09:07:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 23501B82047;
+        Tue, 26 Apr 2022 16:07:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F804C385AA;
+        Tue, 26 Apr 2022 16:07:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650989222;
+        bh=SIWK/mgrwqvjb745XCumZL2zEALgs20U9FUZGDkZgPQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=bDD8Qpj/XMzt4mZm2S8D6NQD6THckGoxgByTgj3daSgFZVM4539iQYEwYMrK9dPlJ
+         VzzeBe2gPmT/q0hqRxKMxeJPpG5HsJFHEG0ETh8C+WVHjSGYThzXg12HdWQFbGpsSZ
+         r5j+rsaD2/QPUdXOcF5pTsoxNr9iJC72Nfv6cRtmBB+N9epJuH1TGMkD3Fia3caX03
+         12JNYyKQCSxnduaISxloJdlOLsUPJ4cTTTMCSwkq/DZPyerS49WLCDqOcHKaPzXG5N
+         /PjXCP/1yBHKGVD3GTwpLffVDYC7u/tVov1UaoyVaBRRqPO+AnPMgWk2mdAWv3WFGB
+         P+E8ag50dBtRw==
+Date:   Tue, 26 Apr 2022 11:07:00 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Frank Wunderlich <linux@fw-web.de>
+Cc:     linux-rockchip@lists.infradead.org,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org
+Subject: Re: [RFC/RFT v2 10/11] PCI: rockchip: add a lane-map to rockchip
+ pcie driver
+Message-ID: <20220426160700.GA1731141@bhelgaas>
 MIME-Version: 1.0
-In-Reply-To: <20220422212945.2227722-2-axelrasmussen@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220426132139.26761-11-linux@fw-web.de>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/22/22 3:29 PM, Axel Rasmussen wrote:
-> This not being included was just a simple oversight. There are certain
-> features (like minor fault support) which are only enabled on shared
-> mappings, so without including hugetlb_shared we actually lose a
-> significant amount of test coverage.
+The subject line should be "PCI: rockchip-dwc: Add ..." so there's no
+need to mention "rockchip" again.  No need to mention "pcie driver"
+either,  because that's obvious from the context, so just something
+like:
+
+  PCI: rockchip-dwc: Add lane-map support
+
+On Tue, Apr 26, 2022 at 03:21:38PM +0200, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
 > 
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> Add a basic lane-map to define which PCIe lanes should be
+> used with this controller.
+> 
+> Rockchip driver uses this for bifurcation (true/false) based
+> on lanes should be splitted across controllers or not.
+> 
+> On rk3568 there are 2 PCIe Controllers which share PCIe lanes.
+> 
+> pcie3x1: pcie@fe270000 //lane1 when using 1+1
+> pcie3x2: pcie@fe280000 //lane0 when using 1+1
+> 
+> This ends up in one Controller (pcie3x1) uses lane-map = <0 1>; and
+> the other lane-map = <1 0>; (pcie3x2)
+> 
+> This means there are 2 lanes (count of numbers), one (by position)
+> is mapped to the first controller, the other one is used on the other
+> controller.
+> 
+> In this driver the lane-map is simply converted to the bifurcation
+> bool instead of direct mapping a specific lane to a controller.
+> 
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 > ---
->   tools/testing/selftests/vm/run_vmtests.sh | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
+> v2:
+> - new patch
+> ---
+>  drivers/pci/controller/dwc/pcie-dw-rockchip.c | 15 +++++++++++++--
+>  1 file changed, 13 insertions(+), 2 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
-> index a2302b5faaf2..5065dbd89bdb 100755
-> --- a/tools/testing/selftests/vm/run_vmtests.sh
-> +++ b/tools/testing/selftests/vm/run_vmtests.sh
-> @@ -121,9 +121,11 @@ run_test ./gup_test -a
->   run_test ./gup_test -ct -F 0x1 0 19 0x1000
->   
->   run_test ./userfaultfd anon 20 16
-> -# Test requires source and destination huge pages.  Size of source
-> -# (half_ufd_size_MB) is passed as argument to test.
-> +# Hugetlb tests require source and destination huge pages. Pass in half the
-> +# size ($half_ufd_size_MB), which is used for *each*.
->   run_test ./userfaultfd hugetlb "$half_ufd_size_MB" 32
-> +run_test ./userfaultfd hugetlb_shared "$half_ufd_size_MB" 32 "$mnt"/uffd-test
-> +rm -f "$mnt"/uffd-test
->   run_test ./userfaultfd shmem 20 16
->   
->   #cleanup
+> diff --git a/drivers/pci/controller/dwc/pcie-dw-rockchip.c b/drivers/pci/controller/dwc/pcie-dw-rockchip.c
+> index 79e909df241c..21cb697a5be1 100644
+> --- a/drivers/pci/controller/dwc/pcie-dw-rockchip.c
+> +++ b/drivers/pci/controller/dwc/pcie-dw-rockchip.c
+> @@ -60,6 +60,7 @@ struct rockchip_pcie {
+>  	struct regulator                *vpcie3v3;
+>  	struct irq_domain		*irq_domain;
+>  	bool				bifurcation;
+> +	u32				lane_map[2];
+>  };
+>  
+>  static int rockchip_pcie_readl_apb(struct rockchip_pcie *rockchip,
+> @@ -293,8 +294,10 @@ static int rockchip_pcie_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+>  	struct rockchip_pcie *rockchip;
+> +	unsigned int lanecnt = 0;
+>  	struct pcie_port *pp;
+>  	int ret;
+> +	int len;
+>  
+>  	rockchip = devm_kzalloc(dev, sizeof(*rockchip), GFP_KERNEL);
+>  	if (!rockchip)
+> @@ -327,8 +330,16 @@ static int rockchip_pcie_probe(struct platform_device *pdev)
+>  		}
+>  	}
+>  
+> -	if (device_property_read_bool(dev, "bifurcation"))
+> -		rockchip->bifurcation = true;
+
+Skip adding the "bifurcation" DT support completely if you can.
+
+> +	len = of_property_read_variable_u32_array(dev->of_node, "lane-map", rockchip->lane_map,
+> +						  2, ARRAY_SIZE(rockchip->lane_map));
+> +
+> +	for (int i = 0; i < len; i++)
+> +		if (rockchip->lane_map[i])
+> +			lanecnt++;
+> +
+> +	rockchip->bifurcation = ((lanecnt > 0) && (lanecnt != len));
+> +
+> +	dev_info(dev, "bifurcation: %s\n", rockchip->bifurcation ? "true" : "false");
+>  
+>  	ret = rockchip_pcie_phy_init(rockchip);
+>  	if (ret)
+> -- 
+> 2.25.1
 > 
-
-Looks good to me.
-
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
+> 
+> -- 
+> linux-phy mailing list
+> linux-phy@lists.infradead.org
+> https://lists.infradead.org/mailman/listinfo/linux-phy

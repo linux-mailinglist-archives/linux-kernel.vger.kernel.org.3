@@ -2,130 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A2C510583
+	by mail.lfdr.de (Postfix) with ESMTP id 5ABAA510582
 	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 19:34:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349508AbiDZRhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 13:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33214 "EHLO
+        id S1350448AbiDZRhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 13:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349185AbiDZRh2 (ORCPT
+        with ESMTP id S1349185AbiDZRht (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 13:37:28 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C99092D3A
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 10:34:20 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id m13so7467033iob.4
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 10:34:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=7f2dI15a4+fxCm2oUbnayxZipYVTc4CPiFnYf4iZd2U=;
-        b=SREAqgM7dV17pgSKvTHXqGRtHaa149tdP3zeKDxtvrWfF/g9kSkykZn7f2kF/kZLrp
-         4ADMNFdr49SVVqqxE4FHv2OBrlkZEsjAwubpihKozfaxZGLx7hfE7uTEAW3lvU4/70if
-         Lzcv5LPTbN395oaYwmC48671h2iLMAq3lDqPI=
+        Tue, 26 Apr 2022 13:37:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C39A939B3
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 10:34:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650994480;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JumK7LOjU2+9ljtUKiS2aDX11u3heSmlrGdnx7b+T4g=;
+        b=MuJGiv2uBl/3gVx/Ykih+mfJiX1+6jMLcN1NbMbK6Yyh/BV1yEai2f4kM4QLVO0DoG4Hir
+        g5EyPfOpPJDLW0LlyJjR8OoSO307aYdj6w1dqMwybsmx5hSuyF4JWWC61tXsOlpBQHU6D9
+        yV+DOhobklMGJt4E0ZDf8NUsUmUGj+c=
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
+ [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-222-h1BQvZcTNKqb1GxZu0AV0g-1; Tue, 26 Apr 2022 13:34:39 -0400
+X-MC-Unique: h1BQvZcTNKqb1GxZu0AV0g-1
+Received: by mail-io1-f69.google.com with SMTP id y20-20020a5e8714000000b0065494b96af2so14731397ioj.10
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 10:34:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=7f2dI15a4+fxCm2oUbnayxZipYVTc4CPiFnYf4iZd2U=;
-        b=KkKXM4pIaH8fPrR30wRjqDtOawkGts1NL6wHeAIgFvgH1zPgzmK9hiWbV5RyJeiwiz
-         AHOdk1lToQ8Fw1Pyx+CU/oQVC54i7ki/G0mFzv+vkIUceNEYUrFyA9/8n2u6bf4NaBJj
-         3qKVfq2kEvHRfwqguYHwy2AmMIY8ssL/e1c+R6JoSj4k0oB5spbTqNEz0AxiVIrf4k0s
-         AkAub27thP3lFvFbER2OZeII+CQ/xM3wq1zcWgoFQlS/6F4Wf4t96/eUJ1uzBv7gNYiy
-         39UEphMd+hlAErVlwWJ8FZL/TcYOCVgJ8X4GRO3W54I50hjTyNxo0LpvGHsmY8nYc0d2
-         RIEg==
-X-Gm-Message-State: AOAM530YggWk2z262CgD7JfhCYxLmtEeBE7cLC+HJTDfZMnykNRbsP+P
-        ovUpe9nH9FTKAYKhnhzbCnsH/g==
-X-Google-Smtp-Source: ABdhPJzQGDlIXE5ent6k2MVRos1IeGAWobjiKgxDUQSt7g0QXIN9BmEROJsT2JY8WurBH/mD6/+5sA==
-X-Received: by 2002:a6b:490f:0:b0:657:5e68:66b8 with SMTP id u15-20020a6b490f000000b006575e6866b8mr7896021iob.102.1650994459551;
-        Tue, 26 Apr 2022 10:34:19 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id t11-20020a922c0b000000b002c85834eb06sm8164495ile.47.2022.04.26.10.34.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 10:34:19 -0700 (PDT)
-Subject: Re: [PATCH v2 6/6] selftests: vm: add /dev/userfaultfd test cases to
- run_vmtests.sh
-To:     Axel Rasmussen <axelrasmussen@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Charan Teja Reddy <charante@codeaurora.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, zhangyi <yi.zhang@huawei.com>
-Cc:     linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220422212945.2227722-1-axelrasmussen@google.com>
- <20220422212945.2227722-7-axelrasmussen@google.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <f257d358-1ec8-d3f4-d3c2-e61e0063df03@linuxfoundation.org>
-Date:   Tue, 26 Apr 2022 11:34:17 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=JumK7LOjU2+9ljtUKiS2aDX11u3heSmlrGdnx7b+T4g=;
+        b=OUevENgF4XOp65n4KxOqJYHksSK3ObMCJT7w1AWExnXTBenliTydO3+VjZqufsld55
+         IsSr6bHCDu80B4jsBSVkLtIpmQ687+CirGg/KkJl/p0m0tnWLtN2/soxH5Sfmup5nqpg
+         N1aIyFdLIirGl6KTgticq4ifQ0f7vlSlO15IbN6wsGie0RX7alynWGBdKWZLoHywtz83
+         tVXb8NwO44IvuqQjmAywiK+9Z1YXRgO2oI/ItasAb8U2DpLS/vUmxOUMlpCNnWr+KeUp
+         uaHts4y5+4M8qFTX8LPt/XgzY83Uo3vJV2p4mKVLha5w2t23e3JHt2jwlXXNv8wOovzZ
+         jwfg==
+X-Gm-Message-State: AOAM532AYJmNguNi/bvnJ67cfc7T7kdCNPYaG5V/aGAyLfWFpatdEh0T
+        ipXa23IsbZd//tbYO9/LcZEU9prXH+Dyyu58ypLPgWqgTaHge5YaZP70wmo18PKiWUIKf0Unk+4
+        PnV5ZBOQ6fz6eRPfcZKqkPDm8
+X-Received: by 2002:a05:6638:dc1:b0:32a:df34:e198 with SMTP id m1-20020a0566380dc100b0032adf34e198mr6587061jaj.117.1650994478306;
+        Tue, 26 Apr 2022 10:34:38 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwGjRSNQEXmwLe232lch2But7s0o5O2VkU1hxD9zj2P5Si3uIjuFd6J4A4k7tDxIBW0o2S/2g==
+X-Received: by 2002:a05:6638:dc1:b0:32a:df34:e198 with SMTP id m1-20020a0566380dc100b0032adf34e198mr6587052jaj.117.1650994478124;
+        Tue, 26 Apr 2022 10:34:38 -0700 (PDT)
+Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id d14-20020a5d964e000000b00657430ee98bsm9841162ios.4.2022.04.26.10.34.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 10:34:37 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 13:34:36 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        akpm@linux-foundation.org, mike.kravetz@oracle.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: hugetlb: Add missing cache flushing in
+ hugetlb_unshare_all_pmds()
+Message-ID: <YmgtLProFiMsyouf@xz-m1.local>
+References: <419b0e777c9e6d1454dcd906e0f5b752a736d335.1650781755.git.baolin.wang@linux.alibaba.com>
+ <YmT//huUbFX+KHcy@FVFYT0MHHV2J.usts.net>
 MIME-Version: 1.0
-In-Reply-To: <20220422212945.2227722-7-axelrasmussen@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YmT//huUbFX+KHcy@FVFYT0MHHV2J.usts.net>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/22/22 3:29 PM, Axel Rasmussen wrote:
-> This new mode was recently added to the userfaultfd selftest. We want to
-> exercise both userfaultfd(2) as well as /dev/userfaultfd, so add both
-> test cases to the script.
+On Sun, Apr 24, 2022 at 03:45:02PM +0800, Muchun Song wrote:
+> On Sun, Apr 24, 2022 at 02:33:19PM +0800, Baolin Wang wrote:
+> > Missed calling flush_cache_range() before removing the sharing PMD entrires,
+> > otherwise data consistence issue may be occurred on some architectures whose
+> > caches are strict and require a virtual–>physical translation to exist for
+> > a virtual address. Thus add it.
+> > 
+> > Fixes: 6dfeaff93be1 ("hugetlb/userfaultfd: unshare all pmds for hugetlbfs when register wp")
+> > Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 > 
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-> ---
->   tools/testing/selftests/vm/run_vmtests.sh | 5 +++++
->   1 file changed, 5 insertions(+)
+> CONFIG_ARCH_WANT_HUGE_PMD_SHARE is only definded on riscv, arm64 and
+> x86.  All of them do not have a VIVT cache.  In others words,
+> flush_cache_range() is null on those architectures. So I suspect
+> in practice this does not cause any issue.  It is better to
+> clarify this in commit log.
+
+Looks correct.
+
 > 
-> diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
-> index 5065dbd89bdb..57f01505c719 100755
-> --- a/tools/testing/selftests/vm/run_vmtests.sh
-> +++ b/tools/testing/selftests/vm/run_vmtests.sh
-> @@ -121,12 +121,17 @@ run_test ./gup_test -a
->   run_test ./gup_test -ct -F 0x1 0 19 0x1000
->   
->   run_test ./userfaultfd anon 20 16
-> +run_test ./userfaultfd anon:dev 20 16
->   # Hugetlb tests require source and destination huge pages. Pass in half the
->   # size ($half_ufd_size_MB), which is used for *each*.
->   run_test ./userfaultfd hugetlb "$half_ufd_size_MB" 32
-> +run_test ./userfaultfd hugetlb:dev "$half_ufd_size_MB" 32
->   run_test ./userfaultfd hugetlb_shared "$half_ufd_size_MB" 32 "$mnt"/uffd-test
->   rm -f "$mnt"/uffd-test
-> +run_test ./userfaultfd hugetlb_shared:dev "$half_ufd_size_MB" 32 "$mnt"/uffd-test
-> +rm -f "$mnt"/uffd-test
->   run_test ./userfaultfd shmem 20 16
-> +run_test ./userfaultfd shmem:dev 20 16
->   
->   #cleanup
->   umount "$mnt"
+> Anyway:
 > 
+> Reviewed-by: Muchun Song <songmuchun@bytedance.com>
 
-Looks good to me.
+Reviewed-by: Peter Xu <peterx@redhat.com>
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+Thanks,
 
-thanks,
--- Shuah
+-- 
+Peter Xu
+

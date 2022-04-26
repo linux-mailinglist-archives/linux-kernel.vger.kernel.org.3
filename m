@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9C0550F3D5
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3E4950F8D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344678AbiDZI1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:27:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36402 "EHLO
+        id S241167AbiDZJSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344762AbiDZI1D (ORCPT
+        with ESMTP id S1345905AbiDZIoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:27:03 -0400
+        Tue, 26 Apr 2022 04:44:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE3042A0A;
-        Tue, 26 Apr 2022 01:23:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5357815CF5E;
+        Tue, 26 Apr 2022 01:33:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CDCDD617E8;
-        Tue, 26 Apr 2022 08:23:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D971FC385A0;
-        Tue, 26 Apr 2022 08:23:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 28A5161899;
+        Tue, 26 Apr 2022 08:33:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3726AC385AC;
+        Tue, 26 Apr 2022 08:33:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961402;
-        bh=JzjMa0IWnDzGXlD4dHmc/gL8xCl2SsWafXDC/SIaMcU=;
+        s=korg; t=1650962029;
+        bh=BKmbcASJHd6f1rIBhJ/lD0NYZIRNWXppaDUSuvpXYF0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u2d+HJKOhJdIamlylI237LvYLOp2lE9K1daFsuNaOCPlVJrX2hjHK6Ds+QcK411Ah
-         2VPC1Tds7ux1ina2U+tVMv2cH7ytfGQZGK/F/VxzjXfgG7qyGvuWt1gTO/d6s9Z5Bp
-         Jcuw9axgwvZam33DAExFA3Ufpd0fIs2ZLXVitiZE=
+        b=eMfAGrIZpK7Rk2iQ4UENUWj92y3FKV3jt/59bYJgZt2enLv1cSSoljPeedD44Uhry
+         ztie5ppoKz5P23YdX21lETapOB497qiR51oKt1DKLbdfkAh58x+o8A0+pHJq2PbhMP
+         gDpjwgxRpdtMM2GOmmxNjq+TSahzBke4fxeE1zbQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
-        stable@kernel.org
-Subject: [PATCH 4.9 23/24] ext4: force overhead calculation if the s_overhead_cluster makes no sense
+        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Keith Busch <kbusch@kernel.org>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 49/86] nvme: add a quirk to disable namespace identifiers
 Date:   Tue, 26 Apr 2022 10:21:17 +0200
-Message-Id: <20220426081732.056406709@linuxfoundation.org>
+Message-Id: <20220426081742.619192756@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081731.370823950@linuxfoundation.org>
-References: <20220426081731.370823950@linuxfoundation.org>
+In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
+References: <20220426081741.202366502@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,44 +56,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Theodore Ts'o <tytso@mit.edu>
+From: Christoph Hellwig <hch@lst.de>
 
-commit 85d825dbf4899a69407338bae462a59aa9a37326 upstream.
+[ Upstream commit 00ff400e6deee00f7b15e200205b2708b63b8cf6 ]
 
-If the file system does not use bigalloc, calculating the overhead is
-cheap, so force the recalculation of the overhead so we don't have to
-trust the precalculated overhead in the superblock.
+Add a quirk to disable using and exporting namespace identifiers for
+controllers where they are broken beyond repair.
 
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Cc: stable@kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The most directly visible problem with non-unique namespace identifiers
+is that they break the /dev/disk/by-id/ links, with the link for a
+supposedly unique identifier now pointing to one of multiple possible
+namespaces that share the same ID, and a somewhat random selection of
+which one actually shows up.
+
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Keith Busch <kbusch@kernel.org>
+Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
+Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/super.c |   15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ drivers/nvme/host/core.c | 24 ++++++++++++++++++------
+ drivers/nvme/host/nvme.h |  5 +++++
+ 2 files changed, 23 insertions(+), 6 deletions(-)
 
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -4164,9 +4164,18 @@ no_journal:
- 	 * Get the # of file system overhead blocks from the
- 	 * superblock if present.
+diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+index 853b9a24f744..ad4f1cfbad2e 100644
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -1270,6 +1270,8 @@ static int nvme_process_ns_desc(struct nvme_ctrl *ctrl, struct nvme_ns_ids *ids,
+ 				 warn_str, cur->nidl);
+ 			return -1;
+ 		}
++		if (ctrl->quirks & NVME_QUIRK_BOGUS_NID)
++			return NVME_NIDT_EUI64_LEN;
+ 		memcpy(ids->eui64, data + sizeof(*cur), NVME_NIDT_EUI64_LEN);
+ 		return NVME_NIDT_EUI64_LEN;
+ 	case NVME_NIDT_NGUID:
+@@ -1278,6 +1280,8 @@ static int nvme_process_ns_desc(struct nvme_ctrl *ctrl, struct nvme_ns_ids *ids,
+ 				 warn_str, cur->nidl);
+ 			return -1;
+ 		}
++		if (ctrl->quirks & NVME_QUIRK_BOGUS_NID)
++			return NVME_NIDT_NGUID_LEN;
+ 		memcpy(ids->nguid, data + sizeof(*cur), NVME_NIDT_NGUID_LEN);
+ 		return NVME_NIDT_NGUID_LEN;
+ 	case NVME_NIDT_UUID:
+@@ -1286,6 +1290,8 @@ static int nvme_process_ns_desc(struct nvme_ctrl *ctrl, struct nvme_ns_ids *ids,
+ 				 warn_str, cur->nidl);
+ 			return -1;
+ 		}
++		if (ctrl->quirks & NVME_QUIRK_BOGUS_NID)
++			return NVME_NIDT_UUID_LEN;
+ 		uuid_copy(&ids->uuid, data + sizeof(*cur));
+ 		return NVME_NIDT_UUID_LEN;
+ 	case NVME_NIDT_CSI:
+@@ -1381,12 +1387,18 @@ static int nvme_identify_ns(struct nvme_ctrl *ctrl, unsigned nsid,
+ 	if ((*id)->ncap == 0) /* namespace not allocated or attached */
+ 		goto out_free_id;
+ 
+-	if (ctrl->vs >= NVME_VS(1, 1, 0) &&
+-	    !memchr_inv(ids->eui64, 0, sizeof(ids->eui64)))
+-		memcpy(ids->eui64, (*id)->eui64, sizeof(ids->eui64));
+-	if (ctrl->vs >= NVME_VS(1, 2, 0) &&
+-	    !memchr_inv(ids->nguid, 0, sizeof(ids->nguid)))
+-		memcpy(ids->nguid, (*id)->nguid, sizeof(ids->nguid));
++
++	if (ctrl->quirks & NVME_QUIRK_BOGUS_NID) {
++		dev_info(ctrl->device,
++			 "Ignoring bogus Namespace Identifiers\n");
++	} else {
++		if (ctrl->vs >= NVME_VS(1, 1, 0) &&
++		    !memchr_inv(ids->eui64, 0, sizeof(ids->eui64)))
++			memcpy(ids->eui64, (*id)->eui64, sizeof(ids->eui64));
++		if (ctrl->vs >= NVME_VS(1, 2, 0) &&
++		    !memchr_inv(ids->nguid, 0, sizeof(ids->nguid)))
++			memcpy(ids->nguid, (*id)->nguid, sizeof(ids->nguid));
++	}
+ 
+ 	return 0;
+ 
+diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
+index 5dd1dd8021ba..10e5ae3a8c0d 100644
+--- a/drivers/nvme/host/nvme.h
++++ b/drivers/nvme/host/nvme.h
+@@ -150,6 +150,11 @@ enum nvme_quirks {
+ 	 * encoding the generation sequence number.
  	 */
--	if (es->s_overhead_clusters)
--		sbi->s_overhead = le32_to_cpu(es->s_overhead_clusters);
--	else {
-+	sbi->s_overhead = le32_to_cpu(es->s_overhead_clusters);
-+	/* ignore the precalculated value if it is ridiculous */
-+	if (sbi->s_overhead > ext4_blocks_count(es))
-+		sbi->s_overhead = 0;
+ 	NVME_QUIRK_SKIP_CID_GEN			= (1 << 17),
++
 +	/*
-+	 * If the bigalloc feature is not enabled recalculating the
-+	 * overhead doesn't take long, so we might as well just redo
-+	 * it to make sure we are using the correct value.
++	 * Reports garbage in the namespace identifiers (eui64, nguid, uuid).
 +	 */
-+	if (!ext4_has_feature_bigalloc(sb))
-+		sbi->s_overhead = 0;
-+	if (sbi->s_overhead == 0) {
- 		err = ext4_calculate_overhead(sb);
- 		if (err)
- 			goto failed_mount_wq;
++	NVME_QUIRK_BOGUS_NID			= (1 << 18),
+ };
+ 
+ /*
+-- 
+2.35.1
+
 
 

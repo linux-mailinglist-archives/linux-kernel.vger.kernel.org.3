@@ -2,96 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DEF2510348
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:24:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1CC651034A
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:24:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345975AbiDZQ1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 12:27:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47542 "EHLO
+        id S1352974AbiDZQ15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 12:27:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345560AbiDZQ1X (ORCPT
+        with ESMTP id S229917AbiDZQ14 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 12:27:23 -0400
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E54170344;
-        Tue, 26 Apr 2022 09:24:15 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id v59so20995072ybi.12;
-        Tue, 26 Apr 2022 09:24:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yRoS0e78MQ3Aw94WaIb6fXl1gKLeuGuUg52q3sQRmzY=;
-        b=5eWtFbfJHZ8B/YJsY/hQi40pNOdAvkl45eDJTGHQSEW5CDLKdJcf0dWyySuFPhBa2e
-         5GyLcZCBv78OHa8No3GT412AhWT9WS07XDInbOZJ5SFITX88w7h11GeG04LwBgeDdvTu
-         yy88roMGmEH9pb/tFRrJxClTYa+KAcW4B7cfgc3Q4EgdbUoHIS7qHYNVaDEEcQsXzS8n
-         c/eOoDvbO2AwSJjlU9uOVjsDJlHkroJpT77RaKQq2pNxIF6IwYTbyS2qjO9ADePZ4YYf
-         SyFXUGfmQlUIhXwLpurvb1s0s7FRI42XRar5Vvpo0QE2ENjN70UKX6CFoXkFqnY0Zocg
-         8Bbw==
-X-Gm-Message-State: AOAM533PGa4dWwo+baV7OO3+FZBuXkWqIoJX2OaPlgpcufSzJ24A6MpD
-        LsZKvvweuWKYd/m8i6OmyjwUhD18Q8jdymVA4bF8tcbR
-X-Google-Smtp-Source: ABdhPJwx/0sG065EFEG6R3FAqY53TNDROIzT+SSV1rhw4vfnS5Bq5793FT0nC8rO8MYbenwgZB7rlOBFIPJrRMSrcRY=
-X-Received: by 2002:a05:6902:352:b0:63e:94c:883c with SMTP id
- e18-20020a056902035200b0063e094c883cmr20762254ybs.365.1650990255156; Tue, 26
- Apr 2022 09:24:15 -0700 (PDT)
+        Tue, 26 Apr 2022 12:27:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A951869D2
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:24:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E68F7B81FE5
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 16:24:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 995B9C385A0;
+        Tue, 26 Apr 2022 16:24:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650990285;
+        bh=bguQYe/Z3sr/CK/WmU84OklDRkcT9+TU/F8iGf4R2Og=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=oPGD9rCssxyklaOVcRKspz5zMDUyp5jQUT7Hm4FTukRklwi8JZZ33rYRs4SnZ5IMR
+         Q94IJpFWWZ52eqkkUNfPdgVg67hkvURyVrEK8E+NUB+2Jeb5M9XcwscbTJfUqIQKgG
+         yoOA0YGft+Ixx/7nSUVhd2iU1egbTVFC0pk3ySNduq3vQgQBe46tyVN0E7eeMNqmLP
+         vIYpkxvWZ1pZyfIluMWgWJIKrx43tIEhQU3orvcCpLgRXV5zpo2ryANWtU1XGOnB5D
+         cQcNz1uDPLqxODzXcn8FRBcqRliRViWxYNWgCt2chh6Zs04LJS7BW3aSzvvaSipW0h
+         0a2A98Vv+8B8g==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 3F13F5C0460; Tue, 26 Apr 2022 09:24:45 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 09:24:45 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com
+Subject: Re: "Dying CPU not properly vacated" splat
+Message-ID: <20220426162445.GG4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220421193821.GA173010@paulmck-ThinkPad-P17-Gen-1>
+ <xhsmh4k2h9m26.mognet@vschneid.remote.csb>
+ <20220425173320.GX4285@paulmck-ThinkPad-P17-Gen-1>
+ <xhsmh1qxkakof.mognet@vschneid.remote.csb>
+ <20220426000328.GY4285@paulmck-ThinkPad-P17-Gen-1>
+ <xhsmhy1zr99zt.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-References: <20220423182410.1841114-1-matthieu.baerts@tessares.net> <YmgOP1FFmidS9ecJ@zn.tnic>
-In-Reply-To: <YmgOP1FFmidS9ecJ@zn.tnic>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 26 Apr 2022 18:24:04 +0200
-Message-ID: <CAJZ5v0gzvOagiYsMxznksrjmtZFV873DaLAiOo4YHkoUq5qTTA@mail.gmail.com>
-Subject: Re: [PATCH v2] x86/pm: fix false positive kmemleak report in msr_build_context()
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Matthieu Baerts <matthieu.baerts@tessares.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Chen Yu <yu.c.chen@intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <xhsmhy1zr99zt.mognet@vschneid.remote.csb>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 5:22 PM Borislav Petkov <bp@alien8.de> wrote:
->
-> On Sat, Apr 23, 2022 at 08:24:10PM +0200, Matthieu Baerts wrote:
-> > diff --git a/arch/x86/include/asm/suspend_64.h b/arch/x86/include/asm/suspend_64.h
-> > index 35bb35d28733..bb7023dbf524 100644
-> > --- a/arch/x86/include/asm/suspend_64.h
-> > +++ b/arch/x86/include/asm/suspend_64.h
-> > @@ -14,9 +14,13 @@
-> >   * Image of the saved processor state, used by the low level ACPI suspend to
-> >   * RAM code and by the low level hibernation code.
-> >   *
-> > - * If you modify it, fix arch/x86/kernel/acpi/wakeup_64.S and make sure that
-> > - * __save/__restore_processor_state(), defined in arch/x86/kernel/suspend_64.c,
-> > - * still work as required.
-> > + * If you modify it before 'misc_enable', fix arch/x86/kernel/acpi/wakeup_64.S
->
-> Why does before misc_enable matter?
->
-> arch/x86/kernel/asm-offsets_64.c computes the offsets and there is a
-> member like saved_context_gdt_desc which will get moved after your
-> change but that's not a problem because the offset will get recomputed
-> at build time.
->
-> Hm?
+On Tue, Apr 26, 2022 at 03:48:06PM +0100, Valentin Schneider wrote:
+> On 25/04/22 17:03, Paul E. McKenney wrote:
+> > On Mon, Apr 25, 2022 at 10:59:44PM +0100, Valentin Schneider wrote:
+> >> On 25/04/22 10:33, Paul E. McKenney wrote:
+> >> >
+> >> > So what did rcu_torture_reader() do wrong here?  ;-)
+> >> >
+> >>
+> >> So on teardown, CPUHP_AP_SCHED_WAIT_EMPTY->sched_cpu_wait_empty() waits for
+> >> the rq to be empty. Tasks must *not* be enqueued onto that CPU after that
+> >> step has been run - if there are per-CPU tasks bound to that CPU, they must
+> >> be unbound in their respective hotplug callback.
+> >>
+> >> For instance for workqueue.c, we have workqueue_offline_cpu() as a hotplug
+> >> callback which invokes unbind_workers(cpu), the interesting bit being:
+> >>
+> >>                 for_each_pool_worker(worker, pool) {
+> >>                         kthread_set_per_cpu(worker->task, -1);
+> >>                         WARN_ON_ONCE(set_cpus_allowed_ptr(worker->task, cpu_possible_mask) < 0);
+> >>                 }
+> >>
+> >> The rcu_torture_reader() kthreads aren't bound to any particular CPU are
+> >> they? I can't find any code that would indicate they are - and in that case
+> >> it means we have a problem with is_cpu_allowed() or related.
+> >
+> > I did not intend that the rcu_torture_reader() kthreads be bound, and
+> > I am not seeing anything that binds them.
+> >
+> > Thoughts?  (Other than that validating any alleged fix will be quite
+> > "interesting".)
+> 
+> IIUC the bogus scenario is is_cpu_allowed() lets one of those kthreads be
+> enqueued on the outgoing CPU *after* CPUHP_AP_SCHED_WAIT_EMPTY.teardown() has
+> been run, and hilarity ensues.
+> 
+> The cpu_dying() condition should prevent a regular kthread from getting
+> enqueued there, most of the details have been evinced from my brain but I
+> recall we got the ordering conditions right...
+> 
+> The only other "obvious" thing here is migrate_disable() which lets the
+> enqueue happen, but then balance_push()->select_fallback_rq() should punt
+> it away on context switch.
+> 
+> I need to rediscover those paths, I don't see any obvious clue right now.
 
-So can the comment be dropped entirely?
+Thank you for looking into this!
+
+The only thought that came to me was to record that is_cpu_allowed()
+returned true do to migration being disabled, and then use that in later
+traces, printk()s or whatever.
+
+My own favorite root-cause hypothesis was invalidated by the fact that
+is_cpu_allowed() returns cpu_online(cpu) rather than just true.  ;-)
+
+							Thanx, Paul

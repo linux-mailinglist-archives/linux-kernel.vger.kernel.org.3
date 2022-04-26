@@ -2,285 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED23510A1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:16:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 214F6510A22
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354821AbiDZUSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 16:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
+        id S1354433AbiDZUTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 16:19:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354340AbiDZUSr (ORCPT
+        with ESMTP id S1345458AbiDZUSt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:18:47 -0400
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA061DA74;
-        Tue, 26 Apr 2022 13:15:17 -0700 (PDT)
-Received: by mail-oi1-f169.google.com with SMTP id s131so2653314oie.1;
-        Tue, 26 Apr 2022 13:15:17 -0700 (PDT)
+        Tue, 26 Apr 2022 16:18:49 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6295920F65;
+        Tue, 26 Apr 2022 13:15:30 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id v65so17240439oig.10;
+        Tue, 26 Apr 2022 13:15:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WxppPzWLYNA+81VUjAnYWO9LgxHOLhASEpeHW0n+B1E=;
+        b=am0tRX8zv7sbt0cJT98VnkmSxAR2HSuYLlJyKm7/FwlRgdy9pMui6CIr5XcTVQjTU1
+         tLvNr4m26L201zwPArojxr+quk6vSF0rcRNLSieec8yQ3F6mMVJL9gmVea1xP9mvghgx
+         IVCspx8T8hfE5bmt6gFcyArX4xalgiBezKSGVr7FBr3v5gJ5VZl4Hk3sIa7g0KDh2siD
+         Cgnqfa9CSMondi292nzbLTXVflMsMFX7HTVpoiB4qV4CGgRU96/aLXmcibDA7THcZmIH
+         u9QBK7kcrRt48vXfT5hfhHHWKUpRdpCGm77nMzH4ra3pj+SB+KLqmXcjtf+uv+y/mOav
+         yFHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=X4D4FA3jMbNSOVGYIrOuVGyIIySWxqxWkkBOU3AjQRE=;
-        b=2ob1sdxGG8/vFwKNOwHXA5NALuYf6BUnia0sry/qx1N4CPoXZHt+RZHaZgDSx+aSPf
-         qg3XLbQ/m4Qdt93jMGc50hJEFHLgeOQ6qq4LVs6mS/qLz/sU+ISHRcdpoDnb097klAIU
-         zq2WYxOa7HA4mIscnLX5Jwzx1Qy7lDiFd9bQWnJjqYixtkJCbbM9xy9z+MHR9MSGXtyv
-         H09nuUUn+Cn/646qdxqxg3V0+8puS5mNetM0xigKmO0B+xuKHuDi5yUanNpYEbO5KvTL
-         asjbBzKSx4WwlOPq5/MQASwtu+Vh20DqTNub98WBxjJB/DVd6B5bQvyPkBfnRZPvjf7T
-         +dPg==
-X-Gm-Message-State: AOAM531Reh0JxKUAycNHU0J4W9f8sUFZY7Pfh6A1AuIELgypbzIOeHrv
-        odp/fAsuAxHG55u2GXfUTA==
-X-Google-Smtp-Source: ABdhPJxQsiU7TXwKBypyr1tR6ffaX0ownpf1Ny/g7n3+2m1MyWGud+Y/0ExcJTEv9n8w1aDgraAX0w==
-X-Received: by 2002:aca:1117:0:b0:322:4189:8959 with SMTP id 23-20020aca1117000000b0032241898959mr15357841oir.254.1651004116888;
-        Tue, 26 Apr 2022 13:15:16 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v22-20020a056870e49600b000d6c86ea98dsm1184568oag.1.2022.04.26.13.15.16
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=WxppPzWLYNA+81VUjAnYWO9LgxHOLhASEpeHW0n+B1E=;
+        b=2YZ0YOPVdu9g8pUBmiwowhd7P+2vgwF1ZpfJoKPVjt9MidI2KKCES9PrU+eUOTH1/I
+         1kutdiqPbU6D+nMz+d9WPlL+ZTKrA+UBcXWVyNEpgvvx9PUywKPXeLCAjIpcAAbPEcs5
+         iAdjQkoud1AscePZ2hLn3ORL4ZDzmjr+Zla6ujpskP5IMvfd1me5Y6j4IqumK1XEh8Ip
+         0tYS2QR3QjrqOF8Yg3aKBpoYsUaaRImMcc3Wh/U4UXSvK6aKy4MiKcTX31sy8Lp9cezr
+         40NCtMv4ABoH9f4b1toTBd/F6tU5pugQwYl4nlRCb33tA7FNe/IVXA6ep4To9bHL8Rv3
+         Xthw==
+X-Gm-Message-State: AOAM530BGj8P6+kZbEFHTyiioG7JnAfxJG+GlpsR3yijgXPRVZCGx9oj
+        5Z0Ay+MRfHRA9EhjdkNM6i0=
+X-Google-Smtp-Source: ABdhPJxpxGL+eWpPlmKdNL9LiJxmuhemz/rq18UeA7KYeFJvnX6YyOnTTf4K9gKNmRdzXpPcNxmJPA==
+X-Received: by 2002:a05:6808:1201:b0:325:75e1:25a8 with SMTP id a1-20020a056808120100b0032575e125a8mr418635oil.18.1651004129790;
+        Tue, 26 Apr 2022 13:15:29 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bq4-20020a05680823c400b0032304581da9sm5396968oib.13.2022.04.26.13.15.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 13:15:16 -0700 (PDT)
-Received: (nullmailer pid 2463555 invoked by uid 1000);
-        Tue, 26 Apr 2022 20:15:15 -0000
-Date:   Tue, 26 Apr 2022 15:15:15 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>,
-        Hui Liu <hui.liu@mediatek.com>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>
-Subject: Re: [PATCH 1/2] ASoC: dt-bindings: mediatek: mt8192: complete clocks
- and clock-names
-Message-ID: <YmhS0yh/KqYqKshj@robh.at.kernel.org>
-References: <20220419025557.22262-1-allen-kh.cheng@mediatek.com>
- <20220419025557.22262-2-allen-kh.cheng@mediatek.com>
+        Tue, 26 Apr 2022 13:15:28 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 26 Apr 2022 13:15:27 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Liu Xinpeng <liuxp11@chinatelecom.cn>
+Cc:     wim@linux-watchdog.org, tzungbi@kernel.org,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 2/3] watchdog: wdat_wdt: Stop watchdog when rebooting
+ the system
+Message-ID: <20220426201527.GL4093517@roeck-us.net>
+References: <1650984810-6247-1-git-send-email-liuxp11@chinatelecom.cn>
+ <1650984810-6247-3-git-send-email-liuxp11@chinatelecom.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220419025557.22262-2-allen-kh.cheng@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <1650984810-6247-3-git-send-email-liuxp11@chinatelecom.cn>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 10:55:56AM +0800, Allen-KH Cheng wrote:
-> From: Jiaxin Yu <jiaxin.yu@mediatek.com>
+On Tue, Apr 26, 2022 at 10:53:29PM +0800, Liu Xinpeng wrote:
+> Executing reboot command several times on the machine "Dell
+> PowerEdge R740", UEFI security detection stopped machine
+> with the following prompt:
 > 
-> Complete all clocks and clock-names be used for mt8192 SoC into dt-bindings.
-
-Not a compatible change breaking the ABI. Please explain why if that's 
-intentional.
-
+> UEFI0082: The system was reset due to a timeout from the watchdog
+> timer. Check the System Event Log (SEL) or crash dumps from
+> Operating Sysstem to identify the source that triggered the
+> watchdog timer reset. Update the firmware or driver for the
+> identified device.
 > 
-> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> iDRAC has warning event: "The watchdog timer reset the system".
+> 
+> This patch fixes this issue by adding the reboot notifier.
+> 
+> Signed-off-by: Liu Xinpeng <liuxp11@chinatelecom.cn>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
->  .../bindings/sound/mt8192-afe-pcm.yaml        | 165 +++++++++++++++++-
->  1 file changed, 157 insertions(+), 8 deletions(-)
+>  drivers/watchdog/wdat_wdt.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml b/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
-> index 7a25bc9b8060..1b6b22a5732e 100644
-> --- a/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
-> +++ b/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
-> @@ -39,20 +39,67 @@ properties:
->      maxItems: 1
+> diff --git a/drivers/watchdog/wdat_wdt.c b/drivers/watchdog/wdat_wdt.c
+> index df0865a61a70..6f36a653767b 100644
+> --- a/drivers/watchdog/wdat_wdt.c
+> +++ b/drivers/watchdog/wdat_wdt.c
+> @@ -462,6 +462,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
+>  		return ret;
 >  
->    clocks:
-> -    items:
-> -      - description: AFE clock
-> -      - description: ADDA DAC clock
-> -      - description: ADDA DAC pre-distortion clock
-> -      - description: audio infra sys clock
-> -      - description: audio infra 26M clock
-> +    minItems: 56
-> +    maxItems: 56
+>  	watchdog_set_nowayout(&wdat->wdd, nowayout);
+> +	watchdog_stop_on_reboot(&wdat->wdd);
+>  	return devm_watchdog_register_device(dev, &wdat->wdd);
+>  }
 >  
->    clock-names:
->      items:
->        - const: aud_afe_clk
->        - const: aud_dac_clk
->        - const: aud_dac_predis_clk
-> +      - const: aud_adc_clk
-> +      - const: aud_adda6_adc_clk
-> +      - const: aud_apll22m_clk
-> +      - const: aud_apll24m_clk
-> +      - const: aud_apll1_tuner_clk
-> +      - const: aud_apll2_tuner_clk
-> +      - const: aud_tdm_clk
-> +      - const: aud_tml_clk
-> +      - const: aud_nle
-> +      - const: aud_dac_hires_clk
-> +      - const: aud_adc_hires_clk
-> +      - const: aud_adc_hires_tml
-> +      - const: aud_adda6_adc_hires_clk
-> +      - const: aud_3rd_dac_clk
-> +      - const: aud_3rd_dac_predis_clk
-> +      - const: aud_3rd_dac_tml
-> +      - const: aud_3rd_dac_hires_clk
->        - const: aud_infra_clk
->        - const: aud_infra_26m_clk
-> +      - const: top_mux_audio
-> +      - const: top_mux_audio_int
-> +      - const: top_mainpll_d4_d4
-> +      - const: top_mux_aud_1
-> +      - const: top_apll1_ck
-> +      - const: top_mux_aud_2
-> +      - const: top_apll2_ck
-> +      - const: top_mux_aud_eng1
-> +      - const: top_apll1_d4
-> +      - const: top_mux_aud_eng2
-> +      - const: top_apll2_d4
-> +      - const: top_i2s0_m_sel
-> +      - const: top_i2s1_m_sel
-> +      - const: top_i2s2_m_sel
-> +      - const: top_i2s3_m_sel
-> +      - const: top_i2s4_m_sel
-> +      - const: top_i2s5_m_sel
-> +      - const: top_i2s6_m_sel
-> +      - const: top_i2s7_m_sel
-> +      - const: top_i2s8_m_sel
-> +      - const: top_i2s9_m_sel
-> +      - const: top_apll12_div0
-> +      - const: top_apll12_div1
-> +      - const: top_apll12_div2
-> +      - const: top_apll12_div3
-> +      - const: top_apll12_div4
-> +      - const: top_apll12_divb
-> +      - const: top_apll12_div5
-> +      - const: top_apll12_div6
-> +      - const: top_apll12_div7
-> +      - const: top_apll12_div8
-> +      - const: top_apll12_div9
-> +      - const: top_mux_audio_h
-> +      - const: top_clk26m_clk
->  
->  required:
->    - compatible
-> @@ -88,13 +135,115 @@ examples:
->          clocks = <&audsys CLK_AUD_AFE>,
->                   <&audsys CLK_AUD_DAC>,
->                   <&audsys CLK_AUD_DAC_PREDIS>,
-> +                 <&audsys CLK_AUD_ADC>,
-> +                 <&audsys CLK_AUD_ADDA6_ADC>,
-> +                 <&audsys CLK_AUD_22M>,
-> +                 <&audsys CLK_AUD_24M>,
-> +                 <&audsys CLK_AUD_APLL_TUNER>,
-> +                 <&audsys CLK_AUD_APLL2_TUNER>,
-> +                 <&audsys CLK_AUD_TDM>,
-> +                 <&audsys CLK_AUD_TML>,
-> +                 <&audsys CLK_AUD_NLE>,
-> +                 <&audsys CLK_AUD_DAC_HIRES>,
-> +                 <&audsys CLK_AUD_ADC_HIRES>,
-> +                 <&audsys CLK_AUD_ADC_HIRES_TML>,
-> +                 <&audsys CLK_AUD_ADDA6_ADC_HIRES>,
-> +                 <&audsys CLK_AUD_3RD_DAC>,
-> +                 <&audsys CLK_AUD_3RD_DAC_PREDIS>,
-> +                 <&audsys CLK_AUD_3RD_DAC_TML>,
-> +                 <&audsys CLK_AUD_3RD_DAC_HIRES>,
->                   <&infracfg CLK_INFRA_AUDIO>,
-> -                 <&infracfg CLK_INFRA_AUDIO_26M_B>;
-> +                 <&infracfg CLK_INFRA_AUDIO_26M_B>,
-> +                 <&topckgen CLK_TOP_AUDIO_SEL>,
-> +                 <&topckgen CLK_TOP_AUD_INTBUS_SEL>,
-> +                 <&topckgen CLK_TOP_MAINPLL_D4_D4>,
-> +                 <&topckgen CLK_TOP_AUD_1_SEL>,
-> +                 <&topckgen CLK_TOP_APLL1>,
-> +                 <&topckgen CLK_TOP_AUD_2_SEL>,
-> +                 <&topckgen CLK_TOP_APLL2>,
-> +                 <&topckgen CLK_TOP_AUD_ENGEN1_SEL>,
-> +                 <&topckgen CLK_TOP_APLL1_D4>,
-> +                 <&topckgen CLK_TOP_AUD_ENGEN2_SEL>,
-> +                 <&topckgen CLK_TOP_APLL2_D4>,
-> +                 <&topckgen CLK_TOP_APLL_I2S0_M_SEL>,
-> +                 <&topckgen CLK_TOP_APLL_I2S1_M_SEL>,
-> +                 <&topckgen CLK_TOP_APLL_I2S2_M_SEL>,
-> +                 <&topckgen CLK_TOP_APLL_I2S3_M_SEL>,
-> +                 <&topckgen CLK_TOP_APLL_I2S4_M_SEL>,
-> +                 <&topckgen CLK_TOP_APLL_I2S5_M_SEL>,
-> +                 <&topckgen CLK_TOP_APLL_I2S6_M_SEL>,
-> +                 <&topckgen CLK_TOP_APLL_I2S7_M_SEL>,
-> +                 <&topckgen CLK_TOP_APLL_I2S8_M_SEL>,
-> +                 <&topckgen CLK_TOP_APLL_I2S9_M_SEL>,
-> +                 <&topckgen CLK_TOP_APLL12_DIV0>,
-> +                 <&topckgen CLK_TOP_APLL12_DIV1>,
-> +                 <&topckgen CLK_TOP_APLL12_DIV2>,
-> +                 <&topckgen CLK_TOP_APLL12_DIV3>,
-> +                 <&topckgen CLK_TOP_APLL12_DIV4>,
-> +                 <&topckgen CLK_TOP_APLL12_DIVB>,
-> +                 <&topckgen CLK_TOP_APLL12_DIV5>,
-> +                 <&topckgen CLK_TOP_APLL12_DIV6>,
-> +                 <&topckgen CLK_TOP_APLL12_DIV7>,
-> +                 <&topckgen CLK_TOP_APLL12_DIV8>,
-> +                 <&topckgen CLK_TOP_APLL12_DIV9>,
-> +                 <&topckgen CLK_TOP_AUDIO_H_SEL>,
-> +                 <&clk26m>;
->          clock-names = "aud_afe_clk",
->                        "aud_dac_clk",
->                        "aud_dac_predis_clk",
-> +                      "aud_adc_clk",
-> +                      "aud_adda6_adc_clk",
-> +                      "aud_apll22m_clk",
-> +                      "aud_apll24m_clk",
-> +                      "aud_apll1_tuner_clk",
-> +                      "aud_apll2_tuner_clk",
-> +                      "aud_tdm_clk",
-> +                      "aud_tml_clk",
-> +                      "aud_nle",
-> +                      "aud_dac_hires_clk",
-> +                      "aud_adc_hires_clk",
-> +                      "aud_adc_hires_tml",
-> +                      "aud_adda6_adc_hires_clk",
-> +                      "aud_3rd_dac_clk",
-> +                      "aud_3rd_dac_predis_clk",
-> +                      "aud_3rd_dac_tml",
-> +                      "aud_3rd_dac_hires_clk",
->                        "aud_infra_clk",
-> -                      "aud_infra_26m_clk";
-> +                      "aud_infra_26m_clk",
-> +                      "top_mux_audio",
-> +                      "top_mux_audio_int",
-> +                      "top_mainpll_d4_d4",
-> +                      "top_mux_aud_1",
-> +                      "top_apll1_ck",
-> +                      "top_mux_aud_2",
-> +                      "top_apll2_ck",
-> +                      "top_mux_aud_eng1",
-> +                      "top_apll1_d4",
-> +                      "top_mux_aud_eng2",
-> +                      "top_apll2_d4",
-> +                      "top_i2s0_m_sel",
-> +                      "top_i2s1_m_sel",
-> +                      "top_i2s2_m_sel",
-> +                      "top_i2s3_m_sel",
-> +                      "top_i2s4_m_sel",
-> +                      "top_i2s5_m_sel",
-> +                      "top_i2s6_m_sel",
-> +                      "top_i2s7_m_sel",
-> +                      "top_i2s8_m_sel",
-> +                      "top_i2s9_m_sel",
-> +                      "top_apll12_div0",
-> +                      "top_apll12_div1",
-> +                      "top_apll12_div2",
-> +                      "top_apll12_div3",
-> +                      "top_apll12_div4",
-> +                      "top_apll12_divb",
-> +                      "top_apll12_div5",
-> +                      "top_apll12_div6",
-> +                      "top_apll12_div7",
-> +                      "top_apll12_div8",
-> +                      "top_apll12_div9",
-> +                      "top_mux_audio_h",
-> +                      "top_clk26m_clk";
->      };
->  
->  ...
 > -- 
-> 2.18.0
-> 
+> 2.23.0
 > 

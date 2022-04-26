@@ -2,74 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BD4850F378
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:12:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 706EE50F37A
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344177AbiDZIPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:15:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50110 "EHLO
+        id S1344500AbiDZIQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:16:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239789AbiDZIPu (ORCPT
+        with ESMTP id S1344497AbiDZIQB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:15:50 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0A86D38F;
-        Tue, 26 Apr 2022 01:12:44 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id r14-20020a9d750e000000b00605446d683eso12536994otk.10;
-        Tue, 26 Apr 2022 01:12:44 -0700 (PDT)
+        Tue, 26 Apr 2022 04:16:01 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F316D3A1;
+        Tue, 26 Apr 2022 01:12:52 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-e9027efe6aso11325700fac.10;
+        Tue, 26 Apr 2022 01:12:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QF8YkvFfz7v7jJW3CPEik5eZZ2OadQSHQGC1NH/WDbw=;
-        b=VBuibKgVwMrwJaqiXQR5as8VpOuu69bk57GXTV7Lt3KL+OKaQArxg6JnuWdwM9nYyr
-         vFwgKYlMz8RIsGILRA47P2SQs27AfiHRU8WW0hqV0HiP/MQVS8nOP2+QnleYS6ddRsXn
-         COjeyhMAqzfNCFLqzPBE8OB3vSgiXfVAM1FMdsgN7Q7xGJwWylFvtk8KCbbUZjEkRUPr
-         sZvFdO0q+QHbp99/N4wmzAnZZuLDPQjRJiwBicBuyEVsujRe4momUecG6n7gwMOMFL+L
-         oAqsF/iaxf/ccy8hlSQAoA4nhgtOsqZny85kRgIuZ4dKFvajNq83djjbu/CsVuxoZW2W
-         ek0Q==
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=+WJUPUHsdpMeeurhKG6V5IgBDct7VAf5h6R/Zg7kLjs=;
+        b=QNgYv/aRwdb01laGIduEyJZz4sGtxsKQ3QSTutna/F9VTa75Wo6/krtD66xm5G4//q
+         7vVOlXMlUIE48I2TEihRUARi12u9LtgC7hcZKQq0MCpu/iIyrAcZatnQFte5usZydyFb
+         JTw+TeYgN1xl9WrAjbTgp8nrRBpccM5l3GJs0guBK47DMbuP8v9YhMgZnjljXSTaDjFT
+         SqbwYa0VYnR3bnrUf9PAZfDy2KbgE/bCcU7j2cZtgdc7cDn9jHNee7HcJGGcftLrU45Q
+         OOeKgmrJhY4nN5QFClkcd+9L2/9N6vcOgUiGHrOFK+dDjVK57z9Lh1YkDdFQakLV4B72
+         HlQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-language:to:cc:references:from:subject:in-reply-to
          :content-transfer-encoding;
-        bh=QF8YkvFfz7v7jJW3CPEik5eZZ2OadQSHQGC1NH/WDbw=;
-        b=GnM8/jME5lMQY+0NPHeVfYan6Ir0oLuWhJb7ExKGUK33Rtcf7G69Z5IU0w2n8tCHZg
-         Ks79Beo5zHbh3CPv/ldJcv9kvbwXnP6+dN49V1hNKPkl4nDGotbmMRvZOhmTnul9cm5p
-         +R++i+erevSk+pzL2iFmwpk2rf9fr9aFbBJwM0S0/akAA4weCzlCG6CmSp/WcuGlgo9j
-         fwIXVQFWk7pQkWCkNTGFA9KoxmWNz3YbalG5kD1z69VDGG0Jo09hR8wFVguER+9GH9x5
-         3PxWyJZ0dMuZkdoRlwL1jGpqxqkShUwokUhvg6/iI+t6gZQ02BTYKcJwkHH98Rkmu8Lk
-         NPJQ==
-X-Gm-Message-State: AOAM533Y8pH+OVdxp1q8OsY5GnKaJsWkFnk6ki5H/bQFCb9BuCOEJVPH
-        Y6l5tBRN+g6daqSjOJLhBGp9Acv8mvs=
-X-Google-Smtp-Source: ABdhPJygeMhass6b1flMYKu7ccDwAi6SY57LHUsmInEjS6kFquf9+RpJkutj7+Z+pLibcb28voGOuQ==
-X-Received: by 2002:a9d:7cc2:0:b0:605:77d1:b01 with SMTP id r2-20020a9d7cc2000000b0060577d10b01mr7945566otn.371.1650960763589;
-        Tue, 26 Apr 2022 01:12:43 -0700 (PDT)
+        bh=+WJUPUHsdpMeeurhKG6V5IgBDct7VAf5h6R/Zg7kLjs=;
+        b=LzPdxNl/caBo2wZqkj5lCAnj3Ugph4REnVKl8JDHClqpDTzH8AHcqCHbCnDEJ6CTOH
+         A7fB30unNRDJ9yWy/QPtp7mVp8lizTHVXLHdhGaJP2+HJPDYUaEebbR5s7LxJyJMssJb
+         6kO7yjzsRABoBb3L0ZyoI/PGgQpVKg3nXoga30hpKNIdpp9ae5Zg0lXRXsY+HJ2MywEK
+         SXNAwEP89h8uOZ46aT4uAeMLfrA/QFAbo/2Gi3NMVK/snIS8gt+u8epsIvfhRaseAcdY
+         CZDnFUufffN2SHJ97XczvnToatdbhv9Rjd2di5MO5LlaqOW4+6XEIY5NBj+14hNBPA/K
+         0IOw==
+X-Gm-Message-State: AOAM530uU/yj69lcMLwJ0VdFil8H9SM7ozaDuc9ocwUY1kSY8zs6X+W2
+        6nVZpaNfh7fiTZILnXo/DnGmJk1aqj8=
+X-Google-Smtp-Source: ABdhPJy/GUvwnPAt8MwxopeV+IfD9cgC1SRZSVlfvC1wdeY7xDuKMYfo5/cJs8nCB63WrWN7X+kwdA==
+X-Received: by 2002:a05:6870:55aa:b0:e1:f826:c241 with SMTP id n42-20020a05687055aa00b000e1f826c241mr13205097oao.84.1650960771803;
+        Tue, 26 Apr 2022 01:12:51 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c17-20020a9d6851000000b0060551d14386sm4663079oto.13.2022.04.26.01.12.41
+        by smtp.gmail.com with ESMTPSA id q12-20020a4a6c0c000000b0035e679ef74asm2439760ooc.25.2022.04.26.01.12.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 01:12:42 -0700 (PDT)
+        Tue, 26 Apr 2022 01:12:51 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c36d2b28-d4e2-b952-d3bc-e060a3cb7412@roeck-us.net>
-Date:   Tue, 26 Apr 2022 01:12:40 -0700
+Message-ID: <dabd968c-1a03-b67e-0457-3583383f0d2e@roeck-us.net>
+Date:   Tue, 26 Apr 2022 01:12:49 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v3 1/4] watchdog: wdat_wdg: Using the existed function to
- check parameter timeout
 Content-Language: en-US
-To:     Tzung-Bi Shih <tzungbi@kernel.org>,
-        Liu Xinpeng <liuxp11@chinatelecom.cn>
-Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1650944120-30954-1-git-send-email-liuxp11@chinatelecom.cn>
- <1650944120-30954-2-git-send-email-liuxp11@chinatelecom.cn>
- <YmeMyqNqnooVifz1@google.com>
+To:     Liu Xinpeng <liuxp11@chinatelecom.cn>, wim@linux-watchdog.org,
+        tzungbi@kernel.org
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1650957029-910-1-git-send-email-liuxp11@chinatelecom.cn>
+ <1650957029-910-5-git-send-email-liuxp11@chinatelecom.cn>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <YmeMyqNqnooVifz1@google.com>
+Subject: Re: [PATCH v4 4/4] watchdog: iTCO_wdg: Make code more clearly with
+ macro definition
+In-Reply-To: <1650957029-910-5-git-send-email-liuxp11@chinatelecom.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -81,41 +78,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/25/22 23:10, Tzung-Bi Shih wrote:
-> On Tue, Apr 26, 2022 at 11:35:17AM +0800, Liu Xinpeng wrote:
->> The module arguement timeout is a configured timeout value.
->> “separate minimum and maximum HW timeouts and configured timeout value.”
->> (patch v1 is explained by Guenter Roeck)
->>
->> So using watchdog_timeout_invalid to check timeout invalid is more justified.
+On 4/26/22 00:10, Liu Xinpeng wrote:
+> Using SET_NOIRQ_SYSTEM_SLEEP_PM_OPS reduces redundant code.
 > 
-> The v3 commit message doesn't help too much for understanding the patch.  You
-> could see [1] for some reference sentences.  See also [2].
-> 
-> [1]: https://patchwork.kernel.org/project/linux-watchdog/patch/1650874932-18407-2-git-send-email-liuxp11@chinatelecom.cn/#24831418
-> [2]: https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/watchdog/watchdog-kernel-api.rst#L95
-> 
->> @@ -14,6 +14,7 @@
->>   #include <linux/watchdog.h>
->>   
->>   #define MAX_WDAT_ACTIONS ACPI_WDAT_ACTION_RESERVED
->> +#define WDAT_TIMEOUT_MIN     1
-> 
-> To be consistent, would MIN_WDAT_TIMEOUT be a better name?
-> 
+> Signed-off-by: Liu Xinpeng <liuxp11@chinatelecom.cn>
+> Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
 
-Should just have set it to 1 below without using a define.
-
->> @@ -344,6 +345,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
->>   	wdat->period = tbl->timer_period;
->>   	wdat->wdd.min_hw_heartbeat_ms = wdat->period * tbl->min_count;
->>   	wdat->wdd.max_hw_heartbeat_ms = wdat->period * tbl->max_count;
->> +	wdat->wdd.min_timeout = WDAT_TIMEOUT_MIN;
-> 
-> Does it really need to configure the `min_timeout`?  What if leave it as is
-> (i.e. 0)?
-
-It is better to set it to 1. Otherwise "0" is considered a valid timeout,
-which doesn't make much sense.
+Also, Tzung-Bi never sent a Reviewed-by: tag. As with the other patches,
+this is completely inappropriate. Really, who gave you that idea ?
+You adding such tags without receiving them means we can never trust
+your patches again since you are making things up.
 
 Guenter
+
+> ---
+>   drivers/watchdog/iTCO_wdt.c | 12 ++++--------
+>   1 file changed, 4 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
+> index 3f2f4343644f..8d24cf4f4ca3 100644
+> --- a/drivers/watchdog/iTCO_wdt.c
+> +++ b/drivers/watchdog/iTCO_wdt.c
+> @@ -635,22 +635,18 @@ static int iTCO_wdt_resume_noirq(struct device *dev)
+>   
+>   	return 0;
+>   }
+> +#endif /* CONFIG_PM_SLEEP */
+>   
+>   static const struct dev_pm_ops iTCO_wdt_pm = {
+> -	.suspend_noirq = iTCO_wdt_suspend_noirq,
+> -	.resume_noirq = iTCO_wdt_resume_noirq,
+> +	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(iTCO_wdt_suspend_noirq,
+> +				      iTCO_wdt_resume_noirq)
+>   };
+>   
+> -#define ITCO_WDT_PM_OPS	(&iTCO_wdt_pm)
+> -#else
+> -#define ITCO_WDT_PM_OPS	NULL
+> -#endif /* CONFIG_PM_SLEEP */
+> -
+>   static struct platform_driver iTCO_wdt_driver = {
+>   	.probe          = iTCO_wdt_probe,
+>   	.driver         = {
+>   		.name   = DRV_NAME,
+> -		.pm     = ITCO_WDT_PM_OPS,
+> +		.pm     = &iTCO_wdt_pm,
+>   	},
+>   };
+>   
+

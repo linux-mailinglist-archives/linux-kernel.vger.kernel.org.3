@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 141A850F3B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:26:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF7950F7F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344800AbiDZI1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:27:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36178 "EHLO
+        id S245128AbiDZJfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:35:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239221AbiDZI0n (ORCPT
+        with ESMTP id S1347906AbiDZJGW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:26:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8A13CFEF;
-        Tue, 26 Apr 2022 01:23:13 -0700 (PDT)
+        Tue, 26 Apr 2022 05:06:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B01B42FC;
+        Tue, 26 Apr 2022 01:47:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1152B81CF7;
-        Tue, 26 Apr 2022 08:23:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CB5EC385A0;
-        Tue, 26 Apr 2022 08:23:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A218F603E0;
+        Tue, 26 Apr 2022 08:47:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 998D6C385A0;
+        Tue, 26 Apr 2022 08:47:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961390;
-        bh=egwIRRSMu30r1F9VMK/dU1QtErCVb4A+qEWO9CxAxOg=;
+        s=korg; t=1650962821;
+        bh=/gJsLD6N+b5xNTzzF4Bzt0cAnW+Ky2AHaiBFQ8+lpCo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hQ/rRthtzBNv5twHv4GAN/IkHNQV94PL+CxhsjbRkfqiKmNd6luhRtuuWsJougfoR
-         qA38CCwQAHGtw86NSg1tI6rc75BBZgPqEPoxO2/oI36yeIn3kHo59uSe+C+PkxXXut
-         9dOKWrL0gn+8Q4ZRIQa1FSrmu+aSqy2LbdRKEOEo=
+        b=H5fXbhJY9iJC2HqVobCmKJJKIZozadcs/BcieG7y+OhRsZ76MBT1GoaN5LtfvRQd/
+         KMJeoRWty1wAdJK45hEGDVnX7iwbvNWktHmhDnU7HWbzWxTnkptOANs5d3t0RjJGPO
+         jNU7wY9QlVIdW3drFel7awCarXtls+xCoQiBJghQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiongwei Song <sxwjean@gmail.com>,
-        Arthur Marsh <arthur.marsh@internode.on.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Khem Raj <raj.khem@gmail.com>
-Subject: [PATCH 4.9 02/24] mm: page_alloc: fix building error on -Werror=array-compare
+        stable@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 061/146] reset: renesas: Check return value of reset_control_deassert()
 Date:   Tue, 26 Apr 2022 10:20:56 +0200
-Message-Id: <20220426081731.445639121@linuxfoundation.org>
+Message-Id: <20220426081751.781790686@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081731.370823950@linuxfoundation.org>
-References: <20220426081731.370823950@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,42 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiongwei Song <sxwjean@gmail.com>
+From: Heiner Kallweit <hkallweit1@gmail.com>
 
-commit ca831f29f8f25c97182e726429b38c0802200c8f upstream.
+[ Upstream commit da18980a855edf44270f05455e0ec3f2472f64cc ]
 
-Arthur Marsh reported we would hit the error below when building kernel
-with gcc-12:
+Deasserting the reset is vital, therefore bail out in case of error.
 
-  CC      mm/page_alloc.o
-  mm/page_alloc.c: In function `mem_init_print_info':
-  mm/page_alloc.c:8173:27: error: comparison between two arrays [-Werror=array-compare]
-   8173 |                 if (start <= pos && pos < end && size > adj) \
-        |
-
-In C++20, the comparision between arrays should be warned.
-
-Link: https://lkml.kernel.org/r/20211125130928.32465-1-sxwjean@me.com
-Signed-off-by: Xiongwei Song <sxwjean@gmail.com>
-Reported-by: Arthur Marsh <arthur.marsh@internode.on.net>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Khem Raj <raj.khem@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Suggested-by: Biju Das <biju.das.jz@bp.renesas.com>
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+Link: https://lore.kernel.org/r/b2131908-0110-006b-862f-080517f3e2d8@gmail.com
+Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- mm/page_alloc.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/reset/reset-rzg2l-usbphy-ctrl.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -6504,7 +6504,7 @@ void __init mem_init_print_info(const ch
- 	 */
- #define adj_init_size(start, end, size, pos, adj) \
- 	do { \
--		if (start <= pos && pos < end && size > adj) \
-+		if (&start[0] <= &pos[0] && &pos[0] < &end[0] && size > adj) \
- 			size -= adj; \
- 	} while (0)
+diff --git a/drivers/reset/reset-rzg2l-usbphy-ctrl.c b/drivers/reset/reset-rzg2l-usbphy-ctrl.c
+index 1e8315038850..a8dde4606360 100644
+--- a/drivers/reset/reset-rzg2l-usbphy-ctrl.c
++++ b/drivers/reset/reset-rzg2l-usbphy-ctrl.c
+@@ -121,7 +121,9 @@ static int rzg2l_usbphy_ctrl_probe(struct platform_device *pdev)
+ 		return dev_err_probe(dev, PTR_ERR(priv->rstc),
+ 				     "failed to get reset\n");
  
+-	reset_control_deassert(priv->rstc);
++	error = reset_control_deassert(priv->rstc);
++	if (error)
++		return error;
+ 
+ 	priv->rcdev.ops = &rzg2l_usbphy_ctrl_reset_ops;
+ 	priv->rcdev.of_reset_n_cells = 1;
+-- 
+2.35.1
+
 
 

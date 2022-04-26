@@ -2,50 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D07350F831
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAF9650F52C
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347797AbiDZJ3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:29:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38470 "EHLO
+        id S1347376AbiDZIvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:51:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347537AbiDZJFz (ORCPT
+        with ESMTP id S1346014AbiDZIjt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:05:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F144F12FECE;
-        Tue, 26 Apr 2022 01:44:54 -0700 (PDT)
+        Tue, 26 Apr 2022 04:39:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5678781487;
+        Tue, 26 Apr 2022 01:32:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A1E36B81CFE;
-        Tue, 26 Apr 2022 08:44:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4494C385A0;
-        Tue, 26 Apr 2022 08:44:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A9ED4618A6;
+        Tue, 26 Apr 2022 08:32:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A6C7C385B2;
+        Tue, 26 Apr 2022 08:32:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962692;
-        bh=5xTDvNXwoCQJk1iKzJHupHTTjUGUOgb2bv+ABVlDzXk=;
+        s=korg; t=1650961951;
+        bh=QBrksCVueVtqzTFMQ4iY1XT8DH2NawqzQlR0iIMujfw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H4klwte6T2nI2vC5kuR+mRGDbi/Mgc1MoinXI8qmLCc/QCu8iJPtvrUUqvrURBBIa
-         h66/442zMLJhlG+4BvST9K1zx69T9ROsZtpkohZ12SSujha7357hqE7ERJVYYFS2S6
-         ADXTCOILiJ0feq//QeRDDp3bNG3rdHRlzAna5f64=
+        b=LVsAV+8sPYg+ccgSE76/NCWHqbKpRZ+Wf0qXh5fZmpIdzUJJdZL3sRGcd/ya8duBM
+         w/o8KwI0kVThb/C1ruQU4gk9qY9Z0KLHxXZNhl9uLeEy2aP6F1SLYzYd26bWBHEM4h
+         jS2SefdWnBYDIHV7GRRpN2+Bs5SfAe5ktMSLrWFY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nadav Amit <namit@vmware.com>,
-        Peter Xu <peterx@redhat.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        stable@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 055/146] userfaultfd: mark uffd_wp regardless of VM_WRITE flag
+Subject: [PATCH 5.10 22/86] ip6_gre: Avoid updating tunnel->tun_hlen in __gre6_xmit()
 Date:   Tue, 26 Apr 2022 10:20:50 +0200
-Message-Id: <20220426081751.615934458@linuxfoundation.org>
+Message-Id: <20220426081741.851720454@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
-References: <20220426081750.051179617@linuxfoundation.org>
+In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
+References: <20220426081741.202366502@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,68 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nadav Amit <namit@vmware.com>
+From: Peilin Ye <peilin.ye@bytedance.com>
 
-[ Upstream commit 0e88904cb700a9654c9f0d9ca4967e761e7c9ee8 ]
+[ Upstream commit f40c064e933d7787ca7411b699504d7a2664c1f5 ]
 
-When a PTE is set by UFFD operations such as UFFDIO_COPY, the PTE is
-currently only marked as write-protected if the VMA has VM_WRITE flag
-set.  This seems incorrect or at least would be unexpected by the users.
+Do not update tunnel->tun_hlen in data plane code.  Use a local variable
+instead, just like "tunnel_hlen" in net/ipv4/ip_gre.c:gre_fb_xmit().
 
-Consider the following sequence of operations that are being performed
-on a certain page:
-
-	mprotect(PROT_READ)
-	UFFDIO_COPY(UFFDIO_COPY_MODE_WP)
-	mprotect(PROT_READ|PROT_WRITE)
-
-At this point the user would expect to still get UFFD notification when
-the page is accessed for write, but the user would not get one, since
-the PTE was not marked as UFFD_WP during UFFDIO_COPY.
-
-Fix it by always marking PTEs as UFFD_WP regardless on the
-write-permission in the VMA flags.
-
-Link: https://lkml.kernel.org/r/20220217211602.2769-1-namit@vmware.com
-Fixes: 292924b26024 ("userfaultfd: wp: apply _PAGE_UFFD_WP bit")
-Signed-off-by: Nadav Amit <namit@vmware.com>
-Acked-by: Peter Xu <peterx@redhat.com>
-Cc: Axel Rasmussen <axelrasmussen@google.com>
-Cc: Mike Rapoport <rppt@linux.vnet.ibm.com>
-Cc: Andrea Arcangeli <aarcange@redhat.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Co-developed-by: Cong Wang <cong.wang@bytedance.com>
+Signed-off-by: Cong Wang <cong.wang@bytedance.com>
+Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- mm/userfaultfd.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ net/ipv6/ip6_gre.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-index 0780c2a57ff1..885e5adb0168 100644
---- a/mm/userfaultfd.c
-+++ b/mm/userfaultfd.c
-@@ -72,12 +72,15 @@ int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
- 	_dst_pte = pte_mkdirty(_dst_pte);
- 	if (page_in_cache && !vm_shared)
- 		writable = false;
--	if (writable) {
--		if (wp_copy)
--			_dst_pte = pte_mkuffd_wp(_dst_pte);
--		else
--			_dst_pte = pte_mkwrite(_dst_pte);
--	}
-+
-+	/*
-+	 * Always mark a PTE as write-protected when needed, regardless of
-+	 * VM_WRITE, which the user might change.
-+	 */
-+	if (wp_copy)
-+		_dst_pte = pte_mkuffd_wp(_dst_pte);
-+	else if (writable)
-+		_dst_pte = pte_mkwrite(_dst_pte);
+diff --git a/net/ipv6/ip6_gre.c b/net/ipv6/ip6_gre.c
+index 9a0263f25232..949d6fbc1ca0 100644
+--- a/net/ipv6/ip6_gre.c
++++ b/net/ipv6/ip6_gre.c
+@@ -743,6 +743,7 @@ static netdev_tx_t __gre6_xmit(struct sk_buff *skb,
+ 		struct ip_tunnel_info *tun_info;
+ 		const struct ip_tunnel_key *key;
+ 		__be16 flags;
++		int tun_hlen;
  
- 	dst_pte = pte_offset_map_lock(dst_mm, dst_pmd, dst_addr, &ptl);
+ 		tun_info = skb_tunnel_info_txcheck(skb);
+ 		if (IS_ERR(tun_info) ||
+@@ -760,9 +761,9 @@ static netdev_tx_t __gre6_xmit(struct sk_buff *skb,
+ 		dsfield = key->tos;
+ 		flags = key->tun_flags &
+ 			(TUNNEL_CSUM | TUNNEL_KEY | TUNNEL_SEQ);
+-		tunnel->tun_hlen = gre_calc_hlen(flags);
++		tun_hlen = gre_calc_hlen(flags);
  
+-		gre_build_header(skb, tunnel->tun_hlen,
++		gre_build_header(skb, tun_hlen,
+ 				 flags, protocol,
+ 				 tunnel_id_to_key32(tun_info->key.tun_id),
+ 				 (flags & TUNNEL_SEQ) ? htonl(tunnel->o_seqno++)
 -- 
 2.35.1
 

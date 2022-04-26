@@ -2,45 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFFAA50F813
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0850D50F8C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346636AbiDZJIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:08:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57808 "EHLO
+        id S1348149AbiDZJep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:34:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346152AbiDZIoj (ORCPT
+        with ESMTP id S1347875AbiDZJGU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:44:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9BD161EBE;
-        Tue, 26 Apr 2022 01:34:17 -0700 (PDT)
+        Tue, 26 Apr 2022 05:06:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7095B1696CD;
+        Tue, 26 Apr 2022 01:46:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AFAB6185C;
-        Tue, 26 Apr 2022 08:34:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43E3CC385A4;
-        Tue, 26 Apr 2022 08:34:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE231603E0;
+        Tue, 26 Apr 2022 08:46:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EE6EC385A4;
+        Tue, 26 Apr 2022 08:46:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962056;
-        bh=RGoE0lV4Gt1FzGtH18FsPre8pQCqlrkKwqFydH7HAbA=;
+        s=korg; t=1650962793;
+        bh=OMQDnUG+1W+8aDe0SQ4X8conpFZORyWDSKhkFj/NcXY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aqdDdhjpbyMb8yx7TbBq5mtmqLSbWesjbfM9Ch1NHK3ffn5uSFxf+JsU/2YQD6Rfg
-         Cuyp3FXHpbyNTN2fJtFoaW3HJ0VjQ8piojljg+aAWCfX3YVQiP68AeFKUiZjo9t8CH
-         HJAdowvaM4CIHOdj9tGOEMcH8jHl3LlqfzgYUp6o=
+        b=m7OfW9SEdtymrLUXfXIUWVmSGRnSjXxCsIUROFbp70aVBB920uh/JpI+7Ar678K6w
+         3mBbauCwQOAHnY0RzGTuwws3ATpwbOj+Eda0artOSjCyJggRhWocNmP3rgOfoHPQvn
+         wrE6V43zm0dpjBe0+KoWfv5XWgsfjB63No37qzN0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, koo5 <kolman.jindrich@gmail.com>,
-        Manuel Ullmann <labre@posteo.de>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.10 57/86] net: atlantic: invert deep par in pm functions, preventing null derefs
+        stable@vger.kernel.org, Shakeel Butt <shakeelb@google.com>,
+        Daniel Dao <dqminh@cloudflare.com>,
+        Ivan Babrou <ivan@cloudflare.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+        Frank Hofmann <fhofmann@cloudflare.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.17 090/146] memcg: sync flush only if periodic flush is delayed
 Date:   Tue, 26 Apr 2022 10:21:25 +0200
-Message-Id: <20220426081742.851286029@linuxfoundation.org>
+Message-Id: <20220426081752.588763370@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
-References: <20220426081741.202366502@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,95 +61,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Manuel Ullmann <labre@posteo.de>
+From: Shakeel Butt <shakeelb@google.com>
 
-commit cbe6c3a8f8f4315b96e46e1a1c70393c06d95a4c upstream.
+commit 9b3016154c913b2e7ec5ae5c9a42eb9e732d86aa upstream.
 
-This will reset deeply on freeze and thaw instead of suspend and
-resume and prevent null pointer dereferences of the uninitialized ring
-0 buffer while thawing.
+Daniel Dao has reported [1] a regression on workloads that may trigger a
+lot of refaults (anon and file).  The underlying issue is that flushing
+rstat is expensive.  Although rstat flush are batched with (nr_cpus *
+MEMCG_BATCH) stat updates, it seems like there are workloads which
+genuinely do stat updates larger than batch value within short amount of
+time.  Since the rstat flush can happen in the performance critical
+codepaths like page faults, such workload can suffer greatly.
 
-The impact is an indefinitely hanging kernel. You can't switch
-consoles after this and the only possible user interaction is SysRq.
+This patch fixes this regression by making the rstat flushing
+conditional in the performance critical codepaths.  More specifically,
+the kernel relies on the async periodic rstat flusher to flush the stats
+and only if the periodic flusher is delayed by more than twice the
+amount of its normal time window then the kernel allows rstat flushing
+from the performance critical codepaths.
 
-BUG: kernel NULL pointer dereference
-RIP: 0010:aq_ring_rx_fill+0xcf/0x210 [atlantic]
-aq_vec_init+0x85/0xe0 [atlantic]
-aq_nic_init+0xf7/0x1d0 [atlantic]
-atl_resume_common+0x4f/0x100 [atlantic]
-pci_pm_thaw+0x42/0xa0
+Now the question: what are the side-effects of this change? The worst
+that can happen is the refault codepath will see 4sec old lruvec stats
+and may cause false (or missed) activations of the refaulted page which
+may under-or-overestimate the workingset size.  Though that is not very
+concerning as the kernel can already miss or do false activations.
 
-resolves in aq_ring.o to
+There are two more codepaths whose flushing behavior is not changed by
+this patch and we may need to come to them in future.  One is the
+writeback stats used by dirty throttling and second is the deactivation
+heuristic in the reclaim.  For now keeping an eye on them and if there
+is report of regression due to these codepaths, we will reevaluate then.
 
-```
-0000000000000ae0 <aq_ring_rx_fill>:
-{
-/* ... */
- baf:	48 8b 43 08          	mov    0x8(%rbx),%rax
- 		buff->flags = 0U; /* buff is NULL */
-```
-
-The bug has been present since the introduction of the new pm code in
-8aaa112a57c1 ("net: atlantic: refactoring pm logic") and was hidden
-until 8ce84271697a ("net: atlantic: changes for multi-TC support"),
-which refactored the aq_vec_{free,alloc} functions into
-aq_vec_{,ring}_{free,alloc}, but is technically not wrong. The
-original functions just always reinitialized the buffers on S3/S4. If
-the interface is down before freezing, the bug does not occur. It does
-not matter, whether the initrd contains and loads the module before
-thawing.
-
-So the fix is to invert the boolean parameter deep in all pm function
-calls, which was clearly intended to be set like that.
-
-First report was on Github [1], which you have to guess from the
-resume logs in the posted dmesg snippet. Recently I posted one on
-Bugzilla [2], since I did not have an AQC device so far.
-
-#regzbot introduced: 8ce84271697a
-#regzbot from: koo5 <kolman.jindrich@gmail.com>
-#regzbot monitor: https://github.com/Aquantia/AQtion/issues/32
-
-Fixes: 8aaa112a57c1 ("net: atlantic: refactoring pm logic")
-Link: https://github.com/Aquantia/AQtion/issues/32 [1]
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215798 [2]
-Cc: stable@vger.kernel.org
-Reported-by: koo5 <kolman.jindrich@gmail.com>
-Signed-off-by: Manuel Ullmann <labre@posteo.de>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Link: https://lore.kernel.org/all/CA+wXwBSyO87ZX5PVwdHm-=dBjZYECGmfnydUicUyrQqndgX2MQ@mail.gmail.com [1]
+Link: https://lkml.kernel.org/r/20220304184040.1304781-1-shakeelb@google.com
+Fixes: 1f828223b799 ("memcg: flush lruvec stats in the refault")
+Signed-off-by: Shakeel Butt <shakeelb@google.com>
+Reported-by: Daniel Dao <dqminh@cloudflare.com>
+Tested-by: Ivan Babrou <ivan@cloudflare.com>
+Cc: Michal Hocko <mhocko@suse.com>
+Cc: Roman Gushchin <roman.gushchin@linux.dev>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Michal Koutný <mkoutny@suse.com>
+Cc: Frank Hofmann <fhofmann@cloudflare.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ include/linux/memcontrol.h |    5 +++++
+ mm/memcontrol.c            |   12 +++++++++++-
+ mm/workingset.c            |    2 +-
+ 3 files changed, 17 insertions(+), 2 deletions(-)
 
---- a/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
-+++ b/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
-@@ -450,22 +450,22 @@ err_exit:
- 
- static int aq_pm_freeze(struct device *dev)
- {
--	return aq_suspend_common(dev, false);
-+	return aq_suspend_common(dev, true);
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -999,6 +999,7 @@ static inline unsigned long lruvec_page_
  }
  
- static int aq_pm_suspend_poweroff(struct device *dev)
+ void mem_cgroup_flush_stats(void);
++void mem_cgroup_flush_stats_delayed(void);
+ 
+ void __mod_memcg_lruvec_state(struct lruvec *lruvec, enum node_stat_item idx,
+ 			      int val);
+@@ -1442,6 +1443,10 @@ static inline void mem_cgroup_flush_stat
  {
--	return aq_suspend_common(dev, true);
-+	return aq_suspend_common(dev, false);
  }
  
- static int aq_pm_thaw(struct device *dev)
++static inline void mem_cgroup_flush_stats_delayed(void)
++{
++}
++
+ static inline void __mod_memcg_lruvec_state(struct lruvec *lruvec,
+ 					    enum node_stat_item idx, int val)
  {
--	return atl_resume_common(dev, false);
-+	return atl_resume_common(dev, true);
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -628,6 +628,9 @@ static DECLARE_DEFERRABLE_WORK(stats_flu
+ static DEFINE_SPINLOCK(stats_flush_lock);
+ static DEFINE_PER_CPU(unsigned int, stats_updates);
+ static atomic_t stats_flush_threshold = ATOMIC_INIT(0);
++static u64 flush_next_time;
++
++#define FLUSH_TIME (2UL*HZ)
+ 
+ static inline void memcg_rstat_updated(struct mem_cgroup *memcg, int val)
+ {
+@@ -649,6 +652,7 @@ static void __mem_cgroup_flush_stats(voi
+ 	if (!spin_trylock_irqsave(&stats_flush_lock, flag))
+ 		return;
+ 
++	flush_next_time = jiffies_64 + 2*FLUSH_TIME;
+ 	cgroup_rstat_flush_irqsafe(root_mem_cgroup->css.cgroup);
+ 	atomic_set(&stats_flush_threshold, 0);
+ 	spin_unlock_irqrestore(&stats_flush_lock, flag);
+@@ -660,10 +664,16 @@ void mem_cgroup_flush_stats(void)
+ 		__mem_cgroup_flush_stats();
  }
  
- static int aq_pm_resume_restore(struct device *dev)
++void mem_cgroup_flush_stats_delayed(void)
++{
++	if (time_after64(jiffies_64, flush_next_time))
++		mem_cgroup_flush_stats();
++}
++
+ static void flush_memcg_stats_dwork(struct work_struct *w)
  {
--	return atl_resume_common(dev, true);
-+	return atl_resume_common(dev, false);
+ 	__mem_cgroup_flush_stats();
+-	queue_delayed_work(system_unbound_wq, &stats_flush_dwork, 2UL*HZ);
++	queue_delayed_work(system_unbound_wq, &stats_flush_dwork, FLUSH_TIME);
  }
  
- static const struct dev_pm_ops aq_pm_ops = {
+ /**
+--- a/mm/workingset.c
++++ b/mm/workingset.c
+@@ -354,7 +354,7 @@ void workingset_refault(struct folio *fo
+ 
+ 	mod_lruvec_state(lruvec, WORKINGSET_REFAULT_BASE + file, nr);
+ 
+-	mem_cgroup_flush_stats();
++	mem_cgroup_flush_stats_delayed();
+ 	/*
+ 	 * Compare the distance to the existing workingset size. We
+ 	 * don't activate pages that couldn't stay resident even if
 
 

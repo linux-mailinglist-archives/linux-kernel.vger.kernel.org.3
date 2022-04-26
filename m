@@ -2,138 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E043510288
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:04:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5933E510283
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352804AbiDZQHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 12:07:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53582 "EHLO
+        id S1352783AbiDZQHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 12:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352785AbiDZQHh (ORCPT
+        with ESMTP id S237871AbiDZQHO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 12:07:37 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628A943AEC;
-        Tue, 26 Apr 2022 09:04:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650989069; x=1682525069;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mqAl6GT0VmvVsoiieDZ39Jw7aD8/OaezIaNnGD3XhX0=;
-  b=GMO1UOVeRGcWOBPOqi9WE+zgHoHJ00CpBAOhk9YQz6058jmtQFgSYMGZ
-   dmj1n46ybuG9MpzY8CjVdad1VCHzU25GIK1E33D3Iq9/AIpOMMTfMdTXd
-   vOzmqWaAoMnYBwc9cLkli97tTmUZFH/fGljD3CVvzzIX2nQtuy7iiF2Z7
-   O9WReeaP38e8j1UGMfcD7BTfqiqmfqMMnFdWp2qEDVdY37A/9adRTTX3s
-   ekVDNAl/0E/87t8JtxcXjJhgr0/eqvynJm9qW1hHIQC7qu8yx8dy6HAiI
-   fjUaHPGHxmH9DnKr3x2DrSbNLj1snwtSbTcHyZ+fSnPf2Lz30GyQELa95
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="328566878"
-X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="328566878"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 09:03:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="874822226"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 26 Apr 2022 09:03:42 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1njNfC-0003mk-5b;
-        Tue, 26 Apr 2022 16:03:42 +0000
-Date:   Wed, 27 Apr 2022 00:02:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daehwan Jung <dh10.jung@samsung.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Howard Yen <howardyen@google.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Puma Hsu <pumahsu@google.com>,
-        "J . Avila" <elavila@google.com>,
-        Daehwan Jung <dh10.jung@samsung.com>, sc.suh@samsung.com,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH v4 1/5] usb: host: export symbols for xhci-exynos to use
- xhci hooks
-Message-ID: <202204262306.mzMIKFKO-lkp@intel.com>
-References: <1650964728-175347-2-git-send-email-dh10.jung@samsung.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1650964728-175347-2-git-send-email-dh10.jung@samsung.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 26 Apr 2022 12:07:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA91434AA;
+        Tue, 26 Apr 2022 09:04:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F3EFA61A59;
+        Tue, 26 Apr 2022 16:04:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94823C385AA;
+        Tue, 26 Apr 2022 16:04:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650989045;
+        bh=69jqnS80ls4U/ADxnP7PEc7prC9IyzE3eMxJZnp7tAU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OF7ff69aH9WhWwYQqzv8Ol92hHSgQ1EBu3+vmSaVHUEhT5CXy6BJoKpnIuYAhOrt8
+         W1+kix+7UbGMbEfZgWHap4qIKIRg2Ye6XkwFsUB7ytq8MkxS6U4QjlimKB3EUaL4Tl
+         lG+o75zjCy5+kHsfpGM/hBJukTZGFs1jaomfDgYBY1Kv33I3gF4Y/h2hmu16YG4tOI
+         kHd3BWsSDlq/XDUcjLKqULgQd/YhY8S2ZqFQGnW6NepUoyoYTx17eDXhJL7t6mPl//
+         V69PmgBM9PsxdttsmpNYPouZkSizbbwh7Uo5h5cBqpGePVXkk9IKXAYus5nAM8w29n
+         A7gpRf/DVOB8Q==
+Date:   Wed, 27 Apr 2022 01:03:59 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Subject: Re: [PATCHv2 bpf-next 1/4] kallsyms: Add kallsyms_lookup_names
+ function
+Message-Id: <20220427010359.8400f28813c1ffc62af2ae2b@kernel.org>
+In-Reply-To: <YmflGEbjkp8mynxK@krava>
+References: <20220418124834.829064-1-jolsa@kernel.org>
+        <20220418124834.829064-2-jolsa@kernel.org>
+        <20220418233546.dfe0a1be12193c26b05cdd93@kernel.org>
+        <Yl5yHVOJpCYr+T3r@krava>
+        <YmJPcU9dahEatb0f@krava>
+        <20220426190108.d9c76f5ccff52e27dbef21af@kernel.org>
+        <YmflGEbjkp8mynxK@krava>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daehwan,
+On Tue, 26 Apr 2022 14:27:04 +0200
+Jiri Olsa <olsajiri@gmail.com> wrote:
 
-Thank you for the patch! Perhaps something to improve:
+> On Tue, Apr 26, 2022 at 07:01:08PM +0900, Masami Hiramatsu wrote:
+> > Hi Jiri,
+> > 
+> > Sorry for replying late.
+> > 
+> > On Fri, 22 Apr 2022 08:47:13 +0200
+> > Jiri Olsa <olsajiri@gmail.com> wrote:
+> > 
+> > > On Tue, Apr 19, 2022 at 10:26:05AM +0200, Jiri Olsa wrote:
+> > > 
+> > > SNIP
+> > > 
+> > > > > > +static int kallsyms_callback(void *data, const char *name,
+> > > > > > +			     struct module *mod, unsigned long addr)
+> > > > > > +{
+> > > > > > +	struct kallsyms_data *args = data;
+> > > > > > +
+> > > > > > +	if (!bsearch(&name, args->syms, args->cnt, sizeof(*args->syms), symbols_cmp))
+> > > > > > +		return 0;
+> > > > > > +
+> > > > > > +	addr = ftrace_location(addr);
+> > > > > > +	if (!addr)
+> > > > > > +		return 0;
+> > > > > 
+> > > > > Ooops, wait. Did you do this last version? I missed this point.
+> > > > > This changes the meanings of the kernel function.
+> > > > 
+> > > > yes, it was there before ;-) and you're right.. so some archs can
+> > > > return different address, I did not realize that
+> > > > 
+> > > > > 
+> > > > > > +
+> > > > > > +	args->addrs[args->found++] = addr;
+> > > > > > +	return args->found == args->cnt ? 1 : 0;
+> > > > > > +}
+> > > > > > +
+> > > > > > +/**
+> > > > > > + * kallsyms_lookup_names - Lookup addresses for array of symbols
+> > > > > 
+> > > > > More correctly "Lookup 'ftraced' addresses for array of sorted symbols", right?
+> > > > > 
+> > > > > I'm not sure, we can call it as a 'kallsyms' API, since this is using
+> > > > > kallsyms but doesn't return symbol address, but ftrace address.
+> > > > > I think this name misleads user to expect returning symbol address.
+> > > > > 
+> > > > > > + *
+> > > > > > + * @syms: array of symbols pointers symbols to resolve, must be
+> > > > > > + * alphabetically sorted
+> > > > > > + * @cnt: number of symbols/addresses in @syms/@addrs arrays
+> > > > > > + * @addrs: array for storing resulting addresses
+> > > > > > + *
+> > > > > > + * This function looks up addresses for array of symbols provided in
+> > > > > > + * @syms array (must be alphabetically sorted) and stores them in
+> > > > > > + * @addrs array, which needs to be big enough to store at least @cnt
+> > > > > > + * addresses.
+> > > > > 
+> > > > > Hmm, sorry I changed my mind. I rather like to expose kallsyms_on_each_symbol()
+> > > > > and provide this API from fprobe or ftrace, because this returns ftrace address
+> > > > > and thus this is only used from fprobe.
+> > > > 
+> > > > ok, so how about:
+> > > > 
+> > > >   int ftrace_lookup_symbols(const char **sorted_syms, size_t cnt, unsigned long *addrs);
+> > > 
+> > > quick question.. is it ok if it stays in kalsyms.c object?
+> > 
+> > I think if this is for the ftrace API, I think it should be in the ftrace.c, and
+> > it can remove unneeded #ifdefs in C code.
+> > 
+> > > 
+> > > so we don't need to expose kallsyms_on_each_symbol,
+> > > and it stays in 'kalsyms' place
+> > 
+> > We don't need to expose it to modules, but just make it into a global scope.
+> > I don't think that doesn't cause a problem.
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on krzk/for-next char-misc/char-misc-testing v5.18-rc4 next-20220426]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Oops, I meant "I don't think that cause any problem."
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daehwan-Jung/usb-host-export-symbols-for-xhci-exynos-to-use-xhci-hooks/20220426-181936
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220426/202204262306.mzMIKFKO-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/05a4937860cedb97b77200b7312a6f009aca2fc6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daehwan-Jung/usb-host-export-symbols-for-xhci-exynos-to-use-xhci-hooks/20220426-181936
-        git checkout 05a4937860cedb97b77200b7312a6f009aca2fc6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/usb/host/
+> 
+> np, will move it to ftrace
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thank you!
 
-All warnings (new ones prefixed by >>):
+> 
+> thanks,
+> jirka
 
-   drivers/usb/host/xhci-mem.c:68:6: warning: no previous prototype for 'xhci_segment_free' [-Wmissing-prototypes]
-      68 | void xhci_segment_free(struct xhci_hcd *xhci, struct xhci_segment *seg)
-         |      ^~~~~~~~~~~~~~~~~
-   drivers/usb/host/xhci-mem.c:100:6: warning: no previous prototype for 'xhci_link_segments' [-Wmissing-prototypes]
-     100 | void xhci_link_segments(struct xhci_segment *prev,
-         |      ^~~~~~~~~~~~~~~~~~
->> drivers/usb/host/xhci-mem.c:261:6: warning: no previous prototype for 'xhci_remove_stream_mapping' [-Wmissing-prototypes]
-     261 | void xhci_remove_stream_mapping(struct xhci_ring *ring)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/host/xhci-mem.c:1974:5: warning: no previous prototype for 'xhci_check_trb_in_td_math' [-Wmissing-prototypes]
-    1974 | int xhci_check_trb_in_td_math(struct xhci_hcd *xhci)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/xhci_remove_stream_mapping +261 drivers/usb/host/xhci-mem.c
-
-   260	
- > 261	void xhci_remove_stream_mapping(struct xhci_ring *ring)
-   262	{
-   263		struct xhci_segment *seg;
-   264	
-   265		if (WARN_ON_ONCE(ring->trb_address_map == NULL))
-   266			return;
-   267	
-   268		seg = ring->first_seg;
-   269		do {
-   270			xhci_remove_segment_mapping(ring->trb_address_map, seg);
-   271			seg = seg->next;
-   272		} while (seg != ring->first_seg);
-   273	}
-   274	EXPORT_SYMBOL_GPL(xhci_remove_stream_mapping);
-   275	
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Masami Hiramatsu <mhiramat@kernel.org>

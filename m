@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2636850F8CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9333450F64F
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237846AbiDZJcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:32:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41250 "EHLO
+        id S1345969AbiDZItW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:49:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347819AbiDZJGO (ORCPT
+        with ESMTP id S1345546AbiDZIjN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:06:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB72C161A60;
-        Tue, 26 Apr 2022 01:46:04 -0700 (PDT)
+        Tue, 26 Apr 2022 04:39:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383D63FBF3;
+        Tue, 26 Apr 2022 01:30:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F1FB60C42;
-        Tue, 26 Apr 2022 08:46:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52A25C385A4;
-        Tue, 26 Apr 2022 08:46:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E63BFB81CAF;
+        Tue, 26 Apr 2022 08:30:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CAD2C385A0;
+        Tue, 26 Apr 2022 08:30:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962762;
-        bh=G1DZZHPxxzY9jiiWaHLSmkavsSyRc4W3bovaeI/JEGk=;
+        s=korg; t=1650961809;
+        bh=/BAm5NTJdX2tMlaApiM7QAkYP88sHZe13rGjL+RUOcg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NmYYwgpas5CyAn5DvnGsfbioikERLjTM291G+eoc05+nxeRF76Ee+fdJFGqKe+ab7
-         H+CTfltQkhufu6X4opdKV3lMM0svAfHm3JzjbGEVz95GrLIKM6D5GqYfqxXeMN/tbu
-         MHTiTmtxZghAVii2KMXghgkWZCkqfxrs2Mx8T7kw=
+        b=CyU2mwLK3PQIVN8Cj9UsbVQF26HOxaK5nAa5Q6kwIpjoTSKv4bWZtuoGZBPPf1/7G
+         i5ae9hXVmg89R+i4ryFo+7AWJMGW6nd16vzyFIE6ao5AlT+nd+TzflVPQgw1Qxnc0c
+         kg6/cnsfIK3BaSaoAl2OSnk2CzFrwJygTGOIFZH0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Manish Rangankar <mrangankar@marvell.com>,
-        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 081/146] scsi: qedi: Fix failed disconnect handling
+        stable@vger.kernel.org,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
+        Borislav Petkov <bp@suse.de>,
+        Michal Simek <michal.simek@xilinx.com>
+Subject: [PATCH 5.4 36/62] EDAC/synopsys: Read the error count from the correct register
 Date:   Tue, 26 Apr 2022 10:21:16 +0200
-Message-Id: <20220426081752.339186805@linuxfoundation.org>
+Message-Id: <20220426081738.258085768@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
-References: <20220426081750.051179617@linuxfoundation.org>
+In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
+References: <20220426081737.209637816@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,146 +55,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Christie <michael.christie@oracle.com>
+From: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
 
-[ Upstream commit 857b06527f707f5df634b854898a191b5c1d0272 ]
+commit e2932d1f6f055b2af2114c7e64a26dc1b5593d0c upstream.
 
-We set the qedi_ep state to EP_STATE_OFLDCONN_START when the ep is
-created. Then in qedi_set_path we kick off the offload work. If userspace
-times out the connection and calls ep_disconnect, qedi will only flush the
-offload work if the qedi_ep state has transitioned away from
-EP_STATE_OFLDCONN_START. If we can't connect we will not have transitioned
-state and will leave the offload work running, and we will free the qedi_ep
-from under it.
+Currently, the error count is read wrongly from the status register. Read
+the count from the proper error count register (ERRCNT).
 
-This patch just has us init the work when we create the ep, then always
-flush it.
+  [ bp: Massage. ]
 
-Link: https://lore.kernel.org/r/20220408001314.5014-10-michael.christie@oracle.com
-Tested-by: Manish Rangankar <mrangankar@marvell.com>
-Reviewed-by: Lee Duncan <lduncan@suse.com>
-Reviewed-by: Chris Leech <cleech@redhat.com>
-Acked-by: Manish Rangankar <mrangankar@marvell.com>
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: b500b4a029d5 ("EDAC, synopsys: Add ECC support for ZynqMP DDR controller")
+Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Acked-by: Michal Simek <michal.simek@xilinx.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220414102813.4468-1-shubhrajyoti.datta@xilinx.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/qedi/qedi_iscsi.c | 69 +++++++++++++++++-----------------
- 1 file changed, 34 insertions(+), 35 deletions(-)
+ drivers/edac/synopsys_edac.c |   16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/scsi/qedi/qedi_iscsi.c b/drivers/scsi/qedi/qedi_iscsi.c
-index 282ecb4e39bb..e1fe989ad7b3 100644
---- a/drivers/scsi/qedi/qedi_iscsi.c
-+++ b/drivers/scsi/qedi/qedi_iscsi.c
-@@ -859,6 +859,37 @@ static int qedi_task_xmit(struct iscsi_task *task)
- 	return qedi_iscsi_send_ioreq(task);
- }
+--- a/drivers/edac/synopsys_edac.c
++++ b/drivers/edac/synopsys_edac.c
+@@ -163,6 +163,11 @@
+ #define ECC_STAT_CECNT_SHIFT		8
+ #define ECC_STAT_BITNUM_MASK		0x7F
  
-+static void qedi_offload_work(struct work_struct *work)
-+{
-+	struct qedi_endpoint *qedi_ep =
-+		container_of(work, struct qedi_endpoint, offload_work);
-+	struct qedi_ctx *qedi;
-+	int wait_delay = 5 * HZ;
-+	int ret;
++/* ECC error count register definitions */
++#define ECC_ERRCNT_UECNT_MASK		0xFFFF0000
++#define ECC_ERRCNT_UECNT_SHIFT		16
++#define ECC_ERRCNT_CECNT_MASK		0xFFFF
 +
-+	qedi = qedi_ep->qedi;
+ /* DDR QOS Interrupt register definitions */
+ #define DDR_QOS_IRQ_STAT_OFST		0x20200
+ #define DDR_QOSUE_MASK			0x4
+@@ -418,15 +423,16 @@ static int zynqmp_get_error_info(struct
+ 	base = priv->baseaddr;
+ 	p = &priv->stat;
+ 
++	regval = readl(base + ECC_ERRCNT_OFST);
++	p->ce_cnt = regval & ECC_ERRCNT_CECNT_MASK;
++	p->ue_cnt = (regval & ECC_ERRCNT_UECNT_MASK) >> ECC_ERRCNT_UECNT_SHIFT;
++	if (!p->ce_cnt)
++		goto ue_err;
 +
-+	ret = qedi_iscsi_offload_conn(qedi_ep);
-+	if (ret) {
-+		QEDI_ERR(&qedi->dbg_ctx,
-+			 "offload error: iscsi_cid=%u, qedi_ep=%p, ret=%d\n",
-+			 qedi_ep->iscsi_cid, qedi_ep, ret);
-+		qedi_ep->state = EP_STATE_OFLDCONN_FAILED;
-+		return;
-+	}
-+
-+	ret = wait_event_interruptible_timeout(qedi_ep->tcp_ofld_wait,
-+					       (qedi_ep->state ==
-+					       EP_STATE_OFLDCONN_COMPL),
-+					       wait_delay);
-+	if (ret <= 0 || qedi_ep->state != EP_STATE_OFLDCONN_COMPL) {
-+		qedi_ep->state = EP_STATE_OFLDCONN_FAILED;
-+		QEDI_ERR(&qedi->dbg_ctx,
-+			 "Offload conn TIMEOUT iscsi_cid=%u, qedi_ep=%p\n",
-+			 qedi_ep->iscsi_cid, qedi_ep);
-+	}
-+}
-+
- static struct iscsi_endpoint *
- qedi_ep_connect(struct Scsi_Host *shost, struct sockaddr *dst_addr,
- 		int non_blocking)
-@@ -907,6 +938,7 @@ qedi_ep_connect(struct Scsi_Host *shost, struct sockaddr *dst_addr,
- 	}
- 	qedi_ep = ep->dd_data;
- 	memset(qedi_ep, 0, sizeof(struct qedi_endpoint));
-+	INIT_WORK(&qedi_ep->offload_work, qedi_offload_work);
- 	qedi_ep->state = EP_STATE_IDLE;
- 	qedi_ep->iscsi_cid = (u32)-1;
- 	qedi_ep->qedi = qedi;
-@@ -1055,12 +1087,11 @@ static void qedi_ep_disconnect(struct iscsi_endpoint *ep)
- 	qedi_ep = ep->dd_data;
- 	qedi = qedi_ep->qedi;
+ 	regval = readl(base + ECC_STAT_OFST);
+ 	if (!regval)
+ 		return 1;
  
-+	flush_work(&qedi_ep->offload_work);
-+
- 	if (qedi_ep->state == EP_STATE_OFLDCONN_START)
- 		goto ep_exit_recover;
+-	p->ce_cnt = (regval & ECC_STAT_CECNT_MASK) >> ECC_STAT_CECNT_SHIFT;
+-	p->ue_cnt = (regval & ECC_STAT_UECNT_MASK) >> ECC_STAT_UECNT_SHIFT;
+-	if (!p->ce_cnt)
+-		goto ue_err;
+-
+ 	p->ceinfo.bitpos = (regval & ECC_STAT_BITNUM_MASK);
  
--	if (qedi_ep->state != EP_STATE_OFLDCONN_NONE)
--		flush_work(&qedi_ep->offload_work);
--
- 	if (qedi_ep->conn) {
- 		qedi_conn = qedi_ep->conn;
- 		abrt_conn = qedi_conn->abrt_conn;
-@@ -1234,37 +1265,6 @@ static int qedi_data_avail(struct qedi_ctx *qedi, u16 vlanid)
- 	return rc;
- }
- 
--static void qedi_offload_work(struct work_struct *work)
--{
--	struct qedi_endpoint *qedi_ep =
--		container_of(work, struct qedi_endpoint, offload_work);
--	struct qedi_ctx *qedi;
--	int wait_delay = 5 * HZ;
--	int ret;
--
--	qedi = qedi_ep->qedi;
--
--	ret = qedi_iscsi_offload_conn(qedi_ep);
--	if (ret) {
--		QEDI_ERR(&qedi->dbg_ctx,
--			 "offload error: iscsi_cid=%u, qedi_ep=%p, ret=%d\n",
--			 qedi_ep->iscsi_cid, qedi_ep, ret);
--		qedi_ep->state = EP_STATE_OFLDCONN_FAILED;
--		return;
--	}
--
--	ret = wait_event_interruptible_timeout(qedi_ep->tcp_ofld_wait,
--					       (qedi_ep->state ==
--					       EP_STATE_OFLDCONN_COMPL),
--					       wait_delay);
--	if ((ret <= 0) || (qedi_ep->state != EP_STATE_OFLDCONN_COMPL)) {
--		qedi_ep->state = EP_STATE_OFLDCONN_FAILED;
--		QEDI_ERR(&qedi->dbg_ctx,
--			 "Offload conn TIMEOUT iscsi_cid=%u, qedi_ep=%p\n",
--			 qedi_ep->iscsi_cid, qedi_ep);
--	}
--}
--
- static int qedi_set_path(struct Scsi_Host *shost, struct iscsi_path *path_data)
- {
- 	struct qedi_ctx *qedi;
-@@ -1380,7 +1380,6 @@ static int qedi_set_path(struct Scsi_Host *shost, struct iscsi_path *path_data)
- 			  qedi_ep->dst_addr, qedi_ep->dst_port);
- 	}
- 
--	INIT_WORK(&qedi_ep->offload_work, qedi_offload_work);
- 	queue_work(qedi->offload_thread, &qedi_ep->offload_work);
- 
- 	ret = 0;
--- 
-2.35.1
-
+ 	regval = readl(base + ECC_CEADDR0_OFST);
 
 

@@ -2,70 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE2BC50FB6B
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 12:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8418350FB70
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 12:49:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349200AbiDZKvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 06:51:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58118 "EHLO
+        id S1345774AbiDZKwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 06:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349474AbiDZKud (ORCPT
+        with ESMTP id S233760AbiDZKwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 06:50:33 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E105676D;
-        Tue, 26 Apr 2022 03:46:59 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id dk23so11885930ejb.8;
-        Tue, 26 Apr 2022 03:46:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=LQ+dR0UOrMeVo1DrEEM2SpNUL4OliZmqjspXFMm8eVs=;
-        b=Xwki4XJKl1bvhU2BAHy1VLInwFSPTDMezYEKLCJfgPuozbREABcQvWUPNqN1ECccUp
-         eIcXgH5K/Rzr2OufjrthDHvzz35YGOLCdrPUB2FDgW5Y2ds4iOuYDHUqRp0H/7s1LobK
-         Y2BjmHgFRaOk8/Y5nkCQLIJ8+flVdFRTEKiGWq8zq5F+1uf5GWotf2lblzhms7FTkQ84
-         PNgiToN0K3ihafgU6clSyjgKbPeBaqtc7rnLDajN0edrBaj5rJ4p5j/VNy9GDTuXMwWI
-         5bZcbmeBGYxOkTTvstU8FZeTQTwh5c9SeH86QTXFP5I7Nm+fr8gflhwXJStRsDpUPj62
-         WtXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=LQ+dR0UOrMeVo1DrEEM2SpNUL4OliZmqjspXFMm8eVs=;
-        b=0rMcPyyfWVyB6z5GqDipSzOvOtBgPT/ryyhJNjMd+dm92oWm1ZKPmjzVSB2TBf4Zl5
-         naEA4erFIONvp1IoKl7YSkNLC1IABUmgNcUZEmQ0joJ4L4g1s9y97RH/0jEZv2V1Dbec
-         49G/pZxG/1mLgy7poy3RCN4l/eY88bWwCU7i6Yc4A/6o1J/YVtchPhI4RTVYLB563zzU
-         jQj8+CKZzNreRxHNG+QCRrnHirx0CfXeo/hgjDVrP1/wr4BOdQW1UycVpkRFRCqCWHah
-         9dWT6FRvBpDT1c6h2/kQDgZArcrUf1G544a5dyT7AoQCFgfIFpA/oypr+BNOP7Lw6XP4
-         GVhA==
-X-Gm-Message-State: AOAM532evFLTwGYqxPcv5gpBChvQHoiGagCO7KQ2C178FZloARRbVPB8
-        7h2jc4vwB0+NRxVliwIiShk=
-X-Google-Smtp-Source: ABdhPJxdSqpjegF02exvsa0Whpl3LQ6ep+nqUMpsWopd9mkam8c4SiNfv8wV44oDB1ez54DB2XYB7Q==
-X-Received: by 2002:a17:907:72d0:b0:6db:4788:66a9 with SMTP id du16-20020a17090772d000b006db478866a9mr21551609ejc.516.1650970018176;
-        Tue, 26 Apr 2022 03:46:58 -0700 (PDT)
-Received: from archbook.localnet (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
-        by smtp.gmail.com with ESMTPSA id h7-20020a1709060f4700b006e8d0746969sm4635074ejj.222.2022.04.26.03.46.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 03:46:57 -0700 (PDT)
-From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-To:     linux-rockchip@lists.infradead.org
-Cc:     linux-rockchip@lists.infradead.org, heiko@sntech.de,
-        Peter Geis <pgwipeout@gmail.com>,
-        Marc Zyngier <maz@kernel.org>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Peter Geis <pgwipeout@gmail.com>
-Subject: Re: [PATCH v8 0/5] Enable rk356x PCIe controller
-Date:   Tue, 26 Apr 2022 12:46:56 +0200
-Message-ID: <2599368.pI0oiQkSSZ@archbook>
-In-Reply-To: <20220423152403.1681222-1-pgwipeout@gmail.com>
-References: <20220423152403.1681222-1-pgwipeout@gmail.com>
+        Tue, 26 Apr 2022 06:52:35 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D3A66AC4;
+        Tue, 26 Apr 2022 03:49:27 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KndtG0zFHz4xLS;
+        Tue, 26 Apr 2022 20:49:25 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1650970166;
+        bh=DMH3ySr9iYba3uZ+6v+2cv3OUMkWXAYZ8BqhGvxLsw4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=B7BFrB8rj4bZPsuN/XuBfRipy+U0EU2TColA84cuQEZV7pb10732mph46ExKdfA76
+         22gTFCfUrQwn70pA9PBoRbPdr0sSJodmW/iJVoQf9Ypl17Tw04wFJuSWrXuqvBZpf8
+         tg+uKBT2c7wXzuTYAUNWSkCRAUVruNVQgjCsdh5vKvDNlcHmJd1/qf1f7DpEkiWpja
+         Wyl2HYv/F4ZvMoDuAXZeXl679/Th3bxbi530dreLG7qKJvkYJHxRBW53ohHiq/H0TD
+         qd3pgBhp4eqwV9HqCfztUsn1wEsRDWqJDMml0Hk4Dd8/wQKqgOW8ZVc47XcMUv5r45
+         +D76VLWnXFHcw==
+Date:   Tue, 26 Apr 2022 20:49:24 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Amadeusz =?UTF-8?B?U8WCYXdpxYRza2k=?= 
+        <amadeuszx.slawinski@linux.intel.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the sound-asoc tree
+Message-ID: <20220426204924.173c3f65@canb.auug.org.au>
+In-Reply-To: <9a1299a4-873c-b3f8-c7c7-6f3fcfee0d5f@linux.intel.com>
+References: <20220426183048.5f1cb899@canb.auug.org.au>
+        <9a1299a4-873c-b3f8-c7c7-6f3fcfee0d5f@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: multipart/signed; boundary="Sig_/NrfTiBqVu3EJNw25ARI_x4z";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,50 +57,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Samstag, 23. April 2022 17:23:58 CEST Peter Geis wrote:
-> This series enables the DesignWare based PCIe controller on the rk356x
-> series of chips.
-> We drop the fallback to the core driver due to compatibility issues.
-> We reset the PCIe controller at driver probe to prevent issues in the
-> future when firmware / kexec leaves the controller in an unknown state.
-> We add support for legacy interrupts for cards that lack MSI support
-> (which is partially broken currently).
-> We then add the device tree nodes to enable PCIe on the Quartz64 Model
-> A.
+--Sig_/NrfTiBqVu3EJNw25ARI_x4z
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Tested-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+Hi Amadeusz,
 
-Tested on a PINE64 Quartz64 Model A. The series was applied to 5.18-rc4,
-and two devices were tested:
+On Tue, 26 Apr 2022 11:01:18 +0200 Amadeusz S=C5=82awi=C5=84ski         <am=
+adeuszx.slawinski@linux.intel.com> wrote:
+>
+> > I have applied the following patch for today:
+> >=20
+> > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Date: Tue, 26 Apr 2022 17:49:37 +1000
+> > Subject: [PATCH] fixup for "ASoC: Intel: avs: Configure modules accordi=
+ng to their type"
+> >=20
+> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > ---
+> >   sound/soc/intel/avs/path.c | 1 +
+> >   1 file changed, 1 insertion(+)
+> >=20
+> > diff --git a/sound/soc/intel/avs/path.c b/sound/soc/intel/avs/path.c
+> > index 3d46dd5e5bc4..6f47ac44de87 100644
+> > --- a/sound/soc/intel/avs/path.c
+> > +++ b/sound/soc/intel/avs/path.c
+> > @@ -9,6 +9,7 @@
+> >   #include <sound/intel-nhlt.h>
+> >   #include <sound/pcm_params.h>
+> >   #include <sound/soc.h>
+> > +#include <sound/intel-nhlt.h> =20
+>=20
+> This fix seems weird, as same include is 3 lines earlier?
 
-Device #1: ASMedia Technology Inc. ASM1142 USB 3.1 Host Controller
+Right.  I applied this at the same time as the previous fix which
+probably stopped this file from being built.  The real problem is that
+the structure is not defined for !CONFIG_ACPI.
 
-A USB 3.1 flash drive was plugged into the PCIe USB controller card.
-Then, the block device was read. Performance was nominal, no errors
-showed up in dmesg.
+So this fix is not needed.
 
-Device #2: NEC Corporation uPD720200 USB 3.0 Host Controller (rev 03)
-behind a PLX Technology, Inc. PEX 8608 8-lane, 8-Port PCI Express Gen 2
-(5.0 GT/s) Switch (rev ba) PCIe switch.
+Sorry for the noise.
+--=20
+Cheers,
+Stephen Rothwell
 
-(it's a weird card I grabbed off an auction site with both USB and SATA
-behind a PCIe switch, it's best not to worry about the twisted mind
-that came up with it.)
+--Sig_/NrfTiBqVu3EJNw25ARI_x4z
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-A USB 3.1 flash drive was plugged into the PCIe controller card's
-USB 3.0 port. Then, the block device was read. Performance was nominal,
-no errors appeared in dmesg.
+-----BEGIN PGP SIGNATURE-----
 
-512 megabytes of /dev/urandom were redirected into a file. The file was
-SHA1 checksummed. The file was then copied onto the mounted USB 3.1 drive
-which was connected to the PCIe card. The drive was unmounted, then
-re-mounted, and then a sha1sum of the file on the drive was calculated.
-The checksums matched.
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJnzjUACgkQAVBC80lX
+0GxPOwf+Lt+DwgO/MQW/6p3nZMvoGr6V9DecsGKZc6JeBa2Z5Db6v+AauaKY2mzX
+3Bwa+6AYHz9oMs99J1OI2ABKjK7Ye4E6nRQe32tcdS8wD63HlN89A6L/G6pqtN8w
+/ZxE6AyFo/pVAz8abrkIyJir0002Xmm78qAKHSnuiCF7vf81rlkEcuAqW8SS3od+
+5SPXdTYls7qbG0SMOm7YEdZeM1w/PcPBaPWGCbnPi10uC0qcka6gvBXRst1M03Be
+x4ChLunuzUKhSWtfDSVBUXbiHGxOC1s8zxlbNciMHS3QrNtlNdmPX1QEoqEzMgtA
+3gbL2OQw9VfTDVcSvk0K68FaPWGRmQ==
+=TVa1
+-----END PGP SIGNATURE-----
 
-Based on these tests it is my understanding that this patch series is
-functional for the use cases I have covered.
-
-Regards,
-Nicolas Frattaroli
-
-
+--Sig_/NrfTiBqVu3EJNw25ARI_x4z--

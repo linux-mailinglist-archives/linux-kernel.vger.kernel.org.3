@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A2C650F5DE
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2487350F8E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:44:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347298AbiDZIvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58484 "EHLO
+        id S1348327AbiDZJj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:39:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345794AbiDZIjb (ORCPT
+        with ESMTP id S1346905AbiDZJJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:39:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ACD595A31;
-        Tue, 26 Apr 2022 01:31:14 -0700 (PDT)
+        Tue, 26 Apr 2022 05:09:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732DDD399E;
+        Tue, 26 Apr 2022 01:49:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18CF96185A;
-        Tue, 26 Apr 2022 08:31:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20F44C385A0;
-        Tue, 26 Apr 2022 08:31:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4BB88B81D18;
+        Tue, 26 Apr 2022 08:49:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CC5BC385A0;
+        Tue, 26 Apr 2022 08:49:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961873;
-        bh=KqzuKxuQJCdfP2D+y8yU6DtCUL++GH2XJYDjiu7Erv0=;
+        s=korg; t=1650962958;
+        bh=sr+Nk5FxcDLzx6uPd1VgAtnE1P3v/6qsQnnjLwf2oUA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d3rqmWPKeF+YQ/+4N5d2aL5rO6O9NBaK/RG0aJ/daaMYcKS/CHZhMusONSrcmxzC3
-         aB13jhIEGZ6hz4s8DznCYZxEDGevWG21D72Cd3zT2A5NmEg0Mft0oGjvuf/WEpOJuE
-         7MpThxqi7vY1hvEsZlm7v74HB9x7lNH/Kh1+b1t4=
+        b=tgtpKrtEOJngVxHqMIkVzHXufDh6qJZQ+6YWfKtveOWX5Q1bUd//Vat1BoNPG/Z5V
+         olVySniek7CMZICNtVOIRB2ogbJHYGcODxDvKBOJfLJ75NODpql3PzjSU3YMqf/F2v
+         rHSWX/ZKyBveacmfQsgtkZ4g2+zhxA8b8AKOAtik=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, lee.jones@linaro.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        "stable@vger.kernel.org, Dan Carpenter" <dan.carpenter@oracle.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH 5.4 60/62] staging: ion: Prevent incorrect reference counting behavour
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 105/146] drm/panel/raspberrypi-touchscreen: Initialise the bridge in prepare
 Date:   Tue, 26 Apr 2022 10:21:40 +0200
-Message-Id: <20220426081738.942624771@linuxfoundation.org>
+Message-Id: <20220426081753.010023636@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
-References: <20220426081737.209637816@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,28 +56,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-Supply additional check in order to prevent unexpected results.
+[ Upstream commit 5f18c0782b99e26121efa93d20b76c19e17aa1dd ]
 
-Fixes: b892bf75b2034 ("ion: Switch ion to use dma-buf")
-Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The panel has a prepare call which is before video starts, and an
+enable call which is after.
+The Toshiba bridge should be configured before video, so move
+the relevant power and initialisation calls to prepare.
+
+Fixes: 2f733d6194bd ("drm/panel: Add support for the Raspberry Pi 7" Touchscreen.")
+Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220415162513.42190-3-stefan.wahren@i2se.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/android/ion/ion.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
---- a/drivers/staging/android/ion/ion.c
-+++ b/drivers/staging/android/ion/ion.c
-@@ -114,6 +114,9 @@ static void *ion_buffer_kmap_get(struct
- 	void *vaddr;
+diff --git a/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c b/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c
+index 1f805eb8fdb5..145047e19394 100644
+--- a/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c
++++ b/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c
+@@ -265,7 +265,7 @@ static int rpi_touchscreen_noop(struct drm_panel *panel)
+ 	return 0;
+ }
  
- 	if (buffer->kmap_cnt) {
-+		if (buffer->kmap_cnt == INT_MAX)
-+			return ERR_PTR(-EOVERFLOW);
+-static int rpi_touchscreen_enable(struct drm_panel *panel)
++static int rpi_touchscreen_prepare(struct drm_panel *panel)
+ {
+ 	struct rpi_touchscreen *ts = panel_to_ts(panel);
+ 	int i;
+@@ -295,6 +295,13 @@ static int rpi_touchscreen_enable(struct drm_panel *panel)
+ 	rpi_touchscreen_write(ts, DSI_STARTDSI, 0x01);
+ 	msleep(100);
+ 
++	return 0;
++}
 +
- 		buffer->kmap_cnt++;
- 		return buffer->vaddr;
- 	}
++static int rpi_touchscreen_enable(struct drm_panel *panel)
++{
++	struct rpi_touchscreen *ts = panel_to_ts(panel);
++
+ 	/* Turn on the backlight. */
+ 	rpi_touchscreen_i2c_write(ts, REG_PWM, 255);
+ 
+@@ -349,7 +356,7 @@ static int rpi_touchscreen_get_modes(struct drm_panel *panel,
+ static const struct drm_panel_funcs rpi_touchscreen_funcs = {
+ 	.disable = rpi_touchscreen_disable,
+ 	.unprepare = rpi_touchscreen_noop,
+-	.prepare = rpi_touchscreen_noop,
++	.prepare = rpi_touchscreen_prepare,
+ 	.enable = rpi_touchscreen_enable,
+ 	.get_modes = rpi_touchscreen_get_modes,
+ };
+-- 
+2.35.1
+
 
 

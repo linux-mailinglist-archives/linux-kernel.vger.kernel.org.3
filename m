@@ -2,104 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4415651020E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 17:38:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B8A9510212
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 17:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350587AbiDZPlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 11:41:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34394 "EHLO
+        id S1352400AbiDZPmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 11:42:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343792AbiDZPlw (ORCPT
+        with ESMTP id S1352020AbiDZPmp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 11:41:52 -0400
-Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEB45AA62;
-        Tue, 26 Apr 2022 08:38:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-        Content-ID:Content-Description;
-        bh=fj9TPZPeaJ77hv7VnUDtPRvcWeH3nXnlDCA0r5MVNDQ=; b=fYGzlnHRfohR0LgdCqIxKi6XB+
-        sXWizY+2kwiDVxGyfR9tf1NNEwFuxDDVKb/tnxWUVNOP3Iq8MjzMo4+E3KzgL04Sp7+65OF3L3siu
-        riide0hOA1paUQpUC01oD5Imje2rYcpN8U+r/mcuobLPEFPymfeE9XGkCWwHDwpMXASZO1454oOov
-        bgj1jpmihJNELx8L10AnLflNJ3cqmdD1gZN5xQPxWyiBX9Cu7M//u1eDiQyYIR+hwloWd8yxHYXc7
-        iTYnWSrVgKQOv4nOS4vrLWZapThmInl3RFaith8laO3E3rHhDVeLUjIf2qEYeHfbqJqcIbXn1BllL
-        J4cdBWFiPtpoUrEhtICMIOGhHZeNdbYwMWS9UV9FNDyucUxUTgZ7QJveU2zoe7kr/ReEk9hfGiwl4
-        WZ/9Xql5IBavt3ILNBhTzaiOTqslV9+VbArcK5qO6DYg+YewBiWPdml+uZWgkfaPVXb9RTPm0mRWx
-        B3OFRY5AZ6IkuhkgXGxb89Cps4KYIlW96DSLfXePm7a3hEE+bUXWe8AKXQVgaXszOGwaVnSUGrcrw
-        ZEAxRR/Z9mizubTC9f59aHi3zaupBPwr3Sfb0FracV0Qr4y3CTn4mp5Nztw5Yy3vPbbGIF7zTlInT
-        hYLl47/2IfeVQ5wDdBnweVyGEschux4btBdqBzrrA=;
-From:   Christian Schoenebeck <linux_oss@crudebyte.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     asmadeus@codewreck.org, David Kahurani <k.kahurani@gmail.com>,
-        davem@davemloft.net, ericvh@gmail.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, lucho@ionkov.net,
-        netdev@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
-        Greg Kurz <groug@kaod.org>
-Subject: Re: 9p EBADF with cache enabled (Was: 9p fs-cache tests/benchmark (was: 9p
- fscache Duplicate cookie detected))
-Date:   Tue, 26 Apr 2022 17:38:30 +0200
-Message-ID: <1817722.O6u07f4CCs@silver>
-In-Reply-To: <3174158.1650895816@warthog.procyon.org.uk>
-References: <YmKp68xvZEjBFell@codewreck.org> <1817268.LulUJvKFVv@silver>
- <3174158.1650895816@warthog.procyon.org.uk>
+        Tue, 26 Apr 2022 11:42:45 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC5C1633AE
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 08:39:36 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso1797128wma.0
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 08:39:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cvlSVuXcRiw+6iepFL0TlfUcx282zkxl1raumY/nhds=;
+        b=XqyHlWpjPB7Q+meLftRFxAA4/vut+Zg/jblwEOYeN2/9RrUClE1oRIa+itbJO86UsN
+         a/n3w1u6tZNLdrTQKcX30CsQWV+uRP/bfIDP2Nzs4MMJ9O3fCY5WTKSkD5mr++zKzldA
+         M7An9v2x8D0X+m5zpI4/PxRUTmUiS/whp8Zh45lPgfFzBciVnG3D1Eea1yphdR7qCecI
+         OXVNjQC5tLvhjSNVWhfN9utIcUjqxlJBL7OSuxsvNDZDNhE05RZrQkTFEoLqtpsWXwmQ
+         qwaHAihO0TV2QTholfA58F4rw/C0eOYG5IO/es/V3m7Bc854LxC7I1WKT4QRKeXFuj44
+         3SKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cvlSVuXcRiw+6iepFL0TlfUcx282zkxl1raumY/nhds=;
+        b=5a5Fnv2KUwwy54D6IRnq0NTarHHbKLajhOj3INEX0ZLEKKxPHxT3u3EZe0IEzg+PKk
+         pdrfhu4kbkddBOOyG+AnhVywNhHsjd6OwSM5JwQKIFG//qtcqfkxkTQTgS9CPxMEdOJz
+         dgVGtYpN5OVD8F6qeJrh7GICCmc/Y0ILIYbxBsoHSoNMBmLJ757alvyVnpgFW2YI0D4K
+         9V1qhO4sWZiPWAYvwGHL8gIXg2VfHW6Tx3yW6HsmyDlXgwp6d2GbmI164vVg5c41o631
+         6loK3Iz4v5nKznV3xcEzRpTNRMqwebo6i+Jr0uJlfsQbCJ27m9100IjyY8kJR1P82eAx
+         gzRA==
+X-Gm-Message-State: AOAM532FGTr6FjYhm736xY06EDBV3UJqgUFBUTmZAiFKOIK4neRZuqZQ
+        bDr6QeJwGS3I3Yat+Itzwv3zYw==
+X-Google-Smtp-Source: ABdhPJywdCr6tJ5pk7SryEdp3Tc08AQNoOkOAPLmI9COo8quqNDluSbMKyvMb7C29oOOOAKqNMrH4g==
+X-Received: by 2002:a05:600c:3c86:b0:392:990b:ae29 with SMTP id bg6-20020a05600c3c8600b00392990bae29mr30830958wmb.105.1650987575370;
+        Tue, 26 Apr 2022 08:39:35 -0700 (PDT)
+Received: from radium ([88.160.162.107])
+        by smtp.gmail.com with ESMTPSA id 204-20020a1c02d5000000b003928c42d02asm13873467wmc.23.2022.04.26.08.39.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 08:39:34 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 17:39:31 +0200
+From:   Fabien Parent <fparent@baylibre.com>
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hermes Wu <hermes.wu@ite.com.tw>,
+        Allen Chen <allen.chen@ite.com.tw>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/bridge: ite-it6505: add missing Kconfig option select
+Message-ID: <20220426153931.suiuc7o53dt6s2es@radium>
+References: <20220426141536.274727-1-fparent@baylibre.com>
+ <fd02a183-bcaa-86a8-8a13-52a9ddb374d5@baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="273566twpnhexmyw"
+Content-Disposition: inline
+In-Reply-To: <fd02a183-bcaa-86a8-8a13-52a9ddb374d5@baylibre.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Montag, 25. April 2022 16:10:16 CEST David Howells wrote:
-> There may be a quick and dirty workaround.  I think the problem is that
-> unless the O_APPEND read starts at the beginning of a page, netfs is going
-> to enforce a read.  Does the attached patch fix the problem?  (note that
-> it's untested)
 
-Patch doesn't apply for me on master:
+--273566twpnhexmyw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-checking file fs/9p/vfs_addr.c
-Hunk #1 FAILED at 291.
-1 out of 1 hunk FAILED
-checking file fs/netfs/buffered_read.c
-Hunk #1 FAILED at 364.
-1 out of 1 hunk FAILED
-checking file fs/netfs/internal.h
-checking file fs/netfs/stats.c
-Hunk #2 FAILED at 38.
-1 out of 2 hunks FAILED
+On Tue, Apr 26, 2022 at 05:29:31PM +0200, Neil Armstrong wrote:
+> On 26/04/2022 16:15, Fabien Parent wrote:
+> > The IT6505 is using functions provided by the DRM_DP_HELPER driver.
+> > In order to avoid having the bridge enabled but the helper disabled,
+> > let's add a select in order to be sure that the DP helper functions are
+> > always available.
+> >=20
+> > Fixes: b5c84a9edcd4 ("drm/bridge: add it6505 driver")
+> > Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> > ---
+> >   drivers/gpu/drm/bridge/Kconfig | 1 +
+> >   1 file changed, 1 insertion(+)
+> >=20
+> > diff --git a/drivers/gpu/drm/bridge/Kconfig b/drivers/gpu/drm/bridge/Kc=
+onfig
+> > index 007e5a282f67..2145b08f9534 100644
+> > --- a/drivers/gpu/drm/bridge/Kconfig
+> > +++ b/drivers/gpu/drm/bridge/Kconfig
+> > @@ -78,6 +78,7 @@ config DRM_ITE_IT6505
+> >           tristate "ITE IT6505 DisplayPort bridge"
+> >           depends on OF
+> >           select DRM_KMS_HELPER
+> > +        select DRM_DP_HELPER
+> >           select EXTCON
+> >           help
+> >             ITE IT6505 DisplayPort bridge chip driver.
+>=20
+> http://lore.kernel.org/r/20220403151637.15546-1-rdunlap@infradead.org als=
+o select DRM_DP_AUX_BUS,
+> can you check if this is really neaded ?
 
-commit d615b5416f8a1afeb82d13b238f8152c572d59c0 (HEAD -> master, origin/master, origin/HEAD)
-Merge: 0fc74d820a01 4d8ec9120819
-Author: Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon Apr 25 10:53:56 2022 -0700
+Oops, I didn't notice that patch.
 
-What was is based on?
+Anyway I can successfully link with the following config:
+CONFIG_DRM_ITE_IT6505=3Dy
+CONFIG_DRM_DP_AUX_BUS=3Dm
+CONFIG_DRM_DP_HELPER=3Dy
 
-> Also, can you get the contents of /proc/fs/fscache/stats from after
-> reproducing the problem?
+But I cannot with the following config:
+CONFIG_DRM_ITE_IT6505=3Dy
+CONFIG_DRM_DP_AUX_BUS=3Dm
+CONFIG_DRM_DP_HELPER=3Dm
 
-FS-Cache statistics
-Cookies: n=684 v=1 vcol=0 voom=0
-Acquire: n=689 ok=689 oom=0
-LRU    : n=0 exp=0 rmv=0 drp=0 at=0
-Invals : n=0
-Updates: n=2095 rsz=0 rsn=0
-Relinqs: n=5 rtr=0 drop=5
-NoSpace: nwr=0 ncr=0 cull=0
-IO     : rd=0 wr=0
-RdHelp : RA=974 RP=0 WB=13323 WBZ=2072 rr=0 sr=0
-RdHelp : ZR=13854 sh=0 sk=2072
-RdHelp : DL=14297 ds=14297 df=13322 di=0
-RdHelp : RD=0 rs=0 rf=0
-RdHelp : WR=0 ws=0 wf=0
+This suggest that DRM_DP_AUX_BUS is not required for that driver.
 
-Best regards,
-Christian Schoenebeck
+Fabien
 
+>=20
+> Neil
 
+--273566twpnhexmyw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEQyJHfU3UNW7IG61XVJKc6g3CeAAFAmJoEjIACgkQVJKc6g3C
+eABeHw/7Bt/VLgszCCzYH9pHOhqbs7jTipFBxg57jmdYMy+fhgNCwW6meNpvuZ5k
+IvAQNMY4CvdwV44bk8KWjGOKgQwu4Y5Ck30Qmy+IARf2h2VaIfmu17/viczdOmkr
+gbIRC99eX30uHQWRAXqyn4taRD2OR54eo7PgoqKx8AKD5rRWqlDUPUEDGXO8QE+Q
+RYl/DVfv1/SyZHkxuMrsYcJrWfalX7ZuSn5kVu3iOllaDL77XtbXglrc5+Udhc4b
+Q5JrgWsSfzQrdx7CYg+Jsg0YLfweE81QHqzztAYGzFg/v8BueApy8k4NKjqF2qTw
+nlUmoLTHQCyicwOrDwd+auZcurokQNAaLbiCA8hDkzd9bUNDjz/1wyG0xatxCB5W
+2rL1zyHIX1S+rugza5FwDQGCUHMDaF9gkNZ2gqVM9SOsnyK5J/kYHtSGoqtb8Afw
+CqHLJ7qd8GinTpUIV0IpjL032Dw9rBA+CblzE4mOJx/DCuMBw9HremiI7oNJxkls
+P4nFXS8CEo9mrKkYtG454ADgCYAmtJOBfIspG5LpaY2Z48sy1E0jM7W6HYa8sdBt
+7aq1Ly0oNT3Il3k1qZrMsQDpSzKFI3cxeFH8eaaJiZ/YYklyFCa/cuk7QGw1HoBY
+kgmyzgcEXck4nrxLD1ic3bcqWOg4acME1mp9UvuUB0Ify+1WOvA=
+=FNMT
+-----END PGP SIGNATURE-----
+
+--273566twpnhexmyw--

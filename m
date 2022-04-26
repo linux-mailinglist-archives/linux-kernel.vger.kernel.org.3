@@ -2,236 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 375A850F0B8
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B0EC50F0BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:11:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244992AbiDZGNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 02:13:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53992 "EHLO
+        id S245010AbiDZGOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 02:14:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236856AbiDZGNi (ORCPT
+        with ESMTP id S244963AbiDZGOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 02:13:38 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE491274C
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:10:29 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id y10-20020a056602164a00b00653f388e244so12999835iow.22
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:10:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=ZWHhaIrivc1f6vDpT+SHzqKXoDWupxSOGEWylDRsX7Q=;
-        b=xJvtKXihsHiiZl4bPJnskMFz03/z7P4qKtCnSjDfDnJIVGb/Sz4dC9Vnn13GV30u2x
-         2I3J/2PsOhk5ptzLmJ8+t2oFL5hUN7nEGIkYn11FkwrU+tyMaRbGGFgv4dPyxvHScmDk
-         G/8QTjyM5X8/zwtVJRkSvPEgMrO83Vf0/iW6Ra6QEDsFe1/xCLQyirgyO0U4sb00ANsZ
-         xt9S1QjuNoDj3IYLtSLRTIFpiMdxwFHYHa8KsYAXYxec6ECH8BvIesiV0RfQPp8+bgCX
-         LTooMFLams0XkzAvpgZmubZ1jP9z5GCyiAwWVId1FA6Ph8VTLBCBQm/m1/2o8bLfMSYv
-         kNUg==
-X-Gm-Message-State: AOAM530/FQ3AVgL6hU4g3mrtF3K1rEAUlns93U/h2Ln8t8l7zo3Qpztm
-        7AVPUdw0aEQwxQrTLFSAUG0YKqSwRiOnEwGy0wXYBr+v5EcJ
-X-Google-Smtp-Source: ABdhPJxd4OhW5fJ9D/zeNIYqKBHidukRcTLTJlXh4AJZatacN8jqFFaP3aGDIhew5KTWYUpya7vod1R9P41JSVOatAs9qGrgjTEs
+        Tue, 26 Apr 2022 02:14:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7913B6;
+        Mon, 25 Apr 2022 23:11:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9EED3B818FE;
+        Tue, 26 Apr 2022 06:11:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62CA1C385AC;
+        Tue, 26 Apr 2022 06:10:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650953464;
+        bh=hfNYTM7tCR7XMLe8YNkDfgK4t27yGuoKsqJS1LzijzI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e85e/ugCVVRQZCqy0k0uEuBzNQnCcVx4WIUnqB8C0T6QPCXjnaKf7IO2/aQ70Kljd
+         vlE4dJmT//ZnuuDmcnfIhOT57sUgCI4rjNzURBa9MW8cg4J84Usgk9AUu2dYZFR/+P
+         hOkua1+28HL8BCIBylnlN1u6bKb2qhmrdltoCCIDJmbqxwYWY9pUqfwQpqZJlHSrlb
+         c3JJnANcPzM7wIjCbIMP18/4VwFmH3zWpvcoh2husAGZShb0RGCKuHgbUtchKoP9gq
+         CNMmVG1ZRlp+uAHYK7X2HFON6jui9rVE1nNBwvP42hjrz1Rts6UOYHVHApUZyJLHth
+         937AxW/3WnxlQ==
+Date:   Tue, 26 Apr 2022 09:10:45 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Martin Fernandez <martin.fernandez@eclypsium.com>
+Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
+        gregkh@linuxfoundation.org, rafael@kernel.org,
+        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
+        hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
+        alison.schofield@intel.com, keescook@chromium.org
+Subject: Re: [PATCH v7 1/8] mm/memblock: Tag memblocks with crypto
+ capabilities
+Message-ID: <YmeM5fklUssR/74e@kernel.org>
+References: <20220425171526.44925-1-martin.fernandez@eclypsium.com>
+ <20220425171526.44925-2-martin.fernandez@eclypsium.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:d01:0:b0:2c5:daa4:77e0 with SMTP id
- 1-20020a920d01000000b002c5daa477e0mr8674069iln.154.1650953429038; Mon, 25 Apr
- 2022 23:10:29 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 23:10:29 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000adbca705dd888c1d@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in ieee80211_scan_rx (3)
-From:   syzbot <syzbot+f9acff9bf08a845f225d@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, johannes@sipsolutions.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220425171526.44925-2-martin.fernandez@eclypsium.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, Apr 25, 2022 at 02:15:19PM -0300, Martin Fernandez wrote:
+> Add the capability to mark regions of the memory memory_type able of
+> hardware memory encryption.
+> 
+> Also add the capability to query if all regions of a memory node are
+> able to do hardware memory encryption to call it when initializing the
+> nodes. Warn the user if a node has both encryptable and
+> non-encryptable regions.
+> 
+> Signed-off-by: Martin Fernandez <martin.fernandez@eclypsium.com>
+> ---
+>  include/linux/memblock.h |  5 ++++
+>  mm/memblock.c            | 62 ++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 67 insertions(+)
+> 
+> diff --git a/include/linux/memblock.h b/include/linux/memblock.h
+> index 50ad19662a32..00c4f1a20335 100644
+> --- a/include/linux/memblock.h
+> +++ b/include/linux/memblock.h
+> @@ -40,6 +40,7 @@ extern unsigned long long max_possible_pfn;
+>   * via a driver, and never indicated in the firmware-provided memory map as
+>   * system RAM. This corresponds to IORESOURCE_SYSRAM_DRIVER_MANAGED in the
+>   * kernel resource tree.
+> + * @MEMBLOCK_CRYPTO_CAPABLE: capable of hardware encryption
+>   */
+>  enum memblock_flags {
+>  	MEMBLOCK_NONE		= 0x0,	/* No special request */
+> @@ -47,6 +48,7 @@ enum memblock_flags {
+>  	MEMBLOCK_MIRROR		= 0x2,	/* mirrored region */
+>  	MEMBLOCK_NOMAP		= 0x4,	/* don't add to kernel direct mapping */
+>  	MEMBLOCK_DRIVER_MANAGED = 0x8,	/* always detected via a driver */
+> +	MEMBLOCK_CRYPTO_CAPABLE = 0x10,	/* capable of hardware encryption */
+>  };
+>  
+>  /**
+> @@ -120,6 +122,9 @@ int memblock_physmem_add(phys_addr_t base, phys_addr_t size);
+>  void memblock_trim_memory(phys_addr_t align);
+>  bool memblock_overlaps_region(struct memblock_type *type,
+>  			      phys_addr_t base, phys_addr_t size);
+> +bool memblock_node_is_crypto_capable(int nid);
+> +int memblock_mark_crypto_capable(phys_addr_t base, phys_addr_t size);
+> +int memblock_clear_crypto_capable(phys_addr_t base, phys_addr_t size);
+>  int memblock_mark_hotplug(phys_addr_t base, phys_addr_t size);
+>  int memblock_clear_hotplug(phys_addr_t base, phys_addr_t size);
+>  int memblock_mark_mirror(phys_addr_t base, phys_addr_t size);
+> diff --git a/mm/memblock.c b/mm/memblock.c
+> index e4f03a6e8e56..fe62f81572e6 100644
+> --- a/mm/memblock.c
+> +++ b/mm/memblock.c
+> @@ -191,6 +191,40 @@ bool __init_memblock memblock_overlaps_region(struct memblock_type *type,
+>  	return i < type->cnt;
+>  }
+>  
+> +/**
+> + * memblock_node_is_crypto_capable - get if whole node is capable
+> + * of encryption
+> + * @nid: number of node
+> + *
+> + * Iterate over all memory memblock_type and find if all regions under
+> + * node @nid are capable of hardware encryption.
+> + *
+> + * Return:
+> + * true if every region in memory memblock_type is capable of
 
-syzbot found the following issue on:
+I'd s/in memory memblock_type/in @nid
 
-HEAD commit:    af2d861d4cd2 Linux 5.18-rc4
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13bf73b2f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4071c85377b36266
-dashboard link: https://syzkaller.appspot.com/bug?extid=f9acff9bf08a845f225d
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> + * encryption, false otherwise.
+> + */
+> +bool __init_memblock memblock_node_is_crypto_capable(int nid)
+> +{
+> +	struct memblock_region *region;
+> +	int crypto_capables = 0;
+> +	int not_crypto_capables = 0;
+> +
+> +	for_each_mem_region(region) {
+> +		if (memblock_get_region_node(region) == nid) {
+> +			if (region->flags & MEMBLOCK_CRYPTO_CAPABLE)
+> +				crypto_capables++;
+> +			else
+> +				not_crypto_capables++;
+> +		}
+> +	}
+> +
+> +	if (crypto_capables > 0 && not_crypto_capables > 0)
+> +		pr_warn("Node %d has %d regions that are encryptable and %d regions that aren't",
+> +			nid, not_crypto_capables, crypto_capables);
+> +
+> +	return not_crypto_capables == 0;
 
-Unfortunately, I don't have any reproducer for this issue yet.
+This will return true for memoryless nodes as well. Do you mean to consider
+them as capable of encryption?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f9acff9bf08a845f225d@syzkaller.appspotmail.com
+> +}
+> +
+>  /**
+>   * __memblock_find_range_bottom_up - find free area utility in bottom-up
+>   * @start: start of candidate range
+> @@ -891,6 +925,34 @@ static int __init_memblock memblock_setclr_flag(phys_addr_t base,
+>  	return 0;
+>  }
+>  
+> +/**
+> + * memblock_mark_crypto_capable - Mark memory regions capable of hardware
+> + * encryption with flag MEMBLOCK_CRYPTO_CAPABLE.
+> + * @base: the base phys addr of the region
+> + * @size: the size of the region
+> + *
+> + * Return: 0 on success, -errno on failure.
+> + */
+> +int __init_memblock memblock_mark_crypto_capable(phys_addr_t base,
+> +						 phys_addr_t size)
+> +{
+> +	return memblock_setclr_flag(base, size, 1, MEMBLOCK_CRYPTO_CAPABLE);
+> +}
+> +
+> +/**
+> + * memblock_clear_crypto_capable - Clear flag MEMBLOCK_CRYPTO for a
+> + * specified region.
+> + * @base: the base phys addr of the region
+> + * @size: the size of the region
+> + *
+> + * Return: 0 on success, -errno on failure.
+> + */
+> +int __init_memblock memblock_clear_crypto_capable(phys_addr_t base,
+> +						  phys_addr_t size)
+> +{
+> +	return memblock_setclr_flag(base, size, 0, MEMBLOCK_CRYPTO_CAPABLE);
+> +}
+> +
+>  /**
+>   * memblock_mark_hotplug - Mark hotpluggable memory with flag MEMBLOCK_HOTPLUG.
+>   * @base: the base phys addr of the region
+> -- 
+> 2.30.2
+> 
 
-==================================================================
-BUG: KASAN: use-after-free in ieee80211_scan_rx+0x7d0/0x7e0 net/mac80211/scan.c:293
-Read of size 4 at addr ffff888025e7f02c by task ksoftirqd/2/28
-
-CPU: 2 PID: 28 Comm: ksoftirqd/2 Not tainted 5.18.0-rc4-syzkaller #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0xeb/0x467 mm/kasan/report.c:313
- print_report mm/kasan/report.c:429 [inline]
- kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
- ieee80211_scan_rx+0x7d0/0x7e0 net/mac80211/scan.c:293
- __ieee80211_rx_handle_packet net/mac80211/rx.c:4782 [inline]
- ieee80211_rx_list+0x1fe3/0x2740 net/mac80211/rx.c:4975
- ieee80211_rx_napi+0xdb/0x3d0 net/mac80211/rx.c:4998
- ieee80211_rx include/net/mac80211.h:4611 [inline]
- ieee80211_tasklet_handler+0xd4/0x130 net/mac80211/main.c:235
- tasklet_action_common.constprop.0+0x201/0x2e0 kernel/softirq.c:784
- __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
- run_ksoftirqd kernel/softirq.c:921 [inline]
- run_ksoftirqd+0x2d/0x60 kernel/softirq.c:913
- smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
- </TASK>
-
-Allocated by task 12352:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:436 [inline]
- ____kasan_kmalloc mm/kasan/common.c:515 [inline]
- ____kasan_kmalloc mm/kasan/common.c:474 [inline]
- __kasan_kmalloc+0xa6/0xd0 mm/kasan/common.c:524
- kasan_kmalloc include/linux/kasan.h:234 [inline]
- kmem_cache_alloc_trace+0x1ea/0x4a0 mm/slab.c:3583
- kmalloc include/linux/slab.h:581 [inline]
- sl_alloc_bufs drivers/net/slip/slip.c:157 [inline]
- slip_open+0x9e3/0x11b0 drivers/net/slip/slip.c:827
- tty_ldisc_open+0x9b/0x110 drivers/tty/tty_ldisc.c:433
- tty_set_ldisc+0x2f1/0x680 drivers/tty/tty_ldisc.c:558
- tiocsetd drivers/tty/tty_io.c:2433 [inline]
- tty_ioctl+0xae0/0x15e0 drivers/tty/tty_io.c:2714
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Last potentially related work creation:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- __kasan_record_aux_stack+0x7e/0x90 mm/kasan/generic.c:348
- kvfree_call_rcu+0x74/0x990 kernel/rcu/tree.c:3595
- drop_sysctl_table+0x3c0/0x4e0 fs/proc/proc_sysctl.c:1705
- unregister_sysctl_table fs/proc/proc_sysctl.c:1743 [inline]
- unregister_sysctl_table+0xc0/0x190 fs/proc/proc_sysctl.c:1718
- sctp_sysctl_net_unregister+0x58/0x80 net/sctp/sysctl.c:602
- ops_exit_list+0xb0/0x170 net/core/net_namespace.c:162
- cleanup_net+0x4ea/0xb00 net/core/net_namespace.c:594
- process_one_work+0x996/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
-
-Second to last potentially related work creation:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- __kasan_record_aux_stack+0x7e/0x90 mm/kasan/generic.c:348
- kvfree_call_rcu+0x74/0x990 kernel/rcu/tree.c:3595
- drop_sysctl_table+0x3c0/0x4e0 fs/proc/proc_sysctl.c:1705
- unregister_sysctl_table fs/proc/proc_sysctl.c:1743 [inline]
- unregister_sysctl_table+0xc0/0x190 fs/proc/proc_sysctl.c:1718
- __devinet_sysctl_unregister net/ipv4/devinet.c:2611 [inline]
- devinet_sysctl_unregister net/ipv4/devinet.c:2639 [inline]
- inetdev_destroy net/ipv4/devinet.c:327 [inline]
- inetdev_event+0xcaf/0x15d0 net/ipv4/devinet.c:1604
- notifier_call_chain+0xb5/0x200 kernel/notifier.c:84
- call_netdevice_notifiers_info+0xb5/0x130 net/core/dev.c:1938
- call_netdevice_notifiers_extack net/core/dev.c:1976 [inline]
- call_netdevice_notifiers net/core/dev.c:1990 [inline]
- unregister_netdevice_many+0x92e/0x1890 net/core/dev.c:10751
- ip_tunnel_delete_nets+0x39f/0x5b0 net/ipv4/ip_tunnel.c:1124
- ops_exit_list+0x125/0x170 net/core/net_namespace.c:167
- cleanup_net+0x4ea/0xb00 net/core/net_namespace.c:594
- process_one_work+0x996/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
-
-The buggy address belongs to the object at ffff888025e7f000
- which belongs to the cache kmalloc-2k of size 2048
-The buggy address is located 44 bytes inside of
- 2048-byte region [ffff888025e7f000, ffff888025e7f800)
-
-The buggy address belongs to the physical page:
-page:ffffea0000979fc0 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x25e7f
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 ffffea00008aaa88 ffffea000081d988 ffff888010c40800
-raw: 0000000000000000 ffff888025e7f000 0000000100000001 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x2420c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_COMP|__GFP_THISNODE), pid 28931, tgid 28930 (syz-executor.2), ts 858983317706, free_ts 817324026609
- prep_new_page mm/page_alloc.c:2441 [inline]
- get_page_from_freelist+0xba2/0x3e00 mm/page_alloc.c:4182
- __alloc_pages_slowpath.constprop.0+0x2eb/0x20e0 mm/page_alloc.c:4953
- __alloc_pages+0x412/0x500 mm/page_alloc.c:5421
- __alloc_pages_node include/linux/gfp.h:587 [inline]
- kmem_getpages mm/slab.c:1378 [inline]
- cache_grow_begin+0x75/0x350 mm/slab.c:2584
- cache_alloc_refill+0x27f/0x380 mm/slab.c:2957
- ____cache_alloc mm/slab.c:3040 [inline]
- ____cache_alloc mm/slab.c:3023 [inline]
- __do_cache_alloc mm/slab.c:3267 [inline]
- slab_alloc mm/slab.c:3309 [inline]
- __do_kmalloc mm/slab.c:3708 [inline]
- __kmalloc+0x3b3/0x4d0 mm/slab.c:3719
- kmalloc include/linux/slab.h:586 [inline]
- kzalloc include/linux/slab.h:714 [inline]
- __register_sysctl_table+0x112/0x1090 fs/proc/proc_sysctl.c:1335
- __devinet_sysctl_register+0x156/0x280 net/ipv4/devinet.c:2588
- devinet_sysctl_register net/ipv4/devinet.c:2628 [inline]
- devinet_sysctl_register+0x160/0x230 net/ipv4/devinet.c:2618
- inetdev_init+0x286/0x580 net/ipv4/devinet.c:279
- inetdev_event+0xa8a/0x15d0 net/ipv4/devinet.c:1536
- notifier_call_chain+0xb5/0x200 kernel/notifier.c:84
- call_netdevice_notifiers_info+0xb5/0x130 net/core/dev.c:1938
- call_netdevice_notifiers_extack net/core/dev.c:1976 [inline]
- call_netdevice_notifiers net/core/dev.c:1990 [inline]
- register_netdevice+0x109e/0x15b0 net/core/dev.c:9994
- __ip_tunnel_create+0x398/0x5c0 net/ipv4/ip_tunnel.c:267
- ip_tunnel_init_net+0x2e4/0x9d0 net/ipv4/ip_tunnel.c:1071
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1356 [inline]
- free_pcp_prepare+0x549/0xd20 mm/page_alloc.c:1406
- free_unref_page_prepare mm/page_alloc.c:3328 [inline]
- free_unref_page+0x19/0x6a0 mm/page_alloc.c:3423
- slab_destroy mm/slab.c:1630 [inline]
- drain_freelist.isra.0+0xc6/0x130 mm/slab.c:2222
- cache_reap+0x1ba/0x290 mm/slab.c:4041
- process_one_work+0x996/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
-
-Memory state around the buggy address:
- ffff888025e7ef00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff888025e7ef80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff888025e7f000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-                                  ^
- ffff888025e7f080: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff888025e7f100: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-- 
+Sincerely yours,
+Mike.

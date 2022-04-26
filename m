@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E87750F62F
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6477250F83C
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345460AbiDZIlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:41:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34078 "EHLO
+        id S1346572AbiDZJLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:11:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345074AbiDZIeD (ORCPT
+        with ESMTP id S1347215AbiDZIvO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:34:03 -0400
+        Tue, 26 Apr 2022 04:51:14 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE7D47562;
-        Tue, 26 Apr 2022 01:25:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE4C175328;
+        Tue, 26 Apr 2022 01:39:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E34CB81CF9;
-        Tue, 26 Apr 2022 08:25:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 885EAC385AC;
-        Tue, 26 Apr 2022 08:25:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 495C5B81CED;
+        Tue, 26 Apr 2022 08:39:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B954C385A0;
+        Tue, 26 Apr 2022 08:39:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961553;
-        bh=JQ7Ve6zrX8vsQolzB2eHjcNa/3twcGFJn2Abmjf8RFI=;
+        s=korg; t=1650962382;
+        bh=blG1BoqgDz4cY3SBTCFsQD2tkAE2zYDC7RKtOQpGP2s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=w/Ej/uYHNVz2dfwJEohsHcmpnhLf8soryqbRtaybARk8Z0TSB69MB77I77iRla49V
-         0P+gqWgImzopZIbriXvbL7Pq0ln8Vf0+7KKghtHBGf3VJVkMpOlLWl5SXc/7dNoMmZ
-         SW7xldaqrKAfpEF6BD6fX6zt/0Bcn10ADwThPgEg=
+        b=E4YGKBM1vdSBv3dsILBgFeCbdkjuDU8SDAuEWR5Lu3jQvHLZgH7n3A8a5H6sFLuxO
+         YarFR3/3PLQb0UNNp8A462S+NOZwP+NtQaHU5De00OKukFlh86adBrM/2Bfbs6W61k
+         antUvKFZt4w/lcDTf2IfuzS+3Tm54aiAuwUvctUI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Khazhismel Kumykov <khazhy@google.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 4.14 34/43] block/compat_ioctl: fix range check in BLKGETSIZE
+        stable@vger.kernel.org,
+        =?UTF-8?q?=E9=87=91=E9=9F=AC?= <me@kingtous.cn>,
+        Christoph Hellwig <hch@lst.de>,
+        Keith Busch <kbusch@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 075/124] nvme-pci: disable namespace identifiers for the MAXIO MAP1002/1202
 Date:   Tue, 26 Apr 2022 10:21:16 +0200
-Message-Id: <20220426081735.521229574@linuxfoundation.org>
+Message-Id: <20220426081749.433897361@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081734.509314186@linuxfoundation.org>
-References: <20220426081734.509314186@linuxfoundation.org>
+In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
+References: <20220426081747.286685339@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Khazhismel Kumykov <khazhy@google.com>
+From: Christoph Hellwig <hch@lst.de>
 
-commit ccf16413e520164eb718cf8b22a30438da80ff23 upstream.
+[ Upstream commit a98a945b80f8684121d477ae68ebc01da953da1f ]
 
-kernel ulong and compat_ulong_t may not be same width. Use type directly
-to eliminate mismatches.
+The MAXIO MAP1002/1202 controllers reports completely bogus Namespace
+identifiers that even change after suspend cycles.  Disable using
+the Identifiers entirely.
 
-This would result in truncation rather than EFBIG for 32bit mode for
-large disks.
-
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-Signed-off-by: Khazhismel Kumykov <khazhy@google.com>
-Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
-Link: https://lore.kernel.org/r/20220414224056.2875681-1-khazhy@google.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: 金韬 <me@kingtous.cn>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Keith Busch <kbusch@kernel.org>
+Tested-by: 金韬 <me@kingtous.cn>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/compat_ioctl.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/nvme/host/pci.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/block/compat_ioctl.c
-+++ b/block/compat_ioctl.c
-@@ -391,7 +391,7 @@ long compat_blkdev_ioctl(struct file *fi
- 		return 0;
- 	case BLKGETSIZE:
- 		size = i_size_read(bdev->bd_inode);
--		if ((size >> 9) > ~0UL)
-+		if ((size >> 9) > ~(compat_ulong_t)0)
- 			return -EFBIG;
- 		return compat_put_ulong(arg, size >> 9);
- 
+diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+index b925a5f4afc3..61f01f5afdc1 100644
+--- a/drivers/nvme/host/pci.c
++++ b/drivers/nvme/host/pci.c
+@@ -3352,6 +3352,10 @@ static const struct pci_device_id nvme_id_table[] = {
+ 		.driver_data = NVME_QUIRK_NO_DEEPEST_PS, },
+ 	{ PCI_DEVICE(0x2646, 0x2263),   /* KINGSTON A2000 NVMe SSD  */
+ 		.driver_data = NVME_QUIRK_NO_DEEPEST_PS, },
++	{ PCI_DEVICE(0x1e4B, 0x1002),   /* MAXIO MAP1002 */
++		.driver_data = NVME_QUIRK_BOGUS_NID, },
++	{ PCI_DEVICE(0x1e4B, 0x1202),   /* MAXIO MAP1202 */
++		.driver_data = NVME_QUIRK_BOGUS_NID, },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMAZON, 0x0061),
+ 		.driver_data = NVME_QUIRK_DMA_ADDRESS_BITS_48, },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMAZON, 0x0065),
+-- 
+2.35.1
+
 
 

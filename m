@@ -2,259 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A5950F363
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC2150F36B
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:09:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344490AbiDZILE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:11:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60408 "EHLO
+        id S243772AbiDZIM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344467AbiDZILB (ORCPT
+        with ESMTP id S239789AbiDZIMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:11:01 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6861748E50;
-        Tue, 26 Apr 2022 01:07:46 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id d15so15063231plh.2;
-        Tue, 26 Apr 2022 01:07:46 -0700 (PDT)
+        Tue, 26 Apr 2022 04:12:54 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B41212C8C8
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 01:09:47 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id p65so31494023ybp.9
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 01:09:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=to+ZeGhLxQcAid0Ufscg8bv/YvTBm1/R7BRG+txDPzM=;
-        b=SxQSXbCWPSYBlG3D1ymX4EnX3akJzKF1gfr3UwRqJCQSH5xVMvHQUVX/8ar5HI4N2B
-         7g92iGNC6M7i/l8cKOpoPrEDSSc8O058UCKivXYCWWWuwPO6F7Tm2Yjr+e75A6lQfx8c
-         2b3V8DWUaY4oqyT/Vyd2Jjz/m/BvBoOGOpKtYGJPeoscac686fvSOyUaMhkBDS8Q/YAY
-         Az66+HrcTzCLdPZB7yJXXlcmG+olgHvSRbTRaB/5qg6WXI5PJqGdv+xqfgo3WOSCgAua
-         un1QKL9xJ02q9NZ3W0rqgYDYonhaaBCNXTqqpcpg/SIG65qhrQGr0y7H0jj6ZV2emcUw
-         Uivw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=MO0SAYWlxIdf9DEpmMwZioSXQuy43DY18gZl0F6LMjk=;
+        b=xaaQ8/zzHCUnHalSZlS6+zqSI2jDcTnNs/gGVfe3X+rXJceNfyx51heYYfmgNTUxy9
+         zZtL/xGKD4NsOhEi0oEblv4gz3TocboP6jR/rR1XzSqOxVA1OT6+q6reMfxMwT3x9DBi
+         sdUYTMv7JaxBilvbCbrRB2QvYv5SYZhA9rtKR1oA/uHRPNAQls0Xp09bXhY5szBMfIiH
+         jczyjgn9pPTGOJBrdQXe9UNw7sBDPg0CrLvv3GuZ7gkMY3CaoOVMEBNCWkE52o9kXnwW
+         df5lrCDuH+r+jUglgw+lhlHmPmVCtB9Rpb2phsw7FsuIasAADOib2v5V/y8GyRPrWhnA
+         CUZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=to+ZeGhLxQcAid0Ufscg8bv/YvTBm1/R7BRG+txDPzM=;
-        b=5ckMHO6Hn+bgk/2OpOJZ1OAcR9pdmW7xoSEeXzMMkQNuzJuQJUhxwvc/ZRJEZrjkAO
-         +VP3EE/cF6SJGJ4WHAC5NiL7K9LvEW7O7S98LIIrDoFNtVS7RhwVB5YlOSk2KW2JZyRP
-         +4CIM9ahsjWxuw3v50RTgO/lb45AJyhZqzs4NDrNfs7kq2dnDg0aC6DS+ttPEqvXDgD0
-         v+JukmjrI9Gjtf31E1pKWMbqhZg3pZya18lEhtuaHnBXXyHWVJsBcZ4oFbQDbAddomhX
-         oY9L8R6xBMkp4TVr8No+A6tjRQNB8GXj0jVaMru3YWQ6WI/QutogbGJeO7xIGGJGdktc
-         g4MQ==
-X-Gm-Message-State: AOAM530cdKLL9D4PvTDIiwjF9XEU2gK9M4Dqe+w+hZvgaQeAt6kX84cG
-        j2+JxsZEmJVqAQGnUaihA28=
-X-Google-Smtp-Source: ABdhPJwE5FdzKKcQmRuv2uacm4y/xT6q2GjcUORzi1wkxmdqNmAR0tZSEAI/JZRZ+qYtuUmtMtXA7w==
-X-Received: by 2002:a17:902:9696:b0:158:f809:310e with SMTP id n22-20020a170902969600b00158f809310emr22626342plp.16.1650960465953;
-        Tue, 26 Apr 2022 01:07:45 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.119])
-        by smtp.gmail.com with ESMTPSA id l4-20020a056a0016c400b004f79504ef9csm15134951pfc.3.2022.04.26.01.07.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 01:07:45 -0700 (PDT)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     kuba@kernel.org
-Cc:     rostedt@goodmis.org, mingo@redhat.com, davem@davemloft.net,
-        yoshfuji@linux-ipv6.org, dsahern@kernel.org, pabeni@redhat.com,
-        benbjiang@tencent.com, flyingpeng@tencent.com,
-        imagedong@tencent.com, edumazet@google.com, kafai@fb.com,
-        talalahmad@google.com, keescook@chromium.org,
-        mengensun@tencent.com, dongli.zhang@oracle.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH net-next 2/2] net: tcp: add skb drop reasons to route_req()
-Date:   Tue, 26 Apr 2022 16:07:09 +0800
-Message-Id: <20220426080709.6504-3-imagedong@tencent.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426080709.6504-1-imagedong@tencent.com>
-References: <20220426080709.6504-1-imagedong@tencent.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=MO0SAYWlxIdf9DEpmMwZioSXQuy43DY18gZl0F6LMjk=;
+        b=bJuOAOWeVSoviKu1wu3hySELU9d+wGBZTSrUB2LEBkVkncvSS06qeXUeg3ZxdK1OdF
+         8DUhkjhmKYDzDf3gK+hhcm/RC/w6pXc1utg/72o9bo9VWPGkDnKGIAmXVgJUxGoXT4OL
+         zC1t+LHQLYhdYw4E1dpZ/ytt2TFeTq3uM8aXeIBZPCE2iuEy2pcrr/JDeMssF43zRZMk
+         ecBt38NAvXTbYPTG3mvEUhWqWhV9sdRmaF7sP6svvF+Nn3P7SbggRTUABJpsRi72a71v
+         LkKNUgGMyeRa8W8kf1Xzwph9FyeQLYhCS9EtErNQF/s3qPI8vQm56zT366O5+216zo3b
+         OFEg==
+X-Gm-Message-State: AOAM531LyI5tS/OTt/jb3Z9mrRjS9OOMw2/qPVIUMZg5/jKl7gU1px+o
+        H6ipTCWFVcZlZBJgJFU4ttrkObJ6ifOP3773R4sjeg==
+X-Google-Smtp-Source: ABdhPJwjSvz8z2JyWVttrO2z9jByltpzGheHLjfIPGM58tgkdZ/Bd5EEc3NkHR4LTsoxqIVahguTNE27EKHr61sfBXY=
+X-Received: by 2002:a05:6902:1c2:b0:63e:6bd:3a5b with SMTP id
+ u2-20020a05690201c200b0063e06bd3a5bmr19081324ybh.424.1650960586619; Tue, 26
+ Apr 2022 01:09:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220407051932.4071-1-xuewen.yan@unisoc.com> <20220420135127.o7ttm5tddwvwrp2a@airbuntu>
+ <CAB8ipk-tWjkeAbV=BDhNy04Yq6rdLf80x_7twuLV=HqT4nc1+w@mail.gmail.com>
+ <20220421161509.asz25zmh25eurgrk@airbuntu> <CAB8ipk_rZnwDrMaY-zJxR3pByYWD1XOP2waCgU9DZzQNpCN2zA@mail.gmail.com>
+ <20220425161209.ydugtrs3b7gyy3kk@airbuntu> <CAB8ipk9hZXDcTV3hakRV+dE5dwKtg-Ka93WZ60ds0=4ErN1-0w@mail.gmail.com>
+In-Reply-To: <CAB8ipk9hZXDcTV3hakRV+dE5dwKtg-Ka93WZ60ds0=4ErN1-0w@mail.gmail.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Tue, 26 Apr 2022 10:09:35 +0200
+Message-ID: <CAKfTPtBswQ6bk8MrvcLmqc-9V2-SeWn3H_-gRvF5isdjL_acqA@mail.gmail.com>
+Subject: Re: [PATCH] sched: Take thermal pressure into account when determine
+ rt fits capacity
+To:     Xuewen Yan <xuewen.yan94@gmail.com>
+Cc:     Qais Yousef <qais.yousef@arm.com>,
+        Xuewen Yan <xuewen.yan@unisoc.com>, dietmar.eggemann@arm.com,
+        lukasz.luba@arm.com, rafael@kernel.org, viresh.kumar@linaro.org,
+        mingo@redhat.com, peterz@infradead.org, rostedt@goodmis.org,
+        linux-kernel@vger.kernel.org, di.shen@unisoc.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+On Tue, 26 Apr 2022 at 04:07, Xuewen Yan <xuewen.yan94@gmail.com> wrote:
+>
+> On Tue, Apr 26, 2022 at 12:12 AM Qais Yousef <qais.yousef@arm.com> wrote:
+> >
+> > On 04/25/22 09:31, Xuewen Yan wrote:
+> > > On Fri, Apr 22, 2022 at 12:15 AM Qais Yousef <qais.yousef@arm.com> wr=
+ote:
+> > > > Is it okay to share what the capacities of the littles, mediums and=
+ bigs on
+> > > > your system? And how they change under worst case scenario thermal =
+pressure?
+> > > > Only IF you have these numbers handy :-)
+> > >
+> > > Okay, the little/mid/big cpu scale capacity is 350/930/1024, but the
+> > > cpu frequency point is discrete, the big core's high freq point may i=
+s
+> > > just a few more than the mid core's highest.
+> > > In this case, once the thermal decrease the scaling_max_freq, the
+> > > maximum frequency of the large core is easily lower than that of the
+> > > medium core.
+> > > Of course, the corner case is due to the frequency design of the soc
+> > > and  our thermal algorithm.
+> >
+> > Okay, thanks for the info!
+> >
+> > >
+> > > >
+> > > > Is it actually an indication of a potential other problem if you sw=
+ing into
+> > > > capacity inversion in the bigs that often? I've seen a lot of syste=
+ms where the
+> > > > difference between the meds and bigs is small. But frequent inversi=
+on could be
+> > > > suspicious still.
+> > > >
+> > > > Do the littles and the mediums experience any significant thermal p=
+ressure too?
+> > >
+> > > In our platform, it's not.
+> >
+> > Good.
+> >
+> > > > It doesn't seem it'll cause a significant error, but still it seems=
+ to me this
+> > > > function wants the original capacity passed to it.
+> > > >
+> > > > There are similar questions to be asked since you modify sg_cpu->ma=
+x. Every
+> > > > user needs to be audited if they're fine with this change or not.
+> > > >
+> > > > I'm not sure still what we are achieving here. You want to force sc=
+hedutil not
+> > > > to request higher frequencies if thermal pressure is high? Should s=
+chedutil
+> > > > actually care? Shouldn't the cpufreq driver reject this request and=
+ pick the
+> > > > next best thing if it can't satisfy it? I could be missing somethin=
+g, I haven't
+> > > > looked that hard tbh :-)
+> > >
+> > > I changed this just want to make it more responsive to the real
+> > > capacity of the cpu, if it will cause other problems, maybe it would
+> > > be better not to change it.:)
+> >
+> > There are others who can give you a better opinion. But AFAICS we're no=
+t fixing
+> > anything but risking breaking other things. So I vote for not to change=
+ it :)
+> >
+> > > > It depends on the severity of the problem. The simplest thing I can=
+ suggest is
+> > > > to check if the cpu is in capacity inversion state, and if it is, t=
+hen make
+> > > > rt_task_fits_capacity() return false always.
+> > > >
+> > > > If we need a generic solution to handle thermal pressure omitting O=
+PPs, then
+> > > > the search needs to become more complex. The proposal in this patch=
+ is not
+> > > > adequate because tasks that want to run at capacity_orig_of(cpu) wi=
+ll wrongly
+> > > > omit some cpus because of any tiny thermal pressure. For example if=
+ the
+> > > > capacity_orig_of(medium_cpu) =3D 700, and uclamp_min for RT is set =
+to 700, then
+> > > > any small thermal pressure on mediums will cause these tasks to run=
+ on big cpus
+> > > > only, which is not what we want. Especially if these big cpus can e=
+nd up in
+> > > > capacity inversion later ;-)
+> > > >
+> > > > So if we want to handle this case, then we need to ensure the searc=
+h returns
+> > > > false only if
+> > > >
+> > > >         1. Thermal pressure results in real OPP to be omitted.
+> > > >         2. Another CPU that can provide this performance level is a=
+vailable.
+> > > >
+> > > > Otherwise we should still fit it on this CPU because it'll give us =
+the closest
+> > > > thing to what was requested.
+> > > >
+> > > > I can think of 2 ways to implement this, but none of them seem part=
+icularly
+> > > > pretty :-/
+> > >
+> > > Maybe as Lukasz Luba said:
+> > >
+> > > https://lore.kernel.org/all/ae98a861-8945-e630-8d4c-8112723d1007@arm.=
+com/
+> > >
+> > > > Let's meet in the middle:
+> > > > 1) use the thermal PELT signal in RT:
+> > > > capacity =3D capacity_orig_of(cpu) - thermal_load_avg(cpu_rq(cpu))
+> > > > 2) introduce a more configurable thermal_pressure shifter instead
+> > > > 'sched_thermal_decay_shift', which would allow not only to make the
+> > > > decaying longer, but also shorter when the platform already might d=
+o
+> > > > that, to not cause too much traffic.
+> > >
+> > > But even if this is changed, there will still be the same problem, I
+> > > look forward to Lukasz's patch:)
+> >
+> > This will not address my concern unless I missed something.
+> >
+> > The best (simplest) way forward IMHO is to introduce a new function
+> >
+> >         bool cpu_in_capacity_inversion(int cpu);
+> >
+> > (feel free to pick another name) which will detect the scenario you're =
+in. You
+> > can use this function then in rt_task_fits_capacity()
+> >
+> >         diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+> >         index a32c46889af8..d48811a7e956 100644
+> >         --- a/kernel/sched/rt.c
+> >         +++ b/kernel/sched/rt.c
+> >         @@ -462,6 +462,9 @@ static inline bool rt_task_fits_capacity(st=
+ruct task_struct *p, int cpu)
+> >                 if (!static_branch_unlikely(&sched_asym_cpucapacity))
+> >                         return true;
+> >
+> >         +       if (cpu_in_capacity_inversion(cpu))
+> >         +               return false;
+> >         +
+> >                 min_cap =3D uclamp_eff_value(p, UCLAMP_MIN);
+> >                 max_cap =3D uclamp_eff_value(p, UCLAMP_MAX);
+> >
+> > You'll probably need to do something similar in dl_task_fits_capacity()=
+.
+> >
+> > This might be a bit aggressive though as we'll steer away all RT tasks =
+from
+> > this CPU (as long as there's another CPU that can fit it). I need to th=
+ink more
+> > about it. But we could do something like this too
+> >
+> >         diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+> >         index a32c46889af8..f2a34946a7ab 100644
+> >         --- a/kernel/sched/rt.c
+> >         +++ b/kernel/sched/rt.c
+> >         @@ -462,11 +462,14 @@ static inline bool rt_task_fits_capacity(=
+struct task_struct *p, int cpu)
+> >                 if (!static_branch_unlikely(&sched_asym_cpucapacity))
+> >                         return true;
+> >
+> >         +       cpu_cap =3D capacity_orig_of(cpu);
+> >         +
+> >         +       if (cpu_in_capacity_inversion(cpu))
+>
+> It's  a good idea, but as you said, in mainline, the
+> sysctl_sched_uclamp_util_min_rt_default is always 1024,
+> Maybe it's better to add it to the judgment?
+>
+>  +       if (sysctl_sched_uclamp_util_min_rt_default !=3D
+> SCHED_CAPACITY_SCALE && cpu_in_capacity_inversion(cpu))
+>
+> >         +               cpu_cap -=3D thermal_load_avg(cpu_rq(cpu));
+>
+> Why use thermal_load_avg? If thermal is always in effect=EF=BC=8Cthe
+> thermal_load_avg would get bigger and bigger, as a result, the cpu_cap
+> maybe smaller than (capacity_orig - thermal_pressure).
 
-Add skb drop reasons to the route_req() in struct tcp_request_sock_ops.
-Following functions are involved:
+For a fixed thermal_pressure(), thermal_load_avg() will not be higher
+than thermal_pressure() but will increase to reach thermal_pressure()
 
-  tcp_v4_route_req()
-  tcp_v6_route_req()
-  subflow_v4_route_req()
-  subflow_v6_route_req()
+In the current implementation for sched_asym_cpucapacity topology, we
+do a 1st iteration trying to find a cpu that fits a task's capacity
+but if it fails, we run a normal cpupri_find that doesn't care about
+capacity.
 
-And the new reason SKB_DROP_REASON_SECURITY is added, which is used when
-skb is dropped by LSM.
+Do I understand correctly that in your case you would like to run
+a 1st iteration that takes into account capacity_orig_of(cpu) -
+thermal_load_avg(cpu_rq(cpu))
+If it fails run another iteration only with capacity_orig_of(cpu)
+and finally tries without capacity constraint
 
-Reviewed-by: Jiang Biao <benbjiang@tencent.com>
-Reviewed-by: Hao Peng <flyingpeng@tencent.com>
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
----
- include/linux/skbuff.h     |  1 +
- include/net/tcp.h          |  3 ++-
- include/trace/events/skb.h |  1 +
- net/ipv4/tcp_input.c       |  2 +-
- net/ipv4/tcp_ipv4.c        | 14 +++++++++++---
- net/ipv6/tcp_ipv6.c        | 14 +++++++++++---
- net/mptcp/subflow.c        | 10 ++++++----
- 7 files changed, 33 insertions(+), 12 deletions(-)
-
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index f33b3636bbce..5909759e1b95 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -473,6 +473,7 @@ enum skb_drop_reason {
- 	SKB_DROP_REASON_TCP_REQQFULLDROP, /* request queue of the listen
- 					   * socket is full
- 					   */
-+	SKB_DROP_REASON_SECURITY,	/* dropped by LSM */
- 	SKB_DROP_REASON_MAX,
- };
- 
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index 679b1964d494..01f841611895 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -2075,7 +2075,8 @@ struct tcp_request_sock_ops {
- 	struct dst_entry *(*route_req)(const struct sock *sk,
- 				       struct sk_buff *skb,
- 				       struct flowi *fl,
--				       struct request_sock *req);
-+				       struct request_sock *req,
-+				       enum skb_drop_reason *reason);
- 	u32 (*init_seq)(const struct sk_buff *skb);
- 	u32 (*init_ts_off)(const struct net *net, const struct sk_buff *skb);
- 	int (*send_synack)(const struct sock *sk, struct dst_entry *dst,
-diff --git a/include/trace/events/skb.h b/include/trace/events/skb.h
-index de6c93670437..aff57cd43e85 100644
---- a/include/trace/events/skb.h
-+++ b/include/trace/events/skb.h
-@@ -82,6 +82,7 @@
- 	EM(SKB_DROP_REASON_PKT_TOO_BIG, PKT_TOO_BIG)		\
- 	EM(SKB_DROP_REASON_LISTENOVERFLOWS, LISTENOVERFLOWS)	\
- 	EM(SKB_DROP_REASON_TCP_REQQFULLDROP, TCP_REQQFULLDROP)	\
-+	EM(SKB_DROP_REASON_SECURITY, SECURITY)			\
- 	EMe(SKB_DROP_REASON_MAX, MAX)
- 
- #undef EM
-diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index e0bbbd624246..2c158593dc37 100644
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -6928,7 +6928,7 @@ int tcp_conn_request(struct request_sock_ops *rsk_ops,
- 	/* Note: tcp_v6_init_req() might override ir_iif for link locals */
- 	inet_rsk(req)->ir_iif = inet_request_bound_dev_if(sk, skb);
- 
--	dst = af_ops->route_req(sk, skb, &fl, req);
-+	dst = af_ops->route_req(sk, skb, &fl, req, &reason);
- 	if (!dst)
- 		goto drop_and_free;
- 
-diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-index b8daf49f54a5..12acf4823488 100644
---- a/net/ipv4/tcp_ipv4.c
-+++ b/net/ipv4/tcp_ipv4.c
-@@ -1424,14 +1424,22 @@ static void tcp_v4_init_req(struct request_sock *req,
- static struct dst_entry *tcp_v4_route_req(const struct sock *sk,
- 					  struct sk_buff *skb,
- 					  struct flowi *fl,
--					  struct request_sock *req)
-+					  struct request_sock *req,
-+					  enum skb_drop_reason *reason)
- {
-+	struct dst_entry *dst;
-+
- 	tcp_v4_init_req(req, sk, skb);
- 
--	if (security_inet_conn_request(sk, skb, req))
-+	if (security_inet_conn_request(sk, skb, req)) {
-+		SKB_DR_SET(*reason, SECURITY);
- 		return NULL;
-+	}
- 
--	return inet_csk_route_req(sk, &fl->u.ip4, req);
-+	dst = inet_csk_route_req(sk, &fl->u.ip4, req);
-+	if (!dst)
-+		SKB_DR_SET(*reason, IP_OUTNOROUTES);
-+	return dst;
- }
- 
- struct request_sock_ops tcp_request_sock_ops __read_mostly = {
-diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
-index 782df529ff69..d69fef0e0892 100644
---- a/net/ipv6/tcp_ipv6.c
-+++ b/net/ipv6/tcp_ipv6.c
-@@ -802,14 +802,22 @@ static void tcp_v6_init_req(struct request_sock *req,
- static struct dst_entry *tcp_v6_route_req(const struct sock *sk,
- 					  struct sk_buff *skb,
- 					  struct flowi *fl,
--					  struct request_sock *req)
-+					  struct request_sock *req,
-+					  enum skb_drop_reason *reason)
- {
-+	struct dst_entry *dst;
-+
- 	tcp_v6_init_req(req, sk, skb);
- 
--	if (security_inet_conn_request(sk, skb, req))
-+	if (security_inet_conn_request(sk, skb, req)) {
-+		SKB_DR_SET(*reason, SECURITY);
- 		return NULL;
-+	}
- 
--	return inet6_csk_route_req(sk, &fl->u.ip6, req, IPPROTO_TCP);
-+	dst = inet6_csk_route_req(sk, &fl->u.ip6, req, IPPROTO_TCP);
-+	if (!dst)
-+		SKB_DR_SET(*reason, IP_OUTNOROUTES);
-+	return dst;
- }
- 
- struct request_sock_ops tcp6_request_sock_ops __read_mostly = {
-diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
-index aba260f547da..03d07165cda6 100644
---- a/net/mptcp/subflow.c
-+++ b/net/mptcp/subflow.c
-@@ -283,7 +283,8 @@ EXPORT_SYMBOL_GPL(mptcp_subflow_init_cookie_req);
- static struct dst_entry *subflow_v4_route_req(const struct sock *sk,
- 					      struct sk_buff *skb,
- 					      struct flowi *fl,
--					      struct request_sock *req)
-+					      struct request_sock *req,
-+					      enum skb_drop_reason *reason)
- {
- 	struct dst_entry *dst;
- 	int err;
-@@ -291,7 +292,7 @@ static struct dst_entry *subflow_v4_route_req(const struct sock *sk,
- 	tcp_rsk(req)->is_mptcp = 1;
- 	subflow_init_req(req, sk);
- 
--	dst = tcp_request_sock_ipv4_ops.route_req(sk, skb, fl, req);
-+	dst = tcp_request_sock_ipv4_ops.route_req(sk, skb, fl, req, reason);
- 	if (!dst)
- 		return NULL;
- 
-@@ -309,7 +310,8 @@ static struct dst_entry *subflow_v4_route_req(const struct sock *sk,
- static struct dst_entry *subflow_v6_route_req(const struct sock *sk,
- 					      struct sk_buff *skb,
- 					      struct flowi *fl,
--					      struct request_sock *req)
-+					      struct request_sock *req,
-+					      enum skb_drop_reason *reason)
- {
- 	struct dst_entry *dst;
- 	int err;
-@@ -317,7 +319,7 @@ static struct dst_entry *subflow_v6_route_req(const struct sock *sk,
- 	tcp_rsk(req)->is_mptcp = 1;
- 	subflow_init_req(req, sk);
- 
--	dst = tcp_request_sock_ipv6_ops.route_req(sk, skb, fl, req);
-+	dst = tcp_request_sock_ipv6_ops.route_req(sk, skb, fl, req, reason);
- 	if (!dst)
- 		return NULL;
- 
--- 
-2.36.0
-
+>
+> Thanks!
+>
+> >         +
+> >                 min_cap =3D uclamp_eff_value(p, UCLAMP_MIN);
+> >                 max_cap =3D uclamp_eff_value(p, UCLAMP_MAX);
+> >
+> >         -       cpu_cap =3D capacity_orig_of(cpu);
+> >         -
+> >                 return cpu_cap >=3D min(min_cap, max_cap);
+> >          }
+> >          #else
+> >
+> > Thoughts?
+>
+> >
+> >
+> > Thanks!
+> >
+> > --
+> > Qais Yousef

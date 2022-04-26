@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A93E50F53A
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B42750F58B
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:54:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345586AbiDZImd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:42:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39904 "EHLO
+        id S1346018AbiDZItc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345529AbiDZIen (ORCPT
+        with ESMTP id S1345580AbiDZIjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:34:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D7878FD8;
-        Tue, 26 Apr 2022 01:27:36 -0700 (PDT)
+        Tue, 26 Apr 2022 04:39:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D9F19C34;
+        Tue, 26 Apr 2022 01:30:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 89850B81A2F;
-        Tue, 26 Apr 2022 08:27:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 068A4C385A0;
-        Tue, 26 Apr 2022 08:27:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EAF11B81CF9;
+        Tue, 26 Apr 2022 08:30:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 344FDC385A0;
+        Tue, 26 Apr 2022 08:30:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961654;
-        bh=IJ+nbtrDHGWw4Lcw0tSqjxDYcCIa1vJufjN0F60rhA4=;
+        s=korg; t=1650961821;
+        bh=MyWmK+PsAZoXKuUVRcLqfbxwM+xdMH/P2sk7Eu3KX8w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jnogcxvw8uO6CpRKwshHvBwGPF04EyiPOmywK0lB2IZ79ktK+DAAIKYiew07fPnMG
-         uaq550Ug8/aHPqk6/RT1zFGXvY4kWtlOiaskgNW+7iF0iJ0GYs7vl56+86MVfH2DRs
-         SjyKy6hwgACh3/ZKAXn1nGOMPrwhvwYX0TlFyiqE=
+        b=Rwy2DfoP7aEsev8zoWfodw1eWJSAI8MIMiuqc/1CD9BtJe1RDyQ/3elvUITcon44H
+         Le+wv7COtXtb2wGuPtN+kZUO2cyN5kKchjUONSZfAjZF4PfJ0N7++MuaJOtiOEdnYx
+         /PHHV98k9X5GvZ8XjlwyBPxJMD6w7P1DJ+h4yQkQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        syzbot+7a806094edd5d07ba029@syzkaller.appspotmail.com,
-        Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Theodore Tso <tytso@mit.edu>, stable@kernel.org
-Subject: [PATCH 4.19 40/53] ext4: limit length to bitmap_maxbytes - blocksize in punch_hole
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 40/62] drm/panel/raspberrypi-touchscreen: Avoid NULL deref if not initialised
 Date:   Tue, 26 Apr 2022 10:21:20 +0200
-Message-Id: <20220426081736.823404701@linuxfoundation.org>
+Message-Id: <20220426081738.370466024@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
-References: <20220426081735.651926456@linuxfoundation.org>
+In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
+References: <20220426081737.209637816@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,60 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tadeusz Struk <tadeusz.struk@linaro.org>
+From: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-commit 2da376228a2427501feb9d15815a45dbdbdd753e upstream.
+[ Upstream commit f92055ae0acb035891e988ce345d6b81a0316423 ]
 
-Syzbot found an issue [1] in ext4_fallocate().
-The C reproducer [2] calls fallocate(), passing size 0xffeffeff000ul,
-and offset 0x1000000ul, which, when added together exceed the
-bitmap_maxbytes for the inode. This triggers a BUG in
-ext4_ind_remove_space(). According to the comments in this function
-the 'end' parameter needs to be one block after the last block to be
-removed. In the case when the BUG is triggered it points to the last
-block. Modify the ext4_punch_hole() function and add constraint that
-caps the length to satisfy the one before laster block requirement.
+If a call to rpi_touchscreen_i2c_write from rpi_touchscreen_probe
+fails before mipi_dsi_device_register_full is called, then
+in trying to log the error message if uses ts->dsi->dev when
+it is still NULL.
 
-LINK: [1] https://syzkaller.appspot.com/bug?id=b80bd9cf348aac724a4f4dff251800106d721331
-LINK: [2] https://syzkaller.appspot.com/text?tag=ReproC&x=14ba0238700000
+Use ts->i2c->dev instead, which is initialised earlier in probe.
 
-Fixes: a4bb6b64e39a ("ext4: enable "punch hole" functionality")
-Reported-by: syzbot+7a806094edd5d07ba029@syzkaller.appspotmail.com
-Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
-Link: https://lore.kernel.org/r/20220331200515.153214-1-tadeusz.struk@linaro.org
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Cc: stable@kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 2f733d6194bd ("drm/panel: Add support for the Raspberry Pi 7" Touchscreen.")
+Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220415162513.42190-2-stefan.wahren@i2se.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/inode.c |   11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -4314,7 +4314,8 @@ int ext4_punch_hole(struct inode *inode,
- 	struct super_block *sb = inode->i_sb;
- 	ext4_lblk_t first_block, stop_block;
- 	struct address_space *mapping = inode->i_mapping;
--	loff_t first_block_offset, last_block_offset;
-+	loff_t first_block_offset, last_block_offset, max_length;
-+	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
- 	handle_t *handle;
- 	unsigned int credits;
- 	int ret = 0;
-@@ -4360,6 +4361,14 @@ int ext4_punch_hole(struct inode *inode,
- 		   offset;
- 	}
+diff --git a/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c b/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c
+index bdb4d59c8127..6906f522521d 100644
+--- a/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c
++++ b/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c
+@@ -232,7 +232,7 @@ static void rpi_touchscreen_i2c_write(struct rpi_touchscreen *ts,
  
-+	/*
-+	 * For punch hole the length + offset needs to be within one block
-+	 * before last range. Adjust the length if it goes beyond that limit.
-+	 */
-+	max_length = sbi->s_bitmap_maxbytes - inode->i_sb->s_blocksize;
-+	if (offset + length > max_length)
-+		length = max_length - offset;
-+
- 	if (offset & (sb->s_blocksize - 1) ||
- 	    (offset + length) & (sb->s_blocksize - 1)) {
- 		/*
+ 	ret = i2c_smbus_write_byte_data(ts->i2c, reg, val);
+ 	if (ret)
+-		dev_err(&ts->dsi->dev, "I2C write failed: %d\n", ret);
++		dev_err(&ts->i2c->dev, "I2C write failed: %d\n", ret);
+ }
+ 
+ static int rpi_touchscreen_write(struct rpi_touchscreen *ts, u16 reg, u32 val)
+-- 
+2.35.1
+
 
 

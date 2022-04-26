@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59E9850FE8F
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:12:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A979950FE93
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350772AbiDZNOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 09:14:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43152 "EHLO
+        id S1350790AbiDZNPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 09:15:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350722AbiDZNOc (ORCPT
+        with ESMTP id S1350730AbiDZNOc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 26 Apr 2022 09:14:32 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76AC6606C8;
-        Tue, 26 Apr 2022 06:11:19 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id q23so12527713wra.1;
-        Tue, 26 Apr 2022 06:11:19 -0700 (PDT)
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA77160A94;
+        Tue, 26 Apr 2022 06:11:20 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id d5so10209215wrb.6;
+        Tue, 26 Apr 2022 06:11:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=9BnF53lWXq+Kioy1WHRA6GamlF6438787W3udo1iOFU=;
-        b=JilcEUE1wgZLXWf8Yn3HiwwoAj0pXjtSrzPDdPxIRmOKN6ZBzQGxE2NyRRSwq49YXx
-         QZZsnyZc9ybd0ypQXxONwcCQ81cuV2J5IDHvjakJ6oZd92McSoBKSOBw57va77z+bSD6
-         h2yPQwRtTccr/4Ht5i1zuNgledGXNxGdqc8cpqwWEYIF+5Kbbc2edB50R3AiVBCLjwTu
-         o+wpD7d2qApO9kURTK2TpjDuScmUrKvL/Yu1PuFrltHBGvDybdlSSOruTj2Fs1IaqkiB
-         1S2iyOepxnz+0hyX3siuIWRSiSTLkC5NB37YuXW2UHsTy5D4NG9Z3xSswmawkOob+mNW
-         i/Tw==
+        bh=TMOavQxWrrTel8vmNQCb3OLZWpjveuECwxNG5yTcW58=;
+        b=E6Z3LJv2VyjxdKTtKGXl4tiP6Af2EbpVcUeLbiJsRW8rn+HlQ1ReWnA4PhVPqvihAJ
+         NiMqXl3J61vRXp+k2erjoh2kux7sQwjoLsiWu1WWh97lHcpAsdN8jRKV2x8d1+8Pv/7i
+         dRkoQZWA2udk6Bj96S0J+yHZUalSr+oJQoawL+8GUwIgmnUDsFqruCa0+iMLxn8xjBmn
+         4/UThDQFtB2xH+Al7lIqcooJaMDzSx4t+SIObgqVvtbABrCGG3Vxjav74QYCV8Z7g4sR
+         aQ/pcb3onPG051d5Tgr0k8mSkL/TUvQJJl0LObdki9pI7S6N0EJ3bRPPGRe+TRGy6HHW
+         xO2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=9BnF53lWXq+Kioy1WHRA6GamlF6438787W3udo1iOFU=;
-        b=k00+oBh3GiNcd6A2Mwl996hoOoCneTBDITEDmIVyPTCdx/qg+9LT08V4K9fKdKna8M
-         TkxG9ermPhIq70sK8TToo8riHgd9Dc7jkg2CxqVKZqVNZgMLvjy4HiPjbXOHyh9MM7n5
-         SGzHLS0aLbYr5a+7kbVkS2jXP883C5bJ6TShDc/BwjCrhEIS3JExpTAkJnWrYLmGcc2g
-         RxOJ2FsbJYneEhatUtNRzkWFMpgz+/0XcXq2PaWdhYGyZ5wo9eKMOIITHaflftVT8ySw
-         3NdfawUacakiGKj0zFQdJvbt3FERS++ozCDcNQGeajE9q3SWR/nrGg9mNELXZsPiLWbr
-         Tulw==
-X-Gm-Message-State: AOAM5322zjSy3tahq6ND26Rr79S4nOwzLVGZExh6Rva705W5m+oI/FLK
-        Hjq19WXIpq1Ac20zM9mIjSUaEQ3zTzNDb+VcUNo=
-X-Google-Smtp-Source: ABdhPJznLVsaJbLER81NSCZq/7VKIgeji7kKy+jdHakN4G6/Bz4tyR3hnXyT13UO14OcT5iba305jg==
-X-Received: by 2002:a05:6000:381:b0:20a:8690:9ac6 with SMTP id u1-20020a056000038100b0020a86909ac6mr18205670wrf.209.1650978678054;
-        Tue, 26 Apr 2022 06:11:18 -0700 (PDT)
+        bh=TMOavQxWrrTel8vmNQCb3OLZWpjveuECwxNG5yTcW58=;
+        b=WDBzTrPr9sVQcuMQBV57IpZO37gPOaHhpWu4FNEVV9tdpfSUfr358A/GY6gvMCiydt
+         mr5A/j83xbAItR65AJUKRomT6PanHZ74BnjI2D+IU52ilhaV2rdL/tdRlq+q/NMkA6Nv
+         YaIhnaQ5px8ZaLAXZ3aHcahsmkuG7jkJCE9JWCYa03MrVnGUtQRbR6t2FF1U1vrCtmyb
+         G4i0R2IfIM55oaqIcsP4vpK9lL56S0lq6wDY+06Z0yyTDfVgbcXe43GDARMLDmMLOXt+
+         SNjUJvoIBws2dEg+BPU8M7gK5Z5sOWnPZhlCRs1SE2HboUgEQ+f2ofzX9mbi9tZTHsyk
+         Vh5w==
+X-Gm-Message-State: AOAM531hRhsZ0RWF3KaFhiFfgVYhtgKMt60g8+SMNv8emjoaGJM0Z2gf
+        9Fr1yMyj+Qra8XyvKaw4qPk=
+X-Google-Smtp-Source: ABdhPJxkVnbdd83GE8OVu/tBulbJEeOGKDh7W+GdUNOQbQBcIEpQJ8WZRy8ESQLTb8kX7jbT7DbFhg==
+X-Received: by 2002:a5d:6d0b:0:b0:20a:d43f:4002 with SMTP id e11-20020a5d6d0b000000b0020ad43f4002mr12661967wrq.230.1650978679178;
+        Tue, 26 Apr 2022 06:11:19 -0700 (PDT)
 Received: from poker.lan (static.2-229-210-222.ip198.fastwebnet.it. [2.229.210.222])
-        by smtp.gmail.com with ESMTPSA id h9-20020a05600c350900b00393f01c8f00sm3262910wmq.47.2022.04.26.06.11.16
+        by smtp.gmail.com with ESMTPSA id h9-20020a05600c350900b00393f01c8f00sm3262910wmq.47.2022.04.26.06.11.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 06:11:17 -0700 (PDT)
+        Tue, 26 Apr 2022 06:11:18 -0700 (PDT)
 From:   Andrea Merello <andrea.merello@gmail.com>
 To:     jic23@kernel.org, mchehab+huawei@kernel.org,
         linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org
 Cc:     lars@metafoo.de, robh+dt@kernel.org, andy.shevchenko@gmail.com,
         matt.ranostay@konsulko.com, ardeleanalex@gmail.com,
-        jacopo@jmondi.org, Andrea Merello <andrea.merello@iit.it>
-Subject: [v5 10/14] iio: document "serialnumber" sysfs attribute
-Date:   Tue, 26 Apr 2022 15:10:58 +0200
-Message-Id: <20220426131102.23966-11-andrea.merello@gmail.com>
+        jacopo@jmondi.org, Andrea Merello <andrea.merello@iit.it>,
+        Rob Herring <robh@kernel.org>
+Subject: [v5 11/14] dt-bindings: iio/imu: Add Bosch BNO055
+Date:   Tue, 26 Apr 2022 15:10:59 +0200
+Message-Id: <20220426131102.23966-12-andrea.merello@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220426131102.23966-1-andrea.merello@gmail.com>
 References: <20220426131102.23966-1-andrea.merello@gmail.com>
@@ -75,29 +76,80 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrea Merello <andrea.merello@iit.it>
 
-Add ABI documentation for the new "serialnumber" sysfs attribute. The
-first user is the bno055 IIO driver.
+Introduce new documentation file for the Bosch BNO055 IMU.
 
 Signed-off-by: Andrea Merello <andrea.merello@iit.it>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/ABI/testing/sysfs-bus-iio | 7 +++++++
- 1 file changed, 7 insertions(+)
+ .../bindings/iio/imu/bosch,bno055.yaml        | 59 +++++++++++++++++++
+ 1 file changed, 59 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/imu/bosch,bno055.yaml
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-iio b/Documentation/ABI/testing/sysfs-bus-iio
-index 2a6954ea1c71..eadf0326a56e 100644
---- a/Documentation/ABI/testing/sysfs-bus-iio
-+++ b/Documentation/ABI/testing/sysfs-bus-iio
-@@ -2048,3 +2048,10 @@ Contact:	linux-iio@vger.kernel.org
- Description:
- 		Raw (unscaled) euler angles readings. Units after
- 		application of scale are deg.
+diff --git a/Documentation/devicetree/bindings/iio/imu/bosch,bno055.yaml b/Documentation/devicetree/bindings/iio/imu/bosch,bno055.yaml
+new file mode 100644
+index 000000000000..e0d06db161a9
+--- /dev/null
++++ b/Documentation/devicetree/bindings/iio/imu/bosch,bno055.yaml
+@@ -0,0 +1,59 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/iio/imu/bosch,bno055.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+What:		/sys/bus/iio/devices/iio:deviceX/serialnumber
-+KernelVersion:	5.19
-+Contact:	linux-iio@vger.kernel.org
-+Description:
-+		An example format is 16-bytes, 2-digits-per-byte, HEX-string
-+		representing the sensor unique ID number.
++title: Bosch BNO055
++
++maintainers:
++  - Andrea Merello <andrea.merello@iit.it>
++
++description: |
++  Inertial Measurement Unit with Accelerometer, Gyroscope, Magnetometer and
++  internal MCU for sensor fusion
++  https://www.bosch-sensortec.com/products/smart-sensors/bno055/
++
++properties:
++  compatible:
++    enum:
++      - bosch,bno055
++
++  reg:
++    maxItems: 1
++
++  reset-gpios:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++required:
++  - compatible
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    serial {
++      imu {
++        compatible = "bosch,bno055";
++        reset-gpios = <&gpio0 54 GPIO_ACTIVE_LOW>;
++        clocks = <&imu_clk>;
++      };
++    };
++
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      imu@28 {
++        compatible = "bosch,bno055";
++        reg = <0x28>;
++        reset-gpios = <&gpio0 54 GPIO_ACTIVE_LOW>;
++        clocks = <&imu_clk>;
++      };
++    };
 -- 
 2.17.1
 

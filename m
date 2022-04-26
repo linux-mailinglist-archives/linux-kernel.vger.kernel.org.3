@@ -2,50 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B18950F6A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:59:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E12D050F8AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237937AbiDZI5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:57:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57956 "EHLO
+        id S1348181AbiDZJes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:34:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346270AbiDZIor (ORCPT
+        with ESMTP id S1347892AbiDZJGV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:44:47 -0400
+        Tue, 26 Apr 2022 05:06:21 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01A083B28;
-        Tue, 26 Apr 2022 01:34:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59FA916A5D8;
+        Tue, 26 Apr 2022 01:46:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1188B81CED;
-        Tue, 26 Apr 2022 08:34:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29545C385AC;
-        Tue, 26 Apr 2022 08:34:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1146DB81A2F;
+        Tue, 26 Apr 2022 08:46:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A974C385A0;
+        Tue, 26 Apr 2022 08:46:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962068;
-        bh=NbsUClvZy0wolQZaaxQ4Sw5keVUOpjaf+AR7ay8B04w=;
+        s=korg; t=1650962805;
+        bh=h4jumOqexBZV5LmBJ3rbAZfoyF9KiI4UT45OEVDa5uM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Abt+Wlqqtuw0SItjJDDt/E+JD69PrPYbfVP0aArsbHdClp40dfMfR88zPREqHSVnp
-         qt9z7WeggG+RiCdL8E8Qgs5/w5AAqZZ0PNjsON4+vBW6tEOUFjmvASh2RMNdZp3o1Q
-         UnqrrdFq0OAWzbpEqIb2NmgYo/wRl2s+QvvQAxUA=
+        b=ZOTaKBgZk4pER4vn5WJJZ7FSRH2OaA6GktW6ybZiwH1TOCx4gjEADUNQ17UPDksCZ
+         p6FK3LMDhrXWBMce0Uf0tUPcdEGrQxPCRCgEp5R1oimM1oeymPCWUYKYCQmnVpT6PR
+         GgiSqNcIlOLd8HG9OPajcnsSv/UIaFjqxh0B0abo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        =?UTF-8?q?Samuel=20=C4=8Cavoj?= <samuel@cavoj.net>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        lukeluk498@gmail.com, Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.10 61/86] gpio: Request interrupts after IRQ is initialized
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: [PATCH 5.17 094/146] ata: pata_marvell: Check the bmdma_addr beforing reading
 Date:   Tue, 26 Apr 2022 10:21:29 +0200
-Message-Id: <20220426081742.967932943@linuxfoundation.org>
+Message-Id: <20220426081752.701054072@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
-References: <20220426081741.202366502@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,70 +53,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-commit 06fb4ecfeac7e00d6704fa5ed19299f2fefb3cc9 upstream.
+commit aafa9f958342db36c17ac2a7f1b841032c96feb4 upstream.
 
-Commit 5467801f1fcb ("gpio: Restrict usage of GPIO chip irq members
-before initialization") attempted to fix a race condition that lead to a
-NULL pointer, but in the process caused a regression for _AEI/_EVT
-declared GPIOs.
+Before detecting the cable type on the dma bar, the driver should check
+whether the 'bmdma_addr' is zero, which means the adapter does not
+support DMA, otherwise we will get the following error:
 
-This manifests in messages showing deferred probing while trying to
-allocate IRQs like so:
+[    5.146634] Bad IO access at port 0x1 (return inb(port))
+[    5.147206] WARNING: CPU: 2 PID: 303 at lib/iomap.c:44 ioread8+0x4a/0x60
+[    5.150856] RIP: 0010:ioread8+0x4a/0x60
+[    5.160238] Call Trace:
+[    5.160470]  <TASK>
+[    5.160674]  marvell_cable_detect+0x6e/0xc0 [pata_marvell]
+[    5.161728]  ata_eh_recover+0x3520/0x6cc0
+[    5.168075]  ata_do_eh+0x49/0x3c0
 
-  amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x0000 to IRQ, err -517
-  amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x002C to IRQ, err -517
-  amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x003D to IRQ, err -517
-  [ .. more of the same .. ]
-
-The code for walking _AEI doesn't handle deferred probing and so this
-leads to non-functional GPIO interrupts.
-
-Fix this issue by moving the call to `acpi_gpiochip_request_interrupts`
-to occur after gc->irc.initialized is set.
-
-Fixes: 5467801f1fcb ("gpio: Restrict usage of GPIO chip irq members before initialization")
-Link: https://lore.kernel.org/linux-gpio/BL1PR12MB51577A77F000A008AA694675E2EF9@BL1PR12MB5157.namprd12.prod.outlook.com/
-Link: https://bugzilla.suse.com/show_bug.cgi?id=1198697
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215850
-Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1979
-Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1976
-Reported-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Reviewed-by: Shreeya Patel <shreeya.patel@collabora.com>
-Tested-By: Samuel Čavoj <samuel@cavoj.net>
-Tested-By: lukeluk498@gmail.com Link:
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
-Reviewed-and-tested-by: Takashi Iwai <tiwai@suse.de>
-Cc: Shreeya Patel <shreeya.patel@collabora.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpio/gpiolib.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/ata/pata_marvell.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -1612,8 +1612,6 @@ static int gpiochip_add_irqchip(struct g
- 
- 	gpiochip_set_irq_hooks(gc);
- 
--	acpi_gpiochip_request_interrupts(gc);
--
- 	/*
- 	 * Using barrier() here to prevent compiler from reordering
- 	 * gc->irq.initialized before initialization of above
-@@ -1623,6 +1621,8 @@ static int gpiochip_add_irqchip(struct g
- 
- 	gc->irq.initialized = true;
- 
-+	acpi_gpiochip_request_interrupts(gc);
-+
- 	return 0;
- }
- 
+--- a/drivers/ata/pata_marvell.c
++++ b/drivers/ata/pata_marvell.c
+@@ -77,6 +77,8 @@ static int marvell_cable_detect(struct a
+ 	switch(ap->port_no)
+ 	{
+ 	case 0:
++		if (!ap->ioaddr.bmdma_addr)
++			return ATA_CBL_PATA_UNK;
+ 		if (ioread8(ap->ioaddr.bmdma_addr + 1) & 1)
+ 			return ATA_CBL_PATA40;
+ 		return ATA_CBL_PATA80;
 
 

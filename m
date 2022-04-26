@@ -2,171 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A69D950F73F
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 549FE50F90E
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347664AbiDZJmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:42:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49042 "EHLO
+        id S1345007AbiDZJmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347923AbiDZJeZ (ORCPT
+        with ESMTP id S1346502AbiDZJkz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:34:25 -0400
-Received: from euporie.uberspace.de (euporie.uberspace.de [185.26.156.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34ED1C65C0
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 01:58:39 -0700 (PDT)
-Received: (qmail 29195 invoked by uid 989); 26 Apr 2022 08:58:37 -0000
-Authentication-Results: euporie.uberspace.de;
-        auth=pass (plain)
-Date:   Tue, 26 Apr 2022 10:58:26 +0200
-From:   Florian Fischer <florian.fischer@muhq.space>
-To:     Namhyung Kim <namhyung@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>
-Subject: Re: [PATCHSET v4 next 0/3] perf stat: add user_time and system_time
- tool events
-Message-ID: <20220426085826.f4jfu4cszbmjlafw@pasture>
-References: <20220420102354.468173-1-florian.fischer@muhq.space>
- <YmA48V09iBbqy6su@kernel.org>
- <CAM9d7cjcA0aYC1otY4WvCJ_h71P9wiHu42GK7iyv3=i01rQ26Q@mail.gmail.com>
- <20220423121557.z5gzbqadonmrg6ef@pasture>
- <CAM9d7cgcx42xD8QxOB+JBEL85mZU_va8FMiF31SRxABH8CakLg@mail.gmail.com>
+        Tue, 26 Apr 2022 05:40:55 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E58213DE6
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 02:00:24 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4FED123A;
+        Tue, 26 Apr 2022 02:00:15 -0700 (PDT)
+Received: from [10.57.12.108] (unknown [10.57.12.108])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DE2623F73B;
+        Tue, 26 Apr 2022 02:00:13 -0700 (PDT)
+Message-ID: <2b2d6ac0-c8c5-0d06-e88d-0f6b8d82b381@arm.com>
+Date:   Tue, 26 Apr 2022 10:00:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAM9d7cgcx42xD8QxOB+JBEL85mZU_va8FMiF31SRxABH8CakLg@mail.gmail.com>
-X-Rspamd-Bar: /
-X-Rspamd-Report: MIME_GOOD(-0.1) MID_RHS_NOT_FQDN(0.5) BAYES_HAM(-1.363996)
-X-Rspamd-Score: -0.963996
-Received: from unknown (HELO unkown) (::1)
-        by euporie.uberspace.de (Haraka/2.8.28) with ESMTPSA; Tue, 26 Apr 2022 10:58:37 +0200
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
-        MSGID_FROM_MTA_HEADER,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2] arch_topology: Trace the update thermal pressure
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, sudeep.holla@arm.com,
+        dietmar.eggemann@arm.com, vincent.guittot@linaro.org,
+        rafael@kernel.org, rostedt@goodmis.org, mingo@redhat.com
+References: <20220425135317.5880-1-lukasz.luba@arm.com>
+ <YmasYv5xHH7EbXXn@kroah.com> <61483e12-c2a2-059a-c157-aea23b8a2f4e@arm.com>
+ <Ymeph6GLO3TgSNpY@kroah.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <Ymeph6GLO3TgSNpY@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.04.2022 12:06, Namhyung Kim wrote:
-> On Sat, Apr 23, 2022 at 5:16 AM Florian Fischer
-> <florian.fischer@muhq.space> wrote:
-> >
-> > On 22.04.2022 16:52, Namhyung Kim wrote:
-> > > Hello,
-> > >
-> > > On Fri, Apr 22, 2022 at 3:05 PM Arnaldo Carvalho de Melo
-> > > <acme@kernel.org> wrote:
-> > > >
-> > > > Em Wed, Apr 20, 2022 at 12:23:51PM +0200, Florian Fischer escreveu:
-> > > > > This patch series adds new internal events to perf stat exposing the times spend
-> > > > > in user and kernel mode in nanoseconds reported by rusage.
-> > > > >
-> > > > > During some benchmarking using perf it bothered me that I could not easily
-> > > > > retrieve those times from perf stat when using the machine readable output.
-> > > > >
-> > > > > But perf definitely knows about those values because in the human readable output
-> > > > > they are present.
-> > > > >
-> > > > > Therefore I exposed the times reported by rusage via the new tool events:
-> > > > > user_time and system_time.
-> > > > >
-> > > > > This allows to retrieved them in machine-readable output:
-> > > > >
-> > > > > $ ./perf stat -x, -e duration_time,user_time,system_time,cache-misses -- grep -q -r duration_time tools/perf
-> > > > > 72134524,ns,duration_time:u,72134524,100.00,,
-> > > > > 65225000,ns,user_time:u,65225000,100.00,,
-> > > > > 6865000,ns,ssystem_time:u,6865000,100.00,,
+
+
+On 4/26/22 09:12, Greg KH wrote:
+> On Tue, Apr 26, 2022 at 08:26:40AM +0100, Lukasz Luba wrote:
+>>
+>>
+>> On 4/25/22 15:12, Greg KH wrote:
+>>> On Mon, Apr 25, 2022 at 02:53:17PM +0100, Lukasz Luba wrote:
+>>>> Add trace event to capture the moment of the call for updating the thermal
+>>>> pressure value. It's helpful to investigate how often those events occurs
+>>>> in a system dealing with throttling. This trace event is needed since the
+>>>> old 'cdev_update' might not be used by some drivers. Also, the new trace
+>>>> event shows capacity value, not a cooling state.
+>>>
+>>> Wait, why are thermal events not going through the thermal system so
+>>> that thermal_cdev_update() would catch them?  Don't work around broken
+>>> systems, force them to use the correct apis.
+>>
+>> In some platforms the thermal is controlled in FW. In Arm we have
+>> recently implemented a logic of our Intelligent Power Allocation
+>> (kernel governor gov_power_allocator.c) (and a bit more) in our
+>> reference FW [1]. So kernel would not controlling thermal.
+>> There is another platform which does similar [2]. As you can see
+>> in that driver, there is no cooling device created, it just handles
+>> the notification about reduced frequency as an IRQ. Then it
+>> populates this information to the task scheduler using thermal
+>> pressure mechanism. Thanks to that the scheduler can avoid mistakes
+>> in the tasks placement and not put more that that CPU real capacity.
+>>
+>> For Arm FW thermal, I can make it, since we don't have it yet.
+>> We are in the middle of internal design of this FW/kernel glue and I
+>> haven't sent the kernel patches yet. I will follow your recommendation.
+>>
+>> For the driver [2] I have no device, so I cannot change it and prove the
+>> new works safely.
+>>
+>> But we need this trace event to discuss the design for RT task scheduler
+>> and impact of thermal pressure decaying delays. We have Android systems
+>> which suffer the RT issues known for years (like audio apps) and we
+>> started to tackle them. That was the motivation for this new trace
+>> event - a helper which everyone can 'just use' in their current code
+>> state and provide measurements.
+>>
+>> We can ask maintainers of that driver [2] to follow your guidance and
+>> fix that cpufreq driver. That might require a split of the logic in
+>> there and a new thermal driver which would handle the part of thermal
+>> updates. If that is feasible, since I have heard that some platforms
+>> can cause a huge noise 'KHz' of those interrupt...
+>> If that is true, I might see the reason why someone goes lightweight way
+>> update-thermal-pressure-only and not via thermal cooling complexity.
+>>
+>> IMO this trace event doesn't harm the design and brings also benefit
+>> comparing to the 'cdev_update' trace event which only provides a state
+>> value: [0, n]. That state value then needs additional tools to translate
+>> it: state -> freq -> capacity -> thermal pressure. As you can see
+>> this new event just stores proper value in the trace buffer, no need
+>> to hassle, just 'cat' the trace file. If anyone would like to help
+>> us and share it's trace output, we would have everything we need.
 > 
-> > > Anyway it looks a little bit strange to me if we can get
-> > > system time in user mode only (the 'u' modifier).
-> >
-> > Sorry but I don't really understand what you mean.
-> > The system_time is reported to userspace via rusage filled by wait4(2).
-> > It will always report the value reported to the user space regardless of what
-> > counters perf has access to.
-> >
-> > If you run perf as user you get the same system_time (but with the ':u' suffix)
-> > as when you run perf as root or lower kernel.perf_event_paranoid to allow access
-> > to more counters.
-> 
-> The ':u' modifier means that the event should count only in user mode.
-> So I think system_time:u should be 0 by definition.
-> Likewise, user_time:k should be handled as such.
+> Ok, can you put this type of explaination in the changelog to make it
+> more obvious for us all going forward?
 
-Not sure if this logic applies to tool events because the time spend in user mode
-or kernel mdoe stays the same regardless of where you count it.
+Yes, I will update that and send v3. Thank you for sharing your opinion
+and guidance for this stuff for future platforms. I'll point Morten
+and other Arm folks this thread.
 
-This is consistent with how duration_time works currently in perf stat.
-
-./perf stat -e duration_time,duration_time:u,duration_time:k -- grep -q -r duration_time .
-
- Performance counter stats for 'grep -q -r duration_time .':
-
-        29,012,558 ns   duration_time
-        29,012,558 ns   duration_time:u
-        29,012,558 ns   duration_time:k
-
-       0.029012558 seconds time elapsed
-
-       0.029088000 seconds user
-       0.000000000 seconds sys
-
-> 
-> But as I said before, we already have the task-clock event, so it's not
-> clear why we need this too.  Also these tool events won't work for
-> other use cases like perf record.
-
-Maybe I do not know enough about perf but I think this is not exactly how those
-suffixes work. This is the output of perf of next-20220420 and my rusage tool
-event patches applied:
-
-$ sysctl kernel.perf_event_paranoid
-kernel.perf_event_paranoid = -1
-
-linux/tools/perf$ ./perf stat -e task-clock,task-clock:u,task-clock:k,\
-                                 duration_time,duration_time:u,duration_time:k,\
-                                 system_time,system_time:u,system_time:k,\
-                                 user_time,user_time:u,user_time:k -- grep -q -r duration_time .
-
- Performance counter stats for 'grep -q -r duration_time .':
-
-             42.30 msec task-clock                #    0.483 CPUs utilized
-             42.30 msec task-clock:u              #    0.483 CPUs utilized
-             42.30 msec task-clock:k              #    0.483 CPUs utilized
-        87,533,340 ns   duration_time             #    2.069 G/sec
-        87,533,340 ns   duration_time:u           #    2.069 G/sec
-        87,533,340 ns   duration_time:k           #    2.069 G/sec
-        12,841,000 ns   system_time               #  303.547 M/sec
-        12,841,000 ns   system_time:u             #  303.547 M/sec
-        12,841,000 ns   system_time:k             #  303.547 M/sec
-        30,820,000 ns   user_time                 #  728.550 M/sec
-        30,820,000 ns   user_time:u               #  728.550 M/sec
-        30,820,000 ns   user_time:k               #  728.550 M/sec
-
-       0.087533340 seconds time elapsed
-
-       0.030820000 seconds user
-       0.012841000 seconds sys
-
-
-So task-clock regardless of its ':u' or ':k' suffix shows approximately the wall
-clock time.
-
-But for my experiments on a shared system where kernel.perf_event_paranoid is
-not set to -1 and I feel uncomfortable to test research prototypes as root I
-would like a simple and fast way to tell where my program spends its time.
-
-This can be achieved by using user_time and system_time.
-Which are reported in the human readable output anyway.
-
-Maybe I am doing something wrong here but as shown above task-clock does not
-provide the information I am interested in.
-
-Florian Fischer
+Regards,
+Lukasz

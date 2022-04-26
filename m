@@ -2,160 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45D5150F00B
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 06:58:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E5250F010
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 07:01:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244197AbiDZFAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 01:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45014 "EHLO
+        id S238085AbiDZFEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 01:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbiDZFAq (ORCPT
+        with ESMTP id S236477AbiDZFEb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 01:00:46 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F203BBF8
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 21:57:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650949058; x=1682485058;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UCcN97RI4a2d+AeokmfPrH4NM62IuE/MuaqFUHKia8w=;
-  b=MEoiZ5Jr4Yd8cCET1n7EZ6pBHeE/w+8nFaVFMhnUqt0h8Rzev40WPFct
-   vtOhmCylVoaEMPjfOzhPLKjgIpWiq1rDTL6i+aPh3WalzPEF45Jsb3Qqi
-   V/AlgjDCApkc5gDtMItobljl45PSmlo0/2D9fkFOfNTcZTMhQK8/NfqhP
-   LKyqRNsOVduZQXOSe3wXcVw9gygDSDtfEGuKCsQ/35Hc/7ipCxewoPj6n
-   cKfGuRqcy+Siq8Eofnxv/jQMwu7tQUVSvJlUF4/yyU9EtX/5icSNC1UOp
-   EbNsLppejbDEvWc9LpBypArU+gg3xW7nic8mh8oVXF8/lHALc8jJsQEnE
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="325941811"
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="325941811"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 21:57:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="730070234"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 25 Apr 2022 21:57:36 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1njDGZ-0003FO-Ls;
-        Tue, 26 Apr 2022 04:57:35 +0000
-Date:   Tue, 26 Apr 2022 12:56:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Arend van Spriel <arend.vanspriel@broadcom.com>
-Subject: [asahilinux:pr/22 40/189]
- drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c:1849:25: warning:
- format '%ld' expects argument of type 'long int', but argument 2 has type
- 'size_t' {aka 'unsigned int'}
-Message-ID: <202204261241.FDz2mhDI-lkp@intel.com>
+        Tue, 26 Apr 2022 01:04:31 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4C0CEE26
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 22:01:24 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id g15-20020a056e021a2f00b002cd868be1faso2033655ile.21
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 22:01:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=LxqcV03nxtRQab3OQQ/+BgCz/sCQjRuCxAx9hrcj9yU=;
+        b=Hs6eETc0e6Yc/X4N1uRPV0wMtwPhjT3bJC2JVFat3gQIoP9DJxTZHow5umqi05EW/x
+         ZZ1XOUB9OqSAa3x6mXmBfUIAWsOanGhMOfWMZNmr5W+jWNOsQtSHYMtaYn1OTnqtmLWY
+         Aq3PyMEMT5t2KH5WLk4NGgqfxU5e1bwVXtyLIQIbQKUs3jBC0Lvrj+N/R6AfeuO9mt+1
+         agIF7rf84573yiKa3sUhcmCsOLCZvRagiiWqjcU8jCd9hbU72SHYxaG8Zk7IoLIsvi5J
+         rhTio9PNICvewP6ZdSbLAuBbWvcE/bnQYHlZG8snhL7C3/SkQpnff71OQM+ewluaS6fg
+         haeg==
+X-Gm-Message-State: AOAM532Wf7VyV2CSyoKEpCAIscgyfFHJWWNjFPAT607FQFBPV8OCWxG/
+        YnSJz9eOvjxUEl7bAxiZhZRq1Ba0+vJngEo2xc5fNTo/PLfS
+X-Google-Smtp-Source: ABdhPJxiNiWCZ6FKc0zZ4jjLFrau05T3E01K6CXGI3CqXHVUQYlYBO1cIkSLES0EaeP3983LcBM3BgoAitWToutKSknEs4qa1Pfm
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:2cd2:b0:657:388f:b993 with SMTP id
+ j18-20020a0566022cd200b00657388fb993mr8878699iow.54.1650949284109; Mon, 25
+ Apr 2022 22:01:24 -0700 (PDT)
+Date:   Mon, 25 Apr 2022 22:01:24 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009f1fa405dd87954f@google.com>
+Subject: [syzbot] WARNING: suspicious RCU usage in mac80211_hwsim_sta_rc_update
+From:   syzbot <syzbot+efb5967310cacc5ac63e@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, johannes@sipsolutions.net, kuba@kernel.org,
+        kvalo@kernel.org, linux-kernel@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux pr/22
-head:   7ee315306d1a3b0da8cf2a53e7f55889d0e7f034
-commit: fc41e32d8f12538376a1c602c118590a4a81a6a9 [40/189] brcmfmac: pcie: Read Apple OTP information
-config: i386-randconfig-a013-20220425 (https://download.01.org/0day-ci/archive/20220426/202204261241.FDz2mhDI-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/AsahiLinux/linux/commit/fc41e32d8f12538376a1c602c118590a4a81a6a9
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux pr/22
-        git checkout fc41e32d8f12538376a1c602c118590a4a81a6a9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/wireless/broadcom/brcm80211/brcmfmac/
+Hello,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+syzbot found the following issue on:
 
-All warnings (new ones prefixed by >>):
+HEAD commit:    59f0c2447e25 Merge tag 'net-5.18-rc4' of git://git.kernel...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=165262fcf00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=71bf5c8488a4e33a
+dashboard link: https://syzkaller.appspot.com/bug?extid=efb5967310cacc5ac63e
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-   In file included from include/linux/kernel.h:29,
-                    from drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c:6:
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c: In function 'brcmf_pcie_parse_otp':
->> drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c:1849:25: warning: format '%ld' expects argument of type 'long int', but argument 2 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
-    1849 |         brcmf_dbg(PCIE, "parse_otp size=%ld\n", size);
-         |                         ^~~~~~~~~~~~~~~~~~~~~~  ~~~~
-         |                                                 |
-         |                                                 size_t {aka unsigned int}
-   include/linux/printk.h:418:25: note: in definition of macro 'printk_index_wrap'
-     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ^~~~
-   include/linux/printk.h:132:17: note: in expansion of macro 'printk'
-     132 |                 printk(fmt, ##__VA_ARGS__);             \
-         |                 ^~~~~~
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/debug.h:96:36: note: in expansion of macro 'no_printk'
-      96 | #define brcmf_dbg(level, fmt, ...) no_printk(fmt, ##__VA_ARGS__)
-         |                                    ^~~~~~~~~
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c:1849:9: note: in expansion of macro 'brcmf_dbg'
-    1849 |         brcmf_dbg(PCIE, "parse_otp size=%ld\n", size);
-         |         ^~~~~~~~~
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c:1849:43: note: format string is defined here
-    1849 |         brcmf_dbg(PCIE, "parse_otp size=%ld\n", size);
-         |                                         ~~^
-         |                                           |
-         |                                           long int
-         |                                         %d
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+efb5967310cacc5ac63e@syzkaller.appspotmail.com
+
+wlan1: Created IBSS using preconfigured BSSID 50:50:50:50:50:50
+wlan1: Creating new IBSS network, BSSID 50:50:50:50:50:50
+=============================
+WARNING: suspicious RCU usage
+5.18.0-rc3-syzkaller-00060-g59f0c2447e25 #0 Not tainted
+-----------------------------
+drivers/net/wireless/mac80211_hwsim.c:2206 suspicious rcu_dereference_check() usage!
+
+other info that might help us debug this:
 
 
-vim +1849 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+rcu_scheduler_active = 2, debug_locks = 1
+4 locks held by kworker/u4:6/3738:
+ #0: ffff8881488a1138 ((wq_completion)phy37){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff8881488a1138 ((wq_completion)phy37){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff8881488a1138 ((wq_completion)phy37){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
+ #0: ffff8881488a1138 ((wq_completion)phy37){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:636 [inline]
+ #0: ffff8881488a1138 ((wq_completion)phy37){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
+ #0: ffff8881488a1138 ((wq_completion)phy37){+.+.}-{0:0}, at: process_one_work+0x87a/0x1610 kernel/workqueue.c:2260
+ #1: ffffc90003fbfda8 ((work_completion)(&sdata->work)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610 kernel/workqueue.c:2264
+ #2: ffff888080bf0dc0 (&wdev->mtx){+.+.}-{3:3}, at: sdata_lock net/mac80211/ieee80211_i.h:1039 [inline]
+ #2: ffff888080bf0dc0 (&wdev->mtx){+.+.}-{3:3}, at: ieee80211_ibss_rx_queued_mgmt+0x101/0x33b0 net/mac80211/ibss.c:1628
+ #3: ffff8880430e9870 (&local->sta_mtx){+.+.}-{3:3}, at: sta_info_insert_rcu+0xc1/0x2b50 net/mac80211/sta_info.c:726
 
-  1842	
-  1843	static int
-  1844	brcmf_pcie_parse_otp(struct brcmf_pciedev_info *devinfo, u8 *otp, size_t size)
-  1845	{
-  1846		int p = 0;
-  1847		int ret = -EINVAL;
-  1848	
-> 1849		brcmf_dbg(PCIE, "parse_otp size=%ld\n", size);
-  1850	
-  1851		while (p < (size - 1)) {
-  1852			u8 type = otp[p];
-  1853			u8 length = otp[p + 1];
-  1854	
-  1855			if (type == 0)
-  1856				break;
-  1857	
-  1858			if ((p + 2 + length) > size)
-  1859				break;
-  1860	
-  1861			switch (type) {
-  1862			case BRCMF_OTP_SYS_VENDOR:
-  1863				brcmf_dbg(PCIE, "OTP @ 0x%x (%d): SYS_VENDOR\n",
-  1864					  p, length);
-  1865				ret = brcmf_pcie_parse_otp_sys_vendor(devinfo,
-  1866								      &otp[p + 2],
-  1867								      length);
-  1868				break;
-  1869			case BRCMF_OTP_BRCM_CIS:
-  1870				brcmf_dbg(PCIE, "OTP @ 0x%x (%d): BRCM_CIS\n",
-  1871					  p, length);
-  1872				break;
-  1873			default:
-  1874				brcmf_dbg(PCIE, "OTP @ 0x%x (%d): Unknown type 0x%x\n",
-  1875					  p, length, type);
-  1876				break;
-  1877			}
-  1878	
-  1879			p += 2 + length;
-  1880		}
-  1881	
-  1882		return ret;
-  1883	}
-  1884	
+stack backtrace:
+CPU: 0 PID: 3738 Comm: kworker/u4:6 Not tainted 5.18.0-rc3-syzkaller-00060-g59f0c2447e25 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: phy37 ieee80211_iface_work
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ mac80211_hwsim_sta_rc_update+0x2b8/0x430 drivers/net/wireless/mac80211_hwsim.c:2206
+ mac80211_hwsim_sta_add+0xba/0x170 drivers/net/wireless/mac80211_hwsim.c:2224
+ drv_sta_add net/mac80211/driver-ops.h:465 [inline]
+ drv_sta_state+0x5cf/0x1520 net/mac80211/driver-ops.c:127
+ sta_info_insert_drv_state net/mac80211/sta_info.c:575 [inline]
+ sta_info_insert_finish net/mac80211/sta_info.c:679 [inline]
+ sta_info_insert_rcu+0x14ab/0x2b50 net/mac80211/sta_info.c:736
+ ieee80211_ibss_finish_sta+0x212/0x390 net/mac80211/ibss.c:585
+ ieee80211_ibss_add_sta+0x405/0x740 net/mac80211/ibss.c:643
+ ieee80211_update_sta_info net/mac80211/ibss.c:1027 [inline]
+ ieee80211_rx_bss_info net/mac80211/ibss.c:1117 [inline]
+ ieee80211_rx_mgmt_probe_beacon net/mac80211/ibss.c:1610 [inline]
+ ieee80211_ibss_rx_queued_mgmt+0x271d/0x33b0 net/mac80211/ibss.c:1639
+ ieee80211_iface_process_skb net/mac80211/iface.c:1527 [inline]
+ ieee80211_iface_work+0xa6f/0xd10 net/mac80211/iface.c:1581
+ process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+ </TASK>
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

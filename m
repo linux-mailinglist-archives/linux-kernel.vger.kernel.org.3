@@ -2,202 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B0EC50F0BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D6350F0C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245010AbiDZGOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 02:14:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56684 "EHLO
+        id S244899AbiDZGOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 02:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244963AbiDZGOO (ORCPT
+        with ESMTP id S236853AbiDZGOl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 02:14:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7913B6;
-        Mon, 25 Apr 2022 23:11:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9EED3B818FE;
-        Tue, 26 Apr 2022 06:11:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62CA1C385AC;
-        Tue, 26 Apr 2022 06:10:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650953464;
-        bh=hfNYTM7tCR7XMLe8YNkDfgK4t27yGuoKsqJS1LzijzI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e85e/ugCVVRQZCqy0k0uEuBzNQnCcVx4WIUnqB8C0T6QPCXjnaKf7IO2/aQ70Kljd
-         vlE4dJmT//ZnuuDmcnfIhOT57sUgCI4rjNzURBa9MW8cg4J84Usgk9AUu2dYZFR/+P
-         hOkua1+28HL8BCIBylnlN1u6bKb2qhmrdltoCCIDJmbqxwYWY9pUqfwQpqZJlHSrlb
-         c3JJnANcPzM7wIjCbIMP18/4VwFmH3zWpvcoh2husAGZShb0RGCKuHgbUtchKoP9gq
-         CNMmVG1ZRlp+uAHYK7X2HFON6jui9rVE1nNBwvP42hjrz1Rts6UOYHVHApUZyJLHth
-         937AxW/3WnxlQ==
-Date:   Tue, 26 Apr 2022 09:10:45 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Martin Fernandez <martin.fernandez@eclypsium.com>
-Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
-        gregkh@linuxfoundation.org, rafael@kernel.org,
-        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
-        hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
-        alison.schofield@intel.com, keescook@chromium.org
-Subject: Re: [PATCH v7 1/8] mm/memblock: Tag memblocks with crypto
- capabilities
-Message-ID: <YmeM5fklUssR/74e@kernel.org>
-References: <20220425171526.44925-1-martin.fernandez@eclypsium.com>
- <20220425171526.44925-2-martin.fernandez@eclypsium.com>
+        Tue, 26 Apr 2022 02:14:41 -0400
+Received: from mailgate.ics.forth.gr (mailgate.ics.forth.gr [139.91.1.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93EF63B6
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:11:32 -0700 (PDT)
+Received: from av3.ics.forth.gr (av3in.ics.forth.gr [139.91.1.77])
+        by mailgate.ics.forth.gr (8.15.2/ICS-FORTH/V10-1.8-GATE) with ESMTP id 23Q6BUQN063569
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:11:30 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; d=ics.forth.gr; s=av; c=relaxed/simple;
+        q=dns/txt; i=@ics.forth.gr; t=1650953485; x=1653545485;
+        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=QkE1Bm53YoFRMFRIYyzcyIpaR/FHwI+8u4IHE6YrgQk=;
+        b=Bn8Nat0Jr0al1fnSyc6ee+fYznGR/5OxQVES9XMFGd7YD0M1qaSRLgxgoT39jDL7
+        tHg8KWKzahD+be/338EEbWgttRqSKm8lActLMnZZeu/XBoZCZ0i8rfM1R5OM9iXH
+        dVYkWKte/6Xl6vVroYUiD0mmNaRv6XLGhNPK888pr1w38asp6Vm9N/Ptpylqc5us
+        Hjmw3NuvsINQsq2Ysp4r13a+JNgE79rSe+ySAYcMRBh2xJYAxwh3jxnrsn2HL97p
+        GFUjO4OC5GcFBUrQ/PfN50s3sUvCGMSJsjDZ5t6ItPp1AmNgpOgc7HzcHbPiDd1O
+        Z7u+HmxBv5VY8paLbtXEqg==;
+X-AuditID: 8b5b014d-f2ab27000000641e-d9-62678d0d15b2
+Received: from enigma.ics.forth.gr (enigma.ics.forth.gr [139.91.151.35])
+        by av3.ics.forth.gr (Symantec Messaging Gateway) with SMTP id 57.D0.25630.D0D87626; Tue, 26 Apr 2022 09:11:25 +0300 (EEST)
+X-ICS-AUTH-INFO: Authenticated user: mick at ics.forth.gr
+Message-ID: <8491e0c3-3e6e-325e-0cc1-5b237ce4f9fd@ics.forth.gr>
+Date:   Tue, 26 Apr 2022 09:11:23 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220425171526.44925-2-martin.fernandez@eclypsium.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] RISC-V-fixes: relocate DTB if it's outside memory region
+Content-Language: el-GR
+To:     palmer@dabbelt.com, paul.walmsley@sifive.com, aou@eecs.berkeley.edu
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220322132839.3653682-1-mick@ics.forth.gr>
+From:   Nick Kossifidis <mick@ics.forth.gr>
+In-Reply-To: <20220322132839.3653682-1-mick@ics.forth.gr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrOLMWRmVeSWpSXmKPExsXSHT1dWZe3Nz3J4OkTHYutv2exW1zeNYfN
+        YtvnFjaLl5d7mC3aZvE7sHq8efmSxeNwxxd2j81L6j0uNV9n9/i8SS6ANYrLJiU1J7MstUjf
+        LoErY+4fq4J/ghUNZ58yNjCe5Oti5OSQEDCRmL/tH3MXIxeHkMBRRok9z5qYIRKWEps/vWQB
+        sXkF7CXmbO5jArFZBFQltsxcygQRF5Q4OfMJWI2oQITEsl1TwWxhAV+JSSt3sILYzALiEkfO
+        /wabKSLgLrF68h8miLijxLSzM8DqhQQsJC58fgVWzyagKTH/0kGgOAcHJ9ANLWcqIMrNJLq2
+        djFC2PIS29/OYZ7AKDALyRWzkGybhaRlFpKWBYwsqxgFEsuM9TKTi/XS8otKMvTSizYxgsOa
+        0XcH4+3Nb/UOMTJxMB5ilOBgVhLhnaqaliTEm5JYWZValB9fVJqTWnyIUZqDRUmcl/1ZeJKQ
+        QHpiSWp2ampBahFMlomDU6qBiVPkws2pTb535/RLyE87cpN/b8uX1qRlDhMn84k1+92TXzBh
+        SVH47gmmlSc2pvxWK3x/i3nehL+Xq2zXih7xdGrdv35j0I00szuJqSH/luQuaXrSvvV46l+R
+        4AgrhY5lx2Nif03vLbq6wDr+WW3zhWdhbds7hAp9ff5sivh7YvKF7M5Uvu37Z7nPN/gs9Wj3
+        p9levTtfsaS2uMpmRLctPbVRx0tFbX3EuS8frPcfWiWrHTtf/YCYUNaeOIeNHE9VQi667FZq
+        ubLGLaPkx6EJlfPUsrcE/UwRKDqoa8dz9vsXY332C5y3byRMl9nw6/1Ndn6hlkiWp61HQvyz
+        vh3k3vrR8LhQwt7fbvtr4h/UrFViKc5INNRiLipOBADX9NJW2gIAAA==
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 02:15:19PM -0300, Martin Fernandez wrote:
-> Add the capability to mark regions of the memory memory_type able of
-> hardware memory encryption.
+Hello Palmer,
+
+Any updates on this ?
+
+Regards,
+Nick
+
+On 3/22/22 15:28, Nick Kossifidis wrote:
+> In case the DTB provided by the bootloader/BootROM is before the kernel
+> image or outside /memory, we won't be able to access it through the
+> linear mapping, and get a segfault on setup_arch(). Currently OpenSBI
+> relocates DTB but that's not always the case (e.g. if FW_JUMP_FDT_ADDR
+> is not specified), and it's also not the most portable approach since
+> the default FW_JUMP_FDT_ADDR of the generic platform relocates the DTB
+> at a specific offset that may not be available. To avoid this situation
+> copy DTB so that it's visible through the linear mapping.
 > 
-> Also add the capability to query if all regions of a memory node are
-> able to do hardware memory encryption to call it when initializing the
-> nodes. Warn the user if a node has both encryptable and
-> non-encryptable regions.
-> 
-> Signed-off-by: Martin Fernandez <martin.fernandez@eclypsium.com>
+> Signed-off-by: Nick Kossifidis <mick@ics.forth.gr>
 > ---
->  include/linux/memblock.h |  5 ++++
->  mm/memblock.c            | 62 ++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 67 insertions(+)
+>   arch/riscv/mm/init.c | 21 +++++++++++++++++++--
+>   1 file changed, 19 insertions(+), 2 deletions(-)
 > 
-> diff --git a/include/linux/memblock.h b/include/linux/memblock.h
-> index 50ad19662a32..00c4f1a20335 100644
-> --- a/include/linux/memblock.h
-> +++ b/include/linux/memblock.h
-> @@ -40,6 +40,7 @@ extern unsigned long long max_possible_pfn;
->   * via a driver, and never indicated in the firmware-provided memory map as
->   * system RAM. This corresponds to IORESOURCE_SYSRAM_DRIVER_MANAGED in the
->   * kernel resource tree.
-> + * @MEMBLOCK_CRYPTO_CAPABLE: capable of hardware encryption
->   */
->  enum memblock_flags {
->  	MEMBLOCK_NONE		= 0x0,	/* No special request */
-> @@ -47,6 +48,7 @@ enum memblock_flags {
->  	MEMBLOCK_MIRROR		= 0x2,	/* mirrored region */
->  	MEMBLOCK_NOMAP		= 0x4,	/* don't add to kernel direct mapping */
->  	MEMBLOCK_DRIVER_MANAGED = 0x8,	/* always detected via a driver */
-> +	MEMBLOCK_CRYPTO_CAPABLE = 0x10,	/* capable of hardware encryption */
->  };
->  
->  /**
-> @@ -120,6 +122,9 @@ int memblock_physmem_add(phys_addr_t base, phys_addr_t size);
->  void memblock_trim_memory(phys_addr_t align);
->  bool memblock_overlaps_region(struct memblock_type *type,
->  			      phys_addr_t base, phys_addr_t size);
-> +bool memblock_node_is_crypto_capable(int nid);
-> +int memblock_mark_crypto_capable(phys_addr_t base, phys_addr_t size);
-> +int memblock_clear_crypto_capable(phys_addr_t base, phys_addr_t size);
->  int memblock_mark_hotplug(phys_addr_t base, phys_addr_t size);
->  int memblock_clear_hotplug(phys_addr_t base, phys_addr_t size);
->  int memblock_mark_mirror(phys_addr_t base, phys_addr_t size);
-> diff --git a/mm/memblock.c b/mm/memblock.c
-> index e4f03a6e8e56..fe62f81572e6 100644
-> --- a/mm/memblock.c
-> +++ b/mm/memblock.c
-> @@ -191,6 +191,40 @@ bool __init_memblock memblock_overlaps_region(struct memblock_type *type,
->  	return i < type->cnt;
->  }
->  
-> +/**
-> + * memblock_node_is_crypto_capable - get if whole node is capable
-> + * of encryption
-> + * @nid: number of node
-> + *
-> + * Iterate over all memory memblock_type and find if all regions under
-> + * node @nid are capable of hardware encryption.
-> + *
-> + * Return:
-> + * true if every region in memory memblock_type is capable of
-
-I'd s/in memory memblock_type/in @nid
-
-> + * encryption, false otherwise.
-> + */
-> +bool __init_memblock memblock_node_is_crypto_capable(int nid)
-> +{
-> +	struct memblock_region *region;
-> +	int crypto_capables = 0;
-> +	int not_crypto_capables = 0;
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index 0d588032d..697a9aed4 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -206,8 +206,25 @@ static void __init setup_bootmem(void)
+>   	 * early_init_fdt_reserve_self() since __pa() does
+>   	 * not work for DTB pointers that are fixmap addresses
+>   	 */
+> -	if (!IS_ENABLED(CONFIG_BUILTIN_DTB))
+> -		memblock_reserve(dtb_early_pa, fdt_totalsize(dtb_early_va));
+> +	if (!IS_ENABLED(CONFIG_BUILTIN_DTB)) {
+> +		/*
+> +		 * In case the DTB is not located in a memory region we won't
+> +		 * be able to locate it later on via the linear mapping and
+> +		 * get a segfault when accessing it via __va(dtb_early_pa).
+> +		 * To avoid this situation copy DTB to a memory region.
+> +		 * Note that memblock_phys_alloc will also reserve DTB region.
+> +		 */
+> +		if (!memblock_is_memory(dtb_early_pa)) {
+> +			size_t fdt_size = fdt_totalsize(dtb_early_va);
+> +			phys_addr_t new_dtb_early_pa = memblock_phys_alloc(fdt_size, PAGE_SIZE);
+> +			void *new_dtb_early_va = early_memremap(new_dtb_early_pa, fdt_size);
 > +
-> +	for_each_mem_region(region) {
-> +		if (memblock_get_region_node(region) == nid) {
-> +			if (region->flags & MEMBLOCK_CRYPTO_CAPABLE)
-> +				crypto_capables++;
-> +			else
-> +				not_crypto_capables++;
-> +		}
+> +			memcpy(new_dtb_early_va, dtb_early_va, fdt_size);
+> +			early_memunmap(new_dtb_early_va, fdt_size);
+> +			_dtb_early_pa = new_dtb_early_pa;
+> +		} else
+> +			memblock_reserve(dtb_early_pa, fdt_totalsize(dtb_early_va));
 > +	}
-> +
-> +	if (crypto_capables > 0 && not_crypto_capables > 0)
-> +		pr_warn("Node %d has %d regions that are encryptable and %d regions that aren't",
-> +			nid, not_crypto_capables, crypto_capables);
-> +
-> +	return not_crypto_capables == 0;
+>   
+>   	early_init_fdt_scan_reserved_mem();
+>   	dma_contiguous_reserve(dma32_phys_limit);
 
-This will return true for memoryless nodes as well. Do you mean to consider
-them as capable of encryption?
-
-> +}
-> +
->  /**
->   * __memblock_find_range_bottom_up - find free area utility in bottom-up
->   * @start: start of candidate range
-> @@ -891,6 +925,34 @@ static int __init_memblock memblock_setclr_flag(phys_addr_t base,
->  	return 0;
->  }
->  
-> +/**
-> + * memblock_mark_crypto_capable - Mark memory regions capable of hardware
-> + * encryption with flag MEMBLOCK_CRYPTO_CAPABLE.
-> + * @base: the base phys addr of the region
-> + * @size: the size of the region
-> + *
-> + * Return: 0 on success, -errno on failure.
-> + */
-> +int __init_memblock memblock_mark_crypto_capable(phys_addr_t base,
-> +						 phys_addr_t size)
-> +{
-> +	return memblock_setclr_flag(base, size, 1, MEMBLOCK_CRYPTO_CAPABLE);
-> +}
-> +
-> +/**
-> + * memblock_clear_crypto_capable - Clear flag MEMBLOCK_CRYPTO for a
-> + * specified region.
-> + * @base: the base phys addr of the region
-> + * @size: the size of the region
-> + *
-> + * Return: 0 on success, -errno on failure.
-> + */
-> +int __init_memblock memblock_clear_crypto_capable(phys_addr_t base,
-> +						  phys_addr_t size)
-> +{
-> +	return memblock_setclr_flag(base, size, 0, MEMBLOCK_CRYPTO_CAPABLE);
-> +}
-> +
->  /**
->   * memblock_mark_hotplug - Mark hotpluggable memory with flag MEMBLOCK_HOTPLUG.
->   * @base: the base phys addr of the region
-> -- 
-> 2.30.2
-> 
-
--- 
-Sincerely yours,
-Mike.

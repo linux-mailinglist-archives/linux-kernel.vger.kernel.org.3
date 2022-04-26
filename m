@@ -2,76 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 755C550F359
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA22050F368
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344527AbiDZIJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:09:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52950 "EHLO
+        id S1344424AbiDZIKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344473AbiDZIJN (ORCPT
+        with ESMTP id S233430AbiDZIKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:09:13 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28D032EC6;
-        Tue, 26 Apr 2022 01:06:01 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-e5ca5c580fso18623636fac.3;
-        Tue, 26 Apr 2022 01:06:01 -0700 (PDT)
+        Tue, 26 Apr 2022 04:10:45 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72DCB47397;
+        Tue, 26 Apr 2022 01:07:37 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id iq10so4256538pjb.0;
+        Tue, 26 Apr 2022 01:07:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Yx4DJC6j8cvTM/tBpp7NRdOzF7TbB+jWhGor2L5SzGU=;
-        b=RALJ0CRBIAAlVZ8KxS1r/ZFduX+cJd2JNfmZN2hRGoVJSH+I3fMFY3KYoVp0LqTsyt
-         3F7mRevxbKUIVX4MOxJ+41XCxFOrL9VsUM+IfpBn2+WJsoRf+qUWJ1VlvyL7NKTso5ps
-         bJLuvL4eBhUcfa8xUqjW77dqBZsVkwA2dHCQThZ7RYpKFVYnHvb0jTzK6onEGToqpDhx
-         EGliTGBfvaeXp16Wl4a7lgWpY7SXdgo09XNl1ZNZyLMTxCkEG2Roumt0urgM65yxETvF
-         rQAfEdVCVDOln34gStg3J7uTa5HKhnpFkEMGNqJeXfA3ZPmMGdEfyphkG+md+xTPFErF
-         7v5A==
+        bh=tN8Fv7V1wSS9FUUkH5yob4wTatJoDf357KJgbMmap0U=;
+        b=kIR825Y3M66dLlpjb0POyvAd4SCCglXnT1WGVNN/3Vao+7fnolZa+kG7I5xTCo65UP
+         y6t2Kk1VBhPOiqmLl8qNRa3I/jaWbP9L7Kl3Y7qOaHOJhi3LB3KdJAl7RszuqoTawZOc
+         e3A1JANOBLme/34V4yPT7MtGFtlmpoW8QoVBGL1WoRYYtiTRuYptKyULa3016iOZ2m5o
+         k2LrTnVr18+dwKm75p2TqcAVpDwI3tuUBITG1bbelFSXxGHLJJ9SQ6Tmn0zOB9nph7Ij
+         0u6jS4ist5xAScrKsaTb0zZgZUto4TRXl22pGNC1O/wXAJgdCLDQk5GXrY9h7NXZIfu2
+         GXkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Yx4DJC6j8cvTM/tBpp7NRdOzF7TbB+jWhGor2L5SzGU=;
-        b=O4BmVAJeCZuiro5+hb22ApyZVFHgkSdGS+mXwFDNEwLwBKex9wmDD2xuCrEr81rXWD
-         FIZNUsDLUpG7mdq8JOsjqMkpR3mrFR8TTquMO4lGUHkiXbkMk/R4WVIWW4+1BmF8IsWi
-         HELWd2MiGCkqrGEgITiD+NP34tgZeOem2I8EhrVGZ1/uzUb5x4mp3fHY7MtxYhNDd5yR
-         GNydvQmC11QZ9ZKcDUkH+1ebM46NxOzAPN8/Ai0o+sX1zlwHyvXCdpXWz2X/fqQGjNRS
-         LKYCHZVerx1xqSwBbc0zL/QsKj+jdMy9BbghmtisZb7myTY4g3dlT6kXhb0xqYxd6gjY
-         NaUA==
-X-Gm-Message-State: AOAM531tGOAm7Hx0eJdDsTuKWgqvx/Fs6YtthdK1l4iH7j1CYATf8Squ
-        9UsOOieCj78kPhQvytQ7Egg=
-X-Google-Smtp-Source: ABdhPJxwGxMsRqyvVxDkD1OzPzbtSteHeUo2dmlJwNpwTWBve7JPcd/WUPfrfn95tvyToisoD77sUw==
-X-Received: by 2002:a05:6870:42c7:b0:e9:11d2:b259 with SMTP id z7-20020a05687042c700b000e911d2b259mr6834771oah.272.1650960361120;
-        Tue, 26 Apr 2022 01:06:01 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d21-20020a4a3c15000000b0033364bde9besm5372819ooa.32.2022.04.26.01.05.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 01:06:00 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f55c7bba-2096-c392-d81f-b04d44ea1175@roeck-us.net>
-Date:   Tue, 26 Apr 2022 01:05:58 -0700
+        bh=tN8Fv7V1wSS9FUUkH5yob4wTatJoDf357KJgbMmap0U=;
+        b=TgqaLDcRVELCnamFOGm+1vd+GJHgjVJsAcY40RMOX0wOqaTvtSyrrm/KN9GzOxjYbj
+         ErP6EqtzyuhU0rB0kjDFUAjErXKnZ6S2QhlK/Qe9iRf9o04HIqssHP/7VNYTdyp5GFpx
+         upQD+SPkUc7UGehkVgnO6nP5m9n9SI0drps0EKaO1O3YI/N6egWz416v4PRUlIrY1X4P
+         841II4bbniJSpisqVtFH0Y/8m4Gz2XUS4yEIS4dwzlC+hiaRoaUxIjHC1JegVRcUOYqX
+         2H6WU6nhcU6vt6Miz1nFFMG1sk9hmSzZa9gG0yjgYGYw4CXMua4Ia+hGT4e+ZhED8chL
+         OtuA==
+X-Gm-Message-State: AOAM5338P8ccXm1nfBsh4trxmVvBgLPcWNJnFE2cZ+8eWLmyeW/VcCf9
+        MvLpndzbkvAKaMSmNXIiVvpC1YuSZdA=
+X-Google-Smtp-Source: ABdhPJyLfboJtLfSoNg3k0eUH0TWjVm0hvDhFtS1Pw6ROm4Ld96n1h0WtefZDR8U+9ifQik9hFC9XQ==
+X-Received: by 2002:a17:902:ea0b:b0:15c:fbe1:2cdb with SMTP id s11-20020a170902ea0b00b0015cfbe12cdbmr12300810plg.126.1650960456930;
+        Tue, 26 Apr 2022 01:07:36 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.119])
+        by smtp.gmail.com with ESMTPSA id l4-20020a056a0016c400b004f79504ef9csm15134951pfc.3.2022.04.26.01.07.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 01:07:36 -0700 (PDT)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     kuba@kernel.org
+Cc:     rostedt@goodmis.org, mingo@redhat.com, davem@davemloft.net,
+        yoshfuji@linux-ipv6.org, dsahern@kernel.org, pabeni@redhat.com,
+        benbjiang@tencent.com, flyingpeng@tencent.com,
+        imagedong@tencent.com, edumazet@google.com, kafai@fb.com,
+        talalahmad@google.com, keescook@chromium.org,
+        mengensun@tencent.com, dongli.zhang@oracle.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH net-next 0/2] net: tcp: add skb drop reasons to connect request
+Date:   Tue, 26 Apr 2022 16:07:07 +0800
+Message-Id: <20220426080709.6504-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v4 1/4] watchdog: wdat_wdg: Using the existed function to
- check parameter timeout
-Content-Language: en-US
-To:     Liu Xinpeng <liuxp11@chinatelecom.cn>, wim@linux-watchdog.org,
-        tzungbi@kernel.org
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1650957029-910-1-git-send-email-liuxp11@chinatelecom.cn>
- <1650957029-910-2-git-send-email-liuxp11@chinatelecom.cn>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <1650957029-910-2-git-send-email-liuxp11@chinatelecom.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,59 +74,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/26/22 00:10, Liu Xinpeng wrote:
-> Context: If max_hw_heartbeat_ms is provided, the configured maximum timeout
+From: Menglong Dong <imagedong@tencent.com>
 
-Drop "Context:".
+Seems now the reasons of skb drop in TCP layer are almost supported,
+except the path of connect requesting. So let's just finish it.
 
-Also, in the subject, it should be "existing".
+The TCP connect requesting is processed by
+'inet_csk(sk)->icsk_af_ops->conn_request()'. Yeah, it's a function
+pointer, so it's not easy to add function param to it. Luckily, it's
+return value can be reused. For now, 0 means a call of 'consume_skb()'
+and -1 means 'kfree_skb()', with a RESET be send. Therefore, we can
+free skb with 'kfree_skb_reason()' in 'conn_request()' and return 1.
+While 1 is returned, we do nothing outside. This work is done in the
+1th patch.
 
-> is not limited by it. The limit check in this driver therefore doesn't make
-> much sense. Similar, the watchdog core ensures that minimum timeout limits
-> are met if min_hw_heartbeat_ms is set. Using watchdog_timeout_invalid()
-> makes more sense because it takes this into account.
-> 
-> Signed-off-by: Liu Xinpeng <liuxp11@chinatelecom.cn>
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
+And in the 2th patch, skb drop reasons are added to route_req() in
+struct tcp_request_sock_ops by adding a function param to it.
 
-And you really should not make up Reviewed-by: tags. This is completely
-inappropriate.
+Following new skb drop reasons are added:
 
-Guenter
+  SKB_DROP_REASON_LISTENOVERFLOWS
+  SKB_DROP_REASON_TCP_REQQFULLDROP
+  SKB_DROP_REASON_SECURITY
 
-> ---
->   drivers/watchdog/wdat_wdt.c | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/watchdog/wdat_wdt.c b/drivers/watchdog/wdat_wdt.c
-> index 195c8c004b69..9db01d165310 100644
-> --- a/drivers/watchdog/wdat_wdt.c
-> +++ b/drivers/watchdog/wdat_wdt.c
-> @@ -55,6 +55,7 @@ MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
->   		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
->   
->   #define WDAT_DEFAULT_TIMEOUT	30
-> +#define WDAT_MIN_TIMEOUT     1
->   
->   static int timeout = WDAT_DEFAULT_TIMEOUT;
->   module_param(timeout, int, 0);
-> @@ -344,6 +345,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
->   	wdat->period = tbl->timer_period;
->   	wdat->wdd.min_hw_heartbeat_ms = wdat->period * tbl->min_count;
->   	wdat->wdd.max_hw_heartbeat_ms = wdat->period * tbl->max_count;
-> +	wdat->wdd.min_timeout = WDAT_MIN_TIMEOUT;
->   	wdat->stopped_in_sleep = tbl->flags & ACPI_WDAT_STOPPED;
->   	wdat->wdd.info = &wdat_wdt_info;
->   	wdat->wdd.ops = &wdat_wdt_ops;
-> @@ -450,8 +452,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
->   	 * watchdog properly after it has opened the device. In some cases
->   	 * the BIOS default is too short and causes immediate reboot.
->   	 */
-> -	if (timeout * 1000 < wdat->wdd.min_hw_heartbeat_ms ||
-> -	    timeout * 1000 > wdat->wdd.max_hw_heartbeat_ms) {
-> +	if (watchdog_timeout_invalid(&wdat->wdd, timeout)) {
->   		dev_warn(dev, "Invalid timeout %d given, using %d\n",
->   			 timeout, WDAT_DEFAULT_TIMEOUT);
->   		timeout = WDAT_DEFAULT_TIMEOUT;
+Menglong Dong (2):
+  net: add skb drop reasons to inet connect request
+  net: tcp: add skb drop reasons to route_req()
+
+ include/linux/skbuff.h     |  5 +++++
+ include/net/tcp.h          |  3 ++-
+ include/trace/events/skb.h |  3 +++
+ net/dccp/input.c           | 12 +++++-------
+ net/ipv4/tcp_input.c       | 23 ++++++++++++++---------
+ net/ipv4/tcp_ipv4.c        | 17 +++++++++++++----
+ net/ipv6/tcp_ipv6.c        | 14 +++++++++++---
+ net/mptcp/subflow.c        | 10 ++++++----
+ 8 files changed, 59 insertions(+), 28 deletions(-)
+
+-- 
+2.36.0
 

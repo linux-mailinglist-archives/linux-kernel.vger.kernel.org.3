@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EFD450F5B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:54:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0798F50F403
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346454AbiDZIpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:45:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
+        id S1344857AbiDZIbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:31:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345470AbiDZIjJ (ORCPT
+        with ESMTP id S1344890AbiDZI3D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:39:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6E213BD4D;
-        Tue, 26 Apr 2022 01:29:52 -0700 (PDT)
+        Tue, 26 Apr 2022 04:29:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DA642A1C;
+        Tue, 26 Apr 2022 01:24:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D7D06179E;
-        Tue, 26 Apr 2022 08:29:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AA4CC385A4;
-        Tue, 26 Apr 2022 08:29:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8F3C61778;
+        Tue, 26 Apr 2022 08:24:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E651DC385A4;
+        Tue, 26 Apr 2022 08:24:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961791;
-        bh=/wgBA+hpXo+XQmSZi+TUIb/xyayLMsJe0/EHsoAHXsU=;
+        s=korg; t=1650961465;
+        bh=Cg6uVNnAnKhZwmZtm1NgSHIhtNMaNG4XByu/JiDv5a0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=izku0X6LoNJrvcnxRKOM7FX6eOpdN+kp1V05rl2poJfwg5pPvoQikxr5OgaZlBP30
-         bc49b7c9BPGco2v9J+uID0y86flgyKB0+0ySyT032wLZxhw76vzGtmY9/Pq/yncq+r
-         OG4VvEY7+u8cjApWhtzP5A71WygY0DX/W8MwipTM=
+        b=rB3RqsrhHu/GF0SrFAXEUrkTi3HQ0woM8pfCdLYsPrle3T6D0gjdTER4/D+tfHuh5
+         EbTrZnz0sBdk6x32z737MED5yqIDOUsNxgtlTYPLrxjWKLAY43GKHhWtGU1AmKVd2A
+         j6AvXnshuuvN8s1Brh0jJKgsd4M4j/wNmy2cUSA8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Dragos-Marian Panait <dragos.panait@windriver.com>
-Subject: [PATCH 5.4 04/62] can: usb_8dev: usb_8dev_start_xmit(): fix double dev_kfree_skb() in error path
+        stable@vger.kernel.org, Xiongwei Song <sxwjean@gmail.com>,
+        Arthur Marsh <arthur.marsh@internode.on.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Khem Raj <raj.khem@gmail.com>
+Subject: [PATCH 4.14 02/43] mm: page_alloc: fix building error on -Werror=array-compare
 Date:   Tue, 26 Apr 2022 10:20:44 +0200
-Message-Id: <20220426081737.348112880@linuxfoundation.org>
+Message-Id: <20220426081734.585462414@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
-References: <20220426081737.209637816@linuxfoundation.org>
+In-Reply-To: <20220426081734.509314186@linuxfoundation.org>
+References: <20220426081734.509314186@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,71 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+From: Xiongwei Song <sxwjean@gmail.com>
 
-commit 3d3925ff6433f98992685a9679613a2cc97f3ce2 upstream.
+commit ca831f29f8f25c97182e726429b38c0802200c8f upstream.
 
-There is no need to call dev_kfree_skb() when usb_submit_urb() fails
-because can_put_echo_skb() deletes original skb and
-can_free_echo_skb() deletes the cloned skb.
+Arthur Marsh reported we would hit the error below when building kernel
+with gcc-12:
 
-Fixes: 0024d8ad1639 ("can: usb_8dev: Add support for USB2CAN interface from 8 devices")
-Link: https://lore.kernel.org/all/20220311080614.45229-1-hbh25y@gmail.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-[DP: adjusted params of can_free_echo_skb() for 5.4 stable]
-Signed-off-by: Dragos-Marian Panait <dragos.panait@windriver.com>
+  CC      mm/page_alloc.o
+  mm/page_alloc.c: In function `mem_init_print_info':
+  mm/page_alloc.c:8173:27: error: comparison between two arrays [-Werror=array-compare]
+   8173 |                 if (start <= pos && pos < end && size > adj) \
+        |
+
+In C++20, the comparision between arrays should be warned.
+
+Link: https://lkml.kernel.org/r/20211125130928.32465-1-sxwjean@me.com
+Signed-off-by: Xiongwei Song <sxwjean@gmail.com>
+Reported-by: Arthur Marsh <arthur.marsh@internode.on.net>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Khem Raj <raj.khem@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/can/usb/usb_8dev.c |   30 ++++++++++++++----------------
- 1 file changed, 14 insertions(+), 16 deletions(-)
+ mm/page_alloc.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/can/usb/usb_8dev.c
-+++ b/drivers/net/can/usb/usb_8dev.c
-@@ -670,9 +670,20 @@ static netdev_tx_t usb_8dev_start_xmit(s
- 	atomic_inc(&priv->active_tx_urbs);
- 
- 	err = usb_submit_urb(urb, GFP_ATOMIC);
--	if (unlikely(err))
--		goto failed;
--	else if (atomic_read(&priv->active_tx_urbs) >= MAX_TX_URBS)
-+	if (unlikely(err)) {
-+		can_free_echo_skb(netdev, context->echo_index);
-+
-+		usb_unanchor_urb(urb);
-+		usb_free_coherent(priv->udev, size, buf, urb->transfer_dma);
-+
-+		atomic_dec(&priv->active_tx_urbs);
-+
-+		if (err == -ENODEV)
-+			netif_device_detach(netdev);
-+		else
-+			netdev_warn(netdev, "failed tx_urb %d\n", err);
-+		stats->tx_dropped++;
-+	} else if (atomic_read(&priv->active_tx_urbs) >= MAX_TX_URBS)
- 		/* Slow down tx path */
- 		netif_stop_queue(netdev);
- 
-@@ -691,19 +702,6 @@ nofreecontext:
- 
- 	return NETDEV_TX_BUSY;
- 
--failed:
--	can_free_echo_skb(netdev, context->echo_index);
--
--	usb_unanchor_urb(urb);
--	usb_free_coherent(priv->udev, size, buf, urb->transfer_dma);
--
--	atomic_dec(&priv->active_tx_urbs);
--
--	if (err == -ENODEV)
--		netif_device_detach(netdev);
--	else
--		netdev_warn(netdev, "failed tx_urb %d\n", err);
--
- nomembuf:
- 	usb_free_urb(urb);
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -6737,7 +6737,7 @@ void __init mem_init_print_info(const ch
+ 	 */
+ #define adj_init_size(start, end, size, pos, adj) \
+ 	do { \
+-		if (start <= pos && pos < end && size > adj) \
++		if (&start[0] <= &pos[0] && &pos[0] < &end[0] && size > adj) \
+ 			size -= adj; \
+ 	} while (0)
  
 
 

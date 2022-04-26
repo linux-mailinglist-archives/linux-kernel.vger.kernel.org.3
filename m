@@ -2,64 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11BBD510224
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 17:46:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D59F1510227
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 17:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352506AbiDZPtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 11:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38480 "EHLO
+        id S1352514AbiDZPuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 11:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352485AbiDZPts (ORCPT
+        with ESMTP id S1348810AbiDZPuc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 11:49:48 -0400
-Received: from nbd.name (nbd.name [IPv6:2a01:4f8:221:3d45::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB43DAFC2;
-        Tue, 26 Apr 2022 08:46:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-         s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=11sZUzwOjgs+gqwyNHC5h0Ql+65wp5IZuERrTmCmbK4=; b=pG0nlL6azQzK0tOk/EhPcANpAo
-        VJqakP9gUhg8WYAEcFCLAUouzbg0YDBYr3chOxbb+Jp1PbU3TTG7KI6OAS34vhSElE3jViDq+njUS
-        Sa7LT4uI14w9kJKyFd+IJrjxcdPsEvEV7GiwiLhtnbasXwTrLa/uP/gVVv4sZBr4DQBg=;
-Received: from [217.114.218.26] (helo=nf.local)
-        by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <nbd@nbd.name>)
-        id 1njNOe-00013r-7F; Tue, 26 Apr 2022 17:46:36 +0200
-Message-ID: <14c5ad61-370b-bcc9-c41c-45312275a0ff@nbd.name>
-Date:   Tue, 26 Apr 2022 17:46:35 +0200
+        Tue, 26 Apr 2022 11:50:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 261EEDAFC6
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 08:47:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650988043;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xQyfBAK470BkIe91eWxfV625DXXdxAqPEYmtJsl5GSo=;
+        b=a4GxUQx5eU2ubxGuSchFVXEBZ8e8U4uPY9J5ZcPJduLMoYclsOaZzYi8jR/Ox0xmYfjJ7G
+        2wfu6MKagYCAfx1vGufPsPwFbcTpTL00sgBFVP0RS5VQb7nUFgDdt0lOZJjG5uWtGmqecB
+        G9UBXSpWaCt25slbXdinC8jXXa0kguo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-45-UrofruDkPvq1p7pf4e_o-Q-1; Tue, 26 Apr 2022 11:47:19 -0400
+X-MC-Unique: UrofruDkPvq1p7pf4e_o-Q-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5AD258001EA;
+        Tue, 26 Apr 2022 15:47:19 +0000 (UTC)
+Received: from localhost (unknown [10.39.192.48])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0FD6B54F8A1;
+        Tue, 26 Apr 2022 15:47:18 +0000 (UTC)
+From:   Cornelia Huck <cohuck@redhat.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>
+Cc:     Halil Pasic <pasic@linux.ibm.com>, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, sgarzare@redhat.com,
+        eperezma@redhat.com, lulu@redhat.com, tglx@linutronix.de,
+        peterz@infradead.org, paulmck@kernel.org, maz@kernel.org
+Subject: Re: [PATCH V3 6/9] virtio-ccw: implement synchronize_cbs()
+In-Reply-To: <20220425235415-mutt-send-email-mst@kernel.org>
+Organization: Red Hat GmbH
+References: <20220425024418.8415-1-jasowang@redhat.com>
+ <20220425024418.8415-7-jasowang@redhat.com>
+ <20220425040512-mutt-send-email-mst@kernel.org>
+ <87a6c98rwf.fsf@redhat.com>
+ <20220425095742-mutt-send-email-mst@kernel.org>
+ <20220426042911.544477f9.pasic@linux.ibm.com>
+ <20220425233434-mutt-send-email-mst@kernel.org>
+ <20220425233604-mutt-send-email-mst@kernel.org>
+ <ba0c3977-c471-3275-2327-c5910cdd506a@redhat.com>
+ <20220425235134-mutt-send-email-mst@kernel.org>
+ <20220425235415-mutt-send-email-mst@kernel.org>
+User-Agent: Notmuch/0.34 (https://notmuchmail.org)
+Date:   Tue, 26 Apr 2022 17:47:17 +0200
+Message-ID: <87o80n7soq.fsf@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.1
-Subject: Re: [PATCH -next] clk: en7523: fix wrong pointer check in
- en7523_clk_probe()
-Content-Language: en-US
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com
-References: <20220426131539.388382-1-yangyingliang@huawei.com>
-From:   Felix Fietkau <nbd@nbd.name>
-In-Reply-To: <20220426131539.388382-1-yangyingliang@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.04.22 15:15, Yang Yingliang wrote:
-> Check the real return value of devm_platform_ioremap_resource()
-> in en7523_clk_probe().
-> 
-> Fixes: 1e6273179190 ("clk: en7523: Add clock driver for Airoha EN7523 SoC")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+On Mon, Apr 25 2022, "Michael S. Tsirkin" <mst@redhat.com> wrote:
 
-Acked-by: Felix Fietkau <nbd@nbd.name>
+> On Mon, Apr 25, 2022 at 11:53:24PM -0400, Michael S. Tsirkin wrote:
+>> On Tue, Apr 26, 2022 at 11:42:45AM +0800, Jason Wang wrote:
+>> >=20
+>> > =E5=9C=A8 2022/4/26 11:38, Michael S. Tsirkin =E5=86=99=E9=81=93:
+>> > > On Mon, Apr 25, 2022 at 11:35:41PM -0400, Michael S. Tsirkin wrote:
+>> > > > On Tue, Apr 26, 2022 at 04:29:11AM +0200, Halil Pasic wrote:
+>> > > > > On Mon, 25 Apr 2022 09:59:55 -0400
+>> > > > > "Michael S. Tsirkin" <mst@redhat.com> wrote:
+>> > > > >=20
+>> > > > > > On Mon, Apr 25, 2022 at 10:54:24AM +0200, Cornelia Huck wrote:
+>> > > > > > > On Mon, Apr 25 2022, "Michael S. Tsirkin" <mst@redhat.com> w=
+rote:
+>> > > > > > > > On Mon, Apr 25, 2022 at 10:44:15AM +0800, Jason Wang wrote:
+>> > > > > > > > > This patch tries to implement the synchronize_cbs() for =
+ccw. For the
+>> > > > > > > > > vring_interrupt() that is called via virtio_airq_handler=
+(), the
+>> > > > > > > > > synchronization is simply done via the airq_info's lock.=
+ For the
+>> > > > > > > > > vring_interrupt() that is called via virtio_ccw_int_hand=
+ler(), a per
+>> > > > > > > > > device spinlock for irq is introduced ans used in the sy=
+nchronization
+>> > > > > > > > > method.
+>> > > > > > > > >=20
+>> > > > > > > > > Cc: Thomas Gleixner <tglx@linutronix.de>
+>> > > > > > > > > Cc: Peter Zijlstra <peterz@infradead.org>
+>> > > > > > > > > Cc: "Paul E. McKenney" <paulmck@kernel.org>
+>> > > > > > > > > Cc: Marc Zyngier <maz@kernel.org>
+>> > > > > > > > > Cc: Halil Pasic <pasic@linux.ibm.com>
+>> > > > > > > > > Cc: Cornelia Huck <cohuck@redhat.com>
+>> > > > > > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
+>> > > > > > > >=20
+>> > > > > > > > This is the only one that is giving me pause. Halil, Corne=
+lia,
+>> > > > > > > > should we be concerned about the performance impact here?
+>> > > > > > > > Any chance it can be tested?
+>> > > > > > > We can have a bunch of devices using the same airq structure=
+, and the
+>> > > > > > > sync cb creates a choke point, same as registering/unregiste=
+ring.
+>> > > > > > BTW can callbacks for multiple VQs run on multiple CPUs at the=
+ moment?
+>> > > > > I'm not sure I understand the question.
+>> > > > >=20
+>> > > > > I do think we can have multiple CPUs that are executing some por=
+tion of
+>> > > > > virtio_ccw_int_handler(). So I guess the answer is yes. Connie w=
+hat do you think?
+>> > > > >=20
+>> > > > > On the other hand we could also end up serializing synchronize_c=
+bs()
+>> > > > > calls for different devices if they happen to use the same airq_=
+info. But
+>> > > > > this probably was not your question
+>> > > >=20
+>> > > > I am less concerned about  synchronize_cbs being slow and more abo=
+ut
+>> > > > the slowdown in interrupt processing itself.
+>> > > >=20
+>> > > > > > this patch serializes them on a spinlock.
+>> > > > > >=20
+>> > > > > Those could then pile up on the newly introduced spinlock.
+
+How bad would that be in practice? IIUC, we hit on the spinlock when
+- doing synchronize_cbs (should be rare)
+- processing queue interrupts for devices using per-device indicators
+  (which is the non-preferred path, which I would basically only expect
+  when running on an ancient or non-standard hypervisor)
+- configuration change interrupts (should be rare)
+- during setup, reset, etc. (should not be a concern)
+
+>> > > > >=20
+>> > > > > Regards,
+>> > > > > Halil
+>> > > > Hmm yea ... not good.
+>> > > Is there any other way to synchronize with all callbacks?
+>> >=20
+>> >=20
+>> > Maybe using rwlock as airq handler?
+>> >=20
+>> > Thanks
+>> >=20
+>>=20
+>> rwlock is still a shared cacheline bouncing between CPUs and
+>> a bunch of ordering instructions.
+>> Maybe something per-cpu + some IPIs to run things on all CPUs instead?
+>
+> ... and I think classic and device interrupts are different enough
+> here ...
+
+You mean classic (per-device) and adapter interrupts, right?
+

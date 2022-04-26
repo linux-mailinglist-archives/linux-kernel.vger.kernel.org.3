@@ -2,122 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB2A0510AF7
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 23:07:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 045B2510AF8
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 23:08:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355248AbiDZVKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 17:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32926 "EHLO
+        id S1355254AbiDZVLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 17:11:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243506AbiDZVKq (ORCPT
+        with ESMTP id S243506AbiDZVLO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 17:10:46 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C4C6D4D9;
-        Tue, 26 Apr 2022 14:07:36 -0700 (PDT)
-Received: from mail-yb1-f174.google.com ([209.85.219.174]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1M5g68-1nmBA42FC6-007AW5; Tue, 26 Apr 2022 23:07:34 +0200
-Received: by mail-yb1-f174.google.com with SMTP id e12so6387048ybc.11;
-        Tue, 26 Apr 2022 14:07:34 -0700 (PDT)
-X-Gm-Message-State: AOAM5333hHcrAqr3ltIOI0nhglaWifkix2IIqdobSkfTn7jp3ihX4Una
-        qmLcIpOUk0k5cHbyt9vD8CC72sFWsGJs1fBSZZQ=
-X-Google-Smtp-Source: ABdhPJxSSDDOtEn7aGJKzNZ9mnCcpZOReFbUpWu56qgp9Lnx/3jQsTHsY7svsF5iLlzz6Yj5mPVQ8TSE4yoAsZQQ/cU=
-X-Received: by 2002:a25:31c2:0:b0:641:660f:230f with SMTP id
- x185-20020a2531c2000000b00641660f230fmr22931175ybx.472.1651007253244; Tue, 26
- Apr 2022 14:07:33 -0700 (PDT)
+        Tue, 26 Apr 2022 17:11:14 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE4A6D4F5
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 14:08:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651007285; x=1682543285;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=L2aiClk+1ighNnSdgTpBPizL0Y+boQZg3WeLjQ9uEkk=;
+  b=oiAiXptJfcklIKNWjdxKeSttUNybZSHHpTfs87Q61/zIYIQo90lj/GFX
+   DNex1lzSVp9zDsXUNOKFgaEgFJq+Xv+ghI/bZ5JZXiRFhilUUWMSrdNGy
+   Ybvhyb8udWKeoXwqIt0WN1wM6VFw/qpTKjlW7OD54gsMHAumdxIHdyqpE
+   0=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 26 Apr 2022 14:08:05 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 14:08:05 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 26 Apr 2022 14:08:04 -0700
+Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 26 Apr
+ 2022 14:08:03 -0700
+Date:   Tue, 26 Apr 2022 17:08:01 -0400
+From:   Qian Cai <quic_qiancai@quicinc.com>
+To:     Zi Yan <ziy@nvidia.com>
+CC:     David Hildenbrand <david@redhat.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Eric Ren <renzhengeek@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Oscar Salvador" <osalvador@suse.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v11 0/6] Use pageblock_order for cma and
+ alloc_contig_range alignment.
+Message-ID: <20220426210801.GA1038@qian>
+References: <20220425143118.2850746-1-zi.yan@sent.com>
+ <20220426201855.GA1014@qian>
+ <B621B4DD-5D11-4F0E-AFF5-F8684AE37E57@nvidia.com>
 MIME-Version: 1.0
-References: <20220426201539.12829-1-sven@svenpeter.dev> <20220426201539.12829-7-sven@svenpeter.dev>
-In-Reply-To: <20220426201539.12829-7-sven@svenpeter.dev>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 26 Apr 2022 23:07:17 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a263ojCtYRec2RwvvcY1H1k7chqXyRhovrWRXh=hFYgfQ@mail.gmail.com>
-Message-ID: <CAK8P3a263ojCtYRec2RwvvcY1H1k7chqXyRhovrWRXh=hFYgfQ@mail.gmail.com>
-Subject: Re: [PATCH v3 6/6] nvme-apple: Add initial Apple SoC NVMe driver
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Marc Zyngier <maz@kernel.org>,
-        Janne Grunau <j@jannau.net>, DTML <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-nvme@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:arb0CGNHCglXbagvdX5x1MHN00MkpYocjWb0DiOfHRMghEjZSOW
- 8vGc8Y7WJFBr43ppWWkHQ/e/mfviQlRLB/VaOUbeYD9hVmRDqsLS9E3zfztjjEsXZUG671M
- cqybp6QUcfq5S+FDE5+ZR2fTE+S3fgQceTl+vhal9J3upBOKSqEOchhMrTg7rvrqJaq8iQW
- tqFurIqI24z8dWg6tgvXA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:KsJOKjXs5rg=:ynkaV/C4zsaWMdABQ4ptOD
- Dgq1QegXU7HurSbd6ePPRnrdadMDcBXH5u+zHUe9Cx4rtOYUfivFU+K0Irt1EIlGYdL8+M0pE
- lw9wifuTFQijFe82isz5sMdr43wCqElqJq6y4h1QvOgE5zheEZZ5RELLDB0DVtpImpFOUTSW5
- S7F3fgj88t66HWHv+Cx7jbPDeeQ088K1Y3gIjM9TZpyoPbF0ZWXharfisUebUyKatvoAbhf9N
- W0jrovaTHe0LWCdArtp0VHWtWWoxOgMRDTU939nYCkbBoF5dfI0Souoxzk5kGgKbVLSEdjQF1
- BhhHE182Q6rJPm+v9JrgwsAUS368wAqmU8lKiY1x2w+s99GHpLyaSnGWhQWqthFGp4VnZV/bX
- w8qa743WFTjLRb9LZZBbu0dQOuEvFrLeGqHUZBMsHFDHM2upsVgL63NWF4RGtEBVdqFth20bB
- z6pdCPliS+F6iJXQtqkM/1GVJjC9vA+KAuc9X+vjTvTyByakRnGTa60MTydpjCUIuUcrLxJz+
- 5DwiudPOX9SuU8jeapRtF3ZgA1GvQMzpx8KaH/YWECUsWDtV76SKu/ppBDS3GDlJpJkbZ1CKg
- i8vIF0DIVWbgaRnNwQCw5YwVd3r4isvA4I4a759qB4CfDyPrzfToJbw4ijAByS/80SNbPxRt7
- OK0FEPfNU0j+h1SUgswoo+jGQu5/F2yE7W6vFMcndl9hhsKMXDHCnjhVFBxpDfD1Wh/LT8Oqe
- Y/+lizqYh5qs3mbFxYG+0mNSjEnvkb/4WF0WdA2r5HNskHu0BXiuwsOXaNbfyEqK6mAA242rm
- Ta2QTnhXhr7Fpi8upNA232ZRNk+v84lY1XoE82rVCb7381ECVA=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <B621B4DD-5D11-4F0E-AFF5-F8684AE37E57@nvidia.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 10:15 PM Sven Peter <sven@svenpeter.dev> wrote:
->
-> Apple SoCs such as the M1 come with an embedded NVMe controller that
-> is not attached to any PCIe bus. Additionally, it doesn't conform
-> to the NVMe specification and requires a bunch of changes to command
-> submission and IOMMU configuration to work.
->
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+On Tue, Apr 26, 2022 at 04:26:08PM -0400, Zi Yan wrote:
+> Thanks for reporting the issue. Do you have a reproducer I can use to debug the code?
 
-I did not do a detailed review of this again, but the previous version seemed
-mostly fine already.
+Nothing fancy. It just try to remove and add back each memory section.
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+#!/usr/bin/env python3
+# SPDX-License-Identifier: GPL-2.0
 
-One suggestion for a very minor improvement:
+import os
+import re
+import subprocess
 
-> +#ifdef CONFIG_PM_SLEEP
-> +static int apple_nvme_resume(struct device *dev)
-> +{
-...
-> +}
-> +
-> +static const struct dev_pm_ops apple_nvme_pm_ops = {
-> +       .suspend        = apple_nvme_suspend,
-> +       .resume         = apple_nvme_resume,
-> +};
-> +#endif
-> +
-> +static const struct of_device_id apple_nvme_of_match[] = {
-> +       { .compatible = "apple,nvme-ans2" },
-> +       {},
-> +};
-> +MODULE_DEVICE_TABLE(of, apple_nvme_of_match);
-> +
-> +static struct platform_driver apple_nvme_driver = {
-> +       .driver = {
-> +               .name = "nvme-apple",
-> +               .of_match_table = apple_nvme_of_match,
-> +#ifdef CONFIG_PM_SLEEP
-> +               .pm = &apple_nvme_pm_ops,
-> +#endif
-> +       },
 
-You can now use "static DEFINE_SIMPLE_DEV_PM_OPS()" to define
-the pm operations without these #ifdefs.
+def mem_iter():
+    base_dir = '/sys/devices/system/memory/'
+    for curr_dir in os.listdir(base_dir):
+        if re.match(r'memory\d+', curr_dir):
+            yield base_dir + curr_dir
 
-       Arnd
+
+if __name__ == '__main__':
+    print('- Try to remove each memory section and then add it back.')
+    for mem_dir in mem_iter():
+        status = f'{mem_dir}/online'
+        if open(status).read().rstrip() == '1':
+            # This could expectedly fail due to many reasons.
+            section = os.path.basename(mem_dir)
+            print(f'- Try to remove {section}.')
+            proc = subprocess.run([f'echo 0 | sudo tee {status}'], shell=True)
+            if proc.returncode == 0:
+                print(f'- Try to add {section}.')
+                subprocess.check_call([f'echo 1 | sudo tee {status}'], shell=True)
+

@@ -2,119 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9343F50F0E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC98950F0EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245061AbiDZGZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 02:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
+        id S245012AbiDZG3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 02:29:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233942AbiDZGZi (ORCPT
+        with ESMTP id S245163AbiDZG26 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 02:25:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69E81229E3
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:22:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 62A7F612D1
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 06:22:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C050AC385A4
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 06:22:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650954150;
-        bh=GrOAZVVQ/R3qESFmB6K9j+YKkA1RomF1reYz1F8tQ1c=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=vRiwGaJcIYAp4A9L5NVO2Sr01XH/RAu89Cp29Al/eSRhVrFBOGTIIkbUzg5Wx2U8x
-         qgBQ3iWrQKhPcaSgJcv9wvsCK1+h9p9qnZVbgO2c5Vy3kf9wfh/MEFlkZl124BH0hZ
-         z44FeyAQ/jc4pZcbuk3KsJOb9Jh6erVsE9fRhXgkZImJvxb9aXURn5l3LJJYQ4L8Bn
-         gLhRhDGJj3RmiSpWqGUa+en1V5mHSgq2LtgP0Hc7EeWlp8/gOSOOoHD3ev2oSCY2Zu
-         7oOJhr7hrNjjyCkQIUAXZ34bytR2mQHI9XDLl+1IzENXUsisfNcBsRX+RuE6Rw0YXu
-         S+PoKe06X9D0Q==
-Received: by mail-vs1-f52.google.com with SMTP id d2so9495117vsd.12
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:22:30 -0700 (PDT)
-X-Gm-Message-State: AOAM532dXzTRHBBbg3nevwlaPRRbLYFZAXuZE1UxB+jSLterlj3/L4nA
-        v5EnDYJVejfU5p79yMtH+R3ptNhRED3sYCkOQqc=
-X-Google-Smtp-Source: ABdhPJxHM08tDWKEqh3dfn41b7uQsUekJkJTEgUx6ZJGzh9kexwGAqDOrHpx93X8d/uQE0QcgAMW5+M3iuIkTRQgy1M=
-X-Received: by 2002:a05:6102:150f:b0:32c:e4f2:77b4 with SMTP id
- f15-20020a056102150f00b0032ce4f277b4mr442485vsv.51.1650954149754; Mon, 25 Apr
- 2022 23:22:29 -0700 (PDT)
+        Tue, 26 Apr 2022 02:28:58 -0400
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4AF101F9
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:25:51 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VBJqdym_1650954348;
+Received: from 30.236.11.146(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VBJqdym_1650954348)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 26 Apr 2022 14:25:49 +0800
+Message-ID: <82632a98-e7e8-cf04-ea5c-f8c804184af8@linux.alibaba.com>
+Date:   Tue, 26 Apr 2022 14:26:24 +0800
 MIME-Version: 1.0
-References: <20220426015751.88582-1-lihuafei1@huawei.com>
-In-Reply-To: <20220426015751.88582-1-lihuafei1@huawei.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 26 Apr 2022 14:22:18 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTR6hL1DfaGpPqfVwtmCHaVYK1nz_-W-h_mye34UjeeAcg@mail.gmail.com>
-Message-ID: <CAJF2gTR6hL1DfaGpPqfVwtmCHaVYK1nz_-W-h_mye34UjeeAcg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] riscv: ftrace: Fix the comments about the number of
- ftrace instruction
-To:     Li Huafei <lihuafei1@huawei.com>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        David Miller <davem@davemloft.net>, jszhang@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>, liaochang1@huawei.com,
-        =?UTF-8?Q?Patrick_St=C3=A4hlin?= <me@packi.ch>,
-        Pekka Enberg <penberg@kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 2/2] mm: rmap: Move the cache flushing to the correct
+ place for hugetlb PMD sharing
+To:     Mike Kravetz <mike.kravetz@oracle.com>, akpm@linux-foundation.org
+Cc:     almasrymina@google.com, songmuchun@bytedance.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <cover.1650810915.git.baolin.wang@linux.alibaba.com>
+ <f5e3b77c5a4c646e000ffadbf6c3db0531a01795.1650810915.git.baolin.wang@linux.alibaba.com>
+ <064da3bb-5b4b-7332-a722-c5a541128705@oracle.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <064da3bb-5b4b-7332-a722-c5a541128705@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.8 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 9:59 AM Li Huafei <lihuafei1@huawei.com> wrote:
->
-> When DYNAMIC_FTRACE is enabled, we put four instructions in front of the
-> function for ftrace use, not five.
->
-> Signed-off-by: Li Huafei <lihuafei1@huawei.com>
-> ---
->  arch/riscv/kernel/ftrace.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
-> index 4716f4cdc038..63f457650fa4 100644
-> --- a/arch/riscv/kernel/ftrace.c
-> +++ b/arch/riscv/kernel/ftrace.c
-> @@ -73,7 +73,7 @@ static int __ftrace_modify_call(unsigned long hook_pos, unsigned long target,
->  }
->
->  /*
-> - * Put 5 instructions with 16 bytes at the front of function within
-> + * Put 4 instructions with 16 bytes at the front of function within
-Yeah, 5 instructions are for mcount, -fpatchable-function-entry=8
-cause 8 16bit instructions.
-
-Fixes: afc76b8b8011 ("riscv: Using PATCHABLE_FUNCTION_ENTRY instead of MCOUNT")
-
-I recommend just delete "4 instructions with"
-- * Put 5 instructions with 16 bytes at the front of function within
-- * patchable function entry nops' area.
-+ * Put 16 bytes at the front of the function within the patchable
-+ * function entry nops' area.
-
->   * patchable function entry nops' area.
->   *
->   * 0: REG_S  ra, -SZREG(sp)
-> --
-> 2.17.1
->
 
 
--- 
-Best Regards
- Guo Ren
+On 4/26/2022 8:20 AM, Mike Kravetz wrote:
+> On 4/24/22 07:50, Baolin Wang wrote:
+>> The cache level flush will always be first when changing an existing
+>> virtual–>physical mapping to a new value, since this allows us to
+>> properly handle systems whose caches are strict and require a
+>> virtual–>physical translation to exist for a virtual address. So we
+>> should move the cache flushing before huge_pmd_unshare().
+>>
+>> As Muchun pointed out[1], now the architectures whose supporting hugetlb
+>> PMD sharing have no cache flush issues in practice. But I think we
+>> should still follow the cache/TLB flushing rules when changing a valid
+>> virtual address mapping in case of potential issues in future.
+>>
+>> [1] https://lore.kernel.org/all/YmT%2F%2FhuUbFX+KHcy@FVFYT0MHHV2J.usts.net/
+>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>> ---
+>>   mm/rmap.c | 40 ++++++++++++++++++++++------------------
+>>   1 file changed, 22 insertions(+), 18 deletions(-)
+>>
+>> diff --git a/mm/rmap.c b/mm/rmap.c
+>> index 61e63db..81872bb 100644
+>> --- a/mm/rmap.c
+>> +++ b/mm/rmap.c
+>> @@ -1535,15 +1535,16 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
+>>   			 * do this outside rmap routines.
+>>   			 */
+>>   			VM_BUG_ON(!(flags & TTU_RMAP_LOCKED));
+>> +			/*
+>> +			 * huge_pmd_unshare unmapped an entire PMD page.
+> 
+> Perhaps update this comment to say that huge_pmd_unshare 'may' unmap
+> an entire PMD page?
 
-ML: https://lore.kernel.org/linux-csky/
+Sure, will do.
+
+> 
+>> +			 * There is no way of knowing exactly which PMDs may
+>> +			 * be cached for this mm, so we must flush them all.
+>> +			 * start/end were already adjusted above to cover this
+>> +			 * range.
+>> +			 */
+>> +			flush_cache_range(vma, range.start, range.end);
+>> +
+>>   			if (huge_pmd_unshare(mm, vma, &address, pvmw.pte)) {
+>> -				/*
+>> -				 * huge_pmd_unshare unmapped an entire PMD
+>> -				 * page.  There is no way of knowing exactly
+>> -				 * which PMDs may be cached for this mm, so
+>> -				 * we must flush them all.  start/end were
+>> -				 * already adjusted above to cover this range.
+>> -				 */
+>> -				flush_cache_range(vma, range.start, range.end);
+>>   				flush_tlb_range(vma, range.start, range.end);
+>>   				mmu_notifier_invalidate_range(mm, range.start,
+>>   							      range.end);
+>> @@ -1560,13 +1561,14 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
+>>   				page_vma_mapped_walk_done(&pvmw);
+>>   				break;
+>>   			}
+>> +		} else {
+>> +			flush_cache_page(vma, address, pte_pfn(*pvmw.pte));
+> 
+> I know this call to flush_cache_page() existed before your change.  But, when
+> looking at this now I wonder how hugetlb pages are handled?  Are there any
+> versions of flush_cache_page() that take page size into account?
+
+Thanks for reminding. I checked the flush_cache_page() implementation on 
+some architectures (like arm32), they did not consider the hugetlb 
+pages, so I think we may miss flushing the whole cache for hguetlb pages 
+on some architectures.
+
+With this patch, we can mitigate this issue, since we change to use 
+flush_cache_range() to cover the possible range to flush cache for 
+hugetlb pages. Bur for anon hugetlb pages, we should also convert to use
+flush_cache_range() instead. I think we can do this conversion in a 
+separate patch set with checking all the places, where using 
+flush_cache_page() to flush cache for hugetlb pages. How do you think?

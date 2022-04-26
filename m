@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44BEF50FE95
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F167750FE94
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350708AbiDZNPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 09:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43166 "EHLO
+        id S1350795AbiDZNPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 09:15:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350743AbiDZNOe (ORCPT
+        with ESMTP id S1350742AbiDZNOe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 26 Apr 2022 09:14:34 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACCF760AAD;
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A3960AB4;
+        Tue, 26 Apr 2022 06:11:24 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id v64-20020a1cac43000000b0038cfd1b3a6dso1460282wme.5;
         Tue, 26 Apr 2022 06:11:23 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id k36-20020a05600c1ca400b00393f18c8fc5so1494269wms.4;
-        Tue, 26 Apr 2022 06:11:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=fNiY+gnAgGTG9yYAQiBJAjwz/XqTriPSXBVdo6NAMn4=;
-        b=VDdoy/HoT4mP8e2l/VFTsUbHzRKwPkIIs+psTh+HwgFCfX6EWtfwOZLSv1+W7sATra
-         8qnt2U/tWG4BMWPFBBCDFxMJOdLk6vCuHXysVgFVPqbWO3N7RtypyKzjgF7COk3//mnu
-         f5ef79L/qg4nQxInfppnuCYUonP70n96Akj0a8z9Bh3fZAcbI3T9oAIPtBBEVHQz2LY0
-         EZHVg9cDiggo1uvjBIWPq6ElISVGglg1/v99T/g2RFwlUohOTzWfLUJ2oxt4DQGebCw4
-         Ye5hrmIGrLYnREkjE+x4HGY5jEyj7ctKO0eg39E3dbKSuvyxor38ow4AF+TlVlRE5KaF
-         W1dg==
+        bh=VbIqYrl/j/4f2JpJRwKTfog5CMhMNsgfur6sJmAAYyM=;
+        b=hXqzTTps2HVRXHQSYmBwN2XN1rYAupQNRApRyMp0zDmiOZ1aSMIAart17L/C3E5oUb
+         2cqHPJ65BoShl2+SSbrHxQTpiVHUFQVzc0G9WgtTgh6TR+8lrewvVjsOYXffalfAh1Lo
+         AhKGn/So5VWuhfINEeZlYKEZoYJ9R8k+1xxRfPjEKnylgVGNkOgwIrY1bpfu0aCreWYG
+         jXkW4Lq5VKZMsgThNJNyy6tLN+l+7PqVscCKFwWi+duJGWHH8ZBqMRvBsSG/fWkESXUg
+         5Bh68MZuWKh7nKJNXDILYPDfR7DTbYS5jfy6sbuTuExQ75Oo0EfqqYkd49X9Px5kfJ8f
+         ny3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=fNiY+gnAgGTG9yYAQiBJAjwz/XqTriPSXBVdo6NAMn4=;
-        b=qoVTH7X8+fTIIQ8FwCEuQ/N1DZWYOhWGux7yrsFcBUwUsTVQH4ZgE+NwAJFicDJxt+
-         xTuBvF3sRM9ObYmA4sZWcFKBJdAwM/aVnmSO2BFLYikwfVscjItetCO/Axq1Q17nmN7L
-         rkhLMm+dKRiyIUzdfobajsR80oX20kHli6PvCkoPKhoRH3ROZG/Aa/biYfpyilfqinFH
-         agCc9uMxNRnfuRBxh2cL3a7+c/2vFap5t0lk/ifVLSR9BBcM/uitZ2elK0r9FMK5/0fh
-         uOx+bYerkOgsZ9EM74JypLLddsZsAQyt93bJ62GNibX6NEfhdWC6GvAu88gCzlxUf1f6
-         x+jA==
-X-Gm-Message-State: AOAM531/SdS8BFMOJm/ZGqUhUbGbN5yOMzl90fmRIYGn24WPaN6kDcpk
-        yIIGa4hUxm7L7NpkD/TRc9g=
-X-Google-Smtp-Source: ABdhPJxxMjhXSo0DcvSB4cVbQABszdhFsbHtBet/KalIo7ahtC6BdZBf22mBt41Apr2IbCOl062wDQ==
-X-Received: by 2002:a1c:4c05:0:b0:38e:b736:350 with SMTP id z5-20020a1c4c05000000b0038eb7360350mr30757265wmf.65.1650978681505;
-        Tue, 26 Apr 2022 06:11:21 -0700 (PDT)
+        bh=VbIqYrl/j/4f2JpJRwKTfog5CMhMNsgfur6sJmAAYyM=;
+        b=EyaQfLvim7GzkbXC4ry/d97Homs6CqkxfI2uZstGTObm36oka1eKwaF5cpDMP89V+M
+         wICpqfHXGoysRhehlBRF2qk0IADOagS9X/OaLggHp5Ha0o9G5pdzfk76+jqs0i3wbxs5
+         4iqsZOYuvS/JI9I1WvJxY5QwqiaspP2okB6xVU0aG/Qe2VQfqn81gy2cdMQBTwYTTKgd
+         sq+NxGPZfI1rvjdnrHWGjcF6Pu7nhuzRaXmLDVDndGqQxcMtE0ItngEyJbKT+DdWFHt0
+         LXmPXdJSYDLfJBPfmOW4AvLqNRYdbVo7uAiSHtIAn9+RZr4lnH5g8BReoPBlVXVh8hll
+         UhQA==
+X-Gm-Message-State: AOAM5334OqqjHXOiA6rj27zMzxnV8+pfxPFQxT50JQu7ZcsaVABKw/es
+        ZhkyR4YtZ5pvlsbdh301IrA=
+X-Google-Smtp-Source: ABdhPJyJx3p6eMl28pdya7q+rrOr3vzQaeqoVn0kIgN543h8VeoLjAyDSIjI3OLtkLU797eb8wrEHA==
+X-Received: by 2002:a05:600c:3b02:b0:393:e7d4:b660 with SMTP id m2-20020a05600c3b0200b00393e7d4b660mr12637839wms.183.1650978682527;
+        Tue, 26 Apr 2022 06:11:22 -0700 (PDT)
 Received: from poker.lan (static.2-229-210-222.ip198.fastwebnet.it. [2.229.210.222])
-        by smtp.gmail.com with ESMTPSA id h9-20020a05600c350900b00393f01c8f00sm3262910wmq.47.2022.04.26.06.11.20
+        by smtp.gmail.com with ESMTPSA id h9-20020a05600c350900b00393f01c8f00sm3262910wmq.47.2022.04.26.06.11.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 06:11:21 -0700 (PDT)
+        Tue, 26 Apr 2022 06:11:22 -0700 (PDT)
 From:   Andrea Merello <andrea.merello@gmail.com>
 To:     jic23@kernel.org, mchehab+huawei@kernel.org,
         linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -55,9 +55,9 @@ To:     jic23@kernel.org, mchehab+huawei@kernel.org,
 Cc:     lars@metafoo.de, robh+dt@kernel.org, andy.shevchenko@gmail.com,
         matt.ranostay@konsulko.com, ardeleanalex@gmail.com,
         jacopo@jmondi.org, Andrea Merello <andrea.merello@iit.it>
-Subject: [v5 13/14] iio: imu: add BNO055 I2C driver
-Date:   Tue, 26 Apr 2022 15:11:01 +0200
-Message-Id: <20220426131102.23966-14-andrea.merello@gmail.com>
+Subject: [v5 14/14] docs: iio: add documentation for BNO055 driver
+Date:   Tue, 26 Apr 2022 15:11:02 +0200
+Message-Id: <20220426131102.23966-15-andrea.merello@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220426131102.23966-1-andrea.merello@gmail.com>
 References: <20220426131102.23966-1-andrea.merello@gmail.com>
@@ -75,109 +75,82 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrea Merello <andrea.merello@iit.it>
 
-Add an I2C driver for communicating to a BNO055 IMU via I2C bus and enable
-the BNO055 core driver to work in this scenario.
+The bno055 driver is rather complex and have some oddities and not-obvious
+things that worth to document (e.g. calibration files).
 
 Signed-off-by: Andrea Merello <andrea.merello@iit.it>
 ---
- drivers/iio/imu/bno055/Kconfig      | 11 ++++++
- drivers/iio/imu/bno055/Makefile     |  2 +
- drivers/iio/imu/bno055/bno055_i2c.c | 57 +++++++++++++++++++++++++++++
- 3 files changed, 70 insertions(+)
- create mode 100644 drivers/iio/imu/bno055/bno055_i2c.c
+ Documentation/iio/bno055.rst | 50 ++++++++++++++++++++++++++++++++++++
+ Documentation/iio/index.rst  |  2 ++
+ 2 files changed, 52 insertions(+)
+ create mode 100644 Documentation/iio/bno055.rst
 
-diff --git a/drivers/iio/imu/bno055/Kconfig b/drivers/iio/imu/bno055/Kconfig
-index d014b68cd43d..ccf9ea7c50f8 100644
---- a/drivers/iio/imu/bno055/Kconfig
-+++ b/drivers/iio/imu/bno055/Kconfig
-@@ -12,3 +12,14 @@ config BOSCH_BNO055_SERIAL
- 
- 	  This driver can also be built as a module. If so, the module will be
- 	  called bno055_sl.
-+
-+config BOSCH_BNO055_I2C
-+	tristate "Bosch BNO055 attached via I2C bus"
-+	depends on I2C
-+	select REGMAP_I2C
-+	select BOSCH_BNO055_IIO
-+	help
-+	  Enable this to support Bosch BNO055 IMUs attached via I2C bus.
-+
-+	  This driver can also be built as a module. If so, the module will be
-+	  called bno055_i2c.
-diff --git a/drivers/iio/imu/bno055/Makefile b/drivers/iio/imu/bno055/Makefile
-index 212307ce9c08..f0be80accb5b 100644
---- a/drivers/iio/imu/bno055/Makefile
-+++ b/drivers/iio/imu/bno055/Makefile
-@@ -6,3 +6,5 @@ bno055_ser-y := bno055_ser_core.o
- # define_trace.h needs to know how to find our header
- CFLAGS_bno055_ser_trace.o := -I$(src)
- bno055_ser-$(CONFIG_TRACING) += bno055_ser_trace.o
-+
-+obj-$(CONFIG_BOSCH_BNO055_I2C) += bno055_i2c.o
-diff --git a/drivers/iio/imu/bno055/bno055_i2c.c b/drivers/iio/imu/bno055/bno055_i2c.c
+diff --git a/Documentation/iio/bno055.rst b/Documentation/iio/bno055.rst
 new file mode 100644
-index 000000000000..9bb256fdb0d3
+index 000000000000..af21376d7a25
 --- /dev/null
-+++ b/drivers/iio/imu/bno055/bno055_i2c.c
-@@ -0,0 +1,57 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Support for I2C-interfaced Bosch BNO055 IMU.
-+ *
-+ * Copyright (C) 2021-2022 Istituto Italiano di Tecnologia
-+ * Electronic Design Laboratory
-+ * Written by Andrea Merello <andrea.merello@iit.it>
-+ */
++++ b/Documentation/iio/bno055.rst
+@@ -0,0 +1,50 @@
++.. SPDX-License-Identifier: GPL-2.0
++==============================
++BNO055 driver
++==============================
 +
-+#include <linux/i2c.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+#include <linux/regmap.h>
++1. Overview
++===========
 +
-+#include "bno055.h"
++This driver supports Bosch BNO055 IMUs (on both serial and I2C busses).
 +
-+#define BNO055_I2C_XFER_BURST_BREAK_THRESHOLD 3 /* FIXME */
++Accelerometer, magnetometer and gyroscope measures are always provided.
++When "fusion_enable" sysfs attribute is set to 1, orientation (both Euler
++angles and quaternion), linear velocity and gravity vector are also
++provided, but some sensor settings (e.g. low pass filtering and range)
++became locked (the IMU firmware controls them).
 +
-+static int bno055_i2c_probe(struct i2c_client *client)
-+{
-+	struct regmap *regmap;
++This driver supports also IIO buffers.
 +
-+	regmap = devm_regmap_init_i2c(client, &bno055_regmap_config);
-+	if (IS_ERR(regmap))
-+		return dev_err_probe(&client->dev, PTR_ERR(regmap),
-+				     "Unable to init register map");
++2. Calibration
++==============
 +
-+	return bno055_probe(&client->dev, regmap,
-+			    BNO055_I2C_XFER_BURST_BREAK_THRESHOLD, true);
-+}
++The IMU continuously performs an autocalibration procedure if (and only if)
++operating in fusion mode. The magnetometer autocalibration can however be
++disabled writing 0 in the sysfs in_magn_calibration_fast_enable attribute.
 +
-+static const struct i2c_device_id bno055_i2c_id[] = {
-+	{"bno055", 0},
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, bno055_i2c_id);
++The driver provides access to autocalibration flags (i.e. you can known if
++the IMU has successfully autocalibrated) and to the calibration data blob.
 +
-+static const struct of_device_id __maybe_unused bno055_i2c_of_match[] = {
-+	{ .compatible = "bosch,bno055" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, bno055_i2c_of_match);
++The user can save this blob in a firmware file (i.e. in /lib/firmware) that
++the driver looks for at probe time. If found, then the IMU is initialized
++with this calibration data. This saves the user from performing the
++calibration procedure every time (which consist of moving the IMU in
++various way).
 +
-+static struct i2c_driver bno055_driver = {
-+	.driver = {
-+		.name = "bno055-i2c",
-+		.of_match_table = of_match_ptr(bno055_i2c_of_match),
-+	},
-+	.probe_new = bno055_i2c_probe,
-+	.id_table = bno055_i2c_id,
-+};
-+module_i2c_driver(bno055_driver);
++The driver looks for calibration data file using two different names: first
++a file whose name is suffixed with the IMU unique ID (exposed in sysfs as
++serial_number) is searched for; this is useful when there is more than one
++IMU instance. If this file is not found, then a "generic" calibration file
++is searched for (which can be used when only one IMU is present, without
++struggling with fancy names, that change on each device).
 +
-+MODULE_AUTHOR("Andrea Merello");
-+MODULE_DESCRIPTION("Bosch BNO055 I2C interface");
-+MODULE_IMPORT_NS(IIO_BNO055);
-+MODULE_LICENSE("GPL");
++Valid calibration file names would be e.g.
++ bno055-caldata-0e7c26a33541515120204a35342b04ff.dat
++ bno055-caldata.dat
++
++In non-fusion mode the IIO 'offset' attributes provide access to the
++offsets from calibration data (if any), so that the user can apply them to
++the accel, angvel and magn IIO attributes. In fusion mode they are not
++needed (the IMU firmware internally applies those corrections) and they
++read as zero.
+diff --git a/Documentation/iio/index.rst b/Documentation/iio/index.rst
+index 58b7a4ebac51..1b7292c58cd0 100644
+--- a/Documentation/iio/index.rst
++++ b/Documentation/iio/index.rst
+@@ -10,3 +10,5 @@ Industrial I/O
+    iio_configfs
+ 
+    ep93xx_adc
++
++   bno055
 -- 
 2.17.1
 

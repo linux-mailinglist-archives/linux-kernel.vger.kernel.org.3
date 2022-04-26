@@ -2,268 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A94B750FB4F
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 12:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF79D50FB61
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 12:48:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344988AbiDZKta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 06:49:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42926 "EHLO
+        id S242879AbiDZKuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 06:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349560AbiDZKs7 (ORCPT
+        with ESMTP id S1349792AbiDZKtT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 06:48:59 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3B141FB3
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 03:44:17 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1njIfg-0000CZ-LM; Tue, 26 Apr 2022 12:43:52 +0200
-Message-ID: <17c5ef22479cfea3f43dce1885f6613f1bef8064.camel@pengutronix.de>
-Subject: Re: [PATCH V4 07/11] arm64: dts: imx8mq: Enable both G1 and G2
- VPU's with vpu-blk-ctrl
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Adam Ford <aford173@gmail.com>, linux-media@vger.kernel.org
-Cc:     aford@beaconembedded.com, cphealy@gmail.com,
-        kernel test robot <lkp@intel.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Date:   Tue, 26 Apr 2022 12:43:51 +0200
-In-Reply-To: <c11a58ecc5da2e206fc2b942980223a04a103f19.camel@puri.sm>
-References: <20220125171129.472775-1-aford173@gmail.com>
-         <20220125171129.472775-8-aford173@gmail.com>
-         <d6c5c5663f8ae904d409240063295cf516e17dd1.camel@puri.sm>
-         <4b958892ba788a0e9e73a9135c305aacbe33294d.camel@pengutronix.de>
-         <c11a58ecc5da2e206fc2b942980223a04a103f19.camel@puri.sm>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        Tue, 26 Apr 2022 06:49:19 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7DD13DC8;
+        Tue, 26 Apr 2022 03:45:08 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id u7so14469620plg.13;
+        Tue, 26 Apr 2022 03:45:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1is8Iezkr6s4Ex2hsS25ZUz1zJxOesQz7FGVxmLzzqI=;
+        b=p0DuLhC8Wjy65J2kDplTzS8Gmbx06flEyAu02NmnEa6iLAouiE2jEx/xoupC8cq87d
+         u6GcRCz0FyfcTy5F9x9jJErzZVniFujrqWUTIt+zbovvDIfLFcptXSQOEhTlutIaJfvb
+         karYlh4Ccy9ZRuTY/FD+W4wndDYVaS0vtFnPbqgsS1ZOwh5JT1ZVww2TgOs5WMiHTY97
+         +2vJrfQ9JE6zAlFBp6HddwWtnE0WUHvEuyfqRYnjOL7sw6HnqI0KjEGRzm7gboajj2Y9
+         8DRcpcmW+jgOXuI7CBDZO4KLCqF6lRkGblXoEUlBGtkhXqmxBk4kuZuPGwAjiKEtFBGA
+         fNYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1is8Iezkr6s4Ex2hsS25ZUz1zJxOesQz7FGVxmLzzqI=;
+        b=5ifkb1dnwQXc7mLfly+ZW8O4sqFUr547VMgdLY76KVQq5BpYPenF4MVRVISwn0pWIK
+         cD3uZ0QR9UvUu7eBhOAVROQnLPvvpJRA5OCtk/Ke1XQzXonmKfXwTi1RHd9CP6Tb2QZD
+         nIHp9PlyoPPg21G784oOondKqhpK1ys0OLnSG7sFdERf4nBAm/C7Vjr14K5rxYcVprRL
+         7Hokn29LbjBcrw8U2FHs6DycbN2OJ6Li/O6knfOGnkZds1W3NLacTlrHj2Wwe6blqb2E
+         MJ46vZeMhOPnPV/T4tilXPj0yc2ZsVMrqLMSyYde0TbOINvSU5R5NjmVYFtAxvvitpE6
+         p6Og==
+X-Gm-Message-State: AOAM531wIL0kKqsL5UbuJX1nHxtO1W8fuwZrCM3i1F9RTJGaAYOcwFI2
+        raFh6aKiOXGFuh3nd2Yk5Go=
+X-Google-Smtp-Source: ABdhPJywGsD8N8S5nB6bbKsBl/gY28f/6aIIUnZRIYbR5jtlC4ehB0GHOptwChCN5l4sOXbq39ztZw==
+X-Received: by 2002:a17:902:ab96:b0:159:1ff:4ea0 with SMTP id f22-20020a170902ab9600b0015901ff4ea0mr23055359plr.60.1650969908094;
+        Tue, 26 Apr 2022 03:45:08 -0700 (PDT)
+Received: from localhost ([101.86.206.159])
+        by smtp.gmail.com with ESMTPSA id c17-20020a056a00249100b00508389d6a7csm15519196pfv.39.2022.04.26.03.45.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 03:45:07 -0700 (PDT)
+From:   Patrick Wang <patrick.wang.shcn@gmail.com>
+To:     paulmck@kernel.org, rostedt@goodmis.org, frederic@kernel.org,
+        quic_neeraju@quicinc.com, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        joel@joelfernandes.org
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patrick.wang.shcn@gmail.com
+Subject: [PATCH v3] rcu: ftrace: avoid tracing a few functions executed in stop machine
+Date:   Tue, 26 Apr 2022 18:45:02 +0800
+Message-Id: <20220426104502.52663-1-patrick.wang.shcn@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Dienstag, dem 26.04.2022 um 09:38 +0200 schrieb Martin Kepplinger:
-> Am Montag, dem 25.04.2022 um 17:34 +0200 schrieb Lucas Stach:
-> > Hi Martin,
-> > 
-> > Am Montag, dem 25.04.2022 um 17:22 +0200 schrieb Martin Kepplinger:
-> > > Am Dienstag, dem 25.01.2022 um 11:11 -0600 schrieb Adam Ford:
-> > > > With the Hantro G1 and G2 now setup to run independently, update
-> > > > the device tree to allow both to operate.  This requires the
-> > > > vpu-blk-ctrl node to be configured.  Since vpu-blk-ctrl needs
-> > > > certain clock enabled to handle the gating of the G1 and G2
-> > > > fuses, the clock-parents and clock-rates for the various VPU's
-> > > > to be moved into the pgc_vpu because they cannot get re-parented
-> > > > once enabled, and the pgc_vpu is the highest in the chain.
-> > > > 
-> > > > Signed-off-by: Adam Ford <aford173@gmail.com>
-> > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > > Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-> > > > 
-> > > > diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> > > > b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> > > > index 2df2510d0118..549b2440f55d 100644
-> > > > --- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> > > > +++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> > > > @@ -737,7 +737,21 @@ pgc_gpu: power-domain@5 {
-> > > >                                         pgc_vpu: power-domain@6 {
-> > > >                                                 #power-domain-
-> > > > cells =
-> > > > <0>;
-> > > >                                                 reg =
-> > > > <IMX8M_POWER_DOMAIN_VPU>;
-> > > > -                                               clocks = <&clk
-> > > > IMX8MQ_CLK_VPU_DEC_ROOT>;
-> > > > +                                               clocks = <&clk
-> > > > IMX8MQ_CLK_VPU_DEC_ROOT>,
-> > > > +                                                        <&clk
-> > > > IMX8MQ_CLK_VPU_G1_ROOT>,
-> > > > +                                                        <&clk
-> > > > IMX8MQ_CLK_VPU_G2_ROOT>;
-> > > > +                                               assigned-clocks =
-> > > > <&clk IMX8MQ_CLK_VPU_G1>,
-> > > > +                                                                
-> > > > <&clk IMX8MQ_CLK_VPU_G2>,
-> > > > +                                                                
-> > > > <&clk IMX8MQ_CLK_VPU_BUS>,
-> > > > +                                                                
-> > > > <&clk IMX8MQ_VPU_PLL_BYPASS>;
-> > > > +                                               assigned-clock-
-> > > > parents = <&clk IMX8MQ_VPU_PLL_OUT>,
-> > > > +                                                                
-> > > >     
-> > > >     <&clk IMX8MQ_VPU_PLL_OUT>,
-> > > > +                                                                
-> > > >     
-> > > >     <&clk IMX8MQ_SYS1_PLL_800M>,
-> > > > +                                                                
-> > > >     
-> > > >     <&clk IMX8MQ_VPU_PLL>;
-> > > > +                                               assigned-clock-
-> > > > rates
-> > > > = <600000000>,
-> > > > +                                                                
-> > > >     
-> > > >   <600000000>,
-> > > > +                                                                
-> > > >     
-> > > >   <800000000>,
-> > > > +                                                                
-> > > >     
-> > > >   <0>;
-> > > >                                         };
-> > > >  
-> > > >                                         pgc_disp: power-domain@7
-> > > > {
-> > > > @@ -1457,30 +1471,31 @@ usb3_phy1: usb-phy@382f0040 {
-> > > >                         status = "disabled";
-> > > >                 };
-> > > >  
-> > > > -               vpu: video-codec@38300000 {
-> > > > -                       compatible = "nxp,imx8mq-vpu";
-> > > > -                       reg = <0x38300000 0x10000>,
-> > > > -                             <0x38310000 0x10000>,
-> > > > -                             <0x38320000 0x10000>;
-> > > > -                       reg-names = "g1", "g2", "ctrl";
-> > > > -                       interrupts = <GIC_SPI 7
-> > > > IRQ_TYPE_LEVEL_HIGH>,
-> > > > -                                    <GIC_SPI 8
-> > > > IRQ_TYPE_LEVEL_HIGH>;
-> > > > -                       interrupt-names = "g1", "g2";
-> > > > +               vpu_g1: video-codec@38300000 {
-> > > > +                       compatible = "nxp,imx8mq-vpu-g1";
-> > > > +                       reg = <0x38300000 0x10000>;
-> > > > +                       interrupts = <GIC_SPI 7
-> > > > IRQ_TYPE_LEVEL_HIGH>;
-> > > > +                       clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>;
-> > > > +                       power-domains = <&vpu_blk_ctrl
-> > > > IMX8MQ_VPUBLK_PD_G1>;
-> > > > +               };
-> > > > +
-> > > > +               vpu_g2: video-codec@38310000 {
-> > > > +                       compatible = "nxp,imx8mq-vpu-g2";
-> > > > +                       reg = <0x38310000 0x10000>;
-> > > > +                       interrupts = <GIC_SPI 8
-> > > > IRQ_TYPE_LEVEL_HIGH>;
-> > > > +                       clocks = <&clk IMX8MQ_CLK_VPU_G2_ROOT>;
-> > > > +                       power-domains = <&vpu_blk_ctrl
-> > > > IMX8MQ_VPUBLK_PD_G2>;
-> > > > +               };
-> > > > +
-> > > > +               vpu_blk_ctrl: blk-ctrl@38320000 {
-> > > > +                       compatible = "fsl,imx8mq-vpu-blk-ctrl";
-> > > > +                       reg = <0x38320000 0x100>;
-> > > > +                       power-domains = <&pgc_vpu>, <&pgc_vpu>,
-> > > > <&pgc_vpu>;
-> > > > +                       power-domain-names = "bus", "g1", "g2";
-> > > >                         clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>,
-> > > > -                                <&clk IMX8MQ_CLK_VPU_G2_ROOT>,
-> > > > -                                <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
-> > > > -                       clock-names = "g1", "g2", "bus";
-> > > > -                       assigned-clocks = <&clk
-> > > > IMX8MQ_CLK_VPU_G1>,
-> > > > -                                         <&clk
-> > > > IMX8MQ_CLK_VPU_G2>,
-> > > > -                                         <&clk
-> > > > IMX8MQ_CLK_VPU_BUS>,
-> > > > -                                         <&clk
-> > > > IMX8MQ_VPU_PLL_BYPASS>;
-> > > > -                       assigned-clock-parents = <&clk
-> > > > IMX8MQ_VPU_PLL_OUT>,
-> > > > -                                                <&clk
-> > > > IMX8MQ_VPU_PLL_OUT>,
-> > > > -                                                <&clk
-> > > > IMX8MQ_SYS1_PLL_800M>,
-> > > > -                                                <&clk
-> > > > IMX8MQ_VPU_PLL>;
-> > > > -                       assigned-clock-rates = <600000000>,
-> > > > <600000000>,
-> > > > -                                              <800000000>, <0>;
-> > > > -                       power-domains = <&pgc_vpu>;
-> > > > +                                <&clk IMX8MQ_CLK_VPU_G2_ROOT>;
-> > > > +                       clock-names = "g1", "g2";
-> > > > +                       #power-domain-cells = <1>;
-> > > >                 };
-> > > >  
-> > > >                 pcie0: pcie@33800000 {
-> > > 
-> > > With this update, when testing suspend to ram on imx8mq, I get:
-> > > 
-> > > buck4: failed to disable: -ETIMEDOUT
-> > > 
-> > > where buck4 is power-supply of pgc_vpu. And thus the transition to
-> > > suspend (and resuming) fails.
-> > > 
-> > > Have you tested system suspend after the imx8m-blk-ctrl update on
-> > > imx8mq?
-> > 
-> > I haven't tested system suspend, don't know if anyone else did.
-> > However
-> > I guess that this is just uncovering a preexisting issue in the
-> > system
-> > suspend sequencing, which you would also hit if the video decoders
-> > were
-> > active at system suspend time.
-> > 
-> > My guess is that the regulator disable fails, due to the power
-> > domains
-> > being disabled quite late in the suspend sequence, where i2c
-> > communication with the PMIC is no longer possible due to i2c being
-> > suspended already or something like that. Maybe you can dig in a bit
-> > on
-> > the actual sequence on your system and we can see how we can rework
-> > things to suspend the power domains at a time where communication
-> > with
-> > the PMIC is still possible?
-> 
-> What exactly would you like to see? Here's all gpcv2 regulators
-> disabling on suspend. (gpu (domain 5) is disabled by runtime pm often):
-> 
-> [   47.138700] imx-pgc imx-pgc-domain.5: disabling regulator
-> [   47.298071] Freezing user space processes ... (elapsed 0.008
-> seconds) done.
-> [   47.313432] OOM killer disabled.
-> [   47.316670] Freezing remaining freezable tasks ... (elapsed 2.221
-> seconds) done.
-> [   49.672052] imx8m-blk-ctrl 38320000.blk-ctrl: imx8m_blk_ctrl_suspend
-> start
-> [   49.704417] imx-pgc imx-pgc-domain.0: disabling regulator
-> [   49.711114] imx-pgc imx-pgc-domain.6: disabling regulator
-> [   49.819064] buck4: failed to disable: -ETIMEDOUT
-> 
-> The stack looks pretty much the same for all of them, from pm_suspend()
-> over genpd_suspend_noiry().
+Because of the change of stop machine implementation, there are functions
+being called while waiting currently:
 
-So the GPU domain is already suspended before the system suspend,
-probably due to short runtime PM timeouts.
+----------------------------------------------------------------
+Former stop machine wait loop:
+do {
+    cpu_relax(); => macro
+    ...
+} while (curstate != STOPMACHINE_EXIT);
+-----------------------------------------------------------------
+Current stop machine wait loop:
+do {
+    stop_machine_yield(cpumask); => function (notraced)
+    ...
+    touch_nmi_watchdog(); => function (notraced, inside calls also notraced)
+    ...
+    rcu_momentary_dyntick_idle(); => function (notraced, inside calls traced)
+} while (curstate != MULTI_STOP_EXIT);
+------------------------------------------------------------------
 
-Can you please check at which point the i2c subsystem is suspended? I
-think we are already past that point when running the PM domain suspend
-from a _noirq callback. I'll take a look on how we can properly change
-this ordering.
+These functions (including the calls inside) should be marked notrace to avoid
+their codes being updated when they are being called. The calls inside
+rcu_momentary_dyntick_idle() still remain traced, and will cause crash:
 
-Regards,
-Lucas
+  rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+  rcu: 	1-...!: (0 ticks this GP) idle=14f/1/0x4000000000000000 softirq=3397/3397 fqs=0
+  rcu: 	3-...!: (0 ticks this GP) idle=ee9/1/0x4000000000000000 softirq=5168/5168 fqs=0
+  	(detected by 0, t=8137 jiffies, g=5889, q=2 ncpus=4)
+  Task dump for CPU 1:
+  task:migration/1     state:R  running task     stack:    0 pid:   19 ppid:     2 flags:0x00000000
+  Stopper: multi_cpu_stop+0x0/0x18c <- stop_machine_cpuslocked+0x128/0x174
+  Call Trace:
+  Task dump for CPU 3:
+  task:migration/3     state:R  running task     stack:    0 pid:   29 ppid:     2 flags:0x00000000
+  Stopper: multi_cpu_stop+0x0/0x18c <- stop_machine_cpuslocked+0x128/0x174
+  Call Trace:
+  rcu: rcu_preempt kthread timer wakeup didn't happen for 8136 jiffies! g5889 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x402
+  rcu: 	Possible timer handling issue on cpu=2 timer-softirq=594
+  rcu: rcu_preempt kthread starved for 8137 jiffies! g5889 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x402 ->cpu=2
+  rcu: 	Unless rcu_preempt kthread gets sufficient CPU time, OOM is now expected behavior.
+  rcu: RCU grace-period kthread stack dump:
+  task:rcu_preempt     state:I stack:    0 pid:   14 ppid:     2 flags:0x00000000
+  Call Trace:
+    schedule+0x56/0xc2
+    schedule_timeout+0x82/0x184
+    rcu_gp_fqs_loop+0x19a/0x318
+    rcu_gp_kthread+0x11a/0x140
+    kthread+0xee/0x118
+    ret_from_exception+0x0/0x14
+  rcu: Stack dump where RCU GP kthread last ran:
+  Task dump for CPU 2:
+  task:migration/2     state:R  running task     stack:    0 pid:   24 ppid:     2 flags:0x00000000
+  Stopper: multi_cpu_stop+0x0/0x18c <- stop_machine_cpuslocked+0x128/0x174
+  Call Trace:
+
+Mark the calls inside rcu_momentary_dyntick_idle():
+ rcu_preempt_deferred_qs()
+ rcu_preempt_need_deferred_qs()
+ rcu_preempt_deferred_qs_irqrestore()
+as notrace to prevent this.
+
+Signed-off-by: Patrick Wang <patrick.wang.shcn@gmail.com>
+---
+v1->v2:
+ - Modify log message.
+
+v2->v3:
+ - Move "notrace" to behind "static" to keep the consistency with the rest of the code.
+
+ kernel/rcu/tree_plugin.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
+index c8ba0fe17267..440d9e02a26e 100644
+--- a/kernel/rcu/tree_plugin.h
++++ b/kernel/rcu/tree_plugin.h
+@@ -460,7 +460,7 @@ static bool rcu_preempt_has_tasks(struct rcu_node *rnp)
+  * be quite short, for example, in the case of the call from
+  * rcu_read_unlock_special().
+  */
+-static void
++static notrace void
+ rcu_preempt_deferred_qs_irqrestore(struct task_struct *t, unsigned long flags)
+ {
+ 	bool empty_exp;
+@@ -581,7 +581,7 @@ rcu_preempt_deferred_qs_irqrestore(struct task_struct *t, unsigned long flags)
+  * is disabled.  This function cannot be expected to understand these
+  * nuances, so the caller must handle them.
+  */
+-static bool rcu_preempt_need_deferred_qs(struct task_struct *t)
++static notrace bool rcu_preempt_need_deferred_qs(struct task_struct *t)
+ {
+ 	return (__this_cpu_read(rcu_data.cpu_no_qs.b.exp) ||
+ 		READ_ONCE(t->rcu_read_unlock_special.s)) &&
+@@ -595,7 +595,7 @@ static bool rcu_preempt_need_deferred_qs(struct task_struct *t)
+  * evaluate safety in terms of interrupt, softirq, and preemption
+  * disabling.
+  */
+-static void rcu_preempt_deferred_qs(struct task_struct *t)
++static notrace void rcu_preempt_deferred_qs(struct task_struct *t)
+ {
+ 	unsigned long flags;
+ 
+-- 
+2.25.1
 

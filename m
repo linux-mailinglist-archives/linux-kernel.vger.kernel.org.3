@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9355B50F682
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:58:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0279750F867
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344153AbiDZI4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:56:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56526 "EHLO
+        id S1347425AbiDZJcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:32:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345313AbiDZInI (ORCPT
+        with ESMTP id S1347093AbiDZJFP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:43:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5A115B443;
-        Tue, 26 Apr 2022 01:33:23 -0700 (PDT)
+        Tue, 26 Apr 2022 05:05:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EBD9F698F;
+        Tue, 26 Apr 2022 01:44:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 72E7C6185A;
-        Tue, 26 Apr 2022 08:33:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66EA7C385A0;
-        Tue, 26 Apr 2022 08:33:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AB789B81A2F;
+        Tue, 26 Apr 2022 08:44:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 230A7C385AC;
+        Tue, 26 Apr 2022 08:44:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962001;
-        bh=SWvMRXkvf+X4DBjrZbBTYFmrjgpYffeBe3Uy39pBiJU=;
+        s=korg; t=1650962642;
+        bh=EOw5hbKDTnYGfUcDibtjJA+xhAnCFPcdHRjqYVUw9Hc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2qnWoYhkRtap5KzvoatkdPrCHC7zbWat24x9mhF35QRZCnS2xJSYNHwKzULQPVfFG
-         scI74l0mwOeYvaicFIDnyYFUaP/hc1Lo7nBShFeakFMyJP+fucyF6z9lvB3KV1Yzdm
-         wjDEIh3wtcgBBrV9o2UjGQlP2z8ytmmBR3iDRKgM=
+        b=l/Gen5IjQcz+VlWjh/mcWrehWwBK/pKIm0O6XQRzdLA1vGsbktkjSCW0MTrpQzuTK
+         dkcrXOO7VTNqxOVoI3Hgyh4mOBP1KXYwEz/2dFTSkKVMKFt6SgMpuYrloN0Q+t2rPz
+         2GOn6eTa3A20IK26/98YM5XdFV3e08LlFaxYfGaI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        syzbot <syzkaller@googlegroups.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.10 06/86] net/sched: cls_u32: fix netns refcount changes in u32_change()
-Date:   Tue, 26 Apr 2022 10:20:34 +0200
-Message-Id: <20220426081741.391271584@linuxfoundation.org>
+        stable@vger.kernel.org,
+        syzbot+2339c27f5c66c652843e@syzkaller.appspotmail.com,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 040/146] can: isotp: stop timeout monitoring when no first frame was sent
+Date:   Tue, 26 Apr 2022 10:20:35 +0200
+Message-Id: <20220426081751.196080441@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
-References: <20220426081741.202366502@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,138 +56,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Oliver Hartkopp <socketcan@hartkopp.net>
 
-commit 3db09e762dc79584a69c10d74a6b98f89a9979f8 upstream.
+[ Upstream commit d73497081710c876c3c61444445512989e102152 ]
 
-We are now able to detect extra put_net() at the moment
-they happen, instead of much later in correct code paths.
+The first attempt to fix a the 'impossible' WARN_ON_ONCE(1) in
+isotp_tx_timer_handler() focussed on the identical CAN IDs created by
+the syzbot reproducer and lead to upstream fix/commit 3ea566422cbd
+("can: isotp: sanitize CAN ID checks in isotp_bind()"). But this did
+not catch the root cause of the wrong tx.state in the tx_timer handler.
 
-u32_init_knode() / tcf_exts_init() populates the ->exts.net
-pointer, but as mentioned in tcf_exts_init(),
-the refcount on netns has not been elevated yet.
+In the isotp 'first frame' case a timeout monitoring needs to be started
+before the 'first frame' is send. But when this sending failed the timeout
+monitoring for this specific frame has to be disabled too.
 
-The refcount is taken only once tcf_exts_get_net()
-is called.
+Otherwise the tx_timer is fired with the 'warn me' tx.state of ISOTP_IDLE.
 
-So the two u32_destroy_key() calls from u32_change()
-are attempting to release an invalid reference on the netns.
-
-syzbot report:
-
-refcount_t: decrement hit 0; leaking memory.
-WARNING: CPU: 0 PID: 21708 at lib/refcount.c:31 refcount_warn_saturate+0xbf/0x1e0 lib/refcount.c:31
-Modules linked in:
-CPU: 0 PID: 21708 Comm: syz-executor.5 Not tainted 5.18.0-rc2-next-20220412-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:refcount_warn_saturate+0xbf/0x1e0 lib/refcount.c:31
-Code: 1d 14 b6 b2 09 31 ff 89 de e8 6d e9 89 fd 84 db 75 e0 e8 84 e5 89 fd 48 c7 c7 40 aa 26 8a c6 05 f4 b5 b2 09 01 e8 e5 81 2e 05 <0f> 0b eb c4 e8 68 e5 89 fd 0f b6 1d e3 b5 b2 09 31 ff 89 de e8 38
-RSP: 0018:ffffc900051af1b0 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000040000 RSI: ffffffff8160a0c8 RDI: fffff52000a35e28
-RBP: 0000000000000004 R08: 0000000000000000 R09: 0000000000000000
-R10: ffffffff81604a9e R11: 0000000000000000 R12: 1ffff92000a35e3b
-R13: 00000000ffffffef R14: ffff8880211a0194 R15: ffff8880577d0a00
-FS:  00007f25d183e700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f19c859c028 CR3: 0000000051009000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __refcount_dec include/linux/refcount.h:344 [inline]
- refcount_dec include/linux/refcount.h:359 [inline]
- ref_tracker_free+0x535/0x6b0 lib/ref_tracker.c:118
- netns_tracker_free include/net/net_namespace.h:327 [inline]
- put_net_track include/net/net_namespace.h:341 [inline]
- tcf_exts_put_net include/net/pkt_cls.h:255 [inline]
- u32_destroy_key.isra.0+0xa7/0x2b0 net/sched/cls_u32.c:394
- u32_change+0xe01/0x3140 net/sched/cls_u32.c:909
- tc_new_tfilter+0x98d/0x2200 net/sched/cls_api.c:2148
- rtnetlink_rcv_msg+0x80d/0xb80 net/core/rtnetlink.c:6016
- netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2495
- netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
- netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
- netlink_sendmsg+0x904/0xe00 net/netlink/af_netlink.c:1921
- sock_sendmsg_nosec net/socket.c:705 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:725
- ____sys_sendmsg+0x6e2/0x800 net/socket.c:2413
- ___sys_sendmsg+0xf3/0x170 net/socket.c:2467
- __sys_sendmsg+0xe5/0x1b0 net/socket.c:2496
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f25d0689049
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f25d183e168 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 00007f25d079c030 RCX: 00007f25d0689049
-RDX: 0000000000000000 RSI: 0000000020000340 RDI: 0000000000000005
-RBP: 00007f25d06e308d R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffd0b752e3f R14: 00007f25d183e300 R15: 0000000000022000
- </TASK>
-
-Fixes: 35c55fc156d8 ("cls_u32: use tcf_exts_get_net() before call_rcu()")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Cc: Cong Wang <xiyou.wangcong@gmail.com>
-Cc: Jiri Pirko <jiri@resnulli.us>
-Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
+Link: https://lore.kernel.org/all/20220405175112.2682-1-socketcan@hartkopp.net
+Reported-by: syzbot+2339c27f5c66c652843e@syzkaller.appspotmail.com
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sched/cls_u32.c |   16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+ net/can/isotp.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
---- a/net/sched/cls_u32.c
-+++ b/net/sched/cls_u32.c
-@@ -386,14 +386,19 @@ static int u32_init(struct tcf_proto *tp
- 	return 0;
- }
+diff --git a/net/can/isotp.c b/net/can/isotp.c
+index 5bce7c66c121..8c753dcefe7f 100644
+--- a/net/can/isotp.c
++++ b/net/can/isotp.c
+@@ -866,6 +866,7 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+ 	struct canfd_frame *cf;
+ 	int ae = (so->opt.flags & CAN_ISOTP_EXTEND_ADDR) ? 1 : 0;
+ 	int wait_tx_done = (so->opt.flags & CAN_ISOTP_WAIT_TX_DONE) ? 1 : 0;
++	s64 hrtimer_sec = 0;
+ 	int off;
+ 	int err;
  
--static int u32_destroy_key(struct tc_u_knode *n, bool free_pf)
-+static void __u32_destroy_key(struct tc_u_knode *n)
- {
- 	struct tc_u_hnode *ht = rtnl_dereference(n->ht_down);
+@@ -964,7 +965,9 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+ 		isotp_create_fframe(cf, so, ae);
  
- 	tcf_exts_destroy(&n->exts);
--	tcf_exts_put_net(&n->exts);
- 	if (ht && --ht->refcnt == 0)
- 		kfree(ht);
-+	kfree(n);
-+}
+ 		/* start timeout for FC */
+-		hrtimer_start(&so->txtimer, ktime_set(1, 0), HRTIMER_MODE_REL_SOFT);
++		hrtimer_sec = 1;
++		hrtimer_start(&so->txtimer, ktime_set(hrtimer_sec, 0),
++			      HRTIMER_MODE_REL_SOFT);
+ 	}
+ 
+ 	/* send the first or only CAN frame */
+@@ -977,6 +980,11 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+ 	if (err) {
+ 		pr_notice_once("can-isotp: %s: can_send_ret %pe\n",
+ 			       __func__, ERR_PTR(err));
 +
-+static void u32_destroy_key(struct tc_u_knode *n, bool free_pf)
-+{
-+	tcf_exts_put_net(&n->exts);
- #ifdef CONFIG_CLS_U32_PERF
- 	if (free_pf)
- 		free_percpu(n->pf);
-@@ -402,8 +407,7 @@ static int u32_destroy_key(struct tc_u_k
- 	if (free_pf)
- 		free_percpu(n->pcpu_success);
- #endif
--	kfree(n);
--	return 0;
-+	__u32_destroy_key(n);
- }
++		/* no transmission -> no timeout monitoring */
++		if (hrtimer_sec)
++			hrtimer_cancel(&so->txtimer);
++
+ 		goto err_out_drop;
+ 	}
  
- /* u32_delete_key_rcu should be called when free'ing a copied
-@@ -898,13 +902,13 @@ static int u32_change(struct net *net, s
- 				    tca[TCA_RATE], ovr, extack);
- 
- 		if (err) {
--			u32_destroy_key(new, false);
-+			__u32_destroy_key(new);
- 			return err;
- 		}
- 
- 		err = u32_replace_hw_knode(tp, new, flags, extack);
- 		if (err) {
--			u32_destroy_key(new, false);
-+			__u32_destroy_key(new);
- 			return err;
- 		}
- 
+-- 
+2.35.1
+
 
 

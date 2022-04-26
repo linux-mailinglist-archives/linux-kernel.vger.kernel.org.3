@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDA5950F8FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:44:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC93F50F55D
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:53:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348227AbiDZJe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39816 "EHLO
+        id S1345667AbiDZIrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347894AbiDZJGV (ORCPT
+        with ESMTP id S1345817AbiDZIje (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:06:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02617954BE;
-        Tue, 26 Apr 2022 01:46:50 -0700 (PDT)
+        Tue, 26 Apr 2022 04:39:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2319E9F0;
+        Tue, 26 Apr 2022 01:31:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9828260C42;
-        Tue, 26 Apr 2022 08:46:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0ED1C385A0;
-        Tue, 26 Apr 2022 08:46:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 990C9B81CF3;
+        Tue, 26 Apr 2022 08:31:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7619C385A0;
+        Tue, 26 Apr 2022 08:31:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962809;
-        bh=j1Tg1nLCK4PayqRk4fovyoejWs7owY0pBIUS6PJwmyI=;
+        s=korg; t=1650961900;
+        bh=7ZPOPnk1sXaTQkRJX3y14F/k4Em2x0E9p1XyCR9NRpY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lvb+iwY7QIacNQuZEB2ixr2LQaE3vwGYj/8m1c4dPdI5r33KZrbg7Q8LhygjwyJ0j
-         9p3GCUkmuABMQeu+5z/ST2icQ11EONrheqgNxdOmYtWjSP7NWmo8iGIYaIzPQz0UC/
-         O6lhZjWlDEzEsT+Y/1kRXNhQ5J3aL1oG+IPk/kfs=
+        b=oRobJJGQIvFbCZ5ZlmpZIAjsKFMDAWNDv2hdk4JK6DXToA7K9hpdDC4nv2GG+kuq8
+         l5HsQTTNOu0Ph764VossAwJfuPhz6jWv6gxUCyed5B6MZhwz7IXV1K5AOdDyavLUJ6
+         2xVFJg0FIpYOCul89T2eLI+G5v77tQK5ZgEaXT5g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 5.17 095/146] dma: at_xdmac: fix a missing check on list iterator
-Date:   Tue, 26 Apr 2022 10:21:30 +0200
-Message-Id: <20220426081752.728998984@linuxfoundation.org>
+        stable@vger.kernel.org, Al Grant <al.grant@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH 5.4 51/62] arm_pmu: Validate single/group leader events
+Date:   Tue, 26 Apr 2022 10:21:31 +0200
+Message-Id: <20220426081738.684978378@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
-References: <20220426081750.051179617@linuxfoundation.org>
+In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
+References: <20220426081737.209637816@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,57 +55,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: Rob Herring <robh@kernel.org>
 
-commit 206680c4e46b62fd8909385e0874a36952595b85 upstream.
+commit e5c23779f93d45e39a52758ca593bd7e62e9b4be upstream.
 
-The bug is here:
-	__func__, desc, &desc->tx_dma_desc.phys, ret, cookie, residue);
+In the case where there is only a cycle counter available (i.e.
+PMCR_EL0.N is 0) and an event other than CPU cycles is opened, the open
+should fail as the event can never possibly be scheduled. However, the
+event validation when an event is opened is skipped when the group
+leader is opened. Fix this by always validating the group leader events.
 
-The list iterator 'desc' will point to a bogus position containing
-HEAD if the list is empty or no element is found. To avoid dev_dbg()
-prints a invalid address, use a new variable 'iter' as the list
-iterator, while use the origin variable 'desc' as a dedicated
-pointer to point to the found element.
-
-Cc: stable@vger.kernel.org
-Fixes: 82e2424635f4c ("dmaengine: xdmac: fix print warning on dma_addr_t variable")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Link: https://lore.kernel.org/r/20220327061154.4867-1-xiam0nd.tong@gmail.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Reported-by: Al Grant <al.grant@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Signed-off-by: Rob Herring <robh@kernel.org>
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+Link: https://lore.kernel.org/r/20220408203330.4014015-1-robh@kernel.org
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Will Deacon <will@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/dma/at_xdmac.c |   12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ drivers/perf/arm_pmu.c |   10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
---- a/drivers/dma/at_xdmac.c
-+++ b/drivers/dma/at_xdmac.c
-@@ -1453,7 +1453,7 @@ at_xdmac_tx_status(struct dma_chan *chan
- {
- 	struct at_xdmac_chan	*atchan = to_at_xdmac_chan(chan);
- 	struct at_xdmac		*atxdmac = to_at_xdmac(atchan->chan.device);
--	struct at_xdmac_desc	*desc, *_desc;
-+	struct at_xdmac_desc	*desc, *_desc, *iter;
- 	struct list_head	*descs_list;
- 	enum dma_status		ret;
- 	int			residue, retry;
-@@ -1568,11 +1568,13 @@ at_xdmac_tx_status(struct dma_chan *chan
- 	 * microblock.
- 	 */
- 	descs_list = &desc->descs_list;
--	list_for_each_entry_safe(desc, _desc, descs_list, desc_node) {
--		dwidth = at_xdmac_get_dwidth(desc->lld.mbr_cfg);
--		residue -= (desc->lld.mbr_ubc & 0xffffff) << dwidth;
--		if ((desc->lld.mbr_nda & 0xfffffffc) == cur_nda)
-+	list_for_each_entry_safe(iter, _desc, descs_list, desc_node) {
-+		dwidth = at_xdmac_get_dwidth(iter->lld.mbr_cfg);
-+		residue -= (iter->lld.mbr_ubc & 0xffffff) << dwidth;
-+		if ((iter->lld.mbr_nda & 0xfffffffc) == cur_nda) {
-+			desc = iter;
- 			break;
-+		}
- 	}
- 	residue += cur_ubc << dwidth;
+--- a/drivers/perf/arm_pmu.c
++++ b/drivers/perf/arm_pmu.c
+@@ -322,6 +322,9 @@ validate_group(struct perf_event *event)
+ 	if (!validate_event(event->pmu, &fake_pmu, leader))
+ 		return -EINVAL;
  
++	if (event == leader)
++		return 0;
++
+ 	for_each_sibling_event(sibling, leader) {
+ 		if (!validate_event(event->pmu, &fake_pmu, sibling))
+ 			return -EINVAL;
+@@ -411,12 +414,7 @@ __hw_perf_event_init(struct perf_event *
+ 		local64_set(&hwc->period_left, hwc->sample_period);
+ 	}
+ 
+-	if (event->group_leader != event) {
+-		if (validate_group(event) != 0)
+-			return -EINVAL;
+-	}
+-
+-	return 0;
++	return validate_group(event);
+ }
+ 
+ static int armpmu_event_init(struct perf_event *event)
 
 
